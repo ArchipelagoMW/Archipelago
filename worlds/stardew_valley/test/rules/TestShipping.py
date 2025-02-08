@@ -76,8 +76,8 @@ class TestShipsanityEverything(SVTestBase):
 
         for location in shipsanity_locations:
             with self.subTest(location.name):
-                self.assert_location_cannot_be_reached(location.name)
+                self.assert_cannot_reach_location(location.name)
 
                 self.collect(bin_item)
-                self.assert_location_can_be_reached(location.name)
+                self.assert_can_reach_location(location.name)
                 self.remove(bin_item)

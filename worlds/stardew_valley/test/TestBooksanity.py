@@ -67,7 +67,7 @@ class TestBooksanityNone(SVTestBase):
                 continue
 
             with self.subTest(location.name):
-                self.assert_reach_location_true(location)
+                self.assert_can_reach_location(location)
 
 
 class TestBooksanityPowers(SVTestBase):
@@ -115,7 +115,7 @@ class TestBooksanityPowers(SVTestBase):
                 continue
 
             with self.subTest(location.name):
-                self.assert_reach_location_true(location)
+                self.assert_can_reach_location(location)
 
 
 class TestBooksanityPowersAndSkills(SVTestBase):
@@ -163,7 +163,7 @@ class TestBooksanityPowersAndSkills(SVTestBase):
                 continue
 
             with self.subTest(location.name):
-                self.assert_reach_location_true(location)
+                self.assert_can_reach_location(location)
 
 
 class TestBooksanityAll(SVTestBase):
@@ -211,4 +211,4 @@ class TestBooksanityAll(SVTestBase):
                 continue
 
             with self.subTest(location.name):
-                self.assert_reach_location_true(location)
+                self.assert_can_reach_location(location)

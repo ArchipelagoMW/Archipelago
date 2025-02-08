@@ -330,14 +330,6 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
     def reset_collection_state(self) -> None:
         self.multiworld.state = self.original_state.copy()
 
-    def assert_location_can_be_reached(self, location_name: str) -> None:
-        location = self.multiworld.get_location(location_name, self.player)
-        self.assert_reach_location_true(location, self.multiworld.state)
-
-    def assert_location_cannot_be_reached(self, location_name: str) -> None:
-        location = self.multiworld.get_location(location_name, self.player)
-        self.assert_reach_location_false(location, self.multiworld.state)
-
     def assert_rule_true(self, rule: StardewRule, state: CollectionState | None = None) -> None:
         if state is None:
             state = self.multiworld.state
@@ -348,15 +340,15 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
             state = self.multiworld.state
         super().assert_rule_false(rule, state)
 
-    def assert_reach_location_true(self, location: Location, state: CollectionState | None = None) -> None:
+    def assert_can_reach_location(self, location: Location | str, state: CollectionState | None = None) -> None:
         if state is None:
             state = self.multiworld.state
-        super().assert_reach_location_true(location, state)
+        super().assert_can_reach_location(location, state)
 
-    def assert_reach_location_false(self, location: Location, state: CollectionState | None = None) -> None:
+    def assert_cannot_reach_location(self, location: Location | str, state: CollectionState | None = None) -> None:
         if state is None:
             state = self.multiworld.state
-        super().assert_reach_location_false(location, state)
+        super().assert_cannot_reach_location(location, state)
 
 
 pre_generated_worlds = {}

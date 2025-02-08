@@ -13,12 +13,12 @@ class TestCropsanityRules(SVTestBase):
 
     def test_need_greenhouse_for_cactus(self):
         harvest_cactus_fruit = "Harvest Cactus Fruit"
-        self.assert_location_cannot_be_reached(harvest_cactus_fruit)
+        self.assert_cannot_reach_location(harvest_cactus_fruit)
 
         self.multiworld.state.collect(self.create_item(Seed.cactus))
         self.multiworld.state.collect(self.create_item(Building.shipping_bin))
         self.multiworld.state.collect(self.create_item(Transportation.desert_obelisk))
-        self.assert_location_cannot_be_reached(harvest_cactus_fruit)
+        self.assert_cannot_reach_location(harvest_cactus_fruit)
 
         self.multiworld.state.collect(self.create_item(Region.greenhouse))
-        self.assert_location_can_be_reached(harvest_cactus_fruit)
+        self.assert_can_reach_location(harvest_cactus_fruit)

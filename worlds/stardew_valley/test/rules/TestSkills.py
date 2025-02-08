@@ -38,10 +38,10 @@ class TestSkillProgressionProgressive(SVTestBase):
 
                 with self.subTest(location_name):
                     if level > 1:
-                        self.assert_location_cannot_be_reached(location_name)
+                        self.assert_cannot_reach_location(location_name)
                         self.collect(f"{skill} Level")
 
-                    self.assert_location_can_be_reached(location_name)
+                    self.assert_can_reach_location(location_name)
 
             self.reset_collection_state()
 
@@ -86,7 +86,7 @@ class TestSkillProgressionProgressiveWithMasteryWithoutMods(SVTestBase):
 
         for skill in all_vanilla_skills:
             with self.subTest(skill):
-                self.assert_location_can_be_reached(f"{skill} Mastery")
+                self.assert_can_reach_location(f"{skill} Mastery")
 
         self.reset_collection_state()
 
@@ -96,7 +96,7 @@ class TestSkillProgressionProgressiveWithMasteryWithoutMods(SVTestBase):
                 self.collect_everything()
                 self.remove_one_by_name(f"{skill} Level")
 
-                self.assert_location_cannot_be_reached(f"{skill} Mastery")
+                self.assert_cannot_reach_location(f"{skill} Mastery")
 
                 self.reset_collection_state()
 
@@ -104,6 +104,6 @@ class TestSkillProgressionProgressiveWithMasteryWithoutMods(SVTestBase):
         self.collect_everything()
 
         self.remove_one_by_name(f"Progressive Pickaxe")
-        self.assert_location_cannot_be_reached("Mining Mastery")
+        self.assert_cannot_reach_location("Mining Mastery")
 
         self.reset_collection_state()

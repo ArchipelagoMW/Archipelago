@@ -1,6 +1,6 @@
 import logging
 from random import Random
-from typing import Dict, Any, Iterable, Optional, List, TextIO
+from typing import Dict, Any, Iterable, Optional, List, TextIO, cast
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from Options import PerGameCommonOptions
@@ -321,9 +321,9 @@ class StardewValleyWorld(World):
             include_traps = True
             exclude_island = False
             for player in link_group["players"]:
-                player_options = self.multiworld.worlds[player].options
                 if self.multiworld.game[player] != self.game:
                     continue
+                player_options = cast(StardewValleyOptions, self.multiworld.worlds[player].options)
                 if player_options.trap_items == TrapItems.option_no_traps:
                     include_traps = False
                 if player_options.exclude_ginger_island == ExcludeGingerIsland.option_true:
