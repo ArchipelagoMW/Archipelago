@@ -60,8 +60,8 @@ class Sly1World(World):
     def create_regions(self):
         create_regions(self)
 
-        if self.options.CluesanityBundleSize.value > 0:
-            generate_bottle_locations(self, self.options.CluesanityBundleSize.value)
+        if self.options.LocationCluesanityBundleSize.value > 0:
+            generate_bottle_locations(self, self.options.LocationCluesanityBundleSize.value)
 
     def create_items(self):
         self.multiworld.itempool += create_itempool(self)
@@ -82,7 +82,8 @@ class Sly1World(World):
                 "IncludeHourglasses": self.options.IncludeHourglasses.value,
                 "HourglassesRequireRoll": self.options.HourglassesRequireRoll.value,
                 "AvoidEarlyBK": self.options.AvoidEarlyBK.value,
-                "CluesanityBundleSize": self.options.CluesanityBundleSize.value
+                "LocationCluesanityBundleSize": self.options.LocationCluesanityBundleSize.value,
+                "ItemCluesanityBundleSize": self.options.ItemCluesanityBundleSize.value
             },
             "Seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "Slot": self.multiworld.player_name[self.player],  # to connect to server

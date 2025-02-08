@@ -89,10 +89,18 @@ def set_rules(world: "Sly1World"):
             add_rule(location, lambda state: state.has("Progressive Invisibility", player, 1))
     
     # Cluesanity rules
-    if options.CluesanityBundleSize.value > 0:
+    if options.ItemCluesanityBundleSize.value > 0:
         for name, data in vault_locations.items():
             level_name = name.rsplit(' ', 1)[0]
-            bundle_amount = get_bundle_amount_for_level(world, level_name)
+            bundle_amount = get_bundle_amount_for_level(level_name, world.options.ItemCluesanityBundleSize.value)
+            bottle_name = f'{level_name} Bottle(s)'
+            
+            set_rule(world.multiworld.get_location(name, player),
+                     lambda state, bn=bottle_name, ba=bundle_amount: state.has(bn, player, ba))
+            
+        for name, data in hourglass_locations.items():
+            level_name = name.rsplit(' ', 1)[0]
+            bundle_amount = get_bundle_amount_for_level(level_name, world.options.ItemCluesanityBundleSize.value)
             bottle_name = f'{level_name} Bottle(s)'
             
             set_rule(world.multiworld.get_location(name, player),

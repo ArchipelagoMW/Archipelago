@@ -30,6 +30,7 @@ namespace Sly1AP
         public static int GameCompletion { get; set; } = 0;
         public static Random rnd = new Random();
         public static int ClueBundles { get; set; } = 0;
+        public static int ClueLocations { get; set; } = 0;
         public static int MurrayTextAddress { get; set; } = 0x2024A7B0;
         public static int RequiredBosses { get; set; } = 0;
         public Form1()
@@ -51,6 +52,9 @@ namespace Sly1AP
                 if (ClueBundles > 0)
                 {
                     Clues.BottleSync();
+                }
+                if (ClueLocations > 0)
+                {
                     Helpers.SendBottles(Helpers.Levels, Client);
                 }
                 if (Memory.ReadByte(0x202623C0) == 0)
@@ -242,9 +246,9 @@ namespace Sly1AP
                     Memory.Write(0x2027D360, keys.PandaKingStart);
                 }
             }
-            if (options.ContainsKey("CluesanityBundleSize"))
+            if (options.ContainsKey("ItemCluesanityBundleSize"))
             {
-                var ClueBundleSizeElement = (JsonElement)options["CluesanityBundleSize"];
+                var ClueBundleSizeElement = (JsonElement)options["ItemCluesanityBundleSize"];
                 ClueBundles = ClueBundleSizeElement.GetUInt16();
                 //if (ClueBundles > 0)
                 //{
@@ -261,6 +265,11 @@ namespace Sly1AP
                 //    }
                 //    Clues.UpdateBottles(0, 0);
                 //}
+            }
+            if (options.ContainsKey("LocationCluesanityBundleSize"))
+            {
+                var LocationBundleSizeElement = (JsonElement)options["LocationCluesanityBundleSize"];
+                ClueLocations = LocationBundleSizeElement.GetUInt16();
             }
             if (options.ContainsKey("RequiredBosses"))
             {

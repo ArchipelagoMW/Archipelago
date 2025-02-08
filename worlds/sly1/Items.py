@@ -51,9 +51,16 @@ def create_itempool(world: "Sly1World") -> List[Item]:
         itempool += create_multiple_items(world, name, item_amount, item_type)
 
     # Create Bottle Bundles if applicable
-    if world.options.CluesanityBundleSize.value > 0:
+    # I feel like im writing gore
+    item_bundle_size = world.options.ItemCluesanityBundleSize.value
+    location_bundle_size = world.options.LocationCluesanityBundleSize.value
+    if item_bundle_size > 0:
+        if item_bundle_size < location_bundle_size:
+            print(f"{world.player_name}: Too many bottle items compared to locations. Increasing item bundle size to match location bundle size.")
+            world.options.ItemCluesanityBundleSize.value = location_bundle_size
+            item_bundle_size = location_bundle_size
         for name, data in bottles.items():
-            bundle_amount = get_bundle_amount_for_level(world, name.rsplit(' ', 1)[0])
+            bundle_amount = get_bundle_amount_for_level(name.rsplit(' ', 1)[0], item_bundle_size)
             itempool += create_multiple_items(world, name, bundle_amount, data.classification)
 
     # Add the Victory item to the pool
