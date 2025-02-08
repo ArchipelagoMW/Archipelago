@@ -2087,17 +2087,20 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 2400, LocationType.VICTORY,
             logic.essence_of_eternity_requirement
         ),
-        make_location_data(SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name, "Destroy 2 Void Thrashers", SC2LOTV_LOC_ID_OFFSET + 2401, LocationType.EXTRA),
-        make_location_data(SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name, "Destroy 4 Void Thrashers", SC2LOTV_LOC_ID_OFFSET + 2402, LocationType.EXTRA,
+        make_location_data(SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name, "Initial Void Thrashers", SC2LOTV_LOC_ID_OFFSET + 2401, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name, "Void Thrasher Wave 1", SC2LOTV_LOC_ID_OFFSET + 2402, LocationType.EXTRA,
             logic.essence_of_eternity_requirement
         ),
-        make_location_data(SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name, "Destroy 6 Void Thrashers", SC2LOTV_LOC_ID_OFFSET + 2403, LocationType.EXTRA,
+        make_location_data(SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name, "Void Thrasher Wave 2", SC2LOTV_LOC_ID_OFFSET + 2403, LocationType.EXTRA,
             logic.essence_of_eternity_requirement
         ),
-        make_location_data(SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name, "Destroy 8 Void Thrashers", SC2LOTV_LOC_ID_OFFSET + 2404, LocationType.EXTRA,
+        make_location_data(SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name, "Void Thrasher Wave 3", SC2LOTV_LOC_ID_OFFSET + 2404, LocationType.EXTRA,
             logic.essence_of_eternity_requirement
         ),
-        make_location_data(SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name, "No more than 15 Kerrigan Kills", SC2LOTV_LOC_ID_OFFSET + 2405, LocationType.MASTERY,
+        make_location_data(SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name, "Void Thrasher Wave 4", SC2LOTV_LOC_ID_OFFSET + 2405, LocationType.EXTRA,
+            logic.essence_of_eternity_requirement
+        ),
+        make_location_data(SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name, "No more than 15 Kerrigan Kills", SC2LOTV_LOC_ID_OFFSET + 2406, LocationType.MASTERY,
             logic.essence_of_eternity_requirement,
             flags=LocationFlag.PREVENTATIVE
         ),
