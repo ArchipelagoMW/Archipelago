@@ -50,7 +50,7 @@
     },
     {
         "Name": "Treasure in the Depths Key",
-        "Id": 10020107,
+        "Id": 10021000,
         "Address": "0x2027C94C",
         "CheckType": 0,
         "AddressBit": 1
@@ -64,14 +64,14 @@
     },
     {
         "Name": "At the Dog Track Key",
-        "Id": 10020109,
+        "Id": 10021100,
         "Address": "0x2027CCA8",
         "CheckType": 0,
         "AddressBit": 1
     },
     {
         "Name": "Murray's Big Gamble Key",
-        "Id": 10020110,
+        "Id": 10021200,
         "Address": "0x2027CC30",
         "CheckType": 0,
         "AddressBit": 1
@@ -127,7 +127,7 @@
     },
     {
         "Name": "Piranha Lake Key",
-        "Id": 10020118,
+        "Id": 10021300,
         "Address": "0x2027D0F4",
         "CheckType": 0,
         "AddressBit": 1
@@ -141,14 +141,14 @@
     },
     {
         "Name": "Ghastly Voyage Key",
-        "Id": 10020120,
+        "Id": 10021400,
         "Address": "0x2027D1E4",
         "CheckType": 0,
         "AddressBit": 1
     },
     {
         "Name": "Down Home Cooking Key",
-        "Id": 10020121,
+        "Id": 10021500,
         "Address": "0x2027D25C",
         "CheckType": 0,
         "AddressBit": 1
@@ -176,21 +176,21 @@
     },
     {
         "Name": "King of the Hill Key",
-        "Id": 10020125,
+        "Id": 10021600,
         "Address": "0x2027D540",
         "CheckType": 0,
         "AddressBit": 1
     },
     {
         "Name": "Rapid Fire Assault Key",
-        "Id": 10020126,
+        "Id": 10021700,
         "Address": "0x2027D5B8",
         "CheckType": 0,
         "AddressBit": 1
     },
     {
         "Name": "Desperate Race Key",
-        "Id": 10020127,
+        "Id": 10021800,
         "Address": "0x2027D6A8",
         "CheckType": 0,
         "AddressBit": 1
