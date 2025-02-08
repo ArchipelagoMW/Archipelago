@@ -1177,7 +1177,7 @@ class SC2Context(CommonContext):
 
         # Build response data
         unit_counts: typing.Dict[str, int] = {}
-        slots_to_update: typing.Dict[str, typing.Dict[str, int]] = {}
+        slots_to_update: typing.Dict[str, typing.Dict[int, typing.Dict[str, int]]] = {}
         for (unit, slot, send_time) in units:
             unit_counts[unit] = unit_counts.get(unit, 0) + 1
             if slot not in slots_to_update:

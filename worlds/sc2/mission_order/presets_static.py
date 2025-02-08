@@ -761,6 +761,34 @@ preset_nco = {
 }
 
 def _build_static_preset(preset: Dict[str, Any], options: Dict[str, Any]) -> Dict[str, Any]:
+    # Raceswap shuffling
+    raceswaps = options.pop("shuffle_raceswaps", False)
+    if not isinstance(raceswaps, bool):
+        raise ValueError(
+            f"Preset option \"shuffle_raceswaps\" received unknown value \"{raceswaps}\".\n"
+            "Valid values are: true, false"
+        )
+    elif raceswaps == True:
+        # Remove "~ Raceswap Missions" operation from mission pool options
+        # Also add raceswap variants to plando'd vanilla missions
+        for layout in preset.values():
+            if type(layout) == dict:
+                # Currently mission pools in layouts are always ["X campaign missions", "~ raceswap missions"]
+                layout_mission_pool: List[str] = layout.get("mission_pool", None)
+                if layout_mission_pool is not None:
+                    layout_mission_pool.pop()
+                    layout["mission_pool"] = layout_mission_pool
+                if "missions" in layout:
+                    for slot in layout["missions"]:
+                        # Currently mission pools in slots are always strings
+                        slot_mission_pool: str = slot.get("mission_pool", None)
+                        # Identify raceswappable missions by their race in brackets
+                        if slot_mission_pool is not None and slot_mission_pool[-1] == ")":
+                            mission_name = slot_mission_pool[:slot_mission_pool.rfind("(")]
+                            new_mission_pool = [f"{mission_name}({race})" for race in ["Terran", "Zerg", "Protoss"]]
+                            slot["mission_pool"] = new_mission_pool
+    # The presets are set up for no raceswaps, so raceswaps == False doesn't need to be covered
+
     # Mission pool selection
     missions = options.pop("missions", "random")
     if missions == "vanilla":

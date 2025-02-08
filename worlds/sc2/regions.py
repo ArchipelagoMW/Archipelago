@@ -6,9 +6,9 @@ from .mission_tables import (
     campaign_final_mission_locations, campaign_alt_final_mission_locations
 )
 from .options import (
-    get_option_value, ShuffleNoBuild, RequiredTactics, ExtraLocations, ShuffleCampaigns,
+    ShuffleNoBuild, RequiredTactics, ExtraLocations, ShuffleCampaigns,
     kerrigan_unit_available, TakeOverAIAllies, MissionOrder, get_excluded_missions, get_enabled_campaigns, static_mission_orders,
-    GridTwoStartPositions, KeyMode, EnableMissionRaceBalancing
+    GridTwoStartPositions, KeyMode, EnableMissionRaceBalancing, EnableRaceSwapVariants
 )
 from .mission_order.options import CustomMissionOrder
 from .mission_order import SC2MissionOrder
@@ -68,13 +68,13 @@ def create_mission_order(
 
 def adjust_mission_pools(world: 'SC2World', pools: SC2MOGenMissionPools):
     # Mission pool changes
-    mission_order_type = get_option_value(world, "mission_order")
+    mission_order_type = world.options.mission_order.value
     enabled_campaigns = get_enabled_campaigns(world)
-    adv_tactics = get_option_value(world, "required_tactics") != RequiredTactics.option_standard
-    shuffle_no_build = get_option_value(world, "shuffle_no_build")
-    extra_locations = get_option_value(world, "extra_locations")
-    grant_story_tech = get_option_value(world, "grant_story_tech")
-    grant_story_levels = get_option_value(world, "grant_story_levels")
+    adv_tactics = world.options.required_tactics.value != RequiredTactics.option_standard
+    shuffle_no_build = world.options.shuffle_no_build.value
+    extra_locations = world.options.extra_locations.value
+    grant_story_tech = world.options.grant_story_tech.value
+    grant_story_levels = world.options.grant_story_levels.value
 
     # WoL
     if shuffle_no_build == ShuffleNoBuild.option_false or adv_tactics:
@@ -112,10 +112,10 @@ def adjust_mission_pools(world: 'SC2World', pools: SC2MOGenMissionPools):
     # Prologue's only valid starter is the goal mission
     if enabled_campaigns == {SC2Campaign.PROLOGUE} \
             or mission_order_type in static_mission_orders \
-            and get_option_value(world, "shuffle_campaigns") == ShuffleCampaigns.option_false:
+            and world.options.shuffle_campaigns.value == ShuffleCampaigns.option_false:
         pools.move_mission(SC2Mission.DARK_WHISPERS, Difficulty.EASY, Difficulty.STARTER)
     # HotS
-    kerriganless = get_option_value(world, "kerrigan_presence") not in kerrigan_unit_available \
+    kerriganless = world.options.kerrigan_presence.value not in kerrigan_unit_available \
         or SC2Campaign.HOTS not in enabled_campaigns
     if adv_tactics:
         # Medium -> Easy
@@ -136,7 +136,7 @@ def adjust_mission_pools(world: 'SC2World', pools: SC2MOGenMissionPools):
         # The player has, all the stuff he needs, provided under these settings
         pools.move_mission(SC2Mission.SUPREME, Difficulty.MEDIUM, Difficulty.STARTER)
         pools.move_mission(SC2Mission.THE_INFINITE_CYCLE, Difficulty.HARD, Difficulty.STARTER)
-    if get_option_value(world, "take_over_ai_allies") == TakeOverAIAllies.option_true:
+    if world.options.take_over_ai_allies.value == TakeOverAIAllies.option_true:
         pools.move_mission(SC2Mission.HARBINGER_OF_OBLIVION, Difficulty.MEDIUM, Difficulty.STARTER)
     if pools.get_pool_size(Difficulty.STARTER) < 2 and not kerriganless or adv_tactics:
         # Conditionally moving Easy missions to Starter
@@ -149,7 +149,7 @@ def adjust_mission_pools(world: 'SC2World', pools: SC2MOGenMissionPools):
         pools.move_mission(SC2Mission.FLASHPOINT, Difficulty.HARD, Difficulty.EASY)
 
 def setup_mission_pool_balancing(world: 'SC2World', pools: SC2MOGenMissionPools):
-    race_mission_balance = get_option_value(world, "mission_race_balancing")
+    race_mission_balance = world.options.mission_race_balancing.value
     flag_ratios: Dict[MissionFlag, int] = {}
     flag_weights: Dict[MissionFlag, int] = {}
     if race_mission_balance == EnableMissionRaceBalancing.option_semi_balanced:
@@ -172,12 +172,18 @@ def create_static_mission_order(world: 'SC2World', mission_order_type: int, miss
     enabled_campaigns = get_enabled_campaigns(world)
     if mission_order_type == MissionOrder.option_vanilla:
         missions = "vanilla"
-    elif get_option_value(world, "shuffle_campaigns") == ShuffleCampaigns.option_true:
+    elif world.options.shuffle_campaigns.value == ShuffleCampaigns.option_true:
         missions = "random"
     else:
         missions = "vanilla_shuffled"
     
-    key_mode_option = get_option_value(world, "key_mode")
+    if world.options.enable_race_swap.value == EnableRaceSwapVariants.option_disabled:
+        shuffle_raceswaps = False
+    else:
+        # Picking specific raceswap variants is handled by mission exclusion
+        shuffle_raceswaps = True
+
+    key_mode_option = world.options.key_mode.value
     if key_mode_option == KeyMode.option_missions:
         keys = "missions"
     elif key_mode_option == KeyMode.option_questlines:
@@ -200,16 +206,17 @@ def create_static_mission_order(world: 'SC2World', mission_order_type: int, miss
         return {
             "preset": prefix + name,
             "missions": missions,
+            "shuffle_raceswaps": shuffle_raceswaps,
             "keys": keys
         }
 
-    if SC2Campaign.WOL in enabled_campaigns:
-        mission_order[SC2Campaign.WOL.campaign_name] = mission_order_preset("wol")
-        
-    if SC2Campaign.PROPHECY in enabled_campaigns:
+    prophecy_enabled = SC2Campaign.PROPHECY in enabled_campaigns
+    wol_enabled = SC2Campaign.WOL in enabled_campaigns
+    if wol_enabled:
+        mission_order[SC2Campaign.WOL.campaign_name] = mission_order_preset("wol") 
+
+    if prophecy_enabled:
         mission_order[SC2Campaign.PROPHECY.campaign_name] = mission_order_preset("prophecy")
-        if SC2Campaign.WOL in enabled_campaigns:
-            mission_order[SC2Campaign.PROPHECY.campaign_name]["entry_rules"] = [{ "scope": SC2Campaign.WOL.campaign_name + "/Artifact/1" }]
 
     if SC2Campaign.HOTS in enabled_campaigns:
         mission_order[SC2Campaign.HOTS.campaign_name] = mission_order_preset("hots")
@@ -237,6 +244,11 @@ def create_static_mission_order(world: 'SC2World', mission_order_type: int, miss
     # Resolve immediately so the layout updates are simpler
     mission_order = CustomMissionOrder(mission_order).value
 
+    # WoL requirements should count missions from Prophecy if both are enabled, and Prophecy should require a WoL mission
+    # There is a preset that already does this, but special-casing this way is easier to work with for other code
+    if wol_enabled and prophecy_enabled:
+        fix_wol_prophecy_entry_rules(mission_order)
+    
     # Vanilla Shuffled is allowed to drop some slots
     if mission_order_type == MissionOrder.option_vanilla_shuffled:
         remove_missions(world, mission_order, mission_pools)
@@ -246,10 +258,40 @@ def create_static_mission_order(world: 'SC2World', mission_order_type: int, miss
 
     return mission_order
 
+
+def fix_wol_prophecy_entry_rules(mission_order: Dict[str, Dict[str, Any]]):
+    prophecy_name = SC2Campaign.PROPHECY.campaign_name
+
+    # Make the mission count entry rules in WoL also count Prophecy
+    def fix_entry_rule(entry_rule: Dict[str, Any], local_campaign_scope: str):
+        # This appends Prophecy to any scope that points at the local campaign (WoL)
+        if "scope" in entry_rule:
+            if entry_rule["scope"] == local_campaign_scope:
+                entry_rule["scope"] = [local_campaign_scope, prophecy_name]
+            elif isinstance(entry_rule["scope"], list) and local_campaign_scope in entry_rule["scope"]:
+                entry_rule["scope"] = entry_rule["scope"] + [prophecy_name]
+    
+    for layout_dict in mission_order[SC2Campaign.WOL.campaign_name].values():
+        if not isinstance(layout_dict, dict):
+            continue
+        if "entry_rules" in layout_dict:
+            for entry_rule in layout_dict["entry_rules"]:
+                fix_entry_rule(entry_rule, "..")
+        if "missions" in layout_dict:
+            for mission_dict in layout_dict["missions"]:
+                if "entry_rules" in mission_dict:
+                    for entry_rule in mission_dict["entry_rules"]:
+                        fix_entry_rule(entry_rule, "../..")
+    
+    # Make Prophecy require Artifact's second mission
+    mission_order[prophecy_name][prophecy_name]["entry_rules"] = [{ "scope": [f"{SC2Campaign.WOL.campaign_name}/Artifact/1"]}]
+
+
 def force_final_missions(world: 'SC2World', mission_order: Dict[str, Dict[str, Any]], mission_order_type: int):
     goal_mission: Optional[SC2Mission] = None
     excluded_missions = get_excluded_missions(world)
     enabled_campaigns = get_enabled_campaigns(world)
+    raceswap_variants = [mission for mission in SC2Mission if mission.flags & MissionFlag.RaceSwap]
     # Prefer long campaigns over shorter ones and harder missions over easier ones
     goal_priorities = {campaign: get_campaign_goal_priority(campaign, excluded_missions) for campaign in enabled_campaigns}
     goal_level = max(goal_priorities.values())
@@ -263,6 +305,10 @@ def force_final_missions(world: 'SC2World', mission_order: Dict[str, Dict[str, A
             if primary_goal is None or primary_goal.mission in excluded_missions:
                 # No primary goal or its mission is excluded
                 candidate_missions = list(campaign_alt_final_mission_locations[goal_campaign].keys())
+                # Also allow raceswaps of curated final missions, provided they're not excluded
+                for candidate_with_raceswaps in [mission for mission in candidate_missions if mission.flags & MissionFlag.HasRaceSwap]:
+                    raceswap_candidates = [mission for mission in raceswap_variants if mission.map_file == candidate_with_raceswaps.map_file]
+                    candidate_missions.extend(raceswap_candidates)
                 candidate_missions = [mission for mission in candidate_missions if mission not in excluded_missions]
                 if len(candidate_missions) == 0:
                     raise Exception(f"There are no valid goal missions for campaign {goal_campaign.campaign_name}. Please exclude fewer missions.")
@@ -374,13 +420,13 @@ def make_grid(world: 'SC2World', size: int) -> Dict[str, Dict[str, Any]]:
             "display_name": "",
             "type": "grid",
             "size": size,
-            "two_start_positions": get_option_value(world, "grid_two_start_positions") == GridTwoStartPositions.option_true
+            "two_start_positions": world.options.grid_two_start_positions.value == GridTwoStartPositions.option_true
         }
     }
     return mission_order
 
 def make_golden_path(world: 'SC2World', size: int) -> Dict[str, Dict[str, Any]]:
-    key_mode = get_option_value(world, "key_mode")
+    key_mode = world.options.key_mode.value
     if key_mode == KeyMode.option_missions:
         keys = "missions"
     elif key_mode == KeyMode.option_questlines:
@@ -430,7 +476,7 @@ def make_hopscotch(world: 'SC2World', size: int) -> Dict[str, Dict[str, Any]]:
             "display_name": "",
             "type": "hopscotch",
             "size": size,
-            "two_start_positions": get_option_value(world, "grid_two_start_positions") == GridTwoStartPositions.option_true
+            "two_start_positions": world.options.grid_two_start_positions.value == GridTwoStartPositions.option_true
         }
     }
     return mission_order
@@ -455,7 +501,7 @@ def create_dynamic_mission_order(world: 'SC2World', mission_order_type: int, mis
     # Optionally add key requirements
     # This only works for layout types that don't define their own entry rules (which is currently all of them)
     # Golden Path handles Key Mode on its own
-    key_mode = get_option_value(world, "key_mode")
+    key_mode = world.options.key_mode.value
     if key_mode == KeyMode.option_missions:
         mission_order[list(mission_order.keys())[0]]["missions"] = [
             { "index": "all", "entry_rules": [{ "items": { "Key": 1 }}] },
