@@ -189,6 +189,16 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
             state = self.multiworld.state
         return super().assert_cannot_reach_region(region, state)
 
+    def assert_can_reach_region(self, region: Region | str, state: CollectionState | None = None) -> None:
+        if state is None:
+            state = self.multiworld.state
+        super().assert_can_reach_region(region, state)
+
+    def assert_cannot_reach_region(self, region: Region | str, state: CollectionState | None = None) -> None:
+        if state is None:
+            state = self.multiworld.state
+        super().assert_cannot_reach_region(region, state)
+
     def assert_can_reach_entrance(self, entrance: Entrance | str, state: CollectionState | None = None) -> None:
         if state is None:
             state = self.multiworld.state

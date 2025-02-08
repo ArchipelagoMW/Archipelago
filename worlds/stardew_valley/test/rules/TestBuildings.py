@@ -9,37 +9,41 @@ class TestBuildingLogic(SVTestBase):
     }
 
     def test_coop_blueprint(self):
-        self.assert_cannot_reach_location("Coop Blueprint")
+        location = "Coop Blueprint"
+        self.assert_cannot_reach_location(location)
 
         self.collect_lots_of_money()
-        self.assert_can_reach_location("Coop Blueprint")
+        self.assert_can_reach_location(location)
 
     def test_big_coop_blueprint(self):
-        self.assert_cannot_reach_location("Big Coop Blueprint")
+        location = "Big Coop Blueprint"
+        self.assert_cannot_reach_location(location)
 
         self.collect_lots_of_money()
-        self.assert_cannot_reach_location("Big Coop Blueprint")
+        self.assert_cannot_reach_location(location)
 
         self.multiworld.state.collect(self.create_item("Progressive Coop"))
-        self.assert_can_reach_location("Big Coop Blueprint")
+        self.assert_can_reach_location(location)
 
     def test_deluxe_coop_blueprint(self):
-        self.assert_cannot_reach_location("Deluxe Coop Blueprint")
+        location = "Deluxe Coop Blueprint"
+        self.assert_cannot_reach_location(location)
 
         self.collect_lots_of_money()
-        self.assert_cannot_reach_location("Deluxe Coop Blueprint")
+        self.assert_cannot_reach_location(location)
 
         self.multiworld.state.collect(self.create_item("Progressive Coop"))
-        self.assert_cannot_reach_location("Deluxe Coop Blueprint")
+        self.assert_cannot_reach_location(location)
 
         self.multiworld.state.collect(self.create_item("Progressive Coop"))
-        self.assert_can_reach_location("Deluxe Coop Blueprint")
+        self.assert_can_reach_location(location)
 
     def test_big_shed_blueprint(self):
-        self.assert_cannot_reach_location("Big Shed Blueprint")
+        location = "Big Shed Blueprint"
+        self.assert_cannot_reach_location(location)
 
         self.collect_lots_of_money()
-        self.assert_cannot_reach_location("Big Shed Blueprint")
+        self.assert_cannot_reach_location(location)
 
         self.multiworld.state.collect(self.create_item("Progressive Shed"))
-        self.assert_can_reach_location("Big Shed Blueprint")
+        self.assert_can_reach_location(location)

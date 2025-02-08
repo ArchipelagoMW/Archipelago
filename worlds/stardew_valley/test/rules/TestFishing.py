@@ -43,18 +43,19 @@ class TestNeedRegionToCatchFish(SVTestBase):
             with self.subTest(f"Region rules for {fish}"):
                 self.collect_all_the_money()
                 item_names = fish_and_items[fish]
-                self.assert_cannot_reach_location(f"Fishsanity: {fish}")
+                location = f"Fishsanity: {fish}"
+                self.assert_cannot_reach_location(location)
                 items = []
                 for item_name in item_names:
                     items.append(self.collect(item_name))
                 with self.subTest(f"{fish} can be reached with {item_names}"):
-                    self.assert_can_reach_location(f"Fishsanity: {fish}")
+                    self.assert_can_reach_location(location)
                 for item_required in items:
                     self.multiworld.state = self.original_state.copy()
                     with self.subTest(f"{fish} requires {item_required.name}"):
                         for item_to_collect in items:
                             if item_to_collect.name != item_required.name:
                                 self.collect(item_to_collect)
-                        self.assert_cannot_reach_location(f"Fishsanity: {fish}")
+                        self.assert_cannot_reach_location(location)
 
             self.multiworld.state = self.original_state.copy()

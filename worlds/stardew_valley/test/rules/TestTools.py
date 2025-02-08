@@ -59,34 +59,35 @@ class TestProgressiveToolsLogic(SVTestBase):
         self.multiworld.state.collect(self.create_item("Summer"))
         self.collect_lots_of_money()
 
-        self.assert_cannot_reach_location("Old Master Cannoli")
+        location = "Old Master Cannoli"
+        self.assert_cannot_reach_location(location)
 
         fall = self.create_item("Fall")
         self.multiworld.state.collect(fall)
-        self.assert_cannot_reach_location("Old Master Cannoli")
+        self.assert_cannot_reach_location(location)
 
         tuesday = self.create_item("Traveling Merchant: Tuesday")
         self.multiworld.state.collect(tuesday)
-        self.assert_cannot_reach_location("Old Master Cannoli")
+        self.assert_cannot_reach_location(location)
 
         rare_seed = self.create_item("Rare Seed")
         self.multiworld.state.collect(rare_seed)
-        self.assert_can_reach_location("Old Master Cannoli")
+        self.assert_can_reach_location(location)
 
         self.remove(fall)
-        self.assert_cannot_reach_location("Old Master Cannoli")
+        self.assert_cannot_reach_location(location)
         self.remove(tuesday)
 
         green_house = self.create_item("Greenhouse")
         self.multiworld.state.collect(green_house)
-        self.assert_cannot_reach_location("Old Master Cannoli")
+        self.assert_cannot_reach_location(location)
 
         friday = self.create_item("Traveling Merchant: Friday")
         self.multiworld.state.collect(friday)
-        self.assert_can_reach_location("Old Master Cannoli")
+        self.assert_can_reach_location(location)
 
         self.remove(green_house)
-        self.assert_cannot_reach_location("Old Master Cannoli")
+        self.assert_cannot_reach_location(location)
         self.remove(friday)
 
 
