@@ -149,6 +149,7 @@ class Sly1Options(PerGameCommonOptions):
     HourglassesRequireRoll:         HourglassesRequireRoll
     AvoidEarlyBK:                   AvoidEarlyBK
     ExcludeMinigames:               ExcludeMinigames
+    MinigameCaches:                 MinigameCaches
     TrapChance:                     TrapChance
     IcePhysicsTrapWeight:           IcePhysicsTrapWeight
     SpeedChangeTrapWeight:          SpeedChangeTrapWeight
@@ -158,7 +159,7 @@ class Sly1Options(PerGameCommonOptions):
 
 sly1_option_groups: Dict[str, List[Any]] = {
     "General Options": [RequiredBosses, StartingEpisode, IncludeHourglasses, HourglassesRequireRoll, CluesanityBundleSize],
-    "Exclude Minigames": [ExcludeMinigames, MinigameCaches],
+    "Minigame Options": [ExcludeMinigames, MinigameCaches],
     "Trap Options": [TrapChance, IcePhysicsTrapWeight,
                      SpeedChangeTrapWeight, BentleyJumpscareTrapWeight,
                      BallTrapWeight]
@@ -171,5 +172,6 @@ slot_data_options: List[str] = {
     "HourglassesRequireRoll",
     "AvoidEarlyBK",
     "ExcludeMinigames",
+    "MinigameCaches",
     "CluesanityBundleSize"
 }
