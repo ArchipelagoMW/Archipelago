@@ -1,6 +1,7 @@
 from . import SVTestBase
 from ..options import ExcludeGingerIsland, Walnutsanity
 from ..strings.ap_names.ap_option_names import WalnutsanityOptionName
+from ..strings.ap_names.transport_names import Transportation
 
 
 class TestWalnutsanityNone(SVTestBase):
@@ -26,24 +27,27 @@ class TestWalnutsanityNone(SVTestBase):
         self.collect("Island West Turtle")
         self.collect("Progressive House")
         self.collect("5 Golden Walnuts", 10)
+        self.assert_cannot_reach_location(Transportation.parrot_express)
 
-        self.assert_cannot_reach_location("Parrot Express")
         self.collect("Island North Turtle")
         self.collect("Island Resort")
         self.collect("Open Professor Snail Cave")
-        self.assert_cannot_reach_location("Parrot Express")
+        self.assert_cannot_reach_location(Transportation.parrot_express)
+
         self.collect("Dig Site Bridge")
         self.collect("Island Farmhouse")
         self.collect("Qi Walnut Room")
-        self.assert_cannot_reach_location("Parrot Express")
+        self.assert_cannot_reach_location(Transportation.parrot_express)
+
         self.collect("Combat Level", 10)
         self.collect("Mining Level", 10)
-        self.assert_cannot_reach_location("Parrot Express")
+        self.assert_cannot_reach_location(Transportation.parrot_express)
+
         self.collect("Progressive Slingshot")
         self.collect("Progressive Weapon", 5)
         self.collect("Progressive Pickaxe", 4)
         self.collect("Progressive Watering Can", 4)
-        self.assert_can_reach_location("Parrot Express")
+        self.assert_can_reach_location(Transportation.parrot_express)
 
 
 class TestWalnutsanityPuzzles(SVTestBase):
@@ -127,9 +131,9 @@ class TestWalnutsanityPuzzlesAndBushes(SVTestBase):
         self.collect("Island West Turtle")
         self.collect("5 Golden Walnuts", 5)
 
-        self.assert_cannot_reach_location("Parrot Express")
+        self.assert_cannot_reach_location(Transportation.parrot_express)
         self.collect("Island North Turtle")
-        self.assert_can_reach_location("Parrot Express")
+        self.assert_can_reach_location(Transportation.parrot_express)
 
 
 class TestWalnutsanityDigSpots(SVTestBase):
@@ -189,20 +193,20 @@ class TestWalnutsanityAll(SVTestBase):
         # You need to receive 40, and collect 4
         self.collect("Island Obelisk")
         self.collect("Island West Turtle")
-        self.assert_cannot_reach_location("Parrot Express")
+        self.assert_cannot_reach_location(Transportation.parrot_express)
         items = self.collect("5 Golden Walnuts", 8)
-        self.assert_can_reach_location("Parrot Express")
+        self.assert_can_reach_location(Transportation.parrot_express)
         self.remove(items)
-        self.assert_cannot_reach_location("Parrot Express")
+        self.assert_cannot_reach_location(Transportation.parrot_express)
         items = self.collect("3 Golden Walnuts", 14)
-        self.assert_can_reach_location("Parrot Express")
+        self.assert_can_reach_location(Transportation.parrot_express)
         self.remove(items)
-        self.assert_cannot_reach_location("Parrot Express")
+        self.assert_cannot_reach_location(Transportation.parrot_express)
         items = self.collect("Golden Walnut", 40)
-        self.assert_can_reach_location("Parrot Express")
+        self.assert_can_reach_location(Transportation.parrot_express)
         self.remove(items)
-        self.assert_cannot_reach_location("Parrot Express")
+        self.assert_cannot_reach_location(Transportation.parrot_express)
         self.collect("5 Golden Walnuts", 4)
         self.collect("3 Golden Walnuts", 6)
         self.collect("Golden Walnut", 2)
-        self.assert_can_reach_location("Parrot Express")
+        self.assert_can_reach_location(Transportation.parrot_express)
