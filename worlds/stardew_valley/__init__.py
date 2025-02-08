@@ -298,9 +298,6 @@ class StardewValleyWorld(World):
     def generate_basic(self):
         pass
 
-    def pre_fill(self) -> None:
-        pass
-
     def get_filler_item_name(self) -> str:
         if not self.filler_item_pool_names:
             self.generate_filler_item_pool_names()

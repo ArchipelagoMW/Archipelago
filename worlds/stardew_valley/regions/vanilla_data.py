@@ -283,6 +283,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
                    flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
     ConnectionData(Entrance.enter_secret_woods, RegionName.secret_woods),
     ConnectionData(Entrance.forest_to_sewer, RegionName.sewer, flag=RandomizationFlag.BUILDINGS),
+    # We remove the bit for masteries, because the mastery cave is to be excluded from the randomization if masteries are not shuffled.
     ConnectionData(Entrance.forest_to_mastery_cave, RegionName.mastery_cave, flag=RandomizationFlag.BUILDINGS ^ RandomizationFlag.EXCLUDE_MASTERIES),
     ConnectionData(Entrance.town_to_sewer, RegionName.sewer, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(Entrance.enter_mutant_bug_lair, RegionName.mutant_bug_lair, flag=RandomizationFlag.BUILDINGS),

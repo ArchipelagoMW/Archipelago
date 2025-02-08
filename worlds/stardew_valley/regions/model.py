@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Container
 from dataclasses import dataclass, field
 from enum import IntFlag
 
@@ -31,7 +32,8 @@ class RandomizationFlag(IntFlag):
 
     # Content flag for entrances exclusions
     # The next 2 bits are used to mark if an entrance is to be excluded from randomization according to the content options.
-    # Those bits should be removed when an entrance should be excluded.
+    # Those bits must be removed from an entrance flags when then entrance must be excluded.
+    __UNUSED = 1 << 4  # 0b010000
     EXCLUDE_MASTERIES = 1 << 5  # 0b100000
 
     # Entrance groups
@@ -59,12 +61,14 @@ class RegionData:
         assert self.name == other.name, "Regions must have the same name to be merged"
 
         if other.flag == MergeFlag.REMOVE_EXITS:
-            return self.get_without_exits(set(other.exits))
+            return self.get_without_exits(other.exits)
 
-        merged_exits = tuple(set(self.exits + other.exits))
+        merged_exits = self.exits + other.exits
+        assert len(merged_exits) == len(set(merged_exits)), "Two regions getting merged have duplicated exists..."
+
         return RegionData(self.name, merged_exits)
 
-    def get_without_exits(self, exits_to_remove: set[str]) -> RegionData:
+    def get_without_exits(self, exits_to_remove: Container[str]) -> RegionData:
         exits = tuple(exit_ for exit_ in self.exits if exit_ not in exits_to_remove)
         return RegionData(self.name, exits)
 

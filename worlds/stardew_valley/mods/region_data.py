@@ -169,7 +169,8 @@ sve_main_land_regions = [
     RegionData(Region.fish_shop, (SVEEntrance.fish_shop_to_willy_bedroom,)),
     RegionData(SVERegion.willy_bedroom),
     RegionData(Region.mountain, (SVEEntrance.mountain_to_guild_summit,)),
-    RegionData(Region.mountain, (Entrance.mountain_to_adventurer_guild, Entrance.mountain_to_the_mines), MergeFlag.REMOVE_EXITS),
+    # These entrances are removed from the mountain region when SVE is enabled
+    RegionData(Region.mountain, (Entrance.mountain_to_adventurer_guild, Entrance.mountain_to_the_mines), flag=MergeFlag.REMOVE_EXITS),
     RegionData(SVERegion.guild_summit, (SVEEntrance.guild_to_interior, SVEEntrance.guild_to_mines)),
     RegionData(Region.railroad, (SVEEntrance.to_susan_house, SVEEntrance.enter_summit, SVEEntrance.railroad_to_grampleton_station)),
     RegionData(SVERegion.grampleton_station, (SVEEntrance.grampleton_station_to_grampleton_suburbs,)),
@@ -355,14 +356,14 @@ boarding_house_entrances = [
     ConnectionData(BoardingHouseEntrance.lost_valley_ruins_to_lost_valley_house_2, BoardingHouseRegion.lost_valley_house_2, flag=RandomizationFlag.BUILDINGS)
 ]
 
-vanilla_connections_to_remove_by_mod: dict[str, tuple[str, ...]] = {
+vanilla_connections_to_remove_by_content_pack: dict[str, tuple[str, ...]] = {
     ModNames.sve: (
         Entrance.mountain_to_the_mines,
         Entrance.mountain_to_adventurer_guild,
     )
 }
 
-region_data_by_mod = {
+region_data_by_content_pack = {
     ModNames.deepwoods: ModRegionsData(ModNames.deepwoods, deep_woods_regions, deep_woods_entrances),
     ModNames.eugene: ModRegionsData(ModNames.eugene, eugene_regions, eugene_entrances),
     ModNames.jasper: ModRegionsData(ModNames.jasper, jasper_regions, jasper_entrances),

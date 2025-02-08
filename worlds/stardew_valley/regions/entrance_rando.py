@@ -6,7 +6,7 @@ from ..options import EntranceRandomization
 
 
 def create_player_randomization_flag(entrance_randomization_choice: EntranceRandomization, content: StardewContent):
-    """Return the flag that a connection is expected of have to be randomized. Only the bit corresponding to the player randomization choice will be enabled.
+    """Return the flag that a connection is expected to have to be randomized. Only the bit corresponding to the player randomization choice will be enabled.
 
     Other bits for content exclusion might also be enabled, tho the preferred solution to exclude content should be to not create those regions at alls, when possible.
     """
@@ -44,8 +44,9 @@ def prepare_mod_data(placements: ERPlacementState) -> dict[str, str]:
     The mod require a dictionary detailing which connections need to be swapped. It acts as if the connections are decoupled, so both directions are required.
 
     For instance, GER will provide placements like (Town to Community Center, Hospital to Town), meaning that the door of the Community Center will instead lead
-     to the Hospital, and that the exit of the Hospital will lead to the Town by the Community Center door. The mod need to know both swaps, being the original
-     destination of the "Town to Community Center" connection is to be replaced by the original destination of "Town to Hospital", and the original destination of "Hospital to Town" is to be replaced by the original destination of "Community Center to Town".
+     to the Hospital, and that the exit of the Hospital will lead to the Town by the Community Center door. The StardewAP mod need to know both swaps, being the
+     original destination of the "Town to Community Center" connection is to be replaced by the original destination of "Town to Hospital", and the original
+     destination of "Hospital to Town" is to be replaced by the original destination of "Community Center to Town".
     """
 
     swapped_connections = {}
