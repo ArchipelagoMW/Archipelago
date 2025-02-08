@@ -310,7 +310,7 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
     def create_item(self, item: str) -> StardewItem:
         return self.world.create_item(item)
 
-    def get_all_created_items(self) -> List[str]:
+    def get_all_created_items(self) -> list[str]:
         return [item.name for item in itertools.chain(self.multiworld.get_items(), self.multiworld.precollected_items[self.player])]
 
     def remove_one_by_name(self, item: str) -> None:
