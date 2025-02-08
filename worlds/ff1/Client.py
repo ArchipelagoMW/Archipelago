@@ -1,9 +1,7 @@
 import logging
 from collections import deque
-from copy import deepcopy
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
-from MultiServer import Client
 from NetUtils import ClientStatus
 
 import worlds._bizhawk as bizhawk
@@ -146,9 +144,7 @@ class FF1Client(BizHawkClient):
         status_b = await self.read_sram_value(ctx, status_b_location)
         status_c = await self.read_sram_value(ctx, status_c_location)
 
-        # First character's name's first character will never have FF
-        # so this will cause all guarded read/writes to fail properly
-        self.guard_character = status_a if status_a != 0x00 else 0xFF
+        self.guard_character = status_a
 
         return (status_a != 0x00) and not (status_a == 0xF2 and status_b == 0xF2 and status_c == 0xF2)
 
@@ -189,7 +185,7 @@ class FF1Client(BizHawkClient):
     async def received_items_check(self, ctx: "BizHawkClientContext") -> None:
         assert self.consumable_stack_amounts, "shouldn't call this function without reading consumable_stack_amounts"
         items_received_count = await self.read_sram_value(ctx, items_obtained)
-        write_list: List[tuple[int, List[int], str]] = []
+        write_list: list[tuple[int, list[int], str]] = []
         items_received_count = await self.read_sram_value_guarded(ctx, items_obtained)
         if items_received_count is None:
             return
