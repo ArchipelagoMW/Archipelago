@@ -32,22 +32,36 @@ def get_total_locations(world: "Sly1World") -> int:
                 
                 total += bundle_amount
 
+    for name, data in minigame_locations.items():
+        if data.level_type in world.options.ExcludeMinigames.value:
+            continue
+
+        total += world.options.MinigameCaches.value
+
     return total
 
 def get_location_names() -> Dict[str, int]:
+    # There HAS to be a better way. I just dont know it since I can't pass the world in here so I can't check the options
+
+    # For all possible bottle numbers, create location entries
     all_possible_bottle_locations = {}
     for name, data in bottle_amounts.items():
-        # For all possible bottle numbers, create location entries
         for bottle_number in range(1, data.bottle_amount + 1):
             bottle_code = data.ap_code + (bottle_number - 1)
             bottle_location_name = f"{name} Bottle #{bottle_number}"
             all_possible_bottle_locations[bottle_location_name] = bottle_code
 
-    names = {**{name: data.ap_code for name, data in location_table.items()}, **all_possible_bottle_locations}
+    # Add all the normal key minigame locations and all the cache options
+    all_possible_minigame_locations = {}
+    for name, data in minigame_locations.items():
+        all_possible_minigame_locations[f"{name} Key"] = data.ap_code
+        for cache_number in range(1, 10):
+            cache_code = data.ap_code + (cache_number - 1)
+            cache_location_name = f"{name} Cache #{cache_number}"
+            all_possible_minigame_locations[cache_location_name] = cache_code
 
-    return names
+    names = {**{name: data.ap_code for name, data in location_table.items()}, **all_possible_bottle_locations, **all_possible_minigame_locations}
 
-    names = {name: data.ap_code for name, data in location_table.items()}
     return names
 
 def is_valid_location(world: "Sly1World", name) -> bool:
@@ -90,6 +104,26 @@ def generate_bottle_locations(world: "Sly1World", bundle_size: int) -> Dict[str,
             location = Sly1Location(world.player, bottle_name, bottle_code, reg)
             reg.locations.append(location)
 
+def generate_minigame_locations(world: "Sly1World", cache_size: int) -> Dict[str, LocData]:
+    # If the cache size is one, add the word key and add it to the region
+    # Otherwise, create however many caches are needed and add them to the region
+    for name, data in minigame_locations.items():
+        if data.level_type in world.options.ExcludeMinigames.value:
+            continue
+
+        reg = world.multiworld.get_region(data.region, world.player)
+
+        if cache_size == 1:
+            location_name = f"{name} Key"
+            location = Sly1Location(world.player, location_name, data.ap_code, reg)
+            reg.locations.append(location)
+        else:
+            for cache_number in range(1, cache_size + 1):
+                location_name = f"{name} Cache #{cache_number}"
+                cache_code = data.ap_code + cache_number
+                location = Sly1Location(world.player, location_name, cache_code, reg)
+                reg.locations.append(location)
+    
 sly_locations = {
     "Paris Files": LocData(10020000, "Paris",),
 
@@ -189,15 +223,15 @@ vault_locations = {
 }
 
 minigame_locations = {
-    "Treasure in the Depths Key": LocData(10020107, "Prowling the Grounds - Second Gate", key_type=EpisodeType.TOT, key_requirement = 3, level_type = "Crabs"),
-    "At the Dog Track Key": LocData(10020109, "Muggshot's Turf", key_type=EpisodeType.SSE, key_requirement = 1, level_type = "Races"),
-    "Murray's Big Gamble Key": LocData(10020110, "Muggshot's Turf", key_type=EpisodeType.SSE, key_requirement = 1, level_type = "Turrets"),
-    "Piranha Lake Key": LocData(10020118, "Swamp's Dark Center", key_type=EpisodeType.VV, key_requirement = 1, level_type = "Swamp Skiff"),
-    "Ghastly Voyage Key": LocData(10020120, "Swamp's Dark Center - Second Gate", key_type=EpisodeType.VV, key_requirement = 3, level_type = "Hover Blasters"),
-    "Down Home Cooking Key": LocData(10020121, "Swamp's Dark Center - Second Gate", key_type=EpisodeType.VV, key_requirement = 3, level_type = "Chicken Killing"),
-    "King of the Hill Key": LocData(10020125, "Inside the Stronghold", key_type=EpisodeType.FITS, key_requirement = 1, level_type = "Turrets"),
-    "Rapid Fire Assault Key": LocData(10020126, "Inside the Stronghold - Second Gate", key_type=EpisodeType.FITS, key_requirement = 3, level_type = "Hover Blasters"),
-    "Desperate Race Key": LocData(10020127, "Inside the Stronghold - Second Gate", key_type=EpisodeType.FITS, key_requirement = 3, level_type = "Races")
+    "Treasure in the Depths": LocData(10021000, "Prowling the Grounds - Second Gate", key_type=EpisodeType.TOT, key_requirement = 3, level_type = "Crabs"),
+    "At the Dog Track": LocData(10021100, "Muggshot's Turf", key_type=EpisodeType.SSE, key_requirement = 1, level_type = "Races"),
+    "Murray's Big Gamble": LocData(10021200, "Muggshot's Turf", key_type=EpisodeType.SSE, key_requirement = 1, level_type = "Turrets"),
+    "Piranha Lake": LocData(10021300, "Swamp's Dark Center", key_type=EpisodeType.VV, key_requirement = 1, level_type = "Swamp Skiff"),
+    "Ghastly Voyage": LocData(10021400, "Swamp's Dark Center - Second Gate", key_type=EpisodeType.VV, key_requirement = 3, level_type = "Hover Blasters"),
+    "Down Home Cooking": LocData(10021500, "Swamp's Dark Center - Second Gate", key_type=EpisodeType.VV, key_requirement = 3, level_type = "Chicken Killing"),
+    "King of the Hill": LocData(10021600, "Inside the Stronghold", key_type=EpisodeType.FITS, key_requirement = 1, level_type = "Turrets"),
+    "Rapid Fire Assault": LocData(10021700, "Inside the Stronghold - Second Gate", key_type=EpisodeType.FITS, key_requirement = 3, level_type = "Hover Blasters"),
+    "Desperate Race": LocData(10021800, "Inside the Stronghold - Second Gate", key_type=EpisodeType.FITS, key_requirement = 3, level_type = "Races")
 }
 
 event_locations = {
@@ -238,5 +272,4 @@ location_table = {
     **vault_locations,
     **hourglass_locations,
     **event_locations,
-    **minigame_locations
 }
