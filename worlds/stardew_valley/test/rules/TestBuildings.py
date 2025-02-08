@@ -9,45 +9,41 @@ class TestBuildingLogic(SVTestBase):
     }
 
     def test_coop_blueprint(self):
-        self.assertFalse(self.world.logic.region.can_reach_location("Coop Blueprint")(self.multiworld.state))
+        coop_blueprint_rule = self.world.logic.region.can_reach_location("Coop Blueprint")
+        self.assert_rule_false(coop_blueprint_rule, self.multiworld.state)
 
         self.collect_lots_of_money()
-        self.assertTrue(self.world.logic.region.can_reach_location("Coop Blueprint")(self.multiworld.state))
+        self.assert_rule_true(coop_blueprint_rule, self.multiworld.state)
 
     def test_big_coop_blueprint(self):
         big_coop_blueprint_rule = self.world.logic.region.can_reach_location("Big Coop Blueprint")
-        self.assertFalse(big_coop_blueprint_rule(self.multiworld.state),
-                         f"Rule is {repr(self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule)}")
+        self.assert_rule_true(big_coop_blueprint_rule, self.multiworld.state)
 
         self.collect_lots_of_money()
-        self.assertFalse(big_coop_blueprint_rule(self.multiworld.state),
-                         f"Rule is {repr(self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule)}")
+        self.assert_rule_false(big_coop_blueprint_rule, self.multiworld.state)
 
         self.multiworld.state.collect(self.create_item("Progressive Coop"))
-        self.assertTrue(big_coop_blueprint_rule(self.multiworld.state),
-                        f"Rule is {repr(self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule)}")
+        self.assert_rule_true(big_coop_blueprint_rule, self.multiworld.state)
 
     def test_deluxe_coop_blueprint(self):
-        self.assertFalse(self.world.logic.region.can_reach_location("Deluxe Coop Blueprint")(self.multiworld.state))
+        deluxe_coop_blueprint_rule = self.world.logic.region.can_reach_location("Deluxe Coop Blueprint")
+        self.assert_rule_false(deluxe_coop_blueprint_rule, self.multiworld.state)
 
         self.collect_lots_of_money()
-        self.assertFalse(self.world.logic.region.can_reach_location("Deluxe Coop Blueprint")(self.multiworld.state))
+        self.assert_rule_false(deluxe_coop_blueprint_rule, self.multiworld.state)
 
         self.multiworld.state.collect(self.create_item("Progressive Coop"))
-        self.assertFalse(self.world.logic.region.can_reach_location("Deluxe Coop Blueprint")(self.multiworld.state))
+        self.assert_rule_false(deluxe_coop_blueprint_rule, self.multiworld.state)
 
         self.multiworld.state.collect(self.create_item("Progressive Coop"))
-        self.assertTrue(self.world.logic.region.can_reach_location("Deluxe Coop Blueprint")(self.multiworld.state))
+        self.assert_rule_true(deluxe_coop_blueprint_rule, self.multiworld.state)
 
     def test_big_shed_blueprint(self):
         big_shed_rule = self.world.logic.region.can_reach_location("Big Shed Blueprint")
-        self.assertFalse(big_shed_rule(self.multiworld.state),
-                         f"Rule is {repr(self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule)}")
+        self.assert_rule_false(big_shed_rule, self.multiworld.state)
 
         self.collect_lots_of_money()
-        self.assertFalse(big_shed_rule(self.multiworld.state),
-                         f"Rule is {repr(self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule)}")
+        self.assert_rule_false(big_shed_rule, self.multiworld.state)
 
         self.multiworld.state.collect(self.create_item("Progressive Shed"))
-        self.assertTrue(big_shed_rule(self.multiworld.state),
-                        f"Rule is {repr(self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule)}")
+        self.assert_rule_true(big_shed_rule, self.multiworld.state)
