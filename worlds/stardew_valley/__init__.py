@@ -290,13 +290,16 @@ class StardewValleyWorld(World):
     def set_rules(self):
         set_rules(self)
 
+    def connect_entrances(self) -> None:
+        no_target_groups = {0: [0]}
+        placement = entrance_rando.randomize_entrances(self, coupled=True, target_group_lookup=no_target_groups)
+        self.randomized_entrances = prepare_mod_data(placement)
+
     def generate_basic(self):
         pass
 
     def pre_fill(self) -> None:
-        no_target_groups = {0: [0]}
-        placement = entrance_rando.randomize_entrances(self, coupled=True, target_group_lookup=no_target_groups)
-        self.randomized_entrances = prepare_mod_data(placement)
+        pass
 
     def get_filler_item_name(self) -> str:
         if not self.filler_item_pool_names:
