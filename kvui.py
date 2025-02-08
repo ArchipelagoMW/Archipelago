@@ -26,6 +26,10 @@ import Utils
 if Utils.is_frozen():
     os.environ["KIVY_DATA_DIR"] = Utils.local_path("data")
 
+import platformdirs
+os.environ["KIVY_HOME"] = os.path.join(platformdirs.user_config_dir("Archipelago", False), "kivy")
+os.makedirs(os.environ["KIVY_HOME"], exist_ok=True)
+
 from kivy.config import Config
 
 Config.set("input", "mouse", "mouse,disable_multitouch")
