@@ -2096,11 +2096,47 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 2400, LocationType.VICTORY,
             logic.essence_of_eternity_requirement
         ),
-        make_location_data(SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name, "Void Trashers", SC2LOTV_LOC_ID_OFFSET + 2401, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name, "Initial Void Thrashers", SC2LOTV_LOC_ID_OFFSET + 2401, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name, "Void Thrasher Wave 1", SC2LOTV_LOC_ID_OFFSET + 2402, LocationType.EXTRA,
+            logic.essence_of_eternity_requirement
+        ),
+        make_location_data(SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name, "Void Thrasher Wave 2", SC2LOTV_LOC_ID_OFFSET + 2403, LocationType.EXTRA,
+            logic.essence_of_eternity_requirement
+        ),
+        make_location_data(SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name, "Void Thrasher Wave 3", SC2LOTV_LOC_ID_OFFSET + 2404, LocationType.EXTRA,
+            logic.essence_of_eternity_requirement
+        ),
+        make_location_data(SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name, "Void Thrasher Wave 4", SC2LOTV_LOC_ID_OFFSET + 2405, LocationType.EXTRA,
+            logic.essence_of_eternity_requirement
+        ),
+        make_location_data(SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name, "No more than 15 Kerrigan Kills", SC2LOTV_LOC_ID_OFFSET + 2406, LocationType.MASTERY,
+            logic.essence_of_eternity_requirement,
+            flags=LocationFlag.PREVENTATIVE
+        ),
         make_location_data(SC2Mission.AMON_S_FALL.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 2500, LocationType.VICTORY,
             logic.amons_fall_requirement
         ),
-
+        make_location_data(SC2Mission.AMON_S_FALL.mission_name, "Destroy 1 Crystal", SC2LOTV_LOC_ID_OFFSET + 2501, LocationType.EXTRA,
+            logic.amons_fall_requirement
+        ),
+        make_location_data(SC2Mission.AMON_S_FALL.mission_name, "Destroy 2 Crystals", SC2LOTV_LOC_ID_OFFSET + 2502, LocationType.EXTRA,
+            logic.amons_fall_requirement
+        ),
+        make_location_data(SC2Mission.AMON_S_FALL.mission_name, "Destroy 3 Crystals", SC2LOTV_LOC_ID_OFFSET + 2503, LocationType.EXTRA,
+            logic.amons_fall_requirement
+        ),
+        make_location_data(SC2Mission.AMON_S_FALL.mission_name, "Destroy 4 Crystals", SC2LOTV_LOC_ID_OFFSET + 2504, LocationType.EXTRA,
+            logic.amons_fall_requirement
+        ),
+        make_location_data(SC2Mission.AMON_S_FALL.mission_name, "Destroy 5 Crystals", SC2LOTV_LOC_ID_OFFSET + 2505, LocationType.EXTRA,
+            logic.amons_fall_requirement
+        ),
+        make_location_data(SC2Mission.AMON_S_FALL.mission_name, "Destroy 6 Crystals", SC2LOTV_LOC_ID_OFFSET + 2506, LocationType.EXTRA,
+            logic.amons_fall_requirement
+        ),
+        make_location_data(SC2Mission.AMON_S_FALL.mission_name, "Clear Void Chasms", SC2LOTV_LOC_ID_OFFSET + 2507, LocationType.MASTERY,
+            logic.amons_fall_requirement
+        ),
         # Nova Covert Ops
         make_location_data(SC2Mission.THE_ESCAPE.mission_name, "Victory", SC2NCO_LOC_ID_OFFSET + 100, LocationType.VICTORY,
             logic.the_escape_requirement,
@@ -2387,10 +2423,28 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.END_GAME.mission_name, "Victory", SC2NCO_LOC_ID_OFFSET + 900, LocationType.VICTORY,
             lambda state: logic.end_game_requirement(state) and logic.nova_any_weapon(state)
         ),
-        make_location_data(SC2Mission.END_GAME.mission_name, "Xanthos", SC2NCO_LOC_ID_OFFSET + 901, LocationType.VANILLA,
+        make_location_data(SC2Mission.END_GAME.mission_name, "Destroy the Xanthos", SC2NCO_LOC_ID_OFFSET + 901, LocationType.VANILLA,
             logic.end_game_requirement
         ),
-
+        make_location_data(SC2Mission.END_GAME.mission_name, "Disable Xanthos Railgun", SC2NCO_LOC_ID_OFFSET + 902, LocationType.EXTRA,
+            logic.end_game_requirement
+        ),
+        make_location_data(SC2Mission.END_GAME.mission_name, "Disable Xanthos Flamethrower", SC2NCO_LOC_ID_OFFSET + 903, LocationType.EXTRA,
+            logic.end_game_requirement
+        ),
+        make_location_data(SC2Mission.END_GAME.mission_name, "Disable Xanthos Fighter Bay", SC2NCO_LOC_ID_OFFSET + 904, LocationType.EXTRA,
+            logic.end_game_requirement
+        ),
+        make_location_data(SC2Mission.END_GAME.mission_name, "Disable Xanthos Missile Pods", SC2NCO_LOC_ID_OFFSET + 905, LocationType.EXTRA,
+            logic.end_game_requirement
+        ),
+        make_location_data(SC2Mission.END_GAME.mission_name, "Protect Hyperion", SC2NCO_LOC_ID_OFFSET + 906, LocationType.CHALLENGE,
+            logic.end_game_requirement
+        ),
+        make_location_data(SC2Mission.END_GAME.mission_name, "Destroy Orbital Commands", SC2NCO_LOC_ID_OFFSET + 907, LocationType.CHALLENGE,
+            logic.end_game_requirement,
+            flags=LocationFlag.PREVENTATIVE
+        ),
         # Mission Variants
         # 10X/20X - Liberation Day
         make_location_data(SC2Mission.THE_OUTLAWS_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 300, LocationType.VICTORY,
