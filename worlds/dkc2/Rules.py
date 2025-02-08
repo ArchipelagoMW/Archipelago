@@ -598,7 +598,7 @@ class DKC2StrictRules(DKC2Rules):
             LocationName.windy_well_dk_coin:
                 lambda state: self.has_kannons(state) and self.can_cling(state) and self.has_both_kongs(state) and self.can_carry(state),
             LocationName.windy_well_bonus_1:
-                self.can_cling,
+                lambda state: self.can_cling(state) and self.can_carry(state),
             LocationName.windy_well_bonus_2:
                 lambda state: self.has_kannons(state) and self.can_cling(state) and self.can_carry(state) and 
                     self.has_squawks(state) and self.has_both_kongs(state),
