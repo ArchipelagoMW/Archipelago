@@ -11,10 +11,10 @@ class TestBundlesLogic(SVTestBase):
     }
 
     def test_vault_2500g_bundle(self):
-        self.assertFalse(self.world.logic.region.can_reach_location("2,500g Bundle")(self.multiworld.state))
+        self.assertFalse(self.get_can_reach_location_rule("2,500g Bundle")(self.multiworld.state))
 
         self.collect_lots_of_money()
-        self.assertTrue(self.world.logic.region.can_reach_location("2,500g Bundle")(self.multiworld.state))
+        self.assertTrue(self.get_can_reach_location_rule("2,500g Bundle")(self.multiworld.state))
 
 
 class TestRemixedBundlesLogic(SVTestBase):
@@ -25,10 +25,10 @@ class TestRemixedBundlesLogic(SVTestBase):
     }
 
     def test_sticky_bundle_has_grind_rules(self):
-        self.assertFalse(self.world.logic.region.can_reach_location("Sticky Bundle")(self.multiworld.state))
+        self.assertFalse(self.get_can_reach_location_rule("Sticky Bundle")(self.multiworld.state))
 
         self.collect_all_the_money()
-        self.assertTrue(self.world.logic.region.can_reach_location("Sticky Bundle")(self.multiworld.state))
+        self.assertTrue(self.get_can_reach_location_rule("Sticky Bundle")(self.multiworld.state))
 
 
 class TestRaccoonBundlesLogic(SVTestBase):
@@ -41,10 +41,10 @@ class TestRaccoonBundlesLogic(SVTestBase):
 
     def test_raccoon_bundles_rely_on_previous_ones(self):
         # The first raccoon bundle is a fishing one
-        raccoon_rule_1 = self.world.logic.region.can_reach_location("Raccoon Request 1")
+        raccoon_rule_1 = self.get_can_reach_location_rule("Raccoon Request 1")
 
         # The 3th raccoon bundle is a foraging one
-        raccoon_rule_3 = self.world.logic.region.can_reach_location("Raccoon Request 3")
+        raccoon_rule_3 = self.get_can_reach_location_rule("Raccoon Request 3")
         self.collect("Progressive Raccoon", 6)
         self.collect("Progressive Mine Elevator", 24)
         self.collect("Mining Level", 12)

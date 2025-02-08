@@ -14,7 +14,7 @@ class TestCraftsanityLogic(SVTestBase):
 
     def test_can_craft_recipe(self):
         location = "Craft Marble Brazier"
-        rule = self.world.logic.region.can_reach_location(location)
+        rule = self.get_can_reach_location_rule(location)
         self.collect([self.create_item("Progressive Pickaxe")] * 4)
         self.collect([self.create_item("Progressive Fishing Rod")] * 4)
         self.collect([self.create_item("Progressive Sword")] * 4)
@@ -30,7 +30,7 @@ class TestCraftsanityLogic(SVTestBase):
 
     def test_can_learn_crafting_recipe(self):
         location = "Marble Brazier Recipe"
-        rule = self.world.logic.region.can_reach_location(location)
+        rule = self.get_can_reach_location_rule(location)
         self.assert_rule_false(rule, self.multiworld.state)
 
         self.collect_lots_of_money()

@@ -1,9 +1,10 @@
+import itertools
 import logging
 import os
 import threading
 import unittest
 from contextlib import contextmanager
-from typing import Dict, ClassVar, Iterable, Tuple, Optional, List, Union, Any
+from typing import Dict, ClassVar, Iterable, Tuple, Optional, List, Union, Any, Set
 
 from BaseClasses import MultiWorld, CollectionState, get_seed, Location, Item
 from test.bases import WorldTestBase
@@ -11,7 +12,7 @@ from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_mul
 from worlds.AutoWorld import call_all
 from .assertion import RuleAssertMixin
 from .options.utils import fill_namespace_with_default, parse_class_option_keys, fill_dataclass_with_default
-from .. import StardewValleyWorld, options, StardewItem
+from .. import StardewValleyWorld, options, StardewItem, StardewRule
 from ..options import StardewValleyOption
 from ..options.options import enabled_mods
 
@@ -309,11 +310,35 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
     def create_item(self, item: str) -> StardewItem:
         return self.world.create_item(item)
 
+    def get_all_created_items(self) -> Set[str]:
+        return {item.name for item in itertools.chain(self.multiworld.get_items(), self.multiworld.precollected_items[self.player])}
+
     def remove_one_by_name(self, item: str) -> None:
         self.remove(self.create_item(item))
 
-    def reset_collection_state(self):
+    def reset_collection_state(self) -> None:
         self.multiworld.state = self.original_state.copy()
+
+    def get_can_reach_location_rule(self, location_name: str) -> StardewRule:
+        return self.multiworld.get_location(location_name, self.player).can_reach
+
+    def assert_location_cannot_be_reached(self, location_name: str) -> None:
+        location = self.multiworld.get_location(location_name, self.player)
+        self.assert_cannot_reach_location(location, self.multiworld.state)
+
+    def assert_location_can_be_reached(self, location_name: str) -> None:
+        location = self.multiworld.get_location(location_name, self.player)
+        self.assert_can_reach_location(location, self.multiworld.state)
+
+    def assert_rule_false(self, rule: StardewRule, state: Optional[CollectionState] = None) -> None:
+        if state is None:
+            state = self.multiworld.state
+        super().assert_rule_false(rule, state)
+
+    def assert_rule_true(self, rule: StardewRule, state: Optional[CollectionState] = None) -> None:
+        if state is None:
+            state = self.multiworld.state
+        super().assert_rule_true(rule, state)
 
 
 pre_generated_worlds = {}
