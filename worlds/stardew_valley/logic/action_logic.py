@@ -6,7 +6,6 @@ from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .tool_logic import ToolLogicMixin
-from ..options import ToolProgression
 from ..stardew_rule import StardewRule, True_
 from ..strings.generic_names import Generic
 from ..strings.geode_names import Geode
