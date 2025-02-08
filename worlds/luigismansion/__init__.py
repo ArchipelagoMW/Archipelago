@@ -198,7 +198,7 @@ class LMWorld(World):
         self.pre_fill_items: list[LMItem] = []
         super(LMWorld, self).__init__(*args, **kwargs)
 
-    def interpret_slot_data(slot_data):
+    def interpret_slot_data(self,slot_data):
         #There are more clever ways to do this, but all would require much larger changes
         return slot_data #Tell UT that we have logic to fix
 
@@ -391,7 +391,7 @@ class LMWorld(World):
         if hasattr(self.multiworld, "generation_is_fake"):
             if hasattr(self.multiworld, "re_gen_passthrough"):
                 #We know we're in second gen
-                re_gen = self.multiworld.re_gen_passtrhough
+                re_gen = self.multiworld.re_gen_passthrough
                 if self.game in re_gen: #Are we the tracked game and in final gen
                     self.ghost_affected_regions = re_gen[self.game]["ghost elements"] #this should be the same list from slot data
         elif self.options.enemizer == 1:
@@ -403,9 +403,10 @@ class LMWorld(World):
         if hasattr(self.multiworld, "generation_is_fake"):
             if hasattr(self.multiworld, "re_gen_passthrough"):
                 #We know we're in second gen
-                re_gen = self.multiworld.re_gen_passtrhough
+                re_gen = self.multiworld.re_gen_passthrough
                 if self.game in re_gen: #Are we the tracked game and in final gen
                     self.open_doors = re_gen[self.game]["door rando list"] #this should be the same list from slot data
+                    self.open_doors = {int(k):v for k, v in self.open_doors.items()}
         elif self.options.door_rando == 1:
             k = list(self.open_doors.keys())
             v = list(self.open_doors.values())
