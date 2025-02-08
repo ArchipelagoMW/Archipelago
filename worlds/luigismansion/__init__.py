@@ -198,6 +198,10 @@ class LMWorld(World):
         self.pre_fill_items: list[LMItem] = []
         super(LMWorld, self).__init__(*args, **kwargs)
 
+    def interpret_slot_data(self,slot_data):
+        #There are more clever ways to do this, but all would require much larger changes
+        return slot_data #Tell UT that we have logic to fix
+
     def _set_optional_locations(self):
 
         # Set the flags for progression location by checking player's settings
@@ -384,13 +388,26 @@ class LMWorld(World):
                                       f"This error was found in {self.player_name}'s Luigi's Mansion world. "
                                       f"Please fix their YAML")
 
-        if self.options.enemizer == 1:
+        if hasattr(self.multiworld, "generation_is_fake"):
+            if hasattr(self.multiworld, "re_gen_passthrough"):
+                #We know we're in second gen
+                re_gen = self.multiworld.re_gen_passthrough
+                if self.game in re_gen: #Are we the tracked game and in final gen
+                    self.ghost_affected_regions = re_gen[self.game]["ghost elements"] #this should be the same list from slot data
+        elif self.options.enemizer == 1:
             set_ghost_type(self, self.ghost_affected_regions)
         elif self.options.enemizer == 2:
             for key in self.ghost_affected_regions.keys():
                 self.ghost_affected_regions[key] = "No Element"
 
-        if self.options.door_rando == 1:
+        if hasattr(self.multiworld, "generation_is_fake"):
+            if hasattr(self.multiworld, "re_gen_passthrough"):
+                #We know we're in second gen
+                re_gen = self.multiworld.re_gen_passthrough
+                if self.game in re_gen: #Are we the tracked game and in final gen
+                    self.open_doors = re_gen[self.game]["door rando list"] #this should be the same list from slot data
+                    self.open_doors = {int(k):v for k, v in self.open_doors.items()}
+        elif self.options.door_rando == 1:
             k = list(self.open_doors.keys())
             v = list(self.open_doors.values())
             self.open_doors = dict(zip(self.random.sample(k, k=len(self.open_doors)),
