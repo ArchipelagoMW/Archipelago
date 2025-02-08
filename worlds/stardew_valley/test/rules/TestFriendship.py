@@ -47,8 +47,8 @@ class TestFriendsanityDatingRules(SVTestBase):
         for i in range(1, max_reachable + 1):
             if i % step != 0 and i != 14:
                 continue
-            self.assert_location_can_be_reached(f"{prefix}{npc} {i}{suffix}")
+            self.assert_can_reach_location(f"{prefix}{npc} {i}{suffix}")
         for i in range(max_reachable + 1, 14 + 1):
             if i % step != 0 and i != 14:
                 continue
-            self.assert_location_cannot_be_reached(f"{prefix}{npc} {i}{suffix}")
+            self.assert_cannot_reach_location(f"{prefix}{npc} {i}{suffix}")

@@ -11,10 +11,10 @@ class TestBundlesLogic(SVTestBase):
     }
 
     def test_vault_2500g_bundle(self):
-        self.assert_location_cannot_be_reached("2,500g Bundle")
+        self.assert_cannot_reach_location("2,500g Bundle")
 
         self.collect_lots_of_money()
-        self.assert_location_can_be_reached("2,500g Bundle")
+        self.assert_can_reach_location("2,500g Bundle")
 
 
 class TestRemixedBundlesLogic(SVTestBase):
@@ -25,10 +25,10 @@ class TestRemixedBundlesLogic(SVTestBase):
     }
 
     def test_sticky_bundle_has_grind_rules(self):
-        self.assert_location_cannot_be_reached("Sticky Bundle")
+        self.assert_cannot_reach_location("Sticky Bundle")
 
         self.collect_all_the_money()
-        self.assert_location_can_be_reached("Sticky Bundle")
+        self.assert_can_reach_location("Sticky Bundle")
 
 
 class TestRaccoonBundlesLogic(SVTestBase):
@@ -54,11 +54,11 @@ class TestRaccoonBundlesLogic(SVTestBase):
         self.collect("Furnace Recipe")
 
         # The first raccoon bundle is a fishing one
-        self.assert_location_cannot_be_reached("Raccoon Request 1")
+        self.assert_cannot_reach_location("Raccoon Request 1")
         # The third raccoon bundle is a foraging one
-        self.assert_location_cannot_be_reached("Raccoon Request 3")
+        self.assert_cannot_reach_location("Raccoon Request 3")
 
         self.collect("Fish Smoker Recipe")
 
-        self.assert_location_can_be_reached("Raccoon Request 1")
-        self.assert_location_can_be_reached("Raccoon Request 3")
+        self.assert_can_reach_location("Raccoon Request 1")
+        self.assert_can_reach_location("Raccoon Request 3")

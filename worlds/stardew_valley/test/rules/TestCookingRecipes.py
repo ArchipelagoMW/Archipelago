@@ -13,17 +13,17 @@ class TestRecipeLearnLogic(SVTestBase):
     }
 
     def test_can_learn_qos_recipe(self):
-        self.assert_location_cannot_be_reached("Cook Radish Salad")
+        self.assert_cannot_reach_location("Cook Radish Salad")
 
         self.multiworld.state.collect(self.create_item("Progressive House"))
         self.multiworld.state.collect(self.create_item("Radish Seeds"))
         self.multiworld.state.collect(self.create_item("Spring"))
         self.multiworld.state.collect(self.create_item("Summer"))
         self.collect_lots_of_money()
-        self.assert_location_cannot_be_reached("Cook Radish Salad")
+        self.assert_cannot_reach_location("Cook Radish Salad")
 
         self.multiworld.state.collect(self.create_item("The Queen of Sauce"))
-        self.assert_location_can_be_reached("Cook Radish Salad")
+        self.assert_can_reach_location("Cook Radish Salad")
 
 
 class TestRecipeReceiveLogic(SVTestBase):
@@ -36,31 +36,31 @@ class TestRecipeReceiveLogic(SVTestBase):
     }
 
     def test_can_learn_qos_recipe(self):
-        self.assert_location_cannot_be_reached("Cook Radish Salad")
+        self.assert_cannot_reach_location("Cook Radish Salad")
 
         self.multiworld.state.collect(self.create_item("Progressive House"))
         self.multiworld.state.collect(self.create_item("Radish Seeds"))
         self.multiworld.state.collect(self.create_item("Summer"))
         self.collect_lots_of_money()
-        self.assert_location_cannot_be_reached("Cook Radish Salad")
+        self.assert_cannot_reach_location("Cook Radish Salad")
 
         spring = self.create_item("Spring")
         qos = self.create_item("The Queen of Sauce")
         self.multiworld.state.collect(spring)
         self.multiworld.state.collect(qos)
-        self.assert_location_cannot_be_reached("Cook Radish Salad")
+        self.assert_cannot_reach_location("Cook Radish Salad")
         self.multiworld.state.remove(spring)
         self.multiworld.state.remove(qos)
 
         self.multiworld.state.collect(self.create_item("Radish Salad Recipe"))
-        self.assert_location_can_be_reached("Cook Radish Salad")
+        self.assert_can_reach_location("Cook Radish Salad")
 
     def test_get_chefsanity_check_recipe(self):
-        self.assert_location_cannot_be_reached("Radish Salad Recipe")
+        self.assert_cannot_reach_location("Radish Salad Recipe")
 
         self.multiworld.state.collect(self.create_item("Spring"))
         self.collect_lots_of_money()
-        self.assert_location_cannot_be_reached("Radish Salad Recipe")
+        self.assert_cannot_reach_location("Radish Salad Recipe")
 
         seeds = self.create_item("Radish Seeds")
         summer = self.create_item("Summer")
@@ -68,10 +68,10 @@ class TestRecipeReceiveLogic(SVTestBase):
         self.multiworld.state.collect(seeds)
         self.multiworld.state.collect(summer)
         self.multiworld.state.collect(house)
-        self.assert_location_cannot_be_reached("Radish Salad Recipe")
+        self.assert_cannot_reach_location("Radish Salad Recipe")
         self.multiworld.state.remove(seeds)
         self.multiworld.state.remove(summer)
         self.multiworld.state.remove(house)
 
         self.multiworld.state.collect(self.create_item("The Queen of Sauce"))
-        self.assert_location_can_be_reached("Radish Salad Recipe")
+        self.assert_can_reach_location("Radish Salad Recipe")
