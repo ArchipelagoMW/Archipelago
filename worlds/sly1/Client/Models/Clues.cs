@@ -224,10 +224,15 @@ namespace Sly1AP.Models
             var UpdatedLevels = Helpers.GetUpdatedLevels();
             foreach (var Level in UpdatedLevels)
             {
+                var WriteMax = Level.ItemBottles * Bundles;
+                if (WriteMax > Level.MaxBottles)
+                {
+                    WriteMax = Level.MaxBottles;
+                }
                 if (Level.LevelType == "Level")
                 {
                     var NameLocation = Memory.ReadUInt(Level.NamePointer) + 0x20000000;
-                    Memory.WriteString(NameLocation, Level.Name + " (" + Level.ItemBottles + "/" + Level.MaxBottles + ") ");
+                    Memory.WriteString(NameLocation, Level.Name + " (" + WriteMax + "/" + Level.MaxBottles + ") ");
                 }
             }
         }
