@@ -1,5 +1,10 @@
+import yaml
+
 from dataclasses import dataclass
-from Options import Toggle, PerGameCommonOptions, Choice, OptionSet, DeathLink, Range
+from typing import Any, Union, TypedDict, List, Tuple, Mapping, Iterable
+from typing_extensions import NotRequired
+
+from Options import Toggle, PerGameCommonOptions, Choice, OptionSet, Range, OptionList, Visibility
 
 
 class FillWithDetermination(Toggle):
@@ -13,8 +18,8 @@ class VictoryLocation(Choice):
     """Optionally moves the final victory location earlier to reduce the number of locations in the multiworld.
 
     - **Snakes on a Planet (default):** The game goes all the way to "Moon, The". This gives the longest game.
-    - **Secret Cache**: The game stops at the end of Cool World. This gives the middlest-length game.
-    - **Captured Goldfish**: The game stops at the end of The Sewers. This gives the shortest game."""
+    - **Secret Cache:** The game stops at the end of Cool World. This gives the middlest-length game.
+    - **Captured Goldfish:** The game stops at the end of The Sewers. This gives the shortest game."""
     display_name = "Victory Location"
     option_snakes_on_a_planet = 0
     option_secret_cache = 1
@@ -24,13 +29,13 @@ class VictoryLocation(Choice):
 
 class EnabledBuffs(OptionSet):
     """Enables various buffs that affect how the rat behaves. All are enabled by default.
-    Well Fed: Gets more done
-    Lucky: One free success
-    Energized: Moves faster
-    Stylish: Better RNG
-    Confident: Ignore a trap
-    Smart: Next check is progression-tier
-    """
+
+    - **Well Fed:** Gets more done
+    - **Lucky:** One free success
+    - **Energized:** Moves faster
+    - **Stylish:** Better RNG
+    - **Confident:** Ignore a trap
+    - **Smart:** Next check is progression"""
     display_name = "Enabled Buffs"
     valid_keys = frozenset({"Well Fed", "Lucky", "Energized", "Stylish", "Confident", "Smart"})
     default = frozenset({"Well Fed", "Lucky", "Energized", "Stylish", "Confident", "Smart"})
@@ -46,13 +51,13 @@ class EnabledBuffs(OptionSet):
 
 class EnabledTraps(OptionSet):
     """Enables various traps that affect how the rat behaves. All are enabled by default.
-    Upset Tummy: Gets less done
-    Unlucky: Worse RNG
-    Sluggish: Moves slower
-    Distracted: Skip a "step"
-    Startled: Run towards start
-    Conspiratorial: Next check is trap-tier
-    """
+
+    - **Upset Tummy:** Gets less done
+    - **Unlucky:** Worse RNG
+    - **Sluggish:** Moves slower
+    - **Distracted:** Skip a "step"
+    - **Startled:** Run towards start
+    - **Conspiratorial:** Next check is trap"""
     display_name = "Enabled Traps"
     valid_keys = frozenset({"Upset Tummy", "Unlucky", "Sluggish", "Distracted", "Startled", "Conspiratorial"})
     default = frozenset({"Upset Tummy", "Unlucky", "Sluggish", "Distracted", "Startled", "Conspiratorial"})
@@ -77,11 +82,160 @@ class DeathDelaySeconds(Range):
     range_end = 60
     default = 5
 
+
+# hack to avoid outputting the messages in flow style
+class RatChatMessagesHack:
+    items: List[Tuple[str, int]]
+    def __init__(self, *args: str):
+        self.items = [(arg, 1) for arg in args]
+
+
+def represent_rat_chat_messages(_dumper: yaml.Dumper, data: RatChatMessagesHack):
+    return yaml.SequenceNode(tag="tag:yaml.org,2002:seq", value=[
+        yaml.MappingNode(tag="tag:yaml.org,2002:map", value=[
+            (yaml.ScalarNode(tag="tag:yaml.org,2002:str", value=t, style='"' if "'" in t else "'"),
+             yaml.ScalarNode(tag="tag:yaml.org,2002:int", value=f'{w}'))
+        ], flow_style=False) if w != 1 else
+        yaml.ScalarNode(tag="tag:yaml.org,2002:str", value=t, style='"' if "'" in t else "'")
+        for t, w in data.items
+    ])
+
+
+yaml.add_representer(RatChatMessagesHack, represent_rat_chat_messages)
+
+
+class RatChatMessages(OptionList):
+    # I'm just using OptionList as a shortcut for most of the validation I need here. It won't actually work anywhere in
+    # either options UI, especially with the way I've got it replicating how other options can be weighted-or-not.
+    visibility = Visibility.template
+
+    @classmethod
+    def from_any(cls, data: Any):
+        if isinstance(data, RatChatMessagesHack):
+            return super().from_any(data.items)
+
+        if isinstance(data, Iterable):
+            res: List[Tuple[str, int]] = []
+            for t in data:
+                if isinstance(t, Mapping):
+                    if len(t) != 1:
+                        raise NotImplementedError(f"Dict must have only one item, got {len(t)}")
+                    for kv in t.items():
+                        res.append(kv)
+                elif t is str:
+                    res.append((t, 1))
+                else:
+                    raise NotImplementedError(f"Cannot convert from non-str + non-dict, got {type(t)}")
+            return res
+
+        raise NotImplementedError(f"Cannot convert from non-dict, got {type(data)}")
+
+
+class ChangedTargetMessages(RatChatMessages):
+    """What messages the rat can say when a buff or trap is added to the queue of location checks to send before resuming its normal logic.
+
+    Specify the message itself, or with an optional weight to have that message appear more often (default weight is 1).
+
+    The text {LOCATION} will be replaced with the name of the actual location.
+
+    If you want to disable rat chat, then you're in the wrong place. Do that from the settings menu in the game client itself."""
+    display_name = "Messages - Changed Target"
+
+    default = RatChatMessagesHack(
+        "Oh, hey, what's that thing over there at {LOCATION}?",
+        "There's something at {LOCATION}, I'm sure of it!",
+        "Something at {LOCATION} smells good!",
+        "There's a rumor that something's going on at {LOCATION}!",
+    )
+
+
+class EnterGoModeMessages(RatChatMessages):
+    """What messages the rat can say when it first realizes that it can complete its goal.
+
+    Specify the message itself, or with an optional weight to have that message appear more often (default weight is 1).
+
+    If you want to disable rat chat, then you're in the wrong place. Do that from the settings menu in the game client itself."""
+    display_name = "Messages - Go Mode"
+
+    default = RatChatMessagesHack(
+        "That's it! I have everything I need! The goal is in sight!",
+    )
+
+
+class EnterBKModeMessages(RatChatMessages):
+    """What messages the rat can say when it first sees that no further location checks are in logic.
+
+    Specify the message itself, or with an optional weight to have that message appear more often (default weight is 1).
+
+    If you want to disable rat chat, then you're in the wrong place. Do that from the settings menu in the game client itself."""
+    display_name = "Messages - Enter BK Mode"
+
+    default = RatChatMessagesHack(
+        "I don't have anything to do right now. Go team!",
+        "Hey, I'm completely stuck. But I still believe in you!",
+        "I've run out of things to do. How are you?",
+        "I'm out of things for now, gonna get a coffee. Anyone want something?",
+    )
+
+
+class RemindBKModeMessages(RatChatMessages):
+    """What messages the rat can say to occasionally remind the players that it has no further location checks in logic.
+
+    Specify the message itself, or with an optional weight to have that message appear more often (default weight is 1).
+
+    If you want to disable rat chat, then you're in the wrong place. Do that from the settings menu in the game client itself."""
+    display_name = "Messages - Still BK"
+
+    default = RatChatMessagesHack(
+        "I don't have anything to do right now. Go team!",
+        "Hey, I'm completely stuck. But I still believe in you!",
+        "I've run out of things to do. How are you?",
+        "I'm out of things for now, gonna get a coffee. Anyone want something?",
+    )
+
+
+class ExitBKModeMessages(RatChatMessages):
+    """What messages the rat can say after one or more location checks become in logic.
+
+    Specify the message itself, or with an optional weight to have that message appear more often (default weight is 1).
+
+    If you want to disable rat chat, then you're in the wrong place. Do that from the settings menu in the game client itself."""
+    display_name = "Messages - Exit BK"
+
+    default = RatChatMessagesHack(
+        "Yippee, that's just what I needed!",
+        "I'm back! I knew you could do it!",
+        "Sweet, I'm unblocked! Thanks!",
+        "Squeak-squeak, it's rattin' time!",
+    )
+
+
+class CompleteGoalMessages(RatChatMessages):
+    """What messages the rat can say to celebrate victory.
+
+    Specify the message itself, or with an optional weight to have that message appear more often (default weight is 1).
+
+    If you want to disable rat chat, then you're in the wrong place. Do that from the settings menu in the game client itself."""
+    display_name = "Messages - Victory"
+
+    default = RatChatMessagesHack(
+        "Yeah, I did it! er... WE did it!",
+    )
+
+
 @dataclass
 class ArchipelagoGameOptions(PerGameCommonOptions):
     fill_with_determination: FillWithDetermination
     victory_location: VictoryLocation
     enabled_buffs: EnabledBuffs
     enabled_traps: EnabledTraps
-    death_link: DeathLink
-    death_delay_seconds: DeathDelaySeconds
+    msg_changed_target: ChangedTargetMessages
+    msg_enter_go_mode: EnterGoModeMessages
+    msg_enter_bk: EnterBKModeMessages
+    msg_remind_bk: RemindBKModeMessages
+    msg_exit_bk: ExitBKModeMessages
+    msg_completed_goal: CompleteGoalMessages
+
+    # not working yet:
+    # death_link: DeathLink
+    # death_delay_seconds: DeathDelaySeconds

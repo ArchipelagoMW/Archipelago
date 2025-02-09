@@ -10,9 +10,11 @@ from .AutopelagoDefinitions import GAME_NAME, version_stamp, AutopelagoGameRequi
     total_available_rat_count, max_required_rat_count, AutopelagoNonProgressionItemType, \
     autopelago_item_classification_of, location_name_to_nonprogression_item, autopelago_regions, item_name_groups, \
     location_name_groups
-from .options import ArchipelagoGameOptions, VictoryLocation, EnabledBuffs, EnabledTraps
+from .options import ArchipelagoGameOptions, VictoryLocation, EnabledBuffs, EnabledTraps, ChangedTargetMessages, \
+    EnterGoModeMessages, EnterBKModeMessages, RemindBKModeMessages, ExitBKModeMessages, CompleteGoalMessages
 
 from BaseClasses import CollectionState, Item, Location, MultiWorld, Region, Tutorial
+from Options import OptionGroup
 from worlds.AutoWorld import World, WebWorld
 
 the_logger = logging.getLogger(GAME_NAME)
@@ -75,6 +77,7 @@ class AutopelagoRegion(Region):
 
 class AutopelagoWebWorld(WebWorld):
     theme = 'partyTime'
+    rich_text_options_doc = True
     tutorials = [
         Tutorial(
             tutorial_name='Setup Guide',
@@ -99,6 +102,16 @@ class AutopelagoWorld(World):
     victory_location: str
     regions_in_scope: Set[str]
     locations_in_scope: Set[str]
+    option_groups = [
+        OptionGroup('Message Text Replacements', [
+            ChangedTargetMessages,
+            EnterGoModeMessages,
+            EnterBKModeMessages,
+            RemindBKModeMessages,
+            ExitBKModeMessages,
+            CompleteGoalMessages,
+        ]),
+    ]
 
     # item_name_to_id and location_name_to_id must be filled VERY early, but seemingly only because
     # they are used in Main.main to log the ID ranges in use. if not for that, we probably could've
@@ -230,6 +243,14 @@ class AutopelagoWorld(World):
             'victory_location_name': self.victory_location,
             'enabled_buffs': [EnabledBuffs.map[b] for b in self.options.enabled_buffs.value],
             'enabled_traps': [EnabledTraps.map[t] for t in self.options.enabled_traps.value],
-            'death_link': not not self.options.death_link,
-            'death_delay_seconds': self.options.death_delay_seconds - 0,
+            'msg_changed_target': self.options.msg_changed_target.value,
+            'msg_enter_go_mode': self.options.msg_enter_go_mode.value,
+            'msg_enter_bk': self.options.msg_enter_bk.value,
+            'msg_remind_bk': self.options.msg_remind_bk.value,
+            'msg_exit_bk': self.options.msg_exit_bk.value,
+            'msg_completed_goal': self.options.msg_completed_goal.value,
+
+            # not working yet:
+            # 'death_link': not not self.options.death_link,
+            # 'death_delay_seconds': self.options.death_delay_seconds - 0,
         }
