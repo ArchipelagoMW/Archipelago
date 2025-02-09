@@ -364,10 +364,10 @@ An enumeration containing the possible hint states.
 import enum
 class HintStatus(enum.IntEnum):
     HINT_FOUND = 0        # The location has been collected. Status cannot be changed once found.
-    HINT_UNSPECIFIED = 1  # The receiving player has not specified any status
-    HINT_NO_PRIORITY = 10 # The receiving player has specified that the item is unneeded
-    HINT_AVOID = 20       # The receiving player has specified that the item is detrimental
-    HINT_PRIORITY = 30    # The receiving player has specified that the item is needed
+    HINT_UNSPECIFIED = 10 # The receiving player has not specified any status
+    HINT_NO_PRIORITY = 20 # The receiving player has specified that the item is unneeded
+    HINT_AVOID = 30       # The receiving player has specified that the item is detrimental
+    HINT_PRIORITY = 40    # The receiving player has specified that the item is needed
 ```
 - Hints for items with `ItemClassification.trap` default to `HINT_AVOID`.
 - Hints created with `LocationScouts`, `!hint_location`, or similar (hinting a location) default to `HINT_UNSPECIFIED`.

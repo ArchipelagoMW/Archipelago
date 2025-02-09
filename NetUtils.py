@@ -12,11 +12,12 @@ from Utils import ByValue, Version
 
 
 class HintStatus(ByValue, enum.IntEnum):
+    # values sorted by UI sort order for kvui.py
     HINT_FOUND = 0
-    HINT_UNSPECIFIED = 1
-    HINT_NO_PRIORITY = 10
-    HINT_AVOID = 20
-    HINT_PRIORITY = 30
+    HINT_UNSPECIFIED = 10
+    HINT_NO_PRIORITY = 20
+    HINT_AVOID = 30
+    HINT_PRIORITY = 40
 
 
 class JSONMessagePart(typing.TypedDict, total=False):
