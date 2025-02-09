@@ -690,7 +690,7 @@ class MultiWorld():
             if not sphere:
                 # ran out of places and did not finish yet, quit
                 logging.warning(f"Could not access required locations for accessibility check."
-                                f" Missing: {locations}")
+                                f" Unreachable Progression Locations: {locations}")
                 return False
 
             for location in sphere:
