@@ -2,11 +2,10 @@
 
 ## Required Software
 
-- Bizhawk: [Bizhawk Releases from TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
-  - Version 2.9.1 is recommended.
-  - Detailed installation instructions for Bizhawk can be found at the above link.
+- BizHawk: [BizHawk Releases from TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
+  - Detailed installation instructions for BizHawk can be found at the above link.
   - Windows users must run the prerequisite installer first, which can also be found at the above link.
-- The built-in Bizhawk client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases)
+- The built-in BizHawk client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases)
 - Your legally obtained Final Fantasy (USA Edition) ROM file, probably named `Final Fantasy (USA).nes`. Neither
   Archipelago.gg nor the Final Fantasy Randomizer Community can supply you with this.
 
@@ -59,7 +58,7 @@ Once the Archipelago server has been hosted:
    extension `*.nes`
 2. Navigate to where you installed Archipelago, then to `data/lua`, and drag+drop the `connector_bizhawk_generic.lua` 
 script onto the main EmuHawk window. You can also instead open the Lua Console manually, click `Script` 〉 `Open Script`,
-and navigate to `connector_ff1.lua` with the file picker.
+and navigate to `connector_bizhawk_generic.lua` with the file picker.
 
 ## Play the game
 

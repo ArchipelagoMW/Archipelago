@@ -114,39 +114,31 @@ class FF1Client(BizHawkClient):
         if ctx.slot is None:
             return
         try:
-            if await self.check_status_okay_to_process(ctx):
-                if self.consumable_stack_amounts is None:
-                    self.consumable_stack_amounts = {}
-                    self.consumable_stack_amounts["Shard"] = 1
-                    other_consumable_amounts = await self.read_rom(ctx, 0x47400, 10)
-                    self.consumable_stack_amounts["Tent"] = other_consumable_amounts[0] + 1
-                    self.consumable_stack_amounts["Cabin"] = other_consumable_amounts[1] + 1
-                    self.consumable_stack_amounts["House"] = other_consumable_amounts[2] + 1
-                    self.consumable_stack_amounts["Heal"] = other_consumable_amounts[3] + 1
-                    self.consumable_stack_amounts["Pure"] = other_consumable_amounts[4] + 1
-                    self.consumable_stack_amounts["Soft"] = other_consumable_amounts[5] + 1
-                    self.consumable_stack_amounts["Ext1"] = other_consumable_amounts[6] + 1
-                    self.consumable_stack_amounts["Ext2"] = other_consumable_amounts[7] + 1
-                    self.consumable_stack_amounts["Ext3"] = other_consumable_amounts[8] + 1
-                    self.consumable_stack_amounts["Ext4"] = other_consumable_amounts[9] + 1
+            self.guard_character = await self.read_sram_value(ctx, status_a_location)
 
-                await self.location_check(ctx)
-                await self.received_items_check(ctx)
-                await self.process_weapons_queue(ctx)
-                await self.process_armor_queue(ctx)
+            if self.consumable_stack_amounts is None:
+                self.consumable_stack_amounts = {}
+                self.consumable_stack_amounts["Shard"] = 1
+                other_consumable_amounts = await self.read_rom(ctx, 0x47400, 10)
+                self.consumable_stack_amounts["Tent"] = other_consumable_amounts[0] + 1
+                self.consumable_stack_amounts["Cabin"] = other_consumable_amounts[1] + 1
+                self.consumable_stack_amounts["House"] = other_consumable_amounts[2] + 1
+                self.consumable_stack_amounts["Heal"] = other_consumable_amounts[3] + 1
+                self.consumable_stack_amounts["Pure"] = other_consumable_amounts[4] + 1
+                self.consumable_stack_amounts["Soft"] = other_consumable_amounts[5] + 1
+                self.consumable_stack_amounts["Ext1"] = other_consumable_amounts[6] + 1
+                self.consumable_stack_amounts["Ext2"] = other_consumable_amounts[7] + 1
+                self.consumable_stack_amounts["Ext3"] = other_consumable_amounts[8] + 1
+                self.consumable_stack_amounts["Ext4"] = other_consumable_amounts[9] + 1
+
+            await self.location_check(ctx)
+            await self.received_items_check(ctx)
+            await self.process_weapons_queue(ctx)
+            await self.process_armor_queue(ctx)
 
         except bizhawk.RequestFailedError:
             # The connector didn't respond. Exit handler and return to main loop to reconnect
             pass
-
-    async def check_status_okay_to_process(self, ctx: "BizHawkClientContext") -> bool:
-        status_a = await self.read_sram_value(ctx, status_a_location)
-        status_b = await self.read_sram_value(ctx, status_b_location)
-        status_c = await self.read_sram_value(ctx, status_c_location)
-
-        self.guard_character = status_a
-
-        return (status_a != 0x00) and not (status_a == 0xF2 and status_b == 0xF2 and status_c == 0xF2)
 
     async def location_check(self, ctx: "BizHawkClientContext"):
         locations_data = await self.read_sram_values_guarded(ctx, locations_array_start, locations_array_length)
@@ -242,7 +234,9 @@ class FF1Client(BizHawkClient):
             elif current_item_name in armor:
                 self.armor_queue.appendleft(current_item_id - 0x143)
             write_list.append((items_obtained, [items_received_count + 1], self.sram))
-            await self.write_sram_values_guarded(ctx, write_list)
+            write_successful = await self.write_sram_values_guarded(ctx, write_list)
+            if write_successful:
+                await bizhawk.display_message(ctx.bizhawk_ctx, f"Received {current_item_name}")
 
     async def process_weapons_queue(self, ctx: "BizHawkClientContext"):
         empty_slots = deque()
