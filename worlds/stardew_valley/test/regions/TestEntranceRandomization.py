@@ -1,79 +1,77 @@
 from collections import deque
 from collections.abc import Collection
+from unittest.mock import patch, Mock
 
 from BaseClasses import get_seed, MultiWorld, Entrance
-from .. import SVTestCase
+from .. import SVTestCase, solo_multiworld
 from ..assertion import WorldAssertMixin
-from ... import options, StardewValleyWorld
+from ... import options
 from ...mods.mod_data import ModNames
 from ...options import EntranceRandomization, ExcludeGingerIsland, SkillProgression
 from ...options.options import all_mods
-from ...regions import vanilla_data
-from ...regions.entrance_rando import create_player_randomization_flag
-from ...regions.regions import create_all_connections
+from ...regions.entrance_rando import create_entrance_rando_target, prepare_mod_data, connect_regions
+from ...regions.model import RegionData, ConnectionData, RandomizationFlag
 from ...strings.entrance_names import Entrance as EntranceName
 from ...strings.region_names import Region as RegionName
 
 
-# TODO Mock create_entrance_rando_target, validate
-
 class TestEntranceRando(SVTestCase):
 
-    def test_entrance_randomization(self):
-        for option in (options.EntranceRandomization.option_pelican_town, options.EntranceRandomization.option_non_progression,
-                       options.EntranceRandomization.option_buildings_without_house, options.EntranceRandomization.option_buildings):
-            test_options = {
-                options.EntranceRandomization: option,
-                options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false,
-                options.SkillProgression: options.SkillProgression.option_progressive_with_masteries,
-            }
-            with self.solo_world_sub_test(world_options=test_options, world_caching=False) as (multiworld, world):
-                world: StardewValleyWorld
-                entrances_placement = world.randomized_entrances
-                flag = create_player_randomization_flag(world.options.entrance_randomization, world.content)
+    def test_given_connection_matching_randomization_when_connect_regions_then_make_connection_entrance_rando_target(self):
+        region_data_by_name = {
+            "Region1": RegionData("Region1", ("randomized_connection", "not_randomized")),
+            "Region2": RegionData("Region2"),
+            "Region3": RegionData("Region3"),
+        }
+        connection_data_by_name = {
+            "randomized_connection": ConnectionData("randomized_connection", "Region2", flag=RandomizationFlag.PELICAN_TOWN),
+            "not_randomized": ConnectionData("not_randomized", "Region2", flag=RandomizationFlag.BUILDINGS),
+        }
+        regions_by_name = {
+            "Region1": Mock(),
+            "Region2": Mock(),
+            "Region3": Mock(),
+        }
+        player_randomization_flag = RandomizationFlag.BIT_PELICAN_TOWN
 
-                for connection in (connection for connection in vanilla_data.connections_with_ginger_island_by_name.values()
-                                   if connection.is_eligible_for_randomization(flag)):
-                    self.assertIn(connection.name, entrances_placement,
-                                  f"Connection {connection.name} should be randomized but it is not in the output.")
-                    self.assertIn(connection.reverse, entrances_placement,
-                                  f"Connection {connection.reverse} should be randomized but it is not in the output.")
+        with patch("worlds.stardew_valley.regions.entrance_rando.create_entrance_rando_target") as mock_create_entrance_rando_target:
+            connect_regions(region_data_by_name, connection_data_by_name, regions_by_name, player_randomization_flag)
 
-                self.assertEqual(len(set(entrances_placement.values())), len(entrances_placement.values()),
-                                 f"Connections are duplicated in randomization.")
+            expected_origin, expected_destination = regions_by_name["Region1"], regions_by_name["Region2"]
+            expected_connection = connection_data_by_name["randomized_connection"]
+            mock_create_entrance_rando_target.assert_called_once_with(expected_origin, expected_destination, expected_connection)
+
+    def test_when_create_entrance_rando_target_then_create_exit_and_er_target(self):
+        origin = Mock()
+        destination = Mock()
+        connection_data = ConnectionData("origin to destination", "destination")
+
+        create_entrance_rando_target(origin, destination, connection_data)
+
+        origin.create_exit.assert_called_once_with("origin to destination")
+        destination.create_er_target.assert_called_once_with("destination to origin")
+
+    def test_when_prepare_mod_data_then_swapped_connections_contains_both_directions(self):
+        placements = Mock(pairings=[("A to B", "C to A"), ("C to D", "A to C")])
+
+        swapped_connections = prepare_mod_data(placements)
+
+        self.assertEqual({"A to B": "A to C", "C to A": "B to A", "C to D": "C to A", "A to C": "D to C"}, swapped_connections)
 
 
-class TestModEntranceRando(WorldAssertMixin, SVTestCase):
-
-    def test_entrance_randomization(self):
-        for option in (options.EntranceRandomization.option_pelican_town, options.EntranceRandomization.option_non_progression,
-                       options.EntranceRandomization.option_buildings_without_house, options.EntranceRandomization.option_buildings):
-            test_options = {
-                options.EntranceRandomization: option,
-                options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false,
-                options.SkillProgression: options.SkillProgression.option_progressive_with_masteries,
-                options.Mods: frozenset(options.Mods.valid_keys)
-            }
-            with self.solo_world_sub_test(world_options=test_options, world_caching=False) as (multiworld, world):
-                world: StardewValleyWorld
-                entrances_placement = world.randomized_entrances
-                flag = create_player_randomization_flag(world.options.entrance_randomization, world.content)
-
-                expected_randomized_connections = [connection
-                                                   for connection in create_all_connections(world.content.registered_packs).values()
-                                                   if connection.is_eligible_for_randomization(flag)]
-                for connection in expected_randomized_connections:
-                    self.assertIn(connection.name, entrances_placement,
-                                  f"Connection {connection.name} should be randomized but it is not in the output.")
-                    self.assertIn(connection.reverse, entrances_placement,
-                                  f"Connection {connection.reverse} should be randomized but it is not in the output.")
-
-                self.assertEqual(len(set(entrances_placement.values())), len(entrances_placement.values()),
-                                 f"Connections are duplicated in randomization.")
+class TestEntranceRandoCreatesValidWorlds(WorldAssertMixin, SVTestCase):
 
     # The following tests validate that ER still generates winnable and logically-sane games with given mods.
     # Mods that do not interact with entrances are skipped
     # Not all ER settings are tested, because 'buildings' is, essentially, a superset of all others
+    def test_ginger_island_excluded_buildings(self):
+        world_options = {
+            options.EntranceRandomization: options.EntranceRandomization.option_buildings,
+            options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_true
+        }
+        with solo_multiworld(world_options) as (multi_world, _):
+            self.assert_basic_checks(multi_world)
+
     def test_deepwoods_entrance_randomization_buildings(self):
         self.perform_basic_checks_on_mod_with_er(ModNames.deepwoods, options.EntranceRandomization.option_buildings)
 
@@ -121,10 +119,11 @@ class TestModEntranceRando(WorldAssertMixin, SVTestCase):
             options.Mods: frozenset(mods),
             options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false
         }
-        with self.solo_world_sub_test(f"entrance_randomization: {er_option}, Mods: {mods}", world_options) as (multi_world, _):
+        with solo_multiworld(world_options) as (multi_world, _):
             self.assert_basic_checks(multi_world)
 
 
+# GER should have this covered, but it's good to have a backup
 class TestGingerIslandEntranceRando(SVTestCase):
     def test_cannot_put_island_access_on_island(self):
         test_options = {

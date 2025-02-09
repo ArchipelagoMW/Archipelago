@@ -1,6 +1,6 @@
 from BaseClasses import Region
 from entrance_rando import ERPlacementState
-from .model import ConnectionData, RandomizationFlag, reverse_connection_name
+from .model import ConnectionData, RandomizationFlag, reverse_connection_name, RegionData
 from ..content import StardewContent
 from ..options import EntranceRandomization
 
@@ -30,6 +30,21 @@ def create_player_randomization_flag(entrance_randomization_choice: EntranceRand
         flag |= RandomizationFlag.EXCLUDE_MASTERIES
 
     return flag
+
+
+def connect_regions(region_data_by_name: dict[str, RegionData], connection_data_by_name: dict[str, ConnectionData], regions_by_name: dict[str, Region],
+                    player_randomization_flag: RandomizationFlag) -> None:
+    for region_name, region_data in region_data_by_name.items():
+        origin_region = regions_by_name[region_name]
+
+        for exit_name in region_data.exits:
+            connection_data = connection_data_by_name[exit_name]
+            destination_region = regions_by_name[connection_data.destination]
+
+            if connection_data.is_eligible_for_randomization(player_randomization_flag):
+                create_entrance_rando_target(origin_region, destination_region, connection_data)
+            else:
+                origin_region.connect(destination_region, connection_data.name)
 
 
 def create_entrance_rando_target(origin: Region, destination: Region, connection_data: ConnectionData) -> None:

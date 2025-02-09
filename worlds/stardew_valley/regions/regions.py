@@ -2,7 +2,7 @@ from typing import Protocol
 
 from BaseClasses import Region
 from . import vanilla_data, mods
-from .entrance_rando import create_player_randomization_flag, create_entrance_rando_target
+from .entrance_rando import create_player_randomization_flag, connect_regions
 from .model import ConnectionData, RegionData
 from ..content import StardewContent
 from ..content.vanilla.ginger_island import ginger_island_content_pack
@@ -23,18 +23,7 @@ def create_regions(region_factory: RegionFactory, world_options: StardewValleyOp
     }
 
     randomization_flag = create_player_randomization_flag(world_options.entrance_randomization, content)
-
-    for region_name, region_data in region_data_by_name.items():
-        origin_region = regions_by_name[region_name]
-
-        for exit_name in region_data.exits:
-            connection_data = connection_data_by_name[exit_name]
-            destination_region = regions_by_name[connection_data.destination]
-
-            if connection_data.is_eligible_for_randomization(randomization_flag):
-                create_entrance_rando_target(origin_region, destination_region, connection_data)
-            else:
-                origin_region.connect(destination_region, connection_data.name)
+    connect_regions(region_data_by_name, connection_data_by_name, regions_by_name, randomization_flag)
 
     return regions_by_name
 
