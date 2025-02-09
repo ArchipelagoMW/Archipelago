@@ -115,6 +115,11 @@ class FF1Client(BizHawkClient):
             return
         try:
             self.guard_character = await self.read_sram_value(ctx, status_a_location)
+            # If the first character's name starts with a 0 value, we're at the title screen/character creation.
+            # In that case, don't allow any read/writes.
+            # We do this by setting the guard to 1 because that's neither a valid character nor the initial value.
+            if self.guard_character == 0:
+                self.guard_character = 0x01
 
             if self.consumable_stack_amounts is None:
                 self.consumable_stack_amounts = {}
@@ -165,18 +170,17 @@ class FF1Client(BizHawkClient):
             if locations_data[index] & flag != 0:
                 locations_checked.append(location)
 
-        for location in locations_checked:
-            if location not in ctx.locations_checked:
-                ctx.locations_checked.add(location)
-                location_name = ctx.location_names.lookup_in_game(location)
-                logger.info(
-                    f'New Check: {location_name} ({len(ctx.locations_checked)}/'
-                    f'{len(ctx.missing_locations) + len(ctx.checked_locations)})')
-                await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [location]}])
+        found_locations = await ctx.check_locations(locations_checked)
+        for location in found_locations:
+            ctx.locations_checked.add(location)
+            location_name = ctx.location_names.lookup_in_game(location)
+            logger.info(
+                f'New Check: {location_name} ({len(ctx.locations_checked)}/'
+                f'{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+
 
     async def received_items_check(self, ctx: "BizHawkClientContext") -> None:
         assert self.consumable_stack_amounts, "shouldn't call this function without reading consumable_stack_amounts"
-        items_received_count = await self.read_sram_value(ctx, items_obtained)
         write_list: list[tuple[int, list[int], str]] = []
         items_received_count = await self.read_sram_value_guarded(ctx, items_obtained)
         if items_received_count is None:
