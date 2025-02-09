@@ -150,8 +150,23 @@ class OpenRCT2World(World):
         def locations_to_region(location, ending_location, chosen_region):
             locations = []
             while location < ending_location + 1:
-                locations.append(OpenRCT2Location(self.player, f"OpenRCT2_{location}",
-                                                  self.location_name_to_id[f"OpenRCT2_{location}"], chosen_region))
+                if location < 8:
+                    locations.append(OpenRCT2Location(self.player, f"White_{location}",
+                                                    self.location_name_to_id[f"White_{location}"], chosen_region))
+                else:
+                    color_map = {
+                        0: "Black",
+                        1: "Green",
+                        2: "Blue",
+                        3: "Yellow",
+                        4: "Gold",
+                        5: "Silver",
+                        6: "Celadon",
+                        7: "Pink",
+                    }
+                    color = color_map[location % 8]
+                    locations.append(OpenRCT2Location(self.player, f"{color}_{math.floor(location/8 - 1)}",
+                                                    self.location_name_to_id[f"{color}_{math.floor(location/8 - 1)}"], chosen_region))
                 location += 1
             return locations
 
@@ -164,7 +179,7 @@ class OpenRCT2World(World):
         self.multiworld.regions.append(s)
 
         level0 = Region("OpenRCT2_Level_0", self.player, self.multiworld)  # Levels of the unlock tree
-        level0.locations = [OpenRCT2Location(self.player, "OpenRCT2_0", self.location_name_to_id["OpenRCT2_0"], level0)]
+        level0.locations = [OpenRCT2Location(self.player, "White_0", self.location_name_to_id["White_0"], level0)]
         self.multiworld.regions.append(level0)
 
         level1 = Region("OpenRCT2_Level_1", self.player, self.multiworld)  # Levels of the unlock tree
