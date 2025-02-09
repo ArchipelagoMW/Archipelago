@@ -1,5 +1,5 @@
-from BaseClasses import Location, Region
-from .data import full_location_table
+from BaseClasses import Location, Region, MultiWorld
+from .data import full_location_list
 
 
 class PeaksOfYoreLocation(Location):
@@ -7,4 +7,8 @@ class PeaksOfYoreLocation(Location):
 
 
 def get_locations(region_num: int) -> dict[str, int]:
-    return {loc["name"]: loc["id"] for loc in full_location_table if loc["region"] == region_num}
+    return {loc.name: loc.id for loc in full_location_list if loc.region == region_num}
+
+
+def get_location_names_by_type(region_num: int, type: str):
+    return {loc.name for loc in full_location_list if loc.region == region_num and loc.type == type}

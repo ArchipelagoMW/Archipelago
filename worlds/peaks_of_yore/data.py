@@ -1,8 +1,169 @@
-import os
-import json
+class LocationData:
+    name: str
+    type: str
+    id: int
+    region: int
 
-with open(os.path.join(os.path.dirname(__file__), 'data.json'), 'r') as file:
-    data = json.load(file)
+    def __init__(self, name: str, type: str, id: int, region: int):
+        self.name = name
+        self.type = type
+        self.id = id
+        self.region = region
 
-full_location_table = data["locations"]
-full_item_table = data["items"]
+
+class ItemData:
+    name: str
+    type: str
+    id: int
+
+    def __init__(self, name: str, type: str, id: int):
+        self.name = name
+        self.type = type
+        self.id = id
+
+
+full_location_list: list[LocationData] = [
+    LocationData("Greenhorn's Top", 'Peak', 1, 0),
+    LocationData('Paltry Peak', 'Peak', 2, 0),
+    LocationData('Old Mill', 'Peak', 3, 0),
+    LocationData('Gray Gully', 'Peak', 4, 0),
+    LocationData('Lighthouse', 'Peak', 5, 0),
+    LocationData('Old Man Of Sjor', 'Peak', 6, 0),
+    LocationData('Giants Shelf', 'Peak', 7, 0),
+    LocationData("Evergreen's End", 'Peak', 8, 0),
+    LocationData('The Twins', 'Peak', 9, 0),
+    LocationData("Old Grove's Skelf", 'Peak', 10, 0),
+    LocationData("Land's End", 'Peak', 11, 0),
+    LocationData("Hangman's Leap", 'Peak', 12, 0),
+    LocationData('Old Langr', 'Peak', 13, 0),
+    LocationData('Aldr Grotto', 'Peak', 14, 0),
+    LocationData('Three Brothers', 'Peak', 15, 0),
+    LocationData("Walter's Crag", 'Peak', 16, 0),
+    LocationData('Great Crevice', 'Peak', 17, 0),
+    LocationData('Old Hagger', 'Peak', 18, 0),
+    LocationData('Ugsome Storr', 'Peak', 19, 0),
+    LocationData('Wuthering Crest', 'Peak', 20, 0),
+    LocationData("Porter's Boulders", 'Peak', 21, 1),
+    LocationData("Jotunn's Thumb", 'Peak', 22, 1),
+    LocationData('Old Skerry', 'Peak', 23, 1),
+    LocationData('Hamarr Stone', 'Peak', 24, 1),
+    LocationData("Giant's Nose", 'Peak', 25, 1),
+    LocationData("Walter's Boulder", 'Peak', 26, 1),
+    LocationData('Sundered Sons', 'Peak', 27, 1),
+    LocationData("Old Weald's Boulder", 'Peak', 28, 1),
+    LocationData('Leaning Spire', 'Peak', 29, 1),
+    LocationData('Cromlech', 'Peak', 30, 1),
+    LocationData("Walker's Pillar", 'Peak', 31, 2),
+    LocationData('Eldenhorn', 'Peak', 32, 2),
+    LocationData('Great Gaol', 'Peak', 33, 2),
+    LocationData('St Haelga', 'Peak', 34, 2),
+    LocationData("Ymir's Shadow", 'Peak', 35, 2),
+    LocationData('Great Bulwark', 'Peak', 36, 3),
+    LocationData('Solemn Tempest', 'Peak', 37, 3),
+    LocationData('Walters Crag Rope', 'Rope', 100, 0),
+    LocationData('Walkers Pillar Rope', 'Rope', 101, 2),
+    LocationData('Great Gaol Rope', 'Rope', 102, 2),
+    LocationData('St Haelga Rope', 'Rope', 103, 2),
+    LocationData('Extra Rope 1', 'Rope', 104, 0),
+    LocationData('Extra Rope 2', 'Rope', 105, 0),
+    LocationData('Extra Rope 3', 'Rope', 106, 0),
+    LocationData('Extra Rope 4', 'Rope', 107, 0),
+    LocationData('Extra Rope 5', 'Rope', 108, 0),
+    LocationData('Extra Rope 6', 'Rope', 109, 0),
+    LocationData('Extra Rope 7', 'Rope', 110, 0),
+    LocationData('Extra Rope 8', 'Rope', 111, 0),
+    LocationData('Extra Rope 9', 'Rope', 112, 2),
+    LocationData('Extra Rope 10', 'Rope', 113, 2),
+    LocationData('Extra Rope 11', 'Rope', 114, 2),
+    LocationData('Extra Rope 12', 'Rope', 115, 2),
+    LocationData('Great Gaol Given Rope', 'Rope', 116, 2),
+    LocationData('St Haelga Given Rope', 'Rope', 117, 2),
+    LocationData('Hat 1', 'Artefact', 200, 0),
+    LocationData('Hat 2', 'Artefact', 201, 0),
+    LocationData('Helmet', 'Artefact', 202, 0),
+    LocationData('Shoe', 'Artefact', 203, 0),
+    LocationData('Shovel', 'Artefact', 204, 0),
+    LocationData('Sleepingbag', 'Artefact', 205, 0),
+    LocationData('Backpack', 'Artefact', 206, 0),
+    LocationData('Coffebox 1', 'Artefact', 207, 0),
+    LocationData('Coffebox 2', 'Artefact', 208, 0),
+    LocationData('Chalkbox 1', 'Artefact', 209, 2),
+    LocationData('Chalkbox 2', 'Artefact', 210, 2),
+    LocationData('Climber Statue 1', 'Artefact', 211, 1),
+    LocationData('Climber Statue 2', 'Artefact', 212, 2),
+    LocationData('Climber Statue 3', 'Artefact', 213, 3),
+    LocationData('Photograph 1', 'Artefact', 214, 0),
+    LocationData('Photograph 2', 'Artefact', 215, 0),
+    LocationData('Photograph 3', 'Artefact', 216, 0),
+    LocationData('Photograph 4', 'Artefact', 217, 2),
+    LocationData('Photograph Frame', 'Artefact', 218, 2),
+    LocationData('Climber Statue 0', 'Artefact', 219, 0),
+    LocationData('Extra Seed 1', 'Bird Seed', 400, 0),
+    LocationData('Extra Seed 2', 'Bird Seed', 401, 1),
+    LocationData('Extra Seed 3', 'Bird Seed', 402, 2),
+    LocationData('Extra Seed 4', 'Bird Seed', 403, 2),
+    LocationData('Extra Seed 5', 'Bird Seed', 404, 2)
+]
+
+full_item_list: list[ItemData] = [
+    ItemData('Walters Crag Rope', 'Rope', 100),
+    ItemData('Walkers Pillar Rope', 'Rope', 101),
+    ItemData('Great Gaol Rope', 'Rope', 102),
+    ItemData('St Haelga Rope', 'Rope', 103),
+    ItemData('Extra Rope 1', 'Rope', 104),
+    ItemData('Extra Rope 2', 'Rope', 105),
+    ItemData('Extra Rope 3', 'Rope', 106),
+    ItemData('Extra Rope 4', 'Rope', 107),
+    ItemData('Extra Rope 5', 'Rope', 108),
+    ItemData('Extra Rope 6', 'Rope', 109),
+    ItemData('Extra Rope 7', 'Rope', 110),
+    ItemData('Extra Rope 8', 'Rope', 111),
+    ItemData('Extra Rope 9', 'Rope', 112),
+    ItemData('Extra Rope 10', 'Rope', 113),
+    ItemData('Extra Rope 11', 'Rope', 114),
+    ItemData('Extra Rope 12', 'Rope', 115),
+    ItemData('Great Gaol Given Rope', 'Rope', 116),
+    ItemData('St Haelga Given Rope', 'Rope', 117),
+    ItemData('Hat 1', 'Artefact', 200),
+    ItemData('Hat 2', 'Artefact', 201),
+    ItemData('Helmet', 'Artefact', 202),
+    ItemData('Shoe', 'Artefact', 203),
+    ItemData('Shovel', 'Artefact', 204),
+    ItemData('Sleepingbag', 'Artefact', 205),
+    ItemData('Backpack', 'Artefact', 206),
+    ItemData('Coffebox 1', 'Artefact', 207),
+    ItemData('Coffebox 2', 'Artefact', 208),
+    ItemData('Chalkbox 1', 'Artefact', 209),
+    ItemData('Chalkbox 2', 'Artefact', 210),
+    ItemData('Climber Statue 1', 'Artefact', 211),
+    ItemData('Climber Statue 2', 'Artefact', 212),
+    ItemData('Climber Statue 3', 'Artefact', 213),
+    ItemData('Photograph 1', 'Artefact', 214),
+    ItemData('Photograph 2', 'Artefact', 215),
+    ItemData('Photograph 3', 'Artefact', 216),
+    ItemData('Photograph 4', 'Artefact', 217),
+    ItemData('Photograph Frame', 'Artefact', 218),
+    ItemData('Climber Statue 0', 'Artefact', 219),
+    ItemData('Fundamentals Book', 'Book', 300),
+    ItemData('Intermediate Book', 'Book', 301),
+    ItemData('Advanced Book', 'Book', 302),
+    ItemData('Expert Book', 'Book', 303),
+    ItemData('Extra Seed 1', 'Bird Seed', 400),
+    ItemData('Extra Seed 2', 'Bird Seed', 401),
+    ItemData('Extra Seed 3', 'Bird Seed', 402),
+    ItemData('Extra Seed 4', 'Bird Seed', 403),
+    ItemData('Extra Seed 5', 'Bird Seed', 404),
+    ItemData('Pipe', 'Tool', 500),
+    ItemData('Rope Length Upgrade', 'Tool', 501),
+    ItemData('Barometer', 'Tool', 502),
+    ItemData('Progressive Crampons', 'Tool', 503),
+    ItemData('Monocular', 'Tool', 504),
+    ItemData('Phonograph', 'Tool', 505),
+    ItemData('Pocketwatch', 'Tool', 506),
+    ItemData('Chalkbag', 'Tool', 507),
+    ItemData('Rope Unlock', 'Tool', 508),
+    ItemData('Extra Rope', 'Extra Item', 600),
+    ItemData('Extra Chalk', 'Extra Item', 601),
+    ItemData('Extra Coffee', 'Extra Item', 602),
+    ItemData('Extra Seed', 'Extra Item', 603)
+]
