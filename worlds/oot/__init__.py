@@ -1211,8 +1211,8 @@ class OOTWorld(World):
             ):
                 if location != "Links Pocket":
                     entrance = self.get_region(f"{location} Boss Room").entrances
-                    entrance = entrance[0].name
-                    dungeon = entrance[:entrance.index(" Boss Door")]
+                    entrance_name = entrance[0].name
+                    dungeon = entrance_name[:entrance_name.index(" Boss Door")]
                 else:
                     dungeon = "Start"
                 prizes[self.get_location(location).item.name] = dungeon
