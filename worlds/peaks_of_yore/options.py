@@ -20,7 +20,7 @@ class Goal(Choice):
 
 
 class StartingBook(Choice):
-    """Choose what book to start with. WARNING: Make sure your selected book is also enabled"""
+    """Choose what book to start with. If the book is not enabled, the easiest enabled book will be chosen"""
     display_name = "Starting Book"
     option_fundamentals = 0
     option_intermediate = 1

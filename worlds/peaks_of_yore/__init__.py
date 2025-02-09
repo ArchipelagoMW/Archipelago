@@ -2,7 +2,7 @@ from typing import Any
 
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial, Item, Region, ItemClassification, MultiWorld
-from .options import PeaksOfYoreOptions, Goal
+from .options import PeaksOfYoreOptions, Goal, StartingBook
 from .data import full_item_list, full_location_list
 from .items import PeaksOfYoreItem
 from .locations import get_locations, get_location_names_by_type, PeaksOfYoreLocation
@@ -42,7 +42,6 @@ class PeaksOfWorld(World):
         self.peaks_in_pool = []
         self.artefacts_in_pool = []
 
-
     def create_item(self, name: str) -> Item:
         classification: ItemClassification = ItemClassification.filler
         item_entry = [item for item in full_item_list if item.name == name][0]
@@ -53,6 +52,38 @@ class PeaksOfWorld(World):
     def create_extra_item(self):
         choices = ["Extra Rope", "Extra Coffee", "Extra Chalk", "Extra Seed"]
         return self.create_item(self.random.choice(choices))
+
+    def generate_early(self) -> None:
+        if self.options.start_with_barometer:
+            self.multiworld.push_precollected(self.create_item("Barometer"))
+
+        if (not self.options.enable_fundamental.value) and (not self.options.enable_intermediate.value) \
+                and (not self.options.enable_advanced.value) and (not self.options.enable_expert.value):
+            raise Exception("Player " + self.player_name + " has not selected any books!")
+
+        starting_book: Item = self.create_item(
+            ["Fundamentals Book", "Intermediate Book", "Advanced Book", "Expert Book"][self.options.starting_book.value]
+        )
+
+        books: list[bool] = [self.options.enable_fundamental.value == 1, self.options.enable_intermediate.value == 1,
+                             self.options.enable_advanced.value == 1, self.options.enable_expert.value == 1]
+        if not books[self.options.starting_book.value]:
+            if self.options.enable_fundamental.value:
+                starting_book = self.create_item("Fundamentals Book")
+                self.options.starting_book.value = StartingBook.option_fundamentals
+                # not sure if ^changing options^ is allowed but this seems to work
+                # this is to prevent generating this book as item later
+            elif self.options.enable_intermediate.value:
+                starting_book = self.create_item("Intermediate Book")
+                self.options.starting_book.value = StartingBook.option_intermediate
+            elif self.options.enable_advanced.value:
+                starting_book = self.create_item("Advanced Book")
+                self.options.starting_book.value = StartingBook.option_advanced
+            else:
+                starting_book = self.create_item("Expert Book")
+                self.options.starting_book.value = StartingBook.option_expert
+            # not sure how to raise a warning without failing generation will silently change to selected book for now
+        self.multiworld.push_precollected(starting_book)
 
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)
@@ -114,10 +145,6 @@ class PeaksOfWorld(World):
         starting_book: Item = self.create_item(
             ["Fundamentals Book", "Intermediate Book", "Advanced Book", "Expert Book"][
                 self.options.starting_book.value])
-        self.multiworld.push_precollected(starting_book)
-
-        if self.options.start_with_barometer:
-            self.multiworld.push_precollected(self.create_item("Barometer"))
 
         remaining_items = self.location_count
 
