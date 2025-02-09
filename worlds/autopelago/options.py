@@ -1,10 +1,12 @@
+import logging
+
 import yaml
 
 from dataclasses import dataclass
-from typing import Any, Union, TypedDict, List, Tuple, Mapping, Iterable
-from typing_extensions import NotRequired
+from typing import Any, List, Tuple, Mapping, Iterable, Type
 
 from Options import Toggle, PerGameCommonOptions, Choice, OptionSet, Range, OptionList, Visibility
+from worlds.AutoWorld import World
 
 
 class FillWithDetermination(Toggle):
@@ -126,9 +128,14 @@ class RatChatMessages(OptionList):
                     res.append((t, 1))
                 else:
                     raise NotImplementedError(f"Cannot convert from non-str + non-dict, got {type(t)}")
-            return res
+            return super().from_any(res)
 
         raise NotImplementedError(f"Cannot convert from non-dict, got {type(data)}")
+
+    def verify(self, world: Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
+        if len(self.value) == 0:
+            logging.warning(f"Settings file tried to set empty rat chat messages for {type(self).__name__} (player: {player_name}). This is not allowed. Reverting them to default.")
+            self.value = RatChatMessages.from_any(self.default).value
 
 
 class ChangedTargetMessages(RatChatMessages):
