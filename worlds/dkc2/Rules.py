@@ -706,7 +706,8 @@ class DKC2StrictRules(DKC2Rules):
                     self.has_controllable_barrels(state),
 
             LocationName.fiery_furnace_clear:
-                lambda state: self.has_controllable_barrels(state) and self.can_cartwheel(state),
+                lambda state: self.has_controllable_barrels(state) and self.can_cartwheel(state)
+                    and self.can_team_attack(state),
             LocationName.fiery_furnace_kong:
                 lambda state: self.has_controllable_barrels(state) and self.can_cartwheel(state)
                     and self.can_team_attack(state),
@@ -715,15 +716,15 @@ class DKC2StrictRules(DKC2Rules):
                     and self.can_team_attack(state),
 
             LocationName.animal_antics_clear:
-                lambda state: self.has_rambi(state) and self.has_enguarde(state) and self.has_squitter(state) and 
+                lambda state: self.has_both_kongs(state) and self.has_rambi(state) and self.has_enguarde(state) and self.has_squitter(state) and 
                     self.has_squawks(state) and self.has_rattly(state) and self.can_swim(state) and 
                     self.has_kannons(state),
             LocationName.animal_antics_kong:
-                lambda state: self.has_rambi(state) and self.has_enguarde(state) and self.has_squitter(state) and 
+                lambda state: self.has_both_kongs(state) and self.has_rambi(state) and self.has_enguarde(state) and self.has_squitter(state) and 
                     self.has_squawks(state) and self.has_rattly(state) and self.can_swim(state) and 
                     self.has_kannons(state),
             LocationName.animal_antics_dk_coin:
-                lambda state: self.has_rambi(state) and self.has_enguarde(state) and self.has_squitter(state) and 
+                lambda state: self.has_both_kongs(state) and self.has_rambi(state) and self.has_enguarde(state) and self.has_squitter(state) and 
                     self.has_squawks(state) and self.can_swim(state),
 
             LocationName.krocodile_core_clear:
