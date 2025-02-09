@@ -10,5 +10,5 @@ def get_locations(region_num: int) -> dict[str, int]:
     return {loc.name: loc.id for loc in full_location_list if loc.region == region_num}
 
 
-def get_location_names_by_type(region_num: int, type: str):
-    return {loc.name for loc in full_location_list if loc.region == region_num and loc.type == type}
+def get_location_names_by_type(region_num: int, location_type: str) -> list[str]:
+    return [loc.name for loc in full_location_list if loc.region == region_num and loc.type == location_type]
