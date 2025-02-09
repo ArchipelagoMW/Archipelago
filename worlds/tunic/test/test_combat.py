@@ -56,12 +56,10 @@ class TestCombat(TunicTestBase):
         prev_statuses = curr_statuses.copy()
         area_names = list(area_data.keys())
         current_items = Counter()
-        collected_items = []
         for current_item_name in combat_items:
             current_items[current_item_name] += 1
             current_item = TunicWorld.create_item(self.world, current_item_name)
             self.collect(current_item)
-            collected_items.append(current_item)
             self.multiworld.worlds[1].random.shuffle(area_names)
             for area in area_names:
                 curr_statuses[area] = check_combat_reqs(area, self.multiworld.state, self.player)
