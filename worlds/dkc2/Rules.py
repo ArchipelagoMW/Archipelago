@@ -2583,7 +2583,7 @@ class DKC2LooseRules(DKC2Rules):
                 lambda state: self.can_team_attack(state) and self.has_squitter(state) and 
                     self.can_cling(state),
             LocationName.hornet_hole_banana_bunch_5:
-                self.can_team_attack,
+                lambda state: self.can_team_attack(state) and self.can_cling(state),
             LocationName.hornet_hole_red_balloon_1:
                 lambda state: self.can_team_attack(state) and self.has_squitter(state) and 
                     self.can_cling(state),
