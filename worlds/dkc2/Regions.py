@@ -133,14 +133,13 @@ def create_regions(world: "DKC2World", active_locations):
     stronghold_showdown_level = create_region(multiworld, player, active_locations, RegionName.stronghold_showdown_level)
 
     screechs_sprint_level = create_region(multiworld, player, active_locations, RegionName.screechs_sprint_level)
-    k_rool_duel_level = create_region(multiworld, player, active_locations, RegionName.k_rool_duel_level)
 
     jungle_jinx_level = create_region(multiworld, player, active_locations, RegionName.jungle_jinx_level)
     black_ice_battle_level = create_region(multiworld, player, active_locations, RegionName.black_ice_battle_level)
     klobber_karnage_level = create_region(multiworld, player, active_locations, RegionName.klobber_karnage_level)
     fiery_furnace_level = create_region(multiworld, player, active_locations, RegionName.fiery_furnace_level)
     animal_antics_level = create_region(multiworld, player, active_locations, RegionName.animal_antics_level)
-    krocodile_core_level = create_region(multiworld, player, active_locations, RegionName.krocodile_core_level)
+
 
     multiworld.regions += [
         menu,
@@ -244,14 +243,19 @@ def create_regions(world: "DKC2World", active_locations):
         toxic_tower_level,
         stronghold_showdown_level,
         screechs_sprint_level,
-        k_rool_duel_level,
         jungle_jinx_level,
         black_ice_battle_level,
         klobber_karnage_level,
         fiery_furnace_level,
         animal_antics_level,
-        krocodile_core_level,
     ]
+
+    if world.options.goal != Goal.option_lost_world:
+        k_rool_duel_level = create_region(multiworld, player, active_locations, RegionName.k_rool_duel_level)
+        multiworld.regions.append(k_rool_duel_level)
+    if world.options.goal != Goal.option_flying_krock:
+        krocodile_core_level = create_region(multiworld, player, active_locations, RegionName.krocodile_core_level)
+        multiworld.regions.append(krocodile_core_level)
 
     # Level clears
     add_location_to_region(multiworld, player, active_locations, RegionName.pirate_panic_level, LocationName.pirate_panic_clear)
@@ -923,8 +927,9 @@ def connect_regions(world: "DKC2World"):
     connect(world, RegionName.krools_keep, RegionName.stronghold_showdown_map)
     
     connect(world, RegionName.the_flying_krock, RegionName.screechs_sprint_map)
-    connect(world, RegionName.the_flying_krock, RegionName.k_rool_duel_map)
-    connect(world, RegionName.k_rool_duel_map, RegionName.k_rool_duel_level)
+    if world.options.goal != Goal.option_lost_world:
+        connect(world, RegionName.the_flying_krock, RegionName.k_rool_duel_map)
+        connect(world, RegionName.k_rool_duel_map, RegionName.k_rool_duel_level)
     
     connect(world, RegionName.lost_world_cauldron, RegionName.jungle_jinx_map)
     connect(world, RegionName.lost_world_quay, RegionName.black_ice_battle_map)
@@ -932,12 +937,13 @@ def connect_regions(world: "DKC2World"):
     connect(world, RegionName.lost_world_gulch, RegionName.fiery_furnace_map)
     connect(world, RegionName.lost_world_keep, RegionName.animal_antics_map)
     
-    connect(world, RegionName.lost_world_cauldron, RegionName.krocodile_core_map)
-    connect(world, RegionName.lost_world_quay, RegionName.krocodile_core_map)
-    connect(world, RegionName.lost_world_kremland, RegionName.krocodile_core_map)
-    connect(world, RegionName.lost_world_gulch, RegionName.krocodile_core_map)
-    connect(world, RegionName.lost_world_keep, RegionName.krocodile_core_map)
-    connect(world, RegionName.krocodile_core_map, RegionName.krocodile_core_level)
+    if world.options.goal != Goal.option_flying_krock:
+        connect(world, RegionName.lost_world_cauldron, RegionName.krocodile_core_map)
+        connect(world, RegionName.lost_world_quay, RegionName.krocodile_core_map)
+        connect(world, RegionName.lost_world_kremland, RegionName.krocodile_core_map)
+        connect(world, RegionName.lost_world_gulch, RegionName.krocodile_core_map)
+        connect(world, RegionName.lost_world_keep, RegionName.krocodile_core_map)
+        connect(world, RegionName.krocodile_core_map, RegionName.krocodile_core_level)
 
     for map_level, level in world.level_connections.items():
         connect(world, map_level, level)

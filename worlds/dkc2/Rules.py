@@ -4,6 +4,7 @@ if TYPE_CHECKING:
     from . import DKC2World
 
 from .Names import LocationName, ItemName, RegionName, EventName
+from .Options import Goal
 
 from worlds.generic.Rules import CollectionRule
 from BaseClasses import CollectionState
@@ -44,17 +45,23 @@ class DKC2Rules:
                 self.can_access_lost_world_gulch,
             f"{RegionName.krools_keep} -> {RegionName.lost_world_keep}":
                 self.can_access_lost_world_keep,
-            f"{RegionName.lost_world_cauldron} -> {RegionName.krocodile_core_map}":
-                self.can_access_kore,
-            f"{RegionName.lost_world_quay} -> {RegionName.krocodile_core_map}":
-                self.can_access_kore,
-            f"{RegionName.lost_world_kremland} -> {RegionName.krocodile_core_map}":
-                self.can_access_kore,
-            f"{RegionName.lost_world_gulch} -> {RegionName.krocodile_core_map}":
-                self.can_access_kore,
-            f"{RegionName.lost_world_keep} -> {RegionName.krocodile_core_map}":
-                self.can_access_kore,
         }
+
+        if world.options.goal != Goal.option_flying_krock:
+            self.connection_rules.update(
+                {
+                    f"{RegionName.lost_world_cauldron} -> {RegionName.krocodile_core_map}":
+                        self.can_access_kore,
+                    f"{RegionName.lost_world_quay} -> {RegionName.krocodile_core_map}":
+                        self.can_access_kore,
+                    f"{RegionName.lost_world_kremland} -> {RegionName.krocodile_core_map}":
+                        self.can_access_kore,
+                    f"{RegionName.lost_world_gulch} -> {RegionName.krocodile_core_map}":
+                        self.can_access_kore,
+                    f"{RegionName.lost_world_keep} -> {RegionName.krocodile_core_map}":
+                        self.can_access_kore,
+                }
+            )
 
     def can_access_galleon(self, state: CollectionState) -> bool:
         return state.has(ItemName.gangplank_galleon, self.player)
