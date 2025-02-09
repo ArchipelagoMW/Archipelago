@@ -1,6 +1,5 @@
 from BaseClasses import ItemClassification
 from collections import Counter
-from random import Random
 
 from . import TunicTestBase
 from .. import options
@@ -42,31 +41,26 @@ class TestCombat(TunicTestBase):
         if item in skipped_items:
             continue
         ic = data.combat_ic or data.classification
+        if item in converter:
+            item = converter[item]
         if ItemClassification.progression in ic:
-            for _ in range(data.quantity_in_item_pool):
-                if item in converter:
-                    item = converter[item]
-                combat_items.append(item)
+            combat_items += [item] * data.quantity_in_item_pool
 
     # we had an issue where collecting certain items brought certain areas out of logic
     # due to the weirdness of swapping between "you have enough attack that you don't need magic"
     # so this will make sure collecting an item doesn't bring something out of logic
     def test_combat_doesnt_fail_backwards(self):
-        random_obj = Random()
         combat_items = self.combat_items.copy()
-        random_obj.shuffle(combat_items)
+        self.multiworld.worlds[1].random.shuffle(combat_items)
         curr_statuses = {name: False for name in area_data.keys()}
         prev_statuses = curr_statuses.copy()
-        area_names = [name for name in area_data.keys()]
-        current_items = Counter({name: 0 for name in combat_items})
-        collected_items = []
-        while len(combat_items):
-            current_item_name = combat_items.pop()
+        area_names = list(area_data.keys())
+        current_items = Counter()
+        for current_item_name in combat_items:
             current_items[current_item_name] += 1
             current_item = TunicWorld.create_item(self.world, current_item_name)
             self.collect(current_item)
-            collected_items.append(current_item)
-            random_obj.shuffle(area_names)
+            self.multiworld.worlds[1].random.shuffle(area_names)
             for area in area_names:
                 curr_statuses[area] = check_combat_reqs(area, self.multiworld.state, self.player)
                 if curr_statuses[area] < prev_statuses[area]:

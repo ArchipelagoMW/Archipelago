@@ -119,14 +119,14 @@ def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_d
     extra_def_needed = 0
     extra_mp_needed = 0
     has_magic = state.has_any(("Magic Wand", "Gun"), player)
-    stick_bool = has_melee(state, player)
     sword_bool = has_sword(state, player)
+    stick_bool = sword_bool or has_melee(state, player)
     equipment = data.equipment.copy()
     for item in data.equipment:
         if item == "Stick":
             if not stick_bool:
-                equipment.remove("Stick")
                 if has_magic:
+                    equipment.remove("Stick")
                     if "Magic" not in equipment:
                         equipment.append("Magic")
                     # magic can make up for the lack of stick
@@ -161,6 +161,7 @@ def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_d
                 else:
                     return False
 
+        # just increase the stat requirement, we'll check for shield when calculating defense
         elif item == "Shield":
             equipment.remove("Shield")
             extra_def_needed += 2
@@ -237,7 +238,7 @@ def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> 
         else:
             att_required += 2
 
-    if player_att < data.att_level:
+    if player_att < att_required:
         return False
     else:
         extra_att = player_att - att_required
@@ -266,21 +267,13 @@ def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> 
                 # first number is def, second number is sp
                 upgrade_options: set[tuple[int, int]] = set()
                 stats_to_buy = req_stats - free_def - free_sp
-                for i in range(def_offerings):
-                    paid_def = i + 1
-                    if paid_def >= stats_to_buy:
-                        upgrade_options.add((paid_def, 0))
-                    for j in range(sp_offerings):
-                        paid_sp = j + 1
-                        if paid_def + paid_sp >= stats_to_buy:
-                            upgrade_options.add((paid_def, paid_sp))
-                for i in range(sp_offerings):
-                    paid_sp = i + 1
-                    if paid_sp >= stats_to_buy:
-                        upgrade_options.add((0, paid_sp))
-                costs = []
-                for defense, sp in upgrade_options:
-                    costs.append(calc_def_sp_cost(defense, sp))
+                for paid_def in range(0, min(def_offerings + 1, stats_to_buy + 1)):
+                    sp_required = stats_to_buy - paid_def
+                    if sp_offerings >= sp_required:
+                        if sp_required < 0:
+                            break
+                        upgrade_options.add((paid_def, stats_to_buy - paid_def))
+                costs = [calc_def_sp_cost(defense, sp) for defense, sp in upgrade_options]
                 money_required += min(costs)
 
     req_effective_hp = calc_effective_hp(data.hp_level, data.potion_level, data.potion_count)
@@ -301,24 +294,18 @@ def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> 
             # we need to pick the cheapest option that gets us above the amount of effective HP we need
             # first number is hp, second number is potion
             upgrade_options: set[tuple[int, int]] = set()
-            for i in range(potion_offerings):
-                paid_potion_count = i + 1
-                if calc_effective_hp(free_hp, free_potion + paid_potion_count, player_potion_count) >= req_effective_hp:
-                    upgrade_options.add((0, paid_potion_count))
-                for j in range(hp_offerings):
-                    paid_hp_count = j + 1
-                    if (calc_effective_hp(free_hp + paid_hp_count, free_potion + paid_potion_count, player_potion_count)
+            # filter out exclusively worse options
+            lowest_hp_added = hp_offerings + 1
+            for paid_potion in range(0, potion_offerings + 1):
+                # check quantities of hp offerings for each potion offering
+                for paid_hp in range(0, lowest_hp_added):
+                    if (calc_effective_hp(free_hp + paid_hp, free_potion + paid_potion, player_potion_count)
                             >= req_effective_hp):
-                        upgrade_options.add((paid_hp_count, paid_potion_count))
+                        upgrade_options.add((paid_hp, paid_potion))
+                        lowest_hp_added = paid_hp
                         break
-            for i in range(hp_offerings):
-                paid_hp_count = i + 1
-                if calc_effective_hp(free_hp + paid_hp_count, free_potion, player_potion_count) >= req_effective_hp:
-                    upgrade_options.add((paid_hp_count, 0))
-                    break
-            costs = []
-            for hp, potion in upgrade_options:
-                costs.append(calc_hp_potion_cost(hp, potion))
+
+            costs = [calc_hp_potion_cost(hp, potion) for hp, potion in upgrade_options]
             money_required += min(costs)
 
     return get_money_count(state, player) >= money_required
@@ -459,14 +446,5 @@ class TunicState(LogicMixin):
         self.tunic_need_to_reset_combat_from_remove = defaultdict(lambda: False)
         # the per-player, per-area state of combat checking -- unchecked, failed, or succeeded
         self.tunic_area_combat_state = defaultdict(lambda: defaultdict(lambda: CombatState.unchecked))
-
-    @staticmethod
-    def copy_mixin(self, new_state: CollectionState) -> CollectionState:
-        # the per-player need to reset the combat state when collecting a combat item
-        new_state.tunic_need_to_reset_combat_from_collect = defaultdict(lambda: False)
-        # the per-player need to reset the combat state when removing a combat item
-        new_state.tunic_need_to_reset_combat_from_remove = defaultdict(lambda: False)
-        # the per-player, per-area state of combat checking -- unchecked, failed, or succeeded
-        new_state.tunic_area_combat_state = defaultdict(lambda: defaultdict(lambda: CombatState.unchecked))
-
-        return new_state
+        # a copy_mixin was intentionally excluded because the empty state from init_mixin
+        # will always be appropriate for recalculating the logic cache
