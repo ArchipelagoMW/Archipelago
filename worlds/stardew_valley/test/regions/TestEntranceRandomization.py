@@ -3,6 +3,7 @@ from collections.abc import Collection
 
 from BaseClasses import get_seed, MultiWorld, Entrance
 from .. import SVTestCase
+from ..assertion import WorldAssertMixin
 from ... import options, StardewValleyWorld
 from ...mods.mod_data import ModNames
 from ...options import EntranceRandomization, ExcludeGingerIsland, SkillProgression
@@ -13,6 +14,8 @@ from ...regions.regions import create_all_connections
 from ...strings.entrance_names import Entrance as EntranceName
 from ...strings.region_names import Region as RegionName
 
+
+# TODO Mock create_entrance_rando_target, validate
 
 class TestEntranceRando(SVTestCase):
 
@@ -40,7 +43,7 @@ class TestEntranceRando(SVTestCase):
                                  f"Connections are duplicated in randomization.")
 
 
-class TestModEntranceRando(SVTestCase):
+class TestModEntranceRando(WorldAssertMixin, SVTestCase):
 
     def test_entrance_randomization(self):
         for option in (options.EntranceRandomization.option_pelican_town, options.EntranceRandomization.option_non_progression,
