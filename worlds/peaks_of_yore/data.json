@@ -3,223 +3,223 @@
     {
       "name": "Greenhorn's Top",
       "type": "Peak",
-      "id": 0,
+      "id": 1,
       "region": 0
     },
     {
       "name": "Paltry Peak",
       "type": "Peak",
-      "id": 1,
+      "id": 2,
       "region": 0
     },
     {
       "name": "Old Mill",
       "type": "Peak",
-      "id": 2,
+      "id": 3,
       "region": 0
     },
     {
       "name": "Gray Gully",
       "type": "Peak",
-      "id": 3,
+      "id": 4,
       "region": 0
     },
     {
       "name": "Lighthouse",
       "type": "Peak",
-      "id": 4,
+      "id": 5,
       "region": 0
     },
     {
       "name": "Old Man Of Sjor",
       "type": "Peak",
-      "id": 5,
+      "id": 6,
       "region": 0
     },
     {
       "name": "Giants Shelf",
       "type": "Peak",
-      "id": 6,
+      "id": 7,
       "region": 0
     },
     {
       "name": "Evergreen's End",
       "type": "Peak",
-      "id": 7,
+      "id": 8,
       "region": 0
     },
     {
       "name": "The Twins",
       "type": "Peak",
-      "id": 8,
+      "id": 9,
       "region": 0
     },
     {
       "name": "Old Grove's Skelf",
       "type": "Peak",
-      "id": 9,
+      "id": 10,
       "region": 0
     },
     {
       "name": "Land's End",
       "type": "Peak",
-      "id": 10,
+      "id": 11,
       "region": 0
     },
     {
       "name": "Hangman's Leap",
       "type": "Peak",
-      "id": 11,
+      "id": 12,
       "region": 0
     },
     {
       "name": "Old Langr",
       "type": "Peak",
-      "id": 12,
+      "id": 13,
       "region": 0
     },
     {
       "name": "Aldr Grotto",
       "type": "Peak",
-      "id": 13,
+      "id": 14,
       "region": 0
     },
     {
       "name": "Three Brothers",
       "type": "Peak",
-      "id": 14,
+      "id": 15,
       "region": 0
     },
     {
       "name": "Walter's Crag",
       "type": "Peak",
-      "id": 15,
+      "id": 16,
       "region": 0
     },
     {
       "name": "Great Crevice",
       "type": "Peak",
-      "id": 16,
+      "id": 17,
       "region": 0
     },
     {
       "name": "Old Hagger",
       "type": "Peak",
-      "id": 17,
+      "id": 18,
       "region": 0
     },
     {
       "name": "Ugsome Storr",
       "type": "Peak",
-      "id": 18,
+      "id": 19,
       "region": 0
     },
     {
       "name": "Wuthering Crest",
       "type": "Peak",
-      "id": 19,
+      "id": 20,
       "region": 0
     },
     {
       "name": "Porter's Boulders",
       "type": "Peak",
-      "id": 20,
+      "id": 21,
       "region": 1
     },
     {
       "name": "Jotunn's Thumb",
       "type": "Peak",
-      "id": 21,
+      "id": 22,
       "region": 1
     },
     {
       "name": "Old Skerry",
       "type": "Peak",
-      "id": 22,
+      "id": 23,
       "region": 1
     },
     {
       "name": "Hamarr Stone",
       "type": "Peak",
-      "id": 23,
+      "id": 24,
       "region": 1
     },
     {
       "name": "Giant's Nose",
       "type": "Peak",
-      "id": 24,
+      "id": 25,
       "region": 1
     },
     {
       "name": "Walter's Boulder",
       "type": "Peak",
-      "id": 25,
+      "id": 26,
       "region": 1
     },
     {
       "name": "Sundered Sons",
       "type": "Peak",
-      "id": 26,
+      "id": 27,
       "region": 1
     },
     {
       "name": "Old Weald's Boulder",
       "type": "Peak",
-      "id": 27,
+      "id": 28,
       "region": 1
     },
     {
       "name": "Leaning Spire",
       "type": "Peak",
-      "id": 28,
+      "id": 29,
       "region": 1
     },
     {
       "name": "Cromlech",
       "type": "Peak",
-      "id": 29,
+      "id": 30,
       "region": 1
     },
     {
       "name": "Walker's Pillar",
       "type": "Peak",
-      "id": 30,
+      "id": 31,
       "region": 2
     },
     {
       "name": "Eldenhorn",
       "type": "Peak",
-      "id": 31,
+      "id": 32,
       "region": 2
     },
     {
       "name": "Great Gaol",
       "type": "Peak",
-      "id": 32,
+      "id": 33,
       "region": 2
     },
     {
       "name": "St Haelga",
       "type": "Peak",
-      "id": 33,
+      "id": 34,
       "region": 2
     },
     {
       "name": "Ymir's Shadow",
       "type": "Peak",
-      "id": 34,
+      "id": 35,
       "region": 2
     },
     {
-      "name": "GreatBulwark",
+      "name": "Great Bulwark",
       "type": "Peak",
-      "id": 35,
+      "id": 36,
       "region": 3
     },
     {
-      "name": "SolemnTempest",
+      "name": "Solemn Tempest",
       "type": "Peak",
-      "id": 36,
+      "id": 37,
       "region": 3
     },
     {
@@ -232,19 +232,19 @@
       "name": "Walkers Pillar Rope",
       "type": "Rope",
       "id": 101,
-      "region": 0
+      "region": 2
     },
     {
       "name": "Great Gaol Rope",
       "type": "Rope",
       "id": 102,
-      "region": 0
+      "region": 2
     },
     {
       "name": "St Haelga Rope",
       "type": "Rope",
       "id": 103,
-      "region": 0
+      "region": 2
     },
     {
       "name": "Extra Rope 1",
@@ -298,37 +298,37 @@
       "name": "Extra Rope 9",
       "type": "Rope",
       "id": 112,
-      "region": 0
+      "region": 2
     },
     {
       "name": "Extra Rope 10",
       "type": "Rope",
       "id": 113,
-      "region": 0
+      "region": 2
     },
     {
       "name": "Extra Rope 11",
       "type": "Rope",
       "id": 114,
-      "region": 0
+      "region": 2
     },
     {
       "name": "Extra Rope 12",
       "type": "Rope",
       "id": 115,
-      "region": 0
+      "region": 2
     },
     {
       "name": "Great Gaol Given Rope",
       "type": "Rope",
       "id": 116,
-      "region": 0
+      "region": 2
     },
     {
       "name": "St Haelga Given Rope",
       "type": "Rope",
       "id": 117,
-      "region": 0
+      "region": 2
     },
     {
       "name": "Hat 1",
@@ -400,19 +400,19 @@
       "name": "Climber Statue 1",
       "type": "Artefact",
       "id": 211,
-      "region": 0
+      "region": 1
     },
     {
       "name": "Climber Statue 2",
       "type": "Artefact",
       "id": 212,
-      "region": 1
+      "region": 2
     },
     {
       "name": "Climber Statue 3",
       "type": "Artefact",
       "id": 213,
-      "region": 2
+      "region": 3
     },
     {
       "name": "Photograph 1",
@@ -448,7 +448,7 @@
       "name": "Climber Statue 0",
       "type": "Artefact",
       "id": 219,
-      "region": 3
+      "region": 0
     },
     {
       "name": "Extra Seed 1",
@@ -720,47 +720,47 @@
     {
       "name": "Pipe",
       "type": "Tool",
-      "id": 400
+      "id": 500
     },
     {
       "name": "Rope Length Upgrade",
       "type": "Tool",
-      "id": 401
+      "id": 501
     },
     {
       "name": "Barometer",
       "type": "Tool",
-      "id": 402
+      "id": 502
     },
     {
       "name": "Progressive Crampons",
       "type": "Tool",
-      "id": 403
+      "id": 503
     },
     {
       "name": "Monocular",
       "type": "Tool",
-      "id": 404
+      "id": 504
     },
     {
       "name": "Phonograph",
       "type": "Tool",
-      "id": 405
+      "id": 505
     },
     {
       "name": "Pocketwatch",
       "type": "Tool",
-      "id": 406
+      "id": 506
     },
     {
       "name": "Chalkbag",
       "type": "Tool",
-      "id": 407
+      "id": 507
     },
     {
-      "name": "Rope",
+      "name": "Rope Unlock",
       "type": "Tool",
-      "id": 408
+      "id": 508
     },
     {
       "name": "Extra Rope",
