@@ -1252,9 +1252,9 @@ class DKC2StrictRules(DKC2Rules):
             LocationName.haunted_hall_banana_coin_1:
                 self.can_cartwheel,
             LocationName.haunted_hall_banana_coin_2:
-                self.has_skull_kart,
+                lambda state: self.can_cling(state) and self.has_skull_kart(state),
             LocationName.haunted_hall_banana_coin_3:
-                self.has_skull_kart,
+                lambda state: self.can_cling(state) and self.has_skull_kart(state),
 
             LocationName.gusty_glade_banana_coin_1:
                 self.can_team_attack,
@@ -2694,9 +2694,15 @@ class DKC2LooseRules(DKC2Rules):
             LocationName.haunted_hall_banana_coin_1:
                 self.can_cartwheel,
             LocationName.haunted_hall_banana_coin_2:
-                self.has_skull_kart,
+                lambda state: self.has_skull_kart(state) and (
+                    self.can_cartwheel(state) or self.can_hover(state) or self.can_cling(state) or 
+                    self.can_team_attack(state)
+                ),
             LocationName.haunted_hall_banana_coin_3:
-                self.has_skull_kart,
+                lambda state: self.has_skull_kart(state) and (
+                    self.can_cartwheel(state) or self.can_hover(state) or self.can_cling(state) or 
+                    self.can_team_attack(state)
+                ),
 
             LocationName.gusty_glade_banana_coin_1:
                 self.can_team_attack,
