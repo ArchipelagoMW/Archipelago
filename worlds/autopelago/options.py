@@ -122,7 +122,7 @@ class RatChatMessages(OptionList):
                         raise NotImplementedError(f"Dict must have only one item, got {len(t)}")
                     for kv in t.items():
                         res.append(kv)
-                elif t is str:
+                elif isinstance(t, str):
                     res.append((t, 1))
                 else:
                     raise NotImplementedError(f"Cannot convert from non-str + non-dict, got {type(t)}")
