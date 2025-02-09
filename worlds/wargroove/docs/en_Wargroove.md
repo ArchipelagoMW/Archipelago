@@ -40,3 +40,4 @@ The following commands are only available when using the WargrooveClient to play
 - `/resync` Manually trigger a resync.
 - `/commander` Set the current commander to the given commander.
 - `/deathlink` Toggle deathlink between On and Off.
+- `/sacrifice_summon` Toggle sacrificing and summoning units between On and Off.

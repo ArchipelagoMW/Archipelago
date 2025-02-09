@@ -31,6 +31,18 @@ wg_logger = logging.getLogger("WG")
 
 
 class WargrooveClientCommandProcessor(ClientCommandProcessor):
+    def _cmd_sacrifice_summon(self):
+        """Toggles sacrifices and summons On/Off"""
+        if isinstance(self.ctx, WargrooveContext):
+            self.ctx.has_sacrifice_summon = not self.ctx.has_sacrifice_summon
+            if self.ctx.has_sacrifice_summon:
+                self.output(f"Sacrifices and summons are enabled.")
+            else:
+                unit_summon_response_file = os.path.join(self.ctx.game_communication_path, "unitSummonResponse")
+                if os.path.exists(unit_summon_response_file):
+                    os.remove(unit_summon_response_file)
+                self.output(f"Sacrifices and summons are disabled.")
+
     def _cmd_deathlink(self):
         """Toggles deathlink On/Off"""
         if isinstance(self.ctx, WargrooveContext):
@@ -76,6 +88,7 @@ class WargrooveContext(CommonContext):
     income_boost_multiplier: int = 0
     starting_groove_multiplier: float
     has_death_link: bool = False
+    has_sacrifice_summon: bool = True
     stored_units_key: str = ""
     faction_item_ids = {
         'Starter': 0,
@@ -149,7 +162,7 @@ class WargrooveContext(CommonContext):
         self.syncing = False
         self.awaiting_bridge = False
         # self.game_communication_path: files go in this path to pass data between us and the actual game
-        game_options = settings.get_settings()["wargroove_options"]
+        game_options = settings.get_settings().wargroove_options
 
         # Validate the AppData directory with Wargroove save data.
         # By default, Windows sets an environment variable we can leverage.
@@ -159,7 +172,7 @@ class WargrooveContext(CommonContext):
             appdata_wargroove = os.environ['appdata']
         else:
             try:
-                appdata_wargroove = game_options["save_directory"]
+                appdata_wargroove = game_options.save_directory
             except FileNotFoundError:
                 print_error_and_close("WargrooveClient couldn't detect a path to the AppData folder.\n"
                                       "Unable to infer required game_communication_path.\n"
@@ -539,30 +552,29 @@ async def game_watcher(ctx: WargrooveContext):
                     victory = True
                     os.remove(os.path.join(ctx.game_communication_path, file))
                 if file == "unitSacrifice":
-                    with open(os.path.join(ctx.game_communication_path, file), 'r') as f:
-                        unit_class = f.read()
-                        if ctx.stored_data[ctx.stored_units_key] is None:
-                            ctx.stored_data[ctx.stored_units_key] = []
-                        ctx.stored_data[ctx.stored_units_key] += [unit_class]
-                        message = [{"cmd": 'Set', "key": ctx.stored_units_key,
-                                    "default": [unit_class],
-                                    "want_reply": True,
-                                    "operations": [{"operation": "add", "value": [unit_class]}]}]
-                        await ctx.send_msgs(message)
+                    if ctx.has_sacrifice_summon:
+                        with open(os.path.join(ctx.game_communication_path, file), 'r') as f:
+                            unit_class = f.read()
+                            message = [{"cmd": 'Set', "key": ctx.stored_units_key,
+                                        "default": [unit_class],
+                                        "want_reply": True,
+                                        "operations": [{"operation": "add", "value": [unit_class]}]}]
+                            await ctx.send_msgs(message)
                     os.remove(os.path.join(ctx.game_communication_path, file))
                 if file == "unitSummonRequest":
-                    with open(os.path.join(ctx.game_communication_path, "unitSummonResponse"), 'w') as f:
-                        if ctx.stored_units_key in ctx.stored_data:
-                            stored_units = ctx.stored_data[ctx.stored_units_key]
-                            wg1_stored_units = [unit for unit in stored_units if unit in ctx.unit_classes]
-                            if len(wg1_stored_units) != 0:
-                                summoned_unit = random.choice(wg1_stored_units)
-                                message = [{"cmd": 'Set', "key": ctx.stored_units_key,
-                                            "default": [],
-                                            "want_reply": True,
-                                            "operations": [{"operation": "remove", "value": summoned_unit}]}]
-                                await ctx.send_msgs(message)
-                                f.write(summoned_unit)
+                    if ctx.has_sacrifice_summon:
+                        with open(os.path.join(ctx.game_communication_path, "unitSummonResponse"), 'w') as f:
+                            if ctx.stored_units_key in ctx.stored_data:
+                                stored_units = ctx.stored_data[ctx.stored_units_key]
+                                wg1_stored_units = [unit for unit in stored_units if unit in ctx.unit_classes]
+                                if len(wg1_stored_units) != 0:
+                                    summoned_unit = random.choice(wg1_stored_units)
+                                    message = [{"cmd": 'Set', "key": ctx.stored_units_key,
+                                                "default": [],
+                                                "want_reply": True,
+                                                "operations": [{"operation": "remove", "value": summoned_unit}]}]
+                                    await ctx.send_msgs(message)
+                                    f.write(summoned_unit)
                     os.remove(os.path.join(ctx.game_communication_path, file))
 
         ctx.locations_checked = sending
