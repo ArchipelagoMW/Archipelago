@@ -1195,9 +1195,9 @@ class OOTWorld(World):
         }
 
         if not self.multiworld.is_race:
-            prizes = {}
-            bosses = {}
-            for location in [
+            prizes: dict[str, str] = {}
+            bosses: dict[str, str] = {}
+            for location in (
                 "Links Pocket",
                 "Queen Gohma",
                 "King Dodongo",
@@ -1208,11 +1208,11 @@ class OOTWorld(World):
                 "Bongo Bongo",
                 "Twinrova",
                 # 'Ganon',
-            ]:
+            ):
                 if location != "Links Pocket":
                     entrance = self.get_region(f"{location} Boss Room").entrances
                     entrance = entrance[0].name
-                    dungeon = entrance[:str(entrance).index(" Boss Door")]
+                    dungeon = entrance[:entrance.index(" Boss Door")]
                 else:
                     dungeon = "Start"
                 prizes[self.get_location(location).item.name] = dungeon
