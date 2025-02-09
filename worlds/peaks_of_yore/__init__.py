@@ -1,7 +1,7 @@
 from typing import Any
 
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Tutorial, Item, Region, ItemClassification
+from BaseClasses import Tutorial, Item, Region, ItemClassification, MultiWorld
 from .options import PeaksOfYoreOptions, Goal
 from .data import full_item_list, full_location_list
 from .items import PeaksOfYoreItem
@@ -32,9 +32,16 @@ class PeaksOfWorld(World):
     item_name_to_id = {item.name: item.id for item in full_item_list}
     location_name_to_id = {location.name: location.id for location in full_location_list}
     topology_present = True
-    location_count = 0
-    peaks_in_pool = []
-    artefacts_in_pool = []
+    location_count: int
+    peaks_in_pool: list[str]
+    artefacts_in_pool: list[str]
+
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super().__init__(multiworld, player)
+        self.location_count = 0
+        self.peaks_in_pool = []
+        self.artefacts_in_pool = []
+
 
     def create_item(self, name: str) -> Item:
         classification: ItemClassification = ItemClassification.filler
