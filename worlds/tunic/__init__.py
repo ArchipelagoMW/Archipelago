@@ -1,4 +1,5 @@
 from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union, Set, TextIO
+from dataclasses import fields
 from logging import warning
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from .items import (item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names,
@@ -16,7 +17,7 @@ from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_op
                       check_options, LocalFill)
 from .combat_logic import area_data, CombatState
 from worlds.AutoWorld import WebWorld, World
-from Options import PlandoConnection, OptionError
+from Options import PlandoConnection, OptionError, PerGameCommonOptions, Range, Removed
 from decimal import Decimal, ROUND_HALF_UP
 from settings import Group, Bool
 
@@ -115,6 +116,21 @@ class TunicWorld(World):
     ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
 
     def generate_early(self) -> None:
+        if self.options.all_random:
+            for option_name in (attr.name for attr in fields(TunicOptions)
+                                if attr not in fields(PerGameCommonOptions)):
+                option = getattr(self.options, option_name)
+                if option_name == "all_random":
+                    continue
+                if issubclass(option.__class__, Removed):
+                    continue
+                print(option)
+                if option.supports_weighting:
+                    print(option)
+                    if issubclass(option.__class__, Range):
+                        option.value = self.random.randint(option.range_start, option.range_end)
+                    else:
+                        option.value = self.random.choice(list(option.name_lookup))
         check_options(self)
         self.er_regions = tunic_er_regions.copy()
         if self.options.plando_connections:

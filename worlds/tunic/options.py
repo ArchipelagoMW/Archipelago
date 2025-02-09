@@ -338,6 +338,16 @@ class BreakableShuffle(Toggle):
     display_name = "Breakable Shuffle"
 
 
+class HiddenAllRandom(Toggle):
+    """
+    Sets all options that can be random to random.
+    For test gens.
+    """
+    internal_name = "all_random"
+    display_name = "All Random Debug"
+    visibility = Visibility.none
+
+
 @dataclass
 class TunicOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -371,6 +381,8 @@ class TunicOptions(PerGameCommonOptions):
     ladder_storage_without_items: LadderStorageWithoutItems
 
     plando_connections: TunicPlandoConnections
+
+    all_random: HiddenAllRandom
 
     fixed_shop: FixedShop  # will be removed at a later date
     logic_rules: Removed  # fully removed in the direction pairs update
