@@ -1,4 +1,3 @@
-import random
 from typing import Any
 
 from worlds.AutoWorld import World, WebWorld
@@ -46,7 +45,7 @@ class PeaksOfWorld(World):
 
     def create_extra_item(self):
         choices = ["Extra Rope", "Extra Coffee", "Extra Chalk", "Extra Seed"]
-        return self.create_item(random.choice(choices))
+        return self.create_item(self.random.choice(choices))
 
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)
@@ -150,7 +149,6 @@ class PeaksOfWorld(World):
 
     def set_rules(self) -> None:
         if self.options.goal.value == Goal.option_all_artefacts:
-            print(self.artefacts_in_pool)
             self.multiworld.completion_condition[self.player] = lambda state: all(
                 state.can_reach_location(artefact, self.player) for artefact in self.artefacts_in_pool)
 
