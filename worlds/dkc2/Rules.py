@@ -1731,9 +1731,9 @@ class DKC2LooseRules(DKC2Rules):
                 self.has_squitter,
 
             LocationName.kannons_klaim_clear:
-                lambda state: self.can_carry(state) and self.has_kannons(state),
+                self.has_kannons,
             LocationName.kannons_klaim_kong:
-                lambda state: self.can_carry(state) and self.has_kannons(state),
+                self.has_kannons,
             LocationName.kannons_klaim_dk_coin:
                 lambda state: self.can_hover(state) or self.can_cartwheel(state),
             LocationName.kannons_klaim_bonus_1:
@@ -1741,9 +1741,9 @@ class DKC2LooseRules(DKC2Rules):
                     self.can_hover(state) or self.can_cartwheel(state)
                 ),
             LocationName.kannons_klaim_bonus_2:
-                lambda state: self.can_carry(state) and self.can_team_attack(state) and self.has_kannons(state),
+                self.has_kannons,
             LocationName.kannons_klaim_bonus_3:
-                lambda state: self.can_carry(state) and self.has_kannons(state),
+                self.has_kannons,
 
             LocationName.lava_lagoon_clear:
                 lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state) and 
@@ -2325,7 +2325,7 @@ class DKC2LooseRules(DKC2Rules):
                 self.has_squitter,
 
             LocationName.kannons_klaim_banana_bunch_1:
-                lambda state: self.has_kannons(state) and self.can_cling(state),
+                lambda state: self.has_kannons(state) and ((self.can_cling(state) and self.can_hover(state)) or self.can_team_attack(state)),
             LocationName.kannons_klaim_banana_coin_1:
                 lambda state: self.has_kannons(state),
             LocationName.kannons_klaim_banana_coin_2:
