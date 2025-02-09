@@ -112,8 +112,8 @@ def connect_all_regions(world: MultiWorld, player: int, options: Ty1Options, por
     if options.boss_shuffle:
         world.random.shuffle(boss_map)
     print(str(portal_map[0]) + " " + str(portal_map[1]) + " " + str(portal_map[2]))
-    pr_mod = 1 if options.start_with_boom and options.progressive_elementals else 0
-    pl_mod = 1 if options.level_unlock_style == 1 else 0
+    pr_mod = 1 if not options.start_with_boom.value and options.progressive_elementals.value else 0
+    pl_mod = 1 if options.level_unlock_style.value == 1 else 0
     connect_regions(world, player, options, "Menu", "Rainbow Cliffs", "Menu -> Z1")
     connect_regions(world, player, options, "Rainbow Cliffs", "Rainbow Cliffs - PF", "Z1 - Rang Needed",
                     lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)),

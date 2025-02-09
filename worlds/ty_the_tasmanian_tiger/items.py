@@ -33,7 +33,7 @@ def create_items(world: MultiWorld, options: Ty1Options, player: int):
     total_location_count = len(world.get_unfilled_locations(player))
 
     # Generic
-    thegg_class = ItemClassification.progression_skip_balancing if options.goal.value == 2 or 3 else (
+    thegg_class = ItemClassification.progression_skip_balancing if options.goal == 2 or options.goal == 3 else (
         ItemClassification.filler if options.level_unlock_style == 1 else ItemClassification.skip_balancing)
     cog_class = ItemClassification.progression_skip_balancing if options.goal == 3 else ItemClassification.skip_balancing
     create_multiple("Fire Thunder Egg", 21, world, player, thegg_class)
