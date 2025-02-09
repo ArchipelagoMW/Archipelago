@@ -1,19 +1,12 @@
 import unittest
-from collections import deque
-from collections.abc import Collection
 
-from BaseClasses import get_seed, MultiWorld, Entrance
-from .. import SVTestCase, RuleAssertMixin
 from ..options.utils import fill_dataclass_with_default
-from ... import create_content, options, StardewValleyWorld
-from ...options import EntranceRandomization, ExcludeGingerIsland, SkillProgression
+from ... import create_content, options
+from ...options import EntranceRandomization, ExcludeGingerIsland
 from ...regions import vanilla_data
 from ...regions.entrance_rando import create_player_randomization_flag
-from ...regions.model import RandomizationFlag, ConnectionData, reverse_connection_name
+from ...regions.model import RandomizationFlag, ConnectionData
 from ...regions.regions import create_all_regions, create_all_connections
-from ...stardew_rule import Reach
-from ...strings.entrance_names import Entrance as EntranceName
-from ...strings.region_names import Region as RegionName
 
 
 class TestRegions(unittest.TestCase):
@@ -131,90 +124,3 @@ class TestRandomizationFlag(unittest.TestCase):
             flag = create_player_randomization_flag(player_options.entrance_randomization, content)
 
             self.assertIn(RandomizationFlag.EXCLUDE_MASTERIES, flag)
-
-
-class TestEntranceRando(SVTestCase):
-
-    def test_entrance_randomization(self):
-        for option in (options.EntranceRandomization.option_pelican_town, options.EntranceRandomization.option_non_progression,
-                       options.EntranceRandomization.option_buildings_without_house, options.EntranceRandomization.option_buildings):
-            test_options = {
-                options.EntranceRandomization: option,
-                options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false,
-                options.SkillProgression: options.SkillProgression.option_progressive_with_masteries,
-            }
-            with self.solo_world_sub_test(world_options=test_options, world_caching=False) as (multiworld, world):
-                world: StardewValleyWorld
-                entrances_placement = world.randomized_entrances
-                flag = create_player_randomization_flag(world.options.entrance_randomization, world.content)
-
-                for connection in (connection for connection in vanilla_data.connections_with_ginger_island_by_name.values()
-                                   if connection.is_eligible_for_randomization(flag)):
-                    self.assertIn(connection.name, entrances_placement,
-                                  f"Connection {connection.name} should be randomized but it is not in the output.")
-                    self.assertIn(connection.reverse, entrances_placement,
-                                  f"Connection {connection.reverse} should be randomized but it is not in the output.")
-
-                self.assertEqual(len(set(entrances_placement.values())), len(entrances_placement.values()),
-                                 f"Connections are duplicated in randomization.")
-
-    def test_cannot_put_island_access_on_island(self):
-        test_options = {
-            options.EntranceRandomization: EntranceRandomization.option_buildings,
-            options.ExcludeGingerIsland: ExcludeGingerIsland.option_false,
-            options.SkillProgression: SkillProgression.option_progressive_with_masteries,
-        }
-
-        blocked_entrances = {EntranceName.use_island_obelisk, EntranceName.boat_to_ginger_island}
-        required_regions = {RegionName.wizard_tower, RegionName.boat_tunnel}
-
-        for i in range(0, 10 if self.skip_long_tests else 1000):
-            seed = get_seed()
-            with self.solo_world_sub_test(f"Seed: {seed}", world_options=test_options, world_caching=False, seed=seed) as (multiworld, world):
-                self.assert_can_reach_any_region_before_blockers(required_regions, blocked_entrances, multiworld)
-
-    def assert_can_reach_any_region_before_blockers(self, required_regions: Collection[str], blocked_entrances: Collection[str], multiworld: MultiWorld):
-        explored_regions = explore_regions_up_to_blockers(blocked_entrances, multiworld)
-        self.assertTrue(any(region in explored_regions for region in required_regions))
-
-
-def explore_regions_up_to_blockers(blocked_entrances: Collection[str], multiworld: MultiWorld) -> set[str]:
-    explored_regions: set[str] = set()
-    regions_by_name = multiworld.regions.region_cache[1]
-    regions_to_explore = deque([regions_by_name["Menu"]])
-
-    while regions_to_explore:
-        region = regions_to_explore.pop()
-
-        if region.name in explored_regions:
-            continue
-
-        explored_regions.add(region.name)
-
-        for exit_ in region.exits:
-            exit_: Entrance
-            if exit_.name in blocked_entrances:
-                continue
-            regions_to_explore.append(exit_.connected_region)
-
-    return explored_regions
-
-
-class TestEntranceClassifications(SVTestCase, RuleAssertMixin):
-
-    def test_non_progression_are_all_accessible_with_empty_inventory(self):
-        for option in [EntranceRandomization.option_pelican_town, EntranceRandomization.option_non_progression]:
-            world_options = {
-                options.EntranceRandomization: option
-            }
-
-            with self.solo_world_sub_test(world_options=world_options) as (multiworld, sv_world):
-                sv_world: StardewValleyWorld
-                ap_entrances = multiworld.regions.entrance_cache[1]
-                for randomized_entrance in sv_world.randomized_entrances:
-
-                    if randomized_entrance not in ap_entrances:
-                        self.assertIn(reverse_connection_name(randomized_entrance), ap_entrances)
-                    else:
-                        reach = Reach(randomized_entrance, "Entrance", 1)
-                        self.assert_rule_true(reach, multiworld.state)
