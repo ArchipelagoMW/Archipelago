@@ -9,7 +9,7 @@ _INACTIVITY_TIMEOUT = 10
 
 
 def create_error():
-    msg = bytearray([0xFF, 0x01, 0x00, 0x00])
+    msg = bytes([0xFF, 0x01, 0x00, 0x00])
     return len(msg).to_bytes(2, "big") + msg
 
 
@@ -29,7 +29,17 @@ class PolyEmuDeviceConnection:
         try:
             self.writer.write(msg)
             await self.writer.drain()
-            return await self.reader.read(1024)
+
+            data_size = await self.reader.read(2)
+            if len(data_size) == 0:
+                raise ConnectionResetError()  # TODO: Figure this out
+
+            data_size = int.from_bytes(data_size, "big")
+            data = await self.reader.read(data_size)
+            if len(data) == 0:
+                raise ConnectionResetError()  # TODO: Figure this out
+
+            return data
         except asyncio.TimeoutError:
             logging.info(f"({self.name}) Device timeout")
         except (asyncio.CancelledError, ConnectionResetError, BrokenPipeError):
@@ -39,7 +49,7 @@ class PolyEmuDeviceConnection:
         self.writer.close()
         try:
             await self.writer.wait_closed()
-        except ConnectionResetError:
+        except (ConnectionResetError, ConnectionAbortedError):
             pass
         finally:
             if self.close_cb is not None:
@@ -67,7 +77,16 @@ class PolyEmuBroker:
         self.clients[client_name] = (reader, writer)
 
         try:
-            while data := await reader.read(1024):
+            while True:
+                data_size = await reader.read(2)
+                if len(data_size) == 0:
+                    break
+
+                data_size = int.from_bytes(data_size, "big")
+                data = await reader.read(data_size)
+                if len(data) == 0:
+                    break
+
                 self.activity_event.set()
                 logging.debug(f"({client_name}) Message received: {data}")
                 if len(self.devices):

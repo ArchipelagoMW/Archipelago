@@ -1,15 +1,33 @@
 from enum import IntEnum
 
 
-class OperationEnum(IntEnum):
+class RequestType(IntEnum):
     NO_OP = 0x00
-    READ = 0x01
-    WRITE = 0x02
-    GUARD = 0x03
-    LOCK = 0x04
-    UNLOCK = 0x05
-    PLATFORM = 0x06
-    DOMAIN_SIZE = 0x07
+    SUPPORTED_OPERATIONS = 0x01
+    PLATFORM = 0x02
+    MEMORY_SIZE = 0x03
+    GAME_ID = 0x04
+    READ = 0x10
+    WRITE = 0x11
+    GUARD = 0x12
+    LOCK = 0x20
+    UNLOCK = 0x21
+    DISPLAY_MESSAGE = 0x22
+
+
+class ResponseType(IntEnum):
+    NO_OP = 0x80
+    SUPPORTED_OPERATIONS = 0x81
+    PLATFORM = 0x82
+    MEMORY_SIZE = 0x83
+    GAME_ID = 0x84
+    READ = 0x90
+    WRITE = 0x91
+    GUARD = 0x92
+    LOCK = 0xA0
+    UNLOCK = 0xA1
+    DISPLAY_MESSAGE = 0xA2
+    ERROR = 0xFF
 
 
 class PlatformEnum(int):
@@ -23,7 +41,9 @@ class PlatformEnum(int):
 
 class Platforms:
     _platforms = [  # Append only
-        ("GBA", ["BIOS", "IWRAM", "EWRAM", "PALRAM", "VRAM", "OAM", "ROM", "SRAM"]),
+        ("GB", ["ROM", "VRAM", "SRAM", "WRAM", "OAM", "IO", "HRAM"]),
+        ("GBC", ["ROM", "VRAM", "SRAM", "WRAM", "OAM", "IO", "HRAM"]),
+        ("GBA", ["BIOS", "EWRAM", "IWRAM", "IO", "PALRAM", "VRAM", "OAM", "ROM", "SRAM"]),
     ]
     _platforms_dict: dict[str, PlatformEnum] = {}
 

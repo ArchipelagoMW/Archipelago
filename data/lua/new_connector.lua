@@ -3,10 +3,39 @@ local DEBUG = false
 local POLYEMU_DEVICE_PORT = 43031
 local polyemu_socket = nil
 
+local locked = false
 local platform = nil
 local memory_domains = nil
 
 local message_buffer = console:createBuffer("Archipelago Connector")
+
+local REQUEST_TYPES = {
+    ["NO_OP"] = string.char(0x00),
+    ["SUPPORTED_OPERATIONS"] = string.char(0x01),
+    ["PLATFORM"] = string.char(0x02),
+    ["MEMORY_SIZE"] = string.char(0x03),
+    ["GAME_ID"] = string.char(0x04),
+    ["READ"] = string.char(0x10),
+    ["WRITE"] = string.char(0x11),
+    ["GUARD"] = string.char(0x12),
+    ["LOCK"] = string.char(0x20),
+    ["UNLOCK"] = string.char(0x21),
+    ["DISPLAY_MESSAGE"] = string.char(0x22),
+}
+
+local RESPONSE_TYPES = {
+    ["NO_OP"] = string.char(0x80),
+    ["SUPPORTED_OPERATIONS"] = string.char(0x81),
+    ["PLATFORM"] = string.char(0x82),
+    ["MEMORY_SIZE"] = string.char(0x84),
+    ["GAME_ID"] = string.char(0x84),
+    ["READ"] = string.char(0x90),
+    ["WRITE"] = string.char(0x91),
+    ["GUARD"] = string.char(0x92),
+    ["LOCK"] = string.char(0xA0),
+    ["UNLOCK"] = string.char(0xA1),
+    ["DISPLAY_MESSAGE"] = string.char(0xA2),
+}
 
 local function bytes_to_hex_str(str)
     return (str:gsub(".", function(c) return string.format("%02X ", string.byte(c)) end)):sub(1, -2)
@@ -38,14 +67,71 @@ local function consume_int(data, size)
 end
 
 local request_handlers = {
-    [0x00] = function (msg, dry)
+    [REQUEST_TYPES["NO_OP"]] = function (msg, dry)
         if dry then
             return "", msg
         end
 
-        return string.char(0x80), msg
+        return RESPONSE_TYPES["NO_OP"], msg
     end,
-    [0x01] = function (msg, dry)
+
+    [REQUEST_TYPES["SUPPORTED_OPERATIONS"]] = function (msg, dry)
+        if dry then
+            return "", msg
+        end
+
+        local response = ""
+        for _, request_type in REQUEST_TYPES do
+            response = response .. request_type
+        end
+
+        return RESPONSE_TYPES["SUPPORTED_OPERATIONS"] .. string.char(#response) .. response, msg
+    end,
+
+    [REQUEST_TYPES["PLATFORM"]] = function (msg, dry)
+        local response
+
+        if dry then
+            return "", msg
+        end
+
+        if platform == C.PLATFORM.GB then
+            if emu.memory.cart0:read8(0x143) == 0xC0 then
+                response = 0x02
+            else
+                response = 0x01
+            end
+        else
+            response = 0x03
+        end
+
+        return RESPONSE_TYPES["PLATFORM"] .. string.char(response), msg
+    end,
+
+    [REQUEST_TYPES["MEMORY_SIZE"]] = function (msg, dry)
+        if dry then
+            return "", msg
+        end
+
+        local response = RESPONSE_TYPES["MEMORY_SIZE"]
+        for id, domain in pairs(memory_domains) do
+            if id ~= 0 then
+                response = response .. string.char(id) .. int_to_bytes(domain:bound() - domain:base(), 8)
+            end
+        end
+        return response, msg
+    end,
+
+    [REQUEST_TYPES["GAME_ID"]] = function (msg, dry)
+        if dry then
+            return "", msg
+        end
+
+        local checksum = "00000000" .. emu:checksum(C.CHECKSUM.CRC32)
+        return RESPONSE_TYPES["GAME_ID"] .. checksum:sub(-8), msg
+    end,
+
+    [REQUEST_TYPES["READ"]] = function (msg, dry)
         local domain, address, size, data
         domain, msg = consume_int(msg, 1)
         address, msg = consume_int(msg, 8)
@@ -57,9 +143,10 @@ local request_handlers = {
 
         data = memory_domains[domain]:readRange(address, size)
 
-        return string.char(0x81) .. int_to_bytes(size, 2) .. data, msg
+        return RESPONSE_TYPES["READ"] .. int_to_bytes(size, 2) .. data, msg
     end,
-    [0x02] = function (msg, dry)
+
+    [REQUEST_TYPES["WRITE"]] = function (msg, dry)
         local domain, address, size, data
         domain, msg = consume_int(msg, 1)
         address, msg = consume_int(msg, 8)
@@ -74,9 +161,10 @@ local request_handlers = {
             memory_domains[domain]:write8(address + (i - 1), data:byte(i))
         end
 
-        return string.char(0x82), msg
+        return RESPONSE_TYPES["WRITE"], msg
     end,
-    [0x03] = function (msg, dry)
+
+    [REQUEST_TYPES["GUARD"]] = function (msg, dry)
         local domain, address, size, expected_data, actual_data
         domain, msg = consume_int(msg, 1)
         address, msg = consume_int(msg, 8)
@@ -94,14 +182,38 @@ local request_handlers = {
             data_is_validated = 0
         end
 
-        return string.char(0x83) .. string.char(data_is_validated), msg
+        return RESPONSE_TYPES["GUARD"] .. string.char(data_is_validated), msg
     end,
-    [0x06] = function (msg, dry)
+
+    [REQUEST_TYPES["LOCK"]] = function (msg, dry)
         if dry then
             return "", msg
         end
 
-        return string.char(0x86) .. string.char(0x01), msg
+        locked = true
+        return RESPONSE_TYPES["LOCK"], msg
+    end,
+
+    [REQUEST_TYPES["UNLOCK"]] = function (msg, dry)
+        if dry then
+            return "", msg
+        end
+
+        locked = false
+        return RESPONSE_TYPES["UNLOCK"], msg
+    end,
+
+    [REQUEST_TYPES["DISPLAY_MESSAGE"]] = function (msg, dry)
+        local message_size, message
+        message_size, msg = consume_int(msg, 1)
+        message, msg = consume_str(msg, message_size)
+
+        if dry then
+            return "", msg
+        end
+
+        message_buffer:log(message)
+        return RESPONSE_TYPES["DISPLAY_MESSAGE"], msg
     end,
 }
 
@@ -137,7 +249,7 @@ local function received()
     repeat
         local request_header, response
         request_header, requests = consume_str(requests, 1)
-        response, requests = request_handlers[request_header:byte(1)](requests, guard_failure_response ~= nil)
+        response, requests = request_handlers[request_header:sub(1, 1)](requests, guard_failure_response ~= nil)
 
         if guard_failure_response ~= nil then
             response = guard_failure_response
@@ -162,28 +274,27 @@ local function tick()
         platform = emu:platform()
 
         if platform == C.PLATFORM.GB then
-            -- memory_domains = {
-            --     ["ROM"] = emu.memory.cart0,
-            --     ["VRAM"] = emu.memory.vram,
-            --     ["SRAM"] = emu.memory.sram,
-            --     ["WRAM"] = emu.memory.wram,
-            --     ["OAM"] = emu.memory.oam,
-            --     ["IO"] = emu.memory.io,
-            --     ["HRAM"] = emu.memory.hram,
-            --     ["System Bus"] = emu
-            -- }
+            memory_domains = {
+                [0x00] = emu,
+                [0x01] = emu.memory.cart0,
+                [0x02] = emu.memory.vram,
+                [0x03] = emu.memory.sram,
+                [0x04] = emu.memory.wram,
+                [0x05] = emu.memory.oam,
+                [0x06] = emu.memory.io,
+                [0x07] = emu.memory.hram,
+            }
         else
             memory_domains = {
                 [0x00] = emu,
                 [0x01] = emu.memory.bios,
-                [0x02] = emu.memory.iwram,
-                [0x03] = emu.memory.wram,
-                [0x04] = emu.memory.cart0,
-                [0x05] = emu.memory.vram,
-                [0x06] = emu.memory.oam,
-                [0x07] = emu.memory.cart0,
+                [0x02] = emu.memory.wram,
+                [0x03] = emu.memory.iwram,
+                [0x04] = emu.memory.io,
+                [0x05] = emu.memory.palette,
+                [0x06] = emu.memory.vram,
+                [0x07] = emu.memory.oam,
                 [0x08] = emu.memory.cart0,
-                -- ["Combined WRAM"] = emu.memory.wram,
             }
         end
     end
@@ -199,6 +310,10 @@ local function tick()
         console:log("Connected to broker")
         polyemu_socket:add("received", received)
         polyemu_socket:add("error", handle_error)
+    else
+        while locked do
+            polyemu_socket:poll()
+        end
     end
 end
 
