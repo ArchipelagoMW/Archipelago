@@ -1,4 +1,4 @@
-# Risk of Rain 2 Setup Guide
+# Peaks of Yore Setup Guide
 
 ## Install using r2modman
 
