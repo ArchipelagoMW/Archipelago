@@ -905,7 +905,7 @@ BOO_LOCATION_TABLE: dict[str, LMLocationData] = {
                                        room_ram_addr=0x803D5E08, locationbit=2),
     "Cellar Boo": LMLocationData("Cellar", 701, "Boo", 32, [], 66, room_ram_addr=0x803D5E08, locationbit=0),
     "Pipe Room Boo": LMLocationData("Pipe Room", 702, "Boo", 33, [], 68, room_ram_addr=0x803D5E08, locationbit=1),
-    "Cold Storage Boo": LMLocationData("Cold Storage", 703, "Boo", 31, [], 64,
+    "Cold Storage Boo": LMLocationData("Cold Storage", 703, "Boo", 31, ["Fire Element Medal"], 64,
                                        room_ram_addr=0x803D5E07, locationbit=7),
     "Boolossus Fragment 1": LMLocationData("Balcony", 720, "Boo", 0, ["Ice Element Medal"], 62,
                                       room_ram_addr=0x803D5E08, locationbit=3),
