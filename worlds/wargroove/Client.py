@@ -76,6 +76,7 @@ class WargrooveContext(CommonContext):
     income_boost_multiplier: int = 0
     starting_groove_multiplier: float
     has_death_link: bool = False
+    stored_units_key: str = ""
     faction_item_ids = {
         'Starter': 0,
         'Cherrystone': 52025,
@@ -88,6 +89,58 @@ class WargrooveContext(CommonContext):
     buff_item_ids = {
         'Income Boost': 52023,
         'Commander Defense Boost': 52024,
+    }
+    unit_classes = {
+        "archer",
+        "ballista",
+        "balloon",
+        "barracks",
+        "city",
+        "commander_caesar",
+        "commander_darkmercia",
+        "commander_elodie",
+        "commander_emeric",
+        "commander_greenfinger",
+        "commander_koji",
+        "commander_mercia",
+        "commander_mercival",
+        "commander_nuru",
+        "commander_ragna",
+        "commander_ryota",
+        "commander_sedge",
+        "commander_sigrid",
+        "commander_tenri",
+        "commander_valder",
+        "crystal",
+        "dog",
+        "dragon",
+        "drone",
+        "garrison",
+        "gate",
+        "ghost_mercival",
+        "giant",
+        "harpoonship",
+        "harpy",
+        "hq",
+        "knight",
+        "mage",
+        "merman",
+        "port",
+        "rifleman",
+        "soldier",
+        "spearman",
+        "thief",
+        "thief_with_gold",
+        "tower",
+        "travelboat",
+        "trebuchet",
+        "turtle",
+        "villager",
+        "vine",
+        "wagon",
+        "warship",
+        "water_city",
+        "witch",
     }
 
     def __init__(self, server_address, password):
@@ -219,6 +272,9 @@ class WargrooveContext(CommonContext):
                 filename = f"send{ss}"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     pass
+
+            self.stored_units_key = f"wargroove_units_{self.team}"
+            self.set_notify(self.stored_units_key)
             self.update_commander_data()
             self.ui.update_tracker()
 
@@ -482,6 +538,33 @@ async def game_watcher(ctx: WargrooveContext):
                 if file.find("victory") > -1:
                     victory = True
                     os.remove(os.path.join(ctx.game_communication_path, file))
+                if file == "unitSacrifice":
+                    with open(os.path.join(ctx.game_communication_path, file), 'r') as f:
+                        unit_class = f.read()
+                        if ctx.stored_data[ctx.stored_units_key] is None:
+                            ctx.stored_data[ctx.stored_units_key] = []
+                        ctx.stored_data[ctx.stored_units_key] += [unit_class]
+                        message = [{"cmd": 'Set', "key": ctx.stored_units_key,
+                                    "default": [unit_class],
+                                    "want_reply": True,
+                                    "operations": [{"operation": "add", "value": [unit_class]}]}]
+                        await ctx.send_msgs(message)
+                    os.remove(os.path.join(ctx.game_communication_path, file))
+                if file == "unitSummonRequest":
+                    with open(os.path.join(ctx.game_communication_path, "unitSummonResponse"), 'w') as f:
+                        if ctx.stored_units_key in ctx.stored_data:
+                            stored_units = ctx.stored_data[ctx.stored_units_key]
+                            wg1_stored_units = [unit for unit in stored_units if unit in ctx.unit_classes]
+                            if len(wg1_stored_units) != 0:
+                                summoned_unit = random.choice(wg1_stored_units)
+                                message = [{"cmd": 'Set', "key": ctx.stored_units_key,
+                                            "default": [],
+                                            "want_reply": True,
+                                            "operations": [{"operation": "remove", "value": summoned_unit}]}]
+                                await ctx.send_msgs(message)
+                                f.write(summoned_unit)
+                    os.remove(os.path.join(ctx.game_communication_path, file))
+
         ctx.locations_checked = sending
         message = [{"cmd": 'LocationChecks', "locations": sending}]
         await ctx.send_msgs(message)

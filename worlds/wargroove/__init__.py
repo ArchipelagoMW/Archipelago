@@ -81,6 +81,10 @@ class WargrooveWorld(World):
             'commander_defense_boost': self.options.commander_defense_boost.value,
             'can_choose_commander': self.options.commander_choice.value != 0,
             'commander_choice': self.options.commander_choice.value,
+            'player_sacrifice_limit': self.options.player_sacrifice_limit.value,
+            'player_summon_limit': self.options.player_summon_limit.value,
+            'ai_sacrifice_limit': self.options.ai_sacrifice_limit.value,
+            'ai_summon_limit': self.options.ai_summon_limit.value,
             'death_link': self.options.death_link.value,
             'starting_groove_multiplier': 20  # Backwards compatibility in case this ever becomes an option
         }
