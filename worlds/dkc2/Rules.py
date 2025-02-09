@@ -2736,7 +2736,7 @@ class DKC2LooseRules(DKC2Rules):
             LocationName.web_woods_green_balloon_1:
                 lambda state: self.can_team_attack(state) and self.can_carry(state) and self.has_kannons(state),
             LocationName.web_woods_banana_bunch_1:
-                self.can_cartwheel,
+                lambda state: self.can_team_attack(state) or self.can_cartwheel(state),
             LocationName.web_woods_banana_bunch_2:
                 self.can_carry,
             LocationName.web_woods_banana_bunch_3:
