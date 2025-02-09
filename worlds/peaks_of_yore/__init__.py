@@ -1,4 +1,5 @@
 import random
+from typing import Any
 
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial, Item, Location, Region, ItemClassification
@@ -21,7 +22,10 @@ class PeaksOfWeb(WebWorld):
 
 
 class PeaksOfWorld(World):
-    """A game about climbing mountains!"""
+    """
+    Peaks of Yore is a first-person physics-based "climb-em-up" adventure set in 1887.
+    Steel your nerves and perfect your climbing skills as you ascend the rock wall, traverse difficult routes, and encounter many challenges and obstacles.
+    """
     game = "Peaks of Yore"
     options_dataclass = PeaksOfYoreOptions
     options: PeaksOfYoreOptions
@@ -83,6 +87,9 @@ class PeaksOfWorld(World):
                 self.options.starting_book.value])
         self.multiworld.push_precollected(starting_book)
 
+        if self.options.start_with_barometer:
+            self.multiworld.push_precollected(self.create_item("Barometer"))
+
         remaining_items = self.location_count
 
         for book in [item for item in full_item_table if item["type"] == "Book"]:
@@ -94,7 +101,7 @@ class PeaksOfWorld(World):
                 remaining_items -= 1
 
         for tool in [item for item in full_item_table if item["type"] == "Tool"]:
-            if remaining_items > 0:
+            if remaining_items > 0 and (tool["name"] != "Barometer" or not self.options.start_with_barometer):
                 self.multiworld.itempool.append(self.create_item(tool["name"]))
                 remaining_items -= 1
 
@@ -117,3 +124,8 @@ class PeaksOfWorld(World):
                 remaining_items -= 1
 
         self.multiworld.itempool += [self.create_extra_item() for _ in range(remaining_items)]
+
+    def fill_slot_data(self) -> dict[str, Any]:
+        return self.options.as_dict("death_link", "goal", "starting_book", "enable_fundamental", "enable_intermediate",
+                                    "enable_advanced", "enable_expert", "disable_solemn_tempest", casing="camel",
+                                    toggles_as_bools=True)
