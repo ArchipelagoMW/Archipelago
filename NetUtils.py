@@ -5,7 +5,8 @@ import enum
 import warnings
 from json import JSONEncoder, JSONDecoder
 
-import websockets
+if typing.TYPE_CHECKING:
+    from websockets import WebSocketServerProtocol as ServerConnection
 
 from Utils import ByValue, Version
 
@@ -151,7 +152,7 @@ decode = JSONDecoder(object_hook=_object_hook).decode
 
 
 class Endpoint:
-    socket: websockets.WebSocketServerProtocol
+    socket: "ServerConnection"
 
     def __init__(self, socket):
         self.socket = socket
