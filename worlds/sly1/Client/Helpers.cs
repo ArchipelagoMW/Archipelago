@@ -45,15 +45,17 @@ namespace Sly1AP
         public class Level
         {
             public string Name { get; set; }
+            public string LevelType { get; set; }
             public ulong Address { get; set; }
             public int BottleId { get; set; }
             public int ItemBottles { get; set; }
             public int MaxBottles { get; set; }
             public ulong NamePointer { get; set; }
 
-            public Level(string name, ulong address, int bottleId, int itemBottles, int maxBottles, ulong namePointer)
+            public Level(string name, string levelType, ulong address, int bottleId, int itemBottles, int maxBottles, ulong namePointer)
             {
                 Name = name;
+                LevelType = levelType;
                 Address = address;
                 BottleId = bottleId;
                 ItemBottles = itemBottles;
@@ -65,50 +67,58 @@ namespace Sly1AP
 
         public static List<Level> Levels = new()
             {
-                new Level("Stealthy Approach", 0x2027C67C, 10020400, StealthyApproachItems, Clues.StealthyApproachMax, 0x20247B98),
-                new Level("Into the Machine", 0x2027C7E4, 10020420, IntoTheMachineItems, Clues.IntoTheMachineMax, 0x20247C1C),
-                new Level("High Class Heist", 0x2027C76C, 10020450, HighClassHeistItems, Clues.HighClassHeistMax, 0x20247BF0),
-                new Level("Fire Down Below", 0x2027C8D4, 10020480, FireDownBelowItems, Clues.FireDownBelowMax, 0x20247C74),
-                new Level("Cunning Disguise", 0x2027C85C, 10020510, CunningDisguiseItems, Clues.CunningDisguiseMax, 0x20247C48),
-                new Level("Gunboat Graveyard", 0x2027C9C4, 10020540, GunboatGraveyardItems, Clues.GunboatGraveyardMax, 0x20247CCC),
-                new Level("Rocky Start", 0x2027CAC8, 10020560, RockyStartItems, Clues.RockyStartMax, 0x20247D24),
-                new Level("Boneyard Casino", 0x2027CBB8, 10020600, BoneyardCasinoItems, Clues.BoneyardCasinoMax, 0x20247D7C),
-                new Level("Back Alley Heist", 0x2027CE10, 10020710, BackAlleyHeistItems, Clues.BackAlleyHeistMax, 0x20247E58),
-                new Level("Straight to the Top", 0x2027CD98, 10020640, StraightToTheTopItems, Clues.StraightToTheTopMax, 0x20247E2C),
-                new Level("Two to Tango", 0x2027CF14, 10020680, TwoToTangoItems, Clues.TwoToTangoMax, 0x20247E00),
-                new Level("Dread Swamp Path", 0x2027CF14, 10020740, DreadSwampPathItems, Clues.DreadSwampPathMax, 0x20247EB0),
-                new Level("Lair of the Beast", 0x2027D004, 10020760, LairOfTheBeastItems, Clues.LairOfTheBeastMax, 0x20247F08),
-                new Level("Grave Undertaking", 0x2027D07C, 10020790, GraveUndertakingItems, Clues.GraveUndertakingMax, 0x20247F34),
-                new Level("Descent into Danger", 0x2027D16C, 10020830, DescentIntoDangerItems, Clues.DescentIntoDangerMax, 0x20247F8C),
-                new Level("Perilous Ascent", 0x2027D360, 10020870, PerilousAscentItems, Clues.PerilousAscentMax, 0x2024803C),
-                new Level("Flaming Temple of Flame", 0x2027D450, 10020930, FlamingTempleItems, Clues.FlamingTempleMax, 0x20248094),
-                new Level("Unseen Foe", 0x2027D4C8, 10020900, UnseenFoeItems, Clues.UnseenFoeMax, 0x202480C0),
-                new Level("Duel by the Dragon", 0x2027D630, 10020955, DuelByTheDragonItems, Clues.DuelByTheDragonMax, 0x20248144)
+                new Level("Stealthy Approach", "Level", 0x2027C67C, 10020400, StealthyApproachItems, Clues.StealthyApproachMax, 0x20247B98),
+                new Level("Into the Machine", "Level", 0x2027C7E4, 10020420, IntoTheMachineItems, Clues.IntoTheMachineMax, 0x20247C1C),
+                new Level("High Class Heist", "Level", 0x2027C76C, 10020450, HighClassHeistItems, Clues.HighClassHeistMax, 0x20247BF0),
+                new Level("Fire Down Below", "Level", 0x2027C8D4, 10020480, FireDownBelowItems, Clues.FireDownBelowMax, 0x20247C74),
+                new Level("Cunning Disguise", "Level", 0x2027C85C, 10020510, CunningDisguiseItems, Clues.CunningDisguiseMax, 0x20247C48),
+                new Level("Gunboat Graveyard", "Level", 0x2027C9C4, 10020540, GunboatGraveyardItems, Clues.GunboatGraveyardMax, 0x20247CCC),
+                new Level("Rocky Start", "Level", 0x2027CAC8, 10020560, RockyStartItems, Clues.RockyStartMax, 0x20247D24),
+                new Level("Boneyard Casino", "Level", 0x2027CBB8, 10020600, BoneyardCasinoItems, Clues.BoneyardCasinoMax, 0x20247D7C),
+                new Level("Back Alley Heist", "Level", 0x2027CE10, 10020710, BackAlleyHeistItems, Clues.BackAlleyHeistMax, 0x20247E58),
+                new Level("Straight to the Top", "Level", 0x2027CD98, 10020640, StraightToTheTopItems, Clues.StraightToTheTopMax, 0x20247E2C),
+                new Level("Two to Tango", "Level", 0x2027CD20, 10020680, TwoToTangoItems, Clues.TwoToTangoMax, 0x20247E00),
+                new Level("Dread Swamp Path", "Level", 0x2027CF14, 10020740, DreadSwampPathItems, Clues.DreadSwampPathMax, 0x20247EB0),
+                new Level("Lair of the Beast", "Level", 0x2027D004, 10020760, LairOfTheBeastItems, Clues.LairOfTheBeastMax, 0x20247F08),
+                new Level("Grave Undertaking", "Level", 0x2027D07C, 10020790, GraveUndertakingItems, Clues.GraveUndertakingMax, 0x20247F34),
+                new Level("Descent into Danger", "Level", 0x2027D16C, 10020830, DescentIntoDangerItems, Clues.DescentIntoDangerMax, 0x20247F8C),
+                new Level("Perilous Ascent", "Level", 0x2027D360, 10020870, PerilousAscentItems, Clues.PerilousAscentMax, 0x2024803C),
+                new Level("Flaming Temple of Flame", "Level", 0x2027D450, 10020930, FlamingTempleItems, Clues.FlamingTempleMax, 0x20248094),
+                new Level("Unseen Foe", "Level", 0x2027D4C8, 10020900, UnseenFoeItems, Clues.UnseenFoeMax, 0x202480C0),
+                new Level("Duel by the Dragon", "Level", 0x2027D630, 10020955, DuelByTheDragonItems, Clues.DuelByTheDragonMax, 0x20248144),
+                new Level("Tide of Terror", "Hub", 0x2027C67C, 0, 0, 0, 0x20274434),
+                new Level("Sunset Snake Eyes", "Hub", 0x2027CAC8, 0, 0, 0, 0x20274438),
+                new Level("Vicious Voodoo", "Hub", 0x2027CF14, 0, 0, 0, 0x2027443C),
+                new Level("Fire in the Sky", "Hub", 0x2027D360, 0, 0, 0, 0x20274440)
             };
 
         public static List<Level> GetUpdatedLevels()
         {
             var updatedLevels = new List<Level>
             {
-                new Level("Stealthy Approach", 0x2027C67C, 10020400, StealthyApproachItems, Clues.StealthyApproachMax, 0x20247B98),
-                new Level("Into the Machine", 0x2027C7E4, 10020420, IntoTheMachineItems, Clues.IntoTheMachineMax, 0x20247C1C),
-                new Level("High Class Heist", 0x2027C76C, 10020450, HighClassHeistItems, Clues.HighClassHeistMax, 0x20247BF0),
-                new Level("Fire Down Below", 0x2027C8D4, 10020480, FireDownBelowItems, Clues.FireDownBelowMax, 0x20247C74),
-                new Level("Cunning Disguise", 0x2027C85C, 10020510, CunningDisguiseItems, Clues.CunningDisguiseMax, 0x20247C48),
-                new Level("Gunboat Graveyard", 0x2027C9C4, 10020540, GunboatGraveyardItems, Clues.GunboatGraveyardMax, 0x20247CCC),
-                new Level("Rocky Start", 0x2027CAC8, 10020560, RockyStartItems, Clues.RockyStartMax, 0x20247D24),
-                new Level("Boneyard Casino", 0x2027CBB8, 10020600, BoneyardCasinoItems, Clues.BoneyardCasinoMax, 0x20247D7C),
-                new Level("Back Alley Heist", 0x2027CE10, 10020710, BackAlleyHeistItems, Clues.BackAlleyHeistMax, 0x20247E58),
-                new Level("Straight to the Top", 0x2027CD98, 10020640, StraightToTheTopItems, Clues.StraightToTheTopMax, 0x20247E2C),
-                new Level("Two to Tango", 0x2027CF14, 10020680, TwoToTangoItems, Clues.TwoToTangoMax, 0x20247E00),
-                new Level("Dread Swamp Path", 0x2027CF14, 10020740, DreadSwampPathItems, Clues.DreadSwampPathMax, 0x20247EB0),
-                new Level("Lair of the Beast", 0x2027D004, 10020760, LairOfTheBeastItems, Clues.LairOfTheBeastMax, 0x20247F08),
-                new Level("Grave Undertaking", 0x2027D07C, 10020790, GraveUndertakingItems, Clues.GraveUndertakingMax, 0x20247F34),
-                new Level("Descent into Danger", 0x2027D16C, 10020830, DescentIntoDangerItems, Clues.DescentIntoDangerMax, 0x20247F8C),
-                new Level("Perilous Ascent", 0x2027D360, 10020870, PerilousAscentItems, Clues.PerilousAscentMax, 0x2024803C),
-                new Level("Flaming Temple of Flame", 0x2027D450, 10020930, FlamingTempleItems, Clues.FlamingTempleMax, 0x20248094),
-                new Level("Unseen Foe", 0x2027D4C8, 10020900, UnseenFoeItems, Clues.UnseenFoeMax, 0x202480C0),
-                new Level("Duel by the Dragon", 0x2027D630, 10020955, DuelByTheDragonItems, Clues.DuelByTheDragonMax, 0x20248144)
+                new Level("Stealthy Approach", "Level", 0x2027C67C, 10020400, StealthyApproachItems, Clues.StealthyApproachMax, 0x20247B98),
+                new Level("Into the Machine", "Level", 0x2027C7E4, 10020420, IntoTheMachineItems, Clues.IntoTheMachineMax, 0x20247C1C),
+                new Level("High Class Heist", "Level", 0x2027C76C, 10020450, HighClassHeistItems, Clues.HighClassHeistMax, 0x20247BF0),
+                new Level("Fire Down Below", "Level", 0x2027C8D4, 10020480, FireDownBelowItems, Clues.FireDownBelowMax, 0x20247C74),
+                new Level("Cunning Disguise", "Level", 0x2027C85C, 10020510, CunningDisguiseItems, Clues.CunningDisguiseMax, 0x20247C48),
+                new Level("Gunboat Graveyard", "Level", 0x2027C9C4, 10020540, GunboatGraveyardItems, Clues.GunboatGraveyardMax, 0x20247CCC),
+                new Level("Rocky Start", "Level", 0x2027CAC8, 10020560, RockyStartItems, Clues.RockyStartMax, 0x20247D24),
+                new Level("Boneyard Casino", "Level", 0x2027CBB8, 10020600, BoneyardCasinoItems, Clues.BoneyardCasinoMax, 0x20247D7C),
+                new Level("Back Alley Heist", "Level", 0x2027CE10, 10020710, BackAlleyHeistItems, Clues.BackAlleyHeistMax, 0x20247E58),
+                new Level("Straight to the Top", "Level", 0x2027CD98, 10020640, StraightToTheTopItems, Clues.StraightToTheTopMax, 0x20247E2C),
+                new Level("Two to Tango", "Level", 0x2027CD20, 10020680, TwoToTangoItems, Clues.TwoToTangoMax, 0x20247E00),
+                new Level("Dread Swamp Path", "Level", 0x2027CF14, 10020740, DreadSwampPathItems, Clues.DreadSwampPathMax, 0x20247EB0),
+                new Level("Lair of the Beast", "Level", 0x2027D004, 10020760, LairOfTheBeastItems, Clues.LairOfTheBeastMax, 0x20247F08),
+                new Level("Grave Undertaking", "Level", 0x2027D07C, 10020790, GraveUndertakingItems, Clues.GraveUndertakingMax, 0x20247F34),
+                new Level("Descent into Danger", "Level", 0x2027D16C, 10020830, DescentIntoDangerItems, Clues.DescentIntoDangerMax, 0x20247F8C),
+                new Level("Perilous Ascent", "Level", 0x2027D360, 10020870, PerilousAscentItems, Clues.PerilousAscentMax, 0x2024803C),
+                new Level("Flaming Temple of Flame", "Level", 0x2027D450, 10020930, FlamingTempleItems, Clues.FlamingTempleMax, 0x20248094),
+                new Level("Unseen Foe", "Level", 0x2027D4C8, 10020900, UnseenFoeItems, Clues.UnseenFoeMax, 0x202480C0),
+                new Level("Duel by the Dragon", "Level", 0x2027D630, 10020955, DuelByTheDragonItems, Clues.DuelByTheDragonMax, 0x20248144),
+                new Level("Tide of Terror", "Hub", 0x2027C67C, 0, 0, 0, 0x20274434),
+                new Level("Sunset Snake Eyes", "Hub", 0x2027CAC8, 0, 0, 0, 0x20274438),
+                new Level("Vicious Voodoo", "Hub", 0x2027CF14, 0, 0, 0, 0x2027443C),
+                new Level("Fire in the Sky", "Hub", 0x2027D360, 0, 0, 0, 0x20274440)
             };
             return updatedLevels;
         }

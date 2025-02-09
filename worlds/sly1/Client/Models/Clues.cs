@@ -221,31 +221,15 @@ namespace Sly1AP.Models
                     DuelByTheDragonBottles = DuelByTheDragonMax;
                 }
             }
-            //var UpdatedLevels = Helpers.GetUpdatedLevels();
-            //foreach (var Level in UpdatedLevels)
-            //{
-            //    //Uncollected Key = &3l&., Uncollected Vault = &3w&., Uncollected Sprint = &1i&.
-            //    //Collected Key = &3k&., Collected Vault = &3v&., Collected Sprint = &1h&.
-            //    var KeyComp = "&3l&. ";
-            //    var VaultComp = "&3w&. ";
-            //    var SprintComp = "&1i&. ";
-
-            //    if (Memory.ReadBit(Level.Address, 1))
-            //    {
-            //        KeyComp = "&3k&. ";
-            //    }
-            //    if (Memory.ReadBit(Level.Address, 2))
-            //    {
-            //        VaultComp = "&3v&. ";
-            //    }
-            //    if (Memory.ReadBit(Level.Address, 3))
-            //    {
-            //        SprintComp = "&1h&. ";
-            //    }
-
-            //    var NameLocation = Memory.ReadUInt(Level.NamePointer) + 0x20000000;
-            //    Memory.WriteString(NameLocation, Level.Name + " (" + Level.ItemBottles + "/" + Level.MaxBottles + ") " + KeyComp + VaultComp + SprintComp);
-            //}
+            var UpdatedLevels = Helpers.GetUpdatedLevels();
+            foreach (var Level in UpdatedLevels)
+            {
+                if (Level.LevelType == "Level")
+                {
+                    var NameLocation = Memory.ReadUInt(Level.NamePointer) + 0x20000000;
+                    Memory.WriteString(NameLocation, Level.Name + " (" + Level.ItemBottles + "/" + Level.MaxBottles + ") ");
+                }
+            }
         }
         public static async void BottleSync()
         {

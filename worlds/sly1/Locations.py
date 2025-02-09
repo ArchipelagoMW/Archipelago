@@ -55,7 +55,7 @@ def get_location_names() -> Dict[str, int]:
     all_possible_minigame_locations = {}
     for name, data in minigame_locations.items():
         all_possible_minigame_locations[f"{name} Key"] = data.ap_code
-        for cache_number in range(1, 10):
+        for cache_number in range(1, 11):
             cache_code = data.ap_code + (cache_number - 1)
             cache_location_name = f"{name} Cache #{cache_number}"
             all_possible_minigame_locations[cache_location_name] = cache_code
@@ -120,7 +120,7 @@ def generate_minigame_locations(world: "Sly1World", cache_size: int) -> Dict[str
         else:
             for cache_number in range(1, cache_size + 1):
                 location_name = f"{name} Cache #{cache_number}"
-                cache_code = data.ap_code + cache_number
+                cache_code = data.ap_code + cache_number - 1
                 location = Sly1Location(world.player, location_name, cache_code, reg)
                 reg.locations.append(location)
     

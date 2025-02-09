@@ -1,3 +1,4 @@
+import logging
 from BaseClasses import Item, ItemClassification
 from .Types import ItemData, Sly1Item, EpisodeType, episode_type_to_name, episode_type_to_shortened_name
 from .Locations import get_total_locations, get_bundle_amount_for_level, did_avoid_early_bk, hourglasses_roll, \
@@ -56,7 +57,7 @@ def create_itempool(world: "Sly1World") -> List[Item]:
     location_bundle_size = world.options.LocationCluesanityBundleSize.value
     if item_bundle_size > 0:
         if item_bundle_size < location_bundle_size:
-            print(f"{world.player_name}: Too many bottle items compared to locations. Increasing item bundle size to match location bundle size.")
+            logging.warning(f"{world.player_name}: Too many bottle items compared to locations. Increasing item bundle size to match location bundle size.")
             world.options.ItemCluesanityBundleSize.value = location_bundle_size
             item_bundle_size = location_bundle_size
         for name, data in bottles.items():

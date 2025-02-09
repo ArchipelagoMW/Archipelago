@@ -16,6 +16,7 @@ using System.Security.Policy;
 using System.Text.Json;
 using System;
 using System.Linq;
+using static Sly1AP.Helpers;
 
 namespace Sly1AP
 {
@@ -33,6 +34,8 @@ namespace Sly1AP
         public static int ClueLocations { get; set; } = 0;
         public static int MurrayTextAddress { get; set; } = 0x2024A7B0;
         public static int RequiredBosses { get; set; } = 0;
+        public static int NameAddress { get; set; } = 0;
+        public static int NameOffset { get; set; } = 2484736;
         public Form1()
         {
             InitializeComponent();
@@ -126,9 +129,9 @@ namespace Sly1AP
                 }
             };
             await Client.Connect(hostTextbox.Text, "Sly Cooper and the Thievius Raccoonus");
-            var locations = Helpers.GetLocations();
             await Client.Login(slotTextbox.Text, passwordTextbox.Text);
             var PlayerName = slotTextbox.Text;
+            var locations = Helpers.GetLocations();
             await Client.PopulateLocations(locations);
             ConfigureOptions(Client.Options);
             if (Memory.ReadInt(0x2027DBF8) == 0 & Memory.ReadInt(0x2027DBFC) != 4)
@@ -157,7 +160,14 @@ namespace Sly1AP
                     await Task.Delay(1000);
                 }
             }
-            if (Client.GameState.ReceivedItems != null && Client.GameState.ReceivedItems.Any())
+            foreach (var Level in Helpers.Levels)
+            {
+                if (Level.LevelType == "Hub" && Memory.ReadInt(Level.Address) == 1)
+                {
+                    Memory.Write(Level.Address, 0);
+                }
+            }
+            if (Client.GameState != null && Client.GameState.ReceivedItems.Any())
             {
                 var ItemsReceived = Client.GameState.ReceivedItems;
                 var NewItems = new List<Item>(ItemsReceived);
@@ -193,6 +203,24 @@ namespace Sly1AP
                     WriteLine($"{args.Message}");
                 }
             };
+            foreach (var Level in Helpers.Levels)
+            {
+                if (Level.LevelType == "Hub")
+                {
+                    Memory.Write(Level.NamePointer, (NameAddress + NameOffset));
+                    NameOffset += 50;
+                }
+                if (Level.LevelType == "Hub" && (Memory.ReadInt(Level.Address) == 0))
+                {
+                    var PlaceToWrite = Memory.ReadUInt(Level.NamePointer) + 0x20000000;
+                    Memory.WriteString(PlaceToWrite, Level.Name + " (Locked)");
+                }
+                else if (Level.LevelType == "Hub")
+                {
+                    var PlaceToWrite = Memory.ReadUInt(Level.NamePointer) + 0x20000000;
+                    Memory.WriteString(PlaceToWrite, Level.Name);
+                }
+            }
             await Loop();
             return true;
         }
@@ -210,61 +238,23 @@ namespace Sly1AP
                 Console.WriteLine("Options dictionary is null.");
                 return;
             }
-            if (options.ContainsKey("StartingEpisode"))
-            {
-                string? StartingEpisode = Convert.ToString(options["StartingEpisode"]);
-                if (StartingEpisode == "Tide of Terror" & Memory.ReadInt(0x2027C67C) == 0)
-                {
-                    keys.RaleighStart = 1;
-                    Memory.Write(0x2027C67C, keys.RaleighStart);
-                }
-                if (StartingEpisode == "Sunset Snake Eyes" & Memory.ReadInt(0x2027CAC8) == 0)
-                {
-                    keys.MuggshotStart = 1;
-                    Memory.Write(0x2027CAC8, keys.MuggshotStart);
-                }
-                if (StartingEpisode == "Vicious Voodoo" & Memory.ReadInt(0x2027CF14) == 0)
-                {
-                    keys.MzRubyStart = 1;
-                    Memory.Write(0x2027CF14, keys.MzRubyStart);
-                }
-                if (StartingEpisode == "Fire in the Sky" & Memory.ReadInt(0x2027D360) == 0)
-                {
-                    keys.PandaKingStart = 1;
-                    Memory.Write(0x2027D360, keys.PandaKingStart);
-                }
-                if (StartingEpisode == "All" & Memory.ReadInt(0x2027C67C) == 0 & Memory.ReadInt(0x2027CAC8) == 0 
-                    & Memory.ReadInt(0x2027CF14) == 0 & Memory.ReadInt(0x2027D360) == 0)
-                {
-                    keys.RaleighStart = 1;
-                    keys.MuggshotStart = 1;
-                    keys.MzRubyStart = 1;
-                    keys.PandaKingStart = 1;
-                    Memory.Write(0x2027C67C, keys.RaleighStart);
-                    Memory.Write(0x2027CAC8, keys.MuggshotStart);
-                    Memory.Write(0x2027CF14, keys.MzRubyStart);
-                    Memory.Write(0x2027D360, keys.PandaKingStart);
-                }
-            }
             if (options.ContainsKey("ItemCluesanityBundleSize"))
             {
                 var ClueBundleSizeElement = (JsonElement)options["ItemCluesanityBundleSize"];
                 ClueBundles = ClueBundleSizeElement.GetUInt16();
-                //if (ClueBundles > 0)
-                //{
-                //    int Offset = 0;
-                //    uint Address = 0x25EA00;
-                //    foreach (var Level in Helpers.Levels)
-                //    {
-                //        if (Level.NamePointer == 0)
-                //        {
-                //            return;
-                //        }
-                //        Memory.Write(Level.NamePointer, (Address + Offset));
-                //        Offset += 50;
-                //    }
-                //    Clues.UpdateBottles(0, 0);
-                //}
+                if (ClueBundles > 0)
+                {
+                    foreach (var Level in Helpers.Levels)
+                    {
+                        if (Level.NamePointer == 0 || Level.LevelType == "Hub")
+                        {
+                            continue;
+                        }
+                        Memory.Write(Level.NamePointer, (NameAddress + NameOffset));
+                        NameOffset += 50;
+                    }
+                    Clues.UpdateBottles(0, 0);
+                }
             }
             if (options.ContainsKey("LocationCluesanityBundleSize"))
             {
@@ -276,6 +266,42 @@ namespace Sly1AP
                 var RequiredBossesElement = (JsonElement)options["RequiredBosses"];
                 RequiredBosses = RequiredBossesElement.GetUInt16();
             }
+            //if (options.ContainsKey("StartingEpisode"))
+            //{
+            //    string? StartingEpisode = Convert.ToString(options["StartingEpisode"]);
+            //    if (StartingEpisode == "Tide of Terror" & Memory.ReadInt(0x2027C67C) == 0)
+            //    {
+            //        keys.RaleighStart = 1;
+            //        Memory.Write(0x2027C67C, keys.RaleighStart);
+            //    }
+            //    if (StartingEpisode == "Sunset Snake Eyes" & Memory.ReadInt(0x2027CAC8) == 0)
+            //    {
+            //        keys.MuggshotStart = 1;
+            //        Memory.Write(0x2027CAC8, keys.MuggshotStart);
+            //    }
+            //    if (StartingEpisode == "Vicious Voodoo" & Memory.ReadInt(0x2027CF14) == 0)
+            //    {
+            //        keys.MzRubyStart = 1;
+            //        Memory.Write(0x2027CF14, keys.MzRubyStart);
+            //    }
+            //    if (StartingEpisode == "Fire in the Sky" & Memory.ReadInt(0x2027D360) == 0)
+            //    {
+            //        keys.PandaKingStart = 1;
+            //        Memory.Write(0x2027D360, keys.PandaKingStart);
+            //    }
+            //    if (StartingEpisode == "All" & Memory.ReadInt(0x2027C67C) == 0 & Memory.ReadInt(0x2027CAC8) == 0
+            //        & Memory.ReadInt(0x2027CF14) == 0 & Memory.ReadInt(0x2027D360) == 0)
+            //    {
+            //        keys.RaleighStart = 1;
+            //        keys.MuggshotStart = 1;
+            //        keys.MzRubyStart = 1;
+            //        keys.PandaKingStart = 1;
+            //        Memory.Write(0x2027C67C, keys.RaleighStart);
+            //        Memory.Write(0x2027CAC8, keys.MuggshotStart);
+            //        Memory.Write(0x2027CF14, keys.MzRubyStart);
+            //        Memory.Write(0x2027D360, keys.PandaKingStart);
+            //    }
+            //}
         }
         //This probably looks like gore to actual programmers, but it works.
         public static void UpdateMoves(long id)
@@ -387,21 +413,33 @@ namespace Sly1AP
             {
                 keys.RaleighStart = 1;
                 Memory.Write(0x2027C67C, keys.RaleighStart);
+                var LevelName = Helpers.Levels.FirstOrDefault(l => l.Name == "Tide of Terror");
+                var PlaceToWrite = Memory.ReadUInt(LevelName.NamePointer) + 536870912;
+                Memory.Write((ulong)(PlaceToWrite + LevelName.Name.Length), 0);
             }
             if (id == 10020022 & Memory.ReadInt(0x2027CAC8) == 0)
             {
                 keys.MuggshotStart = 1;
                 Memory.Write(0x2027CAC8, keys.MuggshotStart);
+                var LevelName = Helpers.Levels.FirstOrDefault(l => l.Name == "Sunset Snake Eyes");
+                var PlaceToWrite = Memory.ReadUInt(LevelName.NamePointer) + 536870912;
+                Memory.Write((ulong)(PlaceToWrite + LevelName.Name.Length), 0);
             }
             if (id == 10020023 & Memory.ReadInt(0x2027CF14) == 0)
             {
                 keys.MzRubyStart = 1;
                 Memory.Write(0x2027CF14, keys.MzRubyStart);
+                var LevelName = Helpers.Levels.FirstOrDefault(l => l.Name == "Vicious Voodoo");
+                var PlaceToWrite = Memory.ReadUInt(LevelName.NamePointer) + 536870912;
+                Memory.Write((ulong)(PlaceToWrite + LevelName.Name.Length), 0);
             }
             if (id == 10020024 & Memory.ReadInt(0x2027D360) == 0)
             {
                 keys.PandaKingStart = 1;
                 Memory.Write(0x2027D360, keys.PandaKingStart);
+                var LevelName = Helpers.Levels.FirstOrDefault(l => l.Name == "Fire in the Sky");
+                var PlaceToWrite = Memory.ReadUInt(LevelName.NamePointer) + 536870912;
+                Memory.Write((ulong)(PlaceToWrite + LevelName.Name.Length), 0);
             }
             return;
         }
@@ -665,6 +703,11 @@ namespace Sly1AP
             {
                 Bosses += 1;
             }
+            if (Bosses < RequiredBosses)
+            {
+                Memory.WriteString(0x2024A7B0, Bosses + "/" + RequiredBosses);
+                Memory.Write(0x2024A7B3, 0);
+            }
             if (Bosses >= RequiredBosses)
             {
                 Memory.Write(0x2027D7A8, 53);
@@ -676,12 +719,17 @@ namespace Sly1AP
         }
         //Sly 1 has anti-piracy measures that can seriously mess with the randomizer's functionality.
         //We freeze the related flags to stop them from ever being flipped.
+        //In case the Into the Machine anticheat activates, we disable the burners.
         private void StopAnticheat()
         {
             Memory.Write(0x20261080, 0);
             Memory.Write(0x20262310, 0);
             Memory.Write(0x20269B48, 0);
             Memory.Write(0x20275C34, 0);
+            Memory.Write(0x2027C828, 0);
+            Memory.Write(0x2027C829, 0);
+            Memory.Write(0x2027C82C, 0);
+            Memory.Write(0x2027C82D, 0);
         }
     }
 }

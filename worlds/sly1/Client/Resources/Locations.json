@@ -502,5 +502,635 @@
         "Address": "0x2027DC19",
         "CheckType": 0,
         "AddressBit": 5
+    },
+    {
+        "Name": "Treasure in the Depths Cache #1",
+        "Id": 10021000,
+        "Address": "0x2027C94C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Treasure in the Depths Cache #2",
+        "Id": 10021001,
+        "Address": "0x2027C94C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Treasure in the Depths Cache #3",
+        "Id": 10021002,
+        "Address": "0x2027C94C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Treasure in the Depths Cache #4",
+        "Id": 10021003,
+        "Address": "0x2027C94C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Treasure in the Depths Cache #5",
+        "Id": 10021004,
+        "Address": "0x2027C94C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Treasure in the Depths Cache #6",
+        "Id": 10021005,
+        "Address": "0x2027C94C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Treasure in the Depths Cache #7",
+        "Id": 10021006,
+        "Address": "0x2027C94C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Treasure in the Depths Cache #8",
+        "Id": 10021007,
+        "Address": "0x2027C94C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Treasure in the Depths Cache #9",
+        "Id": 10021008,
+        "Address": "0x2027C94C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Treasure in the Depths Cache #10",
+        "Id": 10021009,
+        "Address": "0x2027C94C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "At the Dog Track Cache #1",
+        "Id": 10021100,
+        "Address": "0x2027CCA8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "At the Dog Track Cache #2",
+        "Id": 10021101,
+        "Address": "0x2027CCA8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "At the Dog Track Cache #3",
+        "Id": 10021102,
+        "Address": "0x2027CCA8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "At the Dog Track Cache #4",
+        "Id": 10021103,
+        "Address": "0x2027CCA8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "At the Dog Track Cache #5",
+        "Id": 10021104,
+        "Address": "0x2027CCA8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "At the Dog Track Cache #6",
+        "Id": 10021105,
+        "Address": "0x2027CCA8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "At the Dog Track Cache #7",
+        "Id": 10021106,
+        "Address": "0x2027CCA8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "At the Dog Track Cache #8",
+        "Id": 10021107,
+        "Address": "0x2027CCA8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "At the Dog Track Cache #9",
+        "Id": 10021108,
+        "Address": "0x2027CCA8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "At the Dog Track Cache #10",
+        "Id": 10021109,
+        "Address": "0x2027CCA8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Murray's Big Gamble Cache #1",
+        "Id": 10021200,
+        "Address": "0x2027CC30",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Murray's Big Gamble Cache #2",
+        "Id": 10021201,
+        "Address": "0x2027CC30",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Murray's Big Gamble Cache #3",
+        "Id": 10021202,
+        "Address": "0x2027CC30",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Murray's Big Gamble Cache #4",
+        "Id": 10021203,
+        "Address": "0x2027CC30",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Murray's Big Gamble Cache #5",
+        "Id": 10021204,
+        "Address": "0x2027CC30",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Murray's Big Gamble Cache #6",
+        "Id": 10021205,
+        "Address": "0x2027CC30",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Murray's Big Gamble Cache #7",
+        "Id": 10021206,
+        "Address": "0x2027CC30",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Murray's Big Gamble Cache #8",
+        "Id": 10021207,
+        "Address": "0x2027CC30",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Murray's Big Gamble Cache #9",
+        "Id": 10021208,
+        "Address": "0x2027CC30",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Murray's Big Gamble Cache #10",
+        "Id": 10021209,
+        "Address": "0x2027CC30",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Piranha Lake Cache #1",
+        "Id": 10021300,
+        "Address": "0x2027D0F4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Piranha Lake Cache #2",
+        "Id": 10021301,
+        "Address": "0x2027D0F4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Piranha Lake Cache #3",
+        "Id": 10021302,
+        "Address": "0x2027D0F4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Piranha Lake Cache #4",
+        "Id": 10021303,
+        "Address": "0x2027D0F4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Piranha Lake Cache #5",
+        "Id": 10021304,
+        "Address": "0x2027D0F4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Piranha Lake Cache #6",
+        "Id": 10021305,
+        "Address": "0x2027D0F4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Piranha Lake Cache #7",
+        "Id": 10021306,
+        "Address": "0x2027D0F4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Piranha Lake Cache #8",
+        "Id": 10021307,
+        "Address": "0x2027D0F4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Piranha Lake Cache #9",
+        "Id": 10021308,
+        "Address": "0x2027D0F4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Piranha Lake Cache #10",
+        "Id": 10021309,
+        "Address": "0x2027D0F4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Ghastly Voyage Cache #1",
+        "Id": 10021400,
+        "Address": "0x2027D1E4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Ghastly Voyage Cache #2",
+        "Id": 10021401,
+        "Address": "0x2027D1E4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Ghastly Voyage Cache #3",
+        "Id": 10021402,
+        "Address": "0x2027D1E4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Ghastly Voyage Cache #4",
+        "Id": 10021403,
+        "Address": "0x2027D1E4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Ghastly Voyage Cache #5",
+        "Id": 10021404,
+        "Address": "0x2027D1E4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Ghastly Voyage Cache #6",
+        "Id": 10021405,
+        "Address": "0x2027D1E4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Ghastly Voyage Cache #7",
+        "Id": 10021406,
+        "Address": "0x2027D1E4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Ghastly Voyage Cache #8",
+        "Id": 10021407,
+        "Address": "0x2027D1E4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Ghastly Voyage Cache #9",
+        "Id": 10021408,
+        "Address": "0x2027D1E4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Ghastly Voyage Cache #10",
+        "Id": 10021409,
+        "Address": "0x2027D1E4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Down Home Cooking Cache #1",
+        "Id": 10021500,
+        "Address": "0x2027D25C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Down Home Cooking Cache #2",
+        "Id": 10021501,
+        "Address": "0x2027D25C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Down Home Cooking Cache #3",
+        "Id": 10021502,
+        "Address": "0x2027D25C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Down Home Cooking Cache #4",
+        "Id": 10021503,
+        "Address": "0x2027D25C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Down Home Cooking Cache #5",
+        "Id": 10021504,
+        "Address": "0x2027D25C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Down Home Cooking Cache #6",
+        "Id": 10021505,
+        "Address": "0x2027D25C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Down Home Cooking Cache #7",
+        "Id": 10021506,
+        "Address": "0x2027D25C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Down Home Cooking Cache #8",
+        "Id": 10021507,
+        "Address": "0x2027D25C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Down Home Cooking Cache #9",
+        "Id": 10021508,
+        "Address": "0x2027D25C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Down Home Cooking Cache #10",
+        "Id": 10021509,
+        "Address": "0x2027D25C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "King of the Hill Cache #1",
+        "Id": 10021600,
+        "Address": "0x2027D540",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "King of the Hill Cache #2",
+        "Id": 10021601,
+        "Address": "0x2027D540",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "King of the Hill Cache #3",
+        "Id": 10021602,
+        "Address": "0x2027D540",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "King of the Hill Cache #4",
+        "Id": 10021603,
+        "Address": "0x2027D540",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "King of the Hill Cache #5",
+        "Id": 10021604,
+        "Address": "0x2027D540",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "King of the Hill Cache #6",
+        "Id": 10021605,
+        "Address": "0x2027D540",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "King of the Hill Cache #7",
+        "Id": 10021606,
+        "Address": "0x2027D540",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "King of the Hill Cache #8",
+        "Id": 10021607,
+        "Address": "0x2027D540",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "King of the Hill Cache #9",
+        "Id": 10021608,
+        "Address": "0x2027D540",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "King of the Hill Cache #10",
+        "Id": 10021609,
+        "Address": "0x2027D540",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Rapid Fire Assault Cache #1",
+        "Id": 10021700,
+        "Address": "0x2027D5B8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Rapid Fire Assault Cache #2",
+        "Id": 10021701,
+        "Address": "0x2027D5B8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Rapid Fire Assault Cache #3",
+        "Id": 10021702,
+        "Address": "0x2027D5B8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Rapid Fire Assault Cache #4",
+        "Id": 10021703,
+        "Address": "0x2027D5B8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Rapid Fire Assault Cache #5",
+        "Id": 10021704,
+        "Address": "0x2027D5B8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Rapid Fire Assault Cache #6",
+        "Id": 10021705,
+        "Address": "0x2027D5B8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Rapid Fire Assault Cache #7",
+        "Id": 10021706,
+        "Address": "0x2027D5B8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Rapid Fire Assault Cache #8",
+        "Id": 10021707,
+        "Address": "0x2027D5B8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Rapid Fire Assault Cache #9",
+        "Id": 10021708,
+        "Address": "0x2027D5B8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Rapid Fire Assault Cache #10",
+        "Id": 10021709,
+        "Address": "0x2027D5B8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Desperate Race Cache #1",
+        "Id": 10021800,
+        "Address": "0x2027D6A8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Desperate Race Cache #2",
+        "Id": 10021801,
+        "Address": "0x2027D6A8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Desperate Race Cache #3",
+        "Id": 10021802,
+        "Address": "0x2027D6A8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Desperate Race Cache #4",
+        "Id": 10021803,
+        "Address": "0x2027D6A8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Desperate Race Cache #5",
+        "Id": 10021804,
+        "Address": "0x2027D6A8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Desperate Race Cache #6",
+        "Id": 10021805,
+        "Address": "0x2027D6A8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Desperate Race Cache #7",
+        "Id": 10021806,
+        "Address": "0x2027D6A8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Desperate Race Cache #8",
+        "Id": 10021807,
+        "Address": "0x2027D6A8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Desperate Race Cache #9",
+        "Id": 10021808,
+        "Address": "0x2027D6A8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Desperate Race Cache #10",
+        "Id": 10021809,
+        "Address": "0x2027D6A8",
+        "CheckType": 0,
+        "AddressBit": 1
     }
 ]
