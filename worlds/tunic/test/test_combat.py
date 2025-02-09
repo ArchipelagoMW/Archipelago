@@ -1,6 +1,5 @@
 from BaseClasses import ItemClassification
 from collections import Counter
-from random import Random
 
 from . import TunicTestBase
 from .. import options
@@ -51,9 +50,8 @@ class TestCombat(TunicTestBase):
     # due to the weirdness of swapping between "you have enough attack that you don't need magic"
     # so this will make sure collecting an item doesn't bring something out of logic
     def test_combat_doesnt_fail_backwards(self):
-        random_obj = Random()
         combat_items = self.combat_items.copy()
-        random_obj.shuffle(combat_items)
+        self.multiworld.worlds[1].random.shuffle(combat_items)
         curr_statuses = {name: False for name in area_data.keys()}
         prev_statuses = curr_statuses.copy()
         area_names = list(area_data.keys())
@@ -64,7 +62,7 @@ class TestCombat(TunicTestBase):
             current_item = TunicWorld.create_item(self.world, current_item_name)
             self.collect(current_item)
             collected_items.append(current_item)
-            random_obj.shuffle(area_names)
+            self.multiworld.worlds[1].random.shuffle(area_names)
             for area in area_names:
                 curr_statuses[area] = check_combat_reqs(area, self.multiworld.state, self.player)
                 if curr_statuses[area] < prev_statuses[area]:
