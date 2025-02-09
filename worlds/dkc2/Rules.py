@@ -1868,9 +1868,9 @@ class DKC2LooseRules(DKC2Rules):
                 self.can_carry,
 
             LocationName.hornet_hole_clear:
-                lambda state: self.can_cling(state) and self.has_squitter(state) and self.can_team_attack(state),
+                self.can_cling,
             LocationName.hornet_hole_kong:
-                lambda state: self.can_cling(state) and self.has_squitter(state) and self.can_team_attack(state),
+                self.can_cling,
             LocationName.hornet_hole_dk_coin:
                 lambda state: self.can_cling(state) and self.has_squitter(state) and self.can_team_attack(state),
             LocationName.hornet_hole_bonus_1:
@@ -2572,8 +2572,7 @@ class DKC2LooseRules(DKC2Rules):
             LocationName.hornet_hole_green_balloon_1:
                 self.can_carry,
             LocationName.hornet_hole_banana_coin_3:
-                lambda state: self.can_team_attack(state) and self.has_squitter(state) and 
-                    self.can_cling(state),
+                self.true,
             LocationName.hornet_hole_banana_bunch_3:
                 lambda state: self.can_team_attack(state) and self.has_squitter(state) and 
                     self.can_cling(state),
@@ -2584,8 +2583,7 @@ class DKC2LooseRules(DKC2Rules):
                 lambda state: self.can_team_attack(state) and self.has_squitter(state) and 
                     self.can_cling(state),
             LocationName.hornet_hole_banana_bunch_5:
-                lambda state: self.can_team_attack(state) and self.has_squitter(state) and 
-                    self.can_cling(state),
+                self.can_team_attack,
             LocationName.hornet_hole_red_balloon_1:
                 lambda state: self.can_team_attack(state) and self.has_squitter(state) and 
                     self.can_cling(state),
