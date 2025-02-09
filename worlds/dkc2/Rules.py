@@ -2325,7 +2325,7 @@ class DKC2LooseRules(DKC2Rules):
                 self.has_squitter,
 
             LocationName.kannons_klaim_banana_bunch_1:
-                lambda state: self.has_kannons(state) and ((self.can_cling(state) and self.can_hover(state)) or self.can_team_attack(state)),
+                lambda state: self.has_kannons(state) or self.can_team_attack(state),
             LocationName.kannons_klaim_banana_coin_1:
                 lambda state: self.has_kannons(state),
             LocationName.kannons_klaim_banana_coin_2:
