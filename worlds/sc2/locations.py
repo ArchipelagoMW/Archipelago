@@ -5203,11 +5203,11 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 10900, LocationType.VICTORY,
                            logic.terran_spear_of_adun_requirement
                            ),
-        make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_T.mission_name, "Elite Barracks", SC2_RACESWAP_LOC_ID_OFFSET + 10901, LocationType.VANILLA),
-        make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_T.mission_name, "Elite Factory", SC2_RACESWAP_LOC_ID_OFFSET + 10902, LocationType.VANILLA,
+        make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_T.mission_name, "Factory", SC2_RACESWAP_LOC_ID_OFFSET + 10901, LocationType.VANILLA),
+        make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_T.mission_name, "Armory", SC2_RACESWAP_LOC_ID_OFFSET + 10902, LocationType.VANILLA,
                            logic.terran_spear_of_adun_requirement
                            ),
-        make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_T.mission_name, "Elite Starport", SC2_RACESWAP_LOC_ID_OFFSET + 10903, LocationType.VANILLA,
+        make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_T.mission_name, "Starport", SC2_RACESWAP_LOC_ID_OFFSET + 10903, LocationType.VANILLA,
                            logic.terran_spear_of_adun_requirement
                            ),
         make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_T.mission_name, "North Power Cell", SC2_RACESWAP_LOC_ID_OFFSET + 10904, LocationType.EXTRA,
