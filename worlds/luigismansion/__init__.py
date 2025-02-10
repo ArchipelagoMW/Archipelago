@@ -291,7 +291,7 @@ class LMWorld(World):
                     add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
                 if entry.code == 745:
                     add_rule(entry,
-                             lambda state: state.has_group("Mario Item", self.player, self.options.mario_items), "and")
+                             lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value), "and")
                 elif entry.code == 772:
                     add_rule(entry, lambda state: state.can_reach_location("Nursery Clear Chest", self.player))
                 elif entry.code in [773, 778]:
@@ -390,10 +390,10 @@ class LMWorld(World):
 
         if hasattr(self.multiworld, "generation_is_fake"):
             if hasattr(self.multiworld, "re_gen_passthrough"):
-                #We know we're in second gen
+                # We know we're in second gen
                 re_gen = self.multiworld.re_gen_passthrough
-                if self.game in re_gen: #Are we the tracked game and in final gen
-                    self.ghost_affected_regions = re_gen[self.game]["ghost elements"] #this should be the same list from slot data
+                if self.game in re_gen: # Are we the tracked game and in final gen
+                    self.ghost_affected_regions = re_gen[self.game]["ghost elements"] # this should be the same list from slot data
         elif self.options.enemizer == 1:
             set_ghost_type(self, self.ghost_affected_regions)
         elif self.options.enemizer == 2:
