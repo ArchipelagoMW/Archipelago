@@ -760,7 +760,7 @@ item_descriptions = {
     item_names.INFESTED_BANSHEE_ADVANCED_TARGETING_OPTICS: "Infested Banshees gain +2 range while cloaked.",
     item_names.INFESTED_LIBERATOR_CLOUD_DISPERSAL: "Infested Liberators instantly transform into a cloud of microscopic organisms while attacking, reducing the damage they take by 85%.",
     item_names.INFESTED_LIBERATOR_VIRAL_CONTAMINATION: "Increases the damage Infested Liberators deal to their primary target by 100%.",
-    item_names.INFESTED_LIBERATOR_DEFENDER_MODE: "Allows Infested Liberators to deploy into Defender Mode to attack ground units.",
+    item_names.INFESTED_LIBERATOR_DEFENDER_MODE: "Allows Infested Liberators to deploy into Defender Mode to attack ground units. Weapon knocks back the attack target and damages units behind it.",
     item_names.FRIGHTFUL_FLESHWELDER_INFESTED_SIEGE_TANK: _get_resource_efficiency_desc(item_names.INFESTED_SIEGE_TANK),
     item_names.FRIGHTFUL_FLESHWELDER_INFESTED_DIAMONDBACK: _get_resource_efficiency_desc(item_names.INFESTED_DIAMONDBACK),
     item_names.FRIGHTFUL_FLESHWELDER_INFESTED_BANSHEE: _get_resource_efficiency_desc(item_names.INFESTED_BANSHEE),
