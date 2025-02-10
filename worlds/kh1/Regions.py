@@ -253,6 +253,7 @@ def create_regions(kh1world):
     regions["Monstro"].locations.append("Monstro Mouth High Platform Boat Side Chest")
     regions["Monstro"].locations.append("Monstro Mouth High Platform Near Teeth Chest")
     regions["Monstro"].locations.append("Monstro Mouth Near Ship Chest")
+    regions["Monstro"].locations.append("Monstro Throat Blue Trinity")
     regions["Neverland"].locations.append("Neverland Cabin Chest")
     regions["Neverland"].locations.append("Neverland Captain's Cabin Chest")
     #regions["Neverland"].locations.append("Neverland Clock Tower 01:00 Door")

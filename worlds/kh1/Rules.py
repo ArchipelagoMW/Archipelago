@@ -1110,6 +1110,19 @@ def set_rules(kh1world):
         lambda state: state.has("Blue Trinity", player))
     add_rule(kh1world.get_location("Monstro Mouth Blue Trinity"),
         lambda state: state.has("Blue Trinity", player))
+    add_rule(kh1world.get_location("Monstro Throat Blue Trinity"),
+        lambda state: (
+            state.has("Blue Trinity", player)
+            and 
+            (
+                state.has("High Jump", player)
+                or
+                (
+                    options.advanced_logic
+                    and state.has("Progressive Glide", player)
+                )
+            )
+        ))
     add_rule(kh1world.get_location("Monstro Chamber 5 Blue Trinity"),
         lambda state: state.has("Blue Trinity", player))
     add_rule(kh1world.get_location("Hollow Bastion Great Crest Blue Trinity"),

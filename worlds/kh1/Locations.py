@@ -486,6 +486,7 @@ location_table: Dict[str, KH1LocationData] = {
     "Hollow Bastion Dungeon Blue Trinity":                                              KH1LocationData("Hollow Bastion",   265_6609, "Prize"),
     "Deep Jungle Treetop Green Trinity":                                                KH1LocationData("Deep Jungle",      265_6610, "Prize"),
     "Agrabah Cave of Wonders Treasure Room Red Trinity":                                KH1LocationData("Agrabah",          265_6611, "Prize"),
+    "Monstro Throat Blue Trinity":                                                      KH1LocationData("Monstro",          265_6612, "Prize"),
     
     "Destiny Islands Seashore Capture Fish 1 (Day 2)":                                  KH1LocationData("Destiny Islands",  265_6700, "Static"),
     "Destiny Islands Seashore Capture Fish 2 (Day 2)":                                  KH1LocationData("Destiny Islands",  265_6701, "Static"),
