@@ -1,7 +1,7 @@
 # Peaks of Yore
 
 ## Where is the options page?
-The player options page for this game is located <a href="../player-options">here</a>. It contains all the options
+The player options page for this game is located [here](../player-options). It contains all the options
 you need to configure and export a config file.
 
 ## What does randomization do to this game?
@@ -31,5 +31,5 @@ all the received items.
 harder peaks may have to be summited without early-game unlocks.
 
 ## Notes
-- The Alps DLC currently has no implementation, it is not recommended to go to the alps during an archipelago session,
+- The Alps DLC currently has no implementation, it is not recommended to go to the alps during an Archipelago session,
 as that may lead to unforeseen consequences.

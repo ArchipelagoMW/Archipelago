@@ -29,7 +29,7 @@ You can see the [basic multiworld setup guide](/tutorial/Archipelago/setup/en) h
 about why Archipelago uses YAML files and what they're for.
 
 ### Where do I get a YAML?
-You can use the [game options page](/games/Peaks%20of%20Yore/player-options) here on the Archipelago 
+You can use the [game options page](../player-options) here on the Archipelago 
 website to generate a YAML using a graphical interface.
 
 
@@ -51,11 +51,11 @@ If the game instead freezes for a short while, there may have been an error conn
 
 It is recommended to check the console after connecting, when launching the game, a logging console should
 have opened. Right after connecting, one of the bottom lines should say `Login result: True`, if it says
-`Login result: False` then you are **NOT CONNECTED**
+`Login result: False` then you are **NOT CONNECTED**.
 
 To start the game, begin on a new save, to continue, use the same save you have used before.
 
-**WARNING**: Loading vanilla saves has a **very high** probability of breaking progression
+**WARNING**: Loading vanilla saves has a **very high** probability of breaking progression.
 
 ### Gameplay
 When playing randomised peaks of yore, tool unlocking, books, and most other things in your cabin are turned into items,
