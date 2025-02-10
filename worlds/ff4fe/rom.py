@@ -85,12 +85,18 @@ class FF4FEPatchExtension(APPatchExtension):
         kept_items = placements["kept_items"]
         data_dir = placements["data_dir"]
         placements = json.dumps(json.loads(caller.get_file(placement_file)))
+        # We try to import FE, assuming it's been installed by requirements...
         try:
-            import sys
-            sys.path.append(data_dir)
-            from FreeEnterprise4.FreeEnt.cmd_make import MakeCommand
-        except ImportError:
-            raise ImportError("Free Enterprise not found. Try reinstalling it.")
+            from FreeEnt.cmd_make import MakeCommand
+        except:
+            # ...but that won't fly in a standalone APWorld, so we then try and grab it from the data directory.
+            # This could be removed for the merged build but maintaining two versions is pain.
+            try:
+                import sys
+                sys.path.append(data_dir)
+                from FreeEnterprise4.FreeEnt.cmd_make import MakeCommand
+            except ImportError:
+                raise ImportError("Free Enterprise not found. Try reinstalling it.")
         cmd = MakeCommand()
         parser = argparse.ArgumentParser()
         cmd.add_parser_arguments(parser)
