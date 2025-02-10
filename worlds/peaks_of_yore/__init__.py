@@ -3,9 +3,12 @@ from typing import Any
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial, Item, Region, ItemClassification, MultiWorld
 from .options import PeaksOfYoreOptions, Goal, StartingBook
-from .data import full_item_list, full_location_list
-from .items import PeaksOfYoreItem
+from .data import full_item_list, full_location_list, PeaksOfYoreRegion
 from .locations import get_locations, get_location_names_by_type, PeaksOfYoreLocation
+
+
+class PeaksOfYoreItem(Item):
+    game = "Peaks of Yore"
 
 
 class PeaksOfWeb(WebWorld):
@@ -49,9 +52,9 @@ class PeaksOfWorld(World):
             classification = ItemClassification.progression
         return PeaksOfYoreItem(name, classification, self.item_name_to_id[name], self.player)
 
-    def create_extra_item(self):
+    def get_filler_item_name(self) -> str:
         choices = ["Extra Rope", "Extra Coffee", "Extra Chalk", "Extra Seed"]
-        return self.create_item(self.random.choice(choices))
+        return self.random.choice(choices)
 
     def generate_early(self) -> None:
         if self.options.start_with_barometer:
@@ -96,10 +99,10 @@ class PeaksOfWorld(World):
         if self.options.enable_fundamental:
             fundamentals_region = Region("Fundamentals", self.player, self.multiworld)
 
-            self.peaks_in_pool.extend(get_location_names_by_type(0, "Peak"))
-            self.artefacts_in_pool.extend(get_location_names_by_type(0, "Artefact"))
+            self.peaks_in_pool.extend(get_location_names_by_type(PeaksOfYoreRegion.FUNDAMENTALS, "Peak"))
+            self.artefacts_in_pool.extend(get_location_names_by_type(PeaksOfYoreRegion.FUNDAMENTALS, "Artefact"))
 
-            fundamentals_region.add_locations(get_locations(0), PeaksOfYoreLocation)
+            fundamentals_region.add_locations(get_locations(PeaksOfYoreRegion.FUNDAMENTALS), PeaksOfYoreLocation)
             cabin_region.connect(fundamentals_region, "Fundamentals Book",
                                  lambda state: state.has("Fundamentals Book", self.player))
             self.location_count += len(fundamentals_region.locations)
@@ -107,10 +110,10 @@ class PeaksOfWorld(World):
         if self.options.enable_intermediate:
             intermediate_region = Region("Intermediate", self.player, self.multiworld)
 
-            self.peaks_in_pool.extend(get_location_names_by_type(1, "Peak"))
-            self.artefacts_in_pool.extend(get_location_names_by_type(1, "Artefact"))
+            self.peaks_in_pool.extend(get_location_names_by_type(PeaksOfYoreRegion.INTERMEDIATE, "Peak"))
+            self.artefacts_in_pool.extend(get_location_names_by_type(PeaksOfYoreRegion.INTERMEDIATE, "Artefact"))
 
-            intermediate_region.add_locations(get_locations(1), PeaksOfYoreLocation)
+            intermediate_region.add_locations(get_locations(PeaksOfYoreRegion.INTERMEDIATE), PeaksOfYoreLocation)
             cabin_region.connect(intermediate_region, "Intermediate Book",
                                  lambda state: state.has("Intermediate Book", self.player))
             self.location_count += len(intermediate_region.locations)
@@ -118,20 +121,20 @@ class PeaksOfWorld(World):
         if self.options.enable_advanced:
             advanced_region = Region("Advanced", self.player, self.multiworld)
 
-            self.peaks_in_pool.extend(get_location_names_by_type(2, "Peak"))
-            self.artefacts_in_pool.extend(get_location_names_by_type(2, "Artefact"))
+            self.peaks_in_pool.extend(get_location_names_by_type(PeaksOfYoreRegion.ADVANCED, "Peak"))
+            self.artefacts_in_pool.extend(get_location_names_by_type(PeaksOfYoreRegion.ADVANCED, "Artefact"))
 
-            advanced_region.add_locations(get_locations(2), PeaksOfYoreLocation)
+            advanced_region.add_locations(get_locations(PeaksOfYoreRegion.ADVANCED), PeaksOfYoreLocation)
             cabin_region.connect(advanced_region, "Advanced Book",
                                  lambda state: state.has("Advanced Book", self.player))
             self.location_count += len(advanced_region.locations)
 
         if self.options.enable_expert:
             expert_region = Region("Expert", self.player, self.multiworld)
-            expert_locations: dict[str, int] = {k: v for k, v in get_locations(3).items() if
+            expert_locations: dict[str, int] = {k: v for k, v in get_locations(PeaksOfYoreRegion.EXPERT).items() if
                                                 (not self.options.disable_solemn_tempest) or v != 37}
 
-            self.artefacts_in_pool.extend(get_location_names_by_type(3, "Artefact"))
+            self.artefacts_in_pool.extend(get_location_names_by_type(PeaksOfYoreRegion.EXPERT, "Artefact"))
             self.peaks_in_pool.append("Great Bulwark")
             if not self.options.disable_solemn_tempest:
                 self.peaks_in_pool.append("Solemn Tempest")
@@ -179,7 +182,7 @@ class PeaksOfWorld(World):
                 self.multiworld.itempool.append(self.create_item(artefact.name))
                 remaining_items -= 1
 
-        self.multiworld.itempool += [self.create_extra_item() for _ in range(remaining_items)]
+        self.multiworld.itempool += [self.create_item(self.get_filler_item_name()) for _ in range(remaining_items)]
 
     def set_rules(self) -> None:
         if self.options.goal.value == Goal.option_all_artefacts:

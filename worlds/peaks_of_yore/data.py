@@ -1,13 +1,23 @@
+from enum import Enum
+
+
+class PeaksOfYoreRegion(Enum):
+    FUNDAMENTALS = 0
+    INTERMEDIATE = 1
+    ADVANCED = 2
+    EXPERT = 3
+
+
 class LocationData:
     name: str
     type: str
     id: int
-    region: int
+    region: PeaksOfYoreRegion
 
-    def __init__(self, name: str, type: str, id: int, region: int):
+    def __init__(self, name: str, location_type: str, location_id: int, region: PeaksOfYoreRegion):
         self.name = name
-        self.type = type
-        self.id = id
+        self.type = location_type
+        self.id = location_id
         self.region = region
 
 
@@ -16,93 +26,93 @@ class ItemData:
     type: str
     id: int
 
-    def __init__(self, name: str, type: str, id: int):
+    def __init__(self, name: str, item_type: str, item_id: int):
         self.name = name
-        self.type = type
-        self.id = id
+        self.type = item_type
+        self.id = item_id
 
 
 full_location_list: list[LocationData] = [
-    LocationData("Greenhorn's Top", 'Peak', 1, 0),
-    LocationData('Paltry Peak', 'Peak', 2, 0),
-    LocationData('Old Mill', 'Peak', 3, 0),
-    LocationData('Gray Gully', 'Peak', 4, 0),
-    LocationData('Lighthouse', 'Peak', 5, 0),
-    LocationData('Old Man Of Sjor', 'Peak', 6, 0),
-    LocationData('Giants Shelf', 'Peak', 7, 0),
-    LocationData("Evergreen's End", 'Peak', 8, 0),
-    LocationData('The Twins', 'Peak', 9, 0),
-    LocationData("Old Grove's Skelf", 'Peak', 10, 0),
-    LocationData("Land's End", 'Peak', 11, 0),
-    LocationData("Hangman's Leap", 'Peak', 12, 0),
-    LocationData('Old Langr', 'Peak', 13, 0),
-    LocationData('Aldr Grotto', 'Peak', 14, 0),
-    LocationData('Three Brothers', 'Peak', 15, 0),
-    LocationData("Walter's Crag", 'Peak', 16, 0),
-    LocationData('Great Crevice', 'Peak', 17, 0),
-    LocationData('Old Hagger', 'Peak', 18, 0),
-    LocationData('Ugsome Storr', 'Peak', 19, 0),
-    LocationData('Wuthering Crest', 'Peak', 20, 0),
-    LocationData("Porter's Boulders", 'Peak', 21, 1),
-    LocationData("Jotunn's Thumb", 'Peak', 22, 1),
-    LocationData('Old Skerry', 'Peak', 23, 1),
-    LocationData('Hamarr Stone', 'Peak', 24, 1),
-    LocationData("Giant's Nose", 'Peak', 25, 1),
-    LocationData("Walter's Boulder", 'Peak', 26, 1),
-    LocationData('Sundered Sons', 'Peak', 27, 1),
-    LocationData("Old Weald's Boulder", 'Peak', 28, 1),
-    LocationData('Leaning Spire', 'Peak', 29, 1),
-    LocationData('Cromlech', 'Peak', 30, 1),
-    LocationData("Walker's Pillar", 'Peak', 31, 2),
-    LocationData('Eldenhorn', 'Peak', 32, 2),
-    LocationData('Great Gaol', 'Peak', 33, 2),
-    LocationData('St Haelga', 'Peak', 34, 2),
-    LocationData("Ymir's Shadow", 'Peak', 35, 2),
-    LocationData('Great Bulwark', 'Peak', 36, 3),
-    LocationData('Solemn Tempest', 'Peak', 37, 3),
-    LocationData('Walters Crag Rope', 'Rope', 100, 0),
-    LocationData('Walkers Pillar Rope', 'Rope', 101, 2),
-    LocationData('Great Gaol Rope', 'Rope', 102, 2),
-    LocationData('St Haelga Rope', 'Rope', 103, 2),
-    LocationData('Extra Rope 1', 'Rope', 104, 0),
-    LocationData('Extra Rope 2', 'Rope', 105, 0),
-    LocationData('Extra Rope 3', 'Rope', 106, 0),
-    LocationData('Extra Rope 4', 'Rope', 107, 2),
-    LocationData('Extra Rope 5', 'Rope', 108, 2),
-    LocationData('Extra Rope 6', 'Rope', 109, 0),
-    LocationData('Extra Rope 7', 'Rope', 110, 2),
-    LocationData('Extra Rope 8', 'Rope', 111, 0),
-    LocationData('Extra Rope 9', 'Rope', 112, 0),
-    LocationData('Extra Rope 10', 'Rope', 113, 0),
-    LocationData('Extra Rope 11', 'Rope', 114, 0),
-    LocationData('Extra Rope 12', 'Rope', 115, 0),
-    LocationData('Great Gaol Given Rope', 'Rope', 116, 2),
-    LocationData('St Haelga Given Rope', 'Rope', 117, 2),
-    LocationData('Hat 1', 'Artefact', 200, 0),
-    LocationData('Hat 2', 'Artefact', 201, 0),
-    LocationData('Helmet', 'Artefact', 202, 0),
-    LocationData('Shoe', 'Artefact', 203, 0),
-    LocationData('Shovel', 'Artefact', 204, 0),
-    LocationData('Sleepingbag', 'Artefact', 205, 0),
-    LocationData('Backpack', 'Artefact', 206, 0),
-    LocationData('Coffebox 1', 'Artefact', 207, 0),
-    LocationData('Coffebox 2', 'Artefact', 208, 0),
-    LocationData('Chalkbox 1', 'Artefact', 209, 2),
-    LocationData('Chalkbox 2', 'Artefact', 210, 2),
-    LocationData('Climber Statue 1', 'Artefact', 211, 1),
-    LocationData('Climber Statue 2', 'Artefact', 212, 2),
-    LocationData('Climber Statue 3', 'Artefact', 213, 3),
-    LocationData('Photograph 1', 'Artefact', 214, 0),
-    LocationData('Photograph 2', 'Artefact', 215, 0),
-    LocationData('Photograph 3', 'Artefact', 216, 0),
-    LocationData('Photograph 4', 'Artefact', 217, 2),
-    LocationData('Photograph Frame', 'Artefact', 218, 2),
-    LocationData('Climber Statue 0', 'Artefact', 219, 0),
-    LocationData('Extra Seed 1', 'Bird Seed', 400, 0),
-    LocationData('Extra Seed 2', 'Bird Seed', 401, 1),
-    LocationData('Extra Seed 3', 'Bird Seed', 402, 2),
-    LocationData('Extra Seed 4', 'Bird Seed', 403, 2),
-    LocationData('Extra Seed 5', 'Bird Seed', 404, 2)
+    LocationData("Greenhorn's Top", 'Peak', 1, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Paltry Peak', 'Peak', 2, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Old Mill', 'Peak', 3, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Gray Gully', 'Peak', 4, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Lighthouse', 'Peak', 5, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Old Man Of Sjor', 'Peak', 6, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Giants Shelf', 'Peak', 7, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData("Evergreen's End", 'Peak', 8, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('The Twins', 'Peak', 9, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData("Old Grove's Skelf", 'Peak', 10, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData("Land's End", 'Peak', 11, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData("Hangman's Leap", 'Peak', 12, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Old Langr', 'Peak', 13, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Aldr Grotto', 'Peak', 14, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Three Brothers', 'Peak', 15, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData("Walter's Crag", 'Peak', 16, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Great Crevice', 'Peak', 17, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Old Hagger', 'Peak', 18, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Ugsome Storr', 'Peak', 19, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Wuthering Crest', 'Peak', 20, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData("Porter's Boulders", 'Peak', 21, PeaksOfYoreRegion.INTERMEDIATE),
+    LocationData("Jotunn's Thumb", 'Peak', 22, PeaksOfYoreRegion.INTERMEDIATE),
+    LocationData('Old Skerry', 'Peak', 23, PeaksOfYoreRegion.INTERMEDIATE),
+    LocationData('Hamarr Stone', 'Peak', 24, PeaksOfYoreRegion.INTERMEDIATE),
+    LocationData("Giant's Nose", 'Peak', 25, PeaksOfYoreRegion.INTERMEDIATE),
+    LocationData("Walter's Boulder", 'Peak', 26, PeaksOfYoreRegion.INTERMEDIATE),
+    LocationData('Sundered Sons', 'Peak', 27, PeaksOfYoreRegion.INTERMEDIATE),
+    LocationData("Old Weald's Boulder", 'Peak', 28, PeaksOfYoreRegion.INTERMEDIATE),
+    LocationData('Leaning Spire', 'Peak', 29, PeaksOfYoreRegion.INTERMEDIATE),
+    LocationData('Cromlech', 'Peak', 30, PeaksOfYoreRegion.INTERMEDIATE),
+    LocationData("Walker's Pillar", 'Peak', 31, PeaksOfYoreRegion.ADVANCED),
+    LocationData('Eldenhorn', 'Peak', 32, PeaksOfYoreRegion.ADVANCED),
+    LocationData('Great Gaol', 'Peak', 33, PeaksOfYoreRegion.ADVANCED),
+    LocationData('St Haelga', 'Peak', 34, PeaksOfYoreRegion.ADVANCED),
+    LocationData("Ymir's Shadow", 'Peak', 35, PeaksOfYoreRegion.ADVANCED),
+    LocationData('Great Bulwark', 'Peak', 36, PeaksOfYoreRegion.EXPERT),
+    LocationData('Solemn Tempest', 'Peak', 37, PeaksOfYoreRegion.EXPERT),
+    LocationData('Walters Crag Rope', 'Rope', 100, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Walkers Pillar Rope', 'Rope', 101, PeaksOfYoreRegion.ADVANCED),
+    LocationData('Great Gaol Rope', 'Rope', 102, PeaksOfYoreRegion.ADVANCED),
+    LocationData('St Haelga Rope', 'Rope', 103, PeaksOfYoreRegion.ADVANCED),
+    LocationData('Extra Rope 1', 'Rope', 104, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Extra Rope 2', 'Rope', 105, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Extra Rope 3', 'Rope', 106, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Extra Rope 4', 'Rope', 107, PeaksOfYoreRegion.ADVANCED),
+    LocationData('Extra Rope 5', 'Rope', 108, PeaksOfYoreRegion.ADVANCED),
+    LocationData('Extra Rope 6', 'Rope', 109, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Extra Rope 7', 'Rope', 110, PeaksOfYoreRegion.ADVANCED),
+    LocationData('Extra Rope 8', 'Rope', 111, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Extra Rope 9', 'Rope', 112, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Extra Rope 10', 'Rope', 113, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Extra Rope 11', 'Rope', 114, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Extra Rope 12', 'Rope', 115, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Great Gaol Given Rope', 'Rope', 116, PeaksOfYoreRegion.ADVANCED),
+    LocationData('St Haelga Given Rope', 'Rope', 117, PeaksOfYoreRegion.ADVANCED),
+    LocationData('Hat 1', 'Artefact', 200, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Hat 2', 'Artefact', 201, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Helmet', 'Artefact', 202, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Shoe', 'Artefact', 203, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Shovel', 'Artefact', 204, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Sleepingbag', 'Artefact', 205, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Backpack', 'Artefact', 206, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Coffebox 1', 'Artefact', 207, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Coffebox 2', 'Artefact', 208, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Chalkbox 1', 'Artefact', 209, PeaksOfYoreRegion.ADVANCED),
+    LocationData('Chalkbox 2', 'Artefact', 210, PeaksOfYoreRegion.ADVANCED),
+    LocationData('Climber Statue 1', 'Artefact', 211, PeaksOfYoreRegion.INTERMEDIATE),
+    LocationData('Climber Statue 2', 'Artefact', 212, PeaksOfYoreRegion.ADVANCED),
+    LocationData('Climber Statue 3', 'Artefact', 213, PeaksOfYoreRegion.EXPERT),
+    LocationData('Photograph 1', 'Artefact', 214, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Photograph 2', 'Artefact', 215, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Photograph 3', 'Artefact', 216, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Photograph 4', 'Artefact', 217, PeaksOfYoreRegion.ADVANCED),
+    LocationData('Photograph Frame', 'Artefact', 218, PeaksOfYoreRegion.ADVANCED),
+    LocationData('Climber Statue 0', 'Artefact', 219, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Extra Seed 1', 'Bird Seed', 400, PeaksOfYoreRegion.FUNDAMENTALS),
+    LocationData('Extra Seed 2', 'Bird Seed', 401, PeaksOfYoreRegion.INTERMEDIATE),
+    LocationData('Extra Seed 3', 'Bird Seed', 402, PeaksOfYoreRegion.ADVANCED),
+    LocationData('Extra Seed 4', 'Bird Seed', 403, PeaksOfYoreRegion.ADVANCED),
+    LocationData('Extra Seed 5', 'Bird Seed', 404, PeaksOfYoreRegion.ADVANCED)
 ]
 
 full_item_list: list[ItemData] = [
