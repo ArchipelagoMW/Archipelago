@@ -27,7 +27,7 @@ additionally contain shuffled items, and the golden treasures they originally co
 somewhere else in the multiworld. In the former, the Golden Diva's chamber is locked, and you
 instead escape with the treasure by entering the Sound Room on the north side of the pyramid. The
 number of treasures you have and what you need is displayed in the top left corner where the number
-of minigame coins you have used to be.
+of minigame medals you have used to be.
 
 ## What is the goal of Wario Land 4 when randomized?
 
@@ -80,8 +80,8 @@ without Ground Pound.
 the wooden boxes if you have Grab.
 - In Hotel Horror, you can access the frog switch on Hard without carrying the Ringosuki by throwing
 the Marumen upward and bouncing on it in midair to start a Super Ground Pound.
-- To fight Catbat, you're normally expected to use Enemy Jump as the behavior when jumping off of
-the waves is strange without it. To ground pound his head without Enemy Jump, you need to start
+- To fight Catbat, you're normally expected to use Stomp Jump as the behavior when jumping off of
+the waves is strange without it. To ground pound his head without Stomp Jump, you need to start
 walking before you jump; jumps from a standstill won't work. When the waves start oscillating, jump
 at the apex or else you will be bounced off.
 - In Golden Passage, you can skip the current puzzle room by repeatedly jumping out of the river with

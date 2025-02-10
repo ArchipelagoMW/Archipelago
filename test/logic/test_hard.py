@@ -272,12 +272,12 @@ class TestHard(WL4TestBase):
             ['The Toxic Landfill - Transformation Puzzle Box', False, ['Progressive Ground Pound'], ['Progressive Ground Pound']],
             ['The Toxic Landfill - Transformation Puzzle Box', False, [], ['Dash Attack']],
             ['The Toxic Landfill - Transformation Puzzle Box', False, [], ['Head Smash']],
-            ['The Toxic Landfill - Transformation Puzzle Box', False, ['Progressive Grab'], ['Progressive Grab', 'Enemy Jump']],
+            ['The Toxic Landfill - Transformation Puzzle Box', False, ['Progressive Grab'], ['Progressive Grab', 'Stomp Jump']],
             ['The Toxic Landfill - Transformation Puzzle Box', True,
              ['Progressive Ground Pound', 'Progressive Ground Pound', 'Dash Attack', 'Head Smash',
               'Progressive Grab', 'Progressive Grab']],
             ['The Toxic Landfill - Transformation Puzzle Box', True,
-             ['Progressive Ground Pound', 'Progressive Ground Pound', 'Dash Attack', 'Head Smash', 'Enemy Jump']],
+             ['Progressive Ground Pound', 'Progressive Ground Pound', 'Dash Attack', 'Head Smash', 'Stomp Jump']],
 
             ['The Toxic Landfill - CD Box', False, []],
             ['The Toxic Landfill - CD Box', False, ['Progressive Ground Pound'], ['Progressive Ground Pound']],
@@ -427,9 +427,9 @@ class TestHard(WL4TestBase):
             ['The Big Board - Full Health Item Box', False, []],
             ['The Big Board - Full Health Item Box', False, [], ['Progressive Ground Pound']],
             ['The Big Board - Full Health Item Box', False, [], ['Progressive Grab']],
-            ['The Big Board - Full Health Item Box', False, [], ['Enemy Jump']],
+            ['The Big Board - Full Health Item Box', False, [], ['Stomp Jump']],
             ['The Big Board - Full Health Item Box', True,
-             ['Progressive Ground Pound', 'Progressive Grab', 'Enemy Jump']],
+             ['Progressive Ground Pound', 'Progressive Grab', 'Stomp Jump']],
         ])
 
     def _test_doodle_woods(self):
@@ -439,8 +439,8 @@ class TestHard(WL4TestBase):
             ['Doodle Woods - Gray Square Box', True, ['Progressive Ground Pound']],
 
             ['Doodle Woods - Pink Circle Box', False, []],
-            ['Doodle Woods - Pink Circle Box', False, [], ['Enemy Jump']],
-            ['Doodle Woods - Pink Circle Box', True, ['Enemy Jump']],
+            ['Doodle Woods - Pink Circle Box', False, [], ['Stomp Jump']],
+            ['Doodle Woods - Pink Circle Box', True, ['Stomp Jump']],
 
             ['Doodle Woods - Purple Square Box', True, []],
 
@@ -608,8 +608,8 @@ class TestHard(WL4TestBase):
         self.run_location_tests([
             ['Catbat', False, []],
             ['Catbat', False, [], ['Progressive Ground Pound']],
-            ['Catbat', False, [], ['Enemy Jump']],
-            ['Catbat', True, ['Progressive Ground Pound', 'Enemy Jump']],
+            ['Catbat', False, [], ['Stomp Jump']],
+            ['Catbat', True, ['Progressive Ground Pound', 'Stomp Jump']],
         ])
 
     def _test_golden_passage(self):

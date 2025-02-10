@@ -165,7 +165,7 @@ class PrizeWeight(Range):
 
 class JunkWeight(Range):
     """
-    How often to place junk items (hearts, minigame coins) when filling vacant spots in the item pool.
+    How often to place junk items (hearts, minigame medals) when filling vacant spots in the item pool.
     """
     display_name = 'Junk Weight'
     range_start = 0

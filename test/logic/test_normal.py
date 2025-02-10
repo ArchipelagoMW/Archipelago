@@ -445,9 +445,9 @@ class TestNormal(WL4TestBase):
             ['The Big Board - Full Health Item Box', False, []],
             ['The Big Board - Full Health Item Box', False, [], ['Progressive Ground Pound']],
             ['The Big Board - Full Health Item Box', False, [], ['Progressive Grab']],
-            ['The Big Board - Full Health Item Box', False, [], ['Enemy Jump']],
+            ['The Big Board - Full Health Item Box', False, [], ['Stomp Jump']],
             ['The Big Board - Full Health Item Box', True,
-             ['Progressive Ground Pound', 'Progressive Grab', 'Enemy Jump']],
+             ['Progressive Ground Pound', 'Progressive Grab', 'Stomp Jump']],
         ])
 
     def _test_doodle_woods(self):
@@ -613,8 +613,8 @@ class TestNormal(WL4TestBase):
         self.run_location_tests([
             ['Catbat', False, []],
             ['Catbat', False, [], ['Progressive Ground Pound']],
-            ['Catbat', False, [], ['Enemy Jump']],
-            ['Catbat', True, ['Progressive Ground Pound', 'Enemy Jump']],
+            ['Catbat', False, [], ['Stomp Jump']],
+            ['Catbat', True, ['Progressive Ground Pound', 'Stomp Jump']],
         ])
 
     def _test_golden_passage(self):

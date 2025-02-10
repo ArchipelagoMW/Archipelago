@@ -73,8 +73,16 @@ class WL4World(World):
         'Abilities': set(filter_item_names(type=ItemType.ABILITY)),
         'Golden Treasure': set(filter_item_names(type=ItemType.TREASURE)),
         'Traps': {'Wario Form Trap', 'Lightning Trap'},
-        'Junk': {'Heart', 'Minigame Coin'},
+        'Junk': {'Heart', 'Minigame Medal'},
         'Prizes': {'Full Health Item', 'Diamond'},
+
+        # Aliases
+        'Ground Pound': {'Progressive Ground Pound'},
+        'Grab': {'Progressive Grab'},
+        'Smash Attack': {'Progressive Ground Pound'},
+        'Progressive Smash Attack': {'Progressive Ground Pound'},
+        'Enemy Jump': {'Stomp Jump'},
+        'Minigame Coin': {'Minigame Medal'},
     }
 
     location_name_groups = {
@@ -109,7 +117,7 @@ class WL4World(World):
     ABILITIES = tuple(filter_item_names(type=ItemType.ABILITY))
     GOLDEN_TREASURES = tuple(filter_item_names(type=ItemType.TREASURE))
     PRIZES = ('Full Health Item', 'Diamond')
-    JUNK = ('Heart', 'Minigame Coin')
+    JUNK = ('Heart', 'Minigame Medal')
     TRAPS = ('Wario Form Trap', 'Lightning Trap')
 
     filler_item_weights: tuple[int, ...]

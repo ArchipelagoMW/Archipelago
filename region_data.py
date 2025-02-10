@@ -113,7 +113,7 @@ level_table = {
                     LocationData("Submerged Diamond", access_rule=has('Swim')),
                     LocationData(
                         "Switch Staircase Diamond",
-                        access_rule=has('Grab') | advanced_logic() & has('Enemy Jump')
+                        access_rule=has('Grab') | advanced_logic() & has('Stomp Jump')
                     ),
                     LocationData("Scienstein Throw Diamond", access_rule=has('Grab')),
                 ]
@@ -153,7 +153,7 @@ level_table = {
                     ExitData("Giant Sunflower", has('Swim')),
                 ],
                 diamonds=[
-                    LocationData("Scienstein Stomp Diamond", access_rule=has('Grab') & has('Enemy Jump'))
+                    LocationData("Scienstein Stomp Diamond", access_rule=has('Grab') & has('Stomp Jump'))
                 ]
             ),
             RegionData(
@@ -374,7 +374,7 @@ level_table = {
                 None,
                 [
                     ExitData("Current Circle Room", access_rule=has('Swim')),
-                    ExitData("Transformation Puzzle", access_rule=has_any(['Heavy Grab', 'Enemy Jump'])),
+                    ExitData("Transformation Puzzle", access_rule=has_any(['Heavy Grab', 'Stomp Jump'])),
                 ],
                 [
                     LocationData("Portal Room Box", difficulties=[normal]),
@@ -557,7 +557,7 @@ level_table = {
                     LocationData("Tower Diamond", difficulties=[hard]),
                     LocationData("Digging Room Diamond", access_rule=has('Dash Attack')),
                     LocationData("Escape Ledge Diamond", difficulties=[normal]),
-                    LocationData("Cage Diamond", access_rule=has('Enemy Jump'), difficulties=[normal]),
+                    LocationData("Cage Diamond", access_rule=has('Stomp Jump'), difficulties=[normal]),
                     LocationData("Circle Block Diamond", access_rule=has_all(['Super Ground Pound', 'Dash Attack'])),
                 ]
             ),
@@ -596,7 +596,7 @@ level_table = {
                     LocationData("CD Box"),
                     LocationData(
                         "Full Health Item Box",
-                        access_rule=has_all(['Grab', 'Enemy Jump']),
+                        access_rule=has_all(['Grab', 'Stomp Jump']),
                         difficulties=[normal, hard]
                     ),
                     LocationData("Keyzer", event=True),
@@ -617,7 +617,7 @@ level_table = {
             RegionData(
                 None,
                 [
-                    ExitData("Pink Circle Room", has('Enemy Jump')),
+                    ExitData("Pink Circle Room", has('Stomp Jump')),
                     ExitData("Blue Circle Room", has('Ground Pound')),
                     ExitData(
                         "Gray Square Room",
@@ -690,7 +690,7 @@ level_table = {
                 diamonds=[
                     LocationData(
                         "Toy Car Tower Diamond",
-                        access_rule=has_all(['Grab', 'Enemy Jump']),
+                        access_rule=has_all(['Grab', 'Stomp Jump']),
                         difficulties=[normal, hard]
                     ),
                 ]
@@ -888,7 +888,7 @@ level_table = {
                     LocationData("Frog Switch", event=True),
                 ],
                 diamonds=[
-                    LocationData("Ice Jump Diamond", access_rule=has('Enemy Jump'), difficulties=[normal, hard]),
+                    LocationData("Ice Jump Diamond", access_rule=has('Stomp Jump'), difficulties=[normal, hard]),
                     LocationData("Corner Diamond", difficulties=[normal, hard]),
                     LocationData("Hidden Ice Diamond", difficulties=[normal]),
                     LocationData("Frozen Diamond"),
@@ -905,7 +905,7 @@ level_table = {
                         "Switch Room",
                         access_rule=(
                             has('Heavy Grab')
-                            | difficulty(hard) & advanced_logic() & has_all(['Grab', 'Enemy Jump', 'Super Ground Pound'])
+                            | difficulty(hard) & advanced_logic() & has_all(['Grab', 'Stomp Jump', 'Super Ground Pound'])
                             | difficulty(s_hard)
                         )
                     ),
@@ -1016,14 +1016,14 @@ passage_boss_table = {
     Passage.EMERALD: BossData(
         "Cractus",
         has('Ground Pound'),
-        not_difficulty(s_hard) | has('Enemy Jump') | advanced_logic()
+        not_difficulty(s_hard) | has('Stomp Jump') | advanced_logic()
     ),
     Passage.RUBY: BossData("Cuckoo Condor", has('Grab')),
     Passage.TOPAZ: BossData("Aerodent", has('Grab')),
     Passage.SAPPHIRE: BossData(
         "Catbat",
-        has('Ground Pound') & (has('Enemy Jump') | advanced_logic()),
-        has('Enemy Jump') | advanced_logic() & not_difficulty(s_hard)
+        has('Ground Pound') & (has('Stomp Jump') | advanced_logic()),
+        has('Stomp Jump') | advanced_logic() & not_difficulty(s_hard)
     ),
 }
 

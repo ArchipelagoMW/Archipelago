@@ -90,8 +90,8 @@ class TestAdvancedHard(TestHard):
             ['Doodle Woods - Gray Square Box', True, ['Progressive Grab']],
 
             ['Doodle Woods - Pink Circle Box', False, []],
-            ['Doodle Woods - Pink Circle Box', False, [], ['Enemy Jump']],
-            ['Doodle Woods - Pink Circle Box', True, ['Enemy Jump']],
+            ['Doodle Woods - Pink Circle Box', False, [], ['Stomp Jump']],
+            ['Doodle Woods - Pink Circle Box', True, ['Stomp Jump']],
 
             ['Doodle Woods - Purple Square Box', True, []],
 
@@ -175,10 +175,10 @@ class TestAdvancedHard(TestHard):
              ['Progressive Grab', 'Progressive Ground Pound']],
             ['Hotel Horror - Room 102 Box', False,
              ['Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound'],
-             ['Progressive Grab', 'Enemy Jump']],
+             ['Progressive Grab', 'Stomp Jump']],
             ['Hotel Horror - Room 102 Box', True, ['Progressive Grab', 'Progressive Grab']],
             ['Hotel Horror - Room 102 Box', True,
-             ['Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound', 'Enemy Jump'],
+             ['Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound', 'Stomp Jump'],
              ['Progressive Grab']],
 
             ['Hotel Horror - Room 303 Box', False, []],
@@ -186,10 +186,10 @@ class TestAdvancedHard(TestHard):
              ['Progressive Grab', 'Progressive Ground Pound']],
             ['Hotel Horror - Room 303 Box', False,
              ['Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound'],
-             ['Progressive Grab', 'Enemy Jump']],
+             ['Progressive Grab', 'Stomp Jump']],
             ['Hotel Horror - Room 303 Box', True, ['Progressive Grab', 'Progressive Grab']],
             ['Hotel Horror - Room 303 Box', True,
-             ['Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound', 'Enemy Jump'],
+             ['Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound', 'Stomp Jump'],
              ['Progressive Grab']],
 
             ['Hotel Horror - Room 402 Box', False, []],
@@ -197,10 +197,10 @@ class TestAdvancedHard(TestHard):
              ['Progressive Grab', 'Progressive Ground Pound']],
             ['Hotel Horror - Room 402 Box', False,
              ['Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound'],
-             ['Progressive Grab', 'Enemy Jump']],
+             ['Progressive Grab', 'Stomp Jump']],
             ['Hotel Horror - Room 402 Box', True, ['Progressive Grab', 'Progressive Grab']],
             ['Hotel Horror - Room 402 Box', True,
-             ['Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound', 'Enemy Jump'],
+             ['Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound', 'Stomp Jump'],
              ['Progressive Grab']],
 
             ['Hotel Horror - Exterior Box', False, []],
@@ -208,10 +208,10 @@ class TestAdvancedHard(TestHard):
              ['Progressive Grab', 'Progressive Ground Pound']],
             ['Hotel Horror - Exterior Box', False,
              ['Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound'],
-             ['Progressive Grab', 'Enemy Jump']],
+             ['Progressive Grab', 'Stomp Jump']],
             ['Hotel Horror - Exterior Box', True, ['Progressive Grab', 'Progressive Grab']],
             ['Hotel Horror - Exterior Box', True,
-             ['Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound', 'Enemy Jump'],
+             ['Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound', 'Stomp Jump'],
              ['Progressive Grab']],
 
             ['Hotel Horror - CD Box', False, []],
@@ -219,10 +219,10 @@ class TestAdvancedHard(TestHard):
              ['Progressive Grab', 'Progressive Ground Pound']],
             ['Hotel Horror - CD Box', False,
              ['Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound'],
-             ['Progressive Grab', 'Enemy Jump']],
+             ['Progressive Grab', 'Stomp Jump']],
             ['Hotel Horror - CD Box', True, ['Progressive Grab', 'Progressive Grab']],
             ['Hotel Horror - CD Box', True,
-             ['Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound', 'Enemy Jump'],
+             ['Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound', 'Stomp Jump'],
              ['Progressive Grab']],
         ])
 
@@ -258,8 +258,8 @@ class TestAdvancedSHard(TestSHard):
             ['Doodle Woods - Gray Square Box', True, ['Progressive Grab']],
 
             ['Doodle Woods - Pink Circle Box', False, []],
-            ['Doodle Woods - Pink Circle Box', False, [], ['Enemy Jump']],
-            ['Doodle Woods - Pink Circle Box', True, ['Enemy Jump']],
+            ['Doodle Woods - Pink Circle Box', False, [], ['Stomp Jump']],
+            ['Doodle Woods - Pink Circle Box', True, ['Stomp Jump']],
 
             ['Doodle Woods - Purple Square Box', True, []],
 

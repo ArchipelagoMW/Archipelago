@@ -189,10 +189,10 @@ class TestAdvancedHardOpenPortal(TestAdvancedHard, TestHardOpenPortal):
              ['Progressive Grab', 'Progressive Ground Pound']],
             ['Hotel Horror - CD Box', False,
              ['Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound'],
-             ['Progressive Grab', 'Enemy Jump']],
+             ['Progressive Grab', 'Stomp Jump']],
             ['Hotel Horror - CD Box', True, ['Progressive Grab', 'Progressive Grab']],
             ['Hotel Horror - CD Box', True,
-             ['Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound', 'Enemy Jump'],
+             ['Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound', 'Stomp Jump'],
              ['Progressive Grab']],
         ])
 
