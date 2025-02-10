@@ -287,8 +287,6 @@ class LMWorld(World):
             for location, data in LIGHT_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)
                 entry = LMLocation(self.player, location, region, data)
-                if self.options.boo_gates == 1 and self.options.boo_radar != 2:
-                    add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
                 if entry.code == 745:
                     add_rule(entry,
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value), "and")
