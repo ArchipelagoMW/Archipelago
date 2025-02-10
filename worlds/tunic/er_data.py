@@ -175,7 +175,7 @@ portal_mapping: List[Portal] = [
     Portal(name="Temple Door Exit", region="Sealed Temple",
            destination="Overworld Redux", tag="_main"),
 
-    Portal(name="Forest Belltower to Fortress", region="Forest Belltower Main",
+    Portal(name="Forest Belltower to Fortress", region="Forest Belltower Main behind bushes",
            destination="Fortress Courtyard", tag="_"),
     Portal(name="Forest Belltower to Forest", region="Forest Belltower Lower",
            destination="East Forest Redux", tag="_"),
@@ -221,7 +221,7 @@ portal_mapping: List[Portal] = [
 
     Portal(name="Guard House 2 Lower Exit", region="Guard House 2 Lower",
            destination="East Forest Redux", tag="_lower"),
-    Portal(name="Guard House 2 Upper Exit", region="Guard House 2 Upper",
+    Portal(name="Guard House 2 Upper Exit", region="Guard House 2 Upper before bushes",
            destination="East Forest Redux", tag="_upper"),
 
     Portal(name="Guard Captain Room Non-Gate Exit", region="Forest Boss Room",
@@ -601,6 +601,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Sealed Temple Rafters": RegionInfo("Temple"),
     "Forest Belltower Upper": RegionInfo("Forest Belltower"),
     "Forest Belltower Main": RegionInfo("Forest Belltower"),
+    "Forest Belltower Main behind bushes": RegionInfo("Forest Belltower"),
     "Forest Belltower Lower": RegionInfo("Forest Belltower"),
     "East Forest": RegionInfo("East Forest Redux"),
     "East Forest Dance Fox Spot": RegionInfo("East Forest Redux"),
@@ -608,7 +609,8 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Lower Forest": RegionInfo("East Forest Redux"),  # bottom of the forest
     "Guard House 1 East": RegionInfo("East Forest Redux Laddercave"),
     "Guard House 1 West": RegionInfo("East Forest Redux Laddercave"),
-    "Guard House 2 Upper": RegionInfo("East Forest Redux Interior"),
+    "Guard House 2 Upper before bushes": RegionInfo("East Forest Redux Interior"),
+    "Guard House 2 Upper after bushes": RegionInfo("East Forest Redux Interior"),
     "Guard House 2 Lower": RegionInfo("East Forest Redux Interior"),
     "Forest Boss Room": RegionInfo("Forest Boss Room"),
     "Forest Grave Path Main": RegionInfo("Sword Access"),
@@ -627,14 +629,16 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Beneath the Well Back": RegionInfo("Sewer"),  # the back two portals, and all 4 upper chests
     "West Garden before Terry": RegionInfo("Archipelagos Redux"),  # the lower entry point, near hero grave
     "West Garden after Terry": RegionInfo("Archipelagos Redux"),  # after Terry, up until next chompignons
+    "West Garden West Combat": RegionInfo("Archipelagos Redux"),  # for grass rando basically
     "West Garden at Dagger House": RegionInfo("Archipelagos Redux"),  # just outside magic dagger house
-    "West Garden South Checkpoint": RegionInfo("Archipelagos Redux"),
+    "West Garden South Checkpoint": RegionInfo("Archipelagos Redux"),  # the checkpoint and the blue lines area
     "Magic Dagger House": RegionInfo("archipelagos_house", dead_end=DeadEnd.all_cats),
-    "West Garden Portal": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted, outlet_region="West Garden by Portal"),
+    "West Garden Portal": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted,
+                                     outlet_region="West Garden by Portal"),
     "West Garden by Portal": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted),
     "West Garden Portal Item": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted),
     "West Garden Laurels Exit Region": RegionInfo("Archipelagos Redux"),
-    "West Garden before Boss": RegionInfo("Archipelagos Redux"),  # main west garden
+    "West Garden before Boss": RegionInfo("Archipelagos Redux"),  # up the ladder before garden knight
     "West Garden after Boss": RegionInfo("Archipelagos Redux"),
     "West Garden Hero's Grave Region": RegionInfo("Archipelagos Redux", outlet_region="West Garden before Terry"),
     "Ruined Atoll": RegionInfo("Atoll Redux"),
@@ -1026,6 +1030,12 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     "Forest Belltower Main": {
         "Forest Belltower Lower":
             [],
+        "Forest Belltower Main behind bushes":
+            [],
+    },
+    "Forest Belltower Main behind bushes": {
+        "Forest Belltower Main":
+            [],
     },
 
     "East Forest": {
@@ -1057,13 +1067,18 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Guard House 1 East":
             [["Hyperdash"], ["LS1"]],
     },
-
-    "Guard House 2 Upper": {
+    "Guard House 2 Upper before bushes": {
+        "Guard House 2 Upper after bushes":
+            [],
+    },
+    "Guard House 2 Upper after bushes": {
         "Guard House 2 Lower":
+            [],
+        "Guard House 2 Upper before bushes":
             [],
     },
     "Guard House 2 Lower": {
-        "Guard House 2 Upper":
+        "Guard House 2 Upper after bushes":
             [],
     },
 
@@ -1152,8 +1167,10 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     "West Garden after Terry": {
         "West Garden before Terry":
             [],
-        "West Garden South Checkpoint":
+        "West Garden West Combat":
             [],
+        "West Garden South Checkpoint":
+            [["Hyperdash"]],
         "West Garden Laurels Exit Region":
             [["LS1"]],
     },
@@ -1163,6 +1180,8 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "West Garden at Dagger House":
             [],
         "West Garden after Terry":
+            [["Hyperdash"]],
+        "West Garden West Combat":
             [],
     },
     "West Garden before Boss": {
