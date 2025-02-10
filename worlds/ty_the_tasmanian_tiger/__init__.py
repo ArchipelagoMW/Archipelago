@@ -68,6 +68,16 @@ class Ty1World(World):
             "DeathLink": self.options.death_link.value
         }
 
+    def generate_early(self) -> None:
+        if self.options.goal == 3:
+            if self.options.thegg_counts + self.options.extra_theggs < 24:
+                print("WARN [TY1] Goal is completion but thegg counts are set lower than maximum. More theggs will be added to the pool.")
+            if self.options.cog_counts + self.options.extra_cogs < 15:
+                print("WARN [TY1] Goal is completion but cog count is set lower than maximum. More cogs will be added to the pool.")
+        if self.options.goal == 2:
+            if self.options.thegg_counts < 24:
+                print("WARN [TY1] Goal is all theggs but thegg counts are set lower than maximum. More theggs will be added to the pool.")
+
     def create_item(self, name: str) -> Item:
         item_info = ty1_item_table[name]
         return Ty1Item(name, item_info.classification, item_info.code, self.player)

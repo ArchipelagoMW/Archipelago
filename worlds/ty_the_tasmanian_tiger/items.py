@@ -33,13 +33,14 @@ def create_items(world: MultiWorld, options: Ty1Options, player: int):
     total_location_count = len(world.get_unfilled_locations(player))
 
     # Generic
-    thegg_class = ItemClassification.progression_skip_balancing if options.goal == 2 or options.goal == 3 else (
-        ItemClassification.filler if options.level_unlock_style == 1 else ItemClassification.skip_balancing)
-    cog_class = ItemClassification.progression_skip_balancing if options.goal == 3 else ItemClassification.skip_balancing
-    create_multiple("Fire Thunder Egg", 21, world, player, thegg_class)
-    create_multiple("Ice Thunder Egg", 21, world, player, thegg_class)
-    create_multiple("Air Thunder Egg", 21, world, player, thegg_class)
-    create_multiple("Golden Cog", 90, world, player, cog_class)
+    create_multiple("Fire Thunder Egg", options.thegg_gating.value - 3, world, player, ItemClassification.progression_skip_balancing)
+    create_multiple("Fire Thunder Egg", options.extra_theggs.value, world, player, ItemClassification.filler)
+    create_multiple("Ice Thunder Egg", options.thegg_gating.value - 3, world, player, ItemClassification.progression_skip_balancing)
+    create_multiple("Ice Thunder Egg", options.extra_theggs.value, world, player, ItemClassification.filler)
+    create_multiple("Air Thunder Egg", options.thegg_gating.value - 3, world, player, ItemClassification.progression_skip_balancing)
+    create_multiple("Air Thunder Egg", options.extra_theggs.value, world, player, ItemClassification.filler)
+    create_multiple("Golden Cog", options.cog_gating.value * 6, world, player, ItemClassification.progression_skip_balancing)
+    create_multiple("Golden Cog", options.extra_cogs.value, world, player, ItemClassification.filler)
 
     # Bilbies
     create_multiple("Bilby - Two Up", 5, world, player)
@@ -52,16 +53,17 @@ def create_items(world: MultiWorld, options: Ty1Options, player: int):
     create_multiple("Bilby - Beyond the Black Stump", 5, world, player)
     create_multiple("Bilby - Rex Marks the Spot", 5, world, player)
 
-    # Stopwatches 
-    create_single("Stopwatch - Two Up", world, player)
-    create_single("Stopwatch - Walk in the Park", world, player)
-    create_single("Stopwatch - Ship Rex", world, player)
-    create_single("Stopwatch - Bridge on the River Ty", world, player)
-    create_single("Stopwatch - Snow Worries", world, player)
-    create_single("Stopwatch - Outback Safari", world, player)
-    create_single("Stopwatch - Lyre, Lyre Pants on Fire", world, player)
-    create_single("Stopwatch - Beyond the Black Stump", world, player)
-    create_single("Stopwatch - Rex Marks the Spot", world, player)
+    # Stopwatches
+    if options.gate_time_attacks:
+        create_single("Stopwatch - Two Up", world, player)
+        create_single("Stopwatch - Walk in the Park", world, player)
+        create_single("Stopwatch - Ship Rex", world, player)
+        create_single("Stopwatch - Bridge on the River Ty", world, player)
+        create_single("Stopwatch - Snow Worries", world, player)
+        create_single("Stopwatch - Outback Safari", world, player)
+        create_single("Stopwatch - Lyre, Lyre Pants on Fire", world, player)
+        create_single("Stopwatch - Beyond the Black Stump", world, player)
+        create_single("Stopwatch - Rex Marks the Spot", world, player)
 
     # Attributes
     if options.progressive_elementals:
@@ -78,10 +80,11 @@ def create_items(world: MultiWorld, options: Ty1Options, player: int):
         create_single("Frostyrang", world, player)
         create_single("Zappyrang", world, player)
         create_single("Doomerang", world, player)
-    create_single("Extra Health", world, player)
+    if options.scalesanity:
+        create_single("Extra Health", world, player)
     create_single("Zoomerang", world, player)
     create_single("Multirang", world, player)
-    create_single("Infrarang", world, player)
+    create_single("Infrarang", world, player, ItemClassification.progression if options.frames_require_infra else ItemClassification.useful)
     create_single("Megarang", world, player)
     create_single("Kaboomarang", world, player)
     create_single("Chronorang", world, player)
@@ -118,7 +121,7 @@ def create_items(world: MultiWorld, options: Ty1Options, player: int):
 
 
 def place_bilby_theggs(world: MultiWorld, options: Ty1Options, player: int):
-    classification = ItemClassification.progression_skip_balancing if options.goal.value == 2 or 3 else ItemClassification.useful
+    classification = ItemClassification.progression_skip_balancing
     a1_bilby_loc = world.get_location("Two Up - Bilby Completion", player)
     a1_bilby_thegg = Ty1Item("Fire Thunder Egg", classification, 0x8750000, player)
     a1_bilby_loc.place_locked_item(a1_bilby_thegg)
@@ -239,8 +242,8 @@ ty1_item_table: Dict[str, ItemData] = {
 
 
 junk_weights = {
-    "Picture Frame": 70,
-    "Extra Life": 20,
-    "Opal Magnet": 10
+    "Picture Frame": 55,
+    "Extra Life": 10,
+    "Opal Magnet": 35
 }
 

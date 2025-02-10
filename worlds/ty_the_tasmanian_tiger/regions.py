@@ -69,9 +69,12 @@ def create_regions(world: MultiWorld, options: Ty1Options, player: int):
     create_region(world, player, options, "Rainbow Cliffs - PF")
     create_region(world, player, options, "Bli Bli Station")
     create_region(world, player, options, "Bli Bli Station Gate")
+    create_region(world, player, options, "Bli Bli Station Gate - PF")
     create_region(world, player, options, "Pippy Beach")
+    create_region(world, player, options, "Pippy Beach - PF")
     create_region(world, player, options, "Lake Burril")
     create_region(world, player, options, "Final Gauntlet")
+    create_region(world, player, options, "Final Gauntlet - PF")
     create_region(world, player, options, "Two Up")
     create_region(world, player, options, "Two Up - PF")
     create_region(world, player, options, "Two Up - Upper Area")
@@ -81,11 +84,12 @@ def create_regions(world: MultiWorld, options: Ty1Options, player: int):
     create_region(world, player, options, "Walk in the Park - PF")
     create_region(world, player, options, "Ship Rex")
     create_region(world, player, options, "Ship Rex - PF")
-    create_region(world, player, options, "Ship Rex - Beyond Gate 1")
+    create_region(world, player, options, "Ship Rex - Beyond Gate")
+    create_region(world, player, options, "Ship Rex - Beyond Gate - PF")
     create_region(world, player, options, "Bull's Pen")
     create_region(world, player, options, "Bridge on the River Ty")
-    create_region(world, player, options, "Bridge on the River Ty - Beyond Broken Bridge")
     create_region(world, player, options, "Bridge on the River Ty - PF")
+    create_region(world, player, options, "Bridge on the River Ty - Beyond Broken Bridge")
     create_region(world, player, options, "Bridge on the River Ty - Beyond Broken Bridge - PF")
     create_region(world, player, options, "Snow Worries")
     create_region(world, player, options, "Snow Worries - PF")
@@ -93,7 +97,9 @@ def create_regions(world: MultiWorld, options: Ty1Options, player: int):
     create_region(world, player, options, "Outback Safari")
     create_region(world, player, options, "Crikey's Cove")
     create_region(world, player, options, "Lyre, Lyre Pants on Fire")
+    create_region(world, player, options, "Lyre, Lyre Pants on Fire - PF")
     create_region(world, player, options, "Lyre, Lyre Pants on Fire - Beyond Gate")
+    create_region(world, player, options, "Lyre, Lyre Pants on Fire - Beyond Gate - PF")
     create_region(world, player, options, "Beyond the Black Stump")
     create_region(world, player, options, "Beyond the Black Stump - PF")
     create_region(world, player, options, "Beyond the Black Stump - Upper Area")
@@ -110,26 +116,34 @@ def connect_all_regions(world: MultiWorld, player: int, options: Ty1Options, por
     if options.level_shuffle:
         world.random.shuffle(portal_map)
     if options.boss_shuffle:
-        world.random.shuffle(boss_map)
-    print(str(portal_map[0]) + " " + str(portal_map[1]) + " " + str(portal_map[2]))
+        world.random.shuffle(boss_map)        
     pr_mod = 1 if not options.start_with_boom.value and options.progressive_elementals.value else 0
     pl_mod = 1 if options.level_unlock_style.value == 1 else 0
     connect_regions(world, player, options, "Menu", "Rainbow Cliffs", "Menu -> Z1")
-    connect_regions(world, player, options, "Rainbow Cliffs", "Rainbow Cliffs - PF", "Z1 - Rang Needed",
+    connect_regions(world, player, options, "Rainbow Cliffs", "Rainbow Cliffs - PF", "Z1 - PF",
                     lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)),
                     lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)))
     connect_regions(world, player, options, "Rainbow Cliffs", "Bli Bli Station", "Z1 -> A Zone")
     connect_regions(world, player, options, "Bli Bli Station", "Bli Bli Station Gate", "A Zone Gate",
                     lambda state: (state.has("Progressive Rang", player, 1 + pr_mod) or state.has("Second Rang", player)))
+    connect_regions(world, player, options, "Bli Bli Station Gate", "Bli Bli Station Gate - PF", "A Zone Gate - PF",
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)),
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)))
     connect_regions(world, player, options, "Rainbow Cliffs", "Pippy Beach", "Z1 -> B Zone",
                     lambda state: (state.has("Progressive Rang", player, 5 + pr_mod) or state.has("Flamerang", player)),
                     lambda state: (state.has("Progressive Rang", player, 4 + pr_mod) or state.has("Flamerang", player) or state.has("Dive", player)))
+    connect_regions(world, player, options, "Pippy Beach", "Pippy Beach - PF", "B Zone - PF",
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)),
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)))
     connect_regions(world, player, options, "Rainbow Cliffs", "Lake Burril", "Z1 -> C Zone",
                     lambda state: (state.has("Progressive Rang", player, 6 + pr_mod) or state.has("Frostyrang", player)),
                     lambda state: (state.has("Progressive Rang", player, 4 + pr_mod) or state.has("Frostyrang", player) or state.has("Dive", player)))
     connect_regions(world, player, options, "Rainbow Cliffs", "Final Gauntlet", "Z1 -> E Zone",
                     lambda state: (state.has("Progressive Rang", player, 7 + pr_mod) or state.has("Zappyrang", player)),
                     lambda state: (state.has("Progressive Rang", player, 4 + pr_mod) or state.has("Zappyrang", player) or state.has("Dive", player)))
+    connect_regions(world, player, options, "Final Gauntlet", "Final Gauntlet - PF", "E Zone - PF",
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)),
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)))
 
     connect_regions(world, player, options, "Bli Bli Station", ty1_levels[Ty1LevelCode(portal_map[0])], "A1 Portal")
 
@@ -227,52 +241,70 @@ def connect_all_regions(world: MultiWorld, player: int, options: Ty1Options, por
     connect_regions(world, player, options, "Cass' Crest", "Final Battle", "D2 -> E4",
                     lambda state: (state.has("Progressive Rang", player, 1 + pr_mod) or state.has("Second Rang", player)),
                     lambda state: (state.has("Progressive Rang", player, 1 + pr_mod) or state.has("Second Rang", player)))
-    connect_regions(world, player, options, "Two Up", "Two Up - PF", "Two Up - Rang Needed",
-                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)),
-                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)))
+
+    connect_regions(world, player, options, "Two Up", "Two Up - PF", "Two Up - PF",
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)),
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)))
     connect_regions(world, player, options, "Two Up", "Two Up - Upper Area", "Two Up - Upper Area",
                     lambda state: (state.has("Swim", player) or state.has("Dive", player) or state.has("Second Rang", player) or state.has("Progressive Rang", player, 1 + pr_mod)))
-    connect_regions(world, player, options, "Two Up - Upper Area", "Two Up - Upper Area - PF", "Two Up - Upper Area - Rang Needed",
-                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)),
-                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)))
+    connect_regions(world, player, options, "Two Up - Upper Area", "Two Up - Upper Area - PF", "Two Up - Upper Area - PF",
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)),
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)))
     connect_regions(world, player, options, "Two Up", "Two Up - End Area", "Two Up - End Area",
                     lambda state: (state.has("Second Rang", player) or state.has("Progressive Rang", player, 1 + pr_mod)))
-    connect_regions(world, player, options, "Walk in the Park", "Walk in the Park - PF", "Walk in the Park - Rang Needed",
+
+    connect_regions(world, player, options, "Walk in the Park", "Walk in the Park - PF", "Walk in the Park - PF",
                     lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)),
                     lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)))
-    connect_regions(world, player, options, "Ship Rex", "Ship Rex - PF", "Ship Rex - Rang Needed",
-                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)),
-                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)))
-    connect_regions(world, player, options, "Ship Rex", "Ship Rex - Beyond Gate 1", "Ship Rex - Sea Gate 1",
+
+    connect_regions(world, player, options, "Ship Rex", "Ship Rex - PF", "Ship Rex - PF",
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)),
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)))
+    connect_regions(world, player, options, "Ship Rex", "Ship Rex - Beyond Gate", "Ship Rex - Sea Gate",
                     lambda state: (((state.has("Swim", player) or state.has("Dive", player)) and state.has("Aquarang", player)) or state.has("Progressive Rang", player, 3)),
                     lambda state: (state.has("Dive", player) or state.has("Progressive Rang", player, 2)))
-    connect_regions(world, player, options, "Bridge on the River Ty", "Bridge on the River Ty - PF", "Bridge on the River Ty - Rang Needed",
-                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)),
-                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)))
+    connect_regions(world, player, options, "Ship Rex - Beyond Gate", "Ship Rex - Beyond Gate - PF", "Ship Rex - Gate - PF",
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)),
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)))
+
+    connect_regions(world, player, options, "Bridge on the River Ty", "Bridge on the River Ty - PF", "Bridge on the River Ty - PF",
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)),
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)))
     connect_regions(world, player, options, "Bridge on the River Ty", "Bridge on the River Ty - Beyond Broken Bridge", "Bridge on the River Ty - Broken Bridge Glide",
                     lambda state: (state.has("Progressive Rang", player, 1 + pr_mod) or state.has("Second Rang", player)))
-    connect_regions(world, player, options, "Bridge on the River Ty - Beyond Broken Bridge", "Bridge on the River Ty - Beyond Broken Bridge - PF", "Bridge on the River Ty - Broken Bridge - Rang Needed",
-                    rule_adv=lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)))
-    connect_regions(world, player, options, "Snow Worries", "Snow Worries - PF", "Snow Worries - Rang Needed",
-                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)),
-                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)))
+    connect_regions(world, player, options, "Bridge on the River Ty - Beyond Broken Bridge", "Bridge on the River Ty - Beyond Broken Bridge - PF", "Bridge on the River Ty - Broken Bridge - PF",
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)),
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)))
+
+    connect_regions(world, player, options, "Snow Worries", "Snow Worries - PF", "Snow Worries - PF",
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)),
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)))
     connect_regions(world, player, options, "Snow Worries", "Snow Worries - Underwater", "Snow Worries - Underwater",
                     lambda state: (state.has("Swim", player) or state.has("Dive", player) or state.has("Progressive Rang", player, 2)),
                     lambda state: (state.has("Swim", player) or state.has("Dive", player) or state.has("Progressive Rang", player, 2)))
+
     connect_regions(world, player, options, "Lyre, Lyre Pants on Fire", "Lyre, Lyre Pants on Fire - Beyond Gate", "Lyre, Lyre Pants on Fire - Gate",
                     lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)),
                     lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)))
-    connect_regions(world, player, options, "Beyond the Black Stump", "Beyond the Black Stump - PF", "Beyond the Black Stump - Rang Needed",
-                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)),
-                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)))
+    connect_regions(world, player, options, "Lyre, Lyre Pants on Fire", "Lyre, Lyre Pants on Fire - PF", "Lyre, Lyre Pants on Fire - PF",
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)),
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)))
+    connect_regions(world, player, options, "Lyre, Lyre Pants on Fire - Beyond Gate", "Lyre, Lyre Pants on Fire - Beyond Gate - PF", "Lyre, Lyre Pants on Fire - Gate - PF",
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)),
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)))
+
+    connect_regions(world, player, options, "Beyond the Black Stump", "Beyond the Black Stump - PF", "Beyond the Black Stump - PF",
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)),
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)))
     connect_regions(world, player, options, "Beyond the Black Stump", "Beyond the Black Stump - Upper Area", "Beyond the Black Stump - Upper Area",
                     lambda state: (state.has("Progressive Rang", player, 1 + pr_mod)) or state.has("Second Rang", player))
-    connect_regions(world, player, options, "Beyond the Black Stump - Upper Area", "Beyond the Black Stump - Upper Area - PF", "Beyond the Black Stump - Upper Area - Rand Needed",
-                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)),
-                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)))
-    connect_regions(world, player, options, "Rex Marks the Spot", "Rex Marks the Spot - PF", "Rex Marks the Spot, Rang Needed",
-                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)),
-                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)))
+    connect_regions(world, player, options, "Beyond the Black Stump - Upper Area", "Beyond the Black Stump - Upper Area - PF", "Beyond the Black Stump - Upper Area - Rang Needed",
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)),
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)))
+
+    connect_regions(world, player, options, "Rex Marks the Spot", "Rex Marks the Spot - PF", "Rex Marks the Spot, PF",
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)),
+                    lambda state: (state.has("Progressive Rang", player, 0 + pr_mod) and (state.has("Infrarang", player) if options.frames_require_infra else True)))
     connect_regions(world, player, options, "Rex Marks the Spot", "Rex Marks the Spot - Underwater", "Rex Marks the Spot - Underwater",
                     lambda state: (state.has("Swim", player) or state.has("Dive", player) or state.has("Progressive Rang", player, 2)),
                     lambda state: (state.has("Swim", player) or state.has("Dive", player) or state.has("Progressive Rang", player, 2)))

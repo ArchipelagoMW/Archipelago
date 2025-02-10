@@ -7,19 +7,31 @@ class Goal(Choice):
     Determines the goal of the seed
 
     Final Battle: Beat Boss Cass in Final Battle and rescue your parents from The Dreaming
-
-    All Bosses: Beat all five bosses - (Bull, Crikey, Fluffy, Shadow, and Boss Cass)
-
-    All Thunder Eggs: Collect all Thunder Eggs
-
-    Completion: Reach 100% completion by collecting all Thunder Eggs, Golden Cogs, and Talismans
     """
     display_name = "Goal"
     option_final_battle = 0
-    option_all_bosses = 1
-    option_all_thunder_eggs = 2
-    option_completion = 3
     default = 0
+
+class GoalRequiresBosses(Toggle):
+    """
+    Determines if beating all bosses is a requirement to complete the goal
+    """
+    display_name = "Goal Requires Bosses"
+
+class GoalRequiresTheggChecks(Toggle):
+    """
+    Determines if Thunder Egg checks are required to complete the goal
+    """
+    display_name = "Goal Requires Thegg Checks"
+
+class ThunderEggRequirements(Range):
+    """
+    If Thunder Egg checks are required, determines how many thunder egg checks in each level must be completed to complete the goal
+    """
+    display_name = "Thegg Requirements"
+    range_start = 1
+    range_end = 8
+    default = 4
 
 class LogicDifficulty(Choice):
     """
@@ -27,7 +39,7 @@ class LogicDifficulty(Choice):
 
     Standard: The logic assumes elemental rangs are required to enter hubs
 
-    Advanced: Assumes hubs may be entered early and elemental rangs are optional.
+    Advanced: Assumes hubs may be entered early and elemental rangs are optional
     """
     display_name = "Logic Difficulty"
     option_standard = 0
@@ -66,12 +78,12 @@ class LevelUnlockStyle(Choice):
 
     Checks: The first level is unlocked from the start but all other levels are unlocked via checks
 
-    Vanilla Bosses: The first level is unlocked from the start. Bosses are unlocked via vanilla hub Thunder Egg counts. All other levels are unlocked via checks
+    Checks - No Bosses: The first level is unlocked from the start. Bosses are unlocked via hub Thunder Egg counts. All other levels are unlocked via checks
     """
     display_name = "Level Unlock Style"
     option_vanilla = 0
     option_checks = 1
-    option_vanilla_bosses = 2
+    option_checks_no_bosses = 2
     default = 1
 
 class ProgressiveLevel(DefaultOnToggle):
@@ -80,62 +92,52 @@ class ProgressiveLevel(DefaultOnToggle):
     """
     display_name = "Progressive Level"
 
-class HubThunderEggCounts(Range):
+class ThunderEggGating(Range):
     """
-    If bosses are unlocked via vanilla hub Thunder Egg counts, required count per hub can be set here
+    If bosses are unlocked via hub Thunder Egg counts, required count per hub can be set here
+    This also sets the required Thunder Egg count to receive the elemental attribute check after completing bosses
     """
-    display_name = "Hub Thunder Egg Requirement"
+    display_name = "Thunder Egg Gating"
     range_start = 0
     range_end = 24
     default = 17
 
-class Cogsanity(Choice):
+class ExtraThunderEggs(Range):
     """
-    Determines how cogs grant checks
-
-    Each Cog: Every cog grants a check (90 Locations)
-
-    Per Level: Collecting all 10 cogs in a level grants a check (9 Locations)
-
-    None: Cogs do not grant any checks
+    Sets number of additional thunder eggs of each type to add to the pool
+    WARNING - Setting this value high without sanity is likely to lead to generation failures
     """
-    display_name = "Cogsanity"
-    option_each_cog = 0
-    option_per_level = 1
-    option_none = 2
-    default = 0
+    display_name = "Extra Thunder Eggs"
+    range_start = 0
+    range_end = 24
+    default = 7
 
-class Bilbysanity(Choice):
+class CogGating(Range):
     """
-    Determines how bilbies grant checks
-
-    All No TE: All bilbies grant checks but no check is granted for the bilby Thunder Eggs (36 Locations)
-
-    All With TE: Every bilby grants a check as well as the bilby Thunder Eggs (45 Locations)
-
-    None: Bilbies do not grant any checks
+    Cog requirement count for each attribute check in Julius' lab
     """
-    display_name = "Bilbysanity"
-    option_all_no_te = 0
-    option_all_with_te = 1
-    option_none = 2
-    default = 0
+    display_name = "Cog Gating"
+    range_start = 0
+    range_end = 15
+    default = 10
 
-class Attributesanity(Choice):
+class ExtraCogs(Range):
     """
-    Determines how rangs and abilities grant checks
-
-    Skip Elementals: All rangs and abilities except elemental rangs grant checks (avoids double check from talismans) (12 Locations)
-
-    All: All rangs and abilities grant checks (15 Locations)
-
-    None: Rangs and abilities do not grant any checks
+    Sets number of additional golden cogs to add to the pool
+    WARNING - Setting this value high without sanity is likely to lead to generation failures
     """
-    display_name = "Attributesanity"
-    option_skip_elementals = 0
-    option_all = 1
-    option_none = 2
-    default = 0
+    display_name = "Extra Cogs"
+    range_start = 0
+    range_end = 90
+    default = 30
+
+class GateTimeAttacks(Toggle):
+    """
+    If true, adds Stopwatch items to the pool which unlock the time attacks for each level
+    If false, time attacks are unlocked by completing the main objective thunder egg check for the level (vanilla)
+    Also adds checks for beating specific times in the time attacks
+    """
+    display_name = "Gate Time Attacks"
 
 class Framesanity(Choice):
     """
@@ -153,6 +155,18 @@ class Framesanity(Choice):
     option_none = 2
     default = 0
 
+class FramesRequireInfra(Toggle):
+    """
+    Determines whether the generator considers picture frames checks to be logically locked behind the infrarang
+    """
+    display_name = "Frames Require Infra"
+
+class Scalesanity(Toggle):
+    """
+    Determines whether each rainbow scale grants a check as well as the attribute check for finding all 25. Also adds extra health to the pool.
+    """
+    display_name = "Scalesanity"
+
 class JunkFillPercentage(Range):
     """
     Replace a percentage of non-required checks in the item pool with random junk items
@@ -164,26 +178,32 @@ class JunkFillPercentage(Range):
 
 
 ty1_option_groups = [
-    OptionGroup("General Options", [
+    OptionGroup("Goal Options", [
         Goal,
+        GoalRequiresBosses,
+        GoalRequiresTheggChecks,
+        ThunderEggRequirements,
+    ]),
+    OptionGroup("Logic Options", [
         LogicDifficulty,
         ProgressiveElementals,
-        StartWithBoom
-    ]),
-    OptionGroup("Stages", [
+        StartWithBoom,
+        FramesRequireInfra,
+        ThunderEggGating,
+        ExtraThunderEggs,
+        CogGating,
+        ExtraCogs,
         LevelShuffle,
         BossShuffle,
         LevelUnlockStyle,
         ProgressiveLevel,
-        HubThunderEggCounts,
+        GateTimeAttacks,
     ]),
     OptionGroup("Sanity Options", [
-        Cogsanity,
-        Bilbysanity,
-        Attributesanity,
         Framesanity,
+        Scalesanity,
     ]),
-    OptionGroup("Junk", [
+    OptionGroup("Junk Options", [
         JunkFillPercentage,
     ]),
     OptionGroup("Death Link", [
@@ -194,20 +214,28 @@ ty1_option_groups = [
 @dataclass
 class Ty1Options(PerGameCommonOptions):
     goal: Goal
+    req_bosses: GoalRequiresBosses
+    req_theggs: GoalRequiresTheggChecks
+    thegg_reqs: ThunderEggRequirements
+
     logic_difficulty: LogicDifficulty
     progressive_elementals: ProgressiveElementals
     start_with_boom: StartWithBoom
+
+    thegg_gating: ThunderEggGating
+    extra_theggs: ExtraThunderEggs
+    cog_gating: CogGating
+    extra_cogs: ExtraCogs
+    gate_time_attacks: GateTimeAttacks
 
     level_shuffle: LevelShuffle
     boss_shuffle: BossShuffle
     level_unlock_style: LevelUnlockStyle
     progressive_level: ProgressiveLevel
-    hub_te_counts: HubThunderEggCounts
 
-    cogsanity: Cogsanity
-    bilbysanity: Bilbysanity
-    attributesanity: Attributesanity
     framesanity: Framesanity
+    frames_require_infra: FramesRequireInfra
+    scalesanity: Scalesanity
 
     junk_fill_percentage: JunkFillPercentage
     death_link: DeathLink

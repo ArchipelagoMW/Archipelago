@@ -83,6 +83,9 @@ def get_location_rules(world: MultiWorld, options: Ty1Options, player: int):
                      (state.has("Dive", player) or has_progressive_rang(player, options, state, 4)))
                     or (options.logic_difficulty == 1 and
                         (state.has("Dive", player) or state.has("Zappyrang", player) or has_progressive_rang(player, options, state, 4))),
+            "BotRT - Neddy The Bully":
+                lambda state:
+                    has_progressive_rang(player, options, state, 0),
             "Snow Worries - Collect 300 Opals":
                 lambda state:
                     state.has("Aquarang", player) or has_progressive_rang(player, options, state, 3),
@@ -402,6 +405,33 @@ def get_location_rules(world: MultiWorld, options: Ty1Options, player: int):
             "Attribute - Zappyrang":
                 lambda state:
                     has_theggs(player, state, TheggType.AIR_THEGG, options.hub_te_counts.value) and state.has("Cockatoo Talisman", player),
+            # Above water next to Julius' lab (pontoon scale)
+            "Rainbow Scale 11":
+                lambda state:
+                    (options.logic_difficulty == 0 and
+                        (state.has("Second Rang", player) or has_progressive_rang(player, options, state, 1)))
+                    or (options.logic_difficulty == 1 and
+                        (state.has("Swim", player) or state.has("Second Rang", player) or has_progressive_rang(player, options, state, 1))),
+            # Inside starting pillar
+            "Rainbow Scale 15":
+                lambda state:
+                    (options.logic_difficulty == 0 and
+                        (state.has("Second Rang", player) or has_progressive_rang(player, options, state, 1)))
+                    or (options.logic_difficulty == 1),
+            # Underwater near Julius' lab
+            "Rainbow Scale 16":
+                lambda state:
+                    state.has("Swim", player) or state.has("Dive", player) or has_progressive_rang(player, options, state, 2),
+            # Underwater near waterfall cave
+            "Rainbow Scale 21":
+                lambda state:
+                    state.has("Swim", player) or state.has("Dive", player) or has_progressive_rang(player, options, state, 2),
+            # Floating in the air next to starting pillar
+            "Rainbow Scale 24":
+                lambda state:
+                    (options.logic_difficulty == 0 and
+                         (state.has("Second Rang", player) or has_progressive_rang(player, options, state, 1)))
+                    or (options.logic_difficulty == 1),
         }
     }
     return location_rules

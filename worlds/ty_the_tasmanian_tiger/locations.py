@@ -31,8 +31,6 @@ def create_locations(player: int, options: Ty1Options, reg: Region):
     for (key, data) in thunder_eggs_dict.items():
         if data.region != reg.name:
             continue
-        if options.bilbysanity == 0 and "Find 5 Bilbies" in key:
-            continue
         create_location(player, options, reg, key, data)
     # BILBY COMPLETION
     for (key, data) in bilby_completion_dict.items():
@@ -45,17 +43,15 @@ def create_locations(player: int, options: Ty1Options, reg: Region):
             continue
         create_location(player, options, reg, key, data)
     # GOLDEN COGS
-    if options.cogsanity == 0:
-        for (key, data) in golden_cogs_dict.items():
-            if data.region != reg.name:
-                continue
-            create_location(player, options, reg, key, data)
+    for (key, data) in golden_cogs_dict.items():
+        if data.region != reg.name:
+            continue
+        create_location(player, options, reg, key, data)
     # BILBIES
-    if options.bilbysanity != 2:
-        for (key, data) in bilbies_dict.items():
-            if data.region != reg.name:
-                continue
-            create_location(player, options, reg, key, data)
+    for (key, data) in bilbies_dict.items():
+        if data.region != reg.name:
+            continue
+        create_location(player, options, reg, key, data)
     # PICTURE FRAMES
     if options.framesanity == 0:
         for (key, data) in picture_frames_dict.items():
@@ -69,23 +65,25 @@ def create_locations(player: int, options: Ty1Options, reg: Region):
                 continue
             create_location(player, options, reg, key, data)
     # COG COMPLETION
-    if options.cogsanity == 1:
-        for (key, data) in cog_completion_dict.items():
-            if data.region != reg.name:
-                continue
-            create_location(player, options, reg, key, data)
+    for (key, data) in cog_completion_dict.items():
+        if data.region != reg.name:
+            continue
+        create_location(player, options, reg, key, data)
     # ATTRIBUTES
-    if options.attributesanity != 2:
-        for (key, data) in attributes_dict.items():
-            if data.region != reg.name:
-                continue
-            create_location(player, options, reg, key, data)
+    for (key, data) in attributes_dict.items():
+        if data.region != reg.name:
+            continue
+        create_location(player, options, reg, key, data)
     # ELEMENTAL RANGS
-    if options.attributesanity == 1:
-        for (key, data) in elemental_rangs_dict.items():
-            if data.region != reg.name:
-                continue
-            create_location(player, options, reg, key, data)
+    for (key, data) in elemental_rangs_dict.items():
+        if data.region != reg.name:
+            continue
+        create_location(player, options, reg, key, data)
+    # RAINBOW SCALES
+    for (key, data) in rainbow_scales_dict.items():
+        if data.region != reg.name:
+            continue
+        create_location(player, options, reg, key, data)
 
 # Thunder_eggs Dictionary
 thunder_eggs_dict = {
@@ -125,21 +123,21 @@ thunder_eggs_dict = {
         LocData(0x0875010F, "Walk in the Park"),
     # Ship -----------------------------------------------------------------------------------------------------------
     "Ship Rex - Collect 300 Opals":
-        LocData(0x08750110, "Ship Rex - Beyond Gate 1"),
+        LocData(0x08750110, "Ship Rex - Beyond Gate"),
     "Ship Rex - Find 5 Bilbies":
-        LocData(0x08750111, "Ship Rex - Beyond Gate 1"),
+        LocData(0x08750111, "Ship Rex - Beyond Gate"),
     "Ship Rex - Race Rex":
         LocData(0x08750112, "Ship Rex"),
     "Ship Rex - Where's Elle?":
-        LocData(0x08750113, "Ship Rex - Beyond Gate 1"),
+        LocData(0x08750113, "Ship Rex - Beyond Gate"),
     "Ship Rex - Aurora's Kids":
-        LocData(0x08750114, "Ship Rex - Beyond Gate 1"),
+        LocData(0x08750114, "Ship Rex - Beyond Gate"),
     "Ship Rex - Quicksand Coconuts":
-        LocData(0x08750115, "Ship Rex - Beyond Gate 1"),
+        LocData(0x08750115, "Ship Rex - Beyond Gate"),
     "Ship Rex - Ship Wreck":
-        LocData(0x08750116, "Ship Rex - Beyond Gate 1"),
+        LocData(0x08750116, "Ship Rex - Beyond Gate"),
     "Ship Rex - Nest Egg":
-        LocData(0x08750117, "Ship Rex - Beyond Gate 1"),
+        LocData(0x08750117, "Ship Rex - Beyond Gate"),
     # Bridge ---------------------------------------------------------------------------------------------------------
     "BotRT - Collect 300 Opals":
         LocData(0x08750118, "Bridge on the River Ty - Beyond Broken Bridge"),
@@ -156,7 +154,7 @@ thunder_eggs_dict = {
     "BotRT - Ty Diving":
         LocData(0x0875011E, "Bridge on the River Ty - Beyond Broken Bridge"),
     "BotRT - Neddy The Bully":
-        LocData(0x0875011F, "Bridge on the River Ty - Beyond Broken Bridge - PF"),
+        LocData(0x0875011F, "Bridge on the River Ty - Beyond Broken Bridge"),
     # Snow -----------------------------------------------------------------------------------------------------------
     "Snow Worries - Collect 300 Opals":
         LocData(0x08750120, "Snow Worries - Underwater"),
@@ -308,34 +306,34 @@ golden_cogs_dict = {
         LocData(0x0875015B, "Walk in the Park"),
     # On floating platform to the right after entering spire area beyond gate 2
     "Ship Rex - Golden Cog 1":
-        LocData(0x0875015C, "Ship Rex - Beyond Gate 1"),
-    # On pillar to the right after entering main area beyond gate 1
+        LocData(0x0875015C, "Ship Rex - Beyond Gate"),
+    # On pillar to the right after entering main area Beyond Gate
     "Ship Rex - Golden Cog 2":
-        LocData(0x0875015D, "Ship Rex - Beyond Gate 1"),
+        LocData(0x0875015D, "Ship Rex - Beyond Gate"),
     # Wood platform at start
     "Ship Rex - Golden Cog 3":
         LocData(0x0875015E, "Ship Rex"),
     # Large rockpool
     "Ship Rex - Golden Cog 4":
-        LocData(0x0875015F, "Ship Rex - Beyond Gate 1"),
+        LocData(0x0875015F, "Ship Rex - Beyond Gate"),
     # Floating platform reached from geyser
     "Ship Rex - Golden Cog 5":
-        LocData(0x08750160, "Ship Rex - Beyond Gate 1"),
+        LocData(0x08750160, "Ship Rex - Beyond Gate"),
     # Island in the corner near end of coconuts (left of eels)
     "Ship Rex - Golden Cog 6":
-        LocData(0x08750161, "Ship Rex - Beyond Gate 1"),
+        LocData(0x08750161, "Ship Rex - Beyond Gate"),
     # Small rockpool
     "Ship Rex - Golden Cog 7":
-        LocData(0x08750162, "Ship Rex - Beyond Gate 1"),
+        LocData(0x08750162, "Ship Rex - Beyond Gate"),
     # Top of spire
     "Ship Rex - Golden Cog 8":
-        LocData(0x08750163, "Ship Rex - Beyond Gate 1"),
+        LocData(0x08750163, "Ship Rex - Beyond Gate"),
     # Floating platform near opal machine
     "Ship Rex - Golden Cog 9":
-        LocData(0x08750164, "Ship Rex - Beyond Gate 1"),
+        LocData(0x08750164, "Ship Rex - Beyond Gate"),
     # Large raised area in ship wreck area
     "Ship Rex - Golden Cog 10":
-        LocData(0x08750165, "Ship Rex - Beyond Gate 1"),
+        LocData(0x08750165, "Ship Rex - Beyond Gate"),
     # On pillar near big tree in starting area (glide down from higher area)
     "BotRT - Golden Cog 1":
         LocData(0x08750166, "Bridge on the River Ty"),
@@ -541,15 +539,15 @@ bilbies_dict = {
     "WitP - Bilby Grandma":
         LocData(0x087501B5, "Walk in the Park"),
     "Ship Rex - Bilby Dad":
-        LocData(0x087501B6, "Ship Rex - Beyond Gate 1"),
+        LocData(0x087501B6, "Ship Rex - Beyond Gate"),
     "Ship Rex - Bilby Mum":
-        LocData(0x087501B7, "Ship Rex - Beyond Gate 1"),
+        LocData(0x087501B7, "Ship Rex - Beyond Gate"),
     "Ship Rex - Bilby Boy":
-        LocData(0x087501B8, "Ship Rex - Beyond Gate 1"),
+        LocData(0x087501B8, "Ship Rex - Beyond Gate"),
     "Ship Rex - Bilby Girl":
-        LocData(0x087501B9, "Ship Rex - Beyond Gate 1"),
+        LocData(0x087501B9, "Ship Rex - Beyond Gate"),
     "Ship Rex - Bilby Grandma":
-        LocData(0x087501BA, "Ship Rex - Beyond Gate 1"),
+        LocData(0x087501BA, "Ship Rex - Beyond Gate"),
     "BotRT - Bilby Dad":
         LocData(0x087501BB, "Bridge on the River Ty"),
     "BotRT - Bilby Mum":
@@ -631,16 +629,16 @@ picture_frames_dict = {
         LocData(0x087501DD, "Rainbow Cliffs - PF"),
     # Near portal to Cass' Crest in E-zone
     "Rainbow Cliffs - PF 6":
-        LocData(0x087501DE, "Final Gauntlet"),
+        LocData(0x087501DE, "Final Gauntlet - PF"),
     # On the way to A-zone
     "Rainbow Cliffs - PF 7":
         LocData(0x087501DF, "Rainbow Cliffs - PF"),
     # In B-zone
     "Rainbow Cliffs - PF 8":
-        LocData(0x087501E0, "Pippy Beach"),
+        LocData(0x087501E0, "Pippy Beach - PF"),
     # Between houses in A-zone
     "Rainbow Cliffs - PF 9":
-        LocData(0x087501E1, "Bli Bli Station Gate"),
+        LocData(0x087501E1, "Bli Bli Station Gate - PF"),
     # At start
     "Two Up - PF 1":
         LocData(0x087501E2, "Two Up - PF"),
@@ -682,19 +680,19 @@ picture_frames_dict = {
         LocData(0x087501EE, "Walk in the Park - PF"),
     # Top of spire
     "Ship Rex - PF 1":
-        LocData(0x087501EF, "Ship Rex - Beyond Gate 1"),
+        LocData(0x087501EF, "Ship Rex - Beyond Gate - PF"),
     # Small island in Ship Wreck area
     "Ship Rex - PF 2":
-        LocData(0x087501F0, "Ship Rex - Beyond Gate 1"),
+        LocData(0x087501F0, "Ship Rex - Beyond Gate - PF"),
     # Ledge between Nest and Coconut start
     "Ship Rex - PF 3":
-        LocData(0x087501F1, "Ship Rex - Beyond Gate 1"),
+        LocData(0x087501F1, "Ship Rex - Beyond Gate - PF"),
     # Side of island near tunnel into rock pool
     "Ship Rex - PF 4":
-        LocData(0x087501F2, "Ship Rex - Beyond Gate 1"),
+        LocData(0x087501F2, "Ship Rex - Beyond Gate - PF"),
     # End of coconuts - Far
     "Ship Rex - PF 5":
-        LocData(0x087501F3, "Ship Rex - Beyond Gate 1"),
+        LocData(0x087501F3, "Ship Rex - Beyond Gate - PF"),
     # Above shed at start
     "Ship Rex - PF 6":
         LocData(0x087501F4, "Ship Rex - PF"),
@@ -706,7 +704,7 @@ picture_frames_dict = {
         LocData(0x087501F6, "Ship Rex - PF"),
     # End of coconuts - Near
     "Ship Rex - PF 9":
-        LocData(0x087501F7, "Ship Rex - Beyond Gate 1"),
+        LocData(0x087501F7, "Ship Rex - Beyond Gate - PF"),
     # Above Neddy bilby (Above bridge)
     "BotRT - PF 1":
         LocData(0x087501F8, "Bridge on the River Ty - Beyond Broken Bridge - PF"),
@@ -841,19 +839,19 @@ picture_frames_dict = {
         LocData(0x08750223, "Snow Worries - PF"),
     # Between "Jump to the other side" gap
     "LLPoF - PF 1":
-        LocData(0x08750224, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x08750224, "Lyre, Lyre Pants on Fire - Beyond Gate - PF"),
     # At Start
     "LLPoF - PF 2":
-        LocData(0x08750225, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x08750225, "Lyre, Lyre Pants on Fire - PF"),
     # Bottom of slide
     "LLPoF - PF 3":
-        LocData(0x08750226, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x08750226, "Lyre, Lyre Pants on Fire - Beyond Gate - PF"),
     # Next to bounce tree
     "LLPoF - PF 4":
-        LocData(0x08750227, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x08750227, "Lyre, Lyre Pants on Fire - Beyond Gate - PF"),
     # Next to dunny @ top of slide
     "LLPoF - PF 5":
-        LocData(0x08750228, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x08750228, "Lyre, Lyre Pants on Fire - Beyond Gate - PF"),
     # Behind cable car platform house
     "BtBS - PF 1":
         LocData(0x08750229, "Beyond the Black Stump - Upper Area - PF"),
@@ -1032,7 +1030,7 @@ cog_completion_dict = {
     "WitP - All Golden Cogs":
         LocData(0x087501A3, "Walk in the Park"),
     "Ship Rex - All Golden Cogs":
-        LocData(0x087501A4, "Ship Rex - Beyond Gate 1"),
+        LocData(0x087501A4, "Ship Rex - Beyond Gate"),
     "BotRT - All Golden Cogs":
         LocData(0x087501A5, "Bridge on the River Ty - Beyond Broken Bridge"),
     "Snow Worries - All Golden Cogs":
@@ -1050,19 +1048,19 @@ cog_completion_dict = {
 # Frame_completion Dictionary
 frame_completion_dict = {
     "Rainbow Cliffs - All Picture Frames":
-        LocData(0x08750258, "Final Gauntlet"),
+        LocData(0x08750258, "Final Gauntlet - PF"),
     "Two Up - All Picture Frames":
         LocData(0x08750259, "Two Up - Upper Area - PF"),
     "WitP - All Picture Frames":
         LocData(0x0875025A, "Walk in the Park - PF"),
     "Ship Rex - All Picture Frames":
-        LocData(0x0875025B, "Ship Rex - Beyond Gate 1"),
+        LocData(0x0875025B, "Ship Rex - Beyond Gate - PF"),
     "BotRT - All Picture Frames":
         LocData(0x0875025C, "Bridge on the River Ty - Beyond Broken Bridge - PF"),
     "Snow Worries - All Picture Frames":
         LocData(0x0875025D, "Snow Worries - PF"),
     "LLPoF - All Picture Frames":
-        LocData(0x0875025E, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x0875025E, "Lyre, Lyre Pants on Fire - Beyond Gate - PF"),
     "BtBS - All Picture Frames":
         LocData(0x0875025F, "Beyond the Black Stump - Upper Area - PF"),
     "RMtS - All Picture Frames":
@@ -1115,6 +1113,84 @@ elemental_rangs_dict = {
         LocData(0x0875031C, "Rainbow Cliffs")
 }
 
+rainbow_scales_dict = {
+    # Behind right-hand house in A-zone
+    "Rainbow Scale 1":
+        LocData(0x8750320, "Bli Bli Station Gate"),
+    # Behind left-hand house in A-zone
+    "Rainbow Scale 2":
+        LocData(0x8750321, "Bli Bli Station Gate"),
+    # In corner hidden behind Julius' lab
+    "Rainbow Scale 3":
+        LocData(0x8750322, "Rainbow Cliffs"),
+    # Under Thunder Egg collector in B-zone
+    "Rainbow Scale 4":
+        LocData(0x8750323, "Pippy Beach"),
+    # Just past flame logs in C-zone
+    "Rainbow Scale 5":
+        LocData(0x8750324, "Lake Burril"),
+    # On small ledge on the side of starting pillar
+    "Rainbow Scale 6":
+        LocData(0x8750325, "Rainbow Cliffs"),
+    # Inside waterfall cave
+    "Rainbow Scale 7":
+        LocData(0x8750326, "Rainbow Cliffs"),
+    # Corner island next to waterfall cave
+    "Rainbow Scale 8":
+        LocData(0x8750327, "Rainbow Cliffs"),
+    # Side of path between B-zone and Julius' lab 1
+    "Rainbow Scale 9":
+        LocData(0x8750328, "Rainbow Cliffs"),
+    # Next to extra life
+    "Rainbow Scale 10":
+        LocData(0x8750329, "Rainbow Cliffs"),
+    # Above water next to Julius' lab (pontoon scale)
+    "Rainbow Scale 11":
+        LocData(0x875032A, "Rainbow Cliffs"),
+    # After pillar platforms leading up to C-zone
+    "Rainbow Scale 12":
+        LocData(0x875032B, "Rainbow Cliffs"),
+    # In the water next to pillar platforms leading up to C-zone
+    "Rainbow Scale 13":
+        LocData(0x875032C, "Rainbow Cliffs"),
+    # Behind rock at entrance to B-zone
+    "Rainbow Scale 14":
+        LocData(0x875032D, "Rainbow Cliffs"),
+    # Inside starting pillar
+    "Rainbow Scale 15":
+        LocData(0x875032E, "Rainbow Cliffs"),
+    # Underwater near Julius' lab
+    "Rainbow Scale 16":
+        LocData(0x875032F, "Rainbow Cliffs"),
+    # On wooden platform in C-zone
+    "Rainbow Scale 17":
+        LocData(0x8750330, "Lake Burril"),
+    # Under Thunder Egg collector in C-zone
+    "Rainbow Scale 18":
+        LocData(0x8750331, "Lake Burril"),
+    # Just past ice wall in B-zone
+    "Rainbow Scale 19":
+        LocData(0x8750332, "Pippy Beach"),
+    # Next to water wheel on wooden walkway at Julius' lab
+    "Rainbow Scale 20":
+        LocData(0x8750333, "Rainbow Cliffs"),
+    # Underwater near waterfall cave
+    "Rainbow Scale 21":
+        LocData(0x8750334, "Rainbow Cliffs"),
+    # Just past E-zone gate
+    "Rainbow Scale 22":
+        LocData(0x8750335, "Final Gauntlet"),
+    # Hidden around corner in E-zone
+    "Rainbow Scale 23":
+        LocData(0x8750336, "Final Gauntlet"),
+    # Floating in the air next to starting pillar
+    "Rainbow Scale 24":
+        LocData(0x8750337, "Rainbow Cliffs"),
+    # Under Thunder Egg collector in A-zone
+    "Rainbow Scale 25":
+        LocData(0x8750338, "Rainbow Cliffs"),
+}
+
 ty1_location_table = {
     **thunder_eggs_dict,
     **golden_cogs_dict,
@@ -1125,5 +1201,6 @@ ty1_location_table = {
     **frame_completion_dict,
     **bilby_completion_dict,
     **talismans_dict,
-    **elemental_rangs_dict
+    **elemental_rangs_dict,
+    **rainbow_scales_dict
 }
