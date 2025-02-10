@@ -60,7 +60,7 @@ class KH1ClientCommandProcessor(ClientCommandProcessor):
 class KH1Context(CommonContext):
     command_processor: int = KH1ClientCommandProcessor
     game = "Kingdom Hearts"
-    items_handling = 0b111  # full remote
+    items_handling = 0b011  # full remote
 
     def __init__(self, server_address, password):
         super(KH1Context, self).__init__(server_address, password)

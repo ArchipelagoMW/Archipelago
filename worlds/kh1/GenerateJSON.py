@@ -76,5 +76,6 @@ def get_settings(self):
                     "death_link": str(self.options.death_link.current_key),
                     "donald_death_link": bool(self.options.donald_death_link),
                     "goofy_death_link": bool(self.options.goofy_death_link),
-                    "destiny_islands": bool(self.options.destiny_islands)}
+                    "destiny_islands": bool(self.options.destiny_islands),
+                    "starting_items": [item.code for item in self.multiworld.precollected_items[self.player]]}
     return settings
