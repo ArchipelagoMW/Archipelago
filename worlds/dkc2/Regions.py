@@ -77,14 +77,12 @@ def create_regions(world: "DKC2World", active_locations):
     stronghold_showdown_map = create_region(multiworld, player, active_locations, RegionName.stronghold_showdown_map)
 
     screechs_sprint_map = create_region(multiworld, player, active_locations, RegionName.screechs_sprint_map)
-    k_rool_duel_map = create_region(multiworld, player, active_locations, RegionName.k_rool_duel_map)
 
     jungle_jinx_map = create_region(multiworld, player, active_locations, RegionName.jungle_jinx_map)
     black_ice_battle_map = create_region(multiworld, player, active_locations, RegionName.black_ice_battle_map)
     klobber_karnage_map = create_region(multiworld, player, active_locations, RegionName.klobber_karnage_map)
     fiery_furnace_map = create_region(multiworld, player, active_locations, RegionName.fiery_furnace_map)
     animal_antics_map = create_region(multiworld, player, active_locations, RegionName.animal_antics_map)
-    krocodile_core_map = create_region(multiworld, player, active_locations, RegionName.krocodile_core_map)
 
     # Level regions
     pirate_panic_level = create_region(multiworld, player, active_locations, RegionName.pirate_panic_level)
@@ -196,13 +194,11 @@ def create_regions(world: "DKC2World", active_locations):
         toxic_tower_map,
         stronghold_showdown_map,
         screechs_sprint_map,
-        k_rool_duel_map,
         jungle_jinx_map,
         black_ice_battle_map,
         klobber_karnage_map,
         fiery_furnace_map,
         animal_antics_map,
-        krocodile_core_map,
         pirate_panic_level,
         mainbrace_mayhem_level,
         gangplank_galley_level,
@@ -252,10 +248,15 @@ def create_regions(world: "DKC2World", active_locations):
 
     if world.options.goal != Goal.option_lost_world:
         k_rool_duel_level = create_region(multiworld, player, active_locations, RegionName.k_rool_duel_level)
+        k_rool_duel_map = create_region(multiworld, player, active_locations, RegionName.k_rool_duel_map)
         multiworld.regions.append(k_rool_duel_level)
+        multiworld.regions.append(k_rool_duel_map)
+    
     if world.options.goal != Goal.option_flying_krock:
         krocodile_core_level = create_region(multiworld, player, active_locations, RegionName.krocodile_core_level)
+        krocodile_core_map = create_region(multiworld, player, active_locations, RegionName.krocodile_core_map)
         multiworld.regions.append(krocodile_core_level)
+        multiworld.regions.append(krocodile_core_map)
 
     # Level clears
     add_location_to_region(multiworld, player, active_locations, RegionName.pirate_panic_level, LocationName.pirate_panic_clear)
