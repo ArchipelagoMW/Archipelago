@@ -210,10 +210,11 @@ location_table = {
     'Toy Block Tower - CD Box':                                 LocationData(Passage.TOPAZ,    0, ItemFlag.CD,            _ALL),
     'Toy Block Tower - Full Health Item Box':                   LocationData(Passage.TOPAZ,    0, ItemFlag.FULL_HEALTH,   _EASIER),
     'Toy Block Tower - Tower Diamond':                          LocationData(Passage.TOPAZ,    0, ItemFlag.DIAMOND_1,     _HARD),
-    'Toy Block Tower - Escape Ledge Diamond':                   LocationData(Passage.TOPAZ,    0, ItemFlag.DIAMOND_2,     _NORMAL),
-    'Toy Block Tower - Cage Diamond':                           LocationData(Passage.TOPAZ,    0, ItemFlag.DIAMOND_3,     _NORMAL),
-    'Toy Block Tower - Dash Diamond':                           LocationData(Passage.TOPAZ,    0, ItemFlag.DIAMOND_4,     _S_HARD),
-    'Toy Block Tower - Circle Block Diamond':                   LocationData(Passage.TOPAZ,    0, ItemFlag.DIAMOND_5,     _ALL),
+    'Toy Block Tower - Digging Room Diamond':                   LocationData(Passage.TOPAZ,    0, ItemFlag.DIAMOND_2,     _ALL),
+    'Toy Block Tower - Escape Ledge Diamond':                   LocationData(Passage.TOPAZ,    0, ItemFlag.DIAMOND_3,     _NORMAL),
+    'Toy Block Tower - Cage Diamond':                           LocationData(Passage.TOPAZ,    0, ItemFlag.DIAMOND_4,     _NORMAL),
+    'Toy Block Tower - Dash Puzzle Diamond':                    LocationData(Passage.TOPAZ,    0, ItemFlag.DIAMOND_5,     _S_HARD),
+    'Toy Block Tower - Circle Block Diamond':                   LocationData(Passage.TOPAZ,    0, ItemFlag.DIAMOND_6,     _ALL),
 
     # The Big Board
     'The Big Board - First Box':                                LocationData(Passage.TOPAZ,    1, ItemFlag.JEWEL_NE,      _NORMAL),

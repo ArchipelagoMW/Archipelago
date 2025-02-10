@@ -150,7 +150,7 @@ class WL4World(World):
         cds = 16
         full_health_items = (9, 7, 6)[difficulty]
         treasures = 12 * treasure_hunt
-        diamonds = diamond_shuffle * (108, 70, 67)[difficulty]
+        diamonds = diamond_shuffle * (109, 71, 68)[difficulty]
         total_required_locations = gem_pieces + cds + full_health_items + treasures + diamonds
 
         itempool = []
