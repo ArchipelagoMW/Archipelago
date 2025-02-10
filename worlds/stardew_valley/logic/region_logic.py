@@ -12,7 +12,7 @@ always_accessible_regions_with_non_progression_er = {*main_outside_area, Region.
                                                      Region.ranch, Region.farm_cave, Region.wizard_tower, Region.tent,
                                                      Region.pierre_store, Region.saloon, Region.blacksmith, Region.trailer, Region.museum, Region.mayor_house,
                                                      Region.haley_house, Region.sam_house, Region.jojamart, Region.fish_shop}
-always_accessible_regions_without_er = {*always_accessible_regions_with_non_progression_er, Region.community_center, Region.pantry, Region.crafts_room,
+always_accessible_regions_without_er = {*always_accessible_regions_with_non_progression_er, Region.pantry, Region.crafts_room,
                                         Region.fish_tank, Region.boiler_room, Region.vault, Region.bulletin_board}
 
 always_regions_by_setting = {EntranceRandomization.option_disabled: always_accessible_regions_without_er,
