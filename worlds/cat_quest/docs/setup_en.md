@@ -3,7 +3,7 @@
 ## Required Software
 
 - Cat Quest from: [Steam](https://store.steampowered.com/app/593280/Cat_Quest/)
-    - Other store platforms have not been tested but should work.
+    - Games from other storefronts may work, but only if it's the 32 bit version. (EGS, Amazon and GOG are confirmed to be the 64 bit version unfortunately) 
 - BepInEx from: [GitHub](https://github.com/BepInEx/BepInEx/releases)
 - Cat Quest Randomizer from: [GitHub](https://github.com/Nikkilites/CatQuest-Randomizer/releases)
 - Cat Quest World from: [GitHub](https://github.com/Nikkilites/Archipelago-CatQuest/releases)
