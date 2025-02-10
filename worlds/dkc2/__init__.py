@@ -32,10 +32,19 @@ class DKC2Web(WebWorld):
 
     setup_en = Tutorial(
         "Multiworld Setup Guide",
-        "A guide to playing Donkey Kong Country 2 - Diddy's Kong Quest with Archipelago",
+        "A guide to playing Donkey Kong Country 2 with Archipelago",
         "English",
         "setup_en.md",
         "setup/en",
+        ["lx5"]
+    )
+    
+    setup_es = Tutorial(
+        "Guía de configuración de Multiworld",
+        "Guía para jugar Donkey Kong Country 2 en Archipelago",
+        "Spanish",
+        "setup_es.md",
+        "setup/es",
         ["lx5"]
     )
 
@@ -46,8 +55,11 @@ class DKC2Web(WebWorld):
 
 class DKC2World(World):
     """
-    Donkey Kong Country 2 WIP
+    Donkey Kong Country 2 is an action platforming game. 
+    Play as Diddy Kong and his girlfriend Dixie as they go to Crocodile Isle 
+    to rescue Donkey Kong from the clutches of Kaptain K. Rool.
     """
+    # borrowed from DKC3's description
     game = "Donkey Kong Country 2"
     web = DKC2Web()
 
