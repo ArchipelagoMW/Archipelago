@@ -10,11 +10,11 @@ from typing import TYPE_CHECKING
 import Utils
 from settings import get_settings
 from worlds.Files import APProcedurePatch, APTokenMixin, APPatchExtension
-from .FreeEnterpriseForAP.FreeEnt.cmd_make import MakeCommand
 from .items import all_items
 
 if TYPE_CHECKING:
     from . import FF4FEWorld
+
 
 ROM_NAME = 0x007FC0
 sentinel_addresses = [ # A list of memory addresses that amounts to "are we in a cutscene or battle or menu".
@@ -83,7 +83,14 @@ class FF4FEPatchExtension(APPatchExtension):
         junk_tier = placements["junk_tier"]
         junked_items = placements["junked_items"]
         kept_items = placements["kept_items"]
+        data_dir = placements["data_dir"]
         placements = json.dumps(json.loads(caller.get_file(placement_file)))
+        try:
+            import sys
+            sys.path.append(data_dir)
+            from FreeEnterprise4.FreeEnt.cmd_make import MakeCommand
+        except ImportError:
+            raise ImportError("Free Enterprise not found. Try reinstalling it.")
         cmd = MakeCommand()
         parser = argparse.ArgumentParser()
         cmd.add_parser_arguments(parser)

@@ -1,7 +1,7 @@
 import pkgutil
 
 from BaseClasses import Item, ItemClassification
-from .FreeEnterpriseForAP.FreeEnt import csvdb
+from . import csvdb
 
 class FF4FEItem(Item):
     game = 'Final Fantasy IV Free Enterprise'
@@ -34,7 +34,7 @@ all_items: list[ItemData] = []
 filler_items: list[ItemData] = []
 useful_items: list[ItemData] = []
 
-itemscsv = csvdb.CsvDb(pkgutil.get_data(__name__, "FreeEnterpriseForAP/FreeEnt/assets/db/items.csvdb").decode().splitlines())
+itemscsv = csvdb.CsvDb(pkgutil.get_data(__name__, "items.csvdb").decode().splitlines())
 
 for item in itemscsv.create_view():
     item_tier = int(item.tier) if item.tier.isdecimal() else -1

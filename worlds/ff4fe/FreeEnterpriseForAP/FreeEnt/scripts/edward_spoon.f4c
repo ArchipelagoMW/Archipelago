@@ -1,2 +1,0 @@
-// patch equip code for Spoon to apply to Edward
-patch ($792f6) { 19 }

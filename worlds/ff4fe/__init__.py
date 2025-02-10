@@ -12,7 +12,6 @@ from worlds.generic.Rules import set_rule, add_rule, add_item_rule, forbid_items
 from . import events, items, locations
 from . import rules as FERules
 from .Client import FF4FEClient
-from .FreeEnterpriseForAP.FreeEnt.cmd_make import MakeCommand
 from .itempool import create_itempool
 from .items import FF4FEItem, all_items, ItemData
 from .locations import FF4FELocation, all_locations, LocationData

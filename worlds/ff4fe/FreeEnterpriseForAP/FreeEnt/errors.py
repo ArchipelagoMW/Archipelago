@@ -1,2 +1,0 @@
-class BuildError(Exception):
-    pass

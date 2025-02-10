@@ -1,8 +1,0 @@
-// Make items sell for 0 GP
-
-msfpatch {
-    .addr $01c950
-        lda #$00
-        nop nop
-}
-

@@ -4,7 +4,7 @@ from pkgutil import get_data
 from typing import List
 
 from BaseClasses import Location
-from .FreeEnterpriseForAP.FreeEnt import csvdb
+from . import csvdb
 
 class FF4FELocation(Location):
     game = 'Final Fantasy IV Free Enterprise'
@@ -34,7 +34,7 @@ class LocationData():
 
 all_locations: list[LocationData] = []
 
-locationscsv = csvdb.CsvDb(pkgutil.get_data(__name__, "FreeEnterpriseForAP/FreeEnt/assets/db/treasure.csvdb").decode().splitlines())
+locationscsv = csvdb.CsvDb(pkgutil.get_data(__name__, "treasure.csvdb").decode().splitlines())
 
 miab_count = 0
 
@@ -61,7 +61,7 @@ for location in locationscsv.create_view():
     all_locations.append(new_location)
 
 # This is actually a custom data table for the reward locations, mimicking the format of the treasure locations.
-locationscsv = csvdb.CsvDb(pkgutil.get_data(__name__, "FreeEnterpriseForAP/FreeEnt/assets/db/rewardslots.csvdb").decode().splitlines())
+locationscsv = csvdb.CsvDb(pkgutil.get_data(__name__, "rewardslots.csvdb").decode().splitlines())
 
 for location in locationscsv.create_view():
     # All reward locations are given their ID plus 512 so we can't confuse them with regular chests.
