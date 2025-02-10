@@ -35,6 +35,7 @@ local RESPONSE_TYPES = {
     ["LOCK"] = string.char(0xA0),
     ["UNLOCK"] = string.char(0xA1),
     ["DISPLAY_MESSAGE"] = string.char(0xA2),
+    ["ERROR"] = string.char(0xFF),
 }
 
 local function bytes_to_hex_str(str)
@@ -215,6 +216,14 @@ local request_handlers = {
         message_buffer:log(message)
         return RESPONSE_TYPES["DISPLAY_MESSAGE"], msg
     end,
+
+    ["default"] = function (msg, dry)
+        if dry then
+            return "", ""
+        end
+
+        return RESPONSE_TYPES["ERROR"] .. string.char(0x02) .. int_to_bytes(0, 2), ""
+    end,
 }
 
 local function received()
@@ -249,7 +258,13 @@ local function received()
     repeat
         local request_header, response
         request_header, requests = consume_str(requests, 1)
-        response, requests = request_handlers[request_header:sub(1, 1)](requests, guard_failure_response ~= nil)
+        local request_type = request_header:sub(1, 1)
+
+        if request_handlers[request_type] then
+            response, requests = request_handlers[request_type](requests, guard_failure_response ~= nil)
+        else
+            response, requests = request_handlers["default"](requests, guard_failure_response ~= nil)
+        end
 
         if guard_failure_response ~= nil then
             response = guard_failure_response

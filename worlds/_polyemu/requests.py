@@ -2,11 +2,11 @@ import abc
 import struct
 from typing import ClassVar, Sequence
 
-from .enums import RequestType
+from .enums import PolyEmuRequestType
 
 
-class Request(abc.ABC):
-    type: ClassVar[RequestType]
+class PolyEmuRequest(abc.ABC):
+    type: ClassVar[PolyEmuRequestType]
 
     def _get_body(self) -> bytes:
         return b""
@@ -15,28 +15,28 @@ class Request(abc.ABC):
         return struct.pack(">B", self.type) + self._get_body()
 
 
-class NoOpRequest(Request):
-    type = RequestType.NO_OP
+class NoOpRequest(PolyEmuRequest):
+    type = PolyEmuRequestType.NO_OP
 
 
-class SupportedOperationsRequest(Request):
-    type = RequestType.SUPPORTED_OPERATIONS
+class SupportedOperationsRequest(PolyEmuRequest):
+    type = PolyEmuRequestType.SUPPORTED_OPERATIONS
 
 
-class PlatformRequest(Request):
-    type = RequestType.PLATFORM
+class PlatformRequest(PolyEmuRequest):
+    type = PolyEmuRequestType.PLATFORM
 
 
-class GameIdRequest(Request):
-    type = RequestType.GAME_ID
+class GameIdRequest(PolyEmuRequest):
+    type = PolyEmuRequestType.GAME_ID
 
 
-class MemorySizeRequest(Request):
-    type = RequestType.MEMORY_SIZE
+class MemorySizeRequest(PolyEmuRequest):
+    type = PolyEmuRequestType.MEMORY_SIZE
 
 
-class ReadRequest(Request):
-    type = RequestType.READ
+class ReadRequest(PolyEmuRequest):
+    type = PolyEmuRequestType.READ
 
     domain_id: int
     address: int
@@ -52,8 +52,8 @@ class ReadRequest(Request):
         return struct.pack(">BQH", self.domain_id, self.address, self.size)
 
 
-class WriteRequest(Request):
-    type = RequestType.WRITE
+class WriteRequest(PolyEmuRequest):
+    type = PolyEmuRequestType.WRITE
 
     domain_id: int
     address: int
@@ -69,8 +69,8 @@ class WriteRequest(Request):
         return struct.pack(">BQH", self.domain_id, self.address, len(self.data)) + self.data
 
 
-class GuardRequest(Request):
-    type = RequestType.GUARD
+class GuardRequest(PolyEmuRequest):
+    type = PolyEmuRequestType.GUARD
 
     domain_id: int
     address: int
@@ -86,16 +86,16 @@ class GuardRequest(Request):
         return struct.pack(">BQH", self.domain_id, self.address, len(self.expected_data)) + self.expected_data
 
 
-class LockRequest(Request):
-    type = RequestType.LOCK
+class LockRequest(PolyEmuRequest):
+    type = PolyEmuRequestType.LOCK
 
 
-class UnlockRequest(Request):
-    type = RequestType.UNLOCK
+class UnlockRequest(PolyEmuRequest):
+    type = PolyEmuRequestType.UNLOCK
 
 
-class DisplayMessageRequest(Request):
-    type = RequestType.DISPLAY_MESSAGE
+class DisplayMessageRequest(PolyEmuRequest):
+    type = PolyEmuRequestType.DISPLAY_MESSAGE
 
     message: str
 

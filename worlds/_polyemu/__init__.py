@@ -4,35 +4,16 @@ import sys
 from typing import Sequence
 
 from .broker import CLIENT_PORT
-from .enums import RequestType
-from .requests import Request, NoOpRequest, ReadRequest, WriteRequest, GuardRequest, PlatformRequest, GameIdRequest, MemorySizeRequest, LockRequest, UnlockRequest, DisplayMessageRequest, SupportedOperationsRequest
-from .responses import AutoResponseRegister, Response, ReadResponse, WriteResponse, GuardResponse, PlatformResponse, GameIdResponse, MemorySizeResponse, LockResponse, UnlockResponse, DisplayMessageResponse, SupportedOperationsResponse
+from .enums import PolyEmuResponseType
+from .errors import AutoPolyEmuErrorRegister, NotConnectedError, RequestFailedError
+from .requests import PolyEmuRequest, NoOpRequest, ReadRequest, WriteRequest, GuardRequest, PlatformRequest, GameIdRequest, MemorySizeRequest, LockRequest, UnlockRequest, DisplayMessageRequest, SupportedOperationsRequest
+from .responses import AutoPolyEmuResponseRegister, PolyEmuResponse, ReadResponse, WriteResponse, GuardResponse, PlatformResponse, GameIdResponse, MemorySizeResponse, LockResponse, UnlockResponse, DisplayMessageResponse, SupportedOperationsResponse, ErrorResponse
 
 
 class ConnectionStatus(enum.IntEnum):
     NOT_CONNECTED = 1
     TENTATIVE = 2
     CONNECTED = 3
-
-
-class NotConnectedError(Exception):
-    """Raised when something tries to make a request to the connector script before a connection has been established"""
-    pass
-
-
-class RequestFailedError(Exception):
-    """Raised when the connector script did not respond to a request"""
-    pass
-
-
-class ConnectorError(Exception):
-    """Raised when the connector script encounters an error while processing a request"""
-    pass
-
-
-class SyncError(Exception):
-    """Raised when the connector script responded with a mismatched response type"""
-    pass
 
 
 class PolyEmuContext:
@@ -62,7 +43,7 @@ class PolyEmuContext:
 
         async with self._lock:
             if self.streams is None:
-                raise NotConnectedError("You tried to send a request before a connection to the emulator was made")
+                raise NotConnectedError("You tried to send a request before establishing a connection")
 
             try:
                 reader, writer = self.streams
@@ -110,22 +91,19 @@ async def get_script_version(ctx: PolyEmuContext) -> int:
     return 1
 
 
-async def send_requests(ctx: PolyEmuContext, request_list: list[Request]) -> list[Response]:
+async def send_requests(ctx: PolyEmuContext, request_list: list[PolyEmuRequest]) -> list[PolyEmuResponse]:
     message = bytes()
     for request in request_list:
         message += request.to_bytes()
 
-    responses = AutoResponseRegister.convert_message_chain(await ctx._send_message(message))
+    responses = AutoPolyEmuResponseRegister.convert_message_chain(await ctx._send_message(message))
 
     errors: list[Exception] = []
 
     for response in responses:
-        if response.type == 0xFF:
-            errors.append(RequestFailedError(response.error_context))
-            # if response.error_code == 0x01:
-            #     errors.append(NotConnectedError(response.error_context))
-            # else:
-            #     errors.append(ConnectorError(response.error_context))
+        if response.type == PolyEmuResponseType.ERROR:
+            assert isinstance(response, ErrorResponse)
+            errors.append(AutoPolyEmuErrorRegister.get_error_type(response.error_code).from_response(response))
 
     if errors:
         if sys.version_info >= (3, 11, 0):

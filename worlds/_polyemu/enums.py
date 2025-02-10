@@ -1,7 +1,7 @@
 from enum import IntEnum
 
 
-class RequestType(IntEnum):
+class PolyEmuRequestType(IntEnum):
     NO_OP = 0x00
     SUPPORTED_OPERATIONS = 0x01
     PLATFORM = 0x02
@@ -15,7 +15,7 @@ class RequestType(IntEnum):
     DISPLAY_MESSAGE = 0x22
 
 
-class ResponseType(IntEnum):
+class PolyEmuResponseType(IntEnum):
     NO_OP = 0x80
     SUPPORTED_OPERATIONS = 0x81
     PLATFORM = 0x82
@@ -28,6 +28,11 @@ class ResponseType(IntEnum):
     UNLOCK = 0xA1
     DISPLAY_MESSAGE = 0xA2
     ERROR = 0xFF
+
+
+class PolyEmuErrorType(IntEnum):
+    UNKNOWN = 0x00
+    UNSUPPORTED_OPERATION = 0x02
 
 
 class PlatformEnum(int):
