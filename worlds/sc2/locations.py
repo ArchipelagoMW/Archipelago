@@ -2077,7 +2077,9 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.SALVATION.mission_name, "Core Critical", SC2LOTV_LOC_ID_OFFSET + 2204, LocationType.EXTRA,
             logic.protoss_salvation_requirement
         ),
-
+        make_location_data(SC2Mission.SALVATION.mission_name, "Kill Brutalisk", SC2LOTV_LOC_ID_OFFSET + 2205, LocationType.MASTERY,
+            logic.protoss_salvation_requirement
+        ),
         # Epilogue
         make_location_data(SC2Mission.INTO_THE_VOID.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 2300, LocationType.VICTORY,
             logic.into_the_void_requirement
@@ -2172,6 +2174,23 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         ),
         make_location_data(SC2Mission.SUDDEN_STRIKE.mission_name, "Brutalisk", SC2NCO_LOC_ID_OFFSET + 203, LocationType.EXTRA,
             logic.sudden_strike_requirement
+        ),
+        make_location_data(SC2Mission.SUDDEN_STRIKE.mission_name, "Gas Pickups", SC2NCO_LOC_ID_OFFSET + 204, LocationType.EXTRA,
+            lambda state: (
+                logic.advanced_tactics
+                or logic.sudden_strike_requirement(state)
+            ),
+        ),
+        make_location_data(SC2Mission.SUDDEN_STRIKE.mission_name, "Protect Buildings", SC2NCO_LOC_ID_OFFSET + 205, LocationType.CHALLENGE,
+            logic.sudden_strike_requirement,
+            flags=LocationFlag.PREVENTATIVE
+        ),
+        make_location_data(SC2Mission.SUDDEN_STRIKE.mission_name, "Zerg Base", SC2NCO_LOC_ID_OFFSET + 206, LocationType.MASTERY,
+            lambda state: (
+                logic.sudden_strike_requirement(state)
+                and logic.terran_competent_comp(state)
+                and logic.terran_base_trasher(state)
+            ),
         ),
         make_location_data(SC2Mission.ENEMY_INTELLIGENCE.mission_name, "Victory", SC2NCO_LOC_ID_OFFSET + 300, LocationType.VICTORY,
             logic.enemy_intelligence_third_stage_requirement,
@@ -5966,6 +5985,9 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.SALVATION_T.mission_name, "Core Critical", SC2_RACESWAP_LOC_ID_OFFSET + 14104, LocationType.EXTRA,
                            logic.terran_salvation_requirement
                            ),
+        make_location_data(SC2Mission.SALVATION_T.mission_name, "Kill Brutalisk", SC2_RACESWAP_LOC_ID_OFFSET + 14105, LocationType.MASTERY,
+                           logic.terran_salvation_requirement
+                           ),
         make_location_data(SC2Mission.SALVATION_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 14200, LocationType.VICTORY,
                            logic.zerg_salvation_requirement
                            ),
@@ -5979,6 +6001,9 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            logic.zerg_salvation_requirement
                            ),
         make_location_data(SC2Mission.SALVATION_Z.mission_name, "Core Critical", SC2_RACESWAP_LOC_ID_OFFSET + 14204, LocationType.EXTRA,
+                           logic.zerg_salvation_requirement
+                           ),
+        make_location_data(SC2Mission.SALVATION_Z.mission_name, "Kill Brutalisk", SC2_RACESWAP_LOC_ID_OFFSET + 14205, LocationType.MASTERY,
                            logic.zerg_salvation_requirement
                            ),
     ]
