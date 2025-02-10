@@ -27,8 +27,8 @@ class PlatformRequest(PolyEmuRequest):
     type = PolyEmuRequestType.PLATFORM
 
 
-class GameIdRequest(PolyEmuRequest):
-    type = PolyEmuRequestType.GAME_ID
+class ListDevicesRequest(PolyEmuRequest):
+    type = PolyEmuRequestType.LIST_DEVICES
 
 
 class MemorySizeRequest(PolyEmuRequest):

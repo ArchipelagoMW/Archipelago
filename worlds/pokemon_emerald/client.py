@@ -14,6 +14,7 @@ import Utils
 import worlds._polyemu as polyemu
 from worlds._polyemu.client import PolyEmuClient
 from worlds._polyemu.enums import PLATFORMS
+from worlds._polyemu.errors import ConnectionLostError
 
 from .data import BASE_OFFSET, POKEDEX_OFFSET, data
 from .options import Goal, RemoteItems
@@ -187,7 +188,7 @@ class PokemonEmeraldClient(PolyEmuClient):
                 return False
         except UnicodeDecodeError:
             return False
-        except polyemu.RequestFailedError:
+        except ConnectionLostError:
             return False  # Should verify on the next pass
 
         ctx.game = self.game
@@ -413,7 +414,7 @@ class PokemonEmeraldClient(PolyEmuClient):
                         "operations": [{"operation": "or", "value": legendary_bitfield}],
                     }])
                     self.local_defeated_legendaries = caught_legendaries
-        except polyemu.RequestFailedError:
+        except ConnectionLostError:
             # Exit handler and return to main loop to reconnect
             pass
 

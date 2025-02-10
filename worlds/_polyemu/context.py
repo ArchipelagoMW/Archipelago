@@ -1,8 +1,3 @@
-"""
-A module containing context and functions relevant to running the client. This module should only be imported for type
-checking or launching the client, otherwise it will probably cause circular import issues.
-"""
-
 import asyncio
 import enum
 import subprocess
@@ -13,12 +8,11 @@ from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser,
 import Patch
 import Utils
 
+from . import PolyEmuContext, PolyEmuBrokerConnector, ping, list_devices, get_platform
 from .broker import CLIENT_PORT
-# from . import PolyEmuContext, ConnectionStatus, NotConnectedError, RequestFailedError, connect, disconnect, get_hash, \
-#     get_script_version, get_system, ping
-from . import PolyEmuContext, ConnectionStatus, NotConnectedError, RequestFailedError, connect, disconnect, ping, read, get_platform
+from .enums import BROKER_DEVICE_ID
+from .errors import PolyEmuBaseError, NoSuchDeviceError
 from .client import PolyEmuClient, AutoPolyEmuClientRegister
-from .enums import PLATFORMS
 
 
 EXPECTED_SCRIPT_VERSION = 1
@@ -32,15 +26,11 @@ class AuthStatus(enum.IntEnum):
 
 
 class PolyEmuClientCommandProcessor(ClientCommandProcessor):
-    def _cmd_bh(self):
-        """Shows the current status of the client's connection to BizHawk"""
+    def _cmd_emu(self):
+        """Shows the current status of the client's connection to the emulator"""
         if isinstance(self.ctx, PolyEmuClientContext):
-            if self.ctx.polyemu_ctx.connection_status == ConnectionStatus.NOT_CONNECTED:
-                logger.info("BizHawk Connection Status: Not Connected")
-            elif self.ctx.polyemu_ctx.connection_status == ConnectionStatus.TENTATIVE:
-                logger.info("BizHawk Connection Status: Tentatively Connected")
-            elif self.ctx.polyemu_ctx.connection_status == ConnectionStatus.CONNECTED:
-                logger.info("BizHawk Connection Status: Connected")
+            status = "Connected" if self.ctx.polyemu_ctx.connector.is_connected() else "Not Connected"
+            logger.info(f"Emulator Connection Status: {status}")
 
 
 class PolyEmuClientContext(CommonContext):
@@ -49,7 +39,7 @@ class PolyEmuClientContext(CommonContext):
     password_requested: bool
     client_handler: PolyEmuClient | None
     slot_data: dict[str, Any] | None = None
-    rom_hash: str | None = None
+    game_id: bytes | None = None
     polyemu_ctx: PolyEmuContext
 
     watcher_timeout: float
@@ -60,12 +50,12 @@ class PolyEmuClientContext(CommonContext):
         self.auth_status = AuthStatus.NOT_AUTHENTICATED
         self.password_requested = False
         self.client_handler = None
-        self.polyemu_ctx = PolyEmuContext()
+        self.polyemu_ctx = PolyEmuContext(PolyEmuBrokerConnector)
         self.watcher_timeout = 0.5
 
     def make_gui(self):
         ui = super().make_gui()
-        ui.base_title = "Archipelago BizHawk Client"
+        ui.base_title = "Archipelago PolyEmu Client"
         return ui
 
     def on_package(self, cmd, args):
@@ -79,8 +69,8 @@ class PolyEmuClientContext(CommonContext):
     async def server_auth(self, password_requested: bool=False):
         self.password_requested = password_requested
 
-        if self.polyemu_ctx.connection_status != ConnectionStatus.CONNECTED:
-            logger.info("Awaiting connection to BizHawk before authenticating")
+        if not self.polyemu_ctx.connector.is_connected():
+            logger.info("Awaiting connection to Emulator before authenticating")
             return
 
         if self.client_handler is None:
@@ -110,6 +100,7 @@ class PolyEmuClientContext(CommonContext):
 async def _game_watcher(ctx: PolyEmuClientContext):
     showed_connecting_message = False
     showed_connected_message = False
+    showed_searching_devices_message = False
     showed_no_handler_message = False
 
     while not ctx.exit_event.is_set():
@@ -121,16 +112,16 @@ async def _game_watcher(ctx: PolyEmuClientContext):
         ctx.watcher_event.clear()
 
         try:
-            if ctx.polyemu_ctx.connection_status == ConnectionStatus.NOT_CONNECTED:
+            if not ctx.polyemu_ctx.connector.is_connected():
                 showed_connected_message = False
 
                 if not showed_connecting_message:
-                    logger.info("Waiting to connect to BizHawk...")
+                    logger.info("Trying to connect to broker...")
                     showed_connecting_message = True
 
                 # Since a call to `connect` can take a while to return, this will cancel connecting
                 # if the user has decided to close the client.
-                connect_task = asyncio.create_task(connect(ctx.polyemu_ctx), name="BrokerConnect")
+                connect_task = asyncio.create_task(ctx.polyemu_ctx.connector.connect(), name="EmuConnect")
                 exit_task = asyncio.create_task(ctx.exit_event.wait(), name="ExitWait")
                 await asyncio.wait([connect_task, exit_task], return_when=asyncio.FIRST_COMPLETED)
 
@@ -141,7 +132,7 @@ async def _game_watcher(ctx: PolyEmuClientContext):
                 if not connect_task.result():
                     continue
 
-                # showed_no_handler_message = False
+                showed_no_handler_message = False
 
                 # script_version = await get_script_version(ctx.polyemu_ctx)
 
@@ -151,25 +142,37 @@ async def _game_watcher(ctx: PolyEmuClientContext):
                 #     disconnect(ctx.polyemu_ctx)
                 #     continue
 
-            # showed_connecting_message = False
+            showed_connecting_message = False
 
             await ping(ctx.polyemu_ctx)
 
-            # if not showed_connected_message:
-            #     showed_connected_message = True
-            #     logger.info("Connected to BizHawk")
+            if ctx.polyemu_ctx.selected_device_id == BROKER_DEVICE_ID:
+                if not showed_searching_devices_message:
+                    logger.info("Searching for devices...")
+                    showed_searching_devices_message = True
 
-            # game_id = await get_game_id(ctx.polyemu_ctx)
-            # if ctx.rom_hash is not None and ctx.rom_hash != rom_hash:
-            #     if ctx.server is not None and not ctx.server.socket.closed:
-            #         logger.info(f"ROM changed. Disconnecting from server.")
+                devices = await list_devices(ctx.polyemu_ctx)
+                if len(devices):
+                    logger.info("Found device")
+                    ctx.polyemu_ctx.selected_device_id = devices[0]
+                    showed_searching_devices_message = False
+                else:
+                    continue
 
-            #     ctx.auth = None
-            #     ctx.username = None
-            #     ctx.client_handler = None
-            #     ctx.finished_game = False
-            #     await ctx.disconnect(False)
-            # ctx.rom_hash = rom_hash
+            if not showed_connected_message:
+                showed_connected_message = True
+                logger.info("Connected to emulator")
+
+            if ctx.game_id is not None and ctx.game_id != ctx.polyemu_ctx.selected_device_id:
+                if ctx.server is not None and not ctx.server.socket.closed:
+                    logger.info(f"ROM changed. Disconnecting from server.")
+
+                ctx.auth = None
+                ctx.username = None
+                ctx.client_handler = None
+                ctx.finished_game = False
+                await ctx.disconnect(False)
+            ctx.game_id = ctx.polyemu_ctx.selected_device_id
 
             if ctx.client_handler is None:
                 system = await get_platform(ctx.polyemu_ctx)
@@ -184,10 +187,10 @@ async def _game_watcher(ctx: PolyEmuClientContext):
                 else:
                     showed_no_handler_message = False
                     logger.info(f"Running handler for {ctx.client_handler.game}")
-        except RequestFailedError as exc:
-            logger.info(f"Lost connection to emulator: {exc.args[0]}")
-            continue
-        except (ExceptionGroup, NotConnectedError):
+        except NoSuchDeviceError as exc:
+            ctx.polyemu_ctx.selected_device_id = BROKER_DEVICE_ID
+        except (ExceptionGroup, PolyEmuBaseError) as exc:
+            logger.exception(exc)
             continue
 
         # Server auth
@@ -203,10 +206,10 @@ async def _game_watcher(ctx: PolyEmuClientContext):
 
 def _run_game(rom: str):
     import os
-    auto_start = Utils.get_settings().PolyEmuclient_options.rom_start
+    auto_start = Utils.get_settings().polyemuclient_options.rom_start
 
     if auto_start is True:
-        emuhawk_path = Utils.get_settings().PolyEmuclient_options.emuhawk_path
+        emuhawk_path = Utils.get_settings().polyemuclient_options.emuhawk_path
         subprocess.Popen(
             [
                 emuhawk_path,
@@ -267,12 +270,15 @@ def launch(*launch_args: str) -> None:
                 return False
 
         if not await is_broker_running():
+            logger.info("Creating broker")
             subprocess.Popen(
                 [sys.executable, "worlds/_polyemu/broker.py", f"--log_directory={Utils.user_path('logs')}"],
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
                 creationflags=subprocess.DETACHED_PROCESS if Utils.is_windows else 0,
             )
+        else:
+            logger.info("Broker already running")
 
         if gui_enabled:
             ctx.run_gui()

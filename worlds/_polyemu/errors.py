@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import abc
-from typing import Any, ClassVar, Self, Type  # Self py 3.11+
+from typing import TYPE_CHECKING, Any, ClassVar, Self  # Self py 3.11+
 
 from .enums import PolyEmuErrorType
-from .responses import ErrorResponse
+
+if TYPE_CHECKING:
+    from .responses import ErrorResponse
 
 
 class PolyEmuBaseError(Exception):
@@ -15,7 +17,11 @@ class NotConnectedError(PolyEmuBaseError):
     pass
 
 
-class RequestFailedError(PolyEmuBaseError):
+class ConnectionLostError(PolyEmuBaseError):
+    pass
+
+
+class MalformedResponseError(PolyEmuBaseError):
     pass
 
 
@@ -32,7 +38,7 @@ class AutoPolyEmuErrorRegister(abc.ABCMeta):
         return new_class
 
     @staticmethod
-    def get_error_type(code: int) -> Type[PolyEmuError]:
+    def get_error_type(code: int) -> type[PolyEmuError]:
         try:
             return AutoPolyEmuErrorRegister.exception_types[code]
         except KeyError:
@@ -44,7 +50,7 @@ class PolyEmuError(PolyEmuBaseError, abc.ABC, metaclass=AutoPolyEmuErrorRegister
 
     @classmethod
     @abc.abstractmethod
-    def from_response(cls, response: ErrorResponse) -> Self:
+    def from_response(cls, response: "ErrorResponse") -> Self:
         ...
 
 
@@ -55,3 +61,27 @@ class UnsupportedOperationError(PolyEmuError):
     def from_response(cls, response) -> Self:
         context = f"0x{hex(response.error_context[0])}" if response.error_context else "Unknown"
         return cls(f"Device does not support request type: {context}")
+
+
+class MismatchedDeviceError(PolyEmuError):
+    code = PolyEmuErrorType.MISMATCHED_DEVICE
+
+    @classmethod
+    def from_response(cls, response) -> Self:
+        return cls(f"Requests sent to wrong device. Expected [{response.error_context[:8]}] but got [{response.error_context[8:]}]")
+
+
+class NoSuchDeviceError(PolyEmuError):
+    code = PolyEmuErrorType.NO_SUCH_DEVICE
+
+    @classmethod
+    def from_response(cls, response) -> Self:
+        return cls(f"Device does not appear to exist: {response.error_context}")
+
+
+class DeviceClosedConnectionError(PolyEmuError):
+    code = PolyEmuErrorType.DEVICE_CLOSED_CONNECTION
+
+    @classmethod
+    def from_response(cls, response) -> Self:
+        return cls(f"Device closed the connection without sending response")

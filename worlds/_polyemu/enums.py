@@ -1,12 +1,15 @@
 from enum import IntEnum
 
 
+BROKER_DEVICE_ID = b"\x00\x00\x00\x00\x00\x00\x00\x00"
+
+
 class PolyEmuRequestType(IntEnum):
     NO_OP = 0x00
     SUPPORTED_OPERATIONS = 0x01
     PLATFORM = 0x02
     MEMORY_SIZE = 0x03
-    GAME_ID = 0x04
+    LIST_DEVICES = 0x04
     READ = 0x10
     WRITE = 0x11
     GUARD = 0x12
@@ -20,7 +23,7 @@ class PolyEmuResponseType(IntEnum):
     SUPPORTED_OPERATIONS = 0x81
     PLATFORM = 0x82
     MEMORY_SIZE = 0x83
-    GAME_ID = 0x84
+    LIST_DEVICES = 0x84
     READ = 0x90
     WRITE = 0x91
     GUARD = 0x92
@@ -32,7 +35,10 @@ class PolyEmuResponseType(IntEnum):
 
 class PolyEmuErrorType(IntEnum):
     UNKNOWN = 0x00
-    UNSUPPORTED_OPERATION = 0x02
+    UNSUPPORTED_OPERATION = 0x01
+    MISMATCHED_DEVICE = 0x02
+    NO_SUCH_DEVICE = 0x80
+    DEVICE_CLOSED_CONNECTION = 0x81
 
 
 class PlatformEnum(int):

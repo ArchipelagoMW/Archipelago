@@ -3,6 +3,8 @@ local DEBUG = false
 local POLYEMU_DEVICE_PORT = 43031
 local polyemu_socket = nil
 
+local device_id = nil
+
 local locked = false
 local platform = nil
 local memory_domains = nil
@@ -14,7 +16,7 @@ local REQUEST_TYPES = {
     ["SUPPORTED_OPERATIONS"] = string.char(0x01),
     ["PLATFORM"] = string.char(0x02),
     ["MEMORY_SIZE"] = string.char(0x03),
-    ["GAME_ID"] = string.char(0x04),
+    ["LIST_DEVICES"] = string.char(0x04),
     ["READ"] = string.char(0x10),
     ["WRITE"] = string.char(0x11),
     ["GUARD"] = string.char(0x12),
@@ -28,7 +30,7 @@ local RESPONSE_TYPES = {
     ["SUPPORTED_OPERATIONS"] = string.char(0x81),
     ["PLATFORM"] = string.char(0x82),
     ["MEMORY_SIZE"] = string.char(0x84),
-    ["GAME_ID"] = string.char(0x84),
+    ["LIST_DEVICES"] = string.char(0x84),
     ["READ"] = string.char(0x90),
     ["WRITE"] = string.char(0x91),
     ["GUARD"] = string.char(0x92),
@@ -123,13 +125,12 @@ local request_handlers = {
         return response, msg
     end,
 
-    [REQUEST_TYPES["GAME_ID"]] = function (msg, dry)
+    [REQUEST_TYPES["LIST_DEVICES"]] = function (msg, dry)
         if dry then
             return "", msg
         end
 
-        local checksum = "00000000" .. emu:checksum(C.CHECKSUM.CRC32)
-        return RESPONSE_TYPES["GAME_ID"] .. checksum:sub(-8), msg
+        return RESPONSE_TYPES["LIST_DEVICES"] .. string.char(1) .. device_id, msg
     end,
 
     [REQUEST_TYPES["READ"]] = function (msg, dry)
@@ -222,7 +223,7 @@ local request_handlers = {
             return "", ""
         end
 
-        return RESPONSE_TYPES["ERROR"] .. string.char(0x02) .. int_to_bytes(0, 2), ""
+        return RESPONSE_TYPES["ERROR"] .. string.char(0x01) .. int_to_bytes(0, 2), ""
     end,
 }
 
@@ -235,15 +236,16 @@ local function received()
         if err ~= socket.ERRORS.AGAIN then
             polyemu_socket:close()
             polyemu_socket = nil
+            return
         end
     end
-
 
     msg, err = polyemu_socket:receive(bytes_to_int(size, 1, 2))
     if not msg then
         if err ~= socket.ERRORS.AGAIN then
             polyemu_socket:close()
             polyemu_socket = nil
+            return
         end
     end
 
@@ -251,31 +253,36 @@ local function received()
         console:log("Message Received: " .. bytes_to_hex_str(msg))
     end
 
-    local header, requests = consume_str(msg, 1)
+    local header, requests = consume_str(msg, 8)
     local response_buffer = ""
-    local guard_failure_response = nil
 
-    repeat
-        local request_header, response
-        request_header, requests = consume_str(requests, 1)
-        local request_type = request_header:sub(1, 1)
+    if header:sub(1, 8) ~= device_id and header:sub(1, 8) ~= int_to_bytes(0, 8) then
+        response_buffer = RESPONSE_TYPES["ERROR"] .. string.char(0x02) .. int_to_bytes(16, 2) .. header:sub(1, 8) .. device_id
+    else
+        local guard_failure_response = nil
 
-        if request_handlers[request_type] then
-            response, requests = request_handlers[request_type](requests, guard_failure_response ~= nil)
-        else
-            response, requests = request_handlers["default"](requests, guard_failure_response ~= nil)
-        end
+        repeat
+            local request_header, response
+            request_header, requests = consume_str(requests, 1)
+            local request_type = request_header:sub(1, 1)
 
-        if guard_failure_response ~= nil then
-            response = guard_failure_response
-        elseif request_header:byte(1) == 0x03 then
-            if response:byte(2) == 0 then
-                guard_failure_response = response
+            if request_handlers[request_type] then
+                response, requests = request_handlers[request_type](requests, guard_failure_response ~= nil)
+            else
+                response, requests = request_handlers["default"](requests, guard_failure_response ~= nil)
             end
-        end
 
-        response_buffer = response_buffer..response
-    until requests == ""
+            if guard_failure_response ~= nil then
+                response = guard_failure_response
+            elseif request_header:byte(1) == 0x03 then
+                if response:byte(2) == 0 then
+                    guard_failure_response = response
+                end
+            end
+
+            response_buffer = response_buffer..response
+        until requests == ""
+    end
 
     polyemu_socket:send(int_to_bytes(#response_buffer, 2) .. response_buffer)
 end
@@ -285,6 +292,9 @@ local function handle_error()
 end
 
 local function tick()
+    device_id = "00000000" .. emu:checksum(C.CHECKSUM.CRC32)
+    device_id = device_id:sub(-8)
+
     if platform ~= emu:platform() then
         platform = emu:platform()
 

@@ -1,104 +1,114 @@
+import abc
 import asyncio
-import enum
 import sys
 from typing import Sequence
 
 from .broker import CLIENT_PORT
-from .enums import PolyEmuResponseType
-from .errors import AutoPolyEmuErrorRegister, NotConnectedError, RequestFailedError
-from .requests import PolyEmuRequest, NoOpRequest, ReadRequest, WriteRequest, GuardRequest, PlatformRequest, GameIdRequest, MemorySizeRequest, LockRequest, UnlockRequest, DisplayMessageRequest, SupportedOperationsRequest
-from .responses import AutoPolyEmuResponseRegister, PolyEmuResponse, ReadResponse, WriteResponse, GuardResponse, PlatformResponse, GameIdResponse, MemorySizeResponse, LockResponse, UnlockResponse, DisplayMessageResponse, SupportedOperationsResponse, ErrorResponse
+from .enums import BROKER_DEVICE_ID, PolyEmuResponseType
+from .errors import AutoPolyEmuErrorRegister, PolyEmuError, NotConnectedError, ConnectionLostError
+from .requests import PolyEmuRequest, NoOpRequest, ReadRequest, WriteRequest, GuardRequest, PlatformRequest, ListDevicesRequest, MemorySizeRequest, LockRequest, UnlockRequest, DisplayMessageRequest, SupportedOperationsRequest
+from .responses import AutoPolyEmuResponseRegister, PolyEmuResponse, ReadResponse, WriteResponse, GuardResponse, PlatformResponse, ListDevicesResponse, MemorySizeResponse, LockResponse, UnlockResponse, DisplayMessageResponse, SupportedOperationsResponse, ErrorResponse
 
 
-class ConnectionStatus(enum.IntEnum):
-    NOT_CONNECTED = 1
-    TENTATIVE = 2
-    CONNECTED = 3
+class PolyEmuConnector(abc.ABC):
+    @abc.abstractmethod
+    def is_connected(self) -> bool:
+        ...
+
+    @abc.abstractmethod
+    async def connect(self) -> bool:
+        ...
+
+    @abc.abstractmethod
+    async def disconnect(self) -> None:
+        ...
+
+    @abc.abstractmethod
+    async def send_message(self, message: bytes) -> bytes:
+        ...
 
 
-class PolyEmuContext:
-    streams: tuple[asyncio.StreamReader, asyncio.StreamWriter] | None
-    connection_status: ConnectionStatus
-    selected_device_id: int | None
+class PolyEmuBrokerConnector(PolyEmuConnector):
+    _streams: tuple[asyncio.StreamReader, asyncio.StreamWriter] | None
     _lock: asyncio.Lock
 
-    def __init__(self) -> None:
-        self.streams = None
-        self.connection_status = ConnectionStatus.NOT_CONNECTED
-        self.selected_device_id = 12
+    def __init__(self):
+        super().__init__()
+        self._streams = None
         self._lock = asyncio.Lock()
 
-    def _disconnect(self):
-        if self.streams is not None:
-            self.streams[1].close()
-            self.streams = None
-        self.connection_status = ConnectionStatus.NOT_CONNECTED
+    def is_connected(self):
+        return self._streams is not None
 
-    async def _send_message(self, message: bytes):
-        # Attach header
-        message = bytes([self.selected_device_id]) + message
+    async def connect(self):
+        try:
+            self._streams = await asyncio.open_connection("127.0.0.1", CLIENT_PORT)
+            return True
+        except (TimeoutError, ConnectionRefusedError):
+            self._streams = None
+            return False
 
-        # Prepend message size
+    async def disconnect(self):
+        if self._streams is not None:
+            self._streams[1].close()
+
+            try:
+                await self._streams[1].wait_closed()
+            except:
+                pass
+            finally:
+                self._streams = None
+
+    async def send_message(self, message) -> bytes:
         message = len(message).to_bytes(2, "big") + message
 
         async with self._lock:
-            if self.streams is None:
-                raise NotConnectedError("You tried to send a request before establishing a connection")
+            if self._streams is None:
+                raise NotConnectedError()
 
             try:
-                reader, writer = self.streams
+                reader, writer = self._streams
                 writer.write(message)
                 await asyncio.wait_for(writer.drain(), timeout=5)
 
                 response_size = await asyncio.wait_for(reader.read(2), timeout=5)
                 if response_size == b"":
-                    self._disconnect()
-                    raise RequestFailedError("Connection closed")
+                    await self.disconnect()
+                    raise ConnectionLostError("Connection closed")
 
                 data = await asyncio.wait_for(reader.read(int.from_bytes(response_size, "big")), timeout=5)
                 if data == b"":
-                    self._disconnect()
-                    raise RequestFailedError("Connection closed")
-
-                if self.connection_status == ConnectionStatus.TENTATIVE:
-                    self.connection_status = ConnectionStatus.CONNECTED
+                    await self.disconnect()
+                    raise ConnectionLostError("Connection closed")
 
                 return data
             except asyncio.TimeoutError as exc:
-                self._disconnect()
-                raise RequestFailedError("Connection timed out") from exc
+                await self.disconnect()
+                raise ConnectionLostError("Connection timed out") from exc
             except ConnectionResetError as exc:
-                self._disconnect()
-                raise RequestFailedError("Connection reset") from exc
+                await self.disconnect()
+                raise ConnectionLostError("Connection reset") from exc
 
 
-async def connect(ctx: PolyEmuContext) -> bool:
-    try:
-        ctx.streams = await asyncio.open_connection("127.0.0.1", CLIENT_PORT)
-        ctx.connection_status = ConnectionStatus.TENTATIVE
-        return True
-    except (TimeoutError, ConnectionRefusedError):
-        ctx.streams = None
-        ctx.connection_status = ConnectionStatus.NOT_CONNECTED
-        return False
+class PolyEmuContext:
+    connector: PolyEmuConnector
+    selected_device_id: bytes
 
-
-def disconnect(ctx: PolyEmuContext) -> None:
-    ctx._disconnect()
-
-
-async def get_script_version(ctx: PolyEmuContext) -> int:
-    return 1
+    def __init__(self, connector_type: type[PolyEmuConnector]):
+        self.connector = connector_type()
+        self.selected_device_id = BROKER_DEVICE_ID
 
 
 async def send_requests(ctx: PolyEmuContext, request_list: list[PolyEmuRequest]) -> list[PolyEmuResponse]:
     message = bytes()
     for request in request_list:
         message += request.to_bytes()
+    message = ctx.selected_device_id + message
 
-    responses = AutoPolyEmuResponseRegister.convert_message_chain(await ctx._send_message(message))
+    received = await ctx.connector.send_message(message)
+    responses = AutoPolyEmuResponseRegister.convert_response_chain(received)
 
-    errors: list[Exception] = []
+    errors: list[PolyEmuError] = []
 
     for response in responses:
         if response.type == PolyEmuResponseType.ERROR:
@@ -106,10 +116,10 @@ async def send_requests(ctx: PolyEmuContext, request_list: list[PolyEmuRequest])
             errors.append(AutoPolyEmuErrorRegister.get_error_type(response.error_code).from_response(response))
 
     if errors:
-        if sys.version_info >= (3, 11, 0):
-            raise ExceptionGroup("Connector script returned errors", errors)  # noqa
-        else:
+        if len(errors) == 1 or sys.version_info < (3, 11, 0):
             raise errors[0]
+        else:
+            raise ExceptionGroup("Emulator returned errors", errors)  # noqa
 
     return responses
 
@@ -118,9 +128,9 @@ async def ping(ctx: PolyEmuContext) -> None:
     await send_requests(ctx, [NoOpRequest()])
 
 
-async def get_game_id(ctx: PolyEmuContext) -> bytes:
-    res: GameIdResponse = (await send_requests(ctx, [GameIdRequest()]))[0]
-    return res.game_id
+async def list_devices(ctx: PolyEmuContext) -> list[bytes]:
+    res: ListDevicesResponse = (await send_requests(ctx, [ListDevicesRequest()]))[0]
+    return res.devices
 
 
 async def get_memory_size(ctx: PolyEmuContext) -> dict[int, int]:
