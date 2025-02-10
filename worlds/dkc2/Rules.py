@@ -3377,7 +3377,7 @@ class DKC2ExpertRules(DKC2Rules):
             LocationName.rickety_race_dk_coin:
                 self.has_skull_kart,
             LocationName.rickety_race_bonus_1:
-                lambda state: self.has_skull_kart and 
+                lambda state: self.has_skull_kart(state) and 
                     self.can_team_attack(state) 
                     and self.can_hover(state),
 
