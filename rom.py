@@ -71,6 +71,23 @@ class WL4PatchExtensions(APPatchExtension):
         shuffle_wario_voice_sets(local_rom, voices)
         return bytes(local_rom)
 
+    @staticmethod
+    def copy_medal_gfx(caller: APProcedurePatch, rom: bytes) -> bytes:
+        local_rom = LocalRom(rom)
+        top_tiles = local_rom.read_bytes(0x6E561C + 32 * 645, 32 * 2)
+        bottom_tiles = local_rom.read_bytes(0x6E561C + 32 * 677, 32 * 2)
+        tiles = bytearray()
+        for tile in top_tiles + bottom_tiles:
+            upper = tile & 0xF0
+            lower = tile & 0x0F
+            if upper != 0:
+                upper += 10 << 4
+            if lower != 0:
+                lower += 10
+            tiles.append(upper | lower)
+        local_rom.write_bytes(get_rom_address("MinigameCoinTiles"), tiles)
+        return bytes(local_rom)
+
 
 class WL4ProcedurePatch(APProcedurePatch, APTokenMixin):
     hash = MD5_US_EU
@@ -84,6 +101,7 @@ class WL4ProcedurePatch(APProcedurePatch, APTokenMixin):
             ('apply_bsdiff4', ['basepatch.bsdiff']),
             ('apply_tokens', ['token_data.bin']),
             ('update_header', []),
+            ('copy_medal_gfx', []),
         ]
 
     @classmethod
