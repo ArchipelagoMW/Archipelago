@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
 from MultiServer import CommandProcessor
 from NetUtils import (Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot,
-                      RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes, HintStatus, SlotType)
+                      RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes, HintPriority, SlotType)
 from Utils import Version, stream_input, async_start
 from worlds import network_data_package, AutoWorldRegister
 import os
@@ -562,10 +562,10 @@ class CommonContext:
             self.input_task.cancel()
     
     # Hints
-    def update_hint(self, location: int, finding_player: int, status: typing.Optional[HintStatus]) -> None:
+    def update_hint(self, location: int, finding_player: int, priority: typing.Optional[HintPriority]) -> None:
         msg = {"cmd": "UpdateHint", "location": location, "player": finding_player}
-        if status is not None:
-            msg["status"] = status
+        if priority is not None:
+            msg["priority"] = priority
         async_start(self.send_msgs([msg]), name="update_hint")
     
     # DataPackage
