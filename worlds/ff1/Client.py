@@ -206,9 +206,10 @@ class FF1Client(BizHawkClient):
                 write_list.append((location, [1], self.sram))
             elif current_item_name in gold_items:
                 gold_amount = int(current_item_name[4:])
-                current_gold = int.from_bytes(await self.read_sram_values_guarded(ctx, gp_location_low, 3), "little")
-                if current_gold is None:
+                current_gold_value = await self.read_sram_values_guarded(ctx, gp_location_low, 3)
+                if current_gold_value is None:
                     return
+                current_gold = int.from_bytes(current_gold_value, "little")
                 new_gold = min(gold_amount + current_gold, 999999)
                 lower_byte = new_gold % (2 ** 8)
                 middle_byte = (new_gold // (2 ** 8)) % (2 ** 8)
