@@ -271,7 +271,7 @@ class LMWorld(World):
                 entry = LMLocation(self.player, location, region, data)
                 if entry.code == 627:
                     add_rule(entry,
-                             lambda state: state.has_group("Mario Item", self.player, self.options.mario_items), "and")
+                             lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value), "and")
                 if len(entry.access) != 0:
                     for item in entry.access:
                         if item == "Fire Element Medal":
@@ -332,7 +332,7 @@ class LMWorld(World):
                     add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
                 if entry.code == 679:
                     add_rule(entry,
-                             lambda state: state.has_group("Mario Item", self.player, self.options.mario_items), "and")
+                             lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value), "and")
                 if len(entry.access) != 0:
                     for item in entry.access:
                         if item == "Fire Element Medal":
@@ -355,7 +355,7 @@ class LMWorld(World):
                     add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
                 if entry.code == 679:
                     add_rule(entry,
-                             lambda state: state.has_group("Mario Item", self.player, self.options.mario_items), "and")
+                             lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value), "and")
                 if len(entry.access) != 0:
                     for item in entry.access:
                         if item == "Fire Element Medal":
@@ -402,10 +402,10 @@ class LMWorld(World):
 
         if hasattr(self.multiworld, "generation_is_fake"):
             if hasattr(self.multiworld, "re_gen_passthrough"):
-                #We know we're in second gen
+                # We know we're in second gen
                 re_gen = self.multiworld.re_gen_passthrough
-                if self.game in re_gen: #Are we the tracked game and in final gen
-                    self.open_doors = re_gen[self.game]["door rando list"] #this should be the same list from slot data
+                if self.game in re_gen: # Are we the tracked game and in final gen
+                    self.open_doors = re_gen[self.game]["door rando list"] # this should be the same list from slot data
                     self.open_doors = {int(k):v for k, v in self.open_doors.items()}
         elif self.options.door_rando == 1:
             k = list(self.open_doors.keys())
@@ -485,7 +485,7 @@ class LMWorld(World):
                     item: item.player != self.player or (
                         item.player == self.player and item.type != "Money" and item.type != "Trap" and item.type != "Medal"))
             if entry.code == 5:
-                add_rule(entry, lambda state: state.has_group("Mario Item", self.player, self.options.mario_items))
+                add_rule(entry, lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value))
             if len(entry.access) != 0:
                 for item in entry.access:
                     if item == "Fire Element Medal":
