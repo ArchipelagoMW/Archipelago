@@ -8,7 +8,7 @@
 03000044 ucflashloop
 03000047 uctimeup
 030000D0 gcolorfading
-03000104 currententityinfolist_tebuf
+03000104 gspritedata
 03000564 entityleftoverstatelist
 03000A24 currentenemydata
 03000A68 w4itemstatus
@@ -35,6 +35,7 @@
 03000C32 hastreasure11
 03000C33 hastreasure12
 03000C34 uctakaracount
+03000C35 gpauseflag
 03000C3A globalgamemode
 03000C3C sgameseq
 03000C41 globaltimer
@@ -84,5 +85,5 @@
 087904B9 goldentreasuresneeded
 087904BA trapbehavior
 087904BB diamondshuffle
-08794500 multiworldstringdump
+087945DC multiworldstringdump
 
