@@ -427,7 +427,7 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Dining Room Table Mess L (underneath Table)": LMLocationData("Dining Room", 304, "Furniture", 215, [], 8),
     "Dining Room R Candles and Plates": LMLocationData("Dining Room", 305, "Furniture", 287, [], 8),
     "Dining Room L Candles": LMLocationData("Dining Room", 306, "Furniture", 288, [], 8),
-    # "Mr' Lugg's Stool": LMLocationData("Dining Room", 852, "Furniture", , [], 8),
+    "Mr' Lugg's Stool (Dining Room)": LMLocationData("Dining Room", 852, "Furniture", 167, [], 8),
     "Kitchen Oven": LMLocationData("Kitchen", 307, "Furniture", 80, ["Fire Element Medal"], 7),
     # "Kitchen Refrigerator": LMLocationData("Kitchen", 308, "Furniture", 78, [], 7), TODO Prevents Ghosts Spawn
     "Kitchen China Hutch": LMLocationData("Kitchen", 309, "Furniture", 79, [], 7),
