@@ -899,6 +899,7 @@ item_descriptions = {
     item_names.SUPPLICANT_SOUL_AUGMENTATION: "Increases Supplicant max shields by +25.",
     item_names.SUPPLICANT_SHIELD_REGENERATION: "Increases Supplicant shield regeneration rate.",
     item_names.SUPPLICANT_ZENITH_PITCH: "Allows Supplicants to attack air units.",
+    item_names.SUPPLICANT_SACRIFICE: "Allows Supplicants to sacrifice themselves to save nearby units from death.",
     item_names.ADEPT_SHOCKWAVE: "When Adepts deal a finishing blow, their projectiles can jump onto 2 additional targets.",
     item_names.ADEPT_RESONATING_GLAIVES: "Increases Adept attack speed.",
     item_names.ADEPT_PHASE_BULWARK: "Increases Adept shield maximum by +50.",
