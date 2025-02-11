@@ -173,10 +173,11 @@ def create_regions(world: "NineSolsWorld") -> None:
                      lambda state, r=ld["requires"]: eval_rule(state, p, r))
 
     # add dynamic logic, i.e. connections based on player options
+    mw.regions.append(Region("Menu", p, mw))
     menu = mw.get_region("Menu", p)
     # TODO: alternate spawns
-    menu.add_exits(["Four Seasons Pavilion"])
-    menu.add_exits(["Apeman Facility (Monitoring)"])
+    menu.add_exits(["FSP - Root Node"])
+    menu.add_exits(["AFM - Root Node"])
 
 
 # In the .jsonc files we use, a location or region connection's "access rule" is defined
