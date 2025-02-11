@@ -28,7 +28,7 @@ GHOST_TO_ROOM = {
     "Mirror Room": "No Element",
     "Graveyard": "No Element",
     "Anteroom": "No Element",
-    "Sitting Room": "Fire"  # Fire
+    # "Sitting Room": "Fire"  # Fire
 }
 
 
