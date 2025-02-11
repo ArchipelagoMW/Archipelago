@@ -1,0 +1,103 @@
+[
+    // per AP docs, 1734473680 was randomly chosen from the range of
+    // positive 32-bit integers to avoid conflicts with other AP games
+    { "code": 1734473680, "name": "Nothing", "type": "filler" }, // no longer used, here for backwards compatibility
+
+    { "code": 1734473681, "name": "Launch Codes", "type": "progression" },
+
+    { "code": 1734473732, "name": "Spacesuit", "type": "progression" },
+    { "category": "base", "split_translator": false, "code": 1734473682, "name": "Translator", "type": "progression" },
+    { "category": "base", "split_translator": true, "code": 1734473746, "name": "Translator (Hourglass Twins)", "type": "progression" },
+    { "category": "base", "split_translator": true, "code": 1734473747, "name": "Translator (Timber Hearth)", "type": "progression" },
+    { "category": "base", "split_translator": true, "code": 1734473748, "name": "Translator (Brittle Hollow)", "type": "progression" },
+    { "category": "base", "split_translator": true, "code": 1734473749, "name": "Translator (Giant's Deep)", "type": "progression" },
+    { "category": "base", "split_translator": true, "code": 1734473750, "name": "Translator (Dark Bramble)", "type": "progression" },
+    { "category": "base", "split_translator": true, "code": 1734473751, "name": "Translator (Other)", "type": "progression" },
+    { "category": "base", "code": 1734473683, "name": "Signalscope", "type": "progression" },
+    { "code": 1734473684, "name": "Scout", "type": "progression" },
+    { "code": 1734473685, "name": "Ghost Matter Wavelength", "type": "progression" },
+    { "category": "base", "code": 1734473687, "name": "Imaging Rule", "type": "progression" },
+    { "category": "base", "code": 1734473688, "name": "Nomai Warp Codes", "type": "progression" },
+    { "category": "base", "code": 1734473689, "name": "Warp Core Installation Manual", "type": "progression" },
+    { "category": "base", "code": 1734473690, "name": "Entanglement Rule", "type": "progression" },
+    { "category": "base", "code": 1734473691, "name": "Shrine Door Codes", "type": "progression" },
+    { "category": "base", "code": 1734473692, "name": "Tornado Aerodynamic Adjustments", "type": "progression" },
+    { "category": "base", "code": 1734473693, "name": "Silent Running Mode", "type": "progression" },
+    { "category": "base", "code": 1734473694, "name": "Electrical Insulation", "type": "progression" },
+    { "category": "base", "code": 1734473695, "name": "Coordinates", "type": "progression" },
+
+    { "category": "base", "code": 1734473697, "name": "Distress Beacon Frequency", "type": "progression" },
+    { "category": "base", "code": 1734473698, "name": "Quantum Fluctuations Frequency", "type": "progression" },
+    { "category": "base", "code": 1734473699, "name": "Hide & Seek Frequency", "type": "progression" },
+
+    { "category": "base", "code": 1734473700, "name": "Chert's Signal", "type": "filler" },
+    { "category": "base", "code": 1734473701, "name": "Esker's Signal", "type": "filler" },
+    { "category": "base", "code": 1734473702, "name": "Riebeck's Signal", "type": "filler" },
+    { "category": "base", "code": 1734473703, "name": "Gabbro's Signal", "type": "filler" },
+    { "category": "base", "code": 1734473704, "name": "Feldspar's Signal", "type": "progression" },
+    { "category": "base", "code": 1734473705, "name": "Museum Shard Signal", "type": "filler" },
+    { "category": "base", "code": 1734473706, "name": "Grove Shard Signal", "type": "filler" },
+    { "category": "base", "code": 1734473707, "name": "Cave Shard Signal", "type": "filler" },
+    { "category": "base", "code": 1734473708, "name": "Tower Shard Signal", "type": "filler" },
+    { "category": "base", "code": 1734473709, "name": "Island Shard Signal", "type": "filler" },
+    { "category": "base", "code": 1734473710, "name": "Quantum Moon Signal", "type": "progression" },
+    { "category": "base", "code": 1734473711, "name": "Escape Pod 1 Signal", "type": "filler" },
+    { "category": "base", "code": 1734473712, "name": "Escape Pod 2 Signal", "type": "filler" },
+    { "category": "base", "code": 1734473713, "name": "Escape Pod 3 Signal", "type": "progression" },
+    { "category": "base", "code": 1734473714, "name": "Galena's Radio Signal", "type": "filler" },
+    { "category": "base", "code": 1734473715, "name": "Tephra's Radio Signal", "type": "filler" },
+
+    { "code": 1734473716, "name": "Autopilot", "type": "useful" },
+    { "code": 1734473717, "name": "Landing Camera", "type": "useful" },
+    { "code": 1734473718, "name": "Eject Button", "type": "useful" },
+    { "code": 1734473719, "name": "Velocity Matcher", "type": "useful" },
+    { "code": 1734473720, "name": "Surface Integrity Scanner", "type": "useful" },
+    { "code": 1734473729, "name": "Oxygen Capacity Upgrade", "type": "useful" },
+    { "code": 1734473730, "name": "Fuel Capacity Upgrade", "type": "useful" },
+    { "code": 1734473731, "name": "Boost Duration Upgrade", "type": "useful" },
+
+    { "code": 1734473721, "name": "Oxygen Refill", "type": "filler" },
+    { "code": 1734473722, "name": "Jetpack Fuel Refill", "type": "filler" },
+    { "code": 1734473723, "name": "Marshmallow", "type": "filler" },
+    { "code": 1734473724, "name": "Perfect Marshmallow", "type": "filler" },
+    { "code": 1734473725, "name": "Burnt Marshmallow", "type": "filler" },
+
+    { "code": 1734473726, "name": "Ship Damage Trap", "type": "trap" },
+    { "code": 1734473727, "name": "Audio Trap", "type": "trap" },
+    { "code": 1734473728, "name": "Nap Trap", "type": "trap" },
+
+    { "category": "dlc|hn1|hn2|fq", "code": 1734473733, "name": "Stranger Light Modulator", "type": "progression" },
+    { "category": "dlc", "code": 1734473734, "name": "Breach Override Codes", "type": "progression" },
+    { "category": "dlc", "code": 1734473735, "name": "River Lowlands Painting Code", "type": "progression" },
+    { "category": "dlc", "code": 1734473736, "name": "Cinder Isles Painting Code", "type": "progression" },
+    { "category": "dlc", "code": 1734473737, "name": "Hidden Gorge Painting Code", "type": "progression" },
+    { "category": "dlc", "code": 1734473738, "name": "Dream Totem Patch", "type": "progression" },
+    { "category": "dlc", "code": 1734473739, "name": "Raft Docks Patch", "type": "progression" },
+    { "category": "dlc", "code": 1734473740, "name": "Limbo Warp Patch", "type": "progression" },
+    { "category": "dlc", "code": 1734473741, "name": "Projection Range Patch", "type": "progression" },
+    { "category": "dlc", "code": 1734473742, "name": "Alarm Bypass Patch", "type": "progression" },
+
+    { "category": "base", "code": 1734473743, "name": "Deep Space Radio Frequency", "type": "progression" },
+    { "category": "base", "code": 1734473744, "name": "Radio Tower Signal", "type": "filler" },
+    { "category": "base", "code": 1734473745, "name": "Deep Space Satellite Signal", "type": "filler" },
+
+    { "category": "base", "code": null, "name": "Victory - Song of Five", "type": "progression" },
+    { "category": "base", "code": null, "name": "Victory - Song of the Nomai", "type": "progression" },
+    { "category": "base&dlc", "code": null, "name": "Victory - Song of the Stranger", "type": "progression" },
+    { "category": "base&dlc", "code": null, "name": "Victory - Song of Six", "type": "progression" },
+    { "category": "base&dlc", "code": null, "name": "Victory - Song of Seven", "type": "progression" },
+    { "category": "dlc", "code": null, "name": "Victory - Echoes of the Eye", "type": "progression" },
+
+    { "category": "hn1", "code": 1734473752, "name": "Neighbor's Distress Signal Frequency", "type": "progression" },
+    { "category": "hn1", "code": 1734473753, "name": "Lava Core Signals Frequency", "type": "progression" },
+    { "category": "hn1", "code": 1734473754, "name": "Galactic Communication Frequency", "type": "progression" },
+
+    { "category": "ac", "code": 1734473755, "name": "Astral Codec Frequency", "type": "progression" },
+
+    { "category": "hn2", "code": 1734473756, "name": "Memory Cube Interface", "type": "progression" },
+    { "category": "hn2", "code": 1734473757, "name": "Magistarium Library Access Code", "type": "progression" },
+    { "category": "hn2", "code": 1734473758, "name": "Magistarium Dormitory Access Code", "type": "progression" },
+    { "category": "hn2", "code": 1734473759, "name": "Magistarium Engine Access Code", "type": "progression" },
+
+    { "category": "fq", "code": 1734473760, "name": "Hearthian Radio Frequency", "type": "progression" }
+]
