@@ -2,8 +2,8 @@ import logging
 from typing import List
 
 from BaseClasses import Tutorial, ItemClassification
-from Fill import fill_restrictive
-from worlds.LauncherComponents import Component, components, Type, launch_subprocess
+from Fill import fast_fill
+from worlds.LauncherComponents import Component, components, Type, launch as launch_component
 from worlds.AutoWorld import World, WebWorld
 from .Items import *
 from .Locations import *
@@ -17,7 +17,7 @@ from .Subclasses import KH2Item
 
 def launch_client():
     from .Client import launch
-    launch_subprocess(launch, name="KH2Client")
+    launch_component(launch, name="KH2Client")
 
 
 components.append(Component("KH2 Client", "KH2Client", func=launch_client, component_type=Type.CLIENT))
@@ -287,7 +287,7 @@ class KH2World(World):
 
     def pre_fill(self):
         """
-        Plandoing Events and Fill_Restrictive for donald,goofy and sora
+        Plandoing Events and Fast_Fill for donald,goofy and sora
         """
         self.donald_pre_fill()
         self.goofy_pre_fill()
@@ -431,9 +431,10 @@ class KH2World(World):
         Fills keyblade slots with abilities determined on player's setting
         """
         keyblade_locations = [self.multiworld.get_location(location, self.player) for location in Keyblade_Slots.keys()]
-        state = self.multiworld.get_all_state(False)
         keyblade_ability_pool_copy = self.keyblade_ability_pool.copy()
-        fill_restrictive(self.multiworld, state, keyblade_locations, keyblade_ability_pool_copy, True, True, allow_excluded=True)
+        fast_fill(self.multiworld, keyblade_ability_pool_copy, keyblade_locations)
+        for location in keyblade_locations:
+            location.locked = True
 
     def starting_invo_verify(self):
         """

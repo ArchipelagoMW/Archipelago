@@ -47,6 +47,9 @@ Packets are simple JSON lists in which any number of ordered network commands ca
 
 An object can contain the "class" key, which will tell the content data type, such as "Version" in the following example.
 
+Websocket connections should support per-message compression. Uncompressed connections are deprecated and may stop
+working in the future.
+
 Example:
 ```javascript
 [{"cmd": "RoomInfo", "version": {"major": 0, "minor": 1, "build": 3, "class": "Version"}, "tags": ["WebHost"], ... }]
@@ -261,6 +264,7 @@ Sent to clients in response to a [Set](#Set) package if want_reply was set to tr
 | key            | str  | The key that was updated.                                                                  |
 | value          | any  | The new value for the key.                                                                 |
 | original_value | any  | The value the key had before it was updated. Not present on "_read" prefixed special keys. |
+| slot           | int  | The slot that originally sent the Set package causing this change.                         |
 
 Additional arguments added to the [Set](#Set) package that triggered this [SetReply](#SetReply) will also be passed along.
 
@@ -272,6 +276,7 @@ These packets are sent purely from client to server. They are not accepted by cl
 * [Sync](#Sync)
 * [LocationChecks](#LocationChecks)
 * [LocationScouts](#LocationScouts)
+* [UpdateHint](#UpdateHint)
 * [StatusUpdate](#StatusUpdate)
 * [Say](#Say)
 * [GetDataPackage](#GetDataPackage)
@@ -341,6 +346,33 @@ This is useful in cases where an item appears in the game world, such as 'ledge 
 | ---- | ---- | ----- |
 | locations | list\[int\] | The ids of the locations seen by the client. May contain any number of locations, even ones sent before; duplicates do not cause issues with the Archipelago server. |
 | create_as_hint | int | If non-zero, the scouted locations get created and broadcasted as a player-visible hint. <br/>If 2 only new hints are broadcast, however this does not remove them from the LocationInfo reply. |
+
+### UpdateHint
+Sent to the server to update the status of a Hint. The client must be the 'receiving_player' of the Hint, or the update fails.
+
+### Arguments
+| Name | Type | Notes |
+| ---- | ---- | ----- |
+| player | int | The ID of the player whose location is being hinted for. |
+| location | int | The ID of the location to update the hint for. If no hint exists for this location, the packet is ignored. |
+| status | [HintStatus](#HintStatus) | Optional. If included, sets the status of the hint to this status. Cannot set `HINT_FOUND`, or change the status from `HINT_FOUND`. |
+
+#### HintStatus
+An enumeration containing the possible hint states.
+
+```python
+import enum
+class HintStatus(enum.IntEnum):
+    HINT_UNSPECIFIED = 0  # The receiving player has not specified any status
+    HINT_NO_PRIORITY = 10 # The receiving player has specified that the item is unneeded
+    HINT_AVOID = 20       # The receiving player has specified that the item is detrimental
+    HINT_PRIORITY = 30    # The receiving player has specified that the item is needed
+    HINT_FOUND = 40       # The location has been collected. Status cannot be changed once found.
+```
+- Hints for items with `ItemClassification.trap` default to `HINT_AVOID`.
+- Hints created with `LocationScouts`, `!hint_location`, or similar (hinting a location) default to `HINT_UNSPECIFIED`.
+- Hints created with `!hint` or similar (hinting an item for yourself) default to `HINT_PRIORITY`.
+- Once a hint is collected, its' status is updated to `HINT_FOUND` automatically, and can no longer be changed.
 
 ### StatusUpdate
 Sent to the server to update on the sender's status. Examples include readiness or goal completion. (Example: defeated Ganon in A Link to the Past)
@@ -501,9 +533,9 @@ In JSON this may look like:
     {"item": 3, "location": 3, "player": 3, "flags": 0}
 ]
 ```
-`item` is the item id of the item. Item ids are only supported in the range of [-2<sup>53</sup>, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
+`item` is the item id of the item. Item ids are only supported in the range of [-2<sup>53</sup> + 1, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
 
-`location` is the location id of the item inside the world. Location ids are only supported in the range of [-2<sup>53</sup>, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
+`location` is the location id of the item inside the world. Location ids are only supported in the range of [-2<sup>53</sup> + 1, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
 
 `player` is the player slot of the world the item is located in, except when inside an [LocationInfo](#LocationInfo) Packet then it will be the slot of the player to receive the item
 
@@ -512,7 +544,7 @@ In JSON this may look like:
 | ----- | ----- |
 | 0 | Nothing special about this item |
 | 0b001 | If set, indicates the item can unlock logical advancement |
-| 0b010 | If set, indicates the item is important but not in a way that unlocks advancement |
+| 0b010 | If set, indicates the item is especially useful |
 | 0b100 | If set, indicates the item is a trap |
 
 ### JSONMessagePart
@@ -526,6 +558,7 @@ class JSONMessagePart(TypedDict):
     color: Optional[str] # only available if type is a color
     flags: Optional[int] # only available if type is an item_id or item_name
     player: Optional[int] # only available if type is either item or location
+    hint_status: Optional[HintStatus] # only available if type is hint_status
 ```
 
 `type` is used to denote the intent of the message part. This can be used to indicate special information which may be rendered differently depending on client. How these types are displayed in Archipelago's ALttP client is not the end-all be-all. Other clients may choose to interpret and display these messages differently.
@@ -541,6 +574,7 @@ Possible values for `type` include:
 | location_id | Location ID, should be resolved to Location Name |
 | location_name | Location Name, not currently used over network, but supported by reference Clients. |
 | entrance_name | Entrance Name. No ID mapping exists. |
+| hint_status | The [HintStatus](#HintStatus) of the hint. Both `text` and `hint_status` are given. |
 | color | Regular text that should be colored. Only `type` that will contain `color` data. |
 
 
@@ -644,6 +678,7 @@ class Hint(typing.NamedTuple):
     found: bool
     entrance: str = ""
     item_flags: int = 0
+    status: HintStatus = HintStatus.HINT_UNSPECIFIED
 ```
 
 ### Data Package Contents
@@ -713,6 +748,7 @@ Tags are represented as a list of strings, the common client tags follow:
 | HintGame  | Indicates the client is a hint game, made to send hints instead of locations. Special join/leave message,¹ `game` is optional.²      |
 | Tracker   | Indicates the client is a tracker, made to track instead of sending locations. Special join/leave message,¹ `game` is optional.²     |
 | TextOnly  | Indicates the client is a basic client, made to chat instead of sending locations. Special join/leave message,¹ `game` is optional.² |
+| NoText    | Indicates the client does not want to receive text messages, improving performance if not needed.                                    |
 
 ¹: When connecting or disconnecting, the chat message shows e.g. "tracking".\
 ²: Allows `game` to be empty or null in [Connect](#connect). Game and version validation will then be skipped.

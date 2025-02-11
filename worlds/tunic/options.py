@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Dict, Any
 from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PlandoConnections,
-                     PerGameCommonOptions, OptionGroup, Visibility)
+                     PerGameCommonOptions, OptionGroup, Visibility, NamedRange)
 from .er_data import portal_mapping
 
 
@@ -29,7 +29,7 @@ class KeysBehindBosses(Toggle):
     display_name = "Keys Behind Bosses"
 
 
-class AbilityShuffling(Toggle):
+class AbilityShuffling(DefaultOnToggle):
     """
     Locks the usage of Prayer, Holy Cross*, and the Icebolt combo until the relevant pages of the manual have been found.
     If playing Hexagon Quest, abilities are instead randomly unlocked after obtaining 25%, 50%, and 75% of the required Hexagon goal amount.
@@ -154,6 +154,33 @@ class ShuffleLadders(Toggle):
     display_name = "Shuffle Ladders"
 
 
+class GrassRandomizer(Toggle):
+    """
+    Turns over 6,000 blades of grass and bushes in the game into checks.
+    """
+    internal_name = "grass_randomizer"
+    display_name = "Grass Randomizer"
+
+
+class LocalFill(NamedRange):
+    """
+    Choose the percentage of your filler/trap items that will be kept local or distributed to other TUNIC players with this option enabled.
+    If you have Grass Randomizer enabled, this option must be set to 95% or higher to avoid flooding the item pool. The host can remove this restriction by turning off the limit_grass_rando setting in host.yaml.
+    This option defaults to 95% if you have Grass Randomizer enabled, and to 0% otherwise.
+    This option ignores items placed in your local_items or non_local_items.
+    This option does nothing in single player games.
+    """
+    internal_name = "local_fill"
+    display_name = "Local Fill Percent"
+    range_start = 0
+    range_end = 98
+    special_range_names = {
+        "default": -1
+    }
+    default = -1
+    visibility = Visibility.template | Visibility.complex_ui | Visibility.spoiler
+
+
 class TunicPlandoConnections(PlandoConnections):
     """
     Generic connection plando. Format is:
@@ -166,6 +193,22 @@ class TunicPlandoConnections(PlandoConnections):
     exits = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
 
     duplicate_exits = True
+
+
+class CombatLogic(Choice):
+    """
+    If enabled, the player will logically require a combination of stat upgrade items and equipment to get some checks or navigate to some areas, with a goal of matching the vanilla combat difficulty.
+    The player may still be expected to run past enemies, reset aggro (by using a checkpoint or doing a scene transition), or find sneaky paths to checks.
+    This option marks many more items as progression and may force weapons much earlier than normal.
+    Bosses Only makes it so that additional combat logic is only added to the boss fights and the Gauntlet.
+    If disabled, the standard, looser logic is used. The standard logic does not include stat upgrades, just minimal weapon requirements, such as requiring a Sword or Magic Wand for Quarry, or not requiring a weapon for Swamp.
+    """
+    internal_name = "combat_logic"
+    display_name = "More Combat Logic"
+    option_off = 0
+    option_bosses_only = 1
+    option_on = 2
+    default = 0
 
 
 class LaurelsZips(Toggle):
@@ -183,7 +226,7 @@ class IceGrappling(Choice):
     Easy includes ice grappling enemies that are in range without luring them. May include clips through terrain.
     Medium includes using ice grapples to push enemies through doors or off ledges without luring them. Also includes bringing an enemy over to the Temple Door to grapple through it.
     Hard includes luring or grappling enemies to get to where you want to go.
-    The Medium and Hard options will give the player the Torch to return to the Overworld checkpoint to avoid softlocks. Using the Torch is considered in logic.
+    Enabling any of these difficulty options will give the player the Torch to return to the Overworld checkpoint to avoid softlocks. Using the Torch is considered in logic.
     Note: You will still be expected to ice grapple to the slime in East Forest from below with this option off.
     """
     internal_name = "ice_grappling"
@@ -201,7 +244,7 @@ class LadderStorage(Choice):
     Easy includes uses of Ladder Storage to get to open doors over a long distance without too much difficulty. May include convenient elevation changes (going up Mountain stairs, stairs in front of Special Shop, etc.).
     Medium includes the above as well as changing your elevation using the environment and getting knocked down by melee enemies mid-LS.
     Hard includes the above as well as going behind the map to enter closed doors from behind, shooting a fuse with the magic wand to knock yourself down at close range, and getting into the Cathedral Secret Legend room mid-LS.
-    Enabling any of these difficulty options will give the player the Torch item to return to the Overworld checkpoint to avoid softlocks. Using the Torch is considered in logic.
+    Enabling any of these difficulty options will give the player the Torch to return to the Overworld checkpoint to avoid softlocks. Using the Torch is considered in logic.
     Opening individual chests while doing ladder storage is excluded due to tedium.
     Knocking yourself out of LS with a bomb is excluded due to the problematic nature of consumables in logic.
     """
@@ -216,7 +259,7 @@ class LadderStorage(Choice):
 
 class LadderStorageWithoutItems(Toggle):
     """
-    If disabled, you logically require Stick, Sword, or Magic Orb to perform Ladder Storage.
+    If disabled, you logically require Stick, Sword, Magic Orb, or Shield to perform Ladder Storage.
     If enabled, you will be expected to perform Ladder Storage without progression items.
     This can be done with the plushie code, a Golden Coin, Prayer, and many other options.
 
@@ -247,31 +290,41 @@ class LogicRules(Choice):
 @dataclass
 class TunicOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
+
     sword_progression: SwordProgression
     start_with_sword: StartWithSword
     keys_behind_bosses: KeysBehindBosses
     ability_shuffling: AbilityShuffling
-    shuffle_ladders: ShuffleLadders
-    entrance_rando: EntranceRando
-    fixed_shop: FixedShop
     fool_traps: FoolTraps
+    laurels_location: LaurelsLocation
+
     hexagon_quest: HexagonQuest
     hexagon_goal: HexagonGoal
     extra_hexagon_percentage: ExtraHexagonPercentage
-    laurels_location: LaurelsLocation
+
+    shuffle_ladders: ShuffleLadders
+    grass_randomizer: GrassRandomizer
+    local_fill: LocalFill
+
+    entrance_rando: EntranceRando
+    fixed_shop: FixedShop
+
+    combat_logic: CombatLogic
     lanternless: Lanternless
     maskless: Maskless
     laurels_zips: LaurelsZips
     ice_grappling: IceGrappling
     ladder_storage: LadderStorage
     ladder_storage_without_items: LadderStorageWithoutItems
+
     plando_connections: TunicPlandoConnections
 
     logic_rules: LogicRules
-      
+
 
 tunic_option_groups = [
     OptionGroup("Logic Options", [
+        CombatLogic,
         Lanternless,
         Maskless,
         LaurelsZips,
