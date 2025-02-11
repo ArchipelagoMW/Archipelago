@@ -191,7 +191,9 @@ def eval_rule(state: CollectionState, p: int, rule: List[Any]) -> bool:
 
 
 def eval_criterion(state: CollectionState, p: int, criterion: Any) -> bool:
-    # all valid criteria are dicts
+    if isinstance(criterion, list):
+        return all(eval_criterion(state, p, sub_criterion) for sub_criterion in criterion)
+
     if isinstance(criterion, dict):
         # we're only using JSON objects / Python dicts here as discriminated unions,
         # so there should always be exactly one key-value pair
@@ -224,6 +226,9 @@ def regions_referenced_by_rule(rule: List[Any]) -> List[str]:
 
 def regions_referenced_by_criterion(criterion: Any) -> List[str]:
     # see eval_criterion comments
+    if isinstance(criterion, list):
+        return [region for sub_criterion in criterion for region in regions_referenced_by_criterion(sub_criterion)]
+
     if isinstance(criterion, dict):
         if len(criterion.items()) != 1:
             raise ValueError("Invalid rule criterion: " + json.dumps(criterion))
