@@ -1,3 +1,4 @@
+from dataclasses import fields
 from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union, Set, TextIO
 from logging import warning
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
@@ -14,7 +15,7 @@ from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_op
                       LaurelsLocation, LogicRules, LaurelsZips, IceGrappling, LadderStorage)
 from .combat_logic import area_data, CombatState
 from worlds.AutoWorld import WebWorld, World
-from Options import PlandoConnection, OptionError
+from Options import PlandoConnection, OptionError, PerGameCommonOptions, Removed, Range
 from decimal import Decimal, ROUND_HALF_UP
 from settings import Group, Bool
 
@@ -109,6 +110,19 @@ class TunicWorld(World):
     ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
 
     def generate_early(self) -> None:
+        if self.options.all_random:
+            for option_name in (attr.name for attr in fields(TunicOptions)
+                                if attr not in fields(PerGameCommonOptions)):
+                option = getattr(self.options, option_name)
+                if option_name == "all_random":
+                    continue
+                if issubclass(option.__class__, Removed):
+                    continue
+                if option.supports_weighting:
+                    if issubclass(option.__class__, Range):
+                        option.value = self.random.randint(option.range_start, option.range_end)
+                    else:
+                        option.value = self.random.choice(list(option.name_lookup))
         if self.options.logic_rules >= LogicRules.option_no_major_glitches:
             self.options.laurels_zips.value = LaurelsZips.option_true
             self.options.ice_grappling.value = IceGrappling.option_medium

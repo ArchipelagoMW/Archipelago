@@ -269,6 +269,16 @@ class LadderStorageWithoutItems(Toggle):
     display_name = "Ladder Storage without Items"
 
 
+class HiddenAllRandom(Toggle):
+    """
+    Sets all options that can be random to random.
+    For test gens.
+    """
+    internal_name = "all_random"
+    display_name = "All Random Debug"
+    visibility = Visibility.none
+
+
 class LogicRules(Choice):
     """
     This option has been superseded by the individual trick options.
@@ -318,6 +328,8 @@ class TunicOptions(PerGameCommonOptions):
     ladder_storage_without_items: LadderStorageWithoutItems
 
     plando_connections: TunicPlandoConnections
+
+    all_random: HiddenAllRandom
 
     logic_rules: LogicRules
 
