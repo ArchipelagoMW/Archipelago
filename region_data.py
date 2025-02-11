@@ -450,7 +450,10 @@ level_table = {
                     LocationData("Snowman Puzzle Bottom Diamond", difficulties=[normal]),
                     LocationData("Snowman Puzzle Diamond Under Door"),
                     LocationData("Snowman Puzzle Right Diamond"),
-                    LocationData("Crystal Lobbing Diamond", access_rule=has('Grab')),
+                    LocationData(
+                        "Crystal Lobbing Diamond",
+                        access_rule=has('Grab') | advanced_logic() & has_all(['Stomp Jump', 'Ground Pound'])
+                    ),
                     LocationData("Yeti Puzzle Diamond", access_rule=has('Heavy Grab')),
                 ]
             ),
