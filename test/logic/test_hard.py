@@ -439,14 +439,14 @@ class TestHard(WL4TestBase):
             ['Doodle Woods - Gray Square Box', True, ['Progressive Ground Pound']],
 
             ['Doodle Woods - Pink Circle Box', False, []],
-            ['Doodle Woods - Pink Circle Box', False, [], ['Stomp Jump']],
-            ['Doodle Woods - Pink Circle Box', True, ['Stomp Jump']],
+            ['Doodle Woods - Pink Circle Box', False, [], ['Progressive Ground Pound']],
+            ['Doodle Woods - Pink Circle Box', True, ['Progressive Ground Pound']],
 
             ['Doodle Woods - Purple Square Box', True, []],
 
             ['Doodle Woods - Blue Circle Box', False, []],
-            ['Doodle Woods - Blue Circle Box', False, [], ['Progressive Ground Pound']],
-            ['Doodle Woods - Blue Circle Box', True, ['Progressive Ground Pound']],
+            ['Doodle Woods - Blue Circle Box', False, [], ['Stomp Jump']],
+            ['Doodle Woods - Blue Circle Box', True, ['Stomp Jump']],
 
             ['Doodle Woods - CD Box', True, []],
         ])

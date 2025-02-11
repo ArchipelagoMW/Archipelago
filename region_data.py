@@ -617,8 +617,8 @@ level_table = {
             RegionData(
                 None,
                 [
-                    ExitData("Pink Circle Room", has('Stomp Jump')),
-                    ExitData("Blue Circle Room", has('Ground Pound')),
+                    ExitData("Blue Circle Room", has('Stomp Jump')),
+                    ExitData("Pink Circle Room", has('Ground Pound')),
                     ExitData(
                         "Gray Square Room",
                         has('Ground Pound') | not_difficulty(normal) & advanced_logic() & has('Grab')
@@ -641,16 +641,6 @@ level_table = {
                 ]
             ),
             RegionData(
-                "Pink Circle Room",
-                [],
-                [
-                    LocationData("Pink Circle Box", difficulties=[hard, s_hard]),
-                ],
-                diamonds=[
-                    LocationData("Pink Circle Diamond", difficulties=[normal]),
-                ]
-            ),
-            RegionData(
                 "Blue Circle Room",
                 [],
                 [
@@ -658,6 +648,16 @@ level_table = {
                 ],
                 diamonds=[
                     LocationData("Blue Circle Diamond", difficulties=[normal]),
+                ]
+            ),
+            RegionData(
+                "Pink Circle Room",
+                [],
+                [
+                    LocationData("Pink Circle Box", difficulties=[hard, s_hard]),
+                ],
+                diamonds=[
+                    LocationData("Pink Circle Diamond", difficulties=[normal]),
                 ]
             ),
             RegionData(
