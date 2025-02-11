@@ -445,7 +445,10 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
                     key = child.sort_key
                     if key == "priority":
                         parent.hint_sorter = HintLog.hint_sorter
-                    else: parent.hint_sorter = lambda element: remove_between_brackets.sub("", element[key]["text"]).lower()
+                    else:
+                        parent.hint_sorter = lambda element: (
+                            remove_between_brackets.sub("", element[key]["text"]).lower()
+                        )
                     if key == parent.sort_key:
                         # second click reverses order
                         parent.reversed = not parent.reversed
@@ -833,7 +836,13 @@ priority_colors: typing.Dict[HintPriority, str] = {
     HintPriority.HINT_DESIRED: "plum",
     HintPriority.HINT_NEEDED: "plum",
 }
-
+status_sort_weights: dict[HintStatus, int] = {
+    HintStatus.HINT_FOUND: 0,
+    HintStatus.HINT_UNSPECIFIED: 1,
+    HintStatus.HINT_NO_PRIORITY: 2,
+    HintStatus.HINT_AVOID: 3,
+    HintStatus.HINT_PRIORITY: 4,
+}
 
 
 class HintLog(RecycleView):
