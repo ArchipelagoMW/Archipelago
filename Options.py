@@ -1582,7 +1582,7 @@ def dump_player_options(multiworld: MultiWorld) -> None:
             }
             output.append(player_output)
             for option_key, option in world.options_dataclass.type_hints.items():
-                if issubclass(Removed, option):
+                if option.visibility == Visibility.none:
                     continue
                 display_name = getattr(option, "display_name", option_key)
                 player_output[display_name] = getattr(world.options, option_key).current_option_name
