@@ -54,6 +54,12 @@ item_name_groups = {
     "useful": set(entry["name"] for entry in items_data if entry["type"] == "useful"),
     "filler": set(entry["name"] for entry in items_data if entry["type"] == "filler"),
     "trap": set(entry["name"] for entry in items_data if entry["type"] == "trap"),
+
+    "Sol Seals": set(entry["name"] for entry in items_data if entry["name"].startswith("Seal of ")),
+    "Jades": set(entry["name"] for entry in items_data if (" Jade" in entry["name"])),
+    "Map Chips": set(entry["name"] for entry in items_data if entry["name"].endswidth(" Chip")),
+    "Poisons": set(entry["name"] for entry in items_data if entry["name"].startswith("(Poison) ")),
+    "Database Entries": set(entry["name"] for entry in items_data if entry["name"].startswith("(Database) ")),
 }
 
 

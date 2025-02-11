@@ -45,30 +45,77 @@ all_non_event_locations_table = {name: data.address for name, data
                                  in location_data_table.items() if data.address is not None}
 
 location_names: Set[str] = set(entry["name"] for entry in locations_data)
+
+afm = set(n for n in location_names if n.startswith("AF (Monitoring): "))
+afe = set(n for n in location_names if n.startswith("AF (Elevator): "))
+afd = set(n for n in location_names if n.startswith("AF (Depths): "))
+ch = set(n for n in location_names if n.startswith("Central Hall: "))
+fsp = set(n for n in location_names if n.startswith("FSP: "))
+cc = set(n for n in location_names if n.startswith("Cortex Center: "))
+cth = set(n for n in location_names if n.startswith("CTH: "))
+pre = set(n for n in location_names if n.startswith("PR (East): "))
+prc = set(n for n in location_names if n.startswith("PR (Central): "))
+prw = set(n for n in location_names if n.startswith("PR (West)"))
+lyr = set(n for n in location_names if n.startswith("LYR: "))
+gh = set(n for n in location_names if n.startswith("Greenhouse: "))
+wos = set(n for n in location_names if n.startswith("W&OS: "))
+yc = set(n for n in location_names if n.startswith("Yinglong Canal: "))
+fgh = set(n for n in location_names if n.startswith("Factory (GH): "))
+fu = set(n for n in location_names if n.startswith("Factory (U): "))
+p = set(n for n in location_names if n.startswith("Prison: "))
+fmr = set(n for n in location_names if n.startswith("Factory (MR): "))
+fpa = set(n for n in location_names if n.startswith("Factory (PA): "))
+am = set(n for n in location_names if n.startswith("AM: "))
+uc = set(n for n in location_names if n.startswith("UC: "))
+gd = set(n for n in location_names if n.startswith("Galactic Dock: "))
+ow = set(n for n in location_names if n.startswith("OW: "))
+iw = set(n for n in location_names if n.startswith("IW: "))
+br = set(n for n in location_names if n.startswith("BR: "))
+gosy = set(n for n in location_names if n.startswith("GoS (Entry): "))
+gose = set(n for n in location_names if n.startswith("GoS (East): "))
+gosw = set(n for n in location_names if n.startswith("GoS (West): "))
+st = set(n for n in location_names if n.startswith("Sky Tower: "))
+edp = set(n for n in location_names if n.startswith("ED (Passages): "))
+edla = set(n for n in location_names if n.startswith("ED (Living Area): "))
+eds = set(n for n in location_names if n.startswith("ED (Sanctum): "))
+trc = set(n for n in location_names if n.startswith("TRC: "))
+
 location_name_groups = {
     # Auto-generated groups
     # We don't need an "Everywhere" group because AP makes that for us
-
-    "Signals": set(n for n in location_names if n.endswith(" Signal")),
-
-    "Ember Twin": set(n for n in location_names if n.startswith("ET: ") or n.startswith("ET Ship Log: ")),
-    "Ash Twin": set(n for n in location_names if n.startswith("AT: ") or n.startswith("AT Ship Log: ")),
-    "Hourglass Twins": set(n for n in location_names if
-                           n.startswith("ET: ") or n.startswith("ET Ship Log: ") or
-                           n.startswith("AT: ") or n.startswith("AT Ship Log: ")),
-    "Timber Hearth": set(n for n in location_names if n.startswith("TH: ") or n.startswith("TH Ship Log: ")),
-    "Attlerock": set(n for n in location_names if n.startswith("AR: ") or n.startswith("AR Ship Log: ")),
-    "Brittle Hollow": set(n for n in location_names if n.startswith("BH: ") or n.startswith("BH Ship Log: ")),
-    "Giant's Deep": set(n for n in location_names if n.startswith("GD: ") or n.startswith("GD Ship Log: ")),
-    "Dark Bramble": set(n for n in location_names if n.startswith("DB: ") or n.startswith("DB Ship Log: ")),
-    "Quantum Moon": set(n for n in location_names if n.startswith("QM: ") or n.startswith("QM Ship Log: ")),
-    "Interloper": set(n for n in location_names if n == "Ruptured Core (Text Wheel)" or "Ship Log: Ruptured Core" in n),
-    "Sun Station": set(n for n in location_names if n == "Sun Station (Projection Stone Text)" or "Ship Log: Sun Station" in n),
-    "WHS": set(n for n in location_names if n == "WHS (Text Wall)" or "Ship Log: WHS" in n),
-    "The Stranger": set(n for n in location_names if n.startswith("EotE: ") or n.startswith("EotE Ship Log: ")),
-    "Dreamworld": set(n for n in location_names if n.startswith("DW: ") or n.startswith("DW Ship Log: ")),
-
-    "Ship Logs": set(n for n in location_names if "Ship Log: " in n),
+    "AFM": afm, "AF (Monitoring)": afm, "Apeman Facility (Monitoring)": afm,
+    "AFE": afe, "AF (Elevator)": afe, "Apeman Facility (Elevator)": afe,
+    "AFD": afd, "AF (Depths)": afd, "Apeman Facility (Depths)": afd,
+    "CH": ch, "Central Hall": ch,
+    "FSP": fsp, "Four Seasons Pavilion": fsp,
+    "CC": cc, "Cortex Center": cc,
+    "CTH": cth, "Central Transport Hub": cth,
+    "PRE": pre, "PR (East)": pre, "Power Reservoir (East)": pre,
+    "PRC": prc, "PR (Central)": prc, "Power Reservoir (Central)": prc,
+    "PRW": prw, "PR (West)": prw, "Power Reservoir (West)": prw,
+    "LYR": lyr, "Lake Yaochi Ruins": lyr,
+    "GH": gh, "Greenhouse": gh,
+    "W&OS": wos, "Water & Oxygen Synthesis": wos,
+    "YC": yc, "Yinglong Canal": yc,
+    "FGH": fgh, "Factory (GH)": fgh, "Factory (Great Hall)": fgh,
+    "FU": fu, "Factory (U)": fu, "Factory (Underground)": fu,
+    "P": p, "Prison": p,
+    "FMR": fmr, "Factory (MR)": fmr, "Factory (Machine Room)": fmr,
+    "FPA": fpa, "Factory (PA)": fpa, "Factory (Production Area)": fpa,
+    "AM": am, "Abandoned Mines": am,
+    "UC": uc, "Underground Cave": uc,
+    "GD": gd, "Galactic Dock": gd,
+    "OW": ow, "Outer Warehouse": ow,
+    "IW": iw, "Inner Warehouse": iw,
+    "BR": br, "Boundless Repository": br,
+    "GoSY": gosy, "GoS (Entry)": gosy, "Grotto of Scriptures (Entry)": gosy,
+    "GoSE": gose, "GoS (East)": gose, "Grotto of Scriptures (East)": gose,
+    "GoSW": gosw, "GoS (West)": gosw, "Grotto of Scriptures (West)": gosw,
+    "ST": st, "Sky Tower": st,
+    "EDP": edp, "ED (Passages)": edp, "Empyrean District (Passages)": edp,
+    "EDLA": edla, "ED (Living Area)": edla, "Empyrean District (Living Area)": edla,
+    "EDS": eds, "ED (Sanctum)": eds, "Empyrean District (Sanctum)": eds,
+    "TRC": trc, "Tiandao Research Center": trc,
 }
 
 
