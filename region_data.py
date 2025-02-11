@@ -708,7 +708,7 @@ level_table = {
                     LocationData("Frog Switch", event=True),
                 ],
                 diamonds=[
-                    LocationData("Switch Ladder Diamond", difficulties=[normal, hard]),
+                    LocationData("Switch Ladder Diamond", difficulties=[normal, hard], access_rule=has('Super Ground Pound')),
                 ]
             ),
         ]
@@ -984,8 +984,8 @@ level_table = {
                     LocationData("Zombie Hall Left Diamond"),
                     LocationData("Zombie Hall Right Diamond"),
                     LocationData("Digging Diamond"),
-                    LocationData("Slope Diamond", access_rule=has('Dash Attack')),
-                    LocationData("Scienstein Escape Diamond", access_rule=has_all(['Dash Attack', 'Swim'])),
+                    LocationData("Slope Diamond"),
+                    LocationData("Scienstein Escape Diamond", access_rule=has('Swim')),
                 ]
             ),
             RegionData(
