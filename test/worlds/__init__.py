@@ -36,7 +36,7 @@ def load_tests(loader: "TestLoader", standard_tests: "TestSuite", pattern: str):
 
     folders = [os.path.join(os.path.split(world.__file__)[0], "test")
                for world in AutoWorldRegister.world_types.values()
-               if fnmatch.fnmatch(world.__module__, world_glob)]
+               if fnmatch.fnmatch(world.__module__, world_glob) and world.game == "Nine Sols"]  # skip ALttP/Timespinner/etc world tests
 
     all_tests = [
         test_case for folder in folders if os.path.exists(folder)
