@@ -20,7 +20,7 @@ When I tested this using test/benchmark/load_worlds.py, I found OW took ~10-50ms
 
 To run the script, go to the root Archipelago/ folder and run:
 ```shell
-python worlds/outer_wilds/shared_static_logic/pickle_static_logic.py
+python worlds/nine_sols/shared_static_logic/pickle_static_logic.py
 ```
 
 The unit test `test_pickle_file_hashes` checks that the generated `static_logic.pickle` file is up-to-date.

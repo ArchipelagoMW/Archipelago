@@ -11,7 +11,7 @@ if __name__ == '__main__':
 
         exit()
 
-    folder_path = os.path.join("worlds", "outer_wilds", "shared_static_logic")
+    folder_path = os.path.join("worlds", "nine_sols", "shared_static_logic")
     items_path = os.path.join(folder_path, "items.jsonc")
     locations_path = os.path.join(folder_path, "locations.jsonc")
     connections_path = os.path.join(folder_path, "connections.jsonc")
