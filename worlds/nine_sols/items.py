@@ -64,18 +64,23 @@ def create_item(player: int, name: str) -> NineSolsItem:
 # All progression and useful item types have a hardcoded number of instances regardless of options.
 # It's almost always 1, so we only have to write down the number in this map when it's not 1.
 repeated_prog_useful_items = {
-    "Oxygen Capacity Upgrade": 3,
-    "Fuel Capacity Upgrade": 3,
-    "Boost Duration Upgrade": 3,
+    "Herb Catalyst": 8,
+    "Pipe Vial": 2,  # with shop items, 5(???)
+    "Tao Fruit": 13,
+    "Greater Tao Fruit": 4,
+    "Computing Unit": 4,  # with shop items, 8
+    "Dark Steel": 6,
+    "GM Fertilizer": 2,
 }
 
+# I doubt I counted these correctly, but they should be close enough to "feel right".
 repeatable_filler_weights = {
-    "Nothing": 0,  # no longer used, here for backwards compatibility
-    "Oxygen Refill": 10,
-    "Jetpack Fuel Refill": 10,
-    "Marshmallow": 8,
-    "Perfect Marshmallow": 1,
-    "Burnt Marshmallow": 1,
+    "Jin x800": 4,
+    "Jin x320": 26,
+    "Jin x50": 72,
+    "Basic Component": 15,
+    "Standard Component": 30,
+    "Advanced Component": 13,
 }
 
 
