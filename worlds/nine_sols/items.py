@@ -111,44 +111,45 @@ def create_items(world: "NineSolsWorld") -> None:
     unique_filler_with_traps = unique_filler
 
     # replace some unique filler items with trap items, depending on trap settings
-    trap_weights = options.trap_type_weights
-    trap_chance = (options.trap_chance / 100)
-    filler_chance = 1 - trap_chance
-    apply_trap_items = options.trap_chance > 0 and any(v > 0 for v in options.trap_type_weights.values())
-    if apply_trap_items:
-        trap_weights_sum = sum(trap_weights.values())
-        trap_overwrites = random.choices(
-            population=[None] + list(trap_weights.keys()),
-            weights=[filler_chance] + list((w / trap_weights_sum) * trap_chance for w in trap_weights.values()),
-            k=len(unique_filler)
-        )
-        for i in range(0, len(unique_filler)):
-            trap_overwrite = trap_overwrites[i]
-            if trap_overwrite is not None:
-                unique_filler_with_traps[i] = create_item(player, trap_overwrite)
+    # TODO: uncomment this after we have trap items and options
+    # trap_weights = options.trap_type_weights
+    # trap_chance = (options.trap_chance / 100)
+    # filler_chance = 1 - trap_chance
+    # apply_trap_items = options.trap_chance > 0 and any(v > 0 for v in options.trap_type_weights.values())
+    # if apply_trap_items:
+    #     trap_weights_sum = sum(trap_weights.values())
+    #     trap_overwrites = random.choices(
+    #         population=[None] + list(trap_weights.keys()),
+    #         weights=[filler_chance] + list((w / trap_weights_sum) * trap_chance for w in trap_weights.values()),
+    #         k=len(unique_filler)
+    #     )
+    #     for i in range(0, len(unique_filler)):
+    #         trap_overwrite = trap_overwrites[i]
+    #         if trap_overwrite is not None:
+    #             unique_filler_with_traps[i] = create_item(player, trap_overwrite)
 
     # add enough "repeatable"/non-unique filler items (and/or traps) to make item count equal location count
     # here we use the term "junk" to mean "filler or trap items"
     unique_item_count = len(prog_and_useful_items) + len(unique_filler)
     unfilled_location_count = len(multiworld.get_unfilled_locations(player))
     assert unfilled_location_count > unique_item_count
-    repeatable_filler_needed = unfilled_location_count - unique_item_count
-    junk_names = list(repeatable_filler_weights.keys())
-    junk_weights = list(repeatable_filler_weights.values())
-    if apply_trap_items:
-        filler_weights_sum = sum(repeatable_filler_weights.values())
-        normalized_filler_weights = list((w / filler_weights_sum) * filler_chance
-                                         for w in repeatable_filler_weights.values())
-        trap_weights_sum = sum(trap_weights.values())
-        normalized_trap_weights = list((w / trap_weights_sum) * trap_chance for w in trap_weights.values())
-        junk_names += list(trap_weights.keys())
-        junk_weights = normalized_filler_weights + normalized_trap_weights
-    repeatable_filler_names_with_traps = random.choices(
-        population=junk_names,
-        weights=junk_weights,
-        k=repeatable_filler_needed
-    )
-    repeatable_filler_with_traps = list(create_item(player, name) for name in repeatable_filler_names_with_traps)
+    # repeatable_filler_needed = unfilled_location_count - unique_item_count
+    # junk_names = list(repeatable_filler_weights.keys())
+    # junk_weights = list(repeatable_filler_weights.values())
+    # if apply_trap_items:
+    #     filler_weights_sum = sum(repeatable_filler_weights.values())
+    #     normalized_filler_weights = list((w / filler_weights_sum) * filler_chance
+    #                                      for w in repeatable_filler_weights.values())
+    #     trap_weights_sum = sum(trap_weights.values())
+    #     normalized_trap_weights = list((w / trap_weights_sum) * trap_chance for w in trap_weights.values())
+    #     junk_names += list(trap_weights.keys())
+    #     junk_weights = normalized_filler_weights + normalized_trap_weights
+    # repeatable_filler_names_with_traps = random.choices(
+    #     population=junk_names,
+    #     weights=junk_weights,
+    #     k=repeatable_filler_needed
+    # )
+    # repeatable_filler_with_traps = list(create_item(player, name) for name in repeatable_filler_names_with_traps)
 
-    itempool = prog_and_useful_items + unique_filler_with_traps + repeatable_filler_with_traps
+    itempool = prog_and_useful_items + unique_filler_with_traps  # + repeatable_filler_with_traps
     multiworld.itempool += itempool
