@@ -353,5 +353,8 @@ class TestAdvancedSHard(TestSHard):
 
             ['Golden Passage - Bat Room Box', True, []],
 
+            ['Golden Passage - Mad Scienstein Box', False, []],
+            ['Golden Passage - Mad Scienstein Box', False, [], ['Progressive Ground Pound', 'Progressive Grab']],
             ['Golden Passage - Mad Scienstein Box', True, ['Progressive Ground Pound']],
+            ['Golden Passage - Mad Scienstein Box', True, ['Progressive Grab']],
         ])

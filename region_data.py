@@ -973,7 +973,9 @@ level_table = {
             RegionData(
                 "Passage",
                 [
-                    ExitData("Scienstein Area", has('Ground Pound')),
+                    # Trick undocumented due to being currently not doable in practice: Reaching Golden Passage always
+                    # requires Ground Pound because of Cractus and Catbat
+                    ExitData("Scienstein Area", has('Ground Pound') | advanced_logic() & has('Grab')),
                 ],
                 [
                     LocationData("River Box"),
