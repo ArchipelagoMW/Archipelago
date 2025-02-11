@@ -7,25 +7,23 @@ from BaseClasses import CollectionState, Location, Region
 from Utils import restricted_loads
 from worlds.generic.Rules import set_rule
 from .options import Spawn
-from .should_generate import should_generate, should_generate_location
-from .warp_platforms import warp_platform_to_logical_region, warp_platform_required_items
+from .should_generate import should_generate
 
 if typing.TYPE_CHECKING:
-    from . import OuterWildsWorld
+    from . import NineSolsWorld
 
 
-class OuterWildsLocation(Location):
-    game = "Outer Wilds"
+class NineSolsLocation(Location):
+    game = "Nine Sols"
 
 
-class OuterWildsLocationData(NamedTuple):
+class NineSolsLocationData(NamedTuple):
     region: str
     address: Optional[int] = None
     category: Optional[str] = None
-    logsanity: bool = False
 
 
-class OuterWildsRegionData(NamedTuple):
+class NineSolsRegionData(NamedTuple):
     connecting_regions: List[str] = []
 
 
@@ -35,13 +33,12 @@ locations_data = unpickled_data["LOCATIONS"]
 connections_data = unpickled_data["CONNECTIONS"]
 
 
-location_data_table: Dict[str, OuterWildsLocationData] = {}
+location_data_table: Dict[str, NineSolsLocationData] = {}
 for location_datum in locations_data:
-    location_data_table[location_datum["name"]] = OuterWildsLocationData(
+    location_data_table[location_datum["name"]] = NineSolsLocationData(
         address=location_datum["address"],
         region=(location_datum["region"] if "region" in location_datum else None),
         category=(location_datum["category"] if "category" in location_datum else None),
-        logsanity=(location_datum["logsanity"] if "logsanity" in location_datum else False),
     )
 
 all_non_event_locations_table = {name: data.address for name, data
@@ -72,52 +69,38 @@ location_name_groups = {
     "Dreamworld": set(n for n in location_names if n.startswith("DW: ") or n.startswith("DW Ship Log: ")),
 
     "Ship Logs": set(n for n in location_names if "Ship Log: " in n),
-
-    # Manually curated groups
-    "Frequencies": {
-        "Scan Any Distress Beacon",
-        "Scan Any Quantum Fluctuation",
-        "TH: Receive Hide & Seek Frequency",
-    },
 }
 
 
-region_data_table: Dict[str, OuterWildsRegionData] = {}
+region_data_table: Dict[str, NineSolsRegionData] = {}
 
 
-def create_regions(world: "OuterWildsWorld") -> None:
+def create_regions(world: "NineSolsWorld") -> None:
     mw = world.multiworld
     p = world.player
     options = world.options
 
     # start by ensuring every region is a key in region_data_table
     locations_to_create = {k: v for k, v in location_data_table.items()
-                           if should_generate_location(v.category, v.logsanity, options)}
+                           if should_generate(v.category, options)}
 
     for ld in locations_to_create.values():
         region_name = ld.region
         if region_name not in region_data_table:
-            region_data_table[region_name] = OuterWildsRegionData()
+            region_data_table[region_name] = NineSolsRegionData()
 
     connections_to_create = [c for c in connections_data
                              if should_generate(c["category"] if "category" in c else None, options)]
 
     for cd in connections_to_create:
         if cd["from"] not in region_data_table:
-            region_data_table[cd["from"]] = OuterWildsRegionData()
+            region_data_table[cd["from"]] = NineSolsRegionData()
         if cd["to"] not in region_data_table:
-            region_data_table[cd["to"]] = OuterWildsRegionData()
-
-    # when dlc_only: true, the "dead-end" warp platforms have no locations or static connections,
-    # so the random warp setup below fails unless we've explicitly added these to the region list
-    for r in ["Sun Station", "Ash Twin Interior", "Hanging City Ceiling"]:
-        region_data_table[r] = OuterWildsRegionData()
+            region_data_table[cd["to"]] = NineSolsRegionData()
 
     # actually create the Regions, initially all empty
     for region_name in region_data_table.keys():
         mw.regions.append(Region(region_name, p, mw))
-
-    split_translator = options.split_translator
 
     # add locations and connections to each region
     for region_name, region_data in region_data_table.items():
@@ -125,13 +108,13 @@ def create_regions(world: "OuterWildsWorld") -> None:
         region.add_locations({
             location_name: location_data.address for location_name, location_data in locations_to_create.items()
             if location_data.region == region_name
-        }, OuterWildsLocation)
+        }, NineSolsLocation)
 
         exit_connections = [cd for cd in connections_to_create if cd["from"] == region_name]
         for connection in exit_connections:
             to = connection["to"]
             requires = connection["requires"]
-            rule = None if len(requires) == 0 else lambda state, r=requires, st=split_translator: eval_rule(state, p, r, st)
+            rule = None if len(requires) == 0 else lambda state, r=requires: eval_rule(state, p, r)
             entrance = region.connect(mw.get_region(to, p), None, rule)
             indirect_region_names = regions_referenced_by_rule(requires)
             for indirect_region_name in indirect_region_names:
@@ -141,67 +124,13 @@ def create_regions(world: "OuterWildsWorld") -> None:
     for ld in locations_data:
         if ld["name"] in locations_to_create and len(ld["requires"]) > 0:
             set_rule(mw.get_location(ld["name"], p),
-                     lambda state, r=ld["requires"], st=split_translator: eval_rule(state, p, r, st))
+                     lambda state, r=ld["requires"]: eval_rule(state, p, r))
 
     # add dynamic logic, i.e. connections based on player options
     menu = mw.get_region("Menu", p)
-    if world.spawn == Spawn.option_vanilla:
-        menu.add_exits(["Timber Hearth Village"])
-    elif world.spawn == Spawn.option_hourglass_twins:
-        menu.add_exits(["Hourglass Twins"])
-    elif world.spawn == Spawn.option_timber_hearth:
-        menu.add_exits(["Timber Hearth"])
-    elif world.spawn == Spawn.option_brittle_hollow:
-        menu.add_exits(["Brittle Hollow"])
-    elif world.spawn == Spawn.option_giants_deep:
-        menu.add_exits(["Giant's Deep"])
-    elif world.spawn == Spawn.option_stranger:
-        menu.add_exits(["Stranger Sunside Hangar"])
-
-    if world.warps == 'vanilla':
-        def has_codes(state): return state.has("Nomai Warp Codes", p)
-
-        hgt = mw.get_region("Hourglass Twins", p)
-        hgt.add_exits([
-            "Sun Station",
-            "Ash Twin Interior",
-            "Timber Hearth",
-            "Hanging City Ceiling",
-            "Giant's Deep",
-        ], {
-            "Sun Station": lambda state: state.has_all(["Nomai Warp Codes", "Spacesuit"], p),
-            "Ash Twin Interior": has_codes,
-            "Timber Hearth": has_codes,
-            "Hanging City Ceiling": has_codes,
-            "Giant's Deep": has_codes,
-        })
-
-        mw.get_region("Sun Station", p).connect(
-            hgt, "SS vanilla warp",
-            lambda state: state.has_all(["Nomai Warp Codes", "Spacesuit"], p))
-        mw.get_region("Ash Twin Interior", p).connect(hgt, "ATP vanilla warp", has_codes)
-        mw.get_region("Timber Hearth", p).connect(hgt, "TH vanilla warp", has_codes)
-        mw.get_region("Hanging City Ceiling", p).connect(hgt, "BHF vanilla warp", has_codes)
-        mw.get_region("Giant's Deep", p).connect(hgt, "GD vanilla warp", has_codes)
-
-        mw.get_region("White Hole Station", p).add_exits(["Brittle Hollow"], {"Brittle Hollow": has_codes})
-    else:
-        for (platform_1, platform_2) in world.warps:
-            region_name_1 = warp_platform_to_logical_region[platform_1]
-            region_name_2 = warp_platform_to_logical_region[platform_2]
-            if region_name_1 == region_name_2:
-                continue
-            required_items = ["Nomai Warp Codes"]
-            required_items.extend(warp_platform_required_items.get(platform_1, []))
-            required_items.extend(warp_platform_required_items.get(platform_2, []))
-
-            def rule(state: CollectionState) -> bool:
-                nonlocal required_items
-                return state.has_all(required_items, p)
-            r1 = mw.get_region(region_name_1, p)
-            r2 = mw.get_region(region_name_2, p)
-            r1.connect(r2, "%s->%s warp" % (region_name_1, region_name_2), rule)
-            r2.connect(r1, "%s->%s warp" % (region_name_2, region_name_1), rule)
+    # TODO: alternate spawns
+    menu.add_exits(["Four Seasons Pavilion"])
+    menu.add_exits(["Apeman Facility (Monitoring)"])
 
 
 # In the .jsonc files we use, a location or region connection's "access rule" is defined
@@ -211,11 +140,11 @@ def create_regions(world: "OuterWildsWorld") -> None:
 
 # In particular: this eval_rule() function is the main piece of code which will have to
 # be implemented in both languages, so it's important we keep the implementations in sync
-def eval_rule(state: CollectionState, p: int, rule: List[Any], split_translator: bool) -> bool:
-    return all(eval_criterion(state, p, criterion, split_translator) for criterion in rule)
+def eval_rule(state: CollectionState, p: int, rule: List[Any]) -> bool:
+    return all(eval_criterion(state, p, criterion) for criterion in rule)
 
 
-def eval_criterion(state: CollectionState, p: int, criterion: Any, split_translator: bool) -> bool:
+def eval_criterion(state: CollectionState, p: int, criterion: Any) -> bool:
     # all valid criteria are dicts
     if isinstance(criterion, dict):
         # we're only using JSON objects / Python dicts here as discriminated unions,
@@ -227,11 +156,9 @@ def eval_criterion(state: CollectionState, p: int, criterion: Any, split_transla
         # { "item": "..." } and { "anyOf": [ ... ] } and { "location": "foo" } and { "region": "bar" }
         # mean exactly what they sound like, and those are the only kinds of criteria.
         if key == "item" and isinstance(value, str):
-            if not split_translator and value.startswith("Translator ("):
-                return state.has("Translator", p)
             return state.has(value, p)
         elif key == "anyOf" and isinstance(value, list):
-            return any(eval_criterion(state, p, sub_criterion, split_translator) for sub_criterion in value)
+            return any(eval_criterion(state, p, sub_criterion) for sub_criterion in value)
         elif key == "location" and isinstance(value, str):
             return state.can_reach(value, "Location", p)
         elif key == "region" and isinstance(value, str):

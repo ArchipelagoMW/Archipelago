@@ -1,4 +1,4 @@
-# Outer Wilds Setup Guide
+# Nine Sols Setup Guide
 
 TODO: write a Setup Guide
 

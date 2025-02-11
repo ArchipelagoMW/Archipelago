@@ -1,4 +1,4 @@
-# Outer Wilds Shared Static Logic
+# Nine Sols Shared Static Logic
 
 These .jsonc files are the source of truth for the statically known items, locations, regions, connections between regions, and logic / access rules for each location and connection.
 
@@ -27,6 +27,6 @@ The unit test `test_pickle_file_hashes` checks that the generated `static_logic.
 
 ### In-Game Tracker / C# Usage
 
-The C# code for the "Archipelago Randomizer" mod for Outer Wilds is at https://github.com/Ixrec/OuterWildsArchipelagoRandomizer.
+The C# code for the "Archipelago Randomizer" mod for Nine Sols is at https://github.com/Ixrec/NineSolsArchipelagoRandomizer.
 That repo includes this one as a submodule, so the mod's build process can directly use these .jsonc files (and record in git history exactly which versions were last used).
-The mod itself then uses that information for its in-game tracker, which includes full logic tracking for every location.
+The mod itself (will hopefully someday) use that information for its in-game tracker, which includes full logic tracking for every location.
