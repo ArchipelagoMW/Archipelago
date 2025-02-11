@@ -1,319 +1,43 @@
 [
-    // we use a "Space" region to express that the Spaceship lets us go between all the major regions
-    // as well as access a handful of warp pad-less locations like Attlerock and Hollow's Lantern
-    { "from": "Menu", "to": "Space", "requires": [ { "item": "Launch Codes" } ] },
+    // Apeman Facility (Monitoring)
+    { "from": "AFM - Root Node", "to": "AFM - Vents", "requires": [] }, // WC OR CL
+    { "from": "AFM - Vents", "to": "AFM - Exit", "requires": [] },
 
-    { "from": "Space", "to": "Hourglass Twins", "requires": [] },
-    { "from": "Space", "to": "Timber Hearth", "requires": [] },
-    { "from": "Space", "to": "Brittle Hollow", "requires": [] },
-    { "from": "Space", "to": "White Hole Station", "requires": [ { "item": "Spacesuit" } ] },
-    { "from": "Space", "to": "Giant's Deep", "requires": [] },
-    // the only astral body you can't land on without an item
-    { "from": "Space", "to": "Quantum Moon", "requires": [
-        { "item": "Imaging Rule" }
-        // In the past, a suitless player without Scout would have no way of actually taking a photo,
-        // but now that "ship photo mode" is an intended feature, we no longer need additional logic here.
+    { "from": "AFM - Exit", "to": "AFE - Upper Root Node", "requires": [] },
+    { "from": "AFE - Upper Root Node", "to": "AFM - Exit", "requires": [] },
+
+    // Apeman Facility (Elevator)
+    { "from": "AFE - Upper Root Node", "to": "AFE - Between Root Nodes", "requires": [] }, // grapple OR CL OR AD
+    { "from": "AFE - Between Root Nodes", "to": "AFE - Upper Root Node", "requires": [] },
+    { "from": "AFE - Between Root Nodes", "to": "AFE - Lower Root Node", "requires": [] },
+    { "from": "AFE - Lower Root Node", "to": "AFE - Between Root Nodes", "requires": [] }, // grapple
+    { "from": "AFE - Lower Root Node", "to": "AFE - Baichang Arena", "requires": [] }, // WC OR CL
+    { "from": "AFE - Baichang Arena", "to": "AFE - Lower Root Node", "requires": [
+        { "item": "Cloud Leap" }
     ] },
+    { "from": "AFE - Baichang Arena", "to": "AFE - Below Root Node", "requires": [ { "anyOf": [
+        { "item": "Tai-Chi Kick" },
+        [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ]
+    ] } ] },
+    { "from": "AFE - Below Root Node", "to": "AFE - Baichang Arena", "requires": [ { "anyOf": [
+        { "item": "Tai-Chi Kick" },
+        [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ]
+    ] } ] },
+    { "from": "AFE - Below Root Node", "to": "AFE - Statue Chest", "requires": [] }, // DJ OR grapple
+    { "from": "AFE - Statue Chest", "to": "AFE - Lower Root Node", "requires": [] }, // grapple
+    { "from": "AFE - Below Root Node", "to": "AFE - Lower Left Exit", "requires": [ { "anyOf": [
+        { "item": "Tai-Chi Kick" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
+    ] } ] }, // (grapple AND (TCK OR AD OR DJ)) OR (AD AND DJ) OR (TCK AND DJ)
+    { "from": "AFE - Lower Left Exit", "to": "AFE - Below Root Node", "requires": [ { "anyOf": [
+        { "item": "Tai-Chi Kick" },
+        [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ]
+    ] } ] },
 
-    { "from": "Quantum Moon", "to": "Quantum Shrine", "requires": [ { "item": "Shrine Door Codes" } ] },
-    { "from": "Quantum Shrine", "to": "Sixth Location", "requires": [ { "item": "Entanglement Rule" } ] },
+    { "from": "AFE - Baichang Arena", "to": "Central Hall - Center", "requires": [] }, // elevator
 
-    { "from": "Timber Hearth Village", "to": "Timber Hearth", "requires": [ { "item": "Spacesuit" } ] },
-    { "from": "Timber Hearth", "to": "Timber Hearth Village", "requires": [] },
+    { "from": "AFE - Baichang Arena", "to": "CTH - Lower Left Exit", "requires": [] },
+    { "from": "CTH - Lower Left Exit", "to": "AFE - Baichang Arena", "requires": [] },
 
-    // you can simply fall into the black hole inside BH instead of using the warp pad, no matter what warp rando does
-    { "from": "Brittle Hollow", "to": "White Hole Station", "requires": [
-        { "item": "Spacesuit" } // for movement/oxygen after jumping in the black hole
-    ] },
-
-    // you can simply jump off/out and fall to the rest of the Hanging City
-    { "from": "Hanging City Ceiling", "to": "Brittle Hollow", "requires": [ { "item": "Spacesuit" } ] },
-
-    // This connection is tricky because you need to reach the forge controls in Hanging City first,
-    // and then get back to whichever warp pad connects to Hanging City Ceiling _in the same loop_.
-    // I believe that requires either the Spaceship or a "warp path" from the Northern Glacier pad to
-    // the Hanging City Ceiling pad. The latter is hard to write logic for, so we require the ship.
-    // And once the ship is required, { "region": "Brittle Hollow" } would be redundant.
-    { "from": "Hanging City Ceiling", "to": "Black Hole Forge", "requires": [ { "item": "Launch Codes" } ] },
-
-    { "from": "Space", "to": "GD Ocean Depths", "requires": [ { "item": "Tornado Aerodynamic Adjustments" } ] },
-    { "from": "GD Ocean Depths", "to": "GD Core", "requires": [ { "item": "Electrical Insulation" }, { "item": "Spacesuit" } ] },
-
-    { "from": "Space", "to": "Interloper Core", "requires": [ { "item": "Scout" }, { "item": "Ghost Matter Wavelength" }, { "item": "Spacesuit" } ] },
-
-    // representing frequencies/shuttles/etc as abstract regions turns out to be much faster than an anyOf rule
-
-    { "from": "Hourglass Twins", "to": "Distress Beacon Frequency", "requires": [] },
-    { "from": "Brittle Hollow", "to": "Distress Beacon Frequency", "requires": [] },
-    // since pod 3 logically requires this frequency to reach, we don't include Dark Bramble here
-
-    { "from": "Timber Hearth", "to": "Quantum Fluctuations Frequency", "requires": [] },
-    { "from": "Hourglass Twins", "to": "Quantum Fluctuations Frequency", "requires": [] },
-    { "from": "Brittle Hollow", "to": "Quantum Fluctuations Frequency", "requires": [] },
-    { "from": "Space", "to": "Quantum Fluctuations Frequency", "requires": [] },
-    // we ignore the extra requirements on Quantum Moon Signal since, if you can get
-    // to the "Space" region, you can get this frequency from the Tower Shard instead
-
-    // land on the Interloper with your Spaceship, or
-    { "from": "Space", "to": "Frozen Shuttle Log", "requires": [] },
-    // use Ember Twin's Gravity Cannon to recall the shuttle
-    { "from": "Hourglass Twins", "to": "Frozen Shuttle Log", "requires": [] },
-
-    // if you have both the frequency and signal items, you can scan the QM signal from your ship without landing on it
-    { "from": "Space", "to": "Quantum Moon Signal", "requires": [ { "item": "Quantum Moon Signal" } ] },
-    // otherwise you have to land on it to get into "Unidentified Signal Detected" range
-    { "from": "Quantum Moon", "to": "Quantum Moon Signal", "requires": [] },
-
-    // land on the Quantum Moon directly, or
-    { "from": "Quantum Moon", "to": "Solanum's Shuttle Interior", "requires": [] },
-    // use Brittle Hollow's Gravity Cannon to recall the shuttle
-    { "from": "Brittle Hollow", "to": "Solanum's Shuttle Interior", "requires": [] },
-
-    // Dark Bramble has the most complex logic in the base game
-    { "from": "Space", "to": "Dark Bramble", "requires": [
-        // not every part of DB has "guard" anglerfish in vanilla,
-        // but DB rando / fog warp rando might make it necessary
-        { "item": "Silent Running Mode" }
-    ] },
-
-    // To find Feldspar, either follow the harmonica signal on the OW Ventures frequency...
-    { "from": "Dark Bramble", "to": "Feldspar via Signal", "requires": [
-        { "item": "Signalscope" },
-        { "item": "Feldspar's Signal" }
-    ] },
-    // ...or launch a Scout into the DB seed back on TH.
-    // Since DB can only be reached by Spaceship, we don't need an explicit "can reach TH" condition here.
-    { "from": "Dark Bramble", "to": "Feldspar via Scout", "requires": [ { "item": "Scout" } ] },
-
-    // either way you reach the same group of Feldspar-related locations
-    { "from": "Feldspar via Signal", "to": "Feldspar's Camp", "requires": [] },
-    { "from": "Feldspar via Scout", "to": "Feldspar's Camp", "requires": [] },
-
-    { "from": "Dark Bramble", "to": "Nomai Grave", "requires": [
-        // to follow the Escape Pod 3 signal
-        { "item": "Signalscope" },
-        { "item": "Distress Beacon Frequency" },
-        { "item": "Escape Pod 3 Signal" }
-    ] },
-    { "from": "Nomai Grave", "to": "The Vessel", "requires": [
-        { "item": "Scout" }, // to launch into the DB seed at Nomai Grave
-        { "item": "Spacesuit" } // to enter the Vessel
-    ] },
-
-    { "category": "dlc", "from": "Space", "to": "Stranger Sunside Hangar", "requires": [ { "item": "Spacesuit" } ] },
-    { "category": "dlc", "from": "Stranger Sunside Hangar", "to": "Space", "requires": [ { "item": "Launch Codes" } ] },
-
-    { "category": "dlc", "from": "Stranger Sunside Hangar", "to": "River Lowlands", "requires": [] },
-    { "category": "dlc", "from": "Stranger Sunside Hangar", "to": "Cinder Isles", "requires": [
-        { "item": "Stranger Light Modulator" }
-    ] },
-    { "category": "dlc", "from": "Stranger Sunside Hangar", "to": "Hidden Gorge", "requires": [
-        { "item": "Stranger Light Modulator" }
-    ] },
-    // This is the one "irl raft loop" connection where just swimming without a raft is safe, easy, and relevant to logic
-    // because you can get breach codes before SLM. Also, all Reservoir locations are reachable without a raft.
-    { "category": "dlc", "from": "Hidden Gorge", "to": "Reservoir", "requires": [] },
-    { "category": "dlc", "from": "Stranger Sunside Hangar", "to": "Reservoir", "requires": [
-        { "item": "Stranger Light Modulator" }
-    ] },
-    // this is from: Hangar instead of from: Space because from a stranger spawn you might do this suit-only, before Launch Codes
-    { "category": "dlc", "from": "Stranger Sunside Hangar", "to": "Hidden Gorge Laboratory", "requires": [
-        { "item": "Breach Override Codes" }
-    ] },
-    // the Breach Override Codes open both doors, so you can reach HG this way with no additional items
-    { "category": "dlc", "from": "Hidden Gorge Laboratory", "to": "Hidden Gorge", "requires": [] },
-
-    { "category": "dlc", "from": "River Lowlands", "to": "Shrouded Woodlands", "requires": [
-        { "item": "River Lowlands Painting Code" },
-        { "location": "EotE: Find an Artifact" }
-    ] },
-    { "category": "dlc", "from": "Cinder Isles", "to": "Starlit Cove", "requires": [
-        { "item": "Cinder Isles Painting Code" },
-        { "location": "EotE: Find an Artifact" }
-    ] },
-    { "category": "dlc", "from": "Hidden Gorge", "to": "Endless Canyon", "requires": [
-        { "item": "Hidden Gorge Painting Code" } // HG has its own artifact, so we don't need to check for that
-    ] },
-    { "category": "dlc", "from": "Reservoir", "to": "Subterranean Lake", "requires": [
-        { "location": "EotE: Find an Artifact" }
-    ] },
-
-    // we don't need e.g. "OR the RL Painting Code" here because if you can
-    // unlock the dock the vanilla way, this connection is no longer relevant
-    { "category": "dlc", "from": "Dream Raft Loop", "to": "Shrouded Woodlands", "requires": [ { "item": "Raft Docks Patch" } ] },
-    { "category": "dlc", "from": "Dream Raft Loop", "to": "Starlit Cove", "requires": [ { "item": "Raft Docks Patch" } ] },
-    { "category": "dlc", "from": "Dream Raft Loop", "to": "Endless Canyon", "requires": [
-        { "item": "Raft Docks Patch" }, // take the elevator up from the dock
-        { "item": "Projection Range Patch" } // use the bonus invisible bridge you may have never noticed in vanilla
-    ] },
-
-    { "category": "dlc", "from": "Dream Raft Loop", "to": "Subterranean Lake (Out of Bounds)", "requires": [ { "item": "Limbo Warp Patch" } ] },
-    { "category": "dlc", "from": "Subterranean Lake (Out of Bounds)", "to": "Subterranean Lake", "requires": [] },
-
-    { "category": "dlc", "from": "Hidden Gorge", "to": "Abandoned Temple", "requires": [
-        { "item": "Ghost Matter Wavelength" },
-        { "item": "Stranger Light Modulator" }
-    ] },
-
-    { "category": "dlc", "from": "Cinder Isles", "to": "Cinder Isles Symbol Room", "requires": [
-        { "region": "Starlit Cove" }, // to extinguish the dream candles that unlock the real door
-        { "anyOf": [
-            { "item": "Dream Totem Patch" }, // project the dock that adds a walkway to the tower's lower entrance
-            { "item": "Raft Docks Patch" } // unless it's already there
-        ] },
-        // This is the one case where entering DW via The Outsider does not work, because after
-        // using that fire you won't have a ship to fly back to the real world's Cinder Isles tower.
-        // The only good fix I can see for this is requiring that you have access to a normal DW entrance.
-        { "anyOf": [
-            { "item": "River Lowlands Painting Code" },
-            { "item": "Cinder Isles Painting Code" },
-            { "item": "Hidden Gorge Painting Code" }
-        ] }
-    ] },
-
-    { "category": "dlc", "from": "Shrouded Woodlands", "to": "Dream Raft Loop", "requires": [
-        { "item": "Dream Totem Patch" } // extinguish door to dock, project raft
-    ] },
-    { "category": "dlc", "from": "Starlit Cove", "to": "Dream Raft Loop", "requires": [
-        { "item": "Dream Totem Patch" } // project dock and raft
-    ] },
-    { "category": "dlc", "from": "Endless Canyon", "to": "Dream Raft Loop", "requires": [
-        { "item": "Dream Totem Patch" } // project bridge, hand warp to project 2nd bridge, project raft
-    ] },
-
-    // The vanilla SW Archive route needs special logic because you must arrive at SW from the river loop
-    // instead of the green fire, since entering the archive requires waiting for the RL green fire to be
-    // extinguished by the dam breaking.
-    // Implementing this requires a bunch of "duplicate" (After Dam Breaks) regions to express that only
-    // dreamworld routes starting from the CI or HG green fires will work for this.
-    { "category": "dlc", "from": "Cinder Isles", "to": "Starlit Cove (After Dam Breaks)", "requires": [
-        { "item": "Cinder Isles Painting Code" },
-        { "location": "EotE: Find an Artifact" }
-    ] },
-    { "category": "dlc", "from": "Hidden Gorge", "to": "Endless Canyon (After Dam Breaks)", "requires": [
-        { "item": "Hidden Gorge Painting Code" } // HG has its own artifact, so we don't need to check for that
-    ] },
-    { "category": "dlc", "from": "Starlit Cove (After Dam Breaks)", "to": "Dream Raft Loop (After Dam Breaks)", "requires": [
-        { "item": "Dream Totem Patch" } // project dock and raft
-    ] },
-    { "category": "dlc", "from": "Endless Canyon (After Dam Breaks)", "to": "Dream Raft Loop (After Dam Breaks)", "requires": [
-        { "item": "Dream Totem Patch" } // project bridge, hand warp to project 2nd bridge, project raft
-    ] },
-    { "category": "dlc", "from": "Dream Raft Loop (After Dam Breaks)", "to": "Shrouded Woodlands Archive", "requires": [
-        { "anyOf": [
-            { "item": "River Lowlands Painting Code" }, // to open up the SW dock ahead of time
-            { "item": "Raft Docks Patch" } // to use the SW dock without opening it up ahead of time
-        ] },
-        { "item": "Dream Totem Patch" } // project covered bridge
-    ] },
-
-    // or if you have Limbo Warp Patch, you can get to SW archives right away via the lake
-    { "category": "dlc", "from": "Subterranean Lake (Out of Bounds)", "to": "Shrouded Woodlands Archive", "requires": [] },
-
-    // you can also use ^this path to reach SW itself without docks patch or RL painting, but
-    // only after dam breaks, and that's not worth the complexity of including it in logic
-
-    { "category": "dlc", "from": "Starlit Cove", "to": "Starlit Cove Archive", "requires": [
-        { "anyOf": [
-            { "item": "Dream Totem Patch" }, // hand warp to extinguish well lights
-            { "item": "Alarm Bypass Patch" } // or just walk past the alarms while dead
-        ] }
-    ] },
-
-    { "category": "dlc", "from": "Endless Canyon", "to": "Endless Canyon Archive", "requires": [
-        { "item": "Dream Totem Patch" } // extinguish lodge mural, project bridge, hand warp to project 2nd bridge
-    ] },
-
-    { "category": "dlc", "from": "Subterranean Lake (Out of Bounds)", "to": "Sealed Vault", "requires": [
-        { "item": "Projection Range Patch" },
-        { "item": "Alarm Bypass Patch" }
-    ] },
-
-    { "category": "hn1", "from": "Space", "to": "Lonely Hermit", "requires": [
-        { "item": "Spacesuit" } // we don't have proper HN1 suitless logic, so simply require suit for all of it
-    ] },
-
-    { "category": "hn1", "from": "Lonely Hermit", "to": "Alpine Core", "requires": [] },
-
-    { "category": "hn1", "from": "Lonely Hermit", "to": "Lava Core Entrance", "requires": [] },
-    { "category": "hn1", "from": "Lava Core Entrance", "to": "Lava Core Structures", "requires": [
-        { "item": "Signalscope" },
-        { "item": "Lava Core Signals Frequency" }
-    ] },
-    { "category": "hn1", "from": "Lava Core Structures", "to": "Lava Shrine", "requires": [
-        { "item": "Scout" }
-    ] },
-
-    { "category": "hn1", "from": "Lonely Hermit", "to": "Lake Core Start Island", "requires": [] },
-    { "category": "hn1", "from": "Lake Core Start Island", "to": "Lake Core", "requires": [
-        { "item": "Stranger Light Modulator" }
-    ] },
-
-    { "category": "hn1", "from": "Lonely Hermit", "to": "Derelict Ship Exterior", "requires": [
-        { "item": "Signalscope" },
-        { "item": "Neighbor's Distress Signal Frequency" }
-    ] },
-    { "category": "hn1", "from": "Derelict Ship Exterior", "to": "Derelict Ship Interior", "requires": [
-        { "item": "Ghost Matter Wavelength" }
-        // the barrier code is also important, but you need no items to get it, so no point listing it here
-    ] },
-
-    { "category": "hn1", "from": "Timber Hearth", "to": "Sole Survivor Pod", "requires": [
-        { "item": "Signalscope" },
-        { "item": "Galactic Communication Frequency" },
-        { "item": "Spacesuit" } // we don't have proper HN1 suitless logic, so simply require suit for all of it
-    ] },
-
-    { "category": "to", "from": "Space", "to": "Dark Bramble Exterior", "requires": [
-        { "item": "Spacesuit" } // we don't have proper outsider suitless logic, so simply require suit for all of it
-    ] },
-
-    { "category": "to", "from": "Dark Bramble Exterior", "to": "Secluded Structure", "requires": [
-        { "location": "TO: Jellyfish Painting Path" }, // seeing the hidden path in the painting
-        { "region": "Feldspar's Camp" } // getting to the jellyfish the usual way
-    ] },
-    { "category": "to", "from": "Secluded Structure", "to": "Cliffside Home", "requires": [
-        // no logic needed for "can get artifact from Stranger" because Secluded Structure logically requires Jellyfish Painting Path which requires GMW
-        // also no logic needed for "can get ship into shuttle crusher then fly it over" since this already requires reaching DB
-    ] },
-
-    { "category": "to&dlc", "from": "Cliffside Home", "to": "Endless Canyon", "requires": [] },
-    // since you could use this route to get to the SW archive, we need the (ADB) region too
-    { "category": "to&dlc", "from": "Cliffside Home", "to": "Endless Canyon (After Dam Breaks)", "requires": [] },
-
-    { "category": "to", "from": "Dark Bramble", "to": "Projection Pool House", "requires": [ { "item": "Scout" } ] },
-
-    { "category": "ac", "from": "Space", "to": "Lingering Chime", "requires": [
-        { "item": "Spacesuit" } // we don't have proper AC suitless logic, so simply require suit for all of it
-    ] },
-    { "category": "ac", "from": "Space", "to": "Dark Bramble Research Station", "requires": [
-        { "item": "Spacesuit" } // we don't have proper AC suitless logic, so simply require suit for all of it
-    ] },
-    // Astral Codec adds a new way to find Escape Pod 3 / the Nomai Grave with Scout instead of Signalscope
-    { "category": "ac", "from": "Dark Bramble Research Station", "to": "Nomai Grave", "requires": [
-        // being at DBRS implies Launch Codes already
-        { "item": "Scout" }, // launch at the DBRS warp transmitter and it ends up at EP3/NG
-        { "item": "Silent Running Mode" } // to fly into Dark Bramble safely and follow the Scout marker
-    ] },
-
-    { "category": "hn2", "from": "Space", "to": "Jam 3 Galaxy", "requires": [
-        { "item": "Spacesuit" } // we don't have proper HN2 suitless logic, so simply require suit for all of it
-    ] },
-    { "category": "hn2", "from": "Jam 3 Galaxy", "to": "Magistarium", "requires": [] },
-    { "category": "hn2", "from": "Magistarium", "to": "Magistarium Library", "requires": [ { "item": "Magistarium Library Access Code" } ] },
-    { "category": "hn2", "from": "Magistarium", "to": "Magistarium Dormitories", "requires": [ { "item": "Magistarium Dormitory Access Code" } ] },
-    { "category": "hn2", "from": "Magistarium", "to": "Magistarium Engine Room", "requires": [ { "item": "Magistarium Engine Access Code" } ] },
-    { "category": "hn2", "from": "Magistarium", "to": "Magistarium Outer Planes", "requires": [
-        { "item": "Magistarium Dormitory Access Code" }, // enter the Magister's room
-        { "item": "Memory Cube Interface" }, // close the hatch so you can safely remove your spacesuit
-        { "item": "Magistarium Engine Access Code" } // to get the battery
-    ] },
-
-    { "category": "fq", "from": "Hourglass Twins", "to": "Lost Strings", "requires": [
-        { "item": "Entanglement Rule" },
-        { "item": "Spacesuit" }
-    ] },
-    { "category": "fq", "from": "Lost Strings", "to": "Banjo Galaxy", "requires": [
-        { "item": "Launch Codes" }
-    ] }
+    { "from": "AFE - Lower Left Exit", "to": "AFD - Right Exit", "requires": [] },
+    { "from": "AFD - Right Exit", "to": "AFE - Lower Left Exit", "requires": [] }
 ]
