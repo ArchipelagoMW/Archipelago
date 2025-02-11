@@ -173,7 +173,7 @@ location_table = {
     '40 Below Fridge - Snowman Puzzle Bottom Diamond':          LocationData(Passage.RUBY,     2, ItemFlag.DIAMOND_7,     _NORMAL),
     '40 Below Fridge - Snowman Puzzle Diamond Under Door':      LocationData(Passage.RUBY,     2, ItemFlag.DIAMOND_8,     _ALL),
     '40 Below Fridge - Snowman Puzzle Right Diamond':           LocationData(Passage.RUBY,     2, ItemFlag.DIAMOND_9,     _ALL),
-    '40 Below Fridge - Crystal Lobbing Diamond':                LocationData(Passage.RUBY,     2, ItemFlag.DIAMOND_10,    _ALL),
+    '40 Below Fridge - Glass Ball Puzzle Diamond':              LocationData(Passage.RUBY,     2, ItemFlag.DIAMOND_10,    _ALL),
     '40 Below Fridge - Yeti Puzzle Diamond':                    LocationData(Passage.RUBY,     2, ItemFlag.DIAMOND_11,    _ALL),
 
     # Pinball Zone
