@@ -56,7 +56,7 @@ item_name_groups = {
 
     "Sol Seals": set(entry["name"] for entry in items_data if entry["name"].startswith("Seal of ")),
     "Jades": set(entry["name"] for entry in items_data if (" Jade" in entry["name"])),
-    "Map Chips": set(entry["name"] for entry in items_data if entry["name"].endswidth(" Chip")),
+    "Map Chips": set(entry["name"] for entry in items_data if entry["name"].endswith(" Chip")),
     "Poisons": set(entry["name"] for entry in items_data if entry["name"].startswith("(Poison) ")),
     "Database Entries": set(entry["name"] for entry in items_data if entry["name"].startswith("(Database) ")),
 }
