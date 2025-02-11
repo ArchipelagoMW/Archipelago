@@ -4,9 +4,11 @@ import typing
 
 from BaseClasses import (
     CollectionState,
+    Location,
     LocationProgressType,
     Region,
 )
+from ...generic.Rules import add_rule
 from ..PrimeOptions import DoorColorRandomization
 from ..BlastShieldRando import BlastShieldType
 from ..DoorRando import DoorLockType
@@ -199,9 +201,7 @@ class AreaData:
                     {pickup.name: every_location[pickup.name]}, MetroidPrimeLocation
                 )
                 location = world.get_location(pickup.name)
-                location.access_rule = (
-                    lambda state, w=world, p=pickup: self._can_reach_pickup(w, state, p)
-                )
+                self._set_pickup_rule(location, world, pickup)
 
         # Once each region is created, connect the doors and assign their locks
         color_mapping: Dict[str, str] = (
@@ -408,13 +408,17 @@ class AreaData:
 
         return can_color and can_blast_shield
 
-    def _can_reach_pickup(
+    def _set_pickup_rule(
         self,
+        location: Location,
         world: "MetroidPrimeWorld",
-        state: CollectionState,
         pickup_data: PickupData,
-    ) -> bool:
-        """Determines if the player is able to reach the pickup based on their items and selected trick difficulty"""
+    ):
+        """Builds and sets a rule to determine if the player can reach the pickup based on their items and selected tricks/difficulty"""
+        base_rule = pickup_data.rule_func
+        eligible_trick_rules: List[
+            Callable[["MetroidPrimeWorld", CollectionState], bool],
+        ] = []
         max_difficulty = world.options.trick_difficulty.value
         allow_list = world.options.trick_allow_list
         deny_list = world.options.trick_deny_list
@@ -423,14 +427,15 @@ class AreaData:
                 trick.difficulty.value > max_difficulty or trick.name in deny_list
             ):
                 continue
-            if trick.rule_func(world, state):
-                return True
-
-        if pickup_data.rule_func is None:
-            return True
-        if pickup_data.rule_func(world, state):
-            return True
-        return False
+            eligible_trick_rules.append(trick.rule_func)
+        if base_rule is not None:
+            add_rule(location, lambda state: base_rule(world, state))
+        if eligible_trick_rules:
+            add_rule(
+                location,
+                lambda state: any(rule(world, state) for rule in eligible_trick_rules),
+                "or",
+            )
 
     def _can_access_door(
         self, world: "MetroidPrimeWorld", state: CollectionState, door_data: DoorData
