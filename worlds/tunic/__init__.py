@@ -124,9 +124,7 @@ class TunicWorld(World):
                     continue
                 if issubclass(option.__class__, Removed):
                     continue
-                print(option)
                 if option.supports_weighting:
-                    print(option)
                     if issubclass(option.__class__, Range):
                         option.value = self.random.randint(option.range_start, option.range_end)
                     else:
