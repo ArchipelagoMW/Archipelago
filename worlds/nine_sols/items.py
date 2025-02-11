@@ -4,7 +4,6 @@ from typing import Dict, List, NamedTuple, Optional, Set
 
 from BaseClasses import Item, ItemClassification
 from Utils import restricted_loads
-from .options import EarlyKeyItem, Spawn
 from .should_generate import should_generate
 
 if typing.TYPE_CHECKING:

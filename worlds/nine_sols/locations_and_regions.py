@@ -6,7 +6,6 @@ from typing import Any, Dict, List, NamedTuple, Optional, Set
 from BaseClasses import CollectionState, Location, Region
 from Utils import restricted_loads
 from worlds.generic.Rules import set_rule
-from .options import Spawn
 from .should_generate import should_generate
 
 if typing.TYPE_CHECKING:
