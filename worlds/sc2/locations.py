@@ -3823,23 +3823,23 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         ),
         make_location_data(SC2Mission.MEDIA_BLITZ_P.mission_name, "Surprise Attack Ends", SC2_RACESWAP_LOC_ID_OFFSET + 4009, LocationType.EXTRA),
         make_location_data(SC2Mission.A_SINISTER_TURN_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 4500, LocationType.VICTORY,
-                           lambda state: (
-                                   logic.terran_competent_comp(state)
-                                   and logic.terran_common_unit(state)
-                                   and logic.terran_competent_anti_air(state))
-                           ),
+            lambda state: (
+                logic.terran_competent_comp(state)
+                and logic.terran_common_unit(state)
+                and logic.terran_competent_anti_air(state))
+        ),
         make_location_data(SC2Mission.A_SINISTER_TURN_T.mission_name, "Factory", SC2_RACESWAP_LOC_ID_OFFSET + 4501, LocationType.VANILLA,
-                           lambda state: adv_tactics or logic.terran_common_unit(state)
-                           ),
+            lambda state: adv_tactics or logic.terran_common_unit(state)
+        ),
         make_location_data(SC2Mission.A_SINISTER_TURN_T.mission_name, "Armory", SC2_RACESWAP_LOC_ID_OFFSET + 4502, LocationType.VANILLA,
-                           lambda state: adv_tactics or logic.terran_common_unit(state)
-                           ),
+            lambda state: adv_tactics or logic.terran_common_unit(state)
+        ),
         make_location_data(SC2Mission.A_SINISTER_TURN_T.mission_name, "Shadow Ops", SC2_RACESWAP_LOC_ID_OFFSET + 4503, LocationType.VANILLA,
-                           lambda state: logic.terran_common_unit(state) and logic.terran_competent_anti_air(state)
-                           ),
+            lambda state: logic.terran_common_unit(state) and logic.terran_competent_anti_air(state)
+        ),
         make_location_data(SC2Mission.A_SINISTER_TURN_T.mission_name, "Northeast Base", SC2_RACESWAP_LOC_ID_OFFSET + 4504, LocationType.EXTRA,
-                           lambda state: logic.terran_common_unit(state) and logic.terran_competent_anti_air(state)
-                           ),
+            lambda state: logic.terran_common_unit(state) and logic.terran_competent_anti_air(state)
+        ),
         make_location_data(SC2Mission.A_SINISTER_TURN_T.mission_name, "Southwest Base", SC2_RACESWAP_LOC_ID_OFFSET + 4505, LocationType.CHALLENGE,
             lambda state: (
                 logic.terran_competent_comp(state)
@@ -3848,48 +3848,48 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             flags=LocationFlag.BASEBUST,
         ),
         make_location_data(SC2Mission.A_SINISTER_TURN_T.mission_name, "Maar", SC2_RACESWAP_LOC_ID_OFFSET + 4506, LocationType.EXTRA,
-                           logic.terran_common_unit
-                           ),
+            logic.terran_common_unit
+        ),
         make_location_data(SC2Mission.A_SINISTER_TURN_T.mission_name, "Northwest Preserver", SC2_RACESWAP_LOC_ID_OFFSET + 4507, LocationType.EXTRA,
-                           lambda state: (
-                                   logic.terran_competent_comp(state)
-                                   and logic.terran_common_unit(state)
-                                   and logic.terran_competent_anti_air(state))
-                           ),
+            lambda state: (
+                logic.terran_competent_comp(state)
+                and logic.terran_common_unit(state)
+                and logic.terran_competent_anti_air(state))
+        ),
         make_location_data(SC2Mission.A_SINISTER_TURN_T.mission_name, "Southwest Preserver", SC2_RACESWAP_LOC_ID_OFFSET + 4508, LocationType.EXTRA,
-                           lambda state: (
-                                   logic.terran_competent_comp(state)
-                                   and logic.terran_common_unit(state)
-                                   and logic.terran_competent_anti_air(state))
-                           ),
+            lambda state: (
+                logic.terran_competent_comp(state)
+                and logic.terran_common_unit(state)
+                and logic.terran_competent_anti_air(state))
+        ),
         make_location_data(SC2Mission.A_SINISTER_TURN_T.mission_name, "East Preserver", SC2_RACESWAP_LOC_ID_OFFSET + 4509, LocationType.EXTRA,
-                           lambda state: (
-                                   logic.terran_competent_comp(state)
-                                   and logic.terran_common_unit(state)
-                                   and logic.terran_competent_anti_air(state))
-                           ),
+            lambda state: (
+                logic.terran_competent_comp(state)
+                and logic.terran_common_unit(state)
+                and logic.terran_competent_anti_air(state))
+        ),
         make_location_data(SC2Mission.A_SINISTER_TURN_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 4600, LocationType.VICTORY,
-                           lambda state: logic.zerg_competent_comp(state) and logic.zerg_competent_anti_air(state)
-                           ),
+            lambda state: logic.zerg_competent_comp(state) and logic.zerg_competent_anti_air(state)
+        ),
         make_location_data(SC2Mission.A_SINISTER_TURN_Z.mission_name, "Ultralisk Cavern", SC2_RACESWAP_LOC_ID_OFFSET + 4601, LocationType.VANILLA,
-                           lambda state: (adv_tactics or logic.zerg_common_unit(state)) and logic.spread_creep(state)
-                           ),
+            lambda state: (adv_tactics or logic.zerg_common_unit(state)) and logic.spread_creep(state)
+        ),
         make_location_data(SC2Mission.A_SINISTER_TURN_Z.mission_name, "Hydralisk Den", SC2_RACESWAP_LOC_ID_OFFSET + 4602, LocationType.VANILLA,
-                           lambda state: (adv_tactics or logic.zerg_common_unit(state)) and logic.spread_creep(state)
-                           ),
+            lambda state: (adv_tactics or logic.zerg_common_unit(state)) and logic.spread_creep(state)
+        ),
         make_location_data(SC2Mission.A_SINISTER_TURN_Z.mission_name, "Infestation Pit", SC2_RACESWAP_LOC_ID_OFFSET + 4603, LocationType.VANILLA,
-                           lambda state: logic.zerg_common_unit(state) and logic.zerg_competent_anti_air(state) and logic.spread_creep(state)
-                           ),
+            lambda state: logic.zerg_common_unit(state) and logic.zerg_competent_anti_air(state) and logic.spread_creep(state)
+        ),
         make_location_data(SC2Mission.A_SINISTER_TURN_Z.mission_name, "Northeast Base", SC2_RACESWAP_LOC_ID_OFFSET + 4604, LocationType.EXTRA,
-                           lambda state: logic.zerg_common_unit(state) and logic.zerg_competent_anti_air(state)
-                           ),
+            lambda state: logic.zerg_common_unit(state) and logic.zerg_competent_anti_air(state)
+        ),
         make_location_data(SC2Mission.A_SINISTER_TURN_Z.mission_name, "Southwest Base", SC2_RACESWAP_LOC_ID_OFFSET + 4605, LocationType.CHALLENGE,
             lambda state: logic.zerg_common_unit(state) and logic.zerg_competent_anti_air(state),
             flags=LocationFlag.BASEBUST,
         ),
         make_location_data(SC2Mission.A_SINISTER_TURN_Z.mission_name, "Maar", SC2_RACESWAP_LOC_ID_OFFSET + 4606, LocationType.EXTRA,
-                           logic.zerg_common_unit
-                           ),
+            logic.zerg_common_unit
+        ),
         make_location_data(SC2Mission.A_SINISTER_TURN_Z.mission_name, "Northwest Preserver", SC2_RACESWAP_LOC_ID_OFFSET + 4607, LocationType.EXTRA,
                            lambda state: logic.zerg_competent_comp(state) and logic.zerg_competent_anti_air(state)
                            ),
@@ -4720,7 +4720,8 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             flags=LocationFlag.BASEBUST,
         ),
         make_location_data(SC2Mission.WAKING_THE_ANCIENT_P.mission_name, "East Main Primal Hive", SC2_RACESWAP_LOC_ID_OFFSET + 7808, LocationType.CHALLENGE,
-            logic.protoss_competent_comp
+            logic.protoss_competent_comp,
+            flags=LocationFlag.BASEBUST,
         ),
         make_location_data(SC2Mission.WAKING_THE_ANCIENT_P.mission_name, "Flawless", SC2_RACESWAP_LOC_ID_OFFSET + 7809, LocationType.CHALLENGE,
             logic.protoss_competent_comp,
