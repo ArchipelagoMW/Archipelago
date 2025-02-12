@@ -27,7 +27,7 @@ from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui
 from Utils import init_logging, is_windows, async_start
 from .item import item_names, item_parents
 from .item.item_groups import item_name_groups, unlisted_item_name_groups
-from . import options
+from . import options, VICTORY_MODULO
 from .options import (
     MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, EnableMorphling, GameDifficulty,
     GameSpeed, GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, MaxUpgradeLevel,
@@ -76,7 +76,6 @@ pool = concurrent.futures.ThreadPoolExecutor(1)
 loop = asyncio.get_event_loop_policy().new_event_loop()
 nest_asyncio.apply(loop)
 MAX_BONUS: int = 28
-VICTORY_MODULO: int = 100
 
 # GitHub repo where the Map/mod data is hosted for /download_data command
 DATA_REPO_OWNER = "Ziktofel"
@@ -648,6 +647,8 @@ class SC2Context(CommonContext):
         self.trade_lock_start: typing.Optional[float] = None
         self.trade_response: typing.Optional[str] = None
         self.difficulty_damage_modifier: int = DifficultyDamageModifier.default
+        self.mission_order_scouting = MissionOrderScouting.option_none
+        self.mission_item_classification: typing.Optional[typing.Dict[str, int]] = None
 
     async def server_auth(self, password_requested: bool = False) -> None:
         self.game = STARCRAFT2
@@ -838,7 +839,7 @@ class SC2Context(CommonContext):
             self.trade_age_limit = args["slot_data"].get("void_trade_age_limit", VoidTradeAgeLimit.default)
             self.difficulty_damage_modifier = args["slot_data"].get("difficulty_damage_modifier", DifficultyDamageModifier.option_true)
             self.mission_order_scouting = args["slot_data"].get("mission_order_scouting", MissionOrderScouting.option_none)
-            self.mission_item_classification = args["slot_data"].get("mission_item_classification", None)
+            self.mission_item_classification = args["slot_data"].get("mission_item_classification")
 
             if self.required_tactics == RequiredTactics.option_no_logic:
                 # Locking Grant Story Tech/Levels if no logic

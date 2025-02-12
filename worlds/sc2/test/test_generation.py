@@ -496,7 +496,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             'enable_hots_missions': True,
             'mission_order': options.MissionOrder.option_grid,
             'speedrun_locations': options.SpeedrunLocations.option_disabled,
-            'preventative_locations': options.PreventativeLocations.option_resources,
+            'preventative_locations': options.PreventativeLocations.option_filler,
         }
 
         self.generate_world(world_options)

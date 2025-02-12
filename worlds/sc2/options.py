@@ -953,19 +953,21 @@ class VictoryCache(Range):
 
 class LocationInclusion(Choice):
     option_enabled = 0
-    option_resources = 1
+    option_half_chance = 3
+    option_filler = 1
     option_disabled = 2
 
 
 class VanillaLocations(LocationInclusion):
     """
-    Enables or disables item rewards for completing vanilla objectives.
+    Enables or disables checks for completing vanilla objectives.
     Vanilla objectives are bonus objectives from the vanilla game,
     along with some additional objectives to balance the missions.
     Enable these locations for a balanced experience.
 
-    Enabled: All locations fitting into this do their normal rewards
-    Resources: Forces these locations to contain Starting Resources
+    Enabled: Locations of this type give normal rewards.
+    Half Chance: Locations of this type have a 50% chance of being excluded.
+    Filler: Forces these locations to contain filler items.
     Disabled: Removes item rewards from these locations.
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
@@ -976,14 +978,15 @@ class VanillaLocations(LocationInclusion):
 
 class ExtraLocations(LocationInclusion):
     """
-    Enables or disables item rewards for mission progress and minor objectives.
+    Enables or disables checks for mission progress and minor objectives.
     This includes mandatory mission objectives,
     collecting reinforcements and resource pickups,
     destroying structures, and overcoming minor challenges.
     Enables these locations to add more checks and items to your world.
 
-    Enabled: All locations fitting into this do their normal rewards
-    Resources: Forces these locations to contain Starting Resources
+    Enabled: Locations of this type give normal rewards.
+    Half Chance: Locations of this type have a 50% chance of being excluded.
+    Filler: Forces these locations to contain filler items.
     Disabled: Removes item rewards from these locations.
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
@@ -994,13 +997,14 @@ class ExtraLocations(LocationInclusion):
 
 class ChallengeLocations(LocationInclusion):
     """
-    Enables or disables item rewards for completing challenge tasks.
+    Enables or disables checks for completing challenge tasks.
     Challenges are tasks that are more difficult than completing the mission, and are often based on achievements.
     You might be required to visit the same mission later after getting stronger in order to finish these tasks.
     Enable these locations to increase the difficulty of completing the multiworld.
 
-    Enabled: All locations fitting into this do their normal rewards
-    Resources: Forces these locations to contain Starting Resources
+    Enabled: Locations of this type give normal rewards.
+    Half Chance: Locations of this type have a 50% chance of being excluded.
+    Filler: Forces these locations to contain filler items.
     Disabled: Removes item rewards from these locations.
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
@@ -1011,12 +1015,13 @@ class ChallengeLocations(LocationInclusion):
 
 class MasteryLocations(LocationInclusion):
     """
-    Enables or disables item rewards for overcoming especially difficult challenges.
+    Enables or disables checks for overcoming especially difficult challenges.
     These challenges are often based on Mastery achievements and Feats of Strength.
     Enable these locations to add the most difficult checks to the world.
 
-    Enabled: All locations fitting into this do their normal rewards
-    Resources: Forces these locations to contain Starting Resources
+    Enabled: Locations of this type give normal rewards.
+    Half Chance: Locations of this type have a 50% chance of being excluded.
+    Filler: Forces these locations to contain filler items.
     Disabled: Removes item rewards from these locations.
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
@@ -1025,14 +1030,34 @@ class MasteryLocations(LocationInclusion):
     display_name = "Mastery Locations"
 
 
+class BasebustLocations(LocationInclusion):
+    """
+    Enables or disables checks for killing non-objective bases.
+    These challenges are about destroying enemy bases that you normally don't have to fight to win a mission.
+    Enable these locations if you like sieges or being rewarded for achieving alternate win conditions.
+
+    Enabled: Locations of this type give normal rewards.
+    Half Chance: Locations of this type have a 50% chance of being excluded.
+      *Note setting this for both challenge and basebust will have a 25% of a challenge-basebust location spawning.
+    Filler: Forces these locations to contain filler items.
+    Disabled: Removes item rewards from these locations.
+
+    Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
+    See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
+    """
+    display_name = "Base-Bust Locations"
+
+
 class SpeedrunLocations(LocationInclusion):
     """
-    Enables or disables item rewards for overcoming speedrun challenges.
+    Enables or disables checks for overcoming speedrun challenges.
     These challenges are often based on speed achievements or community challenges.
     Enable these locations if you want to be rewarded for going fast.
 
-    Enabled: All locations fitting into this do their normal rewards
-    Resources: Forces these locations to contain Starting Resources
+    Enabled: Locations of this type give normal rewards.
+    Half Chance: Locations of this type have a 50% chance of being excluded.
+      *Note setting this for both challenge and speedrun will have a 25% of a challenge-speedrun location spawning.
+    Filler: Forces these locations to contain filler items.
     Disabled: Removes item rewards from these locations.
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
@@ -1043,13 +1068,15 @@ class SpeedrunLocations(LocationInclusion):
 
 class PreventativeLocations(LocationInclusion):
     """
-    Enables or disables item rewards for overcoming preventative challenges.
+    Enables or disables checks for overcoming preventative challenges.
     These challenges are about winning or achieving something while preventing something else from happening,
     such as beating Evacuation without losing a colonist.
     Enable these locations if you want to be rewarded for achieving a higher standard on some locations.
 
-    Enabled: All locations fitting into this do their normal rewards
-    Resources: Forces these locations to contain Starting Resources
+    Enabled: Locations of this type give normal rewards.
+    Half Chance: Locations of this type have a 50% chance of being excluded.
+      *Note setting this for both challenge and preventative will have a 25% of a challenge-preventative location spawning.
+    Filler: Forces these locations to contain filler items.
     Disabled: Removes item rewards from these locations.
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
@@ -1303,6 +1330,7 @@ class Starcraft2Options(PerGameCommonOptions):
     extra_locations: ExtraLocations
     challenge_locations: ChallengeLocations
     mastery_locations: MasteryLocations
+    basebust_locations: BasebustLocations
     speedrun_locations: SpeedrunLocations
     preventative_locations: PreventativeLocations
     filler_percentage: FillerPercentage
@@ -1384,6 +1412,7 @@ option_groups = [
         ExtraLocations,
         ChallengeLocations,
         MasteryLocations,
+        BasebustLocations,
         SpeedrunLocations,
         PreventativeLocations,
     ]),

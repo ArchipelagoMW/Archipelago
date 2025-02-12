@@ -34,6 +34,7 @@ from .mission_order import SC2MissionOrder
 
 
 logger = logging.getLogger("Starcraft 2")
+VICTORY_MODULO = 100
 
 
 class Starcraft2WebWorld(WebWorld):
@@ -203,16 +204,12 @@ class SC2World(World):
                 if not location.is_event:
                     assert location.address is not None
                     assert location.item is not None
-                    if lookup_location_id_to_type[location.address] == LocationType.VICTORY:
-                        location_name = location.name
-                        mission_item_classification[location_name] = location.item.classification.as_flag()
-                    elif lookup_location_id_to_type[location.address] == LocationType.VICTORY_CACHE:
+                    if lookup_location_id_to_type[location.address] == LocationType.VICTORY_CACHE:
                         # Ensure that if there are multiple items given for finishing a mission and that at least 
                         # one is progressive, the flag kept is progressive.
-                        # Assuming that the location added are always after the basic one, which is true as long as 
-                        # VICTORY_CACHE_OFFSET is a positive integer.
-                        if mission_item_classification[location_name] != ItemClassification.progression:
-                            mission_item_classification[location_name] = location.item.classification.as_flag() 
+                        location_name = self.location_id_to_name[(location.address // VICTORY_MODULO) * VICTORY_MODULO]
+                        old_classification = mission_item_classification.get(location_name, 0)
+                        mission_item_classification[location_name] = old_classification | location.item.classification.as_flag() 
                     else:
                         mission_item_classification[location.name] = location.item.classification.as_flag()
             slot_data["mission_item_classification"] = mission_item_classification
@@ -767,16 +764,16 @@ def flag_and_add_resource_locations(world: SC2World, item_list: List[FilterItem]
     """
     open_locations = [location for location in world.location_cache if location.item is None]
     plando_locations = get_plando_locations(world)
-    resource_location_types = get_location_types(world, LocationInclusion.option_resources)
-    resource_location_flags = get_location_flags(world, LocationInclusion.option_resources)
-    location_data = {sc2_location.name: sc2_location for sc2_location in get_locations(world)}
+    filler_location_types = get_location_types(world, LocationInclusion.option_filler)
+    filler_location_flags = get_location_flags(world, LocationInclusion.option_filler)
+    location_data = {sc2_location.name: sc2_location for sc2_location in DEFAULT_LOCATION_LIST}
     for location in open_locations:
         # Go through the locations that aren't locked yet (early unit, etc)
         if location.name not in plando_locations:
             # The location is not plando'd
             sc2_location = location_data[location.name]
-            if (sc2_location.type in resource_location_types
-                or (sc2_location.flags & resource_location_flags)
+            if (sc2_location.type in filler_location_types
+                or (sc2_location.flags & filler_location_flags)
             ):
                 item_name = world.get_filler_item_name()
                 item = create_item_with_correct_settings(world.player, item_name)
