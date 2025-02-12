@@ -9,7 +9,7 @@ import re
 import bsdiff4
 
 import settings
-from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial, MultiWorld
+from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, Tutorial, MultiWorld
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 from .Common import *
@@ -138,7 +138,8 @@ class LinksAwakeningWorld(World):
         world_setup = LADXRWorldSetup()
         world_setup.randomize(self.ladxr_settings, self.random)
         self.ladxr_logic = LADXRLogic(configuration_options=self.ladxr_settings, world_setup=world_setup)
-        self.ladxr_itempool = LADXRItemPool(self.ladxr_logic, self.ladxr_settings, self.random).toDict()
+        self.ladxr_itempool = LADXRItemPool(self.ladxr_logic, self.ladxr_settings, self.random, bool(self.options.stabilize_item_pool)).toDict()
+
 
     def generate_early(self) -> None:
         self.dungeon_item_types = {
@@ -225,7 +226,7 @@ class LinksAwakeningWorld(World):
             for _ in range(count):
                 if item_name in exclude:
                     exclude.remove(item_name)  # this is destructive. create unique list above
-                    self.multiworld.itempool.append(self.create_item("Nothing"))
+                    self.multiworld.itempool.append(self.create_item(self.get_filler_item_name()))
                 else:
                     item = self.create_item(item_name)
 
@@ -314,8 +315,6 @@ class LinksAwakeningWorld(World):
 
         # Set up filter rules
 
-        # The list of items we will pass to fill_restrictive, contains at first the items that go to all dungeons
-        all_dungeon_items_to_fill = list(self.prefill_own_dungeons)
         # set containing the list of all possible dungeon locations for the player
         all_dungeon_locs = set()
         
@@ -325,9 +324,6 @@ class LinksAwakeningWorld(World):
             locs = set(loc for loc in self.dungeon_locations_by_dungeon[dungeon_index] if not loc.item)
             for item in self.prefill_original_dungeon[dungeon_index]:
                 allowed_locations_by_item[item] = locs
-
-            # put the items for this dungeon in the list to fill
-            all_dungeon_items_to_fill.extend(self.prefill_original_dungeon[dungeon_index])
 
             # ...and gather the list of all dungeon locations
             all_dungeon_locs |= locs
@@ -368,16 +364,27 @@ class LinksAwakeningWorld(World):
             if allowed_locations_by_item[item] is all_dungeon_locs:
                 i += 3
             return i
+        all_dungeon_items_to_fill = self.get_pre_fill_items()
         all_dungeon_items_to_fill.sort(key=priority)
 
         # Set up state
-        all_state = self.multiworld.get_all_state(use_cache=False)
-        # Remove dungeon items we are about to put in from the state so that we don't double count
-        for item in all_dungeon_items_to_fill:
-            all_state.remove(item)
+        partial_all_state = CollectionState(self.multiworld)
+        # Collect every item from the item pool and every pre-fill item like MultiWorld.get_all_state, except not our own pre-fill items.
+        for item in self.multiworld.itempool:
+            partial_all_state.collect(item, prevent_sweep=True)
+        for player in self.multiworld.player_ids:
+            if player == self.player:
+                # Don't collect the items we're about to place.
+                continue
+            subworld = self.multiworld.worlds[player]
+            for item in subworld.get_pre_fill_items():
+                partial_all_state.collect(item, prevent_sweep=True)
+
+        # Sweep to pick up already placed items that are reachable with everything but the dungeon items.
+        partial_all_state.sweep_for_advancements()
         
-        # Finally, fill!
-        fill_restrictive(self.multiworld, all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True, single_player_placement=True, allow_partial=False)
+        fill_restrictive(self.multiworld, partial_all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True, single_player_placement=True, allow_partial=False)
+
 
     name_cache = {}
     # Tries to associate an icon from another game with an icon we have
@@ -438,7 +445,7 @@ class LinksAwakeningWorld(World):
                     # Otherwise, use a cute letter as the icon
                     elif self.options.foreign_item_icons == 'guess_by_name':
                         loc.ladxr_item.item = self.guess_icon_for_other_world(loc.item)
-                        loc.ladxr_item.custom_item_name = loc.item.name
+                        loc.ladxr_item.setCustomItemName(loc.item.name)
 
                     else:
                         if loc.item.advancement:
@@ -499,8 +506,14 @@ class LinksAwakeningWorld(World):
             state.prog_items[self.player]["RUPEES"] -= self.rupees[item.name]
         return change
 
+    # Same fill choices and weights used in LADXR.itempool.__randomizeRupees
+    filler_choices = ("Bomb", "Single Arrow", "10 Arrows", "Magic Powder", "Medicine")
+    filler_weights = ( 10,     5,              10,          10,             1)
+
     def get_filler_item_name(self) -> str:
-        return "Nothing"
+        if self.options.stabilize_item_pool:
+            return "Nothing"
+        return self.random.choices(self.filler_choices, self.filler_weights)[0]
 
     def fill_slot_data(self):
         slot_data = {}
