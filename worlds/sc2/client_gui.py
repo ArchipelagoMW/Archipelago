@@ -471,8 +471,8 @@ class SC2Manager(GameManager):
         title = location_type.name.title().replace("_", " ")
         if self.ctx.location_inclusions[location_type] == LocationInclusion.option_disabled:
             title += " (Nothing)"
-        elif self.ctx.location_inclusions[location_type] == LocationInclusion.option_resources:
-            title += " (Resources)"
+        elif self.ctx.location_inclusions[location_type] == LocationInclusion.option_filler:
+            title += " (Filler)"
         else:
             title += ""
         return title

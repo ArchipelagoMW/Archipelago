@@ -953,7 +953,7 @@ class VictoryCache(Range):
 
 class LocationInclusion(Choice):
     option_enabled = 0
-    option_resources = 1
+    option_filler = 1
     option_disabled = 2
 
 
@@ -965,7 +965,7 @@ class VanillaLocations(LocationInclusion):
     Enable these locations for a balanced experience.
 
     Enabled: All locations fitting into this do their normal rewards
-    Resources: Forces these locations to contain Starting Resources
+    Filler: Forces these locations to contain filler items
     Disabled: Removes item rewards from these locations.
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
@@ -983,7 +983,7 @@ class ExtraLocations(LocationInclusion):
     Enables these locations to add more checks and items to your world.
 
     Enabled: All locations fitting into this do their normal rewards
-    Resources: Forces these locations to contain Starting Resources
+    Filler: Forces these locations to contain filler items
     Disabled: Removes item rewards from these locations.
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
@@ -1000,7 +1000,7 @@ class ChallengeLocations(LocationInclusion):
     Enable these locations to increase the difficulty of completing the multiworld.
 
     Enabled: All locations fitting into this do their normal rewards
-    Resources: Forces these locations to contain Starting Resources
+    Filler: Forces these locations to contain filler items
     Disabled: Removes item rewards from these locations.
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
@@ -1016,7 +1016,7 @@ class MasteryLocations(LocationInclusion):
     Enable these locations to add the most difficult checks to the world.
 
     Enabled: All locations fitting into this do their normal rewards
-    Resources: Forces these locations to contain Starting Resources
+    Filler: Forces these locations to contain filler items
     Disabled: Removes item rewards from these locations.
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
@@ -1032,7 +1032,7 @@ class SpeedrunLocations(LocationInclusion):
     Enable these locations if you want to be rewarded for going fast.
 
     Enabled: All locations fitting into this do their normal rewards
-    Resources: Forces these locations to contain Starting Resources
+    Filler: Forces these locations to contain filler items
     Disabled: Removes item rewards from these locations.
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
@@ -1049,7 +1049,7 @@ class PreventativeLocations(LocationInclusion):
     Enable these locations if you want to be rewarded for achieving a higher standard on some locations.
 
     Enabled: All locations fitting into this do their normal rewards
-    Resources: Forces these locations to contain Starting Resources
+    Filler: Forces these locations to contain filler items
     Disabled: Removes item rewards from these locations.
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
