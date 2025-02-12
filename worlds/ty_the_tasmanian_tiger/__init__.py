@@ -67,6 +67,7 @@ class Ty1World(World):
             "BossMap": self.boss_map,
             "Scalesanity": self.options.scalesanity.value,
             "Framesanity": self.options.framesanity.value,
+            "AdvancedLogic": self.options.logic_difficulty.value,
             "DeathLink": self.options.death_link.value
         }
 

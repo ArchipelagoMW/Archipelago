@@ -457,7 +457,8 @@ def get_rules(world):
                     state.can_reach_location("Ship Rex - Race Rex", world.player),
             "BotRT - Time Attack Challenge":
                 lambda state:
-                    state.can_reach_location("BotRT - Time Attack", world.player),
+                    state.can_reach_location("BotRT - Time Attack", world.player)
+                    and can_go_water(world, state) if world.options.logic_difficulty == 1 else True,
             "Snow Worries - Time Attack Challenge":
                 lambda state:
                     state.can_reach_location("Snow Worries - Time Attack", world.player),
@@ -548,7 +549,7 @@ def get_rules(world):
                     has_level(world, state, 9),
             "D2 -> E4":
                 lambda state:
-                    has_rang(world, state, Ty1Rang.SECOND_RANG)
+                    has_rang(world, state, Ty1Rang.SECOND_RANG) and state.can_reach_location("Dingo Talisman", world.player)
                     and (state.can_reach_location("Frog Talisman", world.player)
                          and state.can_reach_location("Platypus Talisman", world.player)
                          and state.can_reach_location("Cockatoo Talisman", world.player)) if world.options.req_bosses else (
@@ -654,4 +655,4 @@ def set_rules(world):
         except KeyError:
             pass
 
-    world.multiworld.completion_condition[world.player] = lambda state: (state.can_reach_location("Tiger Talisman", world.player) and (state.can_reach_location("Dingo Talisman", world.player)))
+    world.multiworld.completion_condition[world.player] = lambda state: state.can_reach_location("Tiger Talisman", world.player)

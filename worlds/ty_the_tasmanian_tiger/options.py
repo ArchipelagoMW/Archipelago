@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 from Options import Choice, Range, Toggle, DeathLink, DefaultOnToggle, OptionGroup, PerGameCommonOptions
 
+
 class Goal(Choice):
     """
     Determines the goal of the seed
@@ -59,7 +60,7 @@ class BossShuffle(Toggle):
     """
     Determines whether the first three bosses will be shuffled
     """
-    display_name = ("Boss Shuffle")
+    display_name = "Boss Shuffle"
 
 
 class LevelUnlockStyle(Choice):

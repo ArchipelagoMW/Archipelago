@@ -155,7 +155,7 @@ thunder_eggs_dict = {
         LocData(0x08750128, "Outback Safari"),
     "Outback Safari - Find 5 Bilbies":
         LocData(0x08750129, "Outback Safari"),
-    "Outback Safari - Time Attack":
+    "Outback Safari - Race Shazza":
         LocData(0x0875012A, "Outback Safari"),
     "Outback Safari - Emu Roundup":
         LocData(0x0875012B, "Outback Safari"),
@@ -1169,23 +1169,28 @@ scales_dict = {
 
 time_attack_challenge_dict = {
     "Two Up - Time Attack Challenge":
-        LocData(0x08750339, "Two Up"),
+        LocData(0x08750344, "Two Up"),
     "WitP - Time Attack Challenge":
-        LocData(0x0875033A, "Walk in the Park"),
+        LocData(0x08750345, "Walk in the Park"),
     "Ship Rex - Time Attack Challenge":
-        LocData(0x0875033B, "Ship Rex - Beyond Gate"),
+        LocData(0x08750346, "Ship Rex - Beyond Gate"),
     "BotRT - Time Attack Challenge":
-        LocData(0x0875033C, "Bridge on the River Ty - Beyond Broken Bridge"),
+        LocData(0x08750348, "Bridge on the River Ty - Beyond Broken Bridge"),
     "Snow Worries - Time Attack Challenge":
-        LocData(0x0875033D, "Snow Worries"),
+        LocData(0x08750349, "Snow Worries"),
     "Outback Safari - Time Attack Challenge":
-        LocData(0x0875033E, "Outback Safari"),
+        LocData(0x0875034A, "Outback Safari"),
     "LLPoF - Time Attack Challenge":
-        LocData(0x0875033F, "Lyre, Lyre Pants on Fire"),
+        LocData(0x0875034C, "Lyre, Lyre Pants on Fire"),
     "BtBS - Time Attack Challenge":
-        LocData(0x08750340, "Beyond the Black Stump"),
+        LocData(0x0875034D, "Beyond the Black Stump"),
     "RMtS - Time Attack Challenge":
-        LocData(0x08750341, "Rex Marks the Spot - Underwater"),
+        LocData(0x0875034E, "Rex Marks the Spot - Underwater"),
+}
+
+conditional_items_dict = {
+    "Attribute - Extra Health":
+        LocData(0x08750313, "Rainbow Cliffs"),
 }
 
 ty1_location_table = {
@@ -1199,5 +1204,7 @@ ty1_location_table = {
     **bilby_completion_dict,
     **talismans_dict,
     **elemental_rangs_dict,
-    **scales_dict
+    **scales_dict,
+    **time_attack_challenge_dict,
+    **conditional_items_dict
 }
