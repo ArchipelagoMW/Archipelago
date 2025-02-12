@@ -515,6 +515,44 @@ class DestinyIslands(Toggle):
     """
     display_name = "Destiny Islands"
 
+class MythrilInPool(Range):
+    """
+    Determines how much Mythril, one of the two synthesis items, is in the item pool.
+    You need 16 to synth every recipe that requires it.
+    """
+    display_name = "Mythril In Pool"
+    default = 20
+    range_start = 16
+    range_end = 30
+
+class OrichalcumInPool(Range):
+    """
+    Determines how much Orichalcum, one of the two synthesis items, is in the item pool.
+    You need 17 to synth every recipe that requires it.
+    """
+    display_name = "Mythril In Pool"
+    default = 20
+    range_start = 17
+    range_end = 30
+
+class MythrilPrice(Range):
+    """
+    Determines the cost of Mythril in each shop.
+    """
+    display_name = "Mythril Price"
+    default = 5000
+    range_start = 100
+    range_end = 5000
+
+class OrichalcumPrice(Range):
+    """
+    Determines the cost of Orichalcum in each shop.
+    """
+    display_name = "Orichalcum Price"
+    default = 5000
+    range_start = 100
+    range_end = 5000
+
 @dataclass
 class KH1Options(PerGameCommonOptions):
     final_rest_door_key: FinalRestDoorKey
@@ -570,6 +608,10 @@ class KH1Options(PerGameCommonOptions):
     shorten_go_mode: ShortenGoMode
     death_link: DeathLink
     destiny_islands: DestinyIslands
+    orichalcum_in_pool: OrichalcumInPool
+    orichalcum_price: OrichalcumPrice
+    mythril_in_pool: MythrilInPool
+    mythril_price: MythrilPrice
 
 kh1_option_groups = [
     OptionGroup("Goal", [
@@ -618,6 +660,12 @@ kh1_option_groups = [
         KeybladeMaxRecoil,
         KeybladeMaxMP,
         KeybladeMinMP,
+    ]),
+    OptionGroup("Synth", [
+        OrichalcumInPool,
+        OrichalcumPrice,
+        MythrilInPool,
+        MythrilPrice,
     ]),
     OptionGroup("Misc", [
         StartingWorlds,

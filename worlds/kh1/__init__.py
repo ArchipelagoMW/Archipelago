@@ -226,6 +226,10 @@ class KH1World(World):
                     item_pool += [self.create_item(name) for _ in range(0, 3)]
                 if self.options.randomize_postcards.current_key == "all":
                     item_pool += [self.create_item(name) for _ in range(0, quantity)]
+            elif name == "Orichalcum":
+                item_pool += [self.create_item(name) for _ in range(0, self.options.orichalcum_in_pool.value)]
+            elif name == "Mythril":
+                item_pool += [self.create_item(name) for _ in range(0, self.options.mythril_in_pool.value)]
             elif name not in exclude_items:
                 item_pool += [self.create_item(name) for _ in range(0, quantity)]
         
@@ -309,6 +313,10 @@ class KH1World(World):
                     "jungle_slider": bool(self.options.jungle_slider),
                     "keyblades_unlock_chests": bool(self.options.keyblades_unlock_chests),
                     "level_checks": int(self.options.level_checks.value),
+                    "mythril_in_pool": int(self.options.mythril_in_pool.value),
+                    "mythril_price": int(self.options.mythril_price.value),
+                    "orichalcum_in_pool": int(self.options.orichalcum_in_pool.value),
+                    "orichalcum_price": int(self.options.orichalcum_price.value),
                     "randomize_emblem_pieces": bool(self.options.exp_zero_in_pool),
                     "randomize_postcards": str(self.options.randomize_postcards.current_key),
                     "randomize_puppies": str(self.options.randomize_puppies.current_key),
