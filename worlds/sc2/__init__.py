@@ -34,6 +34,7 @@ from .mission_order import SC2MissionOrder
 
 
 logger = logging.getLogger("Starcraft 2")
+VICTORY_MODULO = 100
 
 
 class Starcraft2WebWorld(WebWorld):
@@ -203,16 +204,12 @@ class SC2World(World):
                 if not location.is_event:
                     assert location.address is not None
                     assert location.item is not None
-                    if lookup_location_id_to_type[location.address] == LocationType.VICTORY:
-                        location_name = location.name
-                        mission_item_classification[location_name] = location.item.classification.as_flag()
-                    elif lookup_location_id_to_type[location.address] == LocationType.VICTORY_CACHE:
+                    if lookup_location_id_to_type[location.address] == LocationType.VICTORY_CACHE:
                         # Ensure that if there are multiple items given for finishing a mission and that at least 
                         # one is progressive, the flag kept is progressive.
-                        # Assuming that the location added are always after the basic one, which is true as long as 
-                        # VICTORY_CACHE_OFFSET is a positive integer.
-                        if mission_item_classification[location_name] != ItemClassification.progression:
-                            mission_item_classification[location_name] = location.item.classification.as_flag() 
+                        location_name = self.location_id_to_name[(location.address // VICTORY_MODULO) * VICTORY_MODULO]
+                        old_classification = mission_item_classification.get(location_name, 0)
+                        mission_item_classification[location_name] = old_classification | location.item.classification.as_flag() 
                     else:
                         mission_item_classification[location.name] = location.item.classification.as_flag()
             slot_data["mission_item_classification"] = mission_item_classification

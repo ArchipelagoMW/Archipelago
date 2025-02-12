@@ -492,23 +492,25 @@ class SC2Manager(GameManager):
         else:
             return False
 
-
     def handle_scout_display(self, location_name: str) -> str:
+        if self.ctx.mission_item_classification is None:
+            return ""
         # Only one information is provided for the victory locations of a mission
         if " Cache (" in location_name:
             location_name = location_name.split(" Cache")[0]
         item_classification_key = self.ctx.mission_item_classification[location_name]
-        if item_classification_key == ItemClassification.filler:
-            return " [color=00EEEE](Filler)[/color]"
-        if item_classification_key == ItemClassification.progression:
+        if ((ItemClassification.progression & item_classification_key)
+            and (ItemClassification.useful & item_classification_key)
+        ):
+            # Uncommon, but some games do this to show off that an item is super-important
+            # This can also happen on a victory display if the cache holds both progression and useful
+            return " [color=AF99EF](Useful+Progression)[/color]"
+        if ItemClassification.progression & item_classification_key:
             return " [color=AF99EF](Progression)[/color]"
-        elif item_classification_key == ItemClassification.useful:
+        if ItemClassification.useful & item_classification_key:
             return " [color=6D8BE8](Useful)[/color]"
-        elif item_classification_key == ItemClassification.trap:
-            return " [color=FA8072](Trap)[/color]"
-        else:
-            # Should not happen, but better safe than sory
-            return ""
+        return " [color=00EEEE](Filler)[/color]"
+
 
 def start_gui(context: SC2Context):
     context.ui = SC2Manager(context)
