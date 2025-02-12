@@ -6012,14 +6012,33 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
     if world is not None:
         excluded_location_types = get_location_types(world, LocationInclusion.option_disabled)
         excluded_location_flags = get_location_flags(world, LocationInclusion.option_disabled)
+        chance_location_types = get_location_types(world, LocationInclusion.option_half_chance)
+        chance_location_flags = get_location_flags(world, LocationInclusion.option_half_chance)
         plando_locations = get_plando_locations(world)
         exclude_locations = world.options.exclude_locations.value
+
+        def include_location(location: LocationData) -> bool:
+            if location.type is LocationType.VICTORY:
+                return True
+            if location.name in plando_locations:
+                return True
+            if location.name in exclude_locations:
+                return False
+            if location.flags & excluded_location_flags:
+                return False
+            if location.type in excluded_location_types:
+                return False
+            if location.flags & chance_location_flags:
+                if world.random.random() < 0.5:
+                    return False
+            if location.type in chance_location_types:
+                if world.random.random() < 0.5:
+                    return False
+            return True
+
         location_table = [
             location for location in location_table
-            if (location.type is LocationType.VICTORY or location.name not in exclude_locations)
-                and location.type not in excluded_location_types
-                and not (location.flags & excluded_location_flags)
-            or location.name in plando_locations
+            if include_location(location)
         ]
     beat_events: List[LocationData] = []
     victory_caches: List[LocationData] = []

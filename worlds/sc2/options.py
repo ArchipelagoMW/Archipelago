@@ -953,6 +953,7 @@ class VictoryCache(Range):
 
 class LocationInclusion(Choice):
     option_enabled = 0
+    option_half_chance = 3
     option_filler = 1
     option_disabled = 2
 
@@ -964,8 +965,9 @@ class VanillaLocations(LocationInclusion):
     along with some additional objectives to balance the missions.
     Enable these locations for a balanced experience.
 
-    Enabled: All locations fitting into this do their normal rewards
-    Filler: Forces these locations to contain filler items
+    Enabled: All locations fitting into this do their normal rewards.
+    Half Chance: Locations of this type have a 50% chance of being excluded.
+    Filler: Forces these locations to contain filler items.
     Disabled: Removes item rewards from these locations.
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
@@ -982,8 +984,9 @@ class ExtraLocations(LocationInclusion):
     destroying structures, and overcoming minor challenges.
     Enables these locations to add more checks and items to your world.
 
-    Enabled: All locations fitting into this do their normal rewards
-    Filler: Forces these locations to contain filler items
+    Enabled: All locations fitting into this do their normal rewards.
+    Half Chance: Locations of this type have a 50% chance of being excluded.
+    Filler: Forces these locations to contain filler items.
     Disabled: Removes item rewards from these locations.
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
@@ -999,8 +1002,9 @@ class ChallengeLocations(LocationInclusion):
     You might be required to visit the same mission later after getting stronger in order to finish these tasks.
     Enable these locations to increase the difficulty of completing the multiworld.
 
-    Enabled: All locations fitting into this do their normal rewards
-    Filler: Forces these locations to contain filler items
+    Enabled: All locations fitting into this do their normal rewards.
+    Half Chance: Locations of this type have a 50% chance of being excluded.
+    Filler: Forces these locations to contain filler items.
     Disabled: Removes item rewards from these locations.
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
@@ -1015,8 +1019,9 @@ class MasteryLocations(LocationInclusion):
     These challenges are often based on Mastery achievements and Feats of Strength.
     Enable these locations to add the most difficult checks to the world.
 
-    Enabled: All locations fitting into this do their normal rewards
-    Filler: Forces these locations to contain filler items
+    Enabled: All locations fitting into this do their normal rewards.
+    Half Chance: Locations of this type have a 50% chance of being excluded.
+    Filler: Forces these locations to contain filler items.
     Disabled: Removes item rewards from these locations.
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
@@ -1031,8 +1036,10 @@ class SpeedrunLocations(LocationInclusion):
     These challenges are often based on speed achievements or community challenges.
     Enable these locations if you want to be rewarded for going fast.
 
-    Enabled: All locations fitting into this do their normal rewards
-    Filler: Forces these locations to contain filler items
+    Enabled: All locations fitting into this do their normal rewards.
+    Half Chance: Locations of this type have a 50% chance of being excluded.
+      *Note setting this for both challenge and speedrun will have a 25% of a challenge-speedrun location spawning.
+    Filler: Forces these locations to contain filler items.
     Disabled: Removes item rewards from these locations.
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
@@ -1048,8 +1055,10 @@ class PreventativeLocations(LocationInclusion):
     such as beating Evacuation without losing a colonist.
     Enable these locations if you want to be rewarded for achieving a higher standard on some locations.
 
-    Enabled: All locations fitting into this do their normal rewards
-    Filler: Forces these locations to contain filler items
+    Enabled: All locations fitting into this do their normal rewards.
+    Half Chance: Locations of this type have a 50% chance of being excluded.
+      *Note setting this for both challenge and preventative will have a 25% of a challenge-preventative location spawning.
+    Filler: Forces these locations to contain filler items.
     Disabled: Removes item rewards from these locations.
 
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.

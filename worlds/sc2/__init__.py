@@ -769,7 +769,7 @@ def flag_and_add_resource_locations(world: SC2World, item_list: List[FilterItem]
     plando_locations = get_plando_locations(world)
     filler_location_types = get_location_types(world, LocationInclusion.option_filler)
     filler_location_flags = get_location_flags(world, LocationInclusion.option_filler)
-    location_data = {sc2_location.name: sc2_location for sc2_location in get_locations(world)}
+    location_data = {sc2_location.name: sc2_location for sc2_location in DEFAULT_LOCATION_LIST}
     for location in open_locations:
         # Go through the locations that aren't locked yet (early unit, etc)
         if location.name not in plando_locations:
