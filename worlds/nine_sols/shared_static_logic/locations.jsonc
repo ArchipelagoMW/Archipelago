@@ -174,7 +174,7 @@
     {
         "address": null, "name": "Event - Kuafu in FSP",
         "region": "FSP - Root Node", "requires": [
-            { "region": "RP: After Yingzhao" }
+            { "region": "RP - After Yingzhao" }
         ]
     },
     {
