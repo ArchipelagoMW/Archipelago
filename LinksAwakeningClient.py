@@ -141,7 +141,7 @@ class RAGameboy():
     def set_checks_range(self, checks_start, checks_size):
         self.checks_start = checks_start
         self.checks_size = checks_size
-    
+
     def set_location_range(self, location_start, location_size, critical_addresses):
         self.location_start = location_start
         self.location_size = location_size
@@ -239,7 +239,7 @@ class RAGameboy():
         self.cache[start:start + len(hram_block)] = hram_block
 
         self.last_cache_read = time.time()
-    
+
     async def read_memory_block(self, address: int, size: int):
         block = bytearray()
         remaining_size = size
@@ -247,7 +247,7 @@ class RAGameboy():
             chunk = await self.async_read_memory(address + len(block), remaining_size)
             remaining_size -= len(chunk)
             block += chunk
-        
+
         return block
 
     async def read_memory_cache(self, addresses):
@@ -484,7 +484,7 @@ class LinksAwakeningClient():
             break # one per cycle
 
     async def collect_check(self, check):
-        current_value = int.from_bytes(await self.gameboy.async_read_memory(check.address))
+        current_value = int.from_bytes(await self.gameboy.async_read_memory(check.address), 'big')
         new_value = current_value | check.mask
         self.gameboy.write_memory(check.address, [new_value])
 
@@ -583,8 +583,8 @@ class LinksAwakeningContext(CommonContext):
     magpie_task = None
     won = False
 
-    @property 
-    def slot_storage_key(self): 
+    @property
+    def slot_storage_key(self):
         return f"{self.slot_info[self.slot].name}_{storage_key}"
 
     def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str], magpie: typing.Optional[bool]) -> None:
@@ -631,7 +631,7 @@ class LinksAwakeningContext(CommonContext):
     async def send_checks(self):
         message = [{"cmd": "LocationChecks", "locations": self.found_checks}]
         await self.send_msgs(message)
-    
+
     async def send_new_entrances(self, entrances: typing.Dict[str, str]):
         # Store the entrances we find on the server for future sessions
         message = [{
@@ -670,12 +670,12 @@ class LinksAwakeningContext(CommonContext):
             logger.info("victory!")
             await self.send_msgs(message)
             self.won = True
-    
+
     async def request_found_entrances(self):
         await self.send_msgs([{"cmd": "Get", "keys": [self.slot_storage_key]}])
 
-        # Ask for updates so that players can co-op entrances in a seed  
-        await self.send_msgs([{"cmd": "SetNotify", "keys": [self.slot_storage_key]}])  
+        # Ask for updates so that players can co-op entrances in a seed
+        await self.send_msgs([{"cmd": "SetNotify", "keys": [self.slot_storage_key]}])
 
     async def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
         if self.ENABLE_DEATHLINK:
@@ -711,12 +711,12 @@ class LinksAwakeningContext(CommonContext):
         if cmd == "Connected":
             self.game = self.slot_info[self.slot].game
             self.slot_data = args.get("slot_data", {})
-            
+
         # TODO - use watcher_event
         if cmd == "ReceivedItems":
             for index, item in enumerate(args["items"], start=args["index"]):
                 self.recvd_checks[index] = item
-        
+
         if cmd == "Retrieved" and self.magpie_enabled and self.slot_storage_key in args["keys"]:
             self.client.gps_tracker.receive_found_entrances(args["keys"][self.slot_storage_key])
 
@@ -794,7 +794,7 @@ class LinksAwakeningContext(CommonContext):
                             self.magpie.set_checks(self.client.tracker.all_checks)
                             await self.magpie.set_item_tracker(self.client.item_tracker)
                             self.magpie.slot_data = self.slot_data
-                            
+
                             if self.client.gps_tracker.needs_found_entrances:
                                 await self.request_found_entrances()
                                 self.client.gps_tracker.needs_found_entrances = False
