@@ -39,5 +39,47 @@
     { "from": "CTH - Lower Left Exit", "to": "AFE - Baichang Arena", "requires": [] },
 
     { "from": "AFE - Lower Left Exit", "to": "AFD - Right Exit", "requires": [] },
-    { "from": "AFD - Right Exit", "to": "AFE - Lower Left Exit", "requires": [] }
+    { "from": "AFD - Right Exit", "to": "AFE - Lower Left Exit", "requires": [] },
+
+    // Apeman Facility (Depths)
+    { "from": "AFD - Upper Left Exit", "to": "AFD - Crystal Caves", "requires": [ { "item": "Air Dash" } ] }, // AD AND (grapple OR DJ)
+    { "from": "AFD - Crystal Caves", "to": "AFD - Upper Left Exit", "requires": [ { "anyOf": [
+        { "item": "Air Dash" }, { "item": "Cloud Leap" }
+    ] } ] }, // WC AND grapple AND (AD OR DJ)
+    { "from": "AFD - Crystal Caves", "to": "AFD - Shangui Arena", "requires": [ { "item": "Air Dash" } ] }, // AD and hacking 1
+    { "from": "AFD - Crystal Caves", "to": "AFD - Root Node", "requires": [] },
+    { "from": "AFD - Root Node", "to": "AFD - Shangui Arena", "requires": [
+        { "item": "Air Dash" }, { "item": "Cloud Leap" }
+    ] },
+    { "from": "AFD - Root Node", "to": "AFD - Small Chest Below Root Node", "requires": [] }, // one-way fall
+    { "from": "AFD - Root Node", "to": "AFD - Lower Left Exit", "requires": [] }, // one-way fall
+    { "from": "AFD - Lower Left Exit", "to": "AFD - Right Exit", "requires": [] }, // one-way door
+    { "from": "AFD - Right Exit", "to": "AFD - Lower Level", "requires": [ { "anyOf": [
+        { "item": "Tai-Chi Kick" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
+    ] } ] },
+    { "from": "AFD - Lower Level", "to": "AFD - Right Exit", "requires": [ { "anyOf": [
+        { "item": "Tai-Chi Kick" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
+    ] } ] },
+    { "from": "AFD - Lower Level", "to": "AFD - Under Lower Left Exit", "requires": [ { "anyOf": [
+        { "item": "Tai-Chi Kick" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
+    ] } ] }, // DJ OR (grapple AND (TCK OR AD))
+    { "from": "AFD - Under Lower Left Exit", "to": "AFD - Lower Level", "requires": [ { "anyOf": [
+        { "item": "Tai-Chi Kick" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
+    ] } ] },
+    { "from": "AFD - Under Lower Left Exit", "to": "AFD - Lower Left Exit", "requires": [
+        { "item": "Mystic Nymph: Scout Mode" }
+    ] }, // nymph AND grapple
+    { "from": "AFD - Lower Left Exit", "to": "AFD - Climb to Root Node", "requires": [ { "anyOf": [
+        { "item": "Tai-Chi Kick" }, { "item": "Cloud Leap" }
+    ] } ] },
+    { "from": "AFD - Climb to Root Node", "to": "AFD - Root Node", "requires": [] }, // one-way door
+    { "from": "AFD - Climb to Root Node", "to": "AFD - Upper Right", "requires": [] }, // hacking 1 OR DJ
+
+    { "from": "AFD - Upper Left Exit", "to": "FU - Lower Right Exit", "requires": [] },
+    { "from": "FU - Lower Right Exit", "to": "AFD - Upper Left Exit", "requires": [] },
+
+    { "from": "AFD - Lower Left Exit", "to": "PRW - Left Exit", "requires": [] },
+    { "from": "PRW - Left Exit", "to": "AFD - Lower Left Exit", "requires": [] }
+
+    // Central Hall
 ]

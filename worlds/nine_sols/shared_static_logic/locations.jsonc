@@ -1,4 +1,5 @@
 [
+    // Apeman Facility (Monitoring)
     {
         "address": 101, "name": "AF (Monitoring): Break Corpse",
         "region": "AFM - Root Node", "requires": []
@@ -14,7 +15,79 @@
     {
         "address": 104, "name": "AF (Monitoring): Examine Apeman Surveillance",
         "region": "AFM - Exit", "requires": []
+    },
+
+    // Apeman Facility (Elevator)
+    {
+        "address": 201, "name": "AF (Elevator): Atop Upper Level Pagoda",
+        "region": "AFE - Between Root Nodes", "requires": []
+    },
+    {
+        "address": 202, "name": "AF (Elevator): Moving Boxes",
+        "region": "AFE - Between Root Nodes", "requires": []
+    },
+    {
+        "address": 203, "name": "AF (Elevator): Elevator Shaft",
+        "region": "AFE - Lower Root Node", "requires": []
+    },
+    {
+        "address": 204, "name": "AF (Elevator): Defeat Red Tiger Elite: Baichang",
+        "region": "AFE - Baichang Arena", "requires": []
+    },
+    {
+        "address": 205, "name": "AF (Elevator): Hack Statue",
+        "region": "AFE - Statue Chest", "requires": [ { "region": "AFE - Below Root Node" } ]
+    },
+    {
+        "address": 206, "name": "AF (Elevator): Over Electrified Floor",
+        "region": "AFE - Below Root Node", "requires": []
+    },
+
+    // Apeman Facility (Depths)
+    {
+        "address": 301, "name": "AF (Depths): Crystal Caves",
+        "region": "AFD - Crystal Caves", "requires": []
+    },
+    {
+        "address": 302, "name": "AF (Depths): Defeat Celestial Spectre: Shangui (1st Reward)",
+        "region": "AFD - Shangui Arena", "requires": []
+    },
+    {
+        "address": 303, "name": "AF (Depths): Defeat Celestial Spectre: Shangui (2nd Reward)",
+        "region": "AFD - Shangui Arena", "requires": []
+    },
+    {
+        "address": 304, "name": "AF (Depths): Below Root Node",
+        "region": "AFD - Small Chest Below Root Node", "requires": []
+    },
+    {
+        "address": 305, "name": "AF (Depths): Hack 3 Statues",
+        "region": "AFD - Lower Left Exit", "requires": [ // hacking 1 AND
+            // 1st statue is also in Lower Left Exit, right next to where the chest appears
+            { "region": "AFD - Climb to Root Node" }, // hidden on left side of the shaft
+            { "region": "AFD - Upper Right" } // left of the chests
+        ]
+    },
+    {
+        "address": 306, "name": "AF (Depths): Lower Level",
+        "region": "AFD - Lower Level", "requires": []
+    },
+    {
+        "address": 307, "name": "AF (Depths): Under Lower Left Exit",
+        "region": "AFD - Under Lower Left Exit", "requires": []
+    },
+    {
+        "address": 308, "name": "AF (Depths): Tianhou Flower Under Elevator",
+        "region": "AFD - Climb to Root Node", "requires": [] // hacking 1
+    },
+    {
+        "address": 309, "name": "AF (Depths): Upper Right Chest (1st Reward)",
+        "region": "AFD - Upper Right", "requires": []
+    },
+    {
+        "address": 310, "name": "AF (Depths): Upper Right Chest (2nd Reward)",
+        "region": "AFD - Upper Right", "requires": []
     }
 
-
+    // Central Hall
 ]
