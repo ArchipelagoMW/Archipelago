@@ -208,7 +208,7 @@ class TimespinnerWorld(World):
         self.precalculated_weights.past_key_unlock = slot_data["PastGate"]
         self.precalculated_weights.time_key_unlock = slot_data["TimeGate"]
         # rising tides
-        if (slot_data["Basement"] > 1):
+        if (slot_data["Basement"] > 0):
             self.precalculated_weights.flood_basement = True
         if (slot_data["Basement"] == 2):
             self.precalculated_weights.flood_basement_high = True
