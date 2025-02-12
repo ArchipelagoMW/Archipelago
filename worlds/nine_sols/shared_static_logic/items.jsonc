@@ -36,7 +36,7 @@
 
     { "code": 109, "name": "Fusang Amulet", "type": "useful" },
     { "code": 110, "name": "Multi-tool Kit", "type": "useful" },
-    { "code": 111, "name": "Ancient Music Sheet", "type": "progression" },
+    { "code": 111, "name": "Ancient Sheet Music", "type": "progression" },
     { "code": 112, "name": "Unknown Seed", "type": "progression" },
     { "code": 113, "name": "GM Fertilizer", "type": "progression" },
     { "code": 114, "name": "Sword of Jie", "type": "useful" },
@@ -48,7 +48,7 @@
     { "code": 120, "name": "Kunlun Immortal Portrait", "type": "progression" },
     { "code": 121, "name": "Virtual Reality Device", "type": "useful" },
     { "code": 122, "name": "Ready-to-Eat Rations", "type": "useful" },
-    { "code": 123, "name": "The Four Treasures Of The Study", "type": "progression" },
+    { "code": 123, "name": "The Four Treasures of the Study", "type": "progression" },
 
     { "code": 124, "name": "Bloody Crimson Hibiscus", "type": "filler" },
     { "code": 125, "name": "Ancient Penglai Ballad", "type": "progression" },

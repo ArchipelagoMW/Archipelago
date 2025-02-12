@@ -126,7 +126,7 @@
     },
     {
         "address": 504, "name": "FSP: Have Yi's Portrait Painted",
-        "region": "FSP - Root Node", "requires": [ { "item": "The Four Treasures of the Study" }, { "item": "Immortal Kunlun Portrait" } ]
+        "region": "FSP - Root Node", "requires": [ { "item": "The Four Treasures of the Study" }, { "item": "Kunlun Immortal Portrait" } ]
     },
     {
         "address": 505, "name": "FSP: Give Yi's Portrait to Chiyou",
@@ -145,8 +145,8 @@
         "region": "FSP - Root Node", "requires": [ { "item": "Event - Chiyou in FSP" }, { "item": "Legend of the Porky Heroes" } ]
     },
     {
-        "address": 509, "name": "FSP: Reveal the Immortal Kunlun Portrait's Secret",
-        "region": "FSP - Root Node", "requires": [ { "item": "The Four Treasures of the Study" }, { "item": "Immortal Kunlun Portrait" } ]
+        "address": 509, "name": "FSP: Reveal the Kunlun Immortal Portrait's Secret",
+        "region": "FSP - Root Node", "requires": [ { "item": "The Four Treasures of the Study" }, { "item": "Kunlun Immortal Portrait" } ]
     },
     {
         "address": 510, "name": "FSP: Half-Grown Tree Chest",
