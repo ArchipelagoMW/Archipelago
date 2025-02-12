@@ -99,6 +99,8 @@
     ] } ] },
     { "from": "CH - Left Vents", "to": "CH - Left", "requires": [] }, // one-way fall + shortcut rope
 
+    { "from": "CH - Center", "to": "FSP - Root Node", "requires": [] }, // rando will make this a one-way door
+
     { "from": "CH - Right Vents", "to": "CTH - Above Elevator", "requires": [] }, // one-way fall
 
     { "from": "CH - Upper Right Exit", "to": "LYR - Left Exit", "requires": [] },
@@ -108,7 +110,32 @@
     { "from": "CTH - Upper Left Exit", "to": "CH - Lower Right Exit", "requires": [] },
 
     { "from": "CH - Left", "to": "CC - Right Exit", "requires": [] },
-    { "from": "CC - Right Exit", "to": "CH - Left", "requires": [] }
+    { "from": "CC - Right Exit", "to": "CH - Left", "requires": [] },
 
-    // Four Seasons Pavilion
+    // Cortex Center
+    { "from": "CC - Right Exit", "to": "CC - Root Node", "requires": [ { "anyOf": [
+        { "item": "Unbounded Counter" }, { "item": "Charged Strike" }
+    ] } ] },
+    { "from": "CC - Root Node", "to": "CC - Root Node After Boss", "requires": [
+        { "item": "Event - Lady Ethereal Soulscape Unlocked" },
+        // pre-boss soulscape requires WC AND TCK AND (DJ OR AD)
+        { "item": "Tai-Chi Kick" },
+        { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] }
+        // fight requires: technically nothing but to stay fun probably (TCK AND AD)
+        // CL's a good enough substitute for AD; let's leave it at the soulscape platforming requirements
+    ] },
+    { "from": "CC - Root Node", "to": "CC - Caves Upper Right", "requires": [
+        { "item": "Mystic Nymph: Scout Mode" },
+        // grapple AND wall climb
+        { "anyOf": [ { "item": "Tai-Chi Kick" }, { "item": "Cloud Leap" } ] }
+    ] },
+    { "from": "CC - Caves Upper Right", "to": "CC - Caves Upper Left", "requires": [ { "item": "Charged Strike" } ] },
+    { "from": "CC - Caves Upper Left", "to": "CC - Caves Upper Right", "requires": [ { "item": "Charged Strike" } ] },
+    { "from": "CC - Caves Upper Left", "to": "CC - Caves Middle Left", "requires": [] },
+    { "from": "CC - Caves Middle Left", "to": "CC - Caves Upper Left", "requires": [] }, // djump OR wall climb
+    { "from": "CC - Caves Middle Left", "to": "CC - Caves Lower Left", "requires": [ { "item": "Tai-Chi Kick" } ] }, // TCK AND grapple
+    { "from": "CC - Caves Lower Left", "to": "CC - Caves Middle Left", "requires": [ { "item": "Tai-Chi Kick" } ] }, // grapple AND wall climb AND TCK
+    { "from": "CC - Caves Lower Left", "to": "CC - Root Node", "requires": [] }, // one-way fall + shortcut rope
+    { "from": "CC - Caves Lower Left", "to": "CC - Left Exit", "requires": [] },
+    { "from": "CC - Left Exit", "to": "CC - Caves Lower Left", "requires": [] } // grapple
 ]

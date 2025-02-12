@@ -157,5 +157,11 @@
     { "code": 603, "name": "Jin x50", "type": "filler" },
     { "code": 604, "name": "Basic Component", "type": "filler" },
     { "code": 605, "name": "Standard Component", "type": "filler" },
-    { "code": 606, "name": "Advanced Component", "type": "filler" }
+    { "code": 606, "name": "Advanced Component", "type": "filler" },
+
+    { "code": null, "name": "Victory - Eggnog", "type": "progression" },
+    { "code": null, "name": "Event - Kuafu in FSP", "type": "progression" },
+    { "code": null, "name": "Event - Chiyou in FSP", "type": "progression" },
+    //{ "code": null, "name": "Event - Event - Jiequan 1 Fight Unlocked", "type": "progression" },
+    { "code": null, "name": "Event - Lady Ethereal Soulscape Unlocked", "type": "progression" }
 ]

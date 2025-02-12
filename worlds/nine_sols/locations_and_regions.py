@@ -196,16 +196,20 @@ def eval_criterion(state: CollectionState, p: int, criterion: Any) -> bool:
         return all(eval_criterion(state, p, sub_criterion) for sub_criterion in criterion)
 
     if isinstance(criterion, dict):
-        # we're only using JSON objects / Python dicts here as discriminated unions,
-        # so there should always be exactly one key-value pair
-        if len(criterion.items()) != 1:
-            return False
         key, value = next(iter(criterion.items()))
 
         # { "item": "..." } and { "anyOf": [ ... ] } and { "location": "foo" } and { "region": "bar" }
         # mean exactly what they sound like, and those are the only kinds of criteria.
         if key == "item" and isinstance(value, str):
+            if "count" in criterion:
+                return state.has(value, p, criterion["count"])
             return state.has(value, p)
+        elif key == "item_group" and isinstance(value, str):
+            if "count" in criterion:
+                return state.has_group(value, p, criterion["count"])
+            return state.has_group(value, p)
+        elif key == "count":
+            raise ValueError("Apparently dict iteration can hit 'count' first?: " + json.dumps(criterion))
         elif key == "anyOf" and isinstance(value, list):
             return any(eval_criterion(state, p, sub_criterion) for sub_criterion in value)
         elif key == "location" and isinstance(value, str):
@@ -231,10 +235,8 @@ def regions_referenced_by_criterion(criterion: Any) -> List[str]:
         return [region for sub_criterion in criterion for region in regions_referenced_by_criterion(sub_criterion)]
 
     if isinstance(criterion, dict):
-        if len(criterion.items()) != 1:
-            raise ValueError("Invalid rule criterion: " + json.dumps(criterion))
         key, value = next(iter(criterion.items()))
-        if key == "item":
+        if key == "item" or key == "item_group" or key == "count":
             return []
         elif key == "anyOf":
             return [region for sub_criterion in value for region in regions_referenced_by_criterion(sub_criterion)]

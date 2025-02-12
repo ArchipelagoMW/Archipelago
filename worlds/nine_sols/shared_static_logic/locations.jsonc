@@ -109,9 +109,123 @@
     {
         "address": 405, "name": "Central Hall: Vents",
         "region": "CH - Left Vents", "requires": [] // hacking
-    }
+    },
 
     // Four Seasons Pavilion
+    {
+        "address": 501, "name": "FSP: Kuafu's 1st Gift",
+        "region": "FSP - Root Node", "requires": [ { "item": "Event - Kuafu in FSP" } ]
+    },
+    {
+        "address": 502, "name": "FSP: Kuafu's 2nd Gift",
+        "region": "FSP - Root Node", "requires": [ { "item": "Event - Kuafu in FSP" } ]
+    },
+    {
+        "address": 503, "name": "FSP: Decode the Ancient Sheet Music",
+        "region": "FSP - Root Node", "requires": [ { "item": "Ancient Sheet Music" } ]
+    },
+    {
+        "address": 504, "name": "FSP: Have Yi's Portrait Painted",
+        "region": "FSP - Root Node", "requires": [ { "item": "The Four Treasures of the Study" }, { "item": "Immortal Kunlun Portrait" } ]
+    },
+    {
+        "address": 505, "name": "FSP: Give Yi's Portrait to Chiyou",
+        "region": "FSP - Root Node", "requires": [ { "item": "Event - Chiyou in FSP" }, { "item": "Portrait of Yi" } ]
+    },
+    {
+        "address": 506, "name": "FSP: Receive Peach Blossom Village Quest",
+        "region": "FSP - Root Node", "requires": [] // TODO: decide what if any triggers this will have (in vanilla it's Prison sequence + Chiyou rescue)
+    },
+    {
+        "address": 507, "name": "FSP: Take Shuanshuan's Book",
+        "region": "FSP - Root Node", "requires": [ { "item": "The Four Treasures of the Study" } ]
+    },
+    {
+        "address": 508, "name": "FSP: Give Shuanshuan's Book to Chiyou",
+        "region": "FSP - Root Node", "requires": [ { "item": "Event - Chiyou in FSP" }, { "item": "Legend of the Porky Heroes" } ]
+    },
+    {
+        "address": 509, "name": "FSP: Reveal the Immortal Kunlun Portrait's Secret",
+        "region": "FSP - Root Node", "requires": [ { "item": "The Four Treasures of the Study" }, { "item": "Immortal Kunlun Portrait" } ]
+    },
+    {
+        "address": 510, "name": "FSP: Half-Grown Tree Chest",
+        "region": "FSP - Root Node", "requires": [ { "item": "Unknown Seed" }, { "item": "GM Fertilizer" } ] // and Shennong
+    },
+    {
+        "address": 511, "name": "FSP: Fully Grown Tree 1st Chest",
+        "region": "FSP - Root Node", "requires": [ { "item": "Unknown Seed" }, { "item": "GM Fertilizer", "count": 2 } ] // and Shennong
+    },
+    {
+        "address": 512, "name": "FSP: Fully Grown Tree 2nd Chest",
+        "region": "FSP - Root Node", "requires": [ { "item": "Unknown Seed" }, { "item": "GM Fertilizer", "count": 2 } ] // and Shennong
+    },
+    {
+        "address": 513, "name": "FSP: Isolate the Mutant Gene Sequence",
+        "region": "FSP - Root Node", "requires": [ { "item": "Tianhuo Serum" }, { "item": "Ji's Hair" } ]
+    },
+
+    // Events
+    {
+        "address": null, "name": "Victory - Eggnog",
+        "region": "FSP - Root Node", "requires": [ { "item": "Sol Seals", "count": 8 } ],
+        // TODO: decide on endgame logic
+    },
+    {
+        "address": null, "name": "Event - Kuafu in FSP",
+        "region": "FSP - Root Node", "requires": [
+            { "region": "RP: After Yingzhao" }
+        ]
+    },
+    {
+        "address": null, "name": "Event - Chiyou in FSP",
+        "region": "FSP - Root Node", "requires": [
+            { "region": "PRC - Root Node" },
+            { "region": "GH - Root Node" },
+            { "region": "FGH - Left Exit" },
+            { "region": "BR - Root Node" }
+        ]
+    },
+    // No Shennong event because rando moves him into FSP immediately
+    // TODO: change how Shennong and Chiyou move into FSP so these are correct
+//    {
+//        "address": null, "name": "Event - Jiequan 1 Fight Unlocked",
+//        "region": "FGH - ???", "requires": [ { "item": "Sol Seals", "count": 3 } ]
+//    },
+    {
+        "address": null, "name": "Event - Lady Ethereal Soulscape Unlocked",
+        "region": "CC - Root Node", "requires": [ { "item": "Sol Seals", "count": 4 } ]
+    },
+
+    // Cortex Center
+    {
+        "address": 601, "name": "Cortex Center: Defeat Lady Ethereal",
+        "region": "CC - Root Node After Boss", "requires": []
+    },
+    {
+        "address": 602, "name": "Cortex Center: Lady Ethereal's Tianhou Flower",
+        "region": "CC - Root Node After Boss", "requires": []
+    },
+    {
+        "address": 603, "name": "Cortex Center: Retrieve Chip From Shanhai 9000",
+        "region": "CC - Root Node After Boss", "requires": []
+    },
+    {
+        "address": 604, "name": "Cortex Center: Crystal Caves Upper Right",
+        "region": "CC - Caves Upper Right", "requires": []
+    },
+    {
+        "address": 605, "name": "Cortex Center: Crystal Caves Central Chamber",
+        "region": "CC - Caves Middle Left", "requires": [
+            { "item": "Charged Strike" }, // to break in
+            { "item": "Mystic Nymph: Scout Mode" } // to unlock ropes, since we can't assume
+                                                   // the single-use floor will be used optimally
+        ]
+    },
+    {
+        "address": 606, "name": "Cortex Center: Near Left Exit",
+        "region": "CC - Left Exit", "requires": []
+    }
 ]
 
 
