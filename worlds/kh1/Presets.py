@@ -48,6 +48,11 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "keyblade_max_mp": 3,
         "keyblade_min_mp": -2,
         
+        "orichalcum_in_pool": 20,
+        "orichalcum_price": 5000,
+        "mythril_in_pool": 20,
+        "mythril_price": 5000,
+        
         "randomize_puppies": True,
         "puppy_value": 3,
         "starting_worlds": 0,
@@ -106,6 +111,11 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "keyblade_min_recoil": 1,
         "keyblade_max_mp": 3,
         "keyblade_min_mp": -2,
+        
+        "orichalcum_in_pool": 20,
+        "orichalcum_price": 5000,
+        "mythril_in_pool": 20,
+        "mythril_price": 5000,
         
         "randomize_puppies": True,
         "puppy_value": 1,
@@ -166,6 +176,11 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "keyblade_max_mp": 3,
         "keyblade_min_mp": -2,
         
+        "orichalcum_in_pool": 20,
+        "orichalcum_price": 5000,
+        "mythril_in_pool": 20,
+        "mythril_price": 5000,
+        
         "randomize_puppies": True,
         "puppy_value": 3,
         "starting_worlds": 0,
@@ -223,6 +238,11 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "keyblade_min_recoil": 1,
         "keyblade_max_mp": 3,
         "keyblade_min_mp": -2,
+        
+        "orichalcum_in_pool": 20,
+        "orichalcum_price": 5000,
+        "mythril_in_pool": 20,
+        "mythril_price": 5000,
         
         "randomize_puppies": True,
         "puppy_value": 3,

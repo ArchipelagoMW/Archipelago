@@ -77,5 +77,7 @@ def get_settings(self):
                     "donald_death_link": bool(self.options.donald_death_link),
                     "goofy_death_link": bool(self.options.goofy_death_link),
                     "destiny_islands": bool(self.options.destiny_islands),
-                    "starting_items": [item.code for item in self.multiworld.precollected_items[self.player]]}
+                    "starting_items": [item.code for item in self.multiworld.precollected_items[self.player]],
+                    "mythril_price": int(self.options.mythril_price.value),
+                    "orichalcum_price": int(self.options.orichalcum_price.value)}
     return settings
