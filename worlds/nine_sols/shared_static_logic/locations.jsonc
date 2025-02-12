@@ -225,7 +225,161 @@
     {
         "address": 606, "name": "Cortex Center: Near Left Exit",
         "region": "CC - Left Exit", "requires": []
-    }
+    },
+
+    // Central Transport Hub
+    {
+        "address": 701, "name": "CTH: Large Elevator Shaft",
+        // you can get it for free on the way down, but we can't assume the player
+        // remembered to do that, or even entered CTH from above to get that chance
+        "region": "CTH - Bottom of Large Shaft", "requires": [
+            { "item": "Air Dash" }, { "item": "Cloud Leap" } // AND wall climb
+        ]
+    },
+    {
+        "address": 702, "name": "CTH: Defeat Red Tiger Elite: Yanren",
+        "region": "CTH - Yanren Arena", "requires": []
+    },
+    {
+        "address": 703, "name": "CTH: Side Room Near Right Exit",
+        "region": "CTH - Upper Right Exit", "requires": []
+    },
+    {
+        "address": 704, "name": "CTH: Lower Left Vents",
+        "region": "CTH - Lower Left Vents", "requires": []
+    },
+    {
+        "address": 705, "name": "CTH: Examine Panel by Root Node",
+        "region": "CTH - Root Node", "requires": []
+    },
+    {
+        "address": 706, "name": "CTH: Hack 2 Statues",
+        "region": "CTH - Lower Exits", "requires": [
+            { "item": "Tai-Chi Kick" } // both to disable the statue here, and to reach the other statue
+            // statue in vents requires hacking AND (TCK AND (WC OR CL))
+        ]
+    },
+
+    // Power Reservoir (East)
+    {
+        "address": 801, "name": "PR (East): After Lasers",
+        "region": "PRE - Root Node", "requires": []
+    },
+    {
+        "address": 802, "name": "PR (East): Under Moving Box",
+        "region": "PRE - Root Node", "requires": []
+    },
+    {
+        "address": 803, "name": "PR (East): Top Platform in Upper Right Shaft",
+        "region": "PRE - Upper Right", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ] // to lower rope
+    },
+    {
+        "address": 804, "name": "PR (East): Hack Statue",
+        "region": "PRE - Upper Right", "requires": [ { "item": "Tai-Chi Kick" } ] // AND hacking
+    },
+    {
+        "address": 805, "name": "PR (East): Upper Left Room",
+        "region": "PRE - Upper Left", "requires": []
+    },
+    {
+        "address": 806, "name": "PR (East): Defeat Celestial Guardian: Jiaoduan",
+        "region": "PRE - Jiaoduan Arena", "requires": []
+    },
+
+    // Power Reservoir (Central)
+    {
+        "address": 901, "name": "PR (Central): Breakable Wall Near Right Transporter",
+        "region": "PRC - Right Transporter", "requires": []
+    },
+    {
+        "address": 902, "name": "PR (Central): Near Moving Box",
+        "region": "PRC - Upper Right", "requires": []
+    },
+    {
+        "address": 903, "name": "PR (Central): Hack Statue",
+        "region": "PRC - Upper Right", "requires": [
+            { "item": "Mystic Nymph: Scout Mode" }, // to lower rope
+            { "item": "Tai-Chi Kick" } // for the statue
+        ]
+    },
+    {
+        "address": 904, "name": "PR (Central): Guarded By Beetle",
+        "region": "PRC - Building Right of Light Bridge", "requires": []
+    },
+    {
+        "address": 905, "name": "PR (Central): Near One-Way Door Right of Pagoda",
+        "region": "PRC - Building Right of Light Bridge", "requires": []
+    },
+    {
+        "address": 906, "name": "PR (Central): Retrieve Chip From Shanhai 9000",
+        "region": "PRC - Light Bridge", "requires": []
+    },
+    {
+        "address": 907, "name": "PR (Central): Examine Energy Meter",
+        "region": "PRC - Above Root Node", "requires": []
+    },
+    {
+        "address": 908, "name": "PR (Central): Near Left Transporter",
+        "region": "PRC - Chest Near Left Transporter", "requires": []
+    },
+    {
+        "address": 909, "name": "PR (Central): Left of Light Bridge",
+        "region": "PRC - Chest Left of Light Bridge", "requires": []
+    },
+
+    // Power Reservoir (West)
+    {
+        "address": 1001, "name": "PR (West): Below Root Node",
+        "region": "PRW - Root Node", "requires": [] // hacking the lift
+    },
+    {
+        "address": 1002, "name": "PR (West): Guarded By Turret",
+        "region": "PRW - Guarded Chest", "requires": [ { "anyOf": [
+            { "item": "Mystic Nymph: Scout Mode" },
+            { "item": "Unbounded Counter" }
+            // hacking 2
+        ] } ]
+    },
+    {
+        "address": 1003, "name": "PR (West): Vents",
+        "region": "PRW - Guarded Chest", "requires": []
+    },
+    {
+        "address": 1004, "name": "PR (West): Hack Statue",
+        "region": "PRW - Power Lines", "requires": [ // hacking 2 to open the door AND
+            { "anyOf": [
+                { "item": "Unbounded Counter" }, // to destroy the turret
+                { "region": "PRW - Above Power Lines" } // to move a box in between the turret and the hacking point
+            ] },
+            { "item": "Tai-Chi Kick" } // required for the statue itself, and the easiest way to cross the red floor
+        ]
+    },
+    {
+        "address": 1005, "name": "PR (West): Dusk Guardian Recording Device",
+        "region": "PRW - Tao Fruit", "requires": []
+    },
+    {
+        "address": 1006, "name": "PR (West): Tianhou Flower",
+        "region": "PRW - Tao Fruit", "requires": []
+    },
+    {
+        "address": 1007, "name": "PR (West): Near Right Transporter",
+        "region": "PRW - Above Power Lines", "requires": []
+    },
+
+    // Radiant Pagoda
+    {
+        "address": 1101, "name": "Examine Radiant Pagoda Control Panel",
+        "region": "RP - Root Node", "requires": []
+    },
+    {
+        "address": 1102, "name": "Defeat General Yingzhao",
+        "region": "RP - After Yingzhao", "requires": []
+    },
+    {
+        "address": 1103, "name": "Kuafu's Vital Sanctum",
+        "region": "RP - After Yingzhao", "requires": []
+    },
 ]
 
 
