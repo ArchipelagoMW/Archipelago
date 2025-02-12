@@ -527,7 +527,7 @@ class LMWorld(World):
         if self.options.boo_radar == 2:
             exclude += ["Boo Radar"]
         for item, data in ITEM_TABLE.items():
-            if data.doorid in self.open_doors.keys() and self.open_doors[data.doorid] == 1:
+            if data.doorid in self.open_doors.keys() and self.open_doors.get(data.doorid) == 1:
                 exclude += [item]
             if data.code == 65:
                 copies_to_place = 5

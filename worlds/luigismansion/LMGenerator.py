@@ -241,7 +241,7 @@ class LuigisMansionRandomizer:
         door_list: dict[int, int] = self.output_data["Entrances"]
 
         for event_door in door_list:
-            if door_list[event_door] == 0:
+            if door_list.get(event_door) == 0:
                 event_door_list.append(f"<KEYLOCK>({event_door})" + os.linesep)
             else:
                 event_door_list.append(f"<KEYUNLOCK>({event_door})" + os.linesep)
