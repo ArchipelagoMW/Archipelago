@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import IntEnum
 
 
-class PeaksOfYoreRegion(Enum):
+class PeaksOfYoreRegion(IntEnum):
     FUNDAMENTALS = 0
     INTERMEDIATE = 1
     ADVANCED = 2
