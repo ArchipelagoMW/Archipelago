@@ -168,7 +168,7 @@
     // Events
     {
         "address": null, "name": "Victory - Eggnog",
-        "region": "FSP - Root Node", "requires": [ { "item": "Sol Seals", "count": 8 } ],
+        "region": "FSP - Root Node", "requires": [ { "item_group": "Sol Seals", "count": 8 } ]
         // TODO: decide on endgame logic
     },
     {
@@ -190,11 +190,11 @@
     // TODO: change how Shennong and Chiyou move into FSP so these are correct
 //    {
 //        "address": null, "name": "Event - Jiequan 1 Fight Unlocked",
-//        "region": "FGH - ???", "requires": [ { "item": "Sol Seals", "count": 3 } ]
+//        "region": "FGH - ???", "requires": [ { "item_group": "Sol Seals", "count": 3 } ]
 //    },
     {
         "address": null, "name": "Event - Lady Ethereal Soulscape Unlocked",
-        "region": "CC - Root Node", "requires": [ { "item": "Sol Seals", "count": 4 } ]
+        "region": "CC - Root Node", "requires": [ { "item_group": "Sol Seals", "count": 4 } ]
     },
 
     // Cortex Center
