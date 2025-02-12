@@ -113,7 +113,7 @@ def create_items(world: "NineSolsWorld") -> None:
             for _ in range(0, instances):
                 prog_and_useful_items.append(create_item(player, name))
 
-    unique_filler_with_traps = unique_filler
+    # unique_filler_with_traps = unique_filler
 
     # replace some unique filler items with trap items, depending on trap settings
     # TODO: uncomment this after we have trap items and options
@@ -138,9 +138,19 @@ def create_items(world: "NineSolsWorld") -> None:
     unique_item_count = len(prog_and_useful_items) + len(unique_filler)
     unfilled_location_count = len(multiworld.get_unfilled_locations(player))
     assert unfilled_location_count > unique_item_count
-    # repeatable_filler_needed = unfilled_location_count - unique_item_count
-    # junk_names = list(repeatable_filler_weights.keys())
-    # junk_weights = list(repeatable_filler_weights.values())
+    repeatable_filler_needed = unfilled_location_count - unique_item_count
+    junk_names = list(repeatable_filler_weights.keys())
+    junk_weights = list(repeatable_filler_weights.values())
+
+    filler_weights_sum = sum(repeatable_filler_weights.values())
+    normalized_filler_weights = list((w / filler_weights_sum) for w in junk_weights)
+    repeatable_filler_names = random.choices(
+        population=junk_names,
+        weights=normalized_filler_weights,
+        k=repeatable_filler_needed
+    )
+    repeatable_filler_items = list(create_item(player, name) for name in repeatable_filler_names)
+
     # if apply_trap_items:
     #     filler_weights_sum = sum(repeatable_filler_weights.values())
     #     normalized_filler_weights = list((w / filler_weights_sum) * filler_chance
@@ -156,5 +166,5 @@ def create_items(world: "NineSolsWorld") -> None:
     # )
     # repeatable_filler_with_traps = list(create_item(player, name) for name in repeatable_filler_names_with_traps)
 
-    itempool = prog_and_useful_items + unique_filler_with_traps  # + repeatable_filler_with_traps
+    itempool = prog_and_useful_items + unique_filler + repeatable_filler_items
     multiworld.itempool += itempool
