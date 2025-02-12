@@ -9,7 +9,7 @@ from .AestheticData import chao_name_conversion, sample_chao_names, totally_real
                            all_exits, all_destinations, multi_rooms, single_rooms, room_to_exits_map, exit_to_room_map, valid_kindergarten_exits
 from .GateBosses import get_gate_bosses, get_boss_rush_bosses, get_boss_name
 from .Items import SA2BItem, ItemData, item_table, upgrades_table, emeralds_table, junk_table, minigame_trap_table, item_groups, \
-                   eggs_table, fruits_table, seeds_table, hats_table, animals_table, chaos_drives_table
+                   eggs_table, fruits_table, seeds_table, hats_table, animals_table, chaos_drives_table, event_table
 from .Locations import SA2BLocation, all_locations, location_groups, setup_locations, chao_animal_event_location_table, black_market_location_table
 from .Missions import get_mission_table, get_mission_count_table, get_first_and_last_cannons_core_missions, print_mission_orders_to_spoiler
 from .Names import ItemName, LocationName
@@ -164,8 +164,8 @@ class SA2BWorld(World):
                                  self.options.reverse_trap_weight.value + \
                                  self.options.literature_trap_weight.value + \
                                  self.options.controller_drift_trap_weight.value + \
-                                 self.options.poison_trap.value + \
-                                 self.options.bee_trap.value + \
+                                 self.options.poison_trap_weight.value + \
+                                 self.options.bee_trap_weight.value + \
                                  self.options.pong_trap_weight.value + \
                                  self.options.breakout_trap_weight.value + \
                                  self.options.fishing_trap_weight.value + \
@@ -184,8 +184,8 @@ class SA2BWorld(World):
                 self.options.reverse_trap_weight.value = 4
                 self.options.literature_trap_weight.value = 4
                 self.options.controller_drift_trap_weight.value = 4
-                self.options.poison_trap.value = 4
-                self.options.bee_trap.value = 4
+                self.options.poison_trap_weight.value = 4
+                self.options.bee_trap_weight.value = 4
                 self.options.pong_trap_weight.value = 4
                 self.options.breakout_trap_weight.value = 4
                 self.options.fishing_trap_weight.value = 4
@@ -423,7 +423,11 @@ class SA2BWorld(World):
 
 
     def create_item(self, name: str, force_classification=None, goal=0) -> Item:
-        data = item_table[name]
+        data = None
+        if name in event_table:
+            data = event_table[name]
+        else:
+            data = item_table[name]
 
         if force_classification is not None:
             classification = force_classification

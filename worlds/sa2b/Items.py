@@ -251,7 +251,7 @@ chaos_drives_table = {
 }
 
 event_table = {
-    ItemName.maria: ItemData(0xFF001D, True),
+    ItemName.maria: ItemData(None, True),
 }
 
 # Complete item table.
@@ -268,7 +268,6 @@ item_table = {
     **hats_table,
     **animals_table,
     **chaos_drives_table,
-    **event_table,
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}

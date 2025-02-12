@@ -2219,15 +2219,15 @@ green_hill_itembox_location_table = {
 
 final_boss_location_table = {
     # LocationName.biolizard: 0xFF003F,
-    LocationName.finalhazard: 0xFF005F,
+    LocationName.finalhazard: None,
 }
 
 grand_prix_location_table = {
-    LocationName.grand_prix: 0xFF007F,
+    LocationName.grand_prix: None,
 }
 
 chaos_chao_location_table = {
-    LocationName.chaos_chao: 0xFF009F,
+    LocationName.chaos_chao: None,
 }
 
 all_locations = {
@@ -2259,9 +2259,6 @@ all_locations = {
     **green_hill_chao_location_table,
     **green_hill_animal_location_table,
     **green_hill_itembox_location_table,
-    **final_boss_location_table,
-    **grand_prix_location_table,
-    **chaos_chao_location_table,
     **chao_stat_swim_table,
     **chao_stat_fly_table,
     **chao_stat_run_table,
@@ -4037,6 +4034,9 @@ def setup_locations(world: World, player: int, mission_map: typing.Dict[int, int
 
         if world.options.goal.value in [1, 2]:
             location_table.update({**green_hill_location_table})
+
+            if world.options.goal.value in [1]:
+                location_table[LocationName.green_hill] = None
 
             if world.options.keysanity:
                 location_table.update({**green_hill_chao_location_table})

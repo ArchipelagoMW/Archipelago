@@ -1397,7 +1397,7 @@ def create_region(multiworld: MultiWorld, player: int, active_locations, name: s
     if locations:
         for location in locations:
             loc_id = active_locations.get(location, 0)
-            if loc_id:
+            if loc_id != 0:
                 location = SA2BLocation(player, location, loc_id, ret)
                 ret.locations.append(location)
 
