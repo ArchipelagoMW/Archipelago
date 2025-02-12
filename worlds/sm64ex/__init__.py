@@ -48,6 +48,17 @@ class SM64World(World):
     filler_count: int
     star_costs: typing.Dict[str, int]
 
+    # Spoiler specific variable(s)
+    star_costs_spoiler_key_maxlen = len(max([
+        'First Floor Big Star Door',
+        'Basement Big Star Door',
+        'Second Floor Big Star Door',
+        'MIPS 1',
+        'MIPS 2',
+        'Endless Stairs',
+    ], key=len))
+
+
     def generate_early(self):
         max_stars = 120
         if (not self.options.enable_coin_stars):
@@ -238,3 +249,19 @@ class SM64World(World):
                     for location in region.locations:
                         er_hint_data[location.address] = entrance_name
             hint_data[self.player] = er_hint_data
+
+    def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
+        # Write calculated star costs to spoiler.
+        star_cost_spoiler_header = '\n\n' + self.player_name + ' Star Costs for Super Mario 64:\n\n'
+        spoiler_handle.write(star_cost_spoiler_header)
+        # - Reformat star costs dictionary in spoiler to be a bit more readable.
+        star_costs_spoiler = {}
+        star_costs_copy = self.star_costs.copy()
+        star_costs_spoiler['First Floor Big Star Door'] = star_costs_copy['FirstBowserDoorCost']
+        star_costs_spoiler['Basement Big Star Door'] = star_costs_copy['BasementDoorCost']
+        star_costs_spoiler['Second Floor Big Star Door'] = star_costs_copy['SecondFloorDoorCost']
+        star_costs_spoiler['MIPS 1'] = star_costs_copy['MIPS1Cost']
+        star_costs_spoiler['MIPS 2'] = star_costs_copy['MIPS2Cost']
+        star_costs_spoiler['Endless Stairs'] = star_costs_copy['StarsToFinish']
+        for star, cost in star_costs_spoiler.items():
+            spoiler_handle.write(f"{star:{self.star_costs_spoiler_key_maxlen}s} = {cost}\n")
