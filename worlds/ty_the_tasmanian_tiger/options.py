@@ -12,26 +12,13 @@ class Goal(Choice):
     option_final_battle = 0
     default = 0
 
+
 class GoalRequiresBosses(Toggle):
     """
     Determines if beating all bosses is a requirement to complete the goal
     """
     display_name = "Goal Requires Bosses"
 
-class GoalRequiresTheggChecks(Toggle):
-    """
-    Determines if Thunder Egg checks are required to complete the goal
-    """
-    display_name = "Goal Requires Thegg Checks"
-
-class ThunderEggRequirements(Range):
-    """
-    If Thunder Egg checks are required, determines how many thunder egg checks in each level must be completed to complete the goal
-    """
-    display_name = "Thegg Requirements"
-    range_start = 1
-    range_end = 8
-    default = 4
 
 class LogicDifficulty(Choice):
     """
@@ -46,11 +33,13 @@ class LogicDifficulty(Choice):
     option_advanced = 1
     default = 0
 
+
 class ProgressiveElementals(DefaultOnToggle):
     """
     Determines if elemental rangs are a progressive check
     """
     display_name = "Progressive Elemental Rangs"
+
 
 class StartWithBoom(DefaultOnToggle):
     """
@@ -58,17 +47,20 @@ class StartWithBoom(DefaultOnToggle):
     """
     display_name = "Start With Boomerang"
 
+
 class LevelShuffle(Toggle):
     """
     Determines whether the levels that portals lead to will be shuffled
     """
     display_name = "Level Shuffle"
 
+
 class BossShuffle(Toggle):
     """
     Determines whether the first three bosses will be shuffled
     """
-    display_name = "Boss Shuffle"
+    display_name = ("Boss Shuffle")
+
 
 class LevelUnlockStyle(Choice):
     """
@@ -86,11 +78,13 @@ class LevelUnlockStyle(Choice):
     option_checks_no_bosses = 2
     default = 1
 
+
 class ProgressiveLevel(DefaultOnToggle):
     """
     Determines if level unlocks are progressive (only if levels are check based)
     """
     display_name = "Progressive Level"
+
 
 class ThunderEggGating(Range):
     """
@@ -102,6 +96,7 @@ class ThunderEggGating(Range):
     range_end = 24
     default = 17
 
+
 class ExtraThunderEggs(Range):
     """
     Sets number of additional thunder eggs of each type to add to the pool
@@ -112,6 +107,7 @@ class ExtraThunderEggs(Range):
     range_end = 24
     default = 7
 
+
 class CogGating(Range):
     """
     Cog requirement count for each attribute check in Julius' lab
@@ -120,6 +116,7 @@ class CogGating(Range):
     range_start = 0
     range_end = 15
     default = 10
+
 
 class ExtraCogs(Range):
     """
@@ -131,6 +128,7 @@ class ExtraCogs(Range):
     range_end = 90
     default = 30
 
+
 class GateTimeAttacks(Toggle):
     """
     If true, adds Stopwatch items to the pool which unlock the time attacks for each level
@@ -138,6 +136,7 @@ class GateTimeAttacks(Toggle):
     Also adds checks for beating specific times in the time attacks
     """
     display_name = "Gate Time Attacks"
+
 
 class Framesanity(Choice):
     """
@@ -155,11 +154,13 @@ class Framesanity(Choice):
     option_none = 2
     default = 0
 
+
 class FramesRequireInfra(Toggle):
     """
     Determines whether the generator considers picture frames checks to be logically locked behind the infrarang
     """
     display_name = "Frames Require Infra"
+
 
 class Scalesanity(Toggle):
     """
@@ -167,22 +168,11 @@ class Scalesanity(Toggle):
     """
     display_name = "Scalesanity"
 
-class JunkFillPercentage(Range):
-    """
-    Replace a percentage of non-required checks in the item pool with random junk items
-    """
-    display_name = "Junk Fill Percentage"
-    range_start = 0
-    range_end = 100
-    default = 50
-
 
 ty1_option_groups = [
     OptionGroup("Goal Options", [
         Goal,
         GoalRequiresBosses,
-        GoalRequiresTheggChecks,
-        ThunderEggRequirements,
     ]),
     OptionGroup("Logic Options", [
         LogicDifficulty,
@@ -203,20 +193,16 @@ ty1_option_groups = [
         Framesanity,
         Scalesanity,
     ]),
-    OptionGroup("Junk Options", [
-        JunkFillPercentage,
-    ]),
     OptionGroup("Death Link", [
         DeathLink
     ]),
 ]
 
+
 @dataclass
 class Ty1Options(PerGameCommonOptions):
     goal: Goal
     req_bosses: GoalRequiresBosses
-    req_theggs: GoalRequiresTheggChecks
-    thegg_reqs: ThunderEggRequirements
 
     logic_difficulty: LogicDifficulty
     progressive_elementals: ProgressiveElementals
@@ -237,5 +223,4 @@ class Ty1Options(PerGameCommonOptions):
     frames_require_infra: FramesRequireInfra
     scalesanity: Scalesanity
 
-    junk_fill_percentage: JunkFillPercentage
     death_link: DeathLink

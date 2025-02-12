@@ -1,5 +1,3 @@
-from collections import Counter
-
 from BaseClasses import Location, Region
 from worlds.ty_the_tasmanian_tiger.options import Ty1Options
 
@@ -7,9 +5,6 @@ from worlds.ty_the_tasmanian_tiger.options import Ty1Options
 class Ty1Location(Location):
     game: str = "Ty the Tasmanian Tiger"
 
-class ReqData:
-    name: str
-    count: int = 1
 
 class LocData:
     def __init__(self, code: int, region: str,):
@@ -22,74 +17,57 @@ class LocData:
         self.code = code
         self.region = region
 
-def create_location(player: int, options: Ty1Options, reg: Region, name: str, data: LocData):
-    location = Ty1Location(player, name, data.code, reg)
+
+def create_location(player: int, reg: Region, name: str, code: int):
+    location = Ty1Location(player, name, code, reg)
     reg.locations.append(location)
+
+
+def create_locations_from_dict(loc_dict, reg, player):
+    for (key, data) in loc_dict.items():
+        if data.region != reg.name:
+            continue
+        create_location(player, reg, key, data.code)
+
 
 def create_locations(player: int, options: Ty1Options, reg: Region):
     # THUNDER EGGS
-    for (key, data) in thunder_eggs_dict.items():
-        if data.region != reg.name:
-            continue
-        create_location(player, options, reg, key, data)
-    # BILBY COMPLETION
-    for (key, data) in bilby_completion_dict.items():
-        if data.region != reg.name:
-            continue
-        create_location(player, options, reg, key, data)
-    # TALISMANS
-    for (key, data) in talismans_dict.items():
-        if data.region != reg.name:
-            continue
-        create_location(player, options, reg, key, data)
+    create_locations_from_dict(thunder_eggs_dict, reg, player)
     # GOLDEN COGS
-    for (key, data) in golden_cogs_dict.items():
-        if data.region != reg.name:
-            continue
-        create_location(player, options, reg, key, data)
+    create_locations_from_dict(golden_cogs_dict, reg, player)
+    # COG COMPLETION
+    create_locations_from_dict(cog_completion_dict, reg, player)
     # BILBIES
-    for (key, data) in bilbies_dict.items():
-        if data.region != reg.name:
-            continue
-        create_location(player, options, reg, key, data)
+    create_locations_from_dict(bilbies_dict, reg, player)
+    # BILBY COMPLETION
+    create_locations_from_dict(bilby_completion_dict, reg, player)
+    # TALISMANS
+    create_locations_from_dict(talismans_dict, reg, player)
     # PICTURE FRAMES
     if options.framesanity == 0:
-        for (key, data) in picture_frames_dict.items():
-            if data.region != reg.name:
-                continue
-            create_location(player, options, reg, key, data)
+        create_locations_from_dict(picture_frames_dict, reg, player)
     # FRAME COMPLETION
     if options.framesanity == 1:
-        for (key, data) in frame_completion_dict.items():
-            if data.region != reg.name:
-                continue
-            create_location(player, options, reg, key, data)
-    # COG COMPLETION
-    for (key, data) in cog_completion_dict.items():
-        if data.region != reg.name:
-            continue
-        create_location(player, options, reg, key, data)
+        create_locations_from_dict(frame_completion_dict, reg, player)
+    # SCALES
+    if options.scalesanity:
+        create_locations_from_dict(scales_dict, reg, player)
+        if reg.name == "Rainbow Cliffs":
+            create_location(player, reg, "Attribute - Extra Health", 0x08750313)
     # ATTRIBUTES
-    for (key, data) in attributes_dict.items():
-        if data.region != reg.name:
-            continue
-        create_location(player, options, reg, key, data)
+    create_locations_from_dict(attributes_dict, reg, player)
     # ELEMENTAL RANGS
-    for (key, data) in elemental_rangs_dict.items():
-        if data.region != reg.name:
-            continue
-        create_location(player, options, reg, key, data)
-    # RAINBOW SCALES
-    for (key, data) in rainbow_scales_dict.items():
-        if data.region != reg.name:
-            continue
-        create_location(player, options, reg, key, data)
+    create_locations_from_dict(elemental_rangs_dict, reg, player)
+    # TIME ATTACK CHALLENGES
+    if options.gate_time_attacks:
+        create_locations_from_dict(time_attack_challenge_dict, reg, player)
+
 
 # Thunder_eggs Dictionary
 thunder_eggs_dict = {
     # Two Up ---------------------------------------------------------------------------------------------------------
     "Two Up - Collect 300 Opals":
-        LocData(0x08750100, "Two Up - End Area"),
+        LocData(0x08750100, "Two Up"),
     "Two Up - Find 5 Bilbies":
         LocData(0x08750101, "Two Up - Upper Area"),
     "Two Up - Time Attack":
@@ -1005,8 +983,6 @@ attributes_dict = {
         LocData(0x08750311, "Bridge on the River Ty"),
     "Attribute - Doomerang":
         LocData(0x08750318, "Final Battle"),
-    "Attribute - Extra Health":
-        LocData(0x08750313, "Rainbow Cliffs"),
     "Attribute - Aquarang":
         LocData(0x0875031D, "Ship Rex"),
     "Attribute - Zoomerang":
@@ -1048,7 +1024,7 @@ cog_completion_dict = {
 # Frame_completion Dictionary
 frame_completion_dict = {
     "Rainbow Cliffs - All Picture Frames":
-        LocData(0x08750258, "Final Gauntlet - PF"),
+        LocData(0x08750258, "Rainbow Cliffs"),
     "Two Up - All Picture Frames":
         LocData(0x08750259, "Two Up - Upper Area - PF"),
     "WitP - All Picture Frames":
@@ -1113,7 +1089,7 @@ elemental_rangs_dict = {
         LocData(0x0875031C, "Rainbow Cliffs")
 }
 
-rainbow_scales_dict = {
+scales_dict = {
     # Behind right-hand house in A-zone
     "Rainbow Scale 1":
         LocData(0x8750320, "Bli Bli Station Gate"),
@@ -1191,6 +1167,27 @@ rainbow_scales_dict = {
         LocData(0x8750338, "Rainbow Cliffs"),
 }
 
+time_attack_challenge_dict = {
+    "Two Up - Time Attack Challenge":
+        LocData(0x08750339, "Two Up"),
+    "WitP - Time Attack Challenge":
+        LocData(0x0875033A, "Walk in the Park"),
+    "Ship Rex - Time Attack Challenge":
+        LocData(0x0875033B, "Ship Rex - Beyond Gate"),
+    "BotRT - Time Attack Challenge":
+        LocData(0x0875033C, "Bridge on the River Ty - Beyond Broken Bridge"),
+    "Snow Worries - Time Attack Challenge":
+        LocData(0x0875033D, "Snow Worries"),
+    "Outback Safari - Time Attack Challenge":
+        LocData(0x0875033E, "Outback Safari"),
+    "LLPoF - Time Attack Challenge":
+        LocData(0x0875033F, "Lyre, Lyre Pants on Fire"),
+    "BtBS - Time Attack Challenge":
+        LocData(0x08750340, "Beyond the Black Stump"),
+    "RMtS - Time Attack Challenge":
+        LocData(0x08750341, "Rex Marks the Spot - Underwater"),
+}
+
 ty1_location_table = {
     **thunder_eggs_dict,
     **golden_cogs_dict,
@@ -1202,5 +1199,5 @@ ty1_location_table = {
     **bilby_completion_dict,
     **talismans_dict,
     **elemental_rangs_dict,
-    **rainbow_scales_dict
+    **scales_dict
 }

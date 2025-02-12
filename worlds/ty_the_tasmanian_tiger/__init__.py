@@ -2,7 +2,7 @@ import typing
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
 
-from .items import Ty1Item, ty1_item_table, create_items, ItemData, place_bilby_theggs
+from .items import Ty1Item, ty1_item_table, create_items, ItemData, place_locked_items
 from .locations import ty1_location_table, Ty1Location
 from .options import Ty1Options, ty1_option_groups
 from .regions import create_regions, connect_regions, ty1_levels, Ty1LevelCode, connect_all_regions
@@ -27,7 +27,8 @@ class Ty1Web(WebWorld):
 
 class Ty1World(World):
     """
-    Ty the Tasmanian Tiger is a 3D platformer collectathon created by Australian developers Krome Studios. Play as Ty and travel the Australian outback to snowy mountains to defeat Boss Cass and rescue your family from The Dreaming.
+    Ty the Tasmanian Tiger is a 3D platformer collectathon created by Australian developers Krome Studios.
+    Play as Ty and travel the Australian outback to snowy mountains to defeat Boss Cass and rescue your family from The Dreaming.
     """
     game: str = "Ty the Tasmanian Tiger"
     options_dataclass = Ty1Options
@@ -39,7 +40,7 @@ class Ty1World(World):
                                     Ty1LevelCode.B1.value, Ty1LevelCode.B2.value, Ty1LevelCode.B3.value,
                                     Ty1LevelCode.C1.value, Ty1LevelCode.C2.value, Ty1LevelCode.C3.value]
     boss_map: typing.List[int] = [Ty1LevelCode.A4.value, Ty1LevelCode.D4.value, Ty1LevelCode.C4.value]
-
+    
     web = Ty1Web()
 
     def __init__(self, multiworld: MultiWorld, player: int):
@@ -58,25 +59,16 @@ class Ty1World(World):
             "ProgressiveLevel": self.options.progressive_level.value,
             "StartWithBoom": self.options.start_with_boom.value,
             "LevelUnlockStyle": self.options.level_unlock_style.value,
-            "HubTheggCounts": self.options.hub_te_counts.value,
+            "TheggGating": self.options.thegg_gating.value,
+            "CogGating": self.options.cog_gating.value,
+            "ReqBosses": self.options.req_bosses.value,
+            "GateTimeAttacks": self.options.gate_time_attacks.value,
             "PortalMap": self.portal_map,
             "BossMap": self.boss_map,
-            "Cogsanity": self.options.cogsanity.value,
+            "Scalesanity": self.options.scalesanity.value,
             "Framesanity": self.options.framesanity.value,
-            "Bilbysanity": self.options.bilbysanity.value,
-            "Attributesanity": self.options.attributesanity.value,
             "DeathLink": self.options.death_link.value
         }
-
-    def generate_early(self) -> None:
-        if self.options.goal == 3:
-            if self.options.thegg_counts + self.options.extra_theggs < 24:
-                print("WARN [TY1] Goal is completion but thegg counts are set lower than maximum. More theggs will be added to the pool.")
-            if self.options.cog_counts + self.options.extra_cogs < 15:
-                print("WARN [TY1] Goal is completion but cog count is set lower than maximum. More cogs will be added to the pool.")
-        if self.options.goal == 2:
-            if self.options.thegg_counts < 24:
-                print("WARN [TY1] Goal is all theggs but thegg counts are set lower than maximum. More theggs will be added to the pool.")
 
     def create_item(self, name: str) -> Item:
         item_info = ty1_item_table[name]
@@ -93,13 +85,8 @@ class Ty1World(World):
 
     def create_regions(self):
         create_regions(self.multiworld, self.options, self.player)
-        place_bilby_theggs(self.multiworld, self.options, self.player)
+        place_locked_items(self.multiworld, self.player)
         connect_all_regions(self.multiworld, self.player, self.options, self.portal_map, self.boss_map)
-        self.create_event("Bull's Pen", "Beat Bull")
-        self.create_event("Crikey's Cove", "Beat Crikey")
-        self.create_event("Fluffy's Fjord", "Beat Fluffy")
-        self.create_event("Cass' Crest", "Beat Shadow")
-        self.create_event("Final Battle", "Beat Cass")
 
     def set_rules(self):
-        set_rules(self.multiworld, self.options, self.player)
+        set_rules(self)

@@ -1,4 +1,3 @@
-from collections import namedtuple
 from typing import Dict, Optional
 
 from BaseClasses import Item, ItemClassification, MultiWorld
@@ -89,6 +88,12 @@ def create_items(world: MultiWorld, options: Ty1Options, player: int):
     create_single("Kaboomarang", world, player)
     create_single("Chronorang", world, player)
 
+    create_single("Frog Talisman", world, player)
+    create_single("Platypus Talisman", world, player)
+    create_single("Cockatoo Talisman", world, player)
+    create_single("Dingo Talisman", world, player)
+    create_single("Tiger Talisman", world, player)
+
     # Levels
     if options.level_unlock_style != 0:
         if options.progressive_level:
@@ -106,12 +111,6 @@ def create_items(world: MultiWorld, options: Ty1Options, player: int):
                 create_single("Portal - Crikey's Cove", world, player)
                 create_single("Portal - Fluffy's Fjord", world, player)
 
-    create_single("Frog Talisman", world, player)
-    create_single("Platypus Talisman", world, player)
-    create_single("Cockatoo Talisman", world, player)
-    create_single("Dingo Talisman", world, player)
-    create_single("Tiger Talisman", world, player)
-
     # Junk
     junk = get_junk_item_names(world.random, total_location_count - len(world.worlds[player].itempool))
     for name in junk:
@@ -120,7 +119,7 @@ def create_items(world: MultiWorld, options: Ty1Options, player: int):
     world.itempool += world.worlds[player].itempool
 
 
-def place_bilby_theggs(world: MultiWorld, options: Ty1Options, player: int):
+def place_locked_items(world: MultiWorld, player: int):
     classification = ItemClassification.progression_skip_balancing
     a1_bilby_loc = world.get_location("Two Up - Bilby Completion", player)
     a1_bilby_thegg = Ty1Item("Fire Thunder Egg", classification, 0x8750000, player)
