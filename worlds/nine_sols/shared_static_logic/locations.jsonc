@@ -87,7 +87,65 @@
     {
         "address": 310, "name": "AF (Depths): Upper Right Chest (2nd Reward)",
         "region": "AFD - Upper Right", "requires": []
-    }
+    },
 
     // Central Hall
+    {
+        "address": 401, "name": "Central Hall: Examine Council Sign",
+        "region": "CH - Center", "requires": []
+    },
+    {
+        "address": 402, "name": "Central Hall: Examine Launch Memoral",
+        "region": "CH - Center", "requires": []
+    },
+    {
+        "address": 403, "name": "Central Hall: Examine Council Tenets",
+        "region": "CH - Left", "requires": []
+    },
+    {
+        "address": 404, "name": "Central Hall: Turrets and Double Axe Robot Room",
+        "region": "CH - Left", "requires": [ { "item": "Unbounded Counter" } ]
+    },
+    {
+        "address": 405, "name": "Central Hall: Vents",
+        "region": "CH - Left Vents", "requires": [] // hacking
+    }
+
+    // Four Seasons Pavilion
 ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

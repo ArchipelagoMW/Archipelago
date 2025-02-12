@@ -33,7 +33,7 @@
         [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ]
     ] } ] },
 
-    { "from": "AFE - Baichang Arena", "to": "Central Hall - Center", "requires": [] }, // elevator
+    { "from": "AFE - Baichang Arena", "to": "CH - Center", "requires": [] }, // elevator
 
     { "from": "AFE - Baichang Arena", "to": "CTH - Lower Left Exit", "requires": [] },
     { "from": "CTH - Lower Left Exit", "to": "AFE - Baichang Arena", "requires": [] },
@@ -79,7 +79,36 @@
     { "from": "FU - Lower Right Exit", "to": "AFD - Upper Left Exit", "requires": [] },
 
     { "from": "AFD - Lower Left Exit", "to": "PRW - Left Exit", "requires": [] },
-    { "from": "PRW - Left Exit", "to": "AFD - Lower Left Exit", "requires": [] }
+    { "from": "PRW - Left Exit", "to": "AFD - Lower Left Exit", "requires": [] },
 
     // Central Hall
+    { "from": "CH - Center", "to": "CH - Left", "requires": [
+        { "item": "Mystic Nymph: Scout Mode" }
+    ] },
+    { "from": "CH - Center", "to": "CH - Upper Right Exit", "requires": [
+        { "item": "Tai-Chi Kick" }
+    ] }, // kick AND hacking
+    { "from": "CH - Center", "to": "CH - Lower Right Exit", "requires": [
+        { "item": "Mystic Nymph: Scout Mode" }
+    ] },
+    { "from": "CH - Center", "to": "CH - Right Vents", "requires": [ { "anyOf": [
+        { "item": "Tai-Chi Kick" }, { "item": "Cloud Leap" }
+    ] } ] },
+    { "from": "CH - Right Vents", "to": "CH - Left Vents", "requires": [ { "anyOf": [
+        { "item": "Tai-Chi Kick" }, { "item": "Cloud Leap" }, { "item": "Air Dash" }
+    ] } ] },
+    { "from": "CH - Left Vents", "to": "CH - Left", "requires": [] }, // one-way fall + shortcut rope
+
+    { "from": "CH - Right Vents", "to": "CTH - Above Elevator", "requires": [] }, // one-way fall
+
+    { "from": "CH - Upper Right Exit", "to": "LYR - Left Exit", "requires": [] },
+    { "from": "LYR - Left Exit", "to": "CH - Upper Right Exit", "requires": [] },
+
+    { "from": "CH - Lower Right Exit", "to": "CTH - Upper Left Exit", "requires": [] },
+    { "from": "CTH - Upper Left Exit", "to": "CH - Lower Right Exit", "requires": [] },
+
+    { "from": "CH - Left", "to": "CC - Right Exit", "requires": [] },
+    { "from": "CC - Right Exit", "to": "CH - Left", "requires": [] }
+
+    // Four Seasons Pavilion
 ]
