@@ -1,5 +1,6 @@
 from typing import Any
 
+from Options import Toggle
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial, Item, Region, ItemClassification, MultiWorld
 from .options import PeaksOfYoreOptions, Goal, StartingBook
@@ -145,19 +146,25 @@ class PeaksOfWorld(World):
 
     def create_items(self) -> None:
         # order: books, tools, ropes, bird seeds, artefacts, fill rest with extra Items
-        starting_book: Item = self.create_item(
-            ["Fundamentals Book", "Intermediate Book", "Advanced Book", "Expert Book"][
-                self.options.starting_book.value])
+
+
+        books: dict[str, Toggle] = {
+            "Fundamentals Book": self.options.enable_fundamental,
+            "Intermediate Book": self.options.enable_intermediate,
+            "Advanced Book": self.options.enable_advanced,
+            "Expert Book": self.options.enable_expert
+        }
+
+
+        starting_book: Item = self.create_item([*books][self.options.starting_book.value])
 
         remaining_items = self.location_count
 
-        for book in [item for item in full_item_list if item.type == "Book"]:
-            if remaining_items > 0:
-                item = self.create_item(book.name)
-                if starting_book.name == item.name:
-                    continue
-                self.multiworld.itempool.append(item)
-                remaining_items -= 1
+        for name, option in books.items():
+            if (not option) or remaining_items <= 0 or starting_book.name == name:
+                continue
+            self.multiworld.itempool.append(self.create_item(name))
+            remaining_items -= 1
 
         for tool in [item for item in full_item_list if item.type == "Tool"]:
             if remaining_items > 0 and (tool.name != "Barometer" or not self.options.start_with_barometer):

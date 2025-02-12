@@ -1,4 +1,4 @@
-from Options import Toggle, DefaultOnToggle, DeathLink, Choice, PerGameCommonOptions
+from Options import Toggle, DefaultOnToggle, DeathLink, Choice, PerGameCommonOptions, StartInventoryPool
 from dataclasses import dataclass
 
 
@@ -70,3 +70,4 @@ class PeaksOfYoreOptions(PerGameCommonOptions):
     enable_advanced: EnableAdvanced
     enable_expert: EnableExpert
     disable_solemn_tempest: DisableSolemnTempest
+    start_inventory_from_pool: StartInventoryPool
