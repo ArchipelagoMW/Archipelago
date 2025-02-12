@@ -392,7 +392,10 @@ level_table = {
                     LocationData("Spike Ceiling Diamond"),
                     LocationData("Sewage Pool Diamond", access_rule=has('Swim')),
                     LocationData("Trash Sprint Diamond"),
-                    LocationData("Transformation Puzzle Lower Diamond"),
+                    LocationData(
+                        "Transformation Puzzle Lower Diamond",
+                        access_rule=has('Swim') & (advanced_logic() | has('Heavy Grab'))
+                    ),
                     LocationData("Rock Throwing Diamond", access_rule=has('Grab')),
                 ]
             ),

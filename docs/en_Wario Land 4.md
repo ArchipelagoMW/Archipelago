@@ -69,6 +69,8 @@ A full list of these strategies is as follows:
 
 - In 40 Below Fridge, you can ground pound the switches in the maze puzzle room by getting a running
 start and stomp jumping on the glass ball right after the glass bird spits it out.
+- In The Toxic Landfill, you can lure the Ringosuki toward the water and grab the apple in midair to
+get the Transformation Puzzle Lower Diamond without using Heavy Grab to throw it across the pool.
 - In Pinball Zone, you can get through the fruit room with only grab by throwing one of the lower
 pinballs at the ones on the ledges.
 - Also in Pinball Zone, you can use Heavy Grab in place of Ground Pound in the jungle room by
