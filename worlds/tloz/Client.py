@@ -34,13 +34,11 @@ class TLOZClient(BizHawkClient):
         try:
             # Check ROM name/patch version
             rom_name = ((await bizhawk.read(ctx.bizhawk_ctx, [(Rom.ROM_NAME - 0x10, 3, self.rom)]))[0]).decode("ascii")
-            logger.info(rom_name)
             if rom_name != "LOZ":
-                return False  # Not a MYGAME ROM
+                return False
         except bizhawk.RequestFailedError:
             return False  # Not able to get a response, say no for now
 
-        # This is a MYGAME ROM
         ctx.game = self.game
         ctx.items_handling = 0b101
         ctx.want_slot_data = True
@@ -71,6 +69,7 @@ class TLOZClient(BizHawkClient):
             await self.received_items_check(ctx)
             await self.resolve_shop_items(ctx)
             await self.resolve_triforce_fragments(ctx)
+            await self.resolve_bonus_items(ctx)
 
         except bizhawk.RequestFailedError:
             # The connector didn't respond. Exit handler and return to main loop to reconnect
@@ -133,14 +132,15 @@ class TLOZClient(BizHawkClient):
             if "Take Any Item Right" not in ctx.checked_locations:
                 locations_checked.append(Locations.location_table[f"Take Any Item Left"])
                 self.bonus_items.append(ctx.slot_data["TakeAnyRight"])
-        for location in locations_checked:
-            if location not in ctx.locations_checked:
-                ctx.locations_checked.add(location)
-                location_name = ctx.location_names.lookup_in_game(location)
-                logger.info(
-                    f'New Check: {location_name} ({len(ctx.locations_checked)}/'
-                    f'{len(ctx.missing_locations) + len(ctx.checked_locations)})')
-                await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [location]}])
+
+        found_locations = ctx.check_locations(locations_checked)
+        for location in found_locations:
+            ctx.locations_checked.add(location)
+            location_name = ctx.location_names.lookup_in_game(location)
+            logger.info(
+                f'New Check: {location_name} ({len(ctx.locations_checked)}/'
+                f'{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+            await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [location]}])
 
 
 
@@ -164,7 +164,26 @@ class TLOZClient(BizHawkClient):
             await self.write_item(ctx, current_item_name, write_list)
 
     async def resolve_shop_items(self, ctx):
-        pass
+        left_shop_slots = await self.read_ram_value_guarded(ctx, Rom.left_shop_slots)
+        middle_shop_slots = await self.read_ram_value_guarded(ctx, Rom.middle_shop_slots)
+        right_shop_slots = await self.read_ram_value_guarded(ctx, Rom.right_shop_slots)
+        if left_shop_slots is None or middle_shop_slots is None or right_shop_slots is None:
+            return
+        for shop_category, shops in Locations.shop_categories.items():
+            bit = Rom.shop_correspondance[shop_category]
+            for shop in shops:
+                shop_id = Locations.location_table[shop] + base_id
+                if shop_id in ctx.checked_locations:
+                    if "Left" in shop:
+                        left_shop_slots = left_shop_slots | bit
+                    if "Middle" in shop:
+                        middle_shop_slots = middle_shop_slots | bit
+                    if "Right" in shop:
+                        right_shop_slots = right_shop_slots | bit
+        left_shop_write = (Rom.left_shop_slots, [left_shop_slots], self.wram)
+        middle_shop_write = (Rom.middle_shop_slots, [middle_shop_slots], self.wram)
+        right_shop_write = (Rom.right_shop_slots, [right_shop_slots], self.wram)
+        await self.write(ctx, [left_shop_write, middle_shop_write, right_shop_write])
 
     async def resolve_triforce_fragments(self, ctx):
         current_triforce_count = await self.read_ram_value_guarded(ctx, Rom.triforce_count)

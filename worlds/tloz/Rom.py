@@ -105,6 +105,14 @@ white_sword_pond_location_byte = 0x51
 magical_sword_grave_location_byte = 0x52
 letter_cave_location_byte = 0x53
 
+shop_correspondance = {
+    "Arrow Shop": arrow_shop,
+    "Candle Shop": candle_shop,
+    "Blue Ring Shop": ring_shop,
+    "Shield Shop": shield_shop,
+    "Potion Shop": potion_shop
+}
+
 
 class TLoZDeltaPatch(APDeltaPatch):
     hash = NA10CHECKSUM
