@@ -52,7 +52,7 @@ item_name_groups = {
     "progression": prog_items,
     "useful": set(entry["name"] for entry in items_data if entry["type"] == "useful"),
     "filler": set(entry["name"] for entry in items_data if entry["type"] == "filler"),
-    "trap": set(entry["name"] for entry in items_data if entry["type"] == "trap"),
+    # "trap": set(entry["name"] for entry in items_data if entry["type"] == "trap"),
 
     "Sol Seals": set(entry["name"] for entry in items_data if entry["name"].startswith("Seal of ")),
     "Jades": set(entry["name"] for entry in items_data if (" Jade" in entry["name"])),
