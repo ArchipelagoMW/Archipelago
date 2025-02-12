@@ -109,7 +109,7 @@ class ColorChoice(TextChoice):
         text = text.lower()
         if text == "random":
             choice_list = list(cls.name_lookup)
-            choice_list.remove(-1)
+            choice_list.remove(cls.option_any_color)
             return cls(random.choice(choice_list))
         return super().from_text(text)
 
@@ -259,7 +259,7 @@ def resolve_options(world: World):
             raise OptionError(f"Invalid input for option `madeline_one_dash_hair_color`:"
                               f"{world.options.madeline_one_dash_hair_color.value} for "
                               f"{world.player_name}")
-    elif world.options.madeline_one_dash_hair_color.value == -1:
+    elif world.options.madeline_one_dash_hair_color.value == ColorChoice.option_any_color:
         world.madeline_one_dash_hair_color = world.random.randint(0, 0xFFFFFF)
     else:
         world.madeline_one_dash_hair_color = world.options.madeline_one_dash_hair_color.value
@@ -272,7 +272,7 @@ def resolve_options(world: World):
             raise OptionError(f"Invalid input for option `madeline_two_dash_hair_color`:"
                               f"{world.options.madeline_two_dash_hair_color.value} for "
                               f"{world.player_name}")
-    elif world.options.madeline_two_dash_hair_color.value == -1:
+    elif world.options.madeline_two_dash_hair_color.value == ColorChoice.option_any_color:
         world.madeline_two_dash_hair_color = world.random.randint(0, 0xFFFFFF)
     else:
         world.madeline_two_dash_hair_color = world.options.madeline_two_dash_hair_color.value
@@ -285,7 +285,7 @@ def resolve_options(world: World):
             raise OptionError(f"Invalid input for option `madeline_no_dash_hair_color`:"
                               f"{world.options.madeline_no_dash_hair_color.value} for "
                               f"{world.player_name}")
-    elif world.options.madeline_no_dash_hair_color.value == -1:
+    elif world.options.madeline_no_dash_hair_color.value == ColorChoice.option_any_color:
         world.madeline_no_dash_hair_color = world.random.randint(0, 0xFFFFFF)
     else:
         world.madeline_no_dash_hair_color = world.options.madeline_no_dash_hair_color.value
@@ -298,7 +298,7 @@ def resolve_options(world: World):
             raise OptionError(f"Invalid input for option `madeline_feather_hair_color`:"
                               f"{world.options.madeline_feather_hair_color.value} for "
                               f"{world.player_name}")
-    elif world.options.madeline_feather_hair_color.value == -1:
+    elif world.options.madeline_feather_hair_color.value == ColorChoice.option_any_color:
         world.madeline_feather_hair_color = world.random.randint(0, 0xFFFFFF)
     else:
         world.madeline_feather_hair_color = world.options.madeline_feather_hair_color.value
