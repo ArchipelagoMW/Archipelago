@@ -431,7 +431,7 @@ def get_rules(world):
             "Rainbow Scale 11":
                 lambda state:
                     has_rang(world, state, Ty1Rang.SECOND_RANG) or has_rang(world, state, Ty1Rang.FROSTYRANG)
-                    or (world.options.logic_difficulty == 1 and has_rang(world, state, Ty1Rang.SWIM)),
+                    or world.options.logic_difficulty == 1,
             "Rainbow Scale 15":
                 lambda state:
                     has_rang(world, state, Ty1Rang.SECOND_RANG)
