@@ -13,4 +13,3 @@ __all__ = (
     requests.__all__ +
     responses.__all__
 )
-

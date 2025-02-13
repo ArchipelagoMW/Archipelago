@@ -48,10 +48,25 @@ class GBA(PlatformBase):
     SRAM = 0x09
 
 
+# I don't know what I'm doing here
+class SNES(PlatformBase):
+    _ID = 0x04
+
+    ROM = 0x01
+    SRAM = 0x02
+    WRAM = 0x03
+    VRAM = 0x04
+    APU = 0x05
+    CGRAM = 0x06
+    OAM = 0x07
+    MISC = 0x08
+
+
 class PLATFORMS:
     GB = GB
     GBC = GBC
     GBA = GBA
+    SNES = SNES
 
     @staticmethod
     def cast_to_int(value: int | type[PlatformBase]):

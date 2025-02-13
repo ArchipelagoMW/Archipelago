@@ -11,6 +11,7 @@ import Utils
 from .client import PolyEmuClient, AutoPolyEmuClientRegister
 from .core import BROKER_DEVICE_ID, PolyEmuBaseError, NoSuchDeviceError, PolyEmuContext, no_op, list_devices, get_platform
 from .core.connector import BROKER_CLIENT_PORT, BrokerConnector
+from .sni import SNIConnector
 
 
 EXPECTED_SCRIPT_VERSION = 1
@@ -49,6 +50,7 @@ class PolyEmuClientContext(CommonContext):
         self.password_requested = False
         self.client_handler = None
         self.polyemu_ctx = PolyEmuContext(BrokerConnector)
+        # self.polyemu_ctx = PolyEmuContext(SNIConnector)
         self.watcher_timeout = 0.5
 
     def make_gui(self):
@@ -155,7 +157,7 @@ async def _game_watcher(ctx: PolyEmuClientContext):
 
                 devices = await list_devices(ctx.polyemu_ctx)
                 if len(devices):
-                    logger.info("Found device")
+                    logger.info(f"Found devices: {devices}")
                     ctx.polyemu_ctx.selected_device_id = devices[0]
                     showed_searching_devices_message = False
                 else:

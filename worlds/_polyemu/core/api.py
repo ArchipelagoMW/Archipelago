@@ -91,7 +91,7 @@ async def guarded_read(ctx: PolyEmuContext, read_list: Sequence[tuple[int, int, 
     return [res.data for res in read_responses]
 
 
-async def read(ctx: PolyEmuContext, read_list: Sequence[tuple[int, int, str]]) -> list[bytes]:
+async def read(ctx: PolyEmuContext, read_list: Sequence[tuple[int, int, int]]) -> list[bytes]:
     return await guarded_read(ctx, read_list, [])
 
 
