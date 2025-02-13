@@ -879,7 +879,7 @@ level_table = {
                 diamonds=[
                     LocationData("Long Lava Geyser Diamond", difficulties=[normal]),
                     LocationData("Scienstein Puzzle Diamond", access_rule=has('Grab')),
-                    LocationData("Spring Puzzle Diamond"),
+                    LocationData("Spring Puzzle Diamond", access_rule=has('Ground Pound')),
                 ]
             ),
             RegionData(
