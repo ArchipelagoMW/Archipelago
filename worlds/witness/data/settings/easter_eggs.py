@@ -13,7 +13,7 @@ EASTER_EGGS = {
     "Desert Outside": 6,
     "Desert Vault": 1,
     "Desert Pond Room": 2,
-    "Desert Flood Room": 1,
+    "Desert Flood Room Underwater": 1,
     "Desert Elevator Room": 1,
     "Outside Quarry": 2,
     "Quarry": 5,

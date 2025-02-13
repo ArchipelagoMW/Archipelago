@@ -206,7 +206,7 @@ Door - 0x0A24B (Flood Room Entry) - 0x0A249
 159043 - 0x0A14C (Pond Room Near Reflection EP) - True - True
 159044 - 0x0A14D (Pond Room Far Reflection EP) - True - True
 
-Desert Flood Room (Desert) - Desert Elevator Room - 0x0C316:
+Desert Flood Room (Desert) - Desert Elevator Room - 0x0C316 - Desert Flood Room Underwater - 0x1C260:
 158097 - 0x1C2DF (Reduce Water Level Far Left) - True - True
 158098 - 0x1831E (Reduce Water Level Far Right) - True - True
 158099 - 0x1C260 (Reduce Water Level Near Left) - True - True
@@ -223,6 +223,8 @@ Desert Flood Room (Desert) - Desert Elevator Room - 0x0C316:
 158110 - 0x18076 (Flood Room 6) - 0x17ECA & 0x1C260 & 0x1831C - True
 Door - 0x0C316 (Elevator Room Entry) - 0x18076
 159034 - 0x337F8 (Flood Room EP) - 0x1C2DF - True
+
+Desert Flood Room Underwater (Desert):
 
 Desert Elevator Room (Desert) - Desert Behind Elevator - 0x01317:
 158111 - 0x17C31 (Elevator Room Transparent) - True - True
