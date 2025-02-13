@@ -1787,7 +1787,8 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.protoss_brothers_in_arms_requirement
         ),
         make_location_data(SC2Mission.BROTHERS_IN_ARMS.mission_name, "Win in under 15 minutes", SC2LOTV_LOC_ID_OFFSET + 806, LocationType.CHALLENGE,
-            logic.protoss_brothers_in_arms_requirement
+            logic.protoss_brothers_in_arms_requirement,
+            flags=LocationFlag.SPEEDRUN
         ),
         make_location_data(SC2Mission.AMON_S_REACH.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 900, LocationType.VICTORY,
             logic.protoss_common_unit_anti_light_air
@@ -5489,7 +5490,9 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            lambda state: (
                                    logic.terran_common_unit(state)
                                    and logic.terran_beats_protoss_deathball(state)
-                           )),
+                           ),
+                           flags=LocationFlag.SPEEDRUN
+                           ),
         make_location_data(SC2Mission.BROTHERS_IN_ARMS_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 11400, LocationType.VICTORY,
                            logic.zerg_brothers_in_arms_requirement
                            ),
@@ -5518,7 +5521,8 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            logic.zerg_brothers_in_arms_requirement
                            ),
         make_location_data(SC2Mission.BROTHERS_IN_ARMS_Z.mission_name, "Win in under 15 Minutes", SC2_RACESWAP_LOC_ID_OFFSET + 11406, LocationType.CHALLENGE,
-                           logic.zerg_brothers_in_arms_requirement
+                           logic.zerg_brothers_in_arms_requirement,
+                           flags=LocationFlag.SPEEDRUN
                            ),
         make_location_data(SC2Mission.AMON_S_REACH_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 11500, LocationType.VICTORY,
                            lambda state: (
