@@ -45,10 +45,10 @@ class LuigisMansionRandomizer:
 
         try:
             if os.path.isfile(randomized_output_file_path):
-                temp_file = open(randomized_output_file_path, "r+") # or "a+", whatever you need
+                temp_file = open(randomized_output_file_path, "r+")  # or "a+", whatever you need
                 temp_file.close()
         except IOError:
-            raise Exception("'" +randomized_output_file_path+ "' is currently in use by another program.")
+            raise Exception("'" + randomized_output_file_path + "' is currently in use by another program.")
 
         with open(os.path.abspath(select_aplm_path)) as stream:
             self.output_data = yaml.safe_load(stream)
@@ -234,7 +234,7 @@ class LuigisMansionRandomizer:
 
         include_radar = ""
         if any("Boo Radar" in key for key in self.output_data["Options"]["start_inventory"]):
-            include_radar = "<FLAGON>(73)"  + os.linesep + "<FLAGON>(75)"
+            include_radar = "<FLAGON>(73)" + os.linesep + "<FLAGON>(75)"
         lines = lines.replace("{BOO RADAR}", include_radar)
 
         event_door_list: list[str] = []
@@ -267,8 +267,10 @@ class LuigisMansionRandomizer:
                 str_boo_captured = "boos_captured"
 
                 for i in range(0, 5):
-                    curr_boo_count = 0 if required_boo_count - (25-(5*i)) <= 0 else required_boo_count - (25-(5*i))
-                    lines = lines.replace(f"{{Count{str(i)}}}", str(curr_boo_count))
+                    curr_boo_count = 0 if required_boo_count - (25 - (5 * i)) <= 0 else required_boo_count - (
+                                25 - (5 * i))
+                    lines = lines.replace(f"{{Count{str(i)}}}",
+                                          str(required_boo_count) if i == 4 else str(curr_boo_count))
                     if curr_boo_count < required_boo_count:
                         lines = lines.replace(f"{{Case{str(i)}}}", str_not_enough)
                     else:
@@ -334,7 +336,7 @@ class LuigisMansionRandomizer:
                     continue
 
                 event_text_data = next((info_files for info_files in event_arc.file_entries if
-                      info_files.name == name_to_find)).data
+                                        info_files.name == name_to_find)).data
                 event_str = event_text_data.getvalue().decode('utf-8', errors='replace')
                 music_to_replace = re.findall(r'\<BGM\>\(\d+\)', event_str)
 
@@ -386,10 +388,10 @@ class LuigisMansionRandomizer:
         # Turn off pickup animations
         if self.output_data["Options"]["pickup_animation"] == 1:
             pickup_val = [0x01]
-            #gem_val = [0x05]
+            # gem_val = [0x05]
         else:
             pickup_val = [0x02]
-            #gem_val = [0x06]
+            # gem_val = [0x06]
 
         # Keys and important animations
         self.dol.data.seek(0xCD39B)
@@ -397,8 +399,8 @@ class LuigisMansionRandomizer:
 
         # Diamonds and other treasure animations
         # TODO this breaks king boo boss fight currently
-        #self.dol.data.seek(0xCE8D3)
-        #self.dol.data.write(struct.pack(">B", *gem_val))
+        # self.dol.data.seek(0xCE8D3)
+        # self.dol.data.write(struct.pack(">B", *gem_val))
 
         # Turn off luigi scare animations
         if self.output_data["Options"]["fear_animation"] == 1:
