@@ -132,11 +132,11 @@ function fisher_yates_shuffle(tbl)
     return tbl
 end
 
+script.on_event(defines.events.on_player_changed_position, on_player_changed_position)
+{% endif %}
 -- Handle the pathfinding result of teleport traps
 script.on_event(defines.events.on_script_path_request_finished, handle_teleport_attempt)
 
-script.on_event(defines.events.on_player_changed_position, on_player_changed_position)
-{% endif %}
 function count_energy_bridges()
     local count = 0
     for i, bridge in pairs(storage.energy_link_bridges) do
