@@ -28,7 +28,7 @@ class KH2CommandProcessor(ClientCommandProcessor):
         None: Toggle off any of the receiving notifications.
         """
         if notification_type in {"Puzzle", "Info", "None"}:
-            self.ctx.receive_popup_type = notification_type
+            self.ctx.client_settings["receive_popup_type"] = notification_type
         else:
             self.output(f"Unknown receive notification type:{notification_type}. Valid Inputs: Puzzle, Info, None")
 
@@ -39,14 +39,21 @@ class KH2CommandProcessor(ClientCommandProcessor):
         None: Toggle off any of the receiving notifications.
         """
         if notification_type in {"Puzzle", "Info", "None"}:
-            self.ctx.send_popup_type = notification_type
+            self.ctx.client_settings["send_popup_type"] = notification_type
         else:
             self.output(f"Unknown send notification type:{notification_type}. Valid Inputs: Puzzle, Info, None")
 
-    def _cmd_change_truncation_priority(self, priority=""):
+    def _cmd_change_send_truncation_priority(self, priority=""):
         """Change what gets truncated first when using puzzle piece notifications. Playername min is 5 and ItemName is 15"""
         if priority in {"PlayerName", "ItemName"}:
-            self.ctx.truncate_priority = priority
+            self.ctx.client_settings["send_truncate_first"] = priority
+        else:
+            self.output(f"Unknown priority: {priority}. Valid Inputs: PlayerName, ItemName")
+
+    def _cmd_change_receive_truncation_priority(self, priority=""):
+        """Change what gets truncated first when using puzzle piece notifications. Playername min is 5 and ItemName is 15"""
+        if priority in {"PlayerName", "ItemName"}:
+            self.ctx.client_settings["receive_truncate_first"] = priority
         else:
             self.output(f"Unknown priority: {priority}. Valid Inputs: PlayerName, ItemName")
 
@@ -87,9 +94,10 @@ class KH2Context(CommonContext):
         self.queued_info_popup = []
 
         self.client_settings = {
-            "truncate_first":     "PlayerName",  # truncation order. Can be PlayerName or ItemName
-            "send_popup_type":    "Info",  # type of popup when you receive an item
-            "receive_popup_type": "Puzzle",  # can be Puzzle, Info or None
+            "send_truncate_first":    "PlayerName",  # there is no need to truncate item names for info popup
+            "receive_truncate_first": "PlayerName",  # truncation order. Can be PlayerName or ItemName
+            "send_popup_type":        "Puzzle",  # type of popup when you receive an item
+            "receive_popup_type":     "Puzzle",  # can be Puzzle, Info or None
         }
         # special characters for printing in game
         # A dictionary of all the special characters, which
@@ -449,7 +457,10 @@ class KH2Context(CommonContext):
             if start_index > self.kh2_seed_save_cache["itemIndex"] and self.serverconneced:
                 self.kh2_seed_save_cache["itemIndex"] = start_index
                 for item in args['items']:
-                    asyncio.create_task(self.give_item(item.item, item.location))
+                    networkItem = NetworkItem(*item)
+
+                    # actually give player the item
+                    asyncio.create_task(self.give_item(networkItem.item, networkItem.location))
 
         if cmd == "RoomUpdate":
             if "checked_locations" in args:
@@ -463,35 +474,58 @@ class KH2Context(CommonContext):
                         args["data"]["games"]["Kingdom Hearts 2"]["item_name_to_id"])
                 self.connect_to_game()
                 asyncio.create_task(self.send_msgs([{'cmd': 'Sync'}]))
+
         if cmd == "PrintJSON":
             # shamelessly stolen from kh1
             if args["type"] == "ItemSend":
                 item = args["item"]
                 networkItem = NetworkItem(*item)
-                recieverID = args["receiving"]
+                receiverID = args["receiving"]
                 senderID = networkItem.player
-                locationID = networkItem.location
-                if recieverID != self.slot and senderID == self.slot:
-                    ItemName = self.item_names[networkItem.item]
-                    playerName = self.player_names[recieverID]
-                    if self.receive_popup_type == "Info":  # no restrictions on size here
-                        self.queued_info_popup += [f"Sent {ItemName} to {playerName}"]
-                    else:  #sanitize ItemName and reciever name
-                        totalLength = len(ItemName) + len(playerName)
-                        while totalLength > 23:
-                            if self.truncate_first == "PlayerName":
+                # checking if sender is the kh2 player and you arent sending yourself the item
+                if receiverID == self.slot and senderID != self.slot: #item is sent to you and is not from yourself
+                    itemName = self.item_names[networkItem.item]
+                    playerName = self.player_names[networkItem.player] # player that sent you the item
+                    if self.client_settings["send_popup_type"] == "Info":  # no restrictions on size here
+                        self.queued_info_popup += [f"Obtained {itemName} from {playerName}"]
+                    else:  # sanitize ItemName and reciever name
+                        totalLength = len(itemName) + len(playerName)
+                        while totalLength > 25:
+                            if self.client_settings["receive_truncate_first"] == "PlayerName":
                                 if len(playerName) > 5:
                                     playerName = playerName[:-1]
                                 else:
-                                    ItemName = ItemName[:-1]
+                                    itemName = itemName[:-1]
                             else:
                                 if len(ItemName) > 15:
-                                    ItemName = ItemName[:-1]
+                                    itemName = itemName[:-1]
                                 else:
-                                    ItemName = playerName[:-1]
-                                totalLength = len(ItemName) + len(playerName)
-                        # Sent  =5. to = 4 totalLength of the string cant be over 32 or game crash
-                        self.queued_puzzle_popup += [f"Sent {ItemName} to {playerName}"]
+                                    playerName = playerName[:-1]
+                            totalLength = len(itemName) + len(playerName)
+                        # from  =6. totalLength of the string cant be over 31 or game crash
+                        self.queued_puzzle_popup += [f"{itemName} from {playerName}"]
+
+                if receiverID != self.slot and senderID == self.slot: #item is sent to other players
+                    itemName = self.item_names[networkItem.item]
+                    playerName = self.player_names[receiverID]
+                    if self.client_settings["send_popup_type"] == "Info":  # no restrictions on size here
+                        self.queued_info_popup += [f"Sent {itemName} to {playerName}"]
+                    else:  #sanitize ItemName and reciever name
+                        totalLength = len(itemName) + len(playerName)
+                        while totalLength > 22:
+                            if self.client_settings["send_truncate_first"] == "PlayerName":
+                                if len(playerName) > 5:
+                                    playerName = playerName[:-1]
+                                else:
+                                    itemName = itemName[:-1]
+                            else:
+                                if len(ItemName) > 15:
+                                    itemName = itemName[:-1]
+                                else:
+                                    playerName = playerName[:-1]
+                            totalLength = len(itemName) + len(playerName)
+                        # Sent  =5. to = 4 totalLength of the string cant be over 31 or game crash
+                        self.queued_puzzle_popup += [f"Sent {itemName} to {playerName}"]
 
     def connect_to_game(self):
         if "KeybladeAbilities" in self.kh2slotdata.keys():
@@ -950,29 +984,22 @@ class KH2Context(CommonContext):
             logger.info(e)
             logger.info("line 840")
 
-    async def displayInfoTextinGame(self, string_to_display, SendOrReceive):
+    async def displayInfoTextinGame(self, string_to_display):
         if self.kh2_read_byte(0x800000) == 0:
             self.kh2_write_byte(0x800000, 1)  # displaying info bar popup
             displayed_string = self.to_khscii(string_to_display)
             self.kh2_write_bytes(0x800004, displayed_string)
-            if SendOrReceive == "Send":
-                self.queued_sending_info.remove(string_to_display)  # dont remember if this is index or the value
-            else:
-                self.queued_received_info.remove(string_to_display)
+            self.queued_info_popup.remove(string_to_display)
             await asyncio.sleep(2)
 
-    async def displayPuzzlePieceTextinGame(self, string_to_display, SendOrReceive):
+    async def displayPuzzlePieceTextinGame(self, string_to_display):
         if self.kh2_read_byte(0x800000) == 0:
             displayed_string = self.to_khscii(string_to_display)
             self.kh2_write_bytes(0x800104, displayed_string)
-            logger.info(displayed_string)
+            #logger.info(displayed_string)
             self.kh2_write_byte(0x800000, 2)  # displaying puzzle piece popup
-            if SendOrReceive == "Send":
-                self.queued_sending_info.remove(string_to_display)
-            else:
-                self.queued_received_info.remove(string_to_display)
-
-            await asyncio.sleep(2)
+            self.queued_puzzle_popup.remove(string_to_display)
+            await asyncio.sleep(0.5)
 
     def get_addresses(self):
         if not self.kh2connected and self.kh2 is not None:
@@ -1107,17 +1134,11 @@ async def kh2_watcher(ctx: KH2Context):
                     message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
                     await ctx.send_msgs(message)
 
-                if ctx.receive_popup_type != "None" and ctx.queued_received_info:
-                    if ctx.receive_popup_type:
-                        await asyncio.create_task(ctx.displayInfoTextinGame(ctx.queued_received_info[0], "Received"))  #send the num 1 index of whats in the queue
-                    else:  # == "Puzzle
-                        await asyncio.create_task(ctx.displayPuzzlePieceTextinGame(ctx.queued_received_info[0], "Received"))  # send the num 1 index of whats in the queue
-
-                if ctx.send_popup_type != "None" and ctx.queued_sending_info:
-                    if ctx.receive_popup_type == "Info":
-                        await asyncio.create_task(ctx.displayInfoTextinGame(ctx.queued_sending_info[0], "Send"))
-                    else:
-                        await asyncio.create_task(ctx.displayPuzzlePieceTextinGame(ctx.queued_sending_info[0], "Send"))
+                if ctx.queued_puzzle_popup:
+                    await asyncio.create_task(ctx.displayPuzzlePieceTextinGame(ctx.queued_puzzle_popup[0]))  # send the num 1 index of whats in the queue
+#
+                if ctx.queued_info_popup:
+                    await asyncio.create_task(ctx.displayInfoTextinGame(ctx.queued_info_popup[0]))
 
             elif not ctx.kh2connected and ctx.serverconneced:
                 logger.info("Game Connection lost. waiting 15 seconds until trying to reconnect.")
