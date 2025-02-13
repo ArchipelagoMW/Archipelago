@@ -708,7 +708,7 @@ Infinity +1 Sword;                  Achievement | Grindy | Item(Has Zenith) | Go
 // Exo Mechs
 Auric Quantum Cooling Cell;         Calamity;                                   Cosmic Anvil & Auric Bar & Mysterious Circuitry & Dubious Plating & Endothermic Energy & Core of Eleum & Voltage Regulation System;
 Exo Mechs;                          Calamity | Location | Item | Final Boss;    Codebreaker Base & Decryption Computer & Auric Quantum Cooling Cell;
-XB-Infinity Hekate;                 Getfixedboi | Calamity;                     Codebreaker Base & Decryption Computer & Auric Quantum Cooling Cell & Blood Sample;
+// XB-Infinity Hekate;                 Getfixedboi | Calamity;                     Codebreaker Base & Decryption Computer & Auric Quantum Cooling Cell & Blood Sample; // Currently, this boss doesn't affect logic at all
 Supreme Witch, Calamitas;           Calamity | Location | Item | Final Boss;    (Cosmic Anvil & Brimstone Slag & Auric Bar & Core of Calamity & Ashes of Calamity) | (@getfixedboi & #Supreme Alchemist, Cirrus);
 Supreme Alchemist, Cirrus;          Getfixedboi | Calamity;                     Cosmic Anvil & Brimstone Slag & Auric Bar & Core of Calamity & Fabsol's Vodka;
 THE LORDE;                          Getfixedboi | Calamity;                     Lihzahrd Temple;
