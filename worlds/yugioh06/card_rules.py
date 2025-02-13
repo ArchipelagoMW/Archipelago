@@ -408,8 +408,8 @@ def resolve_rule(world, rule, starter_cards: Dict[str, int]):
         potential_cards.extend(rule.cards)
     if rule.amount_protocol == "total" and len(potential_cards) > 1:
         overlap = [x for x in potential_cards if x in starter_cards.keys()]
-        potential_cards = [x for x in potential_cards if x in overlap or x not in not_in_standard_pool
-                           or x not in banned_cards]
+        potential_cards = [x for x in potential_cards if (x in overlap or x not in not_in_standard_pool)
+                           and x not in banned_cards]
         a = 0
         potential_starters: List[str] = []
         for c in overlap:

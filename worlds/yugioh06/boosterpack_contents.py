@@ -3625,6 +3625,7 @@ not_in_standard_pool = {
     "Blue-Eyes White Dragon Alt 3",
     "Mushroom Man",
     "Flame Swordsman Alt 1",
+    "Summoned Skull Alt 1",
     "Summoned Skull Alt 2",
     "Summoned Skull Alt 3",
     "The Wicked Worm Beast",
