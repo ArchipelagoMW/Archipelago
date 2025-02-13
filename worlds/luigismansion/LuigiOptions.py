@@ -225,7 +225,6 @@ class Boosanity(Toggle):
     """Turns Boos into Items and Locations. These are remote only checks."""
     display_name = "Boosanity"
 
-
 class Portrification(Toggle):
     """Turn Portrait Ghosts into checks in addition to their clear chests. These are remote only checks."""
     display_name = "Portrification"

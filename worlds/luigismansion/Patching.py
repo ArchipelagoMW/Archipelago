@@ -1353,7 +1353,7 @@ def update_enemy_info(enemy_info, output_data):
         # Disables enemies in furniture to allow them to spawn properly if an item is hidden inside said furniture.
         # if x["access_name"] != "(null)":
         # if "_99" in x["access_name"]:
-        # TODO: Handle Speedy Ghosts for blackout
+        # TODO: Speedies do not seem to block items, only normal ghosts
         # owo = True
         # else:
         # x["create_name"] = "(null)"

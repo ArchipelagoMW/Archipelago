@@ -267,7 +267,7 @@ class LuigisMansionRandomizer:
                 str_boo_captured = "boos_captured"
 
                 for i in range(0, 5):
-                    curr_boo_count = 0 if required_boo_count - (20-(5*i)) <= 0 else required_boo_count - (20-(5*i))
+                    curr_boo_count = 0 if required_boo_count - (25-(5*i)) <= 0 else required_boo_count - (25-(5*i))
                     lines = lines.replace(f"{{Count{str(i)}}}", str(curr_boo_count))
                     if curr_boo_count < required_boo_count:
                         lines = lines.replace(f"{{Case{str(i)}}}", str_not_enough)
