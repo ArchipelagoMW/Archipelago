@@ -1780,6 +1780,15 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.BROTHERS_IN_ARMS.mission_name, "South Science Facility", SC2LOTV_LOC_ID_OFFSET + 803, LocationType.VANILLA,
             logic.protoss_brothers_in_arms_requirement
         ),
+        make_location_data(SC2Mission.BROTHERS_IN_ARMS.mission_name, "Raynor Forward Positions", SC2LOTV_LOC_ID_OFFSET + 804, LocationType.EXTRA,
+            logic.protoss_brothers_in_arms_requirement
+        ),
+        make_location_data(SC2Mission.BROTHERS_IN_ARMS.mission_name, "Valerian Forward Positions", SC2LOTV_LOC_ID_OFFSET + 805, LocationType.EXTRA,
+            logic.protoss_brothers_in_arms_requirement
+        ),
+        make_location_data(SC2Mission.BROTHERS_IN_ARMS.mission_name, "Win in under 15 minutes", SC2LOTV_LOC_ID_OFFSET + 806, LocationType.CHALLENGE,
+            logic.protoss_brothers_in_arms_requirement
+        ),
         make_location_data(SC2Mission.AMON_S_REACH.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 900, LocationType.VICTORY,
             logic.protoss_common_unit_anti_light_air
         ),
@@ -1834,6 +1843,12 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.protoss_common_unit_anti_armor_air
         ),
         make_location_data(SC2Mission.FORBIDDEN_WEAPON.mission_name, "Northwest Solarite", SC2LOTV_LOC_ID_OFFSET + 1103, LocationType.VANILLA,
+            logic.protoss_common_unit_anti_armor_air
+        ),
+        make_location_data(SC2Mission.FORBIDDEN_WEAPON.mission_name, "Rescue Sentries", SC2LOTV_LOC_ID_OFFSET + 1104, LocationType.EXTRA,
+            logic.protoss_common_unit_anti_armor_air
+        ),
+        make_location_data(SC2Mission.FORBIDDEN_WEAPON.mission_name, "Destroy Gateways", SC2LOTV_LOC_ID_OFFSET + 1105, LocationType.CHALLENGE,
             logic.protoss_common_unit_anti_armor_air
         ),
         make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 1200, LocationType.VICTORY,
@@ -2027,6 +2042,16 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.RAK_SHIR.mission_name, "East Slayn Elemental", SC2LOTV_LOC_ID_OFFSET + 1803, LocationType.VANILLA,
             logic.protoss_competent_comp,
             hard_rule=logic.protoss_any_anti_air_unit_or_soa,
+        ),
+        make_location_data(SC2Mission.RAK_SHIR.mission_name, "Resource Pickups", SC2LOTV_LOC_ID_OFFSET + 1804, LocationType.EXTRA,
+            logic.protoss_competent_comp
+        ),
+        make_location_data(SC2Mission.RAK_SHIR.mission_name, "Destroy Nexuses", SC2LOTV_LOC_ID_OFFSET + 1805, LocationType.CHALLENGE,
+            logic.protoss_competent_comp
+        ),
+        make_location_data(SC2Mission.RAK_SHIR.mission_name, "Win in under 15 minutes", SC2LOTV_LOC_ID_OFFSET + 1806, LocationType.MASTERY,
+            logic.protoss_competent_comp,
+            flags=LocationFlag.SPEEDRUN
         ),
         make_location_data(SC2Mission.TEMPLAR_S_CHARGE.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 1900, LocationType.VICTORY,
             logic.protoss_templars_charge_requirement
@@ -5450,6 +5475,21 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                                    logic.terran_common_unit(state)
                                    and logic.terran_beats_protoss_deathball(state)
                            )),
+        make_location_data(SC2Mission.BROTHERS_IN_ARMS_T.mission_name, "Raynor Forward Positions", SC2_RACESWAP_LOC_ID_OFFSET + 11304, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_beats_protoss_deathball(state)
+                           )),
+        make_location_data(SC2Mission.BROTHERS_IN_ARMS_T.mission_name, "Valerian Forward Positions", SC2_RACESWAP_LOC_ID_OFFSET + 11305, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_beats_protoss_deathball(state)
+                           )),
+        make_location_data(SC2Mission.BROTHERS_IN_ARMS_T.mission_name, "Win in under 15 Minutes", SC2_RACESWAP_LOC_ID_OFFSET + 11306, LocationType.CHALLENGE,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_beats_protoss_deathball(state)
+                           )),
         make_location_data(SC2Mission.BROTHERS_IN_ARMS_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 11400, LocationType.VICTORY,
                            logic.zerg_brothers_in_arms_requirement
                            ),
@@ -5469,6 +5509,15 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                                    ))
                            ),
         make_location_data(SC2Mission.BROTHERS_IN_ARMS_Z.mission_name, "South Science Facility", SC2_RACESWAP_LOC_ID_OFFSET + 11403, LocationType.VANILLA,
+                           logic.zerg_brothers_in_arms_requirement
+                           ),
+        make_location_data(SC2Mission.BROTHERS_IN_ARMS_Z.mission_name, "Raynor Forward Positions", SC2_RACESWAP_LOC_ID_OFFSET + 11404, LocationType.EXTRA,
+                           logic.zerg_brothers_in_arms_requirement
+                           ),
+        make_location_data(SC2Mission.BROTHERS_IN_ARMS_Z.mission_name, "Valerian Forward Positions", SC2_RACESWAP_LOC_ID_OFFSET + 11405, LocationType.EXTRA,
+                           logic.zerg_brothers_in_arms_requirement
+                           ),
+        make_location_data(SC2Mission.BROTHERS_IN_ARMS_Z.mission_name, "Win in under 15 Minutes", SC2_RACESWAP_LOC_ID_OFFSET + 11406, LocationType.CHALLENGE,
                            logic.zerg_brothers_in_arms_requirement
                            ),
         make_location_data(SC2Mission.AMON_S_REACH_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 11500, LocationType.VICTORY,
@@ -5582,8 +5631,14 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.terran_beats_protoss_deathball
         ),
         make_location_data(SC2Mission.FORBIDDEN_WEAPON_T.mission_name, "Northwest Solarite", SC2_RACESWAP_LOC_ID_OFFSET + 11903, LocationType.VANILLA,
-            logic.terran_beats_protoss_deathball
-        ),
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.FORBIDDEN_WEAPON_T.mission_name, "Rescue Medics", SC2_RACESWAP_LOC_ID_OFFSET + 11904, LocationType.EXTRA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.FORBIDDEN_WEAPON_T.mission_name, "Destroy Gateways", SC2_RACESWAP_LOC_ID_OFFSET + 11905, LocationType.CHALLENGE,
+                           logic.terran_beats_protoss_deathball
+                           ),
         make_location_data(SC2Mission.FORBIDDEN_WEAPON_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 12000, LocationType.VICTORY,
             logic.zerg_competent_comp_competent_aa
         ),
@@ -5594,8 +5649,14 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.zerg_competent_comp_competent_aa
         ),
         make_location_data(SC2Mission.FORBIDDEN_WEAPON_Z.mission_name, "Northwest Solarite", SC2_RACESWAP_LOC_ID_OFFSET + 12003, LocationType.VANILLA,
-            logic.zerg_competent_comp_competent_aa
-        ),
+                           logic.zerg_competent_comp_competent_aa
+                           ),
+        make_location_data(SC2Mission.FORBIDDEN_WEAPON_Z.mission_name, "Rescue Infested Medics", SC2_RACESWAP_LOC_ID_OFFSET + 12004, LocationType.EXTRA,
+                           logic.zerg_competent_comp_competent_aa
+                           ),
+        make_location_data(SC2Mission.FORBIDDEN_WEAPON_Z.mission_name, "Destroy Gateways", SC2_RACESWAP_LOC_ID_OFFSET + 12005, LocationType.CHALLENGE,
+                           logic.zerg_competent_comp_competent_aa
+                           ),
         make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 12100, LocationType.VICTORY,
             logic.terran_beats_protoss_deathball
         ),
@@ -5944,6 +6005,16 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.terran_rak_shir_requirement,
             hard_rule=logic.terran_any_anti_air,
         ),
+        make_location_data(SC2Mission.RAK_SHIR_T.mission_name, "Resource Pickups", SC2_RACESWAP_LOC_ID_OFFSET + 13304, LocationType.EXTRA,
+            logic.terran_rak_shir_requirement
+        ),
+        make_location_data(SC2Mission.RAK_SHIR_T.mission_name, "Destroy Nexuses", SC2_RACESWAP_LOC_ID_OFFSET + 13305, LocationType.CHALLENGE,
+            logic.terran_rak_shir_requirement
+        ),
+        make_location_data(SC2Mission.RAK_SHIR_T.mission_name, "Win in under 115 minutes", SC2_RACESWAP_LOC_ID_OFFSET + 13306, LocationType.MASTERY,
+            logic.terran_rak_shir_requirement,
+            flags=LocationFlag.SPEEDRUN
+        ),
         make_location_data(SC2Mission.RAK_SHIR_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 13400, LocationType.VICTORY,
             logic.zerg_rak_shir_requirement
         ),
@@ -5958,6 +6029,16 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.RAK_SHIR_Z.mission_name, "East Slayn Elemental", SC2_RACESWAP_LOC_ID_OFFSET + 13403, LocationType.VANILLA,
             logic.zerg_rak_shir_requirement,
             hard_rule=logic.zerg_any_anti_air,
+        ),
+        make_location_data(SC2Mission.RAK_SHIR_Z.mission_name, "Resource Pickups", SC2_RACESWAP_LOC_ID_OFFSET + 13404, LocationType.EXTRA,
+            logic.zerg_rak_shir_requirement
+        ),
+        make_location_data(SC2Mission.RAK_SHIR_Z.mission_name, "Destroy Nexuses", SC2_RACESWAP_LOC_ID_OFFSET + 13405, LocationType.CHALLENGE,
+            logic.zerg_rak_shir_requirement
+        ),
+        make_location_data(SC2Mission.RAK_SHIR_Z.mission_name, "Win in under 15 minutes", SC2_RACESWAP_LOC_ID_OFFSET + 13406, LocationType.MASTERY,
+            logic.zerg_rak_shir_requirement,
+            flags=LocationFlag.SPEEDRUN
         ),
         make_location_data(SC2Mission.TEMPLAR_S_CHARGE_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 13500, LocationType.VICTORY,
             logic.terran_templars_charge_requirement
