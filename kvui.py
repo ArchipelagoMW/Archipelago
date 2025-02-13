@@ -26,6 +26,10 @@ import Utils
 if Utils.is_frozen():
     os.environ["KIVY_DATA_DIR"] = Utils.local_path("data")
 
+import platformdirs
+os.environ["KIVY_HOME"] = os.path.join(platformdirs.user_config_dir("Archipelago", False), "kivy")
+os.makedirs(os.environ["KIVY_HOME"], exist_ok=True)
+
 from kivy.config import Config
 
 Config.set("input", "mouse", "mouse,disable_multitouch")
@@ -440,8 +444,11 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
                 if child.collide_point(*touch.pos):
                     key = child.sort_key
                     if key == "status":
-                        parent.hint_sorter = lambda element: element["status"]["hint"]["status"]
-                    else: parent.hint_sorter = lambda element: remove_between_brackets.sub("", element[key]["text"]).lower()
+                        parent.hint_sorter = lambda element: status_sort_weights[element["status"]["hint"]["status"]]
+                    else:
+                        parent.hint_sorter = lambda element: (
+                            remove_between_brackets.sub("", element[key]["text"]).lower()
+                        )
                     if key == parent.sort_key:
                         # second click reverses order
                         parent.reversed = not parent.reversed
@@ -825,7 +832,13 @@ status_colors: typing.Dict[HintStatus, str] = {
     HintStatus.HINT_AVOID: "salmon",
     HintStatus.HINT_PRIORITY: "plum",
 }
-
+status_sort_weights: dict[HintStatus, int] = {
+    HintStatus.HINT_FOUND: 0,
+    HintStatus.HINT_UNSPECIFIED: 1,
+    HintStatus.HINT_NO_PRIORITY: 2,
+    HintStatus.HINT_AVOID: 3,
+    HintStatus.HINT_PRIORITY: 4,
+}
 
 
 class HintLog(RecycleView):
