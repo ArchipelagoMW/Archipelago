@@ -174,7 +174,7 @@ class EasterEggHunt(Choice):
     option_hard = 3
     option_very_hard = 4
     option_extreme = 5
-    default = 2 if datetime.now().month == 4 else 0
+    default = 2 if is_easter_time() else 0
 
     def get_step_and_logical_step(self) -> Tuple[int, int]:
         if self == "easy":
