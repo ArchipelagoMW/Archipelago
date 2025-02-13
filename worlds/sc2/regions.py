@@ -446,6 +446,7 @@ def make_golden_path(world: 'SC2World', size: int) -> Dict[str, Dict[str, Any]]:
             "preset": "golden path",
             "size": size,
             "keys": keys,
+            "two_start_positions": world.options.grid_two_start_positions.value == GridTwoStartPositions.option_true
         }
     }
     return mission_order

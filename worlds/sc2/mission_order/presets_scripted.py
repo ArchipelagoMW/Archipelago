@@ -26,6 +26,10 @@ def make_golden_path(options: Dict[str, Any]) -> Dict[str, Any]:
     keys_option = _validate_option("keys", options, "none", keys_option_values)
     min_chains = 2
     max_chains = 6
+    two_start_positions = options.pop("two_start_positions", False)
+    # Compensating for empty mission at start
+    if two_start_positions:
+        size += 1
 
     class Campaign:
         def __init__(self, missions_remaining: int):
@@ -66,6 +70,9 @@ def make_golden_path(options: Dict[str, Any]) -> Dict[str, Any]:
             campaign.add_mission(side_chain)
         # Adding main path mission
         current_required_missions = (campaign.mission_counter * 3) // 4
+        if two_start_positions:
+            # Compensating for skipped mission at start
+            current_required_missions -= 1
         campaign.add_mission(0, current_required_missions)
     campaign.add_mission(0, current_required_missions, is_final = True)
 
@@ -85,7 +92,8 @@ def make_golden_path(options: Dict[str, Any]) -> Dict[str, Any]:
         str(chain): copy.deepcopy(layout_base) for chain in range(len(campaign.chain_lengths))
     }
     preset["0"]["exit"] = True
-    preset["0"].pop("entry_rules", [])
+    if not two_start_positions:
+        preset["0"].pop("entry_rules", [])
     for chain in range(len(campaign.chain_lengths)):
         length = campaign.chain_lengths[chain]
         padding = campaign.chain_padding[chain]
@@ -98,6 +106,11 @@ def make_golden_path(options: Dict[str, Any]) -> Dict[str, Any]:
             })
 
         if chain == 0:
+            if two_start_positions:
+                preset["0"]["missions"].append({
+                    "index": 0,
+                    "empty": True
+                })
             # Main path gets number requirements
             for mission in range(1, len(campaign.required_missions)):
                 preset["0"]["missions"].append({
@@ -110,21 +123,31 @@ def make_golden_path(options: Dict[str, Any]) -> Dict[str, Any]:
             # Optionally add key requirements except to the starter mission
             if keys_option == "missions":
                 for slot in preset["0"]["missions"]:
-                    slot["entry_rules"].append({ "items": { "Key": 1 }})
+                    if "entry_rules" in slot:
+                        slot["entry_rules"].append({ "items": { "Key": 1 }})
             elif keys_option == "progressive_missions":
                 for slot in preset["0"]["missions"]:
-                    slot["entry_rules"].append({ "items": { "Progressive Key": 1 }})
+                    if "entry_rules" in slot:
+                        slot["entry_rules"].append({ "items": { "Progressive Key": 1 }})
             # No main chain keys for progressive_per_layout keys
         else:
             # Other paths get main path requirements
+            if two_start_positions and chain < 3:
+                preset[str(chain)].pop("entry_rules", [])
             for mission in range(length):
                 target = padding + mission
-                preset[str(chain)]["missions"].append({
-                    "index": target,
-                    "entry_rules": [{
-                        "scope": f"../../0/{target}"
-                    }]
-                })
+                if two_start_positions and mission == 0 and chain < 3:
+                    preset[str(chain)]["missions"].append({
+                        "index": target,
+                        "entrance": True
+                    })
+                else:
+                    preset[str(chain)]["missions"].append({
+                        "index": target,
+                        "entry_rules": [{
+                            "scope": f"../../0/{target}"
+                        }]
+                    })
             # Optionally add key requirements
             if keys_option == "missions":
                 for slot in preset[str(chain)]["missions"]:
@@ -138,5 +161,4 @@ def make_golden_path(options: Dict[str, Any]) -> Dict[str, Any]:
                 for slot in preset[str(chain)]["missions"]:
                     if "entry_rules" in slot:
                         slot["entry_rules"].append({ "items": { "Progressive Key": 0 }})
-    
     return preset
