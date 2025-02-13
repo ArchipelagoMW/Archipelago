@@ -459,7 +459,9 @@ class LinksAwakeningClient():
         for k, v in dependent_location_meta_ids.items()}
 
     async def collect(self, ctx):
-        if not self.collect_enabled or not self.gps_tracker.room:
+        if (not self.collect_enabled
+            or not self.gps_tracker.room
+            or self.gps_tracker.is_transitioning):
             return
         unhandled_locations = ctx.checked_locations - ctx.handled_locations
         for id, dep in self.dependent_location_ids.items():
