@@ -161,6 +161,10 @@ class EasterEggHunt(Choice):
     Checks that require more Eggs than logically available still exist, but are excluded.
     For example, on "Easy", the "63 Eggs Collected" check can physically be obtained, but would logically require 125 Easter Eggs, which is impossible. Thus, it is excluded.
 
+    On "Easy", "Normal", and "Hard", you will start with an "Egg Radar" that you can activate using the Puzzle Skip key.
+    On every difficulty except "Extreme", there will be a message when you've collected all Easter Eggs in an area.
+    On "Easy", there will be an additional message after every Easter Egg telling you how many Easter Eggs are remaining in the area.
+
     It is recommended that you play this mode together with Door Shuffle. Without it, more than half of the Easter Eggs will be in sphere 1.
     """
 
