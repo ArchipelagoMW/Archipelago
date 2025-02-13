@@ -5,10 +5,11 @@ A module containing the PolyEmuClient base class and metaclass
 from __future__ import annotations
 
 import abc
-from typing import TYPE_CHECKING, Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar, Sequence
 
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
-from .enums import PlatformEnum
+
+from .core import PLATFORMS
 
 if TYPE_CHECKING:
     from .context import PolyEmuClientContext
@@ -25,20 +26,20 @@ components.append(component)
 
 
 class AutoPolyEmuClientRegister(abc.ABCMeta):
-    game_handlers: ClassVar[dict[tuple[str, ...], dict[str, PolyEmuClient]]] = {}
+    game_handlers: ClassVar[dict[tuple[int, ...], dict[str, PolyEmuClient]]] = {}
 
     def __new__(cls, name: str, bases: tuple[type, ...], namespace: dict[str, Any]) -> AutoPolyEmuClientRegister:
         new_class = super().__new__(cls, name, bases, namespace)
 
         # Register handler
-        if "system" in namespace:
-            systems = int(namespace["system"]) if type(namespace["system"]) is PlatformEnum else namespace["system"]
-            systems = (systems,) if type(systems) is int else tuple(sorted(int(s) for s in systems))
-            if systems not in AutoPolyEmuClientRegister.game_handlers:
-                AutoPolyEmuClientRegister.game_handlers[systems] = {}
+        if "platform" in namespace:
+            platforms = namespace["platform"] if isinstance(namespace["platform"], Sequence) else (namespace["platform"],)
+            platforms = tuple(PLATFORMS.cast_to_int(p) for p in platforms)
+            if platforms not in AutoPolyEmuClientRegister.game_handlers:
+                AutoPolyEmuClientRegister.game_handlers[platforms] = {}
 
             if "game" in namespace:
-                AutoPolyEmuClientRegister.game_handlers[systems][namespace["game"]] = new_class()
+                AutoPolyEmuClientRegister.game_handlers[platforms][namespace["game"]] = new_class()
 
         # Update launcher component's suffixes
         if "patch_suffix" in namespace:
@@ -67,8 +68,8 @@ class AutoPolyEmuClientRegister(abc.ABCMeta):
 
 
 class PolyEmuClient(abc.ABC, metaclass=AutoPolyEmuClientRegister):
-    system: ClassVar[int | tuple[int, ...]]
-    """The system(s) that the game this client is for runs on"""
+    platform: ClassVar[int | tuple[int, ...]]
+    """The platform(s) that the game this client is for runs on"""
 
     game: ClassVar[str]
     """The game this client is for"""

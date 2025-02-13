@@ -9,23 +9,18 @@ import uuid
 from NetUtils import ClientStatus
 from Options import Toggle
 import Utils
-# import worlds._bizhawk as bizhawk
-# from worlds._bizhawk.client import BizHawkClient
-import worlds._polyemu as polyemu
+import worlds._polyemu.core as polyemu
 from worlds._polyemu.client import PolyEmuClient
-from worlds._polyemu.enums import PLATFORMS
-from worlds._polyemu.errors import ConnectionLostError
 
 from .data import BASE_OFFSET, POKEDEX_OFFSET, data
 from .options import Goal, RemoteItems
 from .util import pokemon_data_to_json, json_to_pokemon_data
 
 if TYPE_CHECKING:
-    # from worlds._bizhawk.context import BizHawkClientContext
     from worlds._polyemu.context import PolyEmuClientContext
 
 
-DOMAINS = PLATFORMS.GBA
+DOMAINS = polyemu.PLATFORMS.GBA
 
 EXPECTED_ROM_NAME = "pokemon emerald version / AP 5"
 
@@ -132,7 +127,7 @@ SHOAL_CAVE_MAPS = tuple(data.constants[map_name] for map_name in [
 
 class PokemonEmeraldClient(PolyEmuClient):
     game = "Pokemon Emerald"
-    system = PLATFORMS.GBA
+    platform = polyemu.PLATFORMS.GBA
     patch_suffix = ".apemerald"
 
     local_checked_locations: Set[int]
@@ -188,7 +183,7 @@ class PokemonEmeraldClient(PolyEmuClient):
                 return False
         except UnicodeDecodeError:
             return False
-        except ConnectionLostError:
+        except polyemu.errors.ConnectionLostError:
             return False  # Should verify on the next pass
 
         ctx.game = self.game
@@ -414,7 +409,9 @@ class PokemonEmeraldClient(PolyEmuClient):
                         "operations": [{"operation": "or", "value": legendary_bitfield}],
                     }])
                     self.local_defeated_legendaries = caught_legendaries
-        except ConnectionLostError:
+        except polyemu.ConnectionLostError:
+            from CommonClient import logger
+            logger.info("a")
             # Exit handler and return to main loop to reconnect
             pass
 

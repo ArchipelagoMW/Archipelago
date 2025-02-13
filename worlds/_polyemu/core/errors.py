@@ -1,12 +1,27 @@
 from __future__ import annotations
 
 import abc
+from enum import IntEnum
 from typing import TYPE_CHECKING, Any, ClassVar, Self  # Self py 3.11+
-
-from .enums import PolyEmuErrorType
 
 if TYPE_CHECKING:
     from .responses import ErrorResponse
+
+
+__all__ = (
+    "ErrorType", "PolyEmuBaseError", "NotConnectedError",
+    "ConnectionLostError", "MalformedResponseError", "MalformedRequestError",
+    "AutoPolyEmuErrorRegister", "PolyEmuError", "UnsupportedOperationError",
+    "MismatchedDeviceError", "NoSuchDeviceError", "DeviceClosedConnectionError",
+)
+
+
+class ErrorType(IntEnum):
+    UNKNOWN = 0x00
+    UNSUPPORTED_OPERATION = 0x01
+    MISMATCHED_DEVICE = 0x02
+    NO_SUCH_DEVICE = 0x80
+    DEVICE_CLOSED_CONNECTION = 0x81
 
 
 class PolyEmuBaseError(Exception):
@@ -22,6 +37,10 @@ class ConnectionLostError(PolyEmuBaseError):
 
 
 class MalformedResponseError(PolyEmuBaseError):
+    pass
+
+
+class MalformedRequestError(PolyEmuBaseError):
     pass
 
 
@@ -42,7 +61,7 @@ class AutoPolyEmuErrorRegister(abc.ABCMeta):
         try:
             return AutoPolyEmuErrorRegister.exception_types[code]
         except KeyError:
-            return AutoPolyEmuErrorRegister.exception_types[PolyEmuErrorType.UNKNOWN]
+            return AutoPolyEmuErrorRegister.exception_types[ErrorType.UNKNOWN]
 
 
 class PolyEmuError(PolyEmuBaseError, abc.ABC, metaclass=AutoPolyEmuErrorRegister):
@@ -55,7 +74,7 @@ class PolyEmuError(PolyEmuBaseError, abc.ABC, metaclass=AutoPolyEmuErrorRegister
 
 
 class UnsupportedOperationError(PolyEmuError):
-    code = PolyEmuErrorType.UNSUPPORTED_OPERATION
+    code = ErrorType.UNSUPPORTED_OPERATION
 
     @classmethod
     def from_response(cls, response) -> Self:
@@ -64,7 +83,7 @@ class UnsupportedOperationError(PolyEmuError):
 
 
 class MismatchedDeviceError(PolyEmuError):
-    code = PolyEmuErrorType.MISMATCHED_DEVICE
+    code = ErrorType.MISMATCHED_DEVICE
 
     @classmethod
     def from_response(cls, response) -> Self:
@@ -72,7 +91,7 @@ class MismatchedDeviceError(PolyEmuError):
 
 
 class NoSuchDeviceError(PolyEmuError):
-    code = PolyEmuErrorType.NO_SUCH_DEVICE
+    code = ErrorType.NO_SUCH_DEVICE
 
     @classmethod
     def from_response(cls, response) -> Self:
@@ -80,7 +99,7 @@ class NoSuchDeviceError(PolyEmuError):
 
 
 class DeviceClosedConnectionError(PolyEmuError):
-    code = PolyEmuErrorType.DEVICE_CLOSED_CONNECTION
+    code = ErrorType.DEVICE_CLOSED_CONNECTION
 
     @classmethod
     def from_response(cls, response) -> Self:

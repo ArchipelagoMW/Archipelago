@@ -8,11 +8,9 @@ from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser,
 import Patch
 import Utils
 
-from . import PolyEmuContext, PolyEmuBrokerConnector, ping, list_devices, get_platform
-from .broker import CLIENT_PORT
-from .enums import BROKER_DEVICE_ID
-from .errors import PolyEmuBaseError, NoSuchDeviceError
 from .client import PolyEmuClient, AutoPolyEmuClientRegister
+from .core import BROKER_DEVICE_ID, PolyEmuBaseError, NoSuchDeviceError, PolyEmuContext, no_op, list_devices, get_platform
+from .core.connector import BROKER_CLIENT_PORT, BrokerConnector
 
 
 EXPECTED_SCRIPT_VERSION = 1
@@ -50,7 +48,7 @@ class PolyEmuClientContext(CommonContext):
         self.auth_status = AuthStatus.NOT_AUTHENTICATED
         self.password_requested = False
         self.client_handler = None
-        self.polyemu_ctx = PolyEmuContext(PolyEmuBrokerConnector)
+        self.polyemu_ctx = PolyEmuContext(BrokerConnector)
         self.watcher_timeout = 0.5
 
     def make_gui(self):
@@ -142,9 +140,13 @@ async def _game_watcher(ctx: PolyEmuClientContext):
                 #     disconnect(ctx.polyemu_ctx)
                 #     continue
 
+            if not showed_connected_message:
+                showed_connected_message = True
+                logger.info("Connected to broker")
+
             showed_connecting_message = False
 
-            await ping(ctx.polyemu_ctx)
+            await no_op(ctx.polyemu_ctx)
 
             if ctx.polyemu_ctx.selected_device_id == BROKER_DEVICE_ID:
                 if not showed_searching_devices_message:
@@ -158,10 +160,6 @@ async def _game_watcher(ctx: PolyEmuClientContext):
                     showed_searching_devices_message = False
                 else:
                     continue
-
-            if not showed_connected_message:
-                showed_connected_message = True
-                logger.info("Connected to emulator")
 
             if ctx.game_id is not None and ctx.game_id != ctx.polyemu_ctx.selected_device_id:
                 if ctx.server is not None and not ctx.server.socket.closed:
@@ -262,7 +260,7 @@ def launch(*launch_args: str) -> None:
 
         async def is_broker_running():
             try:
-                _, writer = await asyncio.open_connection("127.0.0.1", CLIENT_PORT)
+                _, writer = await asyncio.open_connection("127.0.0.1", BROKER_CLIENT_PORT)
                 writer.close()
                 await writer.wait_closed()
                 return True
@@ -271,12 +269,16 @@ def launch(*launch_args: str) -> None:
 
         if not await is_broker_running():
             logger.info("Creating broker")
-            subprocess.Popen(
-                [sys.executable, "worlds/_polyemu/broker.py", f"--log_directory={Utils.user_path('logs')}"],
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-                creationflags=subprocess.DETACHED_PROCESS if Utils.is_windows else 0,
-            )
+            import multiprocessing
+            from .broker import start_broker
+            p = multiprocessing.Process(target=start_broker, args=(Utils.user_path("logs"),))
+            p.start()
+            # subprocess.Popen(
+            #     [sys.executable, "worlds/_polyemu/broker.py", f"--log_directory={Utils.user_path('logs')}"],
+            #     stdout=subprocess.DEVNULL,
+            #     stderr=subprocess.DEVNULL,
+            #     creationflags=subprocess.DETACHED_PROCESS if Utils.is_windows else 0,
+            # )
         else:
             logger.info("Broker already running")
 
@@ -288,8 +290,8 @@ def launch(*launch_args: str) -> None:
 
         try:
             await watcher_task
-        except Exception as e:
-            logger.exception(e)
+        except Exception as exc:
+            logger.exception(exc)
 
         await ctx.exit_event.wait()
         await ctx.shutdown()
