@@ -333,7 +333,7 @@ class PlandoCharmCosts(OptionDict):
                     continue
             try:
                 self.value[key] = CharmCost.from_any(data).value
-            except ValueError as ex:
+            except ValueError:
                 # will fail schema afterwords
                 self.value[key] = data
 
