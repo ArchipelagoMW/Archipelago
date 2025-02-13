@@ -98,6 +98,7 @@ class LAClientConstants:
     # wLinkSendShopTarget = 0xDDFF
 
 
+    CheckCounter = 0xB010 # Two bytes
     wRecvIndex = 0xDDFD # Two bytes
     wCheckAddress = 0xC0FF - 0x4
     WRamCheckSize = 0x4
@@ -474,19 +475,25 @@ class LinksAwakeningClient():
             if(current_room == meta_id[:5]):
                 continue
             check = self.tracker.meta_to_check[meta_id]
-            await self.collect_check(check)
+            did_collect = await self.collect_check(check)
             ctx.handled_locations.add(id)
-            try:
-                our_item = next(x for x in ctx.recvd_checks.values() if x.location == id)
-                await self.give_item(our_item)
-            except StopIteration:
-                pass # not our item
+            if did_collect:
+                try:
+                    our_item = next(x for x in ctx.recvd_checks.values() if x.location == id)
+                    await self.give_item(our_item)
+                except StopIteration:
+                    pass # not our item
             break # one per cycle
 
     async def collect_check(self, check):
         current_value = int.from_bytes(await self.gameboy.async_read_memory(check.address), 'big')
-        new_value = current_value | check.mask
-        self.gameboy.write_memory(check.address, [new_value])
+        already_collected = bool(current_value & check.mask)
+        if not already_collected:
+            new_value = current_value | check.mask
+            self.gameboy.write_memory(check.address, [new_value])
+            check_count = struct.unpack(">H", await self.gameboy.async_read_memory(LAClientConstants.CheckCounter, 2))[0]
+            self.gameboy.write_memory(LAClientConstants.wRecvIndex, struct.pack(">H", check_count + 1))
+        return not already_collected
 
     should_reset_auth = False
     async def wait_for_game_ready(self):
