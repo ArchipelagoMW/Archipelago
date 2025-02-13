@@ -562,17 +562,13 @@ from .items import is_progression  # this is just a dummy
 
 def create_item(self, item: str) -> MyGameItem:
     # this is called when AP wants to create an item by name (for plando) or when you call it from your own code
-    classification = ItemClassification.progression if is_progression(item) else
-    ItemClassification.filler
-
-
-return MyGameItem(item, classification, self.item_name_to_id[item],
-                  self.player)
+    classification = ItemClassification.progression if is_progression(item) else ItemClassification.filler
+    return MyGameItem(item, classification, self.item_name_to_id[item], self.player)
 
 
 def create_event(self, event: str) -> MyGameItem:
     # while we are at it, we can also add a helper to create events
-    return MyGameItem(event, True, None, self.player)
+    return MyGameItem(event, ItemClassification.progression, None, self.player)
 ```
 
 #### create_items
