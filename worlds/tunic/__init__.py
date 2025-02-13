@@ -1,6 +1,7 @@
 from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union, Set, TextIO
 from logging import warning
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
+from .fuses import fuse_location_name_to_id, fuse_location_groups
 from .items import (item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names,
                     combat_items)
 from .locations import location_table, location_name_groups, standard_location_name_to_id, hexagon_locations, sphere_one
@@ -80,10 +81,13 @@ class TunicWorld(World):
     location_name_groups = location_name_groups
     for group_name, members in grass_location_name_groups.items():
         location_name_groups.setdefault(group_name, set()).update(members)
+    for group_name, members in fuse_location_groups.items():
+        location_name_groups.setdefault(group_name, set()).update(members)
 
     item_name_to_id = item_name_to_id
     location_name_to_id = standard_location_name_to_id.copy()
     location_name_to_id.update(grass_location_name_to_id)
+    location_name_to_id.update(fuse_location_name_to_id)
 
     player_location_table: Dict[str, int]
     ability_unlocks: Dict[str, int]
@@ -146,6 +150,7 @@ class TunicWorld(World):
                 self.options.hexagon_quest.value = self.passthrough["hexagon_quest"]
                 self.options.entrance_rando.value = self.passthrough["entrance_rando"]
                 self.options.shuffle_ladders.value = self.passthrough["shuffle_ladders"]
+                self.options.shuffle_fuses.value = self.passthrough.get("shuffle_fuses", 0)
                 self.options.grass_randomizer.value = self.passthrough.get("grass_randomizer", 0)
                 self.options.fixed_shop.value = self.options.fixed_shop.option_false
                 self.options.laurels_location.value = self.options.laurels_location.option_anywhere
@@ -170,6 +175,9 @@ class TunicWorld(World):
                                   f"in their host.yaml settings")
 
             self.player_location_table.update(grass_location_name_to_id)
+
+        if self.options.shuffle_fuses:
+            self.player_location_table.update(fuse_location_name_to_id)
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:
@@ -322,6 +330,11 @@ class TunicWorld(World):
                     ladder_count += 1
             remove_filler(ladder_count)
 
+        if self.options.shuffle_fuses:
+            for item_name, item_data in item_table.items():
+                if item_data.item_group == "Fuses":
+                    items_to_create[item_name] = 1
+
         if self.options.hexagon_quest:
             # Calculate number of hexagons in item pool
             hexagon_goal = self.options.hexagon_goal
@@ -451,7 +464,7 @@ class TunicWorld(World):
 
         # Ladders and Combat Logic uses ER rules with vanilla connections for easier maintenance
         if (self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic
-                or self.options.grass_randomizer):
+                or self.options.grass_randomizer or self.options.shuffle_fuses):
             portal_pairs = create_er_regions(self)
             if self.options.entrance_rando:
                 # these get interpreted by the game to tell it which entrances to connect
@@ -481,7 +494,7 @@ class TunicWorld(World):
     def set_rules(self) -> None:
         # same reason as in create_regions, could probably be put into create_regions
         if (self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic
-                or self.options.grass_randomizer):
+                or self.options.grass_randomizer or self.options.shuffle_fuses):
             set_er_location_rules(self)
         else:
             set_region_rules(self)
@@ -576,6 +589,7 @@ class TunicWorld(World):
             "maskless": self.options.maskless.value,
             "entrance_rando": int(bool(self.options.entrance_rando.value)),
             "shuffle_ladders": self.options.shuffle_ladders.value,
+            "shuffle_fuses": self.options.shuffle_fuses.value,
             "grass_randomizer": self.options.grass_randomizer.value,
             "combat_logic": self.options.combat_logic.value,
             "Hexagon Quest Prayer": self.ability_unlocks["Pages 24-25 (Prayer)"],

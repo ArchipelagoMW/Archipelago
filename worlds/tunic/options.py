@@ -154,6 +154,15 @@ class ShuffleLadders(Toggle):
     display_name = "Shuffle Ladders"
 
 
+class ShuffleFuses(Toggle):
+    """
+    Praying at a fuse will reward a check instead of turning on the power. The power from each fuse gets turned into an
+    item that must be found in order to restore power for that part of the path.
+    """
+    internal_name = "shuffle_fuses"
+    display_name = "Shuffle Fuses"
+
+
 class GrassRandomizer(Toggle):
     """
     Turns over 6,000 blades of grass and bushes in the game into checks.
@@ -304,6 +313,7 @@ class TunicOptions(PerGameCommonOptions):
     extra_hexagon_percentage: ExtraHexagonPercentage
 
     shuffle_ladders: ShuffleLadders
+    shuffle_fuses: ShuffleFuses
     grass_randomizer: GrassRandomizer
     local_fill: LocalFill
 
