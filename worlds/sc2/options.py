@@ -910,8 +910,7 @@ class ExcludedMissions(Sc2MissionSet):
 
 class MissionBias(Choice):
     """
-    When building a campaign, determines whether easy or hard missions are more likely to appear.
-    Only applies to mission orders with fewer missions than those available.
+    Determines whether easy missions can appear late in the campaign.
     """
     display_name = "Mission Bias"
     option_easy = 0
