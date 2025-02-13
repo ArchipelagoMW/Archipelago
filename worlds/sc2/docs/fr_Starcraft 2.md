@@ -55,7 +55,7 @@ Archipelago*.
 Les missions accessibles ont leur nom en bleu, tandis que celles où toutes les *locations* ont été collectées 
 apparaissent en blanc.
 En plaçant votre souris sur une mission, les *locations* non collectées s’affichent, classées par catégorie.
-Si la mission n'est pas disponible, ses prérequis seront également affichés à cet endroit.
+Les missions qui ne sont pas accessibles ont leur nom en gris et leurs prérequis seront également affichés à cet endroit.
 
 
 ## Quel est le but de ce jeu quand il est *randomized*?

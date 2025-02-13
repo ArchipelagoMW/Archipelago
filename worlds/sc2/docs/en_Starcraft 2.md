@@ -46,15 +46,15 @@ e.g., blitz, grid, etc.
 Missions are launched through the StarCraft 2 Archipelago client, through the StarCraft 2 Launcher tab. 
 The between mission segments on the Hyperion, the Leviathan, and the Spear of Adun are not included. 
 Additionally, metaprogression currencies such as credits and Solarite are not used.
-Missions that are available have their names in blue and those where all locations were collected are shown in white.
+Available missions are in blue; missions where all locations were collected are in white.
 If you move your mouse over a mission, the uncollected locations will be displayed, categorized by type.
-If the mission is not available, its requirements will also be shown there.
+Unavailable missions are in grey; their requirements will also be shown there.
 
 ## What is the goal of this game when randomized?
 
 The goal is to beat the final mission in the mission order. 
 The yaml configuration file controls the mission order, which combination of the four StarCraft 2 campaigns can be 
-used and how missions are shuffled. 
+used, and how missions are shuffled. 
 Since the first two options determine the number of missions in a StarCraft 2 world, they can be used to customize the 
 expected time to complete the world. 
 
