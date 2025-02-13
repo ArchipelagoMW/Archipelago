@@ -9,23 +9,23 @@ def yugioh06_difficulty(world, state: CollectionState, player: int, level: int):
     if level <= 0:
         return True
     elif level == 1:
-        return state.has_from_list_unique(world.progression_cards["Beaters"], player,
-                                          total_beaters // 3,) and \
-            state.has_from_list_unique(world.progression_cards["Monster Removal"], player,
-                                       total_monster_removal // 3) and \
-            state.has_from_list_unique(world.progression_cards["Backrow Removal"], player,
-                                       total_backrow_removal // 3)
+        return (state.has_from_list_unique(world.progression_cards["Beaters"], player,
+                                           total_beaters // 3, ) and
+                state.has_from_list_unique(world.progression_cards["Monster Removal"], player,
+                                           total_monster_removal // 3) and
+                state.has_from_list_unique(world.progression_cards["Backrow Removal"], player,
+                                           total_backrow_removal // 3))
     elif level == 2:
-        return state.has_from_list_unique(world.progression_cards["Beaters"], player,
-                                          total_beaters * 2 // 3, ) and \
-            state.has_from_list_unique(world.progression_cards["Monster Removal"], player,
-                                       total_monster_removal * 2 // 3) and \
-            state.has_from_list_unique(world.progression_cards["Backrow Removal"], player,
-                                       total_backrow_removal * 2 // 3)
+        return (state.has_from_list_unique(world.progression_cards["Beaters"], player,
+                                           total_beaters * 2 // 3, ) and
+                state.has_from_list_unique(world.progression_cards["Monster Removal"], player,
+                                           total_monster_removal * 2 // 3) and
+                state.has_from_list_unique(world.progression_cards["Backrow Removal"], player,
+                                           total_backrow_removal * 2 // 3))
     elif level >= 3:
-        return state.has_all(world.progression_cards["Beaters"], player) and \
-            state.has_all(world.progression_cards["Monster Removal"], player) and \
-            state.has_all(world.progression_cards["Backrow Removal"], player)
+        return (state.has_all(world.progression_cards["Beaters"], player) and
+                state.has_all(world.progression_cards["Monster Removal"], player) and
+                state.has_all(world.progression_cards["Backrow Removal"], player))
 
 
 def get_cards_in_first_pack(world: World, criteria: str):

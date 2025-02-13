@@ -201,7 +201,7 @@ def get_opponents(multiworld: Optional[MultiWorld], player: Optional[int], rando
         # Tier 5
         OpponentData(20, "Raviel, Lord of Phantasms", [], 5, 1, 6565, 8020, "deck/LV5_ravieru.ydc\x00\x00", 3),
         OpponentData(21, "Horus the Black Flame Dragon LV8", [], 5, 2, 6100, 8021, "deck/LV5_horus.ydc\x00\x00\x00\x00",
-                     4),
+                     3),
         OpponentData(22, "Stronghold", [], 5, 3, 6153, 8022, "deck/LV5_gadget.ydc\x00\x00\x00", 3),
         OpponentData(23, "Sacred Phoenix of Nephthys", [], 5, 4, 6236, 8023, "deck/LV5_nephthys.ydc\x00", 3),
         OpponentData(24, "Cyber End Dragon", ["Goal"], 5, 5, 6397, 8024, "deck/LV5_cyber.ydc\x00\x00\x00\x00", 3),
