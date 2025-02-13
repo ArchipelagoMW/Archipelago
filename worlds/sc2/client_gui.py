@@ -509,6 +509,8 @@ class SC2Manager(GameManager):
             return " [color=AF99EF](Progression)[/color]"
         if ItemClassification.useful & item_classification_key:
             return " [color=6D8BE8](Useful)[/color]"
+        if SC2World.settings.show_traps and ItemClassification.trap & item_classification_key:
+            return " [color=FA8072](Trap)[/color]"
         return " [color=00EEEE](Filler)[/color]"
 
 
