@@ -35,6 +35,10 @@ def start_playing():
 @app.route('/games/<string:game>/info/<string:lang>')
 @cache.cached()
 def game_info(game, lang):
+    try:
+        AutoWorldRegister.world_types[game]
+    except KeyError:
+        return abort(404)
     return render_template('gameInfo.html', game=game, lang=lang, theme=get_world_theme(game))
 
 
@@ -52,6 +56,10 @@ def games():
 @app.route('/tutorial/<string:game>/<string:file>/<string:lang>')
 @cache.cached()
 def tutorial(game, file, lang):
+    try:
+        AutoWorldRegister.world_types[game]
+    except KeyError:
+        return abort(404)
     return render_template("tutorial.html", game=game, file=file, lang=lang, theme=get_world_theme(game))
 
 
