@@ -618,6 +618,9 @@ class LMContext(CommonContext):
 
 async def dolphin_sync_task(ctx: LMContext):
     logger.info("Starting Dolphin connector. Use /dolphin for status information.")
+    # update boo count here
+    if ctx.ui:
+        await ctx.update_boo_count_label()
     while not ctx.exit_event.is_set():
         try:
             if dme.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
@@ -681,10 +684,6 @@ def main(output_data: Optional[str] = None, connect=None, password=None):
             ctx.run_gui()
         ctx.run_cli()
         await asyncio.sleep(1)
-
-        # update crystals here
-        if ctx.ui:
-            await ctx.update_boo_count_label()
 
         ctx.dolphin_sync_task = asyncio.create_task(dolphin_sync_task(ctx), name="DolphinSync")
 
