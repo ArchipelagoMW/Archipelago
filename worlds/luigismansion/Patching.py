@@ -1347,6 +1347,10 @@ def update_enemy_info(enemy_info, output_data):
                 continue
             room_enemy_entry = next(((key, val) for (key, val) in output_data["Room Enemies"].items() if
                                      ROOM_ID_TO_NAME[x["room_no"]] == key and x["name"] in ghost_list), None)
+
+            if "16_1" in x["create_name"]:
+                x["pos_y"] = 30.000000
+
             if not room_enemy_entry is None or x["room_no"] == 35:
                 apply_new_ghost(x, "No Element" if x["room_no"] == 35 else room_enemy_entry[1])
 
