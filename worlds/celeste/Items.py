@@ -21,6 +21,10 @@ collectable_item_data_table: Dict[str, CelesteItemData] = {
     ItemName.raspberry:  CelesteItemData(celeste_base_id + 0x1, ItemClassification.filler),
 }
 
-item_data_table: Dict[str, CelesteItemData] = {**collectable_item_data_table}
+interactable_item_data_table: Dict[str, CelesteItemData] = {
+    ItemName.springs:  CelesteItemData(celeste_base_id + 0x200 + 0x1, ItemClassification.progression),
+}
+
+item_data_table: Dict[str, CelesteItemData] = {**collectable_item_data_table, **interactable_item_data_table}
 
 item_table = {name: data.code for name, data in item_data_table.items() if data.code is not None}

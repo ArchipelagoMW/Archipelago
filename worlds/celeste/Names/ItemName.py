@@ -1,6 +1,8 @@
+# Collectables
 strawberry = "Strawberry"
 raspberry = "Raspberry"
 
+# Movement
 dash    = "Dash"
 u_dash  = "Up Dash"
 r_dash  = "Right Dash"
@@ -10,3 +12,6 @@ ur_dash = "Up-Right Dash"
 dr_dash = "Down-Right Dash"
 dl_dash = "Down-Left Dash"
 ul_dash = "Up-Left Dash"
+
+# Interactables
+springs = "Springs"

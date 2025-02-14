@@ -6,7 +6,7 @@ from worlds.AutoWorld import WebWorld, World
 from .Items import CelesteItem, item_table, item_data_table
 from .Locations import CelesteLocation, location_table, strawberry_location_data_table
 from .Names import ItemName, LocationName
-from .Options import CelesteOptions, celeste_option_groups
+from .Options import CelesteOptions, celeste_option_groups, resolve_options
 
 
 class CelesteWebWorld(WebWorld):
@@ -37,6 +37,14 @@ class CelesteWorld(World):
     location_name_to_id = location_table
     item_name_to_id = item_table
 
+    # Instance Data
+    madeline_one_dash_hair_color: int
+    madeline_two_dash_hair_color: int
+    madeline_no_dash_hair_color: int
+    madeline_feather_hair_color: int
+
+    def generate_early(self) -> None:
+        resolve_options(self)
 
     def create_item(self, name: str) -> CelesteItem:
         return CelesteItem(name, item_data_table[name].type, item_data_table[name].code, self.player)
@@ -89,4 +97,8 @@ class CelesteWorld(World):
             "death_link": self.options.death_link.value,
             "death_link_amnesty": self.options.death_link_amnesty.value,
             "strawberries_required": self.strawberries_required,
+            "madeline_one_dash_hair_color": self.madeline_one_dash_hair_color,
+            "madeline_two_dash_hair_color": self.madeline_two_dash_hair_color,
+            "madeline_no_dash_hair_color": self.madeline_no_dash_hair_color,
+            "madeline_feather_hair_color": self.madeline_feather_hair_color,
         }
