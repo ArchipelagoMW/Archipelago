@@ -207,7 +207,6 @@ class Ty1Options(PerGameCommonOptions):
 
     logic_difficulty: LogicDifficulty
     progressive_elementals: ProgressiveElementals
-    start_with_boom: StartWithBoom
 
     thegg_gating: ThunderEggGating
     extra_theggs: ExtraThunderEggs

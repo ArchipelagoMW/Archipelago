@@ -66,10 +66,7 @@ def create_items(world: MultiWorld, options: Ty1Options, player: int):
 
     # Attributes
     if options.progressive_elementals:
-        if options.start_with_boom:
-            create_multiple("Progressive Rang", 8, world, player)
-        else:
-            create_multiple("Progressive Rang", 9, world, player)
+        create_multiple("Progressive Rang", 9, world, player)
     else:
         create_single("Second Rang", world, player)
         create_single("Swim", world, player)

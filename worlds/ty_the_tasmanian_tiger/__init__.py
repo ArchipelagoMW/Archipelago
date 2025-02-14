@@ -57,7 +57,6 @@ class Ty1World(World):
             "Goal": self.options.goal.value,
             "ProgressiveElementals": self.options.progressive_elementals.value,
             "ProgressiveLevel": self.options.progressive_level.value,
-            "StartWithBoom": self.options.start_with_boom.value,
             "LevelUnlockStyle": self.options.level_unlock_style.value,
             "TheggGating": self.options.thegg_gating.value,
             "CogGating": self.options.cog_gating.value,
