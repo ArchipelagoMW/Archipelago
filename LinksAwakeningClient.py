@@ -442,6 +442,8 @@ class LinksAwakeningClient():
         next_index += 1
         self.gameboy.write_memory(LAClientConstants.wRecvIndex, struct.pack(">H", next_index))
 
+    # The key location is blocked from collection unless the value location
+    # has also been checked.
     dependent_location_meta_ids = {
         "0x301-0": "0x301-1", # Tunic Fairy Item 1 -> Tunic Fairy Item 2
         "0x301-1": "0x301-0", # Tunic Fairy Item 2 -> Tunic Fairy Item 1
