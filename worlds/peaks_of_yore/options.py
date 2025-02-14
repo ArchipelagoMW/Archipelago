@@ -34,6 +34,21 @@ class StartWithBarometer(DefaultOnToggle):
     display_name = "Start With Barometer"
 
 
+class RopeUnlockMode(Choice):
+    """
+    Choose when the rope unlock item is given
+
+    instant: Unlock ropes as soon as you receive them
+    early: Try to unlock the item early on in the game
+    normal: Do not put rope unlock earlier and randomise it like any other item
+    """
+    display_name = "Rope Unlock Mode"
+    option_instant = 0
+    option_early = 1
+    option_normal = 2
+    default = 1
+
+
 class EnableFundamental(DefaultOnToggle):
     """Enables Fundamentals book, items and collectibles"""
     display_name = "Fundamental Peaks"
@@ -65,6 +80,7 @@ class PeaksOfYoreOptions(PerGameCommonOptions):
     goal: Goal
     starting_book: StartingBook
     start_with_barometer: StartWithBarometer
+    rope_unlock_mode: RopeUnlockMode
     enable_fundamental: EnableFundamental
     enable_intermediate: EnableIntermediate
     enable_advanced: EnableAdvanced

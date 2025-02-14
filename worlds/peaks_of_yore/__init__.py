@@ -3,7 +3,7 @@ from typing import Any
 from Options import Toggle
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial, Item, Region, ItemClassification, MultiWorld
-from .options import PeaksOfYoreOptions, Goal, StartingBook
+from .options import PeaksOfYoreOptions, Goal, StartingBook, RopeUnlockMode
 from .data import full_item_list, full_location_list, PeaksOfYoreRegion
 from .locations import get_locations, get_location_names_by_type, PeaksOfYoreLocation
 
@@ -168,11 +168,22 @@ class PeaksOfWorld(World):
 
         for tool in [item for item in full_item_list if item.type == "Tool"]:
             if remaining_items > 0 and (tool.name != "Barometer" or not self.options.start_with_barometer):
-                self.multiworld.itempool.append(self.create_item(tool.name))
-                remaining_items -= 1
-
-        remaining_items -= 1
-        self.multiworld.itempool.append(self.create_item("Progressive Crampons"))
+                if tool.name == "Progressive Crampons":
+                    self.multiworld.itempool.append(self.create_item(tool.name))
+                    self.multiworld.itempool.append(self.create_item(tool.name))
+                    remaining_items -= 2
+                elif tool.name == "Rope Unlock":
+                    if self.options.rope_unlock_mode == RopeUnlockMode.option_early:
+                        self.multiworld.early_items[self.player][tool.name] = 1
+                        self.multiworld.itempool.append(self.create_item(tool.name))
+                        remaining_items -= 1
+                    elif self.options.rope_unlock_mode == RopeUnlockMode.option_normal:
+                        self.multiworld.itempool.append(self.create_item(tool.name))
+                        remaining_items -= 1
+                        # else don't place rope unlock
+                else:
+                    self.multiworld.itempool.append(self.create_item(tool.name))
+                    remaining_items -= 1
 
         for rope in [item for item in full_item_list if item.type == "Rope"]:
             if remaining_items > 0:
@@ -209,6 +220,5 @@ class PeaksOfWorld(World):
                 state.can_reach_location(loc.name, self.player) for loc in self.get_locations())
 
     def fill_slot_data(self) -> dict[str, Any]:
-        return self.options.as_dict("death_link", "goal", "starting_book", "enable_fundamental", "enable_intermediate",
-                                    "enable_advanced", "enable_expert", "disable_solemn_tempest", casing="camel",
+        return self.options.as_dict("death_link", "goal", "rope_unlock_mode", casing="camel",
                                     toggles_as_bools=True)
