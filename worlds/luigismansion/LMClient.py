@@ -293,6 +293,12 @@ class LMContext(CommonContext):
             self.already_mentioned_rank_diff = False
             return False
 
+        # Make sure we aren't in the middle of an event that would freeze the game if items were received
+        in_event_flag = dme.read_byte(0x803D33B1)
+        if in_event_flag & (1 << 7) > 0:
+            self.last_not_ingame = time.time()
+            return False
+
         # These are the only valid maps we want Luigi to have checks with or do health detection with.
         if curr_map_id in [2, 9, 10, 11, 13]:
             if not time.time() > (self.last_not_ingame + (CHECKS_WAIT*LONGER_MODIFIER)):
