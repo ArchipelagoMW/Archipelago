@@ -188,10 +188,14 @@
     },
     // No Shennong event because rando moves him into FSP immediately
     // TODO: change how Shennong and Chiyou move into FSP so these are correct
-//    {
-//        "address": null, "name": "Event - Jiequan 1 Fight Unlocked",
-//        "region": "FGH - ???", "requires": [ { "item_group": "Sol Seals", "count": 3 } ]
-//    },
+    {
+        "address": null, "name": "Event - Jiequan 1 Fight Unlocked",
+        "region": "FGH - ???", "requires": [
+            { "item_group": "Sol Seals", "count": 3 },
+            { "item": "Mystic Nymph: Scout Mode" }
+            // AND grapple
+        ]
+    },
     {
         "address": null, "name": "Event - Lady Ethereal Soulscape Unlocked",
         "region": "CC - Root Node", "requires": [ { "item_group": "Sol Seals", "count": 4 } ]
@@ -337,8 +341,7 @@
         "region": "PRW - Guarded Chest", "requires": [ { "anyOf": [
             { "item": "Mystic Nymph: Scout Mode" },
             { "item": "Unbounded Counter" }
-            // hacking 2
-        ] } ]
+        ] } ] // hacking 2
     },
     {
         "address": 1003, "name": "PR (West): Vents",
@@ -380,6 +383,288 @@
         "address": 1103, "name": "Kuafu's Vital Sanctum",
         "region": "RP - After Yingzhao", "requires": []
     },
+
+    // Lake Yaochi Ruins
+    {
+        "address": 1201, "name": "LYR: First Chest in Leftmost Pool",
+        "region": "LYR - Left Exit", "requires": []
+    },
+    {
+        "address": 1202, "name": "LYR: Second Chest in Leftmost Pool",
+        "region": "LYR - Left Exit", "requires": []
+    },
+    {
+        "address": 1203, "name": "LYR: Above Leftmost Pool",
+        "region": "LYR - Left Exit", "requires": [] // grapple OR djump
+    },
+    {
+        "address": 1204, "name": "LYR: Right of Leftmost Pool",
+        "region": "LYR - Root Node", "requires": []
+    },
+    {
+        "address": 1205, "name": "LYR: Hear Ji Reminisce About Daybreak Tower",
+        "region": "LYR - Root Node", "requires": []
+    },
+    {
+        "address": 1206, "name": "LYR: Daybreak Tower Chest",
+        "region": "LYR - Root Node", "requires": []
+    },
+    {
+        "address": 1207, "name": "LYR: Daybreak Tower Bell Puzzle",
+        "region": "LYR - Root Node", "requires": [
+            { "item": "Ancient Penglai Ballad" }, // for the combination
+            { "item": "Charged Strike" } // to ring the bells
+        ] // AND hacking the chest itself
+    },
+    {
+        "address": 1208, "name": "LYR: Above Root Node",
+        "region": "LYR - Upper Exit", "requires": []
+    },
+    {
+        "address": 1209, "name": "LYR: Statue Hack Room Near Root Node",
+        "region": "LYR - Root Node", "requires": [ { "item": "Charged Strike" } ] // AND hacking
+    },
+    {
+        "address": 1210, "name": "LYR: Examine Stele",
+        "region": "LYR - Right Exit", "requires": []
+    },
+    {
+        "address": 1211, "name": "LYR: Nymph Puzzle Room Near Stele",
+        "region": "LYR - Right Exit", "requires": []
+    },
+    {
+        "address": 1212, "name": "LYR: Ropes Near Right Exit",
+        "region": "LYR - Right Exit", "requires": []
+    },
+
+    // Greenhouse
+    {
+        "address": 1301, "name": "Greenhouse: Hackable Rope Near Wreckage",
+        "region": "GH - Root Node", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ]
+    },
+    {
+        "address": 1302, "name": "Greenhouse: Examine Water Report",
+        "region": "GH - Chiyou & 1st Waterfall Hack", "requires": []
+    },
+    {
+        "address": 1303, "name": "Greenhouse: Retrieve Chip From Shanhai 9000",
+        "region": "GH - Chiyou & 1st Waterfall Hack", "requires": []
+    },
+    {
+        "address": 1304, "name": "Greenhouse: Near Rightmost Hanging Pool",
+        "region": "GH - 2nd Waterfall Hack", "requires": []
+    },
+    {
+        "address": 1305, "name": "Greenhouse: Hidden in Upper Level Foliage",
+        "region": "GH - 2nd Waterfall Hack", "requires": []
+    },
+    {
+        "address": 1306, "name": "Greenhouse: Vase In Water Above Root Node",
+        "region": "GH - 2nd Waterfall Hack", "requires": []
+    },
+    {
+        "address": 1307, "name": "Greenhouse: In Leftmost Hanging Pool",
+        "region": "GH - 3rd Waterfall Hack", "requires": []
+    },
+    {
+        "address": 1308, "name": "Greenhouse: Examine Mutated Crops",
+        "region": "GH - Mutated Crops", "requires": []
+    },
+    {
+        "address": 1309, "name": "Greenhouse: Defeat Celestial Spectre: Shuigui",
+        "region": "GH - Shuigui Arena", "requires": []
+    },
+
+    // Water & Oxygen Synthesis
+    {
+        "address": 1401, "name": "W&OS: High Platforms Right of Center",
+        "region": "W&OS - Center", "requires": []
+    },
+    {
+        "address": 1402, "name": "W&OS: High Platforms Left of Center",
+        "region": "W&OS - Pipeline Panel", "requires": []
+    },
+    {
+        "address": 1403, "name": "W&OS: Tianhou Flower",
+        "region": "W&OS - Red Crystal Cave", "requires": []
+    },
+    {
+        "address": 1404, "name": "W&OS: Dusk Guardian Recording Device",
+        "region": "W&OS - Red Crystal Cave", "requires": []
+    },
+    {
+        "address": 1405, "name": "W&OS: Examine Pipeline Panel",
+        "region": "W&OS - Pipeline Panel", "requires": []
+    },
+    {
+        "address": 1406, "name": "W&OS: Climb Elevator Shaft By Root Node",
+        "region": "W&OS - Root Node", "requires": [] // grapple (OR djump???)
+    },
+
+    // Agrarian Hall
+    {
+        "address": 1501, "name": "Chest After Goumang (1st Reward)",
+        "region": "AH - After Goumang", "requires": []
+    },
+    {
+        "address": 1502, "name": "Chest After Goumang (2nd Reward)",
+        "region": "AH - After Goumang", "requires": []
+    },
+    {
+        "address": 1503, "name": "Goumang's Vital Sanctum",
+        "region": "AH - After Goumang", "requires": []
+    },
+
+    // Yinglong Canal
+    {
+        "address": 1601, "name": "Yinglong Canal: Top Left of Upper Caves",
+        "region": "YC - Upper Caves", "requires": [] // hacking
+    },
+    {
+        "address": 1602, "name": "Yinglong Canal: Bottom Left of Upper Caves",
+        "region": "YC - Farmland Markings", "requires": []
+    },
+    {
+        "address": 1603, "name": "Yinglong Canal: Examine Farmland Markings",
+        "region": "YC - Farmland Markings", "requires": []
+    },
+    {
+        "address": 1604, "name": "Yinglong Canal: Climbing Puzzle Above Farmland Markings",
+        "region": "YC - Farmland Markings", "requires": [ { "anyOf": [
+            { "item": "Air Dash" }, { "item": "Cloud Leap" }
+        ] } ] // wall climb AND (djump OR airdash OR bow)
+    },
+    {
+        "address": 1605, "name": "Yinglong Canal: Between Egg Cave and Farmland Markings",
+        "region": "YC - Above Egg Cave", "requires": []
+    },
+    {
+        "address": 1606, "name": "Yinglong Canal: Break Center Yinglong Egg",
+        "region": "YC - Egg Cave & Left Exit", "requires": [] // djump OR wall climb
+    },
+    {
+        "address": 1607, "name": "Yinglong Canal: Near Root Node",
+        "region": "YC - Root Node", "requires": []
+    },
+
+    // Factory (Great Hall)
+    {
+        "address": 1701, "name": "Factory (GH): Near Rightmost Shield Orb",
+        "region": "FGH - Lower Levels, Root Node & Right Exit", "requires": []
+    },
+    {
+        "address": 1702, "name": "Factory (GH): Near Root Node",
+        "region": "FGH - Lower Levels, Root Node & Right Exit", "requires": []
+    },
+    {
+        "address": 1703, "name": "Factory (GH): Near Middle Shield Orb",
+        "region": "FGH - Lower Levels, Root Node & Right Exit", "requires": []
+    },
+    {
+        "address": 1704, "name": "Factory (GH): Tianhou Flower Below Hammers",
+        "region": "FGH - Lower Levels, Root Node & Right Exit", "requires": []
+    },
+    {
+        "address": 1705, "name": "Factory (GH): Break the Hammers",
+        "region": "FGH - Lower Levels, Root Node & Right Exit", "requires": [ { "item": "Unbounded Counter" } ]
+    },
+    {
+        "address": 1706, "name": "Factory (GH): Examine Furnance Monitor",
+        "region": "FGH - Lower Levels, Root Node & Right Exit", "requires": []
+    },
+    {
+        "address": 1707, "name": "Factory (GH): Raise the Bridge for Chiyou",
+        "region": "FGH - Left Exit", "requires": []
+    },
+    {
+        "address": 1708, "name": "Factory (GH): Roof Above Root Node",
+        "region": "FGH - Above Root Node", "requires": []
+    },
+    {
+        "address": 1710, "name": "Factory (GH): Near Right Elevator",
+        "region": "FGH - Above Root Node", "requires": []
+    },
+    {
+        "address": 1711, "name": "Factory (GH): Ball Drop in Platform Puzzle Room",
+        "region": "FGH - Above Root Node", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ] // AND hacking
+    },
+    {
+        "address": 1712, "name": "Factory (GH): Recording Device in Platform Puzzle Room",
+        "region": "FGH - Above Root Node", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ]
+    },
+    {
+        "address": 1713, "name": "Factory (GH): Tianhou Flower in Platform Puzzle Room",
+        "region": "FGH - Above Root Node", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ]
+    },
+
+    // Factory (Underground)
+    {
+        "address": 1801, "name": "Factory (U): Near Upper Right Exit",
+        "region": "FU - Upper Right Exit", "requires": [] // hacking
+    },
+    {
+        "address": 1802, "name": "Factory (U): Defeat Red Tiger Elite: Kuiyan",
+        "region": "FU - Upper Elevator & Kuiyan Arena", "requires": []
+    },
+    {
+        "address": 1803, "name": "Factory (U): Near Lower Elevator",
+        "region": "FU - Main Intersection", "requires": []
+    },
+    {
+        "address": 1804, "name": "Factory (U): Hack 2 Statues",
+        "region": "FU - Main Intersection", "requires": [
+            { "item": "Charged Strike" }, // to defeat the 1st statue
+            { "region": "FU - Middle Right Exit" } // it might look like you need TCK to get the 2nd statue,
+                                            // but simply falling, holding left and ledge grabbing is enough
+        ]
+    },
+    {
+        "address": 1805, "name": "Factory (U): Find Broken Shanhai 9000",
+        "region": "FU - Broken Shanhai", "requires": []
+    },
+    {
+        "address": 1806, "name": "Factory (U): Examine Evacuation Notice",
+        "region": "FU - Middle Right Exit", "requires": []
+    },
+    {
+        "address": 1806, "name": "Factory (U): Above Root Node",
+        "region": "FU - Crystal Passage", "requires": []
+    },
+    {
+        "address": 1807, "name": "Factory (U): Below Walkway to Left Exit",
+        "region": "FU - Middle Right Exit", "requires": [ { "anyOf": [
+            { "item": "Air Dash" }, { "item": "Cloud Leap" }
+        ] } ]
+    },
+    {
+        "address": 1808, "name": "Factory (U): Behind Moving Boxes",
+        "region": "FU - Behind Moving Boxes", "requires": []
+    },
+
+    // Outer Warehouse
+    // Inner Warehouse
+    // Boundless Repository
+    // Yangu Hall
+    // Abandoned Mines
+    // Prison
+    // Factory (Machine Room)
+    // Factory (Production Area)
+    // Shengwu Hall
+    // Underground Cave
+    // 95th Livestock Pen / Peach Blossom Village
+    // Livestock Harvesting Platform
+    // Galactic Dock
+    // Grotto of Scriptures (Entry)
+    // Grotto of Scriptures (East)
+    // Grotto of Scriptures (West)
+    // Ancient Stone Pillar
+    // Sky Tower
+    // Empyrean Dist. (Passages)
+    // Empyrean Dist. (Living Area)
+    // Empyrean Dist. (Sanctum)
+    // Nobility Hall
+    // Tiandao Research Center
+    // Tianhuo Research Institute
 ]
 
 

@@ -114,9 +114,7 @@
     { "from": "CC - Right Exit", "to": "CH - Left", "requires": [] },
 
     // Cortex Center
-    { "from": "CC - Right Exit", "to": "CC - Root Node", "requires": [ { "anyOf": [
-        { "item": "Unbounded Counter" }, { "item": "Charged Strike" }
-    ] } ] },
+    { "from": "CC - Right Exit", "to": "CC - Root Node", "requires": [ { "item": "Charged Strike" } ] },
     { "from": "CC - Root Node", "to": "CC - Root Node After Boss", "requires": [
         { "item": "Event - Lady Ethereal Soulscape Unlocked" },
         // pre-boss soulscape requires WC AND TCK AND (DJ OR AD)
@@ -140,8 +138,8 @@
     { "from": "CC - Caves Lower Left", "to": "CC - Left Exit", "requires": [] },
     { "from": "CC - Left Exit", "to": "CC - Caves Lower Left", "requires": [] }, // grapple
 
-    { "from": "CC - Left Exit", "to": "FGH - Right Exit", "requires": [] },
-    { "from": "FGH - Right Exit", "to": "CC - Left Exit", "requires": [] },
+    { "from": "CC - Left Exit", "to": "FGH - Lower Levels, Root Node & Right Exit", "requires": [] },
+    { "from": "FGH - Lower Levels, Root Node & Right Exit", "to": "CC - Left Exit", "requires": [] },
 
     // Central Transport Hub
     { "from": "CTH - Upper Left Exit", "to": "CTH - Bottom of Large Shaft", "requires": [] }, // elevator combat gauntlet
@@ -242,7 +240,165 @@
 
     // Radiant Pagoda
     { "from": "RP - Root Node", "to": "RP - After Yingzhao", "requires": [] }, // TODO: combat logic?
-    { "from": "RP - After Yingzhao", "to": "CH - Center", "requires": [] } // elevator
+    { "from": "RP - After Yingzhao", "to": "CH - Center", "requires": [] }, // elevator
+
+    // Lake Yaochi Ruins
+    { "from": "LYR - Left Exit", "to": "LYR - Root Node", "requires": [] }, // grapple OR airdash OR djump
+    { "from": "LYR - Root Node", "to": "LYR - Left Exit", "requires": [] },
+    { "from": "LYR - Root Node", "to": "LYR - Upper Exit", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "LYR - Upper Exit", "to": "LYR - Root Node", "requires": [] }, // fall
+    { "from": "LYR - Root Node", "to": "LYR - Right Exit", "requires": [] }, // one-way dragon boat ride
+    { "from": "LYR - Root Node", "to": "TRC - Upper Exit", "requires": [ { "item": "Elevator Access Token" } ] },
+
+    { "from": "LYR - Root Node", "to": "YC - Upper Exit", "requires": [] },
+    { "from": "YC - Upper Exit", "to": "LYR - Root Node", "requires": [] },
+
+    { "from": "LYR - Right Exit", "to": "GoSY - Root Node", "requires": [] },
+    { "from": "GoSY - Root Node", "to": "LYR - Right Exit", "requires": [] },
+
+    // Greenhouse
+    { "from": "GH - Root Node", "to": "GH - Chiyou & 1st Waterfall Hack", "requires": [ { "item": "Charged Strike" } ] },
+    { "from": "GH - Chiyou & 1st Waterfall Hack", "to": "GH - Root Node", "requires": [ { "item": "Charged Strike" } ] },
+    { "from": "GH - Chiyou & 1st Waterfall Hack", "to": "GH - 2nd Waterfall Hack", "requires": [] }, // hacking
+    { "from": "GH - 2nd Waterfall Hack", "to": "GH - 3rd Waterfall Hack", "requires": [] }, // hacking
+    { "from": "GH - 3rd Waterfall Hack", "to": "GH - Mutated Crops", "requires": [] }, // hacking
+    { "from": "GH - Mutated Crops", "to": "GH - Shuigui Arena", "requires": [] }, // one-way fall
+    { "from": "GH - Shuigui Arena", "to": "GH - Chiyou & 1st Waterfall Hack", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ] },
+
+    { "from": "GH - 2nd Waterfall Hack", "to": "W&OS - Center", "requires": [] }, // one-way fall
+
+    // Water & Oxygen Synthesis
+    { "from": "W&OS - Center", "to": "W&OS - Left Exit", "requires": [] }, // grapple OR airdash OR djump???
+    { "from": "W&OS - Center", "to": "W&OS - Pipeline Panel", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "W&OS - Center", "to": "W&OS - Root Node", "requires": [] }, // hacking AND (grapple OR airdash OR djump)
+    { "from": "W&OS - Left Exit", "to": "W&OS - Red Crystal Cave", "requires": [] }, // wall climb AND grapple
+    { "from": "W&OS - Red Crystal Cave", "to": "W&OS - Pipeline Panel", "requires": [ { "item": "Charged Strike" } ] },
+    { "from": "W&OS - Pipeline Panel", "to": "W&OS - Red Crystal Cave", "requires": [ { "item": "Charged Strike" } ] },
+    { "from": "W&OS - Root Node", "to": "W&OS - Right Exit", "requires": [ { "item": "Charged Strike" } ] }, // one-way dragon boat ride
+
+    { "from": "W&OS - Left Exit", "to": "YC - Root Node", "requires": [] },
+    { "from": "YC - Root Node", "to": "W&OS - Left Exit", "requires": [] },
+
+    { "from": "W&OS - Right Exit", "to": "AH - Root Node", "requires": [] },
+    { "from": "AH - Root Node", "to": "W&OS - Right Exit", "requires": [] },
+
+    // Agrarian Hall
+    { "from": "AH - Root Node", "to": "AH - After Goumang", "requires": [] }, // TODO: combat logic?
+    { "from": "AH - After Goumang", "to": "AH - Root Node", "requires": [] },
+
+    { "from": "AH - After Goumang", "to": "GoSY - Lower Right Exit", "requires": [] },
+    { "from": "GoSY - Lower Right Exit", "to": "AH - After Goumang", "requires": [] },
+
+    // Yinglong Canal
+    { "from": "YC - Upper Exit", "to": "YC - Upper Caves", "requires": [ { "item": "Charged Strike" } ] },
+    { "from": "YC - Upper Caves", "to": "YC - Upper Exit", "requires": [ { "item": "Charged Strike" } ] },
+    { "from": "YC - Upper Caves", "to": "YC - Farmland Markings", "requires": [] }, // fall
+    { "from": "YC - Farmland Markings", "to": "YC - Upper Caves", "requires": [] }, // wall climb
+    { "from": "YC - Farmland Markings", "to": "YC - Above Egg Cave", "requires": [] }, // djump OR wall climb
+    { "from": "YC - Above Egg Cave", "to": "YC - Farmland Markings", "requires": [] }, // fall
+    { "from": "YC - Above Egg Cave", "to": "YC - Egg Cave & Left Exit", "requires": [] }, // fall
+    { "from": "YC - Egg Cave & Left Exit", "to": "YC - Above Egg Cave", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "YC - Farmland Markings", "to": "YC - Root Node", "requires": [] }, // fall
+    { "from": "YC - Root Node", "to": "YC - Farmland Markings", "requires": [] }, // djump OR grapple
+    { "from": "YC - Egg Cave & Left Exit", "to": "YC - Root Node", "requires": [] }, // one-way door
+
+    // Factory (Great Hall)
+    { "from": "FGH - Lower Levels, Root Node & Right Exit", "to": "FGH - Lower Left Elevator", "requires": [] }, // fall
+    { "from": "FGH - Lower Left Elevator", "to": "FGH - Lower Levels, Root Node & Right Exit", "requires": [] }, // grapple
+    { "from": "FGH - Left Exit", "to": "FGH - Lower Levels, Root Node & Right Exit", "requires": [] }, // bridge only hackable from left side
+    { "from": "FGH - Lower Levels, Root Node & Right Exit", "to": "FGH - Upper Left Elevator", "requires": [ { "item": "Unbounded Counter" } ] },
+    { "from": "FGH - Lower Levels, Root Node & Right Exit", "to": "FGH - Hammer Brothers Roof", "requires": [ { "anyOf": [
+        { "item": "Air Dash" }, { "item": "Cloud Leap" }
+    ] } ] }, // this is for the gap between two conveyor belts above the leftmost safety orb
+    { "from": "FGH - Lower Levels, Root Node & Right Exit", "to": "FGH - Above Root Node", "requires": [
+        { "item": "Cloud Leap" }
+    ] }, // from the rightmost safety orb's right platform, cloud leap is the only way to the higher middle platform
+    { "from": "FGH - Hammer Brothers Roof", "to": "FGH - Above Root Node", "requires": [] }, // wall climb OR cl
+    { "from": "FGH - Above Root Node", "to": "FGH - Hammer Brothers Roof", "requires": [] }, // fall
+
+    { "from": "FGH - Lower Levels, Root Node & Right Exit", "to": "FU - Upper Right Exit", "requires": [] }, // one-way fall
+    { "from": "FU - Upper Right Exit", "to": "FGH - Lower Levels, Root Node & Right Exit", "requires": [] }, // just walk to the right, then one-way debris
+
+    { "from": "FGH - Lower Left Elevator", "to": "FU - Upper Elevator", "requires": [] },
+    { "from": "FU - Upper Elevator", "to": "FGH - Lower Left Elevator", "requires": [] },
+
+    { "from": "FGH - Upper Left Elevator", "to": "FPA - Lower Left Elevator", "requires": [] },
+    { "from": "FPA - Lower Left Elevator", "to": "FGH - Upper Left Elevator", "requires": [] },
+
+    // Factory (Underground)
+    { "from": "FU - Upper Right Exit", "to": "FU - Upper Elevator & Kuiyan Arena", "requires": [] }, // fall
+    { "from": "FU - Upper Elevator & Kuiyan Arena", "to": "FU - Upper Right Exit", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "FU - Upper Elevator & Kuiyan Arena", "to": "FU - Main Intersection", "requires": [] }, // hacking one-way door
+    { "from": "FU - Main Intersection", "to": "FU - Broken Shanhai", "requires": [ { "anyOf": [
+        { "item": "Air Dash" }, { "item": "Cloud Leap" }
+    ] } ] },
+    { "from": "FU - Broken Shanhai", "to": "FU - Middle Right Exit", "requires": [ { "anyOf": [
+        { "item": "Tai-Chi Kick" }, // kinda tight, may revisit
+        [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ]
+    ] } ] },
+    { "from": "FU - Middle Right Exit", "to": "FU - Main Intersection", "requires": [ { "anyOf": [
+        { "item": "Tai-Chi Kick" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
+    ] } ] }, // drop down to one-way door, then a long jump over spikes with a kick target
+    { "from": "FU - Middle Right Exit", "to": "FU - Lower Right Exit", "requires": [] }, // fall
+    { "from": "FU - Lower Right Exit", "to": "FU - Middle Right Exit", "requires": [] }, // grapple OR cl
+    { "from": "FU - Main Intersection", "to": "FU - Root Node & Lower Elevator", "requires": [] }, // fall from ropes on left
+    { "from": "FU - Root Node & Lower Elevator", "to": "FU - Main Intersection", "requires": [ { "anyOf": [
+        { "item": "Air Dash" }, { "item": "Cloud Leap" }
+    ] } ] }, // either CL up to the chest and ropes, or (AD OR CL) over the spikes to the statue
+    { "from": "FU - Upper Elevator & Kuiyan Arena", "to": "FU - Crystal Passage", "requires": [ { "anyOf": [
+        { "item": "Air Dash" }, { "item": "Cloud Leap" }
+    ] } ] },
+    { "from": "FU - Crystal Passage", "to": "FU - Upper Elevator & Kuiyan Arena", "requires": [ { "anyOf": [
+        { "item": "Air Dash" }, { "item": "Cloud Leap" } // AND wall climb
+    ] } ] },
+    { "from": "FU - Root Node & Lower Elevator", "to": "FU - Crystal Passage", "requires": [ { "anyOf": [
+        { "item": "Air Dash" }, { "item": "Cloud Leap" } // AND wall climb
+    ] } ] },
+    { "from": "FU - Crystal Passage", "to": "FU - Root Node & Lower Elevator", "requires": [ { "anyOf": [
+        { "item": "Air Dash" }, { "item": "Cloud Leap" }
+    ] } ] },
+    { "from": "FU - Root Node & Lower Elevator", "to": "FU - Left Exit", "requires": [ { "item": "Air Dash" } ] },
+    { "from": "FU - Left Exit", "to": "FU - Root Node & Lower Elevator", "requires": [ { "item": "Air Dash" } ] },
+    { "from": "FU - Left Exit", "to": "FU - Behind Moving Boxes", "requires": [
+        { "item": "Mystic Nymph: Scout Mode" } // AND wall climb
+    ] },
+    { "from": "FU - Behind Moving Boxes", "to": "FU - Upper Elevator & Kuiyan Arena", "requires": [] }, // one-way debris
+
+    { "from": "FU - Middle Right Exit", "to": "AM - Left Exit", "requires": [] },
+    { "from": "AM - Left Exit", "to": "FU - Middle Right Exit", "requires": [] },
+
+    { "from": "FU - Root Node & Lower Elevator", "to": "FMR - Right Elevator", "requires": [] },
+    { "from": "FMR - Right Elevator", "to": "FU - Root Node & Lower Elevator", "requires": [] },
+
+    { "from": "FU - Left Exit", "to": "OW - Lower Right Exit", "requires": [] },
+    { "from": "OW - Lower Right Exit", "to": "FU - Left Exit", "requires": [] },
+
+    // Outer Warehouse
+    // Inner Warehouse
+    // Boundless Repository
+    // Yangu Hall
+    // Abandoned Mines
+    // Factory (Machine Room)
+    // Factory (Production Area)
+    // Shengwu Hall
+    // Underground Cave
+    // 95th Livestock Pen / Peach Blossom Village
+    // Livestock Harvesting Platform
+    // Galactic Dock
+
+    // Grotto of Scriptures (Entry)
+    { "from": "GoSY - Root Node", "to": "GH - Root Node", "requires": [] } // one-way fall (scripted on first visit)
+
+    // Grotto of Scriptures (East)
+    // Grotto of Scriptures (West)
+    // Ancient Stone Pillar
+    // Sky Tower
+    // Empyrean Dist. (Passages)
+    // Empyrean Dist. (Living Area)
+    // Empyrean Dist. (Sanctum)
+    // Nobility Hall
+    // Tiandao Research Center
+    // Tianhuo Research Institute
 ]
 
 
