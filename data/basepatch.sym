@@ -9,15 +9,12 @@
 03000047 uctimeup
 030000D0 gcolorfading
 03000104 gspritedata
-03000564 entityleftoverstatelist
-03000A24 currentenemydata
+03000564 gpersistentspritedata
+03000A24 gcurrentsprite
 03000A68 w4itemstatus
 03000A73 warioabilities
 03000A76 receiveditemcount
-03000BE0 scbuf_ucstatus
-03000BE3 scbuf_ucseq
-03000BE4 scbuf_ucwork0
-03000BEA scbuf_usposx
+03000BE0 gcurrentsecondarysprite
 03000BF4 igmtotalscore
 03000BF8 igmstagescore
 03000C07 has1stgempiece
@@ -64,7 +61,8 @@
 030062A9 currentjeweliconposition
 030062AA abilitiesinthislevel
 030062AB lastcollecteditemindex
-030062AC vblkstatus
+030062AC lightningtraptimer
+030062AF vblkstatus
 030062B0 queuedfullhealthitem
 030062B0 queuedjunk
 030062B1 queuedformtraps
@@ -85,5 +83,5 @@
 087904B9 goldentreasuresneeded
 087904BA trapbehavior
 087904BB diamondshuffle
-087945E0 multiworldstringdump
+08794670 multiworldstringdump
 
