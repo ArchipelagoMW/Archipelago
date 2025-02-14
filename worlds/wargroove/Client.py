@@ -556,7 +556,7 @@ async def game_watcher(ctx: WargrooveContext):
                         with open(os.path.join(ctx.game_communication_path, file), 'r') as f:
                             unit_class = f.read()
                             message = [{"cmd": 'Set', "key": ctx.stored_units_key,
-                                        "default": [unit_class],
+                                        "default": [],
                                         "want_reply": True,
                                         "operations": [{"operation": "add", "value": [unit_class]}]}]
                             await ctx.send_msgs(message)
