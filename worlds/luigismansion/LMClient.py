@@ -161,6 +161,7 @@ class LMContext(CommonContext):
     command_processor = LMCommandProcessor
     game = "Luigi's Mansion"
     items_handling = 0b111
+    boo_count: "Label" = None
 
     def __init__(self, server_address, password):
         """
@@ -253,6 +254,22 @@ class LMContext(CommonContext):
 
         self.ui = LMManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+
+    async def update_boo_count_label(self):
+        from kvui import Label
+
+        if not self.boo_count:
+            self.boo_count = Label(text=f"")
+            self.ui.connect_layout.add_widget(self.boo_count)
+
+        current_count = 0
+        for item in self.items_received:
+            if self.item_names.lookup_in_game(item.item) in BOO_ITEM_TABLE.keys():
+                current_count += 1
+
+        self.boo_count.text = f"Boo Count: {current_count}/50"
+
+
 
     def check_alive(self):
         # Our health gets messed up in the Lab, so we can just ignore that location altogether.
@@ -664,6 +681,10 @@ def main(output_data: Optional[str] = None, connect=None, password=None):
             ctx.run_gui()
         ctx.run_cli()
         await asyncio.sleep(1)
+
+        # update crystals here
+        if ctx.ui:
+            await ctx.update_boo_count_label()
 
         ctx.dolphin_sync_task = asyncio.create_task(dolphin_sync_task(ctx), name="DolphinSync")
 
