@@ -1,0 +1,5 @@
+<FLAGON>(199)
+<WARP>(4)
+<FLAGOFF>(199)
+<WAIT>(80)
+<END>
