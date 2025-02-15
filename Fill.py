@@ -470,6 +470,11 @@ def balanced_shuffle(multiworld: MultiWorld, fill_locations: list[Location], ite
     if balancing_factor == 0.0:
         return fill_locations
 
+    # Balancing only has an effect if there is progression
+    amount_of_progression = sum(1 for item in itempool if item.advancement)
+    if not amount_of_progression:
+        return fill_locations
+
     # If balancing factor is not 0, we split up the locations list by players.
     locations_per_player = collections.defaultdict(list)
     for location in fill_locations:
@@ -483,7 +488,6 @@ def balanced_shuffle(multiworld: MultiWorld, fill_locations: list[Location], ite
     # Grab some important values for later
     fill_location_counts = {player: len(locations) for player, locations in locations_per_player.items()}
     total_fill_locations = sum(fill_location_counts.values())
-    amount_of_progression = sum(1 for item in itempool if item.advancement)
 
     # Now, the actual balancing begins.
     # We will have two sets of weights.
@@ -505,18 +509,17 @@ def balanced_shuffle(multiworld: MultiWorld, fill_locations: list[Location], ite
     balanced_progression_counts = {player: 0 for player in fill_location_counts}
 
     progression_to_distribute = amount_of_progression
-    if progression_to_distribute:
-        while True:
-            for player, max_count in fill_location_counts.items():
-                if balanced_progression_counts[player] == max_count:
-                    continue
-                balanced_progression_counts[player] += 1
-                progression_to_distribute -= 1
-                if progression_to_distribute == 0:
-                    break
-            else:
+    while True:
+        for player, max_count in fill_location_counts.items():
+            if balanced_progression_counts[player] == max_count:
                 continue
-            break
+            balanced_progression_counts[player] += 1
+            progression_to_distribute -= 1
+            if progression_to_distribute == 0:
+                break
+        else:
+            continue
+        break
 
     # Now, we use the balancing factor to interpolate between the "random" distribution and the "fair" distribution.
     weights_per_player = {
