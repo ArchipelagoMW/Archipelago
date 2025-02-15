@@ -500,17 +500,18 @@ def balanced_shuffle(multiworld: MultiWorld, fill_locations: list[Location], ite
     balanced_progression_counts = {player: 0 for player in fill_location_counts}
 
     progression_to_distribute = amount_of_progression
-    while True:
-        for player, max_count in fill_location_counts.items():
-            if balanced_progression_counts[player] == max_count:
+    if progression_to_distribute:
+        while True:
+            for player, max_count in fill_location_counts.items():
+                if balanced_progression_counts[player] == max_count:
+                    continue
+                balanced_progression_counts[player] += 1
+                progression_to_distribute -= 1
+                if progression_to_distribute == 0:
+                    break
+            else:
                 continue
-            balanced_progression_counts[player] += 1
-            progression_to_distribute -= 1
-            if progression_to_distribute == 0:
-                break
-        else:
-            continue
-        break
+            break
 
     # Now, we use the balancing factor to interpolate between the "random" distribution and the "fair" distribution.
     weights_per_player = {
