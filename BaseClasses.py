@@ -76,11 +76,7 @@ class MultiWorld():
     progression_balancing: Dict[int, Options.ProgressionBalancing]
     completion_condition: Dict[int, Callable[[CollectionState], bool]]
     indirect_connections: Dict[Region, Set[Entrance]]
-    exclude_locations: Dict[int, Options.ExcludeLocations]
-    priority_locations: Dict[int, Options.PriorityLocations]
-    start_inventory: Dict[int, Options.StartInventory]
-    start_hints: Dict[int, Options.StartHints]
-    start_location_hints: Dict[int, Options.StartLocationHints]
+    start_items_remove_from_pool: dict[int, Counter]
     item_links: Dict[int, Options.ItemLinks]
 
     game: Dict[int, str]
@@ -159,7 +155,6 @@ class MultiWorld():
         self.early_items = {player: {} for player in self.player_ids}
         self.local_early_items = {player: {} for player in self.player_ids}
         self.indirect_connections = {}
-        self.start_inventory_from_pool: Dict[int, Options.StartInventoryPool] = {}
 
         for player in range(1, players + 1):
             def set_player_attr(attr: str, val) -> None:
@@ -238,9 +233,10 @@ class MultiWorld():
         from worlds import AutoWorld
 
         item_links = {}
+        self.item_links = {player: self.worlds[player].options.item_links for player in self.player_ids}
         replacement_prio = [False, True, None]
         for player in self.player_ids:
-            for item_link in self.worlds[player].options.item_links.value:
+            for item_link in self.item_links[player]:
                 if item_link["name"] in item_links:
                     if item_links[item_link["name"]]["game"] != self.game[player]:
                         raise Exception(f"Cannot ItemLink across games. Link: {item_link['name']}")
