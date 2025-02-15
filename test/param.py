@@ -18,6 +18,8 @@ def classvar_matrix(**kwargs: Iterable[Any]) -> Callable[[type], None]:
     :param kwargs: A dict of ClassVars to set, where key is the variable name and value is a list of all values.
     :return: A decorator to be applied to a class.
     """
+    keys: tuple[str]
+    values: Iterable[Iterable[Any]]
     keys, values = zip(*kwargs.items())
     values = map(lambda v: sorted(v) if isinstance(v, (set, frozenset)) else v, values)
     permutations_dicts = [dict(zip(keys, v)) for v in itertools.product(*values)]
