@@ -289,10 +289,10 @@ gangplank_galley_banana_bunch_2 = "Gangplank Galley - Banana Bunch #2 (First che
 gangplank_galley_red_balloon_1 = "Gangplank Galley - Red Balloon #1 (Chest before Neek)"
 gangplank_galley_banana_bunch_3 = "Gangplank Galley - Banana Bunch #3 (Hook before O)"
 gangplank_galley_banana_coin_1 = "Gangplank Galley - Banana Coin #1 (Chest before midpoint)"
-gangplank_galley_banana_bunch_4 = "Gangplank Galley - Banana Bunch #4 (Chest before Kruncha trio)"
+gangplank_galley_banana_bunch_4 = "Gangplank Galley - Banana Bunch #4 (Below Kruncha trio)"
 gangplank_galley_banana_coin_2 = "Gangplank Galley - Banana Coin #2 (Below Kruncha trio)"
 gangplank_galley_banana_bunch_5 = "Gangplank Galley - Banana Bunch #5 (Below Kruncha trio)"
-gangplank_galley_banana_bunch_6 = "Gangplank Galley - Banana Bunch #6 (Below Kruncha trio)"
+gangplank_galley_banana_bunch_6 = "Gangplank Galley - Banana Bunch #6 (Chest before Kruncha trio)"
 gangplank_galley_banana_bunch_7 = "Gangplank Galley - Banana Bunch #7 (After G chest)"
 gangplank_galley_red_balloon_2 = "Gangplank Galley - Red Balloon #2 (Chest on barrel between Krunchas)"
 

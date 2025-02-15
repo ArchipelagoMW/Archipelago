@@ -780,11 +780,17 @@ class DKC2StrictRules(DKC2Rules):
             LocationName.gangplank_galley_banana_coin_1:
                 self.can_carry,
             LocationName.gangplank_galley_banana_bunch_4:
-                lambda state: self.can_cling(state) and self.has_kannons(state),
+                lambda state: self.can_cling(state) and self.has_kannons(state) and (
+                    self.can_hover(state) or self.can_cartwheel(state)
+                ),
             LocationName.gangplank_galley_banana_coin_2:
-                lambda state: self.can_cling(state) and self.has_kannons(state),
+                lambda state: self.can_cling(state) and self.has_kannons(state) and (
+                    self.can_hover(state) or self.can_cartwheel(state)
+                ),
             LocationName.gangplank_galley_banana_bunch_5:
-                lambda state: self.can_cling(state) and self.has_kannons(state),
+                lambda state: self.can_cling(state) and self.has_kannons(state) and (
+                    self.can_hover(state) or self.can_cartwheel(state)
+                ),
             LocationName.gangplank_galley_banana_bunch_6:
                 lambda state: self.can_cling(state) and self.can_carry(state),
             LocationName.gangplank_galley_banana_bunch_7:
@@ -824,7 +830,7 @@ class DKC2StrictRules(DKC2Rules):
             LocationName.topsail_trouble_red_balloon_2:
                 lambda state: self.can_carry(state) and (self.has_rattly(state) or (self.can_team_attack(state) and self.can_cling(state))),
             LocationName.topsail_trouble_banana_bunch_1:
-                lambda state: self.can_climb(state) and self.can_carry and (
+                lambda state: self.can_climb(state) and self.can_carry(state) and (
                     self.can_team_attack(state) or
                     self.has_rattly(state) or 
                     (self.can_cling(state) and self.has_kannons(state))
@@ -848,7 +854,7 @@ class DKC2StrictRules(DKC2Rules):
                     (self.can_cling(state) and self.has_kannons(state))
                 ),
             LocationName.topsail_trouble_banana_coin_4:
-                lambda state: self.can_climb(state) and self.can_carry and (
+                lambda state: self.can_climb(state) and self.can_carry(state) and (
                     self.can_team_attack(state) or
                     self.has_rattly(state) or 
                     (self.can_cling(state) and self.has_kannons(state))
@@ -2276,7 +2282,7 @@ class DKC2LooseRules(DKC2Rules):
                     self.has_rattly(state) or self.can_team_attack(state) or self.can_cling(state)
                 ),
             LocationName.topsail_trouble_banana_bunch_1:
-                lambda state: self.can_carry and (
+                lambda state: self.can_carry(state) and (
                     self.can_team_attack(state) or
                     self.has_rattly(state) or 
                     (self.can_cling(state) and self.has_kannons(state))
@@ -2300,7 +2306,7 @@ class DKC2LooseRules(DKC2Rules):
                     (self.can_cling(state) and self.has_kannons(state))
                 ),
             LocationName.topsail_trouble_banana_coin_4:
-                lambda state: self.can_climb(state) and self.can_carry and (
+                lambda state: self.can_climb(state) and self.can_carry(state) and (
                     self.can_team_attack(state) or
                     self.has_rattly(state) or 
                     (self.can_cling(state) and self.has_kannons(state))
@@ -3378,7 +3384,7 @@ class DKC2ExpertRules(DKC2Rules):
             LocationName.rickety_race_dk_coin:
                 self.has_skull_kart,
             LocationName.rickety_race_bonus_1:
-                lambda state: self.has_skull_kart and 
+                lambda state: self.has_skull_kart(state) and 
                     self.can_team_attack(state) 
                     and self.can_hover(state),
 
