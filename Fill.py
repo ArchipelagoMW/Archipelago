@@ -466,6 +466,10 @@ def balanced_shuffle(multiworld: MultiWorld, fill_locations: list[Location], ite
     # First, we shuffle the location pool and then split it up by players.
     multiworld.random.shuffle(fill_locations)
 
+    # If balancing factor is 0, don't do any more unnecessary work.
+    if balancing_factor == 0.0:
+        return fill_locations
+
     locations_per_player = collections.defaultdict(list)
     for location in fill_locations:
         locations_per_player[location.player].append(location)
