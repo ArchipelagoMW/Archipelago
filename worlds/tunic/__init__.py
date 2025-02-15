@@ -116,7 +116,7 @@ class TunicWorld(World):
                 option = getattr(self.options, option_name)
                 if option_name == "all_random":
                     continue
-                if issubclass(option.__class__, Removed):
+                if isinstance(option.__class__, Removed):
                     continue
                 if option.supports_weighting:
                     if issubclass(option.__class__, Range):
