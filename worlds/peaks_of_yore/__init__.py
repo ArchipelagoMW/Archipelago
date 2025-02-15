@@ -220,5 +220,4 @@ class PeaksOfWorld(World):
                 state.can_reach_location(loc.name, self.player) for loc in self.get_locations())
 
     def fill_slot_data(self) -> dict[str, Any]:
-        return self.options.as_dict("death_link", "goal", "rope_unlock_mode", casing="camel",
-                                    toggles_as_bools=True)
+        return self.options.as_dict("death_link", "goal", "rope_unlock_mode", casing="camel")
