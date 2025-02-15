@@ -132,8 +132,6 @@ full_item_list: list[ItemData] = [
     ItemData('Extra Rope 10', 'Rope', 113),
     ItemData('Extra Rope 11', 'Rope', 114),
     ItemData('Extra Rope 12', 'Rope', 115),
-    ItemData('Great Gaol Given Rope', 'Rope', 116),
-    ItemData('St Haelga Given Rope', 'Rope', 117),
     ItemData('Hat 1', 'Artefact', 200),
     ItemData('Hat 2', 'Artefact', 201),
     ItemData('Helmet', 'Artefact', 202),
