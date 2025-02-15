@@ -16,8 +16,9 @@ You can install the PeaksOfArchipelago mod using `r2modman` in one of two ways.
 
 One, you can use the Thunderstore website and click on the "Install with Mod Manager" link.
 
-You can also search for the "Archipelago" mod in the `r2modman` interface. The mod manager should automatically install
-all necessary dependencies as well.
+You can also use the mod manager directly: open `r2modman` > find `Peaks of Yore` > select game > create new profile >
+select profile > online > search for "Archipelago" in the `r2modman` interface.
+The mod manager should automatically install all necessary dependencies as well.
 
 ## Running the Modded Game
 
