@@ -338,7 +338,7 @@ class MinExtraYarn(Range):
     There must be at least this much more yarn over the total number of yarn needed to craft all hats.
     For example, if this option's value is 10, and the total yarn needed to craft all hats is 40,
     there must be at least 50 yarn in the pool."""
-    display_name = "Max Extra Yarn"
+    display_name = "Min Extra Yarn"
     range_start = 5
     range_end = 15
     default = 10
