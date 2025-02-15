@@ -155,6 +155,7 @@ class MultiWorld():
         self.early_items = {player: {} for player in self.player_ids}
         self.local_early_items = {player: {} for player in self.player_ids}
         self.indirect_connections = {}
+        self.start_items_remove_from_pool = {player: Counter() for player in self.player_ids}
 
         for player in range(1, players + 1):
             def set_player_attr(attr: str, val) -> None:
@@ -379,7 +380,6 @@ class MultiWorld():
         later.
         """
         from Options import StartInventoryPool
-        self.start_items_remove_from_pool = {player: Counter() for player in self.player_ids}
         for player in self.player_ids:
             for item_name, count in self.worlds[player].options.start_inventory.value.items():
                 if isinstance(self.worlds[player].options.start_inventory, StartInventoryPool):
