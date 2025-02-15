@@ -373,6 +373,8 @@ def distribute_early_items(multiworld: MultiWorld,
                            fill_locations: typing.List[Location],
                            itempool: typing.List[Item]) -> typing.Tuple[typing.List[Location], typing.List[Item]]:
     """ returns new fill_locations and itempool """
+    original_order = fill_locations.copy()
+
     early_items_count: typing.Dict[typing.Tuple[str, int], typing.List[int]] = {}
     for player in multiworld.player_ids:
         items = itertools.chain(multiworld.early_items[player], multiworld.local_early_items[player])
@@ -452,6 +454,9 @@ def distribute_early_items(multiworld: MultiWorld,
 
         fill_locations.extend(early_locations)
         multiworld.random.shuffle(fill_locations)
+
+    fill_locations = [location for location in original_order if not location.item]
+
     return fill_locations, itempool
 
 
