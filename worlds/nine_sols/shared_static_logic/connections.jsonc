@@ -204,6 +204,7 @@
     { "from": "PRC - Left Transporter", "to": "PRC - Chest Near Left Transporter", "requires": [
         { "item": "Cloud Leap" }
     ] },
+    { "from": "PRC - Chest Near Left Transporter", "to": "PRC - Left Transporter", "requires": [] }, // fall
     { "from": "PRC - Left Transporter", "to": "PRC - Root Node", "requires": [] }, // one-way door
     { "from": "PRC - Left Transporter", "to": "PRC - Above Root Node", "requires": [] }, // DJ OR grapple
     { "from": "PRC - Above Root Node", "to": "PRC - Chest Near Left Transporter", "requires": [
@@ -237,6 +238,7 @@
     { "from": "PRW - Power Lines", "to": "PRW - Above Power Lines", "requires": [] },
         // (WC AND hacking 1) the intended way from the upper left,
         // OR (WC AND DJ) using the boxes in the upper right intended as a shortcut
+    { "from": "PRW - Above Power Lines", "to": "PRW - Right Transporter", "requires": [] }, // one-way door
 
     // Radiant Pagoda
     { "from": "RP - Root Node", "to": "RP - After Yingzhao", "requires": [] }, // TODO: combat logic?

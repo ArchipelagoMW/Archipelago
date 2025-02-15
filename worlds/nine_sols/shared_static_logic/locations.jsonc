@@ -843,11 +843,11 @@
     // Factory (Machine Room)
     {
         "address": 2501, "name": "Factory (MR): Below Right Elevator",
-        "region": "FMR - Below Right Elevator", "requires": []
+        "region": "FMR - Right Elevator", "requires": []
     },
     {
         "address": 2502, "name": "Factory (MR): Break Turret Below Elevator",
-        "region": "FMR - Below Right Elevator", "requires": [ { "item": "Unbounded Counter" } ]
+        "region": "FMR - Right Elevator", "requires": [ { "item": "Unbounded Counter" } ]
     },
     {
         "address": 2503, "name": "Factory (MR): Above Left Elevator",
