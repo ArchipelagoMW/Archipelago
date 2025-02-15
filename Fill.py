@@ -463,13 +463,14 @@ def distribute_early_items(multiworld: MultiWorld,
 def balanced_shuffle(multiworld: MultiWorld, fill_locations: list[Location], itempool: list[Item]) -> list[Location]:
     balancing_factor = 0.5  # This would be a setting instead. Acts as a percentage. 0.0 is min, 1.0 is max.
 
-    # First, we shuffle the location pool and then split it up by players.
+    # First, we shuffle the location pool.
     multiworld.random.shuffle(fill_locations)
 
     # If balancing factor is 0, don't do any more unnecessary work.
     if balancing_factor == 0.0:
         return fill_locations
 
+    # If balancing factor is not 0, we split up the locations list by players.
     locations_per_player = collections.defaultdict(list)
     for location in fill_locations:
         locations_per_player[location.player].append(location)
