@@ -190,7 +190,7 @@
     // TODO: change how Shennong and Chiyou move into FSP so these are correct
     {
         "address": null, "name": "Event - Jiequan 1 Fight Unlocked",
-        "region": "FGH - ???", "requires": [
+        "region": "FGH - Lower Levels, Root Node & Right Exit", "requires": [
             { "item_group": "Sol Seals", "count": 3 },
             { "item": "Mystic Nymph: Scout Mode" }
             // AND grapple
@@ -642,18 +642,353 @@
     },
 
     // Outer Warehouse
+    {
+        "address": 1901, "name": "OW: Retrieve Chip From Shanhai 9000",
+        "region": "OW - Root Node & Middle Exits", "requires": []
+    },
+    {
+        "address": 1902, "name": "OW: Above Sol Statue",
+        "region": "OW - Root Node & Middle Exits", "requires": []
+    },
+    {
+        "address": 1903, "name": "OW: Crusher Gauntlet",
+        "region": "OW - Crate Riding", "requires": [ { "anyOf": [
+            { "item": "Air Dash" }, { "item": "Cloud Leap" }
+        ] } ] // AND hacking; this gets more complex if we ever allow OW - Crate Riding without WC
+    },
+    {
+        "address": 1904, "name": "OW: Enemy Gauntlet Room",
+        "region": "OW - Crate Riding", "requires": [] // just combat
+    },
+    {
+        "address": 1905, "name": "OW: Vents Above Robot",
+        "region": "OW - Robot", "requires": []
+    },
+    {
+        "address": 1906, "name": "OW: Inside Crate Dropped From Vent Hack",
+        "region": "OW - Robot", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ]
+    },
+    {
+        "address": 1907, "name": "OW: Examine Warehouse Database",
+        "region": "OW - Upper Left Exit", "requires": []
+    },
+
     // Inner Warehouse
+    {
+        "address": 2001, "name": "IW: Hack 3 Statues",
+        "region": "IW - Root Node", "requires": [
+            { "item": "Tai-Chi Kick" }, // 1st and 2nd statues need this
+            { "region": "IW - Upper Right Statue" },
+            { "region": "IW - Above Frogs" },
+            { "region": "IW - Upper Left" } // (TCK OR DJ) to reach 3rd, but we already need TCK anyway
+        ]
+    },
+    {
+        "address": 2002, "name": "IW: Shielded Walking Chest",
+        "region": "IW - Above Frogs", "requires": [ { "item": "Charged Strike" } ]
+        // or beating Tieyan to break shield tower, but since Tieyan also requires CS, this is simpler
+    },
+    {
+        "address": 2003, "name": "IW: Defeat Celestial Enforcer: Tieyan",
+        "region": "IW - Above Frogs", "requires": [
+            { "region": "IW - Upper Right Hack Point" },
+            { "item": "Charged Strike" } // for once, the actual fight has combat logic
+        ] // AND WC
+    },
+    {
+        "address": 2004, "name": "IW: Nymph Puzzle Room",
+        "region": "IW - Bottom Left", "requires": [
+            { "item": "Mystic Nymph: Scout Mode" },
+            { "item": "Air Dash" }
+        ] // AND WC
+    },
+    {
+        "address": 2005, "name": "IW: Dusk Guardian Recording Device",
+        "region": "IW - Tao Fruit", "requires": []
+    },
+    {
+        "address": 2006, "name": "IW: Tianhou Flower",
+        "region": "IW - Tao Fruit", "requires": []
+    },
+
     // Boundless Repository
+    {
+        "address": 2101, "name": "BR: Examine Console",
+        "region": "BR - Root Node", "requires": []
+    },
+    {
+        "address": 2102, "name": "BR: Near Xingtian Console",
+        "region": "BR - Root Node", "requires": [] // hacking
+    },
+    {
+        "address": 2103, "name": "BR: Gauntlet Part 1 Chest",
+        "region": "BR - Gauntlet Part 1", "requires": [ { "anyOf": [
+            { "item": "Air Dash" }, { "item": "Cloud Leap" }
+        ] } ] // (WC AND AD) OR DJ
+    },
+    {
+        "address": 2104, "name": "BR: Gauntlet Part 2 First Chest",
+        "region": "BR - Gauntlet Part 2A", "requires": []
+    },
+    {
+        "address": 2105, "name": "BR: Gauntlet Part 2 Chest Past Lasers",
+        "region": "BR - Gauntlet Part 2B", "requires": []
+    },
+    {
+        "address": 2106, "name": "BR: Gauntlet Part 2 Chest Past Beetle",
+        "region": "BR - Gauntlet Part 2B", "requires": []
+    },
+    {
+        "address": 2107, "name": "BR: Vault 1st Chest",
+        "region": "BR - Inside Vault", "requires": []
+    },
+    {
+        "address": 2108, "name": "BR: Vault 2nd Chest",
+        "region": "BR - Inside Vault", "requires": []
+    },
+    {
+        "address": 2109, "name": "BR: Examine Vault Scroll",
+        "region": "BR - Inside Vault", "requires": []
+    },
+    {
+        "address": 2110, "name": "BR: Vault 3rd Chest",
+        "region": "BR - Inside Vault", "requires": []
+    },
+    {
+        "address": 2111, "name": "BR: Vault 4th Chest",
+        "region": "BR - Inside Vault", "requires": []
+    },
+
     // Yangu Hall
+    {
+        "address": 2201, "name": "Yanlao's Tianhou Flower",
+        "region": "YH - After Yanlao", "requires": []
+    },
+    {
+        "address": 2202, "name": "Yanlao's Vital Sanctum",
+        "region": "YH - After Yanlao", "requires": []
+    },
+
     // Abandoned Mines
+    {
+        "address": 2301, "name": "AM: Above Left Exit",
+        "region": "AM - Above Left Exit", "requires": [ { "item": "Cloud Leap" } ] // AND grapple
+    },
+    {
+        "address": 2302, "name": "AM: Defeat Celestial Warden: Yinyue",
+        "region": "AM - Yinyue Arena", "requires": []
+    },
+    {
+        "address": 2303, "name": "AM: Near Root Node",
+        "region": "AM - Above Root Node", "requires": []
+    },
+    {
+        "address": 2304, "name": "AM: Walking Chest",
+        "region": "AM - Bottom Right", "requires": []
+    },
+    {
+        "address": 2305, "name": "AM: Tianhou Flower",
+        "region": "AM - Tao Fruit", "requires": []
+    },
+    {
+        "address": 2306, "name": "AM: 1st Chest After Flower",
+        "region": "AM - After Tao Fruit", "requires": []
+    },
+    {
+        "address": 2307, "name": "AM: 2nd Chest After Flower",
+        "region": "AM - After Tao Fruit", "requires": []
+    },
+
     // Prison
+    // see comments in connections.jsonc
+    {
+        "address": 2401, "name": "Prison: Examine Scroll in Lower Right Cell",
+        "region": "P - Up To Root Node", "requires": []
+    },
+    {
+        "address": 2402, "name": "Prison: Lower Left Cell",
+        "region": "P - Up To Root Node", "requires": []
+    },
+    {
+        "address": 2403, "name": "Prison: Above Stairs on Second Level",
+        "region": "P - Up To Root Node", "requires": []
+    },
+    {
+        "address": 2404, "name": "Prison: Near Root Node",
+        "region": "P - Up To Root Node", "requires": [ { "anyOf": [
+            { "item": "Air Dash" }, { "item": "Cloud Leap" }
+        ] } ]
+    },
+    {
+        "address": 2405, "name": "Prison: Examine Scroll in Upper Left Cell",
+        "region": "P - Kanghui Level", "requires": []
+    },
+    {
+        "address": 2406, "name": "Prison: 1st Chest in Room Before Kanghui",
+        "region": "P - Kanghui Level", "requires": []
+    },
+    {
+        "address": 2407, "name": "Prison: 2nd Chest in Room Before Kanghui",
+        "region": "P - Kanghui Level", "requires": []
+    },
+    {
+        "address": 2408, "name": "Prison: 3rd Chest in Room Before Kanghui",
+        "region": "P - Kanghui Level", "requires": []
+    },
+    {
+        "address": 2409, "name": "Prison: Defeat Kanghui",
+        "region": "P - After Kanghui", "requires": []
+    },
+
     // Factory (Machine Room)
+    {
+        "address": 2501, "name": "Factory (MR): Below Right Elevator",
+        "region": "FMR - Below Right Elevator", "requires": []
+    },
+    {
+        "address": 2502, "name": "Factory (MR): Break Turret Below Elevator",
+        "region": "FMR - Below Right Elevator", "requires": [ { "item": "Unbounded Counter" } ]
+    },
+    {
+        "address": 2503, "name": "Factory (MR): Above Left Elevator",
+        "region": "FMR - Left Elevator", "requires": [ { "anyOf": [
+            { "item": "Air Dash" }, { "item": "Cloud Leap" }
+        ] } ]
+    },
+    {
+        "address": 2504, "name": "Factory (MR): Walking Chest Above Green Pillar",
+        "region": "FMR - Walking Chest Above Green Pillar", "requires": []
+    },
+    {
+        "address": 2505, "name": "Factory (MR): Behind Turret Near Green Pillar",
+        "region": "FMR - Right of Green Pillar", "requires": [ { "item": "Unbounded Counter" } ]
+    },
+    {
+        "address": 2506, "name": "Factory (MR): Near Moving Platforms",
+        "region": "FMR - Moving Platforms", "requires": []
+    },
+    {
+        "address": 2507, "name": "Factory (MR): Tianhou Flower Above Right Elevator",
+        "region": "FMR - Moving Platforms", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ]
+    },
+
     // Factory (Production Area)
+    {
+        "address": 2601, "name": "Factory (PA): Behind Fire in Lower Left Vents",
+        "region": "FPA - Lower Left Elevator", "requires": [ { "anyOf": [
+            { "item": "Mystic Nymph: Scout Mode" }, // turn off the fire
+            { "item": "Cloud Leap" } // or jump straight up to it from the far left
+        ] } ]
+    },
+    {
+        "address": 2602, "name": "Factory (PA): Hallway Near Jiequan Statue",
+        "region": "FPA - Lower Left Fire Zone", "requires": []
+    },
+    {
+        "address": 2603, "name": "Factory (PA): Three Guard Spawners",
+        "region": "FPA - Lower Left Fire Zone Platforms", "requires": []
+    },
+    {
+        "address": 2604, "name": "Factory (PA): Behind Hack in Upper Left Vents",
+        "region": "FPA - Left Vents", "requires": [] // hacking 1
+    },
+    {
+        "address": 2605, "name": "Factory (PA): Examine Production Station",
+        "region": "FPA - Guard Production Station", "requires": []
+    },
+    {
+        "address": 2606, "name": "Factory (PA): Vents Below Production Station",
+        "region": "FPA - Guard Production Station", "requires": [
+            { "item": "Mystic Nymph: Scout Mode" } // turn off the fire
+        ]
+    },
+    {
+        "address": 2607, "name": "Factory (PA): Below Double Sniper Zone",
+        "region": "FPA - Chest Platform Below Sniper Zone", "requires": []
+    },
+    {
+        "address": 2608, "name": "Factory (PA): Examine Pharmacy Panel",
+        "region": "FPA - Pharmacy Interior", "requires": []
+    },
+    {
+        "address": 2609, "name": "Factory (PA): Ball Drop in Pharmacy",
+        "region": "FPA - Pharmacy Interior", "requires": [] // hacking
+    },
+    {
+        "address": 2610, "name": "Factory (PA): Bottom of Right Fire Zone",
+        "region": "FPA - Right Fire Zone & Lower Right Exit & Wuqiang Arena", "requires": []
+    },
+    {
+        "address": 2611, "name": "Factory (PA): Defeat Shanhai 9000",
+        "region": "FPA - Right Fire Zone & Lower Right Exit & Wuqiang Arena", "requires": [ { "item": "Unbounded Counter" } ]
+    },
+    {
+        "address": 2612, "name": "Factory (PA): Top of Right Fire Zone",
+        "region": "FPA - Upper Elevator", "requires": []
+    },
+    {
+        "address": 2613, "name": "Factory (PA): Far Side of Wuqiang Arena",
+        "region": "FPA - Right Fire Zone & Lower Right Exit & Wuqiang Arena", "requires": []
+    },
+    {
+        "address": 2614, "name": "Factory (PA): Defeat Celestial Sentinel: Wuqiang",
+        "region": "FPA - Right Fire Zone & Lower Right Exit & Wuqiang Arena", "requires": []
+    },
+
     // Shengwu Hall
-    // Underground Cave
-    // 95th Livestock Pen / Peach Blossom Village
-    // Livestock Harvesting Platform
+    {
+        "address": 2701, "name": "Examine Sphere Before Jiequan",
+        "region": "SH - Root Node", "requires": []
+    },
+    {
+        "address": 2702, "name": "Chest Before Jiequan",
+        "region": "SH - Root Node", "requires": []
+    },
+    {
+        "address": 2703, "name": "Jiequan's Tianhou Flower",
+        "region": "SH - After Jiequan", "requires": []
+    },
+    {
+        "address": 2704, "name": "Chest After Jiequan",
+        "region": "SH - After Jiequan", "requires": []
+    },
+    {
+        "address": 2705, "name": "Jiequan's Vital Sanctum",
+        "region": "SH - After Jiequan", "requires": []
+    },
+
+    // Underground Cave + 95th Livestock Pen / Peach Blossom Village + Livestock Harvesting Platform
+    {
+        "address": 2801, "name": "UC: Examine Stone Inscription",
+        "region": "UC - Left Exit", "requires": []
+    },
+    {
+        "address": 2802, "name": "UC: Examine Note",
+        "region": "UC - Camp", "requires": []
+    },
+    {
+        "address": 2803, "name": "UC: Examine Scroll",
+        "region": "UC - Camp", "requires": []
+    },
+    {
+        "address": 2804, "name": "Village: Defeat Red Tiger Elite: Lieguan",
+        "region": "Lieguan Arena", "requires": []
+    },
+
     // Galactic Dock
+    {
+        "address": 2901, "name": "Galactic Dock: Examine Sign",
+        "region": "GD - Root Node & Right Exit", "requires": []
+    },
+    {
+        "address": 2902, "name": "Galactic Dock: Tianhou Flower",
+        "region": "GD - Root Node & Right Exit", "requires": [] // grapple OR djump?
+    },
+    {
+        "address": 2903, "name": "Galactic Dock: Shaman's Gift",
+        "region": "GD - Left Exit", "requires": [] // hacking
+    },
+
     // Grotto of Scriptures (Entry)
     // Grotto of Scriptures (East)
     // Grotto of Scriptures (West)
