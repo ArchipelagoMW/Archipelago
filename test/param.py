@@ -19,6 +19,7 @@ def classvar_matrix(**kwargs: Iterable[Any]) -> Callable[[type], None]:
     :return: A decorator to be applied to a class.
     """
     keys, values = zip(*kwargs.items())
+    values = map(lambda v: sorted(v) if isinstance(v, (set, frozenset)) else v, values)
     permutations_dicts = [dict(zip(keys, v)) for v in itertools.product(*values)]
 
     def decorator(cls: type) -> None:
