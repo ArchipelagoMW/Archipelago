@@ -384,9 +384,9 @@ def randomize_entrances(
                     return True
                 for region in er_state.placed_regions:
                     for loc in region.locations:
-                        if loc.can_reach(er_state.collection_state):
-                            if not loc.item:  # don't count locations with preplaced items
-                                accessible_location_count += 1
+                        if not loc.item and loc.can_reach(er_state.collection_state):
+                            # don't count locations with preplaced items
+                            accessible_location_count += 1
                             if accessible_location_count >= prog_item_count:
                                 perform_validity_check = False
                                 # pretend that this was successful to retry the current stage
