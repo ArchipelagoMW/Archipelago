@@ -618,10 +618,11 @@ class LMContext(CommonContext):
 
 async def dolphin_sync_task(ctx: LMContext):
     logger.info("Starting Dolphin connector. Use /dolphin for status information.")
-    # update boo count here
-    if ctx.ui:
-        await ctx.update_boo_count_label()
+
     while not ctx.exit_event.is_set():
+        # update boo count here
+        if ctx.ui:
+            await ctx.update_boo_count_label()
         try:
             if dme.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
                 if not ctx.check_ingame():
