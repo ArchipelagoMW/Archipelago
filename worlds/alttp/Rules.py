@@ -462,12 +462,15 @@ def global_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location('Misery Mire - Big Chest', player), lambda state: state.has('Big Key (Misery Mire)', player))
     set_rule(multiworld.get_location('Misery Mire - Spike Chest', player), lambda state: (world.can_take_damage and has_hearts(state, player, 4)) or state.has('Cane of Byrna', player) or state.has('Cape', player))
     set_rule(multiworld.get_entrance('Misery Mire Big Key Door', player), lambda state: state.has('Big Key (Misery Mire)', player))
-    # How to access crystal switch:
-    # If have big key: then you will need 2 small keys to be able to hit switch and return to main area, as you can burn key in dark room
-    # If not big key: cannot burn key in dark room, hence need only 1 key. all doors immediately available lead to a crystal switch.
-    # The listed chests are those which can be reached if you can reach a crystal switch.
-    set_rule(multiworld.get_location('Misery Mire - Map Chest', player), lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 2) and can_activate_crystal_switch(state, player))
-    set_rule(multiworld.get_location('Misery Mire - Main Lobby', player), lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 2) and can_activate_crystal_switch(state, player))
+
+    # The most number of keys you can burn without opening the map chest and without reaching a crystal switch is 1,
+    # but if you cannot activate a crystal switch except by throwing a pot, you could burn another two going through
+    # the conveyor crystal room.
+    set_rule(multiworld.get_location('Misery Mire - Map Chest', player), lambda state: (state._lttp_has_key('Small Key (Misery Mire)', player, 2) and can_activate_crystal_switch(state, player)) or state._lttp_has_key('Small Key (Misery Mire)', player, 4))
+    # Using a key on the map door chest will get you the map chest but not a crystal switch. Main Lobby should require
+    # one more key.
+    set_rule(multiworld.get_location('Misery Mire - Main Lobby', player), lambda state: (state._lttp_has_key('Small Key (Misery Mire)', player, 3) and can_activate_crystal_switch(state, player)) or state._lttp_has_key('Small Key (Misery Mire)', player, 5))
+
     # we can place a small key in the West wing iff it also contains/blocks the Big Key, as we cannot reach and softlock with the basement key door yet
     set_rule(multiworld.get_location('Misery Mire - Conveyor Crystal Key Drop', player),
              lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 4)
