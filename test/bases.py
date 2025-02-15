@@ -170,6 +170,10 @@ class WorldTestBase(unittest.TestCase):
         self.multiworld.set_options(args)
         self.world = self.multiworld.worlds[self.player]
         for step in gen_steps:
+            if step == "create_regions":
+                self.multiworld.collect_starting_inventory()
+            elif step == "pre_fill":
+                self.multiworld.remove_starting_inventory_from_pool()
             call_all(self.multiworld, step)
 
     # methods that can be called within tests
