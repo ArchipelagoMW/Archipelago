@@ -80,13 +80,15 @@ class LAClientConstants:
     # Unused
     # ROMWorldID = 0x0055
     # ROMConnectorVersion = 0x0056
+    wTradeSequenceItem1 = 0xDB40
+    wTradeSequenceItem2 = 0xDB7F
+    wLinkHealth = 0xDB5A
     # RO: We should only act if this is higher then 6, as it indicates that the game is running normally
     wGameplayType = 0xDB95
     # RO: Starts at 0, increases every time an item is received from the server and processed
     wLinkSyncSequenceNumber = 0xDDF6
     wLinkStatusBits = 0xDDF7          # RW:
     #      Bit0: wLinkGive* contains valid data, set from script cleared from ROM.
-    wLinkHealth = 0xDB5A
     wLinkGiveItem = 0xDDF8  # RW
     wLinkGiveItemFrom = 0xDDF9  # RW
     # All of these six bytes are unused, we can repurpose
@@ -517,6 +519,7 @@ class LinksAwakeningClient():
     }
     async def fix_trade_items(self, recvd_checks):
         expected_trade_items = []
+        held_trade_items = []
         for item, location in self.trade_items.items():
             item_id = next(x.item_id for x in links_awakening_items
                            if x.ladxr_id == item) + LABaseID
@@ -524,7 +527,21 @@ class LinksAwakeningClient():
                                   if x.item == item_id), False)
             destination_checked = next((x for x in self.tracker.all_checks
                                         if x.value and x.id == location), False)
-            expected_trade_items.append(item_received and not destination_checked)
+            expected_trade_items.append(int(item_received and not destination_checked))
+
+            inventory = self.item_tracker.itemDict[item]
+            if item in self.item_tracker.extraItems:
+                inventory -= self.item_tracker.extraItems[item]
+            held_trade_items.append(inventory)
+        if expected_trade_items != held_trade_items:
+            trade1 = 0
+            for i, x in enumerate(expected_trade_items[:8]):
+                trade1 += x << i
+            trade2 = 0
+            for i, x in enumerate(expected_trade_items[8:]):
+                trade2 += x << i
+            self.gameboy.write_memory(LAClientConstants.wTradeSequenceItem1, [trade1])
+            self.gameboy.write_memory(LAClientConstants.wTradeSequenceItem2, [trade2])
 
 
     should_reset_auth = False
@@ -574,9 +591,6 @@ class LinksAwakeningClient():
             await self.recved_item_from_ap(ctx, item, recv_index)
         else:
             await self.collect(ctx)
-
-        await self.fix_trade_items(ctx.recvd_checks)
-
 
 all_tasks = set()
 
