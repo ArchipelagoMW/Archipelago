@@ -526,7 +526,7 @@ level_table = {
                     LocationData("Frog Switch", event=True),
                 ],
                 diamonds=[
-                    LocationData("Robot Room Diamond"),
+                    LocationData("Robot Room Diamond", access_rule=has('Dash Attack')),
                 ]
             ),
         ]
