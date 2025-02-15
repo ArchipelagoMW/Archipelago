@@ -374,7 +374,7 @@ class MultiWorld():
                 self.random.shuffle(items_to_add)
                 self.itempool.extend(items_to_add[:itemcount - len(self.itempool)])
 
-    def collect_starting_inventory(self):
+    def collect_starting_inventory(self) -> None:
         """
         Collects the player specified starting inventory into state and stores what needs to be removed from the pool
         later.
@@ -420,7 +420,7 @@ class MultiWorld():
             ) for player in self.player_ids
         }
 
-    def remove_starting_inventory_from_pool(self):
+    def remove_starting_inventory_from_pool(self) -> None:
         """
         Removes starting inventory flagged for removal from the itempool, logging a warning for anything it can't find.
         """
