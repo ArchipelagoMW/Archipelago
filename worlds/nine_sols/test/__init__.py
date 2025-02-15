@@ -3,7 +3,6 @@ import sys
 from typing import List
 
 from test.bases import WorldTestBase, CollectionState
-from ..options import Goal
 
 path = os.path.dirname(__file__)
 path = os.path.join(path, 'shared_static_logic')
