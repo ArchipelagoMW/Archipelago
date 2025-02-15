@@ -244,14 +244,12 @@ CONNECTIONS: dict[str, dict[str, list[str]]] = {
         "Bottom Left": [
             "Howling Grotto - Top",
             "Quillshroom Marsh - Sand Trap Shop",
-            "Quillshroom Marsh - Bottom Right",
         ],
         "Top Right": [
             "Quillshroom Marsh - Queen of Quills Shop",
             "Searing Crags - Left",
         ],
         "Bottom Right": [
-            "Quillshroom Marsh - Bottom Left",
             "Quillshroom Marsh - Sand Trap Shop",
             "Searing Crags - Bottom",
         ],
