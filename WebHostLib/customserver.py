@@ -136,11 +136,6 @@ class WebHostContext(Context):
             self.item_name_groups[game] = static_item_name_groups.get(game, {})
             self.location_name_groups[game] = static_location_name_groups.get(game, {})
 
-        if not game_data_packages:
-            # all static -> use the static dicts directly
-            self.gamespackage = static_gamespackage
-            self.item_name_groups = static_item_name_groups
-            self.location_name_groups = static_location_name_groups
         return self._load(multidata, game_data_packages, True)
 
     @db_session
