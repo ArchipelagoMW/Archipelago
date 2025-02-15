@@ -128,6 +128,7 @@ standard_traps: Dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.trap_throttled: always_trap,
     ITEMS.trap_malfunction: always_trap,
     ITEMS.trap_inflation: always_trap,
+    ITEMS.trap_clear_belts: always_trap,
 }
 
 random_draining_trap: Dict[str, Callable[[ShapezOptions], IClass]] = {

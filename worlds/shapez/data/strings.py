@@ -271,6 +271,7 @@ class ITEMS:
     trap_draining_blueprint = "Blueprint Shapes Draining Trap"
     trap_draining_level = "Level Shapes Draining Trap"
     trap_draining_upgrade = "Upgrade Shapes Draining Trap"
+    trap_clear_belts = "Belts Clearing Trap"
 
     goal = "Goal"
 
