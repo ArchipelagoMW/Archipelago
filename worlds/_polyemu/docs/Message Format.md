@@ -9,9 +9,8 @@
 
 |Offset|Field Name|Size|Description|
 |--|--|--|--|
-|`0x00`|Message Size|2|The length of the rest of the message.|
-|`0x02`|Device ID|8|The ID of the device this message is intended for.|
-|`0x03`|Requests|1+|A sequence of requests.|
+|`0x00`|Device ID|8|The ID of the device this message is intended for. If this ID does not match the device's understanding of its own ID, it will send back an error. If set to `0x0000000000000000`, the device processing the request will not perform this check. Ideally, this ID is unique per running game. This value is used by connection brokers to route requests.|
+|`0x08`|Requests|1+|A sequence of requests.|
 
 ### Request Format
 
@@ -25,13 +24,13 @@
 |Value|Type|Description|
 |--|--|--|
 |`0x00`|No-op|Does nothing; refreshes connection timeout.|
-|`0x01`|Supported Operations|Lists requests that the device is capable of fulfilling.|
+|`0x01`|Supported Operations|Lists request types that the device is capable of fulfilling.|
 |`0x02`|Platform|Returns the platform id.|
-|`0x03`|Memory Size|Returns the sizes of each memory domain.|
-|`0x04`|List Devices|TODO fix Returns some identifier for the device based on the running game. This remains consistent until the game is swapped for another, and is only used to track that the same game is loaded as was during previous requests. It could be a hash of the ROM, but may also be a timestamp representing when the game was first loaded, or any other arbitrary data.|
+|`0x03`|Memory Size|Returns the size of each memory domain supported by the device. Unsupported domains are omitted.|
+|`0x04`|List Devices|Lists devices by ID.|
 |`0x10`|Read|Reads data from a specified address and memory domain.|
 |`0x11`|Write|Writes data to a specified address and memory domain.|
-|`0x12`|Guard|Skips all following requests if some piece of memory does not match expected value.|
+|`0x12`|Guard|Skips all following requests in the chain if some piece of memory does not match expected value.|
 |`0x20`|Lock|Halts emulation and processes requests until unlocked.|
 |`0x21`|Unlock|Resumes emulation (requests in the same chain will still be processed on this frame).|
 
@@ -89,32 +88,31 @@ No Body
 
 |Offset|Field Name|Size|Description|
 |--|--|--|--|
-|`0x00`|Message Size|2|The length of the text to be displayed.|
+|`0x00`|Text Size|2|The length of the text to be displayed.|
 |`0x02`|Text|0+|The text (utf-8 encoded).|
 
 ## Response Chain Format
 
 |Offset|Field Name|Size|Description|
 |--|--|--|--|
-|`0x00`|Message Size|2|The length of the rest of the message.|
 |`0x02`|Responses|1+|A sequence of responses.|
 
 ### Response Types
 
 |Value|Type|Description|
 |--|--|--|
-|`0x80`|Acknowledge|No-op request was received.|
-|`0x82`|Platform|Returns the platform id.|
-|`0x83`|Memory Size|Returns the platform id.|
-|`0x84`|List Devices|Contains the List Devices.|
-|`0x90`|Read|Contai.|
-|`0x91`|Write|Writes data to a specified address and memory domain.|
-|`0x92`|Guard|Skips all following requests if some piece of memory does not match expected value.|
-|`0xA0`|Lock|Halts emulation and processes requests until unlocked.|
-|`0xA1`|Unlock|Resumes emulation (requests in the same chain will still be processed on this frame).|
+|`0x80`|No-op|Acknowledges a no-op request.|
+|`0x82`|Platform|Contains the platform id.|
+|`0x83`|Memory Size|Contains a sequence of domains and their sizes.|
+|`0x84`|List Devices|Contains a list of device ids.|
+|`0x90`|Read|Contains data read from memory.|
+|`0x91`|Write|Acknowledges a write request|
+|`0x92`|Guard|Indicates the success of a guard request. Requests whose responses follow a failed guard will receive this response type to indicate that they were not fulfilled as a result of that guard's failure.|
+|`0xA0`|Lock|Acknowledges a lock request.|
+|`0xA1`|Unlock|Acknowledges an unlock request.|
 |`0xFF`|Error|Something bad happened.|
 
-#### [`0x80`] Acknowledge
+#### [`0x80`] No-op
 
 No body
 
@@ -150,7 +148,7 @@ No body
 |Offset|Field Name|Size|Description|
 |--|--|--|--|
 |`0x00`|Number of Devices|1|The number of device ids in the following list.|
-|`0x01`|Device IDs|*|An 8-byte device id per device.|
+|`0x01`|Device IDs|*|A list of device ids (8-bytes each).|
 
 #### [`0x90`] Read
 
@@ -193,5 +191,8 @@ No Body
 
 |Value|Type|Description|
 |--|--|--|
-|`0x00`|Device Error|Device returned an error.|
-|`0x01`|Invalid Device|Specified device does not exist.|
+|`0x00`|Device Error|Device returned a device-specific or unknown error.|
+|`0x01`|Unsupported Operation|The device does not support the request.|
+|`0x02`|Mismatched Device|The device received the request chain, but the specified device ID did not match what the device believes its ID to be.|
+|`0x80`|No Such Device|Specified device does not exist.|
+|`0x81`|Device Closed Connection|The connection to the device was lost before any response was received.|
