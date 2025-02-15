@@ -258,6 +258,7 @@ class MessengerWorld(World):
                              f" {logic} for {self.multiworld.get_player_name(self.player)}")
         #     MessengerOOBRules(self).set_messenger_rules()
 
+    def connect_entrances(self) -> None:
         add_closed_portal_reqs(self)
         # i need portal shuffle to happen after rules exist so i can validate it
         attempts = 5
