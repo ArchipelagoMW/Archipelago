@@ -391,7 +391,7 @@ class LinksAwakeningClient():
 
         next_index += 1
         self.gameboy.write_memory(LAClientConstants.wLinkGiveItem, [
-                                  item_id, from_player])
+                                item_id, from_player])
         status |= 1
         status = self.gameboy.write_memory(LAClientConstants.wLinkStatusBits, [status])
         self.gameboy.write_memory(LAClientConstants.wRecvIndex, struct.pack(">H", next_index))
