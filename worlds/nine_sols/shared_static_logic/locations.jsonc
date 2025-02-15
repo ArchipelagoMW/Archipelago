@@ -627,17 +627,17 @@
         "region": "FU - Middle Right Exit", "requires": []
     },
     {
-        "address": 1806, "name": "Factory (U): Above Root Node",
+        "address": 1807, "name": "Factory (U): Above Root Node",
         "region": "FU - Crystal Passage", "requires": []
     },
     {
-        "address": 1807, "name": "Factory (U): Below Walkway to Left Exit",
+        "address": 1808, "name": "Factory (U): Below Walkway to Left Exit",
         "region": "FU - Middle Right Exit", "requires": [ { "anyOf": [
             { "item": "Air Dash" }, { "item": "Cloud Leap" }
         ] } ]
     },
     {
-        "address": 1808, "name": "Factory (U): Behind Moving Boxes",
+        "address": 1809, "name": "Factory (U): Behind Moving Boxes",
         "region": "FU - Behind Moving Boxes", "requires": []
     },
 
