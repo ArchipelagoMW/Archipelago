@@ -144,7 +144,6 @@ local request_handlers = {
         end
 
         data = memory_domains[domain]:readRange(address, size)
-
         return RESPONSE_TYPES["READ"] .. int_to_bytes(size, 2) .. data, msg
     end,
 
@@ -227,7 +226,7 @@ local request_handlers = {
     end,
 }
 
-local function received()
+local function handle_requests()
     local size, msg, err
     if not polyemu_socket then return end
 
@@ -333,7 +332,7 @@ local function tick()
             return
         end
         console:log("Connected to broker")
-        polyemu_socket:add("received", received)
+        polyemu_socket:add("received", handle_requests)
         polyemu_socket:add("error", handle_error)
     else
         while locked do

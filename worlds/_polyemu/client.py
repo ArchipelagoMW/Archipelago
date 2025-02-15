@@ -1,7 +1,3 @@
-"""
-A module containing the PolyEmuClient base class and metaclass
-"""
-
 from __future__ import annotations
 
 import abc
@@ -20,9 +16,18 @@ def launch_client(*args) -> None:
     launch_subprocess(launch, name="PolyEmuClient", args=args)
 
 
-component = Component("PolyEmu Client", "PolyEmuClient", component_type=Type.CLIENT, func=launch_client,
-                      file_identifier=SuffixIdentifier())
-components.append(component)
+def launch_broker(*args) -> None:
+    from .connectors.default import start_broker
+    launch_subprocess(start_broker, name="PolyEmu Connection Broker", args=args)
+
+
+client_component = Component("PolyEmu Client", "PolyEmuClient", component_type=Type.CLIENT, func=launch_client,
+                             file_identifier=SuffixIdentifier())
+broker_component = Component("PolyEmu Connection Broker", component_type=Type.HIDDEN, func=launch_broker,
+                             file_identifier=SuffixIdentifier())
+
+components.append(client_component)
+components.append(broker_component)
 
 
 class AutoPolyEmuClientRegister(abc.ABCMeta):
@@ -44,7 +49,7 @@ class AutoPolyEmuClientRegister(abc.ABCMeta):
         # Update launcher component's suffixes
         if "patch_suffix" in namespace:
             if namespace["patch_suffix"] is not None:
-                existing_identifier: SuffixIdentifier = component.file_identifier
+                existing_identifier: SuffixIdentifier = client_component.file_identifier
                 new_suffixes = [*existing_identifier.suffixes]
 
                 if type(namespace["patch_suffix"]) is str:
@@ -52,7 +57,7 @@ class AutoPolyEmuClientRegister(abc.ABCMeta):
                 else:
                     new_suffixes.extend(namespace["patch_suffix"])
 
-                component.file_identifier = SuffixIdentifier(*new_suffixes)
+                client_component.file_identifier = SuffixIdentifier(*new_suffixes)
 
         return new_class
 

@@ -1,17 +1,15 @@
 import asyncio
 import logging
-# import os
 import typing
-# import sys
 
-# sys.path.remove(os.path.dirname(__file__))
-# polyemu_root = os.path.normpath(os.path.join(os.path.dirname(__file__)))
-# os.chdir(polyemu_root)
-# sys.path.append(polyemu_root)
+from ...core.requests import RequestChain, RequestType, RequestChainHeader, ListDevicesRequest
+from ...core.responses import ResponseChain, ResponseType, ResponseChainHeader, Response, NoOpResponse, ListDevicesResponse, ErrorResponse
+from ...core.errors import ErrorType
 
-from .core.requests import RequestChain, RequestType, RequestChainHeader, ListDevicesRequest
-from .core.responses import ResponseChain, ResponseType, ResponseChainHeader, Response, NoOpResponse, ListDevicesResponse, ErrorResponse
-from .core.errors import ErrorType
+
+__all__ = (
+    "start_broker", "CLIENT_PORT", "DEVICE_PORT",
+)
 
 
 CLIENT_PORT = 43030
@@ -26,6 +24,7 @@ class PolyEmuDeviceConnection:
     writer: asyncio.StreamWriter
     close_cb: typing.Callable[[], None] | None
     logger: logging.Logger
+    _lock: asyncio.Lock
 
     def __init__(self, name: str, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, logger: logging.Logger):
         self.logger = logger
@@ -34,6 +33,7 @@ class PolyEmuDeviceConnection:
         self.reader = reader
         self.writer = writer
         self.close_cb = None
+        self._lock = asyncio.Lock()
 
     async def request_id(self) -> bytes | None:
         msg = RequestChain(RequestChainHeader(bytes([0] * 8)), [ListDevicesRequest()]).to_bytes()
@@ -54,36 +54,37 @@ class PolyEmuDeviceConnection:
     async def send_msg(self, msg: bytes) -> bytes:
         """Do not include message size"""
         msg = len(msg).to_bytes(2, "big") + msg
-        try:
-            self.writer.write(msg)
-            await self.writer.drain()
+        async with self._lock:
+            try:
+                self.writer.write(msg)
+                await asyncio.wait_for(self.writer.drain(), timeout=5)
 
-            data_size = await self.reader.read(2)
-            if len(data_size) == 0:
-                raise ConnectionResetError()  # TODO: Figure this out
+                data_size = await asyncio.wait_for(self.reader.read(2), timeout=5)
+                if len(data_size) == 0:
+                    raise ConnectionResetError()  # TODO: Figure this out
 
-            data_size = int.from_bytes(data_size, "big")
-            data = await self.reader.read(data_size)
-            if len(data) == 0:
-                raise ConnectionResetError()  # TODO: Figure this out
+                data_size = int.from_bytes(data_size, "big")
+                data = await asyncio.wait_for(self.reader.read(data_size), timeout=5)
+                if len(data) == 0:
+                    raise ConnectionResetError()  # TODO: Figure this out
 
-            return data
-        except asyncio.TimeoutError:
-            self.logger.info(f"({self.name}) Device timeout")
-        except (asyncio.CancelledError, ConnectionResetError, BrokenPipeError):
-            self.logger.info(f"({self.name}) Device closed connection")
+                return data
+            except asyncio.TimeoutError:
+                self.logger.info(f"({self.name}) Device timeout")
+            except (asyncio.CancelledError, ConnectionResetError, BrokenPipeError):
+                self.logger.info(f"({self.name}) Device closed connection")
 
-        self.logger.info(f"({self.name}) Device disconnected")
-        self.writer.close()
-        try:
-            await self.writer.wait_closed()
-        except (ConnectionResetError, ConnectionAbortedError):
-            pass
-        finally:
-            if self.close_cb is not None:
-                self.close_cb()
+            self.logger.info(f"({self.name}) Device disconnected")
+            self.writer.close()
+            try:
+                await self.writer.wait_closed()
+            except (ConnectionResetError, ConnectionAbortedError):
+                pass
+            finally:
+                if self.close_cb is not None:
+                    self.close_cb()
 
-            return ErrorResponse(ErrorType.DEVICE_CLOSED_CONNECTION).to_bytes()
+                return ErrorResponse(ErrorType.DEVICE_CLOSED_CONNECTION).to_bytes()
 
 
 class Broker:
@@ -135,7 +136,7 @@ class Broker:
                     raise Exception("ASdf")
 
                 self.activity_event.set()
-                self.logger.info(f"({client_name}) Message received: {incoming_msg}")
+                self.logger.debug(f"({client_name}) Message received: {incoming_msg}")
 
                 device_id = incoming_msg[0:8]
                 if device_id == b"\x00\x00\x00\x00\x00\x00\x00\x00":
@@ -189,70 +190,44 @@ class Broker:
                 self.activity_event.clear()  # Activity occurred, reset timer
             except asyncio.TimeoutError:
                 self.logger.info("No activity. Shutting down.")
-                self.client_server.close()
-                self.device_server.close()
-                await self.client_server.wait_closed()
-                await self.device_server.wait_closed()
-                break
+                return
 
-    async def start(self):
-        self.logger.info("Starting servers")
-        self.client_server = await asyncio.start_server(self.handle_client_connection, "127.0.0.1", CLIENT_PORT)
-        self.device_server = await asyncio.start_server(self.handle_device_connection, "127.0.0.1", DEVICE_PORT)
-        self.logger.info("Servers running")
-
+    async def close(self):
         try:
-            await asyncio.gather(
-                self.client_server.serve_forever(),
-                self.device_server.serve_forever(),
-                self.monitor_inactivity()
-            )
-        except asyncio.CancelledError:
-            pass
-        finally:
             self.client_server.close()
             self.device_server.close()
             await self.client_server.wait_closed()
             await self.device_server.wait_closed()
+        except Exception:
+            pass
+        finally:
+            self.client_server = None
+            self.device_server = None
+
+    async def start(self):
+        try:
+            self.logger.info("Starting servers")
+            self.client_server = await asyncio.start_server(self.handle_client_connection, "127.0.0.1", CLIENT_PORT)
+            self.device_server = await asyncio.start_server(self.handle_device_connection, "127.0.0.1", DEVICE_PORT)
+            self.logger.info("Servers running")
+
+            await asyncio.wait([asyncio.create_task(co) for co in (
+                self.client_server.serve_forever(),
+                self.device_server.serve_forever(),
+                self.monitor_inactivity(),
+            )], return_when=asyncio.FIRST_COMPLETED)
+        except asyncio.CancelledError:
+            pass
+        finally:
+            await self.close()
 
 
 def start_broker(*args):
+    import Utils
+    Utils.init_logging("PolyEmuBroker")
     logger = logging.getLogger("Broker")
     broker = Broker(logger)
     try:
         asyncio.run(broker.start())
-    except KeyboardInterrupt:
-        logger.info("Keyboard interrupt. Exiting.")
-
-
-# def init_logging(log_directory: str):
-#     import datetime
-
-#     # Log uncaught exceptions
-#     original_excepthook = sys.excepthook
-#     def wrapped_excepthook(exc_type, exc_value, exc_traceback):
-#         if issubclass(exc_type, KeyboardInterrupt):
-#             sys.__excepthook__(exc_type, exc_value, exc_traceback)
-#             return
-#         logging.getLogger().exception("Uncaught exception", exc_info=(exc_type, exc_value, exc_traceback), extra={"NoStream": True})
-#         return original_excepthook(exc_type, exc_value, exc_traceback)
-#     sys.excepthook = wrapped_excepthook
-
-#     # Create logfile
-#     os.makedirs(log_directory, exist_ok=True)
-#     logger = logging.getLogger()
-#     logger.setLevel(logging.INFO)
-#     file_handler = logging.FileHandler(os.path.join(log_directory, f"PolyEmuBroker_{datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}.txt"), "w", encoding="utf-8-sig")
-#     file_handler.setFormatter(logging.Formatter("[%(name)s at %(asctime)s]: %(message)s"))
-#     logger.addHandler(file_handler)
-
-
-# if __name__ == "__main__":
-#     import argparse
-#     parser = argparse.ArgumentParser(description="a connection broker for PolyEmu Client")
-#     parser.add_argument("--log_directory", type=str, help="the directory to store log files")
-#     args = parser.parse_args()
-
-#     init_logging(args.log_directory)
-#     logging.info("Logging initialized")
-#     start_broker(logging.getLogger())
+    except Exception as exc:
+        logger.exception(exc)

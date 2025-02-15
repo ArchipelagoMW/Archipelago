@@ -1,8 +1,6 @@
 import asyncio
 import enum
-import subprocess
 from typing import Any
-import sys
 
 from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser, server_loop, logger, gui_enabled
 import Patch
@@ -10,8 +8,8 @@ import Utils
 
 from .client import PolyEmuClient, AutoPolyEmuClientRegister
 from .core import BROKER_DEVICE_ID, PolyEmuBaseError, NoSuchDeviceError, PolyEmuContext, no_op, list_devices, get_platform
-from .core.connector import BROKER_CLIENT_PORT, BrokerConnector
-from .sni import SNIConnector
+from .connectors.default import BrokerConnector
+from .connectors.sni import SNIConnector
 
 
 EXPECTED_SCRIPT_VERSION = 1
@@ -189,6 +187,7 @@ async def _game_watcher(ctx: PolyEmuClientContext):
                     logger.info(f"Running handler for {ctx.client_handler.game}")
         except NoSuchDeviceError as exc:
             ctx.polyemu_ctx.selected_device_id = BROKER_DEVICE_ID
+            continue
         except (ExceptionGroup, PolyEmuBaseError) as exc:
             logger.exception(exc)
             continue
@@ -206,6 +205,8 @@ async def _game_watcher(ctx: PolyEmuClientContext):
 
 def _run_game(rom: str):
     import os
+    import subprocess
+
     auto_start = Utils.get_settings().polyemuclient_options.rom_start
 
     if auto_start is True:
@@ -259,30 +260,6 @@ def launch(*launch_args: str) -> None:
 
         ctx = PolyEmuClientContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
-
-        async def is_broker_running():
-            try:
-                _, writer = await asyncio.open_connection("127.0.0.1", BROKER_CLIENT_PORT)
-                writer.close()
-                await writer.wait_closed()
-                return True
-            except (ConnectionRefusedError, ConnectionResetError, OSError):
-                return False
-
-        if not await is_broker_running():
-            logger.info("Creating broker")
-            import multiprocessing
-            from .broker import start_broker
-            p = multiprocessing.Process(target=start_broker, args=(Utils.user_path("logs"),))
-            p.start()
-            # subprocess.Popen(
-            #     [sys.executable, "worlds/_polyemu/broker.py", f"--log_directory={Utils.user_path('logs')}"],
-            #     stdout=subprocess.DEVNULL,
-            #     stderr=subprocess.DEVNULL,
-            #     creationflags=subprocess.DETACHED_PROCESS if Utils.is_windows else 0,
-            # )
-        else:
-            logger.info("Broker already running")
 
         if gui_enabled:
             ctx.run_gui()

@@ -3,7 +3,7 @@ import grpc
 import os
 import sys
 
-from ..core import PLATFORMS, Connector, RequestChain, NoOpRequest, ListDevicesRequest, PlatformRequest, ReadRequest, ResponseChain, ResponseChainHeader, NoOpResponse, ListDevicesResponse, PlatformResponse, ReadResponse
+from ...core import PLATFORMS, Connector, RequestChain, NoOpRequest, ListDevicesRequest, PlatformRequest, ReadRequest, ResponseChain, ResponseChainHeader, NoOpResponse, ListDevicesResponse, PlatformResponse, ReadResponse
 
 # grpc generated code doesn't do relative imports
 existing_path = sys.path
