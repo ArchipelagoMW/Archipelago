@@ -625,8 +625,9 @@ class LinksAwakeningCommandProcessor(ClientCommandProcessor):
                 logger.info("Collect enabled")
             else:
                 logger.info("Collect disabled")
-    
-	def _cmd_deathlink(self):        """Toggles deathlink."""
+
+    def _cmd_deathlink(self):
+        """Toggles deathlink."""
         if isinstance(self.ctx, LinksAwakeningContext):
             Utils.async_start(self.ctx.update_death_link("DeathLink" not in self.ctx.tags))
 
