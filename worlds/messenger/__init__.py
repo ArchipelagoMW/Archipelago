@@ -335,12 +335,9 @@ class MessengerWorld(World):
                         name = f"{name} -> {self.get_entrance(name).connected_region.name}"
                     path_to_loc.append(name)
 
-            text = ""
-            for transition in reversed(path_to_loc):
-                text += f"{transition} => "
+            text = " => ".join(reversed(path_to_loc))
             if not text:
                 continue
-            text = text.rstrip("=> ")
             hint_data[self.player][loc.address] = text
 
     def fill_slot_data(self) -> dict[str, Any]:

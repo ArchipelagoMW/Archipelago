@@ -40,7 +40,7 @@ def connect_plando(world: "MessengerWorld", plando_connections: TransitionPlando
         # connect the regions
         reg1.connect(reg2)
 
-        # pretend the user set the direction as "both" regardless of what they actually put on coupled
+        # pretend the user set the plando direction as "both" regardless of what they actually put on coupled
         if ((world.options.shuffle_transitions == ShuffleTransitions.option_coupled
              or plando_connection.direction == "both")
                 and plando_connection.exit in RANDOMIZED_CONNECTIONS):
@@ -92,5 +92,5 @@ def shuffle_transitions(world: "MessengerWorld") -> None:
         if "->" not in transition.name:
             continue
         transition.parent_region.exits.remove(transition)
-        transition.name = f"{transition.parent_region} -> {transition.connected_region}"
+        transition.name = f"{transition.parent_region.name} -> {transition.connected_region.name}"
         transition.parent_region.exits.append(transition)
