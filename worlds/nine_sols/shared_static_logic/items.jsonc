@@ -162,6 +162,6 @@
     { "code": null, "name": "Victory - Eggnog", "type": "progression" },
     { "code": null, "name": "Event - Kuafu in FSP", "type": "progression" },
     { "code": null, "name": "Event - Chiyou in FSP", "type": "progression" },
-    //{ "code": null, "name": "Event - Event - Jiequan 1 Fight Unlocked", "type": "progression" },
+    { "code": null, "name": "Event - Jiequan 1 Fight Unlocked", "type": "progression" },
     { "code": null, "name": "Event - Lady Ethereal Soulscape Unlocked", "type": "progression" }
 ]
