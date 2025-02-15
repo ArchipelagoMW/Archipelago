@@ -5,9 +5,9 @@ from ...core.errors import NotConnectedError, ConnectionLostError
 from .main import CLIENT_PORT
 
 
-__all__ = (
-    "BrokerConnector",
-)
+__all__ = [
+    "DefaultConnector",
+]
 
 
 async def launch_broker():
@@ -22,7 +22,9 @@ async def launch_broker():
     )
 
 
-class BrokerConnector(Connector):
+class DefaultConnector(Connector):
+    name = "Default Connector"
+
     _streams: tuple[asyncio.StreamReader, asyncio.StreamWriter] | None
     _lock: asyncio.Lock
 

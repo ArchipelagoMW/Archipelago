@@ -2,14 +2,24 @@ import asyncio
 import logging
 import typing
 
+from worlds.LauncherComponents import Component, Type, components, launch_subprocess
+
 from ...core.requests import RequestChain, RequestType, RequestChainHeader, ListDevicesRequest
 from ...core.responses import ResponseChain, ResponseType, ResponseChainHeader, Response, NoOpResponse, ListDevicesResponse, ErrorResponse
 from ...core.errors import ErrorType
 
 
-__all__ = (
+__all__ = [
     "start_broker", "CLIENT_PORT", "DEVICE_PORT",
-)
+]
+
+
+def launch_broker(*args) -> None:
+    launch_subprocess(start_broker, name="PolyEmu Connection Broker", args=args)
+
+
+broker_component = Component("PolyEmu Connection Broker", component_type=Type.HIDDEN, func=launch_broker)
+components.append(broker_component)
 
 
 CLIENT_PORT = 43030

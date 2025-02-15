@@ -7,11 +7,11 @@ from .requests import Request, NoOpRequest, ListDevicesRequest, ReadRequest, Wri
 from .responses import ResponseType, Response, ResponseChain, ErrorResponse, ListDevicesResponse, ReadResponse, WriteResponse, GuardResponse, MemorySizeResponse, SupportedOperationsResponse, LockResponse, UnlockResponse, PlatformResponse, DisplayMessageResponse
 
 
-__all__ = (
+__all__ = [
     "BROKER_DEVICE_ID", "PolyEmuContext", "send_requests", "no_op", "list_devices",
     "get_memory_size", "get_platform", "get_supported_operations",
     "guarded_read", "read", "write", "lock", "unlock", "display_message",
-)
+]
 
 
 BROKER_DEVICE_ID = b"\x00\x00\x00\x00\x00\x00\x00\x00"

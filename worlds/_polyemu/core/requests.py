@@ -9,13 +9,13 @@ from .errors import MalformedRequestError
 from .utils import Buffer
 
 
-__all__ = (
+__all__ = [
     "RequestType", "RequestChainHeader", "RequestChain",
     "AutoRequestRegister", "Request", "NoOpRequest",
     "SupportedOperationsRequest", "PlatformRequest", "ListDevicesRequest",
     "MemorySizeRequest", "ReadRequest", "WriteRequest", "GuardRequest",
     "LockRequest", "UnlockRequest", "DisplayMessageRequest",
-)
+]
 
 
 class RequestType(IntEnum):

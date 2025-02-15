@@ -8,12 +8,12 @@ if TYPE_CHECKING:
     from .responses import ErrorResponse
 
 
-__all__ = (
+__all__ = [
     "ErrorType", "PolyEmuBaseError", "NotConnectedError",
     "ConnectionLostError", "MalformedResponseError", "MalformedRequestError",
     "AutoPolyEmuErrorRegister", "PolyEmuError", "UnsupportedOperationError",
     "MismatchedDeviceError", "NoSuchDeviceError", "DeviceClosedConnectionError",
-)
+]
 
 
 class ErrorType(IntEnum):

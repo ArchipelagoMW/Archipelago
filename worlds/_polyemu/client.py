@@ -11,23 +11,19 @@ if TYPE_CHECKING:
     from .context import PolyEmuClientContext
 
 
+__all__ = [
+    "AutoPolyEmuClientRegister", "PolyEmuClient",
+]
+
+
 def launch_client(*args) -> None:
     from .context import launch
     launch_subprocess(launch, name="PolyEmuClient", args=args)
 
 
-def launch_broker(*args) -> None:
-    from .connectors.default import start_broker
-    launch_subprocess(start_broker, name="PolyEmu Connection Broker", args=args)
-
-
 client_component = Component("PolyEmu Client", "PolyEmuClient", component_type=Type.CLIENT, func=launch_client,
                              file_identifier=SuffixIdentifier())
-broker_component = Component("PolyEmu Connection Broker", component_type=Type.HIDDEN, func=launch_broker,
-                             file_identifier=SuffixIdentifier())
-
 components.append(client_component)
-components.append(broker_component)
 
 
 class AutoPolyEmuClientRegister(abc.ABCMeta):

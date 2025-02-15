@@ -9,8 +9,7 @@ import uuid
 from NetUtils import ClientStatus
 from Options import Toggle
 import Utils
-import worlds._polyemu.core as polyemu
-from worlds._polyemu.client import PolyEmuClient
+import worlds._polyemu as polyemu
 
 from .data import BASE_OFFSET, POKEDEX_OFFSET, data
 from .options import Goal, RemoteItems
@@ -125,7 +124,7 @@ SHOAL_CAVE_MAPS = tuple(data.constants[map_name] for map_name in [
 ])
 
 
-class PokemonEmeraldClient(PolyEmuClient):
+class PokemonEmeraldClient(polyemu.PolyEmuClient):
     game = "Pokemon Emerald"
     platform = polyemu.PLATFORMS.GBA
     patch_suffix = ".apemerald"

@@ -7,12 +7,12 @@ import Patch
 import Utils
 
 from .client import PolyEmuClient, AutoPolyEmuClientRegister
-from .core import BROKER_DEVICE_ID, PolyEmuBaseError, NoSuchDeviceError, PolyEmuContext, no_op, list_devices, get_platform
-from .connectors.default import BrokerConnector
-from .connectors.sni import SNIConnector
+from .core import BROKER_DEVICE_ID, AutoConnectorRegister, PolyEmuBaseError, NoSuchDeviceError, PolyEmuContext, no_op, list_devices, get_platform
 
 
-EXPECTED_SCRIPT_VERSION = 1
+__all__ = [
+    "PolyEmuClientCommandProcessor", "PolyEmuClientContext", "launch", "AuthStatus",
+]
 
 
 class AuthStatus(enum.IntEnum):
@@ -47,8 +47,8 @@ class PolyEmuClientContext(CommonContext):
         self.auth_status = AuthStatus.NOT_AUTHENTICATED
         self.password_requested = False
         self.client_handler = None
-        self.polyemu_ctx = PolyEmuContext(BrokerConnector)
-        # self.polyemu_ctx = PolyEmuContext(SNIConnector)
+        self.polyemu_ctx = PolyEmuContext(AutoConnectorRegister.get_connector("Default Connector"))
+        # self.polyemu_ctx = PolyEmuContext(AutoConnectorRegister.get_connector("SNI Connector"))
         self.watcher_timeout = 0.5
 
     def make_gui(self):

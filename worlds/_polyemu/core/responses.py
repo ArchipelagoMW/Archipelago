@@ -9,13 +9,13 @@ from .errors import MalformedResponseError
 from .utils import Buffer
 
 
-__all__ = (
+__all__ = [
     "ResponseType", "ResponseChainHeader", "ResponseChain",
     "AutoResponseRegister", "Response", "NoOpResponse",
     "SupportedOperationsResponse", "PlatformResponse", "ListDevicesResponse",
     "MemorySizeResponse", "ReadResponse", "WriteResponse", "GuardResponse",
     "LockResponse", "UnlockResponse", "DisplayMessageResponse",
-)
+]
 
 
 class ResponseType(IntEnum):

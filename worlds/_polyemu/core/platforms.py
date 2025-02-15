@@ -1,13 +1,14 @@
 from typing import ClassVar
 
 
-__all__ = (
+__all__ = [
     "PLATFORMS",
-)
+]
 
 
 class PlatformBase:
     _ID: ClassVar[int]
+    SYSTEM = 0x00
 
 
 class GB(PlatformBase):

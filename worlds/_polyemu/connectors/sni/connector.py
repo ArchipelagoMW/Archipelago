@@ -15,9 +15,9 @@ from .sni_pb2_grpc import DevicesStub, DeviceMemoryStub
 from .sni_pb2 import DevicesRequest, DevicesResponse, MemoryMapping, SingleReadMemoryRequest, ReadMemoryRequest, AddressSpace, SingleReadMemoryResponse
 
 
-__all__ = (
+__all__ = [
     "SNIConnector",
-)
+]
 
 DOMAIN_ID_TO_FXPACK_BASE = {
     PLATFORMS.SNES.ROM: 0x00_0000,
@@ -26,6 +26,8 @@ DOMAIN_ID_TO_FXPACK_BASE = {
 
 
 class SNIConnector(Connector):
+    name = "SNI Connector"
+
     _channel: grpc.Channel | None
     _devices_stub: DevicesStub | None
     _memory_stub: DeviceMemoryStub | None
