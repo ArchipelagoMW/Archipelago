@@ -33,6 +33,7 @@ from worlds.ladx.ItemTracker import ItemTracker
 from worlds.ladx.LADXR.checkMetadata import checkMetadataTable
 from worlds.ladx.Locations import links_awakening_location_meta_to_id
 from worlds.ladx.Tracker import LocationTracker, MagpieBridge
+from worlds.ladx.Items import links_awakening_items
 
 links_awakening_location_id_to_meta = {v:k for k,v in links_awakening_location_meta_to_id.items()}
 
@@ -482,11 +483,10 @@ class LinksAwakeningClient():
             did_collect = await self.collect_check(check)
             ctx.handled_locations.add(id)
             if did_collect:
-                try:
-                    our_item = next(x for x in ctx.recvd_checks.values() if x.location == id)
+                our_item = next((x for x in ctx.recvd_checks.values() if x.location == id), None)
+                if our_item:
                     await self.give_item(our_item)
-                except StopIteration:
-                    pass # not our item
+                self.fix_trade_items(ctx.recvd_checks)
             break # one per cycle
 
     async def collect_check(self, check):
@@ -498,6 +498,34 @@ class LinksAwakeningClient():
             check_count = struct.unpack(">H", await self.gameboy.async_read_memory(LAClientConstants.CheckCounter, 2))[0]
             self.gameboy.write_memory(LAClientConstants.wRecvIndex, struct.pack(">H", check_count + 1))
         return not already_collected
+
+    trade_items = {
+        "TRADING_ITEM_YOSHI_DOLL": "0x2A6-Trade",
+        "TRADING_ITEM_RIBBON": "0x2B2-Trade",
+        "TRADING_ITEM_DOG_FOOD": "0x2FE-Trade",
+        "TRADING_ITEM_BANANAS": "0x07B-Trade",
+        "TRADING_ITEM_STICK": "0x087-Trade",
+        "TRADING_ITEM_HONEYCOMB": "0x2D7-Trade",
+        "TRADING_ITEM_PINEAPPLE": "0x019-Trade",
+        "TRADING_ITEM_HIBISCUS": "0x2D9-Trade",
+        "TRADING_ITEM_LETTER": "0x2A8-Trade",
+        "TRADING_ITEM_BROOM": "0x0CD-Trade",
+        "TRADING_ITEM_FISHING_HOOK": "0x2F5-Trade",
+        "TRADING_ITEM_NECKLACE": "0x0C9-Trade",
+        "TRADING_ITEM_SCALE": "0x297-Trade",
+        "TRADING_ITEM_MAGNIFYING_GLASS": None,
+    }
+    async def fix_trade_items(self, recvd_checks):
+        expected_trade_items = []
+        for item, location in self.trade_items.items():
+            item_id = next(x.item_id for x in links_awakening_items
+                           if x.ladxr_id == item) + LABaseID
+            item_received = next((x for x in recvd_checks.values()
+                                  if x.item == item_id), False)
+            destination_checked = next((x for x in self.tracker.all_checks
+                                        if x.value and x.id == location), False)
+            expected_trade_items.append(item_received and not destination_checked)
+
 
     should_reset_auth = False
     async def wait_for_game_ready(self):
@@ -546,6 +574,8 @@ class LinksAwakeningClient():
             await self.recved_item_from_ap(ctx, item, recv_index)
         else:
             await self.collect(ctx)
+
+        await self.fix_trade_items(ctx.recvd_checks)
 
 
 all_tasks = set()
