@@ -485,10 +485,10 @@ class LinksAwakeningClient():
             did_collect = await self.collect_check(check)
             ctx.handled_locations.add(id)
             if did_collect:
+                await self.fix_trade_items(ctx.recvd_checks)
                 our_item = next((x for x in ctx.recvd_checks.values() if x.location == id), None)
                 if our_item:
                     await self.give_item(our_item)
-                self.fix_trade_items(ctx.recvd_checks)
             break # one per cycle
 
     async def collect_check(self, check):
@@ -527,9 +527,10 @@ class LinksAwakeningClient():
                                   if x.item == item_id), False)
             destination_checked = next((x for x in self.tracker.all_checks
                                         if x.value and x.id == location), False)
+            destination_checked = location and self.tracker.meta_to_check[location].linkedItem
             expected_trade_items.append(int(item_received and not destination_checked))
 
-            inventory = self.item_tracker.itemDict[item]
+            inventory = self.item_tracker.itemDict[item].value
             if item in self.item_tracker.extraItems:
                 inventory -= self.item_tracker.extraItems[item]
             held_trade_items.append(inventory)
