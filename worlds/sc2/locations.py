@@ -4475,20 +4475,20 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.protoss_common_unit
         ),
         make_location_data(SC2Mission.DOMINATION_P.mission_name, "Repel Zagara", SC2_RACESWAP_LOC_ID_OFFSET + 7203, LocationType.EXTRA),
-        make_location_data(SC2Mission.DOMINATION_P.mission_name, "Close Supplicants", SC2_RACESWAP_LOC_ID_OFFSET + 7204, LocationType.EXTRA),
-        make_location_data(SC2Mission.DOMINATION_P.mission_name, "South Supplicants", SC2_RACESWAP_LOC_ID_OFFSET + 7205, LocationType.EXTRA,
+        make_location_data(SC2Mission.DOMINATION_P.mission_name, "Close Templar", SC2_RACESWAP_LOC_ID_OFFSET + 7204, LocationType.EXTRA),
+        make_location_data(SC2Mission.DOMINATION_P.mission_name, "South Templar", SC2_RACESWAP_LOC_ID_OFFSET + 7205, LocationType.EXTRA,
             lambda state: adv_tactics or logic.protoss_common_unit(state)
         ),
-        make_location_data(SC2Mission.DOMINATION_P.mission_name, "Southwest Supplicants", SC2_RACESWAP_LOC_ID_OFFSET + 7206, LocationType.EXTRA,
+        make_location_data(SC2Mission.DOMINATION_P.mission_name, "Southwest Templar", SC2_RACESWAP_LOC_ID_OFFSET + 7206, LocationType.EXTRA,
             logic.protoss_common_unit
         ),
-        make_location_data(SC2Mission.DOMINATION_P.mission_name, "Southeast Supplicants", SC2_RACESWAP_LOC_ID_OFFSET + 7207, LocationType.EXTRA,
+        make_location_data(SC2Mission.DOMINATION_P.mission_name, "Southeast Templar", SC2_RACESWAP_LOC_ID_OFFSET + 7207, LocationType.EXTRA,
             logic.protoss_common_unit_basic_aa
         ),
-        make_location_data(SC2Mission.DOMINATION_P.mission_name, "North Supplicants", SC2_RACESWAP_LOC_ID_OFFSET + 7208, LocationType.EXTRA,
+        make_location_data(SC2Mission.DOMINATION_P.mission_name, "North Templar", SC2_RACESWAP_LOC_ID_OFFSET + 7208, LocationType.EXTRA,
             logic.protoss_common_unit
         ),
-        make_location_data(SC2Mission.DOMINATION_P.mission_name, "Northeast Supplicants", SC2_RACESWAP_LOC_ID_OFFSET + 7209, LocationType.EXTRA,
+        make_location_data(SC2Mission.DOMINATION_P.mission_name, "Northeast Templar", SC2_RACESWAP_LOC_ID_OFFSET + 7209, LocationType.EXTRA,
             logic.protoss_common_unit
         ),
         make_location_data(SC2Mission.DOMINATION_P.mission_name, "Win Without 100 Eggs", SC2_RACESWAP_LOC_ID_OFFSET + 7210, LocationType.CHALLENGE,
@@ -4573,10 +4573,10 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.FIRE_IN_THE_SKY_P.mission_name, "North Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 7407, LocationType.EXTRA,
             logic.protoss_competent_comp
         ),
-        make_location_data(SC2Mission.FIRE_IN_THE_SKY_P.mission_name, "Sentry Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 7408, LocationType.EXTRA,
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_P.mission_name, "West Energizer Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 7408, LocationType.EXTRA,
             logic.protoss_competent_comp
         ),
-        make_location_data(SC2Mission.FIRE_IN_THE_SKY_P.mission_name, "Havoc Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 7409, LocationType.EXTRA,
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_P.mission_name, "East Energizer Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 7409, LocationType.EXTRA,
             logic.protoss_competent_comp
         ),
         make_location_data(SC2Mission.FIRE_IN_THE_SKY_P.mission_name, "South Orbital Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 7410, LocationType.CHALLENGE,
