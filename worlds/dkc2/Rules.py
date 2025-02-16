@@ -1387,7 +1387,7 @@ class DKC2StrictRules(DKC2Rules):
                     self.has_both_kongs(state),
             LocationName.castle_crush_banana_bunch_5:
                 lambda state: self.has_rambi(state) and self.can_carry(state) and 
-                    self.has_both_kongs(state) and self.can_cartwheel(state),
+                    self.has_both_kongs(state) and self.can_cartwheel(state) and self.has_squawks(state),
             LocationName.castle_crush_banana_coin_3:
                 lambda state: self.has_rambi(state) and self.can_carry(state) and 
                     self.has_both_kongs(state) and self.can_cartwheel(state),
@@ -2661,9 +2661,9 @@ class DKC2LooseRules(DKC2Rules):
                     self.can_climb(state),
 
             LocationName.rambi_rumble_banana_coin_1:
-                self.can_hover,
+                self.true,
             LocationName.rambi_rumble_banana_bunch_1:
-                self.can_hover,
+                lambda state: self.can_hover(state) or self.can_cartwheel(state),
             LocationName.rambi_rumble_banana_bunch_2:
                 lambda state: self.can_cling(state) and self.has_kannons(state),
             LocationName.rambi_rumble_banana_coin_2:
@@ -2763,13 +2763,13 @@ class DKC2LooseRules(DKC2Rules):
                     self.can_carry(state),
 
             LocationName.arctic_abyss_banana_coin_1:
-                lambda state: self.can_team_attack(state) and (self.can_cartwheel(state) or self.can_hover(state)),
+                lambda state: self.can_hover(state) or (self.has_diddy(state) and self.can_cartwheel(state)),
             LocationName.arctic_abyss_banana_bunch_1:
-                lambda state: self.can_team_attack(state) and (self.can_cartwheel(state) or self.can_hover(state)),
+                lambda state: self.can_hover(state) or (self.has_diddy(state) and self.can_cartwheel(state)),
             LocationName.arctic_abyss_banana_bunch_2:
-                lambda state: self.can_team_attack(state) and (self.can_cartwheel(state) or self.can_hover(state)),
+                lambda state: self.can_hover(state) or (self.has_diddy(state) and self.can_cartwheel(state)),
             LocationName.arctic_abyss_banana_bunch_3:
-                lambda state: self.can_team_attack(state) and (self.can_cartwheel(state) or self.can_hover(state)),
+                lambda state: self.can_hover(state) or (self.has_diddy(state) and self.can_cartwheel(state)),
             LocationName.arctic_abyss_banana_bunch_4:
                 self.can_swim,
             LocationName.arctic_abyss_banana_coin_2:
@@ -2812,17 +2812,13 @@ class DKC2LooseRules(DKC2Rules):
                     self.has_squawks(state),
 
             LocationName.castle_crush_banana_coin_1:
-                lambda state: self.can_carry(state) and 
-                    self.has_both_kongs(state),
+                self.has_both_kongs,
             LocationName.castle_crush_banana_bunch_1:
-                lambda state: self.can_carry(state) and 
-                    self.has_both_kongs(state),
+                self.has_both_kongs,
             LocationName.castle_crush_banana_bunch_2:
-                lambda state: self.can_carry(state) and 
-                    self.has_both_kongs(state),
+                self.has_both_kongs,
             LocationName.castle_crush_banana_coin_2:
-                lambda state: self.can_carry(state) and 
-                    self.has_both_kongs(state),
+                self.has_both_kongs,
             LocationName.castle_crush_banana_bunch_3:
                 lambda state: self.has_rambi(state) and self.can_carry(state) and 
                     self.has_both_kongs(state),
@@ -3012,12 +3008,9 @@ class DKC2LooseRules(DKC2Rules):
                 lambda state: self.can_cartwheel(state) and self.can_use_diddy_barrels(state) and 
                     self.has_controllable_barrels(state),
             LocationName.klobber_karnage_banana_bunch_4:
-                lambda state: self.can_cartwheel(state) and self.can_use_diddy_barrels(state) and 
-                    self.can_use_dixie_barrels(state) and self.has_controllable_barrels(state),
+                lambda state: (self.has_diddy(state) and self.can_cartwheel(state) or self.can_hover(state)),
             LocationName.klobber_karnage_banana_bunch_5:
-                lambda state: self.can_cartwheel(state) and self.can_use_diddy_barrels(state) and 
-                    self.can_use_dixie_barrels(state) and self.has_controllable_barrels(state) and 
-                    self.has_kannons(state),
+                lambda state: (self.has_diddy(state) and self.can_cartwheel(state) or self.can_hover(state) and self.has_kannons(state)),
             LocationName.klobber_karnage_banana_bunch_6:
                 lambda state: self.can_cartwheel(state) and self.can_use_diddy_barrels(state) and 
                     self.can_use_dixie_barrels(state) and self.has_controllable_barrels(state) and 
