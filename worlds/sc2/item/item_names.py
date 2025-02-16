@@ -382,6 +382,7 @@ DEFILER              = "Defiler"
 INFESTED_MARINE      = "Infested Marine"
 INFESTED_SIEGE_TANK  = "Infested Siege Tank"
 INFESTED_DIAMONDBACK = "Infested Diamondback"
+BULLFROG             = "Bullfrog (Infested Factory)"
 INFESTED_BANSHEE     = "Infested Banshee"
 INFESTED_LIBERATOR   = "Infested Liberator"
 
@@ -552,6 +553,10 @@ FRIGHTFUL_FLESHWELDER_INFESTED_BANSHEE            = "Frightful Fleshwelder (Infe
 FRIGHTFUL_FLESHWELDER_INFESTED_LIBERATOR          = "Frightful Fleshwelder (Infested Liberator)"
 INFESTED_MISSILE_TURRET_BIOELECTRIC_PAYLOAD       = "Bioelectric Payload (Infested Missile Turret)"
 INFESTED_MISSILE_TURRET_ACID_SPORE_VENTS          = "Acid Spore Vents (Infested Missile Turret)"
+BULLFROG_WILD_MUTATION                            = "Mutagen Vents (Bullfrog)"
+BULLFROG_BROODLINGS                               = "Suffused With Vermin (Bullfrog)"
+BULLFROG_HARD_IMPACT                              = "Lethal Impact (Bullfrog)"
+BULLFROG_RANGE                                    = "Catalytic Boosters (Bullfrog)"
 
 # Zerg Strains
 ZERGLING_RAPTOR_STRAIN     = "Raptor Strain (Zergling)"
