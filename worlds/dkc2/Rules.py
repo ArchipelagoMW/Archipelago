@@ -1899,14 +1899,14 @@ class DKC2LooseRules(DKC2Rules):
                 lambda state: self.has_kannons(state) and self.has_skull_kart(state),
 
             LocationName.bramble_scramble_clear:
-                lambda state: self.can_hover(state) and self.can_climb(state) and self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.has_squawks(state),
             LocationName.bramble_scramble_kong:
-                lambda state: self.can_hover(state) and self.can_climb(state) and self.has_squawks(state) and self.has_kannons(state),
+                lambda state: self.can_climb(state) and self.has_squawks(state) and self.has_kannons(state),
             LocationName.bramble_scramble_dk_coin:
-                lambda state: self.can_hover(state) and self.can_cartwheel(state) and self.can_climb(state) and 
+                lambda state: self.can_cartwheel(state) and self.can_climb(state) and 
                     self.has_squitter(state) and self.has_squawks(state) and self.has_kannons(state),
             LocationName.bramble_scramble_bonus_1:
-                lambda state: self.can_hover(state) and self.can_climb(state) and self.can_team_attack(state) and
+                lambda state: self.can_climb(state) and self.can_team_attack(state) and
                     self.has_invincibility(state) and self.has_kannons(state) and self.has_squawks(state),
 
             LocationName.rickety_race_clear:
