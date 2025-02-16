@@ -1073,3 +1073,12 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
     if isinstance(obj, str):
         return False
     return isinstance(obj, typing.Iterable)
+
+
+class WeakRefDict(dict):
+    """
+    The built-in dict class does not support weak references because weak references require a small memory overhead.
+
+    This dict subclass adds in the extra memory overhead to support weak references.
+    """
+    __slots__ = "__weakref__"

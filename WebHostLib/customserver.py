@@ -13,6 +13,7 @@ import threading
 import time
 import typing
 import sys
+import weakref
 
 import websockets
 from pony.orm import commit, db_session, select
@@ -23,6 +24,9 @@ from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, 
 from Utils import restricted_loads, cache_argsless
 from .locker import Locker
 from .models import Command, GameDataPackage, Room, db
+
+if typing.TYPE_CHECKING:
+    from worlds import GamesPackage
 
 
 class CustomClientMessageProcessor(ClientMessageProcessor):
@@ -59,6 +63,11 @@ class DBCommandProcessor(ServerCommandProcessor):
 
 class WebHostContext(Context):
     room_id: int
+
+    # Loaded embedded gamespackages get shared across all rooms on this process.
+    shared_embedded_gamespackages: typing.ClassVar[weakref.WeakValueDictionary[tuple[str, str], dict]] = (
+        weakref.WeakValueDictionary()
+    )
 
     def __init__(self, static_server_data: dict, logger: logging.Logger):
         # static server data is used during _load_game_data to load required data,
@@ -120,16 +129,27 @@ class WebHostContext(Context):
         missing_checksum = False
 
         for game in list(multidata.get("datapackage", {})):
-            game_data = multidata["datapackage"][game]
+            game_data: "GamesPackage" = multidata["datapackage"][game]
             if "checksum" in game_data:
-                if static_gamespackage.get(game, {}).get("checksum") == game_data["checksum"]:
+                checksum = game_data["checksum"]
+                if checksum == static_gamespackage.get(game, {}).get("checksum"):
                     # non-custom. remove from multidata and use static data
                     # games package could be dropped from static data once all rooms embed data package
                     del multidata["datapackage"][game]
                 else:
+                    # Check if this process has already loaded the same datapackage for a different room. If so, use the
+                    # already loaded datapackage.
+                    cache_key = (game, checksum)
+                    cached_datapackage = self.shared_embedded_gamespackages.get(cache_key)
+                    if cached_datapackage is not None:
+                        game_data_packages[game] = cached_datapackage
+                        continue
+
                     row = GameDataPackage.get(checksum=game_data["checksum"])
                     if row:  # None if rolled on >= 0.3.9 but uploaded to <= 0.3.8. multidata should be complete
-                        game_data_packages[game] = Utils.restricted_loads(row.data)
+                        db_datapackage = Utils.WeakRefDict(Utils.restricted_loads(row.data))
+                        game_data_packages[game] = db_datapackage
+                        self.shared_embedded_gamespackages[cache_key] = db_datapackage
                         continue
                     else:
                         self.logger.warning(f"Did not find game_data_package for {game}: {game_data['checksum']}")
