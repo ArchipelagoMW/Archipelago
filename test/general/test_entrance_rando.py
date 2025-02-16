@@ -311,6 +311,37 @@ class TestRandomizeEntrances(unittest.TestCase):
         self.assertEqual([], [exit_ for region in multiworld.get_regions()
                               for exit_ in region.exits if not exit_.connected_region])
 
+    def test_minimal_entrance_rando_with_collect_override(self):
+        """
+        tests that entrance randomization can complete with minimal accessibility and unreachable exits
+        when the world defines a collect override that add extra values to prog_items
+        """
+        multiworld = generate_test_multiworld()
+        multiworld.worlds[1].options.accessibility = Accessibility.from_any(Accessibility.option_minimal)
+        multiworld.completion_condition[1] = lambda state: state.can_reach("region24", player=1)
+        generate_disconnected_region_grid(multiworld, 5, 1)
+        prog_items = generate_items(10, 1, True)
+        multiworld.itempool += prog_items
+        filler_items = generate_items(15, 1, False)
+        multiworld.itempool += filler_items
+        e = multiworld.get_entrance("region1_right", 1)
+        set_rule(e, lambda state: False)
+
+        old_collect = multiworld.worlds[1].collect
+
+        def new_collect(state, item):
+            old_collect(state, item)
+            state.prog_items[item.player]["counter"] += 300
+
+        multiworld.worlds[1].collect = new_collect
+
+        randomize_entrances(multiworld.worlds[1], False, directionally_matched_group_lookup)
+
+        self.assertEqual([], [entrance for region in multiworld.get_regions()
+                              for entrance in region.entrances if not entrance.parent_region])
+        self.assertEqual([], [exit_ for region in multiworld.get_regions()
+                              for exit_ in region.exits if not exit_.connected_region])
+
     def test_restrictive_region_requirement_does_not_fail(self):
         multiworld = generate_test_multiworld()
         generate_disconnected_region_grid(multiworld, 2, 1)
