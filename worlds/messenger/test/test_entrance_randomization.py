@@ -1,3 +1,5 @@
+import unittest
+
 from . import MessengerTestBase
 
 
@@ -11,6 +13,7 @@ class StrictEntranceRandoTest(MessengerTestBase):
         "shuffle_transitions": 1,
     }
 
+    @unittest.skip
     def test_all_state_can_reach_everything(self) -> None:
         """It's not possible to reach everything with these options so skip this test."""
         pass
