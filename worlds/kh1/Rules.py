@@ -256,7 +256,7 @@ def set_rules(kh1world):
         lambda state: (
         
            state.has("Footprints", player)
-           or (options.advanced_logic and state.has("Progressive Glide", player))
+           or state.has("Progressive Glide", player)
         ))
     add_rule(kh1world.get_location("Wonderland Tea Party Garden Across From Bizarre Room Entrance Chest"),
         lambda state: (
@@ -634,7 +634,7 @@ def set_rules(kh1world):
             and
             (
                 has_emblems(state, player, options.keyblades_unlock_chests)
-                or (options.advanced_logic and state.has("High Jump", player, 2) and state.has("Progressive Glide", player))
+                or (state.has("High Jump", player, 2) and state.has("Progressive Glide", player))
                 or (options.advanced_logic and can_dumbo_skip(state, player) and state.has("Progressive Glide", player))
             )
         ))
@@ -685,7 +685,12 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Hollow Bastion Lift Stop Heartless Sigil Door Gravity Chest"),
         lambda state: (
             state.has("Progressive Gravity", player)
-            and has_emblems(state, player, options.keyblades_unlock_chests)
+            and
+            (
+                has_emblems(state, player, options.keyblades_unlock_chests)
+                or (state.has("High Jump", player, 2) and state.has("Progressive Glide", player))
+                or (options.advanced_logic and can_dumbo_skip(state, player) and state.has("Progressive Glide", player))
+            )
         ))
     add_rule(kh1world.get_location("Hollow Bastion Waterway Blizzard on Bubble Chest"),
         lambda state: (
@@ -1657,6 +1662,7 @@ def set_rules(kh1world):
                     and has_final_rest_door(state, player, final_rest_door_requirement, final_rest_door_required_lucky_emblems) # Can open the Door
                 )
             )
+            and has_defensive_tools(state, player)
         ))
     if options.keyblades_unlock_chests:
         add_rule(kh1world.get_location("Traverse Town 1st District Candle Puzzle Chest"),
