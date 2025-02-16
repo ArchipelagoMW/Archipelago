@@ -783,7 +783,7 @@ class Context:
 
     def get_hint(self, team: int, finding_player: int, seeked_location: int) -> typing.Optional[Hint]:
         for hint in self.hints[team, finding_player]:
-            if hint.location == seeked_location:
+            if hint.location == seeked_location and hint.finding_player == finding_player:
                 return hint
         return None
     
