@@ -293,7 +293,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                         auto_priority = HintPriority.HINT_DESIRED
                         if location.item.trap:
                             if location.item.advancement:
-                                auto_priority = HintPriority.HINT_AVOID_FOR_NOW
+                                auto_priority = HintPriority.HINT_DESIRED
                             else:
                                 auto_priority = HintPriority.HINT_AVOID
                         if location.name in multiworld.worlds[location.player].options.start_location_hints:

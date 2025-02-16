@@ -1144,7 +1144,7 @@ def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, st
             new_priority = auto_priority
             if item_flags & ItemClassification.trap:
                 if item_flags & ItemClassification.progression:
-                    new_priority = HintPriority.HINT_AVOID_FOR_NOW
+                    new_priority = HintPriority.HINT_DESIRED
                 else:
                     new_priority = HintPriority.HINT_AVOID
             hints.append(Hint(receiving_player, finding_player, location_id, item_id, found, entrance,
@@ -1173,7 +1173,7 @@ def collect_hint_location_id(ctx: Context, team: int, slot: int, seeked_location
         new_priority = auto_priority
         if item_flags & ItemClassification.trap:
             if item_flags & ItemClassification.progression:
-                new_priority = HintPriority.HINT_AVOID_FOR_NOW
+                new_priority = HintPriority.HINT_DESIRED
             else:
                 new_priority = HintPriority.HINT_AVOID
         return [Hint(receiving_player, slot, seeked_location, item_id, found, entrance, item_flags,
