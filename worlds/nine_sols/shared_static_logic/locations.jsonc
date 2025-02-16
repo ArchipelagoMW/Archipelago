@@ -1411,6 +1411,68 @@
     },
 
     // Tiandao Research Center
+    {
+        "address": 3901, "name": "TRC: Find Broken Shanhai 9000",
+        "region": "TRC - Upper Exit", "requires": []
+    },
+    {
+        "address": 3902, "name": "TRC: Covered In Spikes",
+        "region": "TRC - Lower Mutant Spike Room", "requires": []
+    },
+    {
+        "address": 3903, "name": "TRC: Ground Floor Bookshelf",
+        "region": "TRC - Ground Floor & Exits", "requires": []
+    },
+    {
+        "address": 3904, "name": "TRC: Before Chien Arena",
+        "region": "TRC - Ground Floor & Exits", "requires": []
+    },
+    {
+        "address": 3905, "name": "TRC: Above Sol Statue",
+        "region": "TRC - Lower Sickbay", "requires": [ { "item": "Cloud Leap" } ]
+    },
+    {
+        "address": 3906, "name": "TRC: Past Spikes In Sickbay Vents",
+        "region": "TRC - Lower Sickbay", "requires": [ { "item": "Azure Bow" } ] // to shoot vent spikes before going in
+    },
+    {
+        "address": 3907, "name": "TRC: Dusk Guardian Recording Device",
+        "region": "TRC - Upper Levels", "requires": []
+    },
+    {
+        "address": 3908, "name": "TRC: Destroy Tendril In The Highest Room",
+        "region": "TRC - Upper Levels", "requires": [
+            { "item": "Cloud Leap" }, // and parry the respawning enemy to CL again
+            { "item": "Super Mutant Buster" } // then destroy the tendril
+        ]
+    },
+    {
+        "address": 3909, "name": "TRC: Defeat Mutated Shiyangyue Near Xingtian Sickbay",
+        "region": "TRC - Xingtian Sickbay", "requires": [ { "item": "Super Mutant Buster" } ]
+    },
+    {
+        "address": 3910, "name": "TRC: Behind Mutant Barrier",
+        "region": "TRC - Right Stairwell", "requires": [ { "item": "Super Mutant Buster" } ]
+    },
+    {
+        "address": 3911, "name": "TRC: Destroy Tendril Near Sol Statue",
+        "region": "TRC - Right Stairwell", "requires": [ { "item": "Super Mutant Buster" } ]
+    },
+    {
+        "address": 3912, "name": "TRC: Chest Near Dusk Guardian HQ Screen",
+        "region": "TRC - Dusk Guardian HQ Upper Levels", "requires": []
+    },
+    {
+        "address": 3913, "name": "TRC: Destroy Tendril Near Guardian HQ Screen",
+        "region": "TRC - Dusk Guardian HQ Upper Levels", "requires": [
+            { "item": "Cloud Leap" },
+            { "item": "Super Mutant Buster" }
+        ]
+    },
+    {
+        "address": 3914, "name": "TRC: Examine Dusk Guardian HQ Screen",
+        "region": "TRC - Dusk Guardian HQ Upper Levels", "requires": []
+    }
 
     // Tianhuo Research Institute
     // nothing for now

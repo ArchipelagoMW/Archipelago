@@ -166,8 +166,8 @@
     { "from": "CTH - Yanren Arena", "to": "GD - Right Exit", "requires": [] },
     { "from": "GD - Right Exit", "to": "CTH - Yanren Arena", "requires": [] },
 
-    { "from": "CTH - Upper Right Exit", "to": "TRC - Left Exit", "requires": [] },
-    { "from": "TRC - Left Exit", "to": "CTH - Upper Right Exit", "requires": [] },
+    { "from": "CTH - Upper Right Exit", "to": "TRC - Ground Floor & Exits", "requires": [] },
+    { "from": "TRC - Ground Floor & Exits", "to": "CTH - Upper Right Exit", "requires": [] },
 
     { "from": "CTH - Lower Exits", "to": "PRE - Right Transporter", "requires": [] }, // CTH's lower *right* exit
     { "from": "PRE - Right Transporter", "to": "CTH - Lower Exits", "requires": [] },
@@ -307,8 +307,8 @@
     { "from": "YC - Root Node", "to": "YC - Farmland Markings", "requires": [] }, // djump OR grapple
     { "from": "YC - Egg Cave & Left Exit", "to": "YC - Root Node", "requires": [] }, // one-way door
 
-    { "from": "YC - Egg Cave & Left Exit", "to": "TRC - Right Exit", "requires": [] },
-    { "from": "TRC - Right Exit", "to": "YC - Egg Cave & Left Exit", "requires": [] },
+    { "from": "YC - Egg Cave & Left Exit", "to": "TRC - Ground Floor & Exits", "requires": [] },
+    { "from": "TRC - Ground Floor & Exits", "to": "YC - Egg Cave & Left Exit", "requires": [] },
 
     // Factory (Great Hall)
     { "from": "FGH - Lower Levels, Root Node & Right Exit", "to": "FGH - Lower Left Elevator", "requires": [] }, // fall
@@ -862,15 +862,41 @@
 
     // Nobility Hall
     // No root node in here, so no need for a 2nd region.
-    { "from": "EDS - Outside Nobility Hall", "to": "NH - After Fengs", "requires": [] },
+    { "from": "EDS - Outside Nobility Hall", "to": "NH - After Fengs", "requires": [] }, // TODO: combat logic?
 
     // Tiandao Research Center
-    { "from": "TRC - Right Exit", "to": "TRC - Upper Exit", "requires": [] }, // fake for testing
-    { "from": "TRC - Left Exit", "to": "TRC - Upper Exit", "requires": [] }, // fake for testing
-    { "from": "TRC - Upper Exit", "to": "TRC - Left Exit", "requires": [] }, // fake for testing
-    { "from": "TRC - Upper Exit", "to": "TRC - Right Exit", "requires": [] }, // fake for testing
+    { "from": "TRC - Upper Exit", "to": "TRC - Root Node", "requires": [] }, // one-way door
+    { "from": "TRC - Root Node", "to": "TRC - Lower Mutant Spike Room", "requires": [
+        { "item": "Super Mutant Buster" },
+        { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] }
+    ] },
+    { "from": "TRC - Lower Mutant Spike Room", "to": "TRC - Ground Floor & Exits", "requires": [
+        { "item": "Super Mutant Buster" } // one-way mutant barrier
+    ] },
+    { "from": "TRC - Ground Floor & Exits", "to": "TRC - Lower Sickbay", "requires": [
+        { "item": "Super Mutant Buster" }, // AND grapple
+        { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] }
+    ] },
+    { "from": "TRC - Lower Sickbay", "to": "TRC - Upper Levels", "requires": [] }, // WC
+    { "from": "TRC - Upper Levels", "to": "TRC - Xingtian Sickbay", "requires": [
+        { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] }
+    ] },
+    { "from": "TRC - Upper Levels", "to": "TRC - Root Node", "requires": [] }, // one-way door
+    { "from": "TRC - Upper Levels", "to": "TRC - Right Stairwell", "requires": [] }, // fall
+    { "from": "TRC - Ground Floor & Exits", "to": "TRC - Dusk Guardian HQ Upper Levels", "requires": [
+        { "item": "Super Mutant Buster" },
+        // left node
+        { "region": "TRC - Lower Sickbay" },
+        { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] },
+        // center and right nodes
+        { "region": "TRC - Right Stairwell" }
+    ] },
+    { "from": "TRC - Dusk Guardian HQ Upper Levels", "to": "TRC - Dusk Guardian HQ Lower Levels", "requires": [
+        { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] }
+    ] }
 
     // Tianhuo Research Institute
+    // nothing for now
 ]
 
 
