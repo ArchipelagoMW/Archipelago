@@ -418,7 +418,6 @@ class DSTHandler():
         "Death": set(),
         "Hint": set(),
     }
-    _debug_cache:Set[str] = set()
 
     def __init__(self, ctx:DSTContext):
         self.ctx = ctx
@@ -460,10 +459,11 @@ class DSTHandler():
                         "sources": list(_sources),
                     })
             elif datatype == "DeathLink":
-                if "DeathLink" in self.ctx.tags:
+                _enabled = data.get("enabled", False)
+                if ("DeathLink" in self.ctx.tags) != _enabled:
                     await self.handle_dst_filedata_entry({
                         "datatype": datatype,
-                        "enabled": data.get("enabled", False),
+                        "enabled": _enabled,
                     })
             elif datatype == "Death":
                 for deathdata in data:
