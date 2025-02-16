@@ -1066,7 +1066,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                 logic.zerg_common_unit(state)
                 and logic.zerg_basic_anti_air(state))
         ),
-        make_location_data(SC2Mission.RENDEZVOUS.mission_name, "Kill All Before Reinforcements", SC2HOTS_LOC_ID_OFFSET + 305, LocationType.MASTERY,
+        make_location_data(SC2Mission.RENDEZVOUS.mission_name, "Kill All Buildings Before Reinforcements", SC2HOTS_LOC_ID_OFFSET + 305, LocationType.MASTERY,
             lambda state: (
                 logic.zerg_competent_comp(state)
                 and logic.zerg_competent_anti_air(state)
@@ -4214,7 +4214,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                                    logic.terran_common_unit(state)
                                    and logic.terran_basic_anti_air(state))
                            ),
-        make_location_data(SC2Mission.RENDEZVOUS_T.mission_name, "Kill All Before Reinforcements", SC2_RACESWAP_LOC_ID_OFFSET + 6305, LocationType.MASTERY,
+        make_location_data(SC2Mission.RENDEZVOUS_T.mission_name, "Kill All Buildings Before Reinforcements", SC2_RACESWAP_LOC_ID_OFFSET + 6305, LocationType.MASTERY,
                            lambda state: (
                                    logic.terran_common_unit(state)
                                    and logic.terran_competent_comp(state)
@@ -4246,7 +4246,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                                    logic.protoss_common_unit(state)
                                    and logic.protoss_basic_anti_air(state))
                            ),
-        make_location_data(SC2Mission.RENDEZVOUS_P.mission_name, "Kill All Before Reinforcements", SC2_RACESWAP_LOC_ID_OFFSET + 6405, LocationType.MASTERY,
+        make_location_data(SC2Mission.RENDEZVOUS_P.mission_name, "Kill All Buildings Before Reinforcements", SC2_RACESWAP_LOC_ID_OFFSET + 6405, LocationType.MASTERY,
                            lambda state: (
                                    logic.protoss_competent_comp(state)),
                            flags=LocationFlag.SPEEDRUN
