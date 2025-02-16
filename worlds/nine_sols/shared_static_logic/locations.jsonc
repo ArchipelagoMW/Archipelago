@@ -168,8 +168,11 @@
     // Events
     {
         "address": null, "name": "Victory - Eggnog",
-        "region": "FSP - Root Node", "requires": [ { "item_group": "Sol Seals", "count": 8 } ]
-        // TODO: decide on endgame logic
+        "region": "FSP - Root Node", "requires": [
+            { "item_group": "Sol Seals", "count": 8 },
+            // TODO: decide on endgame logic
+            { "region": "TRC - Dusk Guardian HQ Lower Levels" }
+        ]
     },
     {
         "address": null, "name": "Event - Kuafu in FSP",
