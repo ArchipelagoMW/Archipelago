@@ -2812,13 +2812,13 @@ class DKC2LooseRules(DKC2Rules):
                     self.has_squawks(state),
 
             LocationName.castle_crush_banana_coin_1:
-                self.has_both_kongs,
+                self.true,
             LocationName.castle_crush_banana_bunch_1:
-                self.has_both_kongs,
+                self.true,
             LocationName.castle_crush_banana_bunch_2:
-                self.has_both_kongs,
+                self.true,
             LocationName.castle_crush_banana_coin_2:
-                self.has_both_kongs,
+                self.true,
             LocationName.castle_crush_banana_bunch_3:
                 lambda state: self.has_rambi(state) and self.can_carry(state) and 
                     self.has_both_kongs(state),
