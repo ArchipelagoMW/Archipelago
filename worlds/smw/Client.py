@@ -310,7 +310,6 @@ class SMWSNIClient(SNIClient):
         message_str = ""
         from_queue = False
 
-        # TODO: Check Priority Trap, send "Received Linked Trap" message to SNI output instead of game?
         if getattr(self, "priority_trap", None) and self.priority_trap.item != 0:
             next_trap = self.priority_trap
             message = self.priority_trap_message
