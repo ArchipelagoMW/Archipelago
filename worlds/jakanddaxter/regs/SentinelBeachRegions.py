@@ -1,3 +1,4 @@
+from BaseClasses import CollectionState
 from .RegionBase import JakAndDaxterRegion
 from ..Options import EnableOrbsanity
 from .. import JakAndDaxterWorld
@@ -52,17 +53,22 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
     main_area.connect(flut_flut_egg)     # Run and jump.
     main_area.connect(eco_harvesters)    # Run.
 
-    # You don't need any kind of uppercut to reach this place, just a high jump from a convenient nearby ledge.
+    # We need a helper function for the uppercut logs.
+    def can_uppercut_and_jump_logs(state: CollectionState, p: int) -> bool:
+        return (state.has_any({"Double Jump", "Jump Kick"}, p)
+                and (state.has_all({"Crouch", "Crouch Uppercut"}, p)
+                     or state.has_all({"Punch", "Punch Uppercut"}, p)))
+
+    # If you have double jump or crouch jump, you don't need the logs to reach this place.
     main_area.connect(green_ridge, rule=lambda state:
                       state.has("Double Jump", player)
-                      or state.has_all({"Crouch", "Crouch Jump"}, player))
+                      or state.has_all({"Crouch", "Crouch Jump"}, player)
+                      or can_uppercut_and_jump_logs(state, player))
 
-    # Can either uppercut the log and jump from it, or use the blue eco jump pad.
+    # If you have the blue eco jump pad, you don't need the logs to reach this place.
     main_area.connect(blue_ridge, rule=lambda state:
                       state.has("Blue Eco Switch", player)
-                      or (state.has("Double Jump", player)
-                          and (state.has_all({"Crouch", "Crouch Uppercut"}, player)
-                               or state.has_all({"Punch", "Punch Uppercut"}, player))))
+                      or can_uppercut_and_jump_logs(state, player))
 
     main_area.connect(cannon_tower, rule=lambda state: state.has("Blue Eco Switch", player))
 

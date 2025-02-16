@@ -19,6 +19,7 @@ class JakAndDaxterRegion(Region):
     game: str = jak1_name
     level_name: str
     orb_count: int
+    location_count: int = 0
 
     def __init__(self, name: str, player: int, multiworld: MultiWorld, level_name: str = "", orb_count: int = 0):
         formatted_name = f"{level_name} {name}".strip()
@@ -33,7 +34,7 @@ class JakAndDaxterRegion(Region):
         """
         for loc in locations:
             ap_id = Cells.to_ap_id(loc)
-            self.add_jak_locations(ap_id, location_table[ap_id], access_rule)
+            self.add_jak_location(ap_id, location_table[ap_id], access_rule)
 
     def add_fly_locations(self, locations: Iterable[int], access_rule: CollectionRule | None = None) -> None:
         """
@@ -42,7 +43,7 @@ class JakAndDaxterRegion(Region):
         """
         for loc in locations:
             ap_id = Scouts.to_ap_id(loc)
-            self.add_jak_locations(ap_id, location_table[ap_id], access_rule)
+            self.add_jak_location(ap_id, location_table[ap_id], access_rule)
 
     def add_special_locations(self, locations: Iterable[int], access_rule: CollectionRule | None = None) -> None:
         """
@@ -53,7 +54,7 @@ class JakAndDaxterRegion(Region):
         """
         for loc in locations:
             ap_id = Specials.to_ap_id(loc)
-            self.add_jak_locations(ap_id, location_table[ap_id], access_rule)
+            self.add_jak_location(ap_id, location_table[ap_id], access_rule)
 
     def add_cache_locations(self, locations: Iterable[int], access_rule: CollectionRule | None = None) -> None:
         """
@@ -62,7 +63,7 @@ class JakAndDaxterRegion(Region):
         """
         for loc in locations:
             ap_id = Caches.to_ap_id(loc)
-            self.add_jak_locations(ap_id, location_table[ap_id], access_rule)
+            self.add_jak_location(ap_id, location_table[ap_id], access_rule)
 
     def add_orb_locations(self, level_index: int, bundle_index: int, access_rule: CollectionRule | None = None) -> None:
         """
@@ -77,8 +78,9 @@ class JakAndDaxterRegion(Region):
         if access_rule:
             location.access_rule = access_rule
         self.locations.append(location)
+        self.location_count += 1
 
-    def add_jak_locations(self, ap_id: int, name: str, access_rule: CollectionRule | None = None) -> None:
+    def add_jak_location(self, ap_id: int, name: str, access_rule: CollectionRule | None = None) -> None:
         """
         Helper function to add Locations. Not to be used directly.
         """
@@ -86,3 +88,4 @@ class JakAndDaxterRegion(Region):
         if access_rule:
             location.access_rule = access_rule
         self.locations.append(location)
+        self.location_count += 1

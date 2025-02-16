@@ -77,26 +77,29 @@ If you are in the middle of an async game, and you do not want to update the mod
 - Run the Archipelago Launcher.
 - From the right-most list, find and click `Jak and Daxter Client`.
 - 3 new windows should appear:
-  - The OpenGOAL compiler will launch and compile the game. They should take about 30 seconds to compile.
-      - You should hear a musical cue to indicate the compilation was a success. If you do not, see the Troubleshooting section.
-  - The game window itself will launch, and Jak will be standing outside Samos's Hut. 
-      - Once compilation is complete, the title intro sequence will start.
-  - Finally, the Archipelago text client will open.
-      - If you see `The REPL is ready!` and `The Memory Reader is ready!` then that should indicate a successful startup.
-- You can *minimize* the Compiler window, **BUT DO NOT CLOSE IT.** It is required for Archipelago and the game to communicate with each other.
-- Use the text client to connect to the Archipelago server while on the title screen. This will communicate your current settings to the game.
-  - Once you see `AP CONNECTED!` on the title screen, you should be ready. 
-- Start a new game in the title screen, and play through the cutscenes.
-- Once you reach Geyser Rock, you can start the game!
+    - The OpenGOAL compiler will launch and compile the game. They should take about 30 seconds to compile.
+        - You should hear a musical cue to indicate the compilation was a success. If you do not, see the Troubleshooting section.
+        - You can **MINIMIZE** the Compiler window, **BUT DO NOT CLOSE IT.** It is required for Archipelago and the game to communicate with each other.
+    - The game window itself will launch, and Jak will be standing outside Samos's Hut. 
+        - Once compilation is complete, the title sequence will start.
+    - Finally, the Archipelago text client will open.
+        - If you see **BOTH** `The REPL is ready!` and `The Memory Reader is ready!` then that should indicate a successful startup. If you do not, see the Troubleshooting section.
+- Once you see `CONNECT TO ARCHIPELAGO NOW` on the title screen, use the text client to connect to the Archipelago server. This will communicate your current settings and slot info to the game.
+- If you see `RECEIVING ITEMS, PLEASE WAIT...`, the game is busy receiving items from your starting inventory, assuming you have some.
+- Once you see `READY! PRESS START TO CONTINUE` on the title screen, you can press Start.
+- Choose `New Game`, choose a save file, and play through the opening cutscenes.
+- Once you reach Geyser Rock, the game has begun!
     - You can leave Geyser Rock immediately if you so choose - just step on the warp gate button.
 
 ### Returning / Async Game
+The same steps as New Game apply, with some exceptions: 
 
-- The same steps as New Game apply, with some exceptions: 
-    - Connect to the Archipelago server **BEFORE** you load your save file. This is to allow AP to give the game your current settings and all the items you had previously.
+- Once you reach the title screen, connect to the Archipelago server **BEFORE** you load your save file. 
+    - This is to allow AP to give the game your current settings and all the items you had previously.
     - **THESE SETTINGS AFFECT LOADING AND SAVING OF SAVE FILES, SO IT IS IMPORTANT TO DO THIS FIRST.**
-    - Once you see `AP CONNECTED!` on the title screen, you should be ready. 
-    - Then, instead of choosing `New Game` in the title menu, choose `Load Game`, then choose the save file **CORRESPONDING TO YOUR CURRENT ARCHIPELAGO CONNECTION.** 
+- Once you see `READY! PRESS START TO CONTINUE` on the title screen, you can press Start. 
+- Instead of choosing `New Game` in the title menu, choose `Load Game`, then choose the save file **THAT HAS YOUR CURRENT SLOT NAME.**
+    - To help you find the correct save file, highlighting a save will show you that save's slot name and the first 8 digits of the multiworld seed number.
 
 ## Troubleshooting
 
@@ -169,4 +172,6 @@ If the client cannot open a REPL connection to the game, you may need to ensure 
 - The Compiler console window is orphaned once you close the game - you will have to kill it manually when you stop playing.
 - The console windows cannot be run as background processes due to how the REPL works, so the best we can do is minimize them.
 - Orbsanity checks may show up out of order in the text client.
-- Large item releases may take up to several minutes for the game to process them all. 
+- Large item releases may take up to several minutes for the game to process them all. Item Messages will usually take longer to appear than Items themselves.
+- In Lost Precursor City, if you die in the Color Platforms room, the game may crash after you respawn. The cause is unknown.
+- Darkness Trap may cause some visual glitches on certain levels. This is temporary, and terrain and object collision are unaffected.

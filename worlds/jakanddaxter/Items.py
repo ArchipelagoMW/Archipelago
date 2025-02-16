@@ -100,6 +100,25 @@ move_item_table = {
     # 24040: "Orb Cache at Start of Launch Pad Room",
 }
 
+# These are trap items. Their Item ID is to be subtracted from the base game ID. They do not have corresponding
+# game locations because they are intended to replace other items that have been marked as filler.
+trap_item_table = {
+    1: "Trip Trap",
+    2: "Slippery Trap",
+    3: "Gravity Trap",
+    4: "Camera Trap",
+    5: "Darkness Trap",
+    6: "Earthquake Trap",
+    7: "Teleport Trap",
+    8: "Despair Trap",
+    9: "Pacifism Trap",
+    10: "Ecoless Trap",
+    11: "Health Trap",
+    12: "Ledge Trap",
+    13: "Zoomer Trap",
+    14: "Mirror Trap",
+}
+
 # All Items
 # While we're here, do all the ID conversions needed.
 item_table = {
@@ -108,5 +127,6 @@ item_table = {
     **{Specials.to_ap_id(k): special_item_table[k] for k in special_item_table},
     **{Caches.to_ap_id(k): move_item_table[k] for k in move_item_table},
     **{Orbs.to_ap_id(k): orb_item_table[k] for k in orb_item_table},
+    **{jak1_max - k: trap_item_table[k] for k in trap_item_table},
     jak1_max: "Green Eco Pill"  # Filler item.
 }

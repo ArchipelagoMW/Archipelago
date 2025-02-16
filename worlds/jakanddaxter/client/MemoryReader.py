@@ -28,7 +28,7 @@ sizeof_float = 4
 # *****************************************************************************
 # **** This number must match (-> *ap-info-jak1* version) in ap-struct.gc! ****
 # *****************************************************************************
-expected_memory_version = 4
+expected_memory_version = 5
 
 
 # IMPORTANT: OpenGOAL memory structures are particular about the alignment, in memory, of member elements according to
@@ -104,6 +104,11 @@ memory_version_offset = offsets.define(sizeof_uint32)
 
 # Connection status to AP server (not the game!)
 server_connection_offset = offsets.define(sizeof_uint8)
+slot_name_offset = offsets.define(sizeof_uint8, 16)
+slot_seed_offset = offsets.define(sizeof_uint8, 8)
+
+# Trap information.
+trap_duration_offset = offsets.define(sizeof_float)
 
 # The End.
 end_marker_offset = offsets.define(sizeof_uint8, 4)

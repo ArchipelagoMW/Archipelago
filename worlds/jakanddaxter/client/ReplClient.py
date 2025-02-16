@@ -16,7 +16,7 @@ from asyncio import StreamReader, StreamWriter, Lock
 
 from NetUtils import NetworkItem
 from ..GameID import jak1_id, jak1_max
-from ..Items import item_table
+from ..Items import item_table, trap_item_table
 from ..locs import (
     OrbLocations as Orbs,
     CellLocations as Cells,
@@ -58,6 +58,7 @@ class JakAndDaxterReplClient:
     initiated_connect: bool = False  # Signals when user tells us to try reconnecting.
     received_deathlink: bool = False
     balanced_orbs: bool = False
+    received_initial_items = False
 
     # The REPL client needs the REPL/compiler process running, but that process
     # also needs the game running. Therefore, the REPL client needs both running.
@@ -66,6 +67,7 @@ class JakAndDaxterReplClient:
 
     item_inbox: dict[int, NetworkItem] = {}
     inbox_index = 0
+    initial_item_count = -1  # New games have 0 items, so initialize this to -1.
     json_message_queue: Queue[JsonMessageData] = queue.Queue()
 
     # Logging callbacks
@@ -130,6 +132,13 @@ class JakAndDaxterReplClient:
             await self.receive_item()
             await self.save_data()
             self.inbox_index += 1
+
+        # When connecting the game to the AP server on the title screen, we may be processing items from starting
+        # inventory or items received in an async game. Once we are done, tell the player that we are ready to start.
+        if not self.received_initial_items and self.initial_item_count >= 0:
+            if self.inbox_index == self.initial_item_count:
+                self.received_initial_items = True
+                await self.send_connection_status("ready")
 
         if self.received_deathlink:
             await self.receive_deathlink()
@@ -266,6 +275,14 @@ class JakAndDaxterReplClient:
         result = "".join([c if c in ALLOWED_CHARACTERS else "?" for c in text[:32]]).upper()
         return f"\"{result}\""
 
+    # Like sanitize_game_text, but the settings file will NOT allow any whitespace in the slot_name or slot_seed data.
+    # And don't replace any chars with "?" for good measure.
+    @staticmethod
+    def sanitize_file_text(text: str) -> str:
+        allowed_chars_no_space = ALLOWED_CHARACTERS - {" "}
+        result = "".join([c if c in allowed_chars_no_space else "" for c in text[:16]]).upper()
+        return f"\"{result}\""
+
     # Pushes a JsonMessageData object to the json message queue to be processed during the repl main_tick
     def queue_game_text(self, my_item_name, my_item_finder, their_item_name, their_item_owner):
         self.json_message_queue.put(JsonMessageData(my_item_name, my_item_finder, their_item_name, their_item_owner))
@@ -296,8 +313,10 @@ class JakAndDaxterReplClient:
             await self.receive_special(ap_id)
         elif ap_id in range(jak1_id + Caches.orb_cache_offset, jak1_id + Orbs.orb_offset):
             await self.receive_move(ap_id)
-        elif ap_id in range(jak1_id + Orbs.orb_offset, jak1_max):
+        elif ap_id in range(jak1_id + Orbs.orb_offset, jak1_max - max(trap_item_table)):
             await self.receive_precursor_orb(ap_id)  # Ponder the Orbs.
+        elif ap_id in range(jak1_max - max(trap_item_table), jak1_max):
+            await self.receive_trap(ap_id)
         elif ap_id == jak1_max:
             await self.receive_green_eco()  # Ponder why I chose to do ID's this way.
         else:
@@ -363,6 +382,18 @@ class JakAndDaxterReplClient:
             self.log_error(logger, f"Unable to receive {orb_amount} Precursor Orbs!")
         return ok
 
+    async def receive_trap(self, ap_id: int) -> bool:
+        trap_id = jak1_max - ap_id
+        ok = await self.send_form("(send-event "
+                                  "*target* \'get-archipelago "
+                                  "(pickup-type ap-trap) "
+                                  "(the float " + str(trap_id) + "))")
+        if ok:
+            logger.debug(f"Received a {item_table[ap_id]}!")
+        else:
+            self.log_error(logger, f"Unable to receive a {item_table[ap_id]}!")
+        return ok
+
     # Green eco pills are our filler item. Use the get-pickup event instead to handle being full health.
     async def receive_green_eco(self) -> bool:
         ok = await self.send_form("(send-event *target* \'get-pickup (pickup-type eco-pill) (the float 1))")
@@ -408,33 +439,48 @@ class JakAndDaxterReplClient:
 
         return True
 
-    # OpenGOAL has a limit of 8 parameters per function. We've already hit this limit. We may have to split these
-    # options into two groups, both of which required to be sent successfully, in the future.
-    # TODO - Alternatively, define a new datatype in OpenGOAL that holds all these options, instantiate the type here,
-    #  and rewrite the ap-setup-options! function to take that instance as input.
+    # OpenGOAL has a limit of 8 parameters per function. We've already hit this limit. So, define a new datatype
+    # in OpenGOAL that holds all these options, instantiate the type here, and have ap-setup-options! function take
+    # that instance as input.
     async def setup_options(self,
                             os_option: int, os_bundle: int,
                             fc_count: int, mp_count: int,
                             lt_count: int, ct_amount: int,
-                            ot_amount: int, goal_id: int) -> bool:
-        ok = await self.send_form(f"(ap-setup-options! "
-                                  f"(the uint {os_option}) (the uint {os_bundle}) "
-                                  f"(the float {fc_count}) (the float {mp_count}) "
-                                  f"(the float {lt_count}) (the float {ct_amount}) "
-                                  f"(the float {ot_amount}) (the uint {goal_id}))")
+                            ot_amount: int, trap_time: int,
+                            goal_id: int, slot_name: str,
+                            slot_seed: str) -> bool:
+        sanitized_name = self.sanitize_file_text(slot_name)
+        sanitized_seed = self.sanitize_file_text(slot_seed)
+
+        # I didn't want to have to do this with floats but GOAL's compile-time vs runtime types leave me no choice.
+        ok = await self.send_form(f"(ap-setup-options! (new 'static 'ap-seed-options "
+                                  f":orbsanity-option {os_option} "
+                                  f":orbsanity-bundle {os_bundle} "
+                                  f":fire-canyon-unlock {fc_count}.0 "
+                                  f":mountain-pass-unlock {mp_count}.0 "
+                                  f":lava-tube-unlock {lt_count}.0 "
+                                  f":citizen-orb-amount {ct_amount}.0 "
+                                  f":oracle-orb-amount {ot_amount}.0 "
+                                  f":trap-duration {trap_time}.0 "
+                                  f":completion-goal {goal_id} "
+                                  f":slot-name {sanitized_name} "
+                                  f":slot-seed {sanitized_seed} ))")
         message = (f"Setting options: \n"
                    f"   Orbsanity Option {os_option}, Orbsanity Bundle {os_bundle}, \n"
                    f"   FC Cell Count {fc_count}, MP Cell Count {mp_count}, \n"
                    f"   LT Cell Count {lt_count}, Citizen Orb Amt {ct_amount}, \n"
-                   f"   Oracle Orb Amt {ot_amount}, Completion GOAL {goal_id}... ")
+                   f"   Oracle Orb Amt {ot_amount}, Trap Duration {trap_time}, \n"
+                   f"   Completion GOAL {goal_id}, Slot Name {sanitized_name}, \n"
+                   f"   Slot Seed {sanitized_seed}... ")
         if ok:
             logger.debug(message + "Success!")
-            status = 1
         else:
             self.log_error(logger, message + "Failed!")
-            status = 2
 
-        ok = await self.send_form(f"(ap-set-connection-status! (the uint {status}))")
+        return ok
+
+    async def send_connection_status(self, status: str) -> bool:
+        ok = await self.send_form(f"(ap-set-connection-status! (connection-status {status}))")
         if ok:
             logger.debug(f"Connection Status {status} set!")
         else:

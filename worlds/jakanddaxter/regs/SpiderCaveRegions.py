@@ -27,15 +27,8 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
                                      and state.has_all({"Roll", "Roll Jump"}, player))
 
     dark_cave = JakAndDaxterRegion("Dark Cave", player, multiworld, level_name, 5)
-    dark_cave.add_cell_locations([80], access_rule=lambda state:
-                                 can_fight(state, player)
-                                 and (state.has("Double Jump", player)
-                                      or state.has_all({"Crouch", "Crouch Jump"}, player)))
-    dark_cave.add_fly_locations([262229], access_rule=lambda state:
-                                can_fight(state, player)
-                                and can_free_scout_flies(state, player)
-                                and (state.has("Double Jump", player)
-                                     or state.has_all({"Crouch", "Crouch Jump"}, player)))
+    dark_cave.add_cell_locations([80])
+    dark_cave.add_fly_locations([262229], access_rule=lambda state: can_free_scout_flies(state, player))
 
     robot_cave = JakAndDaxterRegion("Robot Cave", player, multiworld, level_name, 0)
 
@@ -64,7 +57,10 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
 
     main_area.connect(dark_crystals)
     main_area.connect(robot_cave)
-    main_area.connect(dark_cave, rule=lambda state: can_fight(state, player))
+    main_area.connect(dark_cave, rule=lambda state:
+                      can_fight(state, player)
+                      and (state.has("Double Jump", player)
+                           or state.has_all({"Crouch", "Crouch Jump"}, player)))
 
     robot_cave.connect(main_area)
     robot_cave.connect(pole_course)                 # Nothing special required.
@@ -75,8 +71,9 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
 
     scaffolding_level_one.connect(robot_cave)       # All scaffolding (level 1+) connects back by jumping down.
 
-    # Elevator, but the orbs need double jump.
-    scaffolding_level_one.connect(scaffolding_level_zero, rule=lambda state: state.has("Double Jump", player))
+    # Elevator, but the orbs need double jump or jump kick.
+    scaffolding_level_one.connect(scaffolding_level_zero, rule=lambda state:
+                                  state.has_any({"Double Jump", "Jump Kick"}, player))
 
     # Narrow enough that enemies are unavoidable.
     scaffolding_level_one.connect(scaffolding_level_two, rule=lambda state: can_fight(state, player))

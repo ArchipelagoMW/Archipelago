@@ -46,7 +46,7 @@ loc_orbCacheTable = {
     23348: "Orb Cache in Snowy Fort (1)",
     23349: "Orb Cache in Snowy Fort (2)",
     23350: "Orb Cache in Snowy Fort (3)",
-    # 24038: "Orb Cache at End of Blast Furnace",     # TODO - We didn't need all of the orb caches for move rando.
-    # 24039: "Orb Cache at End of Launch Pad Room",   #  In future, could add/fill these with filler items?
-    # 24040: "Orb Cache at Start of Launch Pad Room",
+    24038: "Orb Cache at End of Blast Furnace",
+    24039: "Orb Cache at End of Launch Pad Room",
+    24040: "Orb Cache at Start of Launch Pad Room",
 }

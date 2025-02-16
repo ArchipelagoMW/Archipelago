@@ -15,7 +15,7 @@ At this time, there are several caveats and restrictions:
 The game now contains the following Location checks:
 - All 101 Power Cells 
 - All 112 Scout Flies
-- All the Orb Caches that are not in Gol and Maia's Citadel (a total of 11)
+- All 14 Orb Caches (collect every orb in the cache and let it close)
 
 These may contain Items for different games, as well as different Items from within Jak and Daxter. 
 Additionally, several special checks and corresponding items have been added that are required to complete the game.
@@ -143,6 +143,35 @@ There are several options to change the difficulty of this challenge.
   and Locations to the pool inversely proportional to the size of the bundle.
     - For example, if your bundle size is 20 orbs, you will add 100 items to the pool. If your bundle size is 250 orbs,
       you will add 8 items to the pool.
+
+## What do Traps do?
+When creating your player YAML, you can choose to replace some of the game's extraneous Power Cells and Precursor Orbs 
+with traps. You can choose which traps you want to generate in your seed and how long they last. A random assortment 
+will then be chosen to populate the item pool.
+
+When you receive one, you will hear a buzzer and some kind of negative effect will occur in game. These effects may be 
+challenging, maddening, or entertaining. When the trap duration ends, the game should return to its previous state.
+Multiple traps can be active at the same time, and they may interact with each other in strange ways. If they become 
+too frustrating, you can lower their duration by navigating to `Options`, then `Archipelago Options`, then 
+`Seed Options`, then `Trap Duration`. Lowering this number to zero will disable traps entirely.
+
+## What kind of Traps are there?
+| Trap Name       | Effect                                                                         |
+|-----------------|--------------------------------------------------------------------------------|
+| Trip Trap       | Jak trips and falls                                                            |
+| Slippery Trap   | The world gains the physical properties of Snowy Mountain's ice lake           |
+| Gravity Trap    | Jak falls to the ground faster and takes fall damage more easily               |
+| Camera Trap     | The camera remains fixed in place no matter how far away Jak moves             |
+| Darkness Trap   | The world gains the lighting properties of Dark Cave                           |
+| Earthquake Trap | The world and camera shake                                                     |
+| Teleport Trap   | Jak immediately teleports to Samos's Hut                                       |
+| Despair Trap    | The Warrior sobs profusely                                                     |
+| Pacifism Trap   | Jak's attacks have no effect on enemies, crates, or buttons                    |
+| Ecoless Trap    | Jak's eco is drained and he cannot collect new eco                             |
+| Health Trap     | Jak's health is set to 0 - not dead yet, but he will die to any attack or bonk |
+| Ledge Trap      | Jak cannot grab onto ledges                                                    |
+| Zoomer Trap     | Jak mounts an invisible zoomer (model loads properly depending on level)       |
+| Mirror Trap     | The world is mirrored                                                          |
 
 ## I got soft-locked and can't leave, how do I get out of here?
 Open the game's menu, navigate to `Options`, then `Archipelago Options`, then `Warp To Home`. 
