@@ -2,8 +2,8 @@
 
 ## Required Files
 
-- Wargroove 2 installed through Steam on Windows.
-  - Only the Steam Windows version is supported. MAC and Switch are not supported.
+- Wargroove 2 installed through Steam on Windows or Linux.
+  - Only the Steam version on  Windows and Linux is supported. MAC, Switch and Xbox are not supported.
 - [The most recent Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases/latest).
 
 ## Installing the Archipelago Wargroove 2 Mod and Campaign files
@@ -23,6 +23,16 @@ This should install the mod and campaign for you.
 1. Start the Wargroove 2 Client and connect to the server. Enter your username from your 
 [options file](/games/Wargroove/player-options).
 2. Start Wargroove 2 and play the Archipelago 2 campaign by going to `Story` &rarr; `Custom` &rarr; `Archipelago 2`.
+
+## Linux Only: Select AppData equivalent when starting the client
+1. Shut down Wargroove 2 if it is open.
+2. Start the Wargroove 2 Client from the Archipelago Launcher.
+3. A file select dialogue will appear, claiming it cannot detect a path to the AppData folder.
+4. Navigate to your Steam install directory and select .
+`/steamapps/compatdata/1346020/pfx/drive_c/users/steamuser/AppData/Roaming` as the save directory.
+5. Using a default Steam install path, the full AppData path is
+`~/.steam/steam/steamapps/compatdata/1346020/pfx/drive_c/users/steamuser/AppData/Roaming`.
+6. The client should start.
 
 ## Ending a Multiworld game
 It is strongly recommended that you delete your campaign progress after finishing a multiworld game.

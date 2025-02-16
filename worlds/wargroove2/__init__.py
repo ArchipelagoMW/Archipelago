@@ -15,7 +15,7 @@ from .Presets import wargroove2_option_presets
 from .Regions import create_regions
 from .Rules import set_rules
 from worlds.AutoWorld import World, WebWorld
-from .Options import Wargroove2Options
+from .Options import Wargroove2Options, wargroove2_option_groups
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 
 
@@ -35,7 +35,23 @@ class Wargroove2Settings(settings.Group):
         """
         description = "Wargroove 2 root directory"
 
+
+    class SaveDirectory(settings.UserFolderPath):
+        """
+        Locates the Wargroove 2 save file directory on your system.
+        This is used by the Wargroove 2 client, so it knows where to send mod and save files to.
+        """
+        description = "Wargroove 2 save file/appdata directory"
+
+        def browse(self, **kwargs):
+            from Utils import messagebox
+            messagebox("AppData folder not found",
+                       "Wargroove2Client couldn't detect a path to the AppData folder.\n"
+                       "Please select the folder containing the \"/Chucklefish/Wargroove2/\" directories.")
+            super().browse(**kwargs)
+
     root_directory: RootDirectory = RootDirectory("C:/Program Files (x86)/Steam/steamapps/common/Wargroove 2")
+    save_directory: SaveDirectory = SaveDirectory("%APPDATA%")
 
 
 class Wargroove2Web(WebWorld):
@@ -49,6 +65,7 @@ class Wargroove2Web(WebWorld):
     )]
 
     options_presets = wargroove2_option_presets
+    option_groups = wargroove2_option_groups
 
 
 class Wargroove2World(World):

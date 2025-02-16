@@ -35,12 +35,40 @@ wg2_logger = logging.getLogger("WG2")
 
 
 class Wargroove2ClientCommandProcessor(ClientCommandProcessor):
+    def _cmd_sacrifice_summon(self):
+        """Toggles sacrifices and summons On/Off"""
+        if isinstance(self.ctx, Wargroove2Context):
+            self.ctx.has_sacrifice_summon = not self.ctx.has_sacrifice_summon
+            if self.ctx.has_sacrifice_summon:
+                self.output(f"Sacrifices and summons are enabled.")
+            else:
+                unit_summon_response_file = os.path.join(self.ctx.game_communication_path, "unitSummonResponse")
+                if os.path.exists(unit_summon_response_file):
+                    os.remove(unit_summon_response_file)
+                self.output(f"Sacrifices and summons are disabled.")
+
+    def _cmd_deathlink(self):
+        """Toggles deathlink On/Off"""
+        if isinstance(self.ctx, Wargroove2Context):
+            self.ctx.has_death_link = not self.ctx.has_death_link
+            if self.ctx.has_death_link:
+                death_link_send_file = os.path.join(self.ctx.game_communication_path, "deathLinkSend")
+                if os.path.exists(death_link_send_file):
+                    os.remove(death_link_send_file)
+                self.output(f"Deathlink enabled.")
+            else:
+                death_link_receive_file = os.path.join(self.ctx.game_communication_path, "deathLinkReceive")
+                if os.path.exists(death_link_receive_file):
+                    os.remove(death_link_receive_file)
+                self.output(f"Deathlink disabled.")
+
     def _cmd_resync(self):
         """Manually trigger a resync."""
         self.output(f"Syncing items.")
         self.ctx.syncing = True
 
     def _cmd_commander(self, *commander_name: Iterable[str]):
+
         """Set the current commander to the given commander."""
         if commander_name:
             self.ctx.set_commander(' '.join(commander_name[0]))
@@ -64,6 +92,9 @@ class Wargroove2Context(CommonContext):
     commander_defense_boost_multiplier: int = 0
     income_boost_multiplier: int = 0
     starting_groove_multiplier: int = 0
+    has_death_link: bool = False
+    has_sacrifice_summon: bool = True
+    stored_units_key: str = ""
     victory_locations: int = 1
     objective_locations: int = 1
     has_death_link: bool = False
@@ -93,48 +124,71 @@ class Wargroove2Context(CommonContext):
         self.send_index = 0
         self.syncing = False
         self.awaiting_bridge = False
-        # self.game_communication_path: files go in this path to pass data between us and the actual game
-        if "appdata" in os.environ:
-            options = get_settings()
-            root_directory = os.path.join(options["wargroove2_options"]["root_directory"])
-            self.level_directory = "levels"
-            appdata_wargroove = os.path.expandvars(os.path.join("%APPDATA%", "Chucklefish", "Wargroove2"))
-            if not os.path.isfile(os.path.join(root_directory, "win64_bin", "wargroove64.exe")):
-                print_error_and_close("Wargroove2Client couldn't find wargroove64.exe. "
-                                      "Unable to infer required game_communication_path")
-            self.game_communication_path = os.path.join(root_directory, "AP")
-            if not os.path.exists(self.game_communication_path):
-                os.makedirs(self.game_communication_path)
-            self.remove_communication_files()
-            atexit.register(self.remove_communication_files)
-            if not os.path.isdir(appdata_wargroove):
-                print_error_and_close("Wargroove2Client couldn't find Wargoove 2 in appdata!"
-                                      "Boot Wargroove 2 and then close it to attempt to fix this error")
-            mods_directory = os.path.join(appdata_wargroove, "mods", "ArchipelagoMod")
-            save_directory = os.path.join(appdata_wargroove, "save")
 
-            # Wargroove 2 doesn't always create the mods directory, so we have to do it
-            if not os.path.isdir(mods_directory):
-                os.makedirs(mods_directory)
-            resources = [os.path.join("data", "mods", "ArchipelagoMod", "maps.dat"),
-                         os.path.join("data", "mods", "ArchipelagoMod", "mod.dat"),
-                         os.path.join("data", "mods", "ArchipelagoMod", "modAssets.dat"),
-                         os.path.join("data", "save", "campaign-45747c660b6a2f09601327a18d662a7d.cmp"),
-                         os.path.join("data", "save", "campaign-45747c660b6a2f09601327a18d662a7d.cmp.bak")]
-            file_paths = [os.path.join(mods_directory, "maps.dat"),
-                          os.path.join(mods_directory, "mod.dat"),
-                          os.path.join(mods_directory, "modAssets.dat"),
-                          os.path.join(save_directory, "campaign-45747c660b6a2f09601327a18d662a7d.cmp"),
-                          os.path.join(save_directory, "campaign-45747c660b6a2f09601327a18d662a7d.cmp.bak")]
-            for i in range(0, len(resources)):
-                file_data = pkgutil.get_data("worlds.wargroove2", resources[i])
-                if file_data is None:
-                    print_error_and_close("Wargroove2Client couldn't find Wargoove 2 mod and save files in install!")
-                with open(file_paths[i], 'wb') as f:
-                    f.write(file_data)
+        options = get_settings()
+        # self.game_communication_path: files go in this path to pass data between us and the actual game
+        game_options = options.wargroove2_options
+
+        # Validate the AppData directory with Wargroove save data.
+        # By default, Windows sets an environment variable we can leverage.
+        # However, other OSes don't usually have this value set, so we need to rely on a settings value instead.
+        appdata_wargroove = None
+        if "appdata" in os.environ:
+            self.level_directory = "levels"
+            appdata_wargroove = os.environ['appdata']
         else:
-            print_error_and_close("Wargroove2Client couldn't detect system type. "
-                                  "Unable to infer required game_communication_path")
+            try:
+                appdata_wargroove = game_options.save_directory
+            except FileNotFoundError:
+                print_error_and_close("Wargroove2Client couldn't detect a path to the AppData folder.\n"
+                                      "Unable to infer required game_communication_path.\n"
+                                      "Try setting the \"save_directory\" value in your local options file "
+                                      "to the AppData folder containing your Wargroove 2 saves.")
+        appdata_wargroove = os.path.expandvars(os.path.join(appdata_wargroove, "Chucklefish", "Wargroove2"))
+        if not os.path.isdir(appdata_wargroove):
+            print_error_and_close(f"Wargroove2Client couldn't find Wargroove 2 data in your AppData folder.\n"
+                                  f"Looked in \"{appdata_wargroove}\".\n"
+                                  f"If you haven't yet booted the game at least once, boot Wargroove 2 "
+                                  f"and then close it to attempt to fix this error.\n"
+                                  f"If the AppData folder above seems wrong, try setting the "
+                                  f"\"save_directory\" value in your local options file "
+                                  f"to the AppData folder containing your Wargroove 2 saves.")
+
+        root_directory = os.path.join(game_options.root_directory)
+        if not os.path.isfile(os.path.join(root_directory, "win64_bin", "wargroove64.exe")):
+            print_error_and_close(f"WargrooveClient couldn't find wargroove64.exe in "
+                                  f"\"{root_directory}/win64_bin/\".\n"
+                                  f"Unable to infer required game_communication_path.\n"
+                                  f"Please verify the \"root_directory\" value in your local "
+                                  f"options file is set correctly.")
+        self.game_communication_path = os.path.join(root_directory, "AP")
+        if not os.path.exists(self.game_communication_path):
+            os.makedirs(self.game_communication_path)
+        self.remove_communication_files()
+        atexit.register(self.remove_communication_files)
+
+        mods_directory = os.path.join(appdata_wargroove, "mods", "ArchipelagoMod")
+        save_directory = os.path.join(appdata_wargroove, "save")
+
+        # Wargroove 2 doesn't always create the mods directory, so we have to do it
+        if not os.path.isdir(mods_directory):
+            os.makedirs(mods_directory)
+        resources = [os.path.join("data", "mods", "ArchipelagoMod", "maps.dat"),
+                     os.path.join("data", "mods", "ArchipelagoMod", "mod.dat"),
+                     os.path.join("data", "mods", "ArchipelagoMod", "modAssets.dat"),
+                     os.path.join("data", "save", "campaign-45747c660b6a2f09601327a18d662a7d.cmp"),
+                     os.path.join("data", "save", "campaign-45747c660b6a2f09601327a18d662a7d.cmp.bak")]
+        file_paths = [os.path.join(mods_directory, "maps.dat"),
+                      os.path.join(mods_directory, "mod.dat"),
+                      os.path.join(mods_directory, "modAssets.dat"),
+                      os.path.join(save_directory, "campaign-45747c660b6a2f09601327a18d662a7d.cmp"),
+                      os.path.join(save_directory, "campaign-45747c660b6a2f09601327a18d662a7d.cmp.bak")]
+        for i in range(0, len(resources)):
+            file_data = pkgutil.get_data("worlds.wargroove2", resources[i])
+            if file_data is None:
+                print_error_and_close("Wargroove2Client couldn't find Wargoove 2 mod and save files in install!")
+            with open(file_paths[i], 'wb') as f:
+                f.write(file_data)
 
     def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
         with open(os.path.join(self.game_communication_path, "deathLinkReceive"), 'w+') as f:
@@ -180,12 +234,11 @@ class Wargroove2Context(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
             self.slot_data = args["slot_data"]
-            self.victory_locations = self.slot_data["victory_locations"]
-            self.objective_locations = self.slot_data["objective_locations"]
-            self.has_death_link = self.slot_data["death_link"]
-            self.has_death_link = self.slot_data["death_link"]
-            self.final_levels = self.slot_data["final_levels"]
-            self.level_shuffle_seed = self.slot_data["level_shuffle_seed"]
+            self.victory_locations = self.slot_data.get("victory_locations", 1)
+            self.objective_locations = self.slot_data.get("objective_locations", 1)
+            self.has_death_link = self.slot_data.get("death_link", False)
+            self.final_levels = self.slot_data.get("final_levels", 1)
+            self.level_shuffle_seed = self.slot_data.get("level_shuffle_seed", 0)
             filename = f"AP_settings.json"
             with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                 json.dump(args["slot_data"], f)
@@ -200,6 +253,8 @@ class Wargroove2Context(CommonContext):
 
             self.stored_finale_key = f"wargroove_2_{self.slot}_{self.team}"
             self.set_notify(self.stored_finale_key)
+            self.stored_units_key = f"wargroove_units_{self.team}"
+            self.set_notify(self.stored_units_key)
             self.update_commander_data()
             self.ui.update_ui()
 
@@ -704,6 +759,30 @@ async def game_watcher(ctx: Wargroove2Context):
                             victory = True
                     os.remove(os.path.join(ctx.game_communication_path, file))
                     ctx.ui.update_levels()
+                if file == "unitSacrifice":
+                    if ctx.has_sacrifice_summon:
+                        with open(os.path.join(ctx.game_communication_path, file), 'r') as f:
+                            unit_class = f.read()
+                            message = [{"cmd": 'Set', "key": ctx.stored_units_key,
+                                        "default": [],
+                                        "want_reply": True,
+                                        "operations": [{"operation": "add", "value": [unit_class]}]}]
+                            await ctx.send_msgs(message)
+                    os.remove(os.path.join(ctx.game_communication_path, file))
+                if file == "unitSummonRequest":
+                    if ctx.has_sacrifice_summon:
+                        with open(os.path.join(ctx.game_communication_path, "unitSummonResponse"), 'w') as f:
+                            if ctx.stored_units_key in ctx.stored_data:
+                                stored_units = ctx.stored_data[ctx.stored_units_key]
+                                if len(stored_units) != 0:
+                                    summoned_unit = random.choice(stored_units)
+                                    message = [{"cmd": 'Set', "key": ctx.stored_units_key,
+                                                "default": [],
+                                                "want_reply": True,
+                                                "operations": [{"operation": "remove", "value": summoned_unit}]}]
+                                    await ctx.send_msgs(message)
+                                    f.write(summoned_unit)
+                    os.remove(os.path.join(ctx.game_communication_path, file))
         ctx.locations_checked = sending
         message = [{"cmd": "LocationChecks", "locations": list(sending)}]
         await ctx.send_msgs(message)

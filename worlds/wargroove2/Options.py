@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, Range, DeathLink, PerGameCommonOptions, StartInventoryPool
+from Options import Choice, Range, DeathLink, PerGameCommonOptions, StartInventoryPool, OptionGroup
 
 
 class VictoryLocations(Range):
@@ -75,6 +75,64 @@ class FinalLevels(Range):
     default = 2
 
 
+class PlayerSacrificeLimit(Range):
+    """How many times the player can sacrifice a unit at the Stronghold per level attempt.
+    Sacrificed units are stored in the multiworld for other players to summon."""
+    display_name = "Player Sacrifice Limit"
+    range_start = 0
+    range_end = 5
+    default = 0
+
+
+class PlayerSummonLimit(Range):
+    """How many times the player can summon a unit at the Stronghold per level attempt.
+    Summoned units are from the multiworld which were sacrificed by other players."""
+    display_name = "Player Summon Limit"
+    range_start = 0
+    range_end = 5
+    default = 0
+
+
+class AISacrificeLimit(Range):
+    """How many times the AI can sacrifice a unit at the Stronghold per level attempt.
+    Sacrificed units are stored in the multiworld for other players to summon."""
+    display_name = "AI Sacrifice Limit"
+    range_start = 0
+    range_end = 5
+    default = 0
+
+
+class AISummonLimit(Range):
+    """How many times the AI can summon a unit at the Stronghold per level attempt.
+    Summoned units are from the multiworld which were sacrificed by other players.
+    If a level becomes impossible, use /sacrifice_summon in the client to toggle sacrifices and summons on and off."""
+    display_name = "AI Summon Limit"
+    range_start = 0
+    range_end = 5
+    default = 0
+
+wargroove2_option_groups = [
+        OptionGroup("General Options", [
+            VictoryLocations,
+            ObjectiveLocations,
+            LevelShuffleSeed,
+            CommanderChoice,
+            FinalLevels,
+            DeathLink
+        ]),
+        OptionGroup("Filler Options", [
+            IncomeBoost,
+            CommanderDefenseBoost,
+            GrooveBoost
+        ]),
+        OptionGroup("Sacrifice and Summon Options", [
+            PlayerSacrificeLimit,
+            PlayerSummonLimit,
+            AISacrificeLimit,
+            AISummonLimit
+        ]),
+]
+
 @dataclass
 class Wargroove2Options(PerGameCommonOptions):
     victory_locations: VictoryLocations
@@ -85,5 +143,9 @@ class Wargroove2Options(PerGameCommonOptions):
     level_shuffle_seed: LevelShuffleSeed
     commander_choice: CommanderChoice
     final_levels: FinalLevels
+    player_sacrifice_limit: PlayerSacrificeLimit
+    player_summon_limit: PlayerSummonLimit
+    ai_sacrifice_limit: AISacrificeLimit
+    ai_summon_limit: AISummonLimit
     death_link: DeathLink
     start_inventory_from_pool: StartInventoryPool
