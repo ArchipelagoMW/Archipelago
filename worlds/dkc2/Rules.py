@@ -293,16 +293,16 @@ class DKC2StrictRules(DKC2Rules):
                 lambda state: self.has_squitter(state) and self.has_kannons(state),
 
             LocationName.kannons_klaim_clear:
-                lambda state: self.can_carry(state) and self.has_kannons(state) and self.can_hover(state),
+                lambda state: self.can_carry(state) and self.has_kannons(state),
             LocationName.kannons_klaim_kong:
-                lambda state: self.can_carry(state) and self.has_kannons(state) and self.can_hover(state),
+                lambda state: self.can_carry(state) and self.has_kannons(state),
             LocationName.kannons_klaim_dk_coin:
                 lambda state: self.can_hover(state),
             LocationName.kannons_klaim_bonus_1:
                 lambda state: self.can_use_diddy_barrels(state) and self.can_use_dixie_barrels(state) and
                     self.can_hover(state),
             LocationName.kannons_klaim_bonus_2:
-                lambda state: self.can_carry(state) and self.can_team_attack(state) and self.has_kannons(state) and self.can_hover(state),
+                lambda state: self.can_carry(state) and self.can_team_attack(state) and self.has_kannons(state),
             LocationName.kannons_klaim_bonus_3:
                 lambda state: self.can_carry(state) and self.has_kannons(state) and self.can_hover(state),
 
