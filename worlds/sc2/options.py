@@ -464,9 +464,10 @@ class GenericUpgradeResearch(Choice):
     option_auto_in_build = 2
     option_always_auto = 3
 
+
 class GenericUpgradeResearchSpeedup(Toggle):
     """
-    If turned on, the weapon and armor upgrades are researched more quickly, if level 4 or higher is unlocked.
+    If turned on, the weapon and armor upgrades are researched more quickly if level 4 or higher is unlocked.
     The research times of upgrades are cut proportionally, so you're able to hit the maximum available level
     at the same time, as you'd hit level 3 normally.
 

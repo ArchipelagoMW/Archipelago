@@ -15,13 +15,13 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.properties import StringProperty, BooleanProperty
 
-from worlds.sc2.client import SC2Context, calc_unfinished_nodes
-from worlds.sc2.item.item_descriptions import item_descriptions
-from worlds.sc2.mission_tables import lookup_id_to_mission, campaign_race_exceptions, \
+from .client import SC2Context, calc_unfinished_nodes
+from .item.item_descriptions import item_descriptions
+from .mission_tables import lookup_id_to_mission, campaign_race_exceptions, \
     SC2Mission, SC2Race
-from worlds.sc2.locations import LocationType, lookup_location_id_to_type, lookup_location_id_to_flags
-from worlds.sc2.options import LocationInclusion, MissionOrderScouting
-from worlds.sc2 import SC2World
+from .locations import LocationType, lookup_location_id_to_type, lookup_location_id_to_flags
+from .options import LocationInclusion, MissionOrderScouting
+from . import SC2World
 
 
 class HoverableButton(HoverBehavior, Button):

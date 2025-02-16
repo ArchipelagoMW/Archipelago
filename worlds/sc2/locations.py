@@ -3891,94 +3891,96 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.zerg_common_unit
         ),
         make_location_data(SC2Mission.A_SINISTER_TURN_Z.mission_name, "Northwest Preserver", SC2_RACESWAP_LOC_ID_OFFSET + 4607, LocationType.EXTRA,
-                           lambda state: logic.zerg_competent_comp(state) and logic.zerg_competent_anti_air(state)
-                           ),
+            lambda state: logic.zerg_competent_comp(state) and logic.zerg_competent_anti_air(state)
+        ),
         make_location_data(SC2Mission.A_SINISTER_TURN_Z.mission_name, "Southwest Preserver", SC2_RACESWAP_LOC_ID_OFFSET + 4608, LocationType.EXTRA,
-                           lambda state: logic.zerg_competent_comp(state) and logic.zerg_competent_anti_air(state)
-                           ),
+            lambda state: logic.zerg_competent_comp(state) and logic.zerg_competent_anti_air(state)
+        ),
         make_location_data(SC2Mission.A_SINISTER_TURN_Z.mission_name, "East Preserver", SC2_RACESWAP_LOC_ID_OFFSET + 4609, LocationType.EXTRA,
-                           lambda state: logic.zerg_competent_comp(state) and logic.zerg_competent_anti_air(state)
-                           ),
+            lambda state: logic.zerg_competent_comp(state) and logic.zerg_competent_anti_air(state)
+        ),
         make_location_data(SC2Mission.ECHOES_OF_THE_FUTURE_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 4700, LocationType.VICTORY,
-                           lambda state: (
-                                   logic.terran_common_unit(state) and logic.terran_competent_anti_air(state)
-                           )
-                           ),
+            lambda state: logic.terran_common_unit(state) and logic.terran_competent_anti_air(state)
+        ),
         make_location_data(SC2Mission.ECHOES_OF_THE_FUTURE_T.mission_name, "Close Obelisk", SC2_RACESWAP_LOC_ID_OFFSET + 4701, LocationType.VANILLA,
-                           lambda state: logic.terran_common_unit(state)),
+            logic.terran_common_unit
+        ),
         make_location_data(SC2Mission.ECHOES_OF_THE_FUTURE_T.mission_name, "West Obelisk", SC2_RACESWAP_LOC_ID_OFFSET + 4702, LocationType.VANILLA,
-                           lambda state: logic.terran_common_unit(state) and (adv_tactics or logic.terran_basic_anti_air(state))
-                           ),
+            lambda state: logic.terran_common_unit(state) and (adv_tactics or logic.terran_basic_anti_air(state))
+        ),
         make_location_data(SC2Mission.ECHOES_OF_THE_FUTURE_T.mission_name, "Base", SC2_RACESWAP_LOC_ID_OFFSET + 4703, LocationType.EXTRA),
         make_location_data(SC2Mission.ECHOES_OF_THE_FUTURE_T.mission_name, "Southwest Tendril", SC2_RACESWAP_LOC_ID_OFFSET + 4704, LocationType.EXTRA,
-                           lambda state: logic.terran_common_unit(state)),
+            logic.terran_common_unit
+        ),
         make_location_data(SC2Mission.ECHOES_OF_THE_FUTURE_T.mission_name, "Southeast Tendril", SC2_RACESWAP_LOC_ID_OFFSET + 4705, LocationType.EXTRA,
-                           lambda state: logic.terran_common_unit(state)
-                           ),
+            logic.terran_common_unit
+        ),
         make_location_data(SC2Mission.ECHOES_OF_THE_FUTURE_T.mission_name, "Northeast Tendril", SC2_RACESWAP_LOC_ID_OFFSET + 4706, LocationType.EXTRA,
-                           lambda state: logic.terran_common_unit(state) and logic.terran_competent_anti_air(state)
-                           ),
+            lambda state: logic.terran_common_unit(state) and logic.terran_competent_anti_air(state)
+        ),
         make_location_data(SC2Mission.ECHOES_OF_THE_FUTURE_T.mission_name, "Northwest Tendril", SC2_RACESWAP_LOC_ID_OFFSET + 4707, LocationType.EXTRA,
-                           lambda state: logic.terran_common_unit(state) and logic.terran_competent_anti_air(state)
-                           ),
+            lambda state: logic.terran_common_unit(state) and logic.terran_competent_anti_air(state)
+        ),
         make_location_data(SC2Mission.ECHOES_OF_THE_FUTURE_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 4800, LocationType.VICTORY,
-                           lambda state: logic.zerg_common_unit(state) and logic.zerg_competent_anti_air(state)
-                           ),
+            lambda state: logic.zerg_common_unit(state) and logic.zerg_competent_anti_air(state)
+        ),
         make_location_data(SC2Mission.ECHOES_OF_THE_FUTURE_Z.mission_name, "Close Obelisk", SC2_RACESWAP_LOC_ID_OFFSET + 4801, LocationType.VANILLA,
-                           lambda state: logic.zerg_common_unit(state)),
+            logic.zerg_common_unit
+        ),
         make_location_data(SC2Mission.ECHOES_OF_THE_FUTURE_Z.mission_name, "West Obelisk", SC2_RACESWAP_LOC_ID_OFFSET + 4802, LocationType.VANILLA,
-                           lambda state: (
-                                   logic.zerg_common_unit(state)
-                                   and logic.zerg_basic_kerriganless_anti_air(state)
-                                   and (adv_tactics or logic.spread_creep(state))
-                           )
-                           ),
+            lambda state: (
+                    logic.zerg_common_unit(state)
+                    and logic.zerg_basic_kerriganless_anti_air(state)
+                    and (adv_tactics or logic.spread_creep(state))
+            )
+        ),
         make_location_data(SC2Mission.ECHOES_OF_THE_FUTURE_Z.mission_name, "Base", SC2_RACESWAP_LOC_ID_OFFSET + 4803, LocationType.EXTRA),
         make_location_data(SC2Mission.ECHOES_OF_THE_FUTURE_Z.mission_name, "Southwest Tendril", SC2_RACESWAP_LOC_ID_OFFSET + 4804, LocationType.EXTRA,
-                           lambda state: logic.zerg_common_unit(state)),
+            logic.zerg_common_unit
+        ),
         make_location_data(SC2Mission.ECHOES_OF_THE_FUTURE_Z.mission_name, "Southeast Tendril", SC2_RACESWAP_LOC_ID_OFFSET + 4805, LocationType.EXTRA,
-                           lambda state: logic.zerg_common_unit(state)
-                           ),
+            logic.zerg_common_unit
+        ),
         make_location_data(SC2Mission.ECHOES_OF_THE_FUTURE_Z.mission_name, "Northeast Tendril", SC2_RACESWAP_LOC_ID_OFFSET + 4806, LocationType.EXTRA,
-                           lambda state: logic.zerg_common_unit(state) and logic.zerg_competent_anti_air(state)
-                           ),
+            lambda state: logic.zerg_common_unit(state) and logic.zerg_competent_anti_air(state)
+        ),
         make_location_data(SC2Mission.ECHOES_OF_THE_FUTURE_Z.mission_name, "Northwest Tendril", SC2_RACESWAP_LOC_ID_OFFSET + 4807, LocationType.EXTRA,
-                           lambda state: logic.zerg_common_unit(state) and logic.zerg_competent_anti_air(state)
-                           ),
+            lambda state: logic.zerg_common_unit(state) and logic.zerg_competent_anti_air(state)
+        ),
         make_location_data(SC2Mission.IN_UTTER_DARKNESS_T.mission_name, "Defeat", SC2_RACESWAP_LOC_ID_OFFSET + 4900, LocationType.VICTORY),
         make_location_data(SC2Mission.IN_UTTER_DARKNESS_T.mission_name, "Protoss Archive", SC2_RACESWAP_LOC_ID_OFFSET + 4901, LocationType.VANILLA,
-                           logic.terran_last_stand_requirement
-                           ),
+            logic.terran_last_stand_requirement
+        ),
         make_location_data(SC2Mission.IN_UTTER_DARKNESS_T.mission_name, "Kills", SC2_RACESWAP_LOC_ID_OFFSET + 4902, LocationType.VANILLA,
-                           logic.terran_last_stand_requirement
-                           ),
+            logic.terran_last_stand_requirement
+        ),
         make_location_data(SC2Mission.IN_UTTER_DARKNESS_T.mission_name, "Urun", SC2_RACESWAP_LOC_ID_OFFSET + 4903, LocationType.EXTRA),
         make_location_data(SC2Mission.IN_UTTER_DARKNESS_T.mission_name, "Mohandar", SC2_RACESWAP_LOC_ID_OFFSET + 4904, LocationType.EXTRA,
-                           logic.terran_last_stand_requirement
-                           ),
+            logic.terran_last_stand_requirement
+        ),
         make_location_data(SC2Mission.IN_UTTER_DARKNESS_T.mission_name, "Selendis", SC2_RACESWAP_LOC_ID_OFFSET + 4905, LocationType.EXTRA,
-                           logic.terran_last_stand_requirement
-                           ),
+            logic.terran_last_stand_requirement
+        ),
         make_location_data(SC2Mission.IN_UTTER_DARKNESS_T.mission_name, "Artanis", SC2_RACESWAP_LOC_ID_OFFSET + 4906, LocationType.EXTRA,
-                           logic.terran_last_stand_requirement
-                           ),
+            logic.terran_last_stand_requirement
+        ),
         make_location_data(SC2Mission.IN_UTTER_DARKNESS_Z.mission_name, "Defeat", SC2_RACESWAP_LOC_ID_OFFSET + 5000, LocationType.VICTORY),
         make_location_data(SC2Mission.IN_UTTER_DARKNESS_Z.mission_name, "Protoss Archive", SC2_RACESWAP_LOC_ID_OFFSET + 5001, LocationType.VANILLA,
-                           logic.zerg_last_stand_requirement
-                           ),
+            logic.zerg_last_stand_requirement
+        ),
         make_location_data(SC2Mission.IN_UTTER_DARKNESS_Z.mission_name, "Kills", SC2_RACESWAP_LOC_ID_OFFSET + 5002, LocationType.VANILLA,
-                           logic.zerg_last_stand_requirement
-                           ),
+            logic.zerg_last_stand_requirement
+        ),
         make_location_data(SC2Mission.IN_UTTER_DARKNESS_Z.mission_name, "Urun", SC2_RACESWAP_LOC_ID_OFFSET + 5003, LocationType.EXTRA),
         make_location_data(SC2Mission.IN_UTTER_DARKNESS_Z.mission_name, "Mohandar", SC2_RACESWAP_LOC_ID_OFFSET + 5004, LocationType.EXTRA,
-                           logic.zerg_last_stand_requirement
-                           ),
+            logic.zerg_last_stand_requirement
+        ),
         make_location_data(SC2Mission.IN_UTTER_DARKNESS_Z.mission_name, "Selendis", SC2_RACESWAP_LOC_ID_OFFSET + 5005, LocationType.EXTRA,
-                           logic.zerg_last_stand_requirement
-                           ),
+            logic.zerg_last_stand_requirement
+        ),
         make_location_data(SC2Mission.IN_UTTER_DARKNESS_Z.mission_name, "Artanis", SC2_RACESWAP_LOC_ID_OFFSET + 5006, LocationType.EXTRA,
-                           logic.zerg_last_stand_requirement
-                           ),
+            logic.zerg_last_stand_requirement
+        ),
         make_location_data(SC2Mission.GATES_OF_HELL_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 5100, LocationType.VICTORY,
             logic.zerg_gates_of_hell_requirement
         ),

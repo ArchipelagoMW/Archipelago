@@ -1,7 +1,7 @@
 import unittest
 from typing import List, Set
 
-from worlds.sc2.item import item_tables
+from ..item import item_tables
 
 
 class TestItems(unittest.TestCase):
