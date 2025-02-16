@@ -1191,12 +1191,229 @@
     },
 
     // Sky Tower
+    {
+        "address": 3401, "name": "Sky Tower: Above Lower Elevator",
+        "region": "ST - Lower Chest", "requires": []
+    },
+    {
+        "address": 3402, "name": "Sky Tower: Wall Climb Platform",
+        "region": "ST - Middle Chest", "requires": []
+    },
+    {
+        "address": 3403, "name": "Sky Tower: Surrounded By Hazards",
+        "region": "ST - Upper Checkpoint Platform", "requires": []
+    },
+    {
+        "address": 3404, "name": "Sky Tower: Ropes Below Root Node",
+        "region": "ST - Upper Checkpoint Platform", "requires": [
+            { "item": "Cloud Leap" }, { "item": "Air Dash" } // AND WC
+        ]
+    },
+    {
+        "address": 3405, "name": "Sky Tower: Stowaway's Tianhou Flower",
+        "region": "ST - Stowaway", "requires": []
+    },
+    {
+        "address": 3406, "name": "Sky Tower: Examine Stowaway's Belongings",
+        "region": "ST - Stowaway", "requires": []
+    },
+    {
+        "address": 3407, "name": "Sky Tower: By Root Node",
+        "region": "ST - Upper Exit & Root Node", "requires": []
+    },
+    {
+        "address": 3408, "name": "Sky Tower: Pink Water Near Root Node",
+        "region": "ST - Upper Exit & Root Node", "requires": []
+    },
+
     // Empyrean Dist. (Passages)
+    {
+        "address": 3501, "name": "ED (Passages): Above Transporter",
+        "region": "EDP - Above Right Transporter", "requires": [
+            { "item": "Tai-Chi Kick" }
+        ] // slide/grapple AND TCK AND (DJ OR WC)
+    },
+    {
+        "address": 3502, "name": "ED (Passages): Hack 2 Statues",
+        "region": "EDP - Root Node", "requires": [
+            // 1st statue requires jumping from slider to slider left of Root Node
+            { "item": "Cloud Leap" }, { "item": "Air Dash" },
+            { "item": "Charged Strike" }, // and the statue itself has a shield
+            // 2nd statue needed its own region because of multiple entrances
+            { "region": "EDP - Between Root Node & Tianshou Arena" }
+        ]
+    },
+    {
+        "address": 3503, "name": "ED (Passages): Alcove Right of Root Node 1st Chest",
+        "region": "EDP - Alcove Right of Root Node", "requires": []
+    },
+    {
+        "address": 3504, "name": "ED (Passages): Alcove Right of Root Node 2nd Chest",
+        "region": "EDP - Alcove Right of Root Node", "requires": []
+    },
+    {
+        "address": 3505, "name": "ED (Passages): Slider Right Of Root Node",
+        "region": "EDP - Slider Right Of Root Node", "requires": []
+    },
+    {
+        "address": 3506, "name": "ED (Passages): Above Pink Pool Left Of Root Node",
+        "region": "EDP - Left Pink Pool", "requires": [ { "item": "Tai-Chi Kick" } ]
+    },
+    {
+        "address": 3507, "name": "ED (Passages): Far Left Rooms",
+        "region": "EDP - Left Pink Pool", "requires": [
+            { "item": "Tai-Chi Kick" }, // platforms above pool
+            { "item": "Air Dash" } // AND WC to climb the left pink waterfall
+            // the last jump is (AD OR DJ) so that's already covered, then just fall down
+        ]
+    },
+    {
+        "address": 3508, "name": "ED (Passages): Defeat The Great Miner: Tianshou",
+        "region": "EDP - Tianshou Arena", "requires": [] // TODO: combat logic?
+    },
+    {
+        "address": 3509, "name": "ED (Passages): Examine Water Tower",
+        "region": "EDP - Upper Elevator", "requires": []
+    },
+    {
+        "address": 3510, "name": "ED (Passages): Alcove Between Lasers",
+        "region": "EDP - Laser Gauntlet", "requires": []
+    },
+    {
+        "address": 3511, "name": "ED (Passages): Covered By Lasers",
+        "region": "EDP - Laser Gauntlet", "requires": [
+            { "item": "Mystic Nymph: Scout Mode" } // to disable the laser cover
+            // AND slide/grapple AND WC
+        ]
+    },
+
     // Empyrean Dist. (Living Area)
+    {
+        "address": 3601, "name": "ED (Living Area): Above Right Elevator",
+        "region": "EDLA - Root Node & Lower Elevator", "requires": [ { "item": "Cloud Leap" } ]
+    },
+    {
+        "address": 3602, "name": "ED (Living Area): Retrieve Chip From Shanhai 9000",
+        "region": "EDLA - East Building Interior", "requires": []
+    },
+    {
+        "address": 3603, "name": "ED (Living Area): Examine Bulletin Board",
+        "region": "EDLA - East Building Interior", "requires": []
+    },
+    {
+        "address": 3604, "name": "ED (Living Area): Walking Chest In East Building",
+        "region": "EDLA - East Building Interior", "requires": []
+    },
+    {
+        "address": 3605, "name": "ED (Living Area): Above Root Node",
+        "region": "EDLA - East Building Interior", "requires": []
+    },
+    {
+        "address": 3606, "name": "ED (Living Area): Middle Elevator Chest Room",
+        "region": "EDLA - East Building Interior", "requires": []
+    },
+    {
+        "address": 3607, "name": "ED (Living Area): Defeat Mutated Zouyan in Middle Elevator Room",
+        "region": "EDLA - East Building Interior", "requires": [ { "item": "Super Mutant Buster" } ]
+    },
+    {
+        "address": 3608, "name": "ED (Living Area): Fuxi's Vital Sanctum",
+        "region": "EDLA - Opera Theater", "requires": []
+    },
+    {
+        "address": 3609, "name": "ED (Living Area): Upper Right of Five Bells Room",
+        "region": "EDLA - Opera Theater", "requires": []
+        // the OT region includes the top half of 5BR
+    },
+    {
+        "address": 3610, "name": "ED (Living Area): Defeat Mutated A-Shou in Five Bells Room",
+        "region": "EDLA - Opera Theater", "requires": [ { "item": "Super Mutant Buster" } ]
+    },
+    {
+        "address": 3611, "name": "ED (Living Area): Roof Right of Opera Theater",
+        "region": "EDLA - Opera Theater Right Roof", "requires": []
+    },
+    {
+        "address": 3612, "name": "ED (Living Area): Roof Left of Opera Theater",
+        "region": "EDLA - Opera Theater", "requires": [ { "item": "Cloud Leap" } ]
+    },
+    {
+        "address": 3613, "name": "ED (Living Area): East Building Rooftops",
+        "region": "EDLA - East Building Rooftops", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ] // to lower rope
+    },
+    {
+        "address": 3614, "name": "ED (Living Area): Dusk Guardian Recording Device",
+        "region": "EDLA - Tao Fruit", "requires": []
+    },
+    {
+        "address": 3615, "name": "ED (Living Area): Tianhou Flower",
+        "region": "EDLA - Tao Fruit", "requires": []
+    },
+    {
+        "address": 3616, "name": "ED (Living Area): Backer Room 1st Chest",
+        "region": "EDLA - Backer Room", "requires": []
+    },
+    {
+        "address": 3617, "name": "ED (Living Area): Backer Room 2nd Chest",
+        "region": "EDLA - Backer Room", "requires": []
+    },
+    {
+        "address": 3618, "name": "ED (Living Area): Backer Room 3rd Chest",
+        "region": "EDLA - Backer Room", "requires": []
+    },
+
     // Empyrean Dist. (Sanctum)
+    {
+        "address": 3701, "name": "ED (Sanctum): Examine Monitoring Panel",
+        "region": "EDS - Monitoring Panel", "requires": []
+    },
+    {
+        "address": 3702, "name": "ED (Sanctum): East Rooftop Walking Chest",
+        "region": "EDS - East Rooftop", "requires": []
+    },
+    {
+        "address": 3703, "name": "ED (Sanctum): Right Of East Rooftop",
+        "region": "EDS - East Rooftop", "requires": []
+    },
+    {
+        "address": 3704, "name": "ED (Sanctum): Above East Rooftop",
+        "region": "EDS - East Rooftop", "requires": [ { "item": "Cloud Leap" } ]
+    },
+    {
+        "address": 3705, "name": "ED (Sanctum): Defeat Mutated Xipu Below Nobility Hall",
+        "region": "EDS - Below Nobility Hall", "requires": [ { "item": "Super Mutant Buster" } ]
+    },
+    {
+        "address": 3706, "name": "ED (Sanctum): Defeat Mutated Yangfan Below Root Node",
+        "region": "EDS - Ground Floor Below Root Node", "requires": [ { "item": "Super Mutant Buster" } ]
+    },
+    {
+        "address": 3707, "name": "ED (Sanctum): Lower Left Garden",
+        "region": "EDS - Elevator", "requires": []
+    },
+    {
+        "address": 3708, "name": "ED (Sanctum): Above Lower Left Garden",
+        "region": "EDS - Elevator", "requires": [ { "item": "Cloud Leap" } ]
+    },
+
     // Nobility Hall
+    {
+        "address": 3801, "name": "Nuwa's Vital Sanctum",
+        "region": "NH - After Fengs", "requires": []
+    },
+    {
+        "address": 3802, "name": "Chest After Fengs",
+        "region": "NH - After Fengs", "requires": []
+    },
+    {
+        "address": 3803, "name": "Nuwa's Tianhou Flower",
+        "region": "NH - After Fengs", "requires": [ { "item": "Super Mutant Buster" } ]
+    },
+
     // Tiandao Research Center
+
     // Tianhuo Research Institute
+    // nothing for now
 ]
 
 

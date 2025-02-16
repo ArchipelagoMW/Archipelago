@@ -258,8 +258,8 @@
     { "from": "LYR - Right Exit", "to": "GoSY - Root Node", "requires": [] },
     { "from": "GoSY - Root Node", "to": "LYR - Right Exit", "requires": [] },
 
-//    { "from": "LYR - Upper Exit", "to": "ST - Lower Exit", "requires": [] },
-//    { "from": "ST - Lower Exit", "to": "LYR - Upper Exit", "requires": [] },
+    { "from": "LYR - Upper Exit", "to": "ST - Lower Exit", "requires": [] },
+    { "from": "ST - Lower Exit", "to": "LYR - Upper Exit", "requires": [] },
 
     // Greenhouse
     { "from": "GH - Root Node", "to": "GH - Chiyou & 1st Waterfall Hack", "requires": [ { "item": "Charged Strike" } ] },
@@ -729,21 +729,141 @@
 
     { "from": "GoSW - Lower Right Exits", "to": "GoSY - Elevator", "requires": [] }, // one-way elevator
 
-//    { "from": "GoSW - Lower Left Transporter", "to": "EDP - Lower Right Transporter", "requires": [] },
-//    { "from": "EDP - Lower Right Transporter", "to": "GoSW - Lower Left Transporter", "requires": [] },
-//
-//    { "from": "GoSW - Upper Left Exit", "to": "EDP - Upper Right Exit", "requires": [] },
-//    { "from": "EDP - Upper Right Exit", "to": "GoSW - Upper Left Exit", "requires": [] },
+    { "from": "GoSW - Lower Left Transporter", "to": "EDP - Lower Right Transporter", "requires": [] },
+    { "from": "EDP - Lower Right Transporter", "to": "GoSW - Lower Left Transporter", "requires": [] },
+
+    { "from": "GoSW - Upper Left Exit", "to": "EDP - Upper Right Exit", "requires": [] },
+    { "from": "EDP - Upper Right Exit", "to": "GoSW - Upper Left Exit", "requires": [] },
 
     // Ancient Stone Pillar
     // No root node in here, so no need for a 2nd region.
     { "from": "GoSW - Above Western Cliffs", "to": "ASP - After Ji", "requires": [] }, // TODO: combat logic?
 
     // Sky Tower
+    { "from": "ST - Lower Exit", "to": "ST - Lower Chest", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "ST - Lower Exit", "to": "ST - Lower Checkpoint Platform", "requires": [ { "item": "Cloud Leap" } ] }, // AND WC
+    { "from": "ST - Lower Checkpoint Platform", "to": "ST - Lower Exit", "requires": [] }, // fall
+    { "from": "ST - Lower Checkpoint Platform", "to": "ST - Lower Chest", "requires": [] }, // fall
+    { "from": "ST - Lower Checkpoint Platform", "to": "ST - Middle Chest", "requires": [
+        // either drop down slightly and use WC to get up to this chest, OR
+        // (DJ OR (grapple AND AD)) from above, using the platform right of the red rope
+    ] },
+    { "from": "ST - Lower Checkpoint Platform", "to": "ST - Upper Checkpoint Platform", "requires": [
+        { "item": "Cloud Leap" } // AND (grapple OR WC)
+    ] },
+    { "from": "ST - Upper Checkpoint Platform", "to": "ST - Lower Checkpoint Platform", "requires": [] }, // fall
+    { "from": "ST - Upper Checkpoint Platform", "to": "ST - Stowaway", "requires": [
+        { "item": "Cloud Leap" }, { "item": "Air Dash" } // AND WC
+    ] },
+    { "from": "ST - Stowaway", "to": "ST - Upper Checkpoint Platform", "requires": [] }, // fall
+    { "from": "ST - Stowaway", "to": "ST - Upper Exit & Root Node", "requires": [
+        { "item": "Mystic Nymph: Scout Mode" }
+    ] }, // nymph AND grapple
+    { "from": "ST - Upper Exit & Root Node", "to": "ST - Right Exit", "requires": [
+        { "item": "Air Dash" } // since you have to cross the pink waterfall from the side with no platform
+    ] },
+    { "from": "ST - Right Exit", "to": "ST - Upper Exit & Root Node", "requires": [
+        { "item": "Cloud Leap" } // AND WC, since this way you have to climb up the boxes as they move down
+    ] },
+
+    { "from": "ST - Upper Exit & Root Node", "to": "TRC - Upper Exit", "requires": [ { "item": "Elevator Access Token" } ] },
+
+    { "from": "ST - Right Exit", "to": "EDP - Left Exit", "requires": [] },
+    { "from": "EDP - Left Exit", "to": "ST - Right Exit", "requires": [] },
+
     // Empyrean Dist. (Passages)
+    { "from": "EDP - Left Exit", "to": "EDP - Root Node", "requires": [
+        { "item": "Cloud Leap" }, { "item": "Tai-Chi Kick" } // AND WC AND slide/grapple
+    ] },
+    { "from": "EDP - Root Node", "to": "EDP - Left Exit", "requires": [
+        { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Tai-Chi Kick" } ] } // for doing the slider backwards
+        // AND slide/grapple
+    ] },
+    { "from": "EDP - Lower Right Transporter", "to": "EDP - Above Right Transporter", "requires": [
+        { "item": "Cloud Leap" }, { "item": "Tai-Chi Kick" }
+    ] },
+    { "from": "EDP - Above Right Transporter", "to": "EDP - Lower Right Transporter", "requires": [] }, // fall
+    { "from": "EDP - Above Right Transporter", "to": "EDP - Root Node", "requires": [] }, // slide/grapple
+    { "from": "EDP - Root Node", "to": "EDP - Alcove Right of Root Node", "requires": [
+        { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] } // AND slide/grapple
+    ] },
+    { "from": "EDP - Root Node", "to": "EDP - Slider Right Of Root Node", "requires": [
+        { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] }
+    ] }, // (DJ OR (WC AND AD)) AND slide/grapple
+    { "from": "EDP - Slider Right Of Root Node", "to": "EDP - Between Root Node & Tianshou Arena", "requires": [
+        { "item": "Unbounded Counter" }
+    ] },
+    { "from": "EDP - Root Node", "to": "EDP - Left Pink Pool", "requires": [
+        { "item": "Air Dash" } // AND slide/grapple
+    ] },
+    { "from": "EDP - Left Pink Pool", "to": "EDP - Outside Tianshou Arena", "requires": [
+        { "item": "Cloud Leap" }, { "item": "Tai-Chi Kick" }, { "item": "Air Dash" } // AND slide/grapple
+    ] },
+    { "from": "EDP - Outside Tianshou Arena", "to": "EDP - Between Root Node & Tianshou Arena", "requires": [] }, // shortcut rope
+    { "from": "EDP - Outside Tianshou Arena", "to": "EDP - Tianshou Arena", "requires": [
+        { "item": "Mystic Nymph: Scout Mode" } // to disable the triple pink waterfall
+    ] },
+    { "from": "EDP - Tianshou Arena", "to": "EDP - Upper Elevator", "requires": [
+        { "item": "Cloud Leap" } // AND grapple; is defeating Tianshou actually required?
+    ] },
+    { "from": "EDP - Upper Elevator", "to": "EDP - Upper Right Exit", "requires": [] }, // one-way door
+    { "from": "EDP - Upper Right Exit", "to": "EDP - Laser Gauntlet", "requires": [ { "item": "Tai-Chi Kick" } ] },
+
+    { "from": "EDP - Upper Elevator", "to": "EDLA - Root Node & Lower Elevator", "requires": [] }, // one-way elevator
+
     // Empyrean Dist. (Living Area)
+    { "from": "EDLA - Root Node & Lower Elevator", "to": "EDLA - East Building Interior", "requires": [
+        { "item": "Cloud Leap" } // AND hacking 2 to activate the lift
+    ] },
+    // since East Building Interior has only one way in, which already requires CL + H2,
+    // this logic ignores the other CL and H2 checks that happen later in the building
+    { "from": "EDLA - East Building Interior", "to": "EDLA - Opera Theater", "requires": [] }, // one-way elevator
+    { "from": "EDLA - Opera Theater", "to": "EDLA - East Building Rooftops", "requires": [
+        { "item": "Cloud Leap" }, { "item": "Air Dash" } // AND WC
+    ] },
+    { "from": "EDLA - Opera Theater", "to": "EDLA - Opera Theater Right Roof", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "EDLA - Opera Theater Right Roof", "to": "EDLA - East Building Rooftops", "requires": [] }, // fall
+    { "from": "EDLA - East Building Rooftops", "to": "EDLA - Tao Fruit", "requires": [
+        { "item": "Mystic Nymph: Scout Mode" },
+        { "item": "Cloud Leap" }
+    ] },
+    { "from": "EDLA - Opera Theater", "to": "EDLA - Five Bells Room", "requires": [] }, // fall
+    { "from": "EDLA - Five Bells Room", "to": "EDLA - Opera Theater", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "EDLA - Five Bells Room", "to": "EDLA - Backer Room", "requires": [ { "item": "Charged Strike" } ] }, // to ring the bells
+    { "from": "EDLA - Five Bells Room", "to": "EDLA - Left Exit", "requires": [] }, // fall
+    { "from": "EDLA - Left Exit", "to": "EDLA - Five Bells Room", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "EDLA - Left Exit", "to": "EDLA - Root Node & Lower Elevator", "requires": [] }, // one-way hacking 2 door
+
+    { "from": "EDLA - Left Exit", "to": "EDS - Right Exit", "requires": [] },
+    { "from": "EDS - Right Exit", "to": "EDLA - Left Exit", "requires": [] },
+
     // Empyrean Dist. (Sanctum)
+    { "from": "EDS - Right Exit", "to": "EDS - Below Root Node", "requires": [ { "item": "Air Dash" } ] },
+    { "from": "EDS - Below Root Node", "to": "EDS - Right Exit", "requires": [ { "item": "Air Dash" } ] },
+    { "from": "EDS - Right Exit", "to": "EDS - Root Node", "requires": [ { "anyOf": [
+        { "item": "Air Dash" }, { "item": "Cloud Leap" }
+    ] } ] },
+    { "from": "EDS - Root Node", "to": "EDS - Right Exit", "requires": [ { "anyOf": [
+        { "item": "Air Dash" }, { "item": "Cloud Leap" }
+    ] } ] },
+    { "from": "EDS - Right Exit", "to": "EDS - Monitoring Panel", "requires": [ { "item": "Tai-Chi Kick" } ] },
+    { "from": "EDS - Monitoring Panel", "to": "EDS - East Rooftop", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "EDS - East Rooftop", "to": "EDS - Outside Nobility Hall", "requires": [] }, // fall
+    { "from": "EDS - Outside Nobility Hall", "to": "EDS - East Rooftop", "requires": [ { "item": "Cloud Leap" } ] },
+    // ONH->RN shortcut rope and ONH->MP nymph shortcut door are irrelevant to logic
+    { "from": "EDS - Outside Nobility Hall", "to": "EDS - Below Nobility Hall", "requires": [ { "item": "Super Mutant Buster" } ] },
+    { "from": "EDS - Below Nobility Hall", "to": "EDS - Below Root Node", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ] },
+    { "from": "EDS - Below Root Node", "to": "EDS - Ground Floor Below Root Node", "requires": [] }, // fall
+    { "from": "EDS - Ground Floor Below Root Node", "to": "EDS - Below Root Node", "requires": [] }, // grapple
+    { "from": "EDS - Ground Floor Below Root Node", "to": "EDS - Right Exit", "requires": [] }, // one-way door
+    { "from": "EDS - Ground Floor Below Root Node", "to": "EDS - Elevator", "requires": [ { "item": "Super Mutant Buster" } ] },
+
+    { "from": "EDS - Elevator", "to": "TRC - Upper Exit", "requires": [ { "item": "Elevator Access Token" } ] },
+
     // Nobility Hall
+    // No root node in here, so no need for a 2nd region.
+    { "from": "EDS - Outside Nobility Hall", "to": "NH - After Fengs", "requires": [] },
+
     // Tiandao Research Center
     { "from": "TRC - Right Exit", "to": "TRC - Upper Exit", "requires": [] }, // fake for testing
     { "from": "TRC - Left Exit", "to": "TRC - Upper Exit", "requires": [] }, // fake for testing
