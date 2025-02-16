@@ -56,6 +56,17 @@ class KH1ClientCommandProcessor(ClientCommandProcessor):
                 self.output(f"'death_link' = " + str(self.ctx.slot_data["death_link"]))
         else:
             self.output(f"No 'death_link' in slot_data keys. You probably aren't connected or are playing an older seed.")
+    
+    def _cmd_communication_path(self):
+        """Opens a file browser to allow Linux users to manually set their %LOCALAPPDATA% path"""
+        directory = Utils.open_directory("Select %LOCALAPPDATA% dir", "~/.local/share/Steam/steamapps/compatdata/2552430/pfx/drive_c/users/steamuser/AppData/Local")
+        if directory:
+            directory += "/KH1FM"
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+            self.ctx.game_communication_path = directory
+        else:
+            self.output(self.ctx.game_communication_path)
 
 class KH1Context(CommonContext):
     command_processor: int = KH1ClientCommandProcessor
