@@ -606,13 +606,139 @@
     { "from": "GD - Left Exit", "to": "GD - Root Node & Right Exit", "requires": [] }, // one-way door
 
     // Grotto of Scriptures (Entry)
+    { "from": "GoSY - Root Node", "to": "GoSY - Treasure Room", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "GoSY - Lower Right Exit", "to": "GoSY - Middle Caves & Lower Portals", "requires": [] }, // WC OR using portal (AD OR CL)
+    { "from": "GoSY - Middle Caves & Lower Portals", "to": "GoSY - Lower Right Exit", "requires": [] }, // fall
+    { "from": "GoSY - Middle Caves & Lower Portals", "to": "GoSY - Upper Caves", "requires": [] }, // WC OR DJ
+    { "from": "GoSY - Upper Caves", "to": "GoSY - Middle Caves & Lower Portals", "requires": [] }, // fall
+    { "from": "GoSY - Upper Caves", "to": "GoSY - Below Elevator & Upper Cave Portals", "requires": [
+        { "item": "Charged Strike" }, // either go through the obvious CS barrier
+        { "item": "Cloud Leap" } // or jump to the top right platform with chests and use the portal to bypass the barrier
+    ] },
+    { "from": "GoSY - Below Elevator & Upper Cave Portals", "to": "GoSY - Upper Caves", "requires": [] }, // fall, portal, fall again
+    { "from": "GoSY - Below Elevator & Upper Cave Portals", "to": "GoSY - Root Node", "requires": [] }, // one-way door
+    { "from": "GoSY - Below Elevator & Upper Cave Portals", "to": "GoSY - Elevator", "requires": [
+        { "item": "Cloud Leap" } // this is one of the big CL barriers in vanilla
+    ] },
+    { "from": "GoSY - Elevator", "to": "GoSY - Below Elevator & Upper Cave Portals", "requires": [] }, // fall
+    { "from": "GoSY - Elevator", "to": "GoSY - Upper Right Exit", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "GoSY - Upper Right Exit", "to": "GoSY - Elevator", "requires": [] }, // fall
+
     { "from": "GoSY - Root Node", "to": "GH - Root Node", "requires": [] }, // one-way fall (scripted on first visit)
 
-    { "from": "GoSY - Root Node", "to": "GoSY - Lower Right Exit", "requires": [] }, // fake for testing
+    { "from": "GoSY - Upper Right Exit", "to": "GoSE - Lower Exit", "requires": [] },
+    { "from": "GoSE - Lower Exit", "to": "GoSY - Upper Right Exit", "requires": [] },
 
     // Grotto of Scriptures (East)
+    { "from": "GoSE - Lower Exit", "to": "GoSE - Spike Ball Hall Floor", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "GoSE - Spike Ball Hall Floor", "to": "GoSE - Lower Exit", "requires": [] }, // fall
+    { "from": "GoSE - Spike Ball Hall Floor", "to": "GoSE - Spike Ball Hall Platforms", "requires": [ { "item": "Cloud Leap" } ] }, // DJ AND (grapple OR AD)
+    { "from": "GoSE - Spike Ball Hall Platforms", "to": "GoSE - Spike Ball Hall Floor", "requires": [] }, // fall
+    { "from": "GoSE - Spike Ball Hall Platforms", "to": "GoSE - Root Node", "requires": [ { "anyOf": [
+        { "item": "Air Dash" }, { "item": "Cloud Leap" }
+    ] } ] }, // DJ or (grapple AND AD)
+    { "from": "GoSE - Root Node", "to": "GoSE - Spike Ball Hall Platforms", "requires": [] }, // fall
+    { "from": "GoSE - Root Node", "to": "GoSE - Middle Exit", "requires": [] }, // fall
+    { "from": "GoSE - Middle Exit", "to": "GoSE - Root Node", "requires": [
+        { "item": "Cloud Leap" } // to jump over the spike balls, in case you didn't get it 1st try and the pillars are no longer there
+    ] },
+    { "from": "GoSE - Root Node", "to": "GoSE - Outside Yin Jifu's Tomb", "requires": [] }, // fall slightly, portal on right
+    { "from": "GoSE - Outside Yin Jifu's Tomb", "to": "GoSE - Stone Carvings", "requires": [] }, // one-way door
+    // we mostly ignore the logic for *exiting* YJ tomb regions, because this is the only way into any of them
+    { "from": "GoSE - Outside Yin Jifu's Tomb", "to": "GoSE - Yin Jifu's Spike Ball Puzzle", "requires": [ { "anyOf": [
+        { "item": "Air Dash" }, { "item": "Cloud Leap" }
+    ] } ] },
+    { "from": "GoSE - Yin Jifu's Spike Ball Puzzle", "to": "GoSE - Yin Jifu's Tomb", "requires": [ { "anyOf": [
+        { "item": "Tai-Chi Kick" }, { "item": "Unbounded Counter" } // to fight lurkers
+    ] } ] },
+    // but the GG tomb regions have interesting connections from GoSW and YJ's tomb, so these have to be as thorough as usual
+    { "from": "GoSE - Root Node", "to": "GoSE - Outside Guiguzi's Tomb", "requires": [
+        { "item": "Cloud Leap" } // to the portal above and left of the root node
+    ] },
+    { "from": "GoSE - Outside Guiguzi's Tomb", "to": "GoSE - Root Node", "requires": [] }, // portal, fall
+    { "from": "GoSE - Outside Guiguzi's Tomb", "to": "GoSE - Upper Exit", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "GoSE - Upper Exit", "to": "GoSE - Outside Guiguzi's Tomb", "requires": [] }, // fall
+    { "from": "GoSE - Outside Guiguzi's Tomb", "to": "GoSE - Stone Carvings", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "GoSE - Stone Carvings", "to": "GoSE - Outside Guiguzi's Tomb", "requires": [] }, // fall
+    { "from": "GoSE - Stone Carvings", "to": "GoSE - Upper Exit", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "GoSE - Upper Exit", "to": "GoSE - Stone Carvings", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "GoSE - Outside Guiguzi's Tomb", "to": "GoSE - Guiguzi's Tomb", "requires": [
+        { "item": "Cloud Leap" }, // technically unnecessary if you start from Upper Exit, but
+        // that implies teleporting/quit-and-reloading if you mess it up, so I'd rather not
+        { "item": "Mystic Nymph: Scout Mode" } // to release the spike ball
+    ] },
+
+    { "from": "GoSE - Middle Exit", "to": "GoSW - Lower Right Exits", "requires": [] },
+    { "from": "GoSW - Lower Right Exits", "to": "GoSE - Middle Exit", "requires": [] },
+
+    { "from": "GoSE - Upper Exit", "to": "GoSW - Upper Right Exit", "requires": [] },
+    { "from": "GoSW - Upper Right Exit", "to": "GoSE - Upper Exit", "requires": [] },
+
     // Grotto of Scriptures (West)
+    // First, the regions available "early", before completing enough of East Grotto to find the upper entrance
+    { "from": "GoSW - Lower Right Exits", "to": "GoSW - Cixing Arena", "requires": [] }, // fall
+    { "from": "GoSW - Cixing Arena", "to": "GoSW - Lower Right Exits", "requires": [ { "anyOf": [
+        { "item": "Air Dash" }, { "item": "Cloud Leap" }
+    ] } ] }, // grapple AND (DJ up OR AD across to warp)
+    { "from": "GoSW - Cixing Arena", "to": "GoSW - Lower Left Transporter", "requires": [ { "anyOf": [
+        { "item": "Air Dash" }, { "item": "Cloud Leap" }
+    ] } ] }, // grapple AND (AD OR DJ)
+    // And since these are also simple and isolated, we'll do the Lear's grave stuff next
+    { "from": "GoSW - Cixing Arena", "to": "GoSW - Lear's Grave", "requires": [
+        // to activate the door and force Cixing to spawn in defense
+        { "location": "GoS (East): Examine Mural in Yin Jifu's Tomb" },
+        { "location": "GoS (East): Examine Mural in Guiguzi's Tomb" },
+        { "location": "GoS (West): Examine Mural in Luyan's Tomb" },
+        // to defeat Cixing
+        { "item": "Tai-Chi Kick" }, // combat logic: specifically Cixing's crimson thrust combo needs kick IMO
+        // to reach the part of the grave with items in it
+        { "item": "Charged Strike" }
+    ] },
+    // Now for the messy part of West Grotto: the semi-scripted progression from
+    // upper right exit to Ji fight through the rotating platforms puzzle.
+    // Remember that unlike vanilla we might be starting at the GoSW node.
+    { "from": "GoSW - Upper Right Exit", "to": "GoSW - Root Node", "requires": [ { "anyOf": [
+        { "item": "Air Dash" }, { "item": "Cloud Leap" }
+        // The first time, when the spike ball chases you, the final jump requires just CL.
+        // But if you die or TP out and come back this way later, using the ropes and portals, then
+        // jumping over the stationary spike ball and climbing up to the node is (DJ OR AD) AND WC.
+    ] } ] },
+    { "from": "GoSW - Upper Right Exit", "to": "GoSW - Lower Platform Rotation Button", "requires": [] }, // rope to portal, fall
+    { "from": "GoSW - Root Node", "to": "GoSW - Lower Platform Rotation Button", "requires": [] }, // fall
+    { "from": "GoSW - Lower Platform Rotation Button", "to": "GoSW - Lower Right Exits", "requires": [] }, // press button, fall, go right and open one-way door
+    { "from": "GoSW - Lower Platform Rotation Button", "to": "GoSW - Spike Ball Release", "requires": [
+        // open one-way door to Lower Right Exits as described above, then reset and return here
+        // walk all the way right, drop down where the shortcut rope is, then walk left through the now-open door
+        { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] } // to cross the spikes down here
+        // continue left into the portal, then on the other side keep walking left to the hack point
+    ] },
+    { "from": "GoSW - Spike Ball Release", "to": "GoSW - Luyan's Tomb", "requires": [
+        // the portal at SBR lets you take shortcut ropes and more portals back and forth to the platform rotation button
+        // then you just need WC to climb the vertical platform from the SBR side
+    ] },
+    { "from": "GoSW - Spike Ball Release", "to": "GoSW - Above Western Cliffs", "requires": [
+        { "item": "Tai-Chi Kick" }, { "item": "Cloud Leap" }
+    ] },
+    { "from": "GoSW - Above Western Cliffs", "to": "GoSW - Root Node", "requires": [
+        { "item": "Mystic Nymph: Scout Mode" } // to open the one-way door
+    ] },
+    { "from": "GoSW - Above Western Cliffs", "to": "GoSW - Upper Left Exit", "requires": [] }, // one-way bridge hack
+
+    { "from": "GoSW - Upper Right Exit", "to": "GoSW - Lower Right Exits", "requires": [] }, // rope to portal, fall, press button for vertical green platforms, fall, one-way door
+    { "from": "GoSW - Root Node", "to": "GoSW - Lower Right Exits", "requires": [] }, // fall, press button for vertical green platforms, fall, one-way door
+
+    { "from": "GoSW - Lower Right Exits", "to": "GoSY - Elevator", "requires": [] }, // one-way elevator
+
+//    { "from": "GoSW - Lower Left Transporter", "to": "EDP - Lower Right Transporter", "requires": [] },
+//    { "from": "EDP - Lower Right Transporter", "to": "GoSW - Lower Left Transporter", "requires": [] },
+//
+//    { "from": "GoSW - Upper Left Exit", "to": "EDP - Upper Right Exit", "requires": [] },
+//    { "from": "EDP - Upper Right Exit", "to": "GoSW - Upper Left Exit", "requires": [] },
+
     // Ancient Stone Pillar
+    // No root node in here, so no need for a 2nd region.
+    { "from": "GoSW - Above Western Cliffs", "to": "ASP - After Ji", "requires": [] }, // TODO: combat logic?
+
     // Sky Tower
     // Empyrean Dist. (Passages)
     // Empyrean Dist. (Living Area)

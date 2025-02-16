@@ -990,9 +990,206 @@
     },
 
     // Grotto of Scriptures (Entry)
+    {
+        "address": 3001, "name": "GoS (Entry): Examine Painting",
+        "region": "GoSY - Root Node", "requires": []
+    },
+    {
+        "address": 3002, "name": "GoS (Entry): Examine Coffin",
+        "region": "GoSY - Root Node", "requires": []
+    },
+    {
+        "address": 3003, "name": "GoS (Entry): Poem Treasure 1st Chest",
+        "region": "GoSY - Treasure Room", "requires": []
+    },
+    {
+        "address": 3004, "name": "GoS (Entry): Poem Treasure 2nd Chest",
+        "region": "GoSY - Treasure Room", "requires": []
+    },
+    {
+        "address": 3005, "name": "GoS (Entry): Poem Treasure 3rd Chest",
+        "region": "GoSY - Treasure Room", "requires": []
+    },
+    {
+        "address": 3006, "name": "GoS (Entry): Poem Treasure 4th Chest",
+        "region": "GoSY - Treasure Room", "requires": []
+    },
+    {
+        "address": 3007, "name": "GoS (Entry): Poem Treasure 5th Chest",
+        "region": "GoSY - Treasure Room", "requires": []
+    },
+    {
+        "address": 3008, "name": "GoS (Entry): Poem Treasure 6th Chest",
+        "region": "GoSY - Treasure Room", "requires": []
+    },
+    {
+        "address": 3009, "name": "GoS (Entry): Lower Caves Portal",
+        "region": "GoSY - Middle Caves & Lower Portals", "requires": []
+    },
+    {
+        "address": 3010, "name": "GoS (Entry): Lower Left Caves",
+        "region": "GoSY - Lower Right Exit", "requires": []
+    },
+    {
+        "address": 3011, "name": "GoS (Entry): Alcove Above Middle Caves Portal",
+        "region": "GoSY - Middle Caves & Lower Portals", "requires": []
+    },
+    {
+        "address": 3012, "name": "GoS (Entry): Yellow Pool Above Middle Caves Portal",
+        "region": "GoSY - Middle Caves & Lower Portals", "requires": []
+    },
+    {
+        "address": 3013, "name": "GoS (Entry): Upper Right Caves Portal 1st Chest",
+        "region": "GoSY - Below Elevator & Upper Cave Portals", "requires": []
+    },
+    {
+        "address": 3014, "name": "GoS (Entry): Upper Right Caves Portal 2nd Chest",
+        "region": "GoSY - Below Elevator & Upper Cave Portals", "requires": []
+    },
+    {
+        "address": 3015, "name": "GoS (Entry): Upper Right Caves Portal 3rd Chest",
+        "region": "GoSY - Below Elevator & Upper Cave Portals", "requires": []
+    },
+    {
+        "address": 3016, "name": "GoS (Entry): Near Greenhouse Roof",
+        "region": "GoSY - Below Elevator & Upper Cave Portals", "requires": []
+    },
+    {
+        "address": 3017, "name": "GoS (Entry): Greenhouse Between Elevators",
+        "region": "GoSY - Elevator", "requires": [ { "item": "Cloud Leap" } ]
+        // ^ this will need a proper region if we ever get "Elevator Skip" in logic
+    },
+    {
+        "address": 3018, "name": "GoS (Entry): Near Upper Right Exit",
+        "region": "GoSY - Upper Right Exit", "requires": [ { "item": "Charged Strike" } ]
+    },
+
     // Grotto of Scriptures (East)
+    {
+        "address": 3101, "name": "GoS (East): Lurker Near Lower Exit",
+        "region": "GoSE - Lower Exit", "requires": []
+    },
+    {
+        "address": 3102, "name": "GoS (East): Guarded By Phantom Ninja",
+        "region": "GoSE - Spike Ball Hall Floor", "requires": []
+    },
+    {
+        "address": 3103, "name": "GoS (East): Spike Ball Hall Upper Right",
+        "region": "GoSE - Spike Ball Hall Platforms", "requires": []
+    },
+    {
+        "address": 3104, "name": "GoS (East): Spike Ball Hall Upper Left",
+        "region": "GoSE - Spike Ball Hall Platforms", "requires": [ { "anyOf": [
+            { "item": "Air Dash" }, { "item": "Cloud Leap" }
+        ] } ]
+    },
+    {
+        "address": 3105, "name": "GoS (East): Lurkers Under Tunnel Walkway",
+        "region": "GoSE - Root Node", "requires": []
+    },
+    {
+        "address": 3106, "name": "GoS (East): Portal Below Root Node",
+        "region": "GoSE - Root Node", "requires": []
+    },
+    {
+        "address": 3107, "name": "GoS (East): Alcove Between Tombs 1st Chest",
+        "region": "GoSE - Outside Yin Jifu's Tomb", "requires": []
+    },
+    {
+        "address": 3108, "name": "GoS (East): Alcove Between Tombs 2nd Chest",
+        "region": "GoSE - Outside Yin Jifu's Tomb", "requires": []
+    },
+    {
+        "address": 3109, "name": "GoS (East): Alcove Between Tombs 3rd Chest",
+        "region": "GoSE - Outside Yin Jifu's Tomb", "requires": []
+    },
+    {
+        "address": 3110, "name": "GoS (East): Upper Right of Room Above Yin Jifu's Tomb",
+        "region": "GoSE - Yin Jifu's Spike Ball Puzzle", "requires": []
+    },
+    {
+        "address": 3111, "name": "GoS (East): Examine Mural in Yin Jifu's Tomb",
+        "region": "GoSE - Yin Jifu's Tomb", "requires": [] // Bullet Deflect skill (or UC + Divine Hand Jade???)
+        // this will be the sticking point for skill tree rando
+    },
+    {
+        "address": 3112, "name": "GoS (East): Examine Stone Carvings",
+        "region": "GoSE - Stone Carvings", "requires": []
+    },
+    {
+        "address": 3113, "name": "GoS (East): Outside Guiguzi's Tomb",
+        "region": "GoSE - Guiguzi's Tomb", "requires": [ { "item": "Cloud Leap" } ]
+    },
+    {
+        "address": 3114, "name": "GoS (East): Examine Mural in Guiguzi's Tomb",
+        "region": "GoSE - Guiguzi's Tomb", "requires": [
+            { "item": "Unbounded Counter" },
+            { "item": "Tai-Chi Kick" }
+        ] // Bullet Deflect is optional here since UC covers those statues
+    },
+
     // Grotto of Scriptures (West)
+    {
+        "address": 3201, "name": "GoS (West): Above Elevator",
+        "region": "GoSW - Lower Right Exits", "requires": [
+            { "item": "Cloud Leap" } // from the upper portal
+        ]
+    },
+    {
+        "address": 3202, "name": "GoS (West): Platforms In Top Middle Room",
+        "region": "GoSW - Spike Ball Release", "requires": [
+            // portal next to SBR is the only way to the upper half of this room
+            { "item": "Cloud Leap" } // without the collapsing platforms, AD might also work
+        ] // does NOT require spike ball chase
+    },
+    {
+        "address": 3203, "name": "GoS (West): Below Western Cliffs",
+        "region": "GoSW - Spike Ball Release", "requires": [ { "anyOf": [
+            { "item": "Air Dash" }, { "item": "Cloud Leap" }
+        ] } ] // DOES require spike ball chase, so if you spawned at GoSW node you may need to trigger it
+    },
+    {
+        "address": 3204, "name": "GoS (West): Below Luyan's Tomb",
+        "region": "GoSW - Luyan's Tomb", "requires": [] // does NOT require spike ball chase
+    },
+    {
+        "address": 3205, "name": "GoS (West): Examine Mural in Luyan's Tomb",
+        "region": "GoSW - Luyan's Tomb", "requires": [
+            { "item": "Cloud Leap" }, // to get from the chest platform up to the entrance
+            { "item": "Unbounded Counter" } // for the parry challenge
+        ] // DOES require spike ball chase, so if you spawned at GoSW node you may need to trigger it
+    },
+    {
+        "address": 3206, "name": "GoS (West): Yin Jifu's Tianhou Flower",
+        "region": "GoSW - Lear's Grave", "requires": []
+    },
+    {
+        "address": 3207, "name": "GoS (West): Guiguzi's Tianhou Flower",
+        "region": "GoSW - Lear's Grave", "requires": []
+    },
+    {
+        "address": 3208, "name": "GoS (West): Luyan's Tianhou Flower",
+        "region": "GoSW - Lear's Grave", "requires": []
+    },
+    {
+        "address": 3209, "name": "GoS (West): Chest in Lear's Grave",
+        "region": "GoSW - Lear's Grave", "requires": []
+    },
+
     // Ancient Stone Pillar
+    {
+        "address": 3301, "name": "Examine Ji",
+        "region": "ASP - After Ji", "requires": []
+    },
+    {
+        "address": 3302, "name": "Ji's Vital Sanctum",
+        "region": "ASP - After Ji", "requires": []
+    },
+    {
+        "address": 3303, "name": "Retrieve Chip From Shanhai 1000",
+        "region": "ASP - After Ji", "requires": []
+    },
+
     // Sky Tower
     // Empyrean Dist. (Passages)
     // Empyrean Dist. (Living Area)
