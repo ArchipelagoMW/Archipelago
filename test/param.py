@@ -12,7 +12,7 @@ def classvar_matrix(**kwargs: Iterable[Any]) -> Callable[[type], None]:
     The kwargs will be set as ClassVars in the newly created classes. Use as ::
 
         @classvar_matrix(var_name=[value1, value2])
-        Class MyTestCase(unittest.TestCase):
+        class MyTestCase(unittest.TestCase):
             var_name: typing.ClassVar[...]
 
     :param kwargs: A dict of ClassVars to set, where key is the variable name and value is a list of all values.
