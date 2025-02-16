@@ -1135,7 +1135,7 @@ def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, st
     seeked_item_id = item if isinstance(item, int) else ctx.item_names_for_game(ctx.games[slot])[item]
     for finding_player, location_id, item_id, receiving_player, item_flags \
             in ctx.locations.find_item(slots, seeked_item_id):
-        prev_hint = ctx.get_hint(team, slot, location_id)
+        prev_hint = ctx.get_hint(team, finding_player, location_id)
         if prev_hint:
             hints.append(prev_hint)
         else:
