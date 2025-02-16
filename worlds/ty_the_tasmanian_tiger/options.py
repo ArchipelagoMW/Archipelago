@@ -16,7 +16,7 @@ class Goal(Choice):
 
 class GoalRequiresBosses(Toggle):
     """
-    Determines if beating all bosses is a requirement to complete the goal
+    Determines if beating all bosses is a requirement to go to Final Battle
     """
     display_name = "Goal Requires Bosses"
 
@@ -42,25 +42,11 @@ class ProgressiveElementals(DefaultOnToggle):
     display_name = "Progressive Elemental Rangs"
 
 
-class StartWithBoom(DefaultOnToggle):
-    """
-    Determines if Ty starts with his boomerang (only for progressive elementals)
-    """
-    display_name = "Start With Boomerang"
-
-
 class LevelShuffle(Toggle):
     """
     Determines whether the levels that portals lead to will be shuffled
     """
     display_name = "Level Shuffle"
-
-
-class BossShuffle(Toggle):
-    """
-    Determines whether the first three bosses will be shuffled
-    """
-    display_name = "Boss Shuffle"
 
 
 class LevelUnlockStyle(Choice):
@@ -77,7 +63,7 @@ class LevelUnlockStyle(Choice):
     option_vanilla = 0
     option_checks = 1
     option_checks_no_bosses = 2
-    default = 1
+    default = 2
 
 
 class ProgressiveLevel(DefaultOnToggle):
@@ -153,7 +139,7 @@ class Framesanity(Choice):
     option_all = 0
     option_per_level = 1
     option_none = 2
-    default = 0
+    default = 2
 
 
 class FramesRequireInfra(Toggle):
@@ -178,20 +164,18 @@ ty1_option_groups = [
     OptionGroup("Logic Options", [
         LogicDifficulty,
         ProgressiveElementals,
-        StartWithBoom,
-        FramesRequireInfra,
         ThunderEggGating,
         ExtraThunderEggs,
         CogGating,
         ExtraCogs,
-        LevelShuffle,
-        BossShuffle,
         LevelUnlockStyle,
         ProgressiveLevel,
-        GateTimeAttacks,
+        LevelShuffle,
     ]),
     OptionGroup("Sanity Options", [
+        GateTimeAttacks,
         Framesanity,
+        FramesRequireInfra,
         Scalesanity,
     ]),
     OptionGroup("Death Link", [
@@ -215,7 +199,6 @@ class Ty1Options(PerGameCommonOptions):
     gate_time_attacks: GateTimeAttacks
 
     level_shuffle: LevelShuffle
-    boss_shuffle: BossShuffle
     level_unlock_style: LevelUnlockStyle
     progressive_level: ProgressiveLevel
 

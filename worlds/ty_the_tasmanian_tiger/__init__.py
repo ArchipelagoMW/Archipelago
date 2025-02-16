@@ -1,5 +1,6 @@
 import typing
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
+from Options import OptionError
 from worlds.AutoWorld import WebWorld, World
 
 from .items import Ty1Item, ty1_item_table, create_items, ItemData, place_locked_items
@@ -39,8 +40,7 @@ class Ty1World(World):
     portal_map: typing.List[int] = [Ty1LevelCode.A1.value, Ty1LevelCode.A2.value, Ty1LevelCode.A3.value,
                                     Ty1LevelCode.B1.value, Ty1LevelCode.B2.value, Ty1LevelCode.B3.value,
                                     Ty1LevelCode.C1.value, Ty1LevelCode.C2.value, Ty1LevelCode.C3.value]
-    boss_map: typing.List[int] = [Ty1LevelCode.A4.value, Ty1LevelCode.D4.value, Ty1LevelCode.C4.value]
-    
+
     web = Ty1Web()
 
     def __init__(self, multiworld: MultiWorld, player: int):
@@ -49,11 +49,10 @@ class Ty1World(World):
         self.portal_map = [Ty1LevelCode.A1.value, Ty1LevelCode.A2.value, Ty1LevelCode.A3.value,
                            Ty1LevelCode.B1.value, Ty1LevelCode.B2.value, Ty1LevelCode.B3.value,
                            Ty1LevelCode.C1.value, Ty1LevelCode.C2.value, Ty1LevelCode.C3.value]
-        self.boss_map = [Ty1LevelCode.A4.value, Ty1LevelCode.D4.value, Ty1LevelCode.C4.value]
 
     def fill_slot_data(self) -> id:
         return {
-            "ModVersion": 100,
+            "ModVersion": 112,
             "Goal": self.options.goal.value,
             "ProgressiveElementals": self.options.progressive_elementals.value,
             "ProgressiveLevel": self.options.progressive_level.value,
@@ -63,12 +62,48 @@ class Ty1World(World):
             "ReqBosses": self.options.req_bosses.value,
             "GateTimeAttacks": self.options.gate_time_attacks.value,
             "PortalMap": self.portal_map,
-            "BossMap": self.boss_map,
             "Scalesanity": self.options.scalesanity.value,
             "Framesanity": self.options.framesanity.value,
             "AdvancedLogic": self.options.logic_difficulty.value,
             "DeathLink": self.options.death_link.value
         }
+
+    def generate_early(self) -> None:
+        extra_thegg_count = self.options.extra_theggs * 3
+        extra_cog_count = self.options.extra_cogs
+        empty_cog_checks = 90 - (self.options.cog_gating * 6)
+        empty_thegg_checks = 72 - (self.options.thegg_gating * 3)
+        frame_count = 127 if self.options.framesanity == 0 else 9 if self.options.framesanity == 1 else 0
+        scale_count = 25 if self.options.scalesanity else 0
+        excess_checks = 18 - (0 if self.options.level_unlock_style == 0 else 12 if self.options.level_unlock_style == 1 else 9)
+        excess_checks += frame_count + scale_count + empty_cog_checks + empty_thegg_checks
+        total_unbalanced = extra_thegg_count + extra_cog_count
+        if extra_thegg_count + extra_cog_count > excess_checks:
+            print("[WARN] Ty1 - Thegg and Cog count in item pool is larger than remaining checks.")
+            overflow = total_unbalanced - excess_checks
+            cog_contribution_ratio = extra_cog_count / total_unbalanced
+            thegg_contribution_ratio = extra_thegg_count / total_unbalanced
+
+            reduce_cogs = int(round(overflow * cog_contribution_ratio, 0))
+            reduce_theggs = int(round(overflow * thegg_contribution_ratio, 0))
+
+            reduce_cogs = min(self.options.extra_cogs.value, reduce_cogs)
+            reduce_theggs = min(self.options.extra_theggs.value, int(reduce_theggs / 3))
+            rounding_error = overflow - (reduce_cogs + (reduce_theggs * 3))
+            if 0 < rounding_error < 3 and self.options.extra_cogs - reduce_cogs > 0:
+                reduce_cogs += rounding_error
+
+            self.options.extra_cogs.value = extra_cog_count - int(reduce_cogs)
+            self.options.extra_theggs.value = int(extra_thegg_count / 3) - int(reduce_theggs)
+
+            thegg_count = self.options.extra_theggs * 3
+            cog_count = self.options.extra_cogs
+
+            if thegg_count + cog_count > excess_checks:
+                print("[ERROR] Ty1 - Could not automatically reduce counts. Something is very wrong.")
+                raise OptionError()
+            else:
+                print("[INFO] Ty1 - Extra Theggs and Cogs have been reduced to avoid unplaced items.")
 
     def create_item(self, name: str) -> Item:
         item_info = ty1_item_table[name]
@@ -86,7 +121,7 @@ class Ty1World(World):
     def create_regions(self):
         create_regions(self.multiworld, self.options, self.player)
         place_locked_items(self.multiworld, self.player)
-        connect_all_regions(self.multiworld, self.player, self.options, self.portal_map, self.boss_map)
+        connect_all_regions(self.multiworld, self.player, self.options, self.portal_map)
 
     def set_rules(self):
         set_rules(self)

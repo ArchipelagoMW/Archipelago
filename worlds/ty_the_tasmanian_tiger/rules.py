@@ -89,10 +89,13 @@ def has_level(world, state, level_index: int):
                 or state.has(portal_name, world.player))
 
 
+vanilla_boss_map = [7, 19, 15]
+
+
 def has_boss(world, state, level_index: int):
     if world.options.level_unlock_style != 1:
         return state.has(thegg_type_names[level_index], world.player, world.options.thegg_gating)
-    portal_name = "Portal - " + ty1_levels[Ty1LevelCode(world.boss_map[level_index])]
+    portal_name = "Portal - " + ty1_levels[Ty1LevelCode(vanilla_boss_map[level_index])]
     if world.options.progressive_level:
         return state.has("Progressive Level", world.player, 3 + (4 * level_index))
     return state.has(portal_name, world.player)
@@ -206,9 +209,6 @@ def get_rules(world):
                 lambda state:
                     has_stopwatch(world, state, Ty1LevelCode.C2) if world.options.gate_time_attacks
                     else state.can_reach_location("BtBS - Koala Crisis", world.player),
-            "BtBS - Cable Car Capers":
-                lambda state:
-                    world.options.logic_difficulty == 1,
             "RMtS - Find 5 Bilbies":
                 lambda state:
                     has_all_bilbies(world, state, Ty1LevelCode.C3),
@@ -409,16 +409,17 @@ def get_rules(world):
                     can_go_water(world, state),
             "Rainbow Scale 24":
                 lambda state:
-                    has_rang(world, state, Ty1Rang.SECOND_RANG)
-                    or world.options.logic_difficulty == 1,
+                    has_rang(world, state, Ty1Rang.SECOND_RANG),
             "Two Up - Time Attack Challenge":
                 lambda state:
-                    state.can_reach_location("Two Up - Time Attack", world.player),
+                    state.can_reach_location("Two Up - Time Attack", world.player)
+                    and has_rang(world, state, Ty1Rang.DIVE) if world.options.logic_difficulty == 1 else True,
             "WitP - Time Attack Challenge":
                 lambda state:
                     state.can_reach_location("WitP - Wombat Race", world.player),
             "Ship Rex - Time Attack Challenge":
                 lambda state:
+                    has_rang(world, state, Ty1Rang.DIVE) and
                     state.can_reach_location("Ship Rex - Race Rex", world.player),
             "BotRT - Time Attack Challenge":
                 lambda state:
@@ -438,6 +439,7 @@ def get_rules(world):
                     state.can_reach_location("BtBS - Wombat Rematch", world.player),
             "RMtS - Time Attack Challenge":
                 lambda state:
+                    has_rang(world, state, Ty1Rang.DIVE) and
                     state.can_reach_location("RMtS - Race Rex", world.player),
         },
         "entrances": {
@@ -560,9 +562,6 @@ def get_rules(world):
                 lambda state:
                     can_go_water(world, state),
             "Lyre, Lyre Pants on Fire - PF":
-                lambda state:
-                    state.has("Infrarang", world.player) if world.options.frames_require_infra else True,
-            "Lyre, Lyre Pants on Fire - Gate - PF":
                 lambda state:
                     state.has("Infrarang", world.player) if world.options.frames_require_infra else True,
             "Beyond the Black Stump - PF":

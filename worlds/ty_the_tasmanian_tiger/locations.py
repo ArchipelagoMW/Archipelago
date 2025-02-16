@@ -169,21 +169,21 @@ thunder_eggs_dict = {
         LocData(0x0875012F, "Outback Safari"),
     # Lyre -----------------------------------------------------------------------------------------------------------
     "LLPoF - Collect 300 Opals":
-        LocData(0x08750130, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x08750130, "Lyre, Lyre Pants on Fire"),
     "LLPoF - Find 5 Bilbies":
-        LocData(0x08750131, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x08750131, "Lyre, Lyre Pants on Fire"),
     "LLPoF - Time Attack":
         LocData(0x08750132, "Lyre, Lyre Pants on Fire"),
     "LLPoF - Lenny The Lyrebird":
-        LocData(0x08750133, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x08750133, "Lyre, Lyre Pants on Fire"),
     "LLPoF - Fiery Furnace":
-        LocData(0x08750134, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x08750134, "Lyre, Lyre Pants on Fire"),
     "LLPoF - Water Worries":
-        LocData(0x08750135, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x08750135, "Lyre, Lyre Pants on Fire"),
     "LLPoF - Muddy Towers":
-        LocData(0x08750136, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x08750136, "Lyre, Lyre Pants on Fire"),
     "LLPoF - Gantry Glide":
-        LocData(0x08750137, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x08750137, "Lyre, Lyre Pants on Fire"),
     # Stump ----------------------------------------------------------------------------------------------------------
     "BtBS - Collect 300 Opals":
         LocData(0x08750138, "Beyond the Black Stump - Upper Area"),
@@ -404,34 +404,34 @@ golden_cogs_dict = {
         LocData(0x08750183, "Outback Safari"),
     # Hidden by trees on right at bottom of slide
     "LLPoF - Golden Cog 1":
-        LocData(0x08750184, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x08750184, "Lyre, Lyre Pants on Fire"),
     # On pillar at the bottom of slide
     "LLPoF - Golden Cog 2":
-        LocData(0x08750185, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x08750185, "Lyre, Lyre Pants on Fire"),
     # On pillar near spy eggs and bilby in alcove
     "LLPoF - Golden Cog 3":
-        LocData(0x08750186, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x08750186, "Lyre, Lyre Pants on Fire"),
     # Ice block
     "LLPoF - Golden Cog 4":
-        LocData(0x08750187, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x08750187, "Lyre, Lyre Pants on Fire"),
     # On metal pillar next to water worries log entrance
     "LLPoF - Golden Cog 5":
-        LocData(0x08750188, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x08750188, "Lyre, Lyre Pants on Fire"),
     # Bounce tree
     "LLPoF - Golden Cog 6":
-        LocData(0x08750189, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x08750189, "Lyre, Lyre Pants on Fire"),
     # On pillar before slide
     "LLPoF - Golden Cog 7":
-        LocData(0x0875018A, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x0875018A, "Lyre, Lyre Pants on Fire"),
     # Spy egg pillar after first log teleport
     "LLPoF - Golden Cog 8":
         LocData(0x0875018B, "Lyre, Lyre Pants on Fire"),
     # Hidden behind cobweb in lever area
     "LLPoF - Golden Cog 9":
-        LocData(0x0875018C, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x0875018C, "Lyre, Lyre Pants on Fire"),
     # Pillar between "jump to the other side" broken bridge
     "LLPoF - Golden Cog 10":
-        LocData(0x0875018D, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x0875018D, "Lyre, Lyre Pants on Fire"),
     # Hidden alcove after pillar ponder thunder egg
     "BtBS - Golden Cog 1":
         LocData(0x0875018E, "Beyond the Black Stump - Upper Area"),
@@ -557,15 +557,15 @@ bilbies_dict = {
     "Outback Safari - Bilby Grandma":
         LocData(0x087501C9, "Outback Safari"),
     "LLPoF - Bilby Dad":
-        LocData(0x087501CA, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x087501CA, "Lyre, Lyre Pants on Fire"),
     "LLPoF - Bilby Mum":
-        LocData(0x087501CB, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x087501CB, "Lyre, Lyre Pants on Fire"),
     "LLPoF - Bilby Boy":
-        LocData(0x087501CC, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x087501CC, "Lyre, Lyre Pants on Fire"),
     "LLPoF - Bilby Girl":
-        LocData(0x087501CD, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x087501CD, "Lyre, Lyre Pants on Fire"),
     "LLPoF - Bilby Grandma":
-        LocData(0x087501CE, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x087501CE, "Lyre, Lyre Pants on Fire"),
     "BtBS - Bilby Dad":
         LocData(0x087501CF, "Beyond the Black Stump - Upper Area"),
     "BtBS - Bilby Mum":
@@ -817,19 +817,19 @@ picture_frames_dict = {
         LocData(0x08750223, "Snow Worries - PF"),
     # Between "Jump to the other side" gap
     "LLPoF - PF 1":
-        LocData(0x08750224, "Lyre, Lyre Pants on Fire - Beyond Gate - PF"),
+        LocData(0x08750224, "Lyre, Lyre Pants on Fire - PF"),
     # At Start
     "LLPoF - PF 2":
         LocData(0x08750225, "Lyre, Lyre Pants on Fire - PF"),
     # Bottom of slide
     "LLPoF - PF 3":
-        LocData(0x08750226, "Lyre, Lyre Pants on Fire - Beyond Gate - PF"),
+        LocData(0x08750226, "Lyre, Lyre Pants on Fire - PF"),
     # Next to bounce tree
     "LLPoF - PF 4":
-        LocData(0x08750227, "Lyre, Lyre Pants on Fire - Beyond Gate - PF"),
+        LocData(0x08750227, "Lyre, Lyre Pants on Fire - PF"),
     # Next to dunny @ top of slide
     "LLPoF - PF 5":
-        LocData(0x08750228, "Lyre, Lyre Pants on Fire - Beyond Gate - PF"),
+        LocData(0x08750228, "Lyre, Lyre Pants on Fire - PF"),
     # Behind cable car platform house
     "BtBS - PF 1":
         LocData(0x08750229, "Beyond the Black Stump - Upper Area - PF"),
@@ -1014,7 +1014,7 @@ cog_completion_dict = {
     "Outback Safari - All Golden Cogs":
         LocData(0x087501A7, "Outback Safari"),
     "LLPoF - All Golden Cogs":
-        LocData(0x087501A8, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x087501A8, "Lyre, Lyre Pants on Fire"),
     "BtBS - All Golden Cogs":
         LocData(0x087501A9, "Beyond the Black Stump - Upper Area"),
     "RMtS - All Golden Cogs":
@@ -1036,7 +1036,7 @@ frame_completion_dict = {
     "Snow Worries - All Picture Frames":
         LocData(0x0875025D, "Snow Worries - PF"),
     "LLPoF - All Picture Frames":
-        LocData(0x0875025E, "Lyre, Lyre Pants on Fire - Beyond Gate - PF"),
+        LocData(0x0875025E, "Lyre, Lyre Pants on Fire - PF"),
     "BtBS - All Picture Frames":
         LocData(0x0875025F, "Beyond the Black Stump - Upper Area - PF"),
     "RMtS - All Picture Frames":

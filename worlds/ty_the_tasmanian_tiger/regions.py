@@ -1,6 +1,6 @@
 from enum import Enum
 
-from BaseClasses import MultiWorld, Region
+from BaseClasses import MultiWorld, Region, Entrance
 from worlds.ty_the_tasmanian_tiger.options import Ty1Options
 from worlds.ty_the_tasmanian_tiger.locations import create_locations
 from typing import List, Dict
@@ -78,11 +78,10 @@ class Ty1Region(Region):
     subregions: List[Region] = []
 
 
-def connect_regions(world: MultiWorld, player: int, from_name: str, to_name: str, entrance_name: str) -> Region:
+def connect_regions(world: MultiWorld, player: int, from_name: str, to_name: str, entrance_name: str) -> Entrance:
     entrance_region = world.get_region(from_name, player)
     exit_region = world.get_region(to_name, player)
-    entrance_region.connect(exit_region, entrance_name)
-    return exit_region
+    return entrance_region.connect(exit_region, entrance_name)
 
 
 def create_region(world: MultiWorld, player: int, options: Ty1Options, name: str):
@@ -126,8 +125,6 @@ def create_regions(world: MultiWorld, options: Ty1Options, player: int):
     create_region(world, player, options, "Crikey's Cove")
     create_region(world, player, options, "Lyre, Lyre Pants on Fire")
     create_region(world, player, options, "Lyre, Lyre Pants on Fire - PF")
-    create_region(world, player, options, "Lyre, Lyre Pants on Fire - Beyond Gate")
-    create_region(world, player, options, "Lyre, Lyre Pants on Fire - Beyond Gate - PF")
     create_region(world, player, options, "Beyond the Black Stump")
     create_region(world, player, options, "Beyond the Black Stump - PF")
     create_region(world, player, options, "Beyond the Black Stump - Upper Area")
@@ -141,11 +138,9 @@ def create_regions(world: MultiWorld, options: Ty1Options, player: int):
     create_region(world, player, options, "Final Battle")
 
 
-def connect_all_regions(world: MultiWorld, player: int, options: Ty1Options, portal_map: List[int], boss_map: List[int]):
+def connect_all_regions(world: MultiWorld, player: int, options: Ty1Options, portal_map: List[int]):
     if options.level_shuffle:
         world.random.shuffle(portal_map)
-    if options.boss_shuffle:
-        world.random.shuffle(boss_map)
     connect_regions(world, player, "Menu",
                     "Rainbow Cliffs", "Menu -> Z1")
     connect_regions(world, player, "Rainbow Cliffs",
@@ -166,30 +161,30 @@ def connect_all_regions(world: MultiWorld, player: int, options: Ty1Options, por
                     "Final Gauntlet", "Z1 -> E Zone")
     connect_regions(world, player, "Final Gauntlet",
                     "Final Gauntlet - PF", "E Zone - PF")
-    connect_regions(world, player, "Bli Bli Station",
-                    ty1_levels[Ty1LevelCode(portal_map[0])], "A1 Portal")
+    ent_a1 = connect_regions(world, player, "Bli Bli Station",
+                             ty1_levels[Ty1LevelCode(portal_map[0])], "A1 Portal")
+    ent_a2 = connect_regions(world, player, "Bli Bli Station Gate",
+                             ty1_levels[Ty1LevelCode(portal_map[1])], "A2 Portal")
+    ent_a3 = connect_regions(world, player, "Bli Bli Station Gate",
+                             ty1_levels[Ty1LevelCode(portal_map[2])], "A3 Portal")
     connect_regions(world, player, "Bli Bli Station Gate",
-                    ty1_levels[Ty1LevelCode(portal_map[1])], "A2 Portal")
-    connect_regions(world, player, "Bli Bli Station Gate",
-                    ty1_levels[Ty1LevelCode(portal_map[2])], "A3 Portal")
-    connect_regions(world, player, "Bli Bli Station Gate",
-                    ty1_levels[Ty1LevelCode(boss_map[0])], "A4 Portal")
+                    ty1_levels[Ty1LevelCode.A4], "A4 Portal")
+    ent_b1 = connect_regions(world, player, "Pippy Beach",
+                             ty1_levels[Ty1LevelCode(portal_map[3])], "B1 Portal")
+    ent_b2 = connect_regions(world, player, "Pippy Beach",
+                             ty1_levels[Ty1LevelCode(portal_map[4])], "B2 Portal")
+    ent_b3 = connect_regions(world, player, "Pippy Beach",
+                             ty1_levels[Ty1LevelCode(portal_map[5])], "B3 Portal")
     connect_regions(world, player, "Pippy Beach",
-                    ty1_levels[Ty1LevelCode(portal_map[3])], "B1 Portal")
-    connect_regions(world, player, "Pippy Beach",
-                    ty1_levels[Ty1LevelCode(portal_map[4])], "B2 Portal")
-    connect_regions(world, player, "Pippy Beach",
-                    ty1_levels[Ty1LevelCode(portal_map[5])], "B3 Portal")
-    connect_regions(world, player, "Pippy Beach",
-                    ty1_levels[Ty1LevelCode(boss_map[1])], "D4 Portal")
+                    ty1_levels[Ty1LevelCode.D4], "D4 Portal")
+    ent_c1 = connect_regions(world, player, "Lake Burril",
+                             ty1_levels[Ty1LevelCode(portal_map[6])], "C1 Portal")
+    ent_c2 = connect_regions(world, player, "Lake Burril",
+                             ty1_levels[Ty1LevelCode(portal_map[7])], "C2 Portal")
+    ent_c3 = connect_regions(world, player, "Lake Burril",
+                             ty1_levels[Ty1LevelCode(portal_map[8])], "C3 Portal")
     connect_regions(world, player, "Lake Burril",
-                    ty1_levels[Ty1LevelCode(portal_map[6])], "C1 Portal")
-    connect_regions(world, player, "Lake Burril",
-                    ty1_levels[Ty1LevelCode(portal_map[7])], "C2 Portal")
-    connect_regions(world, player, "Lake Burril",
-                    ty1_levels[Ty1LevelCode(portal_map[8])], "C3 Portal")
-    connect_regions(world, player, "Lake Burril",
-                    ty1_levels[Ty1LevelCode(boss_map[2])], "C4 Portal")
+                    ty1_levels[Ty1LevelCode.C4], "C4 Portal")
     connect_regions(world, player, "Final Gauntlet",
                     "Cass' Pass", "E1 Portal")
     connect_regions(world, player, "Cass' Pass",
@@ -225,12 +220,7 @@ def connect_all_regions(world: MultiWorld, player: int, options: Ty1Options, por
     connect_regions(world, player, "Snow Worries",
                     "Snow Worries - Underwater", "Snow Worries - Underwater")
     connect_regions(world, player, "Lyre, Lyre Pants on Fire",
-                    "Lyre, Lyre Pants on Fire - Beyond Gate", "Lyre, Lyre Pants on Fire - Gate")
-    connect_regions(world, player, "Lyre, Lyre Pants on Fire",
                     "Lyre, Lyre Pants on Fire - PF", "Lyre, Lyre Pants on Fire - PF")
-    connect_regions(world, player, "Lyre, Lyre Pants on Fire - Beyond Gate",
-                    "Lyre, Lyre Pants on Fire - Beyond Gate - PF", 
-                    "Lyre, Lyre Pants on Fire - Gate - PF")
     connect_regions(world, player, "Beyond the Black Stump",
                     "Beyond the Black Stump - PF", "Beyond the Black Stump - PF")
     connect_regions(world, player, "Beyond the Black Stump",
@@ -242,3 +232,16 @@ def connect_all_regions(world: MultiWorld, player: int, options: Ty1Options, por
                     "Rex Marks the Spot - PF", "Rex Marks the Spot, PF")
     connect_regions(world, player, "Rex Marks the Spot",
                     "Rex Marks the Spot - Underwater", "Rex Marks the Spot - Underwater")
+    # 0.6.0 ENTRANCE RANDO SUPPORT
+    # if options.level_shuffle:
+        # disconnect_entrance_for_randomization(ent_a1, 0)
+        # disconnect_entrance_for_randomization(ent_a2, 0)
+        # disconnect_entrance_for_randomization(ent_a3, 0)
+        # disconnect_entrance_for_randomization(ent_b1, 0)
+        # disconnect_entrance_for_randomization(ent_b2, 0)
+        # disconnect_entrance_for_randomization(ent_b3, 0)
+        # disconnect_entrance_for_randomization(ent_c1, 0)
+        # disconnect_entrance_for_randomization(ent_c2, 0)
+        # disconnect_entrance_for_randomization(ent_c3, 0)
+        # target_group_lookup: Dict[int, List[int]] = {0: [0]}
+        # return randomize_entrances(world.worlds[player], True, target_group_lookup)

@@ -66,9 +66,10 @@ def create_items(world: MultiWorld, options: Ty1Options, player: int):
 
     # Attributes
     if options.progressive_elementals:
-        create_multiple("Progressive Rang", 9, world, player)
+        create_multiple("Progressive Rang", 8, world, player)
     else:
         create_single("Second Rang", world, player)
+        world.early_items[player]["Second Rang"] = 1
         create_single("Swim", world, player)
         create_single("Aquarang", world, player)
         create_single("Dive", world, player)
@@ -163,9 +164,9 @@ ty1_item_table: Dict[str, ItemData] = {
     # Junk - 8
 
     # Generic
-    "Fire Thunder Egg": ItemData(0x8750000, ItemClassification.progression_skip_balancing),
-    "Ice Thunder Egg": ItemData(0x8750001, ItemClassification.progression_skip_balancing),
-    "Air Thunder Egg": ItemData(0x8750002, ItemClassification.progression_skip_balancing),
+    "Fire Thunder Egg": ItemData(0x8750000, ItemClassification.progression),
+    "Ice Thunder Egg": ItemData(0x8750001, ItemClassification.progression),
+    "Air Thunder Egg": ItemData(0x8750002, ItemClassification.progression),
     "Golden Cog":  ItemData(0x8750003, ItemClassification.progression_skip_balancing),
 
     # Attributes
