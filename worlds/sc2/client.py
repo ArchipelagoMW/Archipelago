@@ -26,7 +26,7 @@ from pathlib import Path
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows, async_start
 from .item import item_names, item_parents
-from .item.item_groups import item_name_groups, unlisted_item_name_groups
+from .item.item_groups import item_name_groups, unlisted_item_name_groups, ItemGroupNames
 from . import options, VICTORY_MODULO
 from .options import (
     MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, EnableMorphling, GameDifficulty,
@@ -1336,7 +1336,7 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
             continue
 
         # exists exactly once
-        if item_data.quantity == 1:
+        if item_data.quantity == 1 or name in item_name_groups[ItemGroupNames.UNRELEASED_ITEMS]:
             accumulators[item_data.race][item_data.type.flag_word] |= 1 << item_data.number
 
         # exists multiple times
