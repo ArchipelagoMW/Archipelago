@@ -1189,32 +1189,60 @@ class OOTWorld(World):
         self.collectible_flags_available.wait()
 
         slot_data = {
-            'collectible_override_flags': self.collectible_override_flags,
-            'collectible_flag_offsets': self.collectible_flag_offsets
+            "collectible_override_flags": self.collectible_override_flags,
+            "collectible_flag_offsets": self.collectible_flag_offsets,
         }
-        slot_data.update(self.options.as_dict(
-            "open_forest", "open_kakariko", "open_door_of_time", "zora_fountain", "gerudo_fortress",
-            "bridge", "bridge_stones", "bridge_medallions", "bridge_rewards", "bridge_tokens", "bridge_hearts",
-            "shuffle_ganon_bosskey", "ganon_bosskey_medallions", "ganon_bosskey_stones", "ganon_bosskey_rewards",
-            "ganon_bosskey_tokens", "ganon_bosskey_hearts", "trials",
-            "triforce_hunt", "triforce_goal", "extra_triforce_percentage",
-            "shopsanity", "shop_slots", "shopsanity_prices", "tokensanity",
-            "dungeon_shortcuts", "dungeon_shortcuts_list",
-            "mq_dungeons_mode", "mq_dungeons_list", "mq_dungeons_count",
-            "shuffle_interior_entrances", "shuffle_grotto_entrances", "shuffle_dungeon_entrances",
-            "shuffle_overworld_entrances", "shuffle_bosses", "key_rings", "key_rings_list", "enhance_map_compass",
-            "shuffle_mapcompass", "shuffle_smallkeys", "shuffle_hideoutkeys", "shuffle_bosskeys",
-            "logic_rules", "logic_no_night_tokens_without_suns_song", "logic_tricks",
-            "warp_songs", "shuffle_song_items","shuffle_medigoron_carpet_salesman", "shuffle_frog_song_rupees",
-            "shuffle_scrubs", "shuffle_child_trade", "shuffle_freestanding_items", "shuffle_pots", "shuffle_crates",
-            "shuffle_cows", "shuffle_beehives", "shuffle_kokiri_sword", "shuffle_ocarinas", "shuffle_gerudo_card",
-            "shuffle_beans", "starting_age", "bombchus_in_logic", "spawn_positions", "owl_drops",
-            "no_epona_race", "skip_some_minigame_phases", "complete_mask_quest", "free_scarecrow", "plant_beans",
-            "chicken_count", "big_poe_count", "fae_torch_count", "blue_fire_arrows",
-            "damage_multiplier", "deadly_bonks", "starting_tod", "junk_ice_traps",
-            "start_with_consumables", "adult_trade_start", "plando_connections"
+
+        if not self.multiworld.is_race:
+            prizes: dict[str, str] = {}
+            bosses: dict[str, str] = {}
+            for location in (
+                "Links Pocket",
+                "Queen Gohma",
+                "King Dodongo",
+                "Barinade",
+                "Phantom Ganon",
+                "Volvagia",
+                "Morpha",
+                "Bongo Bongo",
+                "Twinrova",
+                # 'Ganon',
+            ):
+                if location != "Links Pocket":
+                    entrance = self.get_region(f"{location} Boss Room").entrances
+                    entrance_name = entrance[0].name
+                    dungeon = entrance_name[:entrance_name.index(" Boss Door")]
+                else:
+                    dungeon = "Start"
+                prizes[self.get_location(location).item.name] = dungeon
+                bosses[dungeon] = location
+
+            slot_data["prizes"] = prizes
+            slot_data["bosses"] = bosses
+            slot_data.update(self.options.as_dict(
+                "open_forest", "open_kakariko", "open_door_of_time", "zora_fountain", "gerudo_fortress",
+                "bridge", "bridge_stones", "bridge_medallions", "bridge_rewards", "bridge_tokens", "bridge_hearts",
+                "shuffle_ganon_bosskey", "ganon_bosskey_medallions", "ganon_bosskey_stones", "ganon_bosskey_rewards",
+                "ganon_bosskey_tokens", "ganon_bosskey_hearts", "trials",
+                "triforce_hunt", "triforce_goal", "extra_triforce_percentage",
+                "shopsanity", "shop_slots", "shopsanity_prices", "tokensanity",
+                "dungeon_shortcuts", "dungeon_shortcuts_list",
+                "mq_dungeons_mode", "mq_dungeons_list", "mq_dungeons_count",
+                "shuffle_interior_entrances", "shuffle_grotto_entrances", "shuffle_dungeon_entrances",
+                "shuffle_overworld_entrances", "shuffle_bosses", "key_rings", "key_rings_list", "enhance_map_compass",
+                "shuffle_mapcompass", "shuffle_smallkeys", "shuffle_hideoutkeys", "shuffle_bosskeys",
+                "logic_rules", "logic_no_night_tokens_without_suns_song", "logic_tricks",
+                "warp_songs", "shuffle_song_items","shuffle_medigoron_carpet_salesman", "shuffle_frog_song_rupees",
+                "shuffle_scrubs", "shuffle_child_trade", "shuffle_freestanding_items", "shuffle_pots", "shuffle_crates",
+                "shuffle_cows", "shuffle_beehives", "shuffle_kokiri_sword", "shuffle_ocarinas", "shuffle_gerudo_card",
+                "shuffle_beans", "starting_age", "bombchus_in_logic", "spawn_positions", "owl_drops",
+                "no_epona_race", "skip_some_minigame_phases", "complete_mask_quest", "free_scarecrow", "plant_beans",
+                "chicken_count", "big_poe_count", "fae_torch_count", "blue_fire_arrows",
+                "damage_multiplier", "deadly_bonks", "starting_tod", "junk_ice_traps",
+                "start_with_consumables", "adult_trade_start", "plando_connections"
+                )
             )
-        )
+
         return slot_data
 
 
