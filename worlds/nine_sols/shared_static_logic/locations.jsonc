@@ -1436,7 +1436,7 @@
     },
     {
         "address": 3906, "name": "TRC: Past Spikes In Sickbay Vents",
-        "region": "TRC - Lower Sickbay", "requires": [ { "item": "Azure Bow" } ] // to shoot vent spikes before going in
+        "region": "TRC - Lower Sickbay", "requires": []
     },
     {
         "address": 3907, "name": "TRC: Dusk Guardian Recording Device",

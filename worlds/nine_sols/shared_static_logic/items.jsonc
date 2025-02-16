@@ -15,7 +15,7 @@
     { "code": 14, "name": "Unbounded Counter", "type": "progression" },
     { "code": 15, "name": "Cloud Leap", "type": "progression" },
     { "code": 16, "name": "Super Mutant Buster", "type": "progression" },
-    { "code": 17, "name": "Azure Bow", "type": "progression" },
+    { "code": 17, "name": "Azure Bow", "type": "useful" },
 
     { "code": 21, "name": "Herb Catalyst", "type": "useful" },
     { "code": 22, "name": "Pipe Vial", "type": "useful" },
