@@ -64,12 +64,16 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
                                          or state.has_all({"Punch", "Punch Uppercut"}, player)))
     capsule_room.add_fly_locations([327729])
 
+    # You can slide to the bottom of the city, but if you spawn down there, you have no momentum from the slide.
+    # So you need some kind of jump to reach this cell.
     second_slide = JakAndDaxterRegion("Second Slide", player, multiworld, level_name, 31)
+    second_slide.add_cell_locations([46], access_rule=lambda state:
+                                    state.has_any({"Double Jump", "Jump Kick"}, player)
+                                    or state.has_all({"Punch", "Punch Uppercut"}, player))
 
+    # If you can enter the helix room, you can jump or fight your way to the top. But you need some kind of movement
+    # to enter it in the first place.
     helix_room = JakAndDaxterRegion("Helix Chamber", player, multiworld, level_name, 30)
-    helix_room.add_cell_locations([46], access_rule=lambda state:
-                                  state.has_any({"Double Jump", "Jump Kick"}, player)
-                                  or state.has_all({"Punch", "Punch Uppercut"}, player))
     helix_room.add_cell_locations([50], access_rule=lambda state:
                                   state.has("Double Jump", player)
                                   or can_fight(state, player))
@@ -109,7 +113,9 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
     capsule_room.connect(main_area, rule=lambda state:              # Chamber goes back to surface.
                          state.has("Jump Dive", player))            # (Assume one-way for sanity.)
 
-    second_slide.connect(helix_room)                                # Slide.
+    second_slide.connect(helix_room, rule=lambda state:                           # As stated above, you need to jump
+                         state.has_any({"Double Jump", "Jump Kick"}, player)      # across the dark eco pool before
+                         or state.has_all({"Punch", "Punch Uppercut"}, player))   # you can climb the helix room.
 
     helix_room.connect(quick_platforms, rule=lambda state:          # Escape to get back to here.
                        state.has("Double Jump", player)             # Capsule is a convenient exit to the level.
