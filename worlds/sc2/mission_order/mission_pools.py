@@ -197,16 +197,16 @@ class SC2MOGenMissionPools:
         final_pool: List[int] = []
         desired_difficulty = slot.option_difficulty
         if prefer_close_difficulty:
-            # Iteratively look down and up around the slot's desired difficulty
+            # Iteratively look up and down around the slot's desired difficulty
             # Either a difficulty with valid missions is found, or an error is raised
             difficulty_offset = 0
             while len(final_pool) == 0:
-                lower_diff = max(desired_difficulty - difficulty_offset, 1)
-                higher_diff = min(desired_difficulty + difficulty_offset + 1, 5)
-                final_pool = difficulty_pools[lower_diff]
+                higher_diff = min(desired_difficulty + difficulty_offset + 1, Difficulty.VERY_HARD)
+                final_pool = difficulty_pools[higher_diff]
                 if len(final_pool) > 0:
                     break
-                final_pool = difficulty_pools[higher_diff]
+                lower_diff = max(desired_difficulty - difficulty_offset, Difficulty.STARTER)
+                final_pool = difficulty_pools[lower_diff]
                 if len(final_pool) > 0:
                     break
                 if lower_diff == Difficulty.STARTER and higher_diff == Difficulty.VERY_HARD:
