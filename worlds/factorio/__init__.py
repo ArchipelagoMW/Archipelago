@@ -8,7 +8,7 @@ import Utils
 import settings
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import Component, components, Type, launch_subprocess
+from worlds.LauncherComponents import Component, components, Type, launch as launch_component
 from worlds.generic import Rules
 from .Locations import location_pools, location_table
 from .Mod import generate_mod
@@ -24,7 +24,7 @@ from .Technologies import base_tech_table, recipe_sources, base_technology_table
 
 def launch_client():
     from .Client import launch
-    launch_subprocess(launch, name="FactorioClient")
+    launch_component(launch, name="FactorioClient")
 
 
 components.append(Component("Factorio Client", "FactorioClient", func=launch_client, component_type=Type.CLIENT))
