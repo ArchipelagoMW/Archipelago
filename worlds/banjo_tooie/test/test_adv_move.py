@@ -1,20 +1,34 @@
+from test.bases import WorldTestBase
+from ..Options import LogicType, RandomizeBTMoveList
 from . import BanjoTooieTestBase
-from ..Names import locationName, itemName, regionName
-from .. import all_item_table, all_group_table
+from .. import all_item_table
 
-class AdvMoves(BanjoTooieTestBase):
-    def _item_pool(self) -> None:
+class AdvMovesEnabled(BanjoTooieTestBase):
+    options = {
+        "randomize_moves": RandomizeBTMoveList.option_true
+    }
+
+    def test_item_pool(self) -> None:
         adv_move_count = len(self.world.item_name_groups["Moves"])
         adv_count = 0
 
+        item_pool_item_names = [item.name for item in self.world.multiworld.itempool]
+        print("after", WorldTestBase.options)
+        print(item_pool_item_names)
+        print()
+        print(self.world.item_name_groups["Moves"])
         for adv_move in self.world.item_name_groups["Moves"]:
-            for item in self.world.multiworld.itempool:
-                if adv_move == item.name:
+            if adv_move in item_pool_item_names:
                     adv_count += 1
 
         assert adv_move_count == adv_count
 
-    def _disabled_item_pool(self) -> None:
+class AdvMovesDisabled(BanjoTooieTestBase):
+    options = {
+        "randomize_moves": RandomizeBTMoveList.option_false
+    }
+
+    def test_disabled_item_pool(self) -> None:
         adv_count = 0
 
         for adv_move in self.world.item_name_groups["Moves"]:
@@ -25,7 +39,7 @@ class AdvMoves(BanjoTooieTestBase):
 
         assert 0 == adv_count
 
-    def _prefills(self) -> None:
+    def test_prefills(self) -> None:
         adv_items = 0
         placed_correctly = 0
         for name in self.world.item_name_groups["Moves"]:
@@ -40,76 +54,50 @@ class AdvMoves(BanjoTooieTestBase):
                 placed_correctly += 0
         assert adv_items == placed_correctly
 
-
-class TestAdvMovesEnabledEasy(AdvMoves):
+class TestAdvMovesEnabledIntended(AdvMovesEnabled):
     options = {
-        'randomized_moves': 'true',
-        'logic_type': 0
+        **AdvMovesEnabled.options,
+        "logic_type": LogicType.option_intended,
     }
-    def test_item_pool(self) -> None:
-        super()._item_pool()
 
-class TestAdvMovesEnabledNormal(AdvMoves):
+class TestAdvMovesEnabledEasyTricks(AdvMovesEnabled):
     options = {
-        'randomized_moves': 'true',
-        'logic_type': 1
+        **AdvMovesEnabled.options,
+        "logic_type": LogicType.option_easy_tricks,
     }
-    def test_item_pool(self) -> None:
-        super()._item_pool()
 
-class TestAdvMovesEnabledAdvance(AdvMoves):
+class TestAdvMovesEnabledHardTricks(AdvMovesEnabled):
     options = {
-        'randomized_moves': 'true',
-        'logic_type': 2
+        **AdvMovesEnabled.options,
+        "logic_type": LogicType.option_hard_tricks,
     }
-    def test_item_pool(self) -> None:
-        super()._item_pool()
 
-class TestAdvMovesEnabledGitch(AdvMoves):
+class TestAdvMovesEnabledGlitchesTricks(AdvMovesEnabled):
     options = {
-        'randomized_moves': 'true',
-        'logic_type': 3
+        **AdvMovesEnabled.options,
+        "logic_type": LogicType.option_glitches,
     }
-    def test_item_pool(self) -> None:
-        super()._item_pool()
 
-
-class TestAdvMovesDisabledEasy(AdvMoves):
+class TestAdvMovesDisabledIntended(AdvMovesDisabled):
     options = {
-        'randomize_moves': 'false',
-        'logic_type': 0
+        **AdvMovesDisabled.options,
+        "logic_type": LogicType.option_intended,
     }
-    def test_disabled_item_pool(self) -> None:
-        super()._disabled_item_pool()
-    def test_prefills(self) -> None:
-        super()._prefills()
 
-class TestAdvMovesDisabledNormal(AdvMoves):
+class TestAdvMovesDisabledEasyTricks(AdvMovesDisabled):
     options = {
-        'randomize_moves': 'false',
-        'logic_type': 1
+        **AdvMovesDisabled.options,
+        "logic_type": LogicType.option_easy_tricks,
     }
-    def test_disabled_item_pool(self) -> None:
-        super()._disabled_item_pool()
-    def test_prefills(self) -> None:
-        super()._prefills()
 
-class TestAdvMovesDisabledAdvance(AdvMoves):
+class TestAdvMovesDisabledHardTricks(AdvMovesDisabled):
     options = {
-        'randomize_moves': 'false',
-        'logic_type': 2
+        **AdvMovesDisabled.options,
+        "logic_type": LogicType.option_hard_tricks,
     }
-    def test_disabled_item_pool(self) -> None:
-        super()._disabled_item_pool()
-    def test_prefills(self) -> None:
-        super()._prefills()
 
-class TestAdvMovesDisabledGlitch(AdvMoves):
+class TestAdvMovesDisabledGlitchesTricks(AdvMovesDisabled):
     options = {
-        'randomize_moves': 'false',
-        'logic_type': 3
+        **AdvMovesDisabled.options,
+        "logic_type": LogicType.option_glitches,
     }
-    def test_disabled_item_pool(self) -> None:
-        super()._disabled_item_pool()
-    def test_prefills(self) -> None:
-        super()._prefills()

@@ -118,6 +118,7 @@ TTRAP = "Trip Trap"
 STRAP = "Slip Trap"
 TRTRAP = "Transform Trap"
 SQTRAP = "Squish Trap"
+TITRAP = "Tip Trap"
 
 CHUFFY = "Chuffy"
 

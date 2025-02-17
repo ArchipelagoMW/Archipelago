@@ -1,12 +1,12 @@
 from BaseClasses import Item
-import typing
+from typing import Dict, NamedTuple
 from .Names import itemName, locationName
 
 
 class BanjoTooieItem(Item):
-    #1230788 Note that 1230790+ exists
+    # 1230833 (TITRAP) but beware of level access keys that are way higher!
     game: str = "Banjo-Tooie"
-class ItemData(typing.NamedTuple):
+class ItemData(NamedTuple):
     btid: int = 0
     qty: int = 0
     type: str = ""
@@ -91,7 +91,7 @@ bk_moves_table = {
 
 progressive_ability_table = {
     itemName.PBBUST:        ItemData(1230828, 2, "progress", ""),
-    itemName.PEGGS:        ItemData(1230829, 4, "progress", ""),
+    itemName.PEGGS:         ItemData(1230829, 4, "progress", ""),
     itemName.PSHOES:        ItemData(1230830, 4, "progress", ""),
     itemName.PSWIM:         ItemData(1230831, 3, "progress", ""),
     itemName.PBASH:         ItemData(1230832, 2, "progress", ""),
@@ -99,6 +99,18 @@ progressive_ability_table = {
     itemName.PEGGAIM:       ItemData(1230783, 2, "progress", ""),
     itemName.PASWIM:        ItemData(1230784, 5, "progress", ""),
     itemName.PAEGGAIM:      ItemData(1230785, 4, "progress", ""),
+}
+
+progressive_ability_breakdown = {
+    itemName.PBBUST:        [itemName.BBUST, itemName.BDRILL],
+    itemName.PEGGS:         [itemName.FEGGS, itemName.GEGGS, itemName.IEGGS, itemName.CEGGS],
+    itemName.PSHOES:        [itemName.SSTRIDE, itemName.TTRAIN, itemName.SPRINGB, itemName.CLAWBTS],
+    itemName.PSWIM:         [itemName.DIVE, itemName.DAIR, itemName.FSWIM],
+    itemName.PBASH:         [itemName.GRAT, itemName.BBASH],
+    itemName.PFLIGHT:       [itemName.FPAD, itemName.BBOMB, itemName.AIREAIM],
+    itemName.PEGGAIM:       [itemName.EGGSHOOT, itemName.EGGAIM],
+    itemName.PASWIM:        [itemName.DIVE, itemName.AUQAIM, itemName.TTORP, itemName.DAIR, itemName.FSWIM],
+    itemName.PAEGGAIM:      [itemName.EGGSHOOT, itemName.AMAZEOGAZE, itemName.EGGAIM, itemName.BBLASTER],
 }
 
 level_progress_table = {
@@ -135,7 +147,8 @@ misc_collectable_table = {
     itemName.TTRAP:         ItemData(1230786,  0, "trap", ""),
     itemName.STRAP:         ItemData(1230787,  0, "trap", ""),
     itemName.TRTRAP:        ItemData(1230788,  0, "trap", ""),
-    itemName.SQTRAP:        ItemData(1230789,  0, "trap", "")
+    itemName.SQTRAP:        ItemData(1230789,  0, "trap", ""),
+    itemName.TITRAP:        ItemData(1230833,  0, "trap", "")
 }
 
 stop_n_swap_table = {
@@ -175,7 +188,7 @@ nest_table= {
 }
 
 
-all_item_table: dict[str, ItemData] = {
+all_item_table: Dict[str, ItemData] = {
     **moves_table,
     **jinjo_table,
     **level_progress_table,
@@ -191,7 +204,7 @@ all_item_table: dict[str, ItemData] = {
     **nest_table
 }
 
-all_group_table: dict[str, dict[str, ItemData]] = {
+all_group_table: Dict[str, Dict[str, ItemData]] = {
     "jiggy": jiggy_table,
     "jinjo": jinjo_table,
     "misc": misc_collectable_table,
@@ -205,6 +218,3 @@ all_group_table: dict[str, dict[str, ItemData]] = {
     "dino": dino_table,
     "nest": nest_table
 }
-
-
-

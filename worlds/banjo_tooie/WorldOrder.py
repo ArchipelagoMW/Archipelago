@@ -1,4 +1,4 @@
-from worlds.banjo_tooie.Options import EggsBehaviour, GameLength, JamjarsSiloCosts, LogicType, ProgressiveEggAim, ProgressiveWaterTraining, RandomizeBKMoveList, OpenSilos
+from .Options import EggsBehaviour, GameLength, JamjarsSiloCosts, LogicType, ProgressiveEggAim, ProgressiveWaterTraining, RandomizeBKMoveList, OpenSilos
 
 from .Names import itemName, regionName, locationName
 from typing import TYPE_CHECKING, List

@@ -1,14 +1,35 @@
+from ..Options import LogicType, RandomizeBKMoveList, RandomizeNotes
 from . import BanjoTooieTestBase
-from ..Names import locationName, itemName, regionName
-from .. import all_item_table, all_group_table
+from .. import all_group_table
 
-class BKMoves(BanjoTooieTestBase):
-
-    def _item_pool(self) -> None:
+class BKMovesAll(BanjoTooieTestBase):
+    options = {
+        "randomize_bk_moves": RandomizeBKMoveList.option_all,
+        "randomize_notes": RandomizeNotes(True)
+    }
+    def test_item_pool(self) -> None:
         bk_moves_count = len(all_group_table["bk_moves"])
         bk_count = 0
         for name, move in all_group_table["bk_moves"].items():
-            if (move.btid == 1230815 or move.btid == 1230816) and self.world.options.randomize_bk_moves == 1:
+            if move.btid == self.world.starting_egg or move.btid == self.world.starting_attack:
+                bk_count += 1
+                continue
+            for item in self.world.multiworld.itempool:
+                if name == item.name:
+                    bk_count += 1
+        assert bk_moves_count == bk_count
+
+
+class BKMovesMcJiggy(BanjoTooieTestBase):
+    options = {
+        "randomize_bk_moves": RandomizeBKMoveList.option_mcjiggy_special,
+        "randomize_notes": RandomizeNotes(True)
+    }
+    def test_item_pool(self) -> None:
+        bk_moves_count = len(all_group_table["bk_moves"])
+        bk_count = 0
+        for name, move in all_group_table["bk_moves"].items():
+            if move.btid == 1230815  or move.btid == 1230816: #Talon Trot and Tall Jump
                 bk_moves_count -= 1 #Not in the pool
             if move.btid == self.world.starting_egg or move.btid == self.world.starting_attack:
                 bk_count += 1
@@ -18,7 +39,11 @@ class BKMoves(BanjoTooieTestBase):
                     bk_count += 1
         assert bk_moves_count == bk_count
 
-    def _not_in_pool(self) -> None:
+class BKMovesDisabled(BanjoTooieTestBase):
+    options = {
+        "randomize_bk_moves": RandomizeBKMoveList.option_none
+    }
+    def test_not_in_pool(self) -> None:
         bk_count = 0
         for name, move in all_group_table["bk_moves"].items():
             for item in self.world.multiworld.itempool:
@@ -27,111 +52,74 @@ class BKMoves(BanjoTooieTestBase):
         assert 0 == bk_count
 
 
-class TestBKMovesALLEnabledEasy(BKMoves):
+class TestBKMovesAllIntended(BKMovesAll):
     options = {
-        'randomize_bk_moves': 2,
-        'logic_type': 0
+        **BKMovesAll.options,
+        "logic_type": LogicType.option_intended,
     }
-    def test_item_pool(self) -> None:
-        super()._item_pool()
 
-class TestBKMovesALLEnabledNormal(BKMoves):
+class TestBKMovesAllEasyTricks(BKMovesAll):
     options = {
-        'randomize_bk_moves': 2,
-        'logic_type': 1
+        **BKMovesAll.options,
+        "logic_type": LogicType.option_easy_tricks,
     }
-    def test_item_pool(self) -> None:
-        super()._item_pool()
 
-
-class TestBKMovesALLEnabledAdvance(BKMoves):
+class TestBKMovesAllHardTricks(BKMovesAll):
     options = {
-        'randomize_bk_moves': 2,
-        'logic_type': 2
+        **BKMovesAll.options,
+        "logic_type": LogicType.option_hard_tricks,
     }
-    def test_item_pool(self) -> None:
-        super()._item_pool()
 
-
-class TestBKMovesALLEnabledGlitch(BKMoves):
+class TestBKMovesAllGlitchesTricks(BKMovesAll):
     options = {
-        'randomize_bk_moves': 2,
-        'logic_type': 3
+        **BKMovesAll.options,
+        "logic_type": LogicType.option_glitches
     }
-    def test_item_pool(self) -> None:
-        super()._item_pool()
 
-
-
-class TestBKMovesMcJiggyEnabledEasy(BKMoves):
+class TestBKMovesMcJiggyIntended(BKMovesMcJiggy):
     options = {
-        'randomize_bk_moves': 1,
-        'logic_type': 0
+        **BKMovesMcJiggy.options,
+        "logic_type": LogicType.option_intended
     }
-    def test_item_pool(self) -> None:
-        super()._item_pool()
 
-
-class TestBKMovesMcJiggyEnabledNormal(BKMoves):
+class TestBKMovesMcJiggyEasyTricks(BKMovesMcJiggy):
     options = {
-        'randomize_bk_moves': 1,
-        'logic_type': 1
+        **BKMovesMcJiggy.options,
+        "logic_type": LogicType.option_easy_tricks,
     }
-    def test_item_pool(self) -> None:
-        super()._item_pool()
 
-
-class TestBKMovesMcJiggyEnabledAdvance(BKMoves):
+class TestBKMovesMcJiggyHardTricks(BKMovesMcJiggy):
     options = {
-        'randomize_bk_moves': 1,
-        'logic_type': 2
+        **BKMovesMcJiggy.options,
+        "logic_type": LogicType.option_hard_tricks
     }
-    def test_item_pool(self) -> None:
-        super()._item_pool()
 
-
-class TestBKMovesMcJiggyEnabledGlitch(BKMoves):
+class TestBKMovesMcJiggyGlitchesTricks(BKMovesMcJiggy):
     options = {
-        'randomize_bk_moves': 1,
-        'logic_type': 3
+        **BKMovesMcJiggy.options,
+        "logic_type": LogicType.option_glitches
     }
-    def test_item_pool(self) -> None:
-        super()._item_pool()
 
-
-
-class TestBKMovesDisabledEasy(BKMoves):
+class TestBKMovesDisabledIntended(BKMovesDisabled):
     options = {
-        'randomize_bk_moves': 0,
-        'logic_type': 0
+        **BKMovesDisabled.options,
+        "logic_type": LogicType.option_intended,
     }
-    def test_not_in_pool(self) -> None:
-        super()._not_in_pool()
 
-
-class TestBKMovesDisabledNormal(BKMoves):
+class TestBKMovesDisabledEasyTricks(BKMovesDisabled):
     options = {
-        'randomize_bk_moves': 0,
-        'logic_type': 1
+        **BKMovesDisabled.options,
+        "logic_type": LogicType.option_easy_tricks,
     }
-    def test_not_in_pool(self) -> None:
-        super()._not_in_pool()
 
-
-class TestBKMovesDisabledAdvance(BKMoves):
+class TestBKMovesDisabledHardTricks(BKMovesDisabled):
     options = {
-        'randomize_bk_moves': 0,
-        'logic_type': 2
+        **BKMovesDisabled.options,
+        "logic_type": LogicType.option_hard_tricks
     }
-    def test_not_in_pool(self) -> None:
-        super()._not_in_pool()
 
-
-class TestBKMovesDisabledGlitch(BKMoves):
+class TestBKMovesDisabledGlitchesTricks(BKMovesDisabled):
     options = {
-        'randomize_bk_moves': 0,
-        'logic_type': 3
+        **BKMovesDisabled.options,
+        "logic_type": LogicType.option_glitches
     }
-    def test_not_in_pool(self) -> None:
-        super()._not_in_pool()
-

@@ -1,10 +1,14 @@
+from ..Options import RandomizeTrebleClefs
+from .test_logic import EasyTricksLogic, GlitchesLogic, HardTricksLogic, IntendedLogic
 from . import BanjoTooieTestBase
-from ..Names import locationName, itemName, regionName
-from .. import all_item_table, all_group_table
+from ..Names import itemName
+from .. import all_group_table
 
-class Treble(BanjoTooieTestBase):
-
-    def _item_pool(self) -> None:
+class TreblesEnabled(BanjoTooieTestBase):
+    options = {
+        "randomize_treble": RandomizeTrebleClefs.option_true
+    }
+    def test_item_pool(self) -> None:
         treble_amt = 0
         treble_count = 0
         for name, btitem in all_group_table["misc"].items():
@@ -17,7 +21,11 @@ class Treble(BanjoTooieTestBase):
                     treble_count += 1
         assert treble_amt == treble_count
 
-    def _disabled_item_pool(self) -> None:
+class TreblesDisabled(BanjoTooieTestBase):
+    options = {
+        "randomize_treble": RandomizeTrebleClefs.option_false
+    }
+    def test_disabled_item_pool(self) -> None:
         adv_count = 0
         for item in self.world.multiworld.itempool:
             if itemName.TREBLE == item.name:
@@ -25,7 +33,7 @@ class Treble(BanjoTooieTestBase):
                 adv_count += 1
         assert 0 == adv_count
 
-    def _prefills(self) -> None:
+    def test_prefills(self) -> None:
         treble_amt = 0
         treble_count = 0
         for name, btitem in all_group_table["misc"].items():
@@ -45,87 +53,50 @@ class Treble(BanjoTooieTestBase):
         assert treble_amt == treble_count
 
 
-class TestTrebleEnabledEasy(Treble):
+class TestTreblesEnabledIntended(TreblesEnabled, IntendedLogic):
     options = {
-        'randomize_treble': 'true',
-        'logic_type': 0
+        **TreblesEnabled.options,
+        **IntendedLogic.options,
     }
-    def test_item_pool(self) -> None:
-        super()._item_pool()
 
-
-class TestTrebleEnabledNormal(Treble):
+class TestTreblesEnabledEasyTricks(TreblesEnabled, EasyTricksLogic):
     options = {
-        'randomize_treble': 'true',
-        'logic_type': 1
+        **TreblesEnabled.options,
+        **EasyTricksLogic.options,
     }
-    def test_item_pool(self) -> None:
-        super()._item_pool()
 
-
-class TestTrebleEnabledAdvance(Treble):
+class TestTreblesEnabledHardTricks(TreblesEnabled, HardTricksLogic):
     options = {
-        'randomize_treble': 'true',
-        'logic_type': 2
+        **TreblesEnabled.options,
+        **HardTricksLogic.options,
     }
-    def test_item_pool(self) -> None:
-        super()._item_pool()
 
-
-class TestTrebleEnabledGlitch(Treble):
+class TestTreblesEnabledGlitchesTricks(TreblesEnabled, GlitchesLogic):
     options = {
-        'randomize_treble': 'true',
-        'logic_type': 3
+        **TreblesEnabled.options,
+        **GlitchesLogic.options,
     }
-    def test_item_pool(self) -> None:
-        super()._item_pool()
 
-
-
-class TestTrebleDisabledEasy(Treble):
+class TestTreblesDisabledIntended(TreblesDisabled, IntendedLogic):
     options = {
-        'randomize_treble': 'false',
-        'logic_type': 0
+        **TreblesDisabled.options,
+        **IntendedLogic.options,
     }
-    def test_disabled_item_pool(self) -> None:
-        super()._disabled_item_pool()
 
-    def test_prefills(self) -> None:
-        super()._prefills()
-
-
-class TestTrebleDisabledNormal(Treble):
+class TestTreblesDisabledEasyTricks(TreblesDisabled, EasyTricksLogic):
     options = {
-        'randomize_treble': 'false',
-        'logic_type': 1
+        **TreblesDisabled.options,
+        **EasyTricksLogic.options,
     }
-    def test_disabled_item_pool(self) -> None:
-        super()._disabled_item_pool()
 
-    def test_prefills(self) -> None:
-        super()._prefills()
-
-
-class TestTrebleDisabledAdvance(Treble):
+class TestTreblesDisabledHardTricks(TreblesDisabled, HardTricksLogic):
     options = {
-        'randomize_treble': 'false',
-        'logic_type': 2
+        **TreblesDisabled.options,
+        **HardTricksLogic.options,
     }
-    def test_disabled_item_pool(self) -> None:
-        super()._disabled_item_pool()
 
-    def test_prefills(self) -> None:
-        super()._prefills()
-
-
-class TestTrebleDisabledGlitch(Treble):
+class TestTreblesDisabledGlitchesTricks(TreblesDisabled, GlitchesLogic):
     options = {
-        'randomize_treble': 'false',
-        'logic_type': 3
+        **TreblesDisabled.options,
+        **GlitchesLogic.options,
     }
-    def test_disabled_item_pool(self) -> None:
-        super()._disabled_item_pool()
-
-    def test_prefills(self) -> None:
-        super()._prefills()
-

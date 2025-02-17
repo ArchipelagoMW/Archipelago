@@ -267,6 +267,7 @@ class TrapsToNestRatio(Range):
 
 class GoldenEggsWeight(Range):
     """The weight of Golden Eggs in the trap pool.
+    You are forced to use Golden Eggs for a minute upon receiving the trap.
     Requires Traps and Nestsanity to have an effect"""
     display_name = "Golden Eggs Weight"
     range_start = 0
@@ -275,6 +276,7 @@ class GoldenEggsWeight(Range):
 
 class TripTrapWeight(Range):
     """The weight of Trip Traps in the trap pool.
+    You trip upon receiving the trap.
     Requires Traps to have an effect"""
     display_name = "Trip Trap Weight"
     range_start = 0
@@ -283,6 +285,7 @@ class TripTrapWeight(Range):
 
 class SlipTrapWeight(Range):
     """The weight of Slip Traps in the trap pool.
+    You slip upon receiving the trap.
     Requires Traps to have an effect"""
     display_name = "Slip Trap Weight"
     range_start = 0
@@ -290,7 +293,8 @@ class SlipTrapWeight(Range):
     default = 40
 
 class TransformTrapWeight(Range):
-    """The weight of Transform Traps in the trap pool.
+    """The weight of Transform Traps in the trap pool.^
+    A transformation animation upon receiving the trap.
     Requires Traps to have an effect"""
     display_name = "Transform Trap Weight"
     range_start = 0
@@ -299,11 +303,21 @@ class TransformTrapWeight(Range):
 
 class SquishTrapWeight(Range):
     """The weight of Squish Traps in the trap pool.
+    Stomponadon attempts to squish you upon receiving the trap.
     Requires Traps to have an effect"""
     display_name = "Squish Trap Weight"
     range_start = 0
     range_end = 100
     default = 20
+
+class TipTrapWeight(Range):
+    """The weight of Tip Traps in the trap pool.
+    You receive a random textbox upon receiving the trap.
+    Requires Traps to have an effect"""
+    display_name = "Tip Trap Weight"
+    range_start = 0
+    range_end = 100
+    default = 40
 
 class KingJingalingHasJiggy(DefaultOnToggle):
     """King Jingaling will always have a Jiggy for you."""
@@ -312,6 +326,19 @@ class KingJingalingHasJiggy(DefaultOnToggle):
 class SkipPuzzles(DefaultOnToggle):
     """Open world entrances without having to go to Jiggywiggy."""
     display_name = "Skip Puzzles"
+
+class ExtraCheats(Toggle):
+    """Extra cheats will be added to the "CHEATS" sub-menu:
+        NESTKING  - Infinite eggs/feathers.
+        HONEYKING - Infinite health/air.
+        SUPERBANJO - Gotta go fast!
+        SUPERBADDY - They gotta go fast!"""
+    display_name = "Extra Cheats"
+
+class EasyCanary(DefaultOnToggle):
+    """Makes Canary Mary Races much easier."""
+    display_name = "Easy Canary"
+
 
 class Backdoors(Toggle):
     """Opens many one-way switches on game start, allowing for more backdoor access to levels.
@@ -366,13 +393,13 @@ class OpenSilos(Choice):
 
 class VictoryCondition(Choice):
     """Choose the victory condition.
-    HAG1: Unlock the HAG1 fight and defeat Gruntilda.
-    Minigame Hunt: Clear the 14 minigames and the final Canary Mary race in Cloud Cuckcoo Land to collect Mumbo Tokens.
-    Boss Hunt: Defeat the 8 world bosses and collect their Mumbo Tokens.
-    Jinjo Family Rescue: Rescue Jinjo Families to collect their prized Mumbo Tokens.
-    Wonderwing Challenge: Collect all 32 Mumbo Tokens across all boss fights, mini games, and every Jinjo family
-        to gain access to HAG1 and Defeat Grunty. The Ultimate Banjo Tooie experience!!
-    Token Hunt: Mumbo's Tokens are scattered around the world. Help him find them!"""
+        HAG1: Unlock the HAG1 fight and defeat Gruntilda.
+        Minigame Hunt: Clear the 14 minigames and the final Canary Mary race in Cloud Cuckcoo Land to collect Mumbo Tokens.
+        Boss Hunt: Defeat the 8 world bosses and collect their Mumbo Tokens.
+        Jinjo Family Rescue: Rescue Jinjo Families to collect their prized Mumbo Tokens.
+        Wonderwing Challenge: Collect all 32 Mumbo Tokens across all boss fights, mini games, and every Jinjo family to gain access to HAG1 and Defeat Grunty. The Ultimate Banjo Tooie experience!!
+        Token Hunt: Mumbo's Tokens are scattered around the world. Help him find them!
+        Boss Hunt + Hag1: Combines Boss Hunt with HAG-1. HAG-1 won't open until the required amount of bosses are defeated."""
     display_name = "Victory Condition"
     option_hag1 = 0
     option_minigame_hunt = 1
@@ -380,6 +407,7 @@ class VictoryCondition(Choice):
     option_jinjo_family_rescue = 3
     option_wonderwing_challenge = 4
     option_token_hunt = 5
+    option_boss_hunt_and_hag1 = 6
     default = 0
 
 class MinigameHuntLength(Range):
@@ -443,6 +471,48 @@ class SkipKlungo(Toggle):
     """Make it so you can skip Klungo 1 and 2."""
     display_name = "Skip Klungo"
 
+class RandomizeSignposts(Toggle):
+    "Signposts give items when read."
+    display_name = "Randomize Banjo-Kazooie Movelist"
+
+class SignpostHints(Range):
+    """Choose how many signpost give a hint when read."""
+    display_name = "Signpost Hints"
+    range_start = 0
+    range_end = 61
+    default = 0
+
+class SignpostMoveHints(Range):
+    """Choose how many signposts, out of the signposts that contain a hint, will hint for one of your moves.
+    The rest of the hints will hint slow locations.
+    Silos and BT moves will not be hinted if randomize_bt_moves is not enabled."""
+    display_name = "Signpost Move Hints"
+    range_start = 0
+    range_end = 61
+    default = 20
+
+# Soon (tm), once this gets merged: https://github.com/ArchipelagoMW/Archipelago/pull/4317
+# class AddSignpostHintsToArchipelagoHints(Choice):
+#     """Choose if a signpost hint is added to the Archipelago hints upon reading the hint.
+#     Never: signpost hints are never added
+#     Progression: hints are added only if the hinted location has a progression item.
+#     Always: hints are always added.
+#     This option only has an effect if signpost hints are enabled."""
+#     display_name = "Add Signpost Hints to Archipelago Hints"
+#     option_never = 0
+#     option_progression = 1
+#     option_always = 2
+#     default = 2
+
+class HintClarity(Choice):
+    """Choose how clear hints are.
+    Cryptic: hints will only tell you how good the item is.
+    Clear: hints will tell you what the item is."""
+    display_name = "Hint Clarity"
+    option_cryptic = 0
+    option_clear = 1
+    default = 1
+
 @dataclass
 class BanjoTooieOptions(PerGameCommonOptions):
     death_link: DeathLink
@@ -485,6 +555,7 @@ class BanjoTooieOptions(PerGameCommonOptions):
     randomize_stop_n_swap: RandomizeStopnSwap
     randomize_dino_roar: RandomizeWorldDinoRoar
     nestsanity: EnableNestsanity
+    randomize_signposts: RandomizeSignposts
 
     traps: Traps
     traps_nests_ratio: TrapsToNestRatio
@@ -494,6 +565,7 @@ class BanjoTooieOptions(PerGameCommonOptions):
     slip_trap_weight: SlipTrapWeight
     transform_trap_weight: TransformTrapWeight
     squish_trap_weight: SquishTrapWeight
+    tip_trap_weight: TipTrapWeight
 
     randomize_stations: RandomizeTrainStationSwitches
     randomize_chuffy: RandomizeChuffyTrain
@@ -505,10 +577,18 @@ class BanjoTooieOptions(PerGameCommonOptions):
     backdoors:Backdoors
     open_silos: OpenSilos
 
+    extra_cheats: ExtraCheats
+    easy_canary: EasyCanary
     speed_up_minigames: SpeedUpMinigames
     tower_of_tragedy: TowerOfTragedy
     skip_klungo: SkipKlungo
-    dialog_character:DialogCharacters
+
+    signpost_hints: SignpostHints
+    signpost_move_hints: SignpostMoveHints
+    # add_signpost_hints_to_ap: AddSignpostHintsToArchipelagoHints
+    hint_clarity: HintClarity
+
+    dialog_character:DialogCharacters # Keep this at the bottom so that the huge list stays at the bottom of the yaml.
 
     start_inventory_from_pool: StartInventoryPool
 

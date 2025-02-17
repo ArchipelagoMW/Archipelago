@@ -1,10 +1,14 @@
-from worlds.banjo_tooie.Items import BanjoTooieItem, all_item_table
+from ..Items import all_item_table
+from ..Options import RandomizeJinjos
+from .test_logic import EasyTricksLogic, GlitchesLogic, HardTricksLogic, IntendedLogic
 from . import BanjoTooieTestBase
-from ..Names import locationName, itemName, regionName
+from ..Names import locationName, itemName
 
-class Jinjo(BanjoTooieTestBase):
-
-    def _item_pool(self) -> None:
+class JinjosEnabled(BanjoTooieTestBase):
+    options = {
+        "randomize_jinjos": RandomizeJinjos.option_true
+    }
+    def test_item_pool_jinjos(self) -> None:
         jinjo_count = 0
         jinjo_counter = 0
 
@@ -17,7 +21,14 @@ class Jinjo(BanjoTooieTestBase):
 
         assert jinjo_count == jinjo_counter
 
-    def _disabled_item_pool(self) -> None:
+    def test_item_pool_jiggies(self) -> None:
+        assert [item.name for item in self.multiworld.itempool].count(itemName.JIGGY) == 89
+
+class JinjosDisabled(BanjoTooieTestBase):
+    options = {
+        "randomize_jinjos": RandomizeJinjos.option_false
+    }
+    def test_disabled_item_pool(self) -> None:
         jinjo_counter = 0
 
         for jinjo in self.world.item_name_groups["Jinjo"]:
@@ -28,14 +39,14 @@ class Jinjo(BanjoTooieTestBase):
 
         assert 0 == jinjo_counter
 
-    def _prefills(self) -> None:
+    def test_prefills(self) -> None:
         jinjos = 0
         placed_correctly = 0
         for name in self.world.item_name_groups["Jinjo"]:
             banjoItem = all_item_table.get(name)
             jinjos += banjoItem.qty
             try:
-                location_item = ''
+                location_item = ""
                 if name == itemName.WJINJO:
                     location_item = self.multiworld.get_location(locationName.JINJOJR5, self.player).item.name
                     if location_item == name:
@@ -185,88 +196,53 @@ class Jinjo(BanjoTooieTestBase):
                 placed_correctly += 0
         assert jinjos == placed_correctly
 
+    def test_item_pool_jiggies(self) -> None:
+        assert [item.name for item in self.multiworld.itempool].count(itemName.JIGGY) == 80
 
-class TestJinjoEnabledEasy(Jinjo):
+class TestJinjosEnabledIntended(JinjosEnabled, IntendedLogic):
     options = {
-        'randomize_jinjos': 'true',
-        'logic_type': 0
+        **JinjosEnabled.options,
+        **IntendedLogic.options,
     }
-    def test_item_pool(self) -> None:
-        super()._item_pool()
 
-
-class TestJinjoEnabledNormal(Jinjo):
+class TestJinjosEnabledEasyTricks(JinjosEnabled, EasyTricksLogic):
     options = {
-        'randomize_jinjos': 'true',
-        'logic_type': 1
+        **JinjosEnabled.options,
+        **EasyTricksLogic.options,
     }
-    def test_item_pool(self) -> None:
-        super()._item_pool()
 
-
-class TestJinjoEnabledAdvance(Jinjo):
+class TestJinjosEnabledHardTricks(JinjosEnabled, HardTricksLogic):
     options = {
-        'randomize_jinjos': 'true',
-        'logic_type': 2
+        **JinjosEnabled.options,
+        **HardTricksLogic.options,
     }
-    def test_item_pool(self) -> None:
-        super()._item_pool()
 
-
-class TestJinjoEnabledGitch(Jinjo):
+class TestJinjosEnabledGlitchesTricks(JinjosEnabled, GlitchesLogic):
     options = {
-        'randomize_jinjos': 'true',
-        'logic_type': 3
+        **JinjosEnabled.options,
+        **GlitchesLogic.options,
     }
-    def test_item_pool(self) -> None:
-        super()._item_pool()
 
-
-
-class TestJinjoDisabledEasy(Jinjo):
+class TestJinjosDisabledIntended(JinjosDisabled, IntendedLogic):
     options = {
-        'randomize_jinjos': 'false',
-        'logic_type': 0
+        **JinjosDisabled.options,
+        **IntendedLogic.options,
     }
-    def test_disabled_item_pool(self) -> None:
-        super()._disabled_item_pool()
 
-    def test_prefills(self) -> None:
-        super()._prefills()
-
-
-class TestJinjoDisabledNormal(Jinjo):
+class TestJinjosDisabledEasyTricks(JinjosDisabled, EasyTricksLogic):
     options = {
-        'randomize_jinjos': 'false',
-        'logic_type': 1
+        **JinjosDisabled.options,
+        **EasyTricksLogic.options,
     }
-    def test_disabled_item_pool(self) -> None:
-        super()._disabled_item_pool()
 
-    def test_prefills(self) -> None:
-        super()._prefills()
-
-
-class TestJinjoDisabledAdvance(Jinjo):
+class TestJinjosDisabledHardTricks(JinjosDisabled, HardTricksLogic):
     options = {
-        'randomize_jinjos': 'false',
-        'logic_type': 2
+        **JinjosDisabled.options,
+        **HardTricksLogic.options,
     }
-    def test_disabled_item_pooll(self) -> None:
-        super()._disabled_item_pool()
 
-    def test_prefills(self) -> None:
-        super()._prefills()
-
-
-class TestJinjoDisabledGlitch(Jinjo):
+class TestJinjosDisabledGlitchesTricks(JinjosDisabled, GlitchesLogic):
     options = {
-        'randomize_jinjos': 'false',
-        'logic_type': 3
+        **JinjosDisabled.options,
+        **GlitchesLogic.options,
     }
-    def test_disabled_item_pool(self) -> None:
-        super()._disabled_item_pool()
-
-    def test_prefills(self) -> None:
-        super()._prefills()
-

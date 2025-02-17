@@ -1,14 +1,14 @@
 import copy
 import typing
 from BaseClasses import Region
-from worlds.banjo_tooie.Options import VictoryCondition
+from .Options import VictoryCondition
 
 from .Names import regionName, locationName, itemName
 from .Locations import BanjoTooieLocation
 from .Rules import BanjoTooieRules
 
 # This dict contains all the regions, as well as all the locations that are always tracked by Archipelago.
-BANJOTOOIEREGIONS: typing.Dict[str, typing.List[str]] = {
+BANJO_TOOIE_REGIONS: typing.Dict[str, typing.List[str]] = {
     "Menu":              [],
     regionName.SM:       [
         locationName.CHEATOSM1,
@@ -1096,11 +1096,110 @@ NEST_REGIONS: typing.Dict[str, typing.List[str]] = {
     ],
 }
 
+SIGNPOST_REGIONS = {
+    regionName.IOHJV: [
+        locationName.SIGNIH1,
+    ],
+    regionName.IOHWH: [
+        locationName.SIGNIH2,
+        locationName.SIGNIH3,
+        locationName.SIGNIH4,
+        locationName.SIGNIH5,
+
+        locationName.SIGNIH7,
+        locationName.SIGNIH8,
+        locationName.SIGNIH9,
+        locationName.SIGNIH10,
+        locationName.SIGNIH11,
+        locationName.SIGNIH12,
+        locationName.SIGNIH13,
+        locationName.SIGNIH14,
+    ],
+
+    regionName.IOHPL: [
+        locationName.SIGNIH6,
+    ],
+    regionName.IOHPG: [
+        locationName.SIGNIH15,
+        locationName.SIGNIH16,
+        locationName.SIGNIH17,
+    ],
+    regionName.IOHCT: [
+        locationName.SIGNIH18,
+    ],
+    regionName.IOHWL: [
+        locationName.SIGNIH19,
+    ],
+    regionName.MT: [
+        locationName.SIGNMT1,
+        locationName.SIGNMT2,
+        locationName.SIGNMT3,
+        locationName.SIGNMT4,
+        locationName.SIGNMT5,
+        locationName.SIGNMT6,
+        locationName.SIGNMT7,
+        locationName.SIGNMT8,
+        locationName.SIGNMT9,
+    ],
+    regionName.GM: [
+        locationName.SIGNGM1,
+        locationName.SIGNGM2,
+        locationName.SIGNGM3,
+        locationName.SIGNGM4,
+    ],
+    regionName.WW: [
+        locationName.SIGNWW1,
+        locationName.SIGNWW2,
+        locationName.SIGNWW3,
+        locationName.SIGNWW4,
+        locationName.SIGNWW5,
+        locationName.SIGNWW6,
+        locationName.SIGNWW7,
+        locationName.SIGNWW8,
+    ],
+    regionName.JR: [
+        locationName.SIGNJR2,
+        locationName.SIGNJR3,
+        locationName.SIGNJR4,
+    ],
+    regionName.JRU2: [
+        locationName.SIGNJR1,
+    ],
+    regionName.TL: [
+        locationName.SIGNTL1,
+        locationName.SIGNTL2,
+        locationName.SIGNTL3,
+        locationName.SIGNTL4,
+    ],
+    regionName.GIO: [
+        locationName.SIGNGI1,
+    ],
+    regionName.GI1: [
+        locationName.SIGNGI2,
+    ],
+    regionName.GIES: [
+        locationName.SIGNGI3,
+        locationName.SIGNGI4,
+    ],
+    regionName.HP: [
+        locationName.SIGNHP1,
+        locationName.SIGNHP2,
+        locationName.SIGNHP3,
+        locationName.SIGNHP4,
+        locationName.SIGNHP5,
+    ],
+    regionName.CC: [
+        locationName.SIGNCC1,
+        locationName.SIGNCC2,
+        locationName.SIGNCC3,
+        locationName.SIGNCC4,
+    ],
+}
+
 def create_regions(self):
     player = self.player
     active_locations = self.location_name_to_id
-    region_map = copy.deepcopy(BANJOTOOIEREGIONS)
-    nest_map = copy.deepcopy(NEST_REGIONS)
+    region_map = copy.deepcopy(BANJO_TOOIE_REGIONS)
 
     if self.options.victory_condition == VictoryCondition.option_minigame_hunt\
       or self.options.victory_condition == VictoryCondition.option_wonderwing_challenge:
@@ -1121,7 +1220,8 @@ def create_regions(self):
         region_map[regionName.CC].append(locationName.MUMBOTKNGAME15)
 
     if self.options.victory_condition == VictoryCondition.option_boss_hunt\
-      or self.options.victory_condition == VictoryCondition.option_wonderwing_challenge:
+      or self.options.victory_condition == VictoryCondition.option_wonderwing_challenge\
+      or self.options.victory_condition == VictoryCondition.option_boss_hunt_and_hag1:
         region_map[regionName.MT].append(locationName.MUMBOTKNBOSS1)
         region_map[regionName.CHUFFY].append(locationName.MUMBOTKNBOSS2)
         region_map[regionName.WW].append(locationName.MUMBOTKNBOSS3)
@@ -1158,14 +1258,21 @@ def create_regions(self):
         region_map[regionName.IOHPL].append(locationName.HONEYBR5)
 
     if self.options.nestsanity:
+        nest_map = copy.deepcopy(NEST_REGIONS)
         for region, locations in nest_map.items():
+            for location in locations:
+                region_map[region].append(location)
+
+    if self.options.randomize_signposts:
+        signpost_map = copy.deepcopy(SIGNPOST_REGIONS)
+        for region, locations in signpost_map.items():
             for location in locations:
                 region_map[region].append(location)
 
 
     self.multiworld.regions.extend(create_region(self.multiworld, self.player,\
           active_locations, region, locations) for region, locations in region_map.items())
-    if self.options.victory_condition in (VictoryCondition.option_hag1, VictoryCondition.option_wonderwing_challenge):
+    if self.options.victory_condition in (VictoryCondition.option_hag1, VictoryCondition.option_wonderwing_challenge, VictoryCondition.option_boss_hunt_and_hag1):
         self.multiworld.get_location(locationName.HAG1, player).place_locked_item(self.create_event_item(itemName.VICTORY))
 
 
@@ -1176,6 +1283,8 @@ def create_region(multiworld, player: int, active_locations, name: str, location
         if multiworld.worlds[player].options.victory_condition == VictoryCondition.option_hag1 and locationName.HAG1 in locations:
             ret.add_locations({locationName.HAG1: None})
         elif multiworld.worlds[player].options.victory_condition == VictoryCondition.option_wonderwing_challenge and locationName.HAG1 in locations:
+            ret.add_locations({locationName.HAG1: None})
+        elif multiworld.worlds[player].options.victory_condition == VictoryCondition.option_boss_hunt_and_hag1 and locationName.HAG1 in locations:
             ret.add_locations({locationName.HAG1: None})
         else:
             ret.add_locations(loc_to_id, BanjoTooieLocation)
@@ -1220,7 +1329,7 @@ def connect_regions(self):
                         regionName.IOHCT: lambda state: rules.split_up(state)})
 
     region_GM = self.get_region(regionName.GM)
-    region_GM.add_exits({regionName.GMWSJT, regionName.CHUFFY, regionName.GMFD}, {
+    region_GM.add_exits({regionName.GMWSJT, regionName.CHUFFY, regionName.GMFD, regionName.WW}, {
                         regionName.GMWSJT: lambda state: rules.can_access_water_storage_jinjo_from_GGM(state),
                         regionName.CHUFFY: lambda state: rules.can_beat_king_coal(state) and rules.ggm_to_chuffy(state),
                         regionName.GMFD: lambda state: rules.humbaGGM(state),
@@ -1313,11 +1422,11 @@ def connect_regions(self):
                          })
 
     region_GIES = self.get_region(regionName.GIES)
-    region_GIES.add_exits({regionName.GI1, regionName.GI2, regionName.GI3, regionName.GI4},
+    region_GIES.add_exits({regionName.GI1, regionName.GI2EM, regionName.GI3B, regionName.GI4B},
                         {regionName.GI1: lambda state: rules.elevator_shaft_to_floor_1(state),
-                         regionName.GI2: lambda state: rules.elevator_shaft_to_em(state),
-                         regionName.GI3: lambda state: rules.elevator_shaft_to_boiler_plant(state),
-                         regionName.GI4: lambda state: rules.elevator_shaft_to_floor_4(state)})
+                         regionName.GI2EM: lambda state: rules.elevator_shaft_to_em(state),
+                         regionName.GI3B: lambda state: rules.elevator_shaft_to_boiler_plant(state),
+                         regionName.GI4B: lambda state: rules.elevator_shaft_to_floor_4(state)})
 
     region_GI1 = self.get_region(regionName.GI1)
     region_GI1.add_exits({regionName.GIO, regionName.GIES, regionName.GI2, regionName.GI5, regionName.CHUFFY},
@@ -1448,4 +1557,3 @@ def connect_regions(self):
         region_JV.add_exits({regionName.IOHPL, regionName.IOHCT, regionName.IOHPG, regionName.IOHWL, regionName.IOHQM})
     else: # The value is a region name of the overworld.
         region_JV.add_exits({silo})
-

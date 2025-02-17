@@ -7,7 +7,7 @@ class BanjoTooieLocation(Location):
     game: str = "Banjo-Tooie"
 
 class LocationData(typing.NamedTuple):
-    #last good ID: 1231482 (NESTIH64)
+    #last good ID: 1231482 (SIGNCC4)
     #12C770 pointer instead (1230704)
     btid: int = 0
     # Save + mem addr
@@ -93,6 +93,7 @@ JVLoc_table = {
     locationName.NESTIH16: LocationData(1231050),
     locationName.NESTIH17: LocationData(1231051),
 
+    locationName.SIGNIH1:   LocationData(1231483, 0, 0, "Signpost"),
 }
 
 MTLoc_Table = {
@@ -181,6 +182,16 @@ MTLoc_Table = {
     locationName.NESTMT39: LocationData(1231136),
     locationName.NESTMT40: LocationData(1231137),
     locationName.NESTMT41: LocationData(1231138),
+
+    locationName.SIGNMT1:   LocationData(1231502, 0, 0, "Signpost"),
+    locationName.SIGNMT2:   LocationData(1231503, 0, 0, "Signpost"),
+    locationName.SIGNMT3:   LocationData(1231504, 0, 0, "Signpost"),
+    locationName.SIGNMT4:   LocationData(1231505, 0, 0, "Signpost"),
+    locationName.SIGNMT5:   LocationData(1231506, 0, 0, "Signpost"),
+    locationName.SIGNMT6:   LocationData(1231507, 0, 0, "Signpost"),
+    locationName.SIGNMT7:   LocationData(1231508, 0, 0, "Signpost"),
+    locationName.SIGNMT8:   LocationData(1231509, 0, 0, "Signpost"),
+    locationName.SIGNMT9:   LocationData(1231510, 0, 0, "Signpost"),
 }
 
 IHPLLoc_table = {
@@ -296,6 +307,11 @@ GMLoc_table = {
     locationName.NESTGM36: LocationData(1231174),
     locationName.NESTGM37: LocationData(1231175),
     locationName.NESTGM38: LocationData(1231176),
+
+    locationName.SIGNGM1:   LocationData(1231511, 0, 0, "Signpost"),
+    locationName.SIGNGM2:   LocationData(1231512, 0, 0, "Signpost"),
+    locationName.SIGNGM3:   LocationData(1231513, 0, 0, "Signpost"),
+    locationName.SIGNGM4:   LocationData(1231514, 0, 0, "Signpost"),
 }
 
 PGLoc_table = {
@@ -314,6 +330,10 @@ PGLoc_table = {
 
     locationName.NESTIH46: LocationData(1231080),
     locationName.NESTIH47: LocationData(1231081),
+
+    locationName.SIGNIH15:   LocationData(1231497, 0, 0, "Signpost"),
+    locationName.SIGNIH16:   LocationData(1231498, 0, 0, "Signpost"),
+    locationName.SIGNIH17:   LocationData(1231499, 0, 0, "Signpost"),
 }
 
 WWLoc_table = {
@@ -404,6 +424,15 @@ WWLoc_table = {
     locationName.NESTWW40: LocationData(1231216),
     locationName.NESTWW41: LocationData(1231217),
     locationName.NESTWW42: LocationData(1231218),
+
+    locationName.SIGNWW1:   LocationData(1231515, 0, 0, "Signpost"),
+    locationName.SIGNWW2:   LocationData(1231516, 0, 0, "Signpost"),
+    locationName.SIGNWW3:   LocationData(1231517, 0, 0, "Signpost"),
+    locationName.SIGNWW4:   LocationData(1231518, 0, 0, "Signpost"),
+    locationName.SIGNWW5:   LocationData(1231519, 0, 0, "Signpost"),
+    locationName.SIGNWW6:   LocationData(1231520, 0, 0, "Signpost"),
+    locationName.SIGNWW7:   LocationData(1231521, 0, 0, "Signpost"),
+    locationName.SIGNWW8:   LocationData(1231522, 0, 0, "Signpost")
 }
 JRLoc_table = {
     locationName.JRLDB1: LocationData(1230521, 0x22, 7, "Doubloon"),
@@ -520,6 +549,11 @@ JRLoc_table = {
     locationName.NESTJR38: LocationData(1231256),
     locationName.NESTJR39: LocationData(1231257),
     locationName.NESTJR40: LocationData(1231258),
+
+    locationName.SIGNJR1:   LocationData(1231523, 0, 0, "Signpost"),
+    locationName.SIGNJR2:   LocationData(1231524, 0, 0, "Signpost"),
+    locationName.SIGNJR3:   LocationData(1231525, 0, 0, "Signpost"),
+    locationName.SIGNJR4:   LocationData(1231526, 0, 0, "Signpost"),
 }
 
 TLLoc_table = {
@@ -627,6 +661,11 @@ TLLoc_table = {
     locationName.NESTTL53: LocationData(1231311),
     locationName.NESTTL54: LocationData(1231312),
     locationName.NESTTL55: LocationData(1231313),
+
+    locationName.SIGNTL1:   LocationData(1231527, 0, 0, "Signpost"),
+    locationName.SIGNTL2:   LocationData(1231528, 0, 0, "Signpost"),
+    locationName.SIGNTL3:   LocationData(1231529, 0, 0, "Signpost"),
+    locationName.SIGNTL4:   LocationData(1231530, 0, 0, "Signpost"),
 }
 
 GILoc_table = {
@@ -753,6 +792,11 @@ GILoc_table = {
     locationName.NESTGI76: LocationData(1231389),
     locationName.NESTGI77: LocationData(1231390),
     locationName.NESTGI78: LocationData(1231391),
+
+    locationName.SIGNGI1:   LocationData(1231531, 0, 0, "Signpost"),
+    locationName.SIGNGI2:   LocationData(1231532, 0, 0, "Signpost"),
+    locationName.SIGNGI3:   LocationData(1231533, 0, 0, "Signpost"),
+    locationName.SIGNGI4:   LocationData(1231534, 0, 0, "Signpost"),
 }
 
 HPLoc_table = {
@@ -842,6 +886,12 @@ HPLoc_table = {
     locationName.NESTHP38: LocationData(1231429),
     locationName.NESTHP39: LocationData(1231430),
     locationName.NESTHP40: LocationData(1231431),
+
+    locationName.SIGNHP1:   LocationData(1231535, 0, 0, "Signpost"),
+    locationName.SIGNHP2:   LocationData(1231536, 0, 0, "Signpost"),
+    locationName.SIGNHP3:   LocationData(1231537, 0, 0, "Signpost"),
+    locationName.SIGNHP4:   LocationData(1231538, 0, 0, "Signpost"),
+    locationName.SIGNHP5:   LocationData(1231539, 0, 0, "Signpost"),
 }
 
 CCLoc_table = {
@@ -937,6 +987,11 @@ CCLoc_table = {
     locationName.NESTCC48: LocationData(1231479),
     locationName.NESTCC49: LocationData(1231480),
     locationName.NESTCC50: LocationData(1231481),
+
+    locationName.SIGNCC1:   LocationData(1231540, 0, 0, "Signpost"),
+    locationName.SIGNCC2:   LocationData(1231541, 0, 0, "Signpost"),
+    locationName.SIGNCC3:   LocationData(1231542, 0, 0, "Signpost"),
+    locationName.SIGNCC4:   LocationData(1231543, 0, 0, "Signpost"),
 }
 
 IHWHLoc_table = {
@@ -964,6 +1019,20 @@ IHWHLoc_table = {
     locationName.NESTIH24: LocationData(1231058),
     locationName.NESTIH25: LocationData(1231059),
     locationName.NESTIH26: LocationData(1231060),
+
+    locationName.SIGNIH2:   LocationData(1231484, 0, 0, "Signpost"), 
+    locationName.SIGNIH3:   LocationData(1231485, 0, 0, "Signpost"), 
+    locationName.SIGNIH4:   LocationData(1231486, 0, 0, "Signpost"), 
+    locationName.SIGNIH5:   LocationData(1231487, 0, 0, "Signpost"), 
+    locationName.SIGNIH6:   LocationData(1231488, 0, 0, "Signpost"), 
+    locationName.SIGNIH7:   LocationData(1231489, 0, 0, "Signpost"), 
+    locationName.SIGNIH8:   LocationData(1231490, 0, 0, "Signpost"), 
+    locationName.SIGNIH9:   LocationData(1231491, 0, 0, "Signpost"), 
+    locationName.SIGNIH10:   LocationData(1231492, 0, 0, "Signpost"),
+    locationName.SIGNIH11:   LocationData(1231493, 0, 0, "Signpost"),
+    locationName.SIGNIH12:   LocationData(1231494, 0, 0, "Signpost"),
+    locationName.SIGNIH13:   LocationData(1231495, 0, 0, "Signpost"),
+    locationName.SIGNIH14:   LocationData(1231496, 0, 0, "Signpost"),
 }
 
 IHWLLoc_table = {
@@ -985,6 +1054,8 @@ IHWLLoc_table = {
 
     locationName.NESTIH56: LocationData(1231090),
     locationName.NESTIH57: LocationData(1231091),
+
+    locationName.SIGNIH19:   LocationData(1231501, 0, 0, "Signpost"),
 }
 
 IHQMLoc_table = {
@@ -1013,6 +1084,8 @@ IHCTLoc_table = {
     locationName.NESTIH44: LocationData(1231078),
     locationName.NESTIH45: LocationData(1231079),
     locationName.NESTIH64: LocationData(1231482), #Out of order.
+
+    locationName.SIGNIH18:   LocationData(1231500, 0, 0, "Signpost"),
 }
 
 boss_table = {

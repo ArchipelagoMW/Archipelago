@@ -15,7 +15,7 @@ local math = require('math')
 require('common')
 
 local SCRIPT_VERSION = 4
-local BT_VERSION = "V4.1"
+local BT_VERSION = "V4.2"
 local PLAYER = ""
 local SEED = 0
 
@@ -51,6 +51,7 @@ local DEBUG_HONEYCOMB = false
 local DEBUG_DOUBLOON = false
 local DEBUG_AMAZE = false
 local DEBUG_NESTS = false
+local DEBUG_SIGNPOSTS = false
 local DEBUGLVL2 = false
 local DEBUGLVL3 = false
 local AP_TIMEOUT_COUNTER = 0
@@ -88,6 +89,7 @@ local TTRAPS = 0;
 local STRAPS = 0;
 local TRTRAPS = 0;
 local SQTRAPS = 0;
+local TITRAPS = 0;
 
 local EGGNEST = 0;
 local FEATHERNEST = 0;
@@ -258,7 +260,8 @@ local ASSET_MAP_CHECK = {
             "1231045",
             "1231046",
             "1231047"
-        }
+        },
+        ["SIGNPOSTS"] = {"1231483"}
     },
     [0x143] = { --JV - Bottles' House
         ["AMAZE"] = {"1231005"},
@@ -295,7 +298,8 @@ local ASSET_MAP_CHECK = {
             "1231078",
             "1231079",
             "1231482",
-        }
+        },
+        ["SIGNPOSTS"] = {"1231500"}
     },
     [0x150] = { --IoH - Heggy's Egg Shed
         ["STOPNSWAP"] = {
@@ -322,6 +326,11 @@ local ASSET_MAP_CHECK = {
             "1231071",
             "1231072",
             "1231073",
+        },
+        ["SIGNPOSTS"] = {
+            "1231499",
+            "1231498",
+            "1231497",
         }
     },
     [0x157] = { -- Pine Grove Humba
@@ -393,7 +402,8 @@ local ASSET_MAP_CHECK = {
             "1231087",
             "1231088",
             "1231089",
-        }
+        },
+        ["SIGNPOSTS"] = {"1231501"}
     },
     [0x14F] = { --IoH - Wooded Hollow
         ["JINJOS"] = {
@@ -409,6 +419,25 @@ local ASSET_MAP_CHECK = {
             "1231058",
             "1231059",
             "1231060"
+        },
+        ["SIGNPOSTS"] = {
+            "1231488",
+            "1231486",
+            "1231485",
+            "1231487",
+            "1231484",
+        }
+    },
+    [0x151] = { --IoH - Jiggywiggy's Temple
+        ["SIGNPOSTS"] = {
+            "1231489",
+            "1231490",
+            "1231491",
+            "1231492",
+            "1231493",
+            "1231494",
+            "1231495",
+            "1231496",
         }
     },
     [0x15C] = { -- Quagmire
@@ -475,7 +504,8 @@ local ASSET_MAP_CHECK = {
             "1231109",
             "1231110",
             "1231111",
-        }
+        },
+        ["SIGNPOSTS"] = {"1231503"}
     },
     [0xC4] = { --MT - Jade Snake Grove
         ["JIGGIES"] = {
@@ -498,6 +528,11 @@ local ASSET_MAP_CHECK = {
             "1231119",
             "1231120",
             "1231121",
+        },
+        ["SIGNPOSTS"] = {
+            "1231508",
+            "1231507",
+            "1231506",
         }
     },
     [0xB6] = { -- MT - Humba
@@ -518,7 +553,8 @@ local ASSET_MAP_CHECK = {
         ["NESTS"] = {
             "1231100",
             "1231101",
-        }
+        },
+        ["SIGNPOSTS"] = {"1231502"}
     },
     [0xB9] = { --MT - Prison Compound
         ["JIGGIES"] = {
@@ -536,6 +572,10 @@ local ASSET_MAP_CHECK = {
             "1231116",
             "1231117",
             "1231118",
+        },
+        ["SIGNPOSTS"] = {
+            "1231504",
+            "1231505",
         }
     },
     [0x179] = { -- MT - Temple Lobby
@@ -582,6 +622,10 @@ local ASSET_MAP_CHECK = {
             "1231130",
             "1231131",
             "1231132",
+        },
+        ["SIGNPOSTS"] = {
+            "1231509",
+            "1231510",
         }
     },
     --GLITTER GULCH MINE
@@ -673,7 +717,8 @@ local ASSET_MAP_CHECK = {
         },
         ["NESTS"] = {
             "1231158",
-        }
+        },
+        ["SIGNPOSTS"] = {"1231512"}
     },
     [0xD4] = { --GGM - Power Hut
         ["NESTS"] = {
@@ -689,7 +734,8 @@ local ASSET_MAP_CHECK = {
             "1231155",
             "1231156",
             "1231157",
-        }
+        },
+        ["SIGNPOSTS"] = {"1231511"}
     },
     [0xD1] = { --GGM - Inside Chuffy's Boiler
         ["JIGGIES"] = {
@@ -742,7 +788,8 @@ local ASSET_MAP_CHECK = {
         ["NESTS"] = {
             "1231168",
             "1231169",
-        }
+        },
+        ["SIGNPOSTS"] = {"1231513"}
     },
     [0xDB] = { -- GGM - Canary Mary
         ["NESTS"] = {
@@ -762,6 +809,9 @@ local ASSET_MAP_CHECK = {
             "1231162",
             "1231163",
         }
+    },
+    [0x121] = { --GGM - Chuffy's Wagon,
+        ["SIGNPOSTS"] = {"1231514"}
     },
     [0xCD] = { --GGM - Water Storage
         ["JINJOS"] = {
@@ -842,11 +892,19 @@ local ASSET_MAP_CHECK = {
             "1231187",
             "1231188",
         },
+        ["SIGNPOSTS"] = {
+            "1231516",
+            "1231517",
+            "1231519",
+            "1231518",
+            "1231515",
+        }
     },
     [0xEA] = { --WW - Cave of Horrors
         ["JINJOS"] = {
             "1230562", -- Cave of Horrors
-        }
+        },
+        ["SIGNPOSTS"] = {"1231521"}
     },
     [0xE1] = { --WW - Crazy Castle Stockade
         ["JIGGIES"] = {
@@ -868,7 +926,8 @@ local ASSET_MAP_CHECK = {
         ["NESTS"] = {
             "1231191",
             "1231192",
-        }
+        },
+        ["SIGNPOSTS"] = {"1231520"}
     },
     [0xDD] = { --WW - Dodgem Dome Lobby
         ["JIGGIES"] = {
@@ -883,7 +942,8 @@ local ASSET_MAP_CHECK = {
             "1231198",
             "1231199",
             "1231200",
-        }
+        },
+        ["SIGNPOSTS"] = {"1231522"}
     },
     [0xF9] = { --WW - Big Top Tent
         ["JIGGIES"] = {
@@ -1001,7 +1061,8 @@ local ASSET_MAP_CHECK = {
         },
         ["NESTS"] = {
             "1231245",
-        }
+        },
+        ["SIGNPOSTS"] = {"1231526"}
     },
     [0xF4] = { --JRL - Ancient Swimming Baths
         ["PAGES"] = {
@@ -1049,7 +1110,8 @@ local ASSET_MAP_CHECK = {
             "1230855",
             "1230856",
             "1230857",
-        }
+        },
+        ["SIGNPOSTS"] = {"1231524"}
     },
     [0xF6] = {  --JRL - Electric Eel's lair
         ["SILO"] = {
@@ -1161,7 +1223,8 @@ local ASSET_MAP_CHECK = {
             "1231229",
             "1231230",
             "1231231",
-        }
+        },
+        ["SIGNPOSTS"] = {"1231523"}
     },
     [0x1A6] =	{ --JRL - Smuggler's cavern
         ["JIGGIES"] = {
@@ -1177,7 +1240,8 @@ local ASSET_MAP_CHECK = {
         ["NESTS"] = {
             "1231243",
             "1231244",
-        }
+        },
+        ["SIGNPOSTS"] = {"1231525"}
     },
     [0xFA] = { --JRL - Temple of the Fishes
         ["JIGGIES"] = {
@@ -1265,7 +1329,8 @@ local ASSET_MAP_CHECK = {
             "1231276",
             "1231277",
             "1231278",
-        }
+        },
+        ["SIGNPOSTS"] = {"1231527"}
     },
     [0x123] = { --TDL - Inside Chompa's Belly
         ["JIGGIES"] = {
@@ -1284,6 +1349,10 @@ local ASSET_MAP_CHECK = {
             "1231290",
             "1231291",
             "1231292",
+        },
+        ["SIGNPOSTS"] = {
+            "1231528",
+            "1231529",
         }
     },
     [0x115] = { --TDL - Oogle Boogles' Cave
@@ -1312,7 +1381,8 @@ local ASSET_MAP_CHECK = {
         },
         ["NESTS"] = {
             "1231293",
-        }
+        },
+        ["SIGNPOSTS"] = {"1231530"}
     },
     [0x119] = { -- Unga Bunga Cave
         ["SILO"] = {
@@ -1408,7 +1478,8 @@ local ASSET_MAP_CHECK = {
             "1231316",
             "1231317",
             "1231318",
-        }
+        },
+        ["SIGNPOSTS"] = {"1231531"}
     },
     [0x10F] = { --GI - Basement
         ["JIGGIES"] = {
@@ -1485,6 +1556,10 @@ local ASSET_MAP_CHECK = {
             "1231332",
             "1231333",
             "1231334",
+        },
+        ["SIGNPOSTS"] = {
+            "1231533",
+            "1231534",
         }
     },
     [0x106] =	{ --GI - Floor 2
@@ -1647,7 +1722,8 @@ local ASSET_MAP_CHECK = {
         ["NESTS"] = {
             "1231328",
             "1231329",
-        }
+        },
+        ["SIGNPOSTS"] = {"1231532"}
     },
     [0x162] = { --GI - Clinker's Cavern
         ["NESTS"] = {
@@ -1749,6 +1825,11 @@ local ASSET_MAP_CHECK = {
         },
         ["HONEYCOMB"] = {
             "1230721" -- Volcano
+        },
+        ["SIGNPOSTS"] = {
+            "1231538",
+            "1231537",
+            "1231539",
         }
     },
     [0x12D] =	{ --HFP - Kickball Stadium lobby
@@ -1809,6 +1890,10 @@ local ASSET_MAP_CHECK = {
             "1231400",
             "1231401",
             "1231402",
+        },
+        ["SIGNPOSTS"] = {
+            "1231536",
+            "1231535",
         }
     },
     [0x129] =	{ --HFP - Lava Train Station
@@ -1939,6 +2024,11 @@ local ASSET_MAP_CHECK = {
             "1231475",
             "1231476",
             "1231477",
+        },
+        ["SIGNPOSTS"] = {
+            "1231540",
+            "1231542",
+            "1231541",
         }
     },
     [0x138] =	{ --CCL - Inside the Cheese Wedge
@@ -2000,7 +2090,8 @@ local ASSET_MAP_CHECK = {
         ["NESTS"] = {
             "1231480",
             "1231481",
-        }
+        },
+        ["SIGNPOSTS"] = {"1231543"}
     },
     [0x139] =	{ --CCL - Zubbas' Nest
         ["JIGGIES"] = {
@@ -2126,7 +2217,8 @@ local TRAPS = {
     "AP_TRAP_TRIP",
     "AP_TRAP_SLIP",
     "AP_TRAP_MISFIRE",
-    "AP_TRAP_SQUISH"
+    "AP_TRAP_SQUISH",
+    "AP_TRAP_TIP"
 }
 
 local CURRENT_DIALOG_CHARACTER = nil
@@ -4871,6 +4963,69 @@ local ADDRESS_MAP = {
         ['1231479'] = 0x1D6,
         ['1231480'] = 0x1D7,
         ['1231481'] = 0x1D8,
+    },
+    ['SIGNPOSTS'] = {
+        ['1231483'] = 0x00,
+        ['1231488'] = 0x01,
+        ['1231486'] = 0x02,
+        ['1231485'] = 0x03,
+        ['1231487'] = 0x04,
+        ['1231484'] = 0x05,
+        ['1231489'] = 0x06,
+        ['1231490'] = 0x07,
+        ['1231491'] = 0x08,
+        ['1231492'] = 0x09,
+        ['1231493'] = 0x0A,
+        ['1231494'] = 0x0B,
+        ['1231495'] = 0x0C,
+        ['1231496'] = 0x0D,
+        ['1231499'] = 0x0E,
+        ['1231498'] = 0x0F,
+        ['1231497'] = 0x10,
+        ['1231500'] = 0x11,
+        ['1231501'] = 0x12,
+        ['1231502'] = 0x13,
+        ['1231503'] = 0x14,
+        ['1231504'] = 0x15,
+        ['1231505'] = 0x16,
+        ['1231508'] = 0x17,
+        ['1231507'] = 0x18,
+        ['1231506'] = 0x19,
+        ['1231509'] = 0x1A,
+        ['1231510'] = 0x1B,
+        ['1231511'] = 0x1C,
+        ['1231512'] = 0x1D,
+        ['1231513'] = 0x1E,
+        ['1231514'] = 0x1F,
+        ['1231516'] = 0x20,
+        ['1231517'] = 0x21,
+        ['1231519'] = 0x22,
+        ['1231518'] = 0x23,
+        ['1231515'] = 0x24,
+        ['1231520'] = 0x25,
+        ['1231521'] = 0x26,
+        ['1231522'] = 0x27,
+        ['1231523'] = 0x28,
+        ['1231524'] = 0x29,
+        ['1231525'] = 0x2A,
+        ['1231526'] = 0x2B,
+        ['1231531'] = 0x2C,
+        ['1231532'] = 0x2D,
+        ['1231533'] = 0x2E,
+        ['1231534'] = 0x2F,
+        ['1231527'] = 0x30,
+        ['1231528'] = 0x31,
+        ['1231529'] = 0x32,
+        ['1231530'] = 0x33,
+        ['1231536'] = 0x34,
+        ['1231535'] = 0x35,
+        ['1231538'] = 0x36,
+        ['1231537'] = 0x37,
+        ['1231539'] = 0x38,
+        ['1231540'] = 0x39,
+        ['1231542'] = 0x3A,
+        ['1231541'] = 0x3B,
+        ['1231543'] = 0x3C,
     }
 }
 
@@ -4993,7 +5148,8 @@ BTHACK = {
         pc_death_ap = 0x1,
         pc_show_txt = 0x2,
     pc_messages = 0x8,
-    pc_settings = 0xC,
+    signpost_messages = 0xC,
+    pc_settings = 0x10,
         setting_seed = 0x0,
         setting_victory_condition = 0x4,
         setting_chuffy = 0x5,
@@ -5005,12 +5161,15 @@ BTHACK = {
         setting_minigames = 0xB,
         setting_dialog_character = 0xC,
         setting_max_mumbo_tokens = 0xD,
-        setting_jiggy_requirements = 0xE,
-        setting_open_silos = 0x19,
-        setting_silo_requirements = 0x20,
-    pc_items = 0x10,
-    pc_traps = 0x14,
-    pc_exit_map = 0x18,
+        setting_signpost_hints = 0xE,
+        setting_extra_cheats = 0xF,
+        setting_easy_canary = 0x10,
+        setting_jiggy_requirements = 0x11,
+        setting_open_silos = 0x1C,
+        setting_silo_requirements = 0x24,
+    pc_items = 0x14,
+    pc_traps = 0x18,
+    pc_exit_map = 0x1C,
         exit_on_map = 0x0,
         exit_og_map = 0x2,
         exit_to_map = 0x4,
@@ -5018,14 +5177,15 @@ BTHACK = {
         exit_to_exit = 0x7,
         exit_map_struct_size = 0x8,
         world_index = 0,
-    n64 = 0x1C,
+    n64 = 0x20,
         n64_show_text = 0x0,
         n64_death_us = 0x1,
         n64_death_ap = 0x2,
         current_map = 0x4,
-    real_flags = 0x20,
-    fake_flags = 0x24,
-    nest_flags = 0x28,
+    real_flags = 0x24,
+    fake_flags = 0x28,
+    nest_flags = 0x2C,
+    signpost_flags = 0x30,
     txt_queue = 0
 }
 
@@ -5102,6 +5262,18 @@ function BTHACK:checkNestFlag(bytebit)
     return false;
 end
 
+function BTHACK:checkSignpostFlag(bytebit)
+    local offset_byte = math.floor(bytebit / 8)
+    local bitbit = math.fmod(bytebit, 8)
+
+    local signpost_addr = BTHACK:getSignpostPointer()
+    local currentValue = mainmemory.readbyte(signpost_addr + offset_byte);
+    if bit.check(currentValue, bitbit) then
+        return true;
+    end
+    return false;
+end
+
 function BTHACK:getSettingPointer()
     local hackPointerIndex = BTHACK:dereferencePointer(self.base_index);
     if hackPointerIndex == nil
@@ -5128,12 +5300,29 @@ function BTHACK:getNestPointer()
 	return BTHACK:dereferencePointer(self.nest_flags + hackPointerIndex);
 end
 
+function BTHACK:getSignpostPointer()
+    local hackPointerIndex = BTHACK:dereferencePointer(self.base_index);
+	return BTHACK:dereferencePointer(self.signpost_flags + hackPointerIndex);
+end
+
 function BTHACK:setSettingNestsanity(nest)
     mainmemory.writebyte(self.setting_nests + BTHACK:getSettingPointer(), nest);
 end
 
+function BTHACK:setSettingSignposts(signpost)
+    mainmemory.writebyte(self.setting_signpost_hints + BTHACK:getSettingPointer(), signpost);
+end
+
 function BTHACK:setSettingPuzzle(puzzle)
     mainmemory.writebyte(self.setting_puzzle + BTHACK:getSettingPointer(), puzzle);
+end
+
+function BTHACK:setExtraCheats(extra_cheats)
+    mainmemory.writebyte(self.setting_extra_cheats + BTHACK:getSettingPointer(), extra_cheats);
+end
+
+function BTHACK:setEasyCanary(easy_canary)
+    mainmemory.writebyte(self.setting_easy_canary + BTHACK:getSettingPointer(), easy_canary);
 end
 
 function BTHACK:setSettingBackdoors(backdoors)
@@ -5247,6 +5436,15 @@ function BTHACK:getPCMsgPointer()
 	return BTHACK:dereferencePointer(self.pc_messages + hackPointerIndex);
 end
 
+function BTHACK:getPCHintPointer()
+    local hackPointerIndex = BTHACK:dereferencePointer(self.base_index);
+    if hackPointerIndex == nil
+    then
+        return nil
+    end
+	return BTHACK:dereferencePointer(self.signpost_messages + hackPointerIndex);
+end
+
 function BTHACK:getPCDeath()
     return mainmemory.readbyte(self:getPCPointer());
 end
@@ -5314,6 +5512,26 @@ function BTHACK:setDialog(message, icon_id)
         mainmemory.writebyte(self:getPCMsgPointer() + last_char, 0);
     end
     self:setTextQueue(icon_id)
+end
+
+function BTHACK:setHintMessages(sign_id, message)
+    uppcase_text = string.upper(message)
+    local overflow = false
+    local last_char = 0
+    for idx = 0, string.len(uppcase_text)-1 do
+        if idx == 150
+        then
+            overflow = true
+            mainmemory.writebyte((self:getPCHintPointer() + sign_id*150 ) + idx, 0);
+            break;
+        end
+        last_char = last_char + 1;
+        mainmemory.writebyte((self:getPCHintPointer() + sign_id*150 ) + idx, uppcase_text:byte(idx + 1));
+    end
+    if overflow == false
+    then
+        mainmemory.writebyte((self:getPCHintPointer() + sign_id*150 ) + last_char, 0);
+    end
 end
 
 function BTHACK:getRomVersion()
@@ -6262,6 +6480,10 @@ function traps(itemId)
     then
         SQTRAPS = SQTRAPS + 1
         BTH:sendTrap(TRAP_TABLE["AP_TRAP_SQUISH"], SQTRAPS)
+    elseif itemId == 1230833
+    then
+        TITRAPS = TITRAPS + 1
+        BTH:sendTrap(TRAP_TABLE["AP_TRAP_TIP"], TITRAPS)
     end
 end
 
@@ -6300,6 +6522,27 @@ function obtain_nests(itemId)
         GOLDNEST = GOLDNEST + 1
         BTH:setItem(ITEM_TABLE["AP_ITEM_GNEST"], GOLDNEST)
     end
+end
+
+---------------------- SIGNPOST LOCATIONS ------------------
+
+function signpost_check()
+    local checks = {}
+    if ASSET_MAP_CHECK[CURRENT_MAP] ~= nil
+    then
+        if ASSET_MAP_CHECK[CURRENT_MAP]["SIGNPOSTS"] ~= nil
+        then
+            for _,locationId in pairs(ASSET_MAP_CHECK[CURRENT_MAP]["SIGNPOSTS"])
+            do
+                checks[locationId] = BTH:checkSignpostFlag(ADDRESS_MAP["SIGNPOSTS"][locationId])
+                if DEBUG_SIGNPOSTS == true
+                then
+                    print(locationId .. ":" .. tostring(checks[locationId]))
+                end
+            end
+        end
+    end
+    return checks
 end
 
 ---------------------- GAME FUNCTIONS -------------------
@@ -6349,6 +6592,10 @@ function hag1_open()
         BTH:setItem(ITEM_TABLE["AP_ITEM_H1A"], 1)
         opened = true
     elseif GOAL_TYPE == 4 and TOTAL_MUMBO_TOKENS >= 32
+    then
+        BTH:setItem(ITEM_TABLE["AP_ITEM_H1A"], 1)
+        opened = true
+    elseif GOAL_TYPE == 6 and TOTAL_MUMBO_TOKENS >= BH_LENGTH
     then
         BTH:setItem(ITEM_TABLE["AP_ITEM_H1A"], 1)
         opened = true
@@ -6527,6 +6774,9 @@ function processAGIItem(item_list)
             then
                 obtain_mumbo_token()
                 check_open_level() -- check if the current jiggy count opens a new level
+            elseif(memlocation == 1230833) -- Tip Trap
+            then
+                traps(memlocation)
             end
             receive_map[tostring(ap_id)] = tostring(memlocation)
         end
@@ -6722,6 +6972,7 @@ function SendToBTClient()
     retTable["roar"] = roar_check();
     retTable["dino_kids"] = dino_kids_check();
     retTable["nests"] = nest_check();
+    retTable["signposts"] = signpost_check();
     retTable["DEMO"] = false;
     retTable["sync_ready"] = "true"
 
@@ -6945,12 +7196,7 @@ function process_slot(block)
         GOAL_TYPE = block['slot_victory_condition']
         BTH:setVictoryCondition(GOAL_TYPE)
     end
-    if block['slot_open_hag1'] ~= nil and block['slot_open_hag1'] ~= 0
-    then
-        OPEN_HAG1 = true
-        hag1_open()
-    end
-    if block['slot_chuffy'] ~= nil and block['slot_chuffy'] ~= 0
+    if block['slot_randomize_chuffy'] ~= nil and block['slot_randomize_chuffy'] ~= 0
     then
         ENABLE_AP_CHUFFY = true
         BTH:setSettingChuffy(1)
@@ -6958,6 +7204,14 @@ function process_slot(block)
     if block['slot_nestsanity'] ~= nil and block['slot_nestsanity'] ~= 0
     then
         BTH:setSettingNestsanity(1)
+    end
+    if block['slot_extra_cheats'] ~= nil and block['slot_extra_cheats'] ~= 0
+    then
+        BTH:setExtraCheats(1)
+    end
+    if block['slot_easy_canary'] ~= nil and block['slot_easy_canary'] ~= 0
+    then
+        BTH:setEasyCanary(1)
     end
     if block['slot_worlds'] ~= nil and block['slot_worlds'] ~= "false"
     then
@@ -7041,7 +7295,6 @@ function process_slot(block)
     end
     if block['slot_open_silo'] ~= nil
     then
-
         OPEN_SILO = block['slot_open_silo']
         if OPEN_SILO == "ALL"
         then
@@ -7075,6 +7328,16 @@ function process_slot(block)
             SILO_MESSAGE = "The Isle O' Hags Cliff Top Silo is open"
         end
     end
+    if block['slot_hints'] ~= nil and (block['slot_hints_activated'] ~= 0 or block["slot_randomize_signposts"] ~= 0)
+    then
+        BTH:setSettingSignposts(1)
+        local sign_id = 0
+        for sign_locationId, hintdata in pairs(block['slot_hints'])
+        do
+            sign_id = ADDRESS_MAP["SIGNPOSTS"][sign_locationId]
+            BTH:setHintMessages(sign_id, hintdata["text"])
+        end
+    end
     if block['slot_version'] ~= nil and block['slot_version'] ~= ""
     then
         CLIENT_VERSION = block['slot_version']
@@ -7091,15 +7354,18 @@ function process_slot(block)
             then
                 if ROMversion ~= CLIENT_VERSION
                 then
-                    print(ROMversion)
                     VERROR = true
-                    print("ROM VERSION DOES NOT MATCH")
                     return false
                 end
                 checked = true
             end
             emu.frameadvance()
         end
+    end
+    if block['slot_open_hag1'] ~= nil and block['slot_open_hag1'] ~= 0
+    then
+        OPEN_HAG1 = true
+        hag1_open()
     end
 
     if block['slot_zones'] ~= nil
@@ -7145,6 +7411,9 @@ function printGoalInfo()
         elseif GOAL_TYPE == 5 and TH_LENGTH < 15 then
             message = "You are trying to find "..TH_LENGTH.." of the 15 of Mumbo Tokens scattered throughout the Isle of Hags!\nGood Luck and"..randomEncouragment;
             BTH:setSettingMaxMumboTokens(TH_LENGTH)
+        elseif GOAL_TYPE == 6 then
+            message = "You need to defeat "..BH_LENGTH.." Bosses in order to defeat HAG-1!\nGood Luck and"..randomEncouragment;
+            BTH:setSettingMaxMumboTokens(BH_LENGTH)
         end
         if GOAL_PRINTED == false
         then
@@ -7205,9 +7474,11 @@ function main()
                 mumbo_announce()
                 if VERROR == true
                 then
-                    print("ERROR: Banjo_Tooie_connector Mismatch. Please obtain the correct version")
+                    print("ERROR: version mismatch. Please obtain the same version for everything")
+                    print("The versions that you are currently using are:")
                     print("Connector Version: " .. BT_VERSION)
                     print("Client Version: " .. CLIENT_VERSION)
+                    print("ROM Version: " .. BTH:getRomVersion())
                     return
                 end
                 if (CURRENT_MAP ~= 0x158 and CURRENT_MAP ~= 0x18B and CURRENT_MAP ~= 0x0) and GOAL_PRINTED == true
