@@ -81,4 +81,4 @@ class TestDefaultWorld(NineSolsTestBase):
     options = {}
 
     def test_default_world(self):
-        self.assertEqual(self.getLocationCount(), 319)  # 314 default locations + 5 events
+        self.assertEqual(self.getLocationCount(), 320)  # 315 default locations + 5 events

@@ -19,7 +19,11 @@
 
     // Apeman Facility (Elevator)
     {
-        "address": 201, "name": "AF (Elevator): Atop Upper Level Pagoda",
+        "address": 201, "name": "AF (Elevator): Hidden Atop Upper Level Pagoda (Left Chest)",
+        "region": "AFE - Between Root Nodes", "requires": []
+    },
+    {
+        "address": 207, "name": "AF (Elevator): Hidden Atop Upper Level Pagoda (Right Chest)",
         "region": "AFE - Between Root Nodes", "requires": []
     },
     {
