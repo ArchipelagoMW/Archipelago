@@ -235,6 +235,12 @@ class FactorioStartItems(OptionDict):
     """Mapping of Factorio internal item-name to amount granted on start."""
     display_name = "Starting Items"
     default = {"burner-mining-drill": 4, "stone-furnace": 4,  "raw-fish": 50}
+    schema = Schema(
+        {
+            str: And(int, lambda n: n > 0,
+                     error="amount of starting items has to be a positive integer"),
+        }
+    )
 
 
 class FactorioFreeSampleBlacklist(OptionSet):
