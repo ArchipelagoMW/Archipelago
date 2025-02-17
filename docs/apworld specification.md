@@ -19,7 +19,21 @@ the world's folder in `worlds/`. I.e. `worlds/ror2.apworld` containing `ror2/__i
 
 ## Metadata
 
-No metadata is specified yet.
+Metadata about the apworld is defined in a `archipelago.json` file inside the zip archive.
+The current format version has at minimum:
+```json
+{
+    "version": 6,
+    "compatible_version": 5,
+    "game": "Game Name"
+}
+```
+
+with the following optional version fields using the format `"1.0.0"` to represent major.minor.build:
+* `minimum_ap_version` and `maximum_ap_version` - which if present each will be compared against the current
+  Archipelago version respectively to filter those files from being loaded
+* `world_version` an arbitrary version for that world to differentiate different releases where only
+  the newest valid world will be loaded
 
 
 ## Extra Data
