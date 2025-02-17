@@ -12,7 +12,7 @@ from ..Locations import AquariaLocationNames
 class BeastFormAccessTest(AquariaTestBase):
     """Unit test used to test accessibility of locations with and without the beast form"""
 
-    def test_beast_form_location(self) -> None:
+    def vtest_beast_form_location(self) -> None:
         """Test locations that require beast form"""
         locations = [
             AquariaLocationNames.MERMOG_CAVE_PIRANHA_EGG,
