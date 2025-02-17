@@ -190,13 +190,13 @@ class MessengerWorld(World):
     def create_items(self) -> None:
         # create items that are always in the item pool
         main_movement_items = ["Rope Dart", "Wingsuit"]
-        precollected_names = [item.name for item in self.multiworld.precollected_items[self.player]]
         itempool: list[MessengerItem] = [
             self.create_item(item)
             for item in self.item_name_to_id
             if item not in {
                 "Power Seal", *NOTES, *FIGURINES, *main_movement_items,
-                *precollected_names, *FILLER, *TRAPS,
+                *self.multiworld.start_items_remove_from_pool[self.player],
+                *FILLER, *TRAPS,
             }
         ]
 
@@ -208,11 +208,11 @@ class MessengerWorld(World):
         if self.options.goal == Goal.option_open_music_box:
             # make a list of all notes except those in the player's defined starting inventory, and adjust the
             # amount we need to put in the itempool and precollect based on that
-            notes = [note for note in NOTES if note not in precollected_names]
+            notes = [note for note in NOTES if note not in self.multiworld.start_items_remove_from_pool[self.player]]
             self.random.shuffle(notes)
-            precollected_notes_amount = NotesNeeded.range_end - \
-                                        self.options.notes_needed - \
-                                        (len(NOTES) - len(notes))
+            precollected_notes_amount = (NotesNeeded.range_end -
+                                         self.options.notes_needed -
+                                         (len(NOTES) - len(notes)))
             if precollected_notes_amount:
                 for note in notes[:precollected_notes_amount]:
                     self.multiworld.push_precollected(self.create_item(note))
@@ -244,6 +244,8 @@ class MessengerWorld(World):
         filler = [self.create_filler() for _ in range(remaining_fill)]
 
         self.multiworld.itempool += filler
+        # start inventory items aren't ever added to the pool so they don't need to be removed later
+        self.multiworld.start_items_remove_from_pool[self.player] = {}
 
     def set_rules(self) -> None:
         logic = self.options.logic_level
