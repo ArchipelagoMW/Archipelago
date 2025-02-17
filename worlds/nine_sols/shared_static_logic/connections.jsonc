@@ -147,7 +147,8 @@
         { "item": "Mystic Nymph: Scout Mode" },
         { "anyOf": [ { "item": "Tai-Chi Kick" }, { "item": "Air Dash" }, { "item": "Cloud Leap" } ] }
     ] }, // nymph to activate crate, wall climb AND (kick OR airdash OR djump) to ride it, then djump OR wall climb to arena
-    { "from": "CTH - Above Elevator", "to": "CTH - Yanren Arena", "requires": [] }, // not quite a one-way fall, but no locations on the way
+    { "from": "CTH - Yanren Arena", "to": "CTH - Middle Left Exit & Elevator", "requires": [] }, // one-way door
+    { "from": "CTH - Above Elevator", "to": "CTH - Middle Left Exit & Elevator", "requires": [] }, // not quite a one-way fall, but no locations on the way
     { "from": "CTH - Upper Right Exit", "to": "CTH - Bottom of Large Shaft", "requires": [] }, // one-way door
     { "from": "CTH - Bottom of Large Shaft", "to": "CTH - Stairs Near Large Shaft", "requires": [] }, // hacking
     { "from": "CTH - Stairs Near Large Shaft", "to": "CTH - Lower Left Vents", "requires": [] }, // wall climb
@@ -161,10 +162,10 @@
     { "from": "CTH - Lower Right Vents", "to": "CTH - Lower Exits", "requires": [] }, // one-way fall
     { "from": "CTH - Lower Exits", "to": "CTH - Lower Right Vents", "requires": [] }, // grapple
 
-    { "from": "CTH - Yanren Arena", "to": "CH - Center", "requires": [] }, // elevator
+    { "from": "CTH - Middle Left Exit & Elevator", "to": "CH - Center", "requires": [] }, // elevator
 
-    { "from": "CTH - Yanren Arena", "to": "GD - Root Node & Right Exit", "requires": [] },
-    { "from": "GD - Root Node & Right Exit", "to": "CTH - Yanren Arena", "requires": [] },
+    { "from": "CTH - Middle Left Exit & Elevator", "to": "GD - Root Node & Right Exit", "requires": [] },
+    { "from": "GD - Root Node & Right Exit", "to": "CTH - Middle Left Exit & Elevator", "requires": [] },
 
     { "from": "CTH - Upper Right Exit", "to": "TRC - Ground Floor & Exits", "requires": [] },
     { "from": "TRC - Ground Floor & Exits", "to": "CTH - Upper Right Exit", "requires": [] },
