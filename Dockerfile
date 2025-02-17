@@ -43,7 +43,7 @@ RUN python -m venv $VIRTUAL_ENV; \
 
 # hadolint ignore=DL3042
 RUN pip install -r WebHostLib/requirements.txt \
-    gunicorn==23.0.0 \
+    gunicorn==23.0.0; \
     python ModuleUpdate.py -y
 
 RUN cythonize -i _speedups.pyx
