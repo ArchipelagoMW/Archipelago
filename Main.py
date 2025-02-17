@@ -189,6 +189,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     multiworld.link_items()
 
+    multiworld.link_items()
+    
     if any(multiworld.item_links.values()):
         multiworld._all_state = None
 
