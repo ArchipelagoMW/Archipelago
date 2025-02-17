@@ -14,7 +14,7 @@ from .data import static_items as static_witness_items
 from .data import static_locations as static_witness_locations
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import DoorItemDefinition, ItemData
-from .data.utils import cast_not_none, get_audio_logs
+from .data.utils import cast_not_none
 from .hints import CompactHintData, create_all_hints, make_compact_hint_data, make_laser_hints
 from .locations import WitnessPlayerLocations
 from .options import TheWitnessOptions, witness_option_groups
@@ -342,26 +342,46 @@ class WitnessWorld(World):
         # Audio Log Hints
 
         hint_amount = self.options.hint_amount.value
-        audio_logs = get_audio_logs().copy()
+
+        all_audio_logs = [
+            entity_hex for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items()
+            if entity_obj["entityType"] == "Audio Log"
+        ]
+        enabled_audio_logs = [
+            log_hex for log_hex in all_audio_logs if log_hex not in self.player_logic.COMPLETELY_DISABLED_ENTITIES
+        ]
+        disabled_audio_logs = [
+            log_hex for log_hex in all_audio_logs if log_hex in self.player_logic.COMPLETELY_DISABLED_ENTITIES
+        ]
+
+        if hint_amount > len(enabled_audio_logs):
+            # TODO: Make this an option in the advanced hints PR
+            warning(
+                f"Player {self.player_name} requested {hint_amount} hints, but only {enabled_audio_logs} Audio Logs "
+                f"are available, so only {enabled_audio_logs} hints were created."
+            )
+            hint_amount = len(enabled_audio_logs)
+            self.options.hint_amount.value = hint_amount
 
         if hint_amount:
             area_hints = round(self.options.area_hint_percentage / 100 * hint_amount)
 
             generated_hints = create_all_hints(self, hint_amount, area_hints, already_hinted_locations)
 
-            self.random.shuffle(audio_logs)
+            self.random.shuffle(enabled_audio_logs)
 
-            duplicates = min(3, len(audio_logs) // hint_amount)
+            duplicates = min(3, len(enabled_audio_logs) // hint_amount)
 
             for hint in generated_hints:
                 compact_hint_data = make_compact_hint_data(hint, self.player)
 
                 for _ in range(0, duplicates):
-                    audio_log = audio_logs.pop()
+                    audio_log = enabled_audio_logs.pop()
                     self.log_ids_to_hints[int(audio_log, 16)] = compact_hint_data
 
-        # Client will generate joke hints for these.
-        self.log_ids_to_hints.update({int(audio_log, 16): ("", -1, -1) for audio_log in audio_logs})
+        # Client will generate joke hints for the remaining unfilled audio logs, including any disabled audio logs.
+        self.log_ids_to_hints.update({int(audio_log, 16): ("", -1, -1) for audio_log in enabled_audio_logs})
+        self.log_ids_to_hints.update({int(audio_log, 16): ("", -1, -1) for audio_log in disabled_audio_logs})
 
         # Options for the client & auto-tracker
 

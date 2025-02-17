@@ -97,7 +97,7 @@ class StaticWitnessLogicObj:
 
             full_entity_name = current_region["shortName"] + " " + entity_name
 
-            if location_id == "Door" or location_id == "Laser":
+            if location_id in ("Door", "Laser", "Audio Log"):
                 self.ENTITIES_BY_HEX[entity_hex] = {
                     "checkName": full_entity_name,
                     "entity_hex": entity_hex,
@@ -131,7 +131,10 @@ class StaticWitnessLogicObj:
                 "Laser Pressure Plates",
             }
 
-            if "Discard" in entity_name:
+            if location_id == "Audio Log":
+                entity_type = "Audio Log"
+                location_type = None
+            elif "Discard" in entity_name:
                 entity_type = "Panel"
                 location_type = "Discard"
             elif "Vault" in entity_name:
