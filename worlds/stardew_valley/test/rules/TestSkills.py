@@ -35,14 +35,13 @@ class TestSkillProgressionProgressive(SVTestBase):
 
             for level in range(1, 11):
                 location_name = f"Level {level} {skill}"
-                location = self.multiworld.get_location(location_name, self.player)
 
                 with self.subTest(location_name):
                     if level > 1:
-                        self.assert_cannot_reach_location(location, self.multiworld.state)
+                        self.assert_cannot_reach_location(location_name)
                         self.collect(f"{skill} Level")
 
-                    self.assert_can_reach_location(location, self.multiworld.state)
+                    self.assert_can_reach_location(location_name)
 
             self.reset_collection_state()
 
@@ -87,8 +86,7 @@ class TestSkillProgressionProgressiveWithMasteryWithoutMods(SVTestBase):
 
         for skill in all_vanilla_skills:
             with self.subTest(skill):
-                location = self.multiworld.get_location(f"{skill} Mastery", self.player)
-                self.assert_can_reach_location(location, self.multiworld.state)
+                self.assert_can_reach_location(f"{skill} Mastery")
 
         self.reset_collection_state()
 
@@ -98,8 +96,7 @@ class TestSkillProgressionProgressiveWithMasteryWithoutMods(SVTestBase):
                 self.collect_everything()
                 self.remove_one_by_name(f"{skill} Level")
 
-                location = self.multiworld.get_location(f"{skill} Mastery", self.player)
-                self.assert_cannot_reach_location(location, self.multiworld.state)
+                self.assert_cannot_reach_location(f"{skill} Mastery")
 
                 self.reset_collection_state()
 
@@ -107,7 +104,6 @@ class TestSkillProgressionProgressiveWithMasteryWithoutMods(SVTestBase):
         self.collect_everything()
 
         self.remove_one_by_name(f"Progressive Pickaxe")
-        location = self.multiworld.get_location("Mining Mastery", self.player)
-        self.assert_cannot_reach_location(location, self.multiworld.state)
+        self.assert_cannot_reach_location("Mining Mastery")
 
         self.reset_collection_state()
