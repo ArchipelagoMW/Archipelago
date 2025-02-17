@@ -196,7 +196,7 @@ def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_d
                 equip_list.append("Magic")
             more_modified_stats = AreaStats(modified_stats.att_level - 32, modified_stats.def_level,
                                             modified_stats.potion_level, modified_stats.hp_level,
-                                            modified_stats.sp_level, modified_stats.mp_level + 4,
+                                            modified_stats.sp_level, modified_stats.mp_level + 2,
                                             modified_stats.potion_count, equip_list, data.is_boss)
             if check_combat_reqs("none", state, player, more_modified_stats):
                 return True
