@@ -4,9 +4,10 @@ import typing
 import unittest
 from argparse import Namespace
 
+import worlds
 from Generate import get_seed_name
 from test.general import gen_steps
-from worlds import AutoWorld
+from worlds import AutoWorld, ensure_worlds_loaded
 from worlds.AutoWorld import World, call_all
 
 from BaseClasses import Location, MultiWorld, CollectionState, ItemClassification, Item
@@ -119,6 +120,12 @@ class WorldTestBase(unittest.TestCase):
     memory_leak_tested: typing.ClassVar[bool] = False
     """ remember if memory leak test was already done for this class """
 
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        if hasattr(cls, "game"):
+            ensure_worlds_loaded(cls.game)
+
     def setUp(self) -> None:
         if self.auto_construct:
             self.world_setup()
@@ -163,6 +170,7 @@ class WorldTestBase(unittest.TestCase):
         random.seed(self.multiworld.seed)
         self.multiworld.seed_name = get_seed_name(random)  # only called to get same RNG progression as Generate.py
         args = Namespace()
+        worlds.ensure_worlds_loaded(self.game)
         for name, option in AutoWorld.AutoWorldRegister.world_types[self.game].options_dataclass.type_hints.items():
             setattr(args, name, {
                 1: option.from_any(self.options.get(name, option.default))
