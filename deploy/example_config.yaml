@@ -2,6 +2,7 @@
 
 # We'll be hosting VIA gunicorn
 SELFHOST: false
+# We'll start a separate process for rooms and generators
 SELFLAUNCH: false
 
 # Host Address.  This is the address encoded into the patch that will be used for client auto-connect.
