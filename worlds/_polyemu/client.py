@@ -59,6 +59,8 @@ class AutoPolyEmuClientRegister(abc.ABCMeta):
 
     @staticmethod
     async def get_handler(ctx: "PolyEmuClientContext", system: str) -> PolyEmuClient | None:
+        # TODO: Get clients to register the request types they need, and check
+        # whether the device can fulfill the requests a handler uses.
         for systems, handlers in AutoPolyEmuClientRegister.game_handlers.items():
             if system in systems:
                 for handler in handlers.values():

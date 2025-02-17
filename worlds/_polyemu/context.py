@@ -47,8 +47,9 @@ class PolyEmuClientContext(CommonContext):
         self.auth_status = AuthStatus.NOT_AUTHENTICATED
         self.password_requested = False
         self.client_handler = None
-        # self.polyemu_ctx = PolyEmuContext(AutoConnectorRegister.get_connector("Default Connector"))
-        self.polyemu_ctx = PolyEmuContext(AutoConnectorRegister.get_connector("SNI Connector"))
+        # TODO: Add a way to swap these based on a user command or something
+        self.polyemu_ctx = PolyEmuContext(AutoConnectorRegister.get_connector("Default Connector"))
+        # self.polyemu_ctx = PolyEmuContext(AutoConnectorRegister.get_connector("SNI Connector"))
         self.watcher_timeout = 0.5
 
     def make_gui(self):
@@ -146,7 +147,7 @@ async def _game_watcher(ctx: PolyEmuClientContext):
 
             showed_connecting_message = False
 
-            await no_op(ctx.polyemu_ctx)
+            await no_op(ctx.polyemu_ctx)  # Only for keeping the broker from timing out
 
             if ctx.polyemu_ctx.selected_device_id == DEFAULT_DEVICE_ID:
                 if not showed_searching_devices_message:
@@ -156,7 +157,7 @@ async def _game_watcher(ctx: PolyEmuClientContext):
                 devices = await list_devices(ctx.polyemu_ctx)
                 if len(devices):
                     logger.info(f"Found devices: {devices}")
-                    ctx.polyemu_ctx.selected_device_id = devices[0]
+                    ctx.polyemu_ctx.selected_device_id = devices[0]  # TODO: Implement way to select device
                     showed_searching_devices_message = False
                 else:
                     continue
@@ -203,44 +204,44 @@ async def _game_watcher(ctx: PolyEmuClientContext):
         await ctx.client_handler.game_watcher(ctx)
 
 
-def _run_game(rom: str):
-    import os
-    import subprocess
+# def _run_game(rom: str):
+#     import os
+#     import subprocess
 
-    auto_start = Utils.get_settings().polyemuclient_options.rom_start
+#     auto_start = Utils.get_settings().polyemuclient_options.rom_start
 
-    if auto_start is True:
-        emuhawk_path = Utils.get_settings().polyemuclient_options.emuhawk_path
-        subprocess.Popen(
-            [
-                emuhawk_path,
-                f"--lua={Utils.local_path('data', 'lua', 'connector_bizhawk_generic.lua')}",
-                os.path.realpath(rom),
-            ],
-            cwd=Utils.local_path("."),
-            stdin=subprocess.DEVNULL,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        )
-    elif isinstance(auto_start, str):
-        import shlex
+#     if auto_start is True:
+#         emuhawk_path = Utils.get_settings().polyemuclient_options.emuhawk_path
+#         subprocess.Popen(
+#             [
+#                 emuhawk_path,
+#                 f"--lua={Utils.local_path('data', 'lua', 'connector_bizhawk_generic.lua')}",
+#                 os.path.realpath(rom),
+#             ],
+#             cwd=Utils.local_path("."),
+#             stdin=subprocess.DEVNULL,
+#             stdout=subprocess.DEVNULL,
+#             stderr=subprocess.DEVNULL,
+#         )
+#     elif isinstance(auto_start, str):
+#         import shlex
 
-        subprocess.Popen(
-            [
-                *shlex.split(auto_start),
-                os.path.realpath(rom)
-            ],
-            cwd=Utils.local_path("."),
-            stdin=subprocess.DEVNULL,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL
-        )
+#         subprocess.Popen(
+#             [
+#                 *shlex.split(auto_start),
+#                 os.path.realpath(rom)
+#             ],
+#             cwd=Utils.local_path("."),
+#             stdin=subprocess.DEVNULL,
+#             stdout=subprocess.DEVNULL,
+#             stderr=subprocess.DEVNULL
+#         )
 
 
 def _patch_and_run_game(patch_file: str):
     try:
         metadata, output_file = Patch.create_rom_file(patch_file)
-        _run_game(output_file)
+        # _run_game(output_file)
         return metadata
     except Exception as exc:
         logger.exception(exc)

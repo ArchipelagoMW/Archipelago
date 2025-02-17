@@ -56,17 +56,13 @@ class SNIConnector(polyemu.Connector):
         return self._channel is not None
 
     async def connect(self):
-        try:
-            # self._channel = grpc.insecure_channel("localhost:8191")
-            self._channel = grpc.aio.insecure_channel("localhost:8191")
-            await self._channel.channel_ready()
-            self._devices_stub = sni_grpc.DevicesStub(self._channel)
-            self._memory_stub = sni_grpc.DeviceMemoryStub(self._channel)
-            self._info_stub = sni_grpc.DeviceInfoStub(self._channel)
-            return True
-        except (TimeoutError, ConnectionRefusedError):
-            self._streams = None
-            return False
+        # TODO: Handle timeouts/errors here instead of waiting forever
+        self._channel = grpc.aio.insecure_channel("localhost:8191")
+        await self._channel.channel_ready()
+        self._devices_stub = sni_grpc.DevicesStub(self._channel)
+        self._memory_stub = sni_grpc.DeviceMemoryStub(self._channel)
+        self._info_stub = sni_grpc.DeviceInfoStub(self._channel)
+        return True
 
     async def disconnect(self):
         if self._channel is not None:
@@ -167,6 +163,7 @@ class SNIConnector(polyemu.Connector):
             await self.disconnect()
             raise polyemu.ConnectionLostError from exc
 
+        # Captures the port of the device as the device id
         self._device_ids = {device.uri.encode("utf-8")[-8:]: device.uri for device in sni_response.devices}
         inverted_device_ids = {v: k for k, v in self._device_ids.items()}
 
@@ -202,7 +199,7 @@ class SNIConnector(polyemu.Connector):
                 requests=[sni.ReadMemoryRequest(
                     requestAddress=DOMAIN_ID_TO_FXPACK_BASE[request.domain_id] + request.address,
                     requestAddressSpace=sni.AddressSpace.FxPakPro,
-                    requestMemoryMapping=sni.MemoryMapping.Unknown,
+                    requestMemoryMapping=sni.MemoryMapping.Unknown,  # This seems to make BizHawk log a lot; maybe an SNI bug?
                     size=request.size,
                 ) for _, request in requests_by_index]
             ))
@@ -224,7 +221,7 @@ class SNIConnector(polyemu.Connector):
                 requests=[sni.WriteMemoryRequest(
                     requestAddress=DOMAIN_ID_TO_FXPACK_BASE[request.domain_id] + request.address,
                     requestAddressSpace=sni.AddressSpace.FxPakPro,
-                    requestMemoryMapping=sni.MemoryMapping.Unknown,
+                    requestMemoryMapping=sni.MemoryMapping.Unknown,  # This seems to make BizHawk log a lot; maybe an SNI bug?
                     data=request.data,
                 ) for _, request in requests_by_index]
             ))
