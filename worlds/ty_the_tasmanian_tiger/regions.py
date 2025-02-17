@@ -28,6 +28,11 @@ class Ty1LevelCode(Enum):
     E4 = 23
 
 
+ty1_core_levels = [Ty1LevelCode.A1, Ty1LevelCode.A2, Ty1LevelCode.A3,
+                   Ty1LevelCode.B1, Ty1LevelCode.B2, Ty1LevelCode.B3,
+                   Ty1LevelCode.C1, Ty1LevelCode.C2, Ty1LevelCode.C3]
+
+
 ty1_levels: Dict[Ty1LevelCode, str] = {
     Ty1LevelCode.Z1: "Rainbow Cliffs",
     Ty1LevelCode.A1: "Two Up",

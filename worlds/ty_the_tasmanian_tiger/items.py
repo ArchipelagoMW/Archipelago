@@ -113,7 +113,6 @@ def create_items(world: MultiWorld, options: Ty1Options, player: int):
     junk = get_junk_item_names(world.random, total_location_count - len(world.worlds[player].itempool))
     for name in junk:
         create_single(name, world, player)
-
     world.itempool += world.worlds[player].itempool
 
 

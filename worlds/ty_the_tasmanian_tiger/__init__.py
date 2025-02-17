@@ -6,7 +6,8 @@ from worlds.AutoWorld import WebWorld, World
 from .items import Ty1Item, ty1_item_table, create_items, ItemData, place_locked_items
 from .locations import ty1_location_table, Ty1Location
 from .options import Ty1Options, ty1_option_groups
-from .regions import create_regions, connect_regions, ty1_levels, Ty1LevelCode, connect_all_regions
+from .regions import create_regions, connect_regions, ty1_levels, Ty1LevelCode, connect_all_regions, ty1_core_levels, \
+    ty1_levels_short
 from .rules import set_rules
 
 
@@ -37,6 +38,7 @@ class Ty1World(World):
     topology_present = True
     item_name_to_id = {name: item.code for name, item in ty1_item_table.items()}
     location_name_to_id = {name: item.code for name, item in ty1_location_table.items()}
+    region_name_to_code = {name: code for code, name in ty1_levels.items()}
     portal_map: typing.List[int] = [Ty1LevelCode.A1.value, Ty1LevelCode.A2.value, Ty1LevelCode.A3.value,
                                     Ty1LevelCode.B1.value, Ty1LevelCode.B2.value, Ty1LevelCode.B3.value,
                                     Ty1LevelCode.C1.value, Ty1LevelCode.C2.value, Ty1LevelCode.C3.value]
@@ -124,4 +126,48 @@ class Ty1World(World):
         connect_all_regions(self.multiworld, self.player, self.options, self.portal_map)
 
     def set_rules(self):
+        self.create_event("Bull's Pen", "Beat Bull")
+        self.create_event("Crikey's Cove", "Beat Crikey")
+        self.create_event("Fluffy's Fjord", "Beat Fluffy")
+        self.create_event("Cass' Crest", "Beat Shadow")
+        self.create_event("Final Battle", "Beat Cass")
         set_rules(self)
+
+    def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
+        new_hint_data = {}
+
+        for key, data in ty1_location_table.items():
+            try:
+                location = self.multiworld.get_location(key, self.player)
+            except KeyError:
+                continue
+            region_name: str = data.region
+            containing_level_code = self.region_name_to_code.get(region_name)
+            if containing_level_code is None:
+                continue
+
+            if containing_level_code not in ty1_core_levels:
+                continue
+
+            try:
+                level_index = self.portal_map.index(containing_level_code.value)
+            except ValueError:
+                continue
+
+            portal_code = level_index + 4
+            if level_index > 5:
+                portal_code = portal_code  + 2
+            elif level_index > 2:
+                portal_code = portal_code + 1
+
+            try:
+                portal_name = ty1_levels_short[Ty1LevelCode(portal_code)]
+            except ValueError:
+                continue
+
+            new_hint_data[location.address] = f"{portal_name} Portal"
+            hint_data[self.player] = new_hint_data
+
+    def write_spoiler_header(self, spoiler_handle: typing.TextIO):
+        spoiler_handle.write("Boss Costs: %i\n" % self.options.thegg_gating)
+        spoiler_handle.write("Technorang Costs: %i\n" % self.options.cog_gating)
