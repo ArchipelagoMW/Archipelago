@@ -2,7 +2,7 @@ import asyncio
 
 from ...core.connector import Connector
 from ...core.errors import NotConnectedError, ConnectionLostError
-from .main import CLIENT_PORT
+from .broker import CLIENT_PORT
 
 
 __all__ = [

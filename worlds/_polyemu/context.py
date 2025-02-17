@@ -7,7 +7,7 @@ import Patch
 import Utils
 
 from .client import PolyEmuClient, AutoPolyEmuClientRegister
-from .core import BROKER_DEVICE_ID, AutoConnectorRegister, PolyEmuBaseError, NoSuchDeviceError, PolyEmuContext, no_op, list_devices, get_platform
+from .core import DEFAULT_DEVICE_ID, AutoConnectorRegister, PolyEmuBaseError, NoSuchDeviceError, PolyEmuContext, no_op, list_devices, get_platform
 
 
 __all__ = [
@@ -47,8 +47,8 @@ class PolyEmuClientContext(CommonContext):
         self.auth_status = AuthStatus.NOT_AUTHENTICATED
         self.password_requested = False
         self.client_handler = None
-        self.polyemu_ctx = PolyEmuContext(AutoConnectorRegister.get_connector("Default Connector"))
-        # self.polyemu_ctx = PolyEmuContext(AutoConnectorRegister.get_connector("SNI Connector"))
+        # self.polyemu_ctx = PolyEmuContext(AutoConnectorRegister.get_connector("Default Connector"))
+        self.polyemu_ctx = PolyEmuContext(AutoConnectorRegister.get_connector("SNI Connector"))
         self.watcher_timeout = 0.5
 
     def make_gui(self):
@@ -148,7 +148,7 @@ async def _game_watcher(ctx: PolyEmuClientContext):
 
             await no_op(ctx.polyemu_ctx)
 
-            if ctx.polyemu_ctx.selected_device_id == BROKER_DEVICE_ID:
+            if ctx.polyemu_ctx.selected_device_id == DEFAULT_DEVICE_ID:
                 if not showed_searching_devices_message:
                     logger.info("Searching for devices...")
                     showed_searching_devices_message = True
@@ -186,7 +186,7 @@ async def _game_watcher(ctx: PolyEmuClientContext):
                     showed_no_handler_message = False
                     logger.info(f"Running handler for {ctx.client_handler.game}")
         except NoSuchDeviceError as exc:
-            ctx.polyemu_ctx.selected_device_id = BROKER_DEVICE_ID
+            ctx.polyemu_ctx.selected_device_id = DEFAULT_DEVICE_ID
             continue
         except (ExceptionGroup, PolyEmuBaseError) as exc:
             logger.exception(exc)

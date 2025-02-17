@@ -8,13 +8,13 @@ from .responses import ResponseType, Response, ResponseChain, ErrorResponse, Lis
 
 
 __all__ = [
-    "BROKER_DEVICE_ID", "PolyEmuContext", "send_requests", "no_op", "list_devices",
+    "DEFAULT_DEVICE_ID", "PolyEmuContext", "send_requests", "no_op", "list_devices",
     "get_memory_size", "get_platform", "get_supported_operations",
     "guarded_read", "read", "write", "lock", "unlock", "display_message",
 ]
 
 
-BROKER_DEVICE_ID = b"\x00\x00\x00\x00\x00\x00\x00\x00"
+DEFAULT_DEVICE_ID = b"\x00\x00\x00\x00\x00\x00\x00\x00"
 
 
 class PolyEmuContext:
@@ -23,7 +23,7 @@ class PolyEmuContext:
 
     def __init__(self, connector_type: type[Connector]):
         self.connector = connector_type()
-        self.selected_device_id = BROKER_DEVICE_ID
+        self.selected_device_id = DEFAULT_DEVICE_ID
 
 
 async def send_requests(ctx: PolyEmuContext, request_list: list[Request]) -> list[Response]:
@@ -56,7 +56,10 @@ async def no_op(ctx: PolyEmuContext) -> None:
 
 
 async def list_devices(ctx: PolyEmuContext) -> list[bytes]:
+    original_device_id = ctx.selected_device_id
+    ctx.selected_device_id = DEFAULT_DEVICE_ID
     res: ListDevicesResponse = (await send_requests(ctx, [ListDevicesRequest()]))[0]
+    ctx.selected_device_id = original_device_id
     return res.devices
 
 

@@ -14,7 +14,7 @@ __all__ = [
     "AutoResponseRegister", "Response", "NoOpResponse",
     "SupportedOperationsResponse", "PlatformResponse", "ListDevicesResponse",
     "MemorySizeResponse", "ReadResponse", "WriteResponse", "GuardResponse",
-    "LockResponse", "UnlockResponse", "DisplayMessageResponse",
+    "LockResponse", "UnlockResponse", "DisplayMessageResponse", "ErrorResponse",
 ]
 
 

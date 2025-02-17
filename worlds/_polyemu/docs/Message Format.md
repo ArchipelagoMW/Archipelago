@@ -102,6 +102,7 @@ No Body
 |Value|Type|Description|
 |--|--|--|
 |`0x80`|No-op|Acknowledges a no-op request.|
+|`0x81`|Supported Operations|The list of supported request types.|
 |`0x82`|Platform|Contains the platform id.|
 |`0x83`|Memory Size|Contains a sequence of domains and their sizes.|
 |`0x84`|List Devices|Contains a list of device ids.|

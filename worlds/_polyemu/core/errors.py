@@ -17,11 +17,12 @@ __all__ = [
 
 
 class ErrorType(IntEnum):
-    UNKNOWN = 0x00
+    DEVICE_ERROR = 0x00
     UNSUPPORTED_OPERATION = 0x01
     MISMATCHED_DEVICE = 0x02
     NO_SUCH_DEVICE = 0x80
     DEVICE_CLOSED_CONNECTION = 0x81
+    UNKNOWN = 0xFF
 
 
 class PolyEmuBaseError(Exception):

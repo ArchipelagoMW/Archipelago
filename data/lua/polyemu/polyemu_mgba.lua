@@ -273,8 +273,11 @@ local function handle_requests()
 
             if guard_failure_response ~= nil then
                 response = guard_failure_response
-            elseif request_header:byte(1) == 0x03 then
-                if response:byte(2) == 0 then
+            elseif request_type == REQUEST_TYPES["GUARD"] then
+                if response:sub(1, 1) == RESPONSE_TYPES["ERR"] then
+                    -- Something went wrong with the guard, send the error response and stop processing requests
+                    requests = ""
+                elseif response:sub(1, 1) == RESPONSE_TYPES["GUARD"] and response:byte(2) == 0 then
                     guard_failure_response = response
                 end
             end
