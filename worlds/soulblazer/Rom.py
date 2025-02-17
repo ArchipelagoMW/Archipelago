@@ -35,7 +35,7 @@ sword_level_requirements = [0x01, 0x05, 0x11, 0x15, 0x16, 0x19, 0x22, 0x24]
 
 
 class RomData:
-    def __init__(self, buffer:bytes, name: Optional[bytes] = None):
+    def __init__(self, buffer: bytes, name: Optional[bytes] = None):
         self.name = name
         self.buffer = bytearray(buffer)
 
@@ -141,7 +141,7 @@ class SoulBlazerProcedurePatch(APProcedurePatch, APTokenMixin):
     @classmethod
     def get_source_data(cls) -> bytes:
         return get_base_rom_bytes()
-    
+
     def place_lair(self, index: int, id: int, operand: int):
         # Compute address of our lair entry
         lair_addr = Addresses.LAIR_DATA + 0x18 + (0x20 * index)
@@ -168,7 +168,9 @@ class SoulBlazerProcedurePatch(APProcedurePatch, APTokenMixin):
         location_data = location.data
         if location.item.player == location.player:
             item: SoulBlazerItem = location.item
-            SoulBlazerProcedurePatch.place_dict[location_data.type](self, location_data.id, item.id, item.operand_for_id)
+            SoulBlazerProcedurePatch.place_dict[location_data.type](
+                self, location_data.id, item.id, item.operand_for_id
+            )
         else:
             # TODO: Better handling of remote items item and player name stored in ROM somewhere.
             # Or let the client populate info in RAM?
@@ -207,7 +209,7 @@ def get_base_rom_path(file_name: str = "") -> str:
 
 
 def write_patch(world: "SoulBlazerWorld", patch: SoulBlazerProcedurePatch) -> None:
-    #TODO: Add bsdiff patches to patch file?
+    # TODO: Add bsdiff patches to patch file?
 
     # Determine stat pool to use
     equipment_power_lookup = {
@@ -218,7 +220,7 @@ def write_patch(world: "SoulBlazerWorld", patch: SoulBlazerProcedurePatch) -> No
         "Broken": equipment_power_broken,
     }
     stats = [*equipment_power_lookup[world.options.equipment_scaling.current_option_name]]
-    
+
     # The indexes into our stat pool which could potentially be shuffled
     indicies_wep = list(range(len(stats)))
     indicies_arm = list(range(len(stats)))
@@ -229,25 +231,39 @@ def write_patch(world: "SoulBlazerWorld", patch: SoulBlazerProcedurePatch) -> No
         world.random.shuffle(indicies_arm)
     # Write stats to ROM
     for i in range(len(stats)):
-        patch.write_token(APTokenTypes.WRITE, Addresses.WEAPON_STRENGTH_DATA + i, stats[indicies_wep[i]].to_bytes(1, "little"))
-        patch.write_token(APTokenTypes.WRITE, Addresses.ARMOR_DEFENSE_DATA + i, stats[indicies_arm[i]].to_bytes(1, "little"))
-       
+        patch.write_token(
+            APTokenTypes.WRITE, Addresses.WEAPON_STRENGTH_DATA + i, stats[indicies_wep[i]].to_bytes(1, "little")
+        )
+        patch.write_token(
+            APTokenTypes.WRITE, Addresses.ARMOR_DEFENSE_DATA + i, stats[indicies_arm[i]].to_bytes(1, "little")
+        )
+
         # Semi-progressive sets all sword level requirements to 1.
         if world.options.equipment_stats != "semi_progressive":
             # Weapon level requirements are stored as 2-byte values even if they only use 1 byte.
-            patch.write_token(APTokenTypes.WRITE, Addresses.WEAPON_REQUIRED_LEVEL_DATA + (2*i), sword_level_requirements[indicies_wep[i]])
-        
+            patch.write_token(
+                APTokenTypes.WRITE,
+                Addresses.WEAPON_REQUIRED_LEVEL_DATA + (2 * i),
+                sword_level_requirements[indicies_wep[i]],
+            )
+
     patch.write_token(APTokenTypes.WRITE, Addresses.TEXT_SPEED, world.options.text_speed.value.to_bytes(1, "little"))
-    patch.write_token(APTokenTypes.WRITE, Addresses.STONES_REQUIRED, world.options.stones_count.value.to_bytes(1, "little"))
-    patch.write_token(APTokenTypes.WRITE, Addresses.ACT_PROGRESSION, world.options.act_progression.value.to_bytes(1, "little"))
-    patch.write_token(APTokenTypes.WRITE, Addresses.OPEN_DEATHTOLL, world.options.open_deathtoll.value.to_bytes(1, "little"))
+    patch.write_token(
+        APTokenTypes.WRITE, Addresses.STONES_REQUIRED, world.options.stones_count.value.to_bytes(1, "little")
+    )
+    patch.write_token(
+        APTokenTypes.WRITE, Addresses.ACT_PROGRESSION, world.options.act_progression.value.to_bytes(1, "little")
+    )
+    patch.write_token(
+        APTokenTypes.WRITE, Addresses.OPEN_DEATHTOLL, world.options.open_deathtoll.value.to_bytes(1, "little")
+    )
 
     patch.write_token(APTokenTypes.WRITE, Addresses.SNES_ROMNAME_START, world.rom_name)
 
     for location in world.multiworld.get_locations(world.player):
         patch.place(location)
 
-    #end TODO
+    # end TODO
 
     patch.write_file("token_data.bin", patch.get_token_binary())
 
@@ -262,4 +278,3 @@ def write_patch(world: "SoulBlazerWorld", patch: SoulBlazerProcedurePatch) -> No
     }
 
     patch.write_file("options.json", json.dumps(options_dict).encode("utf-8"))
-
