@@ -8,4 +8,5 @@ JOB_THRESHOLD: 0
 # Maximum concurrent world gens
 GENERATORS: 3
 
+# Rooms will be spread across multiple processes
 HOSTERS: 4
