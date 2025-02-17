@@ -1838,7 +1838,7 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     if world.options.combat_logic == CombatLogic.option_on:
         combat_logic_to_loc("Overworld - [Northeast] Flowers Holy Cross", "Garden Knight")
         combat_logic_to_loc("Overworld - [Northwest] Chest Near Quarry Gate", "Before Well", dagger=True)
-        combat_logic_to_loc("Overworld - [Northeast] Chest Above Patrol Cave", "Garden Knight", dagger=True)
+        combat_logic_to_loc("Overworld - [Northeast] Chest Above Patrol Cave", "West Garden", dagger=True)
         combat_logic_to_loc("Overworld - [Southwest] West Beach Guarded By Turret", "Overworld", dagger=True)
         combat_logic_to_loc("Overworld - [Southwest] West Beach Guarded By Turret 2", "Overworld")
         combat_logic_to_loc("Overworld - [Southwest] Bombable Wall Near Fountain", "Before Well", dagger=True)
