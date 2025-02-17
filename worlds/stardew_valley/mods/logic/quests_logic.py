@@ -12,6 +12,7 @@ from ...logic.season_logic import SeasonLogicMixin
 from ...logic.time_logic import TimeLogicMixin
 from ...stardew_rule import StardewRule
 from ...strings.animal_product_names import AnimalProduct
+from ...strings.ap_names.mods.mod_items import SVEQuestItem
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.crop_names import Fruit, SVEFruit, SVEVegetable, Vegetable
 from ...strings.fertilizer_names import Fertilizer
@@ -83,7 +84,8 @@ TimeLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MonsterLogicMixin]]):
                                    self.logic.region.can_reach(SVERegion.grandpas_shed),
             ModQuest.MarlonsBoat: self.logic.has_all(*(Loot.void_essence, Loot.solar_essence, Loot.slime, Loot.bat_wing, Loot.bug_meat)) &
                                   self.logic.relationship.can_meet(ModNPC.lance) & self.logic.region.can_reach(SVERegion.guild_summit),
-            ModQuest.AuroraVineyard: self.logic.has(Fruit.starfruit) & self.logic.region.can_reach(SVERegion.aurora_vineyard),
+            ModQuest.AuroraVineyard: self.logic.has(Fruit.starfruit) & self.logic.received(SVEQuestItem.aurora_vineyard_tablet) &
+                                     self.logic.region.can_reach(Region.forest),
             ModQuest.MonsterCrops: self.logic.has_all(*(SVEVegetable.monster_mushroom, SVEFruit.slime_berry, SVEFruit.monster_fruit, SVEVegetable.void_root)),
             ModQuest.VoidSoul: self.logic.has(ModLoot.void_soul) & self.logic.region.can_reach(Region.farm) &
                                self.logic.season.has_any_not_winter() & self.logic.region.can_reach(SVERegion.badlands_entrance) &

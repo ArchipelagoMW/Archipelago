@@ -19,6 +19,7 @@ class SkillLevel:
 
 class SVEQuestItem:
     aurora_vineyard_tablet = "Aurora Vineyard Tablet"
+    aurora_vineyard_reclamation = "Aurora Vineyard Reclamation"
     iridium_bomb = "Iridium Bomb"
     void_soul = "Void Spirit Peace Agreement"
     kittyfish_spell = "Kittyfish Spell"
@@ -31,7 +32,7 @@ class SVEQuestItem:
 
     sve_always_quest_items: List[str] = [kittyfish_spell, scarlett_job_offer, morgan_schooling]
     sve_always_quest_items_ginger_island: List[str] = [fable_reef_portal]
-    sve_quest_items: List[str] = [aurora_vineyard_tablet, iridium_bomb, void_soul, grandpa_shed]
+    sve_quest_items: List[str] = [aurora_vineyard_tablet, iridium_bomb, void_soul, grandpa_shed, aurora_vineyard_reclamation]
     sve_quest_items_ginger_island: List[str] = [marlon_boat_paddle]
 
 
