@@ -24,7 +24,7 @@ from .Names import ItemName, ChestName, NPCRewardName, Addresses, RegionName
 from .Regions import create_regions as region_create_regions
 
 # from .Rules import set_rules as rules_set_rules
-from .Rom import SoulBlazerDeltaPatch, LocalRom, patch_rom, get_base_rom_path
+from .Rom import SoulBlazerProcedurePatch, write_patch, get_base_rom_path
 from worlds.AutoWorld import WebWorld, World
 from BaseClasses import MultiWorld, Region, Location, Entrance, Item, ItemClassification, Tutorial
 
@@ -35,7 +35,7 @@ class SoulBlazerSettings(settings.Group):
 
         copy_to = "Soul Blazer (USA).sfc"
         description = "Soul blazer (US) ROM File"
-        md5s = [SoulBlazerDeltaPatch.hash]
+        md5s = [SoulBlazerProcedurePatch.hash]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
 
@@ -99,9 +99,7 @@ class SoulBlazerWorld(World):
 
     @classmethod
     def stage_assert_generate(cls, multiworld: "MultiWorld") -> None:
-        rom_file = get_base_rom_path()
-        if not os.path.exists(rom_file):
-            raise FileNotFoundError(rom_file)
+        pass
 
     def generate_early(self) -> None:
         from Utils import __version__
@@ -211,26 +209,14 @@ class SoulBlazerWorld(World):
         pass
 
     def generate_output(self, output_directory: str):
-        try:
-            rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
+        patch = SoulBlazerProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
+        write_patch(self, patch)
 
-            rom = LocalRom(get_base_rom_path(), name=self.rom_name)
-            patch_rom(self, rom)
+        patch_path = os.path.join(
+            output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}" f"{patch.patch_file_ending}"
+        )
 
-            rom.write_to_file(rompath)
-
-            patch = SoulBlazerDeltaPatch(
-                os.path.splitext(rompath)[0] + SoulBlazerDeltaPatch.patch_file_ending,
-                player=self.player,
-                player_name=self.multiworld.player_name[self.player],
-                patched_path=rompath,
-            )
-            patch.write()
-        except:
-            raise
-        finally:
-            if os.path.exists(rompath):
-                os.unlink(rompath)
+        patch.write(patch_path)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = dict()
