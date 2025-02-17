@@ -126,3 +126,24 @@ class TestImplemented(unittest.TestCase):
                 self.assertEqual(len(multiworld.itempool), 0)
                 self.assertEqual(len(multiworld.get_locations()), 0)
                 self.assertEqual(len(multiworld.get_regions()), 0)
+
+    def test_rules_not_changed_after_set_rules(self):
+        gen_steps = ("generate_early", "create_regions", "create_items", "set_rules")
+        additional_steps = ("connect_entrances", "generate_basic", "pre_fill")
+        excluded_games = ("Ocarina of Time", "Pokemon Red and Blue")
+        worlds_to_test = {game: world
+                          for game, world in AutoWorldRegister.world_types.items() if game not in excluded_games}
+        for game_name, world_type in worlds_to_test.items():
+            with self.subTest("Game", game=game_name):
+                multiworld = setup_solo_multiworld(world_type, gen_steps)
+                for step in additional_steps:
+                    with self.subTest("step", step=step):
+                        old_location_rules = [location.access_rule for location in multiworld.get_locations()]
+                        old_entrance_rules = [entrance.access_rule for entrance in multiworld.get_entrances()]
+                        call_all(multiworld, step)
+                        self.assertEqual(old_location_rules,
+                                         [location.access_rule for location in multiworld.get_locations()],
+                                         f"{game_name} modified location rules during {step}")
+                        self.assertEqual(old_entrance_rules,
+                                         [entrance.access_rule for entrance in multiworld.get_entrances()],
+                                         f"{game_name} modified entrance rules during {step}")
