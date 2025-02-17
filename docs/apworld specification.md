@@ -32,7 +32,7 @@ The current format version has at minimum:
 with the following optional version fields using the format `"1.0.0"` to represent major.minor.build:
 * `minimum_ap_version` and `maximum_ap_version` - which if present each will be compared against the current
   Archipelago version respectively to filter those files from being loaded
-* `world_version` an arbitrary version for that world to differentiate different releases where only
+* `world_version` - an arbitrary version for that world to differentiate different releases where only
   the newest valid world will be loaded
 
 
