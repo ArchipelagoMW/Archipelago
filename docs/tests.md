@@ -84,18 +84,21 @@ testing portions of your code that can be tested without relying on a multiworld
 
 #### Parametrization
 
-Parametrization means to run the same test for multiple inputs.
+When defining a test that needs to cover a range of inputs it is useful to parameterize (to run the same test
+for multiple inputs) the base test. Some important things to consider when attempting to parametrize your test are:
 
-[Subtests](https://docs.python.org/3/library/unittest.html#distinguishing-test-iterations-using-subtests)
-can be used to have parametrized assertions that show up similar to individual tests but without the overhead of needing
-to instantiate multiple tests; however, subtests can not be multithreaded and do not have individual timing data, so
-they are not suitable for slow tests.
+* [Subtests](https://docs.python.org/3/library/unittest.html#distinguishing-test-iterations-using-subtests)
+  can be used to have parametrized assertions that show up similar to individual tests but without the overhead
+  of needing to instantiate multiple tests; however, subtests can not be multithreaded and do not have individual
+  timing data, so they are not suitable for slow tests.
 
-Archipelago's tests are test-runner-agnostic. That means tests are not allowed to use e.g. `@pytest.mark.parametrize`.
-Instead, we define our own parametrization helpers in [test.param](/test/param.py).
+* Archipelago's tests are test-runner-agnostic. That means tests are not allowed to use e.g. `@pytest.mark.parametrize`.
+  Instead, we define our own parametrization helpers in [test.param](/test/param.py).
 
-Classes inheriting from `WorldTestBase` will run all base tests by default, make sure the produced tests actually do
-what you aim for and do not waste a lot of extra CPU time.
+* Classes inheriting from `WorldTestBase`, including those created by the helpers in `test.param`, will run all
+  base tests by default, make sure the produced tests actually do what you aim for and do not waste a lot of
+  extra CPU time. Consider using `TestBase` or `unittest.TestCase` directly
+  or setting `WorldTestBase.run_default_tests` to False.
 
 #### Performance Considerations
 
