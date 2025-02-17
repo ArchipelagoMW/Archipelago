@@ -2,6 +2,7 @@
 
 # We'll be hosting VIA gunicorn
 SELFHOST: false
+# Start room and generator processes
 SELFLAUNCH: true
 JOB_THRESHOLD: 0
 
