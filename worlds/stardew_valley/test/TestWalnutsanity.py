@@ -1,5 +1,5 @@
 from . import SVTestBase
-from ..options import ExcludeGingerIsland, Walnutsanity
+from ..options import ExcludeGingerIsland, Walnutsanity, ToolProgression, SkillProgression
 from ..strings.ap_names.ap_option_names import WalnutsanityOptionName
 
 
@@ -7,6 +7,8 @@ class TestWalnutsanityNone(SVTestBase):
     options = {
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
         Walnutsanity: Walnutsanity.preset_none,
+        SkillProgression: ToolProgression.option_progressive,
+        ToolProgression: ToolProgression.option_progressive,
     }
 
     def test_no_walnut_locations(self):
@@ -50,6 +52,8 @@ class TestWalnutsanityPuzzles(SVTestBase):
     options = {
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
         Walnutsanity: frozenset({WalnutsanityOptionName.puzzles}),
+        SkillProgression: ToolProgression.option_progressive,
+        ToolProgression: ToolProgression.option_progressive,
     }
 
     def test_only_puzzle_walnut_locations(self):

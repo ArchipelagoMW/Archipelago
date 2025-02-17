@@ -1,5 +1,5 @@
 from . import content_packs
-from .feature import cropsanity, friendsanity, fishsanity, booksanity, skill_progression
+from .feature import cropsanity, friendsanity, fishsanity, booksanity, skill_progression, tool_progression
 from .game_content import ContentPack, StardewContent, StardewFeatures
 from .unpacking import unpack_content
 from .. import options
@@ -33,6 +33,7 @@ def choose_features(player_options: options.StardewValleyOptions) -> StardewFeat
         choose_fishsanity(player_options.fishsanity),
         choose_friendsanity(player_options.friendsanity, player_options.friendsanity_heart_size),
         choose_skill_progression(player_options.skill_progression),
+        choose_tool_progression(player_options.tool_progression, player_options.skill_progression),
     )
 
 
@@ -122,3 +123,18 @@ def choose_skill_progression(skill_progression_option: options.SkillProgression)
         raise ValueError(f"No skill progression feature mapped to {str(skill_progression_option.value)}")
 
     return skill_progression_feature
+
+
+def choose_tool_progression(tool_option: options.ToolProgression, skill_option: options.SkillProgression) -> tool_progression.ToolProgressionFeature:
+    if tool_option.is_vanilla:
+        return tool_progression.ToolProgressionVanilla()
+
+    tools_distribution = tool_progression.get_tools_distribution(
+        progressive_tools_enabled=True,
+        skill_masteries_enabled=skill_option == options.SkillProgression.option_progressive_with_masteries,
+    )
+
+    if tool_option.is_progressive:
+        return tool_progression.ToolProgressionProgressive(tools_distribution)
+
+    raise ValueError(f"No tool progression feature mapped to {str(tool_option.value)}")
