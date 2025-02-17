@@ -109,6 +109,12 @@ class TunicWorld(World):
     ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
 
     def generate_early(self) -> None:
+        try:
+            int(self.settings.disable_local_spoiler)
+        except AttributeError:
+            raise Exception("You have a TUNIC APWorld in your lib/worlds folder and custom_worlds folder.\n"
+                            "This would cause an error at the end of generation.\n"
+                            "Please remove one of them, preferably the one in lib/worlds.")
         if self.options.logic_rules >= LogicRules.option_no_major_glitches:
             self.options.laurels_zips.value = LaurelsZips.option_true
             self.options.ice_grappling.value = IceGrappling.option_medium
