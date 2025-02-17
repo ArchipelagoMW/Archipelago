@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Dict, Any
 from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PlandoConnections,
                      PerGameCommonOptions, OptionGroup, Visibility, NamedRange)
-from .er_data import portal_mapping
+from .region_data import portal_mapping
 
 
 class SwordProgression(DefaultOnToggle):

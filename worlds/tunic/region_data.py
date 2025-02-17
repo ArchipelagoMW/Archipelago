@@ -1,5 +1,5 @@
-from typing import Dict, NamedTuple, List, TYPE_CHECKING, Optional
 from enum import IntEnum
+from typing import Dict, NamedTuple, List, TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from . import TunicWorld
