@@ -3160,6 +3160,8 @@ def patch_rom(world: World, rom, player, active_level_dict):
     rom.write_byte(0x01BFA9, world.options.hidden_1up_checks.value)
     rom.write_byte(0x01BFAA, world.options.bonus_block_checks.value)
     rom.write_byte(0x01BFAB, world.options.blocksanity.value)
+    rom.write_byte(0x01BFB7, world.options.trap_link.value)
+    rom.write_byte(0x01BFB8, world.options.ring_link.value)
 
 
     from Utils import __version__
