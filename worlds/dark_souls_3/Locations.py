@@ -883,7 +883,7 @@ location_tables: Dict[str, List[DS3LocationData]] = {
         DS3LocationData("RS: Homeward Bone - balcony by Farron Keep", "Homeward Bone x2"),
         DS3LocationData("RS: Titanite Shard - woods, surrounded by enemies", "Titanite Shard"),
         DS3LocationData("RS: Twin Dragon Greatshield - woods by Crucifixion Woods bonfire",
-                        "Twin Dragon Greatshield", missable=True),
+                        "Twin Dragon Greatshield", missable=True), # After Eclipse
         DS3LocationData("RS: Sorcerer Hood - water beneath stronghold", "Sorcerer Hood",
                         hidden=True),  # Hidden fall
         DS3LocationData("RS: Sorcerer Robe - water beneath stronghold", "Sorcerer Robe",
