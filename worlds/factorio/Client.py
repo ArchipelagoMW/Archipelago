@@ -305,9 +305,10 @@ def stream_factorio_output(pipe, queue, process):
 async def factorio_server_watcher(ctx: FactorioContext):
     savegame_name = os.path.abspath(os.path.join(ctx.write_data_path, "saves", "Archipelago", ctx.savegame_name))
     if not os.path.exists(savegame_name):
+        config_file = Utils.user_path('factorio', 'config', 'apconfig.ini')
         logger.info(f"Creating savegame {savegame_name}")
         subprocess.run((
-            executable, "--create", savegame_name, "--preset", "archipelago"
+            executable, "--create", savegame_name, "--preset", "archipelago", "--config", config_file
         ))
     factorio_process = subprocess.Popen((executable, "--start-server", savegame_name,
                                          *(str(elem) for elem in server_args)),
@@ -543,6 +544,9 @@ def launch():
 
     if not os.path.exists(os.path.dirname(executable)):
         raise FileNotFoundError(f"Path {os.path.dirname(executable)} does not exist or could not be accessed.")
+    if os.path.isdir(executable) and os.path.exists(os.path.join(executable, "Contents", "MacOS", "factorio")):
+        # user entered the .App bundle, let's find the executable
+        executable = os.path.join(executable, "Contents", "MacOS", "factorio")
     if os.path.isdir(executable):  # user entered a path to a directory, let's find the executable therein
         executable = os.path.join(executable, "factorio")
     if not os.path.isfile(executable):
@@ -550,15 +554,26 @@ def launch():
             executable = executable + ".exe"
         else:
             raise FileNotFoundError(f"Path {executable} is not an executable file.")
+        
+    config_file = Utils.user_path('factorio', 'config', 'apconfig.ini')
+    if not os.path.exists(config_file):
+        os.makedirs(os.path.dirname(config_file), exist_ok=True)
+        with open(config_file, 'w') as f:
+            f.write(f"[path]\nread-data=__PATH__system-read-data__\nwrite-data={Utils.user_path('factorio')}")
 
     if server_settings and os.path.isfile(server_settings):
         server_args = (
             "--rcon-port", rcon_port,
             "--rcon-password", rcon_password,
             "--server-settings", server_settings,
+            "--config", config_file,
             *rest)
     else:
-        server_args = ("--rcon-port", rcon_port, "--rcon-password", rcon_password, *rest)
+        server_args = (
+            "--rcon-port", rcon_port, 
+            "--rcon-password", rcon_password, 
+            "--config", config_file, 
+            *rest)
 
     asyncio.run(main(args, initial_filter_item_sends, initial_bridge_chat_out))
     colorama.deinit()
