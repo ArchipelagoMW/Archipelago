@@ -44,9 +44,6 @@ RUN python -m venv $VIRTUAL_ENV; \
 # hadolint ignore=DL3042
 RUN pip install -r WebHostLib/requirements.txt \
     gunicorn==23.0.0 \
-    eventlet==0.38.2 \
-    gevent==24.11.1 \
-    tornado==6.4.2; \
     python ModuleUpdate.py -y
 
 RUN cythonize -i _speedups.pyx
