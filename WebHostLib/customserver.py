@@ -65,7 +65,7 @@ class WebHostContext(Context):
     room_id: int
 
     # Loaded embedded gamespackages get shared across all rooms on this process.
-    shared_embedded_gamespackages: typing.ClassVar[weakref.WeakValueDictionary[tuple[str, str], dict]] = (
+    shared_embedded_gamespackages: typing.ClassVar[weakref.WeakValueDictionary[str, dict]] = (
         weakref.WeakValueDictionary()
     )
 
@@ -139,8 +139,7 @@ class WebHostContext(Context):
                 else:
                     # Check if this process has already loaded the same datapackage for a different room. If so, use the
                     # already loaded datapackage.
-                    cache_key = (game, checksum)
-                    cached_datapackage = self.shared_embedded_gamespackages.get(cache_key)
+                    cached_datapackage = self.shared_embedded_gamespackages.get(checksum)
                     if cached_datapackage is not None:
                         game_data_packages[game] = cached_datapackage
                         continue
@@ -149,7 +148,7 @@ class WebHostContext(Context):
                     if row:  # None if rolled on >= 0.3.9 but uploaded to <= 0.3.8. multidata should be complete
                         db_datapackage = Utils.WeakRefDict(Utils.restricted_loads(row.data))
                         game_data_packages[game] = db_datapackage
-                        self.shared_embedded_gamespackages[cache_key] = db_datapackage
+                        self.shared_embedded_gamespackages[checksum] = db_datapackage
                         continue
                     else:
                         self.logger.warning(f"Did not find game_data_package for {game}: {game_data['checksum']}")
