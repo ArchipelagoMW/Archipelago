@@ -163,8 +163,8 @@
 
     { "from": "CTH - Yanren Arena", "to": "CH - Center", "requires": [] }, // elevator
 
-    { "from": "CTH - Yanren Arena", "to": "GD - Right Exit", "requires": [] },
-    { "from": "GD - Right Exit", "to": "CTH - Yanren Arena", "requires": [] },
+    { "from": "CTH - Yanren Arena", "to": "GD - Root Node & Right Exit", "requires": [] },
+    { "from": "GD - Root Node & Right Exit", "to": "CTH - Yanren Arena", "requires": [] },
 
     { "from": "CTH - Upper Right Exit", "to": "TRC - Ground Floor & Exits", "requires": [] },
     { "from": "TRC - Ground Floor & Exits", "to": "CTH - Upper Right Exit", "requires": [] },
