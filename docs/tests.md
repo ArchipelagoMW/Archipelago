@@ -106,7 +106,7 @@ Archipelago is big enough that the runtime of unittests can have an impact on pr
 
 Individual tests should take less than a second, so they can be properly multithreaded.
 
-Ideally, thorough tests are directed at actual code/functionality. Do not just create and fill a ton of individual
+Ideally, thorough tests are directed at actual code/functionality. Do not just create and/or fill a ton of individual
 Multiworlds that spend most of the test time outside what you actually want to test.
 
 Consider generating/validating "random" games as part of your APWorld release workflow rather than having that be part
