@@ -855,16 +855,21 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Fortress Courtyard Upper"].connect(
         connecting_region=regions["Fortress Exterior from Overworld"])
 
-    btv_front_to_main = regions["Beneath the Vault Ladder Exit"].connect(
+    regions["Beneath the Vault Ladder Exit"].connect(
+        connecting_region=regions["Beneath the Vault Entry Spot"],
+        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world))
+    regions["Beneath the Vault Entry Spot"].connect(
+        connecting_region=regions["Beneath the Vault Ladder Exit"],
+        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world))
+
+    btv_front_to_main = regions["Beneath the Vault Entry Spot"].connect(
         connecting_region=regions["Beneath the Vault Main"],
-        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world)
-        and has_lantern(state, world)
+        rule=lambda state: has_lantern(state, world)
         # there's some boxes in the way
         and (has_melee(state, player) or state.has_any((gun, grapple, fire_wand, laurels), player)))
     # on the reverse trip, you can lure an enemy over to break the boxes if needed
     regions["Beneath the Vault Main"].connect(
-        connecting_region=regions["Beneath the Vault Ladder Exit"],
-        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world))
+        connecting_region=regions["Beneath the Vault Entry Spot"])
 
     regions["Beneath the Vault Main"].connect(
         connecting_region=regions["Beneath the Vault Back"])

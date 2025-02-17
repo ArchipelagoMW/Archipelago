@@ -3,6 +3,7 @@ from BaseClasses import Region, ItemClassification, Item, Location
 from .locations import all_locations
 from .er_data import Portal, portal_mapping, traversal_requirements, DeadEnd, RegionInfo
 from .er_rules import set_er_region_rules
+from .breakables import create_breakable_exclusive_regions, set_breakable_location_rules
 from Options import PlandoConnection
 from .options import EntranceRando
 from random import Random
@@ -22,19 +23,26 @@ class TunicERLocation(Location):
 
 def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
     regions: Dict[str, Region] = {}
+    for region_name, region_data in world.er_regions.items():
+        if world.options.entrance_rando and region_name == "Zig Skip Exit":
+            # need to check if there's a seed group for this first
+            if world.options.entrance_rando.value not in EntranceRando.options.values():
+                if not world.seed_groups[world.options.entrance_rando.value]["fixed_shop"]:
+                    continue
+            elif not world.options.fixed_shop:
+                continue
+        if not world.options.entrance_rando and region_name in ("Zig Skip Exit", "Purgatory"):
+            continue
+
+        region = Region(region_name, world.player, world.multiworld)
+        regions[region_name] = region
+        world.multiworld.regions.append(region)
+
+    if world.options.breakable_shuffle:
+        breakable_regions = create_breakable_exclusive_regions(world)
+        regions.update({region.name: region for region in breakable_regions})
 
     if world.options.entrance_rando:
-        for region_name, region_data in world.er_regions.items():
-            # if fewer shops is off, zig skip is not made
-            if region_name == "Zig Skip Exit":
-                # need to check if there's a seed group for this first
-                if world.options.entrance_rando.value not in EntranceRando.options.values():
-                    if not world.seed_groups[world.options.entrance_rando.value]["fixed_shop"]:
-                        continue
-                elif not world.options.fixed_shop:
-                    continue
-            regions[region_name] = Region(region_name, world.player, world.multiworld)
-
         portal_pairs = pair_portals(world, regions)
 
         # output the entrances to the spoiler log here for convenience
@@ -42,11 +50,6 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
         for portal1, portal2 in sorted_portal_pairs.items():
             world.multiworld.spoiler.set_entrance(portal1, portal2, "both", world.player)
     else:
-        for region_name, region_data in world.er_regions.items():
-            # filter out regions that are inaccessible in non-er
-            if region_name not in ["Zig Skip Exit", "Purgatory"]:
-                regions[region_name] = Region(region_name, world.player, world.multiworld)
-
         portal_pairs = vanilla_portals(world, regions)
 
     create_randomized_entrances(portal_pairs, regions)
@@ -58,8 +61,8 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
         location = TunicERLocation(world.player, location_name, location_id, region)
         region.locations.append(location)
 
-    for region in regions.values():
-        world.multiworld.regions.append(region)
+    if world.options.breakable_shuffle:
+        set_breakable_location_rules(world)
 
     place_event_items(world, regions)
 
@@ -557,4 +560,3 @@ def sort_portals(portal_pairs: Dict[Portal, Portal]) -> Dict[str, str]:
                 sorted_pairs[portal1.name] = portal2.name
                 break
     return sorted_pairs
-
