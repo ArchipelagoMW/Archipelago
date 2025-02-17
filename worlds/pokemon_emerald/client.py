@@ -409,8 +409,6 @@ class PokemonEmeraldClient(polyemu.PolyEmuClient):
                     }])
                     self.local_defeated_legendaries = caught_legendaries
         except polyemu.ConnectionLostError:
-            from CommonClient import logger
-            logger.info("a")
             # Exit handler and return to main loop to reconnect
             pass
 

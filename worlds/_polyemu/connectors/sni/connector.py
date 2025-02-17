@@ -20,8 +20,14 @@ __all__ = [
 ]
 
 DOMAIN_ID_TO_FXPACK_BASE = {
-    polyemu.PLATFORMS.SNES.ROM: 0x00_0000,
-    polyemu.PLATFORMS.SNES.SRAM: 0x0E_0000,
+    polyemu.PLATFORMS.SNES.ROM: 0x0000000,
+    polyemu.PLATFORMS.SNES.SRAM: 0x0E00000,
+    polyemu.PLATFORMS.SNES.WRAM: 0xF500000,
+    polyemu.PLATFORMS.SNES.VRAM: 0xF700000,
+    polyemu.PLATFORMS.SNES.APU: 0xF800000,
+    polyemu.PLATFORMS.SNES.CGRAM: 0xF900000,
+    polyemu.PLATFORMS.SNES.OAM: 0xF900200,
+    polyemu.PLATFORMS.SNES.MISC: 0xF900420,
 }
 
 
@@ -190,15 +196,18 @@ class SNIConnector(polyemu.Connector):
         requests_by_index = sorted(requests.items())
         indices: tuple[int, ...] = list(zip(*requests_by_index))[0]
 
-        sni_response: sni.MultiReadMemoryResponse = await self._memory_stub.MultiRead(sni.MultiReadMemoryRequest(
-            uri=self._device_ids[device_uri],
-            requests=[sni.ReadMemoryRequest(
-                requestAddress=DOMAIN_ID_TO_FXPACK_BASE[request.domain_id] + request.address,
-                requestAddressSpace=sni.AddressSpace.FxPakPro,
-                requestMemoryMapping=sni.MemoryMapping.Unknown,
-                size=request.size,
-            ) for _, request in requests_by_index]
-        ))
+        try:
+            sni_response: sni.MultiReadMemoryResponse = await self._memory_stub.MultiRead(sni.MultiReadMemoryRequest(
+                uri=device_uri,
+                requests=[sni.ReadMemoryRequest(
+                    requestAddress=DOMAIN_ID_TO_FXPACK_BASE[request.domain_id] + request.address,
+                    requestAddressSpace=sni.AddressSpace.FxPakPro,
+                    requestMemoryMapping=sni.MemoryMapping.Unknown,
+                    size=request.size,
+                ) for _, request in requests_by_index]
+            ))
+        except grpc.aio.AioRpcError as exc:
+            raise polyemu.ConnectionLostError() from exc
 
         return {i: polyemu.ReadResponse(response.data) for i, response in zip(indices, sni_response.responses)}
 
@@ -209,14 +218,17 @@ class SNIConnector(polyemu.Connector):
         requests_by_index = sorted(requests.items())
         indices: tuple[int, ...] = list(zip(*requests_by_index))[0]
 
-        sni_response: sni.MultiWriteMemoryResponse = await self._memory_stub.MultiWrite(sni.MultiWriteMemoryRequest(
-            uri=self._device_ids[device_uri],
-            requests=[sni.WriteMemoryRequest(
-                requestAddress=DOMAIN_ID_TO_FXPACK_BASE[request.domain_id] + request.address,
-                requestAddressSpace=sni.AddressSpace.FxPakPro,
-                requestMemoryMapping=sni.MemoryMapping.Unknown,
-                data=request.data,
-            ) for request in requests]
-        ))
+        try:
+            sni_response: sni.MultiWriteMemoryResponse = await self._memory_stub.MultiWrite(sni.MultiWriteMemoryRequest(
+                uri=device_uri,
+                requests=[sni.WriteMemoryRequest(
+                    requestAddress=DOMAIN_ID_TO_FXPACK_BASE[request.domain_id] + request.address,
+                    requestAddressSpace=sni.AddressSpace.FxPakPro,
+                    requestMemoryMapping=sni.MemoryMapping.Unknown,
+                    data=request.data,
+                ) for _, request in requests_by_index]
+            ))
+        except grpc.aio.AioRpcError as exc:
+            raise polyemu.ConnectionLostError() from exc
 
         return {i: polyemu.WriteResponse() for i, _ in zip(indices, sni_response.responses)}
