@@ -573,6 +573,9 @@ class LinksAwakeningClient():
             self.queue_trade_item_fix = False
             return
 
+        if await self.is_victory():
+            await win_cb()
+
         current_health = (await self.gameboy.read_memory_cache([LAClientConstants.wLinkHealth]))[LAClientConstants.wLinkHealth]
         health_to_remove = (await self.gameboy.read_memory_cache([LAClientConstants.wSubtractHealthBuffer]))[LAClientConstants.wSubtractHealthBuffer]
 
@@ -581,20 +584,19 @@ class LinksAwakeningClient():
             self.gameboy.write_memory(LAClientConstants.wLinkHealth, [1]) #  Almost dead
             self.gameboy.write_memory(LAClientConstants.wSubtractHealthBuffer, [1]) # Deal remaining damage this way to trigger medicine
             self.deathlink_status = 'in_progress'
+            return
         elif self.deathlink_status == 'in_progress':
             if not current_health: # Died from deathlink
                 self.deathlink_status = 'complete'
-                self.fix_trade_items()
+                self.queue_trade_item_fix = True
             elif not health_to_remove: # Survived deathlink (medicine)
                 self.deathlink_status = None
+            return
         elif not self.deathlink_status and not current_health: # Died naturally
             await deathlink_cb()
             self.deathlink_status = 'complete'
         elif self.deathlink_status == 'complete' and current_health:
             self.deathlink_status = None
-
-        if await self.is_victory():
-            await win_cb()
 
         # receive items
         recv_index = struct.unpack(">H", await self.gameboy.async_read_memory(LAClientConstants.wRecvIndex, 2))[0]
