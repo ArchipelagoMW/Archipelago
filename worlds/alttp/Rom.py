@@ -2335,23 +2335,23 @@ def write_strings(rom, world, player):
             for location in locations_to_hint[:hint_count]:
                 if location == 'Swamp Left':
                     if local_random.randint(0, 1):
-                        first_item = hint_text(world.get_location('Swamp Palace - West Chest', player).item)
-                        second_item = hint_text(world.get_location('Swamp Palace - Big Key Chest', player).item)
+                        first_item = hint_text(world.get_location('Swamp Palace - West Side Free Chest', player).item)
+                        second_item = hint_text(world.get_location('Swamp Palace - West Side Switch Chest', player).item)
                     else:
-                        second_item = hint_text(world.get_location('Swamp Palace - West Chest', player).item)
-                        first_item = hint_text(world.get_location('Swamp Palace - Big Key Chest', player).item)
+                        second_item = hint_text(world.get_location('Swamp Palace - West Side Free Chest', player).item)
+                        first_item = hint_text(world.get_location('Swamp Palace - West Side Switch Chest', player).item)
                     this_hint = ('The westmost chests in Swamp Palace contain ' + first_item + ' and ' + second_item + '.')
                     tt[hint_locations.pop(0)] = this_hint
                 elif location == 'Mire Left':
                     if local_random.randint(0, 1):
-                        first_item = hint_text(world.get_location('Misery Mire - Compass Chest', player).item)
-                        second_item = hint_text(world.get_location('Misery Mire - Big Key Chest', player).item)
+                        first_item = hint_text(world.get_location('Misery Mire - Torch Tiles Chest', player).item)
+                        second_item = hint_text(world.get_location('Misery Mire - Cutscene Chest', player).item)
                     else:
-                        second_item = hint_text(world.get_location('Misery Mire - Compass Chest', player).item)
-                        first_item = hint_text(world.get_location('Misery Mire - Big Key Chest', player).item)
+                        second_item = hint_text(world.get_location('Misery Mire - Torch Tiles Chest', player).item)
+                        first_item = hint_text(world.get_location('Misery Mire - Cutscene Chest', player).item)
                     this_hint = ('The westmost chests in Misery Mire contain ' + first_item + ' and ' + second_item + '.')
                     tt[hint_locations.pop(0)] = this_hint
-                elif location == 'Tower of Hera - Big Key Chest':
+                elif location == 'Tower of Hera - Basement Chest':
                     this_hint = 'Waiting in the Tower of Hera basement leads to ' + hint_text(
                         world.get_location(location, player).item) + '.'
                     tt[hint_locations.pop(0)] = this_hint
@@ -2367,7 +2367,7 @@ def write_strings(rom, world, player):
                     this_hint = 'The big chest in Ice Palace contains ' + hint_text(
                         world.get_location(location, player).item) + '.'
                     tt[hint_locations.pop(0)] = this_hint
-                elif location == 'Eastern Palace - Big Key Chest':
+                elif location == 'Eastern Palace - Antifairy Chest':
                     this_hint = 'The antifairy guarded chest in Eastern Palace contains ' + hint_text(
                         world.get_location(location, player).item) + '.'
                     tt[hint_locations.pop(0)] = this_hint
@@ -2978,8 +2978,8 @@ InconvenientLocations = ['Spike Cave',
                          'Purple Chest',
                          'Swamp Left',
                          'Mire Left',
-                         'Tower of Hera - Big Key Chest',
-                         'Eastern Palace - Big Key Chest',
+                         'Tower of Hera - Basement Chest',
+                         'Eastern Palace - Antifairy Chest',
                          'Thieves\' Town - Big Chest',
                          'Ice Palace - Big Chest',
                          'Ganons Tower - Big Chest',
