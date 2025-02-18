@@ -211,7 +211,7 @@ This means that if you want total control over available missions in your missio
 There are, however, several options that are ignored by Custom Mission Orders:
 - `mission_order`, because it has to be `custom` for your Custom Mission Order to apply
 - `maximum_campaign_size`, because you determine the size of the mission order via layout `size` attributes
-- `grid_two_start_positions`, which you can instead determine in individual layouts of the appropriate `type`s (see Grid and Hopscotch sections below)
+- `two_start_positions`, which you can instead determine in individual layouts of the appropriate `type`s (see Grid and Hopscotch sections below)
 - `key_mode`, which you can still specify for presets (see Campaign Presets section), and can otherwise manually set up using Item entry rules
 
 ## Instructions for building a mission order
