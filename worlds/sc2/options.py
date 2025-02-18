@@ -168,15 +168,6 @@ class MaximumCampaignSize(Range):
     default = 83
 
 
-class GridTwoStartPositions(Toggle):
-    """
-    Legacy support for GridTwoStartPositions option.  Use TwoStartPositions on modern settings.
-    """
-    display_name = "Start with two unlocked missions on grid"
-    default = Toggle.option_false
-    visibility = Visibility.none
-
-
 class TwoStartPositions(Toggle):
     """
     If turned on and 'grid', 'hopscotch', or 'golden_path' mission orders are selected,
@@ -1293,7 +1284,6 @@ class Starcraft2Options(PerGameCommonOptions):
     all_in_map: AllInMap
     mission_order: MissionOrder
     maximum_campaign_size: MaximumCampaignSize
-    grid_two_start_positions: GridTwoStartPositions
     two_start_positions: TwoStartPositions
     key_mode: KeyMode
     player_color_terran_raynor: PlayerColorTerranRaynor
