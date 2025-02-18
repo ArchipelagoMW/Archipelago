@@ -1190,6 +1190,14 @@ class LowestMaximumSupply(Range):
     range_end = 200
     default = 180
 
+class ResearchCostReductionPerItem(Range):
+    """
+    Controls how much weapon/armor research cost is cut per item.
+    Affects both minerals and vespene.
+    """
+    range_start = 0
+    range_end = 10
+    default = 2
 
 class FillerRatio(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
     """
@@ -1205,6 +1213,8 @@ class FillerRatio(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
         item_names.SHIELD_REGENERATION: 1,
         item_names.BUILDING_CONSTRUCTION_SPEED: 1,
         item_names.KERRIGAN_LEVELS_1: 1,
+        item_names.UPGRADE_RESEARCH_SPEED: 1,
+        item_names.UPGRADE_RESEARCH_COST: 1,
         item_names.REDUCED_MAX_SUPPLY: 0,
     }
     simple_names = {
@@ -1223,6 +1233,8 @@ class FillerRatio(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
         "reduced max supply": item_names.REDUCED_MAX_SUPPLY,
         "kerrigan levels": item_names.KERRIGAN_LEVELS_1,
         "kerrigan level": item_names.KERRIGAN_LEVELS_1,
+        "research speed": item_names.UPGRADE_RESEARCH_SPEED,
+        "research cost": item_names.UPGRADE_RESEARCH_COST,
     }
     supports_weighting = False
     display_name = "Filler Item Ratios"
@@ -1354,6 +1366,7 @@ class Starcraft2Options(PerGameCommonOptions):
     maximum_supply_per_item: MaximumSupplyPerItem
     maximum_supply_reduction_per_item: MaximumSupplyReductionPerItem
     lowest_maximum_supply: LowestMaximumSupply
+    research_cost_reduction_per_item: ResearchCostReductionPerItem
     filler_ratio: FillerRatio
     mission_order_scouting: MissionOrderScouting
 
