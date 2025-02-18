@@ -521,7 +521,8 @@ class SA2BWorld(World):
                     continue
                 level_region = exit.connected_region
                 for location in level_region.locations:
-                    er_hint_data[location.address] = gate_name
+                    if location.address != None:
+                        er_hint_data[location.address] = gate_name
 
         for i in range(self.options.black_market_slots.value):
             location = self.multiworld.get_location(LocationName.chao_black_market_base + str(i + 1), self.player)

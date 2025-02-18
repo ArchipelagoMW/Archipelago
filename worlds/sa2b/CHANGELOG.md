@@ -1,9 +1,40 @@
 # Sonic Adventure 2 Battle - Changelog
 
 
-## v2.4 - WIP
+## v2.4 - Minigame Madness
 
 ### Features:
+- New Goal
+  - Minigame Madness
+    - Win a certain number of each type of Minigame Trap, then defeat the Finalhazard to win!
+	- How many of each Minigame are required can be set by an Option
+	- When the required amount of a Minigame has been received, that Minigame can be replayed in the Chao World Lobby
+- New optional Location Checks
+  - Bigsanity
+    - Go fishing with Big in each stage for a Location Check
+  - Itemboxsanity
+    - Either Extra Life Boxes or All Item Boxes
+- New Items
+  - New Traps
+    - Literature Trap
+	- Controller Drift Trap
+	- Poison Trap
+	- Bee Trap
+  - New Minigame Traps
+    - Breakout Trap
+	- Fishing Trap
+	- Trivia Trap
+	- Pokemon Trivia Trap
+	- Pokemon Count Trap
+	- Number Sequence Trap
+	- Light Up Path Trap
+	- Pinball Trap
+	- Math Quiz Trap
+	- Snake Trap
+	- Input Sequence Trap
+- Trap Link
+  - When you receive a trap, you send a copy of it to every other player with Trap Link enabled
+- Boss Gate Plando
 - Expert Logic Difficulty
 	- Use at your own risk. This difficulty requires complete mastery of SA2.
 - Missions can now be enabled and disabled per-character, instead of just per-style
@@ -11,6 +42,9 @@
 
 ### Quality of Life:
 - Gate Stages and Mission Orders are now displayed in the spoiler log
+- Additional play stats are saved and displayed with the randomizer credits
+- Stage Locations progress UI now displays in multiple pages when Itemboxsanity is enabled
+- Current stage mission order and progress are now shown when paused in-level
 - Chaos Emeralds are now shown when paused in-level
 - Location Name Groups were created
 - Moved SA2B to the new Options system
@@ -20,9 +54,10 @@
 ### Bug Fixes:
 - Added missing `Dry Lagoon - 12 Animals` location
 - Flying Dog boss should no longer crash when you have done at least 3 Intermediate Kart Races
+- Invincibility can no longer be received in the King Boom Boo fight, preventing a crash
 - Chaos Emeralds should no longer disproportionately end up in Cannon's Core or the final Level Gate
 - Going into submenus from the pause menu should no longer reset traps
-- `Sonic - Magic Gloves`
+- `Sonic - Magic Gloves` are now plural
 - Chao Garden:
 	- Prevent races from occasionally becoming uncompletable when using the "Prize Only" option
 	- Properly allow Hero Chao to participate in Dark Races
