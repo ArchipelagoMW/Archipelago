@@ -749,6 +749,23 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
             assert item in items_in_locations, "early item to be placed in location"
 
 
+    def test_local_filler_overflows_into_priority_locations(self) -> None:
+        """Test that local filler can be placed on priority locations if the amount of local filler is
+        greater than the amount of non-priority locations."""
+        multiworld = generate_test_multiworld(2)
+        player1 = generate_player_data(multiworld, 1, location_count=10, basic_item_count=5, prog_item_count=5)
+        generate_player_data(multiworld, 2, location_count=10, basic_item_count=5, prog_item_count=5)
+
+        multiworld.worlds[player1.id].options.local_items.value = set(names(player1.basic_items))
+        for loc in player1.locations:
+            loc.progress_type = LocationProgressType.PRIORITY
+
+        locality_rules(multiworld)
+        distribute_items_restrictive(multiworld)
+        for item in player1.basic_items:
+            self.assertEqual(player1.id, item.location.player)
+
+
 class TestBalanceMultiworldProgression(unittest.TestCase):
     def assertRegionContains(self, region: Region, item: Item) -> bool:
         for location in region.locations:
