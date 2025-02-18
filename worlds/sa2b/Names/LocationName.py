@@ -1578,7 +1578,7 @@ cannon_core_big_4      = "Cannon's Core - Knuckles - Big"
 cannon_core_big_5      = "Cannon's Core - Sonic - Big"
 
 # Green Hill Definitions
-green_hill            = "Green Hill"
+green_hill            = "Green Hill - 1"
 green_hill_chao_1     = "Green Hill - Chao Key 1"
 green_hill_animal_1   = "Green Hill - 1 Animal"
 green_hill_itembox_1  = "Green Hill - Item Box 1"
