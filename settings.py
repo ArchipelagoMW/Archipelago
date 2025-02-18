@@ -792,7 +792,17 @@ class Settings(Group):
         if location:
             from Utils import parse_yaml
             with open(location, encoding="utf-8-sig") as f:
-                options = parse_yaml(f.read())
+                from yaml.error import MarkedYAMLError
+                try:
+                    options = parse_yaml(f.read())
+                except MarkedYAMLError as ex:
+                    if ex.problem_mark:
+                        f.seek(0)
+                        lines = f.readlines()
+                        problem_line = lines[ex.problem_mark.line]
+                        error_line = " " * ex.problem_mark.column + "^"
+                        raise Exception(f"{ex.context} {ex.problem}\n{problem_line}{error_line}")
+                    raise ex
                 # TODO: detect if upgrade is required
                 # TODO: once we have a cache for _world_settings_name_cache, detect if any game section is missing
                 self.update(options or {})
