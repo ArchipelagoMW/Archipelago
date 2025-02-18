@@ -83,7 +83,7 @@ def get_gate_bosses(world: World):
     available_bosses: typing.List[str] = list(gate_bosses_no_requirements_table.keys())
     world.random.shuffle(available_bosses)
 
-    gate_boss_plando: Union[int, str] = world.options.gate_boss_plando.value
+    gate_boss_plando: typing.Union[int, str] = world.options.gate_boss_plando.value
     plando_bosses = ["None", "None", "None", "None", "None"]
     if isinstance(gate_boss_plando, str):
         # boss plando
