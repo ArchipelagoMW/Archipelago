@@ -598,10 +598,11 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
                 if child.collide_point(*touch.pos):
                     key = child.sort_key
                     if key == "status":
-                        parent.hint_sorter = lambda element: element["status"]["hint"]["status"]
+                        parent.hint_sorter = lambda element: status_sort_weights[element["status"]["hint"]["status"]]
                     else:
-                        parent.hint_sorter = \
-                            lambda element: remove_between_brackets.sub("", element[key]["text"]).lower()
+                        parent.hint_sorter = lambda element: (
+                            remove_between_brackets.sub("", element[key]["text"]).lower()
+                        )
                     if key == parent.sort_key:
                         # second click reverses order
                         parent.reversed = not parent.reversed
@@ -1018,7 +1019,13 @@ status_colors: typing.Dict[HintStatus, str] = {
     HintStatus.HINT_AVOID: "salmon",
     HintStatus.HINT_PRIORITY: "plum",
 }
-
+status_sort_weights: dict[HintStatus, int] = {
+    HintStatus.HINT_FOUND: 0,
+    HintStatus.HINT_UNSPECIFIED: 1,
+    HintStatus.HINT_NO_PRIORITY: 2,
+    HintStatus.HINT_AVOID: 3,
+    HintStatus.HINT_PRIORITY: 4,
+}
 
 class HintLog(MDRecycleView):
     header = {
