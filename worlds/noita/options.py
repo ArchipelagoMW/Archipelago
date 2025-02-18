@@ -121,10 +121,8 @@ class ShopPrice(Choice):
 
 
 class NoitaDeathLink(DeathLink):
-    """
-    When you die, everyone dies. Of course, the reverse is true too.
-    You can disable this in the in-game mod options.
-    """
+    __doc__ = (DeathLink.__doc__ + "\n\n    You can disable this or set it to give yourself a trap effect when " +
+               "another player dies in the in-game mod options.")
 
 
 @dataclass
