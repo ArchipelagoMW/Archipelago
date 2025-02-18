@@ -1,7 +1,7 @@
 00000000 0
 03000002 passageid
 03000003 inpassagelevelid
-03000008 minigamecoinnum
+03000008 gmedalcount
 03000010 ucworldnumbak
 03000013 ucsaveflg
 03000024 currentroomid
@@ -83,5 +83,6 @@
 087904B9 goldentreasuresneeded
 087904BA trapbehavior
 087904BB diamondshuffle
-08794670 multiworldstringdump
+08794140 minigamecointiles
+08794618 multiworldstringdump
 
