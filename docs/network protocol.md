@@ -363,11 +363,11 @@ An enumeration containing the possible hint states.
 ```python
 import enum
 class HintStatus(enum.IntEnum):
-    HINT_FOUND = 0        # The location has been collected. Status cannot be changed once found.
-    HINT_UNSPECIFIED = 1  # The receiving player has not specified any status
+    HINT_UNSPECIFIED = 0  # The receiving player has not specified any status
     HINT_NO_PRIORITY = 10 # The receiving player has specified that the item is unneeded
     HINT_AVOID = 20       # The receiving player has specified that the item is detrimental
     HINT_PRIORITY = 30    # The receiving player has specified that the item is needed
+    HINT_FOUND = 40       # The location has been collected. Status cannot be changed once found.
 ```
 - Hints for items with `ItemClassification.trap` default to `HINT_AVOID`.
 - Hints created with `LocationScouts`, `!hint_location`, or similar (hinting a location) default to `HINT_UNSPECIFIED`.
@@ -533,9 +533,9 @@ In JSON this may look like:
     {"item": 3, "location": 3, "player": 3, "flags": 0}
 ]
 ```
-`item` is the item id of the item. Item ids are only supported in the range of [-2<sup>53</sup>, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
+`item` is the item id of the item. Item ids are only supported in the range of [-2<sup>53</sup> + 1, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
 
-`location` is the location id of the item inside the world. Location ids are only supported in the range of [-2<sup>53</sup>, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
+`location` is the location id of the item inside the world. Location ids are only supported in the range of [-2<sup>53</sup> + 1, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
 
 `player` is the player slot of the world the item is located in, except when inside an [LocationInfo](#LocationInfo) Packet then it will be the slot of the player to receive the item
 
