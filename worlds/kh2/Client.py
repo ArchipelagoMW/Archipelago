@@ -93,12 +93,7 @@ class KH2Context(CommonContext):
         self.queued_puzzle_popup = []
         self.queued_info_popup = []
 
-        self.client_settings = {
-            "send_truncate_first":    "PlayerName",  # there is no need to truncate item names for info popup
-            "receive_truncate_first": "PlayerName",  # truncation order. Can be PlayerName or ItemName
-            "send_popup_type":        "Puzzle",  # type of popup when you receive an item
-            "receive_popup_type":     "Puzzle",  # can be Puzzle, Info or None
-        }
+
         # special characters for printing in game
         # A dictionary of all the special characters, which
         # are hard to convert through a mathematical formula.
@@ -158,8 +153,27 @@ class KH2Context(CommonContext):
         self.kh2slotdata = None
         self.mem_json = None
         self.itemamount = {}
+        self.client_settings = {
+            "send_truncate_first":    "PlayerName",  # there is no need to truncate item names for info popup
+            "receive_truncate_first": "PlayerName",  # truncation order. Can be PlayerName or ItemName
+            "send_popup_type":        "Puzzle",  # type of popup when you receive an item
+            "receive_popup_type":     "Puzzle",  # can be Puzzle, Info or None
+        }
+
         if "localappdata" in os.environ:
             self.game_communication_path = os.path.expandvars(r"%localappdata%\KH2AP")
+            self.kh2_client_settings = f"kh2_client_settings.json"
+            self.kh2_client_settings_join = os.path.join(self.game_communication_path, self.kh2_client_settings)
+            if not os.path.exists(self.game_communication_path):
+                os.makedirs(self.game_communication_path)
+            if not os.path.exists(self.kh2_client_settings_join):
+                # make the json with the settings
+                with open(self.kh2_client_settings_join, "wt") as f:
+                    pass
+            elif os.path.exists(self.kh2_client_settings_join):
+                with open(self.kh2_client_settings_join) as f:
+                    self.client_settings = json.load(f)
+
         self.hitlist_bounties = 0
         # hooked object
         self.kh2 = None
@@ -281,6 +295,8 @@ class KH2Context(CommonContext):
         if self.kh2seedname not in {None} and self.auth not in {None}:
             with open(self.kh2_seed_save_path_join, 'w') as f:
                 f.write(json.dumps(self.kh2_seed_save, indent=4))
+        with open(self.kh2_client_settings_join,'w') as f2:
+            f2.write(json.dumps(self.client_settings, indent=4))
         await super(KH2Context, self).shutdown()
 
     def kh2_read_short(self, address):
@@ -359,8 +375,6 @@ class KH2Context(CommonContext):
             self.kh2_seed_save_path = f"kh2save2{self.kh2seedname}{self.auth}.json"
             self.kh2_seed_save_path_join = os.path.join(self.game_communication_path, self.kh2_seed_save_path)
 
-            if not os.path.exists(self.game_communication_path):
-                os.makedirs(self.game_communication_path)
             if not os.path.exists(self.kh2_seed_save_path_join):
                 self.kh2_seed_save = {
                     "Levels":        {
@@ -483,9 +497,9 @@ class KH2Context(CommonContext):
                 receiverID = args["receiving"]
                 senderID = networkItem.player
                 # checking if sender is the kh2 player and you arent sending yourself the item
-                if receiverID == self.slot and senderID != self.slot: #item is sent to you and is not from yourself
+                if receiverID == self.slot and senderID != self.slot:  #item is sent to you and is not from yourself
                     itemName = self.item_names[networkItem.item]
-                    playerName = self.player_names[networkItem.player] # player that sent you the item
+                    playerName = self.player_names[networkItem.player]  # player that sent you the item
                     if self.client_settings["send_popup_type"] == "Info":  # no restrictions on size here
                         self.queued_info_popup += [f"Obtained {itemName} from {playerName}"]
                     else:  # sanitize ItemName and reciever name
@@ -505,7 +519,7 @@ class KH2Context(CommonContext):
                         # from  =6. totalLength of the string cant be over 31 or game crash
                         self.queued_puzzle_popup += [f"{itemName} from {playerName}"]
 
-                if receiverID != self.slot and senderID == self.slot: #item is sent to other players
+                if receiverID != self.slot and senderID == self.slot:  #item is sent to other players
                     itemName = self.item_names[networkItem.item]
                     playerName = self.player_names[receiverID]
                     if self.client_settings["send_popup_type"] == "Info":  # no restrictions on size here
