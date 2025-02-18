@@ -41,7 +41,11 @@ from .data import ap_id_offset, ItemFlag, Passage
 #  - 3 = Single heart damage
 #  - 4 = Minigame Medal
 #
-# For AP item, classifications are as reported by ItemClassification.as_flag()
+# Classification for AP items:
+#  - 0 = Filler
+#  - 1 = Progression
+#  - 2 = Useful
+#  - 3 = Trap
 
 
 class Box(IntEnum):

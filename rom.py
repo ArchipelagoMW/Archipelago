@@ -203,7 +203,15 @@ def fill_items(world: WL4World, patch: WL4ProcedurePatch):
         if location.native_item:
             itemid = itemid - ap_id_offset
         else:
-            itemid = 0xF0 | location.item.classification.as_flag()
+            if location.item.trap:
+                classification = 3
+            elif location.item.advancement:
+                classification = 1
+            elif location.item.useful:
+                classification = 2
+            else:
+                classification = 0
+            itemid = 0xF0 | classification
         itemname = location.item.name
 
         if playerid == world.player:
