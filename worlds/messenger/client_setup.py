@@ -206,6 +206,14 @@ def launch_game(*args) -> None:
     parser.add_argument("url", type=str, nargs="?", help="Archipelago Webhost uri to auto connect to.")
     args = parser.parse_args(args)
 
+    if args.url:
+        from urllib.parse import urlparse
+        if not urlparse(args.url).port:
+            if not ask_yes_no_cancel(
+                    "Missing Port",
+                    "Invalid port in URL detected. This will cause the game to be unable to connect automatically, "
+                    "but can still be done manually through the in game options menu.\nContinue?"):
+                return
     if not is_windows:
         if args.url:
             open_file(f"steam://rungameid/764790//{args.url}/")
