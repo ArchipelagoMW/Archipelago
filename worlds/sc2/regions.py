@@ -416,8 +416,10 @@ removal_priorities: Dict[SC2Campaign, List[str]] = {
 }
 
 def make_grid(world: 'SC2World', size: int) -> Dict[str, Dict[str, Any]]:
-    two_start_positions = world.options.grid_two_start_positions.value == TwoStartPositions.option_true \
-                          or world.options.two_start_positions.value == GridTwoStartPositions.option_true
+    two_start_positions = (
+        world.options.grid_two_start_positions.value == TwoStartPositions.option_true
+        or world.options.two_start_positions.value == GridTwoStartPositions.option_true
+    )
     mission_order = {
         "grid": {
             "display_name": "",
@@ -475,8 +477,10 @@ def make_blitz(size: int) -> Dict[str, Dict[str, Any]]:
     return mission_order
 
 def make_hopscotch(world: 'SC2World', size: int) -> Dict[str, Dict[str, Any]]:
-    two_start_positions = world.options.grid_two_start_positions.value == TwoStartPositions.option_true \
-                          or world.options.two_start_positions.value == GridTwoStartPositions.option_true
+    two_start_positions = (
+        world.options.grid_two_start_positions.value == TwoStartPositions.option_true
+        or world.options.two_start_positions.value == GridTwoStartPositions.option_true
+    )
     mission_order = {
         "hopscotch": {
             "display_name": "",
