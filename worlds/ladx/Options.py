@@ -547,48 +547,42 @@ class ForeignItemIcons(Choice):
 
 
 ladx_option_groups = [
-    OptionGroup("Goal Options", [
-        Goal,
-        InstrumentCount,
+    OptionGroup("Gameplay Adjustments", [
+        HardMode,
+        TrendyGame,
+        InGameHints,
     ]),
-    OptionGroup("Shuffles", [
+    OptionGroup("World Layout", [
+        Warps,
+        Overworld,
+        DungeonShuffle,
+        EntranceShuffle,
+    ]),
+    OptionGroup("Item Pool", [
+        TradeQuest,
+        Rooster,
         ShuffleInstruments,
         ShuffleNightmareKeys,
         ShuffleSmallKeys,
         ShuffleMaps,
         ShuffleCompasses,
-        ShuffleStoneBeaks
-    ]),
-    OptionGroup("Warp Points", [
-        Warps,
-    ]),
-    OptionGroup("Miscellaneous", [
-        TradeQuest,
-        Rooster,
-        Overworld,
-        TrendyGame,
-        InGameHints,
-        NagMessages,
+        ShuffleStoneBeaks,
         StabilizeItemPool,
+    ]),
+    OptionGroup("Quality of Life & Aesthetic", [
+        NagMessages,
         Quickswap,
-        HardMode,
-        BootsControls
-    ]),
-    OptionGroup("Experimental", [
-        DungeonShuffle,
-        EntranceShuffle
-    ]),
-    OptionGroup("Visuals & Sound", [
-        LinkPalette,
-        Palette,
-        TextShuffle,
+        BootsControls,
         ForeignItemIcons,
         APTitleScreen,
         GfxMod,
+        LinkPalette,
+        Palette,
+        TextShuffle,
+        TextMode,
         Music,
         MusicChangeCondition,
         LowHpBeep,
-        TextMode,
         NoFlash,
     ])
 ]
