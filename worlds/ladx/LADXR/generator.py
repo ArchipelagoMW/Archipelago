@@ -4,6 +4,8 @@ import importlib.machinery
 import os
 import random
 import pickle
+import Utils
+import settings
 from collections import defaultdict
 from typing import Dict
 
@@ -81,8 +83,13 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
     for pymod in pymods:
         pymod.prePatch(rom)
 
-    if options["gfxmod"] != "Link":
-        patches.aesthetics.gfxMod(rom, os.path.join("data", "sprites", "ladx", options["gfxmod"] + ".bdiff"))
+    if options["gfxmod"]:
+        user_settings = settings.get_settings()
+        try:
+            gfx_mod_file = user_settings["ladx_options"]["gfx_mod_file"]
+            patches.aesthetics.gfxMod(rom, gfx_mod_file)
+        except FileNotFoundError:
+            pass # if user just doesnt provide gfxmod file, let patching continue
 
     assembler.resetConsts()
     assembler.const("INV_SIZE", 16)
@@ -94,6 +101,7 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
     assembler.const("wGoldenLeaves", 0xDB42)  # New memory location where to store the golden leaf counter
     assembler.const("wCollectedTunics", 0xDB6D)  # Memory location where to store which tunic options are available (and boots)
     assembler.const("wCustomMessage", 0xC0A0)
+    assembler.const("wOverworldRoomStatus", 0xD800)
 
     # We store the link info in unused color dungeon flags, so it gets preserved in the savegame.
     assembler.const("wLinkSyncSequenceNumber", 0xDDF6)
@@ -111,7 +119,7 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
     assembler.const("wLinkSpawnDelay", 0xDE13)
 
     #assembler.const("HARDWARE_LINK", 1)
-    # assembler.const("HARD_MODE", 1 if options["hardmode"] else 0)
+    assembler.const("HARD_MODE", 1 if options["hard_mode"] else 0)
 
     patches.core.cleanup(rom)
     patches.save.singleSaveSlot(rom)
@@ -144,6 +152,8 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
     if not options["rooster"]:
         patches.maptweaks.tweakMap(rom)
         patches.maptweaks.tweakBirdKeyRoom(rom)
+    if options["overworld"] == Options.Overworld.option_open_mabe:
+        patches.maptweaks.openMabe(rom)
     patches.chest.fixChests(rom)
     patches.shop.fixShop(rom)
     patches.rooster.patchRooster(rom)
@@ -168,8 +178,6 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
     patches.songs.upgradeMamu(rom)
 
     patches.tradeSequence.patchTradeSequence(rom, options)
-    # Monkey bridge patch, always have the bridge there.
-    rom.patch(0x00, 0x333D, assembler.ASM("bit 4, e\njr Z, $05"), b"", fill_nop=True)
     patches.bowwow.fixBowwow(rom, everywhere=False)
     # if ladxr_settings["bowwow"] != 'normal':
     #    patches.bowwow.bowwowMapPatches(rom)
@@ -195,27 +203,27 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
         patches.music.randomizeMusic(rom, random)
     elif options["music"] == Options.Music.option_off:
         patches.music.noMusic(rom)
-    # if ladxr_settings["noflash"]:
-    patches.aesthetics.removeFlashingLights(rom)
-    # if ladxr_settings["hardmode"] == "oracle":
-    #    patches.hardMode.oracleMode(rom)
-    #elif ladxr_settings["hardmode"] == "hero":
-    #    patches.hardMode.heroMode(rom)
-    #elif ladxr_settings["hardmode"] == "ohko":
-    #    patches.hardMode.oneHitKO(rom)
+    if options["no_flash"]:
+        patches.aesthetics.removeFlashingLights(rom)
+    if options["hard_mode"] == Options.HardMode.option_oracle:
+        patches.hardMode.oracleMode(rom)
+    elif options["hard_mode"] == Options.HardMode.option_hero:
+        patches.hardMode.heroMode(rom)
+    elif options["hard_mode"] == Options.HardMode.option_ohko:
+        patches.hardMode.oneHitKO(rom)
     #if ladxr_settings["superweapons"]:
     #    patches.weapons.patchSuperWeapons(rom)
-    #if ladxr_settings["textmode"] == 'fast':
-    patches.aesthetics.fastText(rom)
+    if options["text_mode"] == Options.TextMode.option_fast:
+        patches.aesthetics.fastText(rom)
     #if ladxr_settings["textmode"] == 'none':
     #    patches.aesthetics.fastText(rom)
     #    patches.aesthetics.noText(rom)
     if not options["nag_messages"]:
         patches.aesthetics.removeNagMessages(rom)
-    #if ladxr_settings["lowhpbeep"] == 'slow':
-    #    patches.aesthetics.slowLowHPBeep(rom)
-    #if ladxr_settings["lowhpbeep"] == 'none':
-    #    patches.aesthetics.removeLowHPBeep(rom)
+    if options["low_hp_beep"] == Options.LowHpBeep.option_slow:
+        patches.aesthetics.slowLowHPBeep(rom)
+    if options["low_hp_beep"] == Options.LowHpBeep.option_none:
+        patches.aesthetics.removeLowHPBeep(rom)
     if 0 <= options["link_palette"]:
         patches.aesthetics.forceLinksPalette(rom, options["link_palette"])
     if args.romdebugmode:
@@ -234,10 +242,10 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
     #    patches.health.setStartHealth(rom, 1)
 
     patches.inventory.songSelectAfterOcarinaSelect(rom)
-    #if ladxr_settings["quickswap"] == 'a':
-    #    patches.core.quickswap(rom, 1)
-    #elif ladxr_settings["quickswap"] == 'b':
-    #    patches.core.quickswap(rom, 0)
+    if options["quickswap"] == 'a':
+        patches.core.quickswap(rom, 1)
+    elif options["quickswap"] == 'b':
+        patches.core.quickswap(rom, 0)
 
     patches.core.addBootsControls(rom, options["boots_controls"])
 
@@ -267,8 +275,8 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
                 # There are only 101 player name slots (99 + "The Server" + "another world"), so don't use more than that
                 mw = 100
         spot.patch(rom, spot.item, multiworld=mw)
-    #patches.enemies.changeBosses(rom, patch_data["world_setup"]["boss_mapping"])
-    #patches.enemies.changeMiniBosses(rom, patch_data["world_setup"]["miniboss_mapping"])
+    patches.enemies.changeBosses(rom, patch_data["world_setup"]["boss_mapping"])
+    patches.enemies.changeMiniBosses(rom, patch_data["world_setup"]["miniboss_mapping"])
 
     if not args.romdebugmode:
         patches.core.addFrameCounter(rom, len(item_list))
