@@ -66,9 +66,13 @@ def pop_from_container(container, value):
     return container
 
 
-def update_dict(dictionary, entries):
-    dictionary.update(entries)
-    return dictionary
+def update_container_unique(container, entries):
+    if isinstance(container, list):
+        existing_container_as_set = set(container)
+        container.extend([entry for entry in entries if entry not in existing_container_as_set])
+    else:
+        container.update(entries)
+    return container
 
 
 def queue_gc():
@@ -109,7 +113,7 @@ modify_functions = {
     # lists/dicts:
     "remove": remove_from_list,
     "pop": pop_from_container,
-    "update": update_dict,
+    "update": update_container_unique,
 }
 
 
@@ -1135,7 +1139,7 @@ def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, st
     seeked_item_id = item if isinstance(item, int) else ctx.item_names_for_game(ctx.games[slot])[item]
     for finding_player, location_id, item_id, receiving_player, item_flags \
             in ctx.locations.find_item(slots, seeked_item_id):
-        prev_hint = ctx.get_hint(team, slot, location_id)
+        prev_hint = ctx.get_hint(team, finding_player, location_id)
         if prev_hint:
             hints.append(prev_hint)
         else:
