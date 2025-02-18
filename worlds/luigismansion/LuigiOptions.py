@@ -95,6 +95,20 @@ class BananaTrapWeight(Range):
     range_end = 100
     default = 15
 
+class NothingWeight(Range):
+    """Set the weight for how often nothing is chosen as filler. Default is 40"""
+    display_name = "'Nothing' Weight"
+    range_start = 0
+    range_end = 100
+    default = 40
+
+class HeartWeight(Range):
+    """Set the weight for how often hearts get chosen as filler. Default is 10"""
+    display_name = "Heart Weight"
+    range_start = 0
+    range_end = 100
+    default = 10
+
 
 class BetterVacuum(Choice):
     """Choose whether to include the Poltergust 4000"""
@@ -318,6 +332,8 @@ class LMOptions(PerGameCommonOptions):
     bomb_trap_weight: BombWeight
     ice_trap_weight: IceTrapWeight
     banana_trap_weight: BananaTrapWeight
+    nothing_weight: NothingWeight
+    heart_weight: HeartWeight
     enemizer: Enemizer
     deathlink: Deathlink
     start_inventory_from_pool: StartInventoryPool

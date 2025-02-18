@@ -84,6 +84,8 @@ class LMWeb(WebWorld):
             LuigiOptions.BombWeight,
             LuigiOptions.IceTrapWeight,
             LuigiOptions.BananaTrapWeight,
+            LuigiOptions.NothingWeight,
+            LuigiOptions.HeartWeight,
         ]),
         OptionGroup("QOL Changes", [
             LuigiOptions.LuigiFearAnim,
@@ -554,9 +556,10 @@ class LMWorld(World):
         twenbill = 0 if self.options.bill_weight.value - 5 <= 0 else self.options.bill_weight.value - 5
         morebar = 0 if self.options.bars_weight.value - 5 <= 0 else self.options.bars_weight.value - 5
         diamweight = math.ceil(self.options.gems_weight.value * 0.4)
+        lheart = 0 if self.options.heart_weight.value - 5 <= 0 else self.options.heart_weight.value - 5
         filler_weights = [self.options.bundle_weight.value, self.options.gems_weight.value,  # coins & bills, sapphire
                           self.options.gems_weight.value, self.options.gems_weight.value, diamweight,  # emerald, ruby, diamond
-                          self.options.poison_trap_weight.value, 40, 10, 5,  # poison mush, nothing, sm heart, l heart
+                          self.options.poison_trap_weight.value, self.options.nothing_weight.value, self.options.heart_weight.value, lheart,  # poison mush, nothing, sm heart, l heart
                           self.options.bomb_trap_weight.value, self.options.ice_trap_weight.value,  # bomb, ice
                           self.options.banana_trap_weight.value, self.options.coin_weight.value, twencoin, tencoin,  # banana, 10coin, 20coin, 30coin
                           self.options.bill_weight.value, twenbill, self.options.bars_weight.value, morebar]  # 15bill, 25bill, 1bar, 2bar
