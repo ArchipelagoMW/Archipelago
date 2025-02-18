@@ -574,7 +574,6 @@ class Blitz(LayoutType):
         # else:
         #     final_mission = self.size - 1
         # slots[final_mission].option_exit = True
-        slots[-1].option_exit = True
 
         rows = self.size // self.width
         for row in range(rows):
@@ -584,6 +583,8 @@ class Blitz(LayoutType):
                     other = (row + 1) * self.width + bot
                     if other < self.size:
                         slots[idx].next.append(slots[other])
+                    if row == rows-1:
+                        slots[idx].option_exit = True
         
         return slots
     

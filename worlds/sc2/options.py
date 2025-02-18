@@ -5,7 +5,7 @@ from datetime import timedelta
 from Options import (
     Choice, Toggle, DefaultOnToggle, OptionSet, Range,
     PerGameCommonOptions, Option, VerifyKeys, StartInventory,
-    is_iterable_except_str, OptionGroup
+    is_iterable_except_str, OptionGroup, Visibility
 )
 from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
@@ -168,10 +168,10 @@ class MaximumCampaignSize(Range):
     default = 83
 
 
-class GridTwoStartPositions(Toggle):
+class TwoStartPositions(Toggle):
     """
-    If turned on and 'grid' or 'hopscotch' mission orders are selected,
-    removes a mission from the starting corner and sets the adjacent two missions as the starter missions.
+    If turned on and 'grid', 'hopscotch', or 'golden_path' mission orders are selected,
+    removes the first mission and allows both of the next two missions to be played from the start.
     """
     display_name = "Start with two unlocked missions on grid"
     default = Toggle.option_false
@@ -1296,7 +1296,7 @@ class Starcraft2Options(PerGameCommonOptions):
     all_in_map: AllInMap
     mission_order: MissionOrder
     maximum_campaign_size: MaximumCampaignSize
-    grid_two_start_positions: GridTwoStartPositions
+    two_start_positions: TwoStartPositions
     key_mode: KeyMode
     player_color_terran_raynor: PlayerColorTerranRaynor
     player_color_protoss: PlayerColorProtoss
@@ -1399,7 +1399,7 @@ option_groups = [
         KeyMode,
         ShuffleCampaigns,
         AllInMap,
-        GridTwoStartPositions,
+        TwoStartPositions,
         SelectRaces,
         ExcludeVeryHardMissions,
         EnableMissionRaceBalancing,

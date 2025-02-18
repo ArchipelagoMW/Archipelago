@@ -211,7 +211,7 @@ This means that if you want total control over available missions in your missio
 There are, however, several options that are ignored by Custom Mission Orders:
 - `mission_order`, because it has to be `custom` for your Custom Mission Order to apply
 - `maximum_campaign_size`, because you determine the size of the mission order via layout `size` attributes
-- `grid_two_start_positions`, which you can instead determine in individual layouts of the appropriate `type`s (see Grid and Hopscotch sections below)
+- `two_start_positions`, which you can instead determine in individual layouts of the appropriate `type`s (see Grid and Hopscotch sections below)
 - `key_mode`, which you can still specify for presets (see Campaign Presets section), and can otherwise manually set up using Item entry rules
 
 ## Instructions for building a mission order
@@ -710,11 +710,14 @@ The `keys` option accepts these possible values:
 ```yaml
 preset: golden path
 size: # Required, no default, accepts positive numbers
+two_start_positions: false
 keys: none # Optional
 ```
 Golden Path aims to create a dynamically-sized campaign with branching paths to create a similar experience to the Wings of Liberty campaign. It accomplishes this by having a main column that requires an increasing number of missions to be beaten to advance, and a number of side columns that require progressing the main column to advance. The exit of a Golden Path campaign is the last mission of the main column.
 
 The `size` option defines the number of missions in the campaign.
+
+If `two_start_positions`, the first mission will be skipped, and the first two branches will be available from the start instead.
 
 The columns in a Golden Path get random names from a `display_name` list and have `unique_name: true` set on them. Their definition names for overriding options are `"0"`, `"1"`, `"2"`, etc., with `"0"` always being the main column, `"1"` being the left-most side column, and so on.
 
