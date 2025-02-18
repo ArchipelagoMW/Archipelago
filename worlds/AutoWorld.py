@@ -363,10 +363,10 @@ class World(metaclass=AutoWorldRegister):
         pass
 
     @classmethod
-    def stage_dynamic_datapackage(cls, multiworld: "MultiWorld") -> None:
+    def create_dynamic_datapackage(cls, game_weights: Dict[str, Any]) -> None:
         """
         Method for defining any dynamic item and location names for this generation.
-        This gets called once per present world type.
+        This gets called once per player during YAML parsing.
         """
         pass
 

@@ -823,14 +823,14 @@ class VerifyKeys(metaclass=FreezeValidKeys):
             self.value = new_value
         if self.verify_item_name:
             for item_name in self.value:
-                if item_name not in world.item_names:
+                if item_name not in world.item_names and item_name not in world.dynamic_item_name_to_id:
                     picks = get_fuzzy_results(item_name, world.item_names, limit=1)
                     raise Exception(f"Item '{item_name}' from option '{self}' "
                                     f"is not a valid item name from '{world.game}'. "
                                     f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
         elif self.verify_location_name:
             for location_name in self.value:
-                if location_name not in world.location_names:
+                if location_name not in world.location_names and location_name not in world.dynamic_location_name_to_id:
                     picks = get_fuzzy_results(location_name, world.location_names, limit=1)
                     raise Exception(f"Location '{location_name}' from option '{self}' "
                                     f"is not a valid location name from '{world.game}'. "

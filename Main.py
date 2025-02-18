@@ -307,7 +307,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     for game_world in multiworld.worlds.values()
                 }
                 dynamic_data_package = {
-                    game_world.game: game_world.get_dynamic_data_package()
+                    game_world.game: game_world.get_dynamic_data_package_data()
                     for game_world in multiworld.worlds.values()
                     if game_world.get_dynamic_data_package_data() is not None
                 }

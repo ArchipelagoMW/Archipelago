@@ -493,6 +493,9 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         game_weights = weights[ret.game]
 
     ret.name = get_choice('name', weights)
+
+    world_type.create_dynamic_datapackage(game_weights)
+
     for option_key, option in Options.CommonOptions.type_hints.items():
         setattr(ret, option_key, option.from_any(get_choice(option_key, weights, option.default)))
 
