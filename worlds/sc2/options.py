@@ -180,7 +180,7 @@ class GridTwoStartPositions(Toggle):
 class TwoStartPositions(Toggle):
     """
     If turned on and 'grid', 'hopscotch', or 'golden_path' mission orders are selected,
-    removes a mission from the starting corner and sets the adjacent two missions as the starter missions.
+    removes the first mission and allows both of the next two missions to be played from the start.
     """
     display_name = "Start with two unlocked missions on grid"
     default = Toggle.option_false
