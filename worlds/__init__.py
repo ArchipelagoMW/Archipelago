@@ -43,6 +43,7 @@ class GamesPackage(TypedDict, total=False):
 
 class DataPackage(TypedDict):
     games: Dict[str, GamesPackage]
+    dynamic: Dict[str, GamesPackage]
 
 
 @dataclasses.dataclass(order=True)
@@ -125,5 +126,6 @@ from .AutoWorld import AutoWorldRegister
 
 network_data_package: DataPackage = {
     "games": {world_name: world.get_data_package_data() for world_name, world in AutoWorldRegister.world_types.items()},
+    "dynamic": dict(),
 }
 

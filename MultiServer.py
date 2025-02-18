@@ -266,7 +266,9 @@ class Context:
 
         # init empty to satisfy linter, I suppose
         self.gamespackage = {}
+        self.dynamic_package = {}
         self.checksums = {}
+        self.dynamic_checksums = {}
         self.item_name_groups = {}
         self.location_name_groups = {}
         self.all_item_and_group_names = {}
@@ -309,6 +311,16 @@ class Context:
             self.all_location_and_group_names[game_name] = \
                 set(game_package["location_name_to_id"]) | set(self.location_name_groups.get(game_name, []))
 
+        for game_name, game_package in self.dynamic_package.items():
+            if "checksum" in game_package:
+                self.dynamic_checksums[game_name] = game_package["checksum"]
+            for item_name, item_id in game_package["item_name_to_id"].items():
+                self.item_names[game_name][item_id] = item_name
+            for location_name, location_id in game_package["location_name_to_id"].items():
+                self.location_names[game_name][location_id] = location_name
+            self.all_item_and_group_names[game_name] |= set(game_package["item_name_to_id"])
+            self.all_location_and_group_names[game_name] |= set(game_package["location_name_to_id"])
+
         archipelago_item_names = self.item_names["Archipelago"]
         archipelago_location_names = self.location_names["Archipelago"]
         for game in [game_name for game_name in self.gamespackage if game_name != "Archipelago"]:
@@ -317,10 +329,14 @@ class Context:
             self.location_names[game].update(archipelago_location_names)
 
     def item_names_for_game(self, game: str) -> typing.Optional[typing.Dict[str, int]]:
-        return self.gamespackage[game]["item_name_to_id"] if game in self.gamespackage else None
+        return (self.gamespackage[game]["item_name_to_id"] |
+                self.dynamic_package.get(game, {"item_name_to_id": {}})["item_name_to_id"]) \
+            if game in self.gamespackage else None
 
     def location_names_for_game(self, game: str) -> typing.Optional[typing.Dict[str, int]]:
-        return self.gamespackage[game]["location_name_to_id"] if game in self.gamespackage else None
+        return (self.gamespackage[game]["location_name_to_id"] |
+                self.dynamic_package.get(game, {"location_name_to_id": {}})["location_name_to_id"]) \
+            if game in self.gamespackage else None
 
     # General networking
     async def send_msgs(self, endpoint: Endpoint, msgs: typing.Iterable[dict]) -> bool:
@@ -513,6 +529,11 @@ class Context:
                 self.location_name_groups[game_name] = data["location_name_groups"]
                 del data["location_name_groups"]
             del data["item_name_groups"]  # remove from data package, but keep in self.item_name_groups
+
+        for game_name, data in decoded_obj.get("dynamic_datapackage", {}).items():
+            self.logger.info(f"Loading dynamic data package for game {game_name}")
+            self.dynamic_package[game_name] = data
+
         self._init_game_data()
         for game_name, data in self.item_name_groups.items():
             self.read_data[f"item_name_groups_{game_name}"] = lambda lgame=game_name: self.item_name_groups[lgame]
@@ -880,6 +901,8 @@ async def on_client_connected(ctx: Context, client: Client):
         'location_check_points': ctx.location_check_points,
         'datapackage_checksums': {game: game_data["checksum"] for game, game_data
                                   in ctx.gamespackage.items() if game in games and "checksum" in game_data},
+        "dynamic_checksums": {game: game_data["checksum"] for game, game_data in ctx.dynamic_package.items()
+                              if game in games and "checksum" in game_data},
         'seed_name': ctx.seed_name,
         'time': time.time(),
     }])
@@ -1847,25 +1870,16 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             await ctx.send_msgs(client, reply)
 
     elif cmd == "GetDataPackage":
-        exclusions = args.get("exclusions", [])
         if "games" in args:
             games = {name: game_data for name, game_data in ctx.gamespackage.items()
                      if name in set(args.get("games", []))}
+            dynamic = {name: game_data for name, game_data in ctx.dynamic_package.items()
+                       if name in set(args.get("games", []))}
             await ctx.send_msgs(client, [{"cmd": "DataPackage",
-                                          "data": {"games": games}}])
-        # TODO: remove exclusions behaviour around 0.5.0
-        elif exclusions:
-            exclusions = set(exclusions)
-            games = {name: game_data for name, game_data in ctx.gamespackage.items()
-                     if name not in exclusions}
-
-            package = {"games": games}
-            await ctx.send_msgs(client, [{"cmd": "DataPackage",
-                                          "data": package}])
-
+                                          "data": {"games": games, "dynamic": dynamic}}])
         else:
             await ctx.send_msgs(client, [{"cmd": "DataPackage",
-                                          "data": {"games": ctx.gamespackage}}])
+                                          "data": {"games": ctx.gamespackage, "dynamic": ctx.dynamic_package}}])
 
     elif client.auth:
         if cmd == "ConnectUpdate":

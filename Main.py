@@ -306,6 +306,11 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     game_world.game: worlds.network_data_package["games"][game_world.game]
                     for game_world in multiworld.worlds.values()
                 }
+                dynamic_data_package = {
+                    game_world.game: game_world.get_dynamic_data_package()
+                    for game_world in multiworld.worlds.values()
+                    if game_world.get_dynamic_data_package_data() is not None
+                }
 
                 checks_in_area: Dict[int, Dict[str, Union[int, List[int]]]] = {}
 
@@ -335,6 +340,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     "seed_name": multiworld.seed_name,
                     "spheres": spheres,
                     "datapackage": data_package,
+                    "dynamic_datapackage": dynamic_data_package,
                     "race_mode": int(multiworld.is_race),
                 }
                 AutoWorld.call_all(multiworld, "modify_multidata", multidata)
