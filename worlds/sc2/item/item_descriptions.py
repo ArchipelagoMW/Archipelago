@@ -562,6 +562,8 @@ item_descriptions = {
     item_names.REDUCED_MAX_SUPPLY: "Trap Item. Decreases the maximum supply cap for all missions.",
     item_names.SHIELD_REGENERATION: "Increases shield regeneration of all own units.",
     item_names.BUILDING_CONSTRUCTION_SPEED: "Increases building construction speed.",
+    item_names.UPGRADE_RESEARCH_SPEED: "Increases weapon and armor research speed.",
+    item_names.UPGRADE_RESEARCH_COST: "Decreases weapon and armor upgrade research cost.",
     item_names.NOVA_GHOST_VISOR: "Reveals the locations of enemy units in the fog of war around Nova. Can detect cloaked units.",
     item_names.NOVA_RANGEFINDER_OCULUS: "Increases Nova's vision range and non-melee weapon attack range by 2. Also increases range of melee weapons by 1.",
     item_names.NOVA_DOMINATION: "Gives Nova the ability to mind-control a target enemy unit.",
