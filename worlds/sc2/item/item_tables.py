@@ -93,6 +93,8 @@ class FactionlessItemType(ItemTypeEnum):
     Nothing = "Nothing Group", 5
     Deprecated = "Deprecated", 6
     MaxSupplyTrap = "Max Supply Trap", 7
+    ResearchSpeed = "Research Speed", 8
+    ResearchCost = "Research Cost", 9
     Keys = "Keys", -1
 
 
@@ -1083,6 +1085,12 @@ item_table = {
                  classification=ItemClassification.filler),
     item_names.BUILDING_CONSTRUCTION_SPEED:
         ItemData(806 + SC2WOL_ITEM_ID_OFFSET, FactionlessItemType.BuildingSpeed, 1, SC2Race.ANY, quantity=0,
+                 classification=ItemClassification.filler),
+    item_names.UPGRADE_RESEARCH_SPEED:
+        ItemData(807 + SC2WOL_ITEM_ID_OFFSET, FactionlessItemType.ResearchSpeed, 1, SC2Race.ANY, quantity=0,
+                 classification=ItemClassification.filler),
+    item_names.UPGRADE_RESEARCH_COST:
+        ItemData(808 + SC2WOL_ITEM_ID_OFFSET, FactionlessItemType.ResearchCost, 1, SC2Race.ANY, quantity=0,
                  classification=ItemClassification.filler),
 
     # Trap Filler

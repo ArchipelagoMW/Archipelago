@@ -403,6 +403,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             ConfigurableOptionInfo('max_supply_per_item', 'maximum_supply_per_item', options.MaximumSupplyPerItem, ConfigurableOptionType.INTEGER),
             ConfigurableOptionInfo('reduced_supply_per_item', 'maximum_supply_reduction_per_item', options.MaximumSupplyReductionPerItem, ConfigurableOptionType.INTEGER),
             ConfigurableOptionInfo('lowest_max_supply', 'lowest_maximum_supply', options.LowestMaximumSupply, ConfigurableOptionType.INTEGER),
+            ConfigurableOptionInfo('research_cost_per_item', 'research_cost_reduction_per_item', options.ResearchCostReductionPerItem, ConfigurableOptionType.INTEGER),
             ConfigurableOptionInfo('no_forced_camera', 'disable_forced_camera', options.DisableForcedCamera),
             ConfigurableOptionInfo('skip_cutscenes', 'skip_cutscenes', options.SkipCutscenes),
             ConfigurableOptionInfo('enable_morphling', 'enable_morphling', options.EnableMorphling, can_break_logic=True),
@@ -639,6 +640,7 @@ class SC2Context(CommonContext):
         self.maximum_supply_per_item: int = 2
         self.maximum_supply_reduction_per_item: int = options.MaximumSupplyReductionPerItem.default
         self.lowest_maximum_supply: int = options.LowestMaximumSupply.default
+        self.research_cost_reduction_per_item: int = options.ResearchCostReductionPerItem.default
         self.nova_covert_ops_only = False
         self.kerrigan_levels_per_mission_completed = 0
         self.trade_enabled: int = EnableVoidTrade.default
@@ -838,6 +840,7 @@ class SC2Context(CommonContext):
             self.maximum_supply_per_item = args["slot_data"].get("maximum_supply_per_item", options.MaximumSupplyPerItem.default)
             self.maximum_supply_reduction_per_item = args["slot_data"].get("maximum_supply_reduction_per_item", options.MaximumSupplyReductionPerItem.default)
             self.lowest_maximum_supply = args["slot_data"].get("lowest_maximum_supply", options.LowestMaximumSupply.default)
+            self.research_cost_reduction_per_item = args["slot_data"].get("research_cost_reduction_per_item", options.ResearchCostReductionPerItem.default)
             self.nova_covert_ops_only = args["slot_data"].get("nova_covert_ops_only", False)
             self.trade_enabled = args["slot_data"].get("enable_void_trade", EnableVoidTrade.option_false)
             self.trade_age_limit = args["slot_data"].get("void_trade_age_limit", VoidTradeAgeLimit.default)
@@ -1373,6 +1376,8 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
                 accumulators[item_data.race][item_data.type.flag_word] += ctx.vespene_per_item
             elif name == item_names.STARTING_SUPPLY:
                 accumulators[item_data.race][item_data.type.flag_word] += ctx.starting_supply_per_item
+            elif name == item_names.UPGRADE_RESEARCH_COST:
+                accumulators[item_data.race][item_data.type.flag_word] += ctx.research_cost_reduction_per_item
             else:
                 accumulators[item_data.race][item_data.type.flag_word] += 1
 
@@ -1864,8 +1869,10 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         await self.chat_send("?GiveProtossTech " + " ".join(map(str, protoss_items)))
 
     async def update_misc_tech(self, current_items: typing.Dict[SC2Race, typing.List[int]]):
-        await self.chat_send("?GiveMiscTech {}".format(
+        await self.chat_send("?GiveMiscTech {} {} {}".format(
             current_items[SC2Race.ANY][get_item_flag_word(item_names.BUILDING_CONSTRUCTION_SPEED)],
+            current_items[SC2Race.ANY][get_item_flag_word(item_names.UPGRADE_RESEARCH_SPEED)],
+            current_items[SC2Race.ANY][get_item_flag_word(item_names.UPGRADE_RESEARCH_COST)],
         ))
 
 def calc_unfinished_nodes(

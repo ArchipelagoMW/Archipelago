@@ -913,6 +913,8 @@ STARTING_SUPPLY             = "Additional Starting Supply"
 MAX_SUPPLY                  = "Additional Maximum Supply"
 SHIELD_REGENERATION         = "Increased Shield Regeneration"
 BUILDING_CONSTRUCTION_SPEED = "Increased Building Construction Speed"
+UPGRADE_RESEARCH_SPEED      = "Increased Upgrade Research Speed"
+UPGRADE_RESEARCH_COST       = "Reduced Upgrade Research Cost"
 
 # Trap
 REDUCED_MAX_SUPPLY          = "Decreased Maximum Supply"

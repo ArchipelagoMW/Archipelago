@@ -838,25 +838,36 @@ def pad_item_pool_with_filler(world: SC2World, num_items: int, pool: List[Starcr
 
 def set_up_filler_ratio(world: SC2World) -> None:
     world.filler_ratio = world.options.filler_ratio.value.copy()
-    mission_flags = world.custom_mission_order.get_used_flags()
-    include_protoss = (
-        MissionFlag.Protoss in mission_flags
-        or (world.options.take_over_ai_allies and (MissionFlag.AiProtossAlly in mission_flags))
-    )
-    include_kerrigan = (
-        MissionFlag.Kerrigan in mission_flags
-        and world.options.kerrigan_presence in kerrigan_unit_available
-    )
-    if not include_protoss:
-        world.filler_ratio.pop(item_names.SHIELD_REGENERATION, 0)
-    if not include_kerrigan:
-        world.filler_ratio.pop(item_names.KERRIGAN_LEVELS_1, 0)
+
+    prune_fillers(world)
     if sum(world.filler_ratio.values()) == 0:
         world.filler_ratio = FillerRatio.default.copy()
+    prune_fillers(world)
+
+
+def prune_fillers(world):
+    mission_flags = world.custom_mission_order.get_used_flags()
+    include_protoss = (
+            MissionFlag.Protoss in mission_flags
+            or (world.options.take_over_ai_allies and (MissionFlag.AiProtossAlly in mission_flags))
+    )
+    include_kerrigan = (
+            MissionFlag.Kerrigan in mission_flags
+            and world.options.kerrigan_presence in kerrigan_unit_available
+    )
+    generic_upgrade_research = world.options.generic_upgrade_research
     if not include_protoss:
         world.filler_ratio.pop(item_names.SHIELD_REGENERATION, 0)
     if not include_kerrigan:
         world.filler_ratio.pop(item_names.KERRIGAN_LEVELS_1, 0)
+    if (generic_upgrade_research in
+            [
+                GenericUpgradeResearch.option_always_auto,
+                GenericUpgradeResearch.option_auto_in_build
+            ]
+    ):
+        world.filler_ratio.pop(item_names.UPGRADE_RESEARCH_SPEED, 0)
+        world.filler_ratio.pop(item_names.UPGRADE_RESEARCH_COST, 0)
 
 
 def get_random_first_mission(world: SC2World, mission_order: SC2MissionOrder) -> SC2Mission:
