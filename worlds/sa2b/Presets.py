@@ -192,6 +192,7 @@ allsanity_no_chao = {
     "snake_trap_weight": BaseTrapWeight.option_high,
     "input_sequence_trap_weight": BaseTrapWeight.option_high,
     "minigame_trap_difficulty": MinigameTrapDifficulty.option_chaos,
+    "big_fishing_difficulty": BigFishingDifficulty.option_chaos,
 
     "music_shuffle": MusicShuffle.option_full,
     "voice_shuffle": VoiceShuffle.option_shuffled,
@@ -308,6 +309,7 @@ allsanity = {
     "snake_trap_weight": BaseTrapWeight.option_high,
     "input_sequence_trap_weight": BaseTrapWeight.option_high,
     "minigame_trap_difficulty": MinigameTrapDifficulty.option_chaos,
+    "big_fishing_difficulty": BigFishingDifficulty.option_chaos,
 
     "music_shuffle": MusicShuffle.option_full,
     "voice_shuffle": VoiceShuffle.option_shuffled,
@@ -431,6 +433,7 @@ all_random = {
     "snake_trap_weight": "random",
     "input_sequence_trap_weight": "random",
     "minigame_trap_difficulty": "random",
+    "big_fishing_difficulty": "random",
 
     "sadx_music": "random",
     "music_shuffle": "random",

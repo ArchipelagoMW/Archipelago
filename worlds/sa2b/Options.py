@@ -349,6 +349,19 @@ class MinigameTrapDifficulty(Choice):
     default = 1
 
 
+class BigFishingDifficulty(Choice):
+    """
+    How difficult Big's Fishing Minigames are
+    Chaos causes the difficulty to be random per-minigame
+    """
+    display_name = "Big Fishing Difficulty"
+    option_easy = 0
+    option_medium = 1
+    option_hard = 2
+    option_chaos = 3
+    default = 1
+
+
 class JunkFillPercentage(Range):
     """
     Replace a percentage of non-required emblems in the item pool with random junk items
@@ -1220,6 +1233,7 @@ sa2b_option_groups = [
         SnakeTrapWeight,
         InputSequenceTrapWeight,
         MinigameTrapDifficulty,
+        BigFishingDifficulty,
     ]),
     OptionGroup("Sonic Missions", [
         SonicMissionCount,
@@ -1358,6 +1372,7 @@ class SA2BOptions(PerGameCommonOptions):
     snake_trap_weight: SnakeTrapWeight
     input_sequence_trap_weight: InputSequenceTrapWeight
     minigame_trap_difficulty: MinigameTrapDifficulty
+    big_fishing_difficulty: BigFishingDifficulty
 
     sadx_music: SADXMusic
     music_shuffle: MusicShuffle

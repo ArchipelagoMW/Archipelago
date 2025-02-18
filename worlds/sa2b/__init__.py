@@ -94,6 +94,7 @@ class SA2BWorld(World):
             "MusicShuffle": self.options.music_shuffle.value,
             "Narrator": self.options.narrator.value,
             "MinigameTrapDifficulty": self.options.minigame_trap_difficulty.value,
+            "BigFishingDifficulty": self.options.big_fishing_difficulty.value,
             "RingLoss": self.options.ring_loss.value,
             "RingLink": self.options.ring_link.value,
             "TrapLink": self.options.trap_link.value,
@@ -250,6 +251,9 @@ class SA2BWorld(World):
                 for item in {**emeralds_table}:
                     itempool.append(self.create_item(item))
 
+            # Black Market
+            itempool += [self.create_item(ItemName.market_token) for _ in range(self.options.black_market_slots.value)]
+
             if self.options.goal.value in [8]:
                 available_locations: int = total_required_locations - len(itempool) - self.options.number_of_level_gates.value
 
@@ -268,9 +272,6 @@ class SA2BWorld(World):
                         if i < self.options.minigame_madness_requirement.value:
                             classification |= ItemClassification.progression
                         itempool.append(self.create_item(item, classification))
-
-            # Black Market
-            itempool += [self.create_item(ItemName.market_token) for _ in range(self.options.black_market_slots.value)]
 
             black_market_unlock_mult = 1.0
             if self.options.black_market_unlock_costs.value == 0:
