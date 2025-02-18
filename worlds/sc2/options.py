@@ -427,7 +427,7 @@ class VoidTradeAgeLimit(Choice):
 
 class MaxUpgradeLevel(Range):
     """Controls the maximum number of weapon/armor upgrades that can be found or unlocked."""
-    display_name = "Maximum upgrade level"
+    display_name = "Maximum Upgrade Level"
     range_start = 3
     range_end = 5
     default = 3
@@ -463,6 +463,20 @@ class GenericUpgradeResearch(Choice):
     option_auto_in_no_build = 1
     option_auto_in_build = 2
     option_always_auto = 3
+
+
+class GenericUpgradeResearchSpeedup(Toggle):
+    """
+    If turned on, the weapon and armor upgrades are researched more quickly if level 4 or higher is unlocked.
+    The research times of upgrades are cut proportionally, so you're able to hit the maximum available level
+    at the same time, as you'd hit level 3 normally.
+
+    Turning this on will help you to be able to research level 4 or 5 upgrade levels in timed missions.
+
+    Has no effect if Maximum Upgrade Level is set to 3
+    or Generic Upgrade Research doesn't require you to research upgrades in build missions.
+    """
+    display_name = "Generic Upgrade Research Speedup"
 
 
 class GenericUpgradeItems(Choice):
@@ -910,8 +924,7 @@ class ExcludedMissions(Sc2MissionSet):
 
 class MissionBias(Choice):
     """
-    When building a campaign, determines whether easy or hard missions are more likely to appear.
-    Only applies to mission orders with fewer missions than those available.
+    Determines whether easy missions can appear late in the campaign.
     """
     display_name = "Mission Bias"
     option_easy = 0
@@ -1300,6 +1313,7 @@ class Starcraft2Options(PerGameCommonOptions):
     max_upgrade_level: MaxUpgradeLevel
     generic_upgrade_missions: GenericUpgradeMissions
     generic_upgrade_research: GenericUpgradeResearch
+    generic_upgrade_research_speedup: GenericUpgradeResearchSpeedup
     generic_upgrade_items: GenericUpgradeItems
     kerrigan_presence: KerriganPresence
     kerrigan_levels_per_mission_completed: KerriganLevelsPerMissionCompleted
@@ -1384,6 +1398,7 @@ option_groups = [
         MaxUpgradeLevel,
         GenericUpgradeMissions,
         GenericUpgradeResearch,
+        GenericUpgradeResearchSpeedup,
         GenericUpgradeItems,
     ]),
     OptionGroup("Kerrigan", [

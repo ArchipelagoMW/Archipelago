@@ -167,6 +167,7 @@ class ItemGroupNames:
 
     VANILLA_ITEMS = "Vanilla Items"
     OVERPOWERED_ITEMS = "Overpowered Items"
+    UNRELEASED_ITEMS = "Unreleased Items"
 
     @classmethod
     def get_all_group_names(cls) -> typing.Set[str]:
@@ -791,4 +792,23 @@ item_name_groups[ItemGroupNames.OVERPOWERED_ITEMS] = [
 
     # Protoss general
     item_names.MOTHERSHIP_INTEGRATED_POWER,
+]
+
+# Items not aimed to be officially released
+# These need further balancing, shouldn't generate normally
+# Added here in order to not confuse the client
+item_name_groups[ItemGroupNames.UNRELEASED_ITEMS] = [
+    item_names.PRIDE_OF_AUGUSTRGRAD,
+    item_names.SKY_FURY,
+    item_names.SHOCK_DIVISION,
+    item_names.BLACKHAMMER,
+    item_names.AEGIS_GUARD,
+    item_names.EMPERORS_SHADOW,
+    item_names.SON_OF_KORHAL,
+    item_names.BULWARK_COMPANY,
+    item_names.FIELD_RESPONSE_THETA,
+    item_names.EMPERORS_GUARDIAN,
+    item_names.NIGHT_HAWK,
+    item_names.NIGHT_WOLF,
+    item_names.EMPERORS_SHADOW_SOVEREIGN_TACTICAL_MISSILES,
 ]

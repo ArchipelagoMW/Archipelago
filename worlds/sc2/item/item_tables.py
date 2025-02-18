@@ -1229,6 +1229,9 @@ item_table = {
     item_names.BILE_LAUNCHER:
         ItemData(26 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 25, SC2Race.ZERG,
                  classification=ItemClassification.progression),
+    item_names.BULLFROG:
+        ItemData(27 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 26, SC2Race.ZERG,
+                 classification=ItemClassification.progression),
 
     item_names.PROGRESSIVE_ZERG_MELEE_ATTACK: ItemData(100 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 0, SC2Race.ZERG, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL, parent=parent_names.ZERG_MELEE_ATTACKER),
     item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK: ItemData(101 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 4, SC2Race.ZERG, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL, parent=parent_names.ZERG_MISSILE_ATTACKER),
@@ -1588,6 +1591,14 @@ item_table = {
         ItemData(385 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 12, SC2Race.ZERG, parent=item_names.BILE_LAUNCHER),
     item_names.BILE_LAUNCHER_RAPID_BOMBARMENT:
         ItemData(386 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 13, SC2Race.ZERG, parent=item_names.BILE_LAUNCHER),
+    item_names.BULLFROG_WILD_MUTATION:
+        ItemData(387 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 14, SC2Race.ZERG, parent=item_names.BULLFROG),
+    item_names.BULLFROG_BROODLINGS:
+        ItemData(388 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 15, SC2Race.ZERG, parent=item_names.BULLFROG),
+    item_names.BULLFROG_HARD_IMPACT:
+        ItemData(389 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 16, SC2Race.ZERG, parent=item_names.BULLFROG),
+    item_names.BULLFROG_RANGE:
+        ItemData(390 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 17, SC2Race.ZERG, parent=item_names.BULLFROG),
 
     item_names.KERRIGAN_KINETIC_BLAST: ItemData(400 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 0, SC2Race.ZERG, classification=ItemClassification.progression),
     item_names.KERRIGAN_HEROIC_FORTITUDE: ItemData(401 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 1, SC2Race.ZERG, classification=ItemClassification.progression),
@@ -1981,7 +1992,7 @@ item_table = {
     item_names.SKIRMISHER_PEER_CONTEMPT: ItemData(533 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 3, SC2Race.PROTOSS, classification=ItemClassification.progression, parent=item_names.SKIRMISHER),
     item_names.VOID_RAY_PRISMATIC_RANGE: ItemData(534 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 4, SC2Race.PROTOSS, parent=item_names.VOID_RAY),
     item_names.DESTROYER_REFORGED_BLOODSHARD_CORE: ItemData(336 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 5, SC2Race.PROTOSS, classification=ItemClassification.progression, parent=item_names.DESTROYER),
-    item_names.INTERCESSOR_LIMINAL_MAGNIFIERS: ItemData(536 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 6, SC2Race.PROTOSS, parent=item_names.INTERCESSOR),
+    item_names.INTERCESSOR_CHRONO_SHEAR: ItemData(536 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 6, SC2Race.PROTOSS, parent=item_names.INTERCESSOR),
     item_names.DAWNBRINGER_SOLARITE_LENS: ItemData(537 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 7, SC2Race.PROTOSS, classification=ItemClassification.progression, parent=item_names.DAWNBRINGER),
     item_names.CARRIER_REPAIR_DRONES: ItemData(538 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 8, SC2Race.PROTOSS, classification=ItemClassification.progression, parent=item_names.CARRIER),
     item_names.SKYLORD_JUMP: ItemData(539 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 9, SC2Race.PROTOSS, parent=item_names.SKYLORD),

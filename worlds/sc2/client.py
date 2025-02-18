@@ -26,7 +26,7 @@ from pathlib import Path
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows, async_start
 from .item import item_names, item_parents
-from .item.item_groups import item_name_groups, unlisted_item_name_groups
+from .item.item_groups import item_name_groups, unlisted_item_name_groups, ItemGroupNames
 from . import options, VICTORY_MODULO
 from .options import (
     MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, EnableMorphling, GameDifficulty,
@@ -36,7 +36,7 @@ from .options import (
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
     SpearOfAdunAutonomouslyCastPresentInNoBuild, EnableVoidTrade, VoidTradeAgeLimit, void_trade_age_limits_ms,
-    DifficultyDamageModifier, MissionOrderScouting
+    DifficultyDamageModifier, MissionOrderScouting, GenericUpgradeResearchSpeedup
 )
 from .mission_order.slot_data import CampaignSlotData, LayoutSlotData, MissionSlotData
 from .mission_order.entry_rules import SubRuleRuleData, CountMissionsRuleData, MissionEntryRules
@@ -56,7 +56,7 @@ from worlds._sc2common import bot
 from worlds._sc2common.bot.data import Race
 from worlds._sc2common.bot.main import run_game
 from worlds._sc2common.bot.player import Bot
-from worlds.sc2.item.item_tables import (
+from .item.item_tables import (
     lookup_id_to_name, get_full_item_list, ItemData,
     race_to_item_type, ZergItemType, ProtossItemType, upgrade_bundles,
     WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
@@ -395,6 +395,8 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             ConfigurableOptionInfo('soa_passive_presence', 'spear_of_adun_autonomously_cast_ability_presence', options.SpearOfAdunAutonomouslyCastAbilityPresence),
             ConfigurableOptionInfo('soa_passives_in_nobuilds', 'spear_of_adun_autonomously_cast_present_in_no_build', options.SpearOfAdunAutonomouslyCastPresentInNoBuild),
             ConfigurableOptionInfo('max_upgrade_level', 'max_upgrade_level', options.MaxUpgradeLevel, ConfigurableOptionType.INTEGER),
+            ConfigurableOptionInfo('generic_upgrade_research', 'generic_upgrade_research', options.GenericUpgradeResearch),
+            ConfigurableOptionInfo('generic_upgrade_research_speedup', 'generic_upgrade_research_speedup', options.GenericUpgradeResearchSpeedup),
             ConfigurableOptionInfo('minerals_per_item', 'minerals_per_item', options.MineralsPerItem, ConfigurableOptionType.INTEGER),
             ConfigurableOptionInfo('gas_per_item', 'vespene_per_item', options.VespenePerItem, ConfigurableOptionType.INTEGER),
             ConfigurableOptionInfo('supply_per_item', 'starting_supply_per_item', options.StartingSupplyPerItem, ConfigurableOptionType.INTEGER),
@@ -612,6 +614,7 @@ class SC2Context(CommonContext):
         self.max_upgrade_level: int = MaxUpgradeLevel.default
         self.generic_upgrade_missions = 0
         self.generic_upgrade_research = 0
+        self.generic_upgrade_research_speedup: int = GenericUpgradeResearchSpeedup.default
         self.generic_upgrade_items = 0
         self.location_inclusions: typing.Dict[LocationType, int] = {}
         self.location_inclusions_by_flag: typing.Dict[LocationFlag, int] = {}
@@ -814,6 +817,7 @@ class SC2Context(CommonContext):
             self.max_upgrade_level = args["slot_data"].get("max_upgrade_level", MaxUpgradeLevel.default)
             self.generic_upgrade_items = args["slot_data"].get("generic_upgrade_items", GenericUpgradeItems.option_individual_items)
             self.generic_upgrade_research = args["slot_data"].get("generic_upgrade_research", GenericUpgradeResearch.option_vanilla)
+            self.generic_upgrade_research_speedup = args["slot_data"].get("generic_upgrade_research_speedup", GenericUpgradeResearchSpeedup.default)
             self.kerrigan_presence = args["slot_data"].get("kerrigan_presence", KerriganPresence.option_vanilla)
             self.kerrigan_primal_status = args["slot_data"].get("kerrigan_primal_status", KerriganPrimalStatus.option_vanilla)
             self.kerrigan_levels_per_mission_completed = args["slot_data"].get("kerrigan_levels_per_mission_completed", 0)
@@ -1332,7 +1336,7 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
             continue
 
         # exists exactly once
-        if item_data.quantity == 1:
+        if item_data.quantity == 1 or name in item_name_groups[ItemGroupNames.UNRELEASED_ITEMS]:
             accumulators[item_data.race][item_data.type.flag_word] |= 1 << item_data.number
 
         # exists multiple times
@@ -1516,6 +1520,29 @@ def caclulate_soa_options(ctx: SC2Context) -> int:
 
     return result
 
+def calculate_generic_upgrade_options(ctx: SC2Context) -> int:
+    result = 0
+
+    # Bits 0,1
+    # Research mode
+    research_mode_value = 0
+    if ctx.generic_upgrade_research == GenericUpgradeResearch.option_vanilla:
+        research_mode_value = 0
+    elif ctx.generic_upgrade_research == GenericUpgradeResearch.option_auto_in_no_build:
+        research_mode_value = 1
+    elif ctx.generic_upgrade_research == GenericUpgradeResearch.option_auto_in_build:
+        research_mode_value = 2
+    elif ctx.generic_upgrade_research == GenericUpgradeResearch.option_always_auto:
+        research_mode_value = 3
+    result |= research_mode_value << 0
+
+    # Bit 2
+    # Speedup
+    if ctx.generic_upgrade_research_speedup == GenericUpgradeResearchSpeedup.option_true:
+        result |= 1 << 2
+
+    return result
+
 def kerrigan_primal(ctx: SC2Context, kerrigan_level: int) -> bool:
     if ctx.kerrigan_primal_status == KerriganPrimalStatus.option_always_zerg:
         return True
@@ -1609,6 +1636,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             kerrigan_level = get_kerrigan_level(self.ctx, start_items, missions_beaten)
             kerrigan_options = calculate_kerrigan_options(self.ctx)
             soa_options = caclulate_soa_options(self.ctx)
+            generic_upgrade_options = calculate_generic_upgrade_options(self.ctx)
             mission_variant = get_mission_variant(self.mission_id)  # 0/1/2/3 for unchanged/Terran/Zerg/Protoss
             uncollected_objectives: typing.List[int] = self.get_uncollected_objectives()
             if self.ctx.difficulty_override >= 0:
@@ -1622,7 +1650,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             await self.chat_send(
                 "?SetOptions"
                 f" {difficulty}"
-                f" {self.ctx.generic_upgrade_research}"
+                f" {generic_upgrade_options}"
                 f" {self.ctx.all_in_choice}"
                 f" {game_speed}"
                 f" {self.ctx.disable_forced_camera}"

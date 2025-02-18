@@ -23,14 +23,17 @@ class Starcraft2Settings(settings.Group):
         """Overrides the slot's difficulty setting. Possible values: `casual`, `normal`, `hard`, `brutal`, `default`. Default uses slot value"""
     class GameSpeed(str):
         """Overrides the slot's gamespeed setting. Possible values: `slower`, `slow`, `normal`, `fast`, `faster`, `default`. Default uses slot value"""
+    class ShowTraps(settings.Bool):
+        """If set to true, in-client scouting will show traps as distinct from filler"""
 
-    window_width = WindowWidth(1080)
-    window_height = WindowHeight(720)
+    window_width: WindowWidth = WindowWidth(1080)
+    window_height: WindowHeight = WindowHeight(720)
     game_windowed_mode: Union[GameWindowedMode, bool] = False
-    disable_forced_camera = DisableForcedCamera("default")
-    skip_cutscenes = SkipCutscenes("default")
-    game_difficulty = GameDifficulty("default")
-    game_speed = GameSpeed("default")
-    terran_button_color = TerranButtonColor([0.0838, 0.2898, 0.2346])
-    zerg_button_color = ZergButtonColor([0.345, 0.22425, 0.12765])
-    protoss_button_color = ProtossButtonColor([0.18975, 0.2415, 0.345])
+    show_traps: Union[ShowTraps, bool] = False
+    disable_forced_camera: DisableForcedCamera = DisableForcedCamera("default")
+    skip_cutscenes: SkipCutscenes = SkipCutscenes("default")
+    game_difficulty: GameDifficulty = GameDifficulty("default")
+    game_speed: GameSpeed = GameSpeed("default")
+    terran_button_color: TerranButtonColor = TerranButtonColor([0.0838, 0.2898, 0.2346])
+    zerg_button_color: ZergButtonColor = ZergButtonColor([0.345, 0.22425, 0.12765])
+    protoss_button_color: ProtossButtonColor = ProtossButtonColor([0.18975, 0.2415, 0.345])
