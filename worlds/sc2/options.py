@@ -929,7 +929,7 @@ class DifficultyCurve(Choice):
     Standard: The campaign will start with easy missions and end with challenging missions.  Short campaigns will be more difficult.
     Uneven: The campaign will start with easy missions, but easy missions can still appear later in the campaign.  Short campaigns will be easier.
     """
-    display_name = "Mission Bias"
+    display_name = "Difficulty Curve"
     option_standard = 0
     option_uneven = 1
 
