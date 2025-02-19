@@ -81,6 +81,16 @@ class TrackerData:
             self.item_name_to_id[game] = game_package["item_name_to_id"]
             self.location_name_to_id[game] = game_package["location_name_to_id"]
 
+            if game in self._multidata["dynamic_datapackage"]:
+                dynamic_package = self._multidata["dynamic_datapackage"][game]
+                for name, id in dynamic_package["item_name_to_id"].items():
+                    self.item_id_to_name[game][id] = name
+                    self.item_name_to_id[game][name] = id
+
+                for name, id in dynamic_package["location_name_to_id"].items():
+                    self.location_id_to_name[game][id] = name
+                    self.location_name_to_id[game][name] = id
+
     def get_seed_name(self) -> str:
         """Retrieves the seed name."""
         return self._multidata["seed_name"]
