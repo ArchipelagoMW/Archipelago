@@ -101,24 +101,32 @@ def update_event_info(event_info, boo_checks: bool):
             x["EventFlag"] = 0
             x["disappear_flag"] = 0
             x["EventLoad"] = 0
-            x["EventArea"] = 110
+            x["EventArea"] = 800
             x["EventIf"] = 1
             x["PlayerStop"] = 1
             x["pos_x"] = 0.000000
             x["pos_y"] = 1100.000000
-            x["pos_z"] = -50.000000
+            x["pos_z"] = -25.000000
 
         if x["EventNo"] == 94:
             x["EventFlag"] = 0
             x["disappear_flag"] = 0
+            x["EventArea"] = 800
             x["EventLoad"] = 0
             x["EventIf"] = 1
+            x["pos_x"] = 755.000000
+            x["pos_y"] = 1100.000000
+            x["pos_z"] = -25.000000
 
         if x["EventNo"] == 93:
             x["EventFlag"] = 0
             x["disappear_flag"] = 0
+            x["EventArea"] = 800
             x["EventLoad"] = 0
             x["EventIf"] = 1
+            x["pos_x"] = -755.000000
+            x["pos_y"] = 1100.000000
+            x["pos_z"] = -25.000000
 
         # Allows the Ring of Boos on the 3F Balcony to only appear when the Ice Medal has been collected.
         # This prevents being soft locked in Boolossus and having to reset the game without saving.
