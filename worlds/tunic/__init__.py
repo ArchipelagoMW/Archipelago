@@ -399,7 +399,7 @@ class TunicWorld(World):
     def pre_fill(self) -> None:
         if self.options.local_fill > 0 and self.multiworld.players > 1:
             # we need to reserve a couple locations so that we don't fill up every sphere 1 location
-            sphere_one_locs = self.multiworld.get_reachable_locations(self.multiworld.state, self.player)
+            sphere_one_locs = self.multiworld.get_reachable_locations(CollectionState(self.multiworld), self.player)
             reserved_locations: Set[Location] = set(self.random.sample(sphere_one_locs, 2))
             viable_locations = [loc for loc in self.multiworld.get_unfilled_locations(self.player)
                                 if loc not in reserved_locations
