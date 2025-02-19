@@ -130,13 +130,16 @@ def apply_overrides(patch_data: dict) -> None:
         "music",
         "music_change_condition",
         "palette",
+        "ap_title_screen",
+        "boots_controls",
+        "nag_messages",
+        "text_shuffle",
+        "low_hp_beep",
+        "text_mode",
+        "no_flash"
     }
     if not patch_data["is_race"]:
         overridable_options.update([
-            "ap_title_screen",
-            "boots_controls",
-            "nag_messages",
-            "text_shuffle",
             "trendy_game",
             "warps",
         ])
