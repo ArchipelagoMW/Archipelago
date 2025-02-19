@@ -262,6 +262,7 @@ class JakAndDaxterWorld(World):
             self.total_prog_cells = max(self.power_cell_thresholds[:3])
         non_prog_cells = self.total_power_cells - self.total_prog_cells
         self.total_trap_cells = min(self.options.filler_power_cells_replaced_with_traps.value, non_prog_cells)
+        self.options.filler_power_cells_replaced_with_traps.value = self.total_trap_cells
         self.total_filler_cells = non_prog_cells - self.total_trap_cells
 
         # Verify that we didn't overload the trade amounts with more orbs than exist in the world.
@@ -289,7 +290,10 @@ class JakAndDaxterWorld(World):
             non_prog_orb_bundles = total_orb_bundles - self.total_prog_orb_bundles
             self.total_trap_orb_bundles = min(self.options.filler_orb_bundles_replaced_with_traps.value,
                                               non_prog_orb_bundles)
+            self.options.filler_orb_bundles_replaced_with_traps.value = self.total_trap_orb_bundles
             self.total_filler_orb_bundles = non_prog_orb_bundles - self.total_trap_orb_bundles
+        else:
+            self.options.filler_orb_bundles_replaced_with_traps.value = 0
 
         self.chosen_traps = list(self.options.chosen_traps.value)
 
