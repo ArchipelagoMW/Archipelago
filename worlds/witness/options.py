@@ -12,6 +12,7 @@ from Options import (
     OptionSet,
     PerGameCommonOptions,
     Range,
+    Removed,
     Toggle,
     Visibility,
 )
@@ -48,12 +49,18 @@ class EarlyCaves(Choice):
     alias_on = 2
 
 
-class EarlySymbolItem(DefaultOnToggle):
+class EarlyGoodItems(OptionSet):
     """
-    Put a random helpful symbol item on an early check, specifically Tutorial Gate Open if it is available early.
+    Put one random helpful item of each of the chosen types on an early check, specifically a sphere 1 Tutorial location.
+    If a type is chosen, but no items of that type exist in the itempool, it is skipped.
+
+    If there aren't enough sphere 1 Tutorial locations, Tutorial First Hallway Straight and Tutorial First Hallway Bend may be added as locations.
+    If there still aren't enough sphere 1 Tutorial locations, a random local sphere 1 location is picked.
+    If no local sphere 1 locations are available, there are no further attempts to place the item.
     """
 
-    visibility = Visibility.none
+    valid_keys = {"Symbol", "Door / Door Panel", "Obelisk Key"}
+    default = frozenset({"Symbol"})
 
 
 class ShuffleSymbols(DefaultOnToggle):
@@ -491,7 +498,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     panel_hunt_discourage_same_area_factor: PanelHuntDiscourageSameAreaFactor
     panel_hunt_plando: PanelHuntPlando
     early_caves: EarlyCaves
-    early_symbol_item: EarlySymbolItem
+    early_good_items: EarlyGoodItems
     elevators_come_to_you: ElevatorsComeToYou
     trap_percentage: TrapPercentage
     trap_weights: TrapWeights
@@ -504,6 +511,8 @@ class TheWitnessOptions(PerGameCommonOptions):
     death_link_amnesty: DeathLinkAmnesty
     puzzle_randomization_seed: PuzzleRandomizationSeed
     shuffle_dog: ShuffleDog
+
+    early_symbol_item: Removed
 
 
 witness_option_groups = [
@@ -551,6 +560,7 @@ witness_option_groups = [
         LaserHints
     ]),
     OptionGroup("Misc", [
+        EarlyGoodItems,
         EarlyCaves,
         ElevatorsComeToYou,
         DeathLink,
