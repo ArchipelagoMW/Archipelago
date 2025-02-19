@@ -11,7 +11,7 @@ from typing import (Any, Callable, ClassVar, Dict, FrozenSet, Iterable, List, Ma
                     TYPE_CHECKING, Type, Union)
 
 from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
-from BaseClasses import CollectionState
+from BaseClasses import CollectionState, ItemMetadata, LocationMetadata
 
 if TYPE_CHECKING:
     from BaseClasses import MultiWorld, Item, Location, Tutorial, Region, Entrance
@@ -300,7 +300,7 @@ class World(metaclass=AutoWorldRegister):
 
     explicit_indirect_conditions: bool = True
     """If True, the world implementation is supposed to use MultiWorld.register_indirect_condition() correctly.
-    If False, everything is rechecked at every step, which is slower computationally, 
+    If False, everything is rechecked at every step, which is slower computationally,
     but may be desirable in complex/dynamic worlds."""
 
     multiworld: "MultiWorld"
@@ -330,6 +330,11 @@ class World(metaclass=AutoWorldRegister):
     """If loaded from a .apworld, this is the Path to it."""
     __file__: ClassVar[str]
     """path it was loaded from"""
+
+    item_metadata: ClassVar[Mapping[str, ItemMetadata] | None] = None
+    """An optional mapping of item name to extra metadata to be used by other worlds during generation."""
+    location_metadata: ClassVar[Mapping[str, LocationMetadata] | None] = None
+    """An optional mapping of location name to extra metadata to be used by other worlds during generation."""
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         assert multiworld is not None

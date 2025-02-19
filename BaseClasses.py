@@ -7,7 +7,7 @@ import random
 import secrets
 from argparse import Namespace
 from collections import Counter, deque
-from collections.abc import Collection, MutableSequence
+from collections.abc import Collection, MutableSequence, Sequence
 from enum import IntEnum, IntFlag
 from typing import (AbstractSet, Any, Callable, ClassVar, Dict, Iterable, Iterator, List, Mapping, NamedTuple,
                     Optional, Protocol, Set, Tuple, Union, TYPE_CHECKING)
@@ -704,6 +704,20 @@ class MultiWorld():
                 return True
 
         return False
+
+    # It may make more sense for this to take an Item instance, or maybe player and item_name
+    # Ideally though this could be used statically
+    def get_item_metadata(self, game_name: str, item_name: str) -> "ItemMetadata":
+        metadata = AutoWorld.AutoWorldRegister.world_types[game_name].item_metadata
+        if not metadata:
+            return {}
+        return metadata.get(item_name, {})
+
+    def get_location_metadata(self, game_name: str, location_name: str) -> "LocationMetadata":
+        metadata = AutoWorld.AutoWorldRegister.world_types[game_name].location_metadata
+        if not metadata:
+            return {}
+        return metadata.get(location_name, {})
 
 
 PathValue = Tuple[str, Optional["PathValue"]]
@@ -1761,3 +1775,83 @@ def get_seed(seed: Optional[int] = None) -> int:
         random.seed(None)
         return random.randint(0, pow(10, seeddigits) - 1)
     return seed
+
+
+# These are tags that appear commonly in worlds, but you are not limited to only these choices.
+# It'd be nice to standardize these so worlds don't have to do fuzzy matching on item names or similar,
+# but I don't think these should be all-encompassing.
+class CommonVisualTags:
+    """
+    Container for commonly used visual tags for items.
+    """
+
+    MACGUFFIN = "macguffin"
+    KEY = "key"
+    BOMB = "bomb"
+    HEART = "heart"
+    SPELL = "spell"
+
+
+class CommonFunctionalTags:
+    """
+    Container for commonly used functional tags for items.
+    """
+
+    MACGUFFIN = "macguffin"
+    KEY = "key"
+    MOVEMENT = "movement"
+    COMBAT = "combat"
+    LIFE = "life"
+
+
+
+class ItemMetadata(TypedDict, total=False):
+    """
+    Dict that contains various optional metadata for an item.
+    """
+
+    short_name: str
+    """A shorter name for the item for games with limited text box space."""
+
+    description: str
+    """Gives more information about what the item is or does for players less familiar with the game."""
+    # This could be used on webhost, in a shop's UI in a game, or somewhere in a client
+    # Would likely replace item_descriptions on WebWorld
+
+    visual_tags: Sequence[str]
+    """Tags that identify what the item should look like in another game."""
+    # You are not limited to CommonVisualTags, you can use any arbitrary str
+
+    functional_tags: Sequence[str]
+    """Tags that identify what the item does for the player that receives it."""
+    # You are not limited to CommonFunctionalTags, you can use any arbitrary str
+
+    default_classification: "ItemClassification"
+    """The classification the item should be most of the time."""
+    # I'm not sure if this one has any value but it might be nice for statically analyzing items without Item instances.
+
+    usefulness: int
+    """A relative rating of how useful the item is to receive out of 100."""
+    # These might depend on settings and might not be worth doing.
+
+
+class LocationMetadata(TypedDict, total=False):
+    """
+    Dict that contains various optional metadata for a location.
+    """
+
+    short_name: str
+    """A shorter name for the location for games with limited text box space."""
+
+    description: str
+    """Gives more information about where the location is or how to get it for players less familiar with the game."""
+    # Could be used on webhost or trackers
+    # Would likely replace location_descriptions on WebWorld
+
+    area: str
+    """A name for the area, level, or other in-game region the location is in."""
+    # This is mainly for vague hints
+
+    difficulty: int
+    """A relative rating of how difficult this location is to check."""
+    # These might depend on settings and might not be worth doing.
