@@ -571,7 +571,12 @@ class LinksAwakeningContext(CommonContext):
         if cmd == "Connected":
             self.game = self.slot_info[self.slot].game
             self.slot_data = args.get("slot_data", {})
-            
+            self.slot_data.update({
+                "server_address": self.server_address,
+                "slot_name": self.player_names[self.slot],
+                "password": self.password,
+            })
+
         # TODO - use watcher_event
         if cmd == "ReceivedItems":
             for index, item in enumerate(args["items"], start=args["index"]):
@@ -636,7 +641,8 @@ class LinksAwakeningContext(CommonContext):
                             self.magpie.set_checks(self.client.tracker.all_checks)
                             await self.magpie.set_item_tracker(self.client.item_tracker)
                             await self.magpie.send_gps(self.client.gps_tracker)
-                            self.magpie.slot_data = self.slot_data
+                            if self.slot_data and "slot_data" in self.magpie.features and not self.magpie.has_sent_slot_data:
+                                await self.magpie.send_slot_data(self.slot_data)
                         except Exception:
                             # Don't let magpie errors take out the client
                             pass
