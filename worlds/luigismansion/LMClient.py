@@ -63,6 +63,10 @@ FURN_ID_OFFSET = 0xBC
 # This index is updated every time a new item is received.
 LAST_RECV_ITEM_ADDR = 0x803CDEBA
 
+# This is the flag address we use to determine if Luigi is currently in an Event.
+# If this flag is on, do NOT send any items / receive them.
+EVENT_FLAG_RECV_ADDRR = 0x803D33B1
+
 # This address will monitor when you capture the final boss, King Boo
 KING_BOO_ADDR = 0x803D5DBF
 
@@ -310,12 +314,6 @@ class LMContext(CommonContext):
             self.already_mentioned_rank_diff = False
             return False
 
-        # Make sure we aren't in the middle of an event that would freeze the game if items were received
-        in_event_flag = dme.read_byte(0x803D33B1)
-        if in_event_flag & (1 << 7) > 0:
-            self.last_not_ingame = time.time()
-            return False
-
         # These are the only valid maps we want Luigi to have checks with or do health detection with.
         if curr_map_id in [2, 9, 10, 11, 13]:
             if not time.time() > (self.last_not_ingame + (CHECKS_WAIT*LONGER_MODIFIER)):
@@ -346,6 +344,11 @@ class LMContext(CommonContext):
     async def lm_give_items(self):
         # Only try to give items if we are in game and alive.
         if not (self.check_ingame() and self.check_alive()):
+            return
+
+        # Make sure we aren't in the middle of an event that would freeze the game if items were received
+        in_event_flag = dme.read_byte(EVENT_FLAG_RECV_ADDRR)
+        if in_event_flag & (1 << 7) > 0:
             return
 
         last_recv_idx = dme.read_word(LAST_RECV_ITEM_ADDR)
