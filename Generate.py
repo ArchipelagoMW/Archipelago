@@ -56,11 +56,18 @@ def mystery_argparse():
                         help="Skips generation assertion and multidata, outputting only a spoiler log. "
                              "Intended for debugging and testing purposes.")
     args = parser.parse_args()
+
+    if args.skip_output and args.spoiler_only:
+        parser.error("Cannot mix --skip_output and --spoiler_only")
+    elif args.spoiler == 0 and args.spoiler_only:
+        parser.error("Cannot use --spoiler_only when --spoiler=0. Use --skip_output or set --spoiler to a different value")
+
     if not os.path.isabs(args.weights_file_path):
         args.weights_file_path = os.path.join(args.player_files_path, args.weights_file_path)
     if not os.path.isabs(args.meta_file_path):
         args.meta_file_path = os.path.join(args.player_files_path, args.meta_file_path)
     args.plando: PlandoOptions = PlandoOptions.from_option_string(args.plando)
+
     return args
 
 
@@ -110,10 +117,6 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
     else:
         meta_weights = None
 
-    if args.skip_output and args.spoiler_only:
-        raise Exception("Cannot mix --skip_output and --spoiler_only")
-    elif args.spoiler == 0 and args.spoiler_only:
-        raise Exception("Cannot use --spoiler_only when --spoiler=0. Use --skip_output or set --spoiler to a different value")
 
     player_id = 1
     player_files = {}
