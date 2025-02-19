@@ -114,12 +114,7 @@ def cache_self1(function: typing.Callable[[S, T], RetType]) -> typing.Callable[[
             cache[arg] = res
             return res
 
-    defaults = function.__defaults__
-    if defaults:
-        @functools.wraps(function)
-        def wrap_default(self: S, arg: T = defaults[0]) -> RetType:
-            return wrap(self, arg)
-        return wrap_default
+    wrap.__defaults__ = function.__defaults__
 
     return wrap
 
