@@ -199,6 +199,7 @@ class CommonContext:
             self._flat_store: typing.Dict[int, str] = Utils.KeyedDefaultDict(self._unknown_item)
             self._game_store: typing.Dict[str, typing.ChainMap[int, str]] = collections.defaultdict(
                 lambda: collections.ChainMap(self._archipelago_lookup, Utils.KeyedDefaultDict(self._unknown_item)))
+            self._dynamic_store: typing.Dict[str, typing.Dict[int, str]] = {}
             self.warned: bool = False
 
         # noinspection PyTypeChecker
@@ -253,13 +254,21 @@ class CommonContext:
             """Overrides existing lookup tables for a particular game."""
             id_to_name_lookup_table = Utils.KeyedDefaultDict(self._unknown_item)
             id_to_name_lookup_table.update({code: name for name, code in name_to_id_lookup_table.items()})
-            self._game_store[game] = collections.ChainMap(self._archipelago_lookup, id_to_name_lookup_table)
+            if game not in self._dynamic_store:
+                self._dynamic_store[game] = {}
+            self._game_store[game] = collections.ChainMap(self._archipelago_lookup, id_to_name_lookup_table, self._dynamic_store[game])
             self._flat_store.update(id_to_name_lookup_table)  # Only needed for legacy lookup method.
             if game == "Archipelago":
                 # Keep track of the Archipelago data package separately so if it gets updated in a custom datapackage,
                 # it updates in all chain maps automatically.
                 self._archipelago_lookup.clear()
                 self._archipelago_lookup.update(id_to_name_lookup_table)
+
+        def update_dynamic(self, game: str, name_to_id_lookup_table: typing.Dict[str, int]):
+            """Populates dynamic lookup tables for a particular game"""
+            self._dynamic_store[game].clear()
+            self._dynamic_store[game].update({code: name for name, code in name_to_id_lookup_table.items()})
+
 
     # defaults
     starting_reconnect_delay: int = 5
