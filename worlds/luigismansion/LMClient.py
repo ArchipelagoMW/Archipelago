@@ -632,6 +632,8 @@ class LMContext(CommonContext):
             await self.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(locations)}])
         return locations
 
+#TODO this entire function can be removed only if in game counter is adjusted to using something else.
+#   Until then, this will need to constantly update and write, almost like an AR code.
 async def boo_counter_sync_task(ctx: LMContext):
     while not ctx.exit_event.is_set():
         # Get the current count of Boos that a player has received
