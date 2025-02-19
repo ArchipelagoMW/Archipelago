@@ -103,6 +103,8 @@ class TimespinnerWorld(World):
             "Cantoran": self.options.cantoran.value,
             "LoreChecks": self.options.lore_checks.value,
             "BossRando": self.options.boss_rando.value,
+            "BossRandoType": self.options.boss_rando_type.value,
+            "BossRandoOverrides": self.options.boss_rando_overrides.value,
             "EnemyRando": self.options.enemy_rando.value,
             "DamageRando": self.options.damage_rando.value,
             "DamageRandoOverrides": self.options.damage_rando_overrides.value,
@@ -173,6 +175,8 @@ class TimespinnerWorld(World):
         self.options.cantoran.value = slot_data["Cantoran"]
         self.options.lore_checks.value = slot_data["LoreChecks"]
         self.options.boss_rando.value = slot_data["BossRando"]
+        self.options.boss_rando_type.value = slot_data["BossRandoType"]
+        self.options.boss_rando_overrides.value = slot_data["BossRandoOverrides"]
         self.options.damage_rando.value = slot_data["DamageRando"]
         self.options.damage_rando_overrides.value = slot_data["DamageRandoOverrides"]
         self.options.hp_cap.value = slot_data["HpCap"]
@@ -193,6 +197,7 @@ class TimespinnerWorld(World):
         self.options.rising_tides.value = slot_data["RisingTides"]
         self.options.unchained_keys.value = slot_data["UnchainedKeys"]
         self.options.back_to_the_future.value = slot_data["PresentAccessWithWheelAndSpindle"]
+        self.options.prism_break.value = slot_data["PrismBreak"]
         self.options.traps.value = slot_data["Traps"]
         self.options.death_link.value = slot_data["DeathLink"]
         # Readonly slot_data["StinkyMaw"]
