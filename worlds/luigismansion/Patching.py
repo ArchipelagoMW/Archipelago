@@ -78,7 +78,8 @@ def update_event_info(event_info, boo_checks: bool):
         events_to_remove = events_to_remove + [16, 47, 96]
 
     event_info.info_file_field_entries = list(filter(
-        lambda info_entry: not info_entry["EventNo"] in events_to_remove, event_info.info_file_field_entries))
+        lambda info_entry: not (info_entry["EventNo"] in events_to_remove or (info_entry["EventNo"] == 93 and
+            info_entry["pos_x"] == 0)), event_info.info_file_field_entries))
 
     for x in event_info.info_file_field_entries:
         # Enables a text box to appear when the user receives a key
@@ -114,13 +115,10 @@ def update_event_info(event_info, boo_checks: bool):
             x["EventIf"] = 1
 
         if x["EventNo"] == 93:
-            if x["pos_x"] == 0:
-                event_info.info_file_field_entries.remove(x)
-            else:
-                x["EventFlag"] = 0
-                x["disappear_flag"] = 0
-                x["EventLoad"] = 0
-                x["EventIf"] = 1
+            x["EventFlag"] = 0
+            x["disappear_flag"] = 0
+            x["EventLoad"] = 0
+            x["EventIf"] = 1
 
         # Allows the Ring of Boos on the 3F Balcony to only appear when the Ice Medal has been collected.
         # This prevents being soft locked in Boolossus and having to reset the game without saving.
