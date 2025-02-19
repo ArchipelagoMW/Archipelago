@@ -263,13 +263,12 @@ def update_observer_info(observer_info):
             x["do_type"] = 0
 
         # Add CodeNames to iphone entries out of blackout
-        if x["name"] == "iphone":
-            if x["pos_x"] == -748.401100:
-                x["CodeName"] = "tel2"
-            elif x["pos_x"] == 752.692200:
-                x["CodeName"] = "tel3"
-            elif x["pos_x"] == 0.000000:
-                x["CodeName"] = "tel1"
+        if x["name"] == "iphone" and x["pos_x"] == -748.401100:
+            x["code_name"] = "tel2"
+        elif x["name"] == "iphone" and x["pos_x"] == 752.692200:
+            x["code_name"] = "tel3"
+        elif x["name"] == "iphone" and x["pos_x"] == 0.000000:
+            x["code_name"] = "tel1"
 
         # Ignore me, I am the observers that spawn ghosts for Vincent
         # if x["string_arg0"] in ["57_1", "57_2", "57_3", "57_4", "57_5", "57_6", "57_7"]:
