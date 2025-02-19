@@ -66,9 +66,13 @@ def pop_from_container(container, value):
     return container
 
 
-def update_dict(dictionary, entries):
-    dictionary.update(entries)
-    return dictionary
+def update_container_unique(container, entries):
+    if isinstance(container, list):
+        existing_container_as_set = set(container)
+        container.extend([entry for entry in entries if entry not in existing_container_as_set])
+    else:
+        container.update(entries)
+    return container
 
 
 def queue_gc():
@@ -109,7 +113,7 @@ modify_functions = {
     # lists/dicts:
     "remove": remove_from_list,
     "pop": pop_from_container,
-    "update": update_dict,
+    "update": update_container_unique,
 }
 
 
