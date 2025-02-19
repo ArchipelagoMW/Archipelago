@@ -80,6 +80,7 @@ SMW_UNCOLLECTABLE_DRAGON_COINS = [0x24]
 class SMWSNIClient(SNIClient):
     game = "Super Mario World"
     patch_suffix = ".apsmw"
+    slot_data: dict
 
     async def deathlink_kill_player(self, ctx):
         from SNIClient import DeathState, snes_buffered_write, snes_flush_writes, snes_read
@@ -116,6 +117,11 @@ class SMWSNIClient(SNIClient):
 
 
     def on_package(self, ctx: SNIClient, cmd: str, args: dict) -> None:
+        super().on_package(ctx, cmd, args)
+
+        if cmd == "Connected":
+            self.slot_data = args.get("slot_data", None)
+
         if cmd != "Bounced":
             return
         if "tags" not in args:
@@ -131,7 +137,19 @@ class SMWSNIClient(SNIClient):
                 # We don't know how to handle this trap, ignore it
                 return
 
-            self.priority_trap = NetworkItem(trap_name_to_value[trap_name], None, None)
+            trap_id: int = trap_name_to_value[trap_name]
+
+            if "trap_weights" not in self.slot_data:
+                return
+
+            if f"{trap_id}" not in self.slot_data["trap_weights"]:
+                return
+
+            if self.slot_data["trap_weights"][f"{trap_id}"] == 0:
+                # The player disabled this trap type
+                return
+
+            self.priority_trap = NetworkItem(trap_id, None, None)
             self.priority_trap_message = generate_received_trap_link_text(trap_name, source_name)
             self.priority_trap_message_str = f"Received linked {trap_name} from {source_name}"
         elif "RingLink" in ctx.tags and "RingLink" in args["tags"] and source_name != self.instance_id:
