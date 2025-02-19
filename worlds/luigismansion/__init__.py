@@ -200,9 +200,9 @@ class LMWorld(World):
         self.pre_fill_items: list[LMItem] = []
         super(LMWorld, self).__init__(*args, **kwargs)
 
-    def interpret_slot_data(self,slot_data):
-        #There are more clever ways to do this, but all would require much larger changes
-        return slot_data #Tell UT that we have logic to fix
+    def interpret_slot_data(self, slot_data):
+        # There are more clever ways to do this, but all would require much larger changes
+        return slot_data  # Tell UT that we have logic to fix
 
     def _set_optional_locations(self):
 
