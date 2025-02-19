@@ -71,7 +71,7 @@ def __get_item_name(item_data, slot: int):
 def update_event_info(event_info, boo_checks: bool):
     # Removes events that we don't want to trigger at all in the mansion, such as some E. Gadd calls, warps after
     # boss battles / grabbing boss keys, and various cutscenes etc.
-    events_to_remove = [7, 11, 15, 42, 54, 69, 70, 73, 80, 81, 85, 91, 92, 93, 94]
+    events_to_remove = [7, 11, 15, 42, 54, 69, 70, 73, 80, 81, 85, 91]
 
     # Only remove the boo checks if the player does not want them.
     if not boo_checks:
@@ -94,6 +94,33 @@ def update_event_info(event_info, boo_checks: bool):
         #    x["disappear_flag"] = 0
         #    x["EventIf"] = 0
         #    x["PlayerStop"] = 0
+
+        # Move Telephone rings to third phone, make an A press and make always on
+        if x["EventNo"] == 92:
+            x["EventFlag"] = 0
+            x["disappear_flag"] = 0
+            x["EventLoad"] = 0
+            x["EventArea"] = 110
+            x["EventIf"] = 1
+            x["PlayerStop"] = 1
+            x["pos_x"] = 0.000000
+            x["pos_y"] = 1100.000000
+            x["pos_z"] = -50.000000
+
+        if x["EventNo"] == 94:
+            x["EventFlag"] = 0
+            x["disappear_flag"] = 0
+            x["EventLoad"] = 0
+            x["EventIf"] = 1
+
+        if x["EventNo"] == 93:
+            if x["pos_x"] == 0:
+                event_info.info_file_field_entries.remove(x)
+            else:
+                x["EventFlag"] = 0
+                x["disappear_flag"] = 0
+                x["EventLoad"] = 0
+                x["EventIf"] = 1
 
         # Allows the Ring of Boos on the 3F Balcony to only appear when the Ice Medal has been collected.
         # This prevents being soft locked in Boolossus and having to reset the game without saving.
@@ -234,6 +261,15 @@ def update_observer_info(observer_info):
         # Remove locking doors behind Luigi in dark rooms to prevent soft locks
         if x["do_type"] == 11:
             x["do_type"] = 0
+
+        # Add CodeNames to iphone entries out of blackout
+        if x["name"] == "iphone":
+            if x["pos_x"] == -748.401100:
+                x["CodeName"] = "tel2"
+            elif x["pos_x"] == 752.692200:
+                x["CodeName"] = "tel3"
+            elif x["pos_x"] == 0.000000:
+                x["CodeName"] = "tel1"
 
         # Ignore me, I am the observers that spawn ghosts for Vincent
         # if x["string_arg0"] in ["57_1", "57_2", "57_3", "57_4", "57_5", "57_6", "57_7"]:

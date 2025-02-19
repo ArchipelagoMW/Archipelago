@@ -17,7 +17,7 @@ from Options import OptionGroup
 # Relative Imports
 from .Items import ITEM_TABLE, LMItem, get_item_names_per_category, filler_items, ALL_ITEMS_TABLE, BOO_ITEM_TABLE
 from .Locations import *
-from .LuigiOptions import LMOptions
+from . import LuigiOptions
 from .Hints import get_hints_by_option
 from .Presets import lm_options_presets
 from .Regions import *
@@ -122,8 +122,8 @@ class LMWorld(World):
     """
 
     game: ClassVar[str] = "Luigi's Mansion"
-    options_dataclass = LMOptions
-    options: LMOptions
+    options_dataclass = LuigiOptions.LMOptions
+    options: LuigiOptions.LMOptions
 
     topology_present = True
     item_name_to_id: ClassVar[dict[str, int]] = {

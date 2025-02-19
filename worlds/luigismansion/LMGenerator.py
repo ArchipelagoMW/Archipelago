@@ -268,7 +268,7 @@ class LuigisMansionRandomizer:
 
                 for i in range(0, 5):
                     curr_boo_count = 0 if required_boo_count - (25 - (5 * i)) <= 0 else required_boo_count - (
-                                25 - (5 * i))
+                            25 - (5 * i))
                     lines = lines.replace(f"{{Count{str(i)}}}",
                                           str(required_boo_count) if i == 4 else str(curr_boo_count))
                     if curr_boo_count < required_boo_count:
@@ -278,8 +278,8 @@ class LuigisMansionRandomizer:
 
                 self.update_custom_event(event_no, False, lines)
 
-        toad_hint_events = ["04", "17", "32", "63"]
-        for event_no in toad_hint_events:
+        in_game_hint_events = ["04", "17", "32", "63", "92", "93", "94"]
+        for event_no in in_game_hint_events:
             hintfo: str = ""
             match event_no:
                 case "04":
@@ -290,9 +290,18 @@ class LuigisMansionRandomizer:
                     hintfo = self.output_data["Hints"]["Wardrobe Balcony Toad"]
                 case "63":
                     hintfo = self.output_data["Hints"]["1F Washroom Toad"]
+                case "92":
+                    hintfo = self.output_data["Hints"]["Center Telephone"]
+                case "93":
+                    hintfo = self.output_data["Hints"]["Left Telephone"]
+                case "94":
+                    hintfo = self.output_data["Hints"]["Right Telephone"]
             lines = get_data(__name__, "data/custom_events/event" + event_no + ".txt").decode('utf-8')
             lines = lines.replace("{HintText}", str(hintfo))
-            self.update_custom_event(event_no, False, lines, replace_old_csv=True)
+            if event_no == "93" or event_no == "94":
+                self.update_custom_event(event_no, False, lines, replace_old_csv=False)
+            else:
+                self.update_custom_event(event_no, False, lines, replace_old_csv=True)
 
         # Update Madame Clairvoya's event to check mario items.
         lines = get_data(__name__, "data/custom_events/event36.txt").decode('utf-8')
