@@ -373,6 +373,8 @@ def distribute_early_items(multiworld: MultiWorld,
                            fill_locations: typing.List[Location],
                            itempool: typing.List[Item]) -> typing.Tuple[typing.List[Location], typing.List[Item]]:
     """ returns new fill_locations and itempool """
+    original_order = fill_locations.copy()
+
     early_items_count: typing.Dict[typing.Tuple[str, int], typing.List[int]] = {}
     for player in multiworld.player_ids:
         items = itertools.chain(multiworld.early_items[player], multiworld.local_early_items[player])
@@ -452,16 +454,105 @@ def distribute_early_items(multiworld: MultiWorld,
 
         fill_locations.extend(early_locations)
         multiworld.random.shuffle(fill_locations)
+
+    fill_locations = [location for location in original_order if not location.item]
+
     return fill_locations, itempool
+
+
+def balanced_shuffle(multiworld: MultiWorld, fill_locations: list[Location], itempool: list[Item]) -> list[Location]:
+    balancing_factor = 0.5  # This would be a setting instead. Acts as a percentage. 0.0 is min, 1.0 is max.
+
+    # First, we shuffle the location pool.
+    multiworld.random.shuffle(fill_locations)
+
+    # If balancing factor is 0, don't do any more unnecessary work.
+    if balancing_factor == 0.0:
+        return fill_locations
+
+    # Balancing only has an effect if there is progression
+    amount_of_progression = sum(1 for item in itempool if item.advancement)
+    if not amount_of_progression:
+        return fill_locations
+
+    # If balancing factor is not 0, we split up the locations list by players.
+    locations_per_player = collections.defaultdict(list)
+    for location in fill_locations:
+        locations_per_player[location.player].append(location)
+
+    # shuffle the player order in the dict so that no player gets an inherent advantage.
+    players_with_locations = list(locations_per_player)
+    multiworld.random.shuffle(players_with_locations)
+    locations_per_player = {player: locations_per_player[player] for player in players_with_locations}
+
+    # Grab some important values for later
+    fill_location_counts = {player: len(locations) for player, locations in locations_per_player.items()}
+    total_fill_locations = sum(fill_location_counts.values())
+
+    # Now, the actual balancing begins.
+    # We will have two sets of weights.
+
+    # The first set of weights will be the number of progression items that are expected to end up in each world,
+    # assuming full randomness.
+    # Using this set of weights to shuffle the list will just, on average, just result in a random shuffle.
+
+    expected_progression_counts_if_random = {
+        player: fill_location_count / total_fill_locations * amount_of_progression
+        for player, fill_location_count in fill_location_counts.items()
+    }
+
+    # The second set of weights is the number of progression items that would end up in each world if we tried to place
+    # an equal amount of progression into each world.
+    # This could be just one shared value for all worlds (number of progression items divided by number of slots), but
+    # we have to make sure that we don't give any game more locations than it can hold.
+
+    balanced_progression_counts = {player: 0 for player in fill_location_counts}
+
+    progression_to_distribute = amount_of_progression
+    while True:
+        for player, max_count in fill_location_counts.items():
+            if balanced_progression_counts[player] == max_count:
+                continue
+            balanced_progression_counts[player] += 1
+            progression_to_distribute -= 1
+            if progression_to_distribute == 0:
+                break
+        else:
+            continue
+        break
+
+    # Now, we use the balancing factor to interpolate between the "random" distribution and the "fair" distribution.
+    weights_per_player = {
+        player: random_count + (balanced_progression_counts[player] - random_count) * balancing_factor
+        for player, random_count in expected_progression_counts_if_random.items()
+    }
+
+    # Finally, we use these weights to create the shuffled location list.
+    # This means that, if the balancing_factor is any higher than 0.0, locations from smaller games will show up earlier
+    # in the location list on average, meaning they receive more progression as a percentage of their location count.
+    ret = []
+    while locations_per_player:
+        next_player = multiworld.random.choices(list(locations_per_player.keys()), weights=list(weights_per_player.values()))[0]
+        next_bucket = locations_per_player[next_player]
+        index_within_bucket = 0
+
+        next_location = next_bucket.pop(index_within_bucket)
+        if not next_bucket:
+            del locations_per_player[next_player]
+            del weights_per_player[next_player]
+        ret.append(next_location)
+
+    return ret
 
 
 def distribute_items_restrictive(multiworld: MultiWorld,
                                  panic_method: typing.Literal["swap", "raise", "start_inventory"] = "swap") -> None:
-    fill_locations = sorted(multiworld.get_unfilled_locations())
-    multiworld.random.shuffle(fill_locations)
     # get items to distribute
     itempool = sorted(multiworld.itempool)
     multiworld.random.shuffle(itempool)
+
+    fill_locations = sorted(multiworld.get_unfilled_locations())
+    fill_locations = balanced_shuffle(multiworld, fill_locations, itempool)
 
     fill_locations, itempool = distribute_early_items(multiworld, fill_locations, itempool)
 
