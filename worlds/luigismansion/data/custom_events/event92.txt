@@ -1,15 +1,16 @@
 <FLAGON>(199)
 <MENUOFF>
 <LUIGISTOP2>
-<LUIGISTOP>
 <FORCEMOVE>(0)(1100)(-81)(15)
 <WAIT>(15)
 <HLIGHTON>
 <WAIT>(15)
+<LUIGISTOP>
 <FRAMESTART>
 <ACTOR>"demo_luigi"<ACT>"DM_TEL_ST"
 <ACTOR>"tel1"<ACT>"IP_ST"
 <FRAMEEND>
+<WAIT>(15)
 <CHOICE>"Hint"(1)"Save"(2)"Close"(3)<LISTEND>
 <ANYKEY>
 -------------------------

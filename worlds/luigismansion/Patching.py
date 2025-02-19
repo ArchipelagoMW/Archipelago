@@ -101,7 +101,7 @@ def update_event_info(event_info, boo_checks: bool):
             x["EventFlag"] = 0
             x["disappear_flag"] = 0
             x["EventLoad"] = 0
-            x["EventArea"] = 800
+            x["EventArea"] = 150
             x["EventIf"] = 1
             x["PlayerStop"] = 1
             x["pos_x"] = 0.000000
@@ -111,7 +111,7 @@ def update_event_info(event_info, boo_checks: bool):
         if x["EventNo"] == 94:
             x["EventFlag"] = 0
             x["disappear_flag"] = 0
-            x["EventArea"] = 800
+            x["EventArea"] = 150
             x["EventLoad"] = 0
             x["EventIf"] = 1
             x["pos_x"] = 755.000000
@@ -121,7 +121,7 @@ def update_event_info(event_info, boo_checks: bool):
         if x["EventNo"] == 93:
             x["EventFlag"] = 0
             x["disappear_flag"] = 0
-            x["EventArea"] = 800
+            x["EventArea"] = 150
             x["EventLoad"] = 0
             x["EventIf"] = 1
             x["pos_x"] = -755.000000
