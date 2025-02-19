@@ -106,9 +106,9 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
             raise Exception("Cannot mix --sameoptions with --meta")
     else:
         meta_weights = None
-    player_id = 1
-    player_files = {}
-    player_errors = []
+    player_id: int = 1
+    player_files: dict[int, str] = {}
+    player_errors: list[str] = []
     for file in os.scandir(args.player_files_path):
         fname = file.name
         if file.is_file() and not fname.startswith(".") and \
