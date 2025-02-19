@@ -294,12 +294,19 @@ class HardMode(Choice, LADXROption):
     default = option_none
 
 
-#             Setting('steal', 'Gameplay', 't', 'Stealing from the shop',
-#                 options=[('always', 'a', 'Always'), ('never', 'n', 'Never'), ('default', '', 'Normal')], default='default',
-#                 description="""Effects when you can steal from the shop. Stealing is bad and never in logic.
-# [Normal] requires the sword before you can steal.
-# [Always] you can always steal from the shop
-# [Never] you can never steal from the shop."""),
+
+class Stealing(Choice, LADXROption):
+    """
+    Puts stealing from the shop in logic if the player has a sword.
+    """
+    display_name = "Stealing"
+    ladxr_name = "steal"
+    option_in_logic = 1
+    option_out_of_logic = 2
+    option_disabled = 3
+    default = option_out_of_logic
+
+
 class Bowwow(Choice):
     """Allows BowWow to be taken into any area.  Certain enemies and bosses are given a new weakness to BowWow.
     [Normal] BowWow is in the item pool, but can be logically expected as a damage source.
@@ -565,6 +572,7 @@ ladx_option_groups = [
     OptionGroup("Miscellaneous", [
         TradeQuest,
         Rooster,
+        Stealing,
         Overworld,
         TrendyGame,
         InGameHints,
@@ -632,6 +640,7 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     nag_messages: NagMessages
     ap_title_screen: APTitleScreen
     boots_controls: BootsControls
+    stealing: Stealing
     quickswap: Quickswap
     hard_mode: HardMode
     low_hp_beep: LowHpBeep

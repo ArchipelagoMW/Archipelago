@@ -43,8 +43,12 @@ class World:
         self._addEntrance("start_house", mabe_village, start_house, None)
 
         shop = Location("Shop")
-        Location().add(ShopItem(0)).connect(shop, OR(COUNT("RUPEES", 500), SWORD))
-        Location().add(ShopItem(1)).connect(shop, OR(COUNT("RUPEES", 1480), SWORD))
+        if options.steal == "inlogic":
+            Location().add(ShopItem(0)).connect(shop, OR(COUNT("RUPEES", 500), SWORD))
+            Location().add(ShopItem(1)).connect(shop, OR(COUNT("RUPEES", 1480), SWORD))
+        else:
+            Location().add(ShopItem(0)).connect(shop, COUNT("RUPEES", 500))
+            Location().add(ShopItem(1)).connect(shop, COUNT("RUPEES", 1480))
         self._addEntrance("shop", mabe_village, shop, None)
 
         dream_hut = Location("Dream Hut")
