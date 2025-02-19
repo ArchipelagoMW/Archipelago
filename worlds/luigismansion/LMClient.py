@@ -104,11 +104,23 @@ RECV_OWN_GAME_ITEMS: list[str] = list(BOO_ITEM_TABLE.keys()) + ["Boo Radar", "Po
 CHECKS_WAIT = 3
 LONGER_MODIFIER = 2
 
-boolossus_list = [ALL_LOCATION_TABLE[local_loc] for local_loc in
-                              ["Boolossus Fragment 1", "Boolossus Fragment 2", "Boolossus Fragment 3", "Boolossus Fragment 4",
-                               "Boolossus Fragment 5", "Boolossus Fragment 6", "Boolossus Fragment 7", "Boolossus Fragment 8",
-                               "Boolossus Fragment 9", "Boolossus Fragment 10", "Boolossus Fragment 11", "Boolossus Fragment 12",
-                               "Boolossus Fragment 13", "Boolossus Fragment 14", "Boolossus Fragment 15"]]
+boolossus_list = [BOO_LOCATION_TABLE[local_loc] for local_loc in
+                    ["Boolossus Fragment 1", "Boolossus Fragment 2", "Boolossus Fragment 3", "Boolossus Fragment 4",
+                     "Boolossus Fragment 5", "Boolossus Fragment 6", "Boolossus Fragment 7", "Boolossus Fragment 8",
+                     "Boolossus Fragment 9", "Boolossus Fragment 10", "Boolossus Fragment 11", "Boolossus Fragment 12",
+                     "Boolossus Fragment 13", "Boolossus Fragment 14", "Boolossus Fragment 15"]]
+
+# This address is used to deal with the current display for Captured Boos
+BOO_COUNTER_DISPLAY_ADDR = 0x803A3CC4
+BOO_COUNTER_DISPLAY_OFFSET = 0x77
+
+# These addresses and bits are used to turn on flags for Boo Count related events.
+BOO_WASHROOM_FLAG_ADDR = 0x803D339C
+BOO_WASHROOM_FLAG_BIT = 4
+BOO_BALCONY_FLAG_ADDR = 0x803D3399
+BOO_BALCONY_FLAG_BIT = 2
+BOO_FINAL_FLAG_ADDR = 0x803D33A2
+BOO_FINAL_FLAG_BIT = 5
 
 
 def read_short(console_address: int):
@@ -196,6 +208,9 @@ class LMContext(CommonContext):
         # Used for handling various weird item checks.
         self.last_map_id = 0
 
+        # Handles Updating Boo Counter related things both in game and in client.
+        self.boo_counter_sync_task: Optional[asyncio.Task[None]] = None
+
     async def disconnect(self, allow_autoreconnect: bool = False):
         """
         Disconnect the client from the server and reset game state variables.
@@ -234,6 +249,9 @@ class LMContext(CommonContext):
             self.boosanity = bool(args["slot_data"]["boosanity"])
             self.goal_type = int(args["slot_data"]["goal"])
             self.rank_req = int(args["slot_data"]["rank requirement"])
+            self.boo_washroom_count = int(args["slot_data"]["washroom boo count"])
+            self.boo_balcony_count = int(args["slot_data"]["balcony boo count"])
+            self.boo_final_count = int(args["slot_data"]["final boo count"])
             death_link_enabled = bool(args["slot_data"]["death_link"])
             if "death_link" in args["slot_data"]:
                 Utils.async_start(self.update_death_link(death_link_enabled))
@@ -259,20 +277,14 @@ class LMContext(CommonContext):
         self.ui = LMManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
-    async def update_boo_count_label(self):
+    async def update_boo_count_label(self, curr_boo_count: int):
         from kvui import Label
 
         if not self.boo_count:
             self.boo_count = Label(text=f"")
             self.ui.connect_layout.add_widget(self.boo_count)
 
-        current_count = 0
-        for item in self.items_received:
-            if self.item_names.lookup_in_game(item.item) in BOO_ITEM_TABLE.keys():
-                current_count += 1
-
-        self.boo_count.text = f"Boo Count: {current_count}/50"
-
+        self.boo_count.text = f"Boo Count: {curr_boo_count}/50"
 
 
     def check_alive(self):
@@ -442,6 +454,18 @@ class LMContext(CommonContext):
                     # Assume it is a single address with a bit to update, rather than changing existing value
                     item_val = dme.read_byte(lm_item.ram_addr)
                     dme.write_byte(lm_item.ram_addr, (item_val | (1 << lm_item.itembit)))
+                    if lm_item_name in BOO_ITEM_TABLE.keys():
+                        curr_boo_count = len([netItem.item for netItem in self.items_received if
+                                              self.item_names.lookup_in_game(netItem.item) in BOO_ITEM_TABLE.keys()])
+                        if curr_boo_count >= self.boo_washroom_count:
+                            boo_val = dme.read_byte(BOO_WASHROOM_FLAG_ADDR)
+                            dme.write_byte(BOO_WASHROOM_FLAG_ADDR, (boo_val | (1 << BOO_WASHROOM_FLAG_BIT)))
+                        if curr_boo_count >= self.boo_balcony_count:
+                            boo_val = dme.read_byte(BOO_BALCONY_FLAG_ADDR)
+                            dme.write_byte(BOO_BALCONY_FLAG_ADDR, (boo_val | (1 << BOO_BALCONY_FLAG_BIT)))
+                        if curr_boo_count >= self.boo_final_count:
+                            boo_val = dme.read_byte(BOO_FINAL_FLAG_ADDR)
+                            dme.write_byte(BOO_FINAL_FLAG_ADDR, (boo_val | (1 << BOO_FINAL_FLAG_BIT)))
 
                 # Update the last received index to ensure we don't receive the same item over and over.
                 last_recv_idx += 1
@@ -558,55 +582,45 @@ class LMContext(CommonContext):
 
         # Always adjust the Vacuum speed as saving and quitting or going to E. Gadds lab could reset it back to normal.
         vac_id = AutoWorldRegister.world_types[self.game].item_name_to_id["Poltergust 4000"]
-        if self.items_received.__contains__(vac_id):
+        if any([netItem.item for netItem in self.items_received if netItem.item == vac_id]):
             vac_speed = "3800000F"
             dme.write_bytes(ALL_ITEMS_TABLE["Poltergust 4000"].ram_addr, bytes.fromhex(vac_speed))
 
-        # Reset the Boo capture bit back to 0, in case they only received this item but did not check their location
-        # If in boo gate events, set the Boo capture bits to one ONLY for those in received items.
-        local_recv_ids = [netItem.item for netItem in self.items_received]
-        if self.boosanity:
-            in_boo_gate_event = (dme.read_byte(0x803D33A7) & (1 << 0)) > 0
-            for lm_boo in BOO_ITEM_TABLE.keys():
-                boo_id = AutoWorldRegister.world_types[self.game].item_name_to_id[lm_boo]
-                lm_boo_item = BOO_ITEM_TABLE[lm_boo]
-                boo_caught = dme.read_byte(lm_boo_item.ram_addr)
-                boo_val = boo_caught | (1 << lm_boo_item.itembit) if (in_boo_gate_event and
-                        boo_id in local_recv_ids) else boo_caught & ~(1 << lm_boo_item.itembit)
-                dme.write_byte(lm_boo_item.ram_addr, boo_val)
 
         # Mario item flag updates # TODO Move this after multiple ram addr updates to check and give
         mario_items_in_inventory = ["Mario's Glove", "Mario's Hat", "Mario's Letter", "Mario's Star", "Mario's Shoe",
                                     "Fire Element Medal", "Water Element Medal", "Ice Element Medal"]
         for mario_item in mario_items_in_inventory:
             mario_id = AutoWorldRegister.world_types[self.game].item_name_to_id[mario_item]
-            if mario_id in local_recv_ids:
-                lm_item = ALL_ITEMS_TABLE[mario_item]
-                match lm_item.code:
-                    case 58:  # Mario's Glove
-                        item_val = dme.read_byte(0x803D339B)
-                        dme.write_byte(0x803D339B, (item_val | (1 << 5)))
-                    case 59:  # Mario's Hat
-                        item_val = dme.read_byte(0x803D339D)
-                        dme.write_byte(0x803D339D, (item_val | (1 << 1)))
-                    case 60:  # Mario's Letter
-                        item_val = dme.read_byte(0x803D339C)
-                        dme.write_byte(0x803D339C, (item_val | (1 << 3)))
-                    case 61:  # Mario's Star
-                        item_val = dme.read_byte(0x803D339C)
-                        dme.write_byte(0x803D339C, (item_val | (1 << 6)))
-                    case 62:  # Mario's Shoe
-                        item_val = dme.read_byte(0x803D339C)
-                        dme.write_byte(0x803D339C, (item_val | (1 << 0)))
-                    case 55:  # Fire Element Medal
-                        item_val = dme.read_byte(0x803D339E)
-                        dme.write_byte(0x803D339E, (item_val | (1 << 3)))
-                    case 56:  # Water Element Medal
-                        item_val = dme.read_byte(0x803D339E)
-                        dme.write_byte(0x803D339E, (item_val | (1 << 4)))
-                    case 57:  # Ice Element Medal
-                        item_val = dme.read_byte(0x803D339B)
-                        dme.write_byte(0x803D339B, (item_val | (1 << 6)))
+            if not any([netItem.item for netItem in self.items_received if netItem.item == mario_id]):
+                continue
+
+            lm_item = ALL_ITEMS_TABLE[mario_item]
+            match lm_item.code:
+                case 58:  # Mario's Glove
+                    item_val = dme.read_byte(0x803D339B)
+                    dme.write_byte(0x803D339B, (item_val | (1 << 5)))
+                case 59:  # Mario's Hat
+                    item_val = dme.read_byte(0x803D339D)
+                    dme.write_byte(0x803D339D, (item_val | (1 << 1)))
+                case 60:  # Mario's Letter
+                    item_val = dme.read_byte(0x803D339C)
+                    dme.write_byte(0x803D339C, (item_val | (1 << 3)))
+                case 61:  # Mario's Star
+                    item_val = dme.read_byte(0x803D339C)
+                    dme.write_byte(0x803D339C, (item_val | (1 << 6)))
+                case 62:  # Mario's Shoe
+                    item_val = dme.read_byte(0x803D339C)
+                    dme.write_byte(0x803D339C, (item_val | (1 << 0)))
+                case 55:  # Fire Element Medal
+                    item_val = dme.read_byte(0x803D339E)
+                    dme.write_byte(0x803D339E, (item_val | (1 << 3)))
+                case 56:  # Water Element Medal
+                    item_val = dme.read_byte(0x803D339E)
+                    dme.write_byte(0x803D339E, (item_val | (1 << 4)))
+                case 57:  # Ice Element Medal
+                    item_val = dme.read_byte(0x803D339B)
+                    dme.write_byte(0x803D339B, (item_val | (1 << 6)))
 
         return
 
@@ -618,14 +632,42 @@ class LMContext(CommonContext):
             await self.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(locations)}])
         return locations
 
+async def boo_counter_sync_task(ctx: LMContext):
+    while not ctx.exit_event.is_set():
+        # Get the current count of Boos that a player has received
+        curr_boo_count = len([netItem.item for netItem in ctx.items_received if
+                             ctx.item_names.lookup_in_game(netItem.item) in BOO_ITEM_TABLE.keys()])
+
+        # Update boo count here in LMClient
+        if ctx.ui:
+            await ctx.update_boo_count_label(curr_boo_count)
+
+        if not (ctx.dolphin_status == CONNECTION_CONNECTED_STATUS and ctx.check_ingame() and ctx.boosanity):
+            await asyncio.sleep(3)
+            continue
+
+        # Always reset the Boo's captured RAM byte back to 0, regardless of the situation.
+        # Update the internal counter of Boos Captured though.
+        internal_boo_count = 0
+        for lm_boo in BOO_ITEM_TABLE.keys():
+            boo_id = AutoWorldRegister.world_types[ctx.game].item_name_to_id[lm_boo]
+            if any([netItem.item for netItem in ctx.items_received if netItem.item == boo_id]):
+                internal_boo_count += 1
+
+            lm_boo_item = BOO_ITEM_TABLE[lm_boo]
+            boo_caught = dme.read_byte(lm_boo_item.ram_addr)
+            dme.write_byte(lm_boo_item.ram_addr, boo_caught & ~(1 << lm_boo_item.itembit))
+
+        # Update Current Boo Counter with value of captured boos, but only if Boo Radar is in inventory
+        if check_if_addr_is_pointer(BOO_COUNTER_DISPLAY_ADDR):
+            dme.write_byte(dme.follow_pointers(BOO_COUNTER_DISPLAY_ADDR, [BOO_COUNTER_DISPLAY_OFFSET]),
+                           internal_boo_count)
+        await asyncio.sleep(0.01)
 
 async def dolphin_sync_task(ctx: LMContext):
     logger.info("Starting Dolphin connector. Use /dolphin for status information.")
 
     while not ctx.exit_event.is_set():
-        # update boo count here
-        if ctx.ui:
-            await ctx.update_boo_count_label()
         try:
             if dme.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
                 if not ctx.check_ingame():
@@ -690,10 +732,10 @@ def main(output_data: Optional[str] = None, connect=None, password=None):
         await asyncio.sleep(1)
 
         ctx.dolphin_sync_task = asyncio.create_task(dolphin_sync_task(ctx), name="DolphinSync")
+        ctx.boo_counter_sync_task = asyncio.create_task(boo_counter_sync_task(ctx), name="BooCounterSync")
 
+        await ctx.boo_counter_sync_task
         await ctx.exit_event.wait()
-        ctx.server_address = None
-
         await ctx.shutdown()
 
         if ctx.dolphin_sync_task:
