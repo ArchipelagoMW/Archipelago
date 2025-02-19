@@ -97,12 +97,6 @@ def write_patch_data(world: "LinksAwakeningWorld", patch: LADXProcedurePatch):
             "nag_messages",
             "ap_title_screen",
             "boots_controls",
-            "quickswap",
-            "hard_mode",
-            "low_hp_beep",
-            "text_mode",
-            "no_flash",
-            "overworld",
         ),
     }
     patch.write_file("data.json", json.dumps(data_dict).encode('utf-8'))
