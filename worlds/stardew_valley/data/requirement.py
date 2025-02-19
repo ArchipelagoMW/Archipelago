@@ -22,6 +22,11 @@ class SkillRequirement(Requirement):
 
 
 @dataclass(frozen=True)
+class RegionRequirement(Requirement):
+    region: str
+
+
+@dataclass(frozen=True)
 class SeasonRequirement(Requirement):
     season: str
 
