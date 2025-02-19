@@ -14,6 +14,7 @@ if __name__ == "__main__":
 
     from worlds.subnautica.locations import Vector, location_table
     from worlds.subnautica.items import item_table, group_items, items_by_type
+    from worlds.subnautica.blockers import blocker_list
     from NetUtils import encode
 
     export_folder = os.path.join(new_home, "Subnautica Export")
@@ -25,6 +26,10 @@ if __name__ == "__main__":
     payload = {location_id: location_data["position"] for location_id, location_data in location_table.items()}
     with open(in_export_folder("locations.json"), "w") as f:
         json.dump(payload, f)
+
+        
+    with open(in_export_folder("blockers.json"), "w") as f:
+        json.dump(blocker_list, f)
 
     # copy-paste from Rules
     def is_radiated(x: float, y: float, z: float) -> bool:
@@ -39,7 +44,6 @@ if __name__ == "__main__":
 
     def far_away(pos: Vector):
         return (pos["x"] ** 2 + pos["z"] ** 2) > (800 ** 2)
-
 
     payload = {
         # "LaserCutter" in Subnautica ID
@@ -56,6 +60,16 @@ if __name__ == "__main__":
                 in location_table.items() if far_away(location_data["position"])],
     }
     with open(in_export_folder("logic.json"), "w") as f:
+        json.dump(payload, f)
+
+    payload = {
+        # values of cannon_logic_control
+        "1": [location_id for location_id, location_data
+                in location_table.items() if location_data.get("cannon_logic_control", 0) == 1],
+        "2": [location_id for location_id, location_data
+                in location_table.items() if location_data.get("cannon_logic_control", 0) == 2],
+    }
+    with open(in_export_folder("logic_revisions.json"), "w") as f:
         json.dump(payload, f)
 
     itemcount = sum(item_data.count for item_data in item_table.values())
