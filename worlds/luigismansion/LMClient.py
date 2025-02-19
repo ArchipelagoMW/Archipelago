@@ -277,12 +277,15 @@ class LMContext(CommonContext):
         self.ui = LMManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
-    async def update_boo_count_label(self, curr_boo_count: int):
+    async def update_boo_count_label(self):
         from kvui import Label
 
         if not self.boo_count:
             self.boo_count = Label(text=f"")
             self.ui.connect_layout.add_widget(self.boo_count)
+
+        curr_boo_count = len([netItem.item for netItem in self.items_received if
+                              self.item_names.lookup_in_game(netItem.item) in BOO_ITEM_TABLE.keys()])
 
         self.boo_count.text = f"Boo Count: {curr_boo_count}/50"
 
@@ -636,14 +639,6 @@ class LMContext(CommonContext):
 #   Until then, this will need to constantly update and write, almost like an AR code.
 async def boo_counter_sync_task(ctx: LMContext):
     while not ctx.exit_event.is_set():
-        # Get the current count of Boos that a player has received
-        curr_boo_count = len([netItem.item for netItem in ctx.items_received if
-                             ctx.item_names.lookup_in_game(netItem.item) in BOO_ITEM_TABLE.keys()])
-
-        # Update boo count here in LMClient
-        if ctx.ui:
-            await ctx.update_boo_count_label(curr_boo_count)
-
         if not (ctx.dolphin_status == CONNECTION_CONNECTED_STATUS and ctx.check_ingame() and ctx.boosanity):
             await asyncio.sleep(3)
             continue
@@ -664,7 +659,7 @@ async def boo_counter_sync_task(ctx: LMContext):
         if check_if_addr_is_pointer(BOO_COUNTER_DISPLAY_ADDR):
             dme.write_byte(dme.follow_pointers(BOO_COUNTER_DISPLAY_ADDR, [BOO_COUNTER_DISPLAY_OFFSET]),
                            internal_boo_count)
-        await asyncio.sleep(0.01)
+        await asyncio.sleep(0.1)
 
 async def dolphin_sync_task(ctx: LMContext):
     logger.info("Starting Dolphin connector. Use /dolphin for status information.")
@@ -676,6 +671,9 @@ async def dolphin_sync_task(ctx: LMContext):
                     await asyncio.sleep(0.1)
                     continue
                 if ctx.slot:
+                    # Update boo count in LMClient
+                    if ctx.ui:
+                        await ctx.update_boo_count_label()
                     if "DeathLink" in ctx.tags:
                         await ctx.check_death()
                     await ctx.lm_give_items()
@@ -734,9 +732,7 @@ def main(output_data: Optional[str] = None, connect=None, password=None):
         await asyncio.sleep(1)
 
         ctx.dolphin_sync_task = asyncio.create_task(dolphin_sync_task(ctx), name="DolphinSync")
-        ctx.boo_counter_sync_task = asyncio.create_task(boo_counter_sync_task(ctx), name="BooCounterSync")
 
-        await ctx.boo_counter_sync_task
         await ctx.exit_event.wait()
         await ctx.shutdown()
 
