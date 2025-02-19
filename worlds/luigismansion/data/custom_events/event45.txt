@@ -22,9 +22,11 @@
 <SAY><COLOR>(0)Phew! The lights are back on!\nLeave the room to re-activate
 <ANYKEY>
 <CLOSEWINDOW>(1)
+<FRAMESTART>
 <LUIGIFREE>
-<LUIGIFREE2>
-<WAIT>(120)
-<FLAGON>(25)
+<FORCEMOVE>(3400)(-550)(-2000)(15)
+<FRAMEEND>
 <FLAGOFF>(199)
+<FLAGON>(25)
+<LUIGIFREE2>
 <END>
