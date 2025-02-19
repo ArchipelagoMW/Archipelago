@@ -256,7 +256,8 @@ class CommonContext:
             id_to_name_lookup_table.update({code: name for name, code in name_to_id_lookup_table.items()})
             if game not in self._dynamic_store:
                 self._dynamic_store[game] = {}
-            self._game_store[game] = collections.ChainMap(self._archipelago_lookup, id_to_name_lookup_table, self._dynamic_store[game])
+            self._game_store[game] = collections.ChainMap(self._archipelago_lookup, self._dynamic_store[game],
+                                                          id_to_name_lookup_table)
             self._flat_store.update(id_to_name_lookup_table)  # Only needed for legacy lookup method.
             if game == "Archipelago":
                 # Keep track of the Archipelago data package separately so if it gets updated in a custom datapackage,
@@ -580,7 +581,8 @@ class CommonContext:
     # DataPackage
     async def prepare_data_package(self, relevant_games: typing.Set[str],
                                    remote_date_package_versions: typing.Dict[str, int],
-                                   remote_data_package_checksums: typing.Dict[str, str]):
+                                   remote_data_package_checksums: typing.Dict[str, str],
+                                   dynamic_data_package_checksums: typing.Dict[str, str]):
         """Validate that all data is present for the current multiworld.
         Download, assimilate and cache missing data from the server."""
         # by documentation any game can use Archipelago locations/items -> always relevant
@@ -618,6 +620,9 @@ class CommonContext:
                         needed_updates.add(game)
                     else:
                         self.update_game(cached_game, game)
+        for game in dynamic_data_package_checksums:
+            # always download remote for games with dynamic datapackage
+            needed_updates.add(game)
         if needed_updates:
             await self.send_msgs([{"cmd": "GetDataPackage", "games": [game_name]} for game_name in needed_updates])
 
@@ -627,9 +632,15 @@ class CommonContext:
         self.versions[game] = game_package.get("version", 0)
         self.checksums[game] = game_package.get("checksum")
 
+    def update_dynamic(self, game_package: dict, game: str):
+        self.item_names.update_dynamic(game, game_package["item_name_to_id"])
+        self.location_names.update_dynamic(game, game_package["location_name_to_id"])
+
     def update_data_package(self, data_package: dict):
         for game, game_data in data_package["games"].items():
             self.update_game(game_data, game)
+        for game, game_data in data_package["dynamic"].items():
+            self.update_dynamic(game_data, game)
 
     def consume_network_data_package(self, data_package: dict):
         self.update_data_package(data_package)
@@ -900,7 +911,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             # update data package
             data_package_versions = args.get("datapackage_versions", {})
             data_package_checksums = args.get("datapackage_checksums", {})
-            await ctx.prepare_data_package(set(args["games"]), data_package_versions, data_package_checksums)
+            dynamic_checksums = args.get("dynamic_checksums")
+            await ctx.prepare_data_package(set(args["games"]), data_package_versions, data_package_checksums, dynamic_checksums)
 
             await ctx.server_auth(args['password'])
 
