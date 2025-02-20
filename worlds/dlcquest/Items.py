@@ -1,6 +1,7 @@
 import csv
 import enum
 import math
+import datetime
 from dataclasses import dataclass, field
 from random import Random
 from typing import Dict, List, Set
@@ -74,7 +75,12 @@ items_by_group: Dict[Group, List[ItemData]] = {}
 
 
 def initialize_item_table():
-    item_table.update({item.name: item for item in all_items})
+    active_items = {item.name: item for item in all_items if item_is_active(item)}
+    item_table.update(active_items)
+
+
+def item_is_active(item):
+    return datetime.datetime.today().month == 4 or Group.Piece not in item.groups
 
 
 def initialize_groups():
