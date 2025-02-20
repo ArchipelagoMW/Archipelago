@@ -454,9 +454,6 @@ class LMContext(CommonContext):
                             dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
                     [lm_item.pointer_offset]), curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
                 else:
-                    # Assume it is a single address with a bit to update, rather than changing existing value
-                    item_val = dme.read_byte(lm_item.ram_addr)
-                    dme.write_byte(lm_item.ram_addr, (item_val | (1 << lm_item.itembit)))
                     if lm_item_name in BOO_ITEM_TABLE.keys():
                         curr_boo_count = len([netItem.item for netItem in self.items_received if
                                               self.item_names.lookup_in_game(netItem.item) in BOO_ITEM_TABLE.keys()])
@@ -469,6 +466,10 @@ class LMContext(CommonContext):
                         if curr_boo_count >= self.boo_final_count:
                             boo_val = dme.read_byte(BOO_FINAL_FLAG_ADDR)
                             dme.write_byte(BOO_FINAL_FLAG_ADDR, (boo_val | (1 << BOO_FINAL_FLAG_BIT)))
+                    else:
+                        # Assume it is a single address with a bit to update, rather than changing existing value
+                        item_val = dme.read_byte(lm_item.ram_addr)
+                        dme.write_byte(lm_item.ram_addr, (item_val | (1 << lm_item.itembit)))
 
                 # Update the last received index to ensure we don't receive the same item over and over.
                 last_recv_idx += 1
