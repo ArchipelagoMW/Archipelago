@@ -197,11 +197,11 @@ class TestCustomMissionOrders(Sc2SetupTestBase):
             'custom_mission_order': {
                 'test': {
                     'type': 'column',
-                    'size': 5, # Give the generator some space to place the keys
+                    'size': 12, # Give the generator some space to place the keys
                     'max_difficulty': 'easy',
                     'mission_pool': ['zerg missions'], # Make sure the item isn't excluded by race selection
                     'missions': [{
-                        'index': 4,
+                        'index': 10,
                         'entry_rules': [{
                             'items': { test_item: test_amount } # Require more than the usual item amount
                         }]
