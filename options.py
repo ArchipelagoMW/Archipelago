@@ -150,7 +150,7 @@ class MultiworldSend(Choice):
     display_name = 'Send Locations to Server'
     option_on_escape = 0
     option_immediately = 1
-    default = option_immediately
+    default = option_on_escape
 
 
 class PrizeWeight(Range):
