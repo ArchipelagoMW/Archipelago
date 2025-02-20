@@ -4,7 +4,7 @@ from math import ceil
 from BaseClasses import ItemClassification
 
 from .Locations import KH1Location, location_table
-from .Items import KH1Item, item_table, get_items_by_type
+from .Items import KH1Item, item_table, get_items_by_type, get_items_by_category
 
 WORLDS =    ["Wonderland", "Olympus Coliseum", "Deep Jungle", "Agrabah",      "Monstro",      "Atlantica", "Halloween Town", "Neverland",  "Hollow Bastion", "End of the World"]
 KEYBLADES = ["Lady Luck",  "Olympia",          "Jungle King", "Three Wishes", "Wishing Star", "Crabclaw",  "Pumpkinhead",    "Fairy Harp", "Divine Rose",    "Oblivion"]
@@ -2128,10 +2128,10 @@ def set_rules(kh1world):
                     lambda i: (i.player != player or i.name in get_items_by_type("Item").keys()))
             if location_table[location].type == "Level Slot 1":
                 add_item_rule(kh1world.get_location(location),
-                    lambda i: (i.player != player or i.name in get_items_by_type("Stats").keys()))
+                    lambda i: (i.player != player or i.name in get_items_by_category("Level Up").keys() or i.name in get_items_by_category("Limited Level Up").keys()))
             if location_table[location].type == "Level Slot 2":
                 add_item_rule(kh1world.get_location(location),
-                    lambda i: (i.player != player or (i.name not in get_items_by_type("Item").keys() and i.name not in get_items_by_type("Shared Ability").keys())))
+                    lambda i: (i.player != player or (i.name in get_items_by_category("Level Up").keys() or i.name in get_items_by_category("Limited Level Up").keys() or i.name in get_items_by_type("Ability").keys())))
             if location_table[location].type == "Synth":
                 add_item_rule(kh1world.get_location(location),
                     lambda i: (i.player != player or (i.name in get_items_by_type("Item").keys())))
