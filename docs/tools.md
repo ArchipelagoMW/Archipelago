@@ -28,4 +28,6 @@ These tools may help with interacting with Archipelago once the game has started
 |Tool Name|Description|URL|
 |---|---|---|
 |Archipelago Checklist Tracker|This tracker will work with any Archipelago game but is not intended to provide any help with logic, think of it like an alternative to the tracker pages that are on Archipelago's website.|https://github.com/DrAwesome4333/ap-tracker|
+|Cheese Trackers|This tracker is designed specifically for assisting the organizers and players of async multiworld sessions.|https://cheesetrackers.theincrediblewheelofchee.se|
 |Discord Rich Presence Client|A drop-in alternative to the Archipelago Text Client with identical functionality, but with Discord Rich Presence support when you connect to a slot.|https://github.com/SerpentAI/Archipelago/releases/tag/rich-presence-001|
+|multiworld_tracker_bot|Simple discord bot. It watches your slots in asyncs, and sends Discord DMs when you get stuff.|https://github.com/silasary/multiworld_tracker_bot/|
