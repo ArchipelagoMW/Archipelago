@@ -27,6 +27,7 @@ all_random_settings = {
     LMOptions.Walksanity.display_name:                "random",
     LMOptions.SpeedySpirits.display_name:             "random",
     LMOptions.BooGates.display_name:                  "random",
+    LMOptions.KingBooHealth.display_name:             "random",
     LMOptions.MarioItems.display_name:                "random",
     LMOptions.WashroomBooCount.display_name:          "random",
     LMOptions.BalconyBooCount.display_name:           "random",

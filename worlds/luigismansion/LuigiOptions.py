@@ -227,6 +227,13 @@ class BalconyBooCount(Range):
     default = 20
 
 
+class KingBooHealth(Range):
+    """Set King Boo's health in the final fight. Default = 500"""
+    display_name = "King Boo's Health"
+    range_start = 1
+    range_end = 1000
+    default = 500
+
 class FinalBooCount(Range):
     """Set the number of Boos required to reach the Secret Altar. 0 = Starts Open"""
     display_name = "Altar Boo Count"
@@ -323,6 +330,7 @@ class LMOptions(PerGameCommonOptions):
     washroom_boo_count: WashroomBooCount
     balcony_boo_count: BalconyBooCount
     final_boo_count: FinalBooCount
+    king_boo_health: KingBooHealth
     bundle_weight: BundleWeight
     coin_weight: CoinWeight
     bill_weight: BillWeight

@@ -92,6 +92,7 @@ class LMWeb(WebWorld):
             LuigiOptions.PickupAnim,
             LuigiOptions.LuigiWalkSpeed,
             LuigiOptions.BetterVacuum,
+            LuigiOptions.KingBooHealth,
             LuigiOptions.StartWithBooRadar,
             LuigiOptions.StartHiddenMansion,
             LuigiOptions.RandomMusic,
