@@ -11,12 +11,16 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "required_reports_eotw": 7,
         "required_reports_door": 10,
         "reports_in_pool": 13,
+        "required_postcards": 10,
+        "required_puppies": 99,
         
         "super_bosses": False,
         "atlantica": False,
         "hundred_acre_wood": False,
-        "cups": False,
-        "vanilla_emblem_pieces": True,
+        "cups": Cups.option_cups,
+        "jungle_slider": False,
+        "randomize_emblem_pieces": False,
+        "randomize_postcards": RandomizePostcards.option_all,
         
         "exp_multiplier": 48,
         "level_checks": 100,
@@ -30,7 +34,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "item_slot_increase": 3,
         
         "keyblades_unlock_chests": False,
-        "randomize_keyblade_stats": True,
+        "keyblade_stats": KeybladeStats.option_randomize,
         "bad_starting_weapons": False,
         "keyblade_max_str": 14,
         "keyblade_min_str": 3,
@@ -39,6 +43,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         
         "puppies": Puppies.option_triplets,
         "starting_worlds": 0,
+        "starting_tools": True,
         "interact_in_battle": False,
         "advanced_logic": False,
         "extra_shared_abilities": False,
@@ -54,12 +59,16 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "required_reports_eotw": 13,
         "required_reports_door": 13,
         "reports_in_pool": 13,
+        "required_postcards": 10,
+        "required_puppies": 99,
         
         "super_bosses": False,
         "atlantica": False,
         "hundred_acre_wood": False,
-        "cups": False,
-        "vanilla_emblem_pieces": True,
+        "cups": Cups.option_cups,
+        "jungle_slider": False,
+        "randomize_emblem_pieces": False,
+        "randomize_postcards": RandomizePostcards.option_all,
         
         "exp_multiplier": 48,
         "level_checks": 100,
@@ -73,7 +82,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "item_slot_increase": 3,
         
         "keyblades_unlock_chests": False,
-        "randomize_keyblade_stats": True,
+        "keyblade_stats": KeybladeStats.option_randomize,
         "bad_starting_weapons": False,
         "keyblade_max_str": 14,
         "keyblade_min_str": 3,
@@ -82,6 +91,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         
         "puppies": Puppies.option_individual,
         "starting_worlds": 0,
+        "starting_tools": True,
         "interact_in_battle": False,
         "advanced_logic": False,
         "extra_shared_abilities": False,
@@ -97,12 +107,16 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "required_reports_eotw": 7,
         "required_reports_door": 10,
         "reports_in_pool": 13,
+        "required_postcards": 10,
+        "required_puppies": 99,
         
         "super_bosses": True,
         "atlantica": True,
         "hundred_acre_wood": True,
-        "cups": True,
-        "vanilla_emblem_pieces": False,
+        "cups": Cups.option_hades_cup,
+        "jungle_slider": True,
+        "randomize_emblem_pieces": True,
+        "randomize_postcards": RandomizePostcards.option_all,
         
         "exp_multiplier": 48,
         "level_checks": 100,
@@ -116,7 +130,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "item_slot_increase": 3,
         
         "keyblades_unlock_chests": True,
-        "randomize_keyblade_stats": True,
+        "keyblade_stats": KeybladeStats.option_randomize,
         "bad_starting_weapons": True,
         "keyblade_max_str": 14,
         "keyblade_min_str": 3,
@@ -125,6 +139,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         
         "puppies": Puppies.option_triplets,
         "starting_worlds": 0,
+        "starting_tools": True,
         "interact_in_battle": True,
         "advanced_logic": True,
         "extra_shared_abilities": True,
@@ -140,12 +155,16 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "required_reports_eotw": 7,
         "required_reports_door": 10,
         "reports_in_pool": 13,
+        "required_postcards": 10,
+        "required_puppies": 99,
         
         "super_bosses": False,
         "atlantica": False,
         "hundred_acre_wood": False,
-        "cups": False,
-        "vanilla_emblem_pieces": True,
+        "cups": Cups.option_off,
+        "jungle_slider": False,
+        "randomize_emblem_pieces": False,
+        "randomize_postcards": RandomizePostcards.option_all,
         
         "exp_multiplier": 16,
         "level_checks": 0,
@@ -158,7 +177,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "item_slot_increase": 5,
         
         "keyblades_unlock_chests": False,
-        "randomize_keyblade_stats": True,
+        "keyblade_stats": KeybladeStats.option_randomize,
         "bad_starting_weapons": False,
         "keyblade_max_str": 14,
         "keyblade_min_str": 3,
@@ -167,6 +186,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         
         "puppies": Puppies.option_triplets,
         "starting_worlds": 0,
+        "starting_tools": True,
         "interact_in_battle": False,
         "advanced_logic": False,
         "extra_shared_abilities": False,
