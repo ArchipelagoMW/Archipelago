@@ -1,0 +1,24 @@
+## Base ISO Changes:
+- Add Plants into the pool as locations
+- Add interactable (Furniture) object within the game into the pool as locations
+- Add Portrait Ghosts into the pool as locations. Must be connected to server
+- Add Toads into the pool as locations. Must be connected to server
+- Add Turning on Lights as checks. Must be connected to server.
+- Add visiting rooms as checks. Must be connected to server.
+- Add Speedy Spirits into the pool as locations. Must be connected to server. These are blackout only, and still count even if they run away, so unmissable
+- Add Boos into the pool as separate locations and items. Only Boo Radar is required for the locations. The in-game Boo counter will not be accurate. 
+- (Optional) Require the player to have obtained enough money to get a specific rank upon completion.
+- Customize the Boo count requirement for the 1F Washroom, Balcony, and Secret Altar
+- Customize the number of Mario's items needed to trigger the Fortune-teller
+- Randomize the ghost types in certain rooms of the mansion
+- Various streamlining tweaks (removed cutscenes, dialogue, transitions, and animations) except ending cutscenes
+- The Blackout can be toggled from the breaker in the breaker room, to access certain locations of the game.
+- Start with the stronger Poltergust or include it in the item pool
+- Start with the Boo Radar or include it in the pool
+- In Game Hints on Toads, Telephones and Madame Clairvoya
+- (Optional) Start in the Hidden Mansion
+- (Optional) Turn off Fear and Pickup animations for Luigi. Pickup animation does not include Gems
+- (Optional) Increase Luigi's innate movement speed.
+- (Optional) Randomize music
+- (Optional) Deathlink (Can be toggled in client)
+- (Optional) Weights for all filler items
