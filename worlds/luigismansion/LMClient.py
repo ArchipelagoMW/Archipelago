@@ -626,11 +626,14 @@ class LMContext(CommonContext):
                     item_val = dme.read_byte(0x803D339B)
                     dme.write_byte(0x803D339B, (item_val | (1 << 6)))
 
-        # Always reset the Boo's captured RAM byte back to 0, regardless of the situation.
-        for lm_boo in BOO_ITEM_TABLE.keys():
-            lm_boo_item = BOO_ITEM_TABLE[lm_boo]
-            boo_caught = dme.read_byte(lm_boo_item.ram_addr)
-            dme.write_byte(lm_boo_item.ram_addr, boo_caught & ~(1 << lm_boo_item.itembit))
+        # Always reset the Boo's location captured RAM byte back to 0, only if it's been captured before.
+        # Although Boo items share the same address, we are not using it currently.
+        for lm_boo in BOO_LOCATION_TABLE.keys():
+            lm_boo_item = BOO_LOCATION_TABLE[lm_boo]
+            if not AutoWorldRegister.world_types[self.game].item_name_to_id[lm_boo] in self.checked_locations:
+                continue
+            boo_caught = dme.read_byte(lm_boo_item.room_ram_addr)
+            dme.write_byte(lm_boo_item.room_ram_addr, boo_caught & ~(1 << lm_boo_item.locationbit))
 
         return
 
