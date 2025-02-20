@@ -630,7 +630,7 @@ class LMContext(CommonContext):
         # Although Boo items share the same address, we are not using it currently.
         for lm_boo in BOO_LOCATION_TABLE.keys():
             lm_boo_item = BOO_LOCATION_TABLE[lm_boo]
-            if not AutoWorldRegister.world_types[self.game].item_name_to_id[lm_boo] in self.checked_locations:
+            if not AutoWorldRegister.world_types[self.game].location_name_to_id[lm_boo] in self.checked_locations:
                 continue
             boo_caught = dme.read_byte(lm_boo_item.room_ram_addr)
             dme.write_byte(lm_boo_item.room_ram_addr, boo_caught & ~(1 << lm_boo_item.locationbit))
