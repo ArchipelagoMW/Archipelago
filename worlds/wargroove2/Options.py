@@ -95,7 +95,7 @@ class PlayerSummonLimit(Range):
 
 class AISacrificeLimit(Range):
     """How many times the AI can sacrifice a unit at the Stronghold per level attempt.
-    Sacrificed units are stored in the multiworld for other players to summon."""
+    Sacrificed units are stored in the multiworld for other AIs to summon."""
     display_name = "AI Sacrifice Limit"
     range_start = 0
     range_end = 5
@@ -104,7 +104,7 @@ class AISacrificeLimit(Range):
 
 class AISummonLimit(Range):
     """How many times the AI can summon a unit at the Stronghold per level attempt.
-    Summoned units are from the multiworld which were sacrificed by other players.
+    Summoned units are from the multiworld which were sacrificed by other AIs.
     If a level becomes impossible, use /sacrifice_summon in the client to toggle sacrifices and summons on and off."""
     display_name = "AI Summon Limit"
     range_start = 0

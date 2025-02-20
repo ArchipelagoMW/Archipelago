@@ -488,6 +488,15 @@ low_victory_checks_levels = [
             "Majestic Mountain: Legend of the Mountains": lambda player: lambda state: state.has("Air Trooper", player),
         }
     ),
+    Wargroove2Level(
+        name="Floran Trap",
+        file_name="Floran_Trap.json",
+        location_rules={
+            "Floran Trap: Victory": None,
+            "Floran Trap: Means of Production": None,
+            "Floran Trap: Aerial Reconnaissance": lambda player: lambda state: state.has("Harpy", player),
+        }
+    ),
 ]
 
 first_level = Wargroove2Level(

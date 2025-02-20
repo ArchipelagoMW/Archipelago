@@ -97,12 +97,11 @@ class Wargroove2Context(CommonContext):
     stored_units_key: str = ""
     victory_locations: int = 1
     objective_locations: int = 1
-    has_death_link: bool = False
-    has_death_link: bool = False
     final_levels: int = 1
     level_shuffle_seed: int = 0
     slot_data: dict[str, Any]
-    stored_finale_key: str = ""
+    player_stored_units_key: str = ""
+    ai_stored_units_key: str = ""
     faction_item_ids = {
         'Starter': 0,
         'Cherrystone': 252034,
@@ -253,8 +252,11 @@ class Wargroove2Context(CommonContext):
 
             self.stored_finale_key = f"wargroove_2_{self.slot}_{self.team}"
             self.set_notify(self.stored_finale_key)
-            self.stored_units_key = f"wargroove_units_{self.team}"
-            self.set_notify(self.stored_units_key)
+            self.player_stored_units_key = f"wargroove_player_units_{self.team}"
+            self.set_notify(self.player_stored_units_key)
+            self.ai_stored_units_key = f"wargroove_ai_units_{self.team}"
+            self.set_notify(self.ai_stored_units_key)
+
             self.update_commander_data()
             self.ui.update_ui()
 
@@ -759,27 +761,33 @@ async def game_watcher(ctx: Wargroove2Context):
                             victory = True
                     os.remove(os.path.join(ctx.game_communication_path, file))
                     ctx.ui.update_levels()
-                if file == "unitSacrifice":
+                if file == "unitSacrifice" or file == "unitSacrificeAI":
                     if ctx.has_sacrifice_summon:
+                        stored_units_key = ctx.player_stored_units_key
+                        if file == "unitSacrificeAI":
+                            stored_units_key = ctx.ai_stored_units_key
                         with open(os.path.join(ctx.game_communication_path, file), 'r') as f:
                             unit_class = f.read()
-                            message = [{"cmd": 'Set', "key": ctx.stored_units_key,
+                            message = [{"cmd": 'Set', "key": stored_units_key,
                                         "default": [],
                                         "want_reply": True,
-                                        "operations": [{"operation": "add", "value": [unit_class]}]}]
+                                        "operations": [{"operation": "add", "value": [unit_class[:64]]}]}]
                             await ctx.send_msgs(message)
                     os.remove(os.path.join(ctx.game_communication_path, file))
-                if file == "unitSummonRequest":
+                if file == "unitSummonRequest" or file == "unitSummonRequestAI":
                     if ctx.has_sacrifice_summon:
+                        stored_units_key = ctx.player_stored_units_key
+                        if file == "unitSummonRequestAI":
+                            stored_units_key = ctx.ai_stored_units_key
                         with open(os.path.join(ctx.game_communication_path, "unitSummonResponse"), 'w') as f:
                             if ctx.stored_units_key in ctx.stored_data:
-                                stored_units = ctx.stored_data[ctx.stored_units_key]
-                                if len(stored_units) != 0:
+                                stored_units = ctx.stored_data[stored_units_key]
+                                if stored_units is not None and len(stored_units) != 0:
                                     summoned_unit = random.choice(stored_units)
-                                    message = [{"cmd": 'Set', "key": ctx.stored_units_key,
+                                    message = [{"cmd": 'Set', "key": stored_units_key,
                                                 "default": [],
                                                 "want_reply": True,
-                                                "operations": [{"operation": "remove", "value": summoned_unit}]}]
+                                                "operations": [{"operation": "remove", "value": summoned_unit[:64]}]}]
                                     await ctx.send_msgs(message)
                                     f.write(summoned_unit)
                     os.remove(os.path.join(ctx.game_communication_path, file))
