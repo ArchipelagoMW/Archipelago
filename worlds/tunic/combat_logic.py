@@ -140,24 +140,14 @@ def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_d
                 # need sword for bosses
                 if data.is_boss:
                     return False
-                equipment.remove("Sword")
-                if has_magic:
-                    if "Magic" not in equipment:
-                        equipment.append("Magic")
-                    # +4 mp pretty much makes up for the lack of sword, at least in Quarry
-                    extra_mp_needed += 4
-                    if stick_bool:
-                        # stick is a backup plan, and doesn't scale well, so let's require a little less
-                        equipment.append("Stick")
-                        extra_att_needed -= 2
-                    else:
-                        extra_mp_needed += 2
-                        extra_att_needed -= 32
-                elif stick_bool:
+                if stick_bool:
+                    equipment.remove("Sword")
                     equipment.append("Stick")
                     # may revise this later based on feedback
                     extra_att_needed += 3
                     extra_def_needed += 2
+                    # this is for when it changes over to the magic-only state if it needs to later
+                    extra_mp_needed += 4
                 else:
                     return False
 
@@ -204,7 +194,7 @@ def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_d
                 equip_list.append("Magic")
             more_modified_stats = AreaStats(modified_stats.att_level - 32, modified_stats.def_level,
                                             modified_stats.potion_level, modified_stats.hp_level,
-                                            modified_stats.sp_level, modified_stats.mp_level + 4,
+                                            modified_stats.sp_level, modified_stats.mp_level + 2,
                                             modified_stats.potion_count, equip_list, data.is_boss)
             if check_combat_reqs("none", state, player, more_modified_stats):
                 return True
@@ -222,7 +212,7 @@ def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> 
     player_att, att_offerings = get_att_level(state, player)
 
     # if you have 2 more attack than needed, we can forego needing mp
-    if data.mp_level > 1:
+    if data.mp_level > 1 and "Magic" in data.equipment:
         if player_att < data.att_level + 2:
             player_mp, mp_offerings = get_mp_level(state, player)
             if player_mp < data.mp_level:
