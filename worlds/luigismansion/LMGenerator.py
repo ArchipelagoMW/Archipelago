@@ -255,7 +255,7 @@ class LuigisMansionRandomizer:
 
                 if required_boo_count == 0:
                     self.jmp_event_info_table.info_file_field_entries = list(filter(lambda info_entry:
-                        not (info_entry["EventNo"] == event_no), self.jmp_event_info_table.info_file_field_entries))
+                        not (info_entry["EventNo"] == int(event_no)), self.jmp_event_info_table.info_file_field_entries))
                     continue
 
                 str_not_enough = "not_enough"
