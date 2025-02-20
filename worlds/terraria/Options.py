@@ -1,5 +1,5 @@
-from Options import Choice, Option, Toggle, DeathLink
-import typing
+from dataclasses import dataclass
+from Options import Choice, DeathLink, PerGameCommonOptions
 
 
 class Goal(Choice):
@@ -49,9 +49,9 @@ class FillExtraChecksWith(Choice):
     default = 1
 
 
-options: typing.Dict[str, type(Option)] = {  # type: ignore
-    "goal": Goal,
-    "achievements": Achievements,
-    "fill_extra_checks_with": FillExtraChecksWith,
-    "death_link": DeathLink,
-}
+@dataclass
+class TerrariaOptions(PerGameCommonOptions):
+    goal: Goal
+    achievements: Achievements
+    fill_extra_checks_with: FillExtraChecksWith
+    death_link: DeathLink

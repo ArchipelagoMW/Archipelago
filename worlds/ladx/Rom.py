@@ -1,4 +1,4 @@
-
+import settings
 import worlds.Files
 import hashlib
 import Utils
@@ -32,7 +32,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options = Utils.get_options()
+    options = settings.get_settings()
     if not file_name:
         file_name = options["ladx_options"]["rom_file"]
     if not os.path.exists(file_name):

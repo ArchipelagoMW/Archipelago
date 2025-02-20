@@ -1,0 +1,119 @@
+{% extends 'pageWrapper.html' %}
+{% import 'weightedOptions/macros.html' as inputs %}
+
+{% block head %}
+    <title>{{ world_name }} Weighted Options</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/weightedOptions/weightedOptions.css") }}" />
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/weightedOptions.js") }}"></script>
+    <noscript>
+        <style>
+            .js-required{
+                display: none;
+            }
+        </style>
+    </noscript>
+{% endblock %}
+
+{% block body %}
+    {% include 'header/'+theme+'Header.html' %}
+    <div id="weighted-options" class="markdown" data-game="{{ world_name }}">
+        <noscript>
+            <div class="js-warning-banner">
+                This page has reduced functionality without JavaScript.
+            </div>
+        </noscript>
+
+        <div id="user-message"></div>
+
+        <div id="weighted-options-header">
+            <h1>{{ world_name }}</h1>
+            <h1>Weighted Options</h1>
+        </div>
+
+        <form id="weighted-options-form" method="post" enctype="application/x-www-form-urlencoded" action="generate-weighted-yaml">
+
+            <p>Weighted options allow you to choose how likely a particular option&apos;s value is to be used in game
+                generation. The higher a value is weighted, the more likely the option will be chosen. Think of them like
+                entries in a raffle.</p>
+
+            <p>Choose the options you would like to play with! You may generate a single-player game from
+                this page, or download an options file you can use to participate in a MultiWorld.</p>
+
+            <p>A list of all games you have generated can be found on the <a href="/user-content">User Content</a>
+                page.</p>
+
+
+            <p><label for="player-name">Please enter your player name. This will appear in-game as you send and receive
+                items if you are playing in a MultiWorld.</label><br />
+                <input id="player-name" placeholder="Player Name" name="name" maxlength="16" />
+            </p>
+
+            <div id="{{ world_name }}-container">
+                {% for group_name, group_options in option_groups.items() %}
+                    <details {% if not start_collapsed[group_name] %}open{% endif %}>
+                        <summary class="h2">{{ group_name }}</summary>
+                        {% for option_name, option in group_options.items() %}
+                            <div class="option-wrapper">
+                                <h4>{{ option.display_name|default(option_name) }}</h4>
+                                <div class="option-description">
+                                    {{ option.__doc__ }}
+                                </div>
+                                {% if issubclass(option, Options.Toggle) %}
+                                    {{ inputs.Toggle(option_name, option) }}
+
+                                {% elif issubclass(option, Options.DefaultOnToggle) %}
+                                    {{ inputs.DefaultOnToggle(option_name, option) }}
+
+                                {% elif issubclass(option, Options.PlandoBosses) %}
+                                    {{ inputs.PlandoBosses(option_name, option) }}
+
+                                {% elif issubclass(option, Options.TextChoice) %}
+                                    {{ inputs.TextChoice(option_name, option) }}
+
+                                {% elif issubclass(option, Options.Choice) %}
+                                    {{ inputs.Choice(option_name, option) }}
+
+                                {% elif issubclass(option, Options.NamedRange) %}
+                                    {{ inputs.NamedRange(option_name, option) }}
+
+                                {% elif issubclass(option, Options.Range) %}
+                                    {{ inputs.Range(option_name, option) }}
+
+                                {% elif issubclass(option, Options.FreeText) %}
+                                    {{ inputs.FreeText(option_name, option) }}
+
+                                {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
+                                    {{ inputs.ItemDict(option_name, option, world) }}
+
+                                {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
+                                    {{ inputs.OptionList(option_name, option) }}
+
+                                {% elif issubclass(option, Options.LocationSet) and option.verify_location_name %}
+                                    {{ inputs.LocationSet(option_name, option, world) }}
+
+                                {% elif issubclass(option, Options.ItemSet) and option.verify_item_name %}
+                                    {{ inputs.ItemSet(option_name, option, world) }}
+
+                                {% elif issubclass(option, Options.OptionSet) and option.valid_keys %}
+                                    {{ inputs.OptionSet(option_name, option) }}
+
+                                {% else %}
+                                    <div class="unsupported-option">
+                                        This option is not supported. Please edit your .yaml file manually.
+                                    </div>
+
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </details>
+                {% endfor %}
+            </div>
+
+            <div id="weighted-options-button-row">
+                <input type="submit" name="intent-export" value="Export Options" />
+                <input type="submit" name="intent-generate" value="Generate Single-Player Game">
+            </div>
+        </form>
+    </div>
+{% endblock %}

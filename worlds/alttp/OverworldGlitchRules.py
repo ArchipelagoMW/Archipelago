@@ -220,26 +220,7 @@ def get_invalid_bunny_revival_dungeons():
     yield 'Sanctuary'
 
 
-def no_logic_rules(world, player):
-    """
-    Add OWG transitions to no logic player's world
-    """
-    create_no_logic_connections(player, world, get_boots_clip_exits_lw(world.mode[player] == 'inverted'))
-    create_no_logic_connections(player, world, get_boots_clip_exits_dw(world.mode[player] == 'inverted', player))
-
-    # Glitched speed drops.
-    create_no_logic_connections(player, world, get_glitched_speed_drops_dw(world.mode[player] == 'inverted'))
-
-    # Mirror clip spots.
-    if world.mode[player] != 'inverted':
-        create_no_logic_connections(player, world, get_mirror_clip_spots_dw())
-        create_no_logic_connections(player, world, get_mirror_offset_spots_dw())
-    else:
-        create_no_logic_connections(player, world, get_mirror_offset_spots_lw(player))
-
-
 def overworld_glitch_connections(world, player):
-
     # Boots-accessible locations.
     create_owg_connections(player, world, get_boots_clip_exits_lw(world.mode[player] == 'inverted'))
     create_owg_connections(player, world, get_boots_clip_exits_dw(world.mode[player] == 'inverted', player))

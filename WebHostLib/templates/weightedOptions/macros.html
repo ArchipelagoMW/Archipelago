@@ -1,0 +1,264 @@
+{% macro Toggle(option_name, option) %}
+    <table>
+        <tbody>
+            {{ RangeRow(option_name, option, "No", "false", False, "true" if option.default else "false") }}
+            {{ RangeRow(option_name, option, "Yes", "true", False, "true" if option.default else "false") }}
+            {{ RandomRow(option_name, option) }}
+        </tbody>
+    </table>
+{% endmacro %}
+
+{% macro DefaultOnToggle(option_name, option) %}
+    <!-- Toggle handles defaults properly, so we just reuse that -->
+    {{ Toggle(option_name, option) }}
+{% endmacro %}
+
+{% macro Choice(option_name, option) %}
+    <table>
+        <tbody>
+            {% for id, name in option.name_lookup.items() %}
+                {% if name != 'random' %}
+                    {% if option.default != 'random' %}
+                        {{ RangeRow(option_name, option, option.get_option_name(id), name, False, name if option.default == id else None) }}
+                    {% else %}
+                        {{ RangeRow(option_name, option, option.get_option_name(id), name) }}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            {{ RandomRow(option_name, option) }}
+        </tbody>
+    </table>
+{% endmacro %}
+
+{% macro Range(option_name, option) %}
+    <div class="hint-text js-required">
+        This is a range option.
+        <br /><br />
+        Accepted values:<br />
+        Normal range: {{ option.range_start }} - {{ option.range_end }}
+        {% if option.special_range_names %}
+            <br /><br />
+            The following values have special meanings, and may fall outside the normal range.
+            <ul>
+                {% for name, value in option.special_range_names.items() %}
+                    <li>{{ value }}: {{ name|replace("_", " ")|title }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <div class="add-option-div">
+            <input type="number" class="range-option-value" data-option="{{ option_name }}" />
+            <button type="button" class="add-range-option-button" data-option="{{ option_name }}">Add</button>
+        </div>
+    </div>
+    <table class="range-rows" data-option="{{ option_name }}">
+        <tbody>
+            {{ RangeRow(option_name, option, option.range_start, option.range_start, True) }}
+            {% if option.default is number and option.range_start < option.default < option.range_end %}
+                {{ RangeRow(option_name, option, option.default, option.default, True) }}
+            {% endif %}
+            {{ RangeRow(option_name, option, option.range_end, option.range_end, True) }}
+            {{ RandomRows(option_name, option) }}
+        </tbody>
+    </table>
+{% endmacro %}
+
+{% macro NamedRange(option_name, option) %}
+    <!-- Range is able to properly handle NamedDRange options -->
+    {{ Range(option_name, option) }}
+{% endmacro %}
+
+{% macro FreeText(option_name, option) %}
+    <div class="hint-text">
+        This option allows custom values only. Please enter your desired values below.
+        <div class="custom-value-wrapper">
+            <input class="custom-value" data-option="{{ option_name }}" placeholder="Custom Value" />
+            <button type="button" data-option="{{ option_name }}">Add</button>
+        </div>
+        <table>
+            <tbody>
+                {% if option.default %}
+                    {{ RangeRow(option_name, option, option.default, option.default) }}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+{% endmacro %}
+
+{% macro TextChoice(option_name, option) %}
+    <div class="hint-text">
+        Custom values are also allowed for this option. To create one, enter it into the input box below.
+        <div class="custom-value-wrapper">
+            <input class="custom-value" data-option="{{ option_name }}" placeholder="Custom Value" />
+            <button type="button" data-option="{{ option_name }}">Add</button>
+        </div>
+    </div>
+    <table>
+        <tbody>
+            {% for id, name in option.name_lookup.items() %}
+                {% if name != 'random' %}
+                    {% if option.default != 'random' %}
+                        {{ RangeRow(option_name, option, option.get_option_name(id), name, False, name if option.default == id else None) }}
+                    {% else %}
+                        {{ RangeRow(option_name, option, option.get_option_name(id), name) }}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            {{ RandomRow(option_name, option) }}
+        </tbody>
+    </table>
+{% endmacro %}
+
+{% macro PlandoBosses(option_name, option) %}
+    <!-- PlandoBosses is handled by its parent, TextChoice -->
+    {{ TextChoice(option_name, option) }}
+{% endmacro %}
+
+{% macro ItemDict(option_name, option, world) %}
+    <div class="dict-container">
+        {% for item_name in (option.valid_keys|sort if (option.valid_keys|length > 0) else world.item_names|sort) %}
+            <div class="dict-entry">
+                <label for="{{ option_name }}-{{ item_name }}-qty">{{ item_name }}</label>
+                <input
+                    type="number"
+                    id="{{ option_name }}-{{ item_name }}-qty"
+                    name="{{ option_name }}||{{ item_name }}"
+                    value="{{ option.default[item_name] if item_name in option.default else "0" }}"
+                />
+            </div>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro OptionList(option_name, option) %}
+    <div class="list-container">
+        {% for key in (option.valid_keys if option.valid_keys is ordered else option.valid_keys|sort) %}
+            <div class="list-entry">
+                <input
+                    type="checkbox"
+                    id="{{ option_name }}-{{ key }}"
+                    name="{{ option_name }}||{{ key }}"
+                    value="1"
+                    {{ "checked" if key in option.default }}
+                />
+                <label for="{{ option_name }}-{{ key }}">
+                    {{ key }}
+                </label>
+            </div>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro LocationSet(option_name, option, world) %}
+    <div class="set-container">
+        {% for group_name in world.location_name_groups.keys()|sort %}
+            {% if group_name != "Everywhere" %}
+                <div class="set-entry">
+                    <input type="checkbox" id="{{ option_name }}-{{ group_name }}" name="{{ option_name }}||{{ group_name }}" value="1" {{ "checked" if group_name in option.default }} />
+                    <label for="{{ option_name }}-{{ group_name }}">{{ group_name }}</label>
+                </div>
+            {% endif %}
+        {% endfor %}
+        {% if world.location_name_groups.keys()|length > 1 %}
+            <div class="divider">&nbsp;</div>
+        {% endif %}
+        {% for location_name in (option.valid_keys|sort if (option.valid_keys|length > 0) else world.location_names|sort) %}
+            <div class="set-entry">
+                <input type="checkbox" id="{{ option_name }}-{{ location_name }}" name="{{ option_name }}||{{ location_name }}" value="1" {{ "checked" if location_name in option.default }} />
+                <label for="{{ option_name }}-{{ location_name }}">{{ location_name }}</label>
+            </div>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro ItemSet(option_name, option, world) %}
+    <div class="set-container">
+        {% for group_name in world.item_name_groups.keys()|sort %}
+            {% if group_name != "Everything" %}
+                <div class="set-entry">
+                    <input type="checkbox" id="{{ option_name }}-{{ group_name }}" name="{{ option_name }}||{{ group_name }}" value="1" {{ "checked" if group_name in option.default }} />
+                    <label for="{{ option_name }}-{{ group_name }}">{{ group_name }}</label>
+                </div>
+            {% endif %}
+        {% endfor %}
+        {% if world.item_name_groups.keys()|length > 1 %}
+            <div class="set-divider">&nbsp;</div>
+        {% endif %}
+        {% for item_name in (option.valid_keys|sort if (option.valid_keys|length > 0) else world.item_names|sort) %}
+            <div class="set-entry">
+                <input type="checkbox" id="{{ option_name }}-{{ item_name }}" name="{{ option_name }}||{{ item_name }}" value="1" {{ "checked" if item_name in option.default }} />
+                <label for="{{ option_name }}-{{ item_name }}">{{ item_name }}</label>
+            </div>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro OptionSet(option_name, option) %}
+    <div class="set-container">
+        {% for key in (option.valid_keys if option.valid_keys is ordered else option.valid_keys|sort) %}
+            <div class="set-entry">
+                <input type="checkbox" id="{{ option_name }}-{{ key }}" name="{{ option_name }}||{{ key }}" value="1" {{ "checked" if key in option.default }} />
+                <label for="{{ option_name }}-{{ key }}">{{ key }}</label>
+            </div>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro OptionTitleTd(option_name, value) %}
+    <td class="td-left">
+        <label for="{{ option_name }}||{{ value }}">
+            {{ option.display_name|default(option_name) }}
+        </label>
+    </td>
+{% endmacro %}
+
+{% macro RandomRow(option_name, option, extra_column=False) %}
+    {{ RangeRow(option_name, option, "Random", "random") }}
+{% endmacro %}
+
+{% macro RandomRows(option_name, option, extra_column=False) %}
+    {% for key, value in {"Random": "random", "Random (Low)": "random-low", "Random (Middle)": "random-middle", "Random (High)": "random-high"}.items() %}
+        {{ RangeRow(option_name, option, key, value) }}
+    {% endfor %}
+{% endmacro %}
+
+{% macro RangeRow(option_name, option, display_value, value, can_delete=False, default_override=None) %}
+    <tr data-row="{{ option_name }}-{{ value }}-row" data-option-name="{{ option_name }}" data-value="{{ value }}">
+        <td class="td-left">
+            <label for="{{ option_name }}||{{ value }}">
+                {{ display_value }}
+            </label>
+        </td>
+        <td class="td-middle">
+            <input
+                type="range"
+                id="{{ option_name }}||{{ value }}"
+                name="{{ option_name }}||{{ value }}"
+                min="0"
+                max="50"
+                {% if option.default == value or default_override == value %}
+                    value="25"
+                {% else %}
+                    value="0"
+                {% endif %}
+            />
+        </td>
+        <td class="td-right">
+            <span id="{{ option_name }}||{{ value }}-value">
+                {% if option.default == value or default_override == value %}
+                    25
+                {% else %}
+                    0
+                {% endif %}
+            </span>
+        </td>
+        {% if can_delete %}
+            <td>
+                <span class="range-option-delete js-required" data-target="{{ option_name }}-{{ value }}-row">
+                    ❌
+                </span>
+            </td>
+        {% else %}
+            <td><!-- This td empty on purpose --></td>
+        {% endif %}
+    </tr>
+{% endmacro %}

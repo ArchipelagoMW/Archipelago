@@ -29,6 +29,11 @@ class kill_switch:
         cls._to_kill.append(value)
 
     @classmethod
+    def kill(cls, value):
+        logger.info(f"kill_switch: Process cleanup for 1 process")
+        value._clean(verbose=False)
+
+    @classmethod
     def kill_all(cls):
         logger.info(f"kill_switch: Process cleanup for {len(cls._to_kill)} processes")
         for p in cls._to_kill:
@@ -116,7 +121,7 @@ class SC2Process:
     async def __aexit__(self, *args):
         logger.exception("async exit")
         await self._close_connection()
-        kill_switch.kill_all()
+        kill_switch.kill(self)
         signal.signal(signal.SIGINT, signal.SIG_DFL)
 
     @property
