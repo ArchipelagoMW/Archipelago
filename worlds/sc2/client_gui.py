@@ -224,6 +224,14 @@ class SC2Manager(GameManager):
 
         multi_campaign_layout_height = 0
 
+        # Fetching IDs of all the locations with hints  
+        self.hints_to_highlight = []
+        hints = self.ctx.stored_data.get(f"_read_hints_{self.ctx.team}_{self.ctx.slot}")
+        if hints:
+            for hint in hints:
+                if hint['finding_player'] == self.ctx.slot and not hint['found']:
+                    self.hints_to_highlight.append(hint['location'])
+
         MISSION_BUTTON_HEIGHT = 50
         MISSION_BUTTON_PADDING = 6
         for campaign_idx, campaign in enumerate(self.ctx.custom_mission_order):
@@ -418,6 +426,11 @@ class SC2Manager(GameManager):
                 tooltip += "\n- ".join(plando_locations)
 
         tooltip = f"[b]{text}[/b]\n" + tooltip
+
+        #If the mission has any hints pointing to a check, add asterisks around the mission name
+        if any(tuple(x in self.hints_to_highlight for x in self.ctx.locations_for_mission_id(mission_id))):
+            text = "* " + text + " *"
+
         return text, tooltip
         
 
