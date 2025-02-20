@@ -169,8 +169,7 @@ class LMCommandProcessor(ClientCommandProcessor):
     def _cmd_deathlink(self):
         """Toggle deathlink from client. Overrides default setting."""
         if isinstance(self.ctx, LMContext):
-            death_link_enabled = not "DeathLink" in self.ctx.tags
-            Utils.async_start(self.ctx.update_death_link(death_link_enabled), name="Update Deathlink")
+            Utils.async_start(self.ctx.update_death_link(not "DeathLink" in self.ctx.tags), name="Update Deathlink")
 
 
 class LMContext(CommonContext):
@@ -204,6 +203,9 @@ class LMContext(CommonContext):
         self.rank_req = -1
         self.last_not_ingame = time.time()
         self.boosanity = False
+        self.boo_washroom_count = None
+        self.boo_balcony_count = None
+        self.boo_final_count = None
 
         # Used for handling various weird item checks.
         self.last_map_id = 0
@@ -252,9 +254,8 @@ class LMContext(CommonContext):
             self.boo_washroom_count = int(args["slot_data"]["washroom boo count"])
             self.boo_balcony_count = int(args["slot_data"]["balcony boo count"])
             self.boo_final_count = int(args["slot_data"]["final boo count"])
-            death_link_enabled = bool(args["slot_data"]["death_link"])
             if "death_link" in args["slot_data"]:
-                Utils.async_start(self.update_death_link(death_link_enabled))
+                Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
 
     def on_deathlink(self, data: dict[str, Any]):
         """
@@ -747,7 +748,6 @@ def main(output_data: Optional[str] = None, connect=None, password=None):
         await ctx.shutdown()
 
         if ctx.dolphin_sync_task:
-            await asyncio.sleep(3)
             await ctx.dolphin_sync_task
 
     import colorama
