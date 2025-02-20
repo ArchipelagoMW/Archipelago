@@ -1095,26 +1095,24 @@ def build_sphinx_docs(stable: bool = False) -> None:
             for line_index in range(len(lines)):
                 line = lines[line_index]
                 # hyperlink
-                if "](" in line:
-                    start = line.find("(") + 1
-                    end = line.find(")")
-                    link = line[start:end]
-                    # probably an external link
-                    if "https://" in link and "ArchipelagoMW" not in link:
-                        pass
-                    # direct link to a module
-                    elif ".py" in link and "https://" not in link:
-                        link = link.split("/")[-1].split(".py")[0].lower()
-                    # probably direct link to a file
-                    elif "https://" in link and "main" in link:
-                        link = link.split("/main")[1].lower()
-                    # don't handle images since those should still work if done correctly
-                    elif "img" in line:
-                        pass
-                    # should just be other direct doc links
-                    else:
-                        link = link.split("/")[-1].split(".")[0].lower().replace(" ", "%20")
-                    lines[line_index] = line[:start] + link + line[end:]
+                if "](" not in line:
+                    continue
+                start = line.find("(") + 1
+                end = line.find(")")
+                link = line[start:end]
+                # probably an external link
+                if "https://" in link and "ArchipelagoMW" not in link:
+                    pass
+                # direct link to a module
+                elif ".py" in link and "https://" not in link:
+                    link = link.split("/")[-1].split(".py")[0].lower()
+                # don't handle images since those should still work if done correctly
+                elif "img" in link:
+                    pass
+                # should just be other direct doc links
+                else:
+                    link = link.split("/")[-1].split(".")[0].lower().replace(" ", "%20")
+                lines[line_index] = line[:start] + link + line[end:]
             with open(os.path.join(sphinx_input, file.name), "w") as f:
                 f.writelines(lines)
         elif "img" in file.name:
