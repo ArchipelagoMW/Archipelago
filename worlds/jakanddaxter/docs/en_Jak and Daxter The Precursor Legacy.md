@@ -25,8 +25,8 @@
 
 ## Where is the options page
 
-The [Player Options Page](../player-options) for this game contains 
-all the options you need to configure and export a config file.
+The [Player Options Page](../player-options) for this game contains all the options you need to configure and export 
+a config file.
 
 At this time, there are several caveats and restrictions:
 - Power Cells and Scout Flies are **always** randomized.
@@ -222,10 +222,7 @@ progression items and prevent you (and others) from completing the run.
 
 ## How does the HUD work
 The game's normal HUD shows you how many power cells, precursor orbs, and scout flies you currently have. But if you 
-hold `L2 or R2` and press `Up or Down` on the D-Pad, the HUD will show you alternate modes. In all modes, the last 
-sent/received item and the player who sent/received it will be displayed below the Power Cell icon. This will help you 
-quickly reference information about which locations you've checked, newly received items and who to thank for them, etc. 
-Here is how the HUD works:
+hold `L2 or R2` and press a direction on the D-Pad, the HUD will show you alternate modes. Here is how the HUD works:
 
 | HUD Mode      | Button Combo                 | What You're Seeing                | Text Message                          |
 |---------------|------------------------------|-----------------------------------|---------------------------------------|
@@ -234,6 +231,11 @@ Here is how the HUD works:
 | Global        | `L2 or R2` + `Up`            | Locations Checked (in the game)   | `SENT {Other Item} TO {Other Player}` |
 |               |                              |                                   |                                       |
 | (In Any Mode) |                              | (If you sent an Item to Yourself) | `FOUND {Your Item}`                   |
+
+In all modes, the last 3 sent/received items and the player who sent/received it will be displayed in the 
+bottom left corner. This will help you quickly reference information about newly received or sent items. Items in blue 
+are Progression (or non-Jak items), in green are Filler, and in red are Traps. You can turn this off by navigating 
+to `Options`, then `Archipelago Options`, then set `Item Messages` to `Off`.
 
 ## I think I found a bug where should I report it
 Depending on the nature of the bug, there are a couple of different options.
