@@ -1,5 +1,28 @@
 # Jak And Daxter (ArchipelaGOAL)
 
+## FAQ
+- [Where is the Options page?](#where-is-the-options-page?)
+- [What does randomization do to this game?](#what-does-randomization-do-to-this-game?)
+- [What are the Special Checks and how do I check them?](#what-are-the-special-checks-and-how-do-i-check-them?)
+- [What are the Special Items and what do they unlock?](#what-are-the-special-items-and-what-do-they-unlock?)
+- [How do I know which Special Items I have?](#how-do-i-know-which-special-items-i-have?)
+- [What is the goal of the game once randomized?](#what-is-the-goal-of-the-game-once-randomized?)
+- [What happens when I pick up or receive a Power Cell?](#what-happens-when-i-pick-up-or-receive-a-power-cell?)
+- [What happens when I pick up or receive a Scout Fly?](#what-happens-when-i-pick-up-or-receive-a-scout-fly?)
+- [How do I check the 'Free 7 Scout Flies' Power Cell?](#how-do-i-check-the-'free-7-scout-flies'-power-cell?)
+- [What does Deathlink do?](#what-does-deathlink-do?)
+- [What does Move Randomizer do?](#what-does-move-randomizer-do?)
+- [What are the movement options in Move Randomizer?](#what-are-the-movement-options-in-move-randomizer?)
+- [How do I know which moves I have?](#how-do-i-know-which-moves-i-have?)
+- [What does Orbsanity do?](#what-does-orbsanity-do?)
+- [What do Traps do?](#what-do-traps-do?)
+- [What kind of Traps are there?](#what-kind-of-traps-are-there?)
+- [I got soft-locked and can't leave, how do I get out of here?](#i-got-soft-locked-and-can't-leave,-how-do-i-get-out-of-here?)
+- [Why did I get an Option Error when generating a seed, and how do I fix it?](#why-did-i-get-an-option-error-when-generating-a-seed,-and-how-do-i-fix-it?)
+- [How do I check my player options in-game?](#how-do-i-check-my-player-options-in-game?)
+- [How does the HUD work? What are the alternate modes? (I didn't know there were alternate modes!)](#how-does-the-hud-work?-what-are-the-alternate-modes?-(i-didn't-know-there-were-alternate-modes!))
+- [I think I found a bug, where should I report it?](#i-think-i-found-a-bug,-where-should-i-report-it?)
+
 ## Where is the options page?
 
 The [Player Options Page](../player-options) for this game contains 
@@ -83,7 +106,7 @@ When you receive a scout fly, your total scout fly count will tick up by 1. The 
 scout flies you received per-region, and this number will have ticked up by 1 for the region that scout fly belongs to. 
 Finally, your text client will inform you where you received the scout fly from, and which one it is.
 
-## How do I check the "Free 7 Scout Flies" power cell?
+## How do I check the 'Free 7 Scout Flies' power cell?
 You will automatically check this power cell when you _receive_ your 7th scout fly, NOT when you _pick up_ your 7th
 scout fly. So in short:
 
@@ -177,6 +200,17 @@ too frustrating, you can lower their duration by navigating to `Options`, then `
 Open the game's menu, navigate to `Options`, then `Archipelago Options`, then `Warp To Home`. 
 Selecting this option will ask if you want to be teleported to Geyser Rock. From there, you can teleport back 
 to the nearest sage's hut to continue your journey.
+
+## Why did I get an Option Error when generating a seed, and how do I fix it?
+Depending on your player YAML, Jak and Daxter can have a lot of items, which can sometimes be overwhelming or 
+disruptive to multiworld games. There are also options that are mutually incompatible with each other, even in a solo
+game. To prevent the game from disrupting multiworlds, or generating an impossible solo seed, some options have
+Singleplayer and Multiplayer Minimums and Maximums, collectively called "friendly limits."
+
+If you're generating a solo game, or your multiworld host agrees to your request, you can override those limits by
+editing the `host.yaml`. In the Archipelago Launcher, click `Open host.yaml`, then search for `jakanddaxter_options`,
+then search for `enforce_friendly_options`, then change this value from `true` to `false`. Disabling this allows for 
+more disruptive and challenging options, but it may cause seed generation to fail. **Use at your own risk!**
 
 ## How do I check my player options in-game?
 When you connect your text client to the Archipelago Server, the server will tell the game what options were chosen
