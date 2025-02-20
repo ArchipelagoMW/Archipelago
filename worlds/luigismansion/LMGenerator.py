@@ -423,6 +423,10 @@ class LuigisMansionRandomizer:
         self.dol.data.seek(0x311660)
         self.dol.data.write(struct.pack(str(len(lm_player_name)) + "s", lm_player_name.encode()))
 
+        king_boo_health = int(self.output_data["Options"]["king_boo_health"])
+        self.dol.data.seek(0x399228)
+        self.dol.data.write(struct.pack(">H", king_boo_health))
+
     def update_custom_event(self, event_number: str, check_local_folder: bool, non_local_str="",
                             custom_made: bool = False, replace_old_csv: bool = False):
         # TODO Update custom events to remove any camera files or anything else related.
