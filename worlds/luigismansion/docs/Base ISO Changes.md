@@ -22,3 +22,4 @@
 - (Optional) Randomize music
 - (Optional) Deathlink (Can be toggled in client)
 - (Optional) Weights for all filler items
+- (Optional) King Boo's health now configurable by YAML option
