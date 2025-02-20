@@ -41,6 +41,7 @@ class Starcraft2WebWorld(WebWorld):
     )
 
     tutorials = [setup_en, setup_fr]
+    game_info_languages = ["en", "fr"]
 
 
 class SC2World(World):
