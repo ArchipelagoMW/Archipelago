@@ -1,4 +1,4 @@
-# Archipelago Unit Testing API Guide
+# Archipelago Unit Testing API
 
 This document covers some of the generic tests available using Archipelago's unit testing system, as well as some basic
 steps on how to write your own.
@@ -6,7 +6,7 @@ steps on how to write your own.
 ## Generic Tests
 
 Some generic tests are run on every World to ensure basic functionality with default options. These basic tests can be
-found in the [general test directory](https://github.com/ArchipelagoMW/Archipelago/tree/main/test/general).
+found in the [general test directory](/test/general).
 
 ## Defining World Tests
 
@@ -17,7 +17,7 @@ for your world tests can be created in this file that you can then import into o
 ### WorldTestBase
 
 In order to test basic functionality of varying options, as well as to test specific edge cases or that certain
-interactions in the world interact as expected, you will want to use the [WorldTestBase](WorldTestBase). This class
+interactions in the world interact as expected, you will want to use the [WorldTestBase](/test/bases.py). This class
 comes with the basics for test setup as well as a few preloaded tests that most worlds might want to check on varying
 options combinations.
 
@@ -73,11 +73,11 @@ When tests are run, this class will create a multiworld with a single player hav
 generic tests, as well as the new custom test. Each test method definition will create its own separate solo multiworld
 that will be cleaned up after. If you don't want to run the generic tests on a base, `run_default_tests` can be
 overridden. For more information on what methods are available to your class, check the
-[WorldTestBase definition](WorldTestBase).
+[WorldTestBase definition](/test/bases.py#L104).
 
 #### Alternatives to WorldTestBase
 
-Unit tests can also be created using [TestBase](TestBase) or
+Unit tests can also be created using [TestBase](/test/bases.py#L14) or
 [unittest.TestCase](https://docs.python.org/3/library/unittest.html#unittest.TestCase) depending on your use case. These
 may be useful for generating a multiworld under very specific constraints without using the generic world setup, or for
 testing portions of your code that can be tested without relying on a multiworld to be created first.

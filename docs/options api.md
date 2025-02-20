@@ -1,9 +1,9 @@
-# Archipelago Options API Guide
+# Archipelago Options API
 
 This document covers some of the generic options available using Archipelago's options handling system.
 
 For more information on where these options go in your world please refer to:
- - [world api.md](world%20api.md)
+ - [world api.md](/docs/world%20api.md)
 
 Archipelago will be abbreviated as "AP" from now on.
 

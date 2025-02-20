@@ -45,5 +45,5 @@ which details what is required to implement support for a game, and has tips on 
 If you want to merge a new game into the main Archipelago repo, please make sure to read the responsibilities as a
 [world maintainer](/docs/world%20maintainer.md).
 
-For other questions, feel free to explore the [main documentation folder](/docs), and ask us questions in the
+For other questions, feel free to explore the [main documentation folder](https://github.com/ArchipelagoMW/Archipelago/tree/main/docs), and ask us questions in the
 #ap-world-dev channel of the [Discord](https://archipelago.gg/discord).

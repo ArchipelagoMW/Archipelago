@@ -50,7 +50,7 @@ Recommended steps
 
 ## macOS
 
-Refer to [Guide to Run Archipelago from Source Code on macOS](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/generic/docs/mac_en.md).
+Refer to [Guide to Run Archipelago from Source Code on macOS](../worlds/generic/docs/mac_en.md).
 
 
 ## Optional: A Link to the Past Enemizer
