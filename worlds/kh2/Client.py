@@ -30,7 +30,7 @@ class KH2CommandProcessor(ClientCommandProcessor):
         if notification_type in {"Puzzle", "Info", "None"}:
             temp_client_settings = self.ctx.client_settings["receive_popup_type"]
             self.ctx.client_settings["receive_popup_type"] = notification_type
-            self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings["receive_popup_type"]}")
+            self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings['receive_popup_type']}")
         else:
             self.output(f"Unknown receive notification type:{notification_type}. Valid Inputs: Puzzle, Info, None")
 
@@ -44,7 +44,7 @@ class KH2CommandProcessor(ClientCommandProcessor):
             temp_client_settings = self.ctx.client_settings["receive_popup_type"]
             self.ctx.client_settings["send_popup_type"] = notification_type
             # doing it in this order to make sure it actually changes
-            self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings["send_popup_type"]}")
+            self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings['send_popup_type']}")
         else:
             self.output(f"Unknown send notification type:{notification_type}. Valid Inputs: Puzzle, Info, None")
 
@@ -53,7 +53,7 @@ class KH2CommandProcessor(ClientCommandProcessor):
         if priority in {"PlayerName", "ItemName"}:
             temp_client_settings = self.ctx.client_settings["send_truncate_first"]
             self.ctx.client_settings["send_truncate_first"] = priority
-            self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings["send_truncate_first"]}")
+            self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings['send_truncate_first']}")
         else:
             self.output(f"Unknown priority: {priority}. Valid Inputs: PlayerName, ItemName")
 
@@ -62,7 +62,7 @@ class KH2CommandProcessor(ClientCommandProcessor):
         if priority in {"PlayerName", "ItemName"}:
             temp_client_settings = self.ctx.client_settings["receive_truncate_first"]
             self.ctx.client_settings["receive_truncate_first"] = priority
-            self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings["receive_truncate_first"]}")
+            self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings['receive_truncate_first']}")
         else:
             self.output(f"Unknown priority: {priority}. Valid Inputs: PlayerName, ItemName")
 
