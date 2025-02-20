@@ -26,8 +26,15 @@ class MMBN3Settings(settings.Group):
         description = "MMBN3 ROM File"
         md5s = [MMBN3DeltaPatch.hash]
 
+    class RomStart(str):
+        """
+        Set this to false to never autostart a rom (such as after patching),
+                    true  for operating system default program
+        Alternatively, a path to a program to open the .z64 file with
+        """
+
     rom_file: RomFile = RomFile(RomFile.copy_to)
-    rom_start: bool = True
+    rom_start: typing.Union[RomStart, bool] = True
 
 
 class MMBN3Web(WebWorld):
