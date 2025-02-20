@@ -62,6 +62,7 @@
 030062AA abilitiesinthislevel
 030062AB lastcollecteditemindex
 030062AC lightningtraptimer
+030062AD gstoredmultiworlddiamonds
 030062AF vblkstatus
 030062B0 queuedfullhealthitem
 030062B0 queuedjunk
@@ -83,6 +84,6 @@
 087904B9 goldentreasuresneeded
 087904BA trapbehavior
 087904BB diamondshuffle
-087941E0 minigamecointiles
-087946B8 multiworldstringdump
+08794288 minigamecointiles
+08794760 multiworldstringdump
 

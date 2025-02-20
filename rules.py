@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from . import WL4World
 
 
-__all__ = ['Requirement', 'has', 'has_all', 'has_any', 'has_treasures', 'option', 'difficulty', 'not_difficulty', 'logic']
+__all__ = ['Requirement', 'has', 'has_all', 'has_any', 'has_treasures', 'option', 'difficulty', 'not_difficulty', 'advanced_logic']
 
 
 RequiredItem = Union[str, Tuple[str, int]]
