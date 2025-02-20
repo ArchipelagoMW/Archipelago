@@ -126,3 +126,17 @@ class TestImplemented(unittest.TestCase):
                 self.assertEqual(len(multiworld.itempool), 0)
                 self.assertEqual(len(multiworld.get_locations()), 0)
                 self.assertEqual(len(multiworld.get_regions()), 0)
+
+    def test_completion_condition_not_changed_after_set_rules(self):
+        """Test that completion conditions are done after `set_rules`"""
+        gen_steps = ("generate_early", "create_regions", "create_items", "set_rules")
+        additional_steps = ("connect_entrances", "generate_basic", "pre_fill")
+        for game_name, world_type in AutoWorldRegister.world_types.items():
+            with self.subTest("Game", game=game_name):
+                multiworld = setup_solo_multiworld(world_type, gen_steps)
+                for step in additional_steps:
+                    with self.subTest("step", step=step):
+                        previous_completion_condition = multiworld.completion_condition.copy()
+                        call_all(multiworld, step)
+                        self.assertEqual(previous_completion_condition, multiworld.completion_condition,
+                                         f"{game_name} modified completion condition during {step}")
