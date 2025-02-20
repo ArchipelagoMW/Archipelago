@@ -195,14 +195,6 @@ class LuigisMansionRandomizer:
 
     def save_randomized_iso(self):
         random.seed(self.output_data["Seed"])
-        self.update_maptwo_jmp_tables()
-
-        # Save the map two file changes
-        # As mentioned before, these szp files need to be compressed again in order to be properly read by Dolphin/GC.
-        # If you forget this, you will get an Invalid read error on a certain memory address typically.
-        self.map_two_file.save_changes()
-        self.gcm.changed_files["files/Map/map2.szp"] = Yay0.compress(self.map_two_file.data)
-
         # Save the changes of main.dol
         self.update_dol_offsets()
         self.dol.save_changes()
@@ -254,27 +246,66 @@ class LuigisMansionRandomizer:
             boo_list_events = ["16", "47", "96"]
             for event_no in boo_list_events:
                 lines = get_data(__name__, "data/custom_events/event" + event_no + ".txt").decode('utf-8')
-                required_boo_count = 0
-                match event_no:
-                    case "16":
-                        required_boo_count = final_boo_count
-                    case "47":
-                        required_boo_count = washroom_boo_count
-                    case "96":
-                        required_boo_count = balcony_boo_count
+                if event_no == "16":
+                    required_boo_count = final_boo_count
+                elif event_no == "47":
+                    required_boo_count = washroom_boo_count
+                else:
+                    required_boo_count = balcony_boo_count
+
+                if required_boo_count == 0:
+                    self.jmp_event_info_table.info_file_field_entries = list(filter(lambda info_entry:
+                        not (info_entry["EventNo"] == event_no), self.jmp_event_info_table.info_file_field_entries))
+                    continue
 
                 str_not_enough = "not_enough"
                 str_boo_captured = "boos_captured"
 
-                for i in range(0, 5):
-                    curr_boo_count = 0 if required_boo_count - (25 - (5 * i)) <= 0 else required_boo_count - (
-                            25 - (5 * i))
-                    lines = lines.replace(f"{{Count{str(i)}}}",
-                                          str(required_boo_count) if i == 4 else str(curr_boo_count))
-                    if curr_boo_count < required_boo_count:
-                        lines = lines.replace(f"{{Case{str(i)}}}", str_not_enough)
-                    else:
-                        lines = lines.replace(f"{{Case{str(i)}}}", str_boo_captured)
+                match required_boo_count:
+                    case 1:
+                        lines = lines.replace("{Count0}", "0")
+                        lines = lines.replace("{Count1}", str(required_boo_count))
+                        lines = lines.replace("{Count2}", str(required_boo_count))
+                        lines = lines.replace("{Count3}", str(required_boo_count))
+                        lines = lines.replace("{Count4}", str(required_boo_count))
+                        lines = lines.replace("{Case0}", str_not_enough)
+                        lines = lines.replace("{Case1}", str_boo_captured)
+                        lines = lines.replace("{Case2}", str_boo_captured)
+                        lines = lines.replace("{Case3}", str_boo_captured)
+                        lines = lines.replace("{Case4}", str_boo_captured)
+                    case 2:
+                        lines = lines.replace("{Count0}", "0")
+                        lines = lines.replace("{Count1}", "1")
+                        lines = lines.replace("{Count2}", str(required_boo_count))
+                        lines = lines.replace("{Count3}", str(required_boo_count))
+                        lines = lines.replace("{Count4}", str(required_boo_count))
+                        lines = lines.replace("{Case0}", str_not_enough)
+                        lines = lines.replace("{Case1}", str_not_enough)
+                        lines = lines.replace("{Case2}", str_boo_captured)
+                        lines = lines.replace("{Case3}", str_boo_captured)
+                        lines = lines.replace("{Case4}", str_boo_captured)
+                    case 3:
+                        lines = lines.replace("{Count0}", "0")
+                        lines = lines.replace("{Count1}", "1")
+                        lines = lines.replace("{Count2}", "2")
+                        lines = lines.replace("{Count3}", str(required_boo_count))
+                        lines = lines.replace("{Count4}", str(required_boo_count))
+                        lines = lines.replace("{Case0}", str_not_enough)
+                        lines = lines.replace("{Case1}", str_not_enough)
+                        lines = lines.replace("{Case2}", str_not_enough)
+                        lines = lines.replace("{Case3}", str_boo_captured)
+                        lines = lines.replace("{Case4}", str_boo_captured)
+                    case _:
+                        lines = lines.replace("{Count0}", str(required_boo_count-4))
+                        lines = lines.replace("{Count1}", str(required_boo_count-3))
+                        lines = lines.replace("{Count2}", str(required_boo_count-2))
+                        lines = lines.replace("{Count3}", str(required_boo_count-1))
+                        lines = lines.replace("{Count4}", str(required_boo_count))
+                        lines = lines.replace("{Case0}", str_not_enough)
+                        lines = lines.replace("{Case1}", str_not_enough)
+                        lines = lines.replace("{Case2}", str_not_enough)
+                        lines = lines.replace("{Case3}", str_not_enough)
+                        lines = lines.replace("{Case4}", str_boo_captured)
 
                 self.update_custom_event(event_no, False, lines)
 
@@ -363,6 +394,14 @@ class LuigisMansionRandomizer:
                       info_files.name == name_to_find)).data = updated_event
                 event_arc.save_changes()
                 self.gcm.changed_files[lm_event.file_path] = Yay0.compress(event_arc.data)
+
+        self.update_maptwo_jmp_tables()
+
+        # Save the map two file changes
+        # As mentioned before, these szp files need to be compressed again in order to be properly read by Dolphin/GC.
+        # If you forget this, you will get an Invalid read error on a certain memory address typically.
+        self.map_two_file.save_changes()
+        self.gcm.changed_files["files/Map/map2.szp"] = Yay0.compress(self.map_two_file.data)
 
         # Generator function to combine all necessary files into an ISO file.
         # Returned information is ignored. # Todo Maybe there is something better to put here?
