@@ -267,6 +267,7 @@ class RequirementsSettings:
         self.attack_pols_voice = OR(BOMB, MAGIC_ROD, AND(OCARINA, SONG1)) # BOW works, but isn't as reliable as it needs 4 arrows.
         self.attack_wizrobe = OR(BOMB, MAGIC_ROD) # BOW works, but isn't as reliable as it needs 4 arrows.
         self.stun_wizrobe = OR(BOOMERANG, MAGIC_POWDER, HOOKSHOT)
+        self.stun_mask_mimic = OR(BOOMERANG, HOOKSHOT)
         self.rear_attack = OR(SWORD, BOMB) # mimic
         self.rear_attack_range = OR(MAGIC_ROD, BOW) # mimic
         self.fire = OR(MAGIC_POWDER, MAGIC_ROD) # torches
@@ -275,17 +276,19 @@ class RequirementsSettings:
 
         self.throw_pot = POWER_BRACELET # grab pots to kill enemies
         self.throw_enemy = POWER_BRACELET # grab stunned enemies to kill enemies
+        self.midair_turn = OR(SWORD, BOW, MAGIC_ROD) # while in air, can be used to turn around
         self.tight_jump = FEATHER # jumps that are possible but are tight to make it across
-        self.super_jump = AND(FEATHER, OR(SWORD, BOW, MAGIC_ROD)) # standard superjump for glitch logic
-        self.super_jump_boots = AND(PEGASUS_BOOTS, FEATHER, OR(SWORD, BOW, MAGIC_ROD)) # boots dash into wall for unclipped superjump
+        self.super_jump = AND(FEATHER, self.midair_turn) # standard superjump for glitch logic
+        self.super_jump_boots = AND(PEGASUS_BOOTS, FEATHER, self.midair_turn) # boots dash into wall for unclipped superjump
         self.super_jump_feather = FEATHER # using only feather to align and jump off walls
         self.super_jump_sword = AND(FEATHER, SWORD) # unclipped superjumps
-        self.super_jump_rooster = AND(ROOSTER, OR(SWORD, BOW, MAGIC_ROD)) # use rooster instead of feather to superjump off walls (only where rooster is allowed to be used)
+        self.super_jump_rooster = AND(ROOSTER, self.midair_turn) # use rooster instead of feather to superjump off walls (only where rooster is allowed to be used)
         self.shaq_jump = FEATHER # use interactable objects (keyblocks / pushable blocks)
         self.boots_superhop = AND(PEGASUS_BOOTS, OR(MAGIC_ROD, BOW)) # dash into walls, pause, unpause and use weapon + hold direction away from wall. Only works in peg rooms
         self.boots_roosterhop = AND(PEGASUS_BOOTS, ROOSTER) # dash towards a wall, pick up the rooster and throw it away from the wall before hitting the wall to get a superjump
         self.jesus_jump = FEATHER # pause on the frame of hitting liquid (water / lava) to be able to jump again on unpause
         self.jesus_buffer = PEGASUS_BOOTS # use a boots bonk to get on top of liquid (water / lava), then use buffers to get into positions
+        self.jesus_buffer_itemless = True # Use buffers to get into positions after getting on top of liquids without needing boots or feather or rooster
         self.damage_boost_special = options.hardmode == "none" # use damage to cross pits / get through forced barriers without needing an enemy that can be eaten by bowwow
         self.damage_boost = (options.bowwow == "normal") & (options.hardmode == "none")  # Use damage to cross pits / get through forced barriers
         self.sideways_block_push = True # wall clip pushable block, get against the edge and push block to move it sideways
@@ -310,6 +313,7 @@ class RequirementsSettings:
         self.text_clip = False & options.nagmessages # trigger a text box on keyblock or rock or obstacle while holding diagonal to clip into the side. Removed from logic for now
         self.jesus_rooster = AND(ROOSTER, options.hardmode != "oracle") # when transitioning on top of water, buffer the rooster out of sq menu to spawn it. Then do an unbuffered pickup of the rooster as soon as you spawn again to pick it up
         self.zoomerang = AND(PEGASUS_BOOTS, FEATHER, BOOMERANG) # after starting a boots dash, buffer boomerang (on b), feather and the direction you're dashing in to get boosted in certain directions
+        self.lava_swim = AND(FLIPPERS, SWORD) # when transitioning on top of lava, slash your sword to transition into the lava instead of on top of it
 
         self.boss_requirements = [
             SWORD,  # D1 boss
