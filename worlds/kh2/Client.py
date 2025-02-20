@@ -28,7 +28,9 @@ class KH2CommandProcessor(ClientCommandProcessor):
         None: Toggle off any of the receiving notifications.
         """
         if notification_type in {"Puzzle", "Info", "None"}:
+            temp_client_settings = self.ctx.client_settings["receive_popup_type"]
             self.ctx.client_settings["receive_popup_type"] = notification_type
+            self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings["receive_popup_type"]}")
         else:
             self.output(f"Unknown receive notification type:{notification_type}. Valid Inputs: Puzzle, Info, None")
 
@@ -39,21 +41,28 @@ class KH2CommandProcessor(ClientCommandProcessor):
         None: Toggle off any of the receiving notifications.
         """
         if notification_type in {"Puzzle", "Info", "None"}:
+            temp_client_settings = self.ctx.client_settings["receive_popup_type"]
             self.ctx.client_settings["send_popup_type"] = notification_type
+            # doing it in this order to make sure it actually changes
+            self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings["send_popup_type"]}")
         else:
             self.output(f"Unknown send notification type:{notification_type}. Valid Inputs: Puzzle, Info, None")
 
     def _cmd_change_send_truncation_priority(self, priority=""):
         """Change what gets truncated first when using puzzle piece notifications. Playername min is 5 and ItemName is 15"""
         if priority in {"PlayerName", "ItemName"}:
+            temp_client_settings = self.ctx.client_settings["send_truncate_first"]
             self.ctx.client_settings["send_truncate_first"] = priority
+            self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings["send_truncate_first"]}")
         else:
             self.output(f"Unknown priority: {priority}. Valid Inputs: PlayerName, ItemName")
 
     def _cmd_change_receive_truncation_priority(self, priority=""):
         """Change what gets truncated first when using puzzle piece notifications. Playername min is 5 and ItemName is 15"""
         if priority in {"PlayerName", "ItemName"}:
+            temp_client_settings = self.ctx.client_settings["receive_truncate_first"]
             self.ctx.client_settings["receive_truncate_first"] = priority
+            self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings["receive_truncate_first"]}")
         else:
             self.output(f"Unknown priority: {priority}. Valid Inputs: PlayerName, ItemName")
 
@@ -207,6 +216,7 @@ class KH2Context(CommonContext):
         self.Journal = 0x743260
         self.Shop = 0x743350
         self.Slot1 = 0x2A23018
+        self.InfoBarPointer = 0xABE2A8
 
         self.kh2_game_version = None  # can be egs or steam
 
@@ -295,7 +305,7 @@ class KH2Context(CommonContext):
         if self.kh2seedname not in {None} and self.auth not in {None}:
             with open(self.kh2_seed_save_path_join, 'w') as f:
                 f.write(json.dumps(self.kh2_seed_save, indent=4))
-        with open(self.kh2_client_settings_join,'w') as f2:
+        with open(self.kh2_client_settings_join, 'w') as f2:
             f2.write(json.dumps(self.client_settings, indent=4))
         await super(KH2Context, self).shutdown()
 
@@ -316,6 +326,9 @@ class KH2Context(CommonContext):
 
     def kh2_write_int(self, address, value):
         self.kh2.write_int(self.kh2.base_address + address, value)
+
+    def kh2_read_longlong(self, address):
+        return self.kh2.read_longlong(self.kh2.base_address + address)
 
     def kh2_read_string(self, address, length):
         return self.kh2.read_string(self.kh2.base_address + address, length)
@@ -522,10 +535,14 @@ class KH2Context(CommonContext):
                 if receiverID != self.slot and senderID == self.slot:  #item is sent to other players
                     itemName = self.item_names[networkItem.item]
                     playerName = self.player_names[receiverID]
-                    if self.client_settings["send_popup_type"] == "Info":  # no restrictions on size here
-                        self.queued_info_popup += [f"Sent {itemName} to {playerName}"]
+                    totalLength = len(itemName) + len(playerName)
+                    if self.client_settings["send_popup_type"] == "Info":
+                        if totalLength > 90:
+                            temp_length = f"Sent {itemName} to {playerName}"
+                            self.queued_info_popup += [temp_length[:98]]  #slice it to be 98
+                        else:
+                            self.queued_info_popup += [f"Sent {itemName} to {playerName}"]
                     else:  #sanitize ItemName and reciever name
-                        totalLength = len(itemName) + len(playerName)
                         while totalLength > 22:
                             if self.client_settings["send_truncate_first"] == "PlayerName":
                                 if len(playerName) > 5:
@@ -999,12 +1016,13 @@ class KH2Context(CommonContext):
             logger.info("line 840")
 
     async def displayInfoTextinGame(self, string_to_display):
-        if self.kh2_read_byte(0x800000) == 0:
+        infoBarPointerRef = self.kh2_read_longlong(self.InfoBarPointer)
+        if self.kh2_read_byte(0x800000) == 0 and infoBarPointerRef != 0 and self.kh2.read_int(infoBarPointerRef + 0x48) == 0:
             self.kh2_write_byte(0x800000, 1)  # displaying info bar popup
             displayed_string = self.to_khscii(string_to_display)
             self.kh2_write_bytes(0x800004, displayed_string)
             self.queued_info_popup.remove(string_to_display)
-            await asyncio.sleep(2)
+            await asyncio.sleep(0.5)
 
     async def displayPuzzlePieceTextinGame(self, string_to_display):
         if self.kh2_read_byte(0x800000) == 0:
@@ -1026,6 +1044,7 @@ class KH2Context(CommonContext):
                     self.Slot1 = 0x2A23598
                     self.Journal = 0x7434E0
                     self.Shop = 0x7435D0
+                    self.InfoBarPointer = 0xABE828
                 elif self.kh2_read_string(0x9A9330, 4) == "KH2J":
                     self.kh2_game_version = "EGS"
                 else:
@@ -1150,7 +1169,7 @@ async def kh2_watcher(ctx: KH2Context):
 
                 if ctx.queued_puzzle_popup:
                     await asyncio.create_task(ctx.displayPuzzlePieceTextinGame(ctx.queued_puzzle_popup[0]))  # send the num 1 index of whats in the queue
-#
+                #
                 if ctx.queued_info_popup:
                     await asyncio.create_task(ctx.displayInfoTextinGame(ctx.queued_info_popup[0]))
 
