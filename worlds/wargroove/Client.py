@@ -89,7 +89,9 @@ class WargrooveContext(CommonContext):
     starting_groove_multiplier: float
     has_death_link: bool = False
     has_sacrifice_summon: bool = True
-    stored_units_key: str = ""
+    player_stored_units_key: str = ""
+    ai_stored_units_key: str = ""
+    max_stored_units: int = 1000
     faction_item_ids = {
         'Starter': 0,
         'Cherrystone': 52025,
@@ -107,52 +109,25 @@ class WargrooveContext(CommonContext):
         "archer",
         "ballista",
         "balloon",
-        "barracks",
-        "city",
-        "commander_caesar",
-        "commander_darkmercia",
-        "commander_elodie",
-        "commander_emeric",
-        "commander_greenfinger",
-        "commander_koji",
-        "commander_mercia",
-        "commander_mercival",
-        "commander_nuru",
-        "commander_ragna",
-        "commander_ryota",
-        "commander_sedge",
-        "commander_sigrid",
-        "commander_tenri",
-        "commander_valder",
-        "crystal",
         "dog",
         "dragon",
-        "drone",
-        "garrison",
-        "gate",
-        "ghost_mercival",
         "giant",
         "harpoonship",
         "harpy",
-        "hq",
         "knight",
         "mage",
         "merman",
-        "port",
         "rifleman",
         "soldier",
         "spearman",
         "thief",
         "thief_with_gold",
-        "tower",
         "travelboat",
         "trebuchet",
         "turtle",
         "villager",
-        "vine",
         "wagon",
         "warship",
-        "water_city",
         "witch",
     }
 
@@ -286,8 +261,11 @@ class WargrooveContext(CommonContext):
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     pass
 
-            self.stored_units_key = f"wargroove_units_{self.team}"
-            self.set_notify(self.stored_units_key)
+            self.player_stored_units_key = f"wargroove_player_units_{self.team}"
+            self.set_notify(self.player_stored_units_key)
+            self.ai_stored_units_key = f"wargroove_ai_units_{self.team}"
+            self.set_notify(self.ai_stored_units_key)
+
             self.update_commander_data()
             self.ui.update_tracker()
 
@@ -525,7 +503,6 @@ class WargrooveContext(CommonContext):
 
 
 async def game_watcher(ctx: WargrooveContext):
-    from worlds.wargroove.Locations import location_table
     while not ctx.exit_event.is_set():
         if ctx.syncing == True:
             sync_msg = [{'cmd': 'Sync'}]
@@ -551,28 +528,36 @@ async def game_watcher(ctx: WargrooveContext):
                 if file.find("victory") > -1:
                     victory = True
                     os.remove(os.path.join(ctx.game_communication_path, file))
-                if file == "unitSacrifice":
+                if file == "unitSacrifice" or file == "unitSacrificeAI":
                     if ctx.has_sacrifice_summon:
+                        stored_units_key = ctx.player_stored_units_key
+                        if file == "unitSacrificeAI":
+                            stored_units_key = ctx.ai_stored_units_key
                         with open(os.path.join(ctx.game_communication_path, file), 'r') as f:
                             unit_class = f.read()
-                            message = [{"cmd": 'Set', "key": ctx.stored_units_key,
+                            message = [{"cmd": 'Set', "key": stored_units_key,
                                         "default": [],
                                         "want_reply": True,
-                                        "operations": [{"operation": "add", "value": [unit_class]}]}]
+                                        "operations": [{"operation": "add", "value": [unit_class[:64]]}]}]
                             await ctx.send_msgs(message)
                     os.remove(os.path.join(ctx.game_communication_path, file))
-                if file == "unitSummonRequest":
+                if file == "unitSummonRequestAI" or file == "unitSummonRequest":
                     if ctx.has_sacrifice_summon:
+                        stored_units_key = ctx.player_stored_units_key
+                        if file == "unitSummonRequestAI":
+                            stored_units_key = ctx.ai_stored_units_key
                         with open(os.path.join(ctx.game_communication_path, "unitSummonResponse"), 'w') as f:
-                            if ctx.stored_units_key in ctx.stored_data:
-                                stored_units = ctx.stored_data[ctx.stored_units_key]
+                            if stored_units_key in ctx.stored_data:
+                                stored_units = ctx.stored_data[stored_units_key]
+                                if stored_units is None:
+                                    stored_units = []
                                 wg1_stored_units = [unit for unit in stored_units if unit in ctx.unit_classes]
                                 if len(wg1_stored_units) != 0:
                                     summoned_unit = random.choice(wg1_stored_units)
-                                    message = [{"cmd": 'Set', "key": ctx.stored_units_key,
+                                    message = [{"cmd": 'Set', "key": stored_units_key,
                                                 "default": [],
                                                 "want_reply": True,
-                                                "operations": [{"operation": "remove", "value": summoned_unit}]}]
+                                                "operations": [{"operation": "remove", "value": summoned_unit[:64]}]}]
                                     await ctx.send_msgs(message)
                                     f.write(summoned_unit)
                     os.remove(os.path.join(ctx.game_communication_path, file))

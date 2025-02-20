@@ -1,37 +1,6 @@
-from typing import Dict, Optional
 from dataclasses import dataclass
-
-from schema import Schema, And, Use
-
 from Options import Choice, Range, PerGameCommonOptions, DeathLink, StartInventoryPool, OptionDict, OptionGroup
 
-unit_trap_table: Dict[str, int] = {
-    "Soldier": 0,
-    "Dog": 0,
-    "Spearman": 0,
-    "Wagon": 0,
-    "Mage": 0,
-    "Archer": 0,
-    "Knight": 0,
-    "Ballista": 0,
-    "Trebuchet": 0,
-    "Golem": 0,
-    "Harpy": 0,
-    "Witch": 0,
-    "Dragon": 0,
-    "Balloon": 0,
-    "Barge": 0,
-    "Merfolk": 0,
-    "Turtle": 0,
-    "Harpoon Ship": 0,
-    "Warship": 0,
-    "Thief": 0,
-    "Rifleman": 0
-}
-
-unit_trap_schema = Schema(
-    {key: And(int, lambda value: 0 <= value <= 10)} for key in unit_trap_table.keys()
-)
 
 class IncomeBoost(Range):
     """How much extra income the player gets per turn per boost received."""
@@ -82,7 +51,7 @@ class PlayerSummonLimit(Range):
 
 class AISacrificeLimit(Range):
     """How many times the AI can sacrifice a unit at the Stronghold per level attempt.
-    Sacrificed units are stored in the multiworld for other players to summon."""
+    Sacrificed units are stored in the multiworld for other AIs to summon."""
     display_name = "AI Sacrifice Limit"
     range_start = 0
     range_end = 5
@@ -91,7 +60,7 @@ class AISacrificeLimit(Range):
 
 class AISummonLimit(Range):
     """How many times the AI can summon a unit at the Stronghold per level attempt.
-    Summoned units are from the multiworld which were sacrificed by other players.
+    Summoned units are from the multiworld which were sacrificed by other AIs.
     AI summoning can be overwhelming, use /sacrifice_summon in the client if a level becomes impossible."""
     display_name = "AI Summon Limit"
     range_start = 0
