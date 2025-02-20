@@ -30,6 +30,13 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         os.makedirs(args.outputpath, exist_ok=True)
         output_path.cached_path = args.outputpath
 
+    games = set(args.game.values())
+    worlds.ensure_worlds_loaded(games)
+    # Prevent additional world loading as a safeguard.
+    # Additional worlds must not be loaded after a CollectionState has been created because worlds may add init_mixins
+    # and copy_mixins to the CollectionState class.
+    worlds.world_loading_enabled = False
+
     start = time.perf_counter()
     # initialize the multiworld
     multiworld = MultiWorld(args.multi)

@@ -1,9 +1,18 @@
+from typing_extensions import override
 from unittest import TestCase
 
 from worlds.AutoWorld import AutoWorldRegister
+from worlds import ensure_worlds_loaded
 
 
 class TestNameGroups(TestCase):
+
+    @classmethod
+    @override
+    def setUpClass(cls):
+        super().setUpClass()
+        ensure_worlds_loaded()
+
     def test_item_name_groups_not_empty(self) -> None:
         """
         Test that there are no empty item name groups, which is likely a bug.
