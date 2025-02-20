@@ -626,6 +626,12 @@ class LMContext(CommonContext):
                     item_val = dme.read_byte(0x803D339B)
                     dme.write_byte(0x803D339B, (item_val | (1 << 6)))
 
+        # Always reset the Boo's captured RAM byte back to 0, regardless of the situation.
+        for lm_boo in BOO_ITEM_TABLE.keys():
+            lm_boo_item = BOO_ITEM_TABLE[lm_boo]
+            boo_caught = dme.read_byte(lm_boo_item.ram_addr)
+            dme.write_byte(lm_boo_item.ram_addr, boo_caught & ~(1 << lm_boo_item.itembit))
+
         return
 
     # TODO remove this in favor of 0.6.0's implementation.
