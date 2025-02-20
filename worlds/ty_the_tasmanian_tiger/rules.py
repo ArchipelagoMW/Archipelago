@@ -1,36 +1,18 @@
 import enum
 from typing import Dict
 
-from BaseClasses import MultiWorld
+from BaseClasses import MultiWorld, CollectionState
 from worlds.ty_the_tasmanian_tiger.regions import Ty1LevelCode, ty1_levels, ty1_levels_short
 
 
-def has_progressive_rang(world, state, level: int):
-    return state.has("Progressive Rang", world.player, level)
+vanilla_boss_map = [7, 19, 15]
 
 
-def has_stopwatch(world, state, level: Ty1LevelCode):
-    return state.has("Stopwatch - " + ty1_levels[level], world.player)
-
-
-def has_all_bilbies(world, state, level: Ty1LevelCode):
-    return state.has("Bilby - " + ty1_levels[level], world.player, 5)
-
-
-def can_reach_bilbies(world, state, level: Ty1LevelCode):
-    return (state.can_reach_location(ty1_levels_short[level] + " - Bilby Dad", world.player) and
-            state.can_reach_location(ty1_levels_short[level] + " - Bilby Mum", world.player) and
-            state.can_reach_location(ty1_levels_short[level] + " - Bilby Boy", world.player) and
-            state.can_reach_location(ty1_levels_short[level] + " - Bilby Girl", world.player) and
-            state.can_reach_location(ty1_levels_short[level] + " - Bilby Grandma", world.player))
-
-
-def can_reach_cogs(world, state, level: Ty1LevelCode):
-    result = True
-    for i in range(10):
-        if not state.can_reach_location(ty1_levels_short[level] + " - Golden Cog " + str(i + 1), world.player):
-            result = False
-    return result
+thegg_type_names = {
+    0: "Fire Thunder Egg",
+    1: "Ice Thunder Egg",
+    2: "Air Thunder Egg"
+}
 
 
 ty1_rangs: Dict[int, str] = {
@@ -62,62 +44,80 @@ class TheggType(enum.Enum):
     AIR_THEGG = 2
 
 
-thegg_type_names = {
-    0: "Fire Thunder Egg",
-    1: "Ice Thunder Egg",
-    2: "Air Thunder Egg"
-}
+def has_progressive_rang(world, state: CollectionState, level: int):
+    return state.has("Progressive Rang", world.player, level)
 
 
-def has_level(world, state, level_index: int):
+def has_stopwatch(world, state: CollectionState, level: Ty1LevelCode):
+    return state.has(f"Stopwatch - {ty1_levels[level]}", world.player)
+
+
+def has_all_bilbies(world, state: CollectionState, level: Ty1LevelCode):
+    return state.has(f"Bilby - {ty1_levels[level]}", world.player, 5)
+
+
+def can_reach_bilbies(world, state: CollectionState, level: Ty1LevelCode):
+    return (state.can_reach_location(f"{ty1_levels_short[level]} - Bilby Dad", world.player) and
+            state.can_reach_location(f"{ty1_levels_short[level]} - Bilby Mum", world.player) and
+            state.can_reach_location(f"{ty1_levels_short[level]} - Bilby Boy", world.player) and
+            state.can_reach_location(f"{ty1_levels_short[level]} - Bilby Girl", world.player) and
+            state.can_reach_location(f"{ty1_levels_short[level]} - Bilby Grandma", world.player))
+
+
+def can_reach_cogs(world, state: CollectionState, level: Ty1LevelCode):
+    result = True
+    for i in range(10):
+        if not state.can_reach_location(f"{ty1_levels_short[level]} - Golden Cog {str(i + 1)}", world.player):
+            result = False
+    return result
+
+
+def has_level(world, state: CollectionState, level_index: int):
     if world.options.level_unlock_style == 0:
         return True
     if world.options.level_unlock_style == 2:
         if level_index == 9:
             return (state.has("Progressive Level", world.player, 9)
                     or state.has("Portal - Cass' Pass", world.player))
-        portal_name = "Portal - " + ty1_levels[Ty1LevelCode(world.portal_map[level_index])]
+        portal_name = f"Portal - {ty1_levels[Ty1LevelCode(world.portal_map[level_index])]}"
         return (state.has("Progressive Level", world.player, level_index)
                 or state.has(portal_name, world.player))
     if world.options.level_unlock_style == 1:
         if level_index == 9:
             return (state.has("Progressive Level", world.player, 12)
                     or state.has("Portal - Cass' Pass", world.player))
-        portal_name = "Portal - " + ty1_levels[Ty1LevelCode(world.portal_map[level_index])]
-        prog_count = level_index + (level_index > 2) + (level_index > 5)
+        portal_name: str = f"Portal - {ty1_levels[Ty1LevelCode(world.portal_map[level_index])]}"
+        prog_count: int = level_index + (level_index > 2) + (level_index > 5)
         return (state.has("Progressive Level", world.player, prog_count)
                 or state.has(portal_name, world.player))
 
 
-vanilla_boss_map = [7, 19, 15]
-
-
-def has_boss(world, state, level_index: int):
+def has_boss(world, state: CollectionState, level_index: int):
     if world.options.level_unlock_style != 1:
         return state.has(thegg_type_names[level_index], world.player, world.options.thegg_gating)
-    portal_name = "Portal - " + ty1_levels[Ty1LevelCode(vanilla_boss_map[level_index])]
+    portal_name = f"Portal - {ty1_levels[Ty1LevelCode(vanilla_boss_map[level_index])]}"
     if world.options.progressive_level:
         return state.has("Progressive Level", world.player, 3 + (4 * level_index))
     return state.has(portal_name, world.player)
 
 
-def has_rang(world, state, rang_id: int):
+def has_rang(world, state: CollectionState, rang_id: int):
     return state.has(ty1_rangs[rang_id], world.player) or has_progressive_rang(world, state, rang_id)
 
 
-def can_go_water(world, state):
+def can_go_water(world, state: CollectionState):
     return has_rang(world, state, Ty1Rang.SWIM) or has_rang(world, state, Ty1Rang.DIVE)
 
 
-def can_ice_swim(world, state):
+def can_ice_swim(world, state: CollectionState):
     return can_go_water(world, state) and has_rang(world, state, Ty1Rang.FROSTYRANG)
 
 
-def can_throw_water(world, state):
+def can_throw_water(world, state: CollectionState):
     return can_go_water(world, state) and has_rang(world, state, Ty1Rang.AQUARANG)
 
 
-def has_theggs(world, state, thegg_type: TheggType, amount: int):
+def has_theggs(world, state: CollectionState, thegg_type: TheggType, amount: int):
     if thegg_type == TheggType.FIRE_THEGG:
         return state.has("Fire Thunder Egg", world.player, amount)
     if thegg_type == TheggType.ICE_THEGG:
@@ -131,7 +131,8 @@ def get_rules(world):
         "locations": {
             "Two Up - Collect 300 Opals":
                 lambda state:
-                    state.can_reach_region("Two Up - Upper Area", world.player) and state.can_reach_region("Two Up - End Area", world.player),
+                    state.can_reach_region("Two Up - Upper Area", world.player)
+                    and state.can_reach_region("Two Up - End Area", world.player),
             "Two Up - Time Attack":
                 lambda state:
                     has_stopwatch(world, state, Ty1LevelCode.A1) if world.options.gate_time_attacks
@@ -219,7 +220,9 @@ def get_rules(world):
             "RMtS - Geyser Hop":
                 lambda state:
                     has_rang(world, state, Ty1Rang.SECOND_RANG)
-                    or (world.options.logic_difficulty == 1 and (can_ice_swim(world, state) or has_rang(world, state, Ty1Rang.DOOMERANG))),
+                    or (world.options.logic_difficulty == 1
+                        and (can_ice_swim(world, state)
+                             or has_rang(world, state, Ty1Rang.DOOMERANG))),
             "RMtS - Volcanic Panic":
                 lambda state:
                     has_rang(world, state, Ty1Rang.SECOND_RANG) or
@@ -298,7 +301,9 @@ def get_rules(world):
             "BotRT - Bilby Mum":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FLAMERANG)
-                    or (world.options.logic_difficulty == 1 and has_rang(world, state, Ty1Rang.SECOND_RANG) and can_go_water(world, state)),
+                    or (world.options.logic_difficulty == 1
+                        and has_rang(world, state, Ty1Rang.SECOND_RANG)
+                        and can_go_water(world, state)),
             "Snow Worries - Bilby Mum":
                 lambda state:
                     (has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player))
@@ -444,6 +449,33 @@ def get_rules(world):
                 lambda state:
                     has_rang(world, state, Ty1Rang.DIVE) and
                     state.can_reach_location("RMtS - Race Rex", world.player),
+            "Two Up - Extra Life 2":
+                lambda state:
+                    can_go_water(world, state),
+            "Crikey's Cove - Extra Life 1":
+                lambda state:
+                    can_go_water(world, state),
+            "RMtS - Extra Life 2":
+                lambda state:
+                    can_go_water(world, state),
+            "Cass' Pass - Extra Life 1":
+                lambda state:
+                    can_go_water(world, state),
+            "Cass' Pass - Extra Life 2":
+                lambda state:
+                    can_go_water(world, state),
+            "Cass' Crest - Extra Life 1":
+                lambda state:
+                    has_rang(world, state, Ty1Rang.SECOND_RANG),
+            "Cass' Crest - Extra Life 2":
+                lambda state:
+                    has_rang(world, state, Ty1Rang.SECOND_RANG),
+            "Cass' Crest - Extra Life 4":
+                lambda state:
+                    can_go_water(world, state),
+            "Cass' Crest - Extra Life 5":
+                lambda state:
+                    has_rang(world, state, Ty1Rang.SECOND_RANG),
             "Beat Bull":
                 lambda state:
                     state.can_reach_location("Frog Talisman", world.player),
@@ -602,6 +634,8 @@ def get_rules(world):
 
 
 def set_rules(world):
+    from . import Ty1World
+    world: Ty1World
     rules_lookup = get_rules(world)
     for entrance_name, rule in rules_lookup["entrances"].items():
         try:

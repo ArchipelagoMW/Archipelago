@@ -1,5 +1,5 @@
 import typing
-from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
+from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, Location
 from Options import OptionError
 from worlds.AutoWorld import WebWorld, World
 
@@ -65,6 +65,8 @@ class Ty1World(World):
             "GateTimeAttacks": self.options.gate_time_attacks.value,
             "PortalMap": self.portal_map,
             "Scalesanity": self.options.scalesanity.value,
+            "Signsanity": self.options.signsanity.value,
+            "Lifesanity": self.options.lifesanity.value,
             "Framesanity": self.options.framesanity.value,
             "AdvancedLogic": self.options.logic_difficulty.value,
             "DeathLink": self.options.death_link.value
@@ -77,7 +79,8 @@ class Ty1World(World):
         empty_thegg_checks = 72 - (self.options.thegg_gating * 3)
         frame_count = 127 if self.options.framesanity == 0 else 9 if self.options.framesanity == 1 else 0
         scale_count = 25 if self.options.scalesanity else 0
-        excess_checks = 18 - (0 if self.options.level_unlock_style == 0 else 12 if self.options.level_unlock_style == 1 else 9)
+        portal_items = 0 if self.options.level_unlock_style == 0 else 12 if self.options.level_unlock_style == 1 else 9
+        excess_checks = 18 - portal_items
         excess_checks += frame_count + scale_count + empty_cog_checks + empty_thegg_checks
         total_unbalanced = extra_thegg_count + extra_cog_count
         if extra_thegg_count + extra_cog_count > excess_checks:
@@ -115,22 +118,22 @@ class Ty1World(World):
         create_items(self.multiworld, self.options, self.player)
 
     def create_event(self, region_name: str, event_name: str) -> None:
-        region = self.multiworld.get_region(region_name, self.player)
-        loc = Ty1Location(self.player, event_name, None, region)
+        region: Region = self.multiworld.get_region(region_name, self.player)
+        loc: Ty1Location = Ty1Location(self.player, event_name, None, region)
         loc.place_locked_item(Ty1Item(event_name, ItemClassification.progression, None, self.player))
         region.locations.append(loc)
 
     def create_regions(self):
         create_regions(self.multiworld, self.options, self.player)
         place_locked_items(self.multiworld, self.player)
-        connect_all_regions(self.multiworld, self.player, self.options, self.portal_map)
-
-    def set_rules(self):
         self.create_event("Bull's Pen", "Beat Bull")
         self.create_event("Crikey's Cove", "Beat Crikey")
         self.create_event("Fluffy's Fjord", "Beat Fluffy")
         self.create_event("Cass' Crest", "Beat Shadow")
         self.create_event("Final Battle", "Beat Cass")
+        connect_all_regions(self.multiworld, self.player, self.options, self.portal_map)
+
+    def set_rules(self):
         set_rules(self)
 
     def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
@@ -138,36 +141,29 @@ class Ty1World(World):
 
         for key, data in ty1_location_table.items():
             try:
-                location = self.multiworld.get_location(key, self.player)
+                location: Location = self.multiworld.get_location(key, self.player)
             except KeyError:
                 continue
             region_name: str = data.region
-            containing_level_code = self.region_name_to_code.get(region_name)
-            if containing_level_code is None:
-                continue
-
-            if containing_level_code not in ty1_core_levels:
+            containing_level_code: Ty1LevelCode = self.region_name_to_code.get(region_name)
+            if containing_level_code is None or containing_level_code not in ty1_core_levels:
                 continue
 
             try:
-                level_index = self.portal_map.index(containing_level_code.value)
+                level_index: int = self.portal_map.index(containing_level_code.value)
             except ValueError:
                 continue
 
-            portal_code = level_index + 4
+            portal_code: int = level_index + 4
             if level_index > 5:
-                portal_code = portal_code  + 2
+                portal_code = portal_code + 2
             elif level_index > 2:
                 portal_code = portal_code + 1
 
             try:
-                portal_name = ty1_levels_short[Ty1LevelCode(portal_code)]
+                portal_name: str = ty1_levels_short[Ty1LevelCode(portal_code)]
             except ValueError:
                 continue
 
             new_hint_data[location.address] = f"{portal_name} Portal"
             hint_data[self.player] = new_hint_data
-
-    def write_spoiler_header(self, spoiler_handle: typing.TextIO):
-        spoiler_handle.write("Boss Costs: %i\n" % self.options.thegg_gating)
-        spoiler_handle.write("Technorang Costs: %i\n" % self.options.cog_gating)

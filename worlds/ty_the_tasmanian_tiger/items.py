@@ -1,6 +1,6 @@
 from typing import Dict, Optional
 
-from BaseClasses import Item, ItemClassification, MultiWorld
+from BaseClasses import Item, ItemClassification, MultiWorld, Location
 from worlds.ty_the_tasmanian_tiger.regions import ty1_levels, Ty1LevelCode
 from worlds.ty_the_tasmanian_tiger.options import Ty1Options
 
@@ -17,6 +17,14 @@ def get_junk_item_names(rand, k: int) -> str:
     return junk
 
 
+def get_trap_item_names(rand, k: int) -> str:
+    traps = rand.choices(
+        list(trap_weights.keys()),
+        weights=list(trap_weights.values()),
+        k=k)
+    return traps
+
+
 def create_single(name: str, world: MultiWorld, player: int, item_class: ItemClassification = None):
     classification = ty1_item_table[name].classification if item_class is None else item_class
     world.worlds[player].itempool.append(Ty1Item(name, classification, ty1_item_table[name].code, player))
@@ -28,18 +36,25 @@ def create_multiple(name: str, amount: int, world: MultiWorld, player: int, item
 
 
 def create_items(world: MultiWorld, options: Ty1Options, player: int):
-
-    total_location_count = len(world.get_unfilled_locations(player))
+    total_location_count: int = len(world.get_unfilled_locations(player))
 
     # Generic
-    create_multiple("Fire Thunder Egg", options.thegg_gating.value - 3, world, player, ItemClassification.progression_skip_balancing)
-    create_multiple("Fire Thunder Egg", options.extra_theggs.value, world, player, ItemClassification.filler)
-    create_multiple("Ice Thunder Egg", options.thegg_gating.value - 3, world, player, ItemClassification.progression_skip_balancing)
-    create_multiple("Ice Thunder Egg", options.extra_theggs.value, world, player, ItemClassification.filler)
-    create_multiple("Air Thunder Egg", options.thegg_gating.value - 3, world, player, ItemClassification.progression_skip_balancing)
-    create_multiple("Air Thunder Egg", options.extra_theggs.value, world, player, ItemClassification.filler)
-    create_multiple("Golden Cog", options.cog_gating.value * 6, world, player, ItemClassification.progression_skip_balancing)
-    create_multiple("Golden Cog", options.extra_cogs.value, world, player, ItemClassification.filler)
+    create_multiple("Fire Thunder Egg",
+                    options.thegg_gating.value - 3, world, player, ItemClassification.progression_skip_balancing)
+    create_multiple("Fire Thunder Egg",
+                    options.extra_theggs.value, world, player, ItemClassification.filler)
+    create_multiple("Ice Thunder Egg",
+                    options.thegg_gating.value - 3, world, player, ItemClassification.progression_skip_balancing)
+    create_multiple("Ice Thunder Egg",
+                    options.extra_theggs.value, world, player, ItemClassification.filler)
+    create_multiple("Air Thunder Egg",
+                    options.thegg_gating.value - 3, world, player, ItemClassification.progression_skip_balancing)
+    create_multiple("Air Thunder Egg",
+                    options.extra_theggs.value, world, player, ItemClassification.filler)
+    create_multiple("Golden Cog",
+                    options.cog_gating.value * 6, world, player, ItemClassification.progression_skip_balancing)
+    create_multiple("Golden Cog",
+                    options.extra_cogs.value, world, player, ItemClassification.filler)
 
     # Bilbies
     create_multiple("Bilby - Two Up", 5, world, player)
@@ -81,7 +96,8 @@ def create_items(world: MultiWorld, options: Ty1Options, player: int):
         create_single("Extra Health", world, player)
     create_single("Zoomerang", world, player)
     create_single("Multirang", world, player)
-    create_single("Infrarang", world, player, ItemClassification.progression if options.frames_require_infra else ItemClassification.useful)
+    create_single("Infrarang", world, player,
+                  ItemClassification.progression if options.frames_require_infra else ItemClassification.useful)
     create_single("Megarang", world, player)
     create_single("Kaboomarang", world, player)
     create_single("Chronorang", world, player)
@@ -101,7 +117,7 @@ def create_items(world: MultiWorld, options: Ty1Options, player: int):
             for levelIndex, portal_value in enumerate(world.worlds[player].portal_map):
                 if levelIndex == 0:
                     continue
-                portal_name = "Portal - " + ty1_levels[Ty1LevelCode(portal_value)]
+                portal_name = f"Portal - {ty1_levels[Ty1LevelCode(portal_value)]}"
                 create_single(portal_name, world, player)
             create_single("Portal - Cass' Pass", world, player)
             if options.level_unlock_style == 1:
@@ -110,40 +126,46 @@ def create_items(world: MultiWorld, options: Ty1Options, player: int):
                 create_single("Portal - Fluffy's Fjord", world, player)
 
     # Junk
-    junk = get_junk_item_names(world.random, total_location_count - len(world.worlds[player].itempool))
+    remaining_locations: int = total_location_count - len(world.worlds[player].itempool)
+    trap_count: int = round(remaining_locations * options.trap_fill_percentage / 100)
+    junk_count: int = remaining_locations - trap_count
+    junk = get_junk_item_names(world.random, junk_count)
     for name in junk:
+        create_single(name, world, player)
+    traps = get_trap_item_names(world.random, trap_count)
+    for name in traps:
         create_single(name, world, player)
     world.itempool += world.worlds[player].itempool
 
 
 def place_locked_items(world: MultiWorld, player: int):
     classification = ItemClassification.progression_skip_balancing
-    a1_bilby_loc = world.get_location("Two Up - Bilby Completion", player)
-    a1_bilby_thegg = Ty1Item("Fire Thunder Egg", classification, 0x8750000, player)
+    a1_bilby_loc: Location = world.get_location("Two Up - Bilby Completion", player)
+    a1_bilby_thegg: Ty1Item = Ty1Item("Fire Thunder Egg", classification, 0x8750000, player)
     a1_bilby_loc.place_locked_item(a1_bilby_thegg)
-    a2_bilby_loc = world.get_location("WitP - Bilby Completion", player)
-    a2_bilby_thegg = Ty1Item("Fire Thunder Egg", classification, 0x8750000, player)
+    a2_bilby_loc: Location = world.get_location("WitP - Bilby Completion", player)
+    a2_bilby_thegg: Ty1Item = Ty1Item("Fire Thunder Egg", classification, 0x8750000, player)
     a2_bilby_loc.place_locked_item(a2_bilby_thegg)
-    a3_bilby_loc = world.get_location("Ship Rex - Bilby Completion", player)
-    a3_bilby_thegg = Ty1Item("Fire Thunder Egg", classification, 0x8750000, player)
+    a3_bilby_loc: Location = world.get_location("Ship Rex - Bilby Completion", player)
+    a3_bilby_thegg: Ty1Item = Ty1Item("Fire Thunder Egg", classification, 0x8750000, player)
     a3_bilby_loc.place_locked_item(a3_bilby_thegg)
-    b1_bilby_loc = world.get_location("BotRT - Bilby Completion", player)
-    b1_bilby_thegg = Ty1Item("Ice Thunder Egg", classification, 0x8750001, player)
+    b1_bilby_loc: Location = world.get_location("BotRT - Bilby Completion", player)
+    b1_bilby_thegg: Ty1Item = Ty1Item("Ice Thunder Egg", classification, 0x8750001, player)
     b1_bilby_loc.place_locked_item(b1_bilby_thegg)
-    b2_bilby_loc = world.get_location("Snow Worries - Bilby Completion", player)
-    b2_bilby_thegg = Ty1Item("Ice Thunder Egg", classification, 0x8750001, player)
+    b2_bilby_loc: Location = world.get_location("Snow Worries - Bilby Completion", player)
+    b2_bilby_thegg: Ty1Item = Ty1Item("Ice Thunder Egg", classification, 0x8750001, player)
     b2_bilby_loc.place_locked_item(b2_bilby_thegg)
-    b3_bilby_loc = world.get_location("Outback Safari - Bilby Completion", player)
-    b3_bilby_thegg = Ty1Item("Ice Thunder Egg", classification, 0x8750001, player)
+    b3_bilby_loc: Location = world.get_location("Outback Safari - Bilby Completion", player)
+    b3_bilby_thegg: Ty1Item = Ty1Item("Ice Thunder Egg", classification, 0x8750001, player)
     b3_bilby_loc.place_locked_item(b3_bilby_thegg)
-    c1_bilby_loc = world.get_location("LLPoF - Bilby Completion", player)
-    c1_bilby_thegg = Ty1Item("Air Thunder Egg", classification, 0x8750002, player)
+    c1_bilby_loc: Location = world.get_location("LLPoF - Bilby Completion", player)
+    c1_bilby_thegg: Ty1Item = Ty1Item("Air Thunder Egg", classification, 0x8750002, player)
     c1_bilby_loc.place_locked_item(c1_bilby_thegg)
-    c2_bilby_loc = world.get_location("BtBS - Bilby Completion", player)
-    c2_bilby_thegg = Ty1Item("Air Thunder Egg", classification, 0x8750002, player)
+    c2_bilby_loc: Location = world.get_location("BtBS - Bilby Completion", player)
+    c2_bilby_thegg: Ty1Item = Ty1Item("Air Thunder Egg", classification, 0x8750002, player)
     c2_bilby_loc.place_locked_item(c2_bilby_thegg)
-    c3_bilby_loc = world.get_location("RMtS - Bilby Completion", player)
-    c3_bilby_thegg = Ty1Item("Air Thunder Egg", classification, 0x8750002, player)
+    c3_bilby_loc: Location = world.get_location("RMtS - Bilby Completion", player)
+    c3_bilby_thegg: Ty1Item = Ty1Item("Air Thunder Egg", classification, 0x8750002, player)
     c3_bilby_loc.place_locked_item(c3_bilby_thegg)
 
 
@@ -154,14 +176,6 @@ class ItemData:
 
 
 ty1_item_table: Dict[str, ItemData] = {
-    # IDs
-    # Generic - 0
-    # Attribute - 1
-    # Bilby - 2
-    # Level - 3
-    # Progressive - 7
-    # Junk - 8
-
     # Generic
     "Fire Thunder Egg": ItemData(0x8750000, ItemClassification.progression),
     "Ice Thunder Egg": ItemData(0x8750001, ItemClassification.progression),
@@ -184,7 +198,7 @@ ty1_item_table: Dict[str, ItemData] = {
     "Infrarang": ItemData(0x875001B, ItemClassification.useful),
     "Megarang": ItemData(0x875001C, ItemClassification.filler),
     "Kaboomarang": ItemData(0x875001D, ItemClassification.filler),
-    "Chronorang": ItemData(0x875001E, ItemClassification.trap),
+    "Chronorang": ItemData(0x875001E, ItemClassification.filler),
     "Doomerang": ItemData(0x875001F, ItemClassification.progression),
 
     # Bilby
@@ -234,12 +248,32 @@ ty1_item_table: Dict[str, ItemData] = {
     "Picture Frame":  ItemData(0x8750080, ItemClassification.filler),
     "Extra Life": ItemData(0x8750082, ItemClassification.filler),
     "Opal Magnet": ItemData(0x8750083, ItemClassification.filler),
+    "Quarter Pie": ItemData(0x8750084, ItemClassification.filler),
+    "Full Pie": ItemData(0x8750084, ItemClassification.filler),
+
+    # Trap
+    "Knocked Down Trap": ItemData(0x8750090, ItemClassification.trap),
+    "Slow Trap": ItemData(0x8750091, ItemClassification.trap),
+    "Gravity Trap": ItemData(0x8750092, ItemClassification.trap),
+    "Acid Trap": ItemData(0x8750093, ItemClassification.trap),
+    "Exit Trap": ItemData(0x8750094, ItemClassification.trap),
 }
 
 
 junk_weights = {
-    "Picture Frame": 55,
-    "Extra Life": 10,
-    "Opal Magnet": 35
+    "Picture Frame": 25,
+    "Extra Life": 15,
+    "Opal Magnet": 30,
+    "Quarter Pie": 20,
+    "Full Pie": 10,
+}
+
+
+trap_weights = {
+    "Knocked Down Trap": 20,
+    "Slow Trap": 20,
+    "Gravity Trap": 20,
+    "Acid Trap": 20,
+    "Exit Trap": 20,
 }
 

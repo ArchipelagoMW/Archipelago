@@ -156,6 +156,30 @@ class Scalesanity(Toggle):
     display_name = "Scalesanity"
 
 
+class Signsanity(Toggle):
+    """
+    Determines whether hitting each Maurie signpost with a boomerang grants a check.
+    """
+    display_name = "Signsanity"
+
+
+class Lifesanity(Toggle):
+    """
+    Determines whether each unique extra life grants a check (not including basket lives)
+    """
+    display_name = "Lifesanity"
+
+
+class TrapFill(Range):
+    """
+    Determines the percentage of the junk fill which is filled with traps.
+    """
+    display_name = "Trap Fill Percentage"
+    range_start = 0
+    range_end = 100
+    default = 0
+
+
 ty1_option_groups = [
     OptionGroup("Goal Options", [
         Goal,
@@ -177,6 +201,11 @@ ty1_option_groups = [
         Framesanity,
         FramesRequireInfra,
         Scalesanity,
+        Signsanity,
+        Lifesanity
+    ]),
+    OptionGroup("Traps", [
+        TrapFill
     ]),
     OptionGroup("Death Link", [
         DeathLink
@@ -205,5 +234,8 @@ class Ty1Options(PerGameCommonOptions):
     framesanity: Framesanity
     frames_require_infra: FramesRequireInfra
     scalesanity: Scalesanity
+    signsanity: Signsanity
+    lifesanity: Lifesanity
 
     death_link: DeathLink
+    trap_fill_percentage: TrapFill

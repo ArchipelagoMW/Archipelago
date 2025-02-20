@@ -54,6 +54,12 @@ def create_locations(player: int, options: Ty1Options, reg: Region):
         create_locations_from_dict(scales_dict, reg, player)
         if reg.name == "Rainbow Cliffs":
             create_location(player, reg, "Attribute - Extra Health", 0x08750313)
+    # SIGNS
+    if options.signsanity:
+        create_locations_from_dict(signposts_dict, reg, player)
+    # LIVES
+    if options.lifesanity:
+        create_locations_from_dict(extra_lives_dict, reg,player)
     # ATTRIBUTES
     create_locations_from_dict(attributes_dict, reg, player)
     # ELEMENTAL RANGS
@@ -63,9 +69,8 @@ def create_locations(player: int, options: Ty1Options, reg: Region):
         create_locations_from_dict(time_attack_challenge_dict, reg, player)
 
 
-# Thunder_eggs Dictionary
 thunder_eggs_dict = {
-    # Two Up ---------------------------------------------------------------------------------------------------------
+    # Two Up Thunder Eggs
     "Two Up - Collect 300 Opals":
         LocData(0x08750100, "Two Up"),
     "Two Up - Find 5 Bilbies":
@@ -82,7 +87,7 @@ thunder_eggs_dict = {
         LocData(0x08750106, "Two Up"),
     "Two Up - Lower The Platforms":
         LocData(0x08750107, "Two Up - Upper Area"),
-    # Walk -----------------------------------------------------------------------------------------------------------
+    # Walk Thunder Eggs
     "WitP - Collect 300 Opals":
         LocData(0x08750108, "Walk in the Park"),
     "WitP - Find 5 Bilbies":
@@ -99,7 +104,7 @@ thunder_eggs_dict = {
         LocData(0x0875010E, "Walk in the Park"),
     "WitP - Log Climb":
         LocData(0x0875010F, "Walk in the Park"),
-    # Ship -----------------------------------------------------------------------------------------------------------
+    # Ship Thunder Eggs
     "Ship Rex - Collect 300 Opals":
         LocData(0x08750110, "Ship Rex - Beyond Gate"),
     "Ship Rex - Find 5 Bilbies":
@@ -116,7 +121,7 @@ thunder_eggs_dict = {
         LocData(0x08750116, "Ship Rex - Beyond Gate"),
     "Ship Rex - Nest Egg":
         LocData(0x08750117, "Ship Rex - Beyond Gate"),
-    # Bridge ---------------------------------------------------------------------------------------------------------
+    # Bridge Thunder Eggs
     "BotRT - Collect 300 Opals":
         LocData(0x08750118, "Bridge on the River Ty - Beyond Broken Bridge"),
     "BotRT - Find 5 Bilbies":
@@ -133,7 +138,7 @@ thunder_eggs_dict = {
         LocData(0x0875011E, "Bridge on the River Ty - Beyond Broken Bridge"),
     "BotRT - Neddy The Bully":
         LocData(0x0875011F, "Bridge on the River Ty - Beyond Broken Bridge"),
-    # Snow -----------------------------------------------------------------------------------------------------------
+    # Snow Thunder Eggs
     "Snow Worries - Collect 300 Opals":
         LocData(0x08750120, "Snow Worries - Underwater"),
     "Snow Worries - Find 5 Bilbies":
@@ -150,7 +155,7 @@ thunder_eggs_dict = {
         LocData(0x08750126, "Snow Worries"),
     "Snow Worries - Snowy Peak":
         LocData(0x08750127, "Snow Worries"),
-    # Outback --------------------------------------------------------------------------------------------------------
+    # Outback Thunder Eggs
     "Outback Safari - Collect 300 Opals":
         LocData(0x08750128, "Outback Safari"),
     "Outback Safari - Find 5 Bilbies":
@@ -167,7 +172,7 @@ thunder_eggs_dict = {
         LocData(0x0875012E, "Outback Safari"),
     "Outback Safari - Secret Thunder Egg":
         LocData(0x0875012F, "Outback Safari"),
-    # Lyre -----------------------------------------------------------------------------------------------------------
+    # Lyre Thunder Eggs
     "LLPoF - Collect 300 Opals":
         LocData(0x08750130, "Lyre, Lyre Pants on Fire"),
     "LLPoF - Find 5 Bilbies":
@@ -184,7 +189,7 @@ thunder_eggs_dict = {
         LocData(0x08750136, "Lyre, Lyre Pants on Fire"),
     "LLPoF - Gantry Glide":
         LocData(0x08750137, "Lyre, Lyre Pants on Fire"),
-    # Stump ----------------------------------------------------------------------------------------------------------
+    # Stump Thunder Eggs
     "BtBS - Collect 300 Opals":
         LocData(0x08750138, "Beyond the Black Stump - Upper Area"),
     "BtBS - Find 5 Bilbies":
@@ -201,7 +206,7 @@ thunder_eggs_dict = {
         LocData(0x0875013E, "Beyond the Black Stump - Upper Area"),
     "BtBS - Pillar Ponder":
         LocData(0x0875013F, "Beyond the Black Stump - Upper Area"),
-    # Rex Marks ------------------------------------------------------------------------------------------------------
+    # Rex Marks Thunder Eggs
     "RMtS - Collect 300 Opals":
         LocData(0x08750140, "Rex Marks the Spot - Underwater"),
     "RMtS - Find 5 Bilbies":
@@ -220,7 +225,6 @@ thunder_eggs_dict = {
         LocData(0x08750147, "Rex Marks the Spot"),
 }
 
-# Golden_cogs Dictionary
 golden_cogs_dict = {
     # Next to Julius
     "Two Up - Golden Cog 1":
@@ -494,7 +498,6 @@ golden_cogs_dict = {
         LocData(0x087501A1, "Rex Marks the Spot"),
 }
 
-# Bilbies Dictionary
 bilbies_dict = {
     "Two Up - Bilby Dad":
         LocData(0x087501AC, "Two Up"),
@@ -588,7 +591,6 @@ bilbies_dict = {
         LocData(0x087501D8, "Rex Marks the Spot")
 }
 
-# Picture_frames Dictionary
 picture_frames_dict = {
     # Inside Julius' lab
     "Rainbow Cliffs - PF 1":
@@ -973,7 +975,6 @@ picture_frames_dict = {
         LocData(0x08750257, "Rex Marks the Spot - PF")
 }
 
-# Attributes Dictionary
 attributes_dict = {
     "Attribute - Second Rang":
         LocData(0x08750312, "Two Up"),
@@ -999,7 +1000,6 @@ attributes_dict = {
         LocData(0x0875031F, "Rainbow Cliffs"),
 }
 
-# Cog_completion Dictionary
 cog_completion_dict = {
     "Two Up - All Golden Cogs":
         LocData(0x087501A2, "Two Up - Upper Area"),
@@ -1021,7 +1021,6 @@ cog_completion_dict = {
         LocData(0x087501AA, "Rex Marks the Spot - Underwater"),
 }
 
-# Frame_completion Dictionary
 frame_completion_dict = {
     "Rainbow Cliffs - All Picture Frames":
         LocData(0x08750258, "Rainbow Cliffs"),
@@ -1064,7 +1063,6 @@ bilby_completion_dict = {
         LocData(0x08750278, "Rainbow Cliffs"),
 }
 
-# Talismans Dictionary
 talismans_dict = {
     "Frog Talisman":
         LocData(0x08750261, "Bull's Pen"),
@@ -1078,9 +1076,7 @@ talismans_dict = {
         LocData(0x08750265, "Final Battle"),
 }
 
-# Elemental Rangs Dictionary
 elemental_rangs_dict = {
-    # Counts are set to hub te count in regions.py in evaluate_condition
     "Attribute - Flamerang":
         LocData(0x08750316, "Rainbow Cliffs"),
     "Attribute - Frostyrang":
@@ -1188,6 +1184,157 @@ time_attack_challenge_dict = {
         LocData(0x0875034E, "Rex Marks the Spot - Underwater"),
 }
 
+signposts_dict = {
+    # On starting pillar
+    "Rainbow Cliffs - Signpost 1":
+        LocData(0x08750400, "Rainbow Cliffs"),
+    # At start
+    "Two Up - Signpost 1":
+        LocData(0x08750401, "Two Up"),
+    # At first thunder egg
+    "Two Up - Signpost 2":
+        LocData(0x08750402, "Two Up"),
+    # Before purple crab
+    "Two Up - Signpost 3":
+        LocData(0x08750403, "Two Up"),
+    # Near bunyip
+    "Two Up - Signpost 4":
+        LocData(0x08750404, "Two Up - Upper Area"),
+    # At spy eggs
+    "Two Up - Signpost 5":
+        LocData(0x08750405, "Two Up"),
+    # Before Glide The Gap
+    "Two Up - Signpost 6":
+        LocData(0x08750406, "Two Up"),
+    # At pit with three crates near start
+    "Two Up - Signpost 7":
+        LocData(0x08750407, "Two Up"),
+    # Before first frills
+    "Two Up - Signpost 8":
+        LocData(0x08750408, "Two Up"),
+    # Before first bridge
+    "Two Up - Signpost 9":
+        LocData(0x08750409, "Two Up"),
+    # After first bridge
+    "Two Up - Signpost 10":
+        LocData(0x0875040A, "Two Up"),
+    # After Glide The Gap
+    "Two Up - Signpost 11":
+        LocData(0x0875040B, "Two Up - End Area"),
+    # At mushrooms next to opal collector
+    "Two Up - Signpost 12":
+        LocData(0x0875040C, "Two Up - End Area"),
+    # At second rang
+    "Two Up - Signpost 13":
+        LocData(0x0875040D, "Two Up"),
+    # At first bilby
+    "Two Up - Signpost 14":
+        LocData(0x0875040E, "Two Up"),
+    # At first dunny
+    "Two Up - Signpost 15":
+        LocData(0x0875040F, "Two Up"),
+    # At start on path
+    "WitP - Signpost 1":
+        LocData(0x08750410, "Walk in the Park"),
+    # After third log
+    "WitP - Signpost 2":
+        LocData(0x08750411, "Walk in the Park"),
+    # Top of slide 1
+    "WitP - Signpost 3":
+        LocData(0x08750412, "Walk in the Park"),
+    # Near Neddy
+    "BotRT - Signpost 1":
+        LocData(0x08750413, "Bridge on the River Ty - Beyond Broken Bridge"),
+    # At start
+    "BotRT - Signpost 2":
+        LocData(0x08750414, "Bridge on the River Ty"),
+    # At start on opal path
+    "Snow Worries - Signpost 1":
+        LocData(0x08750415, "Snow Worries"),
+    # At bottom of main path pillars start of ice
+    "Snow Worries - Signpost 2":
+        LocData(0x08750416, "Snow Worries"),
+    # At bottom of mountain steps (mill side)
+    "Snow Worries - Signpost 3":
+        LocData(0x08750417, "Snow Worries"),
+    # Top of log climb
+    "BtBS - Signpost 1":
+        LocData(0x08750418, "Beyond the Black Stump - Upper Area"),
+    # At end
+    "Cass' Pass - Signpost 1":
+        LocData(0x08750419, "Cass' Pass"),
+}
+
+
+extra_lives_dict = {
+    # Side path next to Julius' lab
+    "Rainbow Cliffs - Extra Life 1":
+        LocData(0x08750420, "Rainbow Cliffs"),
+    # In waterfall cave near Rang The Frills
+    "Two Up - Extra Life 1":
+        LocData(0x08750421, "Two Up"),
+    # Underwater under barrier between upper area and bridge
+    "Two Up - Extra Life 2":
+        LocData(0x08750422, "Two Up"),
+    # In bat cave
+    "WitP - Extra Life 1":
+        LocData(0x08750423, "Walk in the Park"),
+    # In small rockpool near tunnel entry to ship wreck
+    "Ship Rex - Extra Life 1":
+        LocData(0x08750424, "Ship Rex - Beyond Gate"),
+    # On pillars in quicksand
+    "Ship Rex - Extra Life 2":
+        LocData(0x08750425, "Ship Rex - Beyond Gate"),
+    # On platforms on back of top of spire
+    "Ship Rex - Extra Life 3":
+        LocData(0x08750426, "Ship Rex - Beyond Gate"),
+    # In metal shed in water towers area
+    "Outback Safari - Extra Life 1":
+        LocData(0x08750427, "Outback Safari"),
+    # On spiral path up the mountain
+    "Outback Safari - Extra Life 2":
+        LocData(0x08750428, "Outback Safari"),
+    # In metal shed on left path from start
+    "Outback Safari - Extra Life 3":
+        LocData(0x08750429, "Outback Safari"),
+    # Top of lighthouse through underwater tunnel
+    "Crikey's Cove - Extra Life 1":
+        LocData(0x0875042A, "Crikey's Cove"),
+    # Inside volcano
+    "RMtS - Extra Life 1":
+        LocData(0x0875042B, "Rex Marks the Spot"),
+    # Underwater near big red button for platform cog
+    "RMtS - Extra Life 2":
+        LocData(0x0875042C, "Rex Marks the Spot"),
+    # Before island with crest portal on left side underwater
+    "Cass' Pass - Extra Life 1":
+        LocData(0x0875042D, "Cass' Pass"),
+    # Behind island with Crest portal at end underwater
+    "Cass' Pass - Extra Life 2":
+        LocData(0x0875042E, "Cass' Pass"),
+    # Behind tree root at first waterfall
+    "Cass' Pass - Extra Life 3":
+        LocData(0x0875042F, "Cass' Pass"),
+    # In corner under lower waterfall after slide
+    "Cass' Pass - Extra Life 4":
+        LocData(0x08750430, "Cass' Pass"),
+    # On platforms before second button
+    "Cass' Crest - Extra Life 1":
+        LocData(0x08750431, "Cass' Crest"),
+    # On platform to the left of path next to second dunny
+    "Cass' Crest - Extra Life 2":
+        LocData(0x08750432, "Cass' Crest"),
+    # At the end around a corner
+    "Cass' Crest - Extra Life 3":
+        LocData(0x08750433, "Cass' Crest"),
+    # Underwater at start under the path between where Shazza is and where Shadow is
+    "Cass' Crest - Extra Life 4":
+        LocData(0x08750434, "Cass' Crest"),
+    # In hole past third gas jet
+    "Cass' Crest - Extra Life 5":
+        LocData(0x08750435, "Cass' Crest"),
+}
+
 conditional_items_dict = {
     "Attribute - Extra Health":
         LocData(0x08750313, "Rainbow Cliffs"),
@@ -1205,6 +1352,8 @@ ty1_location_table = {
     **talismans_dict,
     **elemental_rangs_dict,
     **scales_dict,
+    **signposts_dict,
+    **extra_lives_dict,
     **time_attack_challenge_dict,
     **conditional_items_dict
 }
