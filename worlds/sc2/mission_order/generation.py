@@ -293,7 +293,7 @@ def fill_missions(
     locations_per_region = get_locations_per_region(locations)
     regions: List[Region] = [create_region(world, locations_per_region, location_cache, "Menu")]
     locked_ids = [lookup_name_to_mission[mission].id for mission in locked_missions]
-    prefer_easy_missions = world.options.mission_bias.value == world.options.mission_bias.option_easy
+    prefer_easy_missions = world.options.difficulty_curve.value == world.options.difficulty_curve.option_uneven
 
     def set_mission_in_slot(slot: SC2MOGenMission, mission: SC2Mission):
         slot.mission = mission

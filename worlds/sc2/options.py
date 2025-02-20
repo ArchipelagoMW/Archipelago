@@ -130,6 +130,7 @@ class AllInMap(Choice):
     display_name = "All In Map"
     option_ground = 0
     option_air = 1
+    default = 'random'
 
 
 class MissionOrder(Choice):
@@ -922,13 +923,15 @@ class ExcludedMissions(Sc2MissionSet):
     valid_keys = {mission.mission_name for mission in SC2Mission}
 
 
-class MissionBias(Choice):
+class DifficultyCurve(Choice):
     """
-    Determines whether easy missions can appear late in the campaign.
+    Determines whether campaign missions will be placed with a smooth difficulty curve.
+    Standard: The campaign will start with easy missions and end with challenging missions.  Short campaigns will be more difficult.
+    Uneven: The campaign will start with easy missions, but easy missions can still appear later in the campaign.  Short campaigns will be easier.
     """
-    display_name = "Mission Bias"
-    option_easy = 0
-    option_hard = 1
+    display_name = "Difficulty Curve"
+    option_standard = 0
+    option_uneven = 1
 
 
 class ExcludeVeryHardMissions(Choice):
@@ -1348,7 +1351,7 @@ class Starcraft2Options(PerGameCommonOptions):
     excluded_items: ExcludedItems
     unexcluded_items: UnexcludedItems
     excluded_missions: ExcludedMissions
-    mission_bias: MissionBias
+    difficulty_curve: DifficultyCurve
     exclude_very_hard_missions: ExcludeVeryHardMissions
     vanilla_items_only: VanillaItemsOnly
     victory_cache: VictoryCache
@@ -1380,7 +1383,7 @@ option_groups = [
         StarterUnit,
         RequiredTactics,
         NerfUnitBaselines,
-        MissionBias,
+        DifficultyCurve,
     ]),
     OptionGroup("Primary Campaign Settings", [
         MissionOrder,
