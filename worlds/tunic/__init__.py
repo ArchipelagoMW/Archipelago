@@ -1,22 +1,22 @@
-from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union, Set, TextIO
+from decimal import Decimal, ROUND_HALF_UP
 from logging import warning
-from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
+from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union, Set, TextIO
+
+from BaseClasses import Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
+from Options import PlandoConnection, OptionError
+from settings import Group, Bool
+from worlds.AutoWorld import WebWorld, World
+
+from .combat_logic import area_data, CombatState
+from .er_scripts import create_er_regions
+from .grass import grass_location_table, grass_location_name_to_id, grass_location_name_groups, excluded_grass_locations
 from .items import (item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names,
                     combat_items)
 from .locations import location_table, location_name_groups, standard_location_name_to_id, hexagon_locations, sphere_one
-from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
-from .er_rules import set_er_location_rules
-from .regions import tunic_regions
-from .er_scripts import create_er_regions
-from .grass import grass_location_table, grass_location_name_to_id, grass_location_name_groups, excluded_grass_locations
-from .er_data import portal_mapping, RegionInfo, tunic_er_regions
+from .region_data import portal_mapping, RegionInfo, tunic_er_regions
+from .rules import set_er_location_rules, randomize_ability_unlocks, gold_hexagon
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
                       LaurelsLocation, LogicRules, LaurelsZips, IceGrappling, LadderStorage)
-from .combat_logic import area_data, CombatState
-from worlds.AutoWorld import WebWorld, World
-from Options import PlandoConnection, OptionError
-from decimal import Decimal, ROUND_HALF_UP
-from settings import Group, Bool
 
 
 class TunicSettings(Group):
@@ -449,43 +449,14 @@ class TunicWorld(World):
             self.ability_unlocks["Pages 42-43 (Holy Cross)"] = self.passthrough["Hexagon Quest Holy Cross"]
             self.ability_unlocks["Pages 52-53 (Icebolt)"] = self.passthrough["Hexagon Quest Icebolt"]
 
-        # Ladders and Combat Logic uses ER rules with vanilla connections for easier maintenance
-        if (self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic
-                or self.options.grass_randomizer):
-            portal_pairs = create_er_regions(self)
-            if self.options.entrance_rando:
-                # these get interpreted by the game to tell it which entrances to connect
-                for portal1, portal2 in portal_pairs.items():
-                    self.tunic_portal_pairs[portal1.scene_destination()] = portal2.scene_destination()
-        else:
-            # uses the original rules, easier to navigate and reference
-            for region_name in tunic_regions:
-                region = Region(region_name, self.player, self.multiworld)
-                self.multiworld.regions.append(region)
-
-            for region_name, exits in tunic_regions.items():
-                region = self.get_region(region_name)
-                region.add_exits(exits)
-
-            for location_name, location_id in self.player_location_table.items():
-                region = self.get_region(location_table[location_name].region)
-                location = TunicLocation(self.player, location_name, location_id, region)
-                region.locations.append(location)
-
-            victory_region = self.get_region("Spirit Arena")
-            victory_location = TunicLocation(self.player, "The Heir", None, victory_region)
-            victory_location.place_locked_item(TunicItem("Victory", ItemClassification.progression, None, self.player))
-            self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
-            victory_region.locations.append(victory_location)
+        portal_pairs = create_er_regions(self)
+        if self.options.entrance_rando:
+            # these get interpreted by the game to tell it which entrances to connect
+            for portal1, portal2 in portal_pairs.items():
+                self.tunic_portal_pairs[portal1.scene_destination()] = portal2.scene_destination()
 
     def set_rules(self) -> None:
-        # same reason as in create_regions, could probably be put into create_regions
-        if (self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic
-                or self.options.grass_randomizer):
-            set_er_location_rules(self)
-        else:
-            set_region_rules(self)
-            set_location_rules(self)
+        set_er_location_rules(self)
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)

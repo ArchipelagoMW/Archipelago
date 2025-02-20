@@ -1,6 +1,6 @@
+from BaseClasses import ItemClassification as IC
 from itertools import groupby
 from typing import Dict, List, Set, NamedTuple, Optional
-from BaseClasses import ItemClassification as IC
 
 
 class TunicItemData(NamedTuple):

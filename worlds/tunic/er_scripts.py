@@ -1,12 +1,15 @@
-from typing import Dict, List, Set, Tuple, TYPE_CHECKING
-from BaseClasses import Region, ItemClassification, Item, Location
-from .locations import all_locations
-from .er_data import Portal, portal_mapping, traversal_requirements, DeadEnd, RegionInfo
-from .er_rules import set_er_region_rules
-from Options import PlandoConnection
-from .options import EntranceRando
-from random import Random
 from copy import deepcopy
+from random import Random
+from typing import Dict, List, Set, Tuple, TYPE_CHECKING
+
+from BaseClasses import Region, ItemClassification, Item, Location
+from Options import PlandoConnection
+
+from .locations import all_locations
+from .options import EntranceRando
+from .region_data import Portal, portal_mapping, traversal_requirements, DeadEnd, RegionInfo
+from .rules import set_er_region_rules
+
 
 if TYPE_CHECKING:
     from . import TunicWorld
