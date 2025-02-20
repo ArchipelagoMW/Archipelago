@@ -338,3 +338,16 @@ const hideUserMessage = () => {
   userMessage.removeEventListener('click', hideUserMessage);
   userMessage.style.display = 'none';
 };
+
+const toggleAll = (source, name) => {
+  checkboxes = document.getElementsByName(name);
+  for (var c in checkboxes) {
+    checkboxes[c].checked = source.checked;
+  }
+  this.indeterminate = false;
+};
+
+const toggleOne = (source, id) => {
+  checkbox = document.getElementById(id);
+  checkbox.indeterminate = true;
+};
