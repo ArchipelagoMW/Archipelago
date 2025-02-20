@@ -43,6 +43,7 @@ class TestCacheSelf1(unittest.TestCase):
 
         o1 = Cls()
         o2 = Cls()
+        self.assertIs(o1.func(), o1.func())
         self.assertIs(o1.func(1), o1.func())
         self.assertIsNot(o1.func(2), o1.func())
         self.assertIsNot(o1.func(), o2.func())
