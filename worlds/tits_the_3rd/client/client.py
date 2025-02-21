@@ -3,10 +3,12 @@ from typing import Optional
 
 import colorama
 
+from .memory_io import TitsThe3rdMemoryIO
 from CommonClient import (
     CommonContext,
     get_base_parser,
     gui_enabled,
+    logger,
     server_loop,
 )
 
@@ -16,6 +18,7 @@ class TitsThe3rdContext(CommonContext):
         super().__init__(server_address, password)
         self.game = "Trails in the Sky the 3rd"
         self.items_handling = 0b011  # items from both your own and other worlds are sent through AP.
+        self.game_interface = TitsThe3rdMemoryIO(self.exit_event)
 
     async def server_auth(self, password_requested: bool = False):
         """Wrapper for login."""
@@ -33,6 +36,9 @@ async def tits_the_3rd_watcher(ctx: TitsThe3rdContext):
         ctx (TitsThe3rdContext): The Trails in the Sky the 3rd context instance.
     """
     while not ctx.exit_event.is_set():
+        if not ctx.game_interface.is_connected():
+            logger.info("Waiting for connection to Trails in the Sky The Third")
+            await ctx.game_interface.connect()
         await asyncio.sleep(1)
 
 def launch():
