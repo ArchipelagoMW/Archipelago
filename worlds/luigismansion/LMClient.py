@@ -235,7 +235,8 @@ class LMContext(CommonContext):
             if self.awaiting_rom:
                 return
             self.awaiting_rom = True
-            logger.info("Awaiting connection to Dolphin to get player information")
+            logger.info("Luigi's Mansion ROM loaded in Dolphin. Waiting for player to load into the Foyer. " +
+                "For new AP seeds, ensure a new save file is selected (or delete an old game).")
             return
         await self.send_connect()
 
@@ -693,6 +694,15 @@ async def dolphin_sync_task(ctx: LMContext):
                 else:
                     if not ctx.auth:
                         ctx.auth = read_string(SLOT_NAME_ADDR, SLOT_NAME_STR_LENGTH)
+                        if not ctx.auth:
+                            ctx.auth = None
+                            ctx.awaiting_rom = False
+                            logger.info("No slot name was detected. Ensure a randomized ROM is loaded, " +
+                                        "retrying in 5 seconds...")
+                            ctx.dolphin_status = CONNECTION_REFUSED_GAME_STATUS
+                            dme.un_hook()
+                            await asyncio.sleep(5)
+                            continue
                     if ctx.awaiting_rom:
                         await ctx.server_auth()
                 await asyncio.sleep(0.1)
@@ -700,24 +710,26 @@ async def dolphin_sync_task(ctx: LMContext):
                 if ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
                     logger.info("Connection to Dolphin lost, reconnecting...")
                     ctx.dolphin_status = CONNECTION_LOST_STATUS
+
                 logger.info("Attempting to connect to Dolphin...")
                 dme.hook()
-                if dme.is_hooked():
-                    if read_string(0x80000000, 6) != "GLME01":
-                        logger.info(CONNECTION_REFUSED_GAME_STATUS)
-                        ctx.dolphin_status = CONNECTION_REFUSED_GAME_STATUS
-                        dme.un_hook()
-                        await asyncio.sleep(5)
-                    else:
-                        logger.info(CONNECTION_CONNECTED_STATUS)
-                        ctx.dolphin_status = CONNECTION_CONNECTED_STATUS
-                        ctx.locations_checked = set()
-                else:
+                if not dme.is_hooked():
                     logger.info("Connection to Dolphin failed, attempting again in 5 seconds...")
                     ctx.dolphin_status = CONNECTION_LOST_STATUS
                     await ctx.disconnect()
                     await asyncio.sleep(5)
                     continue
+
+                if read_string(0x80000000, 6) != "GLME01":
+                    logger.info(CONNECTION_REFUSED_GAME_STATUS)
+                    ctx.dolphin_status = CONNECTION_REFUSED_GAME_STATUS
+                    dme.un_hook()
+                    await asyncio.sleep(5)
+                    continue
+
+                logger.info(CONNECTION_CONNECTED_STATUS)
+                ctx.dolphin_status = CONNECTION_CONNECTED_STATUS
+                ctx.locations_checked = set()
         except Exception:
             dme.un_hook()
             logger.info("Connection to Dolphin failed, attempting again in 5 seconds...")
