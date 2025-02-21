@@ -310,32 +310,7 @@ Super Mario 64:
 
 ---
 
-description: Example of generating multiple worlds. World 2 of 3
-name: Minecraft
-game: Minecraft
-Minecraft:
-  progression_balancing: 50
-  accessibility: items
-  advancement_goal: 40
-  combat_difficulty: hard
-  include_hard_advancements: false
-  include_unreasonable_advancements: false
-  include_postgame_advancements: false
-  shuffle_structures: true
-  structure_compasses: true
-  send_defeated_mobs: true
-  bee_traps: 15
-  egg_shards_required: 7
-  egg_shards_available: 10
-  required_bosses:
-    none: 0
-    ender_dragon: 1
-    wither: 0
-    both: 0
-
----
-
-description: Example of generating multiple worlds. World 3 of 3
+description: Example of generating multiple worlds. World 2 of 2
 name: ExampleFinder
 game: ChecksFinder
 
@@ -344,6 +319,6 @@ ChecksFinder:
   accessibility: items
 ```
 
-The above example will generate 3 worlds - one Super Mario 64, one Minecraft, and one ChecksFinder.
+The above example will generate 2 worlds - one Super Mario 64 and one ChecksFinder.
  
 

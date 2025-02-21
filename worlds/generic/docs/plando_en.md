@@ -203,7 +203,7 @@ relevant guide: [A Link to the Past Plando Guide](/tutorial/A%20Link%20to%20the%
 
 ## Connection Plando
 
-This is currently only supported by a few games, including A Link to the Past, Minecraft, and Ocarina of Time. As the way that these games interact with their
+This is currently only supported by a few games, including A Link to the Past and Ocarina of Time. As the way that these games interact with their
 connections is different, only the basics are explained here. More specific information for connection plando in A Link to the Past can be found in 
 its [plando guide](/tutorial/A%20Link%20to%20the%20Past/plando/en#connections).
 
@@ -216,7 +216,6 @@ its [plando guide](/tutorial/A%20Link%20to%20the%20Past/plando/en#connections).
 
 [A Link to the Past connections](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/EntranceShuffle.py#L3852)
 
-[Minecraft connections](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/minecraft/data/regions.json#L18****)
 
 ### Examples
 
@@ -232,19 +231,10 @@ its [plando guide](/tutorial/A%20Link%20to%20the%20Past/plando/en#connections).
     - entrance: Agahnims Tower
       exit: Old Man Cave Exit (West)
       direction: exit
-  
-    # example block 2 - Minecraft
-    - entrance: Overworld Structure 1
-      exit: Nether Fortress
-      direction: both
-    - entrance: Overworld Structure 2
-      exit: Village
-      direction: both
+
 ```
 
 1. These connections are decoupled, so going into the Lake Hylia Cave Shop will take you to the inside of Cave 45, and
    when you leave the interior, you will exit to the Cave 45 ledge. Going into the Cave 45 entrance will then take you to
    the Lake Hylia Cave Shop. Walking into the entrance for the Old Man Cave and Agahnim's Tower entrance will both take
    you to their locations as normal, but leaving Old Man Cave will exit at Agahnim's Tower.
-2. This will force a Nether fortress and a village to be the Overworld structures for your game. Note that for the
-   Minecraft connection plando to work structure shuffle must be enabled.

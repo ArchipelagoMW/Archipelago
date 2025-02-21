@@ -26,10 +26,7 @@
                     <td>{{ patch.game }}</td>
                     <td>
                         {% if patch.data %}
-                            {% if patch.game == "Minecraft" %}
-                            <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
-                                Download APMC File...</a>
-                            {% elif patch.game == "Factorio" %}
+                            {% if patch.game == "Factorio" %}
                             <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
                                 Download Factorio Mod...</a>
                             {% elif patch.game == "Kingdom Hearts 2" %}
