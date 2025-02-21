@@ -95,12 +95,14 @@ class BananaTrapWeight(Range):
     range_end = 100
     default = 15
 
+
 class NothingWeight(Range):
     """Set the weight for how often nothing is chosen as filler. Default is 40"""
     display_name = "'Nothing' Weight"
     range_start = 0
     range_end = 100
     default = 40
+
 
 class HeartWeight(Range):
     """Set the weight for how often hearts get chosen as filler. Default is 10"""
@@ -234,6 +236,7 @@ class KingBooHealth(Range):
     range_end = 1000
     default = 500
 
+
 class FinalBooCount(Range):
     """Set the number of Boos required to reach the Secret Altar. 0 = Starts Open"""
     display_name = "Altar Boo Count"
@@ -245,6 +248,7 @@ class FinalBooCount(Range):
 class Boosanity(Toggle):
     """Turns Boos into Items and Locations. These are remote only checks."""
     display_name = "Boosanity"
+
 
 class Portrification(Toggle):
     """Turn Portrait Ghosts into checks in addition to their clear chests. These are remote only checks."""

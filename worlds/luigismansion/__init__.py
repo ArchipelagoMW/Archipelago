@@ -425,8 +425,13 @@ class LMWorld(World):
                     self.options.start_inventory.value.get("Poltergust 4000", 0) + 1
             )
 
-        if self.options.boosanity == 0 and self.options.balcony_boo_count > 30:
-            self.options.balcony_boo_count.value = 30
+        if self.options.boosanity == 0 and self.options.balcony_boo_count > 36:
+            self.options.balcony_boo_count.value = 36
+
+        if self.options.boo_gates.value == 0:
+            self.options.final_boo_count.value = 0
+            self.options.balcony_boo_count.value = 0
+            self.options.washroom_boo_count.value = 0
 
     def create_regions(self):
         # "Menu" is the required starting point
