@@ -31,6 +31,24 @@ class StrawberriesRequiredPercentage(Range):
     range_end = 100
     default = 80
 
+class Checkpointsanity(Toggle):
+    """
+    Determines whether Checkpoints will be shuffled into the item pool
+    """
+    display_name = "Checkpointsanity"
+
+class IncludeBSides(Toggle):
+    """
+    Determines whether the B-Side Levels will be included
+    """
+    display_name = "Include B-Sides"
+
+class IncludeCSides(Toggle):
+    """
+    Determines whether the C-Side Levels will be included
+    """
+    display_name = "Include C-Sides"
+
 
 class ColorChoice(TextChoice):
     option_strawberry = 0xDB2C00
@@ -109,6 +127,11 @@ celeste_option_groups = [
         TotalStrawberries,
         StrawberriesRequiredPercentage,
     ]),
+    OptionGroup("Location Options", [
+        Checkpointsanity,
+        IncludeBSides,
+        IncludeCSides,
+    ]),
     OptionGroup("Aesthetic Options", [
         MadelineOneDashHairColor,
         MadelineTwoDashHairColor,
@@ -179,6 +202,10 @@ class CelesteOptions(PerGameCommonOptions):
 
     total_strawberries: TotalStrawberries
     strawberries_required_percentage: StrawberriesRequiredPercentage
+
+    checkpointsanity: Checkpointsanity
+    include_b_sides: IncludeBSides
+    include_c_sides: IncludeCSides
 
     madeline_one_dash_hair_color: MadelineOneDashHairColor
     madeline_two_dash_hair_color: MadelineTwoDashHairColor

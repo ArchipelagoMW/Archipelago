@@ -4,7 +4,7 @@ from typing import Dict, List
 from BaseClasses import ItemClassification, Location, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .Items import CelesteItem, item_table, item_data_table
-from .Locations import CelesteLocation, location_table, strawberry_location_data_table
+from .Locations import CelesteLocation, location_table, strawberry_location_data_table, checkpoint_location_data_table
 from .Names import ItemName, LocationName
 from .Options import CelesteOptions, celeste_option_groups, resolve_options
 
@@ -44,25 +44,10 @@ class CelesteWorld(World):
     madeline_feather_hair_color: int
 
     def generate_early(self) -> None:
+        if not self.player_name.isascii():
+            raise RuntimeError(f"Invalid player_name {self.player_name} for game {self.game}.")
+
         resolve_options(self)
-
-    def create_item(self, name: str) -> CelesteItem:
-        return CelesteItem(name, item_data_table[name].type, item_data_table[name].code, self.player)
-
-    def create_items(self) -> None:
-        item_pool: List[CelesteItem] = []
-
-        location_count: int = 1
-
-        real_total_strawberries: int = min(self.options.total_strawberries.value, location_count - len(item_pool))
-        self.strawberries_required = int(real_total_strawberries * (self.options.strawberries_required_percentage / 100))
-
-        item_pool += [self.create_item(ItemName.strawberry) for _ in range(real_total_strawberries)]
-
-        filler_item_count: int = location_count - len(item_pool)
-        item_pool += [self.create_item(ItemName.raspberry) for _ in range(filler_item_count)]
-
-        self.multiworld.itempool += item_pool
 
 
     def create_regions(self) -> None:
@@ -79,9 +64,39 @@ class CelesteWorld(World):
                 location_name: location_data.address for location_name, location_data in strawberry_location_data_table.items()
                 if location_data.region == region_name
             }, CelesteLocation)
+            region.add_locations({
+                location_name: location_data.address for location_name, location_data in checkpoint_location_data_table.items()
+                if location_data.region == region_name
+            }, CelesteLocation)
 
             region.add_exits(region_data_table[region_name].connecting_regions)
 
+
+    def create_item(self, name: str) -> CelesteItem:
+        return CelesteItem(name, item_data_table[name].type, item_data_table[name].code, self.player)
+
+    def create_items(self) -> None:
+        item_pool: List[CelesteItem] = []
+
+        location_count: int = len(self.get_locations())
+
+        if self.options.checkpointsanity:
+            item_pool += [self.create_item(item_name) for item_name in checkpoint_location_data_table.keys()]
+        else:
+            for item_name in checkpoint_location_data_table.keys():
+                checkpoint_loc: Location = self.multiworld.get_location(item_name, self.player)
+                checkpoint_loc.place_locked_item(self.create_item(item_name))
+                location_count -= 1
+
+        real_total_strawberries: int = min(self.options.total_strawberries.value, location_count - len(item_pool))
+        self.strawberries_required = int(real_total_strawberries * (self.options.strawberries_required_percentage / 100))
+
+        item_pool += [self.create_item(ItemName.strawberry) for _ in range(real_total_strawberries)]
+
+        filler_item_count: int = location_count - len(item_pool)
+        item_pool += [self.create_item(ItemName.raspberry) for _ in range(filler_item_count)]
+
+        self.multiworld.itempool += item_pool
 
     def get_filler_item_name(self) -> str:
         return ItemName.raspberry
@@ -97,6 +112,9 @@ class CelesteWorld(World):
             "death_link": self.options.death_link.value,
             "death_link_amnesty": self.options.death_link_amnesty.value,
             "strawberries_required": self.strawberries_required,
+            "checkpointsanity": self.options.checkpointsanity.value,
+            "include_b_sides": self.options.include_b_sides.value,
+            "include_c_sides": self.options.include_c_sides.value,
             "madeline_one_dash_hair_color": self.madeline_one_dash_hair_color,
             "madeline_two_dash_hair_color": self.madeline_two_dash_hair_color,
             "madeline_no_dash_hair_color": self.madeline_no_dash_hair_color,
