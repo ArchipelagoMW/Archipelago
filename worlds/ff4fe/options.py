@@ -95,13 +95,6 @@ class PassEnabled(Toggle):
     """Will the Pass be included in the Key Item Pool?"""
     display_name = "Pass In Key Item Pool"
 
-class UsefulPercentage(Range):
-    """The percentage of useful high tier items in the pool as opposed to filler low tier items."""
-    display_name = "Useful Item Percentage"
-    range_start = 25
-    range_end = 100
-    default = 35
-
 class UnsafeKeyItemPlacement(Toggle):
     """Normally, underground access is guaranteed to be available without taking a trip to the moon.
     Toggling this on disables this check."""
@@ -149,6 +142,23 @@ class CharactersPermadie(Choice):
     option_no = 0
     option_yes = 1
     option_extreme = 2
+    default = 0
+
+class ItemRandomization(Choice):
+    """Affects item pool"""
+    display_name = "Item Randomization"
+    option_standard = 0
+    option_wild = 1
+    option_pro = 2
+    option_wildish = 3
+    default = 1
+
+class LocalItemTiering(Choice):
+    """Affects placement of local items"""
+    display_name = "Local Item Tiering"
+    option_wild = 0
+    option_pro = 1
+    option_wildish = 2
     default = 0
 
 class MinTier(Range):
@@ -360,7 +370,6 @@ class FF4FEOptions(PerGameCommonOptions):
     NoEarnedCharacters: NoEarnedCharacters
     HeroChallenge: HeroChallenge
     PassEnabled: PassEnabled
-    UsefulPercentage: UsefulPercentage
     UnsafeKeyItemPlacement: UnsafeKeyItemPlacement
     PassInShops: PassInShops
     AllowedCharacters: AllowedCharacters
@@ -370,6 +379,8 @@ class FF4FEOptions(PerGameCommonOptions):
     PartySize: PartySize
     CharactersPermajoin: CharactersPermajoin
     CharactersPermadie: CharactersPermadie
+    ItemRandomization: ItemRandomization
+    LocalItemTiering: LocalItemTiering
     MinTier: MinTier
     MaxTier: MaxTier
     JunkTier: JunkTier
@@ -406,9 +417,10 @@ ff4fe_option_groups = [
     ]),
     OptionGroup("Item Options", [
         ItemPlacement,
-        UsefulPercentage,
+        ItemRandomization,
         PassEnabled,
         PassInShops,
+        LocalItemTiering,
         MinTier,
         MaxTier,
         JunkTier,

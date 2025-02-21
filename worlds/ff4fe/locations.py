@@ -31,12 +31,13 @@ class LocationData():
             "name": self.name
         }
 
+    def __repr__(self):
+        return self.name
+
 
 all_locations: list[LocationData] = []
 
-locationscsv = csvdb.CsvDb(pkgutil.get_data(__name__, "treasure.csvdb").decode().splitlines())
-
-miab_count = 0
+locationscsv = csvdb.CsvDb(pkgutil.get_data(__name__, "data/treasure.csvdb").decode().splitlines())
 
 for location in locationscsv.create_view():
     if location.exclude != "":
@@ -60,8 +61,11 @@ for location in locationscsv.create_view():
                          f" -- {location.spoilerdetail}")
     all_locations.append(new_location)
 
+minor_locations = [location for location in all_locations if location.major_slot == False]
+minor_location_names = [location.name for location in minor_locations]
+
 # This is actually a custom data table for the reward locations, mimicking the format of the treasure locations.
-locationscsv = csvdb.CsvDb(pkgutil.get_data(__name__, "rewardslots.csvdb").decode().splitlines())
+locationscsv = csvdb.CsvDb(pkgutil.get_data(__name__, "data/rewardslots.csvdb").decode().splitlines())
 
 for location in locationscsv.create_view():
     # All reward locations are given their ID plus 512 so we can't confuse them with regular chests.
@@ -71,6 +75,9 @@ for location in locationscsv.create_view():
                          f"{subname}"
                          f" -- {location.spoilerdetail}")
     all_locations.append(new_location)
+
+major_locations = [location for location in all_locations if location.major_slot == True]
+major_location_names = [location.name for location in major_locations]
 
 character_slots = [
     ("Starting Character 1", "Overworld", "BaronTown", 0x01),
@@ -141,3 +148,46 @@ for location in all_locations:
 
 for i in range(32):
     all_locations.append(LocationData(f"Objective {i + 1} Status", "Overworld", "BaronTown", 0xEE00 + i, False))
+
+
+class Curve():
+    tier1: int
+    tier2: int
+    tier3: int
+    tier4: int
+    tier5: int
+    tier6: int
+    tier7: int
+    tier8: int
+
+    def __init__(self, tier1: int, tier2: int, tier3: int, tier4: int, tier5: int, tier6: int, tier7: int, tier8: int):
+        self.tier1 = tier1
+        self.tier2 = tier2
+        self.tier3 = tier3
+        self.tier4 = tier4
+        self.tier5 = tier5
+        self.tier6 = tier6
+        self.tier7 = tier7
+        self.tier8 = tier8
+
+
+areas_curves: dict[str, Curve] = {}
+
+curves = csvdb.CsvDb(pkgutil.get_data(__name__, "data/curves.csvdb").decode().splitlines()).create_view()
+
+for area in areas:
+    area_curves = curves.find_one(lambda l: l.area == area)
+    if area_curves is not None:
+        areas_curves[area] = Curve(
+            area_curves.tier1,
+            area_curves.tier2,
+            area_curves.tier3,
+            area_curves.tier4,
+            area_curves.tier5,
+            area_curves.tier6,
+            area_curves.tier7,
+            area_curves.tier8)
+
+def get_location_data(location_name: str):
+    return [location for location in all_locations if location.name == location_name].pop()
+

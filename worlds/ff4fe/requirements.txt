@@ -8,4 +8,4 @@ markdown
 javascripthon
 python-dotenv
 lark
-FreeEnterprise4 @ git+https://github.com/Rosalie-A/FreeEnterprise4@v2
+FreeEnterprise4 @ git+https://github.com/Rosalie-A/FreeEnterprise4@v3

@@ -1,8 +1,11 @@
+import pkgutil
 from typing import List, Tuple
 
-from . import items
-from .locations import LocationData, free_character_locations, earned_character_locations
+from . import items, csvdb
+from .locations import LocationData, free_character_locations, earned_character_locations, all_locations, \
+    minor_locations, major_locations, areas_curves
 from ..AutoWorld import World
+from ..oot import generate_itempool
 
 
 def create_itempool(locations: List[LocationData], world: World) -> Tuple[List[str], str, str]:
@@ -16,20 +19,10 @@ def create_itempool(locations: List[LocationData], world: World) -> Tuple[List[s
     if (world.options.HeroChallenge.current_key != "none"
             and not world.options.ForgeTheCrystal):
         location_count -= 1  # We're manually placing the Advance Weapon at Kokkol
-    if world.options.ConquerTheGiant:
-        location_count -= 1  # No Kain3 location in Giant%
-    useful_percentage = world.options.UsefulPercentage.value
-    useful_count = location_count * useful_percentage // 100
     result_pool = []
     result_pool.extend(character_pool)
     result_pool.extend(key_item_pool)
-    result_pool.extend(world.random.choices([item.name for item in items.useful_items
-                                             if item.tier <= world.options.MaxTier.value
-                                             and not (item.name == "Adamant Armor" and world.options.NoAdamantArmors)],
-                                            k=useful_count))
-    result_pool.extend(world.random.choices([item.name for item in items.filler_items
-                                             if item.tier >= world.options.MinTier.value],
-                                            k=location_count - useful_count))
+    result_pool.extend(create_general_pool(world, location_count, len(key_item_pool)))
     return (result_pool, chosen_character, second_starter)
 
 
@@ -50,7 +43,7 @@ def create_character_pool(world: World, chosen_character: str) -> List[str]:
     if world.options.NoEarnedCharacters:
         filled_character_slots += len(earned_character_locations)
     elif world.options.ConquerTheGiant:
-        character_slots -= 1  # Kain3 slot goes unused in this objective
+        filled_character_slots += 1  # Kain3 slot goes unused in this objective
     if (character_slots - filled_character_slots) > len(allowed_characters):
         if world.options.EnsureAllCharacters:
             character_pool.extend([character for character in allowed_characters if character != "None"])
@@ -84,6 +77,7 @@ def get_second_character(world: World, chosen_character: str, character_pool: Li
                    and character not in world.options.RestrictedCharacters.value]
     if world.options.AllowDuplicateCharacters.value == True:
         pruned_pool = [character for character in pruned_pool if character != chosen_character]
+    pruned_pool.remove(chosen_character)
     if len(pruned_pool) > 0:
         return world.random.choice(sorted(pruned_pool))
     else:
@@ -102,3 +96,58 @@ def create_key_item_pool(world: World) -> List[str]:
     return key_item_pool
 
 
+def create_general_pool(world: World, location_count: int, key_item_count: int):
+    #Tstandard is items from tiers 1-5
+    #TWild is items from tiers 1-8
+    if world.options.WackyChallenge.current_key == "kleptomania":
+        refined_filler = [item for item in items.filler_items if item.group not in ["weapon", "armor"]]
+        refined_useful = [item for item in items.useful_items if item.group not in ["weapon", "armor"]]
+    else:
+        refined_filler = [*items.filler_items]
+        refined_useful = [*items.useful_items]
+    refined_filler = [item for item in refined_filler if item.tier >= world.options.MinTier.value]
+    refined_useful = [item for item in refined_useful if item.tier <= world.options.MaxTier.value]
+    refined_set = [*refined_useful, *refined_filler]
+    priority_locations = world.options.priority_locations.value
+    required_useful_count = len(priority_locations | set(major_locations))
+    item_pool = world.random.choices(refined_useful, k=required_useful_count - key_item_count)
+    if world.options.ItemRandomization.current_key == "standard":
+        refined_set = [item for item in refined_set if item.tier < 6]
+        item_pool.extend(world.random.choices(refined_set, k=location_count))
+    if world.options.ItemRandomization.current_key == "wild":
+        item_pool = world.random.choices(refined_set, k=location_count)
+    if world.options.ItemRandomization.current_key == "pro" or world.options.ItemRandomization.current_key == "wildish":
+        tiers = [0, 1, 2, 3, 4, 5, 6, 7]
+        for location in minor_locations:
+            if location.name in world.options.priority_locations.value:
+                continue
+            area_curve = areas_curves[location.area]
+            if world.options.ItemRandomization.current_key == "pro":
+                tier_weights = [
+                    int(area_curve.tier1),
+                    int(area_curve.tier2),
+                    int(area_curve.tier3),
+                    int(area_curve.tier4),
+                    int(area_curve.tier5),
+                    int(area_curve.tier6),
+                    int(area_curve.tier7),
+                    int(area_curve.tier8),
+                ]
+            else:
+                tier_weights = [
+                    int(area_curve.tier1) * 7 // 8,
+                    (int(area_curve.tier1) * 1 // 8) + (int(area_curve.tier2) * 6 // 8),
+                    (int(area_curve.tier2) * 2 // 8) + (int(area_curve.tier3) * 5 // 8),
+                    (int(area_curve.tier3) * 3 // 8) + (int(area_curve.tier4) * 4 // 8),
+                    (int(area_curve.tier4) * 4 // 8) + (int(area_curve.tier5) * 3 // 8),
+                    (int(area_curve.tier5) * 5 // 8) + (int(area_curve.tier6) * 2 // 8),
+                    (int(area_curve.tier6) * 6 // 8) + (int(area_curve.tier7) * 1 // 8),
+                    (int(area_curve.tier7) * 7 // 8) + int(area_curve.tier8),
+                ]
+            chosen_tier = world.random.choices(tiers, tier_weights, k=1)[0]
+            chosen_item = world.random.choice(items.items_by_tier[chosen_tier])
+            while chosen_item not in refined_set:
+                chosen_tier = world.random.choices(tiers, tier_weights, k=1)[0]
+                chosen_item = world.random.choice(items.items_by_tier[chosen_tier])
+            item_pool.append(chosen_item)
+    return [item.name for item in item_pool]

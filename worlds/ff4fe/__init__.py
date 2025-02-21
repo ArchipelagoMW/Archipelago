@@ -1,20 +1,22 @@
 import json
 import os
+import pkgutil
 import threading
 import typing
 from typing import Mapping, Any
 
 import Utils
 import settings
-from BaseClasses import Region, ItemClassification, MultiWorld, Tutorial
+from BaseClasses import Region, ItemClassification, MultiWorld, Tutorial, Location, Item
+from Fill import fill_restrictive
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule, add_rule, add_item_rule, forbid_items_for_player
-from . import events, items, locations
+from . import events, items, locations, csvdb
 from . import rules as FERules
 from .Client import FF4FEClient
 from .itempool import create_itempool
 from .items import FF4FEItem, all_items, ItemData
-from .locations import FF4FELocation, all_locations, LocationData
+from .locations import FF4FELocation, all_locations, LocationData, free_character_locations, earned_character_locations
 from .options import FF4FEOptions, ff4fe_option_groups
 from . import topology, flags
 from .rom import FF4FEProcedurePatch
@@ -160,21 +162,27 @@ class FF4FEWorld(World):
 
     def create_items(self) -> None:
         item_pool, self.chosen_character, self.second_character = create_itempool(locations.all_locations, self)
-        chosen_character_placed = False
-        second_character_placed = False
 
         character_locations = locations.character_locations.copy()
+        self.get_location("Starting Character 1").place_locked_item(self.create_item(self.chosen_character))
+        self.get_location("Starting Character 2").place_locked_item(self.create_item(self.second_character))
         character_locations.remove("Starting Character 1")
         character_locations.remove("Starting Character 2")
+        item_pool.remove(self.chosen_character)
+        item_pool.remove(self.second_character)
+        earned_character_locations = locations.earned_character_locations.copy()
         if self.options.ConquerTheGiant:
             character_locations.remove("Giant of Bab-il Character")
+            earned_character_locations.remove("Giant of Bab-il Character")
+            self.get_location("Giant of Bab-il Character").place_locked_item(self.create_item("None"))
+            item_pool.remove("None")
         if self.options.NoFreeCharacters:
             for location in locations.free_character_locations:
                 character_locations.remove(location)
                 self.get_location(location).place_locked_item(self.create_item("None"))
                 item_pool.remove("None")
         if self.options.NoEarnedCharacters:
-            for location in locations.earned_character_locations:
+            for location in earned_character_locations:
                 character_locations.remove(location)
                 self.get_location(location).place_locked_item(self.create_item("None"))
                 item_pool.remove("None")
@@ -185,17 +193,7 @@ class FF4FEWorld(World):
         self.random.shuffle(restricted_character_forbid_locations)
 
         for item in map(self.create_item, item_pool):
-            # If we've specifically chosen a starting character, we place them directly even though we're not normally
-            # allowed to have a restricted character as a starter.
-            if item.name == self.chosen_character and not chosen_character_placed:
-                self.get_location("Starting Character 1").place_locked_item(self.create_item(self.chosen_character))
-                chosen_character_placed = True
-                continue
-            elif item.name == self.second_character and not second_character_placed:
-                self.get_location("Starting Character 2").place_locked_item(self.create_item(self.second_character))
-                second_character_placed = True
-                continue
-            elif item.name in items.characters:
+            if item.name in items.characters:
                 if item.name in self.options.RestrictedCharacters.value:
                     # Place restricted characters where they're allowed first, then into the other spots.
                     if len(restricted_character_allow_locations) > 0:
@@ -254,12 +252,6 @@ class FF4FEWorld(World):
                         and location.name not in self.options.priority_locations):
                     forbid_items_for_player(self.get_location(location.name), set(items.characters), self.player)
 
-        # Conquer the Giant doesn't have a character, so we force it to None.
-        if self.options.ConquerTheGiant:
-            (self.get_location(
-                "Giant of Bab-il Character")
-             .place_locked_item(self.create_item("None")))
-
         # If we're doing Hero Challenge and we're not doing Forge the Crystal, Kokkol has a fancy weapon for our Hero.
         # The actual weapon is determined by Free Enterprise, so you can't hint if it's an Excalipur and remove
         # the potential comedy.
@@ -298,8 +290,10 @@ class FF4FEWorld(World):
                 for requirement in FERules.area_rules[location.area]:
                     add_rule(self.get_location(location.name),
                              lambda state, true_requirement=requirement: state.has(true_requirement, self.player))
-            # Major slots must have useful or better.
-            if location.major_slot and location.name not in self.options.exclude_locations:
+            # Major slots must have useful or better. Except on Kleptomania because then we probably won't have enough usefuls.
+            if (location.major_slot
+                    and location.name not in self.options.exclude_locations
+                    and self.options.WackyChallenge.current_key != "kleptomania"):
                 add_item_rule(self.get_location(location.name),
                               lambda item: (item.classification & (ItemClassification.useful | ItemClassification.progression)) > 0)
             # The "harder" an area, the more key items and characters we need to access.
@@ -397,6 +391,72 @@ class FF4FEWorld(World):
         unfilled_locations = self.multiworld.get_unfilled_locations(self.player)
         for location in unfilled_locations:
             location.item = self.create_item(self.get_filler_item_name())
+        if self.options.LocalItemTiering.current_key == "pro" or self.options.LocalItemTiering.current_key == "wildish":
+            # If we're on Tpro or Twildish placement, not every placement is going to fall under their tiering rules
+            # Rather than set item rules doomed to fail, we swap things around here.
+            all_filled_locations = self.multiworld.get_filled_locations(self.player)
+            swappable_locations: list[Location] = []
+            swappable_items: list[Item] = []
+            for location in all_filled_locations:
+                # Get every minor location with local filler that hasn't been plando'd
+                if location.item.player == self.player and not location.item.classification & ItemClassification.progression:
+                    if location.name in locations.minor_location_names and not location.locked:
+                        area = locations.get_location_data(location.name).area
+                        area_curves = locations.areas_curves[area]
+                        item_data = items.get_item_data(location.item.name)
+                        item_tier = item_data.tier
+                        min_tier = self.get_min_tier(area_curves)
+                        max_tier = self.get_max_tier(area_curves)
+                        if self.options.LocalItemTiering.current_key == "wildish":
+                            max_tier += 1
+                        # If the item there isn't allowed by tiering, add the location and item to swap options.
+                        if item_tier < min_tier or item_tier > max_tier:
+                            swappable_locations.append(location)
+                            swappable_items.append(location.item)
+            # Sort both the items and locations by tier, lowest to highest.
+            swappable_locations.sort(key=lambda location: self.get_min_tier(
+                locations.areas_curves[locations.get_location_data(location.name).area]))
+            swappable_items.sort(key=lambda item: items.get_item_data(item.name).tier)
+            # Put the lowest tier item in the lowest tier location.
+            # This isn't perfect: with enough offworld items, we still might not fit the tiering rules.
+            # But we come a lot closer, and this is a fast solution.
+            for location in swappable_locations:
+                location.item = swappable_items.pop()
+
+
+    def get_min_tier(self, curve):
+        if int(curve.tier1) > 0:
+            return 1
+        elif int(curve.tier2) > 0:
+            return 2
+        elif int(curve.tier3) > 0:
+            return 3
+        elif int(curve.tier4) > 0:
+            return 4
+        elif int(curve.tier5) > 0:
+            return 5
+        elif int(curve.tier6) > 0:
+            return 6
+        elif int(curve.tier7) > 0:
+            return 7
+        return 8
+
+    def get_max_tier(self, curve):
+        if int(curve.tier8) > 0:
+            return 8
+        elif int(curve.tier7) > 0:
+            return 7
+        elif int(curve.tier6) > 0:
+            return 6
+        elif int(curve.tier5) > 0:
+            return 5
+        elif int(curve.tier4) > 0:
+            return 4
+        elif int(curve.tier3) > 0:
+            return 3
+        elif int(curve.tier2) > 0:
+            return 2
+        return 1
 
     def generate_output(self, output_directory: str) -> None:
         # Standard rom name stuff.
