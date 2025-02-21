@@ -1142,11 +1142,12 @@ def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, st
             found = location_id in ctx.location_checks[team, finding_player]
             entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
             new_priority = auto_priority
-            if item_flags & ItemClassification.trap:
-                if item_flags & ItemClassification.progression:
-                    new_priority = HintPriority.HINT_DESIRED
-                else:
-                    new_priority = HintPriority.HINT_AVOID
+            if auto_priority != HintPriority.HINT_UNSPECIFIED:
+                if item_flags & ItemClassification.trap:
+                    if item_flags & ItemClassification.progression:
+                        new_priority = HintPriority.HINT_DESIRED
+                    else:
+                        new_priority = HintPriority.HINT_AVOID
             hints.append(Hint(receiving_player, finding_player, location_id, item_id, found, entrance,
                                        item_flags, new_priority))
 
@@ -1171,11 +1172,12 @@ def collect_hint_location_id(ctx: Context, team: int, slot: int, seeked_location
         found = seeked_location in ctx.location_checks[team, slot]
         entrance = ctx.er_hint_data.get(slot, {}).get(seeked_location, "")
         new_priority = auto_priority
-        if item_flags & ItemClassification.trap:
-            if item_flags & ItemClassification.progression:
-                new_priority = HintPriority.HINT_DESIRED
-            else:
-                new_priority = HintPriority.HINT_AVOID
+        if auto_priority != HintPriority.HINT_UNSPECIFIED:
+            if item_flags & ItemClassification.trap:
+                if item_flags & ItemClassification.progression:
+                    new_priority = HintPriority.HINT_DESIRED
+                else:
+                    new_priority = HintPriority.HINT_AVOID
         return [Hint(receiving_player, slot, seeked_location, item_id, found, entrance, item_flags,
                               new_priority)]
     return []
