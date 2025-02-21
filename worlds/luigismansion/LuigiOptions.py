@@ -258,9 +258,9 @@ class Portrification(Toggle):
 class Enemizer(Choice):
     """
     Choose if and how ghosts are randomized.
-    0 = No ghost randomization
-    1 = Randomized ghost elements and waves
-    2 = Remove ghost elements, randomize waves
+    Vanilla = No ghost randomization
+    Randomized Elements = Randomized ghost elements and waves
+    No Elements = Remove ghost elements, randomize waves
     """
     display_name = "Enemizer"
     option_vanilla = 0
