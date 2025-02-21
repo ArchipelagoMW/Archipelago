@@ -23,6 +23,14 @@ def get_locations_by_category(category: str) -> Dict[str, KH1LocationData]:
 
     return location_dict
 
+def get_locations_by_type(type: str) -> Dict[str, KH1LocationData]:
+    location_dict: Dict[str, KH1LocationData] = {}
+    for name, data in location_table.items():
+        if data.type == type:
+            location_dict.setdefault(name, data)
+
+    return location_dict
+
 
 location_table: Dict[str, KH1LocationData] = {
     "Destiny Islands Chest":                                                            KH1LocationData("Destiny Islands",  265_0011, "Chest"),

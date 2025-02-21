@@ -354,7 +354,7 @@ class ForceStatsAbilitiesOnLevels(NamedRange):
     """
     display_name = "Force Stats and Abilities on Level Starting From"
     default = 2
-    range_start = 1
+    range_start = 2
     range_end = 101
     special_range_names = {
         "none": 101,
