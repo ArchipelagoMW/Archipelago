@@ -1075,9 +1075,10 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
     return isinstance(obj, typing.Iterable)
 
 
-class WeakRefDict(dict):
+class WeakReferencableDict(dict):
     """
-    The built-in dict class does not support weak references because weak references require a small memory overhead.
+    dict instances do not support having weak references to them because weak referencing requires a small memory
+    overhead on the object being referenced.
 
     This dict subclass adds in the extra memory overhead to support weak references.
     """

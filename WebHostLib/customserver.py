@@ -148,7 +148,7 @@ class WebHostContext(Context):
 
                     row = GameDataPackage.get(checksum=game_data["checksum"])
                     if row:  # None if rolled on >= 0.3.9 but uploaded to <= 0.3.8. multidata should be complete
-                        db_datapackage = Utils.WeakRefDict(Utils.restricted_loads(row.data))
+                        db_datapackage = Utils.WeakReferencableDict(Utils.restricted_loads(row.data))
                         game_data_packages[game] = db_datapackage
                         self.shared_embedded_game_data_packages[checksum] = db_datapackage
                         continue
