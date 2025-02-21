@@ -2935,6 +2935,10 @@ id,region,name,tags,mod_name
 7433,Farm,Craft Composter,CRAFTSANITY,Binning Skill
 7434,Farm,Craft Recycling Bin,CRAFTSANITY,Binning Skill
 7435,Farm,Craft Advanced Recycling Machine,CRAFTSANITY,Binning Skill
+7440,Farm,Craft Copper Slot Machine,"CRAFTSANITY",Luck Skill
+7441,Farm,Craft Gold Slot Machine,"CRAFTSANITY",Luck Skill
+7442,Farm,Craft Iridium Slot Machine,"CRAFTSANITY",Luck Skill
+7443,Farm,Craft Radioactive Slot Machine,"CRAFTSANITY,GINGER_ISLAND",Luck Skill
 7451,Adventurer's Guild,Magic Elixir Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Magic
 7452,Adventurer's Guild,Travel Core Recipe,CRAFTSANITY,Magic
 7453,Alesia Shop,Haste Elixir Recipe,CRAFTSANITY,Stardew Valley Expanded
@@ -3241,7 +3245,7 @@ id,region,name,tags,mod_name
 8199,Shipping,Shipsanity: Hardwood Display,SHIPSANITY,Archaeology
 8200,Shipping,Shipsanity: Wooden Display,SHIPSANITY,Archaeology
 8201,Shipping,Shipsanity: Dwarf Gadget: Infinite Volcano Simulation,"SHIPSANITY,GINGER_ISLAND",Archaeology
-8202,Shipping,Shipsanity: Water Shifter,SHIPSANITY,Archaeology
+8202,Shipping,Shipsanity: Water Shifter,"SHIPSANITY,DEPRECATED",Archaeology
 8203,Shipping,Shipsanity: Brown Amanita,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Distant Lands - Witch Swamp Overhaul
 8204,Shipping,Shipsanity: Swamp Herb,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Distant Lands - Witch Swamp Overhaul
 8205,Shipping,Shipsanity: Void Mint Seeds,SHIPSANITY,Distant Lands - Witch Swamp Overhaul
