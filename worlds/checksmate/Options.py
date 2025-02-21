@@ -259,12 +259,28 @@ class FairyChessPawns(Choice):
     Mixed: Adds all implemented fairy chess pawns to the pool. You may receive a mix of different types of pawns.
 
     Berolina: Only use the Berolina pawn (may appear to be a Ferz), which moves diagonally and captures forward.
+
+    Checkers: Only borrow Checkers, which move diagonally and capture by skipping over the intervening piece. Can capture many times.
+
+    Reserved: Crashes your game. (Not implemented.)
+
+    Any Pawn: A mix of Vanilla and Berolina - anything referred to as a Pawn by the source text.
+
+    Any Fairy: A mix of Berolina and Checkers - anything except ordinary Pawns.
+
+    Any Classical: A mix of Vanilla and Checkers - anything a player would recognise from their childhood.
     """
     display_name = "Fairy Chess Pawns"
     option_vanilla = 0
     option_mixed = 1
     option_berolina = 2
+    option_checkers = 3
+    option_reserved = 4
+    option_any_pawn = 5
+    option_any_fairy = 6
+    option_any_classical = 7
     default = 0
+
 
 
 class MinorPieceLimitByType(NamedRange):

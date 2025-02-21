@@ -23,12 +23,27 @@ def has_pin(state: CollectionState, player: int) -> bool:
 
 def determine_difficulty(opts: CMOptions):
     difficulty = 1.0
+    
+    # Army composition affects difficulty
     if opts.fairy_chess_army.value == opts.fairy_chess_army.option_stable:
         difficulty *= 1.05
-    if opts.fairy_chess_pawns.value != opts.fairy_chess_pawns.option_vanilla:
-        difficulty *= 1.05
+
+    # Pawn type affects difficulty
     if opts.fairy_chess_pawns.value == opts.fairy_chess_pawns.option_mixed:
-        difficulty *= 1.05
+        difficulty *= 1.16  # Most complex - all pawn types possible
+    elif opts.fairy_chess_pawns.value in [
+        opts.fairy_chess_pawns.option_any_pawn,
+        opts.fairy_chess_pawns.option_any_fairy,
+        opts.fairy_chess_pawns.option_any_classical
+    ]:
+        difficulty *= 1.12  # Two pawn types to manage
+    elif opts.fairy_chess_pawns.value in [
+        opts.fairy_chess_pawns.option_berolina,
+        opts.fairy_chess_pawns.option_checkers
+    ]:
+        difficulty *= 1.06  # Single but unusual pawn type
+    # Vanilla pawns don't affect difficulty
+
     fairy_pieces = len(opts.fairy_chess_pieces_configure.value)
     if opts.fairy_chess_pieces.value == opts.fairy_chess_pieces.option_fide:
         fairy_pieces = 1
@@ -64,11 +79,18 @@ def determine_max_material(opts: CMOptions):
 
 
 def determine_relaxation(opts: CMOptions) -> int:
+    target = 0
     if opts.difficulty.value == opts.difficulty.option_bullet:
-        return 120
+        target += 120
     if opts.difficulty.value == opts.difficulty.option_relaxed:
-        return 240
-    return 0
+        target += 240
+    if opts.fairy_chess_pawns.value in [
+        opts.fairy_chess_pawns.option_checkers,
+        opts.fairy_chess_pawns.option_any_fairy,
+        opts.fairy_chess_pawns.option_any_classical
+    ]:
+        target += 120
+    return target
 
 
 def meets_material_expectations(state: CollectionState,
