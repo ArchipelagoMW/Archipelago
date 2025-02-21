@@ -5,7 +5,7 @@ from math import ceil
 from BaseClasses import Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .Items import KH1Item, KH1ItemData, event_item_table, get_items_by_category, item_table, item_name_groups
-from .Locations import KH1Location, location_table, get_locations_by_category, location_name_groups
+from .Locations import KH1Location, location_table, get_locations_by_type, location_name_groups
 from .Options import KH1Options, kh1_option_groups
 from .Regions import create_regions
 from .Rules import set_rules
@@ -166,12 +166,19 @@ class KH1World(World):
         self.random.shuffle(possible_level_up_item_pool)
         level_up_item_pool = level_up_item_pool + possible_level_up_item_pool[:(99 - len(level_up_item_pool))]
 
-        level_up_locations = list(get_locations_by_category("Levels").keys())
+        level_up_locations = list(get_locations_by_type("Level Slot 1").keys())
         self.random.shuffle(level_up_item_pool)
-        current_level_for_placing_stats = self.options.force_stats_and_abilities_on_levels.value
-        while len(level_up_item_pool) > 0 and current_level_for_placing_stats <= self.options.level_checks:
-            self.get_location(level_up_locations[current_level_for_placing_stats - 1]).place_locked_item(self.create_item(level_up_item_pool.pop()))
-            current_level_for_placing_stats += 1
+        current_level_index_for_placing_stats = self.options.force_stats_and_abilities_on_levels.value - 2 # Level 2 is index 0, Level 3 is index 1, etc
+        if self.options.remote_items.current_key == "off":
+            logging.info(f"{self.player_name}'s value {self.options.force_stats_and_abilities_on_levels.value} for force_stats_and_abilities_on_levels was changed\n"
+                         f"Set to 1 as remote_items if \"off\"")
+            self.options.force_stats_and_abilities_on_levels.value = 2
+            current_level_index_for_placing_stats = 0
+        while len(level_up_item_pool) > 0 and current_level_index_for_placing_stats < self.options.level_checks: # With all levels in location pool, 99 level ups so need to go index 0-98
+            self.get_location(level_up_locations[current_level_index_for_placing_stats]).place_locked_item(self.create_item(level_up_item_pool.pop()))
+            current_level_index_for_placing_stats += 1
+        
+        
         
         # Calculate prefilled locations and items
         exclude_items = ["Final Door Key", "Lucky Emblem"]
@@ -283,7 +290,7 @@ class KH1World(World):
             self.get_location("Traverse Town 2nd District Boots and Shoes Awning Chest").place_locked_item(self.create_item("Postcard"))
             self.get_location("Traverse Town 1st District Blue Trinity Balcony Chest").place_locked_item(self.create_item("Postcard"))
         if not self.options.randomize_puppies:
-            self.options.puppy_value = 3
+            self.options.puppy_value.value = 3
             logging.info(f"{self.player_name}'s value of {self.options.puppy_value.value} for puppy value was changed to 3 as Randomize Puppies is OFF")
             for i, location in enumerate(VANILLA_PUPPY_LOCATIONS):
                 self.get_location(location).place_locked_item(self.create_item("Puppy"))
@@ -424,7 +431,8 @@ class KH1World(World):
                 logging.info(f"{self.player_name}'s value of {self.options.slot_2_level_checks.value} for slot 2 level checks is invalid as it exceeds their value of {self.options.level_checks.value} for Level Checks\n"
                             f"Setting slot 2 level check's value to {self.options.level_checks.value}")
                 self.options.slot_2_level_checks.value = self.options.level_checks.value
-            self.slot_2_levels = self.random.sample(range(2,self.options.level_checks.value + 1), self.options.slot_2_level_checks.value)
+            # Range is exclusive of the top, so if level checks is 1 then the top end of the range needs to be 3 as the only level it can choose is 2.
+            self.slot_2_levels = self.random.sample(range(2,self.options.level_checks.value + 2), self.options.slot_2_level_checks.value) 
         return self.slot_2_levels
     
     def get_keyblade_stats(self):
