@@ -261,6 +261,6 @@ def launch():
     # options = Utils.get_options()
 
     import colorama
-    colorama.init()
+    colorama.just_fix_windows_console()
     asyncio.run(main())
     colorama.deinit()

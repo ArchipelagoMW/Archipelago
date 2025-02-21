@@ -1128,7 +1128,7 @@ def run_as_textclient(*args):
     args = handle_url_arg(args, parser=parser)
 
     # use colorama to display colored text highlighting on windows
-    colorama.init()
+    colorama.just_fix_windows_console()
 
     asyncio.run(main(args))
     colorama.deinit()
