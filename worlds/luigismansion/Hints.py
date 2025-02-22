@@ -16,7 +16,7 @@ def get_progression_only_items(multiworld: MultiWorld, player: int, loc, hinted_
     prog_items_no_skip = [items for items in prog_items if items.classification != 0b1001]
     while loc is None:
         item = multiworld.worlds[player].random.choice(prog_items_no_skip)
-        if item.location not in hinted_loc and item.code is not None:
+        if item.location not in hinted_loc and item.code is not None and (item.player == player or item.location.player == player):
             loc: Location = item.location
     return loc
 
@@ -25,7 +25,7 @@ def get_other_items(multiworld: MultiWorld, player: int, loc, hinted_loc) -> Loc
     other_items = [item for item in multiworld.get_items() if not item.advancement]
     while loc is None:
         item = multiworld.worlds[player].random.choice(other_items)
-        if item.location not in hinted_loc and item.code is not None:
+        if item.location not in hinted_loc and item.code is not None and (item.player == player or item.location.player == player):
             loc: Location = item.location
     return loc
 
