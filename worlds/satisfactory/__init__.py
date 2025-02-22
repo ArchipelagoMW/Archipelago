@@ -6,6 +6,7 @@ from .Locations import Locations, LocationData
 from .StateLogic import EventId, StateLogic
 from .Options import SatisfactoryOptions, Placement
 from .Regions import SatisfactoryLocation, create_regions_and_return_locations
+from .CriticalPathCalculator import CriticalPathCalculator
 from .Web import SatisfactoryWebWorld
 from ..AutoWorld import World
 
@@ -30,6 +31,7 @@ class SatisfactoryWorld(World):
     game_logic: ClassVar[GameLogic] = GameLogic()
     state_logic: StateLogic
     items: Items
+    critical_path: CriticalPathCalculator
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
@@ -37,8 +39,11 @@ class SatisfactoryWorld(World):
 
 
     def generate_early(self) -> None:
+        self.options.final_elevator_package.value = 1
+
         self.state_logic = StateLogic(self.player, self.options)
-        self.items = Items(self.player, self.game_logic, self.random, self.options)
+        self.critical_path = CriticalPathCalculator(self.game_logic, self.random, self.options)
+        self.items = Items(self.player, self.game_logic, self.random, self.options, self.critical_path)
 
         if not self.options.goal_selection.value:
             raise Exception("""Satisfactory: player {} needs to choose a goal, the option goal_selection is empty"""
@@ -65,7 +70,7 @@ class SatisfactoryWorld(World):
 
     def create_regions(self) -> None:
         locations: List[LocationData] = \
-            Locations(self.game_logic, self.options, self.state_logic, self.items).get_locations()
+            Locations(self.game_logic, self.options, self.state_logic, self.items, self.critical_path).get_locations()
         create_regions_and_return_locations(
             self.multiworld, self.options, self.player, self.game_logic, self.state_logic, locations)
 

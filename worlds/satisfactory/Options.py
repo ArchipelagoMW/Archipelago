@@ -44,13 +44,13 @@ class ChoiceMap(Choice, metaclass=ChoiceMapMeta):
 
 class ElevatorTier(NamedRange):
     """
-    Ship these Space Elevator packages to finish.
-    Does nothing if *Space Elevator Tier* goal is not enabled.
+    Put these Shipments to Space Elevator packages in logic.
+    if your goal selection contains *Space Elevator Tier* then the goal will be to complete these shipments.
     """
     display_name = "Goal: Space Elevator shipment"
     default = 2
     range_start = 1
-    range_end = 4
+    range_end = 5
     special_range_names = {
         "one package (tiers 1-2)": 1,
         "two packages (tiers 1-4)": 2,

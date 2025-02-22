@@ -572,8 +572,6 @@ class GameLogic:
             Recipe("AI Expansion Server", "Quantum Encoder", ("Dark Matter Residue", "Excited Photonic Matter", "Magnetic Field Generator", "Neural-Quantum Processor", "Superposition Oscillator")), ),
         ###
 #1.0
-
-        # TODO transport types aren't currently in logic
     }
 
     buildings: Dict[str, Building] = {

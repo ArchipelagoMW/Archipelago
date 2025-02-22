@@ -4,6 +4,7 @@ from .GameLogic import GameLogic, Recipe, Building, PowerInfrastructureLevel, Dr
 from .StateLogic import StateLogic, EventId, part_event_prefix, building_event_prefix
 from .Items import Items
 from .Options import SatisfactoryOptions
+from .CriticalPathCalculator import CriticalPathCalculator
 from math import ceil, floor
 
 
@@ -43,9 +44,6 @@ class Part(LocationData):
     def can_produce_any_recipe_for_part(self, state_logic: StateLogic, recipes: Iterable[Recipe], 
                                         name: str, items: Items) -> Callable[[CollectionState], bool]:
         def can_build_by_any_recipe(state: CollectionState) -> bool:
-            if name == "Steel Ingot":
-                debug = True
-
             if items.precalculated_progression_recipes and name in items.precalculated_progression_recipes:
                 can_produce: bool = state_logic.can_produce_specific_recipe_for_part(
                     state, items.precalculated_progression_recipes[name])
@@ -76,9 +74,6 @@ class EventBuilding(LocationData):
             ) -> Callable[[CollectionState], bool]:
 
         def can_build(state: CollectionState) -> bool:
-            if building.name == "Building: Foundry":
-                debug = True
-
             return state_logic.has_recipe(state, building) \
                 and state_logic.can_power(state, building.power_requirement) \
                 and state_logic.can_produce_all_allowing_handcrafting(state, game_logic, building.inputs)
@@ -177,6 +172,7 @@ class Locations():
     options: Optional[SatisfactoryOptions]
     state_logic: Optional[StateLogic]
     items: Optional[Items]
+    critical_path: Optional[CriticalPathCalculator]
 
     hub_location_start: ClassVar[int] = 1338000
     max_tiers: ClassVar[int] = 10
@@ -186,11 +182,13 @@ class Locations():
     drop_pod_location_id_end: ClassVar[int] = 1338699
 
     def __init__(self, game_logic: Optional[GameLogic] = None, options: Optional[SatisfactoryOptions] = None,
-                 state_logic: Optional[StateLogic] = None, items: Optional[Items] = None):
+                 state_logic: Optional[StateLogic] = None, items: Optional[Items] = None,
+                 critical_path: Optional[CriticalPathCalculator] = None):
         self.game_logic = game_logic
         self.options = options
         self.state_logic = state_logic
         self.items = items
+        self.critical_path = critical_path
 
     def get_base_location_table(self) -> List[LocationData]:
         return [
@@ -310,8 +308,8 @@ class Locations():
         "Must include all possible location names and their id's"
 
         location_table = self.get_base_location_table()
-        location_table.extend(self.get_hub_locations())
-        location_table.extend(self.get_drop_pod_locations())
+        location_table.extend(self.get_hub_locations(True, self.max_tiers))
+        location_table.extend(self.get_drop_pod_locations(True, self.max_tiers))
         location_table.append(LocationData("Overworld", "UpperBound", 1338999))
 
         return {location.name: location.code for location in location_table}
@@ -322,26 +320,38 @@ class Locations():
         if not self.game_logic or not self.options or not self.state_logic or not self.items:
             raise Exception("Locations need to be initialized with logic, options and items before using this method")
 
+        max_tier_for_game = min(self.options.final_elevator_package * 2, len(self.game_logic.hub_layout))
+
         location_table = self.get_base_location_table()
-        location_table.extend(self.get_hub_locations())
-        location_table.extend(self.get_drop_pod_locations())
+        location_table.extend(self.get_hub_locations(False, max_tier_for_game))
+        location_table.extend(self.get_drop_pod_locations(False, max_tier_for_game))
         location_table.extend(self.get_logical_event_locations())
 
         return location_table
 
-    def get_hub_locations(self) -> List[LocationData]:
+    def get_hub_locations(self, for_data_package: bool, max_tier: int) -> List[LocationData]:
         location_table: List[LocationData] = []
+
+        number_of_slots_per_milestone_for_game: int
+        if (for_data_package):
+           number_of_slots_per_milestone_for_game = self.max_slots
+        else:
+            if self.options.final_elevator_package <= 2:
+                number_of_slots_per_milestone_for_game = 10
+            else:
+                number_of_slots_per_milestone_for_game = self.game_logic.slots_per_milestone
 
         hub_location_id = self.hub_location_start
         for tier in range(1, self.max_tiers + 1):
-            for milestone in range(1, self.max_milestones + 1):
-                for slot in range(1, self.max_slots + 1):
-                    if not self.game_logic:
+            for milestone in range(1, max_tier + 1):
+                for slot in range(1, number_of_slots_per_milestone_for_game + 1):
+                    if for_data_package:
                         location_table.append(HubSlot(tier, milestone, slot, hub_location_id))
                     else:
-                        if tier <= len(self.game_logic.hub_layout) \
+                        if tier <= max_tier \
                                 and milestone <= len(self.game_logic.hub_layout[tier - 1]) \
-                                and slot <= self.game_logic.slots_per_milestone:
+                                and slot <= number_of_slots_per_milestone_for_game:
+                            
                             location_table.append(HubSlot(tier, milestone, slot, hub_location_id))
 
                     hub_location_id += 1
@@ -356,11 +366,13 @@ class Locations():
 
         location_table.extend(
             ElevatorTier(index, self.state_logic, self.game_logic) 
-            for index, parts in enumerate(self.game_logic.space_elevator_tiers))
+            for index, parts in enumerate(self.game_logic.space_elevator_tiers)
+            if index < self.options.final_elevator_package)
         location_table.extend(
             part 
             for part_name, recipes in self.game_logic.recipes.items() 
-            for part in Part.get_parts(self.state_logic, recipes, part_name, self.items))
+            for part in Part.get_parts(self.state_logic, recipes, part_name, self.items)
+            if part in self.critical_path.potential_required_parts)
         location_table.extend(
             EventBuilding(self.game_logic, self.state_logic, name, building) 
             for name, building in self.game_logic.buildings.items())
@@ -370,28 +382,28 @@ class Locations():
 
         return location_table
     
-    def get_drop_pod_locations(self) -> List[LocationData]:
+    def get_drop_pod_locations(self, for_data_package: bool, max_tier: int) -> List[LocationData]:
         drop_pod_locations: List[DropPod] = []
 
-        bucket_size: int = 0
-        drop_pod_data: List[DropPodData] = []
-
-        if self.game_logic:
-            bucket_size = floor(
-                (self.drop_pod_location_id_end - self.drop_pod_location_id_start) / len(self.game_logic.hub_layout))
-
+        bucket_size: int
+        drop_pod_data: List[DropPodData]
+        if for_data_package:
+            bucket_size = 0
+            drop_pod_data = []
+        else:
+            bucket_size = floor((self.drop_pod_location_id_end - self.drop_pod_location_id_start) / max_tier)
             drop_pod_data = self.game_logic.drop_pods
             # sort, easily obtainable first, should be deterministic
             drop_pod_data.sort(key = lambda data: ("!" if data.item == None else data.item) + str(data.x - data.z))
 
         for location_id in range(self.drop_pod_location_id_start, self.drop_pod_location_id_end + 1):
-            if not self.game_logic or not self.state_logic or not self.options:
+            if for_data_package:
                 drop_pod_locations.append(DropPod(DropPodData(0, 0, 0, None, 0), None, location_id, 1, False))
             else:
                 location_id_normalized: int = location_id - self.drop_pod_location_id_start
                 data: DropPodData = drop_pod_data[location_id_normalized]
                 can_hold_progression: bool = location_id_normalized < self.options.hard_drive_progression_limit.value
-                tier = min(ceil((location_id_normalized + 1) / bucket_size), len(self.game_logic.hub_layout))
+                tier = min(ceil((location_id_normalized + 1) / bucket_size), max_tier)
 
                 drop_pod_locations.append(DropPod(data, self.state_logic, location_id, tier, can_hold_progression))
 

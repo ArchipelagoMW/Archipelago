@@ -38,10 +38,7 @@ class StateLogic:
         return power_level is None or state.has(building_event_prefix + power_level.to_name(), self.player)
 
     def can_produce_all(self, state: CollectionState, parts: Optional[Iterable[str]]) -> bool:
-        if parts and "SAM" in parts:
-            debug = "Now"
-
-        return parts is None or \
+       return parts is None or \
             state.has_all(map(self.to_part_event, parts), self.player)
 
     def can_produce_all_allowing_handcrafting(self, state: CollectionState, logic: GameLogic, 
@@ -80,7 +77,9 @@ class StateLogic:
             and self.can_produce_all(state, recipe.inputs)
     
     def is_game_phase(self, state: CollectionState, phase: int) -> bool:
-        return state.has(f"Elevator Tier {phase}", self.player)
+        limited_phase = min(self.options.final_elevator_package * 2, phase)
+        
+        return state.has(f"Elevator Tier {limited_phase}", self.player)
     
     @staticmethod
     def to_part_event(part: str) -> str:

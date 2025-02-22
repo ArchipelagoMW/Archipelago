@@ -1,40 +1,42 @@
-from enum import Enum
+from enum import IntFlag
 from typing import NamedTuple, Set
 from BaseClasses import ItemClassification
 
-class ItemGroups(str, Enum):
-    Parts = 1
-    Equipment = 2
-    Ammo = 3
-    Recipe = 4
-    Building = 5
-    Trap = 6
-    Lights = 7
-    Foundations = 8
-    Transport = 9
-    Trains = 10
-    ConveyorMk1 = 11
-    ConveyorMk2 = 12
-    ConveyorMk3 = 13
-    ConveyorMk4 = 14
-    ConveyorMk5 = 15
-    ConveyorSupports = 16
-    PipesMk1 = 17
-    PipesMk2 = 18
-    PipelineSupports = 19
-    HyperTubes = 20
-    Signs = 21
-    Pilars = 22
-    Beams = 23
-    Walls = 24
-    Upgrades = 25
-    Vehicles = 26
-    Customizer = 27
-    ConveyorMk6 = 28
+class ItemGroups(IntFlag):
+    Parts = 1 << 1
+    Equipment = 1 << 2
+    Ammo = 1 << 3
+    Recipe = 1 << 4
+    Building = 1 << 5
+    Trap = 1 << 6
+    Lights = 1 << 7
+    Foundations = 1 << 8
+    Transport = 1 << 9
+    Trains = 1 << 10
+    ConveyorMk1 = 1 << 11
+    ConveyorMk2 = 1 << 12
+    ConveyorMk3 = 1 << 13
+    ConveyorMk4 = 1 << 14
+    ConveyorMk5 = 1 << 15
+    ConveyorSupports = 1 << 16
+    PipesMk1 = 1 << 17
+    PipesMk2 = 1 << 18
+    PipelineSupports = 1 << 19
+    HyperTubes = 1 << 20
+    Signs = 1 << 21
+    Pilars = 1 << 22
+    Beams = 1 << 23
+    Walls = 1 << 24
+    Upgrades = 1 << 25
+    Vehicles = 1 << 26
+    Customizer = 1 << 27
+    ConveyorMk6 = 1 << 28
+    BasicNeeds = 1 << 29
+
 
 class ItemData(NamedTuple):
     """Represents an item in the pool, it could be a resource bundle, production recipe, trap, etc."""
-    category: Set[ItemGroups]
+    category: ItemGroups
     code: int
     type: ItemClassification = ItemClassification.filler
     count: int = 1

@@ -42,6 +42,9 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
     ]
 
     for hub_tier, milestones_per_hub_tier in enumerate(game_logic.hub_layout, 1):
+        if (hub_tier > (options.final_elevator_package * 2)):
+            break
+
         region_names.append(f"Hub Tier {hub_tier}")
 
         for minestone, _ in enumerate(milestones_per_hub_tier, 1):
@@ -85,18 +88,27 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
         super_early_game_buildings.append("Conveyor Splitter")
         super_early_game_buildings.append("Conveyor Merger")
 
+    if options.final_elevator_package == 1:
+        super_early_game_buildings.append(early_game_buildings)
+
     connect(regions, "Menu", "Overworld")
     connect(regions, "Overworld", "Hub Tier 1")
     connect(regions, "Hub Tier 1", "Hub Tier 2",
             lambda state: state_logic.can_build_all(state, super_early_game_buildings))
-    connect(regions, "Hub Tier 2", "Hub Tier 3", lambda state: state.has("Elevator Tier 1", player) 
+    
+    if options.final_elevator_package >= 2:
+        connect(regions, "Hub Tier 2", "Hub Tier 3", lambda state: state.has("Elevator Tier 1", player) 
                                                              and state_logic.can_build_all(state, early_game_buildings))
-    connect(regions, "Hub Tier 3", "Hub Tier 4")
-    connect(regions, "Hub Tier 4", "Hub Tier 5", lambda state: state.has("Elevator Tier 2", player))
-    connect(regions, "Hub Tier 5", "Hub Tier 6")
-    connect(regions, "Hub Tier 6", "Hub Tier 7", lambda state: state.has("Elevator Tier 3", player))
-    connect(regions, "Hub Tier 7", "Hub Tier 8")
-    connect(regions, "Hub Tier 8", "Hub Tier 9", lambda state: state.has("Elevator Tier 4", player))
+        connect(regions, "Hub Tier 3", "Hub Tier 4")
+    if options.final_elevator_package >= 3:
+        connect(regions, "Hub Tier 4", "Hub Tier 5", lambda state: state.has("Elevator Tier 2", player))
+        connect(regions, "Hub Tier 5", "Hub Tier 6")
+    if options.final_elevator_package >= 4:
+        connect(regions, "Hub Tier 6", "Hub Tier 7", lambda state: state.has("Elevator Tier 3", player))
+        connect(regions, "Hub Tier 7", "Hub Tier 8")
+    if options.final_elevator_package >= 5:    
+        connect(regions, "Hub Tier 8", "Hub Tier 9", lambda state: state.has("Elevator Tier 4", player))
+
     connect(regions, "Overworld", "Gas Area", lambda state:
                                 state_logic.can_produce_all(state, ("Gas Mask", "Gas Filter")))
     connect(regions, "Overworld", "Radioactive Area", lambda state:
@@ -112,6 +124,9 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
         return logic_rule
 
     for hub_tier, milestones_per_hub_tier in enumerate(game_logic.hub_layout, 1):
+        if (hub_tier > (options.final_elevator_package * 2)):
+            break
+
         for minestone, parts_per_milestone in enumerate(milestones_per_hub_tier, 1):
             connect(regions, f"Hub Tier {hub_tier}", f"Hub {hub_tier}-{minestone}",
                 can_produce_all_allowing_handcrafting(parts_per_milestone.keys()))
