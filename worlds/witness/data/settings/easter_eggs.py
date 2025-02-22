@@ -38,7 +38,7 @@ EASTER_EGGS = {
     "Town Tower Top": 1,
     "Windmill Interior": 2,
     "Theater": 1,
-    "Jungle Peninsula": 5,
+    "Southern Peninsula": 5,
     "Jungle": 2,
     "Jungle Under Popup Wall": 1,
     "Jungle Vault": 1,
