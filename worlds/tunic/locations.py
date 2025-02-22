@@ -244,7 +244,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Rooted Ziggurat Lower - Near Corpses": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Entry"),
     "Rooted Ziggurat Lower - Spider Ambush": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Entry"),
     "Rooted Ziggurat Lower - Left Of Checkpoint Before Fuse": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Mid Checkpoint"),
-    "Rooted Ziggurat Lower - After Guarded Fuse": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Mid Checkpoint"),
+    "Rooted Ziggurat Lower - After Guarded Fuse": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Miniboss Platform"),
     "Rooted Ziggurat Lower - Guarded By Double Turrets": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Front"),
     "Rooted Ziggurat Lower - After 2nd Double Turret Chest": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Mid Checkpoint"),
     "Rooted Ziggurat Lower - Guarded By Double Turrets 2": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Front"),

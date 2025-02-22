@@ -102,7 +102,9 @@ def place_event_items(world: "TunicWorld", regions: Dict[str, Region]) -> None:
         elif event_name.endswith("Bell"):
             location.place_locked_item(
                 TunicERItem("Ring " + event_name, ItemClassification.progression, None, world.player))
-        else:
+        elif event_name.endswith("Fuse") or event_name.endswith("Fuses"):
+            if world.options.shuffle_fuses:
+                continue
             location.place_locked_item(
                 TunicERItem("Activate " + event_name, ItemClassification.progression, None, world.player))
         region.locations.append(location)

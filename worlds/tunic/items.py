@@ -184,7 +184,7 @@ item_table: Dict[str, TunicItemData] = {
     "Fortress Candles Fuse": TunicItemData(IC.progression, 0, 170, "Fuses"),
     "Fortress Door Left Fuse": TunicItemData(IC.progression, 0, 171, "Fuses"),
     "Fortress Door Right Fuse": TunicItemData(IC.progression, 0, 172, "Fuses"),
-    "Furnace to Well Fuse": TunicItemData(IC.progression, 0, 173, "Fuses"),
+    "West Furnace Fuse": TunicItemData(IC.progression, 0, 173, "Fuses"),
     "West Garden Fuse": TunicItemData(IC.progression, 0, 174, "Fuses"),
     "Atoll Northeast Fuse": TunicItemData(IC.progression, 0, 175, "Fuses"),
     "Atoll Northwest Fuse": TunicItemData(IC.progression, 0, 176, "Fuses"),
