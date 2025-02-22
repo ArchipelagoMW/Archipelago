@@ -1,16 +1,15 @@
+import asyncio
 import traceback
 
 import dolphin_memory_engine as dme
-import asyncio
-from CommonClient  import logger
-from worlds.pokepark_1 import PRISM_ITEM
 
+from CommonClient import logger
 from worlds.pokepark_1.adresses import stage_id_address, is_in_menu_address, pokemon_id_address, \
     tmp_addresses_disabled_friendship_overwrite, UNCHECKED_MEADOW_ZONE_LOCATION_POKEMON_IDS, \
     MEADOW_ZONE_SPECIAL_EXCEPTION_POKEMON, UNCHECKED_BEACH_ZONE_LOCATION_POKEMON_IDS, meadow_zone_stage_id, \
-    beach_zone_stage_id, blocked_unlocks, prisma_overwrites, prisma_item_checks, venusaur_minigame_stage_id, \
-    bulbasaur_minigame_stage_id, meadow_zone_unlock_pokemon_addresses_for_location, unlock_item_checks, \
-    pelliper_minigame_stage_id, gyarados_minigame_stage_id, beach_zone_unlock_pokemon_addresses_for_location
+    beach_zone_stage_id, blocked_unlocks, prisma_blocked_itemIds, meadow_zone_unlock_pokemon_addresses_for_location, \
+    beach_zone_unlock_pokemon_addresses_for_location, \
+    UNLOCKS, PRISMAS, PrismaItem
 
 empty_pokemon_id = 0x00
 
@@ -24,6 +23,11 @@ delay_seconds = 0.5
 
 original_values = {}  # {address: value}
 
+
+def store_and_overwrite_unlock_address(address,value):
+    if address not in original_values:
+        original_values[address] = dme.read_word(address)
+    dme.write_word(address, value)
 
 def store_and_overwrite_address(address, value):
     if address not in original_values:
@@ -71,8 +75,8 @@ class ZoneStateManager:
                         if unlock not in blocked_unlocks:
                             blocked_unlocks.append(unlock)
                             self.temp_blocked_unlocks.append(unlock)
-                            unlock_address, _ = unlock_item_checks[unlock]
-                            store_and_overwrite_address(unlock_address, 0)
+                            unlock_address = UNLOCKS[unlock].item.final_address
+                            store_and_overwrite_unlock_address(unlock_address, 0)
                 break
 
         for pid, checks, location_id in self.checked_pokemon_ids:
@@ -111,44 +115,45 @@ zone_managers = {
 }
 
 
+def restore_original_prisma_values():
+    for prisma in PRISMAS.values():
+        address = prisma.item.final_address
+        if prisma.itemId in prisma_blocked_itemIds:
+            if address in original_values:
+                dme.write_word(address, original_values[address])
+                del original_values[address]
+    prisma_blocked_itemIds.clear()
+
+def set_state_for_unchecked_prisma_location(current_prisma: PrismaItem | None):
+    prisma_blocked_itemIds.append(current_prisma.itemId)
+
+    address = current_prisma.item.final_address
+    if address not in original_values:
+        original_values[address] = dme.read_word(address)
+        dme.write_word(address, 0x2)
+
+def set_state_for_checked_prisma_location(current_prisma: PrismaItem | None):
+    prisma_blocked_itemIds.append(current_prisma.itemId)
+
+    address = current_prisma.item.final_address
+    value = current_prisma.item.value
+    if address not in original_values:
+        original_values[address] = dme.read_word(address)
+        dme.write_word(address, value)
+
 def handle_prisma_overwrites(stage_id, ctx):
-    # Mapping of stage IDs to their specific Prisma
-    stage_prisma_map = {
-        bulbasaur_minigame_stage_id: PRISM_ITEM.get("Bulbasaur Prisma"),
-        venusaur_minigame_stage_id: PRISM_ITEM.get("Venusaur Prisma"),
-        pelliper_minigame_stage_id: PRISM_ITEM.get("Pelliper Prisma"),
-        gyarados_minigame_stage_id: PRISM_ITEM.get("Gyarados Prisma")
-    }
+    current_prisma = next((prisma for prisma in PRISMAS.values() if prisma.stage_id == stage_id), None)
 
-    current_stage_prisma = stage_prisma_map.get(stage_id)
-
-    if current_stage_prisma is None:
-        for prisma in prisma_item_checks:
-            for address, value in prisma_item_checks[prisma]:
-                if prisma in prisma_overwrites:
-                    if address in original_values:
-                        dme.write_word(address, original_values[address])
-                        del original_values[address]
-        prisma_overwrites.clear()
+    if current_prisma is None:
+        restore_original_prisma_values()
         return
 
-    if current_stage_prisma not in ctx.checked_locations:
+    if current_prisma.locationId not in ctx.checked_locations:
+        set_state_for_unchecked_prisma_location(current_prisma)
 
-        prisma_overwrites.append(current_stage_prisma)
 
-        for address, value in prisma_item_checks[current_stage_prisma]:
-            if address not in original_values:
-                original_values[address] = dme.read_word(address)
-            dme.write_word(address, 0x2)
-
-    if current_stage_prisma in ctx.checked_locations:
-
-        prisma_overwrites.append(current_stage_prisma)
-
-        for address, value in prisma_item_checks[current_stage_prisma]:
-            if address not in original_values:
-                original_values[address] = dme.read_word(address)
-            dme.write_word(address, 0x3)
+    if current_prisma.locationId in ctx.checked_locations:
+        set_state_for_checked_prisma_location(current_prisma)
 
 async def location_state_watcher(ctx):
     async def _sub():
