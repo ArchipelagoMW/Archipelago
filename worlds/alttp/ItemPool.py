@@ -718,16 +718,16 @@ def get_pool_core(world, player: int):
         pool.extend(diff.universal_keys)
         if mode == 'standard':
             if world.key_drop_shuffle[player]:
-                key_locations = ['Secret Passage', 'Hyrule Castle - Map Guard Key Drop']
+                key_locations = ['Secret Passage', 'Hyrule Castle - First Guard Key Drop']
                 key_location = world.random.choice(key_locations)
                 key_locations.remove(key_location)
                 place_item(key_location, "Small Key (Universal)")
-                key_locations += ['Hyrule Castle - Boomerang Guard Key Drop', 'Hyrule Castle - Boomerang Chest',
-                                  'Hyrule Castle - Map Chest']
+                key_locations += ['Hyrule Castle - Inner Guard Key Drop', 'Hyrule Castle - Inner Basement Chest',
+                                  'Hyrule Castle - First Basement Chest']
                 key_location = world.random.choice(key_locations)
                 key_locations.remove(key_location)
                 place_item(key_location, "Small Key (Universal)")
-                key_locations += ['Hyrule Castle - Big Key Drop', 'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross']
+                key_locations += ['Hyrule Castle - Prison Key Drop', 'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross']
                 key_location = world.random.choice(key_locations)
                 key_locations.remove(key_location)
                 place_item(key_location, "Small Key (Universal)")
@@ -864,7 +864,7 @@ def make_custom_item_pool(world, player):
     if mode == 'standard':
         if world.small_key_shuffle[player] == small_key_shuffle.option_universal:
             key_location = world.random.choice(
-                ['Secret Passage', 'Hyrule Castle - Boomerang Chest', 'Hyrule Castle - Map Chest',
+                ['Secret Passage', 'Hyrule Castle - Inner Basement Chest', 'Hyrule Castle - First Basement Chest',
                  'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross'])
             place_item(key_location, 'Small Key (Universal)')
             pool.extend(['Small Key (Universal)'] * max((customitemarray[66] - 1), 0))
