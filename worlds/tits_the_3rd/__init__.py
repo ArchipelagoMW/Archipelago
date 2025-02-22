@@ -5,7 +5,14 @@ from typing import ClassVar, Dict, Set
 
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, components, launch_subprocess, Type
-from .items import TitsThe3rdItem
+from .items import (
+    default_item_pool,
+    item_data_table,
+    item_groups,
+    item_table,
+    TitsThe3rdItem,
+    TitsThe3rdItemData,
+)
 from .locations import create_locations as tits_the_third_create_locations
 from .options import TitsThe3rdOptions
 from .regions import create_regions as tits_the_third_create_regions
@@ -40,15 +47,15 @@ class TitsThe3rdWorld(World):
     web: WebWorld = TitsThe3rdWeb()
     base_id: int = 1954308624560
 
-    item_name_groups: Dict[str, Set[str]] = {}
+    item_name_groups: Dict[str, Set[str]] = item_groups
     location_name_groups: Dict[str, Set[str]] = {}
-    item_name_to_id: Dict[str, int] = {"Dummy Item": base_id}
+    item_name_to_id: Dict[str, int] = item_table
     location_name_to_id: Dict[str, int] = {"Dummy Location": base_id}
 
     def create_item(self, name: str) -> TitsThe3rdItem:
         """Create a Trails in the Sky the 3rd item for this player"""
-        item_classification = TitsThe3rdItem.get_item_classfication(name)
-        return TitsThe3rdItem(name, item_classification, self.item_name_to_id[name], self.player)
+        data: TitsThe3rdItemData = item_data_table[name]
+        return TitsThe3rdItem(name, data.classification, data.code, self.player)
 
     def create_event(self, name: str) -> TitsThe3rdItem:
         """Create a Trails in the Sky the 3rd event for this player"""
@@ -61,10 +68,10 @@ class TitsThe3rdWorld(World):
 
     def create_items(self) -> None:
         """Define items for Trails in the Sky the 3rd AP"""
-        dummy_item = self.create_item("Dummy Item")
-        self.multiworld.itempool.append(dummy_item)
+        for item_name, quantity in default_item_pool.items():
+            for _ in range(quantity):
+                self.multiworld.itempool.append(self.create_item(item_name))
 
     def set_rules(self) -> None:
         """Set remaining rules."""
-        self.multiworld.completion_condition[self.player] = \
-            lambda state: state.has("Dummy Item", self.player)
+        self.multiworld.completion_condition[self.player] = lambda _: True
