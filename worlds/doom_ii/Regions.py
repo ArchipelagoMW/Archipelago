@@ -338,7 +338,9 @@ regions:List[RegionDict] = [
     {"name":"Suburbs (MAP16) Red",
      "connects_to_hub":False,
      "episode":2,
-     "connections":[{"target":"Suburbs (MAP16) Main","pro":False}]},
+     "connections":[
+        {"target":"Suburbs (MAP16) Main","pro":False},
+        {"target":"Suburbs (MAP16) Pro Exit","pro":False}]},
     {"name":"Suburbs (MAP16) Pro Exit",
      "connects_to_hub":False,
      "episode":2,
@@ -414,7 +416,9 @@ regions:List[RegionDict] = [
     {"name":"Nirvana (MAP21) Magenta",
      "connects_to_hub":False,
      "episode":3,
-     "connections":[{"target":"Nirvana (MAP21) Yellow","pro":False}]},
+     "connections":[
+        {"target":"Nirvana (MAP21) Yellow","pro":False},
+        {"target":"Nirvana (MAP21) Pro Magenta","pro":False}]},
     {"name":"Nirvana (MAP21) Start",
      "connects_to_hub":True,
      "episode":3,
@@ -471,7 +475,8 @@ regions:List[RegionDict] = [
      "episode":3,
      "connections":[
         {"target":"The Chasm (MAP24) Red","pro":False},
-        {"target":"The Chasm (MAP24) Main","pro":False}]},
+        {"target":"The Chasm (MAP24) Main","pro":False},
+        {"target":"The Chasm (MAP24) Blue Pro","pro":False}]},
     {"name":"The Chasm (MAP24) Blue Pro",
      "connects_to_hub":False,
      "episode":3,
