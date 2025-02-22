@@ -70,12 +70,11 @@
 030062B2 queuedhearts
 030062B3 queuedlightningtraps
 030062B4 collecteditems
-030062B8 collecteditemscopy
 0878F97C playername
 0878F9BC playerid
 0878F9BE seedname
 0878FA00 itemlocationtable
-0878FC1C itemextdatatable
+0878FC1C multiworlddatatable
 0879048C startinginventoryitemstatus
 087904B0 startinginventoryjunkcounts
 087904B6 startinginventorywarioabilities
@@ -84,6 +83,6 @@
 087904B9 goldentreasuresneeded
 087904BA trapbehavior
 087904BB diamondshuffle
-08794288 minigamecointiles
-08794760 multiworldstringdump
+08794298 minigamecointiles
+08794770 multiworldstringdump
 

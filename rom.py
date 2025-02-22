@@ -185,7 +185,7 @@ def write_tokens(world: WL4World, patch: WL4ProcedurePatch):
     patch.write_file('token_data.bin', patch.get_token_binary())
 
 
-class MultiworldExtData(NamedTuple):
+class MultiworldData(NamedTuple):
     receiver: str
     name: str
 
@@ -226,11 +226,11 @@ def fill_items(world: WL4World, patch: WL4ProcedurePatch):
             itemid.to_bytes(1, 'little')
         )
 
-        ext_data_location = get_rom_address('ItemExtDataTable', 4 * location_offset)
+        multiworld_data_location = get_rom_address('MultiworldDataTable', 4 * location_offset)
         if playername is not None:
-            multiworld_items[ext_data_location] = MultiworldExtData(playername, itemname)
+            multiworld_items[multiworld_data_location] = MultiworldData(playername, itemname)
         else:
-            multiworld_items[ext_data_location] = None
+            multiworld_items[multiworld_data_location] = None
 
     create_starting_inventory(world, patch)
 
@@ -339,7 +339,7 @@ def create_starting_inventory(world: WL4World, patch: WL4ProcedurePatch):
 
 
 def create_strings(patch: WL4ProcedurePatch,
-                   multiworld_items: Dict[int, Optional[MultiworldExtData]]
+                   multiworld_items: Dict[int, Optional[MultiworldData]]
                    ) -> Dict[Optional[str], int]:
     receivers = set()
     items = set()
@@ -364,7 +364,7 @@ def create_strings(patch: WL4ProcedurePatch,
 
 
 def write_multiworld_table(patch: WL4ProcedurePatch,
-                           multiworld_items: Dict[int, Optional[MultiworldExtData]],
+                           multiworld_items: Dict[int, Optional[MultiworldData]],
                            strings: Dict[Optional[str], int]):
     entry_address = get_rom_address('MultiworldStringDump')
     for location_address, item in multiworld_items.items():
