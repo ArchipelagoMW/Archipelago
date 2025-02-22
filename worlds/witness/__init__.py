@@ -232,7 +232,7 @@ class WitnessWorld(World):
         needed_size_overall += self.options.shuffle_doors > 0
 
         needed_size_to_hold_tutorial_items = len(
-            self.player_items.get_early_items(self.player_items.get_mandatory_items())
+            self.player_items.get_early_items(set(self.player_items.get_mandatory_items()))
         )
 
         # Then, add checks in order until the required amount of sphere 1 checks is met.

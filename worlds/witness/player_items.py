@@ -2,7 +2,7 @@
 Defines progression, junk and event items for The Witness
 """
 import copy
-from typing import TYPE_CHECKING, Dict, Iterable, List
+from typing import TYPE_CHECKING, Dict, List, Set
 
 from BaseClasses import Item, ItemClassification, MultiWorld
 
@@ -188,13 +188,11 @@ class WitnessPlayerItems:
 
         return output
 
-    def get_early_items(self, existing_items: Iterable[str]) -> Dict[str, List[str]]:
+    def get_early_items(self, existing_items: Set[str]) -> Dict[str, List[str]]:
         """
         Returns items that are ideal for placing on extremely early checks, like the tutorial gate.
         """
         output: Dict[str, List[str]] = {}
-
-        existing_items_lookup = set(existing_items)
 
         if "Symbol" in self._world.options.early_good_items.value:
             good_symbols = ["Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"]
@@ -210,7 +208,7 @@ class WitnessPlayerItems:
                 static_witness_logic.get_parent_progressive_item(item) for item in good_symbols
             ]
 
-            output["Symbol"] = [symbol for symbol in good_symbols if symbol in existing_items_lookup]
+            output["Symbol"] = [symbol for symbol in good_symbols if symbol in existing_items]
 
         if "Door / Door Panel" in self._world.options.early_good_items.value:
             good_doors = [
@@ -262,7 +260,7 @@ class WitnessPlayerItems:
                     "Glass Factory Entry (Panel)",
                 ]
 
-            existing_doors = [door for door in good_doors if door in existing_items_lookup]
+            existing_doors = [door for door in good_doors if door in existing_items]
 
             # On some options combinations with doors, there just aren't a lot of doors that unlock much early.
             # In this case, we add some doors that aren't great, but are at least guaranteed to unlock 1 location.
@@ -284,7 +282,7 @@ class WitnessPlayerItems:
 
             while len(existing_doors) < 4 and fallback_doors:
                 fallback_door = fallback_doors.pop()
-                if fallback_door in existing_items_lookup and fallback_door not in existing_doors:
+                if fallback_door in existing_items and fallback_door not in existing_doors:
                     existing_doors.append(fallback_door)
 
             output["Door"] = existing_doors
@@ -294,7 +292,7 @@ class WitnessPlayerItems:
                 "Desert Obelisk Key", "Town Obelisk Key", "Quarry Obelisk Key",
                 "Treehouse Obelisk Key", "Monastery Obelisk Key", "Mountainside Obelisk Key"
             ]
-            output["Obelisk Key"] = [key for key in obelisk_keys if key in existing_items_lookup]
+            output["Obelisk Key"] = [key for key in obelisk_keys if key in existing_items]
 
         assert all(item in self._world.item_names for sublist in output.values() for item in sublist), (
             [item for sublist in output.values() for item in sublist if item not in self._world.item_names]
