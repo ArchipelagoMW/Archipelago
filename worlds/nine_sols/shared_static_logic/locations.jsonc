@@ -177,8 +177,10 @@
         "address": null, "name": "Victory - Eggnog",
         "region": "FSP - Root Node", "requires": [
             { "item_group": "Sol Seals", "count": 8 },
-            // TODO: decide on endgame logic
-            { "region": "TRC - Dusk Guardian HQ Lower Levels" }
+            { "region": "TRC - Dusk Guardian HQ Lower Levels" },
+            // movement required in TRI
+            { "item": "Air Dash" }, { "item": "Cloud Leap" } // AND wall climb
+            // the Eigong fight itself requires AD OR CL in 3rd phase, but that's redundant with TRI movement for now
         ]
     },
     {
