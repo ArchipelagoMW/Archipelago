@@ -126,7 +126,10 @@
     },
     {
         "address": 503, "name": "FSP: Decode the Ancient Sheet Music",
-        "region": "FSP - Root Node", "requires": [ { "item": "Ancient Sheet Music" } ]
+        "region": "FSP - Root Node", "requires": [
+            { "item": "Ancient Sheet Music" },
+            { "location": "Goumang's Vital Sanctum" }
+        ]
     },
     {
         "address": 504, "name": "FSP: Have Yi's Portrait Painted",
