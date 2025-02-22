@@ -249,7 +249,7 @@ ty1_item_table: Dict[str, ItemData] = {
     "Extra Life": ItemData(0x8750082, ItemClassification.filler),
     "Opal Magnet": ItemData(0x8750083, ItemClassification.filler),
     "Quarter Pie": ItemData(0x8750084, ItemClassification.filler),
-    "Full Pie": ItemData(0x8750084, ItemClassification.filler),
+    "Full Pie": ItemData(0x8750085, ItemClassification.filler),
 
     # Trap
     "Knocked Down Trap": ItemData(0x8750090, ItemClassification.trap),
