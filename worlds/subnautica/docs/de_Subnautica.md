@@ -6,11 +6,11 @@ Die [Spieleroptionen-Seite für dieses Spiel](../player-options) enthält alle E
 
 ## Was verändert die Zufallsgenerierung an Subnautica?
 
-Die größte Änderung ist die vollständige Entfernung von den festgelegte Bereichen wo Fragmente von Blaupausen normalerweise zu finden sind. Diese Blaupausen, die durch das Scannen von Fragmenten oder das Sammeln von Datenboxen freigeschaltet werden, sind jetzt per Standortprüfungen innerhalb des Archipelago-Item-Pools eingebunden und werden darüber verteilt.
+Die größte Änderung ist die vollständige Entfernung der festgelegte Bereiche, in denen normalerweise Fragmente von Blaupausen zu finden sind. Diese Blaupausen, die durch das Scannen von Fragmenten oder das Sammeln von Datenboxen freigeschaltet werden, sind jetzt per Standortprüfungen innerhalb des Archipelago-Item-Pools eingebunden und werden darüber verteilt.
 
 ## Was ist das Ziel von Subnautica mit Zufallsgenerator?
 
-Aktuell gibt vier mögliche Ziele:
+Aktuell gibt es vier mögliche Ziele:
 - Launch: Verlasse den Planeten mit der "Neptune"-Rakete.
 - Free: Heile die Infektion durch das Enzym 42.
 - Infected: Erreiche die maximale Infektionsstufe.

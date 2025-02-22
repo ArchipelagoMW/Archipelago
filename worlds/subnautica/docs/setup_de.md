@@ -2,7 +2,7 @@
 
 ## Erforderliche Software
 
-- Subnautica von der: [Subnautica Steam Store Seite](https://store.steampowered.com/app/264710/Subnautica/) | [Subnautica Epic Games Store Seite](https://store.epicgames.com/p/subnautica)
+- Subnautica von dem: [Steam Store](https://store.steampowered.com/app/264710/Subnautica/) | [Epic Games Store](https://store.epicgames.com/p/subnautica)
 - Archipelago-Mod für Subnautica  
   von der: [Subnautica Archipelago Mod Releases Seite](https://github.com/Berserker66/ArchipelagoSubnauticaModSrc/releases)
 
@@ -12,7 +12,7 @@
 
 2. Starte Subnautica. Du solltest im Hauptmenü oben links ein Verbindungsformular mit drei Eingabefeldern sehen.
 
-**Falls du Linux verwendest**, füge ``WINEDLLOVERRIDES="winhttp=n,b" %command%`` zu den Startargumenten von Subnautica in Steam hinzu. Falls du Subnautica in einer anderen Seite gekauft hast, kannst du es entweder in Steam als ein Steam-fremdes-Spiel hinzufügen und die eben genannten Startoptionen nutzen oder über `winecfg` die DLL-Überschreibung setzen.
+**Falls du Linux verwendest**, füge ``WINEDLLOVERRIDES="winhttp=n,b" %command%`` zu den Startargumenten von Subnautica in Steam hinzu. Falls du Subnautica über eine andere Plattform erworben hast, kannst du es entweder in Steam als ein Steam-fremdes-Spiel hinzufügen und die eben genannten Startoptionen nutzen oder über `winecfg` die DLL-Überschreibung setzen.
 
 ## Verbindung einrichten
 
@@ -22,7 +22,7 @@ Die Verbindungsinformationen bestehen aus:
 - Spielername: Dein Name in der Multiwelt. Wird auch als „Slot-Name“ bezeichnet und ist der Name, den du bei der Erstellung deiner Optionen eingegeben hast.
 - Passwort: Optionales Passwort – leer lassen, falls kein Passwort festgelegt wurde.
 
-Nachdem erfolgreich eine Verbindung hergestellt wurde, starte ein neues Spiel. Du solltest nun Chatnachrichten von Archipelago sehen können, wie z.B. eine Meldung, dass du einer Multiwelt beigetreten bist.
+Nachdem die Verbindung erfolgreich hergestellt wurde, starte ein neues Spiel. Du solltest nun Chatnachrichten von Archipelago sehen können, wie z.B. eine Meldung, dass du einer Multiwelt beigetreten bist.
 
 ## Fortsetzen eines Archipelago Spielstandes
 
