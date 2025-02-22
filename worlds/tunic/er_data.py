@@ -809,7 +809,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Overworld Tunnel Turret":
             [["IG1"], ["LS1"], ["Hyperdash"]],
         "Overworld Temple Door":
-            [["IG2"], ["LS3"], ["Fuse Shuffle"], ["Forest Belltower Upper", "Overworld Belltower"]],
+            [["IG2"], ["LS3"], ["Forest Belltower Upper", "Overworld Belltower"]],
         "Overworld Southeast Cross Door":
             [],
         "Overworld Fountain Cross Door":
@@ -1624,7 +1624,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Rooted Ziggurat Lower Mid Checkpoint":
             [],
         "Rooted Ziggurat Lower Back":
-            [["Fuse Shuffle"], ["Hyperdash"]]
+            []
     },
     "Rooted Ziggurat Lower Back": {
         "Rooted Ziggurat Lower Entry":
