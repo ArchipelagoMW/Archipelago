@@ -8,7 +8,7 @@ Die [Spieleroptionen-Seite für dieses Spiel](../player-options) enthält alle E
 
 Die größte Änderung ist die vollständige Entfernung von den festgelegte Bereichen wo Fragmente von Blaupausen normalerweise zu finden sind. Diese Blaupausen, die normalerweise durch das Scannen von Fragmenten freigeschaltet werden, sind jetzt per Standortprüfungen innerhalb des Archipelago-Item-Pools eingebunden
 
-## Was ist das Ziel von Subnautica im Zufallsgenerierungsmodus?
+## Was ist das Ziel von Subnautica mit Zufallsgenerator?
 
 Aktuell gibt vier mögliche Ziele:
 - Launch: Verlasse den Planeten mit der "Neptune"-Rakete.
