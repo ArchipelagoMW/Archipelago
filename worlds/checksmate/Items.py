@@ -22,7 +22,7 @@ item_table = {
     "Play as White": CMItemData(4_901_000, ItemClassification.progression, material=50),
     "Progressive Engine ELO Lobotomy": CMItemData(4_901_001, ItemClassification.useful, quantity=5),
     # TODO: stop counting material if the board fills up with 23 pieces+pawns
-    "Progressive Pawn": CMItemData(4_901_002, ItemClassification.progression, quantity=40, material=100),
+    "Progressive Pawn": CMItemData(4_901_002, ItemClassification.progression, quantity=60, material=100),
     "Progressive Pawn Forwardness": CMItemData(4_901_003, ItemClassification.filler, quantity=13, parents=[
         ["Progressive Pawn", 3]]),
     # Bishops and Knights are worth 3.25 to 3.5, but some minor pieces are worse, so we assume 3.0 conservatively

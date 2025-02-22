@@ -1,6 +1,6 @@
 from typing import List, Dict, ClassVar, Type
 
-from BaseClasses import Tutorial, Region, MultiWorld, Item, CollectionState
+from BaseClasses import Tutorial, Region, MultiWorld, Item
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
 
