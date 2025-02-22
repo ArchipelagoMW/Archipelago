@@ -212,4 +212,5 @@ class TestCustomMissionOrders(Sc2SetupTestBase):
 
         self.generate_world(world_options)
         test_items_in_pool = [item for item in self.multiworld.itempool if item.name == test_item]
-        self.assertEqual(len(test_items_in_pool), test_amount)
+        test_items_in_start_inventory = [item for item in self.multiworld.precollected_items[self.player] if item.name == test_item]
+        self.assertEqual(len(test_items_in_pool + test_items_in_start_inventory), test_amount)
