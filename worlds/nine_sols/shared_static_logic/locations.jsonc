@@ -177,11 +177,13 @@
         "address": null, "name": "Victory - Eggnog",
         "region": "FSP - Root Node", "requires": [
             { "item_group": "Sol Seals", "count": 8 },
-            { "region": "TRC - Dusk Guardian HQ Lower Levels" },
-            // movement required in TRI
-            { "item": "Air Dash" }, { "item": "Cloud Leap" } // AND wall climb
-            // the Eigong fight itself requires AD OR CL in 3rd phase, but that's redundant with TRI movement for now
+            // the Eigong fight itself requires AD OR CL just for the judgement cut w/ crimson 3rd slash
+            { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] } // combat logic
         ]
+        // If the TRC->TRI->PonR content were included, this would also require:
+        // { "region": "TRC - Dusk Guardian HQ Lower Levels" },
+        // // movement required in TRI
+        // { "item": "Air Dash" }, { "item": "Cloud Leap" } // AND wall climb
     },
     {
         "address": null, "name": "Event - Kuafu in FSP",
