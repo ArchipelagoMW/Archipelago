@@ -4,7 +4,7 @@ import Utils
 import worlds.Files
 
 LTTPJPN10HASH: str = "03a63945398191337e896e5771f77173"
-RANDOMIZERBASEHASH: str = "8704fb9b9fa4fad52d4d2f9a95fb5360"
+RANDOMIZERBASEHASH: str = "528c9298ff37e6d13cb8c1d5b8bd8f79"
 ROM_PLAYER_LIMIT: int = 255
 
 import io
@@ -774,11 +774,17 @@ bonk_addresses = [0x4CF6C, 0x4CFBA, 0x4CFE0, 0x4CFFB, 0x4D018, 0x4D01B, 0x4D028,
                   0x4D504, 0x4D507, 0x4D55E, 0x4D56A]
 
 
-def get_nonnative_item_sprite(code: int) -> int:
+def get_nonnative_item_sprite(code: int, advancement: bool) -> int:
     if 84173 >= code >= 84007:  # LttP item in SMZ3
         return code - 84000
-    return 0x6B  # set all non-native sprites to Power Star as per 13 to 2 vote at
+    # Set all non-native sprites to Power Star as per 13 to 2 vote at
     # https://discord.com/channels/731205301247803413/827141303330406408/852102450822905886
+    # Use a gold Power Star for advancement items and a silver Power Star
+    # for non-advancement items, as per more recent discussions.
+    if advancement:
+        return 0x69  # Gold Power Star
+    else:
+        return 0x6B  # Silver Power Star
 
 
 def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
@@ -800,7 +806,8 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
                     if location.item.trap:
                         itemid = 0x5A  # Nothing, which disguises
                     else:
-                        itemid = get_nonnative_item_sprite(location.item.code)
+                        itemid = get_nonnative_item_sprite(location.item.code,
+                                                           world.star_scams[player] or location.item.advancement)
                 # Keys in their native dungeon should use the orignal item code for keys
                 elif location.parent_region.dungeon:
                     if location.parent_region.dungeon.is_dungeon_item(location.item):
@@ -1776,7 +1783,8 @@ def write_custom_shops(rom, world, player):
             replacement_price_data = get_price_data(item['replacement_price'], item['replacement_price_type'])
             slot = 0 if shop.type == ShopType.TakeAny else index
             if item['player'] and world.game[item['player']] != "A Link to the Past":  # item not native to ALTTP
-                item_code = get_nonnative_item_sprite(world.worlds[item['player']].item_name_to_id[item['item']])
+                item_code = get_nonnative_item_sprite(world.worlds[item['player']].item_name_to_id[item['item']],
+                                                      world.star_scams[player] or shop.region.locations[index].item.advancement)
             else:
                 item_code = item_table[item["item"]].item_code
                 if item['item'] == 'Single Arrow' and item['player'] == 0 and world.retro_bow[player]:
