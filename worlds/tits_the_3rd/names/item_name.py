@@ -1,10 +1,9 @@
 """
-Const item names.
+Constants for item names.
 """
 
-# pylint: disable=invalid-name
-
 class ItemName:
+    """Constants for item names."""
     # Consumables
     extra_spicy_fries = "Extra Spicy Fries"
     fresh_water = "Fresh Water"
