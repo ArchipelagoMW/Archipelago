@@ -6,7 +6,7 @@ Die [Spieleroptionen-Seite für dieses Spiel](../player-options) enthält alle E
 
 ## Was verändert die Zufallsgenerierung an Subnautica?
 
-Die größte Änderung ist die vollständige Entfernung von den festgelegte Bereichen wo Fragmente von Blaupausen normalerweise zu finden sind. Diese Blaupausen, die normalerweise durch das Scannen von Fragmenten freigeschaltet werden, sind jetzt per Standortprüfungen innerhalb des Archipelago-Item-Pools eingebunden
+Die größte Änderung ist die vollständige Entfernung von den festgelegte Bereichen wo Fragmente von Blaupausen normalerweise zu finden sind. Diese Blaupausen, die durch das Scannen von Fragmenten oder das Sammeln von Datenboxen freigeschaltet werden, sind jetzt per Standortprüfungen innerhalb des Archipelago-Item-Pools eingebunden und werden darüber verteilt.
 
 ## Was ist das Ziel von Subnautica mit Zufallsgenerator?
 
@@ -26,8 +26,8 @@ Optional können bis zu 50 Scaneinträge von Tieren in die Zufallsgenerierung au
 Da das Spiel ohne Seegleiter ziemlich umständlich sein kann, sind immer zwei seiner Fragmente an den folgenden Orten zu finden:
 - **Grasplateaus Südwrack** – Datenbox
 - **Grasplateaus Südwrack** – PDA
-- **Grasplateaus Westwrack** – Schließfach-PDA
-- **Grasplateaus Westwrack** – Daten-Terminal
+- **Grasplateaus Westwrack** – Spind-PDA
+- **Grasplateaus Westwrack** – Daten-Konsole
 - **Grasplateaus Westwrack** – Beam-PDA
 - **Sichere Flachwasserzone Wrack** – PDA
 - **Kelpwald-Wrack** – Datenbox
@@ -38,7 +38,7 @@ Da das Spiel ohne Seegleiter ziemlich umständlich sein kann, sind immer zwei se
 
 ## Welche Gegenstände können sich in der Welt eines anderen Spielers befinden?
 
-Die meisten Blaupausen können in die Welt eines anderen Spielers verschoben werden.
+Die meisten Blaupausen können in die Welt eines anderen Spielers gesendet werden.
 
 ## Wie sieht ein Gegenstand aus einer anderen Welt in Subnautica aus?
 
