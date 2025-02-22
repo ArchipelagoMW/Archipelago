@@ -1,4 +1,4 @@
-from Options import Toggle, DefaultOnToggle, DeathLink, Choice, PerGameCommonOptions, StartInventoryPool
+from Options import Toggle, DefaultOnToggle, DeathLink, Choice, PerGameCommonOptions, StartInventoryPool, OptionGroup
 from dataclasses import dataclass
 
 
@@ -31,7 +31,15 @@ class StartingBook(Choice):
 
 class StartWithBarometer(DefaultOnToggle):
     """Choose to start with the barometer, to locate items quicker"""
-    display_name = "Start With Barometer"
+    display_name = "Start with Barometer"
+
+
+class StartWithOilLamp(Toggle):
+    """
+    Choose whether the Aldr Grotto oil lamp is given at the start.
+    Also works with the Idol of Sundown.
+    """
+    display_name = "Start with Oil Lamp"
 
 
 class RopeUnlockMode(Choice):
@@ -74,12 +82,30 @@ class DisableSolemnTempest(DefaultOnToggle):
     display_name = "Disable Solemn Tempest"
 
 
+poy_option_groups = [
+    OptionGroup("Starting Items", [
+        StartingBook,
+        StartWithBarometer,
+        StartWithOilLamp,
+        RopeUnlockMode
+    ]),
+    OptionGroup("Books", [
+        EnableFundamental,
+        EnableIntermediate,
+        EnableAdvanced,
+        EnableExpert,
+        DisableSolemnTempest
+    ]),
+]
+
+
 @dataclass
 class PeaksOfYoreOptions(PerGameCommonOptions):
     death_link: DeathLink
     goal: Goal
     starting_book: StartingBook
     start_with_barometer: StartWithBarometer
+    start_with_oil_lamp: StartWithOilLamp
     rope_unlock_mode: RopeUnlockMode
     enable_fundamental: EnableFundamental
     enable_intermediate: EnableIntermediate
