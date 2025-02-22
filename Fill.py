@@ -517,7 +517,7 @@ def balanced_shuffle(multiworld: MultiWorld, fill_locations: list[Location], ite
             progression_to_distribute -= 1
             if progression_to_distribute == 0:
                 break
-        else:
+        else:  # have not distributed all progression yet
             continue
         break
 
