@@ -171,6 +171,9 @@ class DKC2World(World):
         trap_weights = []
         trap_weights += ([ItemName.freeze_trap] * self.options.freeze_trap_weight.value)
         trap_weights += ([ItemName.reverse_trap] * self.options.reverse_trap_weight.value)
+        trap_weights += ([ItemName.honey_trap] * self.options.honey_trap_weight.value)
+        trap_weights += ([ItemName.ice_trap] * self.options.ice_trap_weight.value)
+        trap_weights += ([ItemName.tnt_barrel_trap] * self.options.tnt_barrel_trap_weight.value)
         trap_weights += ([ItemName.damage_trap] * self.options.damage_trap_weight.value)
         trap_weights += ([ItemName.death_trap] * self.options.insta_death_trap_weight.value)
         trap_count = 0 if (len(trap_weights) == 0) else math.ceil(junk_count * (self.options.trap_fill_percentage.value / 100.0))
@@ -185,9 +188,9 @@ class DKC2World(World):
 
         # Add junk items into the pool
         junk_weights = []
-        junk_weights += ([ItemName.dk_barrel] * 40)
-        junk_weights += ([ItemName.red_balloon] * 35)
-        junk_weights += ([ItemName.banana_coin] * 25)
+        junk_weights += ([ItemName.dk_barrel] * 30)
+        junk_weights += ([ItemName.red_balloon] * 30)
+        junk_weights += ([ItemName.banana_coin] * 20)
 
         junk_pool = []
         for _ in range(junk_count):

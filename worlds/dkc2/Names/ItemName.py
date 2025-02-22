@@ -56,13 +56,16 @@ dk_coin = "DK Coin"
 # Traps
 freeze_trap = "Freeze Trap"
 reverse_trap = "Reverse Trap"
+honey_trap = "Honey Trap"
+ice_trap = "Ice Trap"
+tnt_barrel_trap = "TNT Barrel Trap"
 damage_trap = "Damage Trap"
 death_trap = "Instant Death Trap"
 
 # Junk
 red_balloon = "1-Up Balloon"
 banana_coin = "Banana Coin"
-dk_barrel = "Instant DK Barrel"
+dk_barrel = "Backup DK Barrel"
 
 # Energy Link
 extractinator = "Banana Extractinator"

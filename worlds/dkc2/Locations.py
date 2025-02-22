@@ -621,23 +621,25 @@ bananasanity = {
     LocationName.animal_antics_banana_bunch_4: STARTING_ID + 0x039C,
 }
 
-
 all_locations = {
     **stage_clears,
     **stage_dk_coin,
     **stage_kong,
     **stage_bonus,
-    **swanky_quiz,
     **balloonsanity,
     **coinsanity,
     **bananasanity,
 }
 
-location_table = {}
+#location_table = {}
 
-location_groups = {
-}
+location_groups = {}
+for location in all_locations.keys():
+    level = location.split(" - ")[0]
+    location_groups[level] = location
     
+all_locations.update(swanky_quiz)
+
 def setup_locations(world: "DKC2World"):
     location_table = {
         **stage_clears,

@@ -82,8 +82,47 @@ misc_table = {
 trap_table = {
     ItemName.freeze_trap:           ItemData(STARTING_ID + 0x0040, ItemClassification.trap),
     ItemName.reverse_trap:          ItemData(STARTING_ID + 0x0041, ItemClassification.trap),
-    ItemName.damage_trap:           ItemData(STARTING_ID + 0x0042, ItemClassification.trap),
-    ItemName.death_trap:            ItemData(STARTING_ID + 0x0043, ItemClassification.trap),
+    ItemName.honey_trap:            ItemData(STARTING_ID + 0x0042, ItemClassification.trap),
+    ItemName.ice_trap:              ItemData(STARTING_ID + 0x0043, ItemClassification.trap),
+    ItemName.tnt_barrel_trap:       ItemData(STARTING_ID + 0x0044, ItemClassification.trap),
+    ItemName.damage_trap:           ItemData(STARTING_ID + 0x0045, ItemClassification.trap),
+    ItemName.death_trap:            ItemData(STARTING_ID + 0x0046, ItemClassification.trap),
+}
+
+trap_name_to_value: typing.Dict[str, int] = {
+    # Our native Traps
+    ItemName.freeze_trap:       STARTING_ID + 0x0040,
+    ItemName.reverse_trap:      STARTING_ID + 0x0041,
+    ItemName.honey_trap:        STARTING_ID + 0x0042,
+    ItemName.ice_trap:          STARTING_ID + 0x0043,
+    ItemName.tnt_barrel_trap:   STARTING_ID + 0x0044,
+    ItemName.damage_trap:       STARTING_ID + 0x0045,
+    ItemName.death_trap:        STARTING_ID + 0x0046,
+
+    # Common other trap names
+    "Chaos Control Trap":   STARTING_ID + 0x0040,  # Freeze Trap
+    "Confuse Trap":         STARTING_ID + 0x0041,  # Reverse Trap
+    "Frozen Trap":          STARTING_ID + 0x0040,  # Freeze Trap
+    "Paralyze Trap":        STARTING_ID + 0x0040,  # Freeze Trap
+    "Reversal Trap":        STARTING_ID + 0x0041,  # Reverse Trap
+    "Fuzzy Trap":           STARTING_ID + 0x0041,  # Reverse Trap
+    "Confusion Trap":       STARTING_ID + 0x0041,  # Reverse Trap
+    "Confound Trap":        STARTING_ID + 0x0041,  # Reverse Trap
+    "Poison Trap":          STARTING_ID + 0x0045,  # Damage Trap 
+    "Bee Trap":             STARTING_ID + 0x0042,  # Honey Trap 
+    "Input Sequence Trap":  STARTING_ID + 0x0040,  # Freeze Trap
+    "Thwimp Trap":          STARTING_ID + 0x0044,  # TNT Barrel Trap
+    "Fishin' Boo Trap":     STARTING_ID + 0x0044,  # TNT Barrel Trap
+}
+
+trap_value_to_name: typing.Dict[int, str] = {
+    STARTING_ID + 0x0040: ItemName.freeze_trap,
+    STARTING_ID + 0x0041: ItemName.reverse_trap,
+    STARTING_ID + 0x0042: ItemName.honey_trap,
+    STARTING_ID + 0x0043: ItemName.ice_trap,
+    STARTING_ID + 0x0044: ItemName.tnt_barrel_trap,
+    STARTING_ID + 0x0045: ItemName.damage_trap,
+    STARTING_ID + 0x0046: ItemName.death_trap,
 }
 
 item_groups = {

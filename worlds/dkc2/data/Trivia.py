@@ -506,6 +506,19 @@ trivia_easy_earthbound = [
         """Phase Distorter°°""", 
         """Star Walker°°""", 
     ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   How many "Your Sanctuary"°""", 
+            """   locations must be visited°""", 
+            """    in a normal playthrough°""", 
+            """         of EarthBound?°""", 
+            """°""", 
+        ],
+        """8°°""", 
+        """6°°""", 
+        """7°°""", 
+    ),
 ]
 
 trivia_easy_final_fantasy_mystic_quest = [
@@ -2631,7 +2644,7 @@ trivia_hard_ocarina_of_time = [
     TriviaQuestion(
         [
             """°""", 
-            """ Where you can fin the Business°""", 
+            """Where you can find the Business°""", 
             """    Scrub that sells a Piece°""", 
             """      of Heart to players°""", 
             """      in Ocarina of Time?°""", 
@@ -2666,19 +2679,6 @@ trivia_hard_ocarina_of_time = [
         """With an Ice arrow°°""", 
         """With a bomb°°""", 
         """With Din's Fire°°""", 
-    ),
-    TriviaQuestion(
-        [
-            """°""", 
-            """°""", 
-            """ In Ocarina of Time, where can°""", 
-            """       Dinolfos be found?°""", 
-            """°""", 
-            """°""", 
-        ],
-        """Gerudo Training Ground°°""", 
-        """Fire Temple°°""", 
-        """Dodongo's Cavern°°""", 
     ),
 ]
 
@@ -3014,6 +3014,32 @@ trivia_hard_pokemon_crystal = [
         """Twins°°""", 
         """Cooltrainer°°""", 
     ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """  In Pokemon Crystal, which of°""", 
+            """     these species is NOT a°""", 
+            """ headbutt tree wild encounter?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Sunkern°°""", 
+        """Aipom°°""", 
+        """Ekans°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """  In Pokemon Crystal, which of°""", 
+            """     these species is NOT a°""", 
+            """   rock smash wild encounter?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Geodude°°""", 
+        """Krabby°°""", 
+        """Shuckle°°""", 
+    ),
 ]
 
 trivia_hard_pokemon_emerald = [
@@ -3148,7 +3174,7 @@ trivia_hard_super_mario_world = [
             """°""", 
             """°""", 
         ],
-        """Being in a submap°°""", 
+        """Not being in the°        main map°""", 
         """Riding a Yoshi°°""", 
         """Having a powerup°°""", 
     ),
@@ -3951,6 +3977,19 @@ trivia_medium_earthbound = [
         """Hungry HP-Sucker°°""", 
         """Neutralizer°°""", 
     ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """    Which of these does NOT°""", 
+            """    appear as a PSI ability°""", 
+            """         in EarthBound?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Offense down°°""", 
+        """Offense up°°""", 
+        """Defense down°°""", 
+    ),
 ]
 
 trivia_medium_final_fantasy_mystic_quest = [
@@ -4221,6 +4260,19 @@ trivia_medium_math = [
         """Slope-Intercept Form°°""", 
         """Circle°°""", 
         """Quadratic Equation°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """  What constant, equal to two°""", 
+            """   times pi, is the ratio of°""", 
+            """    a circle's circumference°""", 
+            """         to its radius?°""", 
+            """°""", 
+        ],
+        """Tau°°""", 
+        """Phi°°""", 
+        """Omicron°°""", 
     ),
 ]
 
@@ -4607,7 +4659,7 @@ trivia_medium_ocarina_of_time = [
     TriviaQuestion(
         [
             """°""", 
-            """ Where you can fin the Business°""", 
+            """Where you can find the Business°""", 
             """ Scrub that sells a Deku Stick°""", 
             """  capacity upgrade to players°""", 
             """      in Ocarina of Time?°""", 
@@ -4616,19 +4668,6 @@ trivia_medium_ocarina_of_time = [
         """Lost Woods°°""", 
         """Sacred Forest Meadow°°""", 
         """Hyrule Field°°""", 
-    ),
-    TriviaQuestion(
-        [
-            """°""", 
-            """°""", 
-            """ In Ocarina of Time, where can°""", 
-            """       Lizalfos be found?°""", 
-            """°""", 
-            """°""", 
-        ],
-        """Fire Temple°°""", 
-        """Spirit Temple°°""", 
-        """Forest Temple°°""", 
     ),
 ]
 
@@ -5332,6 +5371,41 @@ trivia_medium_yoshis_island = [
 
 
 trivia_data = {
+    "Super Mario 64": [
+        trivia_easy_super_mario_64, 
+        trivia_medium_super_mario_64, 
+        trivia_hard_super_mario_64,
+    ],
+    "Mega Man X2": [
+        trivia_easy_mega_man_x2, 
+        trivia_medium_mega_man_x2, 
+        trivia_hard_mega_man_x2,
+    ],
+    "Kirby 64 - The Crystal Shards": [
+        trivia_easy_kirby_64_the_crystal_shards, 
+        trivia_medium_kirby_64_the_crystal_shards, 
+        trivia_hard_kirby_64_the_crystal_shards,
+    ],
+    "Astalon": [
+        trivia_easy_astalon, 
+        trivia_medium_astalon, 
+        trivia_hard_astalon,
+    ],
+    "Final Fantasy Mystic Quest": [
+        trivia_easy_final_fantasy_mystic_quest, 
+        trivia_medium_final_fantasy_mystic_quest, 
+        trivia_hard_final_fantasy_mystic_quest,
+    ],
+    "Terraria": [
+        trivia_easy_terraria, 
+        trivia_medium_terraria, 
+        trivia_hard_terraria,
+    ],
+    "Donkey Kong Country 2": [
+        trivia_easy_donkey_kong_country_2, 
+        trivia_medium_donkey_kong_country_2, 
+        trivia_hard_donkey_kong_country_2,
+    ],
     "Pokemon Emerald": [
         trivia_easy_pokemon_emerald, 
         trivia_medium_pokemon_emerald, 
@@ -5342,190 +5416,155 @@ trivia_data = {
         trivia_medium_ocarina_of_time, 
         trivia_hard_ocarina_of_time,
     ],
-    "Overcooked! 2": [
-        trivia_easy_overcooked_2, 
-        trivia_medium_overcooked_2, 
-        trivia_hard_overcooked_2,
-    ],
-    "Mega Man 2": [
-        trivia_easy_mega_man_2, 
-        trivia_medium_mega_man_2, 
-        trivia_hard_mega_man_2,
-    ],
-    "Mega Man 3": [
-        trivia_easy_mega_man_3, 
-        trivia_medium_mega_man_3, 
-        trivia_hard_mega_man_3,
-    ],
-    "Super Mario World": [
-        trivia_easy_super_mario_world, 
-        trivia_medium_super_mario_world, 
-        trivia_hard_super_mario_world,
-    ],
-    "Donkey Kong Country 2": [
-        trivia_easy_donkey_kong_country_2, 
-        trivia_medium_donkey_kong_country_2, 
-        trivia_hard_donkey_kong_country_2,
-    ],
-    "Mega Man X": [
-        trivia_easy_mega_man_x, 
-        trivia_medium_mega_man_x, 
-        trivia_hard_mega_man_x,
-    ],
-    "Cave Story": [
-        trivia_easy_cave_story, 
-        trivia_medium_cave_story, 
-        trivia_hard_cave_story,
-    ],
-    "Risk of Rain 2": [
-        trivia_easy_risk_of_rain_2, 
-        trivia_medium_risk_of_rain_2, 
-        trivia_hard_risk_of_rain_2,
-    ],
-    "Math": [
-        trivia_easy_math, 
-        trivia_medium_math, 
-        trivia_hard_math,
+    "Super Metroid": [
+        trivia_easy_super_metroid, 
+        trivia_medium_super_metroid, 
+        trivia_hard_super_metroid,
     ],
     "Symphony of the Night": [
         trivia_easy_symphony_of_the_night, 
         trivia_medium_symphony_of_the_night, 
         trivia_hard_symphony_of_the_night,
     ],
-    "A Link to the Past": [
-        trivia_easy_a_link_to_the_past, 
-        trivia_medium_a_link_to_the_past, 
-        trivia_hard_a_link_to_the_past,
-    ],
-    "Rabi-Ribi": [
-        trivia_easy_rabiribi, 
-        trivia_medium_rabiribi, 
-        trivia_hard_rabiribi,
-    ],
-    "Terraria": [
-        trivia_easy_terraria, 
-        trivia_medium_terraria, 
-        trivia_hard_terraria,
-    ],
-    "EarthBound": [
-        trivia_easy_earthbound, 
-        trivia_medium_earthbound, 
-        trivia_hard_earthbound,
-    ],
-    "Super Mario 64": [
-        trivia_easy_super_mario_64, 
-        trivia_medium_super_mario_64, 
-        trivia_hard_super_mario_64,
-    ],
-    "Kingdom Hearts 2": [
-        trivia_easy_kingdom_hearts_2, 
-        trivia_medium_kingdom_hearts_2, 
-        trivia_hard_kingdom_hearts_2,
-    ],
-    "Kirby 64 - The Crystal Shards": [
-        trivia_easy_kirby_64_the_crystal_shards, 
-        trivia_medium_kirby_64_the_crystal_shards, 
-        trivia_hard_kirby_64_the_crystal_shards,
-    ],
-    "Yoshi's Island": [
-        trivia_easy_yoshis_island, 
-        trivia_medium_yoshis_island, 
-        trivia_hard_yoshis_island,
-    ],
-    "Hollow Knight": [
-        trivia_easy_hollow_knight, 
-        trivia_medium_hollow_knight, 
-        trivia_hard_hollow_knight,
-    ],
-    "Mega Man X2": [
-        trivia_easy_mega_man_x2, 
-        trivia_medium_mega_man_x2, 
-        trivia_hard_mega_man_x2,
-    ],
-    "Castlevania - Circle of the Moon": [
-        trivia_easy_castlevania_circle_of_the_moon, 
-        trivia_medium_castlevania_circle_of_the_moon, 
-        trivia_hard_castlevania_circle_of_the_moon,
-    ],
-    "Super Metroid": [
-        trivia_easy_super_metroid, 
-        trivia_medium_super_metroid, 
-        trivia_hard_super_metroid,
-    ],
     "Actraiser": [
         trivia_easy_actraiser, 
         trivia_medium_actraiser, 
         trivia_hard_actraiser,
-    ],
-    "Kingdom Hearts": [
-        trivia_easy_kingdom_hearts, 
-        trivia_medium_kingdom_hearts, 
-        trivia_hard_kingdom_hearts,
-    ],
-    "Majora's Mask Recompiled": [
-        trivia_easy_majoras_mask_recompiled, 
-        trivia_medium_majoras_mask_recompiled, 
-        trivia_hard_majoras_mask_recompiled,
-    ],
-    "Final Fantasy Mystic Quest": [
-        trivia_easy_final_fantasy_mystic_quest, 
-        trivia_medium_final_fantasy_mystic_quest, 
-        trivia_hard_final_fantasy_mystic_quest,
-    ],
-    "Paper Mario": [
-        trivia_easy_paper_mario, 
-        trivia_medium_paper_mario, 
-        trivia_hard_paper_mario,
     ],
     "Mega Man X3": [
         trivia_easy_mega_man_x3, 
         trivia_medium_mega_man_x3, 
         trivia_hard_mega_man_x3,
     ],
-    "Pokemon Crystal": [
-        trivia_easy_pokemon_crystal, 
-        trivia_medium_pokemon_crystal, 
-        trivia_hard_pokemon_crystal,
+    "Math": [
+        trivia_easy_math, 
+        trivia_medium_math, 
+        trivia_hard_math,
     ],
-    "VVVVVV": [
-        trivia_easy_vvvvvv, 
-        trivia_medium_vvvvvv, 
-        trivia_hard_vvvvvv,
+    "Risk of Rain 2": [
+        trivia_easy_risk_of_rain_2, 
+        trivia_medium_risk_of_rain_2, 
+        trivia_hard_risk_of_rain_2,
     ],
-    "Kirby's Dream Land 3": [
-        trivia_easy_kirbys_dream_land_3, 
-        trivia_medium_kirbys_dream_land_3, 
-        trivia_hard_kirbys_dream_land_3,
-    ],
-    "The Legend of Zelda": [
-        trivia_easy_the_legend_of_zelda, 
-        trivia_medium_the_legend_of_zelda, 
-        trivia_hard_the_legend_of_zelda,
+    "Mega Man 3": [
+        trivia_easy_mega_man_3, 
+        trivia_medium_mega_man_3, 
+        trivia_hard_mega_man_3,
     ],
     "Diddy Kong Racing": [
         trivia_easy_diddy_kong_racing, 
         trivia_medium_diddy_kong_racing, 
         trivia_hard_diddy_kong_racing,
     ],
+    "Paper Mario": [
+        trivia_easy_paper_mario, 
+        trivia_medium_paper_mario, 
+        trivia_hard_paper_mario,
+    ],
     "Sonic Adventure 2 Battle": [
         trivia_easy_sonic_adventure_2_battle, 
         trivia_medium_sonic_adventure_2_battle, 
         trivia_hard_sonic_adventure_2_battle,
     ],
-    "Donkey Kong Country 3": [
-        trivia_easy_donkey_kong_country_3, 
-        trivia_medium_donkey_kong_country_3, 
-        trivia_hard_donkey_kong_country_3,
+    "Castlevania - Circle of the Moon": [
+        trivia_easy_castlevania_circle_of_the_moon, 
+        trivia_medium_castlevania_circle_of_the_moon, 
+        trivia_hard_castlevania_circle_of_the_moon,
+    ],
+    "A Link to the Past": [
+        trivia_easy_a_link_to_the_past, 
+        trivia_medium_a_link_to_the_past, 
+        trivia_hard_a_link_to_the_past,
+    ],
+    "Overcooked! 2": [
+        trivia_easy_overcooked_2, 
+        trivia_medium_overcooked_2, 
+        trivia_hard_overcooked_2,
+    ],
+    "Kirby's Dream Land 3": [
+        trivia_easy_kirbys_dream_land_3, 
+        trivia_medium_kirbys_dream_land_3, 
+        trivia_hard_kirbys_dream_land_3,
+    ],
+    "Kingdom Hearts": [
+        trivia_easy_kingdom_hearts, 
+        trivia_medium_kingdom_hearts, 
+        trivia_hard_kingdom_hearts,
+    ],
+    "EarthBound": [
+        trivia_easy_earthbound, 
+        trivia_medium_earthbound, 
+        trivia_hard_earthbound,
+    ],
+    "Rabi-Ribi": [
+        trivia_easy_rabiribi, 
+        trivia_medium_rabiribi, 
+        trivia_hard_rabiribi,
+    ],
+    "Majora's Mask Recompiled": [
+        trivia_easy_majoras_mask_recompiled, 
+        trivia_medium_majoras_mask_recompiled, 
+        trivia_hard_majoras_mask_recompiled,
+    ],
+    "Yoshi's Island": [
+        trivia_easy_yoshis_island, 
+        trivia_medium_yoshis_island, 
+        trivia_hard_yoshis_island,
+    ],
+    "Super Mario World": [
+        trivia_easy_super_mario_world, 
+        trivia_medium_super_mario_world, 
+        trivia_hard_super_mario_world,
+    ],
+    "Kingdom Hearts 2": [
+        trivia_easy_kingdom_hearts_2, 
+        trivia_medium_kingdom_hearts_2, 
+        trivia_hard_kingdom_hearts_2,
+    ],
+    "Pokemon Crystal": [
+        trivia_easy_pokemon_crystal, 
+        trivia_medium_pokemon_crystal, 
+        trivia_hard_pokemon_crystal,
+    ],
+    "Mega Man X": [
+        trivia_easy_mega_man_x, 
+        trivia_medium_mega_man_x, 
+        trivia_hard_mega_man_x,
     ],
     "Pokemon Red and Blue": [
         trivia_easy_pokemon_red_and_blue, 
         trivia_medium_pokemon_red_and_blue, 
         trivia_hard_pokemon_red_and_blue,
     ],
-    "Astalon": [
-        trivia_easy_astalon, 
-        trivia_medium_astalon, 
-        trivia_hard_astalon,
+    "Cave Story": [
+        trivia_easy_cave_story, 
+        trivia_medium_cave_story, 
+        trivia_hard_cave_story,
+    ],
+    "Hollow Knight": [
+        trivia_easy_hollow_knight, 
+        trivia_medium_hollow_knight, 
+        trivia_hard_hollow_knight,
+    ],
+    "The Legend of Zelda": [
+        trivia_easy_the_legend_of_zelda, 
+        trivia_medium_the_legend_of_zelda, 
+        trivia_hard_the_legend_of_zelda,
+    ],
+    "Mega Man 2": [
+        trivia_easy_mega_man_2, 
+        trivia_medium_mega_man_2, 
+        trivia_hard_mega_man_2,
+    ],
+    "VVVVVV": [
+        trivia_easy_vvvvvv, 
+        trivia_medium_vvvvvv, 
+        trivia_hard_vvvvvv,
+    ],
+    "Donkey Kong Country 3": [
+        trivia_easy_donkey_kong_country_3, 
+        trivia_medium_donkey_kong_country_3, 
+        trivia_hard_donkey_kong_country_3,
     ],
 }
 

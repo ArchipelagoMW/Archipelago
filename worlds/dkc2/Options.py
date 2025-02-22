@@ -222,12 +222,30 @@ class ReverseTrapWeight(BaseTrapWeight):
     """
     display_name = "Reverse Trap Weight"
 
+class HoneyTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which makes the floor (temporarily) sticky
+    """
+    display_name = "Honey Trap Weight"
+
+class IceTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which makes the level slightly slippery
+    """
+    display_name = "Ice Trap Weight"
+
+class TNTBarrelTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which spawns an active TNT barrel above the player
+    """
+    display_name = "TNT Barrel Trap Weight"
+
 class DamageTrapWeight(BaseTrapWeight):
     """
     Likelihood of a receiving a trap which damages the player
     """
     display_name = "Damage Trap Weight"
-    visibility = Visibility.spoiler | Visibility.complex_ui
+    visibility = Visibility.spoiler
     default = 0
 
 class InstaDeathTrapWeight(BaseTrapWeight):
@@ -235,9 +253,8 @@ class InstaDeathTrapWeight(BaseTrapWeight):
     Likelihood of a receiving a trap which instantly kills the player
     """
     display_name = "Instant Death Trap Weight"
-    visibility = Visibility.spoiler | Visibility.complex_ui
+    visibility = Visibility.spoiler
     default = 0
-
 
 class BaseDiddyPalette(Choice):
     """
@@ -416,6 +433,7 @@ class SetPalettes(OptionDict):
     })
     default = {}
 
+
 class EnergyLink(Toggle):
     """
     EnergyLink allows players to deposit energy extracted from collected bananas into a shared pool across games in the session.
@@ -427,6 +445,17 @@ class EnergyLink(Toggle):
     """
     display_name = "Energy Link"
     visibility = Visibility.spoiler | Visibility.complex_ui | Visibility.template
+
+
+class TrapLink(Toggle):
+    """
+    Whether your received traps are linked to other players
+
+    This feature requires AP 0.6.0 to work correctly.
+    """
+    display_name = "Trap Link"
+    visibility = Visibility.spoiler | Visibility.complex_ui | Visibility.template
+
 
 dkc2_option_groups = [
     OptionGroup("Goal", [
@@ -460,6 +489,9 @@ dkc2_option_groups = [
         TrapFillPercentage,
         FreezeTrapWeight,
         ReverseTrapWeight,
+        HoneyTrapWeight,
+        IceTrapWeight,
+        TNTBarrelTrapWeight,
         DamageTrapWeight,
         InstaDeathTrapWeight,
     ]),
@@ -486,6 +518,7 @@ class DKC2Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     death_link: DeathLink
     energy_link: EnergyLink
+    trap_link: TrapLink
     starting_life_count: StartingLifeCount
     starting_kong: StartingKong
     goal: Goal
@@ -509,6 +542,9 @@ class DKC2Options(PerGameCommonOptions):
     trap_fill_percentage: TrapFillPercentage
     freeze_trap_weight: FreezeTrapWeight
     reverse_trap_weight: ReverseTrapWeight
+    honey_trap_weight: HoneyTrapWeight
+    ice_trap_weight: IceTrapWeight
+    tnt_barrel_trap_weight: TNTBarrelTrapWeight
     damage_trap_weight: DamageTrapWeight
     insta_death_trap_weight: InstaDeathTrapWeight
     player_palettes: SetPalettes
