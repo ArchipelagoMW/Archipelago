@@ -4,10 +4,11 @@ import dolphin_memory_engine as dme
 
 import ModuleUpdate
 from worlds.pokepark_1 import POWERS, BERRIES
-from worlds.pokepark_1.adresses import friend_item_checks, \
-    berry_item_checks, tmp_addresses_disabled_friendship_overwrite, \
-    POWER_INCREMENTS, POWER_SHARED_ADDR, blocked_unlocks, prisma_blocked_itemIds, \
-    driffzeppeli_address, driffzeppeli_value, UNLOCKS, MemoryRange, PRISMAS
+from worlds.pokepark_1.adresses import  \
+    berry_item_checks, \
+    POWER_INCREMENTS, POWER_SHARED_ADDR, blocked_unlock_itemIds, prisma_blocked_itemIds, \
+    driffzeppeli_address, driffzeppeli_value, UNLOCKS, MemoryRange, PRISMAS, POKEMON_STATES, blocked_friendship_itemIds, \
+    blocked_friendship_unlock_itemIds
 from worlds.pokepark_1.watcher.location_state_watcher import location_state_watcher
 from worlds.pokepark_1.watcher.location_watcher import location_watcher
 from worlds.pokepark_1.watcher.logic_watcher import logic_watcher
@@ -130,8 +131,15 @@ async def game_watcher(ctx: PokeparkContext):
 
 
 def refresh_items(ctx:PokeparkContext):
+    blocked_items = set().union(
+        blocked_unlock_itemIds,
+        prisma_blocked_itemIds,
+        blocked_friendship_itemIds,
+        blocked_friendship_unlock_itemIds
+    )
     items = [item for item in ctx.items_received if
-             not item.item in blocked_unlocks and not item.item in prisma_blocked_itemIds]
+             not item.item in blocked_items]
+
     activate_unlock_items(items)
 
     activate_friendship_items(items)
@@ -162,10 +170,14 @@ def activate_unlock_items(items:list[NetworkItem]):
 
 def activate_friendship_items(items:list[NetworkItem]):
     for received_item in items:
-        if received_item.item in friend_item_checks:
-            for address, value in friend_item_checks[received_item.item]:
-                if address not in tmp_addresses_disabled_friendship_overwrite:
-                    dme.write_byte(address, value)
+        if received_item.item in POKEMON_STATES:
+            address = POKEMON_STATES[received_item.item].item.final_address
+            value = POKEMON_STATES[received_item.item].item.value
+            memory_range = POKEMON_STATES[received_item.item].item.memory_range
+            if memory_range == MemoryRange.WORD:
+                dme.write_word(address, value)
+            elif memory_range == MemoryRange.BYTE:
+                dme.write_byte(address, value)
 
 def activate_prisma_items(items:list[NetworkItem]):
     for received_item in items:
