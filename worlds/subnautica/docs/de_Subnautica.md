@@ -6,7 +6,7 @@ Die [Spieleroptionen-Seite für dieses Spiel](../player-options) enthält alle E
 
 ## Was verändert die Zufallsgenerierung an Subnautica?
 
-Die größte Änderung ist die vollständige Entfernung der festgelegten Bereiche, in denen normalerweise Fragmente von Blaupausen zu finden sind. Diese Blaupausen, die durch das Scannen von Fragmenten oder das Sammeln von Datenboxen freigeschaltet werden, sind jetzt per Standortprüfungen innerhalb des Archipelago-Item-Pools eingebunden und werden darüber verteilt.
+Die größte Änderung ist die vollständige Entfernung der festgelegte Bereiche, in denen normalerweise Fragmente von Blaupausen zu finden sind. Diese Blaupausen, die durch das Scannen von Fragmenten oder das Sammeln von Datenboxen freigeschaltet werden, sind jetzt per Standortprüfungen innerhalb des Archipelago-Item-Pools eingebunden und werden darüber verteilt.
 
 ## Was ist das Ziel von Subnautica mit Zufallsgenerator?
 
@@ -19,7 +19,7 @@ Aktuell gibt es vier mögliche Ziele:
 ## Welche Gegenstände und Orte sind von der Zufallsgenerierung betroffen?
 
 Die meisten Blaupausen, die der Spieler im Laufe des Spiels benötigt, werden zufällig verteilt.  
-Spielchecks in Subnautica erfolgen über findbare PDAs und Datenboxen.
+Standortprüfungen in Subnautica erfolgen über Findbare PDAs und Datenboxen.
 
 Optional können bis zu 50 Scaneinträge von Tieren in die Zufallsgenerierung aufgenommen werden. Für jeden hinzugefügten Scan eines Tieres wird ein zufälliges doppeltes Item verteilt.
 
@@ -36,13 +36,13 @@ Da das Spiel ohne Seegleiter ziemlich umständlich sein kann, sind immer zwei se
 - **Rettungskapsel 3** – PDA
 - **Rettungskapsel 17** – PDA
 
-## Welche Gegenstände können in die Welt eines anderen Spielers gesendet werden?
+## Welche Gegenstände können sich in der Welt eines anderen Spielers befinden?
 
 Die meisten Blaupausen können in die Welt eines anderen Spielers gesendet werden.
 
 ## Wie sieht ein Gegenstand aus einer anderen Welt in Subnautica aus?
 
-Spielchecks in Subnautica erfolgen über findbare PDAs und Datenboxen. Das Sammeln/Öffnen dieser sendet einen Gegenstand in die Welt eines anderen Spielers.
+Standortprüfungen in Subnautica sind PDAs und Datenboxen. Das Sammeln/Öffnen dieser sendet einen Gegenstand in die Welt eines anderen Spielers.
 
 ## Was passiert, wenn der Spieler eine Blaupause erhält?
 
