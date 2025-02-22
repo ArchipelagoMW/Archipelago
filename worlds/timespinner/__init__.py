@@ -1,7 +1,7 @@
 from typing import Dict, List, Set, Tuple, TextIO, Any, Optional
 from BaseClasses import Item, Tutorial, ItemClassification
 from .Items import get_item_names_per_category
-from .Items import item_table, starter_melee_weapons, starter_spells, filler_items, starter_progression_items
+from .Items import item_table, starter_melee_weapons, starter_spells, filler_items, starter_progression_items, pyramid_start_starter_progression_items
 from .Locations import get_location_datas, EventId
 from .Options import BackwardsCompatiableTimespinnerOptions, Toggle
 from .PreCalculatedWeights import PreCalculatedWeights
@@ -399,12 +399,14 @@ class TimespinnerWorld(World):
         and not self.options.pyramid_start:
             return
 
+        enabled_starter_progression_items = pyramid_start_starter_progression_items if self.options.pyramid_start else starter_progression_items
+
         for item_name in self.options.start_inventory.value.keys():
-            if item_name in starter_progression_items:
+            if item_name in enabled_starter_progression_items:
                 return
 
         local_starter_progression_items = tuple(
-            item for item in starter_progression_items 
+            item for item in enabled_starter_progression_items 
                 if item not in excluded_items and item not in self.options.non_local_items.value)
 
         if not local_starter_progression_items:

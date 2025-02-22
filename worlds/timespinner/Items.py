@@ -264,6 +264,17 @@ starter_progression_items: Tuple[str, ...] = (
     'Mysterious Warp Beacon'
 )
 
+pyramid_start_starter_progression_items: Tuple[str, ...] = (
+    'Succubus Hairpin',
+    'Succubus Hairpin',
+    'Twin Pyramid Key',
+    'Celestial Sash',
+    'Lightwall',
+    'Modern Warp Beacon',
+    'Timeworn Warp Beacon',
+    'Mysterious Warp Beacon'
+)
+
 filler_items: Tuple[str, ...] = (
     'Potion',
     'Ether',
