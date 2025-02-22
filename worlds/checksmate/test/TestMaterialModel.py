@@ -30,8 +30,9 @@ class TestMaterialModel(CMMockTestCase):
 
     def test_material_requirements_scaling(self):
         """Test that material requirements scale correctly with board size"""
-        min_mat, max_mat = self.material_model.calculate_material_requirements(super_sized=False)
-        min_mat_super, max_mat_super = self.material_model.calculate_material_requirements(super_sized=True)
+        min_mat, max_mat = self.material_model.calculate_material_requirements()
+        self.world.options.goal.value = self.world.options.goal.option_progressive
+        min_mat_super, max_mat_super = self.material_model.calculate_material_requirements()
         
         self.assertGreater(min_mat_super, min_mat)
         self.assertGreater(max_mat_super, max_mat)

@@ -71,11 +71,21 @@ def determine_material(opts: CMOptions, base_material: int):
 
 
 def determine_min_material(opts: CMOptions):
-    return determine_material(opts, 41)
+    super_sized = opts.goal.value != opts.goal.option_single
+    base_material = 41
+    if super_sized:
+        base_material *= (location_table["Checkmate Maxima"].material_expectations_grand /
+                    location_table["Checkmate Minima"].material_expectations_grand)
+    return determine_material(opts, base_material)
 
 
 def determine_max_material(opts: CMOptions):
-    return determine_material(opts, 46)
+    super_sized = opts.goal.value != opts.goal.option_single
+    base_material = 46
+    if super_sized:
+        base_material *= (location_table["Checkmate Maxima"].material_expectations_grand /
+                    location_table["Checkmate Minima"].material_expectations_grand)
+    return determine_material(opts, base_material)
 
 
 def determine_relaxation(opts: CMOptions) -> int:
@@ -141,25 +151,21 @@ def set_rules(world: World):
                 item.material_expectations, item.material_expectations_grand
             ))
         if material_cost > 0:
-            rule_set.append(lambda state, v=material_cost: meets_material_expectations(
+            add_rule(location, lambda state, v=material_cost: meets_material_expectations(
                 state, v, world.player, difficulty, absolute_relaxation))
 
         # Chessmen expectations rule
         if item.chessmen_expectations == -1:
             # this is used for items which change between grand and not... currently only 1 location
             assert item.code == 4_902_039, f"Unknown location code for custom chessmen: {str(item.code)}"
-            rule_set.append(lambda state: meets_chessmen_expectations(
+            add_rule(location, lambda state: meets_chessmen_expectations(
                 state, 18 if super_sized else 14, world.player, opts.pocket_limit_by_pocket.value))
         elif item.chessmen_expectations > 0:
-            rule_set.append(lambda state, v=item.chessmen_expectations: meets_chessmen_expectations(
+            add_rule(location, lambda state, v=item.chessmen_expectations: meets_chessmen_expectations(
                 state, v, world.player, opts.pocket_limit_by_pocket.value))
 
         if item.material_expectations == -1:
-            rule_set.append(lambda state: state.has("Super-Size Me", world.player))
-
-        # Combine all rules with AND logic
-        if rule_set:
-            set_rule(location, lambda state, v=rule_set: all(rule(state) for rule in v))
+            add_rule(location, lambda state: state.has("Super-Size Me", world.player))
 
     # Add special move rules
     if opts.enable_tactics.value == opts.enable_tactics.option_all:

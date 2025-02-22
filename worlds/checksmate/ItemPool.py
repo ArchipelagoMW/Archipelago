@@ -64,7 +64,7 @@ class CMItemPool:
         user_location_count += 1  # Victory item is counted as part of the pool, but you don't start with it
 
         # Calculate material requirements
-        min_material, max_material = self.material_model.calculate_material_requirements(super_sized)
+        min_material, max_material = self.material_model.calculate_material_requirements()
         logging.debug(f"Material requirements: min={min_material}, max={max_material}")
 
         # Handle option limits
@@ -213,19 +213,6 @@ class CMItemPool:
             self.items_used[self.world.player][item_name] += excluded_items[item_name]
             starter_items.extend([self.world.create_item(item_name) for _ in range(excluded_items[item_name])])
         return starter_items
-
-    def calculate_material_requirements(self, super_sized: bool) -> tuple[float, float]:
-        """Calculate the minimum and maximum material requirements based on world options."""
-        min_material = determine_min_material(self.world.options)
-        max_material = determine_max_material(self.world.options)
-        
-        if super_sized:
-            endgame_multiplier = (location_table["Checkmate Maxima"].material_expectations_grand /
-                                location_table["Checkmate Minima"].material_expectations_grand)
-            min_material *= endgame_multiplier
-            max_material *= endgame_multiplier
-            
-        return min_material, max_material
 
     def handle_option_limits(self) -> None:
         """Apply limits based on world options."""

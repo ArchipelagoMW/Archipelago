@@ -11,15 +11,6 @@ class TestItemPool(CMMockTestCase):
         super().setUp()
         self.item_pool = CMItemPool(self.world)
         self.item_pool.initialize_item_tracking()
-        
-    def test_material_requirements(self):
-        """Test that material requirements are calculated correctly for both board sizes"""
-        min_mat, max_mat = self.item_pool.calculate_material_requirements(super_sized=False)
-        self.assertGreater(max_mat, min_mat)
-        
-        min_mat_super, max_mat_super = self.item_pool.calculate_material_requirements(super_sized=True)
-        self.assertGreater(min_mat_super, min_mat)
-        self.assertGreater(max_mat_super, max_mat)
 
     def test_progression_item_pool_preparation(self):
         """Test that the progression item pool is prepared with correct frequencies"""

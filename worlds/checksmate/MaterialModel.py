@@ -26,17 +26,11 @@ class MaterialModel:
             if item in progression_items and progression_items[item].material > 0
         ])
 
-    def calculate_material_requirements(self, super_sized: bool) -> tuple[float, float]:
+    def calculate_material_requirements(self) -> tuple[float, float]:
         """Calculate the minimum and maximum material requirements based on world options."""
         min_material = determine_min_material(self.world.options)
         max_material = determine_max_material(self.world.options)
-        
-        if super_sized:
-            endgame_multiplier = (location_table["Checkmate Maxima"].material_expectations_grand /
-                                location_table["Checkmate Minima"].material_expectations_grand)
-            min_material *= endgame_multiplier
-            max_material *= endgame_multiplier
-            
+
         # We already handle 50 material due to Play as White being forced into the item pool
         min_material -= 50
         max_material -= 50
