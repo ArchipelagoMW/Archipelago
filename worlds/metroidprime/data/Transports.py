@@ -1,3 +1,4 @@
+from collections import defaultdict
 import copy
 from typing import TYPE_CHECKING, Dict, List
 
@@ -143,9 +144,7 @@ def get_region_by_elevator_name(elevator_name: str) -> str:
 def get_random_elevator_mapping(
     world: "MetroidPrimeWorld",
 ) -> Dict[str, Dict[str, str]]:
-    mapped_elevators: Dict[str, Dict[str, str]] = {
-        area: {} for area in world.elevator_mapping.keys()
-    }
+    mapped_elevators: Dict[str, Dict[str, str]] = defaultdict(dict)
     available_elevators_by_region = copy.deepcopy(default_elevator_mappings)
     denied_elevators = world.starting_room_data.denied_elevators or {}
 
