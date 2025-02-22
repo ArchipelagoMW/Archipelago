@@ -9,13 +9,14 @@ from Options import (
 )
 from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
+from .item import item_names, item_tables
+from .item.item_groups import kerrigan_active_abilities, kerrigan_passives, nova_weapons, nova_gadgets
 from .mission_tables import (
     SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_missions_with_any_flags_in_list,
     campaign_mission_table, SC2Race, MissionFlag
 )
 from .mission_groups import mission_groups, MissionGroupNames
 from .mission_order.options import CustomMissionOrder
-from .item import item_names
 
 if TYPE_CHECKING:
     from worlds.AutoWorld import World
@@ -696,6 +697,29 @@ class KerriganPrimalStatus(Choice):
     option_half_completion = 4
     option_item = 5
 
+
+class KerriganMaxActiveAbilities(Range):
+    """
+    Determines the maximum number of Kerrigan active abilities that can be present in the game
+    Additional abilities may spawn if those are required to beat the game.
+    """
+    display_name = "Kerrigan Maximum Active Abilities"
+    range_start = 0
+    range_end = len(kerrigan_active_abilities)
+    default = range_end
+
+
+class KerriganMaxPassiveAbilities(Range):
+    """
+    Determines the maximum number of Kerrigan passive abilities that can be present in the game
+    Additional abilities may spawn if those are required to beat the game.
+    """
+    display_name = "Kerrigan Maximum Passive Abilities"
+    range_start = 0
+    range_end = len(kerrigan_passives)
+    default = range_end
+
+
 class EnableMorphling(Toggle):
     """
     Determines whether the player can build Morphlings, which allow for inefficient morphing of advanced units
@@ -784,6 +808,28 @@ class SpearOfAdunAutonomouslyCastPresentInNoBuild(Toggle):
     display_name = "Spear of Adun Autonomously Cast Powers Present in No-Build"
 
 
+class SpearOfAdunMaxActiveAbilities(Range):
+    """
+    Determines the maximum number of Spear of Adun active abilities (top bar) that can be present in the game
+    Additional abilities may spawn if those are required to beat the game.
+
+    Note: Warp in Reinforcements is treated as a second level of Warp in Pylon
+    """
+    range_start = 0
+    range_end = sum([item.quantity for item_name, item in item_tables.get_full_item_list().items() if item_name in item_tables.spear_of_adun_calldowns])
+    default = range_end
+
+
+class SpearOfAdunMaxAutocastAbilities(Range):
+    """
+    Determines the maximum number of Spear of Adun autonomously cast abilities that can be present in the game
+    Additional abilities may spawn if those are required to beat the game.
+    """
+    range_start = 0
+    range_end = sum(item.quantity for item_name, item in item_tables.get_full_item_list().items() if item_name in item_tables.spear_of_adun_castable_passives)
+    default = range_end
+
+
 class GrantStoryTech(Toggle):
     """
     If set true, grants special tech required for story mission completion for duration of the mission.
@@ -818,6 +864,26 @@ class GrantStoryLevels(Choice):
     option_additive = 1
     option_minimum = 2
     default = option_minimum
+
+
+class NovaMaxWeapons(Range):
+    """
+    Determines maximum number of Nova weapons that can be present in the game
+    Additional weapons may spawn if those are required to beat the game.
+    """
+    range_start = 1
+    range_end = len(nova_weapons)
+    default = range_end
+
+
+class NovaMaxGadgets(Range):
+    """
+    Determines maximum number of Nova gadgets that can be present in the game
+    Additional gadgets may spawn if those are required to beat the game.
+    """
+    range_start = 0
+    range_end = len(nova_gadgets)
+    default = range_end
 
 
 class TakeOverAIAllies(Toggle):
@@ -1338,14 +1404,20 @@ class Starcraft2Options(PerGameCommonOptions):
     kerrigan_total_level_cap: KerriganTotalLevelCap
     start_primary_abilities: StartPrimaryAbilities
     kerrigan_primal_status: KerriganPrimalStatus
+    kerrigan_max_active_abilities: KerriganMaxActiveAbilities
+    kerrigan_max_passive_abilities: KerriganMaxPassiveAbilities
     enable_morphling: EnableMorphling
     nerf_unit_baselines: NerfUnitBaselines
     spear_of_adun_presence: SpearOfAdunPresence
     spear_of_adun_present_in_no_build: SpearOfAdunPresentInNoBuild
     spear_of_adun_autonomously_cast_ability_presence: SpearOfAdunAutonomouslyCastAbilityPresence
     spear_of_adun_autonomously_cast_present_in_no_build: SpearOfAdunAutonomouslyCastPresentInNoBuild
+    spear_of_adun_max_active_abilities: SpearOfAdunMaxActiveAbilities
+    spear_of_adun_max_autonomously_cast_abilities: SpearOfAdunMaxAutocastAbilities
     grant_story_tech: GrantStoryTech
     grant_story_levels: GrantStoryLevels
+    nova_max_weapons: NovaMaxWeapons
+    nova_max_gadgets: NovaMaxGadgets
     take_over_ai_allies: TakeOverAIAllies
     locked_items: LockedItems
     excluded_items: ExcludedItems
@@ -1427,12 +1499,20 @@ option_groups = [
         KerriganTotalLevelCap,
         StartPrimaryAbilities,
         KerriganPrimalStatus,
+        KerriganMaxActiveAbilities,
+        KerriganMaxPassiveAbilities,
     ]),
     OptionGroup("Spear of Adun", [
         SpearOfAdunPresence,
         SpearOfAdunPresentInNoBuild,
         SpearOfAdunAutonomouslyCastAbilityPresence,
         SpearOfAdunAutonomouslyCastPresentInNoBuild,
+        SpearOfAdunMaxActiveAbilities,
+        SpearOfAdunMaxAutocastAbilities,
+    ]),
+    OptionGroup("Nova", [
+        NovaMaxWeapons,
+        NovaMaxGadgets,
     ]),
     OptionGroup("Race Specific Options", [
         EnableMorphling,

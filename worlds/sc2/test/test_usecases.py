@@ -6,6 +6,7 @@ from .test_base import Sc2SetupTestBase
 from .. import get_all_missions, mission_tables, options
 from ..item import item_groups, item_tables, item_names
 from ..mission_tables import SC2Race, SC2Mission, SC2Campaign, MissionFlag
+from ..options import ShuffleNoBuild
 
 
 class TestSupportedUseCases(Sc2SetupTestBase):
@@ -20,8 +21,10 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             'enable_lotv_missions': True,
             'enable_epilogue_missions': True,
         }
+
         self.generate_world(world_options)
         world_regions = [region.name for region in self.multiworld.regions if region.name != "Menu"]
+
         self.assertEqual(len(world_regions), 83, "Unexpected number of missions for vanilla mission order")
 
     def test_terran_with_nco_units_only_generates(self):
@@ -38,9 +41,11 @@ class TestSupportedUseCases(Sc2SetupTestBase):
                 item_groups.ItemGroupNames.NCO_UNITS: 0,
             },
         }
+
         self.generate_world(world_options)
         self.assertTrue(self.multiworld.itempool)
         world_item_names = [item.name for item in self.multiworld.itempool]
+
         self.assertIn(item_names.MARINE, world_item_names)
         self.assertIn(item_names.RAVEN, world_item_names)
         self.assertIn(item_names.LIBERATOR, world_item_names)
@@ -60,9 +65,11 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             'shuffle_no_build': options.ShuffleNoBuild.option_false,
             'mission_order': options.MissionOrder.option_mini_campaign,
         }
+
         self.generate_world(world_options)
         self.assertTrue(self.multiworld.itempool)
         missions = get_all_missions(self.world.custom_mission_order)
+
         self.assertNotIn(mission_tables.SC2Mission.THE_ESCAPE, missions)
         self.assertNotIn(mission_tables.SC2Mission.IN_THE_ENEMY_S_SHADOW, missions)
         for mission in missions:
@@ -86,10 +93,12 @@ class TestSupportedUseCases(Sc2SetupTestBase):
                 item_groups.ItemGroupNames.NCO_MIN_PROGRESSIVE_ITEMS: 1,
             },
         }
+
         self.generate_world(world_options)
         world_item_names = [item.name for item in self.multiworld.itempool + self.multiworld.precollected_items[1]]
         self.assertTrue(world_item_names)
         missions = get_all_missions(self.world.custom_mission_order)
+
         for mission in missions:
             self.assertIn(mission_tables.MissionFlag.Terran, mission.flags)
         self.assertIn(item_names.MARINE, world_item_names)
@@ -124,8 +133,10 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             'accessibility': 'locations',
             'vanilla_items_only': True,
         }
+
         self.generate_world(world_options)
         world_item_names = [item.name for item in self.multiworld.itempool]
+
         self.assertTrue(item_names)
         self.assertNotIn(item_names.LIBERATOR, world_item_names)
         self.assertNotIn(item_names.MARAUDER_PROGRESSIVE_STIMPACK, world_item_names)
@@ -146,10 +157,12 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
             'accessibility': 'locations',
         }
+
         self.generate_world(world_options)
         world_item_names = [item.name for item in self.multiworld.itempool]
         self.assertTrue(world_item_names)
         missions = get_all_missions(self.world.custom_mission_order)
+
         self.assertEqual(len(missions), 7, "Wrong number of missions in free protoss seed")
         for mission in missions:
             self.assertIn(mission.campaign, (mission_tables.SC2Campaign.PROLOGUE, mission_tables.SC2Campaign.PROPHECY))
@@ -165,8 +178,10 @@ class TestSupportedUseCases(Sc2SetupTestBase):
                 item_names.STARTING_SUPPLY: NUM_RESOURCE_ITEMS,
             },
         }
+
         self.generate_world(world_options)
         start_item_names = [item.name for item in self.multiworld.precollected_items[self.player]]
+
         self.assertEqual(start_item_names.count(item_names.STARTING_MINERALS), NUM_RESOURCE_ITEMS, "Wrong number of starting minerals in starting inventory")
         self.assertEqual(start_item_names.count(item_names.STARTING_VESPENE), NUM_RESOURCE_ITEMS, "Wrong number of starting vespene in starting inventory")
         self.assertEqual(start_item_names.count(item_names.STARTING_SUPPLY), NUM_RESOURCE_ITEMS, "Wrong number of starting supply in starting inventory")
@@ -183,10 +198,12 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             'enable_epilogue_missions': True,
             'mission_order': options.MissionOrder.option_grid,
         }
+
         self.generate_world(world_options)
         world_item_names = [item.name for item in self.multiworld.itempool]
         world_regions = [region.name for region in self.multiworld.regions]
         world_regions.remove('Menu')
+
         for item_name in world_item_names:
             self.assertNotEqual(item_tables.item_table[item_name].race, mission_tables.SC2Race.PROTOSS, f"{item_name} is a PROTOSS item!")
         for region in world_regions:
@@ -206,10 +223,12 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             'enable_epilogue_missions': True,
             'mission_order': options.MissionOrder.option_grid,
         }
+
         self.generate_world(world_options)
         world_item_names = [item.name for item in self.multiworld.itempool]
         world_regions = [region.name for region in self.multiworld.regions]
         world_regions.remove('Menu')
+
         for item_name in world_item_names:
             self.assertNotEqual(item_tables.item_table[item_name].race, mission_tables.SC2Race.TERRAN,
                                 f"{item_name} is a TERRAN item!")
@@ -233,10 +252,12 @@ class TestSupportedUseCases(Sc2SetupTestBase):
                 SC2Mission.THE_INFINITE_CYCLE.mission_name
             ]
         }
+
         self.generate_world(world_options)
         world_item_names = [item.name for item in self.multiworld.itempool]
         world_regions = [region.name for region in self.multiworld.regions]
         world_regions.remove('Menu')
+
         for item_name in world_item_names:
             self.assertNotEqual(item_tables.item_table[item_name].race, mission_tables.SC2Race.ZERG,
                                 f"{item_name} is a ZERG item!")
@@ -258,9 +279,11 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             'enable_epilogue_missions': True,
             'mission_order': options.MissionOrder.option_vanilla,
         }
+
         self.generate_world(world_options)
         world_regions = [region.name for region in self.multiworld.regions]
         world_regions.remove('Menu')
+
         for region in world_regions:
             self.assertNotIn(mission_tables.lookup_name_to_mission[region].campaign,
                              ([mission_tables.SC2Campaign.EPILOGUE]),
@@ -280,12 +303,14 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             'mission_order': options.MissionOrder.option_grid,
             'excluded_missions': [mission_tables.SC2Mission.ZERO_HOUR.mission_name],
         }
+
         self.generate_world(world_options)
         world_regions = [region.name for region in self.multiworld.regions]
         world_regions.remove('Menu')
         NUM_WOL_MISSIONS = len([mission for mission in SC2Mission if mission.campaign == SC2Campaign.WOL and MissionFlag.RaceSwap not in mission.flags])
-        self.assertEqual(len(world_regions), NUM_WOL_MISSIONS)
         races = set(mission_tables.lookup_name_to_mission[mission].race for mission in world_regions)
+
+        self.assertEqual(len(world_regions), NUM_WOL_MISSIONS)
         self.assertTrue(SC2Race.ZERG in races or SC2Race.PROTOSS in races)
 
     def test_start_inventory_upgrade_level_includes_only_correct_bundle(self) -> None:
@@ -315,6 +340,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         self.assertTrue(self.multiworld.itempool)
         world_item_names = [item.name for item in self.multiworld.itempool]
         start_inventory = [item.name for item in self.multiworld.precollected_items[self.player]]
+
         # Start inventory
         self.assertIn(item_names.PROGRESSIVE_TERRAN_INFANTRY_UPGRADE, start_inventory)
         self.assertIn(item_names.PROGRESSIVE_TERRAN_VEHICLE_UPGRADE, start_inventory)
@@ -338,3 +364,102 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         self.assertNotIn(item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON, world_item_names)
         self.assertNotIn(item_names.PROGRESSIVE_TERRAN_SHIP_ARMOR, world_item_names)
         self.assertNotIn(item_names.PROGRESSIVE_TERRAN_ARMOR_UPGRADE, world_item_names)
+
+    def test_kerrigan_max_active_abilities(self):
+        target_number: int = 8
+        world_options = {
+            'mission_order': options.MissionOrder.option_grid,
+            'maximum_campaign_size': options.MaximumCampaignSize.range_end,
+            'selected_races': options.SelectRaces.option_zerg,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+            'kerrigan_max_active_abilities': target_number,
+        }
+
+        self.generate_world(world_options)
+        world_item_names = [item.name for item in self.multiworld.itempool]
+        kerrigan_actives = [item_name for item_name in world_item_names if item_name in item_groups.kerrigan_active_abilities]
+
+        self.assertLessEqual(len(kerrigan_actives), target_number)
+
+    def test_kerrigan_max_passive_abilities(self):
+        target_number: int = 3
+        world_options = {
+            'mission_order': options.MissionOrder.option_grid,
+            'maximum_campaign_size': options.MaximumCampaignSize.range_end,
+            'selected_races': options.SelectRaces.option_zerg,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+            'kerrigan_max_passive_abilities': target_number,
+        }
+
+        self.generate_world(world_options)
+        world_item_names = [item.name for item in self.multiworld.itempool]
+        kerrigan_passives = [item_name for item_name in world_item_names if item_name in item_groups.kerrigan_passives]
+
+        self.assertLessEqual(len(kerrigan_passives), target_number)
+
+    def test_spear_of_adun_max_active_abilities(self):
+        target_number: int = 8
+        world_options = {
+            'mission_order': options.MissionOrder.option_grid,
+            'maximum_campaign_size': options.MaximumCampaignSize.range_end,
+            'selected_races': options.SelectRaces.option_protoss,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+            'spear_of_adun_max_active_abilities': target_number,
+        }
+
+        self.generate_world(world_options)
+        world_item_names = [item.name for item in self.multiworld.itempool]
+        spear_of_adun_actives = [item_name for item_name in world_item_names if item_name in item_tables.spear_of_adun_calldowns]
+
+        self.assertLessEqual(len(spear_of_adun_actives), target_number)
+
+
+    def test_spear_of_adun_max_autocasts(self):
+        target_number: int = 2
+        world_options = {
+            'mission_order': options.MissionOrder.option_grid,
+            'maximum_campaign_size': options.MaximumCampaignSize.range_end,
+            'selected_races': options.SelectRaces.option_protoss,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+            'spear_of_adun_max_autonomously_cast_abilities': target_number,
+        }
+
+        self.generate_world(world_options)
+        world_item_names = [item.name for item in self.multiworld.itempool]
+        spear_of_adun_autocasts = [item_name for item_name in world_item_names if item_name in item_tables.spear_of_adun_castable_passives]
+
+        self.assertLessEqual(len(spear_of_adun_autocasts), target_number)
+
+
+    def test_nova_max_weapons(self):
+        target_number: int = 3
+        world_options = {
+            'mission_order': options.MissionOrder.option_grid,
+            'maximum_campaign_size': options.MaximumCampaignSize.range_end,
+            'selected_races': options.SelectRaces.option_terran,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+            'nova_max_weapons': target_number,
+        }
+
+        self.generate_world(world_options)
+        world_item_names = [item.name for item in self.multiworld.itempool]
+        nova_weapons = [item_name for item_name in world_item_names if item_name in item_groups.nova_weapons]
+
+        self.assertLessEqual(len(nova_weapons), target_number)
+
+
+    def test_nova_max_gadgets(self):
+        target_number: int = 3
+        world_options = {
+            'mission_order': options.MissionOrder.option_grid,
+            'maximum_campaign_size': options.MaximumCampaignSize.range_end,
+            'selected_races': options.SelectRaces.option_terran,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+            'nova_max_gadgets': target_number,
+        }
+
+        self.generate_world(world_options)
+        world_item_names = [item.name for item in self.multiworld.itempool]
+        nova_gadgets = [item_name for item_name in world_item_names if item_name in item_groups.nova_gadgets]
+
+        self.assertLessEqual(len(nova_gadgets), target_number)

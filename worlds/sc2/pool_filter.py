@@ -3,7 +3,9 @@ from typing import Callable, Dict, List, Set, Union, Tuple, TYPE_CHECKING, Itera
 
 from BaseClasses import Location
 from .item import StarcraftItem, ItemFilterFlags, item_names, item_parents, item_groups
-from .item.item_tables import item_table, TerranItemType, ZergItemType, ProtossItemType
+from .item.item_groups import nova_weapons
+from .item.item_tables import item_table, TerranItemType, ZergItemType, ProtossItemType, spear_of_adun_calldowns, \
+    spear_of_adun_castable_passives
 from .options import RequiredTactics
 
 if TYPE_CHECKING:
@@ -197,6 +199,22 @@ class ValidInventory:
                 if attempt_removal(child_item, remove_flag):
                     remove_child_items(child_item, remove_flag)
 
+        def cull_items_over_maximum(group: List[StarcraftItem], allowed_max: int) -> None:
+            for item in group:
+                if len([x for x in group if ItemFilterFlags.Culled not in x.filter_flags]) <= allowed_max:
+                    break
+                if ItemFilterFlags.Uncullable & item.filter_flags:
+                    continue
+                attempt_removal(item, remove_flag=ItemFilterFlags.Culled)
+
+        def request_minimum_items(group: List[StarcraftItem], requested_minimum) -> None:
+            for item in group:
+                if len([x for x in group if ItemFilterFlags.RequestedOrBetter & x.filter_flags]) >= requested_minimum:
+                    break
+                if ItemFilterFlags.Culled & item.filter_flags:
+                    continue
+                item.filter_flags |= ItemFilterFlags.Requested
+
         # Process Excluded items, validate if the item can get actually excluded
         excluded_items: List[StarcraftItem] = [starcraft_item for starcraft_item in inventory if ItemFilterFlags.Excluded & starcraft_item.filter_flags]
         self.world.random.shuffle(excluded_items)
@@ -220,6 +238,7 @@ class ValidInventory:
 
         # Determine item groups to be constrained by min/max upgrades per unit
         group_to_item: Dict[str, List[StarcraftItem]] = {}
+        group: str = ""
         for group, group_member_names in item_parents.item_upgrade_groups.items():
             group_to_item[group] = []
             for item_name in group_member_names:
@@ -230,23 +249,40 @@ class ValidInventory:
         if max_upgrades_per_unit != -1:
             for group_name, group_items in group_to_item.items():
                 self.world.random.shuffle(group_to_item[group])
-                for item in group_items:
-                    if len([x for x in group_items if ItemFilterFlags.Culled not in x.filter_flags]) <= max_upgrades_per_unit:
-                        break
-                    if ItemFilterFlags.Uncullable & item.filter_flags:
-                        continue
-                    attempt_removal(item, remove_flag=ItemFilterFlags.Culled)
+                cull_items_over_maximum(group_items, max_upgrades_per_unit)
         
         # Requesting minimum upgrades for items that have already been locked/placed when minimum required
         if min_upgrades_per_unit != -1:
             for group_name, group_items in group_to_item.items():
                 self.world.random.shuffle(group_items)
-                for item in group_items:
-                    if len([x for x in group_items if ItemFilterFlags.RequestedOrBetter & x.filter_flags]) >= min_upgrades_per_unit:
-                        break
-                    if ItemFilterFlags.Culled & item.filter_flags:
-                        continue
-                    item.filter_flags |= ItemFilterFlags.Requested
+                request_minimum_items(group_items, min_upgrades_per_unit)
+
+        # Kerrigan max abilities
+        kerrigan_actives = [item for item in inventory if item.name in item_groups.kerrigan_active_abilities]
+        self.world.random.shuffle(kerrigan_actives)
+        cull_items_over_maximum(kerrigan_actives, self.world.options.kerrigan_max_active_abilities.value)
+
+        kerrigan_passives = [item for item in inventory if item.name in item_groups.kerrigan_passives]
+        self.world.random.shuffle(kerrigan_passives)
+        cull_items_over_maximum(kerrigan_passives, self.world.options.kerrigan_max_passive_abilities.value)
+
+        # Spear of Adun max abilities
+        spear_of_adun_actives = [item for item in inventory if item.name in spear_of_adun_calldowns]
+        self.world.random.shuffle(spear_of_adun_actives)
+        cull_items_over_maximum(spear_of_adun_actives, self.world.options.spear_of_adun_max_active_abilities.value)
+
+        spear_of_adun_autocasts = [item for item in inventory if item.name in spear_of_adun_castable_passives]
+        self.world.random.shuffle(spear_of_adun_autocasts)
+        cull_items_over_maximum(spear_of_adun_autocasts, self.world.options.spear_of_adun_max_autonomously_cast_abilities.value)
+
+        # Nova items
+        nova_weapon_items = [item for item in inventory if item.name in item_groups.nova_weapons]
+        self.world.random.shuffle(nova_weapon_items)
+        cull_items_over_maximum(nova_weapon_items, self.world.options.nova_max_weapons.value)
+
+        nova_gadget_items = [item for item in inventory if item.name in item_groups.nova_gadgets]
+        self.world.random.shuffle(nova_gadget_items)
+        cull_items_over_maximum(nova_gadget_items, self.world.options.nova_max_gadgets.value)
 
         # Determining if the full-size inventory can complete campaign
         # Note(mm): Now that user excludes are checked against logic, this can probably never fail unless there's a bug.
@@ -255,7 +291,14 @@ class ValidInventory:
             raise Exception(f"Too many items excluded - couldn't satisfy access rules for the following locations:\n{failed_locations}")
 
         # Optionally locking generic items
-        generic_items: List[StarcraftItem] = [starcraft_item for starcraft_item in inventory if starcraft_item.name in second_pass_placeable_items]
+        generic_items: List[StarcraftItem] = [
+            starcraft_item for starcraft_item in inventory
+            if starcraft_item.name in second_pass_placeable_items
+               and (
+                       not ItemFilterFlags.CulledOrBetter & starcraft_item.filter_flags
+                       or ItemFilterFlags.RequestedOrBetter & starcraft_item.filter_flags
+               )
+        ]
         reserved_generic_percent = self.world.options.ensure_generic_items.value / 100
         reserved_generic_amount = int(len(generic_items) * reserved_generic_percent)
         self.world.random.shuffle(generic_items)

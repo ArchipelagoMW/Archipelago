@@ -97,6 +97,8 @@ class ItemGroupNames:
     NCO_BASELINE_UPGRADES = "NCO Baseline Upgrades"
     NCO_UPGRADES = "NCO Upgrades"
     NOVA_EQUIPMENT = "Nova Equipment"
+    NOVA_WEAPONS = "Nova Weapons"
+    NOVA_GADGETS = "Nova Gadgets"
     NCO_MAX_PROGRESSIVE_ITEMS = "NCO +Items"
     """NCO item groups that should be set to maximum progressive amounts"""
     NCO_MIN_PROGRESSIVE_ITEMS = "NCO -Items"
@@ -125,6 +127,7 @@ class ItemGroupNames:
     HOTS_MORPHS = "HotS Morphs"
     KERRIGAN_ABILITIES = "Kerrigan Abilities"
     KERRIGAN_HOTS_ABILITIES = "Kerrigan HotS Abilities"
+    KERRIGAN_ACTIVE_ABILITIES = "Kerrigan Active Abilities"
     KERRIGAN_PASSIVES = "Kerrigan Passives"
     KERRIGAN_TIER_1 = "Kerrigan Tier 1"
     KERRIGAN_TIER_2 = "Kerrigan Tier 2"
@@ -243,6 +246,20 @@ item_name_groups[ItemGroupNames.NOVA_EQUIPMENT] = nova_equipment = [
     *[item_name for item_name, item_data in item_tables.item_table.items()
       if item_data.type == item_tables.TerranItemType.Nova_Gear],
     item_names.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE,
+]
+item_name_groups[ItemGroupNames.NOVA_WEAPONS] = nova_weapons = [
+    item_names.NOVA_C20A_CANISTER_RIFLE,
+    item_names.NOVA_HELLFIRE_SHOTGUN,
+    item_names.NOVA_PLASMA_RIFLE,
+    item_names.NOVA_MONOMOLECULAR_BLADE,
+    item_names.NOVA_BLAZEFIRE_GUNBLADE,
+]
+item_name_groups[ItemGroupNames.NOVA_GADGETS] = nova_gadgets = [
+    item_names.NOVA_STIM_INFUSION,
+    item_names.NOVA_PULSE_GRENADES,
+    item_names.NOVA_FLASHBANG_GRENADES,
+    item_names.NOVA_IONIC_FORCE_FIELD,
+    item_names.NOVA_HOLO_DECOY,
 ]
 item_name_groups[ItemGroupNames.WOL_UNITS] = wol_units = [
     item_names.MARINE, item_names.MEDIC, item_names.FIREBAT, item_names.MARAUDER, item_names.REAPER,
@@ -508,6 +525,9 @@ item_name_groups[ItemGroupNames.KERRIGAN_ABILITIES] = kerrigan_abilities = [
 item_name_groups[ItemGroupNames.KERRIGAN_PASSIVES] = kerrigan_passives = [
     item_names.KERRIGAN_HEROIC_FORTITUDE, item_names.KERRIGAN_CHAIN_REACTION,
     item_names.KERRIGAN_INFEST_BROODLINGS, item_names.KERRIGAN_FURY, item_names.KERRIGAN_ABILITY_EFFICIENCY,
+]
+item_name_groups[ItemGroupNames.KERRIGAN_ACTIVE_ABILITIES] = kerrigan_active_abilities = [
+    item_name for item_name in kerrigan_abilities if item_name not in kerrigan_passives
 ]
 item_name_groups[ItemGroupNames.KERRIGAN_TIER_1] = kerrigan_tier_1 = [
     item_names.KERRIGAN_CRUSHING_GRIP, item_names.KERRIGAN_HEROIC_FORTITUDE, item_names.KERRIGAN_LEAPING_STRIKE
