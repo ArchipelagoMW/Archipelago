@@ -135,7 +135,7 @@ def place_early_items(world: "WitnessWorld", prog_itempool: List[Item], fill_loc
             del eligible_early_items_by_type[next_findable_items_dict[item.name]]
             fill_locations.remove(cast_not_none(item.location))
         for item in unplaced_items:
-            debug(f"Could not find a suitable placemenet for item {item}.")
+            debug(f"Could not find a suitable placement for item {item}.")
 
     unfilled_types = list(eligible_early_items_by_type)
     if unfilled_types:
