@@ -371,7 +371,6 @@ class HintPriority(enum.IntEnum):
     HINT_DESIRED = 50        # The item should be collected, as it will be very helpful
     HINT_NEEDED = 60         # The item should be collected, as it is necessary to progress
 ```
-- Hints for items with `ItemClassification.trap` AND `ItemClassification.progression` default to `HINT_AVOID_FOR_NOW`.
 - Hints for items with `ItemClassification.trap` default to `HINT_AVOID`.
 - Hints created with `LocationScouts`, `!hint_location`, or similar (hinting a location) default to `HINT_UNSPECIFIED`.
 - Hints created with `!hint` or similar (hinting an item for yourself) default to `HINT_DESIRED`.
