@@ -481,7 +481,7 @@ def balanced_shuffle(multiworld: MultiWorld, fill_locations: list[Location], ite
         locations_per_player[location.player].append(location)
 
     # shuffle the player order in the dict so that no player gets an inherent advantage.
-    players_with_locations = list(locations_per_player)
+    players_with_locations = list(locations_per_player.keys())
     multiworld.random.shuffle(players_with_locations)
     locations_per_player = {player: locations_per_player[player] for player in players_with_locations}
 
