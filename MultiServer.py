@@ -28,9 +28,11 @@ ModuleUpdate.update()
 
 if typing.TYPE_CHECKING:
     import ssl
+    from NetUtils import ServerConnection
 
-import websockets
 import colorama
+import websockets
+from websockets.extensions.permessage_deflate import PerMessageDeflate
 try:
     # ponyorm is a requirement for webhost, not default server, so may not be importable
     from pony.orm.dbapiprovider import OperationalError
@@ -119,13 +121,14 @@ def get_saving_second(seed_name: str, interval: int = 60) -> int:
 
 class Client(Endpoint):
     version = Version(0, 0, 0)
-    tags: typing.List[str] = []
+    tags: typing.List[str]
     remote_items: bool
     remote_start_inventory: bool
     no_items: bool
     no_locations: bool
+    no_text: bool
 
-    def __init__(self, socket: websockets.WebSocketServerProtocol, ctx: Context):
+    def __init__(self, socket: "ServerConnection", ctx: Context) -> None:
         super().__init__(socket)
         self.auth = False
         self.team = None
@@ -175,6 +178,7 @@ class Context:
                       "compatibility": int}
     # team -> slot id -> list of clients authenticated to slot.
     clients: typing.Dict[int, typing.Dict[int, typing.List[Client]]]
+    endpoints: list[Client]
     locations: LocationStore  # typing.Dict[int, typing.Dict[int, typing.Tuple[int, int, int]]]
     location_checks: typing.Dict[typing.Tuple[int, int], typing.Set[int]]
     hints_used: typing.Dict[typing.Tuple[int, int], int]
@@ -364,18 +368,28 @@ class Context:
             return True
 
     def broadcast_all(self, msgs: typing.List[dict]):
-        msgs = self.dumper(msgs)
-        endpoints = (endpoint for endpoint in self.endpoints if endpoint.auth)
-        async_start(self.broadcast_send_encoded_msgs(endpoints, msgs))
+        msg_is_text = all(msg["cmd"] == "PrintJSON" for msg in msgs)
+        data = self.dumper(msgs)
+        endpoints = (
+            endpoint
+            for endpoint in self.endpoints
+            if endpoint.auth and not (msg_is_text and endpoint.no_text)
+        )
+        async_start(self.broadcast_send_encoded_msgs(endpoints, data))
 
     def broadcast_text_all(self, text: str, additional_arguments: dict = {}):
         self.logger.info("Notice (all): %s" % text)
         self.broadcast_all([{**{"cmd": "PrintJSON", "data": [{ "text": text }]}, **additional_arguments}])
 
     def broadcast_team(self, team: int, msgs: typing.List[dict]):
-        msgs = self.dumper(msgs)
-        endpoints = (endpoint for endpoint in itertools.chain.from_iterable(self.clients[team].values()))
-        async_start(self.broadcast_send_encoded_msgs(endpoints, msgs))
+        msg_is_text = all(msg["cmd"] == "PrintJSON" for msg in msgs)
+        data = self.dumper(msgs)
+        endpoints = (
+            endpoint
+            for endpoint in itertools.chain.from_iterable(self.clients[team].values())
+            if not (msg_is_text and endpoint.no_text)
+        )
+        async_start(self.broadcast_send_encoded_msgs(endpoints, data))
 
     def broadcast(self, endpoints: typing.Iterable[Client], msgs: typing.List[dict]):
         msgs = self.dumper(msgs)
@@ -389,13 +403,13 @@ class Context:
         await on_client_disconnected(self, endpoint)
 
     def notify_client(self, client: Client, text: str, additional_arguments: dict = {}):
-        if not client.auth:
+        if not client.auth or client.no_text:
             return
         self.logger.info("Notice (Player %s in team %d): %s" % (client.name, client.team + 1, text))
         async_start(self.send_msgs(client, [{"cmd": "PrintJSON", "data": [{ "text": text }], **additional_arguments}]))
 
     def notify_client_multiple(self, client: Client, texts: typing.List[str], additional_arguments: dict = {}):
-        if not client.auth:
+        if not client.auth or client.no_text:
             return
         async_start(self.send_msgs(client,
                                    [{"cmd": "PrintJSON", "data": [{ "text": text }], **additional_arguments}
@@ -760,7 +774,7 @@ class Context:
             self.on_new_hint(team, slot)
         for slot, hint_data in concerns.items():
             if recipients is None or slot in recipients:
-                clients = self.clients[team].get(slot)
+                clients = filter(lambda c: not c.no_text, self.clients[team].get(slot, []))
                 if not clients:
                     continue
                 client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player != slot)]
@@ -769,7 +783,7 @@ class Context:
 
     def get_hint(self, team: int, finding_player: int, seeked_location: int) -> typing.Optional[Hint]:
         for hint in self.hints[team, finding_player]:
-            if hint.location == seeked_location:
+            if hint.location == seeked_location and hint.finding_player == finding_player:
                 return hint
         return None
     
@@ -819,7 +833,7 @@ def update_aliases(ctx: Context, team: int):
             async_start(ctx.send_encoded_msgs(client, cmd))
 
 
-async def server(websocket, path: str = "/", ctx: Context = None):
+async def server(websocket: "ServerConnection", path: str = "/", ctx: Context = None) -> None:
     client = Client(websocket, ctx)
     ctx.endpoints.append(client)
 
@@ -910,6 +924,10 @@ async def on_client_joined(ctx: Context, client: Client):
                               "If your client supports it, "
                               "you may have additional local commands you can list with /help.",
                       {"type": "Tutorial"})
+    if not any(isinstance(extension, PerMessageDeflate) for extension in client.socket.extensions):
+        ctx.notify_client(client, "Warning: your client does not support compressed websocket connections! "
+                                  "It may stop working in the future. If you are a player, please report this to the "
+                                  "client's developer.")
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 
@@ -1117,7 +1135,7 @@ def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, st
     seeked_item_id = item if isinstance(item, int) else ctx.item_names_for_game(ctx.games[slot])[item]
     for finding_player, location_id, item_id, receiving_player, item_flags \
             in ctx.locations.find_item(slots, seeked_item_id):
-        prev_hint = ctx.get_hint(team, slot, location_id)
+        prev_hint = ctx.get_hint(team, finding_player, location_id)
         if prev_hint:
             hints.append(prev_hint)
         else:
@@ -1803,7 +1821,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             ctx.clients[team][slot].append(client)
             client.version = args['version']
             client.tags = args['tags']
-            client.no_locations = 'TextOnly' in client.tags or 'Tracker' in client.tags
+            client.no_locations = "TextOnly" in client.tags or "Tracker" in client.tags
+            # set NoText for old PopTracker clients that predate the tag to save traffic
+            client.no_text = "NoText" in client.tags or ("PopTracker" in client.tags and client.version < (0, 5, 1))
             connected_packet = {
                 "cmd": "Connected",
                 "team": client.team, "slot": client.slot,
@@ -1876,6 +1896,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 client.tags = args["tags"]
                 if set(old_tags) != set(client.tags):
                     client.no_locations = 'TextOnly' in client.tags or 'Tracker' in client.tags
+                    client.no_text = "NoText" in client.tags or (
+                        "PopTracker" in client.tags and client.version < (0, 5, 1)
+                    )
                     ctx.broadcast_text_all(
                         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has changed tags "
                         f"from {old_tags} to {client.tags}.",
