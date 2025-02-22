@@ -44,7 +44,7 @@ Um die Konsole in Subnautica zu aktivieren, drücke `Shift+Enter`.
 
 ## Bekannte Probleme
 
-- Spiele keine normalen (Vanilla) Spielstände, während die Mod installiert ist, da die Mod die Scan-Einträge des Spielstandes überschreibt.
+- Beim Spielen eines normalen (Vanilla) Spielstandes, während die Mod installiert ist, werden alle Scan-Einträge des Spielstandes überschrieben.
 - Beim Zurückkehren ins Hauptmenü wird der Mod-Status nicht korrekt zurückgesetzt, wenn du von diesem Punkt aus versuchst ein Spielstand zu laden treten mehrere Fehler auf.
   Falls du einen Spielstand neu laden möchtest, ist es empfohlen das gesamte Spiel neu zu starten.
 - Beim Laden eines Spielstandes mit ungültigen Verbindungsinformationen, ohne vorher gültige Daten im Hauptmenü eingegeben zu haben, hängt sich das Spiel im Ladebildschirm auf.
