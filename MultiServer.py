@@ -2356,7 +2356,6 @@ class ServerCommandProcessor(CommonCommandProcessor):
             known_options = (f"{option}: {option_type}" for option, option_type in self.ctx.simple_options.items())
             self.output(f"Unrecognized option '{option_name}', known: {', '.join(known_options)}")
             return False
-
         if value_type == bool:
             def value_type(input_text: str):
                 return input_text.lower() not in {"off", "0", "false", "none", "null", "no"}
@@ -2389,6 +2388,75 @@ class ServerCommandProcessor(CommonCommandProcessor):
         texts.insert(0, f"Found {len(self.ctx.stored_data)} keys, "
                         f"approximately totaling {Utils.format_SI_prefix(total, power=1024)}B")
         self.output("\n".join(texts))
+
+    def _cmd_discord_webhook(self, webhook_url: str):
+        """Needs to be supplied with a Discord WebHook url as parameter,
+        which will then relay the server log to a discord channel."""
+
+        import discord_webhook
+        initial_response = discord_webhook.DiscordWebhook(webhook_url, wait=True,
+                                                          content="Beginning Discord Logging").execute()
+        if initial_response.ok:
+            import queue
+            response_queue = queue.SimpleQueue()
+
+            class Emitter(threading.Thread):
+                def run(self):
+                    record: typing.Optional[logging.LogRecord] = None
+                    while True:
+                        time.sleep(1)
+                        # check for leftover record from last iteration
+                        message = record.msg if record else ""
+                        while 1:
+                            try:
+                                record = response_queue.get_nowait()
+                            except queue.Empty:
+                                break
+                            else:
+                                if record is None:
+                                    return  # shutdown
+                                if len(record.msg) > 1999:
+                                    continue  # content size limit
+                                if len(message) + len(record.msg) > 2000:
+                                    break  # reached content size limit in total
+                                else:
+                                    message += "\n" + record.msg
+                                    record = None
+                        if message:
+                            try:
+                                response = discord_webhook.DiscordWebhook(
+                                    webhook_url, rate_limit_retry=True, content=message.strip()).execute()
+                                if response.status_code not in (200, 204):
+                                    shutdown()
+                                    logging.info(f"Disabled Discord WebHook due to error code {response.status_code}.")
+                                    return
+                            # just in case to prevent an error-loop logging itself
+                            except Exception as e:
+                                shutdown()
+                                logging.error("Disabled Discord WebHook due to error.")
+                                logging.exception(e)
+                                return
+
+            emitter = Emitter()
+            emitter.daemon = True
+            emitter.start()
+
+            class DiscordLogger(logging.Handler):
+                """Logs to Discord WebHook"""
+                def emit(self, record: logging.LogRecord):
+                    response_queue.put(record)
+
+            handler = DiscordLogger()
+
+            def shutdown():
+                response_queue.put(None)
+                logging.getLogger().removeHandler(handler)
+
+            logging.getLogger().addHandler(handler)
+            self.output("Discord Link established.")
+
+        else:
+            self.output("Discord Link could not be established. Check your webhook url.")
 
 
 async def console(ctx: Context):
