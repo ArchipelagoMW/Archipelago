@@ -44,7 +44,7 @@ ALLOWED_CHARACTERS = frozenset({
     "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
     "o", "p", "q", "r", "s", "t", "u", "v", "w", "x",
     "y", "z", " ", "!", ":", ",", ".", "/", "?", "-",
-    "=", "+",
+    "=", "+", "'",
 })
 
 
@@ -267,19 +267,23 @@ class JakAndDaxterReplClient:
         msg += f"   Did you hear the success audio cue?"
         self.log_info(logger, msg)
 
-    # To properly display in-game text, it must be a valid character, all lowercase letters must be uppercase,
-    # and it must be wrapped in double quotes (for the REPL command). I also only allotted 32 bytes to each string
-    # in OpenGOAL, so we must truncate.
+    # To properly display in-game text:
+    # - It must be a valid character from the
+    # - All lowercase letters must be uppercase
+    # - It must be wrapped in double quotes (for the REPL command).
+    # - Apostrophes must be handled specially - GOAL uses invisible ASCII character 0x12.
+    # I also only allotted 32 bytes to each string in OpenGOAL, so we must truncate.
     @staticmethod
     def sanitize_game_text(text: str) -> str:
         result = "".join([c if c in ALLOWED_CHARACTERS else "?" for c in text[:32]]).upper()
+        result = result.replace("'", "\\c12")
         return f"\"{result}\""
 
     # Like sanitize_game_text, but the settings file will NOT allow any whitespace in the slot_name or slot_seed data.
     # And don't replace any chars with "?" for good measure.
     @staticmethod
     def sanitize_file_text(text: str) -> str:
-        allowed_chars_no_space = ALLOWED_CHARACTERS - {" "}
+        allowed_chars_no_space = ALLOWED_CHARACTERS - {" ", "'"}
         result = "".join([c if c in allowed_chars_no_space else "" for c in text[:16]]).upper()
         return f"\"{result}\""
 
