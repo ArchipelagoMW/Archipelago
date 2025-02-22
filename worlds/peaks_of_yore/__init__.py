@@ -14,6 +14,7 @@ class PeaksOfYoreItem(Item):
 
 
 class PeaksOfWeb(WebWorld):
+    rich_text_options_doc = True
     theme = "stone"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
@@ -152,14 +153,12 @@ class PeaksOfWorld(World):
     def create_items(self) -> None:
         # order: books, tools, ropes, bird seeds, artefacts, fill rest with extra Items
 
-
         books: dict[str, Toggle] = {
             "Fundamentals Book": self.options.enable_fundamental,
             "Intermediate Book": self.options.enable_intermediate,
             "Advanced Book": self.options.enable_advanced,
             "Expert Book": self.options.enable_expert
         }
-
 
         starting_book: Item = self.create_item([*books][self.options.starting_book.value])
 
@@ -172,7 +171,7 @@ class PeaksOfWorld(World):
             remaining_items -= 1
 
         for tool in [item for item in full_item_list if item.type == "Tool"]:
-            if remaining_items > 0 and (tool.name != "Barometer" or not self.options.start_with_barometer)\
+            if remaining_items > 0 and (tool.name != "Barometer" or not self.options.start_with_barometer) \
                     and (tool.name != "Oil Lamp" or not self.options.start_with_oil_lamp):
                 if tool.name == "Progressive Crampons":
                     self.multiworld.itempool.append(self.create_item(tool.name))

@@ -6,10 +6,10 @@ class Goal(Choice):
     """
     Decide what needs to happen to be counted as a win
 
-    **all peaks**: Finish all peaks in selected books to win/complete your run
-    **all artefacts**: Collect all artefacts on selected peaks
-    **all artefacts all peaks**: complete both of the above
-    **all**: all items including bird seeds and ropes
+    - **All Peaks**: Finish all peaks in selected books to win/complete your run
+    - **All Artefacts**: Collect all artefacts on selected peaks
+    - **All Artefacts All Peaks**: complete both of the above
+    - **All**: all items including bird seeds and ropes
     """
     display_name = "Goal"
     option_all_peaks = 0
@@ -46,9 +46,9 @@ class RopeUnlockMode(Choice):
     """
     Choose when the rope unlock item is given
 
-    instant: Unlock ropes as soon as you receive them
-    early: Try to unlock the item early on in the game
-    normal: Do not put rope unlock earlier and randomise it like any other item
+    - **Instant**: Unlock ropes as soon as you receive them
+    - **Early**: Try to unlock the item early on in the game
+    - **Normal**: Do not put rope unlock earlier and randomise it like any other item
     """
     display_name = "Rope Unlock Mode"
     option_instant = 0
