@@ -711,7 +711,12 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Ruined Atoll Portal"].connect(
         connecting_region=regions["Ruined Atoll"])
 
-    if not options.shuffle_fuses:
+    if options.shuffle_fuses:
+        atoll_statue = regions["Ruined Atoll"].connect(
+            connecting_region=regions["Ruined Atoll Statue"],
+            rule=lambda state: has_ability(prayer, state, world)
+            and state.has_all([atoll_northwest_fuse, atoll_northeast_fuse, atoll_southwest_fuse, atoll_southeast_fuse], player))
+    else:
         atoll_statue = regions["Ruined Atoll"].connect(
             connecting_region=regions["Ruined Atoll Statue"],
             rule=lambda state: has_ability(prayer, state, world)
@@ -719,11 +724,6 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                  # shoot fuse and have the shot hit you mid-LS
                  or (can_ladder_storage(state, world) and state.has(fire_wand, player)
                      and options.ladder_storage >= LadderStorage.option_hard)))
-    else:
-        atoll_statue = regions["Ruined Atoll"].connect(
-            connecting_region=regions["Ruined Atoll Statue"],
-            rule=lambda state: has_ability(prayer, state, world)
-            and state.has_all([atoll_northwest_fuse, atoll_northeast_fuse, atoll_southwest_fuse, atoll_southeast_fuse], player))
 
     regions["Ruined Atoll Statue"].connect(
         connecting_region=regions["Ruined Atoll"])
