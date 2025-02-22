@@ -105,8 +105,8 @@ or to launch it properly. If this is happening to you, make sure:
   (Note that older versions of Archipelago required an older patch, but that
   _will not work_ with the current version.)
 
-* You own the DS3 DLC if your randomizer config has DLC enabled. (It's possible
-  but unconfirmed that you need the DLC even when it's disabled in your config).
+* You own the DS3 DLC if your randomizer config has DLC enabled. (It's possible,
+  but unconfirmed, that you need the DLC even when it's disabled in your config).
 
 * Steam is not running in administrator mode. To fix this, right-click
   `steam.exe` (by default this is in `C:\Program Files\Steam`), select
@@ -122,13 +122,13 @@ If you've checked all of these, you can also try:
 
 * Reinstalling DS3 or even reinstalling Steam itself.
 
-* Making sure DS3 is installed on the same drive as steam and as the randomizer.
+* Making sure DS3 is installed on the same drive as Steam and as the randomizer.
   (A number of users are able to run these on different drives, but this has
   helped some users.)
 
 If none of this works, unfortunately there's not much we can do. We use
 ModEngine2 to launch DS3 with the Archipelago mod enabled, but unfortunately
-it's no longer maintained and its successor ModEngine3 isn't usable yet.
+it's no longer maintained and its successor, ModEngine3, isn't usable yet.
 
 ### `DS3Randomizer.exe` isn't working
 
