@@ -21,7 +21,16 @@ class SubnauticaWeb(WebWorld):
         "setup_en.md",
         "setup/en",
         ["Berserker"]
-    )]
+    ),
+    Tutorial(
+            "Multiwelt Einrichtungsanleitung",
+            "Eine Anleitung zur Einrichtung des Subnautica-Zufallsgenerators in einer Archipelago-Multiwelt"
+            "Deutsch",
+            "setup_de.md",
+            "setup/de",
+            ["Erotai"]
+        )
+    ]
 
 
 all_locations = {data["name"]: loc_id for loc_id, data in locations.location_table.items()}
