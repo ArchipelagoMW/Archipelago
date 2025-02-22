@@ -641,9 +641,11 @@ Door - 0x3CCDF (Exit Right) - 0x33AB2
 159556 - 0x33A2A (Door EP) - 0x03553 - True
 159558 - 0x33B06 (Church EP) - 0x0354E - True
 
-==Jungle==
+==Southern Peninsula==
 
-Jungle Peninsula (Jungle Peninsula) - Main Island - True:
+Southern Peninsula (Southern Peninsula) - Main Island - True:
+
+==Jungle==
 
 Jungle (Jungle) - Main Island - True - The Ocean - 0x17CDF - Jungle Under Popup Wall - 0x1475B:
 158251 - 0x17CDF (Shore Boat Spawn) - True - Boat
