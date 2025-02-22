@@ -1,12 +1,18 @@
 import unittest
 
 from Fill import distribute_items_restrictive
-from worlds import network_data_package
+from worlds import network_data_package, ensure_worlds_loaded
 from worlds.AutoWorld import AutoWorldRegister, call_all
 from . import setup_solo_multiworld
 
 
 class TestIDs(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        ensure_worlds_loaded()
+
     def test_range_items(self):
         """There are Javascript clients, which are limited to Number.MAX_SAFE_INTEGER due to 64bit float precision."""
         for gamename, world_type in AutoWorldRegister.world_types.items():
