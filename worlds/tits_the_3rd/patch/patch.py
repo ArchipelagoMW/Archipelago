@@ -266,6 +266,34 @@ def apply_patch():
     finally:
         shutil.rmtree(temp_dir)
 
+def apply_patch_to_dir_with_patch_file(destination: str, patch_path: str):
+    """
+    Apply the patch file provided to the destination directory provided.
+    The patch is applied against the original game files, and the outputs of the patch
+    are written to the destination directory provided.
+
+    Note this function does not check if the destination directory is populated.
+    It is assumed that it is not, as this function is primarily used for the diff
+    tool, which aims to create a new directory.
+
+    :str destination: The destination directory to write the patch to.
+    :str patch_path: The path to the patch file to apply.
+    """
+    patch_dir = os.path.dirname(os.path.realpath(__file__))
+    temp_dir = tempfile.mkdtemp(dir=patch_dir)
+    try:
+        config = read_dev_config_and_assert_contents()
+        _decompress_with_factoria(temp_dir, config["gameDirectory"])
+        _move_archives_into_zip_and_remove_non_zip_files(temp_dir, "input.zip")
+        _apply_patch_file(temp_dir, patch_path)
+        _unzip_patch_output(temp_dir)
+        _delete_zip_files(temp_dir)
+        if "ED6_DT21" in MODIFIED_ARCHIVES:
+            _decompile_with_calmare(temp_dir)
+        copy_contents(temp_dir, destination)
+    finally:
+        shutil.rmtree(temp_dir)
+
 def create_patch():
     """
     Given the original game files and the lbARK directory with the desired patch output files,
