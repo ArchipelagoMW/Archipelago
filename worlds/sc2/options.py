@@ -870,6 +870,8 @@ class NovaMaxWeapons(Range):
     """
     Determines maximum number of Nova weapons that can be present in the game
     Additional weapons may spawn if those are required to beat the game.
+
+    Note: Nova can swap between unlocked weapons anytime during the gameplay.
     """
     range_start = 1
     range_end = len(nova_weapons)
@@ -880,6 +882,8 @@ class NovaMaxGadgets(Range):
     """
     Determines maximum number of Nova gadgets that can be present in the game
     Additional gadgets may spawn if those are required to beat the game.
+
+    Note: Nova can use any unlocked gadget anytime during the gameplay.
     """
     range_start = 0
     range_end = len(nova_gadgets)
