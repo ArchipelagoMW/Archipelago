@@ -151,7 +151,7 @@ def set_fuse_location_rules(world: "TunicWorld") -> None:
     set_rule(world.get_location("Ruined Atoll - [Southwest] Activate Fuse"),
              lambda state: has_ability(prayer, state, world))
     set_rule(world.get_location("Library Lab - Activate Fuse"),
-             lambda state: has_ability(prayer, state, world) and (state.has("Ladders in Library") if world.options.shuffle_ladders else True))
+             lambda state: has_ability(prayer, state, world) and (state.has("Ladders in Library", player) if world.options.shuffle_ladders else True))
     set_rule(world.get_location("Fortress Courtyard - [From Overworld] Activate Fuse"),
              lambda state: has_ability(prayer, state, world))
     set_rule(world.get_location("Fortress Courtyard - [Near Cave] Activate Fuse"),

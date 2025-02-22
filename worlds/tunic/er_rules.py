@@ -659,7 +659,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["West Garden by Portal"])
     regions["West Garden by Portal"].connect(
         connecting_region=regions["West Garden Portal"],
-        rule=lambda state: has_ability(prayer, state, world) and has_fuses("Activate West Garden Fuse", state, player)
+        rule=lambda state: has_ability(prayer, state, world) and has_fuses("Activate West Garden Fuse", state, world)
     )
 
     regions["West Garden by Portal"].connect(
@@ -1939,9 +1939,10 @@ def set_er_location_rules(world: "TunicWorld") -> None:
 
         # could just do the last two, but this outputs better in the spoiler log
         # dagger is maybe viable here, but it's sketchy -- activate ladder switch, save to reset enemies, climb up
-        combat_logic_to_loc("Upper and Central Fortress Exterior Fuses", "Eastern Vault Fortress")
-        combat_logic_to_loc("Beneath the Vault Fuse", "Beneath the Vault")
-        combat_logic_to_loc("Eastern Vault West Fuses", "Eastern Vault Fortress")
+        if not options.shuffle_fuses:
+            combat_logic_to_loc("Upper and Central Fortress Exterior Fuses", "Eastern Vault Fortress")
+            combat_logic_to_loc("Beneath the Vault Fuse", "Beneath the Vault")
+            combat_logic_to_loc("Eastern Vault West Fuses", "Eastern Vault Fortress")
 
         # if you come in from the left, you only need to fight small crabs
         add_rule(world.get_location("Ruined Atoll - [South] Near Birds"),

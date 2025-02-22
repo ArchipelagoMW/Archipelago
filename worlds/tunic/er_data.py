@@ -809,7 +809,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Overworld Tunnel Turret":
             [["IG1"], ["LS1"], ["Hyperdash"]],
         "Overworld Temple Door":
-            [["IG2"], ["LS3"], ["Forest Belltower Upper", "Overworld Belltower"]],
+            [["IG2"], ["LS3"], ["Fuse Shuffle"], ["Forest Belltower Upper", "Overworld Belltower"]],
         "Overworld Southeast Cross Door":
             [],
         "Overworld Fountain Cross Door":
@@ -1215,7 +1215,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "West Garden by Portal": {
         "West Garden Portal":
-            [["West Garden South Checkpoint"]],
+            [["Fuse Shuffle"], ["West Garden South Checkpoint"]],
         "West Garden Portal Item":
             [["Hyperdash"]],
     },
@@ -1449,7 +1449,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
 
     "Eastern Vault Fortress": {
         "Eastern Vault Fortress Gold Door":
-            [["IG2"], ["Fortress Exterior from Overworld", "Beneath the Vault Back", "Fortress Courtyard Upper"]],
+            [["IG2"], ["Fuse Shuffle"], ["Fortress Exterior from Overworld", "Beneath the Vault Back", "Fortress Courtyard Upper"]],
     },
     "Eastern Vault Fortress Gold Door": {
         "Eastern Vault Fortress":
@@ -1495,7 +1495,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
 
     "Fortress Arena": {
         "Fortress Arena Portal":
-            [["Fortress Exterior from Overworld", "Beneath the Vault Back", "Eastern Vault Fortress"]],
+            [["Fuse Shuffle"], ["Fortress Exterior from Overworld", "Beneath the Vault Back", "Eastern Vault Fortress"]],
     },
     "Fortress Arena Portal": {
         "Fortress Arena":
@@ -1528,7 +1528,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
 
     "Quarry Entry": {
         "Quarry Portal":
-            [["Quarry Connector"]],
+            [["Fuse Shuffle"], ["Quarry Connector"]],
         "Quarry":
             [],
         "Monastery Rope":
@@ -1574,7 +1574,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Even Lower Quarry":
             [],
         "Lower Quarry Zig Door":
-            [["Quarry", "Quarry Connector"], ["IG3"]],
+            [["Fuse Shuffle"], ["Quarry", "Quarry Connector"], ["IG3"]],
     },
     "Monastery Rope": {
         "Quarry Back":
@@ -1617,13 +1617,19 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [["Hyperdash"]],
         "Rooted Ziggurat Lower Front":
             [],
-        "Rooted Ziggurat Lower Back":
+        "Rooted Ziggurat Lower Miniboss Platform":
             [],
+    },
+    "Rooted Ziggurat Lower Miniboss Platform": {
+        "Rooted Ziggurat Lower Mid Checkpoint":
+            [],
+        "Rooted Ziggurat Lower Back":
+            [["Fuse Shuffle"], ["Hyperdash"]]
     },
     "Rooted Ziggurat Lower Back": {
         "Rooted Ziggurat Lower Entry":
             [["LS2"]],
-        "Rooted Ziggurat Lower Mid Checkpoint":
+        "Rooted Ziggurat Lower Miniboss Platform":
             [["Hyperdash"], ["IG1"]],
         "Rooted Ziggurat Portal Room Entrance":
             [],
@@ -1643,7 +1649,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Rooted Ziggurat Portal Room": {
         "Rooted Ziggurat Portal Room Exit":
-            [["Rooted Ziggurat Lower Back"]],
+            [["Fuse Shuffle"], ["Rooted Ziggurat Lower Back"]],
         "Rooted Ziggurat Portal":
             [],
     },
@@ -1727,7 +1733,6 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Cathedral Main":
             [],
     },
-
     "Cathedral Gauntlet Checkpoint": {
         "Cathedral Gauntlet":
             [],
@@ -1747,13 +1752,13 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Far Shore to East Forest Region":
             [["Hyperdash"]],
         "Far Shore to Quarry Region":
-            [["Quarry Connector", "Quarry"]],
+            [["Fuse Shuffle"], ["Quarry Connector", "Quarry"]],
         "Far Shore to Library Region":
-            [["Library Lab"]],
+            [["Fuse Shuffle"], ["Library Lab"]],
         "Far Shore to West Garden Region":
-            [["West Garden South Checkpoint"]],
+            [["Fuse Shuffle"], ["West Garden South Checkpoint"]],
         "Far Shore to Fortress Region":
-            [["Fortress Exterior from Overworld", "Beneath the Vault Back", "Eastern Vault Fortress"]],
+            [["Fuse Shuffle"], ["Fortress Exterior from Overworld", "Beneath the Vault Back", "Eastern Vault Fortress"]],
     },
     "Far Shore to Spawn Region": {
         "Far Shore":
