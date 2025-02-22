@@ -3123,6 +3123,7 @@ class DKC2ExpertRules(DKC2Rules):
             LocationName.gangplank_galley_dk_coin:
                 lambda state: self.can_cartwheel(state) and (
                     self.can_cling(state) or self.can_hover(state)
+                    ) or (self.can_team_attack(state) and self.can_cling(state)
                 ),
             LocationName.gangplank_galley_bonus_1:
                 self.can_carry,
