@@ -1,6 +1,15 @@
-<FORCEMOVE>(3500)(-550)(-2164)(15)
 <FLAGON>(199)
+<MENUOFF>
 <LUIGISTOP2>
+<CHOICE>"Blackout"(1)"Save"(2)"Close"(3)<LISTEND>
+<ANYKEY>
+-------------------------
+<CASE>"Save"
+<SAVE>
+<RAMDOMJMP>"Close"
+-------------------------
+<CASE>"Blackout"
+<FORCEMOVE>(3500)(-550)(-2164)(15)
 <WAIT>(60)
 <HLIGHTON>
 <WAIT>(15)
@@ -21,7 +30,6 @@
 <WAIT>(46)
 <HLIGHTOFF>
 <CAMERAEND>
-<FLAGOFF>(25)
 <SE>(95)
 <WINDOW>(1)<COLOR>(4)
 <SAY><COLOR>(2)Fool! Now there are more ghosts for\nyou, <COLOR>(1)Green Man<COLOR>(2)!
@@ -31,7 +39,14 @@
 <LUIGIFREE>
 <FORCEMOVE>(3300)(-550)(-1900)(15)
 <FRAMEEND>
+<FLAGON>(25)
+<FLAGOFF>(8)
+<RAMDOMJMP>"Close"
+-------------------------
+<CASE>"Close"
 <FLAGOFF>(199)
-<FLAGON>(8)
+<BGM>(7)
 <LUIGIFREE2>
+<MENUON>
+<FLAGOFF>(199)
 <END>

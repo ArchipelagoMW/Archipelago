@@ -211,7 +211,7 @@ class LuigisMansionRandomizer:
         final_boo_count: int = int(self.output_data["Options"]["final_boo_count"])
 
         # Update all custom events
-        list_events = ["03", "12", "22", "24", "29", "33", "35", "38", "44", "45", "50", "61", "64", "65",
+        list_events = ["03", "12", "22", "24", "29", "33", "35", "38", "50", "61", "64", "65",
                        "66", "67", "68", "71", "72", "74", "75", "82", "86", "87", "88", "89", "90"]
         for custom_event in list_events:
             self.update_custom_event(custom_event, True)
@@ -309,7 +309,7 @@ class LuigisMansionRandomizer:
 
                 self.update_custom_event(event_no, False, lines)
 
-        in_game_hint_events = ["04", "17", "32", "63", "92", "93", "94"]
+        in_game_hint_events = ["04", "17", "32", "44", "45", "63", "92", "93", "94"]
         for event_no in in_game_hint_events:
             hintfo: str = ""
             match event_no:
@@ -329,10 +329,7 @@ class LuigisMansionRandomizer:
                     hintfo = self.output_data["Hints"]["Right Telephone"]
             lines = get_data(__name__, "data/custom_events/event" + event_no + ".txt").decode('utf-8')
             lines = lines.replace("{HintText}", str(hintfo))
-            if event_no == "93" or event_no == "94":
-                self.update_custom_event(event_no, False, lines, replace_old_csv=False)
-            else:
-                self.update_custom_event(event_no, False, lines, replace_old_csv=True)
+            self.update_custom_event(event_no, False, lines, replace_old_csv=True)
 
         # Update Madame Clairvoya's event to check mario items.
         lines = get_data(__name__, "data/custom_events/event36.txt").decode('utf-8')
