@@ -9,7 +9,7 @@ from Options import NumericOption
 from .Items import item_table, faction_table, Wargroove2Item
 from .Levels import Wargroove2Level, low_victory_checks_levels, high_victory_checks_levels, first_level, \
     final_levels, region_names, FINAL_LEVEL_1, \
-    FINAL_LEVEL_2, FINAL_LEVEL_3, FINAL_LEVEL_4, LEVEL_COUNT, FINAL_LEVEL_COUNT
+    FINAL_LEVEL_2, FINAL_LEVEL_3, FINAL_LEVEL_4, LEVEL_COUNT, FINAL_LEVEL_COUNT, main_filler_levels, final_filler_levels
 from .Locations import location_table
 from .Presets import wargroove2_option_presets
 from .Regions import create_regions
@@ -85,6 +85,10 @@ class Wargroove2World(World):
     location_name_to_id = {name: code for name, code in location_table.items() if code is not None}
 
     def generate_early(self) -> None:
+        early_level_slots = 4
+        main_level_slots = LEVEL_COUNT - early_level_slots
+        final_level_no_ocean_slots = 1
+
         if self.options.level_shuffle_seed.value == 0:
             random = self.random
         else:
@@ -92,19 +96,38 @@ class Wargroove2World(World):
 
         low_victory_checks_levels_copy = low_victory_checks_levels.copy()
         high_victory_checks_levels_copy = high_victory_checks_levels.copy()
+        final_filler_levels_copy = final_filler_levels.copy()
+        low_victory_checks_levels_copy = [level for level in low_victory_checks_levels_copy
+                                          if level.name in self.options.custom_early_level_playlist.value]
+        high_victory_checks_levels_copy = [level for level in high_victory_checks_levels_copy
+                                          if level.name in self.options.custom_main_level_playlist.value]
+        while len(low_victory_checks_levels_copy) < early_level_slots:
+            low_victory_checks_levels_copy.append(random.choice(main_filler_levels))
+        while len(high_victory_checks_levels_copy) < main_level_slots:
+            high_victory_checks_levels_copy.append(random.choice(main_filler_levels))
+
         random.shuffle(low_victory_checks_levels_copy)
         random.shuffle(high_victory_checks_levels_copy)
-        non_starting_levels = high_victory_checks_levels_copy + low_victory_checks_levels_copy[4:]
-        random.shuffle(non_starting_levels)
-        self.level_list = low_victory_checks_levels_copy[0:4] + non_starting_levels
+        self.level_list = low_victory_checks_levels_copy[0:early_level_slots] + high_victory_checks_levels_copy
 
-        final_levels_no_ocean = [level for level in final_levels if not level.has_ocean]
-        final_levels_ocean = [level for level in final_levels if level.has_ocean]
+        final_levels_no_ocean = [level for level in final_levels
+                                 if not level.has_ocean and level.name in self.options.custom_final_level_playlist]
+        final_levels_ocean = [level for level in final_levels if level.has_ocean
+                              and level.name in self.options.custom_final_level_playlist]
+        while len(final_levels_no_ocean) < final_level_no_ocean_slots:
+            final_filler_level = random.choice(final_filler_levels_copy)
+            final_filler_levels_copy.remove(final_filler_level)
+            final_levels_no_ocean.append(final_filler_level)
+        while len(final_levels_ocean) + len(final_levels_no_ocean) < FINAL_LEVEL_COUNT:
+            final_filler_level = random.choice(final_filler_levels_copy)
+            final_filler_levels_copy.remove(final_filler_level)
+            final_levels_ocean.append(final_filler_level)
+
         random.shuffle(final_levels_no_ocean)
         random.shuffle(final_levels_ocean)
-        non_north_levels = final_levels_ocean + final_levels_no_ocean[1:]
+        non_north_levels = final_levels_ocean + final_levels_no_ocean[final_level_no_ocean_slots:]
         random.shuffle(non_north_levels)
-        self.final_levels = final_levels_no_ocean[0:1] + non_north_levels
+        self.final_levels = final_levels_no_ocean[0:final_level_no_ocean_slots] + non_north_levels
 
         # Selecting a random starting faction
         if self.options.commander_choice == "random_starting_faction":

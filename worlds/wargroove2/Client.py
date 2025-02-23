@@ -19,7 +19,7 @@ from .Items import item_table, faction_table, CommanderData, ItemData, item_id_n
 
 from .Levels import LEVEL_COUNT, FINAL_LEVEL_COUNT, region_names, \
     low_victory_checks_levels, high_victory_checks_levels, \
-    FINAL_LEVEL_1, FINAL_LEVEL_2, FINAL_LEVEL_3, FINAL_LEVEL_4, final_levels
+    FINAL_LEVEL_1, FINAL_LEVEL_2, FINAL_LEVEL_3, FINAL_LEVEL_4, final_levels, final_filler_levels
 from .Locations import location_table, location_id_name
 from .RegionFilter import Wargroove2LogicFilter
 from NetUtils import ClientStatus
@@ -100,6 +100,7 @@ class Wargroove2Context(CommonContext):
     final_levels: int = 1
     level_shuffle_seed: int = 0
     slot_data: dict[str, Any]
+    stored_finale_key: str = ""
     player_stored_units_key: str = ""
     ai_stored_units_key: str = ""
     faction_item_ids = {
@@ -444,30 +445,41 @@ class Wargroove2Context(CommonContext):
                     if level_counter <= LEVEL_COUNT and hasattr(self.ctx, 'slot_data'):
                         level_name = self.ctx.slot_data[region_name]
                         level_name_text = f"\n{level_name}"
-                        for location_name in level_rules[level_name].keys():
-                            rule_factory = level_rules[level_name][location_name]
-                            is_beatable = rule_factory is None or rule_factory(self.ctx.slot)(region_filter)
-                            is_fully_beaten = is_fully_beaten and \
-                                              location_table[location_name] in self.ctx.checked_locations
-                            if location_name.endswith(": Victory"):
-                                if location_table[location_name] in self.ctx.checked_locations:
-                                    is_victory_reached = True
-                                    status_color = (1.0, 1.0, 1.0, 1)
-                                    if level_counter <= 4:
-                                        next_level = (level_counter - 1) * 4 + 6 - level_counter
-                                        unreachable_levels.remove(next_level)
-                                        unreachable_levels.remove(next_level + 1)
-                                        unreachable_levels.remove(next_level + 2)
-                                    elif level_counter <= 16:
-                                        unreachable_levels.remove(level_counter + 12)
-                                elif level_counter in unreachable_levels:
-                                    status_color = (0.35, 0.2, 0.2, 1)
-                                    level_name_text = ""
-                                    break
-                                elif is_beatable:
-                                    status_color = (0.6, 0.6, 0.2, 1)
-                            elif is_beatable and location_table[location_name] not in self.ctx.checked_locations:
-                                fully_beaten_text = "*"
+                        if level_name in level_rules:
+                            for location_name in level_rules[level_name].keys():
+                                rule_factory = level_rules[level_name][location_name]
+                                is_beatable = rule_factory is None or rule_factory(self.ctx.slot)(region_filter)
+                                is_fully_beaten = is_fully_beaten and \
+                                                  location_table[location_name] in self.ctx.checked_locations
+                                if location_name.endswith(": Victory"):
+                                    if location_table[location_name] in self.ctx.checked_locations:
+                                        is_victory_reached = True
+                                        status_color = (1.0, 1.0, 1.0, 1)
+                                        if level_counter <= 4:
+                                            next_level = (level_counter - 1) * 4 + 6 - level_counter
+                                            unreachable_levels.remove(next_level)
+                                            unreachable_levels.remove(next_level + 1)
+                                            unreachable_levels.remove(next_level + 2)
+                                        elif level_counter <= 16:
+                                            unreachable_levels.remove(level_counter + 12)
+                                    elif level_counter in unreachable_levels:
+                                        status_color = (0.35, 0.2, 0.2, 1)
+                                        level_name_text = ""
+                                        break
+                                    elif is_beatable:
+                                        status_color = (0.6, 0.6, 0.2, 1)
+                                elif is_beatable and location_table[location_name] not in self.ctx.checked_locations:
+                                    fully_beaten_text = "*"
+                        else:
+                            is_victory_reached = True
+                            status_color = (1.0, 1.0, 1.0, 1)
+                            if level_counter <= 4:
+                                next_level = (level_counter - 1) * 4 + 6 - level_counter
+                                unreachable_levels.remove(next_level)
+                                unreachable_levels.remove(next_level + 1)
+                                unreachable_levels.remove(next_level + 2)
+                            elif level_counter <= 16:
+                                unreachable_levels.remove(level_counter + 12)
 
                     if is_fully_beaten and is_victory_reached:
                         fully_beaten_text = " (100%)"
@@ -500,6 +512,9 @@ class Wargroove2Context(CommonContext):
                     level_counter += 1
 
                 final_level_rules = {final_level.name: final_level.location_rules for final_level in final_levels}
+                filler_final_level_rules = {final_level.name: final_level.location_rules
+                                            for final_level in final_filler_levels}
+                final_level_rules = final_level_rules | filler_final_level_rules
                 final_level_1_name = None
                 final_level_2_name = None
                 final_level_3_name = None
@@ -519,12 +534,15 @@ class Wargroove2Context(CommonContext):
                 elif final_level_1_name is not None and region_filter.has_all(["Final North", "Final Center"],
                                                                               self.ctx.slot):
                     level_name_text = f"\n{final_level_1_name}"
-                    is_beatable = final_level_rules[final_level_1_name] \
-                        [f"{final_level_1_name}: Victory"](self.ctx.slot)(region_filter)
-                    if is_beatable:
+                    final_level_rule = final_level_rules[final_level_1_name][f"{final_level_1_name}: Victory"]
+                    if final_level_rule is None:
                         status_color = (0.6, 0.6, 0.2, 1)
                     else:
-                        status_color = (0.6, 0.2, 0.2, 1)
+                        is_beatable = final_level_rule(self.ctx.slot)(region_filter)
+                        if is_beatable:
+                            status_color = (0.6, 0.6, 0.2, 1)
+                        else:
+                            status_color = (0.6, 0.2, 0.2, 1)
                 else:
                     status_color = (0.35, 0.2, 0.2, 1)
                 label = ItemLabel(text=FINAL_LEVEL_1 + level_name_text, color=status_color)
@@ -536,12 +554,15 @@ class Wargroove2Context(CommonContext):
                 elif final_level_2_name is not None and region_filter.has_all(["Final East", "Final Center"],
                                                                               self.ctx.slot):
                     level_name_text = f"\n{final_level_2_name}"
-                    is_beatable = final_level_rules[final_level_2_name] \
-                        [f"{final_level_2_name}: Victory"](self.ctx.slot)(region_filter)
-                    if is_beatable:
+                    final_level_rule = final_level_rules[final_level_2_name][f"{final_level_2_name}: Victory"]
+                    if final_level_rule is None:
                         status_color = (0.6, 0.6, 0.2, 1)
                     else:
-                        status_color = (0.6, 0.2, 0.2, 1)
+                        is_beatable = final_level_rule(self.ctx.slot)(region_filter)
+                        if is_beatable:
+                            status_color = (0.6, 0.6, 0.2, 1)
+                        else:
+                            status_color = (0.6, 0.2, 0.2, 1)
                 else:
                     status_color = (0.35, 0.2, 0.2, 1)
                 label = ItemLabel(text=FINAL_LEVEL_2 + level_name_text, color=status_color)
@@ -553,12 +574,15 @@ class Wargroove2Context(CommonContext):
                 elif final_level_3_name is not None and region_filter.has_all(["Final South", "Final Center"],
                                                                               self.ctx.slot):
                     level_name_text = f"\n{final_level_3_name}"
-                    is_beatable = final_level_rules[final_level_3_name] \
-                        [f"{final_level_3_name}: Victory"](self.ctx.slot)(region_filter)
-                    if is_beatable:
+                    final_level_rule = final_level_rules[final_level_3_name][f"{final_level_3_name}: Victory"]
+                    if final_level_rule is None:
                         status_color = (0.6, 0.6, 0.2, 1)
                     else:
-                        status_color = (0.6, 0.2, 0.2, 1)
+                        is_beatable = final_level_rule(self.ctx.slot)(region_filter)
+                        if is_beatable:
+                            status_color = (0.6, 0.6, 0.2, 1)
+                        else:
+                            status_color = (0.6, 0.2, 0.2, 1)
                 else:
                     status_color = (0.35, 0.2, 0.2, 1)
                 label = ItemLabel(text=FINAL_LEVEL_3 + level_name_text, color=status_color)
@@ -570,12 +594,15 @@ class Wargroove2Context(CommonContext):
                 elif final_level_4_name is not None and region_filter.has_all(["Final West", "Final Center"],
                                                                               self.ctx.slot):
                     level_name_text = f"\n{final_level_4_name}"
-                    is_beatable = final_level_rules[final_level_4_name] \
-                        [f"{final_level_4_name}: Victory"](self.ctx.slot)(region_filter)
-                    if is_beatable:
+                    final_level_rule = final_level_rules[final_level_4_name][f"{final_level_4_name}: Victory"]
+                    if final_level_rule is None:
                         status_color = (0.6, 0.6, 0.2, 1)
                     else:
-                        status_color = (0.6, 0.2, 0.2, 1)
+                        is_beatable = final_level_rule(self.ctx.slot)(region_filter)
+                        if is_beatable:
+                            status_color = (0.6, 0.6, 0.2, 1)
+                        else:
+                            status_color = (0.6, 0.2, 0.2, 1)
                 else:
                     status_color = (0.35, 0.2, 0.2, 1)
                 label = ItemLabel(text=FINAL_LEVEL_4 + level_name_text, color=status_color)
@@ -828,6 +855,6 @@ def launch():
     parser = get_base_parser(description="Wargroove 2 Client, for text interfacing.")
 
     args, rest = parser.parse_known_args()
-    colorama.init()
+    colorama.just_fix_windows_console()
     asyncio.run(main(args))
     colorama.deinit()

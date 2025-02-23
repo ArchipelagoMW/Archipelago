@@ -25,10 +25,15 @@ LEVEL_COUNT = 28
 FINAL_LEVEL_COUNT = 4
 
 
-def set_region_exit_rules(region: Region, world: "Wargroove2World", victory_location_name: str) -> None:
-    victory_location = world.get_location(victory_location_name)
-    for region_exit in region.exits:
-        region_exit.access_rule = victory_location.access_rule
+def set_region_exit_rules(region: Region, world: "Wargroove2World",
+                          victory_location_name: str, is_event_level: bool) -> None:
+    if is_event_level:
+        for region_exit in region.exits:
+            region_exit.access_rule = lambda state: True
+    else:
+        victory_location = world.get_location(victory_location_name)
+        for region_exit in region.exits:
+            region_exit.access_rule = victory_location.access_rule
 
 
 LocationRules = dict[str, Callable[[int], CollectionRule] | None]
@@ -41,13 +46,19 @@ class Wargroove2Level:
     region_name: str
     victory_location: str
     has_ocean: bool = True
+    is_event_level: bool = False
 
-    def __init__(self, name: str, file_name: str, location_rules: LocationRules, has_ocean: bool = True):
+    def __init__(self, name: str, file_name: str, location_rules: LocationRules,
+                 has_ocean: bool = True, is_event_level: bool = False):
         self.name = name
         self.file_name = file_name
         self.location_rules = location_rules
         self.has_ocean = has_ocean
-        self.victory_location = name + ': Victory'
+        self.is_event_level = is_event_level
+        if is_event_level:
+            self.victory_location = ""
+        else:
+            self.victory_location = name + ": Victory"
 
     def define_access_rules(self, world: "Wargroove2World", player: int, additional_rule=None) -> None:
         for location_name, rule_factory in self.location_rules.items():
@@ -81,7 +92,7 @@ class Wargroove2Level:
             for i in range(1, total_locations):
                 set_rule(world.get_location(location_name + f" Extra {i}"), rule)
         region = world.get_region(self.region_name)
-        set_region_exit_rules(region, world, self.victory_location)
+        set_region_exit_rules(region, world, self.victory_location, self.is_event_level)
 
     def define_region(self, name: str, world: "Wargroove2World", player: int, exits=None) -> Region:
         self.region_name = name
@@ -508,3 +519,53 @@ first_level = Wargroove2Level(
         "Humble Beginnings Rebirth: Good Dog": None
     }
 )
+
+main_filler_levels = [
+    Wargroove2Level(
+        name="Skipped Map #1",
+        file_name="Skipped_Map_#1.json",
+        is_event_level = True,
+        location_rules={}
+    ),
+    Wargroove2Level(
+        name="Skipped Map #2",
+        file_name="Skipped_Map_#2.json",
+        is_event_level = True,
+        location_rules={}
+    ),
+    Wargroove2Level(
+        name="Skipped Map #3",
+        file_name="Skipped_Map_#3.json",
+        is_event_level = True,
+        location_rules={}
+    ),
+    Wargroove2Level(
+        name="Skipped Map #4",
+        file_name="Skipped_Map_#4.json",
+        is_event_level = True,
+        location_rules={}
+    ),
+]
+
+final_filler_levels = [
+    Wargroove2Level(
+        name="Skipped Finale #1",
+        file_name="Skipped_Finale_#1.json",
+        location_rules={"Skipped Finale #1: Victory": None}
+    ),
+    Wargroove2Level(
+        name="Skipped Finale #2",
+        file_name="Skipped_Finale_#2.json",
+        location_rules={"Skipped Finale #2: Victory": None}
+    ),
+    Wargroove2Level(
+        name="Skipped Finale #3",
+        file_name="Skipped_Finale_#3.json",
+        location_rules={"Skipped Finale #3: Victory": None}
+    ),
+    Wargroove2Level(
+        name="Skipped Finale #4",
+        file_name="Skipped_Finale_#4.json",
+        location_rules={"Skipped Finale #4: Victory": None}
+    ),
+]
