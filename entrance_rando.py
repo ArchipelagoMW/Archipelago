@@ -145,22 +145,13 @@ class ERPlacementState:
     """The CollectionState backing the entrance randomization logic"""
     coupled: bool
     """Whether entrance randomization is operating in coupled mode"""
-    single_player_randomization: bool
-    """
-    Whether the entrance randomization is only considering the world, which is having its entrances randomized, in
-    isolation from the rest of the multiworld.
-    """
 
-    def __init__(self, world: World, coupled: bool, single_player_randomization: bool = True):
+    def __init__(self, world: World, coupled: bool):
         self.placements = []
         self.pairings = []
         self.world = world
         self.coupled = coupled
-        self.single_player_randomization = single_player_randomization
-        if single_player_randomization:
-            self.collection_state = world.multiworld.get_single_player_all_state(world.player, True)
-        else:
-            self.collection_state = world.multiworld.get_all_state(False, True)
+        self.collection_state = world.multiworld.get_single_player_all_state(world.player, True)
 
     @property
     def placed_regions(self) -> set[Region]:
@@ -198,7 +189,7 @@ class ERPlacementState:
         copied_state.blocked_connections[self.world.player].remove(source_exit)
         copied_state.blocked_connections[self.world.player].update(target_entrance.connected_region.exits)
         copied_state.update_reachable_regions(self.world.player)
-        copied_state.sweep_for_advancements(self.world.get_locations() if self.single_player_randomization else None)
+        copied_state.sweep_for_advancements(self.world.get_locations())
         # test that at there are newly reachable randomized exits that are ACTUALLY reachable
         available_randomized_exits = copied_state.blocked_connections[self.world.player]
         for _exit in available_randomized_exits:
@@ -306,8 +297,7 @@ def randomize_entrances(
         preserve_group_order: bool = False,
         er_targets: list[Entrance] | None = None,
         exits: list[Entrance] | None = None,
-        on_connect: Callable[[ERPlacementState, list[Entrance]], None] | None = None,
-        single_player_randomization: bool = True,
+        on_connect: Callable[[ERPlacementState, list[Entrance]], None] | None = None
 ) -> ERPlacementState:
     """
     Randomizes Entrances for a single world in the multiworld.
@@ -325,18 +315,13 @@ def randomize_entrances(
                   Remember to be deterministic! If not provided, automatically discovers all valid exits in your world.
     :param on_connect: A callback function which allows specifying side effects after a placement is completed
                        successfully and the underlying collection state has been updated.
-    :param single_player_randomization: Whether the randomization should only consider your World instance in isolation
-                                        from the rest of the multiworld. This should only be False when your world has
-                                        logic depending on part of another world or another world's items, or when some
-                                        of your world's items could have already been placed in another world's
-                                        locations.
     """
     if not world.explicit_indirect_conditions:
         raise EntranceRandomizationError("Entrance randomization requires explicit indirect conditions in order "
                                          + "to correctly analyze whether dead end regions can be required in logic.")
 
     start_time = time.perf_counter()
-    er_state = ERPlacementState(world, coupled, single_player_randomization)
+    er_state = ERPlacementState(world, coupled)
     entrance_lookup = EntranceLookup(world.random, coupled)
     # similar to fill, skip validity checks on entrances if the game is beatable on minimal accessibility
     perform_validity_check = True
@@ -348,7 +333,7 @@ def randomize_entrances(
             entrance_lookup.remove(entrance)
         # propagate new connections
         er_state.collection_state.update_reachable_regions(world.player)
-        er_state.collection_state.sweep_for_advancements(world.get_locations() if single_player_randomization else None)
+        er_state.collection_state.sweep_for_advancements(world.get_locations())
         if on_connect:
             on_connect(er_state, placed_exits)
 
