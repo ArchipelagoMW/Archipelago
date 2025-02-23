@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import shutil
 import typing
 import builtins
 import os
@@ -1073,3 +1074,54 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
     if isinstance(obj, str):
         return False
     return isinstance(obj, typing.Iterable)
+
+
+def build_sphinx_docs(stable: bool = False) -> None:
+    """Build Sphinx autodocs."""
+    from sphinx.cmd.build import main as sphinx_main
+
+    base_dir = os.path.dirname(__file__)
+    docs_path = os.path.join(base_dir, "docs")
+    sphinx_input = os.path.join(docs_path, "sphinx", "source")
+    sphinx_output = os.path.join(base_dir, "WebHostLib", "templates", "sphinx") if stable \
+        else os.path.join(base_dir, "build")
+
+    # copy markdown files to sphinx directory to get rendered
+    for file in os.scandir(docs_path):
+        if file.name.endswith(".md"):
+            shutil.copy(file, sphinx_input)
+            with open(os.path.join(sphinx_input, file.name), "r") as f:
+                lines = f.readlines()
+            for line_index in range(len(lines)):
+                line = lines[line_index]
+                # hyperlink
+                if "](" not in line:
+                    continue
+                start = line.find("(") + 1
+                end = line.find(")")
+                link = line[start:end]
+                # probably an external link
+                if "https://" in link and "ArchipelagoMW" not in link:
+                    pass
+                # direct link to a module
+                elif ".py" in link and "https://" not in link:
+                    link = link.split("/")[-1].split(".py")[0].lower()
+                # don't handle images since those should still work if done correctly
+                elif "img" in link:
+                    pass
+                # should just be other direct doc links
+                else:
+                    link = link.split("/")[-1].split(".")[0].lower().replace(" ", "%20")
+                lines[line_index] = line[:start] + link + line[end:]
+            with open(os.path.join(sphinx_input, file.name), "w") as f:
+                f.writelines(lines)
+        elif "img" in file.name:
+            shutil.copytree(file, os.path.join(sphinx_input, "img"), dirs_exist_ok=True)
+
+    # copy AP header logo and favicon
+    static_dir = os.path.join(base_dir, "WebHostLib", "static", "static")
+    logos = [os.path.join(static_dir, "branding", "header-logo.svg"), os.path.join(static_dir, "favicon.ico")]
+    for file in logos:
+        shutil.copy(file, os.path.join(sphinx_input, "_static"))
+
+    sphinx_main(["-M", "html", sphinx_input, sphinx_output])
