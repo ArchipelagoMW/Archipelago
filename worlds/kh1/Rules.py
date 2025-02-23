@@ -1029,6 +1029,8 @@ def set_rules(kh1world):
                     or (options.advanced_logic and state.has("High Jump", player, 2))
                 )
             ))
+        add_item_rule(kh1world.get_location("Traverse Town Synth Item " + str(i+1).rjust(2,'0')),
+            lambda i: (i.player != player or i.name not in ["Orichalcum", "Mythril"]))
     add_rule(kh1world.get_location("Traverse Town Gizmo Shop Postcard 1"),
         lambda state: state.has("Progressive Thunder", player))
     add_rule(kh1world.get_location("Traverse Town Gizmo Shop Postcard 2"),
