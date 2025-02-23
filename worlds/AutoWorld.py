@@ -599,12 +599,13 @@ class World(metaclass=AutoWorldRegister):
         res: "GamesPackage" = {
             # sorted alphabetically
             "item_name_groups": {},
-            "item_name_to_id": cls.dynamic_item_name_to_id,
+            "item_name_to_id": cls.dynamic_item_name_to_id if cls.dynamic_item_name_to_id else {},
             "location_name_groups": {},
-            "location_name_to_id": cls.dynamic_location_name_to_id,
+            "location_name_to_id": cls.dynamic_location_name_to_id if cls.dynamic_location_name_to_id else {},
         }
         res["checksum"] = data_package_checksum(res)
         return res
+
 
 # any methods attached to this can be used as part of CollectionState,
 # please use a prefix as all of them get clobbered together
