@@ -25,7 +25,7 @@ def determine_difficulty(opts: CMOptions):
     difficulty = 1.0
     
     # Army composition affects difficulty
-    if opts.fairy_chess_army.value == opts.fairy_chess_army.option_stable:
+    if opts.piece_locations.value == opts.piece_locations.option_stable:
         difficulty *= 1.05
 
     # Pawn type affects difficulty

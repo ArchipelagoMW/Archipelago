@@ -218,6 +218,8 @@ class FairyChessPiecesConfigure(OptionSet):
 
     Camel: Adds a custom army themed after 3,x leapers like the Camel (3,1) and Tribbabah (3,0). (The Knight is a 2,1
     leaper.)
+
+    Petal: Adds a custom army themed after pieces that move down angled paths.
     """
     display_name = "Fairy Chess Pieces Configure"
     valid_keys = frozenset([
@@ -227,6 +229,7 @@ class FairyChessPiecesConfigure(OptionSet):
         "Nutty",
         "Cannon",
         "Camel",
+        "Petal",
     ])
     default = valid_keys
 
