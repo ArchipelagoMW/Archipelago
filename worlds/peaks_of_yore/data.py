@@ -1,5 +1,5 @@
 from enum import IntEnum
-
+from BaseClasses import ItemClassification
 
 class PeaksOfYoreRegion(IntEnum):
     FUNDAMENTALS = 0
@@ -25,11 +25,13 @@ class ItemData:
     name: str
     type: str
     id: int
+    classification: ItemClassification
 
-    def __init__(self, name: str, item_type: str, item_id: int):
+    def __init__(self, name: str, item_type: str, item_id: int, classification: ItemClassification):
         self.name = name
         self.type = item_type
         self.id = item_id
+        self.classification = ItemClassification
 
 
 full_location_list: list[LocationData] = [
@@ -114,64 +116,64 @@ full_location_list: list[LocationData] = [
 ]
 
 full_item_list: list[ItemData] = [
-    ItemData('Walters Crag: Rope (Co-Climb)', 'Rope', 100),
-    ItemData('Walkers Pillar: Rope (Co-Climb)', 'Rope', 101),
-    ItemData('Great Gaol: Rope (Encounter)', 'Rope', 102),
-    ItemData('St. Haelga: Rope (Encounter)', 'Rope', 103),
-    ItemData('Rope (Old Man Of Sjor)', 'Rope', 104),
-    ItemData('Hangman\'s Leap: Rope', 'Rope', 105),
-    ItemData('Ugsome Storr: Rope', 'Rope', 106),
-    ItemData('Eldenhorn: Rope', 'Rope', 107),
-    ItemData('Ymir\'s Shadow: Rope', 'Rope', 108),
-    ItemData('Wuthering Crest: Rope', 'Rope', 109),
-    ItemData('Great Gaol: Rope', 'Rope', 110),
-    ItemData('Walter\'s Crag: Rope', 'Rope', 111),
-    ItemData('Land\'s End: Rope', 'Rope', 112),
-    ItemData('Evergreen\'s End: Rope', 'Rope', 113),
-    ItemData('Great Crevice: Rope', 'Rope', 114),
-    ItemData('Old Hagger Rope', 'Rope', 115),
-    ItemData('Hat', 'Artefact', 200),
-    ItemData('Fisherman\'s Cap', 'Artefact', 201),
-    ItemData('Safety Helmet', 'Artefact', 202),
-    ItemData('Climbing Shoe', 'Artefact', 203),
-    ItemData('Shovel', 'Artefact', 204),
-    ItemData('Sleeping Bag', 'Artefact', 205),
-    ItemData('Backpack', 'Artefact', 206),
-    ItemData('Coffee Box (Old Langr)', 'Artefact', 207),
-    ItemData('Coffee Box (Wuthering Crest)', 'Artefact', 208),
-    ItemData('Chalk Box (Walker\'s Pillar)', 'Artefact', 209),
-    ItemData('Chalk Box (Eldenhorn)', 'Artefact', 210),
-    ItemData('Intermediate Trophy', 'Artefact', 211),
-    ItemData('Advanced Trophy', 'Artefact', 212),
-    ItemData('Expert Trophy', 'Artefact', 213),
-    ItemData('Picture Piece #1 (Gray Gully)', 'Artefact', 214),
-    ItemData('Picture Piece #2 (Land\'s End)', 'Artefact', 215),
-    ItemData('Picture Piece #3 (The Great Crevice)', 'Artefact', 216),
-    ItemData('Picture Piece #4 (St. Haelga)', 'Artefact', 217),
-    ItemData('Picture Frame', 'Artefact', 218),
-    ItemData('Fundamentals Trophy', 'Artefact', 219),
-    ItemData('Fundamentals Book', 'Book', 300),
-    ItemData('Intermediate Book', 'Book', 301),
-    ItemData('Advanced Book', 'Book', 302),
-    ItemData('Expert Book', 'Book', 303),
-    ItemData('Bird Seed (Three Brothers)', 'Bird Seed', 400),
-    ItemData('Bird Seed (Old Skerry)', 'Bird Seed', 401),
-    ItemData('Bird Seed (Great Gaol)', 'Bird Seed', 402),
-    ItemData('Bird Seed (Eldenhorn)', 'Bird Seed', 403),
-    ItemData('Bird Seed (Ymir\'s Shadow)', 'Bird Seed', 404),
-    ItemData('Pipe', 'Tool', 500),
-    ItemData('Rope Length Upgrade', 'Tool', 501),
-    ItemData('Barometer', 'Tool', 502),
-    ItemData('Progressive Crampons', 'Tool', 503),
-    ItemData('Monocular', 'Tool', 504),
-    ItemData('Phonograph', 'Tool', 505),
-    ItemData('Pocketwatch', 'Tool', 506),
-    ItemData('Chalkbag', 'Tool', 507),
-    ItemData('Rope Unlock', 'Tool', 508),
-    ItemData('Coffee Unlock', 'Tool', 509),
-    ItemData('Oil Lamp', 'Tool', 510),
-    ItemData('Extra Rope', 'Extra Item', 600),
-    ItemData('Extra Chalk', 'Extra Item', 601),
-    ItemData('Extra Coffee', 'Extra Item', 602),
-    ItemData('Extra Seed', 'Extra Item', 603)
+    ItemData('Walters Crag: Rope (Co-Climb)', 'Rope', 100, ItemClassification.filler),
+    ItemData('Walkers Pillar: Rope (Co-Climb)', 'Rope', 101, ItemClassification.filler),
+    ItemData('Great Gaol: Rope (Encounter)', 'Rope', 102, ItemClassification.filler),
+    ItemData('St. Haelga: Rope (Encounter)', 'Rope', 103, ItemClassification.filler),
+    ItemData('Rope (Old Man Of Sjor)', 'Rope', 104, ItemClassification.filler),
+    ItemData('Hangman\'s Leap: Rope', 'Rope', 105, ItemClassification.filler),
+    ItemData('Ugsome Storr: Rope', 'Rope', 106, ItemClassification.filler),
+    ItemData('Eldenhorn: Rope', 'Rope', 107, ItemClassification.filler),
+    ItemData('Ymir\'s Shadow: Rope', 'Rope', 108, ItemClassification.filler),
+    ItemData('Wuthering Crest: Rope', 'Rope', 109, ItemClassification.filler),
+    ItemData('Great Gaol: Rope', 'Rope', 110, ItemClassification.filler),
+    ItemData('Walter\'s Crag: Rope', 'Rope', 111, ItemClassification.filler),
+    ItemData('Land\'s End: Rope', 'Rope', 112, ItemClassification.filler),
+    ItemData('Evergreen\'s End: Rope', 'Rope', 113, ItemClassification.filler),
+    ItemData('Great Crevice: Rope', 'Rope', 114, ItemClassification.filler),
+    ItemData('Old Hagger Rope', 'Rope', 115, ItemClassification.filler),
+    ItemData('Hat', 'Artefact', 200, ItemClassification.filler),
+    ItemData('Fisherman\'s Cap', 'Artefact', 201, ItemClassification.filler),
+    ItemData('Safety Helmet', 'Artefact', 202, ItemClassification.filler),
+    ItemData('Climbing Shoe', 'Artefact', 203, ItemClassification.filler),
+    ItemData('Shovel', 'Artefact', 204, ItemClassification.filler),
+    ItemData('Sleeping Bag', 'Artefact', 205, ItemClassification.filler),
+    ItemData('Backpack', 'Artefact', 206, ItemClassification.filler),
+    ItemData('Coffee Box (Old Langr)', 'Artefact', 207, ItemClassification.useful),
+    ItemData('Coffee Box (Wuthering Crest)', 'Artefact', 208, ItemClassification.useful),
+    ItemData('Chalk Box (Walker\'s Pillar)', 'Artefact', 209, ItemClassification.useful),
+    ItemData('Chalk Box (Eldenhorn)', 'Artefact', 210, ItemClassification.useful),
+    ItemData('Intermediate Trophy', 'Artefact', 211, ItemClassification.filler),
+    ItemData('Advanced Trophy', 'Artefact', 212, ItemClassification.filler),
+    ItemData('Expert Trophy', 'Artefact', 213, ItemClassification.filler),
+    ItemData('Picture Piece #1 (Gray Gully)', 'Artefact', 214, ItemClassification.filler),
+    ItemData('Picture Piece #2 (Land\'s End)', 'Artefact', 215, ItemClassification.filler),
+    ItemData('Picture Piece #3 (The Great Crevice)', 'Artefact', 216, ItemClassification.filler),
+    ItemData('Picture Piece #4 (St. Haelga)', 'Artefact', 217, ItemClassification.filler),
+    ItemData('Picture Frame', 'Artefact', 218, ItemClassification.filler),
+    ItemData('Fundamentals Trophy', 'Artefact', 219, ItemClassification.filler),
+    ItemData('Fundamentals Book', 'Book', 300, ItemClassification.progression),
+    ItemData('Intermediate Book', 'Book', 301, ItemClassification.progression),
+    ItemData('Advanced Book', 'Book', 302, ItemClassification.progression),
+    ItemData('Expert Book', 'Book', 303, ItemClassification.progression),
+    ItemData('Bird Seed (Three Brothers)', 'Bird Seed', 400, ItemClassification.filler),
+    ItemData('Bird Seed (Old Skerry)', 'Bird Seed', 401, ItemClassification.filler),
+    ItemData('Bird Seed (Great Gaol)', 'Bird Seed', 402, ItemClassification.filler),
+    ItemData('Bird Seed (Eldenhorn)', 'Bird Seed', 403, ItemClassification.filler),
+    ItemData('Bird Seed (Ymir\'s Shadow)', 'Bird Seed', 404, ItemClassification.filler),
+    ItemData('Pipe', 'Tool', 500, ItemClassification.useful),
+    ItemData('Rope Length Upgrade', 'Tool', 501, ItemClassification.progression),
+    ItemData('Barometer', 'Tool', 502, ItemClassification.useful),
+    ItemData('Progressive Crampons', 'Tool', 503, ItemClassification.progression),
+    ItemData('Monocular', 'Tool', 504, ItemClassification.useful),
+    ItemData('Phonograph', 'Tool', 505, ItemClassification.filler),
+    ItemData('Pocketwatch', 'Tool', 506, ItemClassification.useful),
+    ItemData('Chalkbag', 'Tool', 507, ItemClassification.useful),
+    ItemData('Rope Unlock', 'Tool', 508, ItemClassification.progression),
+    ItemData('Coffee Unlock', 'Tool', 509, ItemClassification.useful),
+    ItemData('Oil Lamp', 'Tool', 510, ItemClassification.useful),
+    ItemData('Extra Rope', 'Extra Item', 600, ItemClassification.filler),
+    ItemData('Extra Chalk', 'Extra Item', 601, ItemClassification.filler),
+    ItemData('Extra Coffee', 'Extra Item', 602, ItemClassification.filler),
+    ItemData('Extra Seed', 'Extra Item', 603, ItemClassification.filler)
 ]

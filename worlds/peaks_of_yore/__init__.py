@@ -50,11 +50,8 @@ class PeaksOfWorld(World):
         self.artefacts_in_pool = []
 
     def create_item(self, name: str) -> Item:
-        classification: ItemClassification = ItemClassification.filler
         item_entry = [item for item in full_item_list if item.name == name][0]
-        if item_entry.type in ["Book", "Tool"]:
-            classification = ItemClassification.progression
-        return PeaksOfYoreItem(name, classification, self.item_name_to_id[name], self.player)
+        return PeaksOfYoreItem(name, item_entry.classification, self.item_name_to_id[name], self.player)
 
     def get_filler_item_name(self) -> str:
         choices = ["Extra Rope", "Extra Coffee", "Extra Chalk", "Extra Seed"]
