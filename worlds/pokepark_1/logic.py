@@ -2,7 +2,7 @@ from typing import NamedTuple
 
 from worlds.pokepark_1 import FRIENDSHIP_ITEMS
 from worlds.pokepark_1.LocationIds import MinigameLocationIds, QuestLocationIds, OverworldPokemonLocationIds
-from worlds.pokepark_1.items import UNLOCK_ITEMS, BERRIES, PRISM_ITEM, POWERS, REGION_UNLOCK
+from worlds.pokepark_1.items import UNLOCK_ITEMS, PRISM_ITEM, REGION_UNLOCK
 
 
 class Unlock(NamedTuple):
@@ -27,6 +27,7 @@ class Requirements(NamedTuple):
     prismas: list[Prisma] = []
     oneof_itemName: list[list[str]] = []
 
+
 class Location(NamedTuple):
     name: str
     id: int
@@ -40,7 +41,7 @@ class PokeparkRegion(NamedTuple):
     friendship_locations: list[Location] = []
     unlock_location: list[Location] = []
     minigame_location: list[Location] = []
-    ability_locations: list[Location] = []
+    quest_locations: list[Location] = []
     parent_region: str = "Menu"
 
 
@@ -48,7 +49,7 @@ REGIONS: list[PokeparkRegion] = [
     PokeparkRegion("Pokepark Entrance", "Pokepark Entrance", Requirements(), [
     ]),
     PokeparkRegion("Meadow Zone - Overworld", "Meadow Zone - Overworld", Requirements(),
-                   [  # Location("Chikorita", FRIENDSHIP_ITEMS.get("Chikorita"), Requirements()),
+                   friendship_locations=[  # Location("Chikorita", FRIENDSHIP_ITEMS.get("Chikorita"), Requirements()),
                        Location("Bulbasaur", FRIENDSHIP_ITEMS.get("Bulbasaur"), Requirements(prismas=[
                            Prisma("Bulbasaur Prisma", PRISM_ITEM.get("Bulbasaur Prisma"))])),
                        Location("Munchlax", FRIENDSHIP_ITEMS.get("Munchlax"), Requirements(prismas=[
@@ -88,7 +89,8 @@ REGIONS: list[PokeparkRegion] = [
                        Location("Magikarp", FRIENDSHIP_ITEMS.get("Magikarp"),
                                 Requirements([Unlock("Magikarp Unlock", UNLOCK_ITEMS.get("Magikarp Unlock"))])),
                        Location("Oddish", FRIENDSHIP_ITEMS.get("Oddish"), Requirements()),
-                       Location("Bidoof", FRIENDSHIP_ITEMS.get("Bidoof"), Requirements(friendships=[Friendship("Mankey", FRIENDSHIP_ITEMS.get("Mankey"))])),
+                       Location("Bidoof", FRIENDSHIP_ITEMS.get("Bidoof"),
+                                Requirements(friendships=[Friendship("Mankey", FRIENDSHIP_ITEMS.get("Mankey"))])),
                        Location("Bibarel", FRIENDSHIP_ITEMS.get("Bibarel"),
                                 Requirements([Unlock("Bibarel Unlock", UNLOCK_ITEMS.get("Bibarel Unlock"))])),
                        Location("Leafeon", FRIENDSHIP_ITEMS.get("Leafeon"), Requirements(friendcount=21)),
@@ -96,59 +98,70 @@ REGIONS: list[PokeparkRegion] = [
                        Location("Torterra", FRIENDSHIP_ITEMS.get("Torterra"),
                                 Requirements([Unlock("Torterra Unlock", UNLOCK_ITEMS.get("Torterra Unlock"))])),
                        Location("Starly", FRIENDSHIP_ITEMS.get("Starly"),
-                                Requirements(oneof_itemName=[["Starly Unlock"],["Starly Unlock 2"]])),
+                                Requirements(oneof_itemName=[["Starly Unlock"], ["Starly Unlock 2"]])),
                        Location("Scyther", FRIENDSHIP_ITEMS.get("Scyther"),
-                                Requirements(unlocks=[Unlock("Scyther Unlock",UNLOCK_ITEMS.get("Scyther Unlock"))]))
+                                Requirements(unlocks=[Unlock("Scyther Unlock", UNLOCK_ITEMS.get("Scyther Unlock"))]))
                    ],
-                   [Location("Munchlax Friendship Event", UNLOCK_ITEMS.get("Tropius Unlock"), Requirements(prismas=[
+                   unlock_location=[
+                       Location("Munchlax Friendship Event", UNLOCK_ITEMS.get("Tropius Unlock"), Requirements(prismas=[
                            Prisma("Bulbasaur Prisma", PRISM_ITEM.get("Bulbasaur Prisma"))])),
-                    Location("Turtwig Friendship Event", UNLOCK_ITEMS.get("Pachirisu Unlock"), Requirements()),
-                    Location("Bonsly Friendship Event", UNLOCK_ITEMS.get("Sudowoodo Unlock"),
-                             Requirements([Unlock("Bonsly Unlock", UNLOCK_ITEMS.get("Bonsly Unlock"))])),
-                    Location("Buneary Friendship Event", UNLOCK_ITEMS.get("Lotad Unlock"), Requirements()),
-                    Location("Croagunk Friendship Event", UNLOCK_ITEMS.get("Scyther Unlock"), Requirements()),
-                    Location("Caterpie Tree Dash", UNLOCK_ITEMS.get("Caterpie Unlock"), Requirements()),
-                    Location("Caterpie Friendship Event", UNLOCK_ITEMS.get("Butterfree Unlock"),
-                             Requirements([Unlock("Caterpie Unlock", UNLOCK_ITEMS.get("Caterpie Unlock"))])),
-                    # Location("Mankey Friendship Event", UNLOCK_ITEMS.get("Chimchar Unlock"), Requirements()),
-                    Location("Aipom Friendship Event", UNLOCK_ITEMS.get("Ambipom Unlock"), Requirements()),
-                    Location("Weedle Tree Dash", UNLOCK_ITEMS.get("Weedle Unlock"), Requirements()),
-                    Location("Shroomish Crate Dash", UNLOCK_ITEMS.get("Shroomish Unlock"), Requirements()),
-                    Location("Magikarp shocked", UNLOCK_ITEMS.get("Magikarp Unlock"), Requirements()),
-                    Location("Bidoof Housing 1", QuestLocationIds.MEADOW_BIDOOF_HOUSING1.value,
-                             Requirements(friendships=[Friendship("Mankey", FRIENDSHIP_ITEMS.get("Mankey"))])),
-                    Location("Bidoof Housing 1 - Pokemon Unlock", UNLOCK_ITEMS.get("Bidoof1 Unlock"),
-                             Requirements(friendships=[Friendship("Mankey", FRIENDSHIP_ITEMS.get("Mankey"))])),
-                    Location("Bidoof Housing 2", QuestLocationIds.MEADOW_BIDOOF_HOUSING2.value,
-                             Requirements(friendships=[Friendship("Mankey", FRIENDSHIP_ITEMS.get("Mankey"))])),
-                    Location("Bidoof Housing 2 - Pokemon Unlock", UNLOCK_ITEMS.get("Bidoof2 Unlock"),
-                             Requirements(friendships=[Friendship("Mankey", FRIENDSHIP_ITEMS.get("Mankey"))])),
-                    Location("Bidoof Housing 3", QuestLocationIds.MEADOW_BIDOOF_HOUSING3.value,
-                             Requirements(friendships=[Friendship("Mankey", FRIENDSHIP_ITEMS.get("Mankey"))])),
-                    Location("Bidoof Housing 3 - Pokemon Unlock", UNLOCK_ITEMS.get("Bidoof3 Unlock"),
-                             Requirements(friendships=[Friendship("Mankey", FRIENDSHIP_ITEMS.get("Mankey"))])),
-                    Location("Bidoof Housing 4", QuestLocationIds.MEADOW_BIDOOF_HOUSING4.value,
-                             Requirements(friendships=[Friendship("Mankey", FRIENDSHIP_ITEMS.get("Mankey"))])),
-                    Location("Bidoof Housing 4 - Pokemon Unlock", UNLOCK_ITEMS.get("Bibarel Unlock"),
-                             Requirements(friendships=[Friendship("Mankey", FRIENDSHIP_ITEMS.get("Mankey"))])),
-                    # Location("Starly Unlock event - Dummy", UNLOCK_ITEMS.get("Starly Unlock"), Requirements([],[],0,[Prisma("Venusaur Prisma",PRISM_ITEM.get("Venusaur Prisma"))])), # not fun since autocomplete and kinda unstable
-                    # Location("Starly Unlock event 2 - Dummy", UNLOCK_ITEMS.get("Starly Unlock 2"), Requirements([],[],0,[Prisma("Venusaur Prisma",PRISM_ITEM.get("Venusaur Prisma"))])),
-                    # Location("Torterra Unlock event - Dummy", UNLOCK_ITEMS.get("Torterra Unlock"), Requirements([],[],0,[Prisma("Venusaur Prisma",PRISM_ITEM.get("Venusaur Prisma"))])),
-                    ], parent_region= "Pokepark Entrance"),
+                       Location("Turtwig Friendship Event", UNLOCK_ITEMS.get("Pachirisu Unlock"), Requirements()),
+                       Location("Bonsly Friendship Event", UNLOCK_ITEMS.get("Sudowoodo Unlock"),
+                                Requirements([Unlock("Bonsly Unlock", UNLOCK_ITEMS.get("Bonsly Unlock"))])),
+                       Location("Buneary Friendship Event", UNLOCK_ITEMS.get("Lotad Unlock"), Requirements()),
+                       Location("Croagunk Friendship Event", UNLOCK_ITEMS.get("Scyther Unlock"), Requirements()),
+                       Location("Caterpie Tree Dash", UNLOCK_ITEMS.get("Caterpie Unlock"), Requirements()),
+                       Location("Caterpie Friendship Event", UNLOCK_ITEMS.get("Butterfree Unlock"),
+                                Requirements([Unlock("Caterpie Unlock", UNLOCK_ITEMS.get("Caterpie Unlock"))])),
+                       # Location("Mankey Friendship Event", UNLOCK_ITEMS.get("Chimchar Unlock"), Requirements()),
+                       Location("Aipom Friendship Event", UNLOCK_ITEMS.get("Ambipom Unlock"), Requirements()),
+                       Location("Weedle Tree Dash", UNLOCK_ITEMS.get("Weedle Unlock"), Requirements()),
+                       Location("Shroomish Crate Dash", UNLOCK_ITEMS.get("Shroomish Unlock"), Requirements()),
+                       Location("Magikarp shocked", UNLOCK_ITEMS.get("Magikarp Unlock"), Requirements()),
+                       Location("Bidoof Housing 1 - Pokemon Unlock", UNLOCK_ITEMS.get("Bidoof1 Unlock"),
+                                Requirements(
+                                    friendships=[Friendship("Mankey", FRIENDSHIP_ITEMS.get("Mankey"))])),
+                       Location("Bidoof Housing 2 - Pokemon Unlock", UNLOCK_ITEMS.get("Bidoof2 Unlock"),
+                                Requirements(friendships=[Friendship("Mankey", FRIENDSHIP_ITEMS.get("Mankey"))])),
+                       Location("Bidoof Housing 3 - Pokemon Unlock", UNLOCK_ITEMS.get("Bidoof3 Unlock"),
+                                Requirements(friendships=[Friendship("Mankey", FRIENDSHIP_ITEMS.get("Mankey"))])),
+                       Location("Bidoof Housing 4 - Pokemon Unlock", UNLOCK_ITEMS.get("Bibarel Unlock"),
+                                Requirements(friendships=[Friendship("Mankey", FRIENDSHIP_ITEMS.get("Mankey"))])),
+                       # Location("Starly Unlock event - Dummy", UNLOCK_ITEMS.get("Starly Unlock"), Requirements([],[],0,[Prisma("Venusaur Prisma",PRISM_ITEM.get("Venusaur Prisma"))])), # not fun since autocomplete and kinda unstable
+                       # Location("Starly Unlock event 2 - Dummy", UNLOCK_ITEMS.get("Starly Unlock 2"), Requirements([],[],0,[Prisma("Venusaur Prisma",PRISM_ITEM.get("Venusaur Prisma"))])),
+                       # Location("Torterra Unlock event - Dummy", UNLOCK_ITEMS.get("Torterra Unlock"), Requirements([],[],0,[Prisma("Venusaur Prisma",PRISM_ITEM.get("Venusaur Prisma"))])),
+                   ],
+                   quest_locations=[
+                       Location("Bidoof Housing 1", QuestLocationIds.MEADOW_BIDOOF_HOUSING1.value,
+                                Requirements(friendships=[Friendship("Mankey", FRIENDSHIP_ITEMS.get("Mankey"))])),
+
+                       Location("Bidoof Housing 2", QuestLocationIds.MEADOW_BIDOOF_HOUSING2.value,
+                                Requirements(friendships=[Friendship("Mankey", FRIENDSHIP_ITEMS.get("Mankey"))])),
+
+                       Location("Bidoof Housing 3", QuestLocationIds.MEADOW_BIDOOF_HOUSING3.value,
+                                Requirements(friendships=[Friendship("Mankey", FRIENDSHIP_ITEMS.get("Mankey"))])),
+
+                       Location("Bidoof Housing 4", QuestLocationIds.MEADOW_BIDOOF_HOUSING4.value,
+                                Requirements(friendships=[Friendship("Mankey", FRIENDSHIP_ITEMS.get("Mankey"))])),
+                   ],
+                   parent_region="Pokepark Entrance"),
     PokeparkRegion("Treehouse", "Treehouse",
-                   ability_locations=[Location("Thunderbolt Upgrade 1", QuestLocationIds.THUNDERBOLT_POWERUP1.value),
-                                      Location("Thunderbolt Upgrade 2", QuestLocationIds.THUNDERBOLT_POWERUP2.value),
-                                      Location("Thunderbolt Upgrade 3", QuestLocationIds.THUNDERBOLT_POWERUP3.value),
-                                      Location("Dash Upgrade 1", QuestLocationIds.DASH_POWERUP1.value,Requirements(prismas=[Prisma("Pelipper Prisma",PRISM_ITEM.get("Pelipper Prisma"))])),
-                                      Location("Dash Upgrade 2", QuestLocationIds.DASH_POWERUP2.value,Requirements(prismas=[Prisma("Pelipper Prisma",PRISM_ITEM.get("Pelipper Prisma"))])),
-                                      Location("Dash Upgrade 3", QuestLocationIds.DASH_POWERUP3.value,Requirements(prismas=[Prisma("Pelipper Prisma",PRISM_ITEM.get("Pelipper Prisma"))])),
-                                      Location("Health Upgrade 1", QuestLocationIds.HEALTH_POWERUP1.value, Requirements(
-                                          unlocks=[Unlock("Beach Zone Unlock",REGION_UNLOCK.get("Beach Zone Unlock"))])),
-                                      Location("Health Upgrade 2", QuestLocationIds.HEALTH_POWERUP2.value, Requirements(
-                                          unlocks=[Unlock("Beach Zone Unlock",REGION_UNLOCK.get("Beach Zone Unlock"))])),
-                                      Location("Health Upgrade 3", QuestLocationIds.HEALTH_POWERUP3.value, Requirements(
-                                          unlocks=[Unlock("Beach Zone Unlock",REGION_UNLOCK.get("Beach Zone Unlock"))]))
-],
+                   quest_locations=[Location("Thunderbolt Upgrade 1", QuestLocationIds.THUNDERBOLT_POWERUP1.value),
+                                    Location("Thunderbolt Upgrade 2", QuestLocationIds.THUNDERBOLT_POWERUP2.value),
+                                    Location("Thunderbolt Upgrade 3", QuestLocationIds.THUNDERBOLT_POWERUP3.value),
+                                    Location("Dash Upgrade 1", QuestLocationIds.DASH_POWERUP1.value, Requirements(
+                                        prismas=[Prisma("Pelipper Prisma", PRISM_ITEM.get("Pelipper Prisma"))])),
+                                    Location("Dash Upgrade 2", QuestLocationIds.DASH_POWERUP2.value, Requirements(
+                                        prismas=[Prisma("Pelipper Prisma", PRISM_ITEM.get("Pelipper Prisma"))])),
+                                    Location("Dash Upgrade 3", QuestLocationIds.DASH_POWERUP3.value, Requirements(
+                                        prismas=[Prisma("Pelipper Prisma", PRISM_ITEM.get("Pelipper Prisma"))])),
+                                    Location("Health Upgrade 1", QuestLocationIds.HEALTH_POWERUP1.value, Requirements(
+                                        unlocks=[Unlock("Beach Zone Unlock", REGION_UNLOCK.get("Beach Zone Unlock"))])),
+                                    Location("Health Upgrade 2", QuestLocationIds.HEALTH_POWERUP2.value, Requirements(
+                                        unlocks=[Unlock("Beach Zone Unlock", REGION_UNLOCK.get("Beach Zone Unlock"))])),
+                                    Location("Health Upgrade 3", QuestLocationIds.HEALTH_POWERUP3.value, Requirements(
+                                        unlocks=[Unlock("Beach Zone Unlock", REGION_UNLOCK.get("Beach Zone Unlock"))]))
+                                    ],
                    parent_region="Meadow Zone - Overworld"),
     PokeparkRegion("Meadow Zone - Bulbasaur's Daring Dash Minigame", "Meadow Zone - Bulbasaur's Daring Dash Minigame",
                    minigame_location=
@@ -186,7 +199,8 @@ REGIONS: list[PokeparkRegion] = [
                     # Location("Arcanine", BERRIES.get("100 Berries")+17, Requirements([], [Friendship("Arcanine", FRIENDSHIP_ITEMS.get("Arcanine"))])), #not implemented yet
                     Location("Leafeon", MinigameLocationIds.LEAFEON_DASH.value,
                              Requirements(friendships=[Friendship("Leafeon", FRIENDSHIP_ITEMS.get("Leafeon"))])),
-                    Location("Scyther", MinigameLocationIds.SCYTHER_DASH.value,Requirements([], [Friendship("Scyther", FRIENDSHIP_ITEMS.get("Scyther"))])),
+                    Location("Scyther", MinigameLocationIds.SCYTHER_DASH.value,
+                             Requirements([], [Friendship("Scyther", FRIENDSHIP_ITEMS.get("Scyther"))])),
                     # Location("Ponyta", BERRIES.get("100 Berries")+20, Requirements([], [Friendship("Ponyta", FRIENDSHIP_ITEMS.get("Ponyta"))])), #not implemented yet
                     Location("Shinx", MinigameLocationIds.SHINX_DASH.value,
                              Requirements(friendships=[Friendship("Shinx", FRIENDSHIP_ITEMS.get("Shinx"))])),
@@ -200,7 +214,7 @@ REGIONS: list[PokeparkRegion] = [
                     ], parent_region="Meadow Zone - Overworld"),
 
     PokeparkRegion("Meadow Zone - Venusaur's Vine Swing", "Meadow Zone - Venusaur's Vine Swing",
-                   Requirements(oneof_itemName=[["Croagunk","Spearow"],["Beach Zone Unlock"]]),
+                   Requirements(oneof_itemName=[["Croagunk", "Spearow"], ["Beach Zone Unlock"]]),
                    # needs croagunk and spearow friendship
                    minigame_location=[
                        Location("Prisma", PRISM_ITEM.get("Venusaur Prisma")),
@@ -232,89 +246,111 @@ REGIONS: list[PokeparkRegion] = [
                    ], parent_region="Meadow Zone - Overworld"),
 
     PokeparkRegion("Beach Zone - Overworld", "Beach Zone - Overworld",
-                   Requirements(unlocks=[Unlock("Beach Zone Unlock", REGION_UNLOCK.get("Beach Zone Unlock"))]),friendship_locations=[
-            Location("Buizel", FRIENDSHIP_ITEMS.get("Buizel")),
-            Location("Psyduck", FRIENDSHIP_ITEMS.get("Psyduck")),
-            Location("Slowpoke", FRIENDSHIP_ITEMS.get("Slowpoke")),
-            Location("Azurill",FRIENDSHIP_ITEMS.get("Azurill")),
-            Location("Totodile",FRIENDSHIP_ITEMS.get("Totodile"),Requirements(unlocks=[Unlock("Totodile Unlock",UNLOCK_ITEMS.get("Totodile Unlock"))])),
-            Location("Mudkip", FRIENDSHIP_ITEMS.get("Mudkip"),Requirements(unlocks=[Unlock("Mudkip Unlock",UNLOCK_ITEMS.get("Mudkip Unlock"))])),
-            Location("Pidgeotto", FRIENDSHIP_ITEMS.get("Pidgeotto")),
-            Location("Taillow", FRIENDSHIP_ITEMS.get("Taillow")),
-            Location("Wingull", FRIENDSHIP_ITEMS.get("Wingull")),
-            Location("Staravia", FRIENDSHIP_ITEMS.get("Staravia")),
-            Location("Corsola", FRIENDSHIP_ITEMS.get("Corsola")),
-            Location("Floatzel",FRIENDSHIP_ITEMS.get("Floatzel"),Requirements(unlocks=[Unlock("Floatzel Unlock",UNLOCK_ITEMS.get("Floatzel Unlock"))])),
-            Location("Vaporeon",FRIENDSHIP_ITEMS.get("Vaporeon"),Requirements(friendcount=31)), # +1 for itself
-            Location("Golduck", FRIENDSHIP_ITEMS.get("Golduck"), Requirements(unlocks=[Unlock("Golduck Unlock",UNLOCK_ITEMS.get("Golduck Unlock"))])),
-            #Location("Pelipper", FRIENDSHIP_ITEMS.get("Pelipper"),Requirements(prismas=[Prisma("Pelipper Prisma",PRISM_ITEM.get("Pelipper Prisma"))])), #not working like Bulbasaur
-            Location("Krabby", FRIENDSHIP_ITEMS.get("Krabby"),
-                     Requirements(unlocks=[Unlock("Krabby Unlock",UNLOCK_ITEMS.get("Krabby Unlock"))])),
-            Location("Wailord", FRIENDSHIP_ITEMS.get("Wailord")),
-            Location("Corphish", FRIENDSHIP_ITEMS.get("Corphish"),Requirements(unlocks=[Unlock("Corphish Unlock",UNLOCK_ITEMS.get("Corphish Unlock"))])),
-            #Location("Gyarados", FRIENDSHIP_ITEMS.get("Gyarados"),Requirements(prismas=[Prisma("Gyarados Prisma",PRISM_ITEM.get("Gyarados Prisma"))])), # not workin like Bulbasaur
-            Location("Feraligatr", FRIENDSHIP_ITEMS.get("Feraligatr")),
-            Location("Starly", OverworldPokemonLocationIds.STARLY_BEACH.value),
+                   Requirements(unlocks=[Unlock("Beach Zone Unlock", REGION_UNLOCK.get("Beach Zone Unlock"))]),
+                   friendship_locations=[
+                       Location("Buizel", FRIENDSHIP_ITEMS.get("Buizel")),
+                       Location("Psyduck", FRIENDSHIP_ITEMS.get("Psyduck")),
+                       Location("Slowpoke", FRIENDSHIP_ITEMS.get("Slowpoke")),
+                       Location("Azurill", FRIENDSHIP_ITEMS.get("Azurill")),
+                       Location("Totodile", FRIENDSHIP_ITEMS.get("Totodile"),
+                                Requirements(unlocks=[Unlock("Totodile Unlock", UNLOCK_ITEMS.get("Totodile Unlock"))])),
+                       Location("Mudkip", FRIENDSHIP_ITEMS.get("Mudkip"),
+                                Requirements(unlocks=[Unlock("Mudkip Unlock", UNLOCK_ITEMS.get("Mudkip Unlock"))])),
+                       Location("Pidgeotto", FRIENDSHIP_ITEMS.get("Pidgeotto")),
+                       Location("Taillow", FRIENDSHIP_ITEMS.get("Taillow")),
+                       Location("Wingull", FRIENDSHIP_ITEMS.get("Wingull")),
+                       Location("Staravia", FRIENDSHIP_ITEMS.get("Staravia")),
+                       Location("Corsola", FRIENDSHIP_ITEMS.get("Corsola")),
+                       Location("Floatzel", FRIENDSHIP_ITEMS.get("Floatzel"),
+                                Requirements(unlocks=[Unlock("Floatzel Unlock", UNLOCK_ITEMS.get("Floatzel Unlock"))])),
+                       Location("Vaporeon", FRIENDSHIP_ITEMS.get("Vaporeon"), Requirements(friendcount=31)),
+                       # +1 for itself
+                       Location("Golduck", FRIENDSHIP_ITEMS.get("Golduck"),
+                                Requirements(unlocks=[Unlock("Golduck Unlock", UNLOCK_ITEMS.get("Golduck Unlock"))])),
+                       # Location("Pelipper", FRIENDSHIP_ITEMS.get("Pelipper"),Requirements(prismas=[Prisma("Pelipper Prisma",PRISM_ITEM.get("Pelipper Prisma"))])), #not working like Bulbasaur
+                       Location("Krabby", FRIENDSHIP_ITEMS.get("Krabby"),
+                                Requirements(unlocks=[Unlock("Krabby Unlock", UNLOCK_ITEMS.get("Krabby Unlock"))])),
+                       Location("Wailord", FRIENDSHIP_ITEMS.get("Wailord")),
+                       Location("Corphish", FRIENDSHIP_ITEMS.get("Corphish"),
+                                Requirements(unlocks=[Unlock("Corphish Unlock", UNLOCK_ITEMS.get("Corphish Unlock"))])),
+                       # Location("Gyarados", FRIENDSHIP_ITEMS.get("Gyarados"),Requirements(prismas=[Prisma("Gyarados Prisma",PRISM_ITEM.get("Gyarados Prisma"))])), # not workin like Bulbasaur
+                       Location("Feraligatr", FRIENDSHIP_ITEMS.get("Feraligatr")),
+                       Location("Starly", OverworldPokemonLocationIds.STARLY_BEACH.value),
 
-        ],unlock_location=[Location("Buizel Friendship Event",
-                                    UNLOCK_ITEMS.get("Floatzel Unlock")),
-Location("Psyduck Friendship Event", UNLOCK_ITEMS.get("Golduck Unlock")),
-                           Location("Slowpoke Friendship Event", UNLOCK_ITEMS.get("Mudkip Unlock")),
-                           Location("Azurill Friendship Event", UNLOCK_ITEMS.get("Totodile Unlock")),
-                           Location("Bottle Recycling 1", QuestLocationIds.BEACH_BOTTLE1.value),
-                           Location("Bottle Recycling 2", QuestLocationIds.BEACH_BOTTLE2.value),
-                           Location("Bottle Recycling 2 - Pokemon Unlock", UNLOCK_ITEMS.get("Krabby Unlock")),
-                           Location("Bottle Recycling 3", QuestLocationIds.BEACH_BOTTLE3.value),
-                           Location("Bottle Recycling 4", QuestLocationIds.BEACH_BOTTLE4.value),
-                           Location("Bottle Recycling 4 - Pokemon Unlock", UNLOCK_ITEMS.get("Corphish Unlock")),
-                           Location("Bottle Recycling 5", QuestLocationIds.BEACH_BOTTLE5.value),
-                           Location("Bottle Recycling 6", QuestLocationIds.BEACH_BOTTLE6.value),
-
-                           ],
+                   ], unlock_location=[
+            Location("Buizel Friendship Event",
+                     UNLOCK_ITEMS.get("Floatzel Unlock")),
+            Location("Psyduck Friendship Event", UNLOCK_ITEMS.get("Golduck Unlock")),
+            Location("Slowpoke Friendship Event", UNLOCK_ITEMS.get("Mudkip Unlock")),
+            Location("Azurill Friendship Event", UNLOCK_ITEMS.get("Totodile Unlock")),
+            Location("Bottle Recycling 2 - Pokemon Unlock",
+                     UNLOCK_ITEMS.get("Krabby Unlock")),
+            Location("Bottle Recycling 4 - Pokemon Unlock",
+                     UNLOCK_ITEMS.get("Corphish Unlock")),
+        ],
+                   quest_locations=[
+                       Location("Bottle Recycling 1", QuestLocationIds.BEACH_BOTTLE1.value),
+                       Location("Bottle Recycling 2", QuestLocationIds.BEACH_BOTTLE2.value),
+                       Location("Bottle Recycling 3", QuestLocationIds.BEACH_BOTTLE3.value),
+                       Location("Bottle Recycling 4", QuestLocationIds.BEACH_BOTTLE4.value),
+                       Location("Bottle Recycling 5", QuestLocationIds.BEACH_BOTTLE5.value),
+                       Location("Bottle Recycling 6", QuestLocationIds.BEACH_BOTTLE6.value), ],
                    parent_region="Treehouse"),
-    PokeparkRegion("Beach Zone - Pelipper's Circle Circuit","Beach Zone - Pelipper's Circle Circuit",minigame_location=[
-        Location("Prisma", PRISM_ITEM.get("Pelipper Prisma")),
-        Location("Pikachu", MinigameLocationIds.PIKACHU_CIRCLE.value,Requirements(unlocks=[Unlock("Pikachu Balloon",UNLOCK_ITEMS.get("Pikachu Balloon"))])), #Ballon item is missing for now
-        #Location("Staraptor", BERRIES.get("100 Berries") + 42,Requirements(friendships=[Friendship("Staraptor",FRIENDSHIP_ITEMS.get("Staraptor"))])), # Staraptor missing
-        #Location("Togekiss", BERRIES.get("100 Berries") + 43,Requirements(friendships=[Friendship("Togekiss",FRIENDSHIP_ITEMS.get("Togekiss"))])), #togekiss is missing
-        #Location("Honchkrow", BERRIES.get("100 Berries") + 44, Requirements(friendships=[Friendship("Honchkrow", FRIENDSHIP_ITEMS.get("Honchkrow"))])), #Honchkrow is missing
-        #Location("Gliscor", BERRIES.get("100 Berries") + 45, Requirements(friendships=[Friendship("Gliscor", FRIENDSHIP_ITEMS.get("Gliscor"))])), #Gliscor is missing
-        Location("Pelipper", MinigameLocationIds.PELIPPER_CIRCLE.value, Requirements(friendships=[Friendship("Pelipper", FRIENDSHIP_ITEMS.get("Pelipper"))])),
-        Location("Staravia", MinigameLocationIds.STARAVIA_CIRCLE.value, Requirements(friendships=[Friendship("Staravia", FRIENDSHIP_ITEMS.get("Staravia"))])),
-        Location("Pidgeotto", MinigameLocationIds.PIDGEOTTO_CIRCLE.value, Requirements(friendships=[Friendship("Pidgeotto", FRIENDSHIP_ITEMS.get("Pidgeotto"))])),
-        Location("Butterfree", MinigameLocationIds.BUTTERFREE_CIRCLE.value,Requirements(friendships=[Friendship("Butterfree", FRIENDSHIP_ITEMS.get("Butterfree"))])),
-        Location("Tropius", MinigameLocationIds.TROPIUS_CIRCLE.value, Requirements(friendships=[Friendship("Tropius", FRIENDSHIP_ITEMS.get("Tropius"))])),
-        #Location("Murkrow", BERRIES.get("100 Berries") + 51, Requirements(friendships=[Friendship("Murkrow", FRIENDSHIP_ITEMS.get("Murkrow"))])), # Murkow is missing
-        Location("Taillow", MinigameLocationIds.TAILLOW_CIRCLE.value,
-                 Requirements(friendships=[Friendship("Taillow", FRIENDSHIP_ITEMS.get("Taillow"))])),
-        Location("Spearow", MinigameLocationIds.SPEAROW_CIRCLE.value,
-                 Requirements(friendships=[Friendship("Spearow", FRIENDSHIP_ITEMS.get("Spearow"))])),
-        Location("Starly", MinigameLocationIds.STARLY_CIRCLE.value,
-                 Requirements(friendships=[Friendship("Starly", FRIENDSHIP_ITEMS.get("Starly"))])),
-        Location("Wingull", MinigameLocationIds.WINGULL_CIRCLE.value,
-                 Requirements(friendships=[Friendship("Wingull", FRIENDSHIP_ITEMS.get("Wingull"))])),
-    ],parent_region="Beach Zone - Overworld"),
+    PokeparkRegion("Beach Zone - Pelipper's Circle Circuit", "Beach Zone - Pelipper's Circle Circuit",
+                   minigame_location=[
+                       Location("Prisma", PRISM_ITEM.get("Pelipper Prisma")),
+                       Location("Pikachu", MinigameLocationIds.PIKACHU_CIRCLE.value,
+                                Requirements(unlocks=[Unlock("Pikachu Balloon", UNLOCK_ITEMS.get("Pikachu Balloon"))])),
+                       # Ballon item is missing for now
+                       # Location("Staraptor", BERRIES.get("100 Berries") + 42,Requirements(friendships=[Friendship("Staraptor",FRIENDSHIP_ITEMS.get("Staraptor"))])), # Staraptor missing
+                       # Location("Togekiss", BERRIES.get("100 Berries") + 43,Requirements(friendships=[Friendship("Togekiss",FRIENDSHIP_ITEMS.get("Togekiss"))])), #togekiss is missing
+                       # Location("Honchkrow", BERRIES.get("100 Berries") + 44, Requirements(friendships=[Friendship("Honchkrow", FRIENDSHIP_ITEMS.get("Honchkrow"))])), #Honchkrow is missing
+                       # Location("Gliscor", BERRIES.get("100 Berries") + 45, Requirements(friendships=[Friendship("Gliscor", FRIENDSHIP_ITEMS.get("Gliscor"))])), #Gliscor is missing
+                       Location("Pelipper", MinigameLocationIds.PELIPPER_CIRCLE.value,
+                                Requirements(friendships=[Friendship("Pelipper", FRIENDSHIP_ITEMS.get("Pelipper"))])),
+                       Location("Staravia", MinigameLocationIds.STARAVIA_CIRCLE.value,
+                                Requirements(friendships=[Friendship("Staravia", FRIENDSHIP_ITEMS.get("Staravia"))])),
+                       Location("Pidgeotto", MinigameLocationIds.PIDGEOTTO_CIRCLE.value,
+                                Requirements(friendships=[Friendship("Pidgeotto", FRIENDSHIP_ITEMS.get("Pidgeotto"))])),
+                       Location("Butterfree", MinigameLocationIds.BUTTERFREE_CIRCLE.value, Requirements(
+                           friendships=[Friendship("Butterfree", FRIENDSHIP_ITEMS.get("Butterfree"))])),
+                       Location("Tropius", MinigameLocationIds.TROPIUS_CIRCLE.value,
+                                Requirements(friendships=[Friendship("Tropius", FRIENDSHIP_ITEMS.get("Tropius"))])),
+                       # Location("Murkrow", BERRIES.get("100 Berries") + 51, Requirements(friendships=[Friendship("Murkrow", FRIENDSHIP_ITEMS.get("Murkrow"))])), # Murkow is missing
+                       Location("Taillow", MinigameLocationIds.TAILLOW_CIRCLE.value,
+                                Requirements(friendships=[Friendship("Taillow", FRIENDSHIP_ITEMS.get("Taillow"))])),
+                       Location("Spearow", MinigameLocationIds.SPEAROW_CIRCLE.value,
+                                Requirements(friendships=[Friendship("Spearow", FRIENDSHIP_ITEMS.get("Spearow"))])),
+                       Location("Starly", MinigameLocationIds.STARLY_CIRCLE.value,
+                                Requirements(friendships=[Friendship("Starly", FRIENDSHIP_ITEMS.get("Starly"))])),
+                       Location("Wingull", MinigameLocationIds.WINGULL_CIRCLE.value,
+                                Requirements(friendships=[Friendship("Wingull", FRIENDSHIP_ITEMS.get("Wingull"))])),
+                   ], parent_region="Beach Zone - Overworld"),
     PokeparkRegion("Beach Zone - Gyarados' Aqua Dash", "Beach Zone - Gyarados' Aqua Dash",
                    minigame_location=[
                        Location("Prisma", PRISM_ITEM.get("Gyarados Prisma")),
-                       Location("Pikachu",MinigameLocationIds.PIKACHU_AQUA.value,Requirements(unlocks=[Unlock("Pikachu Surfboard",UNLOCK_ITEMS.get("Pikachu Surfboard"))])), # Pikachu is missing
-                       Location("Psyduck",MinigameLocationIds.PSYDUCK_AQUA.value, Requirements(friendships=[Friendship("Psyduck",FRIENDSHIP_ITEMS.get("Psyduck"))])),
+                       Location("Pikachu", MinigameLocationIds.PIKACHU_AQUA.value, Requirements(
+                           unlocks=[Unlock("Pikachu Surfboard", UNLOCK_ITEMS.get("Pikachu Surfboard"))])),
+                       # Pikachu is missing
+                       Location("Psyduck", MinigameLocationIds.PSYDUCK_AQUA.value,
+                                Requirements(friendships=[Friendship("Psyduck", FRIENDSHIP_ITEMS.get("Psyduck"))])),
                        Location("Azurill", MinigameLocationIds.AZURILL_AQUA.value,
                                 Requirements(friendships=[Friendship("Azurill", FRIENDSHIP_ITEMS.get("Azurill"))])),
                        Location("Slowpoke", MinigameLocationIds.SLOWPOKE_AQUA.value,
                                 Requirements(friendships=[Friendship("Slowpoke", FRIENDSHIP_ITEMS.get("Slowpoke"))])),
-                       #Location("Empoleon", BERRIES.get("100 Berries") + 60, Requirements(friendships=[Friendship("Empoleon", FRIENDSHIP_ITEMS.get("Empoleon"))])), # Empoleon missing
+                       # Location("Empoleon", BERRIES.get("100 Berries") + 60, Requirements(friendships=[Friendship("Empoleon", FRIENDSHIP_ITEMS.get("Empoleon"))])), # Empoleon missing
                        Location("Floatzel", MinigameLocationIds.FLOATZEL_AQUA.value,
                                 Requirements(friendships=[Friendship("Floatzel", FRIENDSHIP_ITEMS.get("Floatzel"))])),
                        Location("Feraligatr", MinigameLocationIds.FERALIGATR_AQUA.value,
-                                Requirements(friendships=[Friendship("Feraligatr", FRIENDSHIP_ITEMS.get("Feraligatr"))])),
+                                Requirements(
+                                    friendships=[Friendship("Feraligatr", FRIENDSHIP_ITEMS.get("Feraligatr"))])),
                        Location("Golduck", MinigameLocationIds.GOLDUCK_AQUA.value,
                                 Requirements(
                                     friendships=[Friendship("Golduck", FRIENDSHIP_ITEMS.get("Golduck"))])),
                        Location("Vaporeon", MinigameLocationIds.VAPOREON_AQUA.value,
                                 Requirements(
                                     friendships=[Friendship("Vaporeon", FRIENDSHIP_ITEMS.get("Vaporeon"))])),
-                       #Location("Prinplup", BERRIES.get("100 Berries") + 65,Requirements(friendships=[Friendship("Prinplup", FRIENDSHIP_ITEMS.get("Prinplup"))])),
+                       # Location("Prinplup", BERRIES.get("100 Berries") + 65,Requirements(friendships=[Friendship("Prinplup", FRIENDSHIP_ITEMS.get("Prinplup"))])),
                        Location("Bibarel", MinigameLocationIds.BIBAREL_AQUA.value,
                                 Requirements(
                                     friendships=[Friendship("Bibarel", FRIENDSHIP_ITEMS.get("Bibarel"))])),
@@ -333,6 +369,10 @@ Location("Psyduck Friendship Event", UNLOCK_ITEMS.get("Golduck Unlock")),
                    ], parent_region="Beach Zone - Overworld"),
     PokeparkRegion("Victory Region", "Victory Region",
                    Requirements(prismas=
-                                [Prisma("Bulbasaur Prisma", PRISM_ITEM.get("Bulbasaur Prisma")),Prisma("Venusaur Prisma",PRISM_ITEM.get("Venusaur Prisma")), Prisma("Pelipper Prisma",PRISM_ITEM.get("Pelipper Prisma")), Prisma("Gyarados Prisma",PRISM_ITEM.get("Gyarados Prisma"))]),parent_region="Beach Zone - Overworld")
+                                [Prisma("Bulbasaur Prisma", PRISM_ITEM.get("Bulbasaur Prisma")),
+                                 Prisma("Venusaur Prisma", PRISM_ITEM.get("Venusaur Prisma")),
+                                 Prisma("Pelipper Prisma", PRISM_ITEM.get("Pelipper Prisma")),
+                                 Prisma("Gyarados Prisma", PRISM_ITEM.get("Gyarados Prisma"))]),
+                   parent_region="Beach Zone - Overworld")
     # just some Victory Requirements for Demo so that meadow zone can be tested
 ]

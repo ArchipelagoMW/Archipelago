@@ -70,6 +70,14 @@ async def location_watcher(ctx):
                 ctx.locations_checked.add(location_id)
                 minigame_remaining.remove(check)
 
+    def check_quest_locations():
+        for check in quest_remaining.copy():
+            location, location_id, check_mask = check
+            current_value = read_memory(dme,location)
+            if(current_value & check_mask) == location.value:
+                ctx.locations_checked.add(location_id)
+                quest_remaining.remove(check)
+
     def _sub():
         if not dme.is_hooked():
             return
@@ -84,13 +92,7 @@ async def location_watcher(ctx):
 
         check_prisma_locations()
 
-        for check in quest_remaining.copy():
-            location, location_id, check_mask = check
-            current_value = read_memory(dme,location)
-            if(current_value & check_mask) == location.value:
-                ctx.locations_checked.add(location_id)
-                quest_remaining.remove(check)
-
+        check_quest_locations()
 
         check_unlock_locations()
 
