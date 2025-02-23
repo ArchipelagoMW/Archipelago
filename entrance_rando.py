@@ -151,7 +151,7 @@ class ERPlacementState:
         self.pairings = []
         self.world = world
         self.coupled = coupled
-        self.collection_state = world.multiworld.get_all_state(False, True)
+        self.collection_state = world.multiworld.get_single_player_all_state(world.player, True)
 
     @property
     def placed_regions(self) -> set[Region]:
@@ -189,7 +189,7 @@ class ERPlacementState:
         copied_state.blocked_connections[self.world.player].remove(source_exit)
         copied_state.blocked_connections[self.world.player].update(target_entrance.connected_region.exits)
         copied_state.update_reachable_regions(self.world.player)
-        copied_state.sweep_for_advancements()
+        copied_state.sweep_for_advancements(self.world.get_locations())
         # test that at there are newly reachable randomized exits that are ACTUALLY reachable
         available_randomized_exits = copied_state.blocked_connections[self.world.player]
         for _exit in available_randomized_exits:
@@ -333,7 +333,7 @@ def randomize_entrances(
             entrance_lookup.remove(entrance)
         # propagate new connections
         er_state.collection_state.update_reachable_regions(world.player)
-        er_state.collection_state.sweep_for_advancements()
+        er_state.collection_state.sweep_for_advancements(world.get_locations())
         if on_connect:
             on_connect(er_state, placed_exits)
 
