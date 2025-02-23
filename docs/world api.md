@@ -479,6 +479,9 @@ In addition, the following methods can be implemented and are called in this ord
 * `stage_assert_generate(cls, multiworld: MultiWorld)`
   a class method called at the start of generation to check for the existence of prerequisite files, usually a ROM for
   games which require one.
+* `create_dynamic_datapackate(cls, game_weights: Dict[str, Any]`
+  a class method called during yaml parsing in which a world is allowed to define `World.dynamic_item_name_to_id` and 
+  `World.dynamic_location_name_to_id` for items/locations that are specific to the current generation.
 * `generate_early(self)`
   called per player before any items or locations are created. You can set properties on your
   world here. Already has access to player options and RNG. This is the earliest step where the world should start
