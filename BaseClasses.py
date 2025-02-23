@@ -446,20 +446,6 @@ class MultiWorld():
             self._all_state = ret
         return ret
 
-    def get_single_player_all_state(self, player: int, allow_partial_entrances: bool = False) -> CollectionState:
-        ret = CollectionState(self, allow_partial_entrances)
-
-        world = self.worlds[player]
-
-        for item in self.itempool:
-            if item.player == player:
-                world.collect(ret, item)
-        for item in world.get_pre_fill_items():
-            world.collect(ret, item)
-        ret.sweep_for_advancements(world.get_locations())
-
-        return ret
-
     def get_items(self) -> List[Item]:
         return [loc.item for loc in self.get_filled_locations()] + self.itempool
 
