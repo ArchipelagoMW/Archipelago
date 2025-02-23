@@ -350,9 +350,15 @@ def randomize_entrances(
                 # very last exit and check whatever exits we open up are functionally accessible.
                 # this requirement can be ignored on a beaten minimal, islands are no issue there.
                 exit_requirement_satisfied = (not perform_validity_check or not require_new_exits
-                                                or target_entrance.connected_region not in er_state.placed_regions)
+                                              or target_entrance.connected_region not in er_state.placed_regions)
+                # the len check on dead ends is because it's possible that the last valid connection will be made
+                # in stage 1. for example, a functional dead end with an indirect condition on it would be the last
+                # target but would be considered a non dead end.
                 needs_speculative_sweep = (not dead_end and require_new_exits and perform_validity_check
-                                           and len(placeable_exits) == 1)
+                                           and len(placeable_exits) == 1 and len(entrance_lookup.dead_ends) > 0 and (
+                                                not coupled
+                                                or any(e.name != source_exit.name for e in entrance_lookup.dead_ends)
+                                           ))
                 if exit_requirement_satisfied and source_exit.can_connect_to(target_entrance, dead_end, er_state):
                     if (needs_speculative_sweep
                             and not er_state.test_speculative_connection(source_exit, target_entrance)):
