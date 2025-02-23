@@ -276,10 +276,10 @@ class World(metaclass=AutoWorldRegister):
     location_name_groups: ClassVar[Dict[str, Set[str]]] = {}
     """maps location group names to sets of locations. Example: {"Sewer": {"Sewer Key Drop 1", "Sewer Key Drop 2"}}"""
 
-    dynamic_item_name_to_id: ClassVar[Dict[str, int]] = {}
+    dynamic_item_name_to_id: ClassVar[Optional[Dict[str, int]]] = None
     """maps item names to their IDs, allowed to change between generations"""
 
-    dynamic_location_name_to_id: ClassVar[Dict[str, int]] = {}
+    dynamic_location_name_to_id: ClassVar[Optional[Dict[str, int]]] = None
     """maps location names to their IDs, allowed to change between generations"""
 
     required_client_version: Tuple[int, int, int] = (0, 1, 6)
