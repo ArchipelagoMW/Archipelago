@@ -117,6 +117,25 @@ class WebHostContext(Context):
                     commit()
             time.sleep(5)
 
+    def _load_datapackage(self, checksum: str) -> dict | None:
+        # Check if this process has already loaded the same datapackage for a different room. If so, use the already
+        # loaded datapackage.
+        game_data_package = WebHostContext.shared_game_data_packages.get(checksum)
+        if game_data_package is None:
+            # Get the datapackage from the database.
+            row = GameDataPackage.get(checksum=checksum)
+            if row:  # None if rolled on >= 0.3.9 but uploaded to <= 0.3.8. multidata should be complete
+                game_data_package = Utils.WeakReferencableDict(Utils.restricted_loads(row.data))
+                # Put the full game data package into the shared weak dict.
+                WebHostContext.shared_game_data_packages[checksum] = game_data_package
+
+        if game_data_package is not None:
+            # Keep reference to the full datapackage so that it remains in WebHostContext.shared_game_data_packages
+            # until `self` is garbage collected.
+            self._shared_game_data_packages_in_use[checksum] = game_data_package
+
+        return game_data_package
+
     @db_session
     def load(self, room_id: int):
         self.room_id = room_id
@@ -146,22 +165,8 @@ class WebHostContext(Context):
                     # games package could be dropped from static data once all rooms embed data package
                     del multidata["datapackage"][game]
                 else:
-                    # Check if this process has already loaded the same datapackage for a different room. If so, use the
-                    # already loaded datapackage.
-                    game_data_package = WebHostContext.shared_game_data_packages.get(checksum)
-                    if game_data_package is None:
-                        # Get the datapackage from the database.
-                        row = GameDataPackage.get(checksum=game_data["checksum"])
-                        if row:  # None if rolled on >= 0.3.9 but uploaded to <= 0.3.8. multidata should be complete
-                            game_data_package = Utils.WeakReferencableDict(Utils.restricted_loads(row.data))
-                            # Put the full game data package into the shared weak dict.
-                            WebHostContext.shared_game_data_packages[checksum] = game_data_package
-                            self._shared_game_data_packages_in_use[game] = game_data_package
-
+                    game_data_package = self._load_datapackage(game_data["checksum"])
                     if game_data_package is not None:
-                        # Keep reference to the full datapackage so that it remains in the shared weak dict until `self`
-                        # is garbage collected.
-                        self._shared_game_data_packages_in_use[game] = game_data_package
                         # A shallow copy is created so that the item name groups and location name groups can be removed
                         # and stored separately.
                         game_data_packages[game] = game_data_package.copy()
