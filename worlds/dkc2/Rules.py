@@ -541,7 +541,7 @@ class DKC2StrictRules(DKC2Rules):
             LocationName.gusty_glade_dk_coin:
                 lambda state: self.can_cling(state) and self.has_kannons(state) and self.can_hover(state),
             LocationName.gusty_glade_bonus_1:
-                lambda state: self.can_cling(state) and self.can_team_attack(state),
+                lambda state: self.can_team_attack(state) and (self.can_cling(state) or self.has_rattly(state)),
             LocationName.gusty_glade_bonus_2:
                 lambda state: self.can_cling(state) and self.can_carry(state) and self.has_kannons(state),
 
@@ -1998,7 +1998,7 @@ class DKC2LooseRules(DKC2Rules):
             LocationName.gusty_glade_dk_coin:
                 lambda state: self.can_cling(state) and self.has_kannons(state) and self.can_hover(state),
             LocationName.gusty_glade_bonus_1:
-                lambda state: self.can_cling(state) and self.can_team_attack(state),
+                lambda state: self.can_team_attack(state) and (self.can_cling(state) or self.has_rattly(state)),
             LocationName.gusty_glade_bonus_2:
                 lambda state: self.can_cling(state) and self.can_carry(state) and self.has_kannons(state),
 
@@ -3460,7 +3460,7 @@ class DKC2ExpertRules(DKC2Rules):
             LocationName.gusty_glade_dk_coin:
                 lambda state: self.can_cling(state) and self.has_kannons(state),
             LocationName.gusty_glade_bonus_1:
-                lambda state: self.can_cling(state) and self.can_team_attack(state),
+                lambda state: self.can_team_attack(state) and (self.can_cling(state) or self.has_rattly(state)),
             LocationName.gusty_glade_bonus_2:
                 lambda state: self.can_cling(state) and self.can_carry(state) and self.has_kannons(state),
 
