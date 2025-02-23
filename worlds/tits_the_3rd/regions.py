@@ -49,6 +49,10 @@ def connect_regions(multiworld: MultiWorld, player: int):
 
     # Assume the warp menu is always reachable, but add access rules to specific warps.
     connect_region(multiworld, player, RegionName.menu, RegionName.warp_menu)
+    connect_region(
+        multiworld, player, RegionName.warp_menu, RegionName.hermit_garden,
+        lambda state: state.can_reach_region(RegionName.hermit_garden, player)
+    )
     connect_region( # Jade Corridor Moon Door 1
         multiworld, player, RegionName.warp_menu, RegionName.jade_corridor_start,
         lambda state: state.can_reach_region(RegionName.jade_corridor_start, player)
