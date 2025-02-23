@@ -41,7 +41,7 @@
 <CAMERAEND>
 <SE>(95)
 <WINDOW>(1)<COLOR>(4)
-<SAY><COLOR>(2)Fool! Now there are more ghosts for\nyou, <COLOR>(1)Green Man<COLOR>(2)!
+<SAY><COLOR>(2)You Fool! Now there are more ghosts\nfor you, <COLOR>(1)Green Man<COLOR>(2)!
 <ANYKEY>
 <CLOSEWINDOW>(1)
 <FRAMESTART>
@@ -73,7 +73,7 @@
 <FLAGON>(57)
 <SE>(132)
 <WINDOW>(1)<COLOR>(1)
-<SAY><COLOR>(0)Phew! The lights are back on!\nLeave the room to re-activate
+<SAY><COLOR>(0)Phew! The Room lights are back on!\nLeave the room to re-activate
 <ANYKEY>
 <CLOSEWINDOW>(1)
 <FRAMESTART>
