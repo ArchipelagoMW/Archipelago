@@ -1,6 +1,7 @@
 from enum import IntEnum
 from BaseClasses import ItemClassification
 
+
 class PeaksOfYoreRegion(IntEnum):
     FUNDAMENTALS = 0
     INTERMEDIATE = 1
@@ -31,7 +32,7 @@ class ItemData:
         self.name = name
         self.type = item_type
         self.id = item_id
-        self.classification = ItemClassification
+        self.classification = classification
 
 
 full_location_list: list[LocationData] = [
