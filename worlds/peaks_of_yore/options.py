@@ -22,6 +22,7 @@ class Goal(Choice):
 class StartingBook(Choice):
     """
     Choose what book to start with. If the book is not enabled, the easiest enabled book will be chosen.
+
     - **Random Book** will choose a random book from the enabled options."""
     display_name = "Starting Book"
     option_fundamentals = 0
@@ -81,7 +82,7 @@ class EnableExpert(DefaultOnToggle):
 
 
 class DisableSolemnTempest(DefaultOnToggle):
-    """Removes Solemn Tempest from the locations pool, has no effect if \"Enable Expert Peaks\" is disabled"""
+    """Removes Solemn Tempest from the locations pool, has no effect if **Enable Expert Peaks** is disabled"""
     display_name = "Disable Solemn Tempest"
 
 
@@ -92,7 +93,7 @@ poy_option_groups = [
         StartWithOilLamp,
         RopeUnlockMode
     ]),
-    OptionGroup("Books", [
+    OptionGroup("Peaks", [
         EnableFundamental,
         EnableIntermediate,
         EnableAdvanced,
