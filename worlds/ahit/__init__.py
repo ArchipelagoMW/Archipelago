@@ -12,13 +12,13 @@ from .DeathWishRules import set_dw_rules, create_enemy_events, hit_list, bosses
 from worlds.AutoWorld import World, WebWorld, CollectionState
 from worlds.generic.Rules import add_rule
 from typing import List, Dict, TextIO
-from worlds.LauncherComponents import Component, components, icon_paths, launch_subprocess, Type
+from worlds.LauncherComponents import Component, components, icon_paths, launch as launch_component, Type
 from Utils import local_path
 
 
 def launch_client():
     from .Client import launch
-    launch_subprocess(launch, name="AHITClient")
+    launch_component(launch, name="AHITClient")
 
 
 components.append(Component("A Hat in Time Client", "AHITClient", func=launch_client,
@@ -253,7 +253,8 @@ class HatInTimeWorld(World):
             else:
                 item_name = loc.item.name
 
-            shop_item_names.setdefault(str(loc.address), item_name)
+            shop_item_names.setdefault(str(loc.address),
+                                       f"{item_name} ({self.multiworld.get_player_name(loc.item.player)})")
 
         slot_data["ShopItemNames"] = shop_item_names
 

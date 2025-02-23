@@ -7,19 +7,29 @@ import itertools
 import operator
 from collections import defaultdict, Counter
 
-logger = logging.getLogger("Hollow Knight")
-
-from .Items import item_table, lookup_type_to_names, item_name_groups
-from .Regions import create_regions
+from .Items import item_table, item_name_groups
 from .Rules import set_rules, cost_terms, _hk_can_beat_thk, _hk_siblings_ending, _hk_can_beat_radiance
 from .Options import hollow_knight_options, hollow_knight_randomize_options, Goal, WhitePalace, CostSanity, \
     shop_to_option, HKOptions, GrubHuntGoal
-from .ExtractedData import locations, starts, multi_locations, location_to_region_lookup, \
-    event_names, item_effects, connectors, one_ways, vanilla_shop_costs, vanilla_location_costs
+from .ExtractedData import locations, starts, multi_locations, event_names, item_effects, connectors, \
+    vanilla_shop_costs, vanilla_location_costs
 from .Charms import names as charm_names
 
-from BaseClasses import Region, Location, MultiWorld, Item, LocationProgressType, Tutorial, ItemClassification, CollectionState
+from BaseClasses import Region, Location, MultiWorld, Item, LocationProgressType, Tutorial, ItemClassification, \
+    CollectionState
 from worlds.AutoWorld import World, LogicMixin, WebWorld
+
+from settings import Group, Bool
+
+logger = logging.getLogger("Hollow Knight")
+
+
+class HollowKnightSettings(Group):
+    class DisableMapModSpoilers(Bool):
+        """Disallows the APMapMod from showing spoiler placements."""
+
+    disable_spoilers: typing.Union[DisableMapModSpoilers, bool] = False
+
 
 path_of_pain_locations = {
     "Soul_Totem-Path_of_Pain_Below_Thornskip",
@@ -124,20 +134,33 @@ shop_cost_types: typing.Dict[str, typing.Tuple[str, ...]] = {
 
 
 class HKWeb(WebWorld):
-    tutorials = [Tutorial(
+    rich_text_options_doc = True
+
+    setup_en = Tutorial(
         "Mod Setup and Use Guide",
         "A guide to playing Hollow Knight with Archipelago.",
         "English",
         "setup_en.md",
         "setup/en",
         ["Ijwu"]
-    )]
+    )
+
+    setup_pt_br = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Português Brasileiro",
+        "setup_pt_br.md",
+        "setup/pt_br",
+        ["JoaoVictor-FA"]
+    )
+
+    tutorials = [setup_en, setup_pt_br]
 
     bug_report_page = "https://github.com/Ijwu/Archipelago.HollowKnight/issues/new?assignees=&labels=bug%2C+needs+investigation&template=bug_report.md&title="
 
 
 class HKWorld(World):
-    """Beneath the fading town of Dirtmouth sleeps a vast, ancient kingdom. Many are drawn beneath the surface, 
+    """Beneath the fading town of Dirtmouth sleeps a vast, ancient kingdom. Many are drawn beneath the surface,
     searching for riches, or glory, or answers to old secrets.
 
     As the enigmatic Knight, you’ll traverse the depths, unravel its mysteries and conquer its evils.
@@ -145,6 +168,7 @@ class HKWorld(World):
     game: str = "Hollow Knight"
     options_dataclass = HKOptions
     options: HKOptions
+    settings: typing.ClassVar[HollowKnightSettings]
 
     web = HKWeb()
 
@@ -157,6 +181,7 @@ class HKWorld(World):
     charm_costs: typing.List[int]
     cached_filler_items = {}
     grub_count: int
+    grub_player_count: typing.Dict[int, int]
 
     def __init__(self, multiworld, player):
         super(HKWorld, self).__init__(multiworld, player)
@@ -166,7 +191,6 @@ class HKWorld(World):
         self.ranges = {}
         self.created_shop_items = 0
         self.vanilla_shop_costs = deepcopy(vanilla_shop_costs)
-        self.grub_count = 0
 
     def generate_early(self):
         options = self.options
@@ -180,7 +204,14 @@ class HKWorld(World):
             mini.value = min(mini.value, maxi.value)
             self.ranges[term] = mini.value, maxi.value
         self.multiworld.push_precollected(HKItem(starts[options.StartLocation.current_key],
-                                       True, None, "Event", self.player))
+                                          True, None, "Event", self.player))
+
+        # defaulting so completion condition isn't incorrect before pre_fill
+        self.grub_count = (
+            46 if options.GrubHuntGoal == GrubHuntGoal.special_range_names["all"]
+            else options.GrubHuntGoal.value
+            )
+        self.grub_player_count = {self.player: self.grub_count}
 
     def white_palace_exclusions(self):
         exclusions = set()
@@ -200,7 +231,6 @@ class HKWorld(World):
     def create_regions(self):
         menu_region: Region = create_region(self.multiworld, self.player, 'Menu')
         self.multiworld.regions.append(menu_region)
-        # wp_exclusions = self.white_palace_exclusions()
 
         # check for any goal that godhome events are relevant to
         all_event_names = event_names.copy()
@@ -209,22 +239,18 @@ class HKWorld(World):
             all_event_names.update(set(godhome_event_names))
 
         # Link regions
-        for event_name in all_event_names:
-            #if event_name in wp_exclusions:
-            #    continue
+        for event_name in sorted(all_event_names):
             loc = HKLocation(self.player, event_name, None, menu_region)
             loc.place_locked_item(HKItem(event_name,
-                                         True, #event_name not in wp_exclusions,
+                                         True,
                                          None, "Event", self.player))
             menu_region.locations.append(loc)
         for entry_transition, exit_transition in connectors.items():
-            #if entry_transition in wp_exclusions:
-            #    continue
             if exit_transition:
                 # if door logic fulfilled -> award vanilla target as event
                 loc = HKLocation(self.player, entry_transition, None, menu_region)
                 loc.place_locked_item(HKItem(exit_transition,
-                                             True, #exit_transition not in wp_exclusions,
+                                             True,
                                              None, "Event", self.player))
                 menu_region.locations.append(loc)
 
@@ -261,7 +287,10 @@ class HKWorld(World):
             if item_name in junk_replace:
                 item_name = self.get_filler_item_name()
 
-            item = self.create_item(item_name) if not vanilla or location_name == "Start" or self.options.AddUnshuffledLocations else self.create_event(item_name)
+            item = (self.create_item(item_name)
+                    if not vanilla or location_name == "Start" or self.options.AddUnshuffledLocations
+                    else self.create_event(item_name)
+                    )
 
             if location_name == "Start":
                 if item_name in randomized_starting_items:
@@ -316,9 +345,9 @@ class HKWorld(World):
             randomized = True
             _add("Elevator_Pass", "Elevator_Pass", randomized)
 
-        for shop, locations in self.created_multi_locations.items():
-            for _ in range(len(locations), getattr(self.options, shop_to_option[shop]).value):
-                loc = self.create_location(shop)
+        for shop, shop_locations in self.created_multi_locations.items():
+            for _ in range(len(shop_locations), getattr(self.options, shop_to_option[shop]).value):
+                self.create_location(shop)
                 unfilled_locations += 1
 
         # Balance the pool
@@ -327,14 +356,14 @@ class HKWorld(World):
 
         # Add additional shop items, as needed.
         if additional_shop_items > 0:
-            shops = list(shop for shop, locations in self.created_multi_locations.items() if len(locations) < 16)
+            shops = [shop for shop, shop_locations in self.created_multi_locations.items() if len(shop_locations) < 16]
             if not self.options.EggShopSlots:  # No eggshop, so don't place items there
                 shops.remove('Egg_Shop')
 
             if shops:
                 for _ in range(additional_shop_items):
                     shop = self.random.choice(shops)
-                    loc = self.create_location(shop)
+                    self.create_location(shop)
                     unfilled_locations += 1
                     if len(self.created_multi_locations[shop]) >= 16:
                         shops.remove(shop)
@@ -349,8 +378,8 @@ class HKWorld(World):
         self.sort_shops_by_cost()
 
     def sort_shops_by_cost(self):
-        for shop, locations in self.created_multi_locations.items():
-            randomized_locations = list(loc for loc in locations if not loc.vanilla)
+        for shop, shop_locations in self.created_multi_locations.items():
+            randomized_locations = [loc for loc in shop_locations if not loc.vanilla]
             prices = sorted(
                 (loc.costs for loc in randomized_locations),
                 key=lambda costs: (len(costs),) + tuple(costs.values())
@@ -374,7 +403,7 @@ class HKWorld(World):
             return {k: v for k, v in weights.items() if v}
 
         random = self.random
-        hybrid_chance = getattr(self.options, f"CostSanityHybridChance").value
+        hybrid_chance = getattr(self.options, "CostSanityHybridChance").value
         weights = {
             data.term: getattr(self.options, f"CostSanity{data.option}Weight").value
             for data in cost_terms.values()
@@ -445,29 +474,28 @@ class HKWorld(World):
         elif goal == Goal.option_godhome_flower:
             multiworld.completion_condition[player] = lambda state: state.count("Godhome_Flower_Quest", player)
         elif goal == Goal.option_grub_hunt:
-            pass  # will set in stage_pre_fill()
+            multiworld.completion_condition[player] = lambda state: self.can_grub_goal(state)
         else:
             # Any goal
             multiworld.completion_condition[player] = lambda state: _hk_siblings_ending(state, player) and \
-                _hk_can_beat_radiance(state, player) and state.count("Godhome_Flower_Quest", player)
+                _hk_can_beat_radiance(state, player) and state.count("Godhome_Flower_Quest", player) and \
+                self.can_grub_goal(state)
 
         set_rules(self)
 
+    def can_grub_goal(self, state: CollectionState) -> bool:
+        return all(state.has("Grub", owner, count) for owner, count in self.grub_player_count.items())
+
     @classmethod
     def stage_pre_fill(cls, multiworld: "MultiWorld"):
-        def set_goal(player, grub_rule: typing.Callable[[CollectionState], bool]):
-            world = multiworld.worlds[player]
-
-            if world.options.Goal == "grub_hunt":
-                multiworld.completion_condition[player] = grub_rule
-            else:
-                old_rule = multiworld.completion_condition[player]
-                multiworld.completion_condition[player] = lambda state: old_rule(state) and grub_rule(state)
-
         worlds = [world for world in multiworld.get_game_worlds(cls.game) if world.options.Goal in ["any", "grub_hunt"]]
         if worlds:
             grubs = [item for item in multiworld.get_items() if item.name == "Grub"]
-        all_grub_players = [world.player for world in worlds if world.options.GrubHuntGoal == GrubHuntGoal.special_range_names["all"]]
+        all_grub_players = [
+            world.player
+            for world in worlds
+            if world.options.GrubHuntGoal == GrubHuntGoal.special_range_names["all"]
+            ]
 
         if all_grub_players:
             group_lookup = defaultdict(set)
@@ -487,9 +515,13 @@ class HKWorld(World):
                     per_player_grubs_per_player[player][player] += 1
 
                 if grub.location and grub.location.player in group_lookup.keys():
-                    for real_player in group_lookup[grub.location.player]:
+                    # will count the item linked grub instead
+                    pass
+                elif player in group_lookup:
+                    for real_player in group_lookup[player]:
                         grub_count_per_player[real_player] += 1
                 else:
+                    # for non-linked grubs
                     grub_count_per_player[player] += 1
 
             for player, count in grub_count_per_player.items():
@@ -497,13 +529,13 @@ class HKWorld(World):
 
             for player, grub_player_count in per_player_grubs_per_player.items():
                 if player in all_grub_players:
-                    set_goal(player, lambda state, g=grub_player_count: all(state.has("Grub", owner, count) for owner, count in g.items()))
+                    multiworld.worlds[player].grub_player_count = grub_player_count
 
         for world in worlds:
             if world.player not in all_grub_players:
                 world.grub_count = world.options.GrubHuntGoal.value
                 player = world.player
-                set_goal(player, lambda state, p=player, c=world.grub_count: state.has("Grub", p, c))
+                world.grub_player_count = {player: world.grub_count}
 
     def fill_slot_data(self):
         slot_data = {}
@@ -512,25 +544,15 @@ class HKWorld(World):
         for option_name in hollow_knight_options:
             option = getattr(self.options, option_name)
             try:
+                # exclude more complex types - we only care about int, bool, enum for player options; the client
+                # can get them back to the necessary type.
                 optionvalue = int(option.value)
-            except TypeError:
-                pass  # C# side is currently typed as dict[str, int], drop what doesn't fit
-            else:
                 options[option_name] = optionvalue
+            except TypeError:
+                pass
 
         # 32 bit int
         slot_data["seed"] = self.random.randint(-2147483647, 2147483646)
-
-        # Backwards compatibility for shop cost data (HKAP < 0.1.0)
-        if not self.options.CostSanity:
-            for shop, terms in shop_cost_types.items():
-                unit = cost_terms[next(iter(terms))].option
-                if unit == "Geo":
-                    continue
-                slot_data[f"{unit}_costs"] = {
-                    loc.name: next(iter(loc.costs.values()))
-                    for loc in self.created_multi_locations[shop]
-                }
 
         # HKAP 0.1.0 and later cost data.
         location_costs = {}
@@ -543,6 +565,8 @@ class HKWorld(World):
         slot_data["notch_costs"] = self.charm_costs
 
         slot_data["grub_count"] = self.grub_count
+
+        slot_data["is_race"] = self.settings.disable_spoilers or self.multiworld.is_race
 
         return slot_data
 
@@ -646,8 +670,8 @@ class HKWorld(World):
                 ):
                     spoiler_handle.write(f"\n{loc}: {loc.item} costing {loc.cost_text()}")
             else:
-                for shop_name, locations in hk_world.created_multi_locations.items():
-                    for loc in locations:
+                for shop_name, shop_locations in hk_world.created_multi_locations.items():
+                    for loc in shop_locations:
                         spoiler_handle.write(f"\n{loc}: {loc.item} costing {loc.cost_text()}")
 
     def get_multi_location_name(self, base: str, i: typing.Optional[int]) -> str:

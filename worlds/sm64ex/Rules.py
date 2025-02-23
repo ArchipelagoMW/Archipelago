@@ -92,9 +92,12 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
     connect_regions(world, player, "Hazy Maze Cave", randomized_entrances_s["Cavern of the Metal Cap"])
     connect_regions(world, player, "Basement", randomized_entrances_s["Vanish Cap under the Moat"],
                     rf.build_rule("GP"))
-    connect_regions(world, player, "Basement", randomized_entrances_s["Bowser in the Fire Sea"],
-                    lambda state: state.has("Power Star", player, star_costs["BasementDoorCost"]) and
-                                  state.can_reach("DDD: Board Bowser's Sub", 'Location', player))
+    entrance = connect_regions(world, player, "Basement", randomized_entrances_s["Bowser in the Fire Sea"],
+                               lambda state: state.has("Power Star", player, star_costs["BasementDoorCost"]) and
+                               state.can_reach("DDD: Board Bowser's Sub", 'Location', player))
+    # Access to "DDD: Board Bowser's Sub" does not require access to other locations or regions, so the only region that
+    # needs to be registered is its parent region.
+    world.register_indirect_condition(world.get_location("DDD: Board Bowser's Sub", player).parent_region, entrance)
 
     connect_regions(world, player, "Menu", "Second Floor", lambda state: state.has("Second Floor Key", player) or state.has("Progressive Key", player, 2))
 
