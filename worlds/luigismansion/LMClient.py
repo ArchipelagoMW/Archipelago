@@ -363,11 +363,6 @@ class LMContext(CommonContext):
         if not (self.check_ingame() and self.check_alive()):
             return
 
-        # Make sure we aren't in the middle of an event that would freeze the game if items were received
-        in_event_flag = dme.read_byte(EVENT_FLAG_RECV_ADDRR)
-        if in_event_flag & (1 << 7) > 0:
-            return
-
         last_recv_idx = dme.read_word(LAST_RECV_ITEM_ADDR)
         if len(self.items_received) == last_recv_idx:
             return
@@ -397,6 +392,12 @@ class LMContext(CommonContext):
                 last_recv_idx += 1
                 dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
                 continue
+
+            # Make sure we aren't in the middle of an event that would freeze the game if items were received
+            # If we are, immediately exit
+            in_event_flag = dme.read_byte(EVENT_FLAG_RECV_ADDRR)
+            if in_event_flag & (1 << 7) > 0:
+                return
 
             # TODO remove this after an in-game message / dolphin client message is received per item.
             #   Note: Common Client does already have a variation of messages supported though.
