@@ -352,19 +352,15 @@ class DKC2StrictRules(DKC2Rules):
                 lambda state: self.can_cling(state) and self.can_carry(state) and self.has_both_kongs(state),
 
             LocationName.barrel_bayou_clear:
-                lambda state: self.has_controllable_barrels(state) and self.has_rambi(state) and
-                    self.has_kannons(state),
+                lambda state: self.has_controllable_barrels(state) and self.has_kannons(state),
             LocationName.barrel_bayou_kong:
-                lambda state: self.has_controllable_barrels(state) and self.has_rambi(state) and
-                    self.has_kannons(state) and self.can_cartwheel(state),
+                lambda state: self.has_controllable_barrels(state) and self.has_kannons(state) and self.can_cartwheel(state),
             LocationName.barrel_bayou_dk_coin:
                 lambda state: self.has_controllable_barrels(state) and self.has_rambi(state),
             LocationName.barrel_bayou_bonus_1:
-                lambda state: self.has_controllable_barrels(state) and self.has_rambi(state) and
-                    self.can_carry(state),
+                lambda state: self.has_controllable_barrels(state) and self.can_carry(state),
             LocationName.barrel_bayou_bonus_2:
-                lambda state: self.has_controllable_barrels(state) and self.has_rambi(state) and
-                    self.has_kannons(state) and self.can_team_attack(state),
+                lambda state: self.has_controllable_barrels(state) and self.has_kannons(state) and self.can_team_attack(state),
 
             LocationName.glimmers_galleon_clear:
                 lambda state: self.can_swim(state) and self.has_glimmer(state),
@@ -867,7 +863,7 @@ class DKC2StrictRules(DKC2Rules):
             LocationName.hot_head_hop_banana_bunch_1:
                 self.can_carry,
             LocationName.hot_head_hop_banana_coin_2:
-                self.has_squitter,
+                lambda state: self.has_squitter(state) or self.can_team_attack(state),
             LocationName.hot_head_hop_banana_bunch_2:
                 self.has_squitter,
             LocationName.hot_head_hop_banana_bunch_3:
@@ -992,14 +988,13 @@ class DKC2StrictRules(DKC2Rules):
             LocationName.barrel_bayou_banana_coin_1:
                 lambda state: self.has_controllable_barrels(state) and self.has_rambi(state),
             LocationName.barrel_bayou_banana_bunch_2:
-                lambda state: self.has_controllable_barrels(state) and self.has_rambi(state),
+                self.has_controllable_barrels,
             LocationName.barrel_bayou_green_balloon:
-                lambda state: self.has_controllable_barrels(state) and self.has_rambi(state) and self.can_carry(state) and self.has_kannons(state),
+                lambda state: self.has_controllable_barrels(state) and self.can_carry(state) and self.has_kannons(state),
             LocationName.barrel_bayou_banana_coin_2:
-                lambda state: self.has_controllable_barrels(state) and self.has_rambi(state) and self.has_kannons(state),
+                lambda state: self.has_controllable_barrels(state) and self.has_kannons(state),
             LocationName.barrel_bayou_banana_bunch_3:
-                lambda state: self.has_controllable_barrels(state) and self.has_rambi(state) and 
-                    self.has_kannons(state) and self.can_team_attack(state),
+                lambda state: self.has_controllable_barrels(state) and self.has_kannons(state) and self.can_team_attack(state),
 
             LocationName.glimmers_galleon_banana_coin_1:
                 lambda state: self.can_swim(state) and self.has_glimmer(state),
