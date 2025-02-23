@@ -67,33 +67,33 @@ class PeaksOfWorld(World):
         if self.options.start_with_oil_lamp:
             self.multiworld.push_precollected(self.create_item("Oil Lamp"))
 
-        if (not self.options.enable_fundamental.value) and (not self.options.enable_intermediate.value) \
-                and (not self.options.enable_advanced.value) and (not self.options.enable_expert.value):
+        starting_book_options: dict[str, Toggle] = {
+            "Fundamentals Book": self.options.enable_fundamental,
+            "Intermediate Book": self.options.enable_intermediate,
+            "Advanced Book": self.options.enable_advanced,
+            "Expert Book": self.options.enable_expert,
+            "Random": None
+        }
+
+        book_names: list[str] = [s for s, t in starting_book_options.items()]
+        enabled_books: list[str] = [b for b, v in starting_book_options.items() if b != "Random" and v.value]
+        start_book: str = ""
+
+        if len(enabled_books) == 0:
             raise Exception("Player " + self.player_name + " has not selected any books!")
 
-        starting_book: Item = self.create_item(
-            ["Fundamentals Book", "Intermediate Book", "Advanced Book", "Expert Book"][self.options.starting_book.value]
-        )
+        if self.options.starting_book.value == StartingBook.option_random_book:
+            start_book = self.random.choice(enabled_books)
+        else:
+            start_book = book_names[self.options.starting_book.value]
 
-        books: list[bool] = [self.options.enable_fundamental.value == 1, self.options.enable_intermediate.value == 1,
-                             self.options.enable_advanced.value == 1, self.options.enable_expert.value == 1]
-        if not books[self.options.starting_book.value]:
-            if self.options.enable_fundamental.value:
-                starting_book = self.create_item("Fundamentals Book")
-                self.options.starting_book.value = StartingBook.option_fundamentals
-                # not sure if ^changing options^ is allowed but this seems to work
-                # this is to prevent generating this book as item later
-            elif self.options.enable_intermediate.value:
-                starting_book = self.create_item("Intermediate Book")
-                self.options.starting_book.value = StartingBook.option_intermediate
-            elif self.options.enable_advanced.value:
-                starting_book = self.create_item("Advanced Book")
-                self.options.starting_book.value = StartingBook.option_advanced
-            else:
-                starting_book = self.create_item("Expert Book")
-                self.options.starting_book.value = StartingBook.option_expert
-            # not sure how to raise a warning without failing generation will silently change to selected book for now
-        self.multiworld.push_precollected(starting_book)
+        if start_book not in enabled_books:
+            print("book " + start_book + "not enabled")
+            start_book = enabled_books[0]
+            print("selecting " + start_book)
+
+        self.options.starting_book.value = book_names.index(start_book)
+        self.multiworld.push_precollected(self.create_item(start_book))
 
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)

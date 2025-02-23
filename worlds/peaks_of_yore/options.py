@@ -20,12 +20,15 @@ class Goal(Choice):
 
 
 class StartingBook(Choice):
-    """Choose what book to start with. If the book is not enabled, the easiest enabled book will be chosen"""
+    """
+    Choose what book to start with. If the book is not enabled, the easiest enabled book will be chosen.
+    - **Random Book** will choose a random book from the enabled options."""
     display_name = "Starting Book"
     option_fundamentals = 0
     option_intermediate = 1
     option_advanced = 2
     option_expert = 3
+    option_random_book = 4
     default = 0
 
 
