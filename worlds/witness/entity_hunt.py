@@ -129,7 +129,7 @@ class EntityHuntPicker:
 
         eligible_panels_by_area = defaultdict(set)
         for eligible_panel in all_eligible_panels:
-            associated_area = static_witness_logic.ENTITIES_BY_HEX[eligible_panel]["area"]["name"]
+            associated_area = static_witness_logic.ENTITIES_BY_HEX[eligible_panel]["area"].name
             eligible_panels_by_area[associated_area].add(eligible_panel)
 
         return all_eligible_panels, eligible_panels_by_area

@@ -10,7 +10,7 @@ from BaseClasses import CollectionState
 from worlds.generic.Rules import CollectionRule, set_rule
 
 from .data import static_logic as static_witness_logic
-from .data.utils import WitnessRule
+from .data.definition_classes import WitnessRule
 from .player_logic import WitnessPlayerLogic
 
 if TYPE_CHECKING:
