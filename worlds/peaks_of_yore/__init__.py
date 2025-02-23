@@ -93,6 +93,9 @@ class PeaksOfWorld(World):
             print("selecting " + start_book)
 
         self.options.starting_book.value = book_names.index(start_book)
+        if self.options.starting_book.value == StartingBook.option_expert:
+            self.multiworld.push_precollected(self.create_item("Progressive Crampons"))
+            # make sure player gets at least 6pt crampons before expert books
         self.multiworld.push_precollected(self.create_item(start_book))
 
     def create_regions(self) -> None:
@@ -104,7 +107,7 @@ class PeaksOfWorld(World):
         menu_region.connect(cabin_region)
 
         if self.options.enable_fundamental:
-            fundamentals_region = Region("Fundamentals", self.player, self.multiworld)
+            fundamentals_region = Region("Fundamental Peaks", self.player, self.multiworld)
 
             self.peaks_in_pool.extend(get_location_names_by_type(PeaksOfYoreRegion.FUNDAMENTALS, "Peak"))
             self.artefacts_in_pool.extend(get_location_names_by_type(PeaksOfYoreRegion.FUNDAMENTALS, "Artefact"))
@@ -115,7 +118,7 @@ class PeaksOfWorld(World):
             self.location_count += len(fundamentals_region.locations)
 
         if self.options.enable_intermediate:
-            intermediate_region = Region("Intermediate", self.player, self.multiworld)
+            intermediate_region = Region("Intermediate Peaks", self.player, self.multiworld)
 
             self.peaks_in_pool.extend(get_location_names_by_type(PeaksOfYoreRegion.INTERMEDIATE, "Peak"))
             self.artefacts_in_pool.extend(get_location_names_by_type(PeaksOfYoreRegion.INTERMEDIATE, "Artefact"))
@@ -126,7 +129,7 @@ class PeaksOfWorld(World):
             self.location_count += len(intermediate_region.locations)
 
         if self.options.enable_advanced:
-            advanced_region = Region("Advanced", self.player, self.multiworld)
+            advanced_region = Region("Advanced Peaks", self.player, self.multiworld)
 
             self.peaks_in_pool.extend(get_location_names_by_type(PeaksOfYoreRegion.ADVANCED, "Peak"))
             self.artefacts_in_pool.extend(get_location_names_by_type(PeaksOfYoreRegion.ADVANCED, "Artefact"))
@@ -137,7 +140,7 @@ class PeaksOfWorld(World):
             self.location_count += len(advanced_region.locations)
 
         if self.options.enable_expert:
-            expert_region = Region("Expert", self.player, self.multiworld)
+            expert_region = Region("Expert Peaks", self.player, self.multiworld)
             expert_locations: dict[str, int] = {k: v for k, v in get_locations(PeaksOfYoreRegion.EXPERT).items() if
                                                 (not self.options.disable_solemn_tempest) or v != 37}
 
@@ -147,7 +150,9 @@ class PeaksOfWorld(World):
                 self.peaks_in_pool.append("Solemn Tempest")
 
             expert_region.add_locations(expert_locations, PeaksOfYoreLocation)
-            cabin_region.connect(expert_region, "Expert Book", lambda state: state.has("Expert Book", self.player))
+            cabin_region.connect(expert_region, "Expert Book",
+                                 lambda state: state.has("Expert Book", self.player)
+                                               and state.has("Progressive Crampons", self.player))
             self.location_count += len(expert_region.locations)
 
     def create_items(self) -> None:
@@ -175,8 +180,10 @@ class PeaksOfWorld(World):
                     and (tool.name != "Oil Lamp" or not self.options.start_with_oil_lamp):
                 if tool.name == "Progressive Crampons":
                     self.multiworld.itempool.append(self.create_item(tool.name))
-                    self.multiworld.itempool.append(self.create_item(tool.name))
-                    remaining_items -= 2
+                    remaining_items -= 1
+                    if self.options.starting_book != StartingBook.option_expert:
+                        self.multiworld.itempool.append(self.create_item(tool.name))
+                        remaining_items -= 1
                 elif tool.name == "Rope Unlock":
                     if self.options.rope_unlock_mode == RopeUnlockMode.option_early:
                         self.multiworld.early_items[self.player][tool.name] = 1
