@@ -9,6 +9,7 @@ from worlds.pokepark_1.adresses import  \
     POWER_INCREMENTS, POWER_SHARED_ADDR, blocked_unlock_itemIds, prisma_blocked_itemIds, \
     driffzeppeli_address, driffzeppeli_value, UNLOCKS, MemoryRange, PRISMAS, POKEMON_STATES, blocked_friendship_itemIds, \
     blocked_friendship_unlock_itemIds
+from worlds.pokepark_1.dme_helper import write_memory
 from worlds.pokepark_1.watcher.location_state_watcher import location_state_watcher
 from worlds.pokepark_1.watcher.location_watcher import location_watcher
 from worlds.pokepark_1.watcher.logic_watcher import logic_watcher
@@ -165,28 +166,22 @@ def activate_unlock_items(items:list[NetworkItem]):
         value &= memory_range.mask
         if memory_range == MemoryRange.WORD:
             dme.write_word(address, value)
+        elif memory_range == MemoryRange.HALFWORD:
+            dme.write_bytes(address, value.to_bytes(2, byteorder='big'))
         elif memory_range == MemoryRange.BYTE:
             dme.write_byte(address, value)
 
 def activate_friendship_items(items:list[NetworkItem]):
     for received_item in items:
         if received_item.item in POKEMON_STATES:
-            address = POKEMON_STATES[received_item.item].item.final_address
-            value = POKEMON_STATES[received_item.item].item.value
-            memory_range = POKEMON_STATES[received_item.item].item.memory_range
-            if memory_range == MemoryRange.WORD:
-                dme.write_word(address, value)
-            elif memory_range == MemoryRange.BYTE:
-                dme.write_byte(address, value)
+            friendship = POKEMON_STATES[received_item.item]
+            write_memory(dme,friendship.item,friendship.item.value)
 
 def activate_prisma_items(items:list[NetworkItem]):
     for received_item in items:
         if received_item.item in PRISMAS:
             prisma = PRISMAS[received_item.item]
-            if prisma.item.memory_range == MemoryRange.WORD:
-                dme.write_word(prisma.item.final_address, prisma.item.value)
-            elif prisma.item.memory_range == MemoryRange.BYTE:
-                dme.write_byte(prisma.item.final_address, prisma.item.value)
+            write_memory(dme,prisma.item,prisma.item.value)
 
 def give_berry_items(items:list[NetworkItem]):
     global old_berry_count, first_berry_check

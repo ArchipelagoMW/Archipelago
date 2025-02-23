@@ -7,13 +7,10 @@ from CommonClient import logger
 from worlds.pokepark_1.adresses import stage_id_address, is_in_menu_address, pokemon_id_address, \
     blocked_unlock_itemIds, prisma_blocked_itemIds, \
     UNLOCKS, PRISMAS, PrismaItem, POKEMON_STATES, blocked_friendship_itemIds, blocked_friendship_unlock_itemIds, \
-    MemoryAddress, MemoryRange, PokemonStateInfo
+    PokemonStateInfo
+from worlds.pokepark_1.dme_helper import write_memory, read_memory
 
 empty_pokemon_id = 0x00
-
-friendship_deactivated_value = 0x0
-
-friendship_activated_value = 0x80
 
 delay_seconds = 0.5
 
@@ -66,8 +63,8 @@ async def location_state_watcher(ctx):
                 blocked_friendship_itemIds.append(item_id)
                 item = POKEMON_STATES[item_id].item
                 if item.final_address not in original_values:
-                    original_values[item.final_address] = read_memory(item)
-                write_memory(item, item.value)
+                    original_values[item.final_address] = read_memory(dme,item)
+                write_memory(dme,item, item.value)
 
     def block_pokemon_state_items(state: PokemonStateInfo):
         if state.friendship_items_to_block:
@@ -76,8 +73,8 @@ async def location_state_watcher(ctx):
                     blocked_friendship_itemIds.append(item_id)
                     item = POKEMON_STATES[item_id].item
                     if item.final_address not in original_values:
-                        original_values[item.final_address] = read_memory(item)
-                    write_memory(item, 0x0)
+                        original_values[item.final_address] = read_memory(dme,item)
+                    write_memory(dme,item, 0x0)
 
         if state.unlock_items_to_block:
             for item_id in state.unlock_items_to_block:
@@ -85,34 +82,21 @@ async def location_state_watcher(ctx):
                     blocked_friendship_unlock_itemIds.append(item_id)
                     item = UNLOCKS[item_id].item
                     if item.final_address not in original_values:
-                        original_values[item.final_address] = read_memory(item)
-                    write_memory(item, 0x0)
-
-    def read_memory(mem: MemoryAddress) -> int:
-        if mem.memory_range == MemoryRange.WORD:
-            return dme.read_word(mem.final_address)
-        elif mem.memory_range == MemoryRange.BYTE:
-            return dme.read_byte(mem.final_address)
-        return 0
-
-    def write_memory(mem: MemoryAddress, value: int):
-        if mem.memory_range == MemoryRange.WORD:
-            dme.write_word(mem.final_address, value)
-        elif mem.memory_range == MemoryRange.BYTE:
-            dme.write_byte(mem.final_address, value)
+                        original_values[item.final_address] = read_memory(dme,item)
+                    write_memory(dme,item, 0x0)
 
     def restore_blocked_items():
         for item_id in blocked_friendship_itemIds[:]:
             item = POKEMON_STATES[item_id].item
             if item.final_address in original_values:
-                write_memory(item, original_values[item.final_address])
+                write_memory(dme,item, original_values[item.final_address])
                 del original_values[item.final_address]
         blocked_friendship_itemIds.clear()
 
         for item_id in blocked_friendship_unlock_itemIds[:]:
             item = UNLOCKS[item_id].item
             if item.final_address in original_values:
-                write_memory(item, original_values[item.final_address])
+                write_memory(dme,item, original_values[item.final_address])
                 del original_values[item.final_address]
         blocked_friendship_unlock_itemIds.clear()
 
