@@ -253,6 +253,7 @@ def isConsumable(item) -> bool:
 
 class RequirementsSettings:
     def __init__(self, options):
+        self.can_farm = OR(SWORD, MAGIC_POWDER, MAGIC_ROD, BOOMERANG, BOMB, HOOKSHOT, BOW)
         self.bush = OR(SWORD, MAGIC_POWDER, MAGIC_ROD, POWER_BRACELET, BOOMERANG, BOMB)
         self.pit_bush = OR(SWORD, MAGIC_POWDER, MAGIC_ROD, BOOMERANG, BOMB) # unique
         self.attack = OR(SWORD, BOMB, BOW, MAGIC_ROD, BOOMERANG)
