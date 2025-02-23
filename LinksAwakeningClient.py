@@ -705,6 +705,6 @@ async def main():
     await ctx.shutdown()
 
 if __name__ == '__main__':
-    colorama.init()
+    colorama.just_fix_windows_console()
     asyncio.run(main())
     colorama.deinit()
