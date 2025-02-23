@@ -1,7 +1,8 @@
 import random
 
 from BaseClasses import get_seed
-from .. import SVTestBase, SVTestCase, allsanity_mods_6_x_x, fill_dataclass_with_default
+from .mod_testing_decorators import must_test_all_mods, mod_testing
+from .. import SVTestBase, SVTestCase, allsanity_mods_6_x_x, fill_dataclass_with_default, solo_multiworld
 from ..assertion import ModAssertMixin, WorldAssertMixin
 from ... import items, Group, ItemClassification, create_content
 from ... import options
@@ -11,76 +12,203 @@ from ...options.options import all_mods
 from ...regions import RandomizationFlag, randomize_connections, create_final_connections_and_regions
 
 
-class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
-
-    def test_given_single_mods_when_generate_then_basic_checks(self):
-        for mod in options.Mods.valid_keys:
-            world_options = {options.Mods: mod, options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false}
-            with self.solo_world_sub_test(f"Mod: {mod}", world_options) as (multi_world, _):
-                self.assert_basic_checks(multi_world)
-                self.assert_stray_mod_items(mod, multi_world)
-
-    # The following tests validate that ER still generates winnable and logically-sane games with given mods.
-    # Mods that do not interact with entrances are skipped
-    # Not all ER settings are tested, because 'buildings' is, essentially, a superset of all others
-    def test_deepwoods_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.deepwoods, options.EntranceRandomization.option_buildings)
-
-    def test_juna_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.juna, options.EntranceRandomization.option_buildings)
-
-    def test_jasper_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.jasper, options.EntranceRandomization.option_buildings)
-
-    def test_alec_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.alec, options.EntranceRandomization.option_buildings)
-
-    def test_yoba_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.yoba, options.EntranceRandomization.option_buildings)
-
-    def test_eugene_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.eugene, options.EntranceRandomization.option_buildings)
-
-    def test_ayeisha_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.ayeisha, options.EntranceRandomization.option_buildings)
-
-    def test_riley_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.riley, options.EntranceRandomization.option_buildings)
-
-    def test_sve_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.sve, options.EntranceRandomization.option_buildings)
-
-    def test_alecto_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.alecto, options.EntranceRandomization.option_buildings)
-
-    def test_lacey_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.lacey, options.EntranceRandomization.option_buildings)
-
-    def test_boarding_house_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.boarding_house, options.EntranceRandomization.option_buildings)
-
-    def test_all_mods_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(all_mods, options.EntranceRandomization.option_buildings)
-
-    def perform_basic_checks_on_mod_with_er(self, mods: str | set[str], er_option: int) -> None:
-        if isinstance(mods, str):
-            mods = {mods}
-        world_options = {
-            options.EntranceRandomization: er_option,
-            options.Mods: frozenset(mods),
-            options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false
-        }
-        with self.solo_world_sub_test(f"entrance_randomization: {er_option}, Mods: {mods}", world_options) as (multi_world, _):
-            self.assert_basic_checks(multi_world)
+class TestCanGenerateAllsanityWithMods(WorldAssertMixin, ModAssertMixin, SVTestCase):
 
     def test_allsanity_all_mods_when_generate_then_basic_checks(self):
-        with self.solo_world_sub_test(world_options=allsanity_mods_6_x_x()) as (multi_world, _):
+        with solo_multiworld(allsanity_mods_6_x_x()) as (multi_world, _):
             self.assert_basic_checks(multi_world)
 
     def test_allsanity_all_mods_exclude_island_when_generate_then_basic_checks(self):
         world_options = allsanity_mods_6_x_x()
         world_options.update({options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true})
-        with self.solo_world_sub_test(world_options=world_options) as (multi_world, _):
+        with solo_multiworld(world_options) as (multi_world, _):
+            self.assert_basic_checks(multi_world)
+
+
+@must_test_all_mods
+class TestCanGenerateWithEachMod(WorldAssertMixin, ModAssertMixin, SVTestCase):
+
+    @mod_testing(ModNames.deepwoods)
+    def test_given_deepwoods_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.deepwoods)
+
+    @mod_testing(ModNames.tractor)
+    def test_given_tractor_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.tractor)
+
+    @mod_testing(ModNames.big_backpack)
+    def test_given_big_backpack_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.big_backpack)
+
+    @mod_testing(ModNames.luck_skill)
+    def test_given_luck_skill_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.luck_skill)
+
+    @mod_testing(ModNames.magic)
+    def test_given_magic_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.magic)
+
+    @mod_testing(ModNames.socializing_skill)
+    def test_given_socializing_skill_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.socializing_skill)
+
+    @mod_testing(ModNames.archaeology)
+    def test_given_archaeology_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.archaeology)
+
+    @mod_testing(ModNames.cooking_skill)
+    def test_given_cooking_skill_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.cooking_skill)
+
+    @mod_testing(ModNames.binning_skill)
+    def test_given_binning_skill_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.binning_skill)
+
+    @mod_testing(ModNames.juna)
+    def test_given_juna_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.juna)
+
+    @mod_testing(ModNames.jasper)
+    def test_given_jasper_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.jasper)
+
+    @mod_testing(ModNames.alec)
+    def test_given_alec_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.alec)
+
+    @mod_testing(ModNames.yoba)
+    def test_given_yoba_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.yoba)
+
+    @mod_testing(ModNames.eugene)
+    def test_given_eugene_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.eugene)
+
+    @mod_testing(ModNames.wellwick)
+    def test_given_wellwick_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.wellwick)
+
+    @mod_testing(ModNames.ginger)
+    def test_given_ginger_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.ginger)
+
+    @mod_testing(ModNames.shiko)
+    def test_given_shiko_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.shiko)
+
+    @mod_testing(ModNames.delores)
+    def test_given_delores_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.delores)
+
+    @mod_testing(ModNames.ayeisha)
+    def test_given_ayeisha_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.ayeisha)
+
+    @mod_testing(ModNames.riley)
+    def test_given_riley_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.riley)
+
+    @mod_testing(ModNames.skull_cavern_elevator)
+    def test_given_skull_cavern_elevator_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.skull_cavern_elevator)
+
+    @mod_testing(ModNames.sve)
+    def test_given_sve_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.sve)
+
+    @mod_testing(ModNames.alecto)
+    def test_given_alecto_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.alecto)
+
+    @mod_testing(ModNames.distant_lands)
+    def test_given_distant_lands_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.distant_lands)
+
+    @mod_testing(ModNames.lacey)
+    def test_given_lacey_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.lacey)
+
+    @mod_testing(ModNames.boarding_house)
+    def test_given_boarding_house_when_generate_with_all_vanilla_content_then_basic_checks(self):
+        self.perform_basic_checks_on_mod_with_all_vanilla_content(ModNames.boarding_house)
+
+    def perform_basic_checks_on_mod_with_all_vanilla_content(self, mod):
+        world_options = {options.Mods: mod, options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false}
+        with solo_multiworld(world_options) as (multi_world, _):
+            self.assert_basic_checks(multi_world)
+            self.assert_stray_mod_items(mod, multi_world)
+
+
+@must_test_all_mods(
+    excluded_mods=[ModNames.ginger, ModNames.distant_lands, ModNames.skull_cavern_elevator, ModNames.wellwick, ModNames.magic, ModNames.binning_skill,
+                   ModNames.big_backpack, ModNames.luck_skill, ModNames.tractor, ModNames.shiko, ModNames.archaeology, ModNames.delores,
+                   ModNames.socializing_skill, ModNames.cooking_skill])
+class TestModsEntranceRandomizationBuildings(WorldAssertMixin, SVTestCase):
+    """The following tests validate that ER still generates winnable and logically-sane games with given mods.
+    Mods that do not interact with entrances are skipped
+    Not all ER settings are tested, because 'buildings' is, essentially, a superset of all others
+    """
+
+    @mod_testing(ModNames.deepwoods)
+    def test_deepwoods_entrance_randomization_buildings(self):
+        self.perform_basic_checks_on_mod_with_er(ModNames.deepwoods)
+
+    @mod_testing(ModNames.juna)
+    def test_juna_entrance_randomization_buildings(self):
+        self.perform_basic_checks_on_mod_with_er(ModNames.juna)
+
+    @mod_testing(ModNames.jasper)
+    def test_jasper_entrance_randomization_buildings(self):
+        self.perform_basic_checks_on_mod_with_er(ModNames.jasper)
+
+    @mod_testing(ModNames.alec)
+    def test_alec_entrance_randomization_buildings(self):
+        self.perform_basic_checks_on_mod_with_er(ModNames.alec)
+
+    @mod_testing(ModNames.yoba)
+    def test_yoba_entrance_randomization_buildings(self):
+        self.perform_basic_checks_on_mod_with_er(ModNames.yoba)
+
+    @mod_testing(ModNames.eugene)
+    def test_eugene_entrance_randomization_buildings(self):
+        self.perform_basic_checks_on_mod_with_er(ModNames.eugene)
+
+    @mod_testing(ModNames.ayeisha)
+    def test_ayeisha_entrance_randomization_buildings(self):
+        self.perform_basic_checks_on_mod_with_er(ModNames.ayeisha)
+
+    @mod_testing(ModNames.riley)
+    def test_riley_entrance_randomization_buildings(self):
+        self.perform_basic_checks_on_mod_with_er(ModNames.riley)
+
+    @mod_testing(ModNames.sve)
+    def test_sve_entrance_randomization_buildings(self):
+        self.perform_basic_checks_on_mod_with_er(ModNames.sve)
+
+    @mod_testing(ModNames.alecto)
+    def test_alecto_entrance_randomization_buildings(self):
+        self.perform_basic_checks_on_mod_with_er(ModNames.alecto)
+
+    @mod_testing(ModNames.lacey)
+    def test_lacey_entrance_randomization_buildings(self):
+        self.perform_basic_checks_on_mod_with_er(ModNames.lacey)
+
+    @mod_testing(ModNames.boarding_house)
+    def test_boarding_house_entrance_randomization_buildings(self):
+        self.perform_basic_checks_on_mod_with_er(ModNames.boarding_house)
+
+    def test_all_mods_entrance_randomization_buildings(self):
+        self.perform_basic_checks_on_mod_with_er(all_mods)
+
+    def perform_basic_checks_on_mod_with_er(self, mods: str | set[str]) -> None:
+        if isinstance(mods, str):
+            mods = {mods}
+        world_options = {
+            options.EntranceRandomization: options.EntranceRandomization.option_buildings,
+            options.Mods: frozenset(mods),
+            options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false
+        }
+        with solo_multiworld(world_options) as (multi_world, _):
             self.assert_basic_checks(multi_world)
 
 
