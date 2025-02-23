@@ -61,6 +61,9 @@ class AutoWorldRegister(type):
         dct["location_name_groups"]["Everywhere"] = dct["location_names"]
         dct["all_item_and_group_names"] = frozenset(dct["item_names"] | set(dct.get("item_name_groups", {})))
 
+        dct["dynamic_item_name_to_id"] = {}
+        dct["dynamic_location_name_to_id"] = {}
+
         # move away from get_required_client_version function
         if "game" in dct:
             assert "get_required_client_version" not in dct, f"{name}: required_client_version is an attribute now"
@@ -276,10 +279,10 @@ class World(metaclass=AutoWorldRegister):
     location_name_groups: ClassVar[Dict[str, Set[str]]] = {}
     """maps location group names to sets of locations. Example: {"Sewer": {"Sewer Key Drop 1", "Sewer Key Drop 2"}}"""
 
-    dynamic_item_name_to_id: ClassVar[Optional[Dict[str, int]]] = None
+    dynamic_item_name_to_id: ClassVar[Dict[str, int]] = {}
     """maps item names to their IDs, allowed to change between generations"""
 
-    dynamic_location_name_to_id: ClassVar[Optional[Dict[str, int]]] = None
+    dynamic_location_name_to_id: ClassVar[Dict[str, int]] = {}
     """maps location names to their IDs, allowed to change between generations"""
 
     required_client_version: Tuple[int, int, int] = (0, 1, 6)
