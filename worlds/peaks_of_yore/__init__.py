@@ -2,7 +2,7 @@ from typing import Any
 
 from Options import Toggle
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Tutorial, Item, Region, ItemClassification, MultiWorld
+from BaseClasses import Tutorial, Item, Region, MultiWorld
 from .options import PeaksOfYoreOptions, Goal, StartingBook, RopeUnlockMode, poy_option_groups
 from . import options
 from .data import full_item_list, full_location_list, PeaksOfYoreRegion
@@ -30,7 +30,8 @@ class PeaksOfWeb(WebWorld):
 class PeaksOfWorld(World):
     """
     Peaks of Yore is a first-person physics-based "climb-em-up" adventure set in 1887.
-    Steel your nerves and perfect your climbing skills as you ascend the rock wall, traverse difficult routes, and encounter many challenges and obstacles.
+    Steel your nerves and perfect your climbing skills as you ascend the rock wall, traverse difficult routes,
+    and encounter many challenges and obstacles.
     """
     game = "Peaks of Yore"
     options_dataclass = PeaksOfYoreOptions
