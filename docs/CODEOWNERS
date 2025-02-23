@@ -115,6 +115,9 @@
 # The Messenger
 /worlds/messenger/ @alwaysintreble
 
+# Metroid Prime
+/worlds/metroidprime/ @hesto2
+
 # Minecraft
 /worlds/minecraft/ @KonoTyran @espeon65536
 
