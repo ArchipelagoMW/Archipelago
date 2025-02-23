@@ -85,14 +85,20 @@ class ModQuestLogic(BaseLogic[Union[HasLogicMixin, QuestLogicMixin, ReceivedLogi
                                    self.logic.region.can_reach(SVERegion.grandpas_shed),
             ModQuest.MarlonsBoat: self.logic.has_all(*(Loot.void_essence, Loot.solar_essence, Loot.slime, Loot.bat_wing, Loot.bug_meat)) &
                                   self.logic.relationship.can_meet(ModNPC.lance) & self.logic.region.can_reach(SVERegion.guild_summit),
-            ModQuest.AuroraVineyard: self.logic.has(Fruit.starfruit) & self.logic.received(SVEQuestItem.aurora_vineyard_tablet) &
-                                     self.logic.region.can_reach(Region.forest),
+            ModQuest.AuroraVineyard: self.logic.region.can_reach(SVERegion.aurora_vineyard) & self.logic.received(SVEQuestItem.aurora_vineyard_tablet) &
+                                     self.logic.has(Fruit.starfruit),
             ModQuest.MonsterCrops: self.logic.has_all(*(SVEVegetable.monster_mushroom, SVEFruit.slime_berry, SVEFruit.monster_fruit, SVEVegetable.void_root)),
             ModQuest.VoidSoul: self.logic.has(ModLoot.void_soul) & self.logic.region.can_reach(Region.farm) &
                                self.logic.season.has_any_not_winter() & self.logic.region.can_reach(SVERegion.badlands_entrance) &
                                self.logic.relationship.has_hearts(NPC.krobus, 10) & self.logic.quest.can_complete_quest(ModQuest.MonsterCrops) &
                                self.logic.monster.can_kill_any((Monster.shadow_brute, Monster.shadow_shaman, Monster.shadow_sniper)),
         }
+
+    def has_completed_aurora_vineyard_bundle(self):
+        if self.options.quest_locations < 1:
+            return self.logic.quest.can_complete_quest(ModQuest.AuroraVineyard)
+
+        return self.logic.received(SVEQuestItem.aurora_vineyard_reclamation)
 
     def _get_distant_lands_quest_rules(self):
         if ModNames.distant_lands not in self.options.mods:

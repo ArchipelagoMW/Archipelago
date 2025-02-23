@@ -1,4 +1,5 @@
 import math
+import typing
 from typing import Union
 
 from Utils import cache_self1
@@ -21,6 +22,11 @@ from ..strings.region_names import Region
 from ..strings.season_names import Season
 from ..strings.villager_names import NPC, ModNPC
 
+if typing.TYPE_CHECKING:
+    from ..mods.logic.mod_logic import ModLogicMixin
+else:
+    ModLogicMixin = object
+
 possible_kids = ("Cute Baby", "Ugly Baby")
 
 
@@ -38,7 +44,7 @@ class RelationshipLogicMixin(BaseLogicMixin):
 
 
 class RelationshipLogic(BaseLogic[Union[RelationshipLogicMixin, BuildingLogicMixin, SeasonLogicMixin, TimeLogicMixin, GiftLogicMixin, RegionLogicMixin,
-ReceivedLogicMixin, HasLogicMixin]]):
+ReceivedLogicMixin, HasLogicMixin, ModLogicMixin]]):
 
     def can_date(self, npc: str) -> StardewRule:
         return self.logic.relationship.has_hearts(npc, 8) & self.logic.has(Gift.bouquet)
@@ -141,7 +147,7 @@ ReceivedLogicMixin, HasLogicMixin]]):
             rules.append(self.logic.region.can_reach(Region.volcano_floor_10))
 
         elif npc == ModNPC.apples:
-            rules.append(self.logic.received(SVEQuestItem.aurora_vineyard_reclamation))
+            rules.append(self.logic.mod.quest.has_completed_aurora_vineyard_bundle())
 
         elif npc == ModNPC.scarlett:
             scarlett_job = self.logic.received(SVEQuestItem.scarlett_job_offer)

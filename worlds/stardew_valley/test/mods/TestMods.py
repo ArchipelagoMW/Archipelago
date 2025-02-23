@@ -4,7 +4,8 @@ from BaseClasses import get_seed
 from .. import SVTestBase, SVTestCase, allsanity_no_mods_6_x_x, allsanity_mods_6_x_x, solo_multiworld, \
     fill_dataclass_with_default
 from ..assertion import ModAssertMixin, WorldAssertMixin
-from ... import items, Group, ItemClassification, create_content
+from ..options import presets
+from ..options.presets import allsanity_mods_6_x_x
 from ... import options
 from ...items import items_by_group
 from ...options import SkillProgression, Walnutsanity
@@ -163,3 +164,17 @@ class TestModTraps(SVTestCase):
                 for item in trap_items:
                     with self.subTest(f"Option: {value}, Item: {item}"):
                         self.assertIn(item, multiworld_items)
+
+
+class TestVanillaLogicAlternativeWhenQuestsAreNotRandomized(WorldAssertMixin, SVTestBase):
+    """We often forget to add an alternative rule that works when quests are not randomized. When this happens, some
+    Location are not reachable because they depend on items that are only added to the pool when quests are randomized.
+    """
+    options = presets.allsanity_mods_6_x_x() | {
+        options.QuestLocations.internal_name: options.QuestLocations.special_range_names["none"],
+        options.Goal.internal_name: options.Goal.option_perfection,
+    }
+
+    def test_given_no_quest_all_mods_when_generate_then_can_reach_everything(self):
+        self.collect_everything()
+        self.assert_can_reach_everything(self.multiworld)

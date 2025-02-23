@@ -41,10 +41,10 @@ from .strings.forageable_names import Forageable
 from .strings.generic_names import Generic
 from .strings.geode_names import Geode
 from .strings.material_names import Material
-from .strings.metal_names import MetalBar, Mineral
+from .strings.metal_names import Artifact as ArtifactName, MetalBar, Mineral
 from .strings.monster_names import Monster
 from .strings.performance_names import Performance
-from .strings.quest_names import Quest, ModQuest
+from .strings.quest_names import Quest
 from .strings.region_names import Region
 from .strings.season_names import Season
 from .strings.skill_names import Skill
@@ -974,7 +974,7 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
     set_entrance_rule(multiworld, player, SVEEntrance.use_bear_shop, (logic.mod.sve.can_buy_bear_recipe()))
     set_entrance_rule(multiworld, player, SVEEntrance.railroad_to_grampleton_station, logic.received(SVEQuestItem.scarlett_job_offer))
     set_entrance_rule(multiworld, player, SVEEntrance.museum_to_gunther_bedroom, logic.relationship.has_hearts(ModNPC.gunther, 2))
-    set_entrance_rule(multiworld, player, SVEEntrance.to_aurora_basement, logic.received(SVEQuestItem.aurora_vineyard_reclamation))
+    set_entrance_rule(multiworld, player, SVEEntrance.to_aurora_basement, logic.mod.quest.has_completed_aurora_vineyard_bundle())
     logic.mod.sve.initialize_rules()
     for location in logic.registry.sve_location_rules:
         MultiWorldRules.set_rule(multiworld.get_location(location, player),
