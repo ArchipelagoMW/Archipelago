@@ -97,7 +97,7 @@ def connect_regions(multiworld: MultiWorld, player: int):
                           or state.has("Boo", player, multiworld.worlds[player].options.washroom_boo_count))
     connect(multiworld, player, "1F Hallway", "Ballroom", "Ballroom Key", 15)
     connect(multiworld, player, "1F Hallway", "Dining Room", "Dining Room Key", 14)
-    connect(multiworld, player, "1F Hallway", "Laundry Room", "Laundry Key", 7)
+    connect(multiworld, player, "1F Hallway", "Laundry Room", "Laundry Room Key", 7)
     connect(multiworld, player, "1F Hallway", "Fortune-Teller's Room", "Fortune Teller Key", 4)
     connect(multiworld, player, "Courtyard", "Rec Room", "North Rec Room Key", 25)
     connect(multiworld, player, "Rec Room", "Courtyard", "North Rec Room Key", 25)

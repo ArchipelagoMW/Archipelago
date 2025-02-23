@@ -48,7 +48,7 @@ ITEM_TABLE: dict[str, LMItemData] = {
     "Ballroom Key": LMItemData("Door Key", 11, IC.progression, 15, ram_addr=0x803D5E15, itembit=7),
     "Storage Room Key": LMItemData("Door Key", 12, IC.progression, 16, ram_addr=0x803D5E16, itembit=0),
     "Fortune Teller Key": LMItemData("Door Key", 13, IC.progression, 4, ram_addr=0x803D5E14, itembit=4),
-    "Laundry Key": LMItemData("Door Key", 14, IC.progression, 7, ram_addr=0x803D5E14, itembit=7),
+    "Laundry Room Key": LMItemData("Door Key", 14, IC.progression, 7, ram_addr=0x803D5E14, itembit=7),
     "Lower 2F Stairwell Key": LMItemData("Door Key", 15, IC.progression, 74, ram_addr=0x803D5E1D, itembit=2), # TODO 1F - 2F Stairwell (Lower Door) Key
     "Conservatory Key": LMItemData("Door Key", 16, IC.progression, 21, ram_addr=0x803D5E16, itembit=5),
     "Dining Room Key": LMItemData("Door Key", 17, IC.progression, 14, ram_addr=0x803D5E15, itembit=6),
