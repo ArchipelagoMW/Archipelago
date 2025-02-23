@@ -151,7 +151,18 @@ class ERPlacementState:
         self.pairings = []
         self.world = world
         self.coupled = coupled
-        self.collection_state = world.multiworld.get_single_player_all_state(world.player, True)
+
+        # Construct an 'all state', similar to MultiWorld.get_all_state(), but only for the world which is having its
+        # entrances randomized.
+        single_player_all_state = CollectionState(world.multiworld, True)
+        player = world.player
+        for item in world.multiworld.itempool:
+            if item.player == player:
+                world.collect(single_player_all_state, item)
+        for item in world.get_pre_fill_items():
+            world.collect(single_player_all_state, item)
+        single_player_all_state.sweep_for_advancements(world.get_locations())
+        self.collection_state = single_player_all_state
 
     @property
     def placed_regions(self) -> set[Region]:
