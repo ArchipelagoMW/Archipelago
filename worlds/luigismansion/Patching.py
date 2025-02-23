@@ -71,7 +71,7 @@ def __get_item_name(item_data, slot: int):
 def update_event_info(event_info, boo_checks: bool):
     # Removes events that we don't want to trigger at all in the mansion, such as some E. Gadd calls, warps after
     # boss battles / grabbing boss keys, and various cutscenes etc.
-    events_to_remove = [7, 11, 15, 42, 54, 69, 70, 73, 80, 81, 85, 91]
+    events_to_remove = [7, 11, 15, 42, 45, 54, 69, 70, 73, 80, 81, 85, 91]
 
     # Only remove the boo checks if the player does not want them.
     if not boo_checks:
@@ -142,9 +142,8 @@ def update_event_info(event_info, boo_checks: bool):
         if x["EventNo"] == 44:
             x["pos_x"] = 3500.277000
             x["pos_y"] = -550.000000
-            x["pos_z"] = -2145.792000
-            x["EventFlag"] = 25
-            x["disappear_flag"] = 8
+            x["pos_z"] = -2000.792000
+            x["EventFlag"] = 0 # 25
             x["EventArea"] = 200
             x["EventIf"] = 1
             x["EventLock"] = 0
@@ -152,15 +151,14 @@ def update_event_info(event_info, boo_checks: bool):
             x["EventLoad"] = 0
 
         # Update the blackout off event trigger to be A-pressed based
-        if x["EventNo"] == 45:
-            x["EventFlag"] = 8
-            x["disappear_flag"] = 25
-            x["pos_z"] = -2145.792000
-            x["EventIf"] = 1
-            x["EventArea"] = 200
-            x["EventLock"] = 0
-            x["PlayerStop"] = 0
-            x["EventLoad"] = 0
+        #if x["EventNo"] == 45:
+        #    x["EventFlag"] = 8
+        #    x["pos_z"] = -2145.792000
+        #    x["EventIf"] = 1
+        #    x["EventArea"] = 200
+        #    x["EventLock"] = 0
+        #    x["PlayerStop"] = 0
+        #    x["EventLoad"] = 0
 
         # Removes the zoom on Bogmire's tombstone
         if x["EventNo"] == 65:

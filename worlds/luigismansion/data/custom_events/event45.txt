@@ -36,8 +36,8 @@
 <LUIGIFREE>
 <FORCEMOVE>(3300)(-550)(-1900)(15)
 <FRAMEEND>
-<FLAGOFF>(25)
-<FLAGON>(8)
+<FLAGON>(25)
+<FLAGOFF>(8)
 <RAMDOMJMP>"Close"
 -------------------------
 <CASE>"Close"

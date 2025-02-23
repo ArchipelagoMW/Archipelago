@@ -309,7 +309,7 @@ class LuigisMansionRandomizer:
 
                 self.update_custom_event(event_no, False, lines)
 
-        in_game_hint_events = ["04", "17", "32", "44", "45", "63", "92", "93", "94"]
+        in_game_hint_events = ["04", "17", "32", "44", "63", "92", "93", "94"]
         for event_no in in_game_hint_events:
             hintfo: str = ""
             match event_no:
