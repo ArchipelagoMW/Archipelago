@@ -254,7 +254,7 @@ location_table: Dict[str, KH1LocationData] = {
     "End of the World World Terminus 100 Acre Wood Chest":                              KH1LocationData("End of the World", 265_4734),
     #"End of the World World Terminus Hollow Bastion Chest":                            KH1LocationData("End of the World", 265_4771),
     "End of the World Final Rest Chest":                                                KH1LocationData("End of the World", 265_4772),
-    "Monstro Chamber 6 White Trinity Chest":                                            KH1LocationData("End of the World", 265_5092),
+    "Monstro Chamber 6 White Trinity Chest":                                            KH1LocationData("Monstro",          265_5092),
     #"Awakening Chest":                                                                 KH1LocationData("Awakening",        265_5093), missable
    
     "Traverse Town Defeat Guard Armor Dodge Roll Event":                                KH1LocationData("Traverse Town",    265_6011),
