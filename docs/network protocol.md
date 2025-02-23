@@ -734,9 +734,10 @@ than any locally cached ones.
     ```
 
 #### Contents
-| Name | Type | Notes |
-| ------ | ----- | ------ |
-| games | dict[str, GameData] | Mapping of all Games and their respective data |
+| Name    | Type                | Notes                                                                  |
+|---------|---------------------|------------------------------------------------------------------------|
+| games   | dict[str, GameData] | Mapping of all Games and their respective data                         |
+| dynamic | dict[str, GameData] | Mapping of any Games that feature per-generation item or location data |
 
 #### GameData
 GameData is a **dict** but contains these keys and values. It's broken out into another "type" for ease of documentation.
