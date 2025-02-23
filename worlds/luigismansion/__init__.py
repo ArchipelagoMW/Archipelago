@@ -295,9 +295,9 @@ class LMWorld(World):
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value), "and")
                 elif entry.code == 772:
                     add_rule(entry, lambda state: state.can_reach_location("Nursery Clear Chest", self.player))
-                elif entry.code in [773, 778]:
+                elif entry.code in [773]:
                     add_rule(entry, lambda state: state.can_reach_location("Graveyard Clear Chest", self.player))
-                elif entry.code in [782, 784, 789, 790, 851]:
+                elif entry.code in [778, 782, 784, 789, 790, 851]:
                     add_rule(entry, lambda state: state.can_reach_location("Balcony Clear Chest", self.player))
                 if len(entry.access) != 0:
                     for item in entry.access:
@@ -425,8 +425,13 @@ class LMWorld(World):
                     self.options.start_inventory.value.get("Poltergust 4000", 0) + 1
             )
 
-        if self.options.boosanity == 0 and self.options.balcony_boo_count > 30:
-            self.options.balcony_boo_count.value = 30
+        if self.options.boosanity == 0 and self.options.balcony_boo_count > 36:
+            self.options.balcony_boo_count.value = 36
+
+        if self.options.boo_gates.value == 0:
+            self.options.final_boo_count.value = 0
+            self.options.balcony_boo_count.value = 0
+            self.options.washroom_boo_count.value = 0
 
     def create_regions(self):
         # "Menu" is the required starting point

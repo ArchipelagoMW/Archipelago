@@ -95,12 +95,14 @@ class BananaTrapWeight(Range):
     range_end = 100
     default = 15
 
+
 class NothingWeight(Range):
     """Set the weight for how often nothing is chosen as filler. Default is 40"""
     display_name = "'Nothing' Weight"
     range_start = 0
     range_end = 100
     default = 40
+
 
 class HeartWeight(Range):
     """Set the weight for how often hearts get chosen as filler. Default is 10"""
@@ -234,6 +236,7 @@ class KingBooHealth(Range):
     range_end = 1000
     default = 500
 
+
 class FinalBooCount(Range):
     """Set the number of Boos required to reach the Secret Altar. 0 = Starts Open"""
     display_name = "Altar Boo Count"
@@ -246,6 +249,7 @@ class Boosanity(Toggle):
     """Turns Boos into Items and Locations. These are remote only checks."""
     display_name = "Boosanity"
 
+
 class Portrification(Toggle):
     """Turn Portrait Ghosts into checks in addition to their clear chests. These are remote only checks."""
     display_name = "Portrification"
@@ -254,9 +258,9 @@ class Portrification(Toggle):
 class Enemizer(Choice):
     """
     Choose if and how ghosts are randomized.
-    0 = No ghost randomization
-    1 = Randomized ghost elements and waves
-    2 = Remove ghost elements, randomize waves
+    Vanilla = No ghost randomization
+    Randomized Elements = Randomized ghost elements and waves
+    No Elements = Remove ghost elements, randomize waves
     """
     display_name = "Enemizer"
     option_vanilla = 0

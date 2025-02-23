@@ -1393,8 +1393,8 @@ def update_enemy_info(enemy_info, output_data):
             if "16_1" in x["create_name"]:
                 x["pos_y"] = 30.000000
 
-            if not room_enemy_entry is None or x["room_no"] == 35:
-                apply_new_ghost(x, "No Element" if x["room_no"] == 35 else room_enemy_entry[1])
+            if not room_enemy_entry is None or x["room_no"] == 35 or x["room_no"] == 27:
+                apply_new_ghost(x, "No Element" if (x["room_no"] == 35 or x["room_no"] == 27) else room_enemy_entry[1])
 
         # Disables enemies in furniture to allow them to spawn properly if an item is hidden inside said furniture.
         # if x["access_name"] != "(null)":
