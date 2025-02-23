@@ -54,8 +54,8 @@ class TitsThe3rdWorld(World):
 
     def create_item(self, name: str) -> TitsThe3rdItem:
         """Create a Trails in the Sky the 3rd item for this player"""
-        item_classification = TitsThe3rdItem.get_item_classfication(name)
-        return TitsThe3rdItem(name, item_classification, self.item_name_to_id[name], self.player)
+        data: TitsThe3rdItemData = item_data_table[name]
+        return TitsThe3rdItem(name, data.classification, data.code, self.player)
 
     def create_event(self, name: str) -> TitsThe3rdItem:
         """Create a Trails in the Sky the 3rd event for this player"""
@@ -69,10 +69,10 @@ class TitsThe3rdWorld(World):
 
     def create_items(self) -> None:
         """Define items for Trails in the Sky the 3rd AP"""
-        dummy_item = self.create_item("Dummy Item")
-        self.multiworld.itempool.append(dummy_item)
+        for item_name, quantity in default_item_pool.items():
+            for _ in range(quantity):
+                self.multiworld.itempool.append(self.create_item(item_name))
 
     def set_rules(self) -> None:
         """Set remaining rules."""
-        self.multiworld.completion_condition[self.player] = \
-            lambda state: state.has("Dummy Item", self.player)
+        self.multiworld.completion_condition[self.player] = lambda _: True
