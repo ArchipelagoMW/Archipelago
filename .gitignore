@@ -200,3 +200,6 @@ minecraft_versions.json
 .LSOverride
 Thumbs.db
 [Dd]esktop.ini
+
+# IIS hosting file
+web.config
