@@ -4,8 +4,7 @@ import traceback
 import dolphin_memory_engine as dme
 
 from CommonClient import logger
-from worlds.pokepark_1.adresses import stage_id_address, is_in_menu_address, pokemon_id_address, \
-    blocked_unlock_itemIds, prisma_blocked_itemIds, \
+from worlds.pokepark_1.adresses import stage_id_address, is_in_menu_address, pokemon_id_address,  prisma_blocked_itemIds, \
     UNLOCKS, PRISMAS, PrismaItem, POKEMON_STATES, blocked_friendship_itemIds, blocked_friendship_unlock_itemIds, \
     PokemonStateInfo
 from worlds.pokepark_1.dme_helper import write_memory, read_memory
@@ -128,10 +127,6 @@ async def location_state_watcher(ctx):
     async def _sub():
         if not dme.is_hooked():
             return
-
-        for location_id in ctx.checked_locations:
-            if location_id in blocked_unlock_itemIds:
-                blocked_unlock_itemIds.remove(location_id)
 
         stage_id = dme.read_word(stage_id_address)
         is_in_menu = dme.read_byte(is_in_menu_address)

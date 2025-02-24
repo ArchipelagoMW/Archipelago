@@ -59,6 +59,7 @@ class UnlockItem:
     itemId: int | None = None
     location: List[MemoryAddress] | None = None
     locationId: int | None = None
+    is_blocked_until_location: bool = False
 
 
 @dataclass
@@ -1254,9 +1255,6 @@ PRISMAS = {
     ),
 }
 
-blocked_unlock_itemIds = [UNLOCK_ITEMS["Caterpie Unlock"], UNLOCK_ITEMS["Weedle Unlock"],
-                          UNLOCK_ITEMS["Shroomish Unlock"],
-                          UNLOCK_ITEMS["Magikarp Unlock"]]
 UNLOCKS = {
     # Meadow Zone Unlocks
     #
@@ -1372,7 +1370,8 @@ UNLOCKS = {
             memory_range=MemoryRange.BYTE,
             value=0x02
         )],
-        locationId=UNLOCK_ITEMS["Caterpie Unlock"]
+        locationId=UNLOCK_ITEMS["Caterpie Unlock"],
+        is_blocked_until_location=True
     ),
     UNLOCK_ITEMS["Butterfree Unlock"]: UnlockItem(
         item=MemoryAddress(
@@ -1432,7 +1431,8 @@ UNLOCKS = {
             memory_range=MemoryRange.BYTE,
             value=0x04
         )],
-        locationId=UNLOCK_ITEMS["Weedle Unlock"]
+        locationId=UNLOCK_ITEMS["Weedle Unlock"],
+        is_blocked_until_location=True
     ),
     UNLOCK_ITEMS["Shroomish Unlock"]: UnlockItem(
         item=MemoryAddress(
@@ -1447,7 +1447,8 @@ UNLOCKS = {
             memory_range=MemoryRange.BYTE,
             value=0x20
         )],
-        locationId=UNLOCK_ITEMS["Shroomish Unlock"]
+        locationId=UNLOCK_ITEMS["Shroomish Unlock"],
+        is_blocked_until_location=True
     ),
     UNLOCK_ITEMS["Magikarp Unlock"]: UnlockItem(
         item=MemoryAddress(
@@ -1462,7 +1463,8 @@ UNLOCKS = {
             memory_range=MemoryRange.BYTE,
             value=0x80
         )],
-        locationId=UNLOCK_ITEMS["Magikarp Unlock"]
+        locationId=UNLOCK_ITEMS["Magikarp Unlock"],
+        is_blocked_until_location=True
     ),
     UNLOCK_ITEMS["Bidoof1 Unlock"]: UnlockItem(
         item=MemoryAddress(

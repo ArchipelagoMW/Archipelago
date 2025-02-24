@@ -6,7 +6,7 @@ import ModuleUpdate
 from worlds.pokepark_1 import POWERS, BERRIES
 from worlds.pokepark_1.adresses import \
     berry_item_checks, \
-    POWER_INCREMENTS, POWER_SHARED_ADDR, blocked_unlock_itemIds, prisma_blocked_itemIds, \
+    POWER_INCREMENTS, POWER_SHARED_ADDR, prisma_blocked_itemIds, \
     driffzeppeli_unlock_address, driffzeppeli_unlock_value, UNLOCKS, MemoryRange, PRISMAS, POKEMON_STATES, blocked_friendship_itemIds, \
     blocked_friendship_unlock_itemIds, stage_id_address, main_menu_stage_id, main_menu2_stage_id, main_menu3_stage_id
 from worlds.pokepark_1.dme_helper import write_memory
@@ -138,7 +138,6 @@ def refresh_items(ctx:PokeparkContext):
 
 
     blocked_items = set().union(
-        blocked_unlock_itemIds,
         prisma_blocked_itemIds,
         blocked_friendship_itemIds,
         blocked_friendship_unlock_itemIds
@@ -146,7 +145,9 @@ def refresh_items(ctx:PokeparkContext):
     items = [item for item in ctx.items_received if
              not item.item in blocked_items]
 
-    activate_unlock_items(items)
+    locations = ctx.locations_checked
+
+    activate_unlock_items(items,locations)
 
     activate_friendship_items(items)
 
@@ -156,13 +157,16 @@ def refresh_items(ctx:PokeparkContext):
 
     activate_power_items(items)
 
-def activate_unlock_items(items:list[NetworkItem]):
+def activate_unlock_items(items:list[NetworkItem], locations: set[int]):
     sums = {}
     key = (driffzeppeli_unlock_address, MemoryRange.WORD)
     sums[key] = sums.get(key, 0) + driffzeppeli_unlock_value
     for item in set(item.item for item in items):
         if item in UNLOCKS:
             unlock = UNLOCKS[item]
+            if unlock.is_blocked_until_location and unlock.locationId not in locations:
+                continue
+
             addr = unlock.item.final_address
             key = (addr, unlock.item.memory_range)
             sums[key] = sums.get(key, 0) + unlock.item.value
