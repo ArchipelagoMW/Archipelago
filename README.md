@@ -12,7 +12,7 @@ Download the last apworld version from releases page.
 Download error recalc software .exe for windows platform and no extension for linux platform and place in your 'lib' folder on archipelago main directory. Default is C:\ProgramData\Archipelago\lib  
 Run ArchipelagoLauncher and choose Install APWorld, select your downloaded sotn.apworld, restart if asked.  
 
-### Playing
+# Playing
 ## Generate
 Place your options file along with all others players yalm in your players folder. You can get an default yalm for SOTN on ArchipelagoLauncher and choose Generate Template Options.  
 Run ArquipelagoGenerate, your seed will be on output directory.  
