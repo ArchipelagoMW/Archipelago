@@ -18,10 +18,9 @@ class TestAuroraVineyard(SVTestBase):
         self.collect("Shipping Bin")
         self.collect("Summer")
         location_name = ModQuest.AuroraVineyard
-        location = self.multiworld.get_location(location_name, self.player)
-        self.assert_reach_location_false(location, self.multiworld.state)
+        self.assert_cannot_reach_location(location_name, self.multiworld.state)
         self.collect(SVEQuestItem.aurora_vineyard_tablet)
-        self.assert_reach_location_true(location, self.multiworld.state)
+        self.assert_can_reach_location(location_name, self.multiworld.state)
 
     def test_need_reclamation_to_go_downstairs(self):
         region_name = SVERegion.aurora_vineyard_basement
