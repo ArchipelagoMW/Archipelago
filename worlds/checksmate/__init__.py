@@ -66,6 +66,8 @@ class CMWorld(World):
         4: {"Progressive Minor Piece": 2, "Progressive Major Piece": 1, "Progressive Major To Queen": 1},
         # Camel pieces
         5: {"Progressive Minor Piece": 2, "Progressive Major Piece": 1, "Progressive Major To Queen": 1},
+        # Petal pieces
+        6: {"Progressive Minor Piece": 2, "Progressive Major Piece": 1, "Progressive Major To Queen": 1},
     }
 
     def __init__(self, multiworld: MultiWorld, player: int) -> None:
@@ -90,7 +92,7 @@ class CMWorld(World):
         elif piece_collection == self.options.fairy_chess_pieces.option_betza:
             army_options = [0, 1, 2, 3]
         elif piece_collection == self.options.fairy_chess_pieces.option_full:
-            army_options = [0, 1, 2, 3, 4, 5]
+            army_options = [0, 1, 2, 3, 4, 5, 6]
         elif piece_collection == self.options.fairy_chess_pieces.option_configure:
             which_pieces = self.options.fairy_chess_pieces_configure
             if (which_pieces.value is None or which_pieces.value == 'None' or
@@ -109,6 +111,8 @@ class CMWorld(World):
                 army_options += [4]
             if "Camel" in which_pieces.value:
                 army_options += [5]
+            if "Petal" in which_pieces.value:
+                army_options += [6]
             if not army_options:
                 army_options = [0]
 
