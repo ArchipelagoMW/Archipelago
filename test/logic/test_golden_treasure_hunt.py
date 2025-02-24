@@ -63,18 +63,18 @@ class TestNormalTreasureHunt(WL4TestBase):
         self.run_location_tests([
             ['Catbat - 0:15', False, []],
             ['Catbat - 0:15', False, [], ['Progressive Ground Pound']],
-            ['Catbat - 0:15', False, [], ['Enemy Jump']],
-            ['Catbat - 0:15', True, ['Progressive Ground Pound', 'Enemy Jump']],
+            ['Catbat - 0:15', False, [], ['Stomp Jump']],
+            ['Catbat - 0:15', True, ['Progressive Ground Pound', 'Stomp Jump']],
 
             ['Catbat - 0:35', False, []],
             ['Catbat - 0:35', False, [], ['Progressive Ground Pound']],
-            ['Catbat - 0:35', False, [], ['Enemy Jump']],
-            ['Catbat - 0:35', True, ['Progressive Ground Pound', 'Enemy Jump']],
+            ['Catbat - 0:35', False, [], ['Stomp Jump']],
+            ['Catbat - 0:35', True, ['Progressive Ground Pound', 'Stomp Jump']],
 
             ['Catbat - 0:55', False, []],
             ['Catbat - 0:55', False, [], ['Progressive Ground Pound']],
-            ['Catbat - 0:55', False, [], ['Enemy Jump']],
-            ['Catbat - 0:55', True, ['Progressive Ground Pound', 'Enemy Jump']],
+            ['Catbat - 0:55', False, [], ['Stomp Jump']],
+            ['Catbat - 0:55', True, ['Progressive Ground Pound', 'Stomp Jump']],
         ])
 
 
@@ -91,36 +91,36 @@ class TestSHardTreasureHunt(TestNormalTreasureHunt):
         self.run_location_tests([
             ['Cractus - 0:15', False, []],
             ['Cractus - 0:15', False, [], ['Progressive Ground Pound']],
-            ['Cractus - 0:15', False, [], ['Enemy Jump']],
-            ['Cractus - 0:15', True, ['Progressive Ground Pound', 'Enemy Jump']],
+            ['Cractus - 0:15', False, [], ['Stomp Jump']],
+            ['Cractus - 0:15', True, ['Progressive Ground Pound', 'Stomp Jump']],
 
             ['Cractus - 0:35', False, []],
             ['Cractus - 0:35', False, [], ['Progressive Ground Pound']],
-            ['Cractus - 0:35', False, [], ['Enemy Jump']],
-            ['Cractus - 0:35', True, ['Progressive Ground Pound', 'Enemy Jump']],
+            ['Cractus - 0:35', False, [], ['Stomp Jump']],
+            ['Cractus - 0:35', True, ['Progressive Ground Pound', 'Stomp Jump']],
 
             ['Cractus - 0:55', False, []],
             ['Cractus - 0:55', False, [], ['Progressive Ground Pound']],
-            ['Cractus - 0:55', False, [], ['Enemy Jump']],
-            ['Cractus - 0:55', True, ['Progressive Ground Pound', 'Enemy Jump']],
+            ['Cractus - 0:55', False, [], ['Stomp Jump']],
+            ['Cractus - 0:55', True, ['Progressive Ground Pound', 'Stomp Jump']],
         ])
 
     def _test_catbat(self):
         self.run_location_tests([
             ['Catbat - 0:15', False, []],
             ['Catbat - 0:15', False, [], ['Progressive Ground Pound']],
-            ['Catbat - 0:15', False, [], ['Enemy Jump']],
-            ['Catbat - 0:15', True, ['Progressive Ground Pound', 'Enemy Jump']],
+            ['Catbat - 0:15', False, [], ['Stomp Jump']],
+            ['Catbat - 0:15', True, ['Progressive Ground Pound', 'Stomp Jump']],
 
             ['Catbat - 0:35', False, []],
             ['Catbat - 0:35', False, [], ['Progressive Ground Pound']],
-            ['Catbat - 0:35', False, [], ['Enemy Jump']],
-            ['Catbat - 0:35', True, ['Progressive Ground Pound', 'Enemy Jump']],
+            ['Catbat - 0:35', False, [], ['Stomp Jump']],
+            ['Catbat - 0:35', True, ['Progressive Ground Pound', 'Stomp Jump']],
 
             ['Catbat - 0:55', False, []],
             ['Catbat - 0:55', False, [], ['Progressive Ground Pound']],
-            ['Catbat - 0:55', False, [], ['Enemy Jump']],
-            ['Catbat - 0:55', True, ['Progressive Ground Pound', 'Enemy Jump']],
+            ['Catbat - 0:55', False, [], ['Stomp Jump']],
+            ['Catbat - 0:55', True, ['Progressive Ground Pound', 'Stomp Jump']],
         ])
 
 
@@ -160,16 +160,16 @@ class TestSHardTreasureHuntAdvanced(TestNormalTreasureHuntAdvanced):
         self.run_location_tests([
             ['Catbat - 0:15', False, []],
             ['Catbat - 0:15', False, [], ['Progressive Ground Pound']],
-            ['Catbat - 0:15', False, [], ['Enemy Jump']],
-            ['Catbat - 0:15', True, ['Progressive Ground Pound', 'Enemy Jump']],
+            ['Catbat - 0:15', False, [], ['Stomp Jump']],
+            ['Catbat - 0:15', True, ['Progressive Ground Pound', 'Stomp Jump']],
 
             ['Catbat - 0:35', False, []],
             ['Catbat - 0:35', False, [], ['Progressive Ground Pound']],
-            ['Catbat - 0:35', False, [], ['Enemy Jump']],
-            ['Catbat - 0:35', True, ['Progressive Ground Pound', 'Enemy Jump']],
+            ['Catbat - 0:35', False, [], ['Stomp Jump']],
+            ['Catbat - 0:35', True, ['Progressive Ground Pound', 'Stomp Jump']],
 
             ['Catbat - 0:55', False, []],
             ['Catbat - 0:55', False, [], ['Progressive Ground Pound']],
-            ['Catbat - 0:55', False, [], ['Enemy Jump']],
-            ['Catbat - 0:55', True, ['Progressive Ground Pound', 'Enemy Jump']],
+            ['Catbat - 0:55', False, [], ['Stomp Jump']],
+            ['Catbat - 0:55', True, ['Progressive Ground Pound', 'Stomp Jump']],
         ])

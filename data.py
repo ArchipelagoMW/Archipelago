@@ -36,6 +36,17 @@ class ItemFlag(IntFlag):
     KEYZER = 1 << 5
     FULL_HEALTH = 1 << 6
     FULL_HEALTH_2 = 1 << 7
+    DIAMOND_1 = 1 << 8
+    DIAMOND_2 = 1 << 9
+    DIAMOND_3 = 1 << 10
+    DIAMOND_4 = 1 << 11
+    DIAMOND_5 = 1 << 12
+    DIAMOND_6 = 1 << 13
+    DIAMOND_7 = 1 << 14
+    DIAMOND_8 = 1 << 15
+    DIAMOND_9 = 1 << 16
+    DIAMOND_10 = 1 << 17
+    DIAMOND_11 = 1 << 18
 
     BOSS_CLEAR = 1 << 5
     DIVA_CLEAR = 1 << 4

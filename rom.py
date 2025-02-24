@@ -71,6 +71,23 @@ class WL4PatchExtensions(APPatchExtension):
         shuffle_wario_voice_sets(local_rom, voices)
         return bytes(local_rom)
 
+    @staticmethod
+    def copy_medal_gfx(caller: APProcedurePatch, rom: bytes) -> bytes:
+        local_rom = LocalRom(rom)
+        top_tiles = local_rom.read_bytes(0x6E561C + 32 * 645, 32 * 2)
+        bottom_tiles = local_rom.read_bytes(0x6E561C + 32 * 677, 32 * 2)
+        tiles = bytearray()
+        for tile in top_tiles + bottom_tiles:
+            upper = tile & 0xF0
+            lower = tile & 0x0F
+            if upper != 0:
+                upper += 10 << 4
+            if lower != 0:
+                lower += 10
+            tiles.append(upper | lower)
+        local_rom.write_bytes(get_rom_address("MinigameCoinTiles"), tiles)
+        return bytes(local_rom)
+
 
 class WL4ProcedurePatch(APProcedurePatch, APTokenMixin):
     hash = MD5_US_EU
@@ -84,6 +101,7 @@ class WL4ProcedurePatch(APProcedurePatch, APTokenMixin):
             ('apply_bsdiff4', ['basepatch.bsdiff']),
             ('apply_tokens', ['token_data.bin']),
             ('update_header', []),
+            ('copy_medal_gfx', []),
         ]
 
     @classmethod
@@ -158,11 +176,16 @@ def write_tokens(world: WL4World, patch: WL4ProcedurePatch):
         get_rom_address('TrapBehavior'),
         world.options.trap_behavior.value.to_bytes(1, 'little')
     )
+    patch.write_token(
+        APTokenTypes.WRITE,
+        get_rom_address('DiamondShuffle'),
+        world.options.diamond_shuffle.value.to_bytes(1, 'little')
+    )
 
     patch.write_file('token_data.bin', patch.get_token_binary())
 
 
-class MultiworldExtData(NamedTuple):
+class MultiworldData(NamedTuple):
     receiver: str
     name: str
 
@@ -180,7 +203,15 @@ def fill_items(world: WL4World, patch: WL4ProcedurePatch):
         if location.native_item:
             itemid = itemid - ap_id_offset
         else:
-            itemid = 0xF0 | location.item.classification.as_flag()
+            if location.item.trap:
+                classification = 3
+            elif location.item.advancement:
+                classification = 1
+            elif location.item.useful:
+                classification = 2
+            else:
+                classification = 0
+            itemid = 0xF0 | classification
         itemname = location.item.name
 
         if playerid == world.player:
@@ -195,11 +226,11 @@ def fill_items(world: WL4World, patch: WL4ProcedurePatch):
             itemid.to_bytes(1, 'little')
         )
 
-        ext_data_location = get_rom_address('ItemExtDataTable', 4 * location_offset)
+        multiworld_data_location = get_rom_address('MultiworldDataTable', 4 * location_offset)
         if playername is not None:
-            multiworld_items[ext_data_location] = MultiworldExtData(playername, itemname)
+            multiworld_items[multiworld_data_location] = MultiworldData(playername, itemname)
         else:
-            multiworld_items[ext_data_location] = None
+            multiworld_items[multiworld_data_location] = None
 
     create_starting_inventory(world, patch)
 
@@ -215,7 +246,7 @@ class StartInventory:
     def __init__(self):
         self.level_table = [[0] * 6 for _ in Passage]
         self.abilities = 0
-        self.junk_counts = [0] * 5
+        self.junk_counts = [0] * 6
 
     def add(self, item: WL4Item):
         if item.type == ItemType.JEWEL:
@@ -259,7 +290,7 @@ class StartInventory:
         patch.write_token(
             APTokenTypes.WRITE,
             get_rom_address('StartingInventoryJunkCounts'),
-            struct.pack('<5B', *(min(255, item) for item in self.junk_counts))
+            struct.pack('<6B', *(min(255, item) for item in self.junk_counts))
         )
 
     def __repr__(self):
@@ -308,7 +339,7 @@ def create_starting_inventory(world: WL4World, patch: WL4ProcedurePatch):
 
 
 def create_strings(patch: WL4ProcedurePatch,
-                   multiworld_items: Dict[int, Optional[MultiworldExtData]]
+                   multiworld_items: Dict[int, Optional[MultiworldData]]
                    ) -> Dict[Optional[str], int]:
     receivers = set()
     items = set()
@@ -333,7 +364,7 @@ def create_strings(patch: WL4ProcedurePatch,
 
 
 def write_multiworld_table(patch: WL4ProcedurePatch,
-                           multiworld_items: Dict[int, Optional[MultiworldExtData]],
+                           multiworld_items: Dict[int, Optional[MultiworldData]],
                            strings: Dict[Optional[str], int]):
     entry_address = get_rom_address('MultiworldStringDump')
     for location_address, item in multiworld_items.items():

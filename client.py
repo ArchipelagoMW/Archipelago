@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import functools
 import itertools
-from typing import TYPE_CHECKING, Dict, Iterable, Iterator, List, Optional
+from typing import TYPE_CHECKING, Dict, Iterable, Iterator, List, Optional, Set
 
 import Utils
 from NetUtils import ClientStatus
@@ -143,6 +143,7 @@ class WL4Client(BizHawkClient):
     system = 'GBA'
     patch_suffix = '.apwl4'
     local_checked_locations: List[int]
+    local_hinted_locations: Set[int]
     local_set_events: Dict[str, bool]
     local_room: int
     rom_slot_name: Optional[str]
@@ -154,6 +155,7 @@ class WL4Client(BizHawkClient):
     def __init__(self) -> None:
         super().__init__()
         self.local_checked_locations = []
+        self.local_hinted_locations = set()
         self.local_set_events = {}
         self.local_room = (1 << 24) - 1
         self.rom_slot_name = None
@@ -239,13 +241,7 @@ class WL4Client(BizHawkClient):
         passage_address = get_symbol('PassageID')
         level_address = get_symbol('InPassageLevelID')
         room_address = get_symbol('CurrentRoomId')
-        gem_1_address = get_symbol('Has1stGemPiece')
-        gem_2_address = get_symbol('Has2ndGemPiece')
-        gem_3_address = get_symbol('Has3rdGemPiece')
-        gem_4_address = get_symbol('Has4thGemPiece')
-        cd_address = get_symbol('HasCD')
-        fhi_1_address = get_symbol('HasFullHealthItem')
-        fhi_2_address = get_symbol('HasFullHealthItem2')
+        collected_items_address = get_symbol('CollectedItems')
 
         try:
             read_result = iter(await bizhawk.read(bizhawk_ctx, [
@@ -261,13 +257,7 @@ class WL4Client(BizHawkClient):
                 read8(passage_address),
                 read8(level_address),
                 read8(room_address),
-                read8(gem_1_address),
-                read8(gem_2_address),
-                read8(gem_3_address),
-                read8(gem_4_address),
-                read8(cd_address),
-                read8(fhi_1_address),
-                read8(fhi_2_address),
+                read32(collected_items_address),
             ]))
         except bizhawk.RequestFailedError:
             return
@@ -284,8 +274,7 @@ class WL4Client(BizHawkClient):
         passage_id = next_int(read_result)
         in_passage_level_id = next_int(read_result)
         room_id = next_int(read_result)
-        level_items = list(next_int(read_result) for _ in range(7))
-        level_items.insert(5, 0)
+        level_item_flags = next_int(read_result)
 
         # Ensure safe state
         gameplay_state = (game_mode, game_state)
@@ -295,6 +284,7 @@ class WL4Client(BizHawkClient):
         ]
         read_safe_states = [
             *write_safe_states,
+            *((1, seq) for seq in range(0x16, 0x19)),  # Died/gave up
             *((0, seq) for seq in range(0x1A, 0x20)),  # End of game cutscene
         ]
 
@@ -302,25 +292,36 @@ class WL4Client(BizHawkClient):
             return
 
         locations = []
+        hint_locations = set()
         events = {flag: False for flag in TRACKER_EVENT_FLAGS}
         game_clear = False
+
+        if in_passage_level_id >= 4:
+            level_item_flags = 0
 
         # Parse item status bits
         for passage in Passage:
             for level in range(5):
+                level_locations = tuple(get_level_locations(passage, level))
                 status_bits = item_status[passage * 6 + level] >> 8
-                if (send_level_locations
-                    and in_passage_level_id < 4
-                    and (passage, level) == (passage_id, in_passage_level_id)
-                ):
-                    for i, status in enumerate(level_items):
-                        if status:
-                            status_bits |= (1 << i)
-                for location in get_level_locations(passage, level):
-                    bit = location_table[location].flag()
+                hint_bits = 0
+
+                if (passage, level) == (passage_id, in_passage_level_id):
+                    if send_level_locations:
+                        status_bits |= level_item_flags
+                    elif game_mode == 1 and game_state in range(0x16, 0x19):
+                        hint_bits = level_item_flags & ~status_bits
+
+                for location in level_locations:
                     location_id = location_name_to_id[location]
-                    if status_bits & bit and location_id in client_ctx.server_locations:
+                    if location_id not in client_ctx.server_locations:
+                        continue
+
+                    bit = location_table[location].flag
+                    if status_bits & bit:
                         locations.append(location_id)
+                    if hint_bits & bit:
+                        hint_locations.add(location_id)
 
                 keyzer_bit = item_status[passage * 6 + level] & (1 << 5)
                 level_name = LEVEL_CLEAR_FLAGS[passage * 5 + level]
@@ -337,6 +338,16 @@ class WL4Client(BizHawkClient):
             await client_ctx.send_msgs([{
                 'cmd': 'LocationChecks',
                 'locations': locations
+            }])
+
+        # Send hints
+        hint_locations.difference_update(self.local_hinted_locations)
+        if hint_locations:
+            self.local_hinted_locations.update(hint_locations)
+            await client_ctx.send_msgs([{
+                'cmd': 'LocationScouts',
+                'locations': hint_locations,
+                'create_as_hint': 2
             }])
 
         # Send game clear

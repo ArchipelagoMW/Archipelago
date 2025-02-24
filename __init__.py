@@ -10,11 +10,10 @@ from worlds.AutoWorld import WebWorld, World
 from .client import WL4Client
 from .data import Passage, data_path
 from .items import ItemType, WL4Item, ap_id_from_wl4_data, filter_item_names, filter_items, item_table
-from .locations import LocationType, get_level_locations, location_name_to_id, location_table, event_table
+from .locations import get_level_locations, location_name_to_id
 from .options import Difficulty, Goal, GoldenJewels, PoolJewels, WL4Options, wl4_option_groups
 from .regions import connect_regions, create_regions
 from .rom import MD5_JP, MD5_US_EU, WL4ProcedurePatch, write_tokens
-from .rules import set_access_rules
 
 
 class WL4Settings(settings.Group):
@@ -61,6 +60,7 @@ class WL4World(World):
     location_name_to_id = location_name_to_id
 
     required_client_version = (0, 5, 0)
+    origin_region_name = "Pyramid"
 
     item_name_groups = {
         'Entry Jewel Pieces': set(filter_item_names(type=ItemType.JEWEL, passage=Passage.ENTRY)),
@@ -73,7 +73,16 @@ class WL4World(World):
         'Abilities': set(filter_item_names(type=ItemType.ABILITY)),
         'Golden Treasure': set(filter_item_names(type=ItemType.TREASURE)),
         'Traps': {'Wario Form Trap', 'Lightning Trap'},
-        'Junk': {'Heart', 'Minigame Coin'},
+        'Junk': {'Heart', 'Minigame Medal'},
+        'Prizes': {'Full Health Item', 'Diamond'},
+
+        # Aliases
+        'Ground Pound': {'Progressive Ground Pound'},
+        'Grab': {'Progressive Grab'},
+        'Smash Attack': {'Progressive Ground Pound'},
+        'Progressive Smash Attack': {'Progressive Ground Pound'},
+        'Enemy Jump': {'Stomp Jump'},
+        'Minigame Coin': {'Minigame Medal'},
     }
 
     location_name_groups = {
@@ -107,8 +116,11 @@ class WL4World(World):
     CDS = tuple(filter_item_names(type=ItemType.CD))
     ABILITIES = tuple(filter_item_names(type=ItemType.ABILITY))
     GOLDEN_TREASURES = tuple(filter_item_names(type=ItemType.TREASURE))
-    FILLER_ITEMS = ('Full Health Item', 'Heart', 'Minigame Coin')
+    PRIZES = ('Full Health Item', 'Diamond')
+    JUNK = ('Heart', 'Minigame Medal')
     TRAPS = ('Wario Form Trap', 'Lightning Trap')
+
+    filler_item_weights: tuple[int, ...]
 
     def generate_early(self):
         if self.options.goal in (Goal.option_local_golden_treasure_hunt, Goal.option_local_golden_diva_treasure_hunt):
@@ -125,40 +137,29 @@ class WL4World(World):
                             'Jewels to 1.')
             self.options.golden_jewels = GoldenJewels(1)
 
-        if self.options.required_jewels == 4 and self.options.difficulty != Difficulty.option_normal:
+        if (self.options.required_jewels == 4 and
+            not self.options.diamond_shuffle and
+            self.options.difficulty != Difficulty.option_normal):
             raise OptionError(f'Not enough locations to place abilities for {self.player_name}. '
                               'Set the "Required Jewels" option to a lower value and try again.')
 
+        self.filler_item_weights = self.options.prize_weight.value, self.options.junk_weight.value, self.options.trap_weight.value
+
     def create_regions(self):
-        location_table = self.setup_locations()
-        create_regions(self, location_table)
-        set_access_rules(self)
+        create_regions(self)
         connect_regions(self)
 
-        passages = ('Emerald', 'Ruby', 'Topaz', 'Sapphire')
-        for passage in passages:
-            location = self.get_region(f'{passage} Passage Boss').locations[0]
-            location.place_locked_item(self.create_item(f'{passage} Passage Clear'))
-            location.show_in_spoiler = False
-
-        if self.options.goal.needs_diva():
-            goal = 'Golden Diva'
-        else:  # Golden Treasure Hunt
-            goal = 'Sound Room - Emergency Exit'
-
-        goal_loc = self.get_location(goal)
-        goal_loc.place_locked_item(self.create_item('Escape the Pyramid'))
-        goal_loc.show_in_spoiler = False
-
     def create_items(self):
-        difficulty = self.options.difficulty
+        difficulty = self.options.difficulty.value
         treasure_hunt = self.options.goal.needs_treasure_hunt()
+        diamond_shuffle = self.options.diamond_shuffle.value
 
         gem_pieces = 18 * 4
         cds = 16
-        full_health_items = (9, 7, 6)[difficulty.value]
+        full_health_items = (9, 7, 6)[difficulty]
         treasures = 12 * treasure_hunt
-        total_required_locations = gem_pieces + cds + full_health_items + treasures
+        diamonds = diamond_shuffle * (109, 71, 68)[difficulty]
+        total_required_locations = gem_pieces + cds + full_health_items + treasures + diamonds
 
         itempool = []
 
@@ -186,10 +187,13 @@ class WL4World(World):
             if name.startswith('Progressive'):
                 itempool.append(self.create_item(name))
 
-        # Remove full health items to make space for abilities
+        # Remove diamonds or full health items to make space for abilities
         if pool_jewels == 4:
-            full_health_items -= 8
-        assert full_health_items > 0
+            if diamond_shuffle:
+                diamonds -= 8
+            else:
+                full_health_items -= 8
+        assert diamonds >= 0 and full_health_items >= 0
 
         for _ in range(full_health_items):
             itempool.append(self.create_item('Full Health Item'))
@@ -197,6 +201,9 @@ class WL4World(World):
         if treasure_hunt:
             for name in self.GOLDEN_TREASURES:
                 itempool.append(self.create_item(name))
+
+        if diamond_shuffle:
+            itempool.extend(self.create_item('Diamond') for _ in range(diamonds))
 
         junk_count = total_required_locations - len(itempool)
         itempool.extend(self.create_item(self.get_filler_item_name()) for _ in range(junk_count))
@@ -206,7 +213,7 @@ class WL4World(World):
     def generate_output(self, output_directory: str):
         output_path = Path(output_directory)
 
-        patch = WL4ProcedurePatch()
+        patch = WL4ProcedurePatch(player=self.player, player_name=self.player_name)
         patch.write_file('basepatch.bsdiff', data_path('basepatch.bsdiff'))
         write_tokens(self, patch)
         patch.procedure.append((
@@ -226,13 +233,13 @@ class WL4World(World):
             'required_jewels',
             'open_doors',
             'portal',
+            'diamond_shuffle',
             'death_link',
         )
 
     def get_filler_item_name(self) -> str:
-        if self.random.randrange(100) < self.options.trap_weight.value:
-            return self.random.choice(self.TRAPS)
-        return self.random.choice(self.FILLER_ITEMS)
+        pool = self.random.choices((self.PRIZES, self.JUNK, self.TRAPS), self.filler_item_weights)[0]
+        return self.random.choice(pool)
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
         return WL4Item(name, self.player, force_non_progression)
@@ -240,16 +247,3 @@ class WL4World(World):
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = (
             lambda state: state.has('Escape the Pyramid', self.player))
-
-    def setup_locations(self):
-        checks = filter(lambda p: self.options.difficulty in p[1].difficulties, location_table.items())
-        if not self.options.goal.needs_treasure_hunt():
-            checks = filter(lambda p: p[1].source != LocationType.CHEST, checks)
-        check_names = {name for name, _ in checks}
-
-        event_names = set(event_table.keys())
-        if self.options.goal.needs_diva():
-            event_names.remove('Sound Room - Emergency Exit')
-        else:
-            event_names.remove('Golden Diva')
-        return check_names.union(event_names)
