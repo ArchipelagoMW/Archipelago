@@ -1,3 +1,4 @@
+import math
 
 def read_extension():
     lines_read = []
@@ -803,47 +804,11 @@ def read_mapping():
 
 if __name__ == "__main__":
     #read_graphed()
-
-    def isValidSudoku(board: [[str]]) -> bool:
-        cols = [list(row) for row in zip(*board)]
-        sub = []
-        for i in range(0, 9, 3):
-            for j in range(0, 9, 3):
-                square = [item for items in [row[j:j + 3] for row in board[i:i + 3]] for item in items]
-                sub.append(square)
-
-        for row in board:
-            for num in row:
-                if num == ".":
-                    continue
-                if row.count(num) > 1:
-                    return False
-
-        for col in cols:
-            for num in col:
-                if num == ".":
-                    continue
-                if col.count(num) > 1:
-                    return False
-
-        for box in sub:
-            for num in box:
-                if num == ".":
-                    continue
-                if box.count(num) > 1:
-                    return False
-
-        return True
+    def rom_offset(zone_pos: int, address: int) -> int:
+        return zone_pos + address + math.floor(address / 0x800) * 0x130
 
 
-    b = isValidSudoku(
-[["5","3",".",".","7",".",".",".","."]
-,["6",".",".","1","9","5",".",".","."]
-,[".","9","8",".",".",".",".","6","."]
-,["8",".",".",".","6",".",".",".","3"]
-,["4",".",".","8",".","3",".",".","1"]
-,["7",".",".",".","2",".",".",".","6"]
-,[".","6",".",".",".",".","2","8","."]
-,[".",".",".","4","1","9",".",".","5"]
-,[".",".",".",".","8",".",".","7","9"]])
-    print("a")
+    # print(hex(rom_offset(0x057df998, 0x1c80)))
+    print(hex(rom_offset(0x059bb0d8, 0x3640)))
+    print(hex(rom_offset(0x04e31458, 0x0d2c + 0x02 * 0)))
+    print(hex(rom_offset(0x067422a8, 0x12a8)))
