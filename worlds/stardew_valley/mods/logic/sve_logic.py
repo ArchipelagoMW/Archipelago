@@ -41,24 +41,24 @@ class SVELogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, QuestLogicMixi
         return self.logic.or_(*(self.logic.received(rune) for rune in rune_list))
 
     def has_iridium_bomb(self):
-        if self.options.quest_locations < 0:
-            return self.logic.quest.can_complete_quest(ModQuest.RailroadBoulder)
-        return self.logic.received(SVEQuestItem.iridium_bomb)
+        if self.options.quest_locations.has_story_quests():
+            return self.logic.received(SVEQuestItem.iridium_bomb)
+        return self.logic.quest.can_complete_quest(ModQuest.RailroadBoulder)
 
     def has_marlon_boat(self):
-        if self.options.quest_locations < 0:
-            return self.logic.quest.can_complete_quest(ModQuest.MarlonsBoat)
-        return self.logic.received(SVEQuestItem.marlon_boat_paddle)
+        if self.options.quest_locations.has_story_quests():
+            return self.logic.received(SVEQuestItem.marlon_boat_paddle)
+        return self.logic.quest.can_complete_quest(ModQuest.MarlonsBoat)
 
     def has_grandpa_shed_repaired(self):
-        if self.options.quest_locations < 0:
-            return self.logic.quest.can_complete_quest(ModQuest.GrandpasShed)
-        return self.logic.received(SVEQuestItem.grandpa_shed)
+        if self.options.quest_locations.has_story_quests():
+            return self.logic.received(SVEQuestItem.grandpa_shed)
+        return self.logic.quest.can_complete_quest(ModQuest.GrandpasShed)
 
     def has_bear_knowledge(self):
-        if self.options.quest_locations < 0:
-            return self.logic.quest.can_complete_quest(Quest.strange_note)
-        return self.logic.received(Wallet.bears_knowledge)
+        if self.options.quest_locations.has_story_quests():
+            return self.logic.received(Wallet.bears_knowledge)
+        return self.logic.quest.can_complete_quest(Quest.strange_note)
 
     def can_buy_bear_recipe(self):
         access_rule = (self.logic.quest.can_complete_quest(Quest.strange_note) & self.logic.tool.has_tool(Tool.axe, ToolMaterial.basic) &
