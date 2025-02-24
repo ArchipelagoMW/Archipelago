@@ -1061,7 +1061,8 @@ _extend_freeze_support()
 
 def visualize_regions(root_region: Region, file_name: str, *,
                       show_entrance_names: bool = False, show_locations: bool = True, show_other_regions: bool = True,
-                      linetype_ortho: bool = True, regions_to_highlight: set[Region] | None = None) -> None:
+                      linetype_ortho: bool = True, regions_to_highlight: set[Region] | None = None,
+                      entrance_highlighting: dict[int, int] | None = None) -> None:
     """Visualize the layout of a world as a PlantUML diagram.
 
     :param root_region: The region from which to start the diagram from. (Usually the "Menu" region of your world.)
@@ -1078,6 +1079,8 @@ def visualize_regions(root_region: Region, file_name: str, *,
     :param show_other_regions: (default True) If enabled, regions that can't be reached by traversing exits are shown.
     :param linetype_ortho: (default True) If enabled, orthogonal straight line parts will be used; otherwise polylines.
     :param regions_to_highlight: Regions that will be highlighted in green if they are reachable.
+    :param entrance_highlighting: a mapping from your world's entrance randomization groups to RGB values, used to color
+        your entrances
 
     Example usage in World code:
     from Utils import visualize_regions
@@ -1122,18 +1125,28 @@ def visualize_regions(root_region: Region, file_name: str, *,
 
     def visualize_exits(region: Region) -> None:
         for exit_ in region.exits:
+            color: str = ""
+            if entrance_highlighting and exit_.randomization_group in entrance_highlighting:
+                color = f" #{entrance_highlighting[exit_.randomization_group]:0>6X}"
             if exit_.connected_region:
                 if show_entrance_names:
-                    uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\" : \"{fmt(exit_)}\"")
+                    uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\" : \"{fmt(exit_)}\"{color}")
                 else:
                     try:
-                        uml.remove(f"\"{fmt(exit_.connected_region)}\" --> \"{fmt(region)}\"")
-                        uml.append(f"\"{fmt(exit_.connected_region)}\" <--> \"{fmt(region)}\"")
+                        uml.remove(f"\"{fmt(exit_.connected_region)}\" --> \"{fmt(region)}\"{color}")
+                        uml.append(f"\"{fmt(exit_.connected_region)}\" <--> \"{fmt(region)}\"{color}")
                     except ValueError:
-                        uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\"")
+                        uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\"{color}")
             else:
-                uml.append(f"circle \"unconnected exit:\\n{fmt(exit_)}\"")
-                uml.append(f"\"{fmt(region)}\" --> \"unconnected exit:\\n{fmt(exit_)}\"")
+                uml.append(f"circle \"unconnected exit:\\n{fmt(exit_)}\" {color}")
+                uml.append(f"\"{fmt(region)}\" --> \"unconnected exit:\\n{fmt(exit_)}\"{color}")
+        for entrance in region.entrances:
+            color: str = ""
+            if entrance_highlighting and entrance.randomization_group in entrance_highlighting:
+                color = f" #{entrance_highlighting[entrance.randomization_group]:0>6X}"
+            if not entrance.parent_region:
+                uml.append(f"circle \"unconnected entrance:\\n{fmt(entrance)}\"{color}")
+                uml.append(f"\"unconnected entrance:\\n{fmt(entrance)}\" --> \"{fmt(region)}\"{color}")
 
     def visualize_locations(region: Region) -> None:
         any_lock = any(location.locked for location in region.locations)
@@ -1154,7 +1167,7 @@ def visualize_regions(root_region: Region, file_name: str, *,
         if other_regions := [region for region in multiworld.get_regions(root_region.player) if region not in seen]:
             uml.append("package \"other regions\" <<Cloud>> {")
             for region in other_regions:
-                uml.append(f"class \"{fmt(region)}\"")
+                visualize_region(region)
             uml.append("}")
 
     uml.append("@startuml")
