@@ -1,11 +1,9 @@
 import random
 
-from BaseClasses import get_seed
+from BaseClasses import get_seed, ItemClassification
 from .. import SVTestBase, SVTestCase, allsanity_mods_6_x_x, fill_dataclass_with_default
 from ..assertion import ModAssertMixin, WorldAssertMixin
-from ..options import presets
-from ..options.presets import allsanity_mods_6_x_x
-from ... import options
+from ... import options, items, Group, create_content
 from ...mods.mod_data import ModNames
 from ...options import SkillProgression, Walnutsanity
 from ...options.options import all_mods
@@ -195,7 +193,7 @@ class TestVanillaLogicAlternativeWhenQuestsAreNotRandomized(WorldAssertMixin, SV
     """We often forget to add an alternative rule that works when quests are not randomized. When this happens, some
     Location are not reachable because they depend on items that are only added to the pool when quests are randomized.
     """
-    options = presets.allsanity_mods_6_x_x() | {
+    options = allsanity_mods_6_x_x() | {
         options.QuestLocations.internal_name: options.QuestLocations.special_range_names["none"],
         options.Goal.internal_name: options.Goal.option_perfection,
     }
