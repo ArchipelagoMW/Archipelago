@@ -32,9 +32,8 @@ You can tweak some option in your default yalm:
 * infinite_wing: Your bat wing smash spell will remain.
 * extra_pool: Will try to add more powerful items to the pool.
 
-![map_normal](https://github.com/user-attachments/assets/0c523853-4244-4d96-be82-05b981ec4739)
-![map_inverted](https://github.com/user-attachments/assets/04c78e2d-ea8b-46da-88cf-45c0ba860c01)
-![teste](https://github.com/user-attachments/assets/89bc0ec7-3231-47bf-b086-d11f474004e6)
+![map_normal](https://github.com/user-attachments/assets/f586e1bc-9eaf-4998-83c7-5562ff30bf91)
+![map_inverted](https://github.com/user-attachments/assets/bd1c6ba5-9b25-4d7a-ae1e-ee34f56e5ca3)
 
 # The game
 Be careful to not load the wrong save file. You can't receive items with the pause screen open.  
