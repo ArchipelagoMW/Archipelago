@@ -168,6 +168,9 @@ def get_rules(world):
             "Snow Worries - Collect 300 Opals":
                 lambda state:
                     has_rang(world, state, Ty1Rang.AQUARANG),
+            "Snow Worries - Koala Chaos":
+                lambda state:
+                    has_rang(world, state, Ty1Rang.SECOND_RANG) or world.options.logic_difficulty == 1,
             "Snow Worries - Find 5 Bilbies":
                 lambda state:
                     has_all_bilbies(world, state, Ty1LevelCode.B2),
@@ -403,7 +406,7 @@ def get_rules(world):
                     and state.has("Cockatoo Talisman", world.player),
             "Rainbow Scale 11":
                 lambda state:
-                    has_rang(world, state, Ty1Rang.SECOND_RANG) or has_rang(world, state, Ty1Rang.FROSTYRANG)
+                    has_rang(world, state, Ty1Rang.FROSTYRANG)
                     or world.options.logic_difficulty == 1,
             "Rainbow Scale 15":
                 lambda state:
