@@ -535,7 +535,7 @@ class SA2BWorld(World):
     def stage_fill_hook(cls, multiworld: MultiWorld, progitempool, usefulitempool, filleritempool, fill_locations):
         if multiworld.get_game_players("Sonic Adventure 2 Battle"):
             progitempool.sort(
-                key=lambda item: 1 if ("Chaos Emerald" in item.name and item.game == "Sonic Adventure 2 Battle") else 0)
+                key=lambda item: 0 if ("Emblem" in item.name and item.game == "Sonic Adventure 2 Battle") else 1)
 
     def get_levels_per_gate(self) -> list:
         levels_per_gate = list()

@@ -13,7 +13,7 @@ class ItemData(typing.NamedTuple):
 
 
 class SA2BItem(Item):
-    game: str = "Sonic Adventure 2: Battle"
+    game: str = "Sonic Adventure 2 Battle"
 
     def __init__(self, name, classification: ItemClassification, code: int = None, player: int = None):
         super(SA2BItem, self).__init__(name, classification, code, player)

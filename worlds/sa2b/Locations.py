@@ -7,7 +7,7 @@ from .Missions import stage_name_prefixes, mission_orders
 
 
 class SA2BLocation(Location):
-    game: str = "Sonic Adventure 2: Battle"
+    game: str = "Sonic Adventure 2 Battle"
 
 
 mission_location_table = {
