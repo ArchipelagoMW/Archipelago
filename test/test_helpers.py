@@ -2,7 +2,7 @@ import itertools
 from test.bases import TestBase
 
 from ..data import Passage
-from ..items import ItemType, filter_items, filter_item_names
+from ..items import ItemType, ap_id_from_wl4_data, filter_items, filter_item_names, item_table, wl4_data_from_ap_id
 from ..locations import get_level_locations, location_table
 from ..options import Difficulty
 from ..region_data import level_table
@@ -46,6 +46,13 @@ class TestHelpers(TestBase):
         with self.subTest('Golden Passage'):
             checks = get_level_locations(Passage.GOLDEN, 0)
             assert all(map(lambda l: l.startswith('Golden Passage'), checks))
+
+    def test_item_id_conversion(self):
+        """Test that item ID conversion works both ways"""
+        for name, data in item_table.items():
+            with self.subTest(name):
+                ap_id = ap_id_from_wl4_data(data)
+                self.assertEqual((name, data), wl4_data_from_ap_id(ap_id))
 
 
 class TestLocationExistence(TestBase):

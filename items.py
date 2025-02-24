@@ -99,7 +99,15 @@ def wl4_data_from_ap_id(ap_id: int) -> Tuple[str, ItemData]:
             candidates = tuple(filter(lambda d: d[1][0] == ItemType.CD and
                                                 d[1][1] == (passage, level),
                                       item_table.items()))
-    elif val >> 4 == 4:
+    elif val >> 3 == 8:
+        candidates = tuple(filter(lambda d: d[1][0] == ItemType.ABILITY and
+                                            d[1][1] == val,
+                                  item_table.items()))
+    elif val >> 4 == 7:
+        candidates = tuple(filter(lambda d: d[1][0] == ItemType.TREASURE and
+                                            d[1][1] == val,
+                                  item_table.items()))
+    elif val >> 4 == 8:
         candidates = tuple(filter(lambda d: d[1][0] == ItemType.ITEM and
                                             d[1][1] == val,
                                   item_table.items()))
