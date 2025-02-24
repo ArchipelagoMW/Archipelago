@@ -1264,7 +1264,7 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
                               657, 671, 672]
     medium_height_furniture_list = [0, 1, 104, 112, 113, 114, 124, 125, 135, 136, 206, 210, 232, 234, 235, 264, 265,
                                     270, 315, 343, 344, 345, 346, 347, 353, 361, 362, 363, 368, 369, 370, 376, 388, 397, 398,
-                                    411, 418, 438, 444, 520,
+                                    411, 418, 431, 438, 444, 520,
                                     526, 544, 552, 553, 554, 555, 602, 603, 634, 635]
     for furniture_jmp_id in (ceiling_furniture_list + medium_height_furniture_list):
         current_y_offset = furniture_info.info_file_field_entries[furniture_jmp_id]["item_offset_y"]
