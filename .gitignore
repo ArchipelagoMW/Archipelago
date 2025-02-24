@@ -28,8 +28,8 @@
 *multisave
 *.archipelago
 *.apsave
-*.BIN
 *.puml
+*.BIN
 
 setups
 build
@@ -200,3 +200,9 @@ minecraft_versions.json
 .LSOverride
 Thumbs.db
 [Dd]esktop.ini
+
+# FF4 Free Enterprise
+/worlds/ff4fe/FreeEnterpriseForAP/FreeEnt/.build/
+!/worlds/ff4fe/FreeEnterpriseForAP/FreeEnt/*.bin
+/data/ff4fe/harp
+/data/ff4fe/zsprite
