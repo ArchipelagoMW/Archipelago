@@ -173,8 +173,6 @@ class ItemName():
     WpnLV_plus_White = "WpnLV+1 (White)"
     Press = "Press"
     UnderSht = "UnderSht"
-    Humor = "Humor"
-    BlckMnd = "BlckMnd"
 
     ## Currency
     zenny_200z = "200z"

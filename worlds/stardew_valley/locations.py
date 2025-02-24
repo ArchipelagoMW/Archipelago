@@ -110,8 +110,6 @@ class LocationTags(enum.Enum):
     MAGIC_LEVEL = enum.auto()
     ARCHAEOLOGY_LEVEL = enum.auto()
 
-    DEPRECATED = enum.auto()
-
 
 @dataclass(frozen=True)
 class LocationData:
@@ -521,10 +519,6 @@ def create_locations(location_collector: StardewLocationCollector,
         location_collector(location_data.name, location_data.code, location_data.region)
 
 
-def filter_deprecated_locations(locations: Iterable[LocationData]) -> Iterable[LocationData]:
-    return [location for location in locations if LocationTags.DEPRECATED not in location.tags]
-
-
 def filter_farm_type(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
     # On Meadowlands, "Feeding Animals" replaces "Raising Animals"
     if options.farm_type == FarmType.option_meadowlands:
@@ -555,8 +549,7 @@ def filter_modded_locations(options: StardewValleyOptions, locations: Iterable[L
 
 
 def filter_disabled_locations(options: StardewValleyOptions, content: StardewContent, locations: Iterable[LocationData]) -> Iterable[LocationData]:
-    locations_deprecated_filter = filter_deprecated_locations(locations)
-    locations_farm_filter = filter_farm_type(options, locations_deprecated_filter)
+    locations_farm_filter = filter_farm_type(options, locations)
     locations_island_filter = filter_ginger_island(options, locations_farm_filter)
     locations_qi_filter = filter_qi_order_locations(options, locations_island_filter)
     locations_masteries_filter = filter_masteries_locations(content, locations_qi_filter)

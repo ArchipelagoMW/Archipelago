@@ -582,7 +582,8 @@ class OOTWorld(World):
                     new_exit = OOTEntrance(self.player, self.multiworld, '%s -> %s' % (new_region.name, exit), new_region)
                     new_exit.vanilla_connected_region = exit
                     new_exit.rule_string = rule
-                    self.parser.parse_spot_rule(new_exit)
+                    if self.options.logic_rules != 'no_logic':
+                        self.parser.parse_spot_rule(new_exit)
                     if new_exit.never:
                         logger.debug('Dropping unreachable exit: %s', new_exit.name)
                     else:

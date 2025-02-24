@@ -11,7 +11,7 @@ on:
       - '**.hh?'
       - '**.hpp'
       - '**.hxx'
-      - '**/CMakeLists.txt'
+      - '**.CMakeLists'
       - '.github/workflows/ctest.yml'
   pull_request:
     paths:
@@ -21,7 +21,7 @@ on:
       - '**.hh?'
       - '**.hpp'
       - '**.hxx'
-      - '**/CMakeLists.txt'
+      - '**.CMakeLists'
       - '.github/workflows/ctest.yml'
 
 jobs:

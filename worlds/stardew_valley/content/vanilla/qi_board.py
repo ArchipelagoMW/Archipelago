@@ -6,6 +6,7 @@ from ...data.game_item import GenericSource, ItemTag
 from ...data.harvest import HarvestCropSource
 from ...strings.crop_names import Fruit
 from ...strings.region_names import Region
+from ...strings.season_names import Season
 from ...strings.seed_names import Seed
 
 

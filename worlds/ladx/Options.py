@@ -534,13 +534,6 @@ class InGameHints(DefaultOnToggle):
     display_name = "In-game Hints"
 
 
-class StabilizeItemPool(DefaultOffToggle):
-    """
-    By default, rupees in the item pool may be randomly swapped with bombs, arrows, powders, or capacity upgrades. This option disables that swapping, which is useful for plando.
-    """
-    display_name = "Stabilize Item Pool"
-
-
 class ForeignItemIcons(Choice):
     """
     Choose how to display foreign items.
@@ -577,7 +570,6 @@ ladx_option_groups = [
         TrendyGame,
         InGameHints,
         NagMessages,
-        StabilizeItemPool,
         Quickswap,
         HardMode,
         BootsControls
@@ -648,7 +640,6 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     no_flash: NoFlash
     in_game_hints: InGameHints
     overworld: Overworld
-    stabilize_item_pool: StabilizeItemPool
 
     warp_improvements: Removed
     additional_warp_points: Removed

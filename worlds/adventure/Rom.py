@@ -2,14 +2,14 @@ import hashlib
 import json
 import os
 import zipfile
-from typing import Any
-
-import bsdiff4
+from typing import Optional, Any
 
 import Utils
+from .Locations import AdventureLocation, LocationData
 from settings import get_settings
 from worlds.Files import APPatch, AutoPatchRegister
-from .Locations import LocationData
+
+import bsdiff4
 
 ADVENTUREHASH: str = "157bddb7192754a45372be196797f284"
 

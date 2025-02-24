@@ -1,6 +1,5 @@
-from test.bases import WorldTestBase
+from . import linkedTestHK, WorldTestBase
 from Options import ItemLinks
-from . import linkedTestHK
 
 
 class test_grubcount_limited(linkedTestHK, WorldTestBase):

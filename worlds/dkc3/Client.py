@@ -1,4 +1,5 @@
 import logging
+import asyncio
 
 from NetUtils import ClientStatus, color
 from worlds.AutoSNIClient import SNIClient
@@ -31,7 +32,7 @@ class DKC3SNIClient(SNIClient):
 
 
     async def validate_rom(self, ctx):
-        from SNIClient import snes_read
+        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
 
         rom_name = await snes_read(ctx, DKC3_ROMHASH_START, ROMHASH_SIZE)
         if rom_name is None or rom_name == bytes([0] * ROMHASH_SIZE) or rom_name[:2] != b"D3":

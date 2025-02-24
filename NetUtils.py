@@ -5,18 +5,17 @@ import enum
 import warnings
 from json import JSONEncoder, JSONDecoder
 
-if typing.TYPE_CHECKING:
-    from websockets import WebSocketServerProtocol as ServerConnection
+import websockets
 
 from Utils import ByValue, Version
 
 
 class HintStatus(ByValue, enum.IntEnum):
-    HINT_UNSPECIFIED = 0
+    HINT_FOUND = 0
+    HINT_UNSPECIFIED = 1
     HINT_NO_PRIORITY = 10
     HINT_AVOID = 20
     HINT_PRIORITY = 30
-    HINT_FOUND = 40
 
 
 class JSONMessagePart(typing.TypedDict, total=False):
@@ -152,7 +151,7 @@ decode = JSONDecoder(object_hook=_object_hook).decode
 
 
 class Endpoint:
-    socket: "ServerConnection"
+    socket: websockets.WebSocketServerProtocol
 
     def __init__(self, socket):
         self.socket = socket

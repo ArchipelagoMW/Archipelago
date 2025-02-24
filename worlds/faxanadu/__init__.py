@@ -44,13 +44,8 @@ class FaxanaduWorld(World):
     location_name_to_id = {loc.name: loc.id for loc in Locations.locations if loc.id is not None}
 
     def __init__(self, world: MultiWorld, player: int):
-        self.filler_ratios: Dict[str, int] = {
-            item.name: item.count
-            for item in Items.items
-            if item.classification in [ItemClassification.filler, ItemClassification.trap]
-        }
-        # Remove poison by default to respect itemlinking
-        self.filler_ratios["Poison"] = 0
+        self.filler_ratios: Dict[str, int] = {}
+        
         super().__init__(world, player)
 
     def create_regions(self):
@@ -165,13 +160,19 @@ class FaxanaduWorld(World):
                 for i in range(item.progression_count):
                     itempool.append(FaxanaduItem(item.name, ItemClassification.progression, item.id, self.player))
 
-        # Adjust filler ratios
+        # Set up filler ratios
+        self.filler_ratios = {
+            item.name: item.count
+            for item in Items.items
+            if item.classification in [ItemClassification.filler, ItemClassification.trap]
+        }
+
         # If red potions are locked in shops, remove the count from the ratio.
         self.filler_ratios["Red Potion"] -= red_potion_in_shop_count
 
-        # Add poisons if desired
-        if self.options.include_poisons:
-            self.filler_ratios["Poison"] = self.item_name_to_item["Poison"].count
+        # Remove poisons if not desired
+        if not self.options.include_poisons:
+            self.filler_ratios["Poison"] = 0
 
         # Randomly add fillers to the pool with ratios based on og game occurrence counts.
         filler_count = len(Locations.locations) - len(itempool) - prefilled_count

@@ -6,7 +6,7 @@ checking or launching the client, otherwise it will probably cause circular impo
 import asyncio
 import enum
 import subprocess
-from typing import Any
+from typing import Any, Dict, Optional
 
 from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser, server_loop, logger, gui_enabled
 import Patch
@@ -43,15 +43,15 @@ class BizHawkClientContext(CommonContext):
     command_processor = BizHawkClientCommandProcessor
     auth_status: AuthStatus
     password_requested: bool
-    client_handler: BizHawkClient | None
-    slot_data: dict[str, Any] | None = None
-    rom_hash: str | None = None
+    client_handler: Optional[BizHawkClient]
+    slot_data: Optional[Dict[str, Any]] = None
+    rom_hash: Optional[str] = None
     bizhawk_ctx: BizHawkContext
 
     watcher_timeout: float
     """The maximum amount of time the game watcher loop will wait for an update from the server before executing"""
 
-    def __init__(self, server_address: str | None, password: str | None):
+    def __init__(self, server_address: Optional[str], password: Optional[str]):
         super().__init__(server_address, password)
         self.auth_status = AuthStatus.NOT_AUTHENTICATED
         self.password_requested = False
@@ -231,27 +231,19 @@ async def _run_game(rom: str):
         )
 
 
-def _patch_and_run_game(patch_file: str):
+async def _patch_and_run_game(patch_file: str):
     try:
         metadata, output_file = Patch.create_rom_file(patch_file)
         Utils.async_start(_run_game(output_file))
-        return metadata
     except Exception as exc:
         logger.exception(exc)
-        Utils.messagebox("Error Patching Game", str(exc), True)
-        return {}
 
 
-def launch(*launch_args: str) -> None:
+def launch(*launch_args) -> None:
     async def main():
         parser = get_base_parser()
         parser.add_argument("patch_file", default="", type=str, nargs="?", help="Path to an Archipelago patch file")
         args = parser.parse_args(launch_args)
-
-        if args.patch_file != "":
-            metadata = _patch_and_run_game(args.patch_file)
-            if "server" in metadata:
-                args.connect = metadata["server"]
 
         ctx = BizHawkClientContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
@@ -259,6 +251,9 @@ def launch(*launch_args: str) -> None:
         if gui_enabled:
             ctx.run_gui()
         ctx.run_cli()
+
+        if args.patch_file != "":
+            Utils.async_start(_patch_and_run_game(args.patch_file))
 
         watcher_task = asyncio.create_task(_game_watcher(ctx), name="GameWatcher")
 

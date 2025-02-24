@@ -109,7 +109,7 @@ class Group:
     def get_type_hints(cls) -> Dict[str, Any]:
         """Returns resolved type hints for the class"""
         if cls._type_cache is None:
-            if not cls.__annotations__ or not isinstance(next(iter(cls.__annotations__.values())), str):
+            if not isinstance(next(iter(cls.__annotations__.values())), str):
                 # non-str: assume already resolved
                 cls._type_cache = cls.__annotations__
             else:
@@ -270,20 +270,15 @@ class Group:
             # fetch class to avoid going through getattr
             cls = self.__class__
             type_hints = cls.get_type_hints()
-            entries = [e for e in self]
-            if not entries:
-                # write empty dict for empty Group with no instance values
-                cls._dump_value({}, f, indent="  " * level)
             # validate group
             for name in cls.__annotations__.keys():
                 assert hasattr(cls, name), f"{cls}.{name} is missing a default value"
             # dump ordered members
-            for name in entries:
+            for name in self:
                 attr = cast(object, getattr(self, name))
                 attr_cls = type_hints[name] if name in type_hints else attr.__class__
                 attr_cls_origin = typing.get_origin(attr_cls)
-                # resolve to first type for doc string
-                while attr_cls_origin is Union or attr_cls_origin is types.UnionType:
+                while attr_cls_origin is Union:  # resolve to first type for doc string
                     attr_cls = typing.get_args(attr_cls)[0]
                     attr_cls_origin = typing.get_origin(attr_cls)
                 if attr_cls.__doc__ and attr_cls.__module__ != "builtins":
@@ -683,8 +678,6 @@ class GeneratorOptions(Group):
     race: Race = Race(0)
     plando_options: PlandoOptions = PlandoOptions("bosses, connections, texts")
     panic_method: PanicMethod = PanicMethod("swap")
-    loglevel: str = "info"
-    logtime: bool = False
 
 
 class SNIOptions(Group):
@@ -792,17 +785,7 @@ class Settings(Group):
         if location:
             from Utils import parse_yaml
             with open(location, encoding="utf-8-sig") as f:
-                from yaml.error import MarkedYAMLError
-                try:
-                    options = parse_yaml(f.read())
-                except MarkedYAMLError as ex:
-                    if ex.problem_mark:
-                        f.seek(0)
-                        lines = f.readlines()
-                        problem_line = lines[ex.problem_mark.line]
-                        error_line = " " * ex.problem_mark.column + "^"
-                        raise Exception(f"{ex.context} {ex.problem}\n{problem_line}{error_line}")
-                    raise ex
+                options = parse_yaml(f.read())
                 # TODO: detect if upgrade is required
                 # TODO: once we have a cache for _world_settings_name_cache, detect if any game section is missing
                 self.update(options or {})

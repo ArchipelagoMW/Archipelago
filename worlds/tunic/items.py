@@ -48,7 +48,6 @@ item_table: Dict[str, TunicItemData] = {
     "Gun": TunicItemData(IC.progression | IC.useful, 1, 30, "Weapons"),
     "Shield": TunicItemData(IC.useful, 1, 31, combat_ic=IC.progression | IC.useful),
     "Dath Stone": TunicItemData(IC.useful, 1, 32),
-    "Torch": TunicItemData(IC.useful, 0, 156),
     "Hourglass": TunicItemData(IC.useful, 1, 33),
     "Old House Key": TunicItemData(IC.progression, 1, 34, "Keys"),
     "Key": TunicItemData(IC.progression, 2, 35, "Keys"),
@@ -167,7 +166,6 @@ item_table: Dict[str, TunicItemData] = {
     "Ladders in Library": TunicItemData(IC.progression, 0, 148, "Ladders"),
     "Ladders in Lower Quarry": TunicItemData(IC.progression, 0, 149, "Ladders"),
     "Ladders in Swamp": TunicItemData(IC.progression, 0, 150, "Ladders"),
-    "Grass": TunicItemData(IC.filler, 0, 151),
 }
 
 # items to be replaced by fool traps
@@ -212,11 +210,11 @@ slot_data_item_names = [
 
 combat_items: List[str] = [name for name, data in item_table.items()
                            if data.combat_ic and IC.progression in data.combat_ic]
-combat_items.extend(["Stick", "Sword", "Sword Upgrade", "Magic Wand", "Hero's Laurels", "Gun"])
+combat_items.extend(["Stick", "Sword", "Sword Upgrade", "Magic Wand", "Hero's Laurels"])
 
 item_name_to_id: Dict[str, int] = {name: item_base_id + data.item_id_offset for name, data in item_table.items()}
 
-filler_items: List[str] = [name for name, data in item_table.items() if data.classification == IC.filler and name != "Grass"]
+filler_items: List[str] = [name for name, data in item_table.items() if data.classification == IC.filler]
 
 
 def get_item_group(item_name: str) -> str:

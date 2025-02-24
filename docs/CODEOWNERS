@@ -99,9 +99,6 @@
 # Lingo
 /worlds/lingo/ @hatkirby
 
-# Links Awakening DX
-/worlds/ladx/ @threeandthreee
-
 # Lufia II Ancient Cave
 /worlds/lufia2ac/ @el-u
 /worlds/lufia2ac/docs/ @wordfcuk @el-u
@@ -238,6 +235,9 @@
 
 # Final Fantasy (1)
 # /worlds/ff1/
+
+# Links Awakening DX
+# /worlds/ladx/
 
 # Ocarina of Time
 # /worlds/oot/
