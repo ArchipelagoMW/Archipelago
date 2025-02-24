@@ -1,3 +1,4 @@
+import logging
 from typing import Any
 
 from Options import Toggle
@@ -78,6 +79,7 @@ class PeaksOfWorld(World):
         start_book: str = ""
 
         if len(enabled_books) == 0:
+            logging.error("Player " + self.player_name + " has not selected any books!")
             raise Exception("Player " + self.player_name + " has not selected any books!")
 
         if self.options.starting_book.value == StartingBook.option_random_book:
@@ -86,9 +88,9 @@ class PeaksOfWorld(World):
             start_book = book_names[self.options.starting_book.value]
 
         if start_book not in enabled_books:
-            print("book " + start_book + "not enabled")
+            logging.warning("book " + start_book + "not enabled")
             start_book = enabled_books[0]
-            print("selecting " + start_book)
+            logging.warning("selecting " + start_book)
 
         self.options.starting_book.value = book_names.index(start_book)
         if self.options.starting_book.value == StartingBook.option_expert:
