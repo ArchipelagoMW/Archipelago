@@ -855,7 +855,7 @@ GOLD_MICE_LOCATION_TABLE: dict[str, LMLocationData] = {
 }
 
 # Boo Locations
-BOO_LOCATION_TABLE: dict[str, LMLocationData] = {
+ROOM_BOO_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Parlor Boo": LMLocationData("Parlor", 669, "Boo", 19, [], 36, room_ram_addr=0x803D5E06, locationbit=3),
     "Anteroom Boo": LMLocationData("Anteroom", 670, "Boo", 21, [], 42, room_ram_addr=0x803D5E06, locationbit=5),
     "Wardrobe Boo": LMLocationData("Wardrobe", 671, "Boo", 20, [], 41, room_ram_addr=0x803D5E06, locationbit=4),
@@ -907,6 +907,9 @@ BOO_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Pipe Room Boo": LMLocationData("Pipe Room", 702, "Boo", 33, [], 68, room_ram_addr=0x803D5E08, locationbit=1),
     "Cold Storage Boo": LMLocationData("Cold Storage", 703, "Boo", 31, ["Fire Element Medal"], 64,
                                        room_ram_addr=0x803D5E07, locationbit=7),
+}
+
+BOOLOSSUS_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Boolossus Fragment 1": LMLocationData("Balcony", 720, "Boo", 0, ["Ice Element Medal"], 62,
                                       room_ram_addr=0x803D5E08, locationbit=3),
     "Boolossus Fragment 2": LMLocationData("Balcony", 721, "Boo", 0, ["Ice Element Medal"], 62,
@@ -938,6 +941,9 @@ BOO_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Boolossus Fragment 15": LMLocationData("Balcony", 734, "Boo", 0, ["Ice Element Medal"], 62,
                                        room_ram_addr=0x803D5E0A, locationbit=1),
 }
+
+BOO_LOCATION_TABLE = {**ROOM_BOO_LOCATION_TABLE,
+                      **BOOLOSSUS_LOCATION_TABLE}
 
 LIGHT_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Parlor Light On": LMLocationData("Parlor", 735, "KingdomHearts", 0, [], 36, room_ram_addr=0x803CDF96),

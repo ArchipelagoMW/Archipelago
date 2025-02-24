@@ -174,7 +174,7 @@ filler_items: Dict[str, LMItemData] = {
     "30 Coins": LMItemData("Money", 135, IC.filler, ram_addr=0x803D8B7C, pointer_offset=0x324, ram_byte_size=4),
     "15 Bills": LMItemData("Money", 136, IC.filler, ram_addr=0x803D8B7C, pointer_offset=0x328, ram_byte_size=4),
     "25 Bills": LMItemData("Money", 137, IC.filler, ram_addr=0x803D8B7C, pointer_offset=0x328, ram_byte_size=4),
-    "1 Gold Bars": LMItemData("Money", 138, IC.filler, ram_addr=0x803D8B7C, pointer_offset=0x32C, ram_byte_size=4),
+    "1 Gold Bar": LMItemData("Money", 138, IC.filler, ram_addr=0x803D8B7C, pointer_offset=0x32C, ram_byte_size=4),
     "2 Gold Bars": LMItemData("Money", 139, IC.filler, ram_addr=0x803D8B7C, pointer_offset=0x32C, ram_byte_size=4)
 }
 

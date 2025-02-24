@@ -326,7 +326,7 @@ class LMWorld(World):
                             add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
                 region.locations.append(entry)
         if self.options.boosanity:
-            for location, data in BOO_LOCATION_TABLE.items():
+            for location, data in ROOM_BOO_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)
                 entry = LMLocation(self.player, location, region, data)
                 if self.options.boo_gates == 1 and self.options.boo_radar != 2:
@@ -345,8 +345,13 @@ class LMWorld(World):
                         else:
                             add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
                 region.locations.append(entry)
+            for location, data in BOOLOSSUS_LOCATION_TABLE.items():
+                region = self.multiworld.get_region(data.region, self.player)
+                entry = LMLocation(self.player, location, region, data)
+                add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                region.locations.append(entry)
         else:
-            for location, data in BOO_LOCATION_TABLE.items():
+            for location, data in ROOM_BOO_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)
                 entry = LMLocation(self.player, location, region, data)
                 entry.address = None
@@ -367,6 +372,14 @@ class LMWorld(World):
                             add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
                         else:
                             add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                region.locations.append(entry)
+            for location, data in BOOLOSSUS_LOCATION_TABLE.items():
+                region = self.multiworld.get_region(data.region, self.player)
+                entry = LMLocation(self.player, location, region, data)
+                entry.address = None
+                entry.code = None
+                entry.place_locked_item(Item("Boo", ItemClassification.progression, None, self.player))
+                add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
                 region.locations.append(entry)
         if self.options.goal == 1:
             rankcalc = 0
