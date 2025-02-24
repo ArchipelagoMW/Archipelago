@@ -104,7 +104,7 @@ class TimespinnerWorld(World):
             "LoreChecks": self.options.lore_checks.value,
             "BossRando": self.options.boss_rando.value,
             "BossRandoType": self.options.boss_rando_type.value,
-            "BossRandoOverrides": self.options.boss_rando_overrides.value,
+            "BossRandoOverrides": self.precalculated_weights.boss_rando_overrides,
             "EnemyRando": self.options.enemy_rando.value,
             "DamageRando": self.options.damage_rando.value,
             "DamageRandoOverrides": self.options.damage_rando_overrides.value,
@@ -176,7 +176,7 @@ class TimespinnerWorld(World):
         self.options.lore_checks.value = slot_data["LoreChecks"]
         self.options.boss_rando.value = slot_data["BossRando"]
         self.options.boss_rando_type.value = slot_data["BossRandoType"]
-        self.options.boss_rando_overrides.value = slot_data["BossRandoOverrides"]
+        self.precalculated_weights.boss_rando_overrides = slot_data["BossRandoOverrides"]
         self.options.damage_rando.value = slot_data["DamageRando"]
         self.options.damage_rando_overrides.value = slot_data["DamageRandoOverrides"]
         self.options.hp_cap.value = slot_data["HpCap"]
