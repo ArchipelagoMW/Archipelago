@@ -102,9 +102,9 @@ class WordipelagoWorld(World):
         for i in range(self.options.starting_letters):
             remaining_letters = [letter for letter in all_letters if letter not in self.starting_items]
             weighted_letter = self.multiworld.random.choices(remaining_letters, weights=list({letter: letter_weights[letter] for letter in remaining_letters}.values()), k=1)[0]
-            starting_letters.append('The Letter ' + weighted_letter)
+            starting_letters.append('Letter ' + weighted_letter)
             self.starting_items.append(weighted_letter)
-            self.multiworld.push_precollected(self.create_item('The Letter ' + weighted_letter))
+            self.multiworld.push_precollected(self.create_item('Letter ' + weighted_letter))
 
         for key, item in item_data_table.items():
             if item.code and item.can_create(self) and key not in starting_letters:

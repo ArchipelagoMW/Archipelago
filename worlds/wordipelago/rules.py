@@ -5,80 +5,80 @@ if TYPE_CHECKING:
 
 def needed_for_words(state, world, vowels, consonants, guesses = 1, yellow = False):
     has_vowels = 0
-    if(state.has("The Letter A", world.player)):
+    if(state.has("Letter A", world.player)):
         has_vowels += 1
-    if(state.has("The Letter E", world.player)):
+    if(state.has("Letter E", world.player)):
         has_vowels += 1
-    if(state.has("The Letter I", world.player)):
+    if(state.has("Letter I", world.player)):
         has_vowels += 1
-    if(state.has("The Letter O", world.player)):
+    if(state.has("Letter O", world.player)):
         has_vowels += 1
-    if(state.has("The Letter U", world.player)):
+    if(state.has("Letter U", world.player)):
         has_vowels += 1
-    if(state.has("The Letter Y", world.player)):
+    if(state.has("Letter Y", world.player)):
         has_vowels += 1
 
     has_strong_letters = 0
-    if(state.has("The Letter B", world.player)):
+    if(state.has("Letter B", world.player)):
         has_strong_letters += 1
-    if(state.has("The Letter c", world.player)):
+    if(state.has("Letter c", world.player)):
         has_strong_letters += 1
-    if(state.has("The Letter D", world.player)):
+    if(state.has("Letter D", world.player)):
         has_strong_letters += 1
-    if(state.has("The Letter F", world.player)):
+    if(state.has("Letter F", world.player)):
         has_strong_letters += 1
-    if(state.has("The Letter G", world.player)):
+    if(state.has("Letter G", world.player)):
         has_strong_letters += 1
-    if(state.has("The Letter H", world.player)):
+    if(state.has("Letter H", world.player)):
         has_strong_letters += 1
-    if(state.has("The Letter L", world.player)):
+    if(state.has("Letter L", world.player)):
         has_strong_letters += 1
-    if(state.has("The Letter M", world.player)):
+    if(state.has("Letter M", world.player)):
         has_strong_letters += 1
-    if(state.has("The Letter N", world.player)):
+    if(state.has("Letter N", world.player)):
         has_strong_letters += 1
-    if(state.has("The Letter P", world.player)):
+    if(state.has("Letter P", world.player)):
         has_strong_letters += 1
-    if(state.has("The Letter R", world.player)):
+    if(state.has("Letter R", world.player)):
         has_strong_letters += 1
-    if(state.has("The Letter S", world.player)):
+    if(state.has("Letter S", world.player)):
         has_strong_letters += 1
-    if(state.has("The Letter T", world.player)):
+    if(state.has("Letter T", world.player)):
         has_strong_letters += 1
-    if(state.has("The Letter V", world.player)):
+    if(state.has("Letter V", world.player)):
         has_strong_letters += 1
-    if(state.has("The Letter W", world.player)):
+    if(state.has("Letter W", world.player)):
         has_strong_letters += 1
 
     return has_vowels >= vowels and has_strong_letters >= consonants and (not yellow or state.has('Yellow Letters', world.player)) and state.has('Guess', world.player, guesses - world.options.starting_guesses)
 
 def create_rules(world: "WordipelagoWorld"):
-    world.get_location("Used A").access_rule = lambda state: state.has("The Letter A", world.player)
-    world.get_location("Used B").access_rule = lambda state: state.has("The Letter B", world.player)
-    world.get_location("Used C").access_rule = lambda state: state.has("The Letter C", world.player)
-    world.get_location("Used D").access_rule = lambda state: state.has("The Letter D", world.player)
-    world.get_location("Used E").access_rule = lambda state: state.has("The Letter E", world.player)
-    world.get_location("Used F").access_rule = lambda state: state.has("The Letter F", world.player)
-    world.get_location("Used G").access_rule = lambda state: state.has("The Letter G", world.player)
-    world.get_location("Used H").access_rule = lambda state: state.has("The Letter H", world.player)
-    world.get_location("Used I").access_rule = lambda state: state.has("The Letter I", world.player)
-    world.get_location("Used J").access_rule = lambda state: state.has("The Letter J", world.player)
-    world.get_location("Used K").access_rule = lambda state: state.has("The Letter K", world.player)
-    world.get_location("Used L").access_rule = lambda state: state.has("The Letter L", world.player)
-    world.get_location("Used M").access_rule = lambda state: state.has("The Letter M", world.player)
-    world.get_location("Used N").access_rule = lambda state: state.has("The Letter N", world.player)
-    world.get_location("Used O").access_rule = lambda state: state.has("The Letter O", world.player)
-    world.get_location("Used P").access_rule = lambda state: state.has("The Letter P", world.player)
-    world.get_location("Used Q").access_rule = lambda state: state.has("The Letter Q", world.player)
-    world.get_location("Used R").access_rule = lambda state: state.has("The Letter R", world.player)
-    world.get_location("Used S").access_rule = lambda state: state.has("The Letter S", world.player)
-    world.get_location("Used T").access_rule = lambda state: state.has("The Letter T", world.player)
-    world.get_location("Used U").access_rule = lambda state: state.has("The Letter U", world.player)
-    world.get_location("Used V").access_rule = lambda state: state.has("The Letter V", world.player)
-    world.get_location("Used W").access_rule = lambda state: state.has("The Letter W", world.player)
-    world.get_location("Used X").access_rule = lambda state: state.has("The Letter X", world.player)
-    world.get_location("Used Y").access_rule = lambda state: state.has("The Letter Y", world.player)
-    world.get_location("Used Z").access_rule = lambda state: state.has("The Letter Z", world.player)
+    world.get_location("Used A").access_rule = lambda state: state.has("Letter A", world.player)
+    world.get_location("Used B").access_rule = lambda state: state.has("Letter B", world.player)
+    world.get_location("Used C").access_rule = lambda state: state.has("Letter C", world.player)
+    world.get_location("Used D").access_rule = lambda state: state.has("Letter D", world.player)
+    world.get_location("Used E").access_rule = lambda state: state.has("Letter E", world.player)
+    world.get_location("Used F").access_rule = lambda state: state.has("Letter F", world.player)
+    world.get_location("Used G").access_rule = lambda state: state.has("Letter G", world.player)
+    world.get_location("Used H").access_rule = lambda state: state.has("Letter H", world.player)
+    world.get_location("Used I").access_rule = lambda state: state.has("Letter I", world.player)
+    world.get_location("Used J").access_rule = lambda state: state.has("Letter J", world.player)
+    world.get_location("Used K").access_rule = lambda state: state.has("Letter K", world.player)
+    world.get_location("Used L").access_rule = lambda state: state.has("Letter L", world.player)
+    world.get_location("Used M").access_rule = lambda state: state.has("Letter M", world.player)
+    world.get_location("Used N").access_rule = lambda state: state.has("Letter N", world.player)
+    world.get_location("Used O").access_rule = lambda state: state.has("Letter O", world.player)
+    world.get_location("Used P").access_rule = lambda state: state.has("Letter P", world.player)
+    world.get_location("Used Q").access_rule = lambda state: state.has("Letter Q", world.player)
+    world.get_location("Used R").access_rule = lambda state: state.has("Letter R", world.player)
+    world.get_location("Used S").access_rule = lambda state: state.has("Letter S", world.player)
+    world.get_location("Used T").access_rule = lambda state: state.has("Letter T", world.player)
+    world.get_location("Used U").access_rule = lambda state: state.has("Letter U", world.player)
+    world.get_location("Used V").access_rule = lambda state: state.has("Letter V", world.player)
+    world.get_location("Used W").access_rule = lambda state: state.has("Letter W", world.player)
+    world.get_location("Used X").access_rule = lambda state: state.has("Letter X", world.player)
+    world.get_location("Used Y").access_rule = lambda state: state.has("Letter Y", world.player)
+    world.get_location("Used Z").access_rule = lambda state: state.has("Letter Z", world.player)
     
     world.get_location("1 Correct Letter In Word").access_rule = lambda state: needed_for_words(state, world, 1, 0)
     world.get_location("2 Correct Letters In Word").access_rule = lambda state: needed_for_words(state, world, 2, 1)
