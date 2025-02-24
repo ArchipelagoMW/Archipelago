@@ -590,6 +590,9 @@ GAME_SPECIFIC_PHRASES = {
         "Firebrand": "POWER_BRACELET", # Magic power that affects Mario/Luigi's hands, either this or MAGIC_ROD would be okay
         "Thunderhand": "POWER_BRACELET", # Ditto
 
+        # Hammer Upgrades --> Swords
+        "Hammer": "SWORD",
+
         # 1-UP Super fix
         "1-UP Super": "TOADSTOOL",
 
@@ -625,7 +628,10 @@ GAME_SPECIFIC_PHRASES = {
         "Soulful Bros.": "TRADING_ITEM_RIBBON",
         "Bros. Rock": "TRADING_ITEM_RIBBON",
 
-
-        "Bean": "GUARDIAN_ACORN", # Beans and nuts are similar enough, right?
+        # Misc. Beans --> Acorns
+        "Hoo Bean": "GUARDIAN_ACORN", # Beans and nuts are similar enough, right?
+        "Chuckle Bean": "GUARDIAN_ACORN",
+        "Hee Bean": "GUARDIAN_ACORN",
+        "Woo Bean": "GUARDIAN_ACORN", 
     }
 }
