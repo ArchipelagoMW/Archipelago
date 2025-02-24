@@ -1,15 +1,15 @@
 from ..bases import SVTestBase
 from ... import options
 from ...data.craftable_data import all_crafting_recipes_by_name
-from ...options import BuildingProgression, ExcludeGingerIsland, Craftsanity, SeasonRandomization
 
 
 class TestCraftsanityLogic(SVTestBase):
     options = {
-        BuildingProgression.internal_name: BuildingProgression.option_progressive,
+        options.SkillProgression.internal_name: options.SkillProgression.option_progressive,
+        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
         options.Cropsanity.internal_name: options.Cropsanity.option_enabled,
-        Craftsanity.internal_name: Craftsanity.option_all,
-        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
+        options.Craftsanity.internal_name: options.Craftsanity.option_all,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
     }
 
     def test_can_craft_recipe(self):
@@ -68,11 +68,11 @@ class TestCraftsanityLogic(SVTestBase):
 
 class TestCraftsanityWithFestivalsLogic(SVTestBase):
     options = {
-        BuildingProgression.internal_name: BuildingProgression.option_progressive,
+        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
         options.Cropsanity.internal_name: options.Cropsanity.option_enabled,
         options.FestivalLocations.internal_name: options.FestivalLocations.option_easy,
-        Craftsanity.internal_name: Craftsanity.option_all,
-        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
+        options.Craftsanity.internal_name: options.Craftsanity.option_all,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
     }
 
     def test_can_craft_festival_recipe(self):
@@ -92,12 +92,13 @@ class TestCraftsanityWithFestivalsLogic(SVTestBase):
 
 class TestNoCraftsanityLogic(SVTestBase):
     options = {
-        BuildingProgression.internal_name: BuildingProgression.option_progressive,
-        SeasonRandomization.internal_name: SeasonRandomization.option_progressive,
+        options.SkillProgression.internal_name: options.SkillProgression.option_progressive,
+        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
+        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_progressive,
         options.Cropsanity.internal_name: options.Cropsanity.option_enabled,
         options.FestivalLocations.internal_name: options.FestivalLocations.option_disabled,
-        Craftsanity.internal_name: Craftsanity.option_none,
-        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
+        options.Craftsanity.internal_name: options.Craftsanity.option_none,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
     }
 
     def test_can_craft_recipe(self):
@@ -136,11 +137,11 @@ class TestNoCraftsanityLogic(SVTestBase):
 
 class TestNoCraftsanityWithFestivalsLogic(SVTestBase):
     options = {
-        BuildingProgression.internal_name: BuildingProgression.option_progressive,
+        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
         options.Cropsanity.internal_name: options.Cropsanity.option_enabled,
         options.FestivalLocations.internal_name: options.FestivalLocations.option_easy,
-        Craftsanity.internal_name: Craftsanity.option_none,
-        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
+        options.Craftsanity.internal_name: options.Craftsanity.option_none,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
     }
 
     def test_can_craft_festival_recipe(self):

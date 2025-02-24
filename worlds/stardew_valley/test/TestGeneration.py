@@ -17,7 +17,7 @@ def get_all_permanent_progression_items() -> List[ItemData]:
         item
         for item in item_data.all_items
         if ItemClassification.progression in item.classification
-        if item.mod_name is None
+        if not item.content_packs
         if item.name not in {event.name for event in item_data.events}
         if item.name not in {deprecated.name for deprecated in items.items_by_group[Group.DEPRECATED]}
         if item.name not in {season.name for season in items.items_by_group[Group.SEASON]}

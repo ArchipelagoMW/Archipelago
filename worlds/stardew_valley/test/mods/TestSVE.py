@@ -9,7 +9,7 @@ from ...strings.region_names import SVERegion
 class TestAuroraVineyard(SVTestBase):
     options = {
         options.Cropsanity.internal_name: options.Cropsanity.option_enabled,
-        options.Mods.internal_name: frozenset({ModNames.sve})
+        options.Mods.internal_name: frozenset({ModNames.sve}),
     }
 
     def test_need_tablet_to_do_quest(self):

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Tuple, Dict, Set, Callable
+from typing import List, Tuple, Dict, Callable
 
 from ..mods.mod_data import ModNames
 from ..mods.mod_monster_locations import modded_monsters_locations
@@ -145,7 +145,7 @@ register_monster_modification(ModNames.boarding_house, grub, update_monster_loca
 register_monster_modification(ModNames.boarding_house, bug, update_monster_locations)
 
 
-def all_monsters_by_name_given_mods(mods: Set[str]) -> Dict[str, StardewMonster]:
+def all_monsters_by_name_given_content_packs(mods: set[str]) -> dict[str, StardewMonster]:
     monsters_by_name = {}
     for monster in all_monsters:
         current_monster = monster
@@ -158,7 +158,7 @@ def all_monsters_by_name_given_mods(mods: Set[str]) -> Dict[str, StardewMonster]
     return monsters_by_name
 
 
-def all_monsters_by_category_given_mods(mods: Set[str]) -> Dict[str, Tuple[StardewMonster, ...]]:
+def all_monsters_by_category_given_content_packs(mods: set[str]) -> dict[str, Tuple[StardewMonster, ...]]:
     monsters_by_category = {}
     for monster in all_monsters:
         current_monster = monster

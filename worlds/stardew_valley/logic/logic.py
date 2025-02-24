@@ -47,12 +47,13 @@ from .traveling_merchant_logic import TravelingMerchantLogicMixin
 from .wallet_logic import WalletLogicMixin
 from .walnut_logic import WalnutLogicMixin
 from ..content.game_content import StardewContent
+from ..content.vanilla.ginger_island import ginger_island_content_pack
 from ..data.craftable_data import all_crafting_recipes
 from ..data.museum_data import all_museum_items
 from ..data.recipe_data import all_cooking_recipes
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_logic import ModLogicMixin
-from ..options import ExcludeGingerIsland, StardewValleyOptions
+from ..options import StardewValleyOptions
 from ..stardew_rule import False_, True_, StardewRule
 from ..strings.animal_names import Animal
 from ..strings.animal_product_names import AnimalProduct
@@ -109,15 +110,16 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         self.registry.museum_rules.update({donation.item_name: self.museum.can_find_museum_item(donation) for donation in all_museum_items})
 
         for recipe in all_cooking_recipes:
-            if recipe.mod_name and recipe.mod_name not in self.options.mods:
+            if recipe.mod_name and not self.content.is_enabled(recipe.mod_name):
                 continue
+
             can_cook_rule = self.cooking.can_cook(recipe)
             if recipe.meal in self.registry.cooking_rules:
                 can_cook_rule = can_cook_rule | self.registry.cooking_rules[recipe.meal]
             self.registry.cooking_rules[recipe.meal] = can_cook_rule
 
         for recipe in all_crafting_recipes:
-            if recipe.mod_name and recipe.mod_name not in self.options.mods:
+            if recipe.mod_name and not self.content.is_enabled(recipe.mod_name):
                 continue
             can_craft_rule = self.crafting.can_craft(recipe)
             if recipe.item in self.registry.crafting_rules:
@@ -377,9 +379,9 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         return self.has(Machine.furnace) & self.has(item)
 
     def has_island_trader(self) -> StardewRule:
-        if self.options.exclude_ginger_island == ExcludeGingerIsland.option_true:
-            return False_()
-        return self.region.can_reach(Region.island_trader)
+        if self.content.is_enabled(ginger_island_content_pack):
+            return self.region.can_reach(Region.island_trader)
+        return self.logic.false_
 
     def has_abandoned_jojamart(self) -> StardewRule:
         return self.received(CommunityUpgrade.movie_theater, 1)

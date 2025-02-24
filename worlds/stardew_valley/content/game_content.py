@@ -50,6 +50,15 @@ class StardewContent:
             if tag in item.tags:
                 yield item
 
+    def are_all_enabled(self, content_packs: frozenset[str]) -> bool:
+        return content_packs.issubset(self.registered_packs)
+
+    def is_enabled(self, content_pack: str | ContentPack) -> bool:
+        if isinstance(content_pack, ContentPack):
+            content_pack = content_pack.name
+
+        return content_pack in self.registered_packs
+
 
 @dataclass(frozen=True)
 class StardewFeatures:
