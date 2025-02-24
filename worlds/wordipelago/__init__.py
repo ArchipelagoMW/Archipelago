@@ -40,8 +40,11 @@ class WordipelagoWorld(World):
             """
             make slot data, which consists of options, and some other variables.
             """
-            yacht_dice_options = self.options.as_dict(
+            wordipelago_options = self.options.as_dict(
                 "words_to_win",
+                "green_checks",
+                "yellow_checks",
+                "letter_checks",
                 "starting_letters",
                 "starting_guesses",
                 "starting_cooldown",
@@ -53,11 +56,10 @@ class WordipelagoWorld(World):
                 "extra_items_as_time_rewards",
                 "start_inventory_from_pool",
             )
-            slot_data = yacht_dice_options # combine the two
             return {
-                **slot_data,
+                **wordipelago_options,
                 "starting_items": self.starting_items,
-                "world_version": "0.7.1"
+                "world_version": "0.8.0"
             }
             
     def create_item(self, name: str) -> WordipelagoItem:
@@ -147,13 +149,12 @@ class WordipelagoWorld(World):
                     region.add_locations({name: 201 + i})
             region.add_exits(region_data_table[region_name].connecting_regions)
 
-        self.options.priority_locations.value.add("1 Correct Letter In Word")
-        self.options.priority_locations.value.add("2 Correct Letter In Word")
-        self.options.priority_locations.value.add("3 Correct Letter In Word")
-        self.options.priority_locations.value.add("4 Correct Letter In Word")
-        self.options.priority_locations.value.add("5 Correct Letter In Word")
-        
-        self.options.priority_locations.value.add("Word 1")
+        if(location_data_table["Used J"].can_create(self)):
+            self.options.exclude_locations.value.add("Used J")
+            self.options.exclude_locations.value.add("Used K")
+            self.options.exclude_locations.value.add("Used X")
+            self.options.exclude_locations.value.add("Used Z")
+            self.options.exclude_locations.value.add("Used Q")
 
     def set_rules(self):
         create_rules(self)

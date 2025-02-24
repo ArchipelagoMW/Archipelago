@@ -31,10 +31,6 @@ def needed_for_words(state, world, vowels, consonants, guesses = 1, yellow = Fal
         has_strong_letters += 1
     if(state.has("The Letter H", world.player)):
         has_strong_letters += 1
-    if(state.has("The Letter J", world.player)):
-        has_strong_letters += 1
-    if(state.has("The Letter K", world.player)):
-        has_strong_letters += 1
     if(state.has("The Letter L", world.player)):
         has_strong_letters += 1
     if(state.has("The Letter M", world.player)):
@@ -42,8 +38,6 @@ def needed_for_words(state, world, vowels, consonants, guesses = 1, yellow = Fal
     if(state.has("The Letter N", world.player)):
         has_strong_letters += 1
     if(state.has("The Letter P", world.player)):
-        has_strong_letters += 1
-    if(state.has("The Letter Q", world.player)):
         has_strong_letters += 1
     if(state.has("The Letter R", world.player)):
         has_strong_letters += 1
@@ -54,10 +48,6 @@ def needed_for_words(state, world, vowels, consonants, guesses = 1, yellow = Fal
     if(state.has("The Letter V", world.player)):
         has_strong_letters += 1
     if(state.has("The Letter W", world.player)):
-        has_strong_letters += 1
-    if(state.has("The Letter X", world.player)):
-        has_strong_letters += 1
-    if(state.has("The Letter Z", world.player)):
         has_strong_letters += 1
 
     return has_vowels >= vowels and has_strong_letters >= consonants and (not yellow or state.has('Yellow Letters', world.player)) and state.has('Guess', world.player, guesses - world.options.starting_guesses)
@@ -95,6 +85,8 @@ def create_rules(world: "WordipelagoWorld"):
     world.get_location("3 Correct Letters In Word").access_rule = lambda state: needed_for_words(state, world, 2, 4, 2)
     world.get_location("4 Correct Letters In Word").access_rule = lambda state: needed_for_words(state, world, 3, 7, 2)
     world.get_location("5 Correct Letters In Word").access_rule = lambda state: needed_for_words(state, world, 4, 9, 3, True)
+
+    world.get_region("Yellow Checks").access_rule = lambda state: state.has('Yellow Letters', world.player)
     
     for i in range(world.options.words_to_win):
         world.get_location("Word " + str(i + 1)).access_rule = lambda state: needed_for_words(state, world, 4, 9, 3, True)

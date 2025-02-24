@@ -49,7 +49,6 @@ class YellowUnlocked(Toggle):
 
 class UnusedLettersUnlocked(Toggle):
     """
-    ==Not Yet Implimented==
     Whether you start with keyboard letters fading out when discovered not to be in the current word
     """
     display_name = "Unused Letters Unlocked"   
@@ -57,6 +56,50 @@ class UnusedLettersUnlocked(Toggle):
 class ExtraItemsAsTimeRewards(Toggle):
     """Whether to fill any extra items needed with time. otherwise non-useful filler item"""
     display_name = "Extra Time Rewards"
+
+class GreenChecks(Choice):
+    """
+    ==Not Yet Implimented==
+    How checks work for green letters in words
+    none: No checks for getting green letters
+    best: Checks for 1-5 correct letters in a word
+    composition: checks for every configuration of green letters
+    complete: Best and composition combined
+    """
+    display_name = "Green Checks"
+    option_none = 0
+    option_best = 1
+    option_composition = 3
+    option_complete = 3
+    default = 1
+
+class YellowChecks(Choice):
+    """
+    ==Not Yet Implimented==
+    How checks work for yellow letters in words
+    none: No checks for getting yellow letters
+    composition: checks for every configuration of yellow letters
+    """
+    display_name = "Yellow Checks"
+    option_none = 0
+    option_composition = 1
+    default = 0
+
+class LetterChecks(Choice):
+    """
+    ==Not Yet Implimented==
+    Which letters do you want to unlock items for sucessfully using in a word
+    none: No checks for using letters
+    vowels: Checks for using vowels
+    common: Checks for using vowels and common consonants
+    all: Checks for using all letters
+    """
+    display_name = "Letter Checks"
+    option_none = 0
+    option_vowels = 1
+    option_common = 2
+    option_all = 3
+    default = 2
 
 class ShuffleTyping(Choice):
     """
@@ -72,9 +115,13 @@ class ShuffleTyping(Choice):
     option_querty = 1
     option_azerty = 2
     option_dvorak = 3
+    default = 0
 
 class LetterBalancing(Range):
-    """New letter usefulness, 0 = completely random, 5 = weighted to useful letters early"""
+    """
+    ==Not Yet Implimented==
+    New letter usefulness, 0 = completely random, 5 = weighted to useful letters early
+    """
     display_name = "Letter Balancing"
     range_start = 0
     default = 2
@@ -83,6 +130,9 @@ class LetterBalancing(Range):
 @dataclass
 class WordipelagoOptions(PerGameCommonOptions):
     words_to_win: WordsToWin
+    green_checks: GreenChecks
+    yellow_checks: YellowChecks
+    letter_checks: LetterChecks
     starting_letters: StartingLetters
     starting_guesses: StartingGuesses
     starting_cooldown: StartingCooldown
