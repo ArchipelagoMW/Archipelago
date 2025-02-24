@@ -1334,8 +1334,7 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, world: World, pla
     # Extra Life Box Upgrade Requirements
     if world.options.itemboxsanity.value > 0:
         add_rule(multiworld.get_location(LocationName.prison_lane_lifebox_1, player),
-                 lambda state: (state.has(ItemName.tails_booster, player) or
-                                state.has(ItemName.tails_bazooka, player)))
+                 lambda state: state.has(ItemName.tails_bazooka, player))
         add_rule(multiworld.get_location(LocationName.pumpkin_hill_lifebox_1, player),
                  lambda state: state.has(ItemName.knuckles_shovel_claws, player))
         add_rule(multiworld.get_location(LocationName.mission_street_lifebox_1, player),
@@ -1534,6 +1533,8 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, world: World, pla
                                 state.has(ItemName.knuckles_hammer_gloves, player)))
         add_rule(multiworld.get_location(LocationName.eternal_engine_itembox_3, player),
                  lambda state: state.has(ItemName.tails_booster, player))
+        add_rule(multiworld.get_location(LocationName.meteor_herd_itembox_3, player),
+                 lambda state: state.has(ItemName.knuckles_sunglasses, player))
         add_rule(multiworld.get_location(LocationName.crazy_gadget_itembox_3, player),
                  lambda state: state.has(ItemName.sonic_flame_ring, player))
 
@@ -1721,6 +1722,8 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, world: World, pla
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
         add_rule(multiworld.get_location(LocationName.white_jungle_itembox_8, player),
                  lambda state: state.has(ItemName.shadow_air_shoes, player))
+        add_rule(multiworld.get_location(LocationName.mad_space_itembox_8, player),
+                 lambda state: state.has(ItemName.rouge_iron_boots, player))
         add_rule(multiworld.get_location(LocationName.cosmic_wall_itembox_8, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
 
@@ -1746,6 +1749,8 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, world: World, pla
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
         add_rule(multiworld.get_location(LocationName.security_hall_itembox_9, player),
                  lambda state: state.has(ItemName.rouge_pick_nails, player))
+        add_rule(multiworld.get_location(LocationName.mad_space_itembox_9, player),
+                 lambda state: state.has(ItemName.rouge_iron_boots, player))
         add_rule(multiworld.get_location(LocationName.cosmic_wall_itembox_9, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
 
@@ -3060,6 +3065,8 @@ def set_mission_upgrade_rules_hard(multiworld: MultiWorld, world: World, player:
                                 state.has(ItemName.knuckles_hammer_gloves, player)))
         add_rule(multiworld.get_location(LocationName.eternal_engine_itembox_3, player),
                  lambda state: state.has(ItemName.tails_booster, player))
+        add_rule(multiworld.get_location(LocationName.meteor_herd_itembox_3, player),
+                 lambda state: state.has(ItemName.knuckles_sunglasses, player))
 
         add_rule(multiworld.get_location(LocationName.weapons_bed_itembox_3, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
@@ -3084,6 +3091,8 @@ def set_mission_upgrade_rules_hard(multiworld: MultiWorld, world: World, player:
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
         add_rule(multiworld.get_location(LocationName.security_hall_itembox_4, player),
                  lambda state: state.has(ItemName.rouge_pick_nails, player))
+        add_rule(multiworld.get_location(LocationName.mad_space_itembox_4, player),
+                 lambda state: state.has(ItemName.rouge_iron_boots, player))
         add_rule(multiworld.get_location(LocationName.cosmic_wall_itembox_4, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
 
@@ -4000,7 +4009,7 @@ def set_mission_upgrade_rules_expert(multiworld: MultiWorld, world: World, playe
         add_rule(multiworld.get_location(LocationName.radical_highway_animal_20, player),
                  lambda state: state.has(ItemName.shadow_flame_ring, player))
 
-    # Extra Life Box Upgrade Requirements TODO
+    # Extra Life Box Upgrade Requirements
     if world.options.itemboxsanity.value > 0:
         add_rule(multiworld.get_location(LocationName.pumpkin_hill_lifebox_1, player),
                  lambda state: state.has(ItemName.knuckles_shovel_claws, player))
@@ -4048,7 +4057,7 @@ def set_mission_upgrade_rules_expert(multiworld: MultiWorld, world: World, playe
         add_rule(multiworld.get_location(LocationName.final_rush_lifebox_13, player),
                  lambda state: state.has(ItemName.sonic_mystic_melody, player))
 
-    # Item Box Upgrade Requirements TODO
+    # Item Box Upgrade Requirements
     if world.options.itemboxsanity.value == 2:
         add_rule(multiworld.get_location(LocationName.eternal_engine_itembox_1, player),
                  lambda state: state.has(ItemName.tails_booster, player))
@@ -4079,6 +4088,8 @@ def set_mission_upgrade_rules_expert(multiworld: MultiWorld, world: World, playe
                  lambda state: state.has(ItemName.tails_booster, player))
         add_rule(multiworld.get_location(LocationName.eternal_engine_itembox_3, player),
                  lambda state: state.has(ItemName.tails_booster, player))
+        add_rule(multiworld.get_location(LocationName.meteor_herd_itembox_3, player),
+                 lambda state: state.has(ItemName.knuckles_sunglasses, player))
 
         add_rule(multiworld.get_location(LocationName.weapons_bed_itembox_3, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
@@ -4191,7 +4202,8 @@ def set_mission_upgrade_rules_expert(multiworld: MultiWorld, world: World, playe
                  lambda state: state.has(ItemName.tails_booster, player))
 
         add_rule(multiworld.get_location(LocationName.egg_quarters_itembox_11, player),
-                 lambda state: state.has(ItemName.rouge_iron_boots, player))
+                 lambda state: (state.has(ItemName.rouge_pick_nails, player) and
+                                state.has(ItemName.rouge_iron_boots, player)))
         add_rule(multiworld.get_location(LocationName.cosmic_wall_itembox_11, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
 
@@ -4264,7 +4276,7 @@ def set_mission_upgrade_rules_expert(multiworld: MultiWorld, world: World, playe
                  lambda state: state.has(ItemName.tails_booster, player))
         add_rule(multiworld.get_location(LocationName.hidden_base_big, player),
                  lambda state: state.has(ItemName.tails_booster, player))
-        add_rule(multiworld.get_location(LocationName.eternal_engine_big, player), #TODO
+        add_rule(multiworld.get_location(LocationName.eternal_engine_big, player),
                  lambda state: state.has(ItemName.tails_booster, player) and
                                state.has(ItemName.tails_bazooka, player))
 
