@@ -66,6 +66,26 @@ class KH2CommandProcessor(ClientCommandProcessor):
         else:
             self.output(f"Unknown priority: {priority}. Valid Inputs: PlayerName, ItemName")
 
+    def _cmd_deathlink(self):
+        """Toggles Deathlink"""
+        if self.ctx.deathlink_toggle:
+            # self.ctx.tags.add("DeathLink")
+            self.ctx.deathlink_toggle = False
+            self.output(f"Death Link turned off")
+        else:
+            self.ctx.deathlink_toggle = True
+            self.output(f"Death Link turned on")
+
+    def _cmd_add_to_blacklist(self, player_name: str = ""):
+        """Adds player to deathlink blacklist"""
+        if player_name not in self.ctx.deathlink_blacklist:
+            self.ctx.deathlink_blacklist.append(player_name)
+
+    def _cmd_remove_from_blacklist(self, player_name: str = ""):
+        """Removes player from the deathlink blacklist"""
+        if player_name in self.ctx.deathlink_blacklist:
+            self.ctx.deathlink_blacklist.remove(player_name)
+
 
 class KH2Context(CommonContext):
     # command_processor: int = KH2CommandProcessor
@@ -101,7 +121,6 @@ class KH2Context(CommonContext):
         # queue for the strings to display on the screen
         self.queued_puzzle_popup = []
         self.queued_info_popup = []
-
 
         # special characters for printing in game
         # A dictionary of all the special characters, which
@@ -217,6 +236,7 @@ class KH2Context(CommonContext):
         self.Shop = 0x743350
         self.Slot1 = 0x2A23018
         self.InfoBarPointer = 0xABE2A8
+        self.isDead = 0x0BEEF28
 
         self.kh2_game_version = None  # can be egs or steam
 
@@ -271,6 +291,9 @@ class KH2Context(CommonContext):
         self.base_item_slots = 3
         self.front_ability_slots = [0x2546, 0x2658, 0x276C, 0x2548, 0x254A, 0x254C, 0x265A, 0x265C, 0x265E, 0x276E,
                                     0x2770, 0x2772]
+
+        self.deathlink_toggle = False
+        self.deathlink_blacklist = []
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -693,6 +716,24 @@ class KH2Context(CommonContext):
             if self.kh2_read_byte(self.Save + anchor) < self.kh2_seed_save["Levels"][leveltype]:
                 self.kh2_write_byte(self.Save + anchor, self.kh2_seed_save["Levels"][leveltype])
 
+    def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
+        """Gets dispatched when a new DeathLink is triggered by another linked player."""
+        if data["source"] not in self.deathlink_blacklist:
+            self.last_death_link = max(data["time"], self.last_death_link)
+            text = data.get("cause", "")
+            if text:
+                logger.info(f"DeathLink: {text}")
+            else:
+                logger.info(f"DeathLink: Received from {data['source']}")
+            # kills sora by setting flag for the lua to read
+            self.kh2_write_byte(0x810000, 1)
+
+    async def is_dead(self):
+        # if hp is 0 and sora has 5 drive gauge and deathlink flag isnt set
+        if self.deathlink_toggle and self.kh2_read_byte(0x810000) == 0 and self.kh2_read_longlong(self.isDead) != 0:
+            self.kh2_write_int(0x810000, 1)
+            await self.send_death(death_text="Sora Died")
+
     async def give_item(self, item, location):
         try:
             # todo: ripout all the itemtype stuff and just have one dictionary. the only thing that needs to be tracked from the server/local is abilites
@@ -1045,6 +1086,7 @@ class KH2Context(CommonContext):
                     self.Journal = 0x7434E0
                     self.Shop = 0x7435D0
                     self.InfoBarPointer = 0xABE828
+                    self.isDead = 0x0BEF4A8
                 elif self.kh2_read_string(0x9A9330, 4) == "KH2J":
                     self.kh2_game_version = "EGS"
                 else:
@@ -1159,7 +1201,9 @@ async def kh2_watcher(ctx: KH2Context):
                 await asyncio.create_task(ctx.verifyChests())
                 await asyncio.create_task(ctx.verifyItems())
                 await asyncio.create_task(ctx.verifyLevel())
-
+                await asyncio.create_task(ctx.is_dead())
+                if (ctx.deathlink_toggle and "DeathLink" not in ctx.tags) or (not ctx.deathlink_toggle and "DeathLink" in ctx.tags):
+                    await ctx.update_death_link(ctx.deathlink_toggle)
                 if finishedGame(ctx) and not ctx.kh2_finished_game:
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                     ctx.kh2_finished_game = True
