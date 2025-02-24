@@ -1,8 +1,10 @@
 from worlds.generic.Rules import forbid_item, set_rule, add_rule
 from BaseClasses import MultiWorld, CollectionState
 
-from .Items import vessel_table
-from .Locations import location_table
+from .Locations import ABREV_TO_LOCATION
+from .Items import progression_items
+from .Options import SOTNOptions
+from .data.Constants import EXTENSIONS, RELIC_NAMES
 
 
 def sotn_has_transformation(state: CollectionState, player: int) -> bool:
@@ -42,1745 +44,313 @@ def sotn_has_dracula(state: CollectionState, player: int) -> bool:
             state.has("Eye of vlad", player) and state.has("Ring of vlad", player))
 
 
-def set_rules(world: MultiWorld, player: int, options: dict) -> None:
-    no4 = options["no4"]
-    are = options["are"]
-    no2 = options["no2"]
-    esanity = options["esanity"]
-    dsanity = options["dsanity"]
-    rules = options["rules"]
-    goal = options["goal"]
-    talisman = options["talisman"]
-    tt = options["tt"]
-    required_talisman = int((talisman / 100) * tt)
+def sotn_has_spike(state: CollectionState, player: int) -> bool:
+    return ((state.has("Soul of bat", player) and state.has("Echo of bat", player)) or
+            (state.has("Spike breaker", player) and sotn_has_any(state, player)))
 
-    # Dracula rule already on Reverse Center Cube region
-    if goal == 0 or goal == 2:
-        location = world.get_location("Keep Boss", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player))
 
-    if goal == 1:
-        location = world.get_location("Keep Boss", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) and state.has("Holy glasses", player))
+def set_rules(world: MultiWorld, player: int, options: SOTNOptions) -> None:
+    open_are = options.open_no4.value
+    open_no4 = options.open_are.value
+    extension = options.extension.value
 
-    if goal == 3:
-        location = world.get_location("RCEN - Kill Dracula", player)
-        set_rule(location, lambda state: sotn_has_dracula(state, player))
-
-    if goal == 4:
-        location = world.get_location("RNO0 - Heart Refresh(Inside clock)", player)
-        forbid_item(location,"Talisman", player)
-
-    if goal == 5:
-        location = world.get_location("RCEN - Kill Dracula", player)
-        set_rule(location, lambda state: sotn_has_dracula(state, player))
-        location = world.get_location("RNO0 - Heart Refresh(Inside clock)", player)
-        forbid_item(location, "Talisman", player)
-
-    for name, data in location_table.items():
-        if data.no_offset:
-            # Forbid progression_items and vessel on no offsets despawn locations
-            location = world.get_location(name, player)
-            for pu in vessel_table.items():
-                forbid_item(location, pu[0], player)
-            # Holy glasses can have progression items
-            if name != "NO0 - Holy glasses":
-                forbid_item(location, "Gold ring", player)
-                forbid_item(location, "Silver ring", player)
-                forbid_item(location, "Holy glasses", player)
-                forbid_item(location, "Spike breaker", player)
-
-    # Vessels can be on gold ring, but cause some weird visual glitches
-    location = world.get_location("NO4 - Gold Ring", player)
-    for pu in vessel_table.items():
-        forbid_item(location, pu[0], player)
-    location = world.get_location("Soul of Bat", player)
-    set_rule(location, lambda state: state.has("Form of mist", player) and sotn_has_any(state, player))
-    location = world.get_location("Fire of Bat", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-    location = world.get_location("Echo of Bat", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player) and sotn_has_transformation(state, player))
-    location = world.get_location("Power of Wolf", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-    location = world.get_location("Skill of Wolf", player)
-    set_rule(location, lambda state: state.has("Gravity boots", player) or sotn_has_flying(state, player))
-    if are:
-        location = world.get_location("Form of Mist", player)
-        set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_jump(state, player))
-    location = world.get_location("Power of Mist", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-    location = world.get_location("Gravity Boots", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-    if not no4:
-        location = world.get_location("Holy Symbol", player)
-        set_rule(location, lambda state: state.has("Merman statue", player) and state.has("Jewel of open", player))
-        location = world.get_location("Merman Statue", player)
-        set_rule(location, lambda state: state.has("Jewel of open", player))
-    else:
-        location = world.get_location("Holy Symbol", player)
-        set_rule(location, lambda state: state.has("Merman statue", player) and
-                 sotn_has_flying(state, player))
-    location = world.get_location("Bat Card", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-    location = world.get_location("Ghost Card", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-    location = world.get_location("Faerie Card", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-    location = world.get_location("Sword Card", player)
-    if no2:
-        set_rule(location, lambda state: (state.has("Gravity boots", player) or sotn_has_flying(state, player)) and
-                                         (state.has("Jewel of open", player) or sotn_has_jump(state, player)))
-    else:
-        set_rule(location, lambda state: sotn_has_flying(state, player))
-
-# Items rules
-    if are:
-        location = world.get_location("ARE - Holy sword(Hidden attic)", player)
-        set_rule(location, lambda state: (state.has("Jewel of open", player) or sotn_has_jump(state, player)) and
-                 state.has("Gravity boots", player) or sotn_has_flying(state, player))
-        location = world.get_location("ARE - Minotaurus/Werewolf kill", player)
-        set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_any(state, player))
-    else:
-        location = world.get_location("ARE - Holy sword(Hidden attic)", player)
-        set_rule(location, lambda state: state.has("Gravity boots", player) or sotn_has_flying(state, player))
-        location = world.get_location("ARE - Minotaurus/Werewolf kill", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-    # CAT - Catacombs worst case scenario player can get here with only jewel, soul and power of wolf
-    # Spike breaker locations
-    location = world.get_location("CAT - Library card(Spike breaker)", player)
-    set_rule(location, lambda state: (state.has("Spike breaker", player) and sotn_has_any(state, player)) or
-             sotn_has_bat(state, player))
-
-    location = world.get_location("CAT - Cross shuriken 1(Spike breaker)", player)
-    set_rule(location, lambda state: (state.has("Spike breaker", player) and sotn_has_any(state, player)) or
-             sotn_has_bat(state, player))
-
-    location = world.get_location("CAT - Cross shuriken 2(Spike breaker)", player)
-    set_rule(location, lambda state: (state.has("Spike breaker", player) and sotn_has_any(state, player)) or
-             sotn_has_bat(state, player))
-
-    location = world.get_location("CAT - Karma coin 1(Spike breaker)", player)
-    set_rule(location, lambda state: (state.has("Spike breaker", player) and sotn_has_any(state, player)) or
-             sotn_has_bat(state, player))
-
-    location = world.get_location("CAT - Karma coin 2(Spike breaker)", player)
-    set_rule(location, lambda state: (state.has("Spike breaker", player) and sotn_has_any(state, player)) or
-             sotn_has_bat(state, player))
-
-    location = world.get_location("CAT - Spike breaker", player)
-    set_rule(location, lambda state: (state.has("Spike breaker", player) and sotn_has_any(state, player)) or
-             sotn_has_bat(state, player))
-
-    location = world.get_location("CAT - Icebrand", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player) or state.has("Gravity boots", player))
-
-    location = world.get_location("CAT - Ballroom mask", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player) or state.has("Gravity boots", player))
-
-    location = world.get_location("CAT - Heart Vessel(Ballroom mask)", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player) or state.has("Gravity boots", player))
-
-    # CHI - Abandoned Mine Same as CAT
-    # Demon card locations
-    location = world.get_location("CHI - Power of sire(Demon)", player)
-    set_rule(location, lambda state: state.has("Demon card", player))
-
-    location = world.get_location("CHI - Barley tea(Demon)", player)
-    set_rule(location, lambda state: state.has("Demon card", player))
-
-    location = world.get_location("CHI - Peanuts 1(Demon)", player)
-    set_rule(location, lambda state: state.has("Demon card", player))
-
-    location = world.get_location("CHI - Peanuts 2(Demon)", player)
-    set_rule(location, lambda state: state.has("Demon card", player))
-
-    location = world.get_location("CHI - Peanuts 3(Demon)", player)
-    set_rule(location, lambda state: state.has("Demon card", player))
-
-    location = world.get_location("CHI - Peanuts 4(Demon)", player)
-    set_rule(location, lambda state: state.has("Demon card", player))
-
-    location = world.get_location("CHI - Turkey(Demon)", player)
-    set_rule(location, lambda state: state.has("Demon card", player))
-
-    location = world.get_location("CHI - Ring of ares", player)
-    set_rule(location, lambda state: state.has("Demon card", player))
-
-    if esanity:
-        location = world.get_location("Enemysanity: 95 - Venus weed", player)
-        set_rule(location, lambda state: state.has("Demon card", player))
-
-    if dsanity:
-        location = world.get_location("Dropsanity: 95 - Venus weed", player)
-        set_rule(location, lambda state: state.has("Demon card", player))
-
-    # DAI - Royal Chapel Worst case scenario only Jewel, maybe didn't have Jewel if he came from NZ1
-    location = world.get_location("DAI - Silver ring", player)
-    set_rule(location, lambda state: state.has("Form of mist", player) and state.has("Jewel of open", player) and
-             state.has("Spike breaker", player))
-
-    location = world.get_location("DAI - Morningstar", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-
-    location = world.get_location("DAI - Boomerang(Stairs)", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-
-    location = world.get_location("DAI - TNT(Stairs)", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-
-    location = world.get_location("DAI - Shuriken(Stairs)", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-
-    location = world.get_location("DAI - Magic missile(Stairs)", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-
-    location = world.get_location("DAI - Ankh of life(Stairs)", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-
-    location = world.get_location("DAI - Mystic pendant", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-
-    location = world.get_location("DAI - Hippogryph kill", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-
-    # LIB - Long Library
-    # Upper part of LIB(Faerie card) can be access with leap stone + kick and jump from an enemy
-    location = world.get_location("LIB - Takemitsu", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-
-    location = world.get_location("LIB - Onyx", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-
-    location = world.get_location("LIB - Frankfurter", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-
-    location = world.get_location("LIB - Potion", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-
-    location = world.get_location("LIB - Antivenom", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-
-    location = world.get_location("LIB - Lesser Demon kill", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-
-    if esanity:
-        location = world.get_location("Enemysanity: 65 - Flea armor", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-        location = world.get_location("Enemysanity: 80 - Lesser demon", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-    if dsanity:
-        location = world.get_location("Dropsanity: 54 - Corpseweed", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-        location = world.get_location("Dropsanity: 65 - Flea armor", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-    # If the player got here with only leap stone, leap jump on flea man
-    location = world.get_location("LIB - Stone mask", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-
-    location = world.get_location("LIB - Holy rod", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-
-    location = world.get_location("LIB - Topaz circlet", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-
-    # NO0 - Marble Gallery
-    location = world.get_location("NO0 - Str. potion", player)
-    set_rule(location, lambda state: state.has("Gravity boots", player) or sotn_has_flying(state, player))
-
-    location = world.get_location("NO0 - Hammer(Spirit)", player)
-    set_rule(location, lambda state: state.has("Gravity boots", player) or sotn_has_flying(state, player))
-
-    location = world.get_location("NO0 - Life Vessel(Left clock)", player)
-    if are:
-        set_rule(location, lambda state: sotn_has_any(state, player) or state.has("Jewel of open", player))
-    else:
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-    location = world.get_location("NO0 - Hammer(Middle clock)", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("NO0 - Life apple(Middle clock)", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("NO0 - Potion(Middle clock)", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("NO0 - Library card(Jewel)", player)
-    set_rule(location, lambda state: state.has("Jewel of open", player))
-
-    location = world.get_location("NO0 - Attack potion(Jewel)", player)
-    set_rule(location, lambda state: state.has("Jewel of open", player))
-
-    # Player could get stopwatch from Black Marble Gallery
-    location = world.get_location("NO0 - Heart Vessel(Right clock)", player)
-    set_rule(location, lambda state: (state.has("Cube of zoe", player) and sotn_has_any(state, player)) or
-             sotn_has_reverse(state, player))
-
-    location = world.get_location("NO0 - Alucart shield", player)
-    set_rule(location, lambda state: (state.has("Cube of zoe", player) and sotn_has_any(state, player)) or
-             sotn_has_reverse(state, player))
-
-    location = world.get_location("NO0 - Alucart mail", player)
-    set_rule(location, lambda state: (state.has("Cube of zoe", player) and sotn_has_any(state, player)) or
-             sotn_has_reverse(state, player))
-
-    location = world.get_location("NO0 - Alucart sword", player)
-    set_rule(location, lambda state: (state.has("Cube of zoe", player) and sotn_has_any(state, player)) or
-             sotn_has_reverse(state, player))
-
-    location = world.get_location("NO0 - Heart Vessel(Inside)", player)
-    set_rule(location, lambda state: state.has("Silver ring", player) and state.has("Gold ring", player))
-
-    location = world.get_location("NO0 - Life Vessel(Inside)", player)
-    set_rule(location, lambda state: state.has("Silver ring", player) and state.has("Gold ring", player))
-
-    location = world.get_location("NO0 - Holy glasses", player)
-    set_rule(location, lambda state: state.has("Silver ring", player) and state.has("Gold ring", player))
-
-    # NO1 - Outer Wall
-    location = world.get_location("NO1 - Garnet", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-
-    # NO2 - Olrox's Quarters
-    location = world.get_location("NO2 - Manna prism", player)
-    set_rule(location, lambda state: state.has("Gravity boots", player) or sotn_has_flying(state, player))
-
-    location = world.get_location("NO2 - Resist fire", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("NO2 - Luck potion", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("NO2 - Estoc", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("NO2 - Iron ball", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("NO2 - Olrox kill", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player) and sotn_has_transformation(state, player))
-
-    if no2:
-        location = world.get_location("NO2 - Garnet", player)
-        set_rule(location, lambda state:
-        (state.has("Gravity boots", player) or sotn_has_flying(state, player)) and (
-         sotn_has_any(state, player) or state.has("Jewel of open", player)))
-
-        location = world.get_location("NO2 - Heart Vessel", player)
-        set_rule(location, lambda state: state.has("Leap stone", player) or sotn_has_any(state, player))
-    else:
-        location = world.get_location("NO2 - Garnet", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player))
-
-        location = world.get_location("NO2 - Heart Vessel", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    if esanity:
-        location = world.get_location("Enemysanity: 57 - Spectral sword", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-        location = world.get_location("Enemysanity: 83 - Blade", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-        location = world.get_location("Enemysanity: 85 - Hammer", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-        location = world.get_location("Enemysanity: 92 - Olrox", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    if dsanity:
-        location = world.get_location("Dropsanity: 57 - Spectral sword", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-        location = world.get_location("Dropsanity: 83 - Blade", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-        location = world.get_location("Dropsanity: 85 - Hammer", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-    # NO3 - Castle Entrance
-    location = world.get_location("NO3 - Life Vessel (Above entry)", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("NO3 - Holy mail", player)
-    set_rule(location, lambda state: state.has("Gravity boots", player) or sotn_has_flying(state, player))
-
-    location = world.get_location("NO3 - Life Apple (Hidden room)", player)
-    set_rule(location, lambda state: state.has("Soul of bat", player) and state.has("Soul of wolf", player))
-
-    location = world.get_location("NO3 - Jewel sword", player)
-    set_rule(location, lambda state: state.has("Soul of bat", player) and state.has("Soul of wolf", player))
-
-    if no4:
-        # With backdoor open, every item beyond waterfall need some kinda of flying or jewel + regular need
-        location = world.get_location("NO4 - Scylla kill", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) or state.has("Jewel of open", player))
-
-        location = world.get_location("NO4 - Succubus kill", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) or
-                                         (state.has("Jewel of open", player) and sotn_has_flying(state, player)))
-
-        location = world.get_location("NO4 - Toadstool(Waterfall)", player)
-        set_rule(location, lambda state: sotn_has_any(state, player) or state.has("Jewel of open", player))
-
-        location = world.get_location("NO4 - Shiitake(Waterfall)", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) or state.has("Jewel of open", player))
-
-        location = world.get_location("NO4 - Secret boots", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) or
-                                         (state.has("Jewel of open", player) and sotn_has_any(state, player)))
-
-        location = world.get_location("NO4 - Herald Shield", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) or (state.has("Jewel of open", player) and
-                                                                            state.has("Soul of wolf", player) and
-                                                                            state.has("Power of wolf", player)))
-
-        location = world.get_location("NO4 - Pentagram", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player))
-
-        location = world.get_location("NO4 - Life Vessel(Bellow bridge)", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) or (state.has("Jewel of open", player) and
-                                                                            state.has("Soul of wolf", player) and
-                                                                            state.has("Power of wolf", player)))
-
-        location = world.get_location("NO4 - Heart Vessel(Bellow bridge)", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) or (state.has("Jewel of open", player) and
-                                                                            state.has("Soul of wolf", player) and
-                                                                            state.has("Power of wolf", player)))
-
-        location = world.get_location("NO4 - Antivenom(Underwater)", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) or state.has("Jewel of open", player))
-
-        location = world.get_location("NO4 - Life Vessel(Underwater)", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) or state.has("Jewel of open", player))
-
-        location = world.get_location("NO4 - Toadstool(26)", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) or state.has("Jewel of open", player))
-
-        location = world.get_location("NO4 - Shiitake(27)", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) or state.has("Jewel of open", player))
-
-        location = world.get_location("NO4 - Nunchaku", player)
-        set_rule(location, lambda state: state.has("Holy symbol", player) and
-                                         (sotn_has_flying(state, player) or state.has("Jewel of open", player)))
-
-        location = world.get_location("NO4 - Shiitake(12)", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) or state.has("Jewel of open", player))
-
-        location = world.get_location("NO4 - Life Vessel(1)", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) or state.has("Jewel of open", player))
-
-        location = world.get_location("NO4 - Heart Vessel(0)", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) or state.has("Jewel of open", player))
-
-        location = world.get_location("NO4 - Bandanna", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) or state.has("Jewel of open", player))
-
-        location = world.get_location("NO4 - Zircon", player)
-        set_rule(location, lambda state: (sotn_has_flying(state, player) or state.has("Jewel of open", player)) and
-                                         sotn_has_any(state, player))
-
-        location = world.get_location("NO4 - Claymore", player)
-        set_rule(location, lambda state: (state.has("Jewel of open", player) and sotn_has_flying(state, player)) or
-                                         sotn_has_flying(state, player))
-
-        location = world.get_location("NO4 - Meal ticket 1(Succubus)", player)
-        set_rule(location, lambda state: (state.has("Jewel of open", player) and sotn_has_flying(state, player)) or
-                                         sotn_has_flying(state, player))
-
-        location = world.get_location("NO4 - Meal ticket 2(Succubus)", player)
-        set_rule(location, lambda state: (state.has("Jewel of open", player) and sotn_has_flying(state, player)) or
-                                         sotn_has_flying(state, player))
-
-        location = world.get_location("NO4 - Meal ticket 3(Succubus)", player)
-        set_rule(location, lambda state: (state.has("Jewel of open", player) and sotn_has_flying(state, player)) or
-                                         sotn_has_flying(state, player))
-
-        location = world.get_location("NO4 - Meal ticket 4(Succubus)", player)
-        set_rule(location, lambda state: (state.has("Jewel of open", player) and sotn_has_flying(state, player)) or
-                                         sotn_has_flying(state, player))
-
-        location = world.get_location("NO4 - Moonstone", player)
-        set_rule(location, lambda state: (state.has("Jewel of open", player) and sotn_has_flying(state, player)) or
-                                         sotn_has_flying(state, player))
-
-        location = world.get_location("NO4 - Gold Ring", player)
-        set_rule(location, lambda state: (state.has("Jewel of open", player) and sotn_has_flying(state, player)) or
-                                         sotn_has_flying(state, player))
-
-        location = world.get_location("NO4 - Resist ice", player)
-        set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
-
-        location = world.get_location("NO4 - Scimitar", player)
-        set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
-
-        location = world.get_location("NO4 - Pot roast", player)
-        set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
-
-        location = world.get_location("NO4 - Crystal cloak", player)
-        set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
-
-        location = world.get_location("NO4 - Life Vessel(Holy)", player)
-        set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
-
-        location = world.get_location("NO4 - Knuckle duster(Holy)", player)
-        set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
-
-        location = world.get_location("NO4 - Onyx(Holy)", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) or (state.has("Merman statue", player) or
-                                                                            sotn_has_any(state, player) and
-                                                                            state.has("Jewel of open", player)))
-
-        location = world.get_location("NO4 - Elixir(Holy)", player)
-        set_rule(location, lambda state: state.has("Merman statue", player) and (state.has("Jewel of open", player) or
-                                                                         sotn_has_flying(state, player)))
-
-        if esanity:
-            location = world.get_location("Enemysanity: 37 - Scylla wyrm", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
-
-            location = world.get_location("Enemysanity: 44 - Toad", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
-
-            location = world.get_location("Enemysanity: 48 - Frog", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
-
-            location = world.get_location("Enemysanity: 59 - Scylla", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
-
-            location = world.get_location("Enemysanity: 93 - Succubus", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
-
-            location = world.get_location("Enemysanity: 79 - Fishhead", player)
-            set_rule(location, lambda state: state.has("Holy symbol", player) and
-                                         (state.has("Jewel of open", player) or sotn_has_flying(state, player)))
-
-            location = world.get_location("Enemysanity: 91 - Killer fish", player)
-            set_rule(location, lambda state: state.has("Holy symbol", player) and
-                                            (state.has("Jewel of open", player) or sotn_has_flying(state, player)))
-
-        if dsanity:
-            location = world.get_location("Dropsanity: 44 - Toad", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
-
-            location = world.get_location("Dropsanity: 48 - Frog", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
-
-            location = world.get_location("Dropsanity: 79 - Fishhead", player)
-            set_rule(location, lambda state: state.has("Holy symbol", player) and
-                                            (state.has("Jewel of open", player) or sotn_has_flying(state, player)))
-
-            location = world.get_location("Dropsanity: 91 - Killer fish", player)
-            set_rule(location, lambda state: state.has("Holy symbol", player) and
-                                            (state.has("Jewel of open", player) or sotn_has_flying(state, player)))
-    else:
-        # NO3 - Life Vessel (UC exit) is the same need as NO4
-        location = world.get_location("NO3 - Life Vessel (UC exit)", player)
-        set_rule(location, lambda state: state.has("Jewel of open", player))
-        # NO4 - Underground Caverns need only Jewel
-        location = world.get_location("NO4 - Zircon", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-        # Succubus
-        location = world.get_location("NO4 - Claymore", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player))
-
-        location = world.get_location("NO4 - Meal ticket 1(Succubus)", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player))
-
-        location = world.get_location("NO4 - Meal ticket 2(Succubus)", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player))
-
-        location = world.get_location("NO4 - Meal ticket 3(Succubus)", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player))
-
-        location = world.get_location("NO4 - Meal ticket 4(Succubus)", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player))
-
-        location = world.get_location("NO4 - Moonstone", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player))
-
-        location = world.get_location("NO4 - Gold Ring", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player))
-
-        location = world.get_location("NO4 - Succubus kill", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) or
-                                         (state.has("Jewel of open", player) and sotn_has_flying(state, player)))
-
-        location = world.get_location("NO4 - Secret boots", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-        location = world.get_location("NO4 - Herald Shield", player)
-        set_rule(location, lambda state: state.has("Leap stone", player) or sotn_has_flying(state, player) or
-                                         (state.has("Soul of wolf", player) and state.has("Power of wolf", player)))
-
-        location = world.get_location("NO4 - Life Vessel(Bellow bridge)", player)
-        set_rule(location, lambda state: state.has("Leap stone", player) or sotn_has_flying(state, player) or
-                                         (state.has("Soul of wolf", player) and state.has("Power of wolf", player)))
-
-        location = world.get_location("NO4 - Heart Vessel(Bellow bridge)", player)
-        set_rule(location, lambda state: state.has("Leap stone", player) or sotn_has_flying(state, player) or
-                                         (state.has("Soul of wolf", player) and state.has("Power of wolf", player)))
-
-        location = world.get_location("NO4 - Elixir(Holy)", player)
-        set_rule(location, lambda state: state.has("Merman statue", player))
-
-        location = world.get_location("NO4 - Onyx(Holy)", player)
-        set_rule(location, lambda state: state.has("Merman statue", player) or sotn_has_any(state, player))
-
-        location = world.get_location("NO4 - Nunchaku", player)
-        set_rule(location, lambda state: state.has("Holy symbol", player))
-
-        if esanity:
-            location = world.get_location("Enemysanity: 37 - Scylla wyrm", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player))
-
-            location = world.get_location("Enemysanity: 44 - Toad", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player))
-
-            location = world.get_location("Enemysanity: 48 - Frog", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player))
-
-            location = world.get_location("Enemysanity: 49 - Frozen shade", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player))
-
-            location = world.get_location("Enemysanity: 59 - Scylla", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player))
-
-            location = world.get_location("Enemysanity: 93 - Succubus", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player) and sotn_has_flying(state, player))
-
-            location = world.get_location("Enemysanity: 79 - Fishhead", player)
-            set_rule(location, lambda state: state.has("Holy symbol", player) and state.has("Jewel of open", player))
-
-            location = world.get_location("Enemysanity: 91 - Killer fish", player)
-            set_rule(location, lambda state: state.has("Holy symbol", player) and state.has("Jewel of open", player))
-
-        if dsanity:
-            location = world.get_location("Dropsanity: 44 - Toad", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player))
-
-            location = world.get_location("Dropsanity: 48 - Frog", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player))
-
-            location = world.get_location("Dropsanity: 49 - Frozen shade", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player))
-
-            location = world.get_location("Dropsanity: 79 - Fishhead", player)
-            set_rule(location, lambda state: state.has("Holy symbol", player) and state.has("Jewel of open", player))
-
-            location = world.get_location("Dropsanity: 91 - Killer fish", player)
-            set_rule(location, lambda state: state.has("Holy symbol", player) and state.has("Jewel of open", player))
-
-    # NZ1 - Clock tower
-    location = world.get_location("NZ1 - Bekatowa", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("NZ1 - Shaman shield", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("NZ1 - Ice mail", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    # Can come from DAI or NO1
-    location = world.get_location("NZ1 - Gold plate", player)
-    set_rule(location, lambda state: sotn_has_any(state, player) or (state.has("Jewel of open", player) and
-                                                                     (state.has("Gravity boots", player) or
-                                                                      sotn_has_flying(state, player))))
-
-    location = world.get_location("NZ1 - Star flail", player)
-    set_rule(location, lambda state: sotn_has_any(state, player) or (state.has("Jewel of open", player) and
-                                                                     (state.has("Gravity boots", player) or
-                                                                      sotn_has_flying(state, player))))
-
-    location = world.get_location("NZ1 - Steel helm", player)
-    set_rule(location, lambda state: sotn_has_any(state, player) or (state.has("Jewel of open", player) and
-                                                                     (state.has("Gravity boots", player) or
-                                                                      sotn_has_flying(state, player))))
-
-    location = world.get_location("NZ1 - Life Vessel(Gear train)", player)
-    set_rule(location, lambda state: sotn_has_any(state, player) or (state.has("Jewel of open", player) and
-                                                                     (state.has("Gravity boots", player) or
-                                                                      sotn_has_flying(state, player))))
-
-    location = world.get_location("NZ1 - Heart Vessel(Gear train)", player)
-    set_rule(location, lambda state: sotn_has_any(state, player) or (state.has("Jewel of open", player) and
-                                                                     (state.has("Gravity boots", player) or
-                                                                      sotn_has_flying(state, player))))
-
-    location = world.get_location("NZ1 - Pot roast", player)
-    set_rule(location, lambda state: sotn_has_any(state, player) or (state.has("Jewel of open", player) and
-                                                                     (state.has("Gravity boots", player) or
-                                                                      sotn_has_flying(state, player))))
-
-    location = world.get_location("NZ1 - Healing mail", player)
-    set_rule(location, lambda state: sotn_has_any(state, player) or (state.has("Jewel of open", player) and
-                                                                     (state.has("Gravity boots", player) or
-                                                                      sotn_has_flying(state, player))))
-
-    location = world.get_location("NZ1 - TNT", player)
-    set_rule(location, lambda state: sotn_has_any(state, player) or (state.has("Jewel of open", player) and
-                                                                     (state.has("Gravity boots", player) or
-                                                                      sotn_has_flying(state, player))))
-
-    location = world.get_location("NZ1 - Bwaka knife", player)
-    set_rule(location, lambda state: sotn_has_any(state, player) or (state.has("Jewel of open", player) and
-                                                                     (state.has("Gravity boots", player) or
-                                                                      sotn_has_flying(state, player))))
-
-    location = world.get_location("NZ1 - Shuriken", player)
-    set_rule(location, lambda state: sotn_has_any(state, player) or (state.has("Jewel of open", player) and
-                                                                     (state.has("Gravity boots", player) or
-                                                                      sotn_has_flying(state, player))))
-
-    location = world.get_location("NZ1 - Karasuman kill", player)
-    set_rule(location, lambda state: sotn_has_any(state, player) or (state.has("Jewel of open", player) and
-                                                                     (state.has("Gravity boots", player) or
-                                                                      sotn_has_flying(state, player))))
-
-    # TOP - Castle Keep
-    if esanity:
-        location = world.get_location("Enemysanity: 56 - Flea rider", player)
-        set_rule(location, lambda  state: sotn_has_flying(state, player) or state.has("Gravity boots", player))
-
-    location = world.get_location("TOP - Turquoise", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-
-    location = world.get_location("TOP - Turkey(Behind wall)", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-
-    location = world.get_location("TOP - Falchion", player)
-    set_rule(location, lambda state: state.has("Gravity boots", player) or sotn_has_flying(state, player))
-
-    # High jump need it items and Richter
-    location = world.get_location("TOP - Fire mail(Behind wall)", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    world.get_location("TOP - Heart Vessel(Before Richter)", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("TOP - Sirloin(Above Richter)", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("TOP - Turkey(Above Richter)", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("TOP - Pot roast(Above Richter)", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("TOP - Frankfurter(Above Richter)", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("TOP - Resist stone(Above Richter)", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("TOP - Resist dark(Above Richter)", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("TOP - Resist holy(Above Richter)", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("TOP - Platinum mail(Above Richter)", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("TOP - Life Vessel 1(Viewing room)", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("TOP - Life Vessel 2(Viewing room)", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("TOP - Heart Vessel 1(Viewing room)", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("TOP - Heart Vessel 2(Viewing room)", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("TOP - Heart Vessel(Before Richter)", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("RNO0 - Heart Refresh(Inside clock)", player)
+    location = world.get_location("Reverse Center Cube - Kill Dracula", player)
     set_rule(location, lambda state: sotn_has_dracula(state, player))
 
-    # Reverse Castle -> Already have some kind of high jump
-    location = world.get_location("RDAI - Twilight cloak", player)
-    set_rule(location, lambda state: state.has("Spike breaker", player) and state.has("Form of mist", player) or
-             (state.has("Form of mist", player) and state.has("Power of mist", player)))
-
-    location = world.get_location("RNO2 - Akmodan II kill", player)
-    set_rule(location, lambda state: sotn_has_transformation(state, player))
-
-    location = world.get_location("RNO2 - Heart Vessel", player)
-    set_rule(location, lambda state: sotn_has_transformation(state, player))
-
-    location = world.get_location("RNO3 - Zircon", player)
-    set_rule(location, lambda state: state.has("Soul of wolf", player) and state.has("Soul of bat", player))
-
-    location = world.get_location("RNO3 - Opal", player)
-    set_rule(location, lambda state: state.has("Soul of wolf", player) and state.has("Soul of bat", player))
-
-    location = world.get_location("RNO3 - Beryl circlet", player)
-    set_rule(location, lambda state: state.has("Soul of wolf", player) and state.has("Soul of bat", player))
-
-    location = world.get_location("RNO0 - Library card", player)
-    set_rule(location, lambda state: state.has("Jewel of open", player))
-
-    location = world.get_location("RNO1 - Hammer", player)
-    set_rule(location, lambda state: state.has("Form of mist", player))
-
-    location = world.get_location("RNO1 - Shotel", player)
-    set_rule(location, lambda state: state.has("Form of mist", player))
-
-    location = world.get_location("RLIB - Staurolite", player)
-    set_rule(location, lambda state: state.has("Form of mist", player))
-
-    location = world.get_location("RNO4 - Life Vessel(Underwater)", player)
-    set_rule(location, lambda state: state.has("Gravity boots", player))
-
-    location = world.get_location("RNO4 - Bat Pentagram", player)
-    set_rule(location, lambda state: state.has("Leap stone", player) or state.has("Soul of bat", player))
-
-    location = world.get_location("RNO4 - Potion(Underwater)", player)
-    set_rule(location, lambda state: state.has("Gravity boots", player))
-
-    location = world.get_location("RNO4 - Heart Vessel(Air pocket)", player)
-    set_rule(location, lambda state: state.has("Gravity boots", player) and state.has("Holy symbol", player))
-
-    location = world.get_location("RNO4 - Osafune katana", player)
-    set_rule(location, lambda state: state.has("Soul of bat", player) or (state.has("Gravity boots", player) and
-                                                  (state.has("Leap stone", player))))
-
-    location = world.get_location("RCHI - Power of Sire(Demon)", player)
-    set_rule(location, lambda state: state.has("Demon card", player))
-
-    location = world.get_location("RCHI - Life apple(Demon)", player)
-    set_rule(location, lambda state: state.has("Demon card", player))
-
-    location = world.get_location("RCHI - Green tea(Demon)", player)
-    set_rule(location, lambda state: state.has("Demon card", player))
-
-    location = world.get_location("RCAT - Resist thunder", player)
-    set_rule(location, lambda state: state.has("Soul of bat", player) or
-             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
-             (state.has("Spike Breaker", player) and (state.has("Leap stone", player) or
-                                                      state.has("Gravity boots", player))))
-
-    location = world.get_location("RCAT - Resist fire", player)
-    set_rule(location, lambda state: state.has("Soul of bat", player) or
-             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
-             (state.has("Spike Breaker", player) and (state.has("Leap stone", player) or
-                                                      state.has("Gravity boots", player))))
-
-    location = world.get_location("RCAT - Karma coin(4)(Spike breaker)", player)
-    set_rule(location, lambda state: state.has("Soul of bat", player) or
-             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
-             (state.has("Spike Breaker", player) and (state.has("Leap stone", player) or
-                                                      state.has("Gravity boots", player))))
-
-    location = world.get_location("RCAT - Karma coin(5)(Spike breaker)", player)
-    set_rule(location, lambda state: state.has("Soul of bat", player) or
-             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
-             (state.has("Spike Breaker", player) and (state.has("Leap stone", player) or
-                                                      state.has("Gravity boots", player))))
-
-    location = world.get_location("RCAT - Red bean bun", player)
-    set_rule(location, lambda state: state.has("Soul of bat", player) or
-             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
-             (state.has("Spike Breaker", player) and (state.has("Leap stone", player) or
-                                                      state.has("Gravity boots", player))))
-
-    location = world.get_location("RCAT - Elixir", player)
-    set_rule(location, lambda state: state.has("Soul of bat", player) or
-             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
-             (state.has("Spike Breaker", player) and (state.has("Leap stone", player) or
-                                                      state.has("Gravity boots", player))))
-
-    location = world.get_location("RCAT - Library card", player)
-    set_rule(location, lambda state: state.has("Soul of bat", player) or
-             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
-             (state.has("Spike Breaker", player) and (state.has("Leap stone", player) or
-                                                      state.has("Gravity boots", player))))
-
-    # Exploration rules
-    location = world.get_location("Exploration 40", player)
-    set_rule(location, lambda state: state.has("Jewel of open", player) or state.has("Leap stone", player) or
-                                     state.has("Gravity boots", player) or state.has("Soul of bat", player))
-
-    location = world.get_location("Exploration 50", player)
-    set_rule(location, lambda state: state.has("Jewel of open", player) or state.has("Leap stone", player) or
-                                     state.has("Gravity boots", player) or state.has("Soul of bat", player))
-
-    location = world.get_location("Exploration 60", player)
-    set_rule(location, lambda state: state.has("Jewel of open", player) and (state.has("Leap stone", player) or
-                                                                             state.has("Gravity boots", player) or
-                                                                             state.has("Soul of bat", player)))
-
-    location = world.get_location("Exploration 70", player)
-    set_rule(location, lambda state: state.has("Jewel of open", player) and (state.has("Leap stone", player) or
-                                                                             state.has("Gravity boots", player) or
-                                                                             state.has("Soul of bat", player)))
-
-    location = world.get_location("Exploration 80", player)
-    set_rule(location, lambda state: state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
-                                                                             (state.has("Gravity boots", player) and
-                                                                              (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)) or
-                                                                              (state.has("Form of mist", player) and
-                                                                               state.has("Power of mist", player)))))
-
-    location = world.get_location("Exploration 90", player)
-    set_rule(location, lambda state: state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
-                                                                             (state.has("Gravity boots", player) and
-                                                                              (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)) or
-                                                                              (state.has("Form of mist", player) and
-                                                                               state.has("Power of mist", player)))))
-
-    location = world.get_location("Exploration 100", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 110", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 120", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 130", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 140", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 150", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 160", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 170", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 180", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 190", player)
-    set_rule(location, lambda state: state.has("Soul of bat", player) and state.has("Soul of wolf", player) and
-                                     state.has("Form of mist", player) and state.has("Merman statue", player) and
-                                     state.has("Spike breaker", player) and state.has("Demon card", player) and
-                                     state.has("Holy symbol", player) and state.has("Holy glasses", player) and
-                                     state.has("Silver ring", player) and state.has("Gold ring", player))
-
-    location = world.get_location("Exploration 200", player)
-    set_rule(location, lambda state: state.has("Soul of bat", player) and state.has("Soul of wolf", player) and
-                                     state.has("Form of mist", player) and state.has("Merman statue", player) and
-                                     state.has("Spike breaker", player) and state.has("Demon card", player) and
-                                     state.has("Holy symbol", player) and state.has("Holy glasses", player) and
-                                     state.has("Silver ring", player) and state.has("Gold ring", player))
-
-    location = world.get_location("Exploration 40 item", player)
-    set_rule(location, lambda state: state.has("Jewel of open", player) or state.has("Leap stone", player) or
-                                     state.has("Gravity boots", player) or state.has("Soul of bat", player))
-
-    location = world.get_location("Exploration 50 item", player)
-    set_rule(location, lambda state: state.has("Jewel of open", player) or state.has("Leap stone", player) or
-                                     state.has("Gravity boots", player) or state.has("Soul of bat", player))
-
-    location = world.get_location("Exploration 60 item", player)
-    set_rule(location, lambda state: state.has("Jewel of open", player) and (state.has("Leap stone", player) or
-                                                                             state.has("Gravity boots", player) or
-                                                                             state.has("Soul of bat", player)))
-
-    location = world.get_location("Exploration 70 item", player)
-    set_rule(location, lambda state: state.has("Jewel of open", player) and (state.has("Leap stone", player) or
-                                                                             state.has("Gravity boots", player) or
-                                                                             state.has("Soul of bat", player)))
-
-    location = world.get_location("Exploration 80 item", player)
-    set_rule(location, lambda state: state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
-                                                                             (state.has("Gravity boots", player) and
-                                                                              (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)) or
-                                                                              (state.has("Form of mist", player) and
-                                                                               state.has("Power of mist", player)))))
-
-    location = world.get_location("Exploration 90 item", player)
-    set_rule(location, lambda state: state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
-                                                                             (state.has("Gravity boots", player) and
-                                                                              (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)) or
-                                                                              (state.has("Form of mist", player) and
-                                                                               state.has("Power of mist", player)))))
-
-    location = world.get_location("Exploration 100 item", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and
-                                     state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
-                                                                             (state.has("Form of mist", player) and
-                                                                              state.has("Power of mist", player)) or
-                                                                             (state.has("Gravity boots", player) and
-                                                                              (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 110 item", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 120 item", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 130 item", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 140 item", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 150 item", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 160 item", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 170 item", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 180 item", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 190 item", player)
-    set_rule(location, lambda state: state.has("Soul of bat", player) and state.has("Soul of wolf", player) and
-                                     state.has("Form of mist", player) and state.has("Merman statue", player) and
-                                     state.has("Spike breaker", player) and state.has("Demon card", player) and
-                                     state.has("Holy symbol", player) and state.has("Holy glasses", player) and
-                                     state.has("Silver ring", player) and state.has("Gold ring", player))
-
-    location = world.get_location("Exploration 200 item", player)
-    set_rule(location, lambda state: state.has("Soul of bat", player) and state.has("Soul of wolf", player) and
-                                     state.has("Form of mist", player) and state.has("Merman statue", player) and
-                                     state.has("Spike breaker", player) and state.has("Demon card", player) and
-                                     state.has("Holy symbol", player) and state.has("Holy glasses", player) and
-                                     state.has("Silver ring", player) and state.has("Gold ring", player))
-
-
-def set_rules_limited(world: MultiWorld, player: int, options: dict) -> None:
-    no4 = options["no4"]
-    are = options["are"]
-    no2 = options["no2"]
-    esanity = options["esanity"]
-    dsanity = options["dsanity"]
-    rules = options["rules"]
-    goal = options["goal"]
-    talisman = options["talisman"]
-    tt = options["tt"]
-
-    # Dracula rule already on Reverse Center Cube region
-    if goal == 0 or goal == 2:
-        location = world.get_location("Keep Boss", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    if goal == 1 or goal == 4:
-        location = world.get_location("Keep Boss", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) and state.has("Holy glasses", player))
-
-    if rules == 0 and (goal == 4 or goal == 5):
-        location = world.get_location("RNO0 - Heart Refresh(Inside clock)", player)
-        forbid_item(location, "Talisman", player)
-
-    if goal == 3:
-        location = world.get_location("RCEN - Kill Dracula", player)
-        set_rule(location, lambda state: sotn_has_dracula(state, player))
-
-    if goal == 5:
-        location = world.get_location("RCEN - Kill Dracula", player)
-        set_rule(location, lambda state: sotn_has_dracula(state, player))
-
-    if rules == 0:
-        for name, data in location_table.items():
-            if data.no_offset:
-                # Forbid progression_items and vessel on no offsets despawn locations
-                location = world.get_location(name, player)
-                for pu in vessel_table.items():
-                    forbid_item(location, pu[0], player)
-                # Holy glasses can have progression items
-                if name != "NO0 - Holy glasses":
-                    forbid_item(location, "Gold ring", player)
-                    forbid_item(location, "Silver ring", player)
-                    forbid_item(location, "Holy glasses", player)
-                    forbid_item(location, "Spike breaker", player)
-
-    location = world.get_location("Soul of Bat", player)
+    # Player might break TOP_Turkey_1 with spell and miss the loot, forbid progression items
+    if ABREV_TO_LOCATION["TOP_Turkey_1"] in EXTENSIONS[extension]:
+        location = world.get_location(ABREV_TO_LOCATION["TOP_Turkey_1"], player)
+        for k in progression_items.keys():
+            forbid_item(location, k, player)
+
+    # Vessels can be on gold ring, but cause some weird visual glitches
+    location = world.get_location(ABREV_TO_LOCATION["NO4_Gold ring_10"], player)
+    forbid_item(location, "Heart Vessel", player)
+    forbid_item(location, "Life Vessel", player)
+
+    # Forbid vessels on no_offset locations and chi turkey, Vlad relics, Jewel of open, Trio and holy glasses
+    for loc in ["Heart of vlad", "Tooth of vlad", "Rib of vlad", "Ring of vlad", "Eye of vlad", "Jewel of open",
+                "NO1_Pot roast_77699032", "NO3_Pot roast_79337332", "NO3_Turkey_79340208", "NZ1_Bwaka knife_89601956",
+                "NZ1_Pot roast_89601948", "NZ1_Shuriken_89601952", "NZ1_TNT_89601960", "RNO1_Dim sum set_84398220",
+                "RNO3_Pot roast_85880396", "RNZ1_Bwaka knife_94094164", "RNZ1_Pot roast_94094156", "RARE_Life Vessel_8",
+                "RNZ1_Shuriken_94094160", "RNZ1_TNT_94094168", "CHI_Turkey_73307650", "CEN_Holy glasses_72803176"]:
+        if loc in EXTENSIONS[extension]:
+            location = world.get_location(ABREV_TO_LOCATION[loc], player)
+            forbid_item(location, "Heart Vessel", player)
+            forbid_item(location, "Life Vessel", player)
+
+    # Forbid relics on no_offset locations, chi turkey
+    for loc in ["NO1_Pot roast_77699032", "NO3_Pot roast_79337332", "NO3_Turkey_79340208", "NZ1_Bwaka knife_89601956",
+                "NZ1_Pot roast_89601948", "NZ1_Shuriken_89601952", "NZ1_TNT_89601960", "RNO1_Dim sum set_84398220",
+                "RNO3_Pot roast_85880396", "RNZ1_Bwaka knife_94094164", "RNZ1_Pot roast_94094156",
+                "RNZ1_Shuriken_94094160", "RNZ1_TNT_94094168", "CHI_Turkey_73307650"]:
+        if loc in EXTENSIONS[extension]:
+            location = world.get_location(ABREV_TO_LOCATION[loc], player)
+            for r in RELIC_NAMES:
+                forbid_item(location, r, player)
+    # TODO Jewel might need some restrictions Green tea RCHI too
+
+    # Relic rules not bound by region
+    location = world.get_location(ABREV_TO_LOCATION["Soul of bat"], player)
     set_rule(location, lambda state: state.has("Form of mist", player) and sotn_has_any(state, player))
-    location = world.get_location("Fire of Bat", player)
+    location = world.get_location(ABREV_TO_LOCATION["Echo of bat"], player)
+    add_rule(location, lambda state: sotn_has_transformation(state, player))
+    location = world.get_location(ABREV_TO_LOCATION["Power of wolf"], player)
     set_rule(location, lambda state: sotn_has_flying(state, player))
-    location = world.get_location("Echo of Bat", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player) and sotn_has_transformation(state, player))
-    location = world.get_location("Power of Wolf", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-    location = world.get_location("Skill of Wolf", player)
+    location = world.get_location(ABREV_TO_LOCATION["Skill of wolf"], player)
     set_rule(location, lambda state: state.has("Gravity boots", player) or sotn_has_flying(state, player))
-    if are:
-        location = world.get_location("Form of Mist", player)
-        set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_jump(state, player))
-    location = world.get_location("Power of Mist", player)
+    location = world.get_location(ABREV_TO_LOCATION["Gravity boots"], player)
     set_rule(location, lambda state: sotn_has_flying(state, player))
-    location = world.get_location("Gravity Boots", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-    if not no4:
-        location = world.get_location("Holy Symbol", player)
-        set_rule(location, lambda state: state.has("Merman statue", player) and state.has("Jewel of open", player))
-        location = world.get_location("Merman Statue", player)
-        set_rule(location, lambda state: state.has("Jewel of open", player))
-    else:
-        location = world.get_location("Holy Symbol", player)
-        set_rule(location, lambda state: state.has("Merman statue", player) and
-                                         sotn_has_flying(state, player))
-    location = world.get_location("Bat Card", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-    location = world.get_location("Ghost Card", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-    location = world.get_location("Faerie Card", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-    location = world.get_location("Sword Card", player)
-    if no2:
-        set_rule(location, lambda state: (state.has("Gravity boots", player) or sotn_has_flying(state, player)) and
-                                         (state.has("Jewel of open", player) or sotn_has_jump(state, player)))
-    else:
-        set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    # Items rules
-    if are:
-        location = world.get_location("ARE - Holy sword(Hidden attic)", player)
-        set_rule(location, lambda state: (state.has("Jewel of open", player) or sotn_has_jump(state, player)) and
-                                         state.has("Gravity boots", player) or sotn_has_flying(state, player))
-        location = world.get_location("ARE - Minotaurus/Werewolf kill", player)
-        set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_any(state, player))
-    else:
-        location = world.get_location("ARE - Holy sword(Hidden attic)", player)
-        set_rule(location, lambda state: state.has("Gravity boots", player) or sotn_has_flying(state, player))
-        location = world.get_location("ARE - Minotaurus/Werewolf kill", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-    # CAT - Catacombs worst case scenario player can get here with only jewel, soul and power of wolf
-    # Spike breaker locations
-    location = world.get_location("CAT - Icebrand", player)
+    location = world.get_location(ABREV_TO_LOCATION["Holy symbol"], player)
+    add_rule(location, lambda state: state.has("Merman statue", player))
+    location = world.get_location(ABREV_TO_LOCATION["Bat card"], player)
     set_rule(location, lambda state: sotn_has_flying(state, player) or state.has("Gravity boots", player))
-
-    # CHI - Abandoned Mine Same as CAT
-    # Demon card locations
-    location = world.get_location("CHI - Ring of ares", player)
-    set_rule(location, lambda state: state.has("Demon card", player))
-
-    if esanity and rules == 2:
-        location = world.get_location("Enemysanity: 95 - Venus weed", player)
-        set_rule(location, lambda state: state.has("Demon card", player))
-
-    if dsanity and rules == 2:
-        location = world.get_location("Dropsanity: 95 - Venus weed", player)
-        set_rule(location, lambda state: state.has("Demon card", player))
-
-    # DAI - Royal Chapel Worst case scenario only Jewel, maybe didn't have Jewel if he came from NZ1
-    location = world.get_location("DAI - Morningstar", player)
+    location = world.get_location(ABREV_TO_LOCATION["Faerie card"], player)
     set_rule(location, lambda state: sotn_has_any(state, player))
 
-    location = world.get_location("DAI - Ankh of life(Stairs)", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
+    # Item rules not bound by region
+    # ARE - Colosseum
+    if "ARE_Holy sword_7" in EXTENSIONS[extension]:
+        location = world.get_location(ABREV_TO_LOCATION["ARE_Holy sword_7"], player)
+        add_rule(location, lambda state: state.has("Gravity boots", player) or sotn_has_flying(state, player))
 
-    location = world.get_location("DAI - Mystic pendant", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
+    # CAT - Catacombs
+    # Spike Breaker area
+    loc_pool = []
+    for loc in ["CAT_Library card_4", "CAT_Cross shuriken_11", "CAT_Cross shuriken_12", "CAT_Karma coin_13",
+                "CAT_Karma coin_14", "CAT_Pork bun_15", "CAT_Spike breaker_16"]:
+        if loc in EXTENSIONS[extension]:
+            loc_pool.append(world.get_location(ABREV_TO_LOCATION[loc], player))
+    for loc in loc_pool:
+        add_rule(loc, lambda state: sotn_has_spike(state, player))
+    # Ballroom mask area
+    loc_pool = []
+    for loc in ["CAT_Icebrand_1", "CAT_Heart Vessel_6", "CAT_Ballroom mask_7"]:
+        if loc in EXTENSIONS[extension]:
+            loc_pool.append(world.get_location(ABREV_TO_LOCATION[loc], player))
+    for loc in loc_pool:
+        add_rule(loc, lambda state: state.has("Gravity boots", player) or sotn_has_flying(state, player))
 
-    location = world.get_location("DAI - Hippogryph kill", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
+    # CHI - Abandoned Mine
+    loc_pool = []
+    for loc in ["CHI_Power of sire_0", "CHI_Ring of ares_4", "CHI_Barley tea_8", "CHI_Peanuts_9",
+                "CHI_Peanuts_10", "CHI_Peanuts_11", "CHI_Peanuts_12", "CHI_Turkey_73307650"]:
+        if loc in EXTENSIONS[extension]:
+            loc_pool.append(world.get_location(ABREV_TO_LOCATION[loc], player))
+    for loc in loc_pool:
+        add_rule(loc, lambda state: state.has("Demon card", player))
+
+    # DAI - Royal Chapel
+    loc_pool = []
+    for loc in ["DAI_Ankh of life_0", "DAI_Morningstar_1", "DAI_Mystic pendant_4", "DAI_Magic missile_5",
+                "DAI_Shuriken_6", "DAI_TNT_7", "DAI_Boomerang_8"]:
+        if loc in EXTENSIONS[extension]:
+            loc_pool.append(world.get_location(ABREV_TO_LOCATION[loc], player))
+    for loc in loc_pool:
+        add_rule(loc, lambda state: sotn_has_any(state, player))
+    location = world.get_location(ABREV_TO_LOCATION["DAI_Silver ring_2"], player)
+    add_rule(location, lambda state: (state.has("Form of mist", player) and
+                                      state.has("Jewel of open", player) and
+                                      state.has("Spike breaker", player)))
 
     # LIB - Long Library
-    # Upper part of LIB(Faerie card) can be access with leap stone + kick and jump from an enemy
-    location = world.get_location("LIB - Onyx", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-
-    location = world.get_location("LIB - Lesser Demon kill", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
-
-    if esanity and rules == 2:
-        location = world.get_location("Enemysanity: 65 - Flea armor", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-        location = world.get_location("Enemysanity: 80 - Lesser demon", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-    if dsanity and rules == 2:
-        location = world.get_location("Dropsanity: 54 - Corpseweed", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-        location = world.get_location("Dropsanity: 65 - Flea armor", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-    # If the player got here with only leap stone, leap jump on flea man
-    location = world.get_location("LIB - Holy rod", player)
-    set_rule(location, lambda state: sotn_has_any(state, player))
+    loc_pool = []
+    for loc in ["LIB_Stone mask_1", "LIB_Holy rod_2", "LIB_Takemitsu_5", "LIB_Onyx_6",
+                "LIB_Frankfurter_7", "LIB_Potion_8", "LIB_Antivenom_9", "LIB_Topaz circlet_10"]:
+        if loc in EXTENSIONS[extension]:
+            loc_pool.append(world.get_location(ABREV_TO_LOCATION[loc], player))
+    for loc in loc_pool:
+        add_rule(loc, lambda state: sotn_has_any(state, player))
 
     # NO0 - Marble Gallery
-
-    # Player could get stopwatch from Black Marble Gallery
-    location = world.get_location("NO0 - Alucart sword", player)
-    set_rule(location, lambda state: (state.has("Cube of zoe", player) and sotn_has_any(state, player)) or
-                                     sotn_has_reverse(state, player))
+    loc_pool = []
+    for loc in ["NO0_Hammer_12", "NO0_Str. potion_13"]:
+        if loc in EXTENSIONS[extension]:
+            loc_pool.append(world.get_location(ABREV_TO_LOCATION[loc], player))
+    for loc in loc_pool:
+        add_rule(loc, lambda state: state.has("Gravity boots", player) or sotn_has_flying(state, player))
+    if "NO0_Life Vessel_0" in EXTENSIONS[extension]:
+        location = world.get_location(ABREV_TO_LOCATION["NO0_Life Vessel_0"], player)
+        if open_are:
+            set_rule(location, lambda state: state.has("Jewel of open", player))
+        else:
+            set_rule(location, lambda state: sotn_has_any(state, player))
+    loc_pool = []
+    for loc in ["NO0_Life apple_3", "NO0_Hammer_4", "NO0_Potion_5"]:
+        if loc in EXTENSIONS[extension]:
+            loc_pool.append(world.get_location(ABREV_TO_LOCATION[loc], player))
+    for loc in loc_pool:
+        add_rule(loc, lambda state: sotn_has_flying(state, player))
+    loc_pool = []
+    for loc in ["NO0_Library card_10", "NO0_Attack potion_11"]:
+        if loc in EXTENSIONS[extension]:
+            loc_pool.append(world.get_location(ABREV_TO_LOCATION[loc], player))
+    for loc in loc_pool:
+        add_rule(loc, lambda state: state.has("Jewel of open", player))
+    loc_pool = []
+    for loc in ["NO0_Alucart shield_1", "NO0_Heart Vessel_2", "NO0_Alucart mail_6", "NO0_Alucart sword_7"]:
+        if loc in EXTENSIONS[extension]:
+            loc_pool.append(world.get_location(ABREV_TO_LOCATION[loc], player))
+    for loc in loc_pool:
+        add_rule(loc, lambda state: (sotn_has_reverse(state, player) or
+                                     (state.has("Cube of zoe", player) and sotn_has_any(state, player))))
+    loc_pool = []
+    for loc in ["NO0_Life Vessel_8", "NO0_Heart Vessel_9"]:
+        if loc in EXTENSIONS[extension]:
+            loc_pool.append(world.get_location(ABREV_TO_LOCATION[loc], player))
+    for loc in loc_pool:
+        add_rule(loc, lambda state: state.has("Silver ring", player) and state.has("Gold ring", player))
 
     # NO1 - Outer Wall
-
-    # NO2 - Olrox's Quarters
-    location = world.get_location("NO2 - Estoc", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    location = world.get_location("NO2 - Olrox kill", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player) and sotn_has_transformation(state, player))
-
-    if no2:
-        location = world.get_location("NO2 - Garnet", player)
-        set_rule(location, lambda state:
-        (state.has("Gravity boots", player) or sotn_has_flying(state, player)) and (
-                sotn_has_any(state, player) or state.has("Jewel of open", player)))
-    else:
-        location = world.get_location("NO2 - Garnet", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    if esanity and rules == 2:
-        location = world.get_location("Enemysanity: 57 - Spectral sword", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-        location = world.get_location("Enemysanity: 83 - Blade", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-        location = world.get_location("Enemysanity: 85 - Hammer", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-        location = world.get_location("Enemysanity: 92 - Olrox", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    if dsanity and rules == 2:
-        location = world.get_location("Dropsanity: 57 - Spectral sword", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-        location = world.get_location("Dropsanity: 83 - Blade", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
-
-        location = world.get_location("Dropsanity: 85 - Hammer", player)
-        set_rule(location, lambda state: sotn_has_any(state, player))
+    if "NO1_Garnet_3" in EXTENSIONS[extension]:
+        location = world.get_location(ABREV_TO_LOCATION["NO1_Garnet_3"], player)
+        add_rule(location, lambda state: sotn_has_any(state, player))
+    if "NO1_Pot roast_77699032" in EXTENSIONS[extension]:
+        location = world.get_location(ABREV_TO_LOCATION["NO1_Pot roast_77699032"], player)
+        for r in RELIC_NAMES:
+            forbid_item(location, r, player)
 
     # NO3 - Castle Entrance
-    location = world.get_location("NO3 - Holy mail", player)
-    set_rule(location, lambda state: state.has("Gravity boots", player) or sotn_has_flying(state, player))
+    if "NO3_Life Vessel_8" in EXTENSIONS[extension]:
+        location = world.get_location(ABREV_TO_LOCATION["NO3_Life Vessel_8"], player)
+        add_rule(location, lambda state: sotn_has_flying(state, player))
+    if "NO3_Holy mail_5" in EXTENSIONS[extension]:
+        location = world.get_location(ABREV_TO_LOCATION["NO3_Holy mail_5"], player)
+        add_rule(location, lambda state: state.has("Gravity boots", player) or sotn_has_flying(state, player))
+    if "NO3_Life Vessel_6" in EXTENSIONS[extension]:
+        location = world.get_location(ABREV_TO_LOCATION["NO3_Life Vessel_6"], player)
+        if not open_no4:
+            add_rule(location, lambda state: state.has("Jewel of open", player))
+    loc_pool = []
+    for loc in ["NO3_Life apple_2", "NP3_Jewel sword_9"]:
+        if loc in EXTENSIONS[extension]:
+            loc_pool.append(world.get_location(ABREV_TO_LOCATION[loc], player))
+    for loc in loc_pool:
+        add_rule(loc, lambda state: state.has("Soul of wolf", player) and state.has("Soul of bat", player))
 
-    location = world.get_location("NO3 - Jewel sword", player)
-    set_rule(location, lambda state: state.has("Soul of bat", player) and state.has("Soul of wolf", player))
-
-    if esanity:
-        location = world.get_location("Enemysanity: 84 - Gurkha", player)
-        set_rule(location, lambda state: state.has("Gravity boots", player) or sotn_has_flying(state, player))
-
-    if dsanity:
-        location = world.get_location("Dropsanity: 84 - Gurkha", player)
-        set_rule(location, lambda state: state.has("Gravity boots", player) or sotn_has_flying(state, player))
-
-    if no4:
-        # With backdoor open, every item beyond waterfall need some kinda of flying or jewel + regular need
-        location = world.get_location("NO4 - Scylla kill", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) or state.has("Jewel of open", player))
-
-        location = world.get_location("NO4 - Succubus kill", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) or
-                                         (state.has("Jewel of open", player) and sotn_has_flying(state, player)))
-
-        location = world.get_location("NO4 - Secret boots", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) or
-                                         (state.has("Jewel of open", player) and sotn_has_any(state, player)))
-
-        location = world.get_location("NO4 - Nunchaku", player)
-        set_rule(location, lambda state: state.has("Holy symbol", player) and
-                                         (sotn_has_flying(state, player) or state.has("Jewel of open", player)))
-
-        location = world.get_location("NO4 - Bandanna", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) or state.has("Jewel of open", player))
-
-        location = world.get_location("NO4 - Crystal cloak", player)
-        set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
-
-        location = world.get_location("NO4 - Knuckle duster(Holy)", player)
-        set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
-
-        location = world.get_location("NO4 - Onyx(Holy)", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) or (state.has("Merman statue", player) or
-                                                                            sotn_has_any(state, player) and
-                                                                            state.has("Jewel of open", player)))
-
-        if esanity and rules == 2:
-            location = world.get_location("Enemysanity: 37 - Scylla wyrm", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
-
-            location = world.get_location("Enemysanity: 44 - Toad", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
-
-            location = world.get_location("Enemysanity: 48 - Frog", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
-
-            location = world.get_location("Enemysanity: 59 - Scylla", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
-
-            location = world.get_location("Enemysanity: 93 - Succubus", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
-
-            location = world.get_location("Enemysanity: 79 - Fishhead", player)
-            set_rule(location, lambda state: state.has("Holy symbol", player) and
-                                             (state.has("Jewel of open", player) or sotn_has_flying(state, player)))
-
-            location = world.get_location("Enemysanity: 91 - Killer fish", player)
-            set_rule(location, lambda state: state.has("Holy symbol", player) and
-                                             (state.has("Jewel of open", player) or sotn_has_flying(state, player)))
-
-        if dsanity and rules == 2:
-            location = world.get_location("Dropsanity: 44 - Toad", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
-
-            location = world.get_location("Dropsanity: 48 - Frog", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
-
-            location = world.get_location("Dropsanity: 79 - Fishhead", player)
-            set_rule(location, lambda state: state.has("Holy symbol", player) and
-                                             (state.has("Jewel of open", player) or sotn_has_flying(state, player)))
-
-            location = world.get_location("Dropsanity: 91 - Killer fish", player)
-            set_rule(location, lambda state: state.has("Holy symbol", player) and
-                                             (state.has("Jewel of open", player) or sotn_has_flying(state, player)))
-    else:
-        # NO4 - Underground Caverns need only Jewel
-        # Succubus
-        location = world.get_location("NO4 - Succubus kill", player)
-        set_rule(location, lambda state: sotn_has_flying(state, player) or
-                                         (state.has("Jewel of open", player) and sotn_has_flying(state, player)))
-
-        location = world.get_location("NO4 - Onyx(Holy)", player)
-        set_rule(location, lambda state: state.has("Merman statue", player) or sotn_has_any(state, player))
-
-        location = world.get_location("NO4 - Nunchaku", player)
-        set_rule(location, lambda state: state.has("Holy symbol", player))
-
-        if esanity and rules == 2:
-            location = world.get_location("Enemysanity: 37 - Scylla wyrm", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player))
-
-            location = world.get_location("Enemysanity: 44 - Toad", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player))
-
-            location = world.get_location("Enemysanity: 48 - Frog", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player))
-
-            location = world.get_location("Enemysanity: 49 - Frozen shade", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player))
-
-            location = world.get_location("Enemysanity: 59 - Scylla", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player))
-
-            location = world.get_location("Enemysanity: 93 - Succubus", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player) and sotn_has_flying(state, player))
-
-            location = world.get_location("Enemysanity: 79 - Fishhead", player)
-            set_rule(location, lambda state: state.has("Holy symbol", player) and state.has("Jewel of open", player))
-
-            location = world.get_location("Enemysanity: 91 - Killer fish", player)
-            set_rule(location, lambda state: state.has("Holy symbol", player) and state.has("Jewel of open", player))
-
-        if dsanity and rules == 2:
-            location = world.get_location("Dropsanity: 44 - Toad", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player))
-
-            location = world.get_location("Dropsanity: 48 - Frog", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player))
-
-            location = world.get_location("Dropsanity: 49 - Frozen shade", player)
-            set_rule(location, lambda state: state.has("Jewel of open", player))
-
-            location = world.get_location("Dropsanity: 79 - Fishhead", player)
-            set_rule(location, lambda state: state.has("Holy symbol", player) and state.has("Jewel of open", player))
-
-            location = world.get_location("Dropsanity: 91 - Killer fish", player)
-            set_rule(location, lambda state: state.has("Holy symbol", player) and state.has("Jewel of open", player))
-
-    # NZ1 - Clock tower
-    location = world.get_location("NZ1 - Bekatowa", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
-
-    # Can come from DAI or NO1
-    location = world.get_location("NZ1 - Gold plate", player)
-    set_rule(location, lambda state: sotn_has_any(state, player) or (state.has("Jewel of open", player) and
-                                                                     (state.has("Gravity boots", player) or
-                                                                      sotn_has_flying(state, player))))
-
-    location = world.get_location("NZ1 - Karasuman kill", player)
-    set_rule(location, lambda state: sotn_has_any(state, player) or (state.has("Jewel of open", player) and
-                                                                     (state.has("Gravity boots", player) or
-                                                                      sotn_has_flying(state, player))))
+    # NO4 - Underground Caverns
+    loc_pool = []
+    for loc in ["NO4_Antivenom_4", "NO4_Life Vessel_5"]:
+        if loc in EXTENSIONS[extension]:
+            loc_pool.append(world.get_location(ABREV_TO_LOCATION[loc], player))
+    for loc in loc_pool:
+        add_rule(loc, lambda state: state.has("Holy symbol", player))
+    if "NO4_Herald shield_7" in EXTENSIONS[extension]:
+        location = world.get_location(ABREV_TO_LOCATION["NO4_Herald shield_7"], player)
+        add_rule(location, lambda state: (sotn_has_flying(state, player) or
+                                          sotn_has_wolf(state, player) or
+                                          state.has("Leap stone", player)))
+    if "NO4_Zircon_9" in EXTENSIONS[extension]:
+        location = world.get_location(ABREV_TO_LOCATION["NO4_Zircon_9"], player)
+        add_rule(location, lambda state: sotn_has_any(state, player) or sotn_has_flying(state, player))
+    if "NO4_Onyx_22" in EXTENSIONS[extension]:
+        location = world.get_location(ABREV_TO_LOCATION["NO4_Onyx_22"], player)
+        add_rule(location, lambda state: state.has("Merman statue", player) or sotn_has_flying(state, player))
+    loc_pool = []
+    for loc in ["NO4_Knuckle duster_23", "NO4_Life Vessel_24"]:
+        if loc in EXTENSIONS[extension]:
+            loc_pool.append(world.get_location(ABREV_TO_LOCATION[loc], player))
+    for loc in loc_pool:
+        add_rule(loc, lambda state: state.has("Holy symbol", player))
+    if "NO4_Elixir_25" in EXTENSIONS[extension]:
+        location = world.get_location(ABREV_TO_LOCATION["NO4_Elixir_25"], player)
+        add_rule(location, lambda state: state.has("Holy symbol", player) and state.has("Merman statue", player))
+    loc_pool = []
+    for loc in ["NO4_Life Vessel_28", "NO4_Heart Vessel_29"]:
+        if loc in EXTENSIONS[extension]:
+            loc_pool.append(world.get_location(ABREV_TO_LOCATION[loc], player))
+    for loc in loc_pool:
+        add_rule(loc, lambda state: (state.has("Leap stone", player) or sotn_has_flying(state, player) or
+                                     sotn_has_wolf(state, player)))
+    loc_pool = []
+    for loc in ["NO4_Secret boots_31", "NO4_Toadstool_33"]:
+        if loc in EXTENSIONS[extension]:
+            loc_pool.append(world.get_location(ABREV_TO_LOCATION[loc], player))
+    for loc in loc_pool:
+        add_rule(loc, lambda state: sotn_has_any(state, player))
+    if "NO4_Nunchaku_36" in EXTENSIONS[extension]:
+        location = world.get_location(ABREV_TO_LOCATION["NO4_Nunchaku_36"], player)
+        add_rule(location, lambda state: state.has("Holy symbol", player))
 
     # TOP - Castle Keep
-    location = world.get_location("TOP - Falchion", player)
-    set_rule(location, lambda state: state.has("Gravity boots", player) or sotn_has_flying(state, player))
+    loc_pool = []
+    for loc in ["TOP_Turquoise_0", "TOP_Turkey_1"]:
+        if loc in EXTENSIONS[extension]:
+            loc_pool.append(world.get_location(ABREV_TO_LOCATION[loc], player))
+    for loc in loc_pool:
+        add_rule(loc, lambda state: sotn_has_any(state, player))
 
-    location = world.get_location("TOP - Platinum mail(Above Richter)", player)
-    set_rule(location, lambda state: sotn_has_flying(state, player))
+    # RCAT - Floating Catacombs
+    # Spike breaker area
+    loc_pool = []
+    for loc in ["RCAT_Resist thunder_2", "RCAT_Resist fire_3", "RCAT_Karma coin_4", "RCAT_Karma coin_5",
+                "RCAT_Red bean bun_6", "RCAT_Elixir_7", "RCAT_Library card_8"]:
+        if loc in EXTENSIONS[extension]:
+            loc_pool.append(world.get_location(ABREV_TO_LOCATION[loc], player))
+    for loc in loc_pool:
+        add_rule(loc, lambda state: (state.has("Soul of bat", player) or
+                                     (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+                                     (state.has("Spike breaker", player) and
+                                      (state.has("Gravity boots", player) or state.has("Leap stone", player)))))
 
-    # Reverse Castle -> Already have some kind of high jump
-    location = world.get_location("RDAI - Twilight cloak", player)
-    set_rule(location, lambda state: state.has("Spike breaker", player) and state.has("Form of mist", player) or
-                                     (state.has("Form of mist", player) and state.has("Power of mist", player)))
+    # RCHI - Cave
+    loc_pool = []
+    for loc in ["RCHI_Power of sire_0", "RCHI_Life apple_1"]:
+        if loc in EXTENSIONS[extension]:
+            loc_pool.append(world.get_location(ABREV_TO_LOCATION[loc], player))
+    for loc in loc_pool:
+        add_rule(loc, lambda state: state.has("Demon card", player))
 
-    location = world.get_location("RNO2 - Akmodan II kill", player)
-    set_rule(location, lambda state: sotn_has_transformation(state, player))
+    # RDAI - Anti-Chapel
+    if "RDAI_Twilight cloak_16" in EXTENSIONS[extension]:
+        location = world.get_location(ABREV_TO_LOCATION["RDAI_Twilight cloak_16"], player)
+        add_rule(location, lambda state: (state.has("Spike breaker", player) and state.has("Form of mist", player)) or
+                 state.has("Power of mist", player) and state.has("Form of mist", player))
 
-    location = world.get_location("RNO3 - Beryl circlet", player)
-    set_rule(location, lambda state: state.has("Soul of wolf", player) and state.has("Soul of bat", player))
+    # RLIB - Forbidden Library
+    if "RLIB_Staurolite_8" in EXTENSIONS[extension]:
+        location = world.get_location(ABREV_TO_LOCATION["RLIB_Staurolite_8"], player)
+        add_rule(location, lambda state: state.has("Form of mist", player))
 
-    location = world.get_location("RNO1 - Shotel", player)
-    set_rule(location, lambda state: state.has("Form of mist", player))
+    # RNO0 - Black Marble Gallery
+    if "RNO0_Meal ticket_9" in EXTENSIONS[extension]:
+        location = world.get_location(ABREV_TO_LOCATION["RNO0_Meal ticket_9"], player)
+        add_rule(location, lambda state: state.has("Jewel of open", player))
 
-    location = world.get_location("RLIB - Staurolite", player)
-    set_rule(location, lambda state: state.has("Form of mist", player))
+    # RNO1 - Reverse Outer Wall
+    loc_pool = []
+    for loc in ["RNO1_Shotel_1", "RNO1_Hammer_2"]:
+        if loc in EXTENSIONS[extension]:
+            loc_pool.append(world.get_location(ABREV_TO_LOCATION[loc], player))
+    for loc in loc_pool:
+        add_rule(loc, lambda state: state.has("Form of mist", player))
 
-    location = world.get_location("RNO4 - Osafune katana", player)
-    set_rule(location, lambda state: state.has("Soul of bat", player) or (state.has("Gravity boots", player) and
-                                                                          (state.has("Leap stone", player))))
+    # RNO2 - Death Wing's Lair
+    loc_pool = []
+    for loc in ["RNO2_Heart Vessel_11", "Rib of vlad"]:
+        if loc in EXTENSIONS[extension]:
+            loc_pool.append(world.get_location(ABREV_TO_LOCATION[loc], player))
+    for loc in loc_pool:
+        add_rule(loc, lambda state: sotn_has_transformation(state, player))
 
-    # Exploration rules
-    location = world.get_location("Exploration 40", player)
-    set_rule(location, lambda state: state.has("Jewel of open", player) or state.has("Leap stone", player) or
-                                     state.has("Gravity boots", player) or state.has("Soul of bat", player))
+    # RNO3 - Reverse Entrance
+    loc_pool = []
+    for loc in ["RNO3_Zircon_4", "RNO3_Opal_5", "RNO3_Beryl circlet_6"]:
+        if loc in EXTENSIONS[extension]:
+            loc_pool.append(world.get_location(ABREV_TO_LOCATION[loc], player))
+    for loc in loc_pool:
+        add_rule(loc, lambda state: state.has("Soul of wolf", player) and state.has("Soul of bat", player))
 
-    location = world.get_location("Exploration 50", player)
-    set_rule(location, lambda state: state.has("Jewel of open", player) or state.has("Leap stone", player) or
-                                     state.has("Gravity boots", player) or state.has("Soul of bat", player))
-
-    location = world.get_location("Exploration 60", player)
-    set_rule(location, lambda state: state.has("Jewel of open", player) and (state.has("Leap stone", player) or
-                                                                             state.has("Gravity boots", player) or
-                                                                             state.has("Soul of bat", player)))
-
-    location = world.get_location("Exploration 70", player)
-    set_rule(location, lambda state: state.has("Jewel of open", player) and (state.has("Leap stone", player) or
-                                                                             state.has("Gravity boots", player) or
-                                                                             state.has("Soul of bat", player)))
-
-    location = world.get_location("Exploration 80", player)
-    set_rule(location, lambda state: state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
-                                                                             (state.has("Gravity boots", player) and
-                                                                              (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)) or
-                                                                              (state.has("Form of mist", player) and
-                                                                               state.has("Power of mist", player)))))
-
-    location = world.get_location("Exploration 90", player)
-    set_rule(location, lambda state: state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
-                                                                             (state.has("Gravity boots", player) and
-                                                                              (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)) or
-                                                                              (state.has("Form of mist", player) and
-                                                                               state.has("Power of mist", player)))))
-
-    location = world.get_location("Exploration 100", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 110", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 120", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 130", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 140", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 150", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 160", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 170", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 180", player)
-    set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                     (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                           state.has("Power of mist", player)) or
-                                      (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                               state.has("Soul of wolf", player) or
-                                                                               state.has("Form of mist", player)))))
-
-    location = world.get_location("Exploration 190", player)
-    set_rule(location, lambda state: state.has("Soul of bat", player) and state.has("Soul of wolf", player) and
-                                     state.has("Form of mist", player) and state.has("Merman statue", player) and
-                                     state.has("Spike breaker", player) and state.has("Demon card", player) and
-                                     state.has("Holy symbol", player) and state.has("Holy glasses", player) and
-                                     state.has("Silver ring", player) and state.has("Gold ring", player))
-
-    location = world.get_location("Exploration 200", player)
-    set_rule(location, lambda state: state.has("Soul of bat", player) and state.has("Soul of wolf", player) and
-                                     state.has("Form of mist", player) and state.has("Merman statue", player) and
-                                     state.has("Spike breaker", player) and state.has("Demon card", player) and
-                                     state.has("Holy symbol", player) and state.has("Holy glasses", player) and
-                                     state.has("Silver ring", player) and state.has("Gold ring", player))
-
-    if rules == 2:
-        location = world.get_location("Exploration 40 item", player)
-        set_rule(location, lambda state: state.has("Jewel of open", player) or state.has("Leap stone", player) or
-                                         state.has("Gravity boots", player) or state.has("Soul of bat", player))
-
-        location = world.get_location("Exploration 50 item", player)
-        set_rule(location, lambda state: state.has("Jewel of open", player) or state.has("Leap stone", player) or
-                                         state.has("Gravity boots", player) or state.has("Soul of bat", player))
-
-        location = world.get_location("Exploration 60 item", player)
-        set_rule(location, lambda state: state.has("Jewel of open", player) and (state.has("Leap stone", player) or
-                                                                                 state.has("Gravity boots", player) or
-                                                                                 state.has("Soul of bat", player)))
-
-        location = world.get_location("Exploration 70 item", player)
-        set_rule(location, lambda state: state.has("Jewel of open", player) and (state.has("Leap stone", player) or
-                                                                                 state.has("Gravity boots", player) or
-                                                                                 state.has("Soul of bat", player)))
-
-        location = world.get_location("Exploration 80 item", player)
-        set_rule(location, lambda state: state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
-                                                                                 (state.has("Gravity boots", player) and
-                                                                                  (state.has("Leap stone", player) or
-                                                                                   state.has("Soul of wolf", player) or
-                                                                                   state.has("Form of mist", player)) or
-                                                                                  (state.has("Form of mist", player) and
-                                                                                   state.has("Power of mist", player)))))
-
-        location = world.get_location("Exploration 90 item", player)
-        set_rule(location, lambda state: state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
-                                                                                 (state.has("Gravity boots", player) and
-                                                                                  (state.has("Leap stone", player) or
-                                                                                   state.has("Soul of wolf", player) or
-                                                                                   state.has("Form of mist", player)) or
-                                                                                  (state.has("Form of mist", player) and
-                                                                                   state.has("Power of mist", player)))))
-
-        location = world.get_location("Exploration 100 item", player)
-        set_rule(location, lambda state: state.has("Holy glasses", player) and
-                                         state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
-                                                                                 (state.has("Form of mist", player) and
-                                                                                  state.has("Power of mist", player)) or
-                                                                                 (state.has("Gravity boots", player) and
-                                                                                  (state.has("Leap stone", player) or
-                                                                                   state.has("Soul of wolf", player) or
-                                                                                   state.has("Form of mist", player)))))
-
-        location = world.get_location("Exploration 110 item", player)
-        set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                         (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                               state.has("Power of mist", player)) or
-                                          (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                                   state.has("Soul of wolf", player) or
-                                                                                   state.has("Form of mist", player)))))
-
-        location = world.get_location("Exploration 120 item", player)
-        set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                         (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                               state.has("Power of mist", player)) or
-                                          (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                                   state.has("Soul of wolf", player) or
-                                                                                   state.has("Form of mist", player)))))
-
-        location = world.get_location("Exploration 130 item", player)
-        set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                         (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                               state.has("Power of mist", player)) or
-                                          (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                                   state.has("Soul of wolf", player) or
-                                                                                   state.has("Form of mist", player)))))
-
-        location = world.get_location("Exploration 140 item", player)
-        set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                         (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                               state.has("Power of mist", player)) or
-                                          (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                                   state.has("Soul of wolf", player) or
-                                                                                   state.has("Form of mist", player)))))
-
-        location = world.get_location("Exploration 150 item", player)
-        set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                         (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                               state.has("Power of mist", player)) or
-                                          (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                                   state.has("Soul of wolf", player) or
-                                                                                   state.has("Form of mist", player)))))
-
-        location = world.get_location("Exploration 160 item", player)
-        set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                         (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                               state.has("Power of mist", player)) or
-                                          (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                                   state.has("Soul of wolf", player) or
-                                                                                   state.has("Form of mist", player)))))
-
-        location = world.get_location("Exploration 170 item", player)
-        set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                         (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                               state.has("Power of mist", player)) or
-                                          (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                                   state.has("Soul of wolf", player) or
-                                                                                   state.has("Form of mist", player)))))
-
-        location = world.get_location("Exploration 180 item", player)
-        set_rule(location, lambda state: state.has("Holy glasses", player) and state.has("Jewel of open", player) and
-                                         (state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                                               state.has("Power of mist", player)) or
-                                          (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                                                   state.has("Soul of wolf", player) or
-                                                                                   state.has("Form of mist", player)))))
-
-        location = world.get_location("Exploration 190 item", player)
-        set_rule(location, lambda state: state.has("Soul of bat", player) and state.has("Soul of wolf", player) and
-                                         state.has("Form of mist", player) and state.has("Merman statue", player) and
-                                         state.has("Spike breaker", player) and state.has("Demon card", player) and
-                                         state.has("Holy symbol", player) and state.has("Holy glasses", player) and
-                                         state.has("Silver ring", player) and state.has("Gold ring", player))
-
-        location = world.get_location("Exploration 200 item", player)
-        set_rule(location, lambda state: state.has("Soul of bat", player) and state.has("Soul of wolf", player) and
-                                         state.has("Form of mist", player) and state.has("Merman statue", player) and
-                                         state.has("Spike breaker", player) and state.has("Demon card", player) and
-                                         state.has("Holy symbol", player) and state.has("Holy glasses", player) and
-                                         state.has("Silver ring", player) and state.has("Gold ring", player))
+    # RNO4 - Reverse Caverns
+    loc_pool = []
+    for loc in ["RNO4_Life Vessel_6", "RNO4_Potion_8"]:
+        if loc in EXTENSIONS[extension]:
+            loc_pool.append(world.get_location(ABREV_TO_LOCATION[loc], player))
+    for loc in loc_pool:
+        add_rule(loc, lambda state: state.has("Gravity boots", player))
+    if "RNO4_Bat pentagram_5" in EXTENSIONS[extension]:
+        location = world.get_location(ABREV_TO_LOCATION["RNO4_Bat pentagram_5"], player)
+        add_rule(location, lambda state: state.has("Leap stone", player) or state.has("Soul of bat", player))
+    if "RNO4_Heart Vessel_7" in EXTENSIONS[extension]:
+        location = world.get_location(ABREV_TO_LOCATION["RNO4_Heart Vessel_7"], player)
+        add_rule(location, lambda state: state.has("Gravity boots", player) and state.has("Holy symbol", player))
