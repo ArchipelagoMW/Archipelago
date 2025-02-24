@@ -13,9 +13,9 @@ from .items import (
     TitsThe3rdItem,
     TitsThe3rdItemData,
 )
-from .locations import create_locations as tits_the_third_create_locations
+from .locations import create_locations, location_groups, location_table
 from .options import TitsThe3rdOptions
-from .regions import create_regions as tits_the_third_create_regions
+from .regions import create_regions, connect_regions
 from .settings import TitsThe3rdSettings
 from .web import TitsThe3rdWeb
 
@@ -48,9 +48,9 @@ class TitsThe3rdWorld(World):
     base_id: int = 1954308624560
 
     item_name_groups: Dict[str, Set[str]] = item_groups
-    location_name_groups: Dict[str, Set[str]] = {}
+    location_name_groups: Dict[str, Set[str]] = location_groups
     item_name_to_id: Dict[str, int] = item_table
-    location_name_to_id: Dict[str, int] = {"Dummy Location": base_id}
+    location_name_to_id: Dict[str, int] = location_table
 
     def create_item(self, name: str) -> TitsThe3rdItem:
         """Create a Trails in the Sky the 3rd item for this player"""
@@ -63,8 +63,9 @@ class TitsThe3rdWorld(World):
 
     def create_regions(self) -> None:
         """Define regions and locations for Trails in the Sky the 3rd AP"""
-        tits_the_third_create_regions(self.multiworld, self.player)
-        tits_the_third_create_locations(self.multiworld, self.player, self.location_name_to_id)
+        create_regions(self.multiworld, self.player)
+        connect_regions(self.multiworld, self.player)
+        create_locations(self.multiworld, self.player)
 
     def create_items(self) -> None:
         """Define items for Trails in the Sky the 3rd AP"""
