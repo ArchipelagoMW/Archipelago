@@ -711,19 +711,16 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Ruined Atoll Portal"].connect(
         connecting_region=regions["Ruined Atoll"])
 
-    if options.shuffle_fuses:
-        atoll_statue = regions["Ruined Atoll"].connect(
-            connecting_region=regions["Ruined Atoll Statue"],
-            rule=lambda state: has_ability(prayer, state, world)
-            and state.has_all([atoll_northwest_fuse, atoll_northeast_fuse, atoll_southwest_fuse, atoll_southeast_fuse], player))
-    else:
-        atoll_statue = regions["Ruined Atoll"].connect(
-            connecting_region=regions["Ruined Atoll Statue"],
-            rule=lambda state: has_ability(prayer, state, world)
-            and (has_ladder("Ladders in South Atoll", state, world)
-                 # shoot fuse and have the shot hit you mid-LS
-                 or (can_ladder_storage(state, world) and state.has(fire_wand, player)
-                     and options.ladder_storage >= LadderStorage.option_hard)))
+    atoll_statue = regions["Ruined Atoll"].connect(
+        connecting_region=regions["Ruined Atoll Statue"],
+        rule=lambda state: has_ability(prayer, state, world)
+        and (((has_ladder("Ladders in South Atoll", state, world)
+             # shoot fuse and have the shot hit you mid-LS
+             or (can_ladder_storage(state, world) and state.has(fire_wand, player)
+                 and options.ladder_storage >= LadderStorage.option_hard))) and not options.shuffle_fuses)
+        or (state.has_all((atoll_northwest_fuse, atoll_northeast_fuse, atoll_southwest_fuse, atoll_southeast_fuse), player)
+            and options.shuffle_fuses)
+    )
 
     regions["Ruined Atoll Statue"].connect(
         connecting_region=regions["Ruined Atoll"])
@@ -1070,13 +1067,13 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     # can ice grapple to the voidlings to get to the double admin fight, still need to pray at the fuse
     zig_low_miniboss_to_back = regions["Rooted Ziggurat Lower Miniboss Platform"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Back"],
-        rule=lambda state: state.has(laurels, player) or (state.has(ziggurat_miniboss_fuse, player) if options.shuffle_fuses
-                                                          else (has_sword(state, player) and has_ability(prayer, state, world))))
+        rule=lambda state: state.has(laurels, player) or (state.has(ziggurat_miniboss_fuse, player) and options.shuffle_fuses)
+                           or (has_sword(state, player) and has_ability(prayer, state, world) and not options.shuffle_fuses))
     regions["Rooted Ziggurat Lower Back"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Miniboss Platform"],
         rule=lambda state: state.has(laurels, player)
                             or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world)
-                            or (state.has(ziggurat_miniboss_fuse, player) if options.shuffle_fuses else False))
+                            or (state.has(ziggurat_miniboss_fuse, player) and options.shuffle_fuses))
 
     regions["Rooted Ziggurat Lower Back"].connect(
         connecting_region=regions["Rooted Ziggurat Portal Room Entrance"],
@@ -1113,30 +1110,24 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         or state.has(laurels, player)
         or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
 
-    if options.shuffle_fuses:
-        swamp_mid_to_cath = regions["Swamp Mid"].connect(
-            connecting_region=regions["Swamp to Cathedral Main Entrance Region"],
-            rule=lambda state: (state.has_all([swamp_fuse_1, swamp_fuse_2, swamp_fuse_3], player)
-                                and (not options.combat_logic
-                                     or has_combat_reqs("Swamp", state, player)))
-                               or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
-    else:
-        swamp_mid_to_cath = regions["Swamp Mid"].connect(
-            connecting_region=regions["Swamp to Cathedral Main Entrance Region"],
-            rule=lambda state: (has_ability(prayer, state, world)
-                                and (state.has(laurels, player)
-                                     # blam yourself in the face with a wand shot off the fuse
-                                     or (can_ladder_storage(state, world) and state.has(fire_wand, player)
-                                         and options.ladder_storage >= LadderStorage.option_hard
-                                         and (not options.shuffle_ladders
-                                              or state.has_any({"Ladders in Overworld Town",
-                                                                "Ladder to Swamp",
-                                                                "Ladders near Weathervane"}, player)
-                                              or (state.has("Ladder to Ruined Atoll", player)
-                                                  and state.can_reach_region("Overworld Beach", player)))))
-                                and (not options.combat_logic
-                                     or has_combat_reqs("Swamp", state, player)))
-            or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
+    swamp_mid_to_cath = regions["Swamp Mid"].connect(
+        connecting_region=regions["Swamp to Cathedral Main Entrance Region"],
+        rule=lambda state: (has_ability(prayer, state, world)
+                            and (state.has(laurels, player)
+                                 # blam yourself in the face with a wand shot off the fuse
+                                 or (can_ladder_storage(state, world) and state.has(fire_wand, player)
+                                     and options.ladder_storage >= LadderStorage.option_hard
+                                     and (not options.shuffle_ladders
+                                          or state.has_any({"Ladders in Overworld Town",
+                                                            "Ladder to Swamp",
+                                                            "Ladders near Weathervane"}, player)
+                                          or (state.has("Ladder to Ruined Atoll", player)
+                                              and state.can_reach_region("Overworld Beach", player)))))
+                            and (not options.combat_logic
+                                 or has_combat_reqs("Swamp", state, player))
+                            and not options.shuffle_fuses)
+        or (state.has_all((swamp_fuse_1, swamp_fuse_2, swamp_fuse_3), player) and options.shuffle_fuses)
+        or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
 
     if options.ladder_storage >= LadderStorage.option_hard and options.shuffle_ladders:
         world.multiworld.register_indirect_condition(regions["Overworld Beach"], swamp_mid_to_cath)
