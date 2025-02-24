@@ -48,7 +48,7 @@ SkillLogicMixin, SpecialOrderLogicMixin, CraftingLogicMixin, QuestLogicMixin]]):
             else:
                 return self.logic.crafting.received_recipe(recipe.item)
         if isinstance(recipe.source, QuestSource):
-            if self.options.quest_locations < 0:
+            if self.options.quest_locations.has_no_story_quests():
                 return self.logic.crafting.can_learn_recipe(recipe)
             else:
                 return self.logic.crafting.received_recipe(recipe.item)

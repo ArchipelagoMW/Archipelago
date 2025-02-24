@@ -76,7 +76,7 @@ SkillLogicMixin, QuestLogicMixin]]):
                 self.logic.region.can_reach_location("Complete Boiler Room"))
 
     def can_access_raccoon_bundles(self) -> StardewRule:
-        if self.options.quest_locations < 0:
+        if self.options.quest_locations.has_no_story_quests():
             return self.logic.received(CommunityUpgrade.raccoon, 1) & self.logic.quest.can_complete_quest(Quest.giant_stump)
 
         # 1 - Break the tree

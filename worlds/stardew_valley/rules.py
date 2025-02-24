@@ -150,7 +150,7 @@ def set_bundle_rules(bundle_rooms: List[BundleRoom], logic: StardewLogic, multiw
             bundle_rules = logic.bundle.can_complete_bundle(bundle)
             if bundle_room.name == CCRoom.raccoon_requests:
                 num = int(bundle.name[-1])
-                extra_raccoons = 1 if world_options.quest_locations >= 0 else 0
+                extra_raccoons = 1 if world_options.quest_locations.has_story_quests() else 0
                 extra_raccoons = extra_raccoons + num
                 bundle_rules = logic.received(CommunityUpgrade.raccoon, extra_raccoons) & bundle_rules
                 if num > 1:
@@ -506,7 +506,7 @@ def set_cropsanity_rules(logic: StardewLogic, multiworld, player, world_content:
 
 
 def set_story_quests_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
-    if world_options.quest_locations < 0:
+    if world_options.quest_locations.has_no_story_quests():
         return
     for quest in locations.locations_by_tag[LocationTags.STORY_QUEST]:
         if quest.name in all_location_names and (quest.mod_name is None or quest.mod_name in world_options.mods):
@@ -541,9 +541,9 @@ slay_monsters = "Slay Monsters"
 
 
 def set_help_wanted_quests_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
-    help_wanted_number = world_options.quest_locations.value
-    if help_wanted_number < 0:
+    if world_options.quest_locations.has_no_story_quests():
         return
+    help_wanted_number = world_options.quest_locations.value
     for i in range(0, help_wanted_number):
         set_number = i // 7
         month_rule = logic.time.has_lived_months(set_number)
