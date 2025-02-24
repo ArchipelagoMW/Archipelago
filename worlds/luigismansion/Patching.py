@@ -145,7 +145,7 @@ def update_event_info(event_info, boo_checks: bool):
             x["pos_z"] = -2000.792000
             x["EventFlag"] = 0 # 25
             x["EventArea"] = 200
-            x["EventIf"] = 1
+            x["EventIf"] = 5
             x["EventLock"] = 0
             x["PlayerStop"] = 0
             x["EventLoad"] = 0
