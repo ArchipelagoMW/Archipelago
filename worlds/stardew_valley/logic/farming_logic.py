@@ -8,8 +8,8 @@ from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .season_logic import SeasonLogicMixin
 from .tool_logic import ToolLogicMixin
-from .. import options
-from ..stardew_rule import StardewRule, True_, false_
+from ..content.vanilla.ginger_island import ginger_island_content_pack
+from ..stardew_rule import StardewRule
 from ..strings.fertilizer_names import Fertilizer
 from ..strings.region_names import Region, LogicRegion
 from ..strings.season_names import Season
@@ -36,13 +36,14 @@ class FarmingLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogi
         return self.logic.tool.has_tool(Tool.hoe) & self.logic.tool.can_water(0)
 
     def has_fertilizer(self, tier: int) -> StardewRule:
-        if tier <= 0:
-            return True_()
+        assert 0 <= tier <= 3
+        if tier == 0:
+            return self.logic.true_
         if tier == 1:
             return self.logic.has(Fertilizer.basic)
         if tier == 2:
             return self.logic.has(Fertilizer.quality)
-        if tier >= 3:
+        if tier == 3:
             return self.logic.has(Fertilizer.deluxe)
 
     @cache_self1
@@ -56,6 +57,6 @@ class FarmingLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogi
         return self.logic.or_(*(self.logic.region.can_reach(farming_region_by_season[season]) for season in seasons))
 
     def has_island_farm(self) -> StardewRule:
-        if self.options.exclude_ginger_island == options.ExcludeGingerIsland.option_false:
+        if self.content.is_enabled(ginger_island_content_pack):
             return self.logic.region.can_reach(Region.island_west)
-        return false_
+        return self.logic.false_

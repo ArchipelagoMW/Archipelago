@@ -12,8 +12,7 @@ from ...logic.received_logic import ReceivedLogicMixin
 from ...logic.region_logic import RegionLogicMixin
 from ...logic.relationship_logic import RelationshipLogicMixin
 from ...logic.tool_logic import ToolLogicMixin
-from ...mods.mod_data import ModNames
-from ...stardew_rule import StardewRule, False_, True_, And
+from ...stardew_rule import StardewRule, True_, And
 from ...strings.building_names import Building
 from ...strings.craftable_names import ModCraftable, ModMachine
 from ...strings.geode_names import Geode
@@ -42,19 +41,23 @@ ToolLogicMixin, FishingLogicMixin, CookingLogicMixin, CraftingLogicMixin, MagicL
         return self.can_earn_mod_skill_level(skill, level)
 
     def can_earn_mod_skill_level(self, skill: str, level: int) -> StardewRule:
-        if ModNames.luck_skill in self.options.mods and skill == ModSkill.luck:
+        if not skill in self.content.skills:
+            return self.logic.false_
+
+        if skill == ModSkill.luck:
             return self.can_earn_luck_skill_level(level)
-        if ModNames.magic in self.options.mods and skill == ModSkill.magic:
+        if skill == ModSkill.magic:
             return self.can_earn_magic_skill_level(level)
-        if ModNames.socializing_skill in self.options.mods and skill == ModSkill.socializing:
+        if skill == ModSkill.socializing:
             return self.can_earn_socializing_skill_level(level)
-        if ModNames.archaeology in self.options.mods and skill == ModSkill.archaeology:
+        if skill == ModSkill.archaeology:
             return self.can_earn_archaeology_skill_level(level)
-        if ModNames.cooking_skill in self.options.mods and skill == ModSkill.cooking:
+        if skill == ModSkill.cooking:
             return self.can_earn_cooking_skill_level(level)
-        if ModNames.binning_skill in self.options.mods and skill == ModSkill.binning:
+        if skill == ModSkill.binning:
             return self.can_earn_binning_skill_level(level)
-        return False_()
+
+        return self.logic.false_
 
     def can_earn_luck_skill_level(self, level: int) -> StardewRule:
         if level >= 6:
