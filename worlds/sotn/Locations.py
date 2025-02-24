@@ -1,1217 +1,3736 @@
 from BaseClasses import Location
+from .data.Zones import ZONE, ZONE_TO_NAME
+from .data.Constants import RELIC_NAMES, BASE_LOCATION_ID
 
+LOCATION_TO_ABREV = dict()
+ABREV_TO_LOCATION = dict()
+AP_ID_TO_NAME = dict()
+ZONE_LOCATIONS = dict()
+BREAKABLE_LOCATIONS = dict()
 
-# I'm assuming this its just to add uniqueness to ids with all worlds in a seed I have no idea how this number is
-# calculate, so just threw some random numbers. 127{zone id}{game id}
-base_location_id = 127000000
-
-
-class ZoneData:
-    def __init__(self, abrev: str, name: str, start: int, loot_flag: int = 0, loot_size: int = 0):
-        self.abrev = abrev
-        self.name = name
-        self.start = start
-        self.loot_flag = 0
-        self.loot_size = 0
-        if loot_flag != 0 and loot_size != 0:
-            self.loot_flag = loot_flag
-            self.loot_size = loot_size
-
-    @staticmethod
-    def get_zone_data(zone_start):
-        for k, v in zones_dict.items():
-            if v.start == zone_start:
-                return k, v
-        return 50, ZoneData("UNK", "UNKNOWN", 0x00)
-
-
-zones_dict = {
-    0: ZoneData("ST0", "Final Stage: Bloodlines", 0x189c),
-    1: ZoneData("ARE", "Colosseum", 0x8704, 0x03bf06, 2),
-    2: ZoneData("CAT", "Catacombs", 0xb6d4, 0x03befc, 3),
-    3: ZoneData("CEN", "Center Cube", 0x0e7c, 0x03beec, 2),
-    4: ZoneData("CHI", "Abandoned Mine", 0xdea4, 0x03bf02, 2),
-    5: ZoneData("DAI", "Royal Chapel", 0x5fb8, 0x03beff, 3),
-    6: ZoneData("DRE", "Nightmare", 0x6fc0),
-    7: ZoneData("LIB", "Long Library", 0xf160, 0x03befa, 2),
-    8: ZoneData("NO0", "Marble Gallery", 0x37b8, 0x03beec, 2),
-    9: ZoneData("NO1", "Outer Wall", 0x1a20, 0x03beee, 2),
-    10: ZoneData("NO2", "Olrox's Quarters", 0x8744, 0x03bef0, 2),
-    11: ZoneData("NO3", "Castle Entrance", 0x187c, 0x03bef2, 2),
-    12: ZoneData("NO3", "Castle Entrance", 0x90ec, 0x03bef2, 2),
-    # 12: ZoneData("NP3", "Castle Entrance (after visiting Alchemy Laboratory)", 0x90ec, 0x03bef2, 2),
-    13: ZoneData("NO4", "Underground Caverns", 0xa620, 0x03bef4, 5),
-    14: ZoneData("NZ0", "Alchemy Laboratory", 0x9504, 0x03bf0b, 2),
-    15: ZoneData("NZ1", "Clock Tower", 0xc710, 0x03bf0d, 2),
-    16: ZoneData("TOP", "Castle Keep", 0xd660, 0x03bf08, 3),
-    17: ZoneData("WRP", "Warp rooms", 0x8218),
-    18: ZoneData("RARE", "Reverse Colosseum", 0x6b70, 0x03bf3b, 2),
-    19: ZoneData("RCAT", "Floating Catacombs", 0x3f80, 0x03bf2b, 4),
-    20: ZoneData("RCEN", "Reverse Center Cube", 0x049c),
-    21: ZoneData("RCHI", "Cave", 0xac24, 0x03bf33, 2),
-    22: ZoneData("RDAI", "Anti-Chapel", 0x465c, 0x03bf2f, 3),
-    23: ZoneData("RLIB", "Forbidden Library", 0x2b90, 0x03bf27, 2),
-    24: ZoneData("RNO0", "Black Marble Gallery", 0x7354, 0x03bf13, 2),
-    25: ZoneData("RNO1", "Reverse Outer Wall", 0x9ccc, 0x03bf17, 2),
-    26: ZoneData("RNO2", "Death Wing's Lair", 0x6d20, 0x03bf1b, 2),
-    27: ZoneData("RNO3", "Reverse Entrance", 0x3ee0, 0x03bf1f, 2),
-    28: ZoneData("RNO4", "Reverse Caverns", 0xa214, 0x03bf23, 4),
-    29: ZoneData("RNZ0", "Necromancy Laboratory", 0xcc34, 0x03bf43, 2),
-    30: ZoneData("RNZ1", "Reverse Clock Tower", 0xced0, 0x03bf47, 2),
-    31: ZoneData("RTOP", "Reverse Castle Keep", 0x2524, 0x03bf3f, 4),
-    32: ZoneData("RWRP", "Reverse Warp rooms", 0xa198),
-    33: ZoneData("BO0", "Olrox", 0xc10c, 0x03bef0, 2),
-    34: ZoneData("BO1", "Granfaloon", 0x55d0, 0x03befc, 3),  # or Granfaloon
-    35: ZoneData("BO2", "Werewolf & Minotaur", 0x76a0, 0x03bf06, 2),
-    36: ZoneData("BO3", "Scylla", 0x6734, 0x03bef4, 5),
-    37: ZoneData("BO4", "Doppleganger10", 0x69ec, 0x03beee, 2),
-    38: ZoneData("BO5", "Hippogryph", 0x6be4, 0x03beff, 2),
-    39: ZoneData("BO6", "Richter", 0x9b84),
-    40: ZoneData("BO7", "Cerberus", 0x6678, 0x03bf02, 2),
-    41: ZoneData("RBO0", "Trio", 0xa094, 0x03bf3b, 2),
-    42: ZoneData("RBO1", "Beezlebub", 0x5174, 0x03bf43, 2),
-    43: ZoneData("RBO2", "Death", 0x1ab0, 0x03bf33, 2),
-    44: ZoneData("RBO3", "Medusa", 0x31c8, 0x03bf2f, 3),
-    45: ZoneData("RBO4", "Creature", 0x8e3c, 0x03bf17, 2),
-    46: ZoneData("RBO5", "Doppleganger40", 0x5920, 0x03bf23, 4),
-    47: ZoneData("RBO6", "Shaft/Dracula", 0x54ec),
-    48: ZoneData("RBO7", "Akmodan II", 0x5f04, 0x03bf1b, 2),
-    49: ZoneData("RBO8", "Galamoth", 0x9dc8, 0x03bf2b, 4),
+locations = {
+    # Colosseum items
+    "Colosseum Second Part - Bottom Right Room":
+        {
+            "ap_id": 0,
+            "zones": [ZONE["ARE"]],
+            "index": 0,
+            "entities": [0x3162, 0x3768],
+            "as_relic": {"y": 0x0075},
+            "vanilla_item": "Heart Vessel",
+        },
+    "Colosseum First Part - Bottom Left Room":
+        {
+            "ap_id": 1,
+            "zones": [ZONE["ARE"]],
+            "index": 1,
+            "entities": [0x3180, 0x3808],
+            "as_relic": {"y": 0x0078},
+            "vanilla_item": "Shield rod",
+        },
+    "Colosseum Second Part - Bottom Left Room":
+        {
+            "ap_id": 2,
+            "zones": [ZONE["ARE"]],
+            "index": 3,
+            "entities": [0x34a0, 0x3b28],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Blood cloak",
+        },
+    "Colosseum First Part - Next to Royal Chapel Passage":
+        {
+            "ap_id": 3,
+            "zones": [ZONE["ARE"]],
+            "index": 4,
+            "entities": [0x34e6, 0x3ba0],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Knight shield",
+        },
+    "Colosseum First Part - Before Minotaurus & Werewolf":
+        {
+            "ap_id": 4,
+            "zones": [ZONE["ARE"]],
+            "index": 5,
+            "entities": [0x352c, 0x3b78],
+            "as_relic": {"y": 0x0094},
+            "vanilla_item": "Library card",
+        },
+    "Colosseum First Part - Bottom Right Room":
+        {
+            "ap_id": 5,
+            "zones": [ZONE["ARE"]],
+            "index": 6,
+            "entities": [0x3482, 0x3b0a],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Green tea",
+        },
+    "Colosseum Junction Tunnel - Attic":
+        {
+            "ap_id": 6,
+            "zones": [ZONE["ARE"]],
+            "index": 7,
+            "entities": [0x34be, 0x3b46],
+            "as_relic": {"y": 0x0098},
+            "vanilla_item": "Holy sword",
+        },
+    "Colosseum Second Part - Behind Mist Crate":
+        {
+            "ap_id": 7,
+            "zones": [ZONE["ARE"]],
+            "index": 2,  # Test if index 2 works
+            "entities": [0x304a, 0x36c8],
+            "as_item": {"y": 0x0099},
+            "vanilla_item": "Form of mist",
+        },
+    # Catacombs items
+    "Catacombs Upper - After Save Point Breakable Wall":
+        {
+            "ap_id": 8,
+            "zones": [ZONE["CAT"]],
+            "index": 0,
+            "entities": [0x2e28, 0x3708],
+            "as_relic": {"x": 0x0020, "y": 0x008f},
+            "vanilla_item": "Cat-eye circl.",
+        },
+    "Catacombs Bottom - Above Discus Lord Breakable Wall Room":
+        {
+            "ap_id": 9,
+            "zones": [ZONE["CAT"]],
+            "index": 1,
+            "entities": [0x2c3e, 0x351e],
+            "as_relic": {"y": 0x0098},
+            "vanilla_item": "Icebrand",
+        },
+    "Catacombs Bottom - After Save Point":
+        {
+            "ap_id": 10,
+            "zones": [ZONE["CAT"]],
+            "index": 2,
+            "entities": [0x2c20, 0x3500],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Walk armor",
+        },
+    "Catacombs Bottom - After Granfaloon":
+        {
+            "ap_id": 11,
+            "zones": [ZONE["CAT"]],
+            "index": 3,
+            "entities": [0x2c02, 0x34e2],
+            "as_relic": {"y": 0x0098},
+            "vanilla_item": "Mormegil",
+        },
+    "Catacombs After Dark Spiked Area - Bottom Left Breakable":
+        {
+            "ap_id": 12,
+            "zones": [ZONE["CAT"]],
+            "index": 4,
+            "entities": [0x3422, 0x3d02],
+            "as_relic": {"x": 0x0020, "y": 0x0088},
+            "vanilla_item": "Library card",
+        },
+    "Catacombs Bottom - Above Discus Lord Red Vase 2":
+        {
+            "ap_id": 13,
+            "zones": [ZONE["CAT"]],
+            "index": 6,
+            "entities": [0x2ea0, 0x3730],
+            "as_relic": {},
+            "vanilla_item": "Heart Vessel",
+        },
+    "Catacombs Bottom - Above Discus Lord Red Vase 1":
+        {
+            "ap_id": 14,
+            "zones": [ZONE["CAT"]],
+            "index": 7,
+            "entities": [0x2eaa, 0x3762],
+            "as_relic": {},
+            "vanilla_item": "Ballroom mask",
+        },
+    "Catacombs Upper - After Save Point":
+        {
+            "ap_id": 15,
+            "zones": [ZONE["CAT"]],
+            "index": 8,
+            "entities": [0x2e32, 0x3712],
+            "as_relic": {"y": 0x0090},
+            "vanilla_item": "Bloodstone",
+        },
+    "Catacombs Bottom - After Crypt Left Item":
+        {
+            "ap_id": 16,
+            "zones": [ZONE["CAT"]],
+            "index": 9,
+            "entities": [0x3198, 0x3a78],
+            "as_relic": {"y": 0x00a0},
+            "vanilla_item": "Life Vessel",
+        },
+    "Catacombs Bottom - After Crypt Right Item":
+        {
+            "ap_id": 17,
+            "zones": [ZONE["CAT"]],
+            "index": 10,
+            "entities": [0x31a2, 0x3a82],
+            "as_relic": {"y": 0x00a0},
+            "vanilla_item": "Heart Vessel",
+        },
+    "Catacombs After Dark Spiked Area - Red Vase 2":
+        {
+            "ap_id": 18,
+            "zones": [ZONE["CAT"]],
+            "index": 11,
+            "entities": [0x3350, 0x3be0],
+            "as_relic": {},
+            "vanilla_item": "Cross shuriken",
+        },
+    "Catacombs After Dark Spiked Area - Red Vase 1":
+        {
+            "ap_id": 19,
+            "zones": [ZONE["CAT"]],
+            "index": 12,
+            "entities": [0x333c, 0x3bea],
+            "as_relic": {},
+            "vanilla_item": "Cross shuriken",
+        },
+    "Catacombs After Dark Spiked Area - Red Vase 4":
+        {
+            "ap_id": 20,
+            "zones": [ZONE["CAT"]],
+            "index": 13,
+            "entities": [0x335a, 0x3c30],
+            "as_relic": {},
+            "vanilla_item": "Karma coin",
+        },
+    "Catacombs After Dark Spiked Area - Red Vase 3":
+        {
+            "ap_id": 21,
+            "zones": [ZONE["CAT"]],
+            "index": 14,
+            "entities": [0x3346, 0x3c3a],
+            "as_relic": {},
+            "vanilla_item": "Karma coin",
+        },
+    "Catacombs After Dark Spiked Area - Bottom Right Item":
+        {
+            "ap_id": 22,
+            "zones": [ZONE["CAT"]],
+            "index": 15,
+            "entities": [0x3404, 0x3ce4],
+            "as_relic": {"x": 0x04d0, "y": 0x0090},
+            "vanilla_item": "Pork bun",
+        },
+    "Catacombs After Dark Spiked Area - Bottom Left Item":
+        {
+            "ap_id": 23,
+            "zones": [ZONE["CAT"]],
+            "index": 16,
+            "entities": [0x342c, 0x3d2a],
+            "as_relic": {"y": 0x0094},
+            "vanilla_item": "Spike breaker",
+        },
+    "Catacombs Bottom - Sarcophagus 1":
+        {
+            "ap_id": 24,
+            "zones": [ZONE["CAT"]],
+            "index": 17,
+            "entities": [0x3206, 0x3ae6],
+            "as_relic": {},
+            "vanilla_item": "Monster vial 3",
+        },
+    "Catacombs Bottom - Sarcophagus 2":
+        {
+            "ap_id": 25,
+            "zones": [ZONE["CAT"]],
+            "index": 18,
+            "entities": [0x321a, 0x3afa],
+            "as_relic": {},
+            "vanilla_item": "Monster vial 3",
+        },
+    "Catacombs Bottom - Sarcophagus 3":
+        {
+            "ap_id": 26,
+            "zones": [ZONE["CAT"]],
+            "index": 19,
+            "entities": [0x3224, 0x3b04],
+            "as_relic": {},
+            "vanilla_item": "Monster vial 3",
+        },
+    "Catacombs Bottom - Sarcophagus 4":
+        {
+            "ap_id": 27,
+            "zones": [ZONE["CAT"]],
+            "index": 20,
+            "entities": [0x3238, 0x3b18],
+            "as_relic": {},
+            "vanilla_item": "Monster vial 3",
+        },
+    # Abandoned Mine items
+    "Abandoned Mine Demon Side - Behind Breakable Wall Item 1":
+        {
+            "ap_id": 28,
+            "zones": [ZONE["CHI"]],
+            "index": 0,
+            "entities": [0x1a34, 0x1dcc],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Power of sire",
+        },
+    "Abandoned Mine Bottom - Right Item":
+        {
+            "ap_id": 29,
+            "zones": [ZONE["CHI"]],
+            "index": 1,
+            "entities": [0x1a8e, 0x1dfe],
+            "as_relic": {"y": 0x0070},
+            "vanilla_item": "Karma coin",
+        },
+    "Abandoned Mine Demon Side - Item on the Floor":
+        {
+            "ap_id": 30,
+            "zones": [ZONE["CHI"]],
+            "index": 4,
+            "entities": [0x1d0e, 0x207e],
+            "as_relic": {"y": 0x0190},
+            "vanilla_item": "Ring of ares",
+        },
+    "Abandoned Mine Bottom - Left Item":
+        {
+            "ap_id": 31,
+            "zones": [ZONE["CHI"]],
+            "index": 5,
+            "entities": [0x1a84, 0x1df4],
+            "as_relic": {"y": 0x005f},
+            "vanilla_item": "Combat knife",
+        },
+    "Abandoned Mine - Bottom Descend Item 2":
+        {
+            "ap_id": 32,
+            "zones": [ZONE["CHI"]],
+            "index": 6,
+            "entities": [0x1c6e, 0x1fca],
+            "as_relic": {"y": 0x01f0},
+            "vanilla_item": "Shiitake",
+        },
+    "Abandoned Mine - Bottom Descend Item 1":
+        {
+            "ap_id": 33,
+            "zones": [ZONE["CHI"]],
+            "index": 7,
+            "entities": [0x1c46, 0x1fc0],
+            "as_relic": {"y": 0x0190},
+            "vanilla_item": "Shiitake",
+        },
+    "Abandoned Mine Demon Side - Behind Breakable Wall Item 2":
+        {
+            "ap_id": 34,
+            "zones": [ZONE["CHI"]],
+            "index": 8,
+            "entities": [0x1a3e, 0x1dd6],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Barley tea",
+        },
+    "Abandoned Mine Demon Side - Behind Breakable Wall Item 3":
+        {
+            "ap_id": 35,
+            "zones": [ZONE["CHI"]],
+            "index": 9,
+            "entities": [0x1a48, 0x1dc2],
+            "as_relic": {"y": 0x0085},
+            "vanilla_item": "Peanuts",
+        },
+    "Abandoned Mine Demon Side - Behind Breakable Wall Item 4":
+        {
+            "ap_id": 36,
+            "zones": [ZONE["CHI"]],
+            "index": 10,
+            "entities": [0x1a52, 0x1da4],
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Peanuts",
+        },
+    "Abandoned Mine Demon Side - Behind Breakable Wall Item 5":
+        {
+            "ap_id": 37,
+            "zones": [ZONE["CHI"]],
+            "index": 11,
+            "entities": [0x1a5c, 0x1dae],
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Peanuts",
+        },
+    "Abandoned Mine Demon Side - Behind Breakable Wall Item 6":
+        {
+            "ap_id": 38,
+            "zones": [ZONE["CHI"]],
+            "index": 12,
+            "entities": [0x1a66, 0x1db8],
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Peanuts",
+        },
+    "Abandoned Mine Demon Side - Item on Breakable Wall":
+        {
+            "ap_id": 39,
+            "zones": [ZONE["CHI"]],
+            "despawn": True,
+            "entities": [0x1cfa, 0x2074],
+            "addresses": [0x045e9602],
+            "bin_addresses": [0xf4eee, 0x438d686],
+            "rom_address": 0xdfcf6,
+            "break_flag": 0x03be3d,
+            "break_mask": 0x1,
+            "vanilla_item": "Turkey",
+        },
+    "Abandoned Mine - Middle Descend Left Room":
+        {
+            "ap_id": 40,
+            "zones": [ZONE["CHI"]],
+            "index": 2,  # Test if index 2 works
+            "entities": [0x1ade, 0x1e62],
+            "as_item": {"y": 0x00b8},
+            "vanilla_item": "Demon card",
+        },
+    # Royal Chapel items
+    "Royal Chapel Stairs - Red Vase on Alcove 4":
+        {
+            "ap_id": 41,
+            "zones": [ZONE["DAI"]],
+            "index": 0,
+            "entities": [0x2928, 0x32a6],
+            "as_relic": {},
+            "vanilla_item": "Ankh of life",
+        },
+    "Royal Chapel Stairs - Upper Alcove":
+        {
+            "ap_id": 42,
+            "zones": [ZONE["DAI"]],
+            "index": 1,
+            "entities": [0x2982, 0x3242],
+            "as_relic": {},
+            "vanilla_item": "Morningstar",
+        },
+    "Royal Chapel - Item Behind Maria":
+        {
+            "ap_id": 43,
+            "zones": [ZONE["DAI"]],
+            "index": 2,
+            "entities": [0x281a, 0x31c0],
+            "as_relic": {"y": 0x009a},
+            "vanilla_item": "Silver ring",
+        },
+    "Royal Chapel Stairs - Bottom Red Vase":
+        {
+            "ap_id": 44,
+            "zones": [ZONE["DAI"]],
+            "index": 3,
+            "entities": [0x28ba, 0x3328],
+            "as_relic": {},
+            "vanilla_item": "Aquamarine",
+        },
+    "Royal Chapel Stairs - Red Vase on Alcove 1":
+        {
+            "ap_id": 45,
+            "zones": [ZONE["DAI"]],
+            "index": 4,
+            "entities": [0x28e2, 0x32f6],
+            "as_relic": {},
+            "vanilla_item": "Mystic pendant",
+        },
+    "Royal Chapel Stairs - Red Vase on Alcove 2":
+        {
+            "ap_id": 46,
+            "zones": [ZONE["DAI"]],
+            "index": 5,
+            "entities": [0x28f6, 0x32d8],
+            "as_relic": {},
+            "vanilla_item": "Magic missile",
+        },
+    "Royal Chapel Stairs - Red Vase on Alcove 3":
+        {
+            "ap_id": 47,
+            "zones": [ZONE["DAI"]],
+            "index": 6,
+            "entities": [0x291e, 0x32b0],
+            "as_relic": {},
+            "vanilla_item": "Shuriken",
+        },
+    "Royal Chapel Stairs - Red Vase on Alcove 5":
+        {
+            "ap_id": 48,
+            "zones": [ZONE["DAI"]],
+            "index": 7,
+            "entities": [0x2946, 0x3292],
+            "as_relic": {},
+            "vanilla_item": "TNT",
+        },
+    "Royal Chapel Stairs - Red Vase on Alcove 6":
+        {
+            "ap_id": 49,
+            "zones": [ZONE["DAI"]],
+            "index": 8,
+            "entities": [0x2964, 0x326a],
+            "as_relic": {},
+            "vanilla_item": "Boomerang",
+        },
+    "Royal Chapel - Inner Chapel Doorway Roof":
+        {
+            "ap_id": 50,
+            "zones": [ZONE["DAI"]],
+            "index": 9,
+            "entities": [0x289c, 0x31f2],
+            "as_relic": {"y": 0x0120},
+            "vanilla_item": "Goggles",
+        },
+    "Royal Chapel Tower 1 - Top Item":
+        {
+            "ap_id": 51,
+            "zones": [ZONE["DAI"]],
+            "index": 10,
+            "entities": [0x2da6, 0x36b6],
+            "as_relic": {"y": 0x00f0},
+            "vanilla_item": "Silver plate",
+        },
+    "Royal Chapel Tower 1 - Yellow Vase":
+        {
+            "ap_id": 52,
+            "zones": [ZONE["DAI"]],
+            "index": 11,
+            "entities": [0x2e82, 0x36c0],
+            "as_relic": {"y": 0x019f},
+            "vanilla_item": "Str. potion",
+        },
+    "Royal Chapel Tower 1 - Red Vase":
+        {
+            "ap_id": 53,
+            "zones": [ZONE["DAI"]],
+            "index": 12,
+            "entities": [0x2d9c, 0x36ca],
+            "as_relic": {},
+            "vanilla_item": "Life Vessel",
+        },
+    "Royal Chapel Tower 2 - Top Item":
+        {
+            "ap_id": 54,
+            "zones": [ZONE["DAI"]],
+            "index": 13,
+            "entities": [0x2f5e, 0x38aa],
+            "as_relic": {"y": 0x01f0},
+            "vanilla_item": "Zircon",
+        },
+    "Royal Chapel Tower 3 - Top Item":
+        {
+            "ap_id": 55,
+            "zones": [ZONE["DAI"]],
+            "index": 14,
+            "entities": [0x3026, 0x3972],
+            "as_relic": {"y": 0x00ef},
+            "vanilla_item": "Cutlass",
+        },
+    "Royal Chapel Tower 3 - Red Vase":
+        {
+            "ap_id": 56,
+            "zones": [ZONE["DAI"]],
+            "index": 15,
+            "entities": [0x3008, 0x397c],  # TODO [ 0x2e82, 0x36c0 ] was wrong
+            "as_relic": {},
+            "vanilla_item": "Potion",
+        },
+    # Long Library items
+    "Long Library - Deeper Library Upper Part Flame on Table":
+        {
+            "ap_id": 57,
+            "zones": [ZONE["LIB"]],
+            "index": 1,
+            "entities": [0x3312, 0x39ac],
+            "as_relic": {},
+            "vanilla_item": "Stone mask",
+        },
+    "Long Library - Deeper Library Behind Bookshelf Item 2":
+        {
+            "ap_id": 58,
+            "zones": [ZONE["LIB"]],
+            "index": 2,
+            "entities": [0x35b0, 0x3c5e],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Holy rod",
+        },
+    "Long Library - Item Bellow Librarian":
+        {
+            "ap_id": 59,
+            "zones": [ZONE["LIB"]],
+            "index": 4,
+            "entities": [0x3286, 0x398e],
+            "as_relic": {"y": 0x01b0},
+            "vanilla_item": "Bronze cuirass"
+        },
+    "Long Library - Deeper Library Lower Part Statue 1":
+        {
+            "ap_id": 60,
+            "zones": [ZONE["LIB"]],
+            "index": 5,
+            "entities": [0x377c, 0x3f10],
+            "as_relic": {},
+            "vanilla_item": "Takemitsu",
+        },
+    "Long Library - Deeper Library Lower Part Statue 2":
+        {
+            "ap_id": 61,
+            "zones": [ZONE["LIB"]],
+            "index": 6,
+            "entities": [0x3786, 0x3f1a],
+            "as_relic": {},
+            "vanilla_item": "Onyx",
+        },
+    "Long Library - Deeper Library Lower Part Red Vase":
+        {
+            "ap_id": 62,
+            "zones": [ZONE["LIB"]],
+            "index": 7,
+            "entities": [0x379a, 0x3f24],
+            "as_relic": {},
+            "vanilla_item": "Frankfurter",
+        },
+    "Long Library - Top Left Room Item 2":
+        {
+            "ap_id": 63,
+            "zones": [ZONE["LIB"]],
+            "index": 8,
+            "entities": [0x357e, 0x3c36],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Potion",
+        },
+    "Long Library - Top Left Room Item 3":
+        {
+            "ap_id": 64,
+            "zones": [ZONE["LIB"]],
+            "index": 9,
+            "entities": [0x3588, 0x3c40],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Antivenom",
+        },
+    "Long Library - Deeper Library Behind Bookshelf Item 1":
+        {
+            "ap_id": 65,
+            "zones": [ZONE["LIB"]],
+            "index": 10,
+            "entities": [0x35a6, 0x3c68],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Topaz circlet",
+        },
+    "Long Library - Deeper Library Behind Mist Crate":
+        {
+            "ap_id": 66,
+            "zones": [ZONE["LIB"]],
+            "index": 0,  # Test if index 0 works
+            "entities": [0x3826, 0x3f06],
+            "as_item": {},
+            "vanilla_item": "Soul of bat",
+        },
+    "Long Library - Top Right Floor":
+        {
+            "ap_id": 67,
+            "zones": [ZONE["LIB"]],
+            "index": 3,  # Test if index 3 works
+            "entities": [0x3510, 0x3a92],
+            "as_item": {"y": 0x00b9},
+            "vanilla_item": "Faerie scroll"
+        },
+    "Long Library - Top Left Room Item 1":
+        {
+            "ap_id": 68,
+            "zones": [ZONE["LIB"]],
+            "index": 11,
+            "entities": [0x3574, 0x3c2c],
+            "as_item": {"y": 0x00b9},
+            "vanilla_item": "Faerie card",
+        },
+    "Long Library - Librarian Shop Item":
+        {
+            "ap_id": 69,
+            "zones": [ZONE["LIB"]],
+            "addresses": [0x047a321c],
+            # bin for jewel item 0xf4f3a/0x438d6d2
+            # rom_address 0x0dfd42
+            "vanilla_item": "Jewel of open"
+        },
+    # Marble Galley items
+    "Marble Gallery - Left Clock Before Olrox's Quarter":
+        {
+            "ap_id": 70,
+            "zones": [ZONE["NO0"]],
+            "index": 0,
+            "entities": [0x3652, 0x44d2],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Life Vessel",
+        },
+    "Marble Gallery - Right Clock Item 1":
+        {
+            "ap_id": 71,
+            "zones": [ZONE["NO0"]],
+            "index": 1,
+            "entities": [0x3670, 0x44f0],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Alucart shield",
+        },
+    "Marble Gallery - Right Clock Item 2":
+        {
+            "ap_id": 72,
+            "zones": [ZONE["NO0"]],
+            "index": 2,
+            "entities": [0x367a, 0x44fa],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Heart Vessel",
+        },
+    "Marble Gallery - Middle clock Left Item 1":
+        {
+            "ap_id": 73,
+            "zones": [ZONE["NO0"]],
+            "index": 3,
+            "entities": [0x296c, 0x37f6],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Life apple",
+        },
+    "Marble Gallery - Middle clock Left Item 2":
+        {
+            "ap_id": 74,
+            "zones": [ZONE["NO0"]],
+            "index": 4,
+            "entities": [0x2976, 0x3800],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Hammer",
+        },
+    "Marble Gallery - Middle clock Left Item 3":
+        {
+            "ap_id": 75,
+            "zones": [ZONE["NO0"]],
+            "index": 5,
+            "entities": [0x2980, 0x380a],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Potion",
+        },
+    "Marble Gallery - Right Clock Item 3":
+        {
+            "ap_id": 76,
+            "zones": [ZONE["NO0"]],
+            "index": 6,
+            "entities": [0x3698, 0x4518],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Alucart mail",
+        },
+    "Marble Gallery - Right Clock Item 4":
+        {
+            "ap_id": 77,
+            "zones": [ZONE["NO0"]],
+            "index": 7,
+            "entities": [0x36a2, 0x4522],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Alucart sword",
+        },
+    "Marble Gallery - Inside Clock Left Item":
+        {
+            "ap_id": 78,
+            "zones": [ZONE["NO0"]],
+            "index": 8,
+            "entities": [0x36c0, 0x4540],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Life Vessel",
+        },
+    "Marble Gallery - Inside Clock Right Item":
+        {
+            "ap_id": 79,
+            "zones": [ZONE["NO0"]],
+            "index": 9,
+            "entities": [0x36ca, 0x454a],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Heart Vessel",
+        },
+    "Marble Gallery - Bellow Red Trap Door Right Item":
+        {
+            "ap_id": 80,
+            "zones": [ZONE["NO0"]],
+            "index": 10,
+            "entities": [0x3742, 0x45b8],
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Library card",
+        },
+    "Marble Gallery - Bellow Red Trap Door Left Item":
+        {
+            "ap_id": 81,
+            "zones": [ZONE["NO0"]],
+            "index": 11,
+            "entities": [0x372e, 0x45c2],
+            "as_relic": {"y": 0x0090},
+            "vanilla_item": "Attack potion",
+        },
+    "Marble Gallery - Descend to Entrance Item 2":
+        {
+            "ap_id": 82,
+            "zones": [ZONE["NO0"]],
+            "index": 12,
+            "entities": [0x3134, 0x3fa0],
+            "as_relic": {},
+            "vanilla_item": "Hammer",
+        },
+    "Marble Gallery - Descend to Entrance Item 1":
+        {
+            "ap_id": 83,
+            "zones": [ZONE["NO0"]],
+            "index": 13,
+            "entities": [0x3170, 0x3f14],
+            "as_relic": {"y": 0x00f9},
+            "vanilla_item": "Str. potion",
+        },
+    "Marble Gallery - Item Given by Maria":
+        {
+            "ap_id": 84,
+            "zones": [ZONE["CEN"]],
+            "addresses": [0x0456e368],
+            "erase":
+                {
+                    "instructions": [{"addresses": [0x0456e360], "instruction": 0x08063ff6}]
+                },
+            "break_flag": 0x03bec4,
+            "break_mask": 0x1,
+            "vanilla_item": "Holy glasses",
+        },
+    "Marble Gallery - Descend to Entrance Item 3":
+        {
+            "ap_id": 85,
+            "zones": [ZONE["NO0"]],
+            "index": 14,
+            "entities": [0x309e, 0x3ff0],
+            "as_item": {"x": 0x0043},
+            "vanilla_item": "Spirit orb"
+        },
+    "Marble Gallery - Middle clock Right Item":
+        {
+            "ap_id": 86,
+            "zones": [ZONE["NO0"]],
+            "index": 15,
+            "entities": [0x298a, 0x37ec],
+            "as_item": {"y": 0x00b9},
+            "vanilla_item": "Gravity boots",
+        },
+    # Outer Wall items
+    "Outer Wall - Item 1 Behind Mist Grate":
+        {
+            "ap_id": 87,
+            "zones": [ZONE["NO1"]],
+            "index": 0,
+            "entities": [0x36d4, 0x3eba],
+            "as_relic": {"y": 0x0090},
+            "vanilla_item": "Jewel knuckles"
+        },
+    "Outer Wall - Item 2 Behind Mist Grate":
+        {
+            "ap_id": 88,
+            "zones": [ZONE["NO1"]],
+            "index": 1,
+            "entities": [0x36e8, 0x3ec4],
+            "as_relic": {"y": 0x0090},
+            "vanilla_item": "Mirror cuirass",
+        },
+    "Outer Wall - Red Vase Near Elevator Switch":
+        {
+            "ap_id": 89,
+            "zones": [ZONE["NO1"]],
+            "index": 2,
+            "entities": [0x3b34, 0x4220],
+            "as_relic": {},
+            "vanilla_item": "Heart Vessel"
+        },
+    "Outer Wall - Yellow Vase on High Ledge":
+        {
+            "ap_id": 90,
+            "zones": [ZONE["NO1"]],
+            "index": 3,
+            "entities": [0x37ba, 0x3f6e],
+            "as_relic": {},
+            "vanilla_item": "Garnet",
+        },
+    "Outer Wall - Item After Doppleganger 10":
+        {
+            "ap_id": 91,
+            "zones": [ZONE["NO1"]],
+            "index": 4,
+            "entities": [0x363e, 0x3e24],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Gladius"
+        },
+    "Outer Wall - Red Vase After Doppleganger 10":
+        {
+            "ap_id": 92,
+            "zones": [ZONE["NO1"]],
+            "index": 5,
+            "entities": [0x3bc0, 0x4450],
+            "as_relic": {},
+            "vanilla_item": "Life Vessel"
+        },
+    "Outer Wall - Red Vase Near Marble Gallery Door":
+        {
+            "ap_id": 93,
+            "zones": [ZONE["NO1"]],
+            "index": 6,
+            "entities": [0x3774, 0x3f3c],
+            "as_relic": {},
+            "vanilla_item": "Zircon"
+        },
+    "Outer Wall - Breakable Wall in Room Behind Armor Lord":
+        {
+            "ap_id": 94,
+            "zones": [ZONE["NO1"]],
+            "despawn": True,
+            "no_offset": True,
+            "entities": [0x3698, 0x3e7e],
+            "addresses": [0x04a197d8],
+            "bin_addresses": [0xf4ed4, 0x438d66c],
+            "rom_address": 0xdfcdc,
+            "break_flag": 0x03bdfe,
+            "break_mask": 0x1,
+            "vanilla_item": "Pot roast"
+        },
+    "Outer Wall - Inside of Elevator":
+        {
+            "ap_id": 95,
+            "zones": [ZONE["NO1"]],
+            "index": 7,
+            "entities": [0x3c2e, 0x4356],
+            "as_item": {"y": 0x0331},
+            "vanilla_item": "Soul of wolf"
+        },
+    # Olrox's Quarters items
+    "Olrox\'s Quarters Path to Royal Chapel - On Wooden Display":
+        {
+            "ap_id": 96,
+            "zones": [ZONE["NO2"]],
+            "index": 1,
+            "entities": [0x3718, 0x3e7c],
+            "as_relic": {"y": 0x0090},
+            "vanilla_item": "Heart Vessel",
+        },
+    "Olrox\'s Quarters Lower Part - Room Behind Breakable Wall Vase 3":
+        {
+            "ap_id": 97,
+            "zones": [ZONE["NO2"]],
+            "index": 4,
+            "entities": [0x34c0, 0x3bd4],
+            "as_relic": {},
+            "vanilla_item": "Broadsword",
+        },
+    "Olrox\'s Quarters Lower Part - Room Behind Breakable Wall Vase 2":
+        {
+            "ap_id": 98,
+            "zones": [ZONE["NO2"]],
+            "index": 5,
+            "entities": [0x34b6, 0x3bde],
+            "as_relic": {},
+            "vanilla_item": "Onyx",
+        },
+    "Olrox\'s Quarters Lower Part - Room Behind Breakable Wall Vase 1":
+        {
+            "ap_id": 99,
+            "zones": [ZONE["NO2"]],
+            "index": 6,
+            "entities": [0x34ac, 0x3be8],
+            "as_relic": {},
+            "vanilla_item": "Cheese",
+        },
+    "Olrox\'s Quarters Upper Part - Ascend Shaft Red Vase 1":
+        {
+            "ap_id": 100,
+            "zones": [ZONE["NO2"]],
+            "index": 7,
+            "entities": [0x3970, 0x40ac],
+            "as_relic": {},
+            "vanilla_item": "Manna prism",
+         },
+    "Olrox\'s Quarters Upper Part - Ascend Shaft Red Vase 2":
+        {
+            "ap_id": 101,
+            "zones": [ZONE["NO2"]],
+            "index": 8,
+            "entities": [0x397a, 0x40a2],
+            "as_relic": {},
+            "vanilla_item": "Resist fire",
+        },
+    "Olrox\'s Quarters Upper Part - Ascend Shaft Red Vase 3":
+        {
+            "ap_id": 102,
+            "zones": [ZONE["NO2"]],
+            "index": 9,
+            "entities": [0x3984, 0x4098],
+            "as_relic": {},
+            "vanilla_item": "Luck potion",
+        },
+    "Olrox\'s Quarters Upper Part - Ledge Before Drop to Courtyard":
+        {
+            "ap_id": 103,
+            "zones": [ZONE["NO2"]],
+            "index": 10,
+            "entities": [0x34e8, 0x3c06],
+            "as_relic": {},
+            "vanilla_item": "Estoc",
+        },
+    "Olrox\'s Quarters - Hole Before Olrox":
+        {
+            "ap_id": 104,
+            "zones": [ZONE["NO2"]],
+            "index": 11,
+            "entities": [0x3470, 0x3b98],
+            "as_relic": {"y": 0x00d0},
+            "vanilla_item": "Iron ball",
+        },
+    "Olrox\'s Quarters Courtyard - Right Room":
+        {
+            "ap_id": 105,
+            "zones": [ZONE["NO2"]],
+            "index": 12,
+            "entities": [0x3434, 0x3b5c],
+            "as_relic": {"y": 0x0090},
+            "vanilla_item": "Garnet",
+        },
+    "Olrox\'s Quarters - After Olrox":
+        {
+            "ap_id": 106,
+            "zones": [ZONE["NO2"]],
+            "index": 0,
+            "entities": [0x35f6, 0x3d1e],
+            "as_item": {"y": 0x009d},
+            "vanilla_item": "Echo of bat",
+        },
+    "Olrox\'s Quarters Path to Royal Chapel - Hidden Attic":
+        {
+            "ap_id": 107,
+            "zones": [ZONE["NO2"]],
+            "index": 2,
+            "entities": [0x3416, 0x3b3e],
+            "as_item": {"y": 0x009c},
+            "vanilla_item": "Sword card",
+        },
+    # Castle Entrance items
+    "Entrance - Above First Encounter With Death":
+        {
+            "ap_id": 108,
+            "zones": [ZONE["NO3"], ZONE["NP3"]],
+            "index": 0,
+            "entities": [0x3e68, 0x45f4, 0x3c08, 0x4344],
+            "as_relic": {"y": 0x00a0},
+            "vanilla_item": "Heart Vessel"
+        },
+    "Entrance - Right Alcove in Cube of Zoe Room":
+        {
+            "ap_id": 109,
+            "zones": [ZONE["NO3"], ZONE["NP3"]],
+            "index": 1,
+            "entities": [0x3e86, 0x4612, 0x3c26, 0x4362],
+            "as_relic": {"y": 0x00a0},
+            "vanilla_item": "Life Vessel"
+        },
+    "Entrance - Wolf/Bat Secret Room Right Item":
+        {
+            "ap_id": 110,
+            "zones": [ZONE["NO3"], ZONE["NP3"]],
+            "index": 2,
+            "entities": [0x40a2, 0x4824, 0x3e60, 0x4588],
+            "as_relic": {"y": 0x0090},
+            "vanilla_item": "Life apple",
+        },
+    "Entrance - Behind Stone Wall in Cube of Zoe Room":
+        {
+            "ap_id": 111,
+            "zones": [ZONE["NO3"], ZONE["NP3"]],
+            "index": 4,
+            "entities": [0x4156, 0x48ba, 0x3f1e, 0x4632],
+            "as_relic": {"y": 0x0090},
+            "vanilla_item": "Shield potion"
+        },
+    "Entrance - Attic Above Mermans":
+        {
+            "ap_id": 112,
+            "zones": [ZONE["NO3"], ZONE["NP3"]],
+            "index": 5,
+            "entities": [0x3ea4, 0x4630, 0x3c44, 0x4380],
+            "as_relic": {"y": 0x0050},
+            "vanilla_item": "Holy mail",
+        },
+    "Entrance - By Underground Caverns Bottom Exit":
+        {
+            "ap_id": 113,
+            "zones": [ZONE["NO3"], ZONE["NP3"]],
+            "index": 6,
+            "entities": [0x4228, 0x49b4, 0x400e, 0x474a],
+            "as_relic": {"y": 0x0090},
+            "vanilla_item": "Life Vessel",
+        },
+    "Entrance - Castle Entrance Teleport Exit":
+        {
+            "ap_id": 114,
+            "zones": [ZONE["NO3"], ZONE["NP3"]],
+            "index": 7,
+            "entities": [0x4066, 0x47f2, 0x3e1a, 0x4556],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Heart Vessel"
+        },
+    "Entrance - Attic Near Start Gate Right item":
+        {
+            "ap_id": 115,
+            "zones": [ZONE["NO3"], ZONE["NP3"]],
+            "index": 8,
+            "entities": [0x41ec, 0x491e, 0x3fd2, 0x4696],
+            "as_relic": {"y": 0x00c0},
+            "vanilla_item": "Life Vessel",
+        },
+    "Entrance - Wolf/Bat Secret Room Left Item":
+        {
+            "ap_id": 116,
+            "zones": [ZONE["NP3"]],
+            "index": 9,
+            "entities": [0x3e56, 0x459c],
+            "as_relic": {"y": 0x00a0},
+            "vanilla_item": "Jewel sword",
+        },
+    "Entrance - Breakable Wall Above Merman":
+        {
+            "ap_id": 117,
+            "zones": [ZONE["NO3"], ZONE["NP3"]],
+            "despawn": True,
+            "no_offset": True,
+            "entities": [0x4304, 0x4a4a, 0x40e0, 0x47cc],
+            "addresses": [0x04ba9774, 0x05431554],
+            "bin_addresses": [0xf4ed6, 0x438d66e],
+            "rom_address": 0xdfcde,
+            "break_flag": 0x03be1f,
+            "break_mask": 0x1,
+            "vanilla_item": "Pot roast"
+        },
+    "Entrance - Breakable Ledge Before Death":
+        {
+            "ap_id": 118,
+            "zones": [ZONE["NO3"], ZONE["NP3"]],
+            "despawn": True,
+            "no_offset": True,
+            "entities": [0x3fd0, 0x4752, 0x3d70, 0x4498],
+            "addresses": [0x04baa2b0, 0x05431f60],
+            "bin_addresses": [0xf4ed8, 0x438d670],
+            "rom_address": 0xdfce0,
+            "break_flag": 0x03be24,
+            "break_mask": 0x1,
+            "vanilla_item": "Turkey"
+        },
+    "Entrance - Pedestal in Cube of Zoe Room":
+        {
+            "ap_id": 119,
+            "zones": [ZONE["NO3"], ZONE["NP3"]],
+            "index": 3,  # Test if index 3 works
+            "entities": [0x411a, 0x48a6, 0x3ece, 0x460a],
+            "as_item": {"y": 0x007b},
+            "vanilla_item": "Cube of zoe"
+        },
+    "Entrance - Attic Near Start Gate Left item":
+        {
+            "ap_id": 120,
+            "zones": [ZONE["NO3"], ZONE["NP3"]],
+            "index": 10,
+            "entities": [0x41e2, 0x4914, 0x3fbe, 0x468c],
+            "as_item": {"y": 0x00c8},
+            "vanilla_item": "Power of wolf",
+        },
+    # Underground Caverns items
+    "Underground Caverns - Wooden Stand Close to Stairway":
+        {
+            "ap_id": 121,
+            "zones": [ZONE["NO4"], ZONE["NO4"]],
+            "index": 0,
+            "entities": [0x3316, 0x439e, 0x380c, 0x4ace],
+            "as_relic": {"y": 0x00a0},
+            "vanilla_item": "Heart Vessel"
+        },
+    "Underground Caverns - Middle of Stairway Room":
+        {
+            "ap_id": 122,
+            "zones": [ZONE["NO4"]],
+            "index": 1,
+            "entities": [0x3334, 0x43bc],
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Life Vessel"
+        },
+    "Underground Caverns Scylla Area - After Fight Item":
+        {
+            "ap_id": 123,
+            "zones": [ZONE["NO4"], ZONE["BO3"]],
+            "index": 2,
+            "entities": [0x3352, 0x43da, 0x1e42, 0x2006],
+            "as_relic": {"y": 0x00a0},
+            "vanilla_item": "Crystal cloak"
+        },
+    "Underground Caverns - Top Underwater Item":
+        {
+            "ap_id": 124,
+            "zones": [ZONE["NO4"]],
+            "index": 4,
+            "entities": [0x3a6e, 0x4ca4],
+            "as_relic": {"y": 0x0150},
+            "vanilla_item": "Antivenom"
+        },
+    "Underground Caverns - Bottom Underwater Item":
+        {
+            "ap_id": 125,
+            "zones": [ZONE["NO4"]],
+            "index": 5,
+            "entities": [0x3a64, 0x4cea],
+            "as_relic": {"y": 0x01c2},
+            "vanilla_item": "Life Vessel"
+        },
+    "Underground Caverns - Hidden Room Behind Waterfall":
+        {
+            "ap_id": 126,
+            "zones": [ZONE["NO4"]],
+            "index": 6,
+            "entities": [0x3f6e, 0x5000],
+            "as_relic": {"y": 0x00a0},
+            "vanilla_item": "Life Vessel"
+        },
+    "Underground Caverns - Top Left Room From Waterfall":
+        {
+            "ap_id": 127,
+            "zones": [ZONE["NO4"]],
+            "index": 7,
+            "entities": [0x3fa0, 0x503c],
+            "as_relic": {"y": 0x00b5},
+            "vanilla_item": "Herald shield"
+        },
+    "Underground Caverns - Red Vase on Ledge Next to Marble Gallery":
+        {
+            "ap_id": 128,
+            "zones": [ZONE["NO4"]],
+            "index": 9,
+            "entities": [0x329e, 0x4308],
+            "as_relic": {},
+            "vanilla_item": "Zircon"
+        },
+    "Underground Caverns Succubus Side - Succubus item":
+        {
+            "ap_id": 129,
+            "zones": [ZONE["NO4"]],
+            "index": 10,
+            "entities": [0x4270, 0x52ee],
+            "addresses": [0x04c324b4],
+            "tile_id": True,
+            "vanilla_item": "Gold ring"
+        },
+    "Underground Caverns - Breakable Wall Close to Stairway":
+        {
+            "ap_id": 130,
+            "zones": [ZONE["NO4"]],
+            "index": 11,
+            "entities": [0x3262, 0x42ea],
+            "as_relic": {"y": 0x00a0},
+            "vanilla_item": "Bandanna"
+        },
+    "Underground Caverns - Bottom of Stairway":
+        {
+            "ap_id": 131,
+            "zones": [ZONE["NO4"]],
+            "index": 12,
+            "entities": [0x3550, 0x461e],
+            "as_relic": {"y": 0x08a0},
+            "vanilla_item": "Shiitake"
+        },
+    "Underground Caverns Succubus Side - Red Vase 1":
+        {
+            "ap_id": 132,
+            "zones": [ZONE["NO4"]],
+            "index": 13,
+            "entities": [0x3406, 0x4448],
+            "as_relic": {},
+            "vanilla_item": "Claymore"
+        },
+    "Underground Caverns Succubus Side - Red Vase 2":
+        {
+            "ap_id": 133,
+            "zones": [ZONE["NO4"]],
+            "index": 14,
+            "entities": [0x3640, 0x46b4],
+            "as_relic": {},
+            "vanilla_item": "Meal ticket"
+        },
+    "Underground Caverns Succubus Side - Red Vase 3":
+        {
+            "ap_id": 134,
+            "zones": [ZONE["NO4"]],
+            "index": 15,
+            "entities": [0x364a, 0x46be],
+            "as_relic": {},
+            "vanilla_item": "Meal ticket"
+        },
+    "Underground Caverns Succubus Side - Red Vase 4":
+        {
+            "ap_id": 135,
+            "zones": [ZONE["NO4"]],
+            "index": 16,
+            "entities": [0x362c, 0x46c8],
+            "as_relic": {},
+            "vanilla_item": "Meal ticket"
+        },
+    "Underground Caverns Succubus Side - Red Vase 5":
+        {
+            "ap_id": 136,
+            "zones": [ZONE["NO4"]],
+            "index": 17,
+            "entities": [0x3636, 0x46d2],
+            "as_relic": {},
+            "vanilla_item": "Meal ticket"
+        },
+    "Underground Caverns Succubus Side - Red Vase 6":
+        {
+            "ap_id": 137,
+            "zones": [ZONE["NO4"]],
+            "index": 18,
+            "entities": [0x3654, 0x46dc],
+            "as_relic": {},
+            "vanilla_item": "Moonstone"
+        },
+    "Underground Caverns Scylla Area - Right item":
+        {
+            "ap_id": 138,
+            "zones": [ZONE["NO4"], ZONE["BO3"]],
+            "index": 19,
+            "entities": [0x423e, 0x52bc, 0x1e24, 0x1fde],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Scimitar"
+        },
+    "Underground Caverns Scylla Area - Left item":
+        {
+            "ap_id": 139,
+            "zones": [ZONE["NO4"], ZONE["BO3"]],
+            "index": 20,
+            "entities": [0x4216, 0x52c6, 0x1df2, 0x1fe8],
+            "as_relic": {"y": 0x00c8},
+            "vanilla_item": "Resist ice"
+        },
+    "Underground Caverns Scylla Area - Red Vase":
+        {
+            "ap_id": 140,
+            "zones": [ZONE["NO4"], ZONE["BO3"]],
+            "index": 21,
+            "entities": [0x41da, 0x5262, 0x1d5c, 0x1f20],
+            "as_relic": {},
+            "vanilla_item": "Pot roast"
+        },
+    "Underground Caverns Ice Area - On Alcove":
+        {
+            "ap_id": 141,
+            "zones": [ZONE["NO4"]],
+            "index": 22,
+            "entities": [0x3d16, 0x4d6c],
+            "tile_index": 1,
+            "as_relic": {"x": 0x053f, "y": 0x0052},
+            "vanilla_item": "Onyx"
+        },
+    "Underground Caverns Ice Area - Underwater Item 1":
+        {
+            "ap_id": 142,
+            "zones": [ZONE["NO4"]],
+            "index": 23,
+            "entities": [0x3c80, 0x4e66],
+            "as_relic": {"y": 0x00f5},
+            "vanilla_item": "Knuckle duster"
+        },
+    "Underground Caverns Ice Area - Underwater Item 2":
+        {
+            "ap_id": 143,
+            "zones": [ZONE["NO4"]],
+            "index": 24,
+            "entities": [0x3cee, 0x4e70],
+            "as_relic": {},
+            "vanilla_item": "Life Vessel"
+        },
+    "Underground Caverns Ice Area - Underwater Item 3":
+        {
+            "ap_id": 144,
+            "zones": [ZONE["NO4"]],
+            "index": 25,
+            "entities": [0x3dd4, 0x4e7a],
+            "as_relic": {"y": 0x0130},
+            "vanilla_item": "Elixir"
+        },
+    "Underground Caverns - Bellow Stairway":
+        {
+            "ap_id": 145,
+            "zones": [ZONE["NO4"]],
+            "index": 26,
+            "entities": [0x3c58, 0x4b3c],
+            "as_relic": {"y": 0x0060},
+            "vanilla_item": "Toadstool"
+        },
+    "Underground Caverns - Alcove Next to Drowned Guards":
+        {
+            "ap_id": 146,
+            "zones": [ZONE["NO4"]],
+            "index": 27,
+            "entities": [0x3bea, 0x4b0a],
+            "as_relic": {"y": 0x0050},
+            "vanilla_item": "Shiitake"
+        },
+    "Underground Caverns - Bellow Wooden Bridge Left Item":
+        {
+            "ap_id": 147,
+            "zones": [ZONE["NO4"]],
+            "index": 28,
+            "entities": [0x4130, 0x51fe],
+            "as_relic": {"y": 0x00d0},
+            "vanilla_item": "Life Vessel"
+        },
+    "Underground Caverns - Bellow Wooden Bridge Right Item":
+        {
+            "ap_id": 148,
+            "zones": [ZONE["NO4"]],
+            "index": 29,
+            "as_relic": {"y": 0x00d0},
+            "entities": [0x4176, 0x5208],
+            "vanilla_item": "Heart Vessel"
+        },
+    "Underground Caverns - Underwater Stream":
+        {
+            "ap_id": 149,
+            "zones": [ZONE["NO4"]],
+            "index": 30,
+            "entities": [0x3f28, 0x4fb0],
+            "as_relic": {"y": 0x00d0},
+            "vanilla_item": "Pentagram"
+        },
+    "Underground Caverns - Alcove Behind Waterfall":
+        {
+            "ap_id": 150,
+            "zones": [ZONE["NO4"]],
+            "index": 31,
+            "entities": [0x37da, 0x47e0],
+            "as_relic": {"x": 0x0110, "y": 0x021f},
+            "vanilla_item": "Secret boots"
+        },
+    "Underground Caverns - Waterfall Upper Item":
+        {
+            "ap_id": 151,
+            "zones": [ZONE["NO4"]],
+            "index": 32,
+            "entities": [0x36cc, 0x47ea],
+            "as_relic": {"x": 0x0030},
+            "vanilla_item": "Shiitake"
+        },
+    "Underground Caverns - Waterfall Bottom Item":
+        {
+            "ap_id": 152,
+            "zones": [ZONE["NO4"]],
+            "index": 33,
+            "entities": [0x36d6, 0x4876],
+            "as_relic": {"x": 0x0040, "y": 0x051c},
+            "vanilla_item": "Toadstool"
+        },
+    "Underground Caverns - Next to Castle Entrance Passage":
+        {
+            "ap_id": 153,
+            "zones": [ZONE["NO4"]],
+            "index": 35,
+            "entities": [0x36ae, 0x4736],
+            "as_relic": {"y": 0x0095},
+            "vanilla_item": "Shiitake"
+        },
+    "Underground Caverns - Air Pocket Item":
+        {
+            "ap_id": 154,
+            "zones": [ZONE["NO4"]],
+            "index": 36,
+            "entities": [0x3c4e, 0x4c72],
+            "as_relic": {"y": 0x00f2},
+            "vanilla_item": "Nunchaku"
+        },
+    "Underground Caverns Ice Area - After Ferryman":
+        {
+            "ap_id": 155,
+            "zones": [ZONE["NO4"]],
+            "index": 3,  # Test if index 3 works
+            "entities": [0x3ea6, 0x4f38],
+            "as_item": {"y": 0x00b9},
+            "vanilla_item": "Holy symbol"
+        },
+    "Underground Caverns - After Ferryman":
+        {
+            "ap_id": 156,
+            "zones": [ZONE["NO4"]],
+            "index": 8,  # Test if index 8 works
+            "entities": [0x4004, 0x50aa],
+            "as_item": {"y": 0x00b9},
+            "vanilla_item": "Merman statue"
+        },
+    # Alchemy Laboratory items
+    "Alchemy Lab. - Globe by the Bottom Entrance":
+        {
+            "ap_id": 157,
+            "zones": [ZONE["NZ0"]],
+            "index": 0,
+            "entities": [0x2df2, 0x377c],
+            "as_relic": {"y": 0x00a0},
+            "vanilla_item": "Hide cuirass"
+        },
+    "Alchemy Lab. - Globe in Hidden Room Behind Breakable Wall":
+        {
+            "ap_id": 158,
+            "zones": [ZONE["NZ0"]],
+            "index": 1,
+            "entities": [0x2eec, 0x3844],
+            "as_relic": {},
+            "vanilla_item": "Heart Vessel"
+        },
+    "Alchemy Lab. - Globe After Spike Puzzle":
+        {
+            "ap_id": 159,
+            "zones": [ZONE["NZ0"]],
+            "index": 2,
+            "entities": [0x2f32, 0x388a],
+            "as_relic": {},
+            "vanilla_item": "Cloth cape"
+        },
+    "Alchemy Lab. - Tank in Hidden Basement on Breakable Floor":
+        {
+            "ap_id": 160,
+            "zones": [ZONE["NZ0"]],
+            "index": 3,
+            "entities": [0x2a28, 0x338a],
+            "as_relic": {"x": 0x0080, "y": 0x01b0},
+            "vanilla_item": "Life Vessel"
+        },
+    "Alchemy Lab. - Globe on Middle Elevator Shaft Room":
+        {
+            "ap_id": 161,
+            "zones": [ZONE["NZ0"]],
+            "index": 6,
+            "entities": [0x3108, 0x3a60],
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Sunglasses"
+        },
+    "Alchemy Lab. - Flame on Table Middle Way Up":
+        {
+            "ap_id": 162,
+            "zones": [ZONE["NZ0"]],
+            "index": 7,
+            "entities": [0x2956, 0x32c2],
+            "as_relic": {"x": 0x0080, "y": 0x01a5},
+            "vanilla_item": "Resist thunder"
+        },
+    "Alchemy Lab. - Flame Near Spike Switch":
+        {
+            "ap_id": 163,
+            "zones": [ZONE["NZ0"]],
+            "index": 8,
+            "entities": [0x2cf8, 0x36b4],
+            "as_relic": {"y": 0x01c0},
+            "vanilla_item": "Leather shield"
+        },
+    "Alchemy Lab. - Item by Cannon":
+        {
+            "ap_id": 164,
+            "zones": [ZONE["NZ0"]],
+            "index": 9,
+            "entities": [0x2ca8, 0x360a],
+            "as_relic": {"y": 0x0090},
+            "vanilla_item": "Basilard"
+        },
+    "Alchemy Lab. - Globe in Big Room With Axe Lord and Spittle Bone":
+        {
+            "ap_id": 165,
+            "zones": [ZONE["NZ0"]],
+            "index": 10,
+            "entities": [0x2b72, 0x3556],
+            "as_relic": {},
+            "vanilla_item": "Potion"
+        },
+    "Alchemy Lab. - Globe in Attic With Powerup Tanks":
+        {
+            "ap_id": 166,
+            "zones": [ZONE["NZ0"]],
+            "index": 4,
+            "entities": [0x3054, 0x3998],
+            "replace_with_relic": False,
+            "addresses": [0x054b1d5a],
+            "as_item": {"x": 0x007e, "y": 0x00b9},
+            "vanilla_item": "Skill of wolf"
+        },
+    "Alchemy Lab. - Globe in Upper-left Room of Slogra and Gaibon":
+        {
+            "ap_id": 167,
+            "zones": [ZONE["NZ0"], ZONE["NZ0"]],
+            "index": 5,
+            "entities": [0x2a8c, 0x33d0, 0x2ad2, 0x343e],
+            "replace_with_relic": False,
+            "addresses": [0x054b1d58],
+            "as_item": {"x": 0x007e, "y": 0x00b9},
+            "vanilla_item": "Bat card"
+        },
+    # Clock tower items
+    "Clock Tower - Bellow Broken Bridge Item 2":
+        {
+            "ap_id": 168,
+            "zones": [ZONE["NZ1"]],
+            "index": 0,
+            "entities": [0x2a52, 0x34ea],
+            "as_relic": {"y": 0x03b0},
+            "vanilla_item": "Magic missile"
+        },
+    "Clock Tower - Bellow Broken Bridge Item 1":
+        {
+            "ap_id": 169,
+            "zones": [ZONE["NZ1"]],
+            "index": 1,
+            "entities": [0x2a0c, 0x34f4],
+            "as_relic": {"y": 0x03b0},
+            "vanilla_item": "Pentagram"
+        },
+    "Clock Tower - Rotating Gears Puzzle Room Item 1":
+        {
+            "ap_id": 170,
+            "zones": [ZONE["NZ1"]],
+            "index": 3,
+            "entities": [0x284a, 0x327e],
+            "as_relic": {"y": 0x0090},
+            "vanilla_item": "Star flail"
+        },
+    "Clock Tower - Rotating Gears Puzzle Room Item 2":
+        {
+            "ap_id": 171,
+            "zones": [ZONE["NZ1"]],
+            "index": 4,
+            "entities": [0x287c, 0x3288],
+            "as_relic": {"y": 0x0090},
+            "vanilla_item": "Gold plate"
+        },
+    "Clock Tower - Rotating Gears Puzzle Room Item 3":
+        {
+            "ap_id": 172,
+            "zones": [ZONE["NZ1"]],
+            "index": 5,
+            "entities": [0x2886, 0x3292],
+            "as_relic": {"y": 0x0090},
+            "vanilla_item": "Steel helm"
+        },
+    "Clock Tower - Behind Breakable Wall Close to Bronze Statue":
+        {
+            "ap_id": 173,
+            "zones": [ZONE["NZ1"]],
+            "index": 6,
+            "entities": [0x2d18, 0x372e],
+            "as_relic": {"y": 0x0090},
+            "vanilla_item": "Healing mail"
+        },
+    "Clock Tower - On Top of Column Item 2":
+        {
+            "ap_id": 174,
+            "zones": [ZONE["NZ1"]],
+            "index": 7,
+            "entities": [0x29e4, 0x33c8],
+            "as_relic": {"y": 0x0280},
+            "vanilla_item": "Bekatowa"
+        },
+    "Clock Tower - On Top of Column Item 1":
+        {
+            "ap_id": 175,
+            "zones": [ZONE["NZ1"]],
+            "index": 8,
+            "entities": [0x29c6, 0x33d2],
+            "as_relic": {"y": 0x0290},
+            "vanilla_item": "Shaman shield"
+        },
+    "Clock Tower - On Top of Column Item 3":
+        {
+            "ap_id": 176,
+            "zones": [ZONE["NZ1"]],
+            "index": 9,
+            "entities": [0x2a02, 0x33dc],
+            "as_relic": {"y": 0x0290},
+            "vanilla_item": "Ice mail"
+        },
+    "Clock Tower - Gears Puzzle Room Breakable Wall Room Left Item":
+        {
+            "ap_id": 177,
+            "zones": [ZONE["NZ1"]],
+            "index": 10,
+            "entities": [0x243a, 0x2e5a],
+            "as_relic": {"y": 0x01a0},
+            "vanilla_item": "Life Vessel"
+        },
+    "Clock Tower - Gears Puzzle Room Breakable Wall Room Right Item":
+        {
+            "ap_id": 178,
+            "zones": [ZONE["NZ1"]],
+            "index": 11,
+            "entities": [0x2458, 0x2e64],
+            "as_relic": {"y": 0x01a0},
+            "vanilla_item": "Heart Vessel"
+        },
+    "Clock Tower - Before Karasuman Breakable Wall Item 2":
+        {
+            "ap_id": 179,
+            "zones": [ZONE["NZ1"]],
+            "despawn": True,
+            "no_offset": True,
+            "entities": [0x2d68, 0x379c],
+            "addresses": [0x055737a4],
+            "bin_addresses": [0xf4eda, 0x438d672],
+            "rom_address": 0xdfce2,
+            "break_flag": 0x03be8f,
+            "break_mask": 0x4,
+            "vanilla_item": "Bwaka knife"
+        },
+    "Clock Tower - After Rotating Gears Behind Breakable Wall":
+        {
+            "ap_id": 180,
+            "zones": [ZONE["NZ1"]],
+            "despawn": True,
+            "no_offset": True,
+            "entities": [0x2caa, 0x363e],
+            "addresses": [0x0557379c],
+            "bin_addresses": [0xf4edc, 0x438d674],
+            "rom_address": 0xdfce4,
+            "break_flag": 0x03be8f,
+            "break_mask": 0x1,
+            "vanilla_item": "Pot roast"
+        },
+    "Clock Tower - Before Karasuman Breakable Wall Item 1":
+        {
+            "ap_id": 181,
+            "zones": [ZONE["NZ1"]],
+            "despawn": True,
+            "no_offset": True,
+            "entities": [0x2d4a, 0x3760],
+            "addresses": [0x055737a0],
+            "bin_addresses": [0xf4ede, 0x438d676],
+            "rom_address": 0xdfce6,
+            "break_flag": 0x03be8f,
+            "break_mask": 0x2,
+            "vanilla_item": "Shuriken"
+        },
+    "Clock Tower - Before Karasuman Breakable Wall Item 3":
+        {
+            "ap_id": 182,
+            "zones": [ZONE["NZ1"]],
+            "despawn": True,
+            "no_offset": True,
+            "entities": [0x2d86, 0x376a],
+            "addresses": [0x055737a8],
+            "bin_addresses": [0xf4ee0, 0x438d678],
+            "rom_address": 0xdfce8,
+            "break_flag": 0x03be8f,
+            "break_mask": 0x8,
+            "vanilla_item": "TNT"
+        },
+    "Clock Tower - Top Right Room in Open Area":
+        {
+            "ap_id": 183,
+            "zones": [ZONE["NZ1"]],
+            "index": 2,
+            "entities": [0x28ae, 0x32ba],
+            "as_item": {"y": 0x00c9},
+            "vanilla_item": "Fire of bat"
+        },
+    # Castle Keep items
+    "Castle Keep - Open Area Bottom Left on Ledge":
+        {
+            "ap_id": 184,
+            "zones": [ZONE["TOP"]],
+            "index": 0,
+            "entities": [0x212e, 0x2842],
+            "as_relic": {"y": 0x06c0},
+            "vanilla_item": "Turquoise"
+        },
+    "Castle Keep - Open Area Bottom Left on Ledge Breakable Wall":
+        {
+            "ap_id": 185,
+            "zones": [ZONE["TOP"]],
+            "index": 1,
+            "despawn": True,
+            "entities": [0x2124, 0x282e],
+            "as_relic": {"x": 0x0190},
+            "vanilla_item": "Turkey"
+        },
+    "Castle Keep - Open Area Top Left Alcove Breakable Wall":
+        {
+            "ap_id": 186,
+            "zones": [ZONE["TOP"]],
+            "index": 2,
+            "entities": [0x211a, 0x27a2],
+            "as_relic": {"x": 0x0190, "y": 0x04b5},
+            "vanilla_item": "Fire mail"
+        },
+    "Castle Keep - Top Right Room by Dual Moving Platforms":
+        {
+            "ap_id": 187,
+            "zones": [ZONE["TOP"]],
+            "index": 3,
+            "entities": [0x23b8, 0x2964],
+            "as_relic": {"y": 0x0090},
+            "vanilla_item": "Tyrfing"
+        },
+    "Castle Keep - Hidden Stair Room Left Statue 1":
+        {
+            "ap_id": 188,
+            "zones": [ZONE["TOP"]],
+            "index": 4,
+            "entities": [0x23fe, 0x29be],
+            "as_relic": {"y": 0x00cf},
+            "vanilla_item": "Sirloin"
+        },
+    "Castle Keep - Hidden Stair Room Left Statue 2":
+        {
+            "ap_id": 189,
+            "zones": [ZONE["TOP"]],
+            "index": 5,
+            "entities": [0x2408, 0x29c8],
+            "as_relic": {"y": 0x00cf},
+            "vanilla_item": "Turkey"
+        },
+    "Castle Keep - Hidden Stair Room Left Yellow Vase 1":
+        {
+            "ap_id": 190,
+            "zones": [ZONE["TOP"]],
+            "index": 6,
+            "despawn": True,
+            "entities": [0x2412, 0x29d2],
+            "as_relic": {"y": 0x00cf},
+            "vanilla_item": "Pot roast"
+        },
+    "Castle Keep - Hidden Stair Room Left Yellow Vase 2":
+        {
+            "ap_id": 191,
+            "zones": [ZONE["TOP"]],
+            "index": 7,
+            "entities": [0x241c, 0x29dc],
+            "as_relic": {"y": 0x00cf},
+            "vanilla_item": "Frankfurter"
+        },
+    "Castle Keep - Hidden Stair Room Right Yellow Vase 1":
+        {
+            "ap_id": 192,
+            "zones": [ZONE["TOP"]],
+            "index": 8,
+            "entities": [0x2430, 0x29e6],
+            "as_relic": {"y": 0x00cf},
+            "vanilla_item": "Resist stone"
+        },
+    "Castle Keep - Hidden Stair Room Right Yellow Vase 2":
+        {
+            "ap_id": 193,
+            "zones": [ZONE["TOP"]],
+            "index": 9,
+            "entities": [0x243a, 0x29f0],
+            "as_relic": {"y": 0x00cf},
+            "vanilla_item": "Resist dark"
+        },
+    "Castle Keep - Hidden Stair Room Right Statue 1":
+        {
+            "ap_id": 194,
+            "zones": [ZONE["TOP"]],
+            "index": 10,
+            "entities": [0x2444, 0x29fa],
+            "as_relic": {"y": 0x00cf},
+            "vanilla_item": "Resist holy"
+        },
+    "Castle Keep - Hidden Stair Room Right Statue 2":
+        {
+            "ap_id": 195,
+            "zones": [ZONE["TOP"]],
+            "index": 11,
+            "entities": [0x244e, 0x29b4],
+            "as_relic": {"y": 0x00be},
+            "vanilla_item": "Platinum mail"
+        },
+    "Castle Keep - Attic by Elevator Surround by Torches":
+        {
+            "ap_id": 196,
+            "zones": [ZONE["TOP"]],
+            "index": 12,
+            "entities": [0x2476, 0x2a22],
+            "as_relic": {"y": 0x0090},
+            "vanilla_item": "Falchion"
+        },
+    "Castle Keep - Open Area Top Right Room Item 1":
+        {
+            "ap_id": 197,
+            "zones": [ZONE["TOP"]],
+            "index": 13,
+            "entities": [0x25d4, 0x2b80],
+            "as_relic": {"y": 0x0190},
+            "vanilla_item": "Life Vessel"
+        },
+    "Castle Keep - Open Area Top Right Room Item 3":
+        {
+            "ap_id": 198,
+            "zones": [ZONE["TOP"]],
+            "index": 14,
+            "entities": [0x25e8, 0x2b94],
+            "as_relic": {"y": 0x0210},
+            "vanilla_item": "Life Vessel"
+        },
+    "Castle Keep - Open Area Top Right Room Item 2":
+        {
+            "ap_id": 199,
+            "zones": [ZONE["TOP"]],
+            "index": 15,
+            "entities": [0x25f2, 0x2b8a],
+            "as_relic": {"y": 0x01b0},
+            "vanilla_item": "Heart Vessel"
+        },
+    "Castle Keep - Open Area Top Right Room Item 4":
+        {
+            "ap_id": 200,
+            "zones": [ZONE["TOP"]],
+            "index": 16,
+            "entities": [0x25de, 0x2b9e],
+            "as_relic": {"y": 0x0250},
+            "vanilla_item": "Heart Vessel"
+        },
+    "Castle Keep - Red Vase Before Richter":
+        {
+            "ap_id": 201,
+            "zones": [ZONE["TOP"]],
+            "index": 18,
+            "entities": [0x2250, 0x2748],
+            "as_relic": {},
+            "vanilla_item": "Heart Vessel"
+        },
+    "Castle Keep - Open Area Bottom Left Floor Item":
+        {
+            "ap_id": 202,
+            "zones": [ZONE["TOP"]],
+            "index": 17,  # Test if index 17 works
+            "entities": [0x2142, 0x286a],
+            "as_item": {"y": 0x0729},
+            "vanilla_item": "Leap stone"
+        },
+    "Castle Keep - Open Area Top Left Alcove":
+        {
+            "ap_id": 203,
+            "zones": [ZONE["TOP"]],
+            "index": 19,
+            "entities": [0x2138, 0x27ac],
+            "as_item": {"y": 0x04c8},
+            "vanilla_item": "Power of mist"
+        },
+    "Castle Keep - Open Area Top Right Room Item 5":
+        {
+            "ap_id": 204,
+            "zones": [ZONE["TOP"]],
+            "index": 20,
+            "entities": [0x25fc, 0x2ba8],
+            "as_item": {"y": 0x02a8},
+            "vanilla_item": "Ghost card"
+        },
+    # Reverse Colosseum items
+    "Reverse Colosseum Junction Tunnel - Breakable Floor Room":
+        {
+            "ap_id": 205,
+            "zones": [ZONE["RARE"]],
+            "index": 0,
+            "entities": [0x2446, 0x29e6],
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Fury plate"
+        },
+    "Reverse Colosseum Right Part - Top Right Room":
+        {
+            "ap_id": 206,
+            "zones": [ZONE["RARE"]],
+            "index": 1,
+            "entities": [0x213a, 0x26e4],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Zircon"
+        },
+    "Reverse Colosseum Right Part - Top Left Room":
+        {
+            "ap_id": 207,
+            "zones": [ZONE["RARE"]],
+            "index": 2,
+            "entities": [0x2400, 0x29aa],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Buffalo star"
+        },
+    "Reverse Colosseum Left Part - Top Right Room":
+        {
+            "ap_id": 208,
+            "zones": [ZONE["RARE"]],
+            "index": 3,
+            "entities": [0x2428, 0x29c8],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Gram"
+        },
+    "Reverse Colosseum Left Part - Top Left Room":
+        {
+            "ap_id": 209,
+            "zones": [ZONE["RARE"]],
+            "index": 4,
+            "entities": [0x2036, 0x2612],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Aquamarine"
+        },
+    "Reverse Colosseum Left Part - Left Item on Floor":
+        {
+            "ap_id": 210,
+            "zones": [ZONE["RARE"]],
+            "index": 5,
+            "entities": [0x219e, 0x27ac],
+            "as_relic": {},
+            "vanilla_item": "Heart Vessel"
+        },
+    "Reverse Colosseum Left Part - Middle Item on Floor":
+        {
+            "ap_id": 211,
+            "zones": [ZONE["RARE"]],
+            "index": 6,
+            "entities": [0x21a8, 0x27b6],
+            "as_relic": {},
+            "vanilla_item": "Life Vessel"
+        },
+    "Reverse Colosseum Left Part - Right Item on Floor":
+        {
+            "ap_id": 212,
+            "zones": [ZONE["RARE"]],
+            "index": 7,
+            "entities": [0x21b2, 0x27c0],
+            "as_relic": {},
+            "vanilla_item": "Heart Vessel"
+        },
+    # Floating Catacombs items
+    "Floating Catacombs Bottom - After Save Point Item":
+        {
+            "ap_id": 213,
+            "zones": [ZONE["RCAT"]],
+            "index": 0,
+            "entities": [0x285c, 0x338a],
+            "as_relic": {"x": 0x00c0},
+            "vanilla_item": "Magic missile"
+        },
+    "Floating Catacombs Bottom - After Save Point Breakable Wall":
+        {
+            "ap_id": 214,
+            "zones": [ZONE["RCAT"]],
+            "index": 1,
+            "entities": [0x2866, 0x3380],
+            "as_relic": {"x": 0x00d0, "y": 0x0080},
+            "vanilla_item": "Buffalo star"
+        },
+    "Floating Catacombs After Spike Tunnel - Top Left Vase":
+        {
+            "ap_id": 215,
+            "zones": [ZONE["RCAT"]],
+            "index": 2,
+            "entities": [0x2d34, 0x384e],
+            "as_relic": {},
+            "vanilla_item": "Resist thunder"
+        },
+    "Floating Catacombs After Spike Tunnel - Top Right Vase":
+        {
+            "ap_id": 216,
+            "zones": [ZONE["RCAT"]],
+            "index": 3,
+            "entities": [0x2d48, 0x3858],
+            "as_relic": {},
+            "vanilla_item": "Resist fire"
+        },
+    "Floating Catacombs After Spike Tunnel - Bottom Left Vase":
+        {
+            "ap_id": 217,
+            "zones": [ZONE["RCAT"]],
+            "index": 4,
+            "entities": [0x2d2a, 0x389e],
+            "as_relic": {},
+            "vanilla_item": "Karma coin"
+        },
+    "Floating Catacombs After Spike Tunnel - Bottom Right Vase":
+        {
+            "ap_id": 218,
+            "zones": [ZONE["RCAT"]],
+            "index": 5,
+            "entities": [0x2d3e, 0x38a8],
+            "as_relic": {},
+            "vanilla_item": "Karma coin"
+        },
+    "Floating Catacombs After Spike Tunnel - Deep Left Item":
+        {
+            "ap_id": 219,
+            "zones": [ZONE["RCAT"]],
+            "index": 6,
+            "entities": [0x2dde, 0x3902],
+            "as_relic": {"x": 0x0030, "y": 0x0085},
+            "vanilla_item": "Red bean bun"
+        },
+    "Floating Catacombs After Spike Tunnel - Deep Right Item":
+        {
+            "ap_id": 220,
+            "zones": [ZONE["RCAT"]],
+            "index": 7,
+            "entities": [0x3036, 0x3b64],
+            "as_relic": {"x": 0x02c0},
+            "vanilla_item": "Elixir"
+        },
+    "Floating Catacombs After Spike Tunnel - Deep Right Breakable Wall Item":
+        {
+            "ap_id": 221,
+            "zones": [ZONE["RCAT"]],
+            "index": 8,
+            "entities": [0x3040, 0x3b5a],
+            "as_relic": {"x": 0x02d0, "y": 0x0080},
+            "vanilla_item": "Library card"
+        },
+    "Floating Catacombs Upper - Start of Crypt Left Item":
+        {
+            "ap_id": 222,
+            "zones": [ZONE["RCAT"]],
+            "index": 9,
+            "entities": [0x296a, 0x3498],
+            "as_relic": {"y": 0x00c0},
+            "vanilla_item": "Life Vessel"
+        },
+    "Floating Catacombs Upper - Start of Crypt Right Item":
+        {
+            "ap_id": 223,
+            "zones": [ZONE["RCAT"]],
+            "index": 10,
+            "entities": [0x2974, 0x348e],
+            "as_relic": {"y": 0x00c0},
+            "vanilla_item": "Heart Vessel"
+        },
+    "Floating Catacombs Upper - After Crypt Cave Upper Red Vase":
+        {
+            "ap_id": 224,
+            "zones": [ZONE["RCAT"]],
+            "index": 11,
+            "entities": [0x2b36, 0x366e],
+            "as_relic": {},
+            "vanilla_item": "Shield potion"
+        },
+    "Floating Catacombs Upper - After Crypt Cave Bottom Red Vase":
+        {
+            "ap_id": 225,
+            "zones": [ZONE["RCAT"]],
+            "index": 12,
+            "entities": [0x2b2c, 0x36b4],
+            "as_relic": {},
+            "vanilla_item": "Attack potion"
+        },
+    "Floating Catacombs Upper - After Crypt Breakable Wall Room":
+        {
+            "ap_id": 226,
+            "zones": [ZONE["RCAT"]],
+            "index": 13,
+            "entities": [0x25dc, 0x3100],
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Necklace of j"
+        },
+    "Floating Catacombs Upper - Before Galamoth Save Point":
+        {
+            "ap_id": 227,
+            "zones": [ZONE["RCAT"]],
+            "index": 14,
+            "entities": [0x25be, 0x30e2],
+            "as_relic": {"y": 0x00c8},
+            "vanilla_item": "Diamond"
+        },
+    "Floating Catacombs Upper - After Galamoth Left Item":
+        {
+            "ap_id": 228,
+            "zones": [ZONE["RCAT"]],
+            "index": 15,
+            "entities": [0x2816, 0x333a],
+            "as_relic": {"y": 0x00c0},
+            "vanilla_item": "Heart Vessel"
+        },
+    "Floating Catacombs Upper - After Galamoth Right Item":
+        {
+            "ap_id": 229,
+            "zones": [ZONE["RCAT"]],
+            "index": 16,
+            "entities": [0x2820, 0x3344],
+            "as_relic": {"y": 0x00c0},
+            "vanilla_item": "Life Vessel"
+        },
+    "Floating Catacombs Upper - After Galamoth Deeper Room Right Item":
+        {
+            "ap_id": 230,
+            "zones": [ZONE["RCAT"]],
+            "index": 17,
+            "entities": [0x25a0, 0x30c4],
+            "as_relic": {"y": 0x00c8},
+            "vanilla_item": "Ruby circlet"
+        },
+    "Floating Catacombs Upper - After Galamoth Deeper Room Left Item":
+        {
+            "ap_id": 231,
+            "zones": [ZONE["RCAT"]],
+            "index": 18,
+            "entities": [0x2596, 0x30ba],
+            "as_item": {"x": 0x0016, "y": 0x00b1},
+            "vanilla_item": "Gas cloud"
+        },
+    # Cave items
+    "Cave Demon Side - Breakable Wall Room Left Item":
+        {
+            "ap_id": 232,
+            "zones": [ZONE["RCHI"]],
+            "index": 0,
+            "entities": [0x1910, 0x1d7a],
+            "as_relic": {"y": 0x00c0},
+            "vanilla_item": "Power of sire"
+        },
+    "Cave Demon Side - Breakable Wall Room Right Item":
+        {
+            "ap_id": 233,
+            "zones": [ZONE["RCHI"]],
+            "index": 1,
+            "entities": [0x191a, 0x1d70],
+            "as_relic": {"y": 0x00a0},
+            "vanilla_item": "Life apple"
+        },
+    "Cave - Middle Ascend Right Item":
+        {
+            "ap_id": 234,
+            "zones": [ZONE["RCHI"]],
+            "index": 2,
+            "entities": [0x1cda, 0x213a],
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Alucard sword"
+        },
+    "Cave - Upper Right Room Left Item(Shared with Demon Side)":
+        {
+            # TODO This green tea is shared in Cave - Upper Right Room
+            "ap_id": 235,
+            "zones": [ZONE["RCHI"], ZONE["RCHI"]],
+            "index": 3,
+            # TODO First entity is the item(Changing does not matter), second the wall, flag wall destroyed 0x03be45
+            "entities": [0x1938, 0x1d98, 0x1a8c, 0x1ece],
+            "as_relic": {"y": 0x00a0},  # TODO Better the wall start broke and only use upper room
+            "vanilla_item": "Green tea"
+        },
+    "Cave - Upper Right Room Right Item":
+        {
+            "ap_id": 236,
+            "zones": [ZONE["RCHI"]],
+            "index": 4,
+            "entities": [0x1942, 0x1da2],
+            "as_relic": {"y": 0x00c0},
+            "vanilla_item": "Power of sire"
+        },
+    "Cave - Upper Ascend Item 2":
+        {
+            "ap_id": 237,
+            "zones": [ZONE["RCHI"]],
+            "index": 6,
+            "entities": [0x1bd6, 0x204a],
+            "as_relic": {"y": 0x0127},
+            "vanilla_item": "Shiitake"
+        },
+    "Cave - Upper Ascend Item 1":
+        {
+            "ap_id": 238,
+            "zones": [ZONE["RCHI"]],
+            "index": 7,
+            "entities": [0x1c30, 0x207c],
+            "as_relic": {"y": 0x02e8},
+            "vanilla_item": "Shiitake"
+        },
+    "Cave - Death Item":
+        {
+            "ap_id": 239,
+            "zones": [ZONE["RCHI"]],
+            "index": 5,
+            "entities": [0x18f2, 0x1d52],
+            "reward": {"zones": ZONE["RBO2"], "index": 0x15},
+            "kill_time": 0x03ca58,
+            "erase":
+                {
+                    "instructions": [{"addresses": [0x06644cf0], "instruction": 0x34020000}]
+                },
+            "as_item": {"y": 0x0079},
+            "vanilla_item": "Eye of vlad"
+        },
+    # Anti-Chapel items
+    "Anti-Chapel Stairs - Bottom Yellow Vase":
+        {
+            "ap_id": 240,
+            "zones": [ZONE["RDAI"]],
+            "index": 2,
+            "entities": [0x1e78, 0x2924],
+            "as_relic": {},
+            "vanilla_item": "Fire boomerang"
+        },
+    "Anti-Chapel Stairs - Red Vase Alcove 3":
+        {
+            "ap_id": 241,
+            "zones": [ZONE["RDAI"]],
+            "index": 3,
+            "entities": [0x1f36, 0x2852],
+            "as_relic": {},
+            "vanilla_item": "Diamond"
+        },
+    "Anti-Chapel Stairs - Red Vase at Top":
+        {
+            "ap_id": 242,
+            "zones": [ZONE["RDAI"]],
+            "index": 4,
+            "entities": [0x1fd6, 0x27b2],
+            "as_relic": {},
+            "vanilla_item": "Zircon"
+        },
+    "Anti-Chapel Stairs - Red Vase Alcove 6":
+        {
+            "ap_id": 243,
+            "zones": [ZONE["RDAI"]],
+            "index": 5,
+            "entities": [0x1fae, 0x27e4],
+            "as_relic": {},
+            "vanilla_item": "Heart Vessel"
+        },
+    "Anti-Chapel Stairs - Red Vase Alcove 5":
+        {
+            "ap_id": 244,
+            "zones": [ZONE["RDAI"]],
+            "index": 6,
+            "entities": [0x1f9a, 0x27f8],
+            "as_relic": {},
+            "vanilla_item": "Shuriken"
+        },
+    "Anti-Chapel Stairs - Red Vase Alcove 4":
+        {
+            "ap_id": 245,
+            "zones": [ZONE["RDAI"]],
+            "index": 7,
+            "entities": [0x1f4a, 0x283e],
+            "as_relic": {},
+            "vanilla_item": "TNT"
+        },
+    "Anti-Chapel Stairs - Red Vase Alcove 2":
+        {
+            "ap_id": 246,
+            "zones": [ZONE["RDAI"]],
+            "index": 8,
+            "entities": [0x1efa, 0x288e],
+            "as_relic": {},
+            "vanilla_item": "Boomerang"
+        },
+    "Anti-Chapel Stairs - Red Vase Alcove 1":
+        {
+            "ap_id": 247,
+            "zones": [ZONE["RDAI"]],
+            "index": 9,
+            "entities": [0x1ed2, 0x28c0],
+            "as_relic": {},
+            "vanilla_item": "Javelin"
+        },
+    "Anti-Chapel Tower 3  - Bottom Item":
+        {
+            "ap_id": 248,
+            "zones": [ZONE["RDAI"]],
+            "index": 10,
+            "entities": [0x2364, 0x2d66],
+            "as_relic": {},
+            "vanilla_item": "Manna prism"
+        },
+    "Anti-Chapel Tower 3 - Yellow Vase":
+        {
+            "ap_id": 249,
+            "zones": [ZONE["RDAI"]],
+            "index": 11,
+            "entities": [0x2288, 0x2d5c],
+            "as_relic": {},
+            "vanilla_item": "Smart potion"
+        },
+    "Anti-Chapel Tower 3 - Red Vase":
+        {
+            "ap_id": 250,
+            "zones": [ZONE["RDAI"]],
+            "index": 12,
+            "entities": [0x23be, 0x2d52],
+            "as_relic": {},
+            "vanilla_item": "Life Vessel"
+        },
+    "Anti-Chapel Tower 2 - Bottom Item":
+        {
+            "ap_id": 251,
+            "zones": [ZONE["RDAI"]],
+            "index": 13,
+            "entities": [0x2472, 0x2e06],
+            "as_relic": {"y": 0x030f},
+            "vanilla_item": "Talwar"
+        },
+    "Anti-Chapel Tower 1 - Bottom Item":
+        {
+            "ap_id": 252,
+            "zones": [ZONE["RDAI"]],
+            "index": 14,
+            "entities": [0x254e, 0x2ed8],
+            "as_relic": {"y": 0x0320},
+            "vanilla_item": "Bwaka knife"
+        },
+    "Anti-Chapel Tower 1 - Red Vase":
+        {
+            "ap_id": 253,
+            "zones": [ZONE["RDAI"]],
+            "index": 15,
+            "entities": [0x2562, 0x2ece],
+            "as_relic": {},
+            "vanilla_item": "Magic missile"
+        },
+    "Anti-Chapel - After Spiked Tunnel":
+        {
+            "ap_id": 254,
+            "zones": [ZONE["RDAI"]],
+            "index": 16,
+            "entities": [0x1d7e, 0x26d6],
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Twilight cloak"
+        },
+    "Anti-Chapel - Next to Upper Save Point":
+        {
+            "ap_id": 255,
+            "zones": [ZONE["RDAI"]],
+            "index": 17,
+            "entities": [0x25a8, 0x2f00],
+            "as_relic": {"y": 0x0070},
+            "vanilla_item": "Heart Vessel"
+        },
+    "Medusa Kill Item":
+        {
+            "ap_id": 256,
+            "zones": [ZONE["RDAI"]],
+            "index": 0,  # Test if index 0 works
+            "entities": [0x1dc4, 0x2730],
+            "reward": {"zones": ZONE["RBO3"], "index": 0x11},
+            "kill_time": 0x03ca64,
+            "as_item": {"y": 0x00c9},
+            "erase":
+                {
+                    "instructions": [{"addresses": [0x06757b54], "instruction": 0x34020000}]
+                },
+            "vanilla_item": "Heart of vlad"
+        },
+    # Forbidden Library items
+    "Forbidden Library - Inner Study Red Vase":
+        {
+            "ap_id": 257,
+            "zones": [ZONE["RLIB"]],
+            "index": 0,
+            "entities": [0x1a42, 0x1fec],
+            "as_relic": {},
+            "vanilla_item": "Turquoise"
+        },
+    "Forbidden Library - Inner Study Left Statue":
+        {
+            "ap_id": 258,
+            "zones": [ZONE["RLIB"]],
+            "index": 1,
+            "entities": [0x1a4c, 0x1ff6],
+            "as_relic": {},
+            "vanilla_item": "Opal"
+        },
+    "Forbidden Library - Inner Study Right Statue":
+        {
+            "ap_id": 259,
+            "zones": [ZONE["RLIB"]],
+            "index": 2,
+            "entities": [0x1a56, 0x2000],
+            "as_relic": {},
+            "vanilla_item": "Library card"
+        },
+    "Forbidden Library Main Area - Bottom Right Room Left Item":
+        {
+            "ap_id": 260,
+            "zones": [ZONE["RLIB"]],
+            "index": 3,
+            "entities": [0x1ace, 0x206e],
+            "as_relic": {"y": 0x00c0},
+            "vanilla_item": "Resist fire"
+        },
+    "Forbidden Library Main Area - Bottom Right Room Middle Item":
+        {
+            "ap_id": 261,
+            "zones": [ZONE["RLIB"]],
+            "index": 4,
+            "entities": [0x1ad8, 0x2078],
+            "as_relic": {"y": 0x00c0},
+            "vanilla_item": "Resist ice"
+        },
+    "Forbidden Library Main Area - Bottom Right Room Right Item":
+        {
+            "ap_id": 262,
+            "zones": [ZONE["RLIB"]],
+            "index": 5,
+            "entities": [0x1ae2, 0x2082],
+            "as_relic": {"y": 0x00c0},
+            "vanilla_item": "Resist stone"
+        },
+    "Forbidden Library Inner Part - Bottom Left Room Green Candle":
+        {
+            "ap_id": 263,
+            "zones": [ZONE["RLIB"]],
+            "index": 6,
+            "entities": [0x1ccc, 0x226c],
+            "as_relic": {},
+            "vanilla_item": "Neutron bomb"
+        },
+    "Forbidden Library Inner Part - Bottom Left Room Behind Bookshelf":
+        {
+            "ap_id": 264,
+            "zones": [ZONE["RLIB"]],
+            "index": 7,
+            "entities": [0x1b00, 0x20a0],
+            "as_relic": {"y": 0x00c0},
+            "vanilla_item": "Badelaire"
+        },
+    "Forbidden Library Inner Part - Behind Mist Crate":
+        {
+            "ap_id": 265,
+            "zones": [ZONE["RLIB"]],
+            "index": 8,
+            "entities": [0x1b82, 0x2122],
+            "as_relic": {"y": 0x00c0},
+            "vanilla_item": "Staurolite"
+        },
+    # Black Marble Gallery items
+    "Black Marble Gallery - Corridor to Entrance Item on Spike Trap":
+        {
+            "ap_id": 266,
+            "zones": [ZONE["RNO0"]],
+            "index": 0,
+            "entities": [0x373a, 0x4a10],
+            "as_relic": {"y": 0x02c0},
+            "vanilla_item": "Library card"
+        },
+    "Black Marble Gallery - Ascend to Entrance Item on Floor 2":
+        {
+            "ap_id": 267,
+            "zones": [ZONE["RNO0"]],
+            "index": 1,
+            "entities": [0x3ab4, 0x4a2e],
+            "as_relic": {"y": 0x0130},
+            "vanilla_item": "Potion"
+        },
+    "Black Marble Gallery - Ascend to Entrance Item on Floor 1":
+        {
+            "ap_id": 268,
+            "zones": [ZONE["RNO0"]],
+            "index": 2,
+            "entities": [0x3abe, 0x4a92],
+            "as_relic": {"y": 0x0330},
+            "vanilla_item": "Antivenom"
+        },
+    "Black Marble Gallery - Middle Clock Right Item":
+        {
+            "ap_id": 269,
+            "zones": [ZONE["RNO0"]],
+            "index": 3,
+            "entities": [0x3c1c, 0x4c22],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Life Vessel"
+        },
+    "Black Marble Gallery - Middle Clock Left Item":
+        {
+            "ap_id": 270,
+            "zones": [ZONE["RNO0"]],
+            "index": 4,
+            "entities": [0x3bb8, 0x4c18],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Heart Vessel"
+        },
+    "Black Marble Gallery - Left Clock Second Room Item on Left":
+        {
+            "ap_id": 271,
+            "zones": [ZONE["RNO0"]],
+            "index": 5,
+            "entities": [0x44d2, 0x5532],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Resist dark"
+        },
+    "Black Marble Gallery - Left Clock Second Room Item on Right":
+        {
+            "ap_id": 272,
+            "zones": [ZONE["RNO0"]],
+            "index": 6,
+            "entities": [0x44dc, 0x553c],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Resist holy"
+        },
+    "Black Marble Gallery - Left Clock First Room Item on Left":
+        {
+            "ap_id": 273,
+            "zones": [ZONE["RNO0"]],
+            "index": 7,
+            "entities": [0x44aa, 0x550a],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Resist thunder"
+        },
+    "Black Marble Gallery - Left Clock First Room Item on Right":
+        {
+            "ap_id": 274,
+            "zones": [ZONE["RNO0"]],
+            "index": 8,
+            "entities": [0x44b4, 0x5514],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Resist fire"
+        },
+    "Black Marble Gallery - Behind Magic Blue Door":
+        {
+            "ap_id": 275,
+            "zones": [ZONE["RNO0"]],
+            "index": 9,
+            "entities": [0x407c, 0x510e],
+            "as_relic": {"y": 0x00c0},
+            "vanilla_item": "Meal ticket"
+        },
+    "Black Marble Gallery - Hole on the Ceiling":
+        {
+            "ap_id": 276,
+            "zones": [ZONE["RNO0"]],
+            "index": 10,
+            "entities": [0x4568, 0x55b],
+            "as_relic": {"y": 0x0090},
+            "vanilla_item": "Iron ball"
+        },
+    "Black Marble Gallery - Item Inside the Clock":
+        {
+            "ap_id": 277,
+            "zones": [ZONE["RNO0"]],
+            "index": 11,
+            "entities": [0x44fa, 0x555a],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Heart refresh"
+        },
+    # Reverse Outer Wall items
+    "Reverse Outer Wall - Item at the Top":
+        {
+            "ap_id": 278,
+            "zones": [ZONE["RNO1"]],
+            "index": 0,
+            "entities": [0x2058, 0x26fe],
+            "as_relic": {"y": 0x00d0},
+            "vanilla_item": "Heart Vessel"
+        },
+    "Reverse Outer Wall - Mist Crate Room Left Item":
+        {
+            "ap_id": 279,
+            "zones": [ZONE["RNO1"]],
+            "index": 1,
+            "entities": [0x215c, 0x2852],
+            "tile_index": 2,
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Shotel"
+        },
+    "Reverse Outer Wall - Mist Crate Room Right Item":
+        {
+            "ap_id": 280,
+            "zones": [ZONE["RNO1"]],
+            "index": 2,
+            "entities": [0x2170, 0x285c],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Hammer"
+        },
+    "Reverse Outer Wall - Red Vase Near Door to BMG":
+        {
+            "ap_id": 281,
+            "zones": [ZONE["RNO1"]],
+            "index": 3,
+            "entities": [0x21de, 0x28d4],
+            "as_relic": {},
+            "vanilla_item": "Life Vessel"
+        },
+    "Reverse Outer Wall - Yellow Vase on Alcove Near Creature":
+        {
+            "ap_id": 282,
+            "zones": [ZONE["RNO1"]],
+            "index": 4,
+            "entities": [0x221a, 0x291a],
+            "as_relic": {},
+            "vanilla_item": "Luck potion"
+        },
+    "Reverse Outer Wall - Item on the Floor Near Creature":
+        {
+            "ap_id": 283,
+            "zones": [ZONE["RNO1"]],
+            "index": 5,
+            "entities": [0x2350, 0x2a46],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Shield potion"
+        },
+    "Reverse Outer Wall - Red Vase Near Creature":
+        {
+            "ap_id": 284,
+            "zones": [ZONE["RNO1"]],
+            "index": 6,
+            "entities": [0x242c, 0x2a8c],
+            "as_relic": {},
+            "vanilla_item": "High potion"
+        },
+    "Reverse Outer Wall - Bottom Red Vase Near Elevator Machinery":
+        {
+            "ap_id": 285,
+            "zones": [ZONE["RNO1"]],
+            "index": 7,
+            "entities": [0x2544, 0x2c8a],
+            "as_relic": {},
+            "vanilla_item": "Garnet"
+        },
+    "Reverse Outer Wall - Breakable Wall on Room Below Mist Crate":
+        {
+            "ap_id": 286,
+            "zones": [ZONE["RNO1"]],
+            "despawn": True,
+            "no_offset": True,
+            "entities": [0x21ac, 0x288e],
+            "as_relic": {"y": 0x0058},
+            "addresses": [0x0507d08c],
+            "bin_addresses": [0xf4ee2, 0x438d67a],
+            "rom_address": 0xdfcea,
+            "break_flag": 0x03be04,
+            "break_mask": 0x1,
+            "vanilla_item": "Dim sum set"
+        },
+    "Creature Kill Item":
+        {
+            "ap_id": 287,
+            "zones": [ZONE["RNO1"]],
+            "index": 8,
+            "entities": [0x2332, 0x2a1e],
+            "reward": {"zones": ZONE["RBO4"], "index": 0x12},
+            "as_item": {"y": 0x00b9},
+            "kill_time": 0x03ca68,
+            "erase":
+                {
+                    "instructions": [{"addresses": [0x067ec398], "instruction": 0x34020000}]
+                },
+            "vanilla_item": "Tooth of vlad"
+        },
+    # Death Wing's Lair items
+    "Death Wing\'s Lair Main Area - Room Behind Breakable Wall Left Red Vase":
+        {
+            "ap_id": 288,
+            "zones": [ZONE["RNO2"]],
+            "index": 0,
+            "entities": [0x29f2, 0x31d6],
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Opal"
+        },
+    "Death Wing\'s Lair Main Area - Room Behind Breakable Wall Middle Red Vase":
+        {
+            "ap_id": 289,
+            "zones": [ZONE["RNO2"]],
+            "index": 1,
+            "entities": [0x29fc, 0x31e0],
+            "tile_index": 3,
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Sword of hador"
+        },
+    "Death Wing\'s Lair Main Area - Room Behind Breakable Wall Right Red Vase":
+        {
+            "ap_id": 290,
+            "zones": [ZONE["RNO2"]],
+            "index": 2,
+            "as_relic": {"y": 0x0080},
+            "entities": [0x2a06, 0x31ea],
+            "vanilla_item": "High potion"
+        },
+    "Death Wing\'s Lair Upper Part - Top Red Vase on Shaft":
+        {
+            "ap_id": 291,
+            "zones": [ZONE["RNO2"]],
+            "index": 3,
+            "entities": [0x293e, 0x3122],
+            "as_relic": {},
+            "vanilla_item": "Shield potion"
+        },
+    "Death Wing\'s Lair Upper Part - Middle Red Vase on Shaft":
+        {
+            "ap_id": 292,
+            "zones": [ZONE["RNO2"]],
+            "index": 4,
+            "entities": [0x2948, 0x312c],
+            "as_relic": {},
+            "vanilla_item": "Luck potion"
+        },
+    "Death Wing\'s Lair Upper Part - Bottom Red Vase on Shaft":
+        {
+            "ap_id": 293,
+            "zones": [ZONE["RNO2"]],
+            "index": 5,
+            "entities": [0x2952, 0x3136],
+            "as_relic": {},
+            "vanilla_item": "Manna prism"
+        },
+    "Death Wing\'s Lair - Red Vase Next to Path to Courtyard":
+        {
+            "ap_id": 294,
+            "zones": [ZONE["RNO2"]],
+            "index": 6,
+            "entities": [0x2664, 0x2e34],
+            "as_relic": {},
+            "vanilla_item": "Aquamarine"
+        },
+    "Death Wing\'s Lair Courtyard - Top Left Room":
+        {
+            "ap_id": 295,
+            "zones": [ZONE["RNO2"]],
+            "index": 7,
+            "entities": [0x298e, 0x3172],
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Alucard mail"
+        },
+    "Death Wing\'s Lair Path to Anti-Chapel - Bellow Wooden Pedestal":
+        {
+            "ap_id": 296,
+            "zones": [ZONE["RNO2"]],
+            "index": 8,
+            "entities": [0x2b78, 0x33c0],
+            "as_relic": {"y": 0x00c0},
+            "vanilla_item": "Life Vessel"
+        },
+    "Death Wing\'s Lair Path to Anti-Chapel - Breakable Floor Room":
+        {
+            "ap_id": 297,
+            "zones": [ZONE["RNO2"]],
+            "index": 9,
+            "entities": [0x2970, 0x3154],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Heart refresh"
+        },
+    "Death Wing\'s Lair - Attic Before Akmodan II":
+        {
+            "ap_id": 298,
+            "zones": [ZONE["RNO2"]],
+            "index": 10,
+            "entities": [0x29ac, 0x3190],
+            "as_relic": {"y": 0x0040},
+            "vanilla_item": "Shuriken"
+        },
+    "Death Wing\'s Lair - After Akmodan II":
+        {
+            "ap_id": 299,
+            "zones": [ZONE["RNO2"]],
+            "index": 11,
+            "entities": [0x2aa6, 0x329e],
+            "as_relic": {"y": 0x00c0},
+            "vanilla_item": "Heart Vessel"
+        },
+    "Death Wing\'s Lair - Akmodan II Item":
+        {
+            "ap_id": 300,
+            "zones": [ZONE["RNO2"]],
+            "index": 12,
+            "entities": [0x29d4, 0x31b8],
+            "reward": {"zones": ZONE["RBO7"], "index": 0x13},
+            "kill_time": 0x03ca74,
+            "as_item": {"y": 0x01b9},
+            "erase":
+                {
+                    "instructions": [{"addresses": [0x069e8524], "instruction": 0x34020000}]
+                },
+            "vanilla_item": "Rib of vlad"
+        },
+    # Reverse Entrance items
+    "Reverse Entrance - Main Gate Bottom Left Item":
+        {
+            "ap_id": 301,
+            "zones": [ZONE["RNO3"]],
+            "index": 0,
+            "entities": [0x2f94, 0x36c4],
+            "as_relic": {"y": 0x0280},
+            "vanilla_item": "Hammer"
+        },
+    "Reverse Entrance - Main Gate Bottom Right Item":
+        {
+            "ap_id": 302,
+            "zones": [ZONE["RNO3"]],
+            "index": 1,
+            "entities": [0x2fda, 0x36ce],
+            "as_relic": {"y": 0x0280},
+            "vanilla_item": "Antivenom"
+        },
+    "Reverse Entrance - Breakable Ledge on Main Corridor":
+        {
+            "ap_id": 303,
+            "zones": [ZONE["RNO3"]],
+            "index": 2,
+            "entities": [0x302a, 0x3700],
+            "as_relic": {"y": 0x0050},
+            "vanilla_item": "High potion"
+        },
+    "Reverse Entrance - Bellow Stone Pedestal":
+        {
+            "ap_id": 304,
+            "zones": [ZONE["RNO3"]],
+            "index": 3,
+            "entities": [0x2e5e, 0x3566],
+            "as_relic": {"y": 0x02c0},
+            "vanilla_item": "Heart Vessel"
+        },
+    "Reverse Entrance - Wolf/Bat Secret Room Left Item":
+        {
+            "ap_id": 305,
+            "zones": [ZONE["RNO3"]],
+            "index": 4,
+            "entities": [0x2d96, 0x3476],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Zircon"
+        },
+    "Reverse Entrance - Wolf/Bat Secret Room Middle Item":
+        {
+            "ap_id": 306,
+            "zones": [ZONE["RNO3"]],
+            "index": 5,
+            "entities": [0x2da0, 0x346c],
+            "as_relic": {"y": 0x00a5},
+            "vanilla_item": "Opal"
+        },
+    "Reverse Entrance - Wolf/Bat Secret Room Right Item":
+        {
+            "ap_id": 307,
+            "zones": [ZONE["RNO3"]],
+            "index": 6,
+            "entities": [0x2daa, 0x3462],
+            "as_relic": {"y": 0x0090},
+            "vanilla_item": "Beryl circlet"
+        },
+    "Reverse Entrance - Hole in Main Corridor Back Item":
+        {
+            "ap_id": 308,
+            "zones": [ZONE["RNO3"]],
+            "index": 7,
+            "entities": [0x2d28, 0x33fe],
+            "as_relic": {"y": 0x00c0},
+            "vanilla_item": "Fire boomerang"
+        },
+    "Reverse Entrance - Middle Room in Open Area Before Main Corridor":
+        {
+            "ap_id": 309,
+            "zones": [ZONE["RNO3"]],
+            "index": 8,
+            "entities": [0x2ce2, 0x33ae],
+            "as_relic": {"y": 0x00c0},
+            "vanilla_item": "Life Vessel"
+        },
+    "Reverse Entrance - Room by Nova Skeleton on the Ledge":
+        {
+            "ap_id": 310,
+            "zones": [ZONE["RNO3"]],
+            "index": 9,
+            "entities": [0x2d00, 0x33cc],
+            "as_relic": {"y": 0x00c0},
+            "vanilla_item": "Talisman"
+        },
+    "Reverse Entrance - Breakable Big Rock in Main Corridor":
+        {
+            "ap_id": 311,
+            "zones": [ZONE["RNO3"]],
+            "despawn": True,
+            "no_offset": True,
+            "entities": [0x2f26, 0x3610],
+            "addresses": [0x051e6e4c],
+            "bin_addresses": [0xf4ee4, 0x438d67c],
+            "rom_address": 0xdfcec,
+            "break_flag": 0x03be27,
+            "break_mask": 0x1,
+            "vanilla_item": "Pot roast"
+        },
+    # Reverse Caverns items
+    "Reverse Caverns Upper - End of Cavern":
+        {
+            "ap_id": 312,
+            "zones": [ZONE["RNO4"]],
+            "index": 0,
+            "entities": [0x3880, 0x47da],
+            "as_relic": {"x": 0x0080, "y": 0x0080},
+            "vanilla_item": "Alucard shield"
+        },
+    "Reverse Caverns Upper - Near Exit":
+        {
+            "ap_id": 313,
+            "zones": [ZONE["RNO4"]],
+            "index": 1,
+            "entities": [0x3bfa, 0x4b68],
+            "as_relic": {"x": 0x004a, "y": 0x0080},
+            "vanilla_item": "Shiitake"
+        },
+    "Reverse Caverns Waterfall - Alcove 1":
+        {
+            "ap_id": 314,
+            "zones": [ZONE["RNO4"]],
+            "index": 2,
+            "entities": [0x31aa, 0x4078],
+            "as_relic": {"x": 0x01c5, "y": 0x0110},
+            "vanilla_item": "Toadstool"
+        },
+    "Reverse Caverns Waterfall - Alcove 2":
+        {
+            "ap_id": 315,
+            "zones": [ZONE["RNO4"]],
+            "index": 3,
+            "entities": [0x31b4, 0x4082],
+            "as_relic": {"x": 0x01d0, "y": 0x02d0},
+            "vanilla_item": "Shiitake"
+        },
+    "Reverse Caverns Waterfall - Bottom Right Room":
+        {
+            "ap_id": 316,
+            "zones": [ZONE["RNO4"]],
+            "index": 4,
+            "entities": [0x381c, 0x476c],
+            "as_relic": {"y": 0x0090},
+            "vanilla_item": "Garnet"
+        },
+    "Reverse Caverns Bottom - Underwater Stream":
+        {
+            "ap_id": 317,
+            "zones": [ZONE["RNO4"]],
+            "index": 5,
+            "entities": [0x3754, 0x46a4],
+            "as_relic": {"y": 0x0040},
+            "vanilla_item": "Bat pentagram"
+        },
+    "Reverse Caverns Bottom - Underwater Top Item":
+        {
+            "ap_id": 318,
+            "zones": [ZONE["RNO4"]],
+            "index": 6,
+            "entities": [0x336c, 0x4122],
+            "as_relic": {"y": 0x0040},
+            "vanilla_item": "Life Vessel"
+        },
+    "Reverse Caverns Bottom - Item on Air Pocket":
+        {
+            "ap_id": 319,
+            "zones": [ZONE["RNO4"]],
+            "index": 7,
+            "entities": [0x31dc, 0x4154],
+            "as_relic": {"y": 0x00d8},
+            "vanilla_item": "Heart Vessel"
+        },
+    "Reverse Caverns Bottom - Underwater Bottom Item":
+        {
+            "ap_id": 320,
+            "zones": [ZONE["RNO4"]],
+            "index": 8,
+            "entities": [0x3362, 0x414a],
+            "as_relic": {},
+            "vanilla_item": "Potion"
+        },
+    "Reverse Caverns Bottom - Alcove Near Water Leak":
+        {
+            "ap_id": 321,
+            "zones": [ZONE["RNO4"]],
+            "index": 9,
+            "entities": [0x3236, 0x42b2],
+            "as_relic": {"y": 0x01c5},
+            "vanilla_item": "Shiitake"
+        },
+    "Reverse Caverns Bottom - Near Stairs Hole":
+        {
+            "ap_id": 322,
+            "zones": [ZONE["RNO4"]],
+            "index": 10,
+            "entities": [0x31d2, 0x42a8],
+            "as_relic": {"y": 0x01d0},
+            "vanilla_item": "Shiitake"
+        },
+    "Reverse Caverns Stairs - Middle Room":
+        {
+            "ap_id": 323,
+            "zones": [ZONE["RNO4"]],
+            "index": 11,
+            "entities": [0x3bbe, 0x4b0e],
+            "as_relic": {"y": 0x0090},
+            "vanilla_item": "Opal"
+        },
+    "Reverse Caverns Stairs - Bottom Item":
+        {
+            "ap_id": 324,
+            "zones": [ZONE["RNO4"]],
+            "index": 12,
+            "entities": [0x3b96, 0x4af0],
+            "as_relic": {"y": 0x00c0},
+            "vanilla_item": "Life Vessel"
+        },
+    "Reverse Caverns Stairs - Bottom Item Behind Breakable Wall":
+        {
+            "ap_id": 325,
+            "zones": [ZONE["RNO4"]],
+            "index": 13,
+            "entities": [0x2d72, 0x3cc2],
+            "as_relic": {"y": 0x00c0},
+            "vanilla_item": "Diamond"
+        },
+    "Reverse Caverns Bottom - Red Vase Near Exit":
+        {
+            "ap_id": 326,
+            "zones": [ZONE["RNO4"]],
+            "index": 14,
+            "entities": [0x3b5a, 0x4ac8],
+            "as_relic": {},
+            "vanilla_item": "Zircon"
+        },
+    "Reverse Caverns Succubus Side - First Red Vase":
+        {
+            "ap_id": 327,
+            "zones": [ZONE["RNO4"]],
+            "index": 15,
+            "entities": [0x2e12, 0x3dc6],
+            "as_relic": {},
+            "vanilla_item": "Heart Vessel"
+        },
+    "Reverse Caverns Succubus Side - Bottom Left Red Vase":
+        {
+            "ap_id": 328,
+            "zones": [ZONE["RNO4"]],
+            "index": 16,
+            "entities": [0x3056, 0x3fce],
+            "as_relic": {},
+            "vanilla_item": "Meal ticket"
+        },
+    "Reverse Caverns Succubus Side - Middle Left Red Vase":
+        {
+            "ap_id": 329,
+            "zones": [ZONE["RNO4"]],
+            "index": 17,
+            "entities": [0x3060, 0x3fba],
+            "as_relic": {},
+            "vanilla_item": "Meal ticket"
+        },
+    "Reverse Caverns Succubus Side - Middle Right Red Vase":
+        {
+            "ap_id": 330,
+            "zones": [ZONE["RNO4"]],
+            "index": 18,
+            "entities": [0x3074, 0x3fc4],
+            "as_relic": {},
+            "vanilla_item": "Meal ticket"
+        },
+    "Reverse Caverns Succubus Side - Top Right Red Vase":
+        {
+            "ap_id": 331,
+            "zones": [ZONE["RNO4"]],
+            "index": 19,
+            "entities": [0x307e, 0x3fa6],
+            "as_relic": {},
+            "vanilla_item": "Meal ticket"
+        },
+    "Reverse Caverns Succubus Side - Top Left Red Vase":
+        {
+            "ap_id": 332,
+            "zones": [ZONE["RNO4"]],
+            "index": 20,
+            "entities": [0x306a, 0x3fb0],
+            "as_relic": {},
+            "vanilla_item": "Meal ticket"
+        },
+    "Reverse Caverns Doppleganger - Item on Alcove":
+        {
+            "ap_id": 333,
+            "zones": [ZONE["RNO4"]],
+            "index": 21,
+            "entities": [0x3af6, 0x4a28],
+            "as_relic": {"y": 0x0040},
+            "vanilla_item": "Zircon"
+        },
+    "Reverse Caverns Doppleganger - Bottom Area Left Red Vase":
+        {
+            "ap_id": 334,
+            "zones": [ZONE["RNO4"]],
+            "index": 22,
+            "entities": [0x39c0, 0x4910],
+            "as_relic": {},
+            "vanilla_item": "Pot roast"
+        },
+    "Reverse Caverns Doppleganger - Bottom Area Right Room":
+        {
+            "ap_id": 335,
+            "zones": [ZONE["RNO4"]],
+            "index": 23,
+            "entities": [0x309c, 0x3fec],
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Dark blade"
+        },
+    "Reverse Caverns Ice Area - Underwater Alcove Item":
+        {
+            "ap_id": 336,
+            "zones": [ZONE["RNO4"]],
+            "index": 24,
+            "entities": [0x342a, 0x42da],
+            "as_relic": {"y": 0x0100},
+            "vanilla_item": "Manna prism"
+        },
+    "Reverse Caverns Ice Area - Inside Cave":
+        {
+            "ap_id": 337,
+            "zones": [ZONE["RNO4"]],
+            "index": 25,
+            "entities": [0x3416, 0x43de],
+            "as_relic": {"y": 0x01d0},
+            "vanilla_item": "Elixir"
+        },
+    "Reverse Caverns Waterfall - Behind Waterfall Room":
+        {
+            "ap_id": 338,
+            "zones": [ZONE["RNO4"]],
+            "index": 26,
+            "entities": [0x37c2, 0x473a],
+            "as_relic": {"x": 0x0080, "y": 0x0080},
+            "vanilla_item": "Osafune katana"
+        },
+    "Reverse Caverns Ice Area - At End":
+        {
+            "ap_id": 339,
+            "zones": [ZONE["RNO4"]],
+            "index": 27,
+            "entities": [0x3718, 0x4686],
+            "as_item": {"y": 0x00b9},
+            "vanilla_item": "Force of echo"
+        },
+    # Necromancy Laboratory items
+    "Necromancy Lab. - Breakable Wall on Tunnel Right of Elevator Shaft":
+        {
+            "ap_id": 340,
+            "zones": [ZONE["RNZ0"]],
+            "index": 1,
+            "entities": [0x26b0, 0x2f7c],
+            "as_relic": {},
+            "vanilla_item": "Heart Vessel"
+        },
+    "Necromancy Lab. - Bottom Room From Spike Traps":
+        {
+            "ap_id": 341,
+            "zones": [ZONE["RNZ0"]],
+            "index": 2,
+            "entities": [0x26f6, 0x2fc2],
+            "as_relic": {},
+            "vanilla_item": "Life Vessel"
+        },
+    "Necromancy Lab. - Middle Room on Elevator Shaft":
+        {
+            "ap_id": 342,
+            "zones": [ZONE["RNZ0"]],
+            "index": 3,
+            "entities": [0x289a, 0x3166],
+            "as_relic": {"x": 0x0080, "y": 0x0080},
+            "vanilla_item": "Goddess shield"
+        },
+    "Necromancy Lab. - Blue Flame in Room With Lesser and Fire Demons":
+        {
+            "ap_id": 343,
+            "zones": [ZONE["RNZ0"]],
+            "index": 4,
+            "entities": [0x2598, 0x2dec],
+            "as_relic": {},
+            "vanilla_item": "Manna prism"
+        },
+    "Necromancy Lab. - Breakable Ceil on Tunnel Right of Elevator Shaft":
+        {
+            "ap_id": 344,
+            "zones": [ZONE["RNZ0"]],
+            "index": 5,
+            "entities": [0x2322, 0x2be4],
+            "as_relic": {"x": 0x0080, "y": 0x0070},
+            "vanilla_item": "Katana"
+        },
+    "Necromancy Lab. - Hole in Room With Lesser and Fire Demons":
+        {
+            "ap_id": 345,
+            "zones": [ZONE["RNZ0"]],
+            "index": 6,
+            "entities": [0x2804, 0x30e4],
+            "as_relic": {},
+            "vanilla_item": "High potion"
+        },
+    "Necromancy Lab. - Globe in Bitterfly Room":
+        {
+            "ap_id": 346,
+            "zones": [ZONE["RNZ0"]],
+            "index": 7,
+            "entities": [0x24d0, 0x2d10],
+            "as_relic": {},
+            "vanilla_item": "Turquoise"
+        },
+    "Necromancy Lab. - Bottom Left Room From Beezelbub":
+        {
+            "ap_id": 347,
+            "zones": [ZONE["RNZ0"]],
+            "index": 8,
+            "entities": [0x2368, 0x2c48],
+            "as_relic": {"x": 0x0082, "y": 0x0080},
+            "vanilla_item": "Ring of arcana"
+        },
+    "Necromancy Lab. - Globe in the Room With Lesser Demons and Ctulhu":
+        {
+            "ap_id": 348,
+            "zones": [ZONE["RNZ0"]],
+            "index": 9,
+            "entities": [0x262e, 0x2edc],
+            "as_relic": {},
+            "vanilla_item": "Resist dark"
+        },
+    # Reverse Clock Tower items
+    "Reverse Clock Tower Open Area - Above Stone Bridge Left Item":
+        {
+            "ap_id": 349,
+            "zones": [ZONE["RNZ1"]],
+            "index": 0,
+            "entities": [0x2ad6, 0x32ee],
+            "as_relic": {"y": 0x0165},
+            "vanilla_item": "Magic missile"
+        },
+    "Reverse Clock Tower Open Area - Above Stone Bridge Right Item":
+        {
+            "ap_id": 350,
+            "zones": [ZONE["RNZ1"]],
+            "index": 1,
+            "entities": [0x2aea, 0x3316],
+            "as_relic": {"y": 0x0180},
+            "vanilla_item": "Karma coin"
+        },
+    "Reverse Clock Tower Open Area - Left Column":
+        {
+            "ap_id": 351,
+            "zones": [ZONE["RNZ1"]],
+            "index": 2,
+            "entities": [0x2af4, 0x3352],
+            "as_relic": {"y": 0x0248},
+            "vanilla_item": "Str. potion"
+        },
+    "Reverse Clock Tower Open Area - Middle Column":
+        {
+            "ap_id": 352,
+            "zones": [ZONE["RNZ1"]],
+            "index": 3,
+            "entities": [0x2afe, 0x335c],
+            "as_relic": {"y": 0x0258},
+            "vanilla_item": "Luminus"
+        },
+    "Reverse Clock Tower Open Area - Right Column":
+        {
+            "ap_id": 353,
+            "zones": [ZONE["RNZ1"]],
+            "index": 4,
+            "entities": [0x2b12, 0x3348],
+            "as_relic": {"y": 0x0248},
+            "vanilla_item": "Smart potion"
+        },
+    "Reverse Clock Tower Open Area - Bottom Left Room":
+        {
+            "ap_id": 354,
+            "zones": [ZONE["RNZ1"]],
+            "index": 5,
+            "entities": [0x2a36, 0x329e],
+            "as_relic": {"y": 0x0060},
+            "vanilla_item": "Dragon helm"
+        },
+    "Reverse Clock Tower Medusa Area - Gears Puzzle Room Left Item":
+        {
+            "ap_id": 355,
+            "zones": [ZONE["RNZ1"]],
+            "index": 6,
+            "entities": [0x29dc, 0x3280],
+            "as_relic": {"y": 0x00c0},
+            "vanilla_item": "Diamond"
+        },
+    "Reverse Clock Tower Medusa Area - Gears Puzzle Room Middle Item":
+        {
+            "ap_id": 356,
+            "zones": [ZONE["RNZ1"]],
+            "index": 7,
+            "entities": [0x2a0e, 0x3276],
+            "as_relic": {"y": 0x00c0},
+            "vanilla_item": "Life apple"
+        },
+    "Reverse Clock Tower Medusa Area - Gears Puzzle Room Right Item":
+        {
+            "ap_id": 357,
+            "zones": [ZONE["RNZ1"]],
+            "index": 8,
+            "entities": [0x2a18, 0x326c],
+            "as_relic": {"y": 0x00c0},
+            "vanilla_item": "Sunstone"
+        },
+    "Reverse Clock Tower Medusa Area - Room Behind Bottom Left Breakable Wall Left Item":
+        {
+            "ap_id": 358,
+            "zones": [ZONE["RNZ1"]],
+            "index": 9,
+            "entities": [0x25c2, 0x2e34],
+            "as_relic": {"y": 0x0038},
+            "vanilla_item": "Life Vessel"
+        },
+    "Reverse Clock Tower Medusa Area - Room Behind Bottom Left Breakable Wall Right Item":
+        {
+            "ap_id": 359,
+            "zones": [ZONE["RNZ1"]],
+            "index": 10,
+            "entities": [0x25e0, 0x2e2a],
+            "as_relic": {"y": 0x0038},
+            "vanilla_item": "Heart Vessel"
+        },
+    "Reverse Clock Tower - Behind Breakable Wall Next to Bronze Statue":
+        {
+            "ap_id": 360,
+            "zones": [ZONE["RNZ1"]],
+            "index": 11,
+            "entities": [0x2d06, 0x3578],
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Moon rod"
+        },
+    "Reverse Clock Tower - Near Darkwing Bat Middle Breakable Wall":
+        {
+            "ap_id": 361,
+            "zones": [ZONE["RNZ1"]],
+            "despawn": True,
+            "no_offset": True,
+            "entities": [0x2d56, 0x3596],
+            "addresses": [0x059bc354],
+            "bin_addresses": [0xf4ee6, 0x438d67e],
+            "rom_address": 0xdfcee,
+            "break_flag": 0x03be97,
+            "break_mask": 0x4,
+            "vanilla_item": "Bwaka knife"
+        },
+    "Reverse Clock Tower - Breakable Wall Item on Brackets":
+        {
+            "ap_id": 362,
+            "zones": [ZONE["RNZ1"]],
+            "despawn": True,
+            "no_offset": True,
+            "entities": [0x2bd0, 0x34a6],
+            "addresses": [0x059bc34c],
+            "bin_addresses": [0xf4ee8, 0x438d680],
+            "rom_address": 0xdfcf0,
+            "break_flag": 0x03be97,
+            "break_mask": 0x1,
+            "vanilla_item": "Pot roast"
+        },
+    "Reverse Clock Tower - Near Darkwing Bat Right Breakable Wall":
+        {
+            "ap_id": 363,
+            "zones": [ZONE["RNZ1"]],
+            "despawn": True,
+            "no_offset": True,
+            "entities": [0x2d74, 0x3596],
+            "addresses": [0x059bc350],
+            "bin_addresses": [0xf4eea, 0x438d682],
+            "rom_address": 0xdfcf2,
+            "break_flag": 0x03be97,
+            "break_mask": 0x2,
+            "vanilla_item": "Shuriken"
+        },
+    "Reverse Clock Tower - Near Darkwing Bat Left Breakable Wall":
+        {
+            "ap_id": 364,
+            "zones": [ZONE["RNZ1"]],
+            "despawn": True,
+            "no_offset": True,
+            "entities": [0x2d38, 0x35d2],
+            "addresses": [0x059bc358],
+            "bin_addresses": [0xf4eec, 0x438d684],
+            "rom_address": 0xdfcf4,
+            "break_flag": 0x03be97,
+            "break_mask": 0x8,
+            "vanilla_item": "TNT"
+        },
+    "Reverse Clock Tower - Darkwing Bat Item":
+        {
+            "ap_id": 365,
+            "zones": [ZONE["RNZ1"]],
+            "index": 12,
+            "entities": [0x2dce, 0x3640],
+            "erase_entity": False,
+            "ids": [{"zones": ZONE["RNZ1"], "addresses": [0x059e8074, 0x059ee2e4, 0x059bdb30]}],
+            "kill_time": 0x03ca78,
+            "erase":
+                {
+                    "instructions": [{"addresses": [0x059ee594], "instruction": 0x34020000},
+                                     {"addresses": [0x059ee2d0], "instruction": 0x34020000},
+                                     {"addresses": [0x059ee2d4], "instruction": 0x00000000}]
+                },
+            "as_item": {"y": 0x00c9},
+            "vanilla_item": "Ring of vlad"
+        },
+    # Reverse Castle Keep items
+    "R. Castle Keep - Open Area Top Right Breakable Wall":
+        {
+            "ap_id": 366,
+            "zones": [ZONE["RTOP"]],
+            "index": 0,
+            "entities": [0x1c80, 0x2004],  # TODO Swapped with Iron ball
+            "tile_index": 2,
+            "as_relic": {"x": 0x0670},
+            "vanilla_item": "Sword of dawn"
+        },
+    "R. Castle Keep - Open Area Bottom Left Underpass Breakable Wall":
+        {
+            "ap_id": 367,
+            "zones": [ZONE["RTOP"]],
+            "index": 1,
+            "entities": [0x1c76, 0x2040],  # TODO Swapped with Sword of dawn
+            "as_relic": {"x": 0x0670},
+            "vanilla_item": "Iron ball"
+        },
+    "R. Castle Keep - Red Vase After Entering":
+        {
+            "ap_id": 368,
+            "zones": [ZONE["RTOP"]],
+            "index": 2,
+            "entities": [0x1b9a, 0x209a],
+            "as_relic": {},
+            "vanilla_item": "Zircon"
+        },
+    "R. Castle Keep - Bellow Stairs Right Statue 2":
+        {
+            "ap_id": 369,
+            "zones": [ZONE["RTOP"]],
+            "index": 4,
+            "entities": [0x1d66, 0x2162],
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Bastard sword"
+        },
+    "R. Castle Keep - Bellow Stairs Right Statue 1":
+        {
+            "ap_id": 370,
+            "zones": [ZONE["RTOP"]],
+            "index": 5,
+            "entities": [0x1d5c, 0x216c],
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Life Vessel"
+        },
+    "R. Castle Keep - Bellow Stairs Right Yellow Vase 2":
+        {
+            "ap_id": 371,
+            "zones": [ZONE["RTOP"]],
+            "index": 6,
+            "entities": [0x1d52, 0x2176],
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Heart Vessel"
+        },
+    "R. Castle Keep - Bellow Stairs Right Yellow Vase 1":
+        {
+            "ap_id": 372,
+            "zones": [ZONE["RTOP"]],
+            "index": 7,
+            "entities": [0x1d48, 0x2180],
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Life Vessel"
+        },
+    "R. Castle Keep - Bellow Stairs Left Yellow Vase 2":
+        {
+            "ap_id": 373,
+            "zones": [ZONE["RTOP"]],
+            "index": 8,
+            "entities": [0x1d34, 0x218a],
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Heart Vessel"
+        },
+    "R. Castle Keep - Bellow Stairs Left Yellow Vase 1":
+        {
+            "ap_id": 374,
+            "zones": [ZONE["RTOP"]],
+            "index": 9,
+            "entities": [0x1d2a, 0x2194],
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Life Vessel"
+        },
+    "R. Castle Keep - Bellow Stairs Left Statue 1":
+        {
+            "ap_id": 375,
+            "zones": [ZONE["RTOP"]],
+            "index": 10,
+            "entities": [0x1d20, 0x219e],
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Heart Vessel"
+        },
+    "R. Castle Keep - Bellow Stairs Left Statue 2":
+        {
+            "ap_id": 376,
+            "zones": [ZONE["RTOP"]],
+            "index": 11,
+            "entities": [0x1d16, 0x21a8],
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Royal cloak"
+        },
+    "R. Castle Keep - Open Area Bottom Right Room Item 1":
+        {
+            "ap_id": 377,
+            "zones": [ZONE["RTOP"]],
+            "index": 17,
+            "entities": [0x1e06, 0x2248],
+            "as_relic": {"y": 0x0148},
+            "vanilla_item": "Resist fire"
+        },
+    "R. Castle Keep - Open Area Bottom Right Room Item 2":
+        {
+            "ap_id": 378,
+            "zones": [ZONE["RTOP"]],
+            "index": 18,
+            "entities": [0x1de8, 0x223e],
+            "as_relic": {"y": 0x0128},
+            "vanilla_item": "Resist ice"
+        },
+    "R. Castle Keep - Open Area Bottom Right Room Item 4":
+        {
+            "ap_id": 379,
+            "zones": [ZONE["RTOP"]],
+            "index": 19,
+            "entities": [0x1dfc, 0x222a],
+            "as_relic": {"y": 0x0087},
+            "vanilla_item": "Resist thunder"
+        },
+    "R. Castle Keep - Open Area Bottom Right Room Item 3":
+        {
+            "ap_id": 380,
+            "zones": [ZONE["RTOP"]],
+            "index": 20,
+            "entities": [0x1df2, 0x2234],
+            "as_relic": {"y": 0x00c8},
+            "vanilla_item": "Resist stone"
+        },
+    "R. Castle Keep - Open Area Bottom Right Room Window Item":
+        {
+            "ap_id": 381,
+            "zones": [ZONE["RTOP"]],
+            "index": 21,
+            "entities": [0x1dde, 0x225c],
+            "as_relic": {"y": 0x0190},
+            "vanilla_item": "High potion"
+        },
+    "R. Castle Keep - Open Area Top Right Ledge":
+        {
+            "ap_id": 382,
+            "zones": [ZONE["RTOP"]],
+            "index": 22,
+            "entities": [0x1c6c, 0x1ffa],
+            "as_relic": {"y": 0x0110},
+            "vanilla_item": "Garnet"
+        },
+    "R. Castle Keep - Bottom Left Room on Dual Elevator Area":
+        {
+            "ap_id": 383,
+            "zones": [ZONE["RTOP"]],
+            "index": 23,
+            "entities": [0x1e2e, 0x227a],
+            "as_relic": {"y": 0x0080},
+            "vanilla_item": "Lightning mail"
+        },
+    "R. Castle Keep - Bellow Save Point":
+        {
+            "ap_id": 384,
+            "zones": [ZONE["RTOP"]],
+            "index": 24,
+            "entities": [0x1e4c, 0x22a2],
+            "as_relic": {"y": 0x00b0},
+            "vanilla_item": "Library card"
+        },
+    # Bosses items
+    "Reverse Colosseum - Trio item":
+        {
+            "ap_id": 385,
+            "zones": [ZONE["RARE"]],
+            "index": 8,
+            "entities": [0x23ba, 0x293c],
+            "reward": {"zones": ZONE["RBO0"], "index": 0x02},
+            "kill_time": 0x03ca54,
+            "as_item": {"y": 0x00d9},
+            "erase":
+                {
+                    "instructions": [{"addresses": [0x06487bd4], "instruction": 0x34020000}]
+                },
+            "trio": True,
+            "vanilla_item": "Life Vessel"
+        }
 }
 
+for k, v in locations.items():
+    # NO0
+    if v["zones"][0] == 8:
+        if 8 in ZONE_LOCATIONS:
+            ZONE_LOCATIONS[8].append({k: v})
+            ZONE_LOCATIONS[3].append({k: v})
+        else:
+            ZONE_LOCATIONS[8] = [{k: v}]
+            ZONE_LOCATIONS[3] = [{k: v}]
+    # NO3 / NP3
+    elif v["zones"][0] == 11 or v["zones"][0] == 12:
+        if 11 in ZONE_LOCATIONS:
+            ZONE_LOCATIONS[11].append({k: v})
+            ZONE_LOCATIONS[12].append({k: v})
+        else:
+            ZONE_LOCATIONS[11] = [{k: v}]
+            ZONE_LOCATIONS[12] = [{k: v}]
+    # NO4
+    elif v["zones"][0] == 13:
+        if 13 in ZONE_LOCATIONS:
+            ZONE_LOCATIONS[13].append({k: v})
+            ZONE_LOCATIONS[36].append({k: v})
+        else:
+            ZONE_LOCATIONS[13] = [{k: v}]
+            ZONE_LOCATIONS[36] = [{k: v}]
+    # RARE
+    elif v["zones"][0] == 18:
+        if 18 in ZONE_LOCATIONS:
+            ZONE_LOCATIONS[18].append({k: v})
+            ZONE_LOCATIONS[41].append({k: v})
+        else:
+            ZONE_LOCATIONS[18] = [{k: v}]
+            ZONE_LOCATIONS[41] = [{k: v}]
+    # RCHI
+    elif v["zones"][0] == 21:
+        if 21 in ZONE_LOCATIONS:
+            ZONE_LOCATIONS[21].append({k: v})
+            ZONE_LOCATIONS[43].append({k: v})
+        else:
+            ZONE_LOCATIONS[21] = [{k: v}]
+            ZONE_LOCATIONS[43] = [{k: v}]
+    # RDAI
+    elif v["zones"][0] == 22:
+        if 22 in ZONE_LOCATIONS:
+            ZONE_LOCATIONS[22].append({k: v})
+            ZONE_LOCATIONS[44].append({k: v})
+        else:
+            ZONE_LOCATIONS[22] = [{k: v}]
+            ZONE_LOCATIONS[44] = [{k: v}]
+    # RNO1
+    elif v["zones"][0] == 25:
+        if 25 in ZONE_LOCATIONS:
+            ZONE_LOCATIONS[25].append({k: v})
+            ZONE_LOCATIONS[45].append({k: v})
+        else:
+            ZONE_LOCATIONS[25] = [{k: v}]
+            ZONE_LOCATIONS[45] = [{k: v}]
+    # RNO2
+    elif v["zones"][0] == 26:
+        if 26 in ZONE_LOCATIONS:
+            ZONE_LOCATIONS[26].append({k: v})
+            ZONE_LOCATIONS[48].append({k: v})
+        else:
+            ZONE_LOCATIONS[26] = [{k: v}]
+            ZONE_LOCATIONS[48] = [{k: v}]
+    else:
+        if v["zones"][0] in ZONE_LOCATIONS:
+            ZONE_LOCATIONS[v["zones"][0]].append({k: v})
+        else:
+            ZONE_LOCATIONS[v["zones"][0]] = [{k: v}]
+    zone = ZONE_TO_NAME[v["zones"][0]]
+    vanilla: str = v["vanilla_item"]
+    if vanilla in RELIC_NAMES:
+        LOCATION_TO_ABREV[k] = vanilla
+        ABREV_TO_LOCATION[vanilla] = k
+    else:
+        if "index" in v:
+            index = str(v["index"])
+        else:
+            if "addresses" in v:
+                index = str(v["addresses"][0])
+            else:
+                index = "NULL"
+        res_str = zone + '_' + vanilla + '_' + index
+        LOCATION_TO_ABREV[k] = res_str
+        ABREV_TO_LOCATION[res_str] = k
 
-def get_zone_id(zone_name: str) -> int:
-    for k, v in zones_dict.items():
-        if v.name == zone_name:
-            return k * 10000
+    if "bin_addresses" in v:
+        BREAKABLE_LOCATIONS[k] = v
+
+    AP_ID_TO_NAME[v["ap_id"] + BASE_LOCATION_ID] = k
 
 
 class SotnLocation(Location):
     game = "Symphony of the Night"
-    # parent_region = Optional[Region] add zones
-
-
-class LocationData:
-    def __init__(self, zone: str, game_id, rom_address: list = None, no_offset=False, can_be_relic=False, delete=0, relic_index=0, item_address=None):
-        self.zone = zone
-        self.game_id = game_id
-        self.rom_address = [] if rom_address is None else rom_address
-        self.can_be_relic = can_be_relic
-        self.no_offset = no_offset
-        self.delete = delete
-        self.relic_index = relic_index
-        self.item_address = [] if item_address is None else item_address
-        if game_id is None:
-            self.game_id: int = None
-            self.location_id: int = None
-        else:
-            self.game_id: int = game_id
-            self.location_id: int = base_location_id + get_zone_id(zone) + game_id
-
-    def get_delete(self):
-        return self.delete
-
-    def get_zone(self):
-        return self.zone
-
-    def get_location_id(self):
-        return self.location_id
-
-    @staticmethod
-    def get_location_name(id: int) -> str:
-        for k, v in location_table.items():
-            if v.location_id == id:
-                return k
-
-
-# Bosses, Relics and despawn item 3{zone}{n++}
-no3_locations = {
-    "NO3 - Heart Vessel (Above Death)": LocationData("Castle Entrance", 0, [0x4b68604, 0x53f5f80]),
-    "NO3 - Life Vessel (Bellow shield potion)": LocationData("Castle Entrance", 1,
-                                                             [0x4b68606, 0x53f5f82]),
-    "NO3 - Life Apple (Hidden room)": LocationData("Castle Entrance", 2, [0x4b68608, 0x53f5f84]),
-    "NO3 - Shield Potion": LocationData("Castle Entrance", 4, [0x4b6860c, 0x53f5f88]),
-    "NO3 - Holy mail": LocationData("Castle Entrance", 5,[0x4b6860e, 0x53f5f8a]),
-    "NO3 - Life Vessel (UC exit)": LocationData("Castle Entrance", 6,[0x4b68610, 0x53f5f8c]),
-    "NO3 - Heart Vessel (Teleport exit)": LocationData("Castle Entrance", 7,
-                                                       [0x4b68612, 0x53f5f8e]),
-    "NO3 - Life Vessel (Above entry)": LocationData("Castle Entrance", 8,[0x4b68614, 0x53f5f90]),
-    "NO3 - Jewel sword": LocationData("Castle Entrance", 9, [0x53f5f92]),
-    "NO3 - Pot roast": LocationData("Castle Entrance", 3110, [0x4ba9774, 0x5431554],
-                                    True, False),
-    "NO3 - Turkey": LocationData("Castle Entrance", 3111, [0x4baa2b0, 0x5431f60],
-                                 True, False),
-    "Cube of Zoe": LocationData("Castle Entrance", 3112,
-                                [0x4b6b082+8, 0x4b6b93e+8, 0x53f8e26+8, 0x53f9692+8],
-                                False, True, 0x000e00b0, 10, [0x4b68618, 0x53f5f94]),
-    "Power of Wolf": LocationData("Castle Entrance", 3113,
-                                  [0x4b6b14a+8, 0x4b6b9ac+8, 0x53f8f16+8, 0x53f9714+8],
-                                  False,True, 0x000e00b1, 11, [0x4b6861a, 0x53f5f96])
-}
-
-nz0_locations = {
-    "NZ0 - Hide cuirass": LocationData("Alchemy Laboratory", 0, [0x54b2298]),
-    "NZ0 - Heart Vessel": LocationData("Alchemy Laboratory", 1, [0x54b229a]),
-    "NZ0 - Cloth cape": LocationData("Alchemy Laboratory", 2, [0x54b229c]),
-    "NZ0 - Life Vessel": LocationData("Alchemy Laboratory", 3, [0x54b229e]),
-    "NZ0 - Sunglasses": LocationData("Alchemy Laboratory", 6, [0x54b22a4]),
-    "NZ0 - Resist thunder": LocationData("Alchemy Laboratory", 7, [0x54b22a6]),
-    "NZ0 - Leather shield": LocationData("Alchemy Laboratory", 8, [0x54b22a8]),
-    "NZ0 - Basilard": LocationData("Alchemy Laboratory", 9, [0x54b22aa]),
-    "NZ0 - Potion": LocationData("Alchemy Laboratory", 10, [0x54b22ac]),
-    "NZ0 - Slogra and Gaibon kill": LocationData("Alchemy Laboratory", 3140),
-    "Skill of Wolf": LocationData("Alchemy Laboratory", 3141, [0x054b1d5a],
-                                  False, True),
-    "Bat Card": LocationData("Alchemy Laboratory", 3142, [0x054b1d58],
-                             False, True)
-}
-
-no0_locations = {
-    "NO0 - Life Vessel(Left clock)": LocationData("Marble Gallery", 0, [0x48fad98]),
-    "NO0 - Alucart shield": LocationData("Marble Gallery", 1, [0x48fad9a]),
-    "NO0 - Heart Vessel(Right clock)": LocationData("Marble Gallery", 2,[0x48fad9c]),
-    "NO0 - Life apple(Middle clock)": LocationData("Marble Gallery", 3, [0x48fad9e]),
-    "NO0 - Hammer(Middle clock)": LocationData("Marble Gallery", 4, [0x48fada0]),
-    "NO0 - Potion(Middle clock)": LocationData("Marble Gallery", 5, [0x48fada2]),
-    "NO0 - Alucart mail": LocationData("Marble Gallery", 6, [0x48fada4]),
-    "NO0 - Alucart sword": LocationData("Marble Gallery", 7, [0x48fada6]),
-    "NO0 - Life Vessel(Inside)": LocationData("Marble Gallery", 8, [0x48fada8]),
-    "NO0 - Heart Vessel(Inside)": LocationData("Marble Gallery", 9, [0x48fadaa]),
-    "NO0 - Library card(Jewel)": LocationData("Marble Gallery", 10, [0x48fadac]),
-    "NO0 - Attack potion(Jewel)": LocationData("Marble Gallery", 11, [0x48fadae]),
-    "NO0 - Hammer(Spirit)": LocationData("Marble Gallery", 12, [0x48fadb0]),
-    "NO0 - Str. potion": LocationData("Marble Gallery", 13, [0x48fadb2]),
-    "NO0 - Holy glasses": LocationData("Marble Gallery", 3080, [0x456e368], True),
-    "Spirit Orb": LocationData("Marble Gallery", 3081, [0x48fd1f6+8, 0x48fe278+8],
-                               False, True, 0x001700b0, 14, [0x48fadb4]),
-    "Gravity Boots": LocationData("Marble Gallery", 3082, [0x48fc9b2+8, 0x48fd944+8],
-                                  False, True, 0x001700b1, 15, [0x48fadb6])
-}
-
-no1_locations = {
-    "NO1 - Jewel knuckles": LocationData("Outer Wall", 0, [0x49d3674]),
-    "NO1 - Mirror cuirass": LocationData("Outer Wall", 1, [0x49d3676]),
-    "NO1 - Heart Vessel": LocationData("Outer Wall", 2, [0x49d3678]),
-    "NO1 - Garnet": LocationData("Outer Wall", 3, [0x49d367a]),
-    "NO1 - Gladius": LocationData("Outer Wall", 4, [0x49d367c]),
-    "NO1 - Life Vessel": LocationData("Outer Wall", 5, [0x49d367e]),
-    "NO1 - Zircon": LocationData("Outer Wall", 6, [0x49d3680]),
-    "NO1 - Pot roast": LocationData("Outer Wall", 3090, [0x4a197d8], True),
-    "NO1 - Doppleganger 10 kill": LocationData("Outer Wall", 3091),
-    "Soul of Wolf": LocationData("Outer Wall", 3092, [0x49d5d36+8, 0x49d658e+8],
-                                 False, True, 0x002e00b0, 7, [0x49d3682])
-}
-
-lib_locations = {
-    "LIB - Stone mask": LocationData("Long Library", 1, [0x47a390a]),
-    "LIB - Holy rod": LocationData("Long Library", 2, [0x47a390c]),
-    "LIB - Bronze cuirass": LocationData("Long Library", 4, [0x47a3910]),
-    "LIB - Takemitsu": LocationData("Long Library", 5, [0x47a3912]),
-    "LIB - Onyx": LocationData("Long Library", 6, [0x47a3914]),
-    "LIB - Frankfurter": LocationData("Long Library", 7, [0x47a3916]),
-    "LIB - Potion": LocationData("Long Library", 8, [0x47a3918]),
-    "LIB - Antivenom": LocationData("Long Library", 9, [0x47a391a]),
-    "LIB - Topaz circlet": LocationData("Long Library", 10, [0x47a391c]),
-    "LIB - Lesser Demon kill": LocationData("Long Library", 3070),
-    "Soul of Bat": LocationData("Long Library", 3072, [0x47a5b5e+8, 0x47a623e+8],
-                                False, True, 0x002600b2, 11, [0x47a391e]),
-    "Faerie Scroll": LocationData("Long Library", 3073, [0x47a5718+8, 0x47a5dca+8],
-                                  False, True, 0x00f400b1, 12, [0x47a3920]),
-    "Jewel of Open": LocationData("Long Library", 3074, [0x047a321c], False,
-                                  True),
-    "Faerie Card": LocationData("Long Library", 3075, [0x47a577c+8, 0x47a5f64+8],
-                                False,True, 0x002600b0, 13, [0x47a3922]),
-}
-
-# IMPORTANT: Writing on item index 12 make Karasuman door not interactable, trying Fire of Bat on index 2
-nz1_locations = {
-    "NZ1 - Magic missile": LocationData("Clock Tower", 0, [0x5573834]),
-    "NZ1 - Pentagram": LocationData("Clock Tower", 1, [0x5573836]),
-    "NZ1 - Star flail": LocationData("Clock Tower", 3, [0x557383a]),
-    "NZ1 - Gold plate": LocationData("Clock Tower", 4, [0x557383c]),
-    "NZ1 - Steel helm": LocationData("Clock Tower", 5, [0x557383e]),
-    "NZ1 - Healing mail": LocationData("Clock Tower", 6, [0x5573840]),
-    "NZ1 - Bekatowa": LocationData("Clock Tower", 7, [0x5573842]),
-    "NZ1 - Shaman shield": LocationData("Clock Tower", 8, [0x5573844]),
-    "NZ1 - Ice mail": LocationData("Clock Tower", 9, [0x5573846]),
-    "NZ1 - Life Vessel(Gear train)": LocationData("Clock Tower", 10, [0x5573848]),
-    "NZ1 - Heart Vessel(Gear train)": LocationData("Clock Tower", 11, [0x557384a]),
-    "NZ1 - Bwaka knife": LocationData("Clock Tower", 3150, [0x55737a4], True),
-    "NZ1 - Pot roast": LocationData("Clock Tower", 3151, [0x557379c], True),
-    "NZ1 - Shuriken": LocationData("Clock Tower", 3152, [0x55737a0], True),
-    "NZ1 - TNT": LocationData("Clock Tower", 3153, [0x55737a8], True),
-    "NZ1 - Karasuman kill": LocationData("Clock Tower", 3154),
-    "Fire of Bat": LocationData("Clock Tower", 3155, [0x5575356+8, 0x5575e92+8], False,
-                                True, 0x002300b0, 2, [0x5573838])
-}
-
-top_locations = {
-    "TOP - Turquoise": LocationData("Castle Keep", 0, [0x560f5f8]),
-    "TOP - Turkey(Behind wall)": LocationData("Castle Keep", 1, [0x560f5fa]),
-    "TOP - Fire mail(Behind wall)": LocationData("Castle Keep", 2, [0x560f5fc]),
-    "TOP - Tyrfing": LocationData("Castle Keep", 3, [0x560f5fe]),
-    "TOP - Sirloin(Above Richter)": LocationData("Castle Keep", 4, [0x560f600]),
-    "TOP - Turkey(Above Richter)": LocationData("Castle Keep", 5, [0x560f602]),
-    "TOP - Pot roast(Above Richter)": LocationData("Castle Keep", 6, [0x560f604]),
-    "TOP - Frankfurter(Above Richter)": LocationData("Castle Keep", 7, [0x560f606]),
-    "TOP - Resist stone(Above Richter)": LocationData("Castle Keep", 8, [0x560f608]),
-    "TOP - Resist dark(Above Richter)": LocationData("Castle Keep", 9, [0x560f60a]),
-    "TOP - Resist holy(Above Richter)": LocationData("Castle Keep", 10, [0x560f60c]),
-    "TOP - Platinum mail(Above Richter)": LocationData("Castle Keep", 11, [0x560f60e]),
-    "TOP - Falchion": LocationData("Castle Keep", 12, [0x560f610]),
-    "TOP - Life Vessel 1(Viewing room)": LocationData("Castle Keep", 13, [0x560f612]),
-    "TOP - Life Vessel 2(Viewing room)": LocationData("Castle Keep", 14, [0x560f614]),
-    "TOP - Heart Vessel 1(Viewing room)": LocationData("Castle Keep", 15, [0x560f616]),
-    "TOP - Heart Vessel 2(Viewing room)": LocationData("Castle Keep", 16, [0x560f618]),
-    "TOP - Heart Vessel(Before Richter)": LocationData("Castle Keep", 18, [0x560f61c]),
-    "Leap Stone": LocationData("Castle Keep", 3160, [0x5610dba+8, 0x5611612+8], False,
-                               True, 0x002400b0, 19, [0x560f61e]),
-    "Power of Mist": LocationData("Castle Keep", 3161, [0x5610db0+8, 0x5611424+8], False,
-                                  True, 0x002400b1, 20, [0x560f620]),
-    "Ghost Card": LocationData("Castle Keep", 3162, [0x5611274+8, 0x5611950+8], False,
-                               True, 0x002400b2, 21, [0x560f622]),
-}
-
-dai_locations = {
-    "DAI - Ankh of life(Stairs)": LocationData("Royal Chapel", 0, [0x4676ef8]),
-    "DAI - Morningstar": LocationData("Royal Chapel", 1, [0x4676efa]),
-    "DAI - Silver ring": LocationData("Royal Chapel", 2, [0x4676efc]),
-    "DAI - Aquamarine(Stairs)": LocationData("Royal Chapel", 3, [0x4676efe]),
-    "DAI - Mystic pendant": LocationData("Royal Chapel", 4, [0x4676f00]),
-    "DAI - Magic missile(Stairs)": LocationData("Royal Chapel", 5, [0x4676f02]),
-    "DAI - Shuriken(Stairs)": LocationData("Royal Chapel", 6, [0x4676f04]),
-    "DAI - TNT(Stairs)": LocationData("Royal Chapel", 7, [0x4676f06]),
-    "DAI - Boomerang(Stairs)": LocationData("Royal Chapel", 8, [0x4676f08]),
-    "DAI - Goggles": LocationData("Royal Chapel", 9, [0x4676f0a]),
-    "DAI - Silver plate": LocationData("Royal Chapel", 10, [0x4676f0c]),
-    "DAI - Str. potion(Bell)": LocationData("Royal Chapel", 11, [0x4676f0e]),
-    "DAI - Life Vessel(Bell)": LocationData("Royal Chapel", 12, [0x4676f10]),
-    "DAI - Zircon": LocationData("Royal Chapel", 13, [0x4676f12]),
-    "DAI - Cutlass": LocationData("Royal Chapel", 14, [0x4676f14]),
-    "DAI - Potion": LocationData("Royal Chapel", 15, [0x4676f16]),
-    "DAI - Hippogryph kill": LocationData("Royal Chapel", 3050),
-}
-
-are_locations = {
-    "ARE - Heart Vessel": LocationData("Colosseum", 0, [0x43c3130]),
-    "ARE - Shield rod": LocationData("Colosseum", 1, [0x43c3132]),
-    "ARE - Blood cloak": LocationData("Colosseum", 3, [0x43c3136]),
-    "ARE - Knight shield(Chapel passage)": LocationData("Colosseum", 4, [0x43c3138]),
-    "ARE - Library card": LocationData("Colosseum", 5, [0x43c313a]),
-    "ARE - Green tea": LocationData("Colosseum", 6, [0x43c313c]),
-    "ARE - Holy sword(Hidden attic)": LocationData("Colosseum", 7, [0x43c313e]),
-    "ARE - Minotaurus/Werewolf kill": LocationData("Colosseum", 3010),
-    "Form of Mist": LocationData("Colosseum", 3011, [0x43c5782+8, 0x43c5e00+8], False,
-                                 True, 0x003300b0, 8, [0x43c3140])
-}
-
-no2_locations = {
-    "NO2 - Heart Vessel": LocationData("Olrox's Quarters", 1, [0x4aa1556]),
-    "NO2 - Broadsword": LocationData("Olrox's Quarters", 4, [0x4aa155c]),
-    "NO2 - Onyx": LocationData("Olrox's Quarters", 5, [0x4aa155e]),
-    "NO2 - Cheese": LocationData("Olrox's Quarters", 6, [0x4aa1560]),
-    "NO2 - Manna prism": LocationData("Olrox's Quarters", 7, [0x4aa1562]),
-    "NO2 - Resist fire": LocationData("Olrox's Quarters", 8, [0x4aa1564]),
-    "NO2 - Luck potion": LocationData("Olrox's Quarters", 9, [0x4aa1566]),
-    "NO2 - Estoc": LocationData("Olrox's Quarters", 10, [0x4aa1698]),
-    "NO2 - Iron ball": LocationData("Olrox's Quarters", 11, [0x4aa169a]),
-    "NO2 - Garnet": LocationData("Olrox's Quarters", 12, [0x4aa169c]),
-    "NO2 - Olrox kill": LocationData("Olrox's Quarters", 3100),
-    "Echo of Bat": LocationData("Olrox's Quarters", 3101, [0x4aa414e+8, 0x4aa49a6+8],
-                                False, True, 0x001a00b0, 13, [0x4aa169e]),
-    "Sword Card": LocationData("Olrox's Quarters", 3102, [0x4aa3f6e+8, 0x4aa47c6+8],
-                               False, True, 0x001a00b1, 14, [0x4aa16a0]),
-}
-
-no4_locations = {
-    "NO4 - Heart Vessel(0)": LocationData("Underground Caverns", 0,[0x4c324a0]),
-    "NO4 - Life Vessel(1)": LocationData("Underground Caverns", 1, [0x4c324a2]),
-    "NO4 - Crystal cloak": LocationData("Underground Caverns", 2,[0x4c324a4, 0x61a73a8]),
-    "NO4 - Antivenom(Underwater)": LocationData("Underground Caverns", 4, [0x4c324a8]),
-    "NO4 - Life Vessel(Underwater)": LocationData("Underground Caverns", 5, [0x4c324aa]),
-    "NO4 - Life Vessel(Behind waterfall)": LocationData("Underground Caverns", 6,[0x4c324ac]),
-    "NO4 - Herald Shield": LocationData("Underground Caverns", 7, [0x4c324ae]),
-    "NO4 - Zircon": LocationData("Underground Caverns", 9, [0x4c324b2]),
-    "NO4 - Gold Ring": LocationData("Underground Caverns", 10, [0x4c324b4]),
-    "NO4 - Bandanna": LocationData("Underground Caverns", 11, [0x4c324b6]),
-    "NO4 - Shiitake(12)": LocationData("Underground Caverns", 12, [0x4c324b8]),
-    "NO4 - Claymore": LocationData("Underground Caverns", 13, [0x4c324ba]),
-    "NO4 - Meal ticket 1(Succubus)": LocationData("Underground Caverns", 14, [0x4c324bc]),
-    "NO4 - Meal ticket 2(Succubus)": LocationData("Underground Caverns", 15, [0x4c324be]),
-    "NO4 - Meal ticket 3(Succubus)": LocationData("Underground Caverns", 16, [0x4c324c0]),
-    "NO4 - Meal ticket 4(Succubus)": LocationData("Underground Caverns", 17, [0x4c324c2]),
-    "NO4 - Moonstone": LocationData("Underground Caverns", 18, [0x4c324c4]),
-    "NO4 - Scimitar": LocationData("Underground Caverns", 19, [0x4c324c6, 0x61a73ca]),
-    "NO4 - Resist ice": LocationData("Underground Caverns", 20, [0x4c324c8, 0x61a73cc]),
-    "NO4 - Pot roast": LocationData("Underground Caverns", 21, [0x4c324ca, 0x61a73ce]),
-    "NO4 - Onyx(Holy)": LocationData("Underground Caverns", 22, [0x4c324cc]),
-    "NO4 - Knuckle duster(Holy)": LocationData("Underground Caverns", 23, [0x4c324ce]),
-    "NO4 - Life Vessel(Holy)": LocationData("Underground Caverns", 24, [0x4c324d0]),
-    "NO4 - Elixir(Holy)": LocationData("Underground Caverns", 25, [0x4c324d2]),
-    "NO4 - Toadstool(26)": LocationData("Underground Caverns", 26, [0x4c324d4]),
-    "NO4 - Shiitake(27)": LocationData("Underground Caverns", 27, [0x4c324d6]),
-    "NO4 - Life Vessel(Bellow bridge)": LocationData("Underground Caverns", 28, [0x4c324d8]),
-    "NO4 - Heart Vessel(Bellow bridge)": LocationData("Underground Caverns", 29, [0x4c324da]),
-    "NO4 - Pentagram": LocationData("Underground Caverns", 30, [0x4c324dc]),
-    "NO4 - Secret boots": LocationData("Underground Caverns", 31, [0x4c324de]),
-    "NO4 - Shiitake(Waterfall)": LocationData("Underground Caverns", 32, [0x4c324e0]),
-    "NO4 - Toadstool(Waterfall)": LocationData("Underground Caverns", 33, [0x4c324e2]),
-    "NO4 - Shiitake(Near entrance passage)": LocationData("Underground Caverns", 35, [0x4c324e6]),
-    "NO4 - Nunchaku": LocationData("Underground Caverns", 36, [0x4c324e8]),
-    "NO4 - Scylla kill": LocationData("Underground Caverns", 3130),
-    "NO4 - Succubus kill": LocationData("Underground Caverns", 3131),
-    "Holy Symbol": LocationData("Underground Caverns", 3132, [0x4c34ede+8, 0x4c361d0+8],
-                                False, True, 0x003f00b0, 37, [0x4c324ea]),
-    "Merman Statue": LocationData("Underground Caverns", 3133, [0x4c3516c+8, 0x4c36472+8],
-                                  False, True, 0x003f00b1, 38, [0x4c324ec])
-}
-
-chi_locations = {
-    "CHI - Power of sire(Demon)": LocationData("Abandoned Mine", 0, [0x45e95fc]),
-    "CHI - Karma coin": LocationData("Abandoned Mine", 1, [0x45e95fe]),
-    "CHI - Ring of ares": LocationData("Abandoned Mine", 4, [0x45e9604]),
-    "CHI - Combat knife": LocationData("Abandoned Mine", 5, [0x45e9606]),
-    "CHI - Shiitake 1": LocationData("Abandoned Mine", 6, [0x45e9608]),
-    "CHI - Shiitake 2": LocationData("Abandoned Mine", 7, [0x45e960a]),
-    "CHI - Barley tea(Demon)": LocationData("Abandoned Mine", 8, [0x45e960c]),
-    "CHI - Peanuts 1(Demon)": LocationData("Abandoned Mine", 9, [0x45e960e]),
-    "CHI - Peanuts 2(Demon)": LocationData("Abandoned Mine", 10, [0x45e9610]),
-    "CHI - Peanuts 3(Demon)": LocationData("Abandoned Mine", 11, [0x45e9612]),
-    "CHI - Peanuts 4(Demon)": LocationData("Abandoned Mine", 12, [0x45e9614]),
-    "CHI - Turkey(Demon)": LocationData("Abandoned Mine", 3040, [0x45e9602]),
-    "CHI - Cerberos kill": LocationData("Abandoned Mine", 3041),
-    "Demon Card": LocationData("Abandoned Mine", 3042, [0x45ea956+8, 0x45eacda+8], False,
-                               True, 0x001600b0, 13, [0x45e9616]),
-}
-
-cat_locations = {
-    "CAT - Cat-eye circl.": LocationData("Catacombs", 0, [0x44912e4]),
-    "CAT - Icebrand": LocationData("Catacombs", 1, [0x44912e6]),
-    "CAT - Walk armor": LocationData("Catacombs", 2, [0x44912e8]),
-    "CAT - Mormegil": LocationData("Catacombs", 3, [0x44912ea]),
-    "CAT - Library card(Spike breaker)": LocationData("Catacombs", 4, [0x44912ec]),
-    "CAT - Heart Vessel(Ballroom mask)": LocationData("Catacombs", 6, [0x44912f0]),
-    "CAT - Ballroom mask": LocationData("Catacombs", 7, [0x44912f2]),
-    "CAT - Bloodstone": LocationData("Catacombs", 8, [0x44912f4]),
-    "CAT - Life Vessel(Crypt)": LocationData("Catacombs", 9, [0x44912f6]),
-    "CAT - Heart Vessel(Crypt)": LocationData("Catacombs", 10, [0x44912f8]),
-    "CAT - Cross shuriken 1(Spike breaker)": LocationData("Catacombs", 11, [0x44912fa]),
-    "CAT - Cross shuriken 2(Spike breaker)": LocationData("Catacombs", 12, [0x44912fc]),
-    "CAT - Karma coin 1(Spike breaker)": LocationData("Catacombs", 13, [0x44912fe]),
-    "CAT - Karma coin 2(Spike breaker)": LocationData("Catacombs", 14, [0x4491300]),
-    "CAT - Pork bun": LocationData("Catacombs", 15, [0x4491302]),
-    "CAT - Spike breaker": LocationData("Catacombs", 16, [0x4491304]),
-    "CAT - Monster vial 3 1(Sarcophagus)": LocationData("Catacombs", 17, [0x4491306]),
-    "CAT - Monster vial 3 2(Sarcophagus)": LocationData("Catacombs", 18, [0x4491308]),
-    "CAT - Monster vial 3 3(Sarcophagus)": LocationData("Catacombs", 19, [0x449130a]),
-    "CAT - Monster vial 3 4(Sarcophagus)": LocationData("Catacombs", 20, [0x449130c]),
-    "CAT - Granfaloon kill": LocationData("Catacombs", 3020),
-}
-
-rare_locations = {
-    "RARE - Fury plate(Hidden floor)": LocationData("Reverse Colosseum", 0, [0x5751554]),
-    "RARE - Zircon": LocationData("Reverse Colosseum", 1, [0x5751556]),
-    "RARE - Buffalo star": LocationData("Reverse Colosseum", 2, [0x5751558]),
-    "RARE - Gram": LocationData("Reverse Colosseum", 3, [0x575155a]),
-    "RARE - Aquamarine": LocationData("Reverse Colosseum", 4, [0x575155c]),
-    "RARE - Heart Vessel(5)": LocationData("Reverse Colosseum", 5, [0x575155e]),
-    "RARE - Life Vessel": LocationData("Reverse Colosseum", 6, [0x5751560]),
-    "RARE - Heart Vessel(7)": LocationData("Reverse Colosseum", 7, [0x5751562]),
-    "RARE - Fake Trevor/Grant/Sypha kill": LocationData("Reverse Colosseum", 3180),
-}
-
-rcat_locations = {
-    "RCAT - Magic missile": LocationData("Floating Catacombs", 0, [0x4cfb6e0]),
-    "RCAT - Buffalo star": LocationData("Floating Catacombs", 1, [0x4cfb6e2]),
-    "RCAT - Resist thunder": LocationData("Floating Catacombs", 2, [0x4cfb6e4]),
-    "RCAT - Resist fire": LocationData("Floating Catacombs", 3, [0x4cfb6e6]),
-    "RCAT - Karma coin(4)(Spike breaker)": LocationData("Floating Catacombs", 4, [0x4cfb6e8]),
-    "RCAT - Karma coin(5)(Spike breaker)": LocationData("Floating Catacombs", 5, [0x4cfb6ea]),
-    "RCAT - Red bean bun": LocationData("Floating Catacombs", 6, [0x4cfb6ec]),
-    "RCAT - Elixir": LocationData("Floating Catacombs", 7, [0x4cfb6ee]),
-    "RCAT - Library card": LocationData("Floating Catacombs", 8, [0x4cfb6f0]),
-    "RCAT - Life Vessel(9)": LocationData("Floating Catacombs", 9, [0x4cfb6f2]),
-    "RCAT - Heart Vessel(10)": LocationData("Floating Catacombs", 10, [0x4cfb6f4]),
-    "RCAT - Shield potion": LocationData("Floating Catacombs", 11, [0x4cfb6f6]),
-    "RCAT - Attack potion": LocationData("Floating Catacombs", 12, [0x4cfb6f8]),
-    "RCAT - Necklace of j": LocationData("Floating Catacombs", 13, [0x4cfb6fa]),
-    "RCAT - Diamond": LocationData("Floating Catacombs", 14, [0x4cfb6fc]),
-    "RCAT - Heart Vessel(After Galamoth)": LocationData("Floating Catacombs", 15, [0x4cfb6fe]),
-    "RCAT - Life Vessel(After Galamoth)": LocationData("Floating Catacombs", 16,  [0x4cfb700]),
-    "RCAT - Ruby circlet": LocationData("Floating Catacombs", 17, [0x4cfb702]),
-    "RCAT - Galamoth kill": LocationData("Floating Catacombs", 3190),
-    "Gas Cloud": LocationData("Floating Catacombs", 3191, [0x4cfcb0e+8, 0x4cfd892+8],
-                              False, True, 0x00ff00b0, 18, [0x4cfb704])
-}
-
-"""rcen_locations = {
-    "RCEN - Kill Dracula": LocationData("Reverse Center Cube", None)
-}"""
-
-rchi_locations = {
-    "RCHI - Power of Sire(Demon)": LocationData("Cave", 0, [0x4da5134]),
-    "RCHI - Life apple(Demon)": LocationData("Cave", 1, [0x4da5136]),
-    "RCHI - Alucard sword": LocationData("Cave", 2, [0x4da5138]),
-    "RCHI - Green tea(Demon)": LocationData("Cave", 3, [0x4da513a]),
-    "RCHI - Power of Sire": LocationData("Cave", 4, [0x4da513c]),
-    "RCHI - Shiitake 1(6)": LocationData("Cave", 6, [0x4da5140]),
-    "RCHI - Shiitake 2(7)": LocationData("Cave", 7, [0x4da5142]),
-    "RCHI - Death kill": LocationData("Cave", 3210),
-    "Eye of Vlad": LocationData("Cave", 3211, [0x4da65ea+8, 0x4da6a4a+8, 0x662263a],
-                                False, True, 0x0016)
-}
-
-rdai_locations = {
-    "RDAI - Fire boomerang": LocationData("Anti-Chapel", 2, [0x4e322b8]),
-    "RDAI - Diamond": LocationData("Anti-Chapel", 3, [0x4e322ba]),
-    "RDAI - Zircon": LocationData("Anti-Chapel", 4, [0x4e322bc]),
-    "RDAI - Heart Vessel(5)": LocationData("Anti-Chapel", 5, [0x4e322be]),
-    "RDAI - Shuriken": LocationData("Anti-Chapel", 6, [0x4e322c0]),
-    "RDAI - TNT": LocationData("Anti-Chapel", 7, [0x4e322c2]),
-    "RDAI - Boomerang": LocationData("Anti-Chapel", 8, [0x4e322c4]),
-    "RDAI - Javelin": LocationData("Anti-Chapel", 9, [0x4e322c6]),
-    "RDAI - Manna prism": LocationData("Anti-Chapel", 10, [0x4e322c8]),
-    "RDAI - Smart potion": LocationData("Anti-Chapel", 11, [0x4e322ca]),
-    "RDAI - Life Vessel": LocationData("Anti-Chapel", 12, [0x4e322cc]),
-    "RDAI - Talwar": LocationData("Anti-Chapel", 13, [0x4e322ce]),
-    "RDAI - Bwaka knife": LocationData("Anti-Chapel", 14, [0x4e322d0]),
-    "RDAI - Magic missile": LocationData("Anti-Chapel", 15, [0x4e322d2]),
-    "RDAI - Twilight cloak": LocationData("Anti-Chapel", 16, [0x4e322d4]),
-    "RDAI - Heart Vessel(17)": LocationData("Anti-Chapel", 17, [0x4e322d6]),
-    "RDAI - Medusa kill": LocationData("Anti-Chapel", 3220),
-    "Heart of Vlad": LocationData("Anti-Chapel", 3221, [0x4e335ac+8, 0x4e34048+8, 0x67437d2],
-                                  False, True, 0x0016),
-}
-
-rlib_locations = {
-    "RLIB - Turquoise": LocationData("Forbidden Library", 0, [0x4ee2f10]),
-    "RLIB - Opal": LocationData("Forbidden Library", 1, [0x4ee2f12]),
-    "RLIB - Library card": LocationData("Forbidden Library", 2, [0x4ee2f14]),
-    "RLIB - Resist fire": LocationData("Forbidden Library", 3, [0x4ee2f16]),
-    "RLIB - Resist ice": LocationData("Forbidden Library", 4, [0x4ee2f18]),
-    "RLIB - Resist stone": LocationData("Forbidden Library", 5, [0x4ee2f1a]),
-    "RLIB - Neutron bomb": LocationData("Forbidden Library", 6, [0x4ee2f1c]),
-    "RLIB - Badelaire": LocationData("Forbidden Library", 7, [0x4ee2f1e]),
-    "RLIB - Staurolite": LocationData("Forbidden Library", 8, [0x4ee2f20]),
-}
-
-rno0_locations = {
-    "RNO0 - Library card": LocationData("Black Marble Gallery", 0, [0x4f85ae4]),
-    "RNO0 - Potion": LocationData("Black Marble Gallery", 1, [0x4f85ae6]),
-    "RNO0 - Antivenom": LocationData("Black Marble Gallery", 2, [0x4f85ae8]),
-    "RNO0 - Life Vessel(Middle clock)": LocationData("Black Marble Gallery", 3, [0x4f85aea]),
-    "RNO0 - Heart Vessel(Middle clock)": LocationData("Black Marble Gallery", 4, [0x4f85aec]),
-    "RNO0 - Resist dark(Left clock)": LocationData("Black Marble Gallery", 5, [0x4f85aee]),
-    "RNO0 - Resist holy(Left clock)": LocationData("Black Marble Gallery", 6, [0x4f85af0]),
-    "RNO0 - Resist thunder(Left clock)": LocationData("Black Marble Gallery", 7, [0x4f85af2]),
-    "RNO0 - Resist fire(Left clock)": LocationData("Black Marble Gallery", 8, [0x4f85af4]),
-    "RNO0 - Meal ticket": LocationData("Black Marble Gallery", 9, [0x4f85af6]),
-    "RNO0 - Iron ball": LocationData("Black Marble Gallery", 10, [0x4f85af8]),
-    "RNO0 - Heart Refresh(Inside clock)": LocationData("Black Marble Gallery", 11, [0x4f85afa]),
-}
-
-rno1_locations = {
-    "RNO1 - Heart Vessel": LocationData("Reverse Outer Wall", 0, [0x505016c]),
-    "RNO1 - Shotel": LocationData("Reverse Outer Wall", 1, [0x505016e]),
-    "RNO1 - Hammer": LocationData("Reverse Outer Wall", 2, [0x5050170]),
-    "RNO1 - Life Vessel": LocationData("Reverse Outer Wall", 3, [0x5050172]),
-    "RNO1 - Luck potion": LocationData("Reverse Outer Wall", 4, [0x5050174]),
-    "RNO1 - Shield potion": LocationData("Reverse Outer Wall", 5, [0x5050176]),
-    "RNO1 - High potion": LocationData("Reverse Outer Wall", 6, [0x5050178]),
-    "RNO1 - Garnet": LocationData("Reverse Outer Wall", 7, [0x505017a]),
-    "RNO1 - Dim Sum set": LocationData("Reverse Outer Wall", 3250, [0x507d08c], True),
-    "RNO1 - Creature kill": LocationData("Reverse Outer Wall", 3251),
-    "Tooth of Vlad": LocationData("Reverse Outer Wall", 3252,
-                                  [0x5051d4a+8, 0x5052566+8, 0x67d1630], False, True,
-                                  0x0016),
-}
-
-rno2_locations = {
-    "RNO2 - Opal": LocationData("Death Wing's Lair", 0, [0x50f87b8]),
-    "RNO2 - Sword of hador": LocationData("Death Wing's Lair", 1, [0x50f87ba]),
-    "RNO2 - High potion": LocationData("Death Wing's Lair", 2, [0x50f87bc]),
-    "RNO2 - Shield potion": LocationData("Death Wing's Lair", 3, [0x50f87be]),
-    "RNO2 - Luck potion": LocationData("Death Wing's Lair", 4, [0x50f87c0]),
-    "RNO2 - Manna prism": LocationData("Death Wing's Lair", 5, [0x50f87c2]),
-    "RNO2 - Aquamarine": LocationData("Death Wing's Lair", 6, [0x50f87c4]),
-    "RNO2 - Alucard mail": LocationData("Death Wing's Lair", 7, [0x50f87c6]),
-    "RNO2 - Life Vessel": LocationData("Death Wing's Lair", 8, [0x50f87c8]),
-    "RNO2 - Heart Refresh": LocationData("Death Wing's Lair", 9, [0x50f87ca]),
-    "RNO2 - Shuriken": LocationData("Death Wing's Lair", 10, [0x50f87cc]),
-    "RNO2 - Heart Vessel": LocationData("Death Wing's Lair", 11, [0x50f87ce]),
-    "RNO2 - Akmodan II kill": LocationData("Death Wing's Lair", 3260),
-    "Rib of Vlad": LocationData("Death Wing's Lair", 3261,
-                                [0x50fa90c+8, 0x50fb220+8, 0x69d2b1e], False, True,
-                                0x0016),
-}
-
-rno3_locations = {
-    "RNO3 - Hammer": LocationData("Reverse Entrance", 0, [0x51ad798]),
-    "RNO3 - Antivenom": LocationData("Reverse Entrance", 1, [0x51ad79a]),
-    "RNO3 - High potion": LocationData("Reverse Entrance", 2, [0x51ad79c]),
-    "RNO3 - Heart Vessel": LocationData("Reverse Entrance", 3, [0x51ad79e]),
-    "RNO3 - Zircon": LocationData("Reverse Entrance", 4, [0x51ad7a0]),
-    "RNO3 - Opal": LocationData("Reverse Entrance", 5, [0x51ad7a2]),
-    "RNO3 - Beryl circlet": LocationData("Reverse Entrance", 6, [0x51ad7a4]),
-    "RNO3 - Fire boomerang": LocationData("Reverse Entrance", 7, [0x51ad7a6]),
-    "RNO3 - Life Vessel": LocationData("Reverse Entrance", 8, [0x51ad7a8]),
-    "RNO3 - Talisman": LocationData("Reverse Entrance", 9, [0x51ad7aa]),
-    "RNO3 - Pot roast": LocationData("Reverse Entrance", 3270, [0x51e6e4c], True),
-}
-
-rno4_locations = {
-    "RNO4 - Alucard shield": LocationData("Reverse Caverns", 0, [0x526c0e8]),
-    "RNO4 - Shiitake 1(Near entrance passage)": LocationData("Reverse Caverns", 1, [0x526c0ea]),
-    "RNO4 - Toadstool(Waterfall)": LocationData("Reverse Caverns", 2, [0x526c0ec]),
-    "RNO4 - Shiitake 2(Waterfall)": LocationData("Reverse Caverns", 3, [0x526c0ee]),
-    "RNO4 - Garnet": LocationData("Reverse Caverns", 4, [0x526c0f0]),
-    "RNO4 - Bat Pentagram": LocationData("Reverse Caverns", 5, [0x526c0f2]),
-    "RNO4 - Life Vessel(Underwater)": LocationData("Reverse Caverns", 6, [0x526c0f4]),
-    "RNO4 - Heart Vessel(Air pocket)": LocationData("Reverse Caverns", 7, [0x526c0f6]),
-    "RNO4 - Potion(Underwater)": LocationData("Reverse Caverns", 8, [0x526c0f8]),
-    "RNO4 - Shiitake 3(Near air pocket)": LocationData("Reverse Caverns", 9, [0x526c0fa]),
-    "RNO4 - Shiitake 4(Near air pocket)": LocationData("Reverse Caverns", 10, [0x526c0fc]),
-    "RNO4 - Opal": LocationData("Reverse Caverns", 11, [0x526c0fe]),
-    "RNO4 - Life Vessel": LocationData("Reverse Caverns", 12, [0x526c100]),
-    "RNO4 - Diamond": LocationData("Reverse Caverns", 13, [0x526c102]),
-    "RNO4 - Zircon(Vase)": LocationData("Reverse Caverns", 14, [0x526c104]),
-    "RNO4 - Heart Vessel(Succubus side)": LocationData("Reverse Caverns", 15, [0x526c106]),
-    "RNO4 - Meal ticket 1(Succubus side)": LocationData("Reverse Caverns", 16, [0x526c108]),
-    "RNO4 - Meal ticket 2(Succubus side)": LocationData("Reverse Caverns", 17, [0x526c10a]),
-    "RNO4 - Meal ticket 3(Succubus side)": LocationData("Reverse Caverns", 18, [0x526c10c]),
-    "RNO4 - Meal ticket 4(Succubus side)": LocationData("Reverse Caverns", 19, [0x526c10e]),
-    "RNO4 - Meal ticket 5(Succubus side)": LocationData("Reverse Caverns", 20, [0x526c110]),
-    "RNO4 - Zircon(Doppleganger)": LocationData("Reverse Caverns", 21, [0x526c112]),
-    "RNO4 - Pot roast(Doppleganger)": LocationData("Reverse Caverns", 22, [0x526c114]),
-    "RNO4 - Dark Blade": LocationData("Reverse Caverns", 23, [0x526c116]),
-    "RNO4 - Manna prism": LocationData("Reverse Caverns", 24, [0x526c118]),
-    "RNO4 - Elixir": LocationData("Reverse Caverns", 25, [0x526c11a]),
-    "RNO4 - Osafune katana": LocationData("Reverse Caverns", 26, [0x526c11c]),
-    "RNO4 - Doppleganger40 kill": LocationData("Reverse Caverns", 3280),
-    "Force of Echo": LocationData("Reverse Caverns", 3281, [0x526e6a0+8, 0x526f86e+8],
-                                  False, True, 0x00da00b0, 27, [0x526c11e])
-}
-
-rnz0_locations = {
-    "RNZ0 - Heart Vessel": LocationData("Necromancy Laboratory", 1, [0x5903072]),
-    "RNZ0 - Life Vessel": LocationData("Necromancy Laboratory", 2, [0x5903074]),
-    "RNZ0 - Goddess shield": LocationData("Necromancy Laboratory", 3, [0x5903076]),
-    "RNZ0 - Manna prism": LocationData("Necromancy Laboratory", 4, [0x5903078]),
-    "RNZ0 - Katana": LocationData("Necromancy Laboratory", 5, [0x590307a]),
-    "RNZ0 - High potion": LocationData("Necromancy Laboratory", 6, [0x590307c]),
-    "RNZ0 - Turquoise": LocationData("Necromancy Laboratory", 7, [0x590307e]),
-    "RNZ0 - Ring of Arcana": LocationData("Necromancy Laboratory", 8, [0x5903080]),
-    "RNZ0 - Resist dark": LocationData("Necromancy Laboratory", 9, [0x5903082]),
-    "RNZ0 - Beezelbub kill": LocationData("Necromancy Laboratory", 3290),
-}
-
-rnz1_locations = {
-    "RNZ1 - Magic missile": LocationData("Reverse Clock Tower", 0, [0x59bc0d0]),
-    "RNZ1 - Karma coin": LocationData("Reverse Clock Tower", 1, [0x59bc0d2]),
-    "RNZ1 - Str. potion": LocationData("Reverse Clock Tower", 2, [0x59bc0d4]),
-    "RNZ1 - Luminus": LocationData("Reverse Clock Tower", 3, [0x59bc0d6]),
-    "RNZ1 - Smart potion": LocationData("Reverse Clock Tower", 4, [0x59bc0d8]),
-    "RNZ1 - Dragon helm": LocationData("Reverse Clock Tower", 5, [0x59bc0da]),
-    "RNZ1 - Diamond(Hidden room)": LocationData("Reverse Clock Tower", 6, [0x59bc0dc]),
-    "RNZ1 - Life apple(Hidden room)": LocationData("Reverse Clock Tower", 7, [0x59bc0de]),
-    "RNZ1 - Sunstone(Hidden room)": LocationData("Reverse Clock Tower", 8, [0x59bc0e0]),
-    "RNZ1 - Life Vessel": LocationData("Reverse Clock Tower", 9, [0x59bc0e2]),
-    "RNZ1 - Heart Vessel": LocationData("Reverse Clock Tower", 10, [0x59bc0e4]),
-    "RNZ1 - Moon rod": LocationData("Reverse Clock Tower", 11, [0x59bc0e6]),
-    "RNZ1 - Bwaka knife": LocationData("Reverse Clock Tower", 3300, [0x59bc354], True),
-    "RNZ1 - Pot roast": LocationData("Reverse Clock Tower", 3301, [0x59bc34c], True),
-    "RNZ1 - Shuriken": LocationData("Reverse Clock Tower", 3302, [0x59bc350], True),
-    "RNZ1 - TNT": LocationData("Reverse Clock Tower", 3303, [0x59bc358], True),
-    "RNZ1 - Darkwing bat kill": LocationData("Reverse Clock Tower", 3304),
-    "Ring of Vlad": LocationData("Reverse Clock Tower", 3305,
-                                 [0x059e8074, 0x059ee2e4, 0x059bdb30], False, True,
-                                 0x0016),
-}
-
-rtop_locations = {
-    "RTOP - Sword of dawn": LocationData("Reverse Castle Keep", 0, [0x57e0160]),
-    "RTOP - Iron ball(Above Richter)": LocationData("Reverse Castle Keep", 1, [0x57e0162]),
-    "RTOP - Zircon": LocationData("Reverse Castle Keep", 2, [0x57e0164]),
-    "RTOP - Bastard sword": LocationData("Reverse Castle Keep", 4, [0x57e0168]),
-    "RTOP - Life Vessel 1": LocationData("Reverse Castle Keep", 5, [0x57e016a]),
-    "RTOP - Heart Vessel 1": LocationData("Reverse Castle Keep", 6, [0x57e016c]),
-    "RTOP - Life Vessel 2": LocationData("Reverse Castle Keep", 7, [0x57e016e]),
-    "RTOP - Heart Vessel 2": LocationData("Reverse Castle Keep", 8, [0x57e0170]),
-    "RTOP - Life Vessel 3": LocationData("Reverse Castle Keep", 9, [0x57e0172]),
-    "RTOP - Heart Vessel 4": LocationData("Reverse Castle Keep", 10, [0x57e0174]),
-    "RTOP - Royal cloak": LocationData("Reverse Castle Keep", 11, [0x57e0176]),
-    "RTOP - Resist fire(Viewing room)": LocationData("Reverse Castle Keep", 17, [0x57e0182]),
-    "RTOP - Resist ice(Viewing room)": LocationData("Reverse Castle Keep", 18, [0x57e0184]),
-    "RTOP - Resist thunder(Viewing room)": LocationData("Reverse Castle Keep", 19, [0x57e0186]),
-    "RTOP - Resist stone(Viewing room)": LocationData("Reverse Castle Keep", 20, [0x57e0188]),
-    "RTOP - High potion(Viewing room)": LocationData("Reverse Castle Keep", 21, [0x57e018a]),
-    "RTOP - Garnet": LocationData("Reverse Castle Keep", 22, [0x57e018c]),
-    "RTOP - Lightning mail": LocationData("Reverse Castle Keep", 23, [0x57e018e]),
-    "RTOP - Library card": LocationData("Reverse Castle Keep", 24, [0x57e0190]),
-}
-
-exp_locations_item = {
-    "Exploration 10 item": LocationData("Castle Entrance", 31, []),
-    "Exploration 20 item": LocationData("Castle Entrance", 32, []),
-    "Exploration 30 item": LocationData("Castle Entrance", 33, []),
-    "Exploration 40 item": LocationData("Castle Entrance", 34, []),
-    "Exploration 50 item": LocationData("Castle Entrance", 35, []),
-    "Exploration 60 item": LocationData("Castle Entrance", 36, []),
-    "Exploration 70 item": LocationData("Castle Entrance", 37, []),
-    "Exploration 80 item": LocationData("Castle Entrance", 38, []),
-    "Exploration 90 item": LocationData("Castle Entrance", 39, []),
-    "Exploration 100 item": LocationData("Castle Entrance", 40, []),
-    "Exploration 110 item": LocationData("Castle Entrance", 41, []),
-    "Exploration 120 item": LocationData("Castle Entrance", 42, []),
-    "Exploration 130 item": LocationData("Castle Entrance", 43, []),
-    "Exploration 140 item": LocationData("Castle Entrance", 44, []),
-    "Exploration 150 item": LocationData("Castle Entrance", 45, []),
-    "Exploration 160 item": LocationData("Castle Entrance", 46, []),
-    "Exploration 170 item": LocationData("Castle Entrance", 47, []),
-    "Exploration 180 item": LocationData("Castle Entrance", 48, []),
-    "Exploration 190 item": LocationData("Castle Entrance", 49, []),
-    "Exploration 200 item": LocationData("Castle Entrance", 50, []),
-}
-
-exp_locations_token = {
-    "Exploration 10": LocationData("Castle Entrance", 11, []),
-    "Exploration 20": LocationData("Castle Entrance", 12, []),
-    "Exploration 30": LocationData("Castle Entrance", 13, []),
-    "Exploration 40": LocationData("Castle Entrance", 14, []),
-    "Exploration 50": LocationData("Castle Entrance", 15, []),
-    "Exploration 60": LocationData("Castle Entrance", 16, []),
-    "Exploration 70": LocationData("Castle Entrance", 17, []),
-    "Exploration 80": LocationData("Castle Entrance", 18, []),
-    "Exploration 90": LocationData("Castle Entrance", 19, []),
-    "Exploration 100": LocationData("Castle Entrance", 20, []),
-    "Exploration 110": LocationData("Castle Entrance", 21, []),
-    "Exploration 120": LocationData("Castle Entrance", 22, []),
-    "Exploration 130": LocationData("Castle Entrance", 23, []),
-    "Exploration 140": LocationData("Castle Entrance", 24, []),
-    "Exploration 150": LocationData("Castle Entrance", 25, []),
-    "Exploration 160": LocationData("Castle Entrance", 26, []),
-    "Exploration 170": LocationData("Castle Entrance", 27, []),
-    "Exploration 180": LocationData("Castle Entrance", 28, []),
-    "Exploration 190": LocationData("Castle Entrance", 29, []),
-    "Exploration 200": LocationData("Castle Entrance", 30, []),
-}
-
-are_enemies = {
-    "Enemysanity: 25 - Blade soldier": LocationData("Colosseum", 125),
-    "Enemysanity: 67 - Paranthropus": LocationData("Colosseum", 167),
-    "Enemysanity: 69 - Blade master": LocationData("Colosseum", 169),
-    "Enemysanity: 71 - Grave keeper": LocationData("Colosseum", 171),
-    "Enemysanity: 74 - Minotaurus": LocationData("Colosseum", 174),
-    "Enemysanity: 75 - Werewolf": LocationData("Colosseum", 175),
-    "Enemysanity: 77 - Valhalla knight": LocationData("Colosseum", 177),
-}
-
-are_drops = {
-    "Dropsanity: 25 - Blade soldier": LocationData("Colosseum", 325),
-    "Dropsanity: 67 - Paranthropus": LocationData("Colosseum", 367),
-    "Dropsanity: 69 - Blade master": LocationData("Colosseum", 369),
-    "Dropsanity: 71 - Grave keeper": LocationData("Colosseum", 371),
-    "Dropsanity: 77 - Valhalla knight": LocationData("Colosseum", 377),
-}
-
-cat_enemies = {
-    "Enemysanity: 68 - Slime": LocationData("Catacombs", 168),
-    "Enemysanity: 70 - Wereskeleton": LocationData("Catacombs", 170),
-    "Enemysanity: 72 - Gremlin": LocationData("Catacombs", 172),
-    "Enemysanity: 76 - Bone ark": LocationData("Catacombs", 176),
-    "Enemysanity: 81 - Lossoth": LocationData("Catacombs", 181),
-    "Enemysanity: 86 - Discus lord": LocationData("Catacombs", 186),
-    "Enemysanity: 88 - Large slime": LocationData("Catacombs", 188),
-    "Enemysanity: 89 - Hellfire beast": LocationData("Catacombs", 189),
-    "Enemysanity: 98 - Granfaloon": LocationData("Catacombs", 198),
-}
-
-cat_drops = {
-    "Dropsanity: 70 - Wereskeleton": LocationData("Catacombs", 370),
-    "Dropsanity: 72 - Gremlin": LocationData("Catacombs", 372),
-    "Dropsanity: 76 - Bone ark": LocationData("Catacombs", 376),
-    "Dropsanity: 81 - Lossoth": LocationData("Catacombs", 381),
-    "Dropsanity: 86 - Discus lord": LocationData("Catacombs", 386),
-    "Dropsanity: 89 - Hellfire beast": LocationData("Catacombs", 389),
-}
-
-chi_enemies = {
-    "Enemysanity: 82 - Salem witch": LocationData("Abandoned Mine", 182),
-    "Enemysanity: 90 - Cerberos": LocationData("Abandoned Mine", 190),
-    "Enemysanity: 95 - Venus weed": LocationData("Abandoned Mine", 195),
-}
-
-chi_drops = {
-    "Dropsanity: 82 - Salem witch": LocationData("Abandoned Mine", 382),
-    "Dropsanity: 95 - Venus weed": LocationData("Abandoned Mine", 395),
-}
-
-# Mudman only appears on Lesser Demon fight keep it out
-lib_enemies = {
-    "Enemysanity: 17 - Thornweed": LocationData("Long Library", 117),
-    "Enemysanity: 40 - Spellbook": LocationData("Long Library", 140),
-    "Enemysanity: 42 - Ectoplasm": LocationData("Long Library", 142),
-    "Enemysanity: 47 - Dhuron": LocationData("Long Library", 147),
-    "Enemysanity: 50 - Magic tome": LocationData("Long Library", 150),
-    "Enemysanity: 54 - Corpseweed": LocationData("Long Library", 154),
-    "Enemysanity: 65 - Flea armor": LocationData("Long Library", 165),
-    "Enemysanity: 80 - Lesser demon": LocationData("Long Library", 180),
-}
-
-lib_drops = {
-    "Dropsanity: 17 - Thornweed": LocationData("Long Library", 317),
-    "Dropsanity: 40 - Spellbook": LocationData("Long Library", 340),
-    "Dropsanity: 42 - Ectoplasm": LocationData("Long Library", 342),
-    "Dropsanity: 47 - Dhuron": LocationData("Long Library", 347),
-    "Dropsanity: 50 - Magic tome": LocationData("Long Library", 350),
-    "Dropsanity: 54 - Corpseweed": LocationData("Long Library", 354),
-    "Dropsanity: 65 - Flea armor": LocationData("Long Library", 365),
-}
-
-dai_enemies = {
-    "Enemysanity: 33 - Bone Pillar": LocationData("Royal Chapel", 133),
-    "Enemysanity: 41 - Winged guard": LocationData("Royal Chapel", 141),
-    "Enemysanity: 46 - Corner guard": LocationData("Royal Chapel", 146),
-    "Enemysanity: 52 - Black crow": LocationData("Royal Chapel", 152),
-    "Enemysanity: 53 - Blue raven": LocationData("Royal Chapel", 153),
-    "Enemysanity: 58 - Bone halberd": LocationData("Royal Chapel", 158),
-    "Enemysanity: 60 - Hunting girl": LocationData("Royal Chapel", 160),
-    "Enemysanity: 63 - Spectral sword(swords)": LocationData("Royal Chapel", 163),
-    "Enemysanity: 66 - Hippogryph": LocationData("Royal Chapel", 166),
-}
-
-dai_drops = {
-    "Dropsanity: 33 - Bone Pillar": LocationData("Royal Chapel", 333),
-    "Dropsanity: 41 - Winged guard": LocationData("Royal Chapel", 341),
-    "Dropsanity: 46 - Corner guard": LocationData("Royal Chapel", 346),
-    "Dropsanity: 52 - Black crow": LocationData("Royal Chapel", 352),
-    "Dropsanity: 53 - Blue raven": LocationData("Royal Chapel", 353),
-    "Dropsanity: 58 - Bone halberd": LocationData("Royal Chapel", 358),
-    "Dropsanity: 60 - Hunting girl": LocationData("Royal Chapel", 360),
-    "Dropsanity: 63 - Spectral sword(swords)": LocationData("Royal Chapel", 363),
-}
-
-no0_enemies = {
-    "Enemysanity: 14 - Slinger": LocationData("Marble Gallery", 114),
-    "Enemysanity: 15 - Ouija table": LocationData("Marble Gallery", 115),
-    "Enemysanity: 16 - Skelerang": LocationData("Marble Gallery", 116),
-    "Enemysanity: 19 - Ghost": LocationData("Marble Gallery", 119),
-    "Enemysanity: 20 - Marionette": LocationData("Marble Gallery", 120),
-    "Enemysanity: 22 - Diplocephalus": LocationData("Marble Gallery", 122),
-    "Enemysanity: 23 - Flea man": LocationData("Marble Gallery", 123),
-    "Enemysanity: 28 - Plate lord": LocationData("Marble Gallery", 128),
-    "Enemysanity: 29 - Stone rose": LocationData("Marble Gallery", 129),
-    "Enemysanity: 31 - Ctulhu": LocationData("Marble Gallery", 131),
-}
-
-no0_drops = {
-    "Dropsanity: 14 - Slinger": LocationData("Marble Gallery", 314),
-    "Dropsanity: 15 - Ouija table": LocationData("Marble Gallery", 315),
-    "Dropsanity: 16 - Skelerang": LocationData("Marble Gallery", 316),
-    "Dropsanity: 19 - Ghost": LocationData("Marble Gallery", 319),
-    "Dropsanity: 20 - Marionette": LocationData("Marble Gallery", 320),
-    "Dropsanity: 22 - Diplocephalus": LocationData("Marble Gallery", 322),
-    "Dropsanity: 23 - Flea man": LocationData("Marble Gallery", 323),
-    "Dropsanity: 28 - Plate lord": LocationData("Marble Gallery", 328),
-    "Dropsanity: 29 - Stone rose": LocationData("Marble Gallery", 329),
-    "Dropsanity: 31 - Ctulhu": LocationData("Marble Gallery", 331),
-}
-
-no1_enemies = {
-    "Enemysanity: 24 - Medusa head": LocationData("Outer Wall", 124),
-    "Enemysanity: 26 - Bone musket": LocationData("Outer Wall", 126),
-    "Enemysanity: 27 - Medusa head(yellow)": LocationData("Outer Wall", 127),
-    "Enemysanity: 30 - Axe knight(armored)": LocationData("Outer Wall", 130),
-    "Enemysanity: 32 - Bone archer": LocationData("Outer Wall", 132),
-    "Enemysanity: 34 - Doppleganger10": LocationData("Outer Wall", 134),
-    "Enemysanity: 38 - Skeleton ape": LocationData("Outer Wall", 138),
-    "Enemysanity: 39 - Spear guard": LocationData("Outer Wall", 139),
-    "Enemysanity: 43 - Sword lord": LocationData("Outer Wall", 143),
-    "Enemysanity: 45 - Armor lord": LocationData("Outer Wall", 145),
-}
-
-no1_drops = {
-    "Dropsanity: 24 - Medusa head": LocationData("Outer Wall", 324),
-    "Dropsanity: 26 - Bone musket": LocationData("Outer Wall", 326),
-    "Dropsanity: 27 - Medusa head(yellow)": LocationData("Outer Wall", 327),
-    "Dropsanity: 30 - Axe knight(armored)": LocationData("Outer Wall", 330),
-    "Dropsanity: 32 - Bone archer": LocationData("Outer Wall", 332),
-    "Dropsanity: 38 - Skeleton ape": LocationData("Outer Wall", 338),
-    "Dropsanity: 39 - Spear guard": LocationData("Outer Wall", 339),
-    "Dropsanity: 43 - Sword lord": LocationData("Outer Wall", 343),
-    "Dropsanity: 45 - Armor lord": LocationData("Outer Wall", 345),
-}
-
-no2_enemies = {
-    "Enemysanity: 57 - Spectral sword": LocationData("Olrox's Quarters", 157),
-    "Enemysanity: 83 - Blade": LocationData("Olrox's Quarters", 183),
-    "Enemysanity: 85 - Hammer": LocationData("Olrox's Quarters", 185),
-    "Enemysanity: 92 - Olrox": LocationData("Olrox's Quarters", 192),
-}
-
-no2_drops = {
-    "Dropsanity: 57 - Spectral sword": LocationData("Olrox's Quarters", 357),
-    "Dropsanity: 83 - Blade": LocationData("Olrox's Quarters", 383),
-    "Dropsanity: 85 - Hammer": LocationData("Olrox's Quarters", 385),
-}
-
-no3_enemies = {
-    "Enemysanity: 3 - Bat": LocationData("Castle Entrance", 103),
-    "Enemysanity: 5 - Zombie": LocationData("Castle Entrance", 105),
-    "Enemysanity: 6 - Merman": LocationData("Castle Entrance", 106),
-    "Enemysanity: 8 - Warg": LocationData("Castle Entrance", 108),
-    "Enemysanity: 10 - Merman(red)": LocationData("Castle Entrance", 110),
-    "Enemysanity: 35 - Owl": LocationData("Castle Entrance", 135),
-    "Enemysanity: 62 - Owl knight": LocationData("Castle Entrance", 162),
-    "Enemysanity: 84 - Gurkha": LocationData("Castle Entrance", 184),
-}
-
-no3_drops = {
-    "Dropsanity: 3 - Bat": LocationData("Castle Entrance", 303),
-    "Dropsanity: 5 - Zombie": LocationData("Castle Entrance", 305),
-    "Dropsanity: 6 - Merman": LocationData("Castle Entrance", 306),
-    "Dropsanity: 10 - Merman(red)": LocationData("Castle Entrance", 310),
-    "Dropsanity: 62 - Owl knight": LocationData("Castle Entrance", 362),
-    "Dropsanity: 84 - Gurkha": LocationData("Castle Entrance", 384),
-}
-
-no4_enemies = {
-    "Enemysanity: 37 - Scylla wyrm": LocationData("Underground Caverns", 137),
-    "Enemysanity: 44 - Toad": LocationData("Underground Caverns", 144),
-    "Enemysanity: 48 - Frog": LocationData("Underground Caverns", 148),
-    "Enemysanity: 49 - Frozen shade": LocationData("Underground Caverns", 149),
-    "Enemysanity: 59 - Scylla": LocationData("Underground Caverns", 159),
-    "Enemysanity: 79 - Fishhead": LocationData("Underground Caverns", 179),
-    "Enemysanity: 91 - Killer fish": LocationData("Underground Caverns", 191),
-    "Enemysanity: 93 - Succubus": LocationData("Underground Caverns", 193),
-}
-
-no4_drops = {
-    "Dropsanity: 44 - Toad": LocationData("Underground Caverns", 344),
-    "Dropsanity: 48 - Frog": LocationData("Underground Caverns", 348),
-    "Dropsanity: 49 - Frozen shade": LocationData("Underground Caverns", 349),
-    "Dropsanity: 79 - Fishhead": LocationData("Underground Caverns", 379),
-    "Dropsanity: 91 - Killer fish": LocationData("Underground Caverns", 391),
-}
-
-nz0_enemies = {
-    "Enemysanity: 2 - Blood skeleton": LocationData("Alchemy Laboratory", 102),
-    "Enemysanity: 7 - Skeleton": LocationData("Alchemy Laboratory", 107),
-    "Enemysanity: 9 - Bone scimitar": LocationData("Alchemy Laboratory", 109),
-    "Enemysanity: 11 - Spittle bone": LocationData("Alchemy Laboratory", 111),
-    "Enemysanity: 12 - Axe knight": LocationData("Alchemy Laboratory", 112),
-    "Enemysanity: 13 - Bloody zombie": LocationData("Alchemy Laboratory", 113),
-    "Enemysanity: 18 - Gaibon": LocationData("Alchemy Laboratory", 118),
-    "Enemysanity: 21 - Slogra": LocationData("Alchemy Laboratory", 121),
-}
-
-nz0_drops = {
-    "Dropsanity: 7 - Skeleton": LocationData("Alchemy Laboratory", 307),
-    "Dropsanity: 9 - Bone scimitar": LocationData("Alchemy Laboratory", 309),
-    "Dropsanity: 12 - Axe knight": LocationData("Alchemy Laboratory", 312),
-    "Dropsanity: 13 - Bloody zombie": LocationData("Alchemy Laboratory", 313),
-}
-
-nz1_enemies = {
-    "Enemysanity: 36 - Phantom skull": LocationData("Clock Tower", 136),
-    "Enemysanity: 51 - Skull lord": LocationData("Clock Tower", 151),
-    "Enemysanity: 55 - Flail guard": LocationData("Clock Tower", 155),
-    "Enemysanity: 64 - Vandal sword": LocationData("Clock Tower", 164),
-    "Enemysanity: 73 - Harpy": LocationData("Clock Tower", 173),
-    "Enemysanity: 78 - Cloaked knight": LocationData("Clock Tower", 178),
-    "Enemysanity: 87 - Karasuman": LocationData("Clock Tower", 187),
-}
-
-nz1_drops = {
-    "Dropsanity: 36 - Phantom skull": LocationData("Clock Tower", 336),
-    "Dropsanity: 51 - Skull lord": LocationData("Clock Tower", 351),
-    "Dropsanity: 55 - Flail guard": LocationData("Clock Tower", 355),
-    "Dropsanity: 64 - Vandal sword": LocationData("Clock Tower", 364),
-    "Dropsanity: 73 - Harpy": LocationData("Clock Tower", 373),
-    "Dropsanity: 78 - Cloaked knight": LocationData("Clock Tower", 378),
-}
-
-top_enemies = {
-    "Enemysanity: 56 - Flea rider": LocationData("Castle Keep", 156),
-    # "Enemysanity: 140 - Richter belmont": LocationData("Castle Keep", 240),
-}
-
-top_drops = {
-    "Dropsanity: 56 - Flea rider": LocationData("Castle Keep", 356),
-}
-
-rare_enemies = {
-    "Enemysanity: 108 - Werewolf(reverse)": LocationData("Reverse Colosseum", 208),
-    "Enemysanity: 112 - Minotaur": LocationData("Reverse Colosseum", 212),
-    "Enemysanity: 115 - White dragon": LocationData("Reverse Colosseum", 215),
-    "Enemysanity: 132 - Fake grant": LocationData("Reverse Colosseum", 232),
-    "Enemysanity: 133 - Fake trevor": LocationData("Reverse Colosseum", 233),
-    "Enemysanity: 135 - Fake sipha": LocationData("Reverse Colosseum", 235),
-    "Enemysanity: 137 - Azaghal": LocationData("Reverse Colosseum", 237),
-}
-
-rare_drops = {
-    "Dropsanity: 108 - Werewolf(reverse)": LocationData("Reverse Colosseum", 408),
-    "Dropsanity: 112 - Minotaur": LocationData("Reverse Colosseum", 412),
-    "Dropsanity: 137 - Azaghal": LocationData("Reverse Colosseum", 437),
-}
-
-rcat_enemies = {
-    "Enemysanity: 138 - Frozen half": LocationData("Floating Catacombs", 238),
-    "Enemysanity: 139 - Salome": LocationData("Floating Catacombs", 239),
-    "Enemysanity: 142 - Galamoth": LocationData("Floating Catacombs", 242),
-}
-
-rcat_drops = {
-    "Dropsanity: 138 - Frozen half": LocationData("Floating Catacombs", 438),
-    "Dropsanity: 139 - Salome": LocationData("Floating Catacombs", 439),
-}
-
-rchi_enemies = {
-    "Enemysanity: 144 - Death": LocationData("Floating Catacombs", 244),
-}
-
-rdai_enemies = {
-    "Enemysanity: 101 - Ballon pod": LocationData("Anti-Chapel", 201),
-    "Enemysanity: 107 - Archer": LocationData("Anti-Chapel", 207),
-    "Enemysanity: 109 - Black panther": LocationData("Anti-Chapel", 209),
-    "Enemysanity: 118 - Sniper of goth": LocationData("Anti-Chapel", 218),
-    "Enemysanity: 119 - Spectral sword(shields)": LocationData("Anti-Chapel", 219),
-    "Enemysanity: 130 - Medusa": LocationData("Anti-Chapel", 230),
-    "Enemysanity: 134 - Imp": LocationData("Anti-Chapel", 234),
-}
-
-rdai_drops = {
-    "Dropsanity: 107 - Archer": LocationData("Anti-Chapel", 407),
-    "Dropsanity: 109 - Black panther": LocationData("Anti-Chapel", 409),
-    "Dropsanity: 118 - Sniper of goth": LocationData("Anti-Chapel", 418),
-    "Dropsanity: 119 - Spectral sword(shields)": LocationData("Anti-Chapel", 419),
-    "Dropsanity: 134 - Imp": LocationData("Anti-Chapel", 434),
-}
-
-rlib_enemies = {
-    "Enemysanity: 96 - Lion": LocationData("Forbidden Library", 196),
-    "Enemysanity: 97 - Scarecrow": LocationData("Forbidden Library", 197),
-    "Enemysanity: 99 - Schmoo": LocationData("Forbidden Library", 199),
-    "Enemysanity: 100 - Tin man": LocationData("Forbidden Library", 200),
-}
-
-rlib_drops = {
-    "Dropsanity: 96 - Lion": LocationData("Forbidden Library", 396),
-    "Dropsanity: 97 - Scarecrow": LocationData("Forbidden Library", 397),
-    "Dropsanity: 99 - Schmoo": LocationData("Forbidden Library", 399),
-    "Dropsanity: 100 - Tin man": LocationData("Forbidden Library", 400),
-}
-
-rno0_enemies = {
-    "Enemysanity: 4 - Stone skull": LocationData("Black Marble Gallery", 104),
-    "Enemysanity: 106 - Jack O'bones": LocationData("Black Marble Gallery", 206),
-    "Enemysanity: 113 - Nova skeleton": LocationData("Black Marble Gallery", 213),
-    "Enemysanity: 125 - Gorgon": LocationData("Black Marble Gallery", 225),
-    "Enemysanity: 143 - Guardian": LocationData("Black Marble Gallery", 243),
-}
-
-rno0_drops = {
-    "Dropsanity: 106 - Jack O'bones": LocationData("Black Marble Gallery", 406),
-    "Dropsanity: 113 - Nova skeleton": LocationData("Black Marble Gallery", 413),
-    "Dropsanity: 125 - Gorgon": LocationData("Black Marble Gallery", 425),
-    "Dropsanity: 143 - Guardian": LocationData("Black Marble Gallery", 443),
-}
-
-rno1_enemies = {
-    "Enemysanity: 131 - The creature": LocationData("Reverse Outer Wall", 231),
-}
-
-rno2_enemies = {
-    "Enemysanity: 104 - Flying zombie": LocationData("Death Wing's Lair", 204),
-    "Enemysanity: 120 - Ghost dancer": LocationData("Death Wing's Lair", 220),
-    "Enemysanity: 126 - Malachi": LocationData("Death Wing's Lair", 226),
-    "Enemysanity: 127 - Akmodan II": LocationData("Death Wing's Lair", 227),
-}
-
-rno2_drops = {
-    "Dropsanity: 104 - Flying zombie": LocationData("Death Wing's Lair", 404),
-    "Dropsanity: 120 - Ghost dancer": LocationData("Death Wing's Lair", 420),
-    "Dropsanity: 126 - Malachi": LocationData("Death Wing's Lair", 426),
-    "Dropsanity: 87 - Karasuman": LocationData("Death Wing's Lair", 387),
-}
-
-rno3_enemies = {
-    "Enemysanity: 111 - Dragon rider": LocationData("Reverse Entrance", 211),
-    "Enemysanity: 114 - Orobourous": LocationData("Reverse Entrance", 214),
-    "Enemysanity: 116 - Fire warg": LocationData("Reverse Entrance", 216),
-    "Enemysanity: 141 - Dodo bird": LocationData("Reverse Entrance", 241),
-}
-
-rno3_drops = {
-    "Dropsanity: 114 - Orobourous": LocationData("Reverse Entrance", 414),
-    "Dropsanity: 116 - Fire warg": LocationData("Reverse Entrance", 416),
-    "Dropsanity: 141 - Dodo bird": LocationData("Reverse Entrance", 441),
-}
-
-rno4_enemies = {
-    "Enemysanity: 117 - Rock knight": LocationData("Reverse Caverns", 217),
-    "Enemysanity: 122 - Cave troll": LocationData("Reverse Caverns", 222),
-    "Enemysanity: 123 - Dark octopus": LocationData("Reverse Caverns", 223),
-    "Enemysanity: 128 - Blue venus weed": LocationData("Reverse Caverns", 228),
-    "Enemysanity: 129 - Doppleganger40": LocationData("Reverse Caverns", 229),
-}
-
-rno4_drops = {
-    "Dropsanity: 117 - Rock knight": LocationData("Reverse Caverns", 417),
-    "Dropsanity: 122 - Cave troll": LocationData("Reverse Caverns", 422),
-    "Dropsanity: 123 - Dark octopus": LocationData("Reverse Caverns", 423),
-    "Dropsanity: 128 - Blue venus weed": LocationData("Reverse Caverns", 428),
-}
-
-rnz0_enemies = {
-    "Enemysanity: 105 - Bitterfly": LocationData("Necromancy Laboratory", 205),
-    "Enemysanity: 124 - Fire demon": LocationData("Necromancy Laboratory", 224),
-    "Enemysanity: 136 - Beezelbub": LocationData("Necromancy Laboratory", 236),
-}
-
-rnz0_drops = {
-    "Dropsanity: 105 - Bitterfly": LocationData("Necromancy Laboratory", 405),
-    "Dropsanity: 124 - Fire demon": LocationData("Necromancy Laboratory", 424),
-}
-
-rnz1_enemies = {
-    "Enemysanity: 103 - Bomb knight": LocationData("Reverse Clock Tower", 203),
-    "Enemysanity: 110 - Darkwing bat": LocationData("Reverse Clock Tower", 210),
-}
-
-rnz1_drops = {
-    "Dropsanity: 103 - Bomb knight": LocationData("Reverse Clock Tower", 403),
-    "Dropsanity: 80 - Lesser demon": LocationData("Necromancy Laboratory", 380),
-}
-
-rtop_enemies = {
-    "Enemysanity: 94 - Tombstone": LocationData("Reverse Castle Keep", 194),
-    "Enemysanity: 102 - Yorick": LocationData("Reverse Castle Keep", 202),
-}
-
-rtop_drops = {
-    "Dropsanity: 94 - Tombstone": LocationData("Reverse Castle Keep", 394),
-    "Dropsanity: 102 - Yorick": LocationData("Reverse Castle Keep", 402),
-}
-
-normal_locations = {
-    **are_locations,
-    **cat_locations,
-    **chi_locations,
-    **dai_locations,
-    **lib_locations,
-    **no0_locations,
-    **no1_locations,
-    **no2_locations,
-    **no3_locations,
-    **no4_locations,
-    **nz0_locations,
-    **nz1_locations,
-    **top_locations
-}
-
-reverse_locations = {
-    **rare_locations,
-    **rcat_locations,
-    **rchi_locations,
-    **rdai_locations,
-    **rlib_locations,
-    **rno0_locations,
-    **rno1_locations,
-    **rno2_locations,
-    **rno3_locations,
-    **rno4_locations,
-    **rnz0_locations,
-    **rnz1_locations,
-    **rtop_locations
-}
-
-enemy_locations = {
-    **are_enemies,
-    **cat_enemies,
-    **chi_enemies,
-    **lib_enemies,
-    **dai_enemies,
-    **no0_enemies,
-    **no1_enemies,
-    **no2_enemies,
-    **no3_enemies,
-    **no4_enemies,
-    **nz0_enemies,
-    **nz1_enemies,
-    **top_enemies,
-    **rare_enemies,
-    **rcat_enemies,
-    **rchi_enemies,
-    **rdai_enemies,
-    **rlib_enemies,
-    **rno0_enemies,
-    **rno1_enemies,
-    **rno2_enemies,
-    **rno3_enemies,
-    **rno4_enemies,
-    **rnz0_enemies,
-    **rnz1_enemies,
-    **rtop_enemies
-}
-
-drop_locations = {
-    **are_drops,
-    **cat_drops,
-    **chi_drops,
-    **lib_drops,
-    **dai_drops,
-    **no0_drops,
-    **no1_drops,
-    **no2_drops,
-    **no3_drops,
-    **no4_drops,
-    **nz0_drops,
-    **nz1_drops,
-    **top_drops,
-    **rare_drops,
-    **rcat_drops,
-    **rdai_drops,
-    **rlib_drops,
-    **rno0_drops,
-    **rno2_drops,
-    **rno3_drops,
-    **rno4_drops,
-    **rnz0_drops,
-    **rnz1_drops,
-    **rtop_drops
-}
-
-castle_table = {
-    **normal_locations,
-    **reverse_locations,
-}
-
-exploration_table = {
-    **exp_locations_item,
-    **exp_locations_token,
-}
-
-location_table = {
-    **normal_locations,
-    **reverse_locations,
-    **exp_locations_item,
-    **exp_locations_token,
-    **enemy_locations,
-    **drop_locations
-}
-
-
-def get_location_data(location_id: int) -> LocationData:
-    """ Try that
-    try:
-        l_id = int(str(location_id)[5:])
-    except:
-        return None
-    """
-    l_id = int(str(location_id)[5:])
-    for k, v in location_table.items():
-        data: LocationData = v
-        if data.game_id == l_id:
-            return data
