@@ -320,11 +320,14 @@ class LinksAwakeningWorld(World):
                 start_item = next((item for item in start_items if item.name in links_awakening_item_name_groups["Bush Breakers"]), None)
 
             else:  # local_progression
+                entrance_mapping = self.ladxr_logic.world_setup.entrance_mapping
                 # Tail key opens a region but not a location if d1 entrance is not mapped to d1 or d4
                 # exclude it in these cases to avoid fill errors
-                d1_mapping = self.ladxr_logic.world_setup.entrance_mapping['d1']
-                if d1_mapping not in ['d1', 'd4']:
+                if entrance_mapping['d1'] not in ['d1', 'd4']:
                     start_items = [item for item in start_items if item.name != 'Tail Key']
+                # Exclude shovel unless starting in Mabe Village
+                if entrance_mapping['start_house'] not in ['start_house', 'shop']:
+                    start_items = [item for item in start_items if item.name != 'Shovel']
                 base_collection_state = CollectionState(self.multiworld)
                 base_collection_state.update_reachable_regions(self.player)
                 reachable_count = len(base_collection_state.reachable_regions[self.player])
