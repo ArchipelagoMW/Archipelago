@@ -14,7 +14,7 @@ from dataclasses import dataclass
 import json
 import os
 import struct
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Literal
 
 from pymem import pymem
 
@@ -122,35 +122,35 @@ class TitsThe3rdMemoryIO():
             raise err
         return function_offsets
 
-    def _read_byte(self, offset):
+    def _read_bytes(self, offset, length):
         """
-        Read 1 byte of data at <base_process_address> + offset and return it.
+        Read length byte of data at <base_process_address> + offset and return it.
 
         offset (int): the offset to read data from.
         returns: The data represented as a byte string
         """
-        data = self.tits_the_3rd_mem.read_bytes(self.tits_the_3rd_mem.base_address + offset, 1)
+        data = self.tits_the_3rd_mem.read_bytes(self.tits_the_3rd_mem.base_address + offset, length)
         return data[0]
 
-    def _read_word(self, offset):
+    def _read_int(self, offset, byteorder: Literal["little", "big"] = "big"):
         """
-        Read 4 bytes of data at <base_process_address> + offset and return it.
-
-        offset (int): the offset to read data from.
-        returns: The data represented as a byte string
-        """
-        data = self.tits_the_3rd_mem.read_bytes(self.tits_the_3rd_mem.base_address + offset, 4)
-        return data
-
-    def _read_int(self, offset):
-        """
-        Read a word at the specified offset, and interpret it as an int.
+        Read 4 bytes at the specified offset, and interpret it as an int.
 
         offset (int): the offset to read data from.
         returns: The data represented as a float.
         """
-        data = self._read_word(offset)
-        return struct.unpack("i", data)[0]
+        data = self._read_bytes(offset, 4)
+        return int.from_bytes(data, byteorder)
+
+    def _read_short(self, offset, byteorder: Literal["little", "big"] = "big"):
+        """
+        Read 2 bytes at the specified offset, and interpret it as an int.
+
+        offset (int): the offset to read data from.
+        returns: The data represented as a float.
+        """
+        data = self._read_bytes(offset, 2)
+        return int.from_bytes(data, byteorder)
 
     def is_connected(self):
         """Returns True if the class instance is currently connected to the game."""
@@ -166,6 +166,20 @@ class TitsThe3rdMemoryIO():
             self.tits_the_3rd_mem = None
             return False
         return True
+
+    def is_in_event(self):
+        """Returns True if player is current in an event or text box"""
+        EVENT_OFFSET = 0x02AD48A4
+        return self._read_int(EVENT_OFFSET) != 0x0000FF00
+
+    def is_in_battle(self):
+        """Returns True if player is currently in battle"""
+        BATTLE_OFFSET = 0x67D644
+        return self._read_short(BATTLE_OFFSET, "little") != 0
+
+    def is_valid_to_receive_item(self):
+        """Returns True if the player is not currently in an event or battle"""
+        return not self.is_in_event() and not self.is_in_battle()
 
     async def connect(self):
         """
@@ -256,6 +270,6 @@ class TitsThe3rdMemoryIO():
         """
         flag_byte_offset = self.OFFSET_FLAG_0 + (flag_number // 8)
         flag_bit = flag_number % 8
-        data = self._read_byte(flag_byte_offset)
+        data = self._read_bytes(flag_byte_offset, 1)
         flag_value = (data >> flag_bit) & 1
         return bool(flag_value)
