@@ -100,6 +100,15 @@ class RequiredJewels(Range):
     display_name = 'Required Jewels'
 
 
+class RestrictSelfLockingJewelPieces(Toggle):
+    """
+    Restrict extra jewel pieces from being placed on their own bosses or in the
+    Golden Passage in treasure hunt modes. The latter does not apply to the
+    golden jewel pieces.
+    """
+    display_name = 'Restrict Self-Locking Jewel Pieces'
+
+
 class OpenDoors(Choice):
     """
     Start with all doors in the passages unlocked. This skips the requirement
@@ -235,6 +244,7 @@ wl4_option_groups = [
     OptionGroup("Item Pool", [
         PoolJewels,
         GoldenJewels,
+        RestrictSelfLockingJewelPieces,
         DiamondShuffle,
         PrizeWeight,
         JunkWeight,
@@ -264,6 +274,7 @@ class WL4Options(PerGameCommonOptions):
     portal: Portal
     pool_jewels: PoolJewels
     golden_jewels: GoldenJewels
+    restrict_self_locking_jewel_pieces: RestrictSelfLockingJewelPieces
     diamond_shuffle: DiamondShuffle
     prize_weight: PrizeWeight
     junk_weight: JunkWeight

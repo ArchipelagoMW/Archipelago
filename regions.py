@@ -3,11 +3,11 @@ from __future__ import annotations
 import itertools
 from typing import Optional, TYPE_CHECKING
 
-from worlds.generic.Rules import CollectionRule, add_rule
-from BaseClasses import Location, Region, Entrance
+from worlds.generic.Rules import CollectionRule, add_rule, add_item_rule
+from BaseClasses import Item, Location, Region, Entrance
 
 from .data import Passage
-from .items import ItemType, WL4Item, filter_item_names
+from .items import ItemType, WL4Item, filter_item_names, wl4_data_from_ap_id
 from .locations import WL4Location
 from .region_data import LocationData, passage_levels, level_table, passage_boss_table, golden_diva
 from .rules import Requirement, has, has_all
@@ -28,6 +28,7 @@ class WL4Region(Region):
 def get_region_name(level: str, region: Optional[str]):
     return level if region is None else f'{level} - {region}'
 
+
 def get_level_entrance_name(level: str):
     return f'{level} - Entrance' if level in level_table and level_table[level].use_entrance_region else level
 
@@ -44,6 +45,20 @@ def create_event(region: Region, location_name: str, item_name: str = None):
 def create_regions(world: WL4World):
     def can_escape(level):
         return lambda state: state.can_reach_location(f'{level} - Frog Switch', world.player)
+
+    def restrict_jewel_piece_on_boss(passage: Passage):
+        def rule(item: Item):
+            if item.player != world.player:
+                return True
+            _, item_data = wl4_data_from_ap_id(item.code)
+            return item_data.type != ItemType.JEWEL or item_data.passage() != passage
+        return rule
+
+    def restrict_jewel_piece_in_golden_passage(item: Item):
+        if item.player != world.player:
+            return True
+        _, item_data = wl4_data_from_ap_id(item.code)
+        return item_data.type != ItemType.JEWEL or item_data.passage() == Passage.GOLDEN
 
     regions = []
 
@@ -81,10 +96,12 @@ def create_regions(world: WL4World):
                 else:
                     location = WL4Location(world.player, location_name, region)
 
-                if (location_data.access_rule is not None):
+                if location_data.access_rule is not None:
                     add_rule(location, location_data.access_rule.apply_world(world))
-                if (world.options.portal.value == Portal.option_vanilla and location_data.name != "Frog Switch"):
+                if world.options.portal.value == Portal.option_vanilla and location_data.name != "Frog Switch":
                     add_rule(location, can_escape(level_name))
+                if world.options.restrict_self_locking_jewel_pieces.value and level_name == "Golden Passage":
+                    add_item_rule(location, restrict_jewel_piece_in_golden_passage)
 
                 region.locations.append(location)
             regions.append(region)
@@ -99,7 +116,10 @@ def create_regions(world: WL4World):
         if world.options.goal.needs_treasure_hunt():
             prize_region = WL4Region(f'{boss_data.name} - Prizes', world)
             for time in ('15', '35', '55'):
-                prize_region.locations.append(WL4Location(world.player, f'{boss_data.name} - 0:{time}', prize_region))
+                location = WL4Location(world.player, f'{boss_data.name} - 0:{time}', prize_region)
+                if world.options.restrict_self_locking_jewel_pieces.value:
+                    add_item_rule(location, restrict_jewel_piece_on_boss(passage))
+                prize_region.locations.append(location)
             regions.append(prize_region)
 
     golden_diva_region = WL4Region('Golden Pyramid Boss', world)
