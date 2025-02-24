@@ -1,454 +1,2028 @@
-from typing import Optional, Tuple
-from enum import Enum
+from typing import Tuple
 from BaseClasses import ItemClassification, Item
 
 base_item_id = 127000000
 tile_id_offset = 0X80
 
-BOOST_QTY = 12
-TRAPS_QTY = 21
-
-
-class IType(Enum):
-    HEART = 0
-    GOLD = 1
-    SUBWEAPON = 2
-    POWERUP = 3
-    WEAPON1 = 4
-    WEAPON2 = 5
-    SHIELD = 6
-    HELMET = 7
-    ARMOR = 8
-    CLOAK = 9
-    ACCESSORY = 10
-    USABLE = 11
-    RELIC = 12
-    EVENT = 13
-    BOOST = 14
-    TRAP = 15
-
-
-def is_relic(item):
-    if isinstance(item, SotnItem):
-        if item.name in relic_table:
-            return True
-    return False
-
 
 class SotnItem(Item):
     game: str = "Symphony of the Night"
 
-    def __init__(self, name: str, classification: ItemClassification, code: Optional[int], player: int):
-        super().__init__(name, classification, code, player)
-
-
-class ItemData:
-    def __init__(self, index: int, item_type: IType, address: int, ic: ItemClassification = ItemClassification.filler):
-        self.index = None if index is None else index + base_item_id
-        self.type = item_type
-        self.ic = ic
-        self.address = address
-
-    def get_item_id_no_offset(self):
-        return self.index - base_item_id
-
-    def get_item_id(self):
-        if self.type == IType.RELIC:
-            return self.index - base_item_id - 300
-        if self.type == IType.POWERUP or self.type == IType.GOLD:
-            return self.index - base_item_id - 400
-        if self.type == IType.TRAP or self.type == IType.BOOST:
-            return 4
-        return self.index - base_item_id + tile_id_offset
-
-    def get_item_type(self):
-        return self.type
-
-    def get_item_classification(self):
-        return self.ic
-
-    @staticmethod
-    def get_item_info(item_id: int) -> tuple:
-        for k, v in item_table.items():
-            if v.index == item_id:
-                return k, v
-
 
 # Thanks M. for useful items
-hand_type_table = {
-    "Monster vial 1": ItemData(1, IType.USABLE, 0x09798b),
-    "Monster vial 2": ItemData(2, IType.USABLE, 0x09798c),
-    "Monster vial 3": ItemData(3, IType.USABLE, 0x09798d),
-    "Shield rod": ItemData(4, IType.WEAPON1, 0x09798e, ItemClassification.useful),
-    "Leather shield": ItemData(5, IType.SHIELD, 0x09798f, ItemClassification.useful),
-    "Knight shield": ItemData(6, IType.SHIELD, 0x097990, ItemClassification.useful),
-    "Iron shield": ItemData(7, IType.SHIELD, 0x097991, ItemClassification.useful),
-    "AxeLord shield": ItemData(8, IType.SHIELD, 0x097992, ItemClassification.useful),
-    "Herald shield": ItemData(9, IType.SHIELD, 0x097993, ItemClassification.useful),
-    "Dark shield": ItemData(10, IType.SHIELD, 0x097994, ItemClassification.useful),
-    "Goddess shield": ItemData(11, IType.SHIELD, 0x097995, ItemClassification.useful),
-    "Shaman shield": ItemData(12, IType.SHIELD, 0x097996, ItemClassification.useful),
-    "Medusa shield": ItemData(13, IType.SHIELD, 0x097997, ItemClassification.useful),
-    "Skull shield": ItemData(14, IType.SHIELD, 0x097998, ItemClassification.useful),
-    "Fire shield": ItemData(15, IType.SHIELD, 0x097999, ItemClassification.useful),
-    "Alucard shield": ItemData(16, IType.SHIELD, 0x09799a, ItemClassification.useful),
-    "Sword of dawn": ItemData(17, IType.WEAPON2, 0x09799b, ItemClassification.useful),
-    "Basilard": ItemData(18, IType.WEAPON1, 0x09799c, ItemClassification.useful),
-    "Short sword": ItemData(19, IType.WEAPON1, 0x09799d, ItemClassification.useful),
-    "Combat knife": ItemData(20, IType.WEAPON1, 0x09799e, ItemClassification.useful),
-    "Nunchaku": ItemData(21, IType.WEAPON2, 0x09799f, ItemClassification.useful),
-    "Were bane": ItemData(22, IType.WEAPON1, 0x0979a0, ItemClassification.useful),
-    "Rapier": ItemData(23, IType.WEAPON1, 0x0979a1, ItemClassification.useful),
-    "Karma coin": ItemData(24, IType.USABLE, 0x0979a2),
-    "Magic missile": ItemData(25, IType.USABLE, 0x0979a3),
-    "Red rust": ItemData(26, IType.WEAPON2, 0x0979a4),
-    "Takemitsu": ItemData(27, IType.WEAPON2, 0x0979a5, ItemClassification.useful),
-    "Shotel": ItemData(28, IType.WEAPON1, 0x0979a6, ItemClassification.useful),
-    "Orange": ItemData(29, IType.USABLE, 0x0979a7),
-    "Apple": ItemData(30, IType.USABLE, 0x0979a8),
-    "Banana": ItemData(31, IType.USABLE, 0x0979a9),
-    "Grapes": ItemData(32, IType.USABLE, 0x0979aa),
-    "Strawberry": ItemData(33, IType.USABLE, 0x0979ab),
-    "Pineapple": ItemData(34, IType.USABLE, 0x0979ac),
-    "Peanuts": ItemData(35, IType.USABLE, 0x0979ad),
-    "Toadstool": ItemData(36, IType.USABLE, 0x0979ae),
-    "Shiitake": ItemData(37, IType.USABLE, 0x0979af),
-    "Cheesecake": ItemData(38, IType.USABLE, 0x0979b0),
-    "Shortcake": ItemData(39, IType.USABLE, 0x0979b1),
-    "Tart": ItemData(40, IType.USABLE, 0x0979b2),
-    "Parfait": ItemData(41, IType.USABLE, 0x0979b3),
-    "Pudding": ItemData(42, IType.USABLE, 0x0979b4),
-    "Ice cream": ItemData(43, IType.USABLE, 0x0979b5),
-    "Frankfurter": ItemData(44, IType.USABLE, 0x0979b6),
-    "Hamburger": ItemData(45, IType.USABLE, 0x0979b7),
-    "Pizza": ItemData(46, IType.USABLE, 0x0979b8),
-    "Cheese": ItemData(47, IType.USABLE, 0x0979b9),
-    "Ham and eggs": ItemData(48, IType.USABLE, 0x0979ba),
-    "Omelette": ItemData(49, IType.USABLE, 0x0979bb),
-    "Morning set": ItemData(50, IType.USABLE, 0x0979bc),
-    "Lunch A": ItemData(51, IType.USABLE, 0x0979bd),
-    "Lunch B": ItemData(52, IType.USABLE, 0x0979be),
-    "Curry rice": ItemData(53, IType.USABLE, 0x0979bf),
-    "Gyros plate": ItemData(54, IType.USABLE, 0x0979c0),
-    "Spaghetti": ItemData(55, IType.USABLE, 0x0979c1),
-    "Grape juice": ItemData(56, IType.USABLE, 0x0979c2),
-    "Barley tea": ItemData(57, IType.USABLE, 0x0979c3),
-    "Green tea": ItemData(58, IType.USABLE, 0x0979c4),
-    "Natou": ItemData(59, IType.USABLE, 0x0979c5),
-    "Ramen": ItemData(60, IType.USABLE, 0x0979c6),
-    "Miso soup": ItemData(61, IType.USABLE, 0x0979c7),
-    "Sushi": ItemData(62, IType.USABLE, 0x0979c8),
-    "Pork bun": ItemData(63, IType.USABLE, 0x0979c9),
-    "Red bean bun": ItemData(64, IType.USABLE, 0x0979ca),
-    "Chinese bun": ItemData(65, IType.USABLE, 0x0979cb),
-    "Dim sum set": ItemData(66, IType.USABLE, 0x0979cc),
-    "Pot roast": ItemData(67, IType.USABLE, 0x0979cd),
-    "Sirloin": ItemData(68, IType.USABLE, 0x0979ce),
-    "Turkey": ItemData(69, IType.USABLE, 0x0979cf),
-    "Meal ticket": ItemData(70, IType.USABLE, 0x0979d0),
-    "Neutron bomb": ItemData(71, IType.USABLE, 0x0979d1),
-    "Power of sire": ItemData(72, IType.USABLE, 0x0979d2),
-    "Pentagram": ItemData(73, IType.USABLE, 0x0979d3),
-    "Bat pentagram": ItemData(74, IType.USABLE, 0x0979d4),
-    "Shuriken": ItemData(75, IType.USABLE, 0x0979d5),
-    "Cross shuriken": ItemData(76, IType.USABLE, 0x0979d6),
-    "Buffalo star": ItemData(77, IType.USABLE, 0x0979d7),
-    "Flame star": ItemData(78, IType.USABLE, 0x0979d8),
-    "TNT": ItemData(79, IType.USABLE, 0x0979d9),
-    "Bwaka knife": ItemData(80, IType.USABLE, 0x0979da),
-    "Boomerang": ItemData(81, IType.USABLE, 0x0979db),
-    "Javelin": ItemData(82, IType.USABLE, 0x0979dc),
-    "Tyrfing": ItemData(83, IType.WEAPON1, 0x0979dd, ItemClassification.useful),
-    "Namakura": ItemData(84, IType.WEAPON2, 0x0979de, ItemClassification.useful),
-    "Knuckle duster": ItemData(85, IType.WEAPON1, 0x0979df, ItemClassification.useful),
-    "Gladius": ItemData(86, IType.WEAPON1, 0x0979e0, ItemClassification.useful),
-    "Scimitar": ItemData(87, IType.WEAPON1, 0x0979e1, ItemClassification.useful),
-    "Cutlass": ItemData(88, IType.WEAPON1, 0x0979e2, ItemClassification.useful),
-    "Saber": ItemData(89, IType.WEAPON1, 0x0979e3, ItemClassification.useful),
-    "Falchion": ItemData(90, IType.WEAPON1, 0x0979e4, ItemClassification.useful),
-    "Broadsword": ItemData(91, IType.WEAPON1, 0x0979e5, ItemClassification.useful),
-    "Bekatowa": ItemData(92, IType.WEAPON1, 0x0979e6, ItemClassification.useful),
-    "Damascus sword": ItemData(93, IType.WEAPON1, 0x0979e7, ItemClassification.useful),
-    "Hunter sword": ItemData(94, IType.WEAPON1, 0x0979e8, ItemClassification.useful),
-    "Estoc": ItemData(95, IType.WEAPON2, 0x0979e9, ItemClassification.useful),
-    "Bastard sword": ItemData(96, IType.WEAPON1, 0x0979ea, ItemClassification.useful),
-    "Jewel knuckles": ItemData(97, IType.WEAPON1, 0x0979eb, ItemClassification.useful),
-    "Claymore": ItemData(98, IType.WEAPON2, 0x0979ec, ItemClassification.useful),
-    "Talwar": ItemData(99, IType.WEAPON1, 0x0979ed, ItemClassification.useful),
-    "Katana": ItemData(100, IType.WEAPON2, 0x0979ee, ItemClassification.useful),
-    "Flamberge": ItemData(101, IType.WEAPON2, 0x0979ef, ItemClassification.useful),
-    "Iron fist": ItemData(102, IType.WEAPON1, 0x0979f0, ItemClassification.useful),
-    "Zwei hander": ItemData(103, IType.WEAPON2, 0x0979f1, ItemClassification.useful),
-    "Sword of hador": ItemData(104, IType.WEAPON1, 0x0979f2, ItemClassification.useful),
-    "Luminus": ItemData(105, IType.WEAPON1, 0x0979f3, ItemClassification.useful),
-    "Harper": ItemData(106, IType.WEAPON1, 0x0979f4, ItemClassification.useful),
-    "Obsidian sword": ItemData(107, IType.WEAPON2, 0x0979f5, ItemClassification.useful),
-    "Gram": ItemData(108, IType.WEAPON1, 0x0979f6, ItemClassification.useful),
-    "Jewel sword": ItemData(109, IType.WEAPON1, 0x0979f7, ItemClassification.useful),
-    "Mormegil": ItemData(110, IType.WEAPON1, 0x0979f8, ItemClassification.useful),
-    "Firebrand": ItemData(111, IType.WEAPON1, 0x0979f9, ItemClassification.useful),
-    "Thunderbrand": ItemData(112, IType.WEAPON1, 0x0979fa, ItemClassification.useful),
-    "Icebrand": ItemData(113, IType.WEAPON1, 0x0979fb, ItemClassification.useful),
-    "Stone sword": ItemData(114, IType.WEAPON1, 0x0979fc, ItemClassification.useful),
-    "Holy sword": ItemData(115, IType.WEAPON1, 0x0979fd, ItemClassification.useful),
-    "Terminus est": ItemData(116, IType.WEAPON1, 0x0979fe, ItemClassification.useful),
-    "Marsil": ItemData(117, IType.WEAPON1, 0x0979ff, ItemClassification.useful),
-    "Dark blade": ItemData(118, IType.WEAPON1, 0x097a00, ItemClassification.useful),
-    "Heaven sword": ItemData(119, IType.WEAPON1, 0x097a01, ItemClassification.useful),
-    "Fist of tulkas": ItemData(120, IType.WEAPON1, 0x097a02, ItemClassification.useful),
-    "Gurthang": ItemData(121, IType.WEAPON1, 0x097a03, ItemClassification.useful),
-    "Mourneblade": ItemData(122, IType.WEAPON1, 0x097a04, ItemClassification.useful),
-    "Alucard sword": ItemData(123, IType.WEAPON1, 0x097a05, ItemClassification.useful),
-    "Mablung sword": ItemData(124, IType.WEAPON1, 0x097a06, ItemClassification.useful),
-    "Badelaire": ItemData(125, IType.WEAPON1, 0x097a07, ItemClassification.useful),
-    "Sword familiar": ItemData(126, IType.WEAPON1, 0x097a08, ItemClassification.useful),
-    "Great sword": ItemData(127, IType.WEAPON2, 0x097a09, ItemClassification.useful),
-    "Mace": ItemData(128, IType.WEAPON1, 0x097a0a, ItemClassification.useful),
-    "Morningstar": ItemData(129, IType.WEAPON1, 0x097a0b, ItemClassification.useful),
-    "Holy rod": ItemData(130, IType.WEAPON1, 0x097a0c, ItemClassification.useful),
-    "Star flail": ItemData(131, IType.WEAPON1, 0x097a0d, ItemClassification.useful),
-    "Moon rod": ItemData(132, IType.WEAPON1, 0x097a0e, ItemClassification.useful),
-    "Chakram": ItemData(133, IType.WEAPON1, 0x097a0f, ItemClassification.useful),
-    "Fire boomerang": ItemData(134, IType.USABLE, 0x097a10),
-    "Iron ball": ItemData(135, IType.USABLE, 0x097a11),
-    "Holbein dagger": ItemData(136, IType.WEAPON1, 0x097a12, ItemClassification.useful),
-    "Blue knuckles": ItemData(137, IType.WEAPON1, 0x097a13, ItemClassification.useful),
-    "Dynamite": ItemData(138, IType.USABLE, 0x097a14),
-    "Osafune katana": ItemData(139, IType.WEAPON2, 0x097a15, ItemClassification.useful),
-    "Masamune": ItemData(140, IType.WEAPON2, 0x097a16, ItemClassification.useful),
-    "Muramasa": ItemData(141, IType.WEAPON2, 0x097a17, ItemClassification.useful),
-    "Heart refresh": ItemData(142, IType.USABLE, 0x097a18),
-    "Runesword": ItemData(143, IType.WEAPON1, 0x097a19, ItemClassification.useful),
-    "Antivenom": ItemData(144, IType.USABLE, 0x097a1a),
-    "Uncurse": ItemData(145, IType.USABLE, 0x097a1b),
-    "Life apple": ItemData(146, IType.USABLE, 0x097a1c),
-    "Hammer": ItemData(147, IType.USABLE, 0x097a1d),
-    "Str. potion": ItemData(148, IType.USABLE, 0x097a1e),
-    "Luck potion": ItemData(149, IType.USABLE, 0x097a1f),
-    "Smart potion": ItemData(150, IType.USABLE, 0x097a20),
-    "Attack potion": ItemData(151, IType.USABLE, 0x097a21),
-    "Shield potion": ItemData(152, IType.USABLE, 0x097a22),
-    "Resist fire": ItemData(153, IType.USABLE, 0x097a23),
-    "Resist thunder": ItemData(154, IType.USABLE, 0x097a24),
-    "Resist ice": ItemData(155, IType.USABLE, 0x097a25),
-    "Resist stone": ItemData(156, IType.USABLE, 0x097a26),
-    "Resist holy": ItemData(157, IType.USABLE, 0x097a27),
-    "Resist dark": ItemData(158, IType.USABLE, 0x097a28),
-    "Potion": ItemData(159, IType.USABLE, 0x097a29),
-    "High potion": ItemData(160, IType.USABLE, 0x097a2a),
-    "Elixir": ItemData(161, IType.USABLE, 0x097a2b),
-    "Manna prism": ItemData(162, IType.USABLE, 0x097a2c),
-    "Vorpal blade": ItemData(163, IType.WEAPON1, 0x097a2d, ItemClassification.useful),
-    "Crissaegrim": ItemData(164, IType.WEAPON1, 0x097a2e, ItemClassification.useful),
-    "Yasutsuna": ItemData(165, IType.WEAPON2, 0x097a2f, ItemClassification.useful),
-    "Library card": ItemData(166, IType.USABLE, 0x097a30),
-    "Alucart shield": ItemData(167, IType.SHIELD, 0x097a31, ItemClassification.useful),
-    "Alucart sword": ItemData(168, IType.WEAPON1, 0x097a32, ItemClassification.useful),
+items = {
+    "Monster vial 1":
+        {
+            "id": 1,
+            "type": "USABLE",
+            "address": 0x09798b,
+            "classification": ItemClassification.filler
+        },
+    "Monster vial 2":
+        {
+            "id": 2,
+            "type": "USABLE",
+            "address": 0x09798c,
+            "classification": ItemClassification.filler
+        },
+    "Monster vial 3":
+        {
+            "id": 3,
+            "type": "USABLE",
+            "address": 0x09798d,
+            "classification": ItemClassification.filler
+        },
+    "Shield rod":
+        {
+            "id": 4,
+            "type": "WEAPON1",
+            "address": 0x09798e,
+            "classification": ItemClassification.useful
+        },
+    "Leather shield":
+        {
+            "id": 5,
+            "type": "SHIELD",
+            "address": 0x09798f,
+            "classification": ItemClassification.useful
+        },
+    "Knight shield":
+        {
+            "id": 6,
+            "type": "SHIELD",
+            "address": 0x097990,
+            "classification": ItemClassification.useful
+        },
+    "Iron shield":
+        {
+            "id": 7,
+            "type": "SHIELD",
+            "address": 0x097991,
+            "classification": ItemClassification.useful
+        },
+    "AxeLord shield":
+        {
+            "id": 8,
+            "type": "SHIELD",
+            "address": 0x097992,
+            "classification": ItemClassification.useful
+        },
+    "Herald shield":
+        {
+            "id": 9,
+            "type": "SHIELD",
+            "address": 0x097993,
+            "classification": ItemClassification.useful
+        },
+    "Dark shield":
+        {
+            "id": 10,
+            "type": "SHIELD",
+            "address": 0x097994,
+            "classification": ItemClassification.useful
+        },
+    "Goddess shield":
+        {
+            "id": 11,
+            "type": "SHIELD",
+            "address": 0x097995,
+            "classification": ItemClassification.useful
+        },
+    "Shaman shield":
+        {
+            "id": 12,
+            "type": "SHIELD",
+            "address": 0x097996,
+            "classification": ItemClassification.useful
+        },
+    "Medusa shield":
+        {
+            "id": 13,
+            "type": "SHIELD",
+            "address": 0x097997,
+            "classification": ItemClassification.useful
+        },
+    "Skull shield":
+        {
+            "id": 14,
+            "type": "SHIELD",
+            "address": 0x097998,
+            "classification": ItemClassification.useful
+        },
+    "Fire shield":
+        {
+            "id": 15,
+            "type": "SHIELD",
+            "address": 0x097999,
+            "classification": ItemClassification.useful
+        },
+    "Alucard shield":
+        {
+            "id": 16,
+            "type": "SHIELD",
+            "address": 0x09799a,
+            "classification": ItemClassification.useful
+        },
+    "Sword of dawn":
+        {
+            "id": 17,
+            "type": "WEAPON2",
+            "address": 0x09799b,
+            "classification": ItemClassification.useful
+        },
+    "Basilard":
+        {
+            "id": 18,
+            "type": "WEAPON1",
+            "address": 0x09799c,
+            "classification": ItemClassification.useful
+        },
+    "Short sword":
+        {
+            "id": 19,
+            "type": "WEAPON1",
+            "address": 0x09799d,
+            "classification": ItemClassification.useful
+        },
+    "Combat knife":
+        {
+            "id": 20,
+            "type": "WEAPON1",
+            "address": 0x09799e,
+            "classification": ItemClassification.useful
+        },
+    "Nunchaku":
+        {
+            "id": 21,
+            "type": "WEAPON2",
+            "address": 0x09799f,
+            "classification": ItemClassification.useful
+        },
+    "Were bane":
+        {
+            "id": 22,
+            "type": "WEAPON1",
+            "address": 0x0979a0,
+            "classification": ItemClassification.useful
+        },
+    "Rapier":
+        {
+            "id": 23,
+            "type": "WEAPON1",
+            "address": 0x0979a1,
+            "classification": ItemClassification.useful
+        },
+    "Karma coin":
+        {
+            "id": 24,
+            "type": "USABLE",
+            "address": 0x0979a2,
+            "classification": ItemClassification.filler
+        },
+    "Magic missile":
+        {
+            "id": 25,
+            "type": "USABLE",
+            "address": 0x0979a3,
+            "classification": ItemClassification.filler
+        },
+    "Red rust":
+        {
+            "id": 26,
+            "type": "WEAPON2",
+            "address": 0x0979a4,
+            "classification": ItemClassification.filler
+        },
+    "Takemitsu":
+        {
+            "id": 27,
+            "type": "WEAPON2",
+            "address": 0x0979a5,
+            "classification": ItemClassification.useful
+        },
+    "Shotel":
+        {
+            "id": 28,
+            "type": "WEAPON1",
+            "address": 0x0979a6,
+            "classification": ItemClassification.useful
+        },
+    "Orange":
+        {
+            "id": 29,
+            "type": "USABLE",
+            "address": 0x0979a7,
+            "classification": ItemClassification.filler
+        },
+    "Apple":
+        {
+            "id": 30,
+            "type": "USABLE",
+            "address": 0x0979a8,
+            "classification": ItemClassification.filler
+        },
+    "Banana":
+        {
+            "id": 31,
+            "type": "USABLE",
+            "address": 0x0979a9,
+            "classification": ItemClassification.filler
+        },
+    "Grapes":
+        {
+            "id": 32,
+            "type": "USABLE",
+            "address": 0x0979aa,
+            "classification": ItemClassification.filler
+        },
+    "Strawberry":
+        {
+            "id": 33,
+            "type": "USABLE",
+            "address": 0x0979ab,
+            "classification": ItemClassification.filler
+        },
+    "Pineapple":
+        {
+            "id": 34,
+            "type": "USABLE",
+            "address": 0x0979ac,
+            "classification": ItemClassification.filler
+        },
+    "Peanuts":
+        {
+            "id": 35,
+            "type": "USABLE",
+            "address": 0x0979ad,
+            "classification": ItemClassification.filler
+        },
+    "Toadstool":
+        {
+            "id": 36,
+            "type": "USABLE",
+            "address": 0x0979ae,
+            "classification": ItemClassification.filler
+        },
+    "Shiitake":
+        {
+            "id": 37,
+            "type": "USABLE",
+            "address": 0x0979af,
+            "classification": ItemClassification.filler
+        },
+    "Cheesecake":
+        {
+            "id": 38,
+            "type": "USABLE",
+            "address": 0x0979b0,
+            "classification": ItemClassification.filler
+        },
+    "Shortcake":
+        {
+            "id": 39,
+            "type": "USABLE",
+            "address": 0x0979b1,
+            "classification": ItemClassification.filler
+        },
+    "Tart":
+        {
+            "id": 40,
+            "type": "USABLE",
+            "address": 0x0979b2,
+            "classification": ItemClassification.filler
+        },
+    "Parfait":
+        {
+            "id": 41,
+            "type": "USABLE",
+            "address": 0x0979b3,
+            "classification": ItemClassification.filler
+        },
+    "Pudding":
+        {
+            "id": 42,
+            "type": "USABLE",
+            "address": 0x0979b4,
+            "classification": ItemClassification.filler
+        },
+    "Ice cream":
+        {
+            "id": 43,
+            "type": "USABLE",
+            "address": 0x0979b5,
+            "classification": ItemClassification.filler
+        },
+    "Frankfurter":
+        {
+            "id": 44,
+            "type": "USABLE",
+            "address": 0x0979b6,
+            "classification": ItemClassification.filler
+        },
+    "Hamburger":
+        {
+            "id": 45,
+            "type": "USABLE",
+            "address": 0x0979b7,
+            "classification": ItemClassification.filler
+        },
+    "Pizza":
+        {
+            "id": 46,
+            "type": "USABLE",
+            "address": 0x0979b8,
+            "classification": ItemClassification.filler
+        },
+    "Cheese":
+        {
+            "id": 47,
+            "type": "USABLE",
+            "address": 0x0979b9,
+            "classification": ItemClassification.filler
+        },
+    "Ham and eggs":
+        {
+            "id": 48,
+            "type": "USABLE",
+            "address": 0x0979ba,
+            "classification": ItemClassification.filler
+        },
+    "Omelette":
+        {
+            "id": 49,
+            "type": "USABLE",
+            "address": 0x0979bb,
+            "classification": ItemClassification.filler
+        },
+    "Morning set":
+        {
+            "id": 50,
+            "type": "USABLE",
+            "address": 0x0979bc,
+            "classification": ItemClassification.filler
+        },
+    "Lunch A":
+        {
+            "id": 51,
+            "type": "USABLE",
+            "address": 0x0979bd,
+            "classification": ItemClassification.filler
+        },
+    "Lunch B":
+        {
+            "id": 52,
+            "type": "USABLE",
+            "address": 0x0979be,
+            "classification": ItemClassification.filler
+        },
+    "Curry rice":
+        {
+            "id": 53,
+            "type": "USABLE",
+            "address": 0x0979bf,
+            "classification": ItemClassification.filler
+        },
+    "Gyros plate":
+        {
+            "id": 54,
+            "type": "USABLE",
+            "address": 0x0979c0,
+            "classification": ItemClassification.filler
+        },
+    "Spaghetti":
+        {
+            "id": 55,
+            "type": "USABLE",
+            "address": 0x0979c1,
+            "classification": ItemClassification.filler
+        },
+    "Grape juice":
+        {
+            "id": 56,
+            "type": "USABLE",
+            "address": 0x0979c2,
+            "classification": ItemClassification.filler
+        },
+    "Barley tea":
+        {
+            "id": 57,
+            "type": "USABLE",
+            "address": 0x0979c3,
+            "classification": ItemClassification.filler
+        },
+    "Green tea":
+        {
+            "id": 58,
+            "type": "USABLE",
+            "address": 0x0979c4,
+            "classification": ItemClassification.filler
+        },
+    "Natou":
+        {
+            "id": 59,
+            "type": "USABLE",
+            "address": 0x0979c5,
+            "classification": ItemClassification.filler
+        },
+    "Ramen":
+        {
+            "id": 60,
+            "type": "USABLE",
+            "address": 0x0979c6,
+            "classification": ItemClassification.filler
+        },
+    "Miso soup":
+        {
+            "id": 61,
+            "type": "USABLE",
+            "address": 0x0979c7,
+            "classification": ItemClassification.filler
+        },
+    "Sushi":
+        {
+            "id": 62,
+            "type": "USABLE",
+            "address": 0x0979c8,
+            "classification": ItemClassification.filler
+        },
+    "Pork bun":
+        {
+            "id": 63,
+            "type": "USABLE",
+            "address": 0x0979c9,
+            "classification": ItemClassification.filler
+        },
+    "Red bean bun":
+        {
+            "id": 64,
+            "type": "USABLE",
+            "address": 0x0979ca,
+            "classification": ItemClassification.filler
+        },
+    "Chinese bun":
+        {
+            "id": 65,
+            "type": "USABLE",
+            "address": 0x0979cb,
+            "classification": ItemClassification.filler
+        },
+    "Dim sum set":
+        {
+            "id": 66,
+            "type": "USABLE",
+            "address": 0x0979cc,
+            "classification": ItemClassification.filler
+        },
+    "Pot roast":
+        {
+            "id": 67,
+            "type": "USABLE",
+            "address": 0x0979cd,
+            "classification": ItemClassification.filler
+        },
+    "Sirloin":
+        {
+            "id": 68,
+            "type": "USABLE",
+            "address": 0x0979ce,
+            "classification": ItemClassification.filler
+        },
+    "Turkey":
+        {
+            "id": 69,
+            "type": "USABLE",
+            "address": 0x0979cf,
+            "classification": ItemClassification.filler
+        },
+    "Meal ticket":
+        {
+            "id": 70,
+            "type": "USABLE",
+            "address": 0x0979d0,
+            "classification": ItemClassification.filler
+        },
+    "Neutron bomb":
+        {
+            "id": 71,
+            "type": "USABLE",
+            "address": 0x0979d1,
+            "classification": ItemClassification.filler
+        },
+    "Power of sire":
+        {
+            "id": 72,
+            "type": "USABLE",
+            "address": 0x0979d2,
+            "classification": ItemClassification.filler
+        },
+    "Pentagram":
+        {
+            "id": 73,
+            "type": "USABLE",
+            "address": 0x0979d3,
+            "classification": ItemClassification.filler
+        },
+    "Bat pentagram":
+        {
+            "id": 74,
+            "type": "USABLE",
+            "address": 0x0979d4,
+            "classification": ItemClassification.filler
+        },
+    "Shuriken":
+        {
+            "id": 75,
+            "type": "USABLE",
+            "address": 0x0979d5,
+            "classification": ItemClassification.filler
+        },
+    "Cross shuriken":
+        {
+            "id": 76,
+            "type": "USABLE",
+            "address": 0x0979d6,
+            "classification": ItemClassification.filler
+        },
+    "Buffalo star":
+        {
+            "id": 77,
+            "type": "USABLE",
+            "address": 0x0979d7,
+            "classification": ItemClassification.filler
+        },
+    "Flame star":
+        {
+            "id": 78,
+            "type": "USABLE",
+            "address": 0x0979d8,
+            "classification": ItemClassification.filler
+        },
+    "TNT":
+        {
+            "id": 79,
+            "type": "USABLE",
+            "address": 0x0979d9,
+            "classification": ItemClassification.filler
+        },
+    "Bwaka knife":
+        {
+            "id": 80,
+            "type": "USABLE",
+            "address": 0x0979da,
+            "classification": ItemClassification.filler
+        },
+    "Boomerang":
+        {
+            "id": 81,
+            "type": "USABLE",
+            "address": 0x0979db,
+            "classification": ItemClassification.filler
+        },
+    "Javelin":
+        {
+            "id": 82,
+            "type": "USABLE",
+            "address": 0x0979dc,
+            "classification": ItemClassification.filler
+        },
+    "Tyrfing":
+        {
+            "id": 83,
+            "type": "WEAPON1",
+            "address": 0x0979dd,
+            "classification": ItemClassification.useful
+        },
+    "Namakura":
+        {
+            "id": 84,
+            "type": "WEAPON2",
+            "address": 0x0979de,
+            "classification": ItemClassification.useful
+        },
+    "Knuckle duster":
+        {
+            "id": 85,
+            "type": "WEAPON1",
+            "address": 0x0979df,
+            "classification": ItemClassification.useful
+        },
+    "Gladius":
+        {
+            "id": 86,
+            "type": "WEAPON1",
+            "address": 0x0979e0,
+            "classification": ItemClassification.useful
+        },
+    "Scimitar":
+        {
+            "id": 87,
+            "type": "WEAPON1",
+            "address": 0x0979e1,
+            "classification": ItemClassification.useful
+        },
+    "Cutlass":
+        {
+            "id": 88,
+            "type": "WEAPON1",
+            "address": 0x0979e2,
+            "classification": ItemClassification.useful
+        },
+    "Saber":
+        {
+            "id": 89,
+            "type": "WEAPON1",
+            "address": 0x0979e3,
+            "classification": ItemClassification.useful
+        },
+    "Falchion":
+        {
+            "id": 90,
+            "type": "WEAPON1",
+            "address": 0x0979e4,
+            "classification": ItemClassification.useful
+        },
+    "Broadsword":
+        {
+            "id": 91,
+            "type": "WEAPON1",
+            "address": 0x0979e5,
+            "classification": ItemClassification.useful
+        },
+    "Bekatowa":
+        {
+            "id": 92,
+            "type": "WEAPON1",
+            "address": 0x0979e6,
+            "classification": ItemClassification.useful
+        },
+    "Damascus sword":
+        {
+            "id": 93,
+            "type": "WEAPON1",
+            "address": 0x0979e7,
+            "classification": ItemClassification.useful
+        },
+    "Hunter sword":
+        {
+            "id": 94,
+            "type": "WEAPON1",
+            "address": 0x0979e8,
+            "classification": ItemClassification.useful
+        },
+    "Estoc":
+        {
+            "id": 95,
+            "type": "WEAPON2",
+            "address": 0x0979e9,
+            "classification": ItemClassification.useful
+        },
+    "Bastard sword":
+        {
+            "id": 96,
+            "type": "WEAPON1",
+            "address": 0x0979ea,
+            "classification": ItemClassification.useful
+        },
+    "Jewel knuckles":
+        {
+            "id": 97,
+            "type": "WEAPON1",
+            "address": 0x0979eb,
+            "classification": ItemClassification.useful
+        },
+    "Claymore":
+        {
+            "id": 98,
+            "type": "WEAPON2",
+            "address": 0x0979ec,
+            "classification": ItemClassification.useful
+        },
+    "Talwar":
+        {
+            "id": 99,
+            "type": "WEAPON1",
+            "address": 0x0979ed,
+            "classification": ItemClassification.useful
+        },
+    "Katana":
+        {
+            "id": 100,
+            "type": "WEAPON2",
+            "address": 0x0979ee,
+            "classification": ItemClassification.useful
+        },
+    "Flamberge":
+        {
+            "id": 101,
+            "type": "WEAPON2",
+            "address": 0x0979ef,
+            "classification": ItemClassification.useful
+        },
+    "Iron fist":
+        {
+            "id": 102,
+            "type": "WEAPON1",
+            "address": 0x0979f0,
+            "classification": ItemClassification.useful
+        },
+    "Zwei hander":
+        {
+            "id": 103,
+            "type": "WEAPON2",
+            "address": 0x0979f1,
+            "classification": ItemClassification.useful
+        },
+    "Sword of hador":
+        {
+            "id": 104,
+            "type": "WEAPON1",
+            "address": 0x0979f2,
+            "classification": ItemClassification.useful
+        },
+    "Luminus":
+        {
+            "id": 105,
+            "type": "WEAPON1",
+            "address": 0x0979f3,
+            "classification": ItemClassification.useful
+        },
+    "Harper":
+        {
+            "id": 106,
+            "type": "WEAPON1",
+            "address": 0x0979f4,
+            "classification": ItemClassification.useful
+        },
+    "Obsidian sword":
+        {
+            "id": 107,
+            "type": "WEAPON2",
+            "address": 0x0979f5,
+            "classification": ItemClassification.useful
+        },
+    "Gram":
+        {
+            "id": 108,
+            "type": "WEAPON1",
+            "address": 0x0979f6,
+            "classification": ItemClassification.useful
+        },
+    "Jewel sword":
+        {
+            "id": 109,
+            "type": "WEAPON1",
+            "address": 0x0979f7,
+            "classification": ItemClassification.useful
+        },
+    "Mormegil":
+        {
+            "id": 110,
+            "type": "WEAPON1",
+            "address": 0x0979f8,
+            "classification": ItemClassification.useful
+        },
+    "Firebrand":
+        {
+            "id": 111,
+            "type": "WEAPON1",
+            "address": 0x0979f9,
+            "classification": ItemClassification.useful
+        },
+    "Thunderbrand":
+        {
+            "id": 112,
+            "type": "WEAPON1",
+            "address": 0x0979fa,
+            "classification": ItemClassification.useful
+        },
+    "Icebrand":
+        {
+            "id": 113,
+            "type": "WEAPON1",
+            "address": 0x0979fb,
+            "classification": ItemClassification.useful
+        },
+    "Stone sword":
+        {
+            "id": 114,
+            "type": "WEAPON1",
+            "address": 0x0979fc,
+            "classification": ItemClassification.useful
+        },
+    "Holy sword":
+        {
+            "id": 115,
+            "type": "WEAPON1",
+            "address": 0x0979fd,
+            "classification": ItemClassification.useful
+        },
+    "Terminus est":
+        {
+            "id": 116,
+            "type": "WEAPON1",
+            "address": 0x0979fe,
+            "classification": ItemClassification.useful
+        },
+    "Marsil":
+        {
+            "id": 117,
+            "type": "WEAPON1",
+            "address": 0x0979ff,
+            "classification": ItemClassification.useful
+        },
+    "Dark blade":
+        {
+            "id": 118,
+            "type": "WEAPON1",
+            "address": 0x097a00,
+            "classification": ItemClassification.useful
+        },
+    "Heaven sword":
+        {
+            "id": 119,
+            "type": "WEAPON1",
+            "address": 0x097a01,
+            "classification": ItemClassification.useful
+        },
+    "Fist of tulkas":
+        {
+            "id": 120,
+            "type": "WEAPON1",
+            "address": 0x097a02,
+            "classification": ItemClassification.useful
+        },
+    "Gurthang":
+        {
+            "id": 121,
+            "type": "WEAPON1",
+            "address": 0x097a03,
+            "classification": ItemClassification.useful
+        },
+    "Mourneblade":
+        {
+            "id": 122,
+            "type": "WEAPON1",
+            "address": 0x097a04,
+            "classification": ItemClassification.useful
+        },
+    "Alucard sword":
+        {
+            "id": 123,
+            "type": "WEAPON1",
+            "address": 0x097a05,
+            "classification": ItemClassification.useful
+        },
+    "Mablung sword":
+        {
+            "id": 124,
+            "type": "WEAPON1",
+            "address": 0x097a06,
+            "classification": ItemClassification.useful
+        },
+    "Badelaire":
+        {
+            "id": 125,
+            "type": "WEAPON1",
+            "address": 0x097a07,
+            "classification": ItemClassification.useful
+        },
+    "Sword familiar":
+        {
+            "id": 126,
+            "type": "WEAPON1",
+            "address": 0x097a08,
+            "classification": ItemClassification.useful
+        },
+    "Great sword":
+        {
+            "id": 127,
+            "type": "WEAPON2",
+            "address": 0x097a09,
+            "classification": ItemClassification.useful
+        },
+    "Mace":
+        {
+            "id": 128,
+            "type": "WEAPON1",
+            "address": 0x097a0a,
+            "classification": ItemClassification.useful
+        },
+    "Morningstar":
+        {
+            "id": 129,
+            "type": "WEAPON1",
+            "address": 0x097a0b,
+            "classification": ItemClassification.useful
+        },
+    "Holy rod":
+        {
+            "id": 130,
+            "type": "WEAPON1",
+            "address": 0x097a0c,
+            "classification": ItemClassification.useful
+        },
+    "Star flail":
+        {
+            "id": 131,
+            "type": "WEAPON1",
+            "address": 0x097a0d,
+            "classification": ItemClassification.useful
+        },
+    "Moon rod":
+        {
+            "id": 132,
+            "type": "WEAPON1",
+            "address": 0x097a0e,
+            "classification": ItemClassification.useful
+        },
+    "Chakram":
+        {
+            "id": 133,
+            "type": "WEAPON1",
+            "address": 0x097a0f,
+            "classification": ItemClassification.useful
+        },
+    "Fire boomerang":
+        {
+            "id": 134,
+            "type": "USABLE",
+            "address": 0x097a10,
+            "classification": ItemClassification.filler
+        },
+    "Iron ball":
+        {
+            "id": 135,
+            "type": "USABLE",
+            "address": 0x097a11,
+            "classification": ItemClassification.filler
+        },
+    "Holbein dagger":
+        {
+            "id": 136,
+            "type": "WEAPON1",
+            "address": 0x097a12,
+            "classification": ItemClassification.useful
+        },
+    "Blue knuckles":
+        {
+            "id": 137,
+            "type": "WEAPON1",
+            "address": 0x097a13,
+            "classification": ItemClassification.useful
+        },
+    "Dynamite":
+        {
+            "id": 138,
+            "type": "USABLE",
+            "address": 0x097a14,
+            "classification": ItemClassification.filler
+        },
+    "Osafune katana":
+        {
+            "id": 139,
+            "type": "WEAPON2",
+            "address": 0x097a15,
+            "classification": ItemClassification.useful
+        },
+    "Masamune":
+        {
+            "id": 140,
+            "type": "WEAPON2",
+            "address": 0x097a16,
+            "classification": ItemClassification.useful
+        },
+    "Muramasa":
+        {
+            "id": 141,
+            "type": "WEAPON2",
+            "address": 0x097a17,
+            "classification": ItemClassification.useful
+        },
+    "Heart refresh":
+        {
+            "id": 142,
+            "type": "USABLE",
+            "address": 0x097a18,
+            "classification": ItemClassification.filler
+        },
+    "Runesword":
+        {
+            "id": 143,
+            "type": "WEAPON1",
+            "address": 0x097a19,
+            "classification": ItemClassification.useful
+        },
+    "Antivenom":
+        {
+            "id": 144,
+            "type": "USABLE",
+            "address": 0x097a1a,
+            "classification": ItemClassification.filler
+        },
+    "Uncurse":
+        {
+            "id": 145,
+            "type": "USABLE",
+            "address": 0x097a1b,
+            "classification": ItemClassification.filler
+        },
+    "Life apple":
+        {
+            "id": 146,
+            "type": "USABLE",
+            "address": 0x097a1c,
+            "classification": ItemClassification.filler
+        },
+    "Hammer":
+        {
+            "id": 147,
+            "type": "USABLE",
+            "address": 0x097a1d,
+            "classification": ItemClassification.filler
+        },
+    "Str. potion":
+        {
+            "id": 148,
+            "type": "USABLE",
+            "address": 0x097a1e,
+            "classification": ItemClassification.filler
+        },
+    "Luck potion":
+        {
+            "id": 149,
+            "type": "USABLE",
+            "address": 0x097a1f,
+            "classification": ItemClassification.filler
+        },
+    "Smart potion":
+        {
+            "id": 150,
+            "type": "USABLE",
+            "address": 0x097a20,
+            "classification": ItemClassification.filler
+        },
+    "Attack potion":
+        {
+            "id": 151,
+            "type": "USABLE",
+            "address": 0x097a21,
+            "classification": ItemClassification.filler
+        },
+    "Shield potion":
+        {
+            "id": 152,
+            "type": "USABLE",
+            "address": 0x097a22,
+            "classification": ItemClassification.filler
+        },
+    "Resist fire":
+        {
+            "id": 153,
+            "type": "USABLE",
+            "address": 0x097a23,
+            "classification": ItemClassification.filler
+        },
+    "Resist thunder":
+        {
+            "id": 154,
+            "type": "USABLE",
+            "address": 0x097a24,
+            "classification": ItemClassification.filler
+        },
+    "Resist ice":
+        {
+            "id": 155,
+            "type": "USABLE",
+            "address": 0x097a25,
+            "classification": ItemClassification.filler
+        },
+    "Resist stone":
+        {
+            "id": 156,
+            "type": "USABLE",
+            "address": 0x097a26,
+            "classification": ItemClassification.filler
+        },
+    "Resist holy":
+        {
+            "id": 157,
+            "type": "USABLE",
+            "address": 0x097a27,
+            "classification": ItemClassification.filler
+        },
+    "Resist dark":
+        {
+            "id": 158,
+            "type": "USABLE",
+            "address": 0x097a28,
+            "classification": ItemClassification.filler
+        },
+    "Potion":
+        {
+            "id": 159,
+            "type": "USABLE",
+            "address": 0x097a29,
+            "classification": ItemClassification.filler
+        },
+    "High potion":
+        {
+            "id": 160,
+            "type": "USABLE",
+            "address": 0x097a2a,
+            "classification": ItemClassification.filler
+        },
+    "Elixir":
+        {
+            "id": 161,
+            "type": "USABLE",
+            "address": 0x097a2b,
+            "classification": ItemClassification.filler
+        },
+    "Manna prism":
+        {
+            "id": 162,
+            "type": "USABLE",
+            "address": 0x097a2c,
+            "classification": ItemClassification.filler
+        },
+    "Vorpal blade":
+        {
+            "id": 163,
+            "type": "WEAPON1",
+            "address": 0x097a2d,
+            "classification": ItemClassification.useful
+        },
+    "Crissaegrim":
+        {
+            "id": 164,
+            "type": "WEAPON1",
+            "address": 0x097a2e,
+            "classification": ItemClassification.useful
+        },
+    "Yasutsuna":
+        {
+            "id": 165,
+            "type": "WEAPON2",
+            "address": 0x097a2f,
+            "classification": ItemClassification.useful
+        },
+    "Library card":
+        {
+            "id": 166,
+            "type": "USABLE",
+            "address": 0x097a30,
+            "classification": ItemClassification.filler
+        },
+    "Alucart shield":
+        {
+            "id": 167,
+            "type": "SHIELD",
+            "address": 0x097a31,
+            "classification": ItemClassification.useful
+        },
+    "Alucart sword":
+        {
+            "id": 168,
+            "type": "WEAPON1",
+            "address": 0x097a32,
+            "classification": ItemClassification.useful
+        },
+    "Cloth tunic":
+        {
+            "id": 170,
+            "type": "ARMOR",
+            "address": 0x097a34,
+            "classification": ItemClassification.useful
+        },
+    "Hide cuirass":
+        {
+            "id": 171,
+            "type": "ARMOR",
+            "address": 0x097a35,
+            "classification": ItemClassification.useful
+        },
+    "Bronze cuirass":
+        {
+            "id": 172,
+            "type": "ARMOR",
+            "address": 0x097a36,
+            "classification": ItemClassification.useful
+        },
+    "Iron cuirass":
+        {
+            "id": 173,
+            "type": "ARMOR",
+            "address": 0x097a37,
+            "classification": ItemClassification.useful
+        },
+    "Steel cuirass":
+        {
+            "id": 174,
+            "type": "ARMOR",
+            "address": 0x097a38,
+            "classification": ItemClassification.useful
+        },
+    "Silver plate":
+        {
+            "id": 175,
+            "type": "ARMOR",
+            "address": 0x097a39,
+            "classification": ItemClassification.useful
+        },
+    "Gold plate":
+        {
+            "id": 176,
+            "type": "ARMOR",
+            "address": 0x097a3a,
+            "classification": ItemClassification.useful
+        },
+    "Platinum mail":
+        {
+            "id": 177,
+            "type": "ARMOR",
+            "address": 0x097a3b,
+            "classification": ItemClassification.useful
+        },
+    "Diamond plate":
+        {
+            "id": 178,
+            "type": "ARMOR",
+            "address": 0x097a3c,
+            "classification": ItemClassification.useful
+        },
+    "Fire mail":
+        {
+            "id": 179,
+            "type": "ARMOR",
+            "address": 0x097a3d,
+            "classification": ItemClassification.useful
+        },
+    "Lightning mail":
+        {
+            "id": 180,
+            "type": "ARMOR",
+            "address": 0x097a3e,
+            "classification": ItemClassification.useful
+        },
+    "Ice mail":
+        {
+            "id": 181,
+            "type": "ARMOR",
+            "address": 0x097a3f,
+            "classification": ItemClassification.useful
+        },
+    "Mirror cuirass":
+        {
+            "id": 182,
+            "type": "ARMOR",
+            "address": 0x097a40,
+            "classification": ItemClassification.useful
+        },
+    "Spike breaker":
+        {
+            "id": 183,
+            "type": "ARMOR",
+            "address": 0x097a41,
+            "classification": ItemClassification.progression
+        },
+    "Alucard mail":
+        {
+            "id": 184,
+            "type": "ARMOR",
+            "address": 0x097a42,
+            "classification": ItemClassification.useful
+        },
+    "Dark armor":
+        {
+            "id": 185,
+            "type": "ARMOR",
+            "address": 0x097a43,
+            "classification": ItemClassification.useful
+        },
+    "Healing mail":
+        {
+            "id": 186,
+            "type": "ARMOR",
+            "address": 0x097a44,
+            "classification": ItemClassification.useful
+        },
+    "Holy mail":
+        {
+            "id": 187,
+            "type": "ARMOR",
+            "address": 0x097a45,
+            "classification": ItemClassification.useful
+        },
+    "Walk armor":
+        {
+            "id": 188,
+            "type": "ARMOR",
+            "address": 0x097a46,
+            "classification": ItemClassification.useful
+        },
+    "Brilliant mail":
+        {
+            "id": 189,
+            "type": "ARMOR",
+            "address": 0x097a47,
+            "classification": ItemClassification.useful
+        },
+    "Mojo mail":
+        {
+            "id": 190,
+            "type": "ARMOR",
+            "address": 0x097a48,
+            "classification": ItemClassification.useful
+        },
+    "Fury plate":
+        {
+            "id": 191,
+            "type": "ARMOR",
+            "address": 0x097a49,
+            "classification": ItemClassification.useful
+        },
+    "Dracula tunic":
+        {
+            "id": 192,
+            "type": "ARMOR",
+            "address": 0x097a4a,
+            "classification": ItemClassification.useful
+        },
+    "God's Garb":
+        {
+            "id": 193,
+            "type": "ARMOR",
+            "address": 0x097a4b,
+            "classification": ItemClassification.useful
+        },
+    "Axe Lord armor":
+        {
+            "id": 194,
+            "type": "ARMOR",
+            "address": 0x097a4c,
+            "classification": ItemClassification.filler
+        },
+    "Alucart mail":
+        {
+            "id": 258,
+            "type": "ARMOR",
+            "address": 0x097a8c,
+            "classification": ItemClassification.useful
+        },
+    "Sunglasses":
+        {
+            "id": 196,
+            "type": "HELMET",
+            "address": 0x097a4e,
+            "classification": ItemClassification.useful
+        },
+    "Ballroom mask":
+        {
+            "id": 197,
+            "type": "HELMET",
+            "address": 0x097a4f,
+            "classification": ItemClassification.useful
+        },
+    "Bandanna":
+        {
+            "id": 198,
+            "type": "HELMET",
+            "address": 0x097a50,
+            "classification": ItemClassification.useful
+        },
+    "Felt hat":
+        {
+            "id": 199,
+            "type": "HELMET",
+            "address": 0x097a51,
+            "classification": ItemClassification.useful
+        },
+    "Velvet hat":
+        {
+            "id": 200,
+            "type": "HELMET",
+            "address": 0x097a52,
+            "classification": ItemClassification.useful
+        },
+    "Goggles":
+        {
+            "id": 201,
+            "type": "HELMET",
+            "address": 0x097a53,
+            "classification": ItemClassification.useful
+        },
+    "Leather hat":
+        {
+            "id": 202,
+            "type": "HELMET",
+            "address": 0x097a54,
+            "classification": ItemClassification.useful
+        },
+    "Holy glasses":
+        {
+            "id": 203,
+            "type": "HELMET",
+            "address": 0x097a55,
+            "classification": ItemClassification.progression
+        },
+    "Steel helm":
+        {
+            "id": 204,
+            "type": "HELMET",
+            "address": 0x097a56,
+            "classification": ItemClassification.useful
+        },
+    "Stone mask":
+        {
+            "id": 205,
+            "type": "HELMET",
+            "address": 0x097a57,
+            "classification": ItemClassification.useful
+        },
+    "Circlet":
+        {
+            "id": 206,
+            "type": "HELMET",
+            "address": 0x097a58,
+            "classification": ItemClassification.useful
+        },
+    "Gold circlet":
+        {
+            "id": 207,
+            "type": "HELMET",
+            "address": 0x097a59,
+            "classification": ItemClassification.useful
+        },
+    "Ruby circlet":
+        {
+            "id": 208,
+            "type": "HELMET",
+            "address": 0x097a5a,
+            "classification": ItemClassification.useful
+        },
+    "Opal circlet":
+        {
+            "id": 209,
+            "type": "HELMET",
+            "address": 0x097a5b,
+            "classification": ItemClassification.useful
+        },
+    "Topaz circlet":
+        {
+            "id": 210,
+            "type": "HELMET",
+            "address": 0x097a5c,
+            "classification": ItemClassification.useful
+        },
+    "Beryl circlet":
+        {
+            "id": 211,
+            "type": "HELMET",
+            "address": 0x097a5d,
+            "classification": ItemClassification.useful
+        },
+    "Cat-eye circl.":
+        {
+            "id": 212,
+            "type": "HELMET",
+            "address": 0x097a5e,
+            "classification": ItemClassification.useful
+        },
+    "Coral circlet":
+        {
+            "id": 213,
+            "type": "HELMET",
+            "address": 0x097a5f,
+            "classification": ItemClassification.useful
+        },
+    "Dragon helm":
+        {
+            "id": 214,
+            "type": "HELMET",
+            "address": 0x097a60,
+            "classification": ItemClassification.useful
+        },
+    "Silver crown":
+        {
+            "id": 215,
+            "type": "HELMET",
+            "address": 0x097a61,
+            "classification": ItemClassification.useful
+        },
+    "Wizard hat":
+        {
+            "id": 216,
+            "type": "HELMET",
+            "address": 0x097a62,
+            "classification": ItemClassification.useful
+        },
+    "Cloth cape":
+        {
+            "id": 218,
+            "type": "CLOAK",
+            "address": 0x097a64,
+            "classification": ItemClassification.useful
+        },
+    "Reverse cloak":
+        {
+            "id": 219,
+            "type": "CLOAK",
+            "address": 0x097a65,
+            "classification": ItemClassification.useful
+        },
+    "Elven cloak":
+        {
+            "id": 220,
+            "type": "CLOAK",
+            "address": 0x097a66,
+            "classification": ItemClassification.useful
+        },
+    "Crystal cloak":
+        {
+            "id": 221,
+            "type": "CLOAK",
+            "address": 0x097a67,
+            "classification": ItemClassification.useful
+        },
+    "Royal cloak":
+        {
+            "id": 222,
+            "type": "CLOAK",
+            "address": 0x097a68,
+            "classification": ItemClassification.useful
+        },
+    "Blood cloak":
+        {
+            "id": 223,
+            "type": "CLOAK",
+            "address": 0x097a69,
+            "classification": ItemClassification.useful
+        },
+    "Joseph's cloak":
+        {
+            "id": 224,
+            "type": "CLOAK",
+            "address": 0x097a6a,
+            "classification": ItemClassification.useful
+        },
+    "Twilight cloak":
+        {
+            "id": 225,
+            "type": "CLOAK",
+            "address": 0x097a6b,
+            "classification": ItemClassification.useful
+        },
+    "Moonstone":
+        {
+            "id": 227,
+            "type": "ACCESSORY",
+            "address": 0x097a6d,
+            "classification": ItemClassification.useful
+        },
+    "Sunstone":
+        {
+            "id": 228,
+            "type": "ACCESSORY",
+            "address": 0x097a6e,
+            "classification": ItemClassification.useful
+        },
+    "Bloodstone":
+        {
+            "id": 229,
+            "type": "ACCESSORY",
+            "address": 0x097a6f,
+            "classification": ItemClassification.useful
+        },
+    "Staurolite":
+        {
+            "id": 230,
+            "type": "ACCESSORY",
+            "address": 0x097a70,
+            "classification": ItemClassification.useful
+        },
+    "Ring of pales":
+        {
+            "id": 231,
+            "type": "ACCESSORY",
+            "address": 0x097a71,
+            "classification": ItemClassification.useful
+        },
+    "Zircon":
+        {
+            "id": 232,
+            "type": "ACCESSORY",
+            "address": 0x097a72,
+            "classification": ItemClassification.filler
+        },
+    "Aquamarine":
+        {
+            "id": 233,
+            "type": "ACCESSORY",
+            "address": 0x097a73,
+            "classification": ItemClassification.filler
+        },
+    "Turquoise":
+        {
+            "id": 234,
+            "type": "ACCESSORY",
+            "address": 0x097a74,
+            "classification": ItemClassification.filler
+        },
+    "Onyx":
+        {
+            "id": 235,
+            "type": "ACCESSORY",
+            "address": 0x097a75,
+            "classification": ItemClassification.filler
+        },
+    "Garnet":
+        {
+            "id": 236,
+            "type": "ACCESSORY",
+            "address": 0x097a76,
+            "classification": ItemClassification.filler
+        },
+    "Opal":
+        {
+            "id": 237,
+            "type": "ACCESSORY",
+            "address": 0x097a77,
+            "classification": ItemClassification.filler
+        },
+    "Diamond":
+        {
+            "id": 238,
+            "type": "ACCESSORY",
+            "address": 0x097a78,
+            "classification": ItemClassification.filler
+        },
+    "Lapis lazuli":
+        {
+            "id": 239,
+            "type": "ACCESSORY",
+            "address": 0x097a79,
+            "classification": ItemClassification.useful
+        },
+    "Ring of ares":
+        {
+            "id": 240,
+            "type": "ACCESSORY",
+            "address": 0x097a7a,
+            "classification": ItemClassification.useful
+        },
+    "Gold ring":
+        {
+            "id": 241,
+            "type": "ACCESSORY",
+            "address": 0x097a7b,
+            "classification": ItemClassification.progression
+        },
+    "Silver ring":
+        {
+            "id": 242,
+            "type": "ACCESSORY",
+            "address": 0x097a7c,
+            "classification": ItemClassification.progression
+        },
+    "Ring of varda":
+        {
+            "id": 243,
+            "type": "ACCESSORY",
+            "address": 0x097a7d,
+            "classification": ItemClassification.useful
+        },
+    "Ring of arcana":
+        {
+            "id": 244,
+            "type": "ACCESSORY",
+            "address": 0x097a7e,
+            "classification": ItemClassification.useful
+        },
+    "Mystic pendant":
+        {
+            "id": 245,
+            "type": "ACCESSORY",
+            "address": 0x097a7f,
+            "classification": ItemClassification.useful
+        },
+    "Heart broach":
+        {
+            "id": 246,
+            "type": "ACCESSORY",
+            "address": 0x097a80,
+            "classification": ItemClassification.useful
+        },
+    "Necklace of j":
+        {
+            "id": 247,
+            "type": "ACCESSORY",
+            "address": 0x097a81,
+            "classification": ItemClassification.useful
+        },
+    "Gauntlet":
+        {
+            "id": 248,
+            "type": "ACCESSORY",
+            "address": 0x097a82,
+            "classification": ItemClassification.useful
+        },
+    "Ankh of life":
+        {
+            "id": 249,
+            "type": "ACCESSORY",
+            "address": 0x097a83,
+            "classification": ItemClassification.useful
+        },
+    "Ring of feanor":
+        {
+            "id": 250,
+            "type": "ACCESSORY",
+            "address": 0x097a84,
+            "classification": ItemClassification.useful
+        },
+    "Medal":
+        {
+            "id": 251,
+            "type": "ACCESSORY",
+            "address": 0x097a85,
+            "classification": ItemClassification.useful
+        },
+    "Talisman":
+        {
+            "id": 252,
+            "type": "ACCESSORY",
+            "address": 0x097a86,
+            "classification": ItemClassification.useful
+        },
+    "Duplicator":
+        {
+            "id": 253,
+            "type": "ACCESSORY",
+            "address": 0x097a87,
+            "classification": ItemClassification.useful
+        },
+    "King's stone":
+        {
+            "id": 254,
+            "type": "ACCESSORY",
+            "address": 0x097a88,
+            "classification": ItemClassification.useful
+        },
+    "Covenant stone":
+        {
+            "id": 255,
+            "type": "ACCESSORY",
+            "address": 0x097a89,
+            "classification": ItemClassification.useful
+        },
+    "Nauglamir":
+        {
+            "id": 256,
+            "type": "ACCESSORY",
+            "address": 0x097a8a,
+            "classification": ItemClassification.useful
+        },
+    "Secret boots":
+        {
+            "id": 257,
+            "type": "ACCESSORY",
+            "address": 0x097a8b,
+            "classification": ItemClassification.filler
+        },
+    "Soul of bat":
+        {
+            "id": 300,
+            "type": "RELIC",
+            "address": 0x097964,
+            "classification": ItemClassification.progression
+        },
+    "Fire of bat":
+        {
+            "id": 301,
+            "type": "RELIC",
+            "address": 0x097965,
+            "classification": ItemClassification.useful
+        },
+    "Echo of bat":
+        {
+            "id": 302,
+            "type": "RELIC",
+            "address": 0x097966,
+            "classification": ItemClassification.progression
+        },
+    "Force of echo":
+        {
+            "id": 303,
+            "type": "RELIC",
+            "address": 0x097967,
+            "classification": ItemClassification.useful
+        },
+    "Soul of wolf":
+        {
+            "id": 304,
+            "type": "RELIC",
+            "address": 0x097968,
+            "classification": ItemClassification.progression
+        },
+    "Power of wolf":
+        {
+            "id": 305,
+            "type": "RELIC",
+            "address": 0x097969,
+            "classification": ItemClassification.useful
+        },
+    "Skill of wolf":
+        {
+            "id": 306,
+            "type": "RELIC",
+            "address": 0x09796a,
+            "classification": ItemClassification.useful
+        },
+    "Form of mist":
+        {
+            "id": 307,
+            "type": "RELIC",
+            "address": 0x09796b,
+            "classification": ItemClassification.progression
+        },
+    "Power of mist":
+        {
+            "id": 308,
+            "type": "RELIC",
+            "address": 0x09796c,
+            "classification": ItemClassification.progression
+        },
+    "Gas cloud":
+        {
+            "id": 309,
+            "type": "RELIC",
+            "address": 0x09796d,
+            "classification": ItemClassification.useful
+        },
+    "Cube of zoe":
+        {
+            "id": 310,
+            "type": "RELIC",
+            "address": 0x09796e,
+            "classification": ItemClassification.progression
+        },
+    "Spirit orb":
+        {
+            "id": 311,
+            "type": "RELIC",
+            "address": 0x09796f,
+            "classification": ItemClassification.useful
+        },
+    "Gravity boots":
+        {
+            "id": 312,
+            "type": "RELIC",
+            "address": 0x097970,
+            "classification": ItemClassification.progression
+        },
+    "Leap stone":
+        {
+            "id": 313,
+            "type": "RELIC",
+            "address": 0x097971,
+            "classification": ItemClassification.progression
+        },
+    "Holy symbol":
+        {
+            "id": 314,
+            "type": "RELIC",
+            "address": 0x097972,
+            "classification": ItemClassification.progression
+        },
+    "Faerie scroll":
+        {
+            "id": 315,
+            "type": "RELIC",
+            "address": 0x097973,
+            "classification": ItemClassification.useful
+        },
+    "Jewel of open":
+        {
+            "id": 316,
+            "type": "RELIC",
+            "address": 0x097974,
+            "classification": ItemClassification.progression
+        },
+    "Merman statue":
+        {
+            "id": 317,
+            "type": "RELIC",
+            "address": 0x097975,
+            "classification": ItemClassification.progression
+        },
+    "Bat card":
+        {
+            "id": 318,
+            "type": "RELIC",
+            "address": 0x097976,
+            "classification": ItemClassification.useful
+        },
+    "Ghost card":
+        {
+            "id": 319,
+            "type": "RELIC",
+            "address": 0x097977,
+            "classification": ItemClassification.useful
+        },
+    "Faerie card":
+        {
+            "id": 320,
+            "type": "RELIC",
+            "address": 0x097978,
+            "classification": ItemClassification.useful
+        },
+    "Demon card":
+        {
+            "id": 321,
+            "type": "RELIC",
+            "address": 0x097979,
+            "classification": ItemClassification.progression
+        },
+    "Sword card":
+        {
+            "id": 322,
+            "type": "RELIC",
+            "address": 0x09797a,
+            "classification": ItemClassification.useful
+        },
+    "Heart of vlad":
+        {
+            "id": 325,
+            "type": "RELIC",
+            "address": 0x09797d,
+            "classification": ItemClassification.progression
+        },
+    "Tooth of vlad":
+        {
+            "id": 326,
+            "type": "RELIC",
+            "address": 0x09797e,
+            "classification": ItemClassification.progression
+        },
+    "Rib of vlad":
+        {
+            "id": 327,
+            "type": "RELIC",
+            "address": 0x09797f,
+            "classification": ItemClassification.progression
+        },
+    "Ring of vlad":
+        {
+            "id": 328,
+            "type": "RELIC",
+            "address": 0x097980,
+            "classification": ItemClassification.progression
+        },
+    "Eye of vlad":
+        {
+            "id": 329,
+            "type": "RELIC",
+            "address": 0x097981,
+            "classification": ItemClassification.progression
+        },
+    "Victory":
+        {
+            "id": 400,
+            "type": "EVENT",
+            "address": 0x000000,
+            "classification": ItemClassification.progression
+        },
+    "Boss token":
+        {
+            "id": 401,
+            "type": "EVENT",
+            "address": 0x000000,
+            "classification": ItemClassification.progression
+        },
+    "Exploration token":
+        {
+            "id": 402,
+            "type": "EVENT",
+            "address": 0x000000,
+            "classification": ItemClassification.progression
+        },
+    "Heart Vessel":
+        {
+            "id": 412,
+            "type": "POWERUP",
+            "address": 0x097ba8,
+            "classification": ItemClassification.useful
+        },
+    "Life Vessel":
+        {
+            "id": 423,
+            "type": "POWERUP",
+            "address": 0x097ba0,
+            "classification": ItemClassification.useful
+        },
 }
 
-chest_type_table = {
-    "Cloth tunic": ItemData(170, IType.ARMOR, 0x097a34, ItemClassification.useful),
-    "Hide cuirass": ItemData(171, IType.ARMOR, 0x097a35, ItemClassification.useful),
-    "Bronze cuirass": ItemData(172, IType.ARMOR, 0x097a36, ItemClassification.useful),
-    "Iron cuirass": ItemData(173, IType.ARMOR, 0x097a37, ItemClassification.useful),
-    "Steel cuirass": ItemData(174, IType.ARMOR, 0x097a38, ItemClassification.useful),
-    "Silver plate": ItemData(175, IType.ARMOR, 0x097a39, ItemClassification.useful),
-    "Gold plate": ItemData(176, IType.ARMOR, 0x097a3a, ItemClassification.useful),
-    "Platinum mail": ItemData(177, IType.ARMOR, 0x097a3b, ItemClassification.useful),
-    "Diamond plate": ItemData(178, IType.ARMOR, 0x097a3c, ItemClassification.useful),
-    "Fire mail": ItemData(179, IType.ARMOR, 0x097a3d, ItemClassification.useful),
-    "Lightning mail": ItemData(180, IType.ARMOR, 0x097a3e, ItemClassification.useful),
-    "Ice mail": ItemData(181, IType.ARMOR, 0x097a3f, ItemClassification.useful),
-    "Mirror cuirass": ItemData(182, IType.ARMOR, 0x097a40, ItemClassification.useful),
-    "Spike breaker": ItemData(183, IType.ARMOR, 0x097a41, ItemClassification.progression),
-    "Alucard mail": ItemData(184, IType.ARMOR, 0x097a42, ItemClassification.useful),
-    "Dark armor": ItemData(185, IType.ARMOR, 0x097a43, ItemClassification.useful),
-    "Healing mail": ItemData(186, IType.ARMOR, 0x097a44, ItemClassification.useful),
-    "Holy mail": ItemData(187, IType.ARMOR, 0x097a45, ItemClassification.useful),
-    "Walk armor": ItemData(188, IType.ARMOR, 0x097a46, ItemClassification.useful),
-    "Brilliant mail": ItemData(189, IType.ARMOR, 0x097a47, ItemClassification.useful),
-    "Mojo mail": ItemData(190, IType.ARMOR, 0x097a48, ItemClassification.useful),
-    "Fury plate": ItemData(191, IType.ARMOR, 0x097a49, ItemClassification.useful),
-    "Dracula tunic": ItemData(192, IType.ARMOR, 0x097a4a, ItemClassification.useful),
-    "God's Garb": ItemData(193, IType.ARMOR, 0x097a4b, ItemClassification.useful),
-    "Axe Lord armor": ItemData(194, IType.ARMOR, 0x097a4c),
-    "Alucart mail": ItemData(258, IType.ARMOR, 0x097a8c, ItemClassification.useful),
-}
-
-helmet_type_table = {
-    "Sunglasses": ItemData(196, IType.HELMET, 0x097a4e, ItemClassification.useful),
-    "Ballroom mask": ItemData(197, IType.HELMET, 0x097a4f, ItemClassification.useful),
-    "Bandanna": ItemData(198, IType.HELMET, 0x097a50, ItemClassification.useful),
-    "Felt hat": ItemData(199, IType.HELMET, 0x097a51, ItemClassification.useful),
-    "Velvet hat": ItemData(200, IType.HELMET, 0x097a52, ItemClassification.useful),
-    "Goggles": ItemData(201, IType.HELMET, 0x097a53, ItemClassification.useful),
-    "Leather hat": ItemData(202, IType.HELMET, 0x097a54, ItemClassification.useful),
-    "Holy glasses": ItemData(203, IType.HELMET, 0x097a55, ItemClassification.progression),
-    "Steel helm": ItemData(204, IType.HELMET, 0x097a56, ItemClassification.useful),
-    "Stone mask": ItemData(205, IType.HELMET, 0x097a57, ItemClassification.useful),
-    "Circlet": ItemData(206, IType.HELMET, 0x097a58, ItemClassification.useful),
-    "Gold circlet": ItemData(207, IType.HELMET, 0x097a59, ItemClassification.useful),
-    "Ruby circlet": ItemData(208, IType.HELMET, 0x097a5a, ItemClassification.useful),
-    "Opal circlet": ItemData(209, IType.HELMET, 0x097a5b, ItemClassification.useful),
-    "Topaz circlet": ItemData(210, IType.HELMET, 0x097a5c, ItemClassification.useful),
-    "Beryl circlet": ItemData(211, IType.HELMET, 0x097a5d, ItemClassification.useful),
-    "Cat-eye circl.": ItemData(212, IType.HELMET, 0x097a5e, ItemClassification.useful),
-    "Coral circlet": ItemData(213, IType.HELMET, 0x097a5f, ItemClassification.useful),
-    "Dragon helm": ItemData(214, IType.HELMET, 0x097a60, ItemClassification.useful),
-    "Silver crown": ItemData(215, IType.HELMET, 0x097a61, ItemClassification.useful),
-    "Wizard hat": ItemData(216, IType.HELMET, 0x097a62, ItemClassification.useful),
-}
-
-cloak_type_table = {
-    "Cloth cape": ItemData(218, IType.CLOAK, 0x097a64, ItemClassification.useful),
-    "Reverse cloak": ItemData(219, IType.CLOAK, 0x097a65, ItemClassification.useful),
-    "Elven cloak": ItemData(220, IType.CLOAK, 0x097a66, ItemClassification.useful),
-    "Crystal cloak": ItemData(221, IType.CLOAK, 0x097a67, ItemClassification.useful),
-    "Royal cloak": ItemData(222, IType.CLOAK, 0x097a68, ItemClassification.useful),
-    "Blood cloak": ItemData(223, IType.CLOAK, 0x097a69, ItemClassification.useful),
-    "Joseph's cloak": ItemData(224, IType.CLOAK, 0x097a6a, ItemClassification.useful),
-    "Twilight cloak": ItemData(225, IType.CLOAK, 0x097a6b, ItemClassification.useful),
-}
-
-acc_type_table = {
-    "Moonstone": ItemData(227, IType.ACCESSORY, 0x097a6d, ItemClassification.useful),
-    "Sunstone": ItemData(228, IType.ACCESSORY, 0x097a6e, ItemClassification.useful),
-    "Bloodstone": ItemData(229, IType.ACCESSORY, 0x097a6f, ItemClassification.useful),
-    "Staurolite": ItemData(230, IType.ACCESSORY, 0x097a70, ItemClassification.useful),
-    "Ring of pales": ItemData(231, IType.ACCESSORY, 0x097a71, ItemClassification.useful),
-    "Zircon": ItemData(232, IType.ACCESSORY, 0x097a72),
-    "Aquamarine": ItemData(233, IType.ACCESSORY, 0x097a73),
-    "Turquoise": ItemData(234, IType.ACCESSORY, 0x097a74),
-    "Onyx": ItemData(235, IType.ACCESSORY, 0x097a75),
-    "Garnet": ItemData(236, IType.ACCESSORY, 0x097a76),
-    "Opal": ItemData(237, IType.ACCESSORY, 0x097a77),
-    "Diamond": ItemData(238, IType.ACCESSORY, 0x097a78),
-    "Lapis lazuli": ItemData(239, IType.ACCESSORY, 0x097a79, ItemClassification.useful),
-    "Ring of ares": ItemData(240, IType.ACCESSORY, 0x097a7a, ItemClassification.useful),
-    "Gold ring": ItemData(241, IType.ACCESSORY, 0x097a7b, ItemClassification.progression),
-    "Silver ring": ItemData(242, IType.ACCESSORY, 0x097a7C, ItemClassification.progression),
-    "Ring of varda": ItemData(243, IType.ACCESSORY, 0x097a7d, ItemClassification.useful),
-    "Ring of arcana": ItemData(244, IType.ACCESSORY, 0x097a7e, ItemClassification.useful),
-    "Mystic pendant": ItemData(245, IType.ACCESSORY, 0x097a7f, ItemClassification.useful),
-    "Heart broach": ItemData(246, IType.ACCESSORY, 0x097a80, ItemClassification.useful),
-    "Necklace of j": ItemData(247, IType.ACCESSORY, 0x097a81, ItemClassification.useful),
-    "Gauntlet": ItemData(248, IType.ACCESSORY, 0x097a82, ItemClassification.useful),
-    "Ankh of life": ItemData(249, IType.ACCESSORY, 0x097a83, ItemClassification.useful),
-    "Ring of feanor": ItemData(250, IType.ACCESSORY, 0x097a84, ItemClassification.useful),
-    "Medal": ItemData(251, IType.ACCESSORY, 0x097a85, ItemClassification.useful),
-    "Talisman": ItemData(252, IType.ACCESSORY, 0x097a86, ItemClassification.useful),
-    "Duplicator": ItemData(253, IType.ACCESSORY, 0x097a87, ItemClassification.useful),
-    "King's stone": ItemData(254, IType.ACCESSORY, 0x097a88, ItemClassification.useful),
-    "Covenant stone": ItemData(255, IType.ACCESSORY, 0x097a89, ItemClassification.useful),
-    "Nauglamir": ItemData(256, IType.ACCESSORY, 0x097a8a, ItemClassification.useful),
-    "Secret boots": ItemData(257, IType.ACCESSORY, 0x097a8b)
-}
-
-vessel_table = {
-    "Heart Vessel": ItemData(412, IType.POWERUP, 0x097ba8, ItemClassification.useful),
-    "Life Vessel": ItemData(423, IType.POWERUP, 0x097ba0, ItemClassification.useful),
-}
-
-relic_table = {
-    "Soul of bat": ItemData(300, IType.RELIC, 0x097964, ItemClassification.progression),
-    "Fire of bat": ItemData(301, IType.RELIC, 0x097965, ItemClassification.useful),
-    "Echo of bat": ItemData(302, IType.RELIC, 0x097966, ItemClassification.progression),
-    "Force of echo": ItemData(303, IType.RELIC, 0x097967, ItemClassification.useful),
-    "Soul of wolf": ItemData(304, IType.RELIC, 0x097968, ItemClassification.progression),
-    "Power of wolf": ItemData(305, IType.RELIC, 0x097969, ItemClassification.useful),
-    "Skill of wolf": ItemData(306, IType.RELIC, 0x09796a, ItemClassification.useful),
-    "Form of mist": ItemData(307, IType.RELIC, 0x09796b, ItemClassification.progression),
-    "Power of mist": ItemData(308, IType.RELIC, 0x09796c, ItemClassification.progression),
-    "Gas cloud": ItemData(309, IType.RELIC, 0x09796d, ItemClassification.useful),
-    "Cube of zoe": ItemData(310, IType.RELIC, 0x09796e, ItemClassification.progression),
-    "Spirit orb": ItemData(311, IType.RELIC, 0x09796f, ItemClassification.useful),
-    "Gravity boots": ItemData(312, IType.RELIC, 0x097970, ItemClassification.progression),
-    "Leap stone": ItemData(313, IType.RELIC, 0x097971, ItemClassification.progression),
-    "Holy symbol": ItemData(314, IType.RELIC, 0x097972, ItemClassification.progression),
-    "Faerie scroll": ItemData(315, IType.RELIC, 0x097973, ItemClassification.useful),
-    "Jewel of open": ItemData(316, IType.RELIC, 0x097974, ItemClassification.progression),
-    "Merman statue": ItemData(317, IType.RELIC, 0x097975, ItemClassification.progression),
-    "Bat card": ItemData(318, IType.RELIC, 0x097976, ItemClassification.useful),
-    "Ghost card": ItemData(319, IType.RELIC, 0x097977, ItemClassification.useful),
-    "Faerie card": ItemData(320, IType.RELIC, 0x097978, ItemClassification.useful),
-    "Demon card": ItemData(321, IType.RELIC, 0x097979, ItemClassification.progression),
-    "Sword card": ItemData(322, IType.RELIC, 0x09797a, ItemClassification.useful),
-    "Heart of vlad": ItemData(325, IType.RELIC, 0x09797d, ItemClassification.progression),
-    "Tooth of vlad": ItemData(326, IType.RELIC, 0x09797e, ItemClassification.progression),
-    "Rib of vlad": ItemData(327, IType.RELIC, 0x09797f, ItemClassification.progression),
-    "Ring of vlad": ItemData(328, IType.RELIC, 0x097980, ItemClassification.progression),
-    "Eye of vlad": ItemData(329, IType.RELIC, 0x097981, ItemClassification.progression),
-}
-
-event_table = {
-    "Victory": ItemData(400, IType.EVENT, 0x0, ItemClassification.progression),
-    "Boss token": ItemData(401, IType.EVENT, 0x0, ItemClassification.progression),
-    "Exploration token": ItemData(402, IType.EVENT, 0x0, ItemClassification.progression)
-}
-
-boost_table = {
-    "Experience boost 1k": ItemData(330, IType.BOOST, 0x097bec, ItemClassification.useful),
-    "Experience boost 5k": ItemData(331, IType.BOOST, 0x097bec, ItemClassification.useful),
-    "Experience boost 10k": ItemData(332, IType.BOOST, 0x097bec, ItemClassification.useful),
-    "Max hp boost 10": ItemData(333, IType.BOOST, 0x097ba4, ItemClassification.useful),
-    "Max hp boost 50": ItemData(334, IType.BOOST, 0x097ba4, ItemClassification.useful),
-    "Max heart boost 10": ItemData(335, IType.BOOST, 0x097bac, ItemClassification.useful),
-    "Max heart boost 50": ItemData(336, IType.BOOST, 0x097bac, ItemClassification.useful),
-    "Max mp boost 10": ItemData(337, IType.BOOST, 0x097bb4, ItemClassification.useful),
-    "Max mp boost 50": ItemData(338, IType.BOOST, 0x097bb4, ItemClassification.useful),
-    "Hp restore": ItemData(339, IType.BOOST, 0x97ba0, ItemClassification.useful),
-    "Heart restore": ItemData(340, IType.BOOST, 0x097ba8, ItemClassification.useful),
-    "Mp restore": ItemData(341, IType.BOOST, 0x097bb0, ItemClassification.useful),
-}
-
-trap_table = {
-    "Half max hp": ItemData(350, IType.TRAP, 0x097ba4, ItemClassification.trap),
-    "80% max hp": ItemData(351, IType.TRAP, 0x097ba4, ItemClassification.trap),
-    "Half max heart": ItemData(352, IType.TRAP, 0x097bac, ItemClassification.trap),
-    "80% max heart": ItemData(353, IType.TRAP, 0x097bac, ItemClassification.trap),
-    "Half max mp": ItemData(354, IType.TRAP, 0x097bb4, ItemClassification.trap),
-    "80% max mp": ItemData(355, IType.TRAP, 0x097bb4, ItemClassification.trap),
-    "10 hp subtract": ItemData(356, IType.TRAP, 0x097ba0, ItemClassification.trap),
-    "50 hp subtract": ItemData(357, IType.TRAP, 0x097ba0, ItemClassification.trap),
-    "10 heart subtract": ItemData(358, IType.TRAP, 0x097ba8, ItemClassification.trap),
-    "50 heart subtract": ItemData(359, IType.TRAP, 0x097ba8, ItemClassification.trap),
-    "Turn into stone": ItemData(360, IType.TRAP, 0x073404, ItemClassification.trap),
-    "Teleport to zone entrance": ItemData(361, IType.TRAP, 0x03c9a4, ItemClassification.trap),
-    "Close random teleport": ItemData(362, IType.TRAP, 0x03c9a4, ItemClassification.trap),
-    "1 hit KO 30": ItemData(364, IType.TRAP, 0x0, ItemClassification.trap),
-    "1 hit KO 60": ItemData(365, IType.TRAP, 0x0, ItemClassification.trap),
-    "Fall damage 5": ItemData(366, IType.TRAP, 0x0, ItemClassification.trap),
-    "Fall damage 10": ItemData(367, IType.TRAP, 0x0, ItemClassification.trap),
-    "Ice floor 5": ItemData(368, IType.TRAP, 0x0, ItemClassification.trap),
-    "Ice floor 10": ItemData(369, IType.TRAP, 0x0, ItemClassification.trap),
-    "Axe Lord 1": ItemData(370, IType.TRAP, 0x0, ItemClassification.trap),
-    "Axe Lord 2": ItemData(371, IType.TRAP, 0x0, ItemClassification.trap)
-}
-
-item_table = {
-    **hand_type_table,
-    **chest_type_table,
-    **helmet_type_table,
-    **cloak_type_table,
-    **acc_type_table,
-    **vessel_table,
-    **relic_table,
-    **event_table,
-    **boost_table,
-    **trap_table,
-}
-
-
-def get_item_data(item_id: int) -> ItemData:
-    for k, v in item_table.items():
-        data: ItemData = v
-        if data.index == item_id:
-            return data
-
-
-def get_item_data_shop(item_id: int) -> Tuple:
-    for k, v in item_table.items():
-        data: ItemData = v
-        if data.index == item_id + base_item_id:
-            return k, data
-
+relic_id_to_name = {v["id"]: k for k, v in items.items() if v["type"] == "RELIC"}
+relic_table = {k: v for k, v in items.items() if v["type"] == "RELIC"}
+progression_items = {k: v for k, v in items.items() if v["classification"] == ItemClassification.progression}
+id_to_item = {v["id"]: v for k, v in items.items()}
