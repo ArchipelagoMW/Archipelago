@@ -507,7 +507,7 @@ class PokemonEmeraldWorld(World):
                     if location.progress_type == LocationProgressType.EXCLUDED \
                     else location.progress_type
 
-            collection_state = self.multiworld.get_all_state(False)
+            collection_state = self.multiworld.get_all_state(False, False)
 
             # If HM shuffle is on, HMs are not placed and not in the pool, so
             # `get_all_state` did not contain them. Collect them manually for
@@ -566,7 +566,7 @@ class PokemonEmeraldWorld(World):
                     if location.progress_type == LocationProgressType.EXCLUDED \
                     else location.progress_type
 
-            collection_state = self.multiworld.get_all_state(False)
+            collection_state = self.multiworld.get_all_state(False, False)
 
             # In specific very constrained conditions, fill_restrictive may run
             # out of swaps before it finds a valid solution if it gets unlucky.
@@ -585,6 +585,16 @@ class PokemonEmeraldWorld(World):
 
                     logging.debug(f"Failed to shuffle HMs for player {self.player}. Retrying.")
                     continue
+
+    def get_pre_fill_items(self) -> List[PokemonEmeraldItem]:
+        pool = []
+        if self.options.badges == RandomizeBadges.option_shuffle:
+            pool.extend(badge for _, badge in self.badge_shuffle_info)
+
+        if self.options.hms == RandomizeHms.option_shuffle:
+            pool.extend(hm for _, hm in self.hm_shuffle_info)
+
+        return pool
 
     def generate_output(self, output_directory: str) -> None:
         self.modified_trainers = copy.deepcopy(emerald_data.trainers)
