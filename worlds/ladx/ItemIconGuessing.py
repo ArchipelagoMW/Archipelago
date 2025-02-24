@@ -528,4 +528,104 @@ GAME_SPECIFIC_PHRASES = {
         '2500 Tokens': 'RUPEES_500',
         '5000 Tokens': 'RUPEES_500',
     },
+
+    # ironminer888 additions start here
+
+    "Donkey Kong Country 3": {
+        "Flupperius Petallus Pongus": "TRADING_ITEM_HIBISCUS", # It's a flower in the game
+        "Banana Bird": "ROOSTER", # Made sure this is a BIRD, not a BANANA
+    },
+
+    "Pokemon Red and Blue": {
+
+        # Key Items
+
+        "Old Amber": "STONE_BEAK", # Aerodactyl's fossil should still be a fossil
+        "Coin Case": "MAGIC_POWDER", # This shouldn't spawn as RUPEES
+        "Bike Voucher": "TRADING_ITEM_LETTER",
+        "Oak's Parcel": "TRADING_ITEM_LETTER",
+        "Pass": "TRADING_ITEM_LETTER", # Safari Pass
+        "Ticket": "TRADING_ITEM_LETTER", # SS Ticket
+
+        # Drinks Fixes
+        
+        "Soda Pop": "MEDICINE", # Lemonade gets corrected to MEDICINE sprite, should it follow for all liquids?
+        "Fresh Water": "MEDICINE", # Ditto
+
+        # Consumables
+        "Elixir": "MEDICINE", # Old-timey names for potions? Elixirs and ethers of ye olde arcane magicks...
+        "Ether": "MEDICINE",
+    },
+
+    "Pokemon Emerald": {
+        # Key Items
+
+        "Old Amber": "STONE_BEAK", # Aerodactyl's fossil should still be a fossil
+        "Coin Case": "MAGIC_POWDER", # This shouldn't spawn as RUPEES
+        "Bike Voucher": "TRADING_ITEM_LETTER",
+        "Oak's Parcel": "TRADING_ITEM_LETTER",
+        "Pass": "TRADING_ITEM_LETTER",
+        "Ticket": "TRADING_ITEM_LETTER",
+
+        # Drinks Fixes
+        
+        "Soda Pop": "MEDICINE", # Lemonade gets corrected to MEDICINE sprite, should it follow for all liquids?
+        "Fresh Water": "MEDICINE", # Ditto
+
+        # Consumables
+        "Elixir": "MEDICINE", # Old-timey names for potions? Elixirs and ethers of ye olde arcane magicks...
+        "Ether": "MEDICINE",
+        "Nanab Berry": "TRADING_ITEM_BANANAS", # Special exception for Nanab Berry, which look like bananas
+        "Berry": "TRADING_ITEM_PINEAPPLE",
+        "Mail": "TRADING_ITEM_LETTER", # Snail mail, not chain mail
+    },
+
+    "Mario & Luigi Superstar Saga": {
+
+        # Key Items
+        "Peach's Extra Dress": "RED_TUNIC",
+        "Peasley's Rose": "TRADING_ITEM_HIBISCUS",
+        "Beanstar": "PIECE_OF_POWER", # Hits both Fake Beanstar and pieces of the real Beanstar, hopefully
+        "Beanstone": "RUPEES_500", # They're gemstones
+        "Firebrand": "POWER_BRACELET", # Magic power that affects Mario/Luigi's hands, either this or MAGIC_ROD would be okay
+        "Thunderhand": "POWER_BRACELET", # Ditto
+
+        # 1-UP Super fix
+        "1-UP Super": "TOADSTOOL",
+
+        # Syrup bottles --> MEDICINE
+        "Syrup": "MEDICINE",
+
+        # Coffee blends --> MEDICINE
+        "Hoolumbian": "MEDICINE",
+        "Chuckoccino": "MEDICINE",
+        "Teeheespresso": "MEDICINE",
+        "Blend": "MEDICINE",
+
+        # Secret Scrolls --> MESSAGE
+        "Secret Scroll": "TRADING_ITEM_LETTER",
+
+        # Goblets --> MEDICINE
+        "Goblet": "MEDICINE",
+
+        # Pearl Beans --> Fruit
+        "Pearl Bean": 'TRADING_ITEM_PINEAPPLE',
+
+        # Bros. Armor --> Blue Tunic
+        "Pants": "BLUE_TUNIC",
+        "Jeans": "BLUE_TUNIC",
+        "Trousers": "BLUE_TUNIC",
+        "Slacks": "BLUE_TUNIC",
+        # Weirder Names for Gear
+        "Casual Coral": "BLUE_TUNIC",
+        "Shroom Bells": "BLUE_TUNIC",
+
+        # Badges --> Ribbon
+        "Badge": "TRADING_ITEM_RIBBON",
+        "Soulful Bros.": "TRADING_ITEM_RIBBON",
+        "Bros. Rock": "TRADING_ITEM_RIBBON",
+
+
+        "Bean": "GUARDIAN_ACORN", # Beans and nuts are similar enough, right?
+    }
 }
