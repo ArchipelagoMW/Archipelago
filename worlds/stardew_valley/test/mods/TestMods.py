@@ -189,7 +189,6 @@ class TestModEntranceRando(SVTestCase):
 
                 self.assertEqual(len(set(randomized_connections.values())), len(randomized_connections.values()),
                                  f"Connections are duplicated in randomization.")
-                        self.assertIn(item, multiworld_items)
 
 
 class TestVanillaLogicAlternativeWhenQuestsAreNotRandomized(WorldAssertMixin, SVTestBase):
