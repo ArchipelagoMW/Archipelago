@@ -41,7 +41,7 @@ from .strings.forageable_names import Forageable
 from .strings.generic_names import Generic
 from .strings.geode_names import Geode
 from .strings.material_names import Material
-from .strings.metal_names import Artifact as ArtifactName, MetalBar, Mineral
+from .strings.metal_names import MetalBar, Mineral
 from .strings.monster_names import Monster
 from .strings.performance_names import Performance
 from .strings.quest_names import Quest

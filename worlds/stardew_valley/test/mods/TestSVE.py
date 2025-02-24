@@ -20,7 +20,7 @@ class TestAuroraVineyard(SVTestBase):
         location_name = ModQuest.AuroraVineyard
         location = self.multiworld.get_location(location_name, self.player)
         self.assert_reach_location_false(location, self.multiworld.state)
-        self.collect(SVEQuestItem.aurora_vineyard_tablet, 1)
+        self.collect(SVEQuestItem.aurora_vineyard_tablet)
         self.assert_reach_location_true(location, self.multiworld.state)
 
     def test_need_reclamation_to_go_downstairs(self):
