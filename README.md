@@ -14,7 +14,7 @@ Run ArchipelagoLauncher and choose Install APWorld, select your downloaded sotn.
 
 # Playing
 ## Generate
-Place your options file along with all others players yalm in your players folder. You can get an default yalm for SOTN on ArchipelagoLauncher and choose Generate Template Options.  
+Place your options file along with all others players yaml in your players folder. You can get an default yaml for SOTN on ArchipelagoLauncher and choose Generate Template Options.  
 Run ArquipelagoGenerate, your seed will be on output directory.  
 Since this is an unsupported apworld is required to generate locally. You can open the zipped seed to get the patches for all unsuported games SOTN extension is .apsotn. You can send the file to Archipelago website to host.  
 ## Running
@@ -22,7 +22,7 @@ Select Open Patch from ArchipelagoLauncher. PAY ATTENTION TO FILE DIALOG. During
 If you prefer to open manually, run the game with AP_SEED_PLAYER.cue, chooose Bizhawk client from ArchipelagoLauncher, on Bizhawk choose Tools->Lua Console, on Lua console choose Script->Open script and select connector_bizhawk_generic.lua from data\lua directory. Don't forget to enter your server address and click connect after getting Symphony of the Night handler.  
 In the same folder as your .apsotn you will get and AP_SEED_NAME.cue, AP_SEED_NAME.bin and Castlevania - Symphony of the Night (USA) (track 2).bin files.  
 # Customize
-You can tweak some option in your default yalm:  
+You can tweak some option in your default yaml:  
 ## Tweaks
 * open_no4: Open the back door of Underground Caverns, after entering Alchemy Laboratory.
 * early_open_no4: Open the back door from the start. You gonna skip Death after entering Underground Caverns.
