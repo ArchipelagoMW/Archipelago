@@ -8,7 +8,7 @@ Symphony of the Night is a metroidvania from playstation 1
 * Bizhawk 2.7 or 2.8 or 2.9.1
 
 ### Instalation
-Download the last apworld version from releases page.
+Download the last apworld version from releases page.  
 Download error recalc software .exe for windows platform and no extension for linux platform and place in your 'lib' folder on archipelago main directory. Default is C:\ProgramData\Archipelago\lib
 Run ArchipelagoLauncher and choose Install APWorld, select your downloaded sotn.apworld, restart if asked.
 
