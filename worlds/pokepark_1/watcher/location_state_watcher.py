@@ -128,6 +128,7 @@ async def location_state_watcher(ctx):
     async def _sub():
         if not dme.is_hooked():
             return
+
         for location_id in ctx.checked_locations:
             if location_id in blocked_unlock_itemIds:
                 blocked_unlock_itemIds.remove(location_id)
@@ -139,6 +140,8 @@ async def location_state_watcher(ctx):
         handle_prisma_overwrites(stage_id)
 
         handle_pokemon_location_states(stage_id, is_in_menu, pokemon_id)
+
+
 
     while not ctx.exit_event.is_set():
         try:

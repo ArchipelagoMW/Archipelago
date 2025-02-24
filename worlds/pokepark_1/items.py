@@ -125,7 +125,8 @@ POWERS: dict[str,int] = {
 
 REGION_UNLOCK: dict[str,int] = {
     # Beach Zone Unlock
-    "Beach Zone Unlock": 99999
+    "Beach Zone Unlock": 99999,
+    "Ice Zone Unlock": 8888
 }
 
 ALL_ITEMS_TABLE: dict[str, int] = {

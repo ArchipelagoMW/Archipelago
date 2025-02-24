@@ -4,16 +4,16 @@ import dolphin_memory_engine as dme
 
 import ModuleUpdate
 from worlds.pokepark_1 import POWERS, BERRIES
-from worlds.pokepark_1.adresses import  \
+from worlds.pokepark_1.adresses import \
     berry_item_checks, \
     POWER_INCREMENTS, POWER_SHARED_ADDR, blocked_unlock_itemIds, prisma_blocked_itemIds, \
-    driffzeppeli_address, driffzeppeli_value, UNLOCKS, MemoryRange, PRISMAS, POKEMON_STATES, blocked_friendship_itemIds, \
-    blocked_friendship_unlock_itemIds
+    driffzeppeli_unlock_address, driffzeppeli_unlock_value, UNLOCKS, MemoryRange, PRISMAS, POKEMON_STATES, blocked_friendship_itemIds, \
+    blocked_friendship_unlock_itemIds, stage_id_address, main_menu_stage_id, main_menu2_stage_id, main_menu3_stage_id
 from worlds.pokepark_1.dme_helper import write_memory
 from worlds.pokepark_1.watcher.location_state_watcher import location_state_watcher
 from worlds.pokepark_1.watcher.location_watcher import location_watcher
 from worlds.pokepark_1.watcher.logic_watcher import logic_watcher
-from worlds.pokepark_1.watcher.state_watcher import state_watcher
+from worlds.pokepark_1.watcher.world_state_watcher import state_watcher
 
 ModuleUpdate.update()
 
@@ -132,6 +132,11 @@ async def game_watcher(ctx: PokeparkContext):
 
 
 def refresh_items(ctx:PokeparkContext):
+    stage_id = dme.read_word(stage_id_address)
+    if stage_id == main_menu_stage_id or stage_id == main_menu2_stage_id or stage_id == main_menu3_stage_id:
+        return
+
+
     blocked_items = set().union(
         blocked_unlock_itemIds,
         prisma_blocked_itemIds,
@@ -153,8 +158,8 @@ def refresh_items(ctx:PokeparkContext):
 
 def activate_unlock_items(items:list[NetworkItem]):
     sums = {}
-    key = (driffzeppeli_address, MemoryRange.WORD)
-    sums[key] = sums.get(key, 0) + driffzeppeli_value
+    key = (driffzeppeli_unlock_address, MemoryRange.WORD)
+    sums[key] = sums.get(key, 0) + driffzeppeli_unlock_value
     for item in set(item.item for item in items):
         if item in UNLOCKS:
             unlock = UNLOCKS[item]

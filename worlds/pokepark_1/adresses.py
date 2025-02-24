@@ -6,8 +6,8 @@ from worlds.pokepark_1 import FRIENDSHIP_ITEMS, UNLOCK_ITEMS, BERRIES
 from worlds.pokepark_1.LocationIds import MinigameLocationIds, OverworldPokemonLocationIds, QuestLocationIds
 from worlds.pokepark_1.items import PRISM_ITEM, REGION_UNLOCK
 
-driffzeppeli_address = 0x80376AE0
-driffzeppeli_value = 0x40000000
+driffzeppeli_unlock_address = 0x80376AE0
+driffzeppeli_unlock_value = 0x40000000
 pokemon_id_address = 0x8036dc20
 stage_id_address = 0x8036AEF0  # word
 is_in_menu_address = 0x80482F04
@@ -22,7 +22,9 @@ bulbasaur_minigame_stage_id = 0x98F584
 venusaur_minigame_stage_id = 0xA81938
 pelipper_minigame_stage_id = 0xD92358
 gyarados_minigame_stage_id = 0xC61408
-
+INIT_WORLD_STATE = 0x7c060
+WORLD_STATE_ADDRESS = 0x8037500C
+INIT_FAST_TRAVEL_VALUE = 0x80
 
 class MemoryRange(Enum):
     BYTE = 1  # 1 Byte
@@ -79,11 +81,13 @@ class PokemonStateInfo:
     unlock_items_to_block: List[int] | None = None
     is_special_exception: bool = False
 
+
 @dataclass
 class MinigameLocation:
     locationId: int
     location: MemoryAddress
     stage_id: int
+
 
 @dataclass
 class QuestLocation:
@@ -91,6 +95,82 @@ class QuestLocation:
     location: MemoryAddress
     check_mask: int
 
+
+@dataclass
+class ZoneGateUnlocks:
+    item_ids: List[int]
+    stage_id: int
+    gate: MemoryAddress
+
+
+@dataclass
+class ZoneState:
+    """Represents a specific zone unlock state"""
+    item_id: int
+    world_state_value: int
+    addresses: List[MemoryAddress]
+    fast_travel_flag: int
+
+
+@dataclass
+class ZoneSystem:
+    """Complete zone system including world states and gates"""
+    world_state_address: int
+    fast_travel_address: int
+    states: List[ZoneState]
+    treehouse_gates: List[ZoneGateUnlocks]
+    connected_zone_gates: List[ZoneGateUnlocks]
+
+
+ZONESYSTEM = ZoneSystem(world_state_address=0x8037500D,
+               fast_travel_address=0x8037502F,
+               states=[
+                   ZoneState(
+                       item_id=REGION_UNLOCK["Beach Zone Unlock"],
+                       world_state_value=0x870,
+                       addresses=[
+                           MemoryAddress( #unlock bidoof in beach zone
+                               base_address=0x80376af0,
+                               value=0b00001000,
+                               memory_range=MemoryRange.BYTE),
+                           MemoryAddress( # bidoof quest state on completed
+                               base_address=0x80375026,
+                               value=0b00000011,
+                               memory_range=MemoryRange.BYTE
+                           ),
+                           MemoryAddress(  #activate all bridges in beach zone
+                               base_address=0x80375010,
+                               value=0b00111011,
+                               memory_range=MemoryRange.BYTE
+                           )
+                       ],
+                       fast_travel_flag=0x40),
+                   ZoneState(
+                       item_id=REGION_UNLOCK["Ice Zone Unlock"],
+                       world_state_value=0xC1E,
+                       addresses=[
+                       ],
+                       fast_travel_flag=0x20),
+               ],
+               treehouse_gates=[
+                   ZoneGateUnlocks(
+                       stage_id=0x13282F8,
+                       item_ids=[REGION_UNLOCK["Beach Zone Unlock"]],
+                       gate=MemoryAddress(
+                           base_address=0x80D53068,
+                           memory_range=MemoryRange.WORD,
+                           value=0x01
+                       )
+                   )
+               ],
+               connected_zone_gates=[ZoneGateUnlocks(
+                   stage_id=0x13282F8,  # not used here
+                   item_ids=[REGION_UNLOCK["Beach Zone Unlock"],REGION_UNLOCK["Ice Zone Unlock"]],
+                   gate=MemoryAddress( # removes stone to lapras
+                       base_address=0x80375012,
+                       memory_range=MemoryRange.BYTE,
+                       value=0b00010000)
+               )])
 
 QUEST_LOCATIONS = [
     # Meadow Zone
@@ -128,7 +208,7 @@ QUEST_LOCATIONS = [
         check_mask=0b00010010
     ),
 
-    #Beach Zone
+    # Beach Zone
     #
     QuestLocation(
         locationId=QuestLocationIds.BEACH_BOTTLE1.value,
@@ -253,7 +333,6 @@ QUEST_LOCATIONS = [
         check_mask=0b00000011
     ),
 ]
-
 
 MINIGAME_LOCATIONS = [
     # Meadow Zone - Bulbasaur's Daring Dash Minigame
@@ -759,7 +838,6 @@ MINIGAME_LOCATIONS = [
         stage_id=gyarados_minigame_stage_id),
 ]
 
-
 blocked_friendship_itemIds = []
 blocked_friendship_unlock_itemIds = []
 POKEMON_STATES = {
@@ -1044,17 +1122,17 @@ POKEMON_STATES = {
         item=MemoryAddress(base_address=0x80375620, memory_range=MemoryRange.BYTE, value=0x80),
         location=MemoryAddress(base_address=0x80375620, offset=0x0001, value=0x80, memory_range=MemoryRange.BYTE),
         zone_id=beach_zone_stage_id,
-        pokemon_ids=[0x00000029,0x00000024],
+        pokemon_ids=[0x00000029, 0x00000024],
         friendship_items_to_block=[FRIENDSHIP_ITEMS["Taillow"]],
         locationId=FRIENDSHIP_ITEMS["Taillow"]),
     FRIENDSHIP_ITEMS["Wingull"]: PokemonStateInfo(
         item=MemoryAddress(base_address=0x803756ac, memory_range=MemoryRange.BYTE, value=0x80),
         location=MemoryAddress(base_address=0x803756ac, offset=0x0001, value=0x80, memory_range=MemoryRange.BYTE),
         zone_id=beach_zone_stage_id,
-        pokemon_ids=[0x0000000a, 0x0000002b,0x00000024],
+        pokemon_ids=[0x0000000a, 0x0000002b, 0x00000024],
         friendship_items_to_block=[FRIENDSHIP_ITEMS["Wingull"]],
         locationId=FRIENDSHIP_ITEMS["Wingull"]),
-    OverworldPokemonLocationIds.STARLY_BEACH.value: PokemonStateInfo( #offset since this entry is not an item
+    OverworldPokemonLocationIds.STARLY_BEACH.value: PokemonStateInfo(  # offset since this entry is not an item
         item=MemoryAddress(base_address=0x80375364, memory_range=MemoryRange.BYTE, value=0x80),
         location=MemoryAddress(base_address=0x80375364, offset=0x0001, value=0x80, memory_range=MemoryRange.BYTE),
         zone_id=beach_zone_stage_id,
@@ -1072,7 +1150,7 @@ POKEMON_STATES = {
         item=MemoryAddress(base_address=0x803755A8, memory_range=MemoryRange.BYTE, value=0x80),
         location=MemoryAddress(base_address=0x803755A8, offset=0x0001, value=0x80, memory_range=MemoryRange.BYTE),
         zone_id=beach_zone_stage_id,
-        pokemon_ids=[0x00000022,0x00000021,0x00000006],
+        pokemon_ids=[0x00000022, 0x00000021, 0x00000006],
         friendship_items_to_block=[FRIENDSHIP_ITEMS["Corsola"]],
         locationId=FRIENDSHIP_ITEMS["Corsola"]),
     FRIENDSHIP_ITEMS["Floatzel"]: PokemonStateInfo(
@@ -1108,7 +1186,7 @@ POKEMON_STATES = {
         item=MemoryAddress(base_address=0x80375580, memory_range=MemoryRange.BYTE, value=0x80),
         location=MemoryAddress(base_address=0x80375580, offset=0x0001, value=0x80, memory_range=MemoryRange.BYTE),
         zone_id=beach_zone_stage_id,
-        pokemon_ids=[0x0000002c,0x0000002d,0x0000000b,0x00000020],
+        pokemon_ids=[0x0000002c, 0x0000002d, 0x0000000b, 0x00000020],
         friendship_items_to_block=[FRIENDSHIP_ITEMS["Krabby"]],
         locationId=FRIENDSHIP_ITEMS["Krabby"]),
     FRIENDSHIP_ITEMS["Wailord"]: PokemonStateInfo(
@@ -1118,7 +1196,7 @@ POKEMON_STATES = {
         pokemon_ids=[0x00000013],
         friendship_items_to_block=[FRIENDSHIP_ITEMS["Wailord"]],
         locationId=FRIENDSHIP_ITEMS["Wailord"],
-    is_special_exception=True),
+        is_special_exception=True),
     FRIENDSHIP_ITEMS["Corphish"]: PokemonStateInfo(
         item=MemoryAddress(base_address=0x80375594, memory_range=MemoryRange.BYTE, value=0x80),
         location=MemoryAddress(base_address=0x80375594, offset=0x0001, value=0x80, memory_range=MemoryRange.BYTE),
@@ -1138,7 +1216,6 @@ POKEMON_STATES = {
     FRIENDSHIP_ITEMS["Piplup"]: PokemonStateInfo(
         item=MemoryAddress(base_address=0x803757EC, memory_range=MemoryRange.BYTE, value=0x80)),
 }
-
 
 prisma_blocked_itemIds = []
 
@@ -1584,11 +1661,6 @@ UNLOCKS = {
     )
 }
 
-
-
-
-
-
 POWER_INCREMENTS = {
     "thunderbolt": {
         "base": 0x11,
@@ -1643,42 +1715,3 @@ logic_adresses = [
     # deactivate power level up
     (0x801268f4, 0x60000000)
 ]
-
-green_zone_trigger_address = stage_id_address
-green_zone_trigger_value = intro_stage_id
-green_zone_states_word = [
-    (0x8037500C, 0x44C60),  # set state before beach zone
-    (0x80377E1C, 0x2),  # init prisma for minigame bulbasaur
-    (0x80376DA8, 0x2),  # init prisma for minigame Venusaur
-    (0x8037502E, 0x5840)  # skip munchlax tutorial
-]
-green_zone_states_byte = [
-    (0x8037AEEF, 0x11),  # init thunderbolt and dash
-    (0x8037AEC9, 0x37),  # init status menu
-    (0x80376AF7, 0x10),  # activate Celebi
-    (0x80375021, 0x20)  # skipping driffzepeli quest
-]
-green_zone_keep_state = [
-    (0x8037501B, 0x08)  # blocking photo quest so beach zone is not unlocked
-]
-
-beach_zone_trigger_address = 0x8037500D
-beach_zone_trigger_value = 0x7d0
-beach_zone_states_word = [
-    (0x803772B8, 0x2),  # init prisma Pelipper
-    (0x80377174, 0x2)  # init prisma Gyarados
-]
-beach_zone_states_hword = [
-    (0x8037500D, 0x870)  # world state
-]
-beach_zone_states_byte = [
-    (0x80376af0, 0x08),  # unlock bidoof in beach zone
-    (0x80375026, 0x03),  # bidoof only first bridge unlocked setup
-    (0x80375010, 0x3b),  # building all bridges
-]  # next stage unlock 0x80375012, 0x14
-
-region_unlock_item_checks = {
-    REGION_UNLOCK["Beach Zone Unlock"]: [(0x8037500D, 0x7d0)]
-}
-
-# bidifas event going 66 6a ... but depends on base value | maybe masking | checking bits
