@@ -342,8 +342,8 @@ class Locations():
                 number_of_slots_per_milestone_for_game = self.game_logic.slots_per_milestone
 
         hub_location_id = self.hub_location_start
-        for tier in range(1, self.max_tiers + 1):
-            for milestone in range(1, max_tier + 1):
+        for tier in range(1, max_tier + 1):
+            for milestone in range(1, self.max_milestones + 1):
                 for slot in range(1, number_of_slots_per_milestone_for_game + 1):
                     if for_data_package:
                         location_table.append(HubSlot(tier, milestone, slot, hub_location_id))
@@ -371,14 +371,16 @@ class Locations():
         location_table.extend(
             part 
             for part_name, recipes in self.game_logic.recipes.items() 
-            for part in Part.get_parts(self.state_logic, recipes, part_name, self.items)
-            if part in self.critical_path.potential_required_parts)
+            if part_name in self.critical_path.potential_required_parts
+            for part in Part.get_parts(self.state_logic, recipes, part_name, self.items))
         location_table.extend(
             EventBuilding(self.game_logic, self.state_logic, name, building) 
-            for name, building in self.game_logic.buildings.items())
+            for name, building in self.game_logic.buildings.items()
+            if name in self.critical_path.potential_required_buildings)
         location_table.extend(
             PowerInfrastructure(self.game_logic, self.state_logic, power_level, recipes) 
-            for power_level, recipes in self.game_logic.requirement_per_powerlevel.items())
+            for power_level, recipes in self.game_logic.requirement_per_powerlevel.items()
+            if power_level <= self.critical_path.potential_required_power)
 
         return location_table
     
