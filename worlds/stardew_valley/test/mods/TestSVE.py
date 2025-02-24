@@ -23,7 +23,6 @@ class TestAuroraVineyard(SVTestBase):
         self.collect(SVEQuestItem.aurora_vineyard_tablet, 1)
         self.assert_reach_location_true(location, self.multiworld.state)
 
-
     def test_need_reclamation_to_go_downstairs(self):
         region_name = SVERegion.aurora_vineyard_basement
         self.assert_cannot_reach_region(region_name, self.multiworld.state)
