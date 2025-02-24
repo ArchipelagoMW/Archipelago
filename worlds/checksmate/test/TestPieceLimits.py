@@ -63,9 +63,9 @@ class TestChaosPieceLimitsOfVanilla(PieceLimitTestBase):
         super().world_setup(*args, **kwargs)
 
     def test_limit(self) -> None:
-        expected_minors = 22
-        expected_majors = 14
-        expected_queens = 6
+        expected_minors = 26
+        expected_majors = 16
+        expected_queens = 7
         self.assert_matches(expected_minors, expected_majors, expected_queens)
         self.assert_actuals(expected_majors, expected_queens)
 
@@ -81,9 +81,9 @@ class TestChaosPieceLimitsOfOne(PieceLimitTestBase):
         super().world_setup(*args, **kwargs)
 
     def test_limit(self) -> None:
-        expected_minors = 11
-        expected_majors = 7
-        expected_queens = 6
+        expected_minors = 13
+        expected_majors = 8
+        expected_queens = 7
         self.assert_matches(expected_minors, expected_majors, expected_queens)
         self.assert_actuals(expected_majors, expected_queens)
 
@@ -99,9 +99,9 @@ class TestChaosPieceLimitsOfTwo(PieceLimitTestBase):
         super().world_setup(*args, **kwargs)
 
     def test_limit(self) -> None:
-        expected_minors = 22
-        expected_majors = 14
-        expected_queens = 12
+        expected_minors = 26
+        expected_majors = 16
+        expected_queens = 14
         self.assert_matches(expected_minors, expected_majors, expected_queens)
         self.assert_actuals(expected_majors, expected_queens)
 
@@ -117,9 +117,9 @@ class TestChaosPieceLimitsByVariety(PieceLimitTestBase):
         super().world_setup(*args, **kwargs)
 
     def test_limit(self) -> None:
-        expected_minors = 55
-        expected_majors = 7
-        expected_queens = 18
+        expected_minors = 65
+        expected_majors = 8
+        expected_queens = 21
         self.assert_matches(expected_minors, expected_majors, expected_queens)
         self.assert_actuals(expected_majors, expected_queens)
 

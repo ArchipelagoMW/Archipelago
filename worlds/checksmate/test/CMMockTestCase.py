@@ -1,7 +1,7 @@
 import unittest
 import random
 from ..Options import (EnableTactics, FairyChessArmy, FairyChessPieces, FairyChessPawns,
-                      Difficulty, FairyChessPiecesConfigure)
+                      Difficulty, FairyChessPiecesConfigure, Goal, PieceLocations)
 
 class CMMockTestCase(unittest.TestCase):
     """Base test case that provides a mock world for unit testing."""
@@ -27,16 +27,13 @@ class CMMockTestCase(unittest.TestCase):
                     'max_pocket': type('MaxPocket', (), {'value': 12})(),
                     'pocket_limit_by_pocket': type('PocketLimit', (), {'value': 3})(),
                     'enable_tactics': EnableTactics(EnableTactics.option_all),
-                    'goal': type('Goal', (), {
-                        'value': 0,
-                        'option_single': 0,
-                        'option_progressive': 1
-                    })(),
+                    'goal': Goal(Goal.option_single),
                     'fairy_chess_army': FairyChessArmy(FairyChessArmy.option_stable),
                     'fairy_chess_pieces': FairyChessPieces(FairyChessPieces.option_fide),
                     'fairy_chess_pieces_configure': FairyChessPiecesConfigure(FairyChessPiecesConfigure.default),
                     'fairy_chess_pawns': FairyChessPawns(FairyChessPawns.option_vanilla),
                     'difficulty': Difficulty(Difficulty.option_daily),
+                    'piece_locations': PieceLocations(PieceLocations.option_chaos),
                     'minor_piece_limit_by_type': type('MinorPieceLimitByType', (), {'value': 2})(),
                     'major_piece_limit_by_type': type('MajorPieceLimitByType', (), {'value': 2})(),
                     'queen_piece_limit_by_type': type('QueenPieceLimitByType', (), {'value': 1})(),
