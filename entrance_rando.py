@@ -365,7 +365,6 @@ def randomize_entrances(
         # if it's not the last placement, we need a sweep
         return not is_last_placement
 
-
     def find_pairing(dead_end: bool, require_new_exits: bool) -> bool:
         nonlocal perform_validity_check
         placeable_exits = er_state.find_placeable_exits(perform_validity_check)
