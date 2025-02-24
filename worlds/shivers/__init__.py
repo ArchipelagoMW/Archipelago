@@ -245,7 +245,7 @@ class ShiversWorld(World):
 
         storage_items += [self.create_item("Empty") for _ in range(3)]
 
-        state = self.multiworld.get_all_state(True)
+        state = self.multiworld.get_all_state(False)
 
         self.random.shuffle(storage_locs)
         self.random.shuffle(storage_items)
