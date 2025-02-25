@@ -53,22 +53,23 @@ def connect(multiworld: MultiWorld, player: int, source: str, target: str, key: 
         add_rule(connection, rule, "and")
 
     # Loop through regions with potential ghost rando. Register indirect connection based on spirit access spots.
-    for region_to_type in multiworld.worlds[player].ghost_affected_regions:
-        if region_to_type == target_region.name:
-            if multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Fire":  # if fire, require water
-                add_rule(connection, lambda state: Rules.can_fst_water(state, player), "and")
-                for r in Rules.WATER_SPIRIT_SPOT:
-                    multiworld.register_indirect_condition(multiworld.get_region(r, player), connection)
-            elif multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Water":  # if water, require ice
-                add_rule(connection, lambda state: Rules.can_fst_ice(state, player), "and")
-                for r in Rules.ICE_SPIRIT_SPOT:
-                    multiworld.register_indirect_condition(multiworld.get_region(r, player), connection)
-            elif multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Ice":  # if ice, require fire
-                add_rule(connection, lambda state: Rules.can_fst_fire(state, player), "and")
-                for r in Rules.FIRE_SPIRIT_SPOT:
-                    multiworld.register_indirect_condition(multiworld.get_region(r, player), connection)
-            else:
-                pass
+    # Leaving this here in case we need it gain somewhere else one day
+    # for region_to_type in multiworld.worlds[player].ghost_affected_regions:
+    #     if region_to_type == target_region.name:
+    #         if multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Fire":  # if fire, require water
+    #             add_rule(connection, lambda state: Rules.can_fst_water(state, player), "and")
+    #             for r in Rules.WATER_SPIRIT_SPOT:
+    #                 multiworld.register_indirect_condition(multiworld.get_region(r, player), connection)
+    #         elif multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Water":  # if water, require ice
+    #             add_rule(connection, lambda state: Rules.can_fst_ice(state, player), "and")
+    #             for r in Rules.ICE_SPIRIT_SPOT:
+    #                 multiworld.register_indirect_condition(multiworld.get_region(r, player), connection)
+    #         elif multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Ice":  # if ice, require fire
+    #             add_rule(connection, lambda state: Rules.can_fst_fire(state, player), "and")
+    #             for r in Rules.FIRE_SPIRIT_SPOT:
+    #                 multiworld.register_indirect_condition(multiworld.get_region(r, player), connection)
+    #         else:
+    #             pass
 
     source_region.exits.append(connection)
     connection.connect(target_region)

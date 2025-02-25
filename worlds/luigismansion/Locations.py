@@ -102,7 +102,6 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Guest Room Clear Chest": LMLocationData("Guest Room", 46, "Chest", 17, ["Water Element Medal"], 29,
                                              room_ram_addr=0x803CDF88),
     "Parlor Clear Chest": LMLocationData("Parlor", 47, "Chest", 20, [], 36, room_ram_addr=0x803CDF96),
-    "Laundry Clear Chest": LMLocationData("Laundry Room", 710, "Chest", 4, [], 5, room_ram_addr=0x803CDF5A),
     "Cold Storage Clear Chest": LMLocationData("Cold Storage", 48, "Chest", 33, ["Fire Element Medal"], 64,
                                                room_ram_addr=0x803CDFCA),
     "Breaker Room Clear Chest": LMLocationData("Breaker Room", 49, "Chest", 36, ["Blackout"], 69,
@@ -133,18 +132,19 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Study Clear Chest": LMLocationData("Study", 1, "Chest", 19, [], 35, room_ram_addr=0x803CDF94),
     "Master Bedroom Clear Chest": LMLocationData("Master Bedroom", 2, "Chest", 18, [], 34, room_ram_addr=0x803CDF92),
     "Nursery Clear Chest": LMLocationData("Nursery", 3, "Chest", 15, [], 26, room_ram_addr=0x803CDF80),
-    "Graveyard Clear Chest": LMLocationData("Graveyard", 711, "Chest", 11, [], 15, room_ram_addr=0x803CDF70)
 }
 
 # Ghost Affected Clear Chests. Rules applied to region entrances
 ENEMIZER_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Wardrobe Shelf Key": LMLocationData("Wardrobe", 50, "Freestanding", 5, [], 41, room_ram_addr=0x803D33A6,
-                                         locationbit=6),  # TODO  gone for good?
+                                         locationbit=6),
+    "Laundry Clear Chest": LMLocationData("Laundry Room", 710, "Chest", 4, [], 5, room_ram_addr=0x803CDF5A),
     "Hidden Room Clear Chest": LMLocationData("Hidden Room", 51, "Chest", 1, [], 1, room_ram_addr=0x803CDF52),
     "Mirror Room Clear Chest": LMLocationData("Mirror Room", 52, "Chest", 3, [], 4, room_ram_addr=0x803CDF58),
     "Kitchen Clear Chest": LMLocationData("Kitchen", 53, "Chest", 5, [], 7, room_ram_addr=0x803CDF60),
     "1F Bathroom Shelf Key": LMLocationData("1F Bathroom", 54, "Freestanding", 3, [], 21, room_ram_addr=0x803D33A6,
                                             locationbit=6),
+    "Graveyard Clear Chest": LMLocationData("Graveyard", 711, "Chest", 11, [], 15, room_ram_addr=0x803CDF70),
     "Courtyard Clear Chest": LMLocationData("Courtyard", 55, "Chest", 14, [], 24, room_ram_addr=0x803CDF7E),
     "Tea Room Clear Chest": LMLocationData("Tea Room", 56, "Chest", 47, [], 50, room_ram_addr=0x803CDFAE),
     "2F Washroom Clear Chest": LMLocationData("2F Washroom", 57, "Chest", 23, [], 45, room_ram_addr=0x803CDFA4),
