@@ -417,6 +417,13 @@ GAME_SPECIFIC_PHRASES = {
 
     'Sonic Adventure 2 Battle': {
         'CHAOS EMERALD': 'PIECE_OF_POWER',
+        "Rings": "RUPEES_20" # This should only affect filler Rings currency, not Flame Ring upgrade
+        "Grapes": "TRADING_ITEM_PINEAPPLE"
+        "Pick Nails": "SHOVEL" # Digging upgrade
+        "Laser Blaster": "BOW"
+        "Bazooka": "BOW"
+        "Large Cannon": "BOW"
+        "Booster": "FEATHER" # Allow Tails mech hovering, so like Roc's feather a bit.
     },
 
     'Super Mario 64': {
@@ -633,42 +640,51 @@ GAME_SPECIFIC_PHRASES = {
         "Chuckle Bean": "GUARDIAN_ACORN",
         "Hee Bean": "GUARDIAN_ACORN",
         "Woo Bean": "GUARDIAN_ACORN", 
-    }
+    },
 
     "DOOM 1993": {
-        "Keycard": "KEY"
-        "Computer area map": "COMPASS"
+        "Keycard": "KEY",
+        # "Computer area map": "COMPASS"
         "Box of": "SINGLE_ARROW" # bullets, rockets, or shotgun shells
-        "Energy cell pack": "SINGLE_ARROW"
-        "Chainsaw": "SWORD"
-        "Shotgun": "BOW"
-        "Rocket launcher": "BOW"
-        "Plasma gun": "BOW"
-        "Chaingun": "BOW"
-        "BFG9000": "BOW"
-        "Medikit": "MEDICINE"
-    }
+        "Energy cell pack": "SINGLE_ARROW",
+        "Chainsaw": "SWORD",
+        "Shotgun": "BOW",
+        "Rocket launcher": "BOW",
+        "Plasma gun": "BOW",
+        "Chaingun": "BOW",
+        "BFG9000": "BOW",
+        "Medikit": "MEDICINE",
+    },
 
     "DOOM II": {
-        "Keycard": "KEY"
-        "Computer area map": "COMPASS"
+        "Keycard": "KEY",
+        # "Computer area map": "COMPASS",
         "Box of": "SINGLE_ARROW" # bullets, rockets, or shotgun shells
-        "Energy cell pack": "SINGLE_ARROW"
-        "Chainsaw": "SWORD"
-        "Shotgun": "BOW"
-        "Rocket launcher": "BOW"
-        "Plasma gun": "BOW"
-        "Chaingun": "BOW"
-        "BFG9000": "BOW"
-        "Medikit": "MEDICINE"
-    }
+        "Energy cell pack": "SINGLE_ARROW",
+        "Chainsaw": "SWORD",
+        "Shotgun": "BOW",
+        "Rocket launcher": "BOW",
+        "Plasma gun": "BOW",
+        "Chaingun": "BOW",
+        "BFG9000": "BOW",
+        "Medikit": "MEDICINE",
+    },
 
     "Inscryption": {
-        "Extra Candle": "HEART_CONTAINER" # Candles act as extra health
-        "Magnificus Eye": 'TRADING_ITEM_MAGNIFYING_GLASS' # Needed to see hidden drawings / messages
-        "Monocle": 'TRADING_ITEM_MAGNIFYING_GLASS' # Ditto
-        "Pile Of Meat": 'TRADING_ITEM_DOG_FOOD'
-        'Angler Hook': 'TRADING_ITEM_FISHING_HOOK' # Good fish.
-        "Quill": 'FEATHER'
+        "Extra Candle": "HEART_CONTAINER", # Candles act as extra health
+        "Magnificus Eye": 'TRADING_ITEM_MAGNIFYING_GLASS', # Needed to see hidden drawings / messages
+        "Monocle": 'TRADING_ITEM_MAGNIFYING_GLASS', # Ditto
+        "Pile Of Meat": 'TRADING_ITEM_DOG_FOOD',
+        'Angler Hook': 'TRADING_ITEM_FISHING_HOOK', # Good fish.
+        "Quill": 'FEATHER',
+    },
+
+    "Minecraft": {
+        "Progressive Weapons": "SWORD",
+        "Progressive Tools": "SHOVEL",
+        "Archery": "BOW",
+        "Emerald": "RUPEES_20",
+        "Brewing": "MEDICINE",
+        "Spyglass": 'TRADING_ITEM_MAGNIFYING_GLASS',
     }
 }
