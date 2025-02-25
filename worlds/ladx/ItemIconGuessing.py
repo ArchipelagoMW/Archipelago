@@ -634,4 +634,32 @@ GAME_SPECIFIC_PHRASES = {
         "Hee Bean": "GUARDIAN_ACORN",
         "Woo Bean": "GUARDIAN_ACORN", 
     }
+
+    "DOOM 1993": {
+        "Keycard": "KEY"
+        "Computer area map": "COMPASS"
+        "Box of": "SINGLE_ARROW" # bullets, rockets, or shotgun shells
+        "Energy cell pack": "SINGLE_ARROW"
+        "Chainsaw": "SWORD"
+        "Shotgun": "BOW"
+        "Rocket launcher": "BOW"
+        "Plasma gun": "BOW"
+        "Chaingun": "BOW"
+        "BFG9000": "BOW"
+        "Medikit": "MEDICINE"
+    }
+
+    "DOOM II": {
+        "Keycard": "KEY"
+        "Computer area map": "COMPASS"
+        "Box of": "SINGLE_ARROW" # bullets, rockets, or shotgun shells
+        "Energy cell pack": "SINGLE_ARROW"
+        "Chainsaw": "SWORD"
+        "Shotgun": "BOW"
+        "Rocket launcher": "BOW"
+        "Plasma gun": "BOW"
+        "Chaingun": "BOW"
+        "BFG9000": "BOW"
+        "Medikit": "MEDICINE"
+    }
 }
