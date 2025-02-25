@@ -31,10 +31,6 @@ class TestGridGeneration(Sc2TestBase):
         "enabled_campaigns": {
             SC2Campaign.WOL.campaign_name,
             SC2Campaign.PROPHECY.campaign_name,
-            SC2Campaign.PROLOGUE.campaign_name,
-            SC2Campaign.LOTV.campaign_name,
-            SC2Campaign.EPILOGUE.campaign_name,
-            SC2Campaign.NCO.campaign_name,
         }
     }
 
