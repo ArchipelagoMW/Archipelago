@@ -2,9 +2,9 @@ import enum
 from typing import List, Tuple, Optional, Callable, NamedTuple, Set, TYPE_CHECKING
 from .item import item_names
 from .options import (get_option_value, RequiredTactics,
-    LocationInclusion, KerriganPresence,
+    LocationInclusion, KerriganPresence, get_enabled_campaigns
 )
-from .mission_tables import SC2Mission
+from .mission_tables import SC2Mission, SC2Campaign
 
 from BaseClasses import Location
 from worlds.AutoWorld import World
@@ -136,7 +136,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         logic_level = world.options.required_tactics.value
         kerriganless = (
             world.options.kerrigan_presence.value != KerriganPresence.option_vanilla
-            or not world.options.enable_hots_missions.value
+            or SC2Campaign.HOTS not in get_enabled_campaigns(world)
         )
     adv_tactics = logic_level != RequiredTactics.option_standard
     if world is not None and world.logic is not None:

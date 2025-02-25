@@ -204,7 +204,7 @@ However, keep in mind that layout types will set their own options for specific 
 ```
 ## Interactions with other YAML options
 
-Custom Mission Orders respect all the options that change which missions can appear as if the options' relevant missions had been excluded. For example, `selected_races: protoss` is equivalent to excluding all Zerg and Terran missions, and `enable_wol_missions: false` is equivalent to excluding all WoL missions.
+Custom Mission Orders respect all the options that change which missions can appear as if the options' relevant missions had been excluded. For example, `selected_races: protoss` is equivalent to excluding all Zerg and Terran missions, and `enabled_campaigns: ["Wings of Liberty"]` is equivalent to excluding all but WoL missions.
 
 This means that if you want total control over available missions in your mission order via `mission_pool`s, you should enable all races and campaigns and leave your `excluded_missions` list empty, but you can also use these options to get rid of particular missions you never want and can then ignore those missions in your `mission_pool`s.
 

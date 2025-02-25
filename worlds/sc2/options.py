@@ -255,60 +255,13 @@ class PlayerColorNova(ColorChoice):
     display_name = "Terran Player Color (Nova)"
 
 
-class EnableWolMissions(DefaultOnToggle):
+class EnabledCampaigns(OptionSet):
     """
-    Enables missions from main Wings of Liberty campaign.
+    Determines which campaign's missions will be used
     """
-    display_name = "Enable Wings of Liberty missions"
-
-
-class EnableProphecyMissions(DefaultOnToggle):
-    """
-    Enables missions from Prophecy mini-campaign.
-    """
-    display_name = "Enable Prophecy missions"
-
-
-class EnableHotsMissions(DefaultOnToggle):
-    """
-    Enables missions from Heart of the Swarm campaign.
-    """
-    display_name = "Enable Heart of the Swarm missions"
-
-
-class EnableLotVPrologueMissions(DefaultOnToggle):
-    """
-    Enables missions from Prologue campaign.
-    """
-    display_name = "Enable Prologue (Legacy of the Void) missions"
-
-
-class EnableLotVMissions(DefaultOnToggle):
-    """
-    Enables missions from Legacy of the Void campaign.
-    """
-    display_name = "Enable Legacy of the Void (main campaign) missions"
-
-
-class EnableEpilogueMissions(DefaultOnToggle):
-    """
-    Enables missions from Epilogue campaign.
-    These missions are considered very hard.
-
-    Enabling Wings of Liberty, Heart of the Swarm and Legacy of the Void is strongly recommended in order to play Epilogue.
-    Not recommended for short mission orders.
-    See also: Exclude Very Hard Missions
-    """
-    display_name = "Enable Epilogue missions"
-
-
-class EnableNCOMissions(DefaultOnToggle):
-    """
-    Enables missions from Nova Covert Ops campaign.
-
-    Note: For best gameplay experience it's recommended to also enable Wings of Liberty campaign.
-    """
-    display_name = "Enable Nova Covert Ops missions"
+    display_name = "Enabled Campaigns"
+    valid_keys = {campaign.campaign_name for campaign in SC2Campaign if campaign != SC2Campaign.GLOBAL}
+    default = valid_keys
 
 
 class EnableRaceSwapVariants(Choice):
@@ -1377,13 +1330,7 @@ class Starcraft2Options(PerGameCommonOptions):
     player_color_zerg_primal: PlayerColorZergPrimal
     player_color_nova: PlayerColorNova
     selected_races: SelectRaces
-    enable_wol_missions: EnableWolMissions
-    enable_prophecy_missions: EnableProphecyMissions
-    enable_hots_missions: EnableHotsMissions
-    enable_lotv_prologue_missions: EnableLotVPrologueMissions
-    enable_lotv_missions: EnableLotVMissions
-    enable_epilogue_missions: EnableEpilogueMissions
-    enable_nco_missions: EnableNCOMissions
+    enabled_campaigns: EnabledCampaigns
     enable_race_swap: EnableRaceSwapVariants
     mission_race_balancing: EnableMissionRaceBalancing
     shuffle_campaigns: ShuffleCampaigns
@@ -1464,13 +1411,7 @@ option_groups = [
     OptionGroup("Primary Campaign Settings", [
         MissionOrder,
         MaximumCampaignSize,
-        EnableWolMissions,
-        EnableProphecyMissions,
-        EnableHotsMissions,
-        EnableLotVPrologueMissions,
-        EnableLotVMissions,
-        EnableEpilogueMissions,
-        EnableNCOMissions,
+        EnabledCampaigns,
         EnableRaceSwapVariants,
         ShuffleNoBuild,
     ]),
@@ -1597,25 +1538,12 @@ def get_enabled_races(world: Optional['SC2World']) -> Set[SC2Race]:
 
 
 def get_enabled_campaigns(world: Optional['SC2World']) -> Set[SC2Campaign]:
-    enabled_campaigns = set()
-    if get_option_value(world, "enable_wol_missions"):
-        enabled_campaigns.add(SC2Campaign.WOL)
-    if get_option_value(world, "enable_prophecy_missions"):
-        enabled_campaigns.add(SC2Campaign.PROPHECY)
-    if get_option_value(world, "enable_hots_missions"):
-        enabled_campaigns.add(SC2Campaign.HOTS)
-    if get_option_value(world, "enable_lotv_prologue_missions"):
-        enabled_campaigns.add(SC2Campaign.PROLOGUE)
-    if get_option_value(world, "enable_lotv_missions"):
-        enabled_campaigns.add(SC2Campaign.LOTV)
-    # Force-disable epilogue missions if vanilla mission order with at least 1 disabled faction
-    if get_option_value(world, "enable_epilogue_missions") \
-            and (get_option_value(world, "mission_order") != MissionOrder.option_vanilla
-                 or get_option_value(world, "selected_races") == SelectRaces.option_all):
-        enabled_campaigns.add(SC2Campaign.EPILOGUE)
-    if get_option_value(world, "enable_nco_missions"):
-        enabled_campaigns.add(SC2Campaign.NCO)
-    return enabled_campaigns
+    campaign_names = get_option_value(world, "enabled_campaigns")
+    campaigns = {campaign for campaign in SC2Campaign if campaign.campaign_name in campaign_names}
+    if (get_option_value(world, "mission_order") == MissionOrder.option_vanilla
+            and get_option_value(world,"selected_races") != SelectRaces.option_all):
+        campaigns.remove(SC2Campaign.EPILOGUE)
+    return campaigns
 
 
 def get_disabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:

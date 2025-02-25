@@ -6,20 +6,14 @@ from .test_base import Sc2SetupTestBase
 from .. import get_all_missions, mission_tables, options
 from ..item import item_groups, item_tables, item_names
 from ..mission_tables import SC2Race, SC2Mission, SC2Campaign, MissionFlag
-from ..options import ShuffleNoBuild
+from ..options import EnabledCampaigns
 
 
 class TestSupportedUseCases(Sc2SetupTestBase):
     def test_vanilla_all_campaigns_generates(self) -> None:
         world_options = {
             'mission_order': options.MissionOrder.option_vanilla,
-            'enable_wol_missions': True,
-            'enable_nco_missions': True,
-            'enable_prophecy_missions': True,
-            'enable_hots_missions': True,
-            'enable_lotv_prologue_missions': True,
-            'enable_lotv_missions': True,
-            'enable_epilogue_missions': True,
+            'enabled_campaigns': EnabledCampaigns.valid_keys,
         }
 
         self.generate_world(world_options)
@@ -29,17 +23,17 @@ class TestSupportedUseCases(Sc2SetupTestBase):
 
     def test_terran_with_nco_units_only_generates(self):
         world_options = {
-            'enable_prophecy_missions': False,
-            'enable_hots_missions': False,
-            'enable_lotv_prologue_missions': False,
-            'enable_lotv_missions': False,
-            'enable_epilogue_missions': False,
+            'enabled_campaigns': {
+                SC2Campaign.WOL.campaign_name,
+                SC2Campaign.NCO.campaign_name
+            },
             'excluded_items': {
                 item_groups.ItemGroupNames.TERRAN_UNITS: 0,
             },
             'unexcluded_items': {
                 item_groups.ItemGroupNames.NCO_UNITS: 0,
             },
+            'max_number_of_upgrades': 2,
         }
 
         self.generate_world(world_options)
@@ -56,12 +50,9 @@ class TestSupportedUseCases(Sc2SetupTestBase):
 
     def test_nco_with_nobuilds_excluded_generates(self):
         world_options = {
-            'enable_wol_missions': False,
-            'enable_prophecy_missions': False,
-            'enable_hots_missions': False,
-            'enable_lotv_prologue_missions': False,
-            'enable_lotv_missions': False,
-            'enable_epilogue_missions': False,
+            'enabled_campaigns': {
+                SC2Campaign.NCO.campaign_name
+            },
             'shuffle_no_build': options.ShuffleNoBuild.option_false,
             'mission_order': options.MissionOrder.option_mini_campaign,
         }
@@ -77,13 +68,10 @@ class TestSupportedUseCases(Sc2SetupTestBase):
 
     def test_terran_with_nco_upgrades_units_only_generates(self):
         world_options = {
-            'enable_wol_missions': True,
-            'enable_nco_missions': True,
-            'enable_prophecy_missions': False,
-            'enable_hots_missions': False,
-            'enable_lotv_prologue_missions': False,
-            'enable_lotv_missions': False,
-            'enable_epilogue_missions': False,
+            'enabled_campaigns': {
+                SC2Campaign.WOL.campaign_name,
+                SC2Campaign.NCO.campaign_name
+            },
             'mission_order': options.MissionOrder.option_vanilla_shuffled,
             'excluded_items': {
                 item_groups.ItemGroupNames.TERRAN_ITEMS: 0,
@@ -118,11 +106,10 @@ class TestSupportedUseCases(Sc2SetupTestBase):
     
     def test_nco_and_2_wol_missions_only_can_generate_with_vanilla_items_only(self) -> None:
         world_options = {
-            'enable_prophecy_missions': False,
-            'enable_hots_missions': False,
-            'enable_lotv_prologue_missions': False,
-            'enable_lotv_missions': False,
-            'enable_epilogue_missions': False,
+            'enabled_campaigns': {
+                SC2Campaign.WOL.campaign_name,
+                SC2Campaign.NCO.campaign_name
+            },
             'excluded_missions': [
                 mission.mission_name for mission in mission_tables.SC2Mission
                 if mission.campaign == mission_tables.SC2Campaign.WOL
@@ -145,13 +132,10 @@ class TestSupportedUseCases(Sc2SetupTestBase):
     
     def test_free_protoss_only_generates(self) -> None:
         world_options = {
-            'enable_wol_missions': False,
-            'enable_nco_missions': False,
-            'enable_prophecy_missions': True,
-            'enable_hots_missions': False,
-            'enable_lotv_prologue_missions': True,
-            'enable_lotv_missions': False,
-            'enable_epilogue_missions': False,
+            'enabled_campaigns': {
+                SC2Campaign.PROPHECY.campaign_name,
+                SC2Campaign.PROLOGUE.campaign_name
+            },
             # todo(mm): Currently, these settings don't generate on grid because there are not enough EASY missions
             'mission_order': options.MissionOrder.option_vanilla_shuffled,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
@@ -189,13 +173,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
     def test_excluding_protoss_excludes_campaigns_and_items(self) -> None:
         world_options = {
             'selected_races': options.SelectRaces.option_terran_and_zerg,
-            'enable_wol_missions': True,
-            'enable_nco_missions': True,
-            'enable_prophecy_missions': True,
-            'enable_hots_missions': True,
-            'enable_lotv_prologue_missions': True,
-            'enable_lotv_missions': True,
-            'enable_epilogue_missions': True,
+            'enabled_campaigns': options.EnabledCampaigns.valid_keys,
             'mission_order': options.MissionOrder.option_grid,
         }
 
@@ -214,13 +192,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
     def test_excluding_terran_excludes_campaigns_and_items(self) -> None:
         world_options = {
             'selected_races': options.SelectRaces.option_zerg_and_protoss,
-            'enable_wol_missions': True,
-            'enable_nco_missions': True,
-            'enable_prophecy_missions': True,
-            'enable_hots_missions': True,
-            'enable_lotv_prologue_missions': True,
-            'enable_lotv_missions': True,
-            'enable_epilogue_missions': True,
+            'enabled_campaigns': EnabledCampaigns.valid_keys,
             'mission_order': options.MissionOrder.option_grid,
         }
 
@@ -240,13 +212,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
     def test_excluding_zerg_excludes_campaigns_and_items(self) -> None:
         world_options = {
             'selected_races': options.SelectRaces.option_terran_and_protoss,
-            'enable_wol_missions': True,
-            'enable_nco_missions': True,
-            'enable_prophecy_missions': True,
-            'enable_hots_missions': True,
-            'enable_lotv_prologue_missions': True,
-            'enable_lotv_missions': True,
-            'enable_epilogue_missions': True,
+            'enabled_campaigns': EnabledCampaigns.valid_keys,
             'mission_order': options.MissionOrder.option_grid,
             'excluded_missions': [
                 SC2Mission.THE_INFINITE_CYCLE.mission_name
@@ -270,13 +236,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
     def test_excluding_faction_on_vanilla_order_excludes_epilogue(self) -> None:
         world_options = {
             'selected_races': options.SelectRaces.option_terran_and_protoss,
-            'enable_wol_missions': True,
-            'enable_nco_missions': True,
-            'enable_prophecy_missions': True,
-            'enable_hots_missions': True,
-            'enable_lotv_prologue_missions': True,
-            'enable_lotv_missions': True,
-            'enable_epilogue_missions': True,
+            'enabled_campaigns': EnabledCampaigns.valid_keys,
             'mission_order': options.MissionOrder.option_vanilla,
         }
 
@@ -293,13 +253,9 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         world_options = {
             'selected_races': options.SelectRaces.option_all,
             'enable_race_swap': options.EnableRaceSwapVariants.option_pick_one,
-            'enable_wol_missions': True,
-            'enable_nco_missions': False,
-            'enable_prophecy_missions': False,
-            'enable_hots_missions': False,
-            'enable_lotv_prologue_missions': False,
-            'enable_lotv_missions': False,
-            'enable_epilogue_missions': False,
+            'enabled_campaigns': {
+                SC2Campaign.WOL.campaign_name,
+            },
             'mission_order': options.MissionOrder.option_grid,
             'excluded_missions': [mission_tables.SC2Mission.ZERO_HOUR.mission_name],
         }
@@ -327,13 +283,9 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             'generic_upgrade_items': options.GenericUpgradeItems.option_bundle_unit_class,
             'selected_races': options.SelectRaces.option_terran,
             'enable_race_swap': options.EnableRaceSwapVariants.option_disabled,
-            'enable_wol_missions': True,
-            'enable_nco_missions': False,
-            'enable_prophecy_missions': False,
-            'enable_hots_missions': False,
-            'enable_lotv_prologue_missions': False,
-            'enable_lotv_missions': False,
-            'enable_epilogue_missions': False,
+            'enabled_campaigns': {
+                SC2Campaign.WOL.campaign_name,
+            },
             'mission_order': options.MissionOrder.option_grid,
         }
         self.generate_world(world_options)
