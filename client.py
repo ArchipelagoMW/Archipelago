@@ -284,6 +284,7 @@ class WL4Client(BizHawkClient):
         ]
         read_safe_states = [
             *write_safe_states,
+            (1, 0x31),  # Level select in passage
             *((1, seq) for seq in range(0x16, 0x19)),  # Died/gave up
             *((0, seq) for seq in range(0x1A, 0x20)),  # End of game cutscene
         ]
@@ -296,7 +297,7 @@ class WL4Client(BizHawkClient):
         events = {flag: False for flag in TRACKER_EVENT_FLAGS}
         game_clear = False
 
-        if in_passage_level_id >= 4:
+        if in_passage_level_id >= 4 or gameplay_state != (2, 2):
             level_item_flags = 0
 
         # Parse item status bits
