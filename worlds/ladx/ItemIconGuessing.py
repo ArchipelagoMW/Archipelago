@@ -404,6 +404,16 @@ GAME_SPECIFIC_PHRASES = {
 
     'Ocarina of Time': {
         'COJIRO': 'ROOSTER',
+        "Goron Tunic": "RED_TUNIC",
+        "Zora Tunic": "BLUE_TUNIC",
+        "Wallet": "MAGIC_BAG",
+        "Medallion": "PIECE_OF_POWER",
+        "Kokiri Emerald": "RUPEES_500",
+        "Goron Ruby": "RUPEES_500",
+        "Zora Sapphire": "RUPEES_500",
+        "Dins Fire": "MAGIC_ROD", # Fire shield
+        "Nayrus Love": "MAGIC_ROD", # Protective barrier
+        "Farores Wind": "MAGIC_ROD", # Create/use warp point in dungeons
     },
 
     'SMZ3': {
@@ -536,8 +546,6 @@ GAME_SPECIFIC_PHRASES = {
         '5000 Tokens': 'RUPEES_500',
     },
 
-    # ironminer888 additions start here
-
     "Donkey Kong Country 3": {
         "Flupperius Petallus Pongus": "TRADING_ITEM_HIBISCUS", # It's a flower in the game
         "Banana Bird": "ROOSTER", # Made sure this is a BIRD, not a BANANA
@@ -560,8 +568,13 @@ GAME_SPECIFIC_PHRASES = {
         "Fresh Water": "MEDICINE", # Ditto
 
         # Consumables
-        "Elixir": "MEDICINE", # Old-timey names for potions? Elixirs and ethers of ye olde arcane magicks...
+        "Elixir": "MEDICINE",
         "Ether": "MEDICINE",
+        "Antidote": "MEDICINE",
+        "Awakening": "MEDICINE",
+        "Burn Heal": "MEDICINE",
+        "Ice Heal": "MEDICINE",
+        "Paralyze Heal": "MEDICINE",
     },
 
     "Pokemon Emerald": {
@@ -569,8 +582,8 @@ GAME_SPECIFIC_PHRASES = {
 
         "Old Amber": "STONE_BEAK", # Aerodactyl's fossil should still be a fossil
         "Coin Case": "MAGIC_POWDER", # This shouldn't spawn as RUPEES
-        "Pass": "TRADING_ITEM_LETTER",
-        "Ticket": "TRADING_ITEM_LETTER", # Aurora/Eon/Mystic
+        "Pass": "TRADING_ITEM_LETTER", # Only hits Contest Pass
+        "Ticket": "TRADING_ITEM_LETTER", # Aurora/Eon/Mystic/SS ticket
 
         "Rock Smash": "SHOVEL", # No pickax but this will do
         "Detector": 'TRADING_ITEM_MAGNIFYING_GLASS',
@@ -582,8 +595,13 @@ GAME_SPECIFIC_PHRASES = {
         "Fresh Water": "MEDICINE", # Ditto
 
         # Consumables
-        "Elixir": "MEDICINE", # Old-timey names for potions? Elixirs and ethers of ye olde arcane magicks...
+        "Elixir": "MEDICINE",
         "Ether": "MEDICINE",
+        "Antidote": "MEDICINE",
+        "Awakening": "MEDICINE",
+        "Burn Heal": "MEDICINE",
+        "Ice Heal": "MEDICINE",
+        "Paralyze Heal": "MEDICINE",
         "Nanab Berry": "TRADING_ITEM_BANANAS", # Special exception for Nanab Berry, which look like bananas
         "Berry": "TRADING_ITEM_PINEAPPLE",
         "Mail": "TRADING_ITEM_LETTER", # Snail mail, not chain mail
@@ -698,7 +716,6 @@ GAME_SPECIFIC_PHRASES = {
         "Time Piece": "PIECE_OF_POWER",
         "Metro Ticket": "TRADING_ITEM_LETTER",
         "Snatcher's Contract": "TRADING_ITEM_LETTER",
-        "Heart Pon": "HEART_PIECE",
         "Pon": "RUPEES_20",
     }
 
