@@ -488,6 +488,9 @@ class OpenRCT2World(World):
                       "RideIncome": [0, False], "ShopIncome": [0, False], "ParkRating": [park_rating, False],
                       "LoanPaidOff": [pay_off_loan, False], "Monopoly": [monopoly, False],
                       "UniqueRides": [unique_rides, False]}
+        seed = self.multiworld.player_name[self.player] + str(self.options.scenario) + str(self.multiworld.seed_name)
+        # print("SEEED!")
+        # print(seed)
         # print(objectives)
         # print(self.item_id_to_name)
 
@@ -516,9 +519,11 @@ class OpenRCT2World(World):
         # visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml")
         # print("Here's the final unlock shop:")
         slot_data = self.options.as_dict("difficulty", "scenario_length", "scenario", "death_link", "randomization_range",
-        "stat_rerolls", "randomize_park_values", "ignore_ride_stat_changes", "visibility", "preferred_intensity")
+        "stat_rerolls", "randomize_park_values", "ignore_ride_stat_changes", "visibility", "preferred_intensity", 
+        "all_rides_and_scenery_base", "all_rides_and_scenery_expansion")
         slot_data["objectives"] = objectives
         slot_data["rules"] = self.rules
+        slot_data["seed"] = seed
         slot_data["location_prices"] = self.location_prices
         return slot_data
 

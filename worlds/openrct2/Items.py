@@ -13,7 +13,12 @@ def set_openRCT2_items(world):
     # print(scenario)
     # print("And these items will be randomized:")
     # print(Scenario_Items[scenario])
-    openRCT2_items = copy.deepcopy(Scenario_Items[world.options.scenario.value])
+    if(world.options.all_rides_and_scenery_expansion):
+        openRCT2_items = copy.deepcopy(Scenario_Items[152]) # Archipelago Madness has every ride in the game. We can go off that
+    elif(world.options.all_rides_and_scenery_base):
+        openRCT2_items = copy.deepcopy(Scenario_Items[151]) # Archipelago Madness, but without the expansion stuff
+    else:
+        openRCT2_items = copy.deepcopy(Scenario_Items[world.options.scenario.value])
     rules = [world.options.difficult_guest_generation.value,
                  world.options.difficult_park_rating.value,
                  world.options.forbid_high_construction.value,
