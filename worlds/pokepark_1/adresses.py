@@ -1030,8 +1030,10 @@ POKEMON_STATES = {
         location=MemoryAddress(base_address=0x80375238, offset=0x0001, value=0x80, memory_range=MemoryRange.BYTE),
         zone_id=meadow_zone_stage_id,
         pokemon_ids=[0x0000000c],
-        unlock_items_to_block=[UNLOCK_ITEMS.get("Bidoof1 Unlock"), UNLOCK_ITEMS.get("Bidoof2 Unlock"),
-                               UNLOCK_ITEMS.get("Bidoof3 Unlock"), UNLOCK_ITEMS.get("Bibarel Unlock")],
+        unlock_items_to_block=[UNLOCK_ITEMS["Bidoof Unlock"],
+                               UNLOCK_ITEMS["Bidoof Unlock 2"],
+                               UNLOCK_ITEMS["Bidoof Unlock 3"],
+                               UNLOCK_ITEMS["Bidoof Unlock 3"]],
         friendship_items_to_block=[FRIENDSHIP_ITEMS["Bidoof"]],
         locationId=FRIENDSHIP_ITEMS["Bidoof"]),
     FRIENDSHIP_ITEMS["Starly"]: PokemonStateInfo(
@@ -1466,7 +1468,7 @@ UNLOCKS = {
         locationId=UNLOCK_ITEMS["Magikarp Unlock"],
         is_blocked_until_location=True
     ),
-    UNLOCK_ITEMS["Bidoof1 Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Bidoof Unlock"]: UnlockItem(
         item=MemoryAddress(
             base_address=0x80376ad0,
             offset=0x10,
@@ -1479,9 +1481,9 @@ UNLOCKS = {
             memory_range=MemoryRange.BYTE,
             value=0x80
         )],
-        locationId=UNLOCK_ITEMS["Bidoof1 Unlock"]
+        locationId=UNLOCK_ITEMS["Bidoof Unlock"]
     ),
-    UNLOCK_ITEMS["Bidoof2 Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Bidoof Unlock 2"]: UnlockItem(
         item=MemoryAddress(
             base_address=0x80376ad4,
             offset=0x10,
@@ -1494,9 +1496,9 @@ UNLOCKS = {
             memory_range=MemoryRange.BYTE,
             value=0x01
         )],
-        locationId=UNLOCK_ITEMS["Bidoof2 Unlock"]
+        locationId=UNLOCK_ITEMS["Bidoof Unlock 2"]
     ),
-    UNLOCK_ITEMS["Bidoof3 Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Bidoof Unlock 3"]: UnlockItem(
         item=MemoryAddress(
             base_address=0x80376ad4,
             offset=0x10,
@@ -1509,7 +1511,7 @@ UNLOCKS = {
             memory_range=MemoryRange.BYTE,
             value=0x02
         )],
-        locationId=UNLOCK_ITEMS["Bidoof3 Unlock"]
+        locationId=UNLOCK_ITEMS["Bidoof Unlock 3"]
     ),
     UNLOCK_ITEMS["Bibarel Unlock"]: UnlockItem(
         item=MemoryAddress(
@@ -1627,7 +1629,8 @@ UNLOCKS = {
             memory_range=MemoryRange.BYTE,
             value=0x01
         )],
-        locationId=UNLOCK_ITEMS["Krabby Unlock"]
+        locationId=UNLOCK_ITEMS["Krabby Unlock"],
+        is_blocked_until_location=True
     ),
     UNLOCK_ITEMS["Corphish Unlock"]: UnlockItem(
         item=MemoryAddress(
@@ -1642,7 +1645,8 @@ UNLOCKS = {
             memory_range=MemoryRange.BYTE,
             value=0x08
         )],
-        locationId=UNLOCK_ITEMS["Corphish Unlock"]
+        locationId=UNLOCK_ITEMS["Corphish Unlock"],
+        is_blocked_until_location=True
     ),
 
     # Misc

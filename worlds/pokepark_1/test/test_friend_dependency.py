@@ -67,19 +67,60 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
                      for i in range(1, 5)
                      for suffix in ["", " - Pokemon Unlock"]]
         locations.append("Meadow Zone - Venusaur's Vine Swing - Mankey")
+        locations.append("Meadow Zone - Overworld - Bidoof")
         items = [["Mankey"]]
         self.assertAccessDependency(locations, items)
 
     def test_spearow(self) -> None:
         """Test locations and minigames that require Spearow"""
-        locations= ["Beach Zone - Pelipper's Circle Circuit - Spearow"]
+        venusaur_minigame_pokemon_names = [
+            "Prisma",
+            "Aipom",
+            "Ambipom",
+            # "Blaziken",
+            "Chimchar",
+            "Croagunk",
+            # "Infernape",
+            # "Lucario",
+            "Magikarp",
+            "Mankey",
+            "Munchlax",
+            "Pachirisu",
+            "Pikachu",
+            # "Primeape",
+            # "Tangrowth",
+            "Treecko",
+        ]
+        locations = [f"Meadow Zone - Venusaur's Vine Swing - {suffix}"
+                     for suffix in venusaur_minigame_pokemon_names]
+        locations.append("Beach Zone - Pelipper's Circle Circuit - Spearow")
         items = [["Spearow"]]
         self.assertAccessDependency(locations, items)
 
     def test_croagunk(self) -> None:
         """Test locations and minigames that require Croagunk"""
-
-        locations = ["Meadow Zone - Bulbasaur's Daring Dash Minigame - Croagunk","Meadow Zone - Venusaur's Vine Swing - Croagunk"]
+        venusaur_minigame_pokemon_names = [
+            "Prisma",
+            "Aipom",
+            "Ambipom",
+            # "Blaziken",
+            "Chimchar",
+            "Croagunk",
+            # "Infernape",
+            # "Lucario",
+            "Magikarp",
+            "Mankey",
+            "Munchlax",
+            "Pachirisu",
+            "Pikachu",
+            # "Primeape",
+            # "Tangrowth",
+            "Treecko",
+        ]
+        locations = [f"Meadow Zone - Venusaur's Vine Swing - {suffix}"
+                     for suffix in venusaur_minigame_pokemon_names]
+        locations.append("Meadow Zone - Bulbasaur's Daring Dash Minigame - Croagunk")
+        locations.append("Meadow Zone - Venusaur's Vine Swing - Croagunk")
         items = [["Croagunk"]]
         self.assertAccessDependency(locations, items)
 

@@ -4,7 +4,7 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
 
     def test_bulbasaur_prisma(self) -> None:
         """Verify locations and victory conditions for Bulbasaur's Prisma unlock"""
-        locations = ["Meadow Zone - Overworld - Munchlax","Meadow Zone - Overworld - Munchlax Friendship Event","Meadow Zone - Overworld - Tropius","Meadow Zone - Overworld - Bulbasaur","Victory"]
+        locations = ["Meadow Zone - Overworld - Munchlax","Meadow Zone - Overworld - Munchlax Friendship - Pokemon Unlock","Meadow Zone - Overworld - Tropius","Meadow Zone - Overworld - Bulbasaur","Victory"]
         items = [["Bulbasaur Prisma"]]
         self.assertAccessDependency(locations, items)
 

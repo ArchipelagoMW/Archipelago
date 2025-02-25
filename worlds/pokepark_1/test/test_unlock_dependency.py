@@ -15,8 +15,8 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
         self.assertAccessDependency(locations, items)
 
     def test_bonsly_unlock(self) -> None:
-        """Verify unlock conditions for accessing Bonsly in Meadow Zone Overworld and Friendship Event"""
-        locations = ["Meadow Zone - Overworld - Bonsly","Meadow Zone - Overworld - Bonsly Friendship Event"]
+        """Verify unlock conditions for accessing Bonsly in Meadow Zone Overworld and Friendship - Pokemon Unlock"""
+        locations = ["Meadow Zone - Overworld - Bonsly","Meadow Zone - Overworld - Bonsly Friendship - Pokemon Unlock"]
         items = [["Bonsly Unlock"]]
         self.assertAccessDependency(locations, items)
 
@@ -45,8 +45,8 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
         self.assertAccessDependency(locations, items)
 
     def test_caterpie_unlock(self) -> None:
-        """Verify unlock conditions for accessing Caterpie in Meadow Zone Overworld and Friendship Event"""
-        locations = ["Meadow Zone - Overworld - Caterpie","Meadow Zone - Overworld - Caterpie Friendship Event"]
+        """Verify unlock conditions for accessing Caterpie in Meadow Zone Overworld and Friendship - Pokemon Unlock"""
+        locations = ["Meadow Zone - Overworld - Caterpie","Meadow Zone - Overworld - Caterpie Friendship - Pokemon Unlock"]
         items = [["Caterpie Unlock"]]
         self.assertAccessDependency(locations, items)
 
@@ -88,17 +88,17 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
 
     def test_bidoof1_unlock(self) -> None:
         locations = []
-        items = [["Bidoof1 Unlock"]]
+        items = [["Bidoof Unlock"]]
         self.assertAccessDependency(locations, items)
 
     def test_bidoof2_unlock(self) -> None:
         locations = []
-        items = [["Bidoof2 Unlock"]]
+        items = [["Bidoof Unlock 2"]]
         self.assertAccessDependency(locations, items)
 
     def test_bidoof3_unlock(self) -> None:
         locations = []
-        items = [["Bidoof3 Unlock"]]
+        items = [["Bidoof Unlock 3"]]
         self.assertAccessDependency(locations, items)
 
     def test_bibarel_unlock(self) -> None:
@@ -184,8 +184,3 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
         self.collect_all_but(["Beach Zone Unlock"])
         self.assertFalse(self.can_reach_region("Beach Zone - Overworld"))
 
-    def test_can_reach_venusaur_minigame(self)->None:
-        """Verify ability to access Venusaur's Vine Swing minigame"""
-
-        self.collect_by_name("Beach Zone Unlock")
-        self.assertTrue(self.can_reach_region("Meadow Zone - Venusaur's Vine Swing"))
