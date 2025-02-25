@@ -33,9 +33,7 @@ class AutoPatchRegister(abc.ABCMeta):
     @staticmethod
     def get_handler(file: str) -> Optional[AutoPatchRegister]:
         _, suffix = os.path.splitext(file)
-        if suffix in AutoPatchRegister.file_endings:
-            return AutoPatchRegister.file_endings[suffix]
-        return None
+        return AutoPatchRegister.file_endings.get(suffix, None)
 
 
 class AutoPatchExtensionRegister(abc.ABCMeta):
