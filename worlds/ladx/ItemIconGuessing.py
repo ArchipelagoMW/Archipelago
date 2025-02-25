@@ -702,5 +702,7 @@ GAME_SPECIFIC_PHRASES = {
         "Pon": "RUPEES_20",
     }
 
-    # To Add: KH2, KH1, OoT, ALttP
+    # TODO: Ocarina of Time: Goron/Zora Tunic, Triforce pieces, dungeon rewards, render wallet as bag
+    # TODO: Link to the Past: just double check that everything matches
+    # TODO: Kingdom Hearts series: Keyblades, equipment, Ansem reports, magic elements, emblems
 }
