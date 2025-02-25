@@ -333,6 +333,7 @@ class SA2BWorld(World):
         connect_regions(self.multiworld, self, self.player, gates, self.emblems_for_cannons_core, self.gate_bosses, self.boss_rush_map, first_cannons_core_mission, final_cannons_core_mission)
 
         max_required_emblems = max(max(emblem_requirement_list), self.emblems_for_cannons_core)
+        max_required_emblems = min(int(max_required_emblems * 1.1), total_emblem_count)
         itempool += [self.create_item(ItemName.emblem) for _ in range(max_required_emblems)]
 
         non_required_emblems = (total_emblem_count - max_required_emblems)
