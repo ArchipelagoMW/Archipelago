@@ -214,12 +214,15 @@ class FairyChessPiecesConfigure(OptionSet):
     Nutty: Adds the CwDA army inspired by Knights, the Nutty Knights.
 
     Cannon: Adds the Rook-like Cannon, which captures a distal chessman by leaping over an intervening chessman, and the
-    Vao, a Bishop-like Cannon, in that it moves and captures diagonally.
+    Vao, a Bishop-like Cannon, in that it moves and captures diagonally. Also adds the Queennon, which moves as a King,
+    a Cannon, and a Vao.
 
     Camel: Adds a custom army themed after 3,x leapers like the Camel (3,1) and Tribbabah (3,0). (The Knight is a 2,1
     leaper.)
 
-    Petal: Adds a custom army themed after pieces that move down angled paths.
+    Petal: Adds a custom army themed after pieces that move down angled paths. The Gardener is a 2,2 leaper with
+    additional pacifist moves. The Ribbon moves 1 space as a Bishop before rotating to move 2 more spaces. The Petal
+    moves 3 spaces as a Rook before rotating 3 more spaces. The Miracle moves as a Ribbon and as a Petal.
     """
     display_name = "Fairy Chess Pieces Configure"
     valid_keys = frozenset([
