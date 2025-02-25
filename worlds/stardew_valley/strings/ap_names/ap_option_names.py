@@ -17,3 +17,10 @@ class BuffOptionName:
     fishing_bar = "Fishing Bar Size"
     quality = "Quality"
     glow = "Glow"
+
+
+class SecretsanityOptionName:
+    easy = "Easy"
+    difficult = "Difficult"
+    fishing = "Fishing"
+    secret_notes = "Secret Notes"

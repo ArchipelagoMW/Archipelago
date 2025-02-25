@@ -6,7 +6,7 @@ from typing import Protocol, ClassVar
 from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList, Visibility, Removed, OptionCounter
 from ..items import items_by_group, Group
 from ..mods.mod_data import ModNames
-from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName
+from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName, SecretsanityOptionName
 from ..strings.bundle_names import all_cc_bundle_names
 
 
@@ -648,20 +648,32 @@ class Moviesanity(Choice):
     option_all = 2
 
 
-class Secretsanity(Choice):
+class Secretsanity(OptionSet):
     """Add checks for the various secrets and easter eggs present in Stardew Valley. Some of them can be very obscure. If you enable this setting, you should expect to need the wiki a lot.
-    None: None of the in-game secrets are checks
-    Simple: Only secrets that can be obtained quickly and easily, if you know what to do, are included
-    Simple and Fishing: Also includes the various secret fishable items around the world
-    All: All secrets are included. This includes some very difficult ones, generally due to very low odds of something purely RNG-based. Expect lots of grinding and hoping
+    Easy: Secrets that can be obtained quickly and easily, if you know what to do
+    Difficult: Includes secrets that require a lot of grinding or a lot of luck. Not for the faint of heart. Enabling this will also modify some secrets from the other categories to require their harder variation, if there is one.
+    Fishing: Various special items and furniture that can be fished up in specific places
+    Secret Notes: Complete tasks described in the various secret notes, when applicable
     """
     internal_name = "secretsanity"
     display_name = "Secretsanity"
-    default = 0
-    option_none = 0
-    option_simple = 1
-    option_simple_and_fishing = 2
-    option_all = 3
+    valid_keys = frozenset({
+        SecretsanityOptionName.easy, SecretsanityOptionName.difficult, SecretsanityOptionName.fishing, SecretsanityOptionName.secret_notes,
+    })
+    preset_none = frozenset()
+    preset_simple = frozenset({
+        SecretsanityOptionName.easy, SecretsanityOptionName.fishing, SecretsanityOptionName.secret_notes,
+    })
+    preset_all = valid_keys
+    default = preset_none
+
+    def __eq__(self, other: typing.Any) -> bool:
+        if isinstance(other, OptionSet):
+            return set(self.value) == other.value
+        if isinstance(other, OptionList):
+            return set(self.value) == set(other.value)
+        else:
+            return typing.cast(bool, self.value == other)
 
 
 class NumberOfMovementBuffs(Range):

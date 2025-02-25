@@ -196,6 +196,7 @@ class LogicRegion:
     bookseller_2 = "Bookseller Year 1 Books"
     bookseller_3 = "Bookseller Year 3 Books"
     forest_waterfall = "Waterfall"
+    secret_notes = "Secret Notes"
 
 
 class DeepWoodsRegion:

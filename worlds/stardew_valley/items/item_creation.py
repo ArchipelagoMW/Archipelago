@@ -10,8 +10,8 @@ from ..data.game_item import ItemTag
 from ..mods.mod_data import ModNames
 from ..options import StardewValleyOptions, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
     ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
-    Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Walnutsanity, EnabledFillerBuffs, TrapDifficulty, Secretsanity
-from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName
+    Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Walnutsanity, EnabledFillerBuffs, TrapDifficulty
+from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName, SecretsanityOptionName
 from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.ap_names.buff_names import Buff
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
@@ -22,6 +22,7 @@ from ..strings.tool_names import Tool
 from ..strings.wallet_item_names import Wallet
 
 logger = logging.getLogger(__name__)
+
 
 def get_too_many_items_error_message(locations_count: int, items_count: int) -> str:
     return f"There should be at least as many locations [{locations_count}] as there are mandatory items [{items_count}]"
@@ -271,7 +272,7 @@ def create_stardrops(item_factory: StardewItemFactory, options: StardewValleyOpt
         items.append(item_factory("Stardrop", stardrops_classification))  # Petting the Unicorn
     if content.features.friendsanity.is_enabled:
         items.append(item_factory("Stardrop", stardrops_classification))  # Spouse Stardrop
-    if options.secretsanity >= Secretsanity.option_all:
+    if SecretsanityOptionName.easy in options.secretsanity:
         # Always Progression as a different secret requires a stardrop
         items.append(item_factory("Stardrop", ItemClassification.progression))  # Old Master Cannoli.
 
@@ -498,13 +499,17 @@ def create_booksanity_items(item_factory: StardewItemFactory, content: StardewCo
 
 
 def create_secrets_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    if options.secretsanity == Secretsanity.option_none:
+    if not options.secretsanity:
         return
 
-    if options.secretsanity >= Secretsanity.option_simple:
+    if SecretsanityOptionName.easy in options.secretsanity:
         items.extend(item_factory(item) for item in items_by_group[Group.SIMPLE_SECRET])
-    if options.secretsanity >= Secretsanity.option_simple_and_fishing:
+    if SecretsanityOptionName.fishing in options.secretsanity:
         items.extend(item_factory(item) for item in items_by_group[Group.FISHING_SECRET])
+    # if SecretsanityOptionName.difficult in options.secretsanity:
+    #     items.extend(item_factory(item) for item in items_by_group[Group.DIFFICULT_SECRET])
+    # if SecretsanityOptionName.secret_notes in options.secretsanity:
+    #     items.extend(item_factory(item) for item in items_by_group[Group.SECRET_NOTES_SECRET])
 
 
 def create_goal_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):

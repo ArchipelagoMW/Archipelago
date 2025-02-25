@@ -14,6 +14,7 @@ from .options import ExcludeGingerIsland, ArcadeMachineLocations, SpecialOrderLo
     FestivalLocations, ElevatorProgression, BackpackProgression, FarmType
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
 from .options.options import BackpackSize, Secretsanity
+from .strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName
 from .strings.backpack_tiers import Backpack
 from .strings.goal_names import Goal
 from .strings.quest_names import ModQuest, Quest
@@ -110,6 +111,7 @@ class LocationTags(enum.Enum):
     SIMPLE_SECRET = enum.auto()
     FISHING_SECRET = enum.auto()
     DIFFICULT_SECRET = enum.auto()
+    SECRET_NOTE = enum.auto()
 
     BEACH_FARM = enum.auto()
     # Mods
@@ -490,27 +492,29 @@ def extend_walnutsanity_locations(randomized_locations: List[LocationData], opti
     if not options.walnutsanity:
         return
 
-    if "Puzzles" in options.walnutsanity:
+    if WalnutsanityOptionName.puzzles in options.walnutsanity:
         randomized_locations.extend(locations_by_tag[LocationTags.WALNUTSANITY_PUZZLE])
-    if "Bushes" in options.walnutsanity:
+    if WalnutsanityOptionName.bushes in options.walnutsanity:
         randomized_locations.extend(locations_by_tag[LocationTags.WALNUTSANITY_BUSH])
-    if "Dig Spots" in options.walnutsanity:
+    if WalnutsanityOptionName.dig_spots in options.walnutsanity:
         randomized_locations.extend(locations_by_tag[LocationTags.WALNUTSANITY_DIG])
-    if "Repeatables" in options.walnutsanity:
+    if WalnutsanityOptionName.repeatables in options.walnutsanity:
         randomized_locations.extend(locations_by_tag[LocationTags.WALNUTSANITY_REPEATABLE])
 
 
 def extend_secrets_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
-    if options.secretsanity == Secretsanity.option_none:
+    if not options.secretsanity:
         return
 
     locations = []
-    if options.secretsanity >= Secretsanity.option_simple:
+    if SecretsanityOptionName.easy in options.secretsanity:
         locations.extend(locations_by_tag[LocationTags.SIMPLE_SECRET])
-    if options.secretsanity >= Secretsanity.option_simple_and_fishing:
+    if SecretsanityOptionName.fishing in options.secretsanity:
         locations.extend(locations_by_tag[LocationTags.FISHING_SECRET])
-    if options.secretsanity >= Secretsanity.option_all:
+    if SecretsanityOptionName.difficult in options.secretsanity:
         locations.extend(locations_by_tag[LocationTags.DIFFICULT_SECRET])
+    if SecretsanityOptionName.secret_notes in options.secretsanity:
+        locations.extend(locations_by_tag[LocationTags.SECRET_NOTE])
     locations = filter_disabled_locations(options, content, locations)
     randomized_locations.extend(locations)
 

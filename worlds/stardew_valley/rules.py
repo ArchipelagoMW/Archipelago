@@ -21,12 +21,12 @@ from .logic.tool_logic import tool_upgrade_prices
 from .mods.mod_data import ModNames
 from .options import ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
     Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, StardewValleyOptions, Walnutsanity
-from .options.options import Secretsanity, FarmType
+from .options.options import FarmType
 from .stardew_rule import And, StardewRule, true_
 from .stardew_rule.indirect_connection import look_for_indirect_connection
 from .stardew_rule.rule_explain import explain
 from .strings.animal_product_names import AnimalProduct
-from .strings.ap_names.ap_option_names import WalnutsanityOptionName
+from .strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName
 from .strings.ap_names.community_upgrade_names import CommunityUpgrade
 from .strings.ap_names.mods.mod_items import SVEQuestItem, SVERunes
 from .strings.ap_names.transport_names import Transportation
@@ -226,6 +226,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     set_island_entrance_rule(multiworld, player, LogicEntrance.island_cooking, logic.cooking.can_cook_in_kitchen, world_options)
     set_entrance_rule(multiworld, player, LogicEntrance.farmhouse_cooking, logic.cooking.can_cook_in_kitchen)
     set_entrance_rule(multiworld, player, LogicEntrance.shipping, logic.shipping.can_use_shipping_bin)
+    set_entrance_rule(multiworld, player, LogicEntrance.find_secret_notes, logic.quest.has_magnifying_glass() & (logic.ability.can_chop_trees() | logic.mine.can_mine_in_the_mines_floor_1_40()))
     set_entrance_rule(multiworld, player, LogicEntrance.watch_queen_of_sauce, logic.action.can_watch(Channel.queen_of_sauce))
     set_entrance_rule(multiworld, player, Entrance.forest_to_mastery_cave, logic.skill.can_enter_mastery_cave)
     set_entrance_rule(multiworld, player, LogicEntrance.buy_experience_books, logic.time.has_lived_months(2))
@@ -851,10 +852,10 @@ def set_arcade_machine_rules(logic: StardewLogic, multiworld: MultiWorld, player
 
 
 def set_secrets_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
-    if world_options.secretsanity == Secretsanity.option_none:
+    if not world_options.secretsanity:
         return
 
-    if world_options.secretsanity >= Secretsanity.option_simple:
+    if SecretsanityOptionName.easy in world_options.secretsanity:
         set_location_rule(multiworld, player, "Old Master Cannoli", logic.has(Fruit.sweet_gem_berry))
         set_location_rule(multiworld, player, "Pot Of Gold", logic.season.has(Season.spring))
         set_location_rule(multiworld, player, "Poison The Governor", logic.has(SpecialItem.lucky_purple_shorts))
@@ -882,7 +883,7 @@ def set_secrets_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, 
         set_location_rule(multiworld, player, "A gift of lovely perfume", logic.relationship.can_gift_to(Consumable.monster_musk, NPC.krobus))
         set_location_rule(multiworld, player, "Where exactly does this juice come from?", logic.relationship.can_gift_to(AnimalProduct.cow_milk, NPC.dwarf))
 
-    if world_options.secretsanity >= Secretsanity.option_simple_and_fishing:
+    if SecretsanityOptionName.fishing in world_options.secretsanity:
         if world_options.farm_type == FarmType.option_beach:
             set_location_rule(multiworld, player, "'Boat'", logic.fishing.can_fish_at(Region.farm))
         if world_options.exclude_ginger_island == ExcludeGingerIsland.option_false:
@@ -898,7 +899,7 @@ def set_secrets_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, 
         set_location_rule(multiworld, player, "'Vista'", logic.fishing.can_fish_at(Region.railroad))
         set_location_rule(multiworld, player, "Wall Basket", logic.fishing.can_fish_at(Region.secret_woods))
 
-    if world_options.secretsanity >= Secretsanity.option_all:
+    if SecretsanityOptionName.difficult in world_options.secretsanity:
         set_location_rule(multiworld, player, "Free The Forsaken Souls", logic.action.can_watch(Channel.sinister_signal))
         set_location_rule(multiworld, player, "Thank the Devs", logic.received("Stardrop") & logic.money.can_spend_at(Region.wizard_basement, 500))
         set_location_rule(multiworld, player, "Annoy the Moon Man", logic.shipping.can_use_shipping_bin & logic.time.has_lived_months(6))

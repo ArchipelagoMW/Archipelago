@@ -39,7 +39,7 @@ class TestBaseItemGeneration(SVTestBase):
         Craftsanity.internal_name: Craftsanity.option_all,
         Booksanity.internal_name: Booksanity.option_all,
         Walnutsanity.internal_name: Walnutsanity.preset_all,
-        Secretsanity.internal_name: Secretsanity.option_all,
+        Secretsanity.internal_name: Secretsanity.preset_all,
     }
 
     def test_all_progression_items_are_added_to_the_pool(self):
@@ -83,7 +83,7 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
         Craftsanity.internal_name: Craftsanity.option_all,
         ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
         Booksanity.internal_name: Booksanity.option_all,
-        Secretsanity.internal_name: Secretsanity.option_all,
+        Secretsanity.internal_name: Secretsanity.preset_all,
     }
 
     def test_all_progression_items_except_island_are_added_to_the_pool(self):

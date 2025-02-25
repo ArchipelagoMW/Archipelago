@@ -15,7 +15,7 @@ vanilla_regions: tuple[RegionData, ...] = (
                (Entrance.farm_to_backwoods, Entrance.farm_to_bus_stop, Entrance.farm_to_forest, Entrance.farm_to_farmcave, Entrance.enter_greenhouse,
                 Entrance.enter_coop, Entrance.enter_barn, Entrance.enter_shed, Entrance.enter_slime_hutch, LogicEntrance.grow_spring_crops,
                 LogicEntrance.grow_summer_crops, LogicEntrance.grow_fall_crops, LogicEntrance.grow_winter_crops, LogicEntrance.shipping,
-                LogicEntrance.fishing,)),
+                LogicEntrance.fishing, LogicEntrance.find_secret_notes,)),
     RegionData(RegionName.backwoods, (Entrance.backwoods_to_mountain,)),
     RegionData(RegionName.bus_stop,
                (Entrance.bus_stop_to_town, Entrance.take_bus_to_desert, Entrance.bus_stop_to_tunnel_entrance)),
@@ -166,6 +166,7 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(LogicRegion.indoor_farming),
 
     RegionData(LogicRegion.shipping),
+    RegionData(LogicRegion.secret_notes),
     RegionData(LogicRegion.traveling_cart, (LogicEntrance.buy_from_traveling_merchant_sunday,
                                             LogicEntrance.buy_from_traveling_merchant_monday,
                                             LogicEntrance.buy_from_traveling_merchant_tuesday,
@@ -431,6 +432,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(LogicEntrance.grow_summer_fall_crops_in_fall, LogicRegion.summer_or_fall_farming),
 
     ConnectionData(LogicEntrance.shipping, LogicRegion.shipping),
+    ConnectionData(LogicEntrance.find_secret_notes, LogicRegion.secret_notes),
     ConnectionData(LogicEntrance.blacksmith_copper, LogicRegion.blacksmith_copper),
     ConnectionData(LogicEntrance.blacksmith_iron, LogicRegion.blacksmith_iron),
     ConnectionData(LogicEntrance.blacksmith_gold, LogicRegion.blacksmith_gold),
