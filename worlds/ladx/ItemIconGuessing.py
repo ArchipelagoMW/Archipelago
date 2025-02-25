@@ -417,13 +417,13 @@ GAME_SPECIFIC_PHRASES = {
 
     'Sonic Adventure 2 Battle': {
         'CHAOS EMERALD': 'PIECE_OF_POWER',
-        "Rings": "RUPEES_20" # This should only affect filler Rings currency, not Flame Ring upgrade
-        "Grapes": "TRADING_ITEM_PINEAPPLE"
-        "Pick Nails": "SHOVEL" # Digging upgrade
-        "Laser Blaster": "BOW"
-        "Bazooka": "BOW"
-        "Large Cannon": "BOW"
-        "Booster": "FEATHER" # Allow Tails mech hovering, so like Roc's feather a bit.
+        "Rings": "RUPEES_20", # This should only affect filler Rings currency, not Flame Ring upgrade
+        "Grapes": "TRADING_ITEM_PINEAPPLE",
+        "Pick Nails": "SHOVEL", # Digging upgrade
+        "Laser Blaster": "BOW",
+        "Bazooka": "BOW",
+        "Large Cannon": "BOW",
+        "Booster": "FEATHER", # Allow Tails mech hovering, so like Roc's feather a bit.
     },
 
     'Super Mario 64': {
@@ -569,10 +569,12 @@ GAME_SPECIFIC_PHRASES = {
 
         "Old Amber": "STONE_BEAK", # Aerodactyl's fossil should still be a fossil
         "Coin Case": "MAGIC_POWDER", # This shouldn't spawn as RUPEES
-        "Bike Voucher": "TRADING_ITEM_LETTER",
-        "Oak's Parcel": "TRADING_ITEM_LETTER",
         "Pass": "TRADING_ITEM_LETTER",
-        "Ticket": "TRADING_ITEM_LETTER",
+        "Ticket": "TRADING_ITEM_LETTER", # Aurora/Eon/Mystic
+
+        "Rock Smash": "SHOVEL", # No pickax but this will do
+        "Detector": 'TRADING_ITEM_MAGNIFYING_GLASS',
+        "Itemfinder": 'TRADING_ITEM_MAGNIFYING_GLASS',
 
         # Drinks Fixes
         
@@ -645,7 +647,7 @@ GAME_SPECIFIC_PHRASES = {
     "DOOM 1993": {
         "Keycard": "KEY",
         # "Computer area map": "COMPASS"
-        "Box of": "SINGLE_ARROW" # bullets, rockets, or shotgun shells
+        "Box of": "SINGLE_ARROW", # bullets, rockets, or shotgun shells
         "Energy cell pack": "SINGLE_ARROW",
         "Chainsaw": "SWORD",
         "Shotgun": "BOW",
@@ -659,7 +661,7 @@ GAME_SPECIFIC_PHRASES = {
     "DOOM II": {
         "Keycard": "KEY",
         # "Computer area map": "COMPASS",
-        "Box of": "SINGLE_ARROW" # bullets, rockets, or shotgun shells
+        "Box of": "SINGLE_ARROW", # bullets, rockets, or shotgun shells
         "Energy cell pack": "SINGLE_ARROW",
         "Chainsaw": "SWORD",
         "Shotgun": "BOW",
@@ -686,6 +688,7 @@ GAME_SPECIFIC_PHRASES = {
         "Emerald": "RUPEES_20",
         "Brewing": "MEDICINE",
         "Spyglass": 'TRADING_ITEM_MAGNIFYING_GLASS',
+        "Porkchop": "TRADING_ITEM_DOG_FOOD"
     },
     "VVVVVV": {
         "Trinket": "PIECE_OF_POWER"
