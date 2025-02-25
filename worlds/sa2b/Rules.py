@@ -4065,9 +4065,6 @@ def set_mission_upgrade_rules_expert(multiworld: MultiWorld, world: World, playe
         add_rule(multiworld.get_location(LocationName.weapons_bed_itembox_1, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
 
-        add_rule(multiworld.get_location(LocationName.cannon_core_itembox_1, player),
-                 lambda state: state.has(ItemName.tails_booster, player))
-
         add_rule(multiworld.get_location(LocationName.hidden_base_itembox_2, player),
                  lambda state: state.has(ItemName.tails_booster, player))
         add_rule(multiworld.get_location(LocationName.eternal_engine_itembox_2, player),
@@ -4124,9 +4121,6 @@ def set_mission_upgrade_rules_expert(multiworld: MultiWorld, world: World, playe
                  lambda state: state.has(ItemName.rouge_treasure_scope, player))
         add_rule(multiworld.get_location(LocationName.cosmic_wall_itembox_5, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
-
-        add_rule(multiworld.get_location(LocationName.cannon_core_itembox_5, player),
-                 lambda state: state.has(ItemName.rouge_iron_boots, player))
 
         add_rule(multiworld.get_location(LocationName.mission_street_itembox_6, player),
                  lambda state: state.has(ItemName.tails_booster, player))
