@@ -37,6 +37,7 @@ components.append(
 
 icon_paths["archiboolego"] = local_path("worlds/luigismansion/data", "archiboolego.png")
 
+
 class LuigisMansionSettings(settings.Group):
     class ISOFile(settings.UserFilePath):
         """
@@ -274,7 +275,8 @@ class LMWorld(World):
                 entry = LMLocation(self.player, location, region, data)
                 if entry.code == 627:
                     add_rule(entry,
-                             lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value), "and")
+                             lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value),
+                             "and")
                 if len(entry.access) != 0:
                     for item in entry.access:
                         if item == "Fire Element Medal":
@@ -292,7 +294,8 @@ class LMWorld(World):
                 entry = LMLocation(self.player, location, region, data)
                 if entry.code == 745:
                     add_rule(entry,
-                             lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value), "and")
+                             lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value),
+                             "and")
                 elif entry.code == 772:
                     add_rule(entry, lambda state: state.can_reach_location("Nursery Clear Chest", self.player))
                 elif entry.code in [773]:
@@ -309,6 +312,18 @@ class LMWorld(World):
                             add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
                         else:
                             add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                if region.name in GHOST_TO_ROOM.keys():
+                    # if fire, require water
+                    if self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Fire":
+                        add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
+                    # if water, require ice
+                    elif self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Water":
+                        add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                    # if ice, require fire
+                    elif self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Ice":
+                        add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
+                    else:
+                        pass
                 region.locations.append(entry)
         if self.options.walksanity:
             for location, data in WALK_LOCATION_TABLE.items():
@@ -333,7 +348,8 @@ class LMWorld(World):
                     add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
                 if entry.code == 679:
                     add_rule(entry,
-                             lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value), "and")
+                             lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value),
+                             "and")
                 if len(entry.access) != 0:
                     for item in entry.access:
                         if item == "Fire Element Medal":
@@ -344,6 +360,18 @@ class LMWorld(World):
                             add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
                         else:
                             add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                if region.name in GHOST_TO_ROOM.keys():
+                    # if fire, require water
+                    if self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Fire":
+                        add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
+                    # if water, require ice
+                    elif self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Water":
+                        add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                    # if ice, require fire
+                    elif self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Ice":
+                        add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
+                    else:
+                        pass
                 region.locations.append(entry)
             for location, data in BOOLOSSUS_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)
@@ -361,7 +389,8 @@ class LMWorld(World):
                     add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
                 if entry.code == 679:
                     add_rule(entry,
-                             lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value), "and")
+                             lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value),
+                             "and")
                 if len(entry.access) != 0:
                     for item in entry.access:
                         if item == "Fire Element Medal":
@@ -372,6 +401,18 @@ class LMWorld(World):
                             add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
                         else:
                             add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                if region.name in GHOST_TO_ROOM.keys():
+                    # if fire, require water
+                    if self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Fire":
+                        add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
+                    # if water, require ice
+                    elif self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Water":
+                        add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                    # if ice, require fire
+                    elif self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Ice":
+                        add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
+                    else:
+                        pass
                 region.locations.append(entry)
             for location, data in BOOLOSSUS_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)
@@ -406,8 +447,9 @@ class LMWorld(World):
             if hasattr(self.multiworld, "re_gen_passthrough"):
                 # We know we're in second gen
                 re_gen = self.multiworld.re_gen_passthrough
-                if self.game in re_gen: # Are we the tracked game and in final gen
-                    self.ghost_affected_regions = re_gen[self.game]["ghost elements"] # this should be the same list from slot data
+                if self.game in re_gen:  # Are we the tracked game and in final gen
+                    self.ghost_affected_regions = re_gen[self.game][
+                        "ghost elements"]  # this should be the same list from slot data
         elif self.options.enemizer == 1:
             set_ghost_type(self, self.ghost_affected_regions)
         elif self.options.enemizer == 2:
@@ -418,9 +460,10 @@ class LMWorld(World):
             if hasattr(self.multiworld, "re_gen_passthrough"):
                 # We know we're in second gen
                 re_gen = self.multiworld.re_gen_passthrough
-                if self.game in re_gen: # Are we the tracked game and in final gen
-                    self.open_doors = re_gen[self.game]["door rando list"] # this should be the same list from slot data
-                    self.open_doors = {int(k):v for k, v in self.open_doors.items()}
+                if self.game in re_gen:  # Are we the tracked game and in final gen
+                    self.open_doors = re_gen[self.game][
+                        "door rando list"]  # this should be the same list from slot data
+                    self.open_doors = {int(k): v for k, v in self.open_doors.items()}
         elif self.options.door_rando == 1:
             k = list(self.open_doors.keys())
             v = list(self.open_doors.values())
@@ -464,7 +507,7 @@ class LMWorld(World):
             if entry.type == "Freestanding":
                 add_item_rule(entry, lambda
                     item: item.player != self.player or (
-                            item.player == self.player and item.type != "Money" and item.type != "Trap" and item.type != "Medal"))
+                        item.player == self.player and item.type != "Money" and item.type != "Trap" and item.type != "Medal"))
             if len(entry.access) != 0:
                 for item in entry.access:
                     if item == "Fire Element Medal":
@@ -496,11 +539,14 @@ class LMWorld(World):
                     else:
                         add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
             if region.name in GHOST_TO_ROOM.keys():
-                if self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Fire":  # if fire, require water
+                if self.multiworld.worlds[self.player].ghost_affected_regions[
+                    region.name] == "Fire":  # if fire, require water
                     add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                elif self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Water":  # if water, require ice
+                elif self.multiworld.worlds[self.player].ghost_affected_regions[
+                    region.name] == "Water":  # if water, require ice
                     add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                elif self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Ice":  # if ice, require fire
+                elif self.multiworld.worlds[self.player].ghost_affected_regions[
+                    region.name] == "Ice":  # if ice, require fire
                     add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
                 else:
                     pass
@@ -513,7 +559,8 @@ class LMWorld(World):
                     item: item.player != self.player or (
                         item.player == self.player and item.type != "Money" and item.type != "Trap" and item.type != "Medal"))
             if entry.code == 5:
-                add_rule(entry, lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value))
+                add_rule(entry,
+                         lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value))
             if len(entry.access) != 0:
                 for item in entry.access:
                     if item == "Fire Element Medal":
@@ -541,8 +588,8 @@ class LMWorld(World):
                 return LMItem(item, self.player, ALL_ITEMS_TABLE[item], set_non_progress)
         raise Exception(f"Invalid item name: {item}")
 
-    #def post_fill(self):
-        # visualize_regions(self.multiworld.get_region("Menu", self.player), "luigiregions.puml", linetype_ortho=False)
+    # def post_fill(self):
+    # visualize_regions(self.multiworld.get_region("Menu", self.player), "luigiregions.puml", linetype_ortho=False)
 
     def create_items(self):
         exclude = [item.name for item in self.multiworld.precollected_items[self.player]]
@@ -586,11 +633,15 @@ class LMWorld(World):
         diamweight = math.ceil(self.options.gems_weight.value * 0.4)
         lheart = 0 if self.options.heart_weight.value - 5 <= 0 else self.options.heart_weight.value - 5
         filler_weights = [self.options.bundle_weight.value, self.options.gems_weight.value,  # coins & bills, sapphire
-                          self.options.gems_weight.value, self.options.gems_weight.value, diamweight,  # emerald, ruby, diamond
-                          self.options.poison_trap_weight.value, self.options.nothing_weight.value, self.options.heart_weight.value, lheart,  # poison mush, nothing, sm heart, l heart
+                          self.options.gems_weight.value, self.options.gems_weight.value, diamweight,
+                          # emerald, ruby, diamond
+                          self.options.poison_trap_weight.value, self.options.nothing_weight.value,
+                          self.options.heart_weight.value, lheart,  # poison mush, nothing, sm heart, l heart
                           self.options.bomb_trap_weight.value, self.options.ice_trap_weight.value,  # bomb, ice
-                          self.options.banana_trap_weight.value, self.options.coin_weight.value, twencoin, thircoin,  # banana, 10coin, 20coin, 30coin
-                          self.options.bill_weight.value, twenbill, self.options.bars_weight.value, morebar]  # 15bill, 25bill, 1bar, 2bar
+                          self.options.banana_trap_weight.value, self.options.coin_weight.value, twencoin, thircoin,
+                          # banana, 10coin, 20coin, 30coin
+                          self.options.bill_weight.value, twenbill, self.options.bars_weight.value,
+                          morebar]  # 15bill, 25bill, 1bar, 2bar
         return self.random.choices(filler, weights=filler_weights, k=1)[0]
 
     def set_rules(self):
