@@ -663,7 +663,7 @@ GAME_SPECIFIC_PHRASES = {
 
     "DOOM 1993": {
         "Keycard": "KEY",
-        "Computer area map": "MAP"
+        "Computer area map": "MAP",
         "Box of": "SINGLE_ARROW", # bullets, rockets, or shotgun shells
         "Energy cell pack": "SINGLE_ARROW",
         "Chainsaw": "SWORD",
@@ -717,7 +717,7 @@ GAME_SPECIFIC_PHRASES = {
         "Metro Ticket": "TRADING_ITEM_LETTER",
         "Snatcher's Contract": "TRADING_ITEM_LETTER",
         "Pon": "RUPEES_20",
-    }
+    },
 
     "Kingdom Hearts 2": {
         # Goal items / Collectibles
@@ -787,11 +787,11 @@ GAME_SPECIFIC_PHRASES = {
         "Ether": "MEDICINE",
         "Elixir": "MEDICINE",
         "Megalixir": "MEDICINE",
-    }
+    },
 
     "Kingdom Hearts 1": {
         # Goal/collectible items
-        "Ansem's Report": "TRADING_ITEM_LETTER"
+        "Ansem's Report": "TRADING_ITEM_LETTER",
 
         # Dalmatian puppies
         "Puppy": "PIECE_OF_POWER",
@@ -838,13 +838,13 @@ GAME_SPECIFIC_PHRASES = {
 
         # Magic
         
-        "Progressive Fire", "MAGIC_ROD",
-        "Progressive Blizzard", "MAGIC_ROD",
-        "Progressive Thunder", "MAGIC_ROD",
-        "Progressive Cure", "MAGIC_ROD",
-        "Progressive Gravity", "MAGIC_ROD",
-        "Progressive Stop", "MAGIC_ROD",
-        "Progressive Aero", "MAGIC_ROD",
+        "Progressive Fire": "MAGIC_ROD",
+        "Progressive Blizzard": "MAGIC_ROD",
+        "Progressive Thunder": "MAGIC_ROD",
+        "Progressive Cure": "MAGIC_ROD",
+        "Progressive Gravity": "MAGIC_ROD",
+        "Progressive Stop": "MAGIC_ROD",
+        "Progressive Aero": "MAGIC_ROD",
 
         # Other
         "Glide": "FEATHER",
