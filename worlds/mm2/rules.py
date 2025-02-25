@@ -92,7 +92,7 @@ def set_rules(world: "MM2World") -> None:
         world.wily_5_weapons = slot_data["wily_5_weapons"]
     else:
         if world.options.random_weakness == RandomWeaknesses.option_shuffled:
-            weapon_tables = [table for weapon, table in weapon_damage.items() if weapon not in (0, 8)]
+            weapon_tables = [table.copy() for weapon, table in weapon_damage.items() if weapon not in (0, 8)]
             world.random.shuffle(weapon_tables)
             for i in range(1, 8):
                 world.weapon_damage[i] = weapon_tables.pop()
