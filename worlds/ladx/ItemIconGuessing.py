@@ -603,7 +603,7 @@ GAME_SPECIFIC_PHRASES = {
         "Hoolumbian": "MEDICINE",
         "Chuckoccino": "MEDICINE",
         "Teeheespresso": "MEDICINE",
-        "Blend": "MEDICINE",
+        "Blend": "MEDICINE", # for all coffee blends
 
         # Secret Scrolls --> MESSAGE
         "Secret Scroll": "TRADING_ITEM_LETTER",
