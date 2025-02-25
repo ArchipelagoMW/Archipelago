@@ -423,7 +423,7 @@ GAME_SPECIFIC_PHRASES = {
         "Laser Blaster": "BOW",
         "Bazooka": "BOW",
         "Large Cannon": "BOW",
-        "Booster": "FEATHER", # Allow Tails mech hovering, so like Roc's feather a bit.
+        "Tails - Booster": "FEATHER", # Allow Tails mech hovering, so like Roc's feather a bit.
     },
 
     'Super Mario 64': {
@@ -628,7 +628,6 @@ GAME_SPECIFIC_PHRASES = {
         "Jeans": "BLUE_TUNIC",
         "Trousers": "BLUE_TUNIC",
         "Slacks": "BLUE_TUNIC",
-        # Weirder Names for Gear
         "Casual Coral": "BLUE_TUNIC",
         "Shroom Bells": "BLUE_TUNIC",
 
@@ -646,7 +645,7 @@ GAME_SPECIFIC_PHRASES = {
 
     "DOOM 1993": {
         "Keycard": "KEY",
-        # "Computer area map": "COMPASS"
+        "Computer area map": "MAP"
         "Box of": "SINGLE_ARROW", # bullets, rockets, or shotgun shells
         "Energy cell pack": "SINGLE_ARROW",
         "Chainsaw": "SWORD",
@@ -660,7 +659,7 @@ GAME_SPECIFIC_PHRASES = {
 
     "DOOM II": {
         "Keycard": "KEY",
-        # "Computer area map": "COMPASS",
+        "Computer area map": "MAP",
         "Box of": "SINGLE_ARROW", # bullets, rockets, or shotgun shells
         "Energy cell pack": "SINGLE_ARROW",
         "Chainsaw": "SWORD",
@@ -679,6 +678,7 @@ GAME_SPECIFIC_PHRASES = {
         "Pile Of Meat": 'TRADING_ITEM_DOG_FOOD',
         'Angler Hook': 'TRADING_ITEM_FISHING_HOOK', # Good fish.
         "Quill": 'FEATHER',
+        "Currency": "RUPEES_20",
     },
 
     "Minecraft": {
@@ -699,7 +699,7 @@ GAME_SPECIFIC_PHRASES = {
         "Metro Ticket": "TRADING_ITEM_LETTER",
         "Snatcher's Contract": "TRADING_ITEM_LETTER",
         "Heart Pon": "HEART_PIECE",
-        "Pons": "RUPEES_20",
+        "Pon": "RUPEES_20",
     }
 
     # To Add: KH2, KH1, OoT, ALttP
