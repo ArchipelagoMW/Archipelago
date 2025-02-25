@@ -570,7 +570,7 @@ class LMWorld(World):
 
     def get_filler_item_name(self) -> str:
         filler = list(filler_items.keys())
-        tencoin = 0 if self.options.coin_weight.value - 10 <= 0 else self.options.coin_weight.value - 10
+        thircoin = 0 if self.options.coin_weight.value - 10 <= 0 else self.options.coin_weight.value - 10
         twencoin = 0 if self.options.coin_weight.value - 5 <= 0 else self.options.coin_weight.value - 5
         twenbill = 0 if self.options.bill_weight.value - 5 <= 0 else self.options.bill_weight.value - 5
         morebar = 0 if self.options.bars_weight.value - 5 <= 0 else self.options.bars_weight.value - 5
@@ -580,7 +580,7 @@ class LMWorld(World):
                           self.options.gems_weight.value, self.options.gems_weight.value, diamweight,  # emerald, ruby, diamond
                           self.options.poison_trap_weight.value, self.options.nothing_weight.value, self.options.heart_weight.value, lheart,  # poison mush, nothing, sm heart, l heart
                           self.options.bomb_trap_weight.value, self.options.ice_trap_weight.value,  # bomb, ice
-                          self.options.banana_trap_weight.value, self.options.coin_weight.value, twencoin, tencoin,  # banana, 10coin, 20coin, 30coin
+                          self.options.banana_trap_weight.value, self.options.coin_weight.value, twencoin, thircoin,  # banana, 10coin, 20coin, 30coin
                           self.options.bill_weight.value, twenbill, self.options.bars_weight.value, morebar]  # 15bill, 25bill, 1bar, 2bar
         return self.random.choices(filler, weights=filler_weights, k=1)[0]
 
