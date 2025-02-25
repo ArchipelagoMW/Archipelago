@@ -686,5 +686,8 @@ GAME_SPECIFIC_PHRASES = {
         "Emerald": "RUPEES_20",
         "Brewing": "MEDICINE",
         "Spyglass": 'TRADING_ITEM_MAGNIFYING_GLASS',
+    },
+    "VVVVVV": {
+        "Trinket": "PIECE_OF_POWER"
     }
 }
