@@ -497,7 +497,7 @@ class LinksAwakeningClient():
             new_value = current_value | check.mask
             self.gameboy.write_memory(check.address, [new_value])
             check_count = struct.unpack(">H", await self.gameboy.async_read_memory(LAClientConstants.CheckCounter, 2))[0]
-            self.gameboy.write_memory(LAClientConstants.wRecvIndex, struct.pack(">H", check_count + 1))
+            self.gameboy.write_memory(LAClientConstants.CheckCounter, struct.pack(">H", check_count + 1))
         return not already_collected
 
     trade_items = {
