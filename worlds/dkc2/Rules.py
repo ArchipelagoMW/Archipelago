@@ -3241,17 +3241,25 @@ class DKC2ExpertRules(DKC2Rules):
                 lambda state: self.can_cling(state) and self.can_carry(state),
 
             LocationName.barrel_bayou_clear:
-                lambda state: self.has_controllable_barrels(state) and self.has_kannons(state),
+                lambda state: (self.has_controllable_barrels(state) or (self.can_hover(state) and self.can_cartwheel(state) and self.has_rambi(state))) 
+                    and (self.has_kannons(state) or (self.can_hover(state) and self.can_team_attack(state))
+                ),
             LocationName.barrel_bayou_kong:
                 lambda state: self.has_controllable_barrels(state) and self.has_kannons(state) and (
                     self.can_team_attack(state) or self.can_cartwheel(state)
                 ),
             LocationName.barrel_bayou_dk_coin:
-                lambda state: self.has_controllable_barrels(state) and self.has_rambi(state),
+                lambda state: self.has_rambi(state) and (
+                    self.has_controllable_barrels(state) or (self.can_hover(state) and self.can_cartwheel(state))
+                ),
             LocationName.barrel_bayou_bonus_1:
-                lambda state: self.has_controllable_barrels(state) and self.can_carry(state),
+                lambda state: self.can_carry(state) and (
+                    self.has_controllable_barrels(state) or (self.can_hover(state) and self.can_cartwheel(state) and self.has_rambi(state))
+                ),
             LocationName.barrel_bayou_bonus_2:
-                lambda state: self.has_controllable_barrels(state) and self.has_kannons(state),
+                lambda state: self.has_controllable_barrels(state) and 
+                    (self.has_kannons(state) or (self.can_hover(state) and self.can_team_attack(state))
+                ),
 
             LocationName.glimmers_galleon_clear:
                 self.can_swim,
@@ -3970,17 +3978,26 @@ class DKC2ExpertRules(DKC2Rules):
             LocationName.barrel_bayou_banana_bunch_1:
                 lambda state: self.can_team_attack(state) or self.has_both_kongs(state),
             LocationName.barrel_bayou_banana_coin_1:
-                self.has_controllable_barrels,
+                lambda state: self.has_controllable_barrels(state) or 
+                    (self.can_hover(state) and self.can_cartwheel(state) and self.has_rambi(state)
+                ),
             LocationName.barrel_bayou_banana_bunch_2:
-                self.has_controllable_barrels,
+                lambda state: self.has_controllable_barrels(state) or 
+                    (self.can_hover(state) and self.can_cartwheel(state) and self.has_rambi(state)
+                ),
             LocationName.barrel_bayou_green_balloon:
-                lambda state: self.has_controllable_barrels(state) and self.can_carry(state) and (
+                lambda state: (self.has_controllable_barrels(state) or (self.can_hover(state) and self.can_cartwheel(state) and self.has_rambi(state)))
+                    and self.can_carry(state) and (
                     self.has_kannons(state) or self.can_hover(state)
-                    ),
+                ),
             LocationName.barrel_bayou_banana_coin_2:
-                lambda state: self.has_controllable_barrels(state) and self.has_kannons(state),
+                lambda state: (self.has_controllable_barrels(state) or (self.can_hover(state) and self.can_cartwheel(state) and self.has_rambi(state))) 
+                    and (self.has_kannons(state) or (self.can_hover(state) and self.can_team_attack(state))
+                ),
             LocationName.barrel_bayou_banana_bunch_3:
-                lambda state: self.has_controllable_barrels(state) and self.has_kannons(state),
+                lambda state: (self.has_controllable_barrels(state) or (self.can_hover(state) and self.can_cartwheel(state) and self.has_rambi(state))) 
+                    and (self.has_kannons(state) or (self.can_hover(state) and self.can_team_attack(state))
+                ),
 
             LocationName.glimmers_galleon_banana_coin_1:
                 self.can_swim,
