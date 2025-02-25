@@ -726,7 +726,6 @@ GAME_SPECIFIC_PHRASES = {
         "Secret Ansem's Report": "TRADING_ITEM_LETTER",
 
         # Sora Keyblades
-
         "Bond of Flame": "SWORD",
         "Circle of Life": "SWORD",
         "Decisive Pumpkin": "SWORD",
@@ -761,7 +760,7 @@ GAME_SPECIFIC_PHRASES = {
         "Rising Dragon": "MAGIC_ROD",
         "Save The Queen+": "MAGIC_ROD",
         "Shaman's Relic": "MAGIC_ROD",
-        "Victory Bell": "MAGIC_ROD",
+        # "Victory Bell": "MAGIC_ROD",
 
         # Goofy Shields
         "Akashic Record": "SHIELD",
@@ -788,6 +787,71 @@ GAME_SPECIFIC_PHRASES = {
         "Ether": "MEDICINE",
         "Elixir": "MEDICINE",
         "Megalixir": "MEDICINE",
+    }
+
+    "Kingdom Hearts 1": {
+        # Goal/collectible items
+        "Ansem's Report": "TRADING_ITEM_LETTER"
+
+        # Dalmatian puppies
+        "Puppy": "PIECE_OF_POWER",
+        "Puppies": "PIECE_OF_POWER",
+        
+        # Sora Keyblades
+        "Jungle King": "SWORD",
+        "Three Wishes": "SWORD",
+        # "Fairy Harp": "SWORD",
+        "Pumpkinhead": "SWORD",
+        "Crabclaw": "SWORD",
+        "Divine Rose": "SWORD",
+        "Spellbinder": "SWORD",
+        "Olympia": "SWORD",
+        "Lionheart": "SWORD",
+        "Metal Chocobo": "SWORD",
+        "Oathkeeper": "SWORD",
+        "Oblivion": "SWORD",
+        "Lady Luck": "SWORD",
+        "Wishing Star": "SWORD",
+        "Ultima Weapon": "SWORD",
+        "Diamond Dust": "SWORD",
+        "One-Winged Angel": "SWORD",
+
+        # Donald Staves
+        "Morning Star": "MAGIC_ROD",
+        "Shooting Star": "MAGIC_ROD",
+        "Warhammer": "MAGIC_ROD",
+        "Silver Mallet": "MAGIC_ROD",
+        "Grand Mallet": "MAGIC_ROD",
+        "Lord Fortune": "MAGIC_ROD",
+        "Violetta": "MAGIC_ROD",
+        "Save the Queen": "MAGIC_ROD",
+        "Wizard's Relic": "MAGIC_ROD",
+        "Meteor Strike": "MAGIC_ROD",
+        "Fantasista": "MAGIC_ROD",
+
+        # Goofy Shields
+        "Smasher": "SHIELD",
+        "Gigas Fist": "SHIELD",
+        "Save the King": "SHIELD",
+        "Defender": "SHIELD",
+        "Seven Elements": "SHIELD",
+
+        # Magic
+        
+        "Progressive Fire", "MAGIC_ROD",
+        "Progressive Blizzard", "MAGIC_ROD",
+        "Progressive Thunder", "MAGIC_ROD",
+        "Progressive Cure", "MAGIC_ROD",
+        "Progressive Gravity", "MAGIC_ROD",
+        "Progressive Stop", "MAGIC_ROD",
+        "Progressive Aero", "MAGIC_ROD",
+
+        # Other
+        "Glide": "FEATHER",
+        "Ether": "MEDICINE",
+        "Elixir": "MEDICINE",
+        "Megalixir": "MEDICINE",
+        
     }
 
     # TODO: Link to the Past: just double check that everything matches
