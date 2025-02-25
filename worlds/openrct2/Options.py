@@ -402,13 +402,10 @@ class SelectedScenario(Choice):
     default = Scenario.archipelago_madness_vanilla.value    
 
 class DeathLink(Choice):
-    """DeathLink is an opt-in feature for Multiworlds where individual death events are propagated to all games with DeathLink enabled.
-
-    - Disabled: No changes to base game.
-
-    - Enabled: When any ride crashes, everybody (with DeathLink enabled) dies. Inversely, when anybody (again, with DeathLink enabled) dies, a random ride will explode.
-
-    When enabled, there is a 20-second rest period between any deathlink event. Fix that coaster quickly!
+    """If you die, everybody dies, and vise versa!
+    - This manifests itself in exploding rides. Somebody dying will cause a random ride to crash,
+    and building rides badly will cause others to die. There's a 20 second timer between deathlink events.
+    Fix that coaster quickly!
     """
     display_name = "DeathLink"
     option_disabled = DeathLinkMode.disabled.value
@@ -702,19 +699,28 @@ class SpamTraps(Range):
     default = 5
 
 class Filler(Range):
-    """How many extra filler items to add to the mix as a percentage. This will mostly consist of Cash Bonuses"""
+    """How many extra filler items to add to the mix as a percentage. This will mostly consist of Cash Bonuses."""
     display_name = "Filler"
     range_start = 1
     range_end = 50
     default = 10
 
 class IncludeATM(OpenRCT2OnToggle):
-    """Includes an ATM in the item list, regardless of whether it normally appears in the chosen scenario"""
+    """Includes an ATM in the item list, regardless of whether it normally appears in the chosen scenario."""
     display_name = "Include ATM"
 
 class IncludeFirstAid(OpenRCT2OnToggle):
-    """Includes a First Aid Room in the item list, regardless of whether it normally appears in the chosen scenario"""
+    """Includes a First Aid Room in the item list, regardless of whether it normally appears in the chosen scenario."""
     display_name = "Include First Aid Room"
+
+class AllRidesAndSceneryBase(OpenRCT2Toggle):
+    """Adds every ride and scenery pack in the base game to the item pool. This will make for a significantly longer scenario."""
+    display_name = "Include All Rides and Scenery (Base Game)"
+
+class AllRidesAndSceneryExpansion(OpenRCT2Toggle):
+    """Adds every ride and scenery pack in the RCT2 Expansion Packs to the item pool. If this is true the base game rides and 
+    scenery will also be included. This will make for a significantly longer scenario."""
+    display_name = "Include All Rides and Scenery (Expansion Packs)"
 
 class Skips(Range):
     """By default, every game starts with a single skip to ignore a shop requirement. This will add additional skips to 
@@ -771,7 +777,9 @@ openrct2_option_groups = [
         Skips,
         FurryConventionTraps,
         BathroomTraps,
-        SpamTraps
+        SpamTraps,
+        AllRidesAndSceneryBase,
+        AllRidesAndSceneryExpansion
     ]),
 ]
 
@@ -792,6 +800,8 @@ class openRCT2Options(PerGameCommonOptions):
     filler: Filler
     include_atm: IncludeATM
     include_first_aid: IncludeFirstAid
+    all_rides_and_scenery_base: AllRidesAndSceneryBase
+    all_rides_and_scenery_expansion: AllRidesAndSceneryExpansion
     skips: Skips
 
     # deathlink
