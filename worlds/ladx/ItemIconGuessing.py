@@ -662,4 +662,13 @@ GAME_SPECIFIC_PHRASES = {
         "BFG9000": "BOW"
         "Medikit": "MEDICINE"
     }
+
+    "Inscryption": {
+        "Extra Candle": "HEART_CONTAINER" # Candles act as extra health
+        "Magnificus Eye": 'TRADING_ITEM_MAGNIFYING_GLASS' # Needed to see hidden drawings / messages
+        "Monocle": 'TRADING_ITEM_MAGNIFYING_GLASS' # Ditto
+        "Pile Of Meat": 'TRADING_ITEM_DOG_FOOD'
+        'Angler Hook': 'TRADING_ITEM_FISHING_HOOK' # Good fish.
+        "Quill": 'FEATHER'
+    }
 }
