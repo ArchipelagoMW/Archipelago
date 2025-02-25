@@ -4,7 +4,7 @@ Unit tests for world generation
 from typing import *
 from .test_base import Sc2SetupTestBase
 
-from .. import mission_groups, mission_tables, options, locations, SC2Mission, SC2Campaign
+from .. import mission_groups, mission_tables, options, locations, SC2Mission, SC2Campaign, SC2Race
 from ..item import item_groups, item_tables, item_names
 from .. import get_all_missions, get_random_first_mission
 from ..options import EnabledCampaigns
@@ -520,7 +520,7 @@ class TestItemFiltering(Sc2SetupTestBase):
                 mission_tables.SC2Mission.ZERO_HOUR.mission_name.split(" (")[0]
             ],
             'mission_order': options.MissionOrder.option_grid,
-            'selected_races': options.SelectRaces.option_all,
+            'selected_races': options.SelectRaces.valid_keys,
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'enabled_campaigns': {
                 SC2Campaign.WOL.campaign_name,
@@ -539,7 +539,7 @@ class TestItemFiltering(Sc2SetupTestBase):
                 mission_tables.SC2Mission.ZERO_HOUR.mission_name
             ],
             'mission_order': options.MissionOrder.option_grid,
-            'selected_races': options.SelectRaces.option_all,
+            'selected_races': options.SelectRaces.valid_keys,
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'enabled_campaigns': {
                 SC2Campaign.WOL.campaign_name,
@@ -793,7 +793,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': campaign_size,
             'enabled_campaigns': EnabledCampaigns.valid_keys,
-            'selected_races': options.SelectRaces.option_all,
+            'selected_races': options.SelectRaces.valid_keys,
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'mission_race_balancing': options.EnableMissionRaceBalancing.option_fully_balanced,
         }
@@ -825,7 +825,9 @@ class TestItemFiltering(Sc2SetupTestBase):
             },
             'max_number_of_upgrades': 2,
             'mission_order': options.MissionOrder.option_grid,
-            'selected_races': options.SelectRaces.option_terran,
+            'selected_races': {
+                SC2Race.TERRAN.get_title(),
+            },
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
         }
 
@@ -859,7 +861,10 @@ class TestItemFiltering(Sc2SetupTestBase):
             },
             'max_number_of_upgrades': 2,
             'mission_order': options.MissionOrder.option_grid,
-            'selected_races': options.SelectRaces.option_terran_and_zerg,
+            'selected_races': {
+                SC2Race.TERRAN.get_title(),
+                SC2Race.ZERG.get_title(),
+            },
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
         }
 

@@ -1,3 +1,4 @@
+import functools
 from dataclasses import fields, Field, dataclass
 from typing import *
 from datetime import timedelta
@@ -62,19 +63,13 @@ class Sc2MissionSet(OptionSet):
         return self.value.__len__()
 
 
-class SelectRaces(Choice):
+class SelectRaces(OptionSet):
     """
     Pick which factions' missions and items can be shuffled into the world.
     """
     display_name = "Select Playable Races"
-    option_all = (MissionFlag.Terran|MissionFlag.Zerg|MissionFlag.Protoss).value
-    option_terran = MissionFlag.Terran.value
-    option_zerg = MissionFlag.Zerg.value
-    option_protoss = MissionFlag.Protoss.value
-    option_terran_and_zerg = (MissionFlag.Terran|MissionFlag.Zerg).value
-    option_terran_and_protoss = (MissionFlag.Terran|MissionFlag.Protoss).value
-    option_zerg_and_protoss = (MissionFlag.Zerg|MissionFlag.Protoss).value
-    default = option_all
+    valid_keys = {race.get_title() for race in SC2Race if race != SC2Race.ANY}
+    default = valid_keys
 
 
 class GameDifficulty(Choice):
@@ -1524,24 +1519,15 @@ def get_option_value(world: Union['SC2World', None], name: str) -> int:
 
 
 def get_enabled_races(world: Optional['SC2World']) -> Set[SC2Race]:
-    selection: int = world.options.selected_races.value if world else SelectRaces.default
-    if selection == SelectRaces.option_all:
-        return set(SC2Race)
-    enabled = {SC2Race.ANY}
-    if selection & MissionFlag.Terran:
-        enabled.add(SC2Race.TERRAN)
-    if selection & MissionFlag.Zerg:
-        enabled.add(SC2Race.ZERG)
-    if selection & MissionFlag.Protoss:
-        enabled.add(SC2Race.PROTOSS)
-    return enabled
+    race_names = world.options.selected_races.value if world else SelectRaces.default
+    return {race for race in SC2Race if race.get_title() in race_names}
 
 
 def get_enabled_campaigns(world: Optional['SC2World']) -> Set[SC2Campaign]:
     campaign_names = get_option_value(world, "enabled_campaigns")
     campaigns = {campaign for campaign in SC2Campaign if campaign.campaign_name in campaign_names}
     if (get_option_value(world, "mission_order") == MissionOrder.option_vanilla
-            and get_option_value(world,"selected_races") != SelectRaces.option_all):
+            and get_option_value(world,"selected_races") != SelectRaces.valid_keys):
         campaigns.remove(SC2Campaign.EPILOGUE)
     return campaigns
 
@@ -1555,7 +1541,10 @@ def get_disabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
 
 
 def get_disabled_flags(world: 'SC2World') -> MissionFlag:
-    excluded = (MissionFlag.Terran|MissionFlag.Zerg|MissionFlag.Protoss) ^ MissionFlag(world.options.selected_races.value)
+    excluded = (
+            (MissionFlag.Terran | MissionFlag.Zerg | MissionFlag.Protoss)
+            ^ functools.reduce(lambda a, b: a | b, [race.get_mission_flag() for race in get_enabled_races(world)])
+    )
     # filter out no-build missions
     if not world.options.shuffle_no_build.value:
         excluded |= MissionFlag.NoBuild

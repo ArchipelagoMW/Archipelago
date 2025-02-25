@@ -172,7 +172,10 @@ class TestSupportedUseCases(Sc2SetupTestBase):
 
     def test_excluding_protoss_excludes_campaigns_and_items(self) -> None:
         world_options = {
-            'selected_races': options.SelectRaces.option_terran_and_zerg,
+            'selected_races': {
+                SC2Race.TERRAN.get_title(),
+                SC2Race.ZERG.get_title(),
+            },
             'enabled_campaigns': options.EnabledCampaigns.valid_keys,
             'mission_order': options.MissionOrder.option_grid,
         }
@@ -191,7 +194,10 @@ class TestSupportedUseCases(Sc2SetupTestBase):
 
     def test_excluding_terran_excludes_campaigns_and_items(self) -> None:
         world_options = {
-            'selected_races': options.SelectRaces.option_zerg_and_protoss,
+            'selected_races': {
+                SC2Race.ZERG.get_title(),
+                SC2Race.PROTOSS.get_title(),
+            },
             'enabled_campaigns': EnabledCampaigns.valid_keys,
             'mission_order': options.MissionOrder.option_grid,
         }
@@ -211,7 +217,10 @@ class TestSupportedUseCases(Sc2SetupTestBase):
 
     def test_excluding_zerg_excludes_campaigns_and_items(self) -> None:
         world_options = {
-            'selected_races': options.SelectRaces.option_terran_and_protoss,
+            'selected_races': {
+                SC2Race.TERRAN.get_title(),
+                SC2Race.PROTOSS.get_title(),
+            },
             'enabled_campaigns': EnabledCampaigns.valid_keys,
             'mission_order': options.MissionOrder.option_grid,
             'excluded_missions': [
@@ -235,7 +244,10 @@ class TestSupportedUseCases(Sc2SetupTestBase):
 
     def test_excluding_faction_on_vanilla_order_excludes_epilogue(self) -> None:
         world_options = {
-            'selected_races': options.SelectRaces.option_terran_and_protoss,
+            'selected_races': {
+                SC2Race.TERRAN.get_title(),
+                SC2Race.PROTOSS.get_title(),
+            },
             'enabled_campaigns': EnabledCampaigns.valid_keys,
             'mission_order': options.MissionOrder.option_vanilla,
         }
@@ -251,7 +263,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
 
     def test_race_swap_pick_one_has_correct_length_and_includes_swaps(self) -> None:
         world_options = {
-            'selected_races': options.SelectRaces.option_all,
+            'selected_races': options.SelectRaces.valid_keys,
             'enable_race_swap': options.EnableRaceSwapVariants.option_pick_one,
             'enabled_campaigns': {
                 SC2Campaign.WOL.campaign_name,
@@ -281,7 +293,9 @@ class TestSupportedUseCases(Sc2SetupTestBase):
                 item_names.BANSHEE: 1,
             },
             'generic_upgrade_items': options.GenericUpgradeItems.option_bundle_unit_class,
-            'selected_races': options.SelectRaces.option_terran,
+            'selected_races': {
+                SC2Race.TERRAN.get_title(),
+            },
             'enable_race_swap': options.EnableRaceSwapVariants.option_disabled,
             'enabled_campaigns': {
                 SC2Campaign.WOL.campaign_name,
@@ -322,7 +336,9 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         world_options = {
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
-            'selected_races': options.SelectRaces.option_zerg,
+            'selected_races': {
+                SC2Race.ZERG.get_title(),
+            },
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'kerrigan_max_active_abilities': target_number,
         }
@@ -338,7 +354,9 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         world_options = {
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
-            'selected_races': options.SelectRaces.option_zerg,
+            'selected_races': {
+                SC2Race.ZERG.get_title(),
+            },
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'kerrigan_max_passive_abilities': target_number,
         }
@@ -354,7 +372,9 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         world_options = {
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
-            'selected_races': options.SelectRaces.option_protoss,
+            'selected_races': {
+                SC2Race.PROTOSS.get_title(),
+            },
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'spear_of_adun_max_active_abilities': target_number,
         }
@@ -371,7 +391,9 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         world_options = {
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
-            'selected_races': options.SelectRaces.option_protoss,
+            'selected_races': {
+                SC2Race.PROTOSS.get_title(),
+            },
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'spear_of_adun_max_autonomously_cast_abilities': target_number,
         }
@@ -388,7 +410,9 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         world_options = {
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
-            'selected_races': options.SelectRaces.option_terran,
+            'selected_races': {
+                SC2Race.TERRAN.get_title(),
+            },
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'nova_max_weapons': target_number,
         }
@@ -405,7 +429,9 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         world_options = {
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
-            'selected_races': options.SelectRaces.option_terran,
+            'selected_races': {
+                SC2Race.TERRAN.get_title(),
+            },
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'nova_max_gadgets': target_number,
         }

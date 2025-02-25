@@ -8,6 +8,11 @@ class SC2Race(IntEnum):
     ZERG = 2
     PROTOSS = 3
 
+    def get_title(self):
+        return self.name.lower().capitalize()
+
+    def get_mission_flag(self):
+        return MissionFlag.__getitem__(self.get_title())
 
 class MissionPools(IntEnum):
     STARTER = 0

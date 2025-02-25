@@ -15,7 +15,9 @@ class ItemFilterTests(Sc2SetupTestBase):
             },
             'required_tactics': 'standard',
             'min_number_of_upgrades': 1,
-            'selected_races': 'terran',
+            'selected_races': {
+                SC2Race.TERRAN.get_title()
+            },
             'mission_order': 'grid',
         }
         self.generate_world(world_options)
@@ -52,7 +54,9 @@ class ItemFilterTests(Sc2SetupTestBase):
             },
             'min_number_of_upgrades': 2,
             'required_tactics': 'standard',
-            'selected_races': 'protoss',
+            'selected_races': {
+                SC2Race.PROTOSS.get_title()
+            },
             'mission_order': 'grid',
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
         }
@@ -71,7 +75,9 @@ class ItemFilterTests(Sc2SetupTestBase):
             },
             'min_number_of_upgrades': 2,
             'required_tactics': 'standard',
-            'selected_races': 'protoss',
+            'selected_races': {
+                SC2Race.PROTOSS.get_title()
+            },
             'mission_order': 'grid',
         }
         self.generate_world(world_options)
