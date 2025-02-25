@@ -406,7 +406,7 @@ GAME_SPECIFIC_PHRASES = {
         'COJIRO': 'ROOSTER',
         "Goron Tunic": "RED_TUNIC",
         "Zora Tunic": "BLUE_TUNIC",
-        "Wallet": "MAGIC_BAG",
+        "Wallet": "MAGIC_POWDER",
         "Medallion": "PIECE_OF_POWER",
         "Kokiri Emerald": "RUPEES_500",
         "Goron Ruby": "RUPEES_500",
@@ -719,7 +719,77 @@ GAME_SPECIFIC_PHRASES = {
         "Pon": "RUPEES_20",
     }
 
-    # TODO: Ocarina of Time: Goron/Zora Tunic, Triforce pieces, dungeon rewards, render wallet as bag
+    "Kingdom Hearts 2": {
+        # Goal items / Collectibles
+        "Proof of": "PIECE_OF_POWER",
+        "Lucky Emblem": "PIECE_OF_POWER",
+        "Secret Ansem's Report": "TRADING_ITEM_LETTER",
+
+        # Sora Keyblades
+
+        "Bond of Flame": "SWORD",
+        "Circle of Life": "SWORD",
+        "Decisive Pumpkin": "SWORD",
+        "Fatal Crest": "SWORD",
+        "Fenrir": "SWORD",
+        "Follow the Wind": "SWORD",
+        "Guardian Soul": "SWORD",
+        "Gull Wing": "SWORD",
+        "Hero's Crest": "SWORD",
+        "Hidden Dragon": "SWORD",
+        "Monochrome": "SWORD",
+        "Mysterious Abyss": "SWORD",
+        "Oathkeeper": "SWORD",
+        "Oblivion": "SWORD",
+        "Photon Debugger": "SWORD",
+        "Pureblood": "SWORD",
+        "Rumbling Rose": "SWORD",
+        "Sleeping Lion": "SWORD",
+        "Star Seeker": "SWORD",
+        "Sweet Memories": "SWORD",
+        "Two Become One": "SWORD",
+        "Ultima Weapon": "SWORD",
+        "Winner's Proof": "SWORD",
+        "Wishing Lamp": "SWORD",
+
+        # Donald Staves
+        "Centurion+": "MAGIC_ROD",
+        "Nobody Lance": "MAGIC_ROD",
+        "Precious Mushroom": "MAGIC_ROD",
+        "Precious Mushroom+": "MAGIC_ROD",
+        "Premium Mushroom": "MAGIC_ROD",
+        "Rising Dragon": "MAGIC_ROD",
+        "Save The Queen+": "MAGIC_ROD",
+        "Shaman's Relic": "MAGIC_ROD",
+        "Victory Bell": "MAGIC_ROD",
+
+        # Goofy Shields
+        "Akashic Record": "SHIELD",
+        "Frozen Pride+": "SHIELD",
+        "Majestic Mushroom": "SHIELD",
+        "Majestic Mushroom+": "SHIELD",
+        "Nobody Guard": "SHIELD",
+        "Ogre Shield": "SHIELD",
+        "Save The King+": "SHIELD",
+        "Ultimate Mushroom": "SHIELD",
+
+        # Armor
+        "Bandana": "POWER_BRACELET",
+        "Belt": "POWER_BRACELET",
+        "Anklet": "POWER_BRACELET",
+        "Trinket": "POWER_BRACELET",
+        "Charm": "POWER_BRACELET",
+
+        # Magic
+        "Element": "MAGIC_ROD",
+
+        # Other
+        "Munny Pouch": "MAGIC_POWDER",
+        "Ether": "MEDICINE",
+        "Elixir": "MEDICINE",
+        "Megalixir": "MEDICINE",
+    }
+
     # TODO: Link to the Past: just double check that everything matches
     # TODO: Kingdom Hearts series: Keyblades, equipment, Ansem reports, magic elements, emblems
 }
