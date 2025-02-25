@@ -691,6 +691,16 @@ GAME_SPECIFIC_PHRASES = {
         "Porkchop": "TRADING_ITEM_DOG_FOOD"
     },
     "VVVVVV": {
-        "Trinket": "PIECE_OF_POWER"
+        "Trinket": "PIECE_OF_POWER",
+    },
+
+    "A Hat in Time": {
+        "Time Piece": "PIECE_OF_POWER",
+        "Metro Ticket": "TRADING_ITEM_LETTER",
+        "Snatcher's Contract": "TRADING_ITEM_LETTER",
+        "Heart Pon": "HEART_PIECE",
+        "Pons": "RUPEES_20",
     }
+
+    # To Add: KH2, KH1, OoT, ALttP
 }
