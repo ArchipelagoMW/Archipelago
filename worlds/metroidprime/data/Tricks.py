@@ -642,8 +642,7 @@ class Tricks:
             "Phendrana's Edge Security Cavern No Grapple",
             "Reach the Phendrana's Edge security cavern without the Grapple Beam",
             TrickDifficulty.Easy,
-            lambda world, state: self.logic.can_grapple(world, state)
-            and self.logic.can_morph_ball(world, state)
+            lambda world, state: self.logic.can_morph_ball(world, state)
             and self.logic.can_space_jump(world, state),
         )
 
