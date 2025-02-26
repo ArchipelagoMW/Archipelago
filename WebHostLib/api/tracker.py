@@ -14,7 +14,7 @@ from WebHostLib.tracker import TrackerData
 
 
 @api_endpoints.route("/tracker/<suuid:tracker>")
-@cache.memoize(timeout=60)
+@cache.cached(timeout=60)
 def tracker_data(tracker: UUID):
     """outputs json data to <root_path>/api/tracker/<id of current session tracker>"""
     room: Optional[Room] = Room.get(tracker=tracker)
