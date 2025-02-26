@@ -199,7 +199,7 @@ class RemoveThermalRequirements(Choice):
 class StartingRoom(Choice):
     """Determines the starting room of the game. This will change your starting loadout depending on the room.
     Normal: Start at the Talon Overworld Landing Site. Most randomization options, when enabled, will move the starting room to Save Station 1 in Chozo Ruins due to the restrictive nature of the landing site starting room.
-    Safe: Start in rooms that will not require a significant combat challenge to progress from. Without disable_starting_room_bk_prevention enabled, this may assign you a new beam and an item in order to make the seed feasible
+    Safe: Start in rooms that will not require a significant combat challenge to progress from.
     Buckle Up: Start in rooms that will pose a significant challenge to players with no energy tanks or suit upgrades. Fun for the aspiring masochist (less fun for their friends waiting in BK).
     """
 
@@ -208,14 +208,6 @@ class StartingRoom(Choice):
     option_safe = StartRoomDifficulty.Safe.value
     option_buckle_up = StartRoomDifficulty.Buckle_Up.value
     default = StartRoomDifficulty.Normal.value
-
-
-class DisableStartingRoomBKPrevention(Toggle):
-    """Normally, starting rooms will give you a minimum set of items in order to have access to several checks immediately. This option disables that behavior as well as any pre-filled items that would have been set. This will automatically get set to true if starting room is normal and tricks or blast shield rando is enabled.
-    WARNING: This will possibly require multiple attempts to generate, especially in solo worlds!
-    """
-
-    display_name = "Disable Starting Room BK Prevention"
 
 
 class CombatLogicDifficultyOption(Choice):
@@ -439,7 +431,6 @@ class MetroidPrimeOptions(PerGameCommonOptions):
     include_morph_ball_bomb_doors: IncludeMorphBallBombDoors
     randomize_starting_beam: RandomizeStartingBeam
     starting_room: StartingRoom
-    disable_starting_room_bk_prevention: DisableStartingRoomBKPrevention
     progressive_beam_upgrades: ProgressiveBeamUpgrades
     non_varia_heat_damage: NonVariaHeatDamage
     staggered_suit_damage: StaggeredSuitDamage
@@ -477,7 +468,6 @@ prime_option_groups = [
             ArtifactHints,
             FinalBosses,
             StartingRoom,
-            DisableStartingRoomBKPrevention,
             CombatLogicDifficultyOption,
         ],
     ),

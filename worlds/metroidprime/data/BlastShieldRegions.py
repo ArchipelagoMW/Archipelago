@@ -581,10 +581,7 @@ def get_valid_blast_shield_regions_by_area(
 
     if not world.starting_room_data:
         return region.regions
-    if world.starting_room_data.area != area or (
-        world.options.disable_starting_room_bk_prevention.value
-        and world.multiworld.players > 1
-    ):
+    if world.starting_room_data.area != area:
         return region.regions
 
     return [

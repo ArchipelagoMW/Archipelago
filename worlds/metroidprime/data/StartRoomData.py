@@ -187,7 +187,7 @@ all_start_rooms: Dict[str, StartRoomData] = {
         ],
     ),
     RoomName.Warrior_Shrine.value: StartRoomData(
-        is_eligible=lambda world: not world.options.disable_starting_room_bk_prevention.value,
+        is_eligible=lambda world: not world.disable_starting_room_bk_prevention,
         # Varia suit is definitely required here
         area=MetroidPrimeArea.Magmoor_Caverns,
         loadouts=[
@@ -444,7 +444,7 @@ def init_starting_room_data(world: "MetroidPrimeWorld"):
                 )
             # Give the randomizer more flexibility if they have options that allow more starting_room checks
             if _has_options_that_allow_more_landing_site_checks(world):
-                world.options.disable_starting_room_bk_prevention.value = True
+                world.disable_starting_room_bk_prevention = True
         else:
             world.starting_room_data = get_random_start_room_by_difficulty(
                 world, difficulty
@@ -454,7 +454,6 @@ def init_starting_room_data(world: "MetroidPrimeWorld"):
 
 
 def init_starting_loadout(world: "MetroidPrimeWorld"):
-    disable_bk_prevention = world.options.disable_starting_room_bk_prevention.value
     assert world.starting_room_data and world.starting_room_data.selected_loadout
 
     option_collected_items = [item for item in world.options.start_inventory_from_pool]
@@ -465,7 +464,7 @@ def init_starting_loadout(world: "MetroidPrimeWorld"):
                 world.starting_room_data.local_early_items.remove(item)
 
     # Clear non starting beam upgrades out of loadout
-    if disable_bk_prevention:
+    if world.disable_starting_room_bk_prevention:
         world.starting_room_data.selected_loadout.loadout = []
 
     # Update the loadout with the correct items based on options (progressive upgrades, missile launcher, etc.)
@@ -475,7 +474,7 @@ def init_starting_loadout(world: "MetroidPrimeWorld"):
     world.starting_room_data.selected_loadout.loadout = updated_loadout
 
     # If we are preventing bk then set a few items for prefill if available
-    if not disable_bk_prevention:
+    if not world.disable_starting_room_bk_prevention:
         if len(world.starting_room_data.selected_loadout.item_rules):
             mapping = world.random.choice(
                 world.starting_room_data.selected_loadout.item_rules

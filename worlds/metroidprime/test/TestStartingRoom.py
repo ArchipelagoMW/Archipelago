@@ -62,28 +62,6 @@ class TestStartingRoomsGenerateWithElevatorRando(MetroidPrimeWithOverridesTestBa
             )
 
 
-class TestStartRoomBKPreventionDisabled(MetroidPrimeWithOverridesTestBase):
-    run_default_tests = False  # type: ignore
-    options = {
-        "starting_room_name": RoomName.Save_Station_B.value,
-        "elevator_randomization": False,
-        "disable_starting_room_bk_prevention": True,
-    }
-    overrides = {"starting_room_name": RoomName.Save_Station_B.value}
-
-    def test_disabling_bk_prevention_does_not_give_items_or_pre_fill(self):
-        self.world.generate_early()
-        world: MetroidPrimeWorld = self.world
-        assert world.starting_room_data.selected_loadout
-        self.assertTrue(
-            SuitUpgrade.Missile_Expansion
-            not in world.starting_room_data.selected_loadout.loadout
-        )
-        self.assertEqual(len(world.prefilled_item_map.keys()), 0)
-        self.assertEqual(
-            world.starting_room_data.selected_loadout.starting_beam,
-            SuitUpgrade.Plasma_Beam,
-        )
 
 
 class TestPrePlacedItemsWithStartFromPool(MetroidPrimeWithOverridesTestBase):
@@ -137,15 +115,14 @@ class TestPreCollectedItemsWithStartInventory(MetroidPrimeWithOverridesTestBase)
         self.assertEqual(count, 1, "Should only be one missile in precolelcted items")
 
 
-class TestStartRoomBKPreventionEnabled(MetroidPrimeWithOverridesTestBase):
+class TestStartRoomBKPrevention(MetroidPrimeWithOverridesTestBase):
     run_default_tests = False  # type: ignore
     options = {
         "elevator_randomization": False,
-        "disable_starting_room_bk_prevention": False,
     }
     overrides = {"starting_room_name": RoomName.Save_Station_B.value}
 
-    def test_enabling_bk_prevention_gives_items_and_pre_fills_locations(self):
+    def test_start_gives_items_and_pre_fills_locations(self):
         self.world.generate_early()
         world: MetroidPrimeWorld = self.world
         assert world.starting_room_data.selected_loadout

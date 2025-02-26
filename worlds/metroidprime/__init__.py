@@ -139,6 +139,9 @@ class MetroidPrimeWorld(World):
     has_generated_bomb_doors: bool = False
     starting_room_name: Optional[str] = None
     starting_beam: Optional[str] = None
+    disable_starting_room_bk_prevention: bool = (
+        False  # Used in certain scenarios to enable more flexibility with starting loadouts
+    )
 
     def get_filler_item_name(self) -> str:
         return SuitUpgrade.Missile_Expansion.value
