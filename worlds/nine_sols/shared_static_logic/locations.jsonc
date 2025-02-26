@@ -171,6 +171,14 @@
         "address": 513, "name": "FSP: Isolate the Mutant Gene Sequence",
         "region": "FSP - Root Node", "requires": [ { "item": "Tianhuo Serum" }, { "item": "Ji's Hair" } ]
     },
+    {
+        "address": 514, "name": "FSP: Give Kuafu the Homing Darts",
+        "region": "FSP - Root Node", "requires": [ { "item": "Event - Kuafu in FSP" }, { "item": "Homing Darts" } ]
+    },
+    {
+        "address": 515, "name": "FSP: Give Kuafu the Thunderburst Bomb",
+        "region": "FSP - Root Node", "requires": [ { "item": "Event - Kuafu in FSP" }, { "item": "Thunderburst Bomb" } ]
+    },
 
     // Events
     {
