@@ -17,7 +17,7 @@ The following are required in order to play Metroid Prime in Archipelago
 - Use the latest Dolphin
 
   - Dolphin Beta (**Recommended**): [Dolphin Emulator - Download](https://dolphin-emu.org/download/#download-beta)
-  - PrimeHack (Not thoroughly tested with Metroid Prime AP): [Releases · shiiion_dolphin.htm](https://github.com/shiiion/dolphin/releases)
+  - PrimeHack: [Releases · shiiion_dolphin.htm](https://github.com/shiiion/dolphin/releases)
 
 - Ensure Only One Instance of Dolphin is Running
 
@@ -25,16 +25,16 @@ The following are required in order to play Metroid Prime in Archipelago
   - You can also just restart your computer to be sure.
 
 - Disable Emulated Memory Size Override
-  - In Dolphin,  
-    Config &rarr; Advanced tab,  
+  - In Dolphin,
+    Config &rarr; Advanced tab,
     **Uncheck** Enable Emulated Memory Size Override
 - Start the Metroid Prime Client and Dolphin in a Specific Order
 
   - For some users, connecting to the AP server before letting the Metroid Prime client causes connection issues
-    Try starting the game in this order:  
-    1\. Start the Metroid Prime client  
-    2\. Start Dolphin and start the game (if it launches automatically, that's fine)  
-    3\. Select or create a save file and enter the game  
+    Try starting the game in this order:
+    1\. Start the Metroid Prime client
+    2\. Start Dolphin and start the game (if it launches automatically, that's fine)
+    3\. Select or create a save file and enter the game
     4\. Enter the AP server address into the Metroid Prime Client
 
 - Avoid using Dolphin FlatPak

@@ -62,8 +62,6 @@ class TestStartingRoomsGenerateWithElevatorRando(MetroidPrimeWithOverridesTestBa
             )
 
 
-
-
 class TestPrePlacedItemsWithStartFromPool(MetroidPrimeWithOverridesTestBase):
     options = {"start_inventory_from_pool": {SuitUpgrade.Morph_Ball.value: 1}}
     overrides = {"starting_room_name": RoomName.Save_Station_1.value}
@@ -75,7 +73,6 @@ class TestPrePlacedItemsWithStartFromPool(MetroidPrimeWithOverridesTestBase):
             SuitUpgrade.Morph_Ball.value,
             self.world.prefilled_item_map.values(),
         )
-
 
 
 class TestPreCollectedItemsWithStartInventoryFromPool(

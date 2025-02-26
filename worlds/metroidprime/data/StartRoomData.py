@@ -316,14 +316,16 @@ all_start_rooms: Dict[str, StartRoomData] = {
         or world.multiworld.players > 1,
     ),
     RoomName.Sunchamber_Lobby.value: StartRoomData(
+        force_starting_beam=True,
         area=MetroidPrimeArea.Chozo_Ruins,
         loadouts=[
             StartRoomLoadout(
-                [
+                starting_beam=SuitUpgrade.Power_Beam,
+                loadout=[
                     SuitUpgrade.Morph_Ball,
                     SuitUpgrade.Missile_Launcher,
                     SuitUpgrade.Morph_Ball_Bomb,
-                ]
+                ],
             ),
         ],
         difficulty=StartRoomDifficulty.Buckle_Up,

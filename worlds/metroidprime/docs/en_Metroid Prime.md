@@ -47,6 +47,9 @@ To warp to the starting location,
 2. When prompted to Save, choose No
 3. While choosing No, simultaneously hold down the L and R buttons.
 
+### Are points of no return ever included in logic?
+Unless you have tricks enabled, no. Rooms like "Ruined Shrine", "Alcove", and others will not expect you to check locations in them without having the equipment required to escape.
+
 ### When fighting Ridley my screen keeps changing width, what's going on?
 
 This is an issue with having aspect ratio set to `auto`. Forcing it to `4:3` should resolve the issue.

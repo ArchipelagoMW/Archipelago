@@ -43,14 +43,17 @@ class ChozoRuinsAreaData(AreaData):
             self.logic.can_power_bomb(world, state)
             and self.logic.has_power_bomb_count(world, state, 4)
         )
+        beam_req = self.logic.can_power_beam(world, state)
         if world.starting_room_data.name == RoomName.Sunchamber_Lobby.value:
-            return bomb_req
+            return bomb_req and beam_req
+
         return (
             state.can_reach_region(RoomName.Sunchamber.value, world.player)
             and self.logic.can_combat_flaahgra(world, state)
             and self.logic.can_missile(world, state, 1)
             and self.logic.can_scan(world, state)
             and bomb_req
+            and beam_req
         )
 
     def can_climb_tower_of_light(
