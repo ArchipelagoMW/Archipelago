@@ -623,6 +623,15 @@ class ParadeTrapWeight(Range):
     default = 20
 
 
+class DeathLinkAmnesty(Range):
+    """Amount of forgiven deaths before sending a Death Link.
+    0 means that every death will send a Death Link."""
+    display_name = "Death Link Amnesty"
+    range_start = 0
+    range_end = 20
+    default = 0
+
+
 @dataclass
 class AHITOptions(PerGameCommonOptions):
     EndGoal:                  EndGoal
@@ -698,6 +707,7 @@ class AHITOptions(PerGameCommonOptions):
     ParadeTrapWeight:         ParadeTrapWeight
 
     death_link:               DeathLink
+    death_link_amnesty:       DeathLinkAmnesty
 
 
 ahit_option_groups: Dict[str, List[Any]] = {
@@ -767,4 +777,5 @@ slot_data_options: List[str] = [
     "MaxPonCost",
 
     "death_link",
+    "death_link_amnesty",
 ]
