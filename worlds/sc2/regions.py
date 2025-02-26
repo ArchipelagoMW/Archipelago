@@ -137,6 +137,9 @@ def adjust_mission_pools(world: 'SC2World', pools: SC2MOGenMissionPools):
         # The player has, all the stuff he needs, provided under these settings
         pools.move_mission(SC2Mission.SUPREME, Difficulty.MEDIUM, Difficulty.STARTER)
         pools.move_mission(SC2Mission.THE_INFINITE_CYCLE, Difficulty.HARD, Difficulty.STARTER)
+    if not grant_story_tech and SC2Campaign.NCO in enabled_campaigns:
+        # Using NCO tech for this mission that must be acquired
+        pools.move_mission(SC2Mission.GHOST_OF_A_CHANCE, Difficulty.STARTER, Difficulty.MEDIUM)
     if world.options.take_over_ai_allies.value == TakeOverAIAllies.option_true:
         pools.move_mission(SC2Mission.HARBINGER_OF_OBLIVION, Difficulty.MEDIUM, Difficulty.STARTER)
     if pools.get_pool_size(Difficulty.STARTER) < 2 and not kerriganless or adv_tactics:

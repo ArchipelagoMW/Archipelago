@@ -111,6 +111,7 @@ class SC2World(World):
         self.custom_mission_order = create_mission_order(
             self, get_locations(self), self.location_cache
         )
+        self.logic.nova_used = MissionFlag.Nova in self.custom_mission_order.get_used_flags()
 
     def create_items(self) -> None:
         # Starcraft 2-specific item setup:
@@ -189,7 +190,12 @@ class SC2World(World):
 
         enabled_campaigns = get_enabled_campaigns(self)
         slot_data["plando_locations"] = get_plando_locations(self)
-        slot_data["nova_covert_ops_only"] = (enabled_campaigns == {SC2Campaign.NCO})
+        if enabled_campaigns == {SC2Campaign.NCO}:
+            slot_data["use_nova_fallback"] = True
+        elif MissionFlag.Nova in self.custom_mission_order.get_used_flags().keys():
+            slot_data["use_nova_fallback"] = False
+        else:
+            slot_data["use_nova_fallback"] = True
         slot_data["final_mission_ids"] = self.custom_mission_order.get_final_mission_ids()
         slot_data["custom_mission_order"] = self.custom_mission_order.get_slot_data()
         slot_data["version"] = 4

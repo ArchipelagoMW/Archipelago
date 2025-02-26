@@ -915,3 +915,45 @@ class TestItemFiltering(Sc2SetupTestBase):
         }
         self.assertDictEqual(expected_result, upgrade_item_counts)
 
+    def test_ghost_of_a_chance_generates_without_nco(self) -> None:
+        world_options = {
+            'mission_order': 'custom',
+            'custom_mission_order': {
+                'test': {
+                    'type': 'column',
+                    'size': 1, # Give the generator some space to place the key
+                    'mission_pool': [
+                        SC2Mission.GHOST_OF_A_CHANCE.mission_name
+                    ]
+                }
+            }
+        }
+
+        self.generate_world(world_options)
+        itempool = [item.name for item in self.multiworld.itempool]
+
+        self.assertNotIn(item_names.NOVA_C20A_CANISTER_RIFLE, itempool)
+        self.assertNotIn(item_names.NOVA_DOMINATION, itempool)
+
+    def test_ghost_of_a_chance_generates_with_nco(self) -> None:
+        world_options = {
+            'mission_order': 'custom',
+            'custom_mission_order': {
+                'test': {
+                    'type': 'column',
+                    'size': 3, # Give the generator some space to place the key
+                    'mission_pool': [
+                        SC2Mission.LIBERATION_DAY.mission_name, # Starter mission
+                        SC2Mission.GHOST_OF_A_CHANCE.mission_name,
+                        SC2Mission.FLASHPOINT.mission_name, # A NCO mission
+                    ]
+                }
+            }
+        }
+
+        self.generate_world(world_options)
+        itempool = [item.name for item in self.multiworld.itempool]
+
+        self.assertGreater(len({item_names.NOVA_C20A_CANISTER_RIFLE, item_names.NOVA_DOMINATION}.intersection(itempool)), 0)
+
+

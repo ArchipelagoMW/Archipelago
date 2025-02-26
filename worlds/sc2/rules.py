@@ -13,7 +13,7 @@ from .item.item_tables import (
     kerrigan_levels, get_full_item_list, zvx_air_defense_ratings, zvx_defense_ratings, pvx_defense_ratings,
     pvz_defense_ratings, no_logic_basic_units, advanced_basic_units, basic_units, upgrade_bundle_inverted_lookup, WEAPON_ARMOR_UPGRADE_MAX_LEVEL
 )
-from .mission_tables import SC2Race, SC2Campaign
+from .mission_tables import SC2Race, SC2Campaign, MissionFlag
 from .item import item_groups, item_names
 
 if TYPE_CHECKING:
@@ -50,6 +50,9 @@ class SC2Logic:
 
         # Must be set externally for accurate logic checking of upgrade level when generic_upgrade_missions is checked
         self.total_mission_count = 1
+
+        # Must be set externally
+        self.nova_used = True
 
         # Conditionally set to False by the world after culling items
         self.has_barracks_unit: bool = True
@@ -185,6 +188,21 @@ class SC2Logic:
             item_names.SKY_FURY, item_names.NIGHT_HAWK, item_names.EMPERORS_GUARDIAN, item_names.NIGHT_WOLF,
             item_names.PRIDE_OF_AUGUSTRGRAD
         }, self.player)
+
+    def ghost_in_a_chance_requirement(self, state: CollectionState) -> bool:
+        return (
+                self.story_tech_granted
+                or not self.nova_used
+                or (
+                    self.nova_ranged_weapon(state)
+                    and state.has_any({item_names.NOVA_DOMINATION, item_names.NOVA_C20A_CANISTER_RIFLE}, self.player)
+                    and (
+                        self.nova_full_stealth(state)
+                        or self.nova_heal(state)
+                    )
+                    and self.nova_anti_air_weapon(state)
+                )
+        )
 
     def terran_competent_ground_to_air(self, state: CollectionState) -> bool:
         """
@@ -2245,6 +2263,11 @@ class SC2Logic:
     def nova_ranged_weapon(self, state: CollectionState) -> bool:
         return state.has_any({
             item_names.NOVA_C20A_CANISTER_RIFLE, item_names.NOVA_HELLFIRE_SHOTGUN, item_names.NOVA_PLASMA_RIFLE
+        }, self.player)
+
+    def nova_anti_air_weapon(self, state: CollectionState) -> bool:
+        return state.has_any({
+            item_names.NOVA_C20A_CANISTER_RIFLE, item_names.NOVA_PLASMA_RIFLE, item_names.NOVA_BLAZEFIRE_GUNBLADE
         }, self.player)
 
     def nova_splash(self, state: CollectionState) -> bool:

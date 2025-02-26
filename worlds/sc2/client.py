@@ -641,7 +641,7 @@ class SC2Context(CommonContext):
         self.maximum_supply_reduction_per_item: int = options.MaximumSupplyReductionPerItem.default
         self.lowest_maximum_supply: int = options.LowestMaximumSupply.default
         self.research_cost_reduction_per_item: int = options.ResearchCostReductionPerItem.default
-        self.nova_covert_ops_only = False
+        self.use_nova_fallback = False
         self.kerrigan_levels_per_mission_completed = 0
         self.trade_enabled: int = EnableVoidTrade.default
         self.trade_age_limit: int = VoidTradeAgeLimit.default
@@ -841,7 +841,13 @@ class SC2Context(CommonContext):
             self.maximum_supply_reduction_per_item = args["slot_data"].get("maximum_supply_reduction_per_item", options.MaximumSupplyReductionPerItem.default)
             self.lowest_maximum_supply = args["slot_data"].get("lowest_maximum_supply", options.LowestMaximumSupply.default)
             self.research_cost_reduction_per_item = args["slot_data"].get("research_cost_reduction_per_item", options.ResearchCostReductionPerItem.default)
-            self.nova_covert_ops_only = args["slot_data"].get("nova_covert_ops_only", False)
+            if self.slot_data_version < 4:
+                self.use_nova_fallback = (
+                    args["slot_data"].get("enable_wol_missions", True)
+                    or args["slot_data"].get("nova_covert_ops_only", False)
+                )
+            else:
+                self.use_nova_fallback = args["slot_data"].get("use_nova_fallback", args["slot_data"].get("nova_covert_ops_only", False))
             self.trade_enabled = args["slot_data"].get("enable_void_trade", EnableVoidTrade.option_false)
             self.trade_age_limit = args["slot_data"].get("void_trade_age_limit", VoidTradeAgeLimit.default)
             self.difficulty_damage_modifier = args["slot_data"].get("difficulty_damage_modifier", DifficultyDamageModifier.option_true)
@@ -1665,7 +1671,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 f" {self.ctx.take_over_ai_allies}"
                 f" {soa_options}"
                 f" {self.ctx.mission_order}"
-                f" {int(self.ctx.nova_covert_ops_only)}"
+                f" {int(self.ctx.use_nova_fallback)}"
                 f" {self.ctx.grant_story_levels}"
                 f" {self.ctx.enable_morphling}"
                 f" {mission_variant}"
