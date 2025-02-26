@@ -150,6 +150,21 @@ ZONESYSTEM = ZoneSystem(world_state_address=0x8037500D,
                        item_id=REGION_UNLOCK["Ice Zone Unlock"],
                        world_state_value=0xC1E,
                        addresses=[
+                           MemoryAddress(
+                               base_address=0x80375021, # lift
+                               value=0b00001000,
+                               memory_range=MemoryRange.BYTE
+                           ),
+                           MemoryAddress(
+                               base_address=0x80375013, #gate and lake
+                               value=0b00001100,
+                               memory_range=MemoryRange.BYTE
+                           ),
+                           MemoryAddress(
+                               base_address=0x80375031,  # skip first christmas tree quest step
+                               value=0b00100000,
+                               memory_range=MemoryRange.BYTE
+                           ),
                        ],
                        fast_travel_flag=0x20),
                ],
