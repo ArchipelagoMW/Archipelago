@@ -238,6 +238,26 @@ async def handle_check_deathlink(ctx: MetroidPrimeContext):
         ctx.is_pending_death_link_reset = False
 
 
+async def handle_tracker_level(ctx: MetroidPrimeContext):
+    current_level = ctx.game_interface.get_current_level()
+    if current_level is None:
+        level = 0
+    else:
+        level = current_level.value
+
+    await ctx.send_msgs(
+        [
+            {
+                "cmd": "Set",
+                "key": f"metroidprime_level_{ctx.team}_{ctx.slot}",
+                "default": 0,
+                "want_reply": False,
+                "operations": [{"operation": "replace", "value": level}],
+            }
+        ]
+    )
+
+
 async def _handle_game_ready(ctx: MetroidPrimeContext):
     if ctx.server:
         ctx.last_error_message = None
@@ -250,6 +270,7 @@ async def _handle_game_ready(ctx: MetroidPrimeContext):
         ctx.notification_manager.handle_notifications()
         await handle_checked_location(ctx, current_inventory)
         await handle_check_goal_complete(ctx)
+        await handle_tracker_level(ctx)
 
         if ctx.death_link_enabled:
             await handle_check_deathlink(ctx)
