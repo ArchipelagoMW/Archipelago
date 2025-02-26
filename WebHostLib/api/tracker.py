@@ -152,6 +152,6 @@ def tracker_data(tracker: UUID):
             "activity_timers": activity_timers,
             "connection_timers": connection_timers,
             "player_status": player_status,
-            "slot_data": encode(slot_data),
+            "slot_data": slot_data,
             "datapackage": tracker_data._multidata["datapackage"],
         }
