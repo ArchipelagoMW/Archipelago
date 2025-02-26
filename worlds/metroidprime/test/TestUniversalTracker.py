@@ -101,8 +101,8 @@ slot_data: Dict[str, Any] = {
             "area": "Tallon Overworld",
             "type_mapping": {
                 "Landing Site": {
-                    1: "Bomb",
-                    2: "Flamethrower",
+                    "1": "Bomb",
+                    "2": "Flamethrower",
                 }
             },
         }

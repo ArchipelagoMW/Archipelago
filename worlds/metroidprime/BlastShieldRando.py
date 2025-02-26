@@ -44,9 +44,18 @@ class AreaBlastShieldMapping(AreaMapping[BlastShieldMapping]):
 class WorldBlastShieldMapping(WorldMapping[BlastShieldMapping]):
     @classmethod
     def from_option_value(cls, data: Dict[str, Any]) -> "WorldBlastShieldMapping":
-        return WorldBlastShieldMapping(
+        mapping = WorldBlastShieldMapping(
             super().from_option_value_generic(data, AreaBlastShieldMapping)
         )
+
+        for area_mapping in mapping.values():
+            for door_mapping in area_mapping.type_mapping.values():
+                new_dict_with_ints_as_keys: Dict[int, BlastShieldType] = dict()
+                for door_id, shield_type in door_mapping.items():
+                    new_dict_with_ints_as_keys[int(door_id)] = shield_type
+                door_mapping.clear()
+                door_mapping.update(new_dict_with_ints_as_keys)
+        return mapping
 
     def to_option_value(self) -> Dict[str, AreaMappingDict]:
         """This needs to convert these to raw dictionaries otherwise the AP server interprets the slot data as a class and fails"""
