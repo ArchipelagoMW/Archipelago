@@ -11,7 +11,7 @@ game contributions:
   It is strongly recommended that unit tests are used to avoid regression and to ensure everything is still working.
   If you wish to contribute by adding a new game, please take a look at
   the [logic unit test documentation](/docs/tests.md).
-  If you wish to contribute to the website, please take a look at [these tests](/test/webhost).
+  If you wish to contribute to the website, please take a look at [these tests](https://github.com/ArchipelagoMW/Archipelago/tree/main/test/webhost).
 
 * **Do not introduce unit test failures/regressions.**
   Archipelago supports multiple versions of Python. You may need to download older Python versions to fully test
