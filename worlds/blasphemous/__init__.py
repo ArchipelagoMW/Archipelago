@@ -1,9 +1,9 @@
 from typing import Dict, List, Set, Any
 from collections import Counter
-from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
+from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, CollectionState
 from Options import OptionError
 from worlds.AutoWorld import World, WebWorld
-from .Items import base_id, item_table, group_table, tears_list, reliquary_set
+from .Items import base_id, item_table, group_table, tears_list, reliquary_set, group_table_reverse
 from .Locations import location_names
 from .Rules import BlasRules
 from worlds.generic.Rules import set_rule
@@ -214,6 +214,27 @@ class BlasphemousWorld(World):
         for loc, item in option_dict.items():
             self.get_location(loc).place_locked_item(self.create_item(item))
 
+    def collect(self, state: CollectionState, item: Item) -> bool:
+        changed = super().collect(state, item)
+        if changed:
+            name = item.name
+            if name in group_table_reverse and state.count(name, self.player) == 1:
+                # Count was 0 before super().collect().
+                group_name = group_table_reverse[name]
+                # Increase unique count for items in this group.
+                state.prog_items[self.player][group_name] += 1
+        return changed
+
+    def remove(self, state: CollectionState, item: Item) -> bool:
+        changed = super().remove(state, item)
+        if changed:
+            name = item.name
+            if name in group_table_reverse and state.count(name, self.player) == 0:
+                # Count was 1 before super().remove().
+                group_name = group_table_reverse[name]
+                # Decrease unique count for items in this group.
+                state.prog_items[self.player][group_name] -= 1
+        return changed
 
     def create_regions(self) -> None:
         multiworld = self.multiworld
