@@ -65,7 +65,18 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "donald_death_link": False,
         "goofy_death_link": False,
         "remote_items": RemoteItems.option_off,
-        "shorten_go_mode": False
+        "shorten_go_mode": False,
+        "one_hp": False,
+        "four_by_three": False,
+        "beep_hack": False,
+        "consistent_finishers": False,
+        "early_skip": False,
+        "fast_camera": False,
+        "faster_animations": False,
+        "unlock_0_volume": False,
+        "unskippable": False,
+        "auto_save": False,
+        "warp_anywhere": False
     },
     # Puppies are found individually, and the goal is to return them all.
     "Puppy Hunt": {
@@ -129,7 +140,18 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "donald_death_link": False,
         "goofy_death_link": False,
         "remote_items": RemoteItems.option_off,
-        "shorten_go_mode": False
+        "shorten_go_mode": False,
+        "one_hp": False,
+        "four_by_three": False,
+        "beep_hack": False,
+        "consistent_finishers": False,
+        "early_skip": False,
+        "fast_camera": False,
+        "faster_animations": False,
+        "unlock_0_volume": False,
+        "unskippable": False,
+        "auto_save": False,
+        "warp_anywhere": False
     },
     # Advanced playthrough with most settings on.
     "Advanced": {
@@ -193,7 +215,18 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "donald_death_link": False,
         "goofy_death_link": False,
         "remote_items": RemoteItems.option_off,
-        "shorten_go_mode": False
+        "shorten_go_mode": False,
+        "one_hp": False,
+        "four_by_three": False,
+        "beep_hack": False,
+        "consistent_finishers": False,
+        "early_skip": False,
+        "fast_camera": False,
+        "faster_animations": False,
+        "unlock_0_volume": False,
+        "unskippable": False,
+        "auto_save": False,
+        "warp_anywhere": False
     },
     # Playthrough meant to enhance the level 1 experience.
     "Level 1": {
@@ -256,6 +289,17 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "donald_death_link": False,
         "goofy_death_link": False,
         "remote_items": RemoteItems.option_off,
-        "shorten_go_mode": False
+        "shorten_go_mode": False,
+        "one_hp": False,
+        "four_by_three": False,
+        "beep_hack": False,
+        "consistent_finishers": False,
+        "early_skip": False,
+        "fast_camera": False,
+        "faster_animations": False,
+        "unlock_0_volume": False,
+        "unskippable": False,
+        "auto_save": False,
+        "warp_anywhere": False
     }
 }
