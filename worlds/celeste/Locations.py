@@ -1,6 +1,8 @@
 from typing import Dict, NamedTuple, Optional
 
 from BaseClasses import Location
+
+from .Levels import Level, LocationType
 from .Names import LocationName
 
 
@@ -103,4 +105,40 @@ checkpoint_location_data_table: Dict[str, CelesteLocationData] = {
 location_data_table: Dict[str, CelesteLocationData] = {**strawberry_location_data_table,
                                                        **checkpoint_location_data_table}
 
-location_table = {name: data.address for name, data in location_data_table.items() if data.address is not None}
+location_id_offsets: Dict[LocationType, int] = {
+    LocationType.Strawberry:        celeste_base_id,
+    LocationType.Golden_Strawberry: celeste_base_id + 0x100,
+    LocationType.Cassette:          celeste_base_id + 0x200,
+    LocationType.Crystal_Heart:     celeste_base_id + 0x300,
+    LocationType.Checkpoint:        celeste_base_id + 0x400,
+    LocationType.Level_Clear:       celeste_base_id + 0x500,
+    LocationType.Room_Enter:        celeste_base_id + 0x800,
+}
+
+
+def generate_location_table(level_data: Dict[str, Level]):
+    location_table = {name: data.address for name, data in location_data_table.items() if data.address is not None}
+
+    location_counts: Dict[LocationType, int] = {
+        LocationType.Strawberry:        0,
+        LocationType.Golden_Strawberry: 0,
+        LocationType.Cassette:          0,
+        LocationType.Crystal_Heart:     0,
+        LocationType.Checkpoint:        0,
+        LocationType.Level_Clear:       0,
+        LocationType.Room_Enter:        0,
+    }
+
+    for _, level in level_data.items():
+        for room in level.rooms:
+            location_table[level.display_name + " - " + room.display_name] = location_id_offsets[LocationType.Room_Enter]
+            location_counts[LocationType.Room_Enter] += 1
+
+            for region in room.regions:
+                for location in region.locations:
+                    location_table[level.display_name + " - " + location.display_name] = location_id_offsets[location.loc_type] + location_counts[location.loc_type]
+                    location_counts[location.loc_type] += 1
+
+    for loc_name in location_table.keys():
+        print(loc_name) 
+    return location_table
