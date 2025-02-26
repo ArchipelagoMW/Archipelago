@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import functools
-import itertools
-from typing import TYPE_CHECKING, Iterable, Iterator, TypeVar
+import struct
+from typing import TYPE_CHECKING, Iterator
 
 import Utils
 from NetUtils import ClientStatus
@@ -50,26 +50,6 @@ guard16 = write16
 
 def next_int(iterator: Iterator[bytes]) -> int:
     return int.from_bytes(next(iterator), 'little')
-
-
-T = TypeVar('T')
-
-# itertools.batched from Python 3.12
-# https://docs.python.org/3.11/library/itertools.html#itertools-recipes
-def _batched(iterable: Iterable[T], n) -> Iterator[tuple[T]]:
-    if n < 1:
-        raise ValueError('n must be at least 1')
-    it = iter(iterable)
-    while batch := tuple(itertools.islice(it, n)):
-        yield batch
-
-def batches(iterable: Iterable[T], n: int) -> Iterator[tuple[T]]:
-    """Batch data into tuples of length n. The last batch may be shorter."""
-
-    try:
-        return itertools.batched(iterable, n)
-    except AttributeError:
-        return _batched(iterable, n)
 
 
 # These flags are communicated to the tracker as a bitfield in this order, from
@@ -313,12 +293,12 @@ class WL4Client(BizHawkClient):
 
         if inventory_result is None:
             return
-        inventory = tuple(batches(map(get_int, batches(inventory_result[0], 4)), 6))
+        inventory = struct.iter_unpack("<6I", inventory_result[0])
 
         locations: set[int] = set()
         events: dict[str, bool] = {}
 
-        for passage, levels in zip(Passage, inventory):
+        for passage, levels in zip(Passage, inventory, strict=True):
             for level, status_bits in enumerate(levels):
                 locations.update(self.get_collected_locations(client_ctx, passage, level, status_bits >> 8))
                 if level > 4:
