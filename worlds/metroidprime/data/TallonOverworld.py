@@ -12,15 +12,28 @@ if TYPE_CHECKING:
 
 
 class TallonOverworldAreaData(AreaData):
+
+    def can_crashed_frigate_front(
+        self, world: "MetroidPrimeWorld", state: CollectionState
+    ) -> bool:
+        return (
+            self.logic.can_morph_ball(world, state)
+            and self.logic.can_wave_beam(world, state)
+            and self.logic.can_thermal(world, state)
+            and (
+                self.logic.can_move_underwater(world, state)
+                or self.logic.can_space_jump(world, state)
+            )
+        )
+
     def can_crashed_frigate(
         self, world: "MetroidPrimeWorld", state: CollectionState
     ) -> bool:
         return (
-            self.logic.can_bomb(world, state)
+            self.can_crashed_frigate_front(world, state)
+            and self.logic.can_bomb(world, state)
             and self.logic.can_space_jump(world, state)
-            and self.logic.can_wave_beam(world, state)
             and self.logic.can_move_underwater(world, state)
-            and self.logic.can_thermal(world, state)
         )
 
     def can_crashed_frigate_backwards(
@@ -117,7 +130,7 @@ class TallonOverworldAreaData(AreaData):
                             or self.logic.can_charge_beam(world, state)
                         )
                         and (
-                            self.can_crashed_frigate(world, state)
+                            self.can_crashed_frigate_front(world, state)
                             or self.can_crashed_frigate_backwards(world, state)
                         ),
                     ),
@@ -135,7 +148,7 @@ class TallonOverworldAreaData(AreaData):
                 doors={
                     0: DoorData(
                         RoomName.Cargo_Freight_Lift_to_Deck_Gamma,
-                        rule_func=self.can_crashed_frigate,
+                        rule_func=self.can_crashed_frigate_front,
                         tricks=[self.tricks.frigate_no_gravity],
                         exclude_from_rando=True,
                     ),
