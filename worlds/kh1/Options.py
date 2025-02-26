@@ -553,6 +553,87 @@ class OrichalcumPrice(Range):
     range_start = 100
     range_end = 5000
 
+class OneHP(Toggle):
+    """
+    If on, forces Sora's max HP to 1 and removes the low health warning sound.
+    """
+    display_name = "One HP"
+
+class FourByThree(Toggle):
+    """
+    If on, changes the aspect ratio to 4 by 3.
+    """
+    display_name = "4 by 3"
+
+class AutoAttack(Toggle):
+    """
+    If on, you can combo by holding confirm.
+    """
+    display_name = "Auto Attack"
+
+class BeepHack(Toggle):
+    """
+    If on, removes low health warning sound.  Works up to max health of 41.
+    """
+    display_name = "Beep Hack"
+
+class ConsistentFinishers(Toggle):
+    """
+    If on, 30% chance finishers are now 100% chance.
+    """
+    display_name = "Consistent Finishers"
+
+class EarlySkip(Toggle):
+    """
+    If on, allows skipping cutscenes without waiting for them.
+    """
+    display_name = "Early Skip"
+
+class EnemyRando(Toggle):
+    """
+    If on, enemies are randomized.
+    """
+    display_name = "Randomize Enemies"
+
+class FastCamera(Toggle):
+    """
+    If on, speeds up camera movement and camera centering.
+    """
+    display_name = "Fast Camera"
+
+class FasterAnimations(Toggle):
+    """
+    If on, speeds up animations during which you can't play.
+    """
+    display_name = "Faster Animations"
+
+class Unlock0Volume(Toggle):
+    """
+    If on, volume 1 mutes the audio channel.
+    """
+    display_name = "Unlock 0 Volume"
+
+class Unskippable(Toggle):
+    """
+    If on, makes unskippable cutscenes skippable.
+    """
+    display_name = "Unskippable"
+
+class AutoSave(Toggle):
+    """
+    If on, enables auto saving.
+    Press L1+L2+R1+R2+D-Pad Left to instantly load continue state.
+    Press L1+L2+R1+R2+D-Pad Right to instantly load autosave.
+    """
+    display_name = "AutoSave"
+
+class WarpAnywhere(Toggle):
+    """
+    If on, enables the player to warp at any time, even when not at a save point.
+    Press L1+L2+R2+Select to open the Save/Warp menu at any time.
+    """
+    display_name = "WarpAnywhere"
+
 @dataclass
 class KH1Options(PerGameCommonOptions):
     final_rest_door_key: FinalRestDoorKey
@@ -612,6 +693,19 @@ class KH1Options(PerGameCommonOptions):
     orichalcum_price: OrichalcumPrice
     mythril_in_pool: MythrilInPool
     mythril_price: MythrilPrice
+    one_hp: OneHP
+    four_by_three: FourByThree
+    auto_attack: AutoAttack
+    beep_hack: BeepHack
+    consistent_finishers: ConsistentFinishers
+    early_skip: EarlySkip
+    enemy_rando: EnemyRando
+    fast_camera: FastCamera
+    faster_animations: FasterAnimations
+    unlock_0_volume: Unlock0Volume
+    unskippable: Unskippable
+    auto_save: AutoSave
+    warp_anywhere: WarpAnywhere
 
 kh1_option_groups = [
     OptionGroup("Goal", [
@@ -681,5 +775,16 @@ kh1_option_groups = [
         GoofyDeathLink,
         RemoteItems,
         ShortenGoMode,
+        OneHP,
+        FourByThree,
+        BeepHack,
+        ConsistentFinishers,
+        EarlySkip,
+        FastCamera,
+        FasterAnimations,
+        Unlock0Volume,
+        Unskippable,
+        AutoSave,
+        WarpAnywhere
     ])
 ]

@@ -169,9 +169,9 @@ class KH1World(World):
         level_up_locations = list(get_locations_by_type("Level Slot 1").keys())
         self.random.shuffle(level_up_item_pool)
         current_level_index_for_placing_stats = self.options.force_stats_and_abilities_on_levels.value - 2 # Level 2 is index 0, Level 3 is index 1, etc
-        if self.options.remote_items.current_key == "off":
+        if self.options.remote_items.current_key == "off" and self.options.force_stats_and_abilities_on_levels.value != 2:
             logging.info(f"{self.player_name}'s value {self.options.force_stats_and_abilities_on_levels.value} for force_stats_and_abilities_on_levels was changed\n"
-                         f"Set to 1 as remote_items if \"off\"")
+                         f"Set to 2 as remote_items if \"off\"")
             self.options.force_stats_and_abilities_on_levels.value = 2
             current_level_index_for_placing_stats = 0
         while len(level_up_item_pool) > 0 and current_level_index_for_placing_stats < self.options.level_checks: # With all levels in location pool, 99 level ups so need to go index 0-98
@@ -303,17 +303,26 @@ class KH1World(World):
         slot_data = {
                     "advanced_logic": bool(self.options.advanced_logic),
                     "atlantica": bool(self.options.atlantica),
+                    "auto_attack": bool(self.options.auto_attack),
+                    "auto_save": bool(self.options.auto_save),
                     "bad_starting_weapons": bool(self.options.bad_starting_weapons),
+                    "beep_hack": bool(self.options.beep_hack),
+                    "consistent_finishers": bool(self.options.consistent_finishers),
                     "cups": str(self.options.cups.current_key),
                     "death_link": str(self.options.death_link.current_key),
                     "destiny_islands": bool(self.options.destiny_islands),
                     "donald_death_link": bool(self.options.donald_death_link),
+                    "early_skip": bool(self.options.early_skip),
                     "end_of_the_world_unlock": str(self.options.end_of_the_world_unlock.current_key),
+                    "enemy_rando": bool(self.options.enemy_rando),
                     "exp_multiplier": int(self.options.exp_multiplier.value)/16,
                     "exp_zero_in_pool": bool(self.options.exp_zero_in_pool),
                     "extra_shared_abilities": bool(self.options.extra_shared_abilities),
+                    "fast_camera": bool(self.options.fast_camera),
+                    "faster_animations": bool(self.options.faster_animations),
                     "final_rest_door_key": str(self.options.final_rest_door_key.current_key),
                     "force_stats_and_abilities_on_levels": int(self.options.force_stats_and_abilities_on_levels.value),
+                    "four_by_three": bool(self.options.four_by_three),
                     "goofy_death_link": bool(self.options.goofy_death_link),
                     "hundred_acre_wood": bool(self.options.hundred_acre_wood),
                     "interact_in_battle": bool(self.options.interact_in_battle),
@@ -322,21 +331,28 @@ class KH1World(World):
                     "level_checks": int(self.options.level_checks.value),
                     "mythril_in_pool": int(self.options.mythril_in_pool.value),
                     "mythril_price": int(self.options.mythril_price.value),
+                    "one_hp": bool(self.options.one_hp),
                     "orichalcum_in_pool": int(self.options.orichalcum_in_pool.value),
                     "orichalcum_price": int(self.options.orichalcum_price.value),
+                    "puppy_value": int(self.options.puppy_value.value),
                     "randomize_emblem_pieces": bool(self.options.exp_zero_in_pool),
                     "randomize_postcards": str(self.options.randomize_postcards.current_key),
                     "randomize_puppies": str(self.options.randomize_puppies.current_key),
                     "remote_items": str(self.options.remote_items.current_key),
+                    "remote_location_ids": self.get_remote_location_ids(),
                     "required_lucky_emblems_door": self.determine_lucky_emblems_required_to_open_final_rest_door(),
                     "required_lucky_emblems_eotw": self.determine_lucky_emblems_required_to_open_end_of_the_world(),
                     "required_postcards": int(self.options.required_postcards.value),
                     "required_puppies": int(self.options.required_puppies.value),
+                    "seed": self.multiworld.seed_name,
                     "shorten_go_mode": bool(self.options.shorten_go_mode),
                     "slot_2_level_checks": int(self.options.slot_2_level_checks.value),
+                    "starting_items": [item.code for item in self.multiworld.precollected_items[self.player]],
                     "starting_tools": bool(self.options.starting_tools),
                     "super_bosses": bool(self.options.super_bosses),
-                    "remote_location_ids": self.get_remote_location_ids()
+                    "unlock_0_volume": bool(self.options.unlock_0_volume),
+                    "unskippable": bool(self.options.unskippable),
+                    "warp_anywhere": bool(self.options.warp_anywhere)
                     }
         return slot_data
     

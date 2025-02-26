@@ -59,25 +59,5 @@ def get_item_location_map(self):
     return location_item_map
 
 def get_settings(self):
-    settings = {"xpmult": int(self.options.exp_multiplier)/16,
-                    "required_lucky_emblems_eotw": self.determine_lucky_emblems_required_to_open_end_of_the_world(),
-                    "required_lucky_emblems_door": self.determine_lucky_emblems_required_to_open_final_rest_door(),
-                    "final_rest_door_key": self.options.final_rest_door_key.current_key,
-                    "end_of_the_world_unlock": self.options.end_of_the_world_unlock.current_key,
-                    "seed": self.multiworld.seed_name,
-                    "advanced_logic": bool(self.options.advanced_logic),
-                    "hundred_acre_wood": bool(self.options.hundred_acre_wood),
-                    "atlantica": bool(self.options.atlantica),
-                    "remote_location_ids": self.get_remote_location_ids(),
-                    "chests_locked": bool(self.options.keyblades_unlock_chests),
-                    "interact_in_battle": bool(self.options.interact_in_battle),
-                    "shorten_go_mode": bool(self.options.shorten_go_mode),
-                    "puppy_value": int(self.options.puppy_value.value),
-                    "death_link": str(self.options.death_link.current_key),
-                    "donald_death_link": bool(self.options.donald_death_link),
-                    "goofy_death_link": bool(self.options.goofy_death_link),
-                    "destiny_islands": bool(self.options.destiny_islands),
-                    "starting_items": [item.code for item in self.multiworld.precollected_items[self.player]],
-                    "mythril_price": int(self.options.mythril_price.value),
-                    "orichalcum_price": int(self.options.orichalcum_price.value)}
+    settings = self.fill_slot_data()
     return settings
