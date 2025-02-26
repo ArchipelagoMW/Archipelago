@@ -1697,7 +1697,7 @@ def set_er_location_rules(world: "TunicWorld") -> None:
 
     # Beneath the Vault
     set_rule(world.get_location("Beneath the Fortress - Bridge"),
-             lambda state: state.has(lantern, player) and
+             lambda state: has_lantern(state, world) and
                            (has_melee(state, player) or state.has_any((laurels, fire_wand, ice_dagger, gun), player)))
 
     # Quarry
