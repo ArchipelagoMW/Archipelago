@@ -32,7 +32,6 @@ from worlds.ladx.TrackerConsts import storage_key
 from worlds.ladx.ItemTracker import ItemTracker
 from worlds.ladx.Locations import links_awakening_location_meta_to_id
 from worlds.ladx.Tracker import LocationTracker, MagpieBridge
-from worlds.ladx.Items import links_awakening_items
 
 links_awakening_location_id_to_meta = {v:k for k,v in links_awakening_location_meta_to_id.items()}
 
@@ -79,8 +78,6 @@ class LAClientConstants:
     # Unused
     # ROMWorldID = 0x0055
     # ROMConnectorVersion = 0x0056
-    wTradeSequenceItem1 = 0xDB40
-    wTradeSequenceItem2 = 0xDB7F
     wLinkHealth = 0xDB5A
     # RO: We should only act if this is higher then 6, as it indicates that the game is running normally
     wGameplayType = 0xDB95
@@ -354,7 +351,6 @@ class LinksAwakeningClient():
     auth = None
     game_crc = None
     collect_enabled = True
-    queue_trade_item_fix = False
     pending_deathlink = False
     deathlink_debounce = True
     retroarch_address = None
@@ -440,9 +436,8 @@ class LinksAwakeningClient():
         status |= 1
         status = self.gameboy.write_memory(LAClientConstants.wLinkStatusBits, [status])
 
-    async def recved_item_from_ap(self, ctx, item, next_index):
-        if item.location <= 0 or item.player != ctx.slot: # items from server or other slots
-            await self.give_item(item)
+    async def recved_item_from_ap(self, item, next_index):
+        await self.give_item(item)
         next_index += 1
         self.gameboy.write_memory(LAClientConstants.wRecvIndex, struct.pack(">H", next_index))
 
@@ -467,28 +462,28 @@ class LinksAwakeningClient():
     async def collect(self, ctx):
         if not self.gps_tracker.room or self.gps_tracker.is_transitioning:
             return
-        unhandled_locations = ctx.checked_locations - ctx.handled_locations
-        for id, dep in self.dependent_location_ids.items():
-            if id in unhandled_locations and dep not in ctx.checked_locations:
-                unhandled_locations.remove(id)
         current_room = '0x' + hex(self.gps_tracker.room)[2:].zfill(3).upper()
-        for id in unhandled_locations:
+        for id in ctx.checked_locations:
             meta_id = links_awakening_location_id_to_meta[id]
             is_checked = next(x for x in self.tracker.all_checks if x.id == meta_id).value
-            if(is_checked):
-                ctx.handled_locations.add(id)
+            if(is_checked or
+               current_room == meta_id[:5] or # player is in the location room
+               id not in ctx.locations_info or # location scout data not in yet
+               self.dependent_location_ids.get(id) not in ctx.checked_locations): # location dependency not met
                 continue
-            if(current_room == meta_id[:5]):
-                continue
+            item = ctx.locations_info[id]
             check = self.tracker.meta_to_check[meta_id]
             did_collect = await self.collect_check(check)
-            ctx.handled_locations.add(id)
-            if did_collect:
-                self.queue_trade_item_fix = True
-                our_item = next((x for x in ctx.recvd_checks.values() if x.location == id), None)
-                if our_item:
-                    await self.give_item(our_item)
+            if did_collect and item.player == ctx.slot:
+                await self.give_item(item)
             break # one per cycle
+        locations_to_scout = ctx.checked_locations - ctx.scouted_locations
+        if len(locations_to_scout):
+            await ctx.send_msgs([{
+                "cmd": "LocationScouts",
+                "locations": locations_to_scout
+            }])
+            ctx.scouted_locations.update(locations_to_scout)
 
     async def collect_check(self, check):
         current_value = int.from_bytes(await self.gameboy.async_read_memory(check.address), 'big')
@@ -499,50 +494,6 @@ class LinksAwakeningClient():
             check_count = struct.unpack(">H", await self.gameboy.async_read_memory(LAClientConstants.CheckCounter, 2))[0]
             self.gameboy.write_memory(LAClientConstants.CheckCounter, struct.pack(">H", check_count + 1))
         return not already_collected
-
-    trade_items = {
-        "TRADING_ITEM_YOSHI_DOLL": "0x2A6-Trade",
-        "TRADING_ITEM_RIBBON": "0x2B2-Trade",
-        "TRADING_ITEM_DOG_FOOD": "0x2FE-Trade",
-        "TRADING_ITEM_BANANAS": "0x07B-Trade",
-        "TRADING_ITEM_STICK": "0x087-Trade",
-        "TRADING_ITEM_HONEYCOMB": "0x2D7-Trade",
-        "TRADING_ITEM_PINEAPPLE": "0x019-Trade",
-        "TRADING_ITEM_HIBISCUS": "0x2D9-Trade",
-        "TRADING_ITEM_LETTER": "0x2A8-Trade",
-        "TRADING_ITEM_BROOM": "0x0CD-Trade",
-        "TRADING_ITEM_FISHING_HOOK": "0x2F5-Trade",
-        "TRADING_ITEM_NECKLACE": "0x0C9-Trade",
-        "TRADING_ITEM_SCALE": "0x297-Trade",
-        "TRADING_ITEM_MAGNIFYING_GLASS": None,
-    }
-    async def fix_trade_items(self, recvd_checks):
-        expected_trade_items = []
-        held_trade_items = []
-        for item, location in self.trade_items.items():
-            item_id = next(x.item_id for x in links_awakening_items
-                           if x.ladxr_id == item) + LABaseID
-            item_received = next((x for x in recvd_checks.values()
-                                  if x.item == item_id), False)
-            all_checks = [x for x in self.tracker.all_checks if x.id == location]
-            remaining_checks = [x for x in self.tracker.remaining_checks if x.id == location]
-            destination_checked = not remaining_checks or (len(remaining_checks) < len(all_checks))
-            expected_trade_items.append(int(item_received and not destination_checked))
-
-            inventory = self.item_tracker.itemDict[item].value
-            if item in self.item_tracker.extraItems:
-                inventory -= self.item_tracker.extraItems[item]
-            held_trade_items.append(inventory)
-        if expected_trade_items != held_trade_items:
-            trade1 = 0
-            for i, x in enumerate(expected_trade_items[:8]):
-                trade1 += x << i
-            trade2 = 0
-            for i, x in enumerate(expected_trade_items[8:]):
-                trade2 += x << i
-            self.gameboy.write_memory(LAClientConstants.wTradeSequenceItem1, [trade1])
-            self.gameboy.write_memory(LAClientConstants.wTradeSequenceItem2, [trade2])
-
 
     should_reset_auth = False
     async def wait_for_game_ready(self):
@@ -566,12 +517,6 @@ class LinksAwakeningClient():
         if not ctx.slot or not self.tracker.has_start_item():
             return
 
-        # fix trade items during transitions when inventory is stable
-        if self.queue_trade_item_fix and cache_is_fresh and self.gps_tracker.is_transitioning:
-            await self.fix_trade_items(ctx.recvd_checks)
-            self.queue_trade_item_fix = False
-            return
-
         current_health = (await self.gameboy.read_memory_cache([LAClientConstants.wLinkHealth]))[LAClientConstants.wLinkHealth]
         if self.deathlink_debounce and current_health != 0:
             self.deathlink_debounce = False
@@ -593,7 +538,7 @@ class LinksAwakeningClient():
         recv_index = struct.unpack(">H", await self.gameboy.async_read_memory(LAClientConstants.wRecvIndex, 2))[0]
         if recv_index in ctx.recvd_checks:
             item = ctx.recvd_checks[recv_index]
-            await self.recved_item_from_ap(ctx, item, recv_index)
+            await self.recved_item_from_ap(item, recv_index)
             return
 
         # collect
@@ -618,11 +563,6 @@ class LinksAwakeningCommandProcessor(ClientCommandProcessor):
     def __init__(self, ctx):
         super().__init__(ctx)
 
-    def _cmd_fix_trade_items(self):
-        """Forces fix of trade items. Ideally you should never need to trigger this manually."""
-        if isinstance(self.ctx, LinksAwakeningContext):
-            self.ctx.client.queue_trade_item_fix = True
-
     def _cmd_toggle_collect(self):
         """Toggles collect."""
         if isinstance(self.ctx, LinksAwakeningContext):
@@ -636,13 +576,13 @@ class LinksAwakeningContext(CommonContext):
     tags = {"AP"}
     game = "Links Awakening DX"
     command_processor = LinksAwakeningCommandProcessor
-    items_handling = 0b111
+    items_handling = 0b101
     want_slot_data = True
     la_task = None
     client = None
     # TODO: does this need to re-read on reset?
     found_checks = []
-    handled_locations = set()
+    scouted_locations = set()
     recvd_checks = {}
     last_resend = time.time()
 
@@ -824,7 +764,6 @@ class LinksAwakeningContext(CommonContext):
                 if not self.client.stop_bizhawk_spam:
                     logger.info("(Re)Starting game loop")
                 self.found_checks.clear()
-                self.handled_locations.clear()
                 # On restart of game loop, clear all checks, just in case we swapped ROMs
                 # this isn't totally neccessary, but is extra safety against cross-ROM contamination
                 self.recvd_checks.clear()
