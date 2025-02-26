@@ -2,18 +2,18 @@ from __future__ import annotations
 
 import functools
 import itertools
-from typing import TYPE_CHECKING, Dict, Iterable, Iterator, List, Optional, Set
+from typing import TYPE_CHECKING, Iterable, Iterator, TypeVar
 
 import Utils
 from NetUtils import ClientStatus
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 
-from .data import Passage, encode_str, get_symbol
+from .data import ItemFlag, Passage, encode_str, get_symbol
 from .locations import get_level_locations, location_name_to_id, location_table
 
 if TYPE_CHECKING:
-    from worlds._bizhawk.context import BizHawkClientContext
+    from worlds._bizhawk.context import BizHawkClientContext, BizHawkContext
 
 
 def read(address: int, length: int, *, align: int = 1):
@@ -52,16 +52,18 @@ def next_int(iterator: Iterator[bytes]) -> int:
     return int.from_bytes(next(iterator), 'little')
 
 
+T = TypeVar('T')
+
 # itertools.batched from Python 3.12
 # https://docs.python.org/3.11/library/itertools.html#itertools-recipes
-def _batched(iterable, n):
+def _batched(iterable: Iterable[T], n) -> Iterator[tuple[T]]:
     if n < 1:
         raise ValueError('n must be at least 1')
     it = iter(iterable)
     while batch := tuple(itertools.islice(it, n)):
         yield batch
 
-def batches(iterable: Iterable, n: int):
+def batches(iterable: Iterable[T], n: int) -> Iterator[tuple[T]]:
     """Batch data into tuples of length n. The last batch may be shorter."""
 
     try:
@@ -110,7 +112,7 @@ TRACKER_EVENT_FLAGS = [
 ]
 
 
-def cmd_deathlink(self):
+def cmd_toggle_deathlink(self):
     """Toggle death link from client. Overrides default setting."""
 
     client_handler = self.ctx.client_handler
@@ -120,6 +122,40 @@ def cmd_deathlink(self):
         self.ctx.update_death_link(client_handler.death_link.enabled),
         name='Update Death Link'
     )
+
+def cmd_receive_death(self):
+    """Debug tool: Send a death to the game to test death link is working."""
+    client_handler = self.ctx.client_handler
+    if client_handler.death_link.enabled:
+        client_handler.death_link.pending = True
+
+
+get_int = functools.partial(int.from_bytes, byteorder='little')
+
+game_mode_address = get_symbol('GlobalGameMode')
+game_state_address = get_symbol('sGameSeq')
+wario_stop_flag_address = get_symbol('usWarStopFlg')
+level_status_address = get_symbol('W4ItemStatus')
+received_item_count_address = level_status_address + 14  # Collection status for unused Entry level
+multiworld_state_address = get_symbol('MultiworldState')
+incoming_item_address = get_symbol('IncomingItemID')
+item_sender_address = get_symbol('IncomingItemSender')
+wario_health_address = get_symbol('WarioHeart')
+timer_status_address = get_symbol('ucTimeUp')
+multiworld_send_address = get_symbol('SendMultiworldItemsImmediately')
+passage_address = get_symbol('PassageID')
+level_address = get_symbol('InPassageLevelID')
+room_address = get_symbol('CurrentRoomId')
+collected_items_address = get_symbol('CollectedItems')
+
+PASSAGE_SELECT_STATE = (1, 2)
+LEVEL_SELECT_STATE = (1, 0x30)
+WARIO_GAMEPLAY_STATE = (2, 2)
+LEVEL_EJECTION_STATES = tuple((1, seq) for seq in range(0x16, 0x19))
+END_OF_GAME_STATES = tuple((0, seq) for seq in range(0x1A, 0x20))
+
+
+CREATE_HINT_ONLY_NEW = 2
 
 
 class DeathLinkCtx:
@@ -142,17 +178,17 @@ class WL4Client(BizHawkClient):
     game = 'Wario Land 4'
     system = 'GBA'
     patch_suffix = '.apwl4'
-    local_checked_locations: List[int]
-    local_hinted_locations: Set[int]
-    local_set_events: Dict[str, bool]
+    local_checked_locations: set[int]
+    local_hinted_locations: set[int]
+    local_set_events: dict[str, bool]
     local_room: int
-    rom_slot_name: Optional[str]
+    rom_slot_name: str | None
 
     death_link: DeathLinkCtx
 
     dc_pending: bool
 
-    def __init__(self) -> None:
+    def __init__(self):
         super().__init__()
         self.local_checked_locations = []
         self.local_hinted_locations = set()
@@ -206,134 +242,96 @@ class WL4Client(BizHawkClient):
             logger.info('Could not determine seed name from ROM. Are you sure this ROM matches this client version?')
             return False
 
-        client_ctx.command_processor.commands['deathlink'] = cmd_deathlink
+        client_ctx.command_processor.commands['deathlink'] = cmd_toggle_deathlink
+        # client_ctx.command_processor.commands['kill'] = cmd_receive_death
 
         self.dc_pending = False
 
         return True
 
-    async def set_auth(self, client_ctx: BizHawkClientContext) -> None:
+    async def set_auth(self, client_ctx: BizHawkClientContext):
         client_ctx.auth = self.rom_slot_name
 
-    async def game_watcher(self, client_ctx: BizHawkClientContext) -> None:
-        if self.dc_pending:
-            await client_ctx.disconnect()
-            return
+    async def get_game_state(self, bizhawk_ctx: BizHawkContext) -> tuple[int, int] | None:
+        try:
+            read_result = await bizhawk.read(
+                bizhawk_ctx,
+                [
+                    read16(game_mode_address),
+                    read16(game_state_address),
+                ]
+            )
+        except bizhawk.RequestFailedError:
+            return None
+        return tuple(map(get_int, read_result))
 
-        if self.death_link.update_pending:
-            await client_ctx.update_death_link(self.death_link.enabled)
-            self.death_link.update_pending = False
+    @staticmethod
+    def guard_game_state(game_state: tuple[int, int]):
+        return [
+            guard16(game_mode_address, game_state[0]),
+            guard16(game_state_address, game_state[1]),
+        ]
 
-        get_int = functools.partial(int.from_bytes, byteorder='little')
+    @staticmethod
+    def get_collected_locations(client_ctx: BizHawkClientContext, passage: int, level: int, collection: int):
+        for location in get_level_locations(passage, level):
+            location_id = location_name_to_id[location]
+            if location_id not in client_ctx.server_locations:
+                continue
+
+            bit = location_table[location].flag
+            if collection & bit:
+                yield location_id
+
+    async def handle_inventory(self, client_ctx: BizHawkClientContext):
         bizhawk_ctx = client_ctx.bizhawk_ctx
 
-        game_mode_address = get_symbol('GlobalGameMode')
-        game_state_address = get_symbol('sGameSeq')
-        wario_stop_flag_address = get_symbol('usWarStopFlg')
-        level_status_address = get_symbol('W4ItemStatus')
-        received_item_count_address = level_status_address + 14  # Collection status for unused Entry level
-        multiworld_state_address = get_symbol('MultiworldState')
-        incoming_item_address = get_symbol('IncomingItemID')
-        item_sender_address = get_symbol('IncomingItemSender')
-        wario_health_address = get_symbol('WarioHeart')
-        timer_status_address = get_symbol('ucTimeUp')
-        multiworld_send_address = get_symbol('SendMultiworldItemsImmediately')
-        passage_address = get_symbol('PassageID')
-        level_address = get_symbol('InPassageLevelID')
-        room_address = get_symbol('CurrentRoomId')
-        collected_items_address = get_symbol('CollectedItems')
+        gameplay_state = await self.get_game_state(bizhawk_ctx)
+        if gameplay_state not in (PASSAGE_SELECT_STATE, LEVEL_SELECT_STATE, WARIO_GAMEPLAY_STATE):
+            return
 
         try:
-            read_result = iter(await bizhawk.read(bizhawk_ctx, [
-                read8(game_mode_address),
-                read8(game_state_address),
-                read16(wario_stop_flag_address),
-                read(level_status_address, 6 * 6 * 4),
-                read8(multiworld_state_address),
-                read16(received_item_count_address),
-                read8(wario_health_address),
-                read8(timer_status_address),
-                read8(multiworld_send_address),
-                read8(passage_address),
-                read8(level_address),
-                read8(room_address),
-                read32(collected_items_address),
-            ]))
+            inventory_result = await bizhawk.guarded_read(
+                bizhawk_ctx,
+                [read(level_status_address, len(Passage) * 6 * 4)],
+                self.guard_game_state(gameplay_state)
+            )
+            collection_result = await bizhawk.guarded_read(
+                bizhawk_ctx,
+                [
+                    read8(passage_address),
+                    read8(level_address),
+                    read32(collected_items_address),
+                ],
+                [
+                    *self.guard_game_state(WARIO_GAMEPLAY_STATE),
+                    guard8(multiworld_send_address, True)
+                ]
+            )
         except bizhawk.RequestFailedError:
             return
 
-        game_mode = next_int(read_result)
-        game_state = next_int(read_result)
-        wario_stop_flag = next_int(read_result)
-        item_status = tuple(map(get_int, batches(next(read_result), 4)))
-        multiworld_state = next_int(read_result)
-        received_item_count = next_int(read_result)
-        wario_health = next_int(read_result)
-        timer_status = next_int(read_result)
-        send_level_locations = next_int(read_result)
-        passage_id = next_int(read_result)
-        in_passage_level_id = next_int(read_result)
-        room_id = next_int(read_result)
-        level_item_flags = next_int(read_result)
-
-        # Ensure safe state
-        gameplay_state = (game_mode, game_state)
-        write_safe_states = [
-            (1, 2),  # Passage select
-            (2, 2),  # Playing level
-        ]
-        read_safe_states = [
-            *write_safe_states,
-            (1, 0x31),  # Level select in passage
-            *((1, seq) for seq in range(0x16, 0x19)),  # Died/gave up
-            *((0, seq) for seq in range(0x1A, 0x20)),  # End of game cutscene
-        ]
-
-        if gameplay_state not in read_safe_states:
+        if inventory_result is None:
             return
+        inventory = tuple(batches(map(get_int, batches(inventory_result[0], 4)), 6))
 
-        locations = []
-        hint_locations = set()
-        events = {flag: False for flag in TRACKER_EVENT_FLAGS}
-        game_clear = False
+        locations: set[int] = set()
+        events: dict[str, bool] = {}
 
-        if in_passage_level_id >= 4 or gameplay_state != (2, 2):
-            level_item_flags = 0
-
-        # Parse item status bits
-        for passage in Passage:
-            for level in range(5):
-                level_locations = tuple(get_level_locations(passage, level))
-                status_bits = item_status[passage * 6 + level] >> 8
-                hint_bits = 0
-
-                if (passage, level) == (passage_id, in_passage_level_id):
-                    if send_level_locations:
-                        status_bits |= level_item_flags
-                    elif game_mode == 1 and game_state in range(0x16, 0x19):
-                        hint_bits = level_item_flags & ~status_bits
-
-                for location in level_locations:
-                    location_id = location_name_to_id[location]
-                    if location_id not in client_ctx.server_locations:
-                        continue
-
-                    bit = location_table[location].flag
-                    if status_bits & bit:
-                        locations.append(location_id)
-                    if hint_bits & bit:
-                        hint_locations.add(location_id)
-
-                keyzer_bit = item_status[passage * 6 + level] & (1 << 5)
+        for passage, levels in zip(Passage, inventory):
+            for level, status_bits in enumerate(levels):
+                locations.update(self.get_collected_locations(client_ctx, passage, level, status_bits >> 8))
+                if level > 4:
+                    continue
                 level_name = LEVEL_CLEAR_FLAGS[passage * 5 + level]
                 if level_name:
-                    level_clear = bool(keyzer_bit)
-                    events[level_name] = level_clear
+                    events[level_name] = bool(status_bits & ItemFlag.KEYZER)
 
-        if item_status[Passage.GOLDEN * 6 + 4] & 0x10:
-            game_clear = True
+        if collection_result is not None:
+            passage, level, collection = map(get_int, collection_result)
+            if level < 4:
+                locations.update(self.get_collected_locations(client_ctx, passage, level, collection))
 
-        # Send locations
         if self.local_checked_locations != locations:
             self.local_checked_locations = locations
             await client_ctx.send_msgs([{
@@ -341,24 +339,6 @@ class WL4Client(BizHawkClient):
                 'locations': locations
             }])
 
-        # Send hints
-        hint_locations.difference_update(self.local_hinted_locations)
-        if hint_locations:
-            self.local_hinted_locations.update(hint_locations)
-            await client_ctx.send_msgs([{
-                'cmd': 'LocationScouts',
-                'locations': hint_locations,
-                'create_as_hint': 2
-            }])
-
-        # Send game clear
-        if game_clear and not client_ctx.finished_game:
-            await client_ctx.send_msgs([{
-                'cmd': 'StatusUpdate',
-                'status': ClientStatus.CLIENT_GOAL
-            }])
-
-        # Send tracker event flags
         if self.local_set_events != events and client_ctx.slot is not None:
             event_bitfield = 0
             for i, flag in enumerate(TRACKER_EVENT_FLAGS):
@@ -373,71 +353,204 @@ class WL4Client(BizHawkClient):
             }])
             self.local_set_events = events
 
-        # Send Wario's location
-        if game_mode not in (2, 4):
-            room = (1 << 24) - 1
+    async def handle_hints(self, client_ctx: BizHawkClientContext):
+        bizhawk_ctx = client_ctx.bizhawk_ctx
+
+        gameplay_state = await self.get_game_state(bizhawk_ctx)
+        if gameplay_state not in LEVEL_EJECTION_STATES:
+            return
+
+        try:
+            read_result = await bizhawk.guarded_read(
+                bizhawk_ctx,
+                [
+                    read8(passage_address),
+                    read8(level_address),
+                    read32(collected_items_address),
+                ],
+                [
+                    *self.guard_game_state(gameplay_state),
+                    guard8(multiworld_send_address, False)
+                ]
+            )
+        except bizhawk.RequestFailedError:
+            return
+
+        if read_result is None:
+            return
+
+        passage, level, collection = map(get_int, read_result)
+        locations: set[int] = set(self.get_collected_locations(client_ctx, passage, level, collection))
+
+        locations.difference_update(self.local_checked_locations)
+        locations.difference_update(self.local_hinted_locations)
+        if locations:
+            self.local_hinted_locations.update(locations)
+            await client_ctx.send_msgs([{
+                'cmd': 'LocationScouts',
+                'locations': locations,
+                'create_as_hint': CREATE_HINT_ONLY_NEW
+            }])
+
+    async def handle_current_room(self, client_ctx: BizHawkClientContext):
+        bizhawk_ctx = client_ctx.bizhawk_ctx
+
+        gameplay_state = await self.get_game_state(bizhawk_ctx)
+        if gameplay_state not in (PASSAGE_SELECT_STATE, LEVEL_SELECT_STATE, WARIO_GAMEPLAY_STATE):
+            return
+
+        if gameplay_state == WARIO_GAMEPLAY_STATE:
+            try:
+                read_result = await bizhawk.read(bizhawk_ctx, [
+                    read8(passage_address),
+                    read8(level_address),
+                    read8(room_address),
+                ])
+            except bizhawk.RequestFailedError:
+                return
+
+            passage, level, room = map(get_int, read_result)
         else:
-            room = (passage_id << 16) | (in_passage_level_id << 8) | room_id
-        if self.local_room != room and client_ctx.slot is not None:
+            passage = level = room = 0xFF
+
+        current_room = passage << 16 | level << 8 | room
+        if self.local_room != current_room and client_ctx.slot is not None:
             await client_ctx.send_msgs([{
                 'cmd': 'Set',
                 'key': f'wl4_room_{client_ctx.team}_{client_ctx.slot}',
                 'default': 0,
                 'want_reply': False,
-                'operations': [{'operation': 'replace', 'value': room}]
+                'operations': [{'operation': 'replace', 'value': current_room}]
             }])
-            self.local_room = room
+            self.local_room = current_room
 
-        # Send death link
-        if self.death_link.enabled:
-            time_up = timer_status in range(4, 11)
-            if gameplay_state == (2, 2) and (wario_health == 0 or time_up):
-                self.death_link.pending = False
-                if not self.death_link.sent_this_death:
-                    self.death_link.sent_this_death = True
-                    death_text = f'{client_ctx.auth} timed out' if time_up else ''
-                    await client_ctx.send_death(death_text)
-            else:
-                self.death_link.sent_this_death = False
+    async def handle_goal(self, client_ctx: BizHawkClientContext):
+        bizhawk_ctx = client_ctx.bizhawk_ctx
 
-        if gameplay_state not in write_safe_states:
+        gameplay_state = await self.get_game_state(bizhawk_ctx)
+        if gameplay_state not in (WARIO_GAMEPLAY_STATE, *END_OF_GAME_STATES):
             return
-
-        write_list = []
-        guard_list = [
-            # Ensure game state hasn't changed
-            guard8(game_mode_address, game_mode),
-            guard8(game_state_address, game_state),
-        ]
-
-        if gameplay_state == (2, 2):
-            if wario_stop_flag != 0:
-                return
-            guard_list.append(guard16(wario_stop_flag_address, 0))
-
-        # Receive death link
-        if self.death_link.enabled and self.death_link.pending:
-            self.death_link.sent_this_death = True
-            write_list.append(write8(wario_health_address, 0))
-
-        # If the game hasn't received all items yet and the game isn't showing the player
-        # another item, then set up the next item message
-        if received_item_count < len(client_ctx.items_received) and multiworld_state == 0:
-            next_item = client_ctx.items_received[received_item_count]
-            next_item_id = next_item.item & 0xFF
-            next_item_sender = encode_str(client_ctx.player_names[next_item.player]) + b'\xFE'
-
-            write_list += [
-                write8(incoming_item_address, next_item_id),
-                write(item_sender_address, next_item_sender),
-                write8(multiworld_state_address, 1),
-            ]
-            guard_list.append(guard8(multiworld_state_address, 0))
 
         try:
-            await bizhawk.guarded_write(bizhawk_ctx, write_list, guard_list)
+            read_result = await bizhawk.guarded_read(
+                bizhawk_ctx,
+                [read32(level_status_address + 4 * (6 * Passage.GOLDEN + 4))],
+                self.guard_game_state(gameplay_state)
+            )
         except bizhawk.RequestFailedError:
             return
+
+        if read_result is None or client_ctx.finished_game:
+            return
+
+        if get_int(read_result[0]) & ItemFlag.DIVA_CLEAR:
+            await client_ctx.send_msgs([{
+                'cmd': 'StatusUpdate',
+                'status': ClientStatus.CLIENT_GOAL
+            }])
+
+    async def handle_death_link(self, client_ctx: BizHawkClientContext):
+        if self.death_link.update_pending:
+            await client_ctx.update_death_link(self.death_link.enabled)
+            self.death_link.update_pending = False
+
+        if not self.death_link.enabled:
+            return
+
+        bizhawk_ctx = client_ctx.bizhawk_ctx
+
+        try:
+            read_result = await bizhawk.guarded_read(
+                bizhawk_ctx,
+                [
+                    read8(wario_health_address),
+                    read8(timer_status_address),
+                ],
+                [
+                    *self.guard_game_state(WARIO_GAMEPLAY_STATE)
+                ]
+            )
+        except bizhawk.RequestFailedError:
+            return
+
+        if read_result is None:
+            return
+
+        wario_health, timer_status = map(get_int, read_result)
+        time_up = timer_status in range(4, 11)
+
+        if wario_health == 0 or time_up:
+            self.death_link.pending = False
+            if not self.death_link.sent_this_death:
+                self.death_link.sent_this_death = True
+                death_text = f'{client_ctx.auth} timed out' if time_up else ''
+                await client_ctx.send_death(death_text)
+        else:
+            self.death_link.sent_this_death = False
+
+        if self.death_link.pending:
+            try:
+                await bizhawk.guarded_write(
+                    bizhawk_ctx,
+                    [write8(wario_health_address, 0)],
+                    [
+                        *self.guard_game_state(WARIO_GAMEPLAY_STATE),
+                        guard16(wario_stop_flag_address, 0),
+                    ]
+                )
+            except bizhawk.RequestFailedError:
+                return
+            self.death_link.sent_this_death = True
+
+    async def handle_received_items(self, client_ctx: BizHawkClientContext):
+        bizhawk_ctx = client_ctx.bizhawk_ctx
+
+        gameplay_state = await self.get_game_state(bizhawk_ctx)
+        if gameplay_state not in (PASSAGE_SELECT_STATE, WARIO_GAMEPLAY_STATE):
+            return
+
+        try:
+            read_result = await bizhawk.read(
+                bizhawk_ctx,
+                [read16(received_item_count_address)]
+            )
+        except bizhawk.RequestFailedError:
+            return
+
+        received_item_count = get_int(read_result[0])
+        if received_item_count >= len(client_ctx.items_received):
+            return
+
+        next_item = client_ctx.items_received[received_item_count]
+        next_item_id = next_item.item & 0xFF
+        next_item_sender = encode_str(client_ctx.player_names[next_item.player]) + b'\xFE'
+        try:
+            await bizhawk.guarded_write(
+                bizhawk_ctx,
+                [
+                    write8(incoming_item_address, next_item_id),
+                    write(item_sender_address, next_item_sender),
+                    write8(multiworld_state_address, 1),
+                ],
+                [
+                    *self.guard_game_state(gameplay_state),
+                    guard8(multiworld_state_address, 0)
+                ]
+            )
+        except bizhawk.RequestFailedError:
+            return
+
+    async def game_watcher(self, client_ctx: BizHawkClientContext):
+        if self.dc_pending:
+            await client_ctx.disconnect()
+            return
+
+        await self.handle_inventory(client_ctx)
+        await self.handle_hints(client_ctx)
+        await self.handle_current_room(client_ctx)
+        await self.handle_received_items(client_ctx)
+        await self.handle_death_link(client_ctx)
+        await self.handle_goal(client_ctx)
 
     def on_package(self, ctx: BizHawkClientContext, cmd: str, args: dict) -> None:
         if cmd == "Connected":
