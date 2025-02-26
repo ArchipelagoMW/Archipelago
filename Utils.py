@@ -1097,8 +1097,8 @@ def build_sphinx_docs(stable: bool = False) -> None:
                 # hyperlink
                 if "](" not in line:
                     continue
-                start = line.find("(") + 1
-                end = line.find(")")
+                start = line.find("](") + 1
+                end = line.find(")", start)
                 link = line[start:end]
                 # probably an external link
                 if "https://" in link and "ArchipelagoMW" not in link:
