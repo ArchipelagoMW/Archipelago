@@ -36,6 +36,7 @@ html_theme = "bizstyle"
 html_theme_options = {
     "sidebarwidth": "15%",
 }
+html_css_files = ["custom.css"]
 
 html_logo = "_static/header-logo.svg"
 html_favicon = "_static/favicon.ico"
