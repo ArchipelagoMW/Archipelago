@@ -381,7 +381,7 @@ class MessengerWorld(World):
             return
         # the messenger client calls into AP with specific args, so check the out path matches what the client sends
         out_path = output_path(multiworld.get_out_file_name_base(1) + ".aptm")
-        if "The Messenger\\Archipelago\\output" not in out_path:
+        if "Messenger\\Archipelago\\output" not in out_path:
             return
         import orjson
         data = {

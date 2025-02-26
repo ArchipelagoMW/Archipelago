@@ -40,7 +40,7 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 ### Where do I get a config file?
 
 The Player Options page on the website allows you to configure your personal options and export a config file from
-them. Player options page: [The Legend of Zelda Player Sptions Page](/games/The%20Legend%20of%20Zelda/player-options)
+them. Player options page: [The Legend of Zelda Player Options Page](/games/The%20Legend%20of%20Zelda/player-options)
 
 ### Verifying your config file
 

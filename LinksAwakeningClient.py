@@ -560,6 +560,10 @@ class LinksAwakeningContext(CommonContext):
 
         while self.client.auth == None:
             await asyncio.sleep(0.1)
+
+            # Just return if we're closing
+            if self.exit_event.is_set():
+                return
         self.auth = self.client.auth
         await self.send_connect()
 

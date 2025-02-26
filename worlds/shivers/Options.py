@@ -110,6 +110,13 @@ class FullPots(Choice):
     option_mixed = 2
 
 
+class IxupiCapturesPriority(DefaultOnToggle):
+    """
+    Ixupi captures are set to priority locations. This forces a progression item into these locations if possible.
+    """
+    display_name = "Ixupi Captures are Priority"
+
+
 class PuzzleCollectBehavior(Choice):
     """
     Defines what happens to puzzles on collect.
@@ -177,6 +184,7 @@ class ShiversOptions(PerGameCommonOptions):
     early_lightning: EarlyLightning
     location_pot_pieces: LocationPotPieces
     full_pots: FullPots
+    ixupi_captures_priority: IxupiCapturesPriority
     puzzle_collect_behavior: PuzzleCollectBehavior
     local_items: ShiversLocalItems
     non_local_items: ShiversNonLocalItems
