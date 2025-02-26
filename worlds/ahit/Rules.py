@@ -414,7 +414,7 @@ def set_moderate_rules(world: "HatInTimeWorld"):
 
     # Moderate: Mystifying Time Mesa time trial without hats
     set_rule(world.multiworld.get_location("Alpine Skyline - Mystifying Time Mesa: Zipline", world.player),
-             lambda state: can_use_hookshot(state, world))
+             lambda state: True)
 
     # Moderate: Goat Refinery from TIHS with Sprint only
     add_rule(world.multiworld.get_location("Alpine Skyline - Goat Refinery", world.player),
@@ -493,9 +493,6 @@ def set_hard_rules(world: "HatInTimeWorld"):
              lambda state: has_paintings(state, world, 3, True))
 
     # SDJ
-    add_rule(world.multiworld.get_location("Subcon Forest - Long Tree Climb Chest", world.player),
-             lambda state: can_use_hat(state, world, HatType.SPRINT) and has_paintings(state, world, 2), "or")
-
     add_rule(world.multiworld.get_location("Act Completion (Time Rift - Curly Tail Trail)", world.player),
              lambda state: can_use_hat(state, world, HatType.SPRINT), "or")
 
@@ -533,7 +530,10 @@ def set_expert_rules(world: "HatInTimeWorld"):
     # Expert: Mafia Town - Above Boats, Top of Lighthouse, and Hot Air Balloon with nothing
     set_rule(world.multiworld.get_location("Mafia Town - Above Boats", world.player), lambda state: True)
     set_rule(world.multiworld.get_location("Mafia Town - Top of Lighthouse", world.player), lambda state: True)
-    set_rule(world.multiworld.get_location("Mafia Town - Hot Air Balloon", world.player), lambda state: True)
+    # There are not enough buckets/beach balls to bucket/ball hover in Heating Up Mafia Town, so any other Mafia Town
+    # act is required.
+    add_rule(world.multiworld.get_location("Mafia Town - Hot Air Balloon", world.player),
+             lambda state: state.can_reach_region("Mafia Town Area", world.player), "or")
 
     # Expert: Clear Dead Bird Studio with nothing
     for loc in world.multiworld.get_region("Dead Bird Studio - Post Elevator Area", world.player).locations:
@@ -590,7 +590,7 @@ def set_expert_rules(world: "HatInTimeWorld"):
 
     if world.is_dlc2():
         # Expert: clear Rush Hour with nothing
-        if not world.options.NoTicketSkips:
+        if world.options.NoTicketSkips != NoTicketSkips.option_true:
             set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player), lambda state: True)
         else:
             set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player),
@@ -739,7 +739,7 @@ def set_dlc1_rules(world: "HatInTimeWorld"):
 
     # This particular item isn't present in Act 3 for some reason, yes in vanilla too
     add_rule(world.multiworld.get_location("The Arctic Cruise - Toilet", world.player),
-             lambda state: state.can_reach("Bon Voyage!", "Region", world.player)
+             lambda state: (state.can_reach("Bon Voyage!", "Region", world.player) and can_use_hookshot(state, world))
              or state.can_reach("Ship Shape", "Region", world.player))
 
 

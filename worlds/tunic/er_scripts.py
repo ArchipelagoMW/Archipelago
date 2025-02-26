@@ -1,6 +1,6 @@
 from typing import Dict, List, Set, Tuple, TYPE_CHECKING
 from BaseClasses import Region, ItemClassification, Item, Location
-from .locations import location_table
+from .locations import all_locations
 from .er_data import Portal, portal_mapping, traversal_requirements, DeadEnd, RegionInfo
 from .er_rules import set_er_region_rules
 from Options import PlandoConnection
@@ -53,8 +53,8 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
 
     set_er_region_rules(world, regions, portal_pairs)
 
-    for location_name, location_id in world.location_name_to_id.items():
-        region = regions[location_table[location_name].er_region]
+    for location_name, location_id in world.player_location_table.items():
+        region = regions[all_locations[location_name].er_region]
         location = TunicERLocation(world.player, location_name, location_id, region)
         region.locations.append(location)
 
