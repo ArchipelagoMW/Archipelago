@@ -302,6 +302,8 @@ class LMWorld(World):
                     add_rule(entry, lambda state: state.can_reach_location("Graveyard Clear Chest", self.player))
                 elif entry.code in [778, 782, 784, 789, 790, 851]:
                     add_rule(entry, lambda state: state.can_reach_location("Balcony Clear Chest", self.player))
+                elif entry.code == 757 and self.options.enemizer.value == 0:
+                    add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
                 if len(entry.access) != 0:
                     for item in entry.access:
                         if item == "Fire Element Medal":
@@ -350,6 +352,8 @@ class LMWorld(World):
                     add_rule(entry,
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value),
                              "and")
+                elif entry.code == 691 and self.options.enemizer.value == 0:
+                    add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
                 if len(entry.access) != 0:
                     for item in entry.access:
                         if item == "Fire Element Medal":
@@ -387,6 +391,8 @@ class LMWorld(World):
                 entry.place_locked_item(Item("Boo", ItemClassification.progression, None, self.player))
                 if self.options.boo_gates == 1 and self.options.boo_radar != 2:
                     add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
+                elif entry.code == 691 and self.options.enemizer.value == 0:
+                    add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
                 if entry.code == 679:
                     add_rule(entry,
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value),
