@@ -61,7 +61,7 @@ class ProgressiveTasks(Toggle):
 
 class EnableDuds(Toggle):
     """
-    Whether to include filler "Dud" checks that serve no purpose but allow for more tasks in the pool.
+    Whether to include filler "Dud" items that serve no purpose but allow for more tasks in the pool.
     """
     display_name = "Enable Duds"
 
