@@ -26,7 +26,7 @@ class MessengerRules:
         maximum_price = (world.multiworld.get_location("The Shop - Demon's Bane", self.player).cost +
                          world.multiworld.get_location("The Shop - Focused Power Sense", self.player).cost)
         self.maximum_price = min(maximum_price, world.total_shards)
-        self.required_seals = max(1, world.required_seals)
+        self.required_seals = world.required_seals
 
         # dict of connection names and requirements to traverse the exit
         self.connection_rules = {
