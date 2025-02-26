@@ -632,6 +632,14 @@ class DeathLinkAmnesty(Range):
     default = 0
 
 
+class DWDeathLinkAmnesty(Range):
+    """Amount of forgiven deaths before sending a Death Link during Death Wish levels."""
+    display_name = "Death Wish Amnesty"
+    range_start = 0
+    range_end = 30
+    default = 5
+
+
 @dataclass
 class AHITOptions(PerGameCommonOptions):
     EndGoal:                  EndGoal
@@ -708,6 +716,7 @@ class AHITOptions(PerGameCommonOptions):
 
     death_link:               DeathLink
     death_link_amnesty:       DeathLinkAmnesty
+    dw_death_link_amnesty:    DWDeathLinkAmnesty
 
 
 ahit_option_groups: Dict[str, List[Any]] = {
@@ -778,4 +787,5 @@ slot_data_options: List[str] = [
 
     "death_link",
     "death_link_amnesty",
+    "dw_death_link_amnesty",
 ]
