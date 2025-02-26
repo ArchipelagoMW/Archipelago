@@ -32,7 +32,6 @@ source_suffix = {
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
-exclude_patterns = []
 html_theme = "bizstyle"
 html_theme_options = {
     "sidebarwidth": "15%",
