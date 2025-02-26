@@ -1,6 +1,9 @@
 BaseClasses
 ===========
 
+.. automodule:: BaseClasses
+    :members:
+
 .. toctree::
     :maxdepth: 2
 
