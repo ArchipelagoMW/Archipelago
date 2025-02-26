@@ -77,6 +77,7 @@ class TestPrePlacedItemsWithStartFromPool(MetroidPrimeWithOverridesTestBase):
         )
 
 
+
 class TestPreCollectedItemsWithStartInventoryFromPool(
     MetroidPrimeWithOverridesTestBase
 ):
