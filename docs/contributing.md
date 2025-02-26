@@ -34,7 +34,7 @@ game contributions:
 
 Other than these requests, we tend to judge code on a case-by-case basis.
 
-For contribution to the website, please refer to the [WebHost README](/WebHostLib/README.md).
+For contribution to the website, please refer to the [WebHost README](https://github.com/ArchipelagoMW/Archipelago/blob/main/WebHostLib/README.md).
 
 If you want to contribute to the core, you will be subject to stricter review on your pull requests. It is recommended
 that you get in touch with other core maintainers via the [Discord](https://archipelago.gg/discord).
