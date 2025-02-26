@@ -81,9 +81,9 @@ UNLOCK_ITEMS: dict[str,int] = {
     "Weedle Unlock": 12000,
     "Shroomish Unlock": 13000,
     "Magikarp Unlock": 14000,
-    "Bidoof1 Unlock": 15000,
-    "Bidoof2 Unlock": 16000,
-    "Bidoof3 Unlock": 17000,
+    "Bidoof Unlock": 15000,
+    "Bidoof Unlock 2": 16000,
+    "Bidoof Unlock 3": 17000,
     "Bibarel Unlock": 18000,
     "Starly Unlock": 19000,
     "Starly Unlock 2": 20000,
@@ -125,7 +125,8 @@ POWERS: dict[str,int] = {
 
 REGION_UNLOCK: dict[str,int] = {
     # Beach Zone Unlock
-    "Beach Zone Unlock": 99999
+    "Beach Zone Unlock": 99999,
+    "Ice Zone Unlock": 8888
 }
 
 ALL_ITEMS_TABLE: dict[str, int] = {

@@ -7,6 +7,7 @@ from worlds.LauncherComponents import components, Component, launch_subprocess
 from .items import FRIENDSHIP_ITEMS, PokeparkItem, UNLOCK_ITEMS, BERRIES, ALL_ITEMS_TABLE, PRISM_ITEM, POWERS, \
     REGION_UNLOCK
 from .locations import ALL_LOCATIONS_TABLE
+from .logic import REGIONS
 from .options import PokeparkOptions
 from .regions import create_regions
 
@@ -26,8 +27,18 @@ class PokeparkWorld(World):
 
     item_name_to_id = ALL_ITEMS_TABLE
     location_name_to_id = ALL_LOCATIONS_TABLE
+    location_name_groups = {
+        "Friendship Locations": [f"{region.display} - {friendship.name}" for region in REGIONS for friendship in
+                                 region.friendship_locations],
+        "Unlock Locations": [f"{region.display} - {unlock.name}" for region in REGIONS for unlock in
+                             region.unlock_location],
+        "Minigame Locations": [f"{region.display} - {minigame.name}" for region in REGIONS for minigame in
+                               region.minigame_location],
+        "Quest Locations": [f"{region.display} - {ability.name}" for region in REGIONS for ability in
+                            region.quest_locations]
+    }
     item_name_groups = {
-        "FRIENDSHIP_ITEMS": FRIENDSHIP_ITEMS.keys(),
+        "Friendship Items": FRIENDSHIP_ITEMS.keys(),
         "Unlock Items": UNLOCK_ITEMS.keys(),
         "Currency Items": BERRIES.keys(),
         "Prisma Items": PRISM_ITEM.keys(),

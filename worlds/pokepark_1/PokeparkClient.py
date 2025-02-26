@@ -4,21 +4,22 @@ import dolphin_memory_engine as dme
 
 import ModuleUpdate
 from worlds.pokepark_1 import POWERS, BERRIES
-from worlds.pokepark_1.adresses import friend_item_checks, \
-    unlock_item_checks, \
-    berry_item_checks, prisma_item_checks, tmp_addresses_disabled_friendship_overwrite, \
-    region_unlock_item_checks, POWER_INCREMENTS, POWER_SHARED_ADDR, blocked_unlocks, prisma_overwrites, \
-    driffzeppeli_address, driffzeppeli_value
+from worlds.pokepark_1.adresses import \
+    berry_item_checks, \
+    POWER_INCREMENTS, POWER_SHARED_ADDR, prisma_blocked_itemIds, \
+    driffzeppeli_unlock_address, driffzeppeli_unlock_value, UNLOCKS, MemoryRange, PRISMAS, POKEMON_STATES, blocked_friendship_itemIds, \
+    blocked_friendship_unlock_itemIds, stage_id_address, main_menu_stage_id, main_menu2_stage_id, main_menu3_stage_id
+from worlds.pokepark_1.dme_helper import write_memory
 from worlds.pokepark_1.watcher.location_state_watcher import location_state_watcher
 from worlds.pokepark_1.watcher.location_watcher import location_watcher
 from worlds.pokepark_1.watcher.logic_watcher import logic_watcher
-from worlds.pokepark_1.watcher.state_watcher import state_watcher
+from worlds.pokepark_1.watcher.world_state_watcher import state_watcher
 
 ModuleUpdate.update()
 
 import Utils
 
-from NetUtils import ClientStatus
+from NetUtils import ClientStatus, NetworkItem
 from CommonClient import gui_enabled, logger, get_base_parser, ClientCommandProcessor, \
     CommonContext, server_loop
 
@@ -130,36 +131,76 @@ async def game_watcher(ctx: PokeparkContext):
         ctx.lives_switch = False
 
 
-def refresh_items(ctx):
-    global old_berry_count, first_berry_check
+def refresh_items(ctx:PokeparkContext):
+    stage_id = dme.read_word(stage_id_address)
+    if stage_id == main_menu_stage_id or stage_id == main_menu2_stage_id or stage_id == main_menu3_stage_id:
+        return
+
+
+    blocked_items = set().union(
+        prisma_blocked_itemIds,
+        blocked_friendship_itemIds,
+        blocked_friendship_unlock_itemIds
+    )
+    items = [item for item in ctx.items_received if
+             not item.item in blocked_items]
+
+    locations = ctx.locations_checked
+
+    activate_unlock_items(items,locations)
+
+    activate_friendship_items(items)
+
+    activate_prisma_items(items)
+
+    give_berry_items(items)
+
+    activate_power_items(items)
+
+def activate_unlock_items(items:list[NetworkItem], locations: set[int]):
     sums = {}
-    for item in ctx.items_received:
-        if item.item in unlock_item_checks and not item.item in blocked_unlocks:
-            addr, val = unlock_item_checks[item.item]
-            sums[addr] = sums.get(addr, 0) + val
-    sums[driffzeppeli_address] = sums.get(driffzeppeli_address,0)+driffzeppeli_value
-    for address,value in sums.items():
-        dme.write_byte(address,value)
+    key = (driffzeppeli_unlock_address, MemoryRange.WORD)
+    sums[key] = sums.get(key, 0) + driffzeppeli_unlock_value
+    for item in set(item.item for item in items):
+        if item in UNLOCKS:
+            unlock = UNLOCKS[item]
+            if unlock.is_blocked_until_location and unlock.locationId not in locations:
+                continue
 
-    for received_item in ctx.items_received:
-        if received_item.item in friend_item_checks:
-            for address, value in friend_item_checks[received_item.item]:
-                if address not in tmp_addresses_disabled_friendship_overwrite:
-                    dme.write_byte(address, value)
+            addr = unlock.item.final_address
+            key = (addr, unlock.item.memory_range)
+            sums[key] = sums.get(key, 0) + unlock.item.value
 
+    for (address, memory_range), value in sums.items():
+        value &= memory_range.mask
+        if memory_range == MemoryRange.WORD:
+            dme.write_word(address, value)
+        elif memory_range == MemoryRange.HALFWORD:
+            dme.write_bytes(address, value.to_bytes(2, byteorder='big'))
+        elif memory_range == MemoryRange.BYTE:
+            dme.write_byte(address, value)
 
-    for received_item in ctx.items_received:
-        if received_item.item in prisma_item_checks and not received_item.item in prisma_overwrites:
-            for address, value in prisma_item_checks[received_item.item]:
-                dme.write_word(address, value)
+def activate_friendship_items(items:list[NetworkItem]):
+    for received_item in items:
+        if received_item.item in POKEMON_STATES:
+            friendship = POKEMON_STATES[received_item.item]
+            write_memory(dme,friendship.item,friendship.item.value)
 
-    berry_count_new = sum(1 for item in ctx.items_received if item.item in BERRIES.values())
-    if first_berry_check and old_berry_count != berry_count_new:
+def activate_prisma_items(items:list[NetworkItem]):
+    for received_item in items:
+        if received_item.item in PRISMAS:
+            prisma = PRISMAS[received_item.item]
+            write_memory(dme,prisma.item,prisma.item.value)
+
+def give_berry_items(items:list[NetworkItem]):
+    global old_berry_count, first_berry_check
+    berry_count_new = sum(1 for item in items if item.item in BERRIES.values())
+    if first_berry_check and old_berry_count != berry_count_new and old_berry_count == 0 and berry_count_new > 1:
         old_berry_count = berry_count_new
         first_berry_check = False
         return
 
-    new_berry_items = [item for item in ctx.items_received
+    new_berry_items = [item for item in items
                       if item.item in BERRIES.values()][old_berry_count:berry_count_new]
     for received_item in new_berry_items:
         if received_item.item in berry_item_checks:
@@ -169,16 +210,16 @@ def refresh_items(ctx):
                     new_value = min(current_berries + value, 0x270F)
                     dme.write_bytes(address, new_value.to_bytes(2, byteorder='big'))
 
-
     old_berry_count = berry_count_new
 
-    thunderbolt_count = sum(1 for item in ctx.items_received
+def activate_power_items(items:list[NetworkItem]):
+    thunderbolt_count = sum(1 for item in items
                            if item.item == POWERS["Progressive Thunderbolt"])
-
-    dash_count = sum(1 for item in ctx.items_received
+    dash_count = sum(1 for item in items
                     if item.item == POWERS["Progressive Dash"])
-    health_count = sum(1 for item in ctx.items_received
+    health_count = sum(1 for item in items
                     if item.item == POWERS["Progressive Health"])
+
     if thunderbolt_count > 0 or dash_count > 0 or health_count:
         new_value = POWER_INCREMENTS["thunderbolt"]["base"]
         if thunderbolt_count > 0:
@@ -188,7 +229,6 @@ def refresh_items(ctx):
         if dash_count > 0:
             new_value += sum(POWER_INCREMENTS["health"]["increments"][:health_count])
         dme.write_bytes(POWER_SHARED_ADDR, new_value.to_bytes(2, byteorder='big'))
-
 
 
 def send_victory(ctx: PokeparkContext):

@@ -14,5 +14,5 @@ for region in REGIONS:
         ALL_LOCATIONS_TABLE[f"{region.display} - {unlock.name}"] = unlock.id
     for minigame in region.minigame_location:
         ALL_LOCATIONS_TABLE[f"{region.display} - {minigame.name}"] = minigame.id
-    for ability in region.ability_locations:
+    for ability in region.quest_locations:
         ALL_LOCATIONS_TABLE[f"{region.display} - {ability.name}"] = ability.id

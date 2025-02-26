@@ -5,15 +5,15 @@ from worlds.pokepark_1.logic import Requirements, PokeparkRegion, REGIONS
 
 
 def pokepark_requirements_satisfied(state: CollectionState, requirements: Requirements, world: "PokeparkWorld"):
-    has_required_unlocks = all(state.has(unlock.name, world.player) for unlock in requirements.unlocks)
-    has_required_friends = all(state.has(friend.name, world.player) for friend in requirements.friendships)
-    has_required_prismas = all(state.has(prisma.name, world.player) for prisma in requirements.prismas)
-    has_enough_friends = requirements.friendcount <= state.count_group("FRIENDSHIP_ITEMS", world.player)
+    has_required_unlocks = all(state.has(unlock, world.player) for unlock in requirements.unlock_names)
+    has_required_friends = all(state.has(friend, world.player) for friend in requirements.friendship_names)
+    has_required_prismas = all(state.has(prisma, world.player) for prisma in requirements.prisma_names)
+    has_enough_friends = requirements.friendcount <= state.count_group("Friendship Items", world.player)
 
-    if requirements.oneof_itemName:
+    if requirements.oneof_item_names:
         has_any = any(
             all(state.has(item, world.player) for item in item_list)
-            for item_list in requirements.oneof_itemName
+            for item_list in requirements.oneof_item_names
         )
     else:
         has_any = True
@@ -39,8 +39,8 @@ def create_region(region: PokeparkRegion, world: "PokeparkWorld"):
         create_location(location, "friendship")
     for location in region.minigame_location:
         create_location(location, "minigame")
-    for location in region.ability_locations:
-        create_location(location, "ability")
+    for location in region.quest_locations:
+        create_location(location, "quest")
 
     if region.name == "Victory Region":
         new_location = PokeparkLocation(world.player, "Victory", None, new_region)
