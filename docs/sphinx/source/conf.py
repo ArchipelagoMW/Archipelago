@@ -37,6 +37,7 @@ html_theme_options = {
     "sidebarwidth": "15%",
 }
 html_css_files = ["custom.css"]
+html_sidebars = {"**": ["globaltoc.html", "relations.html", "sourcelink.html", "searchbox.html"]}
 
 html_logo = "_static/header-logo.svg"
 html_favicon = "_static/favicon.ico"
