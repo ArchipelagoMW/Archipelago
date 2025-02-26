@@ -1944,7 +1944,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             ctx.on_changed_hints(client.team, hint.receiving_player)
 
         elif cmd == 'StatusUpdate':
-            if args["status"] == ClientStatus.CLIENT_GOAL and client.no_locations:
+            if client.no_locations and args["status"] == ClientStatus.CLIENT_GOAL:
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd",
                                               "text": "Trackers can't register Goal Complete",
                                               "original_cmd": cmd}])
