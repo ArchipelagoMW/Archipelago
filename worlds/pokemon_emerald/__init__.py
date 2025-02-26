@@ -238,22 +238,12 @@ class PokemonEmeraldWorld(World):
                             "other settings. Reducing to 4.", self.player, self.player_name)
             self.options.norman_count.value = max_norman_count
 
-        # Prevent player from setting badges/hms to non-local if shuffling them
+        # Shuffled badges/hms will always be placed locally, so add them to local_items
         if self.options.badges == RandomizeBadges.option_shuffle:
-            for item in self.item_name_groups["Badge"]:
-                if item in self.options.non_local_items.value:
-                    logging.warning("Pokemon Emerald: Player %s (%s) set badges to be shuffled in their world, but "
-                                    "then added %s to non-local items. Removing the item from non-local items.",
-                                    self.player, self.player_name, item)
-                    self.options.non_local_items.value.remove(item)
+            self.options.local_items.value.update(self.item_name_groups["Badge"])
 
         if self.options.hms == RandomizeHms.option_shuffle:
-            for item in self.item_name_groups["HM"]:
-                if item in self.options.non_local_items.value:
-                    logging.warning("Pokemon Emerald: Player %s (%s) set hms to be shuffled in their world, but "
-                                    "then added %s to non-local items. Removing the item from non-local items.",
-                                    self.player, self.player_name, item)
-                    self.options.non_local_items.value.remove(item)
+            self.options.local_items.value.update(self.item_name_groups["HM"])
 
     def create_regions(self) -> None:
         from .regions import create_regions
