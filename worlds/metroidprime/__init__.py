@@ -365,7 +365,7 @@ class MetroidPrimeWorld(World):
             and not o.startswith("__")
         ]
         slot_data: Dict[str, Any] = self.options.as_dict(*non_cosmetic_options)
-        slot_data["elevator_mapping"] = self.elevator_mapping
+        slot_data["elevator_mapping"] = dict(self.elevator_mapping)
         if self.door_color_mapping:
             slot_data["door_color_mapping"] = self.door_color_mapping.to_option_value()
         if self.blast_shield_mapping:
