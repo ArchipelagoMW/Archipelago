@@ -124,7 +124,7 @@ def connect_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "2F Rear Hallway", "Nana's Room", "Nana's Room Key", 49)
     connect(multiworld, player, "2F Rear Hallway", "Astral Hall", "Astral Hall Key", 44)
     connect(multiworld, player, "2F Rear Hallway", "Sitting Room", "Sitting Room Key", 29)
-    connect(multiworld, player, "2F Rear Hallway", "Safari Room", "Safari Key", 56)
+    connect(multiworld, player, "2F Rear Hallway", "Safari Room", "North Safari Room Key", 56)
     connect(multiworld, player, "Astral Hall", "Observatory", "Observatory Key", 40,
             lambda state: Rules.can_fst_fire(state, player))
     connect(multiworld, player, "Sitting Room", "Guest Room", "Guest Room Key", 30,
