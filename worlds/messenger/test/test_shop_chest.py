@@ -100,7 +100,7 @@ class NoSealsRequired(MessengerTestBase):
     options = {
         "goal": "power_seal_hunt",
         "total_seals": 1,
-        "required_seals": 10,  # percentage
+        "percent_seals_required": 10,  # percentage
     }
 
     def test_seals_amount(self) -> None:
@@ -110,6 +110,6 @@ class NoSealsRequired(MessengerTestBase):
         self.assertEqual(self.world.required_seals, 1)
         total_seals = [item for item in self.multiworld.itempool if item.name == "Power Seal"]
         required_seals = [item for item in self.multiworld.itempool if
-                          item.classification & ItemClassification.progression]
+                          item.classification & ItemClassification.progression and item.name == "Power Seal"]
         self.assertEqual(len(total_seals), 1)
         self.assertEqual(len(required_seals), 1)
