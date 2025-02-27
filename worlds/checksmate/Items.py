@@ -53,7 +53,7 @@ item_table = {
     # Allows the player to deploy pocket items one rank further from the home row, but not the opponent's home row
     "Progressive Pocket Range": CMItemData(4_901_024, ItemClassification.filler, quantity=6),
 
-    "Progressive King Promotion": CMItemData(4_901_025, ItemClassification.progression, quantity=2, material=350),
+    "Progressive King Promotion": CMItemData(4_901_025, ItemClassification.progression, quantity=2, material=425),
     # Material is really about your ability to get checks, so here is the material value of a Commoner, but the AI gets
     # pretty confused when a royal piece isn't subject to check/mate, so this is a more powerful item than indicated for
     # the purpose of Checkmate Maxima. TODO: Consider adding a property "tactics", used for some complex locations.
