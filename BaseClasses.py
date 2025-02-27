@@ -1098,13 +1098,13 @@ class Region:
             self.region_manager = region_manager
 
         def __getitem__(self, index: int) -> Location:
-            return self._list.__getitem__(index)
+            return self._list[index]
 
         def __setitem__(self, index: int, value: Location) -> None:
             raise NotImplementedError()
 
         def __len__(self) -> int:
-            return self._list.__len__()
+            return len(self._list)
 
         # This seems to not be needed, but that's a bit suspicious.
         # def __del__(self):
@@ -1115,8 +1115,8 @@ class Region:
 
     class LocationRegister(Register):
         def __delitem__(self, index: int) -> None:
-            location: Location = self._list.__getitem__(index)
-            self._list.__delitem__(index)
+            location: Location = self._list[index]
+            del self._list[index]
             del(self.region_manager.location_cache[location.player][location.name])
 
         def insert(self, index: int, value: Location) -> None:
@@ -1127,8 +1127,8 @@ class Region:
 
     class EntranceRegister(Register):
         def __delitem__(self, index: int) -> None:
-            entrance: Entrance = self._list.__getitem__(index)
-            self._list.__delitem__(index)
+            entrance: Entrance = self._list[index]
+            del self._list[index]
             del(self.region_manager.entrance_cache[entrance.player][entrance.name])
 
         def insert(self, index: int, value: Entrance) -> None:
