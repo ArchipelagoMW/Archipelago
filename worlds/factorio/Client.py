@@ -530,7 +530,7 @@ server_args = ("--rcon-port", rcon_port, "--rcon-password", rcon_password)
 def launch():
     import colorama
     global executable, server_settings, server_args
-    colorama.init()
+    colorama.just_fix_windows_console()
 
     if server_settings:
         server_settings = os.path.abspath(server_settings)

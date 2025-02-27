@@ -295,6 +295,6 @@ def launch():
     parser = get_base_parser(description="KH1 Client, for text interfacing.")
 
     args, rest = parser.parse_known_args()
-    colorama.init()
+    colorama.just_fix_windows_console()
     asyncio.run(main(args))
     colorama.deinit()
