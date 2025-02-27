@@ -1,0 +1,210 @@
+.git
+.github
+.run
+docs
+test
+typings
+*Client.py
+
+.idea
+.vscode
+
+*_Spoiler.txt
+*.bmbp
+*.apbp
+*.apl2ac
+*.apm3
+*.apmc
+*.apz5
+*.aptloz
+*.apemerald
+*.pyc
+*.pyd
+*.sfc
+*.z64
+*.n64
+*.nes
+*.smc
+*.sms
+*.gb
+*.gbc
+*.gba
+*.wixobj
+*.lck
+*.db3
+*multidata
+*multisave
+*.archipelago
+*.apsave
+*.BIN
+*.puml
+
+setups
+build
+bundle/components.wxs
+dist
+/prof/
+README.html
+.vs/
+EnemizerCLI/
+/Players/
+/SNI/
+/sni-*/
+/appimagetool*
+/host.yaml
+/options.yaml
+/config.yaml
+/logs/
+_persistent_storage.yaml
+mystery_result_*.yaml
+*-errors.txt
+success.txt
+output/
+Output Logs/
+/factorio/
+/Minecraft Forge Server/
+/WebHostLib/static/generated
+/freeze_requirements.txt
+/Archipelago.zip
+/setup.ini
+/installdelete.iss
+/data/user.kv
+/datapackage
+/custom_worlds
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+*.dll
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+installer.log
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+.pybuilder/
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# vim editor
+*.swp
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv*
+env/
+venv/
+/venv*/
+ENV/
+env.bak/
+venv.bak/
+*.code-workspace
+shell.nix
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# Cython intermediates
+_speedups.c
+_speedups.cpp
+_speedups.html
+
+# minecraft server stuff
+jdk*/
+minecraft*/
+minecraft_versions.json
+!worlds/minecraft/
+
+# pyenv
+.python-version
+
+#undertale stuff
+/Undertale/
+
+# OS General Files
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+[Dd]esktop.ini
