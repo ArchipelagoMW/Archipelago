@@ -5,6 +5,7 @@ from schema import And, Schema
 from Options import (
     Choice,
     DefaultOnToggle,
+    ItemSet,
     LocationSet,
     OptionDict,
     OptionError,
@@ -16,6 +17,8 @@ from Options import (
     Visibility,
 )
 
+from .data import static_items as static_witness_items
+from .data import static_locations as static_witness_locations
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import ItemCategory, WeightedItemDefinition
 from .entity_hunt import ALL_HUNTABLE_PANELS
@@ -466,6 +469,183 @@ class PuzzleRandomizationSeed(Range):
     default = "random"
 
 
+class DiscardSymbolHint(Choice):
+    """
+    Controls whether the symbol(s) required to solve Discarded Panels have elevated priority for Audio Log hints.
+    In vanilla and sigma_normal, this is Triangles.
+    In sigma_expert, this is Arrows.
+    In umbra_variety, this is both Triangles and Arrows.
+    """
+    display_name = "Discarded Panel Symbol Hint"
+
+    option_no_elevated_status = 0
+    option_priority_hint = 1
+    option_always_hint = 2
+    default = 2
+
+
+class FinalDoorHint(Choice):
+    """
+    Controls whether the door required to enter the final room (dependent on Victory Condition option and Shuffle Doors option) has elevated priority for Audio Log hints.
+
+    For Mountain Box goals, this has no effect.
+    For Elevator goal, this will only have an effect if playing Remote Door Shuffle, in which case it hints Mountain Bottom Floor Pillars Room Entry (individual) or Mountain Bottom Floor Doors (regional)
+    For Challenge goal, this will hint Challenge Entry Panel (individual) or Caves Panels (regional) in Panel Door Shuffle, and it will hint Challenge Entry Door (individual) or Caves Doors (regional) in Remote Door Shuffle.
+    """
+    display_name = "Final Door Item Hint"
+
+    option_no_elevated_status = 0
+    option_priority_hint = 1
+    option_always_hint = 2
+    default = 2
+
+
+class AlwaysHintItems(ItemSet):
+    """
+    Items that will always get an audio log hint if they exist in the itempool.
+    """
+    display_name = "Always Hint Items"
+    default = {
+        "Boat",
+        "Caves Shortcuts",
+        "Progressive Dots",
+    }
+
+    valid_keys = static_witness_items.POSSIBLE_ITEMS
+
+
+class AlwaysHintLocations(LocationSet):
+    """
+    Locations that will always get an audio log hint if they exist in the world.
+
+    If an individual EP is set, its corresponding Obelisk Side will become an Always Hint as well, if the EP is not disabled (e.g. through the EP Difficulty setting).
+    """
+    display_name = "Always Hint Locations"
+    default = {
+        "Challenge Vault Box",
+        "Mountain Bottom Floor Discard",
+        "Theater Eclipse EP",
+        "Shipwreck Couch EP",
+        "Mountainside Cloud Cycle EP",
+    }
+
+    valid_keys = static_witness_locations.POSSIBLE_LOCATIONS
+
+
+class PriorityHintItems(ItemSet):
+    """
+    Items that will have increased priority to be hinted if they exist in the itempool.
+    """
+    display_name = "Priority Hint Items"
+    default = {
+        "Black/White Squares",
+    }
+
+    valid_keys = static_witness_items.POSSIBLE_ITEMS
+
+
+class PriorityHintLocations(LocationSet):
+    """
+    Locations that will have increased priority to be hinted if they exist in the world.
+
+    If an individual EP is set, its corresponding Obelisk Side will become a Priority Hint as well, if the EP is not disabled (e.g. through the EP Difficulty setting).
+    """
+
+    display_name = "Priority Hint Locations"
+    default = {
+        "Tutorial Patio Floor",
+        "Tutorial Patio Flowers EP",
+        "Swamp Purple Underwater",
+        "Shipwreck Vault Box",
+        "Town RGB House Upstairs Left",
+        "Town RGB House Upstairs Right",
+        "Treehouse Green Bridge 7",
+        "Treehouse Green Bridge Discard",
+        "Shipwreck Discard",
+        "Desert Vault Box",
+        "Mountainside Vault Box",
+        "Mountainside Discard",
+        "Tunnels Theater Flowers EP",
+        "Boat Desert EP",
+        "Boat Shipwreck Green EP",
+        "Quarry Stoneworks Control Room Left",
+    }
+
+    valid_keys = static_witness_locations.POSSIBLE_LOCATIONS
+
+
+class PrioritySymbols(Range):
+    """
+    Amount of random Symbol items to add to Priority Hints.
+    If Symbol items have been manually set as Priority Hints elsewhere, e.g. via the Priority Hint Items option, they are counted for this number, and only as many symbols as are necessary are added to meet this value.
+    Also, if a priority Symbol item is already an Always Hint, it will just be "eaten", this option will not try to dodge them.
+    """
+    display_name = "Priority Symbols"
+
+    range_start = 0
+    range_end = len(static_witness_items.ITEM_GROUPS["Symbols"])
+    default = 5
+
+
+class PriorityLasers(Range):
+    """
+    Amount of random Laser items to add to Priority Hints.
+    If Laser items have been manually set as Priority Hints elsewhere, e.g. via the Priority Hint Items option, they are counted for this number, and only as many symbols as are necessary are added to meet this value.
+    Also, if a priority Laser item is already an Always Hint, it will just be "eaten", this option will not try to dodge them.
+    """
+    display_name = "Priority Lasers"
+
+    range_start = 0
+    range_end = len(static_witness_items.ITEM_GROUPS["Lasers"])
+    default = 6
+
+
+class PriorityHintsPercentageOutOfRemaining(Range):
+    """
+    Maximum percentage of Priority Hints to make.
+    This percentage refers to the amount of remaining hints after Always and Area hints.
+
+    Example:
+    The total hint amount is 15.
+    There are 3 Area Hints and 2 Always Hints.
+    This option is set to 50%.
+    This means that the amount of Priority Hints is capped at 5, because the amount of remaining hints after Area Hints and Always Hints is 10, and 50% of 10 is equal to 5.
+    """
+    display_name = "Maximum Priority Hints Percentage (out of Remaining Hints)"
+
+    range_start = 0
+    range_end = 100
+    default = 50
+
+
+class PriorityHintsPercentageOutOfPossible(Range):
+    """
+    Maximum percentage of possible Priority Hints to use.
+
+    Example:
+    The amount of remaining hints after Area Hints and Always Hints is 20.
+    After evaluating all the Priority Hint options, there are 30 available Priority Hints.
+    This option is set to 50%.
+    This means that the amount of Priority Hints is capped at 15, because only 50% of available Priority Hints are allowed to be used.
+    """
+    display_name = "Maximum Priority Hints (out of possible Priority Hints)"
+
+    range_start = 0
+    range_end = 100
+    default = 50
+
+
+class RandomHintsAreItemHintsWeight(Range):
+    """
+    Controls the chance of Random Hints (after Area Hints, Always Hints and Priority Hints) to be for Items from this world's itempool, rather than Locations in this world.
+    """
+    display_name = "Remaining Hints Are Items Weight"
+
+    range_start = 0
+    range_end = 100
+    default = 50
+
+
 @dataclass
 class TheWitnessOptions(PerGameCommonOptions):
     puzzle_randomization: PuzzleRandomization
@@ -504,6 +684,18 @@ class TheWitnessOptions(PerGameCommonOptions):
     death_link_amnesty: DeathLinkAmnesty
     puzzle_randomization_seed: PuzzleRandomizationSeed
     shuffle_dog: ShuffleDog
+
+    discard_symbol_hint: DiscardSymbolHint
+    final_door_hint: FinalDoorHint
+    always_hint_items: AlwaysHintItems
+    always_hint_locations: AlwaysHintLocations
+    priority_hint_items: PriorityHintItems
+    priority_hint_locations: PriorityHintLocations
+    priority_symbols: PrioritySymbols
+    priority_lasers: PriorityLasers
+    priority_hints_percentage_out_of_remaining: PriorityHintsPercentageOutOfRemaining
+    priority_hints_percentage_out_of_possible: PriorityHintsPercentageOutOfPossible
+    random_hints_are_items_weight: RandomHintsAreItemHintsWeight
 
 
 witness_option_groups = [
@@ -559,5 +751,18 @@ witness_option_groups = [
     ]),
     OptionGroup("Silly Options", [
         ShuffleDog,
-    ])
+    ]),
+    OptionGroup("Advanced Hint Options", [
+        DiscardSymbolHint,
+        FinalDoorHint,
+        AlwaysHintItems,
+        AlwaysHintLocations,
+        PriorityHintItems,
+        PriorityHintLocations,
+        PrioritySymbols,
+        PriorityLasers,
+        PriorityHintsPercentageOutOfRemaining,
+        PriorityHintsPercentageOutOfPossible,
+        RandomHintsAreItemHintsWeight,
+    ], start_collapsed=True),
 ]
