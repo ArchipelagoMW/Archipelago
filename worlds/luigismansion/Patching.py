@@ -1193,7 +1193,7 @@ def __get_chest_size_from_key(key_id):
 
 # Changes the type of chest loaded in game based on the type of item that is hidden inside
 def __get_item_chest_visual(item_name):
-    if "Bills" in item_name or "Coins" in item_name or "Gold Bars" in item_name:
+    if "Bills" in item_name or "Coins" in item_name or "Gold Bar" in item_name:
         item_name = "Money"
     match item_name:
         case "Heart Key" | "Club Key" | "Diamond Key" | "Spade Key":
