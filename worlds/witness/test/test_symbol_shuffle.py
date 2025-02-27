@@ -3,7 +3,7 @@ from ..test import WitnessMultiworldTestBase, WitnessTestBase
 
 class TestSymbols(WitnessTestBase):
     options = {
-        "early_symbol_item": False,
+        "early_good_items": {},
     }
 
     def test_progressive_symbols(self) -> None:
@@ -53,7 +53,7 @@ class TestSymbolRequirementsMultiworld(WitnessMultiworldTestBase):
 
     common_options = {
         "shuffle_discarded_panels": True,
-        "early_symbol_item": False,
+        "early_good_items": {},
     }
 
     def test_arrows_exist_and_are_required_in_expert_seeds_only(self) -> None:
