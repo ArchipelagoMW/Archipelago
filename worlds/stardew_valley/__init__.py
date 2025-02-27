@@ -42,7 +42,6 @@ class StardewItem(Item):
 class StardewWebWorld(WebWorld):
     theme = "dirt"
     bug_report_page = "https://github.com/agilbert1412/StardewArchipelago/issues/new?labels=bug&title=%5BBug%5D%3A+Brief+Description+of+bug+here"
-    game_info_languages = ['en', 'fr']
     options_presets = sv_options_presets
     option_groups = sv_option_groups
 
