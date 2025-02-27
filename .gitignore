@@ -218,3 +218,5 @@ worlds/yachtdice.apworld
 worlds/metroidprime.apworld
 worlds/psychonauts.apworld
 worlds/ultrakill.apworld
+fuzz.py
+fuzz_output
