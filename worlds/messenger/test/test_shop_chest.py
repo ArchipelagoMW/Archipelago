@@ -110,6 +110,6 @@ class NoSealsRequired(MessengerTestBase):
         self.assertEqual(self.world.required_seals, 1)
         total_seals = [item for item in self.multiworld.itempool if item.name == "Power Seal"]
         required_seals = [item for item in self.multiworld.itempool if
-                          item.classification & ItemClassification.progression and item.name == "Power Seal"]
+                          item.advancement and item.name == "Power Seal"]
         self.assertEqual(len(total_seals), 1)
         self.assertEqual(len(required_seals), 1)
