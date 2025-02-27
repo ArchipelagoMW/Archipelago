@@ -1,10 +1,10 @@
-from datetime import datetime
-from typing import Any, Optional
+from datetime import datetime, timezone
+from typing import Any
 from uuid import UUID
 
 from flask import abort
 
-from NetUtils import ClientStatus, NetworkItem, SlotType, encode
+from NetUtils import ClientStatus, NetworkItem, SlotType
 from WebHostLib import cache
 from WebHostLib.api import api_endpoints
 from WebHostLib.models import Room
@@ -15,7 +15,7 @@ from WebHostLib.tracker import TrackerData
 @cache.cached(timeout=60)
 def tracker_data(tracker: UUID):
     """outputs json data to <root_path>/api/tracker/<id of current session tracker>"""
-    room: Optional[Room] = Room.get(tracker=tracker)
+    room: Room | None = Room.get(tracker=tracker)
     if not room:
         abort(404)
 
@@ -23,135 +23,138 @@ def tracker_data(tracker: UUID):
 
     all_players: dict[int, list[int]] = tracker_data.get_all_players()
 
-    groups: dict[int, dict[int, dict[str, str | list[int]]]] = {}
+    groups: list[list[dict[str, int | list[dict[str, str | int | list[int]]]]]] = []
     """The Slot ID of groups and the IDs of the group's members."""
     for team, players in tracker_data.get_all_slots().items():
+        team_groups = [{"team": team}, "groups", []]
+        groups.append(team_groups)
         for player in players:
             slot_info = tracker_data.get_slot_info(team, player)
             if slot_info.type != SlotType.group or not slot_info.group_members:
                 continue
-            groups.setdefault(team, {})[player] = {
-                "name": slot_info.name,
-                "members": list(slot_info.group_members),
-            }
+            team_groups[0]["groups"].append(
+                {
+                    "slot": player,
+                    "name": slot_info.name,
+                    "members": list(slot_info.group_members),
+                })
 
-    player_names: dict[int, dict[int, str]] = {
-        team: {
-            player: tracker_data.get_player_name(team, player)
-            for player in players
-        }
-        for team, players in all_players.items()
-    }
+    player_names: list[list[dict[str, str | int]]] = []
     """Slot names of all players."""
+    for team, players in all_players.items():
+        team_names = [{"team": team}]
+        player_names.append(team_names)
+        for player in players:
+            team_names.append({"player": player, "name": tracker_data.get_player_name(team, player)})
 
-    player_aliases: dict[int, dict[int, str]] = {
-        team: {
-            player: tracker_data.get_player_alias(team, player)
-            for player in players
-        }
-        for team, players in all_players.items()
-    }
+    player_aliases: list[list[dict[str, int | str]]] = []
     """Slot aliases of all players."""
+    for team, players in all_players.items():
+        team_aliases = [{"team": team}]
+        player_aliases.append(team_aliases)
+        for player in players:
+            team_aliases.append({"player": player, "alias": tracker_data.get_player_alias(team, player)})
 
-    games: dict[int, dict[int, str]] = {
-        team: {
-            player: tracker_data.get_player_game(team, player)
-            for player in players
-        }
-        for team, players in all_players.items()
-    }
+    games: list[list[dict[str, int | str]]] = []
     """The game each player is playing."""
+    for team, players in all_players.items():
+        team_games = [{"team": team}]
+        games.append(team_games)
+        for player in players:
+            team_games.append({"player": player, "game": tracker_data.get_player_game(team, player)})
 
-    player_items_received: dict[int, dict[int, list[NetworkItem]]] = {
-        team: {
-            player: tracker_data.get_player_received_items(team, player)
-            for player in players
-        }
-        for team, players in all_players.items()
-    }
+    player_items_received: list[list[dict[str, int | list[NetworkItem]]]] = []
     """Items received by each player."""
+    for team, players in all_players.items():
+        team_items_received = [{"team": team}]
+        player_items_received.append(team_items_received)
+        for player in players:
+            team_items_received.append(
+                {"player": player, "items": tracker_data.get_player_received_items(team, player)})
 
-    player_checks_done: dict[int, dict[int, list[int]]] = {
-        team: {
-            player: list(tracker_data.get_player_checked_locations(team, player))
-            for player in players
-        }
-        for team, players in all_players.items()
-    }
+    player_checks_done: list[list[dict[str, int | list[int]]]] = []
     """ID of all locations checked by each player."""
+    for team, players in all_players.items():
+        team_checks_done = [{"team": team}]
+        player_checks_done.append(team_checks_done)
+        for player in players:
+            team_checks_done.append(
+                {"player": player, "locations": sorted(tracker_data.get_player_checked_locations(team, player))})
 
-    total_checks_done: dict[int, int] = tracker_data.get_team_locations_checked_count()
+    total_checks_done: list[list[dict[str, int]]] = [
+        [{"team": team}, {"checks_done": checks_done}]
+        for team, checks_done in tracker_data.get_team_locations_checked_count().items()
+    ]
     """Total number of locations checked for the entire multiworld per team."""
 
-    hints: dict[int, dict[int, list[str]]] = {}
+    hints: list[list[dict[str, list[str] | int]]] = []
     """Hints that all players have used or received."""
     for team, players in tracker_data.get_all_slots().items():
+        team_hints = [{"team": team}]
+        hints.append(team_hints)
         for player in players:
             player_hints = list(tracker_data.get_player_hints(team, player))
-            hints.setdefault(team, {})[player] = player_hints
+            team_hints.append({"player": player, "hints": player_hints})
             slot_info = tracker_data.get_slot_info(team, player)
-            # this currently assumes groups are always after players
+            # this assumes groups are always after players
             if slot_info.type != SlotType.group:
                 continue
             for member in slot_info.group_members:
-                hints[team][member] += player_hints
+                team_hints[member]["hints"] += player_hints
 
-    activity_timers: dict[int, dict[int, Optional[datetime]]] = {
-        team: {
-            player: None
-            for player in players
-        }
-        for team, players in all_players.items()
-    }
+    activity_timers: list[list[dict[str, int | None | datetime]]] = []
     """Time of last activity per player. Returned as RFC 1123 format and null if no connection has been made."""
+    for team, players in all_players.items():
+        team_timers = [{"team": team}]
+        activity_timers.append(team_timers)
+        for player in players:
+            team_timers.append({"player": player, "time": None})
+
     client_activity_timers: tuple[tuple[int, int], float] = tracker_data._multisave.get("client_activity_timers", ())
     for (team, player), timestamp in client_activity_timers:
-        activity_timers[team][player] = datetime.utcfromtimestamp(timestamp)
+        activity_timers[team][player] = datetime.fromtimestamp(timestamp, timezone.utc)
 
-    connection_timers: dict[int, dict[int, Optional[datetime]]] = {
-        team: {
-            player: None
-            for player in players
-        }
-        for team, players in all_players.items()
-    }
+    connection_timers: list[list[dict[str, int | None | datetime]]] = []
     """Time of last connection per player. Returned as RFC 1123 format and null if no connection has been made."""
+    for team, players in all_players.items():
+        team_connection_timers = [{"team": team}]
+        connection_timers.append(team_connection_timers)
+        for player in players:
+            team_connection_timers.append({"player": player, "time": None})
 
     client_connection_timers: tuple[tuple[int, int], float] = tracker_data._multisave.get(
         "client_connection_timers", ())
     for (team, player), timestamp in client_connection_timers:
-        connection_timers[team][player] = datetime.utcfromtimestamp(timestamp)
+        connection_timers[team][player] = datetime.fromtimestamp(timestamp, timezone.utc)
 
-    player_status: dict[int, dict[int, ClientStatus]] = {
-        team: {
-            player: tracker_data.get_player_client_status(team, player)
-            for player in players
-        }
-        for team, players in all_players.items()
-    }
+    player_status: list[list[dict[str, int | ClientStatus]]] = []
     """The current client status for each player."""
+    for team, players in all_players.items():
+        team_status = [{"team": team}]
+        player_status.append(team_status)
+        for player in players:
+            team_status.append({"player": player, "status": tracker_data.get_player_client_status(team, player)})
 
-    slot_data: dict[int, dict[int, dict[str, Any]]] = {
-        team: {
-            player: tracker_data.get_slot_data(team, player)
-            for player in players
-        }
-        for team, players in all_players.items()
-    }
+    slot_data: list[list[dict[str, int | Any]]] = []
     """Slot data for each player."""
+    for team, players in all_players.items():
+        team_slot_data = [{"team": team}]
+        slot_data.append(team_slot_data)
+        for player in players:
+            team_slot_data.append({"player": player, "slot_data": tracker_data.get_slot_data(team, player)})
 
     return {
-            "groups": groups,
-            "player_names": player_names,
-            "player_aliases": player_aliases,
-            "games": games,
-            "player_items_received": player_items_received,
-            "player_checks_done": player_checks_done,
-            "total_checks_done": total_checks_done,
-            "hints": hints,
-            "activity_timers": activity_timers,
-            "connection_timers": connection_timers,
-            "player_status": player_status,
-            "slot_data": slot_data,
-            "datapackage": tracker_data._multidata["datapackage"],
-        }
+        "groups": groups,
+        "player_names": player_names,
+        "player_aliases": player_aliases,
+        "games": games,
+        "player_items_received": player_items_received,
+        "player_checks_done": player_checks_done,
+        "total_checks_done": total_checks_done,
+        "hints": hints,
+        "activity_timers": activity_timers,
+        "connection_timers": connection_timers,
+        "player_status": player_status,
+        "slot_data": slot_data,
+        "datapackage": tracker_data._multidata["datapackage"],
+    }
