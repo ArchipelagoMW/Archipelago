@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import functools
 import struct
-from typing import TYPE_CHECKING, Iterator
+from typing import TYPE_CHECKING
 
 import Utils
 from NetUtils import ClientStatus
@@ -14,42 +14,6 @@ from .locations import get_level_locations, location_name_to_id, location_table
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext, BizHawkContext
-
-
-def read(address: int, length: int, *, align: int = 1):
-    assert address % align == 0, f'address: 0x{address:07x}, align: {align}'
-    return (address, length, 'System Bus')
-
-def read8(address: int):
-    return read(address, 1)
-
-def read16(address: int):
-    return read(address, 2, align=2)
-
-def read32(address: int):
-    return read(address, 4, align=4)
-
-
-def write(address: int, value: bytes, *, align: int = 1):
-    assert address % align == 0, f'address: 0x{address:07x}, align: {align}'
-    return (address, value, 'System Bus')
-
-def write8(address: int, value: int):
-    return write(address, value.to_bytes(1, 'little'))
-
-def write16(address: int, value: int):
-    return write(address, value.to_bytes(2, 'little'), align=2)
-
-def write32(address: int, value: int):
-    return write(address, value.to_bytes(4, 'little'), align=4)
-
-
-guard8 = write8
-guard16 = write16
-
-
-def next_int(iterator: Iterator[bytes]) -> int:
-    return int.from_bytes(next(iterator), 'little')
 
 
 # These flags are communicated to the tracker as a bitfield in this order, from
@@ -92,26 +56,6 @@ TRACKER_EVENT_FLAGS = [
 ]
 
 
-def cmd_toggle_deathlink(self):
-    """Toggle death link from client. Overrides default setting."""
-
-    client_handler = self.ctx.client_handler
-    client_handler.death_link.client_override = True
-    client_handler.death_link.enabled = not client_handler.death_link.enabled
-    Utils.async_start(
-        self.ctx.update_death_link(client_handler.death_link.enabled),
-        name='Update Death Link'
-    )
-
-def cmd_receive_death(self):
-    """Debug tool: Send a death to the game to test death link is working."""
-    client_handler = self.ctx.client_handler
-    if client_handler.death_link.enabled:
-        client_handler.death_link.pending = True
-
-
-get_int = functools.partial(int.from_bytes, byteorder='little')
-
 game_mode_address = get_symbol('GlobalGameMode')
 game_state_address = get_symbol('sGameSeq')
 wario_stop_flag_address = get_symbol('usWarStopFlg')
@@ -143,6 +87,56 @@ TRACKER_ROOM_NONE = (1 << 24) - 1
 
 MULTIWORLD_IDLE = 0
 MULTIWORLD_ITEM_QUEUED = 1
+
+
+def read(address: int, length: int, *, align: int = 1):
+    assert address % align == 0, f'address: 0x{address:07x}, align: {align}'
+    return (address, length, 'System Bus')
+
+def read8(address: int):
+    return read(address, 1)
+
+def read16(address: int):
+    return read(address, 2, align=2)
+
+def read32(address: int):
+    return read(address, 4, align=4)
+
+def write(address: int, value: bytes, *, align: int = 1):
+    assert address % align == 0, f'address: 0x{address:07x}, align: {align}'
+    return (address, value, 'System Bus')
+
+def write8(address: int, value: int):
+    return write(address, value.to_bytes(1, 'little'))
+
+def write16(address: int, value: int):
+    return write(address, value.to_bytes(2, 'little'), align=2)
+
+def write32(address: int, value: int):
+    return write(address, value.to_bytes(4, 'little'), align=4)
+
+guard8 = write8
+guard16 = write16
+
+get_int = functools.partial(int.from_bytes, byteorder='little')
+
+
+def cmd_toggle_deathlink(self):
+    """Toggle death link from client. Overrides default setting."""
+
+    client_handler = self.ctx.client_handler
+    client_handler.death_link.client_override = True
+    client_handler.death_link.enabled = not client_handler.death_link.enabled
+    Utils.async_start(
+        self.ctx.update_death_link(client_handler.death_link.enabled),
+        name='Update Death Link'
+    )
+
+def cmd_receive_death(self):
+    """Debug tool: Send a death to the game to test death link is working."""
+    client_handler = self.ctx.client_handler
+    if client_handler.death_link.enabled:
+        client_handler.death_link.pending = True
 
 
 class DeathLinkCtx:
@@ -189,18 +183,20 @@ class WL4Client(BizHawkClient):
 
         bizhawk_ctx = client_ctx.bizhawk_ctx
         try:
-            read_result = iter(await bizhawk.read(bizhawk_ctx, [
-                read(0x080000A0, 12),
-                read(get_symbol('PlayerName'), 64),
-                read(get_symbol('SeedName'), 64),
-            ]))
+            read_result = await bizhawk.read(
+                bizhawk_ctx,
+                [
+                    read(0x080000A0, 12),
+                    read(get_symbol('PlayerName'), 64),
+                    read(get_symbol('SeedName'), 64),
+                ]
+            )
         except bizhawk.RequestFailedError:
             return False  # Should verify on the next pass
 
-        game_name = next(read_result).decode('ascii')
-        slot_name_bytes = next(read_result).rstrip(b'\0')
-        seed_name_bytes = next(read_result).rstrip(b'\0')
+        game_name_bytes, slot_name_bytes, seed_name_bytes = read_result
 
+        game_name = game_name_bytes.decode('ascii')
         if not game_name.startswith('WARIOLAND'):
             return False
         if game_name in ('WARIOLANDE\0\0', 'WARIOLAND\0\0\0'):
@@ -215,7 +211,7 @@ class WL4Client(BizHawkClient):
         # Check if we can read the slot name. Doing this here instead of set_auth as a protection against
         # validating a ROM where there's no slot name to read.
         try:
-            self.rom_slot_name = slot_name_bytes.decode('utf-8')
+            self.rom_slot_name = slot_name_bytes.rstrip(b'\0').decode('utf-8')
         except UnicodeDecodeError:
             logger.info('Could not read slot name from ROM. Are you sure this ROM matches this client version?')
             return False
@@ -224,7 +220,7 @@ class WL4Client(BizHawkClient):
         client_ctx.items_handling = LOCAL_ITEMS
         client_ctx.want_slot_data = True
         try:
-            client_ctx.seed_name = seed_name_bytes.decode('utf-8')
+            client_ctx.seed_name = seed_name_bytes.rstrip(b'\0').decode('utf-8')
         except UnicodeDecodeError:
             logger.info('Could not determine seed name from ROM. Are you sure this ROM matches this client version?')
             return False
