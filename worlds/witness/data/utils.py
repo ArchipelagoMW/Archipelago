@@ -168,10 +168,6 @@ def get_laser_shuffle() -> List[str]:
     return get_adjustment_file("settings/Laser_Shuffle.txt")
 
 
-def get_audio_logs() -> List[str]:
-    return get_adjustment_file("settings/Audio_Logs.txt")
-
-
 def get_ep_all_individual() -> List[str]:
     return get_adjustment_file("settings/EP_Shuffle/EP_All.txt")
 

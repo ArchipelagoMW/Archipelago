@@ -42,11 +42,14 @@ Door - 0x033D0 (Vault Door) - 0x033D4
 158024 - 0x0001F (Tree Row 7) - 0x0001E - Black/White Squares
 158025 - 0x00020 (Tree Row 8) - 0x0001F - Black/White Squares
 158026 - 0x00021 (Tree Row 9) - 0x00020 - Black/White Squares
+Audio Log - 0x015C0 (Tree Row Audio Log) - True
 Door - 0x03BA2 (Outpost Path) - 0x0A3B5
-159511 - 0x03D06 (Garden EP) - True - True
 159514 - 0x28A2F (Town Sewer EP) - True - True
-159516 - 0x334A3 (Path EP) - True - True
 159500 - 0x035C7 (Tractor EP) - True - True
+159511 - 0x03D06 (Garden EP) - True - True
+159516 - 0x334A3 (Path EP) - True - True
+Audio Log - 0x339A8 (Patio Roof Audio Log) - True
+Audio Log - 0x0050A (Top of Gate Audio Log) - True
 
 Outside Tutorial Vault (Outside Tutorial):
 158651 - 0x03481 (Vault Box) - True - True
@@ -59,6 +62,7 @@ Outside Tutorial Outpost (Outside Tutorial) - Outside Tutorial - 0x04CA3:
 158012 - 0x04CA4 (Outpost Exit Panel) - True - Dots & Full Dots
 Door - 0x04CA3 (Outpost Exit) - 0x04CA4
 158600 - 0x17CFB (Discard) - True - Triangles
+Audio Log - 0x339A9 (Outpost Audio Log) - True
 
 Orchard (Orchard) - Main Island - True - Orchard Beyond First Gate - 0x03307:
 158071 - 0x00143 (Apple Tree 1) - True - True
@@ -126,6 +130,7 @@ Symmetry Island Lower (Symmetry Island) - Symmetry Island Upper - 0x18269:
 158056 - 0x00070 (Left 5) - 0x0006F - Symmetry & Colored Dots
 158057 - 0x00071 (Left 6) - 0x00070 - Symmetry & Colored Dots
 158058 - 0x00076 (Left 7) - 0x00071 - Symmetry & Colored Dots
+Audio Log - 0x33B37 (Left Set Audio Log) - True
 158059 - 0x009B8 (Scenery Outlines 1) - True - Symmetry
 158060 - 0x003E8 (Scenery Outlines 2) - 0x009B8 - Symmetry
 158061 - 0x00A15 (Scenery Outlines 3) - 0x003E8 - Symmetry
@@ -145,6 +150,7 @@ Symmetry Island Upper (Symmetry Island):
 158700 - 0x0360D (Laser Panel) - 0x00A68 - True
 Laser - 0x00509 (Laser) - 0x0360D
 159001 - 0x03367 (Glass Factory Black Line EP) - True - True
+Audio Log - 0x3C109 (Upper Audio Log) - True
 
 ==Desert==
 
@@ -182,6 +188,7 @@ Laser - 0x012FB (Laser) - 0x03608
 159033 - 0x335C9 (Stairs Right EP) - True - True
 159036 - 0x220E4 (Broken Wall Straight EP) - True - True
 159037 - 0x220E5 (Broken Wall Bend EP) - True - True
+Audio Log - 0x3C0FE (Broken Wall Audio Log) - True
 159040 - 0x334B9 (Shore EP) - True - True
 159041 - 0x334BC (Island EP) - True - True
 
@@ -303,6 +310,7 @@ Quarry Stoneworks Upper Floor (Quarry Stoneworks) - Quarry Stoneworks Lift - 0x0
 158141 - 0x014E9 (Upper Row 8) - 0x03686 - Colored Squares & Eraser
 158142 - 0x03677 (Stairs Panel) - True - Colored Squares & Eraser
 Door - 0x0368A (Stairs) - 0x03677
+Audio Log - 0x329FF (Near Stairs Audio Log) - True
 158143 - 0x3C125 (Control Room Left) - 0x014E9 - Black/White Squares & Dots & Eraser
 158144 - 0x0367C (Control Room Right) - 0x014E9 - Colored Squares & Dots & Eraser
 159411 - 0x0069D (Ramp EP) - 0x03676 & 0x275FF - True
@@ -364,6 +372,7 @@ Door - 0x19B24 (Timed Door) - 0x334DB | 0x334DC
 158179 - 0x19806 (Far 6) - 0x19809 - True
 158180 - 0x196F8 (Far 7) - 0x19806 - True
 158181 - 0x1972F (Far 8) - 0x196F8 - True
+Audio Log - 0x32A0E (Cargo Box Audio Log) - True
 Door - 0x194B2 (Laser Entry Right) - 0x1972F
 158182 - 0x19797 (Near 1) - 0x0A8E0 - True
 158183 - 0x1979A (Near 2) - 0x19797 - True
@@ -388,6 +397,7 @@ Door - 0x19ADE (Ledge Barrier 2) - 0x0A8DC
 Shadows Laser Room (Shadows):
 158703 - 0x19650 (Laser Panel) - 0x194B2 & 0x19665 - True
 Laser - 0x181B3 (Laser) - 0x19650
+Audio Log - 0x3C10C (Laser Room Audio Log) - True
 
 ==Keep==
 
@@ -401,6 +411,8 @@ Keep (Keep) - Outside Keep - True - Keep 2nd Maze - 0x01954 - Keep 2nd Pressure 
 158198 - 0x033EA (Pressure Plates 1) - 0x0A3A8 - Dots
 Door - 0x01954 (Hedge Maze 1 Exit) - 0x00139
 Door - 0x01BEC (Pressure Plates 1 Exit) - 0x033EA
+Audio Log - 0x3C10B (Pressure Plates 1 Guitar Amp Audio Log) - True
+Audio Log - 0x012C7 (Pressure Plates 1 Throne Audio Log) - True
 
 Keep 2nd Maze (Keep) - Keep - 0x018CE - Keep 3rd Maze - 0x019D8:
 Door - 0x018CE (Hedge Maze 2 Shortcut) - 0x00139
@@ -411,6 +423,7 @@ Keep 3rd Maze (Keep) - Keep - 0x019B5 - Keep 4th Maze - 0x019E6:
 Door - 0x019B5 (Hedge Maze 3 Shortcut) - 0x019DC
 158195 - 0x019E7 (Hedge Maze 3) - True - True
 Door - 0x019E6 (Hedge Maze 3 Exit) - 0x019E7
+Audio Log - 0x0074F (Front Wall Audio Log) - True
 
 Keep 4th Maze (Keep) - Keep - 0x0199A - Keep Tower - 0x01A0E:
 Door - 0x0199A (Hedge Maze 4 Shortcut) - 0x019E7
@@ -426,6 +439,7 @@ Keep 3rd Pressure Plate (Keep) - Keep 4th Pressure Plate - 0x01CD5:
 158201 - 0x0A3BB (Reset Pressure Plates 3) - True - True
 158202 - 0x01CD3 (Pressure Plates 3) - 0x0A3BB - Shapers
 Door - 0x01CD5 (Pressure Plates 3 Exit) - 0x01CD3
+Audio Log - 0x3C10E (Pressure Plates 3 Corridor Audio Log) - True
 
 Keep 4th Pressure Plate (Keep) - Shadows - 0x09E3D - Keep Tower - 0x01D40:
 158203 - 0x0A3AD (Reset Pressure Plates 4) - True - True
@@ -462,6 +476,7 @@ Door - 0x17BB4 (Vault Door) - 0x00AFB
 159225 - 0x28ABD (Rope Inner EP) - True - True
 159226 - 0x28ABE (Rope Outer EP) - True - True
 159230 - 0x3388F (Couch EP) - 0x17CDF | 0x0A054 - True
+Audio Log - 0x329FE (Navigation Room Audio Log) - True
 
 Shipwreck Vault (Shipwreck):
 158655 - 0x03535 (Vault Box) - True - True
@@ -501,7 +516,7 @@ Laser - 0x17C65 (Laser) - 0x17CA4
 159121 - 0x03BE3 (Garden Right EP) - True - True
 159122 - 0x0A409 (Wall EP) - True - True
 
-Inside Monastery (Monastery):
+Inside Monastery (Monastery) - Monastery Shutters - 0x09D9B:
 158213 - 0x09D9B (Shutters Control) - True - Dots
 158214 - 0x193A7 (Inside 1) - 0x00037 - True
 158215 - 0x193AA (Inside 2) - 0x193A7 - True
@@ -512,6 +527,9 @@ Inside Monastery (Monastery):
 159135 - 0x034AF (Right Shutter EP) - 0x09D9B - True
 
 Monastery Garden (Monastery):
+
+Monastery Shutters (Monastery):
+Audio Log - 0x3C106 (West Shutters Audio Log) - True
 
 ==Town==
 
@@ -526,9 +544,11 @@ Town Obelisk (Town) - Entry - True:
 
 Town (Town) - Main Island - True - The Ocean - 0x0A054 - Town Maze Rooftop - 0x28AA2 - Town Church - True - Town Wooden Rooftop - 0x034F5 - Town RGB House - 0x28A61 - Town Inside Cargo Box - 0x0A0C9 - Outside Windmill - True:
 158218 - 0x0A054 (Boat Spawn) - 0x17CA6 | 0x17CDF | 0x09DB8 | 0x17C95 - Boat
+Audio Log - 0x015B7 (Obelisk Audio Log) - True
 158219 - 0x0A0C8 (Cargo Box Entry Panel) - True - Black/White Squares & Shapers
 Door - 0x0A0C9 (Cargo Box Entry) - 0x0A0C8
 158707 - 0x09F98 (Desert Laser Redirect Control) - True - True
+Audio Log - 0x3C107 (Near Redirect Audio Log) - True
 158220 - 0x18590 (Transparent) - True - Symmetry
 158221 - 0x28AE3 (Vines) - 0x18590 - True
 158222 - 0x28938 (Apple Tree) - 0x28AE3 - True
@@ -543,6 +563,9 @@ Door - 0x034F5 (Wooden Roof Stairs) - 0x28AC1
 Door - 0x28A61 (RGB House Entry) - 0x28998
 158226 - 0x28A0D (Church Entry Panel) - 0x28A61 - Stars
 Door - 0x03BB0 (Church Entry) - 0x28A0D
+Audio Log - 0x32A0A (Near Lattice Audio Log Left) - True
+Audio Log - 0x3C10A (Near Lattice Audio Log Right) - True
+Audio Log - 0x3C0F3 (Church Bell Audio Log) - True
 158228 - 0x28A79 (Maze Panel) - True - True
 Door - 0x28AA2 (Maze Stairs) - 0x28A79
 159540 - 0x03335 (Tower Underside Third EP) - True - True
@@ -639,8 +662,14 @@ Door - 0x3CCDF (Exit Right) - 0x33AB2
 
 ==Jungle==
 
-Jungle (Jungle) - Main Island - True - The Ocean - 0x17CDF:
+Jungle Peninsula (Jungle Peninsula) - Main Island - True:
+Audio Log - 0x33B36 (Audio Log) - True
+
+Jungle (Jungle) - Main Island - True - The Ocean - 0x17CDF - Jungle Under Popup Wall - 0x1475B:
+Audio Log - 0x3C0F4 (Entrance Audio Log Left) - True
+Audio Log - 0x3C100 (Entrance Audio Log Right) - True
 158251 - 0x17CDF (Shore Boat Spawn) - True - Boat
+Audio Log - 0x3C10D (Shore Audio Log) - True
 158609 - 0x17F9B (Discard) - True - Triangles
 158252 - 0x002C4 (First Row 1) - True - True
 158253 - 0x00767 (First Row 2) - 0x002C4 - True
@@ -657,6 +686,7 @@ Door - 0x1475B (Popup Wall) - 0x17CAB
 158263 - 0x00C3F (Popup Wall 4) - 0x0026F - Sound Dots
 158264 - 0x00C41 (Popup Wall 5) - 0x00C3F - Sound Dots
 158265 - 0x014B2 (Popup Wall 6) - 0x00C41 - Sound Dots
+Audio Log - 0x3C102 (Near Laser Audio Log) - True
 158709 - 0x03616 (Laser Panel) - 0x014B2 - True
 Laser - 0x00274 (Laser) - 0x03616
 158266 - 0x337FA (Laser Shortcut Panel) - True - True
@@ -669,6 +699,8 @@ Door - 0x3873B (Laser Shortcut) - 0x337FA
 159151 - 0x289F5 (Tree Halo EP) - True - True
 159350 - 0x035CB (Bamboo CCW EP) - True - True
 159351 - 0x035CF (Bamboo CW EP) - True - True
+
+Jungle Under Popup Wall (Jungle):
 
 Outside Jungle River (Jungle) - Main Island - True - Monastery Garden - 0x0CF2A - Jungle Vault - 0x15287:
 158267 - 0x17CAA (Monastery Garden Shortcut Panel) - True - True
@@ -712,8 +744,10 @@ Bunker Ultraviolet Room (Bunker) - Bunker Elevator Section - 0x0A08D:
 158285 - 0x17E67 (UV Room 2) - 0x17E63 & 0x34BC6 - Colored Squares & Black/White Squares
 Door - 0x0A08D (Elevator Room Entry) - 0x17E67
 
-Bunker Elevator Section (Bunker) - Bunker Elevator - TrueOneWay:
+Bunker Elevator Section (Bunker) - Bunker Elevator - TrueOneWay - Bunker Under Elevator - 0x0A079 | Bunker Green Room | Bunker Cyan Room | Bunker Laser Platform:
 159311 - 0x035F5 (Tinted Door EP) - 0x17C79 - True
+
+Bunker Under Elevator (Bunker):
 
 Bunker Elevator (Bunker) - Bunker Elevator Section - 0x0A079 - Bunker Cyan Room - 0x0A079 - Bunker Green Room - 0x0A079 - Bunker Laser Platform - 0x0A079 - Outside Bunker - 0x0A079:
 158286 - 0x0A079 (Elevator Control) - True - Colored Squares & Black/White Squares
@@ -722,6 +756,7 @@ Bunker Cyan Room (Bunker) - Bunker Elevator - TrueOneWay:
 
 Bunker Green Room (Bunker) - Bunker Elevator - TrueOneWay:
 159310 - 0x000D3 (Green Room Flowers EP) - True - True
+Audio Log - 0x32A00 (Green Room Audio Log) - True
 
 Bunker Laser Platform (Bunker) - Bunker Elevator - TrueOneWay:
 158710 - 0x09DE0 (Laser Panel) - True - True
@@ -813,6 +848,7 @@ Swamp Near Boat (Swamp) - Swamp Rotating Bridge - TrueOneWay - Swamp Blue Underw
 Door - 0x18482 (Blue Water Pump) - 0x00E3A
 159332 - 0x3365F (Boat EP) - 0x09DB8 - True
 159333 - 0x03731 (Long Bridge Side EP) - 0x17E2B - True
+Audio Log - 0x00761 (Shortcut Path Audio Log) - True
 
 Swamp Long Bridge (Swamp) - Swamp Near Boat - 0x17E2B - Outside Swamp - 0x17E2B:
 158339 - 0x17E2B (Long Bridge Control) - True - Rotated Shapers & Shapers
@@ -824,6 +860,7 @@ Swamp Purple Underwater (Swamp):
 158333 - 0x009A6 (Purple Underwater) - True - Shapers
 159330 - 0x03A9E (Purple Underwater Right EP) - True - True
 159336 - 0x03A93 (Purple Underwater Left EP) - True - True
+Audio Log - 0x32A07 (Purple Underwater Audio Log) - True
 
 Swamp Blue Underwater (Swamp):
 158334 - 0x009AB (Blue Underwater 1) - True - Shapers & Negative Shapers
@@ -858,12 +895,14 @@ Treehouse Beach (Treehouse Beach) - Main Island - True:
 159200 - 0x0053D (Rock Shadow EP) - True - True
 159201 - 0x0053E (Sand Shadow EP) - True - True
 159212 - 0x220BD (Both Orange Bridges EP) - 0x17DA2 & 0x17DDB - True
+Audio Log - 0x3C12A (Shipwreck Shore Audio Log) - True
 
 Treehouse Entry Area (Treehouse) - Treehouse Between Entry Doors - 0x0C309 - The Ocean - 0x17C95:
 158343 - 0x17C95 (Boat Spawn) - True - Boat
 158344 - 0x0288C (First Door Panel) - True - Stars
 Door - 0x0C309 (First Door) - 0x0288C
 159210 - 0x33721 (Buoy EP) - 0x17C95 - True
+Audio Log - 0x3C104 (Entry Area Audio Log) - True
 
 Treehouse Between Entry Doors (Treehouse) - Treehouse Yellow Bridge - 0x0C310:
 158345 - 0x02886 (Second Door Panel) - True - Stars
@@ -944,6 +983,7 @@ Treehouse Green Bridge (Treehouse) - Treehouse Green Bridge Front House - 0x17E6
 158371 - 0x17E4F (Green Bridge 3) - 0x17E4D - Stars & Shapers & Rotated Shapers
 158372 - 0x17E52 (Green Bridge 4 & Directional) - 0x17E4F - Stars & Rotated Shapers
 158373 - 0x17E5B (Green Bridge 5) - 0x17E52 - Stars & Shapers & Stars + Same Colored Symbol
+Audio Log - 0x015C1 (Green Bridge Audio Log) - 0x17E5B
 158374 - 0x17E5F (Green Bridge 6) - 0x17E5B - Stars & Negative Shapers & Rotated Shapers
 158375 - 0x17E61 (Green Bridge 7) - 0x17E5F - Stars & Shapers & Rotated Shapers
 
@@ -981,6 +1021,7 @@ Mountainside Obelisk (Mountainside) - Entry - True:
 Mountainside (Mountainside) - Main Island - True - Mountaintop - True - Mountainside Vault - 0x00085:
 159550 - 0x28B91 (Thundercloud EP) - 0xFFD03 - True
 158612 - 0x17C42 (Discard) - True - Triangles
+Audio Log - 0x3C103 (Near Discard Audio Log) - True
 158665 - 0x002A6 (Vault Panel) - True - Symmetry & Colored Dots & Black/White Squares
 Door - 0x00085 (Vault Door) - 0x002A6
 159301 - 0x335AE (Cloud Cycle EP) - True - True
@@ -999,13 +1040,15 @@ Mountaintop (Mountaintop) - Mountain Floor 1 - 0x17C34:
 159320 - 0x3370E (Arch Black EP) - True - True
 159324 - 0x336C8 (Arch White Right EP) - True - True
 159326 - 0x3369A (Arch White Left EP) - True - True
+Audio Log - 0x00A0F (Laptop Audio Log) - True
 
 ==Mountain (Inside)==
 
 Mountain Floor 1 (Mountain Floor 1) - Mountain Floor 1 Bridge - 0x09E39:
 158408 - 0x09E39 (Light Bridge Controller) - True - Black/White Squares & Rotated Shapers
+Audio Log - 0x33AFF (Light Bridge Controller Audio Log) - True
 
-Mountain Floor 1 Bridge (Mountain Floor 1) - Mountain Floor 1 At Door - TrueOneWay:
+Mountain Floor 1 Bridge (Mountain Floor 1) - Mountain Floor 1 At Door - TrueOneWay - Mountain Floor 1 Trash Pillar - TrueOneWay - Mountain Floor 1 Back Section - TrueOneWay:
 158409 - 0x09E7A (Right Row 1) - True - Black/White Squares & Dots
 158410 - 0x09E71 (Right Row 2) - 0x09E7A - Black/White Squares & Dots
 158411 - 0x09E72 (Right Row 3) - 0x09E71 - Black/White Squares & Shapers
@@ -1018,11 +1061,17 @@ Mountain Floor 1 Bridge (Mountain Floor 1) - Mountain Floor 1 At Door - TrueOneW
 158418 - 0x09E6C (Left Row 5) - 0x09E79 - Stars & Black/White Squares
 158419 - 0x09E6F (Left Row 6) - 0x09E6C - Shapers & Dots
 158420 - 0x09E6B (Left Row 7) - 0x09E6F - Dots
+158424 - 0x09EAD (Trash Pillar 1) - True - Black/White Squares & Shapers
+158425 - 0x09EAF (Trash Pillar 2) - 0x09EAD - Black/White Squares & Shapers
+
+Mountain Floor 1 Trash Pillar (Mountain Floor 1):
+Audio Log - 0x011F9 (Trash Pillar Audio Log) - True
+
+Mountain Floor 1 Back Section (Mountain Floor 1):
 158421 - 0x33AF5 (Back Row 1) - True - Black/White Squares & Symmetry
 158422 - 0x33AF7 (Back Row 2) - 0x33AF5 - Black/White Squares
 158423 - 0x09F6E (Back Row 3) - 0x33AF7 - Symmetry & Dots
-158424 - 0x09EAD (Trash Pillar 1) - True - Black/White Squares & Shapers
-158425 - 0x09EAF (Trash Pillar 2) - 0x09EAD - Black/White Squares & Shapers
+Audio Log - 0x00763 (Back Section Audio Log) - True
 
 Mountain Floor 1 At Door (Mountain Floor 1) - Mountain Floor 2 - 0x09E54:
 Door - 0x09E54 (Exit) - 0x09EAF & 0x09F6E & 0x09E6B & 0x09E7B
@@ -1040,6 +1089,7 @@ Door - 0x09EDD (Elevator Room Entry) - 0x09ED8 & 0x09E86
 
 Mountain Floor 2 Light Bridge Room Near (Mountain Floor 2):
 158431 - 0x09E86 (Light Bridge Controller Near) - True - Stars & Black/White Squares
+Audio Log - 0x32A08 (Light Bridge Controller Near Audio Log) - True
 
 Mountain Floor 2 Beyond Bridge (Mountain Floor 2) - Mountain Floor 2 Light Bridge Room Far - 0x09E07 - Mountain Pink Bridge EP - TrueOneWay - Mountain Floor 2 - 0x09ED8:
 158432 - 0x09FCC (Far Row 1) - True - Dots
@@ -1068,6 +1118,7 @@ Mountain Floor 3 (Mountain Bottom Floor) - Mountain Floor 2 Elevator - TrueOneWa
 159313 - 0x09D5D (Yellow Bridge EP) - 0x09E86 & 0x09ED8 - True
 159314 - 0x09D5E (Blue Bridge EP) - 0x09E86 & 0x09ED8 - True
 Door - 0x09F89 (Exit) - 0x09FDA
+Audio Log - 0x3C101 (Giant Puzzle Audio Log) - True
 
 Mountain Bottom Floor (Mountain Bottom Floor) - Mountain Path to Caves - 0x17F33 - Mountain Bottom Floor Pillars Room - 0x0C141:
 158614 - 0x17FA2 (Discard) - 0xFFF00 - Triangles
@@ -1075,6 +1126,7 @@ Mountain Bottom Floor (Mountain Bottom Floor) - Mountain Path to Caves - 0x17F33
 158446 - 0x01987 (Pillars Room Entry Right) - True - Colored Squares & Dots
 Door - 0x0C141 (Pillars Room Entry) - 0x01983 & 0x01987
 Door - 0x17F33 (Rock Open) - 0x17FA2 | 0x334E1
+Audio Log - 0x3C0FF (Rocks Audio Log) - True
 
 Mountain Bottom Floor Pillars Room (Mountain Bottom Floor) - Elevator - 0x339BB & 0x33961:
 158522 - 0x0383A (Right Pillar 1) - True - Stars
@@ -1098,14 +1150,16 @@ Elevator (Mountain Bottom Floor):
 Mountain Pink Bridge EP (Mountain Floor 2):
 159312 - 0x09D63 (Pink Bridge EP) - 0x09E39 - True
 
-Mountain Path to Caves (Mountain Bottom Floor) - Caves - 0x2D77D:
+Mountain Path to Caves (Mountain Bottom Floor) - Caves - 0x2D77D - Caves Entry Door - TrueOneWay:
 158447 - 0x00FF8 (Caves Entry Panel) - True - Black/White Squares
 Door - 0x2D77D (Caves Entry) - 0x00FF8
 158448 - 0x334E1 (Rock Control) - True - True
 
 ==Caves==
 
-Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Caves Path to Challenge - 0x019A5:
+Caves Entry Door (Caves):
+
+Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Caves Path to Challenge - 0x019A5 - Caves Entry Door - TrueOneWay:
 158451 - 0x335AB (Elevator Inside Control) - True - Dots & Black/White Squares
 158452 - 0x335AC (Elevator Upper Outside Control) - 0x335AB - Black/White Squares
 158453 - 0x3369D (Elevator Lower Outside Control) - 0x335AB - Black/White Squares & Dots
@@ -1127,6 +1181,7 @@ Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Caves Path to Challenge - 0x01
 158469 - 0x009A4 (Blue Tunnel Left Third 1) - True - Shapers
 158470 - 0x018A0 (Blue Tunnel Right Third 1) - True - Shapers & Symmetry
 158471 - 0x00A72 (Blue Tunnel Left Fourth 1) - True - Shapers & Negative Shapers
+Audio Log - 0x3C135 (Blue Tunnel Audio Log) - True
 158472 - 0x32962 (First Floor Left) - True - Rotated Shapers & Shapers
 158473 - 0x32966 (First Floor Grounded) - True - Stars & Black/White Squares
 158474 - 0x01A31 (First Floor Middle) - True - Colored Squares
@@ -1135,6 +1190,7 @@ Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Caves Path to Challenge - 0x01
 158479 - 0x288FC (Second Wooden Beam) - True - Black/White Squares & Shapers & Rotated Shapers
 158480 - 0x289E7 (Third Wooden Beam) - True - Black/White Squares
 158481 - 0x288AA (Fourth Wooden Beam) - True - Black/White Squares & Shapers
+Audio Log - 0x338D7 (Staircase Audio Log) - True
 158482 - 0x17FB9 (Left Upstairs Single) - True - Dots
 158483 - 0x0A16B (Left Upstairs Left Row 1) - True - Dots & Full Dots
 158484 - 0x0A2CE (Left Upstairs Left Row 2) - 0x0A16B - Dots & Full Dots
@@ -1152,10 +1208,12 @@ Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Caves Path to Challenge - 0x01
 158496 - 0x00027 (Right Upstairs Right Row 1) - True - Dots & Invisible Dots & Symmetry
 158497 - 0x00028 (Right Upstairs Right Row 2) - 0x00027 - Dots & Invisible Dots & Symmetry
 158498 - 0x00029 (Right Upstairs Right Row 3) - 0x00028 - Dots & Invisible Dots & Symmetry
+Audio Log - 0x338CA (Upstairs Audio Log) - True
 158476 - 0x09DD5 (Lone Pillar) - True - Triangles
 Door - 0x019A5 (Pillar Door) - 0x09DD5
 158449 - 0x021D7 (Mountain Shortcut Panel) - True - Stars
 Door - 0x2D73F (Mountain Shortcut Door) - 0x021D7
+Audio Log - 0x338C9 (Near Mountain Shortcut Audio Log) - True
 158450 - 0x17CF2 (Swamp Shortcut Panel) - True - Triangles
 Door - 0x2D859 (Swamp Shortcut Door) - 0x17CF2
 159341 - 0x3397C (Skylight EP) - True - True
@@ -1190,6 +1248,7 @@ Door - 0x04D75 (Vault Door) - 0x1C31A & 0x1C319
 158518 - 0x039B4 (Tunnels Entry Panel) - True - Triangles
 Door - 0x0348A (Tunnels Entry) - 0x039B4
 159530 - 0x28B30 (Water EP) - True - True
+Audio Log - 0x338C1 (Water Audio Log) - True
 
 Challenge Vault (Challenge):
 158667 - 0x0356B (Vault Box) - 0x1C31A & 0x1C319 - True
@@ -1198,12 +1257,14 @@ Challenge Vault (Challenge):
 
 Tunnels (Tunnels) - Windmill Interior - 0x27739 - Desert Behind Elevator - 0x27263 - Town - 0x09E87:
 158668 - 0x2FAF6 (Vault Box) - True - True
+Audio Log - 0x3C105 (Vault Box Audio Log) - True
 158519 - 0x27732 (Theater Shortcut Panel) - True - True
 Door - 0x27739 (Theater Shortcut) - 0x27732
 158520 - 0x2773D (Desert Shortcut Panel) - True - True
 Door - 0x27263 (Desert Shortcut) - 0x2773D
 158521 - 0x09E85 (Town Shortcut Panel) - True - Triangles
 Door - 0x09E87 (Town Shortcut) - 0x09E85
+Audio Log - 0x338BD (Near Town Shortcut Audio Log) - True
 159557 - 0x33A20 (Theater Flowers EP) - 0x03553 & Theater to Tunnels - True
 
 ==Boat==
@@ -1219,3 +1280,5 @@ The Ocean (Boat) - Main Island - TrueOneWay - Swamp Near Boat - TrueOneWay - Tre
 159521 - 0x33879 (Tutorial Reflection EP) - True - True
 159522 - 0x03C19 (Tutorial Moss EP) - True - True
 159531 - 0x035C9 (Cargo Box EP) - 0x0A0C9 - True
+Audio Log - 0x3C0F7 (Treehouse Rock Audio Log) - True
+Audio Log - 0x3C0FD (Broken Boat Audio Log) - True
