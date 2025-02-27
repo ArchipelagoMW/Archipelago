@@ -9,11 +9,12 @@ from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles
 from .content import StardewContent, create_content
 from .early_items import setup_early_items
-from .items import item_table, create_items, ItemData, Group, items_by_group, get_all_filler_items, remove_limited_amount_packs
+from .items import item_table, ItemData, Group, items_by_group
+from .items.item_creation import create_items, get_all_filler_items, remove_limited_amount_packs
 from .locations import location_table, create_locations, LocationData, locations_by_tag
 from .logic.logic import StardewLogic
 from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, EnabledFillerBuffs, NumberOfMovementBuffs, \
-    BuildingProgression, ExcludeGingerIsland, TrapItems, EntranceRandomization, FarmType
+    BuildingProgression, ExcludeGingerIsland, TrapDifficulty, EntranceRandomization, FarmType
 from .options.forced_options import force_change_options_if_incompatible
 from .options.option_groups import sv_option_groups
 from .options.presets import sv_options_presets
@@ -317,13 +318,13 @@ class StardewValleyWorld(World):
                 if self.multiworld.game[player] != self.game:
                     continue
                 player_options = cast(StardewValleyOptions, self.multiworld.worlds[player].options)
-                if player_options.trap_items == TrapItems.option_no_traps:
+                if player_options.trap_difficulty == TrapDifficulty.option_no_traps:
                     include_traps = False
                 if player_options.exclude_ginger_island == ExcludeGingerIsland.option_true:
                     exclude_island = True
             return include_traps, exclude_island
         else:
-            return self.options.trap_items != TrapItems.option_no_traps, self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
+            return self.options.trap_difficulty != TrapDifficulty.option_no_traps, self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         """Write to the spoiler header. If individual it's right at the end of that player's options,

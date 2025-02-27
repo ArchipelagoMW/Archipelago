@@ -13,7 +13,7 @@ from .assertion import RuleAssertMixin
 from .options.utils import fill_namespace_with_default, parse_class_option_keys, fill_dataclass_with_default
 from .. import StardewValleyWorld, options, StardewItem
 from ..options import StardewValleyOption
-from ..options.options import enabled_mods
+from ..options.options import enabled_mods, TrapDistribution
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +52,7 @@ def default_6_x_x():
         options.SkillProgression.internal_name: options.SkillProgression.default,
         options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.default,
         options.ToolProgression.internal_name: options.ToolProgression.default,
-        options.TrapItems.internal_name: options.TrapItems.default,
+        options.TrapDifficulty.internal_name: options.TrapDifficulty.default,
         options.Walnutsanity.internal_name: options.Walnutsanity.default
     }
 
@@ -88,7 +88,7 @@ def allsanity_no_mods_6_x_x():
         options.SkillProgression.internal_name: options.SkillProgression.option_progressive_with_masteries,
         options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
         options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
-        options.TrapItems.internal_name: options.TrapItems.option_nightmare,
+        options.TrapDifficulty.internal_name: options.TrapDifficulty.option_nightmare,
         options.Walnutsanity.internal_name: options.Walnutsanity.preset_all
     }
 
@@ -136,7 +136,7 @@ def get_minsanity_options():
         options.SkillProgression.internal_name: options.SkillProgression.option_vanilla,
         options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_vanilla,
         options.ToolProgression.internal_name: options.ToolProgression.option_vanilla,
-        options.TrapItems.internal_name: options.TrapItems.option_no_traps,
+        options.TrapDifficulty.internal_name: options.TrapDifficulty.option_no_traps,
         options.Walnutsanity.internal_name: options.Walnutsanity.preset_none
     }
 
@@ -172,7 +172,7 @@ def minimal_locations_maximal_items():
         options.SkillProgression.internal_name: options.SkillProgression.option_vanilla,
         options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_vanilla,
         options.ToolProgression.internal_name: options.ToolProgression.option_vanilla,
-        options.TrapItems.internal_name: options.TrapItems.option_nightmare,
+        options.TrapDifficulty.internal_name: options.TrapDifficulty.option_nightmare,
         options.Walnutsanity.internal_name: options.Walnutsanity.preset_none
     }
     return min_max_options
@@ -355,9 +355,9 @@ def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOp
 
     # Yes I reuse the worlds generated between tests, its speeds the execution by a couple seconds
     # If the simple dict caching ends up taking too much memory, we could replace it with some kind of lru cache. 
-    should_cache = "start_inventory" not in test_options
+    should_cache = should_cache_world(test_options)
     if should_cache:
-        frozen_options = frozenset(test_options.items()).union({("seed", seed)})
+        frozen_options = make_hashable(test_options, seed)
         cached_multi_world = search_world_cache(_cache, frozen_options)
         if cached_multi_world:
             print(f"Using cached solo multi world [Seed = {cached_multi_world.seed}] [Cache size = {len(_cache)}]")
@@ -384,6 +384,27 @@ def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOp
     setattr(multiworld, "lock", threading.Lock())
 
     return multiworld
+
+
+def should_cache_world(test_options):
+    if "start_inventory" in test_options:
+        return False
+
+    trap_distribution_key = "trap_distribution"
+    if trap_distribution_key not in test_options:
+        return True
+
+    trap_distribution = test_options[trap_distribution_key]
+    for key in trap_distribution:
+        if trap_distribution[key] != TrapDistribution.default_weight:
+            return False
+
+    return True
+
+
+
+def make_hashable(test_options, seed):
+    return frozenset(test_options.items()).union({("seed", seed)})
 
 
 def search_world_cache(cache: Dict[frozenset, MultiWorld], frozen_options: frozenset) -> Optional[MultiWorld]:
