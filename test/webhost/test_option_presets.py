@@ -2,7 +2,7 @@ import unittest
 
 from BaseClasses import PlandoOptions
 from worlds import AutoWorldRegister
-from Options import ItemDict, NamedRange, NumericOption, OptionList, OptionSet
+from Options import OptionCounter, NamedRange, NumericOption, OptionList, OptionSet
 
 
 class TestOptionPresets(unittest.TestCase):
@@ -19,7 +19,7 @@ class TestOptionPresets(unittest.TestCase):
                             # pass in all plando options in case a preset wants to require certain plando options
                             # for some reason
                             option.verify(world_type, "Test Player", PlandoOptions(sum(PlandoOptions)))
-                            supported_types = [NumericOption, OptionSet, OptionList, ItemDict]
+                            supported_types = [NumericOption, OptionSet, OptionList, OptionCounter]
                             if not any([issubclass(option.__class__, t) for t in supported_types]):
                                 self.fail(f"'{option_name}' in preset '{preset_name}' for game '{game_name}' "
                                           f"is not a supported type for webhost. "
