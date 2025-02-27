@@ -38,7 +38,8 @@ class KH1ClientCommandProcessor(ClientCommandProcessor):
     def _cmd_slot_data(self):
         """Prints slot data settings for the connected seed"""
         for key in self.ctx.slot_data.keys():
-            self.output(str(key) + ": " + str(self.ctx.slot_data[key]))
+            if key not in ["remote_location_ids", "synthesis_item_name_byte_arrays"]:
+                self.output(str(key) + ": " + str(self.ctx.slot_data[key]))
     
     def _cmd_deathlink(self):
         """If your Death Link setting is set to "Toggle", use this command to turn Death Link on and off."""
