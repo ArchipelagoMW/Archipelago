@@ -471,6 +471,7 @@ class LMContext(CommonContext):
                             dme.write_byte(BOO_FINAL_FLAG_ADDR, (boo_val | (1 << BOO_FINAL_FLAG_BIT)))
                     else:
                         # Assume it is a single address with a bit to update, rather than changing existing value
+                        # TODO stick key messages here for text injection
                         item_val = dme.read_byte(lm_item.ram_addr)
                         dme.write_byte(lm_item.ram_addr, (item_val | (1 << lm_item.itembit)))
 

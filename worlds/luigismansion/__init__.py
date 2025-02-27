@@ -35,7 +35,7 @@ components.append(
               icon="archiboolego")
 )
 
-icon_paths["archiboolego"] = local_path("worlds/luigismansion/data", "archiboolego.png")
+icon_paths["archiboolego"] = f"ap:{__name__}/data/archiboolego.png"
 
 
 class LuigisMansionSettings(settings.Group):

@@ -142,8 +142,8 @@ def update_event_info(event_info, boo_checks: bool):
         if x["EventNo"] == 44:
             x["pos_x"] = 3500.277000
             x["pos_y"] = -550.000000
-            x["pos_z"] = -2000.792000
-            x["EventFlag"] = 0 # 25
+            x["pos_z"] = -2100.792000
+            x["EventFlag"] = 0  # 25
             x["EventArea"] = 200
             x["EventIf"] = 5
             x["EventLock"] = 0
@@ -173,13 +173,13 @@ def update_event_info(event_info, boo_checks: bool):
         # Also updates the event disappear trigger to be flag 28
         # Also updates the EventFlag to 0, so this event always plays
         if boo_checks and x["EventNo"] == 47:
-            x["pos_x"] = -1625.000000
+            x["pos_x"] = -1725.000000
             x["pos_y"] = 100.000000
             x["pos_z"] = -4150.000000
             x["EventFlag"] = 0
             x["disappear_flag"] = 28
             x["EventIf"] = 5
-            x["EventArea"] = 380
+            x["EventArea"] = 290
             x["EventLock"] = 1
             x["PlayerStop"] = 1
             x["EventLoad"] = 0
