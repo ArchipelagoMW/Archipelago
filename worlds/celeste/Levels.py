@@ -95,13 +95,15 @@ class Room:
     display_name: str
     regions: List[PreRegion]
     doors: List[Door]
+    checkpoint: str
 
-    def __init__(self, level_name: str, name: str, display_name: str, regions: List[PreRegion], doors: List[Door]):
+    def __init__(self, level_name: str, name: str, display_name: str, regions: List[PreRegion], doors: List[Door], checkpoint: str = None):
         self.level_name = level_name
         self.name = name
         self.display_name = display_name
         self.regions = deepcopy(regions)
         self.doors = deepcopy(doors)
+        self.checkpoint = checkpoint
 
         from .data.TestLevelData import all_regions
 

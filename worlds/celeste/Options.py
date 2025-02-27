@@ -31,11 +31,35 @@ class StrawberriesRequiredPercentage(Range):
     range_end = 100
     default = 80
 
+# Goal Level - 7A, 7B, 7C, 8A, 8B, 8C, Empty Space, Farewell
+
+# Lock Goal Level
+
+# Goal Level Checkpoint Shuffle
+
 class Checkpointsanity(Toggle):
     """
     Determines whether Checkpoints will be shuffled into the item pool
     """
     display_name = "Checkpointsanity"
+
+class Roomsanity(Toggle):
+    """
+    Determines whether entering individual rooms sends location checks
+    """
+    display_name = "Roomsanity"
+
+class IncludeCore(Toggle):
+    """
+    Determines whether Chapter 8 - Core Levels will be included
+    """
+    display_name = "Include Core"
+
+class IncludeFarewell(Toggle):
+    """
+    Determines whether Chapter 9 - Farewell Level will be included
+    """
+    display_name = "Include Farewell"
 
 class IncludeBSides(Toggle):
     """
@@ -129,6 +153,9 @@ celeste_option_groups = [
     ]),
     OptionGroup("Location Options", [
         Checkpointsanity,
+        Roomsanity,
+        IncludeCore,
+        IncludeFarewell,
         IncludeBSides,
         IncludeCSides,
     ]),
@@ -204,6 +231,9 @@ class CelesteOptions(PerGameCommonOptions):
     strawberries_required_percentage: StrawberriesRequiredPercentage
 
     checkpointsanity: Checkpointsanity
+    roomsanity: Roomsanity
+    include_core: IncludeCore
+    include_farewell: IncludeFarewell
     include_b_sides: IncludeBSides
     include_c_sides: IncludeCSides
 

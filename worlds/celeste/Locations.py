@@ -1,6 +1,6 @@
 from typing import Dict, NamedTuple, Optional
 
-from BaseClasses import Location
+from BaseClasses import Location, Region
 
 from .Levels import Level, LocationType
 from .Names import LocationName
@@ -131,8 +131,12 @@ def generate_location_table(level_data: Dict[str, Level]):
 
     for _, level in level_data.items():
         for room in level.rooms:
-            location_table[level.display_name + " - " + room.display_name] = location_id_offsets[LocationType.Room_Enter]
+            location_table[level.display_name + " - " + room.display_name] = location_id_offsets[LocationType.Room_Enter] + location_counts[LocationType.Room_Enter]
             location_counts[LocationType.Room_Enter] += 1
+
+            if room.checkpoint != None and room.checkpoint != "Start":
+                location_table[level.display_name + " - " + room.checkpoint] = location_id_offsets[LocationType.Checkpoint] + location_counts[LocationType.Checkpoint]
+                location_counts[LocationType.Checkpoint] += 1
 
             for region in room.regions:
                 for location in region.locations:
@@ -142,3 +146,60 @@ def generate_location_table(level_data: Dict[str, Level]):
     for loc_name in location_table.keys():
         print(loc_name) 
     return location_table
+
+# TODO: Finish this function
+def create_regions_and_locations(world):
+    menu_region = Region("Menu", world.player, world.multiworld)
+    world.multiworld.regions.append(menu_region)
+
+    for _, level in world.level_data.items():
+        if level.name[-2] == "8" and not world.options.include_core:
+            continue
+        if level.name[-1] == "9" and not world.options.include_farewell:
+            continue
+        if level.name[-1] == "b" and not world.options.include_b_sides:
+            continue
+        if level.name[-1] == "c" and not world.options.include_c_sides:
+            continue
+
+        for room in level.rooms:
+            room_region = Region(room.name + "_room", world.player, world.multiworld)
+            world.multiworld.regions.append(room_region)
+
+            for pre_region in room.regions:
+                region = Region(pre_region.name, world.player, world.multiworld)
+                world.multiworld.regions.append(region)
+                region.add_locations({
+                    location.display_name: world.location_name_to_id[location.display_name] for location in pre_region.locations
+                }, CelesteLocation)
+
+            for pre_region in room.regions:
+                region = world.multiworld.get_region(pre_region.name, world.player)                
+                region.add_exits(
+                    [connection.destination_name for connection in pre_region.connections],
+                    {connection.destination_name: connection.rule for connection in pre_region.connections}
+                )
+                region.add_exits([room_region.name])
+
+            if room.checkpoint != None:
+                checkpoint_location_name = level.display_name + " - " + room.checkpoint
+                checkpoint_rule = None
+                if room.checkpoint != "Start":
+                    checkpoint_rule = lambda state: state.has(checkpoint_location_name)
+                    room_region.add_locations({
+                        checkpoint_location_name: world.location_name_to_id[checkpoint_location_name]
+                    }, CelesteLocation)
+                menu_region.add_exits([checkpoint_location_name], {checkpoint_location_name: checkpoint_rule})
+
+            if world.options.roomsanity:
+                room_location_name = room.display_name
+                room_region.add_locations({
+                    room_location_name: world.location_name_to_id[checkpoint_location_name]
+                }, CelesteLocation)
+
+        for room_connection in level.room_connections:
+            source_region = world.multiworld.get_region(room_connection.source.region.name, world.player)
+            source_region.add_exits([room_connection.dest.region.name])
+            if room_connection.two_way:
+                dest_region = world.multiworld.get_region(room_connection.dest.region, world.player)
+                dest_region.add_exits([room_connection.source.region.name])

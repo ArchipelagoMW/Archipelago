@@ -55,6 +55,10 @@ class CelesteWorld(World):
 
 
     def create_regions(self) -> None:
+        from .Locations import create_regions_and_locations
+
+        create_regions_and_locations(self)
+
         from .Regions import region_data_table
         # Create regions.
         for region_name in region_data_table.keys():

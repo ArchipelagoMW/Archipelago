@@ -6,7 +6,7 @@ from ..Levels import Level, Room, PreRegion, LevelLocation, RegionConnection, Ro
 # (Done) Figure out access rule formatting for locations and region connections
 # (Done) Fill out the rest of the Prologue Data manually
 
-# Figure out checkpoint locations
+# Figure out checkpoint locations and connections
 # Set up APWorld reading of Regions, Entrances, and Locations from there
 # Once generation is successful, determine JSON Data format
 # Write Prologue JSON data
