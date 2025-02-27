@@ -1,8 +1,8 @@
 from .base_logic import BaseLogic, BaseLogicMixin
-from ..options.options import Secretsanity
 from ..stardew_rule import StardewRule
 from ..strings.ap_names.ap_option_names import SecretsanityOptionName
 from ..strings.craftable_names import Consumable
+from ..strings.forageable_names import Forageable
 from ..strings.metal_names import Artifact
 from ..strings.region_names import Region
 from ..strings.season_names import Season
@@ -30,4 +30,9 @@ class SpecialItemsLogic(BaseLogic):
         if SecretsanityOptionName.easy in self.options.secretsanity:
             return sacrifice_rule & self.logic.received(SpecialItem.far_away_stone)
         return sacrifice_rule
+
+    def has_solid_gold_lewis(self) -> StardewRule:
+        if SecretsanityOptionName.secret_notes in self.options.secretsanity:
+            return self.logic.received(SpecialItem.solid_gold_lewis) & self.logic.region.can_reach(Region.town)
+        return self.logic.has(Forageable.secret_note) & self.logic.region.can_reach(Region.town)
 

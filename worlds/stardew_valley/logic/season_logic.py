@@ -38,6 +38,8 @@ class SeasonLogic(BaseLogic):
 
     @cache_self1
     def has(self, season: str) -> StardewRule:
+        assert isinstance(season, str), "use has_any() or has_all() to check multiple seasons at once"
+
         if season == Generic.any:
             return True_()
         seasons_order = [Season.spring, Season.summer, Season.fall, Season.winter]

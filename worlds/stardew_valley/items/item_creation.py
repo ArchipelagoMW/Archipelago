@@ -503,7 +503,7 @@ def create_secrets_items(item_factory: StardewItemFactory, options: StardewValle
         return
 
     if SecretsanityOptionName.easy in options.secretsanity:
-        items.extend(item_factory(item) for item in items_by_group[Group.SIMPLE_SECRET])
+        items.extend(item_factory(item) for item in items_by_group[Group.EASY_SECRET])
     if SecretsanityOptionName.fishing in options.secretsanity:
         items.extend(item_factory(item) for item in items_by_group[Group.FISHING_SECRET])
     # if SecretsanityOptionName.difficult in options.secretsanity:

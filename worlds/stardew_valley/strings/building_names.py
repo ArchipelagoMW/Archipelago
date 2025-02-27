@@ -19,6 +19,7 @@ class Building:
     kids_room = "Kids Room"
     cellar = "Cellar"
     pet_bowl = "Pet Bowl"
+    junimo_hut = "Junimo Hut"
 
 
 class ModBuilding:

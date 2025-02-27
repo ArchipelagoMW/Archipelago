@@ -7,7 +7,7 @@ from ..strings.ap_names.ap_option_names import WalnutsanityOptionName
 from ..strings.ap_names.event_names import Event
 from ..strings.craftable_names import Furniture
 from ..strings.crop_names import Fruit
-from ..strings.metal_names import Mineral, Fossil
+from ..strings.metal_names import Fossil
 from ..strings.region_names import Region
 from ..strings.seed_names import Seed
 
@@ -95,8 +95,8 @@ class WalnutLogic(BaseLogic):
             return self.logic.and_(*reach_walnut_regions)
         if number <= 50:
             return reach_entire_island
-        gems = (Mineral.amethyst, Mineral.aquamarine, Mineral.emerald, Mineral.ruby, Mineral.topaz)
-        return reach_entire_island & self.logic.has(Fruit.banana) & self.logic.has_all(*gems) & \
+
+        return reach_entire_island & self.logic.has(Fruit.banana) & self.logic.museum.has_all_gems() & \
             self.logic.ability.can_mine_perfectly() & self.logic.ability.can_fish_perfectly() & \
             self.logic.has(Furniture.flute_block) & self.logic.has(Seed.melon) & self.logic.has(Seed.wheat) & \
             self.logic.has(Seed.garlic) & self.can_complete_field_office()

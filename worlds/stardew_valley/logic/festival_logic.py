@@ -42,7 +42,7 @@ class FestivalLogic(BaseLogic):
             FestivalCheck.rarecrow_2: self.logic.money.can_spend(5000),
             FestivalCheck.fishing_competition: self.logic.festival.can_win_fishing_competition(),
             FestivalCheck.rarecrow_4: self.logic.money.can_spend(5000),
-            FestivalCheck.mermaid_pearl: self.logic.has(Forageable.secret_note),
+            FestivalCheck.mermaid_show: self.logic.has(Forageable.secret_note),
             FestivalCheck.cone_hat: self.logic.money.can_spend(2500),
             FestivalCheck.iridium_fireplace: self.logic.money.can_spend(15000),
             FestivalCheck.rarecrow_7: self.logic.money.can_spend(5000) & self.logic.museum.can_donate_museum_artifacts(20),

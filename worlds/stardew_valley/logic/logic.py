@@ -74,7 +74,7 @@ from ..strings.gift_names import Gift
 from ..strings.ingredient_names import Ingredient
 from ..strings.machine_names import Machine
 from ..strings.material_names import Material
-from ..strings.metal_names import Ore, MetalBar, Mineral, Fossil, Artifact
+from ..strings.metal_names import Ore, MetalBar, Mineral, Fossil
 from ..strings.monster_drop_names import Loot
 from ..strings.monster_names import Monster
 from ..strings.region_names import Region, LogicRegion
@@ -291,6 +291,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             MetalBar.iron: self.can_smelt(Ore.iron),
             MetalBar.quartz: self.can_smelt(Mineral.quartz) | self.can_smelt("Fire Quartz") | (self.has(Machine.recycling_machine) & (self.has(Trash.broken_cd) | self.has(Trash.broken_glasses))),
             MetalBar.radioactive: self.can_smelt(Ore.radioactive),
+            Mineral.any_gem: self.museum.has_any_gem(),
             Ore.copper: self.mine.can_mine_in_the_mines_floor_1_40() | self.mine.can_mine_in_the_skull_cavern() | self.tool.has_tool(Tool.pan, ToolMaterial.copper),
             Ore.gold: self.mine.can_mine_in_the_mines_floor_81_120() | self.mine.can_mine_in_the_skull_cavern() | self.tool.has_tool(Tool.pan, ToolMaterial.gold),
             Ore.iridium: self.count(2, *(self.mine.can_mine_in_the_skull_cavern(), self.can_fish_pond(Fish.super_cucumber), self.tool.has_tool(Tool.pan, ToolMaterial.iridium))),
@@ -301,6 +302,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             SpecialItem.lucky_purple_shorts: self.special_items.has_purple_shorts(),
             SpecialItem.trimmed_purple_shorts: self.has(SpecialItem.lucky_purple_shorts) & self.has(Machine.sewing_machine),
             SpecialItem.far_away_stone: self.special_items.has_far_away_stone(),
+            SpecialItem.solid_gold_lewis: self.special_items.has_solid_gold_lewis(),
             SpeedGro.basic: self.money.can_spend_at(Region.pierre_store, 100),
             SpeedGro.deluxe: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
             Trash.broken_cd: self.fishing.can_crab_pot_anywhere,

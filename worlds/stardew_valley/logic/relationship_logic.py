@@ -150,16 +150,11 @@ class RelationshipLogic(BaseLogic):
 
         return self.logic.and_(*rules)
 
-    def can_give_loved_gifts_to_everyone(self) -> StardewRule:
-        rules = []
+    def can_meet_all(self, *npcs: str) -> StardewRule:
+        return self.logic.and_(*[self.can_meet(npc) for npc in npcs])
 
-        for npc in self.content.villagers:
-            meet_rule = self.logic.relationship.can_meet(npc)
-            rules.append(meet_rule)
-
-        rules.append(self.logic.gifts.has_any_universal_love)
-
-        return self.logic.and_(*rules)
+    def can_meet_any(self, *npcs: str) -> StardewRule:
+        return self.logic.or_(*[self.can_meet(npc) for npc in npcs])
 
     # Should be cached
     def can_earn_relationship(self, npc: str, hearts: int = 0) -> StardewRule:
@@ -196,6 +191,3 @@ class RelationshipLogic(BaseLogic):
                 rules.append(self.logic.relationship.can_date(npc))
 
         return self.logic.and_(*rules)
-
-    def can_gift_to(self, item: str, npc: str) -> StardewRule:
-        return self.logic.has(item) & self.logic.relationship.can_meet(npc)

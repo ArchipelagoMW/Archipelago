@@ -30,6 +30,7 @@ class MetalBar:
 
 
 class Mineral:
+    any_gem = "Any Gem"
     petrified_slime = "Petrified Slime"
     quartz = "Quartz"
     earth_crystal = "Earth Crystal"

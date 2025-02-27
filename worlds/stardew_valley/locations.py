@@ -13,7 +13,7 @@ from .mods.mod_data import ModNames
 from .options import ExcludeGingerIsland, ArcadeMachineLocations, SpecialOrderLocations, Museumsanity, \
     FestivalLocations, ElevatorProgression, BackpackProgression, FarmType
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
-from .options.options import BackpackSize, Secretsanity
+from .options.options import BackpackSize
 from .strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName
 from .strings.backpack_tiers import Backpack
 from .strings.goal_names import Goal
@@ -108,10 +108,11 @@ class LocationTags(enum.Enum):
     BOOKSANITY_SKILL = enum.auto()
     BOOKSANITY_LOST = enum.auto()
     SECRETSANITY = enum.auto()
-    SIMPLE_SECRET = enum.auto()
+    EASY_SECRET = enum.auto()
     FISHING_SECRET = enum.auto()
     DIFFICULT_SECRET = enum.auto()
     SECRET_NOTE = enum.auto()
+    REPLACES_PREVIOUS_LOCATION = enum.auto()
 
     BEACH_FARM = enum.auto()
     # Mods
@@ -508,15 +509,19 @@ def extend_secrets_locations(randomized_locations: List[LocationData], options: 
 
     locations = []
     if SecretsanityOptionName.easy in options.secretsanity:
-        locations.extend(locations_by_tag[LocationTags.SIMPLE_SECRET])
+        locations.extend(locations_by_tag[LocationTags.EASY_SECRET])
     if SecretsanityOptionName.fishing in options.secretsanity:
         locations.extend(locations_by_tag[LocationTags.FISHING_SECRET])
     if SecretsanityOptionName.difficult in options.secretsanity:
         locations.extend(locations_by_tag[LocationTags.DIFFICULT_SECRET])
     if SecretsanityOptionName.secret_notes in options.secretsanity:
         locations.extend(locations_by_tag[LocationTags.SECRET_NOTE])
-    locations = filter_disabled_locations(options, content, locations)
-    randomized_locations.extend(locations)
+        for location_dupe in locations_by_tag[LocationTags.REPLACES_PREVIOUS_LOCATION]:
+            for location in randomized_locations:
+                if location.name in location_dupe.name:
+                    randomized_locations.remove(location)
+    filtered_locations = filter_disabled_locations(options, content, locations)
+    randomized_locations.extend(filtered_locations)
 
 
 def create_locations(location_collector: StardewLocationCollector,
