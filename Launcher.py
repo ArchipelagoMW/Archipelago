@@ -397,6 +397,10 @@ if __name__ == '__main__':
                                 "connect with.")
     run_group.add_argument("args", nargs="*",
                            help="Arguments to pass to component.")
+
+    from worlds import ensure_worlds_loaded
+    ensure_worlds_loaded()
+
     main(parser.parse_args())
 
     from worlds.LauncherComponents import processes

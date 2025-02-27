@@ -87,6 +87,9 @@ class AutoWorldRegister(type):
             if dct["game"] in AutoWorldRegister.world_types:
                 raise RuntimeError(f"""Game {dct["game"]} already registered.""")
             AutoWorldRegister.world_types[dct["game"]] = new_class
+            # Cannot be imported at the module level without causing cyclic dependencies.
+            from worlds import network_data_package
+            network_data_package["games"][dct["game"]] = new_class.get_data_package_data()
         new_class.__file__ = sys.modules[new_class.__module__].__file__
         if ".apworld" in new_class.__file__:
             new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
@@ -95,6 +98,7 @@ class AutoWorldRegister(type):
             world_folder_name = mod_name[7:].lower() if mod_name.startswith("worlds.") else mod_name.lower()
             new_class.settings_key = world_folder_name + "_options"
         new_class.__settings = None
+
         return new_class
 
 

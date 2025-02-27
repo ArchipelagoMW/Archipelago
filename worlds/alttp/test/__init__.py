@@ -2,10 +2,15 @@ import unittest
 from argparse import Namespace
 
 from BaseClasses import MultiWorld, CollectionState
-from worlds import AutoWorldRegister
+from worlds import AutoWorldRegister, ensure_worlds_loaded
 
 
 class LTTPTestBase(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        ensure_worlds_loaded("A Link to the Past")
+
     def world_setup(self):
         from worlds.alttp.Options import Medallion
         self.multiworld = MultiWorld(1)

@@ -12,10 +12,12 @@ def run_load_worlds_benchmark():
 
     import BaseClasses, Launcher, Fill
 
-    from worlds import world_sources
+    from worlds import world_sources, ensure_worlds_loaded
 
     init_logging("Benchmark Runner")
     logger = logging.getLogger("Benchmark")
+
+    ensure_worlds_loaded()
 
     for module in world_sources:
         logger.info(f"{module} took {module.time_taken:.4f} seconds.")
