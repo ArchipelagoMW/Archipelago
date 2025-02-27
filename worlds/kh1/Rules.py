@@ -1480,7 +1480,10 @@ def set_rules(kh1world):
             ))
         add_rule(kh1world.get_location("Agrabah Defeat Kurt Zisa Zantetsuken Event"),
             lambda state: (
-                has_emblems(state, player, options.keyblades_unlock_chests) and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) and has_defensive_tools(state, player) and state.has("Progressive Blizzard", player, 3)
+                has_emblems(state, player, options.keyblades_unlock_chests)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
+                and has_defensive_tools(state, player)
+                and state.has("Progressive Blizzard", player, 3)
             ))
     if options.super_bosses or options.final_rest_door_key.current_key == "sephiroth":
         add_rule(kh1world.get_location("Olympus Coliseum Defeat Sephiroth Ansem's Report 12"),

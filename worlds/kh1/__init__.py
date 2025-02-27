@@ -1,4 +1,5 @@
 import logging
+import re
 from typing import List
 from math import ceil
 
@@ -72,6 +73,71 @@ VANILLA_PUPPY_LOCATIONS = [
     "Hollow Bastion Castle Gates Gravity Chest",
     "Hollow Bastion Lift Stop Outside Library Gravity Chest"
     ]
+CHAR_TO_KH = {
+    " ": 0x01,
+    "0": 0x21,
+    "1": 0x22,
+    "2": 0x23,
+    "3": 0x24,
+    "4": 0x25,
+    "5": 0x26,
+    "6": 0x27,
+    "7": 0x28,
+    "8": 0x29,
+    "9": 0x2A,
+    "A": 0x2B,
+    "B": 0x2C,
+    "C": 0x2D,
+    "D": 0x2E,
+    "E": 0x2F,
+    "F": 0x30,
+    "G": 0x31,
+    "H": 0x32,
+    "I": 0x33,
+    "J": 0x34,
+    "K": 0x35,
+    "L": 0x36,
+    "M": 0x37,
+    "N": 0x38,
+    "O": 0x39,
+    "P": 0x3A,
+    "Q": 0x3B,
+    "R": 0x3C,
+    "S": 0x3D,
+    "T": 0x3E,
+    "U": 0x3F,
+    "V": 0x40,
+    "W": 0x41,
+    "X": 0x42,
+    "Y": 0x43,
+    "Z": 0x44,
+    "a": 0x45,
+    "b": 0x46,
+    "c": 0x47,
+    "d": 0x48,
+    "e": 0x49,
+    "f": 0x4A,
+    "g": 0x4B,
+    "h": 0x4C,
+    "i": 0x4D,
+    "j": 0x4E,
+    "k": 0x4F,
+    "l": 0x50,
+    "m": 0x51,
+    "n": 0x52,
+    "o": 0x53,
+    "p": 0x54,
+    "q": 0x55,
+    "r": 0x56,
+    "s": 0x57,
+    "t": 0x58,
+    "u": 0x59,
+    "v": 0x5A,
+    "w": 0x5B,
+    "x": 0x5C,
+    "y": 0x5D,
+    "z": 0x5E
+    }
 
 def launch_client():
     from .Client import launch
@@ -165,7 +231,7 @@ class KH1World(World):
         # Fill remaining pool with items from other pool
         self.random.shuffle(possible_level_up_item_pool)
         level_up_item_pool = level_up_item_pool + possible_level_up_item_pool[:(99 - len(level_up_item_pool))]
-
+        
         level_up_locations = list(get_locations_by_type("Level Slot 1").keys())
         self.random.shuffle(level_up_item_pool)
         current_level_index_for_placing_stats = self.options.force_stats_and_abilities_on_levels.value - 2 # Level 2 is index 0, Level 3 is index 1, etc
@@ -350,6 +416,7 @@ class KH1World(World):
                     "starting_items": [item.code for item in self.multiworld.precollected_items[self.player]],
                     "starting_tools": bool(self.options.starting_tools),
                     "super_bosses": bool(self.options.super_bosses),
+                    "synthesis_item_name_byte_arrays": self.get_synthesis_item_name_byte_arrays(),
                     "unlock_0_volume": bool(self.options.unlock_0_volume),
                     "unskippable": bool(self.options.unskippable),
                     "warp_anywhere": bool(self.options.warp_anywhere)
@@ -377,6 +444,8 @@ class KH1World(World):
         generate_json(self, output_directory)
     
     def generate_early(self):
+        self.determine_level_checks()
+        
         value_names = ["Lucky Emblems to Open End of the World", "Lucky Emblems to Open Final Rest Door", "Lucky Emblems in Pool"]
         initial_lucky_emblem_settings = [self.options.required_lucky_emblems_eotw.value, self.options.required_lucky_emblems_door.value, self.options.lucky_emblems_in_pool.value]
         self.change_numbers_of_lucky_emblems_to_consider()
@@ -506,3 +575,33 @@ class KH1World(World):
                 else:
                     self.random.shuffle(keyblade_stats)
         return keyblade_stats
+    
+    def determine_level_checks(self):
+        # Handle if remote_items is off and level_checks > number of stats items
+        total_level_up_items = min(99,
+            self.options.strength_increase.value +\
+            self.options.defense_increase.value +\
+            self.options.hp_increase.value +\
+            self.options.mp_increase.value +\
+            self.options.ap_increase.value +\
+            self.options.accessory_slot_increase.value +\
+            self.options.item_slot_increase.value)
+        if self.options.level_checks.value > total_level_up_items and self.options.remote_items.current_key == "off":
+            logging.info(f"{self.player_name}'s value {self.options.level_checks.value} for level_checks was changed.\n"
+                         f"This value cannot be more than the number of stat items in the pool when \"remote_items\" is \"off\".\n"
+                         f"Set to be equal to number of stat items in pool, {total_level_up_items}.")
+            self.options.level_checks.value = total_level_up_items
+    
+    def get_synthesis_item_name_byte_arrays(self):
+        # Get synth item names to show in synthesis menu
+        synthesis_byte_arrays = []
+        for location in self.multiworld.get_filled_locations(self.player):
+            if location.name != "Final Ansem":
+                location_data = location_table[location.name]
+                if location_data.type == "Synth":
+                    item_name = re.sub('[^A-Za-z0-9 ]+', '',str(location.item.name.replace("Progressive", "Prog")))[:14]
+                    byte_array = []
+                    for character in item_name:
+                        byte_array.append(CHAR_TO_KH[character])
+                    synthesis_byte_arrays.append(byte_array)
+        return synthesis_byte_arrays
