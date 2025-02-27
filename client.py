@@ -128,14 +128,21 @@ level_address = get_symbol('InPassageLevelID')
 room_address = get_symbol('CurrentRoomId')
 collected_items_address = get_symbol('CollectedItems')
 
+BOSS_LEVEL = 4
+
 PASSAGE_SELECT_STATE = (1, 2)
 LEVEL_SELECT_STATE = (1, 0x30)
 WARIO_GAMEPLAY_STATE = (2, 2)
 LEVEL_EJECTION_STATES = tuple((1, seq) for seq in range(0x16, 0x19))
 END_OF_GAME_STATES = tuple((0, seq) for seq in range(0x1A, 0x20))
 
-
+LOCAL_ITEMS = 0b001
 CREATE_HINT_ONLY_NEW = 2
+
+TRACKER_ROOM_NONE = (1 << 24) - 1
+
+MULTIWORLD_IDLE = 0
+MULTIWORLD_ITEM_QUEUED = 1
 
 
 class DeathLinkCtx:
@@ -173,7 +180,7 @@ class WL4Client(BizHawkClient):
         self.local_checked_locations = []
         self.local_hinted_locations = set()
         self.local_set_events = {}
-        self.local_room = (1 << 24) - 1
+        self.local_room = TRACKER_ROOM_NONE
         self.rom_slot_name = None
         self.death_link = DeathLinkCtx()
 
@@ -214,7 +221,7 @@ class WL4Client(BizHawkClient):
             return False
 
         client_ctx.game = self.game
-        client_ctx.items_handling = 0b001
+        client_ctx.items_handling = LOCAL_ITEMS
         client_ctx.want_slot_data = True
         try:
             client_ctx.seed_name = seed_name_bytes.decode('utf-8')
@@ -309,7 +316,7 @@ class WL4Client(BizHawkClient):
 
         if collection_result is not None:
             passage, level, collection = map(get_int, collection_result)
-            if level < 4:
+            if level < BOSS_LEVEL:
                 locations.update(self.get_collected_locations(client_ctx, passage, level, collection))
 
         if self.local_checked_locations != locations:
@@ -390,15 +397,15 @@ class WL4Client(BizHawkClient):
                 return
 
             passage, level, room = map(get_int, read_result)
+            current_room = passage << 16 | level << 8 | room
         else:
-            passage = level = room = 0xFF
+            current_room = TRACKER_ROOM_NONE
 
-        current_room = passage << 16 | level << 8 | room
         if self.local_room != current_room and client_ctx.slot is not None:
             await client_ctx.send_msgs([{
                 'cmd': 'Set',
                 'key': f'wl4_room_{client_ctx.team}_{client_ctx.slot}',
-                'default': 0,
+                'default': TRACKER_ROOM_NONE,
                 'want_reply': False,
                 'operations': [{'operation': 'replace', 'value': current_room}]
             }])
@@ -414,7 +421,7 @@ class WL4Client(BizHawkClient):
         try:
             read_result = await bizhawk.guarded_read(
                 bizhawk_ctx,
-                [read32(level_status_address + 4 * (6 * Passage.GOLDEN + 4))],
+                [read32(level_status_address + 4 * (6 * Passage.GOLDEN + BOSS_LEVEL))],
                 self.guard_game_state(gameplay_state)
             )
         except bizhawk.RequestFailedError:
@@ -510,11 +517,11 @@ class WL4Client(BizHawkClient):
                 [
                     write8(incoming_item_address, next_item_id),
                     write(item_sender_address, next_item_sender),
-                    write8(multiworld_state_address, 1),
+                    write8(multiworld_state_address, MULTIWORLD_ITEM_QUEUED),
                 ],
                 [
                     *self.guard_game_state(gameplay_state),
-                    guard8(multiworld_state_address, 0)
+                    guard8(multiworld_state_address, MULTIWORLD_IDLE)
                 ]
             )
         except bizhawk.RequestFailedError:
