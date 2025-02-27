@@ -13,7 +13,7 @@ class ItemRemoval:
 
     def should_remove_item(self, chosen_item: str, material: int, min_material: float,
                           max_material: float, items: List[Item], progression_items_list: List[str],
-                          locked_items: Dict[str, int]) -> bool:
+                          locked_items: Dict[str, int], user_location_count: int) -> bool:
         """Determine if an item should be removed from the pool based on various rules."""
         # Check queen upgrade rules
         if chosen_item == "Progressive Major To Queen":
@@ -35,6 +35,11 @@ class ItemRemoval:
         if not self._is_minimal_accessibility():
             if self._violates_chessmen_requirements(chosen_item, max_material, total_material, items, locked_items):
                 return True
+
+        # Check material requirements when few locations remain under a large material deficit
+        if self._violates_material_requirements(
+                chosen_item, min_material, total_material, items, locked_items, user_location_count):
+            return True
 
         return False
 
@@ -92,6 +97,22 @@ class ItemRemoval:
                 item_table["Progressive Pawn"].material * necessary_chessmen)
             return minimum_possible_material > max_material
 
+        return False
+
+    def _violates_material_requirements(self, chosen_item: str, min_material: float, total_material: float,
+                                        items: List[Item], locked_items: Dict[str, int],
+                                        user_location_count: int) -> bool:
+        """Check if adding this item would violate material requirements."""
+        # TODO(chesslogic): In games with many pawns, check that we have enough locations for high-value items
+        # Imagine the player added 40 pawns for 80 locations, but needed 100 material. If we added another 40 pawns,
+        # we could never reach the goal. So, we need to check if we have enough locations that we can add some sort of
+        # high-value item, while respecting piece limits. For example, if the player has 1 army with 1 major piece and
+        # major piece limit of 1, and perhaps a queen limit of 1, we would have to add only bishops to reach the
+        # min_material. That would mean among those 40 locations we need to add 10 bishops and 30 pawns, which also
+        # results in having no Useful or Filler items. For the benefit of the player, I would prefer to reserve another
+        # 5 locations (or fewer, if the player sets an AI reduction limit) for Useful items. Also, keep in mind
+        # that a few of the locations are locked with progression items like Victory and Super-Size Me, but that might
+        # be accounted for by the items list.
         return False
 
     def _is_minimal_accessibility(self) -> bool:

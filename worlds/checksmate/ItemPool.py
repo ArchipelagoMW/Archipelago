@@ -291,7 +291,7 @@ class CMItemPool:
             
             # Check if we should remove this item from consideration (limits, material, accessibility)
             if self.should_remove_item(chosen_item, material, min_material, max_material,
-                                     items, my_progression_items, locked_items):
+                                     items, my_progression_items, locked_items, user_location_count):
                 my_progression_items.remove(chosen_item)
                 continue
             
@@ -447,11 +447,11 @@ class CMItemPool:
 
     def should_remove_item(self, chosen_item: str, material: int, min_material: float,
                          max_material: float, items: List[Item], my_progression_items: List[str],
-                         locked_items: Dict[str, int]) -> bool:
+                         locked_items: Dict[str, int], user_location_count: int) -> bool:
         """Delegate item removal decision to ItemRemovalRules."""
         return self.removal_rules.should_remove_item(
             chosen_item, material, min_material, max_material,
-            items, my_progression_items, locked_items)
+            items, my_progression_items, locked_items, user_location_count)
 
     def chessmen_count(self, items: List[CMItem], pocket_limit: int) -> int:
         """Count the number of chessmen in the item pool."""
