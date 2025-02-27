@@ -68,9 +68,9 @@ class EnableDuds(Toggle):
 
 class DudCount(Range):
     """
-    How many "Dud" checks to include in the pool. This setting is ignored if "Enable Duds" is not included
+    How many "Dud" items to include in the pool. This setting is ignored if "Enable Duds" is not included
     """
-    display_name = "Dud Check Count"
+    display_name = "Dud Item Count"
     range_start = 0
     range_end = 30
     default = 10
@@ -78,7 +78,7 @@ class DudCount(Range):
 
 class EnableCarePacks(Toggle):
     """
-    Whether or not to include useful "Care Pack" checks that allow you to trade over specific items.
+    Whether or not to include useful "Care Pack" items that allow you to trade over specific items.
     Note: Requires your account NOT to be an Ironman. Also, requires access to another account to trade over the items,
     or gold to purchase off of the grand exchange.
     """
