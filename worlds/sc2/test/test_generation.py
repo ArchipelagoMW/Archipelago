@@ -7,7 +7,7 @@ from .test_base import Sc2SetupTestBase
 from .. import mission_groups, mission_tables, options, locations, SC2Mission, SC2Campaign, SC2Race
 from ..item import item_groups, item_tables, item_names
 from .. import get_all_missions, get_random_first_mission
-from ..options import EnabledCampaigns
+from ..options import EnabledCampaigns, NovaGhostOfAChanceVariant, MissionOrder
 
 
 class TestItemFiltering(Sc2SetupTestBase):
@@ -917,7 +917,8 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_ghost_of_a_chance_generates_without_nco(self) -> None:
         world_options = {
-            'mission_order': 'custom',
+            'mission_order': MissionOrder.option_custom,
+            'nova_ghost_of_a_chance_variant': NovaGhostOfAChanceVariant.option_auto,
             'custom_mission_order': {
                 'test': {
                     'type': 'column',
@@ -935,9 +936,31 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertNotIn(item_names.NOVA_C20A_CANISTER_RIFLE, itempool)
         self.assertNotIn(item_names.NOVA_DOMINATION, itempool)
 
+    def test_ghost_of_a_chance_generates_using_nco_nova(self) -> None:
+        world_options = {
+            'mission_order': MissionOrder.option_custom,
+            'nova_ghost_of_a_chance_variant': NovaGhostOfAChanceVariant.option_nco,
+            'custom_mission_order': {
+                'test': {
+                    'type': 'column',
+                    'size': 2, # Give the generator some space to place the key
+                    'mission_pool': [
+                        SC2Mission.LIBERATION_DAY.mission_name, # Starter mission
+                        SC2Mission.GHOST_OF_A_CHANCE.mission_name,
+                    ]
+                }
+            }
+        }
+
+        self.generate_world(world_options)
+        itempool = [item.name for item in self.multiworld.itempool]
+
+        self.assertGreater(len({item_names.NOVA_C20A_CANISTER_RIFLE, item_names.NOVA_DOMINATION}.intersection(itempool)), 0)
+
     def test_ghost_of_a_chance_generates_with_nco(self) -> None:
         world_options = {
-            'mission_order': 'custom',
+            'mission_order': MissionOrder.option_custom,
+            'nova_ghost_of_a_chance_variant': NovaGhostOfAChanceVariant.option_auto,
             'custom_mission_order': {
                 'test': {
                     'type': 'column',

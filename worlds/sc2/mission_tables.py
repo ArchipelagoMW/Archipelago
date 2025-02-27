@@ -43,6 +43,7 @@ class MissionFlag(IntFlag):
     VsProtoss     = auto()
     HasRaceSwap   = auto()  # The mission has variants that use different factions from the vanilla experience.
     RaceSwap      = auto()  # The mission uses different factions from the vanilla experience.
+    WoLNova       = auto()  # The player controls WoL Nova in the mission
 
     AiAlly        = AiTerranAlly|AiZergAlly|AiProtossAlly
     TimedDefense  = AutoScroller|Defense
@@ -121,7 +122,7 @@ class SC2Mission(Enum):
     DEVILS_PLAYGROUND = 13, "Devil's Playground (Terran)", SC2Campaign.WOL, "Covert", SC2Race.TERRAN, MissionPools.EASY, "ap_devils_playground", MissionFlag.Terran|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
     WELCOME_TO_THE_JUNGLE = 14, "Welcome to the Jungle (Terran)", SC2Campaign.WOL, "Covert", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_welcome_to_the_jungle", MissionFlag.Terran|MissionFlag.VsProtoss|MissionFlag.HasRaceSwap
     BREAKOUT = 15, "Breakout", SC2Campaign.WOL, "Covert", SC2Race.ANY, MissionPools.STARTER, "ap_breakout", MissionFlag.Terran|MissionFlag.NoBuild|MissionFlag.VsTerran
-    GHOST_OF_A_CHANCE = 16, "Ghost of a Chance", SC2Campaign.WOL, "Covert", SC2Race.ANY, MissionPools.STARTER, "ap_ghost_of_a_chance", MissionFlag.Terran|MissionFlag.NoBuild|MissionFlag.VsTerran
+    GHOST_OF_A_CHANCE = 16, "Ghost of a Chance", SC2Campaign.WOL, "Covert", SC2Race.ANY, MissionPools.STARTER, "ap_ghost_of_a_chance", MissionFlag.Terran|MissionFlag.NoBuild|MissionFlag.VsTerran|MissionFlag.WoLNova
     THE_GREAT_TRAIN_ROBBERY = 17, "The Great Train Robbery (Terran)", SC2Campaign.WOL, "Rebellion", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_the_great_train_robbery", MissionFlag.Terran|MissionFlag.AutoScroller|MissionFlag.VsTerran|MissionFlag.HasRaceSwap
     CUTTHROAT = 18, "Cutthroat (Terran)", SC2Campaign.WOL, "Rebellion", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_cutthroat", MissionFlag.Terran|MissionFlag.Countdown|MissionFlag.VsTerran|MissionFlag.HasRaceSwap
     ENGINE_OF_DESTRUCTION = 19, "Engine of Destruction (Terran)", SC2Campaign.WOL, "Rebellion", SC2Race.TERRAN, MissionPools.HARD, "ap_engine_of_destruction", MissionFlag.Terran|MissionFlag.AutoScroller|MissionFlag.VsTerran|MissionFlag.HasRaceSwap

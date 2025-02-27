@@ -641,7 +641,8 @@ class SC2Context(CommonContext):
         self.maximum_supply_reduction_per_item: int = options.MaximumSupplyReductionPerItem.default
         self.lowest_maximum_supply: int = options.LowestMaximumSupply.default
         self.research_cost_reduction_per_item: int = options.ResearchCostReductionPerItem.default
-        self.use_nova_fallback = False
+        self.use_nova_wol_fallback = False
+        self.use_nova_nco_fallback = False
         self.kerrigan_levels_per_mission_completed = 0
         self.trade_enabled: int = EnableVoidTrade.default
         self.trade_age_limit: int = VoidTradeAgeLimit.default
@@ -841,13 +842,11 @@ class SC2Context(CommonContext):
             self.maximum_supply_reduction_per_item = args["slot_data"].get("maximum_supply_reduction_per_item", options.MaximumSupplyReductionPerItem.default)
             self.lowest_maximum_supply = args["slot_data"].get("lowest_maximum_supply", options.LowestMaximumSupply.default)
             self.research_cost_reduction_per_item = args["slot_data"].get("research_cost_reduction_per_item", options.ResearchCostReductionPerItem.default)
+            self.use_nova_wol_fallback = args["slot_data"].get("use_nova_wol_fallback", True)
             if self.slot_data_version < 4:
-                self.use_nova_fallback = (
-                    args["slot_data"].get("enable_wol_missions", True)
-                    or args["slot_data"].get("nova_covert_ops_only", False)
-                )
+                self.use_nova_nco_fallback = args["slot_data"].get("nova_covert_ops_only", False) and self.mission_order == MissionOrder.option_vanilla
             else:
-                self.use_nova_fallback = args["slot_data"].get("use_nova_fallback", args["slot_data"].get("nova_covert_ops_only", False))
+                self.use_nova_nco_fallback = args["slot_data"].get("use_nova_nco_fallback", False)
             self.trade_enabled = args["slot_data"].get("enable_void_trade", EnableVoidTrade.option_false)
             self.trade_age_limit = args["slot_data"].get("void_trade_age_limit", VoidTradeAgeLimit.default)
             self.difficulty_damage_modifier = args["slot_data"].get("difficulty_damage_modifier", DifficultyDamageModifier.option_true)
@@ -1649,6 +1648,14 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             soa_options = caclulate_soa_options(self.ctx)
             generic_upgrade_options = calculate_generic_upgrade_options(self.ctx)
             mission_variant = get_mission_variant(self.mission_id)  # 0/1/2/3 for unchanged/Terran/Zerg/Protoss
+            mission = lookup_id_to_mission[self.mission_id]
+            nova_fallback: bool
+            if MissionFlag.Nova in mission.flags:
+                nova_fallback = self.ctx.use_nova_nco_fallback
+            elif MissionFlag.WoLNova in mission.flags:
+                nova_fallback = self.ctx.use_nova_wol_fallback
+            else:
+                nova_fallback = False
             uncollected_objectives: typing.List[int] = self.get_uncollected_objectives()
             if self.ctx.difficulty_override >= 0:
                 difficulty = calc_difficulty(self.ctx.difficulty_override)
@@ -1671,7 +1678,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 f" {self.ctx.take_over_ai_allies}"
                 f" {soa_options}"
                 f" {self.ctx.mission_order}"
-                f" {int(self.ctx.use_nova_fallback)}"
+                f" {int(nova_fallback)}"
                 f" {self.ctx.grant_story_levels}"
                 f" {self.ctx.enable_morphling}"
                 f" {mission_variant}"

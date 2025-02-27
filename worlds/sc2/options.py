@@ -796,7 +796,7 @@ class GrantStoryLevels(Choice):
     The Infinite Cycle: 70
     The bonus levels only apply during the listed missions, and can exceed the Total Level Cap.
 
-    If disabled, either of these missions is included, and there are not enough levels in the world, generation may fail.  
+    If disabled, either of these missions is included, and there are not enough levels in the world, generation may fail.
     To prevent this, either increase the amount of levels in the world, or enable this option.
 
     If disabled and Required Tactics is set to no logic, this option is forced to Minimum.
@@ -836,6 +836,29 @@ class NovaMaxGadgets(Range):
     range_start = 0
     range_end = len(nova_gadgets)
     default = range_end
+
+class NovaGhostOfAChanceVariant(Choice):
+    """
+    Determines which variant of Nova should be used in Ghost of a Chance mission.
+
+    WoL: Uses Nova from Wings of Liberty campaign (vanilla)
+    NCO: Uses Nova from Nova Covert Ops campaign
+    Auto: Uses NCO if a mission from Nova Covert Ops is actually shuffled, if not uses WoL
+    """
+    display_name = "Nova Ghost of Chance Variant"
+    option_wol = 0
+    option_nco = 1
+    option_auto = 2
+    default = option_wol
+
+    # Fix case
+    @classmethod
+    def get_option_name(cls, value: int) -> str:
+        if value == NovaGhostOfAChanceVariant.option_wol:
+            return "WoL"
+        elif value == NovaGhostOfAChanceVariant.option_nco:
+            return "NCO"
+        return super().get_option_name(value)
 
 
 class TakeOverAIAllies(Toggle):
@@ -1126,7 +1149,7 @@ class MissionOrderScouting(Choice):
     By default, this option is deactivated.
 
     None: Never provide information
-    Completed: Only for missions that were completed 
+    Completed: Only for missions that were completed
     Available: Only for missions that are available to play
     Layout: Only for missions that are in an accessible layout (e.g. Char, Mar Sara, etc.)
     Campaign: Only for missions that are in an accessible campaign (e.g. WoL, HotS, etc.)
@@ -1364,6 +1387,7 @@ class Starcraft2Options(PerGameCommonOptions):
     grant_story_levels: GrantStoryLevels
     nova_max_weapons: NovaMaxWeapons
     nova_max_gadgets: NovaMaxGadgets
+    nova_ghost_of_a_chance_variant: NovaGhostOfAChanceVariant
     take_over_ai_allies: TakeOverAIAllies
     locked_items: LockedItems
     excluded_items: ExcludedItems
@@ -1453,6 +1477,7 @@ option_groups = [
     OptionGroup("Nova", [
         NovaMaxWeapons,
         NovaMaxGadgets,
+        NovaGhostOfAChanceVariant,
     ]),
     OptionGroup("Race Specific Options", [
         EnableMorphling,
