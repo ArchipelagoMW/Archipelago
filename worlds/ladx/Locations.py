@@ -59,32 +59,26 @@ def get_location_name_groups() -> typing.Dict[str, typing.Set[str]]:
 
 links_awakening_location_name_groups = get_location_name_groups()
 
-def get_locations_to_id():
-    ret = {
 
-    }
+# Magic to generate unique ids
+links_awakening_location_meta_to_id = {}
+links_awakening_location_name_to_id = {}
+for meta_id, metadata in checkMetadataTable.items():
+    if meta_id == "None":
+        continue
+    splits = meta_id.split("-")
 
-    # Magic to generate unique ids
-    for s, v in checkMetadataTable.items():
-        if s == "None":
-            continue
-        splits = s.split("-")
-
-        main_id = int(splits[0], 16)
-        sub_id = 0
-        if len(splits) > 1:
-            sub_id = splits[1]
-            if sub_id.isnumeric():
-                sub_id = (int(sub_id) + 1) * 1000
-            else:
-                sub_id = 1000
-        name = f"{v.name} ({v.area})"
-        ret[name] = BASE_ID + main_id + sub_id
-
-    return ret
-
-
-locations_to_id = get_locations_to_id()
+    main_id = int(splits[0], 16)
+    sub_id = 0
+    if len(splits) > 1:
+        sub_id = splits[1]
+        if sub_id.isnumeric():
+            sub_id = (int(sub_id) + 1) * 1000
+        else:
+            sub_id = 1000
+    id = BASE_ID + main_id + sub_id
+    links_awakening_location_meta_to_id[meta_id] = id
+    links_awakening_location_name_to_id[meta_to_name(metadata)] = id
 
 
 class LinksAwakeningLocation(Location):
@@ -98,7 +92,7 @@ class LinksAwakeningLocation(Location):
         if ladxr_item.event is not None:
             name = ladxr_item.event
         else:
-            address = locations_to_id[name]
+            address = links_awakening_location_name_to_id[name]
         super().__init__(player, name, address)
         self.parent_region = region
         self.ladxr_item = ladxr_item
