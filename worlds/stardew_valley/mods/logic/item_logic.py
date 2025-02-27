@@ -1,7 +1,6 @@
 from typing import Dict, Union
 
 from ..mod_data import ModNames
-from ... import options
 from ...logic.base_logic import BaseLogicMixin, BaseLogic
 from ...logic.combat_logic import CombatLogicMixin
 from ...logic.cooking_logic import CookingLogicMixin
@@ -80,7 +79,7 @@ FarmingLogicMixin]]):
             # Gingerbread House
         }
 
-        if self.options.tool_progression & options.ToolProgression.option_progressive:
+        if self.content.features.tool_progression.is_progressive:
             options_to_update.update({
                 Ore.iridium: items[Ore.iridium] | self.logic.tool.can_use_tool_at(Tool.axe, ToolMaterial.iridium, DeepWoodsRegion.floor_50),  # Iridium Tree
             })

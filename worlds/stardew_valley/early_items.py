@@ -32,7 +32,7 @@ def setup_early_items(multiworld, options: stardew_options.StardewValleyOptions,
     if options.backpack_progression == stardew_options.BackpackProgression.option_early_progressive:
         early_forced.append("Progressive Backpack")
 
-    if options.tool_progression & stardew_options.ToolProgression.option_progressive:
+    if content.features.tool_progression.is_progressive:
         if content.features.fishsanity.is_enabled:
             early_candidates.append("Progressive Fishing Rod")
         early_forced.append("Progressive Pickaxe")
