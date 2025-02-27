@@ -222,17 +222,17 @@ class OpenRCT2World(World):
                 pass
             elif count == 1:  # 3 total items, we want 2 to be rides
                 num_rides = 2
-            elif count == 2:  # 7 total items, we want 4 rides and a food stall
+            elif count == 2:  # 7 total items, we want 4 rides
                 num_rides = 4
-                add_rule(region_entrance, lambda state: state.has("Food Stall", self.player))
-            elif count == 3:  # 15 total items, we want 10 rides and now a drink stall
+            elif count == 3:  # 15 total items, we want 10 rides
                 num_rides = 10
-                add_rule(region_entrance, lambda state: state.has("Drink Stall", self.player, 1))
             elif count == 4:  # 23 total items, we want 15 rides and now toilets
                 num_rides = 15
-                add_rule(region_entrance, lambda state: state.has("Toilets", self.player, 1))
-            elif count == 5:  # 31 total items, we want 18 rides and some rules if applicable
+            elif count == 5:  # 31 total items, we want 18 rides, food, drinks, toilets, and some rules if applicable
                 num_rides = 18
+                add_rule(region_entrance, lambda state: state.has("Toilets", self.player, 1))
+                add_rule(region_entrance, lambda state: state.has("Drink Stall", self.player, 1))
+                add_rule(region_entrance, lambda state: state.has("Food Stall", self.player))
                 if self.rules[2] == 1:  # If high construction can be disabled
                     add_rule(region_entrance, lambda state: state.has("Allow High Construction", self.player, 1))
                 if self.rules[3] == 1:  # landscape
@@ -307,6 +307,10 @@ class OpenRCT2World(World):
                 #                                  self.player).entrances)
                 # print("Added rule: \nHave: " + str(
                 #     category) + "\nLocation: " + get_previous_region_from_OpenRCT2_location(location_number))
+            # print("Here's the rule!")
+            # print("Rule Type: " + str(rule_type))
+            # print("Selected Item: " + str(selected_item))
+            # print("Location Number: " + str(location_number))
 
         length_modifier = 0
         difficulty_modifier = 0
@@ -524,7 +528,10 @@ class OpenRCT2World(World):
         slot_data["objectives"] = objectives
         slot_data["rules"] = self.rules
         slot_data["seed"] = seed
+        # print("Here's the seed!" + str(seed))
         slot_data["location_prices"] = self.location_prices
+        # print("Here's all the rules!")
+        # print(self.multiworld.rules)
         return slot_data
 
     def create_item(self, item: str) -> OpenRCT2Item:
