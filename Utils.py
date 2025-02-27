@@ -1101,14 +1101,14 @@ def build_sphinx_docs(stable: bool = False) -> None:
                 end = line.find(")", start)
                 link = line[start:end]
                 # probably an external link
-                if "https://" in link and "ArchipelagoMW" not in link:
-                    pass
+                if "https://" in link:
+                    continue
                 # direct link to a module
-                elif ".py" in link and "https://" not in link:
+                if ".py" in link:
                     link = link.split("/")[-1].split(".py")[0].lower()
                 # don't handle images since those should still work if done correctly
                 elif "img" in link:
-                    pass
+                    continue
                 # should just be other direct doc links
                 else:
                     link = link.split("/")[-1].split(".")[0].lower().replace(" ", "%20")
