@@ -76,7 +76,7 @@ to locate your Luigi's Mansion ISO
 ### Connect to the client
 
 When the client launched automatically, the Luigi's Mansion client (LMClient) should have also automatically launched in
-the background. If this is its first time launching, you may be prompted to allow it to communicate through the Windows Firewall.
+the background. If this is its first time launching, you may be prompted to allow it to communicate through the Windows Firewall. You must reopen the client each time you connect to a different randomized ISO.
 
 1. Open Dolphin and from Dolphin, open your newly patched Luigi's Mansion ISO
 2. In the server page, there will be a port number. Copy this port number into the top of your LMClient. 
