@@ -522,6 +522,7 @@ class OpenRCT2World(World):
         # from Utils import visualize_regions
         # visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml")
         # print("Here's the final unlock shop:")
+        # print(self.location_prices)
         slot_data = self.options.as_dict("difficulty", "scenario_length", "scenario", "death_link", "randomization_range",
         "stat_rerolls", "randomize_park_values", "ignore_ride_stat_changes", "visibility", "preferred_intensity", 
         "all_rides_and_scenery_base", "all_rides_and_scenery_expansion")
