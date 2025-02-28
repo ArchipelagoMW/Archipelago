@@ -66,7 +66,8 @@ class Goal(Choice):
 
 
 class FarmType(Choice):
-    """What farm to play on?"""
+    """What farm to play on?
+    Custom farms are not supported"""
     internal_name = "farm_type"
     display_name = "Farm Type"
     default = "random"
@@ -203,7 +204,7 @@ class SeasonRandomization(Choice):
 
 
 class Cropsanity(Choice):
-    """Formerly named "Seed Shuffle"
+    """
     Pierre now sells a random amount of seasonal seeds and Joja sells them without season requirements, but only in huge packs.
     Disabled: All the seeds are unlocked from the start, there are no location checks for growing and harvesting crops
     Enabled: Seeds are unlocked as archipelago items, for each seed there is a location check for growing and harvesting that crop
@@ -233,9 +234,9 @@ class BackpackProgression(Choice):
 class ToolProgression(Choice):
     """Shuffle the tool upgrades?
     Vanilla: Clint will upgrade your tools with metal bars.
-    Progressive: You will randomly find Progressive Tool upgrades.
-    Cheap: Tool Upgrades will cost 2/5th as much
-    Very Cheap: Tool Upgrades will cost 1/5th as much"""
+    Progressive: Your tools upgrades are randomized.
+    Cheap: Tool Upgrades have a 60% discount
+    Very Cheap: Tool Upgrades have an 80% discount"""
     internal_name = "tool_progression"
     display_name = "Tool Progression"
     default = 1
@@ -279,8 +280,8 @@ class BuildingProgression(Choice):
     Vanilla: You can buy each building normally.
     Progressive: You will receive the buildings and will be able to build the first one of each type for free,
         once it is received. If you want more of the same building, it will cost the vanilla price.
-    Cheap: Buildings will cost half as much
-    Very Cheap: Buildings will cost 1/5th as much
+    Cheap: Buildings will have a 50% discount
+    Very Cheap: Buildings will an 80% discount
     """
     internal_name = "building_progression"
     display_name = "Building Progression"
@@ -327,7 +328,7 @@ class ArcadeMachineLocations(Choice):
 
 class SpecialOrderLocations(Choice):
     """Shuffle Special Orders?
-    Disabled: The special orders are not included in the Archipelago shuffling.
+    Vanilla: The special orders are not included in the Archipelago shuffling. You may need to complete some of them anyway for their vanilla rewards
     Board Only: The Special Orders on the board in town are location checks
     Board and Qi: The Special Orders from Mr Qi's walnut room are checks, in addition to the board in town
     Short: All Special Order requirements are reduced by 40%
@@ -377,12 +378,12 @@ class QuestLocations(NamedRange):
 
 
 class Fishsanity(Choice):
-    """Locations for catching a fish the first time?
+    """Locations for catching each fish the first time?
     None: There are no locations for catching fish
     Legendaries: Each of the 5 legendary fish are checks, plus the extended family if qi board is turned on
     Special: A curated selection of strong fish are checks
     Randomized: A random selection of fish are checks
-    All: Every single fish in the game is a location that contains an item. Pairs well with the Master Angler Goal
+    All: Every single fish in the game is a location that contains an item.
     Exclude Legendaries: Every fish except legendaries
     Exclude Hard Fish: Every fish under difficulty 80
     Only Easy Fish: Every fish under difficulty 50
@@ -517,7 +518,7 @@ class Chefsanity(NamedRange):
 class Craftsanity(Choice):
     """Checks for crafting items?
     If enabled, all recipes purchased in shops will be checks as well.
-    Recipes obtained from other sources will depend on related archipelago settings
+    Recipes obtained from other sources will depend on their respective archipelago settings
     """
     internal_name = "craftsanity"
     display_name = "Craftsanity"
@@ -530,9 +531,9 @@ class Friendsanity(Choice):
     """Shuffle Friendships?
     None: Friendship hearts are earned normally
     Bachelors: Hearts with bachelors are shuffled
-    Starting NPCs: Hearts for NPCs available immediately are checks
-    All: Hearts for all npcs are checks, including Leo, Kent, Sandy, etc
-    All With Marriage: Hearts for all npcs are checks, including romance hearts up to 14 when applicable
+    Starting NPCs: Hearts for NPCs available immediately are shuffled
+    All: Hearts for all npcs are shuffled, including Leo, Kent, Sandy, etc
+    All With Marriage: All hearts for all npcs are shuffled, including romance hearts up to 14 when applicable
     """
     internal_name = "friendsanity"
     display_name = "Friendsanity"
@@ -577,7 +578,7 @@ class Walnutsanity(OptionSet):
     """Shuffle walnuts?
     Puzzles: Walnuts obtained from solving a special puzzle or winning a minigame
     Bushes: Walnuts that are in a bush and can be collected by clicking it
-    Dig spots: Walnuts that are underground and must be digged up. Includes Journal scrap walnuts
+    Dig Spots: Walnuts that are underground and must be digged up. Includes Journal scrap walnuts
     Repeatables: Random chance walnuts from normal actions (fishing, farming, combat, etc)
     """
     internal_name = "walnutsanity"
@@ -612,7 +613,7 @@ class NumberOfMovementBuffs(Range):
 
 class EnabledFillerBuffs(OptionSet):
     """Enable various permanent player buffs to roll as filler items
-    Luck: Increase daily luck
+    Luck: Increased daily luck
     Damage: Increased Damage %
     Defense: Increased Defense
     Immunity: Increased Immunity
@@ -637,7 +638,7 @@ class EnabledFillerBuffs(OptionSet):
 class ExcludeGingerIsland(Toggle):
     """Exclude Ginger Island?
     This option will forcefully exclude everything related to Ginger Island from the slot.
-    If you pick a goal that requires Ginger Island, you cannot exclude it and it will get included anyway"""
+    If you pick a goal that requires Ginger Island, this option will get forced to 'false'"""
     internal_name = "exclude_ginger_island"
     display_name = "Exclude Ginger Island"
     default = 0
