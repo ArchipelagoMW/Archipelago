@@ -1009,6 +1009,8 @@ item_table = {
     item_names.BRAINWASHING:
         ItemData(632 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 23, SC2Race.TERRAN,
                  classification=ItemClassification.progression),
+    item_names.SIGNAL_BEACON:
+        ItemData(633 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 24, SC2Race.TERRAN),
 
     # WoL Protoss takes SC2WOL + 700~708
 
@@ -1674,7 +1676,8 @@ item_table = {
     item_names.CELL_DIVISION: ItemData(710 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 16, SC2Race.ZERG),
     item_names.SELF_SUFFICIENT: ItemData(711 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 17, SC2Race.ZERG),
     item_names.UNRESTRICTED_MUTATION: ItemData(712 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 18, SC2Race.ZERG),
-    item_names.PROGRESSIVE_EVOLUTIONARY_LEAP: ItemData(713 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Progressive, 6, SC2Race.ZERG, quantity=2),
+    # setup as progressive, level 2 currently disabled
+    item_names.PROGRESSIVE_EVOLUTIONARY_LEAP: ItemData(713 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Progressive, 6, SC2Race.ZERG, quantity=1), 
 
     # Morphs
     item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT: ItemData(800 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 6, SC2Race.ZERG, classification=ItemClassification.progression, parent=parent_names.MORPH_SOURCE_AIR),
