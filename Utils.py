@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import concurrent.futures
 import json
+import random
 import typing
 import builtins
 import os
@@ -1063,7 +1064,7 @@ def visualize_regions(root_region: Region, file_name: str, *,
                       show_entrance_names: bool = False, show_locations: bool = True, show_other_regions: bool = True,
                       linetype_ortho: bool = True, regions_to_highlight: set[Region] | None = None,
                       entrance_highlighting: dict[int, int] | None = None,
-                      detail_other_regions: bool = False) -> None:
+                      detail_other_regions: bool = False, auto_assign_colors: bool = False) -> None:
     """Visualize the layout of a world as a PlantUML diagram.
 
     :param root_region: The region from which to start the diagram from. (Usually the "Menu" region of your world.)
@@ -1084,6 +1085,9 @@ def visualize_regions(root_region: Region, file_name: str, *,
         your entrances
     :param detail_other_regions: (default False) If enabled, will fully visualize regions that aren't reachable
         from root_region.
+    :param auto_assign_colors: (default False) If enabled, will automatically assign random colors to entrances of the
+        same randomization group. Uses entrance_highlighting first, and only picks random colors for entrance groups
+        not found in the passed-in map
 
     Example usage in World code:
     from Utils import visualize_regions
@@ -1109,6 +1113,27 @@ def visualize_regions(root_region: Region, file_name: str, *,
     regions: typing.Deque[Region] = deque((root_region,))
     multiworld: MultiWorld = root_region.multiworld
 
+    colors_used: set[int] = set([0])
+    if not entrance_highlighting:
+        entrance_highlighting = {}
+    else:
+        for color in entrance_highlighting.values():
+            # filter the colors to their most-significant bits to avoid too similar colors
+            colors_used.add(color & 0xF0F0F0)
+
+    def select_color(group: int) -> int:
+        new_color: int = 0
+        while new_color in colors_used:
+            # while this is technically unbounded, expected collisions are low. There are 4095 possible colors
+            # and worlds are unlikely to get to anywhere close to that many entrance groups
+            # intentionally not using multiworld.random to not affect output when debugging with this tool
+            new_color_index: int = random.randint(1, 0xFFF)
+            new_color = ((new_color_index & 0xF00) << 12) + \
+                        ((new_color_index & 0xF0) << 8) + \
+                        ((new_color_index & 0xF) << 4)
+        entrance_highlighting[group] = new_color
+        return new_color
+
     def fmt(obj: Union[Entrance, Item, Location, Region]) -> str:
         name = obj.name
         if isinstance(obj, Item):
@@ -1128,28 +1153,34 @@ def visualize_regions(root_region: Region, file_name: str, *,
 
     def visualize_exits(region: Region) -> None:
         for exit_ in region.exits:
-            color: str = ""
-            if entrance_highlighting and exit_.randomization_group in entrance_highlighting:
-                color = f" #{entrance_highlighting[exit_.randomization_group]:0>6X}"
+            color_code: str = ""
+            if exit_.randomization_group in entrance_highlighting:
+                color_code = f" #{entrance_highlighting[exit_.randomization_group]:0>6X}"
+            elif auto_assign_colors:
+                new_color = select_color(exit_.randomization_group)
+                color_code = f" #{new_color:0>6X}"
             if exit_.connected_region:
                 if show_entrance_names:
-                    uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\" : \"{fmt(exit_)}\"{color}")
+                    uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\" : \"{fmt(exit_)}\"{color_code}")
                 else:
                     try:
-                        uml.remove(f"\"{fmt(exit_.connected_region)}\" --> \"{fmt(region)}\"{color}")
-                        uml.append(f"\"{fmt(exit_.connected_region)}\" <--> \"{fmt(region)}\"{color}")
+                        uml.remove(f"\"{fmt(exit_.connected_region)}\" --> \"{fmt(region)}\"{color_code}")
+                        uml.append(f"\"{fmt(exit_.connected_region)}\" <--> \"{fmt(region)}\"{color_code}")
                     except ValueError:
-                        uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\"{color}")
+                        uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\"{color_code}")
             else:
-                uml.append(f"circle \"unconnected exit:\\n{fmt(exit_)}\" {color}")
-                uml.append(f"\"{fmt(region)}\" --> \"unconnected exit:\\n{fmt(exit_)}\"{color}")
+                uml.append(f"circle \"unconnected exit:\\n{fmt(exit_)}\" {color_code}")
+                uml.append(f"\"{fmt(region)}\" --> \"unconnected exit:\\n{fmt(exit_)}\"{color_code}")
         for entrance in region.entrances:
-            color: str = ""
-            if entrance_highlighting and entrance.randomization_group in entrance_highlighting:
-                color = f" #{entrance_highlighting[entrance.randomization_group]:0>6X}"
+            color_code: str = ""
+            if entrance.randomization_group in entrance_highlighting:
+                color_code = f" #{entrance_highlighting[entrance.randomization_group]:0>6X}"
+            elif auto_assign_colors:
+                new_color = select_color(entrance.randomization_group)
+                color_code = f" #{new_color:0>6X}"
             if not entrance.parent_region:
-                uml.append(f"circle \"unconnected entrance:\\n{fmt(entrance)}\"{color}")
-                uml.append(f"\"unconnected entrance:\\n{fmt(entrance)}\" --> \"{fmt(region)}\"{color}")
+                uml.append(f"circle \"unconnected entrance:\\n{fmt(entrance)}\"{color_code}")
+                uml.append(f"\"unconnected entrance:\\n{fmt(entrance)}\" --> \"{fmt(region)}\"{color_code}")
 
     def visualize_locations(region: Region) -> None:
         any_lock = any(location.locked for location in region.locations)
