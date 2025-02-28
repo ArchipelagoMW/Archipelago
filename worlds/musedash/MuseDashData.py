@@ -621,4 +621,10 @@ SONG_DATA: Dict[str, SongData] = {
     "Arsonist": SongData(2900745, "82-6", "MSR Anthology_Vol.02", False, 3, 6, 8),
     "Operation Deepness": SongData(2900746, "82-7", "MSR Anthology_Vol.02", False, 2, 4, 6),
     "ALL!!!": SongData(2900747, "82-8", "MSR Anthology_Vol.02", False, 6, 8, 10),
+    "LUNATiC CiRCUiT": SongData(2900748, "83-0", "Cosmic Radio 2024", False, 7, 9, 11),
+    "Synthesis.": SongData(2900749, "83-1", "Cosmic Radio 2024", True, 6, 8, 10),
+    "COSMiC FANFARE!!!!": SongData(2900750, "83-2", "Cosmic Radio 2024", False, 7, 9, 11),
+    "Sharp Bubbles": SongData(2900751, "83-3", "Cosmic Radio 2024", True, 7, 9, 11),
+    "Replay": SongData(2900752, "83-4", "Cosmic Radio 2024", True, 5, 7, 9),
+    "Cosmic Dusty Girl": SongData(2900753, "83-5", "Cosmic Radio 2024", True, 5, 7, 9),
 }
