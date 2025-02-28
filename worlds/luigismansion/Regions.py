@@ -109,8 +109,7 @@ def connect_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "Boneyard", "Graveyard",
             rule=lambda state: Rules.can_fst_water(state, player))
     connect(multiworld, player, "Billiards Room", "Projection Room", "Projection Room Key", 18)
-    connect(multiworld, player, "Fortune-Teller's Room", "Mirror Room", "Mirror Room Key", 5,
-            lambda state: Rules.can_fst_fire(state, player))
+    connect(multiworld, player, "Fortune-Teller's Room", "Mirror Room", "Mirror Room Key", 5)
     connect(multiworld, player, "Laundry Room", "Butler's Room", "Butler's Room Key", 1)
     connect(multiworld, player, "Butler's Room", "Hidden Room")
     connect(multiworld, player, "Courtyard", "The Well")
