@@ -163,8 +163,10 @@ class DeathLinkMode(IntEnum):
 
 class Visibility(IntEnum):
     nothing = 0
-    recipient = 1
-    full = 2
+    progression = 1
+    recipient = 2
+    progression_recipient = 3
+    full = 4
 
 class Difficulty(IntEnum):
     very_easy = 0
@@ -416,14 +418,20 @@ class SelectedVisibility(Choice):
     """Choose how much the unlock shop displays. 
 
     "Nothing" tells you nothing about the item you'll purchase. 
+
+    Progression tells you what class of item (Normal, Progression, Useful Trap) you're sending.
     
     Recipient tells you who will receive the item, but not what they'll receive. 
+
+    Progression Recipient tells you both the class of item and who receives it.
     
     Full tells you what you're buying and who receives it.
     """
     display_name = "Visibility"
     option_nothing = Visibility.nothing.value
+    option_progression = Visibility.progression.value
     option_recipient = Visibility.recipient.value
+    option_progression_recipient = Visibility.progression_recipient.value
     option_full = Visibility.full.value
     default = Visibility.recipient.value
 
