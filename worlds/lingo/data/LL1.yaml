@@ -1966,7 +1966,10 @@
     entrances:
       The Observant:
         warp: True
-      Eight Room: True
+      Eight Room:
+        # It is possible to get to the second floor warpless, but there are no warpless exits from the second floor,
+        # meaning that this connection is essentially always a warp for the purposes of Pilgrimage.
+        warp: True
       Eight Alcove:
         door: Eight Door
       Orange Tower Sixth Floor:

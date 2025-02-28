@@ -267,9 +267,7 @@ class WargrooveContext(CommonContext):
 
             def build(self):
                 container = super().build()
-                panel = TabbedPanelItem(text="Wargroove")
-                panel.content = self.build_tracker()
-                self.tabs.add_widget(panel)
+                self.add_client_tab("Wargroove", self.build_tracker())
                 return container
 
             def build_tracker(self) -> TrackerLayout:

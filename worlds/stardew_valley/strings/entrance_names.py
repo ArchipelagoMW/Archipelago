@@ -94,6 +94,7 @@ class Entrance:
     play_junimo_kart = "Play Junimo Kart"
     reach_junimo_kart_2 = "Reach Junimo Kart 2"
     reach_junimo_kart_3 = "Reach Junimo Kart 3"
+    reach_junimo_kart_4 = "Reach Junimo Kart 4"
     enter_locker_room = "Bathhouse Entrance to Locker Room"
     enter_public_bath = "Locker Room to Public Bath"
     enter_witch_swamp = "Witch Warp Cave to Witch's Swamp"

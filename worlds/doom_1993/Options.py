@@ -16,9 +16,9 @@ class Goal(Choice):
 
 class Difficulty(Choice):
     """
-    Choose the difficulty option. Those match DOOM's difficulty options.
-    baby (I'm too young to die.) double ammos, half damage, less monsters or strength.
-    easy (Hey, not too rough.) less monsters or strength.
+    Choose the game difficulty. These options match DOOM's skill levels.
+    baby (I'm too young to die.) Same as easy, with double ammo pickups and half damage taken.
+    easy (Hey, not too rough.) Less monsters or strength.
     medium (Hurt me plenty.) Default.
     hard (Ultra-Violence.) More monsters or strength.
     nightmare (Nightmare!) Monsters attack more rapidly and respawn.
@@ -29,6 +29,11 @@ class Difficulty(Choice):
     option_medium = 2
     option_hard = 3
     option_nightmare = 4
+    alias_itytd = 0
+    alias_hntr = 1
+    alias_hmp = 2
+    alias_uv = 3
+    alias_nm = 4
     default = 2
 
 
@@ -112,7 +117,7 @@ class StartWithComputerAreaMaps(Toggle):
 class ResetLevelOnDeath(DefaultOnToggle):
     """When dying, levels are reset and monsters respawned. But inventory and checks are kept.
     Turning this setting off is considered easy mode. Good for new players that don't know the levels well."""
-    display_name="Reset Level on Death"
+    display_name = "Reset Level on Death"
 
 
 class Episode1(DefaultOnToggle):

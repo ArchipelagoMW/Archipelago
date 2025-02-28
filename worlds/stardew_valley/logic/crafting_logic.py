@@ -14,9 +14,9 @@ from .special_order_logic import SpecialOrderLogicMixin
 from .. import options
 from ..data.craftable_data import CraftingRecipe, all_crafting_recipes_by_name
 from ..data.recipe_source import CutsceneSource, ShopTradeSource, ArchipelagoSource, LogicSource, SpecialOrderSource, \
-    FestivalShopSource, QuestSource, StarterSource, ShopSource, SkillSource, MasterySource, FriendshipSource
+    FestivalShopSource, QuestSource, StarterSource, ShopSource, SkillSource, MasterySource, FriendshipSource, SkillCraftsanitySource
 from ..locations import locations_by_tag, LocationTags
-from ..options import Craftsanity, SpecialOrderLocations, ExcludeGingerIsland, SkillProgression
+from ..options import Craftsanity, SpecialOrderLocations, ExcludeGingerIsland
 from ..stardew_rule import StardewRule, True_, False_
 from ..strings.region_names import Region
 
@@ -54,8 +54,7 @@ SkillLogicMixin, SpecialOrderLogicMixin, CraftingLogicMixin, QuestLogicMixin]]):
                 return self.logic.crafting.received_recipe(recipe.item)
         if self.options.craftsanity == Craftsanity.option_none:
             return self.logic.crafting.can_learn_recipe(recipe)
-        if isinstance(recipe.source, StarterSource) or isinstance(recipe.source, ShopTradeSource) or isinstance(
-                recipe.source, ShopSource):
+        if isinstance(recipe.source, (StarterSource, ShopTradeSource, ShopSource, SkillCraftsanitySource)):
             return self.logic.crafting.received_recipe(recipe.item)
         if isinstance(recipe.source, SpecialOrderSource) and self.options.special_order_locations & SpecialOrderLocations.option_board:
             return self.logic.crafting.received_recipe(recipe.item)
@@ -71,6 +70,8 @@ SkillLogicMixin, SpecialOrderLogicMixin, CraftingLogicMixin, QuestLogicMixin]]):
             return self.logic.money.can_trade_at(recipe.source.region, recipe.source.currency, recipe.source.price)
         if isinstance(recipe.source, ShopSource):
             return self.logic.money.can_spend_at(recipe.source.region, recipe.source.price)
+        if isinstance(recipe.source, SkillCraftsanitySource):
+            return self.logic.skill.has_level(recipe.source.skill, recipe.source.level) & self.logic.skill.can_earn_level(recipe.source.skill, recipe.source.level)
         if isinstance(recipe.source, SkillSource):
             return self.logic.skill.has_level(recipe.source.skill, recipe.source.level)
         if isinstance(recipe.source, MasterySource):
@@ -100,12 +101,13 @@ SkillLogicMixin, SpecialOrderLogicMixin, CraftingLogicMixin, QuestLogicMixin]]):
         craftsanity_prefix = "Craft "
         all_recipes_names = []
         exclude_island = self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
-        exclude_masteries = self.options.skill_progression != SkillProgression.option_progressive_with_masteries
+        exclude_masteries = not self.content.features.skill_progression.are_masteries_shuffled
         for location in locations_by_tag[LocationTags.CRAFTSANITY]:
             if not location.name.startswith(craftsanity_prefix):
                 continue
             if exclude_island and LocationTags.GINGER_ISLAND in location.tags:
                 continue
+            # FIXME Remove when recipes are in content packs
             if exclude_masteries and LocationTags.REQUIRES_MASTERIES in location.tags:
                 continue
             if location.mod_name and location.mod_name not in self.options.mods:
