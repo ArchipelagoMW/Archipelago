@@ -1062,7 +1062,8 @@ _extend_freeze_support()
 def visualize_regions(root_region: Region, file_name: str, *,
                       show_entrance_names: bool = False, show_locations: bool = True, show_other_regions: bool = True,
                       linetype_ortho: bool = True, regions_to_highlight: set[Region] | None = None,
-                      entrance_highlighting: dict[int, int] | None = None) -> None:
+                      entrance_highlighting: dict[int, int] | None = None,
+                      detail_disconnected_regions: bool = False) -> None:
     """Visualize the layout of a world as a PlantUML diagram.
 
     :param root_region: The region from which to start the diagram from. (Usually the "Menu" region of your world.)
@@ -1081,6 +1082,8 @@ def visualize_regions(root_region: Region, file_name: str, *,
     :param regions_to_highlight: Regions that will be highlighted in green if they are reachable.
     :param entrance_highlighting: a mapping from your world's entrance randomization groups to RGB values, used to color
         your entrances
+    :param detail_disconnected_regions: (default False) If enabled, will fully visualize regions that aren't reachable
+        from root_region.
 
     Example usage in World code:
     from Utils import visualize_regions
@@ -1167,7 +1170,10 @@ def visualize_regions(root_region: Region, file_name: str, *,
         if other_regions := [region for region in multiworld.get_regions(root_region.player) if region not in seen]:
             uml.append("package \"other regions\" <<Cloud>> {")
             for region in other_regions:
-                visualize_region(region)
+                if detail_disconnected_regions:
+                    visualize_region(region)
+                else:
+                    uml.append(f"class \"{fmt(region)}\"")
             uml.append("}")
 
     uml.append("@startuml")
