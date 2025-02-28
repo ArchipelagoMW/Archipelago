@@ -126,15 +126,13 @@ def connect_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "2F Rear Hallway", "Safari Room", "North Safari Room Key", 56)
     connect(multiworld, player, "Astral Hall", "Observatory", "Observatory Key", 40,
             lambda state: Rules.can_fst_fire(state, player))
-    connect(multiworld, player, "Sitting Room", "Guest Room", "Guest Room Key", 30,
-            lambda state: Rules.can_fst_fire(state, player))
+    connect(multiworld, player, "Sitting Room", "Guest Room", "Guest Room Key", 30)
     connect(multiworld, player, "Safari Room", "East Attic Hallway", "East Attic Hallway Key", 55)
     connect(multiworld, player, "East Attic Hallway", "Artist's Studio", "Artist's Studio Key", 63)
     connect(multiworld, player, "East Attic Hallway", "Balcony", "Balcony Key", 62,
             lambda state: state.has_group("Boo", player, multiworld.worlds[player].options.balcony_boo_count)
                           or state.has("Boo", player, multiworld.worlds[player].options.balcony_boo_count))
-    connect(multiworld, player, "Balcony", "West Attic Hallway", "Diamond Key", 59,
-            lambda state: Rules.can_fst_ice(state, player))
+    connect(multiworld, player, "Balcony", "West Attic Hallway", "Diamond Key", 59)
     connect(multiworld, player, "West Attic Hallway", "Armory", "Armory Key", 51)
     connect(multiworld, player, "West Attic Hallway", "Telephone Room", "Telephone Room Key", 52)
     connect(multiworld, player, "Telephone Room", "Clockwork Room", "Clockwork Key", 53)
