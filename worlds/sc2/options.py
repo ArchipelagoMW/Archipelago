@@ -1,3 +1,4 @@
+import functools
 from dataclasses import fields, Field, dataclass
 from typing import *
 from datetime import timedelta
@@ -62,19 +63,13 @@ class Sc2MissionSet(OptionSet):
         return self.value.__len__()
 
 
-class SelectRaces(Choice):
+class SelectRaces(OptionSet):
     """
     Pick which factions' missions and items can be shuffled into the world.
     """
     display_name = "Select Playable Races"
-    option_all = (MissionFlag.Terran|MissionFlag.Zerg|MissionFlag.Protoss).value
-    option_terran = MissionFlag.Terran.value
-    option_zerg = MissionFlag.Zerg.value
-    option_protoss = MissionFlag.Protoss.value
-    option_terran_and_zerg = (MissionFlag.Terran|MissionFlag.Zerg).value
-    option_terran_and_protoss = (MissionFlag.Terran|MissionFlag.Protoss).value
-    option_zerg_and_protoss = (MissionFlag.Zerg|MissionFlag.Protoss).value
-    default = option_all
+    valid_keys = {race.get_title() for race in SC2Race if race != SC2Race.ANY}
+    default = valid_keys
 
 
 class GameDifficulty(Choice):
@@ -255,60 +250,13 @@ class PlayerColorNova(ColorChoice):
     display_name = "Terran Player Color (Nova)"
 
 
-class EnableWolMissions(DefaultOnToggle):
+class EnabledCampaigns(OptionSet):
     """
-    Enables missions from main Wings of Liberty campaign.
+    Determines which campaign's missions will be used
     """
-    display_name = "Enable Wings of Liberty missions"
-
-
-class EnableProphecyMissions(DefaultOnToggle):
-    """
-    Enables missions from Prophecy mini-campaign.
-    """
-    display_name = "Enable Prophecy missions"
-
-
-class EnableHotsMissions(DefaultOnToggle):
-    """
-    Enables missions from Heart of the Swarm campaign.
-    """
-    display_name = "Enable Heart of the Swarm missions"
-
-
-class EnableLotVPrologueMissions(DefaultOnToggle):
-    """
-    Enables missions from Prologue campaign.
-    """
-    display_name = "Enable Prologue (Legacy of the Void) missions"
-
-
-class EnableLotVMissions(DefaultOnToggle):
-    """
-    Enables missions from Legacy of the Void campaign.
-    """
-    display_name = "Enable Legacy of the Void (main campaign) missions"
-
-
-class EnableEpilogueMissions(DefaultOnToggle):
-    """
-    Enables missions from Epilogue campaign.
-    These missions are considered very hard.
-
-    Enabling Wings of Liberty, Heart of the Swarm and Legacy of the Void is strongly recommended in order to play Epilogue.
-    Not recommended for short mission orders.
-    See also: Exclude Very Hard Missions
-    """
-    display_name = "Enable Epilogue missions"
-
-
-class EnableNCOMissions(DefaultOnToggle):
-    """
-    Enables missions from Nova Covert Ops campaign.
-
-    Note: For best gameplay experience it's recommended to also enable Wings of Liberty campaign.
-    """
-    display_name = "Enable Nova Covert Ops missions"
+    display_name = "Enabled Campaigns"
+    valid_keys = {campaign.campaign_name for campaign in SC2Campaign if campaign != SC2Campaign.GLOBAL}
+    default = valid_keys
 
 
 class EnableRaceSwapVariants(Choice):
@@ -848,7 +796,7 @@ class GrantStoryLevels(Choice):
     The Infinite Cycle: 70
     The bonus levels only apply during the listed missions, and can exceed the Total Level Cap.
 
-    If disabled, either of these missions is included, and there are not enough levels in the world, generation may fail.  
+    If disabled, either of these missions is included, and there are not enough levels in the world, generation may fail.
     To prevent this, either increase the amount of levels in the world, or enable this option.
 
     If disabled and Required Tactics is set to no logic, this option is forced to Minimum.
@@ -888,6 +836,29 @@ class NovaMaxGadgets(Range):
     range_start = 0
     range_end = len(nova_gadgets)
     default = range_end
+
+class NovaGhostOfAChanceVariant(Choice):
+    """
+    Determines which variant of Nova should be used in Ghost of a Chance mission.
+
+    WoL: Uses Nova from Wings of Liberty campaign (vanilla)
+    NCO: Uses Nova from Nova Covert Ops campaign
+    Auto: Uses NCO if a mission from Nova Covert Ops is actually shuffled, if not uses WoL
+    """
+    display_name = "Nova Ghost of Chance Variant"
+    option_wol = 0
+    option_nco = 1
+    option_auto = 2
+    default = option_wol
+
+    # Fix case
+    @classmethod
+    def get_option_name(cls, value: int) -> str:
+        if value == NovaGhostOfAChanceVariant.option_wol:
+            return "WoL"
+        elif value == NovaGhostOfAChanceVariant.option_nco:
+            return "NCO"
+        return super().get_option_name(value)
 
 
 class TakeOverAIAllies(Toggle):
@@ -1178,7 +1149,7 @@ class MissionOrderScouting(Choice):
     By default, this option is deactivated.
 
     None: Never provide information
-    Completed: Only for missions that were completed 
+    Completed: Only for missions that were completed
     Available: Only for missions that are available to play
     Layout: Only for missions that are in an accessible layout (e.g. Char, Mar Sara, etc.)
     Campaign: Only for missions that are in an accessible campaign (e.g. WoL, HotS, etc.)
@@ -1377,13 +1348,7 @@ class Starcraft2Options(PerGameCommonOptions):
     player_color_zerg_primal: PlayerColorZergPrimal
     player_color_nova: PlayerColorNova
     selected_races: SelectRaces
-    enable_wol_missions: EnableWolMissions
-    enable_prophecy_missions: EnableProphecyMissions
-    enable_hots_missions: EnableHotsMissions
-    enable_lotv_prologue_missions: EnableLotVPrologueMissions
-    enable_lotv_missions: EnableLotVMissions
-    enable_epilogue_missions: EnableEpilogueMissions
-    enable_nco_missions: EnableNCOMissions
+    enabled_campaigns: EnabledCampaigns
     enable_race_swap: EnableRaceSwapVariants
     mission_race_balancing: EnableMissionRaceBalancing
     shuffle_campaigns: ShuffleCampaigns
@@ -1422,6 +1387,7 @@ class Starcraft2Options(PerGameCommonOptions):
     grant_story_levels: GrantStoryLevels
     nova_max_weapons: NovaMaxWeapons
     nova_max_gadgets: NovaMaxGadgets
+    nova_ghost_of_a_chance_variant: NovaGhostOfAChanceVariant
     take_over_ai_allies: TakeOverAIAllies
     locked_items: LockedItems
     excluded_items: ExcludedItems
@@ -1464,13 +1430,7 @@ option_groups = [
     OptionGroup("Primary Campaign Settings", [
         MissionOrder,
         MaximumCampaignSize,
-        EnableWolMissions,
-        EnableProphecyMissions,
-        EnableHotsMissions,
-        EnableLotVPrologueMissions,
-        EnableLotVMissions,
-        EnableEpilogueMissions,
-        EnableNCOMissions,
+        EnabledCampaigns,
         EnableRaceSwapVariants,
         ShuffleNoBuild,
     ]),
@@ -1517,6 +1477,7 @@ option_groups = [
     OptionGroup("Nova", [
         NovaMaxWeapons,
         NovaMaxGadgets,
+        NovaGhostOfAChanceVariant,
     ]),
     OptionGroup("Race Specific Options", [
         EnableMorphling,
@@ -1583,39 +1544,17 @@ def get_option_value(world: Union['SC2World', None], name: str) -> int:
 
 
 def get_enabled_races(world: Optional['SC2World']) -> Set[SC2Race]:
-    selection: int = world.options.selected_races.value if world else SelectRaces.default
-    if selection == SelectRaces.option_all:
-        return set(SC2Race)
-    enabled = {SC2Race.ANY}
-    if selection & MissionFlag.Terran:
-        enabled.add(SC2Race.TERRAN)
-    if selection & MissionFlag.Zerg:
-        enabled.add(SC2Race.ZERG)
-    if selection & MissionFlag.Protoss:
-        enabled.add(SC2Race.PROTOSS)
-    return enabled
+    race_names = world.options.selected_races.value if world else SelectRaces.default
+    return {race for race in SC2Race if race.get_title() in race_names}
 
 
 def get_enabled_campaigns(world: Optional['SC2World']) -> Set[SC2Campaign]:
-    enabled_campaigns = set()
-    if get_option_value(world, "enable_wol_missions"):
-        enabled_campaigns.add(SC2Campaign.WOL)
-    if get_option_value(world, "enable_prophecy_missions"):
-        enabled_campaigns.add(SC2Campaign.PROPHECY)
-    if get_option_value(world, "enable_hots_missions"):
-        enabled_campaigns.add(SC2Campaign.HOTS)
-    if get_option_value(world, "enable_lotv_prologue_missions"):
-        enabled_campaigns.add(SC2Campaign.PROLOGUE)
-    if get_option_value(world, "enable_lotv_missions"):
-        enabled_campaigns.add(SC2Campaign.LOTV)
-    # Force-disable epilogue missions if vanilla mission order with at least 1 disabled faction
-    if get_option_value(world, "enable_epilogue_missions") \
-            and (get_option_value(world, "mission_order") != MissionOrder.option_vanilla
-                 or get_option_value(world, "selected_races") == SelectRaces.option_all):
-        enabled_campaigns.add(SC2Campaign.EPILOGUE)
-    if get_option_value(world, "enable_nco_missions"):
-        enabled_campaigns.add(SC2Campaign.NCO)
-    return enabled_campaigns
+    campaign_names = get_option_value(world, "enabled_campaigns")
+    campaigns = {campaign for campaign in SC2Campaign if campaign.campaign_name in campaign_names}
+    if (get_option_value(world, "mission_order") == MissionOrder.option_vanilla
+            and get_option_value(world,"selected_races") != SelectRaces.valid_keys):
+        campaigns.remove(SC2Campaign.EPILOGUE)
+    return campaigns
 
 
 def get_disabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
@@ -1627,7 +1566,10 @@ def get_disabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
 
 
 def get_disabled_flags(world: 'SC2World') -> MissionFlag:
-    excluded = (MissionFlag.Terran|MissionFlag.Zerg|MissionFlag.Protoss) ^ MissionFlag(world.options.selected_races.value)
+    excluded = (
+            (MissionFlag.Terran | MissionFlag.Zerg | MissionFlag.Protoss)
+            ^ functools.reduce(lambda a, b: a | b, [race.get_mission_flag() for race in get_enabled_races(world)])
+    )
     # filter out no-build missions
     if not world.options.shuffle_no_build.value:
         excluded |= MissionFlag.NoBuild

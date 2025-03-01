@@ -1,6 +1,6 @@
 import unittest
 from .test_base import Sc2TestBase
-from .. import mission_tables
+from .. import mission_tables, SC2Campaign
 from .. import options
 from ..mission_order.layout_types import Grid
 
@@ -28,12 +28,10 @@ class TestGridGeneration(Sc2TestBase):
     options = {
         "mission_order": options.MissionOrder.option_grid,
         "excluded_missions": [mission_tables.SC2Mission.ZERO_HOUR.mission_name,],
-        "enable_hots_missions": False,
-        "enable_prophecy_missions": True,
-        "enable_lotv_prologue_missions": False,
-        "enable_lotv_missions": False,
-        "enable_epilogue_missions": False,
-        "enable_nco_missions": False
+        "enabled_campaigns": {
+            SC2Campaign.WOL.campaign_name,
+            SC2Campaign.PROPHECY.campaign_name,
+        }
     }
 
     def test_size_matches_exclusions(self):

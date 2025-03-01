@@ -2,9 +2,9 @@ import enum
 from typing import List, Tuple, Optional, Callable, NamedTuple, Set, TYPE_CHECKING
 from .item import item_names
 from .options import (get_option_value, RequiredTactics,
-    LocationInclusion, KerriganPresence,
+    LocationInclusion, KerriganPresence, get_enabled_campaigns
 )
-from .mission_tables import SC2Mission
+from .mission_tables import SC2Mission, SC2Campaign
 
 from BaseClasses import Location
 from worlds.AutoWorld import World
@@ -136,7 +136,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         logic_level = world.options.required_tactics.value
         kerriganless = (
             world.options.kerrigan_presence.value != KerriganPresence.option_vanilla
-            or not world.options.enable_hots_missions.value
+            or SC2Campaign.HOTS not in get_enabled_campaigns(world)
         )
     adv_tactics = logic_level != RequiredTactics.option_standard
     if world is not None and world.logic is not None:
@@ -686,12 +686,18 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.BREAKOUT.mission_name, "Siege Tank Prison", SC2WOL_LOC_ID_OFFSET + 1502, LocationType.VANILLA),
         make_location_data(SC2Mission.BREAKOUT.mission_name, "First Checkpoint", SC2WOL_LOC_ID_OFFSET + 1503, LocationType.EXTRA),
         make_location_data(SC2Mission.BREAKOUT.mission_name, "Second Checkpoint", SC2WOL_LOC_ID_OFFSET + 1504, LocationType.EXTRA),
-        make_location_data(SC2Mission.GHOST_OF_A_CHANCE.mission_name, "Victory", SC2WOL_LOC_ID_OFFSET + 1600, LocationType.VICTORY),
-        make_location_data(SC2Mission.GHOST_OF_A_CHANCE.mission_name, "Terrazine Tank", SC2WOL_LOC_ID_OFFSET + 1601, LocationType.EXTRA),
-        make_location_data(SC2Mission.GHOST_OF_A_CHANCE.mission_name, "Jorium Stockpile", SC2WOL_LOC_ID_OFFSET + 1602, LocationType.EXTRA),
-        make_location_data(SC2Mission.GHOST_OF_A_CHANCE.mission_name, "First Island Spectres", SC2WOL_LOC_ID_OFFSET + 1603, LocationType.VANILLA),
-        make_location_data(SC2Mission.GHOST_OF_A_CHANCE.mission_name, "Second Island Spectres", SC2WOL_LOC_ID_OFFSET + 1604, LocationType.VANILLA),
-        make_location_data(SC2Mission.GHOST_OF_A_CHANCE.mission_name, "Third Island Spectres", SC2WOL_LOC_ID_OFFSET + 1605, LocationType.VANILLA),
+        make_location_data(SC2Mission.GHOST_OF_A_CHANCE.mission_name, "Victory", SC2WOL_LOC_ID_OFFSET + 1600, LocationType.VICTORY,
+                           logic.ghost_in_a_chance_requirement, hard_rule=logic.ghost_in_a_chance_requirement),
+        make_location_data(SC2Mission.GHOST_OF_A_CHANCE.mission_name, "Terrazine Tank", SC2WOL_LOC_ID_OFFSET + 1601, LocationType.EXTRA,
+                           logic.ghost_in_a_chance_requirement, hard_rule=logic.ghost_in_a_chance_requirement),
+        make_location_data(SC2Mission.GHOST_OF_A_CHANCE.mission_name, "Jorium Stockpile", SC2WOL_LOC_ID_OFFSET + 1602, LocationType.EXTRA,
+                           logic.ghost_in_a_chance_requirement, hard_rule=logic.ghost_in_a_chance_requirement),
+        make_location_data(SC2Mission.GHOST_OF_A_CHANCE.mission_name, "First Island Spectres", SC2WOL_LOC_ID_OFFSET + 1603, LocationType.VANILLA,
+                           logic.ghost_in_a_chance_requirement, hard_rule=logic.ghost_in_a_chance_requirement),
+        make_location_data(SC2Mission.GHOST_OF_A_CHANCE.mission_name, "Second Island Spectres", SC2WOL_LOC_ID_OFFSET + 1604, LocationType.VANILLA,
+                           logic.ghost_in_a_chance_requirement, hard_rule=logic.ghost_in_a_chance_requirement),
+        make_location_data(SC2Mission.GHOST_OF_A_CHANCE.mission_name, "Third Island Spectres", SC2WOL_LOC_ID_OFFSET + 1605, LocationType.VANILLA,
+                           logic.ghost_in_a_chance_requirement, hard_rule=logic.ghost_in_a_chance_requirement),
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY.mission_name, "Victory", SC2WOL_LOC_ID_OFFSET + 1700, LocationType.VICTORY,
             lambda state: (
                 logic.terran_great_train_robbery_train_stopper(state)

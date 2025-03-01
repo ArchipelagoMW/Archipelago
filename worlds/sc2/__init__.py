@@ -24,6 +24,7 @@ from .options import (
     get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence, Starcraft2Options,
     GrantStoryTech, GenericUpgradeResearch, RequiredTactics,
     upgrade_included_names, EnableVoidTrade, FillerRatio, MissionOrderScouting, option_groups,
+    NovaGhostOfAChanceVariant, MissionOrder,
 )
 from .rules import get_basic_units, SC2Logic
 from . import settings
@@ -111,6 +112,13 @@ class SC2World(World):
         self.custom_mission_order = create_mission_order(
             self, get_locations(self), self.location_cache
         )
+        self.logic.nova_used = (
+                MissionFlag.Nova in self.custom_mission_order.get_used_flags()
+                or (
+                        MissionFlag.WoLNova in self.custom_mission_order.get_used_flags()
+                        and self.options.nova_ghost_of_a_chance_variant == NovaGhostOfAChanceVariant.option_nco
+                )
+        )
 
     def create_items(self) -> None:
         # Starcraft 2-specific item setup:
@@ -189,7 +197,19 @@ class SC2World(World):
 
         enabled_campaigns = get_enabled_campaigns(self)
         slot_data["plando_locations"] = get_plando_locations(self)
-        slot_data["nova_covert_ops_only"] = (enabled_campaigns == {SC2Campaign.NCO})
+        slot_data["use_nova_nco_fallback"] = (
+                enabled_campaigns == {SC2Campaign.NCO}
+                and self.options.mission_order == MissionOrder.option_vanilla
+        )
+        if (self.options.nova_ghost_of_a_chance_variant == NovaGhostOfAChanceVariant.option_nco
+                or (
+                        self.options.nova_ghost_of_a_chance_variant == NovaGhostOfAChanceVariant.option_auto
+                        and MissionFlag.Nova in self.custom_mission_order.get_used_flags().keys()
+                )
+        ):
+            slot_data["use_nova_wol_fallback"] = False
+        else:
+            slot_data["use_nova_wol_fallback"] = True
         slot_data["final_mission_ids"] = self.custom_mission_order.get_final_mission_ids()
         slot_data["custom_mission_order"] = self.custom_mission_order.get_slot_data()
         slot_data["version"] = 4
@@ -479,7 +499,14 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
 
     kerrigan_missions = [mission for mission in missions if MissionFlag.Kerrigan in mission.flags]
     kerrigan_build_missions = [mission for mission in kerrigan_missions if MissionFlag.NoBuild not in mission.flags]
-    nova_missions = [mission for mission in missions if MissionFlag.Nova in mission.flags]
+    nova_missions = [
+        mission for mission in missions
+        if MissionFlag.Nova in mission.flags
+           or (
+                   world.options.nova_ghost_of_a_chance_variant == NovaGhostOfAChanceVariant.option_nco
+                   and MissionFlag.WoLNova in mission.flags
+           )
+    ]
 
     kerrigan_is_present = (
             len(kerrigan_missions) > 0
