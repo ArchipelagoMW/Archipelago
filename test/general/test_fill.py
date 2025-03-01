@@ -706,23 +706,29 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         player2 = generate_player_data(
             multiworld, 2, location_count=5, basic_item_count=5)
 
+        try:
+            for world in multiworld.worlds.values():
+                for location in multiworld.get_locations(world.player):
+                    if location.name not in world.location_name_to_id:
+                        # +1 to avoid ID 0, which isn't allowed
+                        id = len(world.location_name_to_id) + 1
+                        world.location_name_to_id[location.name] = id
+                        world.location_id_to_name[id] = location.name
 
-        for world in multiworld.worlds.values():
-            for location in multiworld.get_locations(world.player):
-                if location.name not in world.location_name_to_id:
-                    # +1 to avoid ID 0, which isn't allowed
-                    id = len(world.location_name_to_id) + 1
-                    world.location_name_to_id[location.name] = id
-                    world.location_id_to_name[id] = location.name
+            multiworld.worlds[player1.id].options.local_locations.value = \
+                set(names(player1.locations))
+            multiworld.worlds[player2.id].options.local_locations.value = \
+                set(names(player2.locations))
+            locality_rules(multiworld)
 
-        multiworld.worlds[player1.id].options.local_locations.value = set(names(player1.locations))
-        multiworld.worlds[player2.id].options.local_locations.value = set(names(player2.locations))
-        locality_rules(multiworld)
+            distribute_items_restrictive(multiworld)
 
-        distribute_items_restrictive(multiworld)
-
-        for item in multiworld.get_items():
-            self.assertEqual(item.player, item.location.player)
+            for item in multiworld.get_items():
+                self.assertEqual(item.player, item.location.player)
+        finally:
+            for world in multiworld.worlds.values():
+                world.location_name_to_id.clear()
+                world.location_id_to_name.clear()
 
     def test_non_local_locations(self):
         """Test that non-local locations get non-local items in a multiworld"""
@@ -732,22 +738,29 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         player2 = generate_player_data(
             multiworld, 2, location_count=5, basic_item_count=5)
 
-        for world in multiworld.worlds.values():
-            for location in multiworld.get_locations(world.player):
-                if location.name not in world.location_name_to_id:
-                    # +1 to avoid ID 0, which isn't allowed
-                    id = len(world.location_name_to_id) + 1
-                    world.location_name_to_id[location.name] = id
-                    world.location_id_to_name[id] = location.name
+        try:
+            for world in multiworld.worlds.values():
+                for location in multiworld.get_locations(world.player):
+                    if location.name not in world.location_name_to_id:
+                        # +1 to avoid ID 0, which isn't allowed
+                        id = len(world.location_name_to_id) + 1
+                        world.location_name_to_id[location.name] = id
+                        world.location_id_to_name[id] = location.name
 
-        multiworld.worlds[player1.id].options.non_local_locations.value = set(names(player1.locations))
-        multiworld.worlds[player2.id].options.non_local_locations.value = set(names(player2.locations))
-        locality_rules(multiworld)
+            multiworld.worlds[player1.id].options.non_local_locations.value = \
+                set(names(player1.locations))
+            multiworld.worlds[player2.id].options.non_local_locations.value = \
+                set(names(player2.locations))
+            locality_rules(multiworld)
 
-        distribute_items_restrictive(multiworld)
+            distribute_items_restrictive(multiworld)
 
-        for item in multiworld.get_items():
-            self.assertNotEqual(item.player, item.location.player)
+            for item in multiworld.get_items():
+                self.assertNotEqual(item.player, item.location.player)
+        finally:
+            for world in multiworld.worlds.values():
+                world.location_name_to_id.clear()
+                world.location_id_to_name.clear()
 
     def test_early_items(self) -> None:
         """Test that the early items API successfully places items early"""
