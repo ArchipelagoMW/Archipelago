@@ -633,11 +633,54 @@ all_locations = {
 
 #location_table = {}
 
-location_groups = {}
-for location in all_locations.keys():
-    level = location.split(" - ")[0]
-    location_groups[level] = location
-    
+
+location_groups = {
+    "Pirate Panic": {location for location in all_locations.keys() if "Pirate Panic" in location},
+    "Mainbrace Mayhem": {location for location in all_locations.keys() if "Mainbrace Mayhem" in location},
+    "Gangplank Galley": {location for location in all_locations.keys() if "Gangplank Galley" in location},
+    "Lockjaw's Locker": {location for location in all_locations.keys() if "Lockjaw's Locker" in location},
+    "Topsail Trouble": {location for location in all_locations.keys() if "Topsail Trouble" in location},
+    "Krow's Nest": {location for location in all_locations.keys() if "Krow's Nest" in location},
+    "Hot-Head Hop": {location for location in all_locations.keys() if "Hot-Head Hop" in location},
+    "Kannon's Klaim": {location for location in all_locations.keys() if "Kannon's Klaim" in location},
+    "Lava Lagoon": {location for location in all_locations.keys() if "Lava Lagoon" in location},
+    "Red-Hot Ride": {location for location in all_locations.keys() if "Red-Hot Ride" in location},
+    "Squawks's Shaft": {location for location in all_locations.keys() if "Squawks's Shaft" in location},
+    "Kleever's Kiln": {location for location in all_locations.keys() if "Kleever's Kiln" in location},
+    "Barrel Bayou": {location for location in all_locations.keys() if "Barrel Bayou" in location},
+    "Glimmer's Galleon": {location for location in all_locations.keys() if "Glimmer's Galleon" in location},
+    "Krockhead Klamber": {location for location in all_locations.keys() if "Krockhead Klamber" in location},
+    "Rattle Battle": {location for location in all_locations.keys() if "Rattle Battle" in location},
+    "Slime Climb": {location for location in all_locations.keys() if "Slime Climb" in location},
+    "Bramble Blast": {location for location in all_locations.keys() if "Bramble Blast" in location},
+    "Kudgel's Kontest": {location for location in all_locations.keys() if "Kudgel's Kontest" in location},
+    "Hornet Hole": {location for location in all_locations.keys() if "Hornet Hole" in location},
+    "Target Terror": {location for location in all_locations.keys() if "Target Terror" in location},
+    "Bramble Scramble": {location for location in all_locations.keys() if "Bramble Scramble" in location},
+    "Rickety Race": {location for location in all_locations.keys() if "Rickety Race" in location},
+    "Mudhole Marsh": {location for location in all_locations.keys() if "Mudhole Marsh" in location},
+    "Rambi Rumble": {location for location in all_locations.keys() if "Rambi Rumble" in location},
+    "King Zing Sting": {location for location in all_locations.keys() if "King Zing Sting" in location},
+    "Haunted Hall": {location for location in all_locations.keys() if "Haunted Hall" in location},
+    "Gusty Glade": {location for location in all_locations.keys() if "Gusty Glade" in location},
+    "Parrot Chute Panic": {location for location in all_locations.keys() if "Parrot Chute Panic" in location},
+    "Web Woods": {location for location in all_locations.keys() if "Web Woods" in location},
+    "Kreepy Krow": {location for location in all_locations.keys() if "Kreepy Krow" in location},
+    "Arctic Abyss": {location for location in all_locations.keys() if "Arctic Abyss" in location},
+    "Windy Well": {location for location in all_locations.keys() if "Windy Well" in location},
+    "Castle Crush": {location for location in all_locations.keys() if "Castle Crush" in location},
+    "Clapper's Cavern": {location for location in all_locations.keys() if "Clapper's Cavern" in location},
+    "Chain Link Chamber": {location for location in all_locations.keys() if "Chain Link Chamber" in location},
+    "Toxic Tower": {location for location in all_locations.keys() if "Toxic Tower" in location},
+    "Stronghold Showdown": {location for location in all_locations.keys() if "Stronghold Showdown" in location},
+    "Screech's Sprint": {location for location in all_locations.keys() if "Screech's Sprint" in location},
+    "Jungle Jinx": {location for location in all_locations.keys() if "Jungle Jinx" in location},
+    "Black Ice Battle": {location for location in all_locations.keys() if "Black Ice Battle" in location},
+    "Klobber Karnage": {location for location in all_locations.keys() if "Klobber Karnage" in location},
+    "Fiery Furnace": {location for location in all_locations.keys() if "Fiery Furnace" in location},
+    "Swanky": {location for location in all_locations.keys() if "Swanky" in location},
+}
+
 all_locations.update(swanky_quiz)
 
 def setup_locations(world: "DKC2World"):
