@@ -57,10 +57,13 @@ class PeaksOfWorld(World):
 
     def generate_early(self) -> None:
         if self.options.start_with_barometer:
-            self.options.start_inventory_from_pool.value.update({"Barometer": 1})
+            # self.options.start_inventory_from_pool.value.update({"Barometer": 1})
+            self.multiworld.push_precollected(self.create_item("Barometer"))
+
 
         if self.options.start_with_oil_lamp:
-            self.options.start_inventory_from_pool.value.update({"Oil Lamp": 1})
+            self.multiworld.push_precollected(self.create_item("Oil Lamp"))
+            # self.options.start_inventory_from_pool.value.update({"Oil Lamp": 1})
 
         starting_book_options: dict[str, Toggle] = {
             "Fundamentals Book": self.options.enable_fundamental,
@@ -90,9 +93,11 @@ class PeaksOfWorld(World):
 
         self.options.starting_book.value = book_names.index(start_book)
         if self.options.starting_book.value == StartingBook.option_expert:
-            self.options.start_inventory_from_pool.value.update({"Progressive Crampons": 1})
+            self.multiworld.push_precollected(self.create_item("Progressive Crampons"))
+            # self.options.start_inventory_from_pool.value.update({"Progressive Crampons": 1})
             # make sure player gets at least 6pt crampons before expert books
-        self.options.start_inventory_from_pool.value.update({start_book: 1})
+        # self.options.start_inventory_from_pool.value.update({start_book: 1})
+        self.multiworld.push_precollected(self.create_item(start_book))
 
     def create_regions(self) -> None:
         self.artefacts_peaks_in_pool = create_poy_regions(self, self.options)
@@ -112,17 +117,20 @@ class PeaksOfWorld(World):
         remaining_items: int = len(self.multiworld.get_unfilled_locations(self.player))
 
         for name, option in books.items():
-            if (not option) or remaining_items <= 0:
+            if (not option) or name == starting_book.name or remaining_items <= 0:
                 continue
             self.multiworld.itempool.append(self.create_item(name))
             remaining_items -= 1
 
         for tool in [item for item in full_item_list if item.type == "Tool"]:
-            if remaining_items > 0:
+            if remaining_items > 0 and (tool.name != "Barometer" or not self.options.start_with_barometer)\
+                    and (tool.name != "Oil Lamp" or not self.options.start_with_oil_lamp):
                 if tool.name == "Progressive Crampons":
                     self.multiworld.itempool.append(self.create_item(tool.name))
-                    self.multiworld.itempool.append(self.create_item(tool.name))
-                    remaining_items -= 2
+                    remaining_items -= 1
+                    if self.options.starting_book.value != StartingBook.option_expert:
+                        self.multiworld.itempool.append(self.create_item(tool.name))
+                        remaining_items -= 1
                 elif tool.name == "Rope Unlock":
                     if self.options.rope_unlock_mode == RopeUnlockMode.option_early:
                         self.multiworld.early_items[self.player][tool.name] = 1
