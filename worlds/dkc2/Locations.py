@@ -629,6 +629,7 @@ all_locations = {
     **balloonsanity,
     **coinsanity,
     **bananasanity,
+    **swanky_quiz,
 }
 
 #location_table = {}
@@ -680,8 +681,6 @@ location_groups = {
     "Fiery Furnace": {location for location in all_locations.keys() if "Fiery Furnace" in location},
     "Swanky": {location for location in all_locations.keys() if "Swanky" in location},
 }
-
-all_locations.update(swanky_quiz)
 
 def setup_locations(world: "DKC2World"):
     location_table = {
