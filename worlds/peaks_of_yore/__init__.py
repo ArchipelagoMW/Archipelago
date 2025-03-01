@@ -3,7 +3,7 @@ from typing import Any
 
 from Options import Toggle
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Tutorial, Item, Region, MultiWorld
+from BaseClasses import Tutorial, Item, MultiWorld
 from .options import PeaksOfYoreOptions, Goal, StartingBook, RopeUnlockMode, poy_option_groups
 from . import options
 from .data import full_item_list, full_location_list, PeaksOfYoreRegion
@@ -42,12 +42,10 @@ class PeaksOfWorld(World):
     item_name_to_id = {item.name: item.id for item in full_item_list}
     location_name_to_id = {location.name: location.id for location in full_location_list}
     topology_present = True
-    location_count: int
     artefacts_peaks_in_pool: RegionLocationInfo
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
-        self.location_count = 0
 
     def create_item(self, name: str) -> Item:
         item_entry = [item for item in full_item_list if item.name == name][0]
@@ -111,7 +109,7 @@ class PeaksOfWorld(World):
 
         starting_book: Item = self.create_item([*books][self.options.starting_book.value])
 
-        remaining_items = self.location_count
+        remaining_items: int = len(self.multiworld.get_unfilled_locations(self.player))
 
         for name, option in books.items():
             if (not option) or remaining_items <= 0:

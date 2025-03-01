@@ -1,6 +1,6 @@
 from typing import NamedTuple
 
-from BaseClasses import Region, MultiWorld
+from BaseClasses import Region
 from .options import PeaksOfYoreOptions
 from worlds.AutoWorld import World
 from .locations import get_locations, get_location_names_by_type, PeaksOfYoreLocation
@@ -65,5 +65,4 @@ def create_region(region_name: str, region_enum: PeaksOfYoreRegion, item_require
     region.add_locations(locations, PeaksOfYoreLocation)
     cabin_region.connect(region, region_name + " Connection", lambda state: state.has_all_counts(item_requirements,
                                                                                                  world.player))
-    world.location_count += len(region.locations)
     return RegionLocationInfo(artefacts_in_pool, peaks_in_pool)
