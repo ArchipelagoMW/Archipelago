@@ -150,7 +150,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         multiworld.worlds[1].options.local_items.value = set()
         multiworld.worlds[1].options.non_local_locations.value = set()
         multiworld.worlds[1].options.local_locations.value = set()
-    
+
+    AutoWorld.call_all(multiworld, "connect_entrances")
     AutoWorld.call_all(multiworld, "generate_basic")
 
     # remove starting inventory from pool items.

@@ -63,6 +63,11 @@ class MuseDashWorld(World):
 
     item_name_to_id = {name: code for name, code in md_collection.item_names_to_id.items()}
     location_name_to_id = {name: code for name, code in md_collection.location_names_to_id.items()}
+    item_name_groups = {
+        "Songs": {name for name in md_collection.song_items.keys()},
+        "Filler Items": {name for name in md_collection.filler_items.keys()},
+        "Traps": {name for name in md_collection.trap_items.keys()}
+    }
 
     # Working Data
     victory_song_name: str = ""
@@ -178,10 +183,6 @@ class MuseDashWorld(World):
         trap = self.md_collection.trap_items.get(name)
         if trap:
             return MuseDashFixedItem(name, ItemClassification.trap, trap, self.player)
-
-        album = self.md_collection.album_items.get(name)
-        if album:
-            return MuseDashSongItem(name, self.player, album)
 
         song = self.md_collection.song_items[name]
         return MuseDashSongItem(name, self.player, song)
