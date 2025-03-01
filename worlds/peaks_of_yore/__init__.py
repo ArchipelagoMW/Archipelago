@@ -8,7 +8,7 @@ from .options import PeaksOfYoreOptions, Goal, StartingBook, RopeUnlockMode, poy
 from . import options
 from .data import full_item_list, full_location_list, PeaksOfYoreRegion
 from .locations import get_locations, get_location_names_by_type, PeaksOfYoreLocation
-from .regions import create_poy_regions
+from .regions import create_poy_regions, RegionLocationInfo
 
 
 class PeaksOfYoreItem(Item):
@@ -43,14 +43,11 @@ class PeaksOfWorld(World):
     location_name_to_id = {location.name: location.id for location in full_location_list}
     topology_present = True
     location_count: int
-    peaks_in_pool: list[str]
-    artefacts_in_pool: list[str]
+    artefacts_peaks_in_pool: RegionLocationInfo
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
         self.location_count = 0
-        self.peaks_in_pool = []
-        self.artefacts_in_pool = []
 
     def create_item(self, name: str) -> Item:
         item_entry = [item for item in full_item_list if item.name == name][0]
@@ -100,7 +97,7 @@ class PeaksOfWorld(World):
         self.options.start_inventory_from_pool.value.update({start_book: 1})
 
     def create_regions(self) -> None:
-        create_poy_regions(self, self.options)
+        self.artefacts_peaks_in_pool = create_poy_regions(self, self.options)
 
     def create_items(self) -> None:
         # order: books, tools, ropes, bird seeds, artefacts, fill rest with extra Items
@@ -161,15 +158,17 @@ class PeaksOfWorld(World):
     def set_rules(self) -> None:
         if self.options.goal.value == Goal.option_all_artefacts:
             self.multiworld.completion_condition[self.player] = lambda state: all(
-                state.can_reach_location(artefact, self.player) for artefact in self.artefacts_in_pool)
+                state.can_reach_location(artefact, self.player) for artefact in
+                self.artefacts_peaks_in_pool.artefacts_in_pool)
 
         if self.options.goal.value == Goal.option_all_peaks:
             self.multiworld.completion_condition[self.player] = lambda state: all(
-                state.can_reach_location(peak, self.player) for peak in self.peaks_in_pool)
+                state.can_reach_location(peak, self.player) for peak in self.artefacts_peaks_in_pool.peaks_in_pool)
 
         if self.options.goal.value == Goal.option_all_peaks:
             self.multiworld.completion_condition[self.player] = lambda state: all(
-                state.can_reach_location(loc, self.player) for loc in [*self.peaks_in_pool, *self.artefacts_in_pool])
+                state.can_reach_location(loc, self.player) for loc in [*self.artefacts_peaks_in_pool.peaks_in_pool,
+                                                                       *self.artefacts_peaks_in_pool.artefacts_in_pool])
 
         if self.options.goal.value == Goal.option_all:
             self.multiworld.completion_condition[self.player] = lambda state: all(
