@@ -110,12 +110,13 @@ def _decompress_with_factoria(temp_dir: str, source_dir: str):
             file_path = f"{base_file_path}{extention}"
             if not os.path.exists(file_path):
                 raise ValueError(f"Path {file_path} does not exist.")
+        os.makedirs(os.path.join(temp_dir, filename))
         try:
             subprocess.run([
                 factoria_path,
                 f"{base_file_path}.dir",
                 "--output",
-                temp_dir
+                os.path.join(temp_dir, filename)
             ], check=True)
         except subprocess.CalledProcessError as err:
             print(f"Error running factoria: {err}")
