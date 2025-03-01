@@ -95,65 +95,7 @@ class PeaksOfWorld(World):
         self.options.start_inventory_from_pool.value.update({start_book: 1})
 
     def create_regions(self) -> None:
-        # self.artefacts_peaks_in_pool = create_poy_regions(self, self.options)
-        menu_region = Region("Menu", self.player, self.multiworld)
-        self.multiworld.regions.append(menu_region)
-
-        cabin_region = Region("Cabin", self.player, self.multiworld)
-        self.multiworld.regions.append(cabin_region)
-        menu_region.connect(cabin_region)
-        peaks_in_pool = []
-        artefacts_in_pool = []
-
-        if self.options.enable_fundamental:
-            fundamentals_region = Region("Fundamental Peaks", self.player, self.multiworld)
-
-            peaks_in_pool.extend(get_location_names_by_type(PeaksOfYoreRegion.FUNDAMENTALS, "Peak"))
-            artefacts_in_pool.extend(get_location_names_by_type(PeaksOfYoreRegion.FUNDAMENTALS, "Artefact"))
-
-            fundamentals_region.add_locations(get_locations(PeaksOfYoreRegion.FUNDAMENTALS), PeaksOfYoreLocation)
-            cabin_region.connect(fundamentals_region, "Fundamentals Book",
-                                 lambda state: state.has("Fundamentals Book", self.player))
-            # self.location_count += len(fundamentals_region.locations)
-
-        if self.options.enable_intermediate:
-            intermediate_region = Region("Intermediate Peaks", self.player, self.multiworld)
-
-            peaks_in_pool.extend(get_location_names_by_type(PeaksOfYoreRegion.INTERMEDIATE, "Peak"))
-            artefacts_in_pool.extend(get_location_names_by_type(PeaksOfYoreRegion.INTERMEDIATE, "Artefact"))
-
-            intermediate_region.add_locations(get_locations(PeaksOfYoreRegion.INTERMEDIATE), PeaksOfYoreLocation)
-            cabin_region.connect(intermediate_region, "Intermediate Book",
-                                 lambda state: state.has("Intermediate Book", self.player))
-            # self.location_count += len(intermediate_region.locations)
-
-        if self.options.enable_advanced:
-            advanced_region = Region("Advanced Peaks", self.player, self.multiworld)
-
-            peaks_in_pool.extend(get_location_names_by_type(PeaksOfYoreRegion.ADVANCED, "Peak"))
-            artefacts_in_pool.extend(get_location_names_by_type(PeaksOfYoreRegion.ADVANCED, "Artefact"))
-
-            advanced_region.add_locations(get_locations(PeaksOfYoreRegion.ADVANCED), PeaksOfYoreLocation)
-            cabin_region.connect(advanced_region, "Advanced Book",
-                                 lambda state: state.has("Advanced Book", self.player))
-            # self.location_count += len(advanced_region.locations)
-
-        if self.options.enable_expert:
-            expert_region = Region("Expert Peaks", self.player, self.multiworld)
-            expert_locations: dict[str, int] = {k: v for k, v in get_locations(PeaksOfYoreRegion.EXPERT).items() if
-                                                (not self.options.disable_solemn_tempest) or v != 37}
-
-            artefacts_in_pool.extend(get_location_names_by_type(PeaksOfYoreRegion.EXPERT, "Artefact"))
-            peaks_in_pool.append("Great Bulwark")
-            if not self.options.disable_solemn_tempest:
-                self.peaks_in_pool.append("Solemn Tempest")
-
-            expert_region.add_locations(expert_locations, PeaksOfYoreLocation)
-            cabin_region.connect(expert_region, "Expert Book",
-                                 lambda state: state.has("Expert Book", self.player)
-                                               and state.has("Progressive Crampons", self.player))
-            # self.location_count += len(expert_region.locations)
-        self.artefacts_peaks_in_pool = RegionLocationInfo(artefacts_in_pool, peaks_in_pool)
+        self.artefacts_peaks_in_pool = create_poy_regions(self, self.options)
 
     def create_items(self) -> None:
         # order: books, tools, ropes, bird seeds, artefacts, fill rest with extra Items
