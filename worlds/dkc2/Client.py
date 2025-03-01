@@ -34,6 +34,8 @@ DKC2_INIT_FLAG = DKC2_SRAM + 0x022
 DKC2_DAMAGE_FLAG = DKC2_SRAM + 0x044
 DKC2_INSTA_DEATH_FLAG = DKC2_SRAM + 0x046
 
+DKC2_TRACKED_LEVELS = DKC2_SRAM + 0x80
+
 DKC2_GAME_TIME = WRAM_START + 0x00D5
 DKC2_IN_LEVEL = WRAM_START + 0x01FF
 DKC2_CURRENT_LEVEL = WRAM_START + 0x08A8    # 0xD3?
@@ -304,6 +306,10 @@ class DKC2SNIClient(SNIClient):
                 return
 
         # Send current map to poptracker
+        reached_levels = await snes_read(ctx, DKC2_TRACKED_LEVELS, 0x20)
+        if reached_levels is None:
+            return
+
         if nmi_pointer == 0x8CE9 or nmi_pointer == 0x8CF1:
             poptracker_id = 0x100 | int.from_bytes(current_map, "little")
         else:
@@ -311,6 +317,27 @@ class DKC2SNIClient(SNIClient):
 
         if self.current_map != poptracker_id:
             self.current_map = poptracker_id
+
+            # Save reached levels
+            if poptracker_id < 0x100:
+                reached_levels = bytearray(reached_levels)
+                level_bit = 1 << (poptracker_id & 0x0F)
+                level_offset = (poptracker_id >> 3) & 0x1E
+                level_data = int.from_bytes(reached_levels[level_offset:level_offset+2], "little")
+                level_data |= level_bit
+                reached_levels[level_offset:level_offset+2] = level_data.to_bytes(2, "little")
+                snes_buffered_write(ctx, DKC2_TRACKED_LEVELS, bytearray(reached_levels))
+                await snes_flush_writes(ctx)
+
+                await ctx.send_msgs([{
+                    "cmd": "Set", 
+                    "key": f"dkc2_reached_levels_{ctx.team}_{ctx.slot}", 
+                    "default": 0,
+                    "want_reply": False,
+                    "operations":
+                        [{"operation": "replace", "value": list(reached_levels)}],
+                }])
+
             await ctx.send_msgs([{
                 "cmd": "Set", 
                 "key": f"dkc2_current_map_{ctx.team}_{ctx.slot}", 
@@ -530,7 +557,7 @@ class DKC2SNIClient(SNIClient):
             elif self.barrel_request == "successful":
                 barrels += 1
                 barrels &= 0x00FF
-                snes_buffered_write(ctx, DKC2_SRAM + + 0x48, bytes([barrels]))
+                snes_buffered_write(ctx, DKC2_SRAM + 0x48, bytes([barrels]))
                 self.barrel_request = ""
                 logger.info(f"Delivered DK Barrel! You have {barrels} barrels pending to be actually delivered in game.")
             
