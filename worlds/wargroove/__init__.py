@@ -14,12 +14,27 @@ from .Options import WargrooveOptions
 class WargrooveSettings(settings.Group):
     class RootDirectory(settings.UserFolderPath):
         """
-        Locate the Wargroove root directory on your system.
-        This is used by the Wargroove client, so it knows where to send communication files to
+        Locates the Wargroove root directory on your system.
+        This is used by the Wargroove client, so it knows where to send communication files to.
         """
         description = "Wargroove root directory"
 
+    class SaveDirectory(settings.UserFolderPath):
+        """
+        Locates the Wargroove save file directory on your system.
+        This is used by the Wargroove client, so it knows where to send communication files to.
+        """
+        description = "Wargroove save file/appdata directory"
+
+        def browse(self, **kwargs):
+            from Utils import messagebox
+            messagebox("AppData folder not found",
+                       "WargrooveClient couldn't detect a path to the AppData folder.\n"
+                       "Please select the folder containing the \"/Chucklefish/Wargroove/\" directories.")
+            super().browse(**kwargs)
+
     root_directory: RootDirectory = RootDirectory("C:/Program Files (x86)/Steam/steamapps/common/Wargroove")
+    save_directory: SaveDirectory = SaveDirectory("%APPDATA%")
 
 
 class WargrooveWeb(WebWorld):
