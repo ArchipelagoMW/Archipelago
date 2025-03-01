@@ -6,7 +6,7 @@ Before running these scripts, please modify `dev_config.json` in this directory 
 - gameDirectory: This should point to your TitS the 3rd installation root. This root should contain the unmodified `ED6_DTXX` files from your game download.
 - lbARKDirectory: This should point to your [LB-ARK installation](https://github.com/Aureole-Suite/LB-ARK). This is by default `"C:\\Program Files (x86)\\Steam\\steamapps\\common\\Trails in the Sky the 3rd\\data"`
 
-Afterwards, please download both [calmare.exe](https://github.com/Kyuuhachi/Aureole/releases/tag/factoria-v1.1.0) and [factoria.exe](https://github.com/Kyuuhachi/Aureole/releases/tag/factoria-v1.1.0) and place them within the `worlds/tits_the_third/external_tools` directory.
+Afterwards, please download both [calmare.exe](https://github.com/Kyuuhachi/Aureole/releases/tag/calmare-v0.1.3) and [factoria.exe](https://github.com/Aureole-Suite/Factoria/releases/tag/v1.0) and place them within the `worlds/tits_the_third/external_tools` directory.
 
 ## patch.py
 
