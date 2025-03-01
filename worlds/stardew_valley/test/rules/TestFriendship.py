@@ -11,34 +11,34 @@ class TestFriendsanityDatingRules(SVTestBase):
 
     def test_earning_dating_heart_requires_dating(self):
         self.collect_all_the_money()
-        self.multiworld.state.collect(self.create_item("Fall"), prevent_sweep=False)
-        self.multiworld.state.collect(self.create_item("Beach Bridge"), prevent_sweep=False)
-        self.multiworld.state.collect(self.create_item("Progressive House"), prevent_sweep=False)
+        self.multiworld.state.collect(self.create_item("Fall"))
+        self.multiworld.state.collect(self.create_item("Beach Bridge"))
+        self.multiworld.state.collect(self.create_item("Progressive House"))
         for i in range(3):
-            self.multiworld.state.collect(self.create_item("Progressive Pickaxe"), prevent_sweep=False)
-            self.multiworld.state.collect(self.create_item("Progressive Weapon"), prevent_sweep=False)
-            self.multiworld.state.collect(self.create_item("Progressive Axe"), prevent_sweep=False)
-            self.multiworld.state.collect(self.create_item("Progressive Barn"), prevent_sweep=False)
+            self.multiworld.state.collect(self.create_item("Progressive Pickaxe"))
+            self.multiworld.state.collect(self.create_item("Progressive Weapon"))
+            self.multiworld.state.collect(self.create_item("Progressive Axe"))
+            self.multiworld.state.collect(self.create_item("Progressive Barn"))
         for i in range(10):
-            self.multiworld.state.collect(self.create_item("Foraging Level"), prevent_sweep=False)
-            self.multiworld.state.collect(self.create_item("Farming Level"), prevent_sweep=False)
-            self.multiworld.state.collect(self.create_item("Mining Level"), prevent_sweep=False)
-            self.multiworld.state.collect(self.create_item("Combat Level"), prevent_sweep=False)
-            self.multiworld.state.collect(self.create_item("Progressive Mine Elevator"), prevent_sweep=False)
-            self.multiworld.state.collect(self.create_item("Progressive Mine Elevator"), prevent_sweep=False)
+            self.multiworld.state.collect(self.create_item("Foraging Level"))
+            self.multiworld.state.collect(self.create_item("Farming Level"))
+            self.multiworld.state.collect(self.create_item("Mining Level"))
+            self.multiworld.state.collect(self.create_item("Combat Level"))
+            self.multiworld.state.collect(self.create_item("Progressive Mine Elevator"))
+            self.multiworld.state.collect(self.create_item("Progressive Mine Elevator"))
 
         npc = "Abigail"
         heart_name = f"{npc} <3"
         step = 3
 
         self.assert_can_reach_heart_up_to(npc, 3, step)
-        self.multiworld.state.collect(self.create_item(heart_name), prevent_sweep=False)
+        self.multiworld.state.collect(self.create_item(heart_name))
         self.assert_can_reach_heart_up_to(npc, 6, step)
-        self.multiworld.state.collect(self.create_item(heart_name), prevent_sweep=False)
+        self.multiworld.state.collect(self.create_item(heart_name))
         self.assert_can_reach_heart_up_to(npc, 8, step)
-        self.multiworld.state.collect(self.create_item(heart_name), prevent_sweep=False)
+        self.multiworld.state.collect(self.create_item(heart_name))
         self.assert_can_reach_heart_up_to(npc, 10, step)
-        self.multiworld.state.collect(self.create_item(heart_name), prevent_sweep=False)
+        self.multiworld.state.collect(self.create_item(heart_name))
         self.assert_can_reach_heart_up_to(npc, 14, step)
 
     def assert_can_reach_heart_up_to(self, npc: str, max_reachable: int, step: int):

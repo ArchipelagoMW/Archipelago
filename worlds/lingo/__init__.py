@@ -128,6 +128,9 @@ class LingoWorld(World):
                     pool.append(self.create_item("Puzzle Skip"))
 
             if traps:
+                if self.options.speed_boost_mode:
+                    self.options.trap_weights.value["Slowness Trap"] = 0
+
                 total_weight = sum(self.options.trap_weights.values())
 
                 if total_weight == 0:
@@ -171,7 +174,7 @@ class LingoWorld(World):
             "death_link", "victory_condition", "shuffle_colors", "shuffle_doors", "shuffle_paintings", "shuffle_panels",
             "enable_pilgrimage", "sunwarp_access", "mastery_achievements", "level_2_requirement", "location_checks",
             "early_color_hallways", "pilgrimage_allows_roof_access", "pilgrimage_allows_paintings", "shuffle_sunwarps",
-            "group_doors"
+            "group_doors", "speed_boost_mode"
         ]
 
         slot_data = {
@@ -188,5 +191,8 @@ class LingoWorld(World):
         return slot_data
 
     def get_filler_item_name(self) -> str:
-        filler_list = [":)", "The Feeling of Being Lost", "Wanderlust", "Empty White Hallways"]
-        return self.random.choice(filler_list)
+        if self.options.speed_boost_mode:
+            return "Speed Boost"
+        else:
+            filler_list = [":)", "The Feeling of Being Lost", "Wanderlust", "Empty White Hallways"]
+            return self.random.choice(filler_list)

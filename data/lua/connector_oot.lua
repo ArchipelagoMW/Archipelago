@@ -1816,7 +1816,7 @@ end
 
 -- Main control handling: main loop and socket receive
 
-function receive()
+function APreceive()
     l, e = ootSocket:receive()
     -- Handle incoming message
     if e == 'closed' then
@@ -1874,7 +1874,7 @@ function main()
         end
         if (curstate == STATE_OK) or (curstate == STATE_INITIAL_CONNECTION_MADE) or (curstate == STATE_TENTATIVELY_CONNECTED) then
             if (frame % 30 == 0) then
-                receive()
+                APreceive()
             end
         elseif (curstate == STATE_UNINITIALIZED) then
             if  (frame % 60 == 0) then

@@ -1,7 +1,5 @@
 ==Tutorial (Inside)==
 
-Menu (Menu) - Entry - True:
-
 Entry (Entry):
 
 Tutorial First Hallway (Tutorial First Hallway) - Entry - True - Tutorial First Hallway Room - 0x00064:
@@ -754,12 +752,12 @@ Swamp Entry Area (Swamp) - Swamp Sliding Bridge - TrueOneWay:
 158300 - 0x00987 (Intro Back 7) - 0x00985 - Rotated Shapers & Triangles
 158301 - 0x181A9 (Intro Back 8) - 0x00987 - Shapers & Triangles
 
-Swamp Sliding Bridge (Swamp) - Swamp Entry Area - 0x00609 - Swamp Near Platform - 0x00609:
+Swamp Sliding Bridge (Swamp) - Swamp Entry Area - 0x00609 - Swamp Platform - 0x00609:
 158302 - 0x00609 (Sliding Bridge) - True - Shapers
 159342 - 0x0105D (Sliding Bridge Left EP) - 0x00609 - True
 159343 - 0x0A304 (Sliding Bridge Right EP) - 0x00609 - True
 
-Swamp Near Platform (Swamp) - Swamp Cyan Underwater - 0x04B7F - Swamp Near Boat - 0x38AE6 - Swamp Between Bridges Near - 0x184B7 - Swamp Sliding Bridge - TrueOneWay:
+Swamp Platform (Swamp) - Swamp Cyan Underwater - 0x04B7F - Swamp Near Boat - 0x38AE6 - Swamp Between Bridges Near - 0x184B7 - Swamp Sliding Bridge - TrueOneWay:
 158313 - 0x00982 (Platform Row 1) - True - Shapers
 158314 - 0x0097F (Platform Row 2) - 0x00982 - Shapers
 158315 - 0x0098F (Platform Row 3) - 0x0097F - Shapers

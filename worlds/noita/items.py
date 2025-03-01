@@ -52,7 +52,8 @@ def create_kantele(victory_condition: VictoryCondition) -> List[str]:
 def create_random_items(world: NoitaWorld, weights: Dict[str, int], count: int) -> List[str]:
     filler_pool = weights.copy()
     if not world.options.bad_effects:
-        del filler_pool["Trap"]
+        filler_pool["Trap"] = 0
+        filler_pool["Greed Die"] = 0
 
     return world.random.choices(population=list(filler_pool.keys()),
                                 weights=list(filler_pool.values()),
@@ -100,13 +101,13 @@ item_table: Dict[str, ItemData] = {
     "Wand (Tier 5)":                        ItemData(110010, "Wands", ItemClassification.useful, 1),
     "Wand (Tier 6)":                        ItemData(110011, "Wands", ItemClassification.useful, 1),
     "Kantele":                              ItemData(110012, "Wands", ItemClassification.useful),
-    "Fire Immunity Perk":                   ItemData(110013, "Perks", ItemClassification.progression, 1),
-    "Toxic Immunity Perk":                  ItemData(110014, "Perks", ItemClassification.progression, 1),
-    "Explosion Immunity Perk":              ItemData(110015, "Perks", ItemClassification.progression, 1),
-    "Melee Immunity Perk":                  ItemData(110016, "Perks", ItemClassification.progression, 1),
-    "Electricity Immunity Perk":            ItemData(110017, "Perks", ItemClassification.progression, 1),
-    "Tinker with Wands Everywhere Perk":    ItemData(110018, "Perks", ItemClassification.progression, 1),
-    "All-Seeing Eye Perk":                  ItemData(110019, "Perks", ItemClassification.progression, 1),
+    "Fire Immunity Perk":                   ItemData(110013, "Perks", ItemClassification.progression | ItemClassification.useful, 1),
+    "Toxic Immunity Perk":                  ItemData(110014, "Perks", ItemClassification.progression | ItemClassification.useful, 1),
+    "Explosion Immunity Perk":              ItemData(110015, "Perks", ItemClassification.progression | ItemClassification.useful, 1),
+    "Melee Immunity Perk":                  ItemData(110016, "Perks", ItemClassification.progression | ItemClassification.useful, 1),
+    "Electricity Immunity Perk":            ItemData(110017, "Perks", ItemClassification.progression | ItemClassification.useful, 1),
+    "Tinker with Wands Everywhere Perk":    ItemData(110018, "Perks", ItemClassification.progression | ItemClassification.useful, 1),
+    "All-Seeing Eye Perk":                  ItemData(110019, "Perks", ItemClassification.progression | ItemClassification.useful, 1),
     "Spatial Awareness Perk":               ItemData(110020, "Perks", ItemClassification.progression),
     "Extra Life Perk":                      ItemData(110021, "Repeatable Perks", ItemClassification.useful, 1),
     "Orb":                                  ItemData(110022, "Orbs", ItemClassification.progression_skip_balancing),
@@ -114,7 +115,7 @@ item_table: Dict[str, ItemData] = {
     "Secret Potion":                        ItemData(110024, "Items", ItemClassification.filler),
     "Powder Pouch":                         ItemData(110025, "Items", ItemClassification.filler),
     "Chaos Die":                            ItemData(110026, "Items", ItemClassification.filler),
-    "Greed Die":                            ItemData(110027, "Items", ItemClassification.filler),
+    "Greed Die":                            ItemData(110027, "Items", ItemClassification.trap),
     "Kammi":                                ItemData(110028, "Items", ItemClassification.filler, 1),
     "Refreshing Gourd":                     ItemData(110029, "Items", ItemClassification.filler, 1),
     "Sädekivi":                             ItemData(110030, "Items", ItemClassification.filler),

@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import Mock
 
-from .. import SVTestBase, create_args, allsanity_mods_6_x_x
+from .. import SVTestBase, allsanity_mods_6_x_x, fill_namespace_with_default
 from ... import STARDEW_VALLEY, FarmType, BundleRandomization, EntranceRandomization
 
 
@@ -29,7 +29,7 @@ class TestUniversalTrackerGenerationIsStable(SVTestBase):
 
         fake_context = Mock()
         fake_context.re_gen_passthrough = {STARDEW_VALLEY: ut_data}
-        args = create_args({0: self.options})
+        args = fill_namespace_with_default({0: self.options})
         args.outputpath = None
         args.outputname = None
         args.multi = 1

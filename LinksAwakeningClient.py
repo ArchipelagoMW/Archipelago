@@ -235,7 +235,7 @@ class RAGameboy():
 
     def check_command_response(self, command: str, response: bytes):
         if command == "VERSION":
-            ok = re.match("\d+\.\d+\.\d+", response.decode('ascii')) is not None
+            ok = re.match(r"\d+\.\d+\.\d+", response.decode('ascii')) is not None
         else:
             ok = response.startswith(command.encode())
         if not ok:
@@ -560,6 +560,10 @@ class LinksAwakeningContext(CommonContext):
 
         while self.client.auth == None:
             await asyncio.sleep(0.1)
+
+            # Just return if we're closing
+            if self.exit_event.is_set():
+                return
         self.auth = self.client.auth
         await self.send_connect()
 

@@ -140,7 +140,8 @@ class GanonsTower(Z3Region):
 
     # added for AP completion_condition when TowerCrystals is lower than GanonCrystals
     def CanComplete(self, items: Progression):
-        return self.world.CanAcquireAtLeast(self.world.GanonCrystals, items, RewardType.AnyCrystal)
+        return self.world.CanAcquireAtLeast(self.world.GanonCrystals, items, RewardType.AnyCrystal) and \
+            self.world.CanAcquireAtLeast(self.world.TourianBossTokens, items, RewardType.AnyBossToken)
 
     def CanFill(self, item: Item):
         if (self.Config.Multiworld):

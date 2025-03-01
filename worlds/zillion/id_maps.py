@@ -1,5 +1,6 @@
 from collections import defaultdict
-from typing import Dict, Iterable, Mapping, Tuple, TypedDict
+from collections.abc import Iterable, Mapping
+from typing import TypedDict
 
 from zilliandomizer.logic_components.items import (
     Item as ZzItem,
@@ -40,13 +41,13 @@ _zz_rescue_1 = zz_item_name_to_zz_item["rescue_1"]
 _zz_empty = zz_item_name_to_zz_item["empty"]
 
 
-def make_id_to_others(start_char: Chars) -> Tuple[
-    Dict[int, str], Dict[int, int], Dict[int, ZzItem]
+def make_id_to_others(start_char: Chars) -> tuple[
+    dict[int, str], dict[int, int], dict[int, ZzItem]
 ]:
     """ returns id_to_name, id_to_zz_id, id_to_zz_item """
-    id_to_name: Dict[int, str] = {}
-    id_to_zz_id: Dict[int, int] = {}
-    id_to_zz_item: Dict[int, ZzItem] = {}
+    id_to_name: dict[int, str] = {}
+    id_to_zz_id: dict[int, int] = {}
+    id_to_zz_item: dict[int, ZzItem] = {}
 
     if start_char == "JJ":
         name_to_zz_item = {
@@ -91,14 +92,14 @@ def make_room_name(row: int, col: int) -> str:
     return f"{chr(ord('A') + row - 1)}-{col + 1}"
 
 
-loc_name_to_id: Dict[str, int] = {
+loc_name_to_id: dict[str, int] = {
     name: id_ + base_id
     for name, id_ in pretty_loc_name_to_id.items()
 }
 
 
 def zz_reg_name_to_reg_name(zz_reg_name: str) -> str:
-    if zz_reg_name[0] == 'r' and zz_reg_name[3] == 'c':
+    if zz_reg_name[0] == "r" and zz_reg_name[3] == "c":
         row, col = parse_reg_name(zz_reg_name)
         end = zz_reg_name[5:]
         return f"{make_room_name(row, col)} {end.upper()}"
@@ -113,17 +114,17 @@ class ClientRescue(TypedDict):
 
 class ZillionSlotInfo(TypedDict):
     start_char: Chars
-    rescues: Dict[str, ClientRescue]
-    loc_mem_to_id: Dict[int, int]
+    rescues: dict[str, ClientRescue]
+    loc_mem_to_id: dict[int, int]
     """ memory location of canister to Archipelago location id number """
 
 
 def get_slot_info(regions: Iterable[RegionData],
                   start_char: Chars,
                   loc_name_to_pretty: Mapping[str, str]) -> ZillionSlotInfo:
-    items_placed_in_map_index: Dict[int, int] = defaultdict(int)
-    rescue_locations: Dict[int, RescueInfo] = {}
-    loc_memory_to_loc_id: Dict[int, int] = {}
+    items_placed_in_map_index: dict[int, int] = defaultdict(int)
+    rescue_locations: dict[int, RescueInfo] = {}
+    loc_memory_to_loc_id: dict[int, int] = {}
     for region in regions:
         for loc in region.locations:
             assert loc.item, ("There should be an item placed in every location before "
@@ -142,7 +143,7 @@ def get_slot_info(regions: Iterable[RegionData],
                 loc_memory_to_loc_id[loc_memory] = pretty_loc_name_to_id[loc_name_to_pretty[loc.name]]
                 items_placed_in_map_index[map_index] += 1
 
-    rescues: Dict[str, ClientRescue] = {}
+    rescues: dict[str, ClientRescue] = {}
     for i in (0, 1):
         if i in rescue_locations:
             ri = rescue_locations[i]

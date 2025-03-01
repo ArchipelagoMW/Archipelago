@@ -21,7 +21,6 @@ from ..content.vanilla.ginger_island import ginger_island_content_pack
 from ..content.vanilla.qi_board import qi_board_content_pack
 from ..stardew_rule import StardewRule, Has, false_
 from ..strings.animal_product_names import AnimalProduct
-from ..strings.ap_names.event_names import Event
 from ..strings.ap_names.transport_names import Transportation
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.crop_names import Vegetable, Fruit
@@ -61,7 +60,7 @@ AbilityLogicMixin, SpecialOrderLogicMixin, MonsterLogicMixin]]):
             SpecialOrder.gifts_for_george: self.logic.season.has(Season.spring) & self.logic.has(Forageable.leek),
             SpecialOrder.fragments_of_the_past: self.logic.monster.can_kill(Monster.skeleton),
             SpecialOrder.gus_famous_omelet: self.logic.has(AnimalProduct.any_egg),
-            SpecialOrder.crop_order: self.logic.ability.can_farm_perfectly() & self.logic.received(Event.can_ship_items),
+            SpecialOrder.crop_order: self.logic.ability.can_farm_perfectly() & self.logic.shipping.can_use_shipping_bin,
             SpecialOrder.community_cleanup: self.logic.skill.can_crab_pot,
             SpecialOrder.the_strong_stuff: self.logic.has(ArtisanGood.specific_juice(Vegetable.potato)),
             SpecialOrder.pierres_prime_produce: self.logic.ability.can_farm_perfectly(),
@@ -94,12 +93,12 @@ AbilityLogicMixin, SpecialOrderLogicMixin, MonsterLogicMixin]]):
             self.update_rules({
                 SpecialOrder.qis_crop: self.logic.ability.can_farm_perfectly() & self.logic.region.can_reach(Region.greenhouse) &
                                        self.logic.region.can_reach(Region.island_west) & self.logic.skill.has_total_level(50) &
-                                       self.logic.has(Machine.seed_maker) & self.logic.received(Event.can_ship_items),
+                                       self.logic.has(Machine.seed_maker) & self.logic.shipping.can_use_shipping_bin,
                 SpecialOrder.lets_play_a_game: self.logic.arcade.has_junimo_kart_max_level(),
                 SpecialOrder.four_precious_stones: self.logic.time.has_lived_max_months & self.logic.has("Prismatic Shard") &
                                                    self.logic.ability.can_mine_perfectly_in_the_skull_cavern(),
                 SpecialOrder.qis_hungry_challenge: self.logic.ability.can_mine_perfectly_in_the_skull_cavern(),
-                SpecialOrder.qis_cuisine: self.logic.cooking.can_cook() & self.logic.received(Event.can_ship_items) &
+                SpecialOrder.qis_cuisine: self.logic.cooking.can_cook() & self.logic.shipping.can_use_shipping_bin &
                                           (self.logic.money.can_spend_at(Region.saloon, 205000) | self.logic.money.can_spend_at(Region.pierre_store, 170000)),
                 SpecialOrder.qis_kindness: self.logic.relationship.can_give_loved_gifts_to_everyone(),
                 SpecialOrder.extended_family: self.logic.ability.can_fish_perfectly() & self.logic.has(Fish.angler) & self.logic.has(Fish.glacierfish) &

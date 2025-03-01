@@ -1,7 +1,7 @@
 from math import floor
 from pkgutil import get_data
 from random import Random
-from typing import Any, Collection, Dict, FrozenSet, Iterable, List, Set, Tuple, TypeVar
+from typing import Any, Collection, Dict, FrozenSet, Iterable, List, Optional, Set, Tuple, TypeVar
 
 T = TypeVar("T")
 
@@ -11,6 +11,11 @@ T = TypeVar("T")
 # {} is an unusable requirement.
 # {{}} is an always usable requirement.
 WitnessRule = FrozenSet[FrozenSet[str]]
+
+
+def cast_not_none(value: Optional[T]) -> T:
+    assert value is not None
+    return value
 
 
 def weighted_sample(world_random: Random, population: List[T], weights: List[float], k: int) -> List[T]:
@@ -197,10 +202,6 @@ def get_discard_exclusion_list() -> List[str]:
 
 def get_caves_except_path_to_challenge_exclusion_list() -> List[str]:
     return get_adjustment_file("settings/Exclusions/Caves_Except_Path_To_Challenge.txt")
-
-
-def get_elevators_come_to_you() -> List[str]:
-    return get_adjustment_file("settings/Door_Shuffle/Elevators_Come_To_You.txt")
 
 
 def get_entity_hunt() -> List[str]:

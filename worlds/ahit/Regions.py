@@ -740,17 +740,20 @@ def is_valid_first_act(world: "HatInTimeWorld", act: Region) -> bool:
 
 
 def connect_time_rift(world: "HatInTimeWorld", time_rift: Region, exit_region: Region):
-    i = 1
-    while i <= len(rift_access_regions[time_rift.name]):
+    for i, access_region in enumerate(rift_access_regions[time_rift.name], start=1):
+        # Matches the naming convention and iteration order in `create_rift_connections()`.
         name = f"{time_rift.name} Portal - Entrance {i}"
         entrance: Entrance
         try:
-            entrance = world.multiworld.get_entrance(name, world.player)
+            entrance = world.get_entrance(name)
+            # Reconnect the rift access region to the new exit region.
             reconnect_regions(entrance, entrance.parent_region, exit_region)
         except KeyError:
-            time_rift.connect(exit_region, name)
-
-        i += 1
+            # The original entrance to the time rift has been deleted by already reconnecting a telescope act to the
+            # time rift, so create a new entrance from the original rift access region to the new exit region.
+            # Normally, acts and time rifts are sorted such that time rifts are reconnected to acts/rifts first, but
+            # starting acts/rifts and act-plando can reconnect acts to time rifts before this happens.
+            world.get_region(access_region).connect(exit_region, name)
 
 
 def get_shuffleable_act_regions(world: "HatInTimeWorld") -> List[Region]:

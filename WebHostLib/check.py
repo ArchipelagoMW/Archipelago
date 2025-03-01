@@ -105,8 +105,9 @@ def roll_options(options: Dict[str, Union[dict, str]],
                                                              plando_options=plando_options)
                 else:
                     for i, yaml_data in enumerate(yaml_datas):
-                        rolled_results[f"{filename}/{i + 1}"] = roll_settings(yaml_data,
-                                                                              plando_options=plando_options)
+                        if yaml_data is not None:
+                            rolled_results[f"{filename}/{i + 1}"] = roll_settings(yaml_data,
+                                                                                  plando_options=plando_options)
             except Exception as e:
                 if e.__cause__:
                     results[filename] = f"Failed to generate options in {filename}: {e} - {e.__cause__}"

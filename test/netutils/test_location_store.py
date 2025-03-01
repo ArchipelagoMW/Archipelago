@@ -115,6 +115,7 @@ class Base:
         def test_get_for_player(self) -> None:
             self.assertEqual(self.store.get_for_player(3), {4: {9}})
             self.assertEqual(self.store.get_for_player(1), {1: {13}, 2: {22, 23}})
+            self.assertEqual(self.store.get_for_player(9999), {})
 
         def test_get_checked(self) -> None:
             self.assertEqual(self.store.get_checked(full_state, 0, 1), [11, 12, 13])
@@ -122,17 +123,47 @@ class Base:
             self.assertEqual(self.store.get_checked(empty_state, 0, 1), [])
             self.assertEqual(self.store.get_checked(full_state, 0, 3), [9])
 
+        def test_get_checked_exception(self) -> None:
+            with self.assertRaises(KeyError):
+                self.store.get_checked(empty_state, 0, 9999)
+            bad_state = {(0, 6): {1}}
+            with self.assertRaises(KeyError):
+                self.store.get_checked(bad_state, 0, 6)
+            bad_state = {(0, 9999): set()}
+            with self.assertRaises(KeyError):
+                self.store.get_checked(bad_state, 0, 9999)
+
         def test_get_missing(self) -> None:
             self.assertEqual(self.store.get_missing(full_state, 0, 1), [])
             self.assertEqual(self.store.get_missing(one_state, 0, 1), [11, 13])
             self.assertEqual(self.store.get_missing(empty_state, 0, 1), [11, 12, 13])
             self.assertEqual(self.store.get_missing(empty_state, 0, 3), [9])
 
+        def test_get_missing_exception(self) -> None:
+            with self.assertRaises(KeyError):
+                self.store.get_missing(empty_state, 0, 9999)
+            bad_state = {(0, 6): {1}}
+            with self.assertRaises(KeyError):
+                self.store.get_missing(bad_state, 0, 6)
+            bad_state = {(0, 9999): set()}
+            with self.assertRaises(KeyError):
+                self.store.get_missing(bad_state, 0, 9999)
+
         def test_get_remaining(self) -> None:
             self.assertEqual(self.store.get_remaining(full_state, 0, 1), [])
             self.assertEqual(self.store.get_remaining(one_state, 0, 1), [(1, 13), (2, 21)])
             self.assertEqual(self.store.get_remaining(empty_state, 0, 1), [(1, 13), (2, 21), (2, 22)])
             self.assertEqual(self.store.get_remaining(empty_state, 0, 3), [(4, 99)])
+
+        def test_get_remaining_exception(self) -> None:
+            with self.assertRaises(KeyError):
+                self.store.get_remaining(empty_state, 0, 9999)
+            bad_state = {(0, 6): {1}}
+            with self.assertRaises(KeyError):
+                self.store.get_missing(bad_state, 0, 6)
+            bad_state = {(0, 9999): set()}
+            with self.assertRaises(KeyError):
+                self.store.get_remaining(bad_state, 0, 9999)
 
         def test_location_set_intersection(self) -> None:
             locations = {10, 11, 12}
@@ -181,6 +212,16 @@ class Base:
                 })
                 self.assertEqual(len(store), 1)
                 self.assertEqual(len(store[1]), 0)
+                self.assertEqual(sorted(store.find_item(set(), 1)), [])
+                self.assertEqual(sorted(store.find_item({1}, 1)), [])
+                self.assertEqual(sorted(store.find_item({1, 2}, 1)), [])
+                self.assertEqual(store.get_for_player(1), {})
+                self.assertEqual(store.get_checked(empty_state, 0, 1), [])
+                self.assertEqual(store.get_checked(full_state, 0, 1), [])
+                self.assertEqual(store.get_missing(empty_state, 0, 1), [])
+                self.assertEqual(store.get_missing(full_state, 0, 1), [])
+                self.assertEqual(store.get_remaining(empty_state, 0, 1), [])
+                self.assertEqual(store.get_remaining(full_state, 0, 1), [])
 
         def test_no_locations_for_1(self) -> None:
             store = self.type({

@@ -19,11 +19,10 @@ from .TotalSMZ3.WorldState import WorldState
 from .TotalSMZ3.Region import IReward, IMedallionAccess
 from .TotalSMZ3.Text.Texts import openFile
 from worlds.AutoWorld import World, AutoLogicRegister, WebWorld
-from .Client import SMZ3SNIClient
-from .Rom import get_base_rom_bytes, SMZ3DeltaPatch
-from .ips import IPS_Patch
+from .Rom import SMZ3ProcedurePatch
 from .Options import SMZ3Options
-from Options import Accessibility, ItemsAccessibility
+from Options import ItemsAccessibility
+from .Client import SMZ3SNIClient
 
 world_folder = os.path.dirname(__file__)
 logger = logging.getLogger("SMZ3")
@@ -88,6 +87,21 @@ class SMZ3World(World):
         self.rom_name_available_event = threading.Event()
         self.locations: Dict[str, Location] = {}
         self.unreachable = []
+        self.junkItemsNames = [item.name for item in [
+            ItemType.Arrow,
+            ItemType.OneHundredRupees,
+            ItemType.TenArrows,
+            ItemType.ThreeBombs,
+            ItemType.OneRupee,
+            ItemType.FiveRupees,
+            ItemType.TwentyRupees,
+            ItemType.FiftyRupees,
+            ItemType.ThreeHundredRupees,
+            ItemType.ETank,
+            ItemType.Missile,
+            ItemType.Super,
+            ItemType.PowerBomb
+        ]]
         super().__init__(world, player)
 
     @classmethod
@@ -183,10 +197,6 @@ class SMZ3World(World):
                             }
         return itemType in progressionTypes
 
-    @classmethod
-    def stage_assert_generate(cls, multiworld: MultiWorld):
-        base_combined_rom = get_base_rom_bytes()
-
     def generate_early(self):
         self.config = Config()
         self.config.GameMode = GameMode.Multiworld
@@ -207,6 +217,10 @@ class SMZ3World(World):
         SMZ3World.location_names = frozenset(self.smz3World.locationLookup.keys())
 
         self.multiworld.state.smz3state[self.player] = TotalSMZ3Item.Progression([])
+
+        if not self.smz3World.Config.Keysanity:
+            # Dungeons items here are not in the itempool and will be prefilled locally so they must stay local
+            self.options.non_local_items.value -= frozenset(item_name for item_name in self.item_names if TotalSMZ3Item.Item.IsNameDungeonItem(item_name))
     
     def create_items(self):
         self.dungeon = TotalSMZ3Item.Item.CreateDungeonPool(self.smz3World)
@@ -223,8 +237,6 @@ class SMZ3World(World):
             progressionItems = self.progression + self.dungeon + self.keyCardsItems + self.SmMapsItems
         else:
             progressionItems = self.progression
-            # Dungeons items here are not in the itempool and will be prefilled locally so they must stay local
-            self.options.non_local_items.value -= frozenset(item_name for item_name in self.item_names if TotalSMZ3Item.Item.IsNameDungeonItem(item_name))
             for item in self.keyCardsItems:
                 self.multiworld.push_precollected(SMZ3Item(item.Type.name, ItemClassification.filler, item.Type, self.item_name_to_id[item.Type.name], self.player, item))
 
@@ -235,7 +247,7 @@ class SMZ3World(World):
         self.multiworld.itempool += itemPool
 
     def set_rules(self):
-        # SM G4 is logically required to access Ganon's Tower in SMZ3
+        # SM G4 is logically required to complete Ganon's Tower
         self.multiworld.completion_condition[self.player] = lambda state: \
             self.smz3World.GetRegion("Ganon's Tower").CanEnter(state.smz3state[self.player]) and \
             self.smz3World.GetRegion("Ganon's Tower").TowerAscend(state.smz3state[self.player]) and \
@@ -444,10 +456,6 @@ class SMZ3World(World):
 
     def generate_output(self, output_directory: str):
         try:
-            base_combined_rom = get_base_rom_bytes()
-            basepatch = IPS_Patch.load(world_folder + "/data/zsm.ips")
-            base_combined_rom = basepatch.apply(base_combined_rom)
-
             patcher = TotalSMZ3Patch(self.smz3World,
                                      [world.smz3World for key, world in self.multiworld.worlds.items() if isinstance(world, SMZ3World) and hasattr(world, "smz3World")],
                                      self.multiworld.seed_name,
@@ -459,21 +467,13 @@ class SMZ3World(World):
             patches.update(self.apply_sm_custom_sprite())
             patches.update(self.apply_item_names())
             patches.update(self.apply_customization())
-            for addr, bytes in patches.items():
-                offset = 0
-                for byte in bytes:
-                    base_combined_rom[addr + offset] = byte
-                    offset += 1
 
-            outfilebase = self.multiworld.get_out_file_name_base(self.player)
+            patch = SMZ3ProcedurePatch(player=self.player, player_name=self.player_name)
+            patch.write_tokens(patches)
+            rom_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}"
+                                                      f"{patch.patch_file_ending}")
+            patch.write(rom_path)
 
-            filename = os.path.join(output_directory, f"{outfilebase}.sfc")
-            with open(filename, "wb") as binary_file:
-                binary_file.write(base_combined_rom)
-            patch = SMZ3DeltaPatch(os.path.splitext(filename)[0] + SMZ3DeltaPatch.patch_file_ending, player=self.player,
-                                   player_name=self.multiworld.player_name[self.player], patched_path=filename)
-            patch.write()
-            os.remove(filename)
             self.rom_name = bytearray(patcher.title, 'utf8')
         except:
             raise

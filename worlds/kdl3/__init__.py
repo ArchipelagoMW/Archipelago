@@ -325,7 +325,7 @@ class KDL3World(World):
 
     def generate_output(self, output_directory: str) -> None:
         try:
-            patch = KDL3ProcedurePatch()
+            patch = KDL3ProcedurePatch(player=self.player, player_name=self.player_name)
             patch_rom(self, patch)
 
             self.rom_name = patch.name

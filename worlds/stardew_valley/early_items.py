@@ -1,11 +1,13 @@
 from random import Random
 
 from . import options as stardew_options
+from .content import StardewContent
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.transport_names import Transportation
 from .strings.building_names import Building
 from .strings.region_names import Region
 from .strings.season_names import Season
+from .strings.skill_names import Skill
 from .strings.tv_channel_names import Channel
 from .strings.wallet_item_names import Wallet
 
@@ -14,7 +16,7 @@ always_early_candidates = [Region.greenhouse, Transportation.desert_obelisk, Wal
 seasons = [Season.spring, Season.summer, Season.fall, Season.winter]
 
 
-def setup_early_items(multiworld, options: stardew_options.StardewValleyOptions, player: int, random: Random):
+def setup_early_items(multiworld, options: stardew_options.StardewValleyOptions, content: StardewContent, player: int, random: Random):
     early_forced = []
     early_candidates = []
     early_candidates.extend(always_early_candidates)
@@ -31,12 +33,13 @@ def setup_early_items(multiworld, options: stardew_options.StardewValleyOptions,
         early_forced.append("Progressive Backpack")
 
     if options.tool_progression & stardew_options.ToolProgression.option_progressive:
-        if options.fishsanity != stardew_options.Fishsanity.option_none:
+        if content.features.fishsanity.is_enabled:
             early_candidates.append("Progressive Fishing Rod")
         early_forced.append("Progressive Pickaxe")
 
-    if options.skill_progression == stardew_options.SkillProgression.option_progressive:
-        early_forced.append("Fishing Level")
+    fishing = content.skills.get(Skill.fishing)
+    if fishing is not None and content.features.skill_progression.is_progressive:
+        early_forced.append(fishing.level_name)
 
     if options.quest_locations >= 0:
         early_candidates.append(Wallet.magnifying_glass)

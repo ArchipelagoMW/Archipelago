@@ -7,7 +7,8 @@ default_features = StardewFeatures(
     feature.booksanity.BooksanityDisabled(),
     feature.cropsanity.CropsanityDisabled(),
     feature.fishsanity.FishsanityNone(),
-    feature.friendsanity.FriendsanityNone()
+    feature.friendsanity.FriendsanityNone(),
+    feature.skill_progression.SkillProgressionVanilla(),
 )
 
 

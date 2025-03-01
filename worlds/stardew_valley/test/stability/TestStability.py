@@ -7,13 +7,8 @@ import unittest
 from BaseClasses import get_seed
 from .. import SVTestCase
 
-# There seems to be 4 bytes that appear at random at the end of the output, breaking the json... I don't know where they came from.
-BYTES_TO_REMOVE = 4
-
 # <function Location.<lambda> at 0x102ca98a0>
 lambda_regex = re.compile(r"^<function Location\.<lambda> at (.*)>$")
-# Python 3.10.2\r\n
-python_version_regex = re.compile(r"^Python (\d+)\.(\d+)\.(\d+)\s*$")
 
 
 class TestGenerationIsStable(SVTestCase):
@@ -29,8 +24,8 @@ class TestGenerationIsStable(SVTestCase):
         output_a = subprocess.check_output([sys.executable, '-m', 'worlds.stardew_valley.test.stability.StabilityOutputScript', '--seed', str(seed)])
         output_b = subprocess.check_output([sys.executable, '-m', 'worlds.stardew_valley.test.stability.StabilityOutputScript', '--seed', str(seed)])
 
-        result_a = json.loads(output_a[:-BYTES_TO_REMOVE])
-        result_b = json.loads(output_b[:-BYTES_TO_REMOVE])
+        result_a = json.loads(output_a)
+        result_b = json.loads(output_b)
 
         for i, ((room_a, bundles_a), (room_b, bundles_b)) in enumerate(zip(result_a["bundles"].items(), result_b["bundles"].items())):
             self.assertEqual(room_a, room_b, f"Bundle rooms at index {i} is different between both executions. Seed={seed}")

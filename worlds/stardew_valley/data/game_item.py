@@ -1,16 +1,10 @@
 import enum
-import sys
 from abc import ABC
 from dataclasses import dataclass, field
 from types import MappingProxyType
 from typing import List, Iterable, Set, ClassVar, Tuple, Mapping, Callable, Any
 
 from ..stardew_rule.protocol import StardewRule
-
-if sys.version_info >= (3, 10):
-    kw_only = {"kw_only": True}
-else:
-    kw_only = {}
 
 DEFAULT_REQUIREMENT_TAGS = MappingProxyType({})
 
@@ -36,21 +30,17 @@ class ItemTag(enum.Enum):
 class ItemSource(ABC):
     add_tags: ClassVar[Tuple[ItemTag]] = ()
 
+    other_requirements: Tuple[Requirement, ...] = field(kw_only=True, default_factory=tuple)
+
     @property
     def requirement_tags(self) -> Mapping[str, Tuple[ItemTag, ...]]:
         return DEFAULT_REQUIREMENT_TAGS
 
-    # FIXME this should just be an optional field, but kw_only requires python 3.10...
-    @property
-    def other_requirements(self) -> Iterable[Requirement]:
-        return ()
 
-
-@dataclass(frozen=True, **kw_only)
+@dataclass(frozen=True, kw_only=True)
 class GenericSource(ItemSource):
     regions: Tuple[str, ...] = ()
     """No region means it's available everywhere."""
-    other_requirements: Tuple[Requirement, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -59,7 +49,7 @@ class CustomRuleSource(ItemSource):
     create_rule: Callable[[Any], StardewRule]
 
 
-@dataclass(frozen=True, **kw_only)
+@dataclass(frozen=True, kw_only=True)
 class CompoundSource(ItemSource):
     sources: Tuple[ItemSource, ...] = ()
 

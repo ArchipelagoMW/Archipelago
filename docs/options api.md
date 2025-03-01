@@ -95,7 +95,7 @@ user hovers over the yellow "(?)" icon, and included in the YAML templates gener
 The WebHost can display Option documentation either as plain text with all whitespace preserved (other than the base
 indentation), or as HTML generated from the standard Python [reStructuredText] format. Although plain text is the
 default for backwards compatibility, world authors are encouraged to write their Option documentation as
-reStructuredText and enable rich text rendering by setting `World.rich_text_options_doc = True`.
+reStructuredText and enable rich text rendering by setting `WebWorld.rich_text_options_doc = True`.
 
 [reStructuredText]: https://docutils.sourceforge.io/rst.html
 

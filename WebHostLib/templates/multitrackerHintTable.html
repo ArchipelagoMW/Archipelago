@@ -21,8 +21,20 @@
                     )
                 -%}
                     <tr>
-                        <td>{{ player_names_with_alias[(team, hint.finding_player)] }}</td>
-                        <td>{{ player_names_with_alias[(team, hint.receiving_player)] }}</td>
+                        <td>
+                            {% if get_slot_info(team, hint.finding_player).type == 2 %}
+                                <i>{{ player_names_with_alias[(team, hint.finding_player)] }}</i>
+                            {% else %}
+                                {{ player_names_with_alias[(team, hint.finding_player)] }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if get_slot_info(team, hint.receiving_player).type == 2 %}
+                                <i>{{ player_names_with_alias[(team, hint.receiving_player)] }}</i>
+                            {% else %}
+                                {{ player_names_with_alias[(team, hint.receiving_player)] }}
+                            {% endif %}
+                        </td>
                         <td>{{ item_id_to_name[games[(team, hint.receiving_player)]][hint.item] }}</td>
                         <td>{{ location_id_to_name[games[(team, hint.finding_player)]][hint.location] }}</td>
                         <td>{{ games[(team, hint.finding_player)] }}</td>

@@ -1,8 +1,10 @@
-from typing import Optional
-from BaseClasses import MultiWorld, Region, Location, Item, CollectionState
+from typing_extensions import override
+
 from zilliandomizer.logic_components.regions import Region as ZzRegion
 from zilliandomizer.logic_components.locations import Location as ZzLocation
 from zilliandomizer.logic_components.items import RESCUE
+
+from BaseClasses import MultiWorld, Region, Location, Item, CollectionState
 
 from .id_maps import loc_name_to_id
 from .item import ZillionItem
@@ -28,12 +30,12 @@ class ZillionLocation(Location):
                  zz_loc: ZzLocation,
                  player: int,
                  name: str,
-                 parent: Optional[Region] = None) -> None:
+                 parent: Region | None = None) -> None:
         loc_id = loc_name_to_id[name]
         super().__init__(player, name, loc_id, parent)
         self.zz_loc = zz_loc
 
-    # override
+    @override
     def can_fill(self, state: CollectionState, item: Item, check_access: bool = True) -> bool:
         saved_gun_req = -1
         if isinstance(item, ZillionItem) \

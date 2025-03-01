@@ -136,6 +136,12 @@ class MeritousWorld(World):
 
     def set_rules(self):
         set_rules(self.multiworld, self.player)
+        if self.goal == 0:
+            self.multiworld.completion_condition[self.player] = lambda state: state.has_any(
+                ["Victory", "Full Victory"], self.player)
+        else:
+            self.multiworld.completion_condition[self.player] = lambda state: state.has(
+                "Full Victory", self.player)
 
     def generate_basic(self):
         self.multiworld.get_location("Place of Power", self.player).place_locked_item(
@@ -165,13 +171,6 @@ class MeritousWorld(World):
             for boss in ["Meridian", "Ataraxia", "Merodach"]:
                 self.multiworld.get_location(boss, self.player).place_locked_item(
                     self.create_item("Evolution Trap"))
-
-        if self.goal == 0:
-            self.multiworld.completion_condition[self.player] = lambda state: state.has_any(
-                ["Victory", "Full Victory"], self.player)
-        else:
-            self.multiworld.completion_condition[self.player] = lambda state: state.has(
-                "Full Victory", self.player)
 
     def fill_slot_data(self) -> dict:
         return {

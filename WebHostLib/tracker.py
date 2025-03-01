@@ -5,7 +5,7 @@ from typing import Any, Callable, Dict, List, Optional, Set, Tuple, NamedTuple, 
 from uuid import UUID
 from email.utils import parsedate_to_datetime
 
-from flask import render_template, make_response, Response, request
+from flask import make_response, render_template, request, Request, Response
 from werkzeug.exceptions import abort
 
 from MultiServer import Context, get_saving_second
@@ -298,16 +298,24 @@ class TrackerData:
         return self._multidata.get("spheres", [])
 
 
-def _process_if_request_valid(incoming_request, room: Optional[Room]) -> Optional[Response]:
+def _process_if_request_valid(incoming_request: Request, room: Optional[Room]) -> Optional[Response]:
     if not room:
         abort(404)
 
-    if_modified = incoming_request.headers.get("If-Modified-Since", None)
-    if if_modified:
-        if_modified = parsedate_to_datetime(if_modified)
+    if_modified_str: Optional[str] = incoming_request.headers.get("If-Modified-Since", None)
+    if if_modified_str:
+        if_modified = parsedate_to_datetime(if_modified_str)
+        if if_modified.tzinfo is None:
+            abort(400)  # standard requires "GMT" timezone
+        # database may use datetime.utcnow(), which is timezone-naive. convert to timezone-aware.
+        last_activity = room.last_activity
+        if last_activity.tzinfo is None:
+            last_activity = room.last_activity.replace(tzinfo=datetime.timezone.utc)
         # if_modified has less precision than last_activity, so we bring them to same precision
-        if if_modified >= room.last_activity.replace(microsecond=0):
+        if if_modified >= last_activity.replace(microsecond=0):
             return make_response("",  304)
+
+    return None
 
 
 @app.route("/tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>")
@@ -415,6 +423,7 @@ def render_generic_tracker(tracker_data: TrackerData, team: int, player: int) ->
         template_name_or_list="genericTracker.html",
         game_specific_tracker=game in _player_trackers,
         room=tracker_data.room,
+        get_slot_info=tracker_data.get_slot_info,
         team=team,
         player=player,
         player_name=tracker_data.get_room_long_player_names()[team, player],
@@ -438,6 +447,7 @@ def render_generic_multiworld_tracker(tracker_data: TrackerData, enabled_tracker
         enabled_trackers=enabled_trackers,
         current_tracker="Generic",
         room=tracker_data.room,
+        get_slot_info=tracker_data.get_slot_info,
         all_slots=tracker_data.get_all_slots(),
         room_players=tracker_data.get_all_players(),
         locations=tracker_data.get_room_locations(),
@@ -489,7 +499,7 @@ if "Factorio" in network_data_package["games"]:
             (team, player): collections.Counter({
                 tracker_data.item_id_to_name["Factorio"][item_id]: count
                 for item_id, count in tracker_data.get_player_inventory_counts(team, player).items()
-            }) for team, players in tracker_data.get_all_slots().items() for player in players
+            }) for team, players in tracker_data.get_all_players().items() for player in players
             if tracker_data.get_player_game(team, player) == "Factorio"
         }
 
@@ -498,6 +508,7 @@ if "Factorio" in network_data_package["games"]:
             enabled_trackers=enabled_trackers,
             current_tracker="Factorio",
             room=tracker_data.room,
+            get_slot_info=tracker_data.get_slot_info,
             all_slots=tracker_data.get_all_slots(),
             room_players=tracker_data.get_all_players(),
             locations=tracker_data.get_room_locations(),
@@ -630,6 +641,7 @@ if "A Link to the Past" in network_data_package["games"]:
             enabled_trackers=enabled_trackers,
             current_tracker="A Link to the Past",
             room=tracker_data.room,
+            get_slot_info=tracker_data.get_slot_info,
             all_slots=tracker_data.get_all_slots(),
             room_players=tracker_data.get_all_players(),
             locations=tracker_data.get_room_locations(),

@@ -170,7 +170,8 @@ def push_shop_inventories(multiworld):
         # Retro Bow arrows will already have been pushed
         if (not multiworld.retro_bow[location.player]) or ((item_name, location.item.player)
                                                            != ("Single Arrow", location.player)):
-            location.shop.push_inventory(location.shop_slot, item_name, location.shop_price,
+            location.shop.push_inventory(location.shop_slot, item_name,
+                                         round(location.shop_price * get_price_modifier(location.item)),
                                          1, location.item.player if location.item.player != location.player else 0,
                                          location.shop_price_type)
             location.shop_price = location.shop.inventory[location.shop_slot]["price"] = min(location.shop_price,

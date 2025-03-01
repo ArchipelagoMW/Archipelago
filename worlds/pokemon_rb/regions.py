@@ -1718,7 +1718,7 @@ def create_regions(world):
     connect(multiworld, player, "Vermilion City", "Vermilion City-Dock", lambda state: state.has("S.S. Ticket", player))
     connect(multiworld, player, "Vermilion City", "Route 11")
     connect(multiworld, player, "Route 12-N", "Route 12-S", lambda state: logic.can_surf(state, world, player))
-    connect(multiworld, player, "Route 12-W", "Route 11-E", lambda state: state.has("Poke Flute", player))
+    connect(multiworld, player, "Route 12-W", "Route 11-E")
     connect(multiworld, player, "Route 12-W", "Route 12-N", lambda state: state.has("Poke Flute", player))
     connect(multiworld, player, "Route 12-W", "Route 12-S", lambda state: state.has("Poke Flute", player))
     connect(multiworld, player, "Route 12-S", "Route 12-Grass", lambda state: logic.can_cut(state, world, player), one_way=True)

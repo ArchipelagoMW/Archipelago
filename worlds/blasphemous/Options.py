@@ -1,17 +1,20 @@
 from dataclasses import dataclass
-from Options import Choice, Toggle, DefaultOnToggle, DeathLink, PerGameCommonOptions, OptionGroup
+from Options import Choice, Toggle, DefaultOnToggle, DeathLink, PerGameCommonOptions, StartInventoryPool, OptionGroup
 import random
 
 
 class ChoiceIsRandom(Choice):
-    randomized: bool = False
+    randomized: bool
+
+    def __init__(self, value: int, randomized: bool = False):
+        super().__init__(value)
+        self.randomized = randomized
 
     @classmethod
     def from_text(cls, text: str) -> Choice:
         text = text.lower()
         if text == "random":
-            cls.randomized = True
-            return cls(random.choice(list(cls.name_lookup)))
+            return cls(random.choice(list(cls.name_lookup)), True)
         for option_name, value in cls.options.items():
             if option_name == text:
                 return cls(value)
@@ -213,6 +216,7 @@ class BlasphemousDeathLink(DeathLink):
 
 @dataclass
 class BlasphemousOptions(PerGameCommonOptions):
+    start_inventory_from_pool: StartInventoryPool
     prie_dieu_warp: PrieDieuWarp
     skip_cutscenes: SkipCutscenes
     corpse_hints: CorpseHints

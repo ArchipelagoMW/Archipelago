@@ -2,7 +2,7 @@ from worlds.alttp.Dungeons import get_dungeon_item_pool
 from worlds.alttp.InvertedRegions import mark_dark_world_regions
 from worlds.alttp.ItemPool import difficulties
 from worlds.alttp.Items import item_factory
-from test.TestBase import TestBase
+from test.bases import TestBase
 from worlds.alttp.Options import GlitchesRequired
 from worlds.alttp.test import LTTPTestBase
 

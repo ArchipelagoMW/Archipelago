@@ -107,7 +107,7 @@ def load_static_data_from_file():
                 return getattr(safe_builtins, name)
             raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")
 
-    file = pkgutil.get_data(__name__, os.path.join("data", "generated.dat"))
+    file = pkgutil.get_data(__name__, "data/generated.dat")
     pickdata = RenameUnpickler(BytesIO(file)).load()
         
     HASHES.update(pickdata["HASHES"])

@@ -1,49 +1,25 @@
-from ..test import WitnessMultiworldTestBase, WitnessTestBase
-
-
-class TestElevatorsComeToYou(WitnessTestBase):
-    options = {
-        "elevators_come_to_you": True,
-        "shuffle_doors": "mixed",
-        "shuffle_symbols": False,
-    }
-
-    def test_bunker_laser(self) -> None:
-        """
-        In elevators_come_to_you, Bunker can be entered from the back.
-        This means that you can access the laser with just Bunker Elevator Control (Panel).
-        It also means that you can, for example, access UV Room with the Control and the Elevator Room Entry Door.
-        """
-
-        self.assertFalse(self.multiworld.state.can_reach("Bunker Laser Panel", "Location", self.player))
-
-        self.collect_by_name("Bunker Elevator Control (Panel)")
-
-        self.assertTrue(self.multiworld.state.can_reach("Bunker Laser Panel", "Location", self.player))
-        self.assertFalse(self.multiworld.state.can_reach("Bunker UV Room 2", "Location", self.player))
-
-        self.collect_by_name("Bunker Elevator Room Entry (Door)")
-        self.collect_by_name("Bunker Drop-Down Door Controls (Panel)")
-
-        self.assertTrue(self.multiworld.state.can_reach("Bunker UV Room 2", "Location", self.player))
+from ..test import WitnessMultiworldTestBase
 
 
 class TestElevatorsComeToYouBleed(WitnessMultiworldTestBase):
     options_per_world = [
         {
-            "elevators_come_to_you": False,
+            "elevators_come_to_you": {},
         },
         {
-            "elevators_come_to_you": True,
+            "elevators_come_to_you": {"Quarry Elevator", "Swamp Long Bridge", "Bunker Elevator"},
         },
         {
-            "elevators_come_to_you": False,
+            "elevators_come_to_you": {}
         },
     ]
 
     common_options = {
         "shuffle_symbols": False,
         "shuffle_doors": "panels",
+        "shuffle_boat": True,
+        "shuffle_EPs": "individual",
+        "obelisk_keys": False,
     }
 
     def test_correct_access_per_player(self) -> None:
@@ -53,14 +29,22 @@ class TestElevatorsComeToYouBleed(WitnessMultiworldTestBase):
         (This is essentially a "does connection info bleed over" test).
         """
 
-        self.assertFalse(self.multiworld.state.can_reach("Bunker Laser Panel", "Location", 1))
-        self.assertFalse(self.multiworld.state.can_reach("Bunker Laser Panel", "Location", 2))
-        self.assertFalse(self.multiworld.state.can_reach("Bunker Laser Panel", "Location", 3))
+        combinations = [
+            ("Quarry Elevator Control (Panel)", "Quarry Boathouse Intro Left"),
+            ("Swamp Long Bridge (Panel)", "Swamp Long Bridge Side EP"),
+            ("Bunker Elevator Control (Panel)", "Bunker Laser Panel"),
+        ]
 
-        self.collect_by_name(["Bunker Elevator Control (Panel)"], 1)
-        self.collect_by_name(["Bunker Elevator Control (Panel)"], 2)
-        self.collect_by_name(["Bunker Elevator Control (Panel)"], 3)
+        for item, location in combinations:
+            with self.subTest(f"Test that {item} only locks {location} for player 2"):
+                self.assertFalse(self.multiworld.state.can_reach_location(location, 1))
+                self.assertFalse(self.multiworld.state.can_reach_location(location, 2))
+                self.assertFalse(self.multiworld.state.can_reach_location(location, 3))
 
-        self.assertFalse(self.multiworld.state.can_reach("Bunker Laser Panel", "Location", 1))
-        self.assertTrue(self.multiworld.state.can_reach("Bunker Laser Panel", "Location", 2))
-        self.assertFalse(self.multiworld.state.can_reach("Bunker Laser Panel", "Location", 3))
+                self.collect_by_name(item, 1)
+                self.collect_by_name(item, 2)
+                self.collect_by_name(item, 3)
+
+                self.assertFalse(self.multiworld.state.can_reach_location(location, 1))
+                self.assertTrue(self.multiworld.state.can_reach_location(location, 2))
+                self.assertFalse(self.multiworld.state.can_reach_location(location, 3))

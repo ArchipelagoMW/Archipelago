@@ -140,7 +140,7 @@ base_game = BaseGameContentPack(
 
         Vegetable.broccoli: (HarvestCropSource(seed=Seed.broccoli, seasons=(Season.fall,)),),
         Vegetable.carrot: (HarvestCropSource(seed=Seed.carrot, seasons=(Season.spring,)),),
-        Fruit.powdermelon: (HarvestCropSource(seed=Seed.powdermelon, seasons=(Season.summer,)),),
+        Fruit.powdermelon: (HarvestCropSource(seed=Seed.powdermelon, seasons=(Season.winter,)),),
         Vegetable.summer_squash: (HarvestCropSource(seed=Seed.summer_squash, seasons=(Season.summer,)),),
 
         Fruit.strawberry: (HarvestCropSource(seed=Seed.strawberry, seasons=(Season.spring,)),),

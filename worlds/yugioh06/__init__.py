@@ -1,6 +1,6 @@
 import os
 import pkgutil
-from typing import Any, ClassVar, Dict, List
+from typing import Any, ClassVar, Dict, List, Set
 
 import settings
 from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
@@ -17,12 +17,14 @@ from .items import (
     draft_opponents,
     excluded_items,
     item_to_index,
-    tier_1_opponents,
     useful,
+    tier_1_opponents,
+    tier_2_opponents,
+    tier_3_opponents,
+    tier_4_opponents,
+    tier_5_opponents,
 )
-from .items import (
-    challenges as challenges,
-)
+from .items import challenges as challenges
 from .locations import (
     Bonuses,
     Campaign_Opponents,
@@ -50,7 +52,7 @@ from .client_bh import YuGiOh2006Client
 class Yugioh06Web(WebWorld):
     theme = "stone"
     setup = Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up Yu-Gi-Oh! - Ultimate Masters Edition - World Championship Tournament 2006 "
         "for Archipelago on your computer.",
         "English",
@@ -109,9 +111,17 @@ class Yugioh06World(World):
     for k, v in Required_Cards.items():
         location_name_to_id[k] = v + start_id
 
-    item_name_groups = {
-        "Core Booster": core_booster,
-        "Campaign Boss Beaten": ["Tier 1 Beaten", "Tier 2 Beaten", "Tier 3 Beaten", "Tier 4 Beaten", "Tier 5 Beaten"],
+    item_name_groups: Dict[str, Set[str]] = {
+        "Core Booster": set(core_booster),
+        "Campaign Boss Beaten": {"Tier 1 Beaten", "Tier 2 Beaten", "Tier 3 Beaten", "Tier 4 Beaten", "Tier 5 Beaten"},
+        "Challenge": set(challenges),
+        "Tier 1 Opponent": set(tier_1_opponents),
+        "Tier 2 Opponent": set(tier_2_opponents),
+        "Tier 3 Opponent": set(tier_3_opponents),
+        "Tier 4 Opponent": set(tier_4_opponents),
+        "Tier 5 Opponent": set(tier_5_opponents),
+        "Campaign Opponent": set(tier_1_opponents + tier_2_opponents + tier_3_opponents +
+                             tier_4_opponents + tier_5_opponents)
     }
 
     removed_challenges: List[str]

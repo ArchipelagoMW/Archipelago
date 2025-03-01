@@ -22,6 +22,7 @@ class TimespinnerLogic:
         self.flag_specific_keycards = bool(options and options.specific_keycards)
         self.flag_eye_spy = bool(options and options.eye_spy)
         self.flag_unchained_keys = bool(options and options.unchained_keys)
+        self.flag_prism_break = bool(options and options.prism_break)
 
         if precalculated_weights:
             if self.flag_unchained_keys:
@@ -92,6 +93,8 @@ class TimespinnerLogic:
             return True
 
     def can_kill_all_3_bosses(self, state: CollectionState) -> bool:
+        if self.flag_prism_break:
+            return state.has_all({'Laser Access M', 'Laser Access I', 'Laser Access A'}, self.player)
         return state.has_all({'Killed Maw', 'Killed Twins', 'Killed Aelana'}, self.player)
 
     def has_teleport(self, state: CollectionState) -> bool:

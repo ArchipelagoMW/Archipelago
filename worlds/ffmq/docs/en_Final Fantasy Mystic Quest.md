@@ -1,7 +1,7 @@
 # Final Fantasy Mystic Quest
 
 ## Game page in other languages:
-* [Français](/games/Final%20Fantasy%20Mystic%20Quest/info/fr)
+* [FranÃ§ais](/games/Final%20Fantasy%20Mystic%20Quest/info/fr)
 
 ## Where is the options page?
 

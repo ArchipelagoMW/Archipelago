@@ -18,7 +18,7 @@ class TestDonationLogicAll(SVTestBase):
         for donation in locations_by_tag[LocationTags.MUSEUM_DONATIONS]:
             self.assertFalse(self.world.logic.region.can_reach_location(donation.name)(self.multiworld.state))
 
-        self.multiworld.state.collect(self.create_item(railroad_item), prevent_sweep=False)
+        self.multiworld.state.collect(self.create_item(railroad_item))
 
         for donation in locations_by_tag[LocationTags.MUSEUM_DONATIONS]:
             self.assertTrue(self.world.logic.region.can_reach_location(donation.name)(self.multiworld.state))
@@ -39,7 +39,7 @@ class TestDonationLogicRandomized(SVTestBase):
         for donation in donation_locations:
             self.assertFalse(self.world.logic.region.can_reach_location(donation.name)(self.multiworld.state))
 
-        self.multiworld.state.collect(self.create_item(railroad_item), prevent_sweep=False)
+        self.multiworld.state.collect(self.create_item(railroad_item))
 
         for donation in donation_locations:
             self.assertTrue(self.world.logic.region.can_reach_location(donation.name)(self.multiworld.state))
@@ -58,7 +58,7 @@ class TestDonationLogicMilestones(SVTestBase):
         for donation in locations_by_tag[LocationTags.MUSEUM_MILESTONES]:
             self.assertFalse(self.world.logic.region.can_reach_location(donation.name)(self.multiworld.state))
 
-        self.multiworld.state.collect(self.create_item(railroad_item), prevent_sweep=False)
+        self.multiworld.state.collect(self.create_item(railroad_item))
 
         for donation in locations_by_tag[LocationTags.MUSEUM_MILESTONES]:
             self.assertTrue(self.world.logic.region.can_reach_location(donation.name)(self.multiworld.state))

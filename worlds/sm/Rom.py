@@ -4,17 +4,58 @@ import os
 import json
 import Utils
 from Utils import read_snes_rom
-from worlds.Files import APDeltaPatch
+from worlds.Files import APPatchExtension, APProcedurePatch, APTokenMixin, APTokenTypes
 from .variaRandomizer.utils.utils import openFile
 
 SMJUHASH = '21f3e98df4780ee1c667b84e57d88675'
 SM_ROM_MAX_PLAYERID = 65535
 SM_ROM_PLAYERDATA_COUNT = 202
 
-class SMDeltaPatch(APDeltaPatch):
+class SMPatchExtensions(APPatchExtension):
+    game = "Super Metroid"
+
+    @staticmethod
+    def write_crc(caller: APProcedurePatch, rom: bytes) -> bytes:
+        def checksum_mirror_sum(start, length, mask = 0x800000):
+            while not(length & mask) and mask:
+                mask >>= 1
+
+            part1 = sum(start[:mask]) & 0xFFFF
+            part2 = 0
+
+            next_length = length - mask
+            if next_length:
+                part2 = checksum_mirror_sum(start[mask:], next_length, mask >> 1)
+
+                while (next_length < mask):
+                    next_length += next_length
+                    part2 += part2
+
+            return (part1 + part2) & 0xFFFF
+
+        def write_bytes(buffer, startaddress: int, values):
+            buffer[startaddress:startaddress + len(values)] = values
+
+        buffer = bytearray(rom)
+        crc = checksum_mirror_sum(buffer, len(buffer))
+        inv = crc ^ 0xFFFF
+        write_bytes(buffer, 0x7FDC, [inv & 0xFF, (inv >> 8) & 0xFF, crc & 0xFF, (crc >> 8) & 0xFF])
+        return bytes(buffer)
+
+class SMProcedurePatch(APProcedurePatch, APTokenMixin):
     hash = SMJUHASH
     game = "Super Metroid"
     patch_file_ending = ".apsm"
+
+    procedure = [
+        ("apply_tokens", ["token_data.bin"]),
+        ("write_crc", [])
+    ]
+
+    def write_tokens(self, patches):
+        for addr, data in patches.items():
+            self.write_token(APTokenTypes.WRITE, addr, bytes(data))
+        self.write_file("token_data.bin", self.get_token_binary())
 
     @classmethod
     def get_source_data(cls) -> bytes:

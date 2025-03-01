@@ -1,6 +1,5 @@
 from . import SVTestBase
 from ..options import ExcludeGingerIsland, Booksanity, Shipsanity
-from ..strings.ap_names.ap_option_names import OptionName
 from ..strings.book_names import Book, LostBook
 
 power_books = [Book.animal_catalogue, Book.book_of_mysteries,
@@ -66,7 +65,7 @@ class TestBooksanityNone(SVTestBase):
             if item_to_ship not in power_books and item_to_ship not in skill_books:
                 continue
             with self.subTest(location.name):
-                self.assert_reach_location_true(location, self.multiworld.state)
+                self.assert_can_reach_location(location, self.multiworld.state)
 
 
 class TestBooksanityPowers(SVTestBase):
@@ -112,7 +111,7 @@ class TestBooksanityPowers(SVTestBase):
             if item_to_ship not in power_books and item_to_ship not in skill_books:
                 continue
             with self.subTest(location.name):
-                self.assert_reach_location_true(location, self.multiworld.state)
+                self.assert_can_reach_location(location, self.multiworld.state)
 
 
 class TestBooksanityPowersAndSkills(SVTestBase):
@@ -158,7 +157,7 @@ class TestBooksanityPowersAndSkills(SVTestBase):
             if item_to_ship not in power_books and item_to_ship not in skill_books:
                 continue
             with self.subTest(location.name):
-                self.assert_reach_location_true(location, self.multiworld.state)
+                self.assert_can_reach_location(location, self.multiworld.state)
 
 
 class TestBooksanityAll(SVTestBase):
@@ -204,4 +203,4 @@ class TestBooksanityAll(SVTestBase):
             if item_to_ship not in power_books and item_to_ship not in skill_books:
                 continue
             with self.subTest(location.name):
-                self.assert_reach_location_true(location, self.multiworld.state)
+                self.assert_can_reach_location(location, self.multiworld.state)

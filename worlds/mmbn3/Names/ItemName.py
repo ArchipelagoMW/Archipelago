@@ -72,7 +72,7 @@ class ItemName():
     SandStage_C = "SandStage C"
     SideGun_S = "SideGun S"
     Slasher_B = "Slasher B"
-    SloGuage_star = "SloGuage *"
+    SloGauge_star = "SloGauge *"
     Snake_D = "Snake D"
     Snctuary_C = "Snctuary C"
     Spreader_star = "Spreader *"
@@ -173,6 +173,8 @@ class ItemName():
     WpnLV_plus_White = "WpnLV+1 (White)"
     Press = "Press"
     UnderSht = "UnderSht"
+    Humor = "Humor"
+    BlckMnd = "BlckMnd"
 
     ## Currency
     zenny_200z = "200z"

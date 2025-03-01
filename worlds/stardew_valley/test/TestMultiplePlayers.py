@@ -53,8 +53,6 @@ class TestDifferentSettings(SVTestCase):
     def test_money_rule_caching(self):
         options_festivals_limited_money = {FestivalLocations.internal_name: FestivalLocations.option_easy,
                                            StartingMoney.internal_name: 5000}
-        options_festivals_limited_money = {FestivalLocations.internal_name: FestivalLocations.option_easy,
-                                           StartingMoney.internal_name: 5000}
 
         multiplayer_options = [options_festivals_limited_money, options_festivals_limited_money]
         multiworld = setup_multiworld(multiplayer_options)

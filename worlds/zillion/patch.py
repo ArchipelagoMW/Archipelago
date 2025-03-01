@@ -1,5 +1,5 @@
 import os
-from typing import Any, BinaryIO, Optional, cast
+from typing import BinaryIO
 import zipfile
 
 from typing_extensions import override
@@ -11,11 +11,11 @@ from zilliandomizer.patch import Patcher
 
 from .gen_data import GenData
 
-USHASH = 'd4bf9e7bcf9a48da53785d2ae7bc4270'
+US_HASH = "d4bf9e7bcf9a48da53785d2ae7bc4270"
 
 
 class ZillionPatch(APAutoPatchInterface):
-    hash = USHASH
+    hash = US_HASH
     game = "Zillion"
     patch_file_ending = ".apzl"
     result_file_ending = ".sms"
@@ -23,8 +23,14 @@ class ZillionPatch(APAutoPatchInterface):
     gen_data_str: str
     """ JSON encoded """
 
-    def __init__(self, *args: Any, gen_data_str: str = "", **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
+    def __init__(self,
+                 path: str | None = None,
+                 player: int | None = None,
+                 player_name: str = "",
+                 server: str = "",
+                 *,
+                 gen_data_str: str = "") -> None:
+        super().__init__(path=path, player=player, player_name=player_name, server=server)
         self.gen_data_str = gen_data_str
 
     @classmethod
@@ -44,15 +50,17 @@ class ZillionPatch(APAutoPatchInterface):
         super().read_contents(opened_zipfile)
         self.gen_data_str = opened_zipfile.read("gen_data.json").decode()
 
+    @override
     def patch(self, target: str) -> None:
         self.read()
         write_rom_from_gen_data(self.gen_data_str, target)
 
 
-def get_base_rom_path(file_name: Optional[str] = None) -> str:
-    options = Utils.get_options()
+def get_base_rom_path(file_name: str | None = None) -> str:
+    from . import ZillionSettings, ZillionWorld
+    settings: ZillionSettings = ZillionWorld.settings
     if not file_name:
-        file_name = cast(str, options["zillion_options"]["rom_file"])
+        file_name = settings.rom_file
     if not os.path.exists(file_name):
         file_name = Utils.user_path(file_name)
     return file_name

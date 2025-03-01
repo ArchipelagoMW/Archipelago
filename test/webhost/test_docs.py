@@ -30,10 +30,16 @@ class TestDocs(unittest.TestCase):
     def test_has_game_info(self):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             if not world_type.hidden:
-                target_path = Utils.local_path("WebHostLib", "static", "generated", "docs", game_name)
+                safe_name = Utils.get_file_safe_name(game_name)
+                target_path = Utils.local_path("WebHostLib", "static", "generated", "docs", safe_name)
                 for game_info_lang in world_type.web.game_info_languages:
                     with self.subTest(game_name):
                         self.assertTrue(
-                            os.path.isfile(Utils.local_path(target_path, f'{game_info_lang}_{game_name}.md')),
+                            safe_name == game_name or
+                            not os.path.isfile(Utils.local_path(target_path, f'{game_info_lang}_{game_name}.md')),
+                            f'Info docs have be named <lang>_{safe_name}.md for {game_name}.'
+                        )
+                        self.assertTrue(
+                            os.path.isfile(Utils.local_path(target_path, f'{game_info_lang}_{safe_name}.md')),
                             f'{game_name} missing game info file for "{game_info_lang}" language.'
                         )

@@ -688,8 +688,8 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         for item in multiworld.get_items():
             item.classification = ItemClassification.useful
 
-        multiworld.local_items[player1.id].value = set(names(player1.basic_items))
-        multiworld.local_items[player2.id].value = set(names(player2.basic_items))
+        multiworld.worlds[player1.id].options.local_items.value = set(names(player1.basic_items))
+        multiworld.worlds[player2.id].options.local_items.value = set(names(player2.basic_items))
         locality_rules(multiworld)
 
         distribute_items_restrictive(multiworld)
@@ -795,8 +795,8 @@ class TestBalanceMultiworldProgression(unittest.TestCase):
 
     def test_balances_progression(self) -> None:
         """Tests that progression balancing moves progression items earlier"""
-        self.multiworld.progression_balancing[self.player1.id].value = 50
-        self.multiworld.progression_balancing[self.player2.id].value = 50
+        self.multiworld.worlds[self.player1.id].options.progression_balancing.value = 50
+        self.multiworld.worlds[self.player2.id].options.progression_balancing.value = 50
 
         self.assertRegionContains(
             self.player1.regions[2], self.player2.prog_items[0])
@@ -808,8 +808,8 @@ class TestBalanceMultiworldProgression(unittest.TestCase):
 
     def test_balances_progression_light(self) -> None:
         """Test that progression balancing still moves items earlier on minimum value"""
-        self.multiworld.progression_balancing[self.player1.id].value = 1
-        self.multiworld.progression_balancing[self.player2.id].value = 1
+        self.multiworld.worlds[self.player1.id].options.progression_balancing.value = 1
+        self.multiworld.worlds[self.player2.id].options.progression_balancing.value = 1
 
         self.assertRegionContains(
             self.player1.regions[2], self.player2.prog_items[0])
@@ -822,8 +822,8 @@ class TestBalanceMultiworldProgression(unittest.TestCase):
 
     def test_balances_progression_heavy(self) -> None:
         """Test that progression balancing moves items earlier on maximum value"""
-        self.multiworld.progression_balancing[self.player1.id].value = 99
-        self.multiworld.progression_balancing[self.player2.id].value = 99
+        self.multiworld.worlds[self.player1.id].options.progression_balancing.value = 99
+        self.multiworld.worlds[self.player2.id].options.progression_balancing.value = 99
 
         self.assertRegionContains(
             self.player1.regions[2], self.player2.prog_items[0])
@@ -836,8 +836,8 @@ class TestBalanceMultiworldProgression(unittest.TestCase):
 
     def test_skips_balancing_progression(self) -> None:
         """Test that progression balancing is skipped when players have it disabled"""
-        self.multiworld.progression_balancing[self.player1.id].value = 0
-        self.multiworld.progression_balancing[self.player2.id].value = 0
+        self.multiworld.worlds[self.player1.id].options.progression_balancing.value = 0
+        self.multiworld.worlds[self.player2.id].options.progression_balancing.value = 0
 
         self.assertRegionContains(
             self.player1.regions[2], self.player2.prog_items[0])
@@ -849,8 +849,8 @@ class TestBalanceMultiworldProgression(unittest.TestCase):
 
     def test_ignores_priority_locations(self) -> None:
         """Test that progression items on priority locations don't get moved by balancing"""
-        self.multiworld.progression_balancing[self.player1.id].value = 50
-        self.multiworld.progression_balancing[self.player2.id].value = 50
+        self.multiworld.worlds[self.player1.id].options.progression_balancing.value = 50
+        self.multiworld.worlds[self.player2.id].options.progression_balancing.value = 50
 
         self.player2.prog_items[0].location.progress_type = LocationProgressType.PRIORITY
 

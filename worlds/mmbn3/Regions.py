@@ -135,6 +135,7 @@ regions = [
                     LocationName.Somebody_please_help,
                     LocationName.Looking_for_condor,
                     LocationName.Help_with_rehab,
+                    LocationName.Help_with_rehab_bonus,
                     LocationName.Old_Master,
                     LocationName.Catching_gang_members,
                     LocationName.Please_adopt_a_virus,
@@ -349,6 +350,7 @@ regions = [
                     LocationName.Secret_2_Upper_BMD,
                     LocationName.Secret_3_Island_BMD,
                     LocationName.Secret_3_South_BMD,
-                    LocationName.Secret_3_BugFrag_BMD
+                    LocationName.Secret_3_BugFrag_BMD,
+                    LocationName.Serenade
                 ])
 ]

@@ -18,7 +18,15 @@ def run_locations_benchmark():
 
     class BenchmarkRunner:
         gen_steps: typing.Tuple[str, ...] = (
-            "generate_early", "create_regions", "create_items", "set_rules", "generate_basic", "pre_fill")
+            "generate_early",
+            "create_regions",
+            "create_items",
+            "set_rules",
+            "connect_entrances",
+            "generate_basic",
+            "pre_fill",
+        )
+
         rule_iterations: int = 100_000
 
         if sys.version_info >= (3, 9):
