@@ -42,7 +42,10 @@ def create_region(region_name: str, region_enum: PeaksOfYoreRegion, item_require
 
     poy_world.artefacts_in_pool.extend(get_location_names_by_type(region_enum, "Artefact"))
 
-    region.add_locations(get_locations(region_enum), PeaksOfYoreLocation)
+    locations = {k: v for k, v in get_locations(region_enum).items() if (not poy_world.options.disable_solemn_tempest)
+                 or k == "Solemn Tempest"}
+
+    region.add_locations(locations, PeaksOfYoreLocation)
     cabin_region.connect(region, region_name + " Connection", lambda state:
                                                                 state.has_all_counts(item_requirements, world.player))
     world.location_count += len(region.locations)
