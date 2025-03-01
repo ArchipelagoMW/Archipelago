@@ -202,14 +202,15 @@
     {
         "address": null, "name": "Event - Chiyou in FSP",
         "region": "FSP - Root Node", "requires": [
-            { "region": "PRC - Root Node" },
-            { "region": "GH - Root Node" },
-            { "region": "FGH - Left Exit" },
-            { "region": "BR - Root Node" }
+            { "location": "Factory (GH): Raise the Bridge for Chiyou" }
+            // in the future we may want one or more of these to apply, perhaps even a "progressive Chiyou":
+            //{ "region": "PRC - Root Node" },
+            //{ "region": "GH - Root Node" },
+            //{ "region": "FGH - Left Exit" },
+            //{ "region": "BR - Root Node" }
         ]
     },
     // No Shennong event because rando moves him into FSP immediately
-    // TODO: change how Shennong and Chiyou move into FSP so these are correct
     {
         "address": null, "name": "Event - Jiequan 1 Fight Unlocked",
         "region": "FGH - Lower Levels, Root Node & Right Exit", "requires": [
