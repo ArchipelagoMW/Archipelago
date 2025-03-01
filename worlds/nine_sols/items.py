@@ -15,6 +15,7 @@ class NineSolsItem(Item):
 
 
 class NineSolsItemData(NamedTuple):
+    name: str = None
     code: Optional[int] = None
     type: ItemClassification = ItemClassification.filler
     category: Optional[str] = None
@@ -33,6 +34,7 @@ item_types_map = {
 item_data_table: Dict[str, NineSolsItemData] = {}
 for items_data_entry in items_data:
     item_data_table[items_data_entry["name"]] = NineSolsItemData(
+        name=items_data_entry["name"],
         code=(items_data_entry["code"] if "code" in items_data_entry else None),
         type=item_types_map[items_data_entry["type"]],
         category=(items_data_entry["category"] if "category" in items_data_entry else None),
@@ -103,6 +105,8 @@ def create_items(world: "NineSolsWorld") -> None:
         if item.code is None:
             # here we rely on our event items and event locations having identical names
             multiworld.get_location(name, player).place_locked_item(create_item(player, name))
+        elif item.name.startswith("Seal of ") and not options.shuffle_sol_seals:
+            continue  # we'll place these as a group later
         elif item.type == ItemClassification.filler:
             if name not in repeatable_filler_weights:
                 unique_filler.append(create_item(player, name))
@@ -168,3 +172,16 @@ def create_items(world: "NineSolsWorld") -> None:
 
     itempool = prog_and_useful_items + unique_filler + repeatable_filler_items
     multiworld.itempool += itempool
+
+    if not options.shuffle_sol_seals:
+        for (location, item) in [
+            ["Kuafu's Vital Sanctum", "Seal of Kuafu"],
+            ["Goumang's Vital Sanctum", "Seal of Goumang"],
+            ["Yanlao's Vital Sanctum", "Seal of Yanlao"],
+            ["Jiequan's Vital Sanctum", "Seal of Jiequan"],
+            ["Cortex Center: Defeat Lady Ethereal", "Seal of Lady Ethereal"],
+            ["Ji's Vital Sanctum", "Seal of Ji"],
+            ["ED (Living Area): Fuxi's Vital Sanctum", "Seal of Fuxi"],
+            ["Nuwa's Vital Sanctum", "Seal of Nuwa"],
+        ]:
+            multiworld.get_location(location, player).place_locked_item(create_item(player, item))

@@ -82,3 +82,15 @@ class TestDefaultWorld(NineSolsTestBase):
 
     def test_default_world(self):
         self.assertEqual(self.getLocationCount(), 322)  # 317 default locations + 5 events
+
+
+class TestShuffleSolSealsOff(NineSolsTestBase):
+    options = {
+        "shuffle_sol_seals": False
+    }
+
+    def test_default_world(self):
+        self.assertEqual(
+            self.multiworld.get_location("Kuafu's Vital Sanctum", self.player).item.name,
+            "Seal of Kuafu"
+        )

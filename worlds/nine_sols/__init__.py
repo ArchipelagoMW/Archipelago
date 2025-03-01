@@ -84,9 +84,7 @@ class NineSolsWorld(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has(goal_item, self.player)
 
     def fill_slot_data(self):
-        slot_data = self.options.as_dict(
-            "death_link", # a client/mod feature
-        )
+        slot_data = dict()  # self.options.as_dict()  # no options to put here yet
         # Archipelago does not yet have apworld versions (data_version is deprecated),
         # so we have to roll our own with slot_data for the time being
         slot_data["apworld_version"] = "0.1.0"
