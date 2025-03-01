@@ -281,6 +281,11 @@ class BaseDiddyPalette(Choice):
     option_smb_luigi = 18
     option_toothpaste = 19
     option_whatsapp = 20
+    option_bubblegum = 21
+    option_retro_frozen = 22
+    option_retro_reversed = 23
+    option_retro_slow = 24
+    option_rottytops = 25
 
 class BaseDixiePalette(Choice):
     """
@@ -317,6 +322,10 @@ class BaseDixiePalette(Choice):
     option_toothpaste = 28
     option_whatsapp = 29
     option_boca = 30
+    option_bubblegum = 31
+    option_retro_frozen = 32
+    option_retro_reversed = 33
+    option_retro_slow = 34
 
 class DiddyActive(BaseDiddyPalette):
     """
