@@ -153,7 +153,12 @@
     },
     {
         "address": 509, "name": "FSP: Reveal the Kunlun Immortal Portrait's Secret",
-        "region": "FSP - Root Node", "requires": [ { "item": "The Four Treasures of the Study" }, { "item": "Kunlun Immortal Portrait" } ]
+        "region": "FSP - Root Node", "requires": [
+            // these are the actual vanilla game conditions for the cutscene; prereqs like 4 Treasures are left implied
+            { "item": "Kunlun Immortal Portrait" },
+            { "item": "Cloud Leap" }, // presumably so you can actually reach the treasure
+            { "location": "FSP: Have Yi's Portrait Painted" }
+        ]
     },
     {
         "address": 510, "name": "FSP: Half-Grown Tree Chest",
