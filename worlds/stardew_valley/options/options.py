@@ -4,10 +4,10 @@ from dataclasses import dataclass
 from typing import Protocol, ClassVar
 
 from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList, Visibility, Removed, OptionCounter
-from ..items import items_by_group, Group
 from ..mods.mod_data import ModNames
 from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName, SecretsanityOptionName
 from ..strings.bundle_names import all_cc_bundle_names
+from ..strings.trap_names import all_traps
 
 
 class StardewValleyOption(Protocol):
@@ -751,6 +751,9 @@ class TrapDifficulty(Choice):
     option_hell = 4
     option_nightmare = 5
 
+    def include_traps(self) -> bool:
+        return self.value > 0
+
 
 trap_default_weight = 100
 
@@ -768,15 +771,10 @@ class TrapDistribution(OptionCounter):
     visibility = Visibility.all ^ Visibility.simple_ui
     min = 0
     max = 1000
-    valid_keys = frozenset({
-        trap_data.name
-        for trap_data in items_by_group[Group.TRAP]
-        if Group.DEPRECATED not in trap_data.groups
-    })
+    valid_keys = frozenset(all_traps)
     default = {
-        trap_data.name: trap_default_weight
-        for trap_data in items_by_group[Group.TRAP]
-        if Group.DEPRECATED not in trap_data.groups
+        trap: trap_default_weight
+        for trap in all_traps
     }
 
 

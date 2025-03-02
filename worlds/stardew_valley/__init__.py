@@ -12,9 +12,7 @@ from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles
 from .content import StardewContent, create_content
 from .early_items import setup_early_items
-from .items import item_table, ItemData, Group, items_by_group
-from .items.item_creation import create_items, get_all_filler_items, remove_limited_amount_packs, \
-    generate_filler_choice_pool
+from .items import item_table, ItemData, Group, items_by_group, create_items, generate_filler_choice_pool
 from .locations import location_table, create_locations, LocationData, locations_by_tag
 from .logic.logic import StardewLogic
 from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, EnabledFillerBuffs, \
@@ -126,6 +124,7 @@ class StardewValleyWorld(World):
     randomized_entrances: Dict[str, str]
 
     total_progression_items: int
+    classifications_to_override_post_fill: list[tuple[Item, ItemClassification]]
 
     @classmethod
     def create_group(cls, multiworld: MultiWorld, new_player_id: int, players: set[int]) -> World:
@@ -139,8 +138,9 @@ class StardewValleyWorld(World):
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
-        self.filler_item_pool_names = []
+        self.filler_item_pool_names = None
         self.total_progression_items = 0
+        self.classifications_to_override_post_fill = []
 
         # Taking the seed specified in slot data for UT, otherwise just generating the seed.
         self.seed = getattr(multiworld, "re_gen_passthrough", {}).get(STARDEW_VALLEY, self.random.getrandbits(64))
@@ -322,14 +322,21 @@ class StardewValleyWorld(World):
     def get_all_location_names(self) -> List[str]:
         return list(location.name for location in self.multiworld.get_locations(self.player))
 
-    def create_item(self, item: str | ItemData, override_classification: ItemClassification = None) -> StardewItem:
+    def create_item(self, item: str | ItemData,
+                    classification_pre_fill: ItemClassification = None,
+                    classification_post_fill: ItemClassification = None) -> StardewItem:
         if isinstance(item, str):
             item = item_table[item]
 
-        if override_classification is None:
-            override_classification = item.classification
+        if classification_pre_fill is None:
+            classification_pre_fill = item.classification
 
-        return StardewItem(item.name, override_classification, item.code, self.player)
+        stardew_item = StardewItem(item.name, classification_pre_fill, item.code, self.player)
+
+        if classification_post_fill is not None:
+            self.classifications_to_override_post_fill.append((stardew_item, classification_post_fill))
+
+        return stardew_item
 
     def create_event_location(self, location_data: LocationData, rule: StardewRule, item: str):
         region = self.multiworld.get_region(location_data.region, self.player)
@@ -345,6 +352,11 @@ class StardewValleyWorld(World):
 
     def generate_basic(self):
         pass
+
+    def post_fill(self) -> None:
+        # Not updating the prog item count, as any change could make some locations inaccessible, which is pretty much illegal in post fill.
+        for item, classification in self.classifications_to_override_post_fill:
+            item.classification = classification
 
     def get_filler_item_name(self) -> str:
         if not self.filler_item_pool_names:

@@ -1,8 +1,10 @@
 import unittest
 
+from .. import Group
 from ..content.content_packs import all_content_pack_names
 from ..items import load_item_csv
 from ..locations import load_location_csv
+from ..strings.trap_names import all_traps
 
 
 class TestCsvIntegrity(unittest.TestCase):
@@ -27,6 +29,11 @@ class TestCsvIntegrity(unittest.TestCase):
             content_packs = {content_pack for item in items for content_pack in item.content_packs}
             for content_pack in content_packs:
                 self.assertIn(content_pack, all_content_pack_names)
+
+        with self.subTest("Test all traps are in string"):
+            traps = [item.name for item in items if Group.TRAP in item.groups and Group.DEPRECATED not in item.groups]
+            for trap in traps:
+                self.assertIn(trap, all_traps)
 
     def test_locations_integrity(self):
         locations = load_location_csv()
