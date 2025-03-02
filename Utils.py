@@ -1113,7 +1113,7 @@ def visualize_regions(root_region: Region, file_name: str, *,
     regions: typing.Deque[Region] = deque((root_region,))
     multiworld: MultiWorld = root_region.multiworld
 
-    colors_used: set[int] = set([0])
+    colors_used: set[int] = set()
     if not entrance_highlighting:
         entrance_highlighting = {}
     else:
@@ -1122,16 +1122,21 @@ def visualize_regions(root_region: Region, file_name: str, *,
             colors_used.add(color & 0xF0F0F0)
 
     def select_color(group: int) -> int:
-        new_color: int = 0
+        # specifically spacing color indexes by three different prime numbers (3, 5, 7) for the RGB components to avoid
+        # obvious cyclical color patterns
+        COLOR_INDEX_SPACING: int = 0x357
+        new_color_index: int = (group * COLOR_INDEX_SPACING) % 0x1000
+        new_color = ((new_color_index & 0xF00) << 12) + \
+                        ((new_color_index & 0xF0) << 8) + \
+                        ((new_color_index & 0xF) << 4)
         while new_color in colors_used:
             # while this is technically unbounded, expected collisions are low. There are 4095 possible colors
             # and worlds are unlikely to get to anywhere close to that many entrance groups
             # intentionally not using multiworld.random to not affect output when debugging with this tool
-            new_color_index: int = random.randint(1, 0xFFF)
+            new_color_index += COLOR_INDEX_SPACING
             new_color = ((new_color_index & 0xF00) << 12) + \
                         ((new_color_index & 0xF0) << 8) + \
                         ((new_color_index & 0xF) << 4)
-        entrance_highlighting[group] = new_color
         return new_color
 
     def fmt(obj: Union[Entrance, Item, Location, Region]) -> str:
@@ -1156,9 +1161,6 @@ def visualize_regions(root_region: Region, file_name: str, *,
             color_code: str = ""
             if exit_.randomization_group in entrance_highlighting:
                 color_code = f" #{entrance_highlighting[exit_.randomization_group]:0>6X}"
-            elif auto_assign_colors:
-                new_color = select_color(exit_.randomization_group)
-                color_code = f" #{new_color:0>6X}"
             if exit_.connected_region:
                 if show_entrance_names:
                     uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\" : \"{fmt(exit_)}\"{color_code}")
@@ -1175,9 +1177,6 @@ def visualize_regions(root_region: Region, file_name: str, *,
             color_code: str = ""
             if entrance.randomization_group in entrance_highlighting:
                 color_code = f" #{entrance_highlighting[entrance.randomization_group]:0>6X}"
-            elif auto_assign_colors:
-                new_color = select_color(entrance.randomization_group)
-                color_code = f" #{new_color:0>6X}"
             if not entrance.parent_region:
                 uml.append(f"circle \"unconnected entrance:\\n{fmt(entrance)}\"{color_code}")
                 uml.append(f"\"unconnected entrance:\\n{fmt(entrance)}\" --> \"{fmt(region)}\"{color_code}")
@@ -1206,6 +1205,21 @@ def visualize_regions(root_region: Region, file_name: str, *,
                 else:
                     uml.append(f"class \"{fmt(region)}\"")
             uml.append("}")
+
+    if auto_assign_colors:
+        all_entrances: list[Entrance] = []
+        for region in multiworld.get_regions(root_region.player):
+            all_entrances.extend(region.entrances)
+            all_entrances.extend(region.exits)
+        all_groups: list[int] = sorted(set([entrance.randomization_group for entrance in all_entrances]))
+        for group in all_groups:
+            if group not in entrance_highlighting:
+                new_color: int = select_color(group)
+                entrance_highlighting[group] = new_color
+                colors_used.add(new_color)
+                if len(colors_used) >= 0x1000:
+                    # on the off chance someone makes 4096 different entrance groups, don't cycle forever
+                    break
 
     uml.append("@startuml")
     uml.append("hide circle")
