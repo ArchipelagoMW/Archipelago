@@ -342,7 +342,7 @@ class FF4FEClient(SNIClient):
                 break
 
     async def check_victory(self, ctx):
-        from SNIClient import snes_buffered_write, snes_read
+        from SNIClient import snes_read
         for sentinel in Rom.sentinel_addresses: # Defend against RAM initialized to static values everywhere.
             sentinel_data = await snes_read(ctx, sentinel, 1)
             if sentinel_data is None:

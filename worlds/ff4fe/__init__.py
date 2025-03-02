@@ -250,11 +250,13 @@ class FF4FEWorld(World):
                 # No key items except Dark Matters in minor slots when we're doing major/minor split.
                 if (self.options.ItemPlacement.current_key == "major_minor_split" and not location.major_slot
                         and location.name not in self.options.priority_locations):
-                    forbid_items_for_player(self.get_location(location.name), set(items.characters), self.player)
+                    forbid_items_for_player(self.get_location(location.name),
+                                            set([item.name for item in items.key_items if item.name != "DkMatter"]),
+                                            self.player)
 
         # If we're doing Hero Challenge and we're not doing Forge the Crystal, Kokkol has a fancy weapon for our Hero.
-        # The actual weapon is determined by Free Enterprise, so you can't hint if it's an Excalipur and remove
-        # the potential comedy.
+        # The actual weapon is determined by Free Enterprise, so you can't hint if it's an Excalipur and remove the
+        # potential comedy.
         if (self.options.HeroChallenge.current_key != "none"
                 and not self.options.ForgeTheCrystal):
             self.get_location(
