@@ -131,7 +131,7 @@ class TitsThe3rdMemoryIO():
         returns: The data represented as a byte string
         """
         data = self.tits_the_3rd_mem.read_bytes(self.tits_the_3rd_mem.base_address + offset, length)
-        return data[0]
+        return data
 
     def _read_int(self, offset, byteorder: Literal["little", "big"] = "big"):
         """
