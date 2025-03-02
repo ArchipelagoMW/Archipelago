@@ -1275,6 +1275,7 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
 
     # Foyer Chandelier will never ever hurt anyone ever again.
     furniture_info.info_file_field_entries[101]["move"] = 7
+    furniture_info.info_file_field_entries[277]["move"] = 23
 
     for x in furniture_info.info_file_field_entries:
         # If this is a book/bookshelf, set it to just shake, no book interaction.
