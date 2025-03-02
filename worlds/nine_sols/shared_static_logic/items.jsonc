@@ -93,7 +93,7 @@
     { "code": 311, "name": "Revival Jade", "type": "useful" },
     { "code": 312, "name": "Swift Descent Jade", "type": "useful" },
     { "code": 313, "name": "Mob Quell Jade - Yin", "type": "useful" },
-    { "code": 314, "name": "Mob Quell Jade - Yang", "type": "useful" },
+    //{ "code": 314, "name": "Mob Quell Jade - Yang", "type": "useful" }, // shop item
     { "code": 315, "name": "Focus Jade", "type": "useful" },
     { "code": 316, "name": "Swift Blade Jade", "type": "useful" },
     { "code": 317, "name": "Breather Jade", "type": "useful" },
