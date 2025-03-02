@@ -32,6 +32,20 @@ somewhere else in the multiworld. In the former, the Golden Diva's chamber is lo
 instead escape with the treasure by entering the Sound Room on the north side of the pyramid. The
 number of treasures you have and what you need is displayed in the top center of the screen.
 
+Wario's shuffled abilities are displayed in the bottom left corner of the screen when selecting a
+stage within a passage. From top to bottom and left to right, these moves are as follows:
+
+- Progressive Ground Pound, which let you break blocks and attack enemies below you by landing on
+them. The second level lets you ground pound from a great height to break green blocks.
+- Progressive Grab, which lets you lift and throw enemies and objects. The second level lets you
+lift heavy things that limit Wario's movement when carried.
+- Dash Attack, which lets you run through enemies and blocks by holding L or R. You also need this
+ability to break green blocks by rolling into them.
+- Swim, which lets you move underwater. Without this ability, you will float to the surface of the
+water and be otherwise unable to move.
+- Head Smash, which lets you break blocks by jumping into them from below.
+- Stomp Jump, which lets you jump high by holding A as you land on an enemy.
+
 ## What is the goal of Wario Land 4 when randomized?
 
 Defeat the Golden Diva and steal the Golden Pyramid's treasure!
