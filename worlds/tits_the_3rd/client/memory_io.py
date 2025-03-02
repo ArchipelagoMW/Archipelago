@@ -21,6 +21,9 @@ from pymem import pymem
 from CommonClient import logger
 from worlds.tits_the_3rd import TitsThe3rdWorld
 
+# TODO:
+# - Writes require adding the base address, while reads do not. Make this consistent.
+
 @dataclass
 class ScenaFunction():
     """
@@ -47,6 +50,8 @@ class TitsThe3rdMemoryIO():
     """
 
     OFFSET_FLAG_0: int = 0x2AD491C
+    OFFSET_WPID: int = OFFSET_FLAG_0 + (9504 // 8) # Flag 9504 - 9536
+    FLAG_SHOULD_WRITE_WPID: int = 9496
 
     def __init__(self, exit_event: asyncio.Event):
         self.tits_the_3rd_mem: pymem.Pymem = None
@@ -151,6 +156,16 @@ class TitsThe3rdMemoryIO():
         returns: The data represented as a float.
         """
         data = self._read_bytes(offset, 2)
+        return int.from_bytes(data, byteorder)
+
+    def _read_byte(self, offset, byteorder: Literal["little", "big"] = "big"):
+        """
+        Read 1 byte at the specified offset, and interpret it as an int.
+
+        offset (int): the offset to read data from.
+        returns: The data represented as a float.
+        """
+        data =self._read_bytes(offset, 1)
         return int.from_bytes(data, byteorder)
 
     def is_connected(self):
@@ -258,7 +273,7 @@ class TitsThe3rdMemoryIO():
         """Allocate memory on the game process which we want to write to later."""
         self.scena_caller_alloc = self.tits_the_3rd_mem.allocate(150)
 
-    def read_flag(self, flag_number: int):
+    def read_flag(self, flag_number: int) -> bool:
         """
         Read a provided flag value.
         In the scena file, this is refered to as flag[X] where X is the flag number.
@@ -271,9 +286,86 @@ class TitsThe3rdMemoryIO():
         """
         flag_byte_offset = self.OFFSET_FLAG_0 + (flag_number // 8)
         flag_bit = flag_number % 8
-        data = self._read_bytes(flag_byte_offset, 1)
+        data = self._read_byte(flag_byte_offset)
         flag_value = (data >> flag_bit) & 1
         return bool(flag_value)
+
+    def write_flag(self, flag_number: int, value: bool) -> bool:
+        """
+        Write a provided flag value.
+        In the scena file, this is refered to as flag[X] where X is the flag number.
+
+        Args:
+            flag_number (int): The number of the flag to write.
+
+        Returns:
+           bool: True if the flag was written successfully, False otherwise.
+        """
+        flag_byte_offset = self.OFFSET_FLAG_0 + (flag_number // 8)
+        flag_bit = flag_number % 8
+        byte_data = self._read_byte(flag_byte_offset)
+        mask = 1 << flag_bit
+        if value:
+            # Set the bit to 1
+            byte_data = byte_data | mask
+        else:
+            # Set the bit to 0
+            byte_data = byte_data & (~mask)
+        byte_data = byte_data.to_bytes(1, "little")
+        self.tits_the_3rd_mem.write_bytes(self.tits_the_3rd_mem.base_address + flag_byte_offset, byte_data, 1)
+        return self.read_flag(flag_number) == value
+
+    def write_world_player_identifier(self, wpid: bytes) -> bool:
+        """
+        This identifier is used to validate that the player is
+        loaded into the correct save. It is written on new-game,
+        and must match in order for items to be sent or received.
+
+        Args:
+            wpid (bytes): The per-world player identifier to write.
+                          Must be 4 bytes long
+
+        Returns:
+            bool: True if the per-world player identifier was written successfully, False otherwise.
+        """
+        if len(wpid) != 4:
+            raise ValueError("wpid must be 4 bytes long")
+        self.tits_the_3rd_mem.write_bytes(self.tits_the_3rd_mem.base_address + self.OFFSET_WPID, wpid, 4)
+        if not self.read_world_player_identifier() == wpid:
+            logger.info(f"Failed to write world player identifier: {self.read_world_player_identifier()} != {wpid}")
+            logger.error("Failed to write world player identifier")
+            return False
+        return self.write_flag(self.FLAG_SHOULD_WRITE_WPID, False)
+
+    def read_world_player_identifier(self) -> bytes:
+        """
+        Read the per-world player identifier from the game process.
+
+        Returns:
+            bytes: The per-world player identifier.
+        """
+        return self._read_bytes(self.OFFSET_WPID, 4)
+
+    def should_write_world_player_identifier(self) -> bool:
+        """
+        Returns True if the per-world player identifier should be written.
+        This is a custom flag set on new game, which is wiped when we write the identifier to memory.
+        """
+        return self.read_flag(self.FLAG_SHOULD_WRITE_WPID)
+
+    def should_send_and_recieve_items(self, wpid: bytes) -> bool:
+        """
+        Returns True if the player should send or recieve items.
+        This is a santiy check to ensure the player is on the correct save, which started from a new game for the AP.
+        If this is the case, the correct world player identifier will be in the flag data.
+
+        Args:
+            wpid (bytes): The per-world player identifier to check.
+
+        Returns:
+            bool: True if the player should send or recieve items, False otherwise.
+        """
+        return self.read_world_player_identifier() == wpid
 
     def get_scena_offset(self, scena_id: bytes) -> Optional[int]:
         """Get and verify a cached scena offset. Find and cache if it does not exist"""
