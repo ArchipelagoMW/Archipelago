@@ -37,6 +37,8 @@ def _compile_with_calmare(lb_ark_dir: str):
         try:
             subprocess.run([
                 calmare_path,
+                "--game",
+                "tc",
                 scena_path,
             ], check=True)
         except subprocess.CalledProcessError as err:

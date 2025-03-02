@@ -26,7 +26,12 @@ def _update_file(dt21_clm_dir: str, dt21_dir: str, calmare_path: str, file: str)
     """
     print(f"Updating {file}")
     src_path = os.path.join(dt21_clm_dir, file)
-    subprocess.run([calmare_path, src_path], check=True)
+    subprocess.run([
+        calmare_path,
+        "--game",
+        "tc",
+        src_path,
+    ], check=True)
     scena_filename = file.replace(".clm", "._sn")
     calmare_out_path = os.path.join(dt21_clm_dir, scena_filename)
     shutil.move(calmare_out_path, os.path.join(dt21_dir, scena_filename))
