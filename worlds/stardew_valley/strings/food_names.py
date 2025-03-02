@@ -42,6 +42,7 @@ class Meal:
     maki_roll = "Maki Roll"
     maple_bar = "Maple Bar"
     miners_treat = "Miner's Treat"
+    moss_soup = "Moss Soup"
     omelet = "Omelet"
     pale_broth = "Pale Broth"
     pancakes = "Pancakes"
@@ -101,6 +102,18 @@ class SVEMeal:
     void_delight = "Void Delight"
     void_salmon_sushi = "Void Salmon Sushi"
     grampleton_orange_chicken = "Grampleton Orange Chicken"
+    stamina_capsule = "Stamina Capsule"
+
+
+class TrashyMeal:
+    grilled_cheese = "Grilled Cheese"
+    fish_casserole = "Fish Casserole"
+
+
+class ArchaeologyMeal:
+    diggers_delight = "Digger's Delight"
+    rocky_root = "Rocky Root Coffee"
+    ancient_jello = "Ancient Jello"
 
 
 class SVEBeverage:

@@ -63,8 +63,12 @@ class OptionAssertMixin(TestCase):
         all_item_names = set(get_all_item_names(multiworld))
         all_location_names = set(get_all_location_names(multiworld))
         all_cropsanity_item_names = {item_name for item_name in all_item_names if Group.CROPSANITY in item_table[item_name].groups}
-        all_cropsanity_location_names = {location_name for location_name in all_location_names if LocationTags.CROPSANITY in location_table[location_name].tags}
-        self.assertEqual(len(all_cropsanity_item_names), len(all_cropsanity_location_names))
+        all_cropsanity_location_names = {location_name
+                                         for location_name in all_location_names
+                                         if LocationTags.CROPSANITY in location_table[location_name].tags
+                                         # Qi Beans do not have an item
+                                         and location_name != "Harvest Qi Fruit"}
+        self.assertEqual(len(all_cropsanity_item_names) + 1, len(all_cropsanity_location_names))
 
     def assert_all_rarecrows_exist(self, multiworld: MultiWorld):
         all_item_names = set(get_all_item_names(multiworld))

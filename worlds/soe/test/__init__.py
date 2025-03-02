@@ -1,9 +1,11 @@
 from test.bases import WorldTestBase
 from typing import Iterable
+from .. import SoEWorld
 
 
 class SoETestBase(WorldTestBase):
     game = "Secret of Evermore"
+    world: SoEWorld
 
     def assertLocationReachability(self, reachable: Iterable[str] = (), unreachable: Iterable[str] = (),
                                    satisfied: bool = True) -> None:

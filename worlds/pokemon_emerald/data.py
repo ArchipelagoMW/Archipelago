@@ -25,13 +25,20 @@ IGNORABLE_MAPS = {
 }
 """These maps exist but don't show up in the rando or are unused, and so should be discarded"""
 
-POSTGAME_MAPS = {
+OUT_OF_LOGIC_MAPS = {
     "MAP_DESERT_UNDERPASS",
     "MAP_SAFARI_ZONE_NORTHEAST",
     "MAP_SAFARI_ZONE_SOUTHEAST",
     "MAP_METEOR_FALLS_STEVENS_CAVE",
+    "MAP_MIRAGE_TOWER_1F",
+    "MAP_MIRAGE_TOWER_2F",
+    "MAP_MIRAGE_TOWER_3F",
+    "MAP_MIRAGE_TOWER_4F",
 }
-"""These maps have encounters and are locked behind beating the champion. Those encounter slots should be ignored for logical access to a species."""
+"""
+These maps have encounters and are locked behind beating the champion or are missable.
+Those encounter slots should be ignored for logical access to a species.
+"""
 
 NUM_REAL_SPECIES = 386
 
@@ -110,6 +117,21 @@ class ItemData(NamedTuple):
     tags: FrozenSet[str]
 
 
+class LocationCategory(IntEnum):
+    BADGE = 0
+    HM = 1
+    KEY = 2
+    ROD = 3
+    BIKE = 4
+    TICKET = 5
+    OVERWORLD_ITEM = 6
+    HIDDEN_ITEM = 7
+    GIFT = 8
+    BERRY_TREE = 9
+    TRAINER = 10
+    POKEDEX = 11
+
+
 class LocationData(NamedTuple):
     name: str
     label: str
@@ -117,6 +139,7 @@ class LocationData(NamedTuple):
     default_item: int
     address: Union[int, List[int]]
     flag: int
+    category: LocationCategory
     tags: FrozenSet[str]
 
 
@@ -128,6 +151,7 @@ class EncounterTableData(NamedTuple):
 @dataclass
 class MapData:
     name: str
+    label: str
     header_address: int
     land_encounters: Optional[EncounterTableData]
     water_encounters: Optional[EncounterTableData]
@@ -269,15 +293,13 @@ def _str_to_pokemon_data_type(string: str) -> TrainerPokemonDataTypeEnum:
         return TrainerPokemonDataTypeEnum.ITEM_CUSTOM_MOVES
 
 
-@dataclass
-class TrainerPokemonData:
+class TrainerPokemonData(NamedTuple):
     species_id: int
     level: int
     moves: Optional[Tuple[int, int, int, int]]
 
 
-@dataclass
-class TrainerPartyData:
+class TrainerPartyData(NamedTuple):
     pokemon: List[TrainerPokemonData]
     pokemon_data_type: TrainerPokemonDataTypeEnum
     address: int
@@ -289,6 +311,7 @@ class TrainerData:
     party: TrainerPartyData
     address: int
     script_address: int
+    battle_type: int
 
 
 class PokemonEmeraldData:
@@ -335,6 +358,8 @@ def load_json_data(data_name: str) -> Union[List[Any], Dict[str, Any]]:
 
 
 def _init() -> None:
+    import re
+
     extracted_data: Dict[str, Any] = load_json_data("extracted_data.json")
     data.constants = extracted_data["constants"]
     data.ram_addresses = extracted_data["misc_ram_addresses"]
@@ -344,6 +369,7 @@ def _init() -> None:
 
     # Create map data
     for map_name, map_json in extracted_data["maps"].items():
+        assert isinstance(map_name, str)
         if map_name in IGNORABLE_MAPS:
             continue
 
@@ -367,8 +393,35 @@ def _init() -> None:
                 map_json["fishing_encounters"]["address"]
             )
 
+        # Derive a user-facing label
+        label = []
+        for word in map_name[4:].split("_"):
+            # 1F, B1F, 2R, etc.
+            re_match = re.match(r"^B?\d+[FRP]$", word)
+            if re_match:
+                label.append(word)
+                continue
+
+            # Route 103, Hall 1, House 5, etc.
+            re_match = re.match(r"^([A-Z]+)(\d+)$", word)
+            if re_match:
+                label.append(re_match.group(1).capitalize())
+                label.append(re_match.group(2).lstrip("0"))
+                continue
+
+            if word == "OF":
+                label.append("of")
+                continue
+
+            if word == "SS":
+                label.append("S.S.")
+                continue
+
+            label.append(word.capitalize())
+
         data.maps[map_name] = MapData(
             map_name,
+            " ".join(label),
             map_json["header_address"],
             land_encounters,
             water_encounters,
@@ -425,6 +478,7 @@ def _init() -> None:
                     location_json["default_item"],
                     [location_json["address"]] + [j["address"] for j in alternate_rival_jsons],
                     location_json["flag"],
+                    LocationCategory[location_attributes_json[location_name]["category"]],
                     frozenset(location_attributes_json[location_name]["tags"])
                 )
             else:
@@ -435,6 +489,7 @@ def _init() -> None:
                     location_json["default_item"],
                     location_json["address"],
                     location_json["flag"],
+                    LocationCategory[location_attributes_json[location_name]["category"]],
                     frozenset(location_attributes_json[location_name]["tags"])
                 )
             new_region.locations.append(location_name)
@@ -646,7 +701,7 @@ def _init() -> None:
         ("SPECIES_CHIKORITA", "Chikorita", 152),
         ("SPECIES_BAYLEEF", "Bayleef", 153),
         ("SPECIES_MEGANIUM", "Meganium", 154),
-        ("SPECIES_CYNDAQUIL", "Cindaquil", 155),
+        ("SPECIES_CYNDAQUIL", "Cyndaquil", 155),
         ("SPECIES_QUILAVA", "Quilava", 156),
         ("SPECIES_TYPHLOSION", "Typhlosion", 157),
         ("SPECIES_TOTODILE", "Totodile", 158),
@@ -741,7 +796,7 @@ def _init() -> None:
         ("SPECIES_PUPITAR", "Pupitar", 247),
         ("SPECIES_TYRANITAR", "Tyranitar", 248),
         ("SPECIES_LUGIA", "Lugia", 249),
-        ("SPECIES_HO_OH", "Ho-oh", 250),
+        ("SPECIES_HO_OH", "Ho-Oh", 250),
         ("SPECIES_CELEBI", "Celebi", 251),
         ("SPECIES_TREECKO", "Treecko", 252),
         ("SPECIES_GROVYLE", "Grovyle", 253),
@@ -942,6 +997,7 @@ def _init() -> None:
             evo_stage_to_ball_map[evo_stage],
             data.locations[dex_location_name].address,
             data.locations[dex_location_name].flag,
+            data.locations[dex_location_name].category,
             data.locations[dex_location_name].tags
         )
 
@@ -1403,9 +1459,6 @@ def _init() -> None:
     for warp, destination in extracted_data["warps"].items():
         data.warp_map[warp] = None if destination == "" else destination
 
-        if encoded_warp not in data.warp_map:
-            data.warp_map[encoded_warp] = None
-
     # Create trainer data
     for i, trainer_json in enumerate(extracted_data["trainers"]):
         party_json = trainer_json["party"]
@@ -1422,7 +1475,8 @@ def _init() -> None:
                 trainer_json["party_address"]
             ),
             trainer_json["address"],
-            trainer_json["script_address"]
+            trainer_json["script_address"],
+            trainer_json["battle_type"]
         ))
 
 

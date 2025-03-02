@@ -1,11 +1,7 @@
-from .Items import SongData, AlbumData
-from typing import Dict, List, Set, Optional
+from .Items import SongData
+from .MuseDashData import SONG_DATA
+from typing import Dict, List, Set
 from collections import ChainMap
-
-
-def load_text_file(name: str) -> str:
-    import pkgutil
-    return pkgutil.get_data(__name__, name).decode()
 
 
 class MuseDashCollections:
@@ -22,34 +18,29 @@ class MuseDashCollections:
     ]
 
     MUSE_PLUS_DLC: str = "Muse Plus"
+
+    # Ordering matters for webhost. Order goes: Muse Plus, Time Limited Muse Plus Dlcs, Paid Dlcs
     DLC: List[str] = [
-        # MUSE_PLUS_DLC, # To be included when OptionSets are rendered as part of basic settings.
-        # "maimai DX Limited-time Suite", # Part of Muse Plus. Goes away 31st Jan 2026.
-        "Miku in Museland", # Paid DLC not included in Muse Plus
-        "Rin Len's Mirrorland", # Paid DLC not included in Muse Plus
-        "MSR Anthology", # Now no longer available.
+        MUSE_PLUS_DLC,
+        "CHUNITHM COURSE MUSE",  # Part of Muse Plus. Goes away 22nd May 2027.
+        "maimai DX Limited-time Suite",  # Part of Muse Plus. Goes away 31st Jan 2026.
+        "MSR Anthology",  # Now no longer available.
+        "Miku in Museland",  # Paid DLC not included in Muse Plus
+        "Rin Len's Mirrorland",  # Paid DLC not included in Muse Plus
     ]
 
-    DIFF_OVERRIDES: List[str] = [
-        "MuseDash ka nanika hi",
-        "Rush-Hour",
-        "Find this Month's Featured Playlist",
-        "PeroPero in the Universe",
-        "umpopoff"
-    ]
-    
     REMOVED_SONGS = [
         "CHAOS Glitch",
         "FM 17314 SUGAR RADIO",
-        "Yume Ou Mono Yo Secret"
+        "Yume Ou Mono Yo Secret",
+        "Echo over you... Secret",
+        "Tsukuyomi Ni Naru Replaced",
     ]
 
-    album_items: Dict[str, AlbumData] = {}
-    album_locations: Dict[str, int] = {}
-    song_items: Dict[str, SongData] = {}
+    song_items = SONG_DATA
     song_locations: Dict[str, int] = {}
 
-    vfx_trap_items: Dict[str, int] = {
+    trap_items: Dict[str, int] = {
         "Bad Apple Trap": STARTING_CODE + 1,
         "Pixelate Trap": STARTING_CODE + 2,
         "Ripple Trap": STARTING_CODE + 3,
@@ -57,72 +48,35 @@ class MuseDashCollections:
         "Chromatic Aberration Trap": STARTING_CODE + 5,
         "Background Freeze Trap": STARTING_CODE + 6,
         "Gray Scale Trap": STARTING_CODE + 7,
-    }
-
-    sfx_trap_items: Dict[str, int] = {
         "Nyaa SFX Trap": STARTING_CODE + 8,
         "Error SFX Trap": STARTING_CODE + 9,
+        "Focus Line Trap": STARTING_CODE + 10,
     }
 
-    item_names_to_id: ChainMap = ChainMap({}, sfx_trap_items, vfx_trap_items)
-    location_names_to_id: ChainMap = ChainMap(song_locations, album_locations)
+    sfx_trap_items: List[str] = [
+        "Nyaa SFX Trap",
+        "Error SFX Trap",
+    ]
+
+    filler_items: Dict[str, int] = {
+        "Great To Perfect (10 Pack)": STARTING_CODE + 30,
+        "Miss To Great (5 Pack)": STARTING_CODE + 31,
+        "Extra Life": STARTING_CODE + 32,
+    }
+
+    filler_item_weights: Dict[str, int] = {
+        "Great To Perfect (10 Pack)": 10,
+        "Miss To Great (5 Pack)": 3,
+        "Extra Life": 1,
+    }
+
+    item_names_to_id: ChainMap = ChainMap({k: v.code for k, v in SONG_DATA.items()}, filler_items, trap_items)
+    location_names_to_id: ChainMap = ChainMap(song_locations)
 
     def __init__(self) -> None:
         self.item_names_to_id[self.MUSIC_SHEET_NAME] = self.MUSIC_SHEET_CODE
 
-        item_id_index = self.STARTING_CODE + 50
-        full_file = load_text_file("MuseDashData.txt")
-        seen_albums = set()
-        for line in full_file.splitlines():
-            line = line.strip()
-            sections = line.split("|")
-
-            album = sections[2]
-            if album not in seen_albums:
-                seen_albums.add(album)
-                self.album_items[album] = AlbumData(item_id_index)
-                item_id_index += 1
-
-            # Data is in the format 'Song|UID|Album|StreamerMode|EasyDiff|HardDiff|MasterDiff|SecretDiff'
-            song_name = sections[0]
-            # [1] is used in the client copy to make sure item id's match.
-            steamer_mode = sections[3] == "True"
-
-            if song_name in self.DIFF_OVERRIDES:
-                # These songs use non-standard difficulty values. Which are being overriden with standard values.
-                # But also avoid filling any missing difficulties (i.e. 0s) with a difficulty value.
-                if sections[4] != '0':
-                    diff_of_easy = 4
-                else:
-                    diff_of_easy = None
-
-                if sections[5] != '0':
-                    diff_of_hard = 7
-                else:
-                    diff_of_hard = None
-
-                if sections[6] != '0':
-                    diff_of_master = 10
-                else:
-                    diff_of_master = None
-            else:
-                diff_of_easy = self.parse_song_difficulty(sections[4])
-                diff_of_hard = self.parse_song_difficulty(sections[5])
-                diff_of_master = self.parse_song_difficulty(sections[6])
-
-            self.song_items[song_name] = SongData(item_id_index, album, steamer_mode,
-                                                  diff_of_easy, diff_of_hard, diff_of_master)
-            item_id_index += 1
-
-        self.item_names_to_id.update({name: data.code for name, data in self.song_items.items()})
-        self.item_names_to_id.update({name: data.code for name, data in self.album_items.items()})
-
         location_id_index = self.STARTING_CODE
-        for name in self.album_items.keys():
-            self.album_locations[f"{name}-0"] = location_id_index
-            self.album_locations[f"{name}-1"] = location_id_index + 1
-            location_id_index += 2
-
         for name in self.song_items.keys():
             self.song_locations[f"{name}-0"] = location_id_index
             self.song_locations[f"{name}-1"] = location_id_index + 1
@@ -136,7 +90,7 @@ class MuseDashCollections:
         for songKey, songData in self.song_items.items():
             if not self.song_matches_dlc_filter(songData, dlc_songs):
                 continue
-                
+
             if songKey in self.REMOVED_SONGS:
                 continue
 
@@ -157,6 +111,9 @@ class MuseDashCollections:
 
         return filtered_list
 
+    def filter_songs_to_dlc(self, song_list: List[str], dlc_songs: Set[str]) -> List[str]:
+        return [song for song in song_list if self.song_matches_dlc_filter(self.song_items[song], dlc_songs)]
+
     def song_matches_dlc_filter(self, song: SongData, dlc_songs: Set[str]) -> bool:
         if song.album in self.FREE_ALBUMS:
             return True
@@ -169,18 +126,3 @@ class MuseDashCollections:
             return True
 
         return False
-
-    def parse_song_difficulty(self, difficulty: str) -> Optional[int]:
-        """Attempts to parse the song difficulty."""
-        if len(difficulty) <= 0 or difficulty == "?" or difficulty == "¿":
-            return None
-
-        # 0 is used as a filler and no songs actually have a 0 difficulty song.
-        if difficulty == "0":
-            return None
-
-        # Curse the 2023 april fools update. Used on 3rd Avenue.
-        if difficulty == "〇":
-            return 10
-
-        return int(difficulty)

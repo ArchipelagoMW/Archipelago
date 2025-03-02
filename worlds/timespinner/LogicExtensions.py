@@ -1,6 +1,6 @@
-from typing import Union
-from BaseClasses import MultiWorld, CollectionState
-from .Options import is_option_enabled
+from typing import Union, Optional
+from BaseClasses import CollectionState
+from .Options import TimespinnerOptions
 from .PreCalculatedWeights import PreCalculatedWeights
 
 
@@ -10,17 +10,19 @@ class TimespinnerLogic:
     flag_unchained_keys: bool
     flag_eye_spy: bool
     flag_specific_keycards: bool
-    pyramid_keys_unlock: Union[str, None]
-    present_keys_unlock: Union[str, None]
-    past_keys_unlock: Union[str, None]
-    time_keys_unlock: Union[str, None]
+    pyramid_keys_unlock: Optional[str]
+    present_keys_unlock: Optional[str]
+    past_keys_unlock: Optional[str]
+    time_keys_unlock: Optional[str]
 
-    def __init__(self, world: MultiWorld, player: int, precalculated_weights: PreCalculatedWeights):
+    def __init__(self, player: int, options: Optional[TimespinnerOptions], 
+                 precalculated_weights: Optional[PreCalculatedWeights]):
         self.player = player
 
-        self.flag_specific_keycards = is_option_enabled(world, player, "SpecificKeycards")
-        self.flag_eye_spy = is_option_enabled(world, player, "EyeSpy")
-        self.flag_unchained_keys = is_option_enabled(world, player, "UnchainedKeys")
+        self.flag_specific_keycards = bool(options and options.specific_keycards)
+        self.flag_eye_spy = bool(options and options.eye_spy)
+        self.flag_unchained_keys = bool(options and options.unchained_keys)
+        self.flag_prism_break = bool(options and options.prism_break)
 
         if precalculated_weights:
             if self.flag_unchained_keys:
@@ -91,6 +93,8 @@ class TimespinnerLogic:
             return True
 
     def can_kill_all_3_bosses(self, state: CollectionState) -> bool:
+        if self.flag_prism_break:
+            return state.has_all({'Laser Access M', 'Laser Access I', 'Laser Access A'}, self.player)
         return state.has_all({'Killed Maw', 'Killed Twins', 'Killed Aelana'}, self.player)
 
     def has_teleport(self, state: CollectionState) -> bool:

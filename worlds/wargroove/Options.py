@@ -1,5 +1,6 @@
 import typing
-from Options import Choice, Option, Range
+from dataclasses import dataclass
+from Options import Choice, Option, Range, PerGameCommonOptions
 
 
 class IncomeBoost(Range):
@@ -30,9 +31,8 @@ class CommanderChoice(Choice):
     option_unlockable_factions = 1
     option_random_starting_faction = 2
 
-
-wargroove_options: typing.Dict[str, type(Option)] = {
-    "income_boost": IncomeBoost,
-    "commander_defense_boost": CommanderDefenseBoost,
-    "commander_choice": CommanderChoice
-}
+@dataclass
+class WargrooveOptions(PerGameCommonOptions):
+    income_boost: IncomeBoost
+    commander_defense_boost: CommanderDefenseBoost
+    commander_choice: CommanderChoice

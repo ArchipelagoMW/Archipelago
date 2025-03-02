@@ -17,6 +17,7 @@ from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
 from .wallet_logic import WalletLogicMixin
 from ..stardew_rule import StardewRule, Has, True_
+from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.building_names import Building
 from ..strings.craftable_names import Craftable
@@ -43,7 +44,8 @@ class QuestLogicMixin(BaseLogicMixin):
 
 
 class QuestLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, MoneyLogicMixin, MineLogicMixin, RegionLogicMixin, RelationshipLogicMixin, ToolLogicMixin,
-FishingLogicMixin, CookingLogicMixin, CombatLogicMixin, SeasonLogicMixin, SkillLogicMixin, WalletLogicMixin, QuestLogicMixin, BuildingLogicMixin, TimeLogicMixin]]):
+                                 FishingLogicMixin, CookingLogicMixin, CombatLogicMixin, SeasonLogicMixin, SkillLogicMixin, WalletLogicMixin, QuestLogicMixin,
+                                 BuildingLogicMixin, TimeLogicMixin]]):
 
     def initialize_rules(self):
         self.update_rules({
@@ -52,6 +54,7 @@ FishingLogicMixin, CookingLogicMixin, CombatLogicMixin, SeasonLogicMixin, SkillL
             Quest.getting_started: self.logic.has(Vegetable.parsnip),
             Quest.to_the_beach: self.logic.region.can_reach(Region.beach),
             Quest.raising_animals: self.logic.quest.can_complete_quest(Quest.getting_started) & self.logic.building.has_building(Building.coop),
+            Quest.feeding_animals: self.logic.quest.can_complete_quest(Quest.getting_started) & self.logic.building.has_building(Building.silo),
             Quest.advancement: self.logic.quest.can_complete_quest(Quest.getting_started) & self.logic.has(Craftable.scarecrow),
             Quest.archaeology: self.logic.tool.has_tool(Tool.hoe) | self.logic.mine.can_mine_in_the_mines_floor_1_40() | self.logic.skill.can_fish(),
             Quest.rat_problem: self.logic.region.can_reach_all((Region.town, Region.community_center)),
@@ -63,7 +66,8 @@ FishingLogicMixin, CookingLogicMixin, CombatLogicMixin, SeasonLogicMixin, SkillL
             Quest.jodis_request: self.logic.season.has(Season.spring) & self.logic.has(Vegetable.cauliflower) & self.logic.relationship.can_meet(NPC.jodi),
             Quest.mayors_shorts: self.logic.season.has(Season.summer) & self.logic.relationship.has_hearts(NPC.marnie, 2) &
                                  self.logic.relationship.can_meet(NPC.lewis),
-            Quest.blackberry_basket: self.logic.season.has(Season.fall) & self.logic.relationship.can_meet(NPC.linus),
+            Quest.blackberry_basket: self.logic.season.has(Season.fall) & self.logic.relationship.can_meet(NPC.linus) & self.logic.region.can_reach(
+                Region.tunnel_entrance),
             Quest.marnies_request: self.logic.relationship.has_hearts(NPC.marnie, 3) & self.logic.has(Forageable.cave_carrot),
             Quest.pam_is_thirsty: self.logic.season.has(Season.summer) & self.logic.has(ArtisanGood.pale_ale) & self.logic.relationship.can_meet(NPC.pam),
             Quest.a_dark_reagent: self.logic.season.has(Season.winter) & self.logic.has(Loot.void_essence) & self.logic.relationship.can_meet(NPC.wizard),
@@ -104,13 +108,14 @@ FishingLogicMixin, CookingLogicMixin, CombatLogicMixin, SeasonLogicMixin, SkillL
             Quest.the_pirates_wife: self.logic.relationship.can_meet(NPC.kent) & self.logic.relationship.can_meet(NPC.gus) &
                                     self.logic.relationship.can_meet(NPC.sandy) & self.logic.relationship.can_meet(NPC.george) &
                                     self.logic.relationship.can_meet(NPC.wizard) & self.logic.relationship.can_meet(NPC.willy),
+            Quest.giant_stump: self.logic.has(Material.hardwood)
         })
 
     def update_rules(self, new_rules: Dict[str, StardewRule]):
         self.registry.quest_rules.update(new_rules)
 
     def can_complete_quest(self, quest: str) -> StardewRule:
-        return Has(quest, self.registry.quest_rules)
+        return Has(quest, self.registry.quest_rules, "quest")
 
     def has_club_card(self) -> StardewRule:
         if self.options.quest_locations < 0:
@@ -126,3 +131,12 @@ FishingLogicMixin, CookingLogicMixin, CombatLogicMixin, SeasonLogicMixin, SkillL
         if self.options.quest_locations < 0:
             return self.logic.quest.can_complete_quest(Quest.dark_talisman)
         return self.logic.received(Wallet.dark_talisman)
+
+    def has_raccoon_shop(self) -> StardewRule:
+        if self.options.quest_locations < 0:
+            return self.logic.received(CommunityUpgrade.raccoon, 2) & self.logic.quest.can_complete_quest(Quest.giant_stump)
+
+        # 1 - Break the tree
+        # 2 - Build the house, which summons the bundle racoon. This one is done manually if quests are turned off
+        # 3 - Raccoon's wife opens the shop
+        return self.logic.received(CommunityUpgrade.raccoon, 3)

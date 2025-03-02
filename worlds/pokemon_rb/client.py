@@ -31,7 +31,7 @@ DATA_LOCATIONS = {
     "CrashCheck2": (0x1617, 1),
     # Progressive keys, should never be above 10. Just before Dexsanity flags.
     "CrashCheck3": (0x1A70, 1),
-    # Route 18 script value. Should never be above 2. Just before Hidden items flags.
+    # Route 18 Gate script value. Should never be above 3. Just before Hidden items flags.
     "CrashCheck4": (0x16DD, 1),
 }
 
@@ -116,7 +116,7 @@ class PokemonRBClient(BizHawkClient):
               or data["CrashCheck1"][0] & 0xF0 or data["CrashCheck1"][1] & 0xFF
               or data["CrashCheck2"][0]
               or data["CrashCheck3"][0] > 10
-              or data["CrashCheck4"][0] > 2):
+              or data["CrashCheck4"][0] > 3):
             # Should mean game crashed
             logger.warning("Pokémon Red/Blue game may have crashed. Disconnecting from server.")
             self.game_state = False
