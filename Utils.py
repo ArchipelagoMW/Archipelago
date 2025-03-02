@@ -1231,7 +1231,7 @@ def visualize_regions(root_region: Region, file_name: str, *,
             seen.add(current_region)
             visualize_region(current_region)
             regions.extend(exit_.connected_region for exit_ in current_region.exits if exit_.connected_region)
-    if show_other_regions:
+    if show_other_regions or detail_other_regions:
         visualize_other_regions()
     uml.append("@enduml")
 
