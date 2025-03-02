@@ -109,6 +109,8 @@ class EarlyMaterial(Choice):
 
     Piece: You will get an early minor or major piece.
 
+    Jack: You will get an early advanced piece, worth about 7 material.
+
     Any: You will get an early chessman.
     """
     display_name = "Early Material"
@@ -116,6 +118,7 @@ class EarlyMaterial(Choice):
     option_pawn = 1
     option_minor = 2
     option_major = 3
+    option_jack = 6
     option_piece = 4
     option_any = 5
     default = 0
@@ -287,6 +290,19 @@ class FairyChessPawns(Choice):
     option_any_classical = 7
     default = 0
 
+
+class AsymmetricTrades(Choice):
+    """
+    Whether to use asymmetric trades.
+
+    Standard: Use the standard set of Pawn (1), Minor (3), Major (5), and Queen (9) pieces.
+    
+    Jacks: Add the custom Jack family of pieces, which are worth 7 material each.
+    """
+    display_name = "Asymmetric Trades"
+    option_disabled = 0
+    option_jacks = 1
+    default = 0
 
 
 class MinorPieceLimitByType(NamedRange):

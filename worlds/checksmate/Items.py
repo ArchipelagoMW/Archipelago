@@ -32,6 +32,7 @@ item_table = {
     # Queen pieces are pretty good, and even the weak ones are pretty close, so queens can stay 9.0 (but not 10.0)
     "Progressive Major To Queen": CMItemData(4_901_006, ItemClassification.progression, quantity=9, material=415,
                                              parents=[["Progressive Major Piece", 1]]),
+    "Progressive Jack": CMItemData(4_901_007, ItemClassification.progression, quantity=9, material=700),
     "Victory": CMItemData(4_901_009, ItemClassification.progression),
     "Super-Size Me": CMItemData(4_901_010, ItemClassification.progression, quantity=0),  # :)
     # TODO: implement extra moves

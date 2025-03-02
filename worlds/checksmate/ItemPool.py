@@ -316,6 +316,9 @@ class CMItemPool:
         items = [item for item in progression_items.keys() 
                 if item != "Victory" and progression_items[item].quantity > 0]
         
+        if self.world.options.asymmetric_trades.value != self.world.options.asymmetric_trades.option_jacks:
+            items.remove("Progressive Jack")
+
         # Adjust frequencies
         items.extend(["Progressive Pawn"] * 3)  # More pawn chance
         items.extend(["Progressive Pocket"] * 2)  # More pocket chance
