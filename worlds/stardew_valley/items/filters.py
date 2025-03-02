@@ -1,0 +1,31 @@
+from collections.abc import Iterable
+
+from .item_data import ItemData, Group
+from ..options import StardewValleyOptions, ExcludeGingerIsland
+
+
+def remove_excluded(items: Iterable[ItemData], options: StardewValleyOptions) -> list[ItemData]:
+    return [
+        item
+        for item in items
+        if Group.DEPRECATED not in item.groups
+           and (options.exclude_ginger_island == ExcludeGingerIsland.option_false or Group.GINGER_ISLAND not in item.groups)
+           and (item.mod_name is None or item.mod_name in options.mods.value)
+    ]
+
+
+def remove_limited_amount_resource_packs(packs: Iterable[ItemData]) -> list[ItemData]:
+    return [
+        resource_pack
+        for resource_pack in packs
+        if not resource_pack.has_limited_amount()
+    ]
+
+
+def remove_already_included(items: Iterable[ItemData], already_added_items: set[str]) -> list[ItemData]:
+    return [
+        item
+        for item in items
+        if item.name not in already_added_items
+           or (item.has_any_group(Group.RESOURCE_PACK, Group.TRAP) and Group.MAXIMUM_ONE not in item.groups)
+    ]

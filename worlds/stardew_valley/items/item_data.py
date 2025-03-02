@@ -1,17 +1,27 @@
+from __future__ import annotations
+
 import csv
 import enum
 from dataclasses import dataclass, field
 from functools import reduce
-from pathlib import Path
-from typing import Dict, List, Protocol, Union, Set, Optional
+from typing import Protocol
 
-from BaseClasses import Item, ItemClassification
+from BaseClasses import ItemClassification, Item
 from .. import data
 from ..logic.logic_event import all_events
 
 ITEM_CODE_OFFSET = 717000
 
-world_folder = Path(__file__).parent
+
+class StardewItemFactory(Protocol):
+    def __call__(self, item: str | ItemData, /, *, classification_pre_fill: ItemClassification = None,
+                 classification_post_fill: ItemClassification = None) -> Item:
+        """
+        :param item: The item to create. Can be the name of the item or the item data.
+        :param classification_pre_fill: The classification to use for the item before the fill. If None, the basic classification of the item is used.
+        :param classification_post_fill: The classification to use for the item after the fill. If None, the pre_fill classification will be used.
+        """
+        raise NotImplementedError
 
 
 class Group(enum.Enum):
@@ -78,11 +88,11 @@ class Group(enum.Enum):
 
 @dataclass(frozen=True)
 class ItemData:
-    code_without_offset: Optional[int]
+    code_without_offset: int | None
     name: str
     classification: ItemClassification
-    mod_name: Optional[str] = None
-    groups: Set[Group] = field(default_factory=frozenset)
+    mod_name: str | None = None
+    groups: set[Group] = field(default_factory=frozenset)
 
     def __post_init__(self):
         if not isinstance(self.groups, frozenset):
@@ -96,10 +106,12 @@ class ItemData:
         groups = set(group)
         return bool(groups.intersection(self.groups))
 
+    def has_all_groups(self, *group: Group) -> bool:
+        groups = set(group)
+        return bool(groups.issubset(self.groups))
 
-class StardewItemFactory(Protocol):
-    def __call__(self, name: Union[str, ItemData], override_classification: ItemClassification = None) -> Item:
-        raise NotImplementedError
+    def has_limited_amount(self) -> bool:
+        return self.has_any_group(Group.MAXIMUM_ONE, Group.AT_LEAST_TWO)
 
 
 def load_item_csv():
@@ -122,9 +134,9 @@ events = [
     for e in sorted(all_events)
 ]
 
-all_items: List[ItemData] = load_item_csv() + events
-item_table: Dict[str, ItemData] = {}
-items_by_group: Dict[Group, List[ItemData]] = {}
+all_items: list[ItemData] = load_item_csv() + events
+item_table: dict[str, ItemData] = {}
+items_by_group: dict[Group, list[ItemData]] = {}
 
 
 def initialize_groups():
