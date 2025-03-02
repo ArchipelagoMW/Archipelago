@@ -7,19 +7,19 @@ from BaseClasses import CollectionState
 
 
 class LocationType(IntEnum):
-    Strawberry = 0
-    Golden_Strawberry = 1
-    Cassette = 2
-    Crystal_Heart = 3
-    Checkpoint = 4
-    Level_Clear = 5
-    Room_Enter = 6
+    strawberry = 0
+    golden_strawberry = 1
+    cassette = 2
+    crystal_heart = 3
+    checkpoint = 4
+    level_clear = 5
+    room_enter = 6
 
 class DoorDirection(IntEnum):
-    Up = 0
-    Right = 1
-    Down = 2
-    Left = 3
+    up = 0
+    right = 1
+    down = 2
+    left = 3
 
 
 class Door:
@@ -96,14 +96,16 @@ class Room:
     regions: List[PreRegion]
     doors: List[Door]
     checkpoint: str
+    checkpoint_region: str
 
-    def __init__(self, level_name: str, name: str, display_name: str, regions: List[PreRegion], doors: List[Door], checkpoint: str = None):
+    def __init__(self, level_name: str, name: str, display_name: str, regions: List[PreRegion], doors: List[Door], checkpoint: str = None, checkpoint_region: str = None):
         self.level_name = level_name
         self.name = name
         self.display_name = display_name
         self.regions = deepcopy(regions)
         self.doors = deepcopy(doors)
         self.checkpoint = checkpoint
+        self.checkpoint_region = checkpoint_region
 
         from .data.TestLevelData import all_regions
 
@@ -144,20 +146,19 @@ class Level:
         self.room_connections = deepcopy(room_connections)
 
 
-def load_logic_data():
-    from .data.TestLevelData import all_levels
+def load_logic_data() -> Dict[str, Level]:
+    from .data.CelesteLevelData import all_levels
 
-    for _, level in all_levels.items():
-        print(level.display_name)
-
-        for room in level.rooms:
-            print(" " + room.display_name)
-
-            for region in room.regions:
-                print("  " + region.name)
-
-                for location in region.locations:
-                    print("   " + location.display_name)
-
+    #for _, level in all_levels.items():
+    #    print(level.display_name)
+    #
+    #    for room in level.rooms:
+    #        print(" " + room.display_name)
+    #
+    #        for region in room.regions:
+    #            print("  " + region.name)
+    #
+    #            for location in region.locations:
+    #                print("   " + location.display_name)
 
     return all_levels

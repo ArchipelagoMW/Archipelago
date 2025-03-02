@@ -61,9 +61,9 @@ class CelesteWorld(World):
 
         from .Regions import region_data_table
         # Create regions.
-        for region_name in region_data_table.keys():
-            region = Region(region_name, self.player, self.multiworld)
-            self.multiworld.regions.append(region)
+        #for region_name in region_data_table.keys():
+        #    region = Region(region_name, self.player, self.multiworld)
+        #    self.multiworld.regions.append(region)
 
         # Create locations.
         for region_name, region_data in region_data_table.items():
@@ -114,7 +114,7 @@ class CelesteWorld(World):
         from .Rules import set_rules
         set_rules(self)
 
-
+    # TODO: More Options
     def fill_slot_data(self):
         return {
             "death_link": self.options.death_link.value,
