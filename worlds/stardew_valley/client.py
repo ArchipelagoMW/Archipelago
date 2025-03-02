@@ -93,23 +93,28 @@ class StardewCommandProcessor(ClientCommandProcessor):
 
     @mark_raw
     def _cmd_explain_missing(self, location: str = ""):
-        """Explain the logic behind a location, while skipping the rules that are already satisfied."""
+        """Explain what is missing for a location to be in logic. It explains the logic behind a location, while skipping the rules that are already satisfied."""
+        self.__explain(location, expected=True)
+
+    @mark_raw
+    def _cmd_explain_how(self, location: str = ""):
+        """Explain how a location is in logic. It explains the logic behind the location, while skipping the rules that are not satisfied."""
+        self.__explain(location, expected=False)
+
+    def __explain(self, location: str = "", expected: bool | None = None):
         logic = self.ctx.get_logic()
         if logic is None:
             return
+
         try:
             rule = logic.region.can_reach_location(location)
-            state = get_updated_state(self.ctx)
-            simplified, _ = rule.evaluate_while_simplifying(state)
-            expl = explain(simplified, state, mode=ExplainMode.CLIENT)
+            expl = explain(rule, get_updated_state(self.ctx), expected=expected, mode=ExplainMode.CLIENT)
         except KeyError:
 
             result, usable, response = Utils.get_intended_text(location, [loc.name for loc in self.ctx.multiworld.get_locations(1)])
             if usable:
                 rule = logic.region.can_reach_location(result)
-                state = get_updated_state(self.ctx)
-                simplified, _ = rule.evaluate_while_simplifying(state)
-                expl = explain(simplified, state, mode=ExplainMode.CLIENT)
+                expl = explain(rule, get_updated_state(self.ctx), expected=expected, mode=ExplainMode.CLIENT)
             else:
                 self.ctx.ui.last_autofillable_command = "/explain_missing"
                 logger.warning(response)
@@ -173,16 +178,17 @@ class StardewClientContext(TrackerGameContext):
     def get_logic(self) -> StardewLogic | None:
         if self.player_id is None:
             logger.warning("Internal logic was not able to load, check your yamls and relaunch.")
-            return
+            return None
 
         if self.game != "Stardew Valley":
             logger.warning(f"Please connect to a slot with explainable logic (not {self.game}).")
-            return
+            return None
 
         return self.multiworld.worlds[self.player_id].logic
 
 
 def parse_explanation(explanation: RuleExplanation) -> list[JSONMessagePart]:
+    # Split the explanation in parts, by isolating all the delimiters, being \(, \), & , -> , | , \d+x , \[ , \] , \(\w+\), \n\s*
     result_regex = r"(\(|\)| & | -> | \| |\d+x | \[|\](?: ->)?\s*| \(\w+\)|\n\s*)"
     splits = re.split(result_regex, str(explanation).strip())
 

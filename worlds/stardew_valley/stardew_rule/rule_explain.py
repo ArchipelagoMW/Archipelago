@@ -29,14 +29,17 @@ class MoreExplanation:
         except KeyError:
             return False
 
-    def __str__(self, depth=0):
+    def summary(self, depth=0) -> str:
         if self.mode is ExplainMode.CLIENT:
             depth *= 2
 
-        summary = "  " * depth + f"{str(self.rule)} -> {self.result}"
-        summary += f" [use `/more {self.more_index}` to explain]"
+        line = "  " * depth + f"{str(self.rule)} -> {self.result}"
+        line += f" [use `/more {self.more_index}` to explain]"
 
-        return summary
+        return line
+
+    def __str__(self, depth=0):
+        return self.summary(depth)
 
 
 @dataclass
@@ -60,11 +63,11 @@ class RuleExplanation:
         if self.mode is ExplainMode.CLIENT:
             depth *= 2
 
-        summary = "  " * depth + f"{str(self.rule)} -> {self.result}"
+        line = "  " * depth + f"{str(self.rule)} -> {self.result}"
         if self.current_rule_explored:
-            summary += " [Already explained]"
+            line += " [Already explained]"
 
-        return summary
+        return line
 
     def __str__(self, depth=0):
         if not self.sub_rules:
