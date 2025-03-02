@@ -64,7 +64,7 @@ class Ty1World(World):
             "ReqBosses": self.options.req_bosses.value,
             "GateTimeAttacks": self.options.gate_time_attacks.value,
             "PortalMap": self.portal_map,
-            "FramesRequireInfra": self.frames_require_infra.value,
+            "FramesRequireInfra": self.options.frames_require_infra.value,
             "Scalesanity": self.options.scalesanity.value,
             "Signsanity": self.options.signsanity.value,
             "Lifesanity": self.options.lifesanity.value,
