@@ -141,7 +141,7 @@
     },
     {
         "address": 506, "name": "FSP: Receive Peach Blossom Village Quest",
-        "region": "FSP - Root Node", "requires": [] // TODO: decide what if any triggers this will have (in vanilla it's Prison sequence + Chiyou rescue)
+        "region": "FSP - Root Node", "requires": []
     },
     {
         "address": 507, "name": "FSP: Take Shuanshuan's Book",
