@@ -145,11 +145,19 @@
     },
     {
         "address": 507, "name": "FSP: Take Shuanshuan's Book",
-        "region": "FSP - Root Node", "requires": [ { "item": "The Four Treasures of the Study" } ]
+        "region": "FSP - Root Node", "requires": [
+            // these are the actual vanilla game conditions for spawning the book; prereqs like 4 Treasures are left implied
+            { "location": "FSP: Give Yi's Portrait to Chiyou" },
+            { "location": "Jiequan's Vital Sanctum" }
+        ]
     },
     {
         "address": 508, "name": "FSP: Give Shuanshuan's Book to Chiyou",
-        "region": "FSP - Root Node", "requires": [ { "item": "Event - Chiyou in FSP" }, { "item": "Legend of the Porky Heroes" } ]
+        "region": "FSP - Root Node", "requires": [
+            // testing implies these can't be done out of order, Portrait scene must be first
+            { "location": "FSP: Give Yi's Portrait to Chiyou" },
+            { "item": "Legend of the Porky Heroes" }
+        ]
     },
     {
         "address": 509, "name": "FSP: Reveal the Kunlun Immortal Portrait's Secret",
