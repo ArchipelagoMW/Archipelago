@@ -78,6 +78,8 @@ Currently, the following games are supported:
 * Yacht Dice
 * Faxanadu
 * Saving Princess
+* Castlevania: Circle of the Moon
+* Inscryption
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled

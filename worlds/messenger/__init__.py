@@ -228,7 +228,7 @@ class MessengerWorld(World):
                     f"({self.options.total_seals}). Adjusting to {total_seals}"
                 )
                 self.total_seals = total_seals
-            self.required_seals = int(self.options.percent_seals_required.value / 100 * self.total_seals)
+            self.required_seals = max(1, int(self.options.percent_seals_required.value / 100 * self.total_seals))
 
             seals = [self.create_item("Power Seal") for _ in range(self.total_seals)]
             itempool += seals
@@ -381,7 +381,7 @@ class MessengerWorld(World):
             return
         # the messenger client calls into AP with specific args, so check the out path matches what the client sends
         out_path = output_path(multiworld.get_out_file_name_base(1) + ".aptm")
-        if "The Messenger\\Archipelago\\output" not in out_path:
+        if "Messenger\\Archipelago\\output" not in out_path:
             return
         import orjson
         data = {

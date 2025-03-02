@@ -152,8 +152,15 @@ def home_path(*path: str) -> str:
     if hasattr(home_path, 'cached_path'):
         pass
     elif sys.platform.startswith('linux'):
-        home_path.cached_path = os.path.expanduser('~/Archipelago')
-        os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
+        xdg_data_home = os.getenv('XDG_DATA_HOME', os.path.expanduser('~/.local/share'))
+        home_path.cached_path = xdg_data_home + '/Archipelago'
+        if not os.path.isdir(home_path.cached_path):
+            legacy_home_path = os.path.expanduser('~/Archipelago')
+            if os.path.isdir(legacy_home_path):
+                os.renames(legacy_home_path, home_path.cached_path)
+                os.symlink(home_path.cached_path, legacy_home_path)
+            else:
+                os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
     else:
         # not implemented
         home_path.cached_path = local_path()  # this will generate the same exceptions we got previously
@@ -514,8 +521,8 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
         def filter(self, record: logging.LogRecord) -> bool:
             return self.condition(record)
 
-    file_handler.addFilter(Filter("NoStream", lambda record: not getattr(record,  "NoFile", False)))
-    file_handler.addFilter(Filter("NoCarriageReturn", lambda record: '\r' not in record.msg))
+    file_handler.addFilter(Filter("NoStream", lambda record: not getattr(record, "NoFile", False)))
+    file_handler.addFilter(Filter("NoCarriageReturn", lambda record: '\r' not in record.getMessage()))
     root_logger.addHandler(file_handler)
     if sys.stdout:
         formatter = logging.Formatter(fmt='[%(asctime)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
@@ -534,7 +541,8 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
                 sys.__excepthook__(exc_type, exc_value, exc_traceback)
                 return
             logging.getLogger(exception_logger).exception("Uncaught exception",
-                                                          exc_info=(exc_type, exc_value, exc_traceback))
+                                                          exc_info=(exc_type, exc_value, exc_traceback),
+                                                          extra={"NoStream": exception_logger is None})
             return orig_hook(exc_type, exc_value, exc_traceback)
 
         handle_exception._wrapped = True
@@ -932,7 +940,7 @@ def freeze_support() -> None:
 
 def visualize_regions(root_region: Region, file_name: str, *,
                       show_entrance_names: bool = False, show_locations: bool = True, show_other_regions: bool = True,
-                      linetype_ortho: bool = True) -> None:
+                      linetype_ortho: bool = True, regions_to_highlight: set[Region] | None = None) -> None:
     """Visualize the layout of a world as a PlantUML diagram.
 
     :param root_region: The region from which to start the diagram from. (Usually the "Menu" region of your world.)
@@ -948,16 +956,22 @@ def visualize_regions(root_region: Region, file_name: str, *,
             Items without ID will be shown in italics.
     :param show_other_regions: (default True) If enabled, regions that can't be reached by traversing exits are shown.
     :param linetype_ortho: (default True) If enabled, orthogonal straight line parts will be used; otherwise polylines.
+    :param regions_to_highlight: Regions that will be highlighted in green if they are reachable.
 
     Example usage in World code:
     from Utils import visualize_regions
-    visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml")
+    state = self.multiworld.get_all_state(False)
+    state.update_reachable_regions(self.player)
+    visualize_regions(self.get_region("Menu"), "my_world.puml", show_entrance_names=True,
+                      regions_to_highlight=state.reachable_regions[self.player])
 
     Example usage in Main code:
     from Utils import visualize_regions
     for player in multiworld.player_ids:
         visualize_regions(multiworld.get_region("Menu", player), f"{multiworld.get_out_file_name_base(player)}.puml")
     """
+    if regions_to_highlight is None:
+        regions_to_highlight = set()
     assert root_region.multiworld, "The multiworld attribute of root_region has to be filled"
     from BaseClasses import Entrance, Item, Location, LocationProgressType, MultiWorld, Region
     from collections import deque
@@ -1010,7 +1024,7 @@ def visualize_regions(root_region: Region, file_name: str, *,
                 uml.append(f"\"{fmt(region)}\" : {{field}} {lock}{fmt(location)}")
 
     def visualize_region(region: Region) -> None:
-        uml.append(f"class \"{fmt(region)}\"")
+        uml.append(f"class \"{fmt(region)}\" {'#00FF00' if region in regions_to_highlight else ''}")
         if show_locations:
             visualize_locations(region)
         visualize_exits(region)
