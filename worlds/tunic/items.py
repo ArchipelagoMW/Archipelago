@@ -191,6 +191,8 @@ item_table: Dict[str, TunicItemData] = {
     "Atoll Southeast Fuse": TunicItemData(IC.progression, 0, 177, "Fuses"),
     "Atoll Southwest Fuse": TunicItemData(IC.progression, 0, 178, "Fuses"),
     "Library Lab Fuse": TunicItemData(IC.progression, 0, 179, "Fuses"),
+    "East Bell": TunicItemData(IC.progression, 0, 180, "Bells"),
+    "West Bell": TunicItemData(IC.progression, 0, 181, "Bells")
 }
 
 # items to be replaced by fool traps

@@ -1,6 +1,7 @@
 from typing import Dict, FrozenSet, Tuple, TYPE_CHECKING
 from worlds.generic.Rules import set_rule, add_rule, forbid_item
 from BaseClasses import Region, CollectionState
+from .bells import set_bell_location_rules
 from .fuses import set_fuse_location_rules, has_fuses
 from .options import IceGrappling, LadderStorage, CombatLogic
 from .rules import (has_ability, has_sword, has_melee, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage,
@@ -385,7 +386,8 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     # nmg: ice grapple through temple door
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Temple Door"],
-        rule=lambda state: state.has_all({"Ring Eastern Bell", "Ring Western Bell"}, player)
+        rule=lambda state: (state.has_all(("Ring Eastern Bell", "Ring Western Bell"), player) and not options.shuffle_bells)
+        or (state.has_all(("East Bell", "West Bell"), player) and options.shuffle_bells)
         or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
 
     regions["Overworld Temple Door"].connect(
@@ -1591,6 +1593,9 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     if options.shuffle_fuses:
         set_fuse_location_rules(world)
 
+    if options.shuffle_bells:
+        set_bell_location_rules(world)
+
     forbid_item(world.get_location("Secret Gathering Place - 20 Fairy Reward"), fairies, player)
 
     # Ability Shuffle Exclusive Rules
@@ -1794,10 +1799,11 @@ def set_er_location_rules(world: "TunicWorld") -> None:
              lambda state: state.has(laurels, player))
 
     # Events
-    set_rule(world.get_location("Eastern Bell"),
-             lambda state: (has_melee(state, player) or state.has(fire_wand, player)))
-    set_rule(world.get_location("Western Bell"),
-             lambda state: (has_melee(state, player) or state.has(fire_wand, player)))
+    if not options.shuffle_bells:
+        set_rule(world.get_location("Eastern Bell"),
+                 lambda state: (has_melee(state, player) or state.has(fire_wand, player)))
+        set_rule(world.get_location("Western Bell"),
+                 lambda state: (has_melee(state, player) or state.has(fire_wand, player)))
     if not options.shuffle_fuses:
         set_rule(world.get_location("Furnace Fuse"),
                  lambda state: has_ability(prayer, state, world))

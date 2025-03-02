@@ -162,6 +162,13 @@ class ShuffleFuses(Toggle):
     internal_name = "shuffle_fuses"
     display_name = "Shuffle Fuses"
 
+class ShuffleBells(Toggle):
+    """
+    The East and West bells are shuffled into the item pool and must be found in order to unlock the Sealed Temple.
+    Ringing the bells will instead now reward a check.
+    """
+    internal_name = "shuffle_bells"
+    display_name = "Shuffle Bells"
 
 class GrassRandomizer(Toggle):
     """
@@ -314,6 +321,7 @@ class TunicOptions(PerGameCommonOptions):
 
     shuffle_ladders: ShuffleLadders
     shuffle_fuses: ShuffleFuses
+    shuffle_bells: ShuffleBells
     grass_randomizer: GrassRandomizer
     local_fill: LocalFill
 
