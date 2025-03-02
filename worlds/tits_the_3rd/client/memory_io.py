@@ -14,7 +14,7 @@ from dataclasses import dataclass
 import json
 import os
 import struct
-from typing import Any, Dict, List, Literal
+from typing import Any, Dict, List, Literal, Optional
 
 from pymem import pymem
 
@@ -53,6 +53,7 @@ class TitsThe3rdMemoryIO():
         self.tits_the_3rd_pid: int = None
         self.exit_event = exit_event
         self.scena_functions: Dict[str, ScenaFunction] = self._read_custom_scena_functions()
+        self.scena_offsets: Dict[bytes, int] = dict()
 
         # Used for starting threads at the start of scena functions for starting events in game.
         self.scena_caller_alloc: Any = None
@@ -273,3 +274,99 @@ class TitsThe3rdMemoryIO():
         data = self._read_bytes(flag_byte_offset, 1)
         flag_value = (data >> flag_bit) & 1
         return bool(flag_value)
+
+    def get_scena_offset(self, scena_id: bytes) -> Optional[int]:
+        """Get and verify a cached scena offset. Find and cache if it does not exist"""
+        if scena_id not in self.scena_offsets:
+            address = self.tits_the_3rd_mem.pattern_scan_all(scena_id)
+            if not address:
+                logger.error("Could not find give item function. Is the game running?")
+                return None
+            self.scena_offsets[scena_id] = address
+
+        if self.tits_the_3rd_mem.read_bytes(self.scena_offsets[scena_id], 2) != b"AP":
+            del self.scena_offsets[scena_id]
+            address = self.tits_the_3rd_mem.pattern_scan_all(scena_id)
+            if not address:
+                logger.error("Could not find give item function. Is the game running?")
+                return None
+            self.scena_offsets[scena_id] = address
+
+        return self.scena_offsets[scena_id]
+
+    def give_item(self, item_id: int, amount: int):
+        """Function to give an item to the player in game"""
+        address = self.get_scena_offset(b"AP Item Receive Notification")
+        if address is None:
+            return False
+        self.tits_the_3rd_mem.write_bytes(address + 30, item_id.to_bytes(2, "little"), 2)
+        self.tits_the_3rd_mem.write_bytes(address + 32, amount.to_bytes(2, "little"), 2)
+        self.tits_the_3rd_mem.write_bytes(address + 45, item_id.to_bytes(2, "little"), 2)
+        self.tits_the_3rd_mem.write_bytes(address + 48, bytes(f"{amount:02d}", encoding="utf8"), 2)
+        self.call_scena(self.scena_functions["give_item"])
+        return True
+
+    def give_mira(self, amount: int):
+        """Function to give mira to the player in game"""
+        address: int = self.get_scena_offset(b"AP Mira Receive Notification")
+        if not address:
+            return False
+        self.tits_the_3rd_mem.write_bytes(address + 30, amount.to_bytes(2, "little"), 2)
+        self.tits_the_3rd_mem.write_bytes(address + 50, bytes(f"{amount:05d}", encoding="utf8"), 5)
+        self.call_scena(self.scena_functions["give_mira"])
+        return True
+
+    def give_low_sepith(self, amount: int):
+        """Function to give low element sepith to the player in game"""
+        address: int = self.get_scena_offset(b"AP Low Sepith Receive Notification")
+        if not address:
+            return False
+        amount_in_bytes = amount.to_bytes(2, "little")
+        self.tits_the_3rd_mem.write_bytes(address + 37, amount_in_bytes, 2)
+        self.tits_the_3rd_mem.write_bytes(address + 41, amount_in_bytes, 2)
+        self.tits_the_3rd_mem.write_bytes(address + 45, amount_in_bytes, 2)
+        self.tits_the_3rd_mem.write_bytes(address + 49, amount_in_bytes, 2)
+        self.tits_the_3rd_mem.write_bytes(address + 81, bytes(f"{amount:03d}", encoding="utf8"), 3)
+        self.tits_the_3rd_mem.write_bytes(address + 103, bytes(f"{amount:03d}", encoding="utf8"), 3)
+        self.tits_the_3rd_mem.write_bytes(address + 124, bytes(f"{amount:03d}", encoding="utf8"), 3)
+        self.tits_the_3rd_mem.write_bytes(address + 145, bytes(f"{amount:03d}", encoding="utf8"), 3)
+        self.call_scena(self.scena_functions["give_low_sepith"])
+        return True
+
+    def give_high_sepith(self, amount: int):
+        """Function to give high element sepith to the player in game"""
+        address: int = self.get_scena_offset(b"AP High Sepith Receive Notification")
+        if not address:
+            return False
+        amount_in_bytes = amount.to_bytes(2, "little")
+        self.tits_the_3rd_mem.write_bytes(address + 38, amount_in_bytes, 2)
+        self.tits_the_3rd_mem.write_bytes(address + 42, amount_in_bytes, 2)
+        self.tits_the_3rd_mem.write_bytes(address + 46, amount_in_bytes, 2)
+        self.tits_the_3rd_mem.write_bytes(address + 77, bytes(f"{amount:03d}", encoding="utf8"), 3)
+        self.tits_the_3rd_mem.write_bytes(address + 99, bytes(f"{amount:03d}", encoding="utf8"), 3)
+        self.tits_the_3rd_mem.write_bytes(address + 122, bytes(f"{amount:03d}", encoding="utf8"), 3)
+        self.call_scena(self.scena_functions["give_high_sepith"])
+        return True
+
+    def give_all_sepith(self, amount: int):
+        """Function to give all types of sepith to the player in game"""
+        address: int = self.get_scena_offset(b"AP All Sepith Receive Notification")
+        if not address:
+            return False
+        amount_in_bytes = amount.to_bytes(2, "little")
+        self.tits_the_3rd_mem.write_bytes(address + 37, amount_in_bytes, 2)
+        self.tits_the_3rd_mem.write_bytes(address + 41, amount_in_bytes, 2)
+        self.tits_the_3rd_mem.write_bytes(address + 45, amount_in_bytes, 2)
+        self.tits_the_3rd_mem.write_bytes(address + 49, amount_in_bytes, 2)
+        self.tits_the_3rd_mem.write_bytes(address + 53, amount_in_bytes, 2)
+        self.tits_the_3rd_mem.write_bytes(address + 57, amount_in_bytes, 2)
+        self.tits_the_3rd_mem.write_bytes(address + 61, amount_in_bytes, 2)
+        self.tits_the_3rd_mem.write_bytes(address + 93, bytes(f"{amount:03d}", encoding="utf8"), 3)
+        self.tits_the_3rd_mem.write_bytes(address + 115, bytes(f"{amount:03d}", encoding="utf8"), 3)
+        self.tits_the_3rd_mem.write_bytes(address + 136, bytes(f"{amount:03d}", encoding="utf8"), 3)
+        self.tits_the_3rd_mem.write_bytes(address + 157, bytes(f"{amount:03d}", encoding="utf8"), 3)
+        self.tits_the_3rd_mem.write_bytes(address + 178, bytes(f"{amount:03d}", encoding="utf8"), 3)
+        self.tits_the_3rd_mem.write_bytes(address + 200, bytes(f"{amount:03d}", encoding="utf8"), 3)
+        self.tits_the_3rd_mem.write_bytes(address + 223, bytes(f"{amount:03d}", encoding="utf8"), 3)
+        self.call_scena(self.scena_functions["give_all_sepith"])
+        return True

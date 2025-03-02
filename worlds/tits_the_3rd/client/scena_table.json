@@ -1,10 +1,26 @@
 {
-    "T0001_1._sn": {
-        "importNumber": 7,
+    "SUB000._sn": {
+        "importNumber": 6,
         "functions": [
             {
-                "functionNumber": 2,
-                "functionName": "test_function"
+                "functionNumber": 29,
+                "functionName": "give_item"
+            },
+            {
+                "functionNumber": 30,
+                "functionName": "give_mira"
+            },
+            {
+                "functionNumber": 31,
+                "functionName": "give_low_sepith"
+            },
+            {
+                "functionNumber": 32,
+                "functionName": "give_high_sepith"
+            },
+            {
+                "functionNumber": 33,
+                "functionName": "give_all_sepith"
             }
         ]
     }
