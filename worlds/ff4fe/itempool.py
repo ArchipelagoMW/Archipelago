@@ -10,9 +10,6 @@ def create_itempool(locations: list[LocationData], world: World) -> tuple[list[s
     location_count = len(locations) - len(character_pool) - len(key_item_pool) - 33  # Objective Status locations
     if world.is_vanilla_game():
         location_count -= 1  # We aren't using the Objective Reward location.
-    if (world.options.HeroChallenge.current_key != "none"
-            and not world.options.ForgeTheCrystal):
-        location_count -= 1  # We're manually placing the Advance Weapon at Kokkol
     result_pool = []
     result_pool.extend(character_pool)
     result_pool.extend(key_item_pool)
@@ -21,6 +18,8 @@ def create_itempool(locations: list[LocationData], world: World) -> tuple[list[s
 
 def create_character_pool(world: World) -> tuple[list[str], str, str]:
     all_allowed_characters = world.options.AllowedCharacters.value
+    if len(all_allowed_characters) == 0:
+        all_allowed_characters = {"Cecil"}
     allowed_starter_characters = all_allowed_characters - world.options.RestrictedCharacters.value
     if world.options.HeroChallenge.current_key != "none":
         option_value = str(world.options.HeroChallenge.current_key)
@@ -91,8 +90,12 @@ def create_general_pool(world: World, location_count: int, key_item_count: int):
     refined_filler = [item for item in refined_filler if item.tier >= world.options.MinTier.value]
     refined_useful = [item for item in refined_useful if item.tier <= world.options.MaxTier.value]
     refined_set = [*refined_useful, *refined_filler]
-    priority_locations = world.options.priority_locations.value
-    required_useful_count = len(priority_locations | set(major_locations))
+    required_useful_count = len(world.options.priority_locations.value)
+    if world.options.ForgeTheCrystal or world.options.HeroChallenge.current_key != "none":
+        required_useful_count -= 1
+        location_count -= 1
+    if not world.is_vanilla_game():
+        required_useful_count += 1
     item_pool = world.random.choices(refined_useful, k=required_useful_count - key_item_count)
     if world.options.ItemRandomization.current_key == "standard":
         refined_set = [item for item in refined_set if item.tier < 6]

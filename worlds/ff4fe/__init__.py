@@ -95,6 +95,11 @@ class FF4FEWorld(World):
             self.objective_count = objective_count
             return min(objective_count, 32)
 
+    def generate_early(self) -> None:
+        self.options.priority_locations.value = (self.options.priority_locations.value |
+                                                 (set(locations.major_location_names) -
+                                                  self.options.exclude_locations.value))
+
     def create_regions(self) -> None:
         menu = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu)
@@ -128,7 +133,7 @@ class FF4FEWorld(World):
         for location in all_locations:
             if location.name.startswith("Objective"): # Objectives aren't "real" locations
                 continue
-            if (self.options.ForgeTheCrystal.current_key == "forge" # Forge the Crystal doesn't have a Kokkol location.
+            if (self.options.ForgeTheCrystal # Forge the Crystal doesn't have a Kokkol location.
                     and location.name == "Kokkol's House 2F -- Kokkol -- forge item"):
                 continue
             region = self.multiworld.get_region(location.area, self.player)
@@ -292,12 +297,10 @@ class FF4FEWorld(World):
                 for requirement in FERules.area_rules[location.area]:
                     add_rule(self.get_location(location.name),
                              lambda state, true_requirement=requirement: state.has(true_requirement, self.player))
-            # Major slots must have useful or better. Except on Kleptomania because then we probably won't have enough usefuls.
-            if (location.major_slot
-                    and location.name not in self.options.exclude_locations
-                    and self.options.WackyChallenge.current_key != "kleptomania"):
+            # Major slots are already Priority, but aren't allowed to have DkMatters
+            if location.major_slot:
                 add_item_rule(self.get_location(location.name),
-                              lambda item: (item.classification & (ItemClassification.useful | ItemClassification.progression)) > 0)
+                              lambda item: item.name != "DkMatter")
             # The "harder" an area, the more key items and characters we need to access.
             # This does two things. First, it ensures a wider distribution of key items so sphere 1 can't just be one
             # piece of progression, which isn't fun in FE.
@@ -477,7 +480,7 @@ class FF4FEWorld(World):
         placement_dict["junk_tier"] = self.options.JunkTier.value
         placement_dict["junked_items"] = list(self.options.JunkedItems.value)
         placement_dict["kept_items"] = list(self.options.KeptItems.value)
-        placement_dict["data_dir"] = Utils.user_path("data", "ff4fe")
+        placement_dict["data_dir"] = Utils.user_path("data/ff4fe")
 
         # Our actual patch is just a set of instructions and data for FE to use.
         patch = FF4FEProcedurePatch(player=self.player, player_name=self.player_name)
