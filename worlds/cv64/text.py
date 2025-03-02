@@ -31,7 +31,7 @@ def cv64_string_to_bytearray(cv64text: str, a_advance: bool = False, append_end:
             if char in cv64_char_dict:
                 text_bytes.extend([0x00, cv64_char_dict[char][0]])
             else:
-                text_bytes.extend([0x00, 0x41])
+                text_bytes.extend([0x00, 0x21])
 
     if a_advance:
         text_bytes.extend([0xA3, 0x00])
@@ -45,7 +45,10 @@ def cv64_text_truncate(cv64text: str, textbox_len_limit: int) -> str:
     line_len = 0
 
     for i in range(len(cv64text)):
-        line_len += cv64_char_dict[cv64text[i]][1]
+        if cv64text[i] in cv64_char_dict:
+            line_len += cv64_char_dict[cv64text[i]][1]
+        else:
+            line_len += 5
 
         if line_len > textbox_len_limit:
             return cv64text[0x00:i]

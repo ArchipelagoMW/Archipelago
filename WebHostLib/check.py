@@ -28,7 +28,7 @@ def check():
                 results, _ = roll_options(options)
                 if len(options) > 1:
                     # offer combined file back
-                    combined_yaml = "---\n".join(f"# original filename: {file_name}\n{file_content.decode('utf-8-sig')}"
+                    combined_yaml = "\n---\n".join(f"# original filename: {file_name}\n{file_content.decode('utf-8-sig')}"
                                                  for file_name, file_content in options.items())
                     combined_yaml = base64.b64encode(combined_yaml.encode("utf-8-sig")).decode()
                 else:
@@ -105,10 +105,14 @@ def roll_options(options: Dict[str, Union[dict, str]],
                                                              plando_options=plando_options)
                 else:
                     for i, yaml_data in enumerate(yaml_datas):
-                        rolled_results[f"{filename}/{i + 1}"] = roll_settings(yaml_data,
-                                                                              plando_options=plando_options)
+                        if yaml_data is not None:
+                            rolled_results[f"{filename}/{i + 1}"] = roll_settings(yaml_data,
+                                                                                  plando_options=plando_options)
             except Exception as e:
-                results[filename] = f"Failed to generate options in {filename}: {e}"
+                if e.__cause__:
+                    results[filename] = f"Failed to generate options in {filename}: {e} - {e.__cause__}"
+                else:
+                    results[filename] = f"Failed to generate options in {filename}: {e}"
             else:
                 results[filename] = True
     return results, rolled_results

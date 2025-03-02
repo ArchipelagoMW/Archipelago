@@ -21,7 +21,7 @@ import Utils
 from CommonClient import ClientCommandProcessor, CommonContext, logger, server_loop, gui_enabled, get_base_parser
 from MultiServer import mark_raw
 from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart
-from Utils import async_start
+from Utils import async_start, get_file_safe_name
 
 
 def check_stdin() -> None:
@@ -120,7 +120,7 @@ class FactorioContext(CommonContext):
 
     @property
     def savegame_name(self) -> str:
-        return f"AP_{self.seed_name}_{self.auth}_Save.zip"
+        return get_file_safe_name(f"AP_{self.seed_name}_{self.auth}")+"_Save.zip"
 
     def print_to_game(self, text):
         self.rcon_client.send_command(f"/ap-print [font=default-large-bold]Archipelago:[/font] "
@@ -234,8 +234,7 @@ async def game_watcher(ctx: FactorioContext):
                         f"Connected Multiworld is not the expected one {data['seed_name']} != {ctx.seed_name}")
                 else:
                     data = data["info"]
-                    research_data = data["research_done"]
-                    research_data = {int(tech_name.split("-")[1]) for tech_name in research_data}
+                    research_data: set[int] = {int(tech_name.split("-")[1]) for tech_name in data["research_done"]}
                     victory = data["victory"]
                     await ctx.update_death_link(data["death_link"])
                     ctx.multiplayer = data.get("multiplayer", False)
@@ -247,9 +246,9 @@ async def game_watcher(ctx: FactorioContext):
                     if ctx.locations_checked != research_data:
                         bridge_logger.debug(
                             f"New researches done: "
-                            f"{[ctx.location_names[rid] for rid in research_data - ctx.locations_checked]}")
+                            f"{[ctx.location_names.lookup_in_game(rid) for rid in research_data - ctx.locations_checked]}")
                         ctx.locations_checked = research_data
-                        await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(research_data)}])
+                        await ctx.check_locations(research_data)
                     death_link_tick = data.get("death_link_tick", 0)
                     if death_link_tick != ctx.death_link_tick:
                         ctx.death_link_tick = death_link_tick
@@ -304,13 +303,13 @@ def stream_factorio_output(pipe, queue, process):
 
 
 async def factorio_server_watcher(ctx: FactorioContext):
-    savegame_name = os.path.abspath(ctx.savegame_name)
+    savegame_name = os.path.abspath(os.path.join(ctx.write_data_path, "saves", "Archipelago", ctx.savegame_name))
     if not os.path.exists(savegame_name):
         logger.info(f"Creating savegame {savegame_name}")
         subprocess.run((
             executable, "--create", savegame_name, "--preset", "archipelago"
         ))
-    factorio_process = subprocess.Popen((executable, "--start-server", ctx.savegame_name,
+    factorio_process = subprocess.Popen((executable, "--start-server", savegame_name,
                                          *(str(elem) for elem in server_args)),
                                         stderr=subprocess.PIPE,
                                         stdout=subprocess.PIPE,
@@ -331,7 +330,8 @@ async def factorio_server_watcher(ctx: FactorioContext):
                 factorio_queue.task_done()
 
                 if not ctx.rcon_client and "Starting RCON interface at IP ADDR:" in msg:
-                    ctx.rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password)
+                    ctx.rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password,
+                                                               timeout=5)
                     if not ctx.server:
                         logger.info("Established bridge to Factorio Server. "
                                     "Ready to connect to Archipelago via /connect")
@@ -360,7 +360,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     transfer_item: NetworkItem = ctx.items_received[ctx.send_index]
                     item_id = transfer_item.item
                     player_name = ctx.player_names[transfer_item.player]
-                    item_name = ctx.item_names[item_id]
+                    item_name = ctx.item_names.lookup_in_game(item_id)
                     factorio_server_logger.info(f"Sending {item_name} to Nauvis from {player_name}.")
                     commands[ctx.send_index] = f"/ap-get-technology {item_name}\t{ctx.send_index}\t{player_name}"
                     ctx.send_index += 1
@@ -405,8 +405,7 @@ async def get_info(ctx: FactorioContext, rcon_client: factorio_rcon.RCONClient):
     info = json.loads(rcon_client.send_command("/ap-rcon-info"))
     ctx.auth = info["slot_name"]
     ctx.seed_name = info["seed_name"]
-    # 0.2.0 addition, not present earlier
-    death_link = bool(info.get("death_link", False))
+    death_link = info["death_link"]
     ctx.energy_link_increment = info.get("energy_link", 0)
     logger.debug(f"Energy Link Increment: {ctx.energy_link_increment}")
     if ctx.energy_link_increment and ctx.ui:
@@ -521,7 +520,7 @@ rcon_port = args.rcon_port
 rcon_password = args.rcon_password if args.rcon_password else ''.join(
     random.choice(string.ascii_letters) for x in range(32))
 factorio_server_logger = logging.getLogger("FactorioServer")
-options = Utils.get_options()
+options = Utils.get_settings()
 executable = options["factorio_options"]["executable"]
 server_settings = args.server_settings if args.server_settings \
     else options["factorio_options"].get("server_settings", None)

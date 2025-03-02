@@ -29,7 +29,7 @@ name: TuNombre
 game: Minecraft
 
 # Opciones compartidas por todos los juegos:
-accessibility: locations
+accessibility: full
 progression_balancing: 50
 # Opciones Especficicas para Minecraft
 

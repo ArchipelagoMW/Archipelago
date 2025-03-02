@@ -29,7 +29,7 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
     def _cmd_patch(self):
         """Patch the game. Only use this command if /auto_patch fails."""
         if isinstance(self.ctx, UndertaleContext):
-            os.makedirs(name=os.path.join(os.getcwd(), "Undertale"), exist_ok=True)
+            os.makedirs(name=Utils.user_path("Undertale"), exist_ok=True)
             self.ctx.patch_game()
             self.output("Patched.")
 
@@ -43,7 +43,7 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
     def _cmd_auto_patch(self, steaminstall: typing.Optional[str] = None):
         """Patch the game automatically."""
         if isinstance(self.ctx, UndertaleContext):
-            os.makedirs(name=os.path.join(os.getcwd(), "Undertale"), exist_ok=True)
+            os.makedirs(name=Utils.user_path("Undertale"), exist_ok=True)
             tempInstall = steaminstall
             if not os.path.isfile(os.path.join(tempInstall, "data.win")):
                 tempInstall = None
@@ -62,7 +62,7 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
                 for file_name in os.listdir(tempInstall):
                     if file_name != "steam_api.dll":
                         shutil.copy(os.path.join(tempInstall, file_name),
-                               os.path.join(os.getcwd(), "Undertale", file_name))
+                               Utils.user_path("Undertale", file_name))
                 self.ctx.patch_game()
                 self.output("Patching successful!")
 
@@ -111,12 +111,12 @@ class UndertaleContext(CommonContext):
         self.save_game_folder = os.path.expandvars(r"%localappdata%/UNDERTALE")
 
     def patch_game(self):
-        with open(os.path.join(os.getcwd(), "Undertale", "data.win"), "rb") as f:
+        with open(Utils.user_path("Undertale", "data.win"), "rb") as f:
             patchedFile = bsdiff4.patch(f.read(), undertale.data_path("patch.bsdiff"))
-        with open(os.path.join(os.getcwd(), "Undertale", "data.win"), "wb") as f:
+        with open(Utils.user_path("Undertale", "data.win"), "wb") as f:
             f.write(patchedFile)
-        os.makedirs(name=os.path.join(os.getcwd(), "Undertale", "Custom Sprites"), exist_ok=True)
-        with open(os.path.expandvars(os.path.join(os.getcwd(), "Undertale", "Custom Sprites",
+        os.makedirs(name=Utils.user_path("Undertale", "Custom Sprites"), exist_ok=True)
+        with open(os.path.expandvars(Utils.user_path("Undertale", "Custom Sprites",
                                      "Which Character.txt")), "w") as f:
             f.writelines(["// Put the folder name of the sprites you want to play as, make sure it is the only "
                           "line other than this one.\n", "frisk"])
@@ -247,8 +247,8 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
             with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
                 toDraw = ""
                 for i in range(20):
-                    if i < len(str(ctx.item_names[l.item])):
-                        toDraw += str(ctx.item_names[l.item])[i]
+                    if i < len(str(ctx.item_names.lookup_in_game(l.item))):
+                        toDraw += str(ctx.item_names.lookup_in_game(l.item))[i]
                     else:
                         break
                 f.write(toDraw)

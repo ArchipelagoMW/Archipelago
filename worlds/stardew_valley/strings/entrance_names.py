@@ -42,14 +42,7 @@ class Entrance:
     forest_to_marnie_ranch = "Forest to Marnie's Ranch"
     forest_to_leah_cottage = "Forest to Leah's Cottage"
     forest_to_sewer = "Forest to Sewer"
-    buy_from_traveling_merchant = "Buy from Traveling Merchant"
-    buy_from_traveling_merchant_sunday = "Buy from Traveling Merchant Sunday"
-    buy_from_traveling_merchant_monday = "Buy from Traveling Merchant Monday"
-    buy_from_traveling_merchant_tuesday = "Buy from Traveling Merchant Tuesday"
-    buy_from_traveling_merchant_wednesday = "Buy from Traveling Merchant Wednesday"
-    buy_from_traveling_merchant_thursday = "Buy from Traveling Merchant Thursday"
-    buy_from_traveling_merchant_friday = "Buy from Traveling Merchant Friday"
-    buy_from_traveling_merchant_saturday = "Buy from Traveling Merchant Saturday"
+    forest_to_mastery_cave = "Forest to Mastery Cave"
     mountain_to_railroad = "Mountain to Railroad"
     mountain_to_tent = "Mountain to Tent"
     mountain_to_carpenter_shop = "Mountain to Carpenter Shop"
@@ -57,6 +50,7 @@ class Entrance:
     mountain_to_the_mines = "Mountain to The Mines"
     enter_quarry = "Mountain to Quarry"
     mountain_to_adventurer_guild = "Mountain to Adventurer's Guild"
+    adventurer_guild_to_bedroom = "Adventurer's Guild to Marlon's Bedroom"
     mountain_to_town = "Mountain to Town"
     town_to_community_center = "Town to Community Center"
     access_crafts_room = "Access Crafts Room"
@@ -100,6 +94,7 @@ class Entrance:
     play_junimo_kart = "Play Junimo Kart"
     reach_junimo_kart_2 = "Reach Junimo Kart 2"
     reach_junimo_kart_3 = "Reach Junimo Kart 3"
+    reach_junimo_kart_4 = "Reach Junimo Kart 4"
     enter_locker_room = "Bathhouse Entrance to Locker Room"
     enter_public_bath = "Locker Room to Public Bath"
     enter_witch_swamp = "Witch Warp Cave to Witch's Swamp"
@@ -120,7 +115,6 @@ class Entrance:
     mine_to_skull_cavern_floor_175 = dig_to_skull_floor(175)
     mine_to_skull_cavern_floor_200 = dig_to_skull_floor(200)
     enter_dangerous_skull_cavern = "Enter the Dangerous Skull Cavern"
-    talk_to_mines_dwarf = "Talk to Mines Dwarf"
     dig_to_mines_floor_5 = dig_to_mines_floor(5)
     dig_to_mines_floor_10 = dig_to_mines_floor(10)
     dig_to_mines_floor_15 = dig_to_mines_floor(15)
@@ -183,6 +177,19 @@ class Entrance:
     parrot_express_jungle_to_docks = "Parrot Express Jungle to Docks"
     parrot_express_dig_site_to_docks = "Parrot Express Dig Site to Docks"
     parrot_express_volcano_to_docks = "Parrot Express Volcano to Docks"
+
+
+class LogicEntrance:
+    talk_to_mines_dwarf = "Talk to Mines Dwarf"
+
+    buy_from_traveling_merchant = "Buy from Traveling Merchant"
+    buy_from_traveling_merchant_sunday = "Buy from Traveling Merchant Sunday"
+    buy_from_traveling_merchant_monday = "Buy from Traveling Merchant Monday"
+    buy_from_traveling_merchant_tuesday = "Buy from Traveling Merchant Tuesday"
+    buy_from_traveling_merchant_wednesday = "Buy from Traveling Merchant Wednesday"
+    buy_from_traveling_merchant_thursday = "Buy from Traveling Merchant Thursday"
+    buy_from_traveling_merchant_friday = "Buy from Traveling Merchant Friday"
+    buy_from_traveling_merchant_saturday = "Buy from Traveling Merchant Saturday"
     farmhouse_cooking = "Farmhouse Cooking"
     island_cooking = "Island Cooking"
     shipping = "Use Shipping Bin"
@@ -191,17 +198,43 @@ class Entrance:
     blacksmith_iron = "Upgrade Iron Tools"
     blacksmith_gold = "Upgrade Gold Tools"
     blacksmith_iridium = "Upgrade Iridium Tools"
-    farming = "Start Farming"
+
+    grow_spring_crops = "Grow Spring Crops"
+    grow_summer_crops = "Grow Summer Crops"
+    grow_fall_crops = "Grow Fall Crops"
+    grow_winter_crops = "Grow Winter Crops"
+    grow_spring_crops_in_greenhouse = "Grow Spring Crops in Greenhouse"
+    grow_summer_crops_in_greenhouse = "Grow Summer Crops in Greenhouse"
+    grow_fall_crops_in_greenhouse = "Grow Fall Crops in Greenhouse"
+    grow_winter_crops_in_greenhouse = "Grow Winter Crops in Greenhouse"
+    grow_indoor_crops_in_greenhouse = "Grow Indoor Crops in Greenhouse"
+    grow_spring_crops_on_island = "Grow Spring Crops on Island"
+    grow_summer_crops_on_island = "Grow Summer Crops on Island"
+    grow_fall_crops_on_island = "Grow Fall Crops on Island"
+    grow_winter_crops_on_island = "Grow Winter Crops on Island"
+    grow_indoor_crops_on_island = "Grow Indoor Crops on Island"
+    grow_summer_fall_crops_in_summer = "Grow Summer Fall Crops in Summer"
+    grow_summer_fall_crops_in_fall = "Grow Summer Fall Crops in Fall"
+
     fishing = "Start Fishing"
     attend_egg_festival = "Attend Egg Festival"
+    attend_desert_festival = "Attend Desert Festival"
     attend_flower_dance = "Attend Flower Dance"
     attend_luau = "Attend Luau"
+    attend_trout_derby = "Attend Trout Derby"
     attend_moonlight_jellies = "Attend Dance of the Moonlight Jellies"
     attend_fair = "Attend Stardew Valley Fair"
     attend_spirit_eve = "Attend Spirit's Eve"
     attend_festival_of_ice = "Attend Festival of Ice"
     attend_night_market = "Attend Night Market"
     attend_winter_star = "Attend Feast of the Winter Star"
+    attend_squidfest = "Attend SquidFest"
+    buy_experience_books = "Buy Experience Books from the bookseller"
+    buy_year1_books = "Buy Year 1 Books from the Bookseller"
+    buy_year3_books = "Buy Year 3 Books from the Bookseller"
+    complete_raccoon_requests = "Complete Raccoon Requests"
+    buy_from_raccoon = "Buy From Raccoon"
+    fish_in_waterfall = "Fish In Waterfall"
 
 
 # Skull Cavern Elevator
@@ -326,6 +359,7 @@ class SVEEntrance:
     sprite_spring_to_cave = "Sprite Spring to Sprite Spring Cave"
     fish_shop_to_willy_bedroom = "Willy's Fish Shop to Willy's Bedroom"
     museum_to_gunther_bedroom = "Museum to Gunther's Bedroom"
+    highlands_to_pond = "Highlands to Highlands Pond"
 
 
 class AlectoEntrance:
@@ -356,4 +390,3 @@ class BoardingHouseEntrance:
     lost_valley_ruins_to_lost_valley_house_1 = "Lost Valley Ruins to Lost Valley Ruins - First House"
     lost_valley_ruins_to_lost_valley_house_2 = "Lost Valley Ruins to Lost Valley Ruins - Second House"
     boarding_house_plateau_to_buffalo_ranch = "Boarding House Outside to Buffalo's Ranch"
-

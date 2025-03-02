@@ -250,13 +250,13 @@ class VariaRandomizer:
     parser.add_argument('--tourianList', help="list to choose from when random",
                         dest='tourianList', nargs='?', default=None)
 
-    def __init__(self, world, rom, player):
+    def __init__(self, options, rom, player):
         # parse args       
         self.args = copy.deepcopy(VariaRandomizer.parser.parse_args(["--logic", "varia"])) #dummy custom args to skip parsing _sys.argv while still get default values
         self.player = player
         args = self.args
         args.rom = rom
-        # args.startLocation = to_pascal_case_with_space(world.startLocation[player].current_key)
+        # args.startLocation = to_pascal_case_with_space(options.startLocation.current_key)
 
         if args.output is None and args.rom is None:
             raise Exception("Need --output or --rom parameter")
@@ -288,7 +288,7 @@ class VariaRandomizer:
                 # print(msg)
                 # optErrMsgs.append(msg)
 
-        preset = loadRandoPreset(world, self.player, args)
+        preset = loadRandoPreset(options, args)
         # use the skill preset from the rando preset
         if preset is not None and preset != 'custom' and preset != 'varia_custom' and args.paramsFileName is None:
             args.paramsFileName = "/".join((appDir, getPresetDir(preset), preset+".json"))
@@ -302,12 +302,12 @@ class VariaRandomizer:
                 preset = args.preset
         else:
             if preset == 'custom':
-                PresetLoader.factory(world.custom_preset[player].value).load(self.player)
+                PresetLoader.factory(options.custom_preset.value).load(self.player)
             elif preset == 'varia_custom':
-                if len(world.varia_custom_preset[player].value) == 0:
+                if len(options.varia_custom_preset.value) == 0:
                     raise Exception("varia_custom was chosen but varia_custom_preset is missing.")
                 url = 'https://randommetroidsolver.pythonanywhere.com/presetWebService'
-                preset_name = next(iter(world.varia_custom_preset[player].value))
+                preset_name = next(iter(options.varia_custom_preset.value))
                 payload = '{{"preset": "{}"}}'.format(preset_name)
                 headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
                 response = requests.post(url, data=payload, headers=headers)
@@ -463,7 +463,7 @@ class VariaRandomizer:
                 args.startLocation = random.choice(possibleStartAPs)
             elif args.startLocation not in possibleStartAPs:
                 args.startLocation = 'Landing Site'
-                world.start_location[player] = StartLocation(StartLocation.default)
+                options.start_location = StartLocation(StartLocation.default)
                 #optErrMsgs.append('Invalid start location: {}.  {}'.format(args.startLocation, reasons[args.startLocation]))
                 #optErrMsgs.append('Possible start locations with these settings: {}'.format(possibleStartAPs))
                 #dumpErrorMsgs(args.output, optErrMsgs)
@@ -680,7 +680,7 @@ class VariaRandomizer:
             #dumpErrorMsg(args.output, self.randoExec.errorMsg)
             raise Exception("Can't generate " + self.fileName + " with the given parameters: {}".format(self.randoExec.errorMsg))
 
-    def PatchRom(self, outputFilename, customPrePatchApply = None, customPostPatchApply = None):
+    def PatchRom(self, customPrePatchApply = None, customPostPatchApply = None) -> RomPatcher:
         args = self.args
         optErrMsgs = self.optErrMsgs
 
@@ -758,9 +758,9 @@ class VariaRandomizer:
             # args.output is not None: generate local json named args.output
             if args.rom is not None:
                 # patch local rom
-                romFileName = args.rom
-                shutil.copyfile(romFileName, outputFilename)
-                romPatcher = RomPatcher(settings=patcherSettings, romFileName=outputFilename, magic=args.raceMagic, player=self.player)
+                # romFileName = args.rom
+                # shutil.copyfile(romFileName, outputFilename)
+                romPatcher = RomPatcher(settings=patcherSettings, magic=args.raceMagic, player=self.player)
             else:
                 romPatcher = RomPatcher(settings=patcherSettings, magic=args.raceMagic)
 
@@ -779,24 +779,12 @@ class VariaRandomizer:
                 #msg = randoExec.errorMsg
                 msg = ''
 
-            if args.rom is None: # web mode
-                data = romPatcher.romFile.data
-                self.fileName = '{}.sfc'.format(self.fileName)
-                data["fileName"] = self.fileName
-                # error msg in json to be displayed by the web site
-                data["errorMsg"] = msg
-                # replaced parameters to update stats in database
-                if len(self.forcedArgs) > 0:
-                    data["forcedArgs"] = self.forcedArgs
-                with open(outputFilename, 'w') as jsonFile:
-                    json.dump(data, jsonFile)
-            else: # CLI mode
-                if msg != "":
-                    print(msg)
+            return romPatcher
+
         except Exception as e:
             import traceback
             traceback.print_exc(file=sys.stdout)
-            raise Exception("Error patching {}: ({}: {})".format(outputFilename, type(e).__name__, e))
+            raise Exception("Error patching: ({}: {})".format(type(e).__name__, e))
             #dumpErrorMsg(args.output, msg)
 
 #        if stuck == True:

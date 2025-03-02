@@ -2,17 +2,17 @@
 
 ## Required Software
 
-- Stardew Valley on PC (Recommended: [Steam version](https://store.steampowered.com/app/413150/Stardew_Valley/))
-- SMAPI ([Mod loader for Stardew Valley](https://smapi.io/))
-- [StardewArchipelago Mod Release 5.x.x](https://github.com/agilbert1412/StardewArchipelago/releases)
-    - It is important to use a mod release of version 5.x.x to play seeds that have been generated here. Later releases 
+- Stardew Valley 1.6 on PC (Recommended: [Steam version](https://store.steampowered.com/app/413150/Stardew_Valley/))
+- SMAPI ([Mod loader for Stardew Valley](https://www.nexusmods.com/stardewvalley/mods/2400?tab=files))
+- [StardewArchipelago Mod Release 6.x.x](https://github.com/agilbert1412/StardewArchipelago/releases)
+    - It is important to use a mod release of version 6.x.x to play seeds that have been generated here. Later releases 
   can only be used with later releases of the world generator, that are not hosted on archipelago.gg yet.
 
 ## Optional Software
 - Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
     * (Only for the TextClient)
 - Other Stardew Valley Mods [Nexus Mods](https://www.nexusmods.com/stardewvalley)
-    * There are [supported mods](https://github.com/agilbert1412/StardewArchipelago/blob/5.x.x/Documentation/Supported%20Mods.md) 
+    * There are [supported mods](https://github.com/agilbert1412/StardewArchipelago/blob/6.x.x/Documentation/Supported%20Mods.md) 
   that you can add to your yaml to include them with the Archipelago randomization
 
     * It is **not** recommended to further mod Stardew Valley with unsupported mods, although it is possible to do so. 
@@ -34,11 +34,10 @@ You can customize your options by visiting the [Stardew Valley Player Options Pa
 
 ### Installing the mod
 
-- Install [SMAPI](https://smapi.io/) by following the instructions on their website
+- Install [SMAPI](https://www.nexusmods.com/stardewvalley/mods/2400?tab=files) by following the instructions on the mod page
 - Download and extract the [StardewArchipelago](https://github.com/agilbert1412/StardewArchipelago/releases) mod into 
 your Stardew Valley "Mods" folder
-- *OPTIONAL*: If you want to launch your game through Steam, add the following to your Stardew Valley launch options:
-    - "[PATH TO STARDEW VALLEY]\Stardew Valley\StardewModdingAPI.exe" %command%
+- *OPTIONAL*: If you want to launch your game through Steam, add the following to your Stardew Valley launch options: `"[PATH TO STARDEW VALLEY]\Stardew Valley\StardewModdingAPI.exe" %command%`
 - Otherwise just launch "StardewModdingAPI.exe" in your installation folder directly
 - Stardew Valley should launch itself alongside a console which allows you to read mod information and interact with some of them.
 
@@ -90,7 +89,7 @@ Stardew-exclusive commands.
 
 ### Playing with supported mods
 
-See the [Supported mods documentation](https://github.com/agilbert1412/StardewArchipelago/blob/5.x.x/Documentation/Supported%20Mods.md)
+See the [Supported mods documentation](https://github.com/agilbert1412/StardewArchipelago/blob/6.x.x/Documentation/Supported%20Mods.md)
 
 ### Multiplayer
 
