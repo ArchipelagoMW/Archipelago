@@ -74,11 +74,14 @@ collected_items_address = get_symbol('CollectedItems')
 
 BOSS_LEVEL = 4
 
-PASSAGE_SELECT_STATE = (1, 2)
-LEVEL_SELECT_STATE = (1, 0x30)
-WARIO_GAMEPLAY_STATE = (2, 2)
-LEVEL_EJECTION_STATES = tuple((1, seq) for seq in range(0x16, 0x19))
-END_OF_GAME_STATES = tuple((0, seq) for seq in range(0x1A, 0x20))
+GAMEMODE_TITLE_CUTSCENE = 0
+GAMEMODE_SELECT = 1
+GAMEMODE_INGAME = 2
+
+SELECT_PASSAGE = 2
+INGAME_WARIOCONTROL = 2
+END_OF_GAME_CUTSCENE_STATES = range(0x1A, 0x20)
+SELECT_EJECTION_STATES = range(0x16, 0x19)
 
 LOCAL_ITEMS = 0b001
 CREATE_HINT_ONLY_NEW = 2
@@ -87,6 +90,7 @@ TRACKER_ROOM_NONE = (1 << 24) - 1
 
 MULTIWORLD_IDLE = 0
 MULTIWORLD_ITEM_QUEUED = 1
+SEND_IMMEDIATELY = 1
 
 
 def read(address: int, length: int, *, align: int = 1):
@@ -235,7 +239,7 @@ class WL4Client(BizHawkClient):
     async def set_auth(self, client_ctx: BizHawkClientContext):
         client_ctx.auth = self.rom_slot_name
 
-    async def get_game_mode(self, bizhawk_ctx: BizHawkContext) -> tuple[int, int] | None:
+    async def get_game_mode(self, bizhawk_ctx: BizHawkContext) -> tuple[int, int]:
         read_result = await bizhawk.read(
             bizhawk_ctx,
             [
@@ -266,14 +270,14 @@ class WL4Client(BizHawkClient):
     async def handle_inventory(self, client_ctx: BizHawkClientContext):
         bizhawk_ctx = client_ctx.bizhawk_ctx
 
-        game_mode = await self.get_game_mode(bizhawk_ctx)
-        if game_mode not in (PASSAGE_SELECT_STATE, LEVEL_SELECT_STATE, WARIO_GAMEPLAY_STATE):
+        main, _ = await self.get_game_mode(bizhawk_ctx)
+        if main not in (GAMEMODE_SELECT, GAMEMODE_INGAME):
             return
 
         inventory_result = await bizhawk.guarded_read(
             bizhawk_ctx,
             [read(inventory_address, len(Passage) * 6 * 4)],
-            self.guard_game_mode(game_mode)
+            guard16(main_game_mode_address, main),
         )
         collection_result = await bizhawk.guarded_read(
             bizhawk_ctx,
@@ -283,8 +287,8 @@ class WL4Client(BizHawkClient):
                 read32(collected_items_address),
             ],
             [
-                *self.guard_game_mode(WARIO_GAMEPLAY_STATE),
-                guard8(multiworld_send_address, True)
+                guard16(main_game_mode_address, main),
+                guard8(multiworld_send_address, SEND_IMMEDIATELY),
             ]
         )
 
@@ -334,7 +338,8 @@ class WL4Client(BizHawkClient):
         bizhawk_ctx = client_ctx.bizhawk_ctx
 
         game_mode = await self.get_game_mode(bizhawk_ctx)
-        if game_mode not in LEVEL_EJECTION_STATES:
+        main, sub = game_mode
+        if main != GAMEMODE_SELECT and sub not in SELECT_EJECTION_STATES:
             return
 
         read_result = await bizhawk.guarded_read(
@@ -368,11 +373,9 @@ class WL4Client(BizHawkClient):
     async def handle_current_room(self, client_ctx: BizHawkClientContext):
         bizhawk_ctx = client_ctx.bizhawk_ctx
 
-        game_mode = await self.get_game_mode(bizhawk_ctx)
-        if game_mode not in (PASSAGE_SELECT_STATE, LEVEL_SELECT_STATE, WARIO_GAMEPLAY_STATE):
-            return
+        main, _ = await self.get_game_mode(bizhawk_ctx)
 
-        if game_mode == WARIO_GAMEPLAY_STATE:
+        if main == GAMEMODE_INGAME:
             read_result = await bizhawk.read(bizhawk_ctx, [
                 read8(passage_address),
                 read8(level_address),
@@ -401,8 +404,10 @@ class WL4Client(BizHawkClient):
         bizhawk_ctx = client_ctx.bizhawk_ctx
 
         game_mode = await self.get_game_mode(bizhawk_ctx)
-        if game_mode not in (WARIO_GAMEPLAY_STATE, *END_OF_GAME_STATES):
-            return
+        main, sub = game_mode
+        if main != GAMEMODE_INGAME:
+            if main != GAMEMODE_TITLE_CUTSCENE or sub not in END_OF_GAME_CUTSCENE_STATES:
+                return
 
         read_result = await bizhawk.guarded_read(
             bizhawk_ctx,
@@ -435,7 +440,7 @@ class WL4Client(BizHawkClient):
                 read8(timer_status_address),
             ],
             [
-                *self.guard_game_mode(WARIO_GAMEPLAY_STATE)
+                guard16(main_game_mode_address, GAMEMODE_INGAME),
             ]
         )
         if read_result is None:
@@ -458,7 +463,7 @@ class WL4Client(BizHawkClient):
                 bizhawk_ctx,
                 [write8(wario_health_address, 0)],
                 [
-                    *self.guard_game_mode(WARIO_GAMEPLAY_STATE),
+                    *self.guard_game_mode((GAMEMODE_INGAME, INGAME_WARIOCONTROL)),
                     guard16(wario_freeze_timer_address, 0),
                 ]
             )
@@ -468,7 +473,7 @@ class WL4Client(BizHawkClient):
         bizhawk_ctx = client_ctx.bizhawk_ctx
 
         game_mode = await self.get_game_mode(bizhawk_ctx)
-        if game_mode not in (PASSAGE_SELECT_STATE, WARIO_GAMEPLAY_STATE):
+        if game_mode not in ((GAMEMODE_SELECT, SELECT_PASSAGE), (GAMEMODE_INGAME, INGAME_WARIOCONTROL)):
             return
 
         read_result = await bizhawk.read(
