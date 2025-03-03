@@ -65,8 +65,10 @@ class TestEntranceLookup(unittest.TestCase):
         """tests that get_targets shuffles targets between groups when requested"""
         multiworld = generate_test_multiworld()
         generate_disconnected_region_grid(multiworld, 5)
+        exits_set = set([ex for region in multiworld.get_regions(1)
+                        for ex in region.exits if not ex.connected_region])
 
-        lookup = EntranceLookup(multiworld.worlds[1].random, coupled=True)
+        lookup = EntranceLookup(multiworld.worlds[1].random, coupled=True, usable_exits=exits_set)
         er_targets = [entrance for region in multiworld.get_regions(1)
                       for entrance in region.entrances if not entrance.parent_region]
         for entrance in er_targets:
@@ -86,8 +88,10 @@ class TestEntranceLookup(unittest.TestCase):
         """tests that get_targets does not shuffle targets between groups when requested"""
         multiworld = generate_test_multiworld()
         generate_disconnected_region_grid(multiworld, 5)
+        exits_set = set([ex for region in multiworld.get_regions(1)
+                        for ex in region.exits if not ex.connected_region])
 
-        lookup = EntranceLookup(multiworld.worlds[1].random, coupled=True)
+        lookup = EntranceLookup(multiworld.worlds[1].random, coupled=True, usable_exits=exits_set)
         er_targets = [entrance for region in multiworld.get_regions(1)
                       for entrance in region.entrances if not entrance.parent_region]
         for entrance in er_targets:
