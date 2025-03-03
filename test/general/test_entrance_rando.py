@@ -117,7 +117,9 @@ class TestEntranceLookup(unittest.TestCase):
                       entrance.name != "region20_right" and entrance.name != "region21_left"]
         for entrance in er_targets:
             lookup.add(entrance)
-
+        # region 20 is the bottom left corner of the grid, and therefore only has a right entrance from region 21
+        # and a top entrance from region 15; since we've told lookup to ignore the right entrance from region 21,
+        # the top entrance from region 15 should be considered a dead-end
         dead_end_region = multiworld.get_region("region20", 1)
         for dead_end in dead_end_region.entrances:
             if dead_end.name == "region20_top":
