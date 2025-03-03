@@ -127,17 +127,23 @@
     {
         "address": 503, "name": "FSP: Decode the Ancient Sheet Music",
         "region": "FSP - Root Node", "requires": [
-            { "item": "Ancient Sheet Music" },
+            { "item": "(Artifact) Ancient Sheet Music" },
             { "location": "Goumang's Vital Sanctum" }
         ]
     },
     {
         "address": 504, "name": "FSP: Have Yi's Portrait Painted",
-        "region": "FSP - Root Node", "requires": [ { "item": "The Four Treasures of the Study" }, { "item": "Kunlun Immortal Portrait" } ]
+        "region": "FSP - Root Node", "requires": [
+            { "item": "(Artifact) The Four Treasures of the Study" },
+            { "item": "(Artifact) Kunlun Immortal Portrait" }
+        ]
     },
     {
         "address": 505, "name": "FSP: Give Yi's Portrait to Chiyou",
-        "region": "FSP - Root Node", "requires": [ { "item": "Event - Chiyou in FSP" }, { "item": "Portrait of Yi" } ]
+        "region": "FSP - Root Node", "requires": [
+            { "item": "Event - Chiyou in FSP" },
+            { "item": "(Artifact) Portrait of Yi" }
+        ]
     },
     {
         "address": 506, "name": "FSP: Receive Peach Blossom Village Quest",
@@ -158,29 +164,29 @@
         "region": "FSP - Root Node", "requires": [
             // testing implies these can't be done out of order, Portrait scene must be first
             { "location": "FSP: Give Yi's Portrait to Chiyou" },
-            { "item": "Legend of the Porky Heroes" }
+            { "item": "(Artifact) Legend of the Porky Heroes" }
         ]
     },
     {
         "address": 509, "name": "FSP: Reveal the Kunlun Immortal Portrait's Secret",
         "region": "FSP - Root Node", "requires": [
             // these are the actual vanilla game conditions for the cutscene; prereqs like 4 Treasures are left implied
-            { "item": "Kunlun Immortal Portrait" },
+            { "item": "(Artifact) Kunlun Immortal Portrait" },
             { "item": "Cloud Leap" }, // presumably so you can actually reach the treasure
             { "location": "FSP: Have Yi's Portrait Painted" }
         ]
     },
     {
         "address": 510, "name": "FSP: Half-Grown Tree Chest",
-        "region": "FSP - Root Node", "requires": [ { "item": "Unknown Seed" }, { "item": "GM Fertilizer" } ] // and Shennong
+        "region": "FSP - Root Node", "requires": [ { "item": "(Artifact) Unknown Seed" }, { "item": "(Artifact) GM Fertilizer" } ] // and Shennong
     },
     {
         "address": 511, "name": "FSP: Fully Grown Tree 1st Chest",
-        "region": "FSP - Root Node", "requires": [ { "item": "Unknown Seed" }, { "item": "GM Fertilizer", "count": 2 } ] // and Shennong
+        "region": "FSP - Root Node", "requires": [ { "item": "(Artifact) Unknown Seed" }, { "item": "(Artifact) GM Fertilizer", "count": 2 } ] // and Shennong
     },
     {
         "address": 512, "name": "FSP: Fully Grown Tree 2nd Chest",
-        "region": "FSP - Root Node", "requires": [ { "item": "Unknown Seed" }, { "item": "GM Fertilizer", "count": 2 } ] // and Shennong
+        "region": "FSP - Root Node", "requires": [ { "item": "(Artifact) Unknown Seed" }, { "item": "(Artifact) GM Fertilizer", "count": 2 } ] // and Shennong
     },
     {
         "address": 513, "name": "FSP: Isolate the Mutant Gene Sequence",

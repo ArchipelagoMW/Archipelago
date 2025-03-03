@@ -59,6 +59,8 @@ item_name_groups = {
     "Sol Seals": set(entry["name"] for entry in items_data if entry["name"].startswith("Seal of ")),
     "Jades": set(entry["name"] for entry in items_data if (" Jade" in entry["name"])),
     "Map Chips": set(entry["name"] for entry in items_data if entry["name"].endswith(" Chip")),
+    "Artifacts": set(entry["name"] for entry in items_data if entry["name"].startswith("(Artifact) ")),
+    "Recyclables": set(entry["name"] for entry in items_data if entry["name"].startswith("(Recyclable) ")),
     "Poisons": set(entry["name"] for entry in items_data if entry["name"].startswith("(Poison) ")),
     "Database Entries": set(entry["name"] for entry in items_data if entry["name"].startswith("(Database) ")),
 }
@@ -77,7 +79,7 @@ repeated_prog_useful_items = {
     "Greater Tao Fruit": 4,
     "Computing Unit": 4,  # with shop items, 8
     "Dark Steel": 6,
-    "GM Fertilizer": 2,
+    "(Artifact) GM Fertilizer": 2,
 }
 
 # I doubt I counted these correctly, but they should be close enough to "feel right".
@@ -85,9 +87,9 @@ repeatable_filler_weights = {
     "Jin x800": 4,
     "Jin x320": 26,
     "Jin x50": 72,
-    "Basic Component": 15,
-    "Standard Component": 30,
-    "Advanced Component": 13,
+    "(Recyclable) Basic Component": 15,
+    "(Recyclable) Standard Component": 30,
+    "(Recyclable) Advanced Component": 13,
 }
 
 
