@@ -513,8 +513,8 @@ def create_secrets_items(item_factory: StardewItemFactory, options: StardewValle
         items.extend(item_factory(item) for item in items_by_group[Group.FISHING_SECRET])
     # if SecretsanityOptionName.difficult in options.secretsanity:
     #     items.extend(item_factory(item) for item in items_by_group[Group.DIFFICULT_SECRET])
-    # if SecretsanityOptionName.secret_notes in options.secretsanity:
-    #     items.extend(item_factory(item) for item in items_by_group[Group.SECRET_NOTES_SECRET])
+    if SecretsanityOptionName.secret_notes in options.secretsanity:
+        items.extend(item_factory(item) for item in items_by_group[Group.SECRET_NOTES_SECRET])
 
 
 def create_goal_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
