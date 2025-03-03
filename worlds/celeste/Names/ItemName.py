@@ -19,17 +19,21 @@ traffic_blocks       = "Traffic Blocks"
 pink_cassette_blocks = "Pink Cassette Blocks"
 blue_cassette_blocks = "Blue Cassette Blocks"
 
-dream_blocks = "Dream Blocks"
-coins        = "Coins"
+dream_blocks     = "Dream Blocks"
+coins            = "Coins"
+strawberry_seeds = "Strawberry Seeds"
+
+sinking_platforms = "Moving Platforms"
 
 moving_platforms = "Moving Platforms"
-
-blue_boosters = "Blue Boosters"
-blue_clouds   = "Blue Clouds"
-move_blocks   = "Move Blocks"
+blue_boosters    = "Blue Boosters"
+blue_clouds      = "Blue Clouds"
+move_blocks      = "Move Blocks"
+white_block      = "White Block"
 
 swap_blocks  = "Swap Blocks"
 red_boosters = "Red Boosters"
+torches      = "Torches"
 theo_crystal = "Theo Crystal"
 
 feathers     = "Feathers"
@@ -52,9 +56,10 @@ yellow_cassette_blocks = "Yellow Cassette Blocks"
 green_cassette_blocks  = "Green Cassette Blocks"
 
 # Questionable
-dash_switch = "Dash Switches"
-seeker      = "Seekers"
-keys        = "Keys"
+dash_switches = "Dash Switches"
+seekers       = "Seekers"
+keys          = "Keys"
+bird          = "Bird"
 
 # Checkpoints
 fc_a_checkpoint_1 = "Forsaken City A - Crossing"

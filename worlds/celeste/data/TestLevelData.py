@@ -2,19 +2,7 @@ from typing import Dict, List
 
 from ..Levels import Level, Room, PreRegion, LevelLocation, RegionConnection, RoomConnection, Door, DoorDirection, LocationType
 
-# TODO
-# (Done) Figure out access rule formatting for locations and region connections
-# (Done) Fill out the rest of the Prologue Data manually
-# (Done) Figure out checkpoint locations and connections
-# (Done) Set up APWorld reading of Regions, Entrances, and Locations from there
-# (Done) Once generation is successful, determine JSON Data format
-# (Done) Write Prologue JSON data
-
-# Write Parser
-# Compare Parsed Data to this manual data
-# Write all the data
-
-
+# TODO: Write all the data
 # Naming: <level><side>_<room>_<descriptor>
 
 all_doors: Dict[str, Door] = {
