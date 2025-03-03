@@ -148,7 +148,9 @@
         "region": "FSP - Root Node", "requires": [
             // these are the actual vanilla game conditions for spawning the book; prereqs like 4 Treasures are left implied
             { "location": "FSP: Give Yi's Portrait to Chiyou" },
-            { "location": "Jiequan's Vital Sanctum" }
+            { "location": "Jiequan's Vital Sanctum" },
+            // but in rando it's possible to give Yi's portrait without Shuanshuan ever painting it, so we can't leave this implied
+            { "location": "FSP: Have Yi's Portrait Painted" }
         ]
     },
     {
