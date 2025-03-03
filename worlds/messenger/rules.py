@@ -26,7 +26,7 @@ class MessengerRules:
         maximum_price = (world.multiworld.get_location("The Shop - Demon's Bane", self.player).cost +
                          world.multiworld.get_location("The Shop - Focused Power Sense", self.player).cost)
         self.maximum_price = min(maximum_price, world.total_shards)
-        self.required_seals = max(1, world.required_seals)
+        self.required_seals = world.required_seals
 
         # dict of connection names and requirements to traverse the exit
         self.connection_rules = {
@@ -34,7 +34,7 @@ class MessengerRules:
             "Artificer's Portal":
                 lambda state: state.has_all({"Demon King Crown", "Magic Firefly"}, self.player),
             "Shrink Down":
-                lambda state: state.has_all(NOTES, self.player) or self.has_enough_seals(state),
+                lambda state: state.has_all(NOTES, self.player),
             # the shop
             "Money Sink":
                 lambda state: state.has("Money Wrench", self.player) and self.can_shop(state),
@@ -313,6 +313,9 @@ class MessengerRules:
             "Water Mega Shard":
                 self.has_dart,
         }
+
+        if self.required_seals:
+            self.connection_rules["Shrink Down"] = self.has_enough_seals
 
     def has_wingsuit(self, state: CollectionState) -> bool:
         return state.has("Wingsuit", self.player)
