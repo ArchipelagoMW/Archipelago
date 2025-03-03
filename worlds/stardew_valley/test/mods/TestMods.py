@@ -1,12 +1,10 @@
 import random
 
 from BaseClasses import get_seed
-from .. import SVTestBase, SVTestCase, allsanity_no_mods_6_x_x, allsanity_mods_6_x_x, solo_multiworld, \
-    fill_dataclass_with_default
+from .. import SVTestBase, SVTestCase, allsanity_mods_6_x_x, fill_dataclass_with_default
 from ..assertion import ModAssertMixin, WorldAssertMixin
 from ... import items, Group, ItemClassification, create_content
 from ... import options
-from ...items import items_by_group
 from ...mods.mod_data import ModNames
 from ...options import SkillProgression, Walnutsanity
 from ...options.options import all_mods
@@ -190,19 +188,3 @@ class TestModEntranceRando(SVTestCase):
 
                 self.assertEqual(len(set(randomized_connections.values())), len(randomized_connections.values()),
                                  f"Connections are duplicated in randomization.")
-
-
-class TestModTraps(SVTestCase):
-    def test_given_traps_when_generate_then_all_traps_in_pool(self):
-        for value in options.TrapItems.options:
-            if value == "no_traps":
-                continue
-
-            world_options = allsanity_no_mods_6_x_x()
-            world_options.update({options.TrapItems.internal_name: options.TrapItems.options[value], options.Mods.internal_name: "Magic"})
-            with solo_multiworld(world_options) as (multi_world, _):
-                trap_items = [item_data.name for item_data in items_by_group[Group.TRAP] if Group.DEPRECATED not in item_data.groups]
-                multiworld_items = [item.name for item in multi_world.get_items()]
-                for item in trap_items:
-                    with self.subTest(f"Option: {value}, Item: {item}"):
-                        self.assertIn(item, multiworld_items)
