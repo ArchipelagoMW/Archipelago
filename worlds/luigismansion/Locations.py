@@ -994,7 +994,7 @@ LIGHT_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Breaker Room Light On": LMLocationData("Breaker Room", 766, "KingdomHearts", 0, [], 69, room_ram_addr=0x803CDFD6),
     "Cellar Light On": LMLocationData("Cellar", 767, "KingdomHearts", 0, [], 66, room_ram_addr=0x803CDFCE),
     "Pipe Room Light On": LMLocationData("Pipe Room", 768, "KingdomHearts", 0, [], 68, room_ram_addr=0x803CDFD4),
-    "Cold Storage Light On": LMLocationData("Cold Storage", 769, "KingdomHearts", 0, [], 64, room_ram_addr=0x803CDFCA),
+    "Cold Storage Light On": LMLocationData("Cold Storage", 769, "KingdomHearts", 0, ["Fire Element Medal"], 64, room_ram_addr=0x803CDFCA),
     "Balcony Light On": LMLocationData("Balcony", 770, "KingdomHearts", 0, ["Ice Element Medal"], 62,
                                        room_ram_addr=0x803CDFC6),
     "Foyer Light On": LMLocationData("Foyer", 771, "KingdomHearts", 0, [], 2, room_ram_addr=0x803CDF54),
