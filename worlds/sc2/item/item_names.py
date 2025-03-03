@@ -630,7 +630,7 @@ BIOMECHANICAL_STOCKPILING        = "Bio-Mechanical Stockpiling (Zerg)"
 BROODLING_PACKING                = "Broodling Packing (Zerg)"
 UNRESTRICTED_MUTATION            = "Unrestricted Mutation (Zerg)"
 CELL_DIVISION                    = "Cell Division (Zerg)"
-PROGRESSIVE_EVOLUTIONARY_LEAP    = "Evolutionary Leap (Zerg)"
+EVOLUTIONARY_LEAP                = "Evolutionary Leap (Zerg)"
 SELF_SUFFICIENT                  = "Self-Sufficient (Zerg)"
 
 # Kerrigan Levels

@@ -780,7 +780,7 @@ item_descriptions = {
     item_names.BROODLING_PACKING: "Zerg buildings release twice as many broodlings on death. Zerg defensive structures release 4 broodlings on death.",
     item_names.UNRESTRICTED_MUTATION: "Zerg Mercenary units are no longer limited by charges.",
     item_names.CELL_DIVISION: "Adds additional units to Zerg Mercenary calldowns.",
-    item_names.PROGRESSIVE_EVOLUTIONARY_LEAP: "Halves the initial cooldown for all Zerg Mercenaries.",
+    item_names.EVOLUTIONARY_LEAP: "Halves the initial cooldown for all Zerg Mercenaries.",
     item_names.SELF_SUFFICIENT: "Zerg Mercenaries no longer use supply.",
     item_names.ZERGLING_RAPTOR_STRAIN: "Allows Zerglings to jump up and down cliffs and leap onto enemies. Also increases Zergling attack damage by 2.",
     item_names.ZERGLING_SWARMLING_STRAIN: "Zerglings will spawn instantly and with an extra Zergling per egg at no additional cost.",
