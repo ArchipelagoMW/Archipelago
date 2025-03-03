@@ -1,6 +1,6 @@
 from typing import Dict, List, Callable, Optional, TYPE_CHECKING
 
-from enum import IntEnum, auto
+from enum import Enum, auto
 from BaseClasses import CollectionState
 from .Names import (
     ItemName,
@@ -20,28 +20,28 @@ if TYPE_CHECKING:
     from . import SoulBlazerWorld
 
 
-class RuleFlag(IntEnum):
-    NONE = 0
+class RuleFlag(Enum):
+    NONE = "NONE"
     """No special requirement preventing access."""
-    CAN_CUT_METAL = auto()
+    CAN_CUT_METAL = "CAN_CUT_METAL"
     """Requires a way to damage metal enemies (Zantestu Sword|Soul Blade)."""
-    CAN_CUT_SPIRIT = auto()
+    CAN_CUT_SPIRIT = "CAN_CUT_SPIRIT"
     """Requires a way to damage metal enemies (Spirit Sword|Soul Blade)."""
-    HAS_THUNDER = auto()
+    HAS_THUNDER = "HAS_THUNDER"
     """
     Requires a way to damage metal enemies in the presence of thunder pyramids
     (Thunder Ring|Zantestu Sword|Soul Blade).
     """
-    HAS_MAGIC = auto()
+    HAS_MAGIC = "HAS_MAGIC"
     """Requires a way to damage enemies outside of sword range."""
-    HAS_SWORD = auto()
+    HAS_SWORD = "HAS_SWORD"
     """
     Requires any sword. Only used as a sanity check at the start of the game
     since we prefill the first chest with a sword.
     """
-    HAS_STONES = auto()
+    HAS_STONES = "HAS_STONES"
     """Requires the necessary number of stones. Adjustable via option."""
-    PHOENIX_CUTSCENE = auto()
+    PHOENIX_CUTSCENE = "PHOENIX_CUTSCENE"
     """
     Requires the Phoenix cutscene:
     Access to the Mountain King

@@ -1,0 +1,1503 @@
+chests:
+- aname: "Trial Room Chest"
+  bid: 0
+  cdescription: "Act 1 - Trial Room - Chest at the start"
+  dtype: Chest
+  eflag: NONE
+- aname: Grass Valley Treasure Room Left Chest
+  bid: 1
+  cdescription: Act 1 - Grass Valley Treasure Room - Left Chest
+  dtype: Chest
+  eflag: NONE
+- aname: Grass Valley Treasure Room Right Chest
+  bid: 2
+  cdescription: Act 1 - Grass Valley Treasure Room - Right Chest
+  dtype: Chest
+  eflag: NONE
+- aname: Underground Castle West Triangle Torch Chest
+  bid: 3
+  cdescription: Act 1 - Underground Castle West - Triangle Torch Chest
+  dtype: Chest
+  eflag: NONE
+- aname: Underground Castle West Triangle Pillar Chest
+  bid: 4
+  cdescription: Act 1 - Underground Castle West - Triangle Pillar Chest
+  dtype: Chest
+  eflag: NONE
+- aname: Underground Castle West North-East Island Chest
+  bid: 5
+  cdescription: Act 1 - Underground Castle West - North-East Island Chest
+  dtype: Chest
+  eflag: NONE
+- aname: Act 1 - Underground Castle (Leo's Brush chest)
+  bid: 6
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 1 - Leo's Paintings (Herb chest)
+  bid: 7
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 1 - Leo's Paintings (Tornado chest)
+  bid: 8
+  cdescription: ''
+  dtype: Chest
+  eflag: CAN_CUT_METAL
+- aname: Act 2 - Greenwood (Ice Armor chest)
+  bid: 9
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 2 - Greenwood tunnels (Mole's Ribbon chest)
+  bid: 10
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Water Shrine 1F Chest Near Exit
+  bid: 11
+  cdescription: Act 2 - Water Shrine 1F - Chest Near Exit
+  dtype: Chest
+  eflag: NONE
+- aname: Water Shrine B1 Chest Behind the Waterfall
+  bid: 12
+  cdescription: Act 2 - Water Shrine B1 - Chest Behind the Waterfall
+  dtype: Chest
+  eflag: NONE
+- aname: Water Shrine B1 Moving Spike Trap Chest
+  bid: 13
+  cdescription: Act 2 - Water Shrine B1 - Moving Spike Trap Chest
+  dtype: Chest
+  eflag: NONE
+- aname: Water Shrine B2 South-West Chest
+  bid: 14
+  cdescription: Act 2 - Water Shrine B2 - South-West Chest
+  dtype: Chest
+  eflag: NONE
+- aname: Water Shrine B2 South-East Chest
+  bid: 15
+  cdescription: Act 2 - Water Shrine B2 - South-East Chest
+  dtype: Chest
+  eflag: NONE
+- aname: Fire Shrine 1F 2nd Bridge from the Left Chest
+  bid: 16
+  cdescription: Act 2 - Fire Shrine 1F - 2nd Bridge from the Left Chest
+  dtype: Chest
+  eflag: NONE
+- aname: Fire Shrine B1 Chest Near the Stairs
+  bid: 17
+  cdescription: Act 2 - Fire Shrine B1 - Chest Near the Stairs
+  dtype: Chest
+  eflag: NONE
+- aname: Fire Shrine B1 Metal Enemies Chest
+  bid: 18
+  cdescription: Act 2 - Fire Shrine B1 - Metal Enemies Chest
+  dtype: Chest
+  eflag: CAN_CUT_METAL
+- aname: Fire Shrine B2 Triple Scorpion Chest
+  bid: 19
+  cdescription: Act 2 - Fire Shrine B2 - Triple Scorpion Chest
+  dtype: Chest
+  eflag: NONE
+- aname: Fire Shrine B2 Chest Near Exit
+  bid: 20
+  cdescription: Act 2 - Fire Shrine B2 - Chest Near Exit
+  dtype: Chest
+  eflag: NONE
+- aname: Act 2 - Light Shrine (Flame Pillar chest)
+  bid: 21
+  cdescription: ''
+  dtype: Chest
+  eflag: CAN_CUT_SPIRIT
+- aname: Seabed Sanctuary Big House Secret Chest
+  bid: 22
+  cdescription: Act 3 - Seabed Sanctuary - Big House Secret Chest
+  dtype: Chest
+  eflag: NONE
+- aname: Act 3 - St Elles (Big Pearl chest)
+  bid: 23
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 3 - Seabed secret cave (top-left chest)
+  bid: 24
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 3 - Seabed secret cave (top-right chest)
+  bid: 25
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 3 - Seabed secret cave (bottom-left chest)
+  bid: 26
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 3 - Seabed secret cave (bottom-right chest)
+  bid: 27
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Southerta Tree Maze Chest
+  bid: 28
+  cdescription: Act 3 - Southerta - Tree Maze Chest
+  dtype: Chest
+  eflag: NONE
+- aname: Act 3 - Rockbird (Herb chest)
+  bid: 29
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 3 - Rockbird (60-gem chest)
+  bid: 30
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 3 - Durean (Critical Sword chest)
+  bid: 31
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 3 - Durean (Strange Bottle chest)
+  bid: 32
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 3 - Ghost Ship (1-gem chest)
+  bid: 33
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 3 - Seabed, way to Ghost Ship (Power Bracelet chest)
+  bid: 34
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 4 - Mountain of Souls 1st screen (40-gem chest)
+  bid: 35
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 4 - Mountain of Souls 2nd screen (left-most chest)
+  bid: 36
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 4 - Mountain of Souls 2nd screen (2nd chest from the left)
+  bid: 37
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 4 - Mountain of Souls 2nd screen (2nd chest from the right)
+  bid: 38
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 4 - Mountain of Souls 2nd screen (right-most chest)
+  bid: 39
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 4 - Laynole 2nd screen (Lucky Blade chest)
+  bid: 40
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 4 - Laynole 2nd screen (north-east, Herb chest)
+  bid: 41
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 4 - Laynole 2nd screen (north-east, Rotator chest)
+  bid: 42
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 5 - Leo's Lab (Zantetsu Sword chest)
+  bid: 43
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 5 - Leo's Lab Power Plant (Light Armor chest)
+  bid: 44
+  cdescription: ''
+  dtype: Chest
+  eflag: CAN_CUT_METAL
+- aname: Act 5 - Model Town 1 (south-east, 50-gem chest)
+  bid: 45
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 5 - Model Town 1 (north part, left chest)
+  bid: 46
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 5 - Model Town 1 (north part, right chest)
+  bid: 47
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 5 - Model Town 2 (top chest)
+  bid: 48
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 5 - Model Town 2 (bottom chest)
+  bid: 49
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 6 - Magridd Castle B1 1st screen (west chest)
+  bid: 50
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 6 - Magridd Castle B1 1st screen (Spirit Sword chest)
+  bid: 51
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 6 - Magridd Castle B1 2nd screen (north chest)
+  bid: 52
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 6 - Magridd Castle B1 2nd screen (south-west chest)
+  bid: 53
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 6 - Magridd Castle B1 2nd screen (middle, 100-gem chest)
+  bid: 54
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 6 - Magridd Castle B2 (north-west chest)
+  bid: 55
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 6 - Magridd Castle Right Tower 2nd screen (left chest)
+  bid: 56
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 6 - Magridd Castle Right Tower 2nd screen (right chest)
+  bid: 57
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 6 - Magridd Castle Right Tower 3rd screen (top-left chest)
+  bid: 58
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 6 - Magridd Castle Right Tower 3rd screen (bottom-right chest)
+  bid: 59
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 7 - World of Evil 1st screen (south-east chest)
+  bid: 60
+  cdescription: ''
+  dtype: Chest
+  eflag: HAS_MAGIC
+- aname: Act 7 - World of Evil 1st screen (south-west chest)
+  bid: 61
+  cdescription: ''
+  dtype: Chest
+  eflag: HAS_MAGIC
+- aname: Act 7 - World of Evil 1st screen (Red-Hot Ball chest)
+  bid: 62
+  cdescription: ''
+  dtype: Chest
+  eflag: HAS_MAGIC
+- aname: Act 7 - World of Evil 2nd screen (Soul Armor chest)
+  bid: 63
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 7 - Dazzling Space (south-east, Soul Blade chest)
+  bid: 64
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+- aname: Act 7 - Dazzling Space (south-west, 100-gem chest)
+  bid: 65
+  cdescription: ''
+  dtype: Chest
+  eflag: NONE
+lairs:
+- aname: Underground Castle West Lair East of Entrance
+  bid: 2
+  cdescription: Act 1 - Underground Castle West - Lair 002 - East of Entrance
+  dtype: Lair
+  eflag: NONE
+- aname: Underground Castle West Lair West of Bridge
+  bid: 6
+  cdescription: Act 1 - Underground Castle West - Lair 006 - West of Bridge
+  dtype: Lair
+  eflag: NONE
+- aname: Underground Castle West Lair North of Triangle Torch Chest
+  bid: 7
+  cdescription: Act 1 - Underground Castle West - Lair 007 - North of Triangle Torch Chest
+  dtype: Lair
+  eflag: NONE
+- aname: Underground Castle West North-East Lair
+  bid: 8
+  cdescription: Act 1 - Underground Castle West - Lair 008 - North-East Lair
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 1 - Lair 009: Solid Arm boss'
+  bid: 9
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: Underground Castle West Plant Cage Lair
+  bid: 13
+  cdescription: Act 1 - Underground Castle West - Lair 013 - Plant Cage
+  dtype: Lair
+  eflag: NONE
+- aname: Underground Castle West South-East Island Lair
+  bid: 14
+  cdescription: Act 1 - Underground Castle West - Lair 014 - South-East Island
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 1 - Lair 015: Underground Castle, east'
+  bid: 15
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 1 - Lair 016: Underground Castle, east'
+  bid: 16
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 1 - Lair 017: Underground Castle, east'
+  bid: 17
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 1 - Lair 018: Underground Castle, east'
+  bid: 18
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 1 - Lair 019: Leo''s Painting, room 2'
+  bid: 19
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 1 - Lair 021: Underground Castle, east'
+  bid: 21
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 1 - Lair 022: Underground Castle, east'
+  bid: 22
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 1 - Lair 024: Underground Castle, east'
+  bid: 24
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 1 - Lair 026: Underground Castle, east'
+  bid: 26
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 1 - Lair 029: Leo''s Painting, room 1'
+  bid: 29
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 1 - Lair 034: Leo''s Painting, room 3'
+  bid: 34
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 1 - Lair 035: Leo''s Painting, room 3'
+  bid: 35
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 1 - Lair 037: Leo''s Painting, room 4'
+  bid: 37
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 1 - Lair 040: Lair: Underground Castle, east'
+  bid: 40
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 1 - Lair 041: Lair: Underground Castle, west'
+  bid: 41
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 1 - Lair 042: Lair: Underground Castle, east'
+  bid: 42
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 1 - Lair 043: Leo''s Painting, room 3'
+  bid: 43
+  cdescription: ''
+  dtype: Lair
+  eflag: CAN_CUT_METAL
+- aname: 'Act 1 - Lair 044: Leo''s Painting, room 4'
+  bid: 44
+  cdescription: ''
+  dtype: Lair
+  eflag: CAN_CUT_METAL
+- aname: 'Act 1 - Lair 046: Leo''s Painting, room 1'
+  bid: 46
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 1 - Lair 047: Leo''s Painting, room 3'
+  bid: 47
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 2 - Lair 055: Light Shrine B1'
+  bid: 55
+  cdescription: ''
+  dtype: Lair
+  eflag: CAN_CUT_SPIRIT
+- aname: Lostside Marsh Entrance Lair
+  bid: 56
+  cdescription: Act 2 - Lostside Marsh - Lair 056 - Lostside Marsh Entrance
+  dtype: Lair
+  eflag: NONE
+- aname: Lostside Marsh Lair on Island West of Water Shrine
+  bid: 60
+  cdescription: Act 2 - Lostside Marsh - Lair 060 - Island West of Water Shrine
+  dtype: Lair
+  eflag: NONE
+- aname: Lostside Marsh Lair North of Water Shrine
+  bid: 61
+  cdescription: Act 2 - Lostside Marsh - Lair 061 - Lair North of Water Shrine
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 2 - Lair 063: Lostside Marsh'
+  bid: 63
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 2 - Lair 064: Lostside Marsh'
+  bid: 64
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 2 - Lair 065: Light Shrine F1'
+  bid: 65
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: Water Shrine F1 Center Island Lair
+  bid: 67
+  cdescription: Act 2 - Water Shrine F1 - Lair 067 - Center Island
+  dtype: Lair
+  eflag: NONE
+- aname: Water Shrine B1 Pillars Near Waterfalls Lair
+  bid: 70
+  cdescription: Act 2 - Water Shrine B1 - Lair 070 - Pillars Near Waterfalls Lair
+  dtype: Lair
+  eflag: NONE
+- aname: Water Shrine B1 Moving Spike Trap Lair
+  bid: 73
+  cdescription: Act 2 - Water Shrine B1 - Lair 073 - Moving Spike Trap Lair
+  dtype: Lair
+  eflag: NONE
+- aname: Water Shrine B2 to 1F Connector Lair
+  bid: 74
+  cdescription: Act 2 - Water Shrine B2 to 1F Connector - Lair 074 - B2 to 1F Connector Lair
+  dtype: Lair
+  eflag: NONE
+- aname: Water Shrine B2 West Side-Room Lair
+  bid: 78
+  cdescription: Act 2 - Water Shrine B2 - Lair 078 - West Side-Room Lair
+  dtype: Lair
+  eflag: NONE
+- aname: Water Shrine B2 North Hallway Lair
+  bid: 79
+  cdescription: Act 2 - Water Shrine B2 - Lair 079 - North Hallway Lair
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 2 - Lair 080: Elemental Statues boss'
+  bid: 80
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: Water Shrine B2 Statue Room Lair
+  bid: 81
+  cdescription: Act 2 - Water Shrine B2 - Lair 081 - Statue Room Lair
+  dtype: Lair
+  eflag: NONE
+- aname: Fire Shrine 1F East-Most Lair
+  bid: 86
+  cdescription: Act 2 - Fire Shrine 1F - Lair 081 - East-Most Lair
+  dtype: Lair
+  eflag: NONE
+- aname: Fire Shrine B1 North-West Lair
+  bid: 88
+  cdescription: Act 2 - Fire Shrine B1 - Lair 088 - North-West Lair
+  dtype: Lair
+  eflag: NONE
+- aname: Fire Shrine B1 Isolated Room Lair
+  bid: 89
+  cdescription: Act 2 - Fire Shrine B1 - Lair 089 - Isolated Room Lair
+  dtype: Lair
+  eflag: NONE
+- aname: Fire Shrine B1 South-East Lair
+  bid: 90
+  cdescription: Act 2 - Fire Shrine B1 - Lair 090 - South-East Lair
+  dtype: Lair
+  eflag: NONE
+- aname: Fire Shrine B1 South Lair
+  bid: 91
+  cdescription: Act 2 - Fire Shrine B1 - Lair 091 - South Lair
+  dtype: Lair
+  eflag: NONE
+- aname: Fire Shrine B2 Lair West of Stairs
+  bid: 92
+  cdescription: Act 2 - Fire Shrine B2 - Lair 092 - Lair West of Stairs
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 2 - Lair 093: Fire Shrine B2'
+  bid: 93
+  cdescription: Act 2 - Fire Shrine B2 - Lair 093 - Lair Past First Heated Path
+  dtype: Lair
+  eflag: NONE
+- aname: Fire Shrine B2 Heated Circle Lair
+  bid: 97
+  cdescription: Act 2 - Fire Shrine B2 - Lair 097 - Heated Circle Lair
+  dtype: Lair
+  eflag: NONE
+- aname: Fire Shrine B2 Snaking Path Center Lair
+  bid: 98
+  cdescription: Act 2 - Fire Shrine B2 - Lair 098 - Snaking Path Center Lair
+  dtype: Lair
+  eflag: NONE
+- aname: Fire Shrine B2 Snaking Path Narrow Bridge Lair
+  bid: 99
+  cdescription: Act 2 - Fire Shrine B2 - Lair 099 - Snaking Path Narrow Bridge Lair
+  dtype: Lair
+  eflag: NONE
+- aname: Fire Shrine B2 Metal Enemies Lair
+  bid: 100
+  cdescription: Act 2 - Fire Shrine B2 - Lair 100 - Metal Enemies Lair
+  dtype: Lair
+  eflag: CAN_CUT_METAL
+- aname: 'Act 2 - Lair 111: Light Shrine B1'
+  bid: 111
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 2 - Lair 114: Light Shrine B1'
+  bid: 114
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 3 - Lair 124: Seabed Northwest (Path to Ghost Ship)'
+  bid: 124
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 3 - Lair 131: Seabed North (Path to Blester)'
+  bid: 131
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 3 - Lair 132: Seabed North (Path to Blester)'
+  bid: 132
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 3 - Lair 134: Seabed North (Path to Blester)'
+  bid: 134
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 3 - Lair 138: Durean'
+  bid: 138
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 3 - Lair 139: Durean'
+  bid: 139
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 3 - Lair 140: Durean'
+  bid: 140
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 3 - Lair 141: Durean'
+  bid: 141
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 3 - Lair 142: Durean'
+  bid: 142
+  cdescription: ''
+  dtype: Lair
+  eflag: CAN_CUT_METAL
+- aname: 'Act 3 - Lair 143: Durean'
+  bid: 143
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 3 - Lair 146: Durean'
+  bid: 146
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 3 - Lair 149: Durean'
+  bid: 149
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: Southerta Tree Island Lair
+  bid: 153
+  cdescription: Act 3 - Southerta - Lair 153 - Tree Island Lair
+  dtype: Lair
+  eflag: NONE
+- aname: Southerta Lair North of Warp
+  bid: 155
+  cdescription: Act 3 - Southerta - Lair 155 - Lair North of Warp
+  dtype: Lair
+  eflag: NONE
+- aname: Southerta Isolated Lair
+  bid: 157
+  cdescription: Act 3 - Southerta - Lair 157 - Isolated Lair (Enter from Seabed)
+  dtype: Lair
+  eflag: NONE
+- aname: Southerta Dried Pond Lair
+  bid: 161
+  cdescription: Act 3 - Southerta - Lair 161 - Dried Pond Lair
+  dtype: Lair
+  eflag: NONE
+- aname: Southerta Ambush North Lair
+  bid: 164
+  cdescription: Act 3 - Southerta - Lair 164 - Ambush North Lair
+  dtype: Lair
+  eflag: NONE
+- aname: Southerta Ambush South Lair
+  bid: 165
+  cdescription: Act 3 - Southerta - Lair 165 - Ambush South Lair
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 3 - Lair 167: Rockbird'
+  bid: 167
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 3 - Lair 171: Rockbird'
+  bid: 171
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 3 - Lair 173: Seabed Northwest (Path to Ghost Ship)'
+  bid: 173
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 3 - Lair 177: Rockbird'
+  bid: 177
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 3 - Lair 181: Rockbird'
+  bid: 181
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 3 - Lair 182: Ghost Ship boss'
+  bid: 182
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 3 - Lair 185: Blester'
+  bid: 185
+  cdescription: ''
+  dtype: Lair
+  eflag: HAS_THUNDER
+- aname: 'Act 3 - Lair 187: Blester'
+  bid: 187
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 3 - Lair 189: Blester'
+  bid: 189
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 3 - Lair 190: Blester'
+  bid: 190
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 3 - Lair 192: Blester'
+  bid: 192
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 3 - Lair 193: South Seabed (Path to Durean)'
+  bid: 193
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 3 - Lair 194: South Seabed (Path to Rockbird)'
+  bid: 194
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 201: Aurora Ridge, south'
+  bid: 201
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 202: Aurora Ridge, south'
+  bid: 202
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 203: Aurora Ridge, south'
+  bid: 203
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 204: Aurora Ridge, north'
+  bid: 204
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 211: Aurora Ridge, north'
+  bid: 211
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 212: Aurora Ridge, north'
+  bid: 212
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 214: Lune Passage'
+  bid: 214
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 215: Lune Passage'
+  bid: 215
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 221: Lune'
+  bid: 221
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 225: Lune'
+  bid: 225
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 230: Lune'
+  bid: 230
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 232: Lune'
+  bid: 232
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 233: Summit'
+  bid: 233
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 234: Summit'
+  bid: 234
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 235: Summit'
+  bid: 235
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 238: Ice Hill'
+  bid: 238
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 239: Ice Hill'
+  bid: 239
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 240: Ice Hill'
+  bid: 240
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 242: Ice Hill'
+  bid: 242
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 246: Ice Hill'
+  bid: 246
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 247: Ice Hill'
+  bid: 247
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 248: Laynole'
+  bid: 248
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 250: Laynole'
+  bid: 250
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 252: Laynole'
+  bid: 252
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 254: Laynole'
+  bid: 254
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 255: Laynole'
+  bid: 255
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 4 - Lair 259: Poseidon boss'
+  bid: 259
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 5 - Lair 265: Leo''s Lab B1'
+  bid: 265
+  cdescription: ''
+  dtype: Lair
+  eflag: CAN_CUT_METAL
+- aname: 'Act 5 - Lair 267: Leo''s Lab B1'
+  bid: 267
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 5 - Lair 268: Leo''s Lab B1'
+  bid: 268
+  cdescription: ''
+  dtype: Lair
+  eflag: CAN_CUT_METAL
+- aname: 'Act 5 - Lair 269: Leo''s Lab B1'
+  bid: 269
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 5 - Lair 274: Leo''s Lab B1'
+  bid: 274
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 5 - Lair 276: Leo''s Lab B1'
+  bid: 276
+  cdescription: ''
+  dtype: Lair
+  eflag: CAN_CUT_METAL
+- aname: 'Act 5 - Lair 282: Leo''s Lab B1'
+  bid: 282
+  cdescription: ''
+  dtype: Lair
+  eflag: CAN_CUT_METAL
+- aname: 'Act 5 - Lair 283: Leo''s Lab B1'
+  bid: 283
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 5 - Lair 286: Leo''s Lab B2'
+  bid: 286
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 5 - Lair 288: Leo''s Lab B2'
+  bid: 288
+  cdescription: ''
+  dtype: Lair
+  eflag: CAN_CUT_METAL
+- aname: 'Act 5 - Lair 290: Leo''s Lab B2'
+  bid: 290
+  cdescription: ''
+  dtype: Lair
+  eflag: CAN_CUT_METAL
+- aname: 'Act 5 - Lair 294: Leo''s Lab B2'
+  bid: 294
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 5 - Lair 297: Leo''s Lab B2'
+  bid: 297
+  cdescription: ''
+  dtype: Lair
+  eflag: CAN_CUT_METAL
+- aname: 'Act 5 - Lair 303: Tin Doll boss'
+  bid: 303
+  cdescription: ''
+  dtype: Lair
+  eflag: CAN_CUT_METAL
+- aname: 'Act 5 - Lair 310: Power Plant'
+  bid: 310
+  cdescription: ''
+  dtype: Lair
+  eflag: CAN_CUT_METAL
+- aname: 'Act 5 - Lair 311: Model of town 1'
+  bid: 311
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 5 - Lair 313: Model of town 1'
+  bid: 313
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 5 - Lair 315: Model of town 1'
+  bid: 315
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 5 - Lair 316: Model of town 1'
+  bid: 316
+  cdescription: ''
+  dtype: Lair
+  eflag: HAS_MAGIC
+- aname: 'Act 5 - Lair 318: Model of town 1'
+  bid: 318
+  cdescription: ''
+  dtype: Lair
+  eflag: HAS_MAGIC
+- aname: 'Act 5 - Lair 322: Model of town 1'
+  bid: 322
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 5 - Lair 325: Model of town 1'
+  bid: 325
+  cdescription: ''
+  dtype: Lair
+  eflag: HAS_MAGIC
+- aname: 'Act 5 - Lair 330: Model of town 1'
+  bid: 330
+  cdescription: ''
+  dtype: Lair
+  eflag: HAS_MAGIC
+- aname: 'Act 5 - Lair 331: Model of town 1'
+  bid: 331
+  cdescription: ''
+  dtype: Lair
+  eflag: HAS_MAGIC
+- aname: 'Act 5 - Lair 332: Model of town 2'
+  bid: 332
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 5 - Lair 333: Model of town 2'
+  bid: 333
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 5 - Lair 338: Model of town 2'
+  bid: 338
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 5 - Lair 339: Model of town 2'
+  bid: 339
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 5 - Lair 341: Model of town 2'
+  bid: 341
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 6 - Lair 345: Torture Chamber'
+  bid: 345
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 6 - Lair 346: Torture Chamber'
+  bid: 346
+  cdescription: ''
+  dtype: Lair
+  eflag: CAN_CUT_SPIRIT
+- aname: 'Act 6 - Lair 351: Magridd Castle B1'
+  bid: 351
+  cdescription: ''
+  dtype: Lair
+  eflag: CAN_CUT_SPIRIT
+- aname: 'Act 6 - Lair 353: Magridd Castle B1'
+  bid: 353
+  cdescription: ''
+  dtype: Lair
+  eflag: CAN_CUT_SPIRIT
+- aname: 'Act 6 - Lair 354: Magridd Castle B1'
+  bid: 354
+  cdescription: ''
+  dtype: Lair
+  eflag: CAN_CUT_SPIRIT
+- aname: 'Act 6 - Lair 358: Magridd Castle B1'
+  bid: 358
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 6 - Lair 359: Magridd Castle B1'
+  bid: 359
+  cdescription: ''
+  dtype: Lair
+  eflag: CAN_CUT_SPIRIT
+- aname: 'Act 6 - Lair 360: Magridd Castle B1'
+  bid: 360
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 6 - Lair 363: Magridd Castle B2'
+  bid: 363
+  cdescription: ''
+  dtype: Lair
+  eflag: CAN_CUT_SPIRIT
+- aname: 'Act 6 - Lair 365: Magridd Castle B2'
+  bid: 365
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 6 - Lair 366: Magridd Castle B2'
+  bid: 366
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 6 - Lair 368: Magridd Castle B2'
+  bid: 368
+  cdescription: ''
+  dtype: Lair
+  eflag: CAN_CUT_SPIRIT
+- aname: 'Act 6 - Lair 370: Magridd Castle B2'
+  bid: 370
+  cdescription: ''
+  dtype: Lair
+  eflag: CAN_CUT_SPIRIT
+- aname: 'Act 6 - Lair 377: Left Tower F1'
+  bid: 377
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 6 - Lair 382: Left Tower F2'
+  bid: 382
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 6 - Lair 383: Left Tower F2'
+  bid: 383
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 6 - Lair 385: Left Tower F3'
+  bid: 385
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 6 - Lair 386: Left Tower F3'
+  bid: 386
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 6 - Lair 387: Left Tower F3'
+  bid: 387
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 6 - Lair 389: Left Tower F3'
+  bid: 389
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 6 - Lair 390: Right Tower F1'
+  bid: 390
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 6 - Lair 391: Right Tower F1'
+  bid: 391
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 6 - Lair 396: Right Tower F1'
+  bid: 396
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 6 - Lair 397: Right Tower F2'
+  bid: 397
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 6 - Lair 399: Right Tower F2'
+  bid: 399
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 6 - Lair 402: Right Tower F3'
+  bid: 402
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+- aname: 'Act 6 - Lair 405: Demon Bird boss'
+  bid: 405
+  cdescription: ''
+  dtype: Lair
+  eflag: NONE
+npc-rewards:
+- aname: Tool Shop Owner's Item
+  bid: 0
+  cdescription: Act 1 - Grass Valley - Tool Shop Owner's item
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Grass Valley Secret Tile on Cliff Overlooking Tulip
+  bid: 1
+  cdescription: Act 1 - Grass Valley - Secret Tile on Cliff Overlooking Tulip
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Grass Valley - Goat Pen Secret Tile (South-East Corner)
+  bid: 2
+  cdescription: Act 1 - Grass Valley - Goat Pen Secret Tile (South-East Corner)
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 1 - Teddy's item (Tool Shop)
+  bid: 3
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Grass Valley Secret Tile Under Sleeping Tulip (Push Left)
+  bid: 4
+  cdescription: Act 1 - Grass Valley - Secret Tile Under Sleeping Tulip (Push Left)
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 1 - Secret hideout tile (to the right after exiting the grotto)
+  bid: 5
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Village Chief's item
+  bid: 6
+  cdescription: Act 1 - Grass Valley - Village Chief's Item
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Magician's Item
+  bid: 7
+  cdescription: Act 1 - Magician's item (start of the game)
+  dtype: NPC Reward
+  eflag: HAS_SWORD
+- aname: Act 1 - Recovery Sword crystal fairy (in secret hideout)
+  bid: 8
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Grass Valley Treasure Cave Crystal
+  bid: 9
+  cdescription: Act 1 - Grass Valley Treasure Cave - Crystal Fairy
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Underground Castle Crystal on Ledge
+  bid: 10
+  cdescription: Act 1 - Underground Castle West - Crystal Fairy on Ledge
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 2 - Red-Hot Mirror bird
+  bid: 11
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 2 - Magic Bell crystal fairy (requires all 8 emblems)
+  bid: 12
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 2 - Woodstin Trio's prize
+  bid: 13
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Greenwood's Guardian's Item
+  bid: 14
+  cdescription:  Act 2 - Greenwood's Guardian's Item
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 2 - Greenwood Leaf tile (under Turbo's bones)
+  bid: 15
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 2 - Shield Bracelet mole's item
+  bid: 16
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 2 - Psycho Sword squirrel's item (requires Delicious Seeds)
+  bid: 17
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 2 - Emblem C squirrel's item
+  bid: 18
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Water Shrine B2 West Secret Tile
+  bid: 19
+  cdescription: Act 2 - Water Shrine B2 - West Secret Tile
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Fire Shrine B2 Heated Path Crystal
+  bid: 20
+  cdescription: Act 2 - Fire Shrine B2 - Heated Path Crystal Fairy
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 2 - Lost Marsh crystal fairy (near Light Shrine entrance)
+  bid: 21
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Water Shrine B1 Moving Spike Trap Crystal
+  bid: 22
+  cdescription: Act 2 - Water Shrine B1 - Moving Spike Trap Crystal Fairy
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Fire Shrine 1F Metal Enemies Crystal
+  bid: 23
+  cdescription: Act 2 - Fire Shrine 1F - Metal Enemies Crystal Fairy
+  dtype: NPC Reward
+  eflag: CAN_CUT_METAL
+- aname: Act 4 - Mountain King's item
+  bid: 24
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 4 - Mushroom Shoes boy's item
+  bid: 25
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 4 - Nome's item
+  bid: 26
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 4 - Emblem E snail's item (in secret room)
+  bid: 27
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 4 - Emblem F tile in Lune (unlocked in mushroom's dream)
+  bid: 28
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 4 - Mountain of Souls 3rd screen crystal fairy
+  bid: 29
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 4 - Lune crystal fairy
+  bid: 30
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 5 - Under Chest of Drawers in locked room
+  bid: 31
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 5 - Inside Chest of Drawers in locked room
+  bid: 32
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 5 - Medical Herb plant in Leo's Lab main room
+  bid: 33
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 5 - Leo's Cat's item
+  bid: 34
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 5 - Actinidia Leaf plant's item
+  bid: 35
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 5 - Inside Chest of Drawers in the attic
+  bid: 36
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 5 - Marie's item
+  bid: 37
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 5 - Spark Bomb Mouse's item (in mouse hole)
+  bid: 38
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 5 - Leo's Lab basement 2nd screen crystal fairy
+  bid: 39
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 5 - Model Town 1 crystal fairy
+  bid: 40
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 5 - Leo's Lab Power Plant crystal fairy
+  bid: 41
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: CAN_CUT_METAL
+- aname: Act 6 - Sleeping Soldier's item
+  bid: 42
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 6 - Super Bracelet tile in Queen Magridd's house
+  bid: 43
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 6 - Queen Magridd's item
+  bid: 44
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 6 - Platinum Card Soldier's item (in concert hall)
+  bid: 45
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 6 - Medical Herb Maid's item
+  bid: 46
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 6 - Emblem H tile outside Magridd Castle
+  bid: 47
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 6 - King Magridd's item
+  bid: 48
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 6 - Dr. Leo's item
+  bid: 49
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 6 - Harp String tile (Magridd Castle B1 1st screen)
+  bid: 50
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 3 - Medical Herb Mermaid (St. Elles north-eastern house)
+  bid: 51
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Seabed Sanctuary Main Mermaid's Item
+  bid: 52
+  cdescription: Act 3 - Seabed Sanctuary - Main Mermaid's Item (Thanks for the house)
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 3 - Magic Flare Mermaid's item (south-west of St. Elles)
+  bid: 53
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 3 - Mermaid Queen's item
+  bid: 54
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 3 - Red-Hot Stick Mermaid's item
+  bid: 55
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 3 - Lue's item
+  bid: 56
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 3 - Crystal fairy in Rockbird
+  bid: 57
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 3 - Seabed crystal fairy (near Blester entrance)
+  bid: 58
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 3 - Seabed crystal fairy (near Durean entrance)
+  bid: 59
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Magician's Soul
+  bid: 60
+  cdescription:  Act 1 - Magician's Soul (start of the game)
+  dtype: NPC Reward
+  eflag: HAS_SWORD
+- aname: Act 2 - Mole's Soul (SE Hole)
+  bid: 61
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 3 - Angelfish's Soul (SE platform)
+  bid: 62
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 5 - Great Door's Soul (2nd Floor door to chapel)
+  bid: 63
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE
+- aname: Act 6 - Soldier's Soul (In south house)
+  bid: 64
+  cdescription: ''
+  dtype: NPC Reward
+  eflag: NONE

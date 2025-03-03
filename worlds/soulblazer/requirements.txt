@@ -1,0 +1,2 @@
+dataclass-wizard>=0.35.0
+tzdata>=2025.1
