@@ -69,7 +69,7 @@ class GreenChecks(Choice):
     display_name = "Green Checks"
     option_none = 0
     option_best = 1
-    option_composition = 3
+    option_composition = 2
     option_complete = 3
     default = 1
 

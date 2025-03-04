@@ -114,7 +114,7 @@ class WordipelagoWorld(World):
             item_pool.append(WordipelagoItem("Time", ItemClassification.filler, 200, self.player))
             
         # Filler Items
-        location_count = 26 + 5 + self.options.words_to_win
+        location_count = 26 + 5 + self.options.words_to_win + 61
         item_count = 26 - self.options.starting_letters + 6 - self.options.starting_guesses + self.options.time_reward_count
         if not self.options.yellow_unlocked: 
             item_count += 1
@@ -146,7 +146,7 @@ class WordipelagoWorld(World):
             if(region_name == 'Words'):
                 for i in range(self.options.words_to_win):
                     name = "Word " + str(i + 1)
-                    region.add_locations({name: 201 + i})
+                    region.add_locations({name: 1001 + i})
             region.add_exits(region_data_table[region_name].connecting_regions)
 
         if(location_data_table["Used J"].can_create(self)):
