@@ -97,8 +97,8 @@ class EntranceLookup:
                 # randomizable exits which are not reverse of the incoming entrance.
                 # uncoupled mode is an exception because in this case going back in the door you just came in could
                 # actually lead somewhere new
-                if not exit_.connected_region and (not self._coupled or exit_.name != entrance.name) \
-                        and exit_ in self._usable_exits:
+                if (not exit_.connected_region and (not self._coupled or exit_.name != entrance.name)
+                        and exit_ in self._usable_exits):
                     self._expands_graph_cache[entrance] = True
                     return True
                 elif exit_.connected_region and exit_.connected_region not in visited:
