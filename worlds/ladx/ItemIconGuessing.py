@@ -430,14 +430,11 @@ GAME_SPECIFIC_PHRASES = {
         "Rings": "RUPEES_20", # This should only affect filler Rings currency, not Flame Ring upgrade
         "Grapes": "TRADING_ITEM_PINEAPPLE",
         "Pick Nails": "SHOVEL", # Digging upgrade
-        "Laser Blaster": "BOW",
-        "Bazooka": "BOW",
-        "Large Cannon": "BOW",
-        "Tails - Booster": "FEATHER", # Allow Tails mech hovering, so like Roc's feather a bit.
     },
 
     'Super Mario 64': {
         'POWER STAR': 'PIECE_OF_POWER',
+        "Key": "NIGHTMARE_KEY" # Affect 2nd Floor / Basement / Progressive keys
     },
 
     'Super Mario World': {
@@ -617,9 +614,6 @@ GAME_SPECIFIC_PHRASES = {
         "Firebrand": "POWER_BRACELET", # Magic power that affects Mario/Luigi's hands, either this or MAGIC_ROD would be okay
         "Thunderhand": "POWER_BRACELET", # Ditto
 
-        # Hammer Upgrades --> Swords
-        "Hammer": "SWORD",
-
         # 1-UP Super fix
         "1-UP Super": "TOADSTOOL",
 
@@ -667,11 +661,6 @@ GAME_SPECIFIC_PHRASES = {
         "Box of": "SINGLE_ARROW", # bullets, rockets, or shotgun shells
         "Energy cell pack": "SINGLE_ARROW",
         "Chainsaw": "SWORD",
-        "Shotgun": "BOW",
-        "Rocket launcher": "BOW",
-        "Plasma gun": "BOW",
-        "Chaingun": "BOW",
-        "BFG9000": "BOW",
         "Medikit": "MEDICINE",
     },
 
@@ -681,11 +670,6 @@ GAME_SPECIFIC_PHRASES = {
         "Box of": "SINGLE_ARROW", # bullets, rockets, or shotgun shells
         "Energy cell pack": "SINGLE_ARROW",
         "Chainsaw": "SWORD",
-        "Shotgun": "BOW",
-        "Rocket launcher": "BOW",
-        "Plasma gun": "BOW",
-        "Chaingun": "BOW",
-        "BFG9000": "BOW",
         "Medikit": "MEDICINE",
     },
 
@@ -789,13 +773,13 @@ GAME_SPECIFIC_PHRASES = {
         "Megalixir": "MEDICINE",
     },
 
-    "Kingdom Hearts 1": {
+    "Kingdom Hearts": {
         # Goal/collectible items
         "Ansem's Report": "TRADING_ITEM_LETTER",
 
         # Dalmatian puppies
-        "Puppy": "PIECE_OF_POWER",
-        "Puppies": "PIECE_OF_POWER",
+        "Puppy": "BOWWOW",
+        "Puppies": "BOWWOW",
         
         # Sora Keyblades
         "Jungle King": "SWORD",
@@ -855,5 +839,4 @@ GAME_SPECIFIC_PHRASES = {
     }
 
     # TODO: Link to the Past: just double check that everything matches
-    # TODO: Kingdom Hearts series: Keyblades, equipment, Ansem reports, magic elements, emblems
 }
