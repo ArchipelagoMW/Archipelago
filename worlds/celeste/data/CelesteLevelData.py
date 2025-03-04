@@ -21,36 +21,36 @@ all_doors: Dict[str, Door] = {
 }
 
 all_region_connections: Dict[str, RegionConnection] = {
-    "0a_-1_main---0a_-1_east": RegionConnection("0a_-1_main", "0a_-1_east"),
-    "0a_-1_east---0a_-1_main": RegionConnection("0a_-1_east", "0a_-1_main"),
+    "0a_-1_main---0a_-1_east": RegionConnection("0a_-1_main", "0a_-1_east", []),
+    "0a_-1_east---0a_-1_main": RegionConnection("0a_-1_east", "0a_-1_main", []),
 
-    "0a_0_west---0a_0_main": RegionConnection("0a_0_west", "0a_0_main"),
-    "0a_0_main---0a_0_west": RegionConnection("0a_0_main", "0a_0_west"),
-    "0a_0_main---0a_0_east": RegionConnection("0a_0_main", "0a_0_east"),
-    "0a_0_main---0a_0_north": RegionConnection("0a_0_main", "0a_0_north"),
-    "0a_0_north---0a_0_main": RegionConnection("0a_0_north", "0a_0_main"),
-    "0a_0_east---0a_0_main": RegionConnection("0a_0_east", "0a_0_main"),
+    "0a_0_west---0a_0_main": RegionConnection("0a_0_west", "0a_0_main", []),
+    "0a_0_main---0a_0_west": RegionConnection("0a_0_main", "0a_0_west", []),
+    "0a_0_main---0a_0_east": RegionConnection("0a_0_main", "0a_0_east", []),
+    "0a_0_main---0a_0_north": RegionConnection("0a_0_main", "0a_0_north", []),
+    "0a_0_north---0a_0_main": RegionConnection("0a_0_north", "0a_0_main", []),
+    "0a_0_east---0a_0_main": RegionConnection("0a_0_east", "0a_0_main", []),
 
 
-    "0a_1_west---0a_1_main": RegionConnection("0a_1_west", "0a_1_main"),
-    "0a_1_main---0a_1_west": RegionConnection("0a_1_main", "0a_1_west"),
-    "0a_1_main---0a_1_east": RegionConnection("0a_1_main", "0a_1_east"),
-    "0a_1_east---0a_1_main": RegionConnection("0a_1_east", "0a_1_main"),
+    "0a_1_west---0a_1_main": RegionConnection("0a_1_west", "0a_1_main", []),
+    "0a_1_main---0a_1_west": RegionConnection("0a_1_main", "0a_1_west", []),
+    "0a_1_main---0a_1_east": RegionConnection("0a_1_main", "0a_1_east", []),
+    "0a_1_east---0a_1_main": RegionConnection("0a_1_east", "0a_1_main", []),
 
-    "0a_2_west---0a_2_main": RegionConnection("0a_2_west", "0a_2_main"),
-    "0a_2_main---0a_2_west": RegionConnection("0a_2_main", "0a_2_west"),
-    "0a_2_main---0a_2_east": RegionConnection("0a_2_main", "0a_2_east"),
-    "0a_2_east---0a_2_main": RegionConnection("0a_2_east", "0a_2_main"),
+    "0a_2_west---0a_2_main": RegionConnection("0a_2_west", "0a_2_main", []),
+    "0a_2_main---0a_2_west": RegionConnection("0a_2_main", "0a_2_west", []),
+    "0a_2_main---0a_2_east": RegionConnection("0a_2_main", "0a_2_east", []),
+    "0a_2_east---0a_2_main": RegionConnection("0a_2_east", "0a_2_main", []),
 
-    "0a_3_west---0a_3_main": RegionConnection("0a_3_west", "0a_3_main"),
-    "0a_3_main---0a_3_west": RegionConnection("0a_3_main", "0a_3_west"),
-    "0a_3_main---0a_3_east": RegionConnection("0a_3_main", "0a_3_east"),
-    "0a_3_east---0a_3_main": RegionConnection("0a_3_east", "0a_3_main"),
+    "0a_3_west---0a_3_main": RegionConnection("0a_3_west", "0a_3_main", []),
+    "0a_3_main---0a_3_west": RegionConnection("0a_3_main", "0a_3_west", []),
+    "0a_3_main---0a_3_east": RegionConnection("0a_3_main", "0a_3_east", []),
+    "0a_3_east---0a_3_main": RegionConnection("0a_3_east", "0a_3_main", []),
 
 }
 
 all_locations: Dict[str, LevelLocation] = {
-    "0a_3_clear": LevelLocation("0a_3_clear", "Prologue - Level Clear", "0a_3_east", LocationType.level_clear),
+    "0a_3_clear": LevelLocation("0a_3_clear", "Prologue - Level Clear", "0a_3_east", LocationType.level_clear, []),
 
 }
 

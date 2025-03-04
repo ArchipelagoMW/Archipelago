@@ -64,7 +64,7 @@ class RegionConnection:
     destination: PreRegion
     rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
 
-    # TODO: Assign the actual regions here after the structure is build
+    # TODO: Assign the actual regions here after the structure is built
 
     def __init__(self, source_name: str, destination_name: str, possible_access: List[List[str]] = []):
         self.source_name = source_name

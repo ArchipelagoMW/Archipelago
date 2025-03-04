@@ -1,5 +1,5 @@
 import json
-from typing import List
+from typing import Dict, List
 
 all_doors: List[str] = []
 all_region_connections: List[str] = []
@@ -8,7 +8,6 @@ all_regions: List[str] = []
 all_room_connections: List[str] = []
 all_rooms: List[str] = []
 all_levels: List[str] = []
-
 
 
 data_file = open('CelesteLevelData.json')
@@ -58,12 +57,24 @@ for level in level_data["levels"]:
             if "locations" in region:
                 for location in region["locations"]:
                     location_full_name = f"{room_full_name}_{location['name']}"
-                    location_display_name = f"{level['display_name']} - {location['display_name']}"
+
+                    location_display_name = location['display_name']
+                    if location['type'] == "strawberry":
+                        location_display_name = f"Room {room['name']} {location_display_name}" 
+                    location_full_display_name = f"{level['display_name']} - {location_display_name}"
 
                     location_str = (f"    \"{location_full_name}\": LevelLocation(\"{location_full_name}\", "
-                                    f"\"{location_display_name}\", \"{region_full_name}\", "
-                                    f"LocationType.{location['type']}),"
+                                    f"\"{location_full_display_name}\", \"{region_full_name}\", "
+                                    f"LocationType.{location['type']}, ["
                                    )
+
+                    for possible_access in location['rule']:
+                        location_str += f"["
+                        for item in possible_access:
+                            location_str += f"ItemName.{item}, "
+                        location_str += f"], "
+
+                    location_str += "]),"
 
                     all_locations.append(location_str)
 
@@ -72,7 +83,15 @@ for level in level_data["levels"]:
                 dest_region_full_name = f"{room_full_name}_{reg_con['dest']}"
                 reg_con_full_name = f"{region_full_name}---{dest_region_full_name}"
 
-                reg_con_str = f"    \"{reg_con_full_name}\": RegionConnection(\"{region_full_name}\", \"{dest_region_full_name}\"),"
+                reg_con_str = f"    \"{reg_con_full_name}\": RegionConnection(\"{region_full_name}\", \"{dest_region_full_name}\", ["
+
+                for possible_access in reg_con['rule']:
+                    reg_con_str += f"["
+                    for item in possible_access:
+                        reg_con_str += f"ItemName.{item}, "
+                    reg_con_str += f"], "
+
+                reg_con_str += "]),"
 
                 all_region_connections.append(reg_con_str)
 
