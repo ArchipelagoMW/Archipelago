@@ -120,7 +120,7 @@
         // pre-boss soulscape requires WC AND TCK AND (DJ OR AD)
         { "item": "Tai-Chi Kick" },
         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] }
-        // fight requires: technically nothing but to stay fun probably (TCK AND AD)
+        // combat logic: technically nothing but to stay fun probably (TCK AND AD)
         // CL's a good enough substitute for AD; let's leave it at the soulscape platforming requirements
     ] },
     { "from": "CC - Root Node", "to": "CC - Caves Upper Right", "requires": [
@@ -593,7 +593,7 @@
     { "from": "FPA - Upper Elevator", "to": "SH - Root Node", "requires": [] }, // one-way elevator
 
     // Shengwu Hall
-    { "from": "SH - Root Node", "to": "SH - After Jiequan", "requires": [] }, // TOOD: combat logic?
+    { "from": "SH - Root Node", "to": "SH - After Jiequan", "requires": [ { "item": "Charged Strike" } ] }, // TODO: (more) combat logic?
 
     // Underground Cave + 95th Livestock Pen / Peach Blossom Village + Livestock Harvesting Platform
     { "from": "UC - Left Exit", "to": "UC - Upper Cave", "requires": [ { "item": "Charged Strike" } ] },
@@ -650,7 +650,7 @@
         { "item": "Air Dash" }, { "item": "Cloud Leap" }
     ] } ] },
     { "from": "GoSE - Yin Jifu's Spike Ball Puzzle", "to": "GoSE - Yin Jifu's Tomb", "requires": [ { "anyOf": [
-        { "item": "Tai-Chi Kick" }, { "item": "Unbounded Counter" } // to fight lurkers
+        { "item": "Tai-Chi Kick" }, { "item": "Unbounded Counter" } // combat logic for the worms/lurkers; you can't just run past them here
     ] } ] },
     // but the GG tomb regions have interesting connections from GoSW and YJ's tomb, so these have to be as thorough as usual
     { "from": "GoSE - Root Node", "to": "GoSE - Outside Guiguzi's Tomb", "requires": [
@@ -738,7 +738,9 @@
 
     // Ancient Stone Pillar
     // No root node in here, so no need for a 2nd region.
-    { "from": "GoSW - Above Western Cliffs", "to": "ASP - After Ji", "requires": [] }, // TODO: combat logic?
+    { "from": "GoSW - Above Western Cliffs", "to": "ASP - After Ji", "requires": [
+        { "item": "Tai-Chi Kick" } // or else Ji's divinations are a softlock
+    ] }, // TODO: (more) combat logic?
 
     // Sky Tower
     { "from": "ST - Lower Exit", "to": "ST - Lower Chest", "requires": [ { "item": "Cloud Leap" } ] },
