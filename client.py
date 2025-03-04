@@ -303,7 +303,6 @@ class WL4Client(BizHawkClient):
         # Parse item status bits
         for passage in Passage:
             for level in range(5):
-                level_locations = tuple(get_level_locations(passage, level))
                 status_bits = item_status[passage * 6 + level] >> 8
                 hint_bits = 0
 
@@ -313,7 +312,7 @@ class WL4Client(BizHawkClient):
                     elif game_mode == 1 and game_state in range(0x16, 0x19):
                         hint_bits = level_item_flags & ~status_bits
 
-                for location in level_locations:
+                for location in get_level_locations(passage, level):
                     location_id = location_name_to_id[location]
                     if location_id not in client_ctx.server_locations:
                         continue
@@ -441,6 +440,10 @@ class WL4Client(BizHawkClient):
 
     def on_package(self, ctx: BizHawkClientContext, cmd: str, args: dict) -> None:
         if cmd == "Connected":
+            self.local_checked_locations = []
+            self.local_hinted_locations = set()
+            self.local_set_events = {}
+            self.local_room = (1 << 24) - 1
             if args["slot_data"].get("death_link"):
                 self.death_link.enabled = True
                 self.death_link.update_pending = True
