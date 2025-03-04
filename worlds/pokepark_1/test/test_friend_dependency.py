@@ -1,15 +1,17 @@
 from . import PokeparkTest
 
+
 class TestPokemonFriendshipDependencies(PokeparkTest):
-    def test_chikorita(self)->None:
+    def test_chikorita(self) -> None:
         """Test locations and minigames that require Chikorita"""
         locations = []
         items = [["Chikorita"]]
-        self.assertAccessDependency(locations,items)
+        self.assertAccessDependency(locations, items)
 
     def test_pachirisu(self) -> None:
         """Test locations and minigames that require Pachirisu"""
-        locations = ["Meadow Zone - Bulbasaur's Daring Dash Minigame - Pachirisu","Meadow Zone - Venusaur's Vine Swing - Pachirisu"]
+        locations = ["Meadow Zone - Bulbasaur's Daring Dash Minigame - Pachirisu",
+                     "Meadow Zone - Venusaur's Vine Swing - Pachirisu"]
         items = [["Pachirisu"]]
         self.assertAccessDependency(locations, items)
 
@@ -19,23 +21,24 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
         items = [["Bulbasaur"]]
         self.assertAccessDependency(locations, items)
 
-    def test_munchlax(self)->None:
+    def test_munchlax(self) -> None:
         """Test locations and minigames that require Munchlax"""
-        locations = ["Meadow Zone - Bulbasaur's Daring Dash Minigame - Munchlax","Meadow Zone - Venusaur's Vine Swing - Munchlax"]
+        locations = ["Meadow Zone - Bulbasaur's Daring Dash Minigame - Munchlax",
+                     "Meadow Zone - Venusaur's Vine Swing - Munchlax"]
         items = [["Munchlax"]]
-        self.assertAccessDependency(locations,items)
+        self.assertAccessDependency(locations, items)
 
-    def test_tropius(self)->None:
+    def test_tropius(self) -> None:
         """Test locations and minigames that require Tropius"""
         locations = ["Beach Zone - Pelipper's Circle Circuit - Tropius"]
         items = [["Tropius"]]
-        self.assertAccessDependency(locations,items)
+        self.assertAccessDependency(locations, items)
 
-    def test_turtwig(self)->None:
+    def test_turtwig(self) -> None:
         """Test locations and minigames that require Turtwig"""
         locations = ["Meadow Zone - Bulbasaur's Daring Dash Minigame - Turtwig"]
         items = [["Turtwig"]]
-        self.assertAccessDependency(locations,items)
+        self.assertAccessDependency(locations, items)
 
     def test_bonsly(self) -> None:
         """Test locations and minigames that require Bonsly"""
@@ -87,7 +90,7 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
             "Munchlax",
             "Pachirisu",
             "Pikachu",
-            # "Primeape",
+            "Primeape",
             # "Tangrowth",
             "Treecko",
         ]
@@ -113,7 +116,7 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
             "Munchlax",
             "Pachirisu",
             "Pikachu",
-            # "Primeape",
+            "Primeape",
             # "Tangrowth",
             "Treecko",
         ]
@@ -132,13 +135,15 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
 
     def test_lotad(self) -> None:
         """Test locations and minigames that require Lotad"""
-        locations = ["Meadow Zone - Bulbasaur's Daring Dash Minigame - Lotad","Beach Zone - Gyarados' Aqua Dash - Lotad"]
+        locations = ["Meadow Zone - Bulbasaur's Daring Dash Minigame - Lotad",
+                     "Beach Zone - Gyarados' Aqua Dash - Lotad"]
         items = [["Lotad"]]
         self.assertAccessDependency(locations, items)
 
     def test_treecko(self) -> None:
         """Test locations and minigames that require Treecko"""
-        locations = ["Meadow Zone - Bulbasaur's Daring Dash Minigame - Treecko","Meadow Zone - Venusaur's Vine Swing - Treecko"]
+        locations = ["Meadow Zone - Bulbasaur's Daring Dash Minigame - Treecko",
+                     "Meadow Zone - Venusaur's Vine Swing - Treecko"]
         items = [["Treecko"]]
         self.assertAccessDependency(locations, items)
 
@@ -156,7 +161,8 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
 
     def test_chimchar(self) -> None:
         """Test locations and minigames that require Chimchar"""
-        locations = ["Meadow Zone - Bulbasaur's Daring Dash Minigame - Chimchar","Meadow Zone - Venusaur's Vine Swing - Chimchar"]
+        locations = ["Meadow Zone - Bulbasaur's Daring Dash Minigame - Chimchar",
+                     "Meadow Zone - Venusaur's Vine Swing - Chimchar"]
         items = [["Chimchar"]]
         self.assertAccessDependency(locations, items)
 
@@ -186,7 +192,8 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
 
     def test_magikarp(self) -> None:
         """Test locations and minigames that require Magikarp"""
-        locations = ["Meadow Zone - Bulbasaur's Daring Dash Minigame - Magikarp","Meadow Zone - Venusaur's Vine Swing - Magikarp"]
+        locations = ["Meadow Zone - Bulbasaur's Daring Dash Minigame - Magikarp",
+                     "Meadow Zone - Venusaur's Vine Swing - Magikarp", "Ice Zone - Empoleon's Snow Slide - Magikarp"]
         items = [["Magikarp"]]
         self.assertAccessDependency(locations, items)
 
@@ -210,7 +217,8 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
 
     def test_bibarel(self) -> None:
         """Test locations and minigames that require Bibarel"""
-        locations = ["Meadow Zone - Bulbasaur's Daring Dash Minigame - Bibarel","Beach Zone - Gyarados' Aqua Dash - Bibarel"]
+        locations = ["Meadow Zone - Bulbasaur's Daring Dash Minigame - Bibarel",
+                     "Beach Zone - Gyarados' Aqua Dash - Bibarel"]
         items = [["Bibarel"]]
         self.assertAccessDependency(locations, items)
 
@@ -363,6 +371,7 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
         locations = []
         items = [["Gyarados"]]
         self.assertAccessDependency(locations, items)
+
     def test_feraligatr(self) -> None:
         """Test locations and minigames that require Feraligatr"""
         locations = ["Beach Zone - Gyarados' Aqua Dash - Feraligatr"]
@@ -371,33 +380,168 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
 
     def test_piplup(self) -> None:
         """Test locations and minigames that require Piplup"""
-        locations = ["Beach Zone - Gyarados' Aqua Dash - Piplup"]
+        locations = ["Beach Zone - Gyarados' Aqua Dash - Piplup", "Ice Zone - Empoleon's Snow Slide - Piplup"]
         items = [["Piplup"]]
         self.assertAccessDependency(locations, items)
 
-# Region access tests
-    def test_can_reach_venusaur_minigame(self)->None:
+    def test_burmy(self) -> None:
+        """Test locations and minigames that require Burmy"""
+        locations = []
+        items = [["Burmy"]]
+        self.assertAccessDependency(locations, items)
+    def test_drifblim(self) -> None:
+        """Test locations and minigames that require Drifblim"""
+        locations = []
+        items = [["Drifblim"]]
+        self.assertAccessDependency(locations, items)
+    def test_lapras(self) -> None:
+        """Test locations and minigames that require Lapras"""
+        locations = ["Ice Zone - Empoleon's Snow Slide - Lapras"]
+        items = [["Lapras"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_spheal(self) -> None:
+        """Test locations and minigames that require Spheal"""
+        locations = [f"Ice Zone - Overworld - Christmas Tree Present {i}"
+                     for i in range(1, 5)]
+        locations.append("Ice Zone - Overworld - Delibird")
+        locations.append("Ice Zone - Overworld - Kirlia")
+        locations.append("Ice Zone - Empoleon's Snow Slide - Spheal")
+        items = [["Spheal"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_octillery(self) -> None:
+        """Test locations and minigames that require Octillery"""
+        locations = []
+        items = [["Octillery"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_teddiursa(self) -> None:
+        """Test locations and minigames that require Teddiursa"""
+        locations = ["Ice Zone - Overworld - Christmas Tree Present 2",
+                     "Ice Zone - Overworld - Christmas Tree Present 3",
+                     "Ice Zone - Overworld - Christmas Tree Present 4", "Ice Zone - Overworld - Delibird",
+                     "Ice Zone - Overworld - Kirlia", "Ice Zone - Empoleon's Snow Slide - Teddiursa"]
+        items = [["Teddiursa"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_delibird(self) -> None:
+        """Test locations and minigames that require Delibird"""
+        locations = ["Ice Zone - Overworld - Kirlia", "Ice Zone - Empoleon's Snow Slide - Delibird"]
+        items = [["Delibird"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_smoochum(self) -> None:
+        """Test locations and minigames that require Smoochum"""
+        locations = ["Ice Zone - Overworld - Christmas Tree Present 4", "Ice Zone - Overworld - Delibird",
+                     "Ice Zone - Overworld - Kirlia"]
+        items = [["Smoochum"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_squirtle(self) -> None:
+        """Test locations and minigames that require Squirtle"""
+        locations = ["Ice Zone - Overworld - Christmas Tree Present 3", "Ice Zone - Overworld - Delibird",
+                     "Ice Zone - Overworld - Kirlia", "Ice Zone - Overworld - Christmas Tree Present 4",
+                     "Ice Zone - Empoleon's Snow Slide - Squirtle"]
+        items = [["Squirtle"]]
+        self.assertAccessDependency(locations, items)
+    def test_glaceon(self) -> None:
+        """Test locations and minigames that require Glaceon"""
+        locations = ["Ice Zone - Empoleon's Snow Slide - Glaceon"]
+        items = [["Glaceon"]]
+        self.assertAccessDependency(locations, items)
+    def test_prinplup(self) -> None:
+        """Test locations and minigames that require Prinplup"""
+        locations = ["Ice Zone - Empoleon's Snow Slide - Prinplup",
+                     "Beach Zone - Gyarados' Aqua Dash - Prinplup",
+                     "Ice Zone - Overworld - Lower Lift Region - Corphish",
+                     "Ice Zone - Overworld - Lower Lift Region - Wingull",
+                     "Ice Zone - Overworld - Lower Lift Region - Quagsire"]
+        items = [["Prinplup"]]
+        self.assertAccessDependency(locations, items)
+    def test_sneasel(self) -> None:
+        """Test locations and minigames that require Sneasel"""
+        locations = []
+        items = [["Sneasel"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_piloswine(self) -> None:
+        """Test locations and minigames that require Piloswine"""
+        locations = ["Ice Zone - Empoleon's Snow Slide - Piloswine"]
+        items = [["Piloswine"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_glalie(self) -> None:
+        """Test locations and minigames that require Glalie"""
+        locations = ["Ice Zone - Empoleon's Snow Slide - Glalie"]
+        items = [["Glalie"]]
+        self.assertAccessDependency(locations, items)
+    def test_primeape(self) -> None:
+        """Test locations and minigames that require Primeape"""
+        locations = ["Meadow Zone - Venusaur's Vine Swing - Primeape"]
+        items = [["Primeape"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_ursaring(self) -> None:
+        """Test locations and minigames that require Ursaring"""
+        locations = []
+        items = [["Ursaring"]]
+        self.assertAccessDependency(locations, items)
+    def test_mamoswine(self) -> None:
+        """Test locations and minigames that require Mamoswine"""
+        locations = []
+        items = [["Mamoswine"]]
+        self.assertAccessDependency(locations, items)
+    def test_kirlia(self) -> None:
+        """Test locations and minigames that require Kirlia"""
+        locations = []
+        items = [["Kirlia"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_quagsire(self) -> None:
+        """Test locations and minigames that require Quagsire"""
+        locations = ["Ice Zone - Empoleon's Snow Slide - Quagsire"]
+        items = [["Quagsire"]]
+        self.assertAccessDependency(locations, items)
+    def test_empoleon(self) -> None:
+        """Test locations and minigames that require Empoleon"""
+        locations = ["Beach Zone - Gyarados' Aqua Dash - Empoleon", "Ice Zone - Empoleon's Snow Slide - Empoleon"]
+        items = [["Empoleon"]]
+        self.assertAccessDependency(locations, items)
+    # Region access tests
+    def test_can_reach_venusaur_minigame(self) -> None:
         """Verify access to Venusaur's Vine Swing minigame with Spearow and Croagunk"""
 
-        self.collect_by_name(["Spearow","Croagunk"])
+        self.collect_by_name(["Spearow", "Croagunk"])
         self.assertTrue(self.can_reach_region("Meadow Zone - Venusaur's Vine Swing"))
 
-
-    def test_can_not_reach_venusaur_minigame_only_croagunk(self)->None:
+    def test_can_not_reach_venusaur_minigame_only_croagunk(self) -> None:
         """Verify inability to access Venusaur's Vine Swing with only Croagunk"""
 
         self.collect_by_name(["Croagunk"])
         self.assertFalse(self.can_reach_region("Meadow Zone - Venusaur's Vine Swing"))
 
-    def test_can_not_reach_venusaur_minigame_only_spearow(self)->None:
+    def test_can_not_reach_venusaur_minigame_only_spearow(self) -> None:
         """Verify inability to access Venusaur's Vine Swing with only Spearow"""
 
         self.collect_by_name(["Spearow"])
         self.assertFalse(self.can_reach_region("Meadow Zone - Venusaur's Vine Swing"))
 
-    def test_can_not_reach_venusaur_minigame_without_spearow_and_croagunk(self)->None:
+    def test_can_not_reach_venusaur_minigame_without_spearow_and_croagunk(self) -> None:
         """Verify inability to access Venusaur's Vine Swing without Spearow and Croagunk"""
 
-        self.collect_all_but(["Spearow","Croagunk","Beach Zone Unlock"])
+        self.collect_all_but(["Spearow", "Croagunk", "Beach Zone Unlock"])
         self.assertFalse(self.can_reach_region("Meadow Zone - Venusaur's Vine Swing"))
 
+
+    def test_can_reach_ice_zone_lower_lift_with_prinplup(self)-> None:
+        """Verify ability to access Ice Zone Lower Lift Region with Prinplup"""
+
+        self.collect_by_name(["Prinplup", "Ice Zone Unlock"])
+        self.assertTrue(self.can_reach_region("Ice Zone - Overworld - Lower Lift Region"))
+
+    def test_can_not_reach_ice_zone_lower_lift_without_prinplup(self)-> None:
+        """Verify inability to access Ice Zone Lower Lift Region without Prinplup"""
+
+        self.collect_all_but(["Prinplup"])
+        self.assertFalse(self.can_reach_region("Ice Zone - Overworld - Lower Lift Region"))

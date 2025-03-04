@@ -82,8 +82,32 @@ class MinigameLocationIds(Enum):
     PIPLUP_AQUA = BERRIES["100 Berries"] + 69
     LOTAD_AQUA = BERRIES["100 Berries"] + 70
 
+    #Empoleon's Snow Slide
+    PIKACHU_SLIDE = BERRIES["100 Berries"]+71
+    TEDDIURSA_SLIDE = BERRIES["100 Berries"]+72
+    MAGIKARP_SLIDE = BERRIES["100 Berries"]+73
+    EMPOLEON_SLIDE = BERRIES["100 Berries"]+74
+    GLACEON_SLIDE = BERRIES["100 Berries"]+ 75
+    BLASTOISE_SLIDE = BERRIES["100 Berries"]+ 76
+    GLALIE_SLIDE = BERRIES["100 Berries"]+77
+    LAPRAS_SLIDE = BERRIES["100 Berries"]+78
+    DELIBIRD_SLIDE = BERRIES["100 Berries"] + 79
+    PILOSWINE_SLIDE = BERRIES["100 Berries"]+ 80
+    PRINPLUP_SLIDE = BERRIES["100 Berries"]+ 81
+    SQUIRTLE_SLIDE = BERRIES["100 Berries"]+ 82
+    PIPLUP_SLIDE = BERRIES["100 Berries"]+ 83
+    QUAGSIRE_SLIDE = BERRIES["100 Berries"]+ 84
+    SPHEAL_SLIDE = BERRIES["100 Berries"]+ 85
+
 class OverworldPokemonLocationIds(Enum):
     STARLY_BEACH = FRIENDSHIP_ITEMS["Starly"] +1000
+    KRABBY_ICE = FRIENDSHIP_ITEMS["Krabby"] +1000
+    CORPHISH_ICE = FRIENDSHIP_ITEMS["Corphish"] +1000
+    MUDKIP_ICE = FRIENDSHIP_ITEMS["Mudkip"] +1000
+    TAILLOW_ICE = FRIENDSHIP_ITEMS["Taillow"] +1000
+    STARAVIA_ICE = FRIENDSHIP_ITEMS["Staravia"] +1000
+    STARLY_ICE = FRIENDSHIP_ITEMS["Starly"] +2000
+    WINGULL_ICE = FRIENDSHIP_ITEMS["Wingull"]+1000
 
 class QuestLocationIds(Enum):
     MEADOW_BIDOOF_HOUSING1 = BERRIES["10 Berries"] + 1
@@ -98,6 +122,16 @@ class QuestLocationIds(Enum):
     BEACH_BOTTLE5 = BERRIES["10 Berries"] + 9
     BEACH_BOTTLE6 = BERRIES["10 Berries"] + 10
 
+    IGLOO_QUEST1 = BERRIES["10 Berries"] + 11
+    IGLOO_QUEST2 = BERRIES["10 Berries"] + 12
+    IGLOO_QUEST3 = BERRIES["10 Berries"] + 13
+
+    CHRISTMAS_TREE1 = BERRIES["10 Berries"] + 14
+    CHRISTMAS_TREE2 = BERRIES["10 Berries"] + 15
+    CHRISTMAS_TREE3 = BERRIES["10 Berries"] + 16
+    CHRISTMAS_TREE4 = BERRIES["10 Berries"] + 17
+
+
     THUNDERBOLT_POWERUP1 = POWERS["Progressive Thunderbolt"] + 1
     THUNDERBOLT_POWERUP2 = POWERS["Progressive Thunderbolt"] + 2
     THUNDERBOLT_POWERUP3 = POWERS["Progressive Thunderbolt"] + 3
@@ -109,4 +143,8 @@ class QuestLocationIds(Enum):
     HEALTH_POWERUP1 = POWERS["Progressive Health"] + 1
     HEALTH_POWERUP2 = POWERS["Progressive Health"] + 2
     HEALTH_POWERUP3 = POWERS["Progressive Health"] + 3
+
+    IRON_TAIL_POWERUP1 = POWERS["Progressive Iron Tail"] +1
+    IRON_TAIL_POWERUP2 = POWERS["Progressive Iron Tail"] +2
+    IRON_TAIL_POWERUP3 = POWERS["Progressive Iron Tail"] +3
 

@@ -18,15 +18,18 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
         """Verify Treehouse Dash Upgrade locations and victory conditions for Pelipper's Prisma unlock"""
         locations = [f"Treehouse - Dash Upgrade {i}" for i in range(1, 4)]
         locations.append("Victory")
-        #locations.append("Beach Zone - Overworld - Pelipper")
         items = [["Pelipper Prisma"]]
         self.assertAccessDependency(locations, items)
 
     def test_gyarados_prisma(self) -> None:
         """Verify victory conditions for Gyarados' Prisma unlock"""
         locations = ["Victory"]
-        #locations.append("Beach Zone - Overworld - Gyarados")
         items = [["Gyarados Prisma"]]
         self.assertAccessDependency(locations, items)
 
+    def test_empoleon_prisma(self) -> None:
+        """Verify victory conditions for Empoleon Prisma unlock"""
+        locations = ["Victory"]
+        items = [["Empoleon Prisma"]]
+        self.assertAccessDependency(locations, items)
 

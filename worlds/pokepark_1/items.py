@@ -1,7 +1,7 @@
 from BaseClasses import Item
 
 class PokeparkItem(Item):
-    game: str = "PokéPark Wii: Pikachu's Adventure"
+    game: str = "PokéPark"
 
 FRIENDSHIP_ITEMS: dict[str, int] = {
     #Meadow Zone
@@ -61,8 +61,32 @@ FRIENDSHIP_ITEMS: dict[str, int] = {
     "Corphish":52,
     "Gyarados":53,
     "Feraligatr":54,
-    "Piplup": 55
+    "Piplup": 55,
 
+    #Treehouse
+    "Burmy": 56,
+    "Drifblim":57,
+
+    # Ice Zone
+    "Lapras": 58,
+    "Spheal":59,
+    "Octillery":60,
+    "Teddiursa": 61,
+    "Delibird": 62,
+    "Smoochum":63,
+    "Squirtle":64,
+    "Glaceon":65,
+    "Prinplup":66,
+    "Sneasel":67,
+    "Piloswine":68,
+    "Glalie":69,
+    "Froslass":70,
+    "Primeape":71,
+    "Ursaring":72,
+    "Mamoswine":73,
+    "Kirlia":74,
+    "Quagsire":75,
+    "Empoleon":76
 
 }
 
@@ -99,7 +123,19 @@ UNLOCK_ITEMS: dict[str,int] = {
 
     #Misc
     "Pikachu Balloon": 28000,
-    "Pikachu Surfboard": 29000
+    "Pikachu Surfboard": 29000,
+    "Pikachu Snowboard": 30000,
+
+    #Ice Zone
+    "Delibird Unlock": 31000,
+    "Squirtle Unlock": 32000,
+    "Smoochum Unlock": 33000,
+    "Sneasel Unlock": 34000,
+    "Mamoswine Unlock": 35000,
+    "Glalie Unlock": 36000,
+    "Primeape Unlock": 37000,
+    "Ursaring Unlock":38000
+
 }
 
 BERRIES: dict[str,int] = {
@@ -113,20 +149,22 @@ PRISM_ITEM: dict[str,int] = {
     "Bulbasaur Prisma": 1000000,
     "Venusaur Prisma": 2000000,
     "Pelipper Prisma": 3000000,
-    "Gyarados Prisma": 4000000
+    "Gyarados Prisma": 4000000,
+    "Empoleon Prisma": 5000000
 
 }
 
 POWERS: dict[str,int] = {
     "Progressive Thunderbolt": 10000000,
     "Progressive Dash": 20000000,
-    "Progressive Health": 30000000
+    "Progressive Health": 30000000,
+    "Progressive Iron Tail": 40000000
 }
 
 REGION_UNLOCK: dict[str,int] = {
     # Beach Zone Unlock
     "Beach Zone Unlock": 99999,
-    "Ice Zone Unlock": 8888
+    "Ice Zone Unlock": 88888
 }
 
 ALL_ITEMS_TABLE: dict[str, int] = {

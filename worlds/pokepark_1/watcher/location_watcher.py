@@ -50,16 +50,19 @@ async def location_watcher(ctx):
                 prisma_remaining.remove(check)
 
     def check_friendship_locations(stage_id):
-        zone_pokemon_states = [
-            state for state in POKEMON_STATES.values()
-            if state.zone_id == stage_id and state.location
-        ]
-        for pokemon_state in zone_pokemon_states:
-            expected_value = pokemon_state.location.value
-            current_value = read_memory(dme,pokemon_state.location)
+        zone_locations = []
+        for state in POKEMON_STATES.values():
+            if state.locations is not None:
+                for location in state.locations:
+                    if location.zone_id == stage_id and location.location:
+                        zone_locations.append(location)
+
+        for location in zone_locations:
+            expected_value = location.location.value
+            current_value = read_memory(dme, location.location)
             if current_value == expected_value:
-                ctx.locations_checked.add(pokemon_state.locationId)
-                write_memory(dme,pokemon_state.location,0x0)
+                ctx.locations_checked.add(location.locationId)
+                write_memory(dme, location.location, 0x0)
 
 
     def check_minigame_locations():

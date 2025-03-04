@@ -127,7 +127,7 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
 
     def test_mudkip_unlock(self) -> None:
         """Verify unlock conditions for accessing Mudkip in Beach Zone Overworld"""
-        locations = ["Beach Zone - Overworld - Mudkip"]
+        locations = ["Beach Zone - Overworld - Mudkip","Ice Zone - Overworld - Mudkip"]
         items = [["Mudkip Unlock"]]
         self.assertAccessDependency(locations, items)
 
@@ -145,13 +145,13 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
 
     def test_krabby_unlock(self) -> None:
         """Verify unlock conditions for accessing Krabby in Beach Zone Overworld"""
-        locations = ["Beach Zone - Overworld - Krabby"]
+        locations = ["Beach Zone - Overworld - Krabby","Ice Zone - Overworld - Krabby"]
         items = [["Krabby Unlock"]]
         self.assertAccessDependency(locations, items)
 
     def test_corphish_unlock(self) -> None:
         """Verify unlock conditions for accessing Corphish in Beach Zone Overworld"""
-        locations = ["Beach Zone - Overworld - Corphish"]
+        locations = ["Beach Zone - Overworld - Corphish","Ice Zone - Overworld - Lower Lift Region - Corphish"]
         items = [["Corphish Unlock"]]
         self.assertAccessDependency(locations, items)
 
@@ -167,6 +167,73 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
         items = [["Pikachu Surfboard"]]
         self.assertAccessDependency(locations, items)
 
+    def test_delibird_unlock(self) -> None:
+        """Verify unlock conditions for accessing Delibird in Ice Zone Overworld"""
+        locations = [f"Ice Zone - Overworld - Christmas Tree Present {i}"
+                     for i in range(1, 5)]
+        locations.append("Ice Zone - Overworld - Delibird")
+        locations.append("Ice Zone - Overworld - Kirlia")
+        items = [["Delibird Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_squirtle_unlock(self) -> None:
+        """Verify unlock conditions for accessing Delibird in Ice Zone Overworld"""
+        locations = [f"Ice Zone - Overworld - Christmas Tree Present {i}"
+                     for i in range(3, 5)]
+        locations.append("Ice Zone - Overworld - Delibird")
+
+        locations.append("Ice Zone - Overworld - Squirtle")
+        locations.append("Ice Zone - Overworld - Kirlia")
+        items = [["Squirtle Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_smoochum_unlock(self) -> None:
+        """Verify unlock conditions for accessing Delibird in Ice Zone Overworld"""
+        locations = [f"Ice Zone - Overworld - Christmas Tree Present {i}"
+                     for i in range(4, 5)]
+        locations.append("Ice Zone - Overworld - Delibird")
+
+        locations.append("Ice Zone - Overworld - Smoochum")
+        locations.append("Ice Zone - Overworld - Kirlia")
+        items = [["Smoochum Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_sneasel_unlock(self) -> None:
+        """Verify unlock conditions for accessing Delibird in Ice Zone Overworld"""
+        locations = ["Ice Zone - Overworld - Sneasel"]
+        items = [["Sneasel Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_mamoswine_unlock(self) -> None:
+        """Verify unlock conditions for accessing Delibird in Ice Zone Overworld"""
+        locations = ["Ice Zone - Overworld - Mamoswine"]
+        items = [["Mamoswine Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_glalie_unlock(self) -> None:
+        """Verify unlock conditions for accessing Delibird in Ice Zone Overworld"""
+        locations = [f"Ice Zone - Overworld - Igloo Quest {i}"
+                     for i in range(1, 4)]
+        locations.append("Ice Zone - Overworld - Igloo Quest 1 - Pokemon Unlock")
+        locations.append("Ice Zone - Overworld - Igloo Quest 2 - Pokemon Unlock")
+        locations.append("Ice Zone - Overworld - Prinplup")
+        locations.append("Ice Zone - Overworld - Glalie")
+        items = [["Glalie Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_primeape_unlock(self) -> None:
+        """Verify unlock conditions for accessing Delibird in Ice Zone Overworld"""
+
+        locations =["Ice Zone - Overworld - Primeape"]
+        items = [["Primeape Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_ursaring_unlock(self) -> None:
+        """Verify unlock conditions for accessing Delibird in Ice Zone Overworld"""
+
+        locations =["Ice Zone - Overworld - Ursaring"]
+        items = [["Ursaring Unlock"]]
+        self.assertAccessDependency(locations, items)
     #region access tests
     def test_can_reach_beach_zone(self)->None:
         """Verify ability to access Beach Zone Overworld"""
@@ -183,4 +250,33 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
         """Verify inability to access Beach Zone Overworld without specific unlock"""
         self.collect_all_but(["Beach Zone Unlock"])
         self.assertFalse(self.can_reach_region("Beach Zone - Overworld"))
+
+    def test_single_locations_reachable_with_beach_zone_unlock(self)->None:
+        """Verify abillity to access Health Power Upgrades"""
+        locations = ["Treehouse - Health Upgrade 1","Treehouse - Health Upgrade 2","Treehouse - Health Upgrade 3"]
+        items = [["Beach Zone Unlock"]]
+        self.assertAccessDependency(locations, items,True)
+
+    def test_can_reach_ice_zone(self)->None:
+        """Verify ability to access Ice Zone Overworld"""
+
+        self.collect_by_name(["Ice Zone Unlock"])
+        self.assertTrue(self.can_reach_region("Ice Zone - Overworld"))
+
+    def test_can_not_reach_ice_zone(self)->None:
+        """Verify inability to access Ice Zone Overworld without unlock"""
+
+        self.assertFalse(self.can_reach_region("Ice Zone - Overworld"))
+
+    def test_can_not_reach_ice_zone_with_everything_but_ice_zone_unlock(self)->None:
+        """Verify inability to access Ice Zone Overworld without specific unlock"""
+        self.collect_all_but(["Ice Zone Unlock"])
+        self.assertFalse(self.can_reach_region("Ice Zone - Overworld"))
+
+    def test_single_locations_reachable_with_ice_zone_unlock(self)->None:
+        """Verify abillity to access Health Power Upgrades"""
+        locations = ["Treehouse - Iron Tail Upgrade 1","Treehouse - Iron Tail Upgrade 2","Treehouse - Iron Tail Upgrade 3"]
+        items = [["Ice Zone Unlock"]]
+        self.assertAccessDependency(locations, items,True)
+
 

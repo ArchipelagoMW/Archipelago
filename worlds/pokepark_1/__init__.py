@@ -1,7 +1,7 @@
 """
 Archipelago init file for Pokepark 1
 """
-from BaseClasses import ItemClassification
+from BaseClasses import ItemClassification, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import components, Component, launch_subprocess
 from .items import FRIENDSHIP_ITEMS, PokeparkItem, UNLOCK_ITEMS, BERRIES, ALL_ITEMS_TABLE, PRISM_ITEM, POWERS, \
@@ -9,21 +9,34 @@ from .items import FRIENDSHIP_ITEMS, PokeparkItem, UNLOCK_ITEMS, BERRIES, ALL_IT
 from .locations import ALL_LOCATIONS_TABLE
 from .logic import REGIONS
 from .options import PokeparkOptions
-from .regions import create_regions
 
 
 class PokeparkWebWorld(WebWorld):
     theme = "jungle"
+    tutorials = [Tutorial(
+            "Multiworld Setup Guide",
+            "A guide to setting up the Pokepark Randomizer software on your computer."
+            "This guide covers single-player, multiworld, and related software.",
+            "English",
+            "pokepark_1_en.md",
+            "pokepark_1/en",
+            [""]
+    )]
+    options_presets = {
+        "Default": {
+            "disable_block_events": True
+        }
+    }
 
 class PokeparkWorld(World):
     """
     The first Pokepark game featuring 3D Gameplay controlling Pokemon. Lot of Minigames in the mission to save the Pokepark through the collection of Prism Shards.
     """
-    game = "PokéPark Wii: Pikachu's Adventure"
-    web = PokeparkWebWorld()
+    game = "PokéPark"
 
     options_dataclass = PokeparkOptions
     options = PokeparkOptions
+    web = PokeparkWebWorld()
 
     item_name_to_id = ALL_ITEMS_TABLE
     location_name_to_id = ALL_LOCATIONS_TABLE
@@ -48,6 +61,7 @@ class PokeparkWorld(World):
 
     data_version = 1
     def create_regions(self):
+        from .regions import create_regions
         create_regions(self)
 
     def create_items(self):
@@ -64,7 +78,8 @@ class PokeparkWorld(World):
             pool.append(self.create_item(berry_name))
 
         self.multiworld.itempool += pool
-
+        if self.options.disable_block_events:
+            print(self.options.disable_block_events.display_name)
 
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)

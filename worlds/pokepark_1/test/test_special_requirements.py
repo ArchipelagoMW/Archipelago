@@ -104,3 +104,99 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
         self.collect_by_name(pokemon_set4)
         self.collect_by_name("Beach Zone Unlock") # Region unlock removes dependency for tests
         self.assertFalse(self.can_reach_location("Beach Zone - Overworld - Vaporeon"))
+
+    def test_glaceon_friendcount_valid1(self) -> None:
+        """Verify Glaceon access with first valid set of 55 Pokemon friendships."""
+        glaceon_set1 = [
+            "Chikorita", "Pachirisu", "Bulbasaur", "Munchlax", "Tropius",
+            "Turtwig", "Bonsly", "Sudowoodo", "Buneary", "Shinx",
+            "Mankey", "Spearow", "Croagunk", "Chatot", "Lotad",
+            "Treecko", "Caterpie", "Butterfree", "Chimchar", "Aipom",
+            "Ambipom", "Weedle", "Shroomish", "Magikarp", "Oddish",
+            "Leafeon", "Bidoof", "Bibarel", "Torterra", "Starly",
+            "Scyther", "Buizel", "Psyduck", "Slowpoke", "Azurill",
+            "Totodile", "Mudkip", "Pidgeotto", "Taillow", "Wingull",
+            "Staravia", "Corsola", "Floatzel", "Vaporeon", "Golduck",
+            "Pelipper", "Sharpedo", "Wynaut", "Carvanha", "Krabby",
+            "Wailord", "Corphish", "Gyarados", "Feraligatr", "Piplup"
+        ]
+        self.collect_by_name(glaceon_set1)
+        self.collect_by_name("Ice Zone Unlock")  # Region unlock removes dependency for tests
+        self.assertTrue(self.can_reach_location("Ice Zone - Overworld - Glaceon"))
+
+    def test_glaceon_friendcount_valid2(self) -> None:
+        """Verify Glaceon access with second valid set of 53 Pokemon friendships including all zones."""
+        glaceon_set2 = [
+            "Chikorita", "Pachirisu", "Bulbasaur", "Munchlax", "Tropius",
+            "Turtwig", "Bonsly", "Sudowoodo", "Buneary", "Shinx",
+            "Mankey", "Spearow", "Croagunk", "Chatot", "Lotad",
+            "Treecko", "Caterpie", "Butterfree", "Chimchar", "Aipom",
+            "Buizel", "Psyduck", "Slowpoke", "Azurill", "Totodile",
+            "Mudkip", "Pidgeotto", "Taillow", "Wingull", "Staravia",
+            "Corsola", "Floatzel", "Vaporeon", "Golduck", "Pelipper",
+            "Sharpedo", "Wynaut", "Carvanha", "Krabby", "Wailord",
+            "Lapras", "Spheal", "Octillery", "Teddiursa", "Delibird",
+            "Smoochum", "Squirtle", "Glaceon", "Prinplup", "Sneasel",
+            "Piloswine", "Burmy", "Drifblim"
+        ]
+        self.collect_by_name(glaceon_set2)
+        self.collect_by_name("Ice Zone Unlock")  # Region unlock removes dependency for tests
+        self.assertTrue(self.can_reach_location("Ice Zone - Overworld - Glaceon"))
+
+    def test_glaceon_friendcount_valid3(self) -> None:
+        """Verify Glaceon access with third valid set containing minimum of 51 Pokemon friendships."""
+        glaceon_set3 = [
+            "Chikorita", "Pachirisu", "Bulbasaur", "Munchlax", "Tropius",
+            "Turtwig", "Bonsly", "Sudowoodo", "Buneary", "Shinx",
+            "Mankey", "Spearow", "Croagunk", "Chatot", "Lotad",
+            "Treecko", "Caterpie", "Butterfree", "Chimchar", "Aipom",
+            "Ambipom", "Weedle", "Shroomish", "Magikarp", "Oddish",
+            "Leafeon", "Bidoof", "Bibarel", "Torterra", "Starly",
+            "Scyther", "Buizel", "Psyduck", "Slowpoke", "Azurill",
+            "Totodile", "Mudkip", "Pidgeotto", "Taillow", "Wingull",
+            "Staravia", "Corsola", "Floatzel", "Vaporeon", "Golduck",
+            "Pelipper", "Sharpedo", "Wynaut", "Carvanha", "Krabby",
+            "Wailord"
+        ]
+        self.collect_by_name(glaceon_set3)
+        self.collect_by_name("Ice Zone Unlock")  # Region unlock removes dependency for tests
+        self.assertTrue(self.can_reach_location("Ice Zone - Overworld - Glaceon"))
+
+    def test_glaceon_friendcount_invalid1(self) -> None:
+        """Verify Glaceon access is blocked with first invalid set (exactly 50 Pokemon friendships)."""
+        glaceon_invalid_set1 = [
+            "Chikorita", "Pachirisu", "Bulbasaur", "Munchlax", "Tropius",
+            "Turtwig", "Bonsly", "Sudowoodo", "Buneary", "Shinx",
+            "Mankey", "Spearow", "Croagunk", "Chatot", "Lotad",
+            "Treecko", "Caterpie", "Butterfree", "Chimchar", "Aipom",
+            "Ambipom", "Weedle", "Shroomish", "Magikarp", "Oddish",
+            "Leafeon", "Bidoof", "Bibarel", "Torterra", "Starly",
+            "Scyther", "Buizel", "Psyduck", "Slowpoke", "Azurill",
+            "Totodile", "Mudkip", "Pidgeotto", "Taillow", "Wingull",
+            "Staravia", "Corsola", "Floatzel", "Vaporeon", "Golduck",
+            "Pelipper", "Sharpedo", "Wynaut", "Carvanha", "Krabby"
+        ]
+        self.collect_by_name(glaceon_invalid_set1)
+        self.collect_by_name("Ice Zone Unlock")  # Region unlock removes dependency for tests
+        self.assertFalse(self.can_reach_location("Ice Zone - Overworld - Glaceon"))
+
+    def test_glaceon_friendcount_invalid2(self) -> None:
+        """Verify Glaceon access is blocked with second invalid set (50 Pokemon friendships, different combination)."""
+        glaceon_invalid_set2 = [
+            "Chikorita", "Pachirisu", "Bulbasaur", "Munchlax", "Tropius",
+            "Turtwig", "Bonsly", "Sudowoodo", "Buneary", "Shinx",
+            "Mankey", "Spearow", "Croagunk", "Chatot", "Lotad",
+            "Treecko", "Caterpie", "Butterfree", "Chimchar", "Aipom",
+            "Ambipom", "Weedle", "Shroomish", "Magikarp", "Oddish",
+            "Leafeon", "Bidoof", "Bibarel", "Torterra", "Starly",
+            "Scyther", "Buizel", "Psyduck", "Slowpoke", "Azurill",
+            "Totodile", "Mudkip", "Pidgeotto", "Taillow", "Wingull",
+            "Staravia", "Corsola", "Floatzel", "Vaporeon", "Golduck",
+            "Pelipper", "Sharpedo", "Wynaut", "Carvanha", "Krabby"
+        ]
+        self.collect_by_name(glaceon_invalid_set2)
+        self.collect_by_name("Ice Zone Unlock")  # Region unlock removes dependency for tests
+        self.assertFalse(self.can_reach_location("Ice Zone - Overworld - Glaceon"))
+
+
+

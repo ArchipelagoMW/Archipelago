@@ -7,8 +7,10 @@ from worlds.pokepark_1 import POWERS, BERRIES
 from worlds.pokepark_1.adresses import \
     berry_item_checks, \
     POWER_INCREMENTS, POWER_SHARED_ADDR, prisma_blocked_itemIds, \
-    driffzeppeli_unlock_address, driffzeppeli_unlock_value, UNLOCKS, MemoryRange, PRISMAS, POKEMON_STATES, blocked_friendship_itemIds, \
-    blocked_friendship_unlock_itemIds, stage_id_address, main_menu_stage_id, main_menu2_stage_id, main_menu3_stage_id
+    drifblim_unlock_address, drifblim_unlock_value, UNLOCKS, MemoryRange, PRISMAS, POKEMON_STATES, \
+    blocked_friendship_itemIds, \
+    blocked_friendship_unlock_itemIds, stage_id_address, main_menu_stage_id, main_menu2_stage_id, main_menu3_stage_id, \
+    BLOCKED_UNLOCKS
 from worlds.pokepark_1.dme_helper import write_memory
 from worlds.pokepark_1.watcher.location_state_watcher import location_state_watcher
 from worlds.pokepark_1.watcher.location_watcher import location_watcher
@@ -51,7 +53,7 @@ class PokeparkCommandProcessor(ClientCommandProcessor):
 
 class PokeparkContext(CommonContext):
     command_processor = PokeparkCommandProcessor
-    game = "PokéPark Wii: Pikachu's Adventure"
+    game = "PokéPark"
     items_handling = 0b111  # full remote
     hook_check = False
     hook_nagged = False
@@ -108,7 +110,8 @@ async def game_watcher(ctx: PokeparkContext):
         if ctx.locations_checked:
             sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
         await ctx.send_msgs(sync_msg)
-        refresh_items(ctx)
+        if dme.is_hooked():
+            refresh_items(ctx)
 
         ctx.lives_switch = True
 
@@ -140,7 +143,8 @@ def refresh_items(ctx:PokeparkContext):
     blocked_items = set().union(
         prisma_blocked_itemIds,
         blocked_friendship_itemIds,
-        blocked_friendship_unlock_itemIds
+        blocked_friendship_unlock_itemIds,
+        BLOCKED_UNLOCKS
     )
     items = [item for item in ctx.items_received if
              not item.item in blocked_items]
@@ -159,14 +163,11 @@ def refresh_items(ctx:PokeparkContext):
 
 def activate_unlock_items(items:list[NetworkItem], locations: set[int]):
     sums = {}
-    key = (driffzeppeli_unlock_address, MemoryRange.WORD)
-    sums[key] = sums.get(key, 0) + driffzeppeli_unlock_value
+    key = (drifblim_unlock_address, MemoryRange.WORD)
+    sums[key] = sums.get(key, 0) + drifblim_unlock_value
     for item in set(item.item for item in items):
         if item in UNLOCKS:
             unlock = UNLOCKS[item]
-            if unlock.is_blocked_until_location and unlock.locationId not in locations:
-                continue
-
             addr = unlock.item.final_address
             key = (addr, unlock.item.memory_range)
             sums[key] = sums.get(key, 0) + unlock.item.value
@@ -219,6 +220,8 @@ def activate_power_items(items:list[NetworkItem]):
                     if item.item == POWERS["Progressive Dash"])
     health_count = sum(1 for item in items
                     if item.item == POWERS["Progressive Health"])
+    tail_count = sum(1 for item in items
+                    if item.item == POWERS["Progressive Iron Tail"])
 
     if thunderbolt_count > 0 or dash_count > 0 or health_count:
         new_value = POWER_INCREMENTS["thunderbolt"]["base"]
@@ -228,6 +231,8 @@ def activate_power_items(items:list[NetworkItem]):
             new_value += sum(POWER_INCREMENTS["dash"]["increments"][:dash_count])
         if dash_count > 0:
             new_value += sum(POWER_INCREMENTS["health"]["increments"][:health_count])
+        if dash_count > 0:
+            new_value += sum(POWER_INCREMENTS["iron_tail"]["increments"][:tail_count])
         dme.write_bytes(POWER_SHARED_ADDR, new_value.to_bytes(2, byteorder='big'))
 
 
@@ -262,11 +267,31 @@ def main(connect= None, password= None):
         state_watch = asyncio.create_task(state_watcher(ctx))
         location_state_watch = asyncio.create_task(location_state_watcher(ctx))
 
-        await progression_watcher
-        await loc_watch
-        await logic_watch
-        await state_watch
-        await location_state_watch
+        try:
+            await progression_watcher
+        except Exception as e:
+            logger.exception(f"Exception in game_watcher: {str(e)}")
+
+        try:
+            await loc_watch
+        except Exception as e:
+            logger.exception(f"Exception in location_watcher: {str(e)}")
+
+        try:
+            await logic_watch
+        except Exception as e:
+            logger.exception(f"Exception in logic_watcher: {str(e)}")
+
+        try:
+            await state_watch
+        except Exception as e:
+            logger.exception(f"Exception in state_watcher: {str(e)}")
+
+        try:
+            await location_state_watch
+        except Exception as e:
+            logger.exception(f"Exception in location_state_watcher: {str(e)}")
+
         await asyncio.sleep(.25)
 
         await ctx.exit_event.wait()
