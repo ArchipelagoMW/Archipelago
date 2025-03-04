@@ -164,44 +164,44 @@ chests:
   cdescription: ''
   dtype: Chest
   eflag: NONE
-- aname: Act 3 - Ghost Ship (1-gem chest)
+- aname: Ghost Ship Chest
   bid: 33
-  cdescription: ''
+  cdescription: Act 3 - Ghost Ship - Chest
   dtype: Chest
   eflag: NONE
-- aname: Act 3 - Seabed, way to Ghost Ship (Power Bracelet chest)
+- aname: Seabed North-West Chest in South-East Cove
   bid: 34
-  cdescription: ''
+  cdescription: Act 3 - Seabed North-West - Chest in South-East Cove
   dtype: Chest
   eflag: NONE
-- aname: Act 4 - Mountain of Souls 1st screen (40-gem chest)
+- aname: Mountain Slopes South South-East Chest Down the Slide
   bid: 35
-  cdescription: ''
+  cdescription: Act 4 - Mountain Slopes South - South-East Chest Down the Slide
   dtype: Chest
   eflag: NONE
-- aname: Act 4 - Mountain of Souls 2nd screen (left-most chest)
+- aname: Mountain Slopes North Buried Treasure Left-Most Chest
   bid: 36
-  cdescription: ''
+  cdescription: Act 4 - Mountain Slopes North - Buried Treasure Left-Most Chest
   dtype: Chest
   eflag: NONE
-- aname: Act 4 - Mountain of Souls 2nd screen (2nd chest from the left)
+- aname: Mountain Slopes North Buried Treasure Middle-Left Chest
   bid: 37
-  cdescription: ''
+  cdescription: Act 4 - Mountain Slopes North - Buried Treasure Middle-Left Chest
   dtype: Chest
   eflag: NONE
-- aname: Act 4 - Mountain of Souls 2nd screen (2nd chest from the right)
+- aname: Mountain Slopes North Buried Treasure Middle-Right Chest
   bid: 38
-  cdescription: ''
+  cdescription: Act 4 - Mountain Slopes North - Buried Treasure Middle-Right Chest
   dtype: Chest
   eflag: NONE
-- aname: Act 4 - Mountain of Souls 2nd screen (right-most chest)
+- aname: Mountain Slopes North Buried Treasure Right-Most Chest
   bid: 39
-  cdescription: ''
+  cdescription: Act 4 - Mountain Slopes North - Buried Treasure Right-Most Chest
   dtype: Chest
   eflag: NONE
-- aname: Act 4 - Laynole 2nd screen (Lucky Blade chest)
+- aname: Laynole West North Invisible Bridge Chest
   bid: 40
-  cdescription: ''
+  cdescription: Act 4 - Laynole West - North Invisible Bridge Chest
   dtype: Chest
   eflag: NONE
 - aname: Act 4 - Laynole 2nd screen (north-east, Herb chest)
@@ -605,24 +605,24 @@ lairs:
   cdescription: ''
   dtype: Lair
   eflag: NONE
-- aname: 'Act 3 - Lair 124: Seabed Northwest (Path to Ghost Ship)'
+- aname: Seabed North-West Seaweed Maze East Lair
   bid: 124
-  cdescription: ''
+  cdescription: Act 3 - Seabed North-West - Lair 124 - Seaweed Maze East Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 3 - Lair 131: Seabed North (Path to Blester)'
+- aname: Act 3 - Seabed North-East - Lair 131 - Lair South of the Current
   bid: 131
-  cdescription: ''
+  cdescription: Act 3 - Seabed North-East - Lair 131 - Lair South of the Current
   dtype: Lair
   eflag: NONE
-- aname: 'Act 3 - Lair 132: Seabed North (Path to Blester)'
+- aname: Seabed North-East West Nook Lair
   bid: 132
-  cdescription: ''
+  cdescription: Act 3 - Seabed North-East - Lair 132 - West Nook Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 3 - Lair 134: Seabed North (Path to Blester)'
+- aname: Seabed North-East Lair Out in the Open
   bid: 134
-  cdescription: ''
+  cdescription: Act 3 - Seabed North-East - Lair 134 - Lair Out in the Open
   dtype: Lair
   eflag: NONE
 - aname: 'Act 3 - Lair 138: Durean'
@@ -705,9 +705,9 @@ lairs:
   cdescription: ''
   dtype: Lair
   eflag: NONE
-- aname: 'Act 3 - Lair 173: Seabed Northwest (Path to Ghost Ship)'
+- aname: Seabed North-West Seaweed Maze South-West Lair
   bid: 173
-  cdescription: ''
+  cdescription: Act 3 - Seabed North-West - Lair 173 - Seaweed Maze South-West Lair
   dtype: Lair
   eflag: NONE
 - aname: 'Act 3 - Lair 177: Rockbird'
@@ -720,34 +720,34 @@ lairs:
   cdescription: ''
   dtype: Lair
   eflag: NONE
-- aname: 'Act 3 - Lair 182: Ghost Ship boss'
+- aname: Ghost Ship Floating Skull Boss Lair
   bid: 182
-  cdescription: ''
+  cdescription: Act 3 - Ghost Ship - Lair 182 - Floating Skull Boss Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 3 - Lair 185: Blester'
+- aname: Blester Metal Gorillas Lair
   bid: 185
-  cdescription: ''
+  cdescription: Act 3 - Blester - Lair 185 - Metal Gorillas Lair
   dtype: Lair
   eflag: HAS_THUNDER
-- aname: 'Act 3 - Lair 187: Blester'
+- aname: Blester Western Pillars Lair
   bid: 187
-  cdescription: ''
+  cdescription: Act 3 - Blester - Lair 187 - Western Pillars Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 3 - Lair 189: Blester'
+- aname: Blester Lair East of the Entrance
   bid: 189
-  cdescription: ''
+  cdescription: Act 3 - Blester - Lair 189 - Lair East of the Entrance
   dtype: Lair
   eflag: NONE
-- aname: 'Act 3 - Lair 190: Blester'
+- aname: Blester Lair Further East of the Entrance
   bid: 190
-  cdescription: ''
+  cdescription: Act 3 - Blester - Lair 190 - Lair Far-East of the Entrance
   dtype: Lair
   eflag: NONE
-- aname: 'Act 3 - Lair 192: Blester'
+- aname: Blester Eastern Pillars Lair
   bid: 192
-  cdescription: ''
+  cdescription: Act 3 - Blester - Lair 192 - Eastern Pillars Lair
   dtype: Lair
   eflag: NONE
 - aname: 'Act 3 - Lair 193: South Seabed (Path to Durean)'
@@ -760,34 +760,34 @@ lairs:
   cdescription: ''
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 201: Aurora Ridge, south'
+- aname: Mountain Slopes South Mid Level Lair
   bid: 201
-  cdescription: ''
+  cdescription: Act 4 - Mountain Slopes South - Lair 202 - Mid Level Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 202: Aurora Ridge, south'
+- aname: Mountain Slopes South Mountain Base Lair
   bid: 202
-  cdescription: ''
+  cdescription: Act 4 - Mountain Slopes South - Lair 202 - Mountain Base Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 203: Aurora Ridge, south'
+- aname: Mountain Slopes South Lair Up on the Ledge
   bid: 203
-  cdescription: ''
+  cdescription: Act 4 - Mountain Slopes South - Lair 203 - Lair Up on the Ledge
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 204: Aurora Ridge, north'
+- aname: Mountain Slopes North Lair at Top of the Slide
   bid: 204
-  cdescription: ''
+  cdescription: Act 4 - Mountain Slopes North - Lair 204 - Lair at Top of the Slide
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 211: Aurora Ridge, north'
+- aname: Mountain Slopes North Path through the Snow Right Lair
   bid: 211
-  cdescription: ''
+  cdescription: Act 4 - Mountain Slopes North - Lair 211 - Path through the Snow Right Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 212: Aurora Ridge, north'
+- aname: Mountain Slopes North Path through the Snow Left Lair
   bid: 212
-  cdescription: ''
+  cdescription: Act 4 - Mountain Slopes North - Lair 212 - Path through the Snow Left Lair
   dtype: Lair
   eflag: NONE
 - aname: 'Act 4 - Lair 214: Lune Passage'
@@ -820,74 +820,74 @@ lairs:
   cdescription: ''
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 233: Summit'
+- aname: Mountain Summit Cave Lair After the Ice
   bid: 233
-  cdescription: ''
+  cdescription: Act 4 - Mountain Summit Cave - Lair 233 - Lair After the Ice
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 234: Summit'
+- aname: Mountain Summit Cave Lair in the Middle of the Ice
   bid: 234
-  cdescription: ''
+  cdescription: Act 4 - Mountain Summit Cave - Lair 234 - Lair in the Middle of the Ice
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 235: Summit'
+- aname: Mountain Summit Cave Entrance Lair
   bid: 235
-  cdescription: ''
+  cdescription: Act 4 - Mountain Summit Cave - Lair 235 - Entrance Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 238: Ice Hill'
+- aname: Ice Hill Lair 238 - North-East Corner Lair
   bid: 238
-  cdescription: ''
+  cdescription: Act 4 - Ice Hill - Lair 238 - North-East Corner Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 239: Ice Hill'
+- aname: Ice Hill Center Alcove Left Lair
   bid: 239
-  cdescription: ''
+  cdescription: Act 4 - Ice Hill - Lair 239 - Center Alcove Left Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 240: Ice Hill'
+- aname: Ice Hill Center Alcove Right Lair
   bid: 240
-  cdescription: ''
+  cdescription: Act 4 - Ice Hill - Lair 240 - Center Alcove Right Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 242: Ice Hill'
+- aname: Ice Hill Middle Icy Slide Lair
   bid: 242
-  cdescription: ''
+  cdescription: Act 4 - Ice Hill - Lair 242 - Middle Icy Slide Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 246: Ice Hill'
+- aname: Ice Hill Lair Across the Wall
   bid: 246
-  cdescription: ''
+  cdescription: Act 4 - Ice Hill - Lair 246 - Lair Across the Wall
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 247: Ice Hill'
+- aname: Ice Hill South-West Corner Lair
   bid: 247
-  cdescription: ''
+  cdescription: Act 4 - Ice Hill - Lair 247 - South-West Corner Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 248: Laynole'
+- aname: Laynole West Lair Amongst the Ice Flowers
   bid: 248
-  cdescription: ''
+  cdescription: Act 4 - Laynole West - Lair 248 - Lair Amongst the Ice Flowers
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 250: Laynole'
+- aname: Laynole West Icy Spiral End Lair
   bid: 250
-  cdescription: ''
+  cdescription: Act 4 - Laynole West - Lair 250 - Icy Spiral End Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 252: Laynole'
+- aname: Laynole West Icy Spiral Center Lair
   bid: 252
-  cdescription: ''
+  cdescription: Act 4 - Laynole West - Lair 252 - Icy Spiral Center Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 254: Laynole'
+- aname: Laynole West South-West Corner Lair
   bid: 254
-  cdescription: ''
+  cdescription: Act 4 - Laynole West - Lair 254 - South-West Corner Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 255: Laynole'
+- aname: Laynole West South Invisible Bridge Lair
   bid: 255
-  cdescription: ''
+  cdescription: Act 4 - Laynole West - Lair 255 - South Invisible Bridge Lair
   dtype: Lair
   eflag: NONE
 - aname: 'Act 4 - Lair 259: Poseidon boss'
@@ -1311,9 +1311,9 @@ npc-rewards:
   cdescription: ''
   dtype: NPC Reward
   eflag: NONE
-- aname: Act 4 - Emblem E snail's item (in secret room)
+- aname: Mountain of Souls Secret Snail's Item
   bid: 27
-  cdescription: ''
+  cdescription: Act 4 - Mountain of Souls - Secret Snail's Item (Fake Northern Wall)
   dtype: NPC Reward
   eflag: NONE
 - aname: Act 4 - Emblem F tile in Lune (unlocked in mushroom's dream)
@@ -1321,9 +1321,9 @@ npc-rewards:
   cdescription: ''
   dtype: NPC Reward
   eflag: NONE
-- aname: Act 4 - Mountain of Souls 3rd screen crystal fairy
+- aname: Mountain Summit Cave Entrance Shortcut Crystal 
   bid: 29
-  cdescription: ''
+  cdescription: Act 4 - Mountain Summit Cave - Entrance Shortcut Crystal Fairy
   dtype: NPC Reward
   eflag: NONE
 - aname: Act 4 - Lune crystal fairy
@@ -1446,9 +1446,9 @@ npc-rewards:
   cdescription: ''
   dtype: NPC Reward
   eflag: NONE
-- aname: Act 3 - Mermaid Queen's item
+- aname: Seabed Sanctuary Mermaid Queen's Item
   bid: 54
-  cdescription: ''
+  cdescription: Act 3 - Seabed Sanctuary - Mermaid Queen's Item
   dtype: NPC Reward
   eflag: NONE
 - aname: Act 3 - Red-Hot Stick Mermaid's item
@@ -1466,9 +1466,9 @@ npc-rewards:
   cdescription: ''
   dtype: NPC Reward
   eflag: NONE
-- aname: Act 3 - Seabed crystal fairy (near Blester entrance)
+- aname: Seabed North-East Crystal South of the Current
   bid: 58
-  cdescription: ''
+  cdescription: Act 3 - Seabed North-East - Crystal Fairy South of the Current
   dtype: NPC Reward
   eflag: NONE
 - aname: Act 3 - Seabed crystal fairy (near Durean entrance)
@@ -1486,9 +1486,9 @@ npc-rewards:
   cdescription: ''
   dtype: NPC Reward
   eflag: NONE
-- aname: Act 3 - Angelfish's Soul (SE platform)
+- aname: Seabed Sanctuary Angelfish's Soul
   bid: 62
-  cdescription: ''
+  cdescription: Act 3 - Seabed Sanctuary - Angelfish's Soul (South-East Platform)
   dtype: NPC Reward
   eflag: NONE
 - aname: Act 5 - Great Door's Soul (2nd Floor door to chapel)
