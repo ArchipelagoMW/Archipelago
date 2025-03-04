@@ -1330,6 +1330,10 @@
             // AND slide/grapple AND WC
         ]
     },
+    {
+        "address": 3512, "name": "ED (Passages): Above Upper Hallway Turret",
+        "region": "EDP - Upper Elevator", "requires": [ { "item": "Unbounded Counter" } ]
+    },
 
     // Empyrean Dist. (Living Area)
     {
