@@ -190,6 +190,38 @@ def create_rules(world: "WordipelagoWorld"):
     world.get_location("YYY-Y").access_rule = lambda state: needed_for_words(state, world, 3, 80, 2, True)
     world.get_location("YYYY-").access_rule = lambda state: needed_for_words(state, world, 3, 80, 2, True)
     world.get_location("YYYYY").access_rule = lambda state: needed_for_words(state, world, 4, 100, 4, True)
+    # Deny yellow letters being placed behind yellow positional checks
+    world.get_location("----Y").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("---Y-").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("---YY").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("--Y--").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("--Y-Y").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("--YY-").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("--YYY").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("-Y---").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("-Y--Y").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("-Y-Y-").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("-Y-YY").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("-YY--").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("-YY-Y").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("-YYY-").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("-YYYY").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("Y----").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("Y---Y").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("Y--Y-").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("Y--YY").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("Y-Y--").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("Y-Y-Y").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("Y-YY-").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("Y-YYY").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("YY---").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("YY--Y").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("YY-Y-").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("YY-YY").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("YYY--").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("YYY-Y").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("YYYY-").item_rule = lambda item: item.name != 'Yellow Letters'
+    world.get_location("YYYYY").item_rule = lambda item: item.name != 'Yellow Letters'
     
     world.get_location("1 Correct Letter In Word").access_rule = lambda state: needed_for_words(state, world, 1, 0)
     world.get_location("2 Correct Letters In Word").access_rule = lambda state: needed_for_words(state, world, 2, 30)
@@ -197,5 +229,4 @@ def create_rules(world: "WordipelagoWorld"):
     world.get_location("4 Correct Letters In Word").access_rule = lambda state: needed_for_words(state, world, 3, 80, 2)
     world.get_location("5 Correct Letters In Word").access_rule = lambda state: needed_for_words(state, world, 4, 100, 3, True)
 
-    world.get_region("Yellow Checks").access_rule = lambda state: state.has('Yellow Letters', world.player)
-    world.get_region("Words").access_rule = lambda state: needed_for_words(state, world, 4, 100, 3, True)
+    world.get_region("Words", world.player).access_rule = lambda state: needed_for_words(state, world, 4, 100, 3, True)
