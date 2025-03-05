@@ -42,7 +42,7 @@ Let's look at a few examples:
 
 
 ### EnergyLink
-EnergyLink lets you share you excess energy across multiple clients and games. It uses a team-specific key of `EnergyLink{team}`. The energy value is a numeric value and it's important that games can add and take energy from it in a thread safe way. We will also provide our current `slot` number, this allows other clients to distinguish which client added or drained what. A little side note, over the course of a long game, many clients can contribute to the energy value making it larger then an int64, while python and json have no issues with this, some programming languages might need to take extra care.
+EnergyLink lets you share you excess energy across multiple clients and games. It uses a team-specific key of `EnergyLink{team}`. The energy value is a numeric value and it's important that games can add and take energy from it in a thread safe way. A little warning, over the course of a long game, many clients can contribute to the energy value making it larger then an int64, while python and json have no issues with this, some programming languages might need to take extra care.
 
 
 Adding is easy, just a `Set`-`add` operation, for example to add 20:
@@ -51,7 +51,6 @@ Adding is easy, just a `Set`-`add` operation, for example to add 20:
     "cmd": "Set",
     "key": "EnergyLink0",
     "default": 0,
-    "slot": 5,
     "operations": [
         {"operation": "add", "value": 20},
     ]
@@ -67,7 +66,6 @@ First we subtract our value 50, then we set the value back to 0 if it went below
     "key": "EnergyLink0",
     "tag": "7cc04194-b491-4cba-a89e-ef754502f3ff",
     "default": 0,
-    "slot": 5,
     "want_reply": true,
     "operations": [
         {"operation": "add", "value": -50},
