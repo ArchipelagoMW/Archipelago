@@ -154,7 +154,7 @@ parent_present[parent_names.ZERG_FLYING_UNIT] = AnyOf(item_groups.zerg_air_units
 
 # Protoss
 parent_present[parent_names.ARCHON_SOURCE] = AnyOf(
-    (item_names.HIGH_TEMPLAR, item_names.SIGNIFIER, item_names.ASCENDANT, item_names.DARK_TEMPLAR),
+    (item_names.HIGH_TEMPLAR, item_names.SIGNIFIER, item_names.ASCENDANT_ARCHON_MERGE, item_names.DARK_TEMPLAR_DARK_ARCHON_MELD),
     main_item="Archon",
 )
 parent_present[parent_names.CARRIER_CLASS] = AnyOf(

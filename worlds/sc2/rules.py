@@ -1456,7 +1456,6 @@ class SC2Logic:
                 item_names.DRAGOON, item_names.ADEPT,
                 item_names.SENTRY, item_names.ENERGIZER,
                 item_names.HIGH_TEMPLAR, item_names.SIGNIFIER, item_names.ASCENDANT, item_names.DARK_ARCHON,
-                item_names.DARK_TEMPLAR,  # Archon, Dark Archon Meld
                 # Stargate
                 item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR,
                 item_names.SCOUT, item_names.MISTWING, item_names.CALADRIUS, item_names.OPPRESSOR,
@@ -1480,6 +1479,10 @@ class SC2Logic:
             )
             or state.has_all((item_names.SKIRMISHER, item_names.SKIRMISHER_PEER_CONTEMPT), self.player)
             or state.has_all((item_names.TRIREME, item_names.TRIREME_SOLAR_BEAM), self.player)
+            or (
+                state.has(item_names.DARK_TEMPLAR, self.player)
+                and state.has_any((item_names.DARK_TEMPLAR_DARK_ARCHON_MELD, item_names.DARK_TEMPLAR_ARCHON_MERGE), self.player)
+            )
         )
 
     def protoss_basic_anti_air(self, state: CollectionState) -> bool:
@@ -1493,8 +1496,10 @@ class SC2Logic:
             or state.has_all({item_names.WRATHWALKER, item_names.WRATHWALKER_AERIAL_TRACKING}, self.player)
             or state.has_all({item_names.WARP_PRISM, item_names.WARP_PRISM_PHASE_BLASTER}, self.player)
             or self.advanced_tactics and state.has_any(
-                {item_names.HIGH_TEMPLAR, item_names.SIGNIFIER, item_names.ASCENDANT, item_names.DARK_TEMPLAR,
+                {item_names.HIGH_TEMPLAR, item_names.SIGNIFIER,
                  item_names.SENTRY, item_names.ENERGIZER}, self.player)
+            or self.protoss_can_merge_archon(state)
+            or self.protoss_can_merge_dark_archon(state)
         )
 
     def protoss_anti_armor_anti_air(self, state: CollectionState) -> bool:
@@ -1743,7 +1748,10 @@ class SC2Logic:
         return state.has_any({item_names.PHOTON_CANNON, item_names.KHAYDARIN_MONOLITH}, self.player)
 
     def protoss_can_merge_archon(self, state: CollectionState) -> bool:
-        return state.has_any({item_names.HIGH_TEMPLAR, item_names.DARK_TEMPLAR, item_names.SIGNIFIER, item_names.ASCENDANT}, self.player)
+        return (state.has_any({item_names.HIGH_TEMPLAR, item_names.SIGNIFIER}, self.player)
+                or state.has_all({item_names.ASCENDANT, item_names.ASCENDANT_ARCHON_MERGE}, self.player)
+                or state.has_all({item_names.DARK_TEMPLAR, item_names.DARK_TEMPLAR_DARK_ARCHON_MELD}, self.player)
+                )
 
     def protoss_can_merge_dark_archon(self, state: CollectionState) -> bool:
         return state.has(item_names.DARK_ARCHON, self.player) or state.has_all({item_names.DARK_TEMPLAR, item_names.DARK_TEMPLAR_DARK_ARCHON_MELD}, self.player)

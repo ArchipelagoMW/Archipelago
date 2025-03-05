@@ -1304,7 +1304,8 @@ API3_TO_API4_COMPAT_ITEMS: typing.Set[CompatItemHolder] = {
        and item_name != item_names.DESTROYER_REFORGED_BLOODSHARD_CORE
        and item_name != item_names.OBSERVER_INDUCE_SCOPOPHOBIA
 }
-
+API3_TO_API4_COMPAT_ITEMS.add(CompatItemHolder(item_names.ASCENDANT_ARCHON_MERGE))
+API3_TO_API4_COMPAT_ITEMS.add(CompatItemHolder(item_names.DARK_TEMPLAR_ARCHON_MERGE))
 
 def compat_item_to_network_items(compat_item: CompatItemHolder) -> typing.List[NetworkItem]:
     item_id = get_full_item_list()[compat_item.name].code
