@@ -49,6 +49,12 @@ class Roomsanity(Toggle):
     """
     display_name = "Roomsanity"
 
+class IncludeGoldens(Toggle):
+    """
+    Determines whether collecting Golden Strawberries sends location checks
+    """
+    display_name = "Roomsanity"
+
 class IncludeCore(Toggle):
     """
     Determines whether Chapter 8 - Core Levels will be included
@@ -232,6 +238,7 @@ class CelesteOptions(PerGameCommonOptions):
 
     checkpointsanity: Checkpointsanity
     roomsanity: Roomsanity
+    include_goldens: IncludeGoldens
     include_core: IncludeCore
     include_farewell: IncludeFarewell
     include_b_sides: IncludeBSides

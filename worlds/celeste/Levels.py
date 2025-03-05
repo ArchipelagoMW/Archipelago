@@ -62,15 +62,14 @@ class RegionConnection:
     source: PreRegion
     destination_name: str
     destination: PreRegion
-    rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
+    possible_access: List[List[str]]
 
     # TODO: Assign the actual regions here after the structure is built
 
     def __init__(self, source_name: str, destination_name: str, possible_access: List[List[str]] = []):
         self.source_name = source_name
         self.destination_name = destination_name
-        if (len(possible_access)):
-            self.rule = lambda state: any(all(state.has(item) for item in sublist) for sublist in possible_access)
+        self.possible_access = deepcopy(possible_access)
 
 
 class LevelLocation:
@@ -79,15 +78,14 @@ class LevelLocation:
     region_name: str
     region: PreRegion
     loc_type: LocationType
-    rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
+    possible_access: List[List[str]]
 
     def __init__(self, name: str, display_name: str, region_name: str, loc_type: LocationType, possible_access: List[List[str]] = []):
         self.name = name
         self.display_name = display_name
         self.region_name = region_name
         self.loc_type = loc_type
-        if (len(possible_access)):
-            self.rule = lambda state: any(all(state.has(item) for item in sublist) for sublist in possible_access)
+        self.possible_access = deepcopy(possible_access)
 
 class Room:
     level_name: str
@@ -107,7 +105,7 @@ class Room:
         self.checkpoint = checkpoint
         self.checkpoint_region = checkpoint_region
 
-        from .data.TestLevelData import all_regions
+        from .data.CelesteLevelData import all_regions
 
         for reg in self.regions:
             reg.room = self

@@ -1,10 +1,12 @@
 from copy import deepcopy
-from typing import Dict, List
+from typing import Dict, List, Set
 
 from BaseClasses import ItemClassification, Location, MultiWorld, Region, Tutorial
+from Utils import visualize_regions
 from worlds.AutoWorld import WebWorld, World
-from .Items import CelesteItem, item_table, item_data_table
-from .Locations import CelesteLocation, generate_location_table, strawberry_location_data_table, checkpoint_location_data_table
+
+from .Items import CelesteItem, generate_item_table, generate_item_data_table, level_item_lists
+from .Locations import CelesteLocation, generate_location_table, checkpoint_location_data_table
 from .Names import ItemName, LocationName
 from .Options import CelesteOptions, celeste_option_groups, resolve_options
 from .Levels import Level, load_logic_data
@@ -37,7 +39,7 @@ class CelesteWorld(World):
     options: CelesteOptions
     level_data: Dict[str, Level] = load_logic_data()
     location_name_to_id = generate_location_table(level_data)
-    item_name_to_id = item_table
+    item_name_to_id = generate_item_table()
 
 
     # Instance Data
@@ -46,12 +48,35 @@ class CelesteWorld(World):
     madeline_no_dash_hair_color: int
     madeline_feather_hair_color: int
 
+    active_levels: Set[str]
+    active_items: Set[str]
+
 
     def generate_early(self) -> None:
         if not self.player_name.isascii():
-            raise RuntimeError(f"Invalid player_name {self.player_name} for game {self.game}.")
+            raise RuntimeError(f"Invalid player_name {self.player_name} for game {self.game}. Name must be ascii.")
 
         resolve_options(self)
+
+        self.active_levels = {"0a", "1a"}
+        #self.active_levels = {"0a", "1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a"}
+        if self.options.include_core:
+            self.active_levels.add("9a")
+        if self.options.include_farewell:
+            self.active_levels.add("10a")
+            self.active_levels.add("10b")
+        if self.options.include_b_sides:
+            self.active_levels.update({"1b", "2b", "3b", "4b", "5b", "6b", "7b"})
+            if self.options.include_core:
+                self.active_levels.add("9b")
+        if self.options.include_c_sides:
+            self.active_levels.update({"1c", "2c", "3c", "4c", "5c", "6c", "7c"})
+            if self.options.include_core:
+                self.active_levels.add("9c")
+
+        self.active_items = set()
+        for level in self.active_levels:
+            self.active_items.update(level_item_lists[level])
 
 
     def create_regions(self) -> None:
@@ -59,28 +84,9 @@ class CelesteWorld(World):
 
         create_regions_and_locations(self)
 
-        from .Regions import region_data_table
-        # Create regions.
-        #for region_name in region_data_table.keys():
-        #    region = Region(region_name, self.player, self.multiworld)
-        #    self.multiworld.regions.append(region)
-
-        # Create locations.
-        for region_name, region_data in region_data_table.items():
-            region = self.multiworld.get_region(region_name, self.player)
-            region.add_locations({
-                location_name: location_data.address for location_name, location_data in strawberry_location_data_table.items()
-                if location_data.region == region_name
-            }, CelesteLocation)
-            region.add_locations({
-                location_name: location_data.address for location_name, location_data in checkpoint_location_data_table.items()
-                if location_data.region == region_name
-            }, CelesteLocation)
-
-            region.add_exits(region_data_table[region_name].connecting_regions)
-
 
     def create_item(self, name: str) -> CelesteItem:
+        item_data_table = generate_item_data_table()
         return CelesteItem(name, item_data_table[name].type, item_data_table[name].code, self.player)
 
     def create_items(self) -> None:
@@ -95,6 +101,8 @@ class CelesteWorld(World):
                 checkpoint_loc: Location = self.multiworld.get_location(item_name, self.player)
                 checkpoint_loc.place_locked_item(self.create_item(item_name))
                 location_count -= 1
+
+        item_pool += [self.create_item(item_name) for item_name in sorted(self.active_items)]
 
         real_total_strawberries: int = min(self.options.total_strawberries.value, location_count - len(item_pool))
         self.strawberries_required = int(real_total_strawberries * (self.options.strawberries_required_percentage / 100))
@@ -113,6 +121,10 @@ class CelesteWorld(World):
     def set_rules(self) -> None:
         from .Rules import set_rules
         set_rules(self)
+
+    def generate_output(self, output_directory: str):
+        visualize_regions(self.multiworld.get_region("Menu", self.player), f"Player{self.player}.puml", show_entrance_names=False,
+                      regions_to_highlight=self.multiworld.get_all_state(self.player).reachable_regions[self.player])
 
     # TODO: More Options
     def fill_slot_data(self):

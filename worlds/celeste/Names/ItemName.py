@@ -61,6 +61,8 @@ seekers       = "Seekers"
 keys          = "Keys"
 bird          = "Bird"
 
+cannot_access = "Cannot Access"
+
 # Checkpoints
 fc_a_checkpoint_1 = "Forsaken City A - Crossing"
 fc_a_checkpoint_2 = "Forsaken City A - Chasm"

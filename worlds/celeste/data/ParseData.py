@@ -68,11 +68,12 @@ for level in level_data["levels"]:
                                     f"LocationType.{location['type']}, ["
                                    )
 
-                    for possible_access in location['rule']:
-                        location_str += f"["
-                        for item in possible_access:
-                            location_str += f"ItemName.{item}, "
-                        location_str += f"], "
+                    if "rule" in location:
+                        for possible_access in location['rule']:
+                            location_str += f"["
+                            for item in possible_access:
+                                location_str += f"ItemName.{item}, "
+                            location_str += f"], "
 
                     location_str += "]),"
 
@@ -142,6 +143,7 @@ sys.stdout = out_file
 
 print("from typing import Dict, List")
 print("from ..Levels import Level, Room, PreRegion, LevelLocation, RegionConnection, RoomConnection, Door, DoorDirection, LocationType")
+print("from ..Names import ItemName")
 print("")
 print("all_doors: Dict[str, Door] = {")
 for line in all_doors:

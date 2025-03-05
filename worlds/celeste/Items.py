@@ -67,7 +67,9 @@ collectable_item_data_table: Dict[str, CelesteItemData] = {
     ItemName.raspberry:  CelesteItemData(celeste_base_id + 0x1, ItemClassification.filler),
 }
 
-checkpoint_item_data_table: Dict[str, CelesteItemData] = {
+checkpoint_item_data_table: Dict[str, CelesteItemData] = {}
+
+old_checkpoint_item_data_table: Dict[str, CelesteItemData] = {
     ItemName.fc_a_checkpoint_1: CelesteItemData(celeste_base_id + 0x100 + 0x00, ItemClassification.progression),
     ItemName.fc_a_checkpoint_2: CelesteItemData(celeste_base_id + 0x100 + 0x01, ItemClassification.progression),
 
@@ -195,8 +197,13 @@ interactable_item_data_table: Dict[str, CelesteItemData] = {
     ItemName.keys:          CelesteItemData(celeste_base_id + 0x200 + 0x1E, ItemClassification.progression),
 }
 
-item_data_table: Dict[str, CelesteItemData] = {**collectable_item_data_table,
-                                               **checkpoint_item_data_table,
-                                               **interactable_item_data_table}
+def add_checkpoint_to_table(id: int, name: str):
+    checkpoint_item_data_table[name] = CelesteItemData(id, ItemClassification.progression)
 
-item_table = {name: data.code for name, data in item_data_table.items() if data.code is not None}
+def generate_item_data_table() -> Dict[int, CelesteItemData]:
+    return {**collectable_item_data_table,
+            **checkpoint_item_data_table,
+            **interactable_item_data_table}
+
+def generate_item_table() -> Dict[str, int]:
+    return {name: data.code for name, data in generate_item_data_table().items() if data.code is not None}
