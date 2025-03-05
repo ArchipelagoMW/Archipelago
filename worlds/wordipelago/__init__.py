@@ -110,16 +110,31 @@ class WordipelagoWorld(World):
             if item.code and item.can_create(self) and key not in starting_letters:
                 for i in range(item.count(self)):
                     item_pool.append(self.create_item(key))
-        for i in range(self.options.time_reward_count):
-            item_pool.append(WordipelagoItem("Time", ItemClassification.filler, 200, self.player))
+        # for i in range(self.options.time_reward_count):
+        #     item_pool.append(WordipelagoItem("Time", ItemClassification.filler, 200, self.player))
             
         # Filler Items
-        location_count = 26 + 5 + self.options.words_to_win + 61
-        item_count = 26 - self.options.starting_letters + 6 - self.options.starting_guesses + self.options.time_reward_count
+        location_count = self.options.words_to_win
+        if(self.options.letter_checks >= 1):
+            location_count += 6
+        if(self.options.letter_checks >= 2):
+            location_count += 13
+        if(self.options.letter_checks == 3):
+            location_count += 7
+        if(self.options.green_checks == 1 or self.options.green_checks == 3):
+            location_count += 5
+        if(self.options.green_checks == 2 or self.options.green_checks == 3):
+            location_count += 31
+        if(self.options.yellow_checks == 1):
+            location_count += 31
+
+
+        item_count = (26 - self.options.starting_letters) + (6 - self.options.starting_guesses) + self.options.time_reward_count
         if not self.options.yellow_unlocked: 
             item_count += 1
         if not self.options.unused_letters_unlocked: 
             item_count += 1
+
 
         if(location_count > item_count):
             for i in range(location_count - item_count):
