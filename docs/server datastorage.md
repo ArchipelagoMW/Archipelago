@@ -76,7 +76,7 @@ First we subtract our value 50, then we set the value back to 0 if it went below
 Response:
 ```json
 {
-    "cmd": "Set",
+    "cmd": "SetReply",
     "key": "EnergyLink0",
     "tag": "7cc04194-b491-4cba-a89e-ef754502f3ff",
     "default": 0,
