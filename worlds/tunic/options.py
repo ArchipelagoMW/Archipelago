@@ -173,7 +173,7 @@ class LocalFill(NamedRange):
     internal_name = "local_fill"
     display_name = "Local Fill Percent"
     range_start = 0
-    range_end = 100
+    range_end = 98
     special_range_names = {
         "default": -1
     }

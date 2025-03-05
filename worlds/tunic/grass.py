@@ -7767,8 +7767,10 @@ grass_location_name_to_id: Dict[str, int] = {name: location_base_id + 302 + inde
 
 grass_location_name_groups: Dict[str, Set[str]] = {}
 for loc_name, loc_data in grass_location_table.items():
-    loc_group_name = loc_name.split(" - ", 1)[0] + " Grass"
-    grass_location_name_groups.setdefault(loc_group_name, set()).add(loc_name)
+    area_name = loc_name.split(" - ", 1)[0]
+    # adding it to the normal location group and a grass-only one
+    grass_location_name_groups.setdefault(area_name, set()).add(loc_name)
+    grass_location_name_groups.setdefault(area_name + " Grass", set()).add(loc_name)
 
 
 def can_break_grass(state: CollectionState, world: "TunicWorld") -> bool:
