@@ -66,3 +66,21 @@ The reason entrance access rules using `location.can_reach` and `entrance.can_re
 We recognize it can feel like a trap since it will not alert you when you are missing an indirect condition, and that some games have very complex access rules.
 As of [PR #3682 (Core: Region handling customization)](https://github.com/ArchipelagoMW/Archipelago/pull/3682) being merged, it is possible for a world to opt out of indirect conditions entirely, instead using the system of checking each entrance whenever a region has been reached, although this does come with a performance cost.
 Opting out of using indirect conditions should only be used by games that *really* need it. For most games, it should be reasonable to know all entrance &rarr; region dependencies, making indirect conditions preferred because they are much faster.
+
+---
+
+### I uploaded the generated output of my world to the webhost and webhost is erroring on corrupted multidata
+
+The error `Count not load multidata. File may be corrupted or incompatible.` on uploading a locally generated file is caused because output multidata is the pickled representation of the data that the server needs to know. It may come
+with a descriptive issue like `(No module named 'worlds.myworld')` or `(global 'worlds.myworld.names.ItemNames' is forbidden)`
+
+Pickling is a way to compress python objects as-is in a way that they can be decompressed and be used to rebuild the
+python objects, this means that if you use custom class instances that end up in multidata that the server would need
+to load those custom classes to decompress the data, which can fail either because the world module is unknown or the
+class it's attempting to import to decompress is deemed unsafe.
+
+Common situations where this can happen is:
+* Using Option instances directly in slot_data ex. `using options.option_name` instead of `options.option_name.value`,
+  also consider using `options.as_dict("option_name", "option_two")` as a helper
+* Using enums as Location/Item names in the datapackage, when building out location_name_to_id
+  or item_name_to_id make sure to use the underlying str: id mapping
