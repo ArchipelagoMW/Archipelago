@@ -119,24 +119,24 @@ chests:
   cdescription: ''
   dtype: Chest
   eflag: NONE
-- aname: Act 3 - Seabed secret cave (top-left chest)
+- aname: Seabed North-West Secret Cove Top-Left Chest
   bid: 24
-  cdescription: ''
+  cdescription: Act 3 - Seabed North-West - Secret Cove Top-Left Chest
   dtype: Chest
   eflag: NONE
-- aname: Act 3 - Seabed secret cave (top-right chest)
+- aname: Seabed North-West Secret Cove Top-Right Chest
   bid: 25
-  cdescription: ''
+  cdescription: Act 3 - Seabed North-West - Secret Cove Top-Right Chest
   dtype: Chest
   eflag: NONE
-- aname: Act 3 - Seabed secret cave (bottom-left chest)
+- aname: Seabed North-West Secret Cove Bottom-Left Chest
   bid: 26
-  cdescription: ''
+  cdescription: Act 3 - Seabed North-West - Secret Cove Bottom-Left Chest
   dtype: Chest
   eflag: NONE
-- aname: Act 3 - Seabed secret cave (bottom-right chest)
+- aname: Seabed North-West Secret Cove Bottom-Right Chest
   bid: 27
-  cdescription: ''
+  cdescription: Act 3 - Seabed North-West - Secret Cove Bottom-Right Chest
   dtype: Chest
   eflag: NONE
 - aname: Southerta Tree Maze Chest
@@ -144,14 +144,14 @@ chests:
   cdescription: Act 3 - Southerta - Tree Maze Chest
   dtype: Chest
   eflag: NONE
-- aname: Act 3 - Rockbird (Herb chest)
+- aname: Rockbird East Lakes Upper Chest
   bid: 29
-  cdescription: ''
+  cdescription: Act 3 - Rockbird - East Lakes Upper Chest
   dtype: Chest
   eflag: NONE
-- aname: Act 3 - Rockbird (60-gem chest)
+- aname: Rockbird East Lakes Lower Chest
   bid: 30
-  cdescription: ''
+  cdescription: Act 3 - Rockbird - East Lakes Lower Chest
   dtype: Chest
   eflag: NONE
 - aname: Act 3 - Durean (Critical Sword chest)
@@ -204,14 +204,14 @@ chests:
   cdescription: Act 4 - Laynole West - North Invisible Bridge Chest
   dtype: Chest
   eflag: NONE
-- aname: Act 4 - Laynole 2nd screen (north-east, Herb chest)
+- aname: Laynole East Chest Past the Invisible Bridge
   bid: 41
-  cdescription: ''
+  cdescription: Act 4 - Laynole East - Chest Past the Invisible Bridge
   dtype: Chest
   eflag: NONE
-- aname: Act 4 - Laynole 2nd screen (north-east, Rotator chest)
+- aname: Laynole East Chest Past the Second Invisible Bridge
   bid: 42
-  cdescription: ''
+  cdescription: Act 4 - Laynole East - Chest Past the Second Invisible Bridge
   dtype: Chest
   eflag: NONE
 - aname: Act 5 - Leo's Lab (Zantetsu Sword chest)
@@ -365,24 +365,24 @@ lairs:
   cdescription: Act 1 - Underground Castle West - Lair 014 - South-East Island
   dtype: Lair
   eflag: NONE
-- aname: 'Act 1 - Lair 015: Underground Castle, east'
+- aname: Underground Castle East Entrance Lair
   bid: 15
-  cdescription: ''
+  cdescription: Act 1 - Underground Castle East - Lair 015 - Entrance Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 1 - Lair 016: Underground Castle, east'
+- aname: Underground Castle East Southern U Lair
   bid: 16
-  cdescription: ''
+  cdescription: Act 1 - Underground Castle East - Lair 016 - Southern U Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 1 - Lair 017: Underground Castle, east'
+- aname: Underground Castle East Northern U Lair
   bid: 17
-  cdescription: ''
+  cdescription: Act 1 - Underground Castle East - Lair 017 - Northern U Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 1 - Lair 018: Underground Castle, east'
+- aname: Underground Castle East Stone Garden Lair
   bid: 18
-  cdescription: ''
+  cdescription: Act 1 - Underground Castle East - Lair 018 - Stone Garden Lair
   dtype: Lair
   eflag: NONE
 - aname: 'Act 1 - Lair 019: Leo''s Painting, room 2'
@@ -390,24 +390,24 @@ lairs:
   cdescription: ''
   dtype: Lair
   eflag: NONE
-- aname: 'Act 1 - Lair 021: Underground Castle, east'
+- aname: Underground Castle East 4 Lair Gauntlet Lair
   bid: 21
-  cdescription: ''
+  cdescription: Act 1 - Underground Castle East - Lair 021 - 4-Lair Gauntlet Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 1 - Lair 022: Underground Castle, east'
+- aname: Underground Castle East Conveyor Dead-End Right Lair
   bid: 22
-  cdescription: ''
+  cdescription: Act 1 - Underground Castle East - Lair 022 - Conveyor Dead-End Right Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 1 - Lair 024: Underground Castle, east'
+- aname: Underground Castle East Narrow Bridge Lair
   bid: 24
-  cdescription: ''
+  cdescription: Act 1 - Underground Castle East - Lair 024 - Narrow Bridge Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 1 - Lair 026: Underground Castle, east'
+- aname: Underground Castle East Lair Near Jewel Fairy
   bid: 26
-  cdescription: ''
+  cdescription: Act 1 - Underground Castle East - Lair 026 - Lair Near Jewel Fairy
   dtype: Lair
   eflag: NONE
 - aname: 'Act 1 - Lair 029: Leo''s Painting, room 1'
@@ -435,14 +435,14 @@ lairs:
   cdescription: ''
   dtype: Lair
   eflag: NONE
-- aname: 'Act 1 - Lair 041: Lair: Underground Castle, west'
+- aname: Underground Castle West Lair Above the Elevator
   bid: 41
-  cdescription: ''
+  cdescription: Act 1 - Underground Castle West - Lair 041 - Lair Above the Elevator
   dtype: Lair
   eflag: NONE
-- aname: 'Act 1 - Lair 042: Lair: Underground Castle, east'
+- aname: Underground Castle East Conveyor Dead-End Left Lair
   bid: 42
-  cdescription: ''
+  cdescription: Act 1 - Underground Castle East - Lair 042 - Conveyor Dead-End Left Lair
   dtype: Lair
   eflag: NONE
 - aname: 'Act 1 - Lair 043: Leo''s Painting, room 3'
@@ -695,14 +695,14 @@ lairs:
   cdescription: Act 3 - Southerta - Lair 165 - Ambush South Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 3 - Lair 167: Rockbird'
+- aname: Rockbird West Center Lake Lair
   bid: 167
-  cdescription: ''
+  cdescription: Act 3 - Rockbird - Lair 167 - West Center Lake Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 3 - Lair 171: Rockbird'
+- aname: Rockbird Center Lake North-East Lair
   bid: 171
-  cdescription: ''
+  cdescription: Act 3 - Rockbird - Lair 171 - Center Lake North-East Lair
   dtype: Lair
   eflag: NONE
 - aname: Seabed North-West Seaweed Maze South-West Lair
@@ -710,14 +710,14 @@ lairs:
   cdescription: Act 3 - Seabed North-West - Lair 173 - Seaweed Maze South-West Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 3 - Lair 177: Rockbird'
+- aname: Rockbird Center Lake South-West Lair
   bid: 177
-  cdescription: ''
+  cdescription: Act 3 - Rockbird - Lair 177 - Center Lake South-West Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 3 - Lair 181: Rockbird'
+- aname: Rockbird South-West Lake Lair
   bid: 181
-  cdescription: ''
+  cdescription: Act 3 - Rockbird - Lair 181 - South-West Lake Lair
   dtype: Lair
   eflag: NONE
 - aname: Ghost Ship Floating Skull Boss Lair
@@ -755,9 +755,9 @@ lairs:
   cdescription: ''
   dtype: Lair
   eflag: NONE
-- aname: 'Act 3 - Lair 194: South Seabed (Path to Rockbird)'
+- aname: Seabed South-East Corner Lair
   bid: 194
-  cdescription: ''
+  cdescription: Act 3 - Seabed - Lair 194 - South-East Corner Lair
   dtype: Lair
   eflag: NONE
 - aname: Mountain Slopes South Mid Level Lair
@@ -790,29 +790,29 @@ lairs:
   cdescription: Act 4 - Mountain Slopes North - Lair 212 - Path through the Snow Left Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 214: Lune Passage'
+- aname: Lune Passage Lair Under the Waterfall
   bid: 214
-  cdescription: ''
+  cdescription: Act 4 - Lune Passage - Lair 214 - Lair Under the Waterfall
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 215: Lune Passage'
+- aname: Lune Passage Lair Between Two Cliffs
   bid: 215
-  cdescription: ''
+  cdescription: Act 4 - Lune Passage - Lair 215 - Lair Between Two Cliffs
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 221: Lune'
+- aname: Lune South-East Corner Lair
   bid: 221
-  cdescription: ''
+  cdescription: Act 4 - Lune - Lair 221 - South-East Corner Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 225: Lune'
+- aname: Lune Clockwise Gauntlet Lair
   bid: 225
-  cdescription: ''
+  cdescription: Act 4 - Lune - Lair 225 - Clockwise Gauntlet Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 230: Lune'
+- aname: Lune Counter-Clockwise Gauntlet Lair
   bid: 230
-  cdescription: ''
+  cdescription: Act 4 - Lune - Lair 230 - Counter-Clockwise Gauntlet Lair
   dtype: Lair
   eflag: NONE
 - aname: 'Act 4 - Lair 232: Lune'
@@ -890,9 +890,9 @@ lairs:
   cdescription: Act 4 - Laynole West - Lair 255 - South Invisible Bridge Lair
   dtype: Lair
   eflag: NONE
-- aname: 'Act 4 - Lair 259: Poseidon boss'
+- aname: Lune Poseidon Boss Lair
   bid: 259
-  cdescription: ''
+  cdescription: Act 4 - Lune - Lair 259 - Poseidon Boss Lair
   dtype: Lair
   eflag: NONE
 - aname: 'Act 5 - Lair 265: Leo''s Lab B1'
@@ -1306,9 +1306,9 @@ npc-rewards:
   cdescription: ''
   dtype: NPC Reward
   eflag: NONE
-- aname: Act 4 - Nome's item
+- aname: Mountain of Souls Nome the Snail's Item
   bid: 26
-  cdescription: ''
+  cdescription: Act 4 - Mountain of Souls - Nome the Snail's Item (Free the Snail!)
   dtype: NPC Reward
   eflag: NONE
 - aname: Mountain of Souls Secret Snail's Item
@@ -1326,9 +1326,9 @@ npc-rewards:
   cdescription: Act 4 - Mountain Summit Cave - Entrance Shortcut Crystal Fairy
   dtype: NPC Reward
   eflag: NONE
-- aname: Act 4 - Lune crystal fairy
+- aname: Lune Passage Center of the River Crystal
   bid: 30
-  cdescription: ''
+  cdescription: Act 4 - Lune Passage - Center of the River Crystal Fairy
   dtype: NPC Reward
   eflag: NONE
 - aname: Act 5 - Under Chest of Drawers in locked room
@@ -1461,9 +1461,9 @@ npc-rewards:
   cdescription: ''
   dtype: NPC Reward
   eflag: NONE
-- aname: Act 3 - Crystal fairy in Rockbird
+- aname: Rockbird North-Western Island Crystal
   bid: 57
-  cdescription: ''
+  cdescription: Act 3 - Rockbird - North-Western Island Crystal Fairy
   dtype: NPC Reward
   eflag: NONE
 - aname: Seabed North-East Crystal South of the Current
