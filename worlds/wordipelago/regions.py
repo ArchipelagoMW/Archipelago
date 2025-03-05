@@ -7,7 +7,9 @@ class WordipelagoRegionData(NamedTuple):
 
 region_data_table: Dict[str, WordipelagoRegionData] = {
     "Menu": WordipelagoRegionData(["Letters"]),
-    "Letters": WordipelagoRegionData([ "Words", "WordBest"]),
+    "Letters": WordipelagoRegionData([ "Words", "Word Best", "Green Checks", "Yellow Checks"]),
     "Words": WordipelagoRegionData([]),
-    "WordBest": WordipelagoRegionData([]),
+    "Green Checks": WordipelagoRegionData([]),
+    "Yellow Checks": WordipelagoRegionData([]),
+    "Word Best": WordipelagoRegionData([]),
 }
