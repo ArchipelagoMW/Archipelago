@@ -476,7 +476,7 @@ What should be done when an data storage operation fails, for example when an `p
 | Option      | On Error Effect |
 | raise       | An error is raised on the server, causing a stacktrace to be logged and the client to be kicked |
 | set_default | Sets the value of the key to `default` of the [Set](#Set)'s package |
-| undo        | Undo's any modifications done to the key's value by previous `operations` part of this [Set](#Set)'s package |
+| undo        | Undoes any modifications done to the key's value by previous `operations` part of this [Set](#Set)'s package |
 | abort       | Stops further processing of `operations` part of this [Set](#Set)'s package |
 | ignore      | Ignore errors and continue processing of remaining `operations` part of this [Set](#Set)'s package |
 
