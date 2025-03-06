@@ -716,12 +716,12 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     atoll_statue = regions["Ruined Atoll"].connect(
         connecting_region=regions["Ruined Atoll Statue"],
         rule=lambda state: has_ability(prayer, state, world)
-        and (((has_ladder("Ladders in South Atoll", state, world)
+        and ((((has_ladder("Ladders in South Atoll", state, world)
              # shoot fuse and have the shot hit you mid-LS
              or (can_ladder_storage(state, world) and state.has(fire_wand, player)
                  and options.ladder_storage >= LadderStorage.option_hard))) and not options.shuffle_fuses)
         or (state.has_all((atoll_northwest_fuse, atoll_northeast_fuse, atoll_southwest_fuse, atoll_southeast_fuse), player)
-            and options.shuffle_fuses)
+            and options.shuffle_fuses))
     )
 
     regions["Ruined Atoll Statue"].connect(
@@ -950,7 +950,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Fortress Arena"].connect(
         connecting_region=regions["Fortress Arena Portal"],
-        rule=lambda state: has_fuses("Activate Eastern Vault West Fuses", state, world))
+        rule=lambda state: has_ability(prayer, state, world) and has_fuses("Activate Eastern Vault West Fuses", state, world))
     regions["Fortress Arena Portal"].connect(
         connecting_region=regions["Fortress Arena"])
 
@@ -964,7 +964,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Quarry Entry"].connect(
         connecting_region=regions["Quarry Portal"],
-        rule=lambda state: has_fuses("Activate Quarry Fuse", state, world))
+        rule=lambda state: has_ability(prayer, state, world) and has_fuses("Activate Quarry Fuse", state, world))
     regions["Quarry Portal"].connect(
         connecting_region=regions["Quarry Entry"])
 
