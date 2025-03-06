@@ -64,7 +64,6 @@ class PeaksOfWorld(World):
             "Intermediate Book": self.options.enable_intermediate,
             "Advanced Book": self.options.enable_advanced,
             "Expert Book": self.options.enable_expert,
-            "Random": None
         }
 
         book_names: list[str] = list(starting_book_options)
@@ -78,15 +77,10 @@ class PeaksOfWorld(World):
             logging.error("Player " + self.player_name + " has not selected any books!")
             raise OptionError("Player " + self.player_name + " has not selected any books!")
 
-        if self.options.starting_book.value == StartingBook.option_random_book:
+        if start_book not in enabled_books:
+            logging.warning("book " + start_book + "not enabled selecting random book")
             start_book = self.random.choice(enabled_books)
-        else:
-            start_book = book_names[self.options.starting_book.value]
-
-            if start_book not in enabled_books:
-                logging.warning("book " + start_book + "not enabled")
-                start_book = enabled_books[0]
-                logging.warning("selecting " + start_book)
+            logging.warning("selected book: " + start_book)
 
         self.options.starting_book.value = book_names.index(start_book)
         if self.options.starting_book.value == StartingBook.option_expert:

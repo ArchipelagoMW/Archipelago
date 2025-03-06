@@ -23,13 +23,13 @@ class StartingBook(Choice):
     """
     Choose what book to start with. If the book is not enabled, the easiest enabled book will be chosen.
 
-    - **Random Book** will choose a random book from the enabled options."""
+    If the selected book is disabled, a random enabled book will be chosen.
+    """
     display_name = "Starting Book"
     option_fundamentals = 0
     option_intermediate = 1
     option_advanced = 2
     option_expert = 3
-    option_random_book = 4
     default = 0
 
     def get_selected_book(self) -> str:
@@ -39,9 +39,7 @@ class StartingBook(Choice):
             return "Intermediate Book"
         elif self.value == 2:
             return "Advanced Book"
-        elif self.value == 3:
-            return "Expert Book"
-        return "Random Book" # probably will remove random book in a commit in the very near future
+        return "Expert Book"
 
 class StartWithBarometer(DefaultOnToggle):
     """Choose to start with the barometer, to locate items quicker"""
