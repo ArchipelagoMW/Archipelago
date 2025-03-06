@@ -111,50 +111,50 @@ class PeaksOfWorld(World):
 
         remaining_items: int = len(self.multiworld.get_unfilled_locations(self.player))
 
+        local_itempool: list[Item] = []
+
         for name, option in books.items():
-            if (not option) or name == starting_book.name or remaining_items <= 0:
+            if (not option) or name == starting_book.name:
                 continue
-            self.multiworld.itempool.append(self.create_item(name))
-            remaining_items -= 1
+            local_itempool.append(self.create_item(name))
+
 
         for tool in [item for item in full_item_table.values() if item.type == "Tool"]:
-            if remaining_items > 0 and (tool.name != "Barometer" or not self.options.start_with_barometer) \
+            if (tool.name != "Barometer" or not self.options.start_with_barometer) \
                     and (tool.name != "Oil Lamp" or not self.options.start_with_oil_lamp):
                 if tool.name == "Progressive Crampons":
-                    self.multiworld.itempool.append(self.create_item(tool.name))
-                    remaining_items -= 1
+                    local_itempool.append(self.create_item(tool.name))
+
                     if self.options.starting_book.value != StartingBook.option_expert:
-                        self.multiworld.itempool.append(self.create_item(tool.name))
-                        remaining_items -= 1
+                        local_itempool.append(self.create_item(tool.name))
+
                 elif tool.name == "Rope Unlock":
                     if self.options.rope_unlock_mode == RopeUnlockMode.option_early:
                         self.multiworld.early_items[self.player][tool.name] = 1
-                        self.multiworld.itempool.append(self.create_item(tool.name))
-                        remaining_items -= 1
+                        local_itempool.append(self.create_item(tool.name))
+
                     elif self.options.rope_unlock_mode == RopeUnlockMode.option_normal:
-                        self.multiworld.itempool.append(self.create_item(tool.name))
-                        remaining_items -= 1
+                        local_itempool.append(self.create_item(tool.name))
                         # else don't place rope unlock as it will be unlocked with any rope pick-up
                 else:
-                    self.multiworld.itempool.append(self.create_item(tool.name))
-                    remaining_items -= 1
+                    local_itempool.append(self.create_item(tool.name))
+
 
         for rope in [item for item in full_item_table.values() if item.type == "Rope"]:
-            if remaining_items > 0:
-                self.multiworld.itempool.append(self.create_item(rope.name))
-                remaining_items -= 1
+            local_itempool.append(self.create_item(rope.name))
+
 
         for birdSeed in [item for item in full_item_table.values() if item.type == "Bird Seed"]:
-            if remaining_items > 0:
-                self.multiworld.itempool.append(self.create_item(birdSeed.name))
-                remaining_items -= 1
+            local_itempool.append(self.create_item(birdSeed.name))
+
 
         for artefact in [item for item in full_item_table.values() if item.type == "Artefact"]:
-            if remaining_items > 0:
-                self.multiworld.itempool.append(self.create_item(artefact.name))
-                remaining_items -= 1
+            local_itempool.append(self.create_item(artefact.name))
 
-        self.multiworld.itempool += [self.create_filler() for _ in range(remaining_items)]
+        if len(local_itempool) < remaining_items:
+            local_itempool += [self.create_filler() for _ in range(remaining_items - len(local_itempool))]
+
+        self.multiworld.itempool += local_itempool[:remaining_items]
 
     def set_rules(self) -> None:
         if self.options.goal.value == Goal.option_all_artefacts:
