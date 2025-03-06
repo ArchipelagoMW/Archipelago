@@ -1,7 +1,7 @@
 import logging
 from typing import Any
 
-from Options import Toggle
+from Options import Toggle, OptionError
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial, Item, MultiWorld, Region
 from .options import PeaksOfYoreOptions, Goal, StartingBook, RopeUnlockMode, poy_option_groups
@@ -75,8 +75,11 @@ class PeaksOfWorld(World):
         start_book: str = ""
 
         if len(enabled_books) == 0:
+            # enabled_books.append("Fundamentals Book")
+            # self.options.enable_fundamental.value = True
+            # self.options.starting_book.value = StartingBook.option_fundamentals
             logging.error("Player " + self.player_name + " has not selected any books!")
-            raise Exception("Player " + self.player_name + " has not selected any books!")
+            raise OptionError("Player " + self.player_name + " has not selected any books!")
 
         if self.options.starting_book.value == StartingBook.option_random_book:
             start_book = self.random.choice(enabled_books)
