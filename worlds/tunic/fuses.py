@@ -2,14 +2,17 @@ from typing import NamedTuple, Dict, TYPE_CHECKING, List
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import set_rule
+
 from .rules import has_ability, has_sword
 
 if TYPE_CHECKING:
     from . import TunicWorld
 
+
 class TunicLocationData(NamedTuple):
     loc_group: str
     er_region: str
+
 
 laurels = "Hero's Laurels"
 grapple = "Magic Orb"
@@ -90,7 +93,8 @@ fuse_activation_reqs: Dict[str, List[str]] = {
     fortress_exterior_fuse_2: [fortress_exterior_fuse_1],
     beneath_the_vault_fuse: [fortress_exterior_fuse_1, fortress_exterior_fuse_2],
     fortress_candles_fuse: [fortress_exterior_fuse_1, fortress_exterior_fuse_2, beneath_the_vault_fuse],
-    fortress_door_left_fuse: [fortress_exterior_fuse_1, fortress_exterior_fuse_2, beneath_the_vault_fuse, fortress_candles_fuse],
+    fortress_door_left_fuse: [fortress_exterior_fuse_1, fortress_exterior_fuse_2, beneath_the_vault_fuse,
+                              fortress_candles_fuse],
     fortress_courtyard_upper_fuse: [fortress_exterior_fuse_1],
     fortress_courtyard_lower_fuse: [fortress_exterior_fuse_1, fortress_courtyard_upper_fuse],
     fortress_door_right_fuse: [fortress_exterior_fuse_1, fortress_courtyard_upper_fuse, fortress_courtyard_lower_fuse],
@@ -102,8 +106,8 @@ fuse_activation_reqs: Dict[str, List[str]] = {
     "Activate Beneath the Vault Fuse": [fortress_exterior_fuse_1, fortress_exterior_fuse_2, beneath_the_vault_fuse],
     "Activate Eastern Vault West Fuses": [fortress_exterior_fuse_1, fortress_exterior_fuse_2, beneath_the_vault_fuse,
                                           fortress_candles_fuse, fortress_door_left_fuse],
-    "Activate Eastern Vault East Fuse": [fortress_exterior_fuse_1, fortress_courtyard_upper_fuse, fortress_courtyard_lower_fuse,
-                                 fortress_door_right_fuse],
+    "Activate Eastern Vault East Fuse": [fortress_exterior_fuse_1, fortress_courtyard_upper_fuse,
+                                         fortress_courtyard_lower_fuse, fortress_door_right_fuse],
     "Activate Quarry Connector Fuse": [quarry_fuse_1],
     "Activate Quarry Fuse": [quarry_fuse_1, quarry_fuse_2],
     "Activate Ziggurat Fuse": [ziggurat_teleporter_fuse],
@@ -112,7 +116,7 @@ fuse_activation_reqs: Dict[str, List[str]] = {
 }
 
 fuse_location_name_to_id: dict[str, int] = {name: fuse_location_base_id + index
-                                                 for index, name in enumerate(fuse_location_table)}
+                                            for index, name in enumerate(fuse_location_table)}
 
 fuse_location_groups: dict[str, set[str]] = {}
 for location_name, location_data in fuse_location_table.items():
@@ -128,15 +132,23 @@ def has_fuses(fuse_event: str, state: CollectionState, world: "TunicWorld") -> b
     return state.has(fuse_event, player)
 
 
+# to be deduplicated in the big refactor
+def has_ladder(ladder: str, state: CollectionState, world: "TunicWorld") -> bool:
+    return not world.options.shuffle_ladders or state.has(ladder, world.player)
+
+
 def set_fuse_location_rules(world: "TunicWorld") -> None:
     player = world.player
 
     set_rule(world.get_location("Overworld - [Southeast] Activate Fuse"),
-             lambda state: state.has(laurels, player) and has_ability(prayer, state, world))
+             lambda state: state.has(laurels, player)
+             and has_ability(prayer, state, world))
     set_rule(world.get_location("Swamp - [Central] Activate Fuse"),
-             lambda state: state.has_all(fuse_activation_reqs[swamp_fuse_2], player) and has_ability(prayer, state, world))
+             lambda state: state.has_all(fuse_activation_reqs[swamp_fuse_2], player)
+             and has_ability(prayer, state, world))
     set_rule(world.get_location("Swamp - [Outside Cathedral] Activate Fuse"),
-             lambda state: state.has_all(fuse_activation_reqs[swamp_fuse_3], player) and has_ability(prayer, state, world))
+             lambda state: state.has_all(fuse_activation_reqs[swamp_fuse_3], player)
+             and has_ability(prayer, state, world))
     set_rule(world.get_location("Cathedral - Activate Fuse"),
              lambda state: has_ability(prayer, state, world))
     set_rule(world.get_location("West Furnace - Activate Fuse"),
@@ -144,7 +156,8 @@ def set_fuse_location_rules(world: "TunicWorld") -> None:
     set_rule(world.get_location("West Garden - [South Highlands] Activate Fuse"),
              lambda state: has_ability(prayer, state, world))
     set_rule(world.get_location("Ruined Atoll - [Northwest] Activate Fuse"),
-             lambda state: state.has_any([grapple, laurels], player) and has_ability(prayer, state, world))
+             lambda state: state.has_any([grapple, laurels], player)
+             and has_ability(prayer, state, world))
     set_rule(world.get_location("Ruined Atoll - [Northeast] Activate Fuse"),
              lambda state: has_ability(prayer, state, world))
     set_rule(world.get_location("Ruined Atoll - [Southeast] Activate Fuse"),
@@ -152,26 +165,37 @@ def set_fuse_location_rules(world: "TunicWorld") -> None:
     set_rule(world.get_location("Ruined Atoll - [Southwest] Activate Fuse"),
              lambda state: has_ability(prayer, state, world))
     set_rule(world.get_location("Library Lab - Activate Fuse"),
-             lambda state: has_ability(prayer, state, world) and (state.has("Ladders in Library", player) if world.options.shuffle_ladders else True))
+             lambda state: has_ability(prayer, state, world)
+             and has_ladder("Ladders in Library", state, world))
     set_rule(world.get_location("Fortress Courtyard - [From Overworld] Activate Fuse"),
              lambda state: has_ability(prayer, state, world))
     set_rule(world.get_location("Fortress Courtyard - [Near Cave] Activate Fuse"),
-             lambda state: state.has(fortress_exterior_fuse_1, player) and has_ability(prayer, state, world))
+             lambda state: state.has(fortress_exterior_fuse_1, player)
+             and has_ability(prayer, state, world))
     set_rule(world.get_location("Fortress Courtyard - [Upper] Activate Fuse"),
-             lambda state: state.has(fortress_exterior_fuse_1, player) and has_ability(prayer, state, world))
+             lambda state: state.has(fortress_exterior_fuse_1, player)
+             and has_ability(prayer, state, world))
     set_rule(world.get_location("Fortress Courtyard - [Central] Activate Fuse"),
-             lambda state: state.has_all(fuse_activation_reqs[fortress_courtyard_lower_fuse], player) and has_ability(prayer, state, world))
+             lambda state: state.has_all(fuse_activation_reqs[fortress_courtyard_lower_fuse], player)
+             and has_ability(prayer, state, world))
     set_rule(world.get_location("Beneath the Fortress - Activate Fuse"),
-             lambda state: state.has_all(fuse_activation_reqs[beneath_the_vault_fuse], player) and has_ability(prayer, state, world))
+             lambda state: state.has_all(fuse_activation_reqs[beneath_the_vault_fuse], player)
+             and has_ability(prayer, state, world))
     set_rule(world.get_location("Eastern Vault Fortress - [Candle Room] Activate Fuse"),
-             lambda state: state.has_all(fuse_activation_reqs[fortress_candles_fuse], player) and has_ability(prayer, state, world))
+             lambda state: state.has_all(fuse_activation_reqs[fortress_candles_fuse], player)
+             and has_ability(prayer, state, world))
     set_rule(world.get_location("Eastern Vault Fortress - [Left of Door] Activate Fuse"),
-             lambda state: state.has_all(fuse_activation_reqs[fortress_door_left_fuse], player) and has_ability(prayer, state, world))
+             lambda state: state.has_all(fuse_activation_reqs[fortress_door_left_fuse], player)
+             and has_ability(prayer, state, world))
     set_rule(world.get_location("Eastern Vault Fortress - [Right of Door] Activate Fuse"),
-             lambda state: state.has_all(fuse_activation_reqs[fortress_door_right_fuse], player) and has_ability(prayer, state, world))
+             lambda state: state.has_all(fuse_activation_reqs[fortress_door_right_fuse], player)
+             and has_ability(prayer, state, world))
     set_rule(world.get_location("Quarry Entryway - Activate Fuse"),
-             lambda state: state.has(grapple, player) and has_ability(prayer, state, world))
+             lambda state: state.has(grapple, player)
+             and has_ability(prayer, state, world))
     set_rule(world.get_location("Quarry - Activate Fuse"),
-             lambda state: state.has_all(fuse_activation_reqs[quarry_fuse_2], player) and has_ability(prayer, state, world))
+             lambda state: state.has_all(fuse_activation_reqs[quarry_fuse_2], player)
+             and has_ability(prayer, state, world))
     set_rule(world.get_location("Rooted Ziggurat Lower - [Miniboss] Activate Fuse"),
-             lambda state: has_sword(state, player) and has_ability(prayer, state, world))
+             lambda state: has_sword(state, player)
+             and has_ability(prayer, state, world))

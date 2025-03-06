@@ -58,6 +58,7 @@ atoll_southeast_fuse = "Atoll Southeast Fuse"
 atoll_southwest_fuse = "Atoll Southwest Fuse"
 library_lab_fuse = "Library Lab Fuse"
 
+
 def has_ladder(ladder: str, state: CollectionState, world: "TunicWorld") -> bool:
     return not world.options.shuffle_ladders or state.has(ladder, world.player)
 
