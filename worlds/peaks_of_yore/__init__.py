@@ -83,10 +83,10 @@ class PeaksOfWorld(World):
         else:
             start_book = book_names[self.options.starting_book.value]
 
-        if start_book not in enabled_books:
-            logging.warning("book " + start_book + "not enabled")
-            start_book = enabled_books[0]
-            logging.warning("selecting " + start_book)
+            if start_book not in enabled_books:
+                logging.warning("book " + start_book + "not enabled")
+                start_book = enabled_books[0]
+                logging.warning("selecting " + start_book)
 
         self.options.starting_book.value = book_names.index(start_book)
         if self.options.starting_book.value == StartingBook.option_expert:
