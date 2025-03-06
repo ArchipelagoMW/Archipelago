@@ -43,8 +43,6 @@ class PeaksOfWorld(World):
     topology_present = True
     artefacts_peaks_in_pool: RegionLocationInfo
 
-    def __init__(self, multiworld: MultiWorld, player: int):
-        super().__init__(multiworld, player)
 
     def create_item(self, name: str) -> Item:
         item_entry = full_item_table[name]
