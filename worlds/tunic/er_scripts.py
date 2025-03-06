@@ -111,9 +111,13 @@ def place_event_items(world: "TunicWorld", regions: Dict[str, Region]) -> None:
             location.place_locked_item(
                 TunicERItem("Unseal the Heir", ItemClassification.progression, None, world.player))
         elif event_name.endswith("Bell"):
+            if world.options.shuffle_bells:
+                continue
             location.place_locked_item(
                 TunicERItem("Ring " + event_name, ItemClassification.progression, None, world.player))
-        else:
+        elif event_name.endswith("Fuse") or event_name.endswith("Fuses"):
+            if world.options.shuffle_fuses:
+                continue
             location.place_locked_item(
                 TunicERItem("Activate " + event_name, ItemClassification.progression, None, world.player))
         region.locations.append(location)
@@ -194,6 +198,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     entrance_layout = world.options.entrance_layout
     laurels_location = world.options.laurels_location
     decoupled = world.options.decoupled
+    shuffle_fuses = world.options.shuffle_fuses.value
     traversal_reqs = deepcopy(traversal_requirements)
     has_laurels = True
     waterfall_plando = False
@@ -293,7 +298,8 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     # make better start region stuff when/if implementing random start
     start_region = "Overworld"
     connected_regions.add(start_region)
-    connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_tricks)
+    connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_tricks,
+                                                 shuffle_fuses)
 
     if world.options.entrance_rando.value in EntranceRando.options.values():
         plando_connections = world.options.plando_connections.value
@@ -515,7 +521,8 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                 two_plus_direction_tracker[portal2.direction] -= 1
 
         # if we have plando connections, our connected regions may change somewhat
-        connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_tricks)
+        connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_tricks,
+                                                     shuffle_fuses)
 
     # if there are an odd number of shops after plando, add another one, except in decoupled where it doesn't matter
     if not decoupled and len(world.used_shop_numbers) % 2 == 1:
@@ -631,7 +638,8 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                     if waterfall_plando:
                         cr = connected_regions.copy()
                         cr.add(portal.region)
-                        if "Secret Gathering Place" not in update_reachable_regions(cr, traversal_reqs, has_laurels, logic_tricks):
+                        if "Secret Gathering Place" not in update_reachable_regions(cr, traversal_reqs, has_laurels,
+                                                                                    logic_tricks, shuffle_fuses):
                             continue
                     # if not waterfall_plando, then we just want to pair secret gathering place now
                     elif portal.region != "Secret Gathering Place":
@@ -680,7 +688,8 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         # once we have both portals, connect them and add the new region(s) to connected_regions
         if not has_laurels and "Secret Gathering Place" in connected_regions:
             has_laurels = True
-        connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_tricks)
+        connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_tricks,
+                                                     shuffle_fuses)
         portal_pairs[portal1] = portal2
         two_plus_direction_tracker[portal1.direction] -= 1
         two_plus_direction_tracker[portal2.direction] -= 1
@@ -755,7 +764,7 @@ def create_randomized_entrances(world: "TunicWorld", portal_pairs: Dict[Portal, 
 
 
 def update_reachable_regions(connected_regions: Set[str], traversal_reqs: Dict[str, Dict[str, List[List[str]]]],
-                             has_laurels: bool, logic: Tuple[bool, int, int]) -> Set[str]:
+                             has_laurels: bool, logic: Tuple[bool, int, int], shuffle_fuses: bool) -> Set[str]:
     zips, ice_grapples, ls = logic
     # starting count, so we can run it again if this changes
     region_count = len(connected_regions)
@@ -787,6 +796,9 @@ def update_reachable_regions(connected_regions: Set[str], traversal_reqs: Dict[s
                             break
                     elif req not in connected_regions:
                         break
+                    elif req == "Fuse Shuffle":
+                        if not shuffle_fuses:
+                            break
                 else:
                     met_traversal_reqs = True
                     break
@@ -795,7 +807,8 @@ def update_reachable_regions(connected_regions: Set[str], traversal_reqs: Dict[s
 
     # if the length of connected_regions changed, we got new regions, so we want to check those new origins
     if region_count != len(connected_regions):
-        connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic)
+        connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic,
+                                                     shuffle_fuses)
 
     return connected_regions
 

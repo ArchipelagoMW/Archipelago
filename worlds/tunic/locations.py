@@ -1,6 +1,9 @@
 from typing import Dict, NamedTuple, Set, Optional, List
+
 from .grass import grass_location_table
 from .breakables import breakable_location_table
+from .fuses import fuse_location_table
+from .bells import bell_location_table
 
 
 class TunicLocationData(NamedTuple):
@@ -243,7 +246,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Rooted Ziggurat Lower - Near Corpses": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Entry"),
     "Rooted Ziggurat Lower - Spider Ambush": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Entry"),
     "Rooted Ziggurat Lower - Left Of Checkpoint Before Fuse": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Mid Checkpoint"),
-    "Rooted Ziggurat Lower - After Guarded Fuse": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Mid Checkpoint"),
+    "Rooted Ziggurat Lower - After Guarded Fuse": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Miniboss Platform"),
     "Rooted Ziggurat Lower - Guarded By Double Turrets": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Front"),
     "Rooted Ziggurat Lower - After 2nd Double Turret Chest": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Mid Checkpoint"),
     "Rooted Ziggurat Lower - Guarded By Double Turrets 2": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Front"),
@@ -292,7 +295,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Hero's Grave - Feathers Relic": TunicLocationData("Swamp", "Hero Relic - Swamp"),
     "West Furnace - Chest": TunicLocationData("West Garden", "Furnace Walking Path"),
     "Overworld - [West] Near West Garden Entrance": TunicLocationData("West Garden", "Overworld to West Garden from Furnace"),
-    "West Garden - [Central Highlands] Holy Cross (Blue Lines)": TunicLocationData("West Garden", "West Garden South Checkpoint", location_group="Holy Cross"),
+    "West Garden - [Central Highlands] Holy Cross (Blue Lines)": TunicLocationData("West Garden", "West Garden before Boss", location_group="Holy Cross"),
     "West Garden - [West Lowlands] Tree Holy Cross Chest": TunicLocationData("West Garden", "West Garden after Terry", location_group="Holy Cross"),
     "West Garden - [Southeast Lowlands] Outside Cave": TunicLocationData("West Garden", "West Garden at Dagger House"),
     "West Garden - [Central Lowlands] Chest Beneath Faeries": TunicLocationData("West Garden", "West Garden South Checkpoint"),
@@ -344,6 +347,8 @@ standard_location_name_to_id: Dict[str, int] = {name: location_base_id + index f
 all_locations = location_table.copy()
 all_locations.update(grass_location_table)
 all_locations.update(breakable_location_table)
+all_locations.update(fuse_location_table)
+all_locations.update(bell_location_table)
 
 location_name_groups: Dict[str, Set[str]] = {}
 for loc_name, loc_data in location_table.items():
