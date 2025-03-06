@@ -157,7 +157,7 @@ class PeaksOfWorld(World):
                 self.multiworld.itempool.append(self.create_item(artefact.name))
                 remaining_items -= 1
 
-        self.multiworld.itempool += [self.create_item(self.get_filler_item_name()) for _ in range(remaining_items)]
+        self.multiworld.itempool += [self.create_filler() for _ in range(remaining_items)]
 
     def set_rules(self) -> None:
         if self.options.goal.value == Goal.option_all_artefacts:
