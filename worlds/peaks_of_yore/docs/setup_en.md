@@ -45,7 +45,6 @@ After clicking on **Mods** to open the in-game mod manager, you should see all t
 and go to the Peaks Of Archipelago config, this is where you connect to
 the server, enter your slot name (the name entered when preparing your yaml file), the hostname and port so for
 example: `archipelago.gg:60324` becomes `hostname=archipelago.gg` and `port=60324`, add a password if necessary.
-![](imgs/settings.png)
 
 The auto connect option will connect automatically when the game is restarted later but may fail if the port has
 changed, which might happen if the server has been offline for a while.
