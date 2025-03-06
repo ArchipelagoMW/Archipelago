@@ -107,7 +107,7 @@ class PeaksOfWorld(World):
             "Expert Book": self.options.enable_expert
         }
 
-        starting_book: Item = self.create_item([*books][self.options.starting_book.value])
+        starting_book: Item = self.create_item(self.options.starting_book.get_selected_book())
 
         remaining_items: int = len(self.multiworld.get_unfilled_locations(self.player))
 
