@@ -151,6 +151,9 @@ class MessengerWorld(World):
     reachable_locs: bool = False
     filler: dict[str, int]
 
+    def interpret_slot_data(self, slot_data: dict[str, Any]) -> int | None:
+        return slot_data
+
     def generate_early(self) -> None:
         if self.options.goal == Goal.option_power_seal_hunt:
             self.total_seals = self.options.total_seals.value
@@ -187,6 +190,10 @@ class MessengerWorld(World):
         self.portal_mapping = []
         self.spoiler_portal_mapping = {}
         self.transitions = []
+
+        slot_data = getattr(self.multiworld, "re_gen_passthrough", {}).get(self.game)
+        if slot_data:
+            self.starting_portals = slot_data["starting_portals"]
 
     def create_regions(self) -> None:
         # MessengerRegion adds itself to the multiworld
@@ -296,6 +303,10 @@ class MessengerWorld(World):
 
         if self.options.shuffle_transitions:
             shuffle_transitions(self)
+
+        slot_data = getattr(self.multiworld, "re_gen_passthrough", {}).get(self.game)
+        if slot_data:
+            self.portal_mapping = slot_data["portal_exits"]
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         if self.options.available_portals < 6:
@@ -463,7 +474,7 @@ class MessengerWorld(World):
             "loc_data": {loc.address: {loc.item.name: [loc.item.code, loc.item.flags]}
                          for loc in multiworld.get_filled_locations() if loc.address},
         }
-    
+
         output = orjson.dumps(data, option=orjson.OPT_NON_STR_KEYS)
         with open(out_path, "wb") as f:
             f.write(output)
