@@ -43,8 +43,8 @@ After clicking on **Mods** to open the in-game mod manager, you should see all t
 the server, enter your slot name (the name entered when preparing your yaml file), the hostname and port so for
 example: `archipelago.gg:60324` becomes `hostname=archipelago.gg` and `port=60324`, add a password if necessary.
 
-The auto connect option will connect automatically when the game is restarted later, but if the port has changed,
-which might happen if the server has been offline for a while, auto connect will fail.
+The auto connect option will connect automatically when the game is restarted later but may fail if the port has
+changed, which might happen if the server has been offline for a while.
 
 Once everything is entered click the Connect button to connect to the server, and if everything is correct
 you should be connected!
