@@ -29,7 +29,6 @@ blue_hexagon = "Blue Questagon"
 gold_hexagon = "Gold Questagon"
 
 # "Quarry - [East] Bombable Wall" is excluded from this list since it has slightly different rules
-# Cube Cave's is also excluded since it's also special since it's an entrance, not a chest
 bomb_walls = ["East Forest - Bombable Wall", "Eastern Vault Fortress - [East Wing] Bombable Wall",
               "Overworld - [Central] Bombable Wall", "Overworld - [Southwest] Bombable Wall Near Fountain",
               "Quarry - [West] Upper Area Bombable Wall", "Ruined Atoll - [Northwest] Bombable Wall"]
@@ -136,6 +135,11 @@ def set_region_rules(world: "TunicWorld") -> None:
         and (state.has_any({grapple, laurels, gun}, player) or can_ladder_storage(state, world))
     world.get_entrance("Quarry Back -> Quarry").access_rule = \
         lambda state: has_sword(state, player) or state.has(fire_wand, player)
+    world.get_entrance("Quarry Back -> Monastery").access_rule = \
+        lambda state: state.has(laurels, player)
+    world.get_entrance("Monastery -> Monastery Back").access_rule = \
+        lambda state: (has_sword(state, player) or state.has(fire_wand, player)
+                       or laurels_zip(state, world))
     world.get_entrance("Quarry -> Lower Quarry").access_rule = \
         lambda state: has_mask(state, world)
     world.get_entrance("Lower Quarry -> Rooted Ziggurat").access_rule = \

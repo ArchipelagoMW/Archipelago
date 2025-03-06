@@ -856,21 +856,16 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Fortress Courtyard Upper"].connect(
         connecting_region=regions["Fortress Exterior from Overworld"])
 
-    regions["Beneath the Vault Ladder Exit"].connect(
-        connecting_region=regions["Beneath the Vault Entry Spot"],
-        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world))
-    regions["Beneath the Vault Entry Spot"].connect(
-        connecting_region=regions["Beneath the Vault Ladder Exit"],
-        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world))
-
-    btv_front_to_main = regions["Beneath the Vault Entry Spot"].connect(
+    btv_front_to_main = regions["Beneath the Vault Ladder Exit"].connect(
         connecting_region=regions["Beneath the Vault Main"],
-        rule=lambda state: has_lantern(state, world)
+        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world)
+        and has_lantern(state, world)
         # there's some boxes in the way
         and (has_melee(state, player) or state.has_any((gun, grapple, fire_wand, laurels), player)))
     # on the reverse trip, you can lure an enemy over to break the boxes if needed
     regions["Beneath the Vault Main"].connect(
-        connecting_region=regions["Beneath the Vault Entry Spot"])
+        connecting_region=regions["Beneath the Vault Ladder Exit"],
+        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world))
 
     regions["Beneath the Vault Main"].connect(
         connecting_region=regions["Beneath the Vault Back"])
@@ -996,7 +991,9 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_hard, state, world))
 
     monastery_front_to_back = regions["Monastery Front"].connect(
-        connecting_region=regions["Monastery Back"])
+        connecting_region=regions["Monastery Back"],
+        rule=lambda state: has_sword(state, player) or state.has(fire_wand, player)
+        or laurels_zip(state, world))
     # laurels through the gate, no setup needed
     regions["Monastery Back"].connect(
         connecting_region=regions["Monastery Front"],
@@ -1217,6 +1214,14 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                              and has_sword(state, player))))
 
     if options.ladder_storage:
+        def get_portal_info(portal_sd: str) -> Tuple[str, str]:
+            for portal1, portal2 in portal_pairs.items():
+                if portal1.scene_destination() == portal_sd:
+                    return portal1.name, get_portal_outlet_region(portal2, world)
+                if portal2.scene_destination() == portal_sd:
+                    return portal2.name, get_portal_outlet_region(portal1, world)
+            raise Exception("no matches found in get_paired_region")
+
         # connect ls elevation regions to their destinations
         def ls_connect(origin_name: str, portal_sdt: str) -> None:
             p_name, paired_region_name = get_portal_info(portal_sdt)
