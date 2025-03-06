@@ -430,7 +430,7 @@ Soul of Fright;                     ;                                           
 Inferna Cutter;                     Calamity;                                   Hardmode Anvil & Axe of Purity & Soul of Fright & Essence of Havoc;
 Flamethrower;                       ;                                           (Hardmode Anvil & Illegal Gun Parts & Soul of Fright) | (@getfixedboi & @calamity & #Skeletron);
 Buckets of Bolts;                   Achievement;                                #The Twins & #The Destroyer & #Skeletron Prime;
-Mecha Mayhem;                       Achievement;                                #The Twins & #The Destroyer & #Skeletron Prime;
+Mecha Mayhem;                       Achievement | Not Getfixedboi;              #The Twins & #The Destroyer & #Skeletron Prime;
 Hallowed Ore;                       Calamity;                                   (@mech_boss(3) & @pickaxe(180)) | Chlorophyte Ore | Hallowed Bar;
 Hallowed Bar;                       ;                                           ((#The Twins | #The Destroyer | #Skeletron Prime) & (~@calamity | @mech_boss(3))) | (@calamity & Hardmode Forge & Hallowed Ore) | Light Disc;
 Hallowed Armor;                     Armor Minions(3);                           Hardmode Anvil & Hallowed Bar;
