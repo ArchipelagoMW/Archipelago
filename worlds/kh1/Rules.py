@@ -1143,6 +1143,37 @@ def set_rules(kh1world):
         lambda state: state.has("Green Trinity", player))
     add_rule(kh1world.get_location("Agrabah Cave of Wonders Treasure Room Red Trinity"),
         lambda state: state.has("Red Trinity", player))
+    add_rule(kh1world.get_location("Wonderland Bizarre Room Examine Flower Pot"),
+        lambda state: state.has("Footprints", player))
+    add_rule(kh1world.get_location("Wonderland Lotus Forest Yellow Elixir Flower Through Painting"),
+        lambda state: state.has("Footprints", player))
+    add_rule(kh1world.get_location("Wonderland Tea Party Garden Left Cushioned Chair"),
+        lambda state: (
+            state.has("Footprints", player)
+            or state.has("Progressive Glide", player)
+        ))
+    add_rule(kh1world.get_location("Wonderland Tea Party Garden Left Pink Chair"),
+        lambda state: (
+            state.has("Footprints", player)
+            or state.has("Progressive Glide", player)
+        ))
+    add_rule(kh1world.get_location("Wonderland Tea Party Garden Right Yellow Chair"),
+        lambda state: (
+            state.has("Footprints", player)
+            or state.has("Progressive Glide", player)
+        ))
+    add_rule(kh1world.get_location("Wonderland Tea Party Garden Left Gray Chair"),
+        lambda state: (
+            state.has("Footprints", player)
+            or state.has("Progressive Glide", player)
+        ))
+    add_rule(kh1world.get_location("Wonderland Tea Party Garden Right Brown Chair"),
+        lambda state: (
+            state.has("Footprints", player)
+            or state.has("Progressive Glide", player)
+        ))
+    add_rule(kh1world.get_location("Hollow Bastion Lift Stop from Waterway Examine Node"),
+        lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
     if options.hundred_acre_wood:
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Left Cliff Chest"),
             lambda state: (
@@ -2086,6 +2117,8 @@ def set_rules(kh1world):
             lambda state: state.has("Oblivion", player))
         add_rule(kh1world.get_location("End of the World World Terminus 100 Acre Wood Chest"),
             lambda state: state.has("Oblivion", player))
+        add_rule(kh1world.get_location("End of the World World Terminus Hollow Bastion Chest"),
+            lambda state: state.has("Oblivion", player))
         add_rule(kh1world.get_location("End of the World Final Rest Chest"),
             lambda state: state.has("Oblivion", player))
         add_rule(kh1world.get_location("Monstro Chamber 6 White Trinity Chest"),
@@ -2114,6 +2147,13 @@ def set_rules(kh1world):
         if options.destiny_islands:
             add_rule(kh1world.get_location("Destiny Islands Chest"),
                 lambda state: state.has("Oathkeeper", player))
+        for i in range(1,13):
+            add_rule(kh1world.get_location("Neverland Clock Tower " + str(i).rjust(2, "0") + ":00 Door"),
+                lambda state: (
+                    state.has("Green Trinity", player)
+                    and has_all_magic_lvx(state, player, 2)
+                    and has_defensive_tools(state, player)
+                ))
     
     
     for location in location_table.keys():
