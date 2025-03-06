@@ -990,7 +990,9 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_hard, state, world))
 
     monastery_front_to_back = regions["Monastery Front"].connect(
-        connecting_region=regions["Monastery Back"])
+        connecting_region=regions["Monastery Back"],
+        rule=lambda state: has_sword(state, player) or state.has(fire_wand, player)
+        or laurels_zip(state, world))
     # laurels through the gate, no setup needed
     regions["Monastery Back"].connect(
         connecting_region=regions["Monastery Front"],
@@ -1695,7 +1697,8 @@ def set_er_location_rules(world: "TunicWorld") -> None:
 
     # Beneath the Vault
     set_rule(world.get_location("Beneath the Fortress - Bridge"),
-             lambda state: has_melee(state, player) or state.has_any((laurels, fire_wand, ice_dagger, gun), player))
+             lambda state: has_lantern(state, world) and
+                           (has_melee(state, player) or state.has_any((laurels, fire_wand, ice_dagger, gun), player)))
 
     # Quarry
     set_rule(world.get_location("Quarry - [Central] Above Ladder Dash Chest"),
@@ -1874,11 +1877,6 @@ def set_er_location_rules(world: "TunicWorld") -> None:
         combat_logic_to_loc("West Garden - [West Highlands] Upper Left Walkway", "West Garden")
         combat_logic_to_loc("West Garden - [Central Highlands] Holy Cross (Blue Lines)", "West Garden")
         combat_logic_to_loc("West Garden - [Central Highlands] Behind Guard Captain", "West Garden")
-
-        # with combat logic on, I presume the player will want to be able to see to avoid the spiders
-        set_rule(world.get_location("Beneath the Fortress - Bridge"),
-                 lambda state: has_lantern(state, world)
-                 and (state.has_any({laurels, fire_wand, "Gun"}, player) or has_melee(state, player)))
 
         combat_logic_to_loc("Eastern Vault Fortress - [West Wing] Candles Holy Cross", "Eastern Vault Fortress",
                             dagger=True)
