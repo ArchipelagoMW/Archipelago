@@ -570,7 +570,10 @@ class TallonOverworldAreaData(AreaData):
                     1: DoorData(
                         RoomName.Great_Tree_Hall,
                         defaultLock=DoorLockType.Ice,
-                        rule_func=self.logic.can_boost,
+                        rule_func=lambda world, state: self.logic.can_boost(
+                            world, state
+                        )
+                        and self.logic.can_space_jump(world, state),
                         sub_region_door_index=0,
                         sub_region_access_override=lambda world, state: True,
                     ),
