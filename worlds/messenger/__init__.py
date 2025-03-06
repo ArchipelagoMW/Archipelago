@@ -1,8 +1,8 @@
 import logging
 from typing import Any, ClassVar, TextIO
 
-from BaseClasses import CollectionState, Entrance, EntranceType, Item, ItemClassification, MultiWorld, Tutorial
-from Options import Accessibility
+from BaseClasses import CollectionState, Entrance, EntranceType, Item, ItemClassification, MultiWorld, Tutorial, PlandoOptions
+from Options import Accessibility, PlandoConnection
 from Utils import output_path
 from settings import FilePath, Group
 from worlds.AutoWorld import WebWorld, World
@@ -12,7 +12,7 @@ from .connections import CONNECTIONS, RANDOMIZED_CONNECTIONS, TRANSITIONS
 from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS, PROG_ITEMS, TRAPS, \
     USEFUL_ITEMS
 from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded, option_groups, ShuffleTransitions
-from .portals import PORTALS, add_closed_portal_reqs, disconnect_portals, shuffle_portals, validate_portals
+from .portals import PORTALS, add_closed_portal_reqs, disconnect_portals, shuffle_portals, validate_portals, find_spot
 from .regions import LEVELS, MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS
 from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
 from .shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS, shuffle_shop_prices
@@ -286,6 +286,19 @@ class MessengerWorld(World):
     def connect_entrances(self) -> None:
         if self.options.shuffle_transitions:
             disconnect_entrances(self)
+
+        slot_data = getattr(self.multiworld, "re_gen_passthrough", {}).get(self.game)
+        if slot_data:
+            self.multiworld.plando_options |= PlandoOptions.connections
+            self.options.portal_plando.value = [
+                PlandoConnection("Autumn Hills", find_spot(slot_data["portal_exits"][0]), "both"),
+                PlandoConnection("Riviere Turquoise", find_spot(slot_data["portal_exits"][1]), "both"),
+                PlandoConnection("Howling Grotto", find_spot(slot_data["portal_exits"][2]), "both"),
+                PlandoConnection("Sunken Shrine", find_spot(slot_data["portal_exits"][3]), "both"),
+                PlandoConnection("Searing Crags", find_spot(slot_data["portal_exits"][4]), "both"),
+                PlandoConnection("Glacial Peak", find_spot(slot_data["portal_exits"][5]), "both"),
+            ]
+
         add_closed_portal_reqs(self)
         # i need portal shuffle to happen after rules exist so i can validate it
         attempts = 20
@@ -303,10 +316,6 @@ class MessengerWorld(World):
 
         if self.options.shuffle_transitions:
             shuffle_transitions(self)
-
-        slot_data = getattr(self.multiworld, "re_gen_passthrough", {}).get(self.game)
-        if slot_data:
-            self.portal_mapping = slot_data["portal_exits"]
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         if self.options.available_portals < 6:
