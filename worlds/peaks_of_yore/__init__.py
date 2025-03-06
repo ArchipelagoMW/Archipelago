@@ -3,10 +3,10 @@ from typing import Any
 
 from Options import Toggle, OptionError
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Tutorial, Item, MultiWorld
+from BaseClasses import Tutorial, Item
 from .options import PeaksOfYoreOptions, Goal, StartingBook, RopeUnlockMode, poy_option_groups
-from .data import PeaksOfYoreRegion, full_item_table, full_location_table
-from .locations import get_locations, get_location_names_by_type, PeaksOfYoreLocation
+from .data import full_item_table, full_location_table
+from .locations import get_locations
 from .regions import create_poy_regions, RegionLocationInfo
 
 
