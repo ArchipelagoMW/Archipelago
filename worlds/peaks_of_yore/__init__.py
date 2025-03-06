@@ -71,7 +71,7 @@ class PeaksOfWorld(World):
         enabled_books: list[str] = [b for b, v in starting_book_options.items() if v]
         start_book: str = ""
 
-        if len(enabled_books) == 0:
+        if not enabled_books:
             # enabled_books.append("Fundamentals Book")
             # self.options.enable_fundamental.value = True
             # self.options.starting_book.value = StartingBook.option_fundamentals
