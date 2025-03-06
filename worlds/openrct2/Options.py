@@ -633,8 +633,27 @@ class ShopMinimumNausea(Range):
     range_end = 4
     default = 0
 
+class ShopMinimumLength(Range):
+    """If the shop determines you need a ride with a minimum length, this value in meters will be the lowest it 
+    can ask for. If this value is higher than the maximum, the generator will assume it is a mistake and set it to 0.
+    """
+    display_name = "Minimum Shop Length Requirement"
+    range_start = 0
+    range_end = 2500
+    default = 610
+
+class ShopMinimumTotalCustomers(Range):
+    """If the shop determines you need a ride with a minimum total number of customers, this value will be the 
+    lowest it can ask for. If this value is higher than the maximum, the generator will assume it is a mistake and 
+    set it to 0.
+    """
+    display_name = "Minimum Shop Customers Requirement"
+    range_start = 0
+    range_end = 2000
+    default = 0
+
 class ShopMaximumExcitement(Range):
-    """If the shop determines you need a ride with a maximum excitement, this value will be the highest it can ask for.
+    """If the shop determines you need a ride with a minimum excitement, this value will be the highest it can ask for.
     """
     display_name = "Maximum Shop Excitement Requirement"
     range_start = 0
@@ -642,7 +661,7 @@ class ShopMaximumExcitement(Range):
     default = 5
 
 class ShopMaximumIntensity(Range):
-    """If the shop determines you need a ride with a maximum intensity, this value will be the highest it can ask for.
+    """If the shop determines you need a ride with a minimum intensity, this value will be the highest it can ask for.
     """
     display_name = "Maximum Shop Intensity Requirement"
     range_start = 0
@@ -650,13 +669,29 @@ class ShopMaximumIntensity(Range):
     default = 5
 
 class ShopMaximumNausea(Range):
-    """If the shop determines you need a ride with a maximum nausea, this value will be the highest it can ask for.
+    """If the shop determines you need a ride with a minimum nausea, this value will be the highest it can ask for.
     """
     display_name = "Maximum Shop Nausea Requirement"
     range_start = 0
     range_end = 4
     default = 4
 
+class ShopMaximumLength(Range):
+    """If the shop determines you need a ride with a miniimum length, this value will be the highest it can ask for.
+    """
+    display_name = "Maximum Shop Length Requirement"
+    range_start = 0
+    range_end = 2500
+    default = 1250
+
+class ShopMaximumTotalCustomers(Range):
+    """If the shop determines you need a ride with a minimum total number of customers, this value will be the 
+    highest it can ask for.
+    """
+    display_name = "Maximum Shop Total Customers Requirement"
+    range_start = 0
+    range_end = 2000
+    default = 800
 
 class RequiredUniqueRides(Range):
     """Requires specific rides to be built before scenario completion is awarded. These will tend to appear in the later half of the game.
@@ -775,6 +810,10 @@ openrct2_option_groups = [
         ShopMaximumIntensity,
         ShopMinimumNausea,
         ShopMaximumNausea,
+        ShopMinimumLength,
+        ShopMaximumLength,
+        ShopMinimumTotalCustomers,
+        ShopMaximumTotalCustomers,
         SelectedVisibility
     ]),
     OptionGroup("Item & Trap Options", [
@@ -802,6 +841,10 @@ class openRCT2Options(PerGameCommonOptions):
     shop_maximum_intensity: ShopMaximumIntensity
     shop_minimum_nausea: ShopMinimumNausea
     shop_maximum_nausea: ShopMaximumNausea
+    shop_minimum_length: ShopMinimumLength
+    shop_maximum_length: ShopMaximumLength
+    shop_minimum_total_customers: ShopMinimumTotalCustomers
+    shop_maximum_total_customers: ShopMaximumTotalCustomers
     ignore_ride_stat_changes: IgnoreRideStatChanges
     scenario_length: SelectedScenarioLength
     scenario: SelectedScenario
