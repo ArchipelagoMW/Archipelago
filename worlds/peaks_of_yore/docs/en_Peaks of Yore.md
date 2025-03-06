@@ -14,7 +14,7 @@ Peaks and on-peak artefacts (ropes, trash, bird seeds etc.) have all been turned
 There are multiple options to select from:
 - All Peaks: You must summit (& stamp) every peak from the selected books to win.
 - All Artefacts: You must collect all artefacts on peaks in the selected books (does not include ropes or bird seeds,
-only items you should normally clean).
+  only items you should normally clean).
 - All Peaks All Artefacts: Both of the above.
 - All: Every check, peaks, ropes, bird seeds, artefacts.
 
