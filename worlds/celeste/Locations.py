@@ -28,6 +28,7 @@ location_id_offsets: Dict[LocationType, int] = {
     LocationType.crystal_heart:     celeste_base_id + 0x300,
     LocationType.checkpoint:        celeste_base_id + 0x400,
     LocationType.level_clear:       celeste_base_id + 0x500,
+    LocationType.key:               celeste_base_id + 0x600,
     LocationType.room_enter:        celeste_base_id + 0x800,
 }
 
@@ -42,6 +43,7 @@ def generate_location_table(level_data: Dict[str, Level]):
         LocationType.crystal_heart:     0,
         LocationType.checkpoint:        0,
         LocationType.level_clear:       0,
+        LocationType.key:               0,
         LocationType.room_enter:        0,
     }
 

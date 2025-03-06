@@ -52,6 +52,16 @@ class CelesteWorld(World):
     active_items: Set[str]
 
 
+    @classmethod
+    def stage_assert_generate(cls, _multiworld: MultiWorld) -> None:
+        with open("./worlds/celeste/data/IDs.txt", "w") as f:
+            print("Items:", file=f)
+            for name, id in CelesteWorld.item_name_to_id.items():
+                print(f"{{ 0x{id:X}, \"{name}\" }},", file=f)
+            print("\nLocations:", file=f)
+            for name, id in CelesteWorld.location_name_to_id.items():
+                print(f"{{ 0x{id:X}, \"{name}\" }},", file=f)
+
     def generate_early(self) -> None:
         if not self.player_name.isascii():
             raise RuntimeError(f"Invalid player_name {self.player_name} for game {self.game}. Name must be ascii.")
@@ -122,9 +132,9 @@ class CelesteWorld(World):
         from .Rules import set_rules
         set_rules(self)
 
-    def generate_output(self, output_directory: str):
-        visualize_regions(self.multiworld.get_region("Menu", self.player), f"Player{self.player}.puml", show_entrance_names=False,
-                      regions_to_highlight=self.multiworld.get_all_state(self.player).reachable_regions[self.player])
+    #def generate_output(self, output_directory: str):
+    #    visualize_regions(self.multiworld.get_region("Menu", self.player), f"Player{self.player}.puml", show_entrance_names=False,
+    #                  regions_to_highlight=self.multiworld.get_all_state(self.player).reachable_regions[self.player])
 
     # TODO: More Options
     def fill_slot_data(self):

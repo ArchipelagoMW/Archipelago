@@ -13,13 +13,15 @@ class LocationType(IntEnum):
     crystal_heart = 3
     checkpoint = 4
     level_clear = 5
-    room_enter = 6
+    key = 6
+    room_enter = 7
 
 class DoorDirection(IntEnum):
     up = 0
     right = 1
     down = 2
     left = 3
+    special = 4
 
 
 class Door:
