@@ -68,7 +68,7 @@ class PeaksOfWorld(World):
         }
 
         book_names: list[str] = list(starting_book_options)
-        enabled_books: list[str] = [b for b, v in starting_book_options.items() if b != "Random" and v.value]
+        enabled_books: list[str] = [b for b, v in starting_book_options.items() if v]
         start_book: str = ""
 
         if len(enabled_books) == 0:
