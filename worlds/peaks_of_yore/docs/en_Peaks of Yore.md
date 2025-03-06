@@ -19,7 +19,7 @@ There are multiple options to select from:
 - All: Every check, peaks, ropes, bird seeds, artefacts.
 
 ## Which items can be in another player's world?
-As described above, books (except the starting one), ropes, tools, in-cabin artefacts. if there are more checks
+As described above, books (except the starting one), ropes, tools, in-cabin artefacts. If there are more checks
 than items, filler items are added: extra ropes, chalk uses, coffee uses & bird seed uses.
 
 ## When the player receives an item, what happens?
