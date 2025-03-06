@@ -1,7 +1,7 @@
 import unittest
 import random
 from ..Options import (EnableTactics, FairyChessArmy, FairyChessPieces, FairyChessPawns,
-                      Difficulty, FairyChessPiecesConfigure, Goal, PieceLocations)
+                      Difficulty, FairyChessPiecesConfigure, Goal, PieceLocations, AsymmetricTrades)
 
 class CMMockTestCase(unittest.TestCase):
     """Base test case that provides a mock world for unit testing."""
@@ -37,7 +37,8 @@ class CMMockTestCase(unittest.TestCase):
                     'minor_piece_limit_by_type': type('MinorPieceLimitByType', (), {'value': 2})(),
                     'major_piece_limit_by_type': type('MajorPieceLimitByType', (), {'value': 2})(),
                     'queen_piece_limit_by_type': type('QueenPieceLimitByType', (), {'value': 1})(),
-                    'queen_piece_limit': type('QueenPieceLimit', (), {'value': 2})()
+                    'queen_piece_limit': type('QueenPieceLimit', (), {'value': 2})(),
+                    'asymmetric_trades': AsymmetricTrades(AsymmetricTrades.option_jacks)
                 })()
                 # The above limits to 2 of all except queens, which means:
                 # 2 * 2 = 4 minors

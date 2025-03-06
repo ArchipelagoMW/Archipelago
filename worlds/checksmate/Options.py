@@ -293,11 +293,11 @@ class FairyChessPawns(Choice):
 
 class AsymmetricTrades(Choice):
     """
-    Whether to use asymmetric trades.
+    Whether to add custom pieces to the pool of an unusual material type, enabling trades of asymmetric material values.
 
-    Standard: Use the standard set of Pawn (1), Minor (3), Major (5), and Queen (9) pieces.
+    Disabled: Use the standard set of Pawn (1), Minor (3), Major (5), and Queen (9) pieces.
     
-    Jacks: Add the custom Jack family of pieces, which are worth 7 material each.
+    Jacks: As Disabled, but also add the custom Jack family of pieces, which are worth 7 material each. They may castle.
     """
     display_name = "Asymmetric Trades"
     option_disabled = 0
@@ -420,6 +420,7 @@ class CMOptions(PerGameCommonOptions):
     pocket_limit_by_pocket: PocketLimitByPocket
     locked_items: LockedItems
     death_link: Deathlink
+    asymmetric_trades: AsymmetricTrades
 
 
 piece_type_limit_options: Dict[str, Callable[[CMOptions], Option]] = {

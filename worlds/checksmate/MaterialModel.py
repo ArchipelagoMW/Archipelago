@@ -39,9 +39,9 @@ class MaterialModel:
     def unupgraded_majors_in_pool(self, items: List[CMItem], locked_items: Dict[str, int]) -> int:
         """Returns the number of unupgraded major pieces in the pool."""
         # Count majors in items list
-        majors_in_items = len([item for item in items if item.name == "Progressive Major Piece"])
+        majors_in_items = len([item for item in items if item.name == "Progressive Major Piece" or item.name == "Progressive Jack"])
         # Count majors in locked items (using the count value)
-        majors_in_locked = locked_items.get("Progressive Major Piece", 0)
+        majors_in_locked = locked_items.get("Progressive Major Piece", 0) + locked_items.get("Progressive Jack", 0)
         total_majors = majors_in_items + majors_in_locked
 
         # Count upgrades in items list

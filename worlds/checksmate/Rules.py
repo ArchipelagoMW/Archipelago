@@ -18,7 +18,7 @@ def has_pawn(state: CollectionState, player: int) -> bool:
 
 
 def has_pin(state: CollectionState, player: int) -> bool:
-    return state.has_any(("Progressive Minor Piece", "Progressive Major Piece"), player)
+    return state.has_any(("Progressive Minor Piece", "Progressive Major Piece", "Progressive Jack"), player)
 
 
 def determine_difficulty(opts: CMOptions):
@@ -180,8 +180,8 @@ def set_rules(world: World):
 
     # Castle rules
     add_rule(world.multiworld.get_location("O-O Castle", world.player),
-             lambda state: state.has("Progressive Major Piece", world.player,
-                                     2 + max(max_queens, state.count("Progressive Major To Queen", world.player))))
+             lambda state: state.has_from_list(["Progressive Major Piece", "Progressive Jack"], world.player,
+                                   2 + max(max_queens, state.count("Progressive Major To Queen", world.player))))
     add_rule(world.multiworld.get_location("O-O-O Castle", world.player),
-             lambda state: state.has("Progressive Major Piece", world.player,
-                                     2 + max(max_queens, state.count("Progressive Major To Queen", world.player))))
+             lambda state: state.has_from_list(["Progressive Major Piece", "Progressive Jack"], world.player,
+                                   2 + max(max_queens, state.count("Progressive Major To Queen", world.player))))

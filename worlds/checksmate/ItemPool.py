@@ -185,6 +185,8 @@ class CMItemPool:
                 early_units.append("Progressive Minor Piece")
             if early_material_option > 2:
                 early_units.append("Progressive Major Piece")
+                if self.world.options.asymmetric_trades.value != self.world.options.asymmetric_trades.option_disabled:
+                    early_units.append("Progressive Jack")
 
             # Filter out non-local and excluded items
             non_local_items = self.world.options.non_local_items.value
