@@ -20,6 +20,9 @@ You can also use the mod manager directly: open `r2modman` > find `Peaks of Yore
 select profile > online > search for "Archipelago" in the `r2modman` interface.
 The mod manager should automatically install all necessary dependencies as well.
 
+### THERE IS NO SUPPORT FOR OTHER MODS, USE THEM AT YOUR OWN RISK
+
+
 ## Running the Modded Game
 
 Click on the `Start modded` button in the top left in `r2modman` to start the game with the Archipelago mod installed.
@@ -38,10 +41,11 @@ website to generate a YAML using a graphical interface.
 ### Connecting to server
 Once the game is launched, if everything is installed correctly, you should see a button **Mods** on the main menu.
 
-After clicking on **Mods** to open the in-game mod manager, you should see all the installed mods
-(which should only be Peaks Of Archipelago), and go to the Peaks Of Archipelago config, this is where you connect to
+After clicking on **Mods** to open the in-game mod manager, you should see all the installed mods,
+and go to the Peaks Of Archipelago config, this is where you connect to
 the server, enter your slot name (the name entered when preparing your yaml file), the hostname and port so for
 example: `archipelago.gg:60324` becomes `hostname=archipelago.gg` and `port=60324`, add a password if necessary.
+![](imgs/settings.png)
 
 The auto connect option will connect automatically when the game is restarted later but may fail if the port has
 changed, which might happen if the server has been offline for a while.
