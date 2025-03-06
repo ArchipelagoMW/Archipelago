@@ -659,11 +659,7 @@ class PhazonMinesAreaData(AreaData):
                     1: DoorData(
                         RoomName.Elite_Research,
                         defaultLock=DoorLockType.Ice,
-                        # Can't go backwards through the wall without tricks, checks if player can reach the room from the other side
-                        rule_func=lambda world, state: self.logic.can_spider(world, state)
-                        and state.can_reach(
-                            RoomName.Research_Access.value, None, world.player
-                        ),
+                        rule_func=lambda world, state: False,
                         tricks=[
                             self.tricks.elite_research_backwards_wall_boost_no_spider,
                             self.tricks.elite_research_backwards_wall_boost,
