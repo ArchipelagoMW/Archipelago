@@ -3,10 +3,9 @@ from typing import Any
 
 from Options import Toggle, OptionError
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Tutorial, Item, MultiWorld, Region
+from BaseClasses import Tutorial, Item, MultiWorld
 from .options import PeaksOfYoreOptions, Goal, StartingBook, RopeUnlockMode, poy_option_groups
-from . import options
-from .data import full_item_list, full_location_list, PeaksOfYoreRegion
+from .data import PeaksOfYoreRegion, full_item_table, full_location_table
 from .locations import get_locations, get_location_names_by_type, PeaksOfYoreLocation
 from .regions import create_poy_regions, RegionLocationInfo
 
@@ -39,8 +38,8 @@ class PeaksOfWorld(World):
     options_dataclass = PeaksOfYoreOptions
     options: PeaksOfYoreOptions
     web = PeaksOfWeb()
-    item_name_to_id = {item.name: item.id for item in full_item_list}
-    location_name_to_id = {location.name: location.id for location in full_location_list}
+    item_name_to_id = {item.name: item.id for item in full_item_table.values()}
+    location_name_to_id = {location.name: location.id for location in full_location_table.values()}
     topology_present = True
     artefacts_peaks_in_pool: RegionLocationInfo
 
@@ -48,7 +47,7 @@ class PeaksOfWorld(World):
         super().__init__(multiworld, player)
 
     def create_item(self, name: str) -> Item:
-        item_entry = [item for item in full_item_list if item.name == name][0]
+        item_entry = full_item_table[name]
         return PeaksOfYoreItem(name, item_entry.classification, self.item_name_to_id[name], self.player)
 
     def get_filler_item_name(self) -> str:
@@ -120,7 +119,7 @@ class PeaksOfWorld(World):
             self.multiworld.itempool.append(self.create_item(name))
             remaining_items -= 1
 
-        for tool in [item for item in full_item_list if item.type == "Tool"]:
+        for tool in [item for item in full_item_table.values() if item.type == "Tool"]:
             if remaining_items > 0 and (tool.name != "Barometer" or not self.options.start_with_barometer) \
                     and (tool.name != "Oil Lamp" or not self.options.start_with_oil_lamp):
                 if tool.name == "Progressive Crampons":
@@ -142,17 +141,17 @@ class PeaksOfWorld(World):
                     self.multiworld.itempool.append(self.create_item(tool.name))
                     remaining_items -= 1
 
-        for rope in [item for item in full_item_list if item.type == "Rope"]:
+        for rope in [item for item in full_item_table.values() if item.type == "Rope"]:
             if remaining_items > 0:
                 self.multiworld.itempool.append(self.create_item(rope.name))
                 remaining_items -= 1
 
-        for birdSeed in [item for item in full_item_list if item.type == "Bird Seed"]:
+        for birdSeed in [item for item in full_item_table.values() if item.type == "Bird Seed"]:
             if remaining_items > 0:
                 self.multiworld.itempool.append(self.create_item(birdSeed.name))
                 remaining_items -= 1
 
-        for artefact in [item for item in full_item_list if item.type == "Artefact"]:
+        for artefact in [item for item in full_item_table.values() if item.type == "Artefact"]:
             if remaining_items > 0:
                 self.multiworld.itempool.append(self.create_item(artefact.name))
                 remaining_items -= 1

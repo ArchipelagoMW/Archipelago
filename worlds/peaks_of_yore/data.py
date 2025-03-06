@@ -178,3 +178,6 @@ full_item_list: list[ItemData] = [
     ItemData('Extra Coffee', 'Extra Item', 602, ItemClassification.filler),
     ItemData('Extra Seed', 'Extra Item', 603, ItemClassification.filler)
 ]
+
+full_item_table: dict[str, ItemData] = {i.name: i for i in full_item_list}
+full_location_table: dict[str, LocationData] = {l.name: l for l in full_location_list}
