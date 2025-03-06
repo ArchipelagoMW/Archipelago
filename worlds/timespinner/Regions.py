@@ -106,7 +106,7 @@ def create_regions_and_locations(world: MultiWorld, player: int, options: Timesp
     connect(world, player, 'Sealed Caves (Sirens)', 'Varndagroth tower right (lower)', lambda state: state.has('Elevator Keycard', player))
     connect(world, player, 'Sealed Caves (Sirens)', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Military Fortress', 'Varndagroth tower right (lower)', logic.can_kill_all_3_bosses)
-    connect(world, player, 'Military Fortress', 'Temporal Gyre', lambda state: state.has('Timespinner Wheel', player))
+    connect(world, player, 'Military Fortress', 'Temporal Gyre', lambda state: state.has('Timespinner Wheel', player) and logic.can_kill_all_3_bosses(state))
     connect(world, player, 'Military Fortress', 'Military Fortress (hangar)', logic.has_doublejump)
     connect(world, player, 'Military Fortress (hangar)', 'Military Fortress')
     connect(world, player, 'Military Fortress (hangar)', 'The lab', lambda state: logic.has_keycard_B(state) and (state.has('Water Mask', player) if flooded.flood_lab else logic.has_doublejump(state)))
