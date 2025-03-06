@@ -162,16 +162,16 @@ class PeaksOfWorld(World):
                 state.can_reach_location(artefact, self.player) for artefact in
                 self.artefacts_peaks_in_pool.artefacts_in_pool)
 
-        if self.options.goal.value == Goal.option_all_peaks:
+        elif self.options.goal.value == Goal.option_all_peaks:
             self.multiworld.completion_condition[self.player] = lambda state: all(
                 state.can_reach_location(peak, self.player) for peak in self.artefacts_peaks_in_pool.peaks_in_pool)
 
-        if self.options.goal.value == Goal.option_all_peaks:
+        elif self.options.goal.value == Goal.option_all_artefacts_all_peaks:
             self.multiworld.completion_condition[self.player] = lambda state: all(
                 state.can_reach_location(loc, self.player) for loc in [*self.artefacts_peaks_in_pool.peaks_in_pool,
                                                                        *self.artefacts_peaks_in_pool.artefacts_in_pool])
 
-        if self.options.goal.value == Goal.option_all:
+        elif self.options.goal.value == Goal.option_all:
             self.multiworld.completion_condition[self.player] = lambda state: all(
                 state.can_reach_location(loc.name, self.player) for loc in self.get_locations())
 
