@@ -51,7 +51,7 @@ class PeaksOfWorld(World):
         return PeaksOfYoreItem(name, item_entry.classification, self.item_name_to_id[name], self.player)
 
     def get_filler_item_name(self) -> str:
-        choices = ["Extra Rope", "Extra Coffee", "Extra Chalk", "Extra Seed"]
+        choices = ("Extra Rope", "Extra Coffee", "Extra Chalk", "Extra Seed")
         return self.random.choice(choices)
 
     def generate_early(self) -> None:
