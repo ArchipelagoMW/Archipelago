@@ -142,9 +142,16 @@ class CelesteWorld(World):
             "death_link": self.options.death_link.value,
             "death_link_amnesty": self.options.death_link_amnesty.value,
             "strawberries_required": self.strawberries_required,
+
             "checkpointsanity": self.options.checkpointsanity.value,
+            "roomsanity": self.options.roomsanity.value,
+            "include_goldens": self.options.include_goldens.value,
+
+            "include_core": self.options.include_core.value,
+            "include_farewell": self.options.include_farewell.value,
             "include_b_sides": self.options.include_b_sides.value,
             "include_c_sides": self.options.include_c_sides.value,
+
             "madeline_one_dash_hair_color": self.madeline_one_dash_hair_color,
             "madeline_two_dash_hair_color": self.madeline_two_dash_hair_color,
             "madeline_no_dash_hair_color": self.madeline_no_dash_hair_color,
