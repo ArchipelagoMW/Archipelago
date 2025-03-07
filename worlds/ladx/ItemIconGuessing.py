@@ -560,8 +560,7 @@ GAME_SPECIFIC_PHRASES = {
         "Coin Case": "MAGIC_POWDER", # This shouldn't spawn as RUPEES
         "Bike Voucher": "TRADING_ITEM_LETTER",
         "Oak's Parcel": "TRADING_ITEM_LETTER",
-        "Pass": "TRADING_ITEM_LETTER", # Safari Pass
-        "Ticket": "TRADING_ITEM_LETTER", # SS Ticket
+        "Safari Pass": "TRADING_ITEM_LETTER",
 
         # Drinks always get converted to MEDICINE
         "Soda Pop": "MEDICINE",
@@ -580,16 +579,8 @@ GAME_SPECIFIC_PHRASES = {
     },
 
     "Pokemon Emerald": {
-        # Key Items
 
-        "Old Amber": "STONE_BEAK", # Aerodactyl's fossil should still be a fossil
         "Coin Case": "MAGIC_POWDER", # This shouldn't spawn as RUPEES
-        "Pass": "TRADING_ITEM_LETTER", # Only hits Contest Pass
-        "Ticket": "TRADING_ITEM_LETTER", # Aurora/Eon/Mystic/SS ticket
-
-        "Rock Smash": "SHOVEL", # No pickax but this will do
-        "Detector": 'TRADING_ITEM_MAGNIFYING_GLASS',
-        "Itemfinder": 'TRADING_ITEM_MAGNIFYING_GLASS',
 
         # Drinks always get converted to MEDICINE
         
