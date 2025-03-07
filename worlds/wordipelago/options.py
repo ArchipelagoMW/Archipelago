@@ -127,6 +127,48 @@ class LetterBalancing(Range):
     default = 2
     range_end = 5
 
+class ExtraTimeRewardPercent(Range):
+    """Description"""
+    display_name = "Extra Time Reward Percent"
+    range_start = 0
+    range_end = 100
+    default = 20
+    
+class ClueItemRewardPercent(Range):
+    """Description"""
+    display_name = "Clue Item Reward Percent"
+    range_start = 0
+    range_end = 100
+    default = 30
+    
+class ClueItemPointSize(Range):
+    """Description"""
+    display_name = "Clue Item Point Size"
+    range_start = 0
+    range_end = 100
+    default = 5
+    
+class BadGuessTrapPercent(Range):
+    """Description"""
+    display_name = "Bad Guess Trap Reward Percent"
+    range_start = 0
+    range_end = 100
+    default = 5
+    
+class ExtraCooldownTrapPercent(Range):
+    """Description"""
+    display_name = "Extra Cooldown Trap Percent"
+    range_start = 0
+    range_end = 100
+    default = 5
+    
+class ExtraCooldownTrapSize(Range):
+    """Description"""
+    display_name = "Extra Cooldown Trap Size"
+    range_start = 0
+    range_end = 300
+    default = 60
+
 @dataclass
 class WordipelagoOptions(PerGameCommonOptions):
     words_to_win: WordsToWin
@@ -142,7 +184,12 @@ class WordipelagoOptions(PerGameCommonOptions):
     unused_letters_unlocked: UnusedLettersUnlocked
     shuffle_typing: ShuffleTyping
     extra_items_as_time_rewards: ExtraItemsAsTimeRewards
-    start_inventory_from_pool: StartInventoryPool
 
-    # DeathLink is always on. Always.
-    # death_link: DeathLink
+    extra_time_reward_percent: ExtraTimeRewardPercent
+    clue_item_reward_percent: ClueItemRewardPercent
+    clue_item_point_size: ClueItemPointSize
+    bad_guess_trap_percent: BadGuessTrapPercent
+    extra_cooldown_trap_percent: ExtraCooldownTrapPercent
+    extra_cooldown_trap_size: ExtraCooldownTrapSize
+
+    start_inventory_from_pool: StartInventoryPool

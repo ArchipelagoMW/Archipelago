@@ -55,6 +55,8 @@ class WordipelagoWorld(World):
                 "shuffle_typing",
                 "extra_items_as_time_rewards",
                 "start_inventory_from_pool",
+                "extra_cooldown_trap_size",
+                "clue_item_point_size"
             )
             return {
                 **wordipelago_options,
@@ -110,8 +112,6 @@ class WordipelagoWorld(World):
             if item.code and item.can_create(self) and key not in starting_letters:
                 for i in range(item.count(self)):
                     item_pool.append(self.create_item(key))
-        # for i in range(self.options.time_reward_count):
-        #     item_pool.append(WordipelagoItem("Time", ItemClassification.filler, 200, self.player))
             
         # Filler Items
         location_count = self.options.words_to_win
@@ -137,11 +137,31 @@ class WordipelagoWorld(World):
 
 
         if(location_count > item_count):
-            for i in range(location_count - item_count):
-                if(self.options.extra_items_as_time_rewards):
-                    item_pool.append(WordipelagoItem("Time", ItemClassification.filler, 200, self.player))  
-                else:
-                    item_pool.append(self.create_filler())  
+            filler_items = location_count - item_count
+            percent_modifier = 1
+            total_item_percent = self.options.bad_guess_trap_percent
+            + self.options.clue_item_reward_percent
+            + self.options.extra_time_reward_percent
+            + self.options.extra_cooldown_trap_percent
+            if(total_item_percent > 100):
+                percent_modifier = 100.00 / total_item_percent
+            
+            extra_cooldown_trap_count = int((filler_items) * (self.options.extra_cooldown_trap_percent / 100.00) * percent_modifier)
+            bad_guess_trap_count = int((filler_items) * (self.options.bad_guess_trap_percent / 100.00) * percent_modifier)
+            clue_item_reward_count = int((filler_items) * (self.options.clue_item_reward_percent / 100.00) * percent_modifier)
+            extra_time_reward_count = int((filler_items) * (self.options.extra_time_reward_percent / 100.00) * percent_modifier)
+            nothing_item_count = filler_items - extra_cooldown_trap_count - bad_guess_trap_count - clue_item_reward_count - extra_time_reward_count
+            
+            for i in range(extra_cooldown_trap_count):
+                item_pool.append(WordipelagoItem("Extra Cooldown Trap", ItemClassification.trap, 197, self.player))  
+            for i in range(bad_guess_trap_count):
+                item_pool.append(WordipelagoItem("Bad Guess Trap", ItemClassification.trap, 198, self.player))  
+            for i in range(clue_item_reward_count):
+                item_pool.append(WordipelagoItem("Clue Points", ItemClassification.filler, 199, self.player))  
+            for i in range(extra_time_reward_count):
+                item_pool.append(WordipelagoItem("Time", ItemClassification.filler, 200, self.player))
+            for i in range(nothing_item_count):
+                item_pool.append(self.create_filler())  
 
         self.multiworld.itempool += item_pool
 
@@ -175,4 +195,4 @@ class WordipelagoWorld(World):
         create_rules(self)
 
     def get_filler_item_name(self) -> str:
-        return "Not Much"
+        return "Suggestion"
