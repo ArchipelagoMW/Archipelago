@@ -58,7 +58,7 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "1F Washroom Toilet": LMLocationData("1F Washroom", 4, "Furniture", 233, [], 16),
     "Fortune Teller Candles": LMLocationData("Fortune-Teller's Room", 6, "Freestanding", 4, ["Fire Element Medal"], 3,
                                              room_ram_addr=0x803D33A6, locationbit=6),
-    "Laundry Washing Machine": LMLocationData("Laundry Room", 7, "Furniture", 187, [], 5),
+    "Laundry Room Washing Machine": LMLocationData("Laundry Room", 7, "Furniture", 187, [], 5),
     # "Hidden Room Large Chest L": LMLocationData("Hidden Room", 9, "Furniture", 243, [], 1), # TODO Prevents Ghosts Spawn
     # "Hidden Room Large Chest C": LMLocationData("Hidden Room", 10, "Furniture", 241, [], 1), # TODO Prevents Ghosts Spawn
     "Hidden Room Large Chest R": LMLocationData("Hidden Room", 11, "Furniture", 242, [], 1),
@@ -138,7 +138,7 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
 ENEMIZER_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Wardrobe Shelf Key": LMLocationData("Wardrobe", 50, "Freestanding", 5, [], 41, room_ram_addr=0x803D33A6,
                                          locationbit=6),
-    "Laundry Clear Chest": LMLocationData("Laundry Room", 710, "Chest", 4, [], 5, room_ram_addr=0x803CDF5A),
+    "Laundry Room Clear Chest": LMLocationData("Laundry Room", 710, "Chest", 4, [], 5, room_ram_addr=0x803CDF5A),
     "Hidden Room Clear Chest": LMLocationData("Hidden Room", 51, "Chest", 1, [], 1, room_ram_addr=0x803CDF52),
     "Mirror Room Clear Chest": LMLocationData("Mirror Room", 52, "Chest", 3, [], 4, room_ram_addr=0x803CDF58),
     "Kitchen Clear Chest": LMLocationData("Kitchen", 53, "Chest", 5, [], 7, room_ram_addr=0x803CDF60),
