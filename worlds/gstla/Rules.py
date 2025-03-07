@@ -917,7 +917,7 @@ def set_access_rules(world: 'GSTLAWorld'):
         if world.options.reveal_hidden_item == 1:
                 for loc in location_type_to_data[LocationType.Hidden]:
                         #for all hidden items that are not eventype 131 (these are scoopable or cyclone places), we require reveal
-                        if loc.event_type != 131:
+                        if loc.event_type != 131 or loc_names_by_id[loc.ap_id] == LocationName.Daila_Psy_Crystal:
                                 add_rule(world.get_location(loc_names_by_id[loc.ap_id]),
                                         lambda state: state.has(ItemName.Reveal, player))
 

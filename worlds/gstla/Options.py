@@ -167,13 +167,13 @@ class ShuffleWpnEffects(Toggle):
     """When enabled the effects for weapons are shuffled amongst each other."""
     internal_name = "shuffle_weapon_effect"
     display_name = "Shuffle Weapon Effects"
-    default = 1
+    default = 0
 
 class ShuffleArmEffect(Toggle):
     """When enabled the bonus effects for armour are shuffled amongst each other."""
     internal_name = "shuffle_armour_effect"
     display_name = "Shuffle Armour Effects"
-    default = 1
+    default = 0
 
 class RandomizeEqCurses(Toggle):
     """When enabled the curses for equipment are randomized."""

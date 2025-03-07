@@ -29,9 +29,9 @@ class LocationName(str, Enum):
     Mikasalla_Lucky_Pepper = "Mikasalla - Inn - Barrel"
     Mikasalla_Herb = "Mikasalla - South-East House - Jar"
     E_Tundaria_Islet_Lucky_Medal = "E Tundaria Islet - House - Jar"
-    Garoh_Nut = "Garoh - North-West Ledge Barrel"
+    Garoh_Nut = "Garoh - North-West Ledge - Barrel"
     Garoh_Smoke_Bomb = "Garoh - South-East Barrel"
-    Garoh_Sleep_Bomb = "Garoh - North-East Ledge House - Jar"
+    Garoh_Sleep_Bomb = "Garoh - North-West Ledge House - Jar"
     Garoh_Elixir = "Garoh - Inn - Jar"
     Naribwe_Elixir = "Naribwe - South-West Jar"
     Naribwe_18_coins = "Naribwe - North-West House - Jar"
@@ -581,9 +581,9 @@ ids_by_loc_name: Dict[LocationName, int] = {
     "Mikasalla - South-East House - Jar": 992424,
     "E Tundaria Islet - House - Jar": 992432,
     "Garoh - Ledge Chest": 992444,
-    "Garoh - North-West Ledge Barrel": 992456,
+    "Garoh - North-West Ledge - Barrel": 992456,
     "Garoh - South-East Barrel": 992464,
-    "Garoh - North-East Ledge House - Jar": 992476,
+    "Garoh - North-West Ledge House - Jar": 992476,
     "Garoh - Inn - Jar": 992484,
     "Air's Rock Exterior - First Room - Lower Left": 992496,
     "Air's Rock Exterior - First Room - Middle": 992504,
@@ -988,9 +988,9 @@ loc_names_by_id: Dict[int, LocationName] = {
     992424: "Mikasalla - South-East House - Jar",
     992432: "E Tundaria Islet - House - Jar",
     992444: "Garoh - Ledge Chest",
-    992456: "Garoh - North-West Ledge Barrel",
+    992456: "Garoh - North-West Ledge - Barrel",
     992464: "Garoh - South-East Barrel",
-    992476: "Garoh - North-East Ledge House - Jar",
+    992476: "Garoh - North-West Ledge House - Jar",
     992484: "Garoh - Inn - Jar",
     992496: "Air's Rock Exterior - First Room - Lower Left",
     992504: "Air's Rock Exterior - First Room - Middle",
