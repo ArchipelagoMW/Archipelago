@@ -210,6 +210,9 @@ class LMContext(CommonContext):
         # Used for handling various weird item checks.
         self.last_map_id = 0
 
+        # Used to let poptracker autotrack Luigi's room
+        self.last_room_id = 0
+
         # Handles Updating Boo Counter related things both in game and in client.
         self.boo_counter_sync_task: Optional[asyncio.Task[None]] = None
 
@@ -510,6 +513,15 @@ class LMContext(CommonContext):
 
                 # Only check locations that are currently in the same room as us.
                 current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
+                if current_room_id != self.last_room_id:
+                    await self.send_msgs([{
+                        "cmd": "Set",
+                        "key": f"lm_room_{self.team}_{self.slot}",
+                        "default": 0,
+                        "want_reply": False,
+                        "operations": [{"operation": "replace", "value": current_room_id}]
+                    }])
+                    self.last_room_id = current_room_id
                 if not lm_loc_data.in_game_room_id == current_room_id:
                     continue
 
