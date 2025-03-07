@@ -110,7 +110,6 @@ SYNONYMS = {
 
     # SHOVEL
     'DIG': 'SHOVEL',
-    "ROCK SMASH": 'SHOVEL',
 
     # MAGIC_POWDER
     'BAG': 'MAGIC_POWDER',
@@ -381,7 +380,8 @@ PHRASES = {
     'BIG KEY': 'NIGHTMARE_KEY',
     'BOSS KEY': 'NIGHTMARE_KEY',
     'HEART PIECE': 'HEART_PIECE',
-    'PIECE OF HEART': 'HEART_PIECE',
+    'PIECE OF HEART': 'HEART_PIECE', 
+    "ROCK SMASH": 'SHOVEL',
 }
 
 # All following will only be used to match items for the specific game.
