@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Toggle, Range, Option, PerGameCommonOptions, Choice, StartInventoryPool
+from Options import Toggle, Range, PerGameCommonOptions, Choice, StartInventoryPool
 
 
 # Will look into feasibility of options later.
