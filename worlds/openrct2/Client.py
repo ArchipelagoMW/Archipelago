@@ -44,7 +44,6 @@ class OpenRCT2Context(CommonContext):
     def on_package(self, cmd: str, args: dict):
         # if cmd == "Connected":
         #     self.game = self.game#slot_info[self.slot].game
-        print("PACKAGE!!!")
         if cmd == "PrintJSON":
             for index, item in enumerate(args['data']):
                 match = re.search(r'\[color=[^\]]+\](.*?)\[/color\]', args['data'][index]['text'])
@@ -53,12 +52,6 @@ class OpenRCT2Context(CommonContext):
         print(args)
         self.gamesock.sendobj(args)
 
-    # async def disconnect(self, allow_autoreconnect: bool = False):
-    #     # self.game = ""
-    #     await super().disconnect(allow_autoreconnect)
-    
-    # async def shutdown(self):
-    #     await super().shutdown()
 
 
     # DeathLink hooks
@@ -80,18 +73,6 @@ class OpenRCT2Context(CommonContext):
         self.ui = TextManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
-# Replacing this with code from Serpent.ai to make a .apworld
-# async def main(args): 
-#     ctx = OpenRCT2Context(args.connect, args.password)
-#     ctx.auth = args.name
-#     ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
-
-#     if gui_enabled:
-#         ctx.run_gui()
-#     ctx.run_cli()
-
-#     await ctx.exit_event.wait()
-#     await ctx.shutdown()
 
 def main():
     Utils.init_logging("OpenRCT2Client", exception_logger="Client")
