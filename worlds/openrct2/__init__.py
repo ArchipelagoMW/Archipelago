@@ -6,7 +6,10 @@ import worlds.LauncherComponents as LauncherComponents
 from BaseClasses import ItemClassification, Region, Location, Tutorial
 from worlds.generic.Rules import add_rule
 
-from .Constants import base_id, item_info, location_info, scenario_info
+from .Constants import base_id
+from .data.scenario_info import scenario_info
+from .data.item_info import item_info
+from .data.location_info import location_info
 from .Items import OpenRCT2Item, set_openRCT2_items
 from .Options import openRCT2Options, Scenario, openrct2_option_groups
 from worlds.AutoWorld import World, WebWorld
@@ -91,6 +94,7 @@ class OpenRCT2World(World):
         self.location_prices = []  # This list is passed to OpenRCT2 to create the unlock shop
         self.rules = []
         self.unique_rides = []
+        print(item_info)
 
     # Okay future Colby, listen up. Here's the plan. We're going to take the item_table and shuffle it in the next
     # section. We'll generate the unlock shop with the item locations and apply our logic to it. Prereqs can only be

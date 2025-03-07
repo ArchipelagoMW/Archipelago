@@ -1,4 +1,4 @@
-{
+scenario_info = {
 	"all_scenarios": [
         "forest_frontiers",
         "dynamite_dunes",
