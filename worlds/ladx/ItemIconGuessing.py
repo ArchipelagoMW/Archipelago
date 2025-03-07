@@ -615,10 +615,12 @@ GAME_SPECIFIC_PHRASES = {
         # 1-UP Super fix
         "1-UP Super": "TOADSTOOL",
 
-        # Syrup bottles --> MEDICINE
+        # Drinks --> medicine
+
+        # Syrup bottles
         "Syrup": "MEDICINE",
 
-        # Coffee blends --> MEDICINE
+        # Coffee blends
         "Hoolumbian": "MEDICINE",
         "Chuckoccino": "MEDICINE",
         "Teeheespresso": "MEDICINE",
@@ -835,6 +837,4 @@ GAME_SPECIFIC_PHRASES = {
         "Megalixir": "MEDICINE",
         
     }
-
-    # TODO: Link to the Past: just double check that everything matches
 }
