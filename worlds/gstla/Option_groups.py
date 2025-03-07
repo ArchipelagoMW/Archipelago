@@ -1,5 +1,5 @@
 from Options import StartInventoryPool
-from .Options import (ItemShuffle, MajorMinorSplit, RevealHiddenItem, OmitLocations, AddGs1Items, AddDummyItems,
+from .Options import (ItemShuffle, RevealHiddenItem, OmitLocations, AddGs1Items, AddDummyItems,
                       StartWithShip, ShipWings, AnemosAccess, CharacterShuffle, SecondStartingCharacter,
                       CharStatShuffle, CharEleShuffle, NoLearningUtilPsy, RandomizeClassStatBoosts,
                       ClassPsynergy, ClassPsynergyLevels, AdjustPsyPower, AdjustPsyCost, RandomizePsyAoe,
@@ -23,7 +23,6 @@ from Options import OptionGroup
 gstla_option_groups = [
     OptionGroup("General Pool", [
         ItemShuffle,
-        MajorMinorSplit,
         OmitLocations,
         AddGs1Items,
         AddDummyItems

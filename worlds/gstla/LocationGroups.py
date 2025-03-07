@@ -426,20 +426,20 @@ goldensuntla_location_groups = {
         LocationName.Mars_Lighthouse_Alastors_Hood.value,
         LocationName.Mars_Lighthouse_Psy_Crystal.value
     },
-    "Overworld": {
+    "Overworld Sea Spots": {
         LocationName.Overworld_Rusty_Axe.value,
         LocationName.Overworld_Rusty_Mace.value,
         LocationName.Overworld_Rusty_Sword.value,
         LocationName.Overworld_Rusty_Sword_Two.value,
         LocationName.Overworld_Rusty_Staff.value
     },
-    "Trade Quest": {
+    "Trade Rewards": {
         LocationName.E_Tundaria_Islet_Pretty_Stone.value,
         LocationName.W_Indra_Islet_Lil_Turtle.value,
         LocationName.SE_Angara_Islet_Red_Cloth.value,
         LocationName.N_Osenia_Islet_Milk.value
     },
-    "Bosses": {
+    "Boss Rewards": {
         LocationName.Contigo_Isaac.value,
         LocationName.Contigo_Garet.value,
         LocationName.Contigo_Ivan.value,
@@ -452,10 +452,66 @@ goldensuntla_location_groups = {
         LocationName.Gaia_Rock_Cloud_Brand.value,        
         LocationName.Lemurian_Ship_Mist_Potion.value
     },
-    "Super Bosses": {
+    "SuperBoss Rewards": {
         LocationName.Yampi_Desert_Cave_Daedalus.value,
         LocationName.Islet_Cave_Catastrophe.value,
         LocationName.Treasure_Isle_Azul.value,
         LocationName.Anemos_Inner_Sanctum_Iris.value
     },
+    "Psynergy Rewards": {
+        LocationName.Airs_Rock_Reveal.value,
+        LocationName.Aqua_Rock_Parch.value,
+        LocationName.Gaia_Rock_Sand.value,
+        LocationName.Magma_Rock_Blaze.value,
+        LocationName.Kandorean_Temple_Lash_Pebble.value,
+        LocationName.Dehkan_Plateau_Pound_Cube.value,
+        LocationName.Madra_Catacombs_Tremor_Bit.value,
+        LocationName.Yampi_Desert_Scoop_Gem.value,
+        LocationName.Madra_Cyclone_Chip.value,
+        LocationName.Tundaria_Tower_Burst_Brooch.value,
+        LocationName.Lemuria_Grindstone.value,
+        LocationName.Shaman_Village_Hover_Jade.value,
+        LocationName.Mars_Lighthouse_Teleport_Lapis.value
+    },
+    "KeyItem Locations": {
+        LocationName.Gabomba_Statue_Black_Crystal.value,
+        LocationName.Jupiter_Lighthouse_Red_Key.value,
+        LocationName.Jupiter_Lighthouse_Blue_Key.value,
+        LocationName.Shrine_of_the_Sea_God_Right_Prong.value,
+        LocationName.Ankohl_Ruins_Left_Prong.value,
+        LocationName.Tundaria_Tower_Center_Prong.value,
+        LocationName.Gondowan_Cliffs_Healing_Fungus.value,
+        LocationName.Gaia_Rock_Dancing_Idol.value,
+        LocationName.Aqua_Rock_Aquarius_Stone.value,
+        LocationName.Daila_Sea_Gods_Tear.value,
+        LocationName.Madra_Catacombs_Ruin_Key.value,
+        LocationName.Magma_Rock_Magma_Ball.value
+    },
+    "Character Held Items": {
+        LocationName.Idejima_Growth.value,
+        LocationName.Idejima_Shamans_Rod.value,
+        LocationName.Idejima_Whirlwind.value,
+        LocationName.Idejima_Mind_Read.value,
+        LocationName.Kibombo_Douse_Drop.value,
+        LocationName.Kibombo_Frost_Jewel.value,
+        LocationName.Contigo_Orb_of_Force.value,
+        LocationName.Contigo_Lifting_Gem.value,
+        LocationName.Contigo_Catch_Beads.value,
+        LocationName.Contigo_Carry_Stone.value
+    },
+    "Summon Tablets": {
+        LocationName.Indra_Cavern_Zagan.value,
+        LocationName.Osenia_Cavern_Megaera.value,
+        LocationName.Airs_Rock_Flora.value,
+        LocationName.Madra_Catacombs_Moloch.value,
+        LocationName.Izumo_Ulysses.value,
+        LocationName.Lemuria_Eclipse.value,
+        LocationName.Angara_Cavern_Haures.value,
+        LocationName.Atteka_Cavern_Coatlicue.value,
+        LocationName.Anemos_Inner_Sanctum_Charon.value,
+        LocationName.Yampi_Desert_Cave_Daedalus.value,
+        LocationName.Islet_Cave_Catastrophe.value,
+        LocationName.Treasure_Isle_Azul.value,
+        LocationName.Anemos_Inner_Sanctum_Iris.value
+    }
 }

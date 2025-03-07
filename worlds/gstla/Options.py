@@ -428,12 +428,6 @@ class HalveEncounterRate(Toggle):
     display_name = "Reduce Encounter Rate"
     default = 0
 
-class MajorMinorSplit(Toggle):
-    """When enabled, all major locations will prefer progressive and all minor locations will prefer filler."""
-    internal_name = "major_minor_split"
-    display_name = "Major Minor Split"
-    default = 0
-
 class EasierBosses(Toggle):
     """When enabled, boss fights will be easier by altering their scripts / stats"""
     internal_name = "easier_bosses"
@@ -620,7 +614,6 @@ class AutoRun(Toggle):
 class GSTLAOptions(PerGameCommonOptions):
     #Pool and Logic settings
     item_shuffle: ItemShuffle
-    major_minor_split: MajorMinorSplit
     reveal_hidden_item: RevealHiddenItem
     omit_locations: OmitLocations
     add_elvenshirt_clericsring: AddGs1Items

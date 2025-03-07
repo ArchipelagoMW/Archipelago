@@ -986,14 +986,3 @@ def set_item_rules(world: 'GSTLAWorld'):
 
         if loc.restrictions > 0:
             add_item_rule(world.get_location(loc_names_by_id[loc.ap_id]), _RestrictionRule(player, loc.restrictions))
-
-        if world.options.major_minor_split == 1:
-            #do not perform major minor split if the location is specifically prioritizes or excluded
-            if loc_names_by_id[loc.ap_id] in world.options.priority_locations or loc_names_by_id[loc.ap_id] in world.options.exclude_locations:
-                continue
-
-            #All key item locations will be guarenteed not filler, major locations can contain anything and non key non major locations will never contain progression
-            if loc.is_key:
-              add_item_rule(world.get_location(loc_names_by_id[loc.ap_id]), lambda item: item.classification != ItemClassification.filler)
-            elif not loc.is_major:
-              add_item_rule(world.get_location(loc_names_by_id[loc.ap_id]), lambda item: item.classification != ItemClassification.progression and item.classification != ItemClassification.progression_skip_balancing)

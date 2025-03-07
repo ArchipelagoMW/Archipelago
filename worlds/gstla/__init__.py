@@ -537,8 +537,8 @@ class GSTLAWorld(World):
         debug_file.write('Hard Mode: ' + self.options.enable_hard_mode.name_lookup[self.options.enable_hard_mode] + '\n')
         write_me += self.options.reduced_encounter_rate << 6 #halve-enc
         debug_file.write('Halve Encounter Rate: ' + self.options.reduced_encounter_rate.name_lookup[self.options.reduced_encounter_rate] + '\n')
-        write_me += self.options.major_minor_split << 5 #major-shuffle
-        debug_file.write('Major Minor Split: ' + self.options.major_minor_split.name_lookup[self.options.major_minor_split] + '\n')
+        #write_me += self.options.major_minor_split << 5 #major-shuffle
+        debug_file.write('Major Minor Split: false\n')
         write_me += self.options.easier_bosses << 4 #easier-bosses
         debug_file.write('Easier Bosses: ' + self.options.easier_bosses.name_lookup[self.options.easier_bosses] + '\n')
         if self.options.name_puzzles == 2:

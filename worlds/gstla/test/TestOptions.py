@@ -75,7 +75,8 @@ class TestRandoFormat(TestFormatBase):
 class TestMostItemShuffle(TestFormatBase):
     options = {
         "item_shuffle": 2,
-        "lemurian_ship": 2
+        "lemurian_ship": 2,
+        "reveal_hidden_item": False
     }
 
     def test_item_shuffle(self):
@@ -1003,24 +1004,6 @@ class EncounterRateHalved(TestFormatBase):
     def test_encounter_halved(self):
         data = self._get_option_byte(10)
         self.assertEqual(0x40, 0x40 & data)
-
-class VanillaShuffle(TestFormatBase):
-    options = {
-        "major_minor_split": 0
-    }
-
-    def test_vanilla_shuffle(self):
-        data = self._get_option_byte(10)
-        self.assertEqual(0x00, 0x20 & data)
-
-class MajorMinorShuffle(TestFormatBase):
-    options = {
-        "major_minor_split": 1
-    }
-
-    def test_major_minor_shuffle(self):
-        data = self._get_option_byte(10)
-        self.assertEqual(0x20, 0x20 & data)
 
 class BossDifficultyVanilla(TestFormatBase):
     options = {
