@@ -110,6 +110,7 @@ SYNONYMS = {
 
     # SHOVEL
     'DIG': 'SHOVEL',
+    "ROCK SMASH": 'SHOVEL',
 
     # MAGIC_POWDER
     'BAG': 'MAGIC_POWDER',
@@ -343,6 +344,7 @@ SYNONYMS = {
     # TRADING_ITEM_LETTER
     'CARD': 'TRADING_ITEM_LETTER',
     'MESSAGE': 'TRADING_ITEM_LETTER',
+    "TICKET": 'TRADING_ITEM_LETTER',
 
     # TRADING_ITEM_BROOM
     'SWEEP': 'TRADING_ITEM_BROOM',
@@ -365,6 +367,8 @@ SYNONYMS = {
     'MIRROR': 'TRADING_ITEM_MAGNIFYING_GLASS',
     'SCOPE': 'TRADING_ITEM_MAGNIFYING_GLASS',
     'XRAY': 'TRADING_ITEM_MAGNIFYING_GLASS',
+    "DETECTOR": 'TRADING_ITEM_MAGNIFYING_GLASS',
+    "ITEMFINDER": 'TRADING_ITEM_MAGNIFYING_GLASS',
 
     # PIECE_OF_POWER
     'TRIANGLE': 'PIECE_OF_POWER',
@@ -559,10 +563,9 @@ GAME_SPECIFIC_PHRASES = {
         "Pass": "TRADING_ITEM_LETTER", # Safari Pass
         "Ticket": "TRADING_ITEM_LETTER", # SS Ticket
 
-        # Drinks Fixes
-        
-        "Soda Pop": "MEDICINE", # Lemonade gets corrected to MEDICINE sprite, should it follow for all liquids?
-        "Fresh Water": "MEDICINE", # Ditto
+        # Drinks always get converted to MEDICINE
+        "Soda Pop": "MEDICINE",
+        "Fresh Water": "MEDICINE",
 
         # Consumables
         "Elixir": "MEDICINE",
@@ -588,10 +591,10 @@ GAME_SPECIFIC_PHRASES = {
         "Detector": 'TRADING_ITEM_MAGNIFYING_GLASS',
         "Itemfinder": 'TRADING_ITEM_MAGNIFYING_GLASS',
 
-        # Drinks Fixes
+        # Drinks always get converted to MEDICINE
         
-        "Soda Pop": "MEDICINE", # Lemonade gets corrected to MEDICINE sprite, should it follow for all liquids?
-        "Fresh Water": "MEDICINE", # Ditto
+        "Soda Pop": "MEDICINE",
+        "Fresh Water": "MEDICINE",
 
         # Consumables
         "Elixir": "MEDICINE",
@@ -679,11 +682,11 @@ GAME_SPECIFIC_PHRASES = {
 
     "Inscryption": {
         "Extra Candle": "HEART_CONTAINER", # Candles act as extra health
-        "Magnificus Eye": 'TRADING_ITEM_MAGNIFYING_GLASS', # Needed to see hidden drawings / messages
-        "Monocle": 'TRADING_ITEM_MAGNIFYING_GLASS', # Ditto
-        "Pile Of Meat": 'TRADING_ITEM_DOG_FOOD',
-        'Angler Hook': 'TRADING_ITEM_FISHING_HOOK', # Good fish.
-        "Quill": 'FEATHER',
+        "Magnificus Eye": "TRADING_ITEM_MAGNIFYING_GLASS", # Needed to see hidden drawings / messages
+        "Monocle": "TRADING_ITEM_MAGNIFYING_GLASS", # Ditto
+        "Pile Of Meat": "TRADING_ITEM_DOG_FOOD",
+        "Angler Hook": "TRADING_ITEM_FISHING_HOOK", # Good fish.
+        "Quill": "FEATHER",
         "Currency": "RUPEES_20",
     },
 
