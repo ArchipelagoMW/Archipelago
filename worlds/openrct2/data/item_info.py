@@ -1,4 +1,4 @@
-{
+item_info = {
 	"all_items": [
         "Spiral Roller Coaster",
         "Stand Up Roller Coaster",

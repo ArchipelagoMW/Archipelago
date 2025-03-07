@@ -1,6 +1,7 @@
 from BaseClasses import Item
 import copy
-from .Constants import item_info, Scenario_Items
+from .Constants import Scenario_Items
+from .data.item_info import item_info
 from .Options import *
 
 

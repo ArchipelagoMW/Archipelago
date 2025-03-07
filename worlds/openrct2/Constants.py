@@ -2,19 +2,10 @@ import os
 import json
 import pkgutil
 
-def load_data_file(*args) -> dict:
-    fname = os.path.join("data", *args)
-    return json.loads(pkgutil.get_data(__name__, fname).decode())
-
 # ID of first item and location, could be hard-coded but code may be easier
 # to read with this as a property.
 
 base_id = 2000000
-
-
-item_info = load_data_file("items.json")
-location_info = load_data_file("locations.json")
-scenario_info = load_data_file("scenarios.json")
 
 #Lists of Scenarios and the unlockables associated with them
 Scenario_Items = {

@@ -1,4 +1,4 @@
-{
+location_info = {
     "all_locations":[
         "White_0",
         "White_1",
