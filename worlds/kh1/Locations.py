@@ -505,7 +505,7 @@ location_table: Dict[str, KH1LocationData] = {
     "Wonderland Tea Party Garden Right Yellow Chair":                                   KH1LocationData("Wonderland",       265_6620, "Prize"),
     "Wonderland Tea Party Garden Left Gray Chair":                                      KH1LocationData("Wonderland",       265_6621, "Prize"),
     "Wonderland Tea Party Garden Right Brown Chair":                                    KH1LocationData("Wonderland",       265_6622, "Prize"),
-    "Hollow Bastion Lift Stop from Waterway Examine Node":                               KH1LocationData("Hollow Bastion",   265_6623, "Prize"),
+    "Hollow Bastion Lift Stop from Waterway Examine Node":                              KH1LocationData("Hollow Bastion",   265_6623, "Prize"),
     
     "Destiny Islands Seashore Capture Fish 1 (Day 2)":                                  KH1LocationData("Destiny Islands",  265_6700, "Static"),
     "Destiny Islands Seashore Capture Fish 2 (Day 2)":                                  KH1LocationData("Destiny Islands",  265_6701, "Static"),
