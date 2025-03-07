@@ -344,6 +344,7 @@ SYNONYMS = {
     'CARD': 'TRADING_ITEM_LETTER',
     'MESSAGE': 'TRADING_ITEM_LETTER',
     "TICKET": 'TRADING_ITEM_LETTER',
+    "PASS": 'TRADING_ITEM_LETTER',
 
     # TRADING_ITEM_BROOM
     'SWEEP': 'TRADING_ITEM_BROOM',
@@ -560,7 +561,6 @@ GAME_SPECIFIC_PHRASES = {
         "Coin Case": "MAGIC_POWDER", # This shouldn't spawn as RUPEES
         "Bike Voucher": "TRADING_ITEM_LETTER",
         "Oak's Parcel": "TRADING_ITEM_LETTER",
-        "Safari Pass": "TRADING_ITEM_LETTER",
 
         # Drinks always get converted to MEDICINE
         "Soda Pop": "MEDICINE",
