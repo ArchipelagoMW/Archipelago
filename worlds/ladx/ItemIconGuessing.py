@@ -572,6 +572,7 @@ GAME_SPECIFIC_PHRASES = {
         "Burn Heal": "MEDICINE",
         "Ice Heal": "MEDICINE",
         "Paralyze Heal": "MEDICINE",
+        "Full Heal": "MEDICINE"
     },
 
     "Pokemon Emerald": {
@@ -598,7 +599,8 @@ GAME_SPECIFIC_PHRASES = {
         "Awakening": "MEDICINE",
         "Burn Heal": "MEDICINE",
         "Ice Heal": "MEDICINE",
-        "Paralyze Heal": "MEDICINE",
+        "Paralyze Heal": "MEDICINE",,
+        "Full Heal": "MEDICINE"
         "Nanab Berry": "TRADING_ITEM_BANANAS", # Special exception for Nanab Berry, which look like bananas
         "Berry": "TRADING_ITEM_PINEAPPLE",
         "Mail": "TRADING_ITEM_LETTER", # Snail mail, not chain mail
