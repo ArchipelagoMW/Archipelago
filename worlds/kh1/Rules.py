@@ -1009,7 +1009,7 @@ def set_rules(kh1world):
         lambda state: state.has("Footprints", player))
     add_rule(kh1world.get_location("Traverse Town Synth 15 Items"),
         lambda state: (
-            max(state.count("Orichalcum", player),9) + max(state.count("Mythril", player),9) >= 15
+            min(state.count("Orichalcum", player),9) + min(state.count("Mythril", player),9) >= 15
             and
             (
                 state.has("Green Trinity", player)
@@ -1174,6 +1174,13 @@ def set_rules(kh1world):
         ))
     add_rule(kh1world.get_location("Hollow Bastion Lift Stop from Waterway Examine Node"),
         lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
+    for i in range(1,13):
+            add_rule(kh1world.get_location("Neverland Clock Tower " + str(i).rjust(2, "0") + ":00 Door"),
+                lambda state: (
+                    state.has("Green Trinity", player)
+                    and has_all_magic_lvx(state, player, 2)
+                    and has_defensive_tools(state, player)
+                ))
     if options.hundred_acre_wood:
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Left Cliff Chest"),
             lambda state: (
@@ -1670,6 +1677,7 @@ def set_rules(kh1world):
                         "Fish": 3,
                         "Drinking Water": 1}, player)
                 ))
+        
     for i in range(1,options.level_checks+1):
         add_rule(kh1world.get_location("Level " + str(i+1).rjust(3,'0') + " (Slot 1)"),
             lambda state, level_num=i: (
@@ -2147,14 +2155,6 @@ def set_rules(kh1world):
         if options.destiny_islands:
             add_rule(kh1world.get_location("Destiny Islands Chest"),
                 lambda state: state.has("Oathkeeper", player))
-        for i in range(1,13):
-            add_rule(kh1world.get_location("Neverland Clock Tower " + str(i).rjust(2, "0") + ":00 Door"),
-                lambda state: (
-                    state.has("Green Trinity", player)
-                    and has_all_magic_lvx(state, player, 2)
-                    and has_defensive_tools(state, player)
-                ))
-    
     
     for location in location_table.keys():
         try:
