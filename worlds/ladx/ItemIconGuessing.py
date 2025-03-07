@@ -744,7 +744,7 @@ GAME_SPECIFIC_PHRASES = {
         "Rising Dragon": "MAGIC_ROD",
         "Save The Queen+": "MAGIC_ROD",
         "Shaman's Relic": "MAGIC_ROD",
-        # "Victory Bell": "MAGIC_ROD",
+        "Victory Bell": "MAGIC_ROD",
 
         # Goofy Shields
         "Akashic Record": "SHIELD",
@@ -773,7 +773,7 @@ GAME_SPECIFIC_PHRASES = {
         "Megalixir": "MEDICINE",
     },
 
-    "Kingdom Hearts": {
+    "Kingdom Hearts 1": {
         # Goal/collectible items
         "Ansem's Report": "TRADING_ITEM_LETTER",
 
@@ -784,7 +784,7 @@ GAME_SPECIFIC_PHRASES = {
         # Sora Keyblades
         "Jungle King": "SWORD",
         "Three Wishes": "SWORD",
-        # "Fairy Harp": "SWORD",
+        "Fairy Harp": "SWORD",
         "Pumpkinhead": "SWORD",
         "Crabclaw": "SWORD",
         "Divine Rose": "SWORD",
