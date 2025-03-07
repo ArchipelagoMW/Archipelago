@@ -563,7 +563,7 @@ level_table = {
                     LocationData("Tower Diamond", difficulties=[hard]),
                     LocationData("Digging Room Diamond", access_rule=has('Dash Attack')),
                     LocationData("Escape Ledge Diamond", difficulties=[normal]),
-                    LocationData("Cage Diamond", access_rule=has('Stomp Jump'), difficulties=[normal]),
+                    LocationData("Cage Diamond", difficulties=[normal]),
                     LocationData("Circle Block Diamond", access_rule=has_all(['Super Ground Pound', 'Dash Attack'])),
                 ]
             ),
