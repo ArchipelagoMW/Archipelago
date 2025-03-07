@@ -384,7 +384,8 @@ class OpenRCT2World(World):
                         item_table_length * .85 < number):  # Determines if we have a prereq
                     total_customers = 0 # Handle total customers early, since it can apply on any prereq
                     if self.random.random() < .5: # Coin flip to determine if there's a customer requirement
-                        total_customers = round(self.random.uniform(self.options.shop_minimum_total_customers.value, self.options.shop_maximum_total_customers.value))
+                        total_customers = round(self.random.uniform(self.options.shop_minimum_total_customers.value, 
+                        self.options.shop_maximum_total_customers.value))
                     if self.random.random() < difficulty_modifier:  # Determines if the prereq is a specific ride
                         chosen_prereq = self.random.choice(possible_prereqs)
                         set_openRCT2_rule("ride", chosen_prereq, number)
@@ -396,17 +397,22 @@ class OpenRCT2World(World):
                             length = 0
                             # 4 coin flips to determine what, if any, stat prereqs will be used
                             if self.random.random() < .5:
-                                excitement = round(self.random.uniform(self.options.shop_minimum_excitement.value, self.options.shop_maximum_excitement.value))
+                                excitement = round(self.random.uniform(self.options.shop_minimum_excitement.value, 
+                                self.options.shop_maximum_excitement.value))
                             if self.random.random() < .5:
-                                intensity = round(self.random.uniform(self.options.shop_minimum_intensity.value, self.options.shop_maximum_intensity.value))
+                                intensity = round(self.random.uniform(self.options.shop_minimum_intensity.value, 
+                                self.options.shop_maximum_intensity.value))
                             if self.random.random() < .5:
-                                nausea = round(self.random.uniform(self.options.shop_minimum_nausea.value, self.options.shop_maximum_nausea.value))
+                                nausea = round(self.random.uniform(self.options.shop_minimum_nausea.value, 
+                                self.options.shop_maximum_nausea.value))
                             if self.random.random() < .5:
-                                length = round(self.random.uniform(self.options.shop_minimum_length.value, self.options.shop_maximum_length.value))
+                                length = round(self.random.uniform(self.options.shop_minimum_length.value, 
+                                self.options.shop_maximum_length.value))
                             unlock["RidePrereq"] = \
                                 [self.random.randint(1, 3), chosen_prereq, excitement, intensity, nausea, length, total_customers]
                         elif (chosen_prereq in item_info["tracked_rides"]
-                              and (self.options.scenario_length.value == "synchronous_short" or self.options.scenario_length.value == "synchronous_long")):
+                              and (self.options.scenario_length.value == "synchronous_short" or 
+                              self.options.scenario_length.value == "synchronous_long")):
                             unlock["RidePrereq"] = [self.random.randint(1, 3), chosen_prereq, 0, 0, 0, 0, total_customers]
                         else:
                             if number > 100:
@@ -419,12 +425,15 @@ class OpenRCT2World(World):
                         while not category_selected:
                             category = self.random.choice(item_info["ride_types"])
                             for ride in possible_prereqs:
-                                if ride not in item_info["requires_landscaping"]: # Too many parks are unpredictable with water access, especially if landscaping is disabled
-                                    if ride in item_info[category]: #Ensures that a category won't be selected if there's no unlocked rides in it
-                                        category_selected = True    #e.g. thrill rides won't be required if none can be unlocked at that point
+                                # Too many parks are unpredictable with water access, especially if landscaping is disabled
+                                if ride not in item_info["requires_landscaping"]: 
+                                    #Ensures that a category won't be selected if there's no unlocked rides in it
+                                    if ride in item_info[category]: 
+                                        category_selected = True #e.g. thrill rides won't be required if none can be unlocked at that point
                         set_openRCT2_rule("category", category, number)
                         # print("Added requirement for: " + category)
-                        if category == "Roller Coasters" and any(item in possible_prereqs and item not in item_info["stat_exempt_roller_coasters"] for item in possible_prereqs):
+                        if category == "Roller Coasters" and any(item in possible_prereqs and 
+                        item not in item_info["stat_exempt_roller_coasters"] for item in possible_prereqs):
                             excitement = 0
                             intensity = 0
                             nausea = 0
@@ -432,15 +441,20 @@ class OpenRCT2World(World):
                             total_customers = 0
                             # 5 coin flips to determine what, if any, stat prereqs will be used
                             if self.random.random() < .5:
-                                excitement = round(self.random.uniform(self.options.shop_minimum_excitement.value, self.options.shop_maximum_excitement.value))
+                                excitement = round(self.random.uniform(self.options.shop_minimum_excitement.value, 
+                                self.options.shop_maximum_excitement.value))
                             if self.random.random() < .5:
-                                intensity = round(self.random.uniform(self.options.shop_minimum_intensity.value, self.options.shop_maximum_intensity.value))
+                                intensity = round(self.random.uniform(self.options.shop_minimum_intensity.value, 
+                                self.options.shop_maximum_intensity.value))
                             if self.random.random() < .5:
-                                nausea = round(self.random.uniform(self.options.shop_minimum_nausea.value, self.options.shop_maximum_nausea.value))
+                                nausea = round(self.random.uniform(self.options.shop_minimum_nausea.value, 
+                                self.options.shop_maximum_nausea.value))
                             if self.random.random() < .5:
-                                length = round(self.random.uniform(self.options.shop_minimum_length.value, self.options.shop_maximum_length.value))
+                                length = round(self.random.uniform(self.options.shop_minimum_length.value, 
+                                self.options.shop_maximum_length.value))
                             unlock["RidePrereq"] = \
-                                [self.random.randint(1, 4), category, excitement, intensity, nausea, length, total_customers]
+                                [self.random.randint(1, 4), 
+                                category, excitement, intensity, nausea, length, total_customers]
                         elif category == "Transport Rides" or category == "Water Rides" or category == "Roller Coasters":
                             unlock["RidePrereq"] = [self.random.randint(1, 3), category, 0, 0, 0, 0, total_customers]
                         else:
