@@ -47,12 +47,8 @@ class TestFriendsanityDatingRules(SVTestBase):
         for i in range(1, max_reachable + 1):
             if i % step != 0 and i != 14:
                 continue
-            location = f"{prefix}{npc} {i}{suffix}"
-            can_reach = self.world.logic.region.can_reach_location(location)(self.multiworld.state)
-            self.assertTrue(can_reach, f"Should be able to earn relationship up to {i} hearts")
+            self.assert_can_reach_location(f"{prefix}{npc} {i}{suffix}")
         for i in range(max_reachable + 1, 14 + 1):
             if i % step != 0 and i != 14:
                 continue
-            location = f"{prefix}{npc} {i}{suffix}"
-            can_reach = self.world.logic.region.can_reach_location(location)(self.multiworld.state)
-            self.assertFalse(can_reach, f"Should not be able to earn relationship up to {i} hearts")
+            self.assert_cannot_reach_location(f"{prefix}{npc} {i}{suffix}")

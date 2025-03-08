@@ -11,10 +11,10 @@ class TestBundlesLogic(SVTestBase):
     }
 
     def test_vault_2500g_bundle(self):
-        self.assertFalse(self.world.logic.region.can_reach_location("2,500g Bundle")(self.multiworld.state))
+        self.assert_cannot_reach_location("2,500g Bundle")
 
         self.collect_lots_of_money()
-        self.assertTrue(self.world.logic.region.can_reach_location("2,500g Bundle")(self.multiworld.state))
+        self.assert_can_reach_location("2,500g Bundle")
 
 
 class TestRemixedBundlesLogic(SVTestBase):
@@ -25,10 +25,10 @@ class TestRemixedBundlesLogic(SVTestBase):
     }
 
     def test_sticky_bundle_has_grind_rules(self):
-        self.assertFalse(self.world.logic.region.can_reach_location("Sticky Bundle")(self.multiworld.state))
+        self.assert_cannot_reach_location("Sticky Bundle")
 
         self.collect_all_the_money()
-        self.assertTrue(self.world.logic.region.can_reach_location("Sticky Bundle")(self.multiworld.state))
+        self.assert_can_reach_location("Sticky Bundle")
 
 
 class TestRaccoonBundlesLogic(SVTestBase):
@@ -40,11 +40,6 @@ class TestRaccoonBundlesLogic(SVTestBase):
     seed = 2  # Magic seed that does what I want. Might need to get changed if we change the randomness behavior of raccoon bundles
 
     def test_raccoon_bundles_rely_on_previous_ones(self):
-        # The first raccoon bundle is a fishing one
-        raccoon_rule_1 = self.world.logic.region.can_reach_location("Raccoon Request 1")
-
-        # The 3th raccoon bundle is a foraging one
-        raccoon_rule_3 = self.world.logic.region.can_reach_location("Raccoon Request 3")
         self.collect("Progressive Raccoon", 6)
         self.collect("Progressive Mine Elevator", 24)
         self.collect("Mining Level", 12)
@@ -58,10 +53,12 @@ class TestRaccoonBundlesLogic(SVTestBase):
         self.collect("Fishing Level", 10)
         self.collect("Furnace Recipe")
 
-        self.assertFalse(raccoon_rule_1(self.multiworld.state))
-        self.assertFalse(raccoon_rule_3(self.multiworld.state))
+        # The first raccoon bundle is a fishing one
+        self.assert_cannot_reach_location("Raccoon Request 1")
+        # The third raccoon bundle is a foraging one
+        self.assert_cannot_reach_location("Raccoon Request 3")
 
         self.collect("Fish Smoker Recipe")
 
-        self.assertTrue(raccoon_rule_1(self.multiworld.state))
-        self.assertTrue(raccoon_rule_3(self.multiworld.state))
+        self.assert_can_reach_location("Raccoon Request 1")
+        self.assert_can_reach_location("Raccoon Request 3")
