@@ -48,15 +48,14 @@ class RuleFlag(Enum):
 
 @dataclass(frozen=True)
 class SoulBlazerLocationData():
-    bid: int
+    id: int
     """Internal location ID and index into ROM chest/lair/NPC reward table"""
-    aname: str
+    name: str
     """String representation of the location."""
-    dtype: LocationType
-    eflag: RuleFlag = RuleFlag.NONE
-    cdescription: str = ""
+    type: LocationType
+    flag: RuleFlag = RuleFlag.NONE
+    description: str = ""
     """Detailed description of location."""
-    # TODO: What other location properties are needed?
 
     @property
     def address(self) -> int:
