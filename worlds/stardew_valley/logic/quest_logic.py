@@ -118,25 +118,24 @@ class QuestLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, MoneyLogicMi
         return Has(quest, self.registry.quest_rules, "quest")
 
     def has_club_card(self) -> StardewRule:
-        if self.options.quest_locations < 0:
-            return self.logic.quest.can_complete_quest(Quest.the_mysterious_qi)
-        return self.logic.received(Wallet.club_card)
+        if self.options.quest_locations.has_story_quests():
+            return self.logic.received(Wallet.club_card)
+        return self.logic.quest.can_complete_quest(Quest.the_mysterious_qi)
 
     def has_magnifying_glass(self) -> StardewRule:
-        if self.options.quest_locations < 0:
-            return self.logic.quest.can_complete_quest(Quest.a_winter_mystery)
-        return self.logic.received(Wallet.magnifying_glass)
+        if self.options.quest_locations.has_story_quests():
+            return self.logic.received(Wallet.magnifying_glass)
+        return self.logic.quest.can_complete_quest(Quest.a_winter_mystery)
 
     def has_dark_talisman(self) -> StardewRule:
-        if self.options.quest_locations < 0:
-            return self.logic.quest.can_complete_quest(Quest.dark_talisman)
-        return self.logic.received(Wallet.dark_talisman)
+        if self.options.quest_locations.has_story_quests():
+            return self.logic.received(Wallet.dark_talisman)
+        return self.logic.quest.can_complete_quest(Quest.dark_talisman)
 
     def has_raccoon_shop(self) -> StardewRule:
-        if self.options.quest_locations < 0:
-            return self.logic.received(CommunityUpgrade.raccoon, 2) & self.logic.quest.can_complete_quest(Quest.giant_stump)
-
-        # 1 - Break the tree
-        # 2 - Build the house, which summons the bundle racoon. This one is done manually if quests are turned off
-        # 3 - Raccoon's wife opens the shop
-        return self.logic.received(CommunityUpgrade.raccoon, 3)
+        if self.options.quest_locations.has_story_quests():
+            # 1 - Break the tree
+            # 2 - Build the house, which summons the bundle racoon. This one is done manually if quests are turned off
+            # 3 - Raccoon's wife opens the shop
+            return self.logic.received(CommunityUpgrade.raccoon, 3)
+        return self.logic.received(CommunityUpgrade.raccoon, 2) & self.logic.quest.can_complete_quest(Quest.giant_stump)

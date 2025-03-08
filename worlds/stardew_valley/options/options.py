@@ -384,6 +384,12 @@ class QuestLocations(NamedRange):
         "maximum": 56,
     }
 
+    def has_story_quests(self) -> bool:
+        return self.value >= 0
+
+    def has_no_story_quests(self) -> bool:
+        return not self.has_story_quests()
+
 
 class Fishsanity(Choice):
     """Locations for catching each fish the first time?
