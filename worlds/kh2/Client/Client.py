@@ -9,7 +9,6 @@ import asyncio
 import json
 import requests
 from pymem import pymem
-from . import item_dictionary_table, exclusion_item_table, CheckDupingItems, all_locations, exclusion_table, \
 from worlds.kh2 import item_dictionary_table, exclusion_item_table, CheckDupingItems, all_locations, exclusion_table, \
     SupportAbility_Table, ActionAbility_Table, all_weapon_slot
 from worlds.kh2.Names import ItemName
