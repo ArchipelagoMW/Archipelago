@@ -780,8 +780,6 @@ GAME_SPECIFIC_PHRASES = {
        "Acrisius": "BLUE_TUNIC",
        "Ribbon": "BLUE_TUNIC",
 
-        
-
         # Magic
         "Element": "MAGIC_ROD",
 
@@ -840,7 +838,6 @@ GAME_SPECIFIC_PHRASES = {
         "Seven Elements": "SHIELD",
 
         # Magic
-        
         "Progressive Fire": "MAGIC_ROD",
         "Progressive Blizzard": "MAGIC_ROD",
         "Progressive Thunder": "MAGIC_ROD",
@@ -848,6 +845,33 @@ GAME_SPECIFIC_PHRASES = {
         "Progressive Gravity": "MAGIC_ROD",
         "Progressive Stop": "MAGIC_ROD",
         "Progressive Aero": "MAGIC_ROD",
+
+        # Accessories / armor (Let's go with BLUE_TUNIC for these, these items are closer to RPG armor anyways)
+        "Chain": "BLUE_TUNIC",
+        "Ring": "BLUE_TUNIC",
+        "Band": "BLUE_TUNIC",
+        "Three Stars": "BLUE_TUNIC",
+        "Stud": "BLUE_TUNIC",
+        "Earring": "BLUE_TUNIC",
+        "Bangle": "BLUE_TUNIC",
+        "Armlet": "BLUE_TUNIC",
+        "Moogle Badge": "BLUE_TUNIC",
+        "Cosmic Arts": "BLUE_TUNIC",
+        "Heartguard": "BLUE_TUNIC",
+        "Crystal Crown": "BLUE_TUNIC",
+        "Ribbon": "BLUE_TUNIC",
+        "Brave Warrior": "BLUE_TUNIC",
+        "Ifrit's Horn": "BLUE_TUNIC",
+        "White Fang": "BLUE_TUNIC",
+        "Ray of Light": "BLUE_TUNIC",
+        "Circlet": "BLUE_TUNIC",
+        "Raven's Claw": "BLUE_TUNIC",
+        "Omega Arts": "BLUE_TUNIC",
+        "Royal Crown": "BLUE_TUNIC",
+        "Prime Cap": "BLUE_TUNIC",
+        "Belt": "BLUE_TUNIC",
+        "EXP Bracelet": "BLUE_TUNIC",
+        "EXP Necklace": "BLUE_TUNIC",
 
         # Other
         "Glide": "FEATHER",
