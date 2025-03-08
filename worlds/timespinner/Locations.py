@@ -92,15 +92,15 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
         LocationData('Military Fortress (hangar)', 'Military Fortress: Pedestal',  1337065, lambda state: state.has('Water Mask', player) if flooded.flood_lab else (logic.has_doublejump_of_npc(state) or logic.has_forwarddash_doublejump(state))),
         LocationData('The lab', 'Lab: Coffee break',  1337066),
         LocationData('The lab', 'Lab: Lower trash right',  1337067, logic.has_doublejump),
-        LocationData('The lab', 'Lab: Lower trash left',  1337068, lambda state: logic.has_doublejump_of_npc(state) if options.lock_key_amadeus else logic.has_upwarddash ),
+        LocationData('The lab', 'Lab: Lower trash left',  1337068, lambda state: logic.has_doublejump_of_npc(state) if logic.lock_key_amadeus_enabled() else logic.has_upwarddash ),
         LocationData('The lab', 'Lab: Below lab entrance',  1337069, logic.has_doublejump),
-        LocationData('The lab (power off)', 'Lab: Trash jump room',  1337070, lambda state: not options.lock_key_amadeus or logic.has_doublejump_of_npc(state) ),
-        LocationData('The lab (power off)', 'Lab: Dynamo Works',  1337071, lambda state: not options.lock_key_amadeus or (state.has_all(('Lab Access Research', 'Lab Access Dynamo'), player)) ),
+        LocationData('The lab (power off)', 'Lab: Trash jump room',  1337070, lambda state: not logic.lock_key_amadeus_enabled() or logic.has_doublejump_of_npc(state) ),
+        LocationData('The lab (power off)', 'Lab: Dynamo Works',  1337071, lambda state: not logic.lock_key_amadeus_enabled() or (state.has_all(('Lab Access Research', 'Lab Access Dynamo'), player)) ),
         LocationData('The lab (upper)', 'Lab: Genza (Blob Mom)',  1337072),
-        LocationData('The lab (power off)', 'Lab: Experiment #13',  1337073, lambda state: not options.lock_key_amadeus or state.has('Lab Access Experiment', player) ),
+        LocationData('The lab (power off)', 'Lab: Experiment #13',  1337073, lambda state: not logic.lock_key_amadeus_enabled() or state.has('Lab Access Experiment', player) ),
         LocationData('The lab (upper)', 'Lab: Download and chest room chest',  1337074),
         LocationData('The lab (upper)', 'Lab: Lab secret',  1337075, logic.can_break_walls),
-        LocationData('The lab (power off)', 'Lab: Spider Hell',  1337076, lambda state: logic.has_keycard_A and not options.lock_key_amadeus or state.has('Lab Access Research', player)),
+        LocationData('The lab (power off)', 'Lab: Spider Hell',  1337076, lambda state: logic.has_keycard_A and not logic.lock_key_amadeus_enabled() or state.has('Lab Access Research', player)),
         LocationData('Emperors tower', 'Emperor\'s Tower: Courtyard bottom chest',  1337077),
         LocationData('Emperors tower', 'Emperor\'s Tower: Courtyard floor secret',  1337078, lambda state: logic.has_upwarddash(state) and logic.can_break_walls(state)),
         LocationData('Emperors tower', 'Emperor\'s Tower: Courtyard upper chest',  1337079, lambda state: logic.has_upwarddash(state)),
@@ -203,7 +203,7 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
 
     # 1337156 - 1337170 Downloads
     if not options or options.downloadable_items:
-        location_table += ( 
+        location_table += (
             LocationData('Library', 'Library: Terminal 2 (Lachiem)',  1337156, lambda state: state.has('Tablet', player)),
             LocationData('Library', 'Library: Terminal 1 (Windaria)',  1337157, lambda state: state.has('Tablet', player)),
             # 1337158 Is lost in time
@@ -214,11 +214,11 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
             LocationData('Library top', 'Library: Backer room terminal (Vandagray Metropolis Map)',  1337163, lambda state: state.has('Tablet', player)),
             LocationData('Varndagroth tower right (elevator)', 'Varndagroth Towers (Right): Medbay terminal (Bleakness Research)',  1337164, lambda state: state.has('Tablet', player) and logic.has_keycard_B(state)),
             LocationData('The lab (upper)', 'Lab: Download and chest room terminal (Experiment #13)',  1337165, lambda state: state.has('Tablet', player)),
-            LocationData('The lab (power off)', 'Lab: Middle terminal (Amadeus Laboratory Map)',  1337166, lambda state: state.has('Tablet', player) and (not options.lock_key_amadeus or state.has('Lab Access Research', player))),
-            LocationData('The lab (power off)', 'Lab: Sentry platform terminal (Origins)',  1337167, lambda state: state.has('Tablet', player) and (not options.lock_key_amadeus or state.has('Lab Access Genza', player) or logic.can_teleport_to(state, "Time", "GateDadsTower"))),
+            LocationData('The lab (power off)', 'Lab: Middle terminal (Amadeus Laboratory Map)',  1337166, lambda state: state.has('Tablet', player) and (not logic.lock_key_amadeus_enabled() or state.has('Lab Access Research', player))),
+            LocationData('The lab (power off)', 'Lab: Sentry platform terminal (Origins)',  1337167, lambda state: state.has('Tablet', player) and (not logic.lock_key_amadeus_enabled() or state.has('Lab Access Genza', player) or logic.can_teleport_to(state, "Time", "GateDadsTower"))),
             LocationData('The lab', 'Lab: Experiment 13 terminal (W.R.E.C Farewell)',  1337168, lambda state: state.has('Tablet', player)),
             LocationData('The lab', 'Lab: Left terminal (Biotechnology)',  1337169, lambda state: state.has('Tablet', player)),
-            LocationData('The lab (power off)', 'Lab: Right terminal (Experiment #11)',  1337170, lambda state: state.has('Tablet', player) and (not options.lock_key_amadeus or state.has('Lab Access Research', player)))
+            LocationData('The lab (power off)', 'Lab: Right terminal (Experiment #11)',  1337170, lambda state: state.has('Tablet', player) and (not logic.lock_key_amadeus_enabled() or state.has('Lab Access Research', player)))
         )
 
     # 1337176 - 1337176 Cantoran
@@ -257,7 +257,7 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
     # 1337199 - 1337232 Reserved for future use
 
     # 1337233 - 1337235 Pyramid Start checks
-    if not options or options.pyramid_start: 
+    if not options or options.pyramid_start:
         location_table += (
             LocationData('Ancient Pyramid (entrance)', 'Dark Forest: Training Dummy',  1337233),
             LocationData('Ancient Pyramid (entrance)', 'Temporal Gyre: Forest Entrance',  1337234, lambda state: logic.has_upwarddash(state) or logic.can_teleport_to(state, "Time", "GateGyre")),
@@ -279,5 +279,5 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
             LocationData('Ifrit\'s Lair', 'Ifrit: Pre fight',  1337244),
             LocationData('Ifrit\'s Lair', 'Ifrit: Post fight (chest)', 1337245),
         )
- 
+
     return location_table

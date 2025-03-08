@@ -10,7 +10,12 @@ class TimespinnerLogic:
     flag_unchained_keys: bool
     flag_eye_spy: bool
     flag_specific_keycards: bool
+    flag_enter_sandman: bool
+    flag_back_to_the_future: bool
     flag_prism_break: bool
+    flag_lock_key_amadeus: bool
+    flag_gate_keep: bool
+    flag_royal_roadblock: bool
     pyramid_keys_unlock: Optional[str]
     present_keys_unlock: Optional[str]
     past_keys_unlock: Optional[str]
@@ -23,7 +28,13 @@ class TimespinnerLogic:
         self.flag_specific_keycards = bool(options and options.specific_keycards)
         self.flag_eye_spy = bool(options and options.eye_spy)
         self.flag_unchained_keys = bool(options and options.unchained_keys)
+        self.flag_enter_sandman = bool(options and options.enter_sandman)
+        self.flag_back_to_the_future = bool(options and options.back_to_the_future)
         self.flag_prism_break = bool(options and options.prism_break)
+        self.flag_lock_key_amadeus = bool(options and options.lock_key_amadeus)
+        self.flag_pyramid_start = bool(options and options.pyramid_start)
+        self.flag_gate_keep = bool(options and options.gate_keep)
+        self.flag_royal_roadblock = bool(options and options.gate_keep)
 
         if precalculated_weights:
             if self.flag_unchained_keys:
@@ -113,3 +124,18 @@ class TimespinnerLogic:
             return self.time_keys_unlock == gate and state.has("Mysterious Warp Beacon", self.player)
         else:
             raise Exception("Invallid Era: {}".format(era))
+
+    def has_pyramid_warp(self, state: CollectionState) -> bool:
+        return self.can_teleport_to(state, "Time", "GateGyre") or self.can_teleport_to(state, "Time", "GateLeftPyramid") or (not self.flag_unchained_keys and self.flag_enter_sandman)
+
+    def has_present_access_from_refugee_camp(self, state: CollectionState) -> bool:
+        return (self.flag_pyramid_start or self.flag_inverted) and self.flag_back_to_the_future and state.has_all({'Timespinner Wheel', 'Timespinner Spindle'}, self.player)
+
+    def lock_key_amadeus_enabled(self) -> bool:
+        return self.flag_lock_key_amadeus
+
+    def can_traverse_drawbridge(self, state: CollectionState) -> bool:
+        return not self.flag_gate_keep or state.has('Drawbridge Key', self.player) or self.has_upwarddash(state)
+
+    def can_open_royal_towers_door(self, state: CollectionState) -> bool:
+        return not self.flag_royal_roadblock or self.has_pink(state)

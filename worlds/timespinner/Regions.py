@@ -77,14 +77,14 @@ def create_regions_and_locations(world: MultiWorld, player: int, options: Timesp
     connect(world, player, 'Lake desolation', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Upper lake desolation', 'Lake desolation')
     connect(world, player, 'Upper lake desolation', 'Eastern lake desolation')
-    connect(world, player, 'Lower lake desolation', 'Lake desolation') 
+    connect(world, player, 'Lower lake desolation', 'Lake desolation')
     connect(world, player, 'Lower lake desolation', 'Eastern lake desolation')
     connect(world, player, 'Eastern lake desolation', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Eastern lake desolation', 'Library')
     connect(world, player, 'Eastern lake desolation', 'Lower lake desolation')
     connect(world, player, 'Eastern lake desolation', 'Upper lake desolation', lambda state: logic.has_fire(state) and state.can_reach('Upper Lake Serene', 'Region', player), "Upper Lake Serene")
     connect(world, player, 'Library', 'Eastern lake desolation')
-    connect(world, player, 'Library', 'Library top', lambda state: logic.has_doublejump(state) or state.has('Talaria Attachment', player)) 
+    connect(world, player, 'Library', 'Library top', lambda state: logic.has_doublejump(state) or state.has('Talaria Attachment', player))
     connect(world, player, 'Library', 'Varndagroth tower left', logic.has_keycard_D)
     connect(world, player, 'Library', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Library top', 'Library')
@@ -112,9 +112,9 @@ def create_regions_and_locations(world: MultiWorld, player: int, options: Timesp
     connect(world, player, 'Military Fortress (hangar)', 'The lab', lambda state: logic.has_keycard_B(state) and (state.has('Water Mask', player) if flooded.flood_lab else logic.has_doublejump(state)))
     connect(world, player, 'Temporal Gyre', 'Military Fortress')
     connect(world, player, 'The lab', 'Military Fortress')
-    connect(world, player, 'The lab', 'The lab (power off)', lambda state: options.lock_key_amadeus or logic.has_doublejump_of_npc(state))
+    connect(world, player, 'The lab', 'The lab (power off)', lambda state: logic.lock_key_amadeus_enabled() or logic.has_doublejump_of_npc(state))
     connect(world, player, 'The lab (power off)', 'The lab', lambda state: not flooded.flood_lab or state.has('Water Mask', player))
-    connect(world, player, 'The lab (power off)', 'The lab (upper)', lambda state: logic.has_forwarddash_doublejump(state) and ((not options.lock_key_amadeus) or state.has('Lab Access Genza', player)))
+    connect(world, player, 'The lab (power off)', 'The lab (upper)', lambda state: logic.has_forwarddash_doublejump(state) and ((not logic.lock_key_amadeus_enabled()) or state.has('Lab Access Genza', player)))
     connect(world, player, 'The lab (upper)', 'The lab (power off)')
     connect(world, player, 'The lab (upper)', 'Emperors tower', logic.has_forwarddash_doublejump)
     connect(world, player, 'The lab (upper)', 'Ancient Pyramid (entrance)', lambda state: state.has_all({'Timespinner Wheel', 'Timespinner Spindle', 'Timespinner Gear 1', 'Timespinner Gear 2', 'Timespinner Gear 3'}, player))
@@ -125,12 +125,12 @@ def create_regions_and_locations(world: MultiWorld, player: int, options: Timesp
     connect(world, player, 'Sealed Caves (Xarion)', 'Skeleton Shaft')
     connect(world, player, 'Sealed Caves (Xarion)', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Refugee Camp', 'Forest')
-    connect(world, player, 'Refugee Camp', 'Library', lambda state: (options.pyramid_start or options.inverted) and options.back_to_the_future and state.has_all({'Timespinner Wheel', 'Timespinner Spindle'}, player))
+    connect(world, player, 'Refugee Camp', 'Library', logic.has_present_access_from_refugee_camp)
     connect(world, player, 'Refugee Camp', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Forest', 'Refugee Camp')
     connect(world, player, 'Forest', 'Left Side forest Caves', lambda state: flooded.flood_lake_serene_bridge or state.has('Talaria Attachment', player) or logic.has_timestop(state))
     connect(world, player, 'Forest', 'Caves of Banishment (Sirens)')
-    connect(world, player, 'Forest', 'Castle Ramparts', lambda state: not options.gate_keep or state.has('Drawbridge Key', player) or logic.has_upwarddash(state))
+    connect(world, player, 'Forest', 'Castle Ramparts', logic.can_traverse_drawbridge)
     connect(world, player, 'Left Side forest Caves', 'Forest')
     connect(world, player, 'Left Side forest Caves', 'Upper Lake Serene', logic.has_timestop)
     connect(world, player, 'Left Side forest Caves', 'Lower Lake Serene', lambda state: not flooded.flood_lake_serene or state.has('Water Mask', player))
@@ -152,7 +152,7 @@ def create_regions_and_locations(world: MultiWorld, player: int, options: Timesp
     connect(world, player, 'Castle Ramparts', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Castle Keep', 'Castle Ramparts')
     connect(world, player, 'Castle Keep', 'Castle Basement', lambda state: not flooded.flood_basement or state.has('Water Mask', player))
-    connect(world, player, 'Castle Keep', 'Royal towers (lower)', lambda state: logic.has_doublejump(state) and (not options.royal_roadblock or logic.has_pink(state)))
+    connect(world, player, 'Castle Keep', 'Royal towers (lower)', lambda state: logic.has_doublejump(state) and logic.can_open_royal_towers_door(state))
     connect(world, player, 'Castle Keep', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Royal towers (lower)', 'Castle Keep')
     connect(world, player, 'Royal towers (lower)', 'Royal towers', lambda state: state.has('Timespinner Wheel', player) or logic.has_forwarddash_doublejump(state))
@@ -185,7 +185,7 @@ def create_regions_and_locations(world: MultiWorld, player: int, options: Timesp
     connect(world, player, 'Space time continuum', 'Caves of Banishment (upper)', lambda state: logic.can_teleport_to(state, "Past", "GateCavesOfBanishment"))
     connect(world, player, 'Space time continuum', 'Military Fortress (hangar)', lambda state: logic.can_teleport_to(state, "Present", "GateLabEntrance"))
     connect(world, player, 'Space time continuum', 'The lab (upper)', lambda state: logic.can_teleport_to(state, "Present", "GateDadsTower"))
-    connect(world, player, 'Space time continuum', 'Ancient Pyramid (entrance)', lambda state: logic.can_teleport_to(state, "Time", "GateGyre") or logic.can_teleport_to(state, "Time", "GateLeftPyramid") or (not options.unchained_keys and options.enter_sandman))
+    connect(world, player, 'Space time continuum', 'Ancient Pyramid (entrance)', logic.has_pyramid_warp)
     connect(world, player, 'Space time continuum', 'Ancient Pyramid (right)', lambda state: logic.can_teleport_to(state, "Time", "GateRightPyramid"))
 
     if options.gyre_archives:
@@ -231,7 +231,7 @@ def connectStartingRegion(world: MultiWorld, player: int, options: TimespinnerOp
     tutorial = world.get_region('Tutorial', player)
     space_time_continuum = world.get_region('Space time continuum', player)
 
-    if options.pyramid_start: 
+    if options.pyramid_start:
         starting_region = world.get_region('Ancient Pyramid (entrance)', player)
     elif options.inverted:
         starting_region = world.get_region('Refugee Camp', player)
@@ -249,7 +249,7 @@ def connectStartingRegion(world: MultiWorld, player: int, options: TimespinnerOp
     space_time_continuum.exits.append(teleport_back_to_start)
 
 
-def connect(world: MultiWorld, player: int, source: str, target: str, 
+def connect(world: MultiWorld, player: int, source: str, target: str,
             rule: Optional[Callable[[CollectionState], bool]] = None,
             indirect: str = ""):
 
