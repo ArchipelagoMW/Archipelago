@@ -4,10 +4,10 @@ import traceback
 import dolphin_memory_engine as dme
 
 from CommonClient import logger
-from worlds.pokepark_1.adresses import  UNLOCKS, \
+from worlds.pokepark.adresses import  UNLOCKS, \
     stage_id_address, main_menu_stage_id, main_menu2_stage_id, main_menu3_stage_id, PRISMAS, \
     POKEMON_STATES, MINIGAME_LOCATIONS, QUEST_LOCATIONS
-from worlds.pokepark_1.dme_helper import read_memory, write_memory
+from worlds.pokepark.dme_helper import read_memory, write_memory
 
 delay_seconds = 0.9
 

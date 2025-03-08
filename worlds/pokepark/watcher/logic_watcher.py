@@ -3,7 +3,7 @@ import traceback
 import dolphin_memory_engine as dme
 import asyncio
 
-from worlds.pokepark_1.adresses import logic_adresses
+from worlds.pokepark.adresses import logic_adresses
 from CommonClient  import logger
 delay_seconds = 0.1
 async def logic_watcher(ctx):

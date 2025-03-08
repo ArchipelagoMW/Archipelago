@@ -1,7 +1,7 @@
 from BaseClasses import Item
 
 class PokeparkItem(Item):
-    game: str = "PokéPark"
+    game: str = "PokePark"
 
 FRIENDSHIP_ITEMS: dict[str, int] = {
     #Meadow Zone
@@ -125,16 +125,17 @@ UNLOCK_ITEMS: dict[str,int] = {
     "Pikachu Balloon": 28000,
     "Pikachu Surfboard": 29000,
     "Pikachu Snowboard": 30000,
+    "Drifblim Unlock": 31000,
 
     #Ice Zone
-    "Delibird Unlock": 31000,
-    "Squirtle Unlock": 32000,
-    "Smoochum Unlock": 33000,
-    "Sneasel Unlock": 34000,
-    "Mamoswine Unlock": 35000,
-    "Glalie Unlock": 36000,
-    "Primeape Unlock": 37000,
-    "Ursaring Unlock":38000
+    "Delibird Unlock": 32000,
+    "Squirtle Unlock": 33000,
+    "Smoochum Unlock": 34000,
+    "Sneasel Unlock": 35000,
+    "Mamoswine Unlock": 36000,
+    "Glalie Unlock": 37000,
+    "Primeape Unlock": 38000,
+    "Ursaring Unlock":39000
 
 }
 
@@ -162,7 +163,7 @@ POWERS: dict[str,int] = {
 }
 
 REGION_UNLOCK: dict[str,int] = {
-    # Beach Zone Unlock
+    "Meadow Zone Unlock": 77777,
     "Beach Zone Unlock": 99999,
     "Ice Zone Unlock": 88888
 }

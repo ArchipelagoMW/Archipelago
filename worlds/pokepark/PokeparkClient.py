@@ -3,19 +3,19 @@ import asyncio
 import dolphin_memory_engine as dme
 
 import ModuleUpdate
-from worlds.pokepark_1 import POWERS, BERRIES
-from worlds.pokepark_1.adresses import \
+from worlds.pokepark import POWERS, BERRIES
+from worlds.pokepark.adresses import \
     berry_item_checks, \
     POWER_INCREMENTS, POWER_SHARED_ADDR, prisma_blocked_itemIds, \
-    drifblim_unlock_address, drifblim_unlock_value, UNLOCKS, MemoryRange, PRISMAS, POKEMON_STATES, \
+ UNLOCKS, MemoryRange, PRISMAS, POKEMON_STATES, \
     blocked_friendship_itemIds, \
     blocked_friendship_unlock_itemIds, stage_id_address, main_menu_stage_id, main_menu2_stage_id, main_menu3_stage_id, \
     BLOCKED_UNLOCKS
-from worlds.pokepark_1.dme_helper import write_memory
-from worlds.pokepark_1.watcher.location_state_watcher import location_state_watcher
-from worlds.pokepark_1.watcher.location_watcher import location_watcher
-from worlds.pokepark_1.watcher.logic_watcher import logic_watcher
-from worlds.pokepark_1.watcher.world_state_watcher import state_watcher
+from worlds.pokepark.dme_helper import write_memory
+from worlds.pokepark.watcher.location_state_watcher import location_state_watcher
+from worlds.pokepark.watcher.location_watcher import location_watcher
+from worlds.pokepark.watcher.logic_watcher import logic_watcher
+from worlds.pokepark.watcher.world_state_watcher import state_watcher
 
 ModuleUpdate.update()
 
@@ -53,7 +53,7 @@ class PokeparkCommandProcessor(ClientCommandProcessor):
 
 class PokeparkContext(CommonContext):
     command_processor = PokeparkCommandProcessor
-    game = "PokéPark"
+    game = "PokePark"
     items_handling = 0b111  # full remote
     hook_check = False
     hook_nagged = False
@@ -163,8 +163,6 @@ def refresh_items(ctx:PokeparkContext):
 
 def activate_unlock_items(items:list[NetworkItem], locations: set[int]):
     sums = {}
-    key = (drifblim_unlock_address, MemoryRange.WORD)
-    sums[key] = sums.get(key, 0) + drifblim_unlock_value
     for item in set(item.item for item in items):
         if item in UNLOCKS:
             unlock = UNLOCKS[item]
@@ -223,17 +221,26 @@ def activate_power_items(items:list[NetworkItem]):
     tail_count = sum(1 for item in items
                     if item.item == POWERS["Progressive Iron Tail"])
 
-    if thunderbolt_count > 0 or dash_count > 0 or health_count:
-        new_value = POWER_INCREMENTS["thunderbolt"]["base"]
-        if thunderbolt_count > 0:
-            new_value += sum(POWER_INCREMENTS["thunderbolt"]["increments"][:thunderbolt_count])
-        if dash_count > 0:
-            new_value += sum(POWER_INCREMENTS["dash"]["increments"][:dash_count])
-        if dash_count > 0:
-            new_value += sum(POWER_INCREMENTS["health"]["increments"][:health_count])
-        if dash_count > 0:
-            new_value += sum(POWER_INCREMENTS["iron_tail"]["increments"][:tail_count])
-        dme.write_bytes(POWER_SHARED_ADDR, new_value.to_bytes(2, byteorder='big'))
+    max_thunderbolt = len(POWER_INCREMENTS["thunderbolt"]["increments"])
+    max_dash = len(POWER_INCREMENTS["dash"]["increments"])
+    max_health = len(POWER_INCREMENTS["health"]["increments"])
+    max_tail = len(POWER_INCREMENTS["iron_tail"]["increments"])
+
+    thunderbolt_count = min(thunderbolt_count, max_thunderbolt)
+    dash_count = min(dash_count, max_dash)
+    health_count = min(health_count, max_health)
+    tail_count = min(tail_count, max_tail)
+
+    new_value = 0x00
+    if thunderbolt_count > 0:
+        new_value += sum(POWER_INCREMENTS["thunderbolt"]["increments"][:thunderbolt_count])
+    if dash_count > 0:
+        new_value += sum(POWER_INCREMENTS["dash"]["increments"][:dash_count])
+    if health_count > 0:
+        new_value += sum(POWER_INCREMENTS["health"]["increments"][:health_count])
+    if tail_count > 0:
+        new_value += sum(POWER_INCREMENTS["iron_tail"]["increments"][:tail_count])
+    dme.write_bytes(POWER_SHARED_ADDR, new_value.to_bytes(2, byteorder='big'))
 
 
 def send_victory(ctx: PokeparkContext):

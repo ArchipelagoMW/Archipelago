@@ -508,6 +508,9 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
         locations = ["Beach Zone - Gyarados' Aqua Dash - Empoleon", "Ice Zone - Empoleon's Snow Slide - Empoleon"]
         items = [["Empoleon"]]
         self.assertAccessDependency(locations, items)
+
+class TestRegionAccessByFriendship(PokeparkTest):
+
     # Region access tests
     def test_can_reach_venusaur_minigame(self) -> None:
         """Verify access to Venusaur's Vine Swing minigame with Spearow and Croagunk"""

@@ -4,9 +4,9 @@ import traceback
 import dolphin_memory_engine as dme
 
 from CommonClient import logger
-from worlds.pokepark_1.adresses import \
-    stage_id_address, intro_stage_id, WORLD_STATE_ADDRESS, INIT_WORLD_STATE, INIT_FAST_TRAVEL_VALUE, ZONESYSTEM
-from worlds.pokepark_1.dme_helper import write_memory, write_bit
+from worlds.pokepark.adresses import \
+    stage_id_address, intro_stage_id, ZONESYSTEM, main_menu_stage_id, main_menu2_stage_id, main_menu3_stage_id
+from worlds.pokepark.dme_helper import write_memory, write_bit
 
 delay_seconds = 1
 
@@ -19,11 +19,19 @@ async def state_watcher(ctx):
         current_stage = dme.read_word(stage_id_address)
 
         if current_stage == intro_stage_id:
-            # Set init World State
-            dme.write_word(WORLD_STATE_ADDRESS, INIT_WORLD_STATE)
+            # Set Treehouse spawn
+            dme.write_byte(0x8037AEE0, 0x02)
+            dme.write_byte(0x8037AEE1, 0x01)
+            dme.write_byte(0x8037AEE3, 0x05)
+            dme.write_byte(0x8037AF20, 0x02)
+            dme.write_byte(0x8037AF21, 0x01)
+            dme.write_byte(0x8037AF23, 0x05)
+
+            # init drifblim fast travel
+            dme.write_byte(0x8037502F, 0x00)
+
 
             # Set starting values
-            dme.write_byte(0x8037AEEF, 0x11)  # Init thunderbolt and dash
             dme.write_byte(0x8037AEC9, 0x37)  # Init status menu
             dme.write_byte(0x80376AF7, 0x10)  # Activate Celebi
 
@@ -63,7 +71,7 @@ async def state_watcher(ctx):
 
     def update_fast_travel(zone_system, available_states):
 
-        fast_travel_value = INIT_FAST_TRAVEL_VALUE + sum(state.fast_travel_flag for state in available_states)
+        fast_travel_value = sum(state.fast_travel_flag for state in available_states)
         dme.write_byte(zone_system.fast_travel_address, fast_travel_value)
 
     def update_treehouse_gates(zone_system, received_items):
@@ -93,6 +101,11 @@ async def state_watcher(ctx):
         nonlocal initialization_done
 
         if not dme.is_hooked():
+            return
+
+        stage_id = dme.read_word(stage_id_address)
+
+        if stage_id == main_menu_stage_id or stage_id == main_menu2_stage_id or stage_id == main_menu3_stage_id:
             return
 
         if not initialization_done:

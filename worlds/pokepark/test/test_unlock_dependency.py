@@ -1,6 +1,6 @@
 from . import PokeparkTest
 
-class TestPokemonFriendshipDependencies(PokeparkTest):
+class TestUnlockDependencies(PokeparkTest):
 
     def test_tropius_unlock(self) -> None:
         """Verify unlock conditions for accessing Tropius in Meadow Zone Overworld"""
@@ -234,7 +234,9 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
         locations =["Ice Zone - Overworld - Ursaring"]
         items = [["Ursaring Unlock"]]
         self.assertAccessDependency(locations, items)
-    #region access tests
+
+
+class TestRegionAccess(PokeparkTest):
     def test_can_reach_beach_zone(self)->None:
         """Verify ability to access Beach Zone Overworld"""
 
@@ -279,4 +281,29 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
         items = [["Ice Zone Unlock"]]
         self.assertAccessDependency(locations, items,True)
 
+    def test_can_reach_meadow_zone(self)->None:
+        """Verify ability to access Meadow Zone Overworld"""
+        self.assertTrue(self.can_reach_region("Meadow Zone - Overworld"))
 
+class TestRegionAccessStartIceZone(PokeparkTest):
+    options = {
+        "starting_zone": 2
+    }
+    def test_can_reach_meadow_zone(self)->None:
+        """Verify ability to access Meadow Zone Overworld"""
+        self.collect_by_name("Meadow Zone Unlock")
+        self.assertTrue(self.can_reach_region("Meadow Zone - Overworld"))
+
+    def test_can_not_reach_meadow_zone(self)->None:
+        """Verify inability to access Meadow Zone Overworld without unlock"""
+        self.assertFalse(self.can_reach_region("Meadow Zone - Overworld"))
+
+    def test_can_not_reach_meadow_zone_with_everything_but_meadow_zone_unlock(self)->None:
+        """Verify inability to access Meadow Zone Overworld without specific unlock"""
+        self.collect_all_but(["Meadow Zone Unlock"])
+        self.assertFalse(self.can_reach_region("Meadow Zone - Overworld"))
+
+    def test_can_reach_ice_zone(self)->None:
+        """Verify ability to access Ice Zone Overworld"""
+
+        self.assertTrue(self.can_reach_region("Ice Zone - Overworld"))

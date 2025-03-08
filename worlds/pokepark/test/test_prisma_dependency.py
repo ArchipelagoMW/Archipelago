@@ -1,6 +1,6 @@
 from . import PokeparkTest
 
-class TestPokemonFriendshipDependencies(PokeparkTest):
+class TestPrismaDependencies(PokeparkTest):
 
     def test_bulbasaur_prisma(self) -> None:
         """Verify locations and victory conditions for Bulbasaur's Prisma unlock"""

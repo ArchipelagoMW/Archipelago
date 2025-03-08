@@ -4,10 +4,10 @@ import traceback
 import dolphin_memory_engine as dme
 
 from CommonClient import logger
-from worlds.pokepark_1.adresses import stage_id_address, is_in_menu_address, pokemon_id_address, prisma_blocked_itemIds, \
+from worlds.pokepark.adresses import stage_id_address, is_in_menu_address, pokemon_id_address, prisma_blocked_itemIds, \
     UNLOCKS, PRISMAS, PrismaItem, POKEMON_STATES, blocked_friendship_itemIds, blocked_friendship_unlock_itemIds, \
     BLOCKED_UNLOCKS, LOADSCREEN_TO_ZONE, PokemonLocation
-from worlds.pokepark_1.dme_helper import write_memory, read_memory
+from worlds.pokepark.dme_helper import write_memory, read_memory
 
 empty_pokemon_id = 0x00
 

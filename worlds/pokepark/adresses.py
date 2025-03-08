@@ -2,12 +2,10 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import List
 
-from worlds.pokepark_1 import FRIENDSHIP_ITEMS, UNLOCK_ITEMS, BERRIES
-from worlds.pokepark_1.LocationIds import MinigameLocationIds, OverworldPokemonLocationIds, QuestLocationIds
-from worlds.pokepark_1.items import PRISM_ITEM, REGION_UNLOCK
+from worlds.pokepark import FRIENDSHIP_ITEMS, UNLOCK_ITEMS, BERRIES
+from worlds.pokepark.LocationIds import MinigameLocationIds, OverworldPokemonLocationIds, QuestLocationIds
+from worlds.pokepark.items import PRISM_ITEM, REGION_UNLOCK
 
-drifblim_unlock_address = 0x80376AE0
-drifblim_unlock_value = 0x40000000
 pokemon_id_address = 0x8036dc20
 stage_id_address = 0x8036AEF0  # word
 is_in_menu_address = 0x80482F04
@@ -26,9 +24,6 @@ venusaur_minigame_stage_id = 0xA81938
 pelipper_minigame_stage_id = 0xD92358
 gyarados_minigame_stage_id = 0xC61408
 empoleon_minigame_stage_id = 0xBE6D00
-INIT_WORLD_STATE = 0x7c060
-WORLD_STATE_ADDRESS = 0x8037500C
-INIT_FAST_TRAVEL_VALUE = 0x80
 
 LOADSCREEN_TO_ZONE = {
 meadow_zone_loadscreen_stage_id:meadow_zone_stage_id,
@@ -144,6 +139,16 @@ ZONESYSTEM = ZoneSystem(world_state_address=0x8037500D,
                fast_travel_address=0x8037502F,
                states=[
                    ZoneState(
+                       item_id=REGION_UNLOCK["Meadow Zone Unlock"],
+                       world_state_value=0x7c0,
+                       addresses=[
+                           MemoryAddress(  # unlock bidoof in beach zone
+                               base_address=0x8037500F,
+                               value=0b01100000,
+                               memory_range=MemoryRange.BYTE),
+                       ],
+                       fast_travel_flag=0x80),
+                   ZoneState(
                        item_id=REGION_UNLOCK["Beach Zone Unlock"],
                        world_state_value=0x870,
                        addresses=[
@@ -191,6 +196,15 @@ ZONESYSTEM = ZoneSystem(world_state_address=0x8037500D,
                        item_ids=[REGION_UNLOCK["Beach Zone Unlock"]],
                        gate=MemoryAddress(
                            base_address=0x80D53068,
+                           memory_range=MemoryRange.WORD,
+                           value=0x01
+                       )
+                   ),
+                   ZoneGateUnlocks(
+                       stage_id=0x13282F8,
+                       item_ids=[REGION_UNLOCK["Meadow Zone Unlock"]],
+                       gate=MemoryAddress(
+                           base_address=0x80D52128,
                            memory_range=MemoryRange.WORD,
                            value=0x01
                        )
@@ -2107,6 +2121,16 @@ PRISMAS = {
 BLOCKED_UNLOCKS = []
 
 UNLOCKS = {
+    # Misc
+    UNLOCK_ITEMS["Drifblim Unlock"]: UnlockItem(
+        item=MemoryAddress(
+            base_address=0x80376AD0,
+            offset=0x10,
+            memory_range=MemoryRange.WORD,
+            value=0x40000000
+        )
+    ),
+
     # Meadow Zone Unlocks
     #
     UNLOCK_ITEMS["Tropius Unlock"]: UnlockItem(
@@ -2610,19 +2634,15 @@ UNLOCKS = {
 
 POWER_INCREMENTS = {
     "thunderbolt": {
-        "base": 0x11,
-        "increments": [0x20, 0x40, 0x80],  # +20, +40, +80
+        "increments": [0x10, 0x20, 0x40, 0x80],  # +20, +40, +80
     },
     "dash": {
-        "base": 0x11,
-        "increments": [0x04, 0x08, 0x4000],  # +4, +8, +4000
+        "increments": [0x01,0x04, 0x08, 0x4000],  # +4, +8, +4000
     },
     "health": {
-        "base": 0x11,
         "increments": [0x100, 0x200, 0x400]
     },
     "iron_tail": {
-        "base": 0x11,
         "increments": [0x800,0x1000,0x2000]
     }
 }

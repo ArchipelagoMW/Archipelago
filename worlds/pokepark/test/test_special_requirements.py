@@ -1,6 +1,6 @@
 from . import PokeparkTest
 
-class TestPokemonFriendshipDependencies(PokeparkTest):
+class TestFriendCountDependencies(PokeparkTest):
 
     def test_leafeon_friendcount(self) -> None:
         """Verify Leafeon access with sufficient Pokemon friendships (first valid set)"""

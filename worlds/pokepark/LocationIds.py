@@ -1,6 +1,6 @@
 from enum import Enum
 
-from worlds.pokepark_1 import BERRIES, FRIENDSHIP_ITEMS, POWERS
+from worlds.pokepark import BERRIES, FRIENDSHIP_ITEMS, POWERS
 
 
 class MinigameLocationIds(Enum):
