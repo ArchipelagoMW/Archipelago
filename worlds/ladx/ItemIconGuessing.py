@@ -107,6 +107,7 @@ SYNONYMS = {
     'JUMP': 'FEATHER',
     'PLUME': 'FEATHER',
     'WING': 'FEATHER',
+    "QUILL": "FEATHER",
 
     # SHOVEL
     'DIG': 'SHOVEL',
@@ -662,6 +663,7 @@ GAME_SPECIFIC_PHRASES = {
         "Energy cell pack": "SINGLE_ARROW",
         "Chainsaw": "SWORD",
         "Medikit": "MEDICINE",
+        "Skull key": "NIGHTMARE_KEY",
     },
 
     "DOOM II": {
@@ -671,6 +673,7 @@ GAME_SPECIFIC_PHRASES = {
         "Energy cell pack": "SINGLE_ARROW",
         "Chainsaw": "SWORD",
         "Medikit": "MEDICINE",
+        "Skull key": "NIGHTMARE_KEY",
     },
 
     "Inscryption": {
@@ -679,7 +682,6 @@ GAME_SPECIFIC_PHRASES = {
         "Monocle": "TRADING_ITEM_MAGNIFYING_GLASS", # Ditto
         "Pile Of Meat": "TRADING_ITEM_DOG_FOOD",
         "Angler Hook": "TRADING_ITEM_FISHING_HOOK", # Good fish.
-        "Quill": "FEATHER",
         "Currency": "RUPEES_20",
     },
 
