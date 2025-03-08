@@ -276,7 +276,7 @@ class Goal(Choice):
     """
     Vanilla: Complete jokes end with the required items and defeat Birdo to unlock Bowser's Castle.
 
-    Emblem Hunt: Find required amount of Beanstar Emblems to gain access to Bowser's Castle.
+    Emblem Hunt: Find the required number of Beanstar Emblems to gain access to Bowser's Castle.
     """
     display_name = "Goal"
     option_vanilla = 0
@@ -287,7 +287,7 @@ class EmblemsRequired(Range):
     """
     Number of Beanstar Emblems to collect to unlock Bowser's Castle.
 
-    If Goal is not Emblem Hunt this does nothing.
+    If Goal is not Emblem Hunt, this does nothing.
     """
     display_name = "Emblems Required"
     range_start = 1
@@ -299,7 +299,7 @@ class EmblemsAmount(Range):
     """
     Number of Beanstar Emblems that are in the pool.
 
-    If Goal is not Emblem Hunt this does nothing.
+    If Goal is not Emblem Hunt, this does nothing.
     """
     display_name = "Emblems Available"
     range_start = 1

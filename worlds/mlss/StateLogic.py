@@ -1,4 +1,4 @@
-from worlds.mlss.Options import Goal
+from .Options import Goal
 
 
 def canDig(state, player):

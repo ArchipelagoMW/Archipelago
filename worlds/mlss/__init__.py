@@ -63,9 +63,12 @@ class MLSSWorld(World):
 
     def generate_early(self) -> None:
         self.disabled_locations = set()
-        if self.options.emblems_amount < self.options.emblems_required:
-            self.options.emblems_amount.value = self.options.emblems_required.value
-            logging.warning("Number of emblems required is greater than the number of emblems available. Adjusting value.")
+        if self.options.goal == "emblem_hunt":
+            if self.options.emblems_amount < self.options.emblems_required:
+                self.options.emblems_amount.value = self.options.emblems_required.value
+                logging.warning(
+                    f"{self.player_name}'s number of emblems required is greater than the number of emblems available. "
+                    f"Changing to {self.options.emblems_required.value}.")
         if self.options.skip_minecart:
             self.disabled_locations.update([LocationName.HoohooMountainBaseMinecartCaveDigspot])
         if self.options.disable_surf:
@@ -117,7 +120,7 @@ class MLSSWorld(World):
             if item.classification != ItemClassification.filler and item.classification != ItemClassification.skip_balancing:
                 freq = item_frequencies.get(item.itemName, 1)
                 if item.itemName == "Beanstar Emblem":
-                    freq = (0 if self.options.goal != "emblem_hunt" else self.options.emblems_amount)
+                    freq = (0 if self.options.goal != "emblem_hunt" else self.options.emblems_amount.value)
                 if item in precollected:
                     freq = max(freq - precollected.count(item), 0)
                 if self.options.disable_harhalls_pants and "Harhall's" in item.itemName:
