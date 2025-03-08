@@ -19,6 +19,29 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
     flooded: Optional[PreCalculatedWeights] = precalculated_weights
     logic = TimespinnerLogic(player, options, precalculated_weights)
 
+    if options and options.specific_keycards:
+        has_keycard_B = logic.has_keycard_B_specific
+        has_keycard_C = logic.has_keycard_C_specific
+        has_keycard_D = logic.has_keycard_D_specific
+    else:
+        has_keycard_B = logic.has_keycard_B
+        has_keycard_C = logic.has_keycard_C
+        has_keycard_D = logic.has_keycard_D
+
+    if options and options.eye_spy:
+        can_break_walls = logic.has_oculus_ring
+    else:
+        can_break_walls = lambda state: True
+
+    if options and options.unchained_keys:
+        has_teleport = lambda state: True
+        can_teleport_to = logic.can_teleport_to_unchained
+    else:
+        has_teleport = logic.has_teleport
+        can_teleport_to = logic.can_teleport_to
+
+    lock_key_amadeus_enabled = options and options.lock_key_amadeus
+
     # 1337000 - 1337155 Generic locations
     # 1337171 - 1337175 New Pickup checks
     # 1337246 - 1337249 Ancient Pyramid
@@ -32,10 +55,10 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
         LocationData('Lake desolation', 'Lake Desolation (Lower): Timespinner Wheel room',  1337005),
         LocationData('Lake desolation', 'Lake Desolation: Forget me not chest',  1337006, lambda state: logic.has_fire(state) and state.can_reach('Upper Lake Serene', 'Region', player)),
         LocationData('Lake desolation', 'Lake Desolation (Lower): Chicken chest', 1337007, logic.has_timestop),
-        LocationData('Lower lake desolation', 'Lake Desolation (Lower): Not so secret room',  1337008, logic.can_break_walls),
+        LocationData('Lower lake desolation', 'Lake Desolation (Lower): Not so secret room',  1337008, can_break_walls),
         LocationData('Lower lake desolation', 'Lake Desolation (Upper): Tank chest',  1337009, logic.has_timestop),
         LocationData('Upper lake desolation', 'Lake Desolation (Upper): Oxygen recovery room',  1337010),
-        LocationData('Upper lake desolation', 'Lake Desolation (Upper): Secret room',  1337011, logic.can_break_walls),
+        LocationData('Upper lake desolation', 'Lake Desolation (Upper): Secret room',  1337011, can_break_walls),
         LocationData('Upper lake desolation', 'Lake Desolation (Upper): Double jump cave platform',  1337012, logic.has_doublejump),
         LocationData('Upper lake desolation', 'Lake Desolation (Upper): Double jump cave floor',  1337013),
         LocationData('Upper lake desolation', 'Lake Desolation (Upper): Sparrow chest',  1337014),
@@ -47,9 +70,9 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
         LocationData('Library', 'Library: Warp gate',  1337020),
         LocationData('Library', 'Library: Librarian',  1337021),
         LocationData('Library', 'Library: Reading nook chest',  1337022),
-        LocationData('Library', 'Library: Storage room chest 1',  1337023, logic.has_keycard_D),
-        LocationData('Library', 'Library: Storage room chest 2',  1337024, logic.has_keycard_D),
-        LocationData('Library', 'Library: Storage room chest 3',  1337025, logic.has_keycard_D),
+        LocationData('Library', 'Library: Storage room chest 1',  1337023, has_keycard_D),
+        LocationData('Library', 'Library: Storage room chest 2',  1337024, has_keycard_D),
+        LocationData('Library', 'Library: Storage room chest 3',  1337025, has_keycard_D),
         LocationData('Library top', 'Library: Backer room chest 5',  1337026),
         LocationData('Library top', 'Library: Backer room chest 4',  1337027),
         LocationData('Library top', 'Library: Backer room chest 3',  1337028),
@@ -57,8 +80,8 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
         LocationData('Library top', 'Library: Backer room chest 1',  1337030),
         LocationData('Varndagroth tower left', 'Varndagroth Towers (Left): Elevator Key not required',  1337031),
         LocationData('Varndagroth tower left', 'Varndagroth Towers (Left): Ye olde Timespinner',  1337032),
-        LocationData('Varndagroth tower left', 'Varndagroth Towers (Left): Bottom floor',  1337033, logic.has_keycard_C),
-        LocationData('Varndagroth tower left', 'Varndagroth Towers (Left): Air vents secret',  1337034, logic.can_break_walls),
+        LocationData('Varndagroth tower left', 'Varndagroth Towers (Left): Bottom floor',  1337033, has_keycard_C),
+        LocationData('Varndagroth tower left', 'Varndagroth Towers (Left): Air vents secret',  1337034, can_break_walls),
         LocationData('Varndagroth tower left', 'Varndagroth Towers (Left): Elevator chest',  1337035, lambda state: state.has('Elevator Keycard', player)),
         LocationData('Varndagroth tower right (upper)', 'Varndagroth Towers: Bridge',  1337036),
         LocationData('Varndagroth tower right (elevator)', 'Varndagroth Towers (Right): Elevator chest',  1337037),
@@ -66,14 +89,14 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
         LocationData('Varndagroth tower right (upper)', 'Varndagroth Towers (Right): Air vents right chest',  1337039, lambda state: state.has('Elevator Keycard', player) or logic.has_doublejump(state)),
         LocationData('Varndagroth tower right (upper)', 'Varndagroth Towers (Right): Air vents left chest',  1337040, lambda state: state.has('Elevator Keycard', player) or logic.has_doublejump(state)),
         LocationData('Varndagroth tower right (lower)', 'Varndagroth Towers (Right): Bottom floor',  1337041),
-        LocationData('Varndagroth tower right (elevator)', 'Varndagroth Towers (Right): Varndagroth',  1337042, logic.has_keycard_C),
+        LocationData('Varndagroth tower right (elevator)', 'Varndagroth Towers (Right): Varndagroth',  1337042, has_keycard_C),
         LocationData('Varndagroth tower right (elevator)', 'Varndagroth Towers (Right): Spider Hell',  1337043, logic.has_keycard_A),
         LocationData('Skeleton Shaft', 'Sealed Caves (Xarion): Skeleton',  1337044),
         LocationData('Sealed Caves (Xarion)', 'Sealed Caves (Xarion): Shroom jump room',  1337045, logic.has_timestop),
         LocationData('Sealed Caves (Xarion)', 'Sealed Caves (Xarion): Double shroom room',  1337046),
         LocationData('Sealed Caves (Xarion)', 'Sealed Caves (Xarion): Jacksquat room',  1337047, logic.has_forwarddash_doublejump),
         LocationData('Sealed Caves (Xarion)', 'Sealed Caves (Xarion): Below Jacksquat room',  1337048),
-        LocationData('Sealed Caves (Xarion)', 'Sealed Caves (Xarion): Secret room',  1337049, logic.can_break_walls),
+        LocationData('Sealed Caves (Xarion)', 'Sealed Caves (Xarion): Secret room',  1337049, can_break_walls),
         LocationData('Sealed Caves (Xarion)', 'Sealed Caves (Xarion): Bottom left room',  1337050),
         LocationData('Sealed Caves (Xarion)', 'Sealed Caves (Xarion): Last chance before Xarion',  1337051, logic.has_doublejump),
         LocationData('Sealed Caves (Xarion)', 'Sealed Caves (Xarion): Xarion',  1337052, lambda state: not flooded.flood_xarion or state.has('Water Mask', player)),
@@ -87,22 +110,22 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
         LocationData('Military Fortress (hangar)', 'Military Fortress: Soldiers bridge',  1337060),
         LocationData('Military Fortress (hangar)', 'Military Fortress: Giantess room',  1337061),
         LocationData('Military Fortress (hangar)', 'Military Fortress: Giantess bridge',  1337062),
-        LocationData('Military Fortress (hangar)', 'Military Fortress: B door chest 2',  1337063, lambda state: logic.has_keycard_B(state) and (state.has('Water Mask', player) if flooded.flood_lab else logic.has_doublejump(state))),
-        LocationData('Military Fortress (hangar)', 'Military Fortress: B door chest 1',  1337064, lambda state: logic.has_keycard_B(state) and (state.has('Water Mask', player) if flooded.flood_lab else logic.has_doublejump(state))),
+        LocationData('Military Fortress (hangar)', 'Military Fortress: B door chest 2',  1337063, lambda state: has_keycard_B(state) and (state.has('Water Mask', player) if flooded.flood_lab else logic.has_doublejump(state))),
+        LocationData('Military Fortress (hangar)', 'Military Fortress: B door chest 1',  1337064, lambda state: has_keycard_B(state) and (state.has('Water Mask', player) if flooded.flood_lab else logic.has_doublejump(state))),
         LocationData('Military Fortress (hangar)', 'Military Fortress: Pedestal',  1337065, lambda state: state.has('Water Mask', player) if flooded.flood_lab else (logic.has_doublejump_of_npc(state) or logic.has_forwarddash_doublejump(state))),
         LocationData('The lab', 'Lab: Coffee break',  1337066),
         LocationData('The lab', 'Lab: Lower trash right',  1337067, logic.has_doublejump),
-        LocationData('The lab', 'Lab: Lower trash left',  1337068, lambda state: logic.has_doublejump_of_npc(state) if logic.lock_key_amadeus_enabled() else logic.has_upwarddash ),
+        LocationData('The lab', 'Lab: Lower trash left',  1337068, lambda state: logic.has_doublejump_of_npc(state) if lock_key_amadeus_enabled else logic.has_upwarddash ),
         LocationData('The lab', 'Lab: Below lab entrance',  1337069, logic.has_doublejump),
-        LocationData('The lab (power off)', 'Lab: Trash jump room',  1337070, lambda state: not logic.lock_key_amadeus_enabled() or logic.has_doublejump_of_npc(state) ),
-        LocationData('The lab (power off)', 'Lab: Dynamo Works',  1337071, lambda state: not logic.lock_key_amadeus_enabled() or (state.has_all(('Lab Access Research', 'Lab Access Dynamo'), player)) ),
+        LocationData('The lab (power off)', 'Lab: Trash jump room',  1337070, lambda state: not lock_key_amadeus_enabled or logic.has_doublejump_of_npc(state) ),
+        LocationData('The lab (power off)', 'Lab: Dynamo Works',  1337071, lambda state: not lock_key_amadeus_enabled or (state.has_all(('Lab Access Research', 'Lab Access Dynamo'), player)) ),
         LocationData('The lab (upper)', 'Lab: Genza (Blob Mom)',  1337072),
-        LocationData('The lab (power off)', 'Lab: Experiment #13',  1337073, lambda state: not logic.lock_key_amadeus_enabled() or state.has('Lab Access Experiment', player) ),
+        LocationData('The lab (power off)', 'Lab: Experiment #13',  1337073, lambda state: not lock_key_amadeus_enabled or state.has('Lab Access Experiment', player) ),
         LocationData('The lab (upper)', 'Lab: Download and chest room chest',  1337074),
-        LocationData('The lab (upper)', 'Lab: Lab secret',  1337075, logic.can_break_walls),
-        LocationData('The lab (power off)', 'Lab: Spider Hell',  1337076, lambda state: logic.has_keycard_A and not logic.lock_key_amadeus_enabled() or state.has('Lab Access Research', player)),
+        LocationData('The lab (upper)', 'Lab: Lab secret',  1337075, can_break_walls),
+        LocationData('The lab (power off)', 'Lab: Spider Hell',  1337076, lambda state: logic.has_keycard_A and not lock_key_amadeus_enabled or state.has('Lab Access Research', player)),
         LocationData('Emperors tower', 'Emperor\'s Tower: Courtyard bottom chest',  1337077),
-        LocationData('Emperors tower', 'Emperor\'s Tower: Courtyard floor secret',  1337078, lambda state: logic.has_upwarddash(state) and logic.can_break_walls(state)),
+        LocationData('Emperors tower', 'Emperor\'s Tower: Courtyard floor secret',  1337078, lambda state: logic.has_upwarddash(state) and can_break_walls(state)),
         LocationData('Emperors tower', 'Emperor\'s Tower: Courtyard upper chest',  1337079, lambda state: logic.has_upwarddash(state)),
         LocationData('Emperors tower', 'Emperor\'s Tower: Galactic sage room',  1337080),
         LocationData('Emperors tower', 'Emperor\'s Tower: Bottom right tower',  1337081),
@@ -119,7 +142,7 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
         LocationData('Refugee Camp', 'Refugee Camp: Storage chest 1',  1337089),
         LocationData('Forest', 'Forest: Refugee camp roof',  1337090),
         LocationData('Forest', 'Forest: Bat jump ledge',  1337091, lambda state: logic.has_doublejump_of_npc(state) or logic.has_forwarddash_doublejump(state) or logic.has_fastjump_on_npc(state)),
-        LocationData('Forest', 'Forest: Green platform secret',  1337092, logic.can_break_walls),
+        LocationData('Forest', 'Forest: Green platform secret',  1337092, can_break_walls),
         LocationData('Forest', 'Forest: Rats guarded chest',  1337093),
         LocationData('Forest', 'Forest: Waterfall chest 1',  1337094, lambda state: state.has('Water Mask', player)),
         LocationData('Forest', 'Forest: Waterfall chest 2',  1337095, lambda state: state.has('Water Mask', player)),
@@ -129,7 +152,7 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
         LocationData('Upper Lake Serene', 'Lake Serene (Upper): Rat nest',  1337099),
         LocationData('Upper Lake Serene', 'Lake Serene (Upper): Double jump cave platform',  1337100, logic.has_doublejump),
         LocationData('Upper Lake Serene', 'Lake Serene (Upper): Double jump cave floor',  1337101),
-        LocationData('Upper Lake Serene', 'Lake Serene (Upper): Cave secret',  1337102, logic.can_break_walls),
+        LocationData('Upper Lake Serene', 'Lake Serene (Upper): Cave secret',  1337102, can_break_walls),
         LocationData('Upper Lake Serene', 'Lake Serene: Before Big Bird', 1337175),
         LocationData('Upper Lake Serene', 'Lake Serene: Behind the vines',  1337103),
         LocationData('Upper Lake Serene', 'Lake Serene: Pyramid keys room',  1337104),
@@ -137,12 +160,12 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
         LocationData('Lower Lake Serene', 'Lake Serene (Lower): Deep dive',  1337105),
         LocationData('Left Side forest Caves', 'Lake Serene (Lower): Under the eels',  1337106, lambda state: state.has('Water Mask', player)),
         LocationData('Lower Lake Serene', 'Lake Serene (Lower): Water spikes room',  1337107),
-        LocationData('Lower Lake Serene', 'Lake Serene (Lower): Underwater secret',  1337108, logic.can_break_walls),
+        LocationData('Lower Lake Serene', 'Lake Serene (Lower): Underwater secret',  1337108, can_break_walls),
         LocationData('Lower Lake Serene', 'Lake Serene (Lower): T chest',  1337109, lambda state: flooded.flood_lake_serene or logic.has_doublejump_of_npc(state)),
         LocationData('Left Side forest Caves', 'Lake Serene (Lower): Past the eels',  1337110, lambda state: state.has('Water Mask', player)),
         LocationData('Lower Lake Serene', 'Lake Serene (Lower): Underwater pedestal',  1337111, lambda state: flooded.flood_lake_serene or logic.has_doublejump(state)),
         LocationData('Caves of Banishment (upper)', 'Caves of Banishment (Maw): Shroom jump room',  1337112, lambda state: flooded.flood_maw or logic.has_doublejump(state)),
-        LocationData('Caves of Banishment (upper)', 'Caves of Banishment (Maw): Secret room',  1337113, lambda state: logic.can_break_walls(state) and (not flooded.flood_maw or state.has('Water Mask', player))),
+        LocationData('Caves of Banishment (upper)', 'Caves of Banishment (Maw): Secret room',  1337113, lambda state: can_break_walls(state) and (not flooded.flood_maw or state.has('Water Mask', player))),
         LocationData('Caves of Banishment (upper)', 'Caves of Banishment (Maw): Bottom left room',  1337114, lambda state: not flooded.flood_maw or state.has('Water Mask', player)),
         LocationData('Caves of Banishment (upper)', 'Caves of Banishment (Maw): Single shroom room',  1337115),
         LocationData('Caves of Banishment (upper)', 'Caves of Banishment (Maw): Jackpot room chest 1',  1337116, lambda state: flooded.flood_maw or logic.has_forwarddash_doublejump(state)),
@@ -165,7 +188,7 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
         LocationData('Castle Ramparts', 'Castle Ramparts: Giantess guarded room',  1337130),
         LocationData('Castle Ramparts', 'Castle Ramparts: Knight and archer guarded room',  1337131),
         LocationData('Castle Ramparts', 'Castle Ramparts: Pedestal',  1337132),
-        LocationData('Castle Basement', 'Castle Basement: Secret pedestal',  1337133, logic.can_break_walls),
+        LocationData('Castle Basement', 'Castle Basement: Secret pedestal',  1337133, can_break_walls),
         LocationData('Castle Basement', 'Castle Basement: Clean the castle basement',  1337134),
         LocationData('Royal towers (lower)', 'Castle Keep: Yas queen room',  1337135, logic.has_pink),
         LocationData('Castle Basement', 'Castle Basement: Giantess guarded chest',  1337136),
@@ -176,7 +199,7 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
         LocationData('Castle Keep', 'Castle Keep: Advisor jump', 1337171, logic.has_timestop),
         LocationData('Castle Keep', 'Castle Keep: Twins',  1337140, logic.has_timestop),
         LocationData('Castle Keep', 'Castle Keep: Royal guard tiny room',  1337141, lambda state: logic.has_doublejump(state) or logic.has_fastjump_on_npc(state)),
-        LocationData('Royal towers (lower)', 'Royal Towers: Floor secret',  1337142, lambda state: logic.has_doublejump(state) and logic.can_break_walls(state)),
+        LocationData('Royal towers (lower)', 'Royal Towers: Floor secret',  1337142, lambda state: logic.has_doublejump(state) and can_break_walls(state)),
         LocationData('Royal towers', 'Royal Towers: Pre-climb gap',  1337143),
         LocationData('Royal towers', 'Royal Towers: Long balcony',  1337144, lambda state: not flooded.flood_courtyard or state.has('Water Mask', player)),
         LocationData('Royal towers', 'Royal Towers: Past bottom struggle juggle',  1337145, lambda state: flooded.flood_courtyard or logic.has_doublejump_of_npc(state)),
@@ -195,8 +218,8 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
         # Ancient pyramid locations
         LocationData('Ancient Pyramid (entrance)', 'Ancient Pyramid: Why not it\'s right there',  1337246),
         LocationData('Ancient Pyramid (left)', 'Ancient Pyramid: Conviction guarded room',  1337247),
-        LocationData('Ancient Pyramid (left)', 'Ancient Pyramid: Pit secret room',  1337248, lambda state: logic.can_break_walls(state) and (not flooded.flood_pyramid_shaft or state.has('Water Mask', player))),
-        LocationData('Ancient Pyramid (left)', 'Ancient Pyramid: Regret chest',  1337249, lambda state: logic.can_break_walls(state) and (state.has('Water Mask', player) if flooded.flood_pyramid_shaft else logic.has_doublejump(state))),
+        LocationData('Ancient Pyramid (left)', 'Ancient Pyramid: Pit secret room',  1337248, lambda state: can_break_walls(state) and (not flooded.flood_pyramid_shaft or state.has('Water Mask', player))),
+        LocationData('Ancient Pyramid (left)', 'Ancient Pyramid: Regret chest',  1337249, lambda state: can_break_walls(state) and (state.has('Water Mask', player) if flooded.flood_pyramid_shaft else logic.has_doublejump(state))),
         LocationData('Ancient Pyramid (right)', 'Ancient Pyramid: Nightmare Door chest',  1337236, lambda state: not flooded.flood_pyramid_back or state.has('Water Mask', player)),
         LocationData('Ancient Pyramid (right)', 'Killed Nightmare', EventId, lambda state: state.has_all({'Timespinner Wheel', 'Timespinner Spindle', 'Timespinner Gear 1', 'Timespinner Gear 2', 'Timespinner Gear 3'}, player) and (not flooded.flood_pyramid_back or state.has('Water Mask', player)))
     ]
@@ -212,13 +235,13 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
             LocationData('Library', 'Library: V terminal 2 (Lake Desolation Map)',  1337161, lambda state: state.has_all({'Tablet', 'Library Keycard V'}, player)),
             LocationData('Library', 'Library: V terminal 3 (Vilete)',  1337162, lambda state: state.has_all({'Tablet', 'Library Keycard V'}, player)),
             LocationData('Library top', 'Library: Backer room terminal (Vandagray Metropolis Map)',  1337163, lambda state: state.has('Tablet', player)),
-            LocationData('Varndagroth tower right (elevator)', 'Varndagroth Towers (Right): Medbay terminal (Bleakness Research)',  1337164, lambda state: state.has('Tablet', player) and logic.has_keycard_B(state)),
+            LocationData('Varndagroth tower right (elevator)', 'Varndagroth Towers (Right): Medbay terminal (Bleakness Research)',  1337164, lambda state: state.has('Tablet', player) and has_keycard_B(state)),
             LocationData('The lab (upper)', 'Lab: Download and chest room terminal (Experiment #13)',  1337165, lambda state: state.has('Tablet', player)),
-            LocationData('The lab (power off)', 'Lab: Middle terminal (Amadeus Laboratory Map)',  1337166, lambda state: state.has('Tablet', player) and (not logic.lock_key_amadeus_enabled() or state.has('Lab Access Research', player))),
-            LocationData('The lab (power off)', 'Lab: Sentry platform terminal (Origins)',  1337167, lambda state: state.has('Tablet', player) and (not logic.lock_key_amadeus_enabled() or state.has('Lab Access Genza', player) or logic.can_teleport_to(state, "Time", "GateDadsTower"))),
+            LocationData('The lab (power off)', 'Lab: Middle terminal (Amadeus Laboratory Map)',  1337166, lambda state: state.has('Tablet', player) and (not lock_key_amadeus_enabled or state.has('Lab Access Research', player))),
+            LocationData('The lab (power off)', 'Lab: Sentry platform terminal (Origins)',  1337167, lambda state: state.has('Tablet', player) and (not lock_key_amadeus_enabled or state.has('Lab Access Genza', player) or (has_teleport(state) and can_teleport_to(state, "Time", "GateDadsTower")))),
             LocationData('The lab', 'Lab: Experiment 13 terminal (W.R.E.C Farewell)',  1337168, lambda state: state.has('Tablet', player)),
             LocationData('The lab', 'Lab: Left terminal (Biotechnology)',  1337169, lambda state: state.has('Tablet', player)),
-            LocationData('The lab (power off)', 'Lab: Right terminal (Experiment #11)',  1337170, lambda state: state.has('Tablet', player) and (not logic.lock_key_amadeus_enabled() or state.has('Lab Access Research', player)))
+            LocationData('The lab (power off)', 'Lab: Right terminal (Experiment #11)',  1337170, lambda state: state.has('Tablet', player) and (not lock_key_amadeus_enabled or state.has('Lab Access Research', player)))
         )
 
     # 1337176 - 1337176 Cantoran
@@ -235,11 +258,11 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
             LocationData('Library top', 'Library: Memory - Library Gap (Lachiemi Sun)',  1337179),
             LocationData('Library top', 'Library: Memory - Mr. Hat Portrait (Moonlit Night)',  1337180),
             LocationData('Varndagroth tower left', 'Varndagroth Towers (Left): Memory - Elevator (Nomads)',  1337181, lambda state: state.has('Elevator Keycard', player)),
-            LocationData('Varndagroth tower right (lower)', 'Varndagroth Towers: Memory - Siren Elevator (Childhood)',  1337182, logic.has_keycard_B),
+            LocationData('Varndagroth tower right (lower)', 'Varndagroth Towers: Memory - Siren Elevator (Childhood)',  1337182, has_keycard_B),
             LocationData('Varndagroth tower right (lower)', 'Varndagroth Towers (Right): Memory - Bottom (Faron)',  1337183),
             LocationData('Military Fortress', 'Military Fortress: Memory - Bomber Climb (A Solution)',  1337184, lambda state: state.has('Timespinner Wheel', player) and logic.has_doublejump_of_npc(state)),
-            LocationData('The lab', 'Lab: Memory - Genza\'s Secret Stash 1 (An Old Friend)',  1337185, logic.can_break_walls),
-            LocationData('The lab', 'Lab: Memory - Genza\'s Secret Stash 2 (Twilight Dinner)',  1337186, logic.can_break_walls),
+            LocationData('The lab', 'Lab: Memory - Genza\'s Secret Stash 1 (An Old Friend)',  1337185, can_break_walls),
+            LocationData('The lab', 'Lab: Memory - Genza\'s Secret Stash 2 (Twilight Dinner)',  1337186, can_break_walls),
             LocationData('Emperors tower', 'Emperor\'s Tower: Memory - Way Up There (Final Circle)',  1337187, logic.has_doublejump_of_npc),
             LocationData('Forest', 'Forest: Journal - Rats (Lachiem Expedition)',  1337188),
             LocationData('Forest', 'Forest: Journal - Bat Jump Ledge (Peace Treaty)',  1337189, lambda state: logic.has_doublejump_of_npc(state) or logic.has_forwarddash_doublejump(state) or logic.has_fastjump_on_npc(state)),
@@ -260,7 +283,7 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
     if not options or options.pyramid_start:
         location_table += (
             LocationData('Ancient Pyramid (entrance)', 'Dark Forest: Training Dummy',  1337233),
-            LocationData('Ancient Pyramid (entrance)', 'Temporal Gyre: Forest Entrance',  1337234, lambda state: logic.has_upwarddash(state) or logic.can_teleport_to(state, "Time", "GateGyre")),
+            LocationData('Ancient Pyramid (entrance)', 'Temporal Gyre: Forest Entrance',  1337234, lambda state: logic.has_upwarddash(state) or (has_teleport(state) and can_teleport_to(state, "Time", "GateGyre"))),
             LocationData('Ancient Pyramid (entrance)', 'Ancient Pyramid: Rubble',  1337235),
         )
 
