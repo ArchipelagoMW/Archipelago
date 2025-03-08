@@ -17,7 +17,6 @@ from .breakables import breakable_location_name_to_id, breakable_location_groups
 from .combat_logic import area_data, CombatState
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection, OptionError
-from decimal import Decimal, ROUND_HALF_UP
 from settings import Group, Bool
 
 
