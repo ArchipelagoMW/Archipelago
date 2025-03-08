@@ -1,4 +1,4 @@
-from collections import defaultdict
+from collections import Counter, defaultdict
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 from Utils import cache_argsless
@@ -11,6 +11,7 @@ from .item_definition_classes import (
     ProgressiveItemDefinition,
     WeightedItemDefinition,
 )
+from .settings.easter_eggs import EASTER_EGGS
 from .utils import (
     WitnessRule,
     define_new_region,
@@ -49,6 +50,70 @@ class StaticWitnessLogicObj:
         self.reverse_connections()
         self.combine_connections()
 
+    def add_easter_eggs(self) -> None:
+        egg_counter = 0
+        area_counts: Dict[str, int] = Counter()
+        for region_name, entity_amount in EASTER_EGGS.items():
+            region_object = self.ALL_REGIONS_BY_NAME[region_name]
+            correct_area = region_object["area"]
+
+            for _ in range(entity_amount):
+                location_id = 160200 + egg_counter
+                entity_hex = hex(0xEE000 + egg_counter)
+                egg_counter += 1
+
+                area_counts[correct_area["name"]] += 1
+                full_entity_name = f"{correct_area['name']} Easter Egg {area_counts[correct_area['name']]}"
+
+                self.ENTITIES_BY_HEX[entity_hex] = {
+                    "checkName": full_entity_name,
+                    "entity_hex": entity_hex,
+                    "region": region_object,
+                    "id": int(location_id),
+                    "entityType": "Easter Egg",
+                    "locationType": "Easter Egg",
+                    "area": correct_area,
+                    "order": len(self.ENTITIES_BY_HEX),
+                }
+
+                self.ENTITIES_BY_NAME[self.ENTITIES_BY_HEX[entity_hex]["checkName"]] = self.ENTITIES_BY_HEX[entity_hex]
+
+                self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex] = {
+                    "entities": frozenset({frozenset({})})
+                }
+                region_object["entities"].append(entity_hex)
+                region_object["physical_entities"].append(entity_hex)
+
+        easter_egg_region = self.ALL_REGIONS_BY_NAME["Easter Eggs"]
+        easter_egg_area = easter_egg_region["area"]
+        for i in range(sum(EASTER_EGGS.values())):
+            location_id = 160000 + i
+            entity_hex = hex(0xEE200 + i)
+
+            if i == 0:
+                continue
+
+            full_entity_name = f"{i + 1} Easter Eggs Collected"
+
+            self.ENTITIES_BY_HEX[entity_hex] = {
+                "checkName": full_entity_name,
+                "entity_hex": entity_hex,
+                "region": easter_egg_region,
+                "id": int(location_id),
+                "entityType": "Easter Egg Total",
+                "locationType": "Easter Egg Total",
+                "area": easter_egg_area,
+                "order": len(self.ENTITIES_BY_HEX),
+            }
+
+            self.ENTITIES_BY_NAME[self.ENTITIES_BY_HEX[entity_hex]["checkName"]] = self.ENTITIES_BY_HEX[entity_hex]
+
+            self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex] = {
+                "entities": frozenset({frozenset({})})
+            }
+            easter_egg_region["entities"].append(entity_hex)
+            easter_egg_region["physical_entities"].append(entity_hex)
+
     def read_logic_file(self, lines: List[str]) -> None:
         """
         Reads the logic file and does the initial population of data structures
@@ -66,7 +131,7 @@ class StaticWitnessLogicObj:
                 continue
 
             if line[-1] == ":":
-                new_region_and_connections = define_new_region(line)
+                new_region_and_connections = define_new_region(line, current_area)
                 current_region = new_region_and_connections[0]
                 region_name = current_region["name"]
                 self.ALL_REGIONS_BY_NAME[region_name] = current_region
@@ -106,6 +171,7 @@ class StaticWitnessLogicObj:
                     "entityType": location_id,
                     "locationType": None,
                     "area": current_area,
+                    "order": len(self.ENTITIES_BY_HEX),
                 }
 
                 self.ENTITIES_BY_NAME[self.ENTITIES_BY_HEX[entity_hex]["checkName"]] = self.ENTITIES_BY_HEX[entity_hex]
@@ -186,6 +252,7 @@ class StaticWitnessLogicObj:
                 "entityType": entity_type,
                 "locationType": location_type,
                 "area": current_area,
+                "order": len(self.ENTITIES_BY_HEX),
             }
 
             self.ENTITY_ID_TO_NAME[entity_hex] = full_entity_name
@@ -195,6 +262,8 @@ class StaticWitnessLogicObj:
 
             current_region["entities"].append(entity_hex)
             current_region["physical_entities"].append(entity_hex)
+
+        self.add_easter_eggs()
 
     def reverse_connection(self, source_region: str, connection: Tuple[str, Set[WitnessRule]]) -> None:
         target = connection[0]

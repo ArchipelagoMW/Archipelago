@@ -151,6 +151,7 @@ class EncounterTableData(NamedTuple):
 @dataclass
 class MapData:
     name: str
+    label: str
     header_address: int
     land_encounters: Optional[EncounterTableData]
     water_encounters: Optional[EncounterTableData]
@@ -357,6 +358,8 @@ def load_json_data(data_name: str) -> Union[List[Any], Dict[str, Any]]:
 
 
 def _init() -> None:
+    import re
+
     extracted_data: Dict[str, Any] = load_json_data("extracted_data.json")
     data.constants = extracted_data["constants"]
     data.ram_addresses = extracted_data["misc_ram_addresses"]
@@ -366,6 +369,7 @@ def _init() -> None:
 
     # Create map data
     for map_name, map_json in extracted_data["maps"].items():
+        assert isinstance(map_name, str)
         if map_name in IGNORABLE_MAPS:
             continue
 
@@ -389,8 +393,35 @@ def _init() -> None:
                 map_json["fishing_encounters"]["address"]
             )
 
+        # Derive a user-facing label
+        label = []
+        for word in map_name[4:].split("_"):
+            # 1F, B1F, 2R, etc.
+            re_match = re.match(r"^B?\d+[FRP]$", word)
+            if re_match:
+                label.append(word)
+                continue
+
+            # Route 103, Hall 1, House 5, etc.
+            re_match = re.match(r"^([A-Z]+)(\d+)$", word)
+            if re_match:
+                label.append(re_match.group(1).capitalize())
+                label.append(re_match.group(2).lstrip("0"))
+                continue
+
+            if word == "OF":
+                label.append("of")
+                continue
+
+            if word == "SS":
+                label.append("S.S.")
+                continue
+
+            label.append(word.capitalize())
+
         data.maps[map_name] = MapData(
             map_name,
+            " ".join(label),
             map_json["header_address"],
             land_encounters,
             water_encounters,
@@ -1427,9 +1458,6 @@ def _init() -> None:
     # Create warp map
     for warp, destination in extracted_data["warps"].items():
         data.warp_map[warp] = None if destination == "" else destination
-
-        if encoded_warp not in data.warp_map:
-            data.warp_map[encoded_warp] = None
 
     # Create trainer data
     for i, trainer_json in enumerate(extracted_data["trainers"]):

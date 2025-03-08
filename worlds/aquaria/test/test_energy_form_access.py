@@ -6,28 +6,31 @@ Description: Unit test used to test accessibility of locations with and without 
 """
 
 from . import AquariaTestBase
+from ..Items import ItemNames
+from ..Locations import AquariaLocationNames
+from ..Options import EarlyEnergyForm
 
 
 class EnergyFormAccessTest(AquariaTestBase):
     """Unit test used to test accessibility of locations with and without the energy form"""
     options = {
-        "early_energy_form": False,
+        "early_energy_form": EarlyEnergyForm.option_off
     }
 
     def test_energy_form_location(self) -> None:
         """Test locations that require Energy form"""
         locations = [
-            "Energy Temple second area, bulb under the rock",
-            "Energy Temple third area, bulb in the bottom path",
-            "The Body left area, first bulb in the top face room",
-            "The Body left area, second bulb in the top face room",
-            "The Body left area, bulb below the water stream",
-            "The Body left area, bulb in the top path to the top face room",
-            "The Body left area, bulb in the bottom face room",
-            "The Body right area, bulb in the top path to the bottom face room",
-            "The Body right area, bulb in the bottom face room",
-            "Final Boss area, bulb in the boss third form room",
-            "Objective complete",
+            AquariaLocationNames.ENERGY_TEMPLE_SECOND_AREA_BULB_UNDER_THE_ROCK,
+            AquariaLocationNames.ENERGY_TEMPLE_THIRD_AREA_BULB_IN_THE_BOTTOM_PATH,
+            AquariaLocationNames.THE_BODY_LEFT_AREA_FIRST_BULB_IN_THE_TOP_FACE_ROOM,
+            AquariaLocationNames.THE_BODY_LEFT_AREA_SECOND_BULB_IN_THE_TOP_FACE_ROOM,
+            AquariaLocationNames.THE_BODY_LEFT_AREA_BULB_BELOW_THE_WATER_STREAM,
+            AquariaLocationNames.THE_BODY_LEFT_AREA_BULB_IN_THE_TOP_PATH_TO_THE_TOP_FACE_ROOM,
+            AquariaLocationNames.THE_BODY_LEFT_AREA_BULB_IN_THE_BOTTOM_FACE_ROOM,
+            AquariaLocationNames.THE_BODY_RIGHT_AREA_BULB_IN_THE_TOP_PATH_TO_THE_BOTTOM_FACE_ROOM,
+            AquariaLocationNames.THE_BODY_RIGHT_AREA_BULB_IN_THE_BOTTOM_FACE_ROOM,
+            AquariaLocationNames.FINAL_BOSS_AREA_BULB_IN_THE_BOSS_THIRD_FORM_ROOM,
+            AquariaLocationNames.OBJECTIVE_COMPLETE,
         ]
-        items = [["Energy form"]]
+        items = [[ItemNames.ENERGY_FORM]]
         self.assertAccessDependency(locations, items)

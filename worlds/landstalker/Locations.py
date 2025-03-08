@@ -1,14 +1,10 @@
 from typing import Dict, Optional
 
 from BaseClasses import Location, ItemClassification, Item
+from .Constants import *
 from .Regions import LandstalkerRegion
 from .data.item_source import ITEM_SOURCES_JSON
 from .data.world_path import WORLD_PATHS_JSON
-
-BASE_LOCATION_ID = 4000
-BASE_GROUND_LOCATION_ID = BASE_LOCATION_ID + 256
-BASE_SHOP_LOCATION_ID = BASE_GROUND_LOCATION_ID + 30
-BASE_REWARD_LOCATION_ID = BASE_SHOP_LOCATION_ID + 50
 
 
 class LandstalkerLocation(Location):
@@ -21,10 +17,14 @@ class LandstalkerLocation(Location):
         self.type_string = type_string
 
 
-def create_locations(player: int, regions_table: Dict[str, LandstalkerRegion], name_to_id_table: Dict[str, int]):
+def create_locations(player: int, regions_table: Dict[str, LandstalkerRegion],
+                     name_to_id_table: Dict[str, int], reach_kazalt_goal: bool):
     # Create real locations from the data inside the corresponding JSON file
     for data in ITEM_SOURCES_JSON:
         region_id = data["nodeId"]
+        # If "Reach Kazalt" goal is enabled and location is beyond Kazalt, don't create it
+        if reach_kazalt_goal and region_id in ENDGAME_REGIONS:
+            continue
         region = regions_table[region_id]
         new_location = LandstalkerLocation(player, data["name"], name_to_id_table[data["name"]], region, data["type"])
         region.locations.append(new_location)
@@ -32,6 +32,10 @@ def create_locations(player: int, regions_table: Dict[str, LandstalkerRegion], n
     # Create fake event locations that will be used to determine if some key regions has been visited
     regions_with_entrance_checks = []
     for data in WORLD_PATHS_JSON:
+        # If "Reach Kazalt" goal is enabled and region is beyond Kazalt, don't create any event for it since it would
+        # be useless anyway
+        if reach_kazalt_goal and data["fromId"] in ENDGAME_REGIONS:
+            continue
         if "requiredNodes" in data:
             regions_with_entrance_checks.extend([region_id for region_id in data["requiredNodes"]])
     regions_with_entrance_checks = sorted(set(regions_with_entrance_checks))

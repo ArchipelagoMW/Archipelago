@@ -44,7 +44,8 @@ jobs:
       - name: Get a recent python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '~3.12.7'
+          check-latest: true
       - name: Install build-time dependencies
         run: |
           echo "PYTHON=python3.12" >> $GITHUB_ENV
