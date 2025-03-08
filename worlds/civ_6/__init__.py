@@ -100,9 +100,9 @@ class CivVIWorld(World):
     location_by_era: Dict[str, Dict[str, CivVILocationData]]
     required_client_version = (0, 4, 5)
     location_table: Dict[str, CivVILocationData]
-    era_required_non_progressive_items: Dict[EraType, List[str]] = {}
-    era_required_progressive_items_counts: Dict[EraType, Dict[str, int]] = {}
-    era_required_progressive_era_counts: Dict[EraType, int] = {}
+    era_required_non_progressive_items: Dict[EraType, List[str]]
+    era_required_progressive_items_counts: Dict[EraType, Dict[str, int]]
+    era_required_progressive_era_counts: Dict[EraType, int]
     item_by_civ_name: Dict[str, str]
 
     def __init__(self, multiworld: MultiWorld, player: int):
@@ -111,6 +111,10 @@ class CivVIWorld(World):
 
         self.location_table: Dict[str, CivVILocationData] = {}
         self.item_table = generate_item_table()
+
+        self.era_required_non_progressive_items = {}
+        self.era_required_progressive_items_counts = {}
+        self.era_required_progressive_era_counts = {}
 
         for locations in self.location_by_era.values():
             for location in locations.values():
