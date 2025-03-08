@@ -677,7 +677,7 @@ class ShopMaximumNausea(Range):
     default = 4
 
 class ShopMaximumLength(Range):
-    """If the shop determines you need a ride with a miniimum length, this value will be the highest it can ask for.
+    """If the shop determines you need a ride with a minimum length, this value will be the highest it can ask for.
     """
     display_name = "Maximum Shop Length Requirement"
     range_start = 0
