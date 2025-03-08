@@ -773,7 +773,7 @@ GAME_SPECIFIC_PHRASES = {
         "Megalixir": "MEDICINE",
     },
 
-    "Kingdom Hearts 1": {
+    "Kingdom Hearts": {
         # Goal/collectible items
         "Ansem's Report": "TRADING_ITEM_LETTER",
 
