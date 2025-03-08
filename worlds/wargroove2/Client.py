@@ -94,7 +94,6 @@ class Wargroove2Context(CommonContext):
     starting_groove_multiplier: int = 0
     has_death_link: bool = False
     has_sacrifice_summon: bool = True
-    stored_units_key: str = ""
     victory_locations: int = 1
     objective_locations: int = 1
     final_levels: int = 1
