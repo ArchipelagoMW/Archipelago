@@ -115,7 +115,7 @@ class TunicWorld(World):
         except AttributeError:
             raise Exception("You have a TUNIC APWorld in your lib/worlds folder and custom_worlds folder.\n"
                             "This would cause an error at the end of generation.\n"
-                            "Please remove one of them, preferably the one in lib/worlds.")
+                            "Please remove one of them, most likely the one in lib/worlds.")
 
         check_options(self)
 
