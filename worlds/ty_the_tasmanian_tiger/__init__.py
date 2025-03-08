@@ -1,6 +1,7 @@
+import dataclasses
 import typing
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, Location
-from Options import OptionError
+from Options import OptionError, PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
 
 from .items import Ty1Item, ty1_item_table, create_items, ItemData, place_locked_items
@@ -54,7 +55,7 @@ class Ty1World(World):
 
     def fill_slot_data(self) -> id:
         return {
-            "ModVersion": 114,
+            "ModVersion": 118,
             "Goal": self.options.goal.value,
             "ProgressiveElementals": self.options.progressive_elementals.value,
             "ProgressiveLevel": self.options.progressive_level.value,
