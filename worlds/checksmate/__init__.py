@@ -203,7 +203,6 @@ class CMWorld(World):
         change = super().remove(state, item)
         if change:
             # we actually removed the item, so we must lose the material
-            # material is negative from CMCollectionState.remove(), so adding it will subtract from total
             state.prog_items[self.player]["Material"] -= material
 
         return change
@@ -211,7 +210,3 @@ class CMWorld(World):
     def find_piece_limit(self, piece_name: str, cascade_type: PieceLimitCascade) -> int:
         """Delegate piece limit finding to the PieceModel."""
         return self._piece_model.find_piece_limit(piece_name, cascade_type)
-
-    def unupgraded_majors_in_pool(self, items: List[Item], locked_items: Dict[str, int]) -> int:
-        """Delegate unupgraded majors calculation to the ItemPool."""
-        return self._item_pool.unupgraded_majors_in_pool(items, locked_items)

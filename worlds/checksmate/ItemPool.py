@@ -404,19 +404,11 @@ class CMItemPool:
         if self.world.options.accessibility.value == self.world.options.accessibility.option_minimal:
             return
         if chosen_item == "Progressive Major To Queen":
-            if self.unupgraded_majors_in_pool(items, locked_items) < 2:
+            if self.material_model.castling_pieces_in_pool(items, locked_items) < 2:
                 if "Progressive Major Piece" not in locked_items:
                     locked_items["Progressive Major Piece"] = 0
+                # TODO(chesslogic): Choose between Progressive Jack and Progressive Major Piece
                 locked_items["Progressive Major Piece"] += 1
-
-    def unupgraded_majors_in_pool(self, items: List[Item], locked_items: Dict[str, int]) -> int:
-        """Returns the number of unupgraded major pieces in the pool."""
-        total_majors = len([item for item in items if item.name == "Progressive Major Piece"]) + len(
-            [item for item in locked_items if item == "Progressive Major Piece"])
-        total_upgrades = len([item for item in items if item.name == "Progressive Major To Queen"]) + len(
-            [item for item in locked_items if item == "Progressive Major To Queen"])
-
-        return total_majors - total_upgrades 
 
     def calculate_current_material(self, items: List[Item] = None) -> int:
         """Calculate the total material value of currently generated items.
@@ -471,6 +463,6 @@ class CMItemPool:
         material = progression_items[chosen_item].material
         if self.world.options.accessibility.value == self.world.options.accessibility.option_minimal:
             return material
-        if chosen_item == "Progressive Major To Queen" and self.unupgraded_majors_in_pool(items, locked_items) <= 2:
+        if chosen_item == "Progressive Major To Queen" and self.material_model.unupgraded_majors_in_pool(items, locked_items) <= 2:
             material += progression_items["Progressive Major Piece"].material
         return material

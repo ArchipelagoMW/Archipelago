@@ -35,13 +35,23 @@ class MaterialModel:
         min_material -= 50
         max_material -= 50
         return min_material, max_material
+    
+    def castling_pieces_in_pool(self, items: List[CMItem], locked_items: Dict[str, int]) -> int:
+        """Returns the number of castling pieces in the pool."""
+        # Count majors in items list
+        jacks_in_items = len([item for item in items if item.name == "Progressive Jack"])
+        # Count majors in locked items (using the count value)
+        jacks_in_locked = locked_items.get("Progressive Jack", 0)
+        total_jacks = jacks_in_items + jacks_in_locked
+
+        return self.unupgraded_majors_in_pool(items, locked_items) + total_jacks
 
     def unupgraded_majors_in_pool(self, items: List[CMItem], locked_items: Dict[str, int]) -> int:
         """Returns the number of unupgraded major pieces in the pool."""
         # Count majors in items list
-        majors_in_items = len([item for item in items if item.name == "Progressive Major Piece" or item.name == "Progressive Jack"])
+        majors_in_items = len([item for item in items if item.name == "Progressive Major Piece"])
         # Count majors in locked items (using the count value)
-        majors_in_locked = locked_items.get("Progressive Major Piece", 0) + locked_items.get("Progressive Jack", 0)
+        majors_in_locked = locked_items.get("Progressive Major Piece", 0)
         total_majors = majors_in_items + majors_in_locked
 
         # Count upgrades in items list
@@ -50,7 +60,7 @@ class MaterialModel:
         upgrades_in_locked = locked_items.get("Progressive Major To Queen", 0)
         total_upgrades = upgrades_in_items + upgrades_in_locked
 
-        return total_majors - total_upgrades
+        return max(0, total_majors - total_upgrades)
 
     def lockable_material_value(self, chosen_item: str, items: List[CMItem], 
                               locked_items: Dict[str, int]) -> float:
