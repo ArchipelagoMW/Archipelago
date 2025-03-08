@@ -5,9 +5,9 @@ A module containing the BizHawkClient base class and metaclass
 from __future__ import annotations
 
 import abc
-from typing import TYPE_CHECKING, Any, ClassVar, Dict, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Any, ClassVar
 
-from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
+from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch as launch_component
 
 if TYPE_CHECKING:
     from .context import BizHawkClientContext
@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 def launch_client(*args) -> None:
     from .context import launch
-    launch_subprocess(launch, name="BizHawkClient", args=args)
+    launch_component(launch, name="BizHawkClient", args=args)
 
 
 component = Component("BizHawk Client", "BizHawkClient", component_type=Type.CLIENT, func=launch_client,
@@ -24,9 +24,9 @@ components.append(component)
 
 
 class AutoBizHawkClientRegister(abc.ABCMeta):
-    game_handlers: ClassVar[Dict[Tuple[str, ...], Dict[str, BizHawkClient]]] = {}
+    game_handlers: ClassVar[dict[tuple[str, ...], dict[str, BizHawkClient]]] = {}
 
-    def __new__(cls, name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]) -> AutoBizHawkClientRegister:
+    def __new__(cls, name: str, bases: tuple[type, ...], namespace: dict[str, Any]) -> AutoBizHawkClientRegister:
         new_class = super().__new__(cls, name, bases, namespace)
 
         # Register handler
@@ -54,7 +54,7 @@ class AutoBizHawkClientRegister(abc.ABCMeta):
         return new_class
 
     @staticmethod
-    async def get_handler(ctx: "BizHawkClientContext", system: str) -> Optional[BizHawkClient]:
+    async def get_handler(ctx: "BizHawkClientContext", system: str) -> BizHawkClient | None:
         for systems, handlers in AutoBizHawkClientRegister.game_handlers.items():
             if system in systems:
                 for handler in handlers.values():
@@ -65,13 +65,13 @@ class AutoBizHawkClientRegister(abc.ABCMeta):
 
 
 class BizHawkClient(abc.ABC, metaclass=AutoBizHawkClientRegister):
-    system: ClassVar[Union[str, Tuple[str, ...]]]
+    system: ClassVar[str | tuple[str, ...]]
     """The system(s) that the game this client is for runs on"""
 
     game: ClassVar[str]
     """The game this client is for"""
 
-    patch_suffix: ClassVar[Optional[Union[str, Tuple[str, ...]]]]
+    patch_suffix: ClassVar[str | tuple[str, ...] | None]
     """The file extension(s) this client is meant to open and patch (e.g. ".apz3")"""
 
     @abc.abstractmethod

@@ -52,7 +52,8 @@ def create_kantele(victory_condition: VictoryCondition) -> List[str]:
 def create_random_items(world: NoitaWorld, weights: Dict[str, int], count: int) -> List[str]:
     filler_pool = weights.copy()
     if not world.options.bad_effects:
-        del filler_pool["Trap"]
+        filler_pool["Trap"] = 0
+        filler_pool["Greed Die"] = 0
 
     return world.random.choices(population=list(filler_pool.keys()),
                                 weights=list(filler_pool.values()),
@@ -114,7 +115,7 @@ item_table: Dict[str, ItemData] = {
     "Secret Potion":                        ItemData(110024, "Items", ItemClassification.filler),
     "Powder Pouch":                         ItemData(110025, "Items", ItemClassification.filler),
     "Chaos Die":                            ItemData(110026, "Items", ItemClassification.filler),
-    "Greed Die":                            ItemData(110027, "Items", ItemClassification.filler),
+    "Greed Die":                            ItemData(110027, "Items", ItemClassification.trap),
     "Kammi":                                ItemData(110028, "Items", ItemClassification.filler, 1),
     "Refreshing Gourd":                     ItemData(110029, "Items", ItemClassification.filler, 1),
     "Sädekivi":                             ItemData(110030, "Items", ItemClassification.filler),
