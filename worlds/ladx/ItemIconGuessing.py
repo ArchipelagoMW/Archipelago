@@ -758,12 +758,29 @@ GAME_SPECIFIC_PHRASES = {
         "Save The King+": "SHIELD",
         "Ultimate Mushroom": "SHIELD",
 
-        # Armor
-        "Bandana": "POWER_BRACELET",
-        "Belt": "POWER_BRACELET",
-        "Anklet": "POWER_BRACELET",
-        "Trinket": "POWER_BRACELET",
-        "Charm": "POWER_BRACELET",
+        # Accessories as RIBBON
+        "Star Charm": "TRADING_ITEM_RIBBON",
+        "Ring": "TRADING_ITEM_RIBBON",
+        "Earring": "TRADING_ITEM_RIBBON",
+        "Shadow Archive": "TRADING_ITEM_RIBBON",
+        "Shadow Archive+": "TRADING_ITEM_RIBBON",
+        "Full Bloom": "TRADING_ITEM_RIBBON",
+        "Full Bloom+": "TRADING_ITEM_RIBBON",
+
+        # Armor as BLUE_TUNIC
+       "Bandanna": "BLUE_TUNIC",
+       "Belt": "BLUE_TUNIC",
+       "Band": "BLUE_TUNIC",
+       "Bangle": "BLUE_TUNIC",
+       "Armlet": "BLUE_TUNIC",
+       "Trinket": "BLUE_TUNIC",
+       "Charm": "BLUE_TUNIC",
+       "Anklet": "BLUE_TUNIC",
+       "Chain": "BLUE_TUNIC",
+       "Acrisius": "BLUE_TUNIC",
+       "Ribbon": "BLUE_TUNIC",
+
+        
 
         # Magic
         "Element": "MAGIC_ROD",
