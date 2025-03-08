@@ -457,14 +457,21 @@ tunic_option_presets: Dict[str, Dict[str, Any]] = {
 
 def check_options(world: "TunicWorld"):
     options = world.options
-    if options.hexagon_quest and options.ability_shuffling and options.hexagon_quest_ability_type == HexagonQuestAbilityUnlockType.option_hexagons:
-        total_hexes = min(
-                int((Decimal(100 + options.extra_hexagon_percentage) / 100 * options.hexagon_goal)
-                    .to_integral_value(rounding=ROUND_HALF_UP)), 100)
+    if (options.hexagon_quest and options.ability_shuffling
+            and options.hexagon_quest_ability_type == HexagonQuestAbilityUnlockType.option_hexagons):
+        total_hexes = get_hexagons_in_pool(world)
         min_hexes = 3
+
         if options.keys_behind_bosses:
             min_hexes = 15
         if total_hexes < min_hexes:
             logging.warning(f"TUNIC: Not enough Gold Hexagons in {world.player_name}'s item pool for Hexagon Ability "
                             f"Shuffle with the selected options. Ability Shuffle mode will be switched to Pages.")
             options.hexagon_quest_ability_type.value = HexagonQuestAbilityUnlockType.option_pages
+
+
+def get_hexagons_in_pool(world: "TunicWorld"):
+    # Calculate number of hexagons in item pool
+    options = world.options
+    return min(int((Decimal(100 + options.extra_hexagon_percentage) / 100 * options.hexagon_goal)
+                   .to_integral_value(rounding=ROUND_HALF_UP)), 100)

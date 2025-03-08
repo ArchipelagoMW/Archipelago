@@ -38,10 +38,6 @@ def randomize_ability_unlocks(world: "TunicWorld") -> Dict[str, int]:
     random = world.random
     options = world.options
 
-    total_hexes = min(
-        int((Decimal(100 + options.extra_hexagon_percentage) / 100 * options.hexagon_goal)
-            .to_integral_value(rounding=ROUND_HALF_UP)), 100)
-
     abilities = [prayer, holy_cross, icebolt]
     ability_requirement = [1, 1, 1]
     random.shuffle(abilities)

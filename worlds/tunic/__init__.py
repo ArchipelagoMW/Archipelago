@@ -16,11 +16,10 @@ from .breakables import breakable_location_name_to_id, breakable_location_groups
 from .er_data import portal_mapping, RegionInfo, tunic_er_regions
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
                       LaurelsLocation, LaurelsZips, IceGrappling, LadderStorage, EntranceLayout,
-                      check_options, LocalFill)
+                      check_options, LocalFill, get_hexagons_in_pool, HexagonQuestAbilityUnlockType)
 from .combat_logic import area_data, CombatState
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection, OptionError, PerGameCommonOptions, Range, Removed
-from decimal import Decimal, ROUND_HALF_UP
 from settings import Group, Bool
 
 
@@ -129,7 +128,7 @@ class TunicWorld(World):
         except AttributeError:
             raise Exception("You have a TUNIC APWorld in your lib/worlds folder and custom_worlds folder.\n"
                             "This would cause an error at the end of generation.\n"
-                            "Please remove one of them, preferably the one in lib/worlds.")
+                            "Please remove one of them, most likely the one in lib/worlds.")
         if self.options.all_random:
             for option_name in (attr.name for attr in fields(TunicOptions)
                                 if attr not in fields(PerGameCommonOptions)):
@@ -201,7 +200,7 @@ class TunicWorld(World):
                     self.options.entrance_layout.value = EntranceLayout.option_fixed_shop
                 self.options.decoupled = self.passthrough.get("decoupled", 0)
                 self.options.laurels_location.value = LaurelsLocation.option_anywhere
-                self.options.combat_logic.value = self.passthrough["combat_logic"]
+                self.options.combat_logic.value = self.passthrough.get("combat_logic", 0)
             else:
                 self.using_ut = False
         else:
@@ -355,11 +354,8 @@ class TunicWorld(World):
         items_to_create: Dict[str, int] = {item: data.quantity_in_item_pool for item, data in item_table.items()}
 
         # Calculate number of hexagons in item pool
-        hexagon_goal = self.options.hexagon_goal
-        extra_hexagons = self.options.extra_hexagon_percentage
         if self.options.hexagon_quest:
-            items_to_create[gold_hexagon] = min(
-                int((Decimal(100 + extra_hexagons) / 100 * hexagon_goal).to_integral_value(rounding=ROUND_HALF_UP)), 100)
+            items_to_create[gold_hexagon] = get_hexagons_in_pool(self)
 
         for money_fool in fool_tiers[self.options.fool_traps]:
             items_to_create["Fool Trap"] += items_to_create[money_fool]
@@ -367,7 +363,7 @@ class TunicWorld(World):
 
         # creating these after the fool traps are made mostly so we don't have to mess with it
         if self.options.breakable_shuffle:
-            for _, loc_data in breakable_location_table.items():
+            for loc_data in breakable_location_table.values():
                 if not self.options.entrance_rando and loc_data.er_region == "Purgatory":
                     continue
                 items_to_create[f"Money x{self.random.randint(1, 5)}"] += 1
@@ -574,7 +570,7 @@ class TunicWorld(World):
             self.ability_unlocks["Pages 42-43 (Holy Cross)"] = self.passthrough["Hexagon Quest Holy Cross"]
             self.ability_unlocks["Pages 52-53 (Icebolt)"] = self.passthrough["Hexagon Quest Icebolt"]
 
-        # Ladders and Combat Logic uses ER rules with vanilla connections for easier maintenance
+        # Most non-standard options use ER regions
         if (self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic
                 or self.options.grass_randomizer or self.options.breakable_shuffle
                 or self.options.shuffle_fuses or self.options.shuffle_bells):
@@ -605,7 +601,7 @@ class TunicWorld(World):
             victory_region.locations.append(victory_location)
 
     def set_rules(self) -> None:
-        # same reason as in create_regions, could probably be put into create_regions
+        # same reason as in create_regions
         if (self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic
                 or self.options.grass_randomizer or self.options.breakable_shuffle
                 or self.options.shuffle_fuses or self.options.shuffle_bells):
@@ -632,7 +628,7 @@ class TunicWorld(World):
 
     def write_spoiler_header(self, spoiler_handle: TextIO):
         if (self.options.hexagon_quest and self.options.ability_shuffling
-                and self.options.hexagon_quest_ability_type == "hexagons"):
+                and self.options.hexagon_quest_ability_type == HexagonQuestAbilityUnlockType.option_hexagons):
             spoiler_handle.write("\nAbility Unlocks (Hexagon Quest):\n")
             for ability in self.ability_unlocks:
                 # Remove parentheses for better readability
