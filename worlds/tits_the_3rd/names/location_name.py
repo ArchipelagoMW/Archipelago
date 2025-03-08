@@ -25,3 +25,4 @@ class LocationName:
     jade_corridor_chest_left_from_checkpoint_second_chest = "Jade Corridor Chest (Left From Checkpoint Second Chest)" # 9881
     jade_corridor_chest_left_from_checkpoint_third_chest = "Jade Corridor Chest (Left From Checkpoint Third Chest)" # 9884
     jade_corridor_chest_left_from_checkpoint_fourth_chest = "Jade Corridor Chest (Left From Checkpoint Fourth Chest)" # 9885
+    chapter1_boss_defeated = "Defeat Bennu (Chapter 1 Boss)"  # 9757

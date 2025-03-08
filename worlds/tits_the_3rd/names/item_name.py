@@ -30,3 +30,6 @@ class ItemName:
     mira_300 = "Mira (300)"
     lower_elements_sepith_50 = "Lower Elements Sepith (50)"
     higher_elements_sepith_50 = "Higher Elements Sepith (50)"
+
+    # Key Item
+    bennu_defeat = "Bennu Defeated (Victory)"

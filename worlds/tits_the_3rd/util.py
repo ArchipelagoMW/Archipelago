@@ -2,6 +2,7 @@ import datetime
 from io import BufferedReader
 import json
 import os
+import pkgutil
 import shutil
 
 DEFAULT_DEV_CONFIG_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), "dev_util/dev_config.json")
@@ -171,3 +172,10 @@ def write_item_id_to_desc(ittxt_path: str, output_path: str) -> None:
                     pass
                 item_id_to_name_fp.write(f"{item_id} {name} {desc}\n")
     return items
+
+
+def load_file(path):
+    data = pkgutil.get_data(__name__, path)
+    if data is None:
+        raise FileNotFoundError(f"{path!r} not found in {__name__}")
+    return data

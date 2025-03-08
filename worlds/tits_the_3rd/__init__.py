@@ -5,6 +5,8 @@ from typing import ClassVar, Dict, Set
 
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, components, launch_subprocess, Type
+from worlds.tits_the_3rd.names.item_name import ItemName
+from worlds.tits_the_3rd.names.location_name import LocationName
 from .items import (
     default_item_pool,
     item_data_table,
@@ -76,3 +78,7 @@ class TitsThe3rdWorld(World):
     def set_rules(self) -> None:
         """Set remaining rules."""
         self.multiworld.completion_condition[self.player] = lambda _: True
+
+    def pre_fill(self):
+        item = self.create_item(ItemName.bennu_defeat)
+        self.multiworld.get_location(LocationName.chapter1_boss_defeated, self.player).place_locked_item(item)

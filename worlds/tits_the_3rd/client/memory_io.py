@@ -20,6 +20,7 @@ from pymem import pymem
 
 from CommonClient import logger
 from worlds.tits_the_3rd import TitsThe3rdWorld
+from worlds.tits_the_3rd.util import load_file
 
 # TODO:
 # - Writes require adding the base address, while reads do not. Make this consistent.
@@ -52,6 +53,7 @@ class TitsThe3rdMemoryIO():
     OFFSET_FLAG_0: int = 0x2AD491C
     OFFSET_WPID: int = OFFSET_FLAG_0 + (9504 // 8) # Flag 9504 - 9536
     FLAG_SHOULD_WRITE_WPID: int = 9496
+    OFFSET_ITEMS_RECEIVED_INDEX = OFFSET_FLAG_0 + (1024 // 8)
 
     def __init__(self, exit_event: asyncio.Event):
         self.tits_the_3rd_mem: pymem.Pymem = None
@@ -86,17 +88,9 @@ class TitsThe3rdMemoryIO():
         Returns (Dict[str, ScenaFunction]): A mapping of function names to ScenaFunction data structs.
         """
         scena_folder = self._get_scena_folder()
-        scena_table_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "scena_table.json")
-        scena_table = None
         scena_functions = {}
-        try:
-            with open(scena_table_path, "r", encoding="utf-8") as fp:
-                scena_table = json.load(fp)
-        except FileNotFoundError as err:
-            logger.info("Unable to find %s", scena_table_path)
-            raise err
+        scena_table = json.loads(load_file("data/scena_table.json"))
         for file in scena_table:
-            logger.info("file %s", file)
             scena_file_path = os.path.join(scena_folder, file)
             import_number = scena_table[file]["importNumber"]
             function_offsets = self._get_scena_file_offsets(scena_file_path)
@@ -138,7 +132,7 @@ class TitsThe3rdMemoryIO():
         data = self.tits_the_3rd_mem.read_bytes(self.tits_the_3rd_mem.base_address + offset, length)
         return data
 
-    def _read_int(self, offset, byteorder: Literal["little", "big"] = "big"):
+    def _read_int(self, offset, byteorder: Literal["little", "big"] = "big", signed: bool = False):
         """
         Read 4 bytes at the specified offset, and interpret it as an int.
 
@@ -146,9 +140,9 @@ class TitsThe3rdMemoryIO():
         returns: The data represented as a float.
         """
         data = self._read_bytes(offset, 4)
-        return int.from_bytes(data, byteorder)
+        return int.from_bytes(data, byteorder, signed=signed)
 
-    def _read_short(self, offset, byteorder: Literal["little", "big"] = "big"):
+    def _read_short(self, offset, byteorder: Literal["little", "big"] = "big", signed: bool = False):
         """
         Read 2 bytes at the specified offset, and interpret it as an int.
 
@@ -156,9 +150,9 @@ class TitsThe3rdMemoryIO():
         returns: The data represented as a float.
         """
         data = self._read_bytes(offset, 2)
-        return int.from_bytes(data, byteorder)
+        return int.from_bytes(data, byteorder, signed=signed)
 
-    def _read_byte(self, offset, byteorder: Literal["little", "big"] = "big"):
+    def _read_byte(self, offset, byteorder: Literal["little", "big"] = "big", signed: bool = False):
         """
         Read 1 byte at the specified offset, and interpret it as an int.
 
@@ -166,7 +160,7 @@ class TitsThe3rdMemoryIO():
         returns: The data represented as a float.
         """
         data =self._read_bytes(offset, 1)
-        return int.from_bytes(data, byteorder)
+        return int.from_bytes(data, byteorder, signed=signed)
 
     def is_connected(self):
         """Returns True if the class instance is currently connected to the game."""
@@ -331,6 +325,7 @@ class TitsThe3rdMemoryIO():
         if len(wpid) != 4:
             raise ValueError("wpid must be 4 bytes long")
         self.tits_the_3rd_mem.write_bytes(self.tits_the_3rd_mem.base_address + self.OFFSET_WPID, wpid, 4)
+        self.write_last_item_receive_index(-1)
         if not self.read_world_player_identifier() == wpid:
             logger.info(f"Failed to write world player identifier: {self.read_world_player_identifier()} != {wpid}")
             logger.error("Failed to write world player identifier")
@@ -345,6 +340,12 @@ class TitsThe3rdMemoryIO():
             bytes: The per-world player identifier.
         """
         return self._read_bytes(self.OFFSET_WPID, 4)
+
+    def read_last_item_receive_index(self) -> int:
+        return self._read_short(self.OFFSET_ITEMS_RECEIVED_INDEX, "little", signed=True)
+
+    def write_last_item_receive_index(self, index: int):
+        self.tits_the_3rd_mem.write_bytes(self.tits_the_3rd_mem.base_address + self.OFFSET_ITEMS_RECEIVED_INDEX, index.to_bytes(2, "little", signed=True), 2)
 
     def should_write_world_player_identifier(self) -> bool:
         """
@@ -461,4 +462,13 @@ class TitsThe3rdMemoryIO():
         self.tits_the_3rd_mem.write_bytes(address + 200, bytes(f"{amount:03d}", encoding="utf8"), 3)
         self.tits_the_3rd_mem.write_bytes(address + 223, bytes(f"{amount:03d}", encoding="utf8"), 3)
         self.call_scena(self.scena_functions["give_all_sepith"])
+        return True
+
+    def send_item(self):
+        # Not currently needed
+        # TODO: Patch item table to have these ghost items for this
+        # address: int = self.get_scena_offset(b"AP All Item Send Notification")
+        # if not address:
+        #     return False
+        self.call_scena(self.scena_functions["send_item"])
         return True

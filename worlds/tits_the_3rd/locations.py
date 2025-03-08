@@ -1,13 +1,21 @@
 """This module represents location definitions for Trails in the Sky the 3rd"""
 from typing import Callable, Dict, Optional, Set
 
-from BaseClasses import CollectionState, MultiWorld, Location
+from BaseClasses import CollectionState, ItemClassification, MultiWorld, Location
+from .items import TitsThe3rdItem
 from .names.location_name import LocationName
 from .names.region_name import RegionName
 
 class TitsThe3rdLocation(Location):
     """Trails in the Sky the 3rd Location Definition"""
     game: str = "Trails in the Sky the 3rd"
+
+
+def get_location_id(location_name: LocationName):
+    if location_name not in location_table:
+        raise Exception(f"{location_name} is not part of location list. Something went wrong?")
+    return location_table[location_name]
+
 
 def create_location(multiworld: MultiWorld, player: int, region_name: str, location_name: str, rule: Optional[Callable[[CollectionState], bool]] = None):
     """
@@ -59,6 +67,7 @@ def create_locations(multiworld: MultiWorld, player: int):
     create_location(multiworld, player, RegionName.jade_corridor_post_julia_gate, LocationName.jade_corridor_chest_left_from_checkpoint_second_chest)
     create_location(multiworld, player, RegionName.jade_corridor_post_julia_gate, LocationName.jade_corridor_chest_left_from_checkpoint_third_chest)
     create_location(multiworld, player, RegionName.jade_corridor_post_julia_gate, LocationName.jade_corridor_chest_left_from_checkpoint_fourth_chest)
+    create_location(multiworld, player, RegionName.jade_corridor_post_julia_gate, LocationName.chapter1_boss_defeated)
 
 
 location_table: Dict[str, int] = {
@@ -83,6 +92,7 @@ location_table: Dict[str, int] = {
     LocationName.jade_corridor_chest_left_from_checkpoint_second_chest: 9881,
     LocationName.jade_corridor_chest_left_from_checkpoint_third_chest: 9884,
     LocationName.jade_corridor_chest_left_from_checkpoint_fourth_chest: 9885,
+    LocationName.chapter1_boss_defeated: 9757,
 }
 
 location_groups: Dict[str, Set[str]] = {}
