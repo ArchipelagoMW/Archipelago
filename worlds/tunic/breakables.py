@@ -406,46 +406,47 @@ def can_break_bomb_walls(state: CollectionState, world: "TunicWorld") -> bool:
 
 def create_breakable_exclusive_regions(world: "TunicWorld") -> list[Region]:
     player = world.player
+    multiworld = world.multiworld
     new_regions: list[Region] = []
 
-    region = Region("Fortress Courtyard westmost pots", world.player, world.multiworld)
+    region = Region("Fortress Courtyard westmost pots", player, multiworld)
     new_regions.append(region)
     world.get_region("Fortress Courtyard").connect(region)
     world.get_region("Fortress Exterior near cave").connect(
         region, rule=lambda state: state.has_any(("Magic Wand", "Gun"), player))
 
-    region = Region("Fortress Courtyard west pots", world.player, world.multiworld)
+    region = Region("Fortress Courtyard west pots", player, multiworld)
     new_regions.append(region)
     world.get_region("Fortress Courtyard").connect(region)
     world.get_region("Fortress Exterior near cave").connect(
         region, rule=lambda state: state.has("Magic Wand", player))
 
-    region = Region("Fortress Courtyard Upper pot", world.player, world.multiworld)
+    region = Region("Fortress Courtyard Upper pot", player, multiworld)
     new_regions.append(region)
     world.get_region("Fortress Courtyard Upper").connect(region)
     world.get_region("Fortress Courtyard").connect(
         region, rule=lambda state: state.has("Magic Wand", player))
 
-    region = Region("Fortress Grave Path westmost pot", world.player, world.multiworld)
+    region = Region("Fortress Grave Path westmost pot", player, multiworld)
     new_regions.append(region)
     world.get_region("Fortress Grave Path Entry").connect(region)
     world.get_region("Fortress Grave Path Upper").connect(
         region, rule=lambda state: state.has_any(("Magic Wand", "Gun"), player))
 
-    region = Region("Fortress Grave Path pots", world.player, world.multiworld)
+    region = Region("Fortress Grave Path pots", player, multiworld)
     new_regions.append(region)
     world.get_region("Fortress Grave Path by Grave").connect(region)
     world.get_region("Fortress Grave Path Dusty Entrance Region").connect(
         region, rule=lambda state: state.has("Magic Wand", player))
 
-    region = Region("Lower Quarry upper pots", world.player, world.multiworld)
+    region = Region("Lower Quarry upper pots", player, multiworld)
     new_regions.append(region)
     world.get_region("Lower Quarry").connect(region)
     world.get_region("Quarry Back").connect(
         region, rule=lambda state: state.has_any(("Magic Wand", "Gun"), player))
 
     for region in new_regions:
-        world.multiworld.regions.append(region)
+        multiworld.regions.append(region)
 
     return new_regions
 
