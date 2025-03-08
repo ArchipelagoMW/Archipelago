@@ -241,7 +241,10 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint) -> Witnes
             area = chosen_group
 
             # local locations should only ever return a location group, as Witness defines groups for every location.
-            hint_text = f"{item_name} can be found in the {area} area."
+            if area == "Easter Eggs":
+                hint_text = f"{item_name} can be found by collecting Easter Eggs."
+            else:
+                hint_text = f"{item_name} can be found in the {area} area."
         else:
             player_name = world.multiworld.get_player_name(hint.location.player)
 
@@ -505,10 +508,13 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, area_items: List[Ite
 
     area_progression_word = "Both" if total_progression == 2 else "All"
 
-    hint_string = f"In the {hinted_area} area, you will find "
+    if hinted_area == "Easter Eggs":
+        hint_string = "Through collecting Easter Eggs, you will find "
+    else:
+        hint_string = f"In the {hinted_area} area, you will find "
 
     hunt_panels = None
-    if world.options.victory_condition == "panel_hunt":
+    if world.options.victory_condition == "panel_hunt" and hinted_area != "Easter Eggs":
         hunt_panels = sum(
             static_witness_logic.ENTITIES_BY_HEX[hunt_entity]["area"]["name"] == hinted_area
             for hunt_entity in world.player_logic.HUNT_ENTITIES
