@@ -156,8 +156,9 @@ class WitnessWorld(World):
 
         self.determine_sufficient_progression()
 
-        if self.options.shuffle_lasers == "local":
-            self.options.local_items.value |= self.item_name_groups["Lasers"]
+        for item_name, item_data in self.player_items.item_data.items():
+            if item_data.local_only:
+                self.options.local_items.value.add(item_name)
 
         if self.options.victory_condition == "panel_hunt":
             total_panels = self.options.panel_hunt_total
@@ -323,8 +324,6 @@ class WitnessWorld(World):
 
             self.own_itempool += new_items
             self.multiworld.itempool += new_items
-            if self.player_items.item_data[item_name].local_only:
-                self.options.local_items.value.add(item_name)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         already_hinted_locations = set()
