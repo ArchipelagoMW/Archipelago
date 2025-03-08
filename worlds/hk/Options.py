@@ -132,7 +132,13 @@ splitter_pattern = re.compile(r'(?<!^)(?=[A-Z])')
 for option_name, option_data in pool_options.items():
     extra_data = {"__module__": __name__, "items": option_data[0], "locations": option_data[1]}
     if option_name in option_docstrings:
-        extra_data["__doc__"] = option_docstrings[option_name]
+        if option_name == "RandomizeFocus":
+            # pool options for focus are just lying
+            count = 1
+        else:
+            count = len([loc for loc in option_data[1] if loc != "Start"])
+        extra_data["__doc__"] = option_docstrings[option_name] + \
+            f"\n    This option adds approximately {count} location{'s' if count != 1 else ''}."
     if option_name in default_on:
         option = type(option_name, (DefaultOnToggle,), extra_data)
     else:
@@ -213,6 +219,7 @@ class MaximumEssencePrice(MinimumEssencePrice):
 class MinimumEggPrice(Range):
     """The minimum rancid egg price in the range of prices that an item should cost from Jiji.
     Only takes effect if the EggSlotShops option is greater than 0."""
+    rich_text_doc = False
     display_name = "Minimum Egg Price"
     range_start = 1
     range_end = 20
@@ -222,6 +229,7 @@ class MinimumEggPrice(Range):
 class MaximumEggPrice(MinimumEggPrice):
     """The maximum rancid egg price in the range of prices that an item should cost from Jiji.
     Only takes effect if the EggSlotShops option is greater than 0."""
+    rich_text_doc = False
     display_name = "Maximum Egg Price"
     default = 10
 
@@ -265,6 +273,7 @@ class RandomCharmCosts(NamedRange):
     Set to -1 or vanilla for vanilla costs.
     Set to -2 or shuffle to shuffle around the vanilla costs to different charms."""
 
+    rich_text_doc = False
     display_name = "Randomize Charm Notch Costs"
     range_start = 0
     range_end = 240
@@ -294,6 +303,10 @@ class RandomCharmCosts(NamedRange):
             return charms
 
 
+class CharmCost(Range):
+    range_end = 6
+
+
 class PlandoCharmCosts(OptionDict):
     """Allows setting a Charm's Notch costs directly, mapping {name: cost}.
     This is set after any random Charm Notch costs, if applicable."""
@@ -302,6 +315,27 @@ class PlandoCharmCosts(OptionDict):
     schema = Schema({
         Optional(name): And(int, lambda n: 6 >= n >= 0, error="Charm costs must be integers in the range 0-6.") for name in charm_names
         })
+
+    def __init__(self, value):
+        # To handle keys of random like other options, create an option instance from their values
+        # Additionally a vanilla keyword is added to plando individual charms to vanilla costs
+        # and default is disabled so as to not cause confusion
+        self.value = {}
+        for key, data in value.items():
+            if isinstance(data, str):
+                if data.lower() == "vanilla" and key in self.valid_keys:
+                    self.value[key] = vanilla_costs[charm_names.index(key)]
+                    continue
+                elif data.lower() == "default":
+                    # default is too easily confused with vanilla but actually 0
+                    # skip CharmCost resolution to fail schema afterwords
+                    self.value[key] = data
+                    continue
+            try:
+                self.value[key] = CharmCost.from_any(data).value
+            except ValueError:
+                # will fail schema afterwords
+                self.value[key] = data
 
     def get_costs(self, charm_costs: typing.List[int]) -> typing.List[int]:
         for name, cost in self.value.items():
@@ -412,6 +446,7 @@ class Goal(Choice):
 class GrubHuntGoal(NamedRange):
     """The amount of grubs required to finish Grub Hunt.
     On 'All' any grubs from item links replacements etc. will be counted"""
+    rich_text_doc = False
     display_name = "Grub Hunt Goal"
     range_start = 1
     range_end = 46
@@ -421,7 +456,7 @@ class GrubHuntGoal(NamedRange):
 
 class WhitePalace(Choice):
     """
-    Whether or not to include White Palace or not.  Note: Even if excluded, the King Fragment check may still be
+    Whether or not to include White Palace or not. Note: Even if excluded, the King Fragment check may still be
     required if charms are vanilla.
     """
     display_name = "White Palace"
@@ -458,6 +493,7 @@ class DeathLinkShade(Choice):
     ** Self-death shade behavior is not changed; if a self-death normally creates a shade in vanilla, it will override
         your existing shade, if any.
     """
+    rich_text_doc = False
     option_vanilla = 0
     option_shadeless = 1
     option_shade = 2
@@ -472,6 +508,7 @@ class DeathLinkBreaksFragileCharms(Toggle):
     ** Self-death fragile charm behavior is not changed; if a self-death normally breaks fragile charms in vanilla, it
         will continue to do so.
     """
+    rich_text_doc = False
     display_name = "Deathlink Breaks Fragile Charms"
 
 
@@ -490,6 +527,7 @@ class CostSanity(Choice):
 
     These costs can be in Geo (except Grubfather, Seer and Eggshop), Grubs, Charms, Essence and/or Rancid Eggs
     """
+    rich_text_doc = False
     option_off = 0
     alias_no = 0
     option_on = 1
