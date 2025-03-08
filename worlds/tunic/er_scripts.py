@@ -4,6 +4,7 @@ from .locations import all_locations
 from .er_data import (Portal, portal_mapping, traversal_requirements, DeadEnd, Direction, RegionInfo,
                       get_portal_outlet_region)
 from .er_rules import set_er_region_rules
+from .breakables import create_breakable_exclusive_regions, set_breakable_location_rules
 from Options import PlandoConnection
 from .options import EntranceRando, EntranceLayout
 from random import Random
@@ -37,6 +38,11 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
                     continue
             regions[region_name] = Region(region_name, world.player, world.multiworld)
 
+    if world.options.breakable_shuffle:
+        breakable_regions = create_breakable_exclusive_regions(world)
+        regions.update({region.name: region for region in breakable_regions})
+
+    if world.options.entrance_rando:
         portal_pairs = pair_portals(world, regions)
 
         # output the entrances to the spoiler log here for convenience
@@ -49,11 +55,6 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
                 world.multiworld.spoiler.set_entrance(portal1, portal2, "entrance", world.player)
 
     else:
-        for region_name, region_data in world.er_regions.items():
-            # filter out regions that are inaccessible in non-er
-            if region_name not in ["Zig Skip Exit", "Purgatory"]:
-                regions[region_name] = Region(region_name, world.player, world.multiworld)
-
         portal_pairs = vanilla_portals(world, regions)
 
     create_randomized_entrances(world, portal_pairs, regions)
@@ -65,8 +66,8 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
         location = TunicERLocation(world.player, location_name, location_id, region)
         region.locations.append(location)
 
-    for region in regions.values():
-        world.multiworld.regions.append(region)
+    if world.options.breakable_shuffle:
+        set_breakable_location_rules(world)
 
     place_event_items(world, regions)
 
