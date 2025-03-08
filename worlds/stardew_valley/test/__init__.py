@@ -2,10 +2,11 @@ import logging
 import os
 import threading
 import unittest
+from collections.abc import Iterator
 from contextlib import contextmanager
-from typing import Dict, ClassVar, Iterable, Tuple, Optional, List, Union, Any
+from typing import Dict, ClassVar, Iterable, Optional, List, Union, Any
 
-from BaseClasses import MultiWorld, CollectionState, get_seed, Location, Item
+from BaseClasses import MultiWorld, CollectionState, get_seed, Location, Item, Entrance
 from test.bases import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
 from worlds.AutoWorld import call_all
@@ -207,7 +208,7 @@ class SVTestCase(unittest.TestCase):
                             *,
                             seed=DEFAULT_TEST_SEED,
                             world_caching=True,
-                            **kwargs) -> Tuple[MultiWorld, StardewValleyWorld]:
+                            **kwargs) -> Iterator[tuple[MultiWorld, StardewValleyWorld]]:
         if msg is not None:
             msg += " "
         else:
@@ -315,6 +316,11 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
     def reset_collection_state(self):
         self.multiworld.state = self.original_state.copy()
 
+    def assert_can_reach_entrance(self, entrance: Entrance | str, state: CollectionState | None = None) -> None:
+        if state is None:
+            state = self.multiworld.state
+        super().assert_can_reach_entrance(entrance, state)
+
 
 pre_generated_worlds = {}
 
@@ -323,7 +329,7 @@ pre_generated_worlds = {}
 def solo_multiworld(world_options: Optional[Dict[Union[str, StardewValleyOption], Any]] = None,
                     *,
                     seed=DEFAULT_TEST_SEED,
-                    world_caching=True) -> Tuple[MultiWorld, StardewValleyWorld]:
+                    world_caching=True) -> Iterator[tuple[MultiWorld, StardewValleyWorld]]:
     if not world_caching:
         multiworld = setup_solo_multiworld(world_options, seed, _cache={})
         yield multiworld, multiworld.worlds[1]
