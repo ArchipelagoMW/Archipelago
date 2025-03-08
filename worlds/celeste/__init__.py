@@ -63,6 +63,10 @@ class CelesteWorld(World):
             for name in sorted(CelesteWorld.location_name_to_id, key=CelesteWorld.location_name_to_id.get):
                 id = CelesteWorld.location_name_to_id[name]
                 print(f"{{ 0x{id:X}, \"{name}\" }},", file=f)
+            print("\nLocations 2:", file=f)
+            for name in sorted(CelesteWorld.location_name_to_id, key=CelesteWorld.location_name_to_id.get):
+                id = CelesteWorld.location_name_to_id[name]
+                print(f"{{ \"{name}\", 0x{id:X} }},", file=f)
 
     def generate_early(self) -> None:
         if not self.player_name.isascii():
