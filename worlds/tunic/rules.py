@@ -1,9 +1,9 @@
-from random import Random
 from typing import Dict, TYPE_CHECKING
+from decimal import Decimal, ROUND_HALF_UP
 
 from worlds.generic.Rules import set_rule, forbid_item, add_rule
 from BaseClasses import CollectionState
-from .options import TunicOptions, LadderStorage, IceGrappling
+from .options import LadderStorage, IceGrappling, HexagonQuestAbilityUnlockType
 if TYPE_CHECKING:
     from . import TunicWorld
 
@@ -34,14 +34,21 @@ bomb_walls = ["East Forest - Bombable Wall", "Eastern Vault Fortress - [East Win
               "Quarry - [West] Upper Area Bombable Wall", "Ruined Atoll - [Northwest] Bombable Wall"]
 
 
-def randomize_ability_unlocks(random: Random, options: TunicOptions) -> Dict[str, int]:
+def randomize_ability_unlocks(world: "TunicWorld") -> Dict[str, int]:
+    random = world.random
+    options = world.options
+
+    abilities = [prayer, holy_cross, icebolt]
     ability_requirement = [1, 1, 1]
-    if options.hexagon_quest.value:
+    random.shuffle(abilities)
+
+    if options.hexagon_quest.value and options.hexagon_quest_ability_type == HexagonQuestAbilityUnlockType.option_hexagons:
         hexagon_goal = options.hexagon_goal.value
         # Set ability unlocks to 25, 50, and 75% of goal amount
         ability_requirement = [hexagon_goal // 4, hexagon_goal // 2, hexagon_goal * 3 // 4]
-    abilities = [prayer, holy_cross, icebolt]
-    random.shuffle(abilities)
+        if any(req == 0 for req in ability_requirement):
+            ability_requirement = [1, 2, 3]
+
     return dict(zip(abilities, ability_requirement))
 
 
@@ -50,7 +57,7 @@ def has_ability(ability: str, state: CollectionState, world: "TunicWorld") -> bo
     ability_unlocks = world.ability_unlocks
     if not options.ability_shuffling:
         return True
-    if options.hexagon_quest:
+    if options.hexagon_quest and options.hexagon_quest_ability_type == HexagonQuestAbilityUnlockType.option_hexagons:
         return state.has(gold_hexagon, world.player, ability_unlocks[ability])
     return state.has(ability, world.player)
 
