@@ -16,7 +16,7 @@ from .Subclasses import KH2Item
 
 
 def launch_client():
-    from .Client import launch
+    from .Client.Client import launch
     launch_component(launch, name="KH2Client")
 
 

@@ -10,85 +10,18 @@ import json
 import requests
 from pymem import pymem
 from . import item_dictionary_table, exclusion_item_table, CheckDupingItems, all_locations, exclusion_table, \
+from worlds.kh2 import item_dictionary_table, exclusion_item_table, CheckDupingItems, all_locations, exclusion_table, \
     SupportAbility_Table, ActionAbility_Table, all_weapon_slot
-from .Names import ItemName
-from .WorldLocations import *
+from worlds.kh2.Names import ItemName
+from worlds.kh2.WorldLocations import *
 
 from NetUtils import ClientStatus, NetworkItem
-from CommonClient import ClientCommandProcessor, gui_enabled, logger, get_base_parser, CommonContext, server_loop
-
-
-class KH2CommandProcessor(ClientCommandProcessor):
-    ctx: KH2Context
-
-    def _cmd_change_receive_notification(self, notification_type=""):
-        """Change receive notification type.Valid Inputs:Puzzle, Info and None
-        Puzzle: Puzzle Piece Popup when you receive an item.
-        Info: Displays the Information notification when you receive an item.
-        None: Toggle off any of the receiving notifications.
-        """
-        if notification_type in {"Puzzle", "Info", "None"}:
-            temp_client_settings = self.ctx.client_settings["receive_popup_type"]
-            self.ctx.client_settings["receive_popup_type"] = notification_type
-            self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings['receive_popup_type']}")
-        else:
-            self.output(f"Unknown receive notification type:{notification_type}. Valid Inputs: Puzzle, Info, None")
-
-    def _cmd_change_send_notification(self, notification_type=""):
-        """Change receive notification type.Valid Inputs:Puzzle, Info and None
-        Puzzle: Puzzle Piece Popup when you receive an item.
-        Info: Displays the Information notification when you receive an item.
-        None: Toggle off any of the receiving notifications.
-        """
-        if notification_type in {"Puzzle", "Info", "None"}:
-            temp_client_settings = self.ctx.client_settings["receive_popup_type"]
-            self.ctx.client_settings["send_popup_type"] = notification_type
-            # doing it in this order to make sure it actually changes
-            self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings['send_popup_type']}")
-        else:
-            self.output(f"Unknown send notification type:{notification_type}. Valid Inputs: Puzzle, Info, None")
-
-    def _cmd_change_send_truncation_priority(self, priority=""):
-        """Change what gets truncated first when using puzzle piece notifications. Playername min is 5 and ItemName is 15"""
-        if priority in {"PlayerName", "ItemName"}:
-            temp_client_settings = self.ctx.client_settings["send_truncate_first"]
-            self.ctx.client_settings["send_truncate_first"] = priority
-            self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings['send_truncate_first']}")
-        else:
-            self.output(f"Unknown priority: {priority}. Valid Inputs: PlayerName, ItemName")
-
-    def _cmd_change_receive_truncation_priority(self, priority=""):
-        """Change what gets truncated first when using puzzle piece notifications. Playername min is 5 and ItemName is 15"""
-        if priority in {"PlayerName", "ItemName"}:
-            temp_client_settings = self.ctx.client_settings["receive_truncate_first"]
-            self.ctx.client_settings["receive_truncate_first"] = priority
-            self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings['receive_truncate_first']}")
-        else:
-            self.output(f"Unknown priority: {priority}. Valid Inputs: PlayerName, ItemName")
-
-    def _cmd_deathlink(self):
-        """Toggles Deathlink"""
-        if self.ctx.deathlink_toggle:
-            # self.ctx.tags.add("DeathLink")
-            self.ctx.deathlink_toggle = False
-            self.output(f"Death Link turned off")
-        else:
-            self.ctx.deathlink_toggle = True
-            self.output(f"Death Link turned on")
-
-    def _cmd_add_to_blacklist(self, player_name: str = ""):
-        """Adds player to deathlink blacklist"""
-        if player_name not in self.ctx.deathlink_blacklist:
-            self.ctx.deathlink_blacklist.append(player_name)
-
-    def _cmd_remove_from_blacklist(self, player_name: str = ""):
-        """Removes player from the deathlink blacklist"""
-        if player_name in self.ctx.deathlink_blacklist:
-            self.ctx.deathlink_blacklist.remove(player_name)
+from CommonClient import gui_enabled, logger, get_base_parser, CommonContext, server_loop
+from .CMDProcessor import KH2CommandProcessor
+from .SendChecks import finishedGame
 
 
 class KH2Context(CommonContext):
-    # command_processor: int = KH2CommandProcessor
     command_processor = KH2CommandProcessor
     game = "Kingdom Hearts 2"
     items_handling = 0b111  # Indicates you get items sent from other worlds.
@@ -295,6 +228,9 @@ class KH2Context(CommonContext):
         self.deathlink_toggle = False
         self.deathlink_blacklist = []
 
+    from .ReadAndWrite import kh2_read_longlong, kh2_read_int, kh2_read_string, kh2_read_byte, kh2_write_bytes, kh2_write_int, kh2_write_short, kh2_write_byte, kh2_read_short
+    from .SendChecks import checkWorldLocations, checkSlots, checkLevels, verifyChests, verifyLevel
+
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             await super(KH2Context, self).server_auth(password_requested)
@@ -332,33 +268,6 @@ class KH2Context(CommonContext):
             f2.write(json.dumps(self.client_settings, indent=4))
         await super(KH2Context, self).shutdown()
 
-    def kh2_read_short(self, address):
-        return self.kh2.read_short(self.kh2.base_address + address)
-
-    def kh2_write_short(self, address, value):
-        return self.kh2.write_short(self.kh2.base_address + address, value)
-
-    def kh2_write_byte(self, address, value):
-        return self.kh2.write_bytes(self.kh2.base_address + address, value.to_bytes(1, 'big'), 1)
-
-    def kh2_read_byte(self, address):
-        return int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + address, 1))
-
-    def kh2_read_int(self, address):
-        return self.kh2.read_int(self.kh2.base_address + address)
-
-    def kh2_write_int(self, address, value):
-        self.kh2.write_int(self.kh2.base_address + address, value)
-
-    def kh2_read_longlong(self, address):
-        return self.kh2.read_longlong(self.kh2.base_address + address)
-
-    def kh2_read_string(self, address, length):
-        return self.kh2.read_string(self.kh2.base_address + address, length)
-
-    def kh2_write_bytes(self, address, value):
-        return self.kh2.write_bytes(self.kh2.base_address + address, bytes(value), len(value))
-
     def to_khscii(self, item_name):
         # credit to TopazTK for this.
         out_list = []
@@ -393,15 +302,8 @@ class KH2Context(CommonContext):
                 else:
                     out_list.append(0x01)
                 char_count += 1
-                #if char_count >= 24:
-                #    break
 
         # When the list ends, we add a terminator and return the string.
-
-        #if len(item_name) >= 24:
-        #    for _ in range(3):
-        #        out_list.append(0x2E)
-
         out_list.append(0x00)
         return out_list
 
@@ -536,9 +438,14 @@ class KH2Context(CommonContext):
                 if receiverID == self.slot and senderID != self.slot:  #item is sent to you and is not from yourself
                     itemName = self.item_names[networkItem.item]
                     playerName = self.player_names[networkItem.player]  # player that sent you the item
+                    totalLength = len(itemName) + len(playerName)
                     if self.client_settings["send_popup_type"] == "Info":  # no restrictions on size here
-                        self.queued_info_popup += [f"Obtained {itemName} from {playerName}"]
-                    else:  # sanitize ItemName and reciever name
+                        temp_length = f"Obtained {itemName} from {playerName}"
+                        if totalLength > 90:
+                            self.queued_info_popup += [temp_length[:90]]  # slice it to be 90
+                        else:
+                            self.queued_info_popup += [temp_length]
+                    elif self.client_settings["send_popup_type"] == "Puzzle":  # sanitize ItemName and receiver name
                         totalLength = len(itemName) + len(playerName)
                         while totalLength > 25:
                             if self.client_settings["receive_truncate_first"] == "PlayerName":
@@ -562,10 +469,10 @@ class KH2Context(CommonContext):
                     if self.client_settings["send_popup_type"] == "Info":
                         if totalLength > 90:
                             temp_length = f"Sent {itemName} to {playerName}"
-                            self.queued_info_popup += [temp_length[:98]]  #slice it to be 98
+                            self.queued_info_popup += [temp_length[:90]]  #slice it to be 90
                         else:
                             self.queued_info_popup += [f"Sent {itemName} to {playerName}"]
-                    else:  #sanitize ItemName and reciever name
+                    elif self.client_settings["send_popup_type"] == "Puzzle":  #sanitize ItemName and reciever name
                         while totalLength > 22:
                             if self.client_settings["send_truncate_first"] == "PlayerName":
                                 if len(playerName) > 5:
@@ -608,113 +515,6 @@ class KH2Context(CommonContext):
         self.kh2_item_name_to_id = item_to_id
         self.lookup_id_to_item = {v: k for k, v in self.kh2_item_name_to_id.items()}
         self.ability_code_list = [self.kh2_item_name_to_id[item] for item in exclusion_item_table["Ability"]]
-
-    async def checkWorldLocations(self):
-        try:
-            currentworldint = self.kh2_read_byte(self.Now)
-            if self.last_world_int != currentworldint:
-                self.last_world_int = currentworldint
-                await self.send_msgs([{
-                    "cmd":     "Set", "key": "Slot: " + str(self.slot) + " :CurrentWorld",
-                    "default": 0, "want_reply": False, "operations": [{
-                        "operation": "replace",
-                        "value":     currentworldint
-                    }]
-                }])
-            if currentworldint in self.worldid_to_locations:
-                curworldid = self.worldid_to_locations[currentworldint]
-                for location, data in curworldid.items():
-                    if location in self.kh2_loc_name_to_id.keys():
-                        locationId = self.kh2_loc_name_to_id[location]
-                        if locationId not in self.locations_checked \
-                                and self.kh2_read_byte(self.Save + data.addrObtained) & 0x1 << data.bitIndex > 0:
-                            self.sending = self.sending + [(int(locationId))]
-        except Exception as e:
-            if self.kh2connected:
-                self.kh2connected = False
-            logger.info(e)
-            logger.info("line 425")
-
-    async def checkLevels(self):
-        try:
-            for location, data in SoraLevels.items():
-                currentLevel = self.kh2_read_byte(self.Save + 0x24FF)
-                locationId = self.kh2_loc_name_to_id[location]
-                if locationId not in self.locations_checked \
-                        and currentLevel >= data.bitIndex:
-                    if self.kh2_seed_save["Levels"]["SoraLevel"] < currentLevel:
-                        self.kh2_seed_save["Levels"]["SoraLevel"] = currentLevel
-                    self.sending = self.sending + [(int(locationId))]
-            formDict = {
-                0: ["ValorLevel", ValorLevels], 1: ["WisdomLevel", WisdomLevels], 2: ["LimitLevel", LimitLevels],
-                3: ["MasterLevel", MasterLevels], 4: ["FinalLevel", FinalLevels], 5: ["SummonLevel", SummonLevels]
-            }
-            for i in range(6):
-                for location, data in formDict[i][1].items():
-                    formlevel = self.kh2_read_byte(self.Save + data.addrObtained)
-                    if location in self.kh2_loc_name_to_id.keys():
-                        # if current form level is above other form level
-                        locationId = self.kh2_loc_name_to_id[location]
-                        if locationId not in self.locations_checked \
-                                and formlevel >= data.bitIndex:
-                            if formlevel > self.kh2_seed_save["Levels"][formDict[i][0]]:
-                                self.kh2_seed_save["Levels"][formDict[i][0]] = formlevel
-                            self.sending = self.sending + [(int(locationId))]
-        except Exception as e:
-            if self.kh2connected:
-                self.kh2connected = False
-            logger.info(e)
-            logger.info("line 456")
-
-    async def checkSlots(self):
-        try:
-            for location, data in weaponSlots.items():
-                locationId = self.kh2_loc_name_to_id[location]
-                if locationId not in self.locations_checked:
-                    if self.kh2_read_byte(self.Save + data.addrObtained) > 0:
-                        self.sending = self.sending + [(int(locationId))]
-
-            for location, data in formSlots.items():
-                locationId = self.kh2_loc_name_to_id[location]
-                if locationId not in self.locations_checked and self.kh2_read_byte(self.Save + 0x06B2) == 0:
-                    if self.kh2_read_byte(self.Save + data.addrObtained) & 0x1 << data.bitIndex > 0:
-                        self.sending = self.sending + [(int(locationId))]
-        except Exception as e:
-            if self.kh2connected:
-                self.kh2connected = False
-            logger.info(e)
-            logger.info("line 475")
-
-    async def verifyChests(self):
-        try:
-            for location in self.locations_checked:
-                locationName = self.lookup_id_to_location[location]
-                if locationName in self.chest_set:
-                    if locationName in self.location_name_to_worlddata.keys():
-                        locationData = self.location_name_to_worlddata[locationName]
-                        if self.kh2_read_byte(
-                                self.Save + locationData.addrObtained) & 0x1 << locationData.bitIndex == 0:
-                            roomData = self.kh2_read_byte(self.Save + locationData.addrObtained)
-                            self.kh2_write_byte(self.Save + locationData.addrObtained,
-                                                roomData | 0x01 << locationData.bitIndex)
-
-        except Exception as e:
-            if self.kh2connected:
-                self.kh2connected = False
-            logger.info(e)
-            logger.info("line 491")
-
-    async def verifyLevel(self):
-        for leveltype, anchor in {
-            "SoraLevel":   0x24FF,
-            "ValorLevel":  0x32F6,
-            "WisdomLevel": 0x332E,
-            "LimitLevel":  0x3366,
-            "MasterLevel": 0x339E,
-            "FinalLevel":  0x33D6
-        }.items():
-            if self.kh2_read_byte(self.Save + anchor) < self.kh2_seed_save["Levels"][leveltype]:
-                self.kh2_write_byte(self.Save + anchor, self.kh2_seed_save["Levels"][leveltype])
 
     def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
         """Gets dispatched when a new DeathLink is triggered by another linked player."""
@@ -1069,7 +869,6 @@ class KH2Context(CommonContext):
         if self.kh2_read_byte(0x800000) == 0:
             displayed_string = self.to_khscii(string_to_display)
             self.kh2_write_bytes(0x800104, displayed_string)
-            #logger.info(displayed_string)
             self.kh2_write_byte(0x800000, 2)  # displaying puzzle piece popup
             self.queued_puzzle_popup.remove(string_to_display)
             await asyncio.sleep(0.5)
@@ -1112,6 +911,8 @@ class KH2Context(CommonContext):
                                     self.Slot1 = int(self.mem_json[key]["Slot1"], 0)
                                     self.Journal = int(self.mem_json[key]["Journal"], 0)
                                     self.Shop = int(self.mem_json[key]["Shop"], 0)
+                                    self.InfoBarPointer = int(self.mem_json[key]["InfoBarPointer"], 0)
+                                    self.isDead = int(self.mem_json[key]["isDead"], 0)
                                     self.kh2_game_version = key
 
             if self.kh2_game_version is not None:
@@ -1122,72 +923,6 @@ class KH2Context(CommonContext):
                             "kingdom-hearts-2-final-mix channel for more information on correcting the game "
                             "version.")
                 self.kh2connected = False
-
-
-def finishedGame(ctx: KH2Context):
-    if ctx.kh2slotdata['FinalXemnas'] == 1:
-        if not ctx.final_xemnas and ctx.kh2_read_byte(
-                ctx.Save + all_world_locations[LocationName.FinalXemnas].addrObtained) \
-                & 0x1 << all_world_locations[LocationName.FinalXemnas].bitIndex > 0:
-            ctx.final_xemnas = True
-    # three proofs
-    if ctx.kh2slotdata['Goal'] == 0:
-        if ctx.kh2_read_byte(ctx.Save + 0x36B2) > 0 \
-                and ctx.kh2_read_byte(ctx.Save + 0x36B3) > 0 \
-                and ctx.kh2_read_byte(ctx.Save + 0x36B4) > 0:
-            if ctx.kh2slotdata['FinalXemnas'] == 1:
-                if ctx.final_xemnas:
-                    return True
-                return False
-            return True
-        return False
-    elif ctx.kh2slotdata['Goal'] == 1:
-        if ctx.kh2_read_byte(ctx.Save + 0x3641) >= ctx.kh2slotdata['LuckyEmblemsRequired']:
-            if ctx.kh2_read_byte(ctx.Save + 0x36B3) < 1:
-                ctx.kh2_write_byte(ctx.Save + 0x36B2, 1)
-                ctx.kh2_write_byte(ctx.Save + 0x36B3, 1)
-                ctx.kh2_write_byte(ctx.Save + 0x36B4, 1)
-                logger.info("The Final Door is now Open")
-            if ctx.kh2slotdata['FinalXemnas'] == 1:
-                if ctx.final_xemnas:
-                    return True
-                return False
-            return True
-        return False
-    elif ctx.kh2slotdata['Goal'] == 2:
-        # for backwards compat
-        if "hitlist" in ctx.kh2slotdata:
-            locations = ctx.sending
-            for boss in ctx.kh2slotdata["hitlist"]:
-                if boss in locations:
-                    ctx.hitlist_bounties += 1
-        if ctx.hitlist_bounties >= ctx.kh2slotdata["BountyRequired"] or ctx.kh2_seed_save_cache["AmountInvo"]["Amount"][
-            "Bounty"] >= ctx.kh2slotdata["BountyRequired"]:
-            if ctx.kh2_read_byte(ctx.Save + 0x36B3) < 1:
-                ctx.kh2_write_byte(ctx.Save + 0x36B2, 1)
-                ctx.kh2_write_byte(ctx.Save + 0x36B3, 1)
-                ctx.kh2_write_byte(ctx.Save + 0x36B4, 1)
-                logger.info("The Final Door is now Open")
-            if ctx.kh2slotdata['FinalXemnas'] == 1:
-                if ctx.final_xemnas:
-                    return True
-                return False
-            return True
-        return False
-    elif ctx.kh2slotdata["Goal"] == 3:
-        if ctx.kh2_seed_save_cache["AmountInvo"]["Amount"]["Bounty"] >= ctx.kh2slotdata["BountyRequired"] and \
-                ctx.kh2_read_byte(ctx.Save + 0x3641) >= ctx.kh2slotdata['LuckyEmblemsRequired']:
-            if ctx.kh2_read_byte(ctx.Save + 0x36B3) < 1:
-                ctx.kh2_write_byte(ctx.Save + 0x36B2, 1)
-                ctx.kh2_write_byte(ctx.Save + 0x36B3, 1)
-                ctx.kh2_write_byte(ctx.Save + 0x36B4, 1)
-                logger.info("The Final Door is now Open")
-            if ctx.kh2slotdata['FinalXemnas'] == 1:
-                if ctx.final_xemnas:
-                    return True
-                return False
-            return True
-        return False
 
 
 async def kh2_watcher(ctx: KH2Context):
@@ -1202,18 +937,20 @@ async def kh2_watcher(ctx: KH2Context):
                 await asyncio.create_task(ctx.verifyItems())
                 await asyncio.create_task(ctx.verifyLevel())
                 await asyncio.create_task(ctx.is_dead())
+
                 if (ctx.deathlink_toggle and "DeathLink" not in ctx.tags) or (not ctx.deathlink_toggle and "DeathLink" in ctx.tags):
                     await ctx.update_death_link(ctx.deathlink_toggle)
+
                 if finishedGame(ctx) and not ctx.kh2_finished_game:
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                     ctx.kh2_finished_game = True
+
                 if ctx.sending:
                     message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
                     await ctx.send_msgs(message)
 
                 if ctx.queued_puzzle_popup:
                     await asyncio.create_task(ctx.displayPuzzlePieceTextinGame(ctx.queued_puzzle_popup[0]))  # send the num 1 index of whats in the queue
-                #
                 if ctx.queued_info_popup:
                     await asyncio.create_task(ctx.displayInfoTextinGame(ctx.queued_info_popup[0]))
 
@@ -1229,7 +966,7 @@ async def kh2_watcher(ctx: KH2Context):
                 ctx.kh2connected = False
             logger.info(e)
             logger.info("line 940")
-        await asyncio.sleep(0.5)
+        await asyncio.sleep(0.3)
 
 
 def launch():
