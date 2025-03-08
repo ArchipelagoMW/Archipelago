@@ -113,6 +113,8 @@ class TunicWorld(World):
         check_options(self)
 
         self.er_regions = tunic_er_regions.copy()
+        if self.options.plando_connections and not self.options.entrance_rando:
+            self.options.plando_connections.value = ()
         if self.options.plando_connections:
             def replace_connection(old_cxn: PlandoConnection, new_cxn: PlandoConnection, index: int) -> None:
                 self.options.plando_connections.value.remove(old_cxn)
