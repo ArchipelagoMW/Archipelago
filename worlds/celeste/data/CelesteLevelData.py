@@ -70,12 +70,12 @@ all_doors: Dict[str, Door] = {
 
     "1a_6c_south-west": Door("1a_6c_south-west", "1a_6c", DoorDirection.left, False, False),
     "1a_6c_north-west": Door("1a_6c_north-west", "1a_6c", DoorDirection.left, True, False),
-    "1a_6c_north-east": Door("1a_6c_north-east", "1a_6c", DoorDirection.right, False, False),
+    "1a_6c_north-east": Door("1a_6c_north-east", "1a_6c", DoorDirection.up, False, False),
 
     "1a_7_west": Door("1a_7_west", "1a_7", DoorDirection.down, False, True),
     "1a_7_east": Door("1a_7_east", "1a_7", DoorDirection.up, False, False),
 
-    "1a_7z_bottom": Door("1a_7z_bottom", "1a_7z", DoorDirection.down, False, False),
+    "1a_7z_bottom": Door("1a_7z_bottom", "1a_7z", DoorDirection.right, False, False),
     "1a_7z_top": Door("1a_7z_top", "1a_7z", DoorDirection.up, True, False),
 
     "1a_8z_bottom": Door("1a_8z_bottom", "1a_8z", DoorDirection.down, False, False),
@@ -94,7 +94,7 @@ all_doors: Dict[str, Door] = {
     "1a_7a_west": Door("1a_7a_west", "1a_7a", DoorDirection.up, False, False),
     "1a_7a_east": Door("1a_7a_east", "1a_7a", DoorDirection.up, False, False),
 
-    "1a_9z_east": Door("1a_9z_east", "1a_9z", DoorDirection.up, False, False),
+    "1a_9z_east": Door("1a_9z_east", "1a_9z", DoorDirection.down, False, False),
 
     "1a_8b_west": Door("1a_8b_west", "1a_8b", DoorDirection.left, False, False),
     "1a_8b_east": Door("1a_8b_east", "1a_8b", DoorDirection.up, False, False),
@@ -121,7 +121,7 @@ all_doors: Dict[str, Door] = {
 
     "1a_11_south": Door("1a_11_south", "1a_11", DoorDirection.down, False, False),
     "1a_11_south-west": Door("1a_11_south-west", "1a_11", DoorDirection.down, False, False),
-    "1a_11_west": Door("1a_11_west", "1a_11", DoorDirection.up, False, False),
+    "1a_11_west": Door("1a_11_west", "1a_11", DoorDirection.left, False, False),
     "1a_11_south-east": Door("1a_11_south-east", "1a_11", DoorDirection.down, False, True),
     "1a_11_north": Door("1a_11_north", "1a_11", DoorDirection.up, False, False),
 
@@ -136,10 +136,56 @@ all_doors: Dict[str, Door] = {
 
     "1a_12z_east": Door("1a_12z_east", "1a_12z", DoorDirection.right, False, False),
 
-    "1a_12a_bottom": Door("1a_12a_bottom", "1a_12a", DoorDirection.down, False, False),
+    "1a_12a_bottom": Door("1a_12a_bottom", "1a_12a", DoorDirection.left, False, False),
     "1a_12a_top": Door("1a_12a_top", "1a_12a", DoorDirection.up, False, False),
 
     "1a_end_south": Door("1a_end_south", "1a_end", DoorDirection.down, False, True),
+
+    "1b_00_east": Door("1b_00_east", "1b_00", DoorDirection.up, False, False),
+
+    "1b_01_west": Door("1b_01_west", "1b_01", DoorDirection.down, False, True),
+    "1b_01_east": Door("1b_01_east", "1b_01", DoorDirection.up, False, False),
+
+    "1b_02_west": Door("1b_02_west", "1b_02", DoorDirection.down, False, True),
+    "1b_02_east": Door("1b_02_east", "1b_02", DoorDirection.up, False, False),
+
+    "1b_02b_west": Door("1b_02b_west", "1b_02b", DoorDirection.down, False, True),
+    "1b_02b_east": Door("1b_02b_east", "1b_02b", DoorDirection.up, False, False),
+
+    "1b_03_west": Door("1b_03_west", "1b_03", DoorDirection.down, False, True),
+    "1b_03_east": Door("1b_03_east", "1b_03", DoorDirection.right, False, False),
+
+    "1b_04_west": Door("1b_04_west", "1b_04", DoorDirection.left, False, True),
+    "1b_04_east": Door("1b_04_east", "1b_04", DoorDirection.up, False, False),
+
+    "1b_05_west": Door("1b_05_west", "1b_05", DoorDirection.down, False, True),
+    "1b_05_east": Door("1b_05_east", "1b_05", DoorDirection.up, False, False),
+
+    "1b_05b_west": Door("1b_05b_west", "1b_05b", DoorDirection.down, False, True),
+    "1b_05b_east": Door("1b_05b_east", "1b_05b", DoorDirection.up, False, False),
+
+    "1b_06_west": Door("1b_06_west", "1b_06", DoorDirection.down, False, True),
+    "1b_06_east": Door("1b_06_east", "1b_06", DoorDirection.right, False, False),
+
+    "1b_07_bottom": Door("1b_07_bottom", "1b_07", DoorDirection.left, False, False),
+    "1b_07_top": Door("1b_07_top", "1b_07", DoorDirection.up, False, False),
+
+    "1b_08_west": Door("1b_08_west", "1b_08", DoorDirection.down, False, True),
+    "1b_08_east": Door("1b_08_east", "1b_08", DoorDirection.up, False, False),
+
+    "1b_08b_west": Door("1b_08b_west", "1b_08b", DoorDirection.down, False, True),
+    "1b_08b_east": Door("1b_08b_east", "1b_08b", DoorDirection.up, False, False),
+
+    "1b_09_west": Door("1b_09_west", "1b_09", DoorDirection.down, False, True),
+    "1b_09_east": Door("1b_09_east", "1b_09", DoorDirection.right, False, False),
+
+    "1b_10_west": Door("1b_10_west", "1b_10", DoorDirection.left, False, False),
+    "1b_10_east": Door("1b_10_east", "1b_10", DoorDirection.right, False, False),
+
+    "1b_11_bottom": Door("1b_11_bottom", "1b_11", DoorDirection.left, False, False),
+    "1b_11_top": Door("1b_11_top", "1b_11", DoorDirection.up, False, False),
+
+    "1b_end_west": Door("1b_end_west", "1b_end", DoorDirection.down, False, True),
 
 }
 
@@ -312,6 +358,51 @@ all_region_connections: Dict[str, RegionConnection] = {
     "1a_end_south---1a_end_main": RegionConnection("1a_end_south", "1a_end_main", []),
     "1a_end_main---1a_end_south": RegionConnection("1a_end_main", "1a_end_south", []),
 
+    "1b_00_west---1b_00_east": RegionConnection("1b_00_west", "1b_00_east", []),
+    "1b_00_east---1b_00_west": RegionConnection("1b_00_east", "1b_00_west", []),
+
+    "1b_01_west---1b_01_east": RegionConnection("1b_01_west", "1b_01_east", [[ItemName.traffic_blocks, ], ]),
+    "1b_01_east---1b_01_west": RegionConnection("1b_01_east", "1b_01_west", [[ItemName.cannot_access, ], ]),
+
+    "1b_02_west---1b_02_east": RegionConnection("1b_02_west", "1b_02_east", [[ItemName.traffic_blocks, ], ]),
+    "1b_02_east---1b_02_west": RegionConnection("1b_02_east", "1b_02_west", [[ItemName.cannot_access, ], ]),
+
+    "1b_02b_west---1b_02b_east": RegionConnection("1b_02b_west", "1b_02b_east", [[ItemName.traffic_blocks, ], ]),
+    "1b_02b_east---1b_02b_west": RegionConnection("1b_02b_east", "1b_02b_west", [[ItemName.cannot_access, ], ]),
+
+    "1b_03_west---1b_03_east": RegionConnection("1b_03_west", "1b_03_east", [[ItemName.traffic_blocks, ItemName.dash_refills, ], ]),
+    "1b_03_east---1b_03_west": RegionConnection("1b_03_east", "1b_03_west", [[ItemName.cannot_access, ], ]),
+
+    "1b_04_west---1b_04_east": RegionConnection("1b_04_west", "1b_04_east", [[ItemName.traffic_blocks, ItemName.springs, ], ]),
+    "1b_04_east---1b_04_west": RegionConnection("1b_04_east", "1b_04_west", [[ItemName.cannot_access, ], ]),
+
+    "1b_05_west---1b_05_east": RegionConnection("1b_05_west", "1b_05_east", [[ItemName.traffic_blocks, ], ]),
+    "1b_05_east---1b_05_west": RegionConnection("1b_05_east", "1b_05_west", [[ItemName.cannot_access, ], ]),
+
+    "1b_05b_west---1b_05b_east": RegionConnection("1b_05b_west", "1b_05b_east", [[ItemName.springs, ItemName.dash_refills, ], ]),
+    "1b_05b_east---1b_05b_west": RegionConnection("1b_05b_east", "1b_05b_west", [[ItemName.cannot_access, ], ]),
+
+    "1b_06_west---1b_06_east": RegionConnection("1b_06_west", "1b_06_east", [[ItemName.springs, ItemName.dash_refills, ], ]),
+    "1b_06_east---1b_06_west": RegionConnection("1b_06_east", "1b_06_west", [[ItemName.cannot_access, ], ]),
+
+    "1b_07_bottom---1b_07_top": RegionConnection("1b_07_bottom", "1b_07_top", [[ItemName.traffic_blocks, ], ]),
+    "1b_07_top---1b_07_bottom": RegionConnection("1b_07_top", "1b_07_bottom", []),
+
+    "1b_08_west---1b_08_east": RegionConnection("1b_08_west", "1b_08_east", [[ItemName.traffic_blocks, ], ]),
+
+    "1b_08b_west---1b_08b_east": RegionConnection("1b_08b_west", "1b_08b_east", [[ItemName.traffic_blocks, ItemName.dash_refills, ], ]),
+    "1b_08b_east---1b_08b_west": RegionConnection("1b_08b_east", "1b_08b_west", [[ItemName.cannot_access, ], ]),
+
+    "1b_09_west---1b_09_east": RegionConnection("1b_09_west", "1b_09_east", [[ItemName.traffic_blocks, ], ]),
+    "1b_09_east---1b_09_west": RegionConnection("1b_09_east", "1b_09_west", []),
+
+    "1b_10_west---1b_10_east": RegionConnection("1b_10_west", "1b_10_east", [[ItemName.traffic_blocks, ItemName.dash_refills, ], ]),
+
+    "1b_11_bottom---1b_11_top": RegionConnection("1b_11_bottom", "1b_11_top", [[ItemName.traffic_blocks, ItemName.dash_refills, ], ]),
+    "1b_11_top---1b_11_bottom": RegionConnection("1b_11_top", "1b_11_bottom", []),
+
+    "1b_end_west---1b_end_goal": RegionConnection("1b_end_west", "1b_end_goal", [[ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks, ItemName.dash_refills, ], ]),
+
 }
 
 all_locations: Dict[str, LevelLocation] = {
@@ -342,6 +433,11 @@ all_locations: Dict[str, LevelLocation] = {
     "1a_end_clear": LevelLocation("1a_end_clear", "Forsaken City A - Level Clear", "1a_end_main", LocationType.level_clear, []),
     "1a_end_golden": LevelLocation("1a_end_golden", "Forsaken City A - Golden Strawberry", "1a_end_main", LocationType.golden_strawberry, []),
     "1a_end_winged_golden": LevelLocation("1a_end_winged_golden", "Forsaken City A - Winged Golden Strawberry", "1a_end_main", LocationType.golden_strawberry, []),
+
+    "1b_03_binoculars": LevelLocation("1b_03_binoculars", "Forsaken City B - Room 03 Binoculars", "1b_03_west", LocationType.binoculars, []),
+    "1b_09_binoculars": LevelLocation("1b_09_binoculars", "Forsaken City B - Room 09 Binoculars", "1b_09_west", LocationType.binoculars, []),
+    "1b_end_clear": LevelLocation("1b_end_clear", "Forsaken City B - Level Clear", "1b_end_goal", LocationType.level_clear, []),
+    "1b_end_golden": LevelLocation("1b_end_golden", "Forsaken City B - Golden Strawberry", "1b_end_goal", LocationType.golden_strawberry, []),
 
 }
 
@@ -497,6 +593,54 @@ all_regions: Dict[str, PreRegion] = {
     "1a_end_south": PreRegion("1a_end_south", "1a_end", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1a_end_south"], [loc for _, loc in all_locations.items() if loc.region_name == "1a_end_south"]),
     "1a_end_main": PreRegion("1a_end_main", "1a_end", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1a_end_main"], [loc for _, loc in all_locations.items() if loc.region_name == "1a_end_main"]),
 
+    "1b_00_west": PreRegion("1b_00_west", "1b_00", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_00_west"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_00_west"]),
+    "1b_00_east": PreRegion("1b_00_east", "1b_00", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_00_east"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_00_east"]),
+
+    "1b_01_west": PreRegion("1b_01_west", "1b_01", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_01_west"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_01_west"]),
+    "1b_01_east": PreRegion("1b_01_east", "1b_01", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_01_east"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_01_east"]),
+
+    "1b_02_west": PreRegion("1b_02_west", "1b_02", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_02_west"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_02_west"]),
+    "1b_02_east": PreRegion("1b_02_east", "1b_02", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_02_east"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_02_east"]),
+
+    "1b_02b_west": PreRegion("1b_02b_west", "1b_02b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_02b_west"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_02b_west"]),
+    "1b_02b_east": PreRegion("1b_02b_east", "1b_02b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_02b_east"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_02b_east"]),
+
+    "1b_03_west": PreRegion("1b_03_west", "1b_03", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_03_west"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_03_west"]),
+    "1b_03_east": PreRegion("1b_03_east", "1b_03", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_03_east"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_03_east"]),
+
+    "1b_04_west": PreRegion("1b_04_west", "1b_04", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_04_west"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_04_west"]),
+    "1b_04_east": PreRegion("1b_04_east", "1b_04", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_04_east"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_04_east"]),
+
+    "1b_05_west": PreRegion("1b_05_west", "1b_05", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_05_west"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_05_west"]),
+    "1b_05_east": PreRegion("1b_05_east", "1b_05", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_05_east"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_05_east"]),
+
+    "1b_05b_west": PreRegion("1b_05b_west", "1b_05b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_05b_west"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_05b_west"]),
+    "1b_05b_east": PreRegion("1b_05b_east", "1b_05b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_05b_east"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_05b_east"]),
+
+    "1b_06_west": PreRegion("1b_06_west", "1b_06", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_06_west"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_06_west"]),
+    "1b_06_east": PreRegion("1b_06_east", "1b_06", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_06_east"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_06_east"]),
+
+    "1b_07_bottom": PreRegion("1b_07_bottom", "1b_07", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_07_bottom"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_07_bottom"]),
+    "1b_07_top": PreRegion("1b_07_top", "1b_07", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_07_top"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_07_top"]),
+
+    "1b_08_west": PreRegion("1b_08_west", "1b_08", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_08_west"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_08_west"]),
+    "1b_08_east": PreRegion("1b_08_east", "1b_08", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_08_east"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_08_east"]),
+
+    "1b_08b_west": PreRegion("1b_08b_west", "1b_08b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_08b_west"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_08b_west"]),
+    "1b_08b_east": PreRegion("1b_08b_east", "1b_08b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_08b_east"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_08b_east"]),
+
+    "1b_09_west": PreRegion("1b_09_west", "1b_09", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_09_west"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_09_west"]),
+    "1b_09_east": PreRegion("1b_09_east", "1b_09", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_09_east"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_09_east"]),
+
+    "1b_10_west": PreRegion("1b_10_west", "1b_10", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_10_west"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_10_west"]),
+    "1b_10_east": PreRegion("1b_10_east", "1b_10", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_10_east"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_10_east"]),
+
+    "1b_11_bottom": PreRegion("1b_11_bottom", "1b_11", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_11_bottom"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_11_bottom"]),
+    "1b_11_top": PreRegion("1b_11_top", "1b_11", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_11_top"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_11_top"]),
+
+    "1b_end_west": PreRegion("1b_end_west", "1b_end", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_end_west"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_end_west"]),
+    "1b_end_goal": PreRegion("1b_end_goal", "1b_end", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_end_goal"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_end_goal"]),
+
 }
 
 all_room_connections: Dict[str, RoomConnection] = {
@@ -549,6 +693,22 @@ all_room_connections: Dict[str, RoomConnection] = {
     "1a_12---1a_12a": RoomConnection("1a", all_doors["1a_12_east"], all_doors["1a_12a_bottom"]),
     "1a_12a---1a_end": RoomConnection("1a", all_doors["1a_12a_top"], all_doors["1a_end_south"]),
 
+    "1b_00---1b_01": RoomConnection("1b", all_doors["1b_00_east"], all_doors["1b_01_west"]),
+    "1b_01---1b_02": RoomConnection("1b", all_doors["1b_01_east"], all_doors["1b_02_west"]),
+    "1b_02---1b_02b": RoomConnection("1b", all_doors["1b_02_east"], all_doors["1b_02b_west"]),
+    "1b_02b---1b_03": RoomConnection("1b", all_doors["1b_02b_east"], all_doors["1b_03_west"]),
+    "1b_03---1b_04": RoomConnection("1b", all_doors["1b_03_east"], all_doors["1b_04_west"]),
+    "1b_04---1b_05": RoomConnection("1b", all_doors["1b_04_east"], all_doors["1b_05_west"]),
+    "1b_05---1b_05b": RoomConnection("1b", all_doors["1b_05_east"], all_doors["1b_05b_west"]),
+    "1b_05b---1b_06": RoomConnection("1b", all_doors["1b_05b_east"], all_doors["1b_06_west"]),
+    "1b_06---1b_07": RoomConnection("1b", all_doors["1b_06_east"], all_doors["1b_07_bottom"]),
+    "1b_07---1b_08": RoomConnection("1b", all_doors["1b_07_top"], all_doors["1b_08_west"]),
+    "1b_08---1b_08b": RoomConnection("1b", all_doors["1b_08_east"], all_doors["1b_08b_west"]),
+    "1b_08b---1b_09": RoomConnection("1b", all_doors["1b_08b_east"], all_doors["1b_09_west"]),
+    "1b_09---1b_10": RoomConnection("1b", all_doors["1b_09_east"], all_doors["1b_10_west"]),
+    "1b_10---1b_11": RoomConnection("1b", all_doors["1b_10_east"], all_doors["1b_11_bottom"]),
+    "1b_11---1b_end": RoomConnection("1b", all_doors["1b_11_top"], all_doors["1b_end_west"]),
+
 }
 
 all_rooms: Dict[str, Room] = {
@@ -598,11 +758,29 @@ all_rooms: Dict[str, Room] = {
     "1a_12a": Room("1a", "1a_12a", "Forsaken City A - Room 12a", [reg for _, reg in all_regions.items() if reg.room_name == "1a_12a"], [door for _, door in all_doors.items() if door.room_name == "1a_12a"]),
     "1a_end": Room("1a", "1a_end", "Forsaken City A - Room end", [reg for _, reg in all_regions.items() if reg.room_name == "1a_end"], [door for _, door in all_doors.items() if door.room_name == "1a_end"]),
 
+    "1b_00": Room("1b", "1b_00", "Forsaken City B - Room 00", [reg for _, reg in all_regions.items() if reg.room_name == "1b_00"], [door for _, door in all_doors.items() if door.room_name == "1b_00"], "Start", "1b_00_west"),
+    "1b_01": Room("1b", "1b_01", "Forsaken City B - Room 01", [reg for _, reg in all_regions.items() if reg.room_name == "1b_01"], [door for _, door in all_doors.items() if door.room_name == "1b_01"]),
+    "1b_02": Room("1b", "1b_02", "Forsaken City B - Room 02", [reg for _, reg in all_regions.items() if reg.room_name == "1b_02"], [door for _, door in all_doors.items() if door.room_name == "1b_02"]),
+    "1b_02b": Room("1b", "1b_02b", "Forsaken City B - Room 02b", [reg for _, reg in all_regions.items() if reg.room_name == "1b_02b"], [door for _, door in all_doors.items() if door.room_name == "1b_02b"]),
+    "1b_03": Room("1b", "1b_03", "Forsaken City B - Room 03", [reg for _, reg in all_regions.items() if reg.room_name == "1b_03"], [door for _, door in all_doors.items() if door.room_name == "1b_03"]),
+    "1b_04": Room("1b", "1b_04", "Forsaken City B - Room 04", [reg for _, reg in all_regions.items() if reg.room_name == "1b_04"], [door for _, door in all_doors.items() if door.room_name == "1b_04"], "Contraption", "1b_04_west"),
+    "1b_05": Room("1b", "1b_05", "Forsaken City B - Room 05", [reg for _, reg in all_regions.items() if reg.room_name == "1b_05"], [door for _, door in all_doors.items() if door.room_name == "1b_05"]),
+    "1b_05b": Room("1b", "1b_05b", "Forsaken City B - Room 05b", [reg for _, reg in all_regions.items() if reg.room_name == "1b_05b"], [door for _, door in all_doors.items() if door.room_name == "1b_05b"]),
+    "1b_06": Room("1b", "1b_06", "Forsaken City B - Room 06", [reg for _, reg in all_regions.items() if reg.room_name == "1b_06"], [door for _, door in all_doors.items() if door.room_name == "1b_06"]),
+    "1b_07": Room("1b", "1b_07", "Forsaken City B - Room 07", [reg for _, reg in all_regions.items() if reg.room_name == "1b_07"], [door for _, door in all_doors.items() if door.room_name == "1b_07"]),
+    "1b_08": Room("1b", "1b_08", "Forsaken City B - Room 08", [reg for _, reg in all_regions.items() if reg.room_name == "1b_08"], [door for _, door in all_doors.items() if door.room_name == "1b_08"], "Scrap Pit", "1b_08_west"),
+    "1b_08b": Room("1b", "1b_08b", "Forsaken City B - Room 08b", [reg for _, reg in all_regions.items() if reg.room_name == "1b_08b"], [door for _, door in all_doors.items() if door.room_name == "1b_08b"]),
+    "1b_09": Room("1b", "1b_09", "Forsaken City B - Room 09", [reg for _, reg in all_regions.items() if reg.room_name == "1b_09"], [door for _, door in all_doors.items() if door.room_name == "1b_09"]),
+    "1b_10": Room("1b", "1b_10", "Forsaken City B - Room 10", [reg for _, reg in all_regions.items() if reg.room_name == "1b_10"], [door for _, door in all_doors.items() if door.room_name == "1b_10"]),
+    "1b_11": Room("1b", "1b_11", "Forsaken City B - Room 11", [reg for _, reg in all_regions.items() if reg.room_name == "1b_11"], [door for _, door in all_doors.items() if door.room_name == "1b_11"]),
+    "1b_end": Room("1b", "1b_end", "Forsaken City B - Room end", [reg for _, reg in all_regions.items() if reg.room_name == "1b_end"], [door for _, door in all_doors.items() if door.room_name == "1b_end"]),
+
 }
 
 all_levels: Dict[str, Level] = {
     "0a": Level("0a", "Prologue", [room for _, room in all_rooms.items() if room.level_name == "0a"], [room_con for _, room_con in all_room_connections.items() if room_con.level_name == "0a"]),
     "1a": Level("1a", "Forsaken City A", [room for _, room in all_rooms.items() if room.level_name == "1a"], [room_con for _, room_con in all_room_connections.items() if room_con.level_name == "1a"]),
+    "1b": Level("1b", "Forsaken City B", [room for _, room in all_rooms.items() if room.level_name == "1b"], [room_con for _, room_con in all_room_connections.items() if room_con.level_name == "1b"]),
 
 }
 

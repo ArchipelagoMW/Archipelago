@@ -59,7 +59,7 @@ for level in level_data["levels"]:
                     location_full_name = f"{room_full_name}_{location['name']}"
 
                     location_display_name = location['display_name']
-                    if location['type'] == "strawberry":
+                    if location['type'] == "strawberry" or location['type'] == "binoculars" or location['type'] == "key":
                         location_display_name = f"Room {room['name']} {location_display_name}" 
                     location_full_display_name = f"{level['display_name']} - {location_display_name}"
 
@@ -132,9 +132,6 @@ for level in level_data["levels"]:
 
 
 all_levels.append("")
-
-# TODO
-# Print lists to output file
 
 
 import sys

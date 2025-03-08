@@ -14,7 +14,8 @@ class LocationType(IntEnum):
     checkpoint = 4
     level_clear = 5
     key = 6
-    room_enter = 7
+    binoculars = 7
+    room_enter = 8
 
 class DoorDirection(IntEnum):
     up = 0
@@ -131,6 +132,12 @@ class RoomConnection:
         self.source = source
         self.dest = dest
         self.two_way = not self.dest.closes_behind
+
+        if (self.source.dir == DoorDirection.left and self.dest.dir != DoorDirection.right or
+            self.source.dir == DoorDirection.right and self.dest.dir != DoorDirection.left or
+            self.source.dir == DoorDirection.up and self.dest.dir != DoorDirection.down or
+            self.source.dir == DoorDirection.down and self.dest.dir != DoorDirection.up):
+            raise Exception(f"Door {source.name} and Door {dest.name} have mismatched directions.")
 
 
 class Level:

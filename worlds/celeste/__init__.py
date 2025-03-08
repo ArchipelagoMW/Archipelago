@@ -56,10 +56,12 @@ class CelesteWorld(World):
     def stage_assert_generate(cls, _multiworld: MultiWorld) -> None:
         with open("./worlds/celeste/data/IDs.txt", "w") as f:
             print("Items:", file=f)
-            for name, id in CelesteWorld.item_name_to_id.items():
+            for name in sorted(CelesteWorld.item_name_to_id, key=CelesteWorld.item_name_to_id.get):
+                id = CelesteWorld.item_name_to_id[name]
                 print(f"{{ 0x{id:X}, \"{name}\" }},", file=f)
             print("\nLocations:", file=f)
-            for name, id in CelesteWorld.location_name_to_id.items():
+            for name in sorted(CelesteWorld.location_name_to_id, key=CelesteWorld.location_name_to_id.get):
+                id = CelesteWorld.location_name_to_id[name]
                 print(f"{{ 0x{id:X}, \"{name}\" }},", file=f)
 
     def generate_early(self) -> None:
