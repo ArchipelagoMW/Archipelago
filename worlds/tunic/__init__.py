@@ -16,7 +16,6 @@ from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_op
 from .combat_logic import area_data, CombatState
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection, OptionError
-from decimal import Decimal, ROUND_HALF_UP
 from settings import Group, Bool
 
 
@@ -112,12 +111,6 @@ class TunicWorld(World):
 
     def generate_early(self) -> None:
         check_options(self)
-
-        if self.options.logic_rules >= LogicRules.option_no_major_glitches:
-            self.options.laurels_zips.value = LaurelsZips.option_true
-            self.options.ice_grappling.value = IceGrappling.option_medium
-            if self.options.logic_rules.value == LogicRules.option_unrestricted:
-                self.options.ladder_storage.value = LadderStorage.option_medium
 
         self.er_regions = tunic_er_regions.copy()
         if self.options.plando_connections:

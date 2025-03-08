@@ -1,5 +1,4 @@
 from typing import Dict, TYPE_CHECKING
-from decimal import Decimal, ROUND_HALF_UP
 
 from worlds.generic.Rules import set_rule, forbid_item, add_rule
 from BaseClasses import CollectionState
