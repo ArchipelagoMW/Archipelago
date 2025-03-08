@@ -106,6 +106,9 @@ class BlasphemousWorld(World):
         if not self.options.wall_climb_shuffle:
             self.multiworld.push_precollected(self.create_item("Wall Climb Ability"))
 
+        if self.options.thorn_shuffle == "local_only":
+            self.options.local_items.value.add("Thorn Upgrade")
+
         if not self.options.boots_of_pleading:
             self.disabled_locations.append("RE401")
 
@@ -140,12 +143,6 @@ class BlasphemousWorld(World):
         ]
 
         skipped_items = []
-        junk: int = 0
-
-        for item, count in self.options.start_inventory.value.items():
-            for _ in range(count):
-                skipped_items.append(item)
-                junk += 1
 
         skipped_items.extend(unrandomized_dict.values())
 
@@ -197,9 +194,6 @@ class BlasphemousWorld(World):
                 for _ in range(count):
                     pool.append(self.create_item(item["name"]))
 
-        for _ in range(junk):
-            pool.append(self.create_item(self.get_filler_item_name()))
-
         self.multiworld.itempool += pool
 
         self.place_items_from_dict(unrandomized_dict)
@@ -212,9 +206,6 @@ class BlasphemousWorld(World):
 
         if not self.options.skill_randomizer:
             self.place_items_from_dict(skill_dict)
-
-        if self.options.thorn_shuffle == "local_only":
-            self.options.local_items.value.add("Thorn Upgrade")
         
 
     def place_items_from_set(self, location_set: Set[str], name: str):

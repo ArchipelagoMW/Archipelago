@@ -73,18 +73,30 @@ When tests are run, this class will create a multiworld with a single player hav
 generic tests, as well as the new custom test. Each test method definition will create its own separate solo multiworld
 that will be cleaned up after. If you don't want to run the generic tests on a base, `run_default_tests` can be
 overridden. For more information on what methods are available to your class, check the
-[WorldTestBase definition](/test/bases.py#L104).
+[WorldTestBase definition](/test/bases.py#L106).
 
 #### Alternatives to WorldTestBase
 
-Unit tests can also be created using [TestBase](/test/bases.py#L14) or
+Unit tests can also be created using [TestBase](/test/bases.py#L16) or
 [unittest.TestCase](https://docs.python.org/3/library/unittest.html#unittest.TestCase) depending on your use case. These
 may be useful for generating a multiworld under very specific constraints without using the generic world setup, or for
 testing portions of your code that can be tested without relying on a multiworld to be created first.
 
 ## Running Tests
 
-In PyCharm, running all tests can be done by right-clicking the root `test` directory and selecting `run Python tests`.
-If you do not have pytest installed, you may get import failures. To solve this, edit the run configuration, and set the
-working directory of the run to the Archipelago directory. If you only want to run your world's defined tests, repeat
-the steps for the test directory within your world.
+#### Using Pycharm
+
+In PyCharm, running all tests can be done by right-clicking the root test directory and selecting Run 'Archipelago Unittests'. 
+Unless you configured PyCharm to use pytest as a test runner, you may get import failures. To solve this, edit the run configuration, 
+and set the working directory to the Archipelago directory which contains all the project files. 
+
+If you only want to run your world's defined tests, repeat the steps for the test directory within your world.
+Your working directory should be the directory of your world in the worlds directory and the script should be the 
+tests folder within your world.
+
+You can also find the 'Archipelago Unittests' as an option in the dropdown at the top of the window
+next to the run and debug buttons.
+
+#### Running Tests without Pycharm
+
+Run `pip install pytest pytest-subtests`, then use your IDE to run tests or run `pytest` from the source folder.

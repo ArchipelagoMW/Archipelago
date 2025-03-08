@@ -1,7 +1,8 @@
+from datetime import date
 from math import floor
 from pkgutil import get_data
 from random import Random
-from typing import Any, Collection, Dict, FrozenSet, Iterable, List, Set, Tuple, TypeVar
+from typing import Any, Collection, Dict, FrozenSet, Iterable, List, Optional, Set, Tuple, TypeVar
 
 T = TypeVar("T")
 
@@ -11,6 +12,11 @@ T = TypeVar("T")
 # {} is an unusable requirement.
 # {{}} is an always usable requirement.
 WitnessRule = FrozenSet[FrozenSet[str]]
+
+
+def cast_not_none(value: Optional[T]) -> T:
+    assert value is not None
+    return value
 
 
 def weighted_sample(world_random: Random, population: List[T], weights: List[float], k: int) -> List[T]:
@@ -56,7 +62,7 @@ def build_weighted_int_list(inputs: Collection[float], total: int) -> List[int]:
     return rounded_output
 
 
-def define_new_region(region_string: str) -> Tuple[Dict[str, Any], Set[Tuple[str, WitnessRule]]]:
+def define_new_region(region_string: str, area: dict[str, Any]) -> Tuple[Dict[str, Any], Set[Tuple[str, WitnessRule]]]:
     """
     Returns a region object by parsing a line in the logic file
     """
@@ -86,6 +92,7 @@ def define_new_region(region_string: str) -> Tuple[Dict[str, Any], Set[Tuple[str
         "shortName": region_name_simple,
         "entities": [],
         "physical_entities": [],
+        "area": area,
     }
     return region_obj, options
 
@@ -199,10 +206,6 @@ def get_caves_except_path_to_challenge_exclusion_list() -> List[str]:
     return get_adjustment_file("settings/Exclusions/Caves_Except_Path_To_Challenge.txt")
 
 
-def get_elevators_come_to_you() -> List[str]:
-    return get_adjustment_file("settings/Door_Shuffle/Elevators_Come_To_You.txt")
-
-
 def get_entity_hunt() -> List[str]:
     return get_adjustment_file("settings/Entity_Hunt.txt")
 
@@ -263,3 +266,15 @@ def logical_and_witness_rules(witness_rules: Iterable[WitnessRule]) -> WitnessRu
 
 def logical_or_witness_rules(witness_rules: Iterable[WitnessRule]) -> WitnessRule:
     return optimize_witness_rule(frozenset.union(*witness_rules))
+
+
+def is_easter_time() -> bool:
+    # dateutils would have been nice here, because it has an easter() function.
+    # But adding it as a requirement seems heavier than necessary.
+    # Thus, we just take a range from the earliest to latest possible easter dates.
+
+    today = date.today()
+    earliest_easter_day = date(today.year, 3, 20)  # Earliest possible is 3/22 + 2 day buffer for Good Friday
+    last_easter_day = date(today.year, 4, 26)  # Latest possible is 4/25 + 1 day buffer for Easter Monday
+
+    return earliest_easter_day <= today <= last_easter_day

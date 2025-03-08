@@ -1,6 +1,4 @@
-from typing import Dict, List
-
-CONNECTIONS: Dict[str, Dict[str, List[str]]] = {
+CONNECTIONS: dict[str, dict[str, list[str]]] = {
     "Ninja Village": {
         "Right": [
             "Autumn Hills - Left",
@@ -640,7 +638,7 @@ CONNECTIONS: Dict[str, Dict[str, List[str]]] = {
     },
 }
 
-RANDOMIZED_CONNECTIONS: Dict[str, str] = {
+RANDOMIZED_CONNECTIONS: dict[str, str] = {
     "Ninja Village - Right": "Autumn Hills - Left",
     "Autumn Hills - Left": "Ninja Village - Right",
     "Autumn Hills - Right": "Forlorn Temple - Left",
@@ -680,7 +678,7 @@ RANDOMIZED_CONNECTIONS: Dict[str, str] = {
     "Sunken Shrine - Left": "Howling Grotto - Bottom",
 }
 
-TRANSITIONS: List[str] = [
+TRANSITIONS: list[str] = [
     "Ninja Village - Right",
     "Autumn Hills - Left",
     "Autumn Hills - Right",

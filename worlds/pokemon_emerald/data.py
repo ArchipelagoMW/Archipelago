@@ -117,6 +117,21 @@ class ItemData(NamedTuple):
     tags: FrozenSet[str]
 
 
+class LocationCategory(IntEnum):
+    BADGE = 0
+    HM = 1
+    KEY = 2
+    ROD = 3
+    BIKE = 4
+    TICKET = 5
+    OVERWORLD_ITEM = 6
+    HIDDEN_ITEM = 7
+    GIFT = 8
+    BERRY_TREE = 9
+    TRAINER = 10
+    POKEDEX = 11
+
+
 class LocationData(NamedTuple):
     name: str
     label: str
@@ -124,6 +139,7 @@ class LocationData(NamedTuple):
     default_item: int
     address: Union[int, List[int]]
     flag: int
+    category: LocationCategory
     tags: FrozenSet[str]
 
 
@@ -135,6 +151,7 @@ class EncounterTableData(NamedTuple):
 @dataclass
 class MapData:
     name: str
+    label: str
     header_address: int
     land_encounters: Optional[EncounterTableData]
     water_encounters: Optional[EncounterTableData]
@@ -198,34 +215,9 @@ class EvolutionMethodEnum(IntEnum):
     FRIENDSHIP_NIGHT = 11
 
 
-def _str_to_evolution_method(string: str) -> EvolutionMethodEnum:
-    if string == "LEVEL":
-        return EvolutionMethodEnum.LEVEL
-    if string == "LEVEL_ATK_LT_DEF":
-        return EvolutionMethodEnum.LEVEL_ATK_LT_DEF
-    if string == "LEVEL_ATK_EQ_DEF":
-        return EvolutionMethodEnum.LEVEL_ATK_EQ_DEF
-    if string == "LEVEL_ATK_GT_DEF":
-        return EvolutionMethodEnum.LEVEL_ATK_GT_DEF
-    if string == "LEVEL_SILCOON":
-        return EvolutionMethodEnum.LEVEL_SILCOON
-    if string == "LEVEL_CASCOON":
-        return EvolutionMethodEnum.LEVEL_CASCOON
-    if string == "LEVEL_NINJASK":
-        return EvolutionMethodEnum.LEVEL_NINJASK
-    if string == "LEVEL_SHEDINJA":
-        return EvolutionMethodEnum.LEVEL_SHEDINJA
-    if string == "FRIENDSHIP":
-        return EvolutionMethodEnum.FRIENDSHIP
-    if string == "FRIENDSHIP_DAY":
-        return EvolutionMethodEnum.FRIENDSHIP_DAY
-    if string == "FRIENDSHIP_NIGHT":
-        return EvolutionMethodEnum.FRIENDSHIP_NIGHT
-
-
 class EvolutionData(NamedTuple):
     method: EvolutionMethodEnum
-    param: int
+    param: int  # Level/item id/friendship/etc.; depends on method
     species_id: int
 
 
@@ -341,6 +333,8 @@ def load_json_data(data_name: str) -> Union[List[Any], Dict[str, Any]]:
 
 
 def _init() -> None:
+    import re
+
     extracted_data: Dict[str, Any] = load_json_data("extracted_data.json")
     data.constants = extracted_data["constants"]
     data.ram_addresses = extracted_data["misc_ram_addresses"]
@@ -350,6 +344,7 @@ def _init() -> None:
 
     # Create map data
     for map_name, map_json in extracted_data["maps"].items():
+        assert isinstance(map_name, str)
         if map_name in IGNORABLE_MAPS:
             continue
 
@@ -373,8 +368,35 @@ def _init() -> None:
                 map_json["fishing_encounters"]["address"]
             )
 
+        # Derive a user-facing label
+        label = []
+        for word in map_name[4:].split("_"):
+            # 1F, B1F, 2R, etc.
+            re_match = re.match(r"^B?\d+[FRP]$", word)
+            if re_match:
+                label.append(word)
+                continue
+
+            # Route 103, Hall 1, House 5, etc.
+            re_match = re.match(r"^([A-Z]+)(\d+)$", word)
+            if re_match:
+                label.append(re_match.group(1).capitalize())
+                label.append(re_match.group(2).lstrip("0"))
+                continue
+
+            if word == "OF":
+                label.append("of")
+                continue
+
+            if word == "SS":
+                label.append("S.S.")
+                continue
+
+            label.append(word.capitalize())
+
         data.maps[map_name] = MapData(
             map_name,
+            " ".join(label),
             map_json["header_address"],
             land_encounters,
             water_encounters,
@@ -431,6 +453,7 @@ def _init() -> None:
                     location_json["default_item"],
                     [location_json["address"]] + [j["address"] for j in alternate_rival_jsons],
                     location_json["flag"],
+                    LocationCategory[location_attributes_json[location_name]["category"]],
                     frozenset(location_attributes_json[location_name]["tags"])
                 )
             else:
@@ -441,6 +464,7 @@ def _init() -> None:
                     location_json["default_item"],
                     location_json["address"],
                     location_json["flag"],
+                    LocationCategory[location_attributes_json[location_name]["category"]],
                     frozenset(location_attributes_json[location_name]["tags"])
                 )
             new_region.locations.append(location_name)
@@ -910,7 +934,7 @@ def _init() -> None:
             (species_data["types"][0], species_data["types"][1]),
             (species_data["abilities"][0], species_data["abilities"][1]),
             [EvolutionData(
-                _str_to_evolution_method(evolution_json["method"]),
+                EvolutionMethodEnum[evolution_json["method"]],
                 evolution_json["param"],
                 evolution_json["species"],
             ) for evolution_json in species_data["evolutions"]],
@@ -928,26 +952,37 @@ def _init() -> None:
             data.species[evolution.species_id].pre_evolution = species.species_id
 
     # Replace default item for dex entry locations based on evo stage of species
-    evo_stage_to_ball_map = {
+    evo_stage_to_ball_map: Dict[int, int] = {
         0: data.constants["ITEM_POKE_BALL"],
         1: data.constants["ITEM_GREAT_BALL"],
         2: data.constants["ITEM_ULTRA_BALL"],
     }
+
     for species in data.species.values():
-        evo_stage = 0
+        default_item: Optional[int] = None
         pre_evolution = species.pre_evolution
-        while pre_evolution is not None:
-            evo_stage += 1
-            pre_evolution = data.species[pre_evolution].pre_evolution
+
+        if pre_evolution is not None:
+            evo_data = next(evo for evo in data.species[pre_evolution].evolutions if evo.species_id == species.species_id)
+            if evo_data.method == EvolutionMethodEnum.ITEM:
+                default_item = evo_data.param
+
+        evo_stage = 0
+        if default_item is None:
+            while pre_evolution is not None:
+                evo_stage += 1
+                pre_evolution = data.species[pre_evolution].pre_evolution
+            default_item = evo_stage_to_ball_map[evo_stage]
 
         dex_location_name = f"POKEDEX_REWARD_{str(species.national_dex_number).zfill(3)}"
         data.locations[dex_location_name] = LocationData(
             data.locations[dex_location_name].name,
             data.locations[dex_location_name].label,
             data.locations[dex_location_name].parent_region,
-            evo_stage_to_ball_map[evo_stage],
+            default_item,
             data.locations[dex_location_name].address,
             data.locations[dex_location_name].flag,
+            data.locations[dex_location_name].category,
             data.locations[dex_location_name].tags
         )
 
@@ -1408,9 +1443,6 @@ def _init() -> None:
     # Create warp map
     for warp, destination in extracted_data["warps"].items():
         data.warp_map[warp] = None if destination == "" else destination
-
-        if encoded_warp not in data.warp_map:
-            data.warp_map[encoded_warp] = None
 
     # Create trainer data
     for i, trainer_json in enumerate(extracted_data["trainers"]):
