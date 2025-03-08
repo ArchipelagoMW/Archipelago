@@ -44,8 +44,7 @@ class QuestLogicMixin(BaseLogicMixin):
 
 
 class QuestLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, MoneyLogicMixin, MineLogicMixin, RegionLogicMixin, RelationshipLogicMixin, ToolLogicMixin,
-                                 FishingLogicMixin, CookingLogicMixin, CombatLogicMixin, SeasonLogicMixin, SkillLogicMixin, WalletLogicMixin, QuestLogicMixin,
-                                 BuildingLogicMixin, TimeLogicMixin]]):
+FishingLogicMixin, CookingLogicMixin, CombatLogicMixin, SeasonLogicMixin, SkillLogicMixin, WalletLogicMixin, QuestLogicMixin, BuildingLogicMixin, TimeLogicMixin]]):
 
     def initialize_rules(self):
         self.update_rules({
@@ -104,7 +103,7 @@ class QuestLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, MoneyLogicMi
             Quest.dark_talisman: self.logic.region.can_reach(Region.railroad) & self.logic.wallet.has_rusty_key() & self.logic.relationship.can_meet(
                 NPC.krobus),
             Quest.goblin_problem: self.logic.region.can_reach(Region.witch_swamp),
-            Quest.magic_ink: self.logic.relationship.can_meet(NPC.wizard),
+            Quest.magic_ink: self.logic.region.can_reach(Region.witch_hut) & self.logic.relationship.can_meet(NPC.wizard),
             Quest.the_pirates_wife: self.logic.relationship.can_meet(NPC.kent) & self.logic.relationship.can_meet(NPC.gus) &
                                     self.logic.relationship.can_meet(NPC.sandy) & self.logic.relationship.can_meet(NPC.george) &
                                     self.logic.relationship.can_meet(NPC.wizard) & self.logic.relationship.can_meet(NPC.willy),
