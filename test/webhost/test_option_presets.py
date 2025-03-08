@@ -1,11 +1,17 @@
 import unittest
 
 from BaseClasses import PlandoOptions
-from worlds import AutoWorldRegister
+from worlds import AutoWorldRegister, ensure_worlds_loaded
 from Options import ItemDict, NamedRange, NumericOption, OptionList, OptionSet
 
 
 class TestOptionPresets(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        ensure_worlds_loaded()
+
     def test_option_presets_have_valid_options(self):
         """Test that all predefined option presets are valid options."""
         for game_name, world_type in AutoWorldRegister.world_types.items():

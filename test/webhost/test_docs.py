@@ -4,11 +4,13 @@ import os
 
 import WebHost
 from worlds.AutoWorld import AutoWorldRegister
+from worlds import ensure_worlds_loaded
 
 
 class TestDocs(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
+        ensure_worlds_loaded()
         cls.tutorials_data = WebHost.create_ordered_tutorials_file()
 
     def test_has_tutorial(self):
