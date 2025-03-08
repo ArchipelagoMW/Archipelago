@@ -293,7 +293,7 @@ class TunicWorld(World):
 
         # creating these after the fool traps are made mostly so we don't have to mess with it
         if self.options.breakable_shuffle:
-            for _, loc_data in breakable_location_table.items():
+            for loc_data in breakable_location_table.values():
                 if not self.options.entrance_rando and loc_data.er_region == "Purgatory":
                     continue
                 items_to_create[f"Money x{self.random.randint(1, 5)}"] += 1
