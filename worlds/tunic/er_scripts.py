@@ -198,7 +198,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     entrance_layout = world.options.entrance_layout
     laurels_location = world.options.laurels_location
     decoupled = world.options.decoupled
-    shuffle_fuses = world.options.shuffle_fuses.value
+    shuffle_fuses = bool(world.options.shuffle_fuses.value)
     traversal_reqs = deepcopy(traversal_requirements)
     has_laurels = True
     waterfall_plando = False
