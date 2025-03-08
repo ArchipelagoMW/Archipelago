@@ -24,7 +24,6 @@ from .data.item_definition_classes import DoorItemDefinition, ItemCategory, Prog
 from .data.static_logic import StaticWitnessLogicObj
 from .data.utils import (
     WitnessRule,
-    define_new_region,
     get_boat,
     get_caves_except_path_to_challenge_exclusion_list,
     get_complex_additional_panels,
@@ -82,6 +81,7 @@ class WitnessPlayerLogic:
         self.PARENT_ITEM_COUNT_PER_BASE_ITEM: Dict[str, int] = defaultdict(lambda: 1)
         self.PROGRESSIVE_LISTS: Dict[str, List[str]] = {}
         self.DOOR_ITEMS_BY_ID: Dict[str, List[str]] = {}
+        self.FORBIDDEN_DOORS: Set[str] = set()
 
         self.STARTING_INVENTORY: Set[str] = set()
 
@@ -118,6 +118,8 @@ class WitnessPlayerLogic:
         self.PRE_PICKED_HUNT_ENTITIES: Set[str] = set()
         self.HUNT_ENTITIES: Set[str] = set()
 
+        self.AVAILABLE_EASTER_EGGS: Set[str] = set()
+        self.AVAILABLE_EASTER_EGGS_PER_REGION: Dict[str, int] = {}
         self.ALWAYS_EVENT_NAMES_BY_HEX = {
             "0x00509": "+1 Laser",
             "0x012FB": "+1 Laser (Unredirected)",
@@ -152,6 +154,9 @@ class WitnessPlayerLogic:
         if world.options.victory_condition == "panel_hunt":
             picker = EntityHuntPicker(self, world, self.PRE_PICKED_HUNT_ENTITIES)
             self.HUNT_ENTITIES = picker.pick_panel_hunt_panels(world.options.panel_hunt_total.value)
+
+        if world.options.easter_egg_hunt:
+            self.finalize_easter_eggs(world)
 
         # Finalize which items actually exist in the MultiWorld and which get grouped into progressive items.
         self.finalize_items()
@@ -192,8 +197,9 @@ class WitnessPlayerLogic:
         for subset in these_items:
             self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME.update(subset)
 
-        # Handle door entities (door shuffle)
-        if entity_hex in self.DOOR_ITEMS_BY_ID:
+        # If this entity is opened by a door item that exists in the itempool, add that item to its requirements.
+        # Also, remove any original power requirements this entity might have had.
+        if entity_hex in self.DOOR_ITEMS_BY_ID and entity_hex not in self.FORBIDDEN_DOORS:
             # If this entity is opened by a door item that exists in the itempool, add that item to its requirements.
             door_items = frozenset({frozenset([item]) for item in self.DOOR_ITEMS_BY_ID[entity_hex]})
 
@@ -238,6 +244,8 @@ class WitnessPlayerLogic:
 
                 if option_entity in {"7 Lasers", "11 Lasers", "7 Lasers + Redirect", "11 Lasers + Redirect",
                                      "PP2 Weirdness", "Theater to Tunnels", "Entity Hunt"}:
+                    new_items = frozenset({frozenset([option_entity])})
+                elif "Eggs" in option_entity:
                     new_items = frozenset({frozenset([option_entity])})
                 elif option_entity in self.DISABLE_EVERYTHING_BEHIND:
                     new_items = frozenset()
@@ -329,6 +337,10 @@ class WitnessPlayerLogic:
                     if entity_hex in self.DOOR_ITEMS_BY_ID and item_name in self.DOOR_ITEMS_BY_ID[entity_hex]:
                         self.DOOR_ITEMS_BY_ID[entity_hex].remove(item_name)
 
+        if adj_type == "Forbidden Doors":
+            entity_hex = line[:7]
+            self.FORBIDDEN_DOORS.add(entity_hex)
+
         if adj_type == "Starting Inventory":
             self.STARTING_INVENTORY.add(line)
 
@@ -378,13 +390,6 @@ class WitnessPlayerLogic:
             entity_hex = line[:7]
 
             self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES.add(entity_hex)
-
-            return
-
-        if adj_type == "Region Changes":
-            new_region_and_options = define_new_region(line + ":")
-
-            self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[new_region_and_options[0]["name"]] = new_region_and_options[1]
 
             return
 
@@ -527,6 +532,55 @@ class WitnessPlayerLogic:
 
         return postgame_adjustments
 
+    def set_easter_egg_requirements(self, world: "WitnessWorld") -> None:
+        eggs_per_check, logically_required_eggs_per_check = world.options.easter_egg_hunt.get_step_and_logical_step()
+
+        for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items():
+            if entity_obj["entityType"] != "Easter Egg Total":
+                continue
+
+            direct_egg_count = int(entity_obj["checkName"].split(" ")[0])
+
+            if direct_egg_count % eggs_per_check:
+                self.COMPLETELY_DISABLED_ENTITIES.add(entity_hex)
+
+            requirement = direct_egg_count // eggs_per_check * logically_required_eggs_per_check
+            self.DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex] = {
+                "entities": frozenset({frozenset({f"{requirement} Eggs"})})
+            }
+
+    def finalize_easter_eggs(self, world: "WitnessWorld") -> None:
+        self.AVAILABLE_EASTER_EGGS = {
+            entity_hex for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items()
+            if entity_obj["entityType"] == "Easter Egg" and self.solvability_guaranteed(entity_hex)
+        }
+        max_eggs = len(self.AVAILABLE_EASTER_EGGS)
+
+        self.AVAILABLE_EASTER_EGGS_PER_REGION = defaultdict(int)
+        for entity_hex in self.AVAILABLE_EASTER_EGGS:
+            region_name = static_witness_logic.ENTITIES_BY_HEX[entity_hex]["region"]["name"]
+            self.AVAILABLE_EASTER_EGGS_PER_REGION[region_name] += 1
+
+        eggs_per_check, logically_required_eggs_per_check = world.options.easter_egg_hunt.get_step_and_logical_step()
+
+        for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items():
+            if entity_obj["entityType"] != "Easter Egg Total":
+                continue
+            if entity_hex in self.COMPLETELY_DISABLED_ENTITIES:
+                continue
+
+            direct_egg_count = int(entity_obj["checkName"].split(" ", 1)[0])
+            logically_required_egg_count = direct_egg_count // eggs_per_check * logically_required_eggs_per_check
+            if direct_egg_count > max_eggs:
+                self.COMPLETELY_DISABLED_ENTITIES.add(entity_hex)
+                continue
+
+            self.ADDED_CHECKS.add(entity_obj["checkName"])
+            if logically_required_egg_count > max_eggs:
+                # Exclude and set logic to require every egg
+                self.EXCLUDED_ENTITIES.add(entity_hex)
+                self.REQUIREMENTS_BY_HEX[entity_hex] = frozenset({frozenset({f"{max_eggs} Eggs"})})
+
     def make_options_adjustments(self, world: "WitnessWorld") -> None:
         """Makes logic adjustments based on options"""
         adjustment_linesets_in_order = []
@@ -635,6 +689,8 @@ class WitnessPlayerLogic:
             adjustment_linesets_in_order.append([
                 "New Connections:",
                 "Outside Bunker - Bunker Elevator - TrueOneWay",
+                "Bunker Elevator Section - Bunker Under Elevator - "
+                "0x0A079 | Bunker Green Room | Bunker Cyan Room | Bunker Laser Platform | Outside Bunker",
             ])
         if "Swamp Long Bridge" in world.options.elevators_come_to_you:
             adjustment_linesets_in_order.append([
@@ -648,6 +704,14 @@ class WitnessPlayerLogic:
         #     adjustment_linesets_in_order.append([
         #         "New Connections:"
         #         "Town Red Rooftop - Town Maze Rooftop - TrueOneWay"
+
+        if world.options.easter_egg_hunt:
+            self.set_easter_egg_requirements(world)
+        else:
+            self.COMPLETELY_DISABLED_ENTITIES.update({
+                entity_hex for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items()
+                if "Easter Egg" in entity_obj["entityType"]
+            })
 
         if world.options.victory_condition == "panel_hunt":
             adjustment_linesets_in_order.append(get_entity_hunt())
@@ -685,6 +749,9 @@ class WitnessPlayerLogic:
             if loc_obj["entityType"] == "EP":
                 self.COMPLETELY_DISABLED_ENTITIES.add(loc_obj["entity_hex"])
 
+            if loc_obj["entityType"] == "Easter Egg":
+                self.COMPLETELY_DISABLED_ENTITIES.add(loc_obj["entity_hex"])
+
             elif loc_obj["entityType"] == "Panel":
                 self.EXCLUDED_ENTITIES.add(loc_obj["entity_hex"])
 
@@ -704,7 +771,7 @@ class WitnessPlayerLogic:
 
                 self.make_single_adjustment(current_adjustment_type, line)
 
-        for entity_id in self.COMPLETELY_DISABLED_ENTITIES:
+        for entity_id in self.COMPLETELY_DISABLED_ENTITIES | self.FORBIDDEN_DOORS:
             if entity_id in self.DOOR_ITEMS_BY_ID:
                 del self.DOOR_ITEMS_BY_ID[entity_id]
 
@@ -921,7 +988,6 @@ class WitnessPlayerLogic:
 
         # Gather quick references to relevant options
         eps_shuffled = world.options.shuffle_EPs
-        come_to_you = world.options.elevators_come_to_you
         difficulty = world.options.puzzle_randomization
         discards_shuffled = world.options.shuffle_discarded_panels
         boat_shuffled = world.options.shuffle_boat
@@ -932,6 +998,10 @@ class WitnessPlayerLogic:
         doors = world.options.shuffle_doors
         shortbox_req = world.options.mountain_lasers
         longbox_req = world.options.challenge_lasers
+        eggs_exist = world.options.easter_egg_hunt
+
+        swamp_bridge_comes_to_you = "Swamp Long Bridge" in world.options.elevators_come_to_you
+        quarry_elevator_comes_to_you = "Quarry Elevator" in world.options.elevators_come_to_you
 
         # Make some helper booleans so it is easier to follow what's going on
         mountain_upper_is_in_postgame = (
@@ -945,17 +1015,17 @@ class WitnessPlayerLogic:
         # It is easier to think about when these items *are* required, so we make that dict first
         # If the entity is disabled anyway, we don't need to consider that case
         is_item_required_dict = {
-            "0x03750": eps_shuffled,  # Monastery Garden Entry Door
+            "0x03750": eps_shuffled or eggs_exist,  # Monastery Garden Entry Door
             "0x275FA": eps_shuffled,  # Boathouse Hook Control
             "0x17D02": eps_shuffled,  # Windmill Turn Control
             "0x0368A": symbols_shuffled or door_panels,  # Quarry Stoneworks Stairs Door
             "0x3865F": symbols_shuffled or door_panels or eps_shuffled,  # Quarry Boathouse 2nd Barrier
-            "0x17CC4": come_to_you or eps_shuffled,  # Quarry Elevator Panel
-            "0x17E2B": come_to_you and boat_shuffled or eps_shuffled,  # Swamp Long Bridge
-            "0x0CF2A": False,  # Jungle Monastery Garden Shortcut
+            "0x17CC4": quarry_elevator_comes_to_you or eps_shuffled,  # Quarry Elevator Panel
+            "0x17E2B": swamp_bridge_comes_to_you and boat_shuffled or eps_shuffled,  # Swamp Long Bridge
+            "0x0CF2A": eggs_exist,  # Jungle Monastery Garden Shortcut
             "0x0364E": False,  # Monastery Laser Shortcut Door
             "0x03713": remote_doors,  # Monastery Laser Shortcut Panel
-            "0x03313": False,  # Orchard Second Gate
+            "0x03313": eggs_exist,  # Orchard Second Gate
             "0x337FA": remote_doors,  # Jungle Bamboo Laser Shortcut Panel
             "0x3873B": False,  # Jungle Bamboo Laser Shortcut Door
             "0x335AB": False,  # Caves Elevator Controls
@@ -1017,5 +1087,10 @@ class WitnessPlayerLogic:
             entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity_hex]
             entity_name = entity_obj["checkName"]
             self.EVENT_ITEM_PAIRS[entity_name + " (Panel Hunt)"] = ("+1 Panel Hunt", entity_hex)
+
+        for region_name, easter_egg_count in self.AVAILABLE_EASTER_EGGS_PER_REGION.items():
+            plural = "s" if easter_egg_count != 1 else ""
+            event_name = f"+{easter_egg_count} Easter Egg{plural}"
+            self.EVENT_ITEM_PAIRS[f"{region_name} Easter Egg{plural}"] = (event_name, region_name)
 
         return

@@ -1,8 +1,20 @@
+# 2.4.0
+
+### Features
+
+- New option `free_fly_blacklist` limits which cities can show up as a free fly location.
+- Spoiler log and hint text for maps where a species can be found now use human-friendly labels.
+- Added many item and location groups based on item type, location type, and location geography.
+
+### Fixes
+
+- Now excludes the location "Navel Rock Top - Hidden Item Sacred Ash" if your goal is Champion and you didn't randomize
+event tickets.
+
 # 2.3.0
 
 ### Features
 
-- Added many new item and location groups.
 - Added a Swedish translation of the setup guide.
 - The client communicates map transitions to any trackers connected to the slot.
 - Added the player's Normalize Encounter Rates option to slot data for trackers.
