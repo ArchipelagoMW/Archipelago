@@ -808,6 +808,16 @@ def remove_excluded_items_island_mods(items, exclude_ginger_island: bool, mods: 
     return mod_filter
 
 
+def generate_filler_choice_pool(options: StardewValleyOptions) -> list[str]:
+    include_traps = options.trap_items != TrapItems.option_no_traps
+    exclude_island = options.exclude_ginger_island == ExcludeGingerIsland.option_true
+
+    available_filler = get_all_filler_items(include_traps, exclude_island)
+    available_filler = remove_limited_amount_packs(available_filler)
+
+    return [item.name for item in available_filler]
+
+
 def remove_limited_amount_packs(packs):
     return [pack for pack in packs if Group.MAXIMUM_ONE not in pack.groups and Group.EXACTLY_TWO not in pack.groups]
 
