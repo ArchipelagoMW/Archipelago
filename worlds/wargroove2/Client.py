@@ -807,7 +807,7 @@ async def game_watcher(ctx: Wargroove2Context):
                         if file == "unitSummonRequestAI":
                             stored_units_key = ctx.ai_stored_units_key
                         with open(os.path.join(ctx.game_communication_path, "unitSummonResponse"), 'w') as f:
-                            if ctx.stored_units_key in ctx.stored_data:
+                            if stored_units_key in ctx.stored_data:
                                 stored_units = ctx.stored_data[stored_units_key]
                                 if stored_units is not None and len(stored_units) != 0:
                                     summoned_unit = random.choice(stored_units)
