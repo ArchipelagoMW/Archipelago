@@ -73,11 +73,11 @@ When tests are run, this class will create a multiworld with a single player hav
 generic tests, as well as the new custom test. Each test method definition will create its own separate solo multiworld
 that will be cleaned up after. If you don't want to run the generic tests on a base, `run_default_tests` can be
 overridden. For more information on what methods are available to your class, check the
-[WorldTestBase definition](/test/bases.py#L104).
+[WorldTestBase definition](/test/bases.py#L106).
 
 #### Alternatives to WorldTestBase
 
-Unit tests can also be created using [TestBase](/test/bases.py#L14) or
+Unit tests can also be created using [TestBase](/test/bases.py#L16) or
 [unittest.TestCase](https://docs.python.org/3/library/unittest.html#unittest.TestCase) depending on your use case. These
 may be useful for generating a multiworld under very specific constraints without using the generic world setup, or for
 testing portions of your code that can be tested without relying on a multiworld to be created first.
