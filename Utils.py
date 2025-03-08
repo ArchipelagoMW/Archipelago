@@ -17,6 +17,9 @@ import logging
 import warnings
 
 from argparse import Namespace
+
+import requests
+
 from settings import Settings, get_settings
 from time import sleep
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
@@ -1066,6 +1069,37 @@ class RepeatableChain:
 
     def __len__(self):
         return sum(len(iterable) for iterable in self.iterable)
+
+
+def request_remote_json_data(request_url: str) -> Any:
+    """
+    Fetches json response from provided url.
+    
+    :param request_url: URL to send a GET request to.
+    :return: JSON response from server.
+    """
+    logging.debug(f"requesting {request_url}")
+    response = requests.get(request_url)
+    if response.status_code == 200:  # success
+        try:
+            data = response.json()
+        except requests.exceptions.JSONDecodeError:
+            raise RuntimeError(f"Unable to fetch data. (status code {response.status_code})")
+    else:
+        raise RuntimeError(f"Unable to fetch data. (status code {response.status_code})")
+    return data
+
+
+def available_update() -> tuple[bool, Version, Any]:
+    """
+    Checks if there is an available update for Archipelago.
+
+    :return: True if there is an update available, False if not, the found remote version and the json response.
+    """
+    release_url = "https://api.github.com/repos/ArchipelagoMW/Archipelago/releases"
+    latest_release_json_data = request_remote_json_data(release_url)[0]
+    remote_version = tuplize_version(latest_release_json_data["tag_name"])
+    return remote_version > version_tuple, remote_version, latest_release_json_data
 
 
 def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]]:

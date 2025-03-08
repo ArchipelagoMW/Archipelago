@@ -516,7 +516,15 @@ class GeneralOptions(Group):
         """
         # created on demand, so marked as optional
 
+    class AutoUpdate(Bool):
+        """Whether the launcher should check for an available update on startup."""
+
+    class SkipUpdate(str):
+        """Version to skip auto updating to as simple string."""
+
     output_path: OutputPath = OutputPath("output")
+    auto_update: AutoUpdate | bool = True
+    skip_update: SkipUpdate = SkipUpdate("")
 
 
 class ServerOptions(Group):

@@ -16,11 +16,13 @@ import multiprocessing
 import shlex
 import subprocess
 import sys
+
 import urllib.parse
+import urllib.request
 import webbrowser
 from os.path import isfile
 from shutil import which
-from typing import Callable, Optional, Sequence, Tuple, Union
+from typing import Any, Callable, Dict, Optional, Sequence, Tuple, Union
 
 if __name__ == "__main__":
     import ModuleUpdate
@@ -312,6 +314,10 @@ def run_gui():
 
             return self.container
 
+        def on_start(self):
+            if is_frozen() and settings.get_settings().general_options.auto_update:
+                check_for_update()
+
         @staticmethod
         def component_action(button):
             if button.component.func:
@@ -379,6 +385,89 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
         run_component(args["component"], *args["args"])
     elif not args["update_settings"]:
         run_gui()
+
+
+def check_for_update() -> None:
+    """Checks if an update is available, and prompts the user if they'd like to update."""
+    import platform
+    # explicitly don't support windows 7
+    # TODO support other platforms
+    if not is_windows or platform.release() == "NT":
+        return
+    update, version, remote_data = Utils.available_update()
+    logging.info(f"Update available: {update}. Latest remote version: {version.as_simple_string()}")
+    if not update:
+        return
+    if settings.get_settings().general_options.skip_update == version.as_simple_string():
+        return
+
+    from kvui import ButtonsPrompt
+
+    def handle_user_update(answer: str) -> None:
+        if answer == "No":
+            return
+        elif answer == "Skip Version":
+            settings.get_settings().general_options.skip_update = version.as_simple_string()
+            return
+        # download and install the latest Archipelago release
+        latest_release = remote_data["assets"]
+        latest_files: Dict[str, Any] = {
+            asset["name"]: asset["browser_download_url"] for asset in latest_release
+        }
+        download_names = []
+        for name in latest_files:
+            if is_windows and name.endswith(".exe"):
+                download_names.append(name)
+
+        def download_selection(asset: str) -> None:
+            import os
+            import tempfile
+            nonlocal latest_files
+
+            temp_dir = os.path.join(tempfile.gettempdir(), "Archipelago", "Downloads")
+            asset_path = os.path.join(temp_dir, asset)
+            if not os.path.exists(asset_path):
+                download_url = latest_files[asset]
+                temp_path = os.path.join(temp_dir, f"{asset}.tmp")
+                if not os.path.exists(temp_dir):
+                    os.makedirs(temp_dir)
+                try:
+                    with urllib.request.urlopen(download_url) as response:
+                        with open(temp_path, "wb") as f:
+                            import shutil
+                            shutil.copyfileobj(response, f)
+                    os.rename(temp_path, asset_path)
+                except Exception as e:
+                    if os.path.exists(asset_path):
+                        os.remove(asset_path)
+                    elif os.path.exists(temp_path):
+                        os.remove(temp_path)
+                    raise e
+
+            messagebox("Update Downloaded Successfully", f"{asset} has been downloaded successfully!")
+            if is_windows:
+                launch([asset_path], True)
+
+        if not download_names:
+            raise FileNotFoundError(f"No download available for {version.as_simple_string()} for {platform.platform()}")
+        if len(download_names) == 1:
+            download_selection(download_names[0])
+        else:
+            ButtonsPrompt(
+                "Available Update",
+                "Select update to download",
+                download_selection,
+                *download_names
+            ).open()
+
+    ButtonsPrompt(
+        "Update Available",
+        f"Update available: {version.as_simple_string()}.\n"
+        f"Currently installed: {Utils.version_tuple.as_simple_string()}.\n"
+        f"Would you like to update?",
+        handle_user_update,
+        "Yes", "No", "Skip Version"
+    ).open()
 
 
 if __name__ == '__main__':
