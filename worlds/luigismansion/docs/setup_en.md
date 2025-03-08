@@ -52,9 +52,10 @@ You will be prompted to locate your Luigi's Mansion ISO the first time you do th
    - This will automatically run the Luigi's Mansion Client.
    - You will ***not*** need to patch the game every time, and can simply run the `LMClient` from the list on the right of the Archipelago Launcher
 to continue later.
-6. Open Dolphin and from Dolphin, open your newly patched Luigi's Mansion ISO. Load all the way into a save file, and pause.
+6. Open Dolphin and from Dolphin, open your newly patched Luigi's Mansion ISO. Load all the way into a brand new save file, and pause.
    - This will be placed in the same folder as your patch file by default.
    - Ensure that "Enable GPU Overclock" and "Emulated Memory Size Override" are both off in your Dolphin settings
+   - You ***must*** use a brand new save file, not a New Game Plus file
 7. In the server page, there will be a port number. Copy this port number into the top of your LMClient. 
    - The field should read `archipelago.gg:<port number>`
 8. Once you have loaded into the game, click the `Connect` button at the top of the LMClient. You are now connected and ready to play!
