@@ -10,6 +10,7 @@ class TimespinnerLogic:
     flag_unchained_keys: bool
     flag_eye_spy: bool
     flag_specific_keycards: bool
+    flag_inverted: bool
     flag_enter_sandman: bool
     flag_back_to_the_future: bool
     flag_prism_break: bool
@@ -26,6 +27,7 @@ class TimespinnerLogic:
         self.player = player
 
         self.flag_specific_keycards = bool(options and options.specific_keycards)
+        self.flag_inverted = bool(options and options.inverted)
         self.flag_eye_spy = bool(options and options.eye_spy)
         self.flag_unchained_keys = bool(options and options.unchained_keys)
         self.flag_enter_sandman = bool(options and options.enter_sandman)
