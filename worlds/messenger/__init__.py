@@ -228,7 +228,7 @@ class MessengerWorld(World):
                     f"({self.options.total_seals}). Adjusting to {total_seals}"
                 )
                 self.total_seals = total_seals
-            self.required_seals = int(self.options.percent_seals_required.value / 100 * self.total_seals)
+            self.required_seals = max(1, int(self.options.percent_seals_required.value / 100 * self.total_seals))
 
             seals = [self.create_item("Power Seal") for _ in range(self.total_seals)]
             itempool += seals
