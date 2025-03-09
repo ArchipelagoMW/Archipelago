@@ -252,7 +252,7 @@ item_descriptions = {
     item_names.REAPER_ADVANCED_CLOAKING_FIELD: "Reapers are permanently cloaked.",
     item_names.REAPER_SPIDER_MINES: "Allows Reapers to lay Spider Mines. 3 charges per Reaper.",
     item_names.REAPER_COMBAT_DRUGS: "Reapers regenerate life while out of combat.",
-    item_names.HELLION_HELLBAT_ASPECT: "Allows Hellions to transform into Hellbats.",
+    item_names.HELLION_HELLBAT: "Allows Hellions to transform into Hellbats.",
     item_names.HELLION_SMART_SERVOS: "Transforms faster between modes. Hellions can attack while moving.",
     item_names.HELLION_OPTIMIZED_LOGISTICS: "Increases Hellion training speed.",
     item_names.HELLION_JUMP_JETS: inspect.cleandoc("""

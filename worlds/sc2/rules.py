@@ -1874,7 +1874,7 @@ class SC2Logic:
                                                         (
                                                                 state.has_all(
                                                                     {item_names.HELLION,
-                                                                     item_names.HELLION_HELLBAT_ASPECT},
+                                                                     item_names.HELLION_HELLBAT},
                                                                     self.player)
                                                                 or state.has(item_names.FIREBAT, self.player)
                                                         )
@@ -2452,7 +2452,7 @@ class SC2Logic:
                     (
                         # Regular infesteds
                         state.has(item_names.FIREBAT, self.player)
-                        or state.has_all({item_names.HELLION, item_names.HELLION_HELLBAT_ASPECT}, self.player)
+                        or state.has_all({item_names.HELLION, item_names.HELLION_HELLBAT}, self.player)
                         or (
                             self.advanced_tactics
                             and state.has_any({item_names.PERDITION_TURRET, item_names.PLANETARY_FORTRESS}, self.player)

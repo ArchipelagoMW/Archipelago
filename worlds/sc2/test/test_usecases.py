@@ -127,7 +127,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         self.assertTrue(item_names)
         self.assertNotIn(item_names.LIBERATOR, world_item_names)
         self.assertNotIn(item_names.MARAUDER_PROGRESSIVE_STIMPACK, world_item_names)
-        self.assertNotIn(item_names.HELLION_HELLBAT_ASPECT, world_item_names)
+        self.assertNotIn(item_names.HELLION_HELLBAT, world_item_names)
         self.assertNotIn(item_names.BATTLECRUISER_CLOAK, world_item_names)
     
     def test_free_protoss_only_generates(self) -> None:

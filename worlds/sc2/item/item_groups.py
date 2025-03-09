@@ -368,7 +368,7 @@ item_name_groups[ItemGroupNames.NCO_BASELINE_UPGRADES] = nco_baseline_upgrades =
     item_names.MARAUDER_KINETIC_FOAM,  # Baseline outside WOL
     item_names.MARAUDER_CONCUSSIVE_SHELLS,  # Baseline from mission 2
     item_names.REAPER_KINETIC_FOAM, # Baseline from mission 2
-    item_names.HELLION_HELLBAT_ASPECT,  # Baseline from mission 3
+    item_names.HELLION_HELLBAT,  # Baseline from mission 3
     item_names.GOLIATH_INTERNAL_TECH_MODULE,  # Baseline from mission 4
     item_names.GOLIATH_SHAPED_HULL,
     # ItemNames.GOLIATH_RESOURCE_EFFICIENCY,  # Supply savings baseline in NCO, mineral savings is non-NCO

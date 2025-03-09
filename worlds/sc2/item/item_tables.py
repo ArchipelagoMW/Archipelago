@@ -436,7 +436,7 @@ item_table = {
     item_names.REAPER_COMBAT_DRUGS:
         ItemData(254 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_2, 20, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent=item_names.REAPER),
-    item_names.HELLION_HELLBAT_ASPECT:
+    item_names.HELLION_HELLBAT:
         ItemData(255 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_2, 21, SC2Race.TERRAN,
                  classification=ItemClassification.progression, parent=item_names.HELLION),
     item_names.HELLION_SMART_SERVOS:
