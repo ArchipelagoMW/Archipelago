@@ -219,7 +219,8 @@ REGIONS: list[PokeparkRegion] = [
                                 id=FRIENDSHIP_ITEMS["Caterpie"],
                                 requirements=Requirements(
                                     unlock_names=["Caterpie Unlock"],
-                                    powers=PowerRequirement.can_play_catch
+                                    powers=PowerRequirement.can_play_catch,
+                                    can_reach_locations=["Meadow Zone - Overworld - Caterpie Tree Dash"]
                                 )),
 
                        Location(name="Butterfree",
@@ -253,21 +254,25 @@ REGIONS: list[PokeparkRegion] = [
                                 id=FRIENDSHIP_ITEMS["Weedle"],
                                 requirements=Requirements(
                                     unlock_names=["Weedle Unlock"],
-                                    powers=PowerRequirement.can_battle
+                                    powers=PowerRequirement.can_dash_overworld, # generation tweak so battle and unlock location are reachable
+                                    can_reach_locations=["Meadow Zone - Overworld - Weedle Tree Dash"]
+
                                 )),
 
                        Location(name="Shroomish",
                                 id=FRIENDSHIP_ITEMS["Shroomish"],
                                 requirements=Requirements(
                                     unlock_names=["Shroomish Unlock"],
-                                    powers=PowerRequirement.can_play_catch
+                                    powers=PowerRequirement.can_play_catch,
+                                    can_reach_locations=["Meadow Zone - Overworld - Shroomish Crate Dash"]
                                 )),
 
                        Location(name="Magikarp",
                                 id=FRIENDSHIP_ITEMS["Magikarp"],
                                 requirements=Requirements(
                                     unlock_names=["Magikarp Unlock"],
-                                    powers=PowerRequirement.can_thunderbolt_overworld
+                                    powers=PowerRequirement.can_play_catch,
+                                    can_reach_locations=["Meadow Zone - Overworld - Magikarp electrocuted"]
                                 )),
 
                        Location(name="Oddish",
@@ -729,7 +734,9 @@ REGIONS: list[PokeparkRegion] = [
                                 id=FRIENDSHIP_ITEMS["Krabby"],
                                 requirements=Requirements(
                                     unlock_names=["Krabby Unlock"],
-                                    powers=PowerRequirement.can_play_catch
+                                    powers=PowerRequirement.can_play_catch,
+                                    can_reach_locations=["Beach Zone - Overworld - Bottle Recycling 2 - Pokemon Unlock"]
+
                                 )),
 
                        Location(name="Wailord",
@@ -739,7 +746,9 @@ REGIONS: list[PokeparkRegion] = [
                                 id=FRIENDSHIP_ITEMS["Corphish"],
                                 requirements=Requirements(
                                     unlock_names=["Corphish Unlock"],
-                                    powers=PowerRequirement.can_battle
+                                    powers=PowerRequirement.can_battle,
+                                    can_reach_locations=["Beach Zone - Overworld - Bottle Recycling 4 - Pokemon Unlock"]
+
                                 )),
 
                        Location(name="Feraligatr",
@@ -783,7 +792,8 @@ REGIONS: list[PokeparkRegion] = [
                        Location(name="Bottle Recycling 2 - Pokemon Unlock",
                                 id=UNLOCK_ITEMS["Krabby Unlock"],
                                 requirements=Requirements(
-                                    can_reach_locations=["Beach Zone - Overworld - Bottle Recycling 2"]
+                                    can_reach_locations=["Beach Zone - Overworld - Bottle Recycling 2"],
+
                                 )),
 
                        Location(name="Bottle Recycling 4 - Pokemon Unlock",

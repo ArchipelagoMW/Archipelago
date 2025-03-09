@@ -142,10 +142,18 @@ ZONESYSTEM = ZoneSystem(world_state_address=0x8037500D,
                        item_id=REGION_UNLOCK["Meadow Zone Unlock"],
                        world_state_value=0x7c0,
                        addresses=[
-                           MemoryAddress(  # unlock bidoof in beach zone
+                           MemoryAddress(  # unlock venusaur gate
                                base_address=0x8037500F,
                                value=0b01100000,
                                memory_range=MemoryRange.BYTE),
+                           MemoryAddress(  # setup Bulbasaur
+                               base_address=0x80375020,
+                               value=0b00000010,
+                               memory_range=MemoryRange.BYTE),
+                           MemoryAddress(  # setup Bulbasaur
+                               base_address=0x80375010,
+                               value=0b10000000,
+                               memory_range=MemoryRange.BYTE)
                        ],
                        fast_travel_flag=0x80),
                    ZoneState(
