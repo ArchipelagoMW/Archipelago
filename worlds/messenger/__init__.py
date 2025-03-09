@@ -153,8 +153,7 @@ class MessengerWorld(World):
                                  self.random.sample(starting_portals[3:], k=self.options.available_portals - 3)]
 
         # super complicated method for adding searing crags to starting portals if it wasn't chosen
-        if (not self.options.shuffle_portals and not self.options.shuffle_transitions
-                and "Searing Crags Portal" not in self.starting_portals):
+        if not self.options.shuffle_portals and "Searing Crags Portal" not in self.starting_portals:
             self.starting_portals.append("Searing Crags Portal")
             portals_to_strip = [portal for portal in ["Riviere Turquoise Portal", "Sunken Shrine Portal"]
                                 if portal in self.starting_portals]
