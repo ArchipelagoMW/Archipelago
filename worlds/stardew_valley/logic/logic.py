@@ -54,7 +54,7 @@ from ..data.recipe_data import all_cooking_recipes
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_logic import ModLogicMixin
 from ..options import StardewValleyOptions
-from ..stardew_rule import False_, True_, StardewRule
+from ..stardew_rule import False_, StardewRule
 from ..strings.animal_names import Animal
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
@@ -279,12 +279,12 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Material.cinder_shard: self.region.can_reach(Region.volcano_floor_5),
             Material.clay: self.region.can_reach_any((Region.farm, Region.beach, Region.quarry)) & self.tool.has_tool(Tool.hoe),
             Material.coal: self.mine.can_mine_in_the_mines_floor_41_80() | self.tool.has_pan(),
-            Material.fiber: True_(),
+            Material.fiber: self.ability.can_scythe_vines(),
             Material.hardwood: self.tool.has_tool(Tool.axe, ToolMaterial.copper) & (self.region.can_reach(Region.secret_woods) | self.region.can_reach(Region.island_west)),
             Material.moss: self.season.has_any_not_winter() & (self.tool.has_scythe() | self.combat.has_any_weapon) & self.region.can_reach(Region.forest),
             Material.sap: self.ability.can_chop_trees(),
-            Material.stone: self.tool.has_tool(Tool.pickaxe),
-            Material.wood: self.tool.has_tool(Tool.axe),
+            Material.stone: self.ability.can_mine_stone(),
+            Material.wood: self.ability.can_chop_trees(),
             Meal.ice_cream: (self.season.has(Season.summer) & self.money.can_spend_at(Region.town, 250)) | self.money.can_spend_at(Region.oasis, 240),
             Meal.strange_bun: self.relationship.has_hearts(NPC.shane, 7) & self.has(Ingredient.wheat_flour) & self.has(Fish.periwinkle) & self.has(ArtisanGood.void_mayonnaise),
             MetalBar.copper: self.can_smelt(Ore.copper),
