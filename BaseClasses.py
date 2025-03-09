@@ -373,7 +373,8 @@ class MultiWorld():
                         items_to_add.append(AutoWorld.call_single(self, "create_item", item_player,
                             group["replacement_items"][player]))
                     else:
-                        items_to_add.append(AutoWorld.call_single(self, "create_filler", item_player))
+                        items_to_add.append(AutoWorld.call_single(self, "create_filler", item_player,
+                                                                  AutoWorld.FillerReason.item_link))
                 self.random.shuffle(items_to_add)
                 self.itempool.extend(items_to_add[:itemcount - len(self.itempool)])
 

@@ -7,7 +7,7 @@ from collections import Counter, deque
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld
 from Options import Accessibility
 
-from worlds.AutoWorld import call_all
+from worlds.AutoWorld import call_all, FillerReason
 from worlds.generic.Rules import add_item_rule
 
 
@@ -316,7 +316,7 @@ def remaining_fill(multiworld: MultiWorld,
             for item in unplaced_items:
                 logging.debug(f"Moved {item} to start_inventory to prevent fill failure.")
                 multiworld.push_precollected(item)
-                last_batch.append(multiworld.worlds[item.player].create_filler())
+                last_batch.append(multiworld.worlds[item.player].create_filler(FillerReason.panic_fill))
             remaining_fill(multiworld, locations, unplaced_items, name + " Start Inventory Retry")
         else:
             raise FillError(f"No more spots to place {len(unplaced_items)} items. Remaining locations are invalid.\n"
@@ -527,7 +527,7 @@ def distribute_items_restrictive(multiworld: MultiWorld,
                 for item in progitempool:
                     logging.debug(f"Moved {item} to start_inventory to prevent fill failure.")
                     multiworld.push_precollected(item)
-                    filleritempool.append(multiworld.worlds[item.player].create_filler())
+                    filleritempool.append(multiworld.worlds[item.player].create_filler(FillerReason.panic_fill))
                 logging.warning(f"{len(progitempool)} items moved to start inventory,"
                                 f" due to failure in Progression fill step.")
                 progitempool[:] = []
@@ -551,7 +551,7 @@ def distribute_items_restrictive(multiworld: MultiWorld,
     inaccessible_location_rules(multiworld, multiworld.state, defaultlocations)
 
     remaining_fill(multiworld, excludedlocations, filleritempool, "Remaining Excluded",
-                   move_unplaceable_to_start_inventory=panic_method=="start_inventory")
+                   move_unplaceable_to_start_inventory=panic_method == "start_inventory")
 
     if excludedlocations:
         raise FillError(
@@ -563,7 +563,7 @@ def distribute_items_restrictive(multiworld: MultiWorld,
     restitempool = filleritempool + usefulitempool
 
     remaining_fill(multiworld, defaultlocations, restitempool,
-                   move_unplaceable_to_start_inventory=panic_method=="start_inventory")
+                   move_unplaceable_to_start_inventory=panic_method == "start_inventory")
 
     unplaced = restitempool
     unfilled = defaultlocations
