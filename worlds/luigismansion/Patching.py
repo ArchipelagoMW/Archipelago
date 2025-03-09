@@ -142,10 +142,10 @@ def update_event_info(event_info, boo_checks: bool):
         if x["EventNo"] == 44:
             x["pos_x"] = 3500.277000
             x["pos_y"] = -550.000000
-            x["pos_z"] = -2100.792000
+            x["pos_z"] = -2150.792000
             x["EventFlag"] = 0  # 25
-            x["EventArea"] = 200
-            x["EventIf"] = 5
+            x["EventArea"] = 230
+            x["EventIf"] = 1
             x["EventLock"] = 0
             x["PlayerStop"] = 0
             x["EventLoad"] = 0
@@ -1193,7 +1193,7 @@ def __get_chest_size_from_key(key_id):
 
 # Changes the type of chest loaded in game based on the type of item that is hidden inside
 def __get_item_chest_visual(item_name):
-    if "Bills" in item_name or "Coins" in item_name or "Gold Bar" in item_name:
+    if "Bills" in item_name or "Coin" in item_name or "Gold Bar" in item_name:
         item_name = "Money"
     match item_name:
         case "Heart Key" | "Club Key" | "Diamond Key" | "Spade Key":
