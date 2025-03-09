@@ -1,36 +1,39 @@
+# Python standard libraries
+import asyncio
+import json
 import logging
 import os
-import sys
-import json
 import subprocess
-from logging import Logger
-from datetime import datetime
+import sys
 
-import colorama
-
-import asyncio
 from asyncio import Task
+from datetime import datetime
+from logging import Logger
+from typing import Awaitable
 
-from typing import Set, Awaitable
-
+# Misc imports
+import colorama
 import pymem
+
 from pymem.exception import ProcessNotFound
 
-import Utils
-from NetUtils import ClientStatus
-from CommonClient import ClientCommandProcessor, CommonContext, server_loop, gui_enabled
-from .Options import EnableOrbsanity
-
-from .GameID import jak1_name
-from .client.ReplClient import JakAndDaxterReplClient
-from .client.MemoryReader import JakAndDaxterMemoryReader
-
+# Archipelago imports
 import ModuleUpdate
+import Utils
+
+from CommonClient import ClientCommandProcessor, CommonContext, server_loop, gui_enabled
+from NetUtils import ClientStatus
+
+# Jak imports
+from .GameID import jak1_name
+from .Options import EnableOrbsanity
+from .client.MemoryReader import JakAndDaxterMemoryReader
+from .client.ReplClient import JakAndDaxterReplClient
+
+
 ModuleUpdate.update()
-
-
 logger = logging.getLogger("JakClient")
-all_tasks: Set[Task] = set()
+all_tasks: set[Task] = set()
 
 
 def create_task_log_exception(awaitable: Awaitable) -> asyncio.Task:
@@ -141,7 +144,7 @@ class JakAndDaxterContext(CommonContext):
                 orbsanity_bundle = 1
 
             # Connected packet is unaware of starting inventory or if player is returning to an existing game.
-            # Set initial item count to 0 if it hasn't been set higher by a ReceivedItems packet yet.
+            # Set initial_item_count to 0, see below comments for more info.
             if not self.repl.received_initial_items and self.repl.initial_item_count < 0:
                 self.repl.initial_item_count = 0
 
@@ -178,11 +181,15 @@ class JakAndDaxterContext(CommonContext):
                 create_task_log_exception(self.repl.subtract_traded_orbs(orbs_traded))
 
         if cmd == "ReceivedItems":
-            if not self.repl.received_initial_items:
 
-                # ReceivedItems packet should set the initial item count to > 0, even if already set to 0 by the
-                # Connected packet. Then we should tell the game to update the title screen, telling the player
-                # to wait while we process the initial items. This is skipped if no initial items are sent.
+            # If you have a starting inventory or are returning to a game where you have items, a ReceivedItems will be
+            # in the same network packet as Connected. This guarantees it is the first of any ReceivedItems we process.
+            # In this case, we should set the initial_item_count to > 0, even if already set to 0 by Connected, as well
+            # as the received_initial_items flag. Finally, use send_connection_status to tell the player to wait while
+            # we process the initial items. However, we will skip all this if there was no initial ReceivedItems and
+            # the REPL indicates it already handled any initial items (0 or otherwise).
+            if not self.repl.received_initial_items and not self.repl.processed_initial_items:
+                self.repl.received_initial_items = True
                 self.repl.initial_item_count = len(args["items"])
                 create_task_log_exception(self.repl.send_connection_status("wait"))
 
@@ -225,14 +232,14 @@ class JakAndDaxterContext(CommonContext):
             # Write to game display.
             self.repl.queue_game_text(my_item_name, my_item_finder, their_item_name, their_item_owner)
 
+    # Even though N items come in as 1 ReceivedItems packet, there are still N PrintJson packets to process,
+    # and they all arrive before the ReceivedItems packet does. Defer processing of these packets as
+    # async tasks to speed up large releases of items.
     def on_print_json(self, args: dict) -> None:
-
-        # Even though N items come in as 1 ReceivedItems packet, there are still N PrintJson packets to process,
-        # and they all arrive before the ReceivedItems packet does. Defer processing of these packets as
-        # async tasks to speed up large releases of items.
         create_task_log_exception(self.json_to_game_text(args))
         super(JakAndDaxterContext, self).on_print_json(args)
 
+    # We need to do a little more than just use CommonClient's on_deathlink.
     def on_deathlink(self, data: dict):
         if self.memr.deathlink_enabled:
             self.repl.received_deathlink = True
@@ -245,6 +252,11 @@ class JakAndDaxterContext(CommonContext):
     def on_location_check(self, location_ids: list[int]):
         create_task_log_exception(self.ap_inform_location_check(location_ids))
 
+    # TODO - Use CommonClient's check_locations function as our async task - AP 0.6.0 ONLY.
+    # def on_location_check(self, location_ids: list[int]):
+    #     create_task_log_exception(self.check_locations(location_ids))
+
+    # CommonClient has no finished_game function, so we will have to craft our own. TODO - Update if that changes.
     async def ap_inform_finished_game(self):
         if not self.finished_game and self.memr.finished_game:
             message = [{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}]
@@ -254,6 +266,7 @@ class JakAndDaxterContext(CommonContext):
     def on_finish_check(self):
         create_task_log_exception(self.ap_inform_finished_game())
 
+    # We need to do a little more than just use CommonClient's send_death.
     async def ap_inform_deathlink(self):
         if self.memr.deathlink_enabled:
             player = self.player_names[self.slot] if self.slot is not None else "Jak"
@@ -268,12 +281,11 @@ class JakAndDaxterContext(CommonContext):
     def on_deathlink_check(self):
         create_task_log_exception(self.ap_inform_deathlink())
 
-    async def ap_inform_deathlink_toggle(self):
-        await self.update_death_link(self.memr.deathlink_enabled)
-
+    # Use CommonClient's update_death_link function as our async task.
     def on_deathlink_toggle(self):
-        create_task_log_exception(self.ap_inform_deathlink_toggle())
+        create_task_log_exception(self.update_death_link(self.memr.deathlink_enabled))
 
+    # Orb trades are situations unique to Jak, so we have to craft our own function.
     async def ap_inform_orb_trade(self, orbs_changed: int):
         if self.memr.orbsanity_enabled:
             await self.send_msgs([{"cmd": "Set",
@@ -286,32 +298,32 @@ class JakAndDaxterContext(CommonContext):
     def on_orb_trade(self, orbs_changed: int):
         create_task_log_exception(self.ap_inform_orb_trade(orbs_changed))
 
+    def _markup_panels(self, msg: str, c: str = None):
+        color = self.jsontotextparser.color_codes[c] if c else None
+        message = f"[color={color}]{msg}[/color]" if c else msg
+
+        self.ui.log_panels["Archipelago"].on_message_markup(message)
+        self.ui.log_panels["All"].on_message_markup(message)
+
     def on_log_error(self, lg: Logger, message: str):
         lg.error(message)
         if self.ui:
-            color = self.jsontotextparser.color_codes["red"]
-            self.ui.log_panels["Archipelago"].on_message_markup(f"[color={color}]{message}[/color]")
-            self.ui.log_panels["All"].on_message_markup(f"[color={color}]{message}[/color]")
+            self._markup_panels(message, "red")
 
     def on_log_warn(self, lg: Logger, message: str):
         lg.warning(message)
         if self.ui:
-            color = self.jsontotextparser.color_codes["orange"]
-            self.ui.log_panels["Archipelago"].on_message_markup(f"[color={color}]{message}[/color]")
-            self.ui.log_panels["All"].on_message_markup(f"[color={color}]{message}[/color]")
+            self._markup_panels(message, "orange")
 
     def on_log_success(self, lg: Logger, message: str):
         lg.info(message)
         if self.ui:
-            color = self.jsontotextparser.color_codes["green"]
-            self.ui.log_panels["Archipelago"].on_message_markup(f"[color={color}]{message}[/color]")
-            self.ui.log_panels["All"].on_message_markup(f"[color={color}]{message}[/color]")
+            self._markup_panels(message, "green")
 
     def on_log_info(self, lg: Logger, message: str):
         lg.info(message)
         if self.ui:
-            self.ui.log_panels["Archipelago"].on_message_markup(f"{message}")
-            self.ui.log_panels["All"].on_message_markup(f"{message}")
+            self._markup_panels(message)
 
     async def run_repl_loop(self):
         while True:
@@ -327,20 +339,21 @@ class JakAndDaxterContext(CommonContext):
 def find_root_directory(ctx: JakAndDaxterContext):
 
     # The path to this file is platform-dependent.
-    if sys.platform == "win32":
+    if Utils.is_windows:
         appdata = os.getenv("APPDATA")
         settings_path = os.path.normpath(f"{appdata}/OpenGOAL-Launcher/settings.json")
-    elif sys.platform == "linux":
+    elif Utils.is_linux:
         home = os.path.expanduser("~")
         settings_path = os.path.normpath(f"{home}/.config/OpenGOAL-Launcher/settings.json")
-    elif sys.platform == "darwin":
-        home = os.path.expanduser("~")  # MacOS
+    elif Utils.is_macos:
+        home = os.path.expanduser("~")
         settings_path = os.path.normpath(f"{home}/Library/Application Support/OpenGOAL-Launcher/settings.json")
     else:
         ctx.on_log_error(logger, f"Unknown operating system: {sys.platform}!")
         return
 
-    # Boilerplate message that all error messages in this function should add at the end.
+    # Boilerplate messages that all error messages in this function should have.
+    err_title = "Unable to locate the ArchipelaGOAL install directory"
     alt_instructions = (f"Please verify that OpenGOAL and ArchipelaGOAL are installed properly. "
                         f"If the problem persists, follow these steps:\n"
                         f"   Run the OpenGOAL Launcher, click Jak and Daxter > Features > Mods > ArchipelaGOAL.\n"
@@ -354,7 +367,7 @@ def find_root_directory(ctx: JakAndDaxterContext):
                         f"   Close all launchers, games, clients, and console windows, then restart Archipelago.")
 
     if not os.path.exists(settings_path):
-        msg = (f"Unable to locate the ArchipelaGOAL install directory: the OpenGOAL settings file does not exist.\n"
+        msg = (f"{err_title}: the OpenGOAL settings file does not exist.\n"
                f"{alt_instructions}")
         ctx.on_log_error(logger, msg)
         return
@@ -364,16 +377,14 @@ def find_root_directory(ctx: JakAndDaxterContext):
 
         jak1_installed = load["games"]["Jak 1"]["isInstalled"]
         if not jak1_installed:
-            msg = (f"Unable to locate the ArchipelaGOAL install directory: "
-                   f"The OpenGOAL Launcher is missing a normal install of Jak 1!\n"
+            msg = (f"{err_title}: The OpenGOAL Launcher is missing a normal install of Jak 1!\n"
                    f"{alt_instructions}")
             ctx.on_log_error(logger, msg)
             return
 
         mod_sources = load["games"]["Jak 1"]["modsInstalledVersion"]
         if mod_sources is None:
-            msg = (f"Unable to locate the ArchipelaGOAL install directory: "
-                   f"No mod sources have been configured in the OpenGOAL Launcher!\n"
+            msg = (f"{err_title}: No mod sources have been configured in the OpenGOAL Launcher!\n"
                    f"{alt_instructions}")
             ctx.on_log_error(logger, msg)
             return
@@ -387,8 +398,7 @@ def find_root_directory(ctx: JakAndDaxterContext):
                     archipelagoal_source = src
                     # Using this file, we could verify the right version is installed, but we don't need to.
         if archipelagoal_source is None:
-            msg = (f"Unable to locate the ArchipelaGOAL install directory: "
-                   f"The ArchipelaGOAL mod is not installed in the OpenGOAL Launcher!\n"
+            msg = (f"{err_title}: The ArchipelaGOAL mod is not installed in the OpenGOAL Launcher!\n"
                    f"{alt_instructions}")
             ctx.on_log_error(logger, msg)
             return
@@ -423,11 +433,12 @@ async def run_game(ctx: JakAndDaxterContext):
         ctx.on_log_warn(logger, "Compiler not running, attempting to start.")
 
     try:
-        auto_detect_root_directory = Utils.get_settings()["jakanddaxter_options"]["auto_detect_root_directory"]
+        settings = Utils.get_settings()
+        auto_detect_root_directory = settings["jakanddaxter_options"]["auto_detect_root_directory"]
         if auto_detect_root_directory:
             root_path = find_root_directory(ctx)
         else:
-            root_path = Utils.get_settings()["jakanddaxter_options"]["root_directory"]
+            root_path = settings["jakanddaxter_options"]["root_directory"]
 
             # Always trust your instincts... the user may not have entered their root_directory properly.
             # We don't have to do this check if the root directory was auto-detected.
@@ -584,6 +595,7 @@ async def main():
 
 
 def launch():
-    colorama.init()
+    # use colorama to display colored text highlighting
+    colorama.just_fix_windows_console()
     asyncio.run(main())
     colorama.deinit()

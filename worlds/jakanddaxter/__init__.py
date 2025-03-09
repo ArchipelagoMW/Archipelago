@@ -1,23 +1,22 @@
-import typing
-from typing import Any, ClassVar, Callable
+# Python standard libraries
 from math import ceil
-import Utils
-import settings
-from Options import OptionGroup
+from typing import Any, ClassVar, Callable, Union, cast
 
+# Archipelago imports
+import settings
+import Utils
+
+from worlds.AutoWorld import World, WebWorld
+from worlds.LauncherComponents import components, Component, launch_subprocess, Type, icon_paths
 from BaseClasses import (Item,
                          ItemClassification as ItemClass,
                          Tutorial,
                          CollectionState)
+from Options import OptionGroup
+
+# Jak imports
+from .Options import *
 from .GameID import jak1_id, jak1_name, jak1_max
-from . import Options
-from .Locations import (JakAndDaxterLocation,
-                        location_table,
-                        cell_location_table,
-                        scout_location_table,
-                        special_location_table,
-                        cache_location_table,
-                        orb_location_table)
 from .Items import (JakAndDaxterItem,
                     item_table,
                     cell_item_table,
@@ -27,14 +26,19 @@ from .Items import (JakAndDaxterItem,
                     orb_item_table,
                     trap_item_table)
 from .Levels import level_table, level_table_with_global
-from .regs.RegionBase import JakAndDaxterRegion
+from .Locations import (JakAndDaxterLocation,
+                        location_table,
+                        cell_location_table,
+                        scout_location_table,
+                        special_location_table,
+                        cache_location_table,
+                        orb_location_table)
 from .locs import (CellLocations as Cells,
                    ScoutLocations as Scouts,
                    SpecialLocations as Specials,
                    OrbCacheLocations as Caches,
                    OrbLocations as Orbs)
-from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import components, Component, launch_subprocess, Type, icon_paths
+from .regs.RegionBase import JakAndDaxterRegion
 
 
 def launch_client():
@@ -70,8 +74,8 @@ class JakAndDaxterSettings(settings.Group):
     root_directory: RootDirectory = RootDirectory(
         "%programfiles%/OpenGOAL-Launcher/features/jak1/mods/JakMods/archipelagoal")
     # Don't ever change these type hints again.
-    auto_detect_root_directory: typing.Union[AutoDetectRootDirectory, bool] = True
-    enforce_friendly_options: typing.Union[EnforceFriendlyOptions, bool] = True
+    auto_detect_root_directory: Union[AutoDetectRootDirectory, bool] = True
+    enforce_friendly_options: Union[EnforceFriendlyOptions, bool] = True
 
 
 class JakAndDaxterWebWorld(WebWorld):
@@ -107,7 +111,7 @@ class JakAndDaxterWebWorld(WebWorld):
             Options.FillerPowerCellsReplacedWithTraps,
             Options.FillerOrbBundlesReplacedWithTraps,
             Options.TrapEffectDuration,
-            Options.ChosenTraps,
+            Options.TrapWeights,
         ]),
     ]
 
@@ -220,7 +224,7 @@ class JakAndDaxterWorld(World):
     total_trap_cells: int = 0
     total_filler_cells: int = 0
     power_cell_thresholds: list[int] = []
-    chosen_traps: list[str] = []
+    trap_weights: tuple[list[str], list[int]] = ({}, {})
 
     # Handles various options validation, rules enforcement, and caching of important information.
     def generate_early(self) -> None:
@@ -295,7 +299,7 @@ class JakAndDaxterWorld(World):
         else:
             self.options.filler_orb_bundles_replaced_with_traps.value = 0
 
-        self.chosen_traps = list(self.options.chosen_traps.value)
+        self.trap_weights = self.options.trap_weights.weights_pair
 
         # Options drive which trade rules to use, so they need to be setup before we create_regions.
         from .Rules import set_orb_trade_rule
@@ -388,20 +392,20 @@ class JakAndDaxterWorld(World):
                 items_made += count
 
         # Handle Traps (for real).
-        # Manually fill the item pool with a random assortment of trap items, equal to the sum of
-        # total_trap_cells + total_trap_orb_bundles. Only do this if one or more traps have been selected.
-        if len(self.chosen_traps) > 0:
+        # Manually fill the item pool with a weighted assortment of trap items, equal to the sum of
+        # total_trap_cells + total_trap_orb_bundles. Only do this if one or more traps have weights > 0.
+        names, weights = self.trap_weights
+        if sum(weights) > 0:
             total_traps = self.total_trap_cells + self.total_trap_orb_bundles
-            for _ in range(total_traps):
-                trap_name = self.random.choice(self.chosen_traps)
-                self.multiworld.itempool.append(self.create_item(trap_name))
+            trap_list = self.random.choices(names, weights=weights, k=total_traps)
+            self.multiworld.itempool += [self.create_item(trap_name) for trap_name in trap_list]
             items_made += total_traps
 
         # Handle Unfilled Locations.
         # Add an amount of filler items equal to the number of locations yet to be filled.
         # This is the final set of items we will add to the pool.
         all_regions = self.multiworld.get_regions(self.player)
-        total_locations = sum(reg.location_count for reg in typing.cast(list[JakAndDaxterRegion], all_regions))
+        total_locations = sum(reg.location_count for reg in cast(list[JakAndDaxterRegion], all_regions))
         total_filler = total_locations - items_made
         self.multiworld.itempool += [self.create_filler() for _ in range(total_filler)]
 
@@ -482,7 +486,7 @@ class JakAndDaxterWorld(World):
                                             "filler_power_cells_replaced_with_traps",
                                             "filler_orb_bundles_replaced_with_traps",
                                             "trap_effect_duration",
-                                            "chosen_traps",
+                                            "trap_weights",
                                             "jak_completion_condition",
                                             "require_punch_for_klaww",
                                             )

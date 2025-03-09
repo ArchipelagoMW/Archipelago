@@ -58,7 +58,11 @@ class JakAndDaxterReplClient:
     initiated_connect: bool = False  # Signals when user tells us to try reconnecting.
     received_deathlink: bool = False
     balanced_orbs: bool = False
+
+    # Variables to handle the title screen and initial game connection.
+    initial_item_count = -1  # Brand new games have 0 items, so initialize this to -1.
     received_initial_items = False
+    processed_initial_items = False
 
     # The REPL client needs the REPL/compiler process running, but that process
     # also needs the game running. Therefore, the REPL client needs both running.
@@ -67,7 +71,6 @@ class JakAndDaxterReplClient:
 
     item_inbox: dict[int, NetworkItem] = {}
     inbox_index = 0
-    initial_item_count = -1  # New games have 0 items, so initialize this to -1.
     json_message_queue: Queue[JsonMessageData] = queue.Queue()
 
     # Logging callbacks
@@ -127,18 +130,20 @@ class JakAndDaxterReplClient:
         else:
             return
 
+        # When connecting the game to the AP server on the title screen, we may be processing items from starting
+        # inventory or items received in an async game. Once we have caught up to the initial count, tell the player
+        # that we are ready to start. New items may even come in during the title screen, so if we go over the count,
+        # we should still send the ready signal.
+        if not self.processed_initial_items:
+            if self.inbox_index >= self.initial_item_count >= 0:
+                self.processed_initial_items = True
+                await self.send_connection_status("ready")
+
         # Receive Items from AP. Handle 1 item per tick.
         if len(self.item_inbox) > self.inbox_index:
             await self.receive_item()
             await self.save_data()
             self.inbox_index += 1
-
-        # When connecting the game to the AP server on the title screen, we may be processing items from starting
-        # inventory or items received in an async game. Once we are done, tell the player that we are ready to start.
-        if not self.received_initial_items and self.initial_item_count >= 0:
-            if self.inbox_index == self.initial_item_count:
-                self.received_initial_items = True
-                await self.send_connection_status("ready")
 
         if self.received_deathlink:
             await self.receive_deathlink()

@@ -177,6 +177,7 @@ def enforce_multiplayer_limits(world: JakAndDaxterWorld):
         raise OptionError(f"{world.player_name}: The options you have chosen may disrupt the multiworld. \n"
                           f"Please adjust the following Options for a multiplayer game. \n"
                           f"{friendly_message}"
+                          f"Or use 'random-range-x-y' instead of 'random' in your player yaml.\n"
                           f"Or set 'enforce_friendly_options' in the seed generator's host.yaml to false. "
                           f"(Use at your own risk!)")
 
@@ -207,6 +208,7 @@ def enforce_singleplayer_limits(world: JakAndDaxterWorld):
         raise OptionError(f"The options you have chosen may result in seed generation failures. \n"
                           f"Please adjust the following Options for a singleplayer game. \n"
                           f"{friendly_message}"
+                          f"Or use 'random-range-x-y' instead of 'random' in your player yaml.\n"
                           f"Or set 'enforce_friendly_options' in your host.yaml to false. "
                           f"(Use at your own risk!)")
 

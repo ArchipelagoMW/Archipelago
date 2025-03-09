@@ -6,7 +6,7 @@ class NoTrapsTest(JakAndDaxterTestBase):
     options = {
         "filler_power_cells_replaced_with_traps": 0,
         "filler_orb_bundles_replaced_with_traps": 0,
-        "chosen_traps": ["Trip Trap"]
+        "trap_weights": {"Trip Trap": 1},
     }
 
     def test_trap_count(self):
@@ -32,7 +32,7 @@ class SomeTrapsTest(JakAndDaxterTestBase):
     options = {
         "filler_power_cells_replaced_with_traps": 10,
         "filler_orb_bundles_replaced_with_traps": 10,
-        "chosen_traps": ["Trip Trap"]
+        "trap_weights": {"Trip Trap": 1},
     }
 
     def test_trap_count(self):
@@ -58,7 +58,7 @@ class MaximumTrapsTest(JakAndDaxterTestBase):
     options = {
         "filler_power_cells_replaced_with_traps": 100,
         "filler_orb_bundles_replaced_with_traps": 100,
-        "chosen_traps": ["Trip Trap"]
+        "trap_weights": {"Trip Trap": 1},
     }
 
     def test_trap_count(self):

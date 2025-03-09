@@ -161,7 +161,7 @@ def autopsy(cause: int) -> str:
 
 class JakAndDaxterMemoryReader:
     marker: ByteString
-    goal_address = None
+    goal_address: int | None = None
     connected: bool = False
     initiated_connect: bool = False
 
@@ -223,7 +223,6 @@ class JakAndDaxterMemoryReader:
     async def main_tick(self):
         if self.initiated_connect:
             await self.connect()
-            await self.verify_memory_version()
             self.initiated_connect = False
 
         if self.connected:
@@ -243,7 +242,6 @@ class JakAndDaxterMemoryReader:
         else:
             return
 
-        # TODO - How drastic of a change is this, to wrap all of main_tick in a self.connected check?
         if self.connected:
 
             # Save some state variables temporarily.
@@ -293,32 +291,47 @@ class JakAndDaxterMemoryReader:
                                                byteorder="little",
                                                signed=False)
             logger.debug("Found the archipelago memory address: " + str(self.goal_address))
-            self.connected = True
+            await self.verify_memory_version()
         else:
-            self.log_error(logger, "Could not find the archipelago memory address!")
+            self.log_error(logger, "Could not find the Archipelago marker address!")
             self.connected = False
 
     async def verify_memory_version(self):
-        if not self.connected:
-            self.log_error(logger, "The Memory Reader is not connected!")
+        if self.goal_address is None:
+            self.log_error(logger, "Could not find the Archipelago memory address!")
+            self.connected = False
+            return
 
         memory_version: int | None = None
         try:
             memory_version = self.read_goal_address(memory_version_offset, sizeof_uint32)
             if memory_version == expected_memory_version:
                 self.log_success(logger, "The Memory Reader is ready!")
+                self.connected = True
             else:
                 raise MemoryReadError(memory_version_offset, sizeof_uint32)
         except (ProcessError, MemoryReadError, WinAPIError):
-            msg = (f"The OpenGOAL memory structure is incompatible with the current Archipelago client!\n"
-                   f"   Expected Version: {str(expected_memory_version)}\n"
-                   f"   Found Version: {str(memory_version)}\n"
-                   f"Please follow these steps:\n"
-                   f"   Run the OpenGOAL Launcher, click Jak and Daxter > Features > Mods > ArchipelaGOAL.\n"
-                   f"   Click Update (if one is available).\n"
-                   f"   Click Advanced > Compile. When this is done, click Continue.\n"
-                   f"   Click Versions and verify the latest version is marked 'Active'.\n"
-                   f"   Close all launchers, games, clients, and console windows, then restart Archipelago.")
+            if memory_version is None:
+                msg = (f"Could not find a version number in the OpenGOAL memory structure!\n"
+                       f"   Expected Version: {str(expected_memory_version)}\n"
+                       f"   Found Version: {str(memory_version)}\n"
+                       f"Please follow these steps:\n"
+                       f"   If the game is running, try entering '/memr connect' in the client.\n"
+                       f"   You should see 'The Memory Reader is ready!'\n"
+                       f"   If that did not work, or the game is not running, run the OpenGOAL Launcher.\n"
+                       f"   Click Jak and Daxter > Features > Mods > ArchipelaGOAL.\n"
+                       f"   Then click Advanced > Play in Debug Mode.\n"
+                       f"   Try entering '/memr connect' in the client again.")
+            else:
+                msg = (f"The OpenGOAL memory structure is incompatible with the current Archipelago client!\n"
+                       f"   Expected Version: {str(expected_memory_version)}\n"
+                       f"   Found Version: {str(memory_version)}\n"
+                       f"Please follow these steps:\n"
+                       f"   Run the OpenGOAL Launcher, click Jak and Daxter > Features > Mods > ArchipelaGOAL.\n"
+                       f"   Click Update (if one is available).\n"
+                       f"   Click Advanced > Compile. When this is done, click Continue.\n"
+                       f"   Click Versions and verify the latest version is marked 'Active'.\n"
+                       f"   Close all launchers, games, clients, and console windows, then restart Archipelago.")
             self.log_error(logger, msg)
             self.connected = False
 

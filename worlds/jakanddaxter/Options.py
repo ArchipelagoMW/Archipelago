@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from Options import PerGameCommonOptions, StartInventoryPool, Toggle, Choice, Range, DefaultOnToggle, OptionSet
+from functools import cached_property
+from Options import PerGameCommonOptions, StartInventoryPool, Toggle, Choice, Range, DefaultOnToggle, OptionDict
 from .Items import trap_item_table
 
 
@@ -194,13 +195,21 @@ class TrapEffectDuration(Range):
     default = 30
 
 
-class ChosenTraps(OptionSet):
+# TODO - Revisit once ArchipelagoMW/Archipelago#3756 is merged.
+class TrapWeights(OptionDict):
     """
-    The list of traps that will be randomly added to the item pool. If the list is empty, no traps are created.
+    The list of traps and corresponding weights that will be randomly added to the item pool. A trap with weight 10 is
+    twice as likely to appear as a trap with weight 5. Set a weight to 0 to prevent that trap from appearing altogether.
+    If all weights are 0, no traps are created, overriding the values of "Filler * Replaced With Traps."
     """
-    display_name = "Chosen Traps"
-    default = {trap for trap in trap_item_table.values()}
-    valid_keys = {trap for trap in trap_item_table.values()}
+    display_name = "Trap Weights"
+    default = {trap: 1 for trap in trap_item_table.values()}
+    valid_keys = sorted({trap for trap in trap_item_table.values()})
+
+    @cached_property
+    def weights_pair(self) -> tuple[list[str], list[int]]:
+        return (list(self.value.keys()),
+                list(max(0, v) for v in self.value.values()))
 
 
 class CompletionCondition(Choice):
@@ -232,6 +241,6 @@ class JakAndDaxterOptions(PerGameCommonOptions):
     filler_power_cells_replaced_with_traps: FillerPowerCellsReplacedWithTraps
     filler_orb_bundles_replaced_with_traps: FillerOrbBundlesReplacedWithTraps
     trap_effect_duration: TrapEffectDuration
-    chosen_traps: ChosenTraps
+    trap_weights: TrapWeights
     jak_completion_condition: CompletionCondition
     start_inventory_from_pool: StartInventoryPool
