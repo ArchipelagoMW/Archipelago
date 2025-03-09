@@ -46,7 +46,7 @@ and go to the Peaks Of Archipelago config, this is where you connect to
 the server, enter your slot name (the name entered when preparing your yaml file), the hostname and port so for
 example: `archipelago.gg:60324` becomes `hostname=archipelago.gg` and `port=60324`, add a password if necessary.
 
-![](https://cdn.discordapp.com/attachments/1344770315527393325/1347292135082168331/settings.png?ex=67cb4b14&is=67c9f994&hm=ff595538433a224c2f59bb0efe30e5b85933f24e0009024501f0e4247d8eca98&)
+![an image showing the steps necessary to connect to the AP server](https://github.com/EliottDup/image-repo/blob/909de8bd643c3a67c3a431c8608db8477d4fdf99/settings.png?raw=true)
 
 The auto connect option will connect automatically when the game is restarted later but may fail if the port has
 changed, which might happen if the server has been offline for a while.
