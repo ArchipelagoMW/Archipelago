@@ -3204,6 +3204,156 @@
                     "dest_door": "west"
                 }
             ]
+        },
+        {
+            "name": "1c",
+            "display_name": "Forsaken City C",
+            "rooms": [
+                {
+                    "name": "00",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": [ ["traffic_blocks", "dash_refills"] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": [ ["cannot_access"] ]
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "Start",
+                    "checkpoint_region": "west"
+                },
+                {
+                    "name": "01",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": [ [ "traffic_blocks" ] ]
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "binoculars",
+                                    "display_name": "Binoculars",
+                                    "type": "binoculars",
+                                    "rules": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": true
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "02",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "goal",
+                                    "rule": [ [ "coins", "traffic_blocks" ] ]
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "binoculars",
+                                    "display_name": "Binoculars",
+                                    "type": "binoculars",
+                                    "rules": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "goal",
+                            "connections": [],
+                            "locations": [
+                                {
+                                    "name": "clear",
+                                    "display_name": "Level Clear",
+                                    "type": "level_clear",
+                                    "rule": []
+                                },
+                                {
+                                    "name": "golden",
+                                    "display_name": "Golden Strawberry",
+                                    "type": "golden_strawberry",
+                                    "rules": [ [ "traffic_blocks", "dash_refills", "coins" ] ]
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": true
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                }
+            ],
+            "room_connections": [
+                {
+                    "source_room": "00",
+                    "source_door": "east",
+                    "dest_room": "01",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "01",
+                    "source_door": "east",
+                    "dest_room": "02",
+                    "dest_door": "west"
+                }
+            ]
         }
     ]
 }

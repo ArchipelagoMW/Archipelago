@@ -187,6 +187,13 @@ all_doors: Dict[str, Door] = {
 
     "1b_end_west": Door("1b_end_west", "1b_end", DoorDirection.down, False, True),
 
+    "1c_00_east": Door("1c_00_east", "1c_00", DoorDirection.right, False, False),
+
+    "1c_01_west": Door("1c_01_west", "1c_01", DoorDirection.left, False, True),
+    "1c_01_east": Door("1c_01_east", "1c_01", DoorDirection.right, False, False),
+
+    "1c_02_west": Door("1c_02_west", "1c_02", DoorDirection.left, False, True),
+
 }
 
 all_region_connections: Dict[str, RegionConnection] = {
@@ -403,6 +410,14 @@ all_region_connections: Dict[str, RegionConnection] = {
 
     "1b_end_west---1b_end_goal": RegionConnection("1b_end_west", "1b_end_goal", [[ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks, ItemName.dash_refills, ], ]),
 
+    "1c_00_west---1c_00_east": RegionConnection("1c_00_west", "1c_00_east", [[ItemName.traffic_blocks, ItemName.dash_refills, ], ]),
+    "1c_00_east---1c_00_west": RegionConnection("1c_00_east", "1c_00_west", [[ItemName.cannot_access, ], ]),
+
+    "1c_01_west---1c_01_east": RegionConnection("1c_01_west", "1c_01_east", [[ItemName.traffic_blocks, ], ]),
+    "1c_01_east---1c_01_west": RegionConnection("1c_01_east", "1c_01_west", []),
+
+    "1c_02_west---1c_02_goal": RegionConnection("1c_02_west", "1c_02_goal", [[ItemName.coins, ItemName.traffic_blocks, ], ]),
+
 }
 
 all_locations: Dict[str, LevelLocation] = {
@@ -438,6 +453,11 @@ all_locations: Dict[str, LevelLocation] = {
     "1b_09_binoculars": LevelLocation("1b_09_binoculars", "Forsaken City B - Room 09 Binoculars", "1b_09_west", LocationType.binoculars, []),
     "1b_end_clear": LevelLocation("1b_end_clear", "Forsaken City B - Level Clear", "1b_end_goal", LocationType.level_clear, []),
     "1b_end_golden": LevelLocation("1b_end_golden", "Forsaken City B - Golden Strawberry", "1b_end_goal", LocationType.golden_strawberry, []),
+
+    "1c_01_binoculars": LevelLocation("1c_01_binoculars", "Forsaken City C - Room 01 Binoculars", "1c_01_west", LocationType.binoculars, []),
+    "1c_02_binoculars": LevelLocation("1c_02_binoculars", "Forsaken City C - Room 02 Binoculars", "1c_02_west", LocationType.binoculars, []),
+    "1c_02_clear": LevelLocation("1c_02_clear", "Forsaken City C - Level Clear", "1c_02_goal", LocationType.level_clear, []),
+    "1c_02_golden": LevelLocation("1c_02_golden", "Forsaken City C - Golden Strawberry", "1c_02_goal", LocationType.golden_strawberry, []),
 
 }
 
@@ -641,6 +661,15 @@ all_regions: Dict[str, PreRegion] = {
     "1b_end_west": PreRegion("1b_end_west", "1b_end", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_end_west"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_end_west"]),
     "1b_end_goal": PreRegion("1b_end_goal", "1b_end", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1b_end_goal"], [loc for _, loc in all_locations.items() if loc.region_name == "1b_end_goal"]),
 
+    "1c_00_west": PreRegion("1c_00_west", "1c_00", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1c_00_west"], [loc for _, loc in all_locations.items() if loc.region_name == "1c_00_west"]),
+    "1c_00_east": PreRegion("1c_00_east", "1c_00", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1c_00_east"], [loc for _, loc in all_locations.items() if loc.region_name == "1c_00_east"]),
+
+    "1c_01_west": PreRegion("1c_01_west", "1c_01", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1c_01_west"], [loc for _, loc in all_locations.items() if loc.region_name == "1c_01_west"]),
+    "1c_01_east": PreRegion("1c_01_east", "1c_01", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1c_01_east"], [loc for _, loc in all_locations.items() if loc.region_name == "1c_01_east"]),
+
+    "1c_02_west": PreRegion("1c_02_west", "1c_02", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1c_02_west"], [loc for _, loc in all_locations.items() if loc.region_name == "1c_02_west"]),
+    "1c_02_goal": PreRegion("1c_02_goal", "1c_02", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "1c_02_goal"], [loc for _, loc in all_locations.items() if loc.region_name == "1c_02_goal"]),
+
 }
 
 all_room_connections: Dict[str, RoomConnection] = {
@@ -709,6 +738,9 @@ all_room_connections: Dict[str, RoomConnection] = {
     "1b_10---1b_11": RoomConnection("1b", all_doors["1b_10_east"], all_doors["1b_11_bottom"]),
     "1b_11---1b_end": RoomConnection("1b", all_doors["1b_11_top"], all_doors["1b_end_west"]),
 
+    "1c_00---1c_01": RoomConnection("1c", all_doors["1c_00_east"], all_doors["1c_01_west"]),
+    "1c_01---1c_02": RoomConnection("1c", all_doors["1c_01_east"], all_doors["1c_02_west"]),
+
 }
 
 all_rooms: Dict[str, Room] = {
@@ -775,12 +807,17 @@ all_rooms: Dict[str, Room] = {
     "1b_11": Room("1b", "1b_11", "Forsaken City B - Room 11", [reg for _, reg in all_regions.items() if reg.room_name == "1b_11"], [door for _, door in all_doors.items() if door.room_name == "1b_11"]),
     "1b_end": Room("1b", "1b_end", "Forsaken City B - Room end", [reg for _, reg in all_regions.items() if reg.room_name == "1b_end"], [door for _, door in all_doors.items() if door.room_name == "1b_end"]),
 
+    "1c_00": Room("1c", "1c_00", "Forsaken City C - Room 00", [reg for _, reg in all_regions.items() if reg.room_name == "1c_00"], [door for _, door in all_doors.items() if door.room_name == "1c_00"], "Start", "1c_00_west"),
+    "1c_01": Room("1c", "1c_01", "Forsaken City C - Room 01", [reg for _, reg in all_regions.items() if reg.room_name == "1c_01"], [door for _, door in all_doors.items() if door.room_name == "1c_01"]),
+    "1c_02": Room("1c", "1c_02", "Forsaken City C - Room 02", [reg for _, reg in all_regions.items() if reg.room_name == "1c_02"], [door for _, door in all_doors.items() if door.room_name == "1c_02"]),
+
 }
 
 all_levels: Dict[str, Level] = {
     "0a": Level("0a", "Prologue", [room for _, room in all_rooms.items() if room.level_name == "0a"], [room_con for _, room_con in all_room_connections.items() if room_con.level_name == "0a"]),
     "1a": Level("1a", "Forsaken City A", [room for _, room in all_rooms.items() if room.level_name == "1a"], [room_con for _, room_con in all_room_connections.items() if room_con.level_name == "1a"]),
     "1b": Level("1b", "Forsaken City B", [room for _, room in all_rooms.items() if room.level_name == "1b"], [room_con for _, room_con in all_room_connections.items() if room_con.level_name == "1b"]),
+    "1c": Level("1c", "Forsaken City C", [room for _, room in all_rooms.items() if room.level_name == "1c"], [room_con for _, room_con in all_room_connections.items() if room_con.level_name == "1c"]),
 
 }
 
