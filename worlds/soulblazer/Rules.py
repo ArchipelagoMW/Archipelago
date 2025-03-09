@@ -1,7 +1,8 @@
-from typing import Dict, List, Callable, Optional, TYPE_CHECKING
+from typing import Callable
 
 from enum import Enum, auto
 from BaseClasses import CollectionState
+from .Data.Enums import RuleFlag
 from .Names import (
     ItemName,
     ItemID,
@@ -16,39 +17,8 @@ from .Names import (
 )
 from .Items import emblems_table, swords_table
 
-if TYPE_CHECKING:
-    from . import SoulBlazerWorld
-
-
-class RuleFlag(Enum):
-    NONE = "NONE"
-    """No special requirement preventing access."""
-    CAN_CUT_METAL = "CAN_CUT_METAL"
-    """Requires a way to damage metal enemies (Zantestu Sword|Soul Blade)."""
-    CAN_CUT_SPIRIT = "CAN_CUT_SPIRIT"
-    """Requires a way to damage metal enemies (Spirit Sword|Soul Blade)."""
-    HAS_THUNDER = "HAS_THUNDER"
-    """
-    Requires a way to damage metal enemies in the presence of thunder pyramids
-    (Thunder Ring|Zantestu Sword|Soul Blade).
-    """
-    HAS_MAGIC = "HAS_MAGIC"
-    """Requires a way to damage enemies outside of sword range."""
-    HAS_SWORD = "HAS_SWORD"
-    """
-    Requires any sword. Only used as a sanity check at the start of the game
-    since we prefill the first chest with a sword.
-    """
-    HAS_STONES = "HAS_STONES"
-    """Requires the necessary number of stones. Adjustable via option."""
-    PHOENIX_CUTSCENE = "PHOENIX_CUTSCENE"
-    """
-    Requires the Phoenix cutscene:
-    Access to the Mountain King
-    Both Dancing Grandmas
-    The 3 Red-Hot Items
-    """
-
+#if TYPE_CHECKING:
+#    from . import SoulBlazerWorld
 
 metal_items = [ItemName.ZANTETSUSWORD, ItemName.SOULBLADE]
 spirit_items = [ItemName.SPIRITSWORD, ItemName.SOULBLADE]
@@ -65,7 +35,7 @@ magic_items = [
 sword_items = [*swords_table.keys()]
 
 
-def no_requirement(state: CollectionState, player: Optional[int] = None) -> bool:
+def no_requirement(state: CollectionState, player: int | None = None) -> bool:
     return True
 
 
@@ -111,7 +81,7 @@ rule_for_flag = {
 
 # Many locations depend on one or two NPC releases so rather than create regions to hold one location,
 # we put these location-specific dependencies here.
-location_dependencies: Dict[str, List[str]] = {
+location_dependencies: dict[str, list[str]] = {
     # Act 1 - Grass Valley
     NPCRewardName.TOOL_SHOP_OWNER: [NPCName.TOOL_SHOP_OWNER],
     NPCRewardName.EMBLEM_A_TILE: [NPCName.IVY, NPCName.IVY_EMBLEM_A],

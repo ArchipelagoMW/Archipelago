@@ -80,13 +80,13 @@ class SoulBlazerItem(Item):
         return self._itemData.operand_for_id
 
 
-herb_count = 20
+herb_count_vanilla = 20
 """Number of Herbs in vanilla item pool"""
 
-bottle_count = 7
+bottle_count_vanilla = 7
 """Number of Strange Bottles in vanilla item pool"""
 
-nothing_count = 3
+nothing_count_vanilla = 3
 """Number of 'Nothing' rewards in vanilla item pool"""
 
 gem_values_vanilla = [1, 12, 40, 50, 50, 50, 50, 50, 60, 60, 80, 80, 80, 80, 80, 100, 100, 100, 100, 150, 200]
@@ -118,16 +118,16 @@ def create_itempool(world: "SoulBlazerWorld") -> List[SoulBlazerItem]:
     itempool = [SoulBlazerItem(name, world.player, itemData) for (name, itemData) in unique_items_table.items()]
     itempool += [
         SoulBlazerItem(ItemName.MEDICALHERB, world.player, repeatable_items_table[ItemName.MEDICALHERB])
-        for _ in range(herb_count)
+        for _ in range(herb_count_vanilla)
     ]
     itempool += [
         SoulBlazerItem(ItemName.STRANGEBOTTLE, world.player, repeatable_items_table[ItemName.STRANGEBOTTLE])
-        for _ in range(bottle_count)
+        for _ in range(bottle_count_vanilla)
     ]
     # TODO: Add option to replace nothings with... something?
     itempool += [
         SoulBlazerItem(ItemName.NOTHING, world.player, repeatable_items_table[ItemName.NOTHING])
-        for _ in range(nothing_count)
+        for _ in range(nothing_count_vanilla)
     ]
     world.gem_items = [world.create_item(ItemName.GEMS).set_operand(value) for value in create_gem_pool(world)]
     itempool += world.gem_items

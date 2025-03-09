@@ -1,0 +1,976 @@
+aswords:
+- aname: Sword of Life
+  bid: 1
+  coperand: 0
+  dclassification: 1
+- aname: Psycho Sword
+  bid: 2
+  coperand: 0
+  dclassification: 1
+- aname: Critical Sword
+  bid: 3
+  coperand: 0
+  dclassification: 1
+- aname: Lucky Blade
+  bid: 4
+  coperand: 0
+  dclassification: 1
+- aname: Zantetsu Sword
+  bid: 5
+  coperand: 0
+  dclassification: 1
+- aname: Spirit Sword
+  bid: 6
+  coperand: 0
+  dclassification: 1
+- aname: Recovery Sword
+  bid: 7
+  coperand: 0
+  dclassification: 1
+- aname: The Soul Blade
+  bid: 8
+  coperand: 0
+  dclassification: 1
+barmors:
+- aname: Iron Armor
+  bid: 9
+  coperand: 0
+  dclassification: 2
+- aname: Ice Armor
+  bid: 10
+  coperand: 0
+  dclassification: 1
+- aname: Bubble Armor
+  bid: 11
+  coperand: 0
+  dclassification: 1
+- aname: Magic Armor
+  bid: 12
+  coperand: 0
+  dclassification: 2
+- aname: Mystic Armor
+  bid: 13
+  coperand: 0
+  dclassification: 2
+- aname: Light Armor
+  bid: 14
+  coperand: 0
+  dclassification: 2
+- aname: Elemental Mail
+  bid: 15
+  coperand: 0
+  dclassification: 2
+- aname: Soul Armor
+  bid: 16
+  coperand: 0
+  dclassification: 1
+cmagics:
+- aname: Flame Ball
+  bid: 17
+  coperand: 0
+  dclassification: 1
+- aname: Light Arrow
+  bid: 18
+  coperand: 0
+  dclassification: 1
+- aname: Magic Flare
+  bid: 19
+  coperand: 0
+  dclassification: 1
+- aname: Rotator
+  bid: 20
+  coperand: 0
+  dclassification: 1
+- aname: Spark Bomb
+  bid: 21
+  coperand: 0
+  dclassification: 1
+- aname: Flame Pillar
+  bid: 22
+  coperand: 0
+  dclassification: 1
+- aname: Tornado
+  bid: 23
+  coperand: 0
+  dclassification: 1
+- aname: Phoenix
+  bid: 24
+  coperand: 0
+  dclassification: 1
+dinventory-items:
+- aname: Goat's Food
+  bid: 25
+  coperand: 0
+  dclassification: 2
+- aname: Harp String
+  bid: 26
+  coperand: 0
+  dclassification: 1
+- aname: a pass
+  bid: 27
+  coperand: 0
+  dclassification: 1
+- aname: Dream Rod
+  bid: 28
+  coperand: 0
+  dclassification: 1
+- aname: Leo's brush
+  bid: 29
+  coperand: 0
+  dclassification: 1
+- aname: G.Leaf
+  bid: 30
+  coperand: 0
+  dclassification: 1
+- aname: Mole's Ribbon
+  bid: 31
+  coperand: 0
+  dclassification: 1
+- aname: the Big Pearl
+  bid: 32
+  coperand: 0
+  dclassification: 1
+- aname: Mermaid's Tears
+  bid: 33
+  coperand: 0
+  dclassification: 1
+- aname: Mushroom Shoes
+  bid: 34
+  coperand: 0
+  dclassification: 1
+- aname: a mobile key
+  bid: 35
+  coperand: 0
+  dclassification: 1
+- aname: Thunder Ring
+  bid: 36
+  coperand: 0
+  dclassification: 1
+- aname: Delicious Seeds
+  bid: 37
+  coperand: 0
+  dclassification: 1
+- aname: A.Leaf
+  bid: 38
+  coperand: 0
+  dclassification: 1
+- aname: a door key
+  bid: 39
+  coperand: 0
+  dclassification: 1
+- aname: Platinum Card
+  bid: 40
+  coperand: 0
+  dclassification: 1
+- aname: the VIP Card
+  bid: 41
+  coperand: 0
+  dclassification: 1
+- aname: Emblem A
+  bid: 42
+  coperand: 0
+  dclassification: 9
+- aname: Emblem B
+  bid: 43
+  coperand: 0
+  dclassification: 9
+- aname: Emblem C
+  bid: 44
+  coperand: 0
+  dclassification: 9
+- aname: Emblem D
+  bid: 45
+  coperand: 0
+  dclassification: 9
+- aname: Emblem E
+  bid: 46
+  coperand: 0
+  dclassification: 9
+- aname: Emblem F
+  bid: 47
+  coperand: 0
+  dclassification: 9
+- aname: Emblem G
+  bid: 48
+  coperand: 0
+  dclassification: 9
+- aname: Emblem H
+  bid: 49
+  coperand: 0
+  dclassification: 9
+- aname: Red-Hot Mirror
+  bid: 50
+  coperand: 0
+  dclassification: 1
+- aname: Red-Hot Ball
+  bid: 51
+  coperand: 0
+  dclassification: 1
+- aname: Red-Hot Stick
+  bid: 52
+  coperand: 0
+  dclassification: 1
+- aname: Power Bracelet
+  bid: 53
+  coperand: 0
+  dclassification: 2
+- aname: Shield Bracelet
+  bid: 54
+  coperand: 0
+  dclassification: 2
+- aname: Super Bracelet
+  bid: 55
+  coperand: 0
+  dclassification: 2
+- aname: Medical Herb
+  bid: 56
+  coperand: 0
+  dclassification: 0
+- aname: Strange Bottle
+  bid: 57
+  coperand: 0
+  dclassification: 0
+- aname: Brown Stone
+  bid: 58
+  coperand: 0
+  dclassification: 1
+- aname: Green Stone
+  bid: 59
+  coperand: 0
+  dclassification: 1
+- aname: Blue Stone
+  bid: 60
+  coperand: 0
+  dclassification: 1
+- aname: Silver Stone
+  bid: 61
+  coperand: 0
+  dclassification: 1
+- aname: Purple Stone
+  bid: 62
+  coperand: 0
+  dclassification: 1
+- aname: Black Stone
+  bid: 63
+  coperand: 0
+  dclassification: 1
+- aname: Magic Bell
+  bid: 64
+  coperand: 0
+  dclassification: 2
+emisc-items:
+- aname: Nothing
+  bid: 0
+  coperand: 0
+  dclassification: 0
+- aname: GEMs
+  bid: 255
+  coperand: 100
+  dclassification: 0
+- aname: EXP
+  bid: 254
+  coperand: 250
+  dclassification: 0
+fnpc-releases:
+- aname: Old Woman (Village Chief's house)
+  bid: 253
+  coperand: 2
+  dclassification: 1
+- aname: Tool Shop Owner
+  bid: 253
+  coperand: 6
+  dclassification: 1
+- aname: Tulip
+  bid: 253
+  coperand: 7
+  dclassification: 0
+- aname: Bridge Guard
+  bid: 253
+  coperand: 8
+  dclassification: 1
+- aname: Village Chief (leads to Act 2)
+  bid: 253
+  coperand: 9
+  dclassification: 1
+- aname: Ivy (leads to the 2-chest room)
+  bid: 253
+  coperand: 13
+  dclassification: 1
+- aname: Watermill Keeper
+  bid: 253
+  coperand: 14
+  dclassification: 1
+- aname: Goat (unlocks Goat Pen)
+  bid: 253
+  coperand: 15
+  dclassification: 1
+- aname: Lisa
+  bid: 253
+  coperand: 16
+  dclassification: 1
+- aname: Tulip 2
+  bid: 253
+  coperand: 17
+  dclassification: 0
+- aname: Architect (stairs to Leo's house)
+  bid: 253
+  coperand: 18
+  dclassification: 1
+- aname: Ivy (to south-eastern Grass Valley)
+  bid: 253
+  coperand: 19
+  dclassification: 1
+- aname: Goat (Wants Goat food)
+  bid: 253
+  coperand: 21
+  dclassification: 1
+- aname: Teddy (Tool Shop Owner's son)
+  bid: 253
+  coperand: 22
+  dclassification: 1
+- aname: Tulip 3
+  bid: 253
+  coperand: 24
+  dclassification: 0
+- aname: Old Man (Leo's house with painting)
+  bid: 253
+  coperand: 26
+  dclassification: 1
+- aname: Lonely Goat
+  bid: 253
+  coperand: 29
+  dclassification: 0
+- aname: Tulip (push for Pass)
+  bid: 253
+  coperand: 34
+  dclassification: 1
+- aname: Boy (in hideout)
+  bid: 253
+  coperand: 35
+  dclassification: 0
+- aname: Boy (guards Grass Valley hideout)
+  bid: 253
+  coperand: 37
+  dclassification: 1
+- aname: Old Man
+  bid: 253
+  coperand: 40
+  dclassification: 0
+- aname: Old Man 2
+  bid: 253
+  coperand: 41
+  dclassification: 0
+- aname: Ivy 2
+  bid: 253
+  coperand: 42
+  dclassification: 0
+- aname: Ivy (to Emblem A tile)
+  bid: 253
+  coperand: 43
+  dclassification: 1
+- aname: Ivy (to Recovery Sword crystal)
+  bid: 253
+  coperand: 44
+  dclassification: 1
+- aname: Tulip 4
+  bid: 253
+  coperand: 46
+  dclassification: 0
+- aname: Goat 2
+  bid: 253
+  coperand: 47
+  dclassification: 0
+- aname: Bird (gives Red-Hot Mirror)
+  bid: 253
+  coperand: 55
+  dclassification: 1
+- aname: Bird
+  bid: 253
+  coperand: 56
+  dclassification: 0
+- aname: Dog
+  bid: 253
+  coperand: 60
+  dclassification: 0
+- aname: Dog 2
+  bid: 253
+  coperand: 61
+  dclassification: 0
+- aname: Woodstin Trio dog
+  bid: 253
+  coperand: 63
+  dclassification: 1
+- aname: Mole (gives Shield Bracelet)
+  bid: 253
+  coperand: 64
+  dclassification: 1
+- aname: Squirrel (gives Emblem C)
+  bid: 253
+  coperand: 65
+  dclassification: 1
+- aname: Squirrel (trades Psycho Sword)
+  bid: 253
+  coperand: 67
+  dclassification: 1
+- aname: Bird 2
+  bid: 253
+  coperand: 70
+  dclassification: 0
+- aname: Mole / Soul of Light (Greenwood Leaf)
+  bid: 253
+  coperand: 73
+  dclassification: 1
+- aname: Woodstin Trio deer
+  bid: 253
+  coperand: 74
+  dclassification: 1
+- aname: First Crocodile (to sleepy bird)
+  bid: 253
+  coperand: 78
+  dclassification: 1
+- aname: Squirrel
+  bid: 253
+  coperand: 79
+  dclassification: 0
+- aname: Greenwood's Guardian (leads to Act 3)
+  bid: 253
+  coperand: 80
+  dclassification: 1
+- aname: Hole leading to dreaming stump
+  bid: 253
+  coperand: 81
+  dclassification: 1
+- aname: Dog 4
+  bid: 253
+  coperand: 86
+  dclassification: 0
+- aname: Squirrel (leads to Ice Armor chest)
+  bid: 253
+  coperand: 88
+  dclassification: 1
+- aname: Squirrel 2
+  bid: 253
+  coperand: 89
+  dclassification: 0
+- aname: Dog 5
+  bid: 253
+  coperand: 90
+  dclassification: 0
+- aname: Second Crocodile (to sleepy bird)
+  bid: 253
+  coperand: 91
+  dclassification: 1
+- aname: Mole 2
+  bid: 253
+  coperand: 92
+  dclassification: 0
+- aname: Woodstin Trio squirrel
+  bid: 253
+  coperand: 93
+  dclassification: 1
+- aname: Sleepy Bird (unlocks Greenwood Leaf)
+  bid: 253
+  coperand: 97
+  dclassification: 1
+- aname: Monmo's hole
+  bid: 253
+  coperand: 98
+  dclassification: 1
+- aname: Deer (unlocks Magic Bell crystal)
+  bid: 253
+  coperand: 99
+  dclassification: 1
+- aname: Bird 3
+  bid: 253
+  coperand: 100
+  dclassification: 0
+- aname: Crocodile (to Deer)
+  bid: 253
+  coperand: 111
+  dclassification: 1
+- aname: Monmo the Mole
+  bid: 253
+  coperand: 114
+  dclassification: 1
+- aname: Dolphin
+  bid: 253
+  coperand: 124
+  dclassification: 0
+- aname: Angelfish
+  bid: 253
+  coperand: 131
+  dclassification: 0
+- aname: Mermaid (gives Medical Herb)
+  bid: 253
+  coperand: 132
+  dclassification: 1
+- aname: Angelfish 2
+  bid: 253
+  coperand: 134
+  dclassification: 0
+- aname: Mermaid (unlocks Lue's prison)
+  bid: 253
+  coperand: 138
+  dclassification: 1
+- aname: Mermaid 2
+  bid: 253
+  coperand: 139
+  dclassification: 0
+- aname: Dolphin (saves Lue from prison)
+  bid: 253
+  coperand: 140
+  dclassification: 1
+- aname: Mermaid Statue (leading to Blester)
+  bid: 253
+  coperand: 141
+  dclassification: 1
+- aname: Mermaid (gives Red-Hot Stick)
+  bid: 253
+  coperand: 142
+  dclassification: 1
+- aname: Lue (gives Thunder Ring)
+  bid: 253
+  coperand: 143
+  dclassification: 1
+- aname: Mermaid 3
+  bid: 253
+  coperand: 146
+  dclassification: 0
+- aname: Mermaid Nana
+  bid: 253
+  coperand: 149
+  dclassification: 0
+- aname: Mermaid 4
+  bid: 253
+  coperand: 153
+  dclassification: 0
+- aname: Dolphin (unlocks north-eastern platform)
+  bid: 253
+  coperand: 155
+  dclassification: 1
+- aname: Mermaid Statue (leading to Rockbird)
+  bid: 253
+  coperand: 157
+  dclassification: 1
+- aname: Mermaid (gives Bubble Armor)
+  bid: 253
+  coperand: 161
+  dclassification: 1
+- aname: Mermaid 5
+  bid: 253
+  coperand: 164
+  dclassification: 0
+- aname: Mermaid 6
+  bid: 253
+  coperand: 165
+  dclassification: 0
+- aname: Mermaid by the Mermaid Tears chest
+  bid: 253
+  coperand: 167
+  dclassification: 0
+- aname: Mermaid Statue (leading to Durean)
+  bid: 253
+  coperand: 171
+  dclassification: 1
+- aname: Angelfish 3
+  bid: 253
+  coperand: 173
+  dclassification: 0
+- aname: Angelfish / Soul of Shield
+  bid: 253
+  coperand: 177
+  dclassification: 1
+- aname: Mermaid (gives Magic Flare)
+  bid: 253
+  coperand: 181
+  dclassification: 1
+- aname: Mermaid Queen (leads to Act 4)
+  bid: 253
+  coperand: 182
+  dclassification: 1
+- aname: Mermaid Statue (leading to Ghost Ship)
+  bid: 253
+  coperand: 185
+  dclassification: 1
+- aname: Sleeping Dolphin (unlocks secret cave)
+  bid: 253
+  coperand: 187
+  dclassification: 1
+- aname: Mermaid 7
+  bid: 253
+  coperand: 189
+  dclassification: 0
+- aname: Angelfish 4
+  bid: 253
+  coperand: 190
+  dclassification: 0
+- aname: Mermaid 8
+  bid: 253
+  coperand: 192
+  dclassification: 0
+- aname: Dolphin (leading to Big Pearl chest)
+  bid: 253
+  coperand: 193
+  dclassification: 1
+- aname: Mermaid 9
+  bid: 253
+  coperand: 194
+  dclassification: 0
+- aname: Grandpa
+  bid: 253
+  coperand: 201
+  dclassification: 1
+- aname: Girl
+  bid: 253
+  coperand: 202
+  dclassification: 0
+- aname: Mushroom
+  bid: 253
+  coperand: 203
+  dclassification: 0
+- aname: Boy (unlocks western tunnel)
+  bid: 253
+  coperand: 204
+  dclassification: 1
+- aname: Grandpa 2
+  bid: 253
+  coperand: 211
+  dclassification: 0
+- aname: Snail Jockey
+  bid: 253
+  coperand: 212
+  dclassification: 0
+- aname: Nome (leads to Act 5)
+  bid: 253
+  coperand: 214
+  dclassification: 1
+- aname: Boy 2
+  bid: 253
+  coperand: 215
+  dclassification: 0
+- aname: Sleeping Mushroom (unlocks lair in Lune)
+  bid: 253
+  coperand: 221
+  dclassification: 1
+- aname: Dancing Grandma 1
+  bid: 253
+  coperand: 225
+  dclassification: 1
+- aname: Dancing Grandma 2
+  bid: 253
+  coperand: 230
+  dclassification: 1
+- aname: Snail in secret room (gives Emblem E)
+  bid: 253
+  coperand: 232
+  dclassification: 1
+- aname: Boy (gives Mushroom Shoes)
+  bid: 253
+  coperand: 233
+  dclassification: 1
+- aname: Grandma
+  bid: 253
+  coperand: 234
+  dclassification: 0
+- aname: Girl 2
+  bid: 253
+  coperand: 235
+  dclassification: 0
+- aname: Mushroom (unlocks southern tunnel)
+  bid: 253
+  coperand: 238
+  dclassification: 1
+- aname: Snail Racer
+  bid: 253
+  coperand: 239
+  dclassification: 0
+- aname: Snail Racer 2
+  bid: 253
+  coperand: 240
+  dclassification: 0
+- aname: Girl (unlocks eastern tunnel)
+  bid: 253
+  coperand: 242
+  dclassification: 1
+- aname: Mushroom 3
+  bid: 253
+  coperand: 246
+  dclassification: 0
+- aname: Snail
+  bid: 253
+  coperand: 247
+  dclassification: 0
+- aname: Grandpa (unlocks south-western tunnel)
+  bid: 253
+  coperand: 248
+  dclassification: 1
+- aname: Snail 2
+  bid: 253
+  coperand: 250
+  dclassification: 0
+- aname: Grandpa (unlocks south-eastern lake)
+  bid: 253
+  coperand: 252
+  dclassification: 1
+- aname: Grandpa (leads to Lune)
+  bid: 253
+  coperand: 254
+  dclassification: 1
+- aname: Grandpa (unlocks Nome's prison)
+  bid: 253
+  coperand: 255
+  dclassification: 1
+- aname: Mountain King (gives Phoenix)
+  bid: 253
+  coperand: 259
+  dclassification: 1
+- aname: Plant (gives Medical Herbs)
+  bid: 253
+  coperand: 265
+  dclassification: 1
+- aname: Plant
+  bid: 253
+  coperand: 267
+  dclassification: 0
+- aname: Chest of Drawers (gives Mystic Armor)
+  bid: 253
+  coperand: 268
+  dclassification: 1
+- aname: First Cat in Leo's Lab main room
+  bid: 253
+  coperand: 269
+  dclassification: 1
+- aname: Great Door (to Zantetsu Sword chest)
+  bid: 253
+  coperand: 274
+  dclassification: 1
+- aname: Second Cat in Leo's Lab main room
+  bid: 253
+  coperand: 276
+  dclassification: 1
+- aname: Locked Door to south-western room
+  bid: 253
+  coperand: 282
+  dclassification: 1
+- aname: Cat 3
+  bid: 253
+  coperand: 283
+  dclassification: 0
+- aname: Model Town 1
+  bid: 253
+  coperand: 286
+  dclassification: 1
+- aname: Great Door (to Model Town room)
+  bid: 253
+  coperand: 288
+  dclassification: 1
+- aname: Steps (to second floor)
+  bid: 253
+  coperand: 290
+  dclassification: 1
+- aname: Leo's sleeping Cat (gives Door Key)
+  bid: 253
+  coperand: 294
+  dclassification: 1
+- aname: Mouse (unlocks Mouse hole)
+  bid: 253
+  coperand: 297
+  dclassification: 1
+- aname: Marie (leads to Act 6)
+  bid: 253
+  coperand: 303
+  dclassification: 1
+- aname: Doll
+  bid: 253
+  coperand: 310
+  dclassification: 0
+- aname: Chest of Drawers
+  bid: 253
+  coperand: 311
+  dclassification: 0
+- aname: Plant 2
+  bid: 253
+  coperand: 313
+  dclassification: 0
+- aname: Mouse 2
+  bid: 253
+  coperand: 315
+  dclassification: 0
+- aname: Mouse (gives Spark Bomb)
+  bid: 253
+  coperand: 316
+  dclassification: 1
+- aname: Mouse 3
+  bid: 253
+  coperand: 318
+  dclassification: 0
+- aname: Great Door / Soul of Detection
+  bid: 253
+  coperand: 322
+  dclassification: 1
+- aname: Model Town 2
+  bid: 253
+  coperand: 325
+  dclassification: 1
+- aname: Mouse 4
+  bid: 253
+  coperand: 330
+  dclassification: 0
+- aname: Steps (to Marie's attic)
+  bid: 253
+  coperand: 331
+  dclassification: 1
+- aname: Chest of Drawers (Herb storage)
+  bid: 253
+  coperand: 332
+  dclassification: 1
+- aname: Plant (gives Actinidia Leaves)
+  bid: 253
+  coperand: 333
+  dclassification: 1
+- aname: Mouse 5
+  bid: 253
+  coperand: 338
+  dclassification: 0
+- aname: Cat 4
+  bid: 253
+  coperand: 339
+  dclassification: 0
+- aname: Stairs (to Power Plant)
+  bid: 253
+  coperand: 341
+  dclassification: 1
+- aname: Soldier
+  bid: 253
+  coperand: 345
+  dclassification: 0
+- aname: Soldier 2
+  bid: 253
+  coperand: 346
+  dclassification: 0
+- aname: Soldier 3
+  bid: 253
+  coperand: 351
+  dclassification: 0
+- aname: Sleeping Soldier (gives Elemental Mail)
+  bid: 253
+  coperand: 353
+  dclassification: 1
+- aname: Soldier 4
+  bid: 253
+  coperand: 354
+  dclassification: 0
+- aname: Soldier 5
+  bid: 253
+  coperand: 358
+  dclassification: 0
+- aname: Singer (unlocks concert hall)
+  bid: 253
+  coperand: 359
+  dclassification: 1
+- aname: Soldier 6
+  bid: 253
+  coperand: 360
+  dclassification: 0
+- aname: Maid
+  bid: 253
+  coperand: 363
+  dclassification: 0
+- aname: Soldier (guarding Left Tower)
+  bid: 253
+  coperand: 365
+  dclassification: 1
+- aname: Soldier (Dok; accompanies Dr. Leo)
+  bid: 253
+  coperand: 366
+  dclassification: 1
+- aname: Soldier (has Platinum Card)
+  bid: 253
+  coperand: 368
+  dclassification: 1
+- aname: Singer
+  bid: 253
+  coperand: 370
+  dclassification: 0
+- aname: Soldier / Soul of Reality
+  bid: 253
+  coperand: 377
+  dclassification: 1
+- aname: Maid 2
+  bid: 253
+  coperand: 382
+  dclassification: 0
+- aname: Queen Magridd (gives VIP Card)
+  bid: 253
+  coperand: 383
+  dclassification: 1
+- aname: Soldier (accompanies Dr. Leo)
+  bid: 253
+  coperand: 385
+  dclassification: 1
+- aname: Soldier (guarding Right Tower)
+  bid: 253
+  coperand: 386
+  dclassification: 1
+- aname: Dr. Leo
+  bid: 253
+  coperand: 387
+  dclassification: 1
+- aname: Soldier 7
+  bid: 253
+  coperand: 389
+  dclassification: 0
+- aname: Soldier 8
+  bid: 253
+  coperand: 390
+  dclassification: 0
+- aname: Maid (gives Medical Herbs)
+  bid: 253
+  coperand: 391
+  dclassification: 1
+- aname: Soldier (unlocks Magridd Castle)
+  bid: 253
+  coperand: 396
+  dclassification: 1
+- aname: Soldier 9
+  bid: 253
+  coperand: 397
+  dclassification: 0
+- aname: Soldier 10
+  bid: 253
+  coperand: 399
+  dclassification: 0
+- aname: Soldier 11
+  bid: 253
+  coperand: 402
+  dclassification: 0
+- aname: King Magridd (leads to Act 7)
+  bid: 253
+  coperand: 405
+  dclassification: 1
+gsouls:
+- aname: Soul of Magician
+  bid: 251
+  coperand: 0
+  dclassification: 1
+- aname: Soul of Light
+  bid: 251
+  coperand: 1
+  dclassification: 1
+- aname: Soul of Shield
+  bid: 251
+  coperand: 2
+  dclassification: 2
+- aname: Soul of Detection
+  bid: 251
+  coperand: 3
+  dclassification: 2
+- aname: Soul of Reality
+  bid: 251
+  coperand: 4
+  dclassification: 1
+hspecial-items:
+- aname: Victory
+  bid: 250
+  coperand: 0
+  dclassification: 1

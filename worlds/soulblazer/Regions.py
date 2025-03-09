@@ -3,7 +3,7 @@ from typing import Dict, List, Callable, TYPE_CHECKING, NamedTuple
 from BaseClasses import MultiWorld, Region, Entrance, CollectionState
 from .Items import swords_table, stones_table, redhots_table
 from .Names import RegionName, ItemName, LairName, ChestName, NPCName, NPCRewardName
-from .Locations import SoulBlazerLocation, all_locations_table
+from .Locations import SoulBlazerLocation, locations_by_name
 from .Options import SoulBlazerOptions
 from .Rules import no_requirement, RuleFlag, rule_for_flag
 
@@ -631,7 +631,7 @@ def create_regions(world: "SoulBlazerWorld") -> None:
         locations = [
             SoulBlazerLocation(world.player, loc, data, region)
             for loc in locations_for_region[region.name]
-            for data in [all_locations_table[loc]]
+            for data in [locations_by_name[loc]]
         ]
 
         region.locations += locations
@@ -646,9 +646,9 @@ def create_regions(world: "SoulBlazerWorld") -> None:
 
     # All of the locations should have been placed in regions.
     # TODO: Delete once confident that all locations are in or move into a test instead?
-    if len(all_locations) < len(all_locations_table):
+    if len(all_locations) < len(locations_by_name):
         all_location_names = {loc.name for loc in all_locations}
-        all_locations_table_names = {*all_locations_table.keys()}
+        all_locations_table_names = {*locations_by_name.keys()}
         unplaced = all_locations_table_names - all_location_names
         logging.warning("Soulblazer: Regions do not contain all locations. Something is likely broken with the logic.")
         for loc in unplaced:

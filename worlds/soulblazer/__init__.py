@@ -19,7 +19,7 @@ from .Items import (
     stones_table,
     item_name_groups as item_groups,
 )
-from .Locations import SoulBlazerLocation, all_locations_table, boss_lair_names_table, village_leader_names_table
+from .Locations import SoulBlazerLocation, locations_by_name, boss_lair_names_table, village_leader_names_table
 from .Names import ItemName, ChestName, NPCRewardName, Addresses, RegionName
 from .Regions import create_regions as region_create_regions
 
@@ -72,7 +72,7 @@ class SoulBlazerWorld(World):
     topology_present = False
 
     item_name_to_id = {name: data.code for name, data in all_items_table.items()}
-    location_name_to_id = {name: data.address for name, data in all_locations_table.items()}
+    location_name_to_id = {name: data.address for name, data in locations_by_name.items()}
 
     item_name_groups = item_groups
 

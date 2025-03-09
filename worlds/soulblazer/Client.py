@@ -8,11 +8,11 @@ from .Names.ArchipelagoID import BASE_ID, LAIR_ID_OFFSET, NPC_REWARD_OFFSET
 from .Locations import (
     SoulBlazerLocationData,
     address_for_location,
-    all_locations_table,
+    locations_by_name,
     LocationType,
-    chest_table,
-    npc_reward_table,
-    lair_table,
+    chests_by_name,
+    npc_rewards_by_name,
+    lairs_by_name,
 )
 from .Items import SoulBlazerItemData, all_items_table
 from .Util import encode_string, is_bit_set, Rectangle
@@ -52,7 +52,7 @@ class SoulBlazerSNIClient(SNIClient):
     game = "Soul Blazer"
     patch_suffix = ".apsb"
 
-    location_data_for_address = {data.address: data for data in all_locations_table.values()}
+    location_data_for_address = {data.address: data for data in locations_by_name.values()}
     item_data_for_code = {data.code: data for data in all_items_table.values()}
 
     def __init__(self) -> None:
@@ -245,7 +245,7 @@ class SoulBlazerSNIClient(SNIClient):
         # Chests
         new_checks: List[int] = [
             loc.address
-            for loc in chest_table.values()
+            for loc in chests_by_name.values()
             if is_bit_set(ram_misc, Addresses.CHEST_FLAG_INDEXES[loc.id], Addresses.CHEST_OPENED_TABLE - ram_misc_start)
             and loc.address not in ctx.locations_checked
         ]
@@ -253,7 +253,7 @@ class SoulBlazerSNIClient(SNIClient):
         # NPC Rewards
         new_checks += [
             loc.address
-            for loc in npc_reward_table.values()
+            for loc in npc_rewards_by_name.values()
             if is_bit_set(ram_misc, loc.id, Addresses.NPC_REWARD_TABLE - ram_misc_start)
             and loc.address not in ctx.locations_checked
         ]
@@ -261,7 +261,7 @@ class SoulBlazerSNIClient(SNIClient):
         # Lairs
         new_checks += [
             loc.address
-            for loc in lair_table.values()
+            for loc in lairs_by_name.values()
             # Last bit set means the location has been checked.
             if ram_lair_spawn[loc.id] & 0x80 and loc.address not in ctx.locations_checked
         ]
