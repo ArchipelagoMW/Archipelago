@@ -276,6 +276,6 @@ def launch(*launch_args: str) -> None:
 
     Utils.init_logging("BizHawkClient", exception_logger="Client")
     import colorama
-    colorama.init()
+    colorama.just_fix_windows_console()
     asyncio.run(main())
     colorama.deinit()
