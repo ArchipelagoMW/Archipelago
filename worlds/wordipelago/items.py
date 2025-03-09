@@ -52,7 +52,11 @@ item_data_table: Dict[str, WordipelagoItemData] = {
     "Yellow Letters": WordipelagoItemData(code=301,type=ItemClassification.progression | ItemClassification.useful, can_create = lambda world: not world.options.yellow_unlocked),
     "Unused Letters": WordipelagoItemData(code=302,type=ItemClassification.useful, can_create = lambda world: not world.options.unused_letters_unlocked),
     
-    "Not Much": WordipelagoItemData(code=150,type=ItemClassification.filler, can_create = lambda world: False),
+    "Suggestion": WordipelagoItemData(code=150,type=ItemClassification.filler, can_create = lambda world: False),
+    
+    "Clue Points": WordipelagoItemData(code=199,type=ItemClassification.filler, can_create = lambda world: False),
+    "Bad Guess Trap": WordipelagoItemData(code=198,type=ItemClassification.trap, can_create = lambda world: False),
+    "Extra Cooldown Trap": WordipelagoItemData(code=197,type=ItemClassification.trap, can_create = lambda world: False),
 }
 
 item_table = {name: data.code for name, data in item_data_table.items() if data.code is not None}

@@ -71,7 +71,7 @@ def needed_for_words(state, world, vowels, score, guesses = 1, yellow = False):
     return has_vowels >= vowels and possible_score >= score and (not yellow or world.options.yellow_unlocked or state.has('Yellow Letters', world.player)) and state.has('Guess', world.player, guesses - world.options.starting_guesses)
 
 def create_rules(world: "WordipelagoWorld"):
-    if(world.options.letter_checks == 1):
+    if(world.options.letter_checks >= 1):
         world.get_location("Used A").access_rule = lambda state: state.has("Letter A", world.player)
         world.get_location("Used E").access_rule = lambda state: state.has("Letter E", world.player)
         world.get_location("Used I").access_rule = lambda state: state.has("Letter I", world.player)
@@ -85,7 +85,7 @@ def create_rules(world: "WordipelagoWorld"):
         world.get_location("Used U").item_rule = lambda item: item.name != "Letter U"
         world.get_location("Used Y").item_rule = lambda item: item.name != "Letter Y"
         
-    if(world.options.letter_checks == 2):
+    if(world.options.letter_checks >= 2):
         world.get_location("Used B").access_rule = lambda state: state.has("Letter B", world.player)
         world.get_location("Used C").access_rule = lambda state: state.has("Letter C", world.player)
         world.get_location("Used D").access_rule = lambda state: state.has("Letter D", world.player)
@@ -228,7 +228,6 @@ def create_rules(world: "WordipelagoWorld"):
         world.get_location("YYY-Y").item_rule = lambda item: item.name != 'Yellow Letters'
         world.get_location("YYYY-").item_rule = lambda item: item.name != 'Yellow Letters'
         world.get_location("YYYYY").item_rule = lambda item: item.name != 'Yellow Letters'
-    
     
     if(world.options.green_checks == 1 or world.options.green_checks == 3):
         world.get_location("1 Correct Letter In Word").access_rule = lambda state: needed_for_words(state, world, 1, 0)

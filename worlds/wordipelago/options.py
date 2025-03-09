@@ -53,13 +53,8 @@ class UnusedLettersUnlocked(Toggle):
     """
     display_name = "Unused Letters Unlocked"   
 
-class ExtraItemsAsTimeRewards(Toggle):
-    """Whether to fill any extra items needed with time. otherwise non-useful filler item"""
-    display_name = "Extra Time Rewards"
-
 class GreenChecks(Choice):
     """
-    ==Not Yet Implimented==
     How checks work for green letters in words
     none: No checks for getting green letters
     best: Checks for 1-5 correct letters in a word
@@ -75,7 +70,6 @@ class GreenChecks(Choice):
 
 class YellowChecks(Choice):
     """
-    ==Not Yet Implimented==
     How checks work for yellow letters in words
     none: No checks for getting yellow letters
     composition: checks for every configuration of yellow letters
@@ -87,7 +81,6 @@ class YellowChecks(Choice):
 
 class LetterChecks(Choice):
     """
-    ==Not Yet Implimented==
     Which letters do you want to unlock items for sucessfully using in a word
     none: No checks for using letters
     vowels: Checks for using vowels
@@ -127,6 +120,65 @@ class LetterBalancing(Range):
     default = 2
     range_end = 5
 
+class ExtraTimeRewardPercent(Range):
+    """
+    What percentage of filler items will be replaced with an extra cooldown reduction
+    """
+    display_name = "Extra Time Reward Percent"
+    range_start = 0
+    range_end = 100
+    default = 0
+    
+class ClueItemRewardPercent(Range):
+    """
+    ==Not Yet Implimented==
+    What percentage of filler items will be replaced with Clue Points
+    """
+    display_name = "Clue Item Reward Percent"
+    range_start = 0
+    range_end = 100
+    default = 0
+    
+class ClueItemPointSize(Range):
+    """
+    ==Not Yet Implimented==
+    How many Clue Points are awarded with Clue Point filler items
+    """
+    display_name = "Clue Item Point Size"
+    range_start = 0
+    range_end = 100
+    default = 0
+    
+class BadGuessTrapPercent(Range):
+    """
+    ==Not Yet Implimented==
+    What percentage of filler items will be replaced with Bad Guess traps
+    """
+    display_name = "Bad Guess Trap Reward Percent"
+    range_start = 0
+    range_end = 100
+    default = 0
+    
+class ExtraCooldownTrapPercent(Range):
+    """
+    ==Not Yet Implimented==
+    What percentage of filler items will be replaced with Extra Cooldown traps
+    """
+    display_name = "Extra Cooldown Trap Percent"
+    range_start = 0
+    range_end = 100
+    default = 0
+    
+class ExtraCooldownTrapSize(Range):
+    """
+    ==Not Yet Implimented==
+    How many second are added with the extra cooldown traps
+    """
+    display_name = "Extra Cooldown Trap Size"
+    range_start = 0
+    range_end = 300
+    default = 60
+
 @dataclass
 class WordipelagoOptions(PerGameCommonOptions):
     words_to_win: WordsToWin
@@ -141,8 +193,12 @@ class WordipelagoOptions(PerGameCommonOptions):
     yellow_unlocked: YellowUnlocked
     unused_letters_unlocked: UnusedLettersUnlocked
     shuffle_typing: ShuffleTyping
-    extra_items_as_time_rewards: ExtraItemsAsTimeRewards
-    start_inventory_from_pool: StartInventoryPool
 
-    # DeathLink is always on. Always.
-    # death_link: DeathLink
+    extra_time_reward_percent: ExtraTimeRewardPercent
+    clue_item_reward_percent: ClueItemRewardPercent
+    clue_item_point_size: ClueItemPointSize
+    bad_guess_trap_percent: BadGuessTrapPercent
+    extra_cooldown_trap_percent: ExtraCooldownTrapPercent
+    extra_cooldown_trap_size: ExtraCooldownTrapSize
+
+    start_inventory_from_pool: StartInventoryPool
