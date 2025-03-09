@@ -480,6 +480,42 @@ class LMContext(CommonContext):
 
                 # Update the last received index to ensure we don't receive the same item over and over.
                 last_recv_idx += 1
+
+                # Mario item flag updates # TODO Move this after multiple ram addr updates to check and give
+                mario_items_in_inventory = ["Mario's Glove", "Mario's Hat", "Mario's Letter", "Mario's Star",
+                                            "Mario's Shoe",
+                                            "Fire Element Medal", "Water Element Medal", "Ice Element Medal"]
+                for mario_item in mario_items_in_inventory:
+                    mario_id = AutoWorldRegister.world_types[self.game].item_name_to_id[mario_item]
+                    if not any([netItem.item for netItem in self.items_received if netItem.item == mario_id]):
+                        continue
+
+                    lm_item = ALL_ITEMS_TABLE[mario_item]
+                    match lm_item.code:
+                        case 58:  # Mario's Glove
+                            item_val = dme.read_byte(0x803D339B)
+                            dme.write_byte(0x803D339B, (item_val | (1 << 5)))
+                        case 59:  # Mario's Hat
+                            item_val = dme.read_byte(0x803D339D)
+                            dme.write_byte(0x803D339D, (item_val | (1 << 1)))
+                        case 60:  # Mario's Letter
+                            item_val = dme.read_byte(0x803D339C)
+                            dme.write_byte(0x803D339C, (item_val | (1 << 3)))
+                        case 61:  # Mario's Star
+                            item_val = dme.read_byte(0x803D339C)
+                            dme.write_byte(0x803D339C, (item_val | (1 << 6)))
+                        case 62:  # Mario's Shoe
+                            item_val = dme.read_byte(0x803D339C)
+                            dme.write_byte(0x803D339C, (item_val | (1 << 0)))
+                        case 55:  # Fire Element Medal
+                            item_val = dme.read_byte(0x803D339E)
+                            dme.write_byte(0x803D339E, (item_val | (1 << 3)))
+                        case 56:  # Water Element Medal
+                            item_val = dme.read_byte(0x803D339E)
+                            dme.write_byte(0x803D339E, (item_val | (1 << 4)))
+                        case 57:  # Ice Element Medal
+                            item_val = dme.read_byte(0x803D339B)
+                            dme.write_byte(0x803D339B, (item_val | (1 << 6)))
                 dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
             # TODO else:
             #   Debug remove before release logger.warn("Missing information for AP ID: " + str(item.item))
@@ -605,42 +641,6 @@ class LMContext(CommonContext):
         if any([netItem.item for netItem in self.items_received if netItem.item == vac_id]):
             vac_speed = "3800000F"
             dme.write_bytes(ALL_ITEMS_TABLE["Poltergust 4000"].ram_addr, bytes.fromhex(vac_speed))
-
-
-        # Mario item flag updates # TODO Move this after multiple ram addr updates to check and give
-        mario_items_in_inventory = ["Mario's Glove", "Mario's Hat", "Mario's Letter", "Mario's Star", "Mario's Shoe",
-                                    "Fire Element Medal", "Water Element Medal", "Ice Element Medal"]
-        for mario_item in mario_items_in_inventory:
-            mario_id = AutoWorldRegister.world_types[self.game].item_name_to_id[mario_item]
-            if not any([netItem.item for netItem in self.items_received if netItem.item == mario_id]):
-                continue
-
-            lm_item = ALL_ITEMS_TABLE[mario_item]
-            match lm_item.code:
-                case 58:  # Mario's Glove
-                    item_val = dme.read_byte(0x803D339B)
-                    dme.write_byte(0x803D339B, (item_val | (1 << 5)))
-                case 59:  # Mario's Hat
-                    item_val = dme.read_byte(0x803D339D)
-                    dme.write_byte(0x803D339D, (item_val | (1 << 1)))
-                case 60:  # Mario's Letter
-                    item_val = dme.read_byte(0x803D339C)
-                    dme.write_byte(0x803D339C, (item_val | (1 << 3)))
-                case 61:  # Mario's Star
-                    item_val = dme.read_byte(0x803D339C)
-                    dme.write_byte(0x803D339C, (item_val | (1 << 6)))
-                case 62:  # Mario's Shoe
-                    item_val = dme.read_byte(0x803D339C)
-                    dme.write_byte(0x803D339C, (item_val | (1 << 0)))
-                case 55:  # Fire Element Medal
-                    item_val = dme.read_byte(0x803D339E)
-                    dme.write_byte(0x803D339E, (item_val | (1 << 3)))
-                case 56:  # Water Element Medal
-                    item_val = dme.read_byte(0x803D339E)
-                    dme.write_byte(0x803D339E, (item_val | (1 << 4)))
-                case 57:  # Ice Element Medal
-                    item_val = dme.read_byte(0x803D339B)
-                    dme.write_byte(0x803D339B, (item_val | (1 << 6)))
 
         # Always reset the Boo's location captured RAM byte back to 0, only if it's been captured before.
         # Although Boo items share the same address, we are not using it currently.
