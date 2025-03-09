@@ -9,7 +9,7 @@ this reference document.
 Get Started
 ============
 
-The first thing you should do to get started with Archipelago is to read the :doc:`Contributing Guidelines`, which cover
+The first thing you should do to get started with Archipelago is to read the :doc:`contributing`, which cover
 the requirements of not only contributing to the main project, but the requirements and expectations of a world as well.
 
 

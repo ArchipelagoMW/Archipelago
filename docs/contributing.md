@@ -1,4 +1,4 @@
-# Contributing
+# Contributing Guidelines
 
 All contributions are welcome, though we have a few requests of contributors, whether they be for core, webhost, or new 
 game contributions:
