@@ -4,14 +4,12 @@ import argparse
 import asyncio
 import collections
 import contextlib
-import copy
 import datetime
 import functools
 import hashlib
 import inspect
 import itertools
 import logging
-import math
 import operator
 import pickle
 import random
@@ -21,6 +19,7 @@ import time
 import typing
 import weakref
 import zlib
+from datastorage import DataStorage, InvalidArgumentsException
 
 import ModuleUpdate
 
@@ -49,28 +48,6 @@ from BaseClasses import ItemClassification
 min_client_version = Version(0, 1, 6)
 colorama.init()
 
-
-def remove_from_list(container, value):
-    try:
-        container.remove(value)
-    except ValueError:
-        pass
-    return container
-
-
-def pop_from_container(container, value):
-    try:
-        container.pop(value)
-    except ValueError:
-        pass
-    return container
-
-
-def update_dict(dictionary, entries):
-    dictionary.update(entries)
-    return dictionary
-
-
 def queue_gc():
     import gc
     from threading import Thread
@@ -84,34 +61,6 @@ def queue_gc():
         gc_thread = Thread(target=async_collect)
         setattr(queue_gc, "_thread", gc_thread)
         gc_thread.start()
-
-
-# functions callable on storable data on the server by clients
-modify_functions = {
-    # generic:
-    "replace": lambda old, new: new,
-    "default": lambda old, new: old,
-    # numeric:
-    "add": operator.add,  # add together two objects, using python's "+" operator (works on strings and lists as append)
-    "mul": operator.mul,
-    "pow": operator.pow,
-    "mod": operator.mod,
-    "floor": lambda value, _: math.floor(value),
-    "ceil": lambda value, _: math.ceil(value),
-    "max": max,
-    "min": min,
-    # bitwise:
-    "xor": operator.xor,
-    "or": operator.or_,
-    "and": operator.and_,
-    "left_shift": operator.lshift,
-    "right_shift": operator.rshift,
-    # lists/dicts:
-    "remove": remove_from_list,
-    "pop": pop_from_container,
-    "update": update_dict,
-}
-
 
 def get_saving_second(seed_name: str, interval: int = 60) -> int:
     # save at expected times so other systems using savegame can expect it
@@ -184,9 +133,9 @@ class Context:
     hints_used: typing.Dict[typing.Tuple[int, int], int]
     groups: typing.Dict[int, typing.Set[int]]
     save_version = 2
-    stored_data: typing.Dict[str, object]
     read_data: typing.Dict[str, object]
     stored_data_notification_clients: typing.Dict[str, typing.Set[Client]]
+    data_storage: DataStorage
     slot_info: typing.Dict[int, NetworkSlot]
     generator_version = Version(0, 0, 0)
     checksums: typing.Dict[str, str]
@@ -259,10 +208,10 @@ class Context:
         self.groups = {}
         self.group_collected: typing.Dict[int, typing.Set[int]] = {}
         self.random = random.Random()
-        self.stored_data = {}
         self.stored_data_notification_clients = collections.defaultdict(weakref.WeakSet)
         self.read_data = {}
         self.spheres = []
+        self.data_storage = DataStorage({})
 
         # init empty to satisfy linter, I suppose
         self.gamespackage = {}
@@ -612,7 +561,7 @@ class Context:
                 (key, value.timestamp()) for key, value in self.client_connection_timers.items()),
             "random_state": self.random.getstate(),
             "group_collected": dict(self.group_collected),
-            "stored_data": self.stored_data,
+            "data_storage": self.data_storage.data,
             "game_options": {"hint_cost": self.hint_cost, "location_check_points": self.location_check_points,
                              "server_password": self.server_password, "password": self.password,
                              "release_mode": self.release_mode,
@@ -657,8 +606,12 @@ class Context:
         if "group_collected" in savedata:
             self.group_collected = savedata["group_collected"]
 
-        if "stored_data" in savedata:
-            self.stored_data = savedata["stored_data"]
+        if "data_storage" in savedata:
+            self.data_storage = DataStorage(savedata["data_storage"])
+        # backwards compatibility, load data_storage from `stored_data` in old saves
+        elif "stored_data" in savedata:
+            self.data_storage = DataStorage(savedata["stored_data"])
+
         # count items and slots from lists for items_handling = remote
         self.logger.info(
             f'Loaded save file with {sum([len(v) for k, v in self.received_items.items() if k[2]])} received items '
@@ -757,17 +710,16 @@ class Context:
                 concerns[player].append(data)
             if not hint.local and data not in concerns[hint.finding_player]:
                 concerns[hint.finding_player].append(data)
+            # remember hints in all cases
 
-            # only remember hints that were not already found at the time of creation
-            if not hint.found:
-                # since hints are bidirectional, finding player and receiving player,
-                # we can check once if hint already exists
-                if hint not in self.hints[team, hint.finding_player]:
-                    self.hints[team, hint.finding_player].add(hint)
-                    new_hint_events.add(hint.finding_player)
-                    for player in self.slot_set(hint.receiving_player):
-                        self.hints[team, player].add(hint)
-                        new_hint_events.add(player)
+            # since hints are bidirectional, finding player and receiving player,
+            # we can check once if hint already exists
+            if hint not in self.hints[team, hint.finding_player]:
+                self.hints[team, hint.finding_player].add(hint)
+                new_hint_events.add(hint.finding_player)
+                for player in self.slot_set(hint.receiving_player):
+                    self.hints[team, player].add(hint)
+                    new_hint_events.add(player)
 
             self.logger.info("Notice (Team #%d): %s" % (team + 1, format_hint(self, team, hint)))
         for slot in new_hint_events:
@@ -1927,8 +1879,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             for location in args["locations"]:
                 if type(location) is not int:
                     await ctx.send_msgs(client,
-                                        [{'cmd': 'InvalidPacket', "type": "arguments",
-                                          "text": 'Locations has to be a list of integers',
+                                        [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts',
                                           "original_cmd": cmd}])
                     return
 
@@ -2017,31 +1968,26 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             keys = args["keys"]
             args["keys"] = {
                 key: ctx.read_data.get(key[6:], lambda: None)() if key.startswith("_read_") else
-                     ctx.stored_data.get(key, None)
+                     ctx.data_storage.data.get(key, None)
                 for key in keys
             }
             await ctx.send_msgs(client, [args])
 
         elif cmd == "Set":
-            if "key" not in args or args["key"].startswith("_read_") or \
-                    "operations" not in args or not type(args["operations"]) == list:
-                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
-                                              "text": 'Set', "original_cmd": cmd}])
-                return
-            args["cmd"] = "SetReply"
-            value = ctx.stored_data.get(args["key"], args.get("default", 0))
-            args["original_value"] = copy.copy(value)
-            args["slot"] = client.slot
-            for operation in args["operations"]:
-                func = modify_functions[operation["operation"]]
-                value = func(value, operation["value"])
-            ctx.stored_data[args["key"]] = args["value"] = value
-            targets = set(ctx.stored_data_notification_clients[args["key"]])
-            if args.get("want_reply", True):
-                targets.add(client)
-            if targets:
-                ctx.broadcast(targets, [args])
-            ctx.save()
+            try:
+                result: typing.Dict[str, object] = ctx.data_storage.set(client.slot, args)
+            except InvalidArgumentsException as argument_exception:
+                await ctx.send_msgs(client, [{"cmd": "InvalidPacket", "type": "arguments",
+                                              "text": str(argument_exception), "original_cmd": cmd}])
+            else:
+                targets = set(ctx.stored_data_notification_clients[args["key"]])
+
+                if args.get("want_reply", True):
+                    targets.add(client)
+                if targets:
+                    ctx.broadcast(targets, [result])
+
+                ctx.save()
 
         elif cmd == "SetNotify":
             if "keys" not in args or type(args["keys"]) != list:
@@ -2382,11 +2328,11 @@ class ServerCommandProcessor(CommonCommandProcessor):
         """Debug Tool: list writable datastorage keys and approximate the size of their values with pickle."""
         total: int = 0
         texts = []
-        for key, value in self.ctx.stored_data.items():
+        for key, value in self.ctx.data_storage.data.items():
             size = len(pickle.dumps(value))
             total += size
             texts.append(f"Key: {key} | Size: {size}B")
-        texts.insert(0, f"Found {len(self.ctx.stored_data)} keys, "
+        texts.insert(0, f"Found {len(self.ctx.data_storage.data)} keys, "
                         f"approximately totaling {Utils.format_SI_prefix(total, power=1024)}B")
         self.output("\n".join(texts))
 
