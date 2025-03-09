@@ -39,6 +39,22 @@ move_item_data_table: Dict[str, Celeste64ItemData] = {
     ItemName.climb:       Celeste64ItemData(celeste_64_base_id + 0xD, ItemClassification.progression),
 }
 
-item_data_table: Dict[str, Celeste64ItemData] = {**collectable_item_data_table, **unlockable_item_data_table, **move_item_data_table}
+checkpoint_item_data_table: Dict[str, Celeste64ItemData] = {
+    ItemName.checkpoint_1:  Celeste64ItemData(celeste_64_base_id + 0x20, ItemClassification.progression),
+    ItemName.checkpoint_2:  Celeste64ItemData(celeste_64_base_id + 0x21, ItemClassification.progression),
+    ItemName.checkpoint_3:  Celeste64ItemData(celeste_64_base_id + 0x22, ItemClassification.progression),
+    ItemName.checkpoint_4:  Celeste64ItemData(celeste_64_base_id + 0x23, ItemClassification.progression),
+    ItemName.checkpoint_5:  Celeste64ItemData(celeste_64_base_id + 0x24, ItemClassification.progression),
+    ItemName.checkpoint_6:  Celeste64ItemData(celeste_64_base_id + 0x25, ItemClassification.progression),
+    ItemName.checkpoint_7:  Celeste64ItemData(celeste_64_base_id + 0x26, ItemClassification.progression),
+    ItemName.checkpoint_8:  Celeste64ItemData(celeste_64_base_id + 0x27, ItemClassification.progression),
+    ItemName.checkpoint_9:  Celeste64ItemData(celeste_64_base_id + 0x28, ItemClassification.progression),
+    ItemName.checkpoint_10: Celeste64ItemData(celeste_64_base_id + 0x29, ItemClassification.progression),
+}
+
+item_data_table: Dict[str, Celeste64ItemData] = {**collectable_item_data_table,
+                                                 **unlockable_item_data_table,
+                                                 **move_item_data_table,
+                                                 **checkpoint_item_data_table}
 
 item_table = {name: data.code for name, data in item_data_table.items() if data.code is not None}
