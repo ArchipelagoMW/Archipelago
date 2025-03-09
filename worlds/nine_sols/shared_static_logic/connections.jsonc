@@ -782,6 +782,7 @@
         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Tai-Chi Kick" } ] } // for doing the slider backwards
         // AND slide/grapple
     ] },
+    { "from": "EDP - Root Node", "to": "EDP - Lower Right Transporter", "requires": [] }, // AND slide/grapple
     { "from": "EDP - Lower Right Transporter", "to": "EDP - Above Right Transporter", "requires": [
         { "item": "Cloud Leap" }, { "item": "Tai-Chi Kick" }
     ] },
@@ -811,6 +812,7 @@
     ] },
     { "from": "EDP - Upper Elevator", "to": "EDP - Upper Right Exit", "requires": [] }, // one-way door
     { "from": "EDP - Upper Right Exit", "to": "EDP - Laser Gauntlet", "requires": [ { "item": "Tai-Chi Kick" } ] },
+    { "from": "EDP - Laser Gauntlet", "to": "EDP - Lower Right Transporter", "requires": [] }, // one-way door // AND slide/grapple AND WC
 
     { "from": "EDP - Upper Elevator", "to": "EDLA - Root Node & Lower Elevator", "requires": [] }, // one-way elevator
 
