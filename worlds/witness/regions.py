@@ -117,12 +117,17 @@ class WitnessPlayerRegions:
         event_locations_per_region = defaultdict(dict)
 
         for event_location, event_item_and_entity in player_logic.EVENT_ITEM_PAIRS.items():
-            region = static_witness_logic.ENTITIES_BY_HEX[event_item_and_entity[1]]["region"]
-            if region is None:
-                region_name = "Entry"
+            entity_or_region = event_item_and_entity[1]
+            if entity_or_region in static_witness_logic.ALL_REGIONS_BY_NAME:
+                region_name = entity_or_region
+                order = -1
             else:
-                region_name = region["name"]
-            order = self.reference_logic.ENTITIES_BY_HEX[event_item_and_entity[1]]["order"]
+                region = static_witness_logic.ENTITIES_BY_HEX[event_item_and_entity[1]]["region"]
+                if region is None:
+                    region_name = "Entry"
+                else:
+                    region_name = region["name"]
+                order = self.reference_logic.ENTITIES_BY_HEX[entity_or_region]["order"]
             event_locations_per_region[region_name][event_location] = order
 
         for region_name, region in regions_to_create.items():
