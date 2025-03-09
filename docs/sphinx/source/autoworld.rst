@@ -1,8 +1,7 @@
 worlds.AutoWorld
 =========
 
-.. automodule:: worlds.AutoWorld
-    :members:
+.. autofunction:: worlds.AutoWorld.
 
 .. toctree::
     :maxdepth: 1

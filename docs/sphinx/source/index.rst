@@ -34,10 +34,12 @@ the requirements of not only contributing to the main project, but the requireme
     :maxdepth: 2
     :caption: Code Reference:
 
-    baseclasses
     autoworld
+    baseclasses
     options
     rules
     fill
+    entrance_rando
+    utils
     netutils
     test
