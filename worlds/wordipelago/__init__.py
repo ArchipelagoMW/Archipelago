@@ -26,7 +26,7 @@ class WordipelagoWebWorld(WebWorld):
 
 
 class WordipelagoWorld(World):
-    """The greatest game of all time."""
+    """A brand new take on the world famous word guessing game."""
 
     game = "Wordipelago"
     web = WordipelagoWebWorld()
@@ -53,7 +53,6 @@ class WordipelagoWorld(World):
                 "yellow_unlocked",
                 "unused_letters_unlocked",
                 "shuffle_typing",
-                "extra_items_as_time_rewards",
                 "start_inventory_from_pool",
                 "extra_cooldown_trap_size",
                 "clue_item_point_size"
@@ -61,7 +60,7 @@ class WordipelagoWorld(World):
             return {
                 **wordipelago_options,
                 "starting_items": self.starting_items,
-                "world_version": "0.8.0"
+                "world_version": "0.8.1"
             }
             
     def create_item(self, name: str) -> WordipelagoItem:
