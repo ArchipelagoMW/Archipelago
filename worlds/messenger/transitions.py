@@ -28,12 +28,10 @@ def connect_plando(world: "MessengerWorld", plando_connections: TransitionPlando
             raise ValueError(f"Invalid target region for {plando_connection}")
         region.entrances.remove(_entrance)
 
-    multiworld = world.multiworld
-    player = world.player
     for plando_connection in plando_connections:
         # get the connecting regions
-        reg1 = multiworld.get_region(plando_connection.entrance, player)
-        reg2 = multiworld.get_region(plando_connection.exit, player)
+        reg1 = world.get_region(plando_connection.entrance)
+        reg2 = world.get_region(plando_connection.exit)
 
         remove_dangling_exit(reg1)
         remove_dangling_entrance(reg2)
@@ -50,8 +48,6 @@ def connect_plando(world: "MessengerWorld", plando_connections: TransitionPlando
 
 
 def shuffle_transitions(world: "MessengerWorld") -> None:
-    multiworld = world.multiworld
-    player = world.player
     coupled = world.options.shuffle_transitions == ShuffleTransitions.option_coupled
 
     def disconnect_entrance() -> None:
@@ -70,11 +66,11 @@ def shuffle_transitions(world: "MessengerWorld") -> None:
 
     for parent, child in RANDOMIZED_CONNECTIONS.items():
         if child == "Corrupted Future":
-            entrance = multiworld.get_entrance("Artificer's Portal", player)
+            entrance = world.get_entrance("Artificer's Portal")
         elif child == "Tower of Time - Left":
-            entrance = multiworld.get_entrance("Artificer's Challenge", player)
+            entrance = world.get_entrance("Artificer's Challenge")
         else:
-            entrance = multiworld.get_entrance(f"{parent} -> {child}", player)
+            entrance = world.get_entrance(f"{parent} -> {child}")
         parent_region = entrance.parent_region
         child_region = entrance.connected_region
         entrance.world = world
