@@ -1,6 +1,7 @@
 from dataclasses import dataclass
+import random
 
-from Options import Choice, Range, Toggle, TextChoice, DeathLink, OptionGroup, PerGameCommonOptions, OptionError
+from Options import Choice, Range, DefaultOnToggle, Toggle, TextChoice, DeathLink, OptionGroup, PerGameCommonOptions, OptionError
 from worlds.AutoWorld import World
 
 
@@ -13,9 +14,33 @@ class DeathLinkAmnesty(Range):
     range_end = 30
     default = 10
 
+
+class GoalArea(Choice):
+    """
+    What Area must be cleared to gain access to the Epilogue and complete the game
+    """
+    display_name = "Goal Area"
+    option_Summit_A = 0
+    option_Core_A = 3
+    option_Empty_Space = 6
+    option_Farewell = 7
+    default = 0
+
+class LockGoalArea(DefaultOnToggle):
+    """
+    Determines whether your Goal Area will be locked until you receive your required Strawberries, or only the Epilogue
+    """
+    display_name = "Lock Goal Area"
+
+class GoalAreaCheckpointsanity(Toggle):
+    """
+    Determines whether the Checkpoints in your Goal Area will be shuffled into the item pool or not
+    """
+    display_name = "Goal Area Checkpointsanity"
+
 class TotalStrawberries(Range):
     """
-    How many Strawberries exist
+    Maximum number of how many Strawberries can exist
     """
     display_name = "Total Strawberries"
     range_start = 0
@@ -24,18 +49,13 @@ class TotalStrawberries(Range):
 
 class StrawberriesRequiredPercentage(Range):
     """
-    Percentage of existing Strawberries you must receive to finish
+    Percentage of existing Strawberries you must receive to access your Goal Area (if Lock Goal Area is active) and the Epilogue
     """
     display_name = "Strawberries Required Percentage"
     range_start = 0
     range_end = 100
     default = 80
 
-# Goal Level - 7A, 7B, 7C, 8A, 8B, 8C, Empty Space, Farewell
-
-# Lock Goal Level
-
-# Goal Level Checkpoint Shuffle
 
 class Checkpointsanity(Toggle):
     """
@@ -54,6 +74,7 @@ class IncludeGoldens(Toggle):
     Determines whether collecting Golden Strawberries sends location checks
     """
     display_name = "Roomsanity"
+
 
 class IncludeCore(Toggle):
     """
@@ -154,6 +175,9 @@ class MadelineFeatherHairColor(ColorChoice):
 
 celeste_option_groups = [
     OptionGroup("Goal Options", [
+        GoalArea,
+        LockGoalArea,
+        GoalAreaCheckpointsanity,
         TotalStrawberries,
         StrawberriesRequiredPercentage,
     ]),
@@ -233,6 +257,9 @@ class CelesteOptions(PerGameCommonOptions):
     death_link: DeathLink
     death_link_amnesty: DeathLinkAmnesty
 
+    goal_area: GoalArea
+    lock_goal_area: LockGoalArea
+    goal_area_checkpointsanity: GoalAreaCheckpointsanity
     total_strawberries: TotalStrawberries
     strawberries_required_percentage: StrawberriesRequiredPercentage
 
