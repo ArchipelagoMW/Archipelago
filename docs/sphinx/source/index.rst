@@ -9,7 +9,7 @@ this reference document.
 Get Started
 ============
 
-The first thing you should do to get started with Archipelago is to read the :doc:`contributing` which cover
+The first thing you should do to get started with Archipelago is to read the :doc:`Contributing Guidelines`, which cover
 the requirements of not only contributing to the main project, but the requirements and expectations of a world as well.
 
 
@@ -26,8 +26,10 @@ the requirements of not only contributing to the main project, but the requireme
     world api
     options api
     settings api
+    entrance randomization
     network protocol
     tests
+    apworld_dev_faq
 
 
 .. toctree::
