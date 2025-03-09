@@ -237,6 +237,22 @@
       - id: arrows_painting3
         disable: True
         move: True
+      - id: symmetry_painting_a_starter
+        display_name: Left Near Painting
+        enter_only: True
+        orientation: west
+        move: True
+        required_door:
+          room: The Wondrous (Doorknob)
+          door: Painting Shortcut
+      - id: eyes_yellow_painting2
+        display_name: Left Far Painting
+        enter_only: True
+        orientation: west
+        move: True
+        required_door:
+          room: Outside The Agreeable
+          door: Painting Shortcut
       - id: garden_painting_tower2
         display_name: Front Left Painting
         enter_only: True
@@ -253,14 +269,6 @@
         required_door:
           room: Courtyard
           door: Painting Shortcut
-      - id: symmetry_painting_a_starter
-        display_name: Left Near Painting
-        enter_only: True
-        orientation: west
-        move: True
-        required_door:
-          room: The Wondrous (Doorknob)
-          door: Painting Shortcut
       - id: pencil_painting6
         display_name: Right Far Painting
         enter_only: True
@@ -276,14 +284,6 @@
         move: True
         required_door:
           room: Outside The Undeterred
-          door: Painting Shortcut
-      - id: eyes_yellow_painting2
-        display_name: Left Far Painting
-        enter_only: True
-        orientation: west
-        move: True
-        required_door:
-          room: Outside The Agreeable
           door: Painting Shortcut
   Hidden Room:
     entrances:
@@ -2574,33 +2574,33 @@
       - id: arrows_painting_10
         display_name: Back Left Painting
         orientation: east
-      - id: owl_painting_3
-        display_name: Right Middle Painting
-        orientation: north
-      - id: clock_painting
-        display_name: Front Left Painting
-        orientation: west
       - id: scenery_painting_5d_2
         display_name: Left Near Painting
         orientation: south
-      - id: symmetry_painting_b_7
-        display_name: Right Near Painting
-        orientation: north
       - id: panda_painting_2
         display_name: Left Middle Painting
         orientation: south
-      - id: crown_painting2
-        display_name: Right Far Painting
-        orientation: north
       - id: colors_painting2
         display_name: Left Far Painting
         orientation: south
-      - id: cherry_painting2
-        display_name: Back Right Painting
-        orientation: east
+      - id: clock_painting
+        display_name: Front Left Painting
+        orientation: west
       - id: hi_solved_painting
         display_name: Front Right Painting
         orientation: west
+      - id: crown_painting2
+        display_name: Right Far Painting
+        orientation: north
+      - id: owl_painting_3
+        display_name: Right Middle Painting
+        orientation: north
+      - id: symmetry_painting_b_7
+        display_name: Right Near Painting
+        orientation: north
+      - id: cherry_painting2
+        display_name: Back Right Painting
+        orientation: east
   Ending Area:
     entrances:
       Orange Tower Sixth Floor:
@@ -7205,21 +7205,21 @@
         panels:
           - ORDER
     paintings:
-      - id: smile_painting_3
-        display_name: Right Far Painting
-        orientation: west
       - id: flower_painting_2
         display_name: Left Near Painting
         orientation: east
-      - id: scenery_painting_0a
-        display_name: Center Back Painting
-        orientation: north
       - id: map_painting
         display_name: Left Far Painting
         orientation: east
       - id: fruitbowl_painting4
         display_name: Center Front Painting
         orientation: south
+      - id: scenery_painting_0a
+        display_name: Center Back Painting
+        orientation: north
+      - id: smile_painting_3
+        display_name: Right Far Painting
+        orientation: west
     progression:
       Progressive Art Gallery:
         doors:
