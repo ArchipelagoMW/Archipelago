@@ -81,7 +81,7 @@
         "region": "AFD - Under Lower Left Exit", "requires": []
     },
     {
-        "address": 308, "name": "AF (Depths): Tianhou Flower Under Elevator",
+        "address": 308, "name": "AF (Depths): Tianhuo Flower Under Elevator",
         "region": "AFD - Climb to Root Node", "requires": [] // hacking 1
     },
     {
@@ -251,7 +251,7 @@
         "region": "CC - Root Node After Boss", "requires": []
     },
     {
-        "address": 602, "name": "Cortex Center: Lady Ethereal's Tianhou Flower",
+        "address": 602, "name": "Cortex Center: Lady Ethereal's Tianhuo Flower",
         "region": "CC - Root Node After Boss", "requires": []
     },
     {
@@ -406,7 +406,7 @@
         "region": "PRW - Tao Fruit", "requires": []
     },
     {
-        "address": 1006, "name": "PR (West): Tianhou Flower",
+        "address": 1006, "name": "PR (West): Tianhuo Flower",
         "region": "PRW - Tao Fruit", "requires": []
     },
     {
@@ -529,7 +529,7 @@
         "region": "W&OS - Pipeline Panel", "requires": []
     },
     {
-        "address": 1403, "name": "W&OS: Tianhou Flower",
+        "address": 1403, "name": "W&OS: Tianhuo Flower",
         "region": "W&OS - Red Crystal Cave", "requires": []
     },
     {
@@ -605,7 +605,7 @@
         "region": "FGH - Lower Levels, Root Node & Right Exit", "requires": []
     },
     {
-        "address": 1704, "name": "Factory (GH): Tianhou Flower Below Hammers",
+        "address": 1704, "name": "Factory (GH): Tianhuo Flower Below Hammers",
         "region": "FGH - Lower Levels, Root Node & Right Exit", "requires": []
     },
     {
@@ -637,7 +637,7 @@
         "region": "FGH - Above Root Node", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ]
     },
     {
-        "address": 1713, "name": "Factory (GH): Tianhou Flower in Platform Puzzle Room",
+        "address": 1713, "name": "Factory (GH): Tianhuo Flower in Platform Puzzle Room",
         "region": "FGH - Above Root Node", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ]
     },
 
@@ -751,7 +751,7 @@
         "region": "IW - Tao Fruit", "requires": []
     },
     {
-        "address": 2006, "name": "IW: Tianhou Flower",
+        "address": 2006, "name": "IW: Tianhuo Flower",
         "region": "IW - Tao Fruit", "requires": []
     },
 
@@ -805,7 +805,7 @@
 
     // Yangu Hall
     {
-        "address": 2201, "name": "Yanlao's Tianhou Flower",
+        "address": 2201, "name": "Yanlao's Tianhuo Flower",
         "region": "YH - After Yanlao", "requires": []
     },
     {
@@ -831,7 +831,7 @@
         "region": "AM - Bottom Right", "requires": []
     },
     {
-        "address": 2305, "name": "AM: Tianhou Flower",
+        "address": 2305, "name": "AM: Tianhuo Flower",
         "region": "AM - Tao Fruit", "requires": []
     },
     {
@@ -912,7 +912,7 @@
         "region": "FMR - Moving Platforms", "requires": []
     },
     {
-        "address": 2507, "name": "Factory (MR): Tianhou Flower Above Right Elevator",
+        "address": 2507, "name": "Factory (MR): Tianhuo Flower Above Right Elevator",
         "region": "FMR - Moving Platforms", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ]
     },
 
@@ -989,7 +989,7 @@
         "region": "SH - Root Node", "requires": []
     },
     {
-        "address": 2703, "name": "Jiequan's Tianhou Flower",
+        "address": 2703, "name": "Jiequan's Tianhuo Flower",
         "region": "SH - After Jiequan", "requires": []
     },
     {
@@ -1025,7 +1025,7 @@
         "region": "GD - Root Node & Right Exit", "requires": []
     },
     {
-        "address": 2902, "name": "Galactic Dock: Tianhou Flower",
+        "address": 2902, "name": "Galactic Dock: Tianhuo Flower",
         "region": "GD - Root Node & Right Exit", "requires": [] // grapple OR djump?
     },
     {
@@ -1204,15 +1204,15 @@
         ] // DOES require spike ball chase, so if you spawned at GoSW node you may need to trigger it
     },
     {
-        "address": 3206, "name": "GoS (West): Yin Jifu's Tianhou Flower",
+        "address": 3206, "name": "GoS (West): Yin Jifu's Tianhuo Flower",
         "region": "GoSW - Lear's Grave", "requires": []
     },
     {
-        "address": 3207, "name": "GoS (West): Guiguzi's Tianhou Flower",
+        "address": 3207, "name": "GoS (West): Guiguzi's Tianhuo Flower",
         "region": "GoSW - Lear's Grave", "requires": []
     },
     {
-        "address": 3208, "name": "GoS (West): Luyan's Tianhou Flower",
+        "address": 3208, "name": "GoS (West): Luyan's Tianhuo Flower",
         "region": "GoSW - Lear's Grave", "requires": []
     },
     {
@@ -1254,7 +1254,7 @@
         ]
     },
     {
-        "address": 3405, "name": "Sky Tower: Stowaway's Tianhou Flower",
+        "address": 3405, "name": "Sky Tower: Stowaway's Tianhuo Flower",
         "region": "ST - Stowaway", "requires": []
     },
     {
@@ -1394,7 +1394,7 @@
         "region": "EDLA - Tao Fruit", "requires": []
     },
     {
-        "address": 3615, "name": "ED (Living Area): Tianhou Flower",
+        "address": 3615, "name": "ED (Living Area): Tianhuo Flower",
         "region": "EDLA - Tao Fruit", "requires": []
     },
     {
@@ -1454,7 +1454,7 @@
         "region": "NH - After Fengs", "requires": []
     },
     {
-        "address": 3803, "name": "Nuwa's Tianhou Flower",
+        "address": 3803, "name": "Nuwa's Tianhuo Flower",
         "region": "NH - After Fengs", "requires": [ { "item": "Super Mutant Buster" } ]
     },
 
