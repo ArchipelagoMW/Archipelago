@@ -1,11 +1,13 @@
 # StarCraft 2
 
 ## Game page in other languages:
+
 * [Français](/games/Starcraft%202/info/fr)
 
 ## What does randomization do to this game?
 
 ### Items and locations
+
 The following unlocks are randomized as items:
 1. Your ability to build any non-worker unit.
 2. Unit specific upgrades including some combinations not available in the vanilla campaigns, such as both strain 
@@ -48,7 +50,7 @@ The between mission segments on the Hyperion, the Leviathan, and the Spear of Ad
 Additionally, metaprogression currencies such as credits and Solarite are not used.
 Available missions are in blue; missions where all locations were collected are in white.
 If you move your mouse over a mission, the uncollected locations will be displayed, categorized by type.
-Unavailable missions are in grey; their requirements will also be shown there.
+Unavailable missions are in gray; their requirements will also be shown there.
 
 ## What is the goal of this game when randomized?
 
@@ -90,8 +92,8 @@ Will overwrite existing files
     * Options: default, slower, slow, normal, fast, faster
 * `/color [faction] [color]` Changes your color for one of your playable factions.
     * Faction options: raynor, kerrigan, primal, protoss, nova
-    * Color options: white, red, blue, teal, purple, yellow, orange, green, lightpink, violet, lightgrey, darkgreen, 
-    brown, lightgreen, darkgrey, pink, rainbow, random, default
+    * Color options: white, red, blue, teal, purple, yellow, orange, green, lightpink, violet, lightgray, darkgreen, 
+    brown, lightgreen, darkgray, pink, rainbow, random, default
 * `/option [option_name] [option_value]` Sets an option normally controlled by your yaml after generation.
     * Run without arguments to list all options.
     * Options pertain to automatic cutscene skipping, Kerrigan presence, Spear of Adun presence, starting resource 
@@ -119,7 +121,7 @@ One of the default options of multiworlds is that once a world has achieved its 
 other worlds. 
 If you do not want this to happen, you should ask the person generating the multiworld to set the `Collect Permission` 
 option to something else, e.g., manual. 
-If the generation is not done via the website, the person that does the generation should modify the corresponding 
+If the generation is not done via the website, the person that does the generation should modify the `collect_mode` 
 option in their `host.yaml` file prior to generation. 
 If the multiworld has already been generated, the host can use the command `/option collect_mode [value]` to change 
 this option.

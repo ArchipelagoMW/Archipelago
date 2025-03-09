@@ -3,6 +3,7 @@
 ## Quel est l'effet de la *randomization* sur ce jeu ?
 
 ### *Items* et *locations*
+
 Les éléments qui suivent sont les *items* qui sont *randomized* et qui doivent être débloqués pour être utilisés dans 
 le jeu:
 1. La capacité de produire des unités, excepté les drones/probes/scv.
@@ -136,7 +137,7 @@ tous ses *items*, incluant ceux dans les autres mondes.
 Si vous ne souhaitez pas que cela se produise, vous devez demander à la personne générant le *multiworld* de changer 
 l'option *Collect Permission*.
 Si la génération n'est pas effectuée via le site web, la personne qui effectue la génération doit modifier l'option 
-correspondante dans son fichier *host.yaml* avant la génération.
+`collect_mode` dans son fichier *host.yaml* avant la génération.
 Si le *multiworld* a déjà été généré, l'hôte peut utiliser la commande `/option collect_mode [valeur]` pour modifier 
 cette option.
 

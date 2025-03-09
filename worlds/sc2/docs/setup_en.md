@@ -41,6 +41,7 @@ Remember the name you enter in the options page or in the yaml file, you'll need
 Check out [Creating a YAML](/tutorial/Archipelago/setup/en#creating-a-yaml) for more game-agnostic information.
 
 ### Common yaml questions
+
 #### How do I know I set my yaml up correctly?
 
 The simplest way to check is to use the website [validator](/check). 
@@ -119,7 +120,7 @@ the mission in the 'StarCraft 2 Launcher' tab in the client.
 4. If the server has a password, enter that when prompted.
 5. Once connected, switch to the 'StarCraft 2 Launcher' tab in the client. There, you can see all the missions in your 
 world. 
-Unreachable missions will have greyed-out text. Just click on an available mission to start it!
+Unreachable missions will have grayed-out text. Just click on an available mission to start it!
 
 ## The game isn't launching when I try to start a mission.
 
