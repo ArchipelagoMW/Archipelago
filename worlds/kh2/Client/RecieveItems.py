@@ -5,12 +5,6 @@ from ..Names import ItemName
 import re
 import asyncio
 
-# I don't know what is going on here, but it works.
-if TYPE_CHECKING:
-    from . import KH2Context
-else:
-    KH2Context = object
-
 
 def to_khscii(self, item_name):
     # credit to TopazTK for this.
@@ -183,6 +177,9 @@ async def verifyItems(self):
                 for location, data in tornPageLocks.items():
                     if self.kh2_read_byte(self.Save + data.addrObtained) & 0x1 << data.bitIndex > 0:
                         amount_of_items -= 1
+            # 255 is the max limit for a byte
+            if amount_of_items > 255:
+                amount_of_items = 255
             if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items and amount_of_items >= 0:
                 self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
 

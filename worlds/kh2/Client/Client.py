@@ -3,7 +3,6 @@ import ModuleUpdate
 import Utils
 
 ModuleUpdate.update()
-import re
 import os
 import asyncio
 import json
@@ -229,7 +228,7 @@ class KH2Context(CommonContext):
 
     from .ReadAndWrite import kh2_read_longlong, kh2_read_int, kh2_read_string, kh2_read_byte, kh2_write_bytes, kh2_write_int, kh2_write_short, kh2_write_byte, kh2_read_short
     from .SendChecks import checkWorldLocations, checkSlots, checkLevels, verifyChests, verifyLevel
-    from .RecieveItems import displayPuzzlePieceTextinGame, displayInfoTextinGame, verifyItems, give_item, to_khscii, IsInShop
+    from .RecieveItems import displayPuzzlePieceTextinGame, displayInfoTextinGame, verifyItems, give_item, IsInShop, to_khscii
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
