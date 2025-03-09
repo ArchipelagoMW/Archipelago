@@ -129,7 +129,7 @@ class MessengerWorld(World):
     spoiler_portal_mapping: dict[str, str]
     portal_mapping: list[int]
     transitions: list[Entrance]
-    reachable_locs: int = 0
+    reachable_locs: bool = False
     filler: dict[str, int]
 
     def generate_early(self) -> None:

@@ -15,16 +15,15 @@ class MessengerEntrance(Entrance):
 
     def can_connect_to(self, other: Entrance, dead_end: bool, state: "ERPlacementState") -> bool:
         can_connect = super().can_connect_to(other, dead_end, state)
-        world = getattr(self, "world", None)
-        # arbitrary minimum number
-        if not world or world.reachable_locs >= 3 or not can_connect:
+        world: MessengerWorld = getattr(self, "world", None)
+        if not world or world.reachable_locs or not can_connect:
             return can_connect
         empty_state = CollectionState(world.multiworld, True)
         self.connected_region = other.connected_region
         empty_state.update_reachable_regions(world.player)
-        world.reachable_locs = sum(loc.can_reach(empty_state) for loc in world.multiworld.get_locations(world.player))
+        world.reachable_locs = any(loc.can_reach(empty_state) and not loc.is_event for loc in world.get_locations())
         self.connected_region = None
-        return world.reachable_locs >= 3 and (not state.coupled or self.name != other.name)
+        return world.reachable_locs and (not state.coupled or self.name != other.name)
 
 
 class MessengerRegion(Region):
