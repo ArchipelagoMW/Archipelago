@@ -34,6 +34,7 @@ class DLCqwebworld(WebWorld):
         ["Deoxis"]
     )
     tutorials = [setup_en, setup_fr]
+    game_info_languages = ["en", "fr"]
 
 
 class DLCqworld(World):
