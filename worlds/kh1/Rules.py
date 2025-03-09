@@ -1147,6 +1147,8 @@ def set_rules(kh1world):
         lambda state: state.has("Footprints", player))
     add_rule(kh1world.get_location("Wonderland Lotus Forest Yellow Elixir Flower Through Painting"),
         lambda state: state.has("Footprints", player))
+    add_rule(kh1world.get_location("Wonderland Lotus Forest Red Flower Raise Lily Pads"),
+        lambda state: state.has("Footprints", player))
     add_rule(kh1world.get_location("Wonderland Tea Party Garden Left Cushioned Chair"),
         lambda state: (
             state.has("Footprints", player)
@@ -1677,7 +1679,6 @@ def set_rules(kh1world):
                         "Fish": 3,
                         "Drinking Water": 1}, player)
                 ))
-        
     for i in range(1,options.level_checks+1):
         add_rule(kh1world.get_location("Level " + str(i+1).rjust(3,'0') + " (Slot 1)"),
             lambda state, level_num=i: (
@@ -2161,6 +2162,9 @@ def set_rules(kh1world):
             kh1world.get_location(location)
         except KeyError:
             continue
+        if location_table[location].type == "Starting Accessory":
+            add_item_rule(kh1world.get_location(location),
+                lambda i: (i.player == player and i.name in get_items_by_category("Accessory").keys()))
         if options.remote_items.current_key == "off":
             if location_table[location].type == "Chest":
                 add_item_rule(kh1world.get_location(location),
@@ -2180,21 +2184,23 @@ def set_rules(kh1world):
             if location_table[location].type == "Synth":
                 add_item_rule(kh1world.get_location(location),
                     lambda i: (i.player != player or (i.name in get_items_by_type("Item").keys())))
-        if location_table[location].type == "Prize":
-            add_item_rule(kh1world.get_location(location),
-                lambda i: (
-                    i.player == player 
-                    and i.name in get_items_by_type("Item").keys()
-                    and i.name not in ["Puppy", "Lucky Emblem", "EXP Necklace", "Ribbon"]
-                    and
-                    (
+        if options.remote_items.current_key in ("off", "allow"):
+            if location_table[location].type == "Prize":
+                add_item_rule(kh1world.get_location(location),
+                    lambda i: (
+                        i.player == player 
+                        and i.name in get_items_by_type("Item").keys()
+                        and i.name not in ["Puppy", "Lucky Emblem", "EXP Necklace", "Ribbon"]
+                        and (i.name not in ["Protect Chain", "Fire Ring", "Thunder Ring", "Blizzard Ring"] or options.randomize_party_member_starting_accessories)
+                        and
                         (
-                            item_table[i.name].max_quantity == 1
-                            and item_table[i.name].classification != ItemClassification.filler
+                            (
+                                item_table[i.name].max_quantity == 1
+                                and item_table[i.name].classification != ItemClassification.filler
+                            )
+                            or item_table[i.name].classification == ItemClassification.filler
                         )
-                        or item_table[i.name].classification == ItemClassification.filler
-                    )
-                ))
+                    ))
 
     
     add_rule(kh1world.get_entrance("Wonderland"),

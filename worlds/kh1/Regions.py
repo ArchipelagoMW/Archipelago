@@ -558,6 +558,9 @@ def create_regions(kh1world):
         regions["Destiny Islands"].locations.append("Destiny Islands Cove Deliver Kairi Items (Day 2)")
         regions["Destiny Islands"].locations.append("Destiny Islands Chest")
     regions["Homecoming"].locations.append("Final Ansem")
+    
+    for location in kh1world.get_starting_accessory_locations():
+        regions[location_table[location].category].locations.append(location)
 
     # Set up the regions correctly.
     for name, data in regions.items():

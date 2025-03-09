@@ -634,6 +634,13 @@ class WarpAnywhere(Toggle):
     """
     display_name = "WarpAnywhere"
 
+class RandomizePartyMemberStartingAccessories(Toggle):
+    """
+    If on, the 10 accessories that some party members (Aladdin, Ariel, Jack, Peter Pan, Beast) start with are randomized.
+    10 random accessories will be distributed amongst any party member aside from Sora in their starting equipment.
+    """
+    display_name = "Randomize Party Member Starting Accessories"
+
 @dataclass
 class KH1Options(PerGameCommonOptions):
     final_rest_door_key: FinalRestDoorKey
@@ -706,6 +713,7 @@ class KH1Options(PerGameCommonOptions):
     unskippable: Unskippable
     auto_save: AutoSave
     warp_anywhere: WarpAnywhere
+    randomize_party_member_starting_accessories: RandomizePartyMemberStartingAccessories
 
 kh1_option_groups = [
     OptionGroup("Goal", [
@@ -770,6 +778,7 @@ kh1_option_groups = [
         AdvancedLogic,
         ExtraSharedAbilities,
         EXPZeroInPool,
+        RandomizePartyMemberStartingAccessories,
         DeathLink,
         DonaldDeathLink,
         GoofyDeathLink,

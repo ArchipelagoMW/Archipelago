@@ -183,6 +183,7 @@ class KH1World(World):
     fillers.update(get_items_by_category("Stat Ups"))
     slot_2_levels = None
     keyblade_stats = None
+    starting_accessory_locations = None
 
     def create_items(self):
         self.place_predetermined_items()
@@ -402,6 +403,7 @@ class KH1World(World):
                     "orichalcum_price": int(self.options.orichalcum_price.value),
                     "puppy_value": int(self.options.puppy_value.value),
                     "randomize_emblem_pieces": bool(self.options.exp_zero_in_pool),
+                    "randomize_party_member_starting_accessories": bool(self.options.randomize_party_member_starting_accessories),
                     "randomize_postcards": str(self.options.randomize_postcards.current_key),
                     "randomize_puppies": str(self.options.randomize_puppies.current_key),
                     "remote_items": str(self.options.remote_items.current_key),
@@ -489,7 +491,8 @@ class KH1World(World):
             if location.name != "Final Ansem":
                 location_data = location_table[location.name]
                 if self.options.remote_items.current_key == "full":
-                    remote_location_ids.append(location_data.code)
+                    if location_data.type == "Starting Accessory":
+                        remote_location_ids.append(location_data.code)
                 elif self.player == location.item.player and location.item.name != "Victory":
                     item_data = item_table[location.item.name]
                     if location_data.type == "Chest":
@@ -605,3 +608,16 @@ class KH1World(World):
                         byte_array.append(CHAR_TO_KH[character])
                     synthesis_byte_arrays.append(byte_array)
         return synthesis_byte_arrays
+    
+    def get_starting_accessory_locations(self):
+        if self.starting_accessory_locations is None:
+            if self.options.randomize_party_member_starting_accessories:
+                self.starting_accessory_locations = list(get_locations_by_type("Starting Accessory").keys())
+                if not self.options.atlantica:
+                    self.starting_accessory_locations.remove("Ariel Starting Accessory 1")
+                    self.starting_accessory_locations.remove("Ariel Starting Accessory 2")
+                    self.starting_accessory_locations.remove("Ariel Starting Accessory 3")
+                self.starting_accessory_locations = self.random.sample(self.starting_accessory_locations, 10)
+            else:
+                self.starting_accessory_locations = []
+        return self.starting_accessory_locations
