@@ -505,6 +505,16 @@ class MaxNumberOfUpgrades(Range):
     default = -1
 
 
+class MercenaryHighlanders(Toggle):
+    """
+    If enabled, it limits the controllable amount of certain mercenaries to 1, even if you have unlimited mercenaries upgrade.
+    With this upgrade you can still call the mercenary again if it dies.
+
+    Affected mercenaries: Jackson's Revenge (Battlecruiser), Wise Old Torrasque (Ultralisk)
+    """
+    display_name = "Mercenary Highlanders"
+
+
 class KerriganPresence(Choice):
     """
     Determines whether Kerrigan is playable outside of missions that require her.
@@ -1360,6 +1370,7 @@ class Starcraft2Options(PerGameCommonOptions):
     ensure_generic_items: EnsureGenericItems
     min_number_of_upgrades: MinNumberOfUpgrades
     max_number_of_upgrades: MaxNumberOfUpgrades
+    mercenary_highlanders: MercenaryHighlanders
     max_upgrade_level: MaxUpgradeLevel
     generic_upgrade_missions: GenericUpgradeMissions
     generic_upgrade_research: GenericUpgradeResearch
@@ -1481,6 +1492,7 @@ option_groups = [
     ]),
     OptionGroup("Race Specific Options", [
         EnableMorphling,
+        MercenaryHighlanders,
     ]),
     OptionGroup("Check Locations", [
         VictoryCache,

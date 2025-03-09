@@ -36,7 +36,7 @@ from .options import (
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
     SpearOfAdunAutonomouslyCastPresentInNoBuild, EnableVoidTrade, VoidTradeAgeLimit, void_trade_age_limits_ms,
-    DifficultyDamageModifier, MissionOrderScouting, GenericUpgradeResearchSpeedup
+    DifficultyDamageModifier, MissionOrderScouting, GenericUpgradeResearchSpeedup, MercenaryHighlanders
 )
 from .mission_order.slot_data import CampaignSlotData, LayoutSlotData, MissionSlotData
 from .mission_order.entry_rules import SubRuleRuleData, CountMissionsRuleData, MissionEntryRules
@@ -409,6 +409,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             ConfigurableOptionInfo('enable_morphling', 'enable_morphling', options.EnableMorphling, can_break_logic=True),
             ConfigurableOptionInfo('difficulty_damage_modifier', 'difficulty_damage_modifier', options.DifficultyDamageModifier),
             ConfigurableOptionInfo('void_trade_age_limit', 'trade_age_limit', options.VoidTradeAgeLimit),
+            ConfigurableOptionInfo('mercenary_highlanders', 'mercenary_highlanders', options.MercenaryHighlanders),
         )
 
         WARNING_COLOUR = "salmon"
@@ -641,8 +642,9 @@ class SC2Context(CommonContext):
         self.maximum_supply_reduction_per_item: int = options.MaximumSupplyReductionPerItem.default
         self.lowest_maximum_supply: int = options.LowestMaximumSupply.default
         self.research_cost_reduction_per_item: int = options.ResearchCostReductionPerItem.default
-        self.use_nova_wol_fallback = False
-        self.use_nova_nco_fallback = False
+        self.use_nova_wol_fallback: bool = False
+        self.use_nova_nco_fallback: bool = False
+        self.mercenary_highlanders: bool = False
         self.kerrigan_levels_per_mission_completed = 0
         self.trade_enabled: int = EnableVoidTrade.default
         self.trade_age_limit: int = VoidTradeAgeLimit.default
@@ -816,6 +818,7 @@ class SC2Context(CommonContext):
                 self.slot_data_version,
                 args["slot_data"].get("player_color_nova", ColorChoice.option_dark_grey)
             )
+            self.mercenary_highlanders = args["slot_data"].get("mercenary_highlanders", MercenaryHighlanders.option_false) == MercenaryHighlanders.option_true
             self.generic_upgrade_missions = args["slot_data"].get("generic_upgrade_missions", GenericUpgradeMissions.default)
             self.max_upgrade_level = args["slot_data"].get("max_upgrade_level", MaxUpgradeLevel.default)
             self.generic_upgrade_items = args["slot_data"].get("generic_upgrade_items", GenericUpgradeItems.option_individual_items)
@@ -1687,6 +1690,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 f" {mission_variant}"
                 f" {self.ctx.trade_enabled}"
                 f" {self.ctx.difficulty_damage_modifier}"
+                f" {self.ctx.mercenary_highlanders}" # TODO: Possibly rework it into unit options in the next cycle
             )
             await self.update_resources(start_items)
             await self.update_terran_tech(start_items)
