@@ -1090,6 +1090,7 @@ def build_sphinx_docs(stable: bool = False) -> None:
     for file in os.scandir(docs_path):
         if file.name.endswith(".md"):
             shutil.copy(file, sphinx_input)
+            # parse through the file and fix links for sphinx's api
             with open(os.path.join(sphinx_input, file.name), "r") as f:
                 lines = f.readlines()
             for line_index in range(len(lines)):
@@ -1117,6 +1118,28 @@ def build_sphinx_docs(stable: bool = False) -> None:
                 f.writelines(lines)
         elif "img" in file.name:
             shutil.copytree(file, os.path.join(sphinx_input, "img"), dirs_exist_ok=True)
+        elif file.name == "CODEOWNERS":
+            with open(file, "r") as orig, open(f"{sphinx_input}/codeowners.md", "w") as output:
+                orig_lines = orig.readlines()
+                output.write(orig_lines[0])
+                for line in orig_lines[1:]:
+                    line = line.strip()
+                    if not line:
+                        output.write("\n")
+                    elif line.startswith("# "):
+                        line = line[1:].strip()
+                        # the unmaintained/disabled worlds have a different format
+                        if line.startswith("/"):
+                            line = "\n- " + line
+                        output.write(line + "\n")
+                    # the world folder and maintainer name
+                    elif line.startswith("/"):
+                        lines = line.split("@")
+                        output.write(f"- {lines[0]}\n")
+                        for maintainer in lines[1:]:
+                            output.write(f"  - {maintainer}\n")
+                    else:
+                        output.write(line + "\n")
 
     # copy AP header logo and favicon
     static_dir = os.path.join(base_dir, "WebHostLib", "static", "static")

@@ -30,6 +30,7 @@ the requirements of not only contributing to the main project, but the requireme
     network protocol
     tests
     apworld_dev_faq
+    codeowners
 
 
 .. toctree::
