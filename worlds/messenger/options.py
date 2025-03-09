@@ -40,7 +40,9 @@ class TransitionPlando(PlandoConnections):
     """
     Plando connections to be used with transition shuffle.
     List of valid connections can be found at https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/messenger/connections.py#L641.
-    Dictionary keys (left) are entrances and values (right) are exits. "entrance" and "exit" directions are treated the same.
+    Dictionary keys (left) are entrances and values (right) are exits. If transition shuffle is on coupled all plando
+    connections will be coupled. If on decoupled, "entrance" and "exit" will be treated the same, simply making the
+    plando connection one-way from entrance to exit.
     Example:
     - entrance: Searing Crags - Top
       exit: Dark Cave - Right
