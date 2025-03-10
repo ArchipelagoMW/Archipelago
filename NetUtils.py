@@ -47,7 +47,7 @@ class HintStatus(ByValue, enum.IntFlag):
         if self.found:
             return HintStatus.HINT_FOUND
         if HintStatus.OLD_HINT_FORMAT in self:
-            return HintStatus.OLD_HINT_FORMAT
+            return HintStatus.HINT_UNFOUND_LEGACY
 
         # Make sure we're only returning statuses that are actually displayable
         return next(
