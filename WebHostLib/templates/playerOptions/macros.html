@@ -182,11 +182,17 @@
 {% endmacro %}
 
 {% macro OptionSet(option_name, option) %}
-    {{ OptionTitle(option_name, option) }}
+    <div>
+        {{ OptionTitle(option_name, option) }}
+        <div style="display:flex; flex-direction:row; margin-top:0.5rem">
+            <input type="checkbox" id="{{ option_name }}-select-all" name="{{ option_name }}-select-all" onClick="toggleAll(this, '{{ option_name }}')" />
+            <label for="{{ option_name }}-select-all">Select All</label>
+        </div>
+    </div>
     <div class="option-container">
         {% for key in (option.valid_keys if option.valid_keys is ordered else option.valid_keys|sort) %}
             <div class="option-entry">
-                <input type="checkbox" id="{{ option_name }}-{{ key }}" name="{{ option_name }}" value="{{ key }}" {{ "checked" if key in option.default }} />
+                <input type="checkbox" id="{{ option_name }}-{{ key }}" name="{{ option_name }}" value="{{ key }}" onClick="toggleOne(this, '{{ option_name }}-select-all')" {{ "checked" if key in option.default }} />
                 <label for="{{ option_name }}-{{ key }}">{{ key }}</label>
             </div>
         {% endfor %}
