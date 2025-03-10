@@ -73,7 +73,7 @@ from kivy.uix.image import AsyncImage
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
-from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType, HintStatus
+from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType, HintPriority
 from Utils import async_start, get_input_text_from_response
 
 if typing.TYPE_CHECKING:
@@ -367,7 +367,7 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         self.finding_text = ""
         self.location_text = ""
         self.entrance_text = ""
-        self.status_text = ""
+        self.priority_text = ""
         self.hint = {}
         for child in self.children:
             child.bind(texture_size=self.set_height)
@@ -377,19 +377,19 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         self.dropdown = DropDown()
 
         def set_value(button):
-            self.dropdown.select(button.status)
+            self.dropdown.select(button.priority)
 
         def select(instance, data):
             ctx.update_hint(self.hint["location"],
                             self.hint["finding_player"],
                             data)
 
-        for status in (HintStatus.HINT_NO_PRIORITY, HintStatus.HINT_PRIORITY, HintStatus.HINT_AVOID):
-            name = status_names[status]
-            status_button = Button(text=name, size_hint_y=None, height=dp(50))
-            status_button.status = status
-            status_button.bind(on_release=set_value)
-            self.dropdown.add_widget(status_button)
+        for priority in reversed(HintPriority):
+            name = priority_names[priority]
+            priority_button = Button(text=name, size_hint_y=None, height=dp(50))
+            priority_button.priority = priority
+            priority_button.bind(on_release=set_value)
+            self.dropdown.add_widget(priority_button)
 
         self.dropdown.bind(on_select=select)
 
@@ -404,8 +404,8 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         self.finding_text = data["finding"]["text"]
         self.location_text = data["location"]["text"]
         self.entrance_text = data["entrance"]["text"]
-        self.status_text = data["status"]["text"]
-        self.hint = data["status"]["hint"]
+        self.priority_text = data["priority"]["text"]
+        self.hint = data["priority"]["hint"]
         self.height = self.minimum_height
         return super(HintLabel, self).refresh_view_attrs(rv, index, data)
 
@@ -415,21 +415,21 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
             return True
         if self.index:  # skip header
             if self.collide_point(*touch.pos):
-                status_label = self.ids["status"]
-                if status_label.collide_point(*touch.pos):
-                    if self.hint["status"] == HintStatus.HINT_FOUND:
+                priority_label = self.ids["priority"]
+                if priority_label.collide_point(*touch.pos):
+                    if self.hint["found"]:
                         return
                     ctx = App.get_running_app().ctx
                     if ctx.slot_concerns_self(self.hint["receiving_player"]):  # If this player owns this hint
                         # open a dropdown
-                        self.dropdown.open(self.ids["status"])
+                        self.dropdown.open(self.ids["priority"])
                 elif self.selected:
                     self.parent.clear_selection()
                 else:
                     text = "".join((self.receiving_text, "\'s ", self.item_text, " is at ", self.location_text, " in ",
                                     self.finding_text, "\'s World", (" at " + self.entrance_text)
                                     if self.entrance_text != "Vanilla"
-                                    else "", ". (", self.status_text.lower(), ")"))
+                                    else "", ". (", self.priority_text.lower(), ")"))
                     temp = MarkupLabel(text).markup
                     text = "".join(
                         part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
@@ -443,8 +443,8 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
             for child in self.children:
                 if child.collide_point(*touch.pos):
                     key = child.sort_key
-                    if key == "status":
-                        parent.hint_sorter = lambda element: status_sort_weights[element["status"]["hint"]["status"]]
+                    if key == "priority":
+                        parent.hint_sorter = HintLog.hint_sorter
                     else:
                         parent.hint_sorter = lambda element: (
                             remove_between_brackets.sub("", element[key]["text"]).lower()
@@ -818,26 +818,23 @@ class HintLayout(BoxLayout):
         self.add_widget(boxlayout)
 
         
-status_names: typing.Dict[HintStatus, str] = {
-    HintStatus.HINT_FOUND: "Found",
-    HintStatus.HINT_UNSPECIFIED: "Unspecified",
-    HintStatus.HINT_NO_PRIORITY: "No Priority",
-    HintStatus.HINT_AVOID: "Avoid",
-    HintStatus.HINT_PRIORITY: "Priority",
+priority_names: typing.Dict[HintPriority, str] = {
+    HintPriority.HINT_UNSPECIFIED: "Unspecified",
+    HintPriority.HINT_CAN_SKIP: "Can Skip",
+    HintPriority.HINT_MIGHT_WANT: "Might Want",
+    HintPriority.HINT_AVOID: "Avoid",
+    HintPriority.HINT_AVOID_FOR_NOW: "Avoid For Now",
+    HintPriority.HINT_DESIRED: "Desired",
+    HintPriority.HINT_NEEDED: "Needed",
 }
-status_colors: typing.Dict[HintStatus, str] = {
-    HintStatus.HINT_FOUND: "green",
-    HintStatus.HINT_UNSPECIFIED: "white",
-    HintStatus.HINT_NO_PRIORITY: "cyan",
-    HintStatus.HINT_AVOID: "salmon",
-    HintStatus.HINT_PRIORITY: "plum",
-}
-status_sort_weights: dict[HintStatus, int] = {
-    HintStatus.HINT_FOUND: 0,
-    HintStatus.HINT_UNSPECIFIED: 1,
-    HintStatus.HINT_NO_PRIORITY: 2,
-    HintStatus.HINT_AVOID: 3,
-    HintStatus.HINT_PRIORITY: 4,
+priority_colors: typing.Dict[HintPriority, str] = {
+    HintPriority.HINT_UNSPECIFIED: "white",
+    HintPriority.HINT_CAN_SKIP: "cyan",
+    HintPriority.HINT_MIGHT_WANT: "cyan",
+    HintPriority.HINT_AVOID: "salmon",
+    HintPriority.HINT_AVOID_FOR_NOW: "salmon",
+    HintPriority.HINT_DESIRED: "plum",
+    HintPriority.HINT_NEEDED: "plum",
 }
 
 
@@ -848,8 +845,8 @@ class HintLog(RecycleView):
         "finding": {"text": "[u]Finding Player[/u]"},
         "location": {"text": "[u]Location[/u]"},
         "entrance": {"text": "[u]Entrance[/u]"},
-        "status": {"text": "[u]Status[/u]",
-                   "hint": {"receiving_player": -1, "location": -1, "finding_player": -1, "status": ""}},
+        "priority": {"text": "[u]Priority[/u]",
+                     "hint": {"receiving_player": -1, "location": -1, "finding_player": -1, "found": False, "priority": ""}},
         "striped": True,
     }
 
@@ -867,13 +864,13 @@ class HintLog(RecycleView):
         data = []
         ctx = App.get_running_app().ctx
         for hint in hints:
-            if not hint.get("status"): # Allows connecting to old servers
-                hint["status"] = HintStatus.HINT_FOUND if hint["found"] else HintStatus.HINT_UNSPECIFIED
-            hint_status_node = self.parser.handle_node({"type": "color",
-                                                        "color": status_colors.get(hint["status"], "red"),
-                                                        "text": status_names.get(hint["status"], "Unknown")})
-            if hint["status"] != HintStatus.HINT_FOUND and ctx.slot_concerns_self(hint["receiving_player"]):
-                hint_status_node = f"[u]{hint_status_node}[/u]"
+            if not hint.get("priority"):  # Allows connecting to old servers
+                hint["priority"] = HintPriority.HINT_UNSPECIFIED
+            hint_priority_node = self.parser.handle_node({"type": "color",
+                                                        "color": "green" if hint["found"] else priority_colors.get(hint["priority"], "red"),
+                                                        "text": "Found" if hint["found"] else priority_names.get(hint["priority"], "Unknown")})
+            if not hint["found"] and ctx.slot_concerns_self(hint["receiving_player"]):
+                hint_priority_node = f"[u]{hint_priority_node}[/u]"
             data.append({
                 "receiving": {"text": self.parser.handle_node({"type": "player_id", "text": hint["receiving_player"]})},
                 "item": {"text": self.parser.handle_node({
@@ -891,8 +888,8 @@ class HintLog(RecycleView):
                 "entrance": {"text": self.parser.handle_node({"type": "color" if hint["entrance"] else "text",
                                                               "color": "blue", "text": hint["entrance"]
                                                               if hint["entrance"] else "Vanilla"})},
-                "status": {
-                    "text": hint_status_node,
+                "priority": {
+                    "text": hint_priority_node,
                     "hint": hint,
                 },
             })
@@ -905,7 +902,9 @@ class HintLog(RecycleView):
 
     @staticmethod
     def hint_sorter(element: dict) -> str:
-        return element["status"]["hint"]["status"]  # By status by default
+        # By priority by default
+        # Found hints sort to one end of priority
+        return "" if element["priority"]["hint"]["found"] else str(element["priority"]["hint"]["priority"])
 
     def fix_heights(self):
         """Workaround fix for divergent texture and layout heights"""
