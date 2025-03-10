@@ -1,16 +1,16 @@
 from random import Random
 
-from . import options as stardew_options
-from .content import StardewContent
-from .content.vanilla.ginger_island import ginger_island_content_pack
-from .strings.ap_names.ap_weapon_names import APWeapon
-from .strings.ap_names.transport_names import Transportation
-from .strings.building_names import Building
-from .strings.region_names import Region
-from .strings.season_names import Season
-from .strings.skill_names import Skill
-from .strings.tv_channel_names import Channel
-from .strings.wallet_item_names import Wallet
+from .. import options as stardew_options
+from ..content import StardewContent
+from ..content.vanilla.ginger_island import ginger_island_content_pack
+from ..strings.ap_names.ap_weapon_names import APWeapon
+from ..strings.ap_names.transport_names import Transportation
+from ..strings.building_names import Building
+from ..strings.region_names import Region
+from ..strings.season_names import Season
+from ..strings.skill_names import Skill
+from ..strings.tv_channel_names import Channel
+from ..strings.wallet_item_names import Wallet
 
 early_candidate_rate = 4
 always_early_candidates = [Region.greenhouse, Transportation.desert_obelisk, Wallet.rusty_key]
