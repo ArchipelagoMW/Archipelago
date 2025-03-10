@@ -28,12 +28,12 @@ options.
 
 ### Where do I get a config file?
 
-The [Player Settings](../player-settings) page on the website allows you to configure
-your personal settings and export a config file from them.
-
-Alternately, run the ArchipelagoLauncher.exe from your Archipelago install and click `Generate Template Options`.
+Run the ArchipelagoLauncher.exe from your Archipelago install and click `Generate Template Options`.
 This will produce a `/Players/Templates` folder in your Archipelago install, which contains default config files for 
-every game in your `custom_worlds` folder. You can manually edit the config file using a text editor of your choice. 
+every game in your `custom_worlds` folder. You can manually edit the config file using a text editor of your choice.
+
+Alternately, the [Player Settings](../player-settings) page on the website allows you to configure
+your personal settings and export a config file from them.
 
 ### Verifying your config file
 
