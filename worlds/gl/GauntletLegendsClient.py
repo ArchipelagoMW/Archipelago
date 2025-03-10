@@ -1019,6 +1019,6 @@ def launch(*args):
 
     import colorama
 
-    colorama.init()
+    colorama.just_fix_windows_console()
     asyncio.run(main(args))
     colorama.deinit()
