@@ -234,8 +234,7 @@ async def game_watcher(ctx: FactorioContext):
                         f"Connected Multiworld is not the expected one {data['seed_name']} != {ctx.seed_name}")
                 else:
                     data = data["info"]
-                    research_data = data["research_done"]
-                    research_data = {int(tech_name.split("-")[1]) for tech_name in research_data}
+                    research_data: set[int] = {int(tech_name.split("-")[1]) for tech_name in data["research_done"]}
                     victory = data["victory"]
                     await ctx.update_death_link(data["death_link"])
                     ctx.multiplayer = data.get("multiplayer", False)
@@ -249,7 +248,7 @@ async def game_watcher(ctx: FactorioContext):
                             f"New researches done: "
                             f"{[ctx.location_names.lookup_in_game(rid) for rid in research_data - ctx.locations_checked]}")
                         ctx.locations_checked = research_data
-                        await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(research_data)}])
+                        await ctx.check_locations(research_data)
                     death_link_tick = data.get("death_link_tick", 0)
                     if death_link_tick != ctx.death_link_tick:
                         ctx.death_link_tick = death_link_tick

@@ -264,7 +264,6 @@ ahit_locations = {
                                              required_hats=[HatType.DWELLER], paintings=3),
 
     "Subcon Forest - Tall Tree Hookshot Swing": LocData(2000324766, "Subcon Forest Area",
-                                                        required_hats=[HatType.DWELLER],
                                                         hookshot=True,
                                                         paintings=3),
 
@@ -323,7 +322,7 @@ ahit_locations = {
     "Alpine Skyline - The Twilight Path": LocData(2000334434, "Alpine Skyline Area", required_hats=[HatType.DWELLER]),
     "Alpine Skyline - The Twilight Bell: Wide Purple Platform": LocData(2000336478, "The Twilight Bell"),
     "Alpine Skyline - The Twilight Bell: Ice Platform": LocData(2000335826, "The Twilight Bell"),
-    "Alpine Skyline - Goat Outpost Horn": LocData(2000334760, "Alpine Skyline Area"),
+    "Alpine Skyline - Goat Outpost Horn": LocData(2000334760, "Alpine Skyline Area (TIHS)", hookshot=True),
     "Alpine Skyline - Windy Passage": LocData(2000334776, "Alpine Skyline Area (TIHS)", hookshot=True),
     "Alpine Skyline - The Windmill: Inside Pon Cluster": LocData(2000336395, "The Windmill"),
     "Alpine Skyline - The Windmill: Entrance": LocData(2000335783, "The Windmill"),
@@ -407,7 +406,7 @@ act_completions = {
                                                hit_type=HitType.umbrella_or_brewing, hookshot=True, paintings=1),
 
     "Act Completion (Queen Vanessa's Manor)": LocData(2000312017, "Queen Vanessa's Manor",
-                                                      hit_type=HitType.umbrella, paintings=1),
+                                                      hit_type=HitType.dweller_bell, paintings=1),
 
     "Act Completion (Mail Delivery Service)": LocData(2000312032, "Mail Delivery Service",
                                                       required_hats=[HatType.SPRINT]),
@@ -878,7 +877,7 @@ snatcher_coins = {
                                                dlc_flags=HatDLC.death_wish),
 
     "Snatcher Coin - Top of HQ (DW: BTH)": LocData(0, "Beat the Heat", snatcher_coin="Snatcher Coin - Top of HQ",
-                                                   dlc_flags=HatDLC.death_wish),
+                                                   hit_type=HitType.umbrella, dlc_flags=HatDLC.death_wish),
 
     "Snatcher Coin - Top of Tower": LocData(0, "Mafia Town Area (HUMT)", snatcher_coin="Snatcher Coin - Top of Tower",
                                             dlc_flags=HatDLC.death_wish),

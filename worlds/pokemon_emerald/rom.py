@@ -696,12 +696,10 @@ def _set_encounter_tables(world: "PokemonEmeraldWorld", patch: PokemonEmeraldPro
     }
     """
     for map_data in world.modified_maps.values():
-        tables = [map_data.land_encounters, map_data.water_encounters, map_data.fishing_encounters]
-        for table in tables:
-            if table is not None:
-                for i, species_id in enumerate(table.slots):
-                    address = table.address + 2 + (4 * i)
-                    patch.write_token(APTokenTypes.WRITE, address, struct.pack("<H", species_id))
+        for table in map_data.encounters.values():
+            for i, species_id in enumerate(table.slots):
+                address = table.address + 2 + (4 * i)
+                patch.write_token(APTokenTypes.WRITE, address, struct.pack("<H", species_id))
 
 
 def _set_species_info(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePatch, easter_egg: Tuple[int, int]) -> None:

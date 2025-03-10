@@ -103,6 +103,7 @@ def generateRom(args, world: "LinksAwakeningWorld"):
     assembler.const("wGoldenLeaves", 0xDB42)  # New memory location where to store the golden leaf counter
     assembler.const("wCollectedTunics", 0xDB6D)  # Memory location where to store which tunic options are available (and boots)
     assembler.const("wCustomMessage", 0xC0A0)
+    assembler.const("wOverworldRoomStatus", 0xD800)
 
     # We store the link info in unused color dungeon flags, so it gets preserved in the savegame.
     assembler.const("wLinkSyncSequenceNumber", 0xDDF6)
