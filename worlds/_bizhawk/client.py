@@ -99,3 +99,6 @@ class BizHawkClient(abc.ABC, metaclass=AutoBizHawkClientRegister):
     def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
         """For handling packages from the server. Called from `BizHawkClientContext.on_package`."""
         pass
+
+    async def deathlink_kill_player(self, ctx: "BizHawkClientContext") -> None:
+        """For killing the player upon receiving a deathlink."""
