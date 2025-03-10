@@ -93,6 +93,7 @@ status_sort_weights: dict[HintStatus, int] = {
     HintStatus.HINT_UNFOUND_LEGACY: 5,
 }
 
+
 class JSONMessagePart(typing.TypedDict, total=False):
     text: str
     # optional
