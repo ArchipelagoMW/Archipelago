@@ -364,14 +364,15 @@ An enumeration containing the possible hint states.
 ```python
 import enum
 class HintStatus(enum.IntFlag):
-    # Lower 8 bits: Technical flags
-    HINT_FOUND = 0b00000001
-
-    # Upper 8 bits: Priorities
+    # Lower 5 bits: Priorities as integers
     HINT_PRIORITY_UNSPECIFIED = 0  # For readable code
-    HINT_PRIORITY_NO_PRIORITY = 1 << 8
-    HINT_PRIORITY_AVOID = 2 << 8
-    HINT_PRIORITY_PRIORITY = 3 << 8
+    HINT_PRIORITY_NO_PRIORITY = 1
+    HINT_PRIORITY_AVOID = 2
+    HINT_PRIORITY_PRIORITY = 3
+    PRIORITY_MASK = 0b11111
+
+    # Bits 6+: Technical status
+    HINT_FOUND = 0b10000000
 ```
 - Hints for items with only `ItemClassification.trap` default to `HINT_AVOID`.
 - Hints created with `LocationScouts`, `!hint_location`, or similar (hinting a location) default to `HINT_UNSPECIFIED`.
