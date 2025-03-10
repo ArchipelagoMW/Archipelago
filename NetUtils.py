@@ -31,7 +31,7 @@ class HintStatus(ByValue, enum.IntFlag):
         return self & HintStatus.PRIORITY_MASK
 
     def with_priority(self, priority: HintStatus):
-        return (self & HintStatus.PRIORITY_MASK) | (priority & HintStatus.PRIORITY_MASK)
+        return (self & ~HintStatus.PRIORITY_MASK) | (priority & HintStatus.PRIORITY_MASK)
 
     @property
     def found(self):
