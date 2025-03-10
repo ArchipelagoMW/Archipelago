@@ -2,7 +2,6 @@ from typing import Any, Dict
 
 import Options as ap_options
 from . import options
-from ..strings.ap_names.ap_option_names import WalnutsanityOptionName
 
 # @formatter:off
 all_random_settings = {
@@ -200,7 +199,7 @@ nightmare_settings = {
     options.Cropsanity.internal_name:               options.Cropsanity.option_enabled,
     options.BackpackProgression.internal_name:      options.BackpackProgression.option_progressive,
     options.BackpackSize.internal_name:             options.BackpackSize.option_12,
-    options.ToolProgression.internal_name:          options.ToolProgression.option_progressive,
+    options.ToolProgression.internal_name:          options.ToolProgression.option_progressive_no_tool_start,
     options.ElevatorProgression.internal_name:      options.ElevatorProgression.option_progressive_from_previous_floor,
     options.SkillProgression.internal_name:         options.SkillProgression.option_progressive_with_masteries,
     options.BuildingProgression.internal_name:      options.BuildingProgression.option_progressive,
@@ -338,7 +337,7 @@ allsanity_settings = {
     options.Cropsanity.internal_name:               options.Cropsanity.option_enabled,
     options.BackpackProgression.internal_name:      options.BackpackProgression.option_early_progressive,
     options.BackpackSize.internal_name:             options.BackpackSize.option_1,
-    options.ToolProgression.internal_name:          options.ToolProgression.option_progressive,
+    options.ToolProgression.internal_name:          options.ToolProgression.option_progressive_no_tool_start,
     options.ElevatorProgression.internal_name:      options.ElevatorProgression.option_progressive,
     options.SkillProgression.internal_name:         options.SkillProgression.option_progressive_with_masteries,
     options.BuildingProgression.internal_name:      options.BuildingProgression.option_progressive,
