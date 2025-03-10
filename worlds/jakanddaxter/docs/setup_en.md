@@ -164,7 +164,12 @@ If at any point the text client says this, you will need to restart the **all** 
 
 ### The Client Cannot Open A REPL Connection
 
-If the client cannot open a REPL connection to the game, you may need to ensure you are not hosting anything on ports `8181` and `8112`.
+If the client cannot open a REPL connection to the game, you may need to check the following steps:
+
+- Ensure you are not hosting anything on ports `8181` and `8112`. Those are for the REPL (goalc) and the game (gk) respectively.
+- Ensure that Windows Defender and Windows Firewall are not blocking those programs from hosting or listening on those ports.
+- You can use Windows Resource Monitor to verify those ports are open when the programs are running.
+- Ensure that you only opened those ports for your local network, not the wider internet.
 
 ## Known Issues
 
