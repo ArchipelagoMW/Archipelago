@@ -85,19 +85,19 @@ class FF4FEPatchExtension(APPatchExtension):
         kept_items = placements["kept_items"]
         data_dir = Utils.user_path("data", "ff4fe")
         placements = json.dumps(json.loads(caller.get_file(placement_file)))
-        # We try to import FE, assuming it's been installed by requirements...
+        # We try to fetch FE from the data directory in case up patcher updates...
         try:
-            logging.info("Loading Free Enterprise from installed packages")
-            from FreeEnt.cmd_make import MakeCommand
+            logging.info(f"Loading Free Enterprise from {data_dir}")
+            import sys
+            sys.path.append(data_dir)
+            from FreeEnterprise4.FreeEnt.cmd_make import MakeCommand
         except:
-            # ...but that won't fly in a standalone APWorld, so we then try and grab it from the data directory.
-            # This could be removed for the merged build but maintaining two versions is pain.
+            # ...and if it's not there, we grab the installed packaged version
             try:
-                logging.info(f"Loading Free Enterprise from {data_dir}")
-                import sys
-                sys.path.append(data_dir)
-                from FreeEnterprise4.FreeEnt.cmd_make import MakeCommand
+                logging.info("Loading Free Enterprise from installed packages")
+                from FreeEnt.cmd_make import MakeCommand
             except ImportError:
+                # Once part of the frozen build, this shouldn't get hit ever, but it's useful for the standalone APWorld.
                 raise ImportError("Free Enterprise not found. Try reinstalling it.")
         cmd = MakeCommand()
         parser = argparse.ArgumentParser()

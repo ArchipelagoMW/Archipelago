@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from .items import sellable_item_names
 from Options import (Toggle, Range, Choice, PerGameCommonOptions, DefaultOnToggle, StartInventoryPool, OptionGroup,
-                     OptionSet, ItemSet, Visibility)
+                     OptionSet, Visibility)
 
 
 class ForgeTheCrystal(Toggle):
@@ -446,3 +446,34 @@ ff4fe_option_groups = [
         StarterKitThree
     ])
 ]
+
+ff4fe_options_presets: dict[str, dict[str, any]] = {
+    "Remixed": {
+        "UnsafeKeyItemPlacement": True,
+        "HeroChallenge": "random_character",
+        "AdditionalObjectives": 8,
+        "RequiredObjectiveCount": 5,
+        "ObjectiveReward": "crystal",
+        "NoAdamantArmors": True,
+        "LocalItemTiering": "pro",
+        "ItemRandomization": "pro",
+        "ShopRandomization": "pro",
+        "FreeShops": True,
+        "EnsureAllCharacters": False,
+        "NoFreeCharacters": True,
+        "StarterKitOne": "random_kit"
+    },
+    "Dark Matter Hunt Plus": {
+        "FindTheDarkMatter": True,
+        "AdditionalObjectives": 3,
+        "RequiredObjectiveCount": 4,
+        "ObjectiveReward": "win",
+        "StarterKitOne": "random_kit",
+        "StarterKitTwo": "random_kit"
+    },
+    "Objective Mania": {
+        "AdditionalObjectives": 32,
+        "RequiredObjectiveCount": 32,
+        "ObjectiveReward": "win"
+    }
+}

@@ -142,9 +142,62 @@ all_locations.append(LocationData("Objective Reward", "Overworld", "BaronTown", 
 
 areas = []
 
+area_groups: dict[str, list[str]] = dict()
+
+area_correspondences: dict[str, list[str]] = {
+    "BaronTown": ["Overworld", "Towns", "Baron Town"],
+    "Mist": ["Overworld", "Towns", "Mist"],
+    "Kaipo": ["Overworld", "Towns", "Kaipo"],
+    "Silvera": ["Overworld", "Towns", "Silvera"],
+    "ToroiaTown": ["Overworld", "Towns", "Toiroia Town"],
+    "Agart": ["Overworld", "Towns", "Agart"],
+    "BaronWeaponShop": ["Overworld", "Towns", "Baron Town"],
+    "ChocoboForest": ["Overworld", "Towns", "Chocobo Forest"],
+    "BaronCastle": ["Overworld", "Dungeons", "Baron Castle"],
+    "Sewer": ["Overworld", "Dungeons", "Baron Castle"],
+    "Damcyan": ["Overworld", "Towns", "Damcyan"],
+    "Fabul": ["Overworld", "Towns", "Fabul"],
+    "ToroiaCastle": ["Overworld", "Towns", "Toroia Castle"],
+    "ToroiaTreasury": ["Overworld", "Towns", "Toroia Castle"],
+    "Eblan": ["Overworld", "Dungeons", "Eblan Castle"],
+    "MistCave": ["Overworld", "Dungeons", "Mist Cave"],
+    "WateryPass": ["Overworld", "Dungeons", "Watery Pass"],
+    "Waterfall": ["Overworld", "Dungeons", "Watery Pass"],
+    "AntlionCave": ["Overworld", "Dungeons", "Antlion Cave"],
+    "MountHobs": ["Overworld", "Dungeons", "Mount Hobs"],
+    "MountOrdeals": ["Overworld", "Dungeons", "Mount Ordeals"],
+    "CaveMagnes": ["Overworld", "Dungeons", "Cave Magnes"],
+    "Zot": ["Overworld", "Dungeons", "Tower of Zot"],
+    "UpperBabil": ["Overworld", "Dungeons", "Tower of Bab-il Upper"],
+    "Giant": ["Overworld", "Moon", "Dungeons", "Giant of Bab-il"],
+    "CaveEblan": ["Overworld", "Dungeons", "Cave Eblana"],
+    "Smithy": ["Underworld", "Towns", "Smithy"],
+    "Tomra": ["Underworld", "Towns", "Tomra"],
+    "DwarfCastle": ["Underworld", "Towns", "Dwarf Castle"],
+    "LowerBabil": ["Underworld", "Dungeons", "Tower of Bab-il", "Tower of Bab-il Lower"],
+    "UpperBabilAfterFall": ["Overworld", "Dungeons", "Tower of Bab-il", "Tower of Bab-il Upper"],
+    "CaveOfSummons": ["Underworld", "Dungeons", "Cave of Summons", "Land of Summons"],
+    "Feymarch": ["Underworld", "Towns", "Dungeons", "Town of Monsters", "Land of Summons"],
+    "SylvanCave": ["Underworld", "Dungeons", "Sylvan Cave"],
+    "SealedCave": ["Underworld", "Dungeons", "Sealed Cave"],
+    "BahamutCave": ["Moon", "Dungeons", "Cave Bahamut"],
+    "LunarPath": ["Moon", "Dungeons", "Lunar Path"],
+    "LunarCore": ["Moon", "Dungeons", "Lunar Subterrane"],
+    "Adamant": ["Overworld", "Towns", "Adamant"],
+    # These two are character-only locations, so they shouldn't get areas to exclude/prioritize
+    "Mysidia": [],
+    "LunarPalace": [],
+}
+
 for location in all_locations:
     if location.area not in areas:
         areas.append(location.area)
+    area_names = area_correspondences[location.area]
+    for area_name in area_names:
+        if area_name not in area_groups.keys():
+            area_groups[area_name] = []
+        if location.name not in character_locations and "Objective" not in location.name:
+            area_groups[area_name].append(location.name)
 
 for i in range(32):
     all_locations.append(LocationData(f"Objective {i + 1} Status", "Overworld", "BaronTown", 0xEE00 + i, False))

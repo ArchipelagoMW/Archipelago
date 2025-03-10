@@ -35,6 +35,9 @@ all items available in Final Fantasy IV: Free Enterprise are possibilities to ap
 
 Characters are shuffled amongst their normal recruitment locations.
 
+By default, all event reward locations are prioritized locations: they will always give an item classified as Useful
+or Progression.
+
 ## Which items can be in another player's world?
 
 Any key item, piece of gear, or consumable item can appear in another world.

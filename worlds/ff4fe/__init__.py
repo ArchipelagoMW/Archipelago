@@ -1,6 +1,5 @@
 import json
 import os
-import pkgutil
 import threading
 import typing
 from typing import Mapping, Any
@@ -10,14 +9,15 @@ import settings
 from BaseClasses import Region, ItemClassification, MultiWorld, Tutorial, Location, Item
 from Fill import fill_restrictive
 from worlds.AutoWorld import World, WebWorld
-from worlds.generic.Rules import set_rule, add_rule, add_item_rule, forbid_items_for_player
+from worlds.generic.Rules import add_rule, add_item_rule, forbid_items_for_player
 from . import events, items, locations, csvdb
 from . import rules as FERules
 from .Client import FF4FEClient
 from .itempool import create_itempool
 from .items import FF4FEItem, all_items, ItemData
-from .locations import FF4FELocation, all_locations, LocationData, free_character_locations, earned_character_locations
-from .options import FF4FEOptions, ff4fe_option_groups
+from .locations import FF4FELocation, all_locations, LocationData, free_character_locations, earned_character_locations, \
+    major_locations
+from .options import FF4FEOptions, ff4fe_option_groups, ff4fe_options_presets
 from . import topology, flags
 from .rom import FF4FEProcedurePatch
 
@@ -37,6 +37,7 @@ class FF4FEWebWorld(WebWorld):
     tutorials = [setup_en]
 
     option_groups = ff4fe_option_groups
+    options_presets = ff4fe_options_presets
 
 
 class FF4FESettings(settings.Group):
@@ -66,6 +67,8 @@ class FF4FEWorld(World):
     location_name_to_id = {location.name: id for
                            id, location in enumerate(all_locations, base_id)}
     item_name_groups = items.item_name_groups
+
+    location_name_groups = locations.area_groups
 
 
     def __init__(self, multiworld: MultiWorld, player: int):
@@ -99,6 +102,8 @@ class FF4FEWorld(World):
         self.options.priority_locations.value = (self.options.priority_locations.value |
                                                  (set(locations.major_location_names) -
                                                   self.options.exclude_locations.value))
+        if self.options.ForgeTheCrystal:
+            self.options.priority_locations.value -= {"Kokkol's House 2F -- Kokkol -- forge item"}
 
     def create_regions(self) -> None:
         menu = Region("Menu", self.player, self.multiworld)
@@ -268,9 +273,16 @@ class FF4FEWorld(World):
                 "Kokkol's House 2F -- Kokkol -- forge item").place_locked_item(self.create_item("Advance Weapon"))
 
         # Zeromus requires the Pass or Moon access in addition to the Crystal. Mostly just makes the spoiler log nicer.
-        set_rule(self.get_location("Zeromus"),
+        add_rule(self.get_location("Zeromus"),
                  lambda state: state.has("Pass", self.player)
                                 or state.has("Darkness Crystal", self.player))
+        if self.options.FindTheDarkMatter:
+            if self.options.ObjectiveReward == "crystal":
+                add_rule(self.get_location("Zeromus"),
+                         lambda state: state.has("DkMatter", self.player, 30))
+            else:
+                add_rule(self.get_location("Objectives Status"),
+                         lambda state: state.has("DkMatter", self.player, 30))
 
         for location in [location for location in all_locations]:
             # Hook areas, of course, require Hook.
@@ -363,7 +375,7 @@ class FF4FEWorld(World):
             )
 
         # Zeromus also requires the Crystal...when he needs to be fought.
-        add_item_rule(self.get_location("Zeromus"),
+        add_rule(self.get_location("Zeromus"),
                       lambda state: state.has("Crystal", self.player)
                                     or (self.options.ObjectiveReward.current_key == "win"
                                         and not self.is_vanilla_game()))
@@ -391,6 +403,15 @@ class FF4FEWorld(World):
 
         else:
             self.multiworld.completion_condition[self.player] = lambda state: state.has("All Objectives Cleared", self.player)
+
+    def pre_fill(self) -> None:
+        major_locations = set(locations.major_location_names) & self.options.priority_locations.value
+        location_set = set(self.get_locations()) - {self.get_location(location) for location in major_locations}
+        itempool = [item for item in self.multiworld.itempool
+                    if (item.name == "DkMatter" and item.player == self.player)]
+        for item in itempool:
+            self.multiworld.itempool.remove(item)
+        fill_restrictive(self.multiworld, self.multiworld.state, sorted(location_set), itempool, allow_partial=True)
 
     def post_fill(self) -> None:
         unfilled_locations = self.multiworld.get_unfilled_locations(self.player)

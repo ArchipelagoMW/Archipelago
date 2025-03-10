@@ -27,6 +27,9 @@ class ItemData:
             "fe_id": self.fe_id
         }
 
+    def __repr__(self):
+        return self.name
+
     @classmethod
     def create_ap_item(cls):
         return ItemData("Archipelago Item", ItemClassification.filler, 100, 0x500, "other")

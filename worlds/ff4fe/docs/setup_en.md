@@ -4,21 +4,13 @@
 
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). 
 
-- Hardware or software capable of loading and playing SNES ROM files
+- Software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI such as:
         - snes9x-rr from: [snes9x rr](https://github.com/gocha/snes9x-rr/releases),
         - BizHawk from: [TASVideos](https://tasvideos.org/BizHawk)
-        - RetroArch 1.10.3 or newer from: [RetroArch Website](https://retroarch.com?page=platforms). Or,
-    - An SD2SNES, FXPak Pro ([FXPak Pro Store Page](https://krikzz.com/store/home/54-fxpak-pro.html)), or other
-      compatible hardware
+        - RetroArch 1.10.3 or newer from: [RetroArch Website](https://retroarch.com?page=platforms).
 - Your legally obtained Final Fantasy IV 1.1 ROM file, probably named ` 	
 Final Fantasy II (USA) (Rev 1).sfc `
-
-## Optional Software
-- Final Fantasy IV: Free Enterprise Tracker
-	- PopTracker from: [PopTracker Releases Page](https://github.com/black-sliver/PopTracker/releases/)
-	- Final Fantasy IV: Free Enterprise Archipelago PopTracker pack from: 
-  [FFIV FE AP Tracker Releases Page](https://github.com/seto10987/Final-Fantasy-4-Free-Enterprise-AP-Poptracker-Pack/releases)
 
 ## Installation Procedures
 
@@ -112,18 +104,6 @@ You only have to do these steps once. Note, RetroArch 1.9.x will not work as it 
 When loading a ROM, be sure to select a **bsnes-mercury** core. These are the only cores that allow external tools to
 read ROM data.
 
-#### With hardware
-
-This guide assumes you have downloaded the correct firmware for your device. If you have not done so already, please do
-this now. SD2SNES and FXPak Pro users may download the appropriate firmware on the SD2SNES releases page. SD2SNES
-releases page: [SD2SNES Releases Page](https://github.com/RedGuyyyy/sd2snes/releases)
-
-Other hardware may find helpful information on the usb2snes platforms
-page: [usb2snes Supported Platforms Page](http://usb2snes.com/#supported-platforms)
-
-1. Close your emulator, which may have auto-launched.
-2. Power on your device and load the ROM.
-
 ### Connect to the Archipelago Server
 
 The patch file which launched your client should have automatically connected you to the AP Server. There are a few
@@ -160,6 +140,12 @@ The recommended way to host a game is to use our hosting service. The process is
 Did I break something?
 - - For technical reasons, MIAB chests have to hand out an actual item. A Cure1 was chosen as the placeholder.
 Everything is as it should be.
+- Why do MIAB chests give an extra item?
+- - Since MIAB locations aren't randomized by Archipelago, this was the cleanest way to keep them as major locations
+while still shuffling their locations. One item is for the chest the monster is in, the other is for the fight itself.
 - Why are there dashes in my name?
 - - Final Fantasy IV has a limited font and not every character can be displayed. These characters are replaced with 
 dashes.
+- Is a hardware connection through SNI supported (such as through a flash cart)?
+- - There have been reports of bugs when playing Free Enterprise for Archipelago on some flash carts. It's recommended
+to do a test run ahead of joining any multiworlds if you plan on playing on hardware.
