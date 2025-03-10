@@ -474,7 +474,7 @@
     },
     {
         "address": 1211, "name": "LYR: Nymph Puzzle Room Near Stele",
-        "region": "LYR - Right Exit", "requires": []
+        "region": "LYR - Right Exit", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ]
     },
     {
         "address": 1212, "name": "LYR: Ropes Near Right Exit",
