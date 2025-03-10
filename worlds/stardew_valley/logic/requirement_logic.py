@@ -26,7 +26,7 @@ class RequirementLogic(BaseLogic):
 
     @meet_requirement.register
     def _(self, requirement: ToolRequirement):
-        return self.logic.tool.has_tool(requirement.tool, requirement.tier)
+        return self.logic.tool.has_tool_generic(requirement.tool, requirement.tier)
 
     @meet_requirement.register
     def _(self, requirement: SkillRequirement):

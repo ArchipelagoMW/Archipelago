@@ -2,6 +2,7 @@ from ..game_content import ContentPack, StardewContent
 from ...data.artisan import MachineSource
 from ...data.game_item import ItemTag, CustomRuleSource, GameItem
 from ...data.harvest import HarvestFruitTreeSource, HarvestCropSource
+from ...data.requirement import ToolRequirement
 from ...data.skill import Skill
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.craftable_names import WildSeeds
@@ -15,6 +16,7 @@ from ...strings.monster_names import Monster
 from ...strings.season_names import Season
 from ...strings.seed_names import Seed
 from ...strings.skill_names import Skill as SkillName
+from ...strings.tool_names import Tool
 
 all_fruits = (
     Fruit.ancient_fruit, Fruit.apple, Fruit.apricot, Fruit.banana, Forageable.blackberry, Fruit.blueberry, Forageable.cactus_fruit, Fruit.cherry,
@@ -110,16 +112,19 @@ base_game = BaseGameContentPack(
         Vegetable.cauliflower: (HarvestCropSource(seed=Seed.cauliflower, seasons=(Season.spring,)),),
         Vegetable.potato: (HarvestCropSource(seed=Seed.potato, seasons=(Season.spring,)),),
         Flower.tulip: (HarvestCropSource(seed=Seed.tulip, seasons=(Season.spring,)),),
-        Vegetable.kale: (HarvestCropSource(seed=Seed.kale, seasons=(Season.spring,)),),
+        Vegetable.kale: (HarvestCropSource(seed=Seed.kale, seasons=(Season.spring,),
+                                           other_requirements=(ToolRequirement(Tool.scythe),)),),
         Flower.blue_jazz: (HarvestCropSource(seed=Seed.jazz, seasons=(Season.spring,)),),
         Vegetable.garlic: (HarvestCropSource(seed=Seed.garlic, seasons=(Season.spring,)),),
-        Vegetable.unmilled_rice: (HarvestCropSource(seed=Seed.rice, seasons=(Season.spring,)),),
+        Vegetable.unmilled_rice: (HarvestCropSource(seed=Seed.rice, seasons=(Season.spring,),
+                                                    other_requirements=(ToolRequirement(Tool.scythe),)),),
 
         Fruit.melon: (HarvestCropSource(seed=Seed.melon, seasons=(Season.summer,)),),
         Vegetable.tomato: (HarvestCropSource(seed=Seed.tomato, seasons=(Season.summer,)),),
         Fruit.blueberry: (HarvestCropSource(seed=Seed.blueberry, seasons=(Season.summer,)),),
         Fruit.hot_pepper: (HarvestCropSource(seed=Seed.pepper, seasons=(Season.summer,)),),
-        Vegetable.wheat: (HarvestCropSource(seed=Seed.wheat, seasons=(Season.summer, Season.fall)),),
+        Vegetable.wheat: (HarvestCropSource(seed=Seed.wheat, seasons=(Season.summer, Season.fall),
+                                            other_requirements=(ToolRequirement(Tool.scythe),)),),
         Vegetable.radish: (HarvestCropSource(seed=Seed.radish, seasons=(Season.summer,)),),
         Flower.poppy: (HarvestCropSource(seed=Seed.poppy, seasons=(Season.summer,)),),
         Flower.summer_spangle: (HarvestCropSource(seed=Seed.spangle, seasons=(Season.summer,)),),
@@ -134,7 +139,8 @@ base_game = BaseGameContentPack(
         Vegetable.yam: (HarvestCropSource(seed=Seed.yam, seasons=(Season.fall,)),),
         Fruit.cranberries: (HarvestCropSource(seed=Seed.cranberry, seasons=(Season.fall,)),),
         Flower.fairy_rose: (HarvestCropSource(seed=Seed.fairy, seasons=(Season.fall,)),),
-        Vegetable.amaranth: (HarvestCropSource(seed=Seed.amaranth, seasons=(Season.fall,)),),
+        Vegetable.amaranth: (HarvestCropSource(seed=Seed.amaranth, seasons=(Season.fall,),
+                                               other_requirements=(ToolRequirement(Tool.scythe),)),),
         Fruit.grape: (HarvestCropSource(seed=Seed.grape, seasons=(Season.fall,)),),
         Vegetable.artichoke: (HarvestCropSource(seed=Seed.artichoke, seasons=(Season.fall,)),),
 
@@ -151,7 +157,7 @@ base_game = BaseGameContentPack(
         Seed.coffee: (HarvestCropSource(seed=Seed.coffee_starter, seasons=(Season.spring, Season.summer,)),),
 
         Vegetable.tea_leaves: (
-        CustomRuleSource(lambda logic: logic.has(WildSeeds.tea_sapling) & logic.time.has_lived_months(2) & logic.season.has_any_not_winter()),),
+            CustomRuleSource(lambda logic: logic.has(WildSeeds.tea_sapling) & logic.time.has_lived_months(2) & logic.season.has_any_not_winter()),),
     },
     artisan_good_sources={
         Beverage.beer: (MachineSource(item=Vegetable.wheat, machine=Machine.keg),),
