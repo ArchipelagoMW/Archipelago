@@ -13,6 +13,7 @@ import dolphin_memory_engine as dme
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from worlds import AutoWorldRegister
 from settings import get_settings, Settings
+from Options import OptionError
 
 from .LMGenerator import LuigisMansionRandomizer
 from .Items import ALL_ITEMS_TABLE, BOO_ITEM_TABLE, filler_items
@@ -260,6 +261,11 @@ class LMContext(CommonContext):
             self.boo_final_count = int(args["slot_data"]["final boo count"])
             if "death_link" in args["slot_data"]:
                 Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
+            # Make sure the world version matches
+            if args["slot_data"]["apworld version"] != "0.1.3":
+                raise OptionError("Error! Server was generated with a different Luigi's Mansion APWorld version. The" +
+                            "client version is 0.1.3! Please verify you are using the same APWorld as the " +
+                            "generator, which is " + args["slot_data"]["apworld version"])
 
     def on_deathlink(self, data: dict[str, Any]):
         """
