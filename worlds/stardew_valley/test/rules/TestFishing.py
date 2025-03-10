@@ -1,5 +1,4 @@
-from ...options import SeasonRandomization, Friendsanity, FriendsanityHeartSize, Fishsanity, ExcludeGingerIsland, SkillProgression, ToolProgression, \
-    ElevatorProgression, SpecialOrderLocations
+from ...options import SeasonRandomization, Fishsanity, ExcludeGingerIsland, SkillProgression, ToolProgression, ElevatorProgression, SpecialOrderLocations
 from ...strings.fish_names import Fish
 from ...test import SVTestBase
 
@@ -44,18 +43,18 @@ class TestNeedRegionToCatchFish(SVTestBase):
                 self.collect_all_the_money()
                 item_names = fish_and_items[fish]
                 location = self.multiworld.get_location(f"Fishsanity: {fish}", self.player)
-                self.assert_reach_location_false(location, self.multiworld.state)
+                self.assert_cannot_reach_location(location, self.multiworld.state)
                 items = []
                 for item_name in item_names:
                     items.append(self.collect(item_name))
                 with self.subTest(f"{fish} can be reached with {item_names}"):
-                    self.assert_reach_location_true(location, self.multiworld.state)
+                    self.assert_can_reach_location(location, self.multiworld.state)
                 for item_required in items:
                     self.multiworld.state = self.original_state.copy()
                     with self.subTest(f"{fish} requires {item_required.name}"):
                         for item_to_collect in items:
                             if item_to_collect.name != item_required.name:
                                 self.collect(item_to_collect)
-                        self.assert_reach_location_false(location, self.multiworld.state)
+                        self.assert_cannot_reach_location(location, self.multiworld.state)
 
             self.multiworld.state = self.original_state.copy()
