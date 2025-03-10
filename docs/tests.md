@@ -82,6 +82,38 @@ Unit tests can also be created using [TestBase](/test/bases.py#L16) or
 may be useful for generating a multiworld under very specific constraints without using the generic world setup, or for
 testing portions of your code that can be tested without relying on a multiworld to be created first.
 
+#### Parametrization
+
+When defining a test that needs to cover a range of inputs it is useful to parameterize (to run the same test
+for multiple inputs) the base test. Some important things to consider when attempting to parametrize your test are:
+
+* [Subtests](https://docs.python.org/3/library/unittest.html#distinguishing-test-iterations-using-subtests)
+  can be used to have parametrized assertions that show up similar to individual tests but without the overhead
+  of needing to instantiate multiple tests; however, subtests can not be multithreaded and do not have individual
+  timing data, so they are not suitable for slow tests.
+
+* Archipelago's tests are test-runner-agnostic. That means tests are not allowed to use e.g. `@pytest.mark.parametrize`.
+  Instead, we define our own parametrization helpers in [test.param](/test/param.py).
+
+* Classes inheriting from `WorldTestBase`, including those created by the helpers in `test.param`, will run all
+  base tests by default, make sure the produced tests actually do what you aim for and do not waste a lot of
+  extra CPU time. Consider using `TestBase` or `unittest.TestCase` directly
+  or setting `WorldTestBase.run_default_tests` to False.
+
+#### Performance Considerations
+
+Archipelago is big enough that the runtime of unittests can have an impact on productivity.
+
+Individual tests should take less than a second, so they can be properly multithreaded.
+
+Ideally, thorough tests are directed at actual code/functionality. Do not just create and/or fill a ton of individual
+Multiworlds that spend most of the test time outside what you actually want to test.
+
+Consider generating/validating "random" games as part of your APWorld release workflow rather than having that be part
+of continuous integration, and add minimal reproducers to the "normal" tests for problems that were found.
+You can use [@unittest.skipIf](https://docs.python.org/3/library/unittest.html#unittest.skipIf) with an environment
+variable to keep all the benefits of the test framework while not running the marked tests by default.
+
 ## Running Tests
 
 #### Using Pycharm
@@ -100,3 +132,11 @@ next to the run and debug buttons.
 #### Running Tests without Pycharm
 
 Run `pip install pytest pytest-subtests`, then use your IDE to run tests or run `pytest` from the source folder.
+
+#### Running Tests Multithreaded
+
+pytest can run multiple test runners in parallel with the pytest-xdist extension.
+
+Install with `pip install pytest-xdist`.
+
+Run with `pytest -n12` to spawn 12 process that each run 1/12th of the tests.
