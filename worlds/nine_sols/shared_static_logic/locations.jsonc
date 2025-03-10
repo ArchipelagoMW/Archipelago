@@ -542,7 +542,7 @@
     },
     {
         "address": 1406, "name": "W&OS: Climb Elevator Shaft By Root Node",
-        "region": "W&OS - Root Node", "requires": [] // grapple (OR djump???)
+        "region": "W&OS - Root Node", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ] // AND grapple (OR djump???)
     },
 
     // Agrarian Hall
