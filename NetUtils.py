@@ -50,7 +50,7 @@ class HintStatus(ByValue, enum.IntFlag):
         if HintStatus.OLD_HINT_FORMAT in self:
             return HintStatus.OLD_HINT_FORMAT
 
-        # Make sure we're only returning statuses that are actually allowed, and only one status at a time
+        # Make sure we're only returning statuses that are actually displayable, and only one bit is set
         for single_status in status_names:
             if single_status in self.priority:
                 return single_status
