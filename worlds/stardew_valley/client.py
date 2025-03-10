@@ -10,6 +10,7 @@ from BaseClasses import MultiWorld, CollectionState
 from CommonClient import logger, get_base_parser, gui_enabled, server_loop
 from MultiServer import mark_raw
 from NetUtils import JSONMessagePart
+from kvui import CommandPromptTextInput
 from .logic.logic import StardewLogic
 from .stardew_rule.rule_explain import explain, ExplainMode, RuleExplanation
 
@@ -64,6 +65,7 @@ class StardewCommandProcessor(ClientCommandProcessor):
                 rule = logic.region.can_reach_location(result)
                 expl = explain(rule, get_updated_state(self.ctx), expected=None, mode=ExplainMode.CLIENT)
             else:
+                self.ctx.ui.last_autofillable_command = "/explain"
                 logger.warning(response)
                 return
 
@@ -82,6 +84,7 @@ class StardewCommandProcessor(ClientCommandProcessor):
             rule = logic.has(result)
             expl = explain(rule, get_updated_state(self.ctx), expected=None, mode=ExplainMode.CLIENT)
         else:
+            self.ctx.ui.last_autofillable_command = "/explain_item"
             logger.warning(response)
             return
 
@@ -108,6 +111,7 @@ class StardewCommandProcessor(ClientCommandProcessor):
                 simplified, _ = rule.evaluate_while_simplifying(state)
                 expl = explain(simplified, state, mode=ExplainMode.CLIENT)
             else:
+                self.ctx.ui.last_autofillable_command = "/explain_missing"
                 logger.warning(response)
                 return
 
@@ -125,6 +129,7 @@ class StardewCommandProcessor(ClientCommandProcessor):
             expl = self.ctx.previous_explanation.more(int(index))
         except (ValueError, IndexError):
             logger.info("Which previous rule do you want to explained?")
+            self.ctx.ui.last_autofillable_command = "/more"
             for i, rule in enumerate(self.ctx.previous_explanation.more_explanations):
                 logger.info(f"/more {i} -> {str(rule)})")
             return
@@ -153,6 +158,13 @@ class StardewClientContext(TrackerGameContext):
                 container = super().build()
                 if not tracker_loaded:
                     logger.info("To enable the tracker page, install Universal Tracker.")
+
+                # Until self.ctx.ui.last_autofillable_command allows for / commands, this is needed to remove the "!" before the /commands when using intended text autofill.
+                def on_text_remove_hardcoded_exclamation_mark_garbage(textinput: CommandPromptTextInput, text: str) -> None:
+                    if text.startswith("!/"):
+                        textinput.text = text[1:]
+
+                self.textinput.bind(text=on_text_remove_hardcoded_exclamation_mark_garbage)
 
                 return container
 
