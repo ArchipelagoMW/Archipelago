@@ -277,11 +277,13 @@ class Context:
             lambda: Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})'))
         self.non_hintable_names = collections.defaultdict(frozenset)
 
-        self._load_game_data()
-
     # Data package retrieval
-    def _load_game_data(self):
+    def _load_game_data(self, games: set[str]):
         import worlds
+        # Archipelago is always required because its items and locations are added to each data package.
+        games = games | {"Archipelago"}
+        self.logger.info(f"Loading local game data for worlds {sorted(games)}")
+        worlds.ensure_worlds_loaded(games)
         self.gamespackage = worlds.network_data_package["games"]
 
         self.item_name_groups = {world_name: world.item_name_groups for world_name, world in
@@ -503,6 +505,11 @@ class Context:
             self._set_options(server_options)
 
         # embedded data package
+        embedded_data_package = decoded_obj.get("datapackage", {})
+        # Use the games present in the embedded data package to determine the worlds to load.
+        games = set(embedded_data_package.keys())
+        self._load_game_data(games)
+
         for game_name, data in decoded_obj.get("datapackage", {}).items():
             if game_name in game_data_packages:
                 data = game_data_packages[game_name]
