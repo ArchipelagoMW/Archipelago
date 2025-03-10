@@ -250,7 +250,10 @@
     { "from": "LYR - Root Node", "to": "LYR - Left Exit", "requires": [] },
     { "from": "LYR - Root Node", "to": "LYR - Upper Exit", "requires": [ { "item": "Cloud Leap" } ] },
     { "from": "LYR - Upper Exit", "to": "LYR - Root Node", "requires": [] }, // fall
-    { "from": "LYR - Root Node", "to": "LYR - Right Exit", "requires": [] }, // one-way dragon boat ride
+    { "from": "LYR - Root Node", "to": "LYR - Right Exit", "requires": [ { "anyOf": [
+        { "item": "Air Dash" }, { "item": "Cloud Leap" }, // to jump over the two-ninja pit after the roof breaks
+        { "item": "Mystic Nymph: Scout Mode" } // or hack the rope to climb out
+    ] } ] }, // then a one-way dragon boat ride; that part requires no items, but means no connection the other way
     { "from": "LYR - Root Node", "to": "TRC - Upper Exit", "requires": [ { "item": "Elevator Access Token" } ] },
 
     { "from": "LYR - Root Node", "to": "YC - Upper Exit", "requires": [] },
