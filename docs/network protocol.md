@@ -369,9 +369,9 @@ class HintStatus(enum.IntFlag):
 
     # Upper 8 bits: Priorities
     HINT_PRIORITY_UNSPECIFIED = 0  # For readable code
-    HINT_PRIORITY_NO_PRIORITY = 0b00000001 << 8
-    HINT_PRIORITY_AVOID = 0b00000010 << 8
-    HINT_PRIORITY_PRIORITY = 0b00000100 << 8
+    HINT_PRIORITY_NO_PRIORITY = 1 << 8
+    HINT_PRIORITY_AVOID = 2 << 8
+    HINT_PRIORITY_PRIORITY = 3 << 8
 ```
 - Hints for items with only `ItemClassification.trap` default to `HINT_AVOID`.
 - Hints created with `LocationScouts`, `!hint_location`, or similar (hinting a location) default to `HINT_UNSPECIFIED`.

@@ -12,19 +12,18 @@ from Utils import ByValue, Version
 
 
 class HintStatus(ByValue, enum.IntFlag):
-    # Lower 8 bits: Technical flags
-    HINT_FOUND = 0b00000001
-
-    # For "compatibility", only used in CommonClient
-    HINT_UNFOUND_LEGACY = OLD_HINT_FORMAT = 0b10000000
-
-    # Upper 8 bits: Priorities
+    # Lower 5 bits: Priorities as integers
     HINT_PRIORITY_UNSPECIFIED = 0  # For readable code
-    HINT_PRIORITY_NO_PRIORITY = 0b00000001 << 8
-    HINT_PRIORITY_AVOID = 0b00000010 << 8
-    HINT_PRIORITY_PRIORITY = 0b00000100 << 8
+    HINT_PRIORITY_NO_PRIORITY = 1
+    HINT_PRIORITY_AVOID = 2
+    HINT_PRIORITY_PRIORITY = 3
+    PRIORITY_MASK = 0b11111
 
-    PRIORITY_MASK = 0b11111111 << 8
+    # Bits 6+: Technical status
+    HINT_FOUND = 0b10000000
+
+    # For "compatibility", only used in CommonClient, thus should not affect memory for MultiServer
+    HINT_UNFOUND_LEGACY = OLD_HINT_FORMAT = 0b1000000000000000
 
     @property
     def priority(self):
@@ -50,12 +49,11 @@ class HintStatus(ByValue, enum.IntFlag):
         if HintStatus.OLD_HINT_FORMAT in self:
             return HintStatus.OLD_HINT_FORMAT
 
-        # Make sure we're only returning statuses that are actually displayable, and only one bit is set
-        for single_status in status_names:
-            if single_status in self.priority:
-                return single_status
-
-        return self.HINT_PRIORITY_UNSPECIFIED
+        # Make sure we're only returning statuses that are actually displayable
+        return next(
+            (priority for priority in status_names if priority == self.priority),
+            self.HINT_PRIORITY_UNSPECIFIED
+        )
 
     @property
     def changeable(self):
