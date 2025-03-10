@@ -2536,6 +2536,25 @@ async def main(args: argparse.Namespace):
             logging.info("No file selected. Exiting.")
             import sys
             sys.exit(1)
+        elif not args.disable_save:
+            import tempfile
+            import os
+            import sys
+            try:
+                common = os.path.commonpath((tempfile.gettempdir(), data_filename))
+                if not os.path.samefile(tempfile.gettempdir(), common):
+                    raise ValueError
+
+            except ValueError:
+                # win32 built-in zip-folder handling, uses "temporary internet files" to store
+                if (sys.platform == "win32" and
+                        "/AppData/Local/Microsoft/Windows/INetCache/IE/" in data_filename):
+                    logging.info("File inside temporary directory (likely a zip file, just load the zip directly). "
+                                 "Exiting.")
+                    sys.exit(1)
+            else:
+                logging.info("File inside temporary directory. Exiting.")
+                sys.exit(1)
 
     try:
         ctx.load(data_filename, args.use_embedded_options)
