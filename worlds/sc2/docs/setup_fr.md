@@ -49,6 +49,7 @@ Si vous désirez des informations et/ou instructions générales sur l'utilisati
 veuillez consulter [*Creating a YAML*](/tutorial/Archipelago/setup/en#creating-a-yaml).
 
 ### Questions récurrentes à propos du fichier *yaml*
+
 #### Comment est-ce que je sais que mon *yaml* est bien défini?
 
 La manière la plus simple de valider votre *yaml* est d'utiliser le 
