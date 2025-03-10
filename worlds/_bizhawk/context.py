@@ -75,6 +75,12 @@ class BizHawkClientContext(CommonContext):
         if self.client_handler is not None:
             self.client_handler.on_package(self, cmd, args)
 
+    def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
+        super().on_deathlink(data)
+
+        if self.client_handler is not None:
+            self.client_handler.on_deathlink(self, data)
+
     async def server_auth(self, password_requested: bool=False):
         self.password_requested = password_requested
 
