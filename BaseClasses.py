@@ -1416,6 +1416,10 @@ class Item:
     def flags(self) -> int:
         return self.classification.as_flag()
 
+    @property
+    def is_event(self) -> bool:
+        return self.code is None
+
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Item):
             return NotImplemented
