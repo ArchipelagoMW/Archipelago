@@ -49,10 +49,5 @@ window.addEventListener('load', () => {
                 scrollTarget?.scrollIntoView();
             }
         });
-    }).catch((error) => {
-        console.error(error);
-        tutorialWrapper.innerHTML =
-            `<h2>This page is out of logic!</h2>
-            <h3>Click <a href="${window.location.origin}/tutorial">here</a> to return to safety.</h3>`;
     });
 });
