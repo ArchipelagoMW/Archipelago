@@ -1077,16 +1077,7 @@ class SC2Logic:
             state.has(item_names.ULTRALISK_TYRANNOZOR_ASPECT, self.player)
             and (state.has(item_names.ULTRALISK, self.player) or self.morphling_enabled)
         )
-    
-    def zerg_infested_siege_tanks_with_ammo(self, state: CollectionState) -> bool:
-        return (
-            state.has(item_names.INFESTED_SIEGE_TANK, self.player)
-            and state.has_any((
-                item_names.INFESTED_SIEGE_TANK_PROGRESSIVE_AUTOMATED_MITOSIS,
-                item_names.INFESTED_MARINE,
-                item_names.INFESTED_BUNKER,
-            ), self.player)
-        )
+
 
     def zerg_competent_comp(self, state: CollectionState) -> bool:
         if self.zerg_army_weapon_armor_upgrade_min_level(state) < 2:
@@ -1172,7 +1163,7 @@ class SC2Logic:
                         item_names.INFESTED_BANSHEE, item_names.INFESTED_DIAMONDBACK, item_names.INFESTED_MARINE,
                     ), self.player)
                     or self.spread_creep(state) and state.has(item_names.INFESTED_BUNKER, self.player)
-                    or self.zerg_infested_siege_tanks_with_ammo(state)
+                    or self.zerg_infested_tank_with_ammo(state)
                     # Highly-upgraded swarm hosts may also work, but that would require promoting many upgrades to progression
                 )
             ) or (
@@ -1981,7 +1972,7 @@ class SC2Logic:
             and self.zerg_competent_anti_air(state)
             and (
                 self.morph_lurker(state)
-                or self.zerg_infested_siege_tanks_with_ammo(state)
+                or self.zerg_infested_tank_with_ammo(state)
                 or state.has_all({item_names.INFESTED_LIBERATOR, item_names.INFESTED_LIBERATOR_DEFENDER_MODE}, self.player)
                 or (
                     state.has(item_names.SWARM_QUEEN, self.player)
