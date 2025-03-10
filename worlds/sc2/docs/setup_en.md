@@ -120,7 +120,7 @@ the mission in the 'StarCraft 2 Launcher' tab in the client.
 4. If the server has a password, enter that when prompted.
 5. Once connected, switch to the 'StarCraft 2 Launcher' tab in the client. There, you can see all the missions in your 
 world. 
-Unreachable missions will have grayed-out text. Just click on an available mission to start it!
+Unreachable missions will have greyed-out text. Just click on an available mission to start it!
 
 ## The game isn't launching when I try to start a mission.
 
