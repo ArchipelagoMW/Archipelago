@@ -867,10 +867,13 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             if args['password']:
                 logger.info('Password required')
             ctx.update_permissions(args.get("permissions", {}))
-            logger.info(
-                f"A !hint costs {args['hint_cost']}% of your total location count as points"
-                f" and you get {args['location_check_points']}"
-                f" for each location checked. Use !hint for more information.")
+            if args['hint_cost'] > 100:
+                logger.info('Hints are disabled.')
+            else:
+                logger.info(
+                    f"A !hint costs {args['hint_cost']}% of your total location count as points"
+                    f" and you get {args['location_check_points']}"
+                    f" for each location checked. Use !hint for more information.")
             ctx.hint_cost = int(args['hint_cost'])
             ctx.check_points = int(args['location_check_points'])
 
