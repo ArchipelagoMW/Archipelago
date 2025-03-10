@@ -59,7 +59,6 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.progressbar import ProgressBar
-from kivy.uix.dropdown import DropDown
 from kivy.utils import escape_markup
 from kivy.lang import Builder
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
@@ -73,7 +72,7 @@ from kivy.uix.image import AsyncImage
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
-from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType, HintStatus
+from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType, HintStatus, status_names, status_colors
 from Utils import async_start, get_input_text_from_response
 
 if typing.TYPE_CHECKING:
@@ -816,33 +815,6 @@ class HintLayout(BoxLayout):
         boxlayout.add_widget(Label(text="New Hint:", size_hint_x=None, size_hint_y=None, height=dp(30)))
         boxlayout.add_widget(AutocompleteHintInput())
         self.add_widget(boxlayout)
-
-        
-status_names: typing.Dict[HintStatus, str] = {
-    HintStatus.HINT_FOUND: "Found",
-    HintStatus.HINT_PRIORITY_UNSPECIFIED: "Unspecified",
-    HintStatus.HINT_PRIORITY_NO_PRIORITY: "No Priority",
-    HintStatus.HINT_PRIORITY_AVOID: "Avoid",
-    HintStatus.HINT_PRIORITY_PRIORITY: "Priority",
-    HintStatus.OLD_HINT_FORMAT: "Not Found"
-}
-status_colors: typing.Dict[HintStatus, str] = {
-    HintStatus.HINT_FOUND: "green",
-    HintStatus.HINT_PRIORITY_UNSPECIFIED: "white",
-    HintStatus.HINT_PRIORITY_NO_PRIORITY: "cyan",
-    HintStatus.HINT_PRIORITY_AVOID: "salmon",
-    HintStatus.HINT_PRIORITY_PRIORITY: "plum",
-    HintStatus.OLD_HINT_FORMAT: "red"
-}
-status_sort_weights: dict[HintStatus, int] = {
-    HintStatus.HINT_FOUND: 0,
-    HintStatus.HINT_PRIORITY_UNSPECIFIED: 1,
-    HintStatus.HINT_PRIORITY_NO_PRIORITY: 2,
-    HintStatus.HINT_PRIORITY_AVOID: 3,
-    HintStatus.HINT_PRIORITY_PRIORITY: 4,
-    HintStatus.OLD_HINT_FORMAT: 5,
-}
-
 
 class HintLog(RecycleView):
     header = {

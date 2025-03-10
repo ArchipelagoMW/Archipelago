@@ -43,7 +43,7 @@ import NetUtils
 import Utils
 from Utils import version_tuple, restricted_loads, Version, async_start, get_intended_text
 from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer, Permission, NetworkSlot, \
-    SlotType, LocationStore, Hint, HintStatus
+    SlotType, LocationStore, Hint, HintStatus, status_names_brackets
 from BaseClasses import ItemClassification
 
 min_client_version = Version(0, 1, 6)
@@ -1187,15 +1187,6 @@ def collect_hint_location_id(ctx: Context, team: int, slot: int, seeked_location
     return []
 
 
-status_names: typing.Dict[HintStatus, str] = {
-    HintStatus.HINT_FOUND: "(found)",
-    HintStatus.HINT_PRIORITY_UNSPECIFIED: "(unspecified)",
-    HintStatus.HINT_PRIORITY_NO_PRIORITY: "(no priority)",
-    HintStatus.HINT_PRIORITY_AVOID: "(avoid)",
-    HintStatus.HINT_PRIORITY_PRIORITY: "(priority)",
-}
-
-
 def format_hint(ctx: Context, team: int, hint: Hint) -> str:
     text = f"[Hint]: {ctx.player_names[team, hint.receiving_player]}'s " \
            f"{ctx.item_names[ctx.slot_info[hint.receiving_player].game][hint.item]} is " \
@@ -1205,7 +1196,7 @@ def format_hint(ctx: Context, team: int, hint: Hint) -> str:
     if hint.entrance:
         text += f" at {hint.entrance}"
     
-    return text + ". " + status_names.get(hint.status.as_display_status(), "(unknown)")
+    return text + ". " + status_names_brackets.get(hint.status.as_display_status(), "(unknown)")
 
 
 def json_format_send_event(net_item: NetworkItem, receiving_player: int):

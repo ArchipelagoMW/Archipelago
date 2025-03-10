@@ -16,7 +16,7 @@ class HintStatus(ByValue, enum.IntFlag):
     HINT_FOUND = 0b00000001
 
     # For "compatibility", only used in CommonClient
-    OLD_HINT_FORMAT = 0b10000000
+    HINT_UNFOUND_LEGACY = OLD_HINT_FORMAT = 0b10000000
 
     # Upper 8 bits: Priorities
     HINT_PRIORITY_UNSPECIFIED = 0  # For readable code
@@ -49,12 +49,51 @@ class HintStatus(ByValue, enum.IntFlag):
             return HintStatus.HINT_FOUND
         if HintStatus.OLD_HINT_FORMAT in self:
             return HintStatus.OLD_HINT_FORMAT
-        return self.priority
+
+        # Make sure we're only returning statuses that are actually allowed, and only one status at a time
+        for single_status in status_names:
+            if single_status in self.priority:
+                return single_status
+
+        return self.HINT_PRIORITY_UNSPECIFIED
 
     @property
     def changeable(self):
         return not self.found and not HintStatus.OLD_HINT_FORMAT in self
 
+
+status_names_brackets: typing.Dict[HintStatus, str] = {
+    HintStatus.HINT_FOUND: "(found)",
+    HintStatus.HINT_PRIORITY_PRIORITY: "(priority)",
+    HintStatus.HINT_PRIORITY_AVOID: "(avoid)",
+    HintStatus.HINT_PRIORITY_NO_PRIORITY: "(no priority)",
+    HintStatus.HINT_PRIORITY_UNSPECIFIED: "(unspecified)",
+    HintStatus.HINT_UNFOUND_LEGACY: "(not found)"
+}
+status_names: typing.Dict[HintStatus, str] = {
+    HintStatus.HINT_FOUND: "Found",
+    HintStatus.HINT_PRIORITY_UNSPECIFIED: "Unspecified",
+    HintStatus.HINT_PRIORITY_NO_PRIORITY: "No Priority",
+    HintStatus.HINT_PRIORITY_AVOID: "Avoid",
+    HintStatus.HINT_PRIORITY_PRIORITY: "Priority",
+    HintStatus.HINT_UNFOUND_LEGACY: "Not Found"
+}
+status_colors: typing.Dict[HintStatus, str] = {
+    HintStatus.HINT_FOUND: "green",
+    HintStatus.HINT_PRIORITY_PRIORITY: "plum",
+    HintStatus.HINT_PRIORITY_AVOID: "salmon",
+    HintStatus.HINT_PRIORITY_NO_PRIORITY: "slateblue",
+    HintStatus.HINT_PRIORITY_UNSPECIFIED: "white",
+    HintStatus.HINT_UNFOUND_LEGACY: "red",
+}
+status_sort_weights: dict[HintStatus, int] = {
+    HintStatus.HINT_FOUND: 0,
+    HintStatus.HINT_PRIORITY_UNSPECIFIED: 1,
+    HintStatus.HINT_PRIORITY_NO_PRIORITY: 2,
+    HintStatus.HINT_PRIORITY_AVOID: 3,
+    HintStatus.HINT_PRIORITY_PRIORITY: 4,
+    HintStatus.HINT_UNFOUND_LEGACY: 5,
+}
 
 class JSONMessagePart(typing.TypedDict, total=False):
     text: str
@@ -350,25 +389,9 @@ def add_json_location(parts: list, location_id: int, player: int = 0, **kwargs) 
     parts.append({"text": str(location_id), "player": player, "type": JSONTypes.location_id, **kwargs})
 
 
-status_names: typing.Dict[HintStatus, str] = {
-    HintStatus.HINT_FOUND: "(found)",
-    HintStatus.HINT_PRIORITY_PRIORITY: "(priority)",
-    HintStatus.HINT_PRIORITY_AVOID: "(avoid)",
-    HintStatus.HINT_PRIORITY_NO_PRIORITY: "(no priority)",
-    HintStatus.HINT_PRIORITY_UNSPECIFIED: "(unspecified)",
-}
-status_colors: typing.Dict[HintStatus, str] = {
-    HintStatus.HINT_FOUND: "green",
-    HintStatus.HINT_PRIORITY_PRIORITY: "plum",
-    HintStatus.HINT_PRIORITY_AVOID: "salmon",
-    HintStatus.HINT_PRIORITY_NO_PRIORITY: "slateblue",
-    HintStatus.HINT_PRIORITY_UNSPECIFIED: "white",
-}
-
-
 def add_json_hint_status(parts: list, hint_status: HintStatus, text: typing.Optional[str] = None, **kwargs):
     if text is None:
-        text = status_names[hint_status.as_display_status()]
+        text = status_names_brackets[hint_status.as_display_status()]
     parts.append({"text": text, "hint_status": hint_status, "type": JSONTypes.hint_status, **kwargs})
 
 
