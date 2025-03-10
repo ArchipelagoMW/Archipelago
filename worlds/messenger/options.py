@@ -51,6 +51,12 @@ class TransitionPlando(PlandoConnections):
     entrances = frozenset(RANDOMIZED_CONNECTIONS.keys())
     exits = frozenset(RANDOMIZED_CONNECTIONS.values())
 
+    @classmethod
+    def can_connect(cls, entrance: str, exit: str) -> bool:
+        if entrance != "Glacial Peak - Left" and entrance.lower() in cls.exits:
+            return exit.lower() in cls.entrances
+        return exit.lower() not in cls.entrances
+
 
 class Logic(Choice):
     """
