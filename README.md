@@ -80,6 +80,7 @@ Currently, the following games are supported:
 * Saving Princess
 * Castlevania: Circle of the Moon
 * Inscryption
+* Civilization VI
 * Jak and Daxter: The Precursor Legacy
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
