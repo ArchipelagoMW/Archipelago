@@ -444,7 +444,9 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
                 if child.collide_point(*touch.pos):
                     key = child.sort_key
                     if key == "status":
-                        parent.hint_sorter = lambda element: status_sort_weights[element["status"]["hint"]["status"].as_display_status()]
+                        parent.hint_sorter = lambda element: (
+                            status_sort_weights[element["status"]["hint"]["status"].as_display_status()]
+                        )
                     else:
                         parent.hint_sorter = lambda element: (
                             remove_between_brackets.sub("", element[key]["text"]).lower()
