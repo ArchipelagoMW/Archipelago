@@ -50,7 +50,7 @@ The between mission segments on the Hyperion, the Leviathan, and the Spear of Ad
 Additionally, metaprogression currencies such as credits and Solarite are not used.
 Available missions are in blue; missions where all locations were collected are in white.
 If you move your mouse over a mission, the uncollected locations will be displayed, categorized by type.
-Unavailable missions are in gray; their requirements will also be shown there.
+Unavailable missions are in grey; their requirements will also be shown there.
 
 ## What is the goal of this game when randomized?
 
@@ -92,8 +92,8 @@ Will overwrite existing files
     * Options: default, slower, slow, normal, fast, faster
 * `/color [faction] [color]` Changes your color for one of your playable factions.
     * Faction options: raynor, kerrigan, primal, protoss, nova
-    * Color options: white, red, blue, teal, purple, yellow, orange, green, lightpink, violet, lightgray, darkgreen, 
-    brown, lightgreen, darkgray, pink, rainbow, random, default
+    * Color options: white, red, blue, teal, purple, yellow, orange, green, light pink, violet, light grey, dark green, 
+    brown, light green, dark grey, pink, rainbow, random, default
 * `/option [option_name] [option_value]` Sets an option normally controlled by your yaml after generation.
     * Run without arguments to list all options.
     * Options pertain to automatic cutscene skipping, Kerrigan presence, Spear of Adun presence, starting resource 
