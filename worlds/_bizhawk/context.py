@@ -75,7 +75,7 @@ class BizHawkClientContext(CommonContext):
         if self.client_handler is not None:
             self.client_handler.on_package(self, cmd, args)
 
-    def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
+    def on_deathlink(self, data: dict[str, Any]) -> None:
         super().on_deathlink(data)
 
         if self.client_handler is not None:

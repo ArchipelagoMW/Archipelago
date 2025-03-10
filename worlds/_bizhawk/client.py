@@ -100,6 +100,6 @@ class BizHawkClient(abc.ABC, metaclass=AutoBizHawkClientRegister):
         """For handling packages from the server. Called from `BizHawkClientContext.on_package`."""
         pass
 
-    def on_deathlink(self, ctx: "BizHawkClientContext", data: typing.Dict[str, typing.Any]) -> None:
+    def on_deathlink(self, ctx: "BizHawkClientContext", data: dict[str, Any]) -> None:
         """For handling Deathlink packets from other clients."""
         pass
