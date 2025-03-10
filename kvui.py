@@ -72,7 +72,8 @@ from kivy.uix.image import AsyncImage
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
-from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType, HintStatus, status_names, status_colors
+from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType, HintStatus, status_names, status_colors, \
+    status_sort_weights
 from Utils import async_start, get_input_text_from_response
 
 if typing.TYPE_CHECKING:
