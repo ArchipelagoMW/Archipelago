@@ -31,7 +31,17 @@ class SA2BWeb(WebWorld):
         ["RaspberrySpaceJam", "PoryGone", "Entiss"]
     )
 
-    tutorials = [setup_en]
+    setup_pt_br  = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Português Brasileiro",
+        "setup_pt_br.md",
+        "setup/pt_br",
+        ["CarlosBraw"]
+    )
+
+    tutorials = [setup_en, setup_pt_br]
+
     option_groups = sa2b_option_groups
 
 
