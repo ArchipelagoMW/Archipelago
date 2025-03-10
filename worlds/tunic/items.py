@@ -253,6 +253,7 @@ extra_groups: Dict[str, Set[str]] = {
     "Ladders in Atoll": {"Ladders in South Atoll"},
     "Ladders in Ruined Atoll": {"Ladders in South Atoll"},
     "Ladders in Town": {"Ladders in Overworld Town"},  # fuzzy matching decided this was Ladders in South Atoll
+    "Ladder in Quarry": {"Ladders in Lower Quarry"},  # fuzzy matching decided this was Ladder to Quarry
 }
 
 item_name_groups.update(extra_groups)
