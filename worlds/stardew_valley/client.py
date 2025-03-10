@@ -94,14 +94,14 @@ class StardewCommandProcessor(ClientCommandProcessor):
     @mark_raw
     def _cmd_explain_missing(self, location: str = ""):
         """Explain what is missing for a location to be in logic. It explains the logic behind a location, while skipping the rules that are already satisfied."""
-        self.__explain(location, expected=True)
+        self.__explain("/explain_missing", location, expected=True)
 
     @mark_raw
     def _cmd_explain_how(self, location: str = ""):
         """Explain how a location is in logic. It explains the logic behind the location, while skipping the rules that are not satisfied."""
-        self.__explain(location, expected=False)
+        self.__explain("/explain_how", location, expected=False)
 
-    def __explain(self, location: str = "", expected: bool | None = None):
+    def __explain(self, command: str, location: str, expected: bool | None = None):
         logic = self.ctx.get_logic()
         if logic is None:
             return
@@ -116,7 +116,7 @@ class StardewCommandProcessor(ClientCommandProcessor):
                 rule = logic.region.can_reach_location(result)
                 expl = explain(rule, get_updated_state(self.ctx), expected=expected, mode=ExplainMode.CLIENT)
             else:
-                self.ctx.ui.last_autofillable_command = "/explain_missing"
+                self.ctx.ui.last_autofillable_command = command
                 logger.warning(response)
                 return
 
