@@ -5,6 +5,7 @@ from .Items import filler_items
 
 speedy_observer_index: [int] = [183, 182, 179, 178, 177, 101, 100, 99, 98, 97, 21, 19]
 speedy_enemy_index: [int] = [128, 125, 115, 114, 113, 67, 66, 60, 59, 58, 7, 6]
+money_item_names: [str] = ["Bills", "Coin", "Gold Bar", "Rupee"]
 
 
 # Converts AP readable name to in-game name
@@ -992,28 +993,47 @@ def update_obj_info(obj_info):
 
 
 # Indicates the chest size that will be loaded in game based on item provided. 0 = small, 1 = medium, 2 = large
-def __get_chest_size_from_item(item_name):
-    if "Bills" in item_name or "Coins" in item_name or "Gold Bars" in item_name:
-        item_name = "Money"
-    match item_name:
-        case "Mario's Hat" | "Mario's Letter" | "Mario's Shoe" | "Mario's Glove" | "Mario's Star":
-            return 0
+def __get_chest_size_from_item(item_name, chest_option, classification, trap_option):
+    if chest_option == 0 or chest_option == 2:
+        if any(iname in item_name for iname in money_item_names):
+            item_name = "Money"
+        match item_name:
+            case "Mario's Hat" | "Mario's Letter" | "Mario's Shoe" | "Mario's Glove" | "Mario's Star":
+                return 0
 
-        case "Small Heart" | "Money":
-            return 0
-        case "Large Heart":
-            return 1
+            case "Small Heart" | "Money":
+                return 0
+            case "Large Heart":
+                return 1
 
-        case "Poison Mushroom" | "Bomb" | "Ice Trap" | "Gold Diamond" | "Banana Trap":
+            case "Poison Mushroom" | "Bomb" | "Ice Trap" | "Gold Diamond" | "Banana Trap":
+                return 2
+
+            case "Fire Element Medal" | "Water Element Medal" | "Ice Element Medal":
+                return 2
+
+            case "Sapphire" | "Emerald" | "Ruby" | "Diamond":
+                return 1
+
+        return 0
+
+    elif chest_option == 3:
+        if "progression" in classification:
             return 2
-
-        case "Fire Element Medal" | "Water Element Medal" | "Ice Element Medal":
-            return 2
-
-        case "Sapphire" | "Emerald" | "Ruby" | "Diamond":
+        elif "useful" in classification:
             return 1
+        elif "filler" in classification:
+            return 0
+        elif "trap" in classification:
+            if trap_option == 0:
+                return 0
+            elif trap_option == 1:
+                return 2
+            else:
+                return choice([0,1,2])
 
-    return 0
+    elif chest_option == 1:
+        return choice([0,1,2])
 
 
 # For every key found in the generation output, add an entry for it in "iteminfotable".
@@ -1116,12 +1136,19 @@ def update_treasure_table(treasure_info, character_info, output_data, teiden: bo
             # Find the proper chest in the proper room by looking comparing the Room ID.
             if x["name"].find("takara") != -1 and x["room_no"] == item_data["room_no"]:
                 # Replace the Chest visuals with something that matches the item name in "characterinfo".
-                x["name"] = __get_item_chest_visual(item_data["name"])
-
-                if item_data["door_id"] == 0:
-                    chest_size = __get_chest_size_from_item(item_data["name"])
+                chest_size = 0
+                if output_data["Options"]["chest_types"] == 0:
+                    x["name"] = __get_item_chest_visual(item_data["name"], 0, item_data["classification"], output_data["Options"]["trap_chests"])
+                    if item_data["door_id"] == 0:
+                        chest_size = __get_chest_size_from_item(item_data["name"], 0, item_data["classification"], output_data["Options"]["trap_chests"])
+                    else:
+                        chest_size = __get_chest_size_from_key(item_data["door_id"])
                 else:
-                    chest_size = __get_chest_size_from_key(item_data["door_id"])
+                    x["name"] = __get_item_chest_visual(item_data["name"], output_data["Options"]["chest_types"], item_data["classification"],
+                                                        output_data["Options"]["trap_chests"])
+                    chest_size = __get_chest_size_from_item(item_data["name"], output_data["Options"]["chest_types"], item_data["classification"],
+                                                            output_data["Options"]["trap_chests"])
+
 
                 # Define the actor name to use from the Location in the generation output.
                 # Act differently if it's a key.
@@ -1192,30 +1219,48 @@ def __get_chest_size_from_key(key_id):
 
 
 # Changes the type of chest loaded in game based on the type of item that is hidden inside
-def __get_item_chest_visual(item_name):
-    if "Bills" in item_name or "Coin" in item_name or "Gold Bar" in item_name:
-        item_name = "Money"
-    match item_name:
-        case "Heart Key" | "Club Key" | "Diamond Key" | "Spade Key":
-            return "ytakara1"
+def __get_item_chest_visual(item_name, chest_option, classification, trap_option):
+    if chest_option == 0:
+        if any(iname in item_name for iname in money_item_names):
+            item_name = "Money"
+        match item_name:
+            case "Heart Key" | "Club Key" | "Diamond Key" | "Spade Key":
+                return "ytakara1"
 
-        case "Small Heart" | "Large Heart":
-            return "ytakara1"
+            case "Small Heart" | "Large Heart":
+                return "ytakara1"
 
-        case "Fire Element Medal" | "Bomb" | "Ruby":
-            return "rtakara1"
-        case "Water Element Medal" | "Poison Mushroom" | "Banana Trap" | "Sapphire":
+            case "Fire Element Medal" | "Bomb" | "Ruby":
+                return "rtakara1"
+            case "Water Element Medal" | "Poison Mushroom" | "Banana Trap" | "Sapphire":
+                return "btakara1"
+            case "Ice Element Medal" | "Ice Trap" | "Diamond":
+                return "wtakara1"
+
+            case "Mario's Hat" | "Mario's Letter" | "Mario's Shoe" | "Mario's Glove" | "Mario's Star":
+                return "rtakara1"
+
+            case "Gold Diamond" | "Emerald" | "Money":
+                return "gtakara1"
+
+        return "btakara1"
+    elif chest_option == 2 or chest_option == 3:
+        if "progression" in classification:
+            return "ytakara1"
+        elif "useful" in classification:
             return "btakara1"
-        case "Ice Element Medal" | "Ice Trap" | "Diamond":
-            return "wtakara1"
-
-        case "Mario's Hat" | "Mario's Letter" | "Mario's Shoe" | "Mario's Glove" | "Mario's Star":
-            return "rtakara1"
-
-        case "Gold Diamond" | "Emerald" | "Money":
+        elif "filler" in classification:
             return "gtakara1"
+        elif "trap" in classification:
+            if trap_option == 0:
+                return "rtakara1"
+            elif trap_option == 1:
+                return "ytakara1"
+            else:
+                return choice(["ytakara1", "rtakara1", "btakara1", "wtakara1", "gtakara1"])
 
-    return "btakara1"
+    elif chest_option == 1:
+        return choice(["ytakara1", "rtakara1", "btakara1", "wtakara1", "gtakara1"])
 
 
 # Dictionary of Location names and their index in keyinfo.

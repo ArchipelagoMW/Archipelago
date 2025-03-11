@@ -41,6 +41,10 @@ all_random_settings = {
     LMOptions.BombWeight.display_name:                "random",
     LMOptions.IceTrapWeight.display_name:             "random",
     LMOptions.BananaTrapWeight.display_name:          "random",
+    LMOptions.HeartWeight.display_name:               "random",
+    LMOptions.NothingWeight.display_name:             "random",
+    LMOptions.ChestTypes.display_name:                "random",
+    LMOptions.TrapChestType.display_name:             "random",
     LMOptions.Enemizer.display_name:                  "random",
     LMOptions.Deathlink.display_name:                 "random"
 }

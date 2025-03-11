@@ -99,6 +99,8 @@ class LMWeb(WebWorld):
             LuigiOptions.RandomMusic,
             LuigiOptions.HintDistribution,
             LuigiOptions.PortraitHints,
+            LuigiOptions.ChestTypes,
+            LuigiOptions.TrapChestType,
             LuigiOptions.Deathlink
         ]),
     ]

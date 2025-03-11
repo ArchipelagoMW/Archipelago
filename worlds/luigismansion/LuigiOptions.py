@@ -25,7 +25,7 @@ class RandomMusic(Toggle):
 
 
 class BundleWeight(Range):
-    """Set the weight for how often coin & bill bundles get chosen as filler. Default is 10"""
+    """Set the weight for how often coin & bill bundles get chosen as filler."""
     display_name = "Money Bundle Weight"
     range_start = 0
     range_end = 100
@@ -33,7 +33,7 @@ class BundleWeight(Range):
 
 
 class CoinWeight(Range):
-    """Set the weight for how often coins get chosen as filler. Default is 15"""
+    """Set the weight for how often coins get chosen as filler."""
     display_name = "Coin Weight"
     range_start = 0
     range_end = 100
@@ -41,7 +41,7 @@ class CoinWeight(Range):
 
 
 class BillWeight(Range):
-    """Set the weight for how often bills get chosen as filler. Default is 10"""
+    """Set the weight for how often bills get chosen as filler."""
     display_name = "Bill Weight"
     range_start = 0
     range_end = 100
@@ -49,7 +49,7 @@ class BillWeight(Range):
 
 
 class BarsWeight(Range):
-    """Set the weight for how often gold bars get chosen as filler. Default is 10"""
+    """Set the weight for how often gold bars get chosen as filler."""
     display_name = "Gold Bars Weight"
     range_start = 0
     range_end = 100
@@ -57,7 +57,7 @@ class BarsWeight(Range):
 
 
 class GemsWeight(Range):
-    """Set the weight for how often gemstones get chosen as filler. Default is 5"""
+    """Set the weight for how often gemstones get chosen as filler."""
     display_name = "Gems Weight"
     range_start = 0
     range_end = 100
@@ -65,7 +65,7 @@ class GemsWeight(Range):
 
 
 class PoisonTrapWeight(Range):
-    """Set the weight for how often poison mushrooms get chosen as traps. Default is 15"""
+    """Set the weight for how often poison mushrooms get chosen as traps."""
     display_name = "Poison Trap Weight"
     range_start = 0
     range_end = 100
@@ -73,7 +73,7 @@ class PoisonTrapWeight(Range):
 
 
 class BombWeight(Range):
-    """Set the weight for how often bombs get chosen as traps. Default is 15"""
+    """Set the weight for how often bombs get chosen as traps."""
     display_name = "Bomb Weight"
     range_start = 0
     range_end = 100
@@ -81,7 +81,7 @@ class BombWeight(Range):
 
 
 class IceTrapWeight(Range):
-    """Set the weight for how often ice traps get chosen as traps. Default is 15"""
+    """Set the weight for how often ice traps get chosen as traps."""
     display_name = "Ice Trap Weight"
     range_start = 0
     range_end = 100
@@ -89,7 +89,7 @@ class IceTrapWeight(Range):
 
 
 class BananaTrapWeight(Range):
-    """Set the weight for how often bananas get chosen as traps. Default is 15"""
+    """Set the weight for how often bananas get chosen as traps."""
     display_name = "Banana Trap Weight"
     range_start = 0
     range_end = 100
@@ -97,7 +97,7 @@ class BananaTrapWeight(Range):
 
 
 class NothingWeight(Range):
-    """Set the weight for how often nothing is chosen as filler. Default is 40"""
+    """Set the weight for how often nothing is chosen as filler."""
     display_name = "'Nothing' Weight"
     range_start = 0
     range_end = 100
@@ -105,7 +105,7 @@ class NothingWeight(Range):
 
 
 class HeartWeight(Range):
-    """Set the weight for how often hearts get chosen as filler. Default is 10"""
+    """Set the weight for how often hearts get chosen as filler."""
     display_name = "Heart Weight"
     range_start = 0
     range_end = 100
@@ -135,9 +135,12 @@ class SpeedySpirits(Toggle):
 class StartWithBooRadar(Choice):
     """
     Start with Boo Radar
-    0 = Start with Boo Radar
-    1 = Boo Radar in pool
-    2 = No Boo Radar - Boo Gates and Boosanity will be disabled if excluded
+
+    start_with: Start with Boo Radar
+
+    include: Boo Radar in pool
+
+    exclude: No Boo Radar - Boo Gates and Boosanity will be disabled if excluded
     """
     display_name = "Boo Radar"
     option_start_with = 0
@@ -199,7 +202,7 @@ class BooGates(Toggle):
     """
     Toggle the events that prevent progress unless a certain number of boos have been caught
 
-    Default to on. If this is turned off, the Boo Count options are ignored, and Boo Radar becomes filler.
+    Default to on. If this is turned off, the Boo Count options are ignored.
     """
     display_name = "Boo Gates"
     default = 1
@@ -230,7 +233,7 @@ class BalconyBooCount(Range):
 
 
 class KingBooHealth(Range):
-    """Set King Boo's health in the final fight. Default = 500"""
+    """Set King Boo's health in the final fight."""
     display_name = "King Boo's Health"
     range_start = 1
     range_end = 1000
@@ -258,9 +261,12 @@ class Portrification(Toggle):
 class Enemizer(Choice):
     """
     Choose if and how ghosts are randomized.
-    Vanilla = No ghost randomization
-    Randomized Elements = Randomized ghost elements and waves
-    No Elements = Remove ghost elements, randomize waves
+
+    Vanilla: No ghost randomization
+
+    Randomized Elements: Randomized ghost elements and waves
+
+    No Elements: Remove ghost elements, randomize waves
     """
     display_name = "Enemizer"
     option_vanilla = 0
@@ -277,6 +283,43 @@ class DoorRando(Toggle):
 class LuigiFearAnim(Toggle):
     """Turn off Luigi being scared by ghosts if they spawn close to him"""
     display_name = "Courageous Luigi"
+
+
+class ChestTypes(Choice):
+    """
+    Determines how chest colors and size are chosen,
+
+    default: Size and color are determined by attempting to match the item type to a representative color similar to the vanilla game
+
+    full_random: Size and color are chosen completely at random.
+
+    color: Chest color represents the AP item classification
+
+    size_and_color: Both size and color are determined by AP item classification
+    """
+    display_name = "Chest Cosmetics"
+    option_default = 0
+    option_full_random = 1
+    option_color = 2
+    option_size_and_color = 3
+    default = 0
+
+
+class TrapChestType(Choice):
+    """
+    Determines if chests containing traps can look like progression items
+
+    filler: Trap chests only appear as traps
+
+    progression: Trap chests only appear as progression
+
+    anything: Trap chests can appear as anything
+    """
+    display_name = "Trap Appearance"
+    option_filler = 0
+    option_progression = 1
+    option_anything = 2
+    default = 0
 
 
 class Goal(Choice):
@@ -319,6 +362,7 @@ class LMOptions(PerGameCommonOptions):
     pickup_animation: PickupAnim
     random_music: RandomMusic
     door_rando: DoorRando
+    enemizer: Enemizer
     portrait_hints: PortraitHints
     hint_distribution: HintDistribution
     toadsanity: Toadsanity
@@ -346,6 +390,7 @@ class LMOptions(PerGameCommonOptions):
     banana_trap_weight: BananaTrapWeight
     nothing_weight: NothingWeight
     heart_weight: HeartWeight
-    enemizer: Enemizer
+    chest_types: ChestTypes
+    trap_chests: TrapChestType
     deathlink: Deathlink
     start_inventory_from_pool: StartInventoryPool
