@@ -721,7 +721,7 @@ class CV64PatchExtensions(APPatchExtension):
         # Change the pointer to the Clock Tower final room 3HB door slab drops to not share its values with those of the
         # 3HB slab near Renon at the top of the room.
         if options["multi_hit_breakables"]:
-            rom_data.write_byte(0x10CF37, 0x04)  # pointer for CT final room door slab item data
+            rom_data.write_byte(0x10CF37, 0x04)
 
         # Once-per-frame gameplay checks
         rom_data.write_int32(0x6C848, 0x080FF40D)  # J 0x803FD034
