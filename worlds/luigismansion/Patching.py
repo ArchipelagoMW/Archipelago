@@ -1487,7 +1487,7 @@ def apply_new_ghost(enemy_info_entry, element):
         case "No Element":
             if enemy_info_entry["room_no"] == 23:
                 no_shy_ghosts = random_ghosts_to_patch
-                no_shy_ghosts.remove(5)
+                no_shy_ghosts.pop(5)
                 enemy_info_entry["name"] = choice(choice(no_shy_ghosts))
             else:
                 enemy_info_entry["name"] = choice(choice(random_ghosts_to_patch))
