@@ -212,7 +212,7 @@ def get_skill_rule(skill, level, player, options) -> CollectionRule:
     return lambda state: True
 
 
-def generate_special_rules_for(entrance, region_row, outbound_region_name, player, options):
+def generate_special_rules_for(entrance, region_row, outbound_region_name, player, options, world):
     if outbound_region_name == RegionNames.Cooks_Guild:
         add_rule(entrance, get_cooking_skill_rule(32, player, options))
     elif outbound_region_name == RegionNames.Crafting_Guild:
@@ -224,6 +224,17 @@ def generate_special_rules_for(entrance, region_row, outbound_region_name, playe
         add_rule(entrance, lambda state: state.has(ItemNames.QP_Below_Ice_Mountain, player))
     elif region_row.name == "Dwarven Mountain Pass" and outbound_region_name == "Anvil*":
         add_rule(entrance, lambda state: state.has(ItemNames.QP_Dorics_Quest, player))
+    elif outbound_region_name == RegionNames.Crandor:
+        add_rule(entrance, lambda state: state.can_reach_region(RegionNames.South_Of_Varrock, player))
+        add_rule(entrance, lambda state: state.can_reach_region(RegionNames.Edgeville, player))
+        add_rule(entrance, lambda state: state.can_reach_region(RegionNames.Lumbridge, player))
+        add_rule(entrance, lambda state: state.can_reach_region(RegionNames.Rimmington, player))
+        add_rule(entrance, lambda state: state.can_reach_region(RegionNames.Monastery, player))
+        add_rule(entrance, lambda state: state.can_reach_region(RegionNames.Dwarven_Mines, player))
+        add_rule(entrance, lambda state: state.can_reach_region(RegionNames.Port_Sarim, player))
+        add_rule(entrance, lambda state: state.can_reach_region(RegionNames.Draynor_Village, player))
+        add_rule(entrance, lambda state: world.quest_points(state) >= 32)
+
 
     # Special logic for canoes
     canoe_regions = [RegionNames.Lumbridge, RegionNames.South_Of_Varrock, RegionNames.Barbarian_Village,

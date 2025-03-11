@@ -168,7 +168,7 @@ class OSRSWorld(World):
 
                 item_name = self.region_rows_by_name[parsed_outbound].itemReq
                 entrance.access_rule = lambda state, item_name=item_name.replace("*",""): state.has(item_name, self.player)
-                generate_special_rules_for(entrance, region_row, outbound_region_name, self.player, self.options)
+                generate_special_rules_for(entrance, region_row, outbound_region_name, self.player, self.options, self)
 
             for resource_region in region_row.resources:
                 if not resource_region:
@@ -179,7 +179,7 @@ class OSRSWorld(World):
                     entrance.connect(self.region_name_to_data[resource_region])
                 else:
                     entrance.connect(self.region_name_to_data[resource_region.replace('*', '')])
-                generate_special_rules_for(entrance, region_row, resource_region, self.player, self.options)
+                generate_special_rules_for(entrance, region_row, resource_region, self.player, self.options, self)
 
         self.roll_locations()
 
