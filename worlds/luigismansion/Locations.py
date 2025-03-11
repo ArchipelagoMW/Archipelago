@@ -1,5 +1,6 @@
 from typing import NamedTuple, Optional, List
 from BaseClasses import Location, Region
+from .Helper_Functions import LMRamData
 
 
 class LMLocationData(NamedTuple):
@@ -8,10 +9,8 @@ class LMLocationData(NamedTuple):
     type: str  # type of randomization option/jmp table and group [Chest, Furniture, Furniture, Plant, Boo, GSpeedy (Gold Mouse), BSpeedy (Blue Ghost), Portrait, Toad]
     jmpentry: int = -1  # entry number on the jmp table it belongs to
     access: List[str] = []  # items required to access location, many special cases
-    in_game_room_id: Optional[int] = None
     locked_item: Optional[str] = None
-    room_ram_addr: Optional[int] = None
-    locationbit: Optional[int] = None
+    update_ram_addr: Optional[list[LMRamData]] = None
 
 
 class LMLocation(Location):

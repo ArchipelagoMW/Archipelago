@@ -2,6 +2,7 @@ from typing import NamedTuple, Dict, Set, Optional
 
 from BaseClasses import Item
 from BaseClasses import ItemClassification as IC
+from .Helper_Functions import LMRamData
 
 
 class LMItemData(NamedTuple):
@@ -9,10 +10,7 @@ class LMItemData(NamedTuple):
     code: Optional[int]
     classification: IC
     doorid: Optional[int] = None
-    ram_addr: Optional[int] = None
-    itembit: Optional[int] = None
-    pointer_offset: Optional[int] = None
-    ram_byte_size: Optional[int] = None
+    update_ram_addr: Optional[list[LMRamData]] = None
 
 
 class LMItem(Item):
@@ -49,7 +47,7 @@ ITEM_TABLE: dict[str, LMItemData] = {
     "Storage Room Key": LMItemData("Door Key", 12, IC.progression, 16, ram_addr=0x803D5E16, itembit=0),
     "Fortune Teller Key": LMItemData("Door Key", 13, IC.progression, 4, ram_addr=0x803D5E14, itembit=4),
     "Laundry Room Key": LMItemData("Door Key", 14, IC.progression, 7, ram_addr=0x803D5E14, itembit=7),
-    "Lower 2F Stairwell Key": LMItemData("Door Key", 15, IC.progression, 74, ram_addr=0x803D5E1D, itembit=2), # TODO 1F - 2F Stairwell (Lower Door) Key
+    "Lower 2F Stairwell Key": LMItemData("Door Key", 15, IC.progression, 74, ram_addr=0x803D5E1D, itembit=2),
     "Conservatory Key": LMItemData("Door Key", 16, IC.progression, 21, ram_addr=0x803D5E16, itembit=5),
     "Dining Room Key": LMItemData("Door Key", 17, IC.progression, 14, ram_addr=0x803D5E15, itembit=6),
     "North Rec Room Key": LMItemData("Door Key", 18, IC.progression, 25, ram_addr=0x803D5E17, itembit=1),
@@ -75,14 +73,14 @@ ITEM_TABLE: dict[str, LMItemData] = {
     "Butler's Room Key": LMItemData("Door Key", 39, IC.progression, 1, ram_addr=0x803D5E14, itembit=1),
     "Tea Room Key": LMItemData("Door Key", 40, IC.progression, 47, ram_addr=0x803D5E19, itembit=7),
     "South Rec Room Key": LMItemData("Door Key", 41, IC.progression, 24, ram_addr=0x803D5E17, itembit=0),
-    "Upper 2F Stairwell Key": LMItemData("Door Key", 42, IC.progression, 75, ram_addr=0x803D5E1D, itembit=3), #TODO 1F - 2F Stairwell (Upper Door) Key
+    "Upper 2F Stairwell Key": LMItemData("Door Key", 42, IC.progression, 75, ram_addr=0x803D5E1D, itembit=3),
     "2F Bathroom Key": LMItemData("Door Key", 43, IC.progression, 48, ram_addr=0x803D5E1A, itembit=0),
     "2F Washroom Key": LMItemData("Door Key", 44, IC.progression, 45, ram_addr=0x803D5E19, itembit=5),
     "Nana's Room Key": LMItemData("Door Key", 45, IC.progression, 49, ram_addr=0x803D5E1A, itembit=1),
     "Astral Hall Key": LMItemData("Door Key", 46, IC.progression, 44, ram_addr=0x803D5E19, itembit=4),
     "Observatory Key": LMItemData("Door Key", 47, IC.progression, 40, ram_addr=0x803D5E19, itembit=0),
     "Guest Room Key": LMItemData("Door Key", 48, IC.progression, 30, ram_addr=0x803D5E17, itembit=6),
-    "East Attic Hallway Key": LMItemData("Door Key", 49, IC.progression, 55, ram_addr=0x803D5E1A, itembit=7), #TODO West Safari Hallway Key
+    "East Attic Hallway Key": LMItemData("Door Key", 49, IC.progression, 55, ram_addr=0x803D5E1A, itembit=7),
     "Telephone Room Key": LMItemData("Door Key", 50, IC.progression, 52, ram_addr=0x803D5E1A, itembit=4),
     "Ceramics Studio Key": LMItemData("Door Key", 51, IC.progression, 50, ram_addr=0x803D5E1A, itembit=2),
     "Breaker Room Key": LMItemData("Door Key", 52, IC.progression, 71, ram_addr=0x803D5E1C, itembit=7),
