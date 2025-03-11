@@ -1742,7 +1742,7 @@ class DKC2LooseRules(DKC2Rules):
             LocationName.kannons_klaim_clear:
                 self.has_kannons,
             LocationName.kannons_klaim_kong:
-                self.has_kannons,
+                lambda state: self.has_kannons(state) and self.can_carry(state),
             LocationName.kannons_klaim_dk_coin:
                 lambda state: self.can_hover(state) or self.can_cartwheel(state),
             LocationName.kannons_klaim_bonus_1:
