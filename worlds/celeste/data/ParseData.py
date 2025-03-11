@@ -74,6 +74,8 @@ for level in level_data["levels"]:
                             for item in possible_access:
                                 location_str += f"ItemName.{item}, "
                             location_str += f"], "
+                    elif "rules" in location:
+                        raise Exception(f"Location {location_full_name} uses 'rules' instead of 'rule")
 
                     location_str += "]),"
 
@@ -118,12 +120,12 @@ for level in level_data["levels"]:
 
     # Room Connections
     for room_con in level["room_connections"]:
-        source_room_full_name = f"{level['name']}_{room_con['source_room']}"
-        dest_room_full_name = f"{level['name']}_{room_con['dest_room']}"
+        source_door_full_name = f"{level['name']}_{room_con['source_room']}_{room_con['source_door']}"
+        dest_door_full_name = f"{level['name']}_{room_con['dest_room']}_{room_con['dest_door']}"
 
-        room_con_str = (f"    \"{source_room_full_name}---{dest_room_full_name}\": RoomConnection(\"{level['name']}\", "
-                        f"all_doors[\"{source_room_full_name}_{room_con['source_door']}\"], "
-                        f"all_doors[\"{dest_room_full_name}_{room_con['dest_door']}\"]),"
+        room_con_str = (f"    \"{source_door_full_name}---{dest_door_full_name}\": RoomConnection(\"{level['name']}\", "
+                        f"all_doors[\"{source_door_full_name}\"], "
+                        f"all_doors[\"{dest_door_full_name}\"]),"
                        )
 
         all_room_connections.append(room_con_str)
