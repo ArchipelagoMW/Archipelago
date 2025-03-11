@@ -3,6 +3,7 @@ import Utils
 import hashlib
 import os
 import json
+import base64
 
 from typing import TYPE_CHECKING, List
 
@@ -117,7 +118,8 @@ class DKC2PatchExtension(APPatchExtension):
     def shuffle_levels(caller: APProcedurePatch, rom: bytes) -> bytes:
         unshuffled_rom = bytearray(rom)
         rom = bytearray(rom)
-        rom_connections = json.loads(caller.get_file("levels.bin").decode("UTF-8"))
+        level_data = base64.b64decode(caller.get_file("levels.bin").decode("UTF-8"))
+        rom_connections = json.loads(level_data)
         
         from .Levels import level_rom_data, boss_rom_data
         dkc2_level_rom_data = dict(level_rom_data, **boss_rom_data)
@@ -426,7 +428,8 @@ def patch_rom(world: "DKC2World", patch: DKC2ProcedurePatch):
     adjust_palettes(world, patch)
 
     # Save shuffled levels data
-    patch.write_file("levels.bin", json.dumps(world.rom_connections).encode("UTF-8"))
+    json_levels = json.dumps(world.rom_connections).encode("UTF-8")
+    patch.write_file("levels.bin", base64.b64encode(json_levels))
 
     patch.write_file("token_patch.bin", patch.get_token_binary())
 
