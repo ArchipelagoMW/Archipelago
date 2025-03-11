@@ -179,7 +179,7 @@ def update_event_info(event_info, boo_checks: bool):
             x["EventFlag"] = 0
             x["disappear_flag"] = 28
             x["EventIf"] = 5
-            x["EventArea"] = 350
+            x["EventArea"] = 380
             x["EventLock"] = 1
             x["PlayerStop"] = 1
             x["EventLoad"] = 0
