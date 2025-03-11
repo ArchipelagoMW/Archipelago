@@ -3,6 +3,8 @@ def load_tests(loader, standard_tests, pattern):
     import unittest
     from .. import file_path
     from worlds.AutoWorld import AutoWorldRegister
+    from worlds import ensure_worlds_loaded
+    ensure_worlds_loaded()
 
     suite = unittest.TestSuite()
     suite.addTests(standard_tests)

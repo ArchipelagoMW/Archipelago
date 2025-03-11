@@ -3,9 +3,16 @@ import unittest
 from BaseClasses import MultiWorld, PlandoOptions
 from Options import ItemLinks
 from worlds.AutoWorld import AutoWorldRegister
+from worlds import ensure_worlds_loaded
 
 
 class TestOptions(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        ensure_worlds_loaded()
+
     def test_options_have_doc_string(self):
         """Test that submitted options have their own specified docstring"""
         for gamename, world_type in AutoWorldRegister.world_types.items():

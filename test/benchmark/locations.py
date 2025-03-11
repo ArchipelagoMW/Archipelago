@@ -10,8 +10,10 @@ def run_locations_benchmark():
 
     from Utils import init_logging
     from BaseClasses import MultiWorld, CollectionState, Location
-    from worlds import AutoWorld
+    from worlds import AutoWorld, ensure_worlds_loaded
     from worlds.AutoWorld import call_all
+
+    ensure_worlds_loaded()
 
     init_logging("Benchmark Runner")
     logger = logging.getLogger("Benchmark")

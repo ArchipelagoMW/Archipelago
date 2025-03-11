@@ -62,6 +62,8 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
     zfile: zipfile.ZipInfo
 
     from worlds.AutoWorld import AutoWorldRegister
+    from worlds import ensure_worlds_loaded
+    ensure_worlds_loaded()
     worlds = {}
     data = []
     for game, world in AutoWorldRegister.world_types.items():

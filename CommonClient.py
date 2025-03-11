@@ -25,7 +25,7 @@ from MultiServer import CommandProcessor
 from NetUtils import (Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot,
                       RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes, HintStatus, SlotType)
 from Utils import Version, stream_input, async_start
-from worlds import network_data_package, AutoWorldRegister
+from worlds import network_data_package, AutoWorldRegister, ensure_worlds_loaded
 import os
 import ssl
 
@@ -107,6 +107,7 @@ class ClientCommandProcessor(CommandProcessor):
             return False
         count = 0
         checked_count = 0
+        ensure_worlds_loaded(self.ctx.game)
         for location, location_id in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id.items():
             if filter_text and filter_text not in location:
                 continue
@@ -134,6 +135,7 @@ class ClientCommandProcessor(CommandProcessor):
             self.output("No game set, cannot determine existing items.")
             return False
         self.output(f"Item Names for {self.ctx.game}")
+        ensure_worlds_loaded(self.ctx.game)
         for item_name in AutoWorldRegister.world_types[self.ctx.game].item_name_to_id:
             self.output(item_name)
 
@@ -143,6 +145,7 @@ class ClientCommandProcessor(CommandProcessor):
             self.output("No game set, cannot determine existing item groups.")
             return False
         self.output(f"Item Group Names for {self.ctx.game}")
+        ensure_worlds_loaded(self.ctx.game)
         for group_name in AutoWorldRegister.world_types[self.ctx.game].item_name_groups:
             self.output(group_name)
 
@@ -152,6 +155,7 @@ class ClientCommandProcessor(CommandProcessor):
             self.output("No game set, cannot determine existing locations.")
             return False
         self.output(f"Location Names for {self.ctx.game}")
+        ensure_worlds_loaded(self.ctx.game)
         for location_name in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id:
             self.output(location_name)
 
@@ -161,6 +165,7 @@ class ClientCommandProcessor(CommandProcessor):
             self.output("No game set, cannot determine existing location groups.")
             return False
         self.output(f"Location Group Names for {self.ctx.game}")
+        ensure_worlds_loaded(self.ctx.game)
         for group_name in AutoWorldRegister.world_types[self.ctx.game].location_name_groups:
             self.output(group_name)
 

@@ -1507,8 +1507,10 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
     import yaml
     from jinja2 import Template
 
-    from worlds import AutoWorldRegister
+    from worlds import AutoWorldRegister, ensure_worlds_loaded
     from Utils import local_path, __version__
+
+    ensure_worlds_loaded()
 
     full_path: str
 

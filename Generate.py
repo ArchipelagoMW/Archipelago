@@ -180,6 +180,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
                         for yaml in weights_cache[path]:
                             if category_name is None:
                                 for category in yaml:
+                                    # FIXME: This is called before worlds get loaded in the roll_settings() call below.
                                     if category in AutoWorldRegister.world_types and \
                                             key in Options.CommonOptions.type_hints:
                                         yaml[category][key] = option
@@ -467,8 +468,13 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
             raise Exception('"game" not specified')
         raise Exception(f"Invalid game: {ret.game}")
     if ret.game not in AutoWorldRegister.world_types:
-        from worlds import failed_world_loads
-        picks = Utils.get_fuzzy_results(ret.game, list(AutoWorldRegister.world_types) + failed_world_loads, limit=1)[0]
+        from worlds import ensure_worlds_loaded
+        ensure_worlds_loaded(ret.game)
+    if ret.game not in AutoWorldRegister.world_types:
+        from worlds import failed_world_loads, world_sources_by_game
+        loaded_games = list(AutoWorldRegister.world_types)
+        non_loaded_games = [game for game in world_sources_by_game if game not in AutoWorldRegister.world_types]
+        picks = Utils.get_fuzzy_results(ret.game, loaded_games + non_loaded_games + failed_world_loads, limit=1)[0]
         if picks[0] in failed_world_loads:
             raise Exception(f"No functional world found to handle game {ret.game}. "
                             f"Did you mean '{picks[0]}' ({picks[1]}% sure)? "

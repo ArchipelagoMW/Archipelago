@@ -2,10 +2,17 @@ import unittest
 
 from BaseClasses import CollectionState
 from worlds.AutoWorld import AutoWorldRegister
+from worlds import ensure_worlds_loaded
 from . import setup_solo_multiworld, gen_steps
 
 
 class TestBase(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        ensure_worlds_loaded()
+
     gen_steps = gen_steps
 
     default_settings_unreachable_regions = {

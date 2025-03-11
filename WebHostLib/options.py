@@ -11,6 +11,7 @@ from flask import redirect, render_template, request, Response
 import Options
 from Utils import local_path
 from worlds.AutoWorld import AutoWorldRegister
+from worlds import ensure_worlds_loaded
 from . import app, cache
 from .generate import get_meta
 
@@ -23,12 +24,14 @@ def create() -> None:
 
 
 def get_world_theme(game_name: str) -> str:
+    ensure_worlds_loaded(game_name)
     if game_name in AutoWorldRegister.world_types:
         return AutoWorldRegister.world_types[game_name].web.theme
     return 'grass'
 
 
 def render_options_page(template: str, world_name: str, is_complex: bool = False) -> Union[Response, str]:
+    ensure_worlds_loaded(world_name)
     world = AutoWorldRegister.world_types[world_name]
     if world.hidden or world.web.options_page is False:
         return redirect("games")
