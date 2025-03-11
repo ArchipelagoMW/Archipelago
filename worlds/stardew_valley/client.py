@@ -27,13 +27,10 @@ except ImportError:
         multiworld: MultiWorld
         player_id: int
 
-        def build_gui(self, manager):
+        def make_gui(self, manager):
             ...
 
         def run_generator(self):
-            ...
-
-        def load_kv(self):
             ...
 
 
@@ -66,7 +63,7 @@ class StardewCommandProcessor(ClientCommandProcessor):
                 expl = explain(rule, get_updated_state(self.ctx), expected=None, mode=ExplainMode.CLIENT)
             else:
                 self.ctx.ui.last_autofillable_command = "/explain"
-                logger.warning(response)
+                self.output(response)
                 return
 
         self.ctx.previous_explanation = expl
@@ -85,7 +82,7 @@ class StardewCommandProcessor(ClientCommandProcessor):
             expl = explain(rule, get_updated_state(self.ctx), expected=None, mode=ExplainMode.CLIENT)
         else:
             self.ctx.ui.last_autofillable_command = "/explain_item"
-            logger.warning(response)
+            self.output(response)
             return
 
         self.ctx.previous_explanation = expl
@@ -117,7 +114,7 @@ class StardewCommandProcessor(ClientCommandProcessor):
                 expl = explain(rule, get_updated_state(self.ctx), expected=expected, mode=ExplainMode.CLIENT)
             else:
                 self.ctx.ui.last_autofillable_command = command
-                logger.warning(response)
+                self.output(response)
                 return
 
         self.ctx.previous_explanation = expl
@@ -127,17 +124,17 @@ class StardewCommandProcessor(ClientCommandProcessor):
     def _cmd_more(self, index: str = ""):
         """Will tell you what's missing to consider a location in logic."""
         if self.ctx.previous_explanation is None:
-            logger.warning("No previous explanation found.")
+            self.output("No previous explanation found.")
             return
 
         try:
             expl = self.ctx.previous_explanation.more(int(index))
         except (ValueError, IndexError):
-            logger.info("Which previous rule do you want to explained?")
+            self.output("Which previous rule do you want to explained?")
             self.ctx.ui.last_autofillable_command = "/more"
             for i, rule in enumerate(self.ctx.previous_explanation.more_explanations):
                 # TODO handle autofillable commands
-                logger.info(f"/more {i} -> {str(rule)})")
+                self.output(f"/more {i} -> {str(rule)})")
             return
 
         self.ctx.previous_explanation = expl
