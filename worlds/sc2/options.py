@@ -505,7 +505,7 @@ class MaxNumberOfUpgrades(Range):
     default = -1
 
 
-class MercenaryHighlanders(Toggle):
+class MercenaryHighlanders(DefaultOnToggle):
     """
     If enabled, it limits the controllable amount of certain mercenaries to 1, even if you have unlimited mercenaries upgrade.
     With this upgrade you can still call the mercenary again if it dies.
@@ -831,7 +831,7 @@ class NovaMaxWeapons(Range):
 
     Note: Nova can swap between unlocked weapons anytime during the gameplay.
     """
-    range_start = 1
+    range_start = 0
     range_end = len(nova_weapons)
     default = range_end
 
@@ -1561,10 +1561,14 @@ def get_enabled_races(world: Optional['SC2World']) -> Set[SC2Race]:
 
 
 def get_enabled_campaigns(world: Optional['SC2World']) -> Set[SC2Campaign]:
-    campaign_names = get_option_value(world, "enabled_campaigns")
+    if world is None:
+        return EnabledCampaigns.default
+    campaign_names = world.options.enabled_campaigns
     campaigns = {campaign for campaign in SC2Campaign if campaign.campaign_name in campaign_names}
-    if (get_option_value(world, "mission_order") == MissionOrder.option_vanilla
-            and get_option_value(world,"selected_races") != SelectRaces.valid_keys):
+    if (world.options.mission_order.value == MissionOrder.option_vanilla
+        and world.options.selected_races.value != SelectRaces.valid_keys
+        and SC2Campaign.EPILOGUE in campaigns
+    ):
         campaigns.remove(SC2Campaign.EPILOGUE)
     return campaigns
 
