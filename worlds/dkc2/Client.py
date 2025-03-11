@@ -33,6 +33,8 @@ DKC2_RECV_INDEX = DKC2_SRAM + 0x020
 DKC2_INIT_FLAG = DKC2_SRAM + 0x022
 DKC2_DAMAGE_FLAG = DKC2_SRAM + 0x044
 DKC2_INSTA_DEATH_FLAG = DKC2_SRAM + 0x046
+DKC2_DEATH_LINK_FORCE = DKC2_SRAM + 0x05A
+DKC2_DEATH_LINK_FLAG = DKC2_SRAM + 0x058
 
 DKC2_TRACKED_LEVELS = DKC2_SRAM + 0x80
 
@@ -80,22 +82,6 @@ class DKC2SNIClient(SNIClient):
         self.barrel_request = ""
         self.current_map = 0
 
-    async def deathlink_kill_player(self, ctx):
-        from SNIClient import DeathState, snes_buffered_write, snes_flush_writes, snes_read
-
-        traps = await snes_read(ctx, DKC2_SRAM + 0x46, 0x02)
-        if traps is None:
-            return
-        
-        traps = int.from_bytes(traps, "little") + 1
-        traps &= 0x00FF
-        snes_buffered_write(ctx, DKC2_SRAM + + 0x46, bytes([traps]))
-
-        await snes_flush_writes(ctx)
-
-        ctx.death_state = DeathState.dead
-        ctx.last_death_link = time.time()
-
 
     async def validate_rom(self, ctx):
         from SNIClient import snes_read
@@ -114,21 +100,27 @@ class DKC2SNIClient(SNIClient):
         ctx.send_option = 0
         ctx.allow_collect = True
 
+        update_tags = False
+
         energy_link = setting_data[0x19]
-        if energy_link:
+        if energy_link and "EnergyLink" not in ctx.tags:
             ctx.tags.add("EnergyLink")
+            update_tags = True
             if "barrel" not in ctx.command_processor.commands:
                 ctx.command_processor.commands["barrel"] = cmd_barrel
 
         trap_link = setting_data[0x1A]
-        if trap_link:
+        if trap_link and "TrapLink" not in ctx.tags:
             ctx.tags.add("TrapLink")
+            update_tags = True
 
         death_link = setting_data[0x18]
         if death_link:
             await ctx.update_death_link(bool(death_link & 0b1))
-
-        await ctx.send_msgs([{"cmd": "ConnectUpdate", "tags": ctx.tags}])
+        
+        if update_tags:
+            await ctx.send_msgs([{"cmd": "ConnectUpdate", "tags": ctx.tags}])
+        
         ctx.rom = rom_name
 
         return True
@@ -178,24 +170,16 @@ class DKC2SNIClient(SNIClient):
             return
         
         if "DeathLink" in ctx.tags and ctx.last_death_link + 1 < time.time():
-            currently_dead = player_state[0] & 0x20
-            await ctx.handle_deathlink_state(currently_dead)
+            death_link_flag = await snes_read(ctx, DKC2_DEATH_LINK_FLAG, 0x01)
+            if death_link_flag is not None:
+                is_death_link_active = death_link_flag[0]
+                is_player_dead = player_state[0] & 0x20
+                is_map = nmi_pointer == 0x8CE9 or nmi_pointer == 0x8CF1
+                currently_dead = is_player_dead and not is_death_link_active and not is_map
+                await ctx.handle_deathlink_state(currently_dead)
 
-        # This is going to be rewritten whenever SNIClient supports on_package
-        energy_link = setting_data[0x19]
-        if self.using_newer_client:
-            if energy_link != 0:
-                await self.handle_energy_link(ctx)
-        else:
-            if energy_link != 0:
-                if self.energy_link_enabled and f'EnergyLink{ctx.team}' in ctx.stored_data:
-                    await self.handle_energy_link(ctx)
-
-                if ctx.server and ctx.server.socket.open and not self.energy_link_enabled and ctx.team is not None:
-                    self.energy_link_enabled = True
-                    ctx.set_notify(f"EnergyLink{ctx.team}")
-                    self.barrel_request = ""
-                    snes_logger.info(f"Initialized EnergyLink{ctx.team}")
+        if "EnergyLink" in ctx.tags:
+            await self.handle_energy_link(ctx)
 
         if "TrapLink" in ctx.tags:
             await self.handle_trap_link(ctx)
@@ -409,7 +393,7 @@ class DKC2SNIClient(SNIClient):
                 else:
                     addr = WRAM_START + offset
                 sfx = currency_data[item.item][1]
-                currency = await snes_read(ctx, addr, 0x02)
+                currency = await snes_read(ctx, addr, 0x01)
                 if currency is None:
                     recv_index -= 1
                     return
@@ -576,6 +560,7 @@ class DKC2SNIClient(SNIClient):
 
         await snes_flush_writes(ctx)
 
+
     async def handle_trap_link(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
         from .Rom import trap_data
@@ -586,34 +571,6 @@ class DKC2SNIClient(SNIClient):
 
         if self.received_trap_link:
             trap = self.received_trap_link
-            if trap.item == STARTING_ID + 0x0040 and not setting_data[0x28]:
-                # Exclude processing Freeze Traps if they're not in the pool
-                self.received_trap_link = None
-                return
-            elif trap.item == STARTING_ID + 0x0041 and not setting_data[0x29]:
-                # Exclude processing Reverse Traps if they're not in the pool
-                self.received_trap_link = None
-                return
-            elif trap.item == STARTING_ID + 0x0042 and not setting_data[0x2A]:
-                # Exclude processing Damage Traps if they're not in the pool
-                self.received_trap_link = None
-                return
-            elif trap.item == STARTING_ID + 0x0043 and not setting_data[0x2B]:
-                # Exclude processing Damage Traps if they're not in the pool
-                self.received_trap_link = None
-                return
-            elif trap.item == STARTING_ID + 0x0044 and not setting_data[0x2C]:
-                # Exclude processing Damage Traps if they're not in the pool
-                self.received_trap_link = None
-                return
-            elif trap.item == STARTING_ID + 0x0045 and not setting_data[0x2D]:
-                # Exclude processing Damage Traps if they're not in the pool
-                self.received_trap_link = None
-                return
-            elif trap.item == STARTING_ID + 0x0046 and not setting_data[0x2E]:
-                # Exclude processing Insta Death Traps if they're not in the pool
-                self.received_trap_link = None
-                return
 
             offset = trap_data[trap.item][0]
             traps = await snes_read(ctx, DKC2_SRAM + offset, 0x02)
@@ -629,17 +586,28 @@ class DKC2SNIClient(SNIClient):
     async def deathlink_kill_player(self, ctx):
         from SNIClient import DeathState, snes_buffered_write, snes_flush_writes, snes_read
 
-        currency = await snes_read(ctx, DKC2_INSTA_DEATH_FLAG, 0x02)
-        if currency is None:
+        # Discard killing from death link
+        death_link_flag = await snes_read(ctx, DKC2_DEATH_LINK_FLAG, 0x01)
+        if death_link_flag is None:
             return
-        currency = int.from_bytes(currency, "little") + 1
-        currency &= 0x0FFF
-        snes_buffered_write(ctx, DKC2_INSTA_DEATH_FLAG, bytes([currency]))
-
+        if death_link_flag[0]:
+            return
+        
+        # Discard killing from the map
+        nmi_pointer = await snes_read(ctx, WRAM_START + 0x0020, 0x2)
+        if nmi_pointer is None:
+            return
+        nmi_pointer = int.from_bytes(nmi_pointer, "little")
+        if nmi_pointer == 0x8CE9 or nmi_pointer == 0x8CF1:
+            return
+            
+        snes_buffered_write(ctx, DKC2_DEATH_LINK_FORCE, bytes([0x01]))
+        snes_buffered_write(ctx, DKC2_DEATH_LINK_FLAG, bytes([0x01]))
         await snes_flush_writes(ctx)
 
         ctx.death_state = DeathState.dead
         ctx.last_death_link = time.time()
+
 
     async def send_trap_link(self, ctx: SNIClient, trap_name: str):
         if "TrapLink" not in ctx.tags or ctx.slot == None:
@@ -654,6 +622,7 @@ class DKC2SNIClient(SNIClient):
             }
         }])
         snes_logger.info(f"Sent linked {trap_name}")
+
 
     def on_package(self, ctx, cmd: str, args: dict):
         super().on_package(ctx, cmd, args)
@@ -706,7 +675,17 @@ class DKC2SNIClient(SNIClient):
                 if trap_name not in trap_name_to_value:
                     return
                 
+                trap_id: int = trap_name_to_value[trap_name]
+                if "trap_weights" not in self.slot_data:
+                    return
+                if f"{trap_id}" not in self.slot_data["trap_weights"]:
+                    return
+                if self.slot_data["trap_weights"][f"{trap_id}"] == 0:
+                    # The player disabled this trap type
+                    return
+                
                 self.received_trap_link = NetworkItem(trap_name_to_value[trap_name], None, None)
+
 
 def cmd_barrel(self):
     """

@@ -112,7 +112,8 @@ trap_name_to_value: typing.Dict[str, int] = {
     "Bee Trap":             STARTING_ID + 0x0042,  # Honey Trap 
     "Input Sequence Trap":  STARTING_ID + 0x0040,  # Freeze Trap
     "Thwimp Trap":          STARTING_ID + 0x0044,  # TNT Barrel Trap
-    "Fishin' Boo Trap":     STARTING_ID + 0x0044,  # TNT Barrel Trap
+    "Sticky Floor Trap":    STARTING_ID + 0x0042,  # Honey Trap 
+    "Sticky Hands Trap":    STARTING_ID + 0x0042,  # Honey Trap 
 }
 
 trap_value_to_name: typing.Dict[int, str] = {

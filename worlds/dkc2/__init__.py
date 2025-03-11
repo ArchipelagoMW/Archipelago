@@ -7,7 +7,7 @@ import pkgutil
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
-from .Items import DKC2Item, item_table, misc_table, item_groups
+from .Items import DKC2Item, item_table, misc_table, item_groups, STARTING_ID
 from .Locations import setup_locations, all_locations, location_groups
 from .Regions import create_regions, connect_regions
 from .Names import ItemName, LocationName
@@ -262,9 +262,22 @@ class DKC2World(World):
         slot_data["coinsanity"] = self.options.coinsanity.value
         slot_data["bananasanity"] = self.options.bananasanity.value
         slot_data["energy_link"] = self.options.energy_link.value
+        slot_data["trap_weights"] = self.output_trap_weights()
 
         return slot_data
 
+    def output_trap_weights(self) -> typing.Dict[int, int]:
+        trap_data = {}
+
+        trap_data[STARTING_ID + 0x0040] = self.options.freeze_trap_weight.value
+        trap_data[STARTING_ID + 0x0041] = self.options.reverse_trap_weight.value
+        trap_data[STARTING_ID + 0x0042] = self.options.honey_trap_weight.value
+        trap_data[STARTING_ID + 0x0043] = self.options.ice_trap_weight.value
+        trap_data[STARTING_ID + 0x0044] = self.options.tnt_barrel_trap_weight.value
+        trap_data[STARTING_ID + 0x0045] = self.options.damage_trap_weight.value
+        trap_data[STARTING_ID + 0x0046] = self.options.insta_death_trap_weight.value
+
+        return trap_data
 
     def generate_early(self):
         self.level_connections = dict()
