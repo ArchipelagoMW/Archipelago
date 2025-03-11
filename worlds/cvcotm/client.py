@@ -161,11 +161,13 @@ class CastlevaniaCotMClient(BizHawkClient):
         if "DeathLink" in args["tags"] and args["data"]["time"] != self.time_of_sent_death:
             if "cause" in args["data"]:
                 cause = args["data"]["cause"]
+                # If the other game sent a death with a blank string for the cause, use the default death message.
                 if cause == "":
                     cause = f"{args['data']['source']} killed you without a word!"
                 if len(cause) > ITEM_NAME_LIMIT + PLAYER_NAME_LIMIT:
                     cause = cause[:ITEM_NAME_LIMIT + PLAYER_NAME_LIMIT]
             else:
+                # If the other game sent a death with no cause at all, use the default death message.
                 cause = f"{args['data']['source']} killed you without a word!"
 
             # Highlight the player that killed us in the game's orange text.
@@ -261,6 +263,7 @@ class CastlevaniaCotMClient(BizHawkClient):
                 else:
                     area_of_death = DEATHLINK_AREA_NAMES[area]
 
+                # Send the death.
                 await ctx.send_death(f"{ctx.player_names[ctx.slot]} perished in {area_of_death}. Dracula has won!")
 
                 # Record the time in which the death was sent so when we receive the packet we can tell it wasn't our
