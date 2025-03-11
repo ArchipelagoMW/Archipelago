@@ -2107,7 +2107,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
     def _cmd_exit(self) -> bool:
         """Shutdown the server"""
         try:
-            self.ctx.server.ws_server.close()
+            self.ctx.server.server.close()
         finally:
             self.ctx.exit_event.set()
         return True
@@ -2477,7 +2477,7 @@ async def auto_shutdown(ctx, to_cancel=None):
         await asyncio.wait_for(ctx.exit_event.wait(), ctx.auto_shutdown)
 
     def inactivity_shutdown():
-        ctx.server.ws_server.close()
+        ctx.server.server.close()
         ctx.exit_event.set()
         if to_cancel:
             for task in to_cancel:
