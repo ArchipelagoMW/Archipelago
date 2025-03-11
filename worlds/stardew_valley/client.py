@@ -136,6 +136,7 @@ class StardewCommandProcessor(ClientCommandProcessor):
             logger.info("Which previous rule do you want to explained?")
             self.ctx.ui.last_autofillable_command = "/more"
             for i, rule in enumerate(self.ctx.previous_explanation.more_explanations):
+                # TODO handle autofillable commands
                 logger.info(f"/more {i} -> {str(rule)})")
             return
 
