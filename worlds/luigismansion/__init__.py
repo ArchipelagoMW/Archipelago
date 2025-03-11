@@ -101,7 +101,6 @@ class LMWeb(WebWorld):
             LuigiOptions.PortraitHints,
             LuigiOptions.ChestTypes,
             LuigiOptions.TrapChestType,
-            LuigiOptions.Deathlink
         ]),
     ]
 
@@ -140,69 +139,16 @@ class LMWorld(World):
     item_name_groups = get_item_names_per_category()
     required_client_version = (0, 5, 1)
     web = LMWeb()
-    ghost_affected_regions: dict[str, str] = GHOST_TO_ROOM
 
-    open_doors: dict[int, int] = {  # TODO maybe move to imported class
-        34: 1,
-        38: 0,
-        43: 1,
-        41: 1,
-        33: 0,
-        32: 1,
-        31: 0,
-        27: 0,
-        28: 0,
-        3: 0,
-        1: 1,
-        4: 0,
-        5: 1,
-        7: 0,
-        11: 1,
-        14: 0,
-        15: 0,
-        10: 1,
-        17: 0,
-        18: 1,
-        20: 1,
-        16: 0,
-        74: 0,
-        75: 1,
-        23: 1,
-        21: 0,
-        25: 0,
-        24: 1,
-        42: 0,
-        29: 0,
-        30: 1,
-        44: 1,
-        40: 1,
-        45: 1,
-        48: 1,
-        49: 1,
-        47: 1,
-        51: 0,
-        63: 0,
-        52: 1,
-        59: 0,
-        62: 0,
-        55: 1,
-        53: 0,
-        56: 0,
-        50: 1,
-        65: 0,
-        9: 1,
-        71: 0,
-        68: 0,
-        67: 1,
-        69: 0,
-        70: 1,
-        72: 0
-    }
+
+
 
     def __init__(self, *args, **kwargs):
         self.itempool: list[LMItem] = []
         self.pre_fill_items: list[LMItem] = []
         super(LMWorld, self).__init__(*args, **kwargs)
+        self.ghost_affected_regions: dict[str, str] = GHOST_TO_ROOM
+        self.open_doors: dict[int, int] = vanilla_door_state
 
     def interpret_slot_data(self, slot_data):
         # There are more clever ways to do this, but all would require much larger changes
@@ -673,7 +619,7 @@ class LMWorld(World):
         output_data = {
             "Seed": self.multiworld.seed,
             "Slot": self.player,
-            "Name": self.multiworld.get_player_name(self.player),
+            "Name": self.player_name,
             "Options": {},
             "Locations": {},
             "Entrances": {},
@@ -757,6 +703,6 @@ class LMWorld(World):
             "balcony boo count": self.options.balcony_boo_count.value,
             "final boo count": self.options.final_boo_count.value,
             "enemizer": self.options.enemizer.value,
-            "death_link": self.options.deathlink.value,
+            "death_link": self.options.death_link.value,
             "apworld version": "0.1.3"
         }

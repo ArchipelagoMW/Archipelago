@@ -1,14 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Toggle, Range, PerGameCommonOptions, Choice, StartInventoryPool
-
-
-# Will look into feasibility of options later.
-
-class Deathlink(Toggle):
-    """All players who have deathlink enabled will die when one person with deathlink on does"""
-    display_name = "Deathlink"
-    internal_name = "deathlink"
+from Options import Toggle, Range, PerGameCommonOptions, Choice, StartInventoryPool, DeathLinkMixin
 
 class LuigiWalkSpeed(Choice):
     """Choose how fast Luigi moves"""
@@ -391,7 +383,7 @@ class RankRequirement(Choice):
 
 
 @dataclass
-class LMOptions(PerGameCommonOptions):
+class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     goal: Goal
     rank_requirement: RankRequirement
     walk_speed: LuigiWalkSpeed
@@ -432,5 +424,4 @@ class LMOptions(PerGameCommonOptions):
     heart_weight: HeartWeight
     chest_types: ChestTypes
     trap_chests: TrapChestType
-    deathlink: Deathlink
     start_inventory_from_pool: StartInventoryPool

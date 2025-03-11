@@ -1177,7 +1177,7 @@ def update_treasure_table(treasure_info, character_info, output_data, teiden: bo
                                 coin_amount = int_money_amt
                         elif "Bills" in item_data["name"]:
                             bill_amount = int_money_amt
-                        elif "Gold Bars" in item_data["name"]:
+                        elif "Gold Bar" in item_data["name"]:
                             gold_bar_amount = int_money_amt
                         elif "Sapphire" in item_data["name"]:
                             sapphire_amount = int_money_amt
@@ -1227,12 +1227,12 @@ def __get_item_chest_visual(item_name, chest_option, classification, trap_option
             case "Heart Key" | "Club Key" | "Diamond Key" | "Spade Key":
                 return "ytakara1"
 
-            case "Small Heart" | "Large Heart":
+            case "Small Heart" | "Large Heart" | "Banana Trap" :
                 return "ytakara1"
 
             case "Fire Element Medal" | "Bomb" | "Ruby":
                 return "rtakara1"
-            case "Water Element Medal" | "Poison Mushroom" | "Banana Trap" | "Sapphire":
+            case "Water Element Medal" | "Poison Mushroom" | "Sapphire":
                 return "btakara1"
             case "Ice Element Medal" | "Ice Trap" | "Diamond":
                 return "wtakara1"

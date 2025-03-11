@@ -46,7 +46,6 @@ all_random_settings = {
     LMOptions.ChestTypes.internal_name:                "random",
     LMOptions.TrapChestType.internal_name:             "random",
     LMOptions.Enemizer.internal_name:                  "random",
-    LMOptions.Deathlink.internal_name:                 "random"
 }
 
 allsanity_settings = {
