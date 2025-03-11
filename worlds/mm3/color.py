@@ -118,7 +118,7 @@ if "worlds.mm2" in sys.modules:
         pass
 
 palette_pointers: Dict[str, List[int]] = {
-    "Mega Buster": [0x3C8A8, 0x4650],
+    "Mega Buster": [0x7C8A8, 0x4650],
     "Gemini Laser": [0x4654],
     "Needle Cannon": [0x4658],
     "Hard Knuckle": [0x465C],
