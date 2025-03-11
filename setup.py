@@ -19,7 +19,7 @@ from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple, Union
 
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
-requirement = 'cx-Freeze==7.2.10'
+requirement = 'cx-Freeze==7.2.0'
 try:
     import pkg_resources
     try:
