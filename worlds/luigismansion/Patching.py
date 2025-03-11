@@ -5,7 +5,11 @@ from .Items import filler_items
 
 speedy_observer_index: [int] = [183, 182, 179, 178, 177, 101, 100, 99, 98, 97, 21, 19]
 speedy_enemy_index: [int] = [128, 125, 115, 114, 113, 67, 66, 60, 59, 58, 7, 6]
-money_item_names: [str] = ["Bills", "Coin", "Gold Bar", "Rupee"]
+money_item_names: [str] = ["Bills", "Coin", "Gold Bar", "Rupee", "Leaf"]
+explode_item_names: [str] = ["Bomb", "Missile", "Glove"]
+icy_item_names: [str] = ["Ice Trap"]
+light_item_names: [str] = ["Light", "Big Key"]
+blueish_item_names: [str] = ["Small Key"]
 
 
 # Converts AP readable name to in-game name
@@ -1223,8 +1227,16 @@ def __get_item_chest_visual(item_name, chest_option, classification, trap_option
     if chest_option == 0:
         if any(iname in item_name for iname in money_item_names):
             item_name = "Money"
+        elif any(iname in item_name for iname in explode_item_names):
+            item_name = "Bomb"
+        elif any(iname in item_name for iname in light_item_names):
+            item_name = "Banana Trap"
+        elif any(iname in item_name for iname in blueish_item_names):
+            item_name = "Sapphire"
+        elif any(iname in item_name for iname in icy_item_names):
+            item_name = "Ice Trap"
         match item_name:
-            case "Heart Key" | "Club Key" | "Diamond Key" | "Spade Key":
+            case "Heart Key" | "Club Key" | "Diamond Key" | "Spade Key" :
                 return "ytakara1"
 
             case "Small Heart" | "Large Heart" | "Banana Trap" :
