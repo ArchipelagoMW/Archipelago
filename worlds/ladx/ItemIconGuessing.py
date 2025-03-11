@@ -383,7 +383,7 @@ PHRASES = {
     'BOSS KEY': 'NIGHTMARE_KEY',
     'HEART PIECE': 'HEART_PIECE',
     'PIECE OF HEART': 'HEART_PIECE', 
-    "ROCK SMASH": 'SHOVEL',
+    "ROCK SMASH": 'BOMB', 
 }
 
 # All following will only be used to match items for the specific game.
