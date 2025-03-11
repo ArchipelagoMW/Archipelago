@@ -372,7 +372,7 @@ def fill_missions(
             remaining_count -= 1
         except IndexError:
             raise IndexError(
-                f"Slot at address \"{goal_slot.get_address_to_node()}\" ran out of possible missions to place "
+                f"Slot at address \"{mission_slot.get_address_to_node()}\" ran out of possible missions to place "
                 f"with {remaining_count} empty slots remaining."
             )
 
