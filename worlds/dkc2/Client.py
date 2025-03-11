@@ -72,6 +72,7 @@ UNCOLLECTABLE_LEVELS = [0x09, 0x21, 0x63, 0x60, 0x0D]
 class DKC2SNIClient(SNIClient):
     game = "Donkey Kong Country 2"
     patch_suffix = ".apdkc2"
+    slot_data: dict
 
     def __init__(self):
         super().__init__()
@@ -628,10 +629,10 @@ class DKC2SNIClient(SNIClient):
         super().on_package(ctx, cmd, args)
 
         if cmd == "Connected":
-            slot_data = args.get("slot_data", None)
+            self.slot_data = args.get("slot_data", None)
             self.using_newer_client = True
             self.barrel_request = ""
-            if slot_data["energy_link"]:
+            if self.slot_data["energy_link"]:
                 ctx.set_notify(f"EnergyLink{ctx.team}")
                 if ctx.ui:
                     ctx.ui.enable_energy_link()
