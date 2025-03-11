@@ -4,7 +4,7 @@ from typing import Any
 from Options import Toggle, OptionError
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial, Item
-from .options import PeaksOfYoreOptions, Goal, StartingBook, RopeUnlockMode, poy_option_groups
+from .options import PeaksOfYoreOptions, Goal, StartingBook, RopeUnlockMode, StartingHands, poy_option_groups
 from .data import full_item_table, full_location_table
 from .locations import get_locations
 from .regions import create_poy_regions, RegionLocationInfo
@@ -141,12 +141,12 @@ class PeaksOfWorld(World):
                         local_itempool.append(self.create_item(tool.name))
                         # else don't place rope unlock as it will be unlocked with any rope pick-up
                 elif tool.name == "Left Hand":
-                    if self.options.start_with_hands.value != 1:
+                    if self.options.start_with_hands.value == StartingHands.option_right:
                         local_itempool.append(self.create_item(tool.name))
                         if self.options.early_hands:
                             self.multiworld.early_items[self.player][tool.name] = 1
                 elif tool.name == "Right Hand":
-                    if self.options.start_with_hands.value != 2:
+                    if self.options.start_with_hands.value == StartingHands.option_left:
                         local_itempool.append(self.create_item(tool.name))
                         if self.options.early_hands:
                             self.multiworld.early_items[self.player][tool.name] = 1
