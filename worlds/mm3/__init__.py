@@ -195,8 +195,58 @@ class MM3World(World):
                   filleritempool: List["Item"],
                   fill_locations: List["Location"]) -> None:
         # on a solo gen, fill can try to force Wily into sphere 2, but for most generations this is impossible
-        # since MM2 can have a 2 item sphere 1, and 3 items are required for Wily
-        return # TODO: confirm the behaviors here
+        # MM3 is worse than MM2 here, some of the RBMs can also require Rush
+        if self.multiworld.players > 1:
+            return  # Don't need to change anything on a multi gen, fill should be able to solve it with a 4 sphere 1
+        rbm_to_item = {
+            0: needle_man_stage,
+            1: magnet_man_stage,
+            2: gemini_man_stage,
+            3: hard_man_stage,
+            4: top_man_stage,
+            5: snake_man_stage,
+            6: spark_man_stage,
+            7: shadow_man_stage
+        }
+        affected_rbm = [2, 3]  # Gemini and Hard will always have this happen
+        possible_rbm = [0, 7]  # Air and Flash are always valid targets, due to Rush Marine/Jet receive
+        if self.options.consumables:
+            possible_rbm.extend([4, 5])  # every stage has at least one of each consumable
+            if self.options.consumables == self.options.consumables.option_weapon_health:
+                possible_rbm.extend([1, 6])
+            else:
+                affected_rbm.extend([1, 6])
+        else:
+            affected_rbm.extend([1, 4, 5, 6])  # only two checks on non consumables
+        if self.options.starting_robot_master.value in affected_rbm:
+            rbm_names = list(map(lambda s: rbm_to_item[s], possible_rbm))
+            valid_second = [item for item in progitempool
+                            if item.name in rbm_names
+                            and item.player == self.player]
+            placed_item = self.random.choice(valid_second)
+            rbm_defeated = (f"{robot_masters[self.options.starting_robot_master.value].replace(' Defeated', '')}"
+                            f" - Defeated")
+            rbm_location = self.get_location(rbm_defeated)
+            rbm_location.place_locked_item(placed_item)
+            progitempool.remove(placed_item)
+            fill_locations.remove(rbm_location)
+            target_rbm = (placed_item.code & 0xF) - 1
+            if self.options.strict_weakness or (self.options.random_weakness
+                                                and not (self.weapon_damage[0][target_rbm] > 0)):
+                # we need to find a weakness for this boss
+                weaknesses = [weapon for weapon in range(1, 9)
+                              if self.weapon_damage[weapon][target_rbm] >= minimum_weakness_requirement[weapon]]
+                weapons = list(map(lambda s: weapons_to_name[s], weaknesses))
+                valid_weapons = [item for item in progitempool
+                                 if item.name in weapons
+                                 and item.player == self.player]
+                placed_weapon = self.random.choice(valid_weapons)
+                weapon_name = next(name for name, idx in lookup_location_to_id.items()
+                                   if idx == 0x890101 + self.options.starting_robot_master.value)
+                weapon_location = self.get_location(weapon_name)
+                weapon_location.place_locked_item(placed_weapon)
+                progitempool.remove(placed_weapon)
+                fill_locations.remove(weapon_location)
 
     def generate_output(self, output_directory: str) -> None:
         try:

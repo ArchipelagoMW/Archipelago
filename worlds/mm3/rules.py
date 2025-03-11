@@ -145,7 +145,7 @@ def set_rules(world: "MM3World") -> None:
         world.weapon_damage = slot_data["weapon_damage"]
     else:
         if world.options.random_weakness == world.options.random_weakness.option_shuffled:
-            weapon_tables = [table for weapon, table in weapon_damage.items() if weapon != 0]
+            weapon_tables = [table.copy() for weapon, table in weapon_damage.items() if weapon != 0]
             world.random.shuffle(weapon_tables)
             for i in range(1, 9):
                 world.weapon_damage[i] = weapon_tables.pop()
@@ -176,10 +176,11 @@ def set_rules(world: "MM3World") -> None:
                     elif i in (20, 21) and not world.options.random_weakness:
                         continue
                         # Gamma and Wily Machine need all weaknesses present, so allow
-                    elif not world.options.random_weakness and i == 17 and \
-                            3 > world.weapon_damage[weapon][i] > 0:
-                        # Kamegoros take 3 max from weapons on non-random
-                        world.weapon_damage[weapon][i] = 0
+                    elif not world.options.random_weakness == world.options.random_weakness.option_randomized \
+                            and i == 17:
+                        if 3 > world.weapon_damage[weapon][i] > 0:
+                            # Kamegoros take 3 max from weapons on non-random
+                            world.weapon_damage[weapon][i] = 0
                     elif 4 > world.weapon_damage[weapon][i] > 0:
                         world.weapon_damage[weapon][i] = 0
 
