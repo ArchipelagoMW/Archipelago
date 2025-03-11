@@ -59,6 +59,14 @@ class PeaksOfWorld(World):
         if self.options.start_with_oil_lamp:
             self.multiworld.push_precollected(self.create_item("Oil Lamp"))
 
+        if self.options.start_with_hands.value == 0:
+            self.multiworld.push_precollected(self.create_item("Right Hand"))
+            self.multiworld.push_precollected(self.create_item("Left Hand"))
+        elif self.options.start_with_hands.value == 1:
+            self.multiworld.push_precollected(self.create_item("Left Hand"))
+        else:
+            self.multiworld.push_precollected(self.create_item("Right Hand"))
+
         starting_book_options: dict[str, Toggle] = {
             "Fundamentals Book": self.options.enable_fundamental,
             "Intermediate Book": self.options.enable_intermediate,
@@ -68,7 +76,7 @@ class PeaksOfWorld(World):
 
         book_names: list[str] = list(starting_book_options)
         enabled_books: list[str] = [b for b, v in starting_book_options.items() if v]
-        start_book: str = ""
+        start_book: str = self.options.starting_book.get_selected_book()
 
         if not enabled_books:
             # enabled_books.append("Fundamentals Book")
@@ -78,7 +86,9 @@ class PeaksOfWorld(World):
             raise OptionError("Player " + self.player_name + " has not selected any books!")
 
         if start_book not in enabled_books:
-            logging.warning("book " + start_book + "not enabled selecting random book")
+            logging.warning(start_book)
+            logging.warning(enabled_books)
+            logging.warning("book " + start_book + " not enabled, selecting random book")
             start_book = self.random.choice(enabled_books)
             logging.warning("selected book: " + start_book)
 
@@ -130,6 +140,16 @@ class PeaksOfWorld(World):
                     elif self.options.rope_unlock_mode == RopeUnlockMode.option_normal:
                         local_itempool.append(self.create_item(tool.name))
                         # else don't place rope unlock as it will be unlocked with any rope pick-up
+                elif tool.name == "Left Hand":
+                    if self.options.start_with_hands.value != 1:
+                        local_itempool.append(self.create_item(tool.name))
+                        if self.options.early_hands:
+                            self.multiworld.early_items[self.player][tool.name] = 1
+                elif tool.name == "Right Hand":
+                    if self.options.start_with_hands.value != 2:
+                        local_itempool.append(self.create_item(tool.name))
+                        if self.options.early_hands:
+                            self.multiworld.early_items[self.player][tool.name] = 1
                 else:
                     local_itempool.append(self.create_item(tool.name))
 

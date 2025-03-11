@@ -53,6 +53,21 @@ class StartWithOilLamp(Toggle):
     """
     display_name = "Start with Oil Lamp"
 
+class StartingHands(Choice):
+    """
+    Choose what hands you want to have enabled on start.
+    WARNING: Setting this to any setting other than *both* can make the game **very** difficult!
+    """
+    display_name = "Starting Hands"
+    option_both = 0
+    option_left = 1
+    option_right = 2
+
+class EarlyHands(DefaultOnToggle):
+    """
+    Choose whether the missing hand will be placed earlier in the run.
+    """
+    display_name = "Early Hands"
 
 class RopeUnlockMode(Choice):
     """
@@ -99,7 +114,9 @@ poy_option_groups = [
         StartingBook,
         StartWithBarometer,
         StartWithOilLamp,
-        RopeUnlockMode
+        RopeUnlockMode,
+        StartingHands,
+        EarlyHands
     ]),
     OptionGroup("Peaks", [
         EnableFundamental,
@@ -118,6 +135,8 @@ class PeaksOfYoreOptions(PerGameCommonOptions):
     starting_book: StartingBook
     start_with_barometer: StartWithBarometer
     start_with_oil_lamp: StartWithOilLamp
+    start_with_hands: StartingHands
+    early_hands: EarlyHands
     rope_unlock_mode: RopeUnlockMode
     enable_fundamental: EnableFundamental
     enable_intermediate: EnableIntermediate
