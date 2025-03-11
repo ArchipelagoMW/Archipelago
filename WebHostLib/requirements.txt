@@ -9,3 +9,5 @@ bokeh>=3.5.2
 markupsafe>=2.1.5
 Markdown>=3.7
 mdx-breakless-lists>=1.0.1
+Sphinx>=7.2.6
+myst-parser>=2.0.0
