@@ -33,7 +33,6 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
             game_logic: GameLogic, state_logic: StateLogic, locations: List[LocationData]):
     
     region_names: List[str] = [
-        "Menu",
         "Overworld",
         "Gas Area",
         "Radioactive Area",
@@ -89,9 +88,8 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
         super_early_game_buildings.append("Conveyor Merger")
 
     if options.final_elevator_package == 1:
-        super_early_game_buildings.append(early_game_buildings)
+        super_early_game_buildings.extend(early_game_buildings)
 
-    connect(regions, "Menu", "Overworld")
     connect(regions, "Overworld", "Hub Tier 1")
     connect(regions, "Hub Tier 1", "Hub Tier 2",
             lambda state: state_logic.can_build_all(state, super_early_game_buildings))

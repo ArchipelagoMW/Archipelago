@@ -60,6 +60,9 @@ class StateLogic:
         return not parts or all(can_handcraft_part(part) for part in parts)
 
     def can_produce_specific_recipe_for_part(self, state: CollectionState, recipe: Recipe) -> bool:
+        if recipe.name == "Recipe: Iron Ingot":
+            debug = True
+
         if recipe.needs_pipes and (
                 not self.can_build_any(state, ("Pipes Mk.1", "Pipes Mk.2")) or
                 not self.can_build_any(state, ("Pipeline Pump Mk.1", "Pipeline Pump Mk.2"))):
@@ -76,8 +79,8 @@ class StateLogic:
             and self.can_build(state, recipe.building) \
             and self.can_produce_all(state, recipe.inputs)
     
-    def is_game_phase(self, state: CollectionState, phase: int) -> bool:
-        limited_phase = min(self.options.final_elevator_package * 2, phase)
+    def is_elevator_tier(self, state: CollectionState, phase: int) -> bool:
+        limited_phase = min(self.options.final_elevator_package, phase)
         
         return state.has(f"Elevator Tier {limited_phase}", self.player)
     

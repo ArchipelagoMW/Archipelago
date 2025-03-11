@@ -23,6 +23,7 @@ class SatisfactoryWorld(World):
     topology_present = False
     data_version = 0
     web = SatisfactoryWebWorld()
+    origin_region_name = "Overworld"
 
     item_name_to_id = Items.item_names_and_ids
     location_name_to_id = Locations().get_locations_for_data_package()

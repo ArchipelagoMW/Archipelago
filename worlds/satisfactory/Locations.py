@@ -28,10 +28,14 @@ class LocationData():
 
 class Part(LocationData):
     @staticmethod
-    def get_parts(state_logic: StateLogic, recipes: Tuple[Recipe, ...], name: str, items: Items) -> List[LocationData]:
+    def get_parts(state_logic: StateLogic, recipes: Tuple[Recipe, ...], name: str, items: Items, 
+                                                                    final_elevator_tier: int) -> List[LocationData]:
         recipes_per_region: Dict[str, List[Recipe]] = {}
 
         for recipe in recipes:
+            if recipe.minimal_tier > final_elevator_tier:
+                continue
+
             recipes_per_region.setdefault(recipe.building or "Overworld", []).append(recipe)
 
         return [Part(state_logic, region, recipes_for_region, name, items) 
@@ -44,6 +48,9 @@ class Part(LocationData):
     def can_produce_any_recipe_for_part(self, state_logic: StateLogic, recipes: Iterable[Recipe], 
                                         name: str, items: Items) -> Callable[[CollectionState], bool]:
         def can_build_by_any_recipe(state: CollectionState) -> bool:
+            if name == "Iron Ingot":
+                debug = True
+
             if items.precalculated_progression_recipes and name in items.precalculated_progression_recipes:
                 can_produce: bool = state_logic.can_produce_specific_recipe_for_part(
                     state, items.precalculated_progression_recipes[name])
@@ -74,7 +81,10 @@ class EventBuilding(LocationData):
             ) -> Callable[[CollectionState], bool]:
 
         def can_build(state: CollectionState) -> bool:
-            return state_logic.has_recipe(state, building) \
+            if building.name == "Building: Manufacturer":
+                debug = True
+
+            return (building.implicitly_unlocked or state_logic.has_recipe(state, building)) \
                 and state_logic.can_power(state, building.power_requirement) \
                 and state_logic.can_produce_all_allowing_handcrafting(state, game_logic, building.inputs)
 
@@ -92,6 +102,9 @@ class PowerInfrastructure(LocationData):
             ) -> Callable[[CollectionState], bool]:
 
         def can_power(state: CollectionState) -> bool:
+            if powerLevel == PowerInfrastructureLevel.Automated:
+                debug = True
+
             return any(state_logic.can_power(state, level) for level in PowerInfrastructureLevel if level > powerLevel)\
                 or any(state_logic.can_build(state, recipe.building) and 
                        state_logic.can_produce_all_allowing_handcrafting(state, game_logic, recipe.inputs) 
@@ -127,11 +140,11 @@ class ShopSlot(LocationData):
             if not state_logic or cost < 20:
                 return True
             elif (cost >= 20 and cost < 50):
-                return state_logic.is_game_phase(state, 1)
+                return state_logic.is_elevator_tier(state, 1)
             elif (cost >= 50 and cost < 100):
-                return state_logic.is_game_phase(state, 2)
+                return state_logic.is_elevator_tier(state, 2)
             else:
-                return state_logic.is_game_phase(state, 3)
+                return state_logic.is_elevator_tier(state, 3)
             
         return can_purchase
 
@@ -309,7 +322,7 @@ class Locations():
 
         location_table = self.get_base_location_table()
         location_table.extend(self.get_hub_locations(True, self.max_tiers))
-        location_table.extend(self.get_drop_pod_locations(True, self.max_tiers))
+        location_table.extend(self.get_drop_pod_locations(True, self.max_tiers, set()))
         location_table.append(LocationData("Overworld", "UpperBound", 1338999))
 
         return {location.name: location.code for location in location_table}
@@ -324,8 +337,8 @@ class Locations():
 
         location_table = self.get_base_location_table()
         location_table.extend(self.get_hub_locations(False, max_tier_for_game))
-        location_table.extend(self.get_drop_pod_locations(False, max_tier_for_game))
-        location_table.extend(self.get_logical_event_locations())
+        location_table.extend(self.get_drop_pod_locations(False, max_tier_for_game, self.critical_path.potential_required_parts))
+        location_table.extend(self.get_logical_event_locations(self.options.final_elevator_package))
 
         return location_table
 
@@ -358,7 +371,7 @@ class Locations():
                 
         return location_table
 
-    def get_logical_event_locations(self) -> List[LocationData]:
+    def get_logical_event_locations(self, final_elevator_tier: int) -> List[LocationData]:
         location_table: List[LocationData] = []
 
         # for performance plan is to upfront calculated everything we need
@@ -372,7 +385,7 @@ class Locations():
             part 
             for part_name, recipes in self.game_logic.recipes.items() 
             if part_name in self.critical_path.potential_required_parts
-            for part in Part.get_parts(self.state_logic, recipes, part_name, self.items))
+            for part in Part.get_parts(self.state_logic, recipes, part_name, self.items, final_elevator_tier))
         location_table.extend(
             EventBuilding(self.game_logic, self.state_logic, name, building) 
             for name, building in self.game_logic.buildings.items()
@@ -384,7 +397,8 @@ class Locations():
 
         return location_table
     
-    def get_drop_pod_locations(self, for_data_package: bool, max_tier: int) -> List[LocationData]:
+    def get_drop_pod_locations(self, for_data_package: bool, max_tier: int, available_parts: set[str]) \
+                                                                                                -> List[LocationData]:
         drop_pod_locations: List[DropPod] = []
 
         bucket_size: int
@@ -403,10 +417,15 @@ class Locations():
                 drop_pod_locations.append(DropPod(DropPodData(0, 0, 0, None, 0), None, location_id, 1, False))
             else:
                 location_id_normalized: int = location_id - self.drop_pod_location_id_start
+
+                if location_id_normalized == 81:
+                    debug = True
+
                 data: DropPodData = drop_pod_data[location_id_normalized]
                 can_hold_progression: bool = location_id_normalized < self.options.hard_drive_progression_limit.value
                 tier = min(ceil((location_id_normalized + 1) / bucket_size), max_tier)
 
-                drop_pod_locations.append(DropPod(data, self.state_logic, location_id, tier, can_hold_progression))
+                if not data.item or data.item in available_parts:
+                    drop_pod_locations.append(DropPod(data, self.state_logic, location_id, tier, can_hold_progression))
 
         return drop_pod_locations
