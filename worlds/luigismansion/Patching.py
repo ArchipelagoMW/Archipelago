@@ -1440,7 +1440,12 @@ def apply_new_ghost(enemy_info_entry, element):
         case "Fire":
             enemy_info_entry["name"] = "yapoo2"
         case "No Element":
-            enemy_info_entry["name"] = choice(choice(random_ghosts_to_patch))
+            if enemy_info_entry["room_no"] == 23:
+                no_shy_ghosts = random_ghosts_to_patch
+                no_shy_ghosts.remove(5)
+                enemy_info_entry["name"] = choice(choice(no_shy_ghosts))
+            else:
+                enemy_info_entry["name"] = choice(choice(random_ghosts_to_patch))
 
     # If the new ghost is a Ceiling Ghost, increase its spawning Y position so it spawns in the air.
     if "tenjyo" in enemy_info_entry["name"]:
