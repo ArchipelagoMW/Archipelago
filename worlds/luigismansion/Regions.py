@@ -5,7 +5,7 @@ from worlds.generic.Rules import add_rule
 from . import Rules
 from worlds.AutoWorld import World
 
-vanilla_door_state = {  # TODO maybe move to imported class
+vanilla_door_state = {
         34: 1,
         38: 0,
         43: 1,
