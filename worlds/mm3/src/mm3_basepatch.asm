@@ -707,7 +707,7 @@ CheckConsumable:
   CMP #$64
   BMI .Return
   print "Consumables (replace 67): ", hex(realbase())
-  CMP #$69
+  CMP #$6A
   BPL .Return
   LDA #$00
   STA $0300, X
