@@ -144,8 +144,8 @@ def connect_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "Cellar", "Basement Hallway", "Basement Hallway Key", 67)
     connect(multiworld, player, "Basement Hallway", "Cold Storage", "Cold Storage Key", 65)
     connect(multiworld, player, "Basement Hallway", "Pipe Room", "Pipe Room Key", 69)
-    connect(multiworld, player, "Basement Hallway", "Spade Hallway", "Altar Hallway Key", 70)
-    connect(multiworld, player, "Spade Hallway", "Secret Altar", "Spade Key", 72,
+    connect(multiworld, player, "Basement Hallway", "Altar Hallway", "Altar Hallway Key", 70)
+    connect(multiworld, player, "Altar Hallway", "Secret Altar", "Spade Key", 72,
             lambda state: state.has_group("Boo", player, multiworld.worlds[player].options.final_boo_count)
                           or state.has("Boo", player, multiworld.worlds[player].options.final_boo_count))
 
@@ -209,7 +209,7 @@ REGION_LIST = {
     50: "Telephone Room",
     56: "Clockwork Room",
     60: "Roof",
-    68: "Spade Hallway"
+    68: "Altar Hallway"
 }
 
 # ROOM_EXITS = []

@@ -1093,7 +1093,7 @@ WALK_LOCATION_TABLE: dict[str, LMLocationData] = {
     "East Attic Hallway Visited": LMLocationData("East Attic Hallway", 846, "Walk", 0, [], 54, room_ram_addr=0x803CDFB6),
     "West Attic Hallway Visited": LMLocationData("West Attic Hallway", 847, "Walk", 0, [], 57, room_ram_addr=0x803CDFB2),
     "Roof Visited": LMLocationData("Roof", 848, "Walk", 0, [], 63, room_ram_addr=0x803CDFC8),
-    "Spade Hallway Visited": LMLocationData("Spade Hallway", 849, "Walk", 0, [], 71, room_ram_addr=0x803CDFD8)
+    "Altar Hallway Visited": LMLocationData("Altar Hallway", 849, "Walk", 0, [], 71, room_ram_addr=0x803CDFD8)
 }
 
 ALL_LOCATION_TABLE = {**BASE_LOCATION_TABLE,
