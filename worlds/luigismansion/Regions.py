@@ -3,7 +3,7 @@ from typing import Optional, Callable
 from BaseClasses import MultiWorld, Entrance
 from worlds.generic.Rules import add_rule
 from . import Rules
-from ..AutoWorld import World
+from worlds.AutoWorld import World
 
 GHOST_TO_ROOM = {
     "Wardrobe": "No Element",
