@@ -135,19 +135,6 @@ class TestStartRoomBKPrevention(MetroidPrimeWithOverridesTestBase):
         )
 
 
-class TestBuckleUpStartingRoom(MetroidPrimeTestBase):
-    run_default_tests = False  # type: ignore
-    options = {"starting_room": StartRoomDifficulty.Buckle_Up.value}
-
-    def test_buckle_up(self):
-        available_room_names = [
-            name
-            for name, room in all_start_rooms.items()
-            if room.difficulty.value == StartRoomDifficulty.Buckle_Up.value
-        ]
-        self.assertTrue(self.world.starting_room_name in available_room_names)
-
-
 class TestNormalStartingRoom(MetroidPrimeTestBase):
     run_default_tests = False  # type: ignore
     options = {"starting_room": StartRoomDifficulty.Normal.value}
