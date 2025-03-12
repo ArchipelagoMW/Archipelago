@@ -98,7 +98,7 @@ def create_trap_items(world, world_options: Options.DLCQuestOptions, trap_needed
     return traps
 
 
-def create_items(world, world_options: Options.DLCQuestOptions, locations_count: int, random: Random):
+def create_items(world, world_options: Options.DLCQuestOptions, locations_count: int, excluded_items: list, random: Random):
     created_items = []
     if world_options.campaign == Options.Campaign.option_basic or world_options.campaign == Options.Campaign.option_both:
         create_items_basic(world_options, created_items, world)
@@ -107,7 +107,9 @@ def create_items(world, world_options: Options.DLCQuestOptions, locations_count:
             world_options.campaign == Options.Campaign.option_both):
         create_items_lfod(world_options, created_items, world)
 
-    trap_items = create_trap_items(world, world_options, locations_count - len(created_items), random)
+    existing_excluded_items = [excluded_item for excluded_item in excluded_items if excluded_item in created_items]
+
+    trap_items = create_trap_items(world, world_options, locations_count + len(existing_excluded_items) - len(created_items), random)
     created_items += trap_items
 
     return created_items
