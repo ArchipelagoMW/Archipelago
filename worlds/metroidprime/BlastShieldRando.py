@@ -71,12 +71,14 @@ class WorldBlastShieldMapping(WorldMapping[BlastShieldMapping]):
         return value
 
 
-MAX_BEAM_COMBO_DOORS_PER_AREA = 1
+MAX_COMPLEX_DOORS_PER_AREA = 2
 ALL_SHIELDS: List[BlastShieldType] = [shield for shield in BlastShieldType]
-BEAM_COMBOS: List[BlastShieldType] = [
+COMPLEX_SHIELDS: List[BlastShieldType] = [
     BlastShieldType.Flamethrower,
     BlastShieldType.Ice_Spreader,
     BlastShieldType.Wavebuster,
+    BlastShieldType.Power_Bomb,
+    BlastShieldType.Super_Missile,
 ]
 
 
@@ -144,36 +146,15 @@ def _generate_blast_shield_mapping_for_area(
 
             shield_type = world.random.choice(
                 _get_available_blast_shields(
-                    world, total_beam_combo_doors >= MAX_BEAM_COMBO_DOORS_PER_AREA
+                    world, total_beam_combo_doors >= MAX_COMPLEX_DOORS_PER_AREA
                 )
             )
             if source_room.value not in area_mapping:
                 area_mapping[source_room.value] = {}
             area_mapping[source_room.value][door_id] = shield_type
 
-            if shield_type in BEAM_COMBOS:
+            if shield_type in COMPLEX_SHIELDS:
                 total_beam_combo_doors += 1
-
-    elif (
-        world.options.blast_shield_randomization.value
-        == BlastShieldRandomization.option_replace_existing
-    ):
-        for room_name, room_data in world.game_region_data[area].rooms.items():
-            for door_id, door_data in room_data.doors.items():
-                if door_data.blast_shield:
-                    if room_name.value not in area_mapping:
-                        area_mapping[room_name.value] = {}
-
-                    shield_type = world.random.choice(
-                        _get_available_blast_shields(
-                            world,
-                            total_beam_combo_doors >= MAX_BEAM_COMBO_DOORS_PER_AREA,
-                        )
-                    )
-                    area_mapping[room_name.value][door_id] = shield_type
-
-                    if shield_type in BEAM_COMBOS:
-                        total_beam_combo_doors += 1
 
     if include_locked_door:
         lockable_regions = [
@@ -204,11 +185,6 @@ def _get_available_blast_shields(
         for shield in ALL_SHIELDS.copy()
         if shield not in [BlastShieldType.Disabled, BlastShieldType.No_Blast_Shield]
     ]
-    if (
-        world.options.blast_shield_randomization
-        == BlastShieldRandomization.option_replace_existing
-    ):
-        available_shields.remove(BlastShieldType.Missile)
 
     if (
         world.options.blast_shield_available_types
@@ -217,7 +193,7 @@ def _get_available_blast_shields(
     ):
         return available_shields
     else:
-        return [shield for shield in available_shields if shield not in BEAM_COMBOS]
+        return [shield for shield in available_shields if shield not in COMPLEX_SHIELDS]
 
 
 def apply_blast_shield_mapping(world: "MetroidPrimeWorld"):

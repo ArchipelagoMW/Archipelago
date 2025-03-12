@@ -3,42 +3,20 @@ from Fill import distribute_items_restrictive
 from ..PrimeOptions import BlastShieldRandomization, DoorColorRandomization
 from ..data.DoorData import get_door_data_by_room_names
 from ..data.BlastShieldRegions import get_valid_blast_shield_regions_by_area
-from ..data.RoomData import AreaData
 from ..data.AreaNames import MetroidPrimeArea
 from ..BlastShieldRando import (
-    MAX_BEAM_COMBO_DOORS_PER_AREA,
-    AreaBlastShieldMapping,
     BlastShieldType,
     WorldBlastShieldMapping,
 )
 from ..DoorRando import DoorLockType, WorldDoorColorMapping
 from ..Config import make_config
 from ..data.RoomNames import RoomName
-from ..Items import ProgressiveUpgrade, SuitUpgrade
+from ..Items import SuitUpgrade
 from . import MetroidPrimeTestBase, MetroidPrimeWithOverridesTestBase
-from typing import Any, Dict, TYPE_CHECKING, List, Tuple
-from ..data.PhazonMines import PhazonMinesAreaData
-from ..data.PhendranaDrifts import PhendranaDriftsAreaData
-from ..data.MagmoorCaverns import MagmoorCavernsAreaData
-from ..data.ChozoRuins import ChozoRuinsAreaData
-from ..data.TallonOverworld import TallonOverworldAreaData
+from typing import TYPE_CHECKING, List, Tuple
 
 if TYPE_CHECKING:
     from .. import MetroidPrimeWorld
-
-
-def _get_default_area_data(
-    area: MetroidPrimeArea, world: "MetroidPrimeWorld"
-) -> AreaData:
-    mapping: Dict[MetroidPrimeArea, Any] = {
-        MetroidPrimeArea.Tallon_Overworld: TallonOverworldAreaData,
-        MetroidPrimeArea.Chozo_Ruins: ChozoRuinsAreaData,
-        MetroidPrimeArea.Magmoor_Caverns: MagmoorCavernsAreaData,
-        MetroidPrimeArea.Phendrana_Drifts: PhendranaDriftsAreaData,
-        MetroidPrimeArea.Phazon_Mines: PhazonMinesAreaData,
-    }
-
-    return mapping[area](world)
 
 
 beam_combo_items = [
@@ -88,216 +66,6 @@ class TestNoBlastShieldRando(MetroidPrimeTestBase):
             == DoorLockType.Blue.value,
             "Existing shield type override is not preserved",
         )
-
-
-class TestReplaceBlastShieldRando(MetroidPrimeTestBase):
-    options = {
-        "blast_shield_randomization": BlastShieldRandomization.option_replace_existing
-    }
-
-    def test_blast_shield_mapping_is_generated_for_each_vanilla_door(self):
-        world: "MetroidPrimeWorld" = self.world
-        assert world.blast_shield_mapping
-        for area, mapping in world.blast_shield_mapping.items():
-            blast_shield_doors = [
-                door_id
-                for room in _get_default_area_data(
-                    MetroidPrimeArea(area), self.world
-                ).rooms.values()
-                for door_id, door_data in room.doors.items()
-                if door_data.blast_shield
-            ]
-            mapped_doors = [
-                door for room in mapping.type_mapping.values() for door in room.keys()
-            ]
-            self.assertCountEqual(
-                blast_shield_doors, mapped_doors, f"Missing doors in mapping for {area}"
-            )
-            for room in mapping.type_mapping.values():
-                for shield_type in room.values():
-                    self.assertIn(
-                        shield_type,
-                        [shield for shield in BlastShieldType],
-                        "Invalid shield type",
-                    )
-                    self.assertNotEqual(
-                        shield_type,
-                        BlastShieldType.Missile,
-                        "Missile should not be included in mapping for replace_existing",
-                    )
-
-    def test_blast_shields_are_replaced_in_config(self):
-        """Verify that the blast shield to ruined shrine access is replaced"""
-        world: "MetroidPrimeWorld" = self.world
-        distribute_items_restrictive(self.multiworld)
-
-        config = make_config(world)
-        level_key = config["levelData"]["Chozo Ruins"]["rooms"]
-        self.assertTrue(
-            level_key[RoomName.Reflecting_Pool.value]["doors"]["3"]["blastShieldType"]
-            != BlastShieldType.Missile.value
-        )
-        self.assertTrue(
-            level_key[RoomName.Antechamber.value]["doors"]["0"]["blastShieldType"]
-            != BlastShieldType.Missile.value,
-            "Paired mapping is not set",
-        )
-        self.assertTrue(
-            level_key[RoomName.Antechamber.value]["doors"]["0"]["shieldType"]
-            == DoorLockType.Blue.value,
-            "Existing shield type override is not preserved",
-        )
-
-    def test_beam_combos_are_not_included_in_mapping_by_default(self):
-        world: "MetroidPrimeWorld" = self.world
-        assert world.blast_shield_mapping
-        for mapping in world.blast_shield_mapping.values():
-            for room in mapping.type_mapping.values():
-                for door in room.values():
-                    self.assertNotIn(door, beam_combo_items)
-
-
-class TestBlastShieldMapping(MetroidPrimeWithOverridesTestBase):
-    run_default_tests = False  # type: ignore
-    options = {
-        "blast_shield_randomization": BlastShieldRandomization.option_replace_existing,
-        "blast_shield_available_types": "all",
-    }
-    overrides = {
-        "blast_shield_mapping": WorldBlastShieldMapping.from_option_value(
-            {
-                "Tallon Overworld": {
-                    "area": "Tallon Overworld",
-                    "type_mapping": {
-                        "Landing Site": {
-                            1: "Bomb",
-                            2: "Flamethrower",
-                        }
-                    },
-                }
-            }
-        )
-    }
-
-    def test_blast_shield_mapping_applies_to_logic(self):
-        test_region = RoomName.Canyon_Cavern.value
-        world: "MetroidPrimeWorld" = self.world
-        assert world.blast_shield_mapping
-        self.assertEqual(
-            world.blast_shield_mapping[MetroidPrimeArea.Tallon_Overworld.value],
-            AreaBlastShieldMapping(MetroidPrimeArea.Tallon_Overworld.value, {"Landing Site": {1: BlastShieldType.Bomb, 2: BlastShieldType.Flamethrower}}),  # type: ignore
-        )
-        self.assertFalse(self.can_reach_region(test_region))
-        self.collect_by_name(
-            [SuitUpgrade.Morph_Ball_Bomb.value, SuitUpgrade.Morph_Ball.value]
-        )
-        self.assertTrue(self.can_reach_region(test_region))
-
-    def test_beam_combos_are_included_in_logic_without_progressive_beams(self):
-        test_region = RoomName.Temple_Hall.value
-        missile_item = self.get_item_by_name(SuitUpgrade.Missile_Expansion.value)
-        self.assertFalse(self.can_reach_region(test_region))
-
-        self.collect_by_name([SuitUpgrade.Flamethrower.value])
-        self.assertFalse(self.can_reach_region(test_region))
-
-        self.collect_by_name(
-            [
-                SuitUpgrade.Plasma_Beam.value,
-                SuitUpgrade.Charge_Beam.value,
-            ]
-        )
-        self.assertFalse(self.can_reach_region(test_region))
-
-        self.collect(missile_item)
-        self.assertFalse(self.can_reach_region(test_region))
-
-        self.collect(missile_item)
-        self.assertFalse(self.can_reach_region(test_region))
-
-        # Flamethrower Beam combo requires 11 missiles
-        self.collect(missile_item)
-        self.assertTrue(self.can_reach_region(test_region))
-
-
-class TestBlastShieldMappingWithProgressiveBeams(MetroidPrimeWithOverridesTestBase):
-    run_default_tests = False  # type: ignore
-    options = {
-        "blast_shield_randomization": BlastShieldRandomization.option_replace_existing,
-        "blast_shield_available_types": "all",
-        "missile_launcher": 1,
-        "progressive_beam_upgrades": True,
-    }
-    overrides = {
-        "blast_shield_mapping": WorldBlastShieldMapping.from_option_value(
-            {
-                "Tallon Overworld": {
-                    "area": "Tallon Overworld",
-                    "type_mapping": {
-                        "Landing Site": {
-                            0: "Ice Spreader",
-                            1: "Ice Spreader",
-                            2: "Flamethrower",
-                            3: "Ice Spreader",
-                            4: "Ice Spreader",
-                        }
-                    },
-                }
-            }
-        )
-    }
-
-    def test_beam_combos_are_included_in_logic_with_progressive_beams(self):
-        test_region = RoomName.Temple_Hall.value
-        self.assertFalse(self.can_reach_region(test_region))
-        progressive_item = self.get_item_by_name(
-            ProgressiveUpgrade.Progressive_Plasma_Beam.value
-        )
-        missile_item = self.get_item_by_name(SuitUpgrade.Missile_Expansion.value)
-        missile_launcher_item = self.get_item_by_name(
-            SuitUpgrade.Missile_Launcher.value
-        )
-        self.collect(
-            [
-                progressive_item,
-                progressive_item,
-                progressive_item,
-            ]
-        )
-        self.assertFalse(self.can_reach_region(test_region))
-
-        self.collect(missile_launcher_item)
-        self.assertFalse(self.can_reach_region(test_region))
-
-        # Beam combos require 10 missiles
-        self.collect(missile_item)
-        self.assertFalse(self.can_reach_region(test_region))
-
-        self.collect(missile_item)
-        self.assertTrue(self.can_reach_region(test_region))
-
-
-class TestIncludeBeamCombos(MetroidPrimeTestBase):
-    options = {
-        "blast_shield_randomization": BlastShieldRandomization.option_replace_existing,
-        "blast_shield_available_types": "all",
-        "trick_difficulty": "easy",
-    }
-
-    def test_beam_combos_are_included_within_limits(self):
-        world: "MetroidPrimeWorld" = self.world
-        assert world.blast_shield_mapping
-        for area, mapping in world.blast_shield_mapping.items():
-            beam_combo_count = 0
-            for room in mapping.type_mapping.values():
-                for shieldType in room.values():
-                    if shieldType in beam_combo_items:
-                        beam_combo_count += 1
-            self.assertLessEqual(
-                beam_combo_count,
-                MAX_BEAM_COMBO_DOORS_PER_AREA,
-                f"Too many beam combos in {area}, {beam_combo_count} found",
-            )
 
 
 class TestMixItUpBlastShieldRando(MetroidPrimeTestBase):
