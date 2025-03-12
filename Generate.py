@@ -12,6 +12,7 @@ import urllib.request
 from collections import Counter
 from typing import Any, Dict, Tuple, Union
 from itertools import chain
+import math
 
 import ModuleUpdate
 
@@ -195,6 +196,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
     erargs.player_options = {}
 
     player = 1
+    max_digits = calculate_digit_length(args.multi)
     while player <= args.multi:
         path = player_path_cache[player]
         if path:
@@ -215,7 +217,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
                         erargs.name[player] = f"Player{player}"
                     elif player not in erargs.name:  # if name was not specified, generate it from filename
                         erargs.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
-                    erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
+                    erargs.name[player] = handle_name(erargs.name[player], player, name_counter, max_digits)
 
                     player += 1
             except Exception as e:
@@ -284,20 +286,36 @@ class SafeDict(dict):
         return '{' + key + '}'
 
 
-def handle_name(name: str, player: int, name_counter: Counter):
+def handle_name(name: str, player: int, name_counter: Counter, max_digits: int):
     name_counter[name.lower()] += 1
     number = name_counter[name.lower()]
     new_name = "%".join([x.replace("%number%", "{number}").replace("%player%", "{player}") for x in name.split("%%")])
     new_name = string.Formatter().vformat(new_name, (), SafeDict(number=number,
                                                                  NUMBER=(number if number > 1 else ''),
                                                                  player=player,
-                                                                 PLAYER=(player if player > 1 else '')))
+                                                                 PLAYER=(player if player > 1 else ''),
+                                                                 zplayer=str(player).zfill(max_digits),
+                                                                 ZPLAYER=(str(player).zfill(max_digits) if player > 1
+                                                                          else '')))
     # Run .strip twice for edge case where after the initial .slice new_name has a leading whitespace.
     # Could cause issues for some clients that cannot handle the additional whitespace.
     new_name = new_name.strip()[:16].strip()
     if new_name == "Archipelago":
         raise Exception(f"You cannot name yourself \"{new_name}\"")
     return new_name
+
+
+def calculate_digit_length(slot_count: int):
+    # Should never run anything but the initial if statement, but on the off chance 'slot_count'
+    # is a non-positive number for some reason, the elif and else will at least prevent it from
+    # blowing up or throwing an exception.
+    if slot_count > 0:
+        digit_count = int(math.log10(slot_count)) + 1
+    elif slot_count == 0:
+        digit_count = 1
+    else:
+        digit_count = int(math.log10(-slot_count)) + 2
+    return digit_count
 
 
 def roll_percentage(percentage: Union[int, float]) -> bool:
