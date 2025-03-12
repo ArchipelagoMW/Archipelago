@@ -8,8 +8,8 @@ speedy_enemy_index: [int] = [128, 125, 115, 114, 113, 67, 66, 60, 59, 58, 7, 6]
 money_item_names: [str] = ["Bills", "Coin", "Gold Bar", "Rupee", "Leaf", "Green", "Gold", "Jewel"]
 explode_item_names: [str] = ["Bomb", "Missile", "Glove", "Red", "Tunic", "Cloth", "Armor"]
 icy_item_names: [str] = ["Ice Trap", "White", "Ice Beam", "Icy"]
-light_item_names: [str] = ["Light", "Big Key", "Yellow", "Banana"]
-blueish_item_names: [str] = ["Small Key", "Blue", ]
+light_item_names: [str] = ["Light", "Big Key", "Yellow", "Banana", "Boss Key", "Sun"]
+blueish_item_names: [str] = ["Small Key", "Blue"]
 
 
 # Converts AP readable name to in-game name
