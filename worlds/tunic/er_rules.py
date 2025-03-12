@@ -720,10 +720,10 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: has_ability(prayer, state, world)
         and ((((has_ladder("Ladders in South Atoll", state, world)
              # shoot fuse and have the shot hit you mid-LS
-             or (can_ladder_storage(state, world) and state.has(fire_wand, player)
-                 and options.ladder_storage >= LadderStorage.option_hard))) and not options.shuffle_fuses)
-        or (state.has_all((atoll_northwest_fuse, atoll_northeast_fuse, atoll_southwest_fuse, atoll_southeast_fuse), player)
-            and options.shuffle_fuses))
+                or (can_ladder_storage(state, world) and state.has(fire_wand, player)
+                    and options.ladder_storage >= LadderStorage.option_hard))) and not options.shuffle_fuses)
+             or (state.has_all((atoll_northwest_fuse, atoll_northeast_fuse, atoll_southwest_fuse, atoll_southeast_fuse), player)
+                 and options.shuffle_fuses))
     )
 
     regions["Ruined Atoll Statue"].connect(
@@ -1960,6 +1960,15 @@ def set_er_location_rules(world: "TunicWorld") -> None:
         if options.shuffle_fuses:
             set_rule(world.get_location("Rooted Ziggurat Lower - [Miniboss] Activate Fuse"),
                      lambda state: has_ability(prayer, state, world) and has_combat_reqs("Rooted Ziggurat", state, player))
+            combat_logic_to_loc("Beneath the Fortress - Activate Fuse", "Beneath the Vault")
+            combat_logic_to_loc("Fortress Courtyard - [Upper] Activate Fuse", "Eastern Vault Fortress")
+            combat_logic_to_loc("Fortress Courtyard - [Central] Activate Fuse", "Eastern Vault Fortress")
+            combat_logic_to_loc("Eastern Vault Fortress - [Candle Room] Activate Fuse", "Eastern Vault Fortress")
+            combat_logic_to_loc("Eastern Vault Fortress - [Left of Door] Activate Fuse", "Eastern Vault Fortress")
+            combat_logic_to_loc("Eastern Vault Fortress - [Right of Door] Activate Fuse", "Eastern Vault Fortress")
+            combat_logic_to_loc("Ruined Atoll - [Northwest] Activate Fuse", "Ruined Atoll")
+            combat_logic_to_loc("Ruined Atoll - [Southwest] Activate Fuse", "Ruined Atoll")
+            combat_logic_to_loc("Swamp - [Central] Activate Fuse", "Swamp")
 
         # replace the sword rule with this one
         combat_logic_to_loc("Swamp - [South Graveyard] 4 Orange Skulls", "Swamp", set_instead=True)
