@@ -153,8 +153,7 @@ Advance Collection ROM; most notably the fact that the audio does not function w
 which is currently a requirement to connect to a multiworld. This happens because all audio code was stripped
 from the ROM, and all sound is instead played by the collection through external means.
 
-The Wii U Virtual Console version is also tested, but due to much of the code being shifted it doesn't patch well at all without
-breaking things pretty badly. As such, it is completely unsupported at the moment.
+The Wii U Virtual Console version does not work due to changes in the code in that version.
 
 Due to the reasons mentioned above, it is most recommended to obtain the ROM by dumping it from an original cartridge of the
 game that you legally own. However, the Advance Collection *is* an option if you cannot do that and don't mind the lack of sound.
