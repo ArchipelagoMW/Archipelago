@@ -232,12 +232,13 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.EVACUATION.mission_name, "Secret Resource Stash", SC2WOL_LOC_ID_OFFSET + 405, LocationType.EXTRA),
         make_location_data(SC2Mission.EVACUATION.mission_name, "Flawless", SC2WOL_LOC_ID_OFFSET + 406, LocationType.CHALLENGE,
             lambda state: (
-                logic.terran_early_tech(state)
-                and logic.terran_defense_rating(state, True, False) >= 2
-                and (adv_tactics
-                    and logic.terran_basic_anti_air(state)
-                    and logic.terran_basic_anti_air(state)
-                    or logic.terran_competent_anti_air(state))),
+                    logic.terran_early_tech(state)
+                    and logic.terran_defense_rating(state, True, False) >= 2
+                    and (
+                            (adv_tactics and logic.terran_basic_anti_air(state))
+                            or logic.terran_competent_anti_air(state)
+                    )
+            ),
             flags=LocationFlag.PREVENTATIVE
         ),
         make_location_data(SC2Mission.EVACUATION.mission_name, "Western Zerg Base", SC2WOL_LOC_ID_OFFSET + 407, LocationType.MASTERY,
