@@ -286,7 +286,10 @@
     { "from": "W&OS - Root Node", "to": "W&OS - Right Exit", "requires": [ { "item": "Charged Strike" } ] }, // one-way dragon boat ride
 
     { "from": "W&OS - Left Exit", "to": "YC - Root Node", "requires": [] },
-    { "from": "YC - Root Node", "to": "W&OS - Left Exit", "requires": [] },
+    { "from": "YC - Root Node", "to": "W&OS - Left Exit", "requires": [
+        // YC's bottom right exit is blocked by a door until you do the 2nd GH hack to drain W&OS's yellow water
+        { "region": "GH - 3rd Waterfall Hack" }
+    ] },
 
     { "from": "W&OS - Right Exit", "to": "AH - Root Node", "requires": [] },
     { "from": "AH - Root Node", "to": "W&OS - Right Exit", "requires": [] },
