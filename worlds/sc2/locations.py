@@ -216,10 +216,11 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.EVACUATION.mission_name, "Victory", SC2WOL_LOC_ID_OFFSET + 400, LocationType.VICTORY,
             lambda state: (
                 logic.terran_early_tech(state)
-                and (adv_tactics
-                    and logic.terran_basic_anti_air(state)
-                    or logic.terran_competent_anti_air(state)
-                ))
+                and (
+                        (adv_tactics and logic.terran_basic_anti_air(state))
+                        or logic.terran_competent_anti_air(state)
+                )
+            )
         ),
         make_location_data(SC2Mission.EVACUATION.mission_name, "North Chrysalis", SC2WOL_LOC_ID_OFFSET + 401, LocationType.VANILLA),
         make_location_data(SC2Mission.EVACUATION.mission_name, "West Chrysalis", SC2WOL_LOC_ID_OFFSET + 402, LocationType.VANILLA,
