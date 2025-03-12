@@ -251,6 +251,10 @@ def update_character_info(character_info, output_data):
         if x["name"] == "situji":
             x["appear_flag"] = 7
 
+        # Make Luggs stay gone if the light are on in the room
+        if x["name"] == "eater":
+            x["disappear_flag"] = 31
+
 
 def update_teiden_observer_info(observer_info, teiden_observer_info):
     for entry_no in speedy_observer_index:
@@ -1000,6 +1004,36 @@ def update_observer_info(observer_info):
         "room_no": 57,
         "cond_arg0": 0,
         "arg0": 12,
+        "arg1": 0,
+        "arg2": 0,
+        "arg3": 0,
+        "arg4": 0,
+        "arg5": 0,
+        "appear_flag": 0,
+        "disappear_flag": 0,
+        "cond_type": 13,
+        "do_type": 7,
+        "invisible": 1,
+        "(Undocumented)": 0,
+    })
+    # This one checks for lights on in the Wardrobe, flagging that key spawn
+    observer_info.info_file_field_entries.append({
+        "name": "observer",
+        "code_name": "(null)",
+        "string_arg0": "(null)",
+        "cond_string_arg0": "(null)",
+        "pos_x": -400.000000,
+        "pos_y": 420.000000,
+        "pos_z": -1800.000000,
+        "dir_x": 0.000000,
+        "dir_y": 0.000000,
+        "dir_z": 0.000000,
+        "scale_x": 1.000000,
+        "scale_y": 1.000000,
+        "scale_z": 1.000000,
+        "room_no": 9,
+        "cond_arg0": 0,
+        "arg0": 31,
         "arg1": 0,
         "arg2": 0,
         "arg3": 0,
