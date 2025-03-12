@@ -9,6 +9,7 @@ from pathlib import Path
 import yaml
 from pkgutil import get_data
 
+from .Hints import PORTRAIT_HINTS
 from .JMP_Info_File import JMPInfoFile
 from .Patching import *
 
@@ -309,6 +310,7 @@ class LuigisMansionRandomizer:
 
                 self.update_custom_event(event_no, False, lines)
 
+        # Update Toad events with hints
         in_game_hint_events = ["04", "17", "32", "44", "63", "92", "93", "94"]
         for event_no in in_game_hint_events:
             hintfo: str = ""
@@ -330,6 +332,20 @@ class LuigisMansionRandomizer:
             lines = get_data(__name__, "data/custom_events/event" + event_no + ".txt").decode('utf-8')
             lines = lines.replace("{HintText}", str(hintfo))
             self.update_custom_event(event_no, False, lines, replace_old_csv=True)
+
+        # Update Portrait Ghost heart scans if those hints are turned on
+        if self.output_data["Options"]["portrait_hints"] == 1:
+            portrait_scan_event = self.get_arc("files/Event/event78.szp")
+            portrait_csv = get_data(__name__, "data/custom_csvs/message78.csv").decode('utf-8')
+            for name in PORTRAIT_HINTS:
+                hintfo = self.output_data["Hints"][name]
+                portrait_csv = portrait_csv.replace(f"{name}", str(hintfo))
+            portrait_csv = io.BytesIO(portrait_csv.encode('utf-8'))
+            next((info_files for info_files in portrait_scan_event.file_entries if
+                  info_files.name == "message78.csv")).data = portrait_csv
+            portrait_scan_event.save_changes()
+            self.gcm.changed_files["files/Event/event78.szp"] = (
+                Yay0.compress(portrait_scan_event.data))
 
         # Update Madame Clairvoya's event to check mario items.
         lines = get_data(__name__, "data/custom_events/event36.txt").decode('utf-8')
