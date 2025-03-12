@@ -100,6 +100,7 @@ class OOTWeb(WebWorld):
         ["Edos"]
     )
 
+    # Very out of date, requires updating to match current
     # setup_es = Tutorial(
     #     setup.tutorial_name,
     #     setup.description,
