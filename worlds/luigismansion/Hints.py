@@ -97,7 +97,7 @@ def get_hints_by_option(multiworld: MultiWorld, player: int) -> Dict[str, Dict[s
                     joke = world.random.choice(str.splitlines(jokes)).replace("\\n", "\n")
                     hintfo = f"<SAY><COLOR>(0){joke}"
                 else:
-                    hintfo = f"<SAY><COLOR>(7){multiworld.player_name[loc.item.player]}'s<COLOR>(5)\\n " + \
+                    hintfo = f"<SAY><COLOR>(7){multiworld.player_name[loc.item.player]}'s<COLOR>({icolor})\\n " + \
                         f"{loc.item.name}\n<ANYKEY>\n<SAY><COLOR>(0)can be found at<COLOR>(1)\\n " + \
                         f"{multiworld.player_name[loc.player]}'s\\n {loc.name}"
             else:
@@ -111,8 +111,8 @@ def get_hints_by_option(multiworld: MultiWorld, player: int) -> Dict[str, Dict[s
                     joke = world.random.choice(str.splitlines(jokes)).replace("\\n", "\n")
                     hintfo = f"<COLOR>(0){joke}"
                 else:
-                    hintfo = f"<COLOR>(7){multiworld.player_name[loc.item.player]}'s\n<COLOR>(5) " + \
-                        f"{loc.item.name}\n<COLOR>(0)can be found at\n<COLOR>(1) " + \
+                    hintfo = f"<COLOR>(7){multiworld.player_name[loc.item.player]}'s\n<COLOR>({icolor})" + \
+                        f"{loc.item.name}\n<COLOR>(0)can be found at\n<COLOR>(1)" + \
                         f"{multiworld.player_name[loc.player]}'s\n{loc.name}"
             hint = {name: hintfo}
             already_hinted_locations.append(loc)
