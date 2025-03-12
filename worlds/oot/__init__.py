@@ -100,14 +100,14 @@ class OOTWeb(WebWorld):
         ["Edos"]
     )
 
-    setup_es = Tutorial(
-        setup.tutorial_name,
-        setup.description,
-        "Español",
-        "setup_es.md",
-        "setup/es",
-        setup.authors
-    )
+    # setup_es = Tutorial(
+    #     setup.tutorial_name,
+    #     setup.description,
+    #     "Español",
+    #     "setup_es.md",
+    #     "setup/es",
+    #     setup.authors
+    # )
 
     setup_fr = Tutorial(
         setup.tutorial_name,
