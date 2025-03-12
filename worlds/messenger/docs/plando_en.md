@@ -77,7 +77,8 @@ Each transition connection is plandoed by specifying a few different attributes 
   making this transition only one-way.
 
 Valid connections can be found in the [`RANDOMIZED_CONNECTIONS` dictionary](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/messenger/connections.py#L640).
-The keys (left) are entrances, and values (right) are exits.
+The keys (left) are entrances, and values (right) are exits. Whether you want the connection to go both ways or not, both
+sides must either be two-way or one-way.
 
 ### Example
 
