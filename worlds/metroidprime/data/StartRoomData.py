@@ -186,23 +186,24 @@ all_start_rooms: Dict[str, StartRoomData] = {
             )
         ],
     ),
-    RoomName.Warrior_Shrine.value: StartRoomData(
-        is_eligible=lambda world: not world.disable_starting_room_bk_prevention,
-        # Varia suit is definitely required here
-        area=MetroidPrimeArea.Magmoor_Caverns,
-        loadouts=[
-            StartRoomLoadout(
-                [SuitUpgrade.Varia_Suit, SuitUpgrade.Morph_Ball],
-                [
-                    {
-                        "Magmoor Caverns: Storage Cavern": [
-                            SuitUpgrade.Morph_Ball_Bomb
-                        ],
-                    }
-                ],
-            ),
-        ],
-    ),
+    # Causes too many failures, commenting out for now
+    # RoomName.Warrior_Shrine.value: StartRoomData(
+    #     is_eligible=lambda world: not world.disable_starting_room_bk_prevention,
+    #     # Varia suit is definitely required here
+    #     area=MetroidPrimeArea.Magmoor_Caverns,
+    #     loadouts=[
+    #         StartRoomLoadout(
+    #             [SuitUpgrade.Varia_Suit, SuitUpgrade.Morph_Ball],
+    #             [
+    #                 {
+    #                     "Magmoor Caverns: Storage Cavern": [
+    #                         SuitUpgrade.Morph_Ball_Bomb
+    #                     ],
+    #                 }
+    #             ],
+    #         ),
+    #     ],
+    # ),
     RoomName.East_Tower.value: StartRoomData(
         area=MetroidPrimeArea.Phendrana_Drifts,
         loadouts=[
