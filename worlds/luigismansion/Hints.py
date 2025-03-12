@@ -7,7 +7,7 @@ ALWAYS_HINT = ["Madame Clairvoya", "Foyer Toad", "Wardrobe Balcony Toad", "1F Wa
                "Left Telephone", "Center Telephone", "Right Telephone"]
 
 PORTRAIT_HINTS = ["Neville", "Lydia", "Chauncey", "Male Whirlinda", "Female Whirlinda", "Shivers", "Melody", "Luggs",
-                  "Spooky", "Atlas", "Bankshot", "Petunia", "Nana", "Sue Pea", "Henry", "Orville", "Grimmly", "Jarvis",
+                  "Spooky", "Atlas", "Bankshot", "Petunia", "Nana", "Sue Pea", "The Twins", "Grimmly", "Jarvis",
                   "Vincent", "Weston", "Clockwork Blue", "Clockwork Pink", "Clockwork Green", "Bogmire", "Boolossus"]
 
 
