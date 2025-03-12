@@ -8,3 +8,4 @@ class LMRamData(NamedTuple):
     ram_byte_size: int = None
     pointer_offset: Optional[int] = None
     in_game_room_id: Optional[int] = None
+    item_count: Optional[int] = None
