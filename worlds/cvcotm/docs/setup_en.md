@@ -4,7 +4,8 @@
 
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases/latest).
 - A Castlevania: Circle of the Moon ROM of the US version specifically. The Archipelago community cannot provide this.
-The Castlevania Advance Collection ROM can technically be used, but it has no audio. The Wii U Virtual Console ROM is untested.
+The Castlevania Advance Collection ROM can be used, but it has no audio. The Wii U Virtual Console ROM is unsupported
+and doesn't work at all.
 - [BizHawk](https://tasvideos.org/BizHawk/ReleaseHistory) 2.7 or later.
 
 ### Configuring BizHawk
