@@ -89,6 +89,14 @@ all_start_rooms: Dict[str, StartRoomData] = {
                 starting_beam=SuitUpgrade.Power_Beam,
             ),
         ],
+        allowed_elevators={
+            MetroidPrimeArea.Tallon_Overworld.value: {
+                RoomName.Transport_to_Chozo_Ruins_West.value: [
+                    RoomName.Transport_to_Tallon_Overworld_North.value,
+                    RoomName.Transport_to_Magmoor_Caverns_North.value,
+                ],
+            }
+        },
         # local_early_items=[SuitUpgrade.Missile_Launcher] Cannot include missile launcher as local early items because it will place non progressive missile expansions early
     ),
     RoomName.Arboretum.value: StartRoomData(
@@ -204,28 +212,6 @@ all_start_rooms: Dict[str, StartRoomData] = {
     #         ),
     #     ],
     # ),
-    RoomName.East_Tower.value: StartRoomData(
-        area=MetroidPrimeArea.Phendrana_Drifts,
-        loadouts=[
-            StartRoomLoadout(
-                starting_beam=SuitUpgrade.Wave_Beam,
-                loadout=[SuitUpgrade.Missile_Launcher],
-                item_rules=[
-                    {
-                        "Phendrana Drifts: Phendrana Canyon": [
-                            SuitUpgrade.Space_Jump_Boots
-                        ],
-                        "Phendrana Drifts: Research Lab Aether - Tank": [
-                            SuitUpgrade.Plasma_Beam
-                        ],
-                    }
-                ],
-            )
-        ],
-        is_eligible=lambda world: not world.options.shuffle_scan_visor.value,
-        no_power_beam_door_on_starting_level=True,
-        difficulty=StartRoomDifficulty.Buckle_Up,
-    ),
     RoomName.Save_Station_B.value: StartRoomData(
         area=MetroidPrimeArea.Phendrana_Drifts,
         force_starting_beam=True,
@@ -289,44 +275,6 @@ all_start_rooms: Dict[str, StartRoomData] = {
                 ],
             }
         },
-    ),
-    RoomName.Quarantine_Monitor.value: StartRoomData(
-        area=MetroidPrimeArea.Phendrana_Drifts,
-        loadouts=[
-            StartRoomLoadout(
-                starting_beam=SuitUpgrade.Wave_Beam,
-                loadout=[SuitUpgrade.Thermal_Visor],
-                item_rules=[
-                    {
-                        "Phendrana Drifts: Quarantine Monitor": [
-                            SuitUpgrade.Morph_Ball
-                        ],
-                        "Phendrana Drifts: Quarantine Cave": [SuitUpgrade.Spider_Ball],
-                        "Phendrana Drifts: Ice Ruins East - Spider Track": [
-                            SuitUpgrade.Space_Jump_Boots
-                        ],
-                        "Phendrana Drifts: Ruined Courtyard": [SuitUpgrade.Plasma_Beam],
-                    },
-                ],
-            )
-        ],
-        difficulty=StartRoomDifficulty.Buckle_Up,
-        is_eligible=lambda world: not world.options.shuffle_scan_visor.value,
-    ),
-    RoomName.Sunchamber_Lobby.value: StartRoomData(
-        force_starting_beam=True,
-        area=MetroidPrimeArea.Chozo_Ruins,
-        loadouts=[
-            StartRoomLoadout(
-                starting_beam=SuitUpgrade.Power_Beam,
-                loadout=[
-                    SuitUpgrade.Morph_Ball,
-                    SuitUpgrade.Missile_Launcher,
-                    SuitUpgrade.Morph_Ball_Bomb,
-                ],
-            ),
-        ],
-        difficulty=StartRoomDifficulty.Buckle_Up,
     ),
 }
 
