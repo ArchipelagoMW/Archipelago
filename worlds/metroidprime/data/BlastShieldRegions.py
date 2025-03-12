@@ -56,6 +56,7 @@ def __get_chozo_region():
                     RoomName.Burn_Dome,
                     RoomName.Ruined_Fountain,
                     RoomName.Tower_Chamber,
+                    RoomName.Landing_Site,
                 ],
             ),
             BlastShieldRegion(
@@ -79,6 +80,7 @@ def __get_chozo_region():
                     RoomName.Burn_Dome,
                     RoomName.Ruined_Fountain,
                     RoomName.Tower_Chamber,
+                    RoomName.Landing_Site,
                 ],
             ),
             BlastShieldRegion(
@@ -89,7 +91,11 @@ def __get_chozo_region():
                     RoomName.Totem_Access: RoomName.Hive_Totem,
                     RoomName.Transport_Access_North: RoomName.Transport_to_Magmoor_Caverns_North,
                 },
-                invalid_start_rooms=[RoomName.Save_Station_1, RoomName.Tower_Chamber],
+                invalid_start_rooms=[
+                    RoomName.Save_Station_1,
+                    RoomName.Tower_Chamber,
+                    RoomName.Landing_Site,
+                ],
             ),
             BlastShieldRegion(
                 name=RoomName.Vault,
@@ -579,15 +585,12 @@ def get_valid_blast_shield_regions_by_area(
     else:
         region = __get_phazon_region()
 
-    if not world.starting_room_data:
-        return region.regions
-    if world.starting_room_data.area != area:
-        return region.regions
-
-    return [
+    sanitized_regions = [
         blast_shield_region
         for blast_shield_region in region.regions
         if blast_shield_region.invalid_start_rooms is None
         or RoomName(world.starting_room_data.name)
         not in blast_shield_region.invalid_start_rooms
     ]
+
+    return sanitized_regions

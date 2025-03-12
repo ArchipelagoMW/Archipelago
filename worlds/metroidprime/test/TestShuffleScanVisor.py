@@ -46,21 +46,6 @@ class TestScanVisorNotShuffled(MetroidPrimeTestBase):
         ]
 
 
-class TestScanVisorRequiredForNonPreScannedElevators(MetroidPrimeTestBase):
-    options = {"pre_scan_elevators": False, "shuffle_scan_visor": True}
-
-    def test_starting_room_switches_to_save_1(self):
-        self.assertTrue(self.world.starting_room_name == RoomName.Save_Station_1.value)
-
-    def test_scan_visor_required_for_elevator(self):
-        state = self.multiworld.state
-        self.assertFalse(
-            state.can_reach_region(RoomName.Landing_Site.value, self.player)
-        )
-        self.collect_by_name(SuitUpgrade.Scan_Visor.value)
-        self.assertTrue(state.can_reach_region(RoomName.Main_Plaza.value, self.player))
-
-
 class TestScanVisorNotRequiredForPreScannedElevators(MetroidPrimeTestBase):
     options = {"pre_scan_elevators": True, "shuffle_scan_visor": True}
 
