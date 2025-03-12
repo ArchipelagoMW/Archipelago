@@ -6,10 +6,10 @@ from .Items import filler_items
 speedy_observer_index: [int] = [183, 182, 179, 178, 177, 101, 100, 99, 98, 97, 21, 19]
 speedy_enemy_index: [int] = [128, 125, 115, 114, 113, 67, 66, 60, 59, 58, 7, 6]
 money_item_names: [str] = ["Bills", "Coin", "Gold Bar", "Rupee", "Leaf", "Green", "Gold", "Jewel"]
-explode_item_names: [str] = ["Bomb", "Missile", "Glove", "Red", "Tunic", "Cloth", "Armor"]
-icy_item_names: [str] = ["Ice Trap", "White", "Ice Beam", "Icy"]
-light_item_names: [str] = ["Light", "Big Key", "Yellow", "Banana", "Boss Key", "Sun"]
-blueish_item_names: [str] = ["Small Key", "Blue"]
+explode_item_names: [str] = ["Bomb", "Missile", "Glove", "Red", "Tunic", "Cloth", "Armor", "Boot", "Shoe"]
+icy_item_names: [str] = ["Ice Trap", "White", "Ice Beam", "Icy", "Freeze"]
+light_item_names: [str] = ["Light", "Big Key", "Yellow", "Banana", "Boss Key", "Sun", "Laser"]
+blueish_item_names: [str] = ["Small Key", "Blue", "Ocean", "Sea", "Magic"]
 
 
 # Converts AP readable name to in-game name
