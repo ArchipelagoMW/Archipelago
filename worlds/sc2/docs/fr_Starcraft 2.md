@@ -103,9 +103,7 @@ Les fichiers existants vont être écrasés.
 * `/game_speed [game_speed]` Remplace la vitesse du jeu pour le monde.  
     * Les options sont *default*, *slower*, *slow*, *normal*, *fast*, and *faster*.
 * `/color [faction] [color]` Remplace la couleur d'une des *factions* qui est jouable. 
-    * Les options de *faction*: raynor, kerrigan, primal, protoss, nova.
-    * Les options de couleur: *white*, *red*, *blue*, *teal*, *purple*, *yellow*, *orange*, *green*, *light pink*, 
-*violet*, *light grey*, *dark green*, *brown*, *light green*, *dark grey*, *pink*, *rainbow*, *random*, *default*.
+    * Si la commande est lancée sans option, la liste des *factions* et des couleurs disponibles sera affichée.
 * `/option [option_name] [option_value]` Permet de changer un option normalement définit dans le *yaml*. 
     * Si la commande est lancée sans option, la liste des options qui sont modifiables va être affichée.
     * Les options qui peuvent être changées avec cette commande incluent sauter les cinématiques  automatiquement, la 

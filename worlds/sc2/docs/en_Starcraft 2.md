@@ -91,9 +91,7 @@ Will overwrite existing files
 * `/game_speed [game_speed]` Overrides the game speed for the world
     * Options: default, slower, slow, normal, fast, faster
 * `/color [faction] [color]` Changes your color for one of your playable factions.
-    * Faction options: raynor, kerrigan, primal, protoss, nova
-    * Color options: white, red, blue, teal, purple, yellow, orange, green, light pink, violet, light grey, dark green, 
-    brown, light green, dark grey, pink, rainbow, random, default
+    * Run without arguments to list all factions and colors that are available.
 * `/option [option_name] [option_value]` Sets an option normally controlled by your yaml after generation.
     * Run without arguments to list all options.
     * Options pertain to automatic cutscene skipping, Kerrigan presence, Spear of Adun presence, starting resource 
