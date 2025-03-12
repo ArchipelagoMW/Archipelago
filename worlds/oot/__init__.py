@@ -128,7 +128,7 @@ class OOTWeb(WebWorld):
         ["Held_der_Zeit"]
     )
 
-    tutorials = [setup, setup_es, setup_fr, setup_de]
+    tutorials = [setup, setup_fr, setup_de]
     option_groups = oot_option_groups
 
 
