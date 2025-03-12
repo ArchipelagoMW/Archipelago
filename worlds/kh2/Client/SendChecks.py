@@ -1,5 +1,5 @@
 from CommonClient import logger
-from worlds.kh2.WorldLocations import *
+from .WorldLocations import *
 from typing import TYPE_CHECKING
 
 # I don't know what is going on here, but it works.

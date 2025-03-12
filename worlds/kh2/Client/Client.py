@@ -11,7 +11,7 @@ from pymem import pymem
 from worlds.kh2 import item_dictionary_table, exclusion_item_table, CheckDupingItems, all_locations, exclusion_table, \
     SupportAbility_Table, ActionAbility_Table, all_weapon_slot
 from worlds.kh2.Names import ItemName
-from worlds.kh2.WorldLocations import *
+from .WorldLocations import *
 
 from NetUtils import ClientStatus, NetworkItem
 from CommonClient import gui_enabled, logger, get_base_parser, CommonContext, server_loop
@@ -489,10 +489,16 @@ class KH2Context(CommonContext):
             self.kh2_write_byte(0x810000, 1)
 
     async def is_dead(self):
-        # if hp is 0 and sora has 5 drive gauge and deathlink flag isnt set
+        #General Death link logic: if hp is 0 and sora has 5 drive gauge and deathlink flag isnt set
+        # if deathlink is on and script is hasnt killed sora and sora isnt dead
         if self.deathlink_toggle and self.kh2_read_byte(0x810000) == 0 and self.kh2_read_longlong(self.isDead) != 0:
             self.kh2_write_int(0x810000, 1)
-            await self.send_death(death_text="Sora Died")
+            Room = self.kh2_read_byte(self.Now+0x01)
+            Event = self.kh2_read_byte(self.Now+0x08)
+            if (Room, Event) in DeathLinkPair.keys():
+                await self.send_death(death_text=f"{self.player_names[self.slot]} Died to {DeathLinkPair[(Room, Event)]}")
+            else:
+                await self.send_death(death_text=f"{self.player_names[self.slot]} lost their heart to darkness")
 
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""

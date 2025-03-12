@@ -1,6 +1,6 @@
 from CommonClient import logger
 from typing import TYPE_CHECKING
-from ..WorldLocations import *
+from .WorldLocations import *
 from ..Names import ItemName
 import re
 import asyncio
