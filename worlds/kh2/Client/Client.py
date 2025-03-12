@@ -492,13 +492,15 @@ class KH2Context(CommonContext):
         #General Death link logic: if hp is 0 and sora has 5 drive gauge and deathlink flag isnt set
         # if deathlink is on and script is hasnt killed sora and sora isnt dead
         if self.deathlink_toggle and self.kh2_read_byte(0x810000) == 0 and self.kh2_read_longlong(self.isDead) != 0:
+            # set deathlink flag so it doesn't send out bunch
+            # basically making the game think it got its death from a deathlink instead of from the game
             self.kh2_write_int(0x810000, 1)
-            Room = self.kh2_read_byte(self.Now+0x01)
-            Event = self.kh2_read_byte(self.Now+0x08)
+            Room = self.kh2_read_byte(self.Now + 0x01)
+            Event = self.kh2_read_byte(self.Now + 0x08)
             if (Room, Event) in DeathLinkPair.keys():
-                await self.send_death(death_text=f"{self.player_names[self.slot]} Died to {DeathLinkPair[(Room, Event)]}")
+                await self.send_death(death_text=f"{self.player_names[self.slot]} died to {DeathLinkPair[(Room, Event)]}.")
             else:
-                await self.send_death(death_text=f"{self.player_names[self.slot]} lost their heart to darkness")
+                await self.send_death(death_text=f"{self.player_names[self.slot]} lost their heart to darkness.")
 
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
