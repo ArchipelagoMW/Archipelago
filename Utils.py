@@ -443,7 +443,8 @@ class RestrictedUnpickler(pickle.Unpickler):
             else:
                 mod = importlib.import_module(module)
             obj = getattr(mod, name)
-            if issubclass(obj, (self.options_module.Option, self.options_module.PlandoConnection)):
+            if issubclass(obj, (self.options_module.Option, self.options_module.PlandoConnection,
+                                self.options_module.PlandoText)):
                 return obj
         # Forbid everything else.
         raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")
@@ -521,8 +522,8 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
         def filter(self, record: logging.LogRecord) -> bool:
             return self.condition(record)
 
-    file_handler.addFilter(Filter("NoStream", lambda record: not getattr(record,  "NoFile", False)))
-    file_handler.addFilter(Filter("NoCarriageReturn", lambda record: '\r' not in record.msg))
+    file_handler.addFilter(Filter("NoStream", lambda record: not getattr(record, "NoFile", False)))
+    file_handler.addFilter(Filter("NoCarriageReturn", lambda record: '\r' not in record.getMessage()))
     root_logger.addHandler(file_handler)
     if sys.stdout:
         formatter = logging.Formatter(fmt='[%(asctime)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
