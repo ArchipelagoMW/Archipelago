@@ -210,6 +210,10 @@ class MetroidPrimeWorld(World):
         if hasattr(self.multiworld, "re_gen_passthrough"):
             self.init_tracker_data()
 
+        # Fix scan options, if necessary
+        if self.options.shuffle_scan_visor:
+            self.options.pre_scan_elevators.value = True
+
         # Select Start Room
         init_starting_room_data(self)
 

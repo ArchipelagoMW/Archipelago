@@ -81,7 +81,7 @@ class MainPowerBomb(Toggle):
 
 
 class ShuffleScanVisor(Toggle):
-    """If enabled, the scan visor will be shuffled into the item pool and will need to be found in order to scan dash and open certain locks."""
+    """If enabled, the scan visor will be shuffled into the item pool and will need to be found in order to scan dash and open certain locks. Note that enabling this will also make all elevators pre-scanned."""
 
     display_name = "Shuffle Scan Visor"
 
@@ -200,13 +200,11 @@ class StartingRoom(Choice):
     """Determines the starting room of the game. This will change your starting loadout depending on the room.
     Normal: Start at the Talon Overworld Landing Site. Most randomization options, when enabled, will move the starting room to Save Station 1 in Chozo Ruins due to the restrictive nature of the landing site starting room.
     Safe: Start in rooms that will not require a significant combat challenge to progress from.
-    Buckle Up: Start in rooms that will pose a significant challenge to players with no energy tanks or suit upgrades. Fun for the aspiring masochist (less fun for their friends waiting in BK).
     """
 
     display_name = "Starting Room Randomization"
     option_normal = StartRoomDifficulty.Normal.value
     option_safe = StartRoomDifficulty.Safe.value
-    option_buckle_up = StartRoomDifficulty.Buckle_Up.value
     default = StartRoomDifficulty.Normal.value
 
 
@@ -243,14 +241,12 @@ class DoorColorRandomization(Choice):
 class BlastShieldRandomization(Choice):
     """Determine if/how blast shields are randomized. Note that this will have a difficult time generating in solo worlds with no tricks enabled.
     None: No blast shields will be randomized
-    Replace Existing: Each existing Missile Blast Shield will be replaced with a different Blast Shield type
     Mix It Up: Each Region will remove all existing blast shields and instead add a specified number to new doors
     """
 
     display_name = "Blast Shield Randomization"
     option_none = 0
-    option_replace_existing = 1
-    option_mix_it_up = 2
+    option_mix_it_up = 1
     default = 0
 
 
@@ -307,7 +303,7 @@ class RandomizeStartingBeam(Toggle):
 
 
 class PreScanElevators(DefaultOnToggle):
-    """Pre scans the elevators in the game, allowing for faster transitions between regions. Makes for more interesting gameplay if disabled when the scan visor is shuffled."""
+    """Pre scans the elevators in the game, allowing for faster transitions between regions. Makes for more interesting gameplay if disabled when the scan visor is shuffled. Note that this will be enabled if the scan visor is shuffled."""
 
     display_name = "Pre Scan Elevators"
 
