@@ -63,6 +63,18 @@ class Checkpointsanity(Toggle):
     """
     display_name = "Checkpointsanity"
 
+class Binosanity(Toggle):
+    """
+    Determines whether using Binoculars sends location checks
+    """
+    display_name = "Binosanity"
+
+class Keysanity(Toggle):
+    """
+    Determines whether individual Keys are shuffled into the item pool
+    """
+    display_name = "Keysanity"
+
 class Roomsanity(Toggle):
     """
     Determines whether entering individual rooms sends location checks
@@ -99,6 +111,20 @@ class IncludeCSides(Toggle):
     Determines whether the C-Side Levels will be included
     """
     display_name = "Include C-Sides"
+
+
+class MadelineHairLength(Choice):
+    """
+    How long Madeline's hair is
+    """
+    display_name = "Madeline Hair Length"
+    option_very_short = 1
+    option_short = 2
+    option_default = 4
+    option_long = 7
+    option_very_long = 10
+    option_absurd = 20
+    default = 4
 
 
 class ColorChoice(TextChoice):
@@ -183,6 +209,8 @@ celeste_option_groups = [
     ]),
     OptionGroup("Location Options", [
         Checkpointsanity,
+        Binosanity,
+        Keysanity,
         Roomsanity,
         IncludeCore,
         IncludeFarewell,
@@ -190,6 +218,7 @@ celeste_option_groups = [
         IncludeCSides,
     ]),
     OptionGroup("Aesthetic Options", [
+        MadelineHairLength,
         MadelineOneDashHairColor,
         MadelineTwoDashHairColor,
         MadelineNoDashHairColor,
@@ -264,6 +293,8 @@ class CelesteOptions(PerGameCommonOptions):
     strawberries_required_percentage: StrawberriesRequiredPercentage
 
     checkpointsanity: Checkpointsanity
+    binosanity: Binosanity
+    keysanity: Keysanity
     roomsanity: Roomsanity
     include_goldens: IncludeGoldens
     include_core: IncludeCore
@@ -271,6 +302,7 @@ class CelesteOptions(PerGameCommonOptions):
     include_b_sides: IncludeBSides
     include_c_sides: IncludeCSides
 
+    madeline_hair_length: MadelineHairLength
     madeline_one_dash_hair_color: MadelineOneDashHairColor
     madeline_two_dash_hair_color: MadelineTwoDashHairColor
     madeline_no_dash_hair_color: MadelineNoDashHairColor

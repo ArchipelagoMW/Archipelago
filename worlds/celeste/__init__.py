@@ -150,6 +150,8 @@ class CelesteWorld(World):
             "strawberries_required": self.strawberries_required,
 
             "checkpointsanity": self.options.checkpointsanity.value,
+            "binosanity": self.options.binosanity.value,
+            "keysanity": self.options.keysanity.value,
             "roomsanity": self.options.roomsanity.value,
             "include_goldens": self.options.include_goldens.value,
 
@@ -158,6 +160,7 @@ class CelesteWorld(World):
             "include_b_sides": self.options.include_b_sides.value,
             "include_c_sides": self.options.include_c_sides.value,
 
+            "madeline_hair_length": self.options.madeline_hair_length.value,
             "madeline_one_dash_hair_color": self.madeline_one_dash_hair_color,
             "madeline_two_dash_hair_color": self.madeline_two_dash_hair_color,
             "madeline_no_dash_hair_color": self.madeline_no_dash_hair_color,

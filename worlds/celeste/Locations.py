@@ -92,6 +92,12 @@ def create_regions_and_locations(world):
                     if level_location.loc_type == LocationType.golden_strawberry and not world.options.include_goldens:
                         continue
 
+                    if level_location.loc_type == LocationType.key and not world.options.keysanity:
+                        continue
+
+                    if level_location.loc_type == LocationType.binoculars and not world.options.binosanity:
+                        continue
+
                     location_rule = lambda state: True
                     if len(level_location.possible_access) > 0:
                         location_rule = lambda state, level_location=level_location: any(all(state.has(item, world.player) for item in sublist) for sublist in level_location.possible_access)
