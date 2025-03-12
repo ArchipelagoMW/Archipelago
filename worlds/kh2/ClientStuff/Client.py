@@ -498,8 +498,11 @@ class KH2Context(CommonContext):
             Room = self.kh2_read_byte(self.Now + 0x01)
             Event = self.kh2_read_byte(self.Now + 0x08)
             if (Room, Event) in DeathLinkPair.keys():
+                # remove the logger.info after testing phase/is in pr
+                logger.info(f"Deathlink: {self.player_names[self.slot]} died to {DeathLinkPair[(Room, Event)]}.")
                 await self.send_death(death_text=f"{self.player_names[self.slot]} died to {DeathLinkPair[(Room, Event)]}.")
             else:
+                logger.info(f"Deathlink: {self.player_names[self.slot]} lost their heart to darkness.")
                 await self.send_death(death_text=f"{self.player_names[self.slot]} lost their heart to darkness.")
 
     def run_gui(self):
