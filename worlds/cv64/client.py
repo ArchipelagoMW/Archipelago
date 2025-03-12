@@ -239,6 +239,7 @@ class Castlevania64Client(BizHawkClient):
 
             # Send game clear if we're in either any ending cutscene or the credits state.
             if not ctx.finished_game and (0x26 <= int(cutscene_value) <= 0x2E or game_state == 0x0000000B):
+                ctx.finished_game = True
                 await ctx.send_msgs([{
                     "cmd": "StatusUpdate",
                     "status": ClientStatus.CLIENT_GOAL
