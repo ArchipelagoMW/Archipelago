@@ -491,7 +491,7 @@ class KH1World(World):
             if location.name != "Final Ansem":
                 location_data = location_table[location.name]
                 if self.options.remote_items.current_key == "full":
-                    if location_data.type == "Starting Accessory":
+                    if location_data.type != "Starting Accessory":
                         remote_location_ids.append(location_data.code)
                 elif self.player == location.item.player and location.item.name != "Victory":
                     item_data = item_table[location.item.name]
