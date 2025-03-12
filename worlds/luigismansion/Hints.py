@@ -6,9 +6,9 @@ from BaseClasses import Location,  MultiWorld
 ALWAYS_HINT = ["Madame Clairvoya", "Foyer Toad", "Wardrobe Balcony Toad", "1F Washroom Toad", "Courtyard Toad",
                "Left Telephone", "Center Telephone", "Right Telephone"]
 
-PORTRAIT_HINTS = ["Neville", "Lydia", "Chauncey", "Male Whirlinda", "Female Whirlinda", "Shivers", "Melody", "Luggs",
-                  "Spooky", "Atlas", "Bankshot", "Petunia", "Nana", "Sue Pea", "The Twins", "Grimmly", "Jarvis",
-                  "Vincent", "Weston", "Clockwork Blue", "Clockwork Pink", "Clockwork Green", "Bogmire", "Boolossus"]
+PORTRAIT_HINTS = ["Neville", "Lydia", "Chauncey", "Whirlindas", "Shivers", "Melody", "Luggs",
+                  "Spooky", "Atlas", "Bankshot", "Petunia", "Nana", "Sue Pea", "The Twins", "Grimmly",
+                  "Vincent", "Weston", "Clockwork Blue", "Clockwork Pink", "Clockwork Green"]
 
 
 def get_progression_only_items(multiworld: MultiWorld, player: int, loc, hinted_loc, prog_items_no_skip) -> Location:
