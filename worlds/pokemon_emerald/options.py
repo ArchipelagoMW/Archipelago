@@ -4,7 +4,7 @@ Option definitions for Pokemon Emerald
 from dataclasses import dataclass
 
 from Options import (Choice, DeathLink, DefaultOnToggle, OptionSet, NamedRange, Range, Toggle, FreeText,
-                     PerGameCommonOptions)
+                     PerGameCommonOptions, OptionGroup, StartInventory)
 
 from .data import data
 
@@ -726,6 +726,39 @@ class FreeFlyLocation(Toggle):
     display_name = "Free Fly Location"
 
 
+class FreeFlyBlacklist(OptionSet):
+    """
+    Disables specific locations as valid free fly locations.
+
+    Has no effect if Free Fly Location is disabled.
+    """
+    display_name = "Free Fly Blacklist"
+    valid_keys = [
+        "Littleroot Town",
+        "Oldale Town",
+        "Petalburg City",
+        "Rustboro City",
+        "Dewford Town",
+        "Slateport City",
+        "Mauville City",
+        "Verdanturf Town",
+        "Fallarbor Town",
+        "Lavaridge Town",
+        "Fortree City",
+        "Lilycove City",
+        "Mossdeep City",
+        "Sootopolis City",
+        "Ever Grande City",
+    ]
+    default = [
+        "Littleroot Town",
+        "Oldale Town",
+        "Petalburg City",
+        "Rustboro City",
+        "Dewford Town",
+    ]
+
+
 class HmRequirements(Choice):
     """
     Sets the requirements to use HMs outside of battle.
@@ -785,6 +818,10 @@ class RandomizeFanfares(Toggle):
     display_name = "Randomize Fanfares"
 
 
+class PokemonEmeraldDeathLink(DeathLink):
+    __doc__ = DeathLink.__doc__ + "\n\n    In Pokemon Emerald, whiting out sends a death and receiving a death causes you to white out."
+
+
 class WonderTrading(DefaultOnToggle):
     """
     Allows participation in wonder trading with other players in your current multiworld. Speak with the center receptionist on the second floor of any pokecenter.
@@ -808,6 +845,14 @@ class EasterEgg(FreeText):
     """
     display_name = "Easter Egg"
     default = "EMERALD SECRET"
+
+
+class PokemonEmeraldStartInventory(StartInventory):
+    """
+    Start with these items.
+
+    They will be in your PC, which you can access from your home or a pokemon center.
+    """
 
 
 @dataclass
@@ -876,6 +921,7 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     extra_bumpy_slope: ExtraBumpySlope
     modify_118: ModifyRoute118
     free_fly_location: FreeFlyLocation
+    free_fly_blacklist: FreeFlyBlacklist
     hm_requirements: HmRequirements
 
     turbo_a: TurboA
@@ -885,7 +931,18 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     music: RandomizeMusic
     fanfares: RandomizeFanfares
 
-    death_link: DeathLink
+    death_link: PokemonEmeraldDeathLink
 
     enable_wonder_trading: WonderTrading
     easter_egg: EasterEgg
+
+    start_inventory: PokemonEmeraldStartInventory
+
+
+OPTION_GROUPS = [
+    OptionGroup(
+        "Item & Location Options", [
+            PokemonEmeraldStartInventory,
+        ], True,
+    ),
+]
