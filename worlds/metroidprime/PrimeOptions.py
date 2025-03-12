@@ -280,7 +280,7 @@ class LockedDoorCount(Range):
 
     display_name = "Number of Locked Doors to Include"
     range_start = 0
-    range_end = 2
+    range_end = 1
     default = 0
 
 
