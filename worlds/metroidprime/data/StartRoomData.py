@@ -222,8 +222,7 @@ all_start_rooms: Dict[str, StartRoomData] = {
                 ],
             )
         ],
-        is_eligible=lambda world: not world.options.shuffle_scan_visor.value
-        or world.multiworld.players > 1,
+        is_eligible=lambda world: not world.options.shuffle_scan_visor.value,
         no_power_beam_door_on_starting_level=True,
         difficulty=StartRoomDifficulty.Buckle_Up,
     ),
@@ -243,8 +242,7 @@ all_start_rooms: Dict[str, StartRoomData] = {
                 ],
             )
         ],
-        is_eligible=lambda world: not world.options.shuffle_scan_visor.value
-        or world.multiworld.players > 1,
+        is_eligible=lambda world: not world.options.shuffle_scan_visor.value,
     ),
     RoomName.Arbor_Chamber.value: StartRoomData(
         area=MetroidPrimeArea.Tallon_Overworld,
@@ -313,8 +311,7 @@ all_start_rooms: Dict[str, StartRoomData] = {
             )
         ],
         difficulty=StartRoomDifficulty.Buckle_Up,
-        is_eligible=lambda world: not world.options.shuffle_scan_visor.value
-        or world.multiworld.players > 1,
+        is_eligible=lambda world: not world.options.shuffle_scan_visor.value,
     ),
     RoomName.Sunchamber_Lobby.value: StartRoomData(
         force_starting_beam=True,
@@ -507,7 +504,6 @@ def init_starting_loadout(world: "MetroidPrimeWorld"):
 
 def init_starting_beam(world: "MetroidPrimeWorld"):
     assert world.starting_room_data and world.starting_room_data.selected_loadout
-    loadout_beam = world.starting_room_data.selected_loadout.starting_beam
 
     def replace_starting_beam(new_beam: SuitUpgrade):
         if loadout_beam:
@@ -516,6 +512,8 @@ def init_starting_beam(world: "MetroidPrimeWorld"):
             )
             world.starting_room_data.selected_loadout.starting_beam = new_beam
         world.starting_beam = new_beam.value
+
+    loadout_beam = world.starting_room_data.selected_loadout.starting_beam
 
     # Use the starting beam if it was set in the options (or for UT)
     if world.starting_beam:

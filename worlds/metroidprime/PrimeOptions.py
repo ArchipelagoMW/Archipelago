@@ -276,7 +276,6 @@ class BlastShieldFrequency(Choice):
     display_name = "Blast Shield Frequency"
     option_low = 1
     option_medium = 4
-    option_high = 6
     default = 4
 
 
