@@ -10,17 +10,18 @@ WitnessRule = FrozenSet[FrozenSet[str]]
 
 
 @dataclass
-class RegionDefinition:
-    name: str
-    short_name: str
-    logical_entities: List[str] = field(default_factory=list)
-    physical_entities: List[str] = field(default_factory=list)
-
-
-@dataclass
 class AreaDefinition:
     name: str
     regions: List[str] = field(default_factory=list)
+
+
+@dataclass
+class RegionDefinition:
+    name: str
+    short_name: str
+    area: AreaDefinition
+    logical_entities: List[str] = field(default_factory=list)
+    physical_entities: List[str] = field(default_factory=list)
 
 
 class ConnectionDefinition(NamedTuple):
