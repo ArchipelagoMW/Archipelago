@@ -30,10 +30,19 @@ def connect_plando(world: "MessengerWorld", plando_connections: TransitionPlando
 
     for plando_connection in plando_connections:
         # get the connecting regions
-        reg1 = world.get_region(plando_connection.entrance)
+        # need to handle these special because the names are unique but have the same parent region
+        if plando_connection.entrance in ("Artificer", "Tower HQ"):
+            reg1 = world.get_region("Tower HQ")
+            if plando_connection.entrance == "Artificer":
+                dangling_exit = world.get_entrance("Artificer's Portal")
+            else:
+                dangling_exit = world.get_entrance("Artificer's Challenge")
+            reg1.exits.remove(dangling_exit)
+        else:
+            reg1 = world.get_region(plando_connection.entrance)
+            remove_dangling_exit(reg1)
+        
         reg2 = world.get_region(plando_connection.exit)
-
-        remove_dangling_exit(reg1)
         remove_dangling_entrance(reg2)
         # connect the regions
         reg1.connect(reg2)
