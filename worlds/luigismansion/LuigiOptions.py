@@ -324,6 +324,8 @@ class ChestTypes(Choice):
     color: Chest color represents the AP item classification
 
     size_and_color: Both size and color are determined by AP item classification
+
+    no_fuzzy_matching: Same as default but uses item classification for other players' items
     """
     display_name = "Chest Cosmetics"
     internal_name = "chest_types"
@@ -331,6 +333,7 @@ class ChestTypes(Choice):
     option_full_random = 1
     option_color = 2
     option_size_and_color = 3
+    option_no_fuzzy_matching = 4
     default = 0
 
 
