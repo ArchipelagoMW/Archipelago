@@ -236,7 +236,7 @@ all_doors: Dict[str, Door] = {
     "2a_d3_north": Door("2a_d3_north", "2a_d3", DoorDirection.left, False, False),
 
     "2a_d2_west": Door("2a_d2_west", "2a_d2", DoorDirection.left, False, False),
-    "2a_d2_north-west": Door("2a_d2_north-west", "2a_d2", DoorDirection.up, False, False),
+    "2a_d2_north-west": Door("2a_d2_north-west", "2a_d2", DoorDirection.up, False, True),
     "2a_d2_east": Door("2a_d2_east", "2a_d2", DoorDirection.right, False, False),
 
     "2a_d9_north-west": Door("2a_d9_north-west", "2a_d9", DoorDirection.up, False, False),
@@ -404,6 +404,22 @@ all_doors: Dict[str, Door] = {
     "2c_01_east": Door("2c_01_east", "2c_01", DoorDirection.right, False, False),
 
     "2c_02_west": Door("2c_02_west", "2c_02", DoorDirection.left, False, True),
+
+    "3a_s0_east": Door("3a_s0_east", "3a_s0", DoorDirection.right, False, False),
+
+    "3a_s1_west": Door("3a_s1_west", "3a_s1", DoorDirection.left, False, False),
+    "3a_s1_east": Door("3a_s1_east", "3a_s1", DoorDirection.right, False, False),
+    "3a_s1_north-east": Door("3a_s1_north-east", "3a_s1", DoorDirection.right, False, False),
+
+    "3a_s2_west": Door("3a_s2_west", "3a_s2", DoorDirection.left, False, False),
+    "3a_s2_north-west": Door("3a_s2_north-west", "3a_s2", DoorDirection.left, False, False),
+    "3a_s2_east": Door("3a_s2_east", "3a_s2", DoorDirection.right, False, False),
+
+    "3a_s3_west": Door("3a_s3_west", "3a_s3", DoorDirection.left, False, False),
+    "3a_s3_north-west": Door("3a_s3_north-west", "3a_s3", DoorDirection.left, False, False),
+    "3a_s3_east": Door("3a_s3_east", "3a_s3", DoorDirection.right, False, False),
+
+    "3a_roof07_west": Door("3a_roof07_west", "3a_roof07", DoorDirection.left, False, False),
 
 }
 
@@ -683,6 +699,7 @@ all_region_connections: Dict[str, RegionConnection] = {
     "2a_d3_north---2a_d3_west": RegionConnection("2a_d3_north", "2a_d3_west", [[ItemName.dream_blocks, ], ]),
 
     "2a_d2_west---2a_d2_east": RegionConnection("2a_d2_west", "2a_d2_east", []),
+    "2a_d2_north-west---2a_d2_west": RegionConnection("2a_d2_north-west", "2a_d2_west", []),
     "2a_d2_east---2a_d2_west": RegionConnection("2a_d2_east", "2a_d2_west", []),
 
 
@@ -855,6 +872,25 @@ all_region_connections: Dict[str, RegionConnection] = {
 
     "2c_02_west---2c_02_goal": RegionConnection("2c_02_west", "2c_02_goal", [[ItemName.coins, ItemName.dream_blocks, ItemName.dash_refills, ], ]),
 
+    "3a_s0_main---3a_s0_east": RegionConnection("3a_s0_main", "3a_s0_east", []),
+    "3a_s0_east---3a_s0_main": RegionConnection("3a_s0_east", "3a_s0_main", []),
+
+    "3a_s1_west---3a_s1_east": RegionConnection("3a_s1_west", "3a_s1_east", []),
+    "3a_s1_west---3a_s1_north-east": RegionConnection("3a_s1_west", "3a_s1_north-east", []),
+    "3a_s1_east---3a_s1_west": RegionConnection("3a_s1_east", "3a_s1_west", []),
+    "3a_s1_north-east---3a_s1_west": RegionConnection("3a_s1_north-east", "3a_s1_west", []),
+
+    "3a_s2_west---3a_s2_east": RegionConnection("3a_s2_west", "3a_s2_east", []),
+    "3a_s2_north-west---3a_s2_east": RegionConnection("3a_s2_north-west", "3a_s2_east", []),
+    "3a_s2_east---3a_s2_west": RegionConnection("3a_s2_east", "3a_s2_west", []),
+    "3a_s2_east---3a_s2_north-west": RegionConnection("3a_s2_east", "3a_s2_north-west", []),
+
+    "3a_s3_west---3a_s3_east": RegionConnection("3a_s3_west", "3a_s3_east", [["Celestial Resort A - Front Door Key", ], ]),
+    "3a_s3_east---3a_s3_west": RegionConnection("3a_s3_east", "3a_s3_west", []),
+
+    "3a_roof07_west---3a_roof07_main": RegionConnection("3a_roof07_west", "3a_roof07_main", []),
+    "3a_roof07_main---3a_roof07_west": RegionConnection("3a_roof07_main", "3a_roof07_west", []),
+
 }
 
 all_locations: Dict[str, LevelLocation] = {
@@ -928,6 +964,14 @@ all_locations: Dict[str, LevelLocation] = {
     "2c_02_binoculars": LevelLocation("2c_02_binoculars", "Old Site C - Room 02 Binoculars", "2c_02_west", LocationType.binoculars, []),
     "2c_02_clear": LevelLocation("2c_02_clear", "Old Site C - Level Clear", "2c_02_goal", LocationType.level_clear, []),
     "2c_02_golden": LevelLocation("2c_02_golden", "Old Site C - Golden Strawberry", "2c_02_goal", LocationType.golden_strawberry, [[ItemName.dream_blocks, ItemName.dash_refills, ItemName.coins, ], ]),
+
+    "3a_s2_strawberry_2": LevelLocation("3a_s2_strawberry_2", "Celestial Resort A - Room s2 Strawberry 2", "3a_s2_west", LocationType.strawberry, []),
+    "3a_s2_strawberry_1": LevelLocation("3a_s2_strawberry_1", "Celestial Resort A - Room s2 Strawberry 1", "3a_s2_north-west", LocationType.strawberry, []),
+    "3a_s3_key_1": LevelLocation("3a_s3_key_1", "Celestial Resort A - Front Door Key", "3a_s3_west", LocationType.key, []),
+    "3a_s3_pink_clutter": LevelLocation("3a_s3_pink_clutter", "Celestial Resort A - Pink Clutter", "3a_s3_west", LocationType.clutter, []),
+    "3a_s3_strawberry": LevelLocation("3a_s3_strawberry", "Celestial Resort A - Room s3 Strawberry", "3a_s3_north", LocationType.strawberry, []),
+    "3a_roof07_clear": LevelLocation("3a_roof07_clear", "Celestial Resort A - Level Clear", "3a_roof07_main", LocationType.level_clear, []),
+    "3a_roof07_golden": LevelLocation("3a_roof07_golden", "Celestial Resort A - Golden Strawberry", "3a_roof07_main", LocationType.golden_strawberry, [[ItemName.dream_blocks, ItemName.coins, ItemName.dash_refills, ], ]),
 
 }
 
@@ -1358,6 +1402,24 @@ all_regions: Dict[str, PreRegion] = {
     "2c_02_west": PreRegion("2c_02_west", "2c_02", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "2c_02_west"], [loc for _, loc in all_locations.items() if loc.region_name == "2c_02_west"]),
     "2c_02_goal": PreRegion("2c_02_goal", "2c_02", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "2c_02_goal"], [loc for _, loc in all_locations.items() if loc.region_name == "2c_02_goal"]),
 
+    "3a_s0_main": PreRegion("3a_s0_main", "3a_s0", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_s0_main"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_s0_main"]),
+    "3a_s0_east": PreRegion("3a_s0_east", "3a_s0", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_s0_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_s0_east"]),
+
+    "3a_s1_west": PreRegion("3a_s1_west", "3a_s1", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_s1_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_s1_west"]),
+    "3a_s1_east": PreRegion("3a_s1_east", "3a_s1", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_s1_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_s1_east"]),
+    "3a_s1_north-east": PreRegion("3a_s1_north-east", "3a_s1", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_s1_north-east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_s1_north-east"]),
+
+    "3a_s2_west": PreRegion("3a_s2_west", "3a_s2", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_s2_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_s2_west"]),
+    "3a_s2_north-west": PreRegion("3a_s2_north-west", "3a_s2", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_s2_north-west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_s2_north-west"]),
+    "3a_s2_east": PreRegion("3a_s2_east", "3a_s2", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_s2_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_s2_east"]),
+
+    "3a_s3_west": PreRegion("3a_s3_west", "3a_s3", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_s3_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_s3_west"]),
+    "3a_s3_north": PreRegion("3a_s3_north", "3a_s3", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_s3_north"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_s3_north"]),
+    "3a_s3_east": PreRegion("3a_s3_east", "3a_s3", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_s3_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_s3_east"]),
+
+    "3a_roof07_west": PreRegion("3a_roof07_west", "3a_roof07", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_roof07_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_roof07_west"]),
+    "3a_roof07_main": PreRegion("3a_roof07_main", "3a_roof07", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_roof07_main"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_roof07_main"]),
+
 }
 
 all_room_connections: Dict[str, RoomConnection] = {
@@ -1505,6 +1567,12 @@ all_room_connections: Dict[str, RoomConnection] = {
     "2c_00_east---2c_01_west": RoomConnection("2c", all_doors["2c_00_east"], all_doors["2c_01_west"]),
     "2c_01_east---2c_02_west": RoomConnection("2c", all_doors["2c_01_east"], all_doors["2c_02_west"]),
 
+    "3a_s0_east---3a_s1_west": RoomConnection("3a", all_doors["3a_s0_east"], all_doors["3a_s1_west"]),
+    "3a_s1_east---3a_s2_west": RoomConnection("3a", all_doors["3a_s1_east"], all_doors["3a_s2_west"]),
+    "3a_s1_north-east---3a_s2_north-west": RoomConnection("3a", all_doors["3a_s1_north-east"], all_doors["3a_s2_north-west"]),
+    "3a_s2_east---3a_s3_west": RoomConnection("3a", all_doors["3a_s2_east"], all_doors["3a_s3_west"]),
+    "3a_s3_east---3a_roof07_west": RoomConnection("3a", all_doors["3a_s3_east"], all_doors["3a_roof07_west"]),
+
 }
 
 all_rooms: Dict[str, Room] = {
@@ -1643,6 +1711,12 @@ all_rooms: Dict[str, Room] = {
     "2c_01": Room("2c", "2c_01", "Old Site C - Room 01", [reg for _, reg in all_regions.items() if reg.room_name == "2c_01"], [door for _, door in all_doors.items() if door.room_name == "2c_01"]),
     "2c_02": Room("2c", "2c_02", "Old Site C - Room 02", [reg for _, reg in all_regions.items() if reg.room_name == "2c_02"], [door for _, door in all_doors.items() if door.room_name == "2c_02"]),
 
+    "3a_s0": Room("3a", "3a_s0", "Celestial Resort A - Room s0", [reg for _, reg in all_regions.items() if reg.room_name == "3a_s0"], [door for _, door in all_doors.items() if door.room_name == "3a_s0"], "Start", "3a_s0_main"),
+    "3a_s1": Room("3a", "3a_s1", "Celestial Resort A - Room s1", [reg for _, reg in all_regions.items() if reg.room_name == "3a_s1"], [door for _, door in all_doors.items() if door.room_name == "3a_s1"]),
+    "3a_s2": Room("3a", "3a_s2", "Celestial Resort A - Room s2", [reg for _, reg in all_regions.items() if reg.room_name == "3a_s2"], [door for _, door in all_doors.items() if door.room_name == "3a_s2"]),
+    "3a_s3": Room("3a", "3a_s3", "Celestial Resort A - Room s3", [reg for _, reg in all_regions.items() if reg.room_name == "3a_s3"], [door for _, door in all_doors.items() if door.room_name == "3a_s3"]),
+    "3a_roof07": Room("3a", "3a_roof07", "Celestial Resort A - Room roof07", [reg for _, reg in all_regions.items() if reg.room_name == "3a_roof07"], [door for _, door in all_doors.items() if door.room_name == "3a_roof07"]),
+
 }
 
 all_levels: Dict[str, Level] = {
@@ -1653,6 +1727,7 @@ all_levels: Dict[str, Level] = {
     "2a": Level("2a", "Old Site A", [room for _, room in all_rooms.items() if room.level_name == "2a"], [room_con for _, room_con in all_room_connections.items() if room_con.level_name == "2a"]),
     "2b": Level("2b", "Old Site B", [room for _, room in all_rooms.items() if room.level_name == "2b"], [room_con for _, room_con in all_room_connections.items() if room_con.level_name == "2b"]),
     "2c": Level("2c", "Old Site C", [room for _, room in all_rooms.items() if room.level_name == "2c"], [room_con for _, room_con in all_room_connections.items() if room_con.level_name == "2c"]),
+    "3a": Level("3a", "Celestial Resort A", [room for _, room in all_rooms.items() if room.level_name == "3a"], [room_con for _, room_con in all_room_connections.items() if room_con.level_name == "3a"]),
 
 }
 

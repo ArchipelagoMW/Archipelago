@@ -59,7 +59,7 @@ for level in level_data["levels"]:
                     location_full_name = f"{room_full_name}_{location['name']}"
 
                     location_display_name = location['display_name']
-                    if location['type'] == "strawberry" or location['type'] == "binoculars" or location['type'] == "key":
+                    if location['type'] == "strawberry" or location['type'] == "binoculars":
                         location_display_name = f"Room {room['name']} {location_display_name}" 
                     location_full_display_name = f"{level['display_name']} - {location_display_name}"
 
@@ -72,7 +72,10 @@ for level in level_data["levels"]:
                         for possible_access in location['rule']:
                             location_str += f"["
                             for item in possible_access:
-                                location_str += f"ItemName.{item}, "
+                                if "Key" in item:
+                                    location_str += f"\"{level['display_name']} - {item}\", "
+                                else:
+                                    location_str += f"ItemName.{item}, "
                             location_str += f"], "
                     elif "rules" in location:
                         raise Exception(f"Location {location_full_name} uses 'rules' instead of 'rule")
@@ -91,7 +94,10 @@ for level in level_data["levels"]:
                 for possible_access in reg_con['rule']:
                     reg_con_str += f"["
                     for item in possible_access:
-                        reg_con_str += f"ItemName.{item}, "
+                        if "Key" in item:
+                            reg_con_str += f"\"{level['display_name']} - {item}\", "
+                        else:
+                            reg_con_str += f"ItemName.{item}, "
                     reg_con_str += f"], "
 
                 reg_con_str += "]),"

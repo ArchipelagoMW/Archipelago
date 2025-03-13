@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple, Optional
+from typing import Dict, List, NamedTuple, Optional
 
 from BaseClasses import Location, Region
 from worlds.generic.Rules import set_rule
@@ -20,6 +20,7 @@ class CelesteLocationData(NamedTuple):
 
 
 checkpoint_location_data_table: Dict[str, CelesteLocationData] = {}
+key_location_data_table: Dict[str, CelesteLocationData] = {}
 
 location_id_offsets: Dict[LocationType, int] = {
     LocationType.strawberry:        celeste_base_id,
@@ -31,6 +32,7 @@ location_id_offsets: Dict[LocationType, int] = {
     LocationType.key:               celeste_base_id + 0x600,
     LocationType.binoculars:        celeste_base_id + 0x700,
     LocationType.room_enter:        celeste_base_id + 0x800,
+    LocationType.clutter:           None,
 }
 
 
@@ -66,8 +68,14 @@ def generate_location_table(level_data: Dict[str, Level]):
 
             for region in room.regions:
                 for location in region.locations:
-                    location_table[location.display_name] = location_id_offsets[location.loc_type] + location_counts[location.loc_type]
-                    location_counts[location.loc_type] += 1
+                    if location_id_offsets[location.loc_type] != None:
+                        location_id = location_id_offsets[location.loc_type] + location_counts[location.loc_type]
+                        location_table[location.display_name] = location_id
+                        location_counts[location.loc_type] += 1
+
+                        if location.loc_type == LocationType.key:
+                            from .Items import add_key_to_table
+                            add_key_to_table(location_id, location.display_name)
 
     return location_table
 
@@ -75,6 +83,10 @@ def generate_location_table(level_data: Dict[str, Level]):
 def create_regions_and_locations(world):
     menu_region = Region("Menu", world.player, world.multiworld)
     world.multiworld.regions.append(menu_region)
+
+    world.active_checkpoint_names: List[str] = []
+    world.active_key_names: List[str] = []
+    world.active_clutter_names: List[str] = []
 
     for _, level in world.level_data.items():
         if level.name not in world.active_levels:
@@ -92,15 +104,23 @@ def create_regions_and_locations(world):
                     if level_location.loc_type == LocationType.golden_strawberry and not world.options.include_goldens:
                         continue
 
-                    if level_location.loc_type == LocationType.key and not world.options.keysanity:
-                        continue
-
                     if level_location.loc_type == LocationType.binoculars and not world.options.binosanity:
                         continue
+
+                    if level_location.loc_type == LocationType.key:
+                        world.active_key_names.append(level_location.display_name)
 
                     location_rule = lambda state: True
                     if len(level_location.possible_access) > 0:
                         location_rule = lambda state, level_location=level_location: any(all(state.has(item, world.player) for item in sublist) for sublist in level_location.possible_access)
+
+                    if level_location.loc_type == LocationType.clutter:
+                        world.active_clutter_names.append(level_location.display_name)
+                        location = CelesteLocation(world.player, level_location.display_name, None, region)
+                        set_rule(location, location_rule)
+                        region.locations.append(location)
+                        continue
+
                     location = CelesteLocation(world.player, level_location.display_name, world.location_name_to_id[level_location.display_name], region)
                     set_rule(location, location_rule)
                     region.locations.append(location)
@@ -118,6 +138,7 @@ def create_regions_and_locations(world):
                 checkpoint_rule = lambda state: True
                 if room.checkpoint != "Start":
                     checkpoint_location_name = level.display_name + " - " + room.checkpoint
+                    world.active_checkpoint_names.append(checkpoint_location_name)
                     checkpoint_rule = lambda state, checkpoint_location_name=checkpoint_location_name: state.has(checkpoint_location_name, world.player)
                     room_region.add_locations({
                         checkpoint_location_name: world.location_name_to_id[checkpoint_location_name]

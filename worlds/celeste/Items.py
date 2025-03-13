@@ -69,6 +69,8 @@ collectable_item_data_table: Dict[str, CelesteItemData] = {
 
 checkpoint_item_data_table: Dict[str, CelesteItemData] = {}
 
+key_item_data_table: Dict[str, CelesteItemData] = {}
+
 old_checkpoint_item_data_table: Dict[str, CelesteItemData] = {
     ItemName.fc_a_checkpoint_1: CelesteItemData(celeste_base_id + 0x100 + 0x00, ItemClassification.progression),
     ItemName.fc_a_checkpoint_2: CelesteItemData(celeste_base_id + 0x100 + 0x01, ItemClassification.progression),
@@ -200,9 +202,13 @@ interactable_item_data_table: Dict[str, CelesteItemData] = {
 def add_checkpoint_to_table(id: int, name: str):
     checkpoint_item_data_table[name] = CelesteItemData(id, ItemClassification.progression)
 
+def add_key_to_table(id: int, name: str):
+    key_item_data_table[name] = CelesteItemData(id, ItemClassification.progression)
+
 def generate_item_data_table() -> Dict[int, CelesteItemData]:
     return {**collectable_item_data_table,
             **checkpoint_item_data_table,
+            **key_item_data_table,
             **interactable_item_data_table}
 
 def generate_item_table() -> Dict[str, int]:

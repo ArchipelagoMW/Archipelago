@@ -24,6 +24,7 @@ class GoalArea(Choice):
     option_Core_A = 3
     option_Empty_Space = 6
     option_Farewell = 7
+    option_Farewell_Golden = 8
     default = 0
 
 class LockGoalArea(DefaultOnToggle):

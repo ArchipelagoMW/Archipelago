@@ -74,7 +74,7 @@ class CelesteWorld(World):
 
         resolve_options(self)
 
-        self.active_levels = {"0a", "1a", "2a"}
+        self.active_levels = {"0a", "1a", "2a", "3a"}
         #self.active_levels = {"0a", "1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a"}
         if self.options.include_core:
             self.active_levels.add("9a")
@@ -103,7 +103,10 @@ class CelesteWorld(World):
 
     def create_item(self, name: str) -> CelesteItem:
         item_data_table = generate_item_data_table()
-        return CelesteItem(name, item_data_table[name].type, item_data_table[name].code, self.player)
+        if name in item_data_table:
+            return CelesteItem(name, item_data_table[name].type, item_data_table[name].code, self.player)
+        else:
+            return CelesteItem(name, ItemClassification.progression, None, self.player)
 
     def create_items(self) -> None:
         item_pool: List[CelesteItem] = []
@@ -111,12 +114,25 @@ class CelesteWorld(World):
         location_count: int = len(self.get_locations())
 
         if self.options.checkpointsanity:
-            item_pool += [self.create_item(item_name) for item_name in checkpoint_location_data_table.keys()]
+            item_pool += [self.create_item(item_name) for item_name in self.active_checkpoint_names]
         else:
-            for item_name in checkpoint_location_data_table.keys():
+            for item_name in self.active_checkpoint_names:
                 checkpoint_loc: Location = self.multiworld.get_location(item_name, self.player)
                 checkpoint_loc.place_locked_item(self.create_item(item_name))
                 location_count -= 1
+
+        if self.options.keysanity:
+            item_pool += [self.create_item(item_name) for item_name in self.active_key_names]
+        else:
+            for item_name in self.active_key_names:
+                key_loc: Location = self.multiworld.get_location(item_name, self.player)
+                key_loc.place_locked_item(self.create_item(item_name))
+                location_count -= 1
+
+        for item_name in self.active_clutter_names:
+            clutter_loc: Location = self.multiworld.get_location(item_name, self.player)
+            clutter_loc.place_locked_item(self.create_item(item_name))
+            location_count -= 1
 
         item_pool += [self.create_item(item_name) for item_name in sorted(self.active_items)]
 
