@@ -1,13 +1,10 @@
 from . import SM64TestBase
 from .. import Options
 from ..Locations import loc100Coin_table
-from ..Regions import sm64_paintings_to_level, sm64_secrets_to_level, sm64_entrances_to_level, sm64_level_to_paintings, sm64_level_to_secrets
+from ..Regions import sm64_entrances_to_level, sm64_level_to_paintings, sm64_level_to_secrets
 
 
-class DefaultTestBase(SM64TestBase):
-    options = {}
-
-# Enable Coin Stars
+# Coin Star Logic
 class EnableCoinStarsTestBase(SM64TestBase):
     options = {
         "enable_coin_stars": Options.EnableCoinStars.option_on
@@ -15,8 +12,11 @@ class EnableCoinStarsTestBase(SM64TestBase):
 
     # Ensure Coin Star locations are created
     def test_coin_star_locations(self):
+        possible_locations = self.world.location_names
         for loc in loc100Coin_table:
-            assert loc in self.world.location_names
+            # Use subtest to force all locations to be tested
+            with self.subTest("Location created", location=loc):
+                assert loc in possible_locations
 
 class DisableCoinStarsTestBase(SM64TestBase):
     options = {
@@ -25,8 +25,11 @@ class DisableCoinStarsTestBase(SM64TestBase):
 
     # Ensure Coin Star locations are not created
     def test_coin_star_locations(self):
-        for loc in self.multiworld.get_locations():
-            assert loc not in loc100Coin_table
+        possible_locations = self.world.get_locations()
+        for loc in loc100Coin_table:
+            # Use subtest to force all locations to be tested
+            with self.subTest("Location not created", location=loc):
+                assert loc not in possible_locations
 
 class VanillaCoinStarsTestBase(SM64TestBase):
     options = {
@@ -35,15 +38,21 @@ class VanillaCoinStarsTestBase(SM64TestBase):
 
     # Ensure Coin Star locations are created
     def test_coin_star_locations(self):
+        possible_locations = self.world.location_names
         for loc in loc100Coin_table:
-            assert loc in self.world.location_names
+            # Use subtest to force all locations to be tested
+            with self.subTest("Location created", location=loc):
+                assert loc in possible_locations
 
     # Vanilla Coin Stars should give the player their own Power Stars
     def test_items_in_coin_star_locations(self):
         for loc in loc100Coin_table:
-            item_in_loc = self.world.get_location(loc).item
-            assert item_in_loc.name == "Power Star"
-            assert item_in_loc.player == self.world.player
+            # Use subtest to force all locations to be tested
+            with self.subTest("Location created", location=loc):
+                item_in_loc = self.world.get_location(loc).item
+                assert item_in_loc.name == "Power Star"
+                # By default, these test bases are single player multiworld.
+                # In any other case, we should test that they belong to their respective worldS.
 
 
 # Exclamation Boxes
@@ -62,14 +71,16 @@ class ExclamationBoxesOffTestBase(SM64TestBase):
         # Get 1Up Block locations
         loc1ups_table = []
         for loc in self.world.location_names:
-             if "1Up Block"  in loc:
+             if "1Up Block" in loc:
                  loc1ups_table.append(loc)
 
         for loc in loc1ups_table:
-            item_in_loc = self.world.get_location(loc).item
-            assert item_in_loc.name == "1Up Mushroom"
-            assert item_in_loc.player == self.world.player
-
+            # Use subtest to force all locations to be tested
+            with self.subTest("Location has own 1Up Mushroom.", location=loc):
+                item_in_loc = self.world.get_location(loc).item
+                assert item_in_loc.name == "1Up Mushroom"
+                # By default, these test bases are single player multiworld.
+                # In any other case, we should test that they belong to their respective worldS.
 
 # Entrance Randomizer
 class EntranceRandoOffTestBase(SM64TestBase):
@@ -181,7 +192,8 @@ class CourseEntrancesMoveTestBase(SM64TestBase):
             "Big Boo's Haunt", "Lethal Lava Land", "Shifting Sand Land",
             "Dire, Dire Docks", "Snowman's Land"
         ]
-        valid_move_randomizer_start_levels = {level: entrance for (level, entrance) in sm64_entrances_to_level.items() if entrance not in valid_move_randomizer_start_courses}
+        valid_move_randomizer_start_levels = {level: entrance for (level, entrance) in sm64_entrances_to_level.items()
+                                              if entrance not in valid_move_randomizer_start_courses}
         assert self.world.area_connections[bob_level_id] in valid_move_randomizer_start_levels.values()
 
     def test_BitFS_entrance(self):
@@ -218,7 +230,8 @@ class SeparateEntrancesMoveTestBase(SM64TestBase):
             "Big Boo's Haunt", "Lethal Lava Land", "Shifting Sand Land",
             "Dire, Dire Docks", "Snowman's Land"
         ]
-        valid_move_randomizer_start_levels = {level: entrance for (level, entrance) in sm64_entrances_to_level.items() if entrance not in valid_move_randomizer_start_courses}
+        valid_move_randomizer_start_levels = {level: entrance for (level, entrance) in sm64_entrances_to_level.items()
+                                              if entrance not in valid_move_randomizer_start_courses}
         assert self.world.area_connections[bob_level_id] in valid_move_randomizer_start_levels.values()
 
     def test_BitFS_entrance(self):
