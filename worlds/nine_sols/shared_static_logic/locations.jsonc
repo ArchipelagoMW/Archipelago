@@ -1284,7 +1284,8 @@
             { "item": "Cloud Leap" }, { "item": "Air Dash" },
             { "item": "Charged Strike" }, // and the statue itself has a shield
             // 2nd statue needed its own region because of multiple entrances
-            { "region": "EDP - Between Root Node & Tianshou Arena" }
+            { "region": "EDP - Between Root Node & Tianshou Arena" },
+            { "item": "Unbounded Counter" } // and the statue itself has a hammer
         ]
     },
     {
