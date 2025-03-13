@@ -181,7 +181,7 @@ class ERPlacementState:
         self.pairings.append((source_exit.name, target_entrance.name))
 
     def test_speculative_connection(self, source_exit: Entrance, target_entrance: Entrance,
-                                    usable_exits: list[Entrance]) -> bool:
+                                    usable_exits: set[Entrance]) -> bool:
         copied_state = self.collection_state.copy()
         # simulated connection. A real connection is unsafe because the region graph is shallow-copied and would
         # propagate back to the real multiworld.
@@ -329,6 +329,24 @@ def randomize_entrances(
     # similar to fill, skip validity checks on entrances if the game is beatable on minimal accessibility
     perform_validity_check = True
 
+    if not er_targets:
+        er_targets = sorted([entrance for region in world.multiworld.get_regions(world.player)
+                             for entrance in region.entrances if not entrance.parent_region], key=lambda x: x.name)
+    if not exits:
+        exits = sorted([ex for region in world.multiworld.get_regions(world.player)
+                        for ex in region.exits if not ex.connected_region], key=lambda x: x.name)
+    if len(er_targets) != len(exits):
+        raise EntranceRandomizationError(f"Unable to randomize entrances due to a mismatched count of "
+                                         f"entrances ({len(er_targets)}) and exits ({len(exits)}.")
+
+    # used when membership checks are needed on the exit list, e.g. speculative sweep
+    exits_set = set(exits)
+    for entrance in er_targets:
+        entrance_lookup.add(entrance)
+
+    # place the menu region and connected start region(s)
+    er_state.collection_state.update_reachable_regions(world.player)
+
     def do_placement(source_exit: Entrance, target_entrance: Entrance) -> None:
         placed_exits, removed_entrances = er_state.connect(source_exit, target_entrance)
         # remove the placed targets from consideration
@@ -358,7 +376,7 @@ def randomize_entrances(
                                            and len(placeable_exits) == 1)
                 if exit_requirement_satisfied and source_exit.can_connect_to(target_entrance, dead_end, er_state):
                     if (needs_speculative_sweep
-                            and not er_state.test_speculative_connection(source_exit, target_entrance, exits)):
+                            and not er_state.test_speculative_connection(source_exit, target_entrance, exits_set)):
                         continue
                     do_placement(source_exit, target_entrance)
                     return True
@@ -409,21 +427,6 @@ def randomize_entrances(
                 f"Placeable exits: {placeable_exits}\n"
                 f"All unplaced entrances: {unplaced_entrances}\n"
                 f"All unplaced exits: {unplaced_exits}")
-
-    if not er_targets:
-        er_targets = sorted([entrance for region in world.multiworld.get_regions(world.player)
-                             for entrance in region.entrances if not entrance.parent_region], key=lambda x: x.name)
-    if not exits:
-        exits = sorted([ex for region in world.multiworld.get_regions(world.player)
-                        for ex in region.exits if not ex.connected_region], key=lambda x: x.name)
-    if len(er_targets) != len(exits):
-        raise EntranceRandomizationError(f"Unable to randomize entrances due to a mismatched count of "
-                                         f"entrances ({len(er_targets)}) and exits ({len(exits)}.")
-    for entrance in er_targets:
-        entrance_lookup.add(entrance)
-
-    # place the menu region and connected start region(s)
-    er_state.collection_state.update_reachable_regions(world.player)
 
     # stage 1 - try to place all the non-dead-end entrances
     while entrance_lookup.others:
