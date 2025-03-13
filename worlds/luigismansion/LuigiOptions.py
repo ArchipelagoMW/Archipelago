@@ -361,7 +361,7 @@ class Goal(Choice):
 
     King Boo: Defeat King Boo in the Secret Altar
 
-    Rank Requirement: Gather enough money to reach the specified rank, then defeat King Boo
+    Rank Requirement: Gather enough money to reach the specified rank, and then defeat King Boo
     """
     display_name = "Goal"
     internal_name = "goal"
