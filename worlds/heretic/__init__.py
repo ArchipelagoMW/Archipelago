@@ -41,7 +41,7 @@ class HereticWorld(World):
     options: HereticOptions
     game = "Heretic"
     web = HereticWeb()
-    required_client_version = (0, 3, 9)
+    required_client_version = (0, 5, 0)  # 1.2.0-prerelease or higher
 
     item_name_to_id = {data["name"]: item_id for item_id, data in Items.item_table.items()}
     item_name_groups = Items.item_name_groups
@@ -206,6 +206,17 @@ class HereticWorld(World):
             count = item["count"] if item["name"] not in self.starting_level_for_episode else item["count"] - 1
             itempool += [self.create_item(item["name"]) for _ in range(count)]
 
+        # Bag(s) of Holding based on options
+        if self.options.split_bag_of_holding.value:
+            itempool += [self.create_item("Crystal Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+            itempool += [self.create_item("Ethereal Arrow Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+            itempool += [self.create_item("Claw Orb Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+            itempool += [self.create_item("Rune Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+            itempool += [self.create_item("Flame Orb Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+            itempool += [self.create_item("Mace Sphere Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+        else:
+            itempool += [self.create_item("Bag of Holding") for _ in range(self.options.bag_of_holding_count.value)]
+
         # Place end level items in locked locations
         for map_name in Maps.map_names:
             loc_name = map_name + " - Exit"
@@ -274,7 +285,7 @@ class HereticWorld(World):
         episode_count = self.get_episode_count()
         count = min(remaining_loc, max(1, self.items_ratio[item_name] * episode_count))
         if count == 0:
-            logger.warning("Warning, no " + item_name + " will be placed.")
+            logger.warning(f"Warning, no {item_name} will be placed.")
             return
 
         for i in range(count):
@@ -289,5 +300,19 @@ class HereticWorld(World):
         slot_data["episode3"] = self.included_episodes[2]
         slot_data["episode4"] = self.included_episodes[3]
         slot_data["episode5"] = self.included_episodes[4]
+
+        # Send slot data for ammo capacity values; this must be generic because Doom uses it too
+        slot_data["ammo1start"] = self.options.max_ammo_crystals.value
+        slot_data["ammo2start"] = self.options.max_ammo_arrows.value
+        slot_data["ammo3start"] = self.options.max_ammo_claw_orbs.value
+        slot_data["ammo4start"] = self.options.max_ammo_runes.value
+        slot_data["ammo5start"] = self.options.max_ammo_flame_orbs.value
+        slot_data["ammo6start"] = self.options.max_ammo_spheres.value
+        slot_data["ammo1add"] = self.options.added_ammo_crystals.value
+        slot_data["ammo2add"] = self.options.added_ammo_arrows.value
+        slot_data["ammo3add"] = self.options.added_ammo_claw_orbs.value
+        slot_data["ammo4add"] = self.options.added_ammo_runes.value
+        slot_data["ammo5add"] = self.options.added_ammo_flame_orbs.value
+        slot_data["ammo6add"] = self.options.added_ammo_spheres.value
 
         return slot_data
