@@ -1,6 +1,6 @@
 from . import SM64TestBase
 from .. import Options
-from ..Locations import loc100Coin_table
+from ..Locations import loc100Coin_table, location_table
 from ..Regions import sm64_entrances_to_level, sm64_level_to_paintings, sm64_level_to_secrets
 
 
@@ -69,11 +69,7 @@ class ExclamationBoxesOffTestBase(SM64TestBase):
     # Should populate the boxes with the players own 1Up Mushrooms
     def test_items_in_exclamation_box_locations(self):
         # Get 1Up Block locations
-        loc1ups_table = []
-        for loc in self.world.location_names:
-             if "1Up Block" in loc:
-                 loc1ups_table.append(loc)
-
+        loc1ups_table = {name for name in location_table.keys() if "1Up Block" in name}
         for loc in loc1ups_table:
             # Use subtest to force all locations to be tested
             with self.subTest("Location has own 1Up Mushroom.", location=loc):
@@ -287,11 +283,11 @@ class AllEntrancesMoveTestBase(SM64TestBase):
                                               if level in valid_move_randomizer_start_courses}
         assert self.world.area_connections[wf_level_id] in valid_move_randomizer_start_levels.values()
 
-    def test_COTMC_entrance(self):
+    def test_CotMC_entrance(self):
         cotmc_level_id = sm64_entrances_to_level["Cavern of the Metal Cap"]
-        # COTMC does not go to HMC.
+        # CotMC does not go to HMC.
         assert self.world.area_connections[cotmc_level_id] != sm64_entrances_to_level["Hazy Maze Cave"]
-        # If BitFS -> HMC, no COTMC does not go to DDD.
+        # If BitFS -> HMC, CotMC does not go to DDD.
         bitfs_level_id = sm64_entrances_to_level["Bowser in the Fire Sea"]
         if self.world.area_connections[bitfs_level_id] == sm64_entrances_to_level["Hazy Maze Cave"]:
             assert self.world.area_connections[cotmc_level_id] != sm64_entrances_to_level["Dire, Dire Docks"]
