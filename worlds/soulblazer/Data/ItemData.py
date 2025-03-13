@@ -18,6 +18,8 @@ class SoulBlazerItemData:
 
     dclassification: int
 
+    edescription: str = ""
+
     def duplicate(self, **changes) -> "SoulBlazerItemData":
         """Returns a copy of this ItemData with the specified changes."""
         return replace(self, **changes)
