@@ -1,6 +1,7 @@
 import logging
+import typing
 from random import Random
-from typing import Dict, Any, Iterable, Optional, List, TextIO
+from typing import Dict, Any, Iterable, Optional, List, TextIO, cast
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from Options import PerGameCommonOptions
@@ -9,14 +10,15 @@ from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles
 from .content import StardewContent, create_content
 from .early_items import setup_early_items
-from .items import item_table, create_items, ItemData, Group, items_by_group, get_all_filler_items, remove_limited_amount_packs
+from .items import item_table, create_items, ItemData, Group, items_by_group, generate_filler_choice_pool
 from .locations import location_table, create_locations, LocationData, locations_by_tag
 from .logic.logic import StardewLogic
 from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, EnabledFillerBuffs, NumberOfMovementBuffs, \
-    BuildingProgression, ExcludeGingerIsland, TrapItems, EntranceRandomization, FarmType
+    BuildingProgression, EntranceRandomization, FarmType
 from .options.forced_options import force_change_options_if_incompatible
 from .options.option_groups import sv_option_groups
 from .options.presets import sv_options_presets
+from .options.worlds_group import apply_most_restrictive_options
 from .regions import create_regions
 from .rules import set_rules
 from .stardew_rule import True_, StardewRule, HasProgressionPercent
@@ -89,6 +91,16 @@ class StardewValleyWorld(World):
 
     total_progression_items: int
 
+    @classmethod
+    def create_group(cls, multiworld: MultiWorld, new_player_id: int, players: set[int]) -> World:
+        world_group = super().create_group(multiworld, new_player_id, players)
+
+        group_options = typing.cast(StardewValleyOptions, world_group.options)
+        worlds_options = [typing.cast(StardewValleyOptions, multiworld.worlds[player].options) for player in players]
+        apply_most_restrictive_options(group_options, worlds_options)
+
+        return world_group
+
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
         self.filler_item_pool_names = []
@@ -124,7 +136,7 @@ class StardewValleyWorld(World):
                                                 self.options)
 
         def add_location(name: str, code: Optional[int], region: str):
-            region = world_regions[region]
+            region: Region = world_regions[region]
             location = StardewLocation(self.player, name, code, region)
             region.locations.append(location)
 
@@ -299,31 +311,8 @@ class StardewValleyWorld(World):
 
     def get_filler_item_name(self) -> str:
         if not self.filler_item_pool_names:
-            self.generate_filler_item_pool_names()
+            self.filler_item_pool_names = generate_filler_choice_pool(self.options)
         return self.random.choice(self.filler_item_pool_names)
-
-    def generate_filler_item_pool_names(self):
-        include_traps, exclude_island = self.get_filler_item_rules()
-        available_filler = get_all_filler_items(include_traps, exclude_island)
-        available_filler = remove_limited_amount_packs(available_filler)
-        self.filler_item_pool_names = [item.name for item in available_filler]
-
-    def get_filler_item_rules(self):
-        if self.player in self.multiworld.groups:
-            link_group = self.multiworld.groups[self.player]
-            include_traps = True
-            exclude_island = False
-            for player in link_group["players"]:
-                player_options = self.multiworld.worlds[player].options
-                if self.multiworld.game[player] != self.game:
-                    continue
-                if player_options.trap_items == TrapItems.option_no_traps:
-                    include_traps = False
-                if player_options.exclude_ginger_island == ExcludeGingerIsland.option_true:
-                    exclude_island = True
-            return include_traps, exclude_island
-        else:
-            return self.options.trap_items != TrapItems.option_no_traps, self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         """Write to the spoiler header. If individual it's right at the end of that player's options,
