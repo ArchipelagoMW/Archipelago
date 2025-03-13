@@ -149,19 +149,28 @@ async def IsInShop(self, sellable):
     if (journal == -1 and shop == 5) or (journal != -1 and shop == 10):
         # print("your in the shop")
         sellable_dict = {}
+        # for item that the player has received that can be sold
+        # get amount of sellable items PRE selling them
+        # basically a snapshot of what the amounts of these items are pre shopping
         for itemName in sellable:
             itemdata = self.item_name_to_data[itemName]
             amount = self.kh2_read_byte(self.Save + itemdata.memaddr)
             sellable_dict[itemName] = amount
+        # wait until user exits the shop
         while (journal == -1 and shop == 5) or (journal != -1 and shop == 10):
             journal = self.kh2_read_short(self.Journal)
             shop = self.kh2_read_short(self.Shop)
             await asyncio.sleep(0.5)
+        # for item and amount pre shop
         for item, amount in sellable_dict.items():
             itemdata = self.item_name_to_data[item]
             afterShop = self.kh2_read_byte(self.Save + itemdata.memaddr)
+            alreadySold = 0
+            if item in self.kh2_seed_save["SoldEquipment"]:
+                alreadySold = self.kh2_seed_save["SoldEquipment"][item]
+            # if afterShop is < Amount post shop i.e if someone sold something
             if afterShop < amount:
-                self.kh2_seed_save["SoldEquipment"].append(item)
+                self.kh2_seed_save["SoldEquipment"][item] = (amount - afterShop) + alreadySold
 
 
 async def verifyItems(self):
@@ -175,8 +184,8 @@ async def verifyItems(self):
         master_bitmask = list(self.kh2_seed_save_cache["AmountInvo"]["Bitmask"])
         # sets of all the weapons. These are different because have to check inventory and equipped
         master_keyblade = list(self.kh2_seed_save_cache["AmountInvo"]["Weapon"]["Sora"])
-        master_staff    = list(self.kh2_seed_save_cache["AmountInvo"]["Weapon"]["Donald"])
-        master_shield   = list(self.kh2_seed_save_cache["AmountInvo"]["Weapon"]["Goofy"])
+        master_staff = list(self.kh2_seed_save_cache["AmountInvo"]["Weapon"]["Donald"])
+        master_shield = list(self.kh2_seed_save_cache["AmountInvo"]["Weapon"]["Goofy"])
         # Same with weapons but a lot more slots
         master_equipment = list(self.kh2_seed_save_cache["AmountInvo"]["Equipment"].keys())
         # Set of magic, Can only be given when  the player is paused due to crashing in loadzones
@@ -299,15 +308,15 @@ async def verifyItems(self):
             else:
                 Equipment_Anchor_List = self.Equipment_Anchor_Dict["Armor"]
                 # Checking form anchors for the equipment
-            for slot in Equipment_Anchor_List:
-                if self.kh2_read_short(self.Save + slot) == item_data.kh2id:
-                    is_there = True
-                    if self.kh2_read_byte(self.Save + item_data.memaddr) != 0:
-                        self.kh2_write_byte(self.Save + item_data.memaddr, 0)
-                    break
-            if not is_there and item_name not in self.kh2_seed_save["SoldEquipment"]:
-                if self.kh2_read_byte(self.Save + item_data.memaddr) != 1:
-                    self.kh2_write_byte(self.Save + item_data.memaddr, 1)
+            for partyMember in ["Sora", "Donald", "Goofy"]:
+                for SlotOffset in Equipment_Anchor_List:
+                    if self.kh2_read_short(self.Save + self.CharacterAnchors[partyMember] + SlotOffset) == item_data.kh2id:
+                        amount_found_in_slots += 1
+            if item_name in self.kh2_seed_save["SoldEquipment"]:
+                amount_found_in_slots += self.kh2_seed_save["SoldEquipment"][item_name]
+            inInventory = self.kh2_seed_save_cache["AmountInvo"]["Equipment"][item_name] - amount_found_in_slots
+            if inInventory != self.kh2_read_byte(self.Save + item_data.memaddr):
+                self.kh2_write_byte(self.Save + item_data.memaddr, inInventory)
 
         for item_name in master_magic:
             item_data = self.item_name_to_data[item_name]
