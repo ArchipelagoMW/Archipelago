@@ -6,7 +6,7 @@ import worlds.LauncherComponents as LauncherComponents
 from BaseClasses import ItemClassification, Region, Location, Tutorial
 from worlds.generic.Rules import add_rule
 
-from .Constants import base_id
+from .Constants import base_id, apworld_version
 from .data.scenario_info import scenario_info
 from .data.item_info import item_info
 from .data.location_info import location_info
@@ -557,6 +557,7 @@ class OpenRCT2World(World):
         slot_data["objectives"] = objectives
         slot_data["rules"] = self.rules
         slot_data["seed"] = seed
+        slot_data["version"] = apworld_version
         # print("Here's the seed!" + str(seed))
         slot_data["location_prices"] = self.location_prices
         # print("Here's all the rules!")
