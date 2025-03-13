@@ -292,7 +292,7 @@ location_table: Dict[str, KH1LocationData] = {
     "Atlantica Defeat Ursula II Thunder Event":                                         KH1LocationData("Atlantica",        265_6072, "Static"),
     "Atlantica Seal Keyhole Crabclaw Event":                                            KH1LocationData("Atlantica",        265_6073, "Reward"),
     "Halloween Town Defeat Oogie Boogie Holy Circlet Event":                            KH1LocationData("Halloween Town",   265_6081, "Reward"),
-    "Halloween Town Defeat Oogie's Manor Gravity Event":                                KH1LocationData("Halloween Town",   265_6082, "Reward"),
+    "Halloween Town Defeat Oogie's Manor Gravity Event":                                KH1LocationData("Halloween Town",   265_6082, "Static"),
     "Halloween Town Seal Keyhole Pumpkinhead Event":                                    KH1LocationData("Halloween Town",   265_6083, "Reward"),
     "Neverland Defeat Anti Sora Raven's Claw Event":                                    KH1LocationData("Neverland",        265_6091, "Reward"),
     "Neverland Encounter Hook Cure Event":                                              KH1LocationData("Neverland",        265_6092, "Static"),
