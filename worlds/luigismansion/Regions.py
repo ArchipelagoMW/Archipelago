@@ -99,8 +99,6 @@ def set_ghost_type(world: "LMWorld", ghost_list: dict):
 def lmconnect(world: "LMWorld", source: str, target: str, key: Optional[str] = None,
             doorid: Optional[int] = None, rule: Optional[Callable] = None):
     player = world.player
-    source_region = world.get_region(source)
-    target_region = world.get_region(target)
 
     if world.open_doors.get(doorid) == 0:
         extra_rule = lambda state: state.has(key, player)
@@ -109,6 +107,8 @@ def lmconnect(world: "LMWorld", source: str, target: str, key: Optional[str] = N
         else:
             rule = extra_rule
 
+    source_region = world.get_region(source)
+    target_region = world.get_region(target)
     source_region.connect(target_region, rule=rule)
     target_region.connect(source_region, rule=rule)
 
