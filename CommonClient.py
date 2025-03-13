@@ -779,6 +779,10 @@ async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) 
 
     address = f"ws://{address}" if "://" not in address \
         else address.replace("archipelago://", "ws://")
+    uri = urllib.parse.urlparse(address)
+    if uri.username and uri.password is None:
+        # Fix for Firefox stripping empty password https://bugzilla.mozilla.org/show_bug.cgi?id=1876952
+        address = address.replace("@", ":@")
 
     server_url = urllib.parse.urlparse(address)
     if server_url.username:
