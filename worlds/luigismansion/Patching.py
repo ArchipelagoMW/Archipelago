@@ -1255,16 +1255,16 @@ def update_treasure_table(treasure_info, character_info, output_data, teiden: bo
                 # Replace the Chest visuals with something that matches the item name in "characterinfo".
                 chest_size = 0
                 if output_data["Options"]["chest_types"] == 0:
-                    x["name"] = __get_item_chest_visual(item_data["name"], 0, item_data["classification"], output_data["Options"]["trap_chests"], output_data["slot"], item_data["player"])
+                    x["name"] = __get_item_chest_visual(item_data["name"], 0, item_data["classification"], output_data["Options"]["trap_chests"], output_data["Slot"], item_data["player"])
                     if item_data["door_id"] == 0:
-                        chest_size = __get_chest_size_from_item(item_data["name"], 0, item_data["classification"], output_data["Options"]["trap_chests"], output_data["slot"], item_data["player"])
+                        chest_size = __get_chest_size_from_item(item_data["name"], 0, item_data["classification"], output_data["Options"]["trap_chests"], output_data["Slot"], item_data["player"])
                     else:
-                        chest_size = __get_chest_size_from_key(item_data["door_id"], output_data["slot"], item_data["player"])
+                        chest_size = __get_chest_size_from_key(item_data["door_id"])
                 else:
                     x["name"] = __get_item_chest_visual(item_data["name"], output_data["Options"]["chest_types"], item_data["classification"],
-                                                        output_data["Options"]["trap_chests"], output_data["slot"], item_data["player"])
+                                                        output_data["Options"]["trap_chests"], output_data["Slot"], item_data["player"])
                     chest_size = __get_chest_size_from_item(item_data["name"], output_data["Options"]["chest_types"], item_data["classification"],
-                                                            output_data["Options"]["trap_chests"], output_data["slot"], item_data["player"])
+                                                            output_data["Options"]["trap_chests"], output_data["Slot"], item_data["player"])
 
 
                 # Define the actor name to use from the Location in the generation output.
