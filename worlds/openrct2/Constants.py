@@ -2,6 +2,9 @@ import os
 import json
 import pkgutil
 
+# Sent to the game to verify that the plugin version is compatible
+apworld_version = "v0.1.17-beta"
+
 # ID of first item and location, could be hard-coded but code may be easier
 # to read with this as a property.
 
