@@ -87,7 +87,7 @@ class KH2Context(CommonContext):
                 },
                 "Bitmask":      [],
                 "Weapon":       {"Sora": [], "Donald": [], "Goofy": []},
-                "Equipment":    [],
+                "Equipment":    {},  # ItemName: Amount
                 "Magic":        {
                     "Fire Element":     0,
                     "Blizzard Element": 0,
@@ -158,6 +158,18 @@ class KH2Context(CommonContext):
             18: TWTNW_Checks,
             #  255: {},  # starting screen
         }
+        #Sora,Donald and Goofy are always in your party
+        self.WorldIDtoParty = {
+            4:  "Beast",
+            6:  "Auron",
+            7:  "Aladdin",
+            8:  "Mulan",
+            10: "Simba",
+            14: "Jack Skellington",
+            16: "Jack Sparrow",
+            17: "Tron",
+            18: "Riku"
+        }
         self.last_world_int = -1
         # PC Address anchors
         # epic .10 addresses
@@ -184,10 +196,29 @@ class KH2Context(CommonContext):
         self.armor_set = set(self.equipment_categories["Armor"])
         self.accessories_set = set(self.equipment_categories["Accessories"])
         self.all_equipment = self.armor_set.union(self.accessories_set)
-
+        self.CharacterAnchors = {
+            "Sora":             0x24F0,
+            "Donald":           0x2604,
+            "Goofy":            0x2718,
+            "Auron":            0x2940,
+            "Mulan":            0x2A54,
+            "Aladdin":          0x2B68,
+            "Jack Sparrow":     0x2C7C,
+            "Beast":            0x2D90,
+            "Jack Skellington": 0x2EA4,
+            "Simba":            0x2FB8,
+            "Tron":             0x30CC,
+            "Riku":             0x31E0
+        }
         self.Equipment_Anchor_Dict = {
-            "Armor":       [0x2504, 0x2506, 0x2508, 0x250A],
-            "Accessories": [0x2514, 0x2516, 0x2518, 0x251A]
+            #Sora, Donald, Goofy in that order
+            # each slot is a short, Sora Anchor:0x24F0, Donald Anchor: 0x2604, Goofy Anchor: 0x2718
+            # Each of these has 8 slots that could have them no matter how many slots are unlocked
+            # If Ability Ring on slot 5 of sora
+            # ReadShort(Save+CharacterAnchors["Sora"]+Equiptment_Anchor["Accessories][4 (index 5)]) == self.item_name_to_data[item_name].memaddr
+            "Armor":       [0x14, 0x16, 0x18, 0x1A, 0x1C, 0x1E, 0x20, 0x22],
+
+            "Accessories": [0x24, 0x26, 0x28, 0x2A, 0x2C, 0x2E, 0x30, 0x32]
         }
 
         self.AbilityQuantityDict = {}
@@ -284,7 +315,8 @@ class KH2Context(CommonContext):
                         "FinalLevel":  0,
                         "SummonLevel": 0,
                     },
-                    "SoldEquipment": [],
+                    # Item: Amount of them sold
+                    "SoldEquipment": dict(),
                 }
                 with open(self.kh2_seed_save_path_join, 'wt') as f:
                     pass
@@ -303,7 +335,8 @@ class KH2Context(CommonContext):
                                 "FinalLevel":  0,
                                 "SummonLevel": 0,
                             },
-                            "SoldEquipment": [],
+                            # Item: Amount of them sold
+                            "SoldEquipment": dict(),
                         }
                     # self.locations_checked = set(self.kh2_seed_save_cache["LocationsChecked"])
             # self.serverconneced = True
@@ -347,7 +380,7 @@ class KH2Context(CommonContext):
                         },
                         "Bitmask":      [],
                         "Weapon":       {"Sora": [], "Donald": [], "Goofy": []},
-                        "Equipment":    [],
+                        "Equipment":    {},  # ItemName: Amount
                         "Magic":        {
                             "Fire Element":     0,
                             "Blizzard Element": 0,

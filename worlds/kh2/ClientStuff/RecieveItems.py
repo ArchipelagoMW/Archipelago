@@ -110,7 +110,10 @@ async def give_item(self, item, location):
             self.kh2_seed_save_cache["AmountInvo"]["Magic"][itemname] += 1
         # equipment is a list instead of dict because you can only have 1 currently
         elif itemname in self.all_equipment:
-            self.kh2_seed_save_cache["AmountInvo"]["Equipment"].append(itemname)
+            if itemname in self.kh2_seed_save_cache["AmountInvo"]["Equipment"]:
+                self.kh2_seed_save_cache["AmountInvo"]["Equipment"][itemname] += 1
+            else:
+                self.kh2_seed_save_cache["AmountInvo"]["Equipment"][itemname] = 1
         # weapons are done differently since you can only have one and has to check it differently
         elif itemname in self.all_weapons:
             if itemname in self.keyblade_set:
@@ -163,23 +166,25 @@ async def IsInShop(self, sellable):
 
 async def verifyItems(self):
     try:
-        master_amount = set(self.kh2_seed_save_cache["AmountInvo"]["Amount"].keys())
-
-        master_ability = set(self.kh2_seed_save_cache["AmountInvo"]["Ability"].keys())
-
-        master_bitmask = set(self.kh2_seed_save_cache["AmountInvo"]["Bitmask"])
-
-        master_keyblade = set(self.kh2_seed_save_cache["AmountInvo"]["Weapon"]["Sora"])
-        master_staff = set(self.kh2_seed_save_cache["AmountInvo"]["Weapon"]["Donald"])
-        master_shield = set(self.kh2_seed_save_cache["AmountInvo"]["Weapon"]["Goofy"])
-
-        master_equipment = set(self.kh2_seed_save_cache["AmountInvo"]["Equipment"])
-
-        master_magic = set(self.kh2_seed_save_cache["AmountInvo"]["Magic"].keys())
-
-        master_stat = set(self.kh2_seed_save_cache["AmountInvo"]["StatIncrease"].keys())
-
-        master_sell = master_equipment | master_staff | master_shield
+        #All these sets include items that the player has recieved
+        # set of all the items that have an
+        master_amount = list(self.kh2_seed_save_cache["AmountInvo"]["Amount"].keys())
+        # set of all the items that have are abilities
+        master_ability = list(self.kh2_seed_save_cache["AmountInvo"]["Ability"].keys())
+        # set of all the items that are bitmasks
+        master_bitmask = list(self.kh2_seed_save_cache["AmountInvo"]["Bitmask"])
+        # sets of all the weapons. These are different because have to check inventory and equipped
+        master_keyblade = list(self.kh2_seed_save_cache["AmountInvo"]["Weapon"]["Sora"])
+        master_staff    = list(self.kh2_seed_save_cache["AmountInvo"]["Weapon"]["Donald"])
+        master_shield   = list(self.kh2_seed_save_cache["AmountInvo"]["Weapon"]["Goofy"])
+        # Same with weapons but a lot more slots
+        master_equipment = list(self.kh2_seed_save_cache["AmountInvo"]["Equipment"].keys())
+        # Set of magic, Can only be given when  the player is paused due to crashing in loadzones
+        master_magic = list(self.kh2_seed_save_cache["AmountInvo"]["Magic"].keys())
+        # Have to apply them to the slot that sora is in and a lot more dynamic than other amount items
+        master_stat = list(self.kh2_seed_save_cache["AmountInvo"]["StatIncrease"].keys())
+        # Set of all things that could be sold
+        master_sell = master_equipment + master_staff + master_shield
 
         await asyncio.create_task(self.IsInShop(master_sell))
         # print(self.kh2_seed_save_cache["AmountInvo"]["Ability"])
@@ -208,6 +213,7 @@ async def verifyItems(self):
             if self.kh2_read_byte(self.Save + item_data.memaddr) != 1 and self.kh2_read_byte(
                     self.Save + 0x1CFF) != 13:
                 # Checking form anchors for the keyblade to remove extra keyblades
+                # Checking Normal Sora,Valor Form,Master Form and Final Forms keyblades
                 if self.kh2_read_short(self.Save + 0x24F0) == item_data.kh2id \
                         or self.kh2_read_short(self.Save + 0x32F4) == item_data.kh2id \
                         or self.kh2_read_short(self.Save + 0x339C) == item_data.kh2id \
@@ -287,7 +293,7 @@ async def verifyItems(self):
 
         for item_name in master_equipment:
             item_data = self.item_name_to_data[item_name]
-            is_there = False
+            amount_found_in_slots = 0
             if item_name in self.accessories_set:
                 Equipment_Anchor_List = self.Equipment_Anchor_Dict["Accessories"]
             else:
@@ -337,7 +343,7 @@ async def verifyItems(self):
                     # change when max drive is changed from 6 to 4
                     if current_max_drive < 9 and current_max_drive != self.base_drive + amount_of_items:
                         self.kh2_write_byte(self.Slot1 + 0x1B2, self.base_drive + amount_of_items)
-
+                # need to do these differently when the amount is dynamic
                 elif item_name == ItemName.AccessorySlotUp:
                     current_accessory = self.kh2_read_byte(self.Save + 0x2501)
                     if current_accessory != self.base_accessory_slots + amount_of_items:
