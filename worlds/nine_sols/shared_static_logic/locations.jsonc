@@ -613,7 +613,7 @@
         "region": "FGH - Lower Levels, Root Node & Right Exit", "requires": [ { "item": "Unbounded Counter" } ]
     },
     {
-        "address": 1706, "name": "Factory (GH): Examine Furnance Monitor",
+        "address": 1706, "name": "Factory (GH): Examine Furnace Monitor",
         "region": "FGH - Lower Levels, Root Node & Right Exit", "requires": []
     },
     {
