@@ -1,9 +1,8 @@
-from typing import Optional, Callable
+from typing import Optional, Callable, TYPE_CHECKING
 
-from BaseClasses import MultiWorld, Entrance
-from worlds.generic.Rules import add_rule
 from . import Rules
-from worlds.AutoWorld import World
+if TYPE_CHECKING:
+    from . import Rules, LMWorld
 
 vanilla_door_state = {
         34: 1,
@@ -89,7 +88,7 @@ GHOST_TO_ROOM = {
 }
 
 
-def set_ghost_type(world: World, ghost_list: dict):
+def set_ghost_type(world: "LMWorld", ghost_list: dict):
     for region_name in ghost_list:
         types = ["Fire", "Water", "Ice", "No Element"]
         weights = [2, 2, 2, 8]
@@ -97,114 +96,94 @@ def set_ghost_type(world: World, ghost_list: dict):
         ghost_list.update({region_name: ghost_type})
 
 
-def connect(multiworld: MultiWorld, player: int, source: str, target: str, key: Optional[str] = None,
-            doorid: Optional[int] = None, rule: Optional[Callable] = None, register: Optional[bool] = False):
-    source_region = multiworld.get_region(source, player)
-    target_region = multiworld.get_region(target, player)
-    name = source + " -> " + target
-    connection = Entrance(player, name, source_region)
-    if doorid in multiworld.worlds[player].open_doors.keys() and multiworld.worlds[player].open_doors.get(doorid) == 0:
-        add_rule(connection, rule=lambda state: state.has(key, player))
+def lmconnect(world: "LMWorld", source: str, target: str, key: Optional[str] = None,
+            doorid: Optional[int] = None, rule: Optional[Callable] = None):
+    player = world.player
+    source_region = world.get_region(source)
+    target_region = world.get_region(target)
 
-    if rule is not None:
-        add_rule(connection, rule, "and")
+    if world.open_doors.get(doorid) == 0:
+        extra_rule = lambda state: state.has(key, player)
+        if rule is not None:
+            rule = lambda state, orig_rule=rule: orig_rule(state) and extra_rule(state)
+        else:
+            rule = extra_rule
 
-    # Loop through regions with potential ghost rando. Register indirect connection based on spirit access spots.
-    # Leaving this here in case we need it gain somewhere else one day
-    # for region_to_type in multiworld.worlds[player].ghost_affected_regions:
-    #     if region_to_type == target_region.name:
-    #         if multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Fire":  # if fire, require water
-    #             add_rule(connection, lambda state: Rules.can_fst_water(state, player), "and")
-    #             for r in Rules.WATER_SPIRIT_SPOT:
-    #                 multiworld.register_indirect_condition(multiworld.get_region(r, player), connection)
-    #         elif multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Water":  # if water, require ice
-    #             add_rule(connection, lambda state: Rules.can_fst_ice(state, player), "and")
-    #             for r in Rules.ICE_SPIRIT_SPOT:
-    #                 multiworld.register_indirect_condition(multiworld.get_region(r, player), connection)
-    #         elif multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Ice":  # if ice, require fire
-    #             add_rule(connection, lambda state: Rules.can_fst_fire(state, player), "and")
-    #             for r in Rules.FIRE_SPIRIT_SPOT:
-    #                 multiworld.register_indirect_condition(multiworld.get_region(r, player), connection)
-    #         else:
-    #             pass
-
-    source_region.exits.append(connection)
-    connection.connect(target_region)
+    source_region.connect(target_region, rule=rule)
+    target_region.connect(source_region, rule=rule)
 
 
-def connect_regions(multiworld: MultiWorld, player: int):
-    connect(multiworld, player, "Menu", "Foyer")
-    connect(multiworld, player, "Foyer", "Parlor", "Parlor Key", 34)
-    connect(multiworld, player, "Parlor", "Anteroom", "Anteroom Key", 38)
-    connect(multiworld, player, "Anteroom", "Wardrobe", "Wardrobe Key", 43)
-    connect(multiworld, player, "Wardrobe", "Wardrobe Balcony", "Wardrobe Balcony Key", 41)
-    connect(multiworld, player, "Foyer", "Family Hallway", "Family Hallway Key", 33)
-    connect(multiworld, player, "Foyer", "1F Hallway", "Heart Key", 3)
-    connect(multiworld, player, "Family Hallway", "Study", "Study Key", 32)
-    connect(multiworld, player, "Family Hallway", "Master Bedroom", "Master Bedroom Key", 31)
-    connect(multiworld, player, "Family Hallway", "Nursery", "Nursery Key", 27)
-    connect(multiworld, player, "Family Hallway", "Twins' Room", "Twins Bedroom Key", 28)
-    connect(multiworld, player, "1F Hallway", "Basement Stairwell", "Basement Stairwell Key", 9)
-    connect(multiworld, player, "1F Hallway", "2F Stairwell", "Lower 2F Stairwell Key", 74)
-    connect(multiworld, player, "1F Hallway", "Courtyard", "Club Key", 42)
-    connect(multiworld, player, "1F Hallway", "1F Bathroom", "1F Bathroom Key", 23)
-    connect(multiworld, player, "1F Hallway", "Conservatory", "Conservatory Key", 21)
-    connect(multiworld, player, "1F Hallway", "Billiards Room", "Billiards Key", 17)
-    connect(multiworld, player, "1F Hallway", "1F Washroom", "1F Washroom Key", 20,
-            lambda state: state.has_group("Boo", player, multiworld.worlds[player].options.washroom_boo_count)
-                          or state.has("Boo", player, multiworld.worlds[player].options.washroom_boo_count))
-    connect(multiworld, player, "1F Hallway", "Ballroom", "Ballroom Key", 15)
-    connect(multiworld, player, "1F Hallway", "Dining Room", "Dining Room Key", 14)
-    connect(multiworld, player, "1F Hallway", "Laundry Room", "Laundry Room Key", 7)
-    connect(multiworld, player, "1F Hallway", "Fortune-Teller's Room", "Fortune Teller Key", 4)
-    connect(multiworld, player, "Courtyard", "Rec Room", "North Rec Room Key", 25)
-    connect(multiworld, player, "Rec Room", "Courtyard", "North Rec Room Key", 25)
-    connect(multiworld, player, "Ballroom", "Storage Room", "Storage Room Key", 16)
-    connect(multiworld, player, "Dining Room", "Kitchen", "Kitchen Key", 11)
-    connect(multiworld, player, "Kitchen", "Boneyard", "Boneyard Key", 10,
-            lambda state: Rules.can_fst_water(state, player))
-    connect(multiworld, player, "Boneyard", "Graveyard",
-            rule=lambda state: Rules.can_fst_water(state, player))
-    connect(multiworld, player, "Billiards Room", "Projection Room", "Projection Room Key", 18)
-    connect(multiworld, player, "Fortune-Teller's Room", "Mirror Room", "Mirror Room Key", 5)
-    connect(multiworld, player, "Laundry Room", "Butler's Room", "Butler's Room Key", 1)
-    connect(multiworld, player, "Butler's Room", "Hidden Room")
-    connect(multiworld, player, "Courtyard", "The Well")
-    connect(multiworld, player, "Rec Room", "2F Stairwell", "South Rec Room Key", 24)
-    connect(multiworld, player, "2F Stairwell", "Tea Room", "Tea Room Key", 47,
-            lambda state: Rules.can_fst_water(state, player))
-    connect(multiworld, player, "2F Stairwell", "Rec Room", "South Rec Room Key", 24)
-    connect(multiworld, player, "2F Stairwell", "2F Rear Hallway", "Upper 2F Stairwell Key", 75)
-    connect(multiworld, player, "2F Rear Hallway", "2F Bathroom", "2F Bathroom Key", 48)
-    connect(multiworld, player, "2F Rear Hallway", "2F Washroom", "2F Washroom Key", 45)
-    connect(multiworld, player, "2F Rear Hallway", "Nana's Room", "Nana's Room Key", 49)
-    connect(multiworld, player, "2F Rear Hallway", "Astral Hall", "Astral Hall Key", 44)
-    connect(multiworld, player, "2F Rear Hallway", "Sitting Room", "Sitting Room Key", 29)
-    connect(multiworld, player, "2F Rear Hallway", "Safari Room", "Safari Room Key", 56)
-    connect(multiworld, player, "Astral Hall", "Observatory", "Observatory Key", 40,
-            lambda state: Rules.can_fst_fire(state, player))
-    connect(multiworld, player, "Sitting Room", "Guest Room", "Guest Room Key", 30)
-    connect(multiworld, player, "Safari Room", "East Attic Hallway", "East Attic Hallway Key", 55)
-    connect(multiworld, player, "East Attic Hallway", "Artist's Studio", "Artist's Studio Key", 63)
-    connect(multiworld, player, "East Attic Hallway", "Balcony", "Balcony Key", 62,
-            lambda state: state.has_group("Boo", player, multiworld.worlds[player].options.balcony_boo_count)
-                          or state.has("Boo", player, multiworld.worlds[player].options.balcony_boo_count))
-    connect(multiworld, player, "Balcony", "West Attic Hallway", "Diamond Key", 59)
-    connect(multiworld, player, "West Attic Hallway", "Armory", "Armory Key", 51)
-    connect(multiworld, player, "West Attic Hallway", "Telephone Room", "Telephone Room Key", 52)
-    connect(multiworld, player, "Telephone Room", "Clockwork Room", "Clockwork Key", 53)
-    connect(multiworld, player, "Armory", "Ceramics Studio", "Ceramics Studio Key", 50)
-    connect(multiworld, player, "Clockwork Room", "Roof")
-    connect(multiworld, player, "Roof", "Sealed Room"),
-    connect(multiworld, player, "Basement Stairwell", "Breaker Room", "Breaker Room Key", 71)
-    connect(multiworld, player, "Basement Stairwell", "Cellar", "Cellar Key", 68)
-    connect(multiworld, player, "Cellar", "Basement Hallway", "Basement Hallway Key", 67)
-    connect(multiworld, player, "Basement Hallway", "Cold Storage", "Cold Storage Key", 65)
-    connect(multiworld, player, "Basement Hallway", "Pipe Room", "Pipe Room Key", 69)
-    connect(multiworld, player, "Basement Hallway", "Altar Hallway", "Altar Hallway Key", 70)
-    connect(multiworld, player, "Altar Hallway", "Secret Altar", "Spade Key", 72,
-            lambda state: state.has_group("Boo", player, multiworld.worlds[player].options.final_boo_count)
-                          or state.has("Boo", player, multiworld.worlds[player].options.final_boo_count))
+def connect_regions(world: "LMWorld"):
+    lmconnect(world, "Menu", "Foyer")
+    lmconnect(world, "Foyer", "Parlor", "Parlor Key", 34)
+    lmconnect(world, "Parlor", "Anteroom", "Anteroom Key", 38)
+    lmconnect(world, "Anteroom", "Wardrobe", "Wardrobe Key", 43)
+    lmconnect(world, "Wardrobe", "Wardrobe Balcony", "Wardrobe Balcony Key", 41)
+    lmconnect(world, "Foyer", "Family Hallway", "Family Hallway Key", 33)
+    lmconnect(world, "Foyer", "1F Hallway", "Heart Key", 3)
+    lmconnect(world, "Family Hallway", "Study", "Study Key", 32)
+    lmconnect(world, "Family Hallway", "Master Bedroom", "Master Bedroom Key", 31)
+    lmconnect(world, "Family Hallway", "Nursery", "Nursery Key", 27)
+    lmconnect(world, "Family Hallway", "Twins' Room", "Twins Bedroom Key", 28)
+    lmconnect(world, "1F Hallway", "Basement Stairwell", "Basement Stairwell Key", 9)
+    lmconnect(world, "1F Hallway", "2F Stairwell", "Lower 2F Stairwell Key", 74)
+    lmconnect(world, "1F Hallway", "Courtyard", "Club Key", 42)
+    lmconnect(world, "1F Hallway", "1F Bathroom", "1F Bathroom Key", 23)
+    lmconnect(world, "1F Hallway", "Conservatory", "Conservatory Key", 21)
+    lmconnect(world, "1F Hallway", "Billiards Room", "Billiards Key", 17)
+    lmconnect(world, "1F Hallway", "1F Washroom", "1F Washroom Key", 20,
+            lambda state, boo_count=world.options.washroom_boo_count: state.has_group("Boo", world.player, boo_count)
+                          or state.has("Boo", world.player, boo_count))
+    lmconnect(world, "1F Hallway", "Ballroom", "Ballroom Key", 15)
+    lmconnect(world, "1F Hallway", "Dining Room", "Dining Room Key", 14)
+    lmconnect(world, "1F Hallway", "Laundry Room", "Laundry Room Key", 7)
+    lmconnect(world, "1F Hallway", "Fortune-Teller's Room", "Fortune Teller Key", 4)
+    lmconnect(world, "Courtyard", "Rec Room", "North Rec Room Key", 25)
+    lmconnect(world, "Ballroom", "Storage Room", "Storage Room Key", 16)
+    lmconnect(world, "Dining Room", "Kitchen", "Kitchen Key", 11)
+    lmconnect(world, "Kitchen", "Boneyard", "Boneyard Key", 10,
+            lambda state: Rules.can_fst_water(state, world.player))
+    lmconnect(world, "Boneyard", "Graveyard",
+            rule=lambda state: Rules.can_fst_water(state, world.player))
+    lmconnect(world, "Billiards Room", "Projection Room", "Projection Room Key", 18)
+    lmconnect(world, "Fortune-Teller's Room", "Mirror Room", "Mirror Room Key", 5)
+    lmconnect(world, "Laundry Room", "Butler's Room", "Butler's Room Key", 1)
+    lmconnect(world, "Butler's Room", "Hidden Room")
+    lmconnect(world, "Courtyard", "The Well")
+    lmconnect(world, "Rec Room", "2F Stairwell", "South Rec Room Key", 24)
+    lmconnect(world, "2F Stairwell", "Tea Room", "Tea Room Key", 47,
+            lambda state: Rules.can_fst_water(state, world.player))
+    lmconnect(world, "2F Stairwell", "2F Rear Hallway", "Upper 2F Stairwell Key", 75)
+    lmconnect(world, "2F Rear Hallway", "2F Bathroom", "2F Bathroom Key", 48)
+    lmconnect(world, "2F Rear Hallway", "2F Washroom", "2F Washroom Key", 45)
+    lmconnect(world, "2F Rear Hallway", "Nana's Room", "Nana's Room Key", 49)
+    lmconnect(world, "2F Rear Hallway", "Astral Hall", "Astral Hall Key", 44)
+    lmconnect(world, "2F Rear Hallway", "Sitting Room", "Sitting Room Key", 29)
+    lmconnect(world, "2F Rear Hallway", "Safari Room", "Safari Room Key", 56)
+    lmconnect(world, "Astral Hall", "Observatory", "Observatory Key", 40,
+            lambda state: Rules.can_fst_fire(state, world.player))
+    lmconnect(world, "Sitting Room", "Guest Room", "Guest Room Key", 30)
+    lmconnect(world, "Safari Room", "East Attic Hallway", "East Attic Hallway Key", 55)
+    lmconnect(world, "East Attic Hallway", "Artist's Studio", "Artist's Studio Key", 63)
+    lmconnect(world, "East Attic Hallway", "Balcony", "Balcony Key", 62,
+            lambda state, boo_count=world.options.balcony_boo_count: state.has_group("Boo", world.player, boo_count)
+                          or state.has("Boo", world.player, boo_count))
+    lmconnect(world, "Balcony", "West Attic Hallway", "Diamond Key", 59)
+    lmconnect(world, "West Attic Hallway", "Armory", "Armory Key", 51)
+    lmconnect(world, "West Attic Hallway", "Telephone Room", "Telephone Room Key", 52)
+    lmconnect(world, "Telephone Room", "Clockwork Room", "Clockwork Key", 53)
+    lmconnect(world, "Armory", "Ceramics Studio", "Ceramics Studio Key", 50)
+    lmconnect(world, "Clockwork Room", "Roof")
+    lmconnect(world, "Roof", "Sealed Room"),
+    lmconnect(world, "Basement Stairwell", "Breaker Room", "Breaker Room Key", 71)
+    lmconnect(world, "Basement Stairwell", "Cellar", "Cellar Key", 68)
+    lmconnect(world, "Cellar", "Basement Hallway", "Basement Hallway Key", 67)
+    lmconnect(world, "Basement Hallway", "Cold Storage", "Cold Storage Key", 65)
+    lmconnect(world, "Basement Hallway", "Pipe Room", "Pipe Room Key", 69)
+    lmconnect(world, "Basement Hallway", "Altar Hallway", "Altar Hallway Key", 70)
+    lmconnect(world, "Altar Hallway", "Secret Altar", "Spade Key", 72,
+            lambda state, boo_count=world.options.final_boo_count: state.has_group("Boo", world.player, boo_count)
+                          or state.has("Boo", world.player, boo_count))
 
 
 REGION_LIST = {

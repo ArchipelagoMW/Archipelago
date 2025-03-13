@@ -9,9 +9,9 @@ import Options
 import settings
 from BaseClasses import Tutorial, Item, ItemClassification
 from Utils import visualize_regions, local_path
-from worlds.AutoWorld import WebWorld
+from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess, icon_paths
-from worlds.generic.Rules import add_item_rule
+from worlds.generic.Rules import add_item_rule, add_rule
 from Options import OptionGroup
 
 # Relative Imports
@@ -539,7 +539,7 @@ class LMWorld(World):
                         add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
             region.locations.append(entry)
         self._set_optional_locations()
-        connect_regions(self.multiworld, self.player)
+        connect_regions(self)
 
     def create_item(self, item: str) -> LMItem:
         set_non_progress = False
