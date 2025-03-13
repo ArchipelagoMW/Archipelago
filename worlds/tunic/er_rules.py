@@ -852,7 +852,9 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Fortress Exterior near cave"].connect(
         connecting_region=regions["Fortress Exterior from Overworld"],
-        rule=lambda state: state.has(laurels, player))
+        rule=lambda state: state.has(laurels, player)
+        or (has_ability(prayer, state, world) and state.has(fortress_exterior_fuse_1, player)
+            and options.shuffle_fuses))
     regions["Fortress Exterior from Overworld"].connect(
         connecting_region=regions["Fortress Exterior near cave"],
         rule=lambda state: state.has(laurels, player) or
@@ -921,11 +923,14 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Eastern Vault Fortress"].connect(
         connecting_region=regions["Eastern Vault Fortress Gold Door"],
         rule=lambda state: (has_fuses("Activate Eastern Vault West Fuses", state, world)
-                           and has_fuses("Activate Eastern Vault East Fuse", state, world))
-                           or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
+                            and has_fuses("Activate Eastern Vault East Fuse", state, world))
+        or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
     regions["Eastern Vault Fortress Gold Door"].connect(
         connecting_region=regions["Eastern Vault Fortress"],
-        rule=lambda state: has_ice_grapple_logic(False, IceGrappling.option_easy, state, world))
+        rule=lambda state: has_ice_grapple_logic(False, IceGrappling.option_easy, state, world)
+        or (has_fuses("Activate Eastern Vault West Fuses", state, world)
+            and has_fuses("Activate Eastern Vault East Fuse", state, world)
+            and options.shuffle_fuses))
 
     fort_grave_entry_to_combat = regions["Fortress Grave Path Entry"].connect(
         connecting_region=regions["Fortress Grave Path Combat"])
@@ -1139,7 +1144,8 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Swamp to Cathedral Main Entrance Region"].connect(
         connecting_region=regions["Swamp Mid"],
-        rule=lambda state: has_ice_grapple_logic(False, IceGrappling.option_easy, state, world))
+        rule=lambda state: has_ice_grapple_logic(False, IceGrappling.option_easy, state, world)
+        or (state.has_all((swamp_fuse_1, swamp_fuse_2, swamp_fuse_3), player) and options.shuffle_fuses))
 
     # grapple push the enemy by the door down, then grapple to it. Really jank
     regions["Swamp Mid"].connect(

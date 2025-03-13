@@ -145,7 +145,8 @@ def set_fuse_location_rules(world: "TunicWorld") -> None:
              and has_ability(prayer, state, world))
     set_rule(world.get_location("Swamp - [Central] Activate Fuse"),
              lambda state: state.has_all(fuse_activation_reqs[swamp_fuse_2], player)
-             and has_ability(prayer, state, world))
+             and has_ability(prayer, state, world)
+             and has_sword(state, player))
     set_rule(world.get_location("Swamp - [Outside Cathedral] Activate Fuse"),
              lambda state: state.has_all(fuse_activation_reqs[swamp_fuse_3], player)
              and has_ability(prayer, state, world))
@@ -199,3 +200,5 @@ def set_fuse_location_rules(world: "TunicWorld") -> None:
     set_rule(world.get_location("Rooted Ziggurat Lower - [Miniboss] Activate Fuse"),
              lambda state: has_sword(state, player)
              and has_ability(prayer, state, world))
+    set_rule(world.get_location("Rooted Ziggurat Lower - [Before Boss] Activate Fuse"),
+             lambda state: has_ability(prayer, state, world))
