@@ -37,7 +37,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                      item_pool: typing.List[Item], single_player_placement: bool = False, lock: bool = False,
                      swap: bool = True, on_place: typing.Optional[typing.Callable[[Location], None]] = None,
                      allow_partial: bool = False, allow_excluded: bool = False, one_item_per_player: bool = True,
-                     name: str = "Unknown") -> None:
+                     allow_nonprogression_filled_locations: bool = False, name: str = "Unknown") -> None:
     """
     :param multiworld: Multiworld to be filled.
     :param base_state: State assumed before fill.
@@ -49,6 +49,8 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
     :param on_place: callback that is called when a placement happens
     :param allow_partial: only place what is possible. Remaining items will be in the item_pool list.
     :param allow_excluded: if true and placement fails, it is re-attempted while ignoring excluded on Locations
+    :param allow_nonprogression_filled_locations: if true, allows for locations filled with nonprogression to be at the
+        end of the location list, and allows items to bump the nonprogression to another location if necessary.
     :param name: name of this fill step for progress logging purposes
     """
     unplaced_items: typing.List[Item] = []
@@ -95,6 +97,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
 
             spot_to_fill: typing.Optional[Location] = None
 
+
             # if minimal accessibility, only check whether location is reachable if game not beatable
             if multiworld.worlds[item_to_place.player].options.accessibility == Accessibility.option_minimal:
                 perform_access_check = not multiworld.has_beaten_game(maximum_exploration_state,
@@ -106,9 +109,36 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
             for i, location in enumerate(locations):
                 if (not single_player_placement or location.player == item_to_place.player) \
                         and location.can_fill(maximum_exploration_state, item_to_place, perform_access_check):
+                    index_to_push_back: int = -1
+                    if location.item is not None:
+                        if allow_nonprogression_filled_locations:
+                            # assumption: this is local filler that can be safely re-placed
+                            # this could be quite slow, but should only happen in cases with lots of local items and
+                            # restrictive starts
+                            nonprogression_item: Item = location.item
+                            for j, new_nonprogression_location in enumerate(locations):
+                                if new_nonprogression_location.item is None and \
+                                   new_nonprogression_location.can_fill(maximum_exploration_state, nonprogression_item,
+                                                                        False):
+                                    # because filler_location is an empty spot, j < i, so we need to pop i first
+                                    # ergo, save this index for later, but set the item now
+                                    index_to_push_back = j
+                                    multiworld.push_item(new_nonprogression_location, nonprogression_item, False)
+                                    break
+                            else:
+                                # can't move this filler to any other location
+                                continue
+                        else:
+                            raise FillError(f"Filled locations passed to fill_restrictive when "
+                                            f"allow_nonprogression_filled_locations is False. This would have resulted "
+                                            f"in deleted items. Location: {location.name}, prior item: "
+                                            f"{location.item.name}, attempting to place: {item_to_place.name}")
+
                     # popping by index is faster than removing by content,
                     spot_to_fill = locations.pop(i)
                     # skipping a scan for the element
+                    if index_to_push_back >= 0:
+                        locations.append(locations.pop(index_to_push_back))
                     break
 
             else:
@@ -236,7 +266,7 @@ def remaining_fill(multiworld: MultiWorld,
                    itempool: typing.List[Item],
                    name: str = "Remaining", 
                    move_unplaceable_to_start_inventory: bool = False,
-                   check_location_can_fill: bool = False) -> None:
+                   check_location_can_fill: bool = False) -> typing.List[Location]:
     unplaced_items: typing.List[Item] = []
     placements: typing.List[Location] = []
     swapped_items: typing.Counter[typing.Tuple[int, str]] = Counter()
@@ -328,6 +358,7 @@ def remaining_fill(multiworld: MultiWorld,
                             f"{', '.join(str(place) for place in placements)}", multiworld=multiworld)
 
     itempool.extend(unplaced_items)
+    return placements
 
 
 def fast_fill(multiworld: MultiWorld,
@@ -355,7 +386,8 @@ def accessibility_corrections(multiworld: MultiWorld, state: CollectionState, lo
             locations.append(location)
     if pool and locations:
         locations.sort(key=lambda loc: loc.progress_type != LocationProgressType.PRIORITY)
-        fill_restrictive(multiworld, state, locations, pool, name="Accessibility Corrections")
+        fill_restrictive(multiworld, state, locations, pool, name="Accessibility Corrections",
+                         allow_nonprogression_filled_locations=True)
 
 
 def inaccessible_location_rules(multiworld: MultiWorld, state: CollectionState, locations):
@@ -479,15 +511,26 @@ def distribute_items_restrictive(multiworld: MultiWorld,
 
     call_all(multiworld, "fill_hook", progitempool, usefulitempool, filleritempool, fill_locations)
 
-    locations: typing.Dict[LocationProgressType, typing.List[Location]] = {
-        loc_type: [] for loc_type in LocationProgressType}
+    single_player = multiworld.players == 1 and not multiworld.groups
 
-    for loc in fill_locations:
-        locations[loc.progress_type].append(loc)
+    prioritylocations: typing.List[Location]
+    defaultlocations: typing.List[Location]
+    excludedlocations: typing.List[Location]
+    if not single_player:
+        # this call will also sort the location list
+        usefulitempool, filleritempool, excludedlocations, defaultlocations, prioritylocations = \
+            distribute_local_nonprogression(multiworld, fill_locations, usefulitempool, filleritempool)
+    else:
+        # just sort the location list
+        locations: typing.Dict[LocationProgressType, typing.List[Location]] = {
+            loc_type: [] for loc_type in LocationProgressType}
 
-    prioritylocations = locations[LocationProgressType.PRIORITY]
-    defaultlocations = locations[LocationProgressType.DEFAULT]
-    excludedlocations = locations[LocationProgressType.EXCLUDED]
+        for loc in fill_locations:
+            locations[loc.progress_type].append(loc)
+
+        prioritylocations = locations[LocationProgressType.PRIORITY]
+        defaultlocations = locations[LocationProgressType.DEFAULT]
+        excludedlocations = locations[LocationProgressType.EXCLUDED]
 
     # can't lock due to accessibility corrections touching things, so we remember which ones got placed and lock later
     lock_later = []
@@ -496,19 +539,18 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         nonlocal lock_later
         lock_later.append(location)
 
-    single_player = multiworld.players == 1 and not multiworld.groups
-
     if prioritylocations:
         # "priority fill"
         fill_restrictive(multiworld, multiworld.state, prioritylocations, progitempool,
                          single_player_placement=single_player, swap=False, on_place=mark_for_locking,
-                         name="Priority", one_item_per_player=True, allow_partial=True)
+                         name="Priority", one_item_per_player=True, allow_partial=True,
+                         allow_nonprogression_filled_locations=True)
 
         if prioritylocations:
             # retry with one_item_per_player off because some priority fills can fail to fill with that optimization
             fill_restrictive(multiworld, multiworld.state, prioritylocations, progitempool,
                             single_player_placement=single_player, swap=False, on_place=mark_for_locking,
-                            name="Priority Retry", one_item_per_player=False)
+                            name="Priority Retry", one_item_per_player=False, allow_nonprogression_filled_locations=True)
         accessibility_corrections(multiworld, multiworld.state, prioritylocations, progitempool)
         defaultlocations = prioritylocations + defaultlocations
 
@@ -516,13 +558,16 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         # "advancement/progression fill"
         if panic_method == "swap":
             fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool, swap=True,
-                             name="Progression", single_player_placement=single_player)
+                             name="Progression", single_player_placement=single_player,
+                             allow_nonprogression_filled_locations=True)
         elif panic_method == "raise":
             fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool, swap=False,
-                             name="Progression", single_player_placement=single_player)
+                             name="Progression", single_player_placement=single_player,
+                             allow_nonprogression_filled_locations=True)
         elif panic_method == "start_inventory":
             fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool, swap=False,
-                             allow_partial=True, name="Progression", single_player_placement=single_player)
+                             allow_partial=True, name="Progression", single_player_placement=single_player,
+                             allow_nonprogression_filled_locations=True)
             if progitempool:
                 for item in progitempool:
                     logging.debug(f"Moved {item} to start_inventory to prevent fill failure.")
@@ -547,6 +592,10 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         if location.item:
             location.locked = True
     del mark_for_locking, lock_later
+
+    # need to filter out locations with local filler now
+    excludedlocations = [location for location in excludedlocations if location.item is None]
+    defaultlocations = [location for location in defaultlocations if location.item is None]
 
     inaccessible_location_rules(multiworld, multiworld.state, defaultlocations)
 
@@ -1086,3 +1135,80 @@ def distribute_planned(multiworld: MultiWorld) -> None:
         except Exception as e:
             raise Exception(
                 f"Error running plando for player {player} ({multiworld.player_name[player]})") from e
+
+
+def distribute_local_nonprogression(multiworld: MultiWorld,
+                                    fill_locations: typing.List[Location],
+                                    useful_itempool: typing.List[Item],
+                                    filler_itempool: typing.List[Item]) \
+        -> typing.Tuple[typing.List[Item], typing.List[Item], typing.List[Location],
+                        typing.List[Location], typing.List[Location]]:
+    # call remaining_fill early on local items, but sort the list of locations filled this way to the back of the list
+    # instead of popping them entirely
+    # sort the location list
+    locations: typing.Dict[LocationProgressType, typing.List[Location]] = {
+        loc_type: [] for loc_type in LocationProgressType}
+
+    for loc in fill_locations:
+        locations[loc.progress_type].append(loc)
+
+    priority_locations = locations[LocationProgressType.PRIORITY]
+    default_locations = locations[LocationProgressType.DEFAULT]
+    excluded_locations = locations[LocationProgressType.EXCLUDED]
+    # recombine
+    fill_locations = [*excluded_locations, *default_locations, *priority_locations]
+    # get all local item names
+    local_item_names_by_player_id: typing.Dict[int, typing.Set[str]] = \
+        {player_id: multiworld.worlds[player_id].options.local_items.value for player_id in multiworld.player_ids} | \
+        {group_id: group["local_items"] for group_id, group in multiworld.groups.items()}
+
+    local_nonprogression_items: typing.List[Item] = []
+    # filter out local filler
+    new_filler_itempool: typing.List[Item] = []
+    for item in filler_itempool:
+        if item.name in local_item_names_by_player_id[item.player]:
+            local_nonprogression_items.append(item)
+        else:
+            new_filler_itempool.append(item)
+    # also filter out local useful items
+    new_useful_itempool: typing.List[Item] = []
+    for item in useful_itempool:
+        if item.name in local_item_names_by_player_id[item.player]:
+            local_nonprogression_items.append(item)
+        else:
+            new_useful_itempool.append(item)
+    fill_placements: typing.List[Location] = remaining_fill(multiworld, fill_locations, local_nonprogression_items,
+                                                       "Local non-progression placement", False, True)
+    # if, somehow, there are still items, then error out, because there's no saving it
+    if local_nonprogression_items:
+        # this should only be happening if the world has a lot of strict item rules
+        raise FillError("Not enough available locations for all local non-progression. Reduce the amount of local items"
+                        " in your YAMLs.")
+
+    # re-sort the location list
+    locations = {loc_type: [] for loc_type in LocationProgressType}
+
+    for loc in fill_locations:
+        locations[loc.progress_type].append(loc)
+
+    priority_locations = locations[LocationProgressType.PRIORITY]
+    default_locations = locations[LocationProgressType.DEFAULT]
+    excluded_locations = locations[LocationProgressType.EXCLUDED]
+
+    # sort the placement list
+    placements: typing.Dict[LocationProgressType, typing.List[Location]] = {
+        loc_type: [] for loc_type in LocationProgressType}
+
+    for place in fill_placements:
+        placements[place.progress_type].append(place)
+
+    priority_placements = placements[LocationProgressType.PRIORITY]
+    default_placements = placements[LocationProgressType.DEFAULT]
+    excluded_placements = placements[LocationProgressType.EXCLUDED]
+
+    # place the filled locations at the back of the list
+    excluded_locations.extend(excluded_placements)
+    # put the priority placements into the default location list to not cause problems during priority fill
+    default_locations.extend(priority_placements)
+    default_locations.extend(default_placements)
+    return new_useful_itempool, new_filler_itempool, excluded_locations, default_locations, priority_locations
