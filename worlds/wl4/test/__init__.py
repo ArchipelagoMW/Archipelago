@@ -11,8 +11,8 @@ class WL4TestBase(WorldTestBase, TestBase):
     starting_regions: Sequence[str] = []
 
     def get_state(self, items):
-        if (self.multiworld, tuple(items)) in self._state_cache:
-            return self._state_cache[self.multiworld, tuple(items)]
+        if (self.multiworld, tuple(self.starting_regions), tuple(items)) in self._state_cache:
+            return self._state_cache[self.multiworld, tuple(self.starting_regions), tuple(items)]
         state = CollectionState(self.multiworld)
         for region_name in self.starting_regions:
             region = self.multiworld.get_region(region_name, 1)
@@ -24,7 +24,7 @@ class WL4TestBase(WorldTestBase, TestBase):
             item.classification = ItemClassification.progression
             state.collect(item)
         state.sweep_for_advancements()
-        self._state_cache[self.multiworld, tuple(items)] = state
+        self._state_cache[self.multiworld, tuple(self.starting_regions), tuple(items)] = state
         return state
 
     def _create_items(self, items, player):

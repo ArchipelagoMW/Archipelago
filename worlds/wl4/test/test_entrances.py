@@ -6,254 +6,254 @@ class TestEntrances(WL4TestBase):
     def test_passage_access(self):
         self.starting_regions = []
         self.run_entrance_tests([
-            ['Menu -> Entry Passage', True, []],
-            ['Menu -> Emerald Passage', True, []],
-            ['Menu -> Ruby Passage', True, []],
-            ['Menu -> Topaz Passage', True, []],
-            ['Menu -> Sapphire Passage', True, []],
-            ['Menu -> Sound Room', True, []],
+            ['Entry Passage Entrance', True, []],
+            ['Emerald Passage Entrance', True, []],
+            ['Ruby Passage Entrance', True, []],
+            ['Topaz Passage Entrance', True, []],
+            ['Sapphire Passage Entrance', True, []],
 
-            ['Menu -> Golden Pyramid', False, []],
-            ['Menu -> Golden Pyramid', False, ['Emerald Passage Clear']],
-            ['Menu -> Golden Pyramid', False, ['Ruby Passage Clear']],
-            ['Menu -> Golden Pyramid', False, ['Topaz Passage Clear']],
-            ['Menu -> Golden Pyramid', False, ['Sapphire Passage Clear']],
-            ['Menu -> Golden Pyramid', True,
+            ['Golden Pyramid Entrance', False, []],
+            ['Golden Pyramid Entrance', False, ['Emerald Passage Clear']],
+            ['Golden Pyramid Entrance', False, ['Ruby Passage Clear']],
+            ['Golden Pyramid Entrance', False, ['Topaz Passage Clear']],
+            ['Golden Pyramid Entrance', False, ['Sapphire Passage Clear']],
+            ['Golden Pyramid Entrance', True,
              ['Emerald Passage Clear', 'Ruby Passage Clear',
               'Topaz Passage Clear', 'Sapphire Passage Clear']],
         ])
 
 
 class TestEntrancesBasic(TestEntrances):
-    options = {'open_doors': options.OpenDoors.option_off}
+    options = {'open_doors': options.OpenDoors.option_off, 'required_jewels': 0}
 
 #   def test_entry_levels(self):
-#       self.starting_regions = ['Hall of Hieroglyphs (entrance)']
+#       self.starting_regions = ['Hall of Hieroglyphs - Entrance']
 #       self.run_entrance_tests([
-#           ['Hall of Hieroglyphs Gate', False, []],
-#           ['Hall of Hieroglyphs Gate', False, [], ['Dash Attack']],
-#           ['Hall of Hieroglyphs Gate', False, [], ['Progressive Grab']],
-#           ['Hall of Hieroglyphs Gate', False, ['Progressive Ground Pound'], ['Progressive Ground Pound']],
-#           ['Hall of Hieroglyphs Gate', True,
+#           ['Entry Passage Boss Door', False, []],
+#           ['Entry Passage Boss Door', False, [], ['Dash Attack']],
+#           ['Entry Passage Boss Door', False, [], ['Progressive Grab']],
+#           ['Entry Passage Boss Door', False, ['Progressive Ground Pound'], ['Progressive Ground Pound']],
+#           ['Entry Passage Boss Door', True,
 #            ['Dash Attack', 'Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound']],
 #       ])
 
     def test_emerald_levels(self):
-        self.starting_regions = ['Palm Tree Paradise (entrance)', 'Wildflower Fields (entrance)',
-                                 'Mystic Lake (entrance)', 'Monsoon Jungle (entrance)']
+        self.starting_regions = ['Palm Tree Paradise', 'Wildflower Fields - Entrance',
+                                 'Mystic Lake - Entrance', 'Monsoon Jungle - Entrance']
         self.run_entrance_tests([
-            ['Palm Tree Paradise Gate', True, []],
+            ['Wildflower Fields Entrance', True, []],
 
-            ['Wildflower Fields Gate', False, []],
-            ['Wildflower Fields Gate', False, [], ['Swim']],
-            ['Wildflower Fields Gate', False,
+            ['Mystic Lake Entrance', False, []],
+            ['Mystic Lake Entrance', False, [], ['Swim']],
+            ['Mystic Lake Entrance', False,
              ['Progressive Ground Pound'], ['Progressive Ground Pound']],
-            ['Wildflower Fields Gate', True,
+            ['Mystic Lake Entrance', True,
              ['Swim', 'Progressive Ground Pound', 'Progressive Ground Pound']],
 
-            ['Mystic Lake Gate', False, []],
-            ['Mystic Lake Gate', False, [], ['Swim']],
-            ['Mystic Lake Gate', False, [], ['Head Smash']],
-            ['Mystic Lake Gate', True, ['Swim', 'Head Smash']],
+            ['Monsoon Jungle Entrance', False, []],
+            ['Monsoon Jungle Entrance', False, [], ['Swim']],
+            ['Monsoon Jungle Entrance', False, [], ['Head Smash']],
+            ['Monsoon Jungle Entrance', True, ['Swim', 'Head Smash']],
 
-            ['Monsoon Jungle Gate', False, []],
-            ['Monsoon Jungle Gate', False, [], ['Progressive Ground Pound']],
-            ['Monsoon Jungle Gate', True, ['Progressive Ground Pound']],
+            ['Emerald Passage Boss Door', False, []],
+            ['Emerald Passage Boss Door', False, [], ['Progressive Ground Pound']],
+            ['Emerald Passage Boss Door', True, ['Progressive Ground Pound']],
         ])
 
     def test_ruby_levels(self):
-        self.starting_regions = ['The Curious Factory (entrance)', 'The Toxic Landfill (entrance)',
-                                 '40 Below Fridge (entrance)', 'Pinball Zone (entrance)']
+        self.starting_regions = ['The Curious Factory', 'The Toxic Landfill - Entrance',
+                                 '40 Below Fridge - Entrance', 'Pinball Zone - Entrance']
         self.run_entrance_tests([
-            ['The Curious Factory Gate', True, []],
+            ['The Toxic Landfill Entrance', True, []],
 
-            ['The Toxic Landfill Gate', False, []],
-            ['The Toxic Landfill Gate', False, [], ['Dash Attack']],
-            ['The Toxic Landfill Gate', False, [], ['Head Smash']],
-            ['The Toxic Landfill Gate', False, ['Progressive Ground Pound'], ['Progressive Ground Pound']],
-            ['The Toxic Landfill Gate', True,
+            ['40 Below Fridge Entrance', False, []],
+            ['40 Below Fridge Entrance', False, [], ['Dash Attack']],
+            ['40 Below Fridge Entrance', False, [], ['Head Smash']],
+            ['40 Below Fridge Entrance', False, ['Progressive Ground Pound'], ['Progressive Ground Pound']],
+            ['40 Below Fridge Entrance', True,
              ['Dash Attack', 'Head Smash', 'Progressive Ground Pound', 'Progressive Ground Pound']],
 
-            ['40 Below Fridge Gate', False, []],
-            ['40 Below Fridge Gate', False, ['Progressive Ground Pound'], ['Progressive Ground Pound']],
-            ['40 Below Fridge Gate', True, ['Progressive Ground Pound', 'Progressive Ground Pound']],
+            ['Pinball Zone Entrance', False, []],
+            ['Pinball Zone Entrance', False, ['Progressive Ground Pound'], ['Progressive Ground Pound']],
+            ['Pinball Zone Entrance', True, ['Progressive Ground Pound', 'Progressive Ground Pound']],
 
-            ['Pinball Zone Gate', False, []],
-            ['Pinball Zone Gate', False, [], ['Progressive Grab']],
-            ['Pinball Zone Gate', False, [], ['Progressive Ground Pound']],
-            ['Pinball Zone Gate', False, [], ['Head Smash']],
-            ['Pinball Zone Gate', True,
+            ['Ruby Passage Boss Door', False, []],
+            ['Ruby Passage Boss Door', False, [], ['Progressive Grab']],
+            ['Ruby Passage Boss Door', False, [], ['Progressive Ground Pound']],
+            ['Ruby Passage Boss Door', False, [], ['Head Smash']],
+            ['Ruby Passage Boss Door', True,
              ['Progressive Grab', 'Progressive Ground Pound', 'Head Smash']],
         ])
 
     def test_topaz_levels(self):
-        self.starting_regions = ['Toy Block Tower (entrance)', 'The Big Board (entrance)',
-                                 'Doodle Woods (entrance)', 'Domino Row (entrance)']
+        self.starting_regions = ['Toy Block Tower - Entrance', 'The Big Board - Entrance',
+                                 'Doodle Woods', 'Domino Row - Entrance']
         self.run_entrance_tests([
-            ['Toy Block Tower Gate', False, []],
-            ['Toy Block Tower Gate', False, ['Progressive Grab'], ['Progressive Grab']],
-            ['Toy Block Tower Gate', True, ['Progressive Grab', 'Progressive Grab']],
+            ['The Big Board Entrance', False, []],
+            ['The Big Board Entrance', False, ['Progressive Grab'], ['Progressive Grab']],
+            ['The Big Board Entrance', True, ['Progressive Grab', 'Progressive Grab']],
 
-            ['The Big Board Gate', False, []],
-            ['The Big Board Gate', False, [], ['Progressive Ground Pound']],
-            ['The Big Board Gate', True, ['Progressive Ground Pound']],
+            ['Doodle Woods Entrance', False, []],
+            ['Doodle Woods Entrance', False, [], ['Progressive Ground Pound']],
+            ['Doodle Woods Entrance', True, ['Progressive Ground Pound']],
 
-            ['Doodle Woods Gate', True, []],
+            ['Domino Row Entrance', True, []],
 
-            ['Domino Row Gate', False, []],
-            ['Domino Row Gate', False, [], ['Swim']],
-            ['Domino Row Gate', False, [], ['Progressive Ground Pound']],
-            ['Domino Row Gate', True, ['Swim', 'Progressive Ground Pound']],
+            ['Topaz Passage Boss Door', False, []],
+            ['Topaz Passage Boss Door', False, [], ['Swim']],
+            ['Topaz Passage Boss Door', False, [], ['Progressive Ground Pound']],
+            ['Topaz Passage Boss Door', True, ['Swim', 'Progressive Ground Pound']],
         ])
 
     def test_sapphire_levels(self):
-        self.starting_regions = ['Crescent Moon Village (entrance)', 'Arabian Night (entrance)',
-                                 'Fiery Cavern (entrance)', 'Hotel Horror (entrance)']
+        self.starting_regions = ['Crescent Moon Village - Entrance', 'Arabian Night - Entrance',
+                                 'Fiery Cavern - Entrance', 'Hotel Horror - Entrance']
         self.run_entrance_tests([
-            ['Crescent Moon Village Gate', False, []],
-            ['Crescent Moon Village Gate', False, [], ['Dash Attack']],
-            ['Crescent Moon Village Gate', False, [], ['Head Smash']],
-            ['Crescent Moon Village Gate', True, ['Dash Attack', 'Head Smash']],
+            ['Arabian Night Entrance', False, []],
+            ['Arabian Night Entrance', False, [], ['Dash Attack']],
+            ['Arabian Night Entrance', False, [], ['Head Smash']],
+            ['Arabian Night Entrance', True, ['Dash Attack', 'Head Smash']],
 
-            ['Arabian Night Gate', False, []],
-            ['Arabian Night Gate', False, [], ['Swim']],
-            ['Arabian Night Gate', True, ['Swim']],
+            ['Fiery Cavern Entrance', False, []],
+            ['Fiery Cavern Entrance', False, [], ['Swim']],
+            ['Fiery Cavern Entrance', True, ['Swim']],
 
-            ['Fiery Cavern Gate', False, []],
-            ['Fiery Cavern Gate', False, [], ['Head Smash']],
-            ['Fiery Cavern Gate', False, [], ['Dash Attack']],
-            ['Fiery Cavern Gate', False, [], ['Progressive Ground Pound']],
-            ['Fiery Cavern Gate', True, ['Dash Attack', 'Progressive Ground Pound', 'Head Smash']],
+            ['Hotel Horror Entrance', False, []],
+            ['Hotel Horror Entrance', False, [], ['Head Smash']],
+            ['Hotel Horror Entrance', False, [], ['Dash Attack']],
+            ['Hotel Horror Entrance', False, [], ['Progressive Ground Pound']],
+            ['Hotel Horror Entrance', True, ['Dash Attack', 'Progressive Ground Pound', 'Head Smash']],
 
-            ['Hotel Horror Gate', False, []],
-            ['Hotel Horror Gate', False, ['Progressive Grab'], ['Progressive Grab']],
-            ['Hotel Horror Gate', True, ['Progressive Grab', 'Progressive Grab']],
+            ['Sapphire Passage Boss Door', False, []],
+            ['Sapphire Passage Boss Door', False, ['Progressive Grab'], ['Progressive Grab']],
+            ['Sapphire Passage Boss Door', True, ['Progressive Grab', 'Progressive Grab']],
         ])
 
     def test_golden_pyramid(self):
-        self.starting_regions = ['Golden Passage (entrance)']
+        self.starting_regions = ['Golden Passage - Entrance']
         self.run_entrance_tests([
-            ['Golden Passage Gate', False, []],
-            ['Golden Passage Gate', False, [], ['Swim']],
-            ['Golden Passage Gate', False, [], ['Progressive Ground Pound']],
-            ['Golden Passage Gate', False, [], ['Progressive Grab']],
-            ['Golden Passage Gate', True, ['Swim', 'Progressive Ground Pound', 'Progressive Grab']],
+            ['Golden Pyramid Boss Door', False, []],
+            ['Golden Pyramid Boss Door', False, [], ['Swim']],
+            ['Golden Pyramid Boss Door', False, [], ['Progressive Ground Pound']],
+            ['Golden Pyramid Boss Door', False, [], ['Progressive Grab']],
+            ['Golden Pyramid Boss Door', True, ['Swim', 'Progressive Ground Pound', 'Progressive Grab']],
         ])
 
 
 class TestEntrancesAdvanced(TestEntrances):
-    options = {'logic': options.Logic.option_advanced, 'open_doors': options.OpenDoors.option_off}
+    options = {'logic': options.Logic.option_advanced, 'open_doors': options.OpenDoors.option_off, 'required_jewels': 0}
 
     def test_topaz_levels(self):
-        self.starting_regions = ['Toy Block Tower (entrance)', 'The Big Board (entrance)',
-                                 'Doodle Woods (entrance)', 'Domino Row (entrance)']
+        self.starting_regions = ['Toy Block Tower - Entrance', 'The Big Board - Entrance',
+                                 'Doodle Woods', 'Domino Row - Entrance']
         self.run_entrance_tests([
-            ['Toy Block Tower Gate', False, []],
-            ['Toy Block Tower Gate', False, ['Progressive Grab'], ['Progressive Grab']],
-            ['Toy Block Tower Gate', True, ['Progressive Grab', 'Progressive Grab']],
+            ['The Big Board Entrance', False, []],
+            ['The Big Board Entrance', False, ['Progressive Grab'], ['Progressive Grab']],
+            ['The Big Board Entrance', True, ['Progressive Grab', 'Progressive Grab']],
 
-            ['The Big Board Gate', False, []],
-            ['The Big Board Gate', False, [], ['Progressive Ground Pound']],
-            ['The Big Board Gate', True, ['Progressive Ground Pound']],
+            ['Doodle Woods Entrance', False, []],
+            ['Doodle Woods Entrance', False, [], ['Progressive Ground Pound']],
+            ['Doodle Woods Entrance', True, ['Progressive Ground Pound']],
 
-            ['Doodle Woods Gate', True, []],
+            ['Domino Row Entrance', True, []],
 
-            ['Domino Row Gate', False, []],
-            ['Domino Row Gate', False, [], ['Swim']],
-            ['Domino Row Gate', False, [], ['Progressive Ground Pound', 'Head Smash',
+            ['Topaz Passage Boss Door', False, []],
+            ['Topaz Passage Boss Door', False, [], ['Swim']],
+            ['Topaz Passage Boss Door', False, [], ['Progressive Ground Pound', 'Head Smash',
                                             'Progressive Grab']],
-            ['Domino Row Gate', True, ['Swim', 'Progressive Ground Pound']],
-            ['Domino Row Gate', True, ['Swim', 'Head Smash']],
-            ['Domino Row Gate', True, ['Swim', 'Progressive Grab']],
+            ['Topaz Passage Boss Door', True, ['Swim', 'Progressive Ground Pound']],
+            ['Topaz Passage Boss Door', True, ['Swim', 'Head Smash']],
+            ['Topaz Passage Boss Door', True, ['Swim', 'Progressive Grab']],
         ])
 
+
 class TestEntrancesOpenPortal(TestEntrances):
-    options = {'portal': options.Portal.option_open, 'open_doors': options.OpenDoors.option_off}
+    options = {'portal': options.Portal.option_open, 'open_doors': options.OpenDoors.option_off, 'required_jewels': 0}
 
     def test_sapphire_levels(self):
-        self.starting_regions = ['Crescent Moon Village (entrance)', 'Arabian Night (entrance)',
-                                 'Fiery Cavern (entrance)', 'Hotel Horror (entrance)']
+        self.starting_regions = ['Crescent Moon Village - Entrance', 'Arabian Night - Entrance',
+                                 'Fiery Cavern - Entrance', 'Hotel Horror - Entrance']
         self.run_entrance_tests([
-            ['Crescent Moon Village Gate', False, []],
-            ['Crescent Moon Village Gate', False, [], ['Dash Attack']],
-            ['Crescent Moon Village Gate', False, [], ['Head Smash']],
-            ['Crescent Moon Village Gate', True, ['Dash Attack', 'Head Smash']],
+            ['Arabian Night Entrance', False, []],
+            ['Arabian Night Entrance', False, [], ['Dash Attack']],
+            ['Arabian Night Entrance', False, [], ['Head Smash']],
+            ['Arabian Night Entrance', True, ['Dash Attack', 'Head Smash']],
 
-            ['Arabian Night Gate', True, []],
+            ['Fiery Cavern Entrance', True, []],
 
-            ['Fiery Cavern Gate', False, []],
-            ['Fiery Cavern Gate', False, [], ['Head Smash']],
-            ['Fiery Cavern Gate', False, [], ['Dash Attack']],
-            ['Fiery Cavern Gate', False, [], ['Progressive Ground Pound']],
-            ['Fiery Cavern Gate', True, ['Dash Attack', 'Progressive Ground Pound', 'Head Smash']],
+            ['Hotel Horror Entrance', False, []],
+            ['Hotel Horror Entrance', False, [], ['Head Smash']],
+            ['Hotel Horror Entrance', False, [], ['Dash Attack']],
+            ['Hotel Horror Entrance', False, [], ['Progressive Ground Pound']],
+            ['Hotel Horror Entrance', True, ['Dash Attack', 'Progressive Ground Pound', 'Head Smash']],
 
-            ['Hotel Horror Gate', True, []],
+            ['Sapphire Passage Boss Door', True, []],
         ])
 
 
 class TestEntrancesOpenDoors(TestEntrances):
-    options = {'open_doors': options.OpenDoors.option_open}
+    options = {'open_doors': options.OpenDoors.option_open, 'required_jewels': 0}
 
 #   def test_entry_levels(self):
 #       self.starting_regions = []
 #       self.run_entrance_tests([
-#           ['Hall of Hieroglyphs Gate', True, []],
+#           ['Entry Passage Boss Door', True, []],
 #       ])
 
     def test_emerald_levels(self):
         self.starting_regions = []
         self.run_entrance_tests([
-            ['Palm Tree Paradise Gate', True, []],
-            ['Wildflower Fields Gate', True, []],
-            ['Mystic Lake Gate', True, []],
-            ['Monsoon Jungle Gate', True, []],
+            ['Wildflower Fields Entrance', True, []],
+            ['Mystic Lake Entrance', True, []],
+            ['Monsoon Jungle Entrance', True, []],
+            ['Emerald Passage Boss Door', True, []],
         ])
 
     def test_ruby_levels(self):
         self.starting_regions = []
         self.run_entrance_tests([
-            ['The Curious Factory Gate', True, []],
-            ['The Toxic Landfill Gate', True, []],
-            ['40 Below Fridge Gate', True, []],
-            ['Pinball Zone Gate', True, []],
+            ['The Toxic Landfill Entrance', True, []],
+            ['40 Below Fridge Entrance', True, []],
+            ['Pinball Zone Entrance', True, []],
+            ['Ruby Passage Boss Door', True, []],
         ])
 
     def test_topaz_levels(self):
         self.starting_regions = []
         self.run_entrance_tests([
-            ['Toy Block Tower Gate', True, []],
-            ['The Big Board Gate', True, []],
-            ['Doodle Woods Gate', True, []],
-            ['Domino Row Gate', True, []],
+            ['The Big Board Entrance', True, []],
+            ['Doodle Woods Entrance', True, []],
+            ['Domino Row Entrance', True, []],
+            ['Topaz Passage Boss Door', True, []],
         ])
 
     def test_sapphire_levels(self):
         self.starting_regions = []
         self.run_entrance_tests([
-            ['Crescent Moon Village Gate', True, []],
-            ['Arabian Night Gate', True, []],
-            ['Fiery Cavern Gate', True, []],
-            ['Hotel Horror Gate', True, []],
+            ['Arabian Night Entrance', True, []],
+            ['Fiery Cavern Entrance', True, []],
+            ['Hotel Horror Entrance', True, []],
+            ['Sapphire Passage Boss Door', True, []],
         ])
 
     def test_golden_pyramid(self):
         self.starting_regions = ['Golden Pyramid']
         self.run_entrance_tests([
-            ['Golden Passage Gate', True, []],
+            ['Golden Pyramid Boss Door', True, []],
         ])
 
 
 class TestEntrancesOpenDoorsExceptPyramid(TestEntrancesOpenDoors):
-    options = {'open_doors': options.OpenDoors.option_closed_diva}
+    options = {'open_doors': options.OpenDoors.option_closed_diva, 'required_jewels': 0}
 
     def test_golden_pyramid(self):
-        self.starting_regions = ['Golden Passage (entrance)']
+        self.starting_regions = ['Golden Passage - Entrance']
         self.run_entrance_tests([
-            ['Golden Passage Gate', False, []],
-            ['Golden Passage Gate', False, [], ['Swim']],
-            ['Golden Passage Gate', False, [], ['Progressive Ground Pound']],
-            ['Golden Passage Gate', False, [], ['Progressive Grab']],
-            ['Golden Passage Gate', True, ['Swim', 'Progressive Ground Pound', 'Progressive Grab']],
+            ['Golden Pyramid Boss Door', False, []],
+            ['Golden Pyramid Boss Door', False, [], ['Swim']],
+            ['Golden Pyramid Boss Door', False, [], ['Progressive Ground Pound']],
+            ['Golden Pyramid Boss Door', False, [], ['Progressive Grab']],
+            ['Golden Pyramid Boss Door', True, ['Swim', 'Progressive Ground Pound', 'Progressive Grab']],
         ])
 
 
@@ -261,107 +261,90 @@ REQUIRED_JEWELS = options.RequiredJewels.default
 
 
 class TestBossAccess(TestEntrances):
-    options = {}
+    options = {'open_doors': options.OpenDoors.option_open}
 
     def test_bosses(self):
-        self.starting_regions = ['Emerald Minigame Shop',
-                                 'Ruby Minigame Shop', 'Topaz Minigame Shop',
-                                 'Sapphire Minigame Shop', 'Golden Minigame Shop']
+        self.starting_regions = ['Monsoon Jungle - Entrance', 'Pinball Zone - Entrance',
+                                 'Domino Row - Entrance', 'Hotel Horror - Entrance',
+                                 'Golden Passage - Entrance']
         self.run_entrance_tests([
-#           ['Entry Minigame Shop -> Entry Passage Boss', False, []],
-#           ['Entry Minigame Shop -> Entry Passage Boss', False,
+#           ['Entry Passage Boss Door', False, []],
+#           ['Entry Passage Boss Door', False,
 #            [], ['Top Right Entry Jewel Piece']],
-#           ['Entry Minigame Shop -> Entry Passage Boss', False,
+#           ['Entry Passage Boss Door', False,
 #            [], ['Top Left Entry Jewel Piece']],
-#           ['Entry Minigame Shop -> Entry Passage Boss', False,
+#           ['Entry Passage Boss Door', False,
 #            [], ['Bottom Right Entry Jewel Piece']],
-#           ['Entry Minigame Shop -> Entry Passage Boss', False,
+#           ['Entry Passage Boss Door', False,
 #            [], ['Bottom Left Entry Jewel Piece']],
-#           ['Entry Minigame Shop -> Entry Passage Boss', True,
+#           ['Entry Passage Boss Door', True,
 #            ['Top Right Entry Jewel Piece', 'Top Left Entry Jewel Piece',
 #             'Bottom Right Entry Jewel Piece', 'Bottom Left Entry Jewel Piece']],
 
-            ['Emerald Minigame Shop -> Emerald Passage Boss', False, []],
-            ['Emerald Minigame Shop -> Emerald Passage Boss', False,
+            ['Emerald Passage Boss Door', False, []],
+            ['Emerald Passage Boss Door', False,
              (REQUIRED_JEWELS - 1) * ['Top Right Emerald Piece'], ['Top Right Emerald Piece']],
-            ['Emerald Minigame Shop -> Emerald Passage Boss', False,
+            ['Emerald Passage Boss Door', False,
              (REQUIRED_JEWELS - 1) * ['Top Left Emerald Piece'], ['Top Left Emerald Piece']],
-            ['Emerald Minigame Shop -> Emerald Passage Boss', False,
+            ['Emerald Passage Boss Door', False,
              (REQUIRED_JEWELS - 1) * ['Bottom Right Emerald Piece'], ['Bottom Right Emerald Piece']],
-            ['Emerald Minigame Shop -> Emerald Passage Boss', False,
+            ['Emerald Passage Boss Door', False,
              (REQUIRED_JEWELS - 1) * ['Bottom Left Emerald Piece'], ['Bottom Left Emerald Piece']],
-            ['Emerald Minigame Shop -> Emerald Passage Boss', True,
+            ['Emerald Passage Boss Door', True,
              REQUIRED_JEWELS * ['Top Right Emerald Piece', 'Top Left Emerald Piece',
                   'Bottom Right Emerald Piece', 'Bottom Left Emerald Piece']],
 
-            ['Ruby Minigame Shop -> Ruby Passage Boss', False, []],
-            ['Ruby Minigame Shop -> Ruby Passage Boss', False,
+            ['Ruby Passage Boss Door', False, []],
+            ['Ruby Passage Boss Door', False,
              (REQUIRED_JEWELS - 1) * ['Top Right Ruby Piece'], ['Top Right Ruby Piece']],
-            ['Ruby Minigame Shop -> Ruby Passage Boss', False,
+            ['Ruby Passage Boss Door', False,
              (REQUIRED_JEWELS - 1) * ['Top Left Ruby Piece'], ['Top Left Ruby Piece']],
-            ['Ruby Minigame Shop -> Ruby Passage Boss', False,
+            ['Ruby Passage Boss Door', False,
              (REQUIRED_JEWELS - 1) * ['Bottom Right Ruby Piece'], ['Bottom Right Ruby Piece']],
-            ['Ruby Minigame Shop -> Ruby Passage Boss', False,
+            ['Ruby Passage Boss Door', False,
              (REQUIRED_JEWELS - 1) * ['Bottom Left Ruby Piece'], ['Bottom Left Ruby Piece']],
-            ['Ruby Minigame Shop -> Ruby Passage Boss', True,
+            ['Ruby Passage Boss Door', True,
              REQUIRED_JEWELS * ['Top Right Ruby Piece', 'Top Left Ruby Piece',
                   'Bottom Right Ruby Piece', 'Bottom Left Ruby Piece']],
 
-            ['Topaz Minigame Shop -> Topaz Passage Boss', False, []],
-            ['Topaz Minigame Shop -> Topaz Passage Boss', False,
+            ['Topaz Passage Boss Door', False, []],
+            ['Topaz Passage Boss Door', False,
              (REQUIRED_JEWELS - 1) * ['Top Right Topaz Piece'], ['Top Right Topaz Piece']],
-            ['Topaz Minigame Shop -> Topaz Passage Boss', False,
+            ['Topaz Passage Boss Door', False,
              (REQUIRED_JEWELS - 1) * ['Top Left Topaz Piece'], ['Top Left Topaz Piece']],
-            ['Topaz Minigame Shop -> Topaz Passage Boss', False,
+            ['Topaz Passage Boss Door', False,
              (REQUIRED_JEWELS - 1) * ['Bottom Right Topaz Piece'], ['Bottom Right Topaz Piece']],
-            ['Topaz Minigame Shop -> Topaz Passage Boss', False,
+            ['Topaz Passage Boss Door', False,
              (REQUIRED_JEWELS - 1) * ['Bottom Left Topaz Piece'], ['Bottom Left Topaz Piece']],
-            ['Topaz Minigame Shop -> Topaz Passage Boss', True,
+            ['Topaz Passage Boss Door', True,
              REQUIRED_JEWELS * ['Top Right Topaz Piece', 'Top Left Topaz Piece',
                   'Bottom Right Topaz Piece', 'Bottom Left Topaz Piece']],
 
-            ['Sapphire Minigame Shop -> Sapphire Passage Boss', False, []],
-            ['Sapphire Minigame Shop -> Sapphire Passage Boss', False,
+            ['Sapphire Passage Boss Door', False, []],
+            ['Sapphire Passage Boss Door', False,
              (REQUIRED_JEWELS - 1) * ['Top Right Sapphire Piece'], ['Top Right Sapphire Piece']],
-            ['Sapphire Minigame Shop -> Sapphire Passage Boss', False,
+            ['Sapphire Passage Boss Door', False,
              (REQUIRED_JEWELS - 1) * ['Top Left Sapphire Piece'], ['Top Left Sapphire Piece']],
-            ['Sapphire Minigame Shop -> Sapphire Passage Boss', False,
+            ['Sapphire Passage Boss Door', False,
              (REQUIRED_JEWELS - 1) * ['Bottom Right Sapphire Piece'], ['Bottom Right Sapphire Piece']],
-            ['Sapphire Minigame Shop -> Sapphire Passage Boss', False,
+            ['Sapphire Passage Boss Door', False,
              (REQUIRED_JEWELS - 1) * ['Bottom Left Sapphire Piece'], ['Bottom Left Sapphire Piece']],
-            ['Sapphire Minigame Shop -> Sapphire Passage Boss', True,
+            ['Sapphire Passage Boss Door', True,
              REQUIRED_JEWELS * ['Top Right Sapphire Piece', 'Top Left Sapphire Piece',
                   'Bottom Right Sapphire Piece', 'Bottom Left Sapphire Piece']],
 
-            ['Golden Minigame Shop -> Golden Pyramid Boss', False, []],
-            ['Golden Minigame Shop -> Golden Pyramid Boss', False,
+            ['Golden Pyramid Boss Door', False, []],
+            ['Golden Pyramid Boss Door', False,
              [], ['Top Right Golden Jewel Piece']],
-            ['Golden Minigame Shop -> Golden Pyramid Boss', False,
+            ['Golden Pyramid Boss Door', False,
              [], ['Top Left Golden Jewel Piece']],
-            ['Golden Minigame Shop -> Golden Pyramid Boss', False,
+            ['Golden Pyramid Boss Door', False,
              [], ['Bottom Right Golden Jewel Piece']],
-            ['Golden Minigame Shop -> Golden Pyramid Boss', False,
+            ['Golden Pyramid Boss Door', False,
              [], ['Bottom Left Golden Jewel Piece']],
-            ['Golden Minigame Shop -> Golden Pyramid Boss', True,
+            ['Golden Pyramid Boss Door', True,
              ['Top Right Golden Jewel Piece', 'Top Left Golden Jewel Piece',
               'Bottom Right Golden Jewel Piece', 'Bottom Left Golden Jewel Piece']],
-        ])
-
-
-class TestBossAccessNoJewels(TestEntrances):
-    options = {'required_jewels': 0}
-
-    def test_bosses(self):
-        self.starting_regions = ['Emerald Minigame Shop',
-                                 'Ruby Minigame Shop', 'Topaz Minigame Shop',
-                                 'Sapphire Minigame Shop', 'Golden Minigame Shop']
-        self.run_entrance_tests([
-#           ['Entry Minigame Shop -> Entry Passage Boss', True, []],
-            ['Emerald Minigame Shop -> Emerald Passage Boss', True, []],
-            ['Ruby Minigame Shop -> Ruby Passage Boss', True, []],
-            ['Topaz Minigame Shop -> Topaz Passage Boss', True, []],
-            ['Sapphire Minigame Shop -> Sapphire Passage Boss', True, []],
-            ['Golden Minigame Shop -> Golden Pyramid Boss', True, []],
         ])
 
 
@@ -373,10 +356,10 @@ class TestBossAccessNoJewelsKeysy(TestEntrances):
     def test_bosses(self):
         self.starting_regions = ['Golden Pyramid']
         self.run_entrance_tests([
-#           ['Entry Minigame Shop -> Entry Passage Boss', True, []],
-            ['Emerald Minigame Shop -> Emerald Passage Boss', True, []],
-            ['Ruby Minigame Shop -> Ruby Passage Boss', True, []],
-            ['Topaz Minigame Shop -> Topaz Passage Boss', True, []],
-            ['Sapphire Minigame Shop -> Sapphire Passage Boss', True, []],
-            ['Golden Minigame Shop -> Golden Pyramid Boss', True, []],
+#           ['Entry Passage Boss Door', True, []],
+            ['Emerald Passage Boss Door', True, []],
+            ['Ruby Passage Boss Door', True, []],
+            ['Topaz Passage Boss Door', True, []],
+            ['Sapphire Passage Boss Door', True, []],
+            ['Golden Pyramid Boss Door', True, []],
         ])

@@ -440,7 +440,6 @@ class TestHardOpenPortal(TestHard):
 
     def _test_arabian_night(self):
         self.run_location_tests([
-            # FIXME: You can use the enemies here, too
             ['Arabian Night - Onomi Box', False, []],
             ['Arabian Night - Onomi Box', False, [], ['Progressive Ground Pound', 'Head Smash']],
             ['Arabian Night - Onomi Box', True, ['Progressive Ground Pound']],

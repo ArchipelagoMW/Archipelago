@@ -4,15 +4,15 @@ class TestNormal(WL4TestBase):
     options = {'difficulty': 0}
 
     def test_entry_passage(self):
-        self.starting_regions = ['Hall of Hieroglyphs (entrance)']
+        self.starting_regions = ['Hall of Hieroglyphs - Entrance']
         self._test_hall_of_hieroglyphs()
         # self._test_spoiled_rotten()
 
     def test_emerald_passage(self):
-        self.starting_regions = ['Palm Tree Paradise (entrance)',
-                                 'Wildflower Fields (entrance)',
-                                 'Mystic Lake (entrance)',
-                                 'Monsoon Jungle (entrance)',
+        self.starting_regions = ['Palm Tree Paradise',
+                                 'Wildflower Fields - Entrance',
+                                 'Mystic Lake - Entrance',
+                                 'Monsoon Jungle - Entrance',
                                  'Emerald Passage Boss']
         self._test_palm_tree_paradise()
         self._test_wildflower_fields()
@@ -21,10 +21,10 @@ class TestNormal(WL4TestBase):
         self._test_cractus()
 
     def test_ruby_passage(self):
-        self.starting_regions = ['The Curious Factory (entrance)',
-                                 'The Toxic Landfill (entrance)',
-                                 '40 Below Fridge (entrance)',
-                                 'Pinball Zone (entrance)',
+        self.starting_regions = ['The Curious Factory',
+                                 'The Toxic Landfill - Entrance',
+                                 '40 Below Fridge - Entrance',
+                                 'Pinball Zone - Entrance',
                                  'Ruby Passage Boss']
         self._test_the_curious_factory()
         self._test_the_toxic_landfill()
@@ -33,10 +33,10 @@ class TestNormal(WL4TestBase):
         self._test_cuckoo_condor()
 
     def test_topaz_passage(self):
-        self.starting_regions = ['Toy Block Tower (entrance)',
-                                 'The Big Board (entrance)',
-                                 'Doodle Woods (entrance)',
-                                 'Domino Row (entrance)',
+        self.starting_regions = ['Toy Block Tower - Entrance',
+                                 'The Big Board - Entrance',
+                                 'Doodle Woods',
+                                 'Domino Row - Entrance',
                                  'Topaz Passage Boss']
         self._test_toy_block_tower()
         self._test_the_big_board()
@@ -45,10 +45,10 @@ class TestNormal(WL4TestBase):
         self._test_aerodent()
 
     def test_sapphire_passage(self):
-        self.starting_regions = ['Crescent Moon Village (entrance)',
-                                 'Arabian Night (entrance)',
-                                 'Fiery Cavern (entrance)',
-                                 'Hotel Horror (entrance)',
+        self.starting_regions = ['Crescent Moon Village - Entrance',
+                                 'Arabian Night - Entrance',
+                                 'Fiery Cavern - Entrance',
+                                 'Hotel Horror - Entrance',
                                  'Sapphire Passage Boss']
         self._test_crescent_moon_village()
         self._test_arabian_night()
@@ -58,7 +58,7 @@ class TestNormal(WL4TestBase):
 
     def test_golden_pyramid(self):
         self.starting_regions = ['Golden Pyramid Boss',
-                                 'Golden Passage (entrance)']
+                                 'Golden Passage - Entrance']
         self._test_golden_passage()
         self._test_golden_diva()
 
@@ -445,9 +445,9 @@ class TestNormal(WL4TestBase):
             ['The Big Board - Full Health Item Box', False, []],
             ['The Big Board - Full Health Item Box', False, [], ['Progressive Ground Pound']],
             ['The Big Board - Full Health Item Box', False, [], ['Progressive Grab']],
-            ['The Big Board - Full Health Item Box', False, [], ['Enemy Jump']],
+            ['The Big Board - Full Health Item Box', False, [], ['Stomp Jump']],
             ['The Big Board - Full Health Item Box', True,
-             ['Progressive Ground Pound', 'Progressive Grab', 'Enemy Jump']],
+             ['Progressive Ground Pound', 'Progressive Grab', 'Stomp Jump']],
         ])
 
     def _test_doodle_woods(self):
@@ -613,8 +613,8 @@ class TestNormal(WL4TestBase):
         self.run_location_tests([
             ['Catbat', False, []],
             ['Catbat', False, [], ['Progressive Ground Pound']],
-            ['Catbat', False, [], ['Enemy Jump']],
-            ['Catbat', True, ['Progressive Ground Pound', 'Enemy Jump']],
+            ['Catbat', False, [], ['Stomp Jump']],
+            ['Catbat', True, ['Progressive Ground Pound', 'Stomp Jump']],
         ])
 
     def _test_golden_passage(self):
