@@ -83,9 +83,7 @@ class DLCqworld(World):
             else:
                 early_items[self.player]["Movement Pack"] = 1
 
-        for item in items_to_exclude:
-            if item in self.multiworld.itempool:
-                self.multiworld.itempool.remove(item)
+
 
     def precollect_coinsanity(self):
         if self.options.campaign == Options.Campaign.option_basic:
