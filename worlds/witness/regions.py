@@ -115,7 +115,7 @@ class WitnessPlayerRegions:
             if k not in player_logic.UNREACHABLE_REGIONS
         }
 
-        event_locations_per_region = defaultdict(dict)
+        event_locations_per_region: Dict[str, Dict[str, int]] = defaultdict(dict)
 
         for event_location, event_item_and_entity in player_logic.EVENT_ITEM_PAIRS.items():
             entity_or_region = event_item_and_entity[1]
