@@ -58,7 +58,6 @@ green_cassette_blocks  = "Green Cassette Blocks"
 # Questionable
 dash_switches = "Dash Switches"
 seekers       = "Seekers"
-keys          = "Keys"
 bird          = "Bird"
 
 cannot_access = "Cannot Access"

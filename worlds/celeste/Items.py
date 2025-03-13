@@ -15,7 +15,7 @@ level_item_lists: Dict[str, Set[str]] = {
     "2b": {ItemName.springs, ItemName.dream_blocks, ItemName.dash_refills, ItemName.coins, ItemName.blue_cassette_blocks},
     "2c": {ItemName.springs, ItemName.dream_blocks, ItemName.dash_refills, ItemName.coins},
 
-    "3a": {ItemName.springs, ItemName.keys, ItemName.sinking_platforms, ItemName.dash_refills, ItemName.coins, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks},
+    "3a": {ItemName.springs, ItemName.sinking_platforms, ItemName.dash_refills, ItemName.coins, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks},
     "3b": {ItemName.springs, ItemName.dash_refills, ItemName.sinking_platforms, ItemName.coins, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks},
     "3c": {ItemName.dash_refills, ItemName.sinking_platforms, ItemName.coins},
 
@@ -23,15 +23,15 @@ level_item_lists: Dict[str, Set[str]] = {
     "4b": {ItemName.blue_boosters, ItemName.moving_platforms, ItemName.move_blocks, ItemName.springs, ItemName.coins, ItemName.blue_clouds, ItemName.pink_clouds, ItemName.dash_refills, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks},
     "4c": {ItemName.blue_boosters, ItemName.move_blocks, ItemName.dash_refills, ItemName.pink_clouds},
 
-    "5a": {ItemName.swap_blocks, ItemName.red_boosters, ItemName.dash_switches, ItemName.keys, ItemName.dash_refills, ItemName.coins, ItemName.springs, ItemName.torches, ItemName.seekers, ItemName.theo_crystal, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks},
-    "5b": {ItemName.swap_blocks, ItemName.red_boosters, ItemName.dash_switches, ItemName.keys, ItemName.dash_refills, ItemName.coins, ItemName.springs, ItemName.torches, ItemName.seekers, ItemName.theo_crystal, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks},
+    "5a": {ItemName.swap_blocks, ItemName.red_boosters, ItemName.dash_switches, ItemName.dash_refills, ItemName.coins, ItemName.springs, ItemName.torches, ItemName.seekers, ItemName.theo_crystal, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks},
+    "5b": {ItemName.swap_blocks, ItemName.red_boosters, ItemName.dash_switches, ItemName.dash_refills, ItemName.coins, ItemName.springs, ItemName.torches, ItemName.seekers, ItemName.theo_crystal, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks},
     "5c": {ItemName.swap_blocks, ItemName.red_boosters, ItemName.dash_switches, ItemName.dash_refills},
 
     "6a": {ItemName.feathers, ItemName.kevin_blocks, ItemName.dash_refills, ItemName.bumpers, ItemName.springs, ItemName.badeline_boosters, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks},
     "6b": {ItemName.feathers, ItemName.kevin_blocks, ItemName.dash_refills, ItemName.bumpers, ItemName.coins, ItemName.springs, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks},
     "6c": {ItemName.feathers, ItemName.kevin_blocks, ItemName.dash_refills, ItemName.bumpers},
 
-    "7a": {ItemName.springs, ItemName.dash_refills, ItemName.badeline_boosters, ItemName.traffic_blocks, ItemName.coins, ItemName.dream_blocks, ItemName.sinking_platforms, ItemName.blue_boosters, ItemName.blue_clouds, ItemName.pink_clouds, ItemName.move_blocks, ItemName.moving_platforms, ItemName.swap_blocks, ItemName.red_boosters, ItemName.keys, ItemName.dash_switches, ItemName.feathers, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks},
+    "7a": {ItemName.springs, ItemName.dash_refills, ItemName.badeline_boosters, ItemName.traffic_blocks, ItemName.coins, ItemName.dream_blocks, ItemName.sinking_platforms, ItemName.blue_boosters, ItemName.blue_clouds, ItemName.pink_clouds, ItemName.move_blocks, ItemName.moving_platforms, ItemName.swap_blocks, ItemName.red_boosters, ItemName.dash_switches, ItemName.feathers, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks},
     "7b": {ItemName.springs, ItemName.dash_refills, ItemName.badeline_boosters, ItemName.traffic_blocks, ItemName.coins, ItemName.dream_blocks, ItemName.moving_platforms, ItemName.blue_boosters, ItemName.blue_clouds, ItemName.pink_clouds, ItemName.move_blocks, ItemName.swap_blocks, ItemName.red_boosters, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks},
     "7c": {ItemName.springs, ItemName.dash_refills, ItemName.badeline_boosters, ItemName.coins, ItemName.pink_clouds},
 
@@ -44,7 +44,7 @@ level_item_lists: Dict[str, Set[str]] = {
     "9c": {ItemName.dash_refills, ItemName.bumpers, ItemName.core_toggles, ItemName.core_blocks, ItemName.traffic_blocks, ItemName.dream_blocks, ItemName.pink_clouds, ItemName.swap_blocks, ItemName.kevin_blocks},
 
     # Farewell Pre/Post Empty Space
-    "10a": {ItemName.blue_clouds, ItemName.badeline_boosters, ItemName.dash_refills, ItemName.double_dash_refills, ItemName.swap_blocks, ItemName.springs, ItemName.pufferfish, ItemName.coins, ItemName.dream_blocks, ItemName.jellyfish, ItemName.red_boosters, ItemName.keys, ItemName.dash_switches, ItemName.move_blocks, ItemName.breaker_boxes, ItemName.traffic_blocks},
+    "10a": {ItemName.blue_clouds, ItemName.badeline_boosters, ItemName.dash_refills, ItemName.double_dash_refills, ItemName.swap_blocks, ItemName.springs, ItemName.pufferfish, ItemName.coins, ItemName.dream_blocks, ItemName.jellyfish, ItemName.red_boosters, ItemName.dash_switches, ItemName.move_blocks, ItemName.breaker_boxes, ItemName.traffic_blocks},
     "10b": {ItemName.dream_blocks, ItemName.badeline_boosters, ItemName.dash_refills, ItemName.double_dash_refills, ItemName.kevin_blocks, ItemName.coins, ItemName.traffic_blocks, ItemName.move_blocks, ItemName.blue_boosters, ItemName.springs, ItemName.feathers, ItemName.swap_blocks, ItemName.red_boosters, ItemName.core_blocks, ItemName.fire_ice_balls, ItemName.kevin_blocks, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks, ItemName.yellow_cassette_blocks, ItemName.green_cassette_blocks, ItemName.breaker_boxes, ItemName.pufferfish, ItemName.jellyfish},
 }
 
@@ -196,7 +196,6 @@ interactable_item_data_table: Dict[str, CelesteItemData] = {
 
     ItemName.dash_switches: CelesteItemData(celeste_base_id + 0x200 + 0x1C, ItemClassification.progression),
     ItemName.seekers:       CelesteItemData(celeste_base_id + 0x200 + 0x1D, ItemClassification.progression),
-    ItemName.keys:          CelesteItemData(celeste_base_id + 0x200 + 0x1E, ItemClassification.progression),
 }
 
 def add_checkpoint_to_table(id: int, name: str):
