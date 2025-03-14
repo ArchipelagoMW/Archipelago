@@ -1,5 +1,5 @@
 import io
-import os, json, re, random
+import os, json, re
 import pathlib
 import sys
 from typing import Any
@@ -88,7 +88,7 @@ def normalizeRounding(n):
 
 # gauss random in [0, r] range
 # the higher the slope, the less probable extreme values are.
-def randGaussBounds(r, slope=5):
+def randGaussBounds(random, r, slope=5):
     r = float(r)
     n = normalizeRounding(random.gauss(r/2, r/slope))
     if n < 0:
@@ -111,7 +111,7 @@ def getRangeDict(weightDict):
 
     return rangeDict
 
-def chooseFromRange(rangeDict):
+def chooseFromRange(rangeDict, random):
     r = random.random()
     val = None
     for v in sorted(rangeDict, key=rangeDict.get):
