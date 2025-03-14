@@ -111,7 +111,7 @@ def set_entrance_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Jupiter_Beacon_Lit, player))
 
     add_rule(world.get_entrance(EntranceName.ShamanVillageCaveToShamanVillage),
-             lambda state: state.has(ItemName.Whirlwind, player))
+             lambda state: state.has(ItemName.Whirlwind, player) or state.has_all([ItemName.Lifting_Gem, ItemName.Frost_Jewel], player))
 
     add_rule(world.get_entrance(EntranceName.WesternSeaToProx),
              lambda state: state.has(ItemName.Magma_Ball, player))
@@ -576,7 +576,7 @@ def set_access_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Moapa_defeated, player))
 
     add_rule(world.get_location(LocationName.Shaman_Village_Hard_Nut),
-             lambda state: state.has(ItemName.Shamans_Rod, player))
+             lambda state: state.has_all([ItemName.Shamans_Rod, ItemName.Whirlwind], player))
 
     add_rule(world.get_location(LocationName.Shaman_Village_Spirit_Gloves),
              lambda state: state.has(ItemName.Growth, player))
@@ -592,7 +592,7 @@ def set_access_rules(world: 'GSTLAWorld'):
              state.has(ItemName.Lifting_Gem, player) and state.has(ItemName.Whirlwind, player) and state.has(ItemName.Reveal, player))
     
     add_rule(world.get_location(LocationName.Shaman_Village_Moapa_fight),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 3 and state.has(ItemName.Shamans_Rod, player))
+             lambda state: state.count_group(ItemType.Character.name, player) >= 3 and state.has_all([ItemName.Shamans_Rod, ItemName.Whirlwind], player))
 
     #Atteka Inlet
     add_rule(world.get_location(LocationName.Geode),
