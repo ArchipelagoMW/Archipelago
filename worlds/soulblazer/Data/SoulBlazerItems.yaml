@@ -473,302 +473,302 @@ fnpc-releases:
   bid: 253
   coperand: 47
   dclassification: 0
-  edescription: Releses the wife of the lonely old man who was reincarnated as a goat. Has no use.
-- aname: Shy Bird
+  edescription: Grass Valley - Releases the wife of the lonely old man who was reincarnated as a goat. Has no use.
+- aname: Shy Bird with Gift
   bid: 253
   coperand: 55
   dclassification: 1
-  edescription: Releases the shy bird who flies away if you approach from the front. Approach from behind to talk to it and get an item.
+  edescription: Greenwood - Releases the shy bird who flies away if you approach from the front. Approach from behind to talk to it and receive an item.
 - aname: Bird Near Marsh Entrance
   bid: 253
   coperand: 56
   dclassification: 0
-  edescription: Releases the bird near the marsh entrance. Has no use.
+  edescription: Greenwood - Releases the bird near the marsh entrance. Has no use.
 - aname: Walkable Dog
   bid: 253
   coperand: 60
   dclassification: 0
-  edescription: Releases the dog who wants to go on a walk. \"I have as much fun walking people as they do walking me.\"
+  edescription: Greenwood - Releases the dog who wants to go on a walk. Has no use. \"I have as much fun walking people as they do walking me.\"
 - aname: Sniffing Dog
   bid: 253
   coperand: 61
   dclassification: 0
-  edescription: Releases the dog who will tell you where the 💩 is. Has no use.
+  edescription: Greenwood - Releases the dog who will tell you where the 💩 is. Has no use.
 - aname: Woodstin Trio Dog
   bid: 253
   coperand: 63
   dclassification: 1
-  edescription: Releases one of the Woodstin Trio. Release all three for an item.
+  edescription: Greenwood - Releases one of the Woodstin Trio. Release all three for an item.
 - aname: Gift-Giving Mole
   bid: 253
   coperand: 64
   dclassification: 1
-  edescription: Releases the mole being guarded by the Ghost Mole who will give you a gift once you give the ghost mole the ribbon.
+  edescription: Greenwood - Releases the mole being guarded by the Ghost Mole who will give you a gift once you give the ghost mole the ribbon.
 - aname: Not-So-Hungry Squirrel
   bid: 253
   coperand: 65
   dclassification: 1
-  edescription: Releases the Squirrel who lives with the Hungry Squirrel. Will give you an item (for free).
+  edescription: Greenwood - Releases the Squirrel who lives with the Hungry Squirrel. Will give you an item (for free).
 - aname: Hungry Squirrel
   bid: 253
   coperand: 67
   dclassification: 1
-  edescription: Releases the Hungry Squirrel who will give you an item in exchange for Delicious Seeds.
+  edescription: Greenwood - Releases the Hungry Squirrel who will give you an item in exchange for Delicious Seeds.
 - aname: South-East Bird
   bid: 253
   coperand: 70
   dclassification: 0
-  edescription: Releases the bird and stump in the south-east corner of Greenwood. Has no use.
+  edescription: Greenwood - Releases the bird and stump in the south-east corner of Greenwood. Has no use.
 - aname: Mole with Soul
   bid: 253
   coperand: 73
   dclassification: 1
-  edescription: Releases the Mole who is from the sky (like you). Will give you a soul/item.
+  edescription: Greenwood - Releases the Mole who is from the sky (like you). Will give you a soul/item.
 - aname: Woodstin Trio Deer
   bid: 253
   coperand: 74
   dclassification: 1
-  edescription: Releases the first member of the Woodstin Crew (huh!). Release all three for an item.
-- aname: First Crocodile (to sleepy bird)
+  edescription: Greenwood - Releases the first member of the Woodstin Crew (huh!). Release all three for an item.
+- aname: Center Island Crocodile
   bid: 253
   coperand: 78
   dclassification: 1
-  edescription: ''
-- aname: Squirrel
+  edescription: Greenwood - Releases the Crocodile leading to the center island. You need to talk to him before you can cross. Required to reach the graveyard.
+- aname: Squirrel in West Tree
   bid: 253
   coperand: 79
   dclassification: 0
-  edescription: ''
-- aname: Greenwood's Guardian (leads to Act 3)
+  edescription: Greenwood - Releases squirrel in the west tree house. Has no use.
+- aname: Greenwood's Guardian
   bid: 253
   coperand: 80
   dclassification: 1
-  edescription: ''
-- aname: Hole leading to dreaming stump
+  edescription: Greenwood - Releases Greenwood's Guardian. He'll give you an item and open the way to the next world.
+- aname: Hole to Sleepy Stump
   bid: 253
   coperand: 81
   dclassification: 1
-  edescription: ''
-- aname: Dog 4
+  edescription: Greenwood - Releases the center mole hole leading to the island with the sleepy stump. Also releases the Ghost Mole who wants the Mole's Ribbon.
+- aname: Dog Waiter
   bid: 253
   coperand: 86
   dclassification: 0
-  edescription: ''
-- aname: Squirrel (leads to Ice Armor chest)
+  edescription: Greenwood - Releases the Dog Waiter (now YOU are on the menu). Has no use.
+- aname: Sleepy Stump
   bid: 253
   coperand: 88
   dclassification: 1
-  edescription: ''
-- aname: Squirrel 2
+  edescription: Greenwood - Releases the sleeping stump (and clueless squirrel). Enter the stump's dream to open the path to the chest in the north-east corner.
+- aname: Cafe Squirrel
   bid: 253
   coperand: 89
   dclassification: 0
-  edescription: ''
-- aname: Dog 5
+  edescription: Greenwood - Releases the squirrel at the cafe who will follow you around after being talked to. Has no use.
+- aname: Graveyard Guard Dog
   bid: 253
   coperand: 90
   dclassification: 0
-  edescription: ''
-- aname: Second Crocodile (to sleepy bird)
+  edescription: Greenwood - Releases the dog guarding the graveyard. Has no use.
+- aname: Graveyard Crocodile
   bid: 253
   coperand: 91
   dclassification: 1
-  edescription: ''
-- aname: Mole 2
+  edescription: Greenwood - Releases the crocodile leading from the center island to the graveyard. Needed to reach the Sleepy Bird.
+- aname: Peekaboo Mole
   bid: 253
   coperand: 92
   dclassification: 0
-  edescription: ''
+  edescription: Greenwood - Releases the Peekaboo Mole (still not surprised) and the mole hole on the far left leading to the central west island. Has no logical use.
 - aname: Woodstin Trio Squirrel
   bid: 253
   coperand: 93
   dclassification: 1
-  edescription: Releases the leader of the Woodstin Trio (you know him well). Release all three for an item.
-- aname: Sleepy Bird (unlocks Greenwood Leaf)
+  edescription: Greenwood - Releases the leader of the Woodstin Trio (you know him well). Release all three for an item.
+- aname: Sleepy Bird
   bid: 253
   coperand: 97
   dclassification: 1
-  edescription: ''
-- aname: Monmo's hole
+  edescription: Greenwood - Releases the Sleey Bird in the graveyard. Enter its dreams to open the path to Turbo's remains.
+- aname: Hole for the Outside Mole
   bid: 253
   coperand: 98
   dclassification: 1
-  edescription: ''
-- aname: Deer (unlocks Magic Bell crystal)
+  edescription: Greenwood - Releases the left hole. When you have also released the Outside Mole you can lead them back to their hole and claim a reward.
+- aname: Master Crystal Deer
   bid: 253
   coperand: 99
   dclassification: 1
-  edescription: ''
-- aname: Bird 3
+  edescription: Greenwood - Releases the deer on the central west island who will knock the master crystal down from the tree. The deer can't use the mole hole so you will also need to unlock the west crocodile.
+- aname: North-East Bird
   bid: 253
   coperand: 100
   dclassification: 0
-  edescription: ''
-- aname: Crocodile (to Deer)
+  edescription: Greenwood - Releases the bird in the north-east corner. Has no use.
+- aname: West Crocodile
   bid: 253
   coperand: 111
   dclassification: 1
-  edescription: ''
+  edescription: Greenwood - Releases the crocodile leading to the central west island. Required for the deer to knock the master crystal down from the tree.
 - aname: Monmo the Mole
   bid: 253
   coperand: 114
   dclassification: 1
-  edescription: ''
-- aname: Dolphin
+  edescription: Greenwood - Releases the outside mole. Guide them home to get a reward. Also requires the Hole for the Outside Mole.
+- aname: Dolphin in North-West House
   bid: 253
   coperand: 124
   dclassification: 0
-  edescription: ''
-- aname: Angelfish
+  edescription: Releases the sleeping dolphin in the North-West House. Enter his dream for a sad story. Has no use.
+- aname: Curious Angelfish
   bid: 253
   coperand: 131
   dclassification: 0
-  edescription: ''
-- aname: Mermaid (gives Medical Herb)
+  edescription: Releases the Curious Angelfish in the south-east who wants to see what the world looks like from above the water. Has no use.
+- aname: North-East Mermaid with Gift
   bid: 253
   coperand: 132
   dclassification: 1
-  edescription: ''
-- aname: Angelfish 2
+  edescription: Releases the mermaid in the north-east house who will give you an item.
+- aname: Jumping Angelfish
   bid: 253
   coperand: 134
   dclassification: 0
-  edescription: ''
-- aname: Mermaid (unlocks Lue's prison)
+  edescription: Releases the angelfish who can jump real high (Look at him go!) Has no use.
+- aname: West Mermaid Guard
   bid: 253
   coperand: 138
   dclassification: 1
-  edescription: ''
-- aname: Mermaid 2
+  edescription: Releases the sympathetic mermaid guard who will let you in to Lue's Prison. Also releases the central west platform by the jail.
+- aname: Mermaid Dancer Nanna
   bid: 253
   coperand: 139
   dclassification: 0
-  edescription: ''
-- aname: Dolphin (saves Lue from prison)
+  edescription: Releases Nanna the mermaid dancer. Has no use.
+- aname: Prison Breaking Dolphin
   bid: 253
   coperand: 140
   dclassification: 1
-  edescription: ''
-- aname: Mermaid Statue (leading to Blester)
+  edescription: Releases the dolphin which will break Lue the Dolphin out of Jail.
+- aname: Mermaid Statue to Blester
   bid: 253
   coperand: 141
   dclassification: 1
-  edescription: ''
-- aname: Mermaid (gives Red-Hot Stick)
+  edescription: Releases the North-East Mermaid statue which will open the path to Blester.
+- aname: Common House Top Mermaid with Gift
   bid: 253
   coperand: 142
   dclassification: 1
-  edescription: ''
-- aname: Lue (gives Thunder Ring)
+  edescription: Releases the mermaid in the top of the central room in the common house who will give you a gift.
+- aname: Lue the Dolphin
   bid: 253
   coperand: 143
   dclassification: 1
-  edescription: ''
-- aname: Mermaid 3
+  edescription: Releases Lue the Dolphin. Bust them out of jail to get an item.
+- aname: Mermaid Queen's Attendant Left
   bid: 253
   coperand: 146
   dclassification: 0
-  edescription: ''
-- aname: Mermaid Nana
+  edescription: Releases the Mermaid attending the queen (on the left). Has no use.
+- aname: Mermaid in North-West House
   bid: 253
   coperand: 149
   dclassification: 0
-  edescription: ''
-- aname: Mermaid 4
+  edescription: Releases the north-west house and the mermaid inside. Has no use.
+- aname: Mermaid Dance Troupe Leader
   bid: 253
   coperand: 153
-  dclassification: 0
-  edescription: ''
-- aname: Dolphin (unlocks north-eastern platform)
+  dclassification: 1
+  edescription: Releases the North-West platform and the Mermaid Dance Troupe Leader.
+- aname: Dolphin to North-East Platform
   bid: 253
   coperand: 155
   dclassification: 1
-  edescription: ''
-- aname: Mermaid Statue (leading to Rockbird)
+  edescription: Releases the dolphin and the North-East platform. Required to reach the North-East Mermaid with Gift.
+- aname: Mermaid Statue to Rockbird
   bid: 253
   coperand: 157
   dclassification: 1
-  edescription: ''
-- aname: Mermaid (gives Bubble Armor)
+  edescription: Releases the South-East Mermaid statue which will open the path to Rockbird.
+- aname: Common House Main Mermaid with Gift
   bid: 253
   coperand: 161
   dclassification: 1
-  edescription: ''
-- aname: Mermaid 5
+  edescription: Releases the big common house in the south, and the main mermaid in the central room who will give you an item. Required to reach the Seabed.
+- aname: East Mermaid Guard
   bid: 253
   coperand: 164
-  dclassification: 0
-  edescription: ''
-- aname: Mermaid 6
+  dclassification: 1
+  edescription: Releases the east platform with the unsympathetic mermaid guard who will NOT let you in to Lue's Prison. Rarely required as an altrenate path to the south-east platform.
+- aname: Mermaid Dancer Kanna
   bid: 253
   coperand: 165
   dclassification: 0
-  edescription: ''
-- aname: Mermaid by the Mermaid Tears chest
+  edescription: Releases Kanna the mermaid dancer. Has no use.
+- aname: Common House East Room Mermaid
   bid: 253
   coperand: 167
   dclassification: 0
-  edescription: ''
-- aname: Mermaid Statue (leading to Durean)
+  edescription: Releaes the mermaid in the east room of the big common house. Has no use.
+- aname: Mermaid Statue to Durean
   bid: 253
   coperand: 171
   dclassification: 1
-  edescription: ''
-- aname: Angelfish 3
+  edescription: Releases the South-West Mermaid statue which will open the path to Durean.
+- aname: Angelfish South of Central Platform
   bid: 253
   coperand: 173
   dclassification: 0
-  edescription: ''
-- aname: Angelfish / Soul of Shield
+  edescription: Releases the Angelfish South of the Central Platform. Has no use.
+- aname: Angelfish with Soul
   bid: 253
   coperand: 177
   dclassification: 1
-  edescription: ''
-- aname: Mermaid (gives Magic Flare)
+  edescription: Releases south-east and the angelfish who is from the sky (like you). Will give you a soul/item. 
+- aname: Common House West Room Mermaid with Gift.
   bid: 253
   coperand: 181
   dclassification: 1
-  edescription: ''
-- aname: Mermaid Queen (leads to Act 4)
+  edescription: Releases the mermaid in the hidden west room of the common house who will give you an item.
+- aname: Mermaid Queen
   bid: 253
   coperand: 182
   dclassification: 1
-  edescription: ''
-- aname: Mermaid Statue (leading to Ghost Ship)
+  edescription: Releases the Mermaid Queen. She'll give you an item and open the way to the next world.
+- aname: Mermaid Statue to Ghost Ship
   bid: 253
   coperand: 185
   dclassification: 1
-  edescription: ''
-- aname: Sleeping Dolphin (unlocks secret cave)
+  edescription: Releases the North-West Mermaid statue which will open the path to the Ghost Ship.
+- aname: Sleepy Dolphin
   bid: 253
   coperand: 187
   dclassification: 1
-  edescription: ''
-- aname: Mermaid 7
+  edescription: Releases the Sleepy Dolphin in prison area. Enter the dolphin's dream and give them the Big Pearl to open the path to the secret cove.
+- aname: Mermaid Queen's Attendant Right
   bid: 253
   coperand: 189
   dclassification: 0
-  edescription: ''
-- aname: Angelfish 4
+  edescription: Releases the Mermaid attending the queen (on the right). Has no use.
+- aname: Angelfish East of Central Platform
   bid: 253
   coperand: 190
   dclassification: 0
-  edescription: ''
-- aname: Mermaid 8
+  edescription: Releases the Angelfish East of the Central Platform. Has no use.
+- aname: Swimming Common House Mermaid
   bid: 253
   coperand: 192
   dclassification: 0
-  edescription: ''
-- aname: Dolphin (leading to Big Pearl chest)
+  edescription: Releases the mermaid swimming in the big common house's central room. Has no use.
+- aname: Dolphin to West Chest
   bid: 253
   coperand: 193
   dclassification: 1
-  edescription: ''
-- aname: Mermaid 9
+  edescription: Releases the South-West platform and the dolphin who will give you a ride to the secluded platform with a treasure chest.
+- aname: Mermaid Dancer Anna
   bid: 253
   coperand: 194
   dclassification: 0
-  edescription: ''
+  edescription: Releases Anna the mermaid dancer. Has no use.
 - aname: Grandpa
   bid: 253
   coperand: 201
