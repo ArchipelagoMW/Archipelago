@@ -156,7 +156,7 @@ dinventory-items:
   bid: 31
   coperand: 0
   dclassification: 1
-  edescription: Give to the mole in Greenwood blocking the way to a gift-giving mole.
+  edescription: Give to the Ghost Mole in Greenwood blocking the way to a Gift-Giving Mole.
 - aname: the Big Pearl
   bid: 32
   coperand: 0
@@ -474,61 +474,61 @@ fnpc-releases:
   coperand: 47
   dclassification: 0
   edescription: Releses the wife of the lonely old man who was reincarnated as a goat. Has no use.
-- aname: Bird (gives Red-Hot Mirror)
+- aname: Shy Bird
   bid: 253
   coperand: 55
   dclassification: 1
-  edescription: ''
-- aname: Bird
+  edescription: Releases the shy bird who flies away if you approach from the front. Approach from behind to talk to it and get an item.
+- aname: Bird Near Marsh Entrance
   bid: 253
   coperand: 56
   dclassification: 0
-  edescription: ''
-- aname: Dog
+  edescription: Releases the bird near the marsh entrance. Has no use.
+- aname: Walkable Dog
   bid: 253
   coperand: 60
   dclassification: 0
-  edescription: ''
-- aname: Dog 2
+  edescription: Releases the dog who wants to go on a walk. \"I have as much fun walking people as they do walking me.\"
+- aname: Sniffing Dog
   bid: 253
   coperand: 61
   dclassification: 0
-  edescription: ''
-- aname: Woodstin Trio dog
+  edescription: Releases the dog who will tell you where the 💩 is. Has no use.
+- aname: Woodstin Trio Dog
   bid: 253
   coperand: 63
   dclassification: 1
-  edescription: ''
-- aname: Mole (gives Shield Bracelet)
+  edescription: Releases one of the Woodstin Trio. Release all three for an item.
+- aname: Gift-Giving Mole
   bid: 253
   coperand: 64
   dclassification: 1
-  edescription: ''
-- aname: Squirrel (gives Emblem C)
+  edescription: Releases the mole being guarded by the Ghost Mole who will give you a gift once you give the ghost mole the ribbon.
+- aname: Not-So-Hungry Squirrel
   bid: 253
   coperand: 65
   dclassification: 1
-  edescription: ''
-- aname: Squirrel (trades Psycho Sword)
+  edescription: Releases the Squirrel who lives with the Hungry Squirrel. Will give you an item (for free).
+- aname: Hungry Squirrel
   bid: 253
   coperand: 67
   dclassification: 1
-  edescription: ''
-- aname: Bird 2
+  edescription: Releases the Hungry Squirrel who will give you an item in exchange for Delicious Seeds.
+- aname: South-East Bird
   bid: 253
   coperand: 70
   dclassification: 0
-  edescription: ''
-- aname: Mole / Soul of Light (Greenwood Leaf)
+  edescription: Releases the bird and stump in the south-east corner of Greenwood. Has no use.
+- aname: Mole with Soul
   bid: 253
   coperand: 73
   dclassification: 1
-  edescription: ''
-- aname: Woodstin Trio deer
+  edescription: Releases the Mole who is from the sky (like you). Will give you a soul/item.
+- aname: Woodstin Trio Deer
   bid: 253
   coperand: 74
   dclassification: 1
-  edescription: ''
+  edescription: Releases the first member of the Woodstin Crew (huh!). Release all three for an item.
 - aname: First Crocodile (to sleepy bird)
   bid: 253
   coperand: 78
@@ -579,11 +579,11 @@ fnpc-releases:
   coperand: 92
   dclassification: 0
   edescription: ''
-- aname: Woodstin Trio squirrel
+- aname: Woodstin Trio Squirrel
   bid: 253
   coperand: 93
   dclassification: 1
-  edescription: ''
+  edescription: Releases the leader of the Woodstin Trio (you know him well). Release all three for an item.
 - aname: Sleepy Bird (unlocks Greenwood Leaf)
   bid: 253
   coperand: 97
