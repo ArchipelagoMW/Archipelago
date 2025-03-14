@@ -63,26 +63,176 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
     total = min(len(item_pool), len(locations))
     placed = 0
 
+    # Fill is performed in batches so that sweeping to produce a maximum exploration state can begin from the state at
+    # the start of the batch, rather than having to sweep from `base_state`.
+
+    # Batch constants:
+    # Pick no fewer than this many items per player for each batch, unless that player does not have enough items
+    # remaining. This is a magic number and will typically be used for most batches.
+    min_batch_size = 5
+    # With a low number of players, try to keep the total number of items in the batch from being too small, to prevent
+    # fills with few players from creating lots of very small batches.
+    min_total_items_per_batch = 40
+    # Gradually increase the number of items placed in each batch until only the player with the largest item pool has
+    # items remaining, at which point, place 2% of their original item pool in each batch. Most fills won't go above
+    # `min_batch_size`, so this is mostly to account for progression fill with worlds with very large numbers of
+    # advancement items that are likely to individually have minimal effect on progression.
+    # 0-274 items: 5  # This will be most fills.
+    # 275-324 items: 6
+    # 325-374 items: 7  # Few worlds will be higher than this in progression fill.
+    # 475-524 items: 10
+    # 975-1024 items: 20
+    # etc.
+    largest_player_pool = max(map(len, reachable_items.values()), default=0)
+    max_one_item_per_player_batch_size = largest_player_pool * 0.02
+    num_players = len(reachable_items)
+    if num_players > 0 and min_batch_size * num_players < min_total_items_per_batch:
+        min_batch_size = min_total_items_per_batch // num_players
+
+    # Per-batch variables:
+    # The base state for the current batch. Collects all items yet to be placed which are not part of the current batch.
+    # Should never be `None` after the first batch has been created.
+    batch_base_state: typing.Optional[CollectionState] = None
+    # The sweep state for the current batch. Starts from `batch_base_state` and then sweeps to collect items from
+    # reachable locations. If a swap changes the item at a location it has collected from, the state may be re-created.
+    batch_sweep_state: typing.Optional[CollectionState] = None
+    # The number of remaining placements in the current batch. Once this reaches zero, a new batch is
+    # created.
+    batched_placements_remaining = 0
+    # The items remaining to be placed in the current batch.
+    batch_item_pool: typing.List[Item] = []
+    # Indicates how many empty spaces for items there are, per player, in the current batch.
+    batch_empty_spaces: typing.Dict[int, int] = {}
+
+    # one_item_per_player=False per-batch variables:
+    # The number of items, per-player, remaining in the batch. Decreased whenever an item is placed, increased whenever
+    # an item is un-placed due to swap and there was empty space in the batch to add into the batch.
+    items_per_player_in_batch: typing.Dict[int, int] = {}
+    # Special value carried over from the previous batch indicating which player needs to place an item at the start of
+    # the next batch.
+    next_player_override: typing.Optional[int] = None
+
     while any(reachable_items.values()) and locations:
+        if batched_placements_remaining <= 0:
+            # Create a new batch.
+
+            # Calculate the number of items, per player, to place in the new batch.
+
+            # Get the count of and individual lengths of non-empty remaining items pools.
+            nonzero_remaining_per_player = [len(items) for items in reachable_items.values() if items]
+            num_players_with_remaining_items = len(nonzero_remaining_per_player)
+
+            if num_players_with_remaining_items == 0:
+                # No more items to place.
+                break
+
+            # Find the length of the largest remaining item pool.
+            largest_remaining = max(nonzero_remaining_per_player)
+            if num_players_with_remaining_items > 1:
+                # Adjust the batch size by the ratio of the average remaining item pool length to the largest remaining
+                # item pool length.
+                # Find the average length of the remaining item pools.
+                average_remaining = sum(nonzero_remaining_per_player) / num_players_with_remaining_items
+                # As the average remaining item pool length approaches the largest remaining item pool length, the batch
+                # size approaches `max_one_item_per_player_batch_size`.
+                batch_size_float = max_one_item_per_player_batch_size * average_remaining / largest_remaining
+            else:
+                batch_size_float = max_one_item_per_player_batch_size
+
+            # Round to the nearest integer.
+            batch_size = round(batch_size_float)
+            # Limit the minimum number of items per player in the batch.
+            batch_size = max(min_batch_size, batch_size)
+            # Don't make the batch larger than the largest remaining item pool.
+            batch_size = min(batch_size, largest_remaining)
+
+            # Set per-batch variables.
+
+            # If a player has fewer items remaining than the size of the batch, then that player has some empty spaces
+            # for items in the batch. This allows for items belonging to that player, that were displaced by a swap, to
+            # be added to the current batch until the spaces are used up.
+            batch_empty_spaces = {player: batch_size - min(len(player_items), batch_size)
+                                  for player, player_items in reachable_items.items()}
+
+            # Iterate the first `batch_size` items of each player's remaining items into a list of all items that will
+            # be placed in the current batch.
+            # Items to place are picked from the end of each player's item pool, so, to get the items in the order they
+            # will be placed, the item pools must be iterated in reverse.
+            item_iters = [reversed(items) for items in reachable_items.values() if items]
+            batch_item_pool = [item for item_iter in item_iters
+                               for item in itertools.islice(item_iter, batch_size)]
+
+            # Collect the remaining items, which won't be placed in this batch, into a copy of `base_state` and make
+            # that the base state for the batch.
+            batch_base_state = base_state.copy()
+            for item_iter in item_iters:
+                for item in item_iter:
+                    batch_base_state.collect(item, True)
+
+            if one_item_per_player:
+                batched_placements_remaining = batch_size
+            else:
+                items_per_player_in_batch = {player: batch_size - empty_spaces
+                                             for player, empty_spaces in batch_empty_spaces.items()}
+                batched_placements_remaining = sum(items_per_player_in_batch.values())
+
+            # If there was an existing batch sweep state, it must be re-created because it will have collected items
+            # that are being placed in the current batch. The placement loop is responsible for creating the sweep state
+            # because the sweep state may get destroyed by a swap.
+            batch_sweep_state = None
+
         if one_item_per_player:
             # grab one item per player
             items_to_place = [items.pop()
                               for items in reachable_items.values() if items]
         else:
-            next_player = multiworld.random.choice([player for player, items in reachable_items.items() if items])
-            items_to_place = []
-            if item_pool:
-                items_to_place.append(reachable_items[next_player].pop())
+            # grab the next item
+            if next_player_override is None:
+                next_player = multiworld.random.choice([player for player, items in reachable_items.items() if items])
+                player_remaining_items_in_batch = items_per_player_in_batch[next_player]
 
+                if player_remaining_items_in_batch == 0:
+                    # This player still has items to place, but their items in the batch have been exhausted.
+                    # A new batch needs to be built. This prevents unfairness in picked items at the boundary between
+                    # two batches.
+                    batched_placements_remaining = 0
+                    next_player_override = next_player
+                    continue
+            else:
+                # We are starting a new batch because we tried to pick an item that was not in the previous batch.
+                next_player = next_player_override
+                # Clear the override.
+                next_player_override = None
+                player_remaining_items_in_batch = items_per_player_in_batch[next_player]
+                assert player_remaining_items_in_batch > 0
+
+            items_to_place = [reachable_items[next_player].pop()]
+            items_per_player_in_batch[next_player] = player_remaining_items_in_batch - 1
         for item in items_to_place:
+            for p, batch_pool_item in enumerate(batch_item_pool):
+                if batch_pool_item is item:
+                    batch_item_pool.pop(p)
+                    break
             for p, pool_item in enumerate(item_pool):
                 if pool_item is item:
                     item_pool.pop(p)
                     break
 
+        batched_placements_remaining -= 1
+
+        explore_locations = multiworld.get_filled_locations(item.player) if single_player_placement else None
+
+        # Create the initial batch sweep state or recreate it if it was destroyed by a swap.
+        if batch_sweep_state is None:
+            assert batch_base_state is not None, "A batch should always exist once placements have started"
+            # `locations=None` defaults to `multiworld.get_filled_locations()`, so only get it once for both the batch
+            # sweep state and the maximum exploration state.
+            if explore_locations is None:
+                explore_locations = multiworld.get_filled_locations()
+            batch_sweep_state = sweep_from_pool(batch_base_state, locations=explore_locations)
+
         maximum_exploration_state = sweep_from_pool(
-            base_state, item_pool + unplaced_items, multiworld.get_filled_locations(item.player)
-            if single_player_placement else None)
+            batch_sweep_state, batch_item_pool + unplaced_items, explore_locations)
 
         has_beaten_game = multiworld.has_beaten_game(maximum_exploration_state)
 
@@ -128,7 +278,15 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
 
                         location.item = None
                         placed_item.location = None
-                        swap_state = sweep_from_pool(base_state, [placed_item, *item_pool] if unsafe else item_pool,
+                        # Use the batch's sweep state as the base state if it has not explored the location of the swap
+                        # attempt.
+                        if (batch_sweep_state is not None
+                                and location not in batch_sweep_state.advancements):
+                            swap_base_state = batch_sweep_state
+                        else:
+                            swap_base_state = batch_base_state
+                        swap_state = sweep_from_pool(swap_base_state,
+                                                     [placed_item, *batch_item_pool] if unsafe else batch_item_pool,
                                                      multiworld.get_filled_locations(item.player)
                                                      if single_player_placement else None)
                         # unsafe means swap_state assumes we can somehow collect placed_item before item_to_place
@@ -160,6 +318,54 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
 
                                 # cleanup at the end to hopefully get better errors
                                 cleanup_required = True
+
+                                # Determine if the displaced item can be added to the current batch.
+                                empty_spaces_for_items = batch_empty_spaces[placed_item.player]
+                                if empty_spaces_for_items > 0:
+                                    # There are some empty spaces for items in the current batch for this player, so add
+                                    # the item into the current batch.
+                                    batch_item_pool.append(placed_item)
+                                    batch_empty_spaces[placed_item.player] = empty_spaces_for_items - 1
+                                    if not one_item_per_player:
+                                        items_per_player_in_batch[placed_item.player] += 1
+                                        batched_placements_remaining += 1
+                                    # If that batch's sweep state has collected the item from the swapped location, the
+                                    # state is now invalid. It must be re-created because it has collected the displaced
+                                    # item and the displaced item is now in `batch_item_pool`, so the next
+                                    # `maximum_exploration_state` would end up collecting the displaced item twice.
+                                    if (batch_sweep_state is not None
+                                            and spot_to_fill in batch_sweep_state.advancements):
+                                        batch_sweep_state = None
+                                else:
+                                    # There are no empty spaces in the current batch for this player, so the item will
+                                    # need to be placed in a different batch.
+                                    # The batch's base state collects all items which are yet to be placed and which are
+                                    # not going to be placed as part of the batch. The displaced item matches these
+                                    # criteria, so collect the item.
+                                    batch_base_state.collect(placed_item, True)
+                                    # The batch's sweep state is swept from the batch's base state, so it needs to
+                                    # collect the item too, but only if it had not already collected it.
+                                    if batch_sweep_state is not None:
+                                        if spot_to_fill not in batch_sweep_state.advancements:
+                                            # The sweep state had not already collected the un-placed item by sweeping,
+                                            # so collect the item.
+                                            batch_sweep_state.collect(placed_item, True)
+                                        else:
+                                            # The batch's sweep state had already collected the displaced item from
+                                            # `spot_to_fill`.
+                                            # Rather than destroying the batch's sweep state, it can be adjusted.
+                                            # Collect the item being placed if `spot_to_fill` is still reachable.
+                                            if spot_to_fill.can_reach(batch_sweep_state):
+                                                # This is slightly faster than removing `spot_to_fill` from the state's
+                                                # collected advancement locations and making future maximum exploration
+                                                # states sweep to pick up `item_to_place`.
+                                                batch_sweep_state.collect(item_to_place, True)
+                                            else:
+                                                # In rare cases, `spot_to_fill` was only reachable because of the item
+                                                # that was placed at it, e.g. self-locking keys.
+                                                # Future sweeps will have to retry `spot_to_fill`, so remove it from the
+                                                # state's set of collected advancement locations.
+                                                batch_sweep_state.advancements.remove(spot_to_fill)
 
                                 break
 
