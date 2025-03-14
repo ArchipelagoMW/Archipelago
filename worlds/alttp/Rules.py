@@ -1219,8 +1219,8 @@ def set_trock_key_rules(multiworld, player):
                     location.place_locked_item(item)
                     toss_junk_item(multiworld, player)
 
-    if world.worlds[player].options.accessibility != 'full':
-        set_always_allow(world.get_location('Turtle Rock - Big Key Chest', player), lambda state, item: item.name == 'Small Key (Turtle Rock)' and item.player == player
+    if multiworld.worlds[player].options.accessibility != 'full':
+        set_always_allow(multiworld.get_location('Turtle Rock - Big Key Chest', player), lambda state, item: item.name == 'Small Key (Turtle Rock)' and item.player == player
                 and state.can_reach(state.multiworld.get_region('Turtle Rock (Second Section)', player)))
 
 
