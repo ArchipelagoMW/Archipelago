@@ -1198,7 +1198,7 @@ def set_trock_key_rules(multiworld, player):
             return 6
 
         # If TR is only accessible from the middle, the big key must be further restricted to prevent softlock potential
-        if not can_reach_front and not world.worlds[player].options.small_key_shuffle:
+        if not can_reach_front and not multiworld.worlds[player].options.small_key_shuffle:
             # Must not go in the Big Key Chest - only 1 other chest available and 2+ keys required for all other chests
             forbid_item(multiworld.get_location('Turtle Rock - Big Key Chest', player), 'Big Key (Turtle Rock)', player)
             if not can_reach_big_chest:
