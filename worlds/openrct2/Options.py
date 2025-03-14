@@ -693,6 +693,13 @@ class ShopMaximumTotalCustomers(Range):
     range_end = 2000
     default = 800
 
+class BalanceGuestCounts(OpenRCT2OnToggle):
+    """Attempts to balance the minimum guest requirements to the ride they're attached to. Low throughput rides
+    like Spiral Slides will tend towards the minimum, while high throughput rides like roller coasters will 
+    tend towards the maximum.
+    """
+    display_name = "Randomize Park Values"
+
 class RequiredUniqueRides(Range):
     """Requires specific rides to be built before scenario completion is awarded. These will tend to appear in the later half of the game.
     It's highly recommended to have this set to at least 1!"""
@@ -814,6 +821,7 @@ openrct2_option_groups = [
         ShopMaximumLength,
         ShopMinimumTotalCustomers,
         ShopMaximumTotalCustomers,
+        BalanceGuestCounts,
         SelectedVisibility
     ]),
     OptionGroup("Item & Trap Options", [
@@ -845,6 +853,7 @@ class openRCT2Options(PerGameCommonOptions):
     shop_maximum_length: ShopMaximumLength
     shop_minimum_total_customers: ShopMinimumTotalCustomers
     shop_maximum_total_customers: ShopMaximumTotalCustomers
+    balance_guest_counts: BalanceGuestCounts
     ignore_ride_stat_changes: IgnoreRideStatChanges
     scenario_length: SelectedScenarioLength
     scenario: SelectedScenario
