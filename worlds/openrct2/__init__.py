@@ -380,8 +380,8 @@ class OpenRCT2World(World):
 
             # We'll never have a prereq on the first 31 items or on blood prices
             if number > 31 and unlock["Lives"] == 0:
-                if (self.random.random() < length_modifier) or (
-                        item_table_length * .85 < number):  # Determines if we have a prereq
+                if (self.random.random() < length_modifier) or (# Determines if we have a prereq
+                        item_table_length * .85 < number):  # The last 15% will always have a prereq
                     total_customers = 0 # Handle total customers early, since it can apply on any prereq
                     if self.random.random() < .5: # Coin flip to determine if there's a customer requirement
                         total_customers = round(self.random.uniform(self.options.shop_minimum_total_customers.value, 
@@ -459,6 +459,21 @@ class OpenRCT2World(World):
                             unlock["RidePrereq"] = [self.random.randint(1, 3), category, 0, 0, 0, 0, total_customers]
                         else:
                             unlock["RidePrereq"] = [self.random.randint(1, 10), category, 0, 0, 0, 0, total_customers]
+                    if self.options.balance_guest_counts.value & total_customers > 0: # Balances rides for throughput
+                        min_customers = self.options.shop_minimum_total_customers.value
+                        max_customers = self.options.shop_maximum_total_customers.value
+                        scale = max_customers - min_customers
+                        if unlock["RidePrereq"][1] in item_info["low_throughput"]:
+                            bias_factor = 3 # The higher the factor, the stronger the bais towards small numbers
+                            total_customers = round(min_customers + (scale * (self.random.random() ** bias_factor)))
+                            print("Customer Requirements for " + unlock["RidePrereq"][1] + ": " + str(total_customers))
+                        elif unlock["RidePrereq"][1] in item_info["high_throughput"]:
+                            bias_factor = .4 # The lower the factor, the stronger the bais towards large numbers
+                            total_customers = round(min_customers + (scale * (self.random.random() ** bias_factor)))
+                            print("Customer Requirements for " + unlock["RidePrereq"][1] + ": " + str(total_customers))
+                            #No need to check outside low or high, since we made a random selection at the top
+                        unlock["RidePrereq"][6] = total_customers
+                            
             # Add the shop item to the shop prices
             self.location_prices.append(unlock)
             # Handle unlocked rides
