@@ -9,6 +9,7 @@ import string
 import sys
 import urllib.parse
 import urllib.request
+import re
 from collections import Counter
 from typing import Any, Dict, Tuple, Union
 from itertools import chain
@@ -311,6 +312,7 @@ def update_weights(weights: dict, new_weights: dict, update_type: str, name: str
     cleaned_weights = {}
     for option in new_weights:
         option_name = option.lstrip("+-")
+        option_name = option_name.rstrip("*")
         if option.startswith("+") and option_name in weights:
             cleaned_value = weights[option_name]
             new_value = new_weights[option]
@@ -387,8 +389,80 @@ def roll_linked_options(weights: dict) -> dict:
     return weights
 
 
-def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
-    weights = copy.deepcopy(weights)  # make sure we don't write back to other weights sets in same_settings
+def handle_trigger_math(math_options: Union[dict, str], option_name: str, original_weights: dict):
+    weights = copy.deepcopy(original_weights)
+    options = copy.deepcopy(math_options)
+    if not isinstance(options, dict):
+        options = {str(options): 1}
+    new_dict = {}
+    for name, value in options.items():
+        value_list = []
+        if not isinstance(name, str):
+            raise TypeError(f"Mathematical trigger malformed: {name} is not a string.")
+        temp_name = name.replace(" ", "")
+        # separate first value by matching non-operators at beginning of name.
+        hold_name = re.search(r"^-?[^+\-*/]+", name)
+        if hold_name is None:
+            raise ValueError(f"There is no first value in {name}")
+        split_name = [hold_name[0]]
+        temp_name = temp_name[len(split_name[0]):]
+        while len(temp_name) != 0:
+            # grab next operator/value pair
+            hold_name = re.search(r"^([+\-*/])(-?[^+\-*/]+)", temp_name)
+            if hold_name is None:
+                raise ValueError(f"{name} is malformed.")
+            split_name.append(hold_name.group(1))
+            split_name.append(hold_name.group(2))
+            temp_name = temp_name[len(hold_name[0]):]
+        if len(split_name) % 2 != 1 or len(split_name) < 1:
+            raise ValueError(f"Cannot perform arithmetic, wrong number of arguments: {math_options}")
+        for x in range(0, len(split_name), 2):
+            if re.search(r"[^0-9.\-]", split_name[x]):
+                if split_name[x] in weights:
+                    weights[split_name[x]] = get_choice(split_name[x], weights)
+                    split_name[x] = str(weights[split_name[x]])
+                else:
+                    raise KeyError(f"{split_name[x]} in {name} has not been assigned a value in yaml")
+                if re.search(r"[^0-9.\-]", split_name[x]):
+                    raise ValueError(f"Cannot perform arithmetic, non-numeric value found for {split_name[x]}")
+            if re.search(r"-?[0-9]+\.[0-9]+", split_name[x]):
+                value_list.append(float(split_name[x]))
+            else:
+                value_list.append(int(split_name[x]))
+            if not (-1_000_000 < value_list[x] < 1_000_000):
+                raise ValueError(f"Arithmetic Option out of bounds: "
+                                f"{value_list[0]}, {value_list[1]} must be between -1,000,000 and 1,000,000")
+            if len(split_name) - 1 > x:
+                value_list.append(split_name[x+1])
+        total = value_list[0]
+        if len(value_list) > 1:
+            for x in range(2, len(value_list), 2):
+                if not (-1_000_000 < total < 1_000_000):
+                    raise ValueError(
+                        f"Total value is outside range -1,000,000-1,000,000 before final operation complete.")
+                if value_list[x - 1] == '+':
+                    total += value_list[x]
+                elif value_list[x - 1] == '-':
+                    total -= value_list[x]
+                elif value_list[x - 1] == '*':
+                    total *= value_list[x]
+                else:
+                    if isinstance(total, float) or isinstance(value_list[x], float):
+                        total = total / value_list[x]
+                    else:
+                        total //= value_list[x]
+                if isinstance(total, float):
+                    total = round(total, 6)
+        if total in new_dict:
+            new_dict[total] += value
+        else:
+            new_dict.update({total: value})
+    options = new_dict
+    return weights, options
+
+
+def roll_triggers(old_weights: dict, triggers: list, valid_keys: set) -> dict:
+    weights = copy.deepcopy(old_weights)  # make sure we don't write back to other weights sets in same_settings
     weights["_Generator_Version"] = Utils.__version__
     for i, option_set in enumerate(triggers):
         try:
@@ -409,6 +483,11 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
                     currently_targeted_weights = weights
                     if category_name:
                         currently_targeted_weights = currently_targeted_weights[category_name]
+                    for option_type, option_value in category_options.items():
+                        if option_type.endswith("*"):
+                            temp_weights, category_options[option_type] = \
+                                handle_trigger_math(option_value, option_type[:-1], currently_targeted_weights)
+                            currently_targeted_weights.update(temp_weights)
                     update_weights(currently_targeted_weights, category_options, "Triggered", option_set["option_name"])
             valid_keys.add(key)
         except Exception as e:
