@@ -507,6 +507,23 @@ class SNESRomPath(UserFilePath):
                 raise ValueError(f"File hash does not match for {path}")
 
 
+class NESRomPath(UserFilePath):
+    """Special UserFilePath that ignores a non-optional variable header when validating. Using this will require
+    validating that the rom has a header when loading the rom, and adding one should it be missing."""
+
+    @classmethod
+    def validate(cls, path: str) -> None:
+        with open(path, "rb", buffering=0) as f:
+            if f.read(4) == b"NES\x1A":
+                f.seek(16)
+            else:
+                f.seek(0)
+            try:
+                cls._validate_stream_hashes(f)
+            except ValueError:
+                raise ValueError(f"File hash does not match for {path}")
+
+
 # World-independent setting groups
 
 class GeneralOptions(Group):
