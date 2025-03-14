@@ -879,7 +879,7 @@ class OOTWorld(World):
         def prefill_state(base_state):
             state = base_state.copy()
             for item in self.get_pre_fill_items():
-                self.collect(state, item)
+                state.collect(item, prevent_sweep=True)
             state.sweep_for_advancements(locations=self.get_locations())
             return state
 
@@ -891,7 +891,7 @@ class OOTWorld(World):
         # Set up initial state
         state = CollectionState(self.multiworld)
         for item in self.itempool:
-            self.collect(state, item)
+            state.collect(item, prevent_sweep=True)
         state.sweep_for_advancements(locations=self.get_locations())
 
         # Place dungeon items
@@ -1381,7 +1381,7 @@ class OOTWorld(World):
     def get_state_with_complete_itempool(self):
         all_state = CollectionState(self.multiworld)
         for item in self.itempool + self.pre_fill_items:
-            self.multiworld.worlds[item.player].collect(all_state, item)
+            all_state.collect(item, prevent_sweep=True)
         # If free_scarecrow give Scarecrow Song
         if self.free_scarecrow:
             all_state.collect(self.create_item("Scarecrow Song"), prevent_sweep=True)
