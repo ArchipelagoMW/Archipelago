@@ -105,7 +105,18 @@ def create_items(world: 'GSTLAWorld', player: int):
     sorted_item_list = sorted(djinn_items, key = lambda item: item.id)
     sorted_loc_list = sorted(location_type_to_data[LocationType.Djinn], key = lambda location: location.id)
  
-    if world.options.shuffle_djinn > 0:
+    if world.options.shuffle_djinn == 1:
+        for i in range(0,4):
+            slice_start = 0 + i * 18
+            sub_djinns = sorted_item_list[slice_start:slice_start+18]
+            sub_locs = sorted_loc_list[slice_start:slice_start+18]
+
+            world.random.shuffle(sub_djinns)
+            world.random.shuffle(sub_locs)
+
+            sorted_item_list[slice_start:slice_start+18] = sub_djinns
+            sorted_loc_list[slice_start:slice_start+18] = sub_locs
+    elif world.options.shuffle_djinn > 1:
         world.random.shuffle(sorted_item_list)
         world.random.shuffle(sorted_loc_list)
 

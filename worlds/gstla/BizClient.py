@@ -9,7 +9,7 @@ from typing import Dict, List, TYPE_CHECKING, Set, Tuple, Mapping, Optional
 from NetUtils import ClientStatus
 from worlds._bizhawk.client import BizHawkClient
 from worlds._bizhawk import read, write, guarded_write
-from . import loc_names_by_id
+from .gen.LocationNames import loc_names_by_id
 from .gen.ItemData import djinn_items, mimics, ItemData
 from .gen.LocationData import all_locations, LocationType, djinn_locations
 
@@ -82,9 +82,10 @@ def cmd_unchecked_djinn(self: 'BizHawkClientCommandProcessor') -> None:
     client = _handle_common_cmd(self)
     if client is None:
         return
-    for djinn in djinn_items:
-        if djinn.name not in client.checked_djinn:
-            logger.info(djinn.name)
+    for djinn in djinn_locations:
+        djinn_name = loc_names_by_id[djinn.id]
+        if djinn_name not in client.checked_djinn:
+            logger.info(djinn_name)
 
 
 def cmd_checked_djinn(self: 'BizHawkClientCommandProcessor') -> None:

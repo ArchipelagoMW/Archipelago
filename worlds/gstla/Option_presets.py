@@ -15,7 +15,7 @@ from .Options import (ItemShuffle, RevealHiddenItem, OmitLocations, AddGs1Items,
                       TelportEverywhere, TrapChance, MimicTrapWeight, ForgeMaterialsFillerWeight,
                       RustyMaterialsFillerWeight, StatBoostFillerWeight, UncommonConsumableFillerWeight,
                       ForgedEquipmentFillerWeight, LuckyFountainEquipmentFillerWeight, ShopEquipmentFillerWeight,
-                      CoinsFillerWeight, CommonConsumablesFillerWeight)
+                      CoinsFillerWeight, CommonConsumablesFillerWeight,ForgeMaterialsAreFiller, ArtifactsAreFiller)
 
 easy = {
     ItemShuffle.internal_name: ItemShuffle.option_all_chests_and_tablets,

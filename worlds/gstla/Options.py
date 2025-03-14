@@ -188,15 +188,19 @@ class AdjustPsyPower(Toggle):
     default = 0
 
 class DjinnShuffle(Choice):
-    """How djinn should be placed in your own world.
+    """How Djinn should be placed in your own world. The client has extra commands to help find which Djinni locations have (not) been checked.
     Note currently Djinn can only be placed in djinn locations in their own world due to game limitations.
+    Vanilla keeps them in their vanilla locations.
+    Vanilla Shuffled by Element, Djinni are placed in vanilla Djinni locations that share their element.
+    Vanilla Shuffled are placed in any vanilla Djinni location regardless of element.
     """
     internal_name = "shuffle_djinn"
     display_name = "Shuffle Djinn"
     option_vanilla = 0
-    option_vanilla_shuffled = 1
-    #option_anywhere = 2, not supported yet
-    default = 1
+    option_vanilla_shuffled_by_element = 1
+    option_vanilla_shuffled = 2
+    #option_anywhere = 3, not supported yet
+    default = 2
 
 class ShuffleDjinnStats(Toggle):
     """When enabled the stats a djinn grant are shuffled amongst each other."""
