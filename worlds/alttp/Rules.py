@@ -1203,10 +1203,10 @@ def set_trock_key_rules(multiworld, player):
             forbid_item(multiworld.get_location('Turtle Rock - Big Key Chest', player), 'Big Key (Turtle Rock)', player)
             if not can_reach_big_chest:
                 # Must not go in the Chain Chomps chest - only 2 other chests available and 3+ keys required for all other chests
-                forbid_item(world.get_location('Turtle Rock - Chain Chomps', player), 'Big Key (Turtle Rock)', player)
-                forbid_item(world.get_location('Turtle Rock - Pokey 2 Key Drop', player), 'Big Key (Turtle Rock)', player)
-            if world.worlds[player].options.accessibility == 'full':
-                if world.worlds[player].options.big_key_shuffle and can_reach_big_chest:
+                forbid_item(multiworld.get_location('Turtle Rock - Chain Chomps', player), 'Big Key (Turtle Rock)', player)
+                forbid_item(multiworld.get_location('Turtle Rock - Pokey 2 Key Drop', player), 'Big Key (Turtle Rock)', player)
+            if multiworld.worlds[player].options.accessibility == 'full':
+                if multiworld.worlds[player].options.big_key_shuffle and can_reach_big_chest:
                     # Must not go in the dungeon - all 3 available chests (Chomps, Big Chest, Crystaroller) must be keys to access laser bridge, and the big key is required first
                     for location in ['Turtle Rock - Chain Chomps', 'Turtle Rock - Compass Chest',
                                      'Turtle Rock - Pokey 1 Key Drop', 'Turtle Rock - Pokey 2 Key Drop',
