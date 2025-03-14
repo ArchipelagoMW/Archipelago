@@ -466,11 +466,11 @@ class OpenRCT2World(World):
                         if unlock["RidePrereq"][1] in item_info["low_throughput"]:
                             bias_factor = 3 # The higher the factor, the stronger the bais towards small numbers
                             total_customers = round(min_customers + (scale * (self.random.random() ** bias_factor)))
-                            print("Customer Requirements for " + unlock["RidePrereq"][1] + ": " + str(total_customers))
+                            # print("Customer Requirements for " + unlock["RidePrereq"][1] + ": " + str(total_customers))
                         elif unlock["RidePrereq"][1] in item_info["high_throughput"]:
                             bias_factor = .4 # The lower the factor, the stronger the bais towards large numbers
                             total_customers = round(min_customers + (scale * (self.random.random() ** bias_factor)))
-                            print("Customer Requirements for " + unlock["RidePrereq"][1] + ": " + str(total_customers))
+                            # print("Customer Requirements for " + unlock["RidePrereq"][1] + ": " + str(total_customers))
                             #No need to check outside low or high, since we made a random selection at the top
                         unlock["RidePrereq"][6] = total_customers
                             
