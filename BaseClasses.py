@@ -820,6 +820,21 @@ class CollectionState():
             ret = function(self, ret)
         return ret
 
+    def get_path(self, region: Region) -> List[Union[Tuple[str, str], Tuple[str, None]]]:
+        from itertools import zip_longest
+
+        def flist_to_iter(path_value: Optional[PathValue]) -> Iterator[str]:
+            while path_value:
+                region_or_entrance, path_value = path_value
+                yield region_or_entrance
+
+        reversed_path_as_flist: PathValue = self.path.get(region, (str(region), None))
+        string_path_flat = reversed(list(map(str, flist_to_iter(reversed_path_as_flist))))
+        # Now we combine the flat string list into (region, exit) pairs
+        pathsiter = iter(string_path_flat)
+        pathpairs = zip_longest(pathsiter, pathsiter)
+        return list(pathpairs)
+
     def can_reach(self,
                   spot: Union[Location, Entrance, Region, str],
                   resolution_hint: Optional[str] = None,
@@ -1589,27 +1604,13 @@ class Spoiler:
             multiworld.push_precollected(item)
 
     def create_paths(self, state: CollectionState, collection_spheres: List[Set[Location]]) -> None:
-        from itertools import zip_longest
         multiworld = self.multiworld
-
-        def flist_to_iter(path_value: Optional[PathValue]) -> Iterator[str]:
-            while path_value:
-                region_or_entrance, path_value = path_value
-                yield region_or_entrance
-
-        def get_path(state: CollectionState, region: Region) -> List[Union[Tuple[str, str], Tuple[str, None]]]:
-            reversed_path_as_flist: PathValue = state.path.get(region, (str(region), None))
-            string_path_flat = reversed(list(map(str, flist_to_iter(reversed_path_as_flist))))
-            # Now we combine the flat string list into (region, exit) pairs
-            pathsiter = iter(string_path_flat)
-            pathpairs = zip_longest(pathsiter, pathsiter)
-            return list(pathpairs)
 
         self.paths = {}
         topology_worlds = (player for player in multiworld.player_ids if multiworld.worlds[player].topology_present)
         for player in topology_worlds:
             self.paths.update(
-                {str(location): get_path(state, location.parent_region)
+                {str(location): state.get_path(location.parent_region)
                  for sphere in collection_spheres for location in sphere
                  if location.player == player})
             if player in multiworld.get_game_players("A Link to the Past"):
@@ -1619,10 +1620,10 @@ class Spoiler:
                        for (_, exit_path) in path):
                     if multiworld.worlds[player].options.mode != 'inverted':
                         self.paths[str(multiworld.get_region('Big Bomb Shop', player))] = \
-                            get_path(state, multiworld.get_region('Big Bomb Shop', player))
+                            state.get_path(multiworld.get_region('Big Bomb Shop', player))
                     else:
                         self.paths[str(multiworld.get_region('Inverted Big Bomb Shop', player))] = \
-                            get_path(state, multiworld.get_region('Inverted Big Bomb Shop', player))
+                            state.get_path(multiworld.get_region('Inverted Big Bomb Shop', player))
 
     def to_file(self, filename: str) -> None:
         from itertools import chain
