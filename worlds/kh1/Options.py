@@ -347,12 +347,12 @@ class LevelChecks(Range):
     range_start = 0
     range_end = 99
 
-class ForceStatsAbilitiesOnLevels(NamedRange):
+class ForceStatsOnLevels(NamedRange):
     """
     If this value is less than the value for Level Checks, this determines the minimum level from which only stat ups are obtained at level up locations.
     For example, if you want to be able to find any multiworld item from levels 2-50, then just stat ups for levels 51-100, set this value to 51.
     """
-    display_name = "Force Stats and Abilities on Level Starting From"
+    display_name = "Force Stats on Level Starting From"
     default = 2
     range_start = 2
     range_end = 101
@@ -589,12 +589,6 @@ class EarlySkip(Toggle):
     """
     display_name = "Early Skip"
 
-class EnemyRando(Toggle):
-    """
-    If on, enemies are randomized.
-    """
-    display_name = "Randomize Enemies"
-
 class FastCamera(Toggle):
     """
     If on, speeds up camera movement and camera centering.
@@ -641,6 +635,15 @@ class RandomizePartyMemberStartingAccessories(Toggle):
     """
     display_name = "Randomize Party Member Starting Accessories"
 
+class MaxLevelForSlot2LevelChecks(Range):
+    """
+    Determines the max level for slot 2 level checks.
+    """
+    display_name = "Max Level for Slot 2 Level Checks"
+    default = 50
+    range_start = 2
+    range_end = 100
+
 @dataclass
 class KH1Options(PerGameCommonOptions):
     final_rest_door_key: FinalRestDoorKey
@@ -681,7 +684,7 @@ class KH1Options(PerGameCommonOptions):
     keyblade_max_mp: KeybladeMaxMP
     level_checks: LevelChecks
     slot_2_level_checks: Slot2LevelChecks
-    force_stats_and_abilities_on_levels: ForceStatsAbilitiesOnLevels
+    force_stats_on_levels: ForceStatsOnLevels
     strength_increase: StrengthIncrease
     defense_increase: DefenseIncrease
     hp_increase: HPIncrease
@@ -706,7 +709,6 @@ class KH1Options(PerGameCommonOptions):
     beep_hack: BeepHack
     consistent_finishers: ConsistentFinishers
     early_skip: EarlySkip
-    enemy_rando: EnemyRando
     fast_camera: FastCamera
     faster_animations: FasterAnimations
     unlock_0_volume: Unlock0Volume
@@ -714,6 +716,7 @@ class KH1Options(PerGameCommonOptions):
     auto_save: AutoSave
     warp_anywhere: WarpAnywhere
     randomize_party_member_starting_accessories: RandomizePartyMemberStartingAccessories
+    max_level_for_slot_2_level_checks: MaxLevelForSlot2LevelChecks
 
 kh1_option_groups = [
     OptionGroup("Goal", [
@@ -739,7 +742,8 @@ kh1_option_groups = [
         EXPMultiplier,
         LevelChecks,
         Slot2LevelChecks,
-        ForceStatsAbilitiesOnLevels,
+        MaxLevelForSlot2LevelChecks,
+        ForceStatsOnLevels,
         StrengthIncrease,
         DefenseIncrease,
         HPIncrease,
