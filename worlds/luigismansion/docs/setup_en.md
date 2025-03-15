@@ -42,12 +42,15 @@ If you would like to validate your config file to make sure it works, you may do
 
 ## Generating a Single-Player Game
 
-1. Navigate to the [Player Settings](../player-settings) page, configure your options,
-   and click the "Generate Game" button.
-2. You will be presented with a "Seed Info" page.
-3. Click the "Create New Room" link.
-4. You will be presented with a server page, from which you can download your patch file.
-5. Run the ArchipelagoLauncher.exe and click `Open Patch`. Select your `.aplm` patch file.
+1. After modifying your yaml, place it into your Archipelago/player folder
+   - Alternately, navigate to the [Player Settings](../player-settings) page, configure your options,
+      and click the "Generate Game" button.
+2. Open the Archipelago Launcher and click "Generate". This will create a zip file in Archipelago/output
+   - You will need to open this .zip to get your .aplm patch file
+3. Navigate to the Archipelago website and go to the Host Game page
+4. Click upload file and pass it the .zip created in your output folder
+5. Click the "Create New Room" link.
+6. Run the ArchipelagoLauncher.exe and click `Open Patch`. Select your `.aplm` patch file.
 You will be prompted to locate your Luigi's Mansion ISO the first time you do this.
    - This will automatically run the Luigi's Mansion Client.
    - You will ***not*** need to patch the game every time, and can simply run the `LMClient` from the list on the right of the Archipelago Launcher
