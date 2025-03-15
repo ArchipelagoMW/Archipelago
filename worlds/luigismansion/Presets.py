@@ -6,7 +6,6 @@ from . import LuigiOptions as LMOptions
 all_random_settings = {
     "progression_balancing":                          "random",
     "accessibility":                                  "random",
-    LMOptions.Goal.internal_name:                      "random",
     LMOptions.RankRequirement.internal_name:           "random",
     LMOptions.LuigiWalkSpeed.internal_name:            "random",
     LMOptions.LuigiFearAnim.internal_name:             "random",
