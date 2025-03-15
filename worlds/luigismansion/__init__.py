@@ -149,6 +149,7 @@ class LMWorld(World):
         super(LMWorld, self).__init__(*args, **kwargs)
         self.ghost_affected_regions: dict[str, str] = GHOST_TO_ROOM
         self.open_doors: dict[int, int] = vanilla_door_state
+        self.spawn_region: str = "Foyer"
 
     def interpret_slot_data(self, slot_data):
         # There are more clever ways to do this, but all would require much larger changes
@@ -630,6 +631,7 @@ class LMWorld(World):
         # Output relevant options to file
         for field in fields(self.options):
             output_data["Options"][field.name] = getattr(self.options, field.name).value
+            output_data["Options"]["spawn"]: str = self.spawn_region
 
         output_data["Entrances"] = self.open_doors
         output_data["Room Enemies"] = self.ghost_affected_regions

@@ -87,6 +87,21 @@ GHOST_TO_ROOM = {
     # "Sitting Room": "Fire"  # Fire
 }
 
+spawn_locations: dict[str,dict[str, int]] = {
+    "Hidden":       {"room_no": 1, "pos_x": 1, "pos_y": 1, "pos_z": 1}, # Hidden
+    "Armory":       {"room_no": 48, "pos_x": -2541.662600, "pos_y": 1100.000000, "pos_z": -40.361595}, # Armory
+    "Courtyard":    {"room_no": 23, "pos_x": 1, "pos_y": 1, "pos_z": 1}, # Courtyard
+    "Roof":         {"room_no": 30, "pos_x": 1, "pos_y": 1, "pos_z": 1}, # Roof
+    "Clockwork":    {"room_no": 56, "pos_x": 1, "pos_y": 1, "pos_z": 1}, # Clockwork
+    "Foyer":        {"room_no": 2, "pos_x": -7.640748, "pos_y": 0.000000, "pos_z": 145.174300}, # Foyer
+    "Rec Room":     {"room_no": 22, "pos_x": 1, "pos_y": 1, "pos_z": 1}, # Rec Room
+}
+
+exp_spawns: dict[str,dict[str, int]] = {
+    "Telephone":    {"room_no": 50, "pos_x": 1, "pos_y": 1, "pos_z": 1},  # Telephone
+    "Laundry":      {"room_no": 5, "pos_x": 1, "pos_y": 1, "pos_z": 1}, # Laundry
+}
+
 
 def set_ghost_type(world: "LMWorld", ghost_list: dict):
     for region_name in ghost_list:

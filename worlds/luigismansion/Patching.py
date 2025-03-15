@@ -1,6 +1,7 @@
 import re
 from random import choice
 
+from .Regions import spawn_locations
 from .Items import filler_items
 
 speedy_observer_index: [int] = [183, 182, 179, 178, 177, 101, 100, 99, 98, 97, 21, 19]
@@ -73,7 +74,7 @@ def __get_item_name(item_data, slot: int):
     return "nothing"
 
 
-def update_event_info(event_info, boo_checks: bool):
+def update_event_info(event_info, boo_checks: bool, output_data):
     # Removes events that we don't want to trigger at all in the mansion, such as some E. Gadd calls, warps after
     # boss battles / grabbing boss keys, and various cutscenes etc.
     events_to_remove = [7, 11, 15, 42, 45, 54, 69, 70, 73, 80, 81, 85, 91]
@@ -155,15 +156,12 @@ def update_event_info(event_info, boo_checks: bool):
             x["PlayerStop"] = 0
             x["EventLoad"] = 0
 
-        # Update the blackout off event trigger to be A-pressed based
-        #if x["EventNo"] == 45:
-        #    x["EventFlag"] = 8
-        #    x["pos_z"] = -2145.792000
-        #    x["EventIf"] = 1
-        #    x["EventArea"] = 200
-        #    x["EventLock"] = 0
-        #    x["PlayerStop"] = 0
-        #    x["EventLoad"] = 0
+        # Update the spawn in event trigger to wherever spawn is
+        if x["EventNo"] == 48:
+            spawn_data = spawn_locations[output_data["Options"]["spawn"]]
+            x["pos_y"] = spawn_data["pos_y"]
+            x["pos_z"] = spawn_data["pos_z"]
+            x["pos_x"] = spawn_data["pos_x"]
 
         # Removes the zoom on Bogmire's tombstone
         if x["EventNo"] == 65:
@@ -254,6 +252,13 @@ def update_character_info(character_info, output_data):
         # Make Luggs stay gone if the light are on in the room
         if x["name"] == "eater":
             x["disappear_flag"] = 31
+
+        if x["room_no"] == 2 and x["name"] == "luige":
+            spawn_region: dict[str,int] = spawn_locations[output_data["Options"]["spawn"]]
+            x["room_no"] = spawn_region["room_no"]
+            x["pos_y"] = spawn_region["pos_y"]
+            x["pos_x"] = spawn_region["pos_x"]
+            x["pos_z"] = spawn_region["pos_z"]
 
 
 def update_teiden_observer_info(observer_info, teiden_observer_info):
