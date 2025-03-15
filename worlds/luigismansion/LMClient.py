@@ -198,7 +198,6 @@ class LMContext(CommonContext):
         self.last_health_checked = time.time()
 
         # Used for handling received items to the client.
-        self.goal_type = None
         self.already_mentioned_rank_diff = False
         self.game_clear = False
         self.rank_req = -1
@@ -254,7 +253,6 @@ class LMContext(CommonContext):
         super().on_package(cmd, args)
         if cmd == "Connected":  # On Connect
             self.boosanity = bool(args["slot_data"]["boosanity"])
-            self.goal_type = int(args["slot_data"]["goal"])
             self.rank_req = int(args["slot_data"]["rank requirement"])
             self.boo_washroom_count = int(args["slot_data"]["washroom boo count"])
             self.boo_balcony_count = int(args["slot_data"]["balcony boo count"])
@@ -613,22 +611,18 @@ class LMContext(CommonContext):
         if current_map_id == 9:
             beat_king_boo = dme.read_byte(KING_BOO_ADDR)
             if (beat_king_boo & (1 << 5)) > 0 and not self.game_clear:
-                if self.goal_type == 0:
+                int_rank_sum = 0
+                req_rank_amt = RANK_REQ_AMTS[self.rank_req]
+                for key in WALLET_OFFSETS.keys():
+                    currency_amt = dme.read_word(dme.follow_pointers(WALLET_START_ADDR, [key]))
+                    int_rank_sum += currency_amt * WALLET_OFFSETS[key]
+                if int_rank_sum >= req_rank_amt:
                     self.game_clear = True
-                elif self.goal_type == 1:
-                    int_rank_sum = 0
-                    req_rank_amt = RANK_REQ_AMTS[self.rank_req]
-                    for key in WALLET_OFFSETS.keys():
-                        currency_amt = dme.read_word(dme.follow_pointers(WALLET_START_ADDR, [key]))
-                        int_rank_sum += currency_amt * WALLET_OFFSETS[key]
-
-                    if int_rank_sum >= req_rank_amt:
-                        self.game_clear = True
-                    else:
-                        if not self.already_mentioned_rank_diff:
-                            logger.info("Unfortunately, you do NOT have enough money to satisfy the rank" +
-                                    f"requirements.\nYou are missing: '{(req_rank_amt - int_rank_sum):,}'")
-                            self.already_mentioned_rank_diff = True
+                else:
+                    if not self.already_mentioned_rank_diff:
+                        logger.info("Unfortunately, you do NOT have enough money to satisfy the rank" +
+                                f"requirements.\nYou are missing: '{(req_rank_amt - int_rank_sum):,}'")
+                        self.already_mentioned_rank_diff = True
 
         if not self.finished_game and self.game_clear:
             self.finished_game = True

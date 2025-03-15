@@ -65,7 +65,6 @@ class LMWeb(WebWorld):
             LuigiOptions.Walksanity
         ]),
         OptionGroup("Access Options", [
-            LuigiOptions.Goal,
             LuigiOptions.RankRequirement,
             LuigiOptions.MarioItems,
             LuigiOptions.BooGates,
@@ -389,20 +388,20 @@ class LMWorld(World):
                 entry.place_locked_item(Item("Boo", ItemClassification.progression, None, self.player))
                 add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
                 region.locations.append(entry)
-        if self.options.goal == 1:
-            rankcalc = 0
-            if self.options.rank_requirement < 3:
-                rankcalc = 1
-            elif self.options.rank_requirement == 3:
-                rankcalc = 2
-            elif 3 < self.options.rank_requirement < 5:
-                rankcalc = 3
-            elif self.options.rank_requirement == 6:
-                rankcalc = 4
-            else:
-                rankcalc = 5
-            loc = self.multiworld.get_location("King Boo", self.player)
-            add_rule(loc, lambda state: state.has("Gold Diamond", self.player, rankcalc), "and")
+
+        rankcalc = 0
+        if self.options.rank_requirement < 3:
+            rankcalc = 1
+        elif self.options.rank_requirement == 3:
+            rankcalc = 2
+        elif 3 < self.options.rank_requirement < 5:
+            rankcalc = 3
+        elif self.options.rank_requirement == 6:
+            rankcalc = 4
+        else:
+            rankcalc = 5
+        loc = self.multiworld.get_location("King Boo", self.player)
+        add_rule(loc, lambda state: state.has("Gold Diamond", self.player, rankcalc), "and")
 
     def generate_early(self):
         if (self.options.boosanity == 1 or self.options.boo_gates == 1) and self.options.boo_radar == 2:
@@ -546,13 +545,7 @@ class LMWorld(World):
         set_non_progress = False
 
         if item in ALL_ITEMS_TABLE:
-            if item == "Gold Diamond":
-                if self.options.goal == 1:
-                    return LMItem(item, self.player, ITEM_TABLE[item], False)
-                else:
-                    return LMItem(item, self.player, ITEM_TABLE[item], True)
-            else:
-                return LMItem(item, self.player, ALL_ITEMS_TABLE[item], set_non_progress)
+            return LMItem(item, self.player, ALL_ITEMS_TABLE[item], set_non_progress)
         raise Exception(f"Invalid item name: {item}")
 
     # def post_fill(self):
@@ -685,7 +678,6 @@ class LMWorld(World):
     # TODO: UPDATE FOR LM tracker
     def fill_slot_data(self):
         return {
-            "goal": self.options.goal.value,
             "rank requirement": self.options.rank_requirement.value,
             "better vacuum": self.options.good_vacuum.value,
             "door rando": self.options.door_rando.value,

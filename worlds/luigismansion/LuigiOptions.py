@@ -355,24 +355,13 @@ class TrapChestType(Choice):
     default = 0
 
 
-class Goal(Choice):
-    """
-    Determines when victory is achieved in your playthrough.
-
-    King Boo: Defeat King Boo in the Secret Altar
-
-    Rank Requirement: Gather enough money to reach the specified rank, and then defeat King Boo
-    """
-    display_name = "Goal"
-    internal_name = "goal"
-    option_king_boo = 0
-    option_rank_requirement = 1
-    default = 0
-
-
 class RankRequirement(Choice):
     """
-    If Rank Requirement is chosen as goal, choose the required rank (H to A) with A being the highest
+    Choose the required rank (H to A) to complete the game, with A being the highest.
+
+    Rank H requires any amount of money to finish the game, including 0
+
+    Rank A requires 5 Gold Diamonds (or equivalent money) to finish the game
     """
     display_name = "Rank Requirement"
     internal_name = "rank_requirement"
@@ -388,7 +377,6 @@ class RankRequirement(Choice):
 
 @dataclass
 class LMOptions(DeathLinkMixin, PerGameCommonOptions):
-    goal: Goal
     rank_requirement: RankRequirement
     walk_speed: LuigiWalkSpeed
     good_vacuum: BetterVacuum
