@@ -191,19 +191,19 @@ class PickupAnim(Toggle):
 
 
 class Toadsanity(Toggle):
-    """Add Toads as locations to be checked. These are remote only checks."""
+    """Add Toads as locations to be checked."""
     display_name = "Toadsanity"
     internal_name = "toadsanity"
 
 
 class Lightsanity(Toggle):
-    """Adds the act of lighting up rooms as locations. These are remote only checks"""
+    """Adds the act of lighting up rooms as locations."""
     display_name = "Lightsanity"
     internal_name = "lightsanity"
 
 
 class Walksanity(Toggle):
-    """Adds the act of visiting rooms as locations. These are remote only checks"""
+    """Adds the act of visiting rooms as locations."""
     display_name = "Walksanity"
     internal_name = "walksanity"
 
@@ -273,13 +273,13 @@ class FinalBooCount(Range):
 
 
 class Boosanity(Toggle):
-    """Turns Boos into Items and Locations. These are remote only checks."""
+    """Turns Boos into Items and Locations."""
     display_name = "Boosanity"
     internal_name = "boosanity"
 
 
 class Portrification(Toggle):
-    """Turn Portrait Ghosts into checks in addition to their clear chests. These are remote only checks."""
+    """Turn Portrait Ghosts into checks in addition to their clear chests."""
     display_name = "Portrification"
     internal_name = "portrification"
 
