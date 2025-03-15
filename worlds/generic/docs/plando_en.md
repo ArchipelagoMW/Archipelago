@@ -203,7 +203,7 @@ relevant guide: [A Link to the Past Plando Guide](/tutorial/A%20Link%20to%20the%
 
 ## Connection Plando
 
-This is currently only supported by a few games, including A Link to the Past, Minecraft, and Ocarina of Time. As the way that these games interact with their
+This is currently only supported by a few games. As the way that these games interact with their
 connections is different, only the basics are explained here. More specific information for connection plando in A Link to the Past can be found in 
 its [plando guide](/tutorial/A%20Link%20to%20the%20Past/plando/en#connections).
 
@@ -212,7 +212,7 @@ its [plando guide](/tutorial/A%20Link%20to%20the%20Past/plando/en#connections).
 * `percentage` is the percentage chance for this connection from 0 to 100 and defaults to 100.
 * Every connection has an `entrance` and an `exit`. These can be unlinked like in A Link to the Past insanity entrance
   shuffle.
-* `direction` can be `both`, `entrance`, or `exit` and determines in which direction this connection will operate. `direction` defaults to `both`.
+* `direction` can be `both`, `entrance`, or `exit`. How this is handled varies between games. `direction` defaults to `both`.
 
 [A Link to the Past connections](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/EntranceShuffle.py#L3852)
 
