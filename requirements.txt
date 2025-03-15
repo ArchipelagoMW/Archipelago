@@ -1,5 +1,5 @@
 colorama>=0.4.6
-websockets>=13.0.1,<14
+websockets>=15.0.1
 PyYAML>=6.0.2
 jellyfish>=1.1.0
 jinja2>=3.1.4
