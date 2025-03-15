@@ -470,7 +470,7 @@ The following operations can be applied to a datastorage key
 | right_shift | Applies a bitwise right-shift to the current value of the key by `value`. |
 | remove | List only: removes the first instance of `value` found in the list. |
 | pop | List or Dict: for lists it will remove the index of the `value` given. for dicts it removes the element with the specified key of `value`. |
-| update | Dict only: Updates the dictionary with the specified elements given in `value` creating new keys, or updating old ones if they previously existed. |
+| update | List or Dict: Adds the elements of `value` to the container if they weren't already present. In the case of a Dict, already present keys will have their corresponding values updated. |
 
 ### SetNotify
 Used to register your current session for receiving all [SetReply](#SetReply) packages of certain keys to allow your client to keep track of changes.
