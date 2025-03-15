@@ -235,11 +235,11 @@ class KH1World(World):
         
         level_up_locations = list(get_locations_by_type("Level Slot 1").keys())
         self.random.shuffle(level_up_item_pool)
-        current_level_index_for_placing_stats = self.options.force_stats_and_abilities_on_levels.value - 2 # Level 2 is index 0, Level 3 is index 1, etc
-        if self.options.remote_items.current_key == "off" and self.options.force_stats_and_abilities_on_levels.value != 2:
-            logging.info(f"{self.player_name}'s value {self.options.force_stats_and_abilities_on_levels.value} for force_stats_and_abilities_on_levels was changed\n"
+        current_level_index_for_placing_stats = self.options.force_stats_on_levels.value - 2 # Level 2 is index 0, Level 3 is index 1, etc
+        if self.options.remote_items.current_key == "off" and self.options.force_stats_on_levels.value != 2:
+            logging.info(f"{self.player_name}'s value {self.options.force_stats_on_levels.value} for force_stats_on_levels was changed\n"
                          f"Set to 2 as remote_items if \"off\"")
-            self.options.force_stats_and_abilities_on_levels.value = 2
+            self.options.force_stats_on_levels.value = 2
             current_level_index_for_placing_stats = 0
         while len(level_up_item_pool) > 0 and current_level_index_for_placing_stats < self.options.level_checks: # With all levels in location pool, 99 level ups so need to go index 0-98
             self.get_location(level_up_locations[current_level_index_for_placing_stats]).place_locked_item(self.create_item(level_up_item_pool.pop()))
@@ -381,14 +381,13 @@ class KH1World(World):
                     "donald_death_link": bool(self.options.donald_death_link),
                     "early_skip": bool(self.options.early_skip),
                     "end_of_the_world_unlock": str(self.options.end_of_the_world_unlock.current_key),
-                    "enemy_rando": bool(self.options.enemy_rando),
                     "exp_multiplier": int(self.options.exp_multiplier.value)/16,
                     "exp_zero_in_pool": bool(self.options.exp_zero_in_pool),
                     "extra_shared_abilities": bool(self.options.extra_shared_abilities),
                     "fast_camera": bool(self.options.fast_camera),
                     "faster_animations": bool(self.options.faster_animations),
                     "final_rest_door_key": str(self.options.final_rest_door_key.current_key),
-                    "force_stats_and_abilities_on_levels": int(self.options.force_stats_and_abilities_on_levels.value),
+                    "force_stats_on_levels": int(self.options.force_stats_on_levels.value),
                     "four_by_three": bool(self.options.four_by_three),
                     "goofy_death_link": bool(self.options.goofy_death_link),
                     "hundred_acre_wood": bool(self.options.hundred_acre_wood),
@@ -521,12 +520,20 @@ class KH1World(World):
     def get_slot_2_levels(self):
         if self.slot_2_levels is None:
             self.slot_2_levels = []
+            if self.options.max_level_for_slot_2_level_checks - 1 > self.options.level_checks.value:
+                logging.info(f"{self.player_name}'s value of {self.options.max_level_for_slot_2_level_checks.value} for max level for slot 2 level checks is invalid as it exceeds their value of {self.options.level_checks.value} for Level Checks\n"
+                            f"Setting max level for slot 2 level checks's value to {self.options.level_checks.value + 1}")
+                self.options.max_level_for_slot_2_level_checks.value = self.options.level_checks.value + 1
             if self.options.slot_2_level_checks.value > self.options.level_checks.value:
                 logging.info(f"{self.player_name}'s value of {self.options.slot_2_level_checks.value} for slot 2 level checks is invalid as it exceeds their value of {self.options.level_checks.value} for Level Checks\n"
                             f"Setting slot 2 level check's value to {self.options.level_checks.value}")
                 self.options.slot_2_level_checks.value = self.options.level_checks.value
-            # Range is exclusive of the top, so if level checks is 1 then the top end of the range needs to be 3 as the only level it can choose is 2.
-            self.slot_2_levels = self.random.sample(range(2,self.options.level_checks.value + 2), self.options.slot_2_level_checks.value) 
+            if self.options.slot_2_level_checks > self.options.max_level_for_slot_2_level_checks - 1:
+                logging.info(f"{self.player_name}'s value of {self.options.slot_2_level_checks.value} for slot 2 level checks is invalid as it exceeds their value of {self.options.max_level_for_slot_2_level_checks.value} for Max Level for Slot 2 Level Checks\n"
+                            f"Setting slot 2 level check's value to {self.options.max_level_for_slot_2_level_checks.value - 1}")
+                self.options.slot_2_level_checks.value = self.options.max_level_for_slot_2_level_checks.value - 1
+            # Range is exclusive of the top, so if max_level_for_slot_2_level_checks is 2 then the top end of the range needs to be 3 as the only level it can choose is 2.
+            self.slot_2_levels = self.random.sample(range(2,self.options.max_level_for_slot_2_level_checks.value + 1), self.options.slot_2_level_checks.value) 
         return self.slot_2_levels
     
     def get_keyblade_stats(self):
