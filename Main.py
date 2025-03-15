@@ -81,7 +81,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     del item_digits, location_digits, item_count, location_count
 
     # This assertion method should not be necessary to run if we are not outputting any multidata.
-    if not args.skip_output:
+    if not args.skip_output and not args.spoiler_only:
         AutoWorld.call_stage(multiworld, "assert_generate")
 
     AutoWorld.call_all(multiworld, "generate_early")
@@ -223,6 +223,15 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     logger.info(f'Beginning output...')
     outfilebase = 'AP_' + multiworld.seed_name
+
+    if args.spoiler_only:
+        if args.spoiler > 1:
+            logger.info('Calculating playthrough.')
+            multiworld.spoiler.create_playthrough(create_paths=args.spoiler > 2)
+
+        multiworld.spoiler.to_file(output_path('%s_Spoiler.txt' % outfilebase))
+        logger.info('Done. Skipped multidata modification. Total time: %s', time.perf_counter() - start)
+        return multiworld
 
     output = tempfile.TemporaryDirectory()
     with output as temp_dir:
