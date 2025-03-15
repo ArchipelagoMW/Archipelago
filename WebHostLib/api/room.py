@@ -13,6 +13,7 @@ def room_info(room_id: UUID) -> Dict[str, Any]:
     room = Room.get(id=room_id)
     if room is None:
         return abort(404)
+    from base64 import urlsafe_b64encode
 
     def supports_apdeltapatch(game: str) -> bool:
         return game in worlds.Files.AutoPatchRegister.patch_types
@@ -33,7 +34,7 @@ def room_info(room_id: UUID) -> Dict[str, Any]:
             downloads.append(slot_download)
 
     return {
-        "tracker": room.tracker,
+        "tracker": urlsafe_b64encode(room.tracker.bytes).rstrip(b"=").decode("ascii"),
         "players": get_players(room.seed),
         "last_port": room.last_port,
         "last_activity": room.last_activity,
