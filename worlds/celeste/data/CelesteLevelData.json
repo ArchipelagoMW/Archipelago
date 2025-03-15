@@ -7084,7 +7084,7 @@
                             "connections": [
                                 {
                                     "dest": "east",
-                                    "rule": [ ["Front Door Key"] ]
+                                    "rule": [ [ "Front Door Key" ] ]
                                 }
                             ],
                             "locations": [
@@ -7092,12 +7092,6 @@
                                     "name": "key_1",
                                     "display_name": "Front Door Key",
                                     "type": "key",
-                                    "rule": []
-                                },
-                                {
-                                    "name": "pink_clutter",
-                                    "display_name": "Pink Clutter",
-                                    "type": "clutter",
                                     "rule": []
                                 }
                             ]
@@ -7132,6 +7126,281 @@
                             "closes_behind": false
                         },
                         {
+                            "name": "north",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "0x-a",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": true
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "00-a",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "strawberry",
+                                    "display_name": "Strawberry",
+                                    "type": "strawberry",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "02-a",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": [
+                                        [ "sinking_platforms" ],
+                                        [ "dash_refills" ]
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "top",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": [ [ "dash_refills" ] ]
+                                },
+                                {
+                                    "dest": "main",
+                                    "rule": [ [ "dash_refills" ] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "main",
+                            "connections": [
+                                {
+                                    "dest": "top",
+                                    "rule": [ [ "dash_refills" ] ]
+                                },
+                                {
+                                    "dest": "east",
+                                    "rule": [ [ "Hallway Key 1" ] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "main",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": true
+                        },
+                        {
+                            "name": "top",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": true,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "02-b",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "hallway_key_1",
+                                    "display_name": "Hallway Key 1",
+                                    "type": "key",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "far-east",
+                            "connections": []
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "far-east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "01-b",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "north-west",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                },
+                                {
+                                    "dest": "north-west",
+                                    "rule": [ [ "springs" ] ]
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
                             "name": "north-west",
                             "direction": "left",
                             "blocked": false,
@@ -7147,9 +7416,2920 @@
                     "checkpoint": "",
                     "checkpoint_region": ""
                 },
-
-
-
+                {
+                    "name": "00-b",
+                    "regions": [
+                        {
+                            "name": "south-west",
+                            "connections": [
+                                {
+                                    "dest": "south-east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "south-east",
+                            "connections": [
+                                {
+                                    "dest": "south-west",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "north-west",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "north-west",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "north",
+                                    "rule": []
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "strawberry",
+                                    "display_name": "Strawberry",
+                                    "type": "strawberry",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "north",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "south-west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "south-east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "north-west",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "north",
+                            "direction": "up",
+                            "blocked": true,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "00-c",
+                    "regions": [
+                        {
+                            "name": "south-west",
+                            "connections": [
+                                {
+                                    "dest": "south-east",
+                                    "rule": [ [ "dash_refills" ] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "south-east",
+                            "connections": [
+                                {
+                                    "dest": "south-west",
+                                    "rule": [ [ "dash_refills" ] ]
+                                },
+                                {
+                                    "dest": "north-east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "north-east",
+                            "connections": [
+                                {
+                                    "dest": "south-east",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "south-west",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "south-east",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "north-east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "0x-b",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "south-east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "south-east",
+                            "connections": []
+                        },
+                        {
+                            "name": "north-east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": [ [ "dash_refills" ] ]
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "south-east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "north-east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "03-a",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": [ [ "sinking_platforms" ] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "top",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "top",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "top",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "04-b",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": []
+                        },
+                        {
+                            "name": "east",
+                            "connections": [],
+                            "locations": [
+                                {
+                                    "name": "strawberry",
+                                    "display_name": "Strawberry",
+                                    "type": "strawberry",
+                                    "rule": [ [ "dash_refills" ] ]
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "05-a",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": [ [ "dash_refills", "moving_platforms" ] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": [ [ "dash_refills", "moving_platforms" ] ]
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "06-a",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "strawberry",
+                                    "display_name": "Strawberry",
+                                    "type": "strawberry",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": []
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "07-a",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": [ [ "Hallway Key 2", "dash_refills" ] ]
+                                },
+                                {
+                                    "dest": "top",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "top",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": [ [ "Hallway Key 2", "dash_refills" ] ]
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "top",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "07-b",
+                    "regions": [
+                        {
+                            "name": "bottom",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "bottom",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "top",
+                            "connections": [],
+                            "locations": [
+                                {
+                                    "name": "strawberry",
+                                    "display_name": "Strawberry",
+                                    "type": "strawberry",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "bottom",
+                                    "rule": []
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "key_2",
+                                    "display_name": "Hallway Key 2",
+                                    "type": "key",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "bottom",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "top",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "06-b",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "strawberry",
+                                    "display_name": "Strawberry",
+                                    "type": "strawberry",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "06-c",
+                    "regions": [
+                        {
+                            "name": "south-west",
+                            "connections": [
+                                {
+                                    "dest": "north-west",
+                                    "rule": []
+                                },
+                                {
+                                    "dest": "south-east",
+                                    "rule": []
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "strawberry",
+                                    "display_name": "Strawberry",
+                                    "type": "strawberry",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "north-west",
+                            "connections": [
+                                {
+                                    "dest": "south-west",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "south-east",
+                            "connections": [
+                                {
+                                    "dest": "south-west",
+                                    "rule": []
+                                },
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "south-east",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "south-west",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": true
+                        },
+                        {
+                            "name": "north-west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "south-east",
+                            "direction": "down",
+                            "blocked": true,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "05-c",
+                    "regions": [
+                        {
+                            "name": "east",
+                            "connections": [],
+                            "locations": [
+                                {
+                                    "name": "strawberry",
+                                    "display_name": "Strawberry",
+                                    "type": "strawberry",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "08-c",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": [ [ "coins", "moving_platforms", "springs" ] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": []
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "08-b",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": []
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": [ [ "sinking_platforms", "coins" ] ]
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "08-a",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                },
+                                {
+                                    "dest": "bottom",
+                                    "rule": [
+                                        [ "brown_clutter" ],
+                                        [ "green_clutter" ],
+                                        [ "pink_clutter" ]
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "bottom",
+                            "connections": []
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": true
+                        },
+                        {
+                            "name": "bottom",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "Huge Mess",
+                    "checkpoint_region": "west"
+                },
+                {
+                    "name": "09-b",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "center",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "north-west",
+                            "connections": [
+                                {
+                                    "dest": "center",
+                                    "rule": [ [ "Huge Mess Key" ] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "center",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                },
+                                {
+                                    "dest": "north-west",
+                                    "rule": [ [ "Huge Mess Key" ] ]
+                                },
+                                {
+                                    "dest": "south-west",
+                                    "rule": [
+                                        [ "brown_clutter" ],
+                                        [ "green_clutter" ],
+                                        [ "pink_clutter" ]
+                                    ]
+                                },
+                                {
+                                    "dest": "south",
+                                    "rule": []
+                                },
+                                {
+                                    "dest": "south-east",
+                                    "rule": []
+                                },
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                },
+                                {
+                                    "dest": "north-east-right",
+                                    "rule": []
+                                },
+                                {
+                                    "dest": "north-east-top",
+                                    "rule": []
+                                },
+                                {
+                                    "dest": "north",
+                                    "rule": []
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "key_4",
+                                    "display_name": "Huge Mess Key",
+                                    "type": "key",
+                                    "rule": [ [ "brown_clutter", "green_clutter", "pink_clutter" ] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "south-west",
+                            "connections": [
+                                {
+                                    "dest": "center",
+                                    "rule": [
+                                        [ "brown_clutter" ],
+                                        [ "green_clutter" ],
+                                        [ "pink_clutter" ]
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "south",
+                            "connections": [
+                                {
+                                    "dest": "center",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "south-east",
+                            "connections": [
+                                {
+                                    "dest": "center",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "center",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "north-east-right",
+                            "connections": [
+                                {
+                                    "dest": "center",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "north-east-top",
+                            "connections": [
+                                {
+                                    "dest": "center",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "north",
+                            "connections": [
+                                {
+                                    "dest": "center",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "north-west",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "south-west",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": true
+                        },
+                        {
+                            "name": "south",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": true
+                        },
+                        {
+                            "name": "south-east",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "north-east-right",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "north-east-top",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "north",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "10-x",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "south-east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "south-east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": [ [ "brown_clutter" ] ]
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "brown_clutter",
+                                    "display_name": "Brown Clutter",
+                                    "type": "clutter",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "north-east-top",
+                            "connections": [
+                                {
+                                    "dest": "north-east-right",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "north-east-right",
+                            "connections": [
+                                {
+                                    "dest": "north-east-top",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "south-east",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": true
+                        },
+                        {
+                            "name": "north-east-top",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": true
+                        },
+                        {
+                            "name": "north-east-right",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": true
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "11-x",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "south",
+                                    "rule": [ [ "coins" ] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "south",
+                            "connections": []
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "south",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "11-y",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                },
+                                {
+                                    "dest": "south",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "south",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "south",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "12-y",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [],
+                            "locations": [
+                                {
+                                    "name": "strawberry",
+                                    "display_name": "Strawberry",
+                                    "type": "strawberry",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "11-z",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": [ [ "dash_refills" ] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": [ [ "dash_refills" ] ]
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "10-z",
+                    "regions": [
+                        {
+                            "name": "bottom",
+                            "connections": [
+                                {
+                                    "dest": "top",
+                                    "rule": [ [ "sinking_platforms" ] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "top",
+                            "connections": [
+                                {
+                                    "dest": "bottom",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "bottom",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "top",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "10-y",
+                    "regions": [
+                        {
+                            "name": "bottom",
+                            "connections": [
+                                {
+                                    "dest": "top",
+                                    "rule": []
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "strawberry",
+                                    "display_name": "Strawberry",
+                                    "type": "strawberry",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "top",
+                            "connections": [
+                                {
+                                    "dest": "bottom",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "bottom",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": true
+                        },
+                        {
+                            "name": "top",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "10-c",
+                    "regions": [
+                        {
+                            "name": "south-east",
+                            "connections": [
+                                {
+                                    "dest": "north-east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "north-east",
+                            "connections": [
+                                {
+                                    "dest": "south-east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "north-west",
+                            "connections": [
+                                {
+                                    "dest": "south-west",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "south-west",
+                            "connections": [
+                                {
+                                    "dest": "north-west",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "south-east",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "north-east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "north-west",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "south-west",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "11-c",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "south-east",
+                            "connections": [
+                                {
+                                    "dest": "south-west",
+                                    "rule": []
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "crystal_heart",
+                                    "display_name": "Crystal Heart",
+                                    "type": "crystal_heart",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "south-west",
+                            "connections": [
+                                {
+                                    "dest": "south-east",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "south-east",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": true
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "south-west",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "12-c",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "top",
+                                    "rule": []
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "strawberry",
+                                    "display_name": "Strawberry",
+                                    "type": "strawberry",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "top",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "top",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "12-d",
+                    "regions": [
+                        {
+                            "name": "bottom",
+                            "connections": [
+                                {
+                                    "dest": "top",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "top",
+                            "connections": []
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "bottom",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": true
+                        },
+                        {
+                            "name": "top",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "11-d",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": [ [ "cannot_access" ] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": [ [ "dash_refills" ] ]
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "strawberry",
+                                    "display_name": "Strawberry",
+                                    "type": "strawberry",
+                                    "rule": [ [ "dash_refills" ] ]
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "10-d",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "main",
+                                    "rule": [ [ "green_clutter" ] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "main",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": [ [ "dash_refills" ] ]
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "green_clutter",
+                                    "display_name": "Green Clutter",
+                                    "type": "clutter",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "main",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "11-b",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "north-west",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                },
+                                {
+                                    "dest": "north-east",
+                                    "rule": [ [ "pink_clutter" ] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "north-east",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": [ [ "pink_clutter" ] ]
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "north-west",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "north-east",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "12-b",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "13-b",
+                    "regions": [
+                        {
+                            "name": "top",
+                            "connections": [
+                                {
+                                    "dest": "bottom",
+                                    "rule": []
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "strawberry",
+                                    "display_name": "Strawberry",
+                                    "type": "strawberry",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "bottom",
+                            "connections": [
+                                {
+                                    "dest": "top",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "top",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "bottom",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "13-a",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                },
+                                {
+                                    "dest": "south-west",
+                                    "rule": [ [ "pink_clutter" ] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "south-west",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": [ [ "pink_clutter" ] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": []
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "south-west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "13-x",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "strawberry",
+                                    "display_name": "Strawberry",
+                                    "type": "strawberry",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "12-x",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "north-east",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "pink_clutter",
+                                    "display_name": "Pink Clutter",
+                                    "type": "clutter",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "north-east",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "11-a",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "south",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "south",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "south-east-bottom",
+                            "connections": [
+                                {
+                                    "dest": "south-east-right",
+                                    "rule": [ [ "pink_clutter" ] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "south-east-right",
+                            "connections": [
+                                {
+                                    "dest": "south-east-bottom",
+                                    "rule": [ [ "pink_clutter" ] ]
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "south",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": true
+                        },
+                        {
+                            "name": "south-east-bottom",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "south-east-right",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "08-x",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "strawberry",
+                                    "display_name": "Strawberry",
+                                    "type": "strawberry",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "09-d",
+                    "regions": [
+                        {
+                            "name": "bottom",
+                            "connections": [
+                                {
+                                    "dest": "top",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "top",
+                            "connections": []
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "bottom",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": true
+                        },
+                        {
+                            "name": "top",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "Elevator Shaft",
+                    "checkpoint_region": "bottom"
+                },
+                {
+                    "name": "08-d",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": []
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": [ [ "dash_refills", "coins" ] ]
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "06-d",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": []
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": [ [ "dash_refills" ] ]
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "strawberry",
+                                    "display_name": "Strawberry",
+                                    "type": "strawberry",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "04-d",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "south-west",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "south",
+                            "connections": [
+                                {
+                                    "dest": "south-west",
+                                    "rule": [ [ "cannot_access" ] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "south",
+                                    "rule": [ [ "dash_refills" ] ]
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "south-west",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "south",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "04-c",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "north-west",
+                                    "rule": [ [ "Presidential Suite Key" ] ]
+                                },
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "north-west",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": [ [ "Presidential Suite Key" ] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "strawberry",
+                                    "display_name": "Strawberry",
+                                    "type": "strawberry",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "north-west",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "02-c",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "key_5",
+                                    "display_name": "Presidential Suite Key",
+                                    "type": "key",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": [ [ "sinking_platforms" ] ]
+                                },
+                                {
+                                    "dest": "south-east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "south-east",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "south-east",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "03-b",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "strawberry_1",
+                                    "display_name": "Strawberry 1",
+                                    "type": "strawberry",
+                                    "rule": []
+                                },
+                                {
+                                    "name": "strawberry_2",
+                                    "display_name": "Strawberry 2",
+                                    "type": "strawberry",
+                                    "rule": [ [ "dash_refills" ] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                },
+                                {
+                                    "dest": "north",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "north",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "north",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "01-c",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": []
+                        },
+                        {
+                            "name": "east",
+                            "connections": [],
+                            "locations": [
+                                {
+                                    "name": "cassette",
+                                    "display_name": "Cassette",
+                                    "type": "cassette",
+                                    "rule": [ [ "pink_cassette_blocks", "blue_cassette_blocks" ] ]
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "02-d",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": [ [ "cannot_access" ] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": [ [ "dash_refills" ] ]
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "00-d",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "up",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": true
+                        }
+                    ],
+                    "checkpoint": "Presidential Suite",
+                    "checkpoint_region": "east"
+                },
+                {
+                    "name": "roof00",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "down",
+                            "blocked": false,
+                            "closes_behind": true
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "roof01",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": [ [ "springs" ] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": []
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "roof02",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "roof03",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": [ [ "springs", "coins", "dash_refills" ] ]
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "strawberry",
+                                    "display_name": "Strawberry",
+                                    "type": "strawberry",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": []
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "roof04",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "roof05",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": [ ["springs"] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": []
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "roof06b",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": [ ["dash_refills"] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": [ [ "dash_refills" ] ]
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
+                {
+                    "name": "roof06",
+                    "regions": [
+                        {
+                            "name": "west",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "strawberry_1",
+                                    "display_name": "Strawberry 1",
+                                    "type": "strawberry",
+                                    "rule": []
+                                },
+                                {
+                                    "name": "strawberry_2",
+                                    "display_name": "Strawberry 2",
+                                    "type": "strawberry",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "west",
+                                    "rule": []
+                                }
+                            ]
+                        }
+                    ],
+                    "doors": [
+                        {
+                            "name": "west",
+                            "direction": "left",
+                            "blocked": false,
+                            "closes_behind": false
+                        },
+                        {
+                            "name": "east",
+                            "direction": "right",
+                            "blocked": false,
+                            "closes_behind": false
+                        }
+                    ],
+                    "checkpoint": "",
+                    "checkpoint_region": ""
+                },
                 {
                     "name": "roof07",
                     "regions": [
@@ -7223,10 +10403,488 @@
                     "dest_room": "s3",
                     "dest_door": "west"
                 },
-
-
                 {
                     "source_room": "s3",
+                    "source_door": "east",
+                    "dest_room": "0x-a",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "0x-a",
+                    "source_door": "east",
+                    "dest_room": "00-a",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "00-a",
+                    "source_door": "east",
+                    "dest_room": "02-a",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "02-a",
+                    "source_door": "east",
+                    "dest_room": "03-a",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "02-a",
+                    "source_door": "top",
+                    "dest_room": "02-b",
+                    "dest_door": "east"
+                },
+                {
+                    "source_room": "02-b",
+                    "source_door": "west",
+                    "dest_room": "01-b",
+                    "dest_door": "east"
+                },
+                {
+                    "source_room": "01-b",
+                    "source_door": "north-west",
+                    "dest_room": "00-b",
+                    "dest_door": "east"
+                },
+                {
+                    "source_room": "01-b",
+                    "source_door": "west",
+                    "dest_room": "00-b",
+                    "dest_door": "south-east"
+                },
+                {
+                    "source_room": "00-b",
+                    "source_door": "south-west",
+                    "dest_room": "0x-b",
+                    "dest_door": "south-east"
+                },
+                {
+                    "source_room": "00-b",
+                    "source_door": "north",
+                    "dest_room": "00-c",
+                    "dest_door": "south-east"
+                },
+                {
+                    "source_room": "00-b",
+                    "source_door": "west",
+                    "dest_room": "0x-b",
+                    "dest_door": "north-east"
+                },
+                {
+                    "source_room": "00-c",
+                    "source_door": "south-west",
+                    "dest_room": "00-b",
+                    "dest_door": "north-west"
+                },
+                {
+                    "source_room": "00-c",
+                    "source_door": "north-east",
+                    "dest_room": "01-c",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "0x-b",
+                    "source_door": "west",
+                    "dest_room": "s3",
+                    "dest_door": "north"
+                },
+                {
+                    "source_room": "03-a",
+                    "source_door": "top",
+                    "dest_room": "04-b",
+                    "dest_door": "east"
+                },
+                {
+                    "source_room": "03-a",
+                    "source_door": "east",
+                    "dest_room": "05-a",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "05-a",
+                    "source_door": "east",
+                    "dest_room": "06-a",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "06-a",
+                    "source_door": "east",
+                    "dest_room": "07-a",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "07-a",
+                    "source_door": "top",
+                    "dest_room": "07-b",
+                    "dest_door": "bottom"
+                },
+                {
+                    "source_room": "07-a",
+                    "source_door": "east",
+                    "dest_room": "08-a",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "07-b",
+                    "source_door": "west",
+                    "dest_room": "06-b",
+                    "dest_door": "east"
+                },
+                {
+                    "source_room": "06-b",
+                    "source_door": "west",
+                    "dest_room": "06-c",
+                    "dest_door": "south-west"
+                },
+                {
+                    "source_room": "06-c",
+                    "source_door": "north-west",
+                    "dest_room": "05-c",
+                    "dest_door": "east"
+                },
+                {
+                    "source_room": "06-c",
+                    "source_door": "east",
+                    "dest_room": "08-c",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "06-c",
+                    "source_door": "south-east",
+                    "dest_room": "07-b",
+                    "dest_door": "top"
+                },
+                {
+                    "source_room": "08-c",
+                    "source_door": "east",
+                    "dest_room": "08-b",
+                    "dest_door": "east"
+                },
+                {
+                    "source_room": "08-b",
+                    "source_door": "west",
+                    "dest_room": "07-b",
+                    "dest_door": "east"
+                },
+                {
+                    "source_room": "08-a",
+                    "source_door": "bottom",
+                    "dest_room": "08-x",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "08-a",
+                    "source_door": "east",
+                    "dest_room": "09-b",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "09-b",
+                    "source_door": "south-east",
+                    "dest_room": "10-x",
+                    "dest_door": "north-east-top"
+                },
+                {
+                    "source_room": "09-b",
+                    "source_door": "north-west",
+                    "dest_room": "09-d",
+                    "dest_door": "bottom"
+                },
+                {
+                    "source_room": "09-b",
+                    "source_door": "north-east-top",
+                    "dest_room": "10-c",
+                    "dest_door": "south-east"
+                },
+                {
+                    "source_room": "09-b",
+                    "source_door": "east",
+                    "dest_room": "11-a",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "09-b",
+                    "source_door": "north-east-right",
+                    "dest_room": "11-b",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "10-x",
+                    "source_door": "north-east-right",
+                    "dest_room": "11-x",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "11-x",
+                    "source_door": "south",
+                    "dest_room": "11-y",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "11-y",
+                    "source_door": "east",
+                    "dest_room": "12-y",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "11-y",
+                    "source_door": "south",
+                    "dest_room": "11-z",
+                    "dest_door": "east"
+                },
+                {
+                    "source_room": "11-z",
+                    "source_door": "west",
+                    "dest_room": "10-z",
+                    "dest_door": "bottom"
+                },
+                {
+                    "source_room": "10-z",
+                    "source_door": "top",
+                    "dest_room": "10-y",
+                    "dest_door": "bottom"
+                },
+                {
+                    "source_room": "10-y",
+                    "source_door": "top",
+                    "dest_room": "10-x",
+                    "dest_door": "south-east"
+                },
+                {
+                    "source_room": "10-x",
+                    "source_door": "west",
+                    "dest_room": "09-b",
+                    "dest_door": "south"
+                },
+                {
+                    "source_room": "10-c",
+                    "source_door": "north-east",
+                    "dest_room": "11-c",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "10-c",
+                    "source_door": "south-west",
+                    "dest_room": "09-b",
+                    "dest_door": "north"
+                },
+                {
+                    "source_room": "11-c",
+                    "source_door": "east",
+                    "dest_room": "12-c",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "11-c",
+                    "source_door": "south-west",
+                    "dest_room": "11-b",
+                    "dest_door": "north-west"
+                },
+                {
+                    "source_room": "12-c",
+                    "source_door": "top",
+                    "dest_room": "12-d",
+                    "dest_door": "bottom"
+                },
+                {
+                    "source_room": "12-d",
+                    "source_door": "top",
+                    "dest_room": "11-d",
+                    "dest_door": "east"
+                },
+                {
+                    "source_room": "11-d",
+                    "source_door": "west",
+                    "dest_room": "10-d",
+                    "dest_door": "east"
+                },
+                {
+                    "source_room": "10-d",
+                    "source_door": "west",
+                    "dest_room": "10-c",
+                    "dest_door": "north-west"
+                },
+                {
+                    "source_room": "11-b",
+                    "source_door": "north-east",
+                    "dest_room": "11-c",
+                    "dest_door": "south-east"
+                },
+                {
+                    "source_room": "11-b",
+                    "source_door": "east",
+                    "dest_room": "12-b",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "12-b",
+                    "source_door": "east",
+                    "dest_room": "13-b",
+                    "dest_door": "top"
+                },
+                {
+                    "source_room": "13-b",
+                    "source_door": "bottom",
+                    "dest_room": "13-a",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "13-a",
+                    "source_door": "east",
+                    "dest_room": "13-x",
+                    "dest_door": "east"
+                },
+                {
+                    "source_room": "13-x",
+                    "source_door": "west",
+                    "dest_room": "12-x",
+                    "dest_door": "east"
+                },
+                {
+                    "source_room": "12-x",
+                    "source_door": "north-east",
+                    "dest_room": "11-a",
+                    "dest_door": "south-east-bottom"
+                },
+                {
+                    "source_room": "12-x",
+                    "source_door": "west",
+                    "dest_room": "11-a",
+                    "dest_door": "south"
+                },
+                {
+                    "source_room": "11-a",
+                    "source_door": "south-east-right",
+                    "dest_room": "13-a",
+                    "dest_door": "south-west"
+                },
+                {
+                    "source_room": "08-x",
+                    "source_door": "east",
+                    "dest_room": "09-b",
+                    "dest_door": "south-west"
+                },
+                {
+                    "source_room": "09-d",
+                    "source_door": "top",
+                    "dest_room": "08-d",
+                    "dest_door": "east"
+                },
+                {
+                    "source_room": "08-d",
+                    "source_door": "west",
+                    "dest_room": "06-d",
+                    "dest_door": "east"
+                },
+                {
+                    "source_room": "06-d",
+                    "source_door": "west",
+                    "dest_room": "04-d",
+                    "dest_door": "east"
+                },
+                {
+                    "source_room": "04-d",
+                    "source_door": "west",
+                    "dest_room": "02-d",
+                    "dest_door": "east"
+                },
+                {
+                    "source_room": "04-d",
+                    "source_door": "south",
+                    "dest_room": "04-c",
+                    "dest_door": "east"
+                },
+                {
+                    "source_room": "04-c",
+                    "source_door": "west",
+                    "dest_room": "02-c",
+                    "dest_door": "east"
+                },
+                {
+                    "source_room": "04-c",
+                    "source_door": "north-west",
+                    "dest_room": "04-d",
+                    "dest_door": "south-west"
+                },
+                {
+                    "source_room": "02-c",
+                    "source_door": "west",
+                    "dest_room": "01-c",
+                    "dest_door": "east"
+                },
+                {
+                    "source_room": "02-c",
+                    "source_door": "south-east",
+                    "dest_room": "03-b",
+                    "dest_door": "north"
+                },
+                {
+                    "source_room": "03-b",
+                    "source_door": "east",
+                    "dest_room": "04-b",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "03-b",
+                    "source_door": "west",
+                    "dest_room": "02-b",
+                    "dest_door": "far-east"
+                },
+                {
+                    "source_room": "02-d",
+                    "source_door": "west",
+                    "dest_room": "00-d",
+                    "dest_door": "east"
+                },
+                {
+                    "source_room": "00-d",
+                    "source_door": "west",
+                    "dest_room": "roof00",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "roof00",
+                    "source_door": "east",
+                    "dest_room": "roof01",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "roof01",
+                    "source_door": "east",
+                    "dest_room": "roof02",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "roof02",
+                    "source_door": "east",
+                    "dest_room": "roof03",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "roof03",
+                    "source_door": "east",
+                    "dest_room": "roof04",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "roof04",
+                    "source_door": "east",
+                    "dest_room": "roof05",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "roof05",
+                    "source_door": "east",
+                    "dest_room": "roof06b",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "roof06b",
+                    "source_door": "east",
+                    "dest_room": "roof06",
+                    "dest_door": "west"
+                },
+                {
+                    "source_room": "roof06",
                     "source_door": "east",
                     "dest_room": "roof07",
                     "dest_door": "west"

@@ -23,7 +23,7 @@ dream_blocks     = "Dream Blocks"
 coins            = "Coins"
 strawberry_seeds = "Strawberry Seeds"
 
-sinking_platforms = "Moving Platforms"
+sinking_platforms = "Sinking Platforms"
 
 moving_platforms = "Moving Platforms"
 blue_boosters    = "Blue Boosters"
@@ -55,10 +55,13 @@ double_dash_refills    = "Double Dash Refills"
 yellow_cassette_blocks = "Yellow Cassette Blocks"
 green_cassette_blocks  = "Green Cassette Blocks"
 
-# Questionable
 dash_switches = "Dash Switches"
 seekers       = "Seekers"
 bird          = "Bird"
+
+brown_clutter = "Celestial Resort A - Brown Clutter"
+green_clutter = "Celestial Resort A - Green Clutter"
+pink_clutter  = "Celestial Resort A - Pink Clutter"
 
 cannot_access = "Cannot Access"
 

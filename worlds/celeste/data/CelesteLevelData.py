@@ -416,8 +416,227 @@ all_doors: Dict[str, Door] = {
     "3a_s2_east": Door("3a_s2_east", "3a_s2", DoorDirection.right, False, False),
 
     "3a_s3_west": Door("3a_s3_west", "3a_s3", DoorDirection.left, False, False),
-    "3a_s3_north-west": Door("3a_s3_north-west", "3a_s3", DoorDirection.left, False, False),
+    "3a_s3_north": Door("3a_s3_north", "3a_s3", DoorDirection.right, False, False),
     "3a_s3_east": Door("3a_s3_east", "3a_s3", DoorDirection.right, False, False),
+
+    "3a_0x-a_west": Door("3a_0x-a_west", "3a_0x-a", DoorDirection.left, False, True),
+    "3a_0x-a_east": Door("3a_0x-a_east", "3a_0x-a", DoorDirection.right, False, False),
+
+    "3a_00-a_west": Door("3a_00-a_west", "3a_00-a", DoorDirection.left, False, False),
+    "3a_00-a_east": Door("3a_00-a_east", "3a_00-a", DoorDirection.right, False, False),
+
+    "3a_02-a_west": Door("3a_02-a_west", "3a_02-a", DoorDirection.left, False, True),
+    "3a_02-a_top": Door("3a_02-a_top", "3a_02-a", DoorDirection.up, False, False),
+    "3a_02-a_east": Door("3a_02-a_east", "3a_02-a", DoorDirection.right, True, False),
+
+    "3a_02-b_west": Door("3a_02-b_west", "3a_02-b", DoorDirection.left, False, False),
+    "3a_02-b_east": Door("3a_02-b_east", "3a_02-b", DoorDirection.down, False, False),
+    "3a_02-b_far-east": Door("3a_02-b_far-east", "3a_02-b", DoorDirection.right, False, False),
+
+    "3a_01-b_west": Door("3a_01-b_west", "3a_01-b", DoorDirection.left, False, False),
+    "3a_01-b_north-west": Door("3a_01-b_north-west", "3a_01-b", DoorDirection.left, False, False),
+    "3a_01-b_east": Door("3a_01-b_east", "3a_01-b", DoorDirection.right, False, False),
+
+    "3a_00-b_south-west": Door("3a_00-b_south-west", "3a_00-b", DoorDirection.left, False, False),
+    "3a_00-b_south-east": Door("3a_00-b_south-east", "3a_00-b", DoorDirection.right, False, False),
+    "3a_00-b_west": Door("3a_00-b_west", "3a_00-b", DoorDirection.left, False, False),
+    "3a_00-b_north-west": Door("3a_00-b_north-west", "3a_00-b", DoorDirection.up, False, False),
+    "3a_00-b_east": Door("3a_00-b_east", "3a_00-b", DoorDirection.right, False, False),
+    "3a_00-b_north": Door("3a_00-b_north", "3a_00-b", DoorDirection.up, True, False),
+
+    "3a_00-c_south-west": Door("3a_00-c_south-west", "3a_00-c", DoorDirection.down, False, False),
+    "3a_00-c_south-east": Door("3a_00-c_south-east", "3a_00-c", DoorDirection.down, False, False),
+    "3a_00-c_north-east": Door("3a_00-c_north-east", "3a_00-c", DoorDirection.right, False, False),
+
+    "3a_0x-b_west": Door("3a_0x-b_west", "3a_0x-b", DoorDirection.left, False, False),
+    "3a_0x-b_south-east": Door("3a_0x-b_south-east", "3a_0x-b", DoorDirection.right, False, False),
+    "3a_0x-b_north-east": Door("3a_0x-b_north-east", "3a_0x-b", DoorDirection.right, False, False),
+
+    "3a_03-a_west": Door("3a_03-a_west", "3a_03-a", DoorDirection.left, False, False),
+    "3a_03-a_top": Door("3a_03-a_top", "3a_03-a", DoorDirection.up, False, False),
+    "3a_03-a_east": Door("3a_03-a_east", "3a_03-a", DoorDirection.right, False, False),
+
+    "3a_04-b_west": Door("3a_04-b_west", "3a_04-b", DoorDirection.left, False, False),
+    "3a_04-b_east": Door("3a_04-b_east", "3a_04-b", DoorDirection.down, False, False),
+
+    "3a_05-a_west": Door("3a_05-a_west", "3a_05-a", DoorDirection.left, False, False),
+    "3a_05-a_east": Door("3a_05-a_east", "3a_05-a", DoorDirection.right, False, False),
+
+    "3a_06-a_west": Door("3a_06-a_west", "3a_06-a", DoorDirection.left, False, False),
+    "3a_06-a_east": Door("3a_06-a_east", "3a_06-a", DoorDirection.right, False, False),
+
+    "3a_07-a_west": Door("3a_07-a_west", "3a_07-a", DoorDirection.left, False, False),
+    "3a_07-a_top": Door("3a_07-a_top", "3a_07-a", DoorDirection.up, False, False),
+    "3a_07-a_east": Door("3a_07-a_east", "3a_07-a", DoorDirection.right, False, False),
+
+    "3a_07-b_bottom": Door("3a_07-b_bottom", "3a_07-b", DoorDirection.down, False, False),
+    "3a_07-b_west": Door("3a_07-b_west", "3a_07-b", DoorDirection.left, False, False),
+    "3a_07-b_top": Door("3a_07-b_top", "3a_07-b", DoorDirection.up, False, False),
+    "3a_07-b_east": Door("3a_07-b_east", "3a_07-b", DoorDirection.right, False, False),
+
+    "3a_06-b_west": Door("3a_06-b_west", "3a_06-b", DoorDirection.up, False, False),
+    "3a_06-b_east": Door("3a_06-b_east", "3a_06-b", DoorDirection.right, False, False),
+
+    "3a_06-c_south-west": Door("3a_06-c_south-west", "3a_06-c", DoorDirection.down, False, True),
+    "3a_06-c_north-west": Door("3a_06-c_north-west", "3a_06-c", DoorDirection.left, False, False),
+    "3a_06-c_south-east": Door("3a_06-c_south-east", "3a_06-c", DoorDirection.down, True, False),
+    "3a_06-c_east": Door("3a_06-c_east", "3a_06-c", DoorDirection.right, False, False),
+
+    "3a_05-c_east": Door("3a_05-c_east", "3a_05-c", DoorDirection.right, False, False),
+
+    "3a_08-c_west": Door("3a_08-c_west", "3a_08-c", DoorDirection.left, False, False),
+    "3a_08-c_east": Door("3a_08-c_east", "3a_08-c", DoorDirection.down, False, False),
+
+    "3a_08-b_west": Door("3a_08-b_west", "3a_08-b", DoorDirection.left, False, False),
+    "3a_08-b_east": Door("3a_08-b_east", "3a_08-b", DoorDirection.up, False, False),
+
+    "3a_08-a_west": Door("3a_08-a_west", "3a_08-a", DoorDirection.left, False, True),
+    "3a_08-a_bottom": Door("3a_08-a_bottom", "3a_08-a", DoorDirection.down, False, False),
+    "3a_08-a_east": Door("3a_08-a_east", "3a_08-a", DoorDirection.right, False, False),
+
+    "3a_09-b_west": Door("3a_09-b_west", "3a_09-b", DoorDirection.left, False, False),
+    "3a_09-b_north-west": Door("3a_09-b_north-west", "3a_09-b", DoorDirection.up, False, False),
+    "3a_09-b_south-west": Door("3a_09-b_south-west", "3a_09-b", DoorDirection.down, False, True),
+    "3a_09-b_south": Door("3a_09-b_south", "3a_09-b", DoorDirection.down, False, True),
+    "3a_09-b_south-east": Door("3a_09-b_south-east", "3a_09-b", DoorDirection.down, False, False),
+    "3a_09-b_east": Door("3a_09-b_east", "3a_09-b", DoorDirection.right, False, False),
+    "3a_09-b_north-east-right": Door("3a_09-b_north-east-right", "3a_09-b", DoorDirection.right, False, False),
+    "3a_09-b_north-east-top": Door("3a_09-b_north-east-top", "3a_09-b", DoorDirection.up, False, False),
+    "3a_09-b_north": Door("3a_09-b_north", "3a_09-b", DoorDirection.up, False, False),
+
+    "3a_10-x_west": Door("3a_10-x_west", "3a_10-x", DoorDirection.up, False, False),
+    "3a_10-x_south-east": Door("3a_10-x_south-east", "3a_10-x", DoorDirection.down, False, True),
+    "3a_10-x_north-east-top": Door("3a_10-x_north-east-top", "3a_10-x", DoorDirection.up, False, True),
+    "3a_10-x_north-east-right": Door("3a_10-x_north-east-right", "3a_10-x", DoorDirection.right, False, True),
+
+    "3a_11-x_west": Door("3a_11-x_west", "3a_11-x", DoorDirection.left, False, False),
+    "3a_11-x_south": Door("3a_11-x_south", "3a_11-x", DoorDirection.down, False, False),
+
+    "3a_11-y_west": Door("3a_11-y_west", "3a_11-y", DoorDirection.up, False, False),
+    "3a_11-y_east": Door("3a_11-y_east", "3a_11-y", DoorDirection.right, False, False),
+    "3a_11-y_south": Door("3a_11-y_south", "3a_11-y", DoorDirection.down, False, False),
+
+    "3a_12-y_west": Door("3a_12-y_west", "3a_12-y", DoorDirection.left, False, False),
+
+    "3a_11-z_west": Door("3a_11-z_west", "3a_11-z", DoorDirection.left, False, False),
+    "3a_11-z_east": Door("3a_11-z_east", "3a_11-z", DoorDirection.up, False, False),
+
+    "3a_10-z_bottom": Door("3a_10-z_bottom", "3a_10-z", DoorDirection.right, False, False),
+    "3a_10-z_top": Door("3a_10-z_top", "3a_10-z", DoorDirection.up, False, False),
+
+    "3a_10-y_bottom": Door("3a_10-y_bottom", "3a_10-y", DoorDirection.down, False, True),
+    "3a_10-y_top": Door("3a_10-y_top", "3a_10-y", DoorDirection.up, False, False),
+
+    "3a_10-c_south-east": Door("3a_10-c_south-east", "3a_10-c", DoorDirection.down, False, False),
+    "3a_10-c_north-east": Door("3a_10-c_north-east", "3a_10-c", DoorDirection.right, False, False),
+    "3a_10-c_north-west": Door("3a_10-c_north-west", "3a_10-c", DoorDirection.up, False, False),
+    "3a_10-c_south-west": Door("3a_10-c_south-west", "3a_10-c", DoorDirection.down, False, False),
+
+    "3a_11-c_south-east": Door("3a_11-c_south-east", "3a_11-c", DoorDirection.down, False, True),
+    "3a_11-c_east": Door("3a_11-c_east", "3a_11-c", DoorDirection.right, False, False),
+    "3a_11-c_west": Door("3a_11-c_west", "3a_11-c", DoorDirection.left, False, False),
+    "3a_11-c_south-west": Door("3a_11-c_south-west", "3a_11-c", DoorDirection.down, False, False),
+
+    "3a_12-c_west": Door("3a_12-c_west", "3a_12-c", DoorDirection.left, False, False),
+    "3a_12-c_top": Door("3a_12-c_top", "3a_12-c", DoorDirection.up, False, False),
+
+    "3a_12-d_bottom": Door("3a_12-d_bottom", "3a_12-d", DoorDirection.down, False, True),
+    "3a_12-d_top": Door("3a_12-d_top", "3a_12-d", DoorDirection.left, False, False),
+
+    "3a_11-d_west": Door("3a_11-d_west", "3a_11-d", DoorDirection.left, False, False),
+    "3a_11-d_east": Door("3a_11-d_east", "3a_11-d", DoorDirection.right, False, False),
+
+    "3a_10-d_west": Door("3a_10-d_west", "3a_10-d", DoorDirection.down, False, False),
+    "3a_10-d_east": Door("3a_10-d_east", "3a_10-d", DoorDirection.right, False, False),
+
+    "3a_11-b_west": Door("3a_11-b_west", "3a_11-b", DoorDirection.left, False, False),
+    "3a_11-b_north-west": Door("3a_11-b_north-west", "3a_11-b", DoorDirection.up, False, False),
+    "3a_11-b_east": Door("3a_11-b_east", "3a_11-b", DoorDirection.right, False, False),
+    "3a_11-b_north-east": Door("3a_11-b_north-east", "3a_11-b", DoorDirection.up, False, False),
+
+    "3a_12-b_west": Door("3a_12-b_west", "3a_12-b", DoorDirection.left, False, False),
+    "3a_12-b_east": Door("3a_12-b_east", "3a_12-b", DoorDirection.right, False, False),
+
+    "3a_13-b_top": Door("3a_13-b_top", "3a_13-b", DoorDirection.left, False, False),
+    "3a_13-b_bottom": Door("3a_13-b_bottom", "3a_13-b", DoorDirection.down, False, False),
+
+    "3a_13-a_west": Door("3a_13-a_west", "3a_13-a", DoorDirection.up, False, False),
+    "3a_13-a_south-west": Door("3a_13-a_south-west", "3a_13-a", DoorDirection.left, False, False),
+    "3a_13-a_east": Door("3a_13-a_east", "3a_13-a", DoorDirection.down, False, False),
+
+    "3a_13-x_west": Door("3a_13-x_west", "3a_13-x", DoorDirection.left, False, False),
+    "3a_13-x_east": Door("3a_13-x_east", "3a_13-x", DoorDirection.up, False, False),
+
+    "3a_12-x_west": Door("3a_12-x_west", "3a_12-x", DoorDirection.up, False, False),
+    "3a_12-x_north-east": Door("3a_12-x_north-east", "3a_12-x", DoorDirection.up, False, False),
+    "3a_12-x_east": Door("3a_12-x_east", "3a_12-x", DoorDirection.right, False, False),
+
+    "3a_11-a_west": Door("3a_11-a_west", "3a_11-a", DoorDirection.left, False, False),
+    "3a_11-a_south": Door("3a_11-a_south", "3a_11-a", DoorDirection.down, False, True),
+    "3a_11-a_south-east-bottom": Door("3a_11-a_south-east-bottom", "3a_11-a", DoorDirection.down, False, False),
+    "3a_11-a_south-east-right": Door("3a_11-a_south-east-right", "3a_11-a", DoorDirection.right, False, False),
+
+    "3a_08-x_west": Door("3a_08-x_west", "3a_08-x", DoorDirection.up, False, False),
+    "3a_08-x_east": Door("3a_08-x_east", "3a_08-x", DoorDirection.up, False, False),
+
+    "3a_09-d_bottom": Door("3a_09-d_bottom", "3a_09-d", DoorDirection.down, False, True),
+    "3a_09-d_top": Door("3a_09-d_top", "3a_09-d", DoorDirection.left, False, False),
+
+    "3a_08-d_west": Door("3a_08-d_west", "3a_08-d", DoorDirection.left, False, False),
+    "3a_08-d_east": Door("3a_08-d_east", "3a_08-d", DoorDirection.right, False, False),
+
+    "3a_06-d_west": Door("3a_06-d_west", "3a_06-d", DoorDirection.left, False, False),
+    "3a_06-d_east": Door("3a_06-d_east", "3a_06-d", DoorDirection.right, False, False),
+
+    "3a_04-d_west": Door("3a_04-d_west", "3a_04-d", DoorDirection.left, False, False),
+    "3a_04-d_south-west": Door("3a_04-d_south-west", "3a_04-d", DoorDirection.down, False, False),
+    "3a_04-d_south": Door("3a_04-d_south", "3a_04-d", DoorDirection.down, False, False),
+    "3a_04-d_east": Door("3a_04-d_east", "3a_04-d", DoorDirection.right, False, False),
+
+    "3a_04-c_west": Door("3a_04-c_west", "3a_04-c", DoorDirection.left, False, False),
+    "3a_04-c_north-west": Door("3a_04-c_north-west", "3a_04-c", DoorDirection.up, False, False),
+    "3a_04-c_east": Door("3a_04-c_east", "3a_04-c", DoorDirection.up, False, False),
+
+    "3a_02-c_west": Door("3a_02-c_west", "3a_02-c", DoorDirection.left, False, False),
+    "3a_02-c_east": Door("3a_02-c_east", "3a_02-c", DoorDirection.right, False, False),
+    "3a_02-c_south-east": Door("3a_02-c_south-east", "3a_02-c", DoorDirection.down, False, False),
+
+    "3a_03-b_west": Door("3a_03-b_west", "3a_03-b", DoorDirection.left, False, False),
+    "3a_03-b_east": Door("3a_03-b_east", "3a_03-b", DoorDirection.right, False, False),
+    "3a_03-b_north": Door("3a_03-b_north", "3a_03-b", DoorDirection.up, False, False),
+
+    "3a_01-c_west": Door("3a_01-c_west", "3a_01-c", DoorDirection.left, False, False),
+    "3a_01-c_east": Door("3a_01-c_east", "3a_01-c", DoorDirection.right, False, False),
+
+    "3a_02-d_west": Door("3a_02-d_west", "3a_02-d", DoorDirection.left, False, False),
+    "3a_02-d_east": Door("3a_02-d_east", "3a_02-d", DoorDirection.right, False, False),
+
+    "3a_00-d_west": Door("3a_00-d_west", "3a_00-d", DoorDirection.up, False, False),
+    "3a_00-d_east": Door("3a_00-d_east", "3a_00-d", DoorDirection.right, False, True),
+
+    "3a_roof00_west": Door("3a_roof00_west", "3a_roof00", DoorDirection.down, False, True),
+    "3a_roof00_east": Door("3a_roof00_east", "3a_roof00", DoorDirection.right, False, False),
+
+    "3a_roof01_west": Door("3a_roof01_west", "3a_roof01", DoorDirection.left, False, False),
+    "3a_roof01_east": Door("3a_roof01_east", "3a_roof01", DoorDirection.right, False, False),
+
+    "3a_roof02_west": Door("3a_roof02_west", "3a_roof02", DoorDirection.left, False, False),
+    "3a_roof02_east": Door("3a_roof02_east", "3a_roof02", DoorDirection.right, False, False),
+
+    "3a_roof03_west": Door("3a_roof03_west", "3a_roof03", DoorDirection.left, False, False),
+    "3a_roof03_east": Door("3a_roof03_east", "3a_roof03", DoorDirection.right, False, False),
+
+    "3a_roof04_west": Door("3a_roof04_west", "3a_roof04", DoorDirection.left, False, False),
+    "3a_roof04_east": Door("3a_roof04_east", "3a_roof04", DoorDirection.right, False, False),
+
+    "3a_roof05_west": Door("3a_roof05_west", "3a_roof05", DoorDirection.left, False, False),
+    "3a_roof05_east": Door("3a_roof05_east", "3a_roof05", DoorDirection.right, False, False),
+
+    "3a_roof06b_west": Door("3a_roof06b_west", "3a_roof06b", DoorDirection.left, False, False),
+    "3a_roof06b_east": Door("3a_roof06b_east", "3a_roof06b", DoorDirection.right, False, False),
+
+    "3a_roof06_west": Door("3a_roof06_west", "3a_roof06", DoorDirection.left, False, False),
+    "3a_roof06_east": Door("3a_roof06_east", "3a_roof06", DoorDirection.right, False, False),
 
     "3a_roof07_west": Door("3a_roof07_west", "3a_roof07", DoorDirection.left, False, False),
 
@@ -888,6 +1107,228 @@ all_region_connections: Dict[str, RegionConnection] = {
     "3a_s3_west---3a_s3_east": RegionConnection("3a_s3_west", "3a_s3_east", [["Celestial Resort A - Front Door Key", ], ]),
     "3a_s3_east---3a_s3_west": RegionConnection("3a_s3_east", "3a_s3_west", []),
 
+    "3a_0x-a_west---3a_0x-a_east": RegionConnection("3a_0x-a_west", "3a_0x-a_east", []),
+    "3a_0x-a_east---3a_0x-a_west": RegionConnection("3a_0x-a_east", "3a_0x-a_west", []),
+
+    "3a_00-a_west---3a_00-a_east": RegionConnection("3a_00-a_west", "3a_00-a_east", []),
+    "3a_00-a_east---3a_00-a_west": RegionConnection("3a_00-a_east", "3a_00-a_west", []),
+
+    "3a_02-a_west---3a_02-a_east": RegionConnection("3a_02-a_west", "3a_02-a_east", [[ItemName.sinking_platforms, ], [ItemName.dash_refills, ], ]),
+    "3a_02-a_top---3a_02-a_west": RegionConnection("3a_02-a_top", "3a_02-a_west", [[ItemName.dash_refills, ], ]),
+    "3a_02-a_top---3a_02-a_main": RegionConnection("3a_02-a_top", "3a_02-a_main", [[ItemName.dash_refills, ], ]),
+    "3a_02-a_main---3a_02-a_top": RegionConnection("3a_02-a_main", "3a_02-a_top", [[ItemName.dash_refills, ], ]),
+    "3a_02-a_main---3a_02-a_east": RegionConnection("3a_02-a_main", "3a_02-a_east", [["Celestial Resort A - Hallway Key 1", ], ]),
+    "3a_02-a_east---3a_02-a_main": RegionConnection("3a_02-a_east", "3a_02-a_main", []),
+
+    "3a_02-b_west---3a_02-b_east": RegionConnection("3a_02-b_west", "3a_02-b_east", []),
+    "3a_02-b_east---3a_02-b_west": RegionConnection("3a_02-b_east", "3a_02-b_west", []),
+
+    "3a_01-b_west---3a_01-b_east": RegionConnection("3a_01-b_west", "3a_01-b_east", []),
+    "3a_01-b_north-west---3a_01-b_west": RegionConnection("3a_01-b_north-west", "3a_01-b_west", []),
+    "3a_01-b_east---3a_01-b_west": RegionConnection("3a_01-b_east", "3a_01-b_west", []),
+    "3a_01-b_east---3a_01-b_north-west": RegionConnection("3a_01-b_east", "3a_01-b_north-west", [[ItemName.springs, ], ]),
+
+    "3a_00-b_south-west---3a_00-b_south-east": RegionConnection("3a_00-b_south-west", "3a_00-b_south-east", []),
+    "3a_00-b_south-east---3a_00-b_south-west": RegionConnection("3a_00-b_south-east", "3a_00-b_south-west", []),
+    "3a_00-b_west---3a_00-b_north-west": RegionConnection("3a_00-b_west", "3a_00-b_north-west", []),
+    "3a_00-b_north-west---3a_00-b_west": RegionConnection("3a_00-b_north-west", "3a_00-b_west", []),
+    "3a_00-b_east---3a_00-b_north": RegionConnection("3a_00-b_east", "3a_00-b_north", []),
+    "3a_00-b_north---3a_00-b_east": RegionConnection("3a_00-b_north", "3a_00-b_east", []),
+
+    "3a_00-c_south-west---3a_00-c_south-east": RegionConnection("3a_00-c_south-west", "3a_00-c_south-east", [[ItemName.dash_refills, ], ]),
+    "3a_00-c_south-east---3a_00-c_south-west": RegionConnection("3a_00-c_south-east", "3a_00-c_south-west", [[ItemName.dash_refills, ], ]),
+    "3a_00-c_south-east---3a_00-c_north-east": RegionConnection("3a_00-c_south-east", "3a_00-c_north-east", []),
+    "3a_00-c_north-east---3a_00-c_south-east": RegionConnection("3a_00-c_north-east", "3a_00-c_south-east", []),
+
+    "3a_0x-b_west---3a_0x-b_south-east": RegionConnection("3a_0x-b_west", "3a_0x-b_south-east", []),
+    "3a_0x-b_north-east---3a_0x-b_west": RegionConnection("3a_0x-b_north-east", "3a_0x-b_west", [[ItemName.dash_refills, ], ]),
+
+    "3a_03-a_west---3a_03-a_east": RegionConnection("3a_03-a_west", "3a_03-a_east", [[ItemName.sinking_platforms, ], ]),
+    "3a_03-a_top---3a_03-a_east": RegionConnection("3a_03-a_top", "3a_03-a_east", []),
+    "3a_03-a_east---3a_03-a_top": RegionConnection("3a_03-a_east", "3a_03-a_top", []),
+
+
+    "3a_05-a_west---3a_05-a_east": RegionConnection("3a_05-a_west", "3a_05-a_east", [[ItemName.dash_refills, ItemName.moving_platforms, ], ]),
+    "3a_05-a_east---3a_05-a_west": RegionConnection("3a_05-a_east", "3a_05-a_west", [[ItemName.dash_refills, ItemName.moving_platforms, ], ]),
+
+    "3a_06-a_west---3a_06-a_east": RegionConnection("3a_06-a_west", "3a_06-a_east", []),
+
+    "3a_07-a_west---3a_07-a_east": RegionConnection("3a_07-a_west", "3a_07-a_east", [["Celestial Resort A - Hallway Key 2", ItemName.dash_refills, ], ]),
+    "3a_07-a_west---3a_07-a_top": RegionConnection("3a_07-a_west", "3a_07-a_top", []),
+    "3a_07-a_top---3a_07-a_west": RegionConnection("3a_07-a_top", "3a_07-a_west", []),
+    "3a_07-a_east---3a_07-a_west": RegionConnection("3a_07-a_east", "3a_07-a_west", [["Celestial Resort A - Hallway Key 2", ItemName.dash_refills, ], ]),
+
+    "3a_07-b_bottom---3a_07-b_west": RegionConnection("3a_07-b_bottom", "3a_07-b_west", []),
+    "3a_07-b_west---3a_07-b_bottom": RegionConnection("3a_07-b_west", "3a_07-b_bottom", []),
+    "3a_07-b_east---3a_07-b_bottom": RegionConnection("3a_07-b_east", "3a_07-b_bottom", []),
+
+    "3a_06-b_west---3a_06-b_east": RegionConnection("3a_06-b_west", "3a_06-b_east", []),
+    "3a_06-b_east---3a_06-b_west": RegionConnection("3a_06-b_east", "3a_06-b_west", []),
+
+    "3a_06-c_south-west---3a_06-c_north-west": RegionConnection("3a_06-c_south-west", "3a_06-c_north-west", []),
+    "3a_06-c_south-west---3a_06-c_south-east": RegionConnection("3a_06-c_south-west", "3a_06-c_south-east", []),
+    "3a_06-c_north-west---3a_06-c_south-west": RegionConnection("3a_06-c_north-west", "3a_06-c_south-west", []),
+    "3a_06-c_south-east---3a_06-c_south-west": RegionConnection("3a_06-c_south-east", "3a_06-c_south-west", []),
+    "3a_06-c_south-east---3a_06-c_east": RegionConnection("3a_06-c_south-east", "3a_06-c_east", []),
+    "3a_06-c_east---3a_06-c_south-east": RegionConnection("3a_06-c_east", "3a_06-c_south-east", []),
+
+
+    "3a_08-c_west---3a_08-c_east": RegionConnection("3a_08-c_west", "3a_08-c_east", [[ItemName.coins, ItemName.moving_platforms, ItemName.springs, ], ]),
+
+    "3a_08-b_east---3a_08-b_west": RegionConnection("3a_08-b_east", "3a_08-b_west", [[ItemName.sinking_platforms, ItemName.coins, ], ]),
+
+    "3a_08-a_west---3a_08-a_east": RegionConnection("3a_08-a_west", "3a_08-a_east", []),
+    "3a_08-a_west---3a_08-a_bottom": RegionConnection("3a_08-a_west", "3a_08-a_bottom", [[ItemName.brown_clutter, ], [ItemName.green_clutter, ], [ItemName.pink_clutter, ], ]),
+    "3a_08-a_east---3a_08-a_west": RegionConnection("3a_08-a_east", "3a_08-a_west", []),
+
+    "3a_09-b_west---3a_09-b_center": RegionConnection("3a_09-b_west", "3a_09-b_center", []),
+    "3a_09-b_north-west---3a_09-b_center": RegionConnection("3a_09-b_north-west", "3a_09-b_center", [["Celestial Resort A - Huge Mess Key", ], ]),
+    "3a_09-b_center---3a_09-b_west": RegionConnection("3a_09-b_center", "3a_09-b_west", []),
+    "3a_09-b_center---3a_09-b_north-west": RegionConnection("3a_09-b_center", "3a_09-b_north-west", [["Celestial Resort A - Huge Mess Key", ], ]),
+    "3a_09-b_center---3a_09-b_south-west": RegionConnection("3a_09-b_center", "3a_09-b_south-west", [[ItemName.brown_clutter, ], [ItemName.green_clutter, ], [ItemName.pink_clutter, ], ]),
+    "3a_09-b_center---3a_09-b_south": RegionConnection("3a_09-b_center", "3a_09-b_south", []),
+    "3a_09-b_center---3a_09-b_south-east": RegionConnection("3a_09-b_center", "3a_09-b_south-east", []),
+    "3a_09-b_center---3a_09-b_east": RegionConnection("3a_09-b_center", "3a_09-b_east", []),
+    "3a_09-b_center---3a_09-b_north-east-right": RegionConnection("3a_09-b_center", "3a_09-b_north-east-right", []),
+    "3a_09-b_center---3a_09-b_north-east-top": RegionConnection("3a_09-b_center", "3a_09-b_north-east-top", []),
+    "3a_09-b_center---3a_09-b_north": RegionConnection("3a_09-b_center", "3a_09-b_north", []),
+    "3a_09-b_south-west---3a_09-b_center": RegionConnection("3a_09-b_south-west", "3a_09-b_center", [[ItemName.brown_clutter, ], [ItemName.green_clutter, ], [ItemName.pink_clutter, ], ]),
+    "3a_09-b_south---3a_09-b_center": RegionConnection("3a_09-b_south", "3a_09-b_center", []),
+    "3a_09-b_south-east---3a_09-b_center": RegionConnection("3a_09-b_south-east", "3a_09-b_center", []),
+    "3a_09-b_east---3a_09-b_center": RegionConnection("3a_09-b_east", "3a_09-b_center", []),
+    "3a_09-b_north-east-right---3a_09-b_center": RegionConnection("3a_09-b_north-east-right", "3a_09-b_center", []),
+    "3a_09-b_north-east-top---3a_09-b_center": RegionConnection("3a_09-b_north-east-top", "3a_09-b_center", []),
+    "3a_09-b_north---3a_09-b_center": RegionConnection("3a_09-b_north", "3a_09-b_center", []),
+
+    "3a_10-x_west---3a_10-x_south-east": RegionConnection("3a_10-x_west", "3a_10-x_south-east", []),
+    "3a_10-x_south-east---3a_10-x_west": RegionConnection("3a_10-x_south-east", "3a_10-x_west", [[ItemName.brown_clutter, ], ]),
+    "3a_10-x_north-east-top---3a_10-x_north-east-right": RegionConnection("3a_10-x_north-east-top", "3a_10-x_north-east-right", []),
+    "3a_10-x_north-east-right---3a_10-x_north-east-top": RegionConnection("3a_10-x_north-east-right", "3a_10-x_north-east-top", []),
+
+    "3a_11-x_west---3a_11-x_south": RegionConnection("3a_11-x_west", "3a_11-x_south", [[ItemName.coins, ], ]),
+
+    "3a_11-y_west---3a_11-y_east": RegionConnection("3a_11-y_west", "3a_11-y_east", []),
+    "3a_11-y_east---3a_11-y_east": RegionConnection("3a_11-y_east", "3a_11-y_east", []),
+    "3a_11-y_east---3a_11-y_south": RegionConnection("3a_11-y_east", "3a_11-y_south", []),
+    "3a_11-y_south---3a_11-y_east": RegionConnection("3a_11-y_south", "3a_11-y_east", []),
+
+
+    "3a_11-z_west---3a_11-z_east": RegionConnection("3a_11-z_west", "3a_11-z_east", [[ItemName.dash_refills, ], ]),
+    "3a_11-z_east---3a_11-z_west": RegionConnection("3a_11-z_east", "3a_11-z_west", [[ItemName.dash_refills, ], ]),
+
+    "3a_10-z_bottom---3a_10-z_top": RegionConnection("3a_10-z_bottom", "3a_10-z_top", [[ItemName.sinking_platforms, ], ]),
+    "3a_10-z_top---3a_10-z_bottom": RegionConnection("3a_10-z_top", "3a_10-z_bottom", []),
+
+    "3a_10-y_bottom---3a_10-y_top": RegionConnection("3a_10-y_bottom", "3a_10-y_top", []),
+    "3a_10-y_top---3a_10-y_bottom": RegionConnection("3a_10-y_top", "3a_10-y_bottom", []),
+
+    "3a_10-c_south-east---3a_10-c_north-east": RegionConnection("3a_10-c_south-east", "3a_10-c_north-east", []),
+    "3a_10-c_north-east---3a_10-c_south-east": RegionConnection("3a_10-c_north-east", "3a_10-c_south-east", []),
+    "3a_10-c_north-west---3a_10-c_south-west": RegionConnection("3a_10-c_north-west", "3a_10-c_south-west", []),
+    "3a_10-c_south-west---3a_10-c_north-west": RegionConnection("3a_10-c_south-west", "3a_10-c_north-west", []),
+
+    "3a_11-c_west---3a_11-c_east": RegionConnection("3a_11-c_west", "3a_11-c_east", []),
+    "3a_11-c_east---3a_11-c_west": RegionConnection("3a_11-c_east", "3a_11-c_west", []),
+    "3a_11-c_south-east---3a_11-c_south-west": RegionConnection("3a_11-c_south-east", "3a_11-c_south-west", []),
+    "3a_11-c_south-west---3a_11-c_south-east": RegionConnection("3a_11-c_south-west", "3a_11-c_south-east", []),
+
+    "3a_12-c_west---3a_12-c_top": RegionConnection("3a_12-c_west", "3a_12-c_top", []),
+    "3a_12-c_top---3a_12-c_west": RegionConnection("3a_12-c_top", "3a_12-c_west", []),
+
+    "3a_12-d_bottom---3a_12-d_top": RegionConnection("3a_12-d_bottom", "3a_12-d_top", []),
+
+    "3a_11-d_west---3a_11-d_east": RegionConnection("3a_11-d_west", "3a_11-d_east", [[ItemName.cannot_access, ], ]),
+    "3a_11-d_east---3a_11-d_west": RegionConnection("3a_11-d_east", "3a_11-d_west", [[ItemName.dash_refills, ], ]),
+
+    "3a_10-d_west---3a_10-d_main": RegionConnection("3a_10-d_west", "3a_10-d_main", [[ItemName.green_clutter, ], ]),
+    "3a_10-d_main---3a_10-d_west": RegionConnection("3a_10-d_main", "3a_10-d_west", [[ItemName.dash_refills, ], ]),
+    "3a_10-d_east---3a_10-d_main": RegionConnection("3a_10-d_east", "3a_10-d_main", []),
+
+    "3a_11-b_west---3a_11-b_east": RegionConnection("3a_11-b_west", "3a_11-b_east", []),
+    "3a_11-b_north-west---3a_11-b_west": RegionConnection("3a_11-b_north-west", "3a_11-b_west", []),
+    "3a_11-b_east---3a_11-b_west": RegionConnection("3a_11-b_east", "3a_11-b_west", []),
+    "3a_11-b_east---3a_11-b_north-east": RegionConnection("3a_11-b_east", "3a_11-b_north-east", [[ItemName.pink_clutter, ], ]),
+    "3a_11-b_north-east---3a_11-b_east": RegionConnection("3a_11-b_north-east", "3a_11-b_east", [[ItemName.pink_clutter, ], ]),
+
+    "3a_12-b_west---3a_12-b_east": RegionConnection("3a_12-b_west", "3a_12-b_east", []),
+    "3a_12-b_east---3a_12-b_west": RegionConnection("3a_12-b_east", "3a_12-b_west", []),
+
+    "3a_13-b_top---3a_13-b_bottom": RegionConnection("3a_13-b_top", "3a_13-b_bottom", []),
+    "3a_13-b_bottom---3a_13-b_top": RegionConnection("3a_13-b_bottom", "3a_13-b_top", []),
+
+    "3a_13-a_west---3a_13-a_east": RegionConnection("3a_13-a_west", "3a_13-a_east", []),
+    "3a_13-a_west---3a_13-a_south-west": RegionConnection("3a_13-a_west", "3a_13-a_south-west", [[ItemName.pink_clutter, ], ]),
+    "3a_13-a_south-west---3a_13-a_west": RegionConnection("3a_13-a_south-west", "3a_13-a_west", [[ItemName.pink_clutter, ], ]),
+
+    "3a_13-x_west---3a_13-x_east": RegionConnection("3a_13-x_west", "3a_13-x_east", []),
+    "3a_13-x_east---3a_13-x_west": RegionConnection("3a_13-x_east", "3a_13-x_west", []),
+
+    "3a_12-x_west---3a_12-x_east": RegionConnection("3a_12-x_west", "3a_12-x_east", []),
+    "3a_12-x_north-east---3a_12-x_east": RegionConnection("3a_12-x_north-east", "3a_12-x_east", []),
+    "3a_12-x_east---3a_12-x_west": RegionConnection("3a_12-x_east", "3a_12-x_west", []),
+
+    "3a_11-a_west---3a_11-a_south": RegionConnection("3a_11-a_west", "3a_11-a_south", []),
+    "3a_11-a_south---3a_11-a_west": RegionConnection("3a_11-a_south", "3a_11-a_west", []),
+    "3a_11-a_south-east-bottom---3a_11-a_south-east-right": RegionConnection("3a_11-a_south-east-bottom", "3a_11-a_south-east-right", [[ItemName.pink_clutter, ], ]),
+    "3a_11-a_south-east-right---3a_11-a_south-east-bottom": RegionConnection("3a_11-a_south-east-right", "3a_11-a_south-east-bottom", [[ItemName.pink_clutter, ], ]),
+
+    "3a_08-x_west---3a_08-x_east": RegionConnection("3a_08-x_west", "3a_08-x_east", []),
+    "3a_08-x_east---3a_08-x_west": RegionConnection("3a_08-x_east", "3a_08-x_west", []),
+
+    "3a_09-d_bottom---3a_09-d_top": RegionConnection("3a_09-d_bottom", "3a_09-d_top", []),
+
+    "3a_08-d_east---3a_08-d_west": RegionConnection("3a_08-d_east", "3a_08-d_west", [[ItemName.dash_refills, ItemName.coins, ], ]),
+
+    "3a_06-d_east---3a_06-d_west": RegionConnection("3a_06-d_east", "3a_06-d_west", [[ItemName.dash_refills, ], ]),
+
+    "3a_04-d_west---3a_04-d_west": RegionConnection("3a_04-d_west", "3a_04-d_west", []),
+    "3a_04-d_south-west---3a_04-d_west": RegionConnection("3a_04-d_south-west", "3a_04-d_west", []),
+    "3a_04-d_south---3a_04-d_south-west": RegionConnection("3a_04-d_south", "3a_04-d_south-west", [[ItemName.cannot_access, ], ]),
+    "3a_04-d_east---3a_04-d_south": RegionConnection("3a_04-d_east", "3a_04-d_south", [[ItemName.dash_refills, ], ]),
+
+    "3a_04-c_west---3a_04-c_north-west": RegionConnection("3a_04-c_west", "3a_04-c_north-west", [["Celestial Resort A - Presidential Suite Key", ], ]),
+    "3a_04-c_west---3a_04-c_east": RegionConnection("3a_04-c_west", "3a_04-c_east", []),
+    "3a_04-c_north-west---3a_04-c_west": RegionConnection("3a_04-c_north-west", "3a_04-c_west", [["Celestial Resort A - Presidential Suite Key", ], ]),
+    "3a_04-c_east---3a_04-c_west": RegionConnection("3a_04-c_east", "3a_04-c_west", []),
+
+    "3a_02-c_west---3a_02-c_east": RegionConnection("3a_02-c_west", "3a_02-c_east", []),
+    "3a_02-c_east---3a_02-c_west": RegionConnection("3a_02-c_east", "3a_02-c_west", [[ItemName.sinking_platforms, ], ]),
+    "3a_02-c_east---3a_02-c_south-east": RegionConnection("3a_02-c_east", "3a_02-c_south-east", []),
+    "3a_02-c_south-east---3a_02-c_east": RegionConnection("3a_02-c_south-east", "3a_02-c_east", []),
+
+    "3a_03-b_west---3a_03-b_east": RegionConnection("3a_03-b_west", "3a_03-b_east", []),
+    "3a_03-b_east---3a_03-b_west": RegionConnection("3a_03-b_east", "3a_03-b_west", []),
+    "3a_03-b_east---3a_03-b_north": RegionConnection("3a_03-b_east", "3a_03-b_north", []),
+    "3a_03-b_north---3a_03-b_east": RegionConnection("3a_03-b_north", "3a_03-b_east", []),
+
+
+    "3a_02-d_west---3a_02-d_east": RegionConnection("3a_02-d_west", "3a_02-d_east", [[ItemName.cannot_access, ], ]),
+    "3a_02-d_east---3a_02-d_west": RegionConnection("3a_02-d_east", "3a_02-d_west", [[ItemName.dash_refills, ], ]),
+
+    "3a_00-d_west---3a_00-d_east": RegionConnection("3a_00-d_west", "3a_00-d_east", []),
+    "3a_00-d_east---3a_00-d_west": RegionConnection("3a_00-d_east", "3a_00-d_west", []),
+
+    "3a_roof00_west---3a_roof00_east": RegionConnection("3a_roof00_west", "3a_roof00_east", []),
+    "3a_roof00_east---3a_roof00_west": RegionConnection("3a_roof00_east", "3a_roof00_west", []),
+
+    "3a_roof01_west---3a_roof01_east": RegionConnection("3a_roof01_west", "3a_roof01_east", [[ItemName.springs, ], ]),
+
+    "3a_roof02_west---3a_roof02_east": RegionConnection("3a_roof02_west", "3a_roof02_east", []),
+    "3a_roof02_east---3a_roof02_west": RegionConnection("3a_roof02_east", "3a_roof02_west", []),
+
+    "3a_roof03_west---3a_roof03_east": RegionConnection("3a_roof03_west", "3a_roof03_east", [[ItemName.springs, ItemName.coins, ItemName.dash_refills, ], ]),
+
+    "3a_roof04_west---3a_roof04_east": RegionConnection("3a_roof04_west", "3a_roof04_east", []),
+    "3a_roof04_east---3a_roof04_west": RegionConnection("3a_roof04_east", "3a_roof04_west", []),
+
+    "3a_roof05_west---3a_roof05_east": RegionConnection("3a_roof05_west", "3a_roof05_east", [[ItemName.springs, ], ]),
+
+    "3a_roof06b_west---3a_roof06b_east": RegionConnection("3a_roof06b_west", "3a_roof06b_east", [[ItemName.dash_refills, ], ]),
+    "3a_roof06b_east---3a_roof06b_west": RegionConnection("3a_roof06b_east", "3a_roof06b_west", [[ItemName.dash_refills, ], ]),
+
+    "3a_roof06_west---3a_roof06_east": RegionConnection("3a_roof06_west", "3a_roof06_east", []),
+    "3a_roof06_east---3a_roof06_west": RegionConnection("3a_roof06_east", "3a_roof06_west", []),
+
     "3a_roof07_west---3a_roof07_main": RegionConnection("3a_roof07_west", "3a_roof07_main", []),
     "3a_roof07_main---3a_roof07_west": RegionConnection("3a_roof07_main", "3a_roof07_west", []),
 
@@ -968,8 +1409,38 @@ all_locations: Dict[str, LevelLocation] = {
     "3a_s2_strawberry_2": LevelLocation("3a_s2_strawberry_2", "Celestial Resort A - Room s2 Strawberry 2", "3a_s2_west", LocationType.strawberry, []),
     "3a_s2_strawberry_1": LevelLocation("3a_s2_strawberry_1", "Celestial Resort A - Room s2 Strawberry 1", "3a_s2_north-west", LocationType.strawberry, []),
     "3a_s3_key_1": LevelLocation("3a_s3_key_1", "Celestial Resort A - Front Door Key", "3a_s3_west", LocationType.key, []),
-    "3a_s3_pink_clutter": LevelLocation("3a_s3_pink_clutter", "Celestial Resort A - Pink Clutter", "3a_s3_west", LocationType.clutter, []),
     "3a_s3_strawberry": LevelLocation("3a_s3_strawberry", "Celestial Resort A - Room s3 Strawberry", "3a_s3_north", LocationType.strawberry, []),
+    "3a_00-a_strawberry": LevelLocation("3a_00-a_strawberry", "Celestial Resort A - Room 00-a Strawberry", "3a_00-a_east", LocationType.strawberry, []),
+    "3a_02-b_hallway_key_1": LevelLocation("3a_02-b_hallway_key_1", "Celestial Resort A - Hallway Key 1", "3a_02-b_east", LocationType.key, []),
+    "3a_00-b_strawberry": LevelLocation("3a_00-b_strawberry", "Celestial Resort A - Room 00-b Strawberry", "3a_00-b_east", LocationType.strawberry, []),
+    "3a_04-b_strawberry": LevelLocation("3a_04-b_strawberry", "Celestial Resort A - Room 04-b Strawberry", "3a_04-b_east", LocationType.strawberry, [[ItemName.dash_refills, ], ]),
+    "3a_06-a_strawberry": LevelLocation("3a_06-a_strawberry", "Celestial Resort A - Room 06-a Strawberry", "3a_06-a_west", LocationType.strawberry, []),
+    "3a_07-b_strawberry": LevelLocation("3a_07-b_strawberry", "Celestial Resort A - Room 07-b Strawberry", "3a_07-b_top", LocationType.strawberry, []),
+    "3a_07-b_key_2": LevelLocation("3a_07-b_key_2", "Celestial Resort A - Hallway Key 2", "3a_07-b_east", LocationType.key, []),
+    "3a_06-b_strawberry": LevelLocation("3a_06-b_strawberry", "Celestial Resort A - Room 06-b Strawberry", "3a_06-b_east", LocationType.strawberry, []),
+    "3a_06-c_strawberry": LevelLocation("3a_06-c_strawberry", "Celestial Resort A - Room 06-c Strawberry", "3a_06-c_south-west", LocationType.strawberry, []),
+    "3a_05-c_strawberry": LevelLocation("3a_05-c_strawberry", "Celestial Resort A - Room 05-c Strawberry", "3a_05-c_east", LocationType.strawberry, []),
+    "3a_09-b_key_4": LevelLocation("3a_09-b_key_4", "Celestial Resort A - Huge Mess Key", "3a_09-b_center", LocationType.key, [[ItemName.brown_clutter, ItemName.green_clutter, ItemName.pink_clutter, ], ]),
+    "3a_10-x_brown_clutter": LevelLocation("3a_10-x_brown_clutter", "Celestial Resort A - Brown Clutter", "3a_10-x_south-east", LocationType.clutter, []),
+    "3a_12-y_strawberry": LevelLocation("3a_12-y_strawberry", "Celestial Resort A - Room 12-y Strawberry", "3a_12-y_west", LocationType.strawberry, []),
+    "3a_10-y_strawberry": LevelLocation("3a_10-y_strawberry", "Celestial Resort A - Room 10-y Strawberry", "3a_10-y_bottom", LocationType.strawberry, []),
+    "3a_11-c_crystal_heart": LevelLocation("3a_11-c_crystal_heart", "Celestial Resort A - Crystal Heart", "3a_11-c_south-east", LocationType.crystal_heart, []),
+    "3a_12-c_strawberry": LevelLocation("3a_12-c_strawberry", "Celestial Resort A - Room 12-c Strawberry", "3a_12-c_west", LocationType.strawberry, []),
+    "3a_11-d_strawberry": LevelLocation("3a_11-d_strawberry", "Celestial Resort A - Room 11-d Strawberry", "3a_11-d_east", LocationType.strawberry, [[ItemName.dash_refills, ], ]),
+    "3a_10-d_green_clutter": LevelLocation("3a_10-d_green_clutter", "Celestial Resort A - Green Clutter", "3a_10-d_main", LocationType.clutter, []),
+    "3a_13-b_strawberry": LevelLocation("3a_13-b_strawberry", "Celestial Resort A - Room 13-b Strawberry", "3a_13-b_top", LocationType.strawberry, []),
+    "3a_13-x_strawberry": LevelLocation("3a_13-x_strawberry", "Celestial Resort A - Room 13-x Strawberry", "3a_13-x_west", LocationType.strawberry, []),
+    "3a_12-x_pink_clutter": LevelLocation("3a_12-x_pink_clutter", "Celestial Resort A - Pink Clutter", "3a_12-x_east", LocationType.clutter, []),
+    "3a_08-x_strawberry": LevelLocation("3a_08-x_strawberry", "Celestial Resort A - Room 08-x Strawberry", "3a_08-x_west", LocationType.strawberry, []),
+    "3a_06-d_strawberry": LevelLocation("3a_06-d_strawberry", "Celestial Resort A - Room 06-d Strawberry", "3a_06-d_east", LocationType.strawberry, []),
+    "3a_04-c_strawberry": LevelLocation("3a_04-c_strawberry", "Celestial Resort A - Room 04-c Strawberry", "3a_04-c_east", LocationType.strawberry, []),
+    "3a_02-c_key_5": LevelLocation("3a_02-c_key_5", "Celestial Resort A - Presidential Suite Key", "3a_02-c_west", LocationType.key, []),
+    "3a_03-b_strawberry_1": LevelLocation("3a_03-b_strawberry_1", "Celestial Resort A - Room 03-b Strawberry 1", "3a_03-b_west", LocationType.strawberry, []),
+    "3a_03-b_strawberry_2": LevelLocation("3a_03-b_strawberry_2", "Celestial Resort A - Room 03-b Strawberry 2", "3a_03-b_west", LocationType.strawberry, [[ItemName.dash_refills, ], ]),
+    "3a_01-c_cassette": LevelLocation("3a_01-c_cassette", "Celestial Resort A - Cassette", "3a_01-c_east", LocationType.cassette, [[ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks, ], ]),
+    "3a_roof03_strawberry": LevelLocation("3a_roof03_strawberry", "Celestial Resort A - Room roof03 Strawberry", "3a_roof03_west", LocationType.strawberry, []),
+    "3a_roof06_strawberry_1": LevelLocation("3a_roof06_strawberry_1", "Celestial Resort A - Room roof06 Strawberry 1", "3a_roof06_west", LocationType.strawberry, []),
+    "3a_roof06_strawberry_2": LevelLocation("3a_roof06_strawberry_2", "Celestial Resort A - Room roof06 Strawberry 2", "3a_roof06_west", LocationType.strawberry, []),
     "3a_roof07_clear": LevelLocation("3a_roof07_clear", "Celestial Resort A - Level Clear", "3a_roof07_main", LocationType.level_clear, []),
     "3a_roof07_golden": LevelLocation("3a_roof07_golden", "Celestial Resort A - Golden Strawberry", "3a_roof07_main", LocationType.golden_strawberry, [[ItemName.dream_blocks, ItemName.coins, ItemName.dash_refills, ], ]),
 
@@ -1417,6 +1888,228 @@ all_regions: Dict[str, PreRegion] = {
     "3a_s3_north": PreRegion("3a_s3_north", "3a_s3", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_s3_north"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_s3_north"]),
     "3a_s3_east": PreRegion("3a_s3_east", "3a_s3", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_s3_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_s3_east"]),
 
+    "3a_0x-a_west": PreRegion("3a_0x-a_west", "3a_0x-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_0x-a_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_0x-a_west"]),
+    "3a_0x-a_east": PreRegion("3a_0x-a_east", "3a_0x-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_0x-a_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_0x-a_east"]),
+
+    "3a_00-a_west": PreRegion("3a_00-a_west", "3a_00-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_00-a_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_00-a_west"]),
+    "3a_00-a_east": PreRegion("3a_00-a_east", "3a_00-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_00-a_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_00-a_east"]),
+
+    "3a_02-a_west": PreRegion("3a_02-a_west", "3a_02-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_02-a_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_02-a_west"]),
+    "3a_02-a_top": PreRegion("3a_02-a_top", "3a_02-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_02-a_top"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_02-a_top"]),
+    "3a_02-a_main": PreRegion("3a_02-a_main", "3a_02-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_02-a_main"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_02-a_main"]),
+    "3a_02-a_east": PreRegion("3a_02-a_east", "3a_02-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_02-a_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_02-a_east"]),
+
+    "3a_02-b_west": PreRegion("3a_02-b_west", "3a_02-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_02-b_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_02-b_west"]),
+    "3a_02-b_east": PreRegion("3a_02-b_east", "3a_02-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_02-b_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_02-b_east"]),
+    "3a_02-b_far-east": PreRegion("3a_02-b_far-east", "3a_02-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_02-b_far-east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_02-b_far-east"]),
+
+    "3a_01-b_west": PreRegion("3a_01-b_west", "3a_01-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_01-b_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_01-b_west"]),
+    "3a_01-b_north-west": PreRegion("3a_01-b_north-west", "3a_01-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_01-b_north-west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_01-b_north-west"]),
+    "3a_01-b_east": PreRegion("3a_01-b_east", "3a_01-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_01-b_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_01-b_east"]),
+
+    "3a_00-b_south-west": PreRegion("3a_00-b_south-west", "3a_00-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_00-b_south-west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_00-b_south-west"]),
+    "3a_00-b_south-east": PreRegion("3a_00-b_south-east", "3a_00-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_00-b_south-east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_00-b_south-east"]),
+    "3a_00-b_west": PreRegion("3a_00-b_west", "3a_00-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_00-b_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_00-b_west"]),
+    "3a_00-b_north-west": PreRegion("3a_00-b_north-west", "3a_00-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_00-b_north-west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_00-b_north-west"]),
+    "3a_00-b_east": PreRegion("3a_00-b_east", "3a_00-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_00-b_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_00-b_east"]),
+    "3a_00-b_north": PreRegion("3a_00-b_north", "3a_00-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_00-b_north"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_00-b_north"]),
+
+    "3a_00-c_south-west": PreRegion("3a_00-c_south-west", "3a_00-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_00-c_south-west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_00-c_south-west"]),
+    "3a_00-c_south-east": PreRegion("3a_00-c_south-east", "3a_00-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_00-c_south-east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_00-c_south-east"]),
+    "3a_00-c_north-east": PreRegion("3a_00-c_north-east", "3a_00-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_00-c_north-east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_00-c_north-east"]),
+
+    "3a_0x-b_west": PreRegion("3a_0x-b_west", "3a_0x-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_0x-b_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_0x-b_west"]),
+    "3a_0x-b_south-east": PreRegion("3a_0x-b_south-east", "3a_0x-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_0x-b_south-east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_0x-b_south-east"]),
+    "3a_0x-b_north-east": PreRegion("3a_0x-b_north-east", "3a_0x-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_0x-b_north-east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_0x-b_north-east"]),
+
+    "3a_03-a_west": PreRegion("3a_03-a_west", "3a_03-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_03-a_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_03-a_west"]),
+    "3a_03-a_top": PreRegion("3a_03-a_top", "3a_03-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_03-a_top"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_03-a_top"]),
+    "3a_03-a_east": PreRegion("3a_03-a_east", "3a_03-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_03-a_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_03-a_east"]),
+
+    "3a_04-b_west": PreRegion("3a_04-b_west", "3a_04-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_04-b_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_04-b_west"]),
+    "3a_04-b_east": PreRegion("3a_04-b_east", "3a_04-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_04-b_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_04-b_east"]),
+
+    "3a_05-a_west": PreRegion("3a_05-a_west", "3a_05-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_05-a_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_05-a_west"]),
+    "3a_05-a_east": PreRegion("3a_05-a_east", "3a_05-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_05-a_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_05-a_east"]),
+
+    "3a_06-a_west": PreRegion("3a_06-a_west", "3a_06-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_06-a_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_06-a_west"]),
+    "3a_06-a_east": PreRegion("3a_06-a_east", "3a_06-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_06-a_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_06-a_east"]),
+
+    "3a_07-a_west": PreRegion("3a_07-a_west", "3a_07-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_07-a_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_07-a_west"]),
+    "3a_07-a_top": PreRegion("3a_07-a_top", "3a_07-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_07-a_top"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_07-a_top"]),
+    "3a_07-a_east": PreRegion("3a_07-a_east", "3a_07-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_07-a_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_07-a_east"]),
+
+    "3a_07-b_bottom": PreRegion("3a_07-b_bottom", "3a_07-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_07-b_bottom"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_07-b_bottom"]),
+    "3a_07-b_west": PreRegion("3a_07-b_west", "3a_07-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_07-b_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_07-b_west"]),
+    "3a_07-b_top": PreRegion("3a_07-b_top", "3a_07-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_07-b_top"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_07-b_top"]),
+    "3a_07-b_east": PreRegion("3a_07-b_east", "3a_07-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_07-b_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_07-b_east"]),
+
+    "3a_06-b_west": PreRegion("3a_06-b_west", "3a_06-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_06-b_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_06-b_west"]),
+    "3a_06-b_east": PreRegion("3a_06-b_east", "3a_06-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_06-b_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_06-b_east"]),
+
+    "3a_06-c_south-west": PreRegion("3a_06-c_south-west", "3a_06-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_06-c_south-west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_06-c_south-west"]),
+    "3a_06-c_north-west": PreRegion("3a_06-c_north-west", "3a_06-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_06-c_north-west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_06-c_north-west"]),
+    "3a_06-c_south-east": PreRegion("3a_06-c_south-east", "3a_06-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_06-c_south-east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_06-c_south-east"]),
+    "3a_06-c_east": PreRegion("3a_06-c_east", "3a_06-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_06-c_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_06-c_east"]),
+
+    "3a_05-c_east": PreRegion("3a_05-c_east", "3a_05-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_05-c_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_05-c_east"]),
+
+    "3a_08-c_west": PreRegion("3a_08-c_west", "3a_08-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_08-c_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_08-c_west"]),
+    "3a_08-c_east": PreRegion("3a_08-c_east", "3a_08-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_08-c_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_08-c_east"]),
+
+    "3a_08-b_west": PreRegion("3a_08-b_west", "3a_08-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_08-b_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_08-b_west"]),
+    "3a_08-b_east": PreRegion("3a_08-b_east", "3a_08-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_08-b_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_08-b_east"]),
+
+    "3a_08-a_west": PreRegion("3a_08-a_west", "3a_08-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_08-a_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_08-a_west"]),
+    "3a_08-a_bottom": PreRegion("3a_08-a_bottom", "3a_08-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_08-a_bottom"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_08-a_bottom"]),
+    "3a_08-a_east": PreRegion("3a_08-a_east", "3a_08-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_08-a_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_08-a_east"]),
+
+    "3a_09-b_west": PreRegion("3a_09-b_west", "3a_09-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_09-b_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_09-b_west"]),
+    "3a_09-b_north-west": PreRegion("3a_09-b_north-west", "3a_09-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_09-b_north-west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_09-b_north-west"]),
+    "3a_09-b_center": PreRegion("3a_09-b_center", "3a_09-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_09-b_center"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_09-b_center"]),
+    "3a_09-b_south-west": PreRegion("3a_09-b_south-west", "3a_09-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_09-b_south-west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_09-b_south-west"]),
+    "3a_09-b_south": PreRegion("3a_09-b_south", "3a_09-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_09-b_south"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_09-b_south"]),
+    "3a_09-b_south-east": PreRegion("3a_09-b_south-east", "3a_09-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_09-b_south-east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_09-b_south-east"]),
+    "3a_09-b_east": PreRegion("3a_09-b_east", "3a_09-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_09-b_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_09-b_east"]),
+    "3a_09-b_north-east-right": PreRegion("3a_09-b_north-east-right", "3a_09-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_09-b_north-east-right"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_09-b_north-east-right"]),
+    "3a_09-b_north-east-top": PreRegion("3a_09-b_north-east-top", "3a_09-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_09-b_north-east-top"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_09-b_north-east-top"]),
+    "3a_09-b_north": PreRegion("3a_09-b_north", "3a_09-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_09-b_north"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_09-b_north"]),
+
+    "3a_10-x_west": PreRegion("3a_10-x_west", "3a_10-x", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_10-x_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_10-x_west"]),
+    "3a_10-x_south-east": PreRegion("3a_10-x_south-east", "3a_10-x", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_10-x_south-east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_10-x_south-east"]),
+    "3a_10-x_north-east-top": PreRegion("3a_10-x_north-east-top", "3a_10-x", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_10-x_north-east-top"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_10-x_north-east-top"]),
+    "3a_10-x_north-east-right": PreRegion("3a_10-x_north-east-right", "3a_10-x", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_10-x_north-east-right"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_10-x_north-east-right"]),
+
+    "3a_11-x_west": PreRegion("3a_11-x_west", "3a_11-x", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_11-x_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_11-x_west"]),
+    "3a_11-x_south": PreRegion("3a_11-x_south", "3a_11-x", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_11-x_south"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_11-x_south"]),
+
+    "3a_11-y_west": PreRegion("3a_11-y_west", "3a_11-y", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_11-y_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_11-y_west"]),
+    "3a_11-y_east": PreRegion("3a_11-y_east", "3a_11-y", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_11-y_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_11-y_east"]),
+    "3a_11-y_south": PreRegion("3a_11-y_south", "3a_11-y", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_11-y_south"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_11-y_south"]),
+
+    "3a_12-y_west": PreRegion("3a_12-y_west", "3a_12-y", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_12-y_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_12-y_west"]),
+
+    "3a_11-z_west": PreRegion("3a_11-z_west", "3a_11-z", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_11-z_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_11-z_west"]),
+    "3a_11-z_east": PreRegion("3a_11-z_east", "3a_11-z", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_11-z_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_11-z_east"]),
+
+    "3a_10-z_bottom": PreRegion("3a_10-z_bottom", "3a_10-z", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_10-z_bottom"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_10-z_bottom"]),
+    "3a_10-z_top": PreRegion("3a_10-z_top", "3a_10-z", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_10-z_top"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_10-z_top"]),
+
+    "3a_10-y_bottom": PreRegion("3a_10-y_bottom", "3a_10-y", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_10-y_bottom"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_10-y_bottom"]),
+    "3a_10-y_top": PreRegion("3a_10-y_top", "3a_10-y", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_10-y_top"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_10-y_top"]),
+
+    "3a_10-c_south-east": PreRegion("3a_10-c_south-east", "3a_10-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_10-c_south-east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_10-c_south-east"]),
+    "3a_10-c_north-east": PreRegion("3a_10-c_north-east", "3a_10-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_10-c_north-east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_10-c_north-east"]),
+    "3a_10-c_north-west": PreRegion("3a_10-c_north-west", "3a_10-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_10-c_north-west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_10-c_north-west"]),
+    "3a_10-c_south-west": PreRegion("3a_10-c_south-west", "3a_10-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_10-c_south-west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_10-c_south-west"]),
+
+    "3a_11-c_west": PreRegion("3a_11-c_west", "3a_11-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_11-c_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_11-c_west"]),
+    "3a_11-c_east": PreRegion("3a_11-c_east", "3a_11-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_11-c_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_11-c_east"]),
+    "3a_11-c_south-east": PreRegion("3a_11-c_south-east", "3a_11-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_11-c_south-east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_11-c_south-east"]),
+    "3a_11-c_south-west": PreRegion("3a_11-c_south-west", "3a_11-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_11-c_south-west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_11-c_south-west"]),
+
+    "3a_12-c_west": PreRegion("3a_12-c_west", "3a_12-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_12-c_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_12-c_west"]),
+    "3a_12-c_top": PreRegion("3a_12-c_top", "3a_12-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_12-c_top"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_12-c_top"]),
+
+    "3a_12-d_bottom": PreRegion("3a_12-d_bottom", "3a_12-d", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_12-d_bottom"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_12-d_bottom"]),
+    "3a_12-d_top": PreRegion("3a_12-d_top", "3a_12-d", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_12-d_top"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_12-d_top"]),
+
+    "3a_11-d_west": PreRegion("3a_11-d_west", "3a_11-d", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_11-d_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_11-d_west"]),
+    "3a_11-d_east": PreRegion("3a_11-d_east", "3a_11-d", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_11-d_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_11-d_east"]),
+
+    "3a_10-d_west": PreRegion("3a_10-d_west", "3a_10-d", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_10-d_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_10-d_west"]),
+    "3a_10-d_main": PreRegion("3a_10-d_main", "3a_10-d", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_10-d_main"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_10-d_main"]),
+    "3a_10-d_east": PreRegion("3a_10-d_east", "3a_10-d", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_10-d_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_10-d_east"]),
+
+    "3a_11-b_west": PreRegion("3a_11-b_west", "3a_11-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_11-b_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_11-b_west"]),
+    "3a_11-b_north-west": PreRegion("3a_11-b_north-west", "3a_11-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_11-b_north-west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_11-b_north-west"]),
+    "3a_11-b_east": PreRegion("3a_11-b_east", "3a_11-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_11-b_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_11-b_east"]),
+    "3a_11-b_north-east": PreRegion("3a_11-b_north-east", "3a_11-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_11-b_north-east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_11-b_north-east"]),
+
+    "3a_12-b_west": PreRegion("3a_12-b_west", "3a_12-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_12-b_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_12-b_west"]),
+    "3a_12-b_east": PreRegion("3a_12-b_east", "3a_12-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_12-b_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_12-b_east"]),
+
+    "3a_13-b_top": PreRegion("3a_13-b_top", "3a_13-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_13-b_top"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_13-b_top"]),
+    "3a_13-b_bottom": PreRegion("3a_13-b_bottom", "3a_13-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_13-b_bottom"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_13-b_bottom"]),
+
+    "3a_13-a_west": PreRegion("3a_13-a_west", "3a_13-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_13-a_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_13-a_west"]),
+    "3a_13-a_south-west": PreRegion("3a_13-a_south-west", "3a_13-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_13-a_south-west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_13-a_south-west"]),
+    "3a_13-a_east": PreRegion("3a_13-a_east", "3a_13-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_13-a_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_13-a_east"]),
+
+    "3a_13-x_west": PreRegion("3a_13-x_west", "3a_13-x", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_13-x_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_13-x_west"]),
+    "3a_13-x_east": PreRegion("3a_13-x_east", "3a_13-x", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_13-x_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_13-x_east"]),
+
+    "3a_12-x_west": PreRegion("3a_12-x_west", "3a_12-x", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_12-x_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_12-x_west"]),
+    "3a_12-x_north-east": PreRegion("3a_12-x_north-east", "3a_12-x", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_12-x_north-east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_12-x_north-east"]),
+    "3a_12-x_east": PreRegion("3a_12-x_east", "3a_12-x", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_12-x_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_12-x_east"]),
+
+    "3a_11-a_west": PreRegion("3a_11-a_west", "3a_11-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_11-a_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_11-a_west"]),
+    "3a_11-a_south": PreRegion("3a_11-a_south", "3a_11-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_11-a_south"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_11-a_south"]),
+    "3a_11-a_south-east-bottom": PreRegion("3a_11-a_south-east-bottom", "3a_11-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_11-a_south-east-bottom"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_11-a_south-east-bottom"]),
+    "3a_11-a_south-east-right": PreRegion("3a_11-a_south-east-right", "3a_11-a", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_11-a_south-east-right"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_11-a_south-east-right"]),
+
+    "3a_08-x_west": PreRegion("3a_08-x_west", "3a_08-x", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_08-x_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_08-x_west"]),
+    "3a_08-x_east": PreRegion("3a_08-x_east", "3a_08-x", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_08-x_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_08-x_east"]),
+
+    "3a_09-d_bottom": PreRegion("3a_09-d_bottom", "3a_09-d", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_09-d_bottom"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_09-d_bottom"]),
+    "3a_09-d_top": PreRegion("3a_09-d_top", "3a_09-d", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_09-d_top"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_09-d_top"]),
+
+    "3a_08-d_west": PreRegion("3a_08-d_west", "3a_08-d", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_08-d_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_08-d_west"]),
+    "3a_08-d_east": PreRegion("3a_08-d_east", "3a_08-d", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_08-d_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_08-d_east"]),
+
+    "3a_06-d_west": PreRegion("3a_06-d_west", "3a_06-d", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_06-d_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_06-d_west"]),
+    "3a_06-d_east": PreRegion("3a_06-d_east", "3a_06-d", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_06-d_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_06-d_east"]),
+
+    "3a_04-d_west": PreRegion("3a_04-d_west", "3a_04-d", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_04-d_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_04-d_west"]),
+    "3a_04-d_south-west": PreRegion("3a_04-d_south-west", "3a_04-d", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_04-d_south-west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_04-d_south-west"]),
+    "3a_04-d_south": PreRegion("3a_04-d_south", "3a_04-d", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_04-d_south"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_04-d_south"]),
+    "3a_04-d_east": PreRegion("3a_04-d_east", "3a_04-d", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_04-d_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_04-d_east"]),
+
+    "3a_04-c_west": PreRegion("3a_04-c_west", "3a_04-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_04-c_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_04-c_west"]),
+    "3a_04-c_north-west": PreRegion("3a_04-c_north-west", "3a_04-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_04-c_north-west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_04-c_north-west"]),
+    "3a_04-c_east": PreRegion("3a_04-c_east", "3a_04-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_04-c_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_04-c_east"]),
+
+    "3a_02-c_west": PreRegion("3a_02-c_west", "3a_02-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_02-c_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_02-c_west"]),
+    "3a_02-c_east": PreRegion("3a_02-c_east", "3a_02-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_02-c_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_02-c_east"]),
+    "3a_02-c_south-east": PreRegion("3a_02-c_south-east", "3a_02-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_02-c_south-east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_02-c_south-east"]),
+
+    "3a_03-b_west": PreRegion("3a_03-b_west", "3a_03-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_03-b_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_03-b_west"]),
+    "3a_03-b_east": PreRegion("3a_03-b_east", "3a_03-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_03-b_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_03-b_east"]),
+    "3a_03-b_north": PreRegion("3a_03-b_north", "3a_03-b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_03-b_north"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_03-b_north"]),
+
+    "3a_01-c_west": PreRegion("3a_01-c_west", "3a_01-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_01-c_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_01-c_west"]),
+    "3a_01-c_east": PreRegion("3a_01-c_east", "3a_01-c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_01-c_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_01-c_east"]),
+
+    "3a_02-d_west": PreRegion("3a_02-d_west", "3a_02-d", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_02-d_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_02-d_west"]),
+    "3a_02-d_east": PreRegion("3a_02-d_east", "3a_02-d", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_02-d_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_02-d_east"]),
+
+    "3a_00-d_west": PreRegion("3a_00-d_west", "3a_00-d", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_00-d_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_00-d_west"]),
+    "3a_00-d_east": PreRegion("3a_00-d_east", "3a_00-d", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_00-d_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_00-d_east"]),
+
+    "3a_roof00_west": PreRegion("3a_roof00_west", "3a_roof00", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_roof00_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_roof00_west"]),
+    "3a_roof00_east": PreRegion("3a_roof00_east", "3a_roof00", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_roof00_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_roof00_east"]),
+
+    "3a_roof01_west": PreRegion("3a_roof01_west", "3a_roof01", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_roof01_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_roof01_west"]),
+    "3a_roof01_east": PreRegion("3a_roof01_east", "3a_roof01", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_roof01_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_roof01_east"]),
+
+    "3a_roof02_west": PreRegion("3a_roof02_west", "3a_roof02", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_roof02_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_roof02_west"]),
+    "3a_roof02_east": PreRegion("3a_roof02_east", "3a_roof02", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_roof02_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_roof02_east"]),
+
+    "3a_roof03_west": PreRegion("3a_roof03_west", "3a_roof03", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_roof03_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_roof03_west"]),
+    "3a_roof03_east": PreRegion("3a_roof03_east", "3a_roof03", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_roof03_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_roof03_east"]),
+
+    "3a_roof04_west": PreRegion("3a_roof04_west", "3a_roof04", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_roof04_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_roof04_west"]),
+    "3a_roof04_east": PreRegion("3a_roof04_east", "3a_roof04", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_roof04_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_roof04_east"]),
+
+    "3a_roof05_west": PreRegion("3a_roof05_west", "3a_roof05", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_roof05_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_roof05_west"]),
+    "3a_roof05_east": PreRegion("3a_roof05_east", "3a_roof05", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_roof05_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_roof05_east"]),
+
+    "3a_roof06b_west": PreRegion("3a_roof06b_west", "3a_roof06b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_roof06b_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_roof06b_west"]),
+    "3a_roof06b_east": PreRegion("3a_roof06b_east", "3a_roof06b", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_roof06b_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_roof06b_east"]),
+
+    "3a_roof06_west": PreRegion("3a_roof06_west", "3a_roof06", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_roof06_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_roof06_west"]),
+    "3a_roof06_east": PreRegion("3a_roof06_east", "3a_roof06", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_roof06_east"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_roof06_east"]),
+
     "3a_roof07_west": PreRegion("3a_roof07_west", "3a_roof07", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_roof07_west"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_roof07_west"]),
     "3a_roof07_main": PreRegion("3a_roof07_main", "3a_roof07", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "3a_roof07_main"], [loc for _, loc in all_locations.items() if loc.region_name == "3a_roof07_main"]),
 
@@ -1571,7 +2264,87 @@ all_room_connections: Dict[str, RoomConnection] = {
     "3a_s1_east---3a_s2_west": RoomConnection("3a", all_doors["3a_s1_east"], all_doors["3a_s2_west"]),
     "3a_s1_north-east---3a_s2_north-west": RoomConnection("3a", all_doors["3a_s1_north-east"], all_doors["3a_s2_north-west"]),
     "3a_s2_east---3a_s3_west": RoomConnection("3a", all_doors["3a_s2_east"], all_doors["3a_s3_west"]),
-    "3a_s3_east---3a_roof07_west": RoomConnection("3a", all_doors["3a_s3_east"], all_doors["3a_roof07_west"]),
+    "3a_s3_east---3a_0x-a_west": RoomConnection("3a", all_doors["3a_s3_east"], all_doors["3a_0x-a_west"]),
+    "3a_0x-a_east---3a_00-a_west": RoomConnection("3a", all_doors["3a_0x-a_east"], all_doors["3a_00-a_west"]),
+    "3a_00-a_east---3a_02-a_west": RoomConnection("3a", all_doors["3a_00-a_east"], all_doors["3a_02-a_west"]),
+    "3a_02-a_east---3a_03-a_west": RoomConnection("3a", all_doors["3a_02-a_east"], all_doors["3a_03-a_west"]),
+    "3a_02-a_top---3a_02-b_east": RoomConnection("3a", all_doors["3a_02-a_top"], all_doors["3a_02-b_east"]),
+    "3a_02-b_west---3a_01-b_east": RoomConnection("3a", all_doors["3a_02-b_west"], all_doors["3a_01-b_east"]),
+    "3a_01-b_north-west---3a_00-b_east": RoomConnection("3a", all_doors["3a_01-b_north-west"], all_doors["3a_00-b_east"]),
+    "3a_01-b_west---3a_00-b_south-east": RoomConnection("3a", all_doors["3a_01-b_west"], all_doors["3a_00-b_south-east"]),
+    "3a_00-b_south-west---3a_0x-b_south-east": RoomConnection("3a", all_doors["3a_00-b_south-west"], all_doors["3a_0x-b_south-east"]),
+    "3a_00-b_north---3a_00-c_south-east": RoomConnection("3a", all_doors["3a_00-b_north"], all_doors["3a_00-c_south-east"]),
+    "3a_00-b_west---3a_0x-b_north-east": RoomConnection("3a", all_doors["3a_00-b_west"], all_doors["3a_0x-b_north-east"]),
+    "3a_00-c_south-west---3a_00-b_north-west": RoomConnection("3a", all_doors["3a_00-c_south-west"], all_doors["3a_00-b_north-west"]),
+    "3a_00-c_north-east---3a_01-c_west": RoomConnection("3a", all_doors["3a_00-c_north-east"], all_doors["3a_01-c_west"]),
+    "3a_0x-b_west---3a_s3_north": RoomConnection("3a", all_doors["3a_0x-b_west"], all_doors["3a_s3_north"]),
+    "3a_03-a_top---3a_04-b_east": RoomConnection("3a", all_doors["3a_03-a_top"], all_doors["3a_04-b_east"]),
+    "3a_03-a_east---3a_05-a_west": RoomConnection("3a", all_doors["3a_03-a_east"], all_doors["3a_05-a_west"]),
+    "3a_05-a_east---3a_06-a_west": RoomConnection("3a", all_doors["3a_05-a_east"], all_doors["3a_06-a_west"]),
+    "3a_06-a_east---3a_07-a_west": RoomConnection("3a", all_doors["3a_06-a_east"], all_doors["3a_07-a_west"]),
+    "3a_07-a_top---3a_07-b_bottom": RoomConnection("3a", all_doors["3a_07-a_top"], all_doors["3a_07-b_bottom"]),
+    "3a_07-a_east---3a_08-a_west": RoomConnection("3a", all_doors["3a_07-a_east"], all_doors["3a_08-a_west"]),
+    "3a_07-b_west---3a_06-b_east": RoomConnection("3a", all_doors["3a_07-b_west"], all_doors["3a_06-b_east"]),
+    "3a_06-b_west---3a_06-c_south-west": RoomConnection("3a", all_doors["3a_06-b_west"], all_doors["3a_06-c_south-west"]),
+    "3a_06-c_north-west---3a_05-c_east": RoomConnection("3a", all_doors["3a_06-c_north-west"], all_doors["3a_05-c_east"]),
+    "3a_06-c_east---3a_08-c_west": RoomConnection("3a", all_doors["3a_06-c_east"], all_doors["3a_08-c_west"]),
+    "3a_06-c_south-east---3a_07-b_top": RoomConnection("3a", all_doors["3a_06-c_south-east"], all_doors["3a_07-b_top"]),
+    "3a_08-c_east---3a_08-b_east": RoomConnection("3a", all_doors["3a_08-c_east"], all_doors["3a_08-b_east"]),
+    "3a_08-b_west---3a_07-b_east": RoomConnection("3a", all_doors["3a_08-b_west"], all_doors["3a_07-b_east"]),
+    "3a_08-a_bottom---3a_08-x_west": RoomConnection("3a", all_doors["3a_08-a_bottom"], all_doors["3a_08-x_west"]),
+    "3a_08-a_east---3a_09-b_west": RoomConnection("3a", all_doors["3a_08-a_east"], all_doors["3a_09-b_west"]),
+    "3a_09-b_south-east---3a_10-x_north-east-top": RoomConnection("3a", all_doors["3a_09-b_south-east"], all_doors["3a_10-x_north-east-top"]),
+    "3a_09-b_north-west---3a_09-d_bottom": RoomConnection("3a", all_doors["3a_09-b_north-west"], all_doors["3a_09-d_bottom"]),
+    "3a_09-b_north-east-top---3a_10-c_south-east": RoomConnection("3a", all_doors["3a_09-b_north-east-top"], all_doors["3a_10-c_south-east"]),
+    "3a_09-b_east---3a_11-a_west": RoomConnection("3a", all_doors["3a_09-b_east"], all_doors["3a_11-a_west"]),
+    "3a_09-b_north-east-right---3a_11-b_west": RoomConnection("3a", all_doors["3a_09-b_north-east-right"], all_doors["3a_11-b_west"]),
+    "3a_10-x_north-east-right---3a_11-x_west": RoomConnection("3a", all_doors["3a_10-x_north-east-right"], all_doors["3a_11-x_west"]),
+    "3a_11-x_south---3a_11-y_west": RoomConnection("3a", all_doors["3a_11-x_south"], all_doors["3a_11-y_west"]),
+    "3a_11-y_east---3a_12-y_west": RoomConnection("3a", all_doors["3a_11-y_east"], all_doors["3a_12-y_west"]),
+    "3a_11-y_south---3a_11-z_east": RoomConnection("3a", all_doors["3a_11-y_south"], all_doors["3a_11-z_east"]),
+    "3a_11-z_west---3a_10-z_bottom": RoomConnection("3a", all_doors["3a_11-z_west"], all_doors["3a_10-z_bottom"]),
+    "3a_10-z_top---3a_10-y_bottom": RoomConnection("3a", all_doors["3a_10-z_top"], all_doors["3a_10-y_bottom"]),
+    "3a_10-y_top---3a_10-x_south-east": RoomConnection("3a", all_doors["3a_10-y_top"], all_doors["3a_10-x_south-east"]),
+    "3a_10-x_west---3a_09-b_south": RoomConnection("3a", all_doors["3a_10-x_west"], all_doors["3a_09-b_south"]),
+    "3a_10-c_north-east---3a_11-c_west": RoomConnection("3a", all_doors["3a_10-c_north-east"], all_doors["3a_11-c_west"]),
+    "3a_10-c_south-west---3a_09-b_north": RoomConnection("3a", all_doors["3a_10-c_south-west"], all_doors["3a_09-b_north"]),
+    "3a_11-c_east---3a_12-c_west": RoomConnection("3a", all_doors["3a_11-c_east"], all_doors["3a_12-c_west"]),
+    "3a_11-c_south-west---3a_11-b_north-west": RoomConnection("3a", all_doors["3a_11-c_south-west"], all_doors["3a_11-b_north-west"]),
+    "3a_12-c_top---3a_12-d_bottom": RoomConnection("3a", all_doors["3a_12-c_top"], all_doors["3a_12-d_bottom"]),
+    "3a_12-d_top---3a_11-d_east": RoomConnection("3a", all_doors["3a_12-d_top"], all_doors["3a_11-d_east"]),
+    "3a_11-d_west---3a_10-d_east": RoomConnection("3a", all_doors["3a_11-d_west"], all_doors["3a_10-d_east"]),
+    "3a_10-d_west---3a_10-c_north-west": RoomConnection("3a", all_doors["3a_10-d_west"], all_doors["3a_10-c_north-west"]),
+    "3a_11-b_north-east---3a_11-c_south-east": RoomConnection("3a", all_doors["3a_11-b_north-east"], all_doors["3a_11-c_south-east"]),
+    "3a_11-b_east---3a_12-b_west": RoomConnection("3a", all_doors["3a_11-b_east"], all_doors["3a_12-b_west"]),
+    "3a_12-b_east---3a_13-b_top": RoomConnection("3a", all_doors["3a_12-b_east"], all_doors["3a_13-b_top"]),
+    "3a_13-b_bottom---3a_13-a_west": RoomConnection("3a", all_doors["3a_13-b_bottom"], all_doors["3a_13-a_west"]),
+    "3a_13-a_east---3a_13-x_east": RoomConnection("3a", all_doors["3a_13-a_east"], all_doors["3a_13-x_east"]),
+    "3a_13-x_west---3a_12-x_east": RoomConnection("3a", all_doors["3a_13-x_west"], all_doors["3a_12-x_east"]),
+    "3a_12-x_north-east---3a_11-a_south-east-bottom": RoomConnection("3a", all_doors["3a_12-x_north-east"], all_doors["3a_11-a_south-east-bottom"]),
+    "3a_12-x_west---3a_11-a_south": RoomConnection("3a", all_doors["3a_12-x_west"], all_doors["3a_11-a_south"]),
+    "3a_11-a_south-east-right---3a_13-a_south-west": RoomConnection("3a", all_doors["3a_11-a_south-east-right"], all_doors["3a_13-a_south-west"]),
+    "3a_08-x_east---3a_09-b_south-west": RoomConnection("3a", all_doors["3a_08-x_east"], all_doors["3a_09-b_south-west"]),
+    "3a_09-d_top---3a_08-d_east": RoomConnection("3a", all_doors["3a_09-d_top"], all_doors["3a_08-d_east"]),
+    "3a_08-d_west---3a_06-d_east": RoomConnection("3a", all_doors["3a_08-d_west"], all_doors["3a_06-d_east"]),
+    "3a_06-d_west---3a_04-d_east": RoomConnection("3a", all_doors["3a_06-d_west"], all_doors["3a_04-d_east"]),
+    "3a_04-d_west---3a_02-d_east": RoomConnection("3a", all_doors["3a_04-d_west"], all_doors["3a_02-d_east"]),
+    "3a_04-d_south---3a_04-c_east": RoomConnection("3a", all_doors["3a_04-d_south"], all_doors["3a_04-c_east"]),
+    "3a_04-c_west---3a_02-c_east": RoomConnection("3a", all_doors["3a_04-c_west"], all_doors["3a_02-c_east"]),
+    "3a_04-c_north-west---3a_04-d_south-west": RoomConnection("3a", all_doors["3a_04-c_north-west"], all_doors["3a_04-d_south-west"]),
+    "3a_02-c_west---3a_01-c_east": RoomConnection("3a", all_doors["3a_02-c_west"], all_doors["3a_01-c_east"]),
+    "3a_02-c_south-east---3a_03-b_north": RoomConnection("3a", all_doors["3a_02-c_south-east"], all_doors["3a_03-b_north"]),
+    "3a_03-b_east---3a_04-b_west": RoomConnection("3a", all_doors["3a_03-b_east"], all_doors["3a_04-b_west"]),
+    "3a_03-b_west---3a_02-b_far-east": RoomConnection("3a", all_doors["3a_03-b_west"], all_doors["3a_02-b_far-east"]),
+    "3a_02-d_west---3a_00-d_east": RoomConnection("3a", all_doors["3a_02-d_west"], all_doors["3a_00-d_east"]),
+    "3a_00-d_west---3a_roof00_west": RoomConnection("3a", all_doors["3a_00-d_west"], all_doors["3a_roof00_west"]),
+    "3a_roof00_east---3a_roof01_west": RoomConnection("3a", all_doors["3a_roof00_east"], all_doors["3a_roof01_west"]),
+    "3a_roof01_east---3a_roof02_west": RoomConnection("3a", all_doors["3a_roof01_east"], all_doors["3a_roof02_west"]),
+    "3a_roof02_east---3a_roof03_west": RoomConnection("3a", all_doors["3a_roof02_east"], all_doors["3a_roof03_west"]),
+    "3a_roof03_east---3a_roof04_west": RoomConnection("3a", all_doors["3a_roof03_east"], all_doors["3a_roof04_west"]),
+    "3a_roof04_east---3a_roof05_west": RoomConnection("3a", all_doors["3a_roof04_east"], all_doors["3a_roof05_west"]),
+    "3a_roof05_east---3a_roof06b_west": RoomConnection("3a", all_doors["3a_roof05_east"], all_doors["3a_roof06b_west"]),
+    "3a_roof06b_east---3a_roof06_west": RoomConnection("3a", all_doors["3a_roof06b_east"], all_doors["3a_roof06_west"]),
+    "3a_roof06_east---3a_roof07_west": RoomConnection("3a", all_doors["3a_roof06_east"], all_doors["3a_roof07_west"]),
 
 }
 
@@ -1715,6 +2488,66 @@ all_rooms: Dict[str, Room] = {
     "3a_s1": Room("3a", "3a_s1", "Celestial Resort A - Room s1", [reg for _, reg in all_regions.items() if reg.room_name == "3a_s1"], [door for _, door in all_doors.items() if door.room_name == "3a_s1"]),
     "3a_s2": Room("3a", "3a_s2", "Celestial Resort A - Room s2", [reg for _, reg in all_regions.items() if reg.room_name == "3a_s2"], [door for _, door in all_doors.items() if door.room_name == "3a_s2"]),
     "3a_s3": Room("3a", "3a_s3", "Celestial Resort A - Room s3", [reg for _, reg in all_regions.items() if reg.room_name == "3a_s3"], [door for _, door in all_doors.items() if door.room_name == "3a_s3"]),
+    "3a_0x-a": Room("3a", "3a_0x-a", "Celestial Resort A - Room 0x-a", [reg for _, reg in all_regions.items() if reg.room_name == "3a_0x-a"], [door for _, door in all_doors.items() if door.room_name == "3a_0x-a"]),
+    "3a_00-a": Room("3a", "3a_00-a", "Celestial Resort A - Room 00-a", [reg for _, reg in all_regions.items() if reg.room_name == "3a_00-a"], [door for _, door in all_doors.items() if door.room_name == "3a_00-a"]),
+    "3a_02-a": Room("3a", "3a_02-a", "Celestial Resort A - Room 02-a", [reg for _, reg in all_regions.items() if reg.room_name == "3a_02-a"], [door for _, door in all_doors.items() if door.room_name == "3a_02-a"]),
+    "3a_02-b": Room("3a", "3a_02-b", "Celestial Resort A - Room 02-b", [reg for _, reg in all_regions.items() if reg.room_name == "3a_02-b"], [door for _, door in all_doors.items() if door.room_name == "3a_02-b"]),
+    "3a_01-b": Room("3a", "3a_01-b", "Celestial Resort A - Room 01-b", [reg for _, reg in all_regions.items() if reg.room_name == "3a_01-b"], [door for _, door in all_doors.items() if door.room_name == "3a_01-b"]),
+    "3a_00-b": Room("3a", "3a_00-b", "Celestial Resort A - Room 00-b", [reg for _, reg in all_regions.items() if reg.room_name == "3a_00-b"], [door for _, door in all_doors.items() if door.room_name == "3a_00-b"]),
+    "3a_00-c": Room("3a", "3a_00-c", "Celestial Resort A - Room 00-c", [reg for _, reg in all_regions.items() if reg.room_name == "3a_00-c"], [door for _, door in all_doors.items() if door.room_name == "3a_00-c"]),
+    "3a_0x-b": Room("3a", "3a_0x-b", "Celestial Resort A - Room 0x-b", [reg for _, reg in all_regions.items() if reg.room_name == "3a_0x-b"], [door for _, door in all_doors.items() if door.room_name == "3a_0x-b"]),
+    "3a_03-a": Room("3a", "3a_03-a", "Celestial Resort A - Room 03-a", [reg for _, reg in all_regions.items() if reg.room_name == "3a_03-a"], [door for _, door in all_doors.items() if door.room_name == "3a_03-a"]),
+    "3a_04-b": Room("3a", "3a_04-b", "Celestial Resort A - Room 04-b", [reg for _, reg in all_regions.items() if reg.room_name == "3a_04-b"], [door for _, door in all_doors.items() if door.room_name == "3a_04-b"]),
+    "3a_05-a": Room("3a", "3a_05-a", "Celestial Resort A - Room 05-a", [reg for _, reg in all_regions.items() if reg.room_name == "3a_05-a"], [door for _, door in all_doors.items() if door.room_name == "3a_05-a"]),
+    "3a_06-a": Room("3a", "3a_06-a", "Celestial Resort A - Room 06-a", [reg for _, reg in all_regions.items() if reg.room_name == "3a_06-a"], [door for _, door in all_doors.items() if door.room_name == "3a_06-a"]),
+    "3a_07-a": Room("3a", "3a_07-a", "Celestial Resort A - Room 07-a", [reg for _, reg in all_regions.items() if reg.room_name == "3a_07-a"], [door for _, door in all_doors.items() if door.room_name == "3a_07-a"]),
+    "3a_07-b": Room("3a", "3a_07-b", "Celestial Resort A - Room 07-b", [reg for _, reg in all_regions.items() if reg.room_name == "3a_07-b"], [door for _, door in all_doors.items() if door.room_name == "3a_07-b"]),
+    "3a_06-b": Room("3a", "3a_06-b", "Celestial Resort A - Room 06-b", [reg for _, reg in all_regions.items() if reg.room_name == "3a_06-b"], [door for _, door in all_doors.items() if door.room_name == "3a_06-b"]),
+    "3a_06-c": Room("3a", "3a_06-c", "Celestial Resort A - Room 06-c", [reg for _, reg in all_regions.items() if reg.room_name == "3a_06-c"], [door for _, door in all_doors.items() if door.room_name == "3a_06-c"]),
+    "3a_05-c": Room("3a", "3a_05-c", "Celestial Resort A - Room 05-c", [reg for _, reg in all_regions.items() if reg.room_name == "3a_05-c"], [door for _, door in all_doors.items() if door.room_name == "3a_05-c"]),
+    "3a_08-c": Room("3a", "3a_08-c", "Celestial Resort A - Room 08-c", [reg for _, reg in all_regions.items() if reg.room_name == "3a_08-c"], [door for _, door in all_doors.items() if door.room_name == "3a_08-c"]),
+    "3a_08-b": Room("3a", "3a_08-b", "Celestial Resort A - Room 08-b", [reg for _, reg in all_regions.items() if reg.room_name == "3a_08-b"], [door for _, door in all_doors.items() if door.room_name == "3a_08-b"]),
+    "3a_08-a": Room("3a", "3a_08-a", "Celestial Resort A - Room 08-a", [reg for _, reg in all_regions.items() if reg.room_name == "3a_08-a"], [door for _, door in all_doors.items() if door.room_name == "3a_08-a"], "Huge Mess", "3a_08-a_west"),
+    "3a_09-b": Room("3a", "3a_09-b", "Celestial Resort A - Room 09-b", [reg for _, reg in all_regions.items() if reg.room_name == "3a_09-b"], [door for _, door in all_doors.items() if door.room_name == "3a_09-b"]),
+    "3a_10-x": Room("3a", "3a_10-x", "Celestial Resort A - Room 10-x", [reg for _, reg in all_regions.items() if reg.room_name == "3a_10-x"], [door for _, door in all_doors.items() if door.room_name == "3a_10-x"]),
+    "3a_11-x": Room("3a", "3a_11-x", "Celestial Resort A - Room 11-x", [reg for _, reg in all_regions.items() if reg.room_name == "3a_11-x"], [door for _, door in all_doors.items() if door.room_name == "3a_11-x"]),
+    "3a_11-y": Room("3a", "3a_11-y", "Celestial Resort A - Room 11-y", [reg for _, reg in all_regions.items() if reg.room_name == "3a_11-y"], [door for _, door in all_doors.items() if door.room_name == "3a_11-y"]),
+    "3a_12-y": Room("3a", "3a_12-y", "Celestial Resort A - Room 12-y", [reg for _, reg in all_regions.items() if reg.room_name == "3a_12-y"], [door for _, door in all_doors.items() if door.room_name == "3a_12-y"]),
+    "3a_11-z": Room("3a", "3a_11-z", "Celestial Resort A - Room 11-z", [reg for _, reg in all_regions.items() if reg.room_name == "3a_11-z"], [door for _, door in all_doors.items() if door.room_name == "3a_11-z"]),
+    "3a_10-z": Room("3a", "3a_10-z", "Celestial Resort A - Room 10-z", [reg for _, reg in all_regions.items() if reg.room_name == "3a_10-z"], [door for _, door in all_doors.items() if door.room_name == "3a_10-z"]),
+    "3a_10-y": Room("3a", "3a_10-y", "Celestial Resort A - Room 10-y", [reg for _, reg in all_regions.items() if reg.room_name == "3a_10-y"], [door for _, door in all_doors.items() if door.room_name == "3a_10-y"]),
+    "3a_10-c": Room("3a", "3a_10-c", "Celestial Resort A - Room 10-c", [reg for _, reg in all_regions.items() if reg.room_name == "3a_10-c"], [door for _, door in all_doors.items() if door.room_name == "3a_10-c"]),
+    "3a_11-c": Room("3a", "3a_11-c", "Celestial Resort A - Room 11-c", [reg for _, reg in all_regions.items() if reg.room_name == "3a_11-c"], [door for _, door in all_doors.items() if door.room_name == "3a_11-c"]),
+    "3a_12-c": Room("3a", "3a_12-c", "Celestial Resort A - Room 12-c", [reg for _, reg in all_regions.items() if reg.room_name == "3a_12-c"], [door for _, door in all_doors.items() if door.room_name == "3a_12-c"]),
+    "3a_12-d": Room("3a", "3a_12-d", "Celestial Resort A - Room 12-d", [reg for _, reg in all_regions.items() if reg.room_name == "3a_12-d"], [door for _, door in all_doors.items() if door.room_name == "3a_12-d"]),
+    "3a_11-d": Room("3a", "3a_11-d", "Celestial Resort A - Room 11-d", [reg for _, reg in all_regions.items() if reg.room_name == "3a_11-d"], [door for _, door in all_doors.items() if door.room_name == "3a_11-d"]),
+    "3a_10-d": Room("3a", "3a_10-d", "Celestial Resort A - Room 10-d", [reg for _, reg in all_regions.items() if reg.room_name == "3a_10-d"], [door for _, door in all_doors.items() if door.room_name == "3a_10-d"]),
+    "3a_11-b": Room("3a", "3a_11-b", "Celestial Resort A - Room 11-b", [reg for _, reg in all_regions.items() if reg.room_name == "3a_11-b"], [door for _, door in all_doors.items() if door.room_name == "3a_11-b"]),
+    "3a_12-b": Room("3a", "3a_12-b", "Celestial Resort A - Room 12-b", [reg for _, reg in all_regions.items() if reg.room_name == "3a_12-b"], [door for _, door in all_doors.items() if door.room_name == "3a_12-b"]),
+    "3a_13-b": Room("3a", "3a_13-b", "Celestial Resort A - Room 13-b", [reg for _, reg in all_regions.items() if reg.room_name == "3a_13-b"], [door for _, door in all_doors.items() if door.room_name == "3a_13-b"]),
+    "3a_13-a": Room("3a", "3a_13-a", "Celestial Resort A - Room 13-a", [reg for _, reg in all_regions.items() if reg.room_name == "3a_13-a"], [door for _, door in all_doors.items() if door.room_name == "3a_13-a"]),
+    "3a_13-x": Room("3a", "3a_13-x", "Celestial Resort A - Room 13-x", [reg for _, reg in all_regions.items() if reg.room_name == "3a_13-x"], [door for _, door in all_doors.items() if door.room_name == "3a_13-x"]),
+    "3a_12-x": Room("3a", "3a_12-x", "Celestial Resort A - Room 12-x", [reg for _, reg in all_regions.items() if reg.room_name == "3a_12-x"], [door for _, door in all_doors.items() if door.room_name == "3a_12-x"]),
+    "3a_11-a": Room("3a", "3a_11-a", "Celestial Resort A - Room 11-a", [reg for _, reg in all_regions.items() if reg.room_name == "3a_11-a"], [door for _, door in all_doors.items() if door.room_name == "3a_11-a"]),
+    "3a_08-x": Room("3a", "3a_08-x", "Celestial Resort A - Room 08-x", [reg for _, reg in all_regions.items() if reg.room_name == "3a_08-x"], [door for _, door in all_doors.items() if door.room_name == "3a_08-x"]),
+    "3a_09-d": Room("3a", "3a_09-d", "Celestial Resort A - Room 09-d", [reg for _, reg in all_regions.items() if reg.room_name == "3a_09-d"], [door for _, door in all_doors.items() if door.room_name == "3a_09-d"], "Elevator Shaft", "3a_09-d_bottom"),
+    "3a_08-d": Room("3a", "3a_08-d", "Celestial Resort A - Room 08-d", [reg for _, reg in all_regions.items() if reg.room_name == "3a_08-d"], [door for _, door in all_doors.items() if door.room_name == "3a_08-d"]),
+    "3a_06-d": Room("3a", "3a_06-d", "Celestial Resort A - Room 06-d", [reg for _, reg in all_regions.items() if reg.room_name == "3a_06-d"], [door for _, door in all_doors.items() if door.room_name == "3a_06-d"]),
+    "3a_04-d": Room("3a", "3a_04-d", "Celestial Resort A - Room 04-d", [reg for _, reg in all_regions.items() if reg.room_name == "3a_04-d"], [door for _, door in all_doors.items() if door.room_name == "3a_04-d"]),
+    "3a_04-c": Room("3a", "3a_04-c", "Celestial Resort A - Room 04-c", [reg for _, reg in all_regions.items() if reg.room_name == "3a_04-c"], [door for _, door in all_doors.items() if door.room_name == "3a_04-c"]),
+    "3a_02-c": Room("3a", "3a_02-c", "Celestial Resort A - Room 02-c", [reg for _, reg in all_regions.items() if reg.room_name == "3a_02-c"], [door for _, door in all_doors.items() if door.room_name == "3a_02-c"]),
+    "3a_03-b": Room("3a", "3a_03-b", "Celestial Resort A - Room 03-b", [reg for _, reg in all_regions.items() if reg.room_name == "3a_03-b"], [door for _, door in all_doors.items() if door.room_name == "3a_03-b"]),
+    "3a_01-c": Room("3a", "3a_01-c", "Celestial Resort A - Room 01-c", [reg for _, reg in all_regions.items() if reg.room_name == "3a_01-c"], [door for _, door in all_doors.items() if door.room_name == "3a_01-c"]),
+    "3a_02-d": Room("3a", "3a_02-d", "Celestial Resort A - Room 02-d", [reg for _, reg in all_regions.items() if reg.room_name == "3a_02-d"], [door for _, door in all_doors.items() if door.room_name == "3a_02-d"]),
+    "3a_00-d": Room("3a", "3a_00-d", "Celestial Resort A - Room 00-d", [reg for _, reg in all_regions.items() if reg.room_name == "3a_00-d"], [door for _, door in all_doors.items() if door.room_name == "3a_00-d"], "Presidential Suite", "3a_00-d_east"),
+    "3a_roof00": Room("3a", "3a_roof00", "Celestial Resort A - Room roof00", [reg for _, reg in all_regions.items() if reg.room_name == "3a_roof00"], [door for _, door in all_doors.items() if door.room_name == "3a_roof00"]),
+    "3a_roof01": Room("3a", "3a_roof01", "Celestial Resort A - Room roof01", [reg for _, reg in all_regions.items() if reg.room_name == "3a_roof01"], [door for _, door in all_doors.items() if door.room_name == "3a_roof01"]),
+    "3a_roof02": Room("3a", "3a_roof02", "Celestial Resort A - Room roof02", [reg for _, reg in all_regions.items() if reg.room_name == "3a_roof02"], [door for _, door in all_doors.items() if door.room_name == "3a_roof02"]),
+    "3a_roof03": Room("3a", "3a_roof03", "Celestial Resort A - Room roof03", [reg for _, reg in all_regions.items() if reg.room_name == "3a_roof03"], [door for _, door in all_doors.items() if door.room_name == "3a_roof03"]),
+    "3a_roof04": Room("3a", "3a_roof04", "Celestial Resort A - Room roof04", [reg for _, reg in all_regions.items() if reg.room_name == "3a_roof04"], [door for _, door in all_doors.items() if door.room_name == "3a_roof04"]),
+    "3a_roof05": Room("3a", "3a_roof05", "Celestial Resort A - Room roof05", [reg for _, reg in all_regions.items() if reg.room_name == "3a_roof05"], [door for _, door in all_doors.items() if door.room_name == "3a_roof05"]),
+    "3a_roof06b": Room("3a", "3a_roof06b", "Celestial Resort A - Room roof06b", [reg for _, reg in all_regions.items() if reg.room_name == "3a_roof06b"], [door for _, door in all_doors.items() if door.room_name == "3a_roof06b"]),
+    "3a_roof06": Room("3a", "3a_roof06", "Celestial Resort A - Room roof06", [reg for _, reg in all_regions.items() if reg.room_name == "3a_roof06"], [door for _, door in all_doors.items() if door.room_name == "3a_roof06"]),
     "3a_roof07": Room("3a", "3a_roof07", "Celestial Resort A - Room roof07", [reg for _, reg in all_regions.items() if reg.room_name == "3a_roof07"], [door for _, door in all_doors.items() if door.room_name == "3a_roof07"]),
 
 }
