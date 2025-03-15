@@ -110,6 +110,7 @@ DataSaix = "Data Saix"
 # hb
 Hb = "Hollow Bastion"
 Hb2 = "Hollow Bastion 2"
+Hb2Corridors = "Hollow Bastion 2:Corridors Fight"
 HBDemyx = "Hollow Bastion Demyx"
 ThousandHeartless = "Thousand Heartless"
 Mushroom13 = "Mushroom 13"
