@@ -479,10 +479,10 @@ class LuigisMansionRandomizer:
         self.dol.data.seek(0x399228)
         self.dol.data.write(struct.pack(">H", king_boo_health))
 
-        # Change magic number so save files are different
-        new_magic = "GBOO" + "01"
-        self.dol.data.seek(0x80000000)
-        self.dol.data.write(struct.pack("6s", new_magic.encode()))
+        # # Change magic number so save files are different
+        # new_magic = "GBOO" + "01"
+        # self.dol.data.seek(0x80000000)
+        # self.dol.data.write(struct.pack("6s", new_magic.encode()))
 
     def update_custom_event(self, event_number: str, check_local_folder: bool, non_local_str="",
                             custom_made: bool = False, replace_old_csv: bool = False):
