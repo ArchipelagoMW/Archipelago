@@ -618,601 +618,601 @@ fnpc-releases:
   bid: 253
   coperand: 124
   dclassification: 0
-  edescription: Releases the sleeping dolphin in the North-West House. Enter his dream for a sad story. Has no use.
+  edescription: Seabed Sanctuary - Releases the sleeping dolphin in the North-West House. Enter his dream for a sad story. Has no use.
 - aname: Curious Angelfish
   bid: 253
   coperand: 131
   dclassification: 0
-  edescription: Releases the Curious Angelfish in the south-east who wants to see what the world looks like from above the water. Has no use.
+  edescription: Seabed Sanctuary - Releases the Curious Angelfish in the south-east who wants to see what the world looks like from above the water. Has no use.
 - aname: North-East Mermaid with Gift
   bid: 253
   coperand: 132
   dclassification: 1
-  edescription: Releases the mermaid in the north-east house who will give you an item.
+  edescription: Seabed Sanctuary - Releases the mermaid in the north-east house who will give you an item.
 - aname: Jumping Angelfish
   bid: 253
   coperand: 134
   dclassification: 0
-  edescription: Releases the angelfish who can jump real high (Look at him go!) Has no use.
+  edescription: Seabed Sanctuary - Releases the angelfish who can jump real high (Look at him go!) Has no use.
 - aname: West Mermaid Guard
   bid: 253
   coperand: 138
   dclassification: 1
-  edescription: Releases the sympathetic mermaid guard who will let you in to Lue's Prison. Also releases the central west platform by the jail.
+  edescription: Seabed Sanctuary - Releases the sympathetic mermaid guard who will let you in to Lue's Prison. Also releases the central west platform by the jail.
 - aname: Mermaid Dancer Nanna
   bid: 253
   coperand: 139
   dclassification: 0
-  edescription: Releases Nanna the mermaid dancer. Has no use.
+  edescription: Seabed Sanctuary - Releases Nanna the mermaid dancer. Has no use.
 - aname: Prison Breaking Dolphin
   bid: 253
   coperand: 140
   dclassification: 1
-  edescription: Releases the dolphin which will break Lue the Dolphin out of Jail.
+  edescription: Seabed Sanctuary - Releases the dolphin which will break Lue the Dolphin out of Jail.
 - aname: Mermaid Statue to Blester
   bid: 253
   coperand: 141
   dclassification: 1
-  edescription: Releases the North-East Mermaid statue which will open the path to Blester.
+  edescription: Seabed Sanctuary - Releases the North-East Mermaid statue which will open the path to Blester.
 - aname: Common House Top Mermaid with Gift
   bid: 253
   coperand: 142
   dclassification: 1
-  edescription: Releases the mermaid in the top of the central room in the common house who will give you a gift.
+  edescription: Seabed Sanctuary - Releases the mermaid in the top of the central room in the common house who will give you a gift.
 - aname: Lue the Dolphin
   bid: 253
   coperand: 143
   dclassification: 1
-  edescription: Releases Lue the Dolphin. Bust them out of jail to get an item.
+  edescription: Seabed Sanctuary - Releases Lue the Dolphin. Bust them out of jail to get an item.
 - aname: Mermaid Queen's Attendant Left
   bid: 253
   coperand: 146
   dclassification: 0
-  edescription: Releases the Mermaid attending the queen (on the left). Has no use.
+  edescription: Seabed Sanctuary - Releases the Mermaid attending the queen (on the left). Has no use.
 - aname: Mermaid in North-West House
   bid: 253
   coperand: 149
   dclassification: 0
-  edescription: Releases the north-west house and the mermaid inside. Has no use.
+  edescription: Seabed Sanctuary - Releases the north-west house and the mermaid inside. Has no use.
 - aname: Mermaid Dance Troupe Leader
   bid: 253
   coperand: 153
   dclassification: 1
-  edescription: Releases the North-West platform and the Mermaid Dance Troupe Leader.
+  edescription: Seabed Sanctuary - Releases the North-West platform and the Mermaid Dance Troupe Leader.
 - aname: Dolphin to North-East Platform
   bid: 253
   coperand: 155
   dclassification: 1
-  edescription: Releases the dolphin and the North-East platform. Required to reach the North-East Mermaid with Gift.
+  edescription: Seabed Sanctuary - Releases the dolphin and the North-East platform. Required to reach the North-East Mermaid with Gift.
 - aname: Mermaid Statue to Rockbird
   bid: 253
   coperand: 157
   dclassification: 1
-  edescription: Releases the South-East Mermaid statue which will open the path to Rockbird.
+  edescription: Seabed Sanctuary - Releases the South-East Mermaid statue which will open the path to Rockbird.
 - aname: Common House Main Mermaid with Gift
   bid: 253
   coperand: 161
   dclassification: 1
-  edescription: Releases the big common house in the south, and the main mermaid in the central room who will give you an item. Required to reach the Seabed.
+  edescription: Seabed Sanctuary - Releases the big common house in the south, and the main mermaid in the central room who will give you an item. Required to reach the Seabed.
 - aname: East Mermaid Guard
   bid: 253
   coperand: 164
   dclassification: 1
-  edescription: Releases the east platform with the unsympathetic mermaid guard who will NOT let you in to Lue's Prison. Rarely required as an altrenate path to the south-east platform.
+  edescription: Seabed Sanctuary - Releases the east platform with the unsympathetic mermaid guard who will NOT let you in to Lue's Prison. Rarely required as an altrenate path to the south-east platform.
 - aname: Mermaid Dancer Kanna
   bid: 253
   coperand: 165
   dclassification: 0
-  edescription: Releases Kanna the mermaid dancer. Has no use.
+  edescription: Seabed Sanctuary - Releases Kanna the mermaid dancer. Has no use.
 - aname: Common House East Room Mermaid
   bid: 253
   coperand: 167
   dclassification: 0
-  edescription: Releaes the mermaid in the east room of the big common house. Has no use.
+  edescription: Seabed Sanctuary - Releaes the mermaid in the east room of the big common house. Has no use.
 - aname: Mermaid Statue to Durean
   bid: 253
   coperand: 171
   dclassification: 1
-  edescription: Releases the South-West Mermaid statue which will open the path to Durean.
+  edescription: Seabed Sanctuary - Releases the South-West Mermaid statue which will open the path to Durean.
 - aname: Angelfish South of Central Platform
   bid: 253
   coperand: 173
   dclassification: 0
-  edescription: Releases the Angelfish South of the Central Platform. Has no use.
+  edescription: Seabed Sanctuary - Releases the Angelfish South of the Central Platform. Has no use.
 - aname: Angelfish with Soul
   bid: 253
   coperand: 177
   dclassification: 1
-  edescription: Releases south-east and the angelfish who is from the sky (like you). Will give you a soul/item. 
+  edescription: Seabed Sanctuary - Releases south-east and the angelfish who is from the sky (like you). Will give you a soul/item. 
 - aname: Common House West Room Mermaid with Gift.
   bid: 253
   coperand: 181
   dclassification: 1
-  edescription: Releases the mermaid in the hidden west room of the common house who will give you an item.
+  edescription: Seabed Sanctuary - Releases the mermaid in the hidden west room of the common house who will give you an item.
 - aname: Mermaid Queen
   bid: 253
   coperand: 182
   dclassification: 1
-  edescription: Releases the Mermaid Queen. She'll give you an item and open the way to the next world.
+  edescription: Seabed Sanctuary - Releases the Mermaid Queen. She'll give you an item and open the way to the next world.
 - aname: Mermaid Statue to Ghost Ship
   bid: 253
   coperand: 185
   dclassification: 1
-  edescription: Releases the North-West Mermaid statue which will open the path to the Ghost Ship.
+  edescription: Seabed Sanctuary - Releases the North-West Mermaid statue which will open the path to the Ghost Ship.
 - aname: Sleepy Dolphin
   bid: 253
   coperand: 187
   dclassification: 1
-  edescription: Releases the Sleepy Dolphin in prison area. Enter the dolphin's dream and give them the Big Pearl to open the path to the secret cove.
+  edescription: Seabed Sanctuary - Releases the Sleepy Dolphin in prison area. Enter the dolphin's dream and give them the Big Pearl to open the path to the secret cove.
 - aname: Mermaid Queen's Attendant Right
   bid: 253
   coperand: 189
   dclassification: 0
-  edescription: Releases the Mermaid attending the queen (on the right). Has no use.
+  edescription: Seabed Sanctuary - Releases the Mermaid attending the queen (on the right). Has no use.
 - aname: Angelfish East of Central Platform
   bid: 253
   coperand: 190
   dclassification: 0
-  edescription: Releases the Angelfish East of the Central Platform. Has no use.
+  edescription: Seabed Sanctuary - Releases the Angelfish East of the Central Platform. Has no use.
 - aname: Swimming Common House Mermaid
   bid: 253
   coperand: 192
   dclassification: 0
-  edescription: Releases the mermaid swimming in the big common house's central room. Has no use.
+  edescription: Seabed Sanctuary - Releases the mermaid swimming in the big common house's central room. Has no use.
 - aname: Dolphin to West Chest
   bid: 253
   coperand: 193
   dclassification: 1
-  edescription: Releases the South-West platform and the dolphin who will give you a ride to the secluded platform with a treasure chest.
+  edescription: Seabed Sanctuary - Releases the South-West platform and the dolphin who will give you a ride to the secluded platform with a treasure chest.
 - aname: Mermaid Dancer Anna
   bid: 253
   coperand: 194
   dclassification: 0
-  edescription: Releases Anna the mermaid dancer. Has no use.
-- aname: Grandpa
+  edescription: Seabed Sanctuary - Releases Anna the mermaid dancer. Has no use.
+- aname: North-West Grandpa
   bid: 253
   coperand: 201
   dclassification: 1
-  edescription: ''
-- aname: Girl
+  edescription: Mountain of Souls - Releases the North-West room and the Grandpa who lives there. He'd like to have a nice chat. Sometimes required to reach the mountain king.
+- aname: Girl Near Entrance
   bid: 253
   coperand: 202
   dclassification: 0
-  edescription: ''
-- aname: Mushroom
+  edescription: Mountain of Souls - Releases the Girl Near Entrance. Has no use.
+- aname: Mushroom at North-East Lake
   bid: 253
   coperand: 203
   dclassification: 0
-  edescription: ''
-- aname: Boy (unlocks western tunnel)
+  edescription: Mountain of Souls - Releases a mushroom and the north-east lake. Has no use.
+- aname: Boy for Western Tunnel
   bid: 253
   coperand: 204
   dclassification: 1
-  edescription: ''
-- aname: Grandpa 2
+  edescription: Mountain of Souls - Releases a boy and the western tunnel on the path to the Mountain King's throne room.
+- aname: Grandpa Husband
   bid: 253
   coperand: 211
   dclassification: 0
-  edescription: ''
-- aname: Snail Jockey
+  edescription: Mountain of Souls - Releases the Grandpa who is the husband of the Teleporting Grandma. Has no use.
+- aname: Snail Jockey (Legend)
   bid: 253
   coperand: 212
   dclassification: 0
-  edescription: ''
-- aname: Nome (leads to Act 5)
+  edescription: Mountain of Souls - Releases the Snail Jockey on the top riding the snail named Legend. Has no use.
+- aname: Nome the Snail
   bid: 253
   coperand: 214
   dclassification: 1
-  edescription: ''
-- aname: Boy 2
+  edescription: Mountain of Souls - Releases Nome the Snail. He'll give you an item and open the way to the next world. Requires the Mountain King to open the jail cell doors.
+- aname: Boy in Jail
   bid: 253
   coperand: 215
   dclassification: 0
-  edescription: ''
-- aname: Sleeping Mushroom (unlocks lair in Lune)
+  edescription: Mountain of Souls - Releases the Boy in Jail (What did he do to deserve this?) Has no use.
+- aname: Sleepy Mushroom
   bid: 253
   coperand: 221
   dclassification: 1
-  edescription: ''
-- aname: Dancing Grandma 1
+  edescription: Mountain of Souls - Releases the Sleepy Mushroom in the unlocked jail cell. Enter his dream to open a path in Lune leading to a lair and a secret tile.
+- aname: Dancing Grandma Right
   bid: 253
   coperand: 225
   dclassification: 1
-  edescription: ''
-- aname: Dancing Grandma 2
+  edescription: Mountain of Souls - Releases the Dancing Grandma who attends the Mountain King (on the right).
+- aname: Dancing Grandma Left
   bid: 253
   coperand: 230
   dclassification: 1
-  edescription: ''
-- aname: Snail in secret room (gives Emblem E)
+  edescription: Mountain of Souls - Releases the Dancing Grandma who attends the Mountain King (on the left).
+- aname: Snail in Secret Room with Gift
   bid: 253
   coperand: 232
   dclassification: 1
-  edescription: ''
-- aname: Boy (gives Mushroom Shoes)
+  edescription: Mountain of Souls - Releases the Snail in the Secret Room. Use the passage through the fake norther wall to reach him and receive an item.
+- aname: Boy with Gift
   bid: 253
   coperand: 233
   dclassification: 1
-  edescription: ''
-- aname: Grandma
+  edescription: Mountain of Souls - Releases the boy in the central lake room who will give you a gift.
+- aname: Teleporting Grandma
   bid: 253
   coperand: 234
   dclassification: 0
-  edescription: ''
-- aname: Girl 2
+  edescription: Mountain of Souls - Releases the Teleporting Grandma in the western tunnel (although it's you that teleports, not her). Has no use.
+- aname: Gazing Girl
   bid: 253
   coperand: 235
   dclassification: 0
-  edescription: ''
-- aname: Mushroom (unlocks southern tunnel)
+  edescription: Mountain of Souls - Releases the girl gazing at the boy in the western tunnel (but not for long?) Has no use.
+- aname: Mushroom for Southern Tunnel
   bid: 253
   coperand: 238
   dclassification: 1
-  edescription: ''
-- aname: Snail Racer
+  edescription: Mountain of Souls - Releases a mushroom and the southern tunnel on the path to the jail.
+- aname: Snail Jockey (Flash)
   bid: 253
   coperand: 239
   dclassification: 0
-  edescription: ''
-- aname: Snail Racer 2
+  edescription: Mountain of Souls - Releases the Snail Jockey in the middle riding the snail named Flash. Has no use.
+- aname: Snail Jockey (Unknown)
   bid: 253
   coperand: 240
   dclassification: 0
-  edescription: ''
-- aname: Girl (unlocks eastern tunnel)
+  edescription: Mountain of Souls - Releases the Snail Jockey on the bottom riding the snail with an unknown name. Has no use.
+- aname: Girl for Eastern Tunnel
   bid: 253
   coperand: 242
   dclassification: 1
-  edescription: ''
-- aname: Mushroom 3
+  edescription: Mountain of Souls - Releases a girl and the eastern tunnel on the path to Lune and the jail.
+- aname: Solitary Mushroom
   bid: 253
   coperand: 246
   dclassification: 0
-  edescription: ''
-- aname: Snail
+  edescription: Mountain of Souls - Releases the Solitary mushroom in the room with no entrance. Has no use.
+- aname: Snail with Boy
   bid: 253
   coperand: 247
   dclassification: 0
-  edescription: ''
-- aname: Grandpa (unlocks south-western tunnel)
+  edescription: Mountain of Souls - Releases the snail accompanying the boy with gift in the center lake room (he wants walkies). Has no use.
+- aname: Grandpa for South-West Tunnel.
   bid: 253
   coperand: 248
   dclassification: 1
-  edescription: ''
-- aname: Snail 2
+  edescription: Mountain of Souls - Releases a grandpa and the south-west tunnel on the path to the Mountain King.
+- aname: Snail with Grandpa
   bid: 253
   coperand: 250
   dclassification: 0
-  edescription: ''
-- aname: Grandpa (unlocks south-eastern lake)
+  edescription: Mountain of Souls - Releases the snail accompanying the grandpa at the south-east lake. Has no use.
+- aname: Grandpa for South-East Lake
   bid: 253
   coperand: 252
   dclassification: 1
-  edescription: ''
-- aname: Grandpa (leads to Lune)
+  edescription: Mountain of Souls - Releases a sleepy grandpa and the south-east lake on the path to the jail. No need to enter his dreams.
+- aname: Grandpa Guarding Lune
   bid: 253
   coperand: 254
   dclassification: 1
-  edescription: ''
-- aname: Grandpa (unlocks Nome's prison)
+  edescription: Mountain of Souls - Releases a grandpa guarding the path to Lune. He wont let you pass until you show him the Lucky Blade.
+- aname: Grandpa Guarding the Jail
   bid: 253
   coperand: 255
   dclassification: 1
-  edescription: ''
-- aname: Mountain King (gives Phoenix)
+  edescription: Mountain of Souls - Releases the jail area and the grandpa guarding the jail.
+- aname: Mountain King
   bid: 253
   coperand: 259
   dclassification: 1
-  edescription: ''
-- aname: Plant (gives Medical Herbs)
+  edescription: Mountain of Souls - Releases the Mountain King. Talk to him after you have released the two dancing grandmas and gotten the three red-hot items to open the way to Deathtoll's Lair and get an item. 
+- aname: Mousehole Plant
   bid: 253
   coperand: 265
   dclassification: 1
-  edescription: ''
-- aname: Plant
+  edescription: Leo's Lab - Releases the plant on the other end of the mouse hole which will give you an item.
+- aname: West Lab Plant
   bid: 253
   coperand: 267
   dclassification: 0
-  edescription: ''
-- aname: Chest of Drawers (gives Mystic Armor)
+  edescription: Leo's Lab - Releases the plant on the west side of the lab room on the first floor.
+- aname: Chest of Drawers in Locked Room
   bid: 253
   coperand: 268
   dclassification: 1
-  edescription: ''
-- aname: First Cat in Leo's Lab main room
+  edescription: Leo's Lab - Releases the chest of drawers in the locked room on the first floor. Has an item inside, and underneath (push to the left).
+- aname: Stalking Cat 1
   bid: 253
   coperand: 269
   dclassification: 1
-  edescription: ''
-- aname: Great Door (to Zantetsu Sword chest)
+  edescription: Leo's Lab - Releases the 1 of the 2 cats stalking mice in the main room of the first floor. Lure them out of the room with the Actinidea Leaves to have the mice let you into their hole.
+- aname: Great Door to Lab
   bid: 253
   coperand: 274
   dclassification: 1
-  edescription: ''
-- aname: Second Cat in Leo's Lab main room
+  edescription: Leo's Lab - Releases the great door leading to the lab room on the first floor. Now you can get that chest.
+- aname: Stalking Cat 2
   bid: 253
   coperand: 276
   dclassification: 1
-  edescription: ''
-- aname: Locked Door to south-western room
+  edescription: Leo's Lab - Releases the 1 of the 2 cats stalking mice in the main room of the first floor. Lure them out of the room with the Actinidea Leaves to have the mice let you into their hole.
+- aname: Locked Door to South-West Room
   bid: 253
   coperand: 282
   dclassification: 1
-  edescription: ''
-- aname: Cat 3
+  edescription: Leo's Lab - Releases the locked door leading to the south-west room on the first floor. Requires the door key to open.
+- aname: Cat in Locked Room
   bid: 253
   coperand: 283
   dclassification: 0
-  edescription: ''
-- aname: Model Town 1
+  edescription: Leo's Lab - Releases the cat in the locked room on the first floor. Has no use.
+- aname: Model Town Left
   bid: 253
   coperand: 286
   dclassification: 1
-  edescription: ''
-- aname: Great Door (to Model Town room)
+  edescription: Leo's Lab - Releases the Model of Town on the left.
+- aname: Great Door to Models of Town
   bid: 253
   coperand: 288
   dclassification: 1
-  edescription: ''
-- aname: Steps (to second floor)
+  edescription: Leo's Lab - Releases the great door on the 2nd floor leading to the room with the models of town.
+- aname: Steps to 2nd Floor
   bid: 253
   coperand: 290
   dclassification: 1
-  edescription: ''
-- aname: Leo's sleeping Cat (gives Door Key)
+  edescription: Leo's Lab - Releases the steps leading up to the 2nd floor.
+- aname: Sleepy Cat
   bid: 253
   coperand: 294
   dclassification: 1
-  edescription: ''
-- aname: Mouse (unlocks Mouse hole)
+  edescription: Leo's Lab - Releases the Sleepy Cat on the 2nd floor. Enter their dreams to receive an item.
+- aname: Mouse Outside Hole
   bid: 253
   coperand: 297
   dclassification: 1
-  edescription: ''
-- aname: Marie (leads to Act 6)
+  edescription: Leo's Lab - Releases the mouse outside of the mouse hole. They wont let you in until you lure the two cats out of the room with the Actinidea Leaves.
+- aname: Marie the Doll
   bid: 253
   coperand: 303
   dclassification: 1
-  edescription: ''
-- aname: Doll
+  edescription: Leo's Lab - Releases the doll, Marie. She'll give you an item and open the way to the next world.
+- aname: Doll in Chapel
   bid: 253
   coperand: 310
   dclassification: 0
-  edescription: ''
-- aname: Chest of Drawers
+  edescription: Leo's Lab - Releases the doll in the chapel on the 2nd floor. Has no use.
+- aname: Excercising Chest of Drawers
   bid: 253
   coperand: 311
   dclassification: 0
-  edescription: ''
-- aname: Plant 2
+  edescription: Leo's Lab - Releases the chest of drawers in the entryway that just wants to get up and go. Has no use.
+- aname: Plant in Locked Room
   bid: 253
   coperand: 313
   dclassification: 0
-  edescription: ''
-- aname: Mouse 2
+  edescription: Leo's Lab - Releases the plant in the locked room. Has no use.
+- aname: Circling Mouse 1
   bid: 253
   coperand: 315
   dclassification: 0
-  edescription: ''
-- aname: Mouse (gives Spark Bomb)
+  edescription: Leo's Lab - Releases the 1st of 2 mice running in a circle in the mouse hole. Has no use.
+- aname: Mouse with Gift
   bid: 253
   coperand: 316
   dclassification: 1
-  edescription: ''
-- aname: Mouse 3
+  edescription: Leo's Lab - Releases the mouse in the mouse hole that will give you an item.
+- aname: Mouse on 2nd Floor
   bid: 253
   coperand: 318
   dclassification: 0
-  edescription: ''
-- aname: Great Door / Soul of Detection
+  edescription: Leo's Lab - Releases the mouse on the 2nd floor. Has no use.
+- aname: Great Door with Soul
   bid: 253
   coperand: 322
   dclassification: 1
-  edescription: ''
-- aname: Model Town 2
+  edescription: Leo's Lab - Releases the great door to the chapel on the 2nd floor that is from the sky (like you). Will give you a soul/item.
+- aname: Model Town Right
   bid: 253
   coperand: 325
   dclassification: 1
-  edescription: ''
-- aname: Mouse 4
+  edescription: Leo's Lab - Releases the Model of Town on the right.
+- aname: Devout Mouse
   bid: 253
   coperand: 330
   dclassification: 0
-  edescription: ''
-- aname: Steps (to Marie's attic)
+  edescription: Leo's Lab - Releases the Devout Mouse on the 2nd floor. Will let you pray to get a full heal. Otherwise has no use.
+- aname: Steps to the Attic
   bid: 253
   coperand: 331
   dclassification: 1
-  edescription: ''
-- aname: Chest of Drawers (Herb storage)
+  edescription: Leo's Lab - Releases the steps leading from the room with models of town to the attic.
+- aname: Chest of Drawers in Attic
   bid: 253
   coperand: 332
   dclassification: 1
-  edescription: ''
-- aname: Plant (gives Actinidia Leaves)
+  edescription: Leo's Lab - Releases the chest of drawer in the attic which will give you an item.
+- aname: Plant by Town Models
   bid: 253
   coperand: 333
   dclassification: 1
-  edescription: ''
-- aname: Mouse 5
+  edescription: Leo's Lab - Releases the plant on the 2nd floor by the town models. Will give you an item.
+- aname: Circling Mouse 2
   bid: 253
   coperand: 338
   dclassification: 0
-  edescription: ''
-- aname: Cat 4
+  edescription: Leo's Lab - Releases the 2nd of 2 mice running in a circle in the mouse hole. Has no use.
+- aname: Cat in Attic
   bid: 253
   coperand: 339
   dclassification: 0
-  edescription: ''
-- aname: Stairs (to Power Plant)
+  edescription: Leo's Lab - Releases the cat in the attic. Has no use.
+- aname: Steps to Power Plant
   bid: 253
   coperand: 341
   dclassification: 1
-  edescription: ''
-- aname: Soldier
+  edescription: Leo's Lab - Releases the steps leading down to the power plant.
+- aname: Soldier Near Basement Stairs
   bid: 253
   coperand: 345
   dclassification: 0
-  edescription: ''
-- aname: Soldier 2
+  edescription: Magridd Castle Town - Releases the soldier near the stairs to the basement of Magridd Castle. Has no use.
+- aname: Soldier Architect
   bid: 253
   coperand: 346
   dclassification: 0
-  edescription: ''
-- aname: Soldier 3
+  edescription: Magridd Castle Town - Releases the soldier who is the nephew of the famous architech Gaudi. He'll build some architecture after you talk to him, but otherwise has no use.
+- aname: Soldier Who Knows a Guy
   bid: 253
   coperand: 351
   dclassification: 0
-  edescription: ''
-- aname: Sleeping Soldier (gives Elemental Mail)
+  edescription: Magridd Castle Town - Releases the soldier who will give you a hint about what the sleepy soldier has.
+- aname: Sleepy Soldier
   bid: 253
   coperand: 353
   dclassification: 1
-  edescription: ''
-- aname: Soldier 4
+  edescription: Magridd Castle Town - Releases the Sleepy Soldier. Enter their dreams to receive an item.
+- aname: Patrolling Soldier
   bid: 253
   coperand: 354
   dclassification: 0
-  edescription: ''
-- aname: Soldier 5
+  edescription: Magridd Castle Town - Releases the soldier patrolling the castle town streets. Has no use. "Don't talk to me."
+- aname: Right Moat Guard Soldier
   bid: 253
   coperand: 358
   dclassification: 0
-  edescription: ''
-- aname: Singer (unlocks concert hall)
+  edescription: Magridd Castle Town - Releases the soldier guard the moat bridge to the castle (on the right).
+- aname: Singer in Concert Hall
   bid: 253
   coperand: 359
   dclassification: 1
-  edescription: ''
-- aname: Soldier 6
+  edescription: Magridd Castle Town - Releases the Concert Hall and the singer inside. Give them a harp string so they can play music so that the soldier with item underfoot moves.
+- aname: Unremarkable Concert Hall Soldier
   bid: 253
   coperand: 360
   dclassification: 0
-  edescription: ''
-- aname: Maid
+  edescription: Magridd Castle Town - Releases a soldier in the concert hall. Has no use.
+- aname: Bashful Maid
   bid: 253
   coperand: 363
   dclassification: 0
-  edescription: ''
-- aname: Soldier (guarding Left Tower)
+  edescription: Magridd Castle Town - Releases the maid 'removing a speck of dust' from a soldier's eye in the west barracks 😉. Has no use.
+- aname: Soldier Guarding Left Tower
   bid: 253
   coperand: 365
   dclassification: 1
-  edescription: ''
-- aname: Soldier (Dok; accompanies Dr. Leo)
+  edescription: Magridd Castle Town - Releases the Left Tower and the Soldier Guarding it. Show him the Platinum Card to enter.
+- aname: Soldier with Dr. Leo (Dok)
   bid: 253
   coperand: 366
   dclassification: 1
-  edescription: ''
-- aname: Soldier (has Platinum Card)
+  edescription: Magridd Castle Town - Releases a soldier helping Dr. Leo escape. Gets stabbed in the back (Dok!)
+- aname: Soldier with Item Underfoot
   bid: 253
   coperand: 368
   dclassification: 1
-  edescription: ''
-- aname: Singer
+  edescription: Magridd Castle Town - Releases the soldier in the concert hall who is standing on an item. Give the Singer a harp string to make the soldier move so you can grab the item that was where he was standing.
+- aname: Singer Outside
   bid: 253
   coperand: 370
   dclassification: 0
-  edescription: ''
-- aname: Soldier / Soul of Reality
+  edescription: Magridd Castle Town - Releases the singer outside in the south-east corner. Has no use.
+- aname: Soldier with Soul
   bid: 253
   coperand: 377
   dclassification: 1
-  edescription: ''
-- aname: Maid 2
+  edescription: Magridd Castle Town - Releases the soldier in the east barracks who is from the sky (like you). Will give you a soul/item.
+- aname: Maid in Concert Hall
   bid: 253
   coperand: 382
   dclassification: 0
-  edescription: ''
+  edescription: Magridd Castle Town - Releases the maid in the concert hall. Has no use.
 - aname: Queen Magridd (gives VIP Card)
   bid: 253
   coperand: 383
   dclassification: 1
-  edescription: ''
-- aname: Soldier (accompanies Dr. Leo)
+  edescription: Magridd Castle Town - Releases Queen Magridd. She'll give you an item if you tell her she's pretty, and you get can another item where she was standing after her sudden (but inevitable) demise. The game has been patched to give you both items if you go to the tile where she was standing if she blew up before giving you her item.
+- aname: Soldier with Dr. Leo (Oct)
   bid: 253
   coperand: 385
   dclassification: 1
-  edescription: ''
-- aname: Soldier (guarding Right Tower)
+  edescription: Magridd Castle Town - Releases a soldier helping Dr. Leo escape.
+- aname: Soldier Guarding Right Tower
   bid: 253
   coperand: 386
   dclassification: 1
-  edescription: ''
+  edescription: Magridd Castle Town - Releases the Right Tower and the soldier guarding it. Show him the VIP Card to enter.
 - aname: Dr. Leo
   bid: 253
   coperand: 387
   dclassification: 1
-  edescription: ''
-- aname: Soldier 7
+  edescription: Magridd Castle Town - Releases Dr. Leo. The man, the myth, the legend. Release the soldiers accompanying him to receive an item (and a fireworks show).
+- aname: Bashful Soldier
   bid: 253
   coperand: 389
   dclassification: 0
-  edescription: ''
-- aname: Soldier 8
+  edescription: Magridd Castle Town - Releases the soldier having 'speck of dust removed from his eye' by a maid in the west barracks 😉. Has no use.
+- aname: Observant Soldier
   bid: 253
   coperand: 390
   dclassification: 0
-  edescription: ''
-- aname: Maid (gives Medical Herbs)
+  edescription: Magridd Castle Town - Releases the soldier in the east barracks who tells you about the secret tile in front of the castle. Has no use.
+- aname: Maid at the Bar
   bid: 253
   coperand: 391
   dclassification: 1
-  edescription: ''
-- aname: Soldier (unlocks Magridd Castle)
+  edescription: Magridd Castle Town - Releases the telepathic maid at the bar in the south-east house (she knows what men want?). Talk to her to receive an item.
+- aname: Soldier with Castle
   bid: 253
   coperand: 396
   dclassification: 1
-  edescription: ''
-- aname: Soldier 9
+  edescription: Magridd Castle Town - Releases Magridd Castle Keep and the soldier guarding the throne room. Also enables the secret tile in front of the castle.
+- aname: Soldier in North-East Building
   bid: 253
   coperand: 397
   dclassification: 0
-  edescription: ''
-- aname: Soldier 10
+  edescription: Magridd Castle Town - Releases the soldier in the north-east building. Has no use.
+- aname: Soldier at the Bar
   bid: 253
   coperand: 399
   dclassification: 0
-  edescription: ''
-- aname: Soldier 11
+  edescription: Magridd Castle Town - Releases the soldier at the bar. Has no use.
+- aname: Unobservant Soldier
   bid: 253
   coperand: 402
   dclassification: 0
-  edescription: ''
-- aname: King Magridd (leads to Act 7)
+  edescription: Magridd Castle Town - Releases the soldier staring at the moat. Has no use.
+- aname: King Magridd
   bid: 253
   coperand: 405
   dclassification: 1
-  edescription: ''
+  edescription: Magridd Castle Town - Releases King Magridd. He'll give you an item and open the way to the next world.
 gsouls:
 - aname: Soul of Magician
   bid: 251
   coperand: 0
   dclassification: 1
-  edescription: ''
+  edescription: Alows your character use gems to cast magic.
 - aname: Soul of Light
   bid: 251
   coperand: 1
   dclassification: 1
-  edescription: ''
+  edescription: Reveals the dark room in the basement of the Light Shrine in Act 2.
 - aname: Soul of Shield
   bid: 251
   coperand: 2
   dclassification: 2
-  edescription: ''
+  edescription: Protects you from the falling magma erupting from the volcano in Durean in Act 3.
 - aname: Soul of Detection
   bid: 251
   coperand: 3
   dclassification: 2
-  edescription: ''
+  edescription: Allows you to see the invisible enemies in the models of town in Act 5.
 - aname: Soul of Reality
   bid: 251
   coperand: 4
   dclassification: 1
-  edescription: ''
+  edescription: Allows you to see the hidden passages in Magridd Castle in Act 6.
 hspecial-items:
 - aname: Victory
   bid: 250
   coperand: 0
   dclassification: 1
-  edescription: ''
+  edescription: A special 'item' used to signify that you have achieved your goal and beaten the game. GG.
