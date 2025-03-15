@@ -112,7 +112,7 @@ def set_ghost_type(world: "LMWorld", ghost_list: dict):
 
 
 def lmconnect(world: "LMWorld", source: str, target: str, key: Optional[str] = None,
-            doorid: Optional[int] = None, rule: Optional[Callable] = None):
+            doorid: Optional[int] = None, rule: Optional[Callable] = None, one_way: bool = False):
     player = world.player
 
     if world.open_doors.get(doorid) == 0:
@@ -125,11 +125,11 @@ def lmconnect(world: "LMWorld", source: str, target: str, key: Optional[str] = N
     source_region = world.get_region(source)
     target_region = world.get_region(target)
     source_region.connect(target_region, rule=rule)
-    target_region.connect(source_region, rule=rule)
+    if not one_way:
+        target_region.connect(source_region, rule=rule)
 
 
 def connect_regions(world: "LMWorld"):
-    lmconnect(world, "Menu", "Foyer")
     lmconnect(world, "Foyer", "Parlor", "Parlor Key", 34)
     lmconnect(world, "Parlor", "Anteroom", "Anteroom Key", 38)
     lmconnect(world, "Anteroom", "Wardrobe", "Wardrobe Key", 43)
@@ -199,6 +199,24 @@ def connect_regions(world: "LMWorld"):
     lmconnect(world, "Altar Hallway", "Secret Altar", "Spade Key", 72,
             lambda state, boo_count=world.options.final_boo_count: state.has_group("Boo", world.player, boo_count)
                           or state.has("Boo", world.player, boo_count))
+    # Mirror warps
+    lmconnect(world, "Armory", "Foyer", one_way=True)
+    lmconnect(world, "Sealed Room", "Foyer", one_way=True)
+    lmconnect(world, "Master Bedroom", "Foyer", one_way=True)
+    lmconnect(world, "Rec Room", "Foyer", one_way=True)
+    lmconnect(world, "1F Bathroom", "Foyer", one_way=True)
+    lmconnect(world, "1F Washroom", "Foyer", one_way=True)
+    lmconnect(world, "2F Washroom", "Foyer", one_way=True)
+    lmconnect(world, "2F Bathroom", "Foyer", one_way=True)
+    lmconnect(world, "Guest Room", "Foyer", one_way=True)
+    lmconnect(world, "Mirror Room", "Foyer", one_way=True)
+    lmconnect(world, "Billiards Room", "Foyer", one_way=True)
+    lmconnect(world, "Wardrobe", "Foyer", one_way=True)
+    lmconnect(world, "Secret Altar", "Foyer", one_way=True)
+    lmconnect(world, "Storage Room", "Foyer", one_way=True)
+    lmconnect(world, "The Well", "Foyer", one_way=True)
+    lmconnect(world, "Safari Room", "Foyer", one_way=True)
+    lmconnect(world, "Breaker Room", "Foyer", one_way=True)
 
 
 REGION_LIST = {

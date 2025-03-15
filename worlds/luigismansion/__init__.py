@@ -72,7 +72,8 @@ class LMWeb(WebWorld):
             LuigiOptions.BalconyBooCount,
             LuigiOptions.FinalBooCount,
             LuigiOptions.Enemizer,
-            LuigiOptions.DoorRando
+            LuigiOptions.DoorRando,
+            LuigiOptions.RandomSpawn,
         ]),
         OptionGroup("Filler Weights", [
             LuigiOptions.BundleWeight,
@@ -148,7 +149,7 @@ class LMWorld(World):
         super(LMWorld, self).__init__(*args, **kwargs)
         self.ghost_affected_regions: dict[str, str] = GHOST_TO_ROOM
         self.open_doors: dict[int, int] = vanilla_door_state
-        self.spawn_region: str = "Foyer"
+        self.origin_region_name: str = "Foyer"
 
     def interpret_slot_data(self, slot_data):
         # There are more clever ways to do this, but all would require much larger changes
@@ -407,7 +408,9 @@ class LMWorld(World):
         if (self.options.boosanity == 1 or self.options.boo_gates == 1) and self.options.boo_radar == 2:
             raise Options.OptionError(f"When Boo Radar is excluded, neither Boosanity nor Boo Gates can be active "
                                       f"This error was found in {self.player_name}'s Luigi's Mansion world. "
-                                      f"Please fix their YAML")
+                                      f"Their YAML must be fixed")
+        if self.options.random_spawn.value > 0:
+            self.origin_region_name = self.random.choice(list(spawn_locations.keys()))
 
         if hasattr(self.multiworld, "generation_is_fake"):
             if hasattr(self.multiworld, "re_gen_passthrough"):
@@ -456,10 +459,6 @@ class LMWorld(World):
             self.options.washroom_boo_count.value = 0
 
     def create_regions(self):
-        # "Menu" is the required starting point
-        menu_region = Region("Menu", self.player, self.multiworld)
-        self.multiworld.regions.append(menu_region)
-
         # Add all randomizable regions
         for region_name in REGION_LIST.values():
             if region_name in self.multiworld.regions.region_cache[self.player]:
@@ -549,7 +548,7 @@ class LMWorld(World):
         raise Exception(f"Invalid item name: {item}")
 
     # def post_fill(self):
-    # visualize_regions(self.multiworld.get_region("Menu", self.player), "luigiregions.puml", linetype_ortho=False)
+    #     visualize_regions(self.multiworld.get_region(self.origin_region_name, self.player), "luigiregions.puml", linetype_ortho=False)
 
     def create_items(self):
         exclude = [item.name for item in self.multiworld.precollected_items[self.player]]
@@ -624,7 +623,7 @@ class LMWorld(World):
         # Output relevant options to file
         for field in fields(self.options):
             output_data["Options"][field.name] = getattr(self.options, field.name).value
-            output_data["Options"]["spawn"]: str = self.spawn_region
+            output_data["Options"]["spawn"]: str = self.origin_region_name
 
         output_data["Entrances"] = self.open_doors
         output_data["Room Enemies"] = self.ghost_affected_regions
@@ -697,6 +696,7 @@ class LMWorld(World):
             "balcony boo count": self.options.balcony_boo_count.value,
             "final boo count": self.options.final_boo_count.value,
             "enemizer": self.options.enemizer.value,
+            "spawn_region": self.origin_region_name,
             "death_link": self.options.death_link.value,
             "apworld version": "0.1.3"
         }

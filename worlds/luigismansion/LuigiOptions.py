@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 from Options import Toggle, Range, PerGameCommonOptions, Choice, StartInventoryPool, DeathLinkMixin
 
+
 class LuigiWalkSpeed(Choice):
     """Choose how fast Luigi moves"""
     display_name = "Walk Speed"
@@ -375,6 +376,22 @@ class RankRequirement(Choice):
     option_rank_a = 7
 
 
+class RandomSpawn(Choice):
+    """
+    Allows Luigi to randomly spawn somewhere in the mansion.
+
+    Random Spawn: Randomly spawn in one of the rooms with enough locations to successfully generate
+
+    Expanded Spawns: Only viable if Walksanity, or <furniture options here>. Larger amount of viable random spawn locations
+    """
+    display_name = "Random Spawn Location"
+    internal_name = "random_spawn"
+    option_vanilla = 0
+    option_random_spawn = 1
+    option_expanded_spawns = 2
+    default = 0
+
+
 @dataclass
 class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     rank_requirement: RankRequirement
@@ -387,6 +404,7 @@ class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     random_music: RandomMusic
     door_rando: DoorRando
     enemizer: Enemizer
+    random_spawn: RandomSpawn
     portrait_hints: PortraitHints
     hint_distribution: HintDistribution
     toadsanity: Toadsanity
