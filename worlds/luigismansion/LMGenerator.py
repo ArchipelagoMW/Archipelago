@@ -62,6 +62,14 @@ class LuigisMansionRandomizer:
         self.gcm = GCM(self.clean_iso_path)
         self.gcm.read_entire_disc()
 
+        # Change game ID so save files are different
+        magic_seed = str(self.output_data["Seed"])[0:19]
+        bin_data = self.gcm.read_file_data("sys/boot.bin")
+        bin_data.seek(0x01)
+        bin_data.write(struct.pack("21s", (magic_seed + "01").encode()))
+        self.gcm.changed_files["sys/boot.bin"] = bin_data
+
+
         # Find the main DOL file, which is the main file used for GC and Wii games.
         dol_data = self.gcm.read_file_data("sys/main.dol")
         self.dol = DOL()
@@ -479,10 +487,6 @@ class LuigisMansionRandomizer:
         self.dol.data.seek(0x399228)
         self.dol.data.write(struct.pack(">H", king_boo_health))
 
-        # # Change magic number so save files are different
-        # new_magic = "GBOO" + "01"
-        # self.dol.data.seek(0x80000000)
-        # self.dol.data.write(struct.pack("6s", new_magic.encode()))
 
     def update_custom_event(self, event_number: str, check_local_folder: bool, non_local_str="",
                             custom_made: bool = False, replace_old_csv: bool = False):
