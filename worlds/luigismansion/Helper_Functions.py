@@ -1,6 +1,6 @@
 from typing import NamedTuple, Optional
 
-
+#TODO When bit position is set, assume 1 byte size, otherwise use ram_byte_size
 class LMRamData(NamedTuple):
     ram_addr: Optional[int] = None
     bit_position: Optional[int] = None
