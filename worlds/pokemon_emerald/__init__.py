@@ -479,9 +479,9 @@ class PokemonEmeraldWorld(World):
 
     def connect_entrances(self):
         randomize_wild_encounters(self)
-        # Item rules get set after `set_rules`, so if badge/hm shuffle is
-        # moved later, that needs to be accounted for.
         self.shuffle_badges_hms()
+        # For entrance randomization, disconnect entrances here, randomize map, then
+        # undo badge/HM placement and re-shuffle them in the new map.
 
     def shuffle_badges_hms(self) -> None:
         my_progression_items = [item for item in self.item_pool if item.advancement]
@@ -512,7 +512,7 @@ class PokemonEmeraldWorld(World):
             badge_items.sort(key=lambda item: badge_priority.get(item.name, 0))
 
             # Build state
-            state = CollectionState(self.multiworld, True)
+            state = CollectionState(self.multiworld)
             for item in my_progression_items:
                 state.collect(item, True)
             # If HM shuffle is on, HMs are neither placed in locations nor in
@@ -551,7 +551,7 @@ class PokemonEmeraldWorld(World):
 
             # Build state
             # Badges are either in the item pool, or already placed and collected during sweep
-            state = CollectionState(self.multiworld, True)
+            state = CollectionState(self.multiworld)
             for item in my_progression_items:
                 state.collect(item, True)
             state.sweep_for_advancements(my_locations)
@@ -576,7 +576,7 @@ class PokemonEmeraldWorld(World):
             self.random.shuffle(locations_copy)
             try:
                 fill_restrictive(self.multiworld, state, locations_copy, items_copy, single_player_placement=True,
-                                    lock=True, allow_excluded=True)
+                                 lock=True)
                 break
             except FillError as exc:
                 if attempts_remaining <= 0:
