@@ -77,6 +77,9 @@ Currently, the following games are supported:
 * Mega Man 2
 * Yacht Dice
 * Faxanadu
+* Saving Princess
+* Castlevania: Circle of the Moon
+* Inscryption
 * Super Mario Land 2: 6 Golden Coins
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
