@@ -69,7 +69,7 @@ class Coinsanity(Toggle):
     Shuffles the singular coins found freestanding and in question mark blocks into the item pool, and adds location
     checks made by obtaining a sufficient number of coins in particular levels within a single playthrough.
     """
-    default_name = "Coinsanity"
+    display_name = "Coinsanity"
 
 
 class CoinsanityChecks(Range):
@@ -79,7 +79,7 @@ class CoinsanityChecks(Range):
     If Accessibility is set to Full, auto-scroll levels may have a lower maximum count, which may lead to this
     value being limited.
     """
-    default_name = "Coinsanity Checks"
+    display_name = "Coinsanity Checks"
     range_start = 31
     range_end = 2599
     default = 150
