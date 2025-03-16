@@ -254,11 +254,15 @@ ALL_ITEMS_TABLE = {**ITEM_TABLE,
                    **BOO_ITEM_TABLE,
                    **filler_items}
 
+#TODO decide if to move to IDs instead
 RECV_OWN_GAME_ITEMS: list[str] = [
     BOO_ITEM_TABLE.keys(),
     "Boo Radar",
     "Poltergust 4000"
 ]
+
+# List of received items to ignore because they are handled elsewhere
+RECV_ITEMS_IGNORE = [8127, 8125, 8130, 8131, 8132]
 
 
 def get_item_names_per_category() -> Dict[str, Set[str]]:

@@ -91,15 +91,6 @@ WALLET_OFFSETS: dict[int, int] = {
 # Rank Requirements for each rank. H, G, F, E, D, C, B, A
 RANK_REQ_AMTS = [0, 5000000, 20000000, 40000000, 50000000, 60000000, 70000000, 100000000]
 
-# List of received items to ignore because they are handled elsewhere
-RECV_ITEMS_IGNORE = [8127, 8125, 8130, 8131, 8132]
-RECV_OWN_GAME_LOCATIONS: list[str] = list(BOO_LOCATION_TABLE.keys()) \
-                                     + list(TOAD_LOCATION_TABLE.keys()) \
-                                     + list(PORTRAIT_LOCATION_TABLE.keys()) \
-                                     + list(LIGHT_LOCATION_TABLE.keys()) \
-                                     + list(SPEEDY_LOCATION_TABLE.keys()) \
-                                     + list(WALK_LOCATION_TABLE.keys()) + ["Luigi's Courage", "Observatory Mario Star"]
-
 # Static time to wait for health and death checks
 CHECKS_WAIT = 3
 LONGER_MODIFIER = 2
