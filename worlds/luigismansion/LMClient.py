@@ -99,17 +99,10 @@ RECV_OWN_GAME_LOCATIONS: list[str] = list(BOO_LOCATION_TABLE.keys()) \
                                      + list(LIGHT_LOCATION_TABLE.keys()) \
                                      + list(SPEEDY_LOCATION_TABLE.keys()) \
                                      + list(WALK_LOCATION_TABLE.keys()) + ["Luigi's Courage", "Observatory Mario Star"]
-RECV_OWN_GAME_ITEMS: list[str] = list(BOO_ITEM_TABLE.keys()) + ["Boo Radar", "Poltergust 4000"]
 
 # Static time to wait for health and death checks
 CHECKS_WAIT = 3
 LONGER_MODIFIER = 2
-
-boolossus_list = [BOO_LOCATION_TABLE[local_loc] for local_loc in
-                    ["Boolossus Fragment 1", "Boolossus Fragment 2", "Boolossus Fragment 3", "Boolossus Fragment 4",
-                     "Boolossus Fragment 5", "Boolossus Fragment 6", "Boolossus Fragment 7", "Boolossus Fragment 8",
-                     "Boolossus Fragment 9", "Boolossus Fragment 10", "Boolossus Fragment 11", "Boolossus Fragment 12",
-                     "Boolossus Fragment 13", "Boolossus Fragment 14", "Boolossus Fragment 15"]]
 
 # This address is used to deal with the current display for Captured Boos
 BOO_COUNTER_DISPLAY_ADDR = 0x803A3CC4
