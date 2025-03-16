@@ -60,6 +60,9 @@ def set_openRCT2_items(world):
     for each in range(world.options.bathroom_traps.value):
         openRCT2_items.append("Bathroom Trap")
 
+    for each in range(world.options.loan_shark_traps.value):
+        openRCT2_items.append("Loan Shark Trap")
+
     for each in range(world.options.skips.value):
         openRCT2_items.append("Skip")
 

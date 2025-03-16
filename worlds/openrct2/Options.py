@@ -748,6 +748,13 @@ class SpamTraps(Range):
     range_end = 20
     default = 5
 
+class LoanSharkTraps(Range):
+    """When found, increases your loan! Adding traps will increase the total number of items in the world."""
+    display_name = "Loan Shark Trap"
+    range_start = 0
+    range_end = 20
+    default = 5
+
 class Filler(Range):
     """How many extra filler items to add to the mix as a percentage. This will mostly consist of Cash Bonuses."""
     display_name = "Filler"
@@ -833,6 +840,7 @@ openrct2_option_groups = [
         FurryConventionTraps,
         BathroomTraps,
         SpamTraps,
+        LoanSharkTraps,
         AllRidesAndSceneryBase,
         AllRidesAndSceneryExpansion
     ]),
@@ -871,6 +879,7 @@ class openRCT2Options(PerGameCommonOptions):
     furry_convention_traps: FurryConventionTraps
     bathroom_traps: BathroomTraps
     spam_traps: SpamTraps
+    loan_shark_traps: LoanSharkTraps
 
     # in-game options. All Archipelago needs to do with these is pass them to OpenRCT2. The game will handle the rest
     randomization_range: SelectedRandomizationRange
