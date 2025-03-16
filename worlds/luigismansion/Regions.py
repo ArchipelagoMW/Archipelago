@@ -218,6 +218,7 @@ def connect_regions(world: "LMWorld"):
     lmconnect(world, "The Well", "Foyer", one_way=True)
     lmconnect(world, "Safari Room", "Foyer", one_way=True)
     lmconnect(world, "Breaker Room", "Foyer", one_way=True)
+    lmconnect(world, "Hidden Room", "Foyer", one_way=True)
 
 
 REGION_LIST = {
