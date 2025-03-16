@@ -199,8 +199,9 @@ class MarioLand2World(World):
                 self.num_coin_locations[-1][1] += 1
             coin_locations = []
             for level, coins in self.num_coin_locations:
-                coin_thresholds = self.random.sample(range(1, self.max_coin_locations[level] + 1), coins)
-                coin_locations += [f"{level} - {i} Coin{'s' if i > 1 else ''}" for i in coin_thresholds]
+                if self.max_coin_locations[level]:
+                    coin_thresholds = self.random.sample(range(1, self.max_coin_locations[level] + 1), coins)
+                    coin_locations += [f"{level} - {i} Coin{'s' if i > 1 else ''}" for i in coin_thresholds]
             for location_name in coin_locations:
                 region = self.multiworld.get_region(location_name.split(" -")[0], self.player)
                 region.locations.append(MarioLand2Location(self.player, location_name,
