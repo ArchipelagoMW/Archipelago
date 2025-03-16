@@ -254,6 +254,12 @@ ALL_ITEMS_TABLE = {**ITEM_TABLE,
                    **BOO_ITEM_TABLE,
                    **filler_items}
 
+RECV_OWN_GAME_ITEMS: list[str] = [
+    BOO_ITEM_TABLE.keys(),
+    "Boo Radar",
+    "Poltergust 4000"
+]
+
 
 def get_item_names_per_category() -> Dict[str, Set[str]]:
     categories: Dict[str, Set[str]] = {}
