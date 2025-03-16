@@ -330,6 +330,7 @@
     ] }, // from the rightmost safety orb's right platform, cloud leap is the only way to the higher middle platform
     { "from": "FGH - Hammer Brothers Roof", "to": "FGH - Above Root Node", "requires": [] }, // wall climb OR cl
     { "from": "FGH - Above Root Node", "to": "FGH - Hammer Brothers Roof", "requires": [] }, // fall
+    { "from": "FGH - Above Root Node", "to": "FGH - Lower Levels, Root Node & Right Exit", "requires": [] }, // fall farther
 
     { "from": "FGH - Left Exit", "to": "OW - Root Node & Middle Exits", "requires": [] },
     { "from": "OW - Root Node & Middle Exits", "to": "FGH - Left Exit", "requires": [] },
