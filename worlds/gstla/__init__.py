@@ -24,7 +24,7 @@ from .Items import GSTLAItem, item_table, all_items, ItemType, create_events, cr
 from .Locations import GSTLALocation, all_locations, location_name_to_id, location_type_to_data
 from .Rules import set_access_rules, set_item_rules, set_entrance_rules
 from .Regions import create_regions
-from .Connections import create_connections
+from .Connections import create_vanilla_connections
 from .gen.ItemData import mimics, characters
 from .gen.LocationData import LocationType, location_name_to_data
 from .gen.ItemNames import ItemName, item_id_by_name, name_by_item_id
@@ -172,7 +172,7 @@ class GSTLAWorld(World):
 
     def create_regions(self) -> None:
         create_regions(self)
-        create_connections(self.multiworld, self.player)
+        create_vanilla_connections(self.multiworld, self.player)
 
     def create_items(self) -> None:
         create_events(self)
