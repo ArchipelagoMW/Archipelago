@@ -83,13 +83,13 @@ installation and send a bug report either on GitHub or the [Archipelago Discord 
 ## FAQ
 
 * The tracker says I can get some checks in Howling Grotto, but I can't defeat the Emerald Golem. How do I get there?
-    * Due to the way the vanilla game handles bosses and level transitions, if you die to him the room will be unlocked
+    * Due to the way the vanilla game handles bosses and level transitions, if you die to him, the room will be unlocked,
       and you can leave.
 * I have the money wrench. Why won't the shopkeeper let me enter the sink?
     * The money wrench is both an item you must find or receive from another player and a location check, which you must
-      purchase from the Artificer as in vanilla.
-* How do I unfreeze Manfred/where is the monk?
-    * The monk will only appear near manfred after you cleanse the queen of quills with the fairy (magic firefly).
+      purchase from the Artificer, as in vanilla.
+* How do I unfreeze Manfred? Where is the monk?
+    * The monk will only appear near Manfred after you cleanse the Queen of Quills with the fairy (magic firefly).
 * I have all the power seals I need to win, but nothing is happening when I open the chest.
-    * Due to how the level loading code works, I am currently unable to teleport you out of HQ at will, you must enter the
+    * Due to how the level loading code works, I am currently unable to teleport you out of HQ at will; you must enter the
       shop from within a level.
