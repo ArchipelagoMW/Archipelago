@@ -47,7 +47,7 @@ from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, Networ
 from BaseClasses import ItemClassification
 
 min_client_version = Version(0, 1, 6)
-colorama.init()
+colorama.just_fix_windows_console()
 
 
 def remove_from_list(container, value):
@@ -324,7 +324,7 @@ class Context:
 
     # General networking
     async def send_msgs(self, endpoint: Endpoint, msgs: typing.Iterable[dict]) -> bool:
-        if not endpoint.socket or not endpoint.socket.open:
+        if not endpoint.socket or endpoint.socket.state != websockets.protocol.State.OPEN:
             return False
         msg = self.dumper(msgs)
         try:
@@ -339,7 +339,7 @@ class Context:
             return True
 
     async def send_encoded_msgs(self, endpoint: Endpoint, msg: str) -> bool:
-        if not endpoint.socket or not endpoint.socket.open:
+        if not endpoint.socket or endpoint.socket.state != websockets.protocol.State.OPEN:
             return False
         try:
             await endpoint.socket.send(msg)
@@ -355,7 +355,7 @@ class Context:
     async def broadcast_send_encoded_msgs(self, endpoints: typing.Iterable[Endpoint], msg: str) -> bool:
         sockets = []
         for endpoint in endpoints:
-            if endpoint.socket and endpoint.socket.open:
+            if endpoint.socket and endpoint.socket.state == websockets.protocol.State.OPEN:
                 sockets.append(endpoint.socket)
         try:
             websockets.broadcast(sockets, msg)
@@ -783,7 +783,7 @@ class Context:
 
     def get_hint(self, team: int, finding_player: int, seeked_location: int) -> typing.Optional[Hint]:
         for hint in self.hints[team, finding_player]:
-            if hint.location == seeked_location:
+            if hint.location == seeked_location and hint.finding_player == finding_player:
                 return hint
         return None
     
@@ -924,7 +924,7 @@ async def on_client_joined(ctx: Context, client: Client):
                               "If your client supports it, "
                               "you may have additional local commands you can list with /help.",
                       {"type": "Tutorial"})
-    if not any(isinstance(extension, PerMessageDeflate) for extension in client.socket.extensions):
+    if not any(isinstance(extension, PerMessageDeflate) for extension in client.socket.protocol.extensions):
         ctx.notify_client(client, "Warning: your client does not support compressed websocket connections! "
                                   "It may stop working in the future. If you are a player, please report this to the "
                                   "client's developer.")
@@ -1135,7 +1135,7 @@ def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, st
     seeked_item_id = item if isinstance(item, int) else ctx.item_names_for_game(ctx.games[slot])[item]
     for finding_player, location_id, item_id, receiving_player, item_flags \
             in ctx.locations.find_item(slots, seeked_item_id):
-        prev_hint = ctx.get_hint(team, slot, location_id)
+        prev_hint = ctx.get_hint(team, finding_player, location_id)
         if prev_hint:
             hints.append(prev_hint)
         else:
@@ -2107,7 +2107,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
     def _cmd_exit(self) -> bool:
         """Shutdown the server"""
         try:
-            self.ctx.server.ws_server.close()
+            self.ctx.server.server.close()
         finally:
             self.ctx.exit_event.set()
         return True
@@ -2477,7 +2477,7 @@ async def auto_shutdown(ctx, to_cancel=None):
         await asyncio.wait_for(ctx.exit_event.wait(), ctx.auto_shutdown)
 
     def inactivity_shutdown():
-        ctx.server.ws_server.close()
+        ctx.server.server.close()
         ctx.exit_event.set()
         if to_cancel:
             for task in to_cancel:
