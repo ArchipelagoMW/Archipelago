@@ -14,7 +14,7 @@ from .Locations import (
     npc_rewards_by_name,
     lairs_by_name,
 )
-from .Items import SoulBlazerItemData, all_items_table
+from .Items import SoulBlazerItemData, all_items_by_name
 from .Util import encode_string, is_bit_set, Rectangle
 from .Lair import LairData, unpack_lair_data
 from .Entity import EntityData, unpack_entity_data
@@ -53,7 +53,7 @@ class SoulBlazerSNIClient(SNIClient):
     patch_suffix = ".apsb"
 
     location_data_for_address = {data.address: data for data in locations_by_name.values()}
-    item_data_for_code = {data.code: data for data in all_items_table.values()}
+    item_data_for_code = {data.code: data for data in all_items_by_name.values()}
 
     def __init__(self) -> None:
         super().__init__()

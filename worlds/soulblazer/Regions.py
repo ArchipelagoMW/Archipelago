@@ -1,7 +1,7 @@
 import logging
 from typing import Dict, List, Callable, TYPE_CHECKING, NamedTuple
 from BaseClasses import MultiWorld, Region, Entrance, CollectionState
-from .Items import swords_table, stones_table, redhots_table
+from .Items import swords_by_name, stones_by_name, redhots_by_name
 from .Names import RegionName, ItemName, LairName, ChestName, NPCName, NPCRewardName
 from .Locations import SoulBlazerLocation, locations_by_name
 from .Options import SoulBlazerOptions

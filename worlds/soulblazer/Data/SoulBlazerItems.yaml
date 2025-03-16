@@ -1,1218 +1,1218 @@
-aswords:
-- aname: Sword of Life
-  bid: 1
-  coperand: 0
-  dclassification: 1
-  edescription: It's a sword with no other special properties. Swingy swingy.
-- aname: Psycho Sword
-  bid: 2
-  coperand: 0
-  dclassification: 1
-  edescription: Will paralyze metal- and spirit-type enemies (but wont damage them).
-- aname: Critical Sword
-  bid: 3
-  coperand: 0
-  dclassification: 1
-  edescription: Will randomly insta-kill non-boss enemies.
-- aname: Lucky Blade
-  bid: 4
-  coperand: 0
-  dclassification: 1
-  edescription: Increased chance of getting larger gems from enemies. Also required for access to Lune in Act 4.
-- aname: Zantetsu Sword
-  bid: 5
-  coperand: 0
-  dclassification: 1
-  edescription: Can damage metal-type enemies.
-- aname: Spirit Sword
-  bid: 6
-  coperand: 0
-  dclassification: 1
-  edescription: Can damage spirit-type enemies.
-- aname: Recovery Sword
-  bid: 7
-  coperand: 0
-  dclassification: 1
-  edescription: Recovers a little life on kill.
-- aname: The Soul Blade
-  bid: 8
-  coperand: 0
-  dclassification: 1
-  edescription: Can damage all types of enemies. Must be equipped to use the Phoenix.
-barmors:
-- aname: Iron Armor
-  bid: 9
-  coperand: 0
-  dclassification: 2
-  edescription: Increases your defence and has no other special properties. Better than nothing.
-- aname: Ice Armor
-  bid: 10
-  coperand: 0
-  dclassification: 1
-  edescription: Negates damage from the hot floors in the Fire Shrine in Act 2 and the Basement of Leo's Lab in Act 5.
-- aname: Bubble Armor
-  bid: 11
-  coperand: 0
-  dclassification: 1
-  edescription: Allows you to breathe underwater. Used for traversing the seabed in Act 3 without taking damage.
-- aname: Magic Armor
-  bid: 12
-  coperand: 0
-  dclassification: 2
-  edescription: Cuts the cost of gems in half.
-- aname: Mystic Armor
-  bid: 13
-  coperand: 0
-  dclassification: 2
-  edescription: Grants more invincibility frames after taking damage.
-- aname: Light Armor
-  bid: 14
-  coperand: 0
-  dclassification: 2
-  edescription: Changes the damage formula to allow attacks to deal no damage when the minimum damage would otherwise be 1HP.
-- aname: Elemental Mail
-  bid: 15
-  coperand: 0
-  dclassification: 2
-  edescription: Makes you immune to the spikes in the basement Magridd Castle... and no other hazards.
-- aname: Soul Armor
-  bid: 16
-  coperand: 0
-  dclassification: 1
-  edescription: Allows you to traverse Dazzling Space in the World of Evil without taking damage. Must be equipped to use the Phoenix.
-cmagics:
-- aname: Flame Ball
-  bid: 17
-  coperand: 0
-  dclassification: 1
-  edescription: Shoots a fireball projectile. Costs 4 gems to cast.
-- aname: Light Arrow
-  bid: 18
-  coperand: 0
-  dclassification: 1
-  edescription: Shoots 4 light arrow projectiles. Costs 8 gems to cast.
-- aname: Magic Flare
-  bid: 19
-  coperand: 0
-  dclassification: 1
-  edescription: Hold the button to charge up a damaging ring which will explode when released. Costs 8 gems to cast.
-- aname: Rotator
-  bid: 20
-  coperand: 0
-  dclassification: 1
-  edescription: Hold the button to have a damaging ring of small explosions circle you. Costs 1 gem to cast, but casts rapidly while the button is held.
-- aname: Spark Bomb
-  bid: 21
-  coperand: 0
-  dclassification: 1
-  edescription: Drops 4 mines will will explode after a short delay. Costs 8 gems to cast.
-- aname: Flame Pillar
-  bid: 22
-  coperand: 0
-  dclassification: 1
-  edescription: Drops 4 pillars of fire which will linger for a while before dissapearing. Costs 20 gems to cast.
-- aname: Tornado
-  bid: 23
-  coperand: 0
-  dclassification: 1
-  edescription: Drops a tornado which moves in random directions for a while. Costs 8 gems to cast.
-- aname: Phoenix
-  bid: 24
-  coperand: 0
-  dclassification: 1
-  edescription: Shoots a Phoenix Projectile whenever you swing your sword. Costs 2 gems per swing. Requires the Soul Blade and Soul Armor to be equipped to use.
-dinventory-items:
-- aname: Goat's Food
-  bid: 25
-  coperand: 0
-  dclassification: 2
-  edescription: Give to the Gourmet Goat in Grass Valley for a secret (The secret is not useful for the randomizer... yet).
-- aname: Harp String
-  bid: 26
-  coperand: 0
-  dclassification: 1
-  edescription: Give to the musician in the concert hall in Magridd Castle Town to have the Soldier with Item Underfoot move.
-- aname: a pass
-  bid: 27
-  coperand: 0
-  dclassification: 1
-  edescription: Use this to get into the boys' secret hideout in Grass Valley.
-- aname: Dream Rod
-  bid: 28
-  coperand: 0
-  dclassification: 1
-  edescription: Use to enter the dreams of other creatures.
-- aname: Leo's brush
-  bid: 29
-  coperand: 0
-  dclassification: 1
-  edescription: Use to enter Leo's Painting in Grass Valley.
-- aname: G.Leaf
-  bid: 30
-  coperand: 0
-  dclassification: 1
-  edescription: Leaves of Greenwood. Required to use the rafts in Lostside Marsh.
-- aname: Mole's Ribbon
-  bid: 31
-  coperand: 0
-  dclassification: 1
-  edescription: Give to the Ghost Mole in Greenwood blocking the way to a Gift-Giving Mole.
-- aname: the Big Pearl
-  bid: 32
-  coperand: 0
-  dclassification: 1
-  edescription: Give to the Sleepy Dolphin to release the path to the secret cove.
-- aname: Mermaid's Tears
-  bid: 33
-  coperand: 0
-  dclassification: 1
-  edescription: Use at the top of the Durean volcano to cool the lava.
-- aname: Mushroom Shoes
-  bid: 34
-  coperand: 0
-  dclassification: 1
-  edescription: Use to walk freely on ice.
-- aname: a mobile key
-  bid: 35
-  coperand: 0
-  dclassification: 1
-  edescription: Use to start the airship and fight the boss.
-- aname: Thunder Ring
-  bid: 36
-  coperand: 0
-  dclassification: 1
-  edescription: Use in Blester to call down lighting which can defeat metal enemies.
-- aname: Delicious Seeds
-  bid: 37
-  coperand: 0
-  dclassification: 1
-  edescription: Trade to the Hungry Squirrel for an item.
-- aname: A.Leaf
-  bid: 38
-  coperand: 0
-  dclassification: 1
-  edescription: Actinidea Leaves. Use in Leo's Lab to lure the cats out of the main room so the mice will let you into their home.
-- aname: a door key
-  bid: 39
-  coperand: 0
-  dclassification: 1
-  edescription: Used to unlock the locked door in Leo's Lab 1F.
-- aname: Platinum Card
-  bid: 40
-  coperand: 0
-  dclassification: 1
-  edescription: Use to enter the left tower in Magridd Castle Town.
-- aname: the VIP Card
-  bid: 41
-  coperand: 0
-  dclassification: 1
-  edescription: Use to enter the right tower in Magridd Castle Town.
-- aname: Emblem A
-  bid: 42
-  coperand: 0
-  dclassification: 9
-  edescription: One of 8 Master's Emblems. Trade them all to the Gem Fairy is Greenwood for an item.
-- aname: Emblem B
-  bid: 43
-  coperand: 0
-  dclassification: 9
-  edescription: One of 8 Master's Emblems. Trade them all to the Gem Fairy is Greenwood for an item.
-- aname: Emblem C
-  bid: 44
-  coperand: 0
-  dclassification: 9
-  edescription: One of 8 Master's Emblems. Trade them all to the Gem Fairy is Greenwood for an item.
-- aname: Emblem D
-  bid: 45
-  coperand: 0
-  dclassification: 9
-  edescription: One of 8 Master's Emblems. Trade them all to the Gem Fairy is Greenwood for an item.
-- aname: Emblem E
-  bid: 46
-  coperand: 0
-  dclassification: 9
-  edescription: One of 8 Master's Emblems. Trade them all to the Gem Fairy is Greenwood for an item.
-- aname: Emblem F
-  bid: 47
-  coperand: 0
-  dclassification: 9
-  edescription: One of 8 Master's Emblems. Trade them all to the Gem Fairy is Greenwood for an item.
-- aname: Emblem G
-  bid: 48
-  coperand: 0
-  dclassification: 9
-  edescription: One of 8 Master's Emblems. Trade them all to the Gem Fairy is Greenwood for an item.
-- aname: Emblem H
-  bid: 49
-  coperand: 0
-  dclassification: 9
-  edescription: One of 8 Master's Emblems. Trade them all to the Gem Fairy is Greenwood for an item.
-- aname: Red-Hot Mirror
-  bid: 50
-  coperand: 0
-  dclassification: 1
-  edescription: Give the three Red-Hot Items to the Mountain King after you have released both dancing grandmas to open the way to Deathtoll's Palace and get and item.
-- aname: Red-Hot Ball
-  bid: 51
-  coperand: 0
-  dclassification: 1
-  edescription: Give the three Red-Hot Items to the Mountain King after you have released both dancing grandmas to open the way to Deathtoll's Palace and get and item.
-- aname: Red-Hot Stick
-  bid: 52
-  coperand: 0
-  dclassification: 1
-  edescription: Give the three Red-Hot Items to the Mountain King after you have released both dancing grandmas to open the way to Deathtoll's Palace and get and item.
-- aname: Power Bracelet
-  bid: 53
-  coperand: 0
-  dclassification: 2
-  edescription: Doubles your damage dealt.
-- aname: Shield Bracelet
-  bid: 54
-  coperand: 0
-  dclassification: 2
-  edescription: Halves your damage taken.
-- aname: Super Bracelet
-  bid: 55
-  coperand: 0
-  dclassification: 2
-  edescription: Doubles your damage dealt and halves your damage taken.
-- aname: Medical Herb
-  bid: 56
-  coperand: 0
-  dclassification: 0
-  edescription: Consumable. Equip to fully heal yourself once when you run out of life.
-- aname: Strange Bottle
-  bid: 57
-  coperand: 0
-  dclassification: 0
-  edescription: Consumable. Equip to fully lose no gems once when you run out of life.
-- aname: Brown Stone
-  bid: 58
-  coperand: 0
-  dclassification: 1
-  edescription: One of 6 stones required to open the way to the World of Evil.
-- aname: Green Stone
-  bid: 59
-  coperand: 0
-  dclassification: 1
-  edescription: One of 6 stones required to open the way to the World of Evil.
-- aname: Blue Stone
-  bid: 60
-  coperand: 0
-  dclassification: 1
-  edescription: One of 6 stones required to open the way to the World of Evil.
-- aname: Silver Stone
-  bid: 61
-  coperand: 0
-  dclassification: 1
-  edescription: One of 6 stones required to open the way to the World of Evil.
-- aname: Purple Stone
-  bid: 62
-  coperand: 0
-  dclassification: 1
-  edescription: One of 6 stones required to open the way to the World of Evil.
-- aname: Black Stone
-  bid: 63
-  coperand: 0
-  dclassification: 1
-  edescription: One of 6 stones required to open the way to the World of Evil.
-- aname: Magic Bell
-  bid: 64
-  coperand: 0
-  dclassification: 2
-  edescription: Equip to consume no gems when casting magic.
-emisc-items:
-- aname: Nothing
-  bid: 0
-  coperand: 0
-  dclassification: 0
-  edescription: Its nothing, nothing at all.
-- aname: GEMs
-  bid: 255
-  coperand: 100
-  dclassification: 0
-  edescription: A (possibly) random quantity of gems.
-- aname: EXP
-  bid: 254
-  coperand: 250
-  dclassification: 0
-  edescription: A (possibly) random quantity of EXP.
-fnpc-releases:
-- aname: Village Chief's House
-  bid: 253
-  coperand: 2
-  dclassification: 1
-  edescription: Grass Valley - Releases the Village Chief's House... and the Village Chief's Wife too. She will attempt to adopt you, and give you a full heal when you talk to her. Now go upstairs and clean your room.
-- aname: Tool Shop Owner
-  bid: 253
-  coperand: 6
-  dclassification: 1
-  edescription: Releases the Tool Shop and its owner. She'll give you an item when you talk to her.
-- aname: Tulip in front of Village Chief's House
-  bid: 253
-  coperand: 7
-  dclassification: 0
-  edescription: Grass Valley - Releases the Tulip in front of the Village Chief's House. You can talk to it for some world exposition if you want. Otherwise has no use.
-- aname: Bridge Guard
-  bid: 253
-  coperand: 8
-  dclassification: 1
-  edescription: Grass Valley - Releases the bridge linking the two halves of Grass Valley... and the man guarding said bridge too, I suppose. He'll let you pass.
-- aname: Village Chief
-  bid: 253
-  coperand: 9
-  dclassification: 1
-  edescription: Grass Valley - Releases the Village Chief. He'll give you an item and open the way to the next world.
-- aname: Ivy to Treasure Room
-  bid: 253
-  coperand: 13
-  dclassification: 1
-  edescription: Grass Valley - Releases the Ivy which lets you climb down to the Treasure Room. Unlocks two chests and an item-giving gem fairy.
-- aname: Watermill Keeper
-  bid: 253
-  coperand: 14
-  dclassification: 1
-  edescription: Grass Valley - Releases the Watermill and its Keeper. Turning the wheel will power the elevator and give access to the east half of the Underground Castle.
-- aname: Goat Pen
-  bid: 253
-  coperand: 15
-  dclassification: 1
-  edescription: Grass Valley - Releases the Goat Pen and one of the goats in it. Also gives access to the Goat Pen Secret Tile in the South-East Corner.
-- aname: Lisa
-  bid: 253
-  coperand: 16
-  dclassification: 1
-  edescription: Grass Valley - Releases Lisa, the daughter of Dr. Leo. Enter her dreams with the Dream Rod to unlock two checks in the east half of the Underground Castle.
-- aname: Tulip Above Dungeon Entrance
-  bid: 253
-  coperand: 17
-  dclassification: 0
-  edescription: Grass Valley - Releases the Tulip on the cliff above the dungeon entrance. Has no use.
-- aname: Architect
-  bid: 253
-  coperand: 18
-  dclassification: 1
-  edescription: Grass Valley - Releases the Architect and the stairs leading up to Leo's House. Required to access Leo's Painting.
-- aname: Ivy to South-East Grass Valley
-  bid: 253
-  coperand: 19
-  dclassification: 1
-  edescription: Grass Valley - Releases the Ivy which lets you reach the south-east part of Grass Valley.
-- aname: Gourmet Goat
-  bid: 253
-  coperand: 21
-  dclassification: 1
-  edescription: Grass Valley - Releases the Gourmet Goat. Give the goat some Goat's Food for a secret (The secret is not useful for the randomizer... yet).
-- aname: Tool Shop Owner's Son
-  bid: 253
-  coperand: 22
-  dclassification: 1
-  edescription: Grass Valley - Releases Teddy the Tool Show Owner's son. Will give you an item. Requires the Tool Shop Owner to be released.
-- aname: Tulip Behind Leo's House
-  bid: 253
-  coperand: 24
-  dclassification: 0
-  edescription: Grass Valley - Releases the Tulip Behind Leo's House. Has no use.
-- aname: Leo's House
-  bid: 253
-  coperand: 26
-  dclassification: 1
-  edescription: Grass Valley - Releases Leo's House and the old man inside. Required to access Leo's Painting.
-- aname: Lonely Goat
-  bid: 253
-  coperand: 29
-  dclassification: 0
-  edescription: Grass Valley - Releases the Lonely Goat. Will give you a tour of Grass Valley but otherwise has no use.
-- aname: Sleepy Tulip
-  bid: 253
-  coperand: 34
-  dclassification: 1
-  edescription: Grass Valley - Releases the Sleepy Tulip. Push it to the left for an item.
-- aname: Boy in Hut
-  bid: 253
-  coperand: 35
-  dclassification: 0
-  edescription: Grass Valley - Releases the Boy in the hut in south-east Grass Valley. Has no use.
-- aname: Boy Guarding Hideout
-  bid: 253
-  coperand: 37
-  dclassification: 1
-  edescription: Grass Valley - Releases the boy guarding the hideout. Show him the pass to enter. Required to access the Hideout Cliff Secret Tile and Hideout Cliff Crystal's Item.
-- aname: Lonely Old Man
-  bid: 253
-  coperand: 40
-  dclassification: 0
-  edescription: Grass Valley - Releases the Lonely Old Man in the house next to the shrine portal. Has no use.
-- aname: Crab-Walking Old Man
-  bid: 253
-  coperand: 41
-  dclassification: 0
-  edescription: Grass Valley - Releases the old man who tells you about crab-walking. Has no use.
-- aname: Ivy to Ledge Above Dungeon Entrance
-  bid: 253
-  coperand: 42
-  dclassification: 0
-  edescription: Grass Valley - Releases the ivy which leads to the ledge above the dungeon entrance. Does not lead anywhere useful.
-- aname: Ivy to Secret Tile
-  bid: 253
-  coperand: 43
-  dclassification: 1
-  edescription: Grass Valley - Releases the ivy which leads to the ledge overlooking the Sleepy Tulip which has a secret item tile.
-- aname: Ivy to Hideout Crystal
-  bid: 253
-  coperand: 44
-  dclassification: 1
-  edescription: Grass Valley - Releases the ivy which leads to the item-giving crystal on the upper ledge of the hideout.
-- aname: Tulip South of Goat Pen
-  bid: 253
-  coperand: 46
-  dclassification: 0
-  edescription: Grass Valley - Releases the tulip south of the goat pen. Has no use.
-- aname: Goat Wife
-  bid: 253
-  coperand: 47
-  dclassification: 0
-  edescription: Grass Valley - Releases the wife of the lonely old man who was reincarnated as a goat. Has no use.
-- aname: Shy Bird with Gift
-  bid: 253
-  coperand: 55
-  dclassification: 1
-  edescription: Greenwood - Releases the shy bird who flies away if you approach from the front. Approach from behind to talk to it and receive an item.
-- aname: Bird Near Marsh Entrance
-  bid: 253
-  coperand: 56
-  dclassification: 0
-  edescription: Greenwood - Releases the bird near the marsh entrance. Has no use.
-- aname: Walkable Dog
-  bid: 253
-  coperand: 60
-  dclassification: 0
-  edescription: Greenwood - Releases the dog who wants to go on a walk. Has no use. \"I have as much fun walking people as they do walking me.\"
-- aname: Sniffing Dog
-  bid: 253
-  coperand: 61
-  dclassification: 0
-  edescription: Greenwood - Releases the dog who will tell you where the 💩 is. Has no use.
-- aname: Woodstin Trio Dog
-  bid: 253
-  coperand: 63
-  dclassification: 1
-  edescription: Greenwood - Releases one of the Woodstin Trio. Release all three for an item.
-- aname: Gift-Giving Mole
-  bid: 253
-  coperand: 64
-  dclassification: 1
-  edescription: Greenwood - Releases the mole being guarded by the Ghost Mole who will give you a gift once you give the ghost mole the ribbon.
-- aname: Not-So-Hungry Squirrel
-  bid: 253
-  coperand: 65
-  dclassification: 1
-  edescription: Greenwood - Releases the Squirrel who lives with the Hungry Squirrel. Will give you an item (for free).
-- aname: Hungry Squirrel
-  bid: 253
-  coperand: 67
-  dclassification: 1
-  edescription: Greenwood - Releases the Hungry Squirrel who will give you an item in exchange for Delicious Seeds.
-- aname: South-East Bird
-  bid: 253
-  coperand: 70
-  dclassification: 0
-  edescription: Greenwood - Releases the bird and stump in the south-east corner of Greenwood. Has no use.
-- aname: Mole with Soul
-  bid: 253
-  coperand: 73
-  dclassification: 1
-  edescription: Greenwood - Releases the Mole who is from the sky (like you). Will give you a soul/item.
-- aname: Woodstin Trio Deer
-  bid: 253
-  coperand: 74
-  dclassification: 1
-  edescription: Greenwood - Releases the first member of the Woodstin Crew (huh!). Release all three for an item.
-- aname: Center Island Crocodile
-  bid: 253
-  coperand: 78
-  dclassification: 1
-  edescription: Greenwood - Releases the Crocodile leading to the center island. You need to talk to him before you can cross. Required to reach the graveyard.
-- aname: Squirrel in West Tree
-  bid: 253
-  coperand: 79
-  dclassification: 0
-  edescription: Greenwood - Releases squirrel in the west tree house. Has no use.
-- aname: Greenwood's Guardian
-  bid: 253
-  coperand: 80
-  dclassification: 1
-  edescription: Greenwood - Releases Greenwood's Guardian. He'll give you an item and open the way to the next world.
-- aname: Hole to Sleepy Stump
-  bid: 253
-  coperand: 81
-  dclassification: 1
-  edescription: Greenwood - Releases the center mole hole leading to the island with the sleepy stump. Also releases the Ghost Mole who wants the Mole's Ribbon.
-- aname: Dog Waiter
-  bid: 253
-  coperand: 86
-  dclassification: 0
-  edescription: Greenwood - Releases the Dog Waiter (now YOU are on the menu). Has no use.
-- aname: Sleepy Stump
-  bid: 253
-  coperand: 88
-  dclassification: 1
-  edescription: Greenwood - Releases the sleeping stump (and clueless squirrel). Enter the stump's dream to open the path to the chest in the north-east corner.
-- aname: Cafe Squirrel
-  bid: 253
-  coperand: 89
-  dclassification: 0
-  edescription: Greenwood - Releases the squirrel at the cafe who will follow you around after being talked to. Has no use.
-- aname: Graveyard Guard Dog
-  bid: 253
-  coperand: 90
-  dclassification: 0
-  edescription: Greenwood - Releases the dog guarding the graveyard. Has no use.
-- aname: Graveyard Crocodile
-  bid: 253
-  coperand: 91
-  dclassification: 1
-  edescription: Greenwood - Releases the crocodile leading from the center island to the graveyard. Needed to reach the Sleepy Bird.
-- aname: Peekaboo Mole
-  bid: 253
-  coperand: 92
-  dclassification: 0
-  edescription: Greenwood - Releases the Peekaboo Mole (still not surprised) and the mole hole on the far left leading to the central west island. Has no logical use.
-- aname: Woodstin Trio Squirrel
-  bid: 253
-  coperand: 93
-  dclassification: 1
-  edescription: Greenwood - Releases the leader of the Woodstin Trio (you know him well). Release all three for an item.
-- aname: Sleepy Bird
-  bid: 253
-  coperand: 97
-  dclassification: 1
-  edescription: Greenwood - Releases the Sleey Bird in the graveyard. Enter its dreams to open the path to Turbo's remains.
-- aname: Hole for the Outside Mole
-  bid: 253
-  coperand: 98
-  dclassification: 1
-  edescription: Greenwood - Releases the left hole. When you have also released the Outside Mole you can lead them back to their hole and claim a reward.
-- aname: Master Crystal Deer
-  bid: 253
-  coperand: 99
-  dclassification: 1
-  edescription: Greenwood - Releases the deer on the central west island who will knock the master crystal down from the tree. The deer can't use the mole hole so you will also need to unlock the west crocodile.
-- aname: North-East Bird
-  bid: 253
-  coperand: 100
-  dclassification: 0
-  edescription: Greenwood - Releases the bird in the north-east corner. Has no use.
-- aname: West Crocodile
-  bid: 253
-  coperand: 111
-  dclassification: 1
-  edescription: Greenwood - Releases the crocodile leading to the central west island. Required for the deer to knock the master crystal down from the tree.
-- aname: Monmo the Mole
-  bid: 253
-  coperand: 114
-  dclassification: 1
-  edescription: Greenwood - Releases the outside mole. Guide them home to get a reward. Also requires the Hole for the Outside Mole.
-- aname: Dolphin in North-West House
-  bid: 253
-  coperand: 124
-  dclassification: 0
-  edescription: Seabed Sanctuary - Releases the sleeping dolphin in the North-West House. Enter his dream for a sad story. Has no use.
-- aname: Curious Angelfish
-  bid: 253
-  coperand: 131
-  dclassification: 0
-  edescription: Seabed Sanctuary - Releases the Curious Angelfish in the south-east who wants to see what the world looks like from above the water. Has no use.
-- aname: North-East Mermaid with Gift
-  bid: 253
-  coperand: 132
-  dclassification: 1
-  edescription: Seabed Sanctuary - Releases the mermaid in the north-east house who will give you an item.
-- aname: Jumping Angelfish
-  bid: 253
-  coperand: 134
-  dclassification: 0
-  edescription: Seabed Sanctuary - Releases the angelfish who can jump real high (Look at him go!) Has no use.
-- aname: West Mermaid Guard
-  bid: 253
-  coperand: 138
-  dclassification: 1
-  edescription: Seabed Sanctuary - Releases the sympathetic mermaid guard who will let you in to Lue's Prison. Also releases the central west platform by the jail.
-- aname: Mermaid Dancer Nanna
-  bid: 253
-  coperand: 139
-  dclassification: 0
-  edescription: Seabed Sanctuary - Releases Nanna the mermaid dancer. Has no use.
-- aname: Prison Breaking Dolphin
-  bid: 253
-  coperand: 140
-  dclassification: 1
-  edescription: Seabed Sanctuary - Releases the dolphin which will break Lue the Dolphin out of Jail.
-- aname: Mermaid Statue to Blester
-  bid: 253
-  coperand: 141
-  dclassification: 1
-  edescription: Seabed Sanctuary - Releases the North-East Mermaid statue which will open the path to Blester.
-- aname: Common House Top Mermaid with Gift
-  bid: 253
-  coperand: 142
-  dclassification: 1
-  edescription: Seabed Sanctuary - Releases the mermaid in the top of the central room in the common house who will give you a gift.
-- aname: Lue the Dolphin
-  bid: 253
-  coperand: 143
-  dclassification: 1
-  edescription: Seabed Sanctuary - Releases Lue the Dolphin. Bust them out of jail to get an item.
-- aname: Mermaid Queen's Attendant Left
-  bid: 253
-  coperand: 146
-  dclassification: 0
-  edescription: Seabed Sanctuary - Releases the Mermaid attending the queen (on the left). Has no use.
-- aname: Mermaid in North-West House
-  bid: 253
-  coperand: 149
-  dclassification: 0
-  edescription: Seabed Sanctuary - Releases the north-west house and the mermaid inside. Has no use.
-- aname: Mermaid Dance Troupe Leader
-  bid: 253
-  coperand: 153
-  dclassification: 1
-  edescription: Seabed Sanctuary - Releases the North-West platform and the Mermaid Dance Troupe Leader.
-- aname: Dolphin to North-East Platform
-  bid: 253
-  coperand: 155
-  dclassification: 1
-  edescription: Seabed Sanctuary - Releases the dolphin and the North-East platform. Required to reach the North-East Mermaid with Gift.
-- aname: Mermaid Statue to Rockbird
-  bid: 253
-  coperand: 157
-  dclassification: 1
-  edescription: Seabed Sanctuary - Releases the South-East Mermaid statue which will open the path to Rockbird.
-- aname: Common House Main Mermaid with Gift
-  bid: 253
-  coperand: 161
-  dclassification: 1
-  edescription: Seabed Sanctuary - Releases the big common house in the south, and the main mermaid in the central room who will give you an item. Required to reach the Seabed.
-- aname: East Mermaid Guard
-  bid: 253
-  coperand: 164
-  dclassification: 1
-  edescription: Seabed Sanctuary - Releases the east platform with the unsympathetic mermaid guard who will NOT let you in to Lue's Prison. Rarely required as an altrenate path to the south-east platform.
-- aname: Mermaid Dancer Kanna
-  bid: 253
-  coperand: 165
-  dclassification: 0
-  edescription: Seabed Sanctuary - Releases Kanna the mermaid dancer. Has no use.
-- aname: Common House East Room Mermaid
-  bid: 253
-  coperand: 167
-  dclassification: 0
-  edescription: Seabed Sanctuary - Releaes the mermaid in the east room of the big common house. Has no use.
-- aname: Mermaid Statue to Durean
-  bid: 253
-  coperand: 171
-  dclassification: 1
-  edescription: Seabed Sanctuary - Releases the South-West Mermaid statue which will open the path to Durean.
-- aname: Angelfish South of Central Platform
-  bid: 253
-  coperand: 173
-  dclassification: 0
-  edescription: Seabed Sanctuary - Releases the Angelfish South of the Central Platform. Has no use.
-- aname: Angelfish with Soul
-  bid: 253
-  coperand: 177
-  dclassification: 1
-  edescription: Seabed Sanctuary - Releases south-east and the angelfish who is from the sky (like you). Will give you a soul/item. 
-- aname: Common House West Room Mermaid with Gift.
-  bid: 253
-  coperand: 181
-  dclassification: 1
-  edescription: Seabed Sanctuary - Releases the mermaid in the hidden west room of the common house who will give you an item.
-- aname: Mermaid Queen
-  bid: 253
-  coperand: 182
-  dclassification: 1
-  edescription: Seabed Sanctuary - Releases the Mermaid Queen. She'll give you an item and open the way to the next world.
-- aname: Mermaid Statue to Ghost Ship
-  bid: 253
-  coperand: 185
-  dclassification: 1
-  edescription: Seabed Sanctuary - Releases the North-West Mermaid statue which will open the path to the Ghost Ship.
-- aname: Sleepy Dolphin
-  bid: 253
-  coperand: 187
-  dclassification: 1
-  edescription: Seabed Sanctuary - Releases the Sleepy Dolphin in prison area. Enter the dolphin's dream and give them the Big Pearl to open the path to the secret cove.
-- aname: Mermaid Queen's Attendant Right
-  bid: 253
-  coperand: 189
-  dclassification: 0
-  edescription: Seabed Sanctuary - Releases the Mermaid attending the queen (on the right). Has no use.
-- aname: Angelfish East of Central Platform
-  bid: 253
-  coperand: 190
-  dclassification: 0
-  edescription: Seabed Sanctuary - Releases the Angelfish East of the Central Platform. Has no use.
-- aname: Swimming Common House Mermaid
-  bid: 253
-  coperand: 192
-  dclassification: 0
-  edescription: Seabed Sanctuary - Releases the mermaid swimming in the big common house's central room. Has no use.
-- aname: Dolphin to West Chest
-  bid: 253
-  coperand: 193
-  dclassification: 1
-  edescription: Seabed Sanctuary - Releases the South-West platform and the dolphin who will give you a ride to the secluded platform with a treasure chest.
-- aname: Mermaid Dancer Anna
-  bid: 253
-  coperand: 194
-  dclassification: 0
-  edescription: Seabed Sanctuary - Releases Anna the mermaid dancer. Has no use.
-- aname: North-West Grandpa
-  bid: 253
-  coperand: 201
-  dclassification: 1
-  edescription: Mountain of Souls - Releases the North-West room and the Grandpa who lives there. He'd like to have a nice chat. Sometimes required to reach the mountain king.
-- aname: Girl Near Entrance
-  bid: 253
-  coperand: 202
-  dclassification: 0
-  edescription: Mountain of Souls - Releases the Girl Near Entrance. Has no use.
-- aname: Mushroom at North-East Lake
-  bid: 253
-  coperand: 203
-  dclassification: 0
-  edescription: Mountain of Souls - Releases a mushroom and the north-east lake. Has no use.
-- aname: Boy for Western Tunnel
-  bid: 253
-  coperand: 204
-  dclassification: 1
-  edescription: Mountain of Souls - Releases a boy and the western tunnel on the path to the Mountain King's throne room.
-- aname: Grandpa Husband
-  bid: 253
-  coperand: 211
-  dclassification: 0
-  edescription: Mountain of Souls - Releases the Grandpa who is the husband of the Teleporting Grandma. Has no use.
-- aname: Snail Jockey (Legend)
-  bid: 253
-  coperand: 212
-  dclassification: 0
-  edescription: Mountain of Souls - Releases the Snail Jockey on the top riding the snail named Legend. Has no use.
-- aname: Nome the Snail
-  bid: 253
-  coperand: 214
-  dclassification: 1
-  edescription: Mountain of Souls - Releases Nome the Snail. He'll give you an item and open the way to the next world. Requires the Mountain King to open the jail cell doors.
-- aname: Boy in Jail
-  bid: 253
-  coperand: 215
-  dclassification: 0
-  edescription: Mountain of Souls - Releases the Boy in Jail (What did he do to deserve this?) Has no use.
-- aname: Sleepy Mushroom
-  bid: 253
-  coperand: 221
-  dclassification: 1
-  edescription: Mountain of Souls - Releases the Sleepy Mushroom in the unlocked jail cell. Enter his dream to open a path in Lune leading to a lair and a secret tile.
-- aname: Dancing Grandma Right
-  bid: 253
-  coperand: 225
-  dclassification: 1
-  edescription: Mountain of Souls - Releases the Dancing Grandma who attends the Mountain King (on the right).
-- aname: Dancing Grandma Left
-  bid: 253
-  coperand: 230
-  dclassification: 1
-  edescription: Mountain of Souls - Releases the Dancing Grandma who attends the Mountain King (on the left).
-- aname: Snail in Secret Room with Gift
-  bid: 253
-  coperand: 232
-  dclassification: 1
-  edescription: Mountain of Souls - Releases the Snail in the Secret Room. Use the passage through the fake norther wall to reach him and receive an item.
-- aname: Boy with Gift
-  bid: 253
-  coperand: 233
-  dclassification: 1
-  edescription: Mountain of Souls - Releases the boy in the central lake room who will give you a gift.
-- aname: Teleporting Grandma
-  bid: 253
-  coperand: 234
-  dclassification: 0
-  edescription: Mountain of Souls - Releases the Teleporting Grandma in the western tunnel (although it's you that teleports, not her). Has no use.
-- aname: Gazing Girl
-  bid: 253
-  coperand: 235
-  dclassification: 0
-  edescription: Mountain of Souls - Releases the girl gazing at the boy in the western tunnel (but not for long?) Has no use.
-- aname: Mushroom for Southern Tunnel
-  bid: 253
-  coperand: 238
-  dclassification: 1
-  edescription: Mountain of Souls - Releases a mushroom and the southern tunnel on the path to the jail.
-- aname: Snail Jockey (Flash)
-  bid: 253
-  coperand: 239
-  dclassification: 0
-  edescription: Mountain of Souls - Releases the Snail Jockey in the middle riding the snail named Flash. Has no use.
-- aname: Snail Jockey (Unknown)
-  bid: 253
-  coperand: 240
-  dclassification: 0
-  edescription: Mountain of Souls - Releases the Snail Jockey on the bottom riding the snail with an unknown name. Has no use.
-- aname: Girl for Eastern Tunnel
-  bid: 253
-  coperand: 242
-  dclassification: 1
-  edescription: Mountain of Souls - Releases a girl and the eastern tunnel on the path to Lune and the jail.
-- aname: Solitary Mushroom
-  bid: 253
-  coperand: 246
-  dclassification: 0
-  edescription: Mountain of Souls - Releases the Solitary mushroom in the room with no entrance. Has no use.
-- aname: Snail with Boy
-  bid: 253
-  coperand: 247
-  dclassification: 0
-  edescription: Mountain of Souls - Releases the snail accompanying the boy with gift in the center lake room (he wants walkies). Has no use.
-- aname: Grandpa for South-West Tunnel.
-  bid: 253
-  coperand: 248
-  dclassification: 1
-  edescription: Mountain of Souls - Releases a grandpa and the south-west tunnel on the path to the Mountain King.
-- aname: Snail with Grandpa
-  bid: 253
-  coperand: 250
-  dclassification: 0
-  edescription: Mountain of Souls - Releases the snail accompanying the grandpa at the south-east lake. Has no use.
-- aname: Grandpa for South-East Lake
-  bid: 253
-  coperand: 252
-  dclassification: 1
-  edescription: Mountain of Souls - Releases a sleepy grandpa and the south-east lake on the path to the jail. No need to enter his dreams.
-- aname: Grandpa Guarding Lune
-  bid: 253
-  coperand: 254
-  dclassification: 1
-  edescription: Mountain of Souls - Releases a grandpa guarding the path to Lune. He wont let you pass until you show him the Lucky Blade.
-- aname: Grandpa Guarding the Jail
-  bid: 253
-  coperand: 255
-  dclassification: 1
-  edescription: Mountain of Souls - Releases the jail area and the grandpa guarding the jail.
-- aname: Mountain King
-  bid: 253
-  coperand: 259
-  dclassification: 1
-  edescription: Mountain of Souls - Releases the Mountain King. Talk to him after you have released the two dancing grandmas and gotten the three red-hot items to open the way to Deathtoll's Lair and get an item. 
-- aname: Mousehole Plant
-  bid: 253
-  coperand: 265
-  dclassification: 1
-  edescription: Leo's Lab - Releases the plant on the other end of the mouse hole which will give you an item.
-- aname: West Lab Plant
-  bid: 253
-  coperand: 267
-  dclassification: 0
-  edescription: Leo's Lab - Releases the plant on the west side of the lab room on the first floor.
-- aname: Chest of Drawers in Locked Room
-  bid: 253
-  coperand: 268
-  dclassification: 1
-  edescription: Leo's Lab - Releases the chest of drawers in the locked room on the first floor. Has an item inside, and underneath (push to the left).
-- aname: Stalking Cat 1
-  bid: 253
-  coperand: 269
-  dclassification: 1
-  edescription: Leo's Lab - Releases the 1 of the 2 cats stalking mice in the main room of the first floor. Lure them out of the room with the Actinidea Leaves to have the mice let you into their hole.
-- aname: Great Door to Lab
-  bid: 253
-  coperand: 274
-  dclassification: 1
-  edescription: Leo's Lab - Releases the great door leading to the lab room on the first floor. Now you can get that chest.
-- aname: Stalking Cat 2
-  bid: 253
-  coperand: 276
-  dclassification: 1
-  edescription: Leo's Lab - Releases the 1 of the 2 cats stalking mice in the main room of the first floor. Lure them out of the room with the Actinidea Leaves to have the mice let you into their hole.
-- aname: Locked Door to South-West Room
-  bid: 253
-  coperand: 282
-  dclassification: 1
-  edescription: Leo's Lab - Releases the locked door leading to the south-west room on the first floor. Requires the door key to open.
-- aname: Cat in Locked Room
-  bid: 253
-  coperand: 283
-  dclassification: 0
-  edescription: Leo's Lab - Releases the cat in the locked room on the first floor. Has no use.
-- aname: Model Town Left
-  bid: 253
-  coperand: 286
-  dclassification: 1
-  edescription: Leo's Lab - Releases the Model of Town on the left.
-- aname: Great Door to Models of Town
-  bid: 253
-  coperand: 288
-  dclassification: 1
-  edescription: Leo's Lab - Releases the great door on the 2nd floor leading to the room with the models of town.
-- aname: Steps to 2nd Floor
-  bid: 253
-  coperand: 290
-  dclassification: 1
-  edescription: Leo's Lab - Releases the steps leading up to the 2nd floor.
-- aname: Sleepy Cat
-  bid: 253
-  coperand: 294
-  dclassification: 1
-  edescription: Leo's Lab - Releases the Sleepy Cat on the 2nd floor. Enter their dreams to receive an item.
-- aname: Mouse Outside Hole
-  bid: 253
-  coperand: 297
-  dclassification: 1
-  edescription: Leo's Lab - Releases the mouse outside of the mouse hole. They wont let you in until you lure the two cats out of the room with the Actinidea Leaves.
-- aname: Marie the Doll
-  bid: 253
-  coperand: 303
-  dclassification: 1
-  edescription: Leo's Lab - Releases the doll, Marie. She'll give you an item and open the way to the next world.
-- aname: Doll in Chapel
-  bid: 253
-  coperand: 310
-  dclassification: 0
-  edescription: Leo's Lab - Releases the doll in the chapel on the 2nd floor. Has no use.
-- aname: Excercising Chest of Drawers
-  bid: 253
-  coperand: 311
-  dclassification: 0
-  edescription: Leo's Lab - Releases the chest of drawers in the entryway that just wants to get up and go. Has no use.
-- aname: Plant in Locked Room
-  bid: 253
-  coperand: 313
-  dclassification: 0
-  edescription: Leo's Lab - Releases the plant in the locked room. Has no use.
-- aname: Circling Mouse 1
-  bid: 253
-  coperand: 315
-  dclassification: 0
-  edescription: Leo's Lab - Releases the 1st of 2 mice running in a circle in the mouse hole. Has no use.
-- aname: Mouse with Gift
-  bid: 253
-  coperand: 316
-  dclassification: 1
-  edescription: Leo's Lab - Releases the mouse in the mouse hole that will give you an item.
-- aname: Mouse on 2nd Floor
-  bid: 253
-  coperand: 318
-  dclassification: 0
-  edescription: Leo's Lab - Releases the mouse on the 2nd floor. Has no use.
-- aname: Great Door with Soul
-  bid: 253
-  coperand: 322
-  dclassification: 1
-  edescription: Leo's Lab - Releases the great door to the chapel on the 2nd floor that is from the sky (like you). Will give you a soul/item.
-- aname: Model Town Right
-  bid: 253
-  coperand: 325
-  dclassification: 1
-  edescription: Leo's Lab - Releases the Model of Town on the right.
-- aname: Devout Mouse
-  bid: 253
-  coperand: 330
-  dclassification: 0
-  edescription: Leo's Lab - Releases the Devout Mouse on the 2nd floor. Will let you pray to get a full heal. Otherwise has no use.
-- aname: Steps to the Attic
-  bid: 253
-  coperand: 331
-  dclassification: 1
-  edescription: Leo's Lab - Releases the steps leading from the room with models of town to the attic.
-- aname: Chest of Drawers in Attic
-  bid: 253
-  coperand: 332
-  dclassification: 1
-  edescription: Leo's Lab - Releases the chest of drawer in the attic which will give you an item.
-- aname: Plant by Town Models
-  bid: 253
-  coperand: 333
-  dclassification: 1
-  edescription: Leo's Lab - Releases the plant on the 2nd floor by the town models. Will give you an item.
-- aname: Circling Mouse 2
-  bid: 253
-  coperand: 338
-  dclassification: 0
-  edescription: Leo's Lab - Releases the 2nd of 2 mice running in a circle in the mouse hole. Has no use.
-- aname: Cat in Attic
-  bid: 253
-  coperand: 339
-  dclassification: 0
-  edescription: Leo's Lab - Releases the cat in the attic. Has no use.
-- aname: Steps to Power Plant
-  bid: 253
-  coperand: 341
-  dclassification: 1
-  edescription: Leo's Lab - Releases the steps leading down to the power plant.
-- aname: Soldier Near Basement Stairs
-  bid: 253
-  coperand: 345
-  dclassification: 0
-  edescription: Magridd Castle Town - Releases the soldier near the stairs to the basement of Magridd Castle. Has no use.
-- aname: Soldier Architect
-  bid: 253
-  coperand: 346
-  dclassification: 0
-  edescription: Magridd Castle Town - Releases the soldier who is the nephew of the famous architech Gaudi. He'll build some architecture after you talk to him, but otherwise has no use.
-- aname: Soldier Who Knows a Guy
-  bid: 253
-  coperand: 351
-  dclassification: 0
-  edescription: Magridd Castle Town - Releases the soldier who will give you a hint about what the sleepy soldier has.
-- aname: Sleepy Soldier
-  bid: 253
-  coperand: 353
-  dclassification: 1
-  edescription: Magridd Castle Town - Releases the Sleepy Soldier. Enter their dreams to receive an item.
-- aname: Patrolling Soldier
-  bid: 253
-  coperand: 354
-  dclassification: 0
-  edescription: Magridd Castle Town - Releases the soldier patrolling the castle town streets. Has no use. "Don't talk to me."
-- aname: Right Moat Guard Soldier
-  bid: 253
-  coperand: 358
-  dclassification: 0
-  edescription: Magridd Castle Town - Releases the soldier guard the moat bridge to the castle (on the right).
-- aname: Singer in Concert Hall
-  bid: 253
-  coperand: 359
-  dclassification: 1
-  edescription: Magridd Castle Town - Releases the Concert Hall and the singer inside. Give them a harp string so they can play music so that the soldier with item underfoot moves.
-- aname: Unremarkable Concert Hall Soldier
-  bid: 253
-  coperand: 360
-  dclassification: 0
-  edescription: Magridd Castle Town - Releases a soldier in the concert hall. Has no use.
-- aname: Bashful Maid
-  bid: 253
-  coperand: 363
-  dclassification: 0
-  edescription: Magridd Castle Town - Releases the maid 'removing a speck of dust' from a soldier's eye in the west barracks 😉. Has no use.
-- aname: Soldier Guarding Left Tower
-  bid: 253
-  coperand: 365
-  dclassification: 1
-  edescription: Magridd Castle Town - Releases the Left Tower and the Soldier Guarding it. Show him the Platinum Card to enter.
-- aname: Soldier with Dr. Leo (Dok)
-  bid: 253
-  coperand: 366
-  dclassification: 1
-  edescription: Magridd Castle Town - Releases a soldier helping Dr. Leo escape. Gets stabbed in the back (Dok!)
-- aname: Soldier with Item Underfoot
-  bid: 253
-  coperand: 368
-  dclassification: 1
-  edescription: Magridd Castle Town - Releases the soldier in the concert hall who is standing on an item. Give the Singer a harp string to make the soldier move so you can grab the item that was where he was standing.
-- aname: Singer Outside
-  bid: 253
-  coperand: 370
-  dclassification: 0
-  edescription: Magridd Castle Town - Releases the singer outside in the south-east corner. Has no use.
-- aname: Soldier with Soul
-  bid: 253
-  coperand: 377
-  dclassification: 1
-  edescription: Magridd Castle Town - Releases the soldier in the east barracks who is from the sky (like you). Will give you a soul/item.
-- aname: Maid in Concert Hall
-  bid: 253
-  coperand: 382
-  dclassification: 0
-  edescription: Magridd Castle Town - Releases the maid in the concert hall. Has no use.
-- aname: Queen Magridd (gives VIP Card)
-  bid: 253
-  coperand: 383
-  dclassification: 1
-  edescription: Magridd Castle Town - Releases Queen Magridd. She'll give you an item if you tell her she's pretty, and you get can another item where she was standing after her sudden (but inevitable) demise. The game has been patched to give you both items if you go to the tile where she was standing if she blew up before giving you her item.
-- aname: Soldier with Dr. Leo (Oct)
-  bid: 253
-  coperand: 385
-  dclassification: 1
-  edescription: Magridd Castle Town - Releases a soldier helping Dr. Leo escape.
-- aname: Soldier Guarding Right Tower
-  bid: 253
-  coperand: 386
-  dclassification: 1
-  edescription: Magridd Castle Town - Releases the Right Tower and the soldier guarding it. Show him the VIP Card to enter.
-- aname: Dr. Leo
-  bid: 253
-  coperand: 387
-  dclassification: 1
-  edescription: Magridd Castle Town - Releases Dr. Leo. The man, the myth, the legend. Release the soldiers accompanying him to receive an item (and a fireworks show).
-- aname: Bashful Soldier
-  bid: 253
-  coperand: 389
-  dclassification: 0
-  edescription: Magridd Castle Town - Releases the soldier having 'speck of dust removed from his eye' by a maid in the west barracks 😉. Has no use.
-- aname: Observant Soldier
-  bid: 253
-  coperand: 390
-  dclassification: 0
-  edescription: Magridd Castle Town - Releases the soldier in the east barracks who tells you about the secret tile in front of the castle. Has no use.
-- aname: Maid at the Bar
-  bid: 253
-  coperand: 391
-  dclassification: 1
-  edescription: Magridd Castle Town - Releases the telepathic maid at the bar in the south-east house (she knows what men want?). Talk to her to receive an item.
-- aname: Soldier with Castle
-  bid: 253
-  coperand: 396
-  dclassification: 1
-  edescription: Magridd Castle Town - Releases Magridd Castle Keep and the soldier guarding the throne room. Also enables the secret tile in front of the castle.
-- aname: Soldier in North-East Building
-  bid: 253
-  coperand: 397
-  dclassification: 0
-  edescription: Magridd Castle Town - Releases the soldier in the north-east building. Has no use.
-- aname: Soldier at the Bar
-  bid: 253
-  coperand: 399
-  dclassification: 0
-  edescription: Magridd Castle Town - Releases the soldier at the bar. Has no use.
-- aname: Unobservant Soldier
-  bid: 253
-  coperand: 402
-  dclassification: 0
-  edescription: Magridd Castle Town - Releases the soldier staring at the moat. Has no use.
-- aname: King Magridd
-  bid: 253
-  coperand: 405
-  dclassification: 1
-  edescription: Magridd Castle Town - Releases King Magridd. He'll give you an item and open the way to the next world.
-gsouls:
-- aname: Soul of Magician
-  bid: 251
-  coperand: 0
-  dclassification: 1
-  edescription: Alows your character use gems to cast magic.
-- aname: Soul of Light
-  bid: 251
-  coperand: 1
-  dclassification: 1
-  edescription: Reveals the dark room in the basement of the Light Shrine in Act 2.
-- aname: Soul of Shield
-  bid: 251
-  coperand: 2
-  dclassification: 2
-  edescription: Protects you from the falling magma erupting from the volcano in Durean in Act 3.
-- aname: Soul of Detection
-  bid: 251
-  coperand: 3
-  dclassification: 2
-  edescription: Allows you to see the invisible enemies in the models of town in Act 5.
-- aname: Soul of Reality
-  bid: 251
-  coperand: 4
-  dclassification: 1
-  edescription: Allows you to see the hidden passages in Magridd Castle in Act 6.
-hspecial-items:
-- aname: Victory
-  bid: 250
-  coperand: 0
-  dclassification: 1
-  edescription: A special 'item' used to signify that you have achieved your goal and beaten the game. GG.
+swords:
+- name: Sword of Life
+  id: 1
+  operand: 0
+  classification: 1
+  description: It's a sword with no other special properties. Swingy swingy.
+- name: Psycho Sword
+  id: 2
+  operand: 0
+  classification: 1
+  description: Will paralyze metal- and spirit-type enemies (but wont damage them).
+- name: Critical Sword
+  id: 3
+  operand: 0
+  classification: 1
+  description: Will randomly insta-kill non-boss enemies.
+- name: Lucky Blade
+  id: 4
+  operand: 0
+  classification: 1
+  description: Increased chance of getting larger gems from enemies. Also required for access to Lune in Act 4.
+- name: Zantetsu Sword
+  id: 5
+  operand: 0
+  classification: 1
+  description: Can damage metal-type enemies.
+- name: Spirit Sword
+  id: 6
+  operand: 0
+  classification: 1
+  description: Can damage spirit-type enemies.
+- name: Recovery Sword
+  id: 7
+  operand: 0
+  classification: 1
+  description: Recovers a little life on kill.
+- name: The Soul Blade
+  id: 8
+  operand: 0
+  classification: 1
+  description: Can damage all types of enemies. Must be equipped to use the Phoenix.
+armors:
+- name: Iron Armor
+  id: 9
+  operand: 0
+  classification: 2
+  description: Increases your defence and has no other special properties. Better than nothing.
+- name: Ice Armor
+  id: 10
+  operand: 0
+  classification: 1
+  description: Negates damage from the hot floors in the Fire Shrine in Act 2 and the Basement of Leo's Lab in Act 5.
+- name: Bubble Armor
+  id: 11
+  operand: 0
+  classification: 1
+  description: Allows you to breathe underwater. Used for traversing the seabed in Act 3 without taking damage.
+- name: Magic Armor
+  id: 12
+  operand: 0
+  classification: 2
+  description: Cuts the cost of gems in half.
+- name: Mystic Armor
+  id: 13
+  operand: 0
+  classification: 2
+  description: Grants more invincibility frames after taking damage.
+- name: Light Armor
+  id: 14
+  operand: 0
+  classification: 2
+  description: Changes the damage formula to allow attacks to deal no damage when the minimum damage would otherwise be 1HP.
+- name: Elemental Mail
+  id: 15
+  operand: 0
+  classification: 2
+  description: Makes you immune to the spikes in the basement Magridd Castle... and no other hazards.
+- name: Soul Armor
+  id: 16
+  operand: 0
+  classification: 1
+  description: Allows you to traverse Dazzling Space in the World of Evil without taking damage. Must be equipped to use the Phoenix.
+magics:
+- name: Flame Ball
+  id: 17
+  operand: 0
+  classification: 1
+  description: Shoots a fireball projectile. Costs 4 gems to cast.
+- name: Light Arrow
+  id: 18
+  operand: 0
+  classification: 1
+  description: Shoots 4 light arrow projectiles. Costs 8 gems to cast.
+- name: Magic Flare
+  id: 19
+  operand: 0
+  classification: 1
+  description: Hold the button to charge up a damaging ring which will explode when released. Costs 8 gems to cast.
+- name: Rotator
+  id: 20
+  operand: 0
+  classification: 1
+  description: Hold the button to have a damaging ring of small explosions circle you. Costs 1 gem to cast, but casts rapidly while the button is held.
+- name: Spark Bomb
+  id: 21
+  operand: 0
+  classification: 1
+  description: Drops 4 mines will will explode after a short delay. Costs 8 gems to cast.
+- name: Flame Pillar
+  id: 22
+  operand: 0
+  classification: 1
+  description: Drops 4 pillars of fire which will linger for a while before dissapearing. Costs 20 gems to cast.
+- name: Tornado
+  id: 23
+  operand: 0
+  classification: 1
+  description: Drops a tornado which moves in random directions for a while. Costs 8 gems to cast.
+- name: Phoenix
+  id: 24
+  operand: 0
+  classification: 1
+  description: Shoots a Phoenix Projectile whenever you swing your sword. Costs 2 gems per swing. Requires the Soul Blade and Soul Armor to be equipped to use.
+inventory-items:
+- name: Goat's Food
+  id: 25
+  operand: 0
+  classification: 2
+  description: Give to the Gourmet Goat in Grass Valley for a secret (The secret is not useful for the randomizer... yet).
+- name: Harp String
+  id: 26
+  operand: 0
+  classification: 1
+  description: Give to the musician in the concert hall in Magridd Castle Town to have the Soldier with Item Underfoot move.
+- name: a pass
+  id: 27
+  operand: 0
+  classification: 1
+  description: Use this to get into the boys' secret hideout in Grass Valley.
+- name: Dream Rod
+  id: 28
+  operand: 0
+  classification: 1
+  description: Use to enter the dreams of other creatures.
+- name: Leo's brush
+  id: 29
+  operand: 0
+  classification: 1
+  description: Use to enter Leo's Painting in Grass Valley.
+- name: G.Leaf
+  id: 30
+  operand: 0
+  classification: 1
+  description: Leaves of Greenwood. Required to use the rafts in Lostside Marsh.
+- name: Mole's Ribbon
+  id: 31
+  operand: 0
+  classification: 1
+  description: Give to the Ghost Mole in Greenwood blocking the way to a Gift-Giving Mole.
+- name: the Big Pearl
+  id: 32
+  operand: 0
+  classification: 1
+  description: Give to the Sleepy Dolphin to release the path to the secret cove.
+- name: Mermaid's Tears
+  id: 33
+  operand: 0
+  classification: 1
+  description: Use at the top of the Durean volcano to cool the lava.
+- name: Mushroom Shoes
+  id: 34
+  operand: 0
+  classification: 1
+  description: Use to walk freely on ice.
+- name: a mobile key
+  id: 35
+  operand: 0
+  classification: 1
+  description: Use to start the airship and fight the boss.
+- name: Thunder Ring
+  id: 36
+  operand: 0
+  classification: 1
+  description: Use in Blester to call down lighting which can defeat metal enemies.
+- name: Delicious Seeds
+  id: 37
+  operand: 0
+  classification: 1
+  description: Trade to the Hungry Squirrel for an item.
+- name: A.Leaf
+  id: 38
+  operand: 0
+  classification: 1
+  description: Actinidea Leaves. Use in Leo's Lab to lure the cats out of the main room so the mice will let you into their home.
+- name: a door key
+  id: 39
+  operand: 0
+  classification: 1
+  description: Used to unlock the locked door in Leo's Lab 1F.
+- name: Platinum Card
+  id: 40
+  operand: 0
+  classification: 1
+  description: Use to enter the left tower in Magridd Castle Town.
+- name: the VIP Card
+  id: 41
+  operand: 0
+  classification: 1
+  description: Use to enter the right tower in Magridd Castle Town.
+- name: Emblem A
+  id: 42
+  operand: 0
+  classification: 9
+  description: One of 8 Master's Emblems. Trade them all to the Gem Fairy is Greenwood for an item.
+- name: Emblem B
+  id: 43
+  operand: 0
+  classification: 9
+  description: One of 8 Master's Emblems. Trade them all to the Gem Fairy is Greenwood for an item.
+- name: Emblem C
+  id: 44
+  operand: 0
+  classification: 9
+  description: One of 8 Master's Emblems. Trade them all to the Gem Fairy is Greenwood for an item.
+- name: Emblem D
+  id: 45
+  operand: 0
+  classification: 9
+  description: One of 8 Master's Emblems. Trade them all to the Gem Fairy is Greenwood for an item.
+- name: Emblem E
+  id: 46
+  operand: 0
+  classification: 9
+  description: One of 8 Master's Emblems. Trade them all to the Gem Fairy is Greenwood for an item.
+- name: Emblem F
+  id: 47
+  operand: 0
+  classification: 9
+  description: One of 8 Master's Emblems. Trade them all to the Gem Fairy is Greenwood for an item.
+- name: Emblem G
+  id: 48
+  operand: 0
+  classification: 9
+  description: One of 8 Master's Emblems. Trade them all to the Gem Fairy is Greenwood for an item.
+- name: Emblem H
+  id: 49
+  operand: 0
+  classification: 9
+  description: One of 8 Master's Emblems. Trade them all to the Gem Fairy is Greenwood for an item.
+- name: Red-Hot Mirror
+  id: 50
+  operand: 0
+  classification: 1
+  description: Give the three Red-Hot Items to the Mountain King after you have released both dancing grandmas to open the way to Deathtoll's Palace and get and item.
+- name: Red-Hot Ball
+  id: 51
+  operand: 0
+  classification: 1
+  description: Give the three Red-Hot Items to the Mountain King after you have released both dancing grandmas to open the way to Deathtoll's Palace and get and item.
+- name: Red-Hot Stick
+  id: 52
+  operand: 0
+  classification: 1
+  description: Give the three Red-Hot Items to the Mountain King after you have released both dancing grandmas to open the way to Deathtoll's Palace and get and item.
+- name: Power Bracelet
+  id: 53
+  operand: 0
+  classification: 2
+  description: Doubles your damage dealt.
+- name: Shield Bracelet
+  id: 54
+  operand: 0
+  classification: 2
+  description: Halves your damage taken.
+- name: Super Bracelet
+  id: 55
+  operand: 0
+  classification: 2
+  description: Doubles your damage dealt and halves your damage taken.
+- name: Medical Herb
+  id: 56
+  operand: 0
+  classification: 0
+  description: Consumable. Equip to fully heal yourself once when you run out of life.
+- name: Strange Bottle
+  id: 57
+  operand: 0
+  classification: 0
+  description: Consumable. Equip to fully lose no gems once when you run out of life.
+- name: Brown Stone
+  id: 58
+  operand: 0
+  classification: 1
+  description: One of 6 stones required to open the way to the World of Evil.
+- name: Green Stone
+  id: 59
+  operand: 0
+  classification: 1
+  description: One of 6 stones required to open the way to the World of Evil.
+- name: Blue Stone
+  id: 60
+  operand: 0
+  classification: 1
+  description: One of 6 stones required to open the way to the World of Evil.
+- name: Silver Stone
+  id: 61
+  operand: 0
+  classification: 1
+  description: One of 6 stones required to open the way to the World of Evil.
+- name: Purple Stone
+  id: 62
+  operand: 0
+  classification: 1
+  description: One of 6 stones required to open the way to the World of Evil.
+- name: Black Stone
+  id: 63
+  operand: 0
+  classification: 1
+  description: One of 6 stones required to open the way to the World of Evil.
+- name: Magic Bell
+  id: 64
+  operand: 0
+  classification: 2
+  description: Equip to consume no gems when casting magic.
+misc-items:
+- name: Nothing
+  id: 0
+  operand: 0
+  classification: 0
+  description: Its nothing, nothing at all.
+- name: GEMs
+  id: 255
+  operand: 100
+  classification: 0
+  description: A (possibly) random quantity of gems.
+- name: EXP
+  id: 254
+  operand: 250
+  classification: 0
+  description: A (possibly) random quantity of EXP.
+npc-releases:
+- name: Village Chief's House
+  id: 253
+  operand: 2
+  classification: 1
+  description: Grass Valley - Releases the Village Chief's House... and the Village Chief's Wife too. She will attempt to adopt you, and give you a full heal when you talk to her. Now go upstairs and clean your room.
+- name: Tool Shop Owner
+  id: 253
+  operand: 6
+  classification: 1
+  description: Releases the Tool Shop and its owner. She'll give you an item when you talk to her.
+- name: Tulip in front of Village Chief's House
+  id: 253
+  operand: 7
+  classification: 0
+  description: Grass Valley - Releases the Tulip in front of the Village Chief's House. You can talk to it for some world exposition if you want. Otherwise has no use.
+- name: Bridge Guard
+  id: 253
+  operand: 8
+  classification: 1
+  description: Grass Valley - Releases the bridge linking the two halves of Grass Valley... and the man guarding said bridge too, I suppose. He'll let you pass.
+- name: Village Chief
+  id: 253
+  operand: 9
+  classification: 1
+  description: Grass Valley - Releases the Village Chief. He'll give you an item and open the way to the next world.
+- name: Ivy to Treasure Room
+  id: 253
+  operand: 13
+  classification: 1
+  description: Grass Valley - Releases the Ivy which lets you climb down to the Treasure Room. Unlocks two chests and an item-giving gem fairy.
+- name: Watermill Keeper
+  id: 253
+  operand: 14
+  classification: 1
+  description: Grass Valley - Releases the Watermill and its Keeper. Turning the wheel will power the elevator and give access to the east half of the Underground Castle.
+- name: Goat Pen
+  id: 253
+  operand: 15
+  classification: 1
+  description: Grass Valley - Releases the Goat Pen and one of the goats in it. Also gives access to the Goat Pen Secret Tile in the South-East Corner.
+- name: Lisa
+  id: 253
+  operand: 16
+  classification: 1
+  description: Grass Valley - Releases Lisa, the daughter of Dr. Leo. Enter her dreams with the Dream Rod to unlock two checks in the east half of the Underground Castle.
+- name: Tulip Above Dungeon Entrance
+  id: 253
+  operand: 17
+  classification: 0
+  description: Grass Valley - Releases the Tulip on the cliff above the dungeon entrance. Has no use.
+- name: Architect
+  id: 253
+  operand: 18
+  classification: 1
+  description: Grass Valley - Releases the Architect and the stairs leading up to Leo's House. Required to access Leo's Painting.
+- name: Ivy to South-East Grass Valley
+  id: 253
+  operand: 19
+  classification: 1
+  description: Grass Valley - Releases the Ivy which lets you reach the south-east part of Grass Valley.
+- name: Gourmet Goat
+  id: 253
+  operand: 21
+  classification: 1
+  description: Grass Valley - Releases the Gourmet Goat. Give the goat some Goat's Food for a secret (The secret is not useful for the randomizer... yet).
+- name: Tool Shop Owner's Son
+  id: 253
+  operand: 22
+  classification: 1
+  description: Grass Valley - Releases Teddy the Tool Show Owner's son. Will give you an item. Requires the Tool Shop Owner to be released.
+- name: Tulip Behind Leo's House
+  id: 253
+  operand: 24
+  classification: 0
+  description: Grass Valley - Releases the Tulip Behind Leo's House. Has no use.
+- name: Leo's House
+  id: 253
+  operand: 26
+  classification: 1
+  description: Grass Valley - Releases Leo's House and the old man inside. Required to access Leo's Painting.
+- name: Lonely Goat
+  id: 253
+  operand: 29
+  classification: 0
+  description: Grass Valley - Releases the Lonely Goat. Will give you a tour of Grass Valley but otherwise has no use.
+- name: Sleepy Tulip
+  id: 253
+  operand: 34
+  classification: 1
+  description: Grass Valley - Releases the Sleepy Tulip. Push it to the left for an item.
+- name: Boy in Hut
+  id: 253
+  operand: 35
+  classification: 0
+  description: Grass Valley - Releases the Boy in the hut in south-east Grass Valley. Has no use.
+- name: Boy Guarding Hideout
+  id: 253
+  operand: 37
+  classification: 1
+  description: Grass Valley - Releases the boy guarding the hideout. Show him the pass to enter. Required to access the Hideout Cliff Secret Tile and Hideout Cliff Crystal's Item.
+- name: Lonely Old Man
+  id: 253
+  operand: 40
+  classification: 0
+  description: Grass Valley - Releases the Lonely Old Man in the house next to the shrine portal. Has no use.
+- name: Crab-Walking Old Man
+  id: 253
+  operand: 41
+  classification: 0
+  description: Grass Valley - Releases the old man who tells you about crab-walking. Has no use.
+- name: Ivy to Ledge Above Dungeon Entrance
+  id: 253
+  operand: 42
+  classification: 0
+  description: Grass Valley - Releases the ivy which leads to the ledge above the dungeon entrance. Does not lead anywhere useful.
+- name: Ivy to Secret Tile
+  id: 253
+  operand: 43
+  classification: 1
+  description: Grass Valley - Releases the ivy which leads to the ledge overlooking the Sleepy Tulip which has a secret item tile.
+- name: Ivy to Hideout Crystal
+  id: 253
+  operand: 44
+  classification: 1
+  description: Grass Valley - Releases the ivy which leads to the item-giving crystal on the upper ledge of the hideout.
+- name: Tulip South of Goat Pen
+  id: 253
+  operand: 46
+  classification: 0
+  description: Grass Valley - Releases the tulip south of the goat pen. Has no use.
+- name: Goat Wife
+  id: 253
+  operand: 47
+  classification: 0
+  description: Grass Valley - Releases the wife of the lonely old man who was reincarnated as a goat. Has no use.
+- name: Shy Bird with Gift
+  id: 253
+  operand: 55
+  classification: 1
+  description: Greenwood - Releases the shy bird who flies away if you approach from the front. Approach from behind to talk to it and receive an item.
+- name: Bird Near Marsh Entrance
+  id: 253
+  operand: 56
+  classification: 0
+  description: Greenwood - Releases the bird near the marsh entrance. Has no use.
+- name: Walkable Dog
+  id: 253
+  operand: 60
+  classification: 0
+  description: Greenwood - Releases the dog who wants to go on a walk. Has no use. "I have as much fun walking people as they do walking me."
+- name: Sniffing Dog
+  id: 253
+  operand: 61
+  classification: 0
+  description: Greenwood - Releases the dog who will tell you where the 💩 is. Has no use.
+- name: Woodstin Trio Dog
+  id: 253
+  operand: 63
+  classification: 1
+  description: Greenwood - Releases one of the Woodstin Trio. Release all three for an item.
+- name: Gift-Giving Mole
+  id: 253
+  operand: 64
+  classification: 1
+  description: Greenwood - Releases the mole being guarded by the Ghost Mole who will give you a gift once you give the ghost mole the ribbon.
+- name: Not-So-Hungry Squirrel
+  id: 253
+  operand: 65
+  classification: 1
+  description: Greenwood - Releases the Squirrel who lives with the Hungry Squirrel. Will give you an item (for free).
+- name: Hungry Squirrel
+  id: 253
+  operand: 67
+  classification: 1
+  description: Greenwood - Releases the Hungry Squirrel who will give you an item in exchange for Delicious Seeds.
+- name: South-East Bird
+  id: 253
+  operand: 70
+  classification: 0
+  description: Greenwood - Releases the bird and stump in the south-east corner of Greenwood. Has no use.
+- name: Mole with Soul
+  id: 253
+  operand: 73
+  classification: 1
+  description: Greenwood - Releases the Mole who is from the sky (like you). Will give you a soul/item.
+- name: Woodstin Trio Deer
+  id: 253
+  operand: 74
+  classification: 1
+  description: Greenwood - Releases the first member of the Woodstin Crew (huh!). Release all three for an item.
+- name: Center Island Crocodile
+  id: 253
+  operand: 78
+  classification: 1
+  description: Greenwood - Releases the Crocodile leading to the center island. You need to talk to him before you can cross. Required to reach the graveyard.
+- name: Squirrel in West Tree
+  id: 253
+  operand: 79
+  classification: 0
+  description: Greenwood - Releases squirrel in the west tree house. Has no use.
+- name: Greenwood's Guardian
+  id: 253
+  operand: 80
+  classification: 1
+  description: Greenwood - Releases Greenwood's Guardian. He'll give you an item and open the way to the next world.
+- name: Hole to Sleepy Stump
+  id: 253
+  operand: 81
+  classification: 1
+  description: Greenwood - Releases the center mole hole leading to the island with the sleepy stump. Also releases the Ghost Mole who wants the Mole's Ribbon.
+- name: Dog Waiter
+  id: 253
+  operand: 86
+  classification: 0
+  description: Greenwood - Releases the Dog Waiter (now YOU are on the menu). Has no use.
+- name: Sleepy Stump
+  id: 253
+  operand: 88
+  classification: 1
+  description: Greenwood - Releases the sleeping stump (and clueless squirrel). Enter the stump's dream to open the path to the chest in the north-east corner.
+- name: Cafe Squirrel
+  id: 253
+  operand: 89
+  classification: 0
+  description: Greenwood - Releases the squirrel at the cafe who will follow you around after being talked to. Has no use.
+- name: Graveyard Guard Dog
+  id: 253
+  operand: 90
+  classification: 0
+  description: Greenwood - Releases the dog guarding the graveyard. Has no use.
+- name: Graveyard Crocodile
+  id: 253
+  operand: 91
+  classification: 1
+  description: Greenwood - Releases the crocodile leading from the center island to the graveyard. Needed to reach the Sleepy Bird.
+- name: Peekaboo Mole
+  id: 253
+  operand: 92
+  classification: 0
+  description: Greenwood - Releases the Peekaboo Mole (still not surprised) and the mole hole on the far left leading to the central west island. Has no logical use.
+- name: Woodstin Trio Squirrel
+  id: 253
+  operand: 93
+  classification: 1
+  description: Greenwood - Releases the leader of the Woodstin Trio (you know him well). Release all three for an item.
+- name: Sleepy Bird
+  id: 253
+  operand: 97
+  classification: 1
+  description: Greenwood - Releases the Sleey Bird in the graveyard. Enter its dreams to open the path to Turbo's remains.
+- name: Hole for the Outside Mole
+  id: 253
+  operand: 98
+  classification: 1
+  description: Greenwood - Releases the left hole. When you have also released the Outside Mole you can lead them back to their hole and claim a reward.
+- name: Master Crystal Deer
+  id: 253
+  operand: 99
+  classification: 1
+  description: Greenwood - Releases the deer on the central west island who will knock the master crystal down from the tree. The deer can't use the mole hole so you will also need to unlock the west crocodile.
+- name: North-East Bird
+  id: 253
+  operand: 100
+  classification: 0
+  description: Greenwood - Releases the bird in the north-east corner. Has no use.
+- name: West Crocodile
+  id: 253
+  operand: 111
+  classification: 1
+  description: Greenwood - Releases the crocodile leading to the central west island. Required for the deer to knock the master crystal down from the tree.
+- name: Monmo the Mole
+  id: 253
+  operand: 114
+  classification: 1
+  description: Greenwood - Releases the outside mole. Guide them home to get a reward. Also requires the Hole for the Outside Mole.
+- name: Dolphin in North-West House
+  id: 253
+  operand: 124
+  classification: 0
+  description: Seabed Sanctuary - Releases the sleeping dolphin in the North-West House. Enter his dream for a sad story. Has no use.
+- name: Curious Angelfish
+  id: 253
+  operand: 131
+  classification: 0
+  description: Seabed Sanctuary - Releases the Curious Angelfish in the south-east who wants to see what the world looks like from above the water. Has no use.
+- name: North-East Mermaid with Gift
+  id: 253
+  operand: 132
+  classification: 1
+  description: Seabed Sanctuary - Releases the mermaid in the north-east house who will give you an item.
+- name: Jumping Angelfish
+  id: 253
+  operand: 134
+  classification: 0
+  description: Seabed Sanctuary - Releases the angelfish who can jump real high (Look at him go!) Has no use.
+- name: West Mermaid Guard
+  id: 253
+  operand: 138
+  classification: 1
+  description: Seabed Sanctuary - Releases the sympathetic mermaid guard who will let you in to Lue's Prison. Also releases the central west platform by the jail.
+- name: Mermaid Dancer Nanna
+  id: 253
+  operand: 139
+  classification: 0
+  description: Seabed Sanctuary - Releases Nanna the mermaid dancer. Has no use.
+- name: Prison Breaking Dolphin
+  id: 253
+  operand: 140
+  classification: 1
+  description: Seabed Sanctuary - Releases the dolphin which will break Lue the Dolphin out of Jail.
+- name: Mermaid Statue to Blester
+  id: 253
+  operand: 141
+  classification: 1
+  description: Seabed Sanctuary - Releases the North-East Mermaid statue which will open the path to Blester.
+- name: Common House Top Mermaid with Gift
+  id: 253
+  operand: 142
+  classification: 1
+  description: Seabed Sanctuary - Releases the mermaid in the top of the central room in the common house who will give you a gift.
+- name: Lue the Dolphin
+  id: 253
+  operand: 143
+  classification: 1
+  description: Seabed Sanctuary - Releases Lue the Dolphin. Bust them out of jail to get an item.
+- name: Mermaid Queen's Attendant Left
+  id: 253
+  operand: 146
+  classification: 0
+  description: Seabed Sanctuary - Releases the Mermaid attending the queen (on the left). Has no use.
+- name: Mermaid in North-West House
+  id: 253
+  operand: 149
+  classification: 0
+  description: Seabed Sanctuary - Releases the north-west house and the mermaid inside. Has no use.
+- name: Mermaid Dance Troupe Leader
+  id: 253
+  operand: 153
+  classification: 1
+  description: Seabed Sanctuary - Releases the North-West platform and the Mermaid Dance Troupe Leader.
+- name: Dolphin to North-East Platform
+  id: 253
+  operand: 155
+  classification: 1
+  description: Seabed Sanctuary - Releases the dolphin and the North-East platform. Required to reach the North-East Mermaid with Gift.
+- name: Mermaid Statue to Rockbird
+  id: 253
+  operand: 157
+  classification: 1
+  description: Seabed Sanctuary - Releases the South-East Mermaid statue which will open the path to Rockbird.
+- name: Common House Main Mermaid with Gift
+  id: 253
+  operand: 161
+  classification: 1
+  description: Seabed Sanctuary - Releases the big common house in the south, and the main mermaid in the central room who will give you an item. Required to reach the Seabed.
+- name: East Mermaid Guard
+  id: 253
+  operand: 164
+  classification: 1
+  description: Seabed Sanctuary - Releases the east platform with the unsympathetic mermaid guard who will NOT let you in to Lue's Prison. Rarely required as an altrenate path to the south-east platform.
+- name: Mermaid Dancer Kanna
+  id: 253
+  operand: 165
+  classification: 0
+  description: Seabed Sanctuary - Releases Kanna the mermaid dancer. Has no use.
+- name: Common House East Room Mermaid
+  id: 253
+  operand: 167
+  classification: 0
+  description: Seabed Sanctuary - Releaes the mermaid in the east room of the big common house. Has no use.
+- name: Mermaid Statue to Durean
+  id: 253
+  operand: 171
+  classification: 1
+  description: Seabed Sanctuary - Releases the South-West Mermaid statue which will open the path to Durean.
+- name: Angelfish South of Central Platform
+  id: 253
+  operand: 173
+  classification: 0
+  description: Seabed Sanctuary - Releases the Angelfish South of the Central Platform. Has no use.
+- name: Angelfish with Soul
+  id: 253
+  operand: 177
+  classification: 1
+  description: Seabed Sanctuary - Releases south-east and the angelfish who is from the sky (like you). Will give you a soul/item. 
+- name: Common House West Room Mermaid with Gift.
+  id: 253
+  operand: 181
+  classification: 1
+  description: Seabed Sanctuary - Releases the mermaid in the hidden west room of the common house who will give you an item.
+- name: Mermaid Queen
+  id: 253
+  operand: 182
+  classification: 1
+  description: Seabed Sanctuary - Releases the Mermaid Queen. She'll give you an item and open the way to the next world.
+- name: Mermaid Statue to Ghost Ship
+  id: 253
+  operand: 185
+  classification: 1
+  description: Seabed Sanctuary - Releases the North-West Mermaid statue which will open the path to the Ghost Ship.
+- name: Sleepy Dolphin
+  id: 253
+  operand: 187
+  classification: 1
+  description: Seabed Sanctuary - Releases the Sleepy Dolphin in prison area. Enter the dolphin's dream and give them the Big Pearl to open the path to the secret cove.
+- name: Mermaid Queen's Attendant Right
+  id: 253
+  operand: 189
+  classification: 0
+  description: Seabed Sanctuary - Releases the Mermaid attending the queen (on the right). Has no use.
+- name: Angelfish East of Central Platform
+  id: 253
+  operand: 190
+  classification: 0
+  description: Seabed Sanctuary - Releases the Angelfish East of the Central Platform. Has no use.
+- name: Swimming Common House Mermaid
+  id: 253
+  operand: 192
+  classification: 0
+  description: Seabed Sanctuary - Releases the mermaid swimming in the big common house's central room. Has no use.
+- name: Dolphin to West Chest
+  id: 253
+  operand: 193
+  classification: 1
+  description: Seabed Sanctuary - Releases the South-West platform and the dolphin who will give you a ride to the secluded platform with a treasure chest.
+- name: Mermaid Dancer Anna
+  id: 253
+  operand: 194
+  classification: 0
+  description: Seabed Sanctuary - Releases Anna the mermaid dancer. Has no use.
+- name: North-West Grandpa
+  id: 253
+  operand: 201
+  classification: 1
+  description: Mountain of Souls - Releases the North-West room and the Grandpa who lives there. He'd like to have a nice chat. Sometimes required to reach the mountain king.
+- name: Girl Near Entrance
+  id: 253
+  operand: 202
+  classification: 0
+  description: Mountain of Souls - Releases the Girl Near Entrance. Has no use.
+- name: Mushroom at North-East Lake
+  id: 253
+  operand: 203
+  classification: 0
+  description: Mountain of Souls - Releases a mushroom and the north-east lake. Has no use.
+- name: Boy for Western Tunnel
+  id: 253
+  operand: 204
+  classification: 1
+  description: Mountain of Souls - Releases a boy and the western tunnel on the path to the Mountain King's throne room.
+- name: Grandpa Husband
+  id: 253
+  operand: 211
+  classification: 0
+  description: Mountain of Souls - Releases the Grandpa who is the husband of the Teleporting Grandma. Has no use.
+- name: Snail Jockey (Legend)
+  id: 253
+  operand: 212
+  classification: 0
+  description: Mountain of Souls - Releases the Snail Jockey on the top riding the snail named Legend. Has no use.
+- name: Nome the Snail
+  id: 253
+  operand: 214
+  classification: 1
+  description: Mountain of Souls - Releases Nome the Snail. He'll give you an item and open the way to the next world. Requires the Mountain King to open the jail cell doors.
+- name: Boy in Jail
+  id: 253
+  operand: 215
+  classification: 0
+  description: Mountain of Souls - Releases the Boy in Jail (What did he do to deserve this?) Has no use.
+- name: Sleepy Mushroom
+  id: 253
+  operand: 221
+  classification: 1
+  description: Mountain of Souls - Releases the Sleepy Mushroom in the unlocked jail cell. Enter his dream to open a path in Lune leading to a lair and a secret tile.
+- name: Dancing Grandma Right
+  id: 253
+  operand: 225
+  classification: 1
+  description: Mountain of Souls - Releases the Dancing Grandma who attends the Mountain King (on the right).
+- name: Dancing Grandma Left
+  id: 253
+  operand: 230
+  classification: 1
+  description: Mountain of Souls - Releases the Dancing Grandma who attends the Mountain King (on the left).
+- name: Snail in Secret Room with Gift
+  id: 253
+  operand: 232
+  classification: 1
+  description: Mountain of Souls - Releases the Snail in the Secret Room. Use the passage through the fake norther wall to reach him and receive an item.
+- name: Boy with Gift
+  id: 253
+  operand: 233
+  classification: 1
+  description: Mountain of Souls - Releases the boy in the central lake room who will give you a gift.
+- name: Teleporting Grandma
+  id: 253
+  operand: 234
+  classification: 0
+  description: Mountain of Souls - Releases the Teleporting Grandma in the western tunnel (although it's you that teleports, not her). Has no use.
+- name: Gazing Girl
+  id: 253
+  operand: 235
+  classification: 0
+  description: Mountain of Souls - Releases the girl gazing at the boy in the western tunnel (but not for long?) Has no use.
+- name: Mushroom for Southern Tunnel
+  id: 253
+  operand: 238
+  classification: 1
+  description: Mountain of Souls - Releases a mushroom and the southern tunnel on the path to the jail.
+- name: Snail Jockey (Flash)
+  id: 253
+  operand: 239
+  classification: 0
+  description: Mountain of Souls - Releases the Snail Jockey in the middle riding the snail named Flash. Has no use.
+- name: Snail Jockey (Unknown)
+  id: 253
+  operand: 240
+  classification: 0
+  description: Mountain of Souls - Releases the Snail Jockey on the bottom riding the snail with an unknown name. Has no use.
+- name: Girl for Eastern Tunnel
+  id: 253
+  operand: 242
+  classification: 1
+  description: Mountain of Souls - Releases a girl and the eastern tunnel on the path to Lune and the jail.
+- name: Solitary Mushroom
+  id: 253
+  operand: 246
+  classification: 0
+  description: Mountain of Souls - Releases the Solitary mushroom in the room with no entrance. Has no use.
+- name: Snail with Boy
+  id: 253
+  operand: 247
+  classification: 0
+  description: Mountain of Souls - Releases the snail accompanying the boy with gift in the center lake room (he wants walkies). Has no use.
+- name: Grandpa for South-West Tunnel.
+  id: 253
+  operand: 248
+  classification: 1
+  description: Mountain of Souls - Releases a grandpa and the south-west tunnel on the path to the Mountain King.
+- name: Snail with Grandpa
+  id: 253
+  operand: 250
+  classification: 0
+  description: Mountain of Souls - Releases the snail accompanying the grandpa at the south-east lake. Has no use.
+- name: Grandpa for South-East Lake
+  id: 253
+  operand: 252
+  classification: 1
+  description: Mountain of Souls - Releases a sleepy grandpa and the south-east lake on the path to the jail. No need to enter his dreams.
+- name: Grandpa Guarding Lune
+  id: 253
+  operand: 254
+  classification: 1
+  description: Mountain of Souls - Releases a grandpa guarding the path to Lune. He wont let you pass until you show him the Lucky Blade.
+- name: Grandpa Guarding the Jail
+  id: 253
+  operand: 255
+  classification: 1
+  description: Mountain of Souls - Releases the jail area and the grandpa guarding the jail.
+- name: Mountain King
+  id: 253
+  operand: 259
+  classification: 1
+  description: Mountain of Souls - Releases the Mountain King. Talk to him after you have released the two dancing grandmas and gotten the three red-hot items to open the way to Deathtoll's Lair and get an item. 
+- name: Mousehole Plant
+  id: 253
+  operand: 265
+  classification: 1
+  description: Leo's Lab - Releases the plant on the other end of the mouse hole which will give you an item.
+- name: West Lab Plant
+  id: 253
+  operand: 267
+  classification: 0
+  description: Leo's Lab - Releases the plant on the west side of the lab room on the first floor.
+- name: Chest of Drawers in Locked Room
+  id: 253
+  operand: 268
+  classification: 1
+  description: Leo's Lab - Releases the chest of drawers in the locked room on the first floor. Has an item inside, and underneath (push to the left).
+- name: Stalking Cat 1
+  id: 253
+  operand: 269
+  classification: 1
+  description: Leo's Lab - Releases the 1 of the 2 cats stalking mice in the main room of the first floor. Lure them out of the room with the Actinidea Leaves to have the mice let you into their hole.
+- name: Great Door to Lab
+  id: 253
+  operand: 274
+  classification: 1
+  description: Leo's Lab - Releases the great door leading to the lab room on the first floor. Now you can get that chest.
+- name: Stalking Cat 2
+  id: 253
+  operand: 276
+  classification: 1
+  description: Leo's Lab - Releases the 1 of the 2 cats stalking mice in the main room of the first floor. Lure them out of the room with the Actinidea Leaves to have the mice let you into their hole.
+- name: Locked Door to South-West Room
+  id: 253
+  operand: 282
+  classification: 1
+  description: Leo's Lab - Releases the locked door leading to the south-west room on the first floor. Requires the door key to open.
+- name: Cat in Locked Room
+  id: 253
+  operand: 283
+  classification: 0
+  description: Leo's Lab - Releases the cat in the locked room on the first floor. Has no use.
+- name: Model Town Left
+  id: 253
+  operand: 286
+  classification: 1
+  description: Leo's Lab - Releases the Model of Town on the left.
+- name: Great Door to Models of Town
+  id: 253
+  operand: 288
+  classification: 1
+  description: Leo's Lab - Releases the great door on the 2nd floor leading to the room with the models of town.
+- name: Steps to 2nd Floor
+  id: 253
+  operand: 290
+  classification: 1
+  description: Leo's Lab - Releases the steps leading up to the 2nd floor.
+- name: Sleepy Cat
+  id: 253
+  operand: 294
+  classification: 1
+  description: Leo's Lab - Releases the Sleepy Cat on the 2nd floor. Enter their dreams to receive an item.
+- name: Mouse Outside Hole
+  id: 253
+  operand: 297
+  classification: 1
+  description: Leo's Lab - Releases the mouse outside of the mouse hole. They wont let you in until you lure the two cats out of the room with the Actinidea Leaves.
+- name: Marie the Doll
+  id: 253
+  operand: 303
+  classification: 1
+  description: Leo's Lab - Releases the doll, Marie. She'll give you an item and open the way to the next world.
+- name: Doll in Chapel
+  id: 253
+  operand: 310
+  classification: 0
+  description: Leo's Lab - Releases the doll in the chapel on the 2nd floor. Has no use.
+- name: Excercising Chest of Drawers
+  id: 253
+  operand: 311
+  classification: 0
+  description: Leo's Lab - Releases the chest of drawers in the entryway that just wants to get up and go. Has no use.
+- name: Plant in Locked Room
+  id: 253
+  operand: 313
+  classification: 0
+  description: Leo's Lab - Releases the plant in the locked room. Has no use.
+- name: Circling Mouse 1
+  id: 253
+  operand: 315
+  classification: 0
+  description: Leo's Lab - Releases the 1st of 2 mice running in a circle in the mouse hole. Has no use.
+- name: Mouse with Gift
+  id: 253
+  operand: 316
+  classification: 1
+  description: Leo's Lab - Releases the mouse in the mouse hole that will give you an item.
+- name: Mouse on 2nd Floor
+  id: 253
+  operand: 318
+  classification: 0
+  description: Leo's Lab - Releases the mouse on the 2nd floor. Has no use.
+- name: Great Door with Soul
+  id: 253
+  operand: 322
+  classification: 1
+  description: Leo's Lab - Releases the great door to the chapel on the 2nd floor that is from the sky (like you). Will give you a soul/item.
+- name: Model Town Right
+  id: 253
+  operand: 325
+  classification: 1
+  description: Leo's Lab - Releases the Model of Town on the right.
+- name: Devout Mouse
+  id: 253
+  operand: 330
+  classification: 0
+  description: Leo's Lab - Releases the Devout Mouse on the 2nd floor. Will let you pray to get a full heal. Otherwise has no use.
+- name: Steps to the Attic
+  id: 253
+  operand: 331
+  classification: 1
+  description: Leo's Lab - Releases the steps leading from the room with models of town to the attic.
+- name: Chest of Drawers in Attic
+  id: 253
+  operand: 332
+  classification: 1
+  description: Leo's Lab - Releases the chest of drawer in the attic which will give you an item.
+- name: Plant by Town Models
+  id: 253
+  operand: 333
+  classification: 1
+  description: Leo's Lab - Releases the plant on the 2nd floor by the town models. Will give you an item.
+- name: Circling Mouse 2
+  id: 253
+  operand: 338
+  classification: 0
+  description: Leo's Lab - Releases the 2nd of 2 mice running in a circle in the mouse hole. Has no use.
+- name: Cat in Attic
+  id: 253
+  operand: 339
+  classification: 0
+  description: Leo's Lab - Releases the cat in the attic. Has no use.
+- name: Steps to Power Plant
+  id: 253
+  operand: 341
+  classification: 1
+  description: Leo's Lab - Releases the steps leading down to the power plant.
+- name: Soldier Near Basement Stairs
+  id: 253
+  operand: 345
+  classification: 0
+  description: Magridd Castle Town - Releases the soldier near the stairs to the basement of Magridd Castle. Has no use.
+- name: Soldier Architect
+  id: 253
+  operand: 346
+  classification: 0
+  description: Magridd Castle Town - Releases the soldier who is the nephew of the famous architech Gaudi. He'll build some architecture after you talk to him, but otherwise has no use.
+- name: Soldier Who Knows a Guy
+  id: 253
+  operand: 351
+  classification: 0
+  description: Magridd Castle Town - Releases the soldier who will give you a hint about what the sleepy soldier has.
+- name: Sleepy Soldier
+  id: 253
+  operand: 353
+  classification: 1
+  description: Magridd Castle Town - Releases the Sleepy Soldier. Enter their dreams to receive an item.
+- name: Patrolling Soldier
+  id: 253
+  operand: 354
+  classification: 0
+  description: Magridd Castle Town - Releases the soldier patrolling the castle town streets. Has no use. "Don't talk to me."
+- name: Right Moat Guard Soldier
+  id: 253
+  operand: 358
+  classification: 0
+  description: Magridd Castle Town - Releases the soldier guard the moat bridge to the castle (on the right).
+- name: Singer in Concert Hall
+  id: 253
+  operand: 359
+  classification: 1
+  description: Magridd Castle Town - Releases the Concert Hall and the singer inside. Give them a harp string so they can play music so that the soldier with item underfoot moves.
+- name: Unremarkable Concert Hall Soldier
+  id: 253
+  operand: 360
+  classification: 0
+  description: Magridd Castle Town - Releases a soldier in the concert hall. Has no use.
+- name: Bashful Maid
+  id: 253
+  operand: 363
+  classification: 0
+  description: Magridd Castle Town - Releases the maid 'removing a speck of dust' from a soldier's eye in the west barracks 😉. Has no use.
+- name: Soldier Guarding Left Tower
+  id: 253
+  operand: 365
+  classification: 1
+  description: Magridd Castle Town - Releases the Left Tower and the Soldier Guarding it. Show him the Platinum Card to enter.
+- name: Soldier with Dr. Leo (Dok)
+  id: 253
+  operand: 366
+  classification: 1
+  description: Magridd Castle Town - Releases a soldier helping Dr. Leo escape. Gets stabbed in the back (Dok!)
+- name: Soldier with Item Underfoot
+  id: 253
+  operand: 368
+  classification: 1
+  description: Magridd Castle Town - Releases the soldier in the concert hall who is standing on an item. Give the Singer a harp string to make the soldier move so you can grab the item that was where he was standing.
+- name: Singer Outside
+  id: 253
+  operand: 370
+  classification: 0
+  description: Magridd Castle Town - Releases the singer outside in the south-east corner. Has no use.
+- name: Soldier with Soul
+  id: 253
+  operand: 377
+  classification: 1
+  description: Magridd Castle Town - Releases the soldier in the east barracks who is from the sky (like you). Will give you a soul/item.
+- name: Maid in Concert Hall
+  id: 253
+  operand: 382
+  classification: 0
+  description: Magridd Castle Town - Releases the maid in the concert hall. Has no use.
+- name: Queen Magridd (gives VIP Card)
+  id: 253
+  operand: 383
+  classification: 1
+  description: Magridd Castle Town - Releases Queen Magridd. She'll give you an item if you tell her she's pretty, and you get can another item where she was standing after her sudden (but inevitable) demise. The game has been patched to give you both items if you go to the tile where she was standing if she blew up before giving you her item.
+- name: Soldier with Dr. Leo (Oct)
+  id: 253
+  operand: 385
+  classification: 1
+  description: Magridd Castle Town - Releases a soldier helping Dr. Leo escape.
+- name: Soldier Guarding Right Tower
+  id: 253
+  operand: 386
+  classification: 1
+  description: Magridd Castle Town - Releases the Right Tower and the soldier guarding it. Show him the VIP Card to enter.
+- name: Dr. Leo
+  id: 253
+  operand: 387
+  classification: 1
+  description: Magridd Castle Town - Releases Dr. Leo. The man, the myth, the legend. Release the soldiers accompanying him to receive an item (and a fireworks show).
+- name: Bashful Soldier
+  id: 253
+  operand: 389
+  classification: 0
+  description: Magridd Castle Town - Releases the soldier having 'speck of dust removed from his eye' by a maid in the west barracks 😉. Has no use.
+- name: Observant Soldier
+  id: 253
+  operand: 390
+  classification: 0
+  description: Magridd Castle Town - Releases the soldier in the east barracks who tells you about the secret tile in front of the castle. Has no use.
+- name: Maid at the Bar
+  id: 253
+  operand: 391
+  classification: 1
+  description: Magridd Castle Town - Releases the telepathic maid at the bar in the south-east house (she knows what men want?). Talk to her to receive an item.
+- name: Soldier with Castle
+  id: 253
+  operand: 396
+  classification: 1
+  description: Magridd Castle Town - Releases Magridd Castle Keep and the soldier guarding the throne room. Also enables the secret tile in front of the castle.
+- name: Soldier in North-East Building
+  id: 253
+  operand: 397
+  classification: 0
+  description: Magridd Castle Town - Releases the soldier in the north-east building. Has no use.
+- name: Soldier at the Bar
+  id: 253
+  operand: 399
+  classification: 0
+  description: Magridd Castle Town - Releases the soldier at the bar. Has no use.
+- name: Unobservant Soldier
+  id: 253
+  operand: 402
+  classification: 0
+  description: Magridd Castle Town - Releases the soldier staring at the moat. Has no use.
+- name: King Magridd
+  id: 253
+  operand: 405
+  classification: 1
+  description: Magridd Castle Town - Releases King Magridd. He'll give you an item and open the way to the next world.
+souls:
+- name: Soul of Magician
+  id: 251
+  operand: 0
+  classification: 1
+  description: Alows your character use gems to cast magic.
+- name: Soul of Light
+  id: 251
+  operand: 1
+  classification: 1
+  description: Reveals the dark room in the basement of the Light Shrine in Act 2.
+- name: Soul of Shield
+  id: 251
+  operand: 2
+  classification: 2
+  description: Protects you from the falling magma erupting from the volcano in Durean in Act 3.
+- name: Soul of Detection
+  id: 251
+  operand: 3
+  classification: 2
+  description: Allows you to see the invisible enemies in the models of town in Act 5.
+- name: Soul of Reality
+  id: 251
+  operand: 4
+  classification: 1
+  description: Allows you to see the hidden passages in Magridd Castle in Act 6.
+special-items:
+- name: Victory
+  id: 250
+  operand: 0
+  classification: 1
+  description: A special 'item' used to signify that you have achieved your goal and beaten the game. GG.

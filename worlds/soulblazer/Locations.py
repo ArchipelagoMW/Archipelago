@@ -1,19 +1,9 @@
 from collections import namedtuple
 from dataclasses import dataclass
-from enum import Enum
 from BaseClasses import Region, Location
 from .Data.LocationData import SoulBlazerLocationData, SoulBlazerLocationsData
 from .Rules import get_rule_for_location
-from .Data.Enums import IDOffset, LairID, NPCRewardID
-
-
-class LocationType(Enum):
-    CHEST = "Chest"
-    """Location checked by opening a chest."""
-    NPC_REWARD = "NPC Reward"
-    """Location checked by talking to an NPC or stepping on an item tile."""
-    LAIR = "Lair"
-    """Location checked by sealing a monster lair."""
+from .Data.Enums import IDOffset, LairID, NPCRewardID, LocationType
 
 
 def address_for_location(type: LocationType, id: int) -> int:

@@ -207,6 +207,7 @@ class ItemID(IntEnum):
     EXP             = 0xFE
     GEMS            = 0xFF
 
+#TODO: redo enum names based on renamified NPCs.
 class LairID(IntEnum):
     OLD_WOMAN                     = 2
     TOOL_SHOP_OWNER               = 6
@@ -446,3 +447,17 @@ class NPCRewardID(IntEnum):
     ANGELFISH_SOUL_OF_SHIELD         = 0x3E
     GREAT_DOOR_SOUL_OF_DETECTION     = 0x3F
     SOLDIER_SOUL_OF_REALITY          = 0x40
+
+#soul_names: dict[int, str]
+
+class SoulId(IntEnum):
+    SOUL_MAGICIAN  = 0x00
+    SOUL_LIGHT     = 0x01
+    SOUL_SHIELD    = 0x02
+    SOUL_DETECTION = 0x03
+    SOUL_REALITY   = 0x04
+
+    ##TODO: can this override name?
+    #@property
+    #def display_name (self) -> str:
+    #    return soul_names[self.value]

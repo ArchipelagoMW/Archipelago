@@ -1,6 +1,5 @@
 from typing import Callable
 
-from enum import Enum, auto
 from BaseClasses import CollectionState
 from .Data.Enums import RuleFlag
 from .Names import (
@@ -15,7 +14,7 @@ from .Names import (
     NPCName,
     RegionName,
 )
-from .Items import emblems_table, swords_table
+from .Items import emblems_by_name, swords_by_name
 
 #if TYPE_CHECKING:
 #    from . import SoulBlazerWorld
@@ -32,7 +31,7 @@ magic_items = [
     ItemName.FLAMEPILLAR,
     ItemName.TORNADO,
 ]
-sword_items = [*swords_table.keys()]
+sword_items = [*swords_by_name.keys()]
 
 
 def no_requirement(state: CollectionState, player: int | None = None) -> bool:
@@ -95,7 +94,7 @@ location_dependencies: dict[str, list[str]] = {
     ChestName.UNDERGROUND_CASTLE_LEOS_BRUSH: [NPCName.LISA, ItemName.DREAMROD],
     # Act 2 - Greenwood
     NPCRewardName.REDHOT_MIRROR_BIRD: [NPCName.BIRD_RED_HOT_MIRROR],
-    NPCRewardName.MAGIC_BELL_CRYSTAL: [*emblems_table.keys(), NPCName.DEER_MAGIC_BELL, NPCName.CROCODILE3],
+    NPCRewardName.MAGIC_BELL_CRYSTAL: [*emblems_by_name.keys(), NPCName.DEER_MAGIC_BELL, NPCName.CROCODILE3],
     NPCRewardName.WOODSTIN_TRIO: [NPCName.DEER, NPCName.SQUIRREL3, NPCName.DOG3],
     NPCRewardName.GREENWOOD_LEAVES_TILE: [
         NPCName.MOLE_SOUL_OF_LIGHT,
