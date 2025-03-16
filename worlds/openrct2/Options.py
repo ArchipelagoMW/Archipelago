@@ -698,7 +698,7 @@ class BalanceGuestCounts(OpenRCT2OnToggle):
     like Spiral Slides will tend towards the minimum, while high throughput rides like roller coasters will 
     tend towards the maximum.
     """
-    display_name = "Randomize Park Values"
+    display_name = "Balance Guest Counts"
 
 class RequiredUniqueRides(Range):
     """Requires specific rides to be built before scenario completion is awarded. These will tend to appear in the later half of the game.
