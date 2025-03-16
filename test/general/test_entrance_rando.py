@@ -146,6 +146,7 @@ class TestDisconnectForRandomization(unittest.TestCase):
         e = r1.create_exit("e")
         e.randomization_type = EntranceType.ONE_WAY
         e.randomization_group = 1
+        e.vanilla_target_name = "foo"
         e.connect(r2)
 
         disconnect_entrance_for_randomization(e)
@@ -158,9 +159,21 @@ class TestDisconnectForRandomization(unittest.TestCase):
 
         self.assertEqual(1, len(r2.entrances))
         self.assertIsNone(r2.entrances[0].parent_region)
-        self.assertEqual("r2", r2.entrances[0].name)
+        self.assertEqual("foo", r2.entrances[0].name)
         self.assertEqual(EntranceType.ONE_WAY, r2.entrances[0].randomization_type)
         self.assertEqual(1, r2.entrances[0].randomization_group)
+
+    def test_disconnect_default_1way_no_vanilla_target_raises(self):
+        multiworld = generate_test_multiworld()
+        r1 = Region("r1", 1, multiworld)
+        r2 = Region("r2", 1, multiworld)
+        e = r1.create_exit("e")
+        e.randomization_type = EntranceType.ONE_WAY
+        e.randomization_group = 1
+        e.connect(r2)
+
+        with self.assertRaises(ValueError):
+            disconnect_entrance_for_randomization(e)
 
     def test_disconnect_uses_alternate_group(self):
         multiworld = generate_test_multiworld()
@@ -169,6 +182,7 @@ class TestDisconnectForRandomization(unittest.TestCase):
         e = r1.create_exit("e")
         e.randomization_type = EntranceType.ONE_WAY
         e.randomization_group = 1
+        e.vanilla_target_name = "foo"
         e.connect(r2)
 
         disconnect_entrance_for_randomization(e, 2)
@@ -181,7 +195,7 @@ class TestDisconnectForRandomization(unittest.TestCase):
 
         self.assertEqual(1, len(r2.entrances))
         self.assertIsNone(r2.entrances[0].parent_region)
-        self.assertEqual("r2", r2.entrances[0].name)
+        self.assertEqual("foo", r2.entrances[0].name)
         self.assertEqual(EntranceType.ONE_WAY, r2.entrances[0].randomization_type)
         self.assertEqual(2, r2.entrances[0].randomization_group)
 

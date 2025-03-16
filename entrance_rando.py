@@ -287,8 +287,11 @@ def disconnect_entrance_for_randomization(entrance: Entrance, target_group: int 
         # targets in the child region will be created when the other direction edge is disconnected
         target = parent_region.create_er_target(entrance.name)
     else:
-        # for 1-ways, the child region needs a target and coupling/naming is not a concern
-        target = child_region.create_er_target(child_region.name)
+        # for 1-ways, the child region needs a target. naming is not a concern for coupling so we
+        # allow it to be user provided (and require it, to prevent an unhelpful assumed name in pairings)
+        if not entrance.vanilla_target_name:
+            raise ValueError("Cannot disconnect a one-way entrance without a vanilla target name specified")
+        target = child_region.create_er_target(entrance.vanilla_target_name)
     target.randomization_type = entrance.randomization_type
     target.randomization_group = target_group or entrance.randomization_group
 

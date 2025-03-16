@@ -1022,17 +1022,20 @@ class Entrance:
     connected_region: Optional[Region] = None
     randomization_group: int
     randomization_type: EntranceType
+    vanilla_target_name: Optional[str]
     # LttP specific, TODO: should make a LttPEntrance
     addresses = None
     target = None
 
     def __init__(self, player: int, name: str = "", parent: Optional[Region] = None,
-                 randomization_group: int = 0, randomization_type: EntranceType = EntranceType.ONE_WAY) -> None:
+                 randomization_group: int = 0, randomization_type: EntranceType = EntranceType.ONE_WAY,
+                 vanilla_target_name: Optional[str] = None) -> None:
         self.name = name
         self.parent_region = parent
         self.player = player
         self.randomization_group = randomization_group
         self.randomization_type = randomization_type
+        self.vanilla_target_name = vanilla_target_name
 
     def can_reach(self, state: CollectionState) -> bool:
         assert self.parent_region, f"called can_reach on an Entrance \"{self}\" with no parent_region"
