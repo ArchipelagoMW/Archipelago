@@ -3,6 +3,7 @@ from random import choice
 
 from .Items import filler_items
 
+#TODO remove this in favor of JMP entries?
 speedy_observer_index: [int] = [183, 182, 179, 178, 177, 101, 100, 99, 98, 97, 21, 19]
 speedy_enemy_index: [int] = [128, 125, 115, 114, 113, 67, 66, 60, 59, 58, 7, 6]
 
