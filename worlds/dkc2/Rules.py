@@ -2022,7 +2022,7 @@ class DKC2LooseRules(DKC2Rules):
             LocationName.parrot_chute_panic_kong:
                 self.has_squawks,
             LocationName.parrot_chute_panic_dk_coin:
-                lambda self.can_cartwheel(state) or self.can_hover(state),
+                lambda state: self.can_cartwheel(state) or self.can_hover(state),
             LocationName.parrot_chute_panic_bonus_1:
                 self.has_squawks,
             LocationName.parrot_chute_panic_bonus_2:
