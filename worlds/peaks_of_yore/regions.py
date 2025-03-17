@@ -59,8 +59,10 @@ def create_region(region_name: str, region_enum: PeaksOfYoreRegion, item_require
     peaks_in_pool = peaks
     artefacts_in_pool = get_location_names_by_type(region_enum, "Artefact")
 
-    locations = {k: v for k, v in get_locations(region_enum).items() if (not options.disable_solemn_tempest)
-                 or k != "Solemn Tempest"}
+    locations = {k: v for k, v in get_locations(region_enum).items() if
+                 ((not options.disable_solemn_tempest) or not (k == "Solemn Tempest" or
+                                                               k == "Solemn Tempest (Free Solo)"))
+                 and options.include_free_solo or "(Free Solo)" not in k}
 
     region.add_locations(locations, PeaksOfYoreLocation)
     cabin_region.connect(region, region_name + " Connection", lambda state: state.has_all_counts(item_requirements,

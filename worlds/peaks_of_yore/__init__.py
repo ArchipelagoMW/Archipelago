@@ -43,7 +43,6 @@ class PeaksOfWorld(World):
     topology_present = True
     artefacts_peaks_in_pool: RegionLocationInfo
 
-
     def create_item(self, name: str) -> Item:
         item_entry = full_item_table[name]
         return PeaksOfYoreItem(name, item_entry.classification, self.item_name_to_id[name], self.player)
@@ -122,7 +121,6 @@ class PeaksOfWorld(World):
                 continue
             local_itempool.append(self.create_item(name))
 
-
         for tool in [item for item in full_item_table.values() if item.type == "Tool"]:
             if (tool.name != "Barometer" or not self.options.start_with_barometer) \
                     and (tool.name != "Oil Lamp" or not self.options.start_with_oil_lamp):
@@ -153,14 +151,11 @@ class PeaksOfWorld(World):
                 else:
                     local_itempool.append(self.create_item(tool.name))
 
-
         for rope in [item for item in full_item_table.values() if item.type == "Rope"]:
             local_itempool.append(self.create_item(rope.name))
 
-
         for birdSeed in [item for item in full_item_table.values() if item.type == "Bird Seed"]:
             local_itempool.append(self.create_item(birdSeed.name))
-
 
         for artefact in [item for item in full_item_table.values() if item.type == "Artefact"]:
             local_itempool.append(self.create_item(artefact.name))

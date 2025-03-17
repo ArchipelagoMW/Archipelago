@@ -41,6 +41,7 @@ class StartingBook(Choice):
             return "Advanced Book"
         return "Expert Book"
 
+
 class StartWithBarometer(DefaultOnToggle):
     """Choose to start with the barometer, to locate items quicker"""
     display_name = "Start with Barometer"
@@ -53,6 +54,7 @@ class StartWithOilLamp(Toggle):
     """
     display_name = "Start with Oil Lamp"
 
+
 class StartingHands(Choice):
     """
     Choose what hands you want to have enabled on start.
@@ -63,11 +65,13 @@ class StartingHands(Choice):
     option_left = 1
     option_right = 2
 
+
 class EarlyHands(DefaultOnToggle):
     """
     Choose whether the missing hand will be placed earlier in the run.
     """
     display_name = "Early Hands"
+
 
 class RopeUnlockMode(Choice):
     """
@@ -109,6 +113,11 @@ class DisableSolemnTempest(DefaultOnToggle):
     display_name = "Disable Solemn Tempest"
 
 
+class IncludeFreeSolo(Toggle):
+    """Add Free Solo Peaks to the pool"""
+    display_name = "Include Free Solo Peaks"
+
+
 poy_option_groups = [
     OptionGroup("Starting Items", [
         StartingBook,
@@ -123,7 +132,8 @@ poy_option_groups = [
         EnableIntermediate,
         EnableAdvanced,
         EnableExpert,
-        DisableSolemnTempest
+        DisableSolemnTempest,
+        IncludeFreeSolo
     ]),
 ]
 
@@ -143,4 +153,5 @@ class PeaksOfYoreOptions(PerGameCommonOptions):
     enable_advanced: EnableAdvanced
     enable_expert: EnableExpert
     disable_solemn_tempest: DisableSolemnTempest
+    include_free_solo: IncludeFreeSolo
     start_inventory_from_pool: StartInventoryPool

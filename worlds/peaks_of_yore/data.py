@@ -113,7 +113,14 @@ full_location_list: list[LocationData] = [
     LocationData('Bird Seed (Old Skerry)', 'Bird Seed', 4001, PeaksOfYoreRegion.INTERMEDIATE),
     LocationData('Bird Seed (Great Gaol)', 'Bird Seed', 4002, PeaksOfYoreRegion.ADVANCED),
     LocationData('Bird Seed (Eldenhorn)', 'Bird Seed', 4003, PeaksOfYoreRegion.ADVANCED),
-    LocationData('Bird Seed (Ymir\'s Shadow)', 'Bird Seed', 4004, PeaksOfYoreRegion.ADVANCED)
+    LocationData('Bird Seed (Ymir\'s Shadow)', 'Bird Seed', 4004, PeaksOfYoreRegion.ADVANCED),
+    LocationData("Walker's Pillar (Free Solo)", 'Free Solo Peak', 7030, PeaksOfYoreRegion.ADVANCED),
+    LocationData('Eldenhorn (Free Solo)', 'Free Solo Peak', 7031, PeaksOfYoreRegion.ADVANCED),
+    LocationData('Great Gaol (Free Solo)', 'Free Solo Peak', 7032, PeaksOfYoreRegion.ADVANCED),
+    LocationData('St. Haelga (Free Solo)', 'Free Solo Peak', 7033, PeaksOfYoreRegion.ADVANCED),
+    LocationData("Ymir's Shadow (Free Solo)", 'Free Solo Peak', 7034, PeaksOfYoreRegion.ADVANCED),
+    LocationData('Great Bulwark (Free Solo)', 'Free Solo Peak', 7035, PeaksOfYoreRegion.EXPERT),
+    LocationData('Solemn Tempest (Free Solo)', 'Free Solo Peak', 7036, PeaksOfYoreRegion.EXPERT),
 ]
 
 full_item_list: list[ItemData] = [
