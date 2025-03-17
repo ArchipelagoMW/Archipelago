@@ -80,7 +80,7 @@ class HardAdvancements(Toggle):
 
 
 class UnreasonableAdvancements(Toggle):
-    """Enables the extremely difficult advancements "How Did We Get Here?" and "Adventuring Time.\""""
+    """Enables the extremely difficult advancements "How Did We Get Here?", "Adventuring Time", "Two by Two", and "A Complete Catalogue"."""
     display_name = "Include Unreasonable Advancements"
 
 
