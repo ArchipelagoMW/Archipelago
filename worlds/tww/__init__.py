@@ -151,12 +151,57 @@ class TWWWorld(World):
         self.dungeon_specific_item_names: set[str] = set()
         self.dungeons: dict[str, Dungeon] = {}
 
+        self.item_classification_overrides: dict[str, IC] = {}
+
         self.useful_pool: list[str] = []
         self.filler_pool: list[str] = []
 
         self.charts = ChartRandomizer(self)
         self.entrances = EntranceRandomizer(self)
         self.boss_reqs = RequiredBossesRandomizer(self)
+
+    def _determine_item_classification_overrides(self) -> None:
+        """
+        Determine item classification overrides. The classification of an item may be affected by which options are
+        enabled or disabled.
+        """
+        options = self.options
+        item_classification_overrides = self.item_classification_overrides
+
+        # Override certain items to be filler depending on user options.
+        # TODO: Calculate filler items dynamically
+        override_as_filler = []
+        if not options.progression_dungeons:
+            override_as_filler.extend(item_name_groups["Small Keys"] + item_name_groups["Big Keys"])
+            override_as_filler.extend(("Command Melody", "Earth God's Lyric", "Wind God's Aria"))
+        if not options.progression_short_sidequests:
+            override_as_filler.extend(("Maggie's Letter", "Moblin's Letter"))
+        if not (options.progression_short_sidequests or options.progression_long_sidequests):
+            override_as_filler.append("Progressive Picto Box")
+        if not options.progression_spoils_trading:
+            override_as_filler.append("Spoils Bag")
+        if not options.progression_triforce_charts:
+            override_as_filler.extend(item_name_groups["Triforce Charts"])
+        if not options.progression_treasure_charts:
+            override_as_filler.extend(item_name_groups["Treasure Charts"])
+        if not options.progression_misc:
+            override_as_filler.extend(item_name_groups["Tingle Statues"])
+
+        for item_name in override_as_filler:
+            item_classification_overrides[item_name] = IC.filler
+
+        # Override certain items to be useful depending on user options.
+        # TODO: Calculate useful items dynamically
+        override_as_useful = []
+        if not options.progression_big_octos_gunboats:
+            override_as_useful.append("Quiver Capacity Upgrade")
+        if options.sword_mode in ("swords_optional", "swordless"):
+            override_as_useful.append("Progressive Sword")
+        if not options.enable_tuner_logic:
+            override_as_useful.append("Tingle Tuner")
+
+        for item_name in override_as_useful:
+            item_classification_overrides[item_name] = IC.useful
 
     def _determine_progress_and_nonprogress_locations(self) -> tuple[set[str], set[str]]:
         """
@@ -246,19 +291,22 @@ class TWWWorld(World):
                 if option == "dungeon":
                     self.dungeon_specific_item_names |= self.item_name_groups[option.item_name_group]
                 else:
-                    self.options.local_items.value |= self.dungeon_local_item_names
+                    options.local_items.value |= self.dungeon_local_item_names
 
         # Resolve logic options and set them onto the world instance for faster lookup in logic rules.
-        self.logic_rematch_bosses_skipped = bool(self.options.skip_rematch_bosses.value)
-        self.logic_in_swordless_mode = self.options.sword_mode in ("swords_optional", "swordless")
-        self.logic_in_required_bosses_mode = bool(self.options.required_bosses.value)
-        self.logic_obscure_3 = self.options.logic_obscurity == "very_hard"
-        self.logic_obscure_2 = self.logic_obscure_3 or self.options.logic_obscurity == "hard"
-        self.logic_obscure_1 = self.logic_obscure_2 or self.options.logic_obscurity == "normal"
-        self.logic_precise_3 = self.options.logic_precision == "very_hard"
-        self.logic_precise_2 = self.logic_precise_3 or self.options.logic_precision == "hard"
-        self.logic_precise_1 = self.logic_precise_2 or self.options.logic_precision == "normal"
-        self.logic_tuner_logic_enabled = bool(self.options.enable_tuner_logic.value)
+        self.logic_rematch_bosses_skipped = bool(options.skip_rematch_bosses.value)
+        self.logic_in_swordless_mode = options.sword_mode in ("swords_optional", "swordless")
+        self.logic_in_required_bosses_mode = bool(options.required_bosses.value)
+        self.logic_obscure_3 = options.logic_obscurity == "very_hard"
+        self.logic_obscure_2 = self.logic_obscure_3 or options.logic_obscurity == "hard"
+        self.logic_obscure_1 = self.logic_obscure_2 or options.logic_obscurity == "normal"
+        self.logic_precise_3 = options.logic_precision == "very_hard"
+        self.logic_precise_2 = self.logic_precise_3 or options.logic_precision == "hard"
+        self.logic_precise_1 = self.logic_precise_2 or options.logic_precision == "normal"
+        self.logic_tuner_logic_enabled = bool(options.enable_tuner_logic.value)
+
+        # Determine any item classification overrides based on user options.
+        self._determine_item_classification_overrides()
 
     def create_regions(self) -> None:
         """
@@ -468,45 +516,6 @@ class TWWWorld(World):
                     chart_name = self.charts.island_number_to_chart_name[island_number]
                     hint_data[self.player][location.address] = chart_name
 
-    def determine_item_classification(self, name: str) -> IC | None:
-        """
-        Determine the adjusted classification of an item. The classification of an item may be affected by which options
-        are enabled or disabled.
-
-        :param name: The name of the item.
-        :return: The adjusted classification of the item. If there is no adjustment from the default, returns `None`.
-        """
-        # TODO: Calculate nonprogress items dynamically
-        adjusted_classification = None
-        if not self.options.progression_big_octos_gunboats and name == "Quiver Capacity Upgrade":
-            adjusted_classification = IC.useful
-        if self.options.sword_mode in ("swords_optional", "swordless") and name == "Progressive Sword":
-            adjusted_classification = IC.useful
-        if not self.options.enable_tuner_logic and name == "Tingle Tuner":
-            adjusted_classification = IC.useful
-
-        if not self.options.progression_dungeons and name.endswith(" Key"):
-            adjusted_classification = IC.filler
-        if not self.options.progression_dungeons and name in ("Command Melody", "Earth God's Lyric", "Wind God's Aria"):
-            adjusted_classification = IC.filler
-        if not self.options.progression_short_sidequests and name in ("Maggie's Letter", "Moblin's Letter"):
-            adjusted_classification = IC.filler
-        if (
-            not (self.options.progression_short_sidequests or self.options.progression_long_sidequests)
-            and name == "Progressive Picto Box"
-        ):
-            adjusted_classification = IC.filler
-        if not self.options.progression_spoils_trading and name == "Spoils Bag":
-            adjusted_classification = IC.filler
-        if not self.options.progression_triforce_charts and name.startswith("Triforce Chart"):
-            adjusted_classification = IC.filler
-        if not self.options.progression_treasure_charts and name.startswith("Treasure Chart"):
-            adjusted_classification = IC.filler
-        if not self.options.progression_misc and name.endswith("Tingle Statue"):
-            adjusted_classification = IC.filler
-
-        return adjusted_classification
-
     def create_item(self, name: str) -> TWWItem:
         """
         Create an item for this world type and player.
@@ -515,7 +524,7 @@ class TWWWorld(World):
         :raises KeyError: If an invalid item name is provided.
         """
         if name in ITEM_TABLE:
-            return TWWItem(name, self.player, ITEM_TABLE[name], self.determine_item_classification(name))
+            return TWWItem(name, self.player, ITEM_TABLE[name], self.item_classification_overrides.get(name))
         raise KeyError(f"Invalid item name: {name}")
 
     def get_filler_item_name(self, strict: bool = True) -> str:

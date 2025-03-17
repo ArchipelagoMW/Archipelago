@@ -100,7 +100,7 @@ def get_pool_core(world: "TWWWorld") -> tuple[list[str], list[str]]:
     filler_pool: list[str] = []
     for item, data in ITEM_TABLE.items():
         if data.type == "Item":
-            adjusted_classification = world.determine_item_classification(item)
+            adjusted_classification = world.item_classification_overrides.get(item)
             classification = data.classification if adjusted_classification is None else adjusted_classification
 
             if classification & IC.progression:
