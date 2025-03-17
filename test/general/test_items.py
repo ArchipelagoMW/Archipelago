@@ -112,7 +112,7 @@ class TestBase(unittest.TestCase):
             multiworld.set_item_links()
             # groups get added to state during its constructor so this has to be after item links are set
             multiworld.state = CollectionState(multiworld)
-            gen_steps = ("generate_early", "create_regions", "create_items", "set_rules", "generate_basic")
+            gen_steps = ("generate_early", "create_regions", "create_items", "set_rules", "connect_entrances", "generate_basic")
             for step in gen_steps:
                 call_all(multiworld, step)
             # link the items together and attempt to fill
@@ -121,7 +121,7 @@ class TestBase(unittest.TestCase):
             call_all(multiworld, "pre_fill")
             distribute_items_restrictive(multiworld)
             call_all(multiworld, "post_fill")
-            self.assertTrue(multiworld.can_beat_game(CollectionState(multiworld)))
+            self.assertTrue(multiworld.can_beat_game(CollectionState(multiworld)), f"seed = {multiworld.seed}")
 
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Can generate with link replacement", game=game_name):
