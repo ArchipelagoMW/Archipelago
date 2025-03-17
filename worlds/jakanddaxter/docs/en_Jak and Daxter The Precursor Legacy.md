@@ -224,11 +224,11 @@ progression items and prevent you (and others) from completing the run.
 The game's normal HUD shows you how many power cells, precursor orbs, and scout flies you currently have. But if you 
 hold `L2 or R2` and press a direction on the D-Pad, the HUD will show you alternate modes. Here is how the HUD works:
 
-| HUD Mode      | Button Combo                 | What You're Seeing                | Text Message                          |
+| HUD Mode      | Button Combo                 | What The HUD Shows                | Text Messages                         |
 |---------------|------------------------------|-----------------------------------|---------------------------------------|
-| Normal        | `L2 or R2` + `Left or Right` | Items Received                    | `GOT {Your Item} FROM {Other Player}` |
 | Per-Level     | `L2 or R2` + `Down`          | Locations Checked (in this level) | `SENT {Other Item} TO {Other Player}` |
-| Global        | `L2 or R2` + `Up`            | Locations Checked (in the game)   | `SENT {Other Item} TO {Other Player}` |
+| Global        | `L2 or R2` + `Up`            | Locations Checked (in the game)   | `GOT {Your Item} FROM {Other Player}` |
+| Normal        | `L2 or R2` + `Left or Right` | Items Received                    | Both Sent and Got Messages            |
 |               |                              |                                   |                                       |
 | (In Any Mode) |                              | (If you sent an Item to Yourself) | `FOUND {Your Item}`                   |
 
