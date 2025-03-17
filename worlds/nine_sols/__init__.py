@@ -38,6 +38,7 @@ class NineSolsWorld(World):
             if hasattr(self.multiworld, "re_gen_passthrough"):
                 if "Nine Sols" in self.multiworld.re_gen_passthrough:
                     slot_data = self.multiworld.re_gen_passthrough["Nine Sols"]
+                    self.options.skip_soulscape_platforming = slot_data['skip_soulscape_platforming']
                     # TODO: alternate spawns, etc
             return
 
@@ -84,7 +85,10 @@ class NineSolsWorld(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has(goal_item, self.player)
 
     def fill_slot_data(self):
-        slot_data = dict()  # self.options.as_dict()  # no options to put here yet
+        slot_data = self.options.as_dict(
+            'skip_soulscape_platforming',  # implemented by client/mod code,
+                                           # and affects logic/trackers
+        )
         # Archipelago does not yet have apworld versions (data_version is deprecated),
         # so we have to roll our own with slot_data for the time being
         slot_data["apworld_version"] = "0.1.2"

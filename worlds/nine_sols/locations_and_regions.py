@@ -160,6 +160,15 @@ def create_regions(world: "NineSolsWorld") -> None:
         for connection in exit_connections:
             to = connection["to"]
             requires = connection["requires"]
+            # we'll replace this with a generic "requires": { "option": ... } syntax when we get to trick logic
+            if (region_name == "CC - Root Node" and to == "CC - Root Node After Boss"
+                    and options.skip_soulscape_platforming):
+                # TODO: different logic
+                requires = [
+                    {"item": "Event - Lady Ethereal Soulscape Unlocked"},
+                    {"item": "Tai-Chi Kick"},
+                    {"anyOf": [{"item": "Cloud Leap"}, {"item": "Air Dash"}]}
+                ]
             rule = None if len(requires) == 0 else lambda state, r=requires: eval_rule(state, p, r)
             entrance = region.connect(mw.get_region(to, p), None, rule)
             indirect_region_names = regions_referenced_by_rule(requires)
