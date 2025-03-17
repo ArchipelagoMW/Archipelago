@@ -315,8 +315,14 @@ def run_gui():
             return self.container
 
         def on_start(self):
-            if is_frozen() and settings.get_settings().general_options.auto_update:
-                check_for_update()
+            launcher_settings = Utils.persistent_load().get("launcher", {})
+            if not launcher_settings:
+                launcher_settings["auto_update"] = True
+                Utils.persistent_store("launcher", "auto_update", True)
+                launcher_settings["skip_version"] = "0"
+                Utils.persistent_store("launcher", "skip_version", "0")
+            if is_frozen() and launcher_settings["auto_update"]:
+                check_for_update(launcher_settings["skip_version"])
 
         @staticmethod
         def component_action(button):
@@ -387,7 +393,7 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
         run_gui()
 
 
-def check_for_update() -> None:
+def check_for_update(skip_version: str) -> None:
     """Checks if an update is available, and prompts the user if they'd like to update."""
     import platform
     # explicitly don't support windows 7
@@ -398,7 +404,7 @@ def check_for_update() -> None:
     logging.info(f"Update available: {update}. Latest remote version: {version.as_simple_string()}")
     if not update:
         return
-    if settings.get_settings().general_options.skip_update == version.as_simple_string():
+    if skip_version == version.as_simple_string():
         return
 
     from kvui import ButtonsPrompt
@@ -407,7 +413,7 @@ def check_for_update() -> None:
         if answer == "No":
             return
         elif answer == "Skip Version":
-            settings.get_settings().general_options.skip_update = version.as_simple_string()
+            Utils.persistent_store("launcher", "skip_update", version.as_simple_string())
             return
         # download and install the latest Archipelago release
         latest_release = remote_data["assets"]
