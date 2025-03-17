@@ -83,6 +83,26 @@ class TestDefaultWorld(NineSolsTestBase):
     def test_default_world(self):
         self.assertEqual(self.getLocationCount(), 323)  # 318 default locations + 5 events
 
+        # breathing tests for logic assertion helpers
+        self.assertReachableWith("Central Hall: Examine Launch Memoral", [])
+        self.assertNotReachableWith("Central Hall: Examine Council Tenets", [])
+        self.assertReachableWith("Central Hall: Examine Council Tenets", [
+            "Mystic Nymph: Scout Mode"
+        ])
+
+        # control for TestSkipSoulscapePlatforming
+        self.assertNotReachableWith("Cortex Center: Defeat Lady Ethereal", [])
+        self.assertNotReachableWith("Cortex Center: Defeat Lady Ethereal", [
+            "Mystic Nymph: Scout Mode", "Charged Strike",
+            "Seal of Kuafu", "Seal of Goumang", "Seal of Yanlao", "Seal of Jiequan",
+            "Event - Lady Ethereal Soulscape Unlocked", "Air Dash"
+        ])
+        self.assertReachableWith("Cortex Center: Defeat Lady Ethereal", [
+            "Mystic Nymph: Scout Mode", "Charged Strike",  # to reach CC
+            "Seal of Kuafu", "Seal of Goumang", "Seal of Yanlao", "Seal of Jiequan",  # to trigger Lady E
+            "Event - Lady Ethereal Soulscape Unlocked", "Air Dash", "Tai-Chi Kick"  # to reach and defeat Lady E
+        ])
+
 
 class TestShuffleSolSealsOff(NineSolsTestBase):
     options = {
@@ -94,3 +114,24 @@ class TestShuffleSolSealsOff(NineSolsTestBase):
             self.multiworld.get_location("Kuafu's Vital Sanctum", self.player).item.name,
             "Seal of Kuafu"
         )
+
+
+class TestSkipSoulscapePlatforming(NineSolsTestBase):
+    options = {
+        "skip_soulscape_platforming": True
+    }
+
+    def test_default_world(self):
+        # when the soulscape is skipped, TCK is no longer logically necessary to reach Lady E
+        self.assertNotReachableWith("Cortex Center: Defeat Lady Ethereal", [])
+        self.assertNotReachableWith("Cortex Center: Defeat Lady Ethereal", [
+            "Mystic Nymph: Scout Mode", "Charged Strike",
+            "Seal of Kuafu", "Seal of Goumang", "Seal of Yanlao", "Seal of Jiequan",
+            "Event - Lady Ethereal Soulscape Unlocked"
+        ])
+        self.assertReachableWith("Cortex Center: Defeat Lady Ethereal", [
+            "Mystic Nymph: Scout Mode", "Charged Strike",  # to reach CC
+            "Seal of Kuafu", "Seal of Goumang", "Seal of Yanlao", "Seal of Jiequan",  # to trigger Lady E
+            "Event - Lady Ethereal Soulscape Unlocked", "Air Dash"  # to reach and defeat Lady E
+        ])
+
