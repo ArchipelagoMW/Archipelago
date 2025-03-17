@@ -1547,9 +1547,9 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     rom.write_byte(0x18003B, 0x01 if world.map_shuffle[player] else 0x00)  # maps showing crystals on overworld
 
     # compasses showing dungeon count
-    if local_world.clock_mode or not world.dungeon_counters[player]:
+    if local_world.clock_mode or world.dungeon_counters[player] == 'off':
         rom.write_byte(0x18003C, 0x00)  # Currently must be off if timer is on, because they use same HUD location
-    elif world.dungeon_counters[player] is True:
+    elif world.dungeon_counters[player] == 'on':
         rom.write_byte(0x18003C, 0x02)  # always on
     elif world.compass_shuffle[player] or world.dungeon_counters[player] == 'pickup':
         rom.write_byte(0x18003C, 0x01)  # show on pickup
