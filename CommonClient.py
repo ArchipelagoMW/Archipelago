@@ -417,7 +417,7 @@ class CommonContext:
 
     async def send_msgs(self, msgs: typing.List[typing.Any]) -> None:
         """ `msgs` JSON serializable """
-        if not self.server or not self.server.socket.open or self.server.socket.closed:
+        if not self.server or self.server.socket.state != websockets.protocol.State.OPEN:
             return
         await self.server.socket.send(encode(msgs))
 
@@ -1128,7 +1128,7 @@ def run_as_textclient(*args):
     args = handle_url_arg(args, parser=parser)
 
     # use colorama to display colored text highlighting on windows
-    colorama.init()
+    colorama.just_fix_windows_console()
 
     asyncio.run(main(args))
     colorama.deinit()

@@ -272,7 +272,7 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
 
                     await ctx.server
                 port = 0
-                for wssocket in ctx.server.ws_server.sockets:
+                for wssocket in ctx.server.server.sockets:
                     socketname = wssocket.getsockname()
                     if wssocket.family == socket.AF_INET6:
                         # Prefer IPv4, as most users seem to not have working ipv6 support
