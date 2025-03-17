@@ -95,8 +95,8 @@ settings. If a game can be rolled it **must** have an options section even if it
 Some options in Archipelago can be used by every game but must still be placed within the relevant game's section.
 
 Currently, these options are `accessibility`, `progression_balancing`, `triggers`, `local_items`, `non_local_items`,
-`start_inventory`, `start_hints`, `start_location_hints`, `exclude_locations`, `priority_locations`, `item_links`, and
-various plando options.
+`start_inventory`, `start_hints`, `start_location_hints`, `exclude_locations`, `priority_locations`, `local_locations`,
+`non_local_locations`, `item_links`, and various plando options.
 
 See the plando guide for more info on plando options. Plando
 guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
@@ -135,6 +135,9 @@ guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
   "progression" or "useful" from being placed on them.
 * `priority_locations` lets you define any locations that you want to do and forces a progression item into these
   locations.
+* `local_locations` forces locations to only contain items from your world.
+* `non_local_locations` is the inverse of `local_locations`, forces locations to only contain items from another world
+  instead of your own.
 * `item_links` allows players to link their items into a group with the same item link name and game. The items declared
   in `item_pool` get combined and when an item is found for the group, all players in the group receive it. Item links
   can also have local and non-local items, forcing the items to either be placed within the worlds of the group or in
