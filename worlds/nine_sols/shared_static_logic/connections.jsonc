@@ -117,11 +117,10 @@
     { "from": "CC - Right Exit", "to": "CC - Root Node", "requires": [ { "item": "Charged Strike" } ] },
     { "from": "CC - Root Node", "to": "CC - Root Node After Boss", "requires": [
         { "item": "Event - Lady Ethereal Soulscape Unlocked" },
-        // pre-boss soulscape requires WC AND TCK AND (DJ OR AD)
+        // pre-boss soulscape requires WC AND TCK AND (CL OR AD), the boss herself requires just AD
+        // to evade the phase 3 orb, so that simplifies down to just WC AND TCK AND AD
         { "item": "Tai-Chi Kick" },
-        { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] }
-        // combat logic: technically nothing but to stay fun probably (TCK AND AD)
-        // CL's a good enough substitute for AD; let's leave it at the soulscape platforming requirements
+        { "item": "Air Dash" }
     ] },
     { "from": "CC - Root Node", "to": "CC - Caves Upper Right", "requires": [
         { "item": "Mystic Nymph: Scout Mode" },
