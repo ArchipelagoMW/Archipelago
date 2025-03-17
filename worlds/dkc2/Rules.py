@@ -1060,9 +1060,9 @@ class DKC2StrictRules(DKC2Rules):
                 lambda state: self.can_climb(state) and self.has_kannons(state),
 
             LocationName.rattle_battle_banana_coin_1:
-                self.has_kannons,
+                self.true,
             LocationName.rattle_battle_banana_bunch_1:
-                self.has_kannons,
+                self.true,
             LocationName.rattle_battle_banana_bunch_2:
                 self.has_rattly,
             LocationName.rattle_battle_banana_coin_2:
@@ -2504,9 +2504,9 @@ class DKC2LooseRules(DKC2Rules):
                 self.can_climb,
 
             LocationName.rattle_battle_banana_coin_1:
-                self.has_kannons,
+                self.true,
             LocationName.rattle_battle_banana_bunch_1:
-                self.has_kannons,
+                self.true,
             LocationName.rattle_battle_banana_bunch_2:
                 self.has_rattly,
             LocationName.rattle_battle_banana_coin_2:
@@ -4062,9 +4062,9 @@ class DKC2ExpertRules(DKC2Rules):
                 self.can_climb,
 
             LocationName.rattle_battle_banana_coin_1:
-                lambda state: self.can_team_attack(state) or self.has_kannons(state),
+                self.true,
             LocationName.rattle_battle_banana_bunch_1:
-                lambda state: self.can_team_attack(state) or self.has_kannons(state),
+                self.true,
             LocationName.rattle_battle_banana_bunch_2:
                 self.has_rattly,
             LocationName.rattle_battle_banana_coin_2:
