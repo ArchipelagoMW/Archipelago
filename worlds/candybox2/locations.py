@@ -107,6 +107,24 @@ naked_monkey_wizard_locations = {
     "Monkey Wizard Quest": 2000,
 }
 
+castle_egg_room_locations = {
+    "Egg Room Chest": 2100
+}
+
+dragon_locations = {}
+
+hell_locations = {
+    "Kill the Devil": 2300
+}
+
+the_developer_fight_locations = {
+    "Kill the Developer": 2400
+}
+
+lighthouse_locations = {
+    "Solve Cyclops Puzzle": 2500
+}
+
 locations = {
     **candy_box_locations,
     **village_locations,
@@ -129,5 +147,10 @@ locations = {
     **village_house_2_locations,
     **sorceress_hut_locations,
     **octopus_king_locations,
-    **naked_monkey_wizard_locations
+    **naked_monkey_wizard_locations,
+    **castle_egg_room_locations,
+    **dragon_locations,
+    **hell_locations,
+    **the_developer_fight_locations,
+    **lighthouse_locations
 }

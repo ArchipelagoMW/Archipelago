@@ -1,12 +1,14 @@
 from enum import IntEnum
+from typing import Callable, Optional
 
-from BaseClasses import Region, MultiWorld, Entrance
+from BaseClasses import Region, MultiWorld, Entrance, CollectionState
 from entrance_rando import disconnect_entrance_for_randomization, randomize_entrances
 from .locations import candy_box_locations, CandyBox2Location, village_shop_locations, village_house_1_locations, \
     village_locations, village_cellar_locations, map_stage_1_locations, map_stage_2_locations, map_stage_7_locations, \
     map_stage_6_locations, map_stage_5_locations, map_stage_4_locations, map_stage_3_locations, desert_locations, \
     bridge_locations, cave_locations, forest_locations, castle_entrance_locations, giant_nougat_monster_locations, \
-    village_house_2_locations, sorceress_hut_locations, octopus_king_locations, naked_monkey_wizard_locations
+    village_house_2_locations, sorceress_hut_locations, octopus_king_locations, naked_monkey_wizard_locations, \
+    castle_egg_room_locations, dragon_locations, lighthouse_locations, hell_locations, the_developer_fight_locations
 from .options import CandyBox2Options
 
 
@@ -19,13 +21,13 @@ class Groups(IntEnum):
 def create_regions(world: MultiWorld, options: CandyBox2Options, player: int):
     candy_box, _ = populate_region(world, player, CandyBox2Region("Menu", player, world, "The Candy Box"), candy_box_locations, None)
     village, _ = populate_region(world, player, CandyBox2Region("Village", player, world, "The Village"), village_locations, candy_box)
-    world_map_1, _ = populate_region(world, player, CandyBox2Region("World Map (1)", player, world, "The World Map"), map_stage_1_locations, village) # TODO: Guard this transition with Progressive World Map >= 1
-    world_map_2, _ = populate_region(world, player, CandyBox2Region("World Map (2)", player, world, "The World Map"), map_stage_2_locations, world_map_1) # TODO: Guard this transition with Progressive World Map >= 2
-    world_map_3, _ = populate_region(world, player, CandyBox2Region("World Map (3)", player, world, "The World Map"), map_stage_3_locations, world_map_2) # TODO: Guard this transition with Progressive World Map >= 3
-    world_map_4, _ = populate_region(world, player, CandyBox2Region("World Map (4)", player, world, "The World Map"), map_stage_4_locations, world_map_3) # TODO: Guard this transition with Progressive World Map >= 4
-    world_map_5, _ = populate_region(world, player, CandyBox2Region("World Map (5)", player, world, "The World Map"), map_stage_5_locations, world_map_4) # TODO: Guard this transition with Progressive World Map >= 5
-    castle, _ = populate_region(world, player, CandyBox2Region("The Castle", player, world, "The Castle"), map_stage_6_locations, world_map_5) # TODO: Guard this transition with Progressive World Map >= 6
-    tower_entrance, _ = populate_region(world, player, CandyBox2Region("The Tower's Entrance", player, world, "The Tower's Entrance"), map_stage_7_locations, castle) # TODO: Guard this transition with Progressive World Map >= 7
+    world_map_1, _ = populate_region(world, player, CandyBox2Region("World Map (1)", player, world, "The World Map"), map_stage_1_locations, village, lambda state: state.has("Progressive World Map", player, 1))
+    world_map_2, _ = populate_region(world, player, CandyBox2Region("World Map (2)", player, world, "The World Map"), map_stage_2_locations, world_map_1, lambda state: state.has("Progressive World Map", player, 2))
+    world_map_3, _ = populate_region(world, player, CandyBox2Region("World Map (3)", player, world, "The World Map"), map_stage_3_locations, world_map_2, lambda state: state.has("Progressive World Map", player, 3))
+    world_map_4, _ = populate_region(world, player, CandyBox2Region("World Map (4)", player, world, "The World Map"), map_stage_4_locations, world_map_3, lambda state: state.has("Progressive World Map", player, 4))
+    world_map_5, _ = populate_region(world, player, CandyBox2Region("World Map (5)", player, world, "The World Map"), map_stage_5_locations, world_map_4, lambda state: state.has("Progressive World Map", player, 5))
+    castle, _ = populate_region(world, player, CandyBox2Region("The Castle", player, world, "The Castle"), map_stage_6_locations, world_map_5, lambda state: state.has("Progressive World Map", player, 6))
+    tower_entrance, _ = populate_region(world, player, CandyBox2Region("The Tower's Entrance", player, world, "The Tower's Entrance"), map_stage_7_locations, castle, lambda state: state.has("Progressive World Map", player, 7))
 
     populate_region(world, player, CandyBox2Region("Village Shop", player, world, "The shop in the village"), village_shop_locations, village)
     populate_region(world, player, CandyBox2Region("Village House 1", player, world, "The house next to the forge in the village"), village_house_1_locations, village)
@@ -57,12 +59,26 @@ def create_regions(world: MultiWorld, options: CandyBox2Options, player: int):
     _, giant_nougat_monster_quest_entrance = populate_region(world, player, CandyBox2Region("The Giant Nougat Monster", player, world, "The Giant Nougat Monster"), giant_nougat_monster_locations, castle)
     mark_quest_entrance(giant_nougat_monster_quest_entrance, "Giant Nougat Monster Click")
 
-def populate_region(world: MultiWorld, player: int, region: CandyBox2Region, locations: dict[str, int], parent: Region | None):
+    _, castle_egg_room_quest_entrance = populate_region(world, player, CandyBox2Region("The Castle Egg Room", player, world, "The Castle Egg Room"), castle_egg_room_locations, castle)
+    mark_quest_entrance(castle_egg_room_quest_entrance, "Castle Egg Room Click")
+
+    dragon_room, _ = populate_region(world, player, CandyBox2Region("Dragon Room", player, world, "The Dragon Room"), dragon_locations, castle)
+
+    # The lighthouse is parented to the dragon room because its puzzles are dependent on reaching the dragon first
+    populate_region(world, player, CandyBox2Region("The Lighthouse", player, world, "The Lighthouse"), lighthouse_locations, dragon_room)
+
+    _, hell_quest_entrance = populate_region(world, player, CandyBox2Region("Hell", player, world, "Hell"), hell_locations, dragon_room)
+    mark_quest_entrance(hell_quest_entrance, "Hell Room Click")
+
+    _, the_developer_quest_entrance = populate_region(world, player, CandyBox2Region("The Developer Quest", player, world, "The Developer Quest"), the_developer_fight_locations, dragon_room);
+    mark_quest_entrance(the_developer_quest_entrance, "The Developer Quest Click")
+
+def populate_region(world: MultiWorld, player: int, region: CandyBox2Region, locations: dict[str, int], parent: Region | None, rule: Optional[Callable[[CollectionState], bool]] = None):
     region.locations += [CandyBox2Location(player, location_name, locations[location_name], region) for location_name in locations]
     world.regions.append(region)
     entrance = None
     if parent is not None:
-        entrance = parent.connect(region)
+        entrance = parent.connect(region, None, rule)
 
     return region, entrance
 

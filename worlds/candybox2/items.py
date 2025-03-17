@@ -40,5 +40,9 @@ items: dict[str, CandyBox2ItemData] = {
     "The Monkey Wizard Staff": CandyBox2ItemData(candy_box_2_base_id + 16, 1, ItemClassification.useful),
     "The Heart Plug": CandyBox2ItemData(candy_box_2_base_id + 17, 1, ItemClassification.useful),
     "The Pogo Stick": CandyBox2ItemData(candy_box_2_base_id + 18, 1, ItemClassification.useful),
+    "The P Stone": CandyBox2ItemData(candy_box_2_base_id + 19, 1, ItemClassification.progression),
+    "The L Stone": CandyBox2ItemData(candy_box_2_base_id + 20, 1, ItemClassification.progression),
+    "The A Stone": CandyBox2ItemData(candy_box_2_base_id + 21, 1, ItemClassification.progression),
+    "The Y Stone": CandyBox2ItemData(candy_box_2_base_id + 22, 1, ItemClassification.progression),
 }
 

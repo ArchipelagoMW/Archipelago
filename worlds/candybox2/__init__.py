@@ -1,6 +1,7 @@
 import typing
 import uuid
 
+from BaseClasses import CollectionState
 from entrance_rando import ERPlacementState
 from worlds.AutoWorld import World, WebWorld
 from .locations import location_descriptions, locations
@@ -47,6 +48,15 @@ class CandyBox2World(World):
             "entranceInformation": self.entrance_randomisation.pairings,
         }
 
+    def set_rules(self) -> None:
+        self.multiworld.completion_condition[self.player] = lambda state: self.completion_rule(state)
+
+    def completion_rule(self, state: CollectionState):
+        return state.has("Progressive World Map", self.player, 7) and \
+            state.has("The P Stone", self.player) and \
+            state.has("The L Stone", self.player) and \
+            state.has("The A Stone", self.player) and \
+            state.has("The Y Stone", self.player)
 
 class CandyBox2WebWorld(WebWorld):
     location_descriptions = location_descriptions
