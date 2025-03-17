@@ -7,7 +7,7 @@ import dolphin_memory_engine
 
 import Utils
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
-from NetUtils import ClientStatus, NetworkItem
+from NetUtils import ClientStatus
 
 from .Items import ITEM_TABLE, LOOKUP_ID_TO_NAME
 from .Locations import ISLAND_NAME_TO_SALVAGE_BIT, LOCATION_TABLE, TWWLocation, TWWLocationData, TWWLocationType
@@ -132,11 +132,9 @@ class TWWContext(CommonContext):
         """
 
         super().__init__(server_address, password)
-        self.items_received_2: list[tuple[NetworkItem, int]] = []
         self.dolphin_sync_task: Optional[asyncio.Task[None]] = None
         self.dolphin_status: str = CONNECTION_INITIAL_STATUS
         self.awaiting_rom: bool = False
-        self.last_rcvd_index: int = -1
         self.has_send_death: bool = False
 
         # Bitfields used for checking locations.
@@ -205,21 +203,12 @@ class TWWContext(CommonContext):
         :param args: The command arguments.
         """
         if cmd == "Connected":
-            self.items_received_2 = []
-            self.last_rcvd_index = -1
             self.update_salvage_locations_map()
             if "death_link" in args["slot_data"]:
                 Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
             # Request the connected slot's dictionary (used as a set) of visited stages.
             visited_stages_key = AP_VISITED_STAGE_NAMES_KEY_FORMAT % self.slot
             Utils.async_start(self.send_msgs([{"cmd": "Get", "keys": [visited_stages_key]}]))
-        elif cmd == "ReceivedItems":
-            if args["index"] >= self.last_rcvd_index:
-                self.last_rcvd_index = args["index"]
-                for item in args["items"]:
-                    self.items_received_2.append((item, self.last_rcvd_index))
-                    self.last_rcvd_index += 1
-            self.items_received_2.sort(key=lambda v: v[1])
         elif cmd == "Retrieved":
             requested_keys_dict = args["keys"]
             # Read the connected slot's dictionary (used as a set) of visited stages.
@@ -378,19 +367,25 @@ async def give_items(ctx: TWWContext) -> None:
     :param ctx: The Wind Waker client context.
     """
     if check_ingame() and dolphin_memory_engine.read_byte(CURR_STAGE_ID_ADDR) != 0xFF:
-        # Read the expected index of the player, which is the index of the latest item they've received.
+        # Read the expected index of the player, which is the index of the next item they're expecting to receive.
+        # The expected index starts at 0 for a fresh save file.
         expected_idx = read_short(EXPECTED_INDEX_ADDR)
 
-        # Loop through items to give.
-        for item, idx in ctx.items_received_2:
-            # If the item's index is greater than the player's expected index, give the player the item.
-            if expected_idx <= idx:
-                # Attempt to give the item and increment the expected index.
-                while not _give_item(ctx, LOOKUP_ID_TO_NAME[item.item]):
-                    await asyncio.sleep(0.01)
+        # Check if there are new items.
+        received_items = ctx.items_received
+        if len(received_items) <= expected_idx:
+            # There are no new items.
+            return
 
-                # Increment the expected index.
-                write_short(EXPECTED_INDEX_ADDR, idx + 1)
+        # Loop through items to give.
+        # Give the player all items at an index greater than or equal to the expected index.
+        for idx, item in enumerate(received_items[expected_idx:], start=expected_idx):
+            # Attempt to give the item and increment the expected index.
+            while not _give_item(ctx, LOOKUP_ID_TO_NAME[item.item]):
+                await asyncio.sleep(0.01)
+
+            # Increment the expected index.
+            write_short(EXPECTED_INDEX_ADDR, idx + 1)
 
 
 def check_special_location(location_name: str, data: TWWLocationData) -> bool:
