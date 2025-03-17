@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, Any, Optional
 
 from BaseClasses import CollectionState, Item, Location, MultiWorld
 from Fill import fill_restrictive
+from worlds.generic.Rules import add_item_rule
 
 from ..Items import item_factory
 
@@ -191,11 +192,20 @@ def modify_dungeon_location_rules(locations: list[Location], dungeon_specific: s
     """
     for location in locations:
         if dungeon_specific:
-            dungeon = location.dungeon
-            orig_rule = location.item_rule
-            location.item_rule = lambda item, dungeon=dungeon, orig_rule=orig_rule: (
-                not (item.player, item.name) in dungeon_specific or item.dungeon is dungeon
-            ) and orig_rule(item)
+            # Special case: If Dragon Roost Cavern has its own small keys, then ensure the first chest isn't the Big
+            # Key. This is to avoid placing the Big Key there during fill and resulting in a costly swap.
+            if location.name == "Dragon Roost Cavern - First Room":
+                add_item_rule(
+                    location,
+                    lambda item: item.name != "DRC Big Key" and (item.player, "DRC Small Key") in dungeon_specific,
+                )
+
+            # Add item rule to ensure dungeon items are in their own dungeon when they should be.
+            add_item_rule(
+                location,
+                lambda item, dungeon=location.dungeon: not (item.player, item.name) in dungeon_specific
+                or item.dungeon is dungeon,
+            )
 
 
 def fill_dungeons_restrictive(multiworld: MultiWorld) -> None:
