@@ -240,7 +240,7 @@ class GauntletLegendsWorld(World):
         return change
 
     def remove(self, state: "CollectionState", item: "Item") -> bool:
-        change = super().collect(state, item)
+        change = super().remove(state, item)
         if change and "Runestone" in item.name:
             state.prog_items[item.player]["stones"] -= 1
         return change
