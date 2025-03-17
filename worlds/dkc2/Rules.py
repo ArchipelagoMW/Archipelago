@@ -2838,11 +2838,9 @@ class DKC2LooseRules(DKC2Rules):
                 lambda state: self.has_rambi(state) and self.can_carry(state) and 
                     self.has_both_kongs(state),
             LocationName.castle_crush_banana_bunch_4:
-                lambda state: self.can_carry(state) and 
-                    self.has_both_kongs(state),
+                self.true,
             LocationName.castle_crush_banana_bunch_5:
-                lambda state: self.can_carry(state) and 
-                    self.has_both_kongs(state) and self.can_cartwheel(state),
+                lambda state: self.can_cartwheel(state) and self.has_squawks(state),
             LocationName.castle_crush_banana_coin_3:
                 lambda state: self.can_carry(state) and 
                     self.has_both_kongs(state) and self.can_cartwheel(state),
