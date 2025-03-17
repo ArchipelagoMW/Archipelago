@@ -2018,7 +2018,7 @@ class DKC2LooseRules(DKC2Rules):
             LocationName.web_woods_kong:
                 lambda state: self.has_squitter(state) and self.can_team_attack(state),
             LocationName.web_woods_dk_coin:
-                lambda state: self.has_squitter(state) and self.can_team_attack(state),
+                lambda state: self.has_squitter(state) and (self.can_team_attack(state) or self.has_kannons(state)),
             LocationName.web_woods_bonus_1:
                 self.has_squitter,
             LocationName.web_woods_bonus_2:
