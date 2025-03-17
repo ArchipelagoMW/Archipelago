@@ -666,14 +666,17 @@ class DKC2StrictRules(DKC2Rules):
                 self.true,
 
             LocationName.screechs_sprint_clear:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_kong:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_dk_coin:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_bonus_1:
                 lambda state: self.can_climb(state) and self.can_team_attack(state) and self.can_carry(state) and 
                     self.can_cartwheel(state) and self.can_hover(state),
@@ -734,7 +737,7 @@ class DKC2StrictRules(DKC2Rules):
                 lambda state: self.can_carry(state) and self.can_hover(state) and self.has_diddy(state),
                 
             LocationName.pirate_panic_banana_coin_1:
-                lambda state: self.can_team_attack(state) and self.has_kannons(state),
+                self.can_team_attack,
             LocationName.pirate_panic_banana_bunch_1:
                 self.true,
             LocationName.pirate_panic_red_balloon:
@@ -1067,9 +1070,9 @@ class DKC2StrictRules(DKC2Rules):
                 lambda state: self.can_climb(state) and self.has_kannons(state),
 
             LocationName.rattle_battle_banana_coin_1:
-                self.has_kannons,
+                self.true,
             LocationName.rattle_battle_banana_bunch_1:
-                self.has_kannons,
+                self.true,
             LocationName.rattle_battle_banana_bunch_2:
                 self.has_rattly,
             LocationName.rattle_battle_banana_coin_2:
@@ -1490,41 +1493,53 @@ class DKC2StrictRules(DKC2Rules):
             LocationName.screechs_sprint_banana_coin_2:
                 lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state),
             LocationName.screechs_sprint_banana_coin_3:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_red_balloon:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_banana_bunch_2:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state) and self.has_kannons(state),
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_banana_bunch_3:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_banana_coin_4:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_banana_coin_5:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_banana_coin_6:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_banana_coin_7:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_banana_coin_8:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_banana_bunch_4:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_banana_bunch_5:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_banana_bunch_6:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
 
             LocationName.jungle_jinx_banana_bunch_1:
                 self.true,
@@ -2014,7 +2029,7 @@ class DKC2LooseRules(DKC2Rules):
             LocationName.parrot_chute_panic_kong:
                 self.has_squawks,
             LocationName.parrot_chute_panic_dk_coin:
-                self.can_hover,
+                lambda state: self.can_cartwheel(state) or self.can_hover(state),
             LocationName.parrot_chute_panic_bonus_1:
                 self.has_squawks,
             LocationName.parrot_chute_panic_bonus_2:
@@ -2025,7 +2040,7 @@ class DKC2LooseRules(DKC2Rules):
             LocationName.web_woods_kong:
                 lambda state: self.has_squitter(state) and self.can_team_attack(state),
             LocationName.web_woods_dk_coin:
-                lambda state: self.has_squitter(state) and self.has_kannons(state),
+                lambda state: self.has_squitter(state) and (self.can_team_attack(state) or self.has_kannons(state)),
             LocationName.web_woods_bonus_1:
                 self.has_squitter,
             LocationName.web_woods_bonus_2:
@@ -2127,11 +2142,17 @@ class DKC2LooseRules(DKC2Rules):
                 self.true,
 
             LocationName.screechs_sprint_clear:
-                lambda state: self.can_climb(state) and self.can_cartwheel(state) and self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_kong:
-                lambda state: self.can_climb(state) and self.can_cartwheel(state) and self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_dk_coin:
-                lambda state: self.can_climb(state) and self.can_cartwheel(state) and self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_bonus_1:
                 lambda state: self.can_climb(state) and self.can_team_attack(state) and self.can_carry(state) and 
                     self.can_cartwheel(state) and self.can_hover(state),
@@ -2189,7 +2210,7 @@ class DKC2LooseRules(DKC2Rules):
                 self.can_carry,
                 
             LocationName.pirate_panic_banana_coin_1:
-                lambda state: self.can_team_attack(state) and self.has_kannons(state),
+                self.can_team_attack,
             LocationName.pirate_panic_banana_bunch_1:
                 self.true,
             LocationName.pirate_panic_red_balloon:
@@ -2277,11 +2298,10 @@ class DKC2LooseRules(DKC2Rules):
                     self.has_rattly(state) or self.can_team_attack(state) or self.can_cling(state)
                 ),
             LocationName.topsail_trouble_banana_bunch_1:
-                lambda state: self.can_carry(state) and (
-                    self.can_team_attack(state) or
+                lambda state: self.can_team_attack(state) or
                     self.has_rattly(state) or 
                     (self.can_cling(state) and self.has_kannons(state))
-                ),
+                ,
             LocationName.topsail_trouble_banana_bunch_2:
                 lambda state: self.has_rattly(state) or self.can_team_attack(state),
             LocationName.topsail_trouble_banana_coin_1:
@@ -2511,9 +2531,9 @@ class DKC2LooseRules(DKC2Rules):
                 self.can_climb,
 
             LocationName.rattle_battle_banana_coin_1:
-                self.has_kannons,
+                self.true,
             LocationName.rattle_battle_banana_bunch_1:
-                self.has_kannons,
+                self.true,
             LocationName.rattle_battle_banana_bunch_2:
                 self.has_rattly,
             LocationName.rattle_battle_banana_coin_2:
@@ -2825,11 +2845,9 @@ class DKC2LooseRules(DKC2Rules):
                 lambda state: self.has_rambi(state) and self.can_carry(state) and 
                     self.has_both_kongs(state),
             LocationName.castle_crush_banana_bunch_4:
-                lambda state: self.can_carry(state) and 
-                    self.has_both_kongs(state),
+                self.true,
             LocationName.castle_crush_banana_bunch_5:
-                lambda state: self.can_carry(state) and 
-                    self.has_both_kongs(state) and self.can_cartwheel(state),
+                lambda state: self.can_cartwheel(state) and self.has_squawks(state),
             LocationName.castle_crush_banana_coin_3:
                 lambda state: self.can_carry(state) and 
                     self.has_both_kongs(state) and self.can_cartwheel(state),
@@ -2930,41 +2948,53 @@ class DKC2LooseRules(DKC2Rules):
             LocationName.screechs_sprint_banana_coin_2:
                 lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state),
             LocationName.screechs_sprint_banana_coin_3:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_red_balloon:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_banana_bunch_2:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state) and self.has_kannons(state),
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_banana_bunch_3:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_banana_coin_4:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_banana_coin_5:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_banana_coin_6:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_banana_coin_7:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_banana_coin_8:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_banana_bunch_4:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_banana_bunch_5:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
             LocationName.screechs_sprint_banana_bunch_6:
-                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
-                    self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
+                ),
 
             LocationName.jungle_jinx_banana_bunch_1:
                 self.true,
@@ -3737,7 +3767,7 @@ class DKC2ExpertRules(DKC2Rules):
                 self.can_carry,
                 
             LocationName.pirate_panic_banana_coin_1:
-                lambda state: self.can_team_attack(state) and self.has_kannons(state),
+                self.can_team_attack,
             LocationName.pirate_panic_banana_bunch_1:
                 self.true,
             LocationName.pirate_panic_red_balloon:
@@ -4069,9 +4099,9 @@ class DKC2ExpertRules(DKC2Rules):
                 self.can_climb,
 
             LocationName.rattle_battle_banana_coin_1:
-                lambda state: self.can_team_attack(state) or self.has_kannons(state),
+                self.true,
             LocationName.rattle_battle_banana_bunch_1:
-                lambda state: self.can_team_attack(state) or self.has_kannons(state),
+                self.true,
             LocationName.rattle_battle_banana_bunch_2:
                 self.has_rattly,
             LocationName.rattle_battle_banana_coin_2:
@@ -4710,7 +4740,7 @@ class DKC2ExpertRules(DKC2Rules):
             LocationName.fiery_furnace_banana_coin_2:
                 self.has_controllable_barrels,
             LocationName.fiery_furnace_banana_bunch_5:
-                lambda state: self.can_cartwheel(state) or self.can_hover(state) or self.has_controllable_barrels(state),
+                lambda state: self.has_controllable_barrels(state) and (self.can_cartwheel(state) or self.can_hover(state)),
 
             LocationName.animal_antics_banana_bunch_1:
                 lambda state: self.can_swim(state) and self.has_enguarde(state) and (
