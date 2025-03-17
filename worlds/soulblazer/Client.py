@@ -1,20 +1,12 @@
 import logging
 import asyncio
 import types
-from typing import Dict, List, Optional, NamedTuple, TYPE_CHECKING, Set
+from typing import NamedTuple, TYPE_CHECKING
 
-from .Names import Addresses, ItemID, MapID
-from .Names.ArchipelagoID import BASE_ID, LAIR_ID_OFFSET, NPC_REWARD_OFFSET
-from .Locations import (
-    SoulBlazerLocationData,
-    address_for_location,
-    locations_by_name,
-    LocationType,
-    chests_by_name,
-    npc_rewards_by_name,
-    lairs_by_name,
-)
-from .Items import SoulBlazerItemData, all_items_by_name
+from .Names import Addresses, MapID
+from .Data.ItemData import items_data
+from .Data.LocationData import locations_data
+from .Data.Enums import LocationType, ItemID
 from .Util import encode_string, is_bit_set, Rectangle
 from .Lair import LairData, unpack_lair_data
 from .Entity import EntityData, unpack_entity_data
@@ -52,14 +44,14 @@ class SoulBlazerSNIClient(SNIClient):
     game = "Soul Blazer"
     patch_suffix = ".apsb"
 
-    location_data_for_address = {data.address: data for data in locations_by_name.values()}
-    item_data_for_code = {data.code: data for data in all_items_by_name.values()}
+    location_data_for_address = {data.address: data for data in locations_data.all_locations}
+    item_data_for_code = {data.code: data for data in items_data.all_items}
 
     def __init__(self) -> None:
         super().__init__()
-        self.lair_data: List[LairData] = []
-        self.entity_list: List[EntityData] = []
-        self.lairs_for_map: Dict[int, Set[int]] = {}
+        self.lair_data: list[LairData] = []
+        self.entity_list: list[EntityData] = []
+        self.lairs_for_map: dict[int, set[int]] = {}
         self.lairs_rom_name: bytes = bytes(0)
 
     async def was_obtained_locally(self, ctx, item: NetworkItem) -> bool:
@@ -243,9 +235,9 @@ class SoulBlazerSNIClient(SNIClient):
         # Any new checks?
 
         # Chests
-        new_checks: List[int] = [
+        new_checks: list[int] = [
             loc.address
-            for loc in chests_by_name.values()
+            for loc in locations_data.chests
             if is_bit_set(ram_misc, Addresses.CHEST_FLAG_INDEXES[loc.id], Addresses.CHEST_OPENED_TABLE - ram_misc_start)
             and loc.address not in ctx.locations_checked
         ]
@@ -253,7 +245,7 @@ class SoulBlazerSNIClient(SNIClient):
         # NPC Rewards
         new_checks += [
             loc.address
-            for loc in npc_rewards_by_name.values()
+            for loc in locations_data.npc_rewards
             if is_bit_set(ram_misc, loc.id, Addresses.NPC_REWARD_TABLE - ram_misc_start)
             and loc.address not in ctx.locations_checked
         ]
@@ -261,7 +253,7 @@ class SoulBlazerSNIClient(SNIClient):
         # Lairs
         new_checks += [
             loc.address
-            for loc in lairs_by_name.values()
+            for loc in locations_data.lairs
             # Last bit set means the location has been checked.
             if ram_lair_spawn[loc.id] & 0x80 and loc.address not in ctx.locations_checked
         ]

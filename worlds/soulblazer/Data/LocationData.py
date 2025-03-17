@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from dataclass_wizard import YAMLWizard
-from .Enums import LocationType, RuleFlag, IDOffset
+from .Enums import LocationType, RuleFlag, IDOffset, LairID, ChestID, NPCRewardID
 
 
 @dataclass(frozen=True)
@@ -35,3 +35,15 @@ class SoulBlazerLocationsData(YAMLWizard):
     @property
     def all_locations(self) -> list[SoulBlazerLocationData]:
         return [*self.chests, *self.lairs, *self.npc_rewards]
+
+
+# TODO: Load YAML here or in Locations.py?
+locations_data: SoulBlazerLocationsData = SoulBlazerLocationsData.from_yaml_file(
+    "worlds/soulblazer/Data/SoulBlazerLocations.yaml"
+)
+
+ChestID.display_names = {data.id: data.name for data in locations_data.chests}
+
+LairID.display_names = {data.id: data.name for data in locations_data.lairs}
+
+NPCRewardID.display_names = {data.id: data.name for data in locations_data.npc_rewards}

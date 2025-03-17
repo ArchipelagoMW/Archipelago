@@ -1,9 +1,9 @@
 from dataclasses import dataclass, replace
 from dataclass_wizard import YAMLWizard
 from BaseClasses import ItemClassification
-from enum import Enum
-from .Enums import ItemID, IDOffset
+from .Enums import ItemID, IDOffset, NPCID, SoulID
 from ..Util import int_to_bcd
+
 
 @dataclass(frozen=True)
 class SoulBlazerItemData:
@@ -43,7 +43,8 @@ class SoulBlazerItemData:
         if self.id == ItemID.GEMS or self.id == ItemID.EXP:
             return self.operand_bcd
         return self.operand
-    
+
+
 @dataclass(frozen=True)
 class SoulBlazerItemsData(YAMLWizard):
     swords: list[SoulBlazerItemData]
@@ -57,9 +58,37 @@ class SoulBlazerItemsData(YAMLWizard):
 
     @property
     def all_items(self) -> list[SoulBlazerItemData]:
-        return [*self.swords, *self.armors, *self.magics, *self.inventory_items, *self.misc_items, *self.npc_releases, *self.souls, *self.special_items]
+        return [
+            *self.swords,
+            *self.armors,
+            *self.magics,
+            *self.inventory_items,
+            *self.misc_items,
+            *self.npc_releases,
+            *self.souls,
+            *self.special_items,
+        ]
 
-##TODO: Where to load the yaml?
-#items_data: SoulBlazerItemsData = SoulBlazerItemsData.from_yaml_file("worlds/soulblazer/Data/SoulBlazerItems.yaml")
-#"""A collection of SoulBlazer Item data loaded from SoulBlazerItems.yaml."""
 
+# TODO: Load YAML here or in Items.py?
+items_data: SoulBlazerItemsData = SoulBlazerItemsData.from_yaml_file("worlds/soulblazer/Data/SoulBlazerItems.yaml")
+"""A collection of SoulBlazer Item data loaded from SoulBlazerItems.yaml."""
+
+ItemID.display_names = {
+    data.id: data.name
+    for data in [
+        *items_data.swords,
+        *items_data.armors,
+        *items_data.magics,
+        *items_data.inventory_items,
+        *items_data.misc_items,
+        *items_data.special_items,
+    ]
+}
+ItemID.display_names.update(
+    {ItemID.LAIR_RELEASE: "Lair Release", ItemID.SOUL: "Soul", ItemID.REMOTE_ITEM: "Remote Item"}
+)
+
+NPCID.display_names = {data.operand: data.name for data in items_data.npc_releases}
+
+SoulID.display_names = {data.operand: data.name for data in items_data.souls}
