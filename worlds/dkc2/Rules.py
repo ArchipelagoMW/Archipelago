@@ -727,7 +727,7 @@ class DKC2StrictRules(DKC2Rules):
                 lambda state: self.can_carry(state) and self.can_hover(state) and self.has_diddy(state),
                 
             LocationName.pirate_panic_banana_coin_1:
-                lambda state: self.can_team_attack(state) and self.has_kannons(state),
+                self.can_team_attack,
             LocationName.pirate_panic_banana_bunch_1:
                 self.true,
             LocationName.pirate_panic_red_balloon:
@@ -2182,7 +2182,7 @@ class DKC2LooseRules(DKC2Rules):
                 self.can_carry,
                 
             LocationName.pirate_panic_banana_coin_1:
-                lambda state: self.can_team_attack(state) and self.has_kannons(state),
+                self.can_team_attack,
             LocationName.pirate_panic_banana_bunch_1:
                 self.true,
             LocationName.pirate_panic_red_balloon:
@@ -3730,7 +3730,7 @@ class DKC2ExpertRules(DKC2Rules):
                 self.can_carry,
                 
             LocationName.pirate_panic_banana_coin_1:
-                lambda state: self.can_team_attack(state) and self.has_kannons(state),
+                self.can_team_attack,
             LocationName.pirate_panic_banana_bunch_1:
                 self.true,
             LocationName.pirate_panic_red_balloon:
