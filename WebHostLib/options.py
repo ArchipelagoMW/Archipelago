@@ -158,10 +158,12 @@ def generate_weighted_yaml(game: str):
 
                 options[key] = val
             else:
+                [option, setting] = key.split("||")
+                if setting == "select-all":
+                    continue
                 if int(val) == 0:
                     continue
 
-                [option, setting] = key.split("||")
                 options.setdefault(option, {})[setting] = int(val)
 
         # Error checking
@@ -236,6 +238,10 @@ def generate_yaml(game: str):
                 if options[key_parts[-1][:-6]] == "custom":
                     options[key_parts[-1][:-6]] = val
 
+                del options[key]
+
+            # Detect keys which end with -select-all, indicating a "Select All" checkbox for OptionSets
+            elif key_parts[-1].endswith("-select-all"):
                 del options[key]
 
         # Detect random-* keys and set their options accordingly
