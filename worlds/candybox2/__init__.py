@@ -1,11 +1,12 @@
 import typing
+import uuid
 
-from BaseClasses import ItemClassification
+from entrance_rando import ERPlacementState
 from worlds.AutoWorld import World, WebWorld
 from .locations import location_descriptions, locations
 from .items import items, CandyBox2Item
 from .options import CandyBox2Options
-from .regions import create_regions
+from .regions import create_regions, connect_entrances
 
 
 class CandyBox2World(World):
@@ -20,6 +21,8 @@ class CandyBox2World(World):
     settings: typing.ClassVar[CandyBox2Options]
     topology_present = True
 
+    entrance_randomisation: ERPlacementState = None
+
     def create_regions(self) -> None:
         return create_regions(self.multiworld, self.options, self.player)
 
@@ -33,8 +36,16 @@ class CandyBox2World(World):
         for name, data in items.items():
             if data.required_amount > 0:
                 for i in range(data.required_amount):
-                    print("new item " + name)
                     self.multiworld.itempool += [self.create_item(name)]
+
+    def connect_entrances(self) -> None:
+        connect_entrances(self)
+
+    def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
+        return {
+            "uuid": str(uuid.uuid4()),
+            "entranceInformation": self.entrance_randomisation.pairings,
+        }
 
 
 class CandyBox2WebWorld(WebWorld):
