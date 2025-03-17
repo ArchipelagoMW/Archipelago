@@ -2007,7 +2007,7 @@ class DKC2LooseRules(DKC2Rules):
             LocationName.parrot_chute_panic_kong:
                 self.has_squawks,
             LocationName.parrot_chute_panic_dk_coin:
-                self.can_hover,
+                lambda self.can_cartwheel(state) or self.can_hover(state)
             LocationName.parrot_chute_panic_bonus_1:
                 self.has_squawks,
             LocationName.parrot_chute_panic_bonus_2:
@@ -2018,7 +2018,7 @@ class DKC2LooseRules(DKC2Rules):
             LocationName.web_woods_kong:
                 lambda state: self.has_squitter(state) and self.can_team_attack(state),
             LocationName.web_woods_dk_coin:
-                lambda state: self.has_squitter(state) and self.has_kannons(state),
+                lambda state: self.has_squitter(state) and self.can_team_attack(state),
             LocationName.web_woods_bonus_1:
                 self.has_squitter,
             LocationName.web_woods_bonus_2:
@@ -2270,11 +2270,10 @@ class DKC2LooseRules(DKC2Rules):
                     self.has_rattly(state) or self.can_team_attack(state) or self.can_cling(state)
                 ),
             LocationName.topsail_trouble_banana_bunch_1:
-                lambda state: self.can_carry(state) and (
-                    self.can_team_attack(state) or
+                lambda state: self.can_team_attack(state) or
                     self.has_rattly(state) or 
                     (self.can_cling(state) and self.has_kannons(state))
-                ),
+                ,
             LocationName.topsail_trouble_banana_bunch_2:
                 lambda state: self.has_rattly(state) or self.can_team_attack(state),
             LocationName.topsail_trouble_banana_coin_1:
