@@ -4703,7 +4703,7 @@ class DKC2ExpertRules(DKC2Rules):
             LocationName.fiery_furnace_banana_coin_2:
                 self.has_controllable_barrels,
             LocationName.fiery_furnace_banana_bunch_5:
-                lambda state: self.can_cartwheel(state) or self.can_hover(state) or self.has_controllable_barrels(state),
+                lambda state: self.has_controllable_barrels(state) and (self.can_cartwheel(state) or self.can_hover(state)),
 
             LocationName.animal_antics_banana_bunch_1:
                 lambda state: self.can_swim(state) and self.has_enguarde(state) and (
