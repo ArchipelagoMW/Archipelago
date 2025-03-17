@@ -1,5 +1,5 @@
 from . import SVTestBase
-from ..options import ExcludeGingerIsland, Walnutsanity
+from ..options import ExcludeGingerIsland, Walnutsanity, ToolProgression, SkillProgression
 from ..strings.ap_names.ap_option_names import WalnutsanityOptionName
 
 
@@ -7,6 +7,8 @@ class TestWalnutsanityNone(SVTestBase):
     options = {
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
         Walnutsanity: Walnutsanity.preset_none,
+        SkillProgression: ToolProgression.option_progressive,
+        ToolProgression: ToolProgression.option_progressive,
     }
 
     def test_no_walnut_locations(self):
@@ -25,7 +27,7 @@ class TestWalnutsanityNone(SVTestBase):
         self.collect("Island Obelisk")
         self.collect("Island West Turtle")
         self.collect("Progressive House")
-        items = self.collect("5 Golden Walnuts", 10)
+        self.collect("5 Golden Walnuts", 10)
 
         self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))
         self.collect("Island North Turtle")
@@ -50,6 +52,8 @@ class TestWalnutsanityPuzzles(SVTestBase):
     options = {
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
         Walnutsanity: frozenset({WalnutsanityOptionName.puzzles}),
+        SkillProgression: ToolProgression.option_progressive,
+        ToolProgression: ToolProgression.option_progressive,
     }
 
     def test_only_puzzle_walnut_locations(self):
@@ -81,10 +85,10 @@ class TestWalnutsanityPuzzles(SVTestBase):
         self.collect("Combat Level", 10)
         self.collect("Mining Level", 10)
         for location in locations:
-            self.assert_reach_location_false(location, self.multiworld.state)
+            self.assert_cannot_reach_location(location, self.multiworld.state)
         self.collect("Open Professor Snail Cave")
         for location in locations:
-            self.assert_reach_location_true(location, self.multiworld.state)
+            self.assert_can_reach_location(location, self.multiworld.state)
 
 
 class TestWalnutsanityBushes(SVTestBase):
@@ -126,10 +130,10 @@ class TestWalnutsanityPuzzlesAndBushes(SVTestBase):
         # You need to receive 25, and collect 15
         self.collect("Island Obelisk")
         self.collect("Island West Turtle")
-        items = self.collect("5 Golden Walnuts", 5)
+        self.collect("5 Golden Walnuts", 5)
 
         self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))
-        items = self.collect("Island North Turtle")
+        self.collect("Island North Turtle")
         self.assertTrue(self.multiworld.state.can_reach_location("Parrot Express", self.player))
 
 
@@ -203,7 +207,7 @@ class TestWalnutsanityAll(SVTestBase):
         self.assertTrue(self.multiworld.state.can_reach_location("Parrot Express", self.player))
         self.remove(items)
         self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))
-        items = self.collect("5 Golden Walnuts", 4)
-        items = self.collect("3 Golden Walnuts", 6)
-        items = self.collect("Golden Walnut", 2)
+        self.collect("5 Golden Walnuts", 4)
+        self.collect("3 Golden Walnuts", 6)
+        self.collect("Golden Walnut", 2)
         self.assertTrue(self.multiworld.state.can_reach_location("Parrot Express", self.player))

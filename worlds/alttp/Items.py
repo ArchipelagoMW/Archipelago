@@ -7,7 +7,7 @@ from worlds.AutoWorld import World
 def GetBeemizerItem(world, player: int, item):
     item_name = item if isinstance(item, str) else item.name
 
-    if item_name not in trap_replaceable:
+    if item_name not in trap_replaceable or player in world.groups:
         return item
 
     # first roll - replaceable item should be replaced, within beemizer_total_chance
