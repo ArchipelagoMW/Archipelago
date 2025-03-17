@@ -387,6 +387,35 @@ def roll_linked_options(weights: dict) -> dict:
     return weights
 
 
+def compare_results(
+        yaml_value: Union[str, int, bool, dict, list],
+        trigger_value: Union[str, int, bool, dict, list],
+        comparator: str):
+    if yaml_value is None:
+        return False
+    if isinstance(yaml_value, (str, bool, int)) and isinstance(trigger_value, (str, bool, int)):
+        yaml_value = str(yaml_value).lower()
+        trigger_value = str(trigger_value).lower()
+    if comparator == "=":
+        return yaml_value == trigger_value
+    if comparator == "!=":
+        return yaml_value != trigger_value
+    try:
+        yaml_value = int(yaml_value)
+        trigger_value = int(trigger_value)
+    except (ValueError, TypeError):
+        raise Exception("Value of option_name and option_result must be integers if comparison is not = or !=")
+    if comparator == "<":
+        return yaml_value < trigger_value
+    if comparator == "<=":
+        return yaml_value <= trigger_value
+    if comparator == ">":
+        return yaml_value > trigger_value
+    if comparator == ">=":
+        return yaml_value >= trigger_value
+    raise ValueError(f"option_compare must be one of [=,<,<=,>=,>,!=]")
+
+
 def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
     weights = copy.deepcopy(weights)  # make sure we don't write back to other weights sets in same_settings
     weights["_Generator_Version"] = Utils.__version__
@@ -394,6 +423,8 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
         try:
             currently_targeted_weights = weights
             category = option_set.get("option_category", None)
+            if "option_compare" not in option_set:
+                option_set["option_compare"] = "="
             if category:
                 currently_targeted_weights = currently_targeted_weights[category]
             key = get_choice("option_name", option_set)
@@ -403,8 +434,10 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
                                 f'This is probably in error.')
             trigger_result = get_choice("option_result", option_set)
             result = get_choice(key, currently_targeted_weights)
+            compare = get_choice("option_compare", option_set)
             currently_targeted_weights[key] = result
-            if result == trigger_result and roll_percentage(get_choice("percentage", option_set, 100)):
+            if (compare_results(result, trigger_result, compare) and
+                    roll_percentage(get_choice("percentage", option_set, 100))):
                 for category_name, category_options in option_set["options"].items():
                     currently_targeted_weights = weights
                     if category_name:
