@@ -41,7 +41,7 @@
         "The End... Again...",
         "Acquire Hardware",
         "Not Quite \"Nine\" Lives",
-        "Cover Me With Diamonds",
+        "Cover Me with Diamonds",
         "Sky's the Limit",
         "Hired Help",
         "Return to Sender",
@@ -104,7 +104,7 @@
         "Glow and Behold!",
         "Whatever Floats Your Goat!",
         "Caves & Cliffs",
-        "Feels like home",
+        "Feels Like Home",
         "Sound of Music",
         "Star Trader",
         "Birthday Song",
@@ -138,7 +138,7 @@
             "Total Beelocation",
             "Arbalistic",
             "Acquire Hardware",
-            "Cover Me With Diamonds",
+            "Cover Me with Diamonds",
             "Hired Help",
             "Sweet Dreams",
             "Adventure",
@@ -190,14 +190,12 @@
             "We Need to Go Deeper",
             "Not Quite \"Nine\" Lives",
             "Return to Sender",
-            "Serious Dedication",
             "Hidden in the Depths",
             "Subspace Bubble",
             "Country Lode, Take Me Home",
             "Uneasy Alliance",
-            "Cover Me in Debris",
             "Is It a Balloon?",
-            "Feels like home",
+            "Feels Like Home",
             "With Our Powers Combined!"
         ],
         "The End": [
@@ -238,7 +236,9 @@
         ],
         "Bastion Remnant": [
             "War Pigs",
+            "Serious Dedication",
             "Those Were the Days",
+            "Cover Me in Debris",
             "Overpowered"
         ],
         "End City": [
