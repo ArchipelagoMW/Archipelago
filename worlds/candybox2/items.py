@@ -1,4 +1,4 @@
-from typing import NamedTuple
+from typing import NamedTuple, Iterable
 
 from BaseClasses import Item, ItemClassification
 
@@ -22,7 +22,7 @@ item_descriptions = {
 
 items: dict[str, CandyBox2ItemData] = {
     "Candy": CandyBox2ItemData(candy_box_2_base_id + 0, 0),
-    "Lollipop": CandyBox2ItemData(candy_box_2_base_id + 1, 7, ItemClassification.skip_balancing),
+    "Lollipop": CandyBox2ItemData(candy_box_2_base_id + 1, 8, ItemClassification.skip_balancing),
     "Chocolate Bar": CandyBox2ItemData(candy_box_2_base_id + 2, 2, ItemClassification.useful),
     "HP Bar": CandyBox2ItemData(candy_box_2_base_id + 3, 1, ItemClassification.useful),
     "Time Ring": CandyBox2ItemData(candy_box_2_base_id + 4, 1, ItemClassification.useful),
@@ -44,5 +44,18 @@ items: dict[str, CandyBox2ItemData] = {
     "The L Stone": CandyBox2ItemData(candy_box_2_base_id + 20, 1, ItemClassification.progression),
     "The A Stone": CandyBox2ItemData(candy_box_2_base_id + 21, 1, ItemClassification.progression),
     "The Y Stone": CandyBox2ItemData(candy_box_2_base_id + 22, 1, ItemClassification.progression),
+    "Wooden Sword": CandyBox2ItemData(candy_box_2_base_id + 23, 1, ItemClassification.useful),
+    "Iron Axe": CandyBox2ItemData(candy_box_2_base_id + 24, 1, ItemClassification.useful),
+    "Polished Silver Sword": CandyBox2ItemData(candy_box_2_base_id + 25, 1, ItemClassification.useful),
+    "Lightweight Body Armour": CandyBox2ItemData(candy_box_2_base_id + 26, 1, ItemClassification.useful),
+    "Scythe": CandyBox2ItemData(candy_box_2_base_id + 27, 1, ItemClassification.useful),
 }
 
+weapons: Iterable[str] = [
+    "Wooden Sword",
+    "Iron Axe",
+    "Polished Silver Sword",
+    "The Troll's Bludgeon",
+    "The Monkey Wizard Staff",
+    "Scythe"
+]

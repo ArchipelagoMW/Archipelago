@@ -125,6 +125,27 @@ lighthouse_locations = {
     "Solve Cyclops Puzzle": 2500
 }
 
+forge_1_locations = {
+    "Lollipop on Exhaust Chute": 2600,
+    "Buy Wooden Sword": 2601
+}
+
+forge_2_locations = {
+    "Buy Iron Axe": 2700
+}
+
+forge_3_locations = {
+    "Buy Polished Silver Sword": 2800,
+}
+
+forge_4_locations = {
+    "Buy Lightweight Body Armour": 2900
+}
+
+forge_5_locations = {
+    "Buy Scythe": 3000
+}
+
 locations = {
     **candy_box_locations,
     **village_locations,
@@ -152,5 +173,10 @@ locations = {
     **dragon_locations,
     **hell_locations,
     **the_developer_fight_locations,
-    **lighthouse_locations
+    **lighthouse_locations,
+    **forge_1_locations,
+    **forge_2_locations,
+    **forge_3_locations,
+    **forge_4_locations,
+    **forge_5_locations,
 }
