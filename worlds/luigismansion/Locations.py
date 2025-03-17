@@ -273,7 +273,7 @@ PLANT_LOCATION_TABLE: dict[str, LMLocationData] = {
     # "Huge Flower":   LMLocationData("Boneyard", 70, "Chest", ???, ["Water Element Medal"], 11, room_ram_addr=0x803CDF66)
 }
 
-# Adds the myriad shakable objects or objects that react to elements such as fire as locations
+# Adds the myriad of shakable objects or objects that react to elements such as fire as locations
 FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Foyer Dresser": LMLocationData("Foyer", 93, "Furniture", 207, [], 2),
     "Heart Door Lamp": LMLocationData("Foyer", 94, "Furniture", 270, [], 2),
