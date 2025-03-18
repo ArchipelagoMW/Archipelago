@@ -443,11 +443,13 @@ class LMContext(CommonContext):
             local_loc = self.location_names.lookup_in_game(mis_loc)
             lm_loc_data = ALL_LOCATION_TABLE[local_loc]
 
+            #TODO Maybe helper function can get map id included?
             # If in Boolossus Arena, check Boo ids
             if current_map_id == 11:
                 if not mis_loc in BOO_AP_ID_LIST:
                     continue
 
+                #TODO account for ram offsets and other similar things.
                 for addr_to_update in lm_loc_data.update_ram_addr:
                     current_boo_state = dme.read_byte(addr_to_update.ram_addr)
                     if (current_boo_state & (1 << addr_to_update.bit_position)) > 0:
