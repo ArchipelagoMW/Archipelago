@@ -225,7 +225,7 @@ def update_character_info(character_info, output_data):
     for x in character_info.info_file_field_entries:
         # Replace the mstar Observatory item with its randomized item.
         if x["name"] == "mstar":
-            x["name"] = __get_item_name(output_data["Locations"]["Observatory Mario Star"], int(output_data["Slot"]))
+            x["name"] = __get_item_name(output_data["Locations"]["Observatory Shoot the Moon"], int(output_data["Slot"]))
             x["appear_flag"] = 50
             x["invisible"] = 1
             x["pos_y"] = 600.000000
@@ -1637,13 +1637,13 @@ def update_enemy_info(enemy_info, output_data):
 def update_boo_table(telesa_info, output_data):
     for x in telesa_info.info_file_field_entries:
         x["accel"] = 3.000000
-        x["max_speed"] = output_data["boo_speed"]
-        if output_data["boo health option"] == 0:
-            x["str_hp"] = output_data["boo health value"]
-        elif output_data["boo health option"] == 1:
+        x["max_speed"] = output_data["Options"]["boo_speed"]
+        if output_data["Options"]["boo_health_option"] == 0:
+            x["str_hp"] = output_data["Options"]["boo_health_value"]
+        elif output_data["Options"]["boo_health_option"] == 1:
             x["str_hp"] = randint(1,999)
-        x["move_time"] = output_data["boo_escape_time"]
-        x["attack"] = output_data["boo_anger"]
+        x["move_time"] = output_data["Options"]["boo_escape_time"]
+        x["attack"] = output_data["Options"]["boo_anger"]
 
 
 def apply_new_ghost(enemy_info_entry, element):
