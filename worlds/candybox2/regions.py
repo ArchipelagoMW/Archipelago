@@ -15,7 +15,7 @@ from .locations import candy_box_locations, CandyBox2Location, village_shop_loca
     wishing_well_monkey_wizard_staff_locations, wishing_well_knight_body_armour_locations, \
     wishing_well_octopus_king_crown_locations, wishing_well_giant_spoon_locations, hole_locations, \
     desert_fortress_locations, teapot_quest_locations, xinopherydron_quest_locations, ledge_room_quest_locations, \
-    castle_trap_room_locations
+    castle_trap_room_locations, squirrel_tree_locations
 from .options import CandyBox2Options
 
 
@@ -50,6 +50,9 @@ def create_regions(world: MultiWorld, options: CandyBox2Options, player: int):
     forge_3, _ = populate_region(world, player, CandyBox2Region("The Forge 3", player, world, "The forge in the village"), forge_3_locations, forge_2)
     forge_4, _ = populate_region(world, player, CandyBox2Region("The Forge 4", player, world, "The forge in the village"), forge_4_locations, forge_3, lambda state: state.has("Progressive World Map", player, 3))
     forge_5, _ = populate_region(world, player, CandyBox2Region("The Forge 5", player, world, "The forge in the village"), forge_5_locations, forge_4, lambda state: state.has("Progressive World Map", player, 6))
+
+    # The Squirrel Tree
+    populate_region(world, player, CandyBox2Region("A tree", player, world, "The squirrel's tree"), squirrel_tree_locations, world_map_1)
 
     # The Desert
     _, desert_quest_entrance = populate_region(world, player, CandyBox2Region("The Desert", player, world, "The Desert"), desert_locations, world_map_1)

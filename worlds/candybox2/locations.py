@@ -205,6 +205,15 @@ castle_dark_room_locations = {
     "Pitchfork Acquired": 4300
 }
 
+squirrel_tree_locations = {
+    "The Squirrel's first question": 4400,
+    "The Squirrel's second question": 4401,
+    "The Squirrel's third question": 4402,
+    "The Squirrel's fourth question": 4403,
+    "The Squirrel's fifth question": 4404,
+    "The Squirrel's puzzle": 4405
+}
+
 locations = {
     **candy_box_locations,
     **village_locations,
@@ -252,4 +261,5 @@ locations = {
     **ledge_room_quest_locations,
     **castle_trap_room_locations,
     **castle_dark_room_locations,
+    **squirrel_tree_locations
 }
