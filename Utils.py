@@ -1077,15 +1077,14 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
     return isinstance(obj, typing.Iterable)
 
 
-def build_sphinx_docs(stable: bool = False) -> None:
+def build_sphinx_docs() -> None:
     """Build Sphinx autodocs."""
     from sphinx.cmd.build import main as sphinx_main
 
     base_dir = os.path.dirname(__file__)
     docs_path = os.path.join(base_dir, "docs")
     sphinx_input = os.path.join(docs_path, "sphinx", "source")
-    sphinx_output = os.path.join(base_dir, "WebHostLib", "templates", "sphinx") if stable \
-        else os.path.join(base_dir, "build")
+    sphinx_output = os.path.join(base_dir, "build")
 
     # copy markdown files to sphinx directory to get rendered
     for file in os.scandir(docs_path):
