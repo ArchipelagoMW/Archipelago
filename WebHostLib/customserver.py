@@ -22,7 +22,6 @@ import Utils
 from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor, load_server_cert
 from Utils import restricted_loads, cache_argsless
 
-from . import app
 from .locker import Locker
 from .models import Command, GameDataPackage, Room, db
 
