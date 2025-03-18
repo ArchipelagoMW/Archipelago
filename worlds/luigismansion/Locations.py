@@ -1734,7 +1734,7 @@ ALL_LOCATION_TABLE = {**BASE_LOCATION_TABLE,
                       **WALK_LOCATION_TABLE,
                       **LIGHT_LOCATION_TABLE}
 
-#TODO review this table to make sure remote only for these are set and update client.
-RECV_OWN_GAME_LOCATIONS: list[str] = (list(BOO_LOCATION_TABLE.keys()) + list(TOAD_LOCATION_TABLE.keys()) +
-    list(PORTRAIT_LOCATION_TABLE.keys()) + list(LIGHT_LOCATION_TABLE.keys()) + list(SPEEDY_LOCATION_TABLE.keys()) +
-    list(WALK_LOCATION_TABLE.keys()) + ["Luigi's Courage", "Observatory Mario Star"])
+
+#TODO figure out why this is a list of list of ints instead of a list of ints
+SELF_LOCATIONS_TO_RECV = [
+    (LMLocation.get_apid(value.code) for value in ALL_LOCATION_TABLE.values() if value.remote_only)]

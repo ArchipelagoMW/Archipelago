@@ -114,7 +114,7 @@ ITEM_TABLE: dict[str, LMItemData] = { #TODO need to validate these are all corre
         update_ram_addr=[LMRamData(0x803D5DBB, bit_position=7), LMRamData(0x803D339C, bit_position=0)]),
     "Boo Radar": LMItemData("Upgrade", 63, IC.progression,
         update_ram_addr=[LMRamData(0x803D33A2, bit_position=1), LMRamData(0x803D33A2, bit_position=3)]),
-    "Poltergust 4000": LMItemData("Upgrade", 64, IC.useful, update_ram_addr=[LMRamData(0x80081CC8, pointer_offset=0)]),
+    "Poltergust 4000": LMItemData("Upgrade", 64, IC.useful, update_ram_addr=[LMRamData(0x80081CC8, item_count=0)]),
     "Gold Diamond": LMItemData("Money", 65, IC.progression,
         update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x344, ram_byte_size=4, item_count=1)]),
 }
@@ -263,6 +263,9 @@ filler_items: Dict[str, LMItemData] = {
 ALL_ITEMS_TABLE = {**ITEM_TABLE,
                    **BOO_ITEM_TABLE,
                    **filler_items}
+
+#TODO figure out why this is a list of list of ints instead of a list of ints
+BOO_AP_ID_LIST = [list(LMItem.get_apid(value.code) for value in BOO_ITEM_TABLE.values())]
 
 RECV_OWN_GAME_ITEMS: list[int] = [
     list(LMItem.get_apid(value.code) for value in BOO_ITEM_TABLE.values()), 8063, 8064]
