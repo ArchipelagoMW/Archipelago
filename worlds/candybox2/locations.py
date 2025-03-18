@@ -177,7 +177,10 @@ wishing_well_giant_spoon_locations = {
 
 hole_locations = {
     "Tribal Spear Acquired": 3700,
-    "Desert Fortress Key Acquired": 3701
+    "Desert Fortress Key Acquired": 3701,
+    "Heart Pendant Acquired": 3702,
+    "Black Magic Grimoire Acquired": 3703,
+    "Four Chocolate Bars in The Hole Acquired": 3704
 }
 
 desert_fortress_locations = {}
