@@ -1,5 +1,7 @@
-# Archipelago General Client
-## Archipelago Connection Handshake
+# Network Protocol
+
+## Archipelago General Client
+### Archipelago Connection Handshake
 These steps should be followed in order to establish a gameplay connection with an Archipelago session.
 
 1. Client establishes WebSocket connection to Archipelago server.
@@ -30,7 +32,7 @@ There are also a number of community-supported libraries available that implemen
 | Game Maker + Studio 1.x       | [gm-apclientpp](https://github.com/black-sliver/gm-apclientpp)                                     | For GM7, GM8 and GMS1.x, maybe older                                            |
 | GameMaker: Studio 2.x+        | [see Discord](https://discord.com/channels/731205301247803413/1166418532519653396)                 |                                                                                 |
 
-## Synchronizing Items
+### Synchronizing Items
 After a client connects, it will receive all previously collected items for its associated slot in a [ReceivedItems](#ReceivedItems) packet. This will include items the client may have already processed in a previous play session.  
 To ensure the client is able to reject those items if it needs to, each item in the packet has an associated `index` argument. You will need to find a way to save the "last processed item index" to the player's local savegame, a local file, or something to that effect. Before connecting, you should load that "last processed item index" value and compare against it in your received items handling.
 
@@ -40,7 +42,7 @@ Even if the client detects a desync, it can still accept the items provided in t
 
 When the client receives a [ReceivedItems](#ReceivedItems) packet and the `index` arg is `0` (zero) then the client should accept the provided `items` list as its full inventory. (Abandon previous inventory.)
 
-# Archipelago Protocol Packets
+## Archipelago Protocol Packets
 Packets are sent between the multiworld server and client in order to sync information between them. Below is a directory of each packet.
 
 Packets are simple JSON lists in which any number of ordered network commands can be sent, which are objects. Each command has a "cmd" key, indicating its purpose. All packet argument types documented here refer to JSON types, unless otherwise specified.
@@ -55,7 +57,7 @@ Example:
 [{"cmd": "RoomInfo", "version": {"major": 0, "minor": 1, "build": 3, "class": "Version"}, "tags": ["WebHost"], ... }]
 ```
 
-## (Server -> Client)
+### (Server -> Client)
 These packets are sent from the multiworld server to the client. They are not messages which the server accepts.
 * [RoomInfo](#RoomInfo)
 * [ConnectionRefused](#ConnectionRefused)
@@ -70,9 +72,9 @@ These packets are sent from the multiworld server to the client. They are not me
 * [Retrieved](#Retrieved)
 * [SetReply](#SetReply)
 
-### RoomInfo
+#### RoomInfo
 Sent to clients when they connect to an Archipelago server.
-#### Arguments
+##### Arguments
 | Name                  | Type                                          | Notes                                                                                                                                                                                                                                 |
 |-----------------------|-----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | version               | [NetworkVersion](#NetworkVersion)             | Object denoting the version of Archipelago which the server is running.                                                                                                                                                               |
@@ -87,7 +89,7 @@ Sent to clients when they connect to an Archipelago server.
 | seed_name             | str                                           | Uniquely identifying name of this generation                                                                                                                                                                                          |
 | time                  | float                                         | Unix time stamp of "now". Send for time synchronization if wanted for things like the DeathLink Bounce.                                                                                                                               |
 
-#### release
+##### release
 Dictates what is allowed when it comes to a player releasing their run. A release is an action which distributes the rest of the items in a player's run to those other players awaiting them.
 
 * `auto`: Distributes a player's items to other players when they complete their goal.
@@ -96,7 +98,7 @@ Dictates what is allowed when it comes to a player releasing their run. A releas
 * `disabled`: All release modes disabled.
 * `goal`: Allows for manual use of release command once a player completes their goal. (Disabled until goal completion)
 
-#### collect
+##### collect
 Dictates what is allowed when it comes to a player collecting their run. A collect is an action which sends the rest of the items in a player's run.
 
 * `auto`: Automatically when they complete their goal.
@@ -106,16 +108,16 @@ Dictates what is allowed when it comes to a player collecting their run. A colle
 * `goal`: Allows for manual use of collect command once a player completes their goal. (Disabled until goal completion)
 
 
-#### remaining
+##### remaining
 Dictates what is allowed when it comes to a player querying the items remaining in their run.
 
 * `goal`: Allows a player to query for items remaining in their run but only after they completed their own goal.
 * `enabled`: Denotes that players may query for any items remaining in their run (even those belonging to other players).
 * `disabled`: All remaining item query modes disabled.
 
-### ConnectionRefused
+#### ConnectionRefused
 Sent to clients when the server refuses connection. This is sent during the initial connection handshake.
-#### Arguments
+##### Arguments
 | Name   | Type        | Notes                                                                                                                                                  |
 |--------|-------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
 | errors | list\[str\] | Optional. When provided, should contain any one of: `InvalidSlot`, `InvalidGame`, `IncompatibleVersion`, `InvalidPassword`, or `InvalidItemsHandling`. |
@@ -126,9 +128,9 @@ IncompatibleVersion indicates a version mismatch.
 InvalidPassword indicates the wrong, or no password when it was required, was sent.
 InvalidItemsHandling indicates a wrong value type or flag combination was sent.
 
-### Connected
+#### Connected
 Sent to clients when the connection handshake is successfully completed.
-#### Arguments
+##### Arguments
 | Name              | Type                                     | Notes                                                                                                                                               |
 |-------------------|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
 | team              | int                                      | Your team number. See [NetworkPlayer](#NetworkPlayer) for more info on team number.                                                                 |
@@ -140,24 +142,24 @@ Sent to clients when the connection handshake is successfully completed.
 | slot_info         | dict\[int, [NetworkSlot](#NetworkSlot)\] | maps each slot to a [NetworkSlot](#NetworkSlot) information.                                                                                        |
 | hint_points       | int                                      | Number of hint points that the current player has.                                                                                                  |
 
-### ReceivedItems
+#### ReceivedItems
 Sent to clients when they receive an item.
-#### Arguments
+##### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | index | int | The next empty slot in the list of items for the receiving client. |
 | items | list\[[NetworkItem](#NetworkItem)\] | The items which the client is receiving. |
 
-### LocationInfo
+#### LocationInfo
 Sent to clients to acknowledge a received [LocationScouts](#LocationScouts) packet and responds with the item in the location(s) being scouted.
-#### Arguments
+##### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | locations | list\[[NetworkItem](#NetworkItem)\] | Contains list of item(s) in the location(s) scouted. |
 
-### RoomUpdate
+#### RoomUpdate
 Sent when there is a need to update information about the present game session.
-#### Arguments
+##### Arguments
 RoomUpdate may contain the same arguments from [RoomInfo](#RoomInfo) and, once authenticated, arguments from
 [Connected](#Connected) with the following exceptions:
 
@@ -169,9 +171,9 @@ RoomUpdate may contain the same arguments from [RoomInfo](#RoomInfo) and, once a
 
 All arguments for this packet are optional, only changes are sent.
 
-### PrintJSON
+#### PrintJSON
 Sent to clients purely to display a message to the player. While various message types provide additional arguments, clients only need to evaluate the `data` argument to construct the human-readable message text. All other arguments may be ignored safely.
-#### Arguments
+##### Arguments
 | Name | Type | Message Types | Contents |
 | ---- | ---- | ------------- | -------- |
 | data | list\[[JSONMessagePart](#JSONMessagePart)\] | (all) | Textual content of this message |
@@ -185,7 +187,7 @@ Sent to clients purely to display a message to the player. While various message
 | tags | list\[str\] | Join, TagsChanged | Tags of the triggering player |
 | countdown | int | Countdown | Amount of seconds remaining on the countdown |
 
-#### PrintJsonType
+##### PrintJsonType
 PrintJsonType indicates the type of a [PrintJSON](#PrintJSON) packet. Different types can be handled differently by the client and can also contain additional arguments. When receiving an unknown or missing type, the `data`'s list\[[JSONMessagePart](#JSONMessagePart)\] should still be displayed to the player as normal text.
 
 Currently defined types are:
@@ -208,18 +210,18 @@ Currently defined types are:
 | Collect | A player collected the remaining items for their world. |
 | Countdown | The current server countdown has progressed. |
 
-### DataPackage
+#### DataPackage
 Sent to clients to provide what is known as a 'data package' which contains information to enable a client to most easily communicate with the Archipelago server. Contents include things like location id to name mappings, among others; see [Data Package Contents](#Data-Package-Contents) for more info.
 
-#### Arguments
+##### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | data | [DataPackageObject](#Data-Package-Contents) | The data package as a JSON object. |
 
-### Bounced
+#### Bounced
 Sent to clients after a client requested this message be sent to them, more info in the [Bounce](#Bounce) package.
 
-#### Arguments
+##### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | games | list\[str\] | Optional. Game names this message is targeting |
@@ -227,17 +229,17 @@ Sent to clients after a client requested this message be sent to them, more info
 | tags | list\[str\] | Optional. Client [Tags](#Tags) this message is targeting |
 | data | dict | The data in the [Bounce](#Bounce) package copied |
 
-### InvalidPacket
+#### InvalidPacket
 Sent to clients if the server caught a problem with a packet. This only occurs for errors that are explicitly checked for.
 
-#### Arguments
+##### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | type | str | The [PacketProblemType](#PacketProblemType) that was detected in the packet. |
 | original_cmd | Optional[str] | The `cmd` argument of the faulty packet, will be `None` if the `cmd` failed to be parsed. |
 | text | str | A descriptive message of the problem at hand. |
 
-##### PacketProblemType
+###### PacketProblemType
 `PacketProblemType` indicates the type of problem that was detected in the faulty packet, the known problem types are below but others may be added in the future.
 
 | Type | Notes |
@@ -245,9 +247,9 @@ Sent to clients if the server caught a problem with a packet. This only occurs f
 | cmd | `cmd` argument of the faulty packet that could not be parsed correctly. |
 | arguments | Arguments of the faulty packet which were not correct. |
 
-### Retrieved
+#### Retrieved
 Sent to clients as a response the a [Get](#Get) package.
-#### Arguments
+##### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | keys | dict\[str\, any] | A key-value collection containing all the values for the keys requested in the [Get](#Get) package. |
@@ -256,9 +258,9 @@ If a requested key was not present in the server's data, the associated value wi
 
 Additional arguments added to the [Get](#Get) package that triggered this [Retrieved](#Retrieved) will also be passed along.
 
-### SetReply
+#### SetReply
 Sent to clients in response to a [Set](#Set) package if want_reply was set to true, or if the client has registered to receive updates for a certain key using the [SetNotify](#SetNotify) package. SetReply packages are sent even if a [Set](#Set) package did not alter the value for the key.
-#### Arguments
+##### Arguments
 | Name           | Type | Notes                                                                                      |
 |----------------|------|--------------------------------------------------------------------------------------------|
 | key            | str  | The key that was updated.                                                                  |
@@ -268,7 +270,7 @@ Sent to clients in response to a [Set](#Set) package if want_reply was set to tr
 
 Additional arguments added to the [Set](#Set) package that triggered this [SetReply](#SetReply) will also be passed along.
 
-## (Client -> Server)
+### (Client -> Server)
 These packets are sent purely from client to server. They are not accepted by clients.
 
 * [Connect](#Connect)
@@ -285,10 +287,10 @@ These packets are sent purely from client to server. They are not accepted by cl
 * [Set](#Set)
 * [SetNotify](#SetNotify)
 
-### Connect
+#### Connect
 Sent by the client to initiate a connection to an Archipelago game session.
 
-#### Arguments
+##### Arguments
 | Name           | Type                              | Notes                                                                                        |
 |----------------|-----------------------------------|----------------------------------------------------------------------------------------------|
 | password       | str                               | If the game session requires a password, it should be passed here.                           |
@@ -300,7 +302,7 @@ Sent by the client to initiate a connection to an Archipelago game session.
 | tags           | list\[str\]                       | Denotes special features or capabilities that the sender is capable of. [Tags](#Tags)        |
 | slot_data      | bool                              | If true, the Connect answer will contain slot_data                                           |
 
-#### items_handling flags
+##### items_handling flags
 | Value | Meaning |
 | ----- | ------- |
 | 0b000 | No ReceivedItems is sent to you, ever. |
@@ -309,55 +311,55 @@ Sent by the client to initiate a connection to an Archipelago game session.
 | 0b100 | Indicates you get your starting inventory sent. Requires 0b001 to be set. |
 | null  | Null or undefined loads settings from world definition for backwards compatibility. This is deprecated. |
 
-#### Authentication
+##### Authentication
 Many, if not all, other packets require a successfully authenticated client. This is described in more detail in [Archipelago Connection Handshake](#Archipelago-Connection-Handshake).
 
-### ConnectUpdate
+#### ConnectUpdate
 Update arguments from the Connect package, currently only updating tags and items_handling is supported.
 
-#### Arguments
+##### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | items_handling | int | Flags configuring which items should be sent by the server. |
 | tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. [Tags](#Tags) |
 
-### Sync
+#### Sync
 Sent to server to request a [ReceivedItems](#ReceivedItems) packet to synchronize items.
-#### Arguments
+##### Arguments
 No arguments necessary.
 
-### LocationChecks
+#### LocationChecks
 Sent to server to inform it of locations that the client has checked. Used to inform the server of new checks that are made, as well as to sync state.
 
-#### Arguments
+##### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | locations | list\[int\] | The ids of the locations checked by the client. May contain any number of checks, even ones sent before; duplicates do not cause issues with the Archipelago server. |
 
-### LocationScouts
+#### LocationScouts
 Sent to the server to retrieve the items that are on a specified list of locations. The server will respond with a [LocationInfo](#LocationInfo) packet containing the items located in the scouted locations.
 Fully remote clients without a patch file may use this to "place" items onto their in-game locations, most commonly to display their names or item classifications before/upon pickup.
 
 LocationScouts can also be used to inform the server of locations the client has seen, but not checked. This creates a hint as if the player had run `!hint_location` on a location, but without deducting hint points.
 This is useful in cases where an item appears in the game world, such as 'ledge items' in _A Link to the Past_. To do this, set the `create_as_hint` parameter to a non-zero value.
 
-#### Arguments
+##### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | locations | list\[int\] | The ids of the locations seen by the client. May contain any number of locations, even ones sent before; duplicates do not cause issues with the Archipelago server. |
 | create_as_hint | int | If non-zero, the scouted locations get created and broadcasted as a player-visible hint. <br/>If 2 only new hints are broadcast, however this does not remove them from the LocationInfo reply. |
 
-### UpdateHint
+#### UpdateHint
 Sent to the server to update the status of a Hint. The client must be the 'receiving_player' of the Hint, or the update fails.
 
-### Arguments
+#### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | player | int | The ID of the player whose location is being hinted for. |
 | location | int | The ID of the location to update the hint for. If no hint exists for this location, the packet is ignored. |
 | status | [HintStatus](#HintStatus) | Optional. If included, sets the status of the hint to this status. Cannot set `HINT_FOUND`, or change the status from `HINT_FOUND`. |
 
-#### HintStatus
+##### HintStatus
 An enumeration containing the possible hint states.
 
 ```python
@@ -374,35 +376,35 @@ class HintStatus(enum.IntEnum):
 - Hints created with `!hint` or similar (hinting an item for yourself) default to `HINT_PRIORITY`.
 - Once a hint is collected, its' status is updated to `HINT_FOUND` automatically, and can no longer be changed.
 
-### StatusUpdate
+#### StatusUpdate
 Sent to the server to update on the sender's status. Examples include readiness or goal completion. (Example: defeated Ganon in A Link to the Past)
 
-#### Arguments
+##### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | status | ClientStatus\[int\] | One of [Client States](#ClientStatus). Send as int. Follow the link for more information. |
 
-### Say
+#### Say
 Basic chat command which sends text to the server to be distributed to other clients.
 
-#### Arguments
+##### Arguments
 | Name | Type | Notes |
 | ------ | ----- | ------ |
 | text | str  | Text to send to others. |
 
-### GetDataPackage
+#### GetDataPackage
 Requests the data package from the server. Does not require client authentication.
 
-#### Arguments
+##### Arguments
 | Name  | Type | Notes                                                                                                                           |
 |-------| ----- |---------------------------------------------------------------------------------------------------------------------------------|
 | games | list\[str\]  | Optional. If specified, will only send back the specified data. Such as, \["Factorio"\] -> Datapackage with only Factorio data. |
 
-### Bounce
+#### Bounce
 Send this message to the server, tell it which clients should receive the message and 
 the server will forward the message to all those targets to which any one requirement applies.
 
-#### Arguments
+##### Arguments
 | Name | Type | Notes |
 | ------ | ----- | ------ |
 | games | list\[str\] | Optional. Game names that should receive this message |
@@ -410,9 +412,9 @@ the server will forward the message to all those targets to which any one requir
 | tags | list\[str\] | Optional. Client tags that should receive this message |
 | data | dict | Any data you want to send |
 
-### Get
+#### Get
 Used to request a single or multiple values from the server's data storage, see the [Set](#Set) package for how to write values to the data storage. A Get package will be answered with a [Retrieved](#Retrieved) package.
-#### Arguments
+##### Arguments
 | Name | Type | Notes |
 | ------ | ----- | ------ |
 | keys | list\[str\] | Keys to retrieve the values for. |
@@ -430,10 +432,10 @@ Some special keys exist with specific return data, all of them have the prefix `
 | client_status_{team}_{slot}      | [ClientStatus](#ClientStatus) | The current game status of the requested player.      |
 | race_mode                        | int                           | 0 if race mode is disabled, and 1 if it's enabled.    |
 
-### Set
+#### Set
 Used to write data to the server's data storage, that data can then be shared across worlds or just saved for later. Values for keys in the data storage can be retrieved with a [Get](#Get) package, or monitored with a [SetNotify](#SetNotify) package.
 Keys that start with `_read_` cannot be set.
-#### Arguments
+##### Arguments
 | Name       | Type                                                  | Notes                                                                                                                  |
 |------------|-------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|
 | key        | str                                                   | The key to manipulate. Can never start with "_read".                                                                   |
@@ -443,7 +445,7 @@ Keys that start with `_read_` cannot be set.
 
 Additional arguments sent in this package will also be added to the [SetReply](#SetReply) package it triggers.
 
-#### DataStorageOperation
+##### DataStorageOperation
 A DataStorageOperation manipulates or alters the value of a key in the data storage. If the operation transforms the value from one state to another then the current value of the key is used as the starting point otherwise the [Set](#Set)'s package `default` is used if the key does not exist on the server already.
 DataStorageOperations consist of an object containing both the operation to be applied, provided in the form of a string, as well as the value to be used for that operation, Example:
 ```json
@@ -472,16 +474,16 @@ The following operations can be applied to a datastorage key
 | pop | List or Dict: for lists it will remove the index of the `value` given. for dicts it removes the element with the specified key of `value`. |
 | update | Dict only: Updates the dictionary with the specified elements given in `value` creating new keys, or updating old ones if they previously existed. |
 
-### SetNotify
+#### SetNotify
 Used to register your current session for receiving all [SetReply](#SetReply) packages of certain keys to allow your client to keep track of changes.
-#### Arguments
+##### Arguments
 | Name | Type | Notes |
 | ------ | ----- | ------ |
 | keys | list\[str\] | Keys to receive all [SetReply](#SetReply) packages for. |
 
-## Appendix
+### Appendix
 
-### Coop
+#### Coop
 Coop in Archipelago is automatically facilitated by the server, however some of the default behaviour may not be what you desire.
 
 If the game in question is a remote-items game (attribute on AutoWorld), then all items will always be sent and received.
@@ -489,7 +491,7 @@ If the game in question is not a remote-items game, then any items that are plac
 
 To manually react to others in the same player slot doing checks, listen to [RoomUpdate](#RoomUpdate) -> checked_locations.
 
-### NetworkPlayer
+#### NetworkPlayer
 A list of objects. Each object denotes one player. Each object has four fields about the player, in this order: `team`, `slot`, `alias`, and `name`. `team` and `slot` are ints, `alias` and `name` are strs.
 
 Each player belongs to a `team` and has a `slot`. Team numbers start at `0`. Slot numbers are unique per team and start at `1`. Slot number `0` refers to the Archipelago server; this may appear in instances where the server grants the player an item.
@@ -515,7 +517,7 @@ Example:
 ]
 ```
 
-### NetworkItem
+#### NetworkItem
 Items that are sent over the net (in packets) use the following data structure and are sent as objects:
 ```python
 from typing import NamedTuple
@@ -547,7 +549,7 @@ In JSON this may look like:
 | 0b010 | If set, indicates the item is especially useful |
 | 0b100 | If set, indicates the item is a trap |
 
-### JSONMessagePart
+#### JSONMessagePart
 Message nodes sent along with [PrintJSON](#PrintJSON) packet to be reconstructed into a legible message. The nodes are intended to be read in the order they are listed in the packet.
 
 ```python
@@ -604,7 +606,7 @@ Color options:
 `player` marks owning player id for location/item, 
 `flags` contains the [NetworkItem](#NetworkItem) flags that belong to the item
 
-### ClientStatus
+#### ClientStatus
 An enumeration containing the possible client states that may be used to inform
 the server in [StatusUpdate](#StatusUpdate). The MultiServer automatically sets
 the client state to `ClientStatus.CLIENT_CONNECTED` on the first active connection
@@ -620,7 +622,7 @@ class ClientStatus(enum.IntEnum):
     CLIENT_GOAL = 30
 ```
 
-### NetworkVersion
+#### NetworkVersion
 An object representing software versioning. Used in the [Connect](#Connect) packet to allow the client to inform the server of the Archipelago version it supports.
 ```python
 from typing import NamedTuple
@@ -630,7 +632,7 @@ class Version(NamedTuple):
     build: int
 ```
 
-### SlotType
+#### SlotType
 An enum representing the nature of a slot.
 
 ```python
@@ -641,7 +643,7 @@ class SlotType(enum.IntFlag):
     group = 0b10
 ```
 
-### NetworkSlot
+#### NetworkSlot
 An object representing static information about a slot.
 
 ```python
@@ -654,7 +656,7 @@ class NetworkSlot(typing.NamedTuple):
    group_members: typing.List[int] = []  # only populated if type == group
 ```
 
-### Permission
+#### Permission
 An enumeration containing the possible command permission, for commands that may be restricted. 
 ```python
 import enum
@@ -666,7 +668,7 @@ class Permission(enum.IntEnum):
     auto_enabled = 0b111  # 7, forces use after goal completion, allows manual use any time
 ```
 
-### Hint
+#### Hint
 An object representing a Hint.
 ```python
 import typing
@@ -681,7 +683,7 @@ class Hint(typing.NamedTuple):
     status: HintStatus = HintStatus.HINT_UNSPECIFIED
 ```
 
-### Data Package Contents
+#### Data Package Contents
 A data package is a JSON object which may contain arbitrary metadata to enable a client to interact with the Archipelago
 server most easily and not maintain their own mappings. Some contents include:
 
@@ -724,12 +726,12 @@ than any locally cached ones.
     }
     ```
 
-#### Contents
+##### Contents
 | Name | Type | Notes |
 | ------ | ----- | ------ |
 | games | dict[str, GameData] | Mapping of all Games and their respective data |
 
-#### GameData
+##### GameData
 GameData is a **dict** but contains these keys and values. It's broken out into another "type" for ease of documentation.
 
 | Name                | Type           | Notes                                                                                                                         |
@@ -738,7 +740,7 @@ GameData is a **dict** but contains these keys and values. It's broken out into 
 | location_name_to_id | dict[str, int] | Mapping of all location names to their respective ID.                                                                         |
 | checksum            | str            | A checksum hash of this game's data.                                                                                          |
 
-### Tags
+#### Tags
 Tags are represented as a list of strings, the common client tags follow:
 
 | Name      | Notes                                                                                                                                |
@@ -753,7 +755,7 @@ Tags are represented as a list of strings, the common client tags follow:
 ¹: When connecting or disconnecting, the chat message shows e.g. "tracking".\
 ²: Allows `game` to be empty or null in [Connect](#connect). Game and version validation will then be skipped.
 
-### DeathLink
+#### DeathLink
 A special kind of Bounce packet that can be supported by any AP game. It targets the tag "DeathLink" and carries the following data:
 
 | Name   | Type  | Notes                                                                                                                                                  |
