@@ -68,6 +68,11 @@ items: dict[str, CandyBox2ItemData] = {
     "Black Magic Grimoire": CandyBox2ItemData(candy_box_2_base_id + 44, 1, ItemClassification.useful),
     "4 Chocolate Bars": CandyBox2ItemData(candy_box_2_base_id + 45, 1, ItemClassification.skip_balancing),
     "Pitchfork": CandyBox2ItemData(candy_box_2_base_id + 46, 1, ItemClassification.useful),
+    "20 Candies": CandyBox2ItemData(candy_box_2_base_id + 47, 1, ItemClassification.skip_balancing),
+    "100 Candies": CandyBox2ItemData(candy_box_2_base_id + 48, 1, ItemClassification.skip_balancing),
+    "500 Candies": CandyBox2ItemData(candy_box_2_base_id + 49, 1, ItemClassification.skip_balancing),
+    "3 Lollipops": CandyBox2ItemData(candy_box_2_base_id + 50, 1, ItemClassification.skip_balancing),
+    "3 Chocolate Bars": CandyBox2ItemData(candy_box_2_base_id + 51, 1, ItemClassification.skip_balancing)
 }
 
 weapons: Iterable[str] = [
