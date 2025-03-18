@@ -1,6 +1,5 @@
 import asyncio
 import os
-import re
 import time
 import traceback
 
@@ -13,13 +12,12 @@ import dolphin_memory_engine as dme
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from worlds import AutoWorldRegister
 from settings import get_settings, Settings
-from Options import OptionError
 
 from .LMGenerator import LuigisMansionRandomizer
-from .Items import ALL_ITEMS_TABLE, BOO_ITEM_TABLE, filler_items
-from .Locations import ALL_LOCATION_TABLE, TOAD_LOCATION_TABLE, BOO_LOCATION_TABLE, PORTRAIT_LOCATION_TABLE, \
-    LIGHT_LOCATION_TABLE, SPEEDY_LOCATION_TABLE, WALK_LOCATION_TABLE
+from .Items import ALL_ITEMS_TABLE, RECV_ITEMS_IGNORE, RECV_OWN_GAME_ITEMS, BOO_AP_ID_LIST
+from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV
 
+CLIENT_VERSION = "0.1.4"
 CONNECTION_REFUSED_GAME_STATUS = (
     "Dolphin failed to connect. Please load a randomized ROM for LM. Trying again in 5 seconds..."
 )
@@ -91,25 +89,9 @@ WALLET_OFFSETS: dict[int, int] = {
 # Rank Requirements for each rank. H, G, F, E, D, C, B, A
 RANK_REQ_AMTS = [0, 5000000, 20000000, 40000000, 50000000, 60000000, 70000000, 100000000]
 
-# List of received items to ignore because they are handled elsewhere
-RECV_ITEMS_IGNORE = [8127, 8125, 8130, 8131, 8132]
-RECV_OWN_GAME_LOCATIONS: list[str] = list(BOO_LOCATION_TABLE.keys()) \
-                                     + list(TOAD_LOCATION_TABLE.keys()) \
-                                     + list(PORTRAIT_LOCATION_TABLE.keys()) \
-                                     + list(LIGHT_LOCATION_TABLE.keys()) \
-                                     + list(SPEEDY_LOCATION_TABLE.keys()) \
-                                     + list(WALK_LOCATION_TABLE.keys()) + ["Luigi's Courage", "Observatory Mario Star"]
-RECV_OWN_GAME_ITEMS: list[str] = list(BOO_ITEM_TABLE.keys()) + ["Boo Radar", "Poltergust 4000"]
-
 # Static time to wait for health and death checks
 CHECKS_WAIT = 3
 LONGER_MODIFIER = 2
-
-boolossus_list = [BOO_LOCATION_TABLE[local_loc] for local_loc in
-                    ["Boolossus Fragment 1", "Boolossus Fragment 2", "Boolossus Fragment 3", "Boolossus Fragment 4",
-                     "Boolossus Fragment 5", "Boolossus Fragment 6", "Boolossus Fragment 7", "Boolossus Fragment 8",
-                     "Boolossus Fragment 9", "Boolossus Fragment 10", "Boolossus Fragment 11", "Boolossus Fragment 12",
-                     "Boolossus Fragment 13", "Boolossus Fragment 14", "Boolossus Fragment 15"]]
 
 # This address is used to deal with the current display for Captured Boos
 BOO_COUNTER_DISPLAY_ADDR = 0x803A3CC4
@@ -213,9 +195,6 @@ class LMContext(CommonContext):
         # Used to let poptracker autotrack Luigi's room
         self.last_room_id = 0
 
-        # Handles Updating Boo Counter related things both in game and in client.
-        self.boo_counter_sync_task: Optional[asyncio.Task[None]] = None
-
     async def disconnect(self, allow_autoreconnect: bool = False):
         """
         Disconnect the client from the server and reset game state variables.
@@ -252,6 +231,13 @@ class LMContext(CommonContext):
         """
         super().on_package(cmd, args)
         if cmd == "Connected":  # On Connect
+            # Make sure the world version matches
+            if not "apworld version" in args["slot_data"] or args["slot_data"]["apworld version"] != CLIENT_VERSION:
+                local_version = CLIENT_VERSION if str(args["slot_data"]["apworld version"]) else "N/A"
+                raise Utils.VersionException("Error! Server was generated with a different Luigi's Mansion APWorld version. " +
+                    f"The client version is {CLIENT_VERSION}! Please verify you are using the same APWorld as the " +
+                    f"generator, which is '{local_version}'")
+
             self.boosanity = bool(args["slot_data"]["boosanity"])
             self.rank_req = int(args["slot_data"]["rank requirement"])
             self.boo_washroom_count = int(args["slot_data"]["washroom boo count"])
@@ -259,11 +245,6 @@ class LMContext(CommonContext):
             self.boo_final_count = int(args["slot_data"]["final boo count"])
             if "death_link" in args["slot_data"]:
                 Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
-            # Make sure the world version matches
-            if args["slot_data"]["apworld version"] != "0.1.3":
-                raise OptionError("Error! Server was generated with a different Luigi's Mansion APWorld version. The" +
-                            "client version is 0.1.3! Please verify you are using the same APWorld as the " +
-                            "generator, which is " + args["slot_data"]["apworld version"])
 
     def on_deathlink(self, data: dict[str, Any]):
         """
@@ -293,8 +274,7 @@ class LMContext(CommonContext):
             self.boo_count = Label(text=f"")
             self.ui.connect_layout.add_widget(self.boo_count)
 
-        curr_boo_count = len([netItem.item for netItem in self.items_received if
-                              self.item_names.lookup_in_game(netItem.item) in BOO_ITEM_TABLE.keys()])
+        curr_boo_count = len([item.item for item in self.items_received if item.item in BOO_AP_ID_LIST])
 
         self.boo_count.text = f"Boo Count: {curr_boo_count}/50"
 
@@ -374,37 +354,21 @@ class LMContext(CommonContext):
         if len(self.items_received) == last_recv_idx:
             return
 
-        # Filter for only items where we have not received yet. If same slot, only receive the locations from the
-        # pre-approved own locations (as everything is currently a NetworkItem), otherwise accept other slots.
+        # Filter for only items where we have not received yet. If same slot, only receive locations from pre-approved
+        # own locations, otherwise accept other slots. Additionally accept only items from a pre-approved list.
         recv_items = self.items_received[last_recv_idx:]
-        #TODO leave for debug logger.info("DEBUG -- Received items to try and validate: " + str(len(recv_items)))
 
         if len(recv_items) == 0:
             dme.write_word(LAST_RECV_ITEM_ADDR, len(self.items_received))
             return
 
-        # TODO remove this in-favor of transferring to a list of addresses to add / remove things from.
-        last_bill_list = [x[1] for x in filler_items.items() if "Bills" in x[0]]
-        bills_rams_pointer = last_bill_list[len(last_bill_list) - 1].pointer_offset
-        last_coin_list = [x[1] for x in filler_items.items() if "Coins" in x[0]]
-        coins_ram_pointer = last_coin_list[len(last_coin_list) - 1].pointer_offset
-
+        # TODO give items from console
         for item in recv_items:
-            # If item is handled as start inventory and created in patching, ignore them.
-            # If item is something we found, but not something that is a location we want to get an item from or an
-            # item that is okay to get no matter what, ignore it.
             if item.item in RECV_ITEMS_IGNORE or (item.player == self.slot and not
-            ((self.location_names.lookup_in_game(item.location) in RECV_OWN_GAME_LOCATIONS or
-             self.item_names.lookup_in_game(item.item) in RECV_OWN_GAME_ITEMS) or item.location < 0)):
+            (item.location in SELF_LOCATIONS_TO_RECV or item.item in RECV_OWN_GAME_ITEMS)):
                 last_recv_idx += 1
                 dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
                 continue
-
-            # Make sure we aren't in the middle of an event that would freeze the game if items were received
-            # If we are, immediately exit
-            in_event_flag = dme.read_byte(EVENT_FLAG_RECV_ADDRR)
-            if in_event_flag & (1 << 7) > 0:
-                return
 
             # TODO remove this after an in-game message / dolphin client message is received per item.
             #   Note: Common Client does already have a variation of messages supported though.
@@ -422,107 +386,48 @@ class LMContext(CommonContext):
             lm_item_name = self.item_names.lookup_in_game(item.item)
             lm_item = ALL_ITEMS_TABLE[lm_item_name]
 
-            if not lm_item.ram_addr is None and (not lm_item.itembit is None or not lm_item.pointer_offset is None):
-                if not lm_item.pointer_offset is None:
-                    # Assume we need to update an existing value of size X with Y value at the pointer's address
-                    int_item_amount = 1
-                    match lm_item.code:
-                        case 119:  # Bills and Coins
-                            coins_curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
-                                    [coins_ram_pointer]), lm_item.ram_byte_size))
-                            bills_curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
-                                    [bills_rams_pointer]), lm_item.ram_byte_size))
-                            if re.search(r"^\d+", lm_item_name):
-                                int_item_amount = int(re.search(r"^\d+", lm_item_name).group())
-                            coins_curr_val += int_item_amount
-                            bills_curr_val += int_item_amount
-                            dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,[coins_ram_pointer]),
-                                            coins_curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
-                            dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,[bills_rams_pointer]),
-                                            bills_curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
-                        case 128 | 129: # Small / Large Hearts
-                            curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
-                            [lm_item.pointer_offset]), lm_item.ram_byte_size))
-                            curr_val += 10 if lm_item.code == 128 else 50
-                            curr_val = curr_val if curr_val <= 100 else 100
-                            dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
-                        [lm_item.pointer_offset]), curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
-                        case 63: # Boo Radar
-                            curr_val = dme.read_byte(lm_item.ram_addr)
-                            curr_val = (curr_val | (1 << 1))  # Enable flag 73
-                            curr_val = (curr_val | (1 << 3))  # Enable flag 75
-                            dme.write_byte(lm_item.ram_addr, curr_val)
-                        case 64: # Poltergust 4000
-                            vac_speed = "3800000F"
-                            dme.write_bytes(lm_item.ram_addr, bytes.fromhex(vac_speed))
-                        case _:
-                            curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
-                                 [lm_item.pointer_offset]), lm_item.ram_byte_size))
-                            if re.search(r"^\d+", lm_item_name):
-                                int_item_amount = int(re.search(r"^\d+", lm_item_name).group())
-                            curr_val += int_item_amount
-                            dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
-                    [lm_item.pointer_offset]), curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
-                else:
-                    if lm_item_name in BOO_ITEM_TABLE.keys():
-                        curr_boo_count = len([netItem.item for netItem in self.items_received if
-                                              self.item_names.lookup_in_game(netItem.item) in BOO_ITEM_TABLE.keys()])
-                        if curr_boo_count >= self.boo_washroom_count:
-                            boo_val = dme.read_byte(BOO_WASHROOM_FLAG_ADDR)
-                            dme.write_byte(BOO_WASHROOM_FLAG_ADDR, (boo_val | (1 << BOO_WASHROOM_FLAG_BIT)))
-                        if curr_boo_count >= self.boo_balcony_count:
-                            boo_val = dme.read_byte(BOO_BALCONY_FLAG_ADDR)
-                            dme.write_byte(BOO_BALCONY_FLAG_ADDR, (boo_val | (1 << BOO_BALCONY_FLAG_BIT)))
-                        if curr_boo_count >= self.boo_final_count:
-                            boo_val = dme.read_byte(BOO_FINAL_FLAG_ADDR)
-                            dme.write_byte(BOO_FINAL_FLAG_ADDR, (boo_val | (1 << BOO_FINAL_FLAG_BIT)))
+            # TODO optimize all other cases for reading when a pointer is there vs not.
+            for addr_to_update in lm_item.updated_ram_addr:
+                byte_size = 1 if not addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
+
+                if not addr_to_update.item_count is None:
+                    if not addr_to_update.pointer_offset is None:
+                        curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
+            [addr_to_update.pointer_offset]), byte_size))
+                        curr_val+= addr_to_update.item_count
+                        dme.write_bytes(dme.follow_pointers(addr_to_update.ram_add,
+            [addr_to_update.pointer_offset]), curr_val.to_bytes(byte_size, 'big'))
                     else:
-                        # Assume it is a single address with a bit to update, rather than changing existing value
-                        # TODO stick key messages here for text injection
-                        item_val = dme.read_byte(lm_item.ram_addr)
-                        dme.write_byte(lm_item.ram_addr, (item_val | (1 << lm_item.itembit)))
+                        curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
+                        curr_val += addr_to_update.item_count
+                        dme.write_bytes(addr_to_update.ram_add, curr_val.to_bytes(byte_size, 'big'))
+                else:
+                    if not addr_to_update.pointer_offset is None:
+                        curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
+            [addr_to_update.pointer_offset]),byte_size))
+                        curr_val = (curr_val | (1 << addr_to_update.bit_position))
+                        dme.write_bytes(dme.follow_pointers(addr_to_update.ram_add,
+            [addr_to_update.pointer_offset]), curr_val.to_bytes(byte_size, 'big'))
+                    else:
+                        curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
+                        curr_val = (curr_val | (1 << addr_to_update.bit_position))
+                        dme.write_bytes(addr_to_update.ram_add, curr_val.to_bytes(byte_size, 'big'))
 
-                # Update the last received index to ensure we don't receive the same item over and over.
-                last_recv_idx += 1
+            # Update the last received index to ensure we don't receive the same item over and over.
+            last_recv_idx += 1
 
-                # Mario item flag updates # TODO Move this after multiple ram addr updates to check and give
-                mario_items_in_inventory = ["Mario's Glove", "Mario's Hat", "Mario's Letter", "Mario's Star",
-                                            "Mario's Shoe",
-                                            "Fire Element Medal", "Water Element Medal", "Ice Element Medal"]
-                for mario_item in mario_items_in_inventory:
-                    mario_id = AutoWorldRegister.world_types[self.game].item_name_to_id[mario_item]
-                    if not any([netItem.item for netItem in self.items_received if netItem.item == mario_id]):
-                        continue
+            if item.item in BOO_AP_ID_LIST:
+                curr_boo_count = len([item.item for item in self.items_received if item.item in BOO_AP_ID_LIST])
+                if curr_boo_count >= self.boo_washroom_count:
+                    boo_val = dme.read_byte(BOO_WASHROOM_FLAG_ADDR)
+                    dme.write_byte(BOO_WASHROOM_FLAG_ADDR, (boo_val | (1 << BOO_WASHROOM_FLAG_BIT)))
+                if curr_boo_count >= self.boo_balcony_count:
+                    boo_val = dme.read_byte(BOO_BALCONY_FLAG_ADDR)
+                    dme.write_byte(BOO_BALCONY_FLAG_ADDR, (boo_val | (1 << BOO_BALCONY_FLAG_BIT)))
+                if curr_boo_count >= self.boo_final_count:
+                    boo_val = dme.read_byte(BOO_FINAL_FLAG_ADDR)
+                    dme.write_byte(BOO_FINAL_FLAG_ADDR, (boo_val | (1 << BOO_FINAL_FLAG_BIT)))
 
-                    lm_item = ALL_ITEMS_TABLE[mario_item]
-                    match lm_item.code:
-                        case 58:  # Mario's Glove
-                            item_val = dme.read_byte(0x803D339B)
-                            dme.write_byte(0x803D339B, (item_val | (1 << 5)))
-                        case 59:  # Mario's Hat
-                            item_val = dme.read_byte(0x803D339D)
-                            dme.write_byte(0x803D339D, (item_val | (1 << 1)))
-                        case 60:  # Mario's Letter
-                            item_val = dme.read_byte(0x803D339C)
-                            dme.write_byte(0x803D339C, (item_val | (1 << 3)))
-                        case 61:  # Mario's Star
-                            item_val = dme.read_byte(0x803D339C)
-                            dme.write_byte(0x803D339C, (item_val | (1 << 6)))
-                        case 62:  # Mario's Shoe
-                            item_val = dme.read_byte(0x803D339C)
-                            dme.write_byte(0x803D339C, (item_val | (1 << 0)))
-                        case 55:  # Fire Element Medal
-                            item_val = dme.read_byte(0x803D339E)
-                            dme.write_byte(0x803D339E, (item_val | (1 << 3)))
-                        case 56:  # Water Element Medal
-                            item_val = dme.read_byte(0x803D339E)
-                            dme.write_byte(0x803D339E, (item_val | (1 << 4)))
-                        case 57:  # Ice Element Medal
-                            item_val = dme.read_byte(0x803D339B)
-                            dme.write_byte(0x803D339B, (item_val | (1 << 6)))
-                dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
-            # TODO else:
-            #   Debug remove before release logger.warn("Missing information for AP ID: " + str(item.item))
         return
 
     async def lm_check_locations(self):
@@ -536,22 +441,21 @@ class LMContext(CommonContext):
             local_loc = self.location_names.lookup_in_game(mis_loc)
             lm_loc_data = ALL_LOCATION_TABLE[local_loc]
 
+            #TODO Maybe helper function can get map id included?
             # If in Boolossus Arena, check Boo ids
             if current_map_id == 11:
-                if lm_loc_data in boolossus_list:
-                    match lm_loc_data.type:
-                        case "Boo":
-                            current_boo_state_int = dme.read_byte(lm_loc_data.room_ram_addr)
-                            if (current_boo_state_int & (1 << lm_loc_data.locationbit)) > 0:
-                                self.locations_checked.add(mis_loc)
+                if not mis_loc in BOO_AP_ID_LIST:
+                    continue
+
+                #TODO account for ram offsets and other similar things.
+                for addr_to_update in lm_loc_data.update_ram_addr:
+                    current_boo_state = dme.read_byte(addr_to_update.ram_addr)
+                    if (current_boo_state & (1 << addr_to_update.bit_position)) > 0:
+                        self.locations_checked.add(mis_loc)
 
             # If in main mansion map
             elif current_map_id == 2:
-                # TODO Debug remove before release
-                #  if lm_loc_data.in_game_room_id is None:
-                #    logger.warn("Missing in game room id: " + str(mis_loc))
-
-                # Only check locations that are currently in the same room as us.
+                #TODO move this... maybe to check in game?
                 current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
                 if current_room_id != self.last_room_id:
                     await self.send_msgs([{
@@ -562,48 +466,40 @@ class LMContext(CommonContext):
                         "operations": [{"operation": "replace", "value": current_room_id}]
                     }])
                     self.last_room_id = current_room_id
-                if not lm_loc_data.in_game_room_id == current_room_id:
-                    continue
 
-                match lm_loc_data.type:
-                    case "Furniture" | "Plant":
-                        # Check all possible furniture addresses. #TODO Find a way to not check all 600+
-                        for current_offset in range(0, FURNITURE_ADDR_COUNT, 4):
-                            # Only check if the current address is a pointer
-                            current_addr = FURNITURE_MAIN_TABLE_ID + current_offset
-                            if not check_if_addr_is_pointer(current_addr):
-                                continue
+                #TODO optimize all other cases for reading when a pointer is there vs not.
+                for addr_to_update in lm_loc_data.update_ram_addr:
+                    # Only check locations that are currently in the same room as us.
+                    if not addr_to_update.in_game_room_id == current_room_id:
+                        continue
 
-                            furn_id = dme.read_word(dme.follow_pointers(current_addr, [FURN_ID_OFFSET]))
-                            if not furn_id == lm_loc_data.jmpentry:
-                                continue
+                    match lm_loc_data.type:
+                        case "Furniture" | "Plant":
+                            # Check all possible furniture addresses. #TODO Find a way to not check all 600+
+                            for current_offset in range(0, FURNITURE_ADDR_COUNT, 4):
+                                # Only check if the current address is a pointer
+                                current_addr = FURNITURE_MAIN_TABLE_ID + current_offset
+                                if not check_if_addr_is_pointer(current_addr):
+                                    continue
 
-                            furn_flag = dme.read_word(dme.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
-                            if furn_flag > 0:
-                                self.locations_checked.add(mis_loc)
-                    case "Chest":
-                        # Bit 2 of the current room address indicates if a chest in that room has been opened.
-                        current_room_state_int = read_short(lm_loc_data.room_ram_addr)
-                        if (current_room_state_int & (1 << 2)) > 0:
-                            self.locations_checked.add(mis_loc)
-                    case "KingdomHearts":
-                        # Bit 1 of the current room address indicates if a light in that room has been turned on.
-                        current_room_state_int = read_short(lm_loc_data.room_ram_addr)
-                        if (current_room_state_int & (1 << 1)) > 0:
-                            self.locations_checked.add(mis_loc)
-                    case "Walk":
-                        # Bit 0 of the current room address indicates if a room has been visited.
-                        current_room_state_int = read_short(lm_loc_data.room_ram_addr)
-                        if (current_room_state_int & (1 << 0)) > 0:
-                            self.locations_checked.add(mis_loc)
-                    case "Boo":
-                        current_boo_state_int = dme.read_byte(lm_loc_data.room_ram_addr)
-                        if (current_boo_state_int & (1 << lm_loc_data.locationbit)) > 0:
-                            self.locations_checked.add(mis_loc)
-                    case "Toad" | "Freestanding" | "Special" | "Portrait" | "BSpeedy":
-                        current_toad_int = dme.read_byte(lm_loc_data.room_ram_addr)
-                        if (current_toad_int & (1 << lm_loc_data.locationbit)) > 0:
-                            self.locations_checked.add(mis_loc)
+                                furn_id = dme.read_word(dme.follow_pointers(current_addr, [FURN_ID_OFFSET]))
+                                if not furn_id == lm_loc_data.jmpentry:
+                                    continue
+
+                                furn_flag = dme.read_word(dme.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
+                                if furn_flag > 0:
+                                    self.locations_checked.add(mis_loc)
+                        case _:
+                            byte_size = 1 if not addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
+                            if not addr_to_update.pointer_offset is None:
+                                curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
+                    [addr_to_update.pointer_offset]), byte_size))
+                                if (curr_val & (1 << addr_to_update.bit_position)) > 0:
+                                    self.locations_checked.add(mis_loc)
+                            else:
+                                curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
+                                if (curr_val & (1 << addr_to_update.bit_position)) > 0:
+                                    self.locations_checked.add(mis_loc)
 
         await self.check_locations(self.locations_checked)
 
@@ -642,14 +538,15 @@ class LMContext(CommonContext):
             vac_speed = "3800000F"
             dme.write_bytes(ALL_ITEMS_TABLE["Poltergust 4000"].ram_addr, bytes.fromhex(vac_speed))
 
+        #TODO Validate in game display has moved so we don't need this anymore.
         # Always reset the Boo's location captured RAM byte back to 0, only if it's been captured before.
         # Although Boo items share the same address, we are not using it currently.
-        for lm_boo in BOO_LOCATION_TABLE.keys():
-            lm_boo_item = BOO_LOCATION_TABLE[lm_boo]
-            if not AutoWorldRegister.world_types[self.game].location_name_to_id[lm_boo] in self.checked_locations:
-                continue
-            boo_caught = dme.read_byte(lm_boo_item.room_ram_addr)
-            dme.write_byte(lm_boo_item.room_ram_addr, boo_caught & ~(1 << lm_boo_item.locationbit))
+        #for lm_boo in BOO_LOCATION_TABLE.keys():
+        #    lm_boo_item = BOO_LOCATION_TABLE[lm_boo]
+        #    if not AutoWorldRegister.world_types[self.game].location_name_to_id[lm_boo] in self.checked_locations:
+        #        continue
+        #    boo_caught = dme.read_byte(lm_boo_item.room_ram_addr)
+        #    dme.write_byte(lm_boo_item.room_ram_addr, boo_caught & ~(1 << lm_boo_item.locationbit))
 
         return
 
@@ -660,32 +557,6 @@ class LMContext(CommonContext):
         if locations:
             await self.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(locations)}])
         return locations
-
-#TODO this entire function can be removed only if in game counter is adjusted to using something else.
-#   Until then, this will need to constantly update and write, almost like an AR code.
-async def boo_counter_sync_task(ctx: LMContext):
-    while not ctx.exit_event.is_set():
-        if not (ctx.dolphin_status == CONNECTION_CONNECTED_STATUS and ctx.check_ingame() and ctx.boosanity):
-            await asyncio.sleep(3)
-            continue
-
-        # Always reset the Boo's captured RAM byte back to 0, regardless of the situation.
-        # Update the internal counter of Boos Captured though.
-        internal_boo_count = 0
-        for lm_boo in BOO_ITEM_TABLE.keys():
-            boo_id = AutoWorldRegister.world_types[ctx.game].item_name_to_id[lm_boo]
-            if any([netItem.item for netItem in ctx.items_received if netItem.item == boo_id]):
-                internal_boo_count += 1
-
-            lm_boo_item = BOO_ITEM_TABLE[lm_boo]
-            boo_caught = dme.read_byte(lm_boo_item.ram_addr)
-            dme.write_byte(lm_boo_item.ram_addr, boo_caught & ~(1 << lm_boo_item.itembit))
-
-        # Update Current Boo Counter with value of captured boos, but only if Boo Radar is in inventory
-        if check_if_addr_is_pointer(BOO_COUNTER_DISPLAY_ADDR):
-            dme.write_byte(dme.follow_pointers(BOO_COUNTER_DISPLAY_ADDR, [BOO_COUNTER_DISPLAY_OFFSET]),
-                           internal_boo_count)
-        await asyncio.sleep(0.1)
 
 async def dolphin_sync_task(ctx: LMContext):
     logger.info("Starting Dolphin connector. Use /dolphin for status information.")

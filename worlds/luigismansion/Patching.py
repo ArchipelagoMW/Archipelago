@@ -4,6 +4,7 @@ from random import choice, randint
 from .Regions import spawn_locations
 from .Items import filler_items
 
+#TODO remove this in favor of JMP entries?
 speedy_observer_index: [int] = [183, 182, 179, 178, 177, 101, 100, 99, 98, 97, 21, 19]
 speedy_enemy_index: [int] = [128, 125, 115, 114, 113, 67, 66, 60, 59, 58, 7, 6]
 money_item_names: [str] = ["Bills", "Coin", "Gold Bar", "Rupee", "Leaf", "Green", "Gold", "Jewel"]
@@ -76,8 +77,8 @@ def __get_item_name(item_data, slot: int):
 
 def update_event_info(event_info, boo_checks: bool, output_data):
     # Removes events that we don't want to trigger at all in the mansion, such as some E. Gadd calls, warps after
-    # boss battles / grabbing boss keys, and various cutscenes etc.
-    events_to_remove = [7, 11, 15, 42, 45, 54, 69, 70, 73, 80, 81, 85, 91]
+    # boss battles / grabbing boss keys, and various cutscenes etc. Also remove Mario Items/Elemental Item events
+    events_to_remove = [7, 11, 12, 15, 18, 19, 20, 21, 41, 42, 45, 54, 69, 70, 73, 80, 81, 85, 91]
 
     # Only remove the boo checks if the player does not want them.
     if not boo_checks:
@@ -1163,6 +1164,11 @@ def update_item_info_table(item_info, output_data):
     items_to_add = ["rdiamond", "itembomb", "ice", "mstar", "banana", "diamond", "gameboy", "vbody"]
     for new_item in items_to_add:
         __add_info_item(item_info, None, info_item_name=new_item, slot=int(output_data["Slot"]))
+
+    heart_amounts_to_fix = {"sheart": 20, "lheart": 50}
+    for heart_item in heart_amounts_to_fix.keys():
+        next(item_info_entry for item_info_entry in item_info.info_file_field_entries if
+              item_info_entry["name"] == heart_item)["hp_amount"] = heart_amounts_to_fix[heart_item]
 
     # Gets the list of keys already added in the item info table
     already_added_keys = [item_entry["name"] for item_entry in item_info.info_file_field_entries if

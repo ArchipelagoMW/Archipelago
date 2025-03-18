@@ -16,6 +16,7 @@ from Options import OptionGroup
 
 # Relative Imports
 from .Items import ITEM_TABLE, LMItem, get_item_names_per_category, filler_items, ALL_ITEMS_TABLE, BOO_ITEM_TABLE
+from .LMClient import CLIENT_VERSION
 from .Locations import *
 from . import LuigiOptions
 from .Hints import get_hints_by_option
@@ -36,7 +37,6 @@ components.append(
 )
 
 icon_paths["archiboolego"] = f"ap:{__name__}/data/archiboolego.png"
-
 
 class LuigisMansionSettings(settings.Group):
     class ISOFile(settings.UserFilePath):
@@ -703,5 +703,5 @@ class LMWorld(World):
             "enemizer": self.options.enemizer.value,
             "spawn_region": self.origin_region_name,
             "death_link": self.options.death_link.value,
-            "apworld version": "0.1.3"
+            "apworld version": CLIENT_VERSION
         }
