@@ -3,7 +3,7 @@ import os
 from typing import TYPE_CHECKING, Dict, List, Optional, cast
 import zipfile
 from BaseClasses import Location
-from worlds.Files import APContainer
+from worlds.Files import APContainer, AutoPatchRegister
 
 from .Enum import CivVICheckType
 from .Locations import CivVILocation, CivVILocationData
@@ -25,11 +25,12 @@ class CivTreeItem:
     ui_tree_row: int
 
 
-class CivVIContainer(APContainer):
+class CivVIContainer(APContainer, metaclass=AutoPatchRegister):
     """
     Responsible for generating the dynamic mod files for the Civ VI multiworld
     """
     game: Optional[str] = "Civilization VI"
+    patch_file_ending = ".apcivvi"
 
     def __init__(self, patch_data: Dict[str, str], base_path: str, output_directory: str,
                  player: Optional[int] = None, player_name: str = "", server: str = ""):
