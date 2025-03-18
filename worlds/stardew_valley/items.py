@@ -264,7 +264,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
 
 def create_raccoons(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
     number_progressive_raccoons = 9
-    if options.quest_locations < 0:
+    if options.quest_locations.has_no_story_quests():
         number_progressive_raccoons = number_progressive_raccoons - 1
 
     items.extend(item_factory(item) for item in [CommunityUpgrade.raccoon] * number_progressive_raccoons)
@@ -387,7 +387,7 @@ def create_quest_rewards(item_factory: StardewItemFactory, options: StardewValle
 
 
 def create_special_quest_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    if options.quest_locations < 0:
+    if options.quest_locations.has_no_story_quests():
         return
     # items.append(item_factory("Adventurer's Guild")) # Now unlocked always!
     items.append(item_factory(Wallet.club_card))
@@ -698,7 +698,7 @@ def create_quest_rewards_sve(item_factory: StardewItemFactory, options: StardewV
     if not exclude_ginger_island:
         items.extend([item_factory(item) for item in SVEQuestItem.sve_always_quest_items_ginger_island])
 
-    if options.quest_locations < 0:
+    if options.quest_locations.has_no_story_quests():
         return
 
     items.extend([item_factory(item) for item in SVEQuestItem.sve_quest_items])
