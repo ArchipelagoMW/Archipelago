@@ -54,6 +54,10 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "mythril_in_pool": 20,
         "mythril_price": 5000,
         
+        "randomize_ap_costs": RandomizeAPCosts.option_off,
+        "max_ap_cost": 5,
+        "min_ap_cost": 0,
+        
         "randomize_puppies": True,
         "puppy_value": 3,
         "starting_worlds": 0,
@@ -130,6 +134,10 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "orichalcum_price": 5000,
         "mythril_in_pool": 20,
         "mythril_price": 5000,
+        
+        "randomize_ap_costs": RandomizeAPCosts.option_off,
+        "max_ap_cost": 5,
+        "min_ap_cost": 0,
         
         "randomize_puppies": True,
         "puppy_value": 1,
@@ -208,6 +216,10 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "mythril_in_pool": 20,
         "mythril_price": 5000,
         
+        "randomize_ap_costs": RandomizeAPCosts.option_off,
+        "max_ap_cost": 5,
+        "min_ap_cost": 0,
+        
         "randomize_puppies": True,
         "puppy_value": 3,
         "starting_worlds": 0,
@@ -283,6 +295,10 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "orichalcum_price": 5000,
         "mythril_in_pool": 20,
         "mythril_price": 5000,
+        
+        "randomize_ap_costs": RandomizeAPCosts.option_off,
+        "max_ap_cost": 5,
+        "min_ap_cost": 0,
         
         "randomize_puppies": True,
         "puppy_value": 3,

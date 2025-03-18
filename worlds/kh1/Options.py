@@ -644,6 +644,38 @@ class MaxLevelForSlot2LevelChecks(Range):
     range_start = 2
     range_end = 100
 
+class RandomizeAPCosts(Choice):
+    """
+    Off: No randomization
+    Shuffle: Ability AP Costs will be shuffled amongst themselves.
+    Randomize: Ability AP Costs will be randomized to the specified max and min.
+    Distribute: Ability AP Costs will totalled and re-distributed randomly between the specified max and min.
+    """
+    display_name = "Randomize AP Costs"
+    option_off = 0
+    option_shuffle = 1
+    option_randomize = 2
+    option_distribute = 3
+    default = 0
+
+class MaxAPCost(Range):
+    """
+    If Randomize AP Costs is set to Randomize or Distribute, this defined the max AP cost an ability can have.
+    """
+    display_name = "Max AP Cost"
+    default = 5
+    range_start = 4
+    range_end = 9
+
+class MinAPCost(Range):
+    """
+    If Randomize AP Costs is set to Randomize or Distribute, this defined the min AP cost an ability can have.
+    """
+    display_name = "Max AP Cost"
+    default = 0
+    range_start = 0
+    range_end = 2
+
 @dataclass
 class KH1Options(PerGameCommonOptions):
     final_rest_door_key: FinalRestDoorKey
@@ -717,6 +749,9 @@ class KH1Options(PerGameCommonOptions):
     warp_anywhere: WarpAnywhere
     randomize_party_member_starting_accessories: RandomizePartyMemberStartingAccessories
     max_level_for_slot_2_level_checks: MaxLevelForSlot2LevelChecks
+    randomize_ap_costs: RandomizeAPCosts
+    max_ap_cost: MaxAPCost
+    min_ap_cost: MinAPCost
 
 kh1_option_groups = [
     OptionGroup("Goal", [
@@ -772,6 +807,11 @@ kh1_option_groups = [
         OrichalcumPrice,
         MythrilInPool,
         MythrilPrice,
+    ]),
+    OptionGroup("AP Costs", [
+        RandomizeAPCosts,
+        MaxAPCost,
+        MinAPCost
     ]),
     OptionGroup("Misc", [
         StartingWorlds,

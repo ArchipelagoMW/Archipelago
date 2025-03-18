@@ -12,132 +12,10 @@ from .Regions import create_regions
 from .Rules import set_rules
 from .Presets import kh1_option_presets
 from .GenerateJSON import generate_json
+from .Data import VANILLA_KEYBLADE_STATS, VANILLA_PUPPY_LOCATIONS, CHAR_TO_KH, VANILLA_ABILITY_AP_COSTS
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 
-VANILLA_KEYBLADE_STATS = [
-    {"STR":  3, "CRR":  20, "CRB":  0, "REC": 30, "MP":  0}, # Kingdom Key
-    {"STR":  1, "CRR":  20, "CRB":  0, "REC": 30, "MP":  0}, # Dream Sword
-    {"STR":  1, "CRR":   0, "CRB":  0, "REC": 60, "MP":  0}, # Dream Shield
-    {"STR":  1, "CRR":  10, "CRB":  0, "REC": 30, "MP":  0}, # Dream Rod
-    {"STR":  0, "CRR":  20, "CRB":  0, "REC": 30, "MP":  0}, # Wooden Sword
-    {"STR":  5, "CRR":  10, "CRB":  0, "REC":  1, "MP":  0}, # Jungle King
-    {"STR":  6, "CRR":  20, "CRB":  0, "REC": 60, "MP":  0}, # Three Wishes
-    {"STR":  8, "CRR":  10, "CRB":  2, "REC": 30, "MP":  1}, # Fairy Harp
-    {"STR":  7, "CRR":  40, "CRB":  0, "REC":  1, "MP":  0}, # Pumpkinhead
-    {"STR":  6, "CRR":  20, "CRB":  0, "REC": 30, "MP":  1}, # Crabclaw
-    {"STR": 13, "CRR":  40, "CRB":  0, "REC": 60, "MP":  0}, # Divine Rose
-    {"STR":  4, "CRR":  20, "CRB":  0, "REC": 30, "MP":  2}, # Spellbinder
-    {"STR": 10, "CRR":  20, "CRB":  2, "REC": 90, "MP":  0}, # Olympia
-    {"STR": 10, "CRR":  20, "CRB":  0, "REC": 30, "MP":  1}, # Lionheart
-    {"STR":  9, "CRR":   2, "CRB":  0, "REC": 90, "MP": -1}, # Metal Chocobo
-    {"STR":  9, "CRR":  40, "CRB":  0, "REC":  1, "MP":  1}, # Oathkeeper
-    {"STR": 11, "CRR":  20, "CRB":  2, "REC": 30, "MP": -1}, # Oblivion
-    {"STR":  7, "CRR":  20, "CRB":  0, "REC":  1, "MP":  2}, # Lady Luck
-    {"STR":  5, "CRR": 200, "CRB":  2, "REC":  1, "MP":  0}, # Wishing Star
-    {"STR": 14, "CRR":  40, "CRB":  2, "REC": 90, "MP":  2}, # Ultima Weapon
-    {"STR":  3, "CRR":  20, "CRB":  0, "REC":  1, "MP":  3}, # Diamond Dust
-    {"STR":  8, "CRR":  10, "CRB": 16, "REC": 90, "MP": -2}, # One-Winged Angel
-    ]
-VANILLA_PUPPY_LOCATIONS = [
-    "Traverse Town Mystical House Glide Chest",
-    "Traverse Town Alleyway Behind Crates Chest",
-    "Traverse Town Item Workshop Left Chest",
-    "Traverse Town Secret Waterway Near Stairs Chest",
-    "Wonderland Queen's Castle Hedge Right Blue Chest",
-    "Wonderland Lotus Forest Nut Chest",
-    "Wonderland Tea Party Garden Above Lotus Forest Entrance 1st Chest",
-    "Olympus Coliseum Coliseum Gates Right Blue Trinity Chest",
-    "Deep Jungle Hippo's Lagoon Center Chest",
-    "Deep Jungle Vines 2 Chest",
-    "Deep Jungle Waterfall Cavern Middle Chest",
-    "Deep Jungle Camp Blue Trinity Chest",
-    "Agrabah Cave of Wonders Treasure Room Across Platforms Chest",
-    "Halloween Town Oogie's Manor Hollow Chest",
-    "Neverland Pirate Ship Deck White Trinity Chest",
-    "Agrabah Cave of Wonders Hidden Room Left Chest",
-    "Agrabah Cave of Wonders Entrance Tall Tower Chest",
-    "Agrabah Palace Gates High Opposite Palace Chest",
-    "Monstro Chamber 3 Platform Above Chamber 2 Entrance Chest",
-    "Wonderland Lotus Forest Through the Painting Thunder Plant Chest",
-    "Hollow Bastion Grand Hall Left of Gate Chest",
-    "Halloween Town Cemetery By Cat Shape Chest",
-    "Halloween Town Moonlight Hill White Trinity Chest",
-    "Halloween Town Guillotine Square Pumpkin Structure Right Chest",
-    "Monstro Mouth High Platform Across from Boat Chest",
-    "Monstro Chamber 6 Low Chest",
-    "Monstro Chamber 5 Atop Barrel Chest",
-    "Neverland Hold Flight 1st Chest",
-    "Neverland Hold Yellow Trinity Green Chest",
-    "Neverland Captain's Cabin Chest",
-    "Hollow Bastion Rising Falls Floating Platform Near Save Chest",
-    "Hollow Bastion Castle Gates Gravity Chest",
-    "Hollow Bastion Lift Stop Outside Library Gravity Chest"
-    ]
-CHAR_TO_KH = {
-    " ": 0x01,
-    "0": 0x21,
-    "1": 0x22,
-    "2": 0x23,
-    "3": 0x24,
-    "4": 0x25,
-    "5": 0x26,
-    "6": 0x27,
-    "7": 0x28,
-    "8": 0x29,
-    "9": 0x2A,
-    "A": 0x2B,
-    "B": 0x2C,
-    "C": 0x2D,
-    "D": 0x2E,
-    "E": 0x2F,
-    "F": 0x30,
-    "G": 0x31,
-    "H": 0x32,
-    "I": 0x33,
-    "J": 0x34,
-    "K": 0x35,
-    "L": 0x36,
-    "M": 0x37,
-    "N": 0x38,
-    "O": 0x39,
-    "P": 0x3A,
-    "Q": 0x3B,
-    "R": 0x3C,
-    "S": 0x3D,
-    "T": 0x3E,
-    "U": 0x3F,
-    "V": 0x40,
-    "W": 0x41,
-    "X": 0x42,
-    "Y": 0x43,
-    "Z": 0x44,
-    "a": 0x45,
-    "b": 0x46,
-    "c": 0x47,
-    "d": 0x48,
-    "e": 0x49,
-    "f": 0x4A,
-    "g": 0x4B,
-    "h": 0x4C,
-    "i": 0x4D,
-    "j": 0x4E,
-    "k": 0x4F,
-    "l": 0x50,
-    "m": 0x51,
-    "n": 0x52,
-    "o": 0x53,
-    "p": 0x54,
-    "q": 0x55,
-    "r": 0x56,
-    "s": 0x57,
-    "t": 0x58,
-    "u": 0x59,
-    "v": 0x5A,
-    "w": 0x5B,
-    "x": 0x5C,
-    "y": 0x5D,
-    "z": 0x5E
-    }
+
 
 def launch_client():
     from .Client import launch
@@ -184,6 +62,7 @@ class KH1World(World):
     slot_2_levels = None
     keyblade_stats = None
     starting_accessory_locations = None
+    ap_costs = None
 
     def create_items(self):
         self.place_predetermined_items()
@@ -395,12 +274,15 @@ class KH1World(World):
                     "jungle_slider": bool(self.options.jungle_slider),
                     "keyblades_unlock_chests": bool(self.options.keyblades_unlock_chests),
                     "level_checks": int(self.options.level_checks.value),
+                    "max_ap_cost": int(self.options.max_ap_cost.value),
+                    "min_ap_cost": int(self.options.min_ap_cost.value),
                     "mythril_in_pool": int(self.options.mythril_in_pool.value),
                     "mythril_price": int(self.options.mythril_price.value),
                     "one_hp": bool(self.options.one_hp),
                     "orichalcum_in_pool": int(self.options.orichalcum_in_pool.value),
                     "orichalcum_price": int(self.options.orichalcum_price.value),
                     "puppy_value": int(self.options.puppy_value.value),
+                    "randomize_ap_costs": str(self.options.randomize_ap_costs.current_key),
                     "randomize_emblem_pieces": bool(self.options.exp_zero_in_pool),
                     "randomize_party_member_starting_accessories": bool(self.options.randomize_party_member_starting_accessories),
                     "randomize_postcards": str(self.options.randomize_postcards.current_key),
@@ -628,3 +510,38 @@ class KH1World(World):
             else:
                 self.starting_accessory_locations = []
         return self.starting_accessory_locations
+    
+    def get_ap_costs(self):
+        if self.ap_costs is None:
+            ap_costs = VANILLA_ABILITY_AP_COSTS.copy()
+            if self.options.randomize_ap_costs.current_key == "shuffle":
+                possible_costs = []
+                for ap_cost in VANILLA_ABILITY_AP_COSTS:
+                    if ap_cost["Randomize"]:
+                        possible_costs.append(ap_cost["AP Cost"])
+                self.random.shuffle(possible_costs)
+                for ap_cost in ap_costs:
+                    if ap_cost["Randomize"]:
+                        ap_cost["AP Cost"] = possible_costs.pop(0)
+            elif self.options.randomize_ap_costs.current_key == "randomize":
+                for ap_cost in ap_costs:
+                    if ap_cost["Randomize"]:
+                        ap_cost["AP Cost"] = self.random.randint(self.options.min_ap_cost.value, self.options.max_ap_cost.value)
+            elif self.options.randomize_ap_costs.current_key == "distribute":
+                total_ap_value = 0
+                for ap_cost in VANILLA_ABILITY_AP_COSTS:
+                    if ap_cost["Randomize"]:
+                        total_ap_value = total_ap_value + ap_cost["AP Cost"]
+                for ap_cost in ap_costs:
+                    if ap_cost["Randomize"]:
+                        total_ap_value = total_ap_value - self.options.min_ap_cost.value
+                        ap_cost["AP Cost"] = self.options.min_ap_cost.value
+                while total_ap_value > 0:
+                    ap_cost = self.random.choice(ap_costs)
+                    if ap_cost["Randomize"]:
+                        if ap_cost["AP Cost"] < self.options.max_ap_cost.value:
+                            amount_to_add = self.random.randint(1, min(self.options.max_ap_cost.value - ap_cost["AP Cost"], total_ap_value))
+                            ap_cost["AP Cost"] = ap_cost["AP Cost"] + amount_to_add
+                            total_ap_value = total_ap_value - amount_to_add
+            self.ap_costs = ap_costs
+        return self.ap_costs
