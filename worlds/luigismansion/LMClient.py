@@ -387,7 +387,7 @@ class LMContext(CommonContext):
             lm_item = ALL_ITEMS_TABLE[lm_item_name]
 
             # TODO optimize all other cases for reading when a pointer is there vs not.
-            for addr_to_update in lm_item.updated_ram_addr:
+            for addr_to_update in lm_item.update_ram_addr:
                 byte_size = 1 if not addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
 
                 if not addr_to_update.item_count is None:
@@ -605,7 +605,9 @@ async def dolphin_sync_task(ctx: LMContext):
                     await asyncio.sleep(5)
                     continue
 
-                if read_string(0x80000000, 6) != "GLME01":
+                if ((read_string(0x80000000, 6) == "GLME01" or
+                        read_string(0x80000000, 6) == "GLMJ01") or
+                        read_string(0x80000000, 6) == "GLMP01"):
                     logger.info(CONNECTION_REFUSED_GAME_STATUS)
                     ctx.dolphin_status = CONNECTION_REFUSED_GAME_STATUS
                     dme.un_hook()
