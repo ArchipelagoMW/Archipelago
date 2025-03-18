@@ -424,9 +424,9 @@ class BooSpeed(Range):
     """
     display_name = "Boo Speed"
     internal_name = "boo_speed"
-    range_start = 1.000000
-    range_end = 36.000000
-    default = 15.000000
+    range_start = 1
+    range_end = 36
+    default = 15
 
 
 class BooEscapeTime(Range):
