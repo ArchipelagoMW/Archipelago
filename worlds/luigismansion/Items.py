@@ -31,6 +31,15 @@ class LMItem(Item):
         return base_id + code if code is not None else None
 
 
+def get_item_names_per_category() -> Dict[str, Set[str]]:
+    categories: Dict[str, Set[str]] = {}
+
+    for name, data in ALL_ITEMS_TABLE.items():
+        categories.setdefault(data.type, set()).add(name)
+
+    return categories
+
+
 ITEM_TABLE: dict[str, LMItemData] = { #TODO need to validate these are all correct in new format
     "Heart Key": LMItemData("Door Key", 0, IC.progression, 3, [LMRamData(0x803D5E14, bit_position=3)]),
     "Club Key": LMItemData("Door Key", 1, IC.progression, 42, [LMRamData(0x803D5E19, bit_position=2)]),
@@ -90,8 +99,9 @@ ITEM_TABLE: dict[str, LMItemData] = { #TODO need to validate these are all corre
         update_ram_addr=[LMRamData(0x803D5DB2, bit_position=5), LMRamData(0x803D339E, bit_position=3)]),
     "Water Element Medal": LMItemData("Medal", 56, IC.progression,
         update_ram_addr=[LMRamData(0x803D5DB2, bit_position=7), LMRamData(0x803D339E, bit_position=4)]),
-    "Ice Element Medal": LMItemData("Medal", 57, IC.progression,
-        update_ram_addr=[LMRamData(0x803D5DB2, bit_position=6), LMRamData(0x803D339B, bit_position=6)]),
+    "Ice Element Medal": LMItemData("Medal", 57, IC.progression, # Turns on flag 22 and 45
+        update_ram_addr=[LMRamData(0x803D5DB2, bit_position=6), LMRamData(0x803D339B, bit_position=6),
+                         LMRamData(0x803D339E, bit_position=4)]),
     "Mario's Glove": LMItemData("Mario Item", 58, IC.progression,
         update_ram_addr=[LMRamData(0x803D5DBB, bit_position=6), LMRamData(0x803D339B, bit_position=5)]),
     "Mario's Hat": LMItemData("Mario Item", 59, IC.progression,
@@ -254,21 +264,8 @@ ALL_ITEMS_TABLE = {**ITEM_TABLE,
                    **BOO_ITEM_TABLE,
                    **filler_items}
 
-#TODO decide if to move to IDs instead
-RECV_OWN_GAME_ITEMS: list[str] = [
-    BOO_ITEM_TABLE.keys(),
-    "Boo Radar",
-    "Poltergust 4000"
-]
+RECV_OWN_GAME_ITEMS: list[int] = [
+    list(LMItem.get_apid(value.code) for value in BOO_ITEM_TABLE.values()), 8063, 8064]
 
 # List of received items to ignore because they are handled elsewhere
-RECV_ITEMS_IGNORE = [8127, 8125, 8130, 8131, 8132]
-
-
-def get_item_names_per_category() -> Dict[str, Set[str]]:
-    categories: Dict[str, Set[str]] = {}
-
-    for name, data in ALL_ITEMS_TABLE.items():
-        categories.setdefault(data.type, set()).add(name)
-
-    return categories
+RECV_ITEMS_IGNORE: list[int] = [8127, 8125, 8130, 8131, 8132]
