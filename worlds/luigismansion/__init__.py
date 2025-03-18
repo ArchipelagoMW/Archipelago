@@ -37,6 +37,7 @@ components.append(
 
 icon_paths["archiboolego"] = f"ap:{__name__}/data/archiboolego.png"
 
+CLIENT_VERSION = "0.1.3"
 
 class LuigisMansionSettings(settings.Group):
     class ISOFile(settings.UserFilePath):
@@ -704,5 +705,5 @@ class LMWorld(World):
             "final boo count": self.options.final_boo_count.value,
             "enemizer": self.options.enemizer.value,
             "death_link": self.options.death_link.value,
-            "apworld version": "0.1.3"
+            "apworld version": CLIENT_VERSION
         }
