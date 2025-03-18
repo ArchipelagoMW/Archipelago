@@ -189,8 +189,8 @@ def connect_regions(world: "LMWorld"):
     lmconnect(world, "West Attic Hallway", "Telephone Room", "Telephone Room Key", 52)
     lmconnect(world, "Telephone Room", "Clockwork Room", "Clockwork Key", 53)
     lmconnect(world, "Armory", "Ceramics Studio", "Ceramics Studio Key", 50)
-    lmconnect(world, "Clockwork Room", "Roof")
-    lmconnect(world, "Roof", "Sealed Room"),
+    lmconnect(world, "Clockwork Room", "Roof", one_way=True)
+    lmconnect(world, "Roof", "Sealed Room", one_way=True),
     lmconnect(world, "Basement Stairwell", "Breaker Room", "Breaker Room Key", 71)
     lmconnect(world, "Basement Stairwell", "Cellar", "Cellar Key", 68)
     lmconnect(world, "Cellar", "Basement Hallway", "Basement Hallway Key", 67)
