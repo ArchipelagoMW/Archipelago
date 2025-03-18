@@ -31,7 +31,7 @@ source_suffix = {
 }
 
 autodoc_default_options = {
-    "undoc_members": True,
+    "undoc-members": True,
     "show-inheritance": True,
 }
 
