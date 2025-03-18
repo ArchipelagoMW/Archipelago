@@ -264,8 +264,8 @@ ALL_ITEMS_TABLE = {**ITEM_TABLE,
                    **BOO_ITEM_TABLE,
                    **filler_items}
 
-#TODO figure out why this is a list of list of ints instead of a list of ints
-BOO_AP_ID_LIST = [list(LMItem.get_apid(value.code) for value in BOO_ITEM_TABLE.values())]
+
+BOO_AP_ID_LIST: list[int] = [LMItem.get_apid(value.code) for value in BOO_ITEM_TABLE.values()]
 
 RECV_OWN_GAME_ITEMS: list[int] = [
     list(LMItem.get_apid(value.code) for value in BOO_ITEM_TABLE.values()), 8063, 8064]
