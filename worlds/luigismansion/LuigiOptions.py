@@ -392,6 +392,64 @@ class RandomSpawn(Choice):
     default = 0
 
 
+class BooHealthOption(Choice):
+    """
+    Choose how Boo Health is determined
+
+    Choice: Use Boo Health Value to set all boos to the specified value
+
+    Random Values: Every boo has a different, randomly chosen health value between 1 and 999
+    """
+    display_name = "Boo Health Option"
+    internal_name = "boo_health_option"
+    option_choice = 0
+    option_random_values = 1
+    default = 0
+
+class BooHealthValue(Range):
+    """
+    Choose the health value all Boos will have it the Boo Health Option is Choice. Range between 1 and 999
+
+    Values over 150 may not be catchable within the current room and logic cannot account for where they move
+    """
+    display_name = "Boo Health Value"
+    internal_name = "boo_health_value"
+    range_start = 1
+    range_end = 999
+    default = 30
+
+class BooSpeed(Range):
+    """
+    Choose how fast boos move. Range from 1 to 36
+    """
+    display_name = "Boo Speed"
+    internal_name = "boo_speed"
+    range_start = 1.000000
+    range_end = 36.000000
+    default = 15.000000
+
+
+class BooEscapeTime(Range):
+    """
+    Choose how long before Boos leave the current room. Range between 1 and 300.
+
+    Values below 90 may not be catchable within the current room and logic cannot account for where they move
+    """
+    display_name = "Boo Escape Time"
+    internal_name = "boo_escape_time"
+    range_start = 1
+    range_end = 300
+    default = 120
+
+class BooAnger(Toggle):
+    """
+    Choose whether boos can damage Luigi.
+    """
+    display_name = "Angry Boos"
+    internal_name = "boo_anger"
+    default = 0
+
+
 @dataclass
 class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     rank_requirement: RankRequirement
@@ -432,6 +490,11 @@ class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     banana_trap_weight: BananaTrapWeight
     nothing_weight: NothingWeight
     heart_weight: HeartWeight
+    boo_health_option: BooHealthOption
+    boo_health_value: BooHealthValue
+    boo_speed: BooSpeed
+    boo_escape_time: BooEscapeTime
+    boo_anger: BooAnger
     chest_types: ChestTypes
     trap_chests: TrapChestType
     start_inventory_from_pool: StartInventoryPool

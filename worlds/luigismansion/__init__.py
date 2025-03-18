@@ -99,6 +99,11 @@ class LMWeb(WebWorld):
             LuigiOptions.RandomMusic,
             LuigiOptions.HintDistribution,
             LuigiOptions.PortraitHints,
+            LuigiOptions.BooHealthOption,
+            LuigiOptions.BooHealthValue,
+            LuigiOptions.BooSpeed,
+            LuigiOptions.BooEscapeTime,
+            LuigiOptions.BooAnger,
             LuigiOptions.ChestTypes,
             LuigiOptions.TrapChestType,
         ]),
@@ -341,7 +346,7 @@ class LMWorld(World):
             for location, data in BOOLOSSUS_LOCATION_TABLE.items():
                 region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
-                add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                add_rule(entry, lambda state: state.has("Ice Element Medal", self.player), "and")
                 region.locations.append(entry)
         else:
             for location, data in ROOM_BOO_LOCATION_TABLE.items():
@@ -387,7 +392,7 @@ class LMWorld(World):
                 entry.address = None
                 entry.code = None
                 entry.place_locked_item(Item("Boo", ItemClassification.progression, None, self.player))
-                add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                add_rule(entry, lambda state: state.has("Ice Element Medal", self.player), "and")
                 region.locations.append(entry)
 
         rankcalc = 0

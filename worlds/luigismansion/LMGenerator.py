@@ -182,7 +182,7 @@ class LuigisMansionRandomizer:
         if self.output_data["Options"]["speedy_spirits"]:
             update_teiden_enemy_info(self.jmp_enemy_info_table, self.jmp_teiden_enemy_info_table)
             update_teiden_observer_info(self.jmp_observer_info_table, self.jmp_teiden_observer_info_table)
-        update_boo_table(self.jmp_boo_table)
+        update_boo_table(self.jmp_boo_table, self.output_data)
 
         # Updates all the data entries in each jmp table in the szp file.
         self.update_maptwo_info_table(self.jmp_character_info_table)

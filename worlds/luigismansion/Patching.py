@@ -1,5 +1,5 @@
 import re
-from random import choice
+from random import choice, randint
 
 from .Regions import spawn_locations
 from .Items import filler_items
@@ -1628,13 +1628,16 @@ def update_enemy_info(enemy_info, output_data):
         # x["do_type"] = 6
 
 
-def update_boo_table(telesa_info):
+def update_boo_table(telesa_info, output_data):
     for x in telesa_info.info_file_field_entries:
         x["accel"] = 3.000000
-        x["max_speed"] = 15.000000
-        x["str_hp"] = 30
-        x["move_time"] = 300
-        x["attack"] = 0
+        x["max_speed"] = output_data["boo_speed"]
+        if output_data["boo health option"] == 0:
+            x["str_hp"] = output_data["boo health value"]
+        elif output_data["boo health option"] == 1:
+            x["str_hp"] = randint(1,999)
+        x["move_time"] = output_data["boo_escape_time"]
+        x["attack"] = output_data["boo_anger"]
 
 
 def apply_new_ghost(enemy_info_entry, element):
