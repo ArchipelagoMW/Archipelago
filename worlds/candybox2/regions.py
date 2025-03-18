@@ -14,7 +14,7 @@ from .locations import candy_box_locations, CandyBox2Location, village_shop_loca
     wishing_well_locations, wishing_well_glove_locations, wishing_well_tribal_spear_locations, \
     wishing_well_monkey_wizard_staff_locations, wishing_well_knight_body_armour_locations, \
     wishing_well_octopus_king_crown_locations, wishing_well_giant_spoon_locations, hole_locations, \
-    desert_fortress_locations, teapot_quest_locations
+    desert_fortress_locations, teapot_quest_locations, xinopherydron_quest_locations
 from .options import CandyBox2Options
 
 
@@ -84,7 +84,8 @@ def create_regions(world: MultiWorld, options: CandyBox2Options, player: int):
     _, castle_entrance_quest_entrance = populate_region(world, player, CandyBox2Region("The Castle Entrance", player, world, "The Castle Entrance"), castle_entrance_locations, world_map_5)
     mark_quest_entrance(castle_entrance_quest_entrance, "Castle Entrance Click")
 
-    populate_region(world, player, CandyBox2Region("The Hole", player, world, "The Hole"), hole_locations, world_map_5)
+    _, hole_quest_entrance = populate_region(world, player, CandyBox2Region("The Hole", player, world, "The Hole"), hole_locations, world_map_5)
+    mark_quest_entrance(hole_quest_entrance, "Hole Click")
 
     _, giant_nougat_monster_quest_entrance = populate_region(world, player, CandyBox2Region("The Giant Nougat Monster", player, world, "The Giant Nougat Monster"), giant_nougat_monster_locations, castle)
     mark_quest_entrance(giant_nougat_monster_quest_entrance, "Giant Nougat Monster Click")
@@ -105,6 +106,9 @@ def create_regions(world: MultiWorld, options: CandyBox2Options, player: int):
 
     # The Desert Fortress
     desert_fortress, _ = populate_region(world, player, CandyBox2Region("The Desert Fortress", player, world, "The Desert Fortress"), desert_fortress_locations, world_map_1, lambda state: state.has("Desert Fortress Key", player))
+
+    _, xinopherydron_quest_entrance = populate_region(world, player, CandyBox2Region("The Xinopherydron Quest", player, world, "The Xinopherydron Quest"), xinopherydron_quest_locations, desert_fortress)
+    mark_quest_entrance(xinopherydron_quest_entrance, "The Xinopherydron Quest Click")
 
     _, teapot_quest_entrance = populate_region(world, player, CandyBox2Region("The Teapot Quest", player, world, "The Teapot Quest"), teapot_quest_locations, desert_fortress)
     mark_quest_entrance(teapot_quest_entrance, "The Teapot Quest Click")

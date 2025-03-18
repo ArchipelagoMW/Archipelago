@@ -186,6 +186,11 @@ teapot_quest_locations = {
     "Giant Spoon Acquired": 3900
 }
 
+xinopherydron_quest_locations = {
+    "Xinopherydon Claw Acquired": 4000,
+    "Unicorn Horn Acquired": 4001
+}
+
 locations = {
     **candy_box_locations,
     **village_locations,
@@ -228,5 +233,6 @@ locations = {
     **wishing_well_giant_spoon_locations,
     **hole_locations,
     **desert_fortress_locations,
-    **teapot_quest_locations
+    **teapot_quest_locations,
+    **xinopherydron_quest_locations
 }
