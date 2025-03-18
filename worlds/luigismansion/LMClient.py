@@ -13,11 +13,11 @@ from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser,
 from worlds import AutoWorldRegister
 from settings import get_settings, Settings
 
-from .__init__ import CLIENT_VERSION
 from .LMGenerator import LuigisMansionRandomizer
 from .Items import ALL_ITEMS_TABLE, RECV_ITEMS_IGNORE, RECV_OWN_GAME_ITEMS, BOO_AP_ID_LIST
 from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV
 
+CLIENT_VERSION = "0.1.3"
 CONNECTION_REFUSED_GAME_STATUS = (
     "Dolphin failed to connect. Please load a randomized ROM for LM. Trying again in 5 seconds..."
 )
