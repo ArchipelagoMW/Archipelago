@@ -14,7 +14,7 @@ from .locations import candy_box_locations, CandyBox2Location, village_shop_loca
     wishing_well_locations, wishing_well_glove_locations, wishing_well_tribal_spear_locations, \
     wishing_well_monkey_wizard_staff_locations, wishing_well_knight_body_armour_locations, \
     wishing_well_octopus_king_crown_locations, wishing_well_giant_spoon_locations, hole_locations, \
-    desert_fortress_locations, teapot_quest_locations, xinopherydron_quest_locations
+    desert_fortress_locations, teapot_quest_locations, xinopherydron_quest_locations, ledge_room_quest_locations
 from .options import CandyBox2Options
 
 
@@ -112,6 +112,9 @@ def create_regions(world: MultiWorld, options: CandyBox2Options, player: int):
 
     _, teapot_quest_entrance = populate_region(world, player, CandyBox2Region("The Teapot Quest", player, world, "The Teapot Quest"), teapot_quest_locations, desert_fortress)
     mark_quest_entrance(teapot_quest_entrance, "The Teapot Quest Click")
+
+    _, ledge_room_quest_entrance = populate_region(world, player, CandyBox2Region("The Ledge Room Quest", player, world, "The Ledge Room Quest"), ledge_room_quest_locations, desert_fortress)
+    mark_quest_entrance(ledge_room_quest_entrance, "The Ledge Room Quest Click")
 
 def populate_region(world: MultiWorld, player: int, region: CandyBox2Region, locations: dict[str, int], parent: Region | None, rule: Optional[Callable[[CollectionState], bool]] = None):
     region.locations += [CandyBox2Location(player, location_name, locations[location_name], region) for location_name in locations]

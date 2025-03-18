@@ -191,6 +191,10 @@ xinopherydron_quest_locations = {
     "Unicorn Horn Acquired": 4001
 }
 
+ledge_room_quest_locations = {
+    "Rocket Boots Acquired": 4100
+}
+
 locations = {
     **candy_box_locations,
     **village_locations,
@@ -234,5 +238,6 @@ locations = {
     **hole_locations,
     **desert_fortress_locations,
     **teapot_quest_locations,
-    **xinopherydron_quest_locations
+    **xinopherydron_quest_locations,
+    **ledge_room_quest_locations
 }

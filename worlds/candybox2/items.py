@@ -62,7 +62,8 @@ items: dict[str, CandyBox2ItemData] = {
     "Desert Fortress Key": CandyBox2ItemData(candy_box_2_base_id + 38, 1, ItemClassification.progression),
     "Knight Body Armour": CandyBox2ItemData(candy_box_2_base_id + 39, 1, ItemClassification.useful),
     "Xinopherydon Claw": CandyBox2ItemData(candy_box_2_base_id + 40, 1, ItemClassification.useful),
-    "Unicorn Horn": CandyBox2ItemData(candy_box_2_base_id + 41, 1, ItemClassification.useful)
+    "Unicorn Horn": CandyBox2ItemData(candy_box_2_base_id + 41, 1, ItemClassification.useful),
+    "Rocket Boots": CandyBox2ItemData(candy_box_2_base_id + 42, 1, ItemClassification.useful),
 }
 
 weapons: Iterable[str] = [
