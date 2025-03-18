@@ -198,6 +198,12 @@ ledge_room_quest_locations = {
     "Rocket Boots Acquired": 4100
 }
 
+castle_trap_room_locations = {}
+
+castle_dark_room_locations = {
+    "Pitchfork Acquired": 4300
+}
+
 locations = {
     **candy_box_locations,
     **village_locations,
@@ -242,5 +248,7 @@ locations = {
     **desert_fortress_locations,
     **teapot_quest_locations,
     **xinopherydron_quest_locations,
-    **ledge_room_quest_locations
+    **ledge_room_quest_locations,
+    **castle_trap_room_locations,
+    **castle_dark_room_locations,
 }

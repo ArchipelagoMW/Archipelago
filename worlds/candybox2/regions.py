@@ -14,7 +14,8 @@ from .locations import candy_box_locations, CandyBox2Location, village_shop_loca
     wishing_well_locations, wishing_well_glove_locations, wishing_well_tribal_spear_locations, \
     wishing_well_monkey_wizard_staff_locations, wishing_well_knight_body_armour_locations, \
     wishing_well_octopus_king_crown_locations, wishing_well_giant_spoon_locations, hole_locations, \
-    desert_fortress_locations, teapot_quest_locations, xinopherydron_quest_locations, ledge_room_quest_locations
+    desert_fortress_locations, teapot_quest_locations, xinopherydron_quest_locations, ledge_room_quest_locations, \
+    castle_trap_room_locations
 from .options import CandyBox2Options
 
 
@@ -89,6 +90,9 @@ def create_regions(world: MultiWorld, options: CandyBox2Options, player: int):
 
     _, giant_nougat_monster_quest_entrance = populate_region(world, player, CandyBox2Region("The Giant Nougat Monster", player, world, "The Giant Nougat Monster"), giant_nougat_monster_locations, castle)
     mark_quest_entrance(giant_nougat_monster_quest_entrance, "Giant Nougat Monster Click")
+
+    _, castle_trap_room_entrance = populate_region(world, player, CandyBox2Region("The Trap Room", player, world, "The Trap Room"), castle_trap_room_locations, castle)
+    mark_quest_entrance(castle_trap_room_entrance, "Castle Trap Room Click")
 
     _, castle_egg_room_quest_entrance = populate_region(world, player, CandyBox2Region("The Castle Egg Room", player, world, "The Castle Egg Room"), castle_egg_room_locations, castle)
     mark_quest_entrance(castle_egg_room_quest_entrance, "Castle Egg Room Click")
