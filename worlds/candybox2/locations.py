@@ -222,6 +222,14 @@ the_sea_locations = {
     "The Purple Fin Acquired": 4504,
 }
 
+dig_spot_locations = {
+    "X marks the spot!": 4600
+}
+
+lonely_house_locations = {
+    "Locked Candy Box Acquired": 4700
+}
+
 locations = {
     **candy_box_locations,
     **village_locations,
@@ -269,5 +277,8 @@ locations = {
     **ledge_room_quest_locations,
     **castle_trap_room_locations,
     **castle_dark_room_locations,
-    **squirrel_tree_locations
+    **squirrel_tree_locations,
+    **the_sea_locations,
+    **dig_spot_locations,
+    **lonely_house_locations,
 }

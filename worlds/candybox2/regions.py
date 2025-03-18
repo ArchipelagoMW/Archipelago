@@ -15,7 +15,7 @@ from .locations import candy_box_locations, CandyBox2Location, village_shop_loca
     wishing_well_monkey_wizard_staff_locations, wishing_well_knight_body_armour_locations, \
     wishing_well_octopus_king_crown_locations, wishing_well_giant_spoon_locations, hole_locations, \
     desert_fortress_locations, teapot_quest_locations, xinopherydron_quest_locations, ledge_room_quest_locations, \
-    castle_trap_room_locations, squirrel_tree_locations, the_sea_locations
+    castle_trap_room_locations, squirrel_tree_locations, the_sea_locations, lonely_house_locations, dig_spot_locations
 from .options import CandyBox2Options
 
 
@@ -54,9 +54,14 @@ def create_regions(world: MultiWorld, options: CandyBox2Options, player: int):
     # The Squirrel Tree
     populate_region(world, player, CandyBox2Region("A tree", player, world, "The squirrel's tree"), squirrel_tree_locations, world_map_1)
 
+    populate_region(world, player, CandyBox2Region("The Lonely House", player, world, "The Lonely House"), lonely_house_locations, world_map_1)
+
     # The Desert
     _, desert_quest_entrance = populate_region(world, player, CandyBox2Region("The Desert", player, world, "The Desert"), desert_locations, world_map_1)
     mark_quest_entrance(desert_quest_entrance, "The Desert Click")
+
+    # This is connected to world_map_2 because it is only accessible once you see the stones in the cave
+    populate_region(world, player, CandyBox2Region("The Dig Spot", player, world, "The Dig Spot"), dig_spot_locations, world_map_2)
 
     # The Wishing Well
     wishing_well, _ = populate_region(world, player, CandyBox2Region("The Wishing Well", player, world, "The Wishing Well"), wishing_well_locations, world_map_2)
