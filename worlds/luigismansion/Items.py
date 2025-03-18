@@ -272,3 +272,12 @@ RECV_OWN_GAME_ITEMS: list[int] = [
 
 # List of received items to ignore because they are handled elsewhere
 RECV_ITEMS_IGNORE: list[int] = [8127, 8125, 8130, 8131, 8132]
+
+
+ICE_TRAP_EQUIV = ["Freeze Trap", "Frozen Trap"]
+BOMB_EQUIV = []
+BANANA_TRAP_EQUIV = ["Stun Trap"]
+GHOST_EQUIV = ["OmoTrap"]
+POISON_MUSH_EQUIV = ["Poison Trap", "Tiny Trap"]
+
+ACCEPTED_TRAPS = ICE_TRAP_EQUIV+BOMB_EQUIV+BANANA_TRAP_EQUIV+GHOST_EQUIV+POISON_MUSH_EQUIV
