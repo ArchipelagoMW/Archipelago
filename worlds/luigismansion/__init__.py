@@ -9,9 +9,9 @@ import Options
 import settings
 from BaseClasses import Tutorial, Item, ItemClassification
 from Utils import visualize_regions, local_path
-from worlds.AutoWorld import WebWorld
+from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess, icon_paths
-from worlds.generic.Rules import add_item_rule
+from worlds.generic.Rules import add_item_rule, add_rule
 from Options import OptionGroup
 
 # Relative Imports
@@ -99,7 +99,8 @@ class LMWeb(WebWorld):
             LuigiOptions.RandomMusic,
             LuigiOptions.HintDistribution,
             LuigiOptions.PortraitHints,
-            LuigiOptions.Deathlink
+            LuigiOptions.ChestTypes,
+            LuigiOptions.TrapChestType,
         ]),
     ]
 
@@ -138,69 +139,16 @@ class LMWorld(World):
     item_name_groups = get_item_names_per_category()
     required_client_version = (0, 5, 1)
     web = LMWeb()
-    ghost_affected_regions: dict[str, str] = GHOST_TO_ROOM
 
-    open_doors: dict[int, int] = {  # TODO maybe move to imported class
-        34: 1,
-        38: 0,
-        43: 1,
-        41: 1,
-        33: 0,
-        32: 1,
-        31: 0,
-        27: 0,
-        28: 0,
-        3: 0,
-        1: 1,
-        4: 0,
-        5: 1,
-        7: 0,
-        11: 1,
-        14: 0,
-        15: 0,
-        10: 1,
-        17: 0,
-        18: 1,
-        20: 1,
-        16: 0,
-        74: 0,
-        75: 1,
-        23: 1,
-        21: 0,
-        25: 0,
-        24: 1,
-        42: 0,
-        29: 0,
-        30: 1,
-        44: 1,
-        40: 1,
-        45: 1,
-        48: 1,
-        49: 1,
-        47: 1,
-        51: 0,
-        63: 0,
-        52: 1,
-        59: 0,
-        62: 0,
-        55: 1,
-        53: 0,
-        56: 0,
-        50: 1,
-        65: 0,
-        9: 1,
-        71: 0,
-        68: 0,
-        67: 1,
-        69: 0,
-        70: 1,
-        72: 0
-    }
+
+
 
     def __init__(self, *args, **kwargs):
         self.itempool: list[LMItem] = []
         self.pre_fill_items: list[LMItem] = []
         super(LMWorld, self).__init__(*args, **kwargs)
+        self.ghost_affected_regions: dict[str, str] = GHOST_TO_ROOM
+        self.open_doors: dict[int, int] = vanilla_door_state
 
     def interpret_slot_data(self, slot_data):
         # There are more clever ways to do this, but all would require much larger changes
@@ -211,7 +159,7 @@ class LMWorld(World):
         # Set the flags for progression location by checking player's settings
         if self.options.toadsanity:
             for location, data in TOAD_LOCATION_TABLE.items():
-                region = self.multiworld.get_region(data.region, self.player)
+                region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
                 if len(entry.access) != 0:
                     for item in entry.access:
@@ -226,7 +174,7 @@ class LMWorld(World):
                 region.locations.append(entry)
         if self.options.plantsanity:
             for location, data in PLANT_LOCATION_TABLE.items():
-                region = self.multiworld.get_region(data.region, self.player)
+                region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
                 if len(entry.access) != 0:
                     # if entry.code == 70:     # Placed here for eventual Huge Flower Support
@@ -240,7 +188,7 @@ class LMWorld(World):
                 region.locations.append(entry)
         if self.options.furnisanity:
             for location, data in FURNITURE_LOCATION_TABLE.items():
-                region = self.multiworld.get_region(data.region, self.player)
+                region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
                 if len(entry.access) != 0:
                     for item in entry.access:
@@ -255,7 +203,7 @@ class LMWorld(World):
                 region.locations.append(entry)
         if self.options.speedy_spirits:
             for location, data in SPEEDY_LOCATION_TABLE.items():
-                region = self.multiworld.get_region(data.region, self.player)
+                region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
                 add_rule(entry, lambda state: state.has("Blackout", self.player), "and")
                 if len(entry.access) != 0:
@@ -271,7 +219,7 @@ class LMWorld(World):
                 region.locations.append(entry)
         if self.options.portrification:
             for location, data in PORTRAIT_LOCATION_TABLE.items():
-                region = self.multiworld.get_region(data.region, self.player)
+                region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
                 if entry.code == 627:
                     add_rule(entry,
@@ -289,20 +237,20 @@ class LMWorld(World):
                             add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
                 if region.name in GHOST_TO_ROOM.keys():
                     # if fire, require water
-                    if self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Fire":
+                    if self.ghost_affected_regions[region.name] == "Fire":
                         add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
                     # if water, require ice
-                    elif self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Water":
+                    elif self.ghost_affected_regions[region.name] == "Water":
                         add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
                     # if ice, require fire
-                    elif self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Ice":
+                    elif self.ghost_affected_regions[region.name] == "Ice":
                         add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
                     else:
                         pass
                 region.locations.append(entry)
         if self.options.lightsanity:
             for location, data in LIGHT_LOCATION_TABLE.items():
-                region = self.multiworld.get_region(data.region, self.player)
+                region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
                 if entry.code == 745:
                     add_rule(entry,
@@ -328,20 +276,20 @@ class LMWorld(World):
                             add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
                 if region.name in GHOST_TO_ROOM.keys():
                     # if fire, require water
-                    if self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Fire":
+                    if self.ghost_affected_regions[region.name] == "Fire":
                         add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
                     # if water, require ice
-                    elif self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Water":
+                    elif self.ghost_affected_regions[region.name] == "Water":
                         add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
                     # if ice, require fire
-                    elif self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Ice":
+                    elif self.ghost_affected_regions[region.name] == "Ice":
                         add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
                     else:
                         pass
                 region.locations.append(entry)
         if self.options.walksanity:
             for location, data in WALK_LOCATION_TABLE.items():
-                region = self.multiworld.get_region(data.region, self.player)
+                region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
                 if len(entry.access) != 0:
                     for item in entry.access:
@@ -356,7 +304,7 @@ class LMWorld(World):
                 region.locations.append(entry)
         if self.options.boosanity:
             for location, data in ROOM_BOO_LOCATION_TABLE.items():
-                region = self.multiworld.get_region(data.region, self.player)
+                region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
                 if self.options.boo_gates == 1 and self.options.boo_radar != 2:
                     add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
@@ -378,25 +326,25 @@ class LMWorld(World):
                             add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
                 if region.name in GHOST_TO_ROOM.keys():
                     # if fire, require water
-                    if self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Fire":
+                    if self.ghost_affected_regions[region.name] == "Fire":
                         add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
                     # if water, require ice
-                    elif self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Water":
+                    elif self.ghost_affected_regions[region.name] == "Water":
                         add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
                     # if ice, require fire
-                    elif self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Ice":
+                    elif self.ghost_affected_regions[region.name] == "Ice":
                         add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
                     else:
                         pass
                 region.locations.append(entry)
             for location, data in BOOLOSSUS_LOCATION_TABLE.items():
-                region = self.multiworld.get_region(data.region, self.player)
+                region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
                 add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
                 region.locations.append(entry)
         else:
             for location, data in ROOM_BOO_LOCATION_TABLE.items():
-                region = self.multiworld.get_region(data.region, self.player)
+                region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
                 entry.address = None
                 entry.place_locked_item(Item("Boo", ItemClassification.progression, None, self.player))
@@ -421,19 +369,19 @@ class LMWorld(World):
                             add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
                 if region.name in GHOST_TO_ROOM.keys():
                     # if fire, require water
-                    if self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Fire":
+                    if self.ghost_affected_regions[region.name] == "Fire":
                         add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
                     # if water, require ice
-                    elif self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Water":
+                    elif self.ghost_affected_regions[region.name] == "Water":
                         add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
                     # if ice, require fire
-                    elif self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Ice":
+                    elif self.ghost_affected_regions[region.name] == "Ice":
                         add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
                     else:
                         pass
                 region.locations.append(entry)
             for location, data in BOOLOSSUS_LOCATION_TABLE.items():
-                region = self.multiworld.get_region(data.region, self.player)
+                region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
                 entry.address = None
                 entry.code = None
@@ -558,13 +506,13 @@ class LMWorld(World):
                         add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
             if region.name in GHOST_TO_ROOM.keys():
                 # if fire, require water
-                if self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Fire":
+                if self.ghost_affected_regions[region.name] == "Fire":
                     add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
                 # if water, require ice
-                elif self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Water":
+                elif self.ghost_affected_regions[region.name] == "Water":
                     add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
                 # if ice, require fire
-                elif self.multiworld.worlds[self.player].ghost_affected_regions[region.name] == "Ice":
+                elif self.ghost_affected_regions[region.name] == "Ice":
                     add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
                 else:
                     pass
@@ -591,7 +539,7 @@ class LMWorld(World):
                         add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
             region.locations.append(entry)
         self._set_optional_locations()
-        connect_regions(self.multiworld, self.player)
+        connect_regions(self)
 
     def create_item(self, item: str) -> LMItem:
         set_non_progress = False
@@ -671,7 +619,7 @@ class LMWorld(World):
         output_data = {
             "Seed": self.multiworld.seed,
             "Slot": self.player,
-            "Name": self.multiworld.get_player_name(self.player),
+            "Name": self.player_name,
             "Options": {},
             "Locations": {},
             "Entrances": {},
@@ -755,6 +703,6 @@ class LMWorld(World):
             "balcony boo count": self.options.balcony_boo_count.value,
             "final boo count": self.options.final_boo_count.value,
             "enemizer": self.options.enemizer.value,
-            "death_link": self.options.deathlink.value,
+            "death_link": self.options.death_link.value,
             "apworld version": "0.1.3"
         }

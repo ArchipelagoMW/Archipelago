@@ -6,6 +6,11 @@ from .Items import filler_items
 #TODO remove this in favor of JMP entries?
 speedy_observer_index: [int] = [183, 182, 179, 178, 177, 101, 100, 99, 98, 97, 21, 19]
 speedy_enemy_index: [int] = [128, 125, 115, 114, 113, 67, 66, 60, 59, 58, 7, 6]
+money_item_names: [str] = ["Bills", "Coin", "Gold Bar", "Rupee", "Leaf", "Green", "Gold", "Jewel"]
+explode_item_names: [str] = ["Bomb", "Missile", "Glove", "Red", "Tunic", "Cloth", "Armor", "Boot", "Shoe"]
+icy_item_names: [str] = ["Ice Trap", "White", "Ice Beam", "Icy", "Freeze"]
+light_item_names: [str] = ["Light", "Big Key", "Yellow", "Banana", "Boss Key", "Sun", "Laser"]
+blueish_item_names: [str] = ["Small Key", "Blue", "Ocean", "Sea", "Magic"]
 
 
 # Converts AP readable name to in-game name
@@ -170,6 +175,11 @@ def update_event_info(event_info, boo_checks: bool):
             x["EventFlag"] = 0
             x["disappear_flag"] = 74
 
+        # Make event38 load more than once
+        if x["EventNo"] == 38:
+            x["EventLoad"] = 0
+            x["disappear_flag"] = 12
+
         # Update the Washroom event trigger to be area entry based
         # Also updates the event disappear trigger to be flag 28
         # Also updates the EventFlag to 0, so this event always plays
@@ -241,6 +251,10 @@ def update_character_info(character_info, output_data):
         # Make Shivers not disappear by doing a different appear flag.
         if x["name"] == "situji":
             x["appear_flag"] = 7
+
+        # Make Luggs stay gone if the light are on in the room
+        if x["name"] == "eater":
+            x["disappear_flag"] = 31
 
 
 def update_teiden_observer_info(observer_info, teiden_observer_info):
@@ -973,6 +987,66 @@ def update_observer_info(observer_info):
         "invisible": 1,
         "(Undocumented)": 0,
     })
+    # Turn on flag 12 to stop event38 from reloading
+    observer_info.info_file_field_entries.append({
+        "name": "observer",
+        "code_name": "(null)",
+        "string_arg0": "(null)",
+        "cond_string_arg0": "(null)",
+        "pos_x": 2970.000000,
+        "pos_y": 1550.000000,
+        "pos_z": -2095.000000,
+        "dir_x": 0.000000,
+        "dir_y": 0.000000,
+        "dir_z": 0.000000,
+        "scale_x": 1.000000,
+        "scale_y": 1.000000,
+        "scale_z": 1.000000,
+        "room_no": 57,
+        "cond_arg0": 0,
+        "arg0": 12,
+        "arg1": 0,
+        "arg2": 0,
+        "arg3": 0,
+        "arg4": 0,
+        "arg5": 0,
+        "appear_flag": 0,
+        "disappear_flag": 0,
+        "cond_type": 13,
+        "do_type": 7,
+        "invisible": 1,
+        "(Undocumented)": 0,
+    })
+    # This one checks for lights on in the Wardrobe, flagging that key spawn
+    observer_info.info_file_field_entries.append({
+        "name": "observer",
+        "code_name": "(null)",
+        "string_arg0": "(null)",
+        "cond_string_arg0": "(null)",
+        "pos_x": -400.000000,
+        "pos_y": 420.000000,
+        "pos_z": -1800.000000,
+        "dir_x": 0.000000,
+        "dir_y": 0.000000,
+        "dir_z": 0.000000,
+        "scale_x": 1.000000,
+        "scale_y": 1.000000,
+        "scale_z": 1.000000,
+        "room_no": 9,
+        "cond_arg0": 0,
+        "arg0": 31,
+        "arg1": 0,
+        "arg2": 0,
+        "arg3": 0,
+        "arg4": 0,
+        "arg5": 0,
+        "appear_flag": 0,
+        "disappear_flag": 0,
+        "cond_type": 13,
+        "do_type": 7,
+        "invisible": 1,
+        "(Undocumented)": 0,
+    })
 
 
 def update_generator_info(generator_info):
@@ -993,28 +1067,90 @@ def update_obj_info(obj_info):
 
 
 # Indicates the chest size that will be loaded in game based on item provided. 0 = small, 1 = medium, 2 = large
-def __get_chest_size_from_item(item_name):
-    if "Bills" in item_name or "Coins" in item_name or "Gold Bars" in item_name:
-        item_name = "Money"
-    match item_name:
-        case "Mario's Hat" | "Mario's Letter" | "Mario's Shoe" | "Mario's Glove" | "Mario's Star":
+def __get_chest_size_from_item(item_name, chest_option, classification, trap_option, slot, iplayer):
+    if chest_option == 0 or chest_option == 2:
+        if "Boo" in item_name and slot == iplayer:
             return 0
+        if any(iname in item_name for iname in money_item_names):
+            item_name = "Money"
+        match item_name:
+            case "Mario's Hat" | "Mario's Letter" | "Mario's Shoe" | "Mario's Glove" | "Mario's Star":
+                return 0
 
-        case "Small Heart" | "Money":
+            case "Small Heart" | "Money":
+                return 0
+            case "Large Heart":
+                return 1
+
+            case "Poison Mushroom" | "Bomb" | "Ice Trap" | "Gold Diamond" | "Banana Trap":
+                return 2
+
+            case "Fire Element Medal" | "Water Element Medal" | "Ice Element Medal":
+                return 2
+
+            case "Sapphire" | "Emerald" | "Ruby" | "Diamond":
+                return 1
+
+        return 0
+
+    elif chest_option == 3:
+        if "progression" in classification:
+            return 2
+        elif "useful" in classification:
+            return 1
+        elif "filler" in classification:
             return 0
-        case "Large Heart":
-            return 1
+        elif "trap" in classification:
+            if trap_option == 0:
+                return 0
+            elif trap_option == 1:
+                return 2
+            else:
+                return choice([0,1,2])
 
-        case "Poison Mushroom" | "Bomb" | "Ice Trap" | "Gold Diamond" | "Banana Trap":
-            return 2
+    elif chest_option == 1:
+        return choice([0,1,2])
 
-        case "Fire Element Medal" | "Water Element Medal" | "Ice Element Medal":
-            return 2
+    elif chest_option == 4:
+        if "Boo" in item_name and slot == iplayer:
+            return 0
+        if any(iname in item_name for iname in money_item_names) and slot == iplayer:
+            item_name = "Money"
 
-        case "Sapphire" | "Emerald" | "Ruby" | "Diamond":
-            return 1
+        if slot != iplayer:
+            if "progression" in classification:
+                return 2
+            elif "useful" in classification:
+                return 1
+            elif "filler" in classification:
+                return 0
+            elif "trap" in classification:
+                if trap_option == 0:
+                    return 0
+                elif trap_option == 1:
+                    return 2
+                else:
+                    return choice([0, 1, 2])
 
-    return 0
+        match item_name:
+            case "Mario's Hat" | "Mario's Letter" | "Mario's Shoe" | "Mario's Glove" | "Mario's Star":
+                return 0
+
+            case "Small Heart" | "Money":
+                return 0
+            case "Large Heart":
+                return 1
+
+            case "Poison Mushroom" | "Bomb" | "Ice Trap" | "Gold Diamond" | "Banana Trap":
+                return 2
+
+            case "Fire Element Medal" | "Water Element Medal" | "Ice Element Medal":
+                return 2
+
+            case "Sapphire" | "Emerald" | "Ruby" | "Diamond":
+                return 1
+
+        return 0
 
 
 # For every key found in the generation output, add an entry for it in "iteminfotable".
@@ -1119,15 +1255,23 @@ def update_treasure_table(treasure_info, character_info, output_data, teiden: bo
             if not item_data["type"] == "Chest":
                 continue
 
+
             # Find the proper chest in the proper room by looking comparing the Room ID.
             if x["name"].find("takara") != -1 and x["room_no"] == item_data["room_no"]:
                 # Replace the Chest visuals with something that matches the item name in "characterinfo".
-                x["name"] = __get_item_chest_visual(item_data["name"])
-
-                if item_data["door_id"] == 0:
-                    chest_size = __get_chest_size_from_item(item_data["name"])
+                chest_size = 0
+                if output_data["Options"]["chest_types"] == 0:
+                    x["name"] = __get_item_chest_visual(item_data["name"], 0, item_data["classification"], output_data["Options"]["trap_chests"], output_data["Slot"], item_data["player"])
+                    if item_data["door_id"] == 0:
+                        chest_size = __get_chest_size_from_item(item_data["name"], 0, item_data["classification"], output_data["Options"]["trap_chests"], output_data["Slot"], item_data["player"])
+                    else:
+                        chest_size = __get_chest_size_from_key(item_data["door_id"])
                 else:
-                    chest_size = __get_chest_size_from_key(item_data["door_id"])
+                    x["name"] = __get_item_chest_visual(item_data["name"], output_data["Options"]["chest_types"], item_data["classification"],
+                                                        output_data["Options"]["trap_chests"], output_data["Slot"], item_data["player"])
+                    chest_size = __get_chest_size_from_item(item_data["name"], output_data["Options"]["chest_types"], item_data["classification"],
+                                                            output_data["Options"]["trap_chests"], output_data["Slot"], item_data["player"])
+
 
                 # Define the actor name to use from the Location in the generation output.
                 # Act differently if it's a key.
@@ -1156,7 +1300,7 @@ def update_treasure_table(treasure_info, character_info, output_data, teiden: bo
                                 coin_amount = int_money_amt
                         elif "Bills" in item_data["name"]:
                             bill_amount = int_money_amt
-                        elif "Gold Bars" in item_data["name"]:
+                        elif "Gold Bar" in item_data["name"]:
                             gold_bar_amount = int_money_amt
                         elif "Sapphire" in item_data["name"]:
                             sapphire_amount = int_money_amt
@@ -1198,30 +1342,100 @@ def __get_chest_size_from_key(key_id):
 
 
 # Changes the type of chest loaded in game based on the type of item that is hidden inside
-def __get_item_chest_visual(item_name):
-    if "Bills" in item_name or "Coin" in item_name or "Gold Bar" in item_name:
-        item_name = "Money"
-    match item_name:
-        case "Heart Key" | "Club Key" | "Diamond Key" | "Spade Key":
-            return "ytakara1"
-
-        case "Small Heart" | "Large Heart":
-            return "ytakara1"
-
-        case "Fire Element Medal" | "Bomb" | "Ruby":
-            return "rtakara1"
-        case "Water Element Medal" | "Poison Mushroom" | "Banana Trap" | "Sapphire":
-            return "btakara1"
-        case "Ice Element Medal" | "Ice Trap" | "Diamond":
+def __get_item_chest_visual(item_name, chest_option, classification, trap_option, slot, iplayer):
+    if chest_option == 0:
+        if "Boo" in item_name and slot == iplayer:
             return "wtakara1"
+        if any(iname in item_name for iname in money_item_names):
+            item_name = "Money"
+        elif any(iname in item_name for iname in explode_item_names):
+            item_name = "Bomb"
+        elif any(iname in item_name for iname in light_item_names):
+            item_name = "Banana Trap"
+        elif any(iname in item_name for iname in blueish_item_names):
+            item_name = "Sapphire"
+        elif any(iname in item_name for iname in icy_item_names):
+            item_name = "Ice Trap"
+        match item_name:
+            case "Heart Key" | "Club Key" | "Diamond Key" | "Spade Key" :
+                return "ytakara1"
 
-        case "Mario's Hat" | "Mario's Letter" | "Mario's Shoe" | "Mario's Glove" | "Mario's Star":
-            return "rtakara1"
+            case "Small Heart" | "Large Heart" | "Banana Trap" :
+                return "ytakara1"
 
-        case "Gold Diamond" | "Emerald" | "Money":
+            case "Fire Element Medal" | "Bomb" | "Ruby":
+                return "rtakara1"
+            case "Water Element Medal" | "Poison Mushroom" | "Sapphire":
+                return "btakara1"
+            case "Ice Element Medal" | "Ice Trap" | "Diamond":
+                return "wtakara1"
+
+            case "Mario's Hat" | "Mario's Letter" | "Mario's Shoe" | "Mario's Glove" | "Mario's Star":
+                return "rtakara1"
+
+            case "Gold Diamond" | "Emerald" | "Money":
+                return "gtakara1"
+
+        return "btakara1"
+    elif chest_option == 2 or chest_option == 3:
+        if "progression" in classification:
+            return "ytakara1"
+        elif "useful" in classification:
+            return "btakara1"
+        elif "filler" in classification:
             return "gtakara1"
+        elif "trap" in classification:
+            if trap_option == 0:
+                return "rtakara1"
+            elif trap_option == 1:
+                return "ytakara1"
+            else:
+                return choice(["ytakara1", "rtakara1", "btakara1", "wtakara1", "gtakara1"])
 
-    return "btakara1"
+    elif chest_option == 1:
+        return choice(["ytakara1", "rtakara1", "btakara1", "wtakara1", "gtakara1"])
+
+    elif chest_option == 4:
+        if "Boo" in item_name and slot == iplayer:
+            return "wtakara1"
+        if any(iname in item_name for iname in money_item_names) and slot == iplayer:
+            item_name = "Money"
+
+        if slot != iplayer:
+            if "progression" in classification:
+                return "ytakara1"
+            elif "useful" in classification:
+                return "btakara1"
+            elif "filler" in classification:
+                return "gtakara1"
+            elif "trap" in classification:
+                if trap_option == 0:
+                    return "rtakara1"
+                elif trap_option == 1:
+                    return "ytakara1"
+                else:
+                    return choice(["ytakara1", "rtakara1", "btakara1", "wtakara1", "gtakara1"])
+        match item_name:
+            case "Heart Key" | "Club Key" | "Diamond Key" | "Spade Key" :
+                return "ytakara1"
+
+            case "Small Heart" | "Large Heart" | "Banana Trap" :
+                return "ytakara1"
+
+            case "Fire Element Medal" | "Bomb" | "Ruby":
+                return "rtakara1"
+            case "Water Element Medal" | "Poison Mushroom" | "Sapphire":
+                return "btakara1"
+            case "Ice Element Medal" | "Ice Trap" | "Diamond":
+                return "wtakara1"
+
+            case "Mario's Hat" | "Mario's Letter" | "Mario's Shoe" | "Mario's Glove" | "Mario's Star":
+                return "rtakara1"
+
+            case "Gold Diamond" | "Emerald" | "Money":
+                return "gtakara1"
+
+        return "btakara1"
 
 
 # Dictionary of Location names and their index in keyinfo.
@@ -1448,7 +1662,7 @@ def apply_new_ghost(enemy_info_entry, element):
         case "No Element":
             if enemy_info_entry["room_no"] == 23:
                 no_shy_ghosts = random_ghosts_to_patch
-                no_shy_ghosts.remove(5)
+                no_shy_ghosts.pop(5)
                 enemy_info_entry["name"] = choice(choice(no_shy_ghosts))
             else:
                 enemy_info_entry["name"] = choice(choice(random_ghosts_to_patch))
