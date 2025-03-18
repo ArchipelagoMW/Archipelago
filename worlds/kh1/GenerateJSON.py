@@ -38,7 +38,8 @@ def generate_json(self, output_directory):
     files = {
         "item_location_map.json":  json.dumps(item_location_map),
         "keyblade_stats.json":     json.dumps(self.get_keyblade_stats()),
-        "settings.json":           json.dumps(settings)
+        "settings.json":           json.dumps(settings),
+        "ap_costs.json":           json.dumps(self.get_ap_costs())
     }
 
     mod = KH1Container(files, mod_dir, output_directory, self.player,
