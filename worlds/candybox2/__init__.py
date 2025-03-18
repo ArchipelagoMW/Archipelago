@@ -15,11 +15,9 @@ class CandyBox2World(World):
 
     game = "Candy Box 2"
     base_id = 1
-    location_name_to_id = {name: id for id, name in enumerate(locations, 1)}
+    location_name_to_id = locations
     item_name_to_id = {name: data.code for name, data in items.items() if data.code is not None}
     options_dataclass = CandyBox2Options
-    options: CandyBox2Options
-    settings: typing.ClassVar[CandyBox2Options]
     topology_present = True
 
     entrance_randomisation: ERPlacementState = None
