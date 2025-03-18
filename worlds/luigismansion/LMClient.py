@@ -649,7 +649,7 @@ def main(output_data: Optional[str] = None, connect=None, password=None):
 
     import colorama
 
-    colorama.init()
+    colorama.just_fix_windows_console()
     asyncio.run(_main(connect, password))
     colorama.deinit()
 
