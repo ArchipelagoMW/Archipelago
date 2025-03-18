@@ -73,7 +73,12 @@ items: dict[str, CandyBox2ItemData] = {
     "500 Candies": CandyBox2ItemData(candy_box_2_base_id + 49, 1, ItemClassification.skip_balancing),
     "3 Lollipops": CandyBox2ItemData(candy_box_2_base_id + 50, 1, ItemClassification.skip_balancing),
     "3 Chocolate Bars": CandyBox2ItemData(candy_box_2_base_id + 51, 1, ItemClassification.skip_balancing),
-    "Third House Key": CandyBox2ItemData(candy_box_2_base_id + 52, 1, ItemClassification.skip_balancing)
+    "Third House Key": CandyBox2ItemData(candy_box_2_base_id + 52, 1, ItemClassification.skip_balancing),
+    "The Sponge": CandyBox2ItemData(candy_box_2_base_id + 53, 1, ItemClassification.useful),
+    "The Shell Powder": CandyBox2ItemData(candy_box_2_base_id + 54, 1, ItemClassification.useful),
+    "The Red Fin": CandyBox2ItemData(candy_box_2_base_id + 55, 1, ItemClassification.useful),
+    "The Green Fin": CandyBox2ItemData(candy_box_2_base_id + 56, 1, ItemClassification.useful),
+    "The Purple Fin": CandyBox2ItemData(candy_box_2_base_id + 57, 1, ItemClassification.useful),
 }
 
 weapons: Iterable[str] = [

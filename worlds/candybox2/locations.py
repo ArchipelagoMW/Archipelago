@@ -214,6 +214,14 @@ squirrel_tree_locations = {
     "The Squirrel's puzzle": 4405
 }
 
+the_sea_locations = {
+    "The Sponge Acquired": 4500,
+    "The Shell Powder Acquired": 4501,
+    "The Red Fin Acquired": 4502,
+    "The Green Fin Acquired": 4503,
+    "The Purple Fin Acquired": 4504,
+}
+
 locations = {
     **candy_box_locations,
     **village_locations,

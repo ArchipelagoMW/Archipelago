@@ -15,7 +15,7 @@ from .locations import candy_box_locations, CandyBox2Location, village_shop_loca
     wishing_well_monkey_wizard_staff_locations, wishing_well_knight_body_armour_locations, \
     wishing_well_octopus_king_crown_locations, wishing_well_giant_spoon_locations, hole_locations, \
     desert_fortress_locations, teapot_quest_locations, xinopherydron_quest_locations, ledge_room_quest_locations, \
-    castle_trap_room_locations, squirrel_tree_locations
+    castle_trap_room_locations, squirrel_tree_locations, the_sea_locations
 from .options import CandyBox2Options
 
 
@@ -79,6 +79,9 @@ def create_regions(world: MultiWorld, options: CandyBox2Options, player: int):
     mark_quest_entrance(bridge_quest_entrance, "The Bridge Click")
 
     populate_region(world, player, CandyBox2Region("The Sorceress' Hut", player, world, "The Sorceress' Hut"), sorceress_hut_locations, world_map_3)
+
+    _, sea_quest_entrance = populate_region(world, player, CandyBox2Region("The Sea", player, world, "The Sea"), the_sea_locations, world_map_4)
+    mark_quest_entrance(sea_quest_entrance, "The Sea Click")
 
     # The Forest
     _, forest_quest_entrance = populate_region(world, player, CandyBox2Region("The Forest", player, world, "The Forest"), forest_locations, world_map_4)
