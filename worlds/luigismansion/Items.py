@@ -156,7 +156,7 @@ BOO_ITEM_TABLE: dict[str, LMItemData] = {
         update_ram_addr=[LMRamData(0x803D5E06, bit_position=5)]),
     "Astral Boo (Boonswoggle)": LMItemData("Boo", 88, IC.progression,
         update_ram_addr=[LMRamData(0x803D5E06, bit_position=6)]),
-    "Nana's Room Boo (LamBooger)": LMItemData("Boo", 89, IC.progression,
+    "Nana's Room Boo (LimBooger)": LMItemData("Boo", 89, IC.progression,
         update_ram_addr=[LMRamData(0x803D5E06, bit_position=7)]),
     "Tea Room Boo (Mr. Boojangles)": LMItemData("Boo", 90, IC.progression,
         update_ram_addr=[LMRamData(0x803D5E07, bit_position=0)]),
