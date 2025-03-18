@@ -23,7 +23,7 @@ item_descriptions = {
 items: dict[str, CandyBox2ItemData] = {
     "Candy": CandyBox2ItemData(candy_box_2_base_id + 0, 0),
     "Lollipop": CandyBox2ItemData(candy_box_2_base_id + 1, 8, ItemClassification.skip_balancing),
-    "Chocolate Bar": CandyBox2ItemData(candy_box_2_base_id + 2, 2, ItemClassification.useful),
+    "Chocolate Bar": CandyBox2ItemData(candy_box_2_base_id + 2, 3, ItemClassification.useful),
     "HP Bar": CandyBox2ItemData(candy_box_2_base_id + 3, 1, ItemClassification.useful),
     "Time Ring": CandyBox2ItemData(candy_box_2_base_id + 4, 1, ItemClassification.useful),
     "Candy Merchant's Hat": CandyBox2ItemData(candy_box_2_base_id + 5, 1, ItemClassification.useful),

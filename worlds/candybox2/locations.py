@@ -12,7 +12,8 @@ location_descriptions = {
 }
 
 candy_box_locations = {
-    "HP Bar Unlock": 1
+    "HP Bar Unlock": 1,
+    "Disappointed Emote Chocolate Bar": 2
 }
 
 village_locations = {}
