@@ -15,18 +15,18 @@ def can_bomb_clip(state: CollectionState, region: LTTPRegion, player: int) -> bo
 
 def can_buy_unlimited(state: CollectionState, item: str, player: int) -> bool:
     return any(shop.region.player == player and shop.has_unlimited(item) and shop.region.can_reach(state) for
-                shop in state.multiworld.shops)
+               shop in state.multiworld.shops)
 
 
 def can_buy(state: CollectionState, item: str, player: int) -> bool:
     return any(shop.region.player == player and shop.has(item) and shop.region.can_reach(state) for
-                shop in state.multiworld.shops)
+               shop in state.multiworld.shops)
 
 
-def can_shoot_arrows(state: CollectionState, player: int) -> bool:
+def can_shoot_arrows(state: CollectionState, player: int, count: int = 0) -> bool:
     if state.multiworld.retro_bow[player]:
         return (state.has('Bow', player) or state.has('Silver Bow', player)) and can_buy(state, 'Single Arrow', player)
-    return state.has('Bow', player) or state.has('Silver Bow', player)
+    return (state.has('Bow', player) or state.has('Silver Bow', player)) and can_hold_arrows(state, player, count)
 
 
 def has_triforce_pieces(state: CollectionState, player: int) -> bool:
@@ -61,13 +61,13 @@ def heart_count(state: CollectionState, player: int) -> int:
     # Warning: This only considers items that are marked as advancement items
     diff = state.multiworld.worlds[player].difficulty_requirements
     return min(state.count('Boss Heart Container', player), diff.boss_heart_container_limit) \
-            + state.count('Sanctuary Heart Container', player) \
+        + state.count('Sanctuary Heart Container', player) \
         + min(state.count('Piece of Heart', player), diff.heart_piece_limit) // 4 \
-            + 3  # starting hearts
+        + 3  # starting hearts
 
 
 def can_extend_magic(state: CollectionState, player: int, smallmagic: int = 16,
-                        fullrefill: bool = False):  # This reflects the total magic Link has, not the total extra he has.
+                     fullrefill: bool = False):  # This reflects the total magic Link has, not the total extra he has.
     basemagic = 8
     if state.has('Magic Upgrade (1/4)', player):
         basemagic = 32
@@ -84,11 +84,18 @@ def can_extend_magic(state: CollectionState, player: int, smallmagic: int = 16,
 
 
 def can_hold_arrows(state: CollectionState, player: int, quantity: int):
-    arrows = 30 + ((state.count("Arrow Upgrade (+5)", player) * 5) + (state.count("Arrow Upgrade (+10)", player) * 10)
-                   + (state.count("Bomb Upgrade (50)", player) * 50))
-    # Arrow Upgrade (+5) beyond the 6th gives +10
-    arrows += max(0, ((state.count("Arrow Upgrade (+5)", player) - 6) * 10))
-    return min(70, arrows) >= quantity
+    if state.multiworld.worlds[player].options.shuffle_capacity_upgrades:
+        if quantity == 0:
+            return True
+        if state.has("Arrow Upgrade (70)", player):
+            arrows = 70
+        else:
+            arrows = (30 + (state.count("Arrow Upgrade (+5)", player) * 5)
+                      + (state.count("Arrow Upgrade (+10)", player) * 10))
+            # Arrow Upgrade (+5) beyond the 6th gives +10
+            arrows += max(0, ((state.count("Arrow Upgrade (+5)", player) - 6) * 10))
+        return min(70, arrows) >= quantity
+    return quantity <= 30 or state.has("Capacity Upgrade Shop", player)
 
 
 def can_use_bombs(state: CollectionState, player: int, quantity: int = 1) -> bool:
@@ -146,19 +153,19 @@ def can_get_good_bee(state: CollectionState, player: int) -> bool:
 def can_retrieve_tablet(state: CollectionState, player: int) -> bool:
     return state.has('Book of Mudora', player) and (has_beam_sword(state, player) or
                                                     (state.multiworld.swordless[player] and
-                                                    state.has("Hammer", player)))
+                                                     state.has("Hammer", player)))
 
 
 def has_sword(state: CollectionState, player: int) -> bool:
     return state.has('Fighter Sword', player) \
-            or state.has('Master Sword', player) \
-            or state.has('Tempered Sword', player) \
-            or state.has('Golden Sword', player)
+        or state.has('Master Sword', player) \
+        or state.has('Tempered Sword', player) \
+        or state.has('Golden Sword', player)
 
 
 def has_beam_sword(state: CollectionState, player: int) -> bool:
     return state.has('Master Sword', player) or state.has('Tempered Sword', player) or state.has('Golden Sword',
-                                                                                                player)
+                                                                                                 player)
 
 
 def has_melee_weapon(state: CollectionState, player: int) -> bool:
@@ -171,9 +178,9 @@ def has_fire_source(state: CollectionState, player: int) -> bool:
 
 def can_melt_things(state: CollectionState, player: int) -> bool:
     return state.has('Fire Rod', player) or \
-            (state.has('Bombos', player) and
-            (state.multiworld.swordless[player] or
-                has_sword(state, player)))
+        (state.has('Bombos', player) and
+         (state.multiworld.swordless[player] or
+          has_sword(state, player)))
 
 
 def has_misery_mire_medallion(state: CollectionState, player: int) -> bool:

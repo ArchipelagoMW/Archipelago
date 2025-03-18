@@ -2,9 +2,7 @@
 from __future__ import annotations
 import abc
 import logging
-from typing import TYPE_CHECKING, ClassVar, Dict, Iterable, Tuple, Any, Optional, Union
-
-from typing_extensions import TypeGuard
+from typing import TYPE_CHECKING, ClassVar, Dict, Iterable, Tuple, Any, Optional, Union, TypeGuard
 
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components
 
@@ -87,4 +85,8 @@ class SNIClient(abc.ABC, metaclass=AutoSNIClientRegister):
 
     async def deathlink_kill_player(self, ctx: SNIContext) -> None:
         """ override this with implementation to kill player """
+        pass
+
+    def on_package(self, ctx: SNIContext, cmd: str, args: Dict[str, Any]) -> None:
+        """ override this with code to handle packages from the server """
         pass

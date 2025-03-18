@@ -61,6 +61,7 @@ item_name_groups = ({
     "VesselFragments": lookup_type_to_names["Vessel"],
     "WhisperingRoots": lookup_type_to_names["Root"],
     "WhiteFragments": {"Queen_Fragment", "King_Fragment", "Void_Heart"},
+    "DreamNails": {"Dream_Nail", "Dream_Gate", "Awoken_Dream_Nail"},
 })
 item_name_groups['Horizontal'] = item_name_groups['Cloak'] | item_name_groups['CDash']
 item_name_groups['Vertical'] = item_name_groups['Claw'] | {'Monarch_Wings'}

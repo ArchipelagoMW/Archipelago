@@ -118,6 +118,7 @@ class WebHostContext(Context):
         self.gamespackage = {"Archipelago": static_gamespackage.get("Archipelago", {})}  # this may be modified by _load
         self.item_name_groups = {"Archipelago": static_item_name_groups.get("Archipelago", {})}
         self.location_name_groups = {"Archipelago": static_location_name_groups.get("Archipelago", {})}
+        missing_checksum = False
 
         for game in list(multidata.get("datapackage", {})):
             game_data = multidata["datapackage"][game]
@@ -133,11 +134,13 @@ class WebHostContext(Context):
                         continue
                     else:
                         self.logger.warning(f"Did not find game_data_package for {game}: {game_data['checksum']}")
+            else:
+                missing_checksum = True  # Game rolled on old AP and will load data package from multidata
             self.gamespackage[game] = static_gamespackage.get(game, {})
             self.item_name_groups[game] = static_item_name_groups.get(game, {})
             self.location_name_groups[game] = static_location_name_groups.get(game, {})
 
-        if not game_data_packages:
+        if not game_data_packages and not missing_checksum:
             # all static -> use the static dicts directly
             self.gamespackage = static_gamespackage
             self.item_name_groups = static_item_name_groups
@@ -307,7 +310,7 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
 
                     await ctx.server
                 port = 0
-                for wssocket in ctx.server.ws_server.sockets:
+                for wssocket in ctx.server.server.sockets:
                     socketname = wssocket.getsockname()
                     if wssocket.family == socket.AF_INET6:
                         # Prefer IPv4, as most users seem to not have working ipv6 support
