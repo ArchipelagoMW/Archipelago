@@ -17,7 +17,7 @@ if base_dir not in sys.path:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "Archipelago"
-copyright = "2024, Archipelago"
+copyright = "2025, Archipelago"
 author = "Archipelago"
 release = __version__
 
@@ -28,6 +28,11 @@ extensions = ["sphinx.ext.autodoc", "myst_parser"]
 source_suffix = {
     ".rst": "restructuredtext",
     ".md": "markdown",
+}
+
+autodoc_default_options = {
+    "undoc_members": True,
+    "show-inheritance": True,
 }
 
 # -- Options for HTML output -------------------------------------------------
