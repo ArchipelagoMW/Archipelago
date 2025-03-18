@@ -388,30 +388,30 @@ class LMContext(CommonContext):
 
             # TODO optimize all other cases for reading when a pointer is there vs not.
             for addr_to_update in lm_item.update_ram_addr:
-                byte_size = 1 if not addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
+                byte_size = 1 if addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
 
                 if not addr_to_update.item_count is None:
                     if not addr_to_update.pointer_offset is None:
                         curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
             [addr_to_update.pointer_offset]), byte_size))
                         curr_val+= addr_to_update.item_count
-                        dme.write_bytes(dme.follow_pointers(addr_to_update.ram_add,
+                        dme.write_bytes(dme.follow_pointers(addr_to_update.ram_addr,
             [addr_to_update.pointer_offset]), curr_val.to_bytes(byte_size, 'big'))
                     else:
                         curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
                         curr_val += addr_to_update.item_count
-                        dme.write_bytes(addr_to_update.ram_add, curr_val.to_bytes(byte_size, 'big'))
+                        dme.write_bytes(addr_to_update.ram_addr, curr_val.to_bytes(byte_size, 'big'))
                 else:
                     if not addr_to_update.pointer_offset is None:
                         curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
             [addr_to_update.pointer_offset]),byte_size))
                         curr_val = (curr_val | (1 << addr_to_update.bit_position))
-                        dme.write_bytes(dme.follow_pointers(addr_to_update.ram_add,
+                        dme.write_bytes(dme.follow_pointers(addr_to_update.ram_addr,
             [addr_to_update.pointer_offset]), curr_val.to_bytes(byte_size, 'big'))
                     else:
                         curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
                         curr_val = (curr_val | (1 << addr_to_update.bit_position))
-                        dme.write_bytes(addr_to_update.ram_add, curr_val.to_bytes(byte_size, 'big'))
+                        dme.write_bytes(addr_to_update.ram_addr, curr_val.to_bytes(byte_size, 'big'))
 
             # Update the last received index to ensure we don't receive the same item over and over.
             last_recv_idx += 1
@@ -490,7 +490,7 @@ class LMContext(CommonContext):
                                 if furn_flag > 0:
                                     self.locations_checked.add(mis_loc)
                         case _:
-                            byte_size = 1 if not addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
+                            byte_size = 1 if addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
                             if not addr_to_update.pointer_offset is None:
                                 curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
                     [addr_to_update.pointer_offset]), byte_size))
@@ -536,7 +536,7 @@ class LMContext(CommonContext):
         vac_id = AutoWorldRegister.world_types[self.game].item_name_to_id["Poltergust 4000"]
         if any([netItem.item for netItem in self.items_received if netItem.item == vac_id]):
             vac_speed = "3800000F"
-            dme.write_bytes(ALL_ITEMS_TABLE["Poltergust 4000"].ram_addr, bytes.fromhex(vac_speed))
+            dme.write_bytes(ALL_ITEMS_TABLE["Poltergust 4000"].update_ram_addr[0].ram_addr, bytes.fromhex(vac_speed))
 
         #TODO Validate in game display has moved so we don't need this anymore.
         # Always reset the Boo's location captured RAM byte back to 0, only if it's been captured before.
