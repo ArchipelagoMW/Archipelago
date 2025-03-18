@@ -10,7 +10,11 @@ from .locations import candy_box_locations, CandyBox2Location, village_shop_loca
     bridge_locations, cave_locations, forest_locations, castle_entrance_locations, giant_nougat_monster_locations, \
     village_house_2_locations, sorceress_hut_locations, octopus_king_locations, naked_monkey_wizard_locations, \
     castle_egg_room_locations, dragon_locations, lighthouse_locations, hell_locations, the_developer_fight_locations, \
-    forge_1_locations, forge_2_locations, forge_3_locations, forge_4_locations, forge_5_locations
+    forge_1_locations, forge_2_locations, forge_3_locations, forge_4_locations, forge_5_locations, \
+    wishing_well_locations, wishing_well_glove_locations, wishing_well_tribal_spear_locations, \
+    wishing_well_monkey_wizard_staff_locations, wishing_well_knight_body_armour_locations, \
+    wishing_well_octopus_king_crown_locations, wishing_well_giant_spoon_locations, hole_locations, \
+    desert_fortress_locations, teapot_quest_locations
 from .options import CandyBox2Options
 
 
@@ -50,6 +54,15 @@ def create_regions(world: MultiWorld, options: CandyBox2Options, player: int):
     _, desert_quest_entrance = populate_region(world, player, CandyBox2Region("The Desert", player, world, "The Desert"), desert_locations, world_map_1)
     mark_quest_entrance(desert_quest_entrance, "The Desert Click")
 
+    # The Wishing Well
+    wishing_well, _ = populate_region(world, player, CandyBox2Region("The Wishing Well", player, world, "The Wishing Well"), wishing_well_locations, world_map_2)
+    populate_region(world, player, CandyBox2Region("The Wishing Well (Unlocked Gloves)", player, world, "The Wishing Well"), wishing_well_glove_locations, wishing_well, lambda state: state.has("Leather Gloves", player))
+    populate_region(world, player, CandyBox2Region("The Wishing Well (Unlocked Tribal Spear)", player, world, "The Wishing Well"), wishing_well_tribal_spear_locations, wishing_well, lambda state: state.has("Tribal Spear", player))
+    populate_region(world, player, CandyBox2Region("The Wishing Well (Unlocked Monkey Wizard Staff)", player, world, "The Wishing Well"), wishing_well_monkey_wizard_staff_locations, wishing_well, lambda state: state.has("Monkey Wizard Staff", player))
+    populate_region(world, player, CandyBox2Region("The Wishing Well (Unlocked Knight Body Armour)", player, world, "The Wishing Well"), wishing_well_knight_body_armour_locations, wishing_well, lambda state: state.has("Knight Body Armour", player))
+    populate_region(world, player, CandyBox2Region("The Wishing Well (Unlocked Octopus King Crown)", player, world, "The Wishing Well"), wishing_well_octopus_king_crown_locations, wishing_well, lambda state: state.has("Octopus King Crown", player))
+    populate_region(world, player, CandyBox2Region("The Wishing Well (Unlocked Giant Spoon)", player, world, "The Wishing Well"), wishing_well_giant_spoon_locations, wishing_well, lambda state: state.has("Giant Spoon", player))
+
     # The Cave
     the_cave, _ = populate_region(world, player, CandyBox2Region("The Cave", player, world, "The Cave"), cave_locations, world_map_2)
     _, octopus_king_quest_entrance = populate_region(world, player, CandyBox2Region("The Octopus King Quest", player, world, "The Octopus King"), octopus_king_locations, the_cave)
@@ -71,6 +84,8 @@ def create_regions(world: MultiWorld, options: CandyBox2Options, player: int):
     _, castle_entrance_quest_entrance = populate_region(world, player, CandyBox2Region("The Castle Entrance", player, world, "The Castle Entrance"), castle_entrance_locations, world_map_5)
     mark_quest_entrance(castle_entrance_quest_entrance, "Castle Entrance Click")
 
+    populate_region(world, player, CandyBox2Region("The Hole", player, world, "The Hole"), hole_locations, world_map_5)
+
     _, giant_nougat_monster_quest_entrance = populate_region(world, player, CandyBox2Region("The Giant Nougat Monster", player, world, "The Giant Nougat Monster"), giant_nougat_monster_locations, castle)
     mark_quest_entrance(giant_nougat_monster_quest_entrance, "Giant Nougat Monster Click")
 
@@ -85,8 +100,14 @@ def create_regions(world: MultiWorld, options: CandyBox2Options, player: int):
     _, hell_quest_entrance = populate_region(world, player, CandyBox2Region("Hell", player, world, "Hell"), hell_locations, dragon_room)
     mark_quest_entrance(hell_quest_entrance, "Hell Room Click")
 
-    _, the_developer_quest_entrance = populate_region(world, player, CandyBox2Region("The Developer Quest", player, world, "The Developer Quest"), the_developer_fight_locations, dragon_room);
+    _, the_developer_quest_entrance = populate_region(world, player, CandyBox2Region("The Developer Quest", player, world, "The Developer Quest"), the_developer_fight_locations, dragon_room)
     mark_quest_entrance(the_developer_quest_entrance, "The Developer Quest Click")
+
+    # The Desert Fortress
+    desert_fortress, _ = populate_region(world, player, CandyBox2Region("The Desert Fortress", player, world, "The Desert Fortress"), desert_fortress_locations, world_map_1, lambda state: state.has("Desert Fortress Key", player))
+
+    _, teapot_quest_entrance = populate_region(world, player, CandyBox2Region("The Teapot Quest", player, world, "The Teapot Quest"), teapot_quest_locations, desert_fortress)
+    mark_quest_entrance(teapot_quest_entrance, "The Teapot Quest Click")
 
 def populate_region(world: MultiWorld, player: int, region: CandyBox2Region, locations: dict[str, int], parent: Region | None, rule: Optional[Callable[[CollectionState], bool]] = None):
     region.locations += [CandyBox2Location(player, location_name, locations[location_name], region) for location_name in locations]

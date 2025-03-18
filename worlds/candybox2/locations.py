@@ -82,7 +82,8 @@ forest_locations = {
 }
 
 castle_entrance_locations = {
-    "Castle Entrance Quest": 1500
+    "Castle Entrance Quest": 1500,
+    "Knight Body Armour Acquired": 1501,
 }
 
 giant_nougat_monster_locations = {
@@ -146,6 +147,45 @@ forge_5_locations = {
     "Buy Scythe": 3000
 }
 
+wishing_well_locations = {}
+
+wishing_well_glove_locations = {
+    "Enchant Red Enchanted Gloves": 3100,
+    "Enchant Pink Enchanted Gloves": 3101,
+}
+
+wishing_well_tribal_spear_locations = {
+    "Enchant Summoning Tribal Spear": 3200,
+}
+
+wishing_well_monkey_wizard_staff_locations = {
+    "Enchant Enchanted Monkey Wizard Staff": 3300,
+}
+
+wishing_well_knight_body_armour_locations = {
+    "Enchant Enchanted Knight Body Armour": 3400,
+}
+
+wishing_well_octopus_king_crown_locations = {
+    "Enchant Octopus King Crown with Jaspers": 3500,
+    "Enchant Octopus King Crown with Obsidian": 3501,
+}
+
+wishing_well_giant_spoon_locations = {
+    "Enchant Giant Spoon of Doom": 3600
+}
+
+hole_locations = {
+    "Tribal Spear Acquired": 3700,
+    "Desert Fortress Key Acquired": 3701
+}
+
+desert_fortress_locations = {}
+
+teapot_quest_locations = {
+    "Giant Spoon Acquired": 3900
+}
+
 locations = {
     **candy_box_locations,
     **village_locations,
@@ -179,4 +219,14 @@ locations = {
     **forge_3_locations,
     **forge_4_locations,
     **forge_5_locations,
+    **wishing_well_locations,
+    **wishing_well_glove_locations,
+    **wishing_well_tribal_spear_locations,
+    **wishing_well_monkey_wizard_staff_locations,
+    **wishing_well_knight_body_armour_locations,
+    **wishing_well_octopus_king_crown_locations,
+    **wishing_well_giant_spoon_locations,
+    **hole_locations,
+    **desert_fortress_locations,
+    **teapot_quest_locations
 }

@@ -49,6 +49,18 @@ items: dict[str, CandyBox2ItemData] = {
     "Polished Silver Sword": CandyBox2ItemData(candy_box_2_base_id + 25, 1, ItemClassification.useful),
     "Lightweight Body Armour": CandyBox2ItemData(candy_box_2_base_id + 26, 1, ItemClassification.useful),
     "Scythe": CandyBox2ItemData(candy_box_2_base_id + 27, 1, ItemClassification.useful),
+    "Red Enchanted Gloves": CandyBox2ItemData(candy_box_2_base_id + 28, 1, ItemClassification.useful),
+    "Pink Enchanted Gloves": CandyBox2ItemData(candy_box_2_base_id + 29, 1, ItemClassification.useful),
+    "Summoning Tribal Spear": CandyBox2ItemData(candy_box_2_base_id + 30, 1, ItemClassification.useful),
+    "Enchanted Monkey Wizard Staff": CandyBox2ItemData(candy_box_2_base_id + 31, 1, ItemClassification.useful),
+    "Enchanted Knight Body Armour": CandyBox2ItemData(candy_box_2_base_id + 32, 1, ItemClassification.useful),
+    "Octopus King Crown with Jaspers": CandyBox2ItemData(candy_box_2_base_id + 33, 1, ItemClassification.useful),
+    "Octopus King Crown with Obsidian": CandyBox2ItemData(candy_box_2_base_id + 34, 1, ItemClassification.useful),
+    "Giant Spoon of Doom": CandyBox2ItemData(candy_box_2_base_id + 35, 1, ItemClassification.useful),
+    "Tribal Spear": CandyBox2ItemData(candy_box_2_base_id + 36, 1, ItemClassification.useful),
+    "Giant Spoon": CandyBox2ItemData(candy_box_2_base_id + 37, 1, ItemClassification.useful),
+    "Desert Fortress Key": CandyBox2ItemData(candy_box_2_base_id + 38, 1, ItemClassification.progression),
+    "Knight Body Armour": CandyBox2ItemData(candy_box_2_base_id + 39, 1, ItemClassification.useful),
 }
 
 weapons: Iterable[str] = [
@@ -57,5 +69,9 @@ weapons: Iterable[str] = [
     "Polished Silver Sword",
     "The Troll's Bludgeon",
     "The Monkey Wizard Staff",
-    "Scythe"
+    "Scythe",
+    "Summoning Tribal Spear",
+    "Enchanted Monkey Wizard Staff",
+    "Enchanted Knight Body Armour",
+    "Giant Spoon of Doom"
 ]
