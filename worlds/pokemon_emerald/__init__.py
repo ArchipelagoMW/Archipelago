@@ -22,11 +22,12 @@ from .locations import (PokemonEmeraldLocation, create_location_label_to_id_map,
                         set_free_fly, set_legendary_cave_entrances)
 from .opponents import randomize_opponent_parties
 from .options import (Goal, DarkCavesRequireFlash, HmRequirements, ItemPoolType, PokemonEmeraldOptions,
-                      RandomizeWildPokemon, RandomizeBadges, RandomizeHms, NormanRequirement)
+                      RandomizeWildPokemon, RandomizeBadges, RandomizeHms, NormanRequirement, OPTION_GROUPS)
 from .pokemon import (get_random_move, get_species_id_by_label, randomize_abilities, randomize_learnsets,
                       randomize_legendary_encounters, randomize_misc_pokemon, randomize_starters,
                       randomize_tm_hm_compatibility,randomize_types, randomize_wild_encounters)
 from .rom import PokemonEmeraldProcedurePatch, write_tokens 
+from .util import get_encounter_type_label
 
 
 class PokemonEmeraldWebWorld(WebWorld):
@@ -63,6 +64,7 @@ class PokemonEmeraldWebWorld(WebWorld):
     )
 
     tutorials = [setup_en, setup_es, setup_sv]
+    option_groups = OPTION_GROUPS
 
 
 class PokemonEmeraldSettings(settings.Group):
@@ -635,32 +637,11 @@ class PokemonEmeraldWorld(World):
 
             spoiler_handle.write(f"\n\nWild Pokemon ({self.player_name}):\n\n")
 
-            slot_to_rod_suffix = {
-                0: " (Old Rod)",
-                1: " (Old Rod)",
-                2: " (Good Rod)",
-                3: " (Good Rod)",
-                4: " (Good Rod)",
-                5: " (Super Rod)",
-                6: " (Super Rod)",
-                7: " (Super Rod)",
-                8: " (Super Rod)",
-                9: " (Super Rod)",
-            }
-
             species_maps = defaultdict(set)
-            for map in self.modified_maps.values():
-                if map.land_encounters is not None:
-                    for encounter in map.land_encounters.slots:
-                        species_maps[encounter].add(map.label + " (Land)")
-
-                if map.water_encounters is not None:
-                    for encounter in map.water_encounters.slots:
-                        species_maps[encounter].add(map.label + " (Water)")
-
-                if map.fishing_encounters is not None:
-                    for slot, encounter in enumerate(map.fishing_encounters.slots):
-                        species_maps[encounter].add(map.label + slot_to_rod_suffix[slot])
+            for map_data in self.modified_maps.values():
+                for encounter_type, encounter_data in map_data.encounters.items():
+                    for i, encounter in enumerate(encounter_data.slots):
+                        species_maps[encounter].add(f"{map_data.label} ({get_encounter_type_label(encounter_type, i)})")
 
             lines = [f"{emerald_data.species[species].label}: {', '.join(sorted(maps))}\n"
                      for species, maps in species_maps.items()]
@@ -674,32 +655,11 @@ class PokemonEmeraldWorld(World):
         if self.options.dexsanity:
             from collections import defaultdict
 
-            slot_to_rod_suffix = {
-                0: " (Old Rod)",
-                1: " (Old Rod)",
-                2: " (Good Rod)",
-                3: " (Good Rod)",
-                4: " (Good Rod)",
-                5: " (Super Rod)",
-                6: " (Super Rod)",
-                7: " (Super Rod)",
-                8: " (Super Rod)",
-                9: " (Super Rod)",
-            }
-
             species_maps = defaultdict(set)
-            for map in self.modified_maps.values():
-                if map.land_encounters is not None:
-                    for encounter in map.land_encounters.slots:
-                        species_maps[encounter].add(map.label + " (Land)")
-
-                if map.water_encounters is not None:
-                    for encounter in map.water_encounters.slots:
-                        species_maps[encounter].add(map.label + " (Water)")
-
-                if map.fishing_encounters is not None:
-                    for slot, encounter in enumerate(map.fishing_encounters.slots):
-                        species_maps[encounter].add(map.label + slot_to_rod_suffix[slot])
+            for map_data in self.modified_maps.values():
+                for encounter_type, encounter_data in map_data.encounters.items():
+                    for i, encounter in enumerate(encounter_data.slots):
+                        species_maps[encounter].add(f"{map_data.label} ({get_encounter_type_label(encounter_type, i)})")
 
             hint_data[self.player] = {
                 self.location_name_to_id[f"Pokedex - {emerald_data.species[species].label}"]: ", ".join(sorted(maps))
