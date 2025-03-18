@@ -634,8 +634,9 @@ class ShopMinimumNausea(Range):
     default = 0
 
 class ShopMinimumLength(Range):
-    """If the shop determines you need a ride with a minimum length, this value in meters will be the lowest it 
-    can ask for. If this value is higher than the maximum, the generator will assume it is a mistake and set it to 0.
+    """If the shop determines you need a ride with a minimum length (In Meters), this value in meters will 
+    be the lowest it can ask for. If this value is higher than the maximum, the generator will assume it is a 
+    mistake and set it to 0.
     """
     display_name = "Minimum Shop Length Requirement"
     range_start = 0
@@ -677,7 +678,8 @@ class ShopMaximumNausea(Range):
     default = 4
 
 class ShopMaximumLength(Range):
-    """If the shop determines you need a ride with a minimum length, this value will be the highest it can ask for.
+    """If the shop determines you need a ride with a minimum length (In Meters), 
+    this value will be the highest it can ask for.
     """
     display_name = "Maximum Shop Length Requirement"
     range_start = 0
