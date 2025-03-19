@@ -1741,7 +1741,7 @@ class SC2Logic:
     def protoss_can_merge_archon(self, state: CollectionState) -> bool:
         return (state.has_any({item_names.HIGH_TEMPLAR, item_names.SIGNIFIER}, self.player)
                 or state.has_all({item_names.ASCENDANT, item_names.ASCENDANT_ARCHON_MERGE}, self.player)
-                or state.has_all({item_names.DARK_TEMPLAR, item_names.DARK_TEMPLAR_DARK_ARCHON_MELD}, self.player)
+                or state.has_all({item_names.DARK_TEMPLAR, item_names.DARK_TEMPLAR_ARCHON_MERGE}, self.player)
                 )
 
     def protoss_can_merge_dark_archon(self, state: CollectionState) -> bool:
