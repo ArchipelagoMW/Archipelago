@@ -471,7 +471,10 @@ class LMContext(CommonContext):
                 #TODO optimize all other cases for reading when a pointer is there vs not.
                 for addr_to_update in lm_loc_data.update_ram_addr:
                     # Only check locations that are currently in the same room as us.
-                    if not addr_to_update.in_game_room_id == current_room_id:
+                    room_to_check = addr_to_update.in_game_room_id if not addr_to_update.in_game_room_id is None \
+                        else current_room_id
+
+                    if not room_to_check == current_room_id:
                         continue
 
                     match lm_loc_data.type:

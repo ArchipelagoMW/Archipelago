@@ -55,7 +55,9 @@ class LMLocation(Location):
 BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     # Give item on Altar lights turning on
     "Luigi's Courage": LMLocationData("Foyer", 708, "KingdomHearts", 0, [], remote_only=True,
-        update_ram_addr=[LMRamData(0x803CDFDC, bit_position=1, in_game_room_id=2, ram_byte_size=2)]),
+        update_ram_addr=[LMRamData(0x803CDFDC, bit_position=1, ram_byte_size=2)]),
+    "E. Gadd's Gift": LMLocationData("Foyer", 708, "KingdomHearts", 0, [], remote_only=True,
+        update_ram_addr=[LMRamData(0x803CDFDC, bit_position=1, ram_byte_size=2)]),
     "Ghost Foyer Key": LMLocationData("Foyer", 713, "Freestanding", 1, [],
         update_ram_addr=[LMRamData(0x803D3399, bit_position=3, in_game_room_id=2)]),
     "1F Washroom Toilet": LMLocationData("1F Washroom", 4, "Furniture", 233, [],
