@@ -44,7 +44,7 @@ items: dict[str, CandyBox2ItemData] = {
     "The L Stone": CandyBox2ItemData(candy_box_2_base_id + 20, 1, ItemClassification.progression | ItemClassification.useful),
     "The A Stone": CandyBox2ItemData(candy_box_2_base_id + 21, 1, ItemClassification.progression | ItemClassification.useful),
     "The Y Stone": CandyBox2ItemData(candy_box_2_base_id + 22, 1, ItemClassification.progression | ItemClassification.useful),
-    "Wooden Sword": CandyBox2ItemData(candy_box_2_base_id + 23, 1, ItemClassification.progression | ItemClassification.useful),
+    "Wooden Sword": CandyBox2ItemData(candy_box_2_base_id + 23, 1, ItemClassification.useful),
     "Iron Axe": CandyBox2ItemData(candy_box_2_base_id + 24, 1, ItemClassification.useful),
     "Polished Silver Sword": CandyBox2ItemData(candy_box_2_base_id + 25, 1, ItemClassification.useful),
     "Lightweight Body Armour": CandyBox2ItemData(candy_box_2_base_id + 26, 1, ItemClassification.useful),
