@@ -1,0 +1,18 @@
+name: Package Candy Box 2
+on:
+  push:
+    branches:
+      - "candy-box-2"
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Archive
+        run: |
+          cd worlds
+          zip -r candybox2.apworld candybox2/
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: "worlds/candybox2.apworld"
