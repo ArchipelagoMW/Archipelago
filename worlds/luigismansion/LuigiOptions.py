@@ -376,19 +376,12 @@ class RankRequirement(Choice):
     option_rank_a = 7
 
 
-class RandomSpawn(Choice):
+class RandomSpawn(Toggle):
     """
     Allows Luigi to randomly spawn somewhere in the mansion.
-
-    Random Spawn: Randomly spawn in one of the rooms with enough locations to successfully generate
-
-    Expanded Spawns: Only viable if Walksanity, or <furniture options here>. Larger amount of viable random spawn locations
     """
     display_name = "Random Spawn Location"
     internal_name = "random_spawn"
-    option_vanilla = 0
-    option_random_spawn = 1
-    option_expanded_spawns = 2
     default = 0
 
 
