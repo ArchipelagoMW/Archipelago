@@ -212,6 +212,7 @@ components: List[Component] = [
     Component('Generate', 'Generate', cli=True),
     Component("Install APWorld", func=install_apworld, file_identifier=SuffixIdentifier(".apworld")),
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient),
+    Component('Text Color Picker', 'ColorPicker', 'ArchipelagoColorPicker'),
     Component('Links Awakening DX Client', 'LinksAwakeningClient',
               file_identifier=SuffixIdentifier('.apladx')),
     Component('LttP Adjuster', 'LttPAdjuster'),
