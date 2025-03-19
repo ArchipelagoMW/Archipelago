@@ -40,7 +40,10 @@
     },
     {
         "address": 205, "name": "AF (Elevator): Hack Statue",
-        "region": "AFE - Statue Chest", "requires": [ { "region": "AFE - Below Root Node" } ]
+        "region": "AFE - Statue Chest", "requires": [
+            { "region": "AFE - Below Root Node" },
+            { "item": "Tai-Chi Kick" }
+        ]
     },
     {
         "address": 206, "name": "AF (Elevator): Over Electrified Floor",
