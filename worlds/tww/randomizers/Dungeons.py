@@ -183,29 +183,42 @@ def get_unfilled_dungeon_locations(multiworld: MultiWorld) -> list[Location]:
     ]
 
 
-def modify_dungeon_location_rules(locations: list[Location], dungeon_specific: set[tuple[int, str]]) -> None:
+def modify_dungeon_location_rules(multiworld: MultiWorld) -> None:
     """
     Modify the rules for The Wind Waker dungeon locations based on specific player-requested constraints.
 
-    :param locations: List of dungeon locations to modify.
-    :param dungeon_specific: Set of dungeon-specific item constraints.
+    :param multiworld: The MultiWorld instance.
     """
-    for location in locations:
-        if dungeon_specific:
-            # Special case: If Dragon Roost Cavern has its own small keys, then ensure the first chest isn't the Big
-            # Key. This is to avoid placing the Big Key there during fill and resulting in a costly swap.
-            if location.name == "Dragon Roost Cavern - First Room":
-                add_item_rule(
-                    location,
-                    lambda item: item.name != "DRC Big Key" and (item.player, "DRC Small Key") in dungeon_specific,
-                )
+    localized: set[tuple[int, str]] = set()
+    dungeon_specific: set[tuple[int, str]] = set()
+    for subworld in multiworld.get_game_worlds("The Wind Waker"):
+        player = subworld.player
+        if player not in multiworld.groups:
+            localized |= {(player, item_name) for item_name in subworld.dungeon_local_item_names}
+            dungeon_specific |= {(player, item_name) for item_name in subworld.dungeon_specific_item_names}
 
-            # Add item rule to ensure dungeon items are in their own dungeon when they should be.
-            add_item_rule(
-                location,
-                lambda item, dungeon=location.dungeon: not (item.player, item.name) in dungeon_specific
-                or item.dungeon is dungeon,
-            )
+    if localized:
+        in_dungeon_items = [item for item in get_dungeon_item_pool(multiworld) if (item.player, item.name) in localized]
+        if in_dungeon_items:
+            locations = [location for location in get_unfilled_dungeon_locations(multiworld)]
+
+            for location in locations:
+                if dungeon_specific:
+                    # Special case: If Dragon Roost Cavern has its own small keys, then ensure the first chest isn't the
+                    # Big Key. This is to avoid placing the Big Key there during fill and resulting in a costly swap.
+                    if location.name == "Dragon Roost Cavern - First Room":
+                        add_item_rule(
+                            location,
+                            lambda item: item.name != "DRC Big Key"
+                            and (item.player, "DRC Small Key") in dungeon_specific,
+                        )
+
+                    # Add item rule to ensure dungeon items are in their own dungeon when they should be.
+                    add_item_rule(
+                        location,
+                        lambda item, dungeon=location.dungeon: not (item.player, item.name) in dungeon_specific
+                        or item.dungeon is dungeon,
+                    )
 
 
 def fill_dungeons_restrictive(multiworld: MultiWorld) -> None:
@@ -226,8 +239,6 @@ def fill_dungeons_restrictive(multiworld: MultiWorld) -> None:
         in_dungeon_items = [item for item in get_dungeon_item_pool(multiworld) if (item.player, item.name) in localized]
         if in_dungeon_items:
             locations = [location for location in get_unfilled_dungeon_locations(multiworld)]
-            modify_dungeon_location_rules(locations, dungeon_specific)
-
             multiworld.random.shuffle(locations)
 
             # Dungeon-locked items have to be placed first so as not to run out of space for dungeon-locked items.

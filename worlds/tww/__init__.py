@@ -412,6 +412,18 @@ class TWWWorld(World):
                 )
 
     @classmethod
+    def stage_set_rules(cls, multiworld: MultiWorld) -> None:
+        """
+        Class method used to modify the rules for The Wind Waker dungeon locations.
+
+        :param multiworld: The MultiWorld.
+        """
+        from .randomizers.Dungeons import modify_dungeon_location_rules
+
+        # Set additional rules on dungeon locations as necessary.
+        modify_dungeon_location_rules(multiworld)
+
+    @classmethod
     def stage_pre_fill(cls, multiworld: MultiWorld) -> None:
         """
         Class method used to correctly place dungeon items for The Wind Waker worlds.
