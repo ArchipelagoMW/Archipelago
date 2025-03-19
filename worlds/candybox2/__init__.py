@@ -54,7 +54,8 @@ class CandyBox2World(World):
             state.has("The P Stone", self.player) and \
             state.has("The L Stone", self.player) and \
             state.has("The A Stone", self.player) and \
-            state.has("The Y Stone", self.player)
+            state.has("The Y Stone", self.player) and \
+            state.has("Locked Candy Box", self.player)
 
 class CandyBox2WebWorld(WebWorld):
     location_descriptions = location_descriptions
