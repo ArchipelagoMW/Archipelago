@@ -322,23 +322,6 @@ hexagon_locations: Dict[str, str] = {
     "Blue Questagon": "Rooted Ziggurat Lower - Hexagon Blue",
 }
 
-sphere_one: List[str] = [
-    "Overworld - [Central] Chest Across From Well",
-    "Overworld - [Northwest] Chest Near Quarry Gate",
-    "Overworld - [Northwest] Shadowy Corner Chest",
-    "Overworld - [Southwest] Chest Guarded By Turret",
-    "Overworld - [Southwest] South Chest Near Guard",
-    "Overworld - [Southwest] Obscured in Tunnel to Beach",
-    "Overworld - [Northwest] Chest Near Turret",
-    "Overworld - [Northwest] Page By Well",
-    "Overworld - [West] Chest Behind Moss Wall",
-    "Overworld - [Southwest] Key Pickup",
-    "Overworld - [West] Key Pickup",
-    "Overworld - [West] Obscured Behind Windmill",
-    "Overworld - [West] Obscured Near Well",
-    "Overworld - [West] Page On Teleporter"
-]
-
 standard_location_name_to_id: Dict[str, int] = {name: location_base_id + index for index, name in enumerate(location_table)}
 
 all_locations = location_table.copy()
