@@ -415,6 +415,7 @@ class LMContext(CommonContext):
 
             # Update the last received index to ensure we don't receive the same item over and over.
             last_recv_idx += 1
+            dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
 
             if item.item in BOO_AP_ID_LIST:
                 curr_boo_count = len([item.item for item in self.items_received if item.item in BOO_AP_ID_LIST])
