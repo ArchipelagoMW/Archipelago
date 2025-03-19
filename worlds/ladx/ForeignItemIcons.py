@@ -22,7 +22,7 @@ class ForeignItemIconMatcher:
         self.name_cache = pluralizations | self.name_cache
 
 
-    def get_icon_for_other_world(self, foreign_item_name:str, foreign_game:str) -> str:
+    def get_icon_for_other_world(self, foreign_item_name: str, foreign_game: str) -> str:
         # Try to match game specific phrases before using the name cache
         phrases = GAME_SPECIFIC_PHRASES.get(foreign_game, {})
         for phrase, icon in phrases.items():
@@ -47,7 +47,7 @@ class ForeignItemIconMatcher:
 
 # When building the generic name cache, these words are blocked because they
 # create undesired associations.
-BLOCKED_ASSOCIATIONS = [
+BLOCKED_ASSOCIATIONS: list[str] = [
     "MAX",      # MAX_ARROWS_UPGRADE, MAX_BOMBS_UPGRADE, MAX_POWDER_UPGRADE
     "ARROWS",   # MAX_ARROWS_UPGRADE
     "BOMBS",    # MAX_BOMBS_UPGRADE
@@ -83,7 +83,7 @@ BLOCKED_ASSOCIATIONS = [
 
 # Generic single word synonyms for Link's Awakening items. This is used for
 # building the name cache.
-SYNONYMS = {
+SYNONYMS: dict[str, str] = {
     # POWER_BRACELET
     "ANKLET": POWER_BRACELET,
     "ARMLET": POWER_BRACELET,
@@ -418,7 +418,7 @@ SYNONYMS = {
 # Phrase groups are not used automatically in any way, instead they are a
 # convenient way to share mappings across multiple games by unpacking them
 # into the game specific entries.
-PHRASE_GROUPS = {
+PHRASE_GROUPS: dict[str, dict[str, str]] = {
     "Doom": {
         "Keycard": KEY,
         "Computer area map": MAP,
@@ -469,7 +469,7 @@ PHRASE_GROUPS = {
 
 # All following will only be used to match items for the specific game.
 # Please insert games in alphabetical order
-GAME_SPECIFIC_PHRASES = {
+GAME_SPECIFIC_PHRASES: dict[str, dict[str, str]] = {
     "A Hat in Time": {
         "Time Piece": PIECE_OF_POWER,
         "Metro Ticket": TRADING_ITEM_LETTER,
