@@ -136,7 +136,7 @@ def create_regions(world):
     mark_quest_entrance(world, ledge_room_quest_entrance, "The Ledge Room Quest Click")
 
     # X Potion region
-    _, x_potion_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The X Potion Quest", player, multiworld, "The X Potion Quest"), yourself_fight_locations, candy_box) # TODO: Guard with requirement for player to have the Octopus King Crown and also the Sorceress' Cauldron
+    _, x_potion_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The X Potion Quest", player, multiworld, "The X Potion Quest"), yourself_fight_locations, candy_box, lambda state: state.has("The Sorceress' Cauldron", player) and state.has("The Octopus King Crown", player))
     mark_x_quest_entrance(world, x_potion_quest_entrance, "The X Potion Quest Click")
 
 def populate_region(world: MultiWorld, player: int, region: CandyBox2Region, locations: dict[str, int], parent: Region | None, rule: Optional[Callable[[CollectionState], bool]] = None):
