@@ -47,6 +47,7 @@ class CandyBox2World(World):
         return {
             "uuid": str(uuid.uuid4()),
             "entranceInformation": self.original_entrances if self.options.quest_randomisation == "off" else self.entrance_randomisation.pairings,
+            "deathLink": self.options.death_link.value,
         }
 
     def set_rules(self) -> None:

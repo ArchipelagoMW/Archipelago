@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import PerGameCommonOptions, Choice
+from Options import PerGameCommonOptions, Choice, DeathLink
 
 
 class QuestRandomisation(Choice):
@@ -25,3 +25,4 @@ class CandyBox2Options(PerGameCommonOptions):
     progression_balancing = True
 
     quest_randomisation: QuestRandomisation
+    death_link: DeathLink
