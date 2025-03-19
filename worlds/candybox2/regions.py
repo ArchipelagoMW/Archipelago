@@ -149,7 +149,7 @@ def populate_region(world: MultiWorld, player: int, region: CandyBox2Region, loc
     return region, entrance
 
 def mark_quest_entrance(world, entrance: Entrance, name: str):
-    world.original_entrances.append((name, entrance.name))
+    world.original_entrances.append((name, entrance.connected_region.name))
     if world.options.quest_randomisation == "off":
         return
 
@@ -158,7 +158,7 @@ def mark_quest_entrance(world, entrance: Entrance, name: str):
     disconnect_entrance_for_randomization(entrance, Groups.QUESTS)
 
 def mark_x_quest_entrance(world, entrance: Entrance, name: str):
-    world.original_entrances.append((name, entrance.name))
+    world.original_entrances.append((name, entrance.connected_region.name))
     if world.options.quest_randomisation == "off":
         return
 
