@@ -17,3 +17,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: "worlds/candybox2.apworld"
+          name: 'candybox2.apworld'
