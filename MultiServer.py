@@ -1996,16 +1996,35 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             client.messageprocessor(args["text"])
 
         elif cmd == "Bounce":
-            games = set(args.get("games", []))
-            tags = set(args.get("tags", []))
-            slots = set(args.get("slots", []))
             args["cmd"] = "Bounced"
             msg = ctx.dumper([args])
 
+            teams = set(args.get("teams", client.team))
+            boolean_operator = args.get("operator", "or")
+
+            if boolean_operator not in ("or", "and"):
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
+                                              "text": "Bounce", "original_cmd": cmd}])
+                return
+
+            conditions = [lambda bounceclient: bounceclient.team in teams]
+            if "games" in args:
+                games = set(args["games"])
+                conditions.append(lambda bounceclient: ctx.games[bounceclient.slot] in games)
+            if "tags" in args:
+                tags = set(args["tags"])
+                conditions.append(lambda bounceclient: set(bounceclient.tags) & tags)
+            if "slots" in args:
+                slots = set(args["slots"])
+                conditions.append(lambda bounceclient: bounceclient.slot in slots)
+
+            condition_concatenator = any if boolean_operator == "or" else all
+
             for bounceclient in ctx.endpoints:
-                if client.team == bounceclient.team and (ctx.games[bounceclient.slot] in games or
-                                                         set(bounceclient.tags) & tags or
-                                                         bounceclient.slot in slots):
+                if client.team != bounceclient.team:
+                    continue
+
+                if condition_concatenator(condition(bounceclient) for condition in conditions):
                     await ctx.send_encoded_msgs(bounceclient, msg)
 
         elif cmd == "Get":
