@@ -1419,7 +1419,7 @@ class Item:
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Item):
             return NotImplemented
-        return self.name == other.name and self.player == other.player
+        return self.name == other.name and self.player == other.player and self.classification == other.classification
 
     def __lt__(self, other: object) -> bool:
         if not isinstance(other, Item):
