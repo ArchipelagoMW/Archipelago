@@ -1,3 +1,20 @@
+# 2.4.0
+
+### Features
+
+- New option `free_fly_blacklist` limits which cities can show up as a free fly location.
+- Spoiler log and hint text for maps where a species can be found now use human-friendly labels.
+- Added many item and location groups based on item type, location type, and location geography.
+- Dexsanity locations for species which evolve via item use (Fire Stone, Metal Coat, etc.) now contribute those items to
+the randomized item pool instead of Great Balls.
+- Rock smash encounters are now randomized according to your wild pokemon randomization option. These encounters are
+_not_ used for logical access (the seed will never require you to catch something through one of these encounters).
+
+### Fixes
+
+- Now excludes the location "Navel Rock Top - Hidden Item Sacred Ash" if your goal is Champion and you didn't randomize
+event tickets.
+
 # 2.3.0
 
 ### Features
@@ -20,6 +37,8 @@ the player randomized NPC gifts.
 with another NPC was moved to an unoccupied space.
 - Fixed a problem where the client would crash on certain operating systems while using certain python versions if the
 player tried to wonder trade.
+- Prevent the poke flute sound from replacing the evolution fanfare, which would cause the game to wait in silence for
+a long time during the evolution scene.
 
 # 2.2.0
 

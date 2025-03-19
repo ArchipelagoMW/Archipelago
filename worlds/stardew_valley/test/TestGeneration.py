@@ -5,8 +5,8 @@ from . import SVTestBase
 from .. import items, location_table, options
 from ..items import Group
 from ..locations import LocationTags
-from ..options import Friendsanity, SpecialOrderLocations, Shipsanity, Chefsanity, SeasonRandomization, Craftsanity, ExcludeGingerIsland, ToolProgression, \
-    SkillProgression, Booksanity, Walnutsanity
+from ..options import Friendsanity, SpecialOrderLocations, Shipsanity, Chefsanity, SeasonRandomization, Craftsanity, ExcludeGingerIsland, SkillProgression, \
+    Booksanity, Walnutsanity
 from ..strings.region_names import Region
 
 
@@ -35,7 +35,7 @@ class TestBaseItemGeneration(SVTestBase):
         items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
         items_to_ignore.extend(resource_pack.name for resource_pack in items.items_by_group[Group.RESOURCE_PACK])
         items_to_ignore.append("The Gateway Gazette")
-        progression_items = [item for item in items.all_items if item.classification is ItemClassification.progression and item.name not in items_to_ignore]
+        progression_items = [item for item in items.all_items if item.classification & ItemClassification.progression and item.name not in items_to_ignore]
         for progression_item in progression_items:
             with self.subTest(f"{progression_item.name}"):
                 self.assertIn(progression_item.name, all_created_items)
@@ -86,7 +86,7 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.WEAPON])
         items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
         items_to_ignore.append("The Gateway Gazette")
-        progression_items = [item for item in items.all_items if item.classification is ItemClassification.progression and item.name not in items_to_ignore]
+        progression_items = [item for item in items.all_items if item.classification & ItemClassification.progression and item.name not in items_to_ignore]
         for progression_item in progression_items:
             with self.subTest(f"{progression_item.name}"):
                 if Group.GINGER_ISLAND in progression_item.groups:
@@ -320,7 +320,7 @@ class TestProgressiveElevator(SVTestBase):
 class TestSkullCavernLogic(SVTestBase):
     options = {
         options.ElevatorProgression.internal_name: options.ElevatorProgression.option_vanilla,
-        ToolProgression.internal_name: ToolProgression.option_progressive,
+        options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
         options.SkillProgression.internal_name: options.SkillProgression.option_progressive,
     }
 

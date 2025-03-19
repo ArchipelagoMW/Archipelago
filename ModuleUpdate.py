@@ -5,8 +5,15 @@ import multiprocessing
 import warnings
 
 
-if sys.version_info < (3, 8, 6):
-    raise RuntimeError("Incompatible Python Version. 3.8.7+ is supported.")
+if sys.platform in ("win32", "darwin") and sys.version_info < (3, 10, 11):
+    # Official micro version updates. This should match the number in docs/running from source.md.
+    raise RuntimeError(f"Incompatible Python Version found: {sys.version_info}. Official 3.10.15+ is supported.")
+elif sys.platform in ("win32", "darwin") and sys.version_info < (3, 10, 15):
+    # There are known security issues, but no easy way to install fixed versions on Windows for testing.
+    warnings.warn(f"Python Version {sys.version_info} has security issues. Don't use in production.")
+elif sys.version_info < (3, 10, 1):
+    # Other platforms may get security backports instead of micro updates, so the number is unreliable.
+    raise RuntimeError(f"Incompatible Python Version found: {sys.version_info}. 3.10.1+ is supported.")
 
 # don't run update if environment is frozen/compiled or if not the parent process (skip in subprocess)
 _skip_update = bool(getattr(sys, "frozen", False) or multiprocessing.parent_process())

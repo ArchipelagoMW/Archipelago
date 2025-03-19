@@ -1,8 +1,14 @@
+import logging
 from dataclasses import dataclass
-from typing import Dict, Any
+from typing import Dict, Any, TYPE_CHECKING
+
+from decimal import Decimal, ROUND_HALF_UP
+
 from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PlandoConnections,
-                     PerGameCommonOptions, OptionGroup, Visibility)
+                     PerGameCommonOptions, OptionGroup, Visibility, NamedRange)
 from .er_data import portal_mapping
+if TYPE_CHECKING:
+    from . import TunicWorld
 
 
 class SwordProgression(DefaultOnToggle):
@@ -24,15 +30,17 @@ class StartWithSword(Toggle):
 class KeysBehindBosses(Toggle):
     """
     Places the three hexagon keys behind their respective boss fight in your world.
+    If playing Hexagon Quest, it will place three gold hexagons at the boss locations.
     """
     internal_name = "keys_behind_bosses"
     display_name = "Keys Behind Bosses"
 
 
-class AbilityShuffling(Toggle):
+class AbilityShuffling(DefaultOnToggle):
     """
     Locks the usage of Prayer, Holy Cross*, and the Icebolt combo until the relevant pages of the manual have been found.
-    If playing Hexagon Quest, abilities are instead randomly unlocked after obtaining 25%, 50%, and 75% of the required Hexagon goal amount.
+    If playing Hexagon Quest, abilities are instead randomly unlocked after obtaining 25%, 50%, and 75% of the required
+    Hexagon goal amount, unless the option is set to have them unlock via pages instead.
     * Certain Holy Cross usages are still allowed, such as the free bomb codes, the seeking spell, and other player-facing codes.
     """
     internal_name = "ability_shuffling"
@@ -84,14 +92,16 @@ class HexagonGoal(Range):
     """
     internal_name = "hexagon_goal"
     display_name = "Gold Hexagons Required"
-    range_start = 15
-    range_end = 50
+    range_start = 1
+    range_end = 100
     default = 20
 
 
 class ExtraHexagonPercentage(Range):
     """
     How many extra Gold Questagons are shuffled into the item pool, taken as a percentage of the goal amount.
+    The max number of Gold Questagons that can be in the item pool is 100, so this option may be overridden and/or
+    reduced if the Hexagon Goal amount is greater than 50.
     """
     internal_name = "extra_hexagon_percentage"
     display_name = "Percentage of Extra Gold Hexagons"
@@ -100,11 +110,27 @@ class ExtraHexagonPercentage(Range):
     default = 50
 
 
+class HexagonQuestAbilityUnlockType(Choice):
+    """
+    Determines how abilities are unlocked when playing Hexagon Quest with Shuffled Abilities enabled.
+
+    Hexagons: A new ability is randomly unlocked after obtaining 25%, 50%, and 75% of the required Hexagon goal amount. Requires at least 3 Gold Hexagons in the item pool, or 15 if Keys Behind Bosses is enabled.
+    Pages: Abilities are unlocked by finding specific pages in the manual.
+
+    This option does nothing if Shuffled Abilities is not enabled.
+    """
+    internal_name = "hexagon_quest_ability_type"
+    display_name = "Hexagon Quest Ability Unlocks"
+    option_hexagons = 0
+    option_pages = 1
+    default = 0
+
+
 class EntranceRando(TextChoice):
     """
     Randomize the connections between scenes.
     A small, very lost fox on a big adventure.
-    
+
     If you set this option's value to a string, it will be used as a custom seed.
     Every player who uses the same custom seed will have the same entrances, choosing the most restrictive settings among these players for the purpose of pairing entrances.
     """
@@ -154,6 +180,33 @@ class ShuffleLadders(Toggle):
     display_name = "Shuffle Ladders"
 
 
+class GrassRandomizer(Toggle):
+    """
+    Turns over 6,000 blades of grass and bushes in the game into checks.
+    """
+    internal_name = "grass_randomizer"
+    display_name = "Grass Randomizer"
+
+
+class LocalFill(NamedRange):
+    """
+    Choose the percentage of your filler/trap items that will be kept local or distributed to other TUNIC players with this option enabled.
+    If you have Grass Randomizer enabled, this option must be set to 95% or higher to avoid flooding the item pool. The host can remove this restriction by turning off the limit_grass_rando setting in host.yaml.
+    This option defaults to 95% if you have Grass Randomizer enabled, and to 0% otherwise.
+    This option ignores items placed in your local_items or non_local_items.
+    This option does nothing in single player games.
+    """
+    internal_name = "local_fill"
+    display_name = "Local Fill Percent"
+    range_start = 0
+    range_end = 98
+    special_range_names = {
+        "default": -1
+    }
+    default = -1
+    visibility = Visibility.template | Visibility.complex_ui | Visibility.spoiler
+
+
 class TunicPlandoConnections(PlandoConnections):
     """
     Generic connection plando. Format is:
@@ -166,6 +219,22 @@ class TunicPlandoConnections(PlandoConnections):
     exits = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
 
     duplicate_exits = True
+
+
+class CombatLogic(Choice):
+    """
+    If enabled, the player will logically require a combination of stat upgrade items and equipment to get some checks or navigate to some areas, with a goal of matching the vanilla combat difficulty.
+    The player may still be expected to run past enemies, reset aggro (by using a checkpoint or doing a scene transition), or find sneaky paths to checks.
+    This option marks many more items as progression and may force weapons much earlier than normal.
+    Bosses Only makes it so that additional combat logic is only added to the boss fights and the Gauntlet.
+    If disabled, the standard, looser logic is used. The standard logic does not include stat upgrades, just minimal weapon requirements, such as requiring a Sword or Magic Wand for Quarry, or not requiring a weapon for Swamp.
+    """
+    internal_name = "combat_logic"
+    display_name = "More Combat Logic"
+    option_off = 0
+    option_bosses_only = 1
+    option_on = 2
+    default = 0
 
 
 class LaurelsZips(Toggle):
@@ -216,7 +285,7 @@ class LadderStorage(Choice):
 
 class LadderStorageWithoutItems(Toggle):
     """
-    If disabled, you logically require Stick, Sword, or Magic Orb to perform Ladder Storage.
+    If disabled, you logically require Stick, Sword, Magic Orb, or Shield to perform Ladder Storage.
     If enabled, you will be expected to perform Ladder Storage without progression items.
     This can be done with the plushie code, a Golden Coin, Prayer, and many other options.
 
@@ -244,34 +313,60 @@ class LogicRules(Choice):
     default = 0
 
 
+class BreakableShuffle(Toggle):
+    """
+    Turns approximately 250 breakable objects in the game into checks.
+    """
+    internal_name = "breakable_shuffle"
+    display_name = "Breakable Shuffle"
+
+
 @dataclass
 class TunicOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
+
     sword_progression: SwordProgression
     start_with_sword: StartWithSword
     keys_behind_bosses: KeysBehindBosses
     ability_shuffling: AbilityShuffling
-    shuffle_ladders: ShuffleLadders
-    entrance_rando: EntranceRando
-    fixed_shop: FixedShop
     fool_traps: FoolTraps
+    laurels_location: LaurelsLocation
+
     hexagon_quest: HexagonQuest
     hexagon_goal: HexagonGoal
     extra_hexagon_percentage: ExtraHexagonPercentage
-    laurels_location: LaurelsLocation
+    hexagon_quest_ability_type: HexagonQuestAbilityUnlockType
+
+    shuffle_ladders: ShuffleLadders
+    grass_randomizer: GrassRandomizer
+    breakable_shuffle: BreakableShuffle
+    local_fill: LocalFill
+
+    entrance_rando: EntranceRando
+    fixed_shop: FixedShop
+
+    combat_logic: CombatLogic
     lanternless: Lanternless
     maskless: Maskless
     laurels_zips: LaurelsZips
     ice_grappling: IceGrappling
     ladder_storage: LadderStorage
     ladder_storage_without_items: LadderStorageWithoutItems
+
     plando_connections: TunicPlandoConnections
 
     logic_rules: LogicRules
-      
+
 
 tunic_option_groups = [
+    OptionGroup("Hexagon Quest Options", [
+        HexagonQuest,
+        HexagonGoal,
+        ExtraHexagonPercentage,
+        HexagonQuestAbilityUnlockType
+    ]),
     OptionGroup("Logic Options", [
+        CombatLogic,
         Lanternless,
         Maskless,
         LaurelsZips,
@@ -304,3 +399,23 @@ tunic_option_presets: Dict[str, Dict[str, Any]] = {
         "lanternless": True,
     },
 }
+
+
+def check_options(world: "TunicWorld"):
+    options = world.options
+    if options.hexagon_quest and options.ability_shuffling and options.hexagon_quest_ability_type == HexagonQuestAbilityUnlockType.option_hexagons:
+        total_hexes = get_hexagons_in_pool(world)
+        min_hexes = 3
+
+        if options.keys_behind_bosses:
+            min_hexes = 15
+        if total_hexes < min_hexes:
+            logging.warning(f"TUNIC: Not enough Gold Hexagons in {world.player_name}'s item pool for Hexagon Ability Shuffle with the selected options. Ability Shuffle mode will be switched to Pages.")
+            options.hexagon_quest_ability_type.value = HexagonQuestAbilityUnlockType.option_pages
+
+
+def get_hexagons_in_pool(world: "TunicWorld"):
+    # Calculate number of hexagons in item pool
+    options = world.options
+    return min(int((Decimal(100 + options.extra_hexagon_percentage) / 100 * options.hexagon_goal)
+                    .to_integral_value(rounding=ROUND_HALF_UP)), 100)
