@@ -32,7 +32,7 @@ class ForeignItemIconMatcher:
         # Break down words and look them up in self.name_cache
         # This will break down camelCase and separate out digits as well.
         pattern = re.compile(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=\d)")
-        possibles = pattern.sub(' ', foreign_item_name).upper()
+        possibles = pattern.sub(" ", foreign_item_name).upper()
         for ch in "[]()_":
             possibles = possibles.replace(ch, " ")
         possibles = possibles.split()
@@ -82,102 +82,102 @@ BLOCKED_ASSOCIATIONS = [
 # building the name cache.
 SYNONYMS = {
     # POWER_BRACELET
-    'ANKLET': POWER_BRACELET,
-    'ARMLET': POWER_BRACELET,
-    'BAND': POWER_BRACELET,
-    'BANGLE': POWER_BRACELET,
-    'BRACER': POWER_BRACELET,
-    'CARRY': POWER_BRACELET,
-    'CIRCLET': POWER_BRACELET,
-    'CROISSANT': POWER_BRACELET,
-    'GAUNTLET': POWER_BRACELET,
-    'GLOVE': POWER_BRACELET,
-    'RING': POWER_BRACELET,
-    'STRENGTH': POWER_BRACELET,
+    "ANKLET": POWER_BRACELET,
+    "ARMLET": POWER_BRACELET,
+    "BAND": POWER_BRACELET,
+    "BANGLE": POWER_BRACELET,
+    "BRACER": POWER_BRACELET,
+    "CARRY": POWER_BRACELET,
+    "CIRCLET": POWER_BRACELET,
+    "CROISSANT": POWER_BRACELET,
+    "GAUNTLET": POWER_BRACELET,
+    "GLOVE": POWER_BRACELET,
+    "RING": POWER_BRACELET,
+    "STRENGTH": POWER_BRACELET,
 
     # SHIELD
-    'AEGIS': SHIELD,
-    'BUCKLER': SHIELD,
-    'SHLD': SHIELD,
+    "AEGIS": SHIELD,
+    "BUCKLER": SHIELD,
+    "SHLD": SHIELD,
 
     # BOW
-    'BALLISTA': BOW,
+    "BALLISTA": BOW,
 
     # HOOKSHOT
-    'GRAPPLE': HOOKSHOT,
-    'GRAPPLING': HOOKSHOT,
-    'ROPE': HOOKSHOT,
+    "GRAPPLE": HOOKSHOT,
+    "GRAPPLING": HOOKSHOT,
+    "ROPE": HOOKSHOT,
 
     # MAGIC_ROD
-    'BEAM': MAGIC_ROD,
-    'CANE': MAGIC_ROD,
-    'STAFF': MAGIC_ROD,
-    'WAND': MAGIC_ROD,
+    "BEAM": MAGIC_ROD,
+    "CANE": MAGIC_ROD,
+    "STAFF": MAGIC_ROD,
+    "WAND": MAGIC_ROD,
 
     # PEGASUS_BOOTS
-    'BOOT': PEGASUS_BOOTS,
-    'GREAVES': PEGASUS_BOOTS,
-    'RUN': PEGASUS_BOOTS,
-    'SHOE': PEGASUS_BOOTS,
-    'SPEED': PEGASUS_BOOTS,
+    "BOOT": PEGASUS_BOOTS,
+    "GREAVES": PEGASUS_BOOTS,
+    "RUN": PEGASUS_BOOTS,
+    "SHOE": PEGASUS_BOOTS,
+    "SPEED": PEGASUS_BOOTS,
 
     # OCARINA
-    'FLUTE': OCARINA,
-    'RECORDER': OCARINA,
+    "FLUTE": OCARINA,
+    "RECORDER": OCARINA,
 
     # FEATHER
-    'JUMP': FEATHER,
-    'PLUME': FEATHER,
-    'WING': FEATHER,
+    "JUMP": FEATHER,
+    "PLUME": FEATHER,
+    "WING": FEATHER,
     "QUILL": FEATHER,
 
     # SHOVEL
-    'DIG': SHOVEL,
+    "DIG": SHOVEL,
 
     # MAGIC_POWDER
-    'BAG': MAGIC_POWDER,
-    'CASE': MAGIC_POWDER,
-    'DUST': MAGIC_POWDER,
-    'POUCH': MAGIC_POWDER,
-    'POWDER': MAGIC_POWDER, # POWDER is a blocked association so must be manually assigned
-    'SACK': MAGIC_POWDER,
+    "BAG": MAGIC_POWDER,
+    "CASE": MAGIC_POWDER,
+    "DUST": MAGIC_POWDER,
+    "POUCH": MAGIC_POWDER,
+    "POWDER": MAGIC_POWDER, # POWDER is a blocked association so must be manually assigned
+    "SACK": MAGIC_POWDER,
 
     # BOMB
-    'BLAST': BOMB,
-    'BOMB': BOMB, # BOMB is a blocked association so must be manually assigned
-    'BOMBCHU': BOMB,
-    'FIRECRACKER': BOMB,
-    'TNT': BOMB,
+    "BLAST": BOMB,
+    "BOMB": BOMB, # BOMB is a blocked association so must be manually assigned
+    "BOMBCHU": BOMB,
+    "FIRECRACKER": BOMB,
+    "TNT": BOMB,
 
     # SWORD
-    'BLADE': SWORD,
-    'CUT': SWORD,
-    'DAGGER': SWORD,
-    'DIRK': SWORD,
-    'EDGE': SWORD,
-    'EPEE': SWORD,
-    'EXCALIBUR': SWORD,
-    'FALCHION': SWORD,
-    'KATANA': SWORD,
-    'KNIFE': SWORD,
-    'MACHETE': SWORD,
-    'MASAMUNE': SWORD,
-    'MURASAME': SWORD,
-    'SABER': SWORD,
-    'SABRE': SWORD,
-    'SCIMITAR': SWORD,
-    'SLASH': SWORD,
+    "BLADE": SWORD,
+    "CUT": SWORD,
+    "DAGGER": SWORD,
+    "DIRK": SWORD,
+    "EDGE": SWORD,
+    "EPEE": SWORD,
+    "EXCALIBUR": SWORD,
+    "FALCHION": SWORD,
+    "KATANA": SWORD,
+    "KNIFE": SWORD,
+    "MACHETE": SWORD,
+    "MASAMUNE": SWORD,
+    "MURASAME": SWORD,
+    "SABER": SWORD,
+    "SABRE": SWORD,
+    "SCIMITAR": SWORD,
+    "SLASH": SWORD,
 
     # FLIPPERS
-    'FLIPPER': FLIPPERS,
-    'SWIM': FLIPPERS,
+    "FLIPPER": FLIPPERS,
+    "SWIM": FLIPPERS,
 
     # MEDICINE
-    'BOTTLE': MEDICINE,
-    'FLASK': MEDICINE,
-    'LEMONADE': MEDICINE,
-    'POTION': MEDICINE,
-    'TEA': MEDICINE,
+    "BOTTLE": MEDICINE,
+    "FLASK": MEDICINE,
+    "LEMONADE": MEDICINE,
+    "POTION": MEDICINE,
+    "TEA": MEDICINE,
 
     # TAIL_KEY
 
@@ -190,12 +190,12 @@ SYNONYMS = {
     # SLIME_KEY
 
     # GOLD_LEAF
-    'HERB': GOLD_LEAF,
+    "HERB": GOLD_LEAF,
 
     # RUPEES_20
-    'COIN': RUPEES_20,
-    'MONEY': RUPEES_20,
-    'RUPEE': RUPEES_20,
+    "COIN": RUPEES_20,
+    "MONEY": RUPEES_20,
+    "RUPEE": RUPEES_20,
 
     # RUPEES_50
 
@@ -204,41 +204,41 @@ SYNONYMS = {
     # RUPEES_200
 
     # RUPEES_500
-    'GEM': RUPEES_500,
-    'JEWEL': RUPEES_500,
+    "GEM": RUPEES_500,
+    "JEWEL": RUPEES_500,
 
     # SEASHELL
-    'CARAPACE': SEASHELL,
-    'CONCH': SEASHELL,
-    'SHELL': SEASHELL,
+    "CARAPACE": SEASHELL,
+    "CONCH": SEASHELL,
+    "SHELL": SEASHELL,
 
     # MESSAGE (master stalfos message)
-    'NOTHING': MESSAGE,
-    'TRAP': MESSAGE,
+    "NOTHING": MESSAGE,
+    "TRAP": MESSAGE,
 
     # BOOMERANG
-    'BOOMER': BOOMERANG,
+    "BOOMER": BOOMERANG,
 
     # HEART_PIECE
 
     # BOWWOW
-    'BEAST': BOWWOW,
-    'PET': BOWWOW,
+    "BEAST": BOWWOW,
+    "PET": BOWWOW,
 
     # ARROWS_10
 
     # SINGLE_ARROW
-    'ARROW': SINGLE_ARROW, # ARROW is a blocked association so must be manually assigned
-    'MISSILE': SINGLE_ARROW,
-    'QUIVER': SINGLE_ARROW,
+    "ARROW": SINGLE_ARROW, # ARROW is a blocked association so must be manually assigned
+    "MISSILE": SINGLE_ARROW,
+    "QUIVER": SINGLE_ARROW,
 
     # ROOSTER
-    'BIRD': ROOSTER,
-    'CHICKEN': ROOSTER,
-    'CUCCO': ROOSTER,
-    'FLY': ROOSTER,
-    'GRIFFIN': ROOSTER,
-    'GRYPHON': ROOSTER,
+    "BIRD": ROOSTER,
+    "CHICKEN": ROOSTER,
+    "CUCCO": ROOSTER,
+    "FLY": ROOSTER,
+    "GRIFFIN": ROOSTER,
+    "GRYPHON": ROOSTER,
 
     # MAX_POWDER_UPGRADE
 
@@ -249,31 +249,31 @@ SYNONYMS = {
     # RED_TUNIC
 
     # BLUE_TUNIC
-    'ARMOR': BLUE_TUNIC,
-    'MAIL': BLUE_TUNIC,
-    'SUIT': BLUE_TUNIC,
+    "ARMOR": BLUE_TUNIC,
+    "MAIL": BLUE_TUNIC,
+    "SUIT": BLUE_TUNIC,
 
     # HEART_CONTAINER
-    'TANK': HEART_CONTAINER,
+    "TANK": HEART_CONTAINER,
 
     # TOADSTOOL
-    '1-UP': TOADSTOOL,
-    'FUNGAL': TOADSTOOL,
-    'FUNGUS': TOADSTOOL,
-    'MUSHROOM': TOADSTOOL,
-    'SHROOM': TOADSTOOL,
+    "1-UP": TOADSTOOL,
+    "FUNGAL": TOADSTOOL,
+    "FUNGUS": TOADSTOOL,
+    "MUSHROOM": TOADSTOOL,
+    "SHROOM": TOADSTOOL,
 
     # GUARDIAN_ACORN
-    'NUT': GUARDIAN_ACORN,
-    'SEED': GUARDIAN_ACORN,
+    "NUT": GUARDIAN_ACORN,
+    "SEED": GUARDIAN_ACORN,
 
     # KEY
-    'DOOR': KEY,
-    'GATE': KEY,
-    'KEY': KEY, # Without this, foreign keys show up as nightmare keys
-    'LOCK': KEY,
-    'PANEL': KEY,
-    'UNLOCK': KEY,
+    "DOOR": KEY,
+    "GATE": KEY,
+    "KEY": KEY, # Without this, foreign keys show up as nightmare keys
+    "LOCK": KEY,
+    "PANEL": KEY,
+    "UNLOCK": KEY,
 
     # NIGHTMARE_KEY
 
@@ -282,125 +282,125 @@ SYNONYMS = {
     # COMPASS
 
     # STONE_BEAK
-    'FOSSIL': STONE_BEAK,
-    'RELIC': STONE_BEAK,
+    "FOSSIL": STONE_BEAK,
+    "RELIC": STONE_BEAK,
 
     # SONG1
-    'BOLERO': SONG1,
-    'LULLABY': SONG1,
-    'MELODY': SONG1,
-    'MINUET': SONG1,
-    'NOCTURNE': SONG1,
-    'PRELUDE': SONG1,
-    'REQUIEM': SONG1,
-    'SERENADE': SONG1,
-    'SONG': SONG1,
+    "BOLERO": SONG1,
+    "LULLABY": SONG1,
+    "MELODY": SONG1,
+    "MINUET": SONG1,
+    "NOCTURNE": SONG1,
+    "PRELUDE": SONG1,
+    "REQUIEM": SONG1,
+    "SERENADE": SONG1,
+    "SONG": SONG1,
 
     # SONG2
-    'FISH': SONG2,
-    'SURF': SONG2,
+    "FISH": SONG2,
+    "SURF": SONG2,
 
     # SONG3
-    'FROG': SONG3,
+    "FROG": SONG3,
 
     # INSTRUMENT1
-    'CELLO': INSTRUMENT1,
-    'GUITAR': INSTRUMENT1,
-    'LUTE': INSTRUMENT1,
-    'VIOLIN': INSTRUMENT1,
+    "CELLO": INSTRUMENT1,
+    "GUITAR": INSTRUMENT1,
+    "LUTE": INSTRUMENT1,
+    "VIOLIN": INSTRUMENT1,
 
     # INSTRUMENT2
-    'HORN': INSTRUMENT2,
+    "HORN": INSTRUMENT2,
 
     # INSTRUMENT3
-    'BELL': INSTRUMENT3,
-    'CHIME': INSTRUMENT3,
+    "BELL": INSTRUMENT3,
+    "CHIME": INSTRUMENT3,
 
     # INSTRUMENT4
-    'HARP': INSTRUMENT4,
-    'KANTELE': INSTRUMENT4,
+    "HARP": INSTRUMENT4,
+    "KANTELE": INSTRUMENT4,
 
     # INSTRUMENT5
-    'MARIMBA': INSTRUMENT5,
-    'XYLOPHONE': INSTRUMENT5,
+    "MARIMBA": INSTRUMENT5,
+    "XYLOPHONE": INSTRUMENT5,
 
     # INSTRUMENT6 (triangle)
 
     # INSTRUMENT7
-    'KEYBOARD': INSTRUMENT7,
-    'ORGAN': INSTRUMENT7,
-    'PIANO': INSTRUMENT7,
+    "KEYBOARD": INSTRUMENT7,
+    "ORGAN": INSTRUMENT7,
+    "PIANO": INSTRUMENT7,
 
     # INSTRUMENT8
-    'DRUM': INSTRUMENT8,
+    "DRUM": INSTRUMENT8,
 
     # TRADING_ITEM_YOSHI_DOLL
-    'DINOSAUR': TRADING_ITEM_YOSHI_DOLL,
-    'DRAGON': TRADING_ITEM_YOSHI_DOLL,
-    'TOY': TRADING_ITEM_YOSHI_DOLL,
+    "DINOSAUR": TRADING_ITEM_YOSHI_DOLL,
+    "DRAGON": TRADING_ITEM_YOSHI_DOLL,
+    "TOY": TRADING_ITEM_YOSHI_DOLL,
 
     # TRADING_ITEM_RIBBON
-    'HAIRBAND': TRADING_ITEM_RIBBON,
-    'HAIRPIN': TRADING_ITEM_RIBBON,
+    "HAIRBAND": TRADING_ITEM_RIBBON,
+    "HAIRPIN": TRADING_ITEM_RIBBON,
 
     # TRADING_ITEM_DOG_FOOD
-    'CAN': TRADING_ITEM_DOG_FOOD,
+    "CAN": TRADING_ITEM_DOG_FOOD,
 
     # TRADING_ITEM_BANANAS
-    'BANANA': TRADING_ITEM_BANANAS,
+    "BANANA": TRADING_ITEM_BANANAS,
 
     # TRADING_ITEM_STICK
-    'BRANCH': TRADING_ITEM_STICK,
-    'TWIG': TRADING_ITEM_STICK,
+    "BRANCH": TRADING_ITEM_STICK,
+    "TWIG": TRADING_ITEM_STICK,
 
     # TRADING_ITEM_HONEYCOMB
-    'BEEHIVE': TRADING_ITEM_HONEYCOMB,
-    'HIVE': TRADING_ITEM_HONEYCOMB,
-    'HONEY': TRADING_ITEM_HONEYCOMB,
+    "BEEHIVE": TRADING_ITEM_HONEYCOMB,
+    "HIVE": TRADING_ITEM_HONEYCOMB,
+    "HONEY": TRADING_ITEM_HONEYCOMB,
 
     # TRADING_ITEM_PINEAPPLE
-    'FOOD': TRADING_ITEM_PINEAPPLE,
-    'FRUIT': TRADING_ITEM_PINEAPPLE,
-    'GOURD': TRADING_ITEM_PINEAPPLE,
+    "FOOD": TRADING_ITEM_PINEAPPLE,
+    "FRUIT": TRADING_ITEM_PINEAPPLE,
+    "GOURD": TRADING_ITEM_PINEAPPLE,
 
     # TRADING_ITEM_HIBISCUS
-    'FLOWER': TRADING_ITEM_HIBISCUS,
-    'PETAL': TRADING_ITEM_HIBISCUS,
+    "FLOWER": TRADING_ITEM_HIBISCUS,
+    "PETAL": TRADING_ITEM_HIBISCUS,
 
     # TRADING_ITEM_LETTER
-    'CARD': TRADING_ITEM_LETTER,
-    'MESSAGE': TRADING_ITEM_LETTER,
+    "CARD": TRADING_ITEM_LETTER,
+    "MESSAGE": TRADING_ITEM_LETTER,
     "TICKET": TRADING_ITEM_LETTER,
     "PASS": TRADING_ITEM_LETTER,
 
     # TRADING_ITEM_BROOM
-    'SWEEP': TRADING_ITEM_BROOM,
+    "SWEEP": TRADING_ITEM_BROOM,
 
     # TRADING_ITEM_FISHING_HOOK
-    'CLAW': TRADING_ITEM_FISHING_HOOK,
+    "CLAW": TRADING_ITEM_FISHING_HOOK,
 
     # TRADING_ITEM_NECKLACE
-    'AMULET': TRADING_ITEM_NECKLACE,
-    'BEADS': TRADING_ITEM_NECKLACE,
-    'PEARLS': TRADING_ITEM_NECKLACE,
-    'PENDANT': TRADING_ITEM_NECKLACE,
-    'ROSARY': TRADING_ITEM_NECKLACE,
+    "AMULET": TRADING_ITEM_NECKLACE,
+    "BEADS": TRADING_ITEM_NECKLACE,
+    "PEARLS": TRADING_ITEM_NECKLACE,
+    "PENDANT": TRADING_ITEM_NECKLACE,
+    "ROSARY": TRADING_ITEM_NECKLACE,
 
     # TRADING_ITEM_SCALE
 
     # TRADING_ITEM_MAGNIFYING_GLASS
     "DETECTOR": TRADING_ITEM_MAGNIFYING_GLASS,
-    'FINDER': TRADING_ITEM_MAGNIFYING_GLASS,
+    "FINDER": TRADING_ITEM_MAGNIFYING_GLASS,
     "ITEMFINDER": TRADING_ITEM_MAGNIFYING_GLASS,
-    'LENS': TRADING_ITEM_MAGNIFYING_GLASS,
-    'MIRROR': TRADING_ITEM_MAGNIFYING_GLASS,
-    'SCOPE': TRADING_ITEM_MAGNIFYING_GLASS,
-    'XRAY': TRADING_ITEM_MAGNIFYING_GLASS,
+    "LENS": TRADING_ITEM_MAGNIFYING_GLASS,
+    "MIRROR": TRADING_ITEM_MAGNIFYING_GLASS,
+    "SCOPE": TRADING_ITEM_MAGNIFYING_GLASS,
+    "XRAY": TRADING_ITEM_MAGNIFYING_GLASS,
 
     # PIECE_OF_POWER
-    'TRIANGLE': PIECE_OF_POWER,
-    'TRIFORCE': PIECE_OF_POWER,
-    'POWER': PIECE_OF_POWER,
+    "TRIANGLE": PIECE_OF_POWER,
+    "TRIFORCE": PIECE_OF_POWER,
+    "POWER": PIECE_OF_POWER,
 }
 
 
@@ -416,7 +416,7 @@ SYNONYMS = {
 # convenient way to share mappings across multiple games by unpacking them
 # into the game specific entries.
 PHRASE_GROUPS = {
-    'Doom': {
+    "Doom": {
         "Keycard": KEY,
         "Computer area map": MAP,
         "Box of": SINGLE_ARROW, # bullets, rockets, or shotgun shells
@@ -426,8 +426,8 @@ PHRASE_GROUPS = {
         "Skull key": NIGHTMARE_KEY,
     },
 
-    'Pokemon': {
-        'Rock Smash': BOMB,
+    "Pokemon": {
+        "Rock Smash": BOMB,
 
         "Old Amber": STONE_BEAK, # Aerodactyl's fossil should still be a fossil
         "Coin Case": MAGIC_POWDER, # This shouldn't spawn as RUPEES
@@ -451,11 +451,11 @@ PHRASE_GROUPS = {
         "Berry": TRADING_ITEM_PINEAPPLE,
     },
 
-    'Zelda': {
-        'BIG KEY': NIGHTMARE_KEY,
-        'BOSS KEY': NIGHTMARE_KEY,
-        'HEART PIECE': HEART_PIECE,
-        'PIECE OF HEART': HEART_PIECE,
+    "Zelda": {
+        "BIG KEY": NIGHTMARE_KEY,
+        "BOSS KEY": NIGHTMARE_KEY,
+        "HEART PIECE": HEART_PIECE,
+        "PIECE OF HEART": HEART_PIECE,
     },
 }
 
@@ -476,55 +476,55 @@ GAME_SPECIFIC_PHRASES = {
     },
 
     "DOOM 1993": {
-        **PHRASE_GROUPS['Doom'],
+        **PHRASE_GROUPS["Doom"],
     },
 
     "DOOM II": {
-        **PHRASE_GROUPS['Doom'],
+        **PHRASE_GROUPS["Doom"],
     },
 
-    'Final Fantasy': {
-        'OXYALE': MEDICINE,
-        'VORPAL': SWORD,
-        'XCALBER': SWORD,
+    "Final Fantasy": {
+        "OXYALE": MEDICINE,
+        "VORPAL": SWORD,
+        "XCALBER": SWORD,
     },
 
-    'FNaFW': {
-        'Freddy': TRADING_ITEM_YOSHI_DOLL, # all of these are animatronics, aka dolls.
-        'Bonnie': TRADING_ITEM_YOSHI_DOLL,
-        'Chica': TRADING_ITEM_YOSHI_DOLL,
-        'Foxy': TRADING_ITEM_YOSHI_DOLL,
-        'Mangle': TRADING_ITEM_YOSHI_DOLL,
-        'Balloon Boy': TRADING_ITEM_YOSHI_DOLL,
-        'JJ': TRADING_ITEM_YOSHI_DOLL,
-        'Phantom BB': TRADING_ITEM_YOSHI_DOLL,
-        'Marionette': TRADING_ITEM_YOSHI_DOLL,
-        'Paperpals': TRADING_ITEM_YOSHI_DOLL,
-        'Endo 01': TRADING_ITEM_YOSHI_DOLL,
-        'Endo 02': TRADING_ITEM_YOSHI_DOLL,
-        'Plushtrap': TRADING_ITEM_YOSHI_DOLL,
-        'Endoplush': TRADING_ITEM_YOSHI_DOLL,
-        'Springtrap': TRADING_ITEM_YOSHI_DOLL,
-        'RWQFSFASXC': TRADING_ITEM_YOSHI_DOLL,
-        'Crying Child': TRADING_ITEM_YOSHI_DOLL,
-        'Nightmare': TRADING_ITEM_YOSHI_DOLL,
-        'Fredbear': TRADING_ITEM_YOSHI_DOLL,
-        'Jack-O-Chica': TRADING_ITEM_YOSHI_DOLL,
-        'Coffee': TRADING_ITEM_YOSHI_DOLL,
-        'Jack-O-Bonnie': TRADING_ITEM_YOSHI_DOLL,
-        'Purpleguy': TRADING_ITEM_YOSHI_DOLL,
-        'Nightmarionne': TRADING_ITEM_YOSHI_DOLL,
-        'Mr. Chipper': TRADING_ITEM_YOSHI_DOLL,
-        'Animdude': TRADING_ITEM_YOSHI_DOLL,
-        'Progressive Endoskeleton': BLUE_TUNIC, # basically armor you wear to give you more defense
-        '25 Tokens': RUPEES_20, # money
-        '50 Tokens': RUPEES_50,
-        '100 Tokens': RUPEES_100,
-        '250 Tokens': RUPEES_200,
-        '500 Tokens': RUPEES_500,
-        '1000 Tokens': RUPEES_500,
-        '2500 Tokens': RUPEES_500,
-        '5000 Tokens': RUPEES_500,
+    "FNaFW": {
+        "Freddy": TRADING_ITEM_YOSHI_DOLL, # all of these are animatronics, aka dolls.
+        "Bonnie": TRADING_ITEM_YOSHI_DOLL,
+        "Chica": TRADING_ITEM_YOSHI_DOLL,
+        "Foxy": TRADING_ITEM_YOSHI_DOLL,
+        "Mangle": TRADING_ITEM_YOSHI_DOLL,
+        "Balloon Boy": TRADING_ITEM_YOSHI_DOLL,
+        "JJ": TRADING_ITEM_YOSHI_DOLL,
+        "Phantom BB": TRADING_ITEM_YOSHI_DOLL,
+        "Marionette": TRADING_ITEM_YOSHI_DOLL,
+        "Paperpals": TRADING_ITEM_YOSHI_DOLL,
+        "Endo 01": TRADING_ITEM_YOSHI_DOLL,
+        "Endo 02": TRADING_ITEM_YOSHI_DOLL,
+        "Plushtrap": TRADING_ITEM_YOSHI_DOLL,
+        "Endoplush": TRADING_ITEM_YOSHI_DOLL,
+        "Springtrap": TRADING_ITEM_YOSHI_DOLL,
+        "RWQFSFASXC": TRADING_ITEM_YOSHI_DOLL,
+        "Crying Child": TRADING_ITEM_YOSHI_DOLL,
+        "Nightmare": TRADING_ITEM_YOSHI_DOLL,
+        "Fredbear": TRADING_ITEM_YOSHI_DOLL,
+        "Jack-O-Chica": TRADING_ITEM_YOSHI_DOLL,
+        "Coffee": TRADING_ITEM_YOSHI_DOLL,
+        "Jack-O-Bonnie": TRADING_ITEM_YOSHI_DOLL,
+        "Purpleguy": TRADING_ITEM_YOSHI_DOLL,
+        "Nightmarionne": TRADING_ITEM_YOSHI_DOLL,
+        "Mr. Chipper": TRADING_ITEM_YOSHI_DOLL,
+        "Animdude": TRADING_ITEM_YOSHI_DOLL,
+        "Progressive Endoskeleton": BLUE_TUNIC, # basically armor you wear to give you more defense
+        "25 Tokens": RUPEES_20, # money
+        "50 Tokens": RUPEES_50,
+        "100 Tokens": RUPEES_100,
+        "250 Tokens": RUPEES_200,
+        "500 Tokens": RUPEES_500,
+        "1000 Tokens": RUPEES_500,
+        "2500 Tokens": RUPEES_500,
+        "5000 Tokens": RUPEES_500,
     },
 
     "Inscryption": {
@@ -770,13 +770,13 @@ GAME_SPECIFIC_PHRASES = {
         "Porkchop": TRADING_ITEM_DOG_FOOD,
     },
 
-    'Noita': {
-        'ALL-SEEING EYE': TRADING_ITEM_MAGNIFYING_GLASS,  # lets you find secrets
+    "Noita": {
+        "ALL-SEEING EYE": TRADING_ITEM_MAGNIFYING_GLASS,  # lets you find secrets
     },
 
-    'Ocarina of Time': {
-        **PHRASE_GROUPS['Zelda'],
-        'COJIRO': ROOSTER,
+    "Ocarina of Time": {
+        **PHRASE_GROUPS["Zelda"],
+        "COJIRO": ROOSTER,
         "Goron Tunic": RED_TUNIC,
         "Zora Tunic": BLUE_TUNIC,
         "Wallet": MAGIC_POWDER,
@@ -790,87 +790,87 @@ GAME_SPECIFIC_PHRASES = {
     },
 
     "Pokemon Emerald": {
-        **PHRASE_GROUPS['Pokemon'],
+        **PHRASE_GROUPS["Pokemon"],
     },
 
     "Pokemon Red and Blue": {
-        **PHRASE_GROUPS['Pokemon'],
+        **PHRASE_GROUPS["Pokemon"],
     },
 
-    'SMZ3': {
-        'BIGKEY': NIGHTMARE_KEY,
-        'BYRNA': MAGIC_ROD,
-        'HEARTPIECE': HEART_PIECE,
-        'POWERBOMB': BOMB,
-        'SOMARIA': MAGIC_ROD,
-        'SUPER': SINGLE_ARROW,
+    "SMZ3": {
+        "BIGKEY": NIGHTMARE_KEY,
+        "BYRNA": MAGIC_ROD,
+        "HEARTPIECE": HEART_PIECE,
+        "POWERBOMB": BOMB,
+        "SOMARIA": MAGIC_ROD,
+        "SUPER": SINGLE_ARROW,
     },
 
-    'Sonic Adventure 2 Battle': {
-        'CHAOS EMERALD': PIECE_OF_POWER,
+    "Sonic Adventure 2 Battle": {
+        "CHAOS EMERALD": PIECE_OF_POWER,
         "Rings": RUPEES_20, # This should only affect filler Rings currency, not Flame Ring upgrade
         "Grapes": TRADING_ITEM_PINEAPPLE,
         "Pick Nails": SHOVEL, # Digging upgrade
     },
 
-    'Super Mario 64': {
-        'POWER STAR': PIECE_OF_POWER,
+    "Super Mario 64": {
+        "POWER STAR": PIECE_OF_POWER,
         "Key": NIGHTMARE_KEY, # Affect 2nd Floor / Basement / Progressive keys
     },
 
-    'Super Mario World': {
-        'P-BALLOON': FEATHER,
+    "Super Mario World": {
+        "P-BALLOON": FEATHER,
     },
 
-    'Super Metroid': {
-        'POWER BOMB': BOMB,
+    "Super Metroid": {
+        "POWER BOMB": BOMB,
     },
 
-    'The Legend of Zelda': {
-        'WATER OF LIFE': MEDICINE,
+    "The Legend of Zelda": {
+        "WATER OF LIFE": MEDICINE,
     },
 
-    'The Legend of Zelda - Oracle of Seasons': {
-        **PHRASE_GROUPS['Zelda'],
-        'RARE PEACH STONE': HEART_PIECE,
+    "The Legend of Zelda - Oracle of Seasons": {
+        **PHRASE_GROUPS["Zelda"],
+        "RARE PEACH STONE": HEART_PIECE,
     },
 
-    'The Witness': {
-        'BONK': BOMB,
-        'BUNKER LASER': INSTRUMENT4,
-        'DESERT LASER': INSTRUMENT5,
-        'JUNGLE LASER': INSTRUMENT4,
-        'KEEP LASER': INSTRUMENT7,
-        'MONASTERY LASER': INSTRUMENT1,
-        'POWER SURGE': BOMB,
-        'PUZZLE SKIP': GOLD_LEAF,
-        'QUARRY LASER': INSTRUMENT8,
-        'SHADOWS LASER': INSTRUMENT1,
-        'SHORTCUTS': KEY,
-        'SLOWNESS': BOMB,
-        'SWAMP LASER': INSTRUMENT2,
-        'SYMMETRY LASER': INSTRUMENT6,
-        'TOWN LASER': INSTRUMENT3,
-        'TREEHOUSE LASER': INSTRUMENT2,
-        'WATER PUMPS': KEY,
+    "The Witness": {
+        "BONK": BOMB,
+        "BUNKER LASER": INSTRUMENT4,
+        "DESERT LASER": INSTRUMENT5,
+        "JUNGLE LASER": INSTRUMENT4,
+        "KEEP LASER": INSTRUMENT7,
+        "MONASTERY LASER": INSTRUMENT1,
+        "POWER SURGE": BOMB,
+        "PUZZLE SKIP": GOLD_LEAF,
+        "QUARRY LASER": INSTRUMENT8,
+        "SHADOWS LASER": INSTRUMENT1,
+        "SHORTCUTS": KEY,
+        "SLOWNESS": BOMB,
+        "SWAMP LASER": INSTRUMENT2,
+        "SYMMETRY LASER": INSTRUMENT6,
+        "TOWN LASER": INSTRUMENT3,
+        "TREEHOUSE LASER": INSTRUMENT2,
+        "WATER PUMPS": KEY,
     },
 
-    'TUNIC': {
+    "TUNIC": {
         "AURA'S GEM": SHIELD,  # card that enhances the shield
-        'DUSTY': TRADING_ITEM_BROOM,  # a broom
-        'HERO RELIC - HP': TRADING_ITEM_HIBISCUS,
-        'HERO RELIC - MP': TOADSTOOL,
-        'HERO RELIC - SP': FEATHER,
-        'HP BERRY': GUARDIAN_ACORN,
-        'HP OFFERING': TRADING_ITEM_HIBISCUS,  # a flower
-        'LUCKY CUP': HEART_CONTAINER,  # card with a heart on it
-        'INVERTED ASH': MEDICINE,  # card with a potion on it
-        'MAGIC ORB': HOOKSHOT,
-        'MP BERRY': GUARDIAN_ACORN,
-        'MP OFFERING': TOADSTOOL,  # a mushroom
-        'QUESTAGON': PIECE_OF_POWER,  # triforce piece equivalent
-        'SP OFFERING': FEATHER,  # a feather
-        'SPRING FALLS': TRADING_ITEM_HIBISCUS,  # a flower
+        "DUSTY": TRADING_ITEM_BROOM,  # a broom
+        "HERO RELIC - HP": TRADING_ITEM_HIBISCUS,
+        "HERO RELIC - MP": TOADSTOOL,
+        "HERO RELIC - SP": FEATHER,
+        "HP BERRY": GUARDIAN_ACORN,
+        "HP OFFERING": TRADING_ITEM_HIBISCUS,  # a flower
+        "LUCKY CUP": HEART_CONTAINER,  # card with a heart on it
+        "INVERTED ASH": MEDICINE,  # card with a potion on it
+        "MAGIC ORB": HOOKSHOT,
+        "MP BERRY": GUARDIAN_ACORN,
+        "MP OFFERING": TOADSTOOL,  # a mushroom
+        "QUESTAGON": PIECE_OF_POWER,  # triforce piece equivalent
+        "SP OFFERING": FEATHER,  # a feather
+        "SPRING FALLS": TRADING_ITEM_HIBISCUS,  # a flower
     },
 
     "VVVVVV": {
