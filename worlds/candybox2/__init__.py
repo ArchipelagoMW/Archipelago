@@ -9,6 +9,7 @@ from .locations import location_descriptions, locations
 from .items import items, CandyBox2Item
 from .options import CandyBox2Options
 from .regions import create_regions, connect_entrances
+from .rules import set_rules
 
 
 class CandyBox2World(World):
@@ -52,6 +53,7 @@ class CandyBox2World(World):
 
     def set_rules(self) -> None:
         self.multiworld.completion_condition[self.player] = lambda state: self.completion_rule(state)
+        set_rules(self, self.player)
 
     def completion_rule(self, state: CollectionState):
         return state.has("Progressive World Map", self.player, 7) and \
