@@ -68,11 +68,14 @@ BLOCKED_ASSOCIATIONS = [
     "ITEM",     # TRADING_ITEM_*
 
     "BAD",      # BAD_HEART_CONTAINER
+    "HEART"     # BAD_HEART_CONTAINER, HEART_CONTAINER, HEART_PIECE
+    "CONTAINER" # BAD_HEART_CONTAINER, HEART_CONTAINER
     "GOLD",     # GOLD_LEAF
     "MAGIC",    # MAGIC_POWDER, MAGIC_ROD
     "MESSAGE",  # MESSAGE (Master Stalfos' Message)
     "PEGASUS",  # PEGASUS_BOOTS
     "PIECE",    # HEART_PIECE, PIECE_OF_POWER
+    "OF",       # PIECE_OF_POWER
     "POWER",    # POWER_BRACELET, PIECE_OF_POWER
     "SINGLE",   # SINGLE_ARROW
     "STONE",    # STONE_BEAK
@@ -254,7 +257,7 @@ SYNONYMS = {
     "SUIT": BLUE_TUNIC,
 
     # HEART_CONTAINER
-    "TANK": HEART_CONTAINER,
+    "HEART": HEART_CONTAINER, # HEART is a blocked association so must be manually assigned
 
     # TOADSTOOL
     "1-UP": TOADSTOOL,
@@ -452,10 +455,14 @@ PHRASE_GROUPS = {
     },
 
     "Zelda": {
-        "BIG KEY": NIGHTMARE_KEY,
-        "BOSS KEY": NIGHTMARE_KEY,
-        "HEART PIECE": HEART_PIECE,
-        "PIECE OF HEART": HEART_PIECE,
+        "Big Key": NIGHTMARE_KEY,
+        "Boss Key": NIGHTMARE_KEY,
+        "Heart Piece": HEART_PIECE,
+        "Piece of Heart": HEART_PIECE,
+        "Heart Container": HEART_CONTAINER,
+        "Rupoor": RUPEES_500,
+        "Mitts": POWER_BRACELET,
+        "Mirror Shield": SHIELD, # if left alone it picks up 'mirror' instead
     },
 }
 
@@ -468,6 +475,10 @@ GAME_SPECIFIC_PHRASES = {
         "Metro Ticket": TRADING_ITEM_LETTER,
         "Snatcher's Contract": TRADING_ITEM_LETTER,
         "Pon": RUPEES_20,
+    },
+
+    "A Link to the Past": {
+        **PHRASE_GROUPS["Zelda"],
     },
 
     "Donkey Kong Country 3": {
@@ -814,8 +825,14 @@ GAME_SPECIFIC_PHRASES = {
     },
 
     "Super Mario 64": {
-        "POWER STAR": PIECE_OF_POWER,
         "Key": NIGHTMARE_KEY, # Affect 2nd Floor / Basement / Progressive keys
+        "Power Star": PIECE_OF_POWER,
+        "Wing Cap": ROOSTER,
+        "Ledge Grab": POWER_BRACELET,
+        "Climb": POWER_BRACELET,
+        "Backflip": FEATHER,
+        "Side Flip": FEATHER,
+        "Wall Kick": FEATHER,
     },
 
     "Super Mario World": {
