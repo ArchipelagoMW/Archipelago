@@ -147,7 +147,6 @@ SYNONYMS: dict[str, str] = {
 
     # BOMB
     "BLAST": BOMB,
-    "BOMB": BOMB, # BOMB is a blocked association so must be manually assigned
     "BOMBCHU": BOMB,
     "FIRECRACKER": BOMB,
     "TNT": BOMB,
@@ -217,7 +216,7 @@ SYNONYMS: dict[str, str] = {
 
     # MESSAGE (master stalfos message)
     "NOTHING": MESSAGE,
-    "TRAP": MESSAGE,
+    "TRAP": MESSAGE, # it appears as various progression items in game
 
     # BOOMERANG
     "BOOMER": BOOMERANG,
@@ -231,7 +230,6 @@ SYNONYMS: dict[str, str] = {
     # ARROWS_10
 
     # SINGLE_ARROW
-    "ARROW": SINGLE_ARROW, # ARROW is a blocked association so must be manually assigned
     "MISSILE": SINGLE_ARROW,
     "QUIVER": SINGLE_ARROW,
 
@@ -244,6 +242,7 @@ SYNONYMS: dict[str, str] = {
     "GRYPHON": ROOSTER,
 
     # MAX_POWDER_UPGRADE
+    "CAPACITY": MAX_POWDER_UPGRADE,
 
     # MAX_BOMBS_UPGRADE
 
@@ -274,6 +273,7 @@ SYNONYMS: dict[str, str] = {
     "DOOR": KEY,
     "GATE": KEY,
     "KEY": KEY, # Without this, foreign keys show up as nightmare keys
+    "KEYCARD": KEY,
     "LOCK": KEY,
     "PANEL": KEY,
     "UNLOCK": KEY,
@@ -369,6 +369,7 @@ SYNONYMS: dict[str, str] = {
     # TRADING_ITEM_HIBISCUS
     "FLOWER": TRADING_ITEM_HIBISCUS,
     "PETAL": TRADING_ITEM_HIBISCUS,
+    "ROSE": TRADING_ITEM_HIBISCUS,
 
     # TRADING_ITEM_LETTER
     "CARD": TRADING_ITEM_LETTER,
@@ -420,7 +421,7 @@ SYNONYMS: dict[str, str] = {
 # into the game specific entries.
 PHRASE_GROUPS: dict[str, dict[str, str]] = {
     "Doom": {
-        "Keycard": KEY,
+        "Keycard": KEY, # necessary despite global synonym to override MAP
         "Computer area map": MAP,
         "Box of": SINGLE_ARROW, # bullets, rockets, or shotgun shells
         "Energy cell pack": SINGLE_ARROW,
@@ -724,8 +725,8 @@ GAME_SPECIFIC_PHRASES: dict[str, dict[str, str]] = {
     "Mario & Luigi Superstar Saga": {
         # Key Items
         "Peach's Extra Dress": RED_TUNIC,
-        "Peasley's Rose": TRADING_ITEM_HIBISCUS,
-        "Beanstar": PIECE_OF_POWER, # Hits both Fake Beanstar and pieces of the real Beanstar, hopefully
+        "Fake Beanstar": PIECE_OF_POWER,
+        "Beanstar Piece": PIECE_OF_POWER,
         "Beanstone": RUPEES_500, # They're gemstones
         "Firebrand": POWER_BRACELET, # Magic power that affects Mario/Luigi's hands, either this or MAGIC_ROD would be okay
         "Thunderhand": POWER_BRACELET, # Ditto
@@ -809,12 +810,23 @@ GAME_SPECIFIC_PHRASES: dict[str, dict[str, str]] = {
     },
 
     "SMZ3": {
+        # Zelda
+        **PHRASE_GROUPS["Zelda"],
         "BIGKEY": NIGHTMARE_KEY,
         "BYRNA": MAGIC_ROD,
-        "HEARTPIECE": HEART_PIECE,
-        "POWERBOMB": BOMB,
         "SOMARIA": MAGIC_ROD,
+        "FIREROD": MAGIC_ROD,
+        "ICEROD": MAGIC_ROD,
+        "HEARTPIECE": HEART_PIECE,
+
+        # Metroid
+        "POWERBOMB": BOMB,
         "SUPER": SINGLE_ARROW,
+        "TANK": HEART_CONTAINER,
+        "VARIA": BLUE_TUNIC,
+        "GRAVITY": RED_TUNIC,
+        "XRAY": TRADING_ITEM_MAGNIFYING_GLASS,
+        "CARD": KEY,
     },
 
     "Sonic Adventure 2 Battle": {
@@ -841,6 +853,7 @@ GAME_SPECIFIC_PHRASES: dict[str, dict[str, str]] = {
 
     "Super Metroid": {
         "POWER BOMB": BOMB,
+        "TANK": HEART_CONTAINER,
     },
 
     "The Legend of Zelda": {
@@ -870,6 +883,18 @@ GAME_SPECIFIC_PHRASES: dict[str, dict[str, str]] = {
         "TOWN LASER": INSTRUMENT3,
         "TREEHOUSE LASER": INSTRUMENT2,
         "WATER PUMPS": KEY,
+    },
+
+    "Timespinner": {
+        "Cheveur Plume": FEATHER,
+        "Cheveur": ROOSTER,
+        "Cheveux Feather": FEATHER,
+        "Cheveux": ROOSTER,
+        "Crow": ROOSTER,
+        "Ether": MEDICINE,
+        "Hi-Potion": MEDICINE,
+        "Hi-Ether": MEDICINE,
+        "Antidote": MEDICINE,
     },
 
     "TUNIC": {
