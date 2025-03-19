@@ -20,6 +20,8 @@ jobs:
           name: 'candybox2.apworld'
   release:
     runs-on: ubuntu-latest
+    needs:
+      - archive
     steps:
       - uses: actions/download-artifact@v4
         with:
