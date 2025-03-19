@@ -14,7 +14,7 @@ from ..data.game_item import ItemTag
 from ..mods.mod_data import ModNames
 from ..options import StardewValleyOptions, FestivalLocations, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
     ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
-    Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Walnutsanity
+    Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Walnutsanity, Moviesanity
 from ..strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName
 from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.ap_names.buff_names import Buff
@@ -115,6 +115,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_cooking_recipes(item_factory, options, content, items)
     create_shipsanity_items(item_factory, options, items)
     create_booksanity_items(item_factory, content, items)
+    create_movie_items(item_factory, options, items)
     create_secrets_items(item_factory, options, items)
     create_goal_items(item_factory, options, items)
     items.append(item_factory("Golden Egg"))
@@ -501,6 +502,13 @@ def create_booksanity_items(item_factory: StardewItemFactory, content: StardewCo
     items.extend(item_factory(item_table[booksanity.to_item_name(book.name)]) for book in content.find_tagged_items(ItemTag.BOOK_POWER))
     progressive_lost_book = item_table[booksanity.progressive_lost_book]
     items.extend(item_factory(progressive_lost_book) for _ in content.features.booksanity.get_randomized_lost_books())
+
+
+def create_movie_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+    if options.moviesanity.value <= Moviesanity.option_none:
+        return
+
+    items.extend(item_factory(item) for item in items_by_group[Group.MOVIESANITY])
 
 
 def create_secrets_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):

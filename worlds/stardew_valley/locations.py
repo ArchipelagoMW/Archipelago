@@ -15,7 +15,7 @@ from .mods.mod_data import ModNames
 from .options import ArcadeMachineLocations, SpecialOrderLocations, Museumsanity, \
     FestivalLocations, ElevatorProgression, BackpackProgression, FarmType
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
-from .options.options import BackpackSize
+from .options.options import BackpackSize, Moviesanity
 from .strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName
 from .strings.backpack_tiers import Backpack
 from .strings.goal_names import Goal
@@ -115,6 +115,8 @@ class LocationTags(enum.Enum):
     DIFFICULT_SECRET = enum.auto()
     SECRET_NOTE = enum.auto()
     REPLACES_PREVIOUS_LOCATION = enum.auto()
+    MOVIE = enum.auto()
+    MOVIE_SNACK = enum.auto()
 
     BEACH_FARM = enum.auto()
     # Mods
@@ -509,6 +511,19 @@ def extend_walnutsanity_locations(randomized_locations: List[LocationData], opti
         randomized_locations.extend(locations_by_tag[LocationTags.WALNUTSANITY_DIG])
     if WalnutsanityOptionName.repeatables in options.walnutsanity:
         randomized_locations.extend(locations_by_tag[LocationTags.WALNUTSANITY_REPEATABLE])
+
+
+def extend_movies_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
+    if options.moviesanity == Moviesanity.option_none:
+        return
+
+    locations = []
+    if options.moviesanity >= Moviesanity.option_all_movies:
+        locations.extend(locations_by_tag[LocationTags.MOVIE])
+    if options.moviesanity >= Moviesanity.option_all_movies_and_all_snacks:
+        locations.extend(locations_by_tag[LocationTags.MOVIE_SNACK])
+    filtered_locations = filter_disabled_locations(options, content, locations)
+    randomized_locations.extend(filtered_locations)
 
 
 def extend_secrets_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):

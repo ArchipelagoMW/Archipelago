@@ -864,6 +864,13 @@ def set_arcade_machine_rules(logic: StardewLogic, multiworld: MultiWorld, player
     set_location_rule(multiworld, player, "Journey of the Prairie King Victory", logic.has("JotPK Max Buff"))
 
 
+def set_movie_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions, content: StardewContent):
+    if world_options.moviesanity.value <= Moviesanity.option_none:
+        return
+
+
+
+
 def set_secrets_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions, content: StardewContent):
     if not world_options.secretsanity:
         return

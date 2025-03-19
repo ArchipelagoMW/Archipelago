@@ -87,6 +87,7 @@ class Group(enum.Enum):
     EASY_SECRET = enum.auto()
     FISHING_SECRET = enum.auto()
     SECRET_NOTES_SECRET = enum.auto()
+    MOVIESANITY = enum.auto()
     # Mods
     MAGIC_SPELL = enum.auto()
     MOD_WARP = enum.auto()

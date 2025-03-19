@@ -650,14 +650,20 @@ class Moviesanity(Choice):
     """Add checks for watching movies?
     None: No movie checks
     One: There is a check for watching a movie, regardless of which
-    All: Watching all individual movies are checks
+    All Movies: Watching all individual movies are checks
+    All Movies With Loved Snacks: Watching movies only counts if you invite someone and buy them a loved snack
+    All Movies And All Snacks: Watch all movies, and purchase all the snacks once
+    All Movies And All Loved Snacks: Watch all movies, and purchase all the snacks for someone who loves them
     """
     internal_name = "moviesanity"
     display_name = "Moviesanity"
     default = 1
     option_none = 0
     option_one = 1
-    option_all = 2
+    option_all_movies = 2
+    option_all_movies_with_loved_snack = 3
+    option_all_movies_and_all_snacks = 4
+    option_all_movies_and_all_loved_snacks = 5
 
 
 class Secretsanity(OptionSet):
@@ -959,6 +965,7 @@ class StardewValleyOptions(PerGameCommonOptions):
     friendsanity_heart_size: FriendsanityHeartSize
     booksanity: Booksanity
     walnutsanity: Walnutsanity
+    moviesanity: Moviesanity
     secretsanity: Secretsanity
     exclude_ginger_island: ExcludeGingerIsland
     quick_start: QuickStart
