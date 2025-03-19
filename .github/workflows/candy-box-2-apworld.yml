@@ -32,4 +32,4 @@ jobs:
           automatic_release_tag: "latest"
           prerelease: true
           title: "Latest Development Build"
-          files: worlds/candybox2.apworld
+          files: candybox2.apworld
