@@ -473,27 +473,32 @@ class LMWorld(World):
 
         # Assign each location to their region
         for location, data in BASE_LOCATION_TABLE.items():
-            region = self.multiworld.get_region(data.region, self.player)
-            entry = LMLocation(self.player, location, region, data)
-            if entry.type == "Freestanding":
-                add_item_rule(entry, lambda
-                    item: item.player != self.player or (
-                        item.player == self.player and item.type != "Money" and item.type != "Trap" and item.type != "Medal"))
-            if len(entry.access) != 0:
-                for item in entry.access:
-                    if item == "Fire Element Medal":
-                        add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                    elif item == "Water Element Medal":
-                        add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                    elif item == "Ice Element Medal":
-                        add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                    else:
-                        add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
-            if entry.code is None:
-                entry.place_locked_item(Item(entry.locked_item, ItemClassification.progression, None, self.player))
-            region.locations.append(entry)
+            if location == "Luigi's Courage" or location == "E. Gadd's Gift":
+                region = self.get_region(self.origin_region_name)
+                entry = LMLocation(self.player, location, region, data)
+                region.locations.append(entry)
+            else:
+                region = self.get_region(data.region)
+                entry = LMLocation(self.player, location, region, data)
+                if entry.type == "Freestanding":
+                    add_item_rule(entry, lambda
+                        item: item.player != self.player or (
+                            item.player == self.player and item.type != "Money" and item.type != "Trap" and item.type != "Medal"))
+                if len(entry.access) != 0:
+                    for item in entry.access:
+                        if item == "Fire Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
+                        elif item == "Water Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
+                        elif item == "Ice Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                        else:
+                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                if entry.code is None:
+                    entry.place_locked_item(Item(entry.locked_item, ItemClassification.progression, None, self.player))
+                region.locations.append(entry)
         for location, data in ENEMIZER_LOCATION_TABLE.items():
-            region = self.multiworld.get_region(data.region, self.player)
+            region = self.get_region(data.region)
             entry = LMLocation(self.player, location, region, data)
             if entry.type == "Freestanding":
                 add_item_rule(entry, lambda
@@ -523,7 +528,7 @@ class LMWorld(World):
                     pass
             region.locations.append(entry)
         for location, data in CLEAR_LOCATION_TABLE.items():
-            region = self.multiworld.get_region(data.region, self.player)
+            region = self.get_region(data.region)
             entry = LMLocation(self.player, location, region, data)
             if entry.type == "Freestanding":
                 add_item_rule(entry, lambda

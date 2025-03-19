@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from . import Rules, LMWorld
 
 vanilla_door_state = {
-        34: 1,
+        34: 0,
         38: 0,
         43: 1,
         41: 1,
