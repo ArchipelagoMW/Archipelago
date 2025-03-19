@@ -10,7 +10,7 @@
 - [What happens when I pick up or receive a Power Cell?](#what-happens-when-i-pick-up-or-receive-a-power-cell)
 - [What happens when I pick up or receive a Scout Fly?](#what-happens-when-i-pick-up-or-receive-a-scout-fly)
 - [How do I check the 'Free 7 Scout Flies' Power Cell?](#how-do-i-check-the-free-7-scout-flies-power-cell)
-- [What does Deathlink do?](#what-does-deathlink-do)
+- [What does Death Link do?](#what-does-death-link-do)
 - [What does Move Randomizer do?](#what-does-move-randomizer-do)
 - [What are the movement options in Move Randomizer?](#what-are-the-movement-options-in-move-randomizer)
 - [How do I know which moves I have?](#how-do-i-know-which-moves-i-have)
@@ -60,7 +60,7 @@ Additionally, several special checks and corresponding items have been added tha
 | Freed The Green Sage   | Free the Green Sage in Gol and Maia's Citadel                                | 
 
 ## What are the special items and what do they unlock
-| Item Name                                                                | What It Unlocks                                                                               |
+| Item Name                                                                | What it Unlocks                                                                               |
 |--------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
 | Fisherman's Boat                                                         | Misty Island                                                                                  |
 | Jungle Elevator                                                          | The blue vent switch inside the temple in Forbidden Jungle                                    |
@@ -115,12 +115,12 @@ scout fly. So in short:
     - First, you will receive that scout fly, as normal.
     - Second, you will immediately complete the "Free 7 Scout Flies" check, which will send out another item.
 
-## What does Deathlink do
-If you enable Deathlink, all the other players in your Multiworld who also have it enabled will be linked on death. 
-That means when Jak dies in your game, the players in your Deathlink group also die. Likewise, if any of the other 
-players die, Jak will also die in a random, possibly spectacular fashion.
+## What does Death Link do
+If you enable Death Link, all the other players in your Multiworld who also have it enabled will be linked by death. 
+That means when Jak dies in your game, the players in with Death Link also die. Likewise, if any of the other 
+players with Death Link die, Jak will also die in a random, possibly spectacular fashion.
 
-You can turn off Deathlink at any time in the game by opening the game's menu and navigating to `Options`, 
+You can turn off Death Link at any time in the game by opening the game's menu and navigating to `Options`, 
 then `Archipelago Options`, then `Deathlink`.
 
 ## What does Move Randomizer do
@@ -224,7 +224,7 @@ progression items and prevent you (and others) from completing the run.
 The game's normal HUD shows you how many power cells, precursor orbs, and scout flies you currently have. But if you 
 hold `L2 or R2` and press a direction on the D-Pad, the HUD will show you alternate modes. Here is how the HUD works:
 
-| HUD Mode      | Button Combo                 | What The HUD Shows                | Text Messages                         |
+| HUD Mode      | Button Combo                 | What the HUD Shows                | Text Messages                         |
 |---------------|------------------------------|-----------------------------------|---------------------------------------|
 | Per-Level     | `L2 or R2` + `Down`          | Locations Checked (in this level) | `SENT {Other Item} TO {Other Player}` |
 | Global        | `L2 or R2` + `Up`            | Locations Checked (in the game)   | `GOT {Your Item} FROM {Other Player}` |
