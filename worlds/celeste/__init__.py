@@ -74,7 +74,7 @@ class CelesteWorld(World):
 
         resolve_options(self)
 
-        self.active_levels = {"0a", "1a", "2a", "3a"}
+        self.active_levels = {"0a", "1a", "2a", "3a", "4a"}
         #self.active_levels = {"0a", "1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a"}
         if self.options.include_core:
             self.active_levels.add("9a")
