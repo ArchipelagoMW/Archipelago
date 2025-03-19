@@ -1,5 +1,6 @@
 import typing
 import uuid
+from typing import TextIO
 
 from BaseClasses import CollectionState
 from entrance_rando import ERPlacementState
@@ -18,12 +19,14 @@ class CandyBox2World(World):
     location_name_to_id = locations
     item_name_to_id = {name: data.code for name, data in items.items() if data.code is not None}
     options_dataclass = CandyBox2Options
+    options: CandyBox2Options
     topology_present = True
 
     entrance_randomisation: ERPlacementState = None
+    original_entrances: list[tuple[str, str]] = []
 
     def create_regions(self) -> None:
-        return create_regions(self.multiworld, self.options, self.player)
+        return create_regions(self)
 
     def create_item(self, name: str) -> CandyBox2Item:
         data = items[name]
@@ -43,7 +46,7 @@ class CandyBox2World(World):
     def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
         return {
             "uuid": str(uuid.uuid4()),
-            "entranceInformation": self.entrance_randomisation.pairings,
+            "entranceInformation": self.original_entrances if self.options.quest_randomisation == "off" else self.entrance_randomisation.pairings,
         }
 
     def set_rules(self) -> None:
@@ -56,6 +59,12 @@ class CandyBox2World(World):
             state.has("The A Stone", self.player) and \
             state.has("The Y Stone", self.player) and \
             state.has("Locked Candy Box", self.player)
+
+    def write_spoiler(self, spoiler_handle: TextIO) -> None:
+        spoiler_handle.write(f"\nCandy Box 2 Entrance randomisation for {self.player_name}:\n")
+        slot_data = self.fill_slot_data()
+        for entrance in slot_data.get("entranceInformation", []):
+            spoiler_handle.write(f"{entrance[0]} -> {entrance[1]}\n")
 
 class CandyBox2WebWorld(WebWorld):
     location_descriptions = location_descriptions

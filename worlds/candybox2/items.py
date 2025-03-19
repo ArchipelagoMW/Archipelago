@@ -80,6 +80,7 @@ items: dict[str, CandyBox2ItemData] = {
     "The Green Fin": CandyBox2ItemData(candy_box_2_base_id + 56, 1, ItemClassification.useful),
     "The Purple Fin": CandyBox2ItemData(candy_box_2_base_id + 57, 1, ItemClassification.useful),
     "Locked Candy Box": CandyBox2ItemData(candy_box_2_base_id + 58, 1, ItemClassification.progression),
+    "Boots of Introspection": CandyBox2ItemData(candy_box_2_base_id + 59, 1, ItemClassification.useful),
 }
 
 weapons: Iterable[str] = [

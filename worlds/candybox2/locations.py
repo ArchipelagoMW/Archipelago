@@ -230,6 +230,10 @@ lonely_house_locations = {
     "Locked Candy Box Acquired": 4700
 }
 
+yourself_fight_locations = {
+    "Boots of Introspection Acquired": 4800
+}
+
 locations = {
     **candy_box_locations,
     **village_locations,
@@ -281,4 +285,5 @@ locations = {
     **the_sea_locations,
     **dig_spot_locations,
     **lonely_house_locations,
+    **yourself_fight_locations,
 }
