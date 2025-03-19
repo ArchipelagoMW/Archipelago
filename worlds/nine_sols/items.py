@@ -26,6 +26,7 @@ items_data = restricted_loads(pickled_data)["ITEMS"]
 
 item_types_map = {
     "progression": ItemClassification.progression,
+    "progression_skip_balancing": ItemClassification.progression_skip_balancing,
     "useful": ItemClassification.useful,
     "filler": ItemClassification.filler,
     "trap": ItemClassification.trap

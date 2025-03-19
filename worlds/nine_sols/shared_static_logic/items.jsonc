@@ -34,7 +34,7 @@
     { "code": 53, "name": "Twin Tao Fruit", "type": "useful" },
 
     // progression "Artifact"s gifted to Shuanshuan
-    { "code": 101, "name": "(Artifact) Ancient Sheet Music", "type": "progression" },
+    { "code": 101, "name": "(Artifact) Ancient Sheet Music", "type": "progression_skip_balancing" },
     { "code": 102, "name": "(Artifact) Kunlun Immortal Portrait", "type": "progression" },
     { "code": 103, "name": "(Artifact) The Four Treasures of the Study", "type": "progression" },
     { "code": 104, "name": "(Artifact) Unknown Seed", "type": "progression" },
@@ -42,7 +42,7 @@
 
     // progression "Artifact"s created by Shuanshuan
     { "code": 111, "name": "(Artifact) Portrait of Yi", "type": "progression" },
-    { "code": 112, "name": "(Artifact) Legend of the Porky Heroes", "type": "progression" },
+    { "code": 112, "name": "(Artifact) Legend of the Porky Heroes", "type": "progression_skip_balancing" },
 
     // other "Artifact"s gifted to Shuanshuan
     { "code": 121, "name": "(Artifact) Fusang Amulet", "type": "useful" },
@@ -59,11 +59,11 @@
     // other "Key Item"s, roughly in order of (randomizer) importance
     { "code": 141, "name": "Abandoned Mines Access Token", "type": "progression" },
     { "code": 142, "name": "Elevator Access Token", "type": "progression" },
-    { "code": 143, "name": "Homing Darts", "type": "progression" },
-    { "code": 144, "name": "Thunderburst Bomb", "type": "progression" },
-    { "code": 145, "name": "Ancient Penglai Ballad", "type": "progression" },
-    { "code": 146, "name": "Ji's Hair", "type": "progression" },
-    { "code": 147, "name": "Tianhuo Serum", "type": "progression" },
+    { "code": 143, "name": "Homing Darts", "type": "progression_skip_balancing" },
+    { "code": 144, "name": "Thunderburst Bomb", "type": "progression_skip_balancing" },
+    { "code": 145, "name": "Ancient Penglai Ballad", "type": "progression_skip_balancing" },
+    { "code": 146, "name": "Ji's Hair", "type": "progression_skip_balancing" },
+    { "code": 147, "name": "Tianhuo Serum", "type": "progression_skip_balancing" },
     { "code": 148, "name": "Rhizomatic Bomb", "type": "useful" },
     { "code": 149, "name": "Soul-Severing Blade", "type": "useful" },
     { "code": 150, "name": "Firestorm Ring", "type": "useful" },
