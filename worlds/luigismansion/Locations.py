@@ -116,6 +116,7 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     # Game Event Locations
     "Breaker Box": LMLocationData("Breaker Room", None, "Event", -1, [], locked_item="Blackout"),
     "King Boo": LMLocationData("Secret Altar", None, "Event", -1, [], locked_item="Mario's Painting"),
+    "Clockwork Clear": LMLocationData("Clockwork Room", None, "Event", -1, [], locked_item="Defeat Clockwork"),
 }
 
 # Adds all the chests that are spawned after clearing a room of ghosts.

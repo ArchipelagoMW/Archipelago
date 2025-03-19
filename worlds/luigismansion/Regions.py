@@ -88,19 +88,46 @@ GHOST_TO_ROOM = {
 }
 
 spawn_locations: dict[str,dict[str, int]] = {
-    "Hidden Room":    {"room_no": 1, "pos_x": -1803.157350, "pos_y": 0.000000, "pos_z": 153.575714}, # Hidden
-    "Armory":         {"room_no": 48, "pos_x": -2541.662600, "pos_y": 1100.000000, "pos_z": -40.361595}, # Armory
-    "Courtyard":      {"room_no": 23, "pos_x": 1613.042970, "pos_y": 9.000000, "pos_z": -5663.574710}, # Courtyard
-    "Roof":           {"room_no": 30, "pos_x": 0.000000, "pos_y": 1780.000000, "pos_z": -306.035980}, # Roof
-    "Clockwork Room": {"room_no": 56, "pos_x": 10.759588, "pos_y": 1100.000000, "pos_z": -1649.743900}, # Clockwork
-    "Foyer":          {"room_no": 2, "pos_x": -7.640748, "pos_y": 0.000000, "pos_z": 145.174300}, # Foyer
-    "Rec Room":       {"room_no": 22, "pos_x": 3517.026860, "pos_y": 0.000000, "pos_z": -4646.33203}, # Rec Room
-    "Sealed Room":    {"room_no": 36, "pos_x": 3476.570800, "pos_y": 620.000000, "pos_z": -2130.725100}, # Sealed Room
+    "Hidden Room":           {"room_no": 1, "pos_x": -1803.157350, "pos_y": 0.000000, "pos_z": 153.575714}, # Hidden
+    "Armory":                {"room_no": 48, "pos_x": -2541.662600, "pos_y": 1100.000000, "pos_z": -40.361595}, # Armory
+    "Courtyard":             {"room_no": 23, "pos_x": 1613.042970, "pos_y": 9.000000, "pos_z": -5663.574710}, # Courtyard
+    "Roof":                  {"room_no": 30, "pos_x": 0.000000, "pos_y": 1780.000000, "pos_z": -306.035980}, # Roof
+    "Clockwork Room":        {"room_no": 56, "pos_x": 10.759588, "pos_y": 1100.000000, "pos_z": -1649.743900}, # Clockwork
+    "Foyer":                 {"room_no": 2, "pos_x": -7.640748, "pos_y": 0.000000, "pos_z": 145.174300}, # Foyer
+    "Rec Room":              {"room_no": 22, "pos_x": 3517.026860, "pos_y": 0.000000, "pos_z": -4646.33203}, # Rec Room
+    "Sealed Room":           {"room_no": 36, "pos_x": 3476.570800, "pos_y": 620.000000, "pos_z": -2130.725100}, # Sealed Room
+    "Laundry Room":          {"room_no": 5, "pos_x": -3165.112550, "pos_y": 0, "pos_z": -804.770508},  # Laundry
+    "Telephone Room":        {"room_no": 50, "pos_x": -9.812825, "pos_y": 1100, "pos_z": 118.738243}, # Telephone
+    "Butler's Room":         {"room_no": 0, "pos_x": -3391.8396, "pos_y": 0, "pos_z": 114.336197}, # Butler
+    "Fortune-Teller's Room": {"room_no": 3, "pos_x": 1807.135740, "pos_y": 0, "pos_z": 214.838852}, # Fortune Teller
+    "Mirror Room":           {"room_no": 4, "pos_x": 3343.897950, "pos_y": 0, "pos_z": -114.910957}, # Mirror
+    "Ballroom":              {"room_no": 10, "pos_x": 2854.236820, "pos_y": 0, "pos_z": -1565.909060}, # BaLLROOM
+    "Storage Room":          {"room_no": 14, "pos_x": 3412.177250, "pos_y": 0, "pos_z": -3009.698000}, # Storage
+    "Breaker Room":          {"room_no": 67, "pos_x": 3127.567140, "pos_y": -550, "pos_z": -1437.766600}, # Breaker
+    "Dining Room":           {"room_no": 9, "pos_x": -393.851349, "pos_y": 0, "pos_z": -1416.557500}, # Dining
+    "Conservatory":          {"room_no": 21, "pos_x": 780.405884, "pos_y": 0, "pos_z": -4662.089840}, # Conservatory
+    "1F Bathroom":           {"room_no": 17, "pos_x": -2160.237550, "pos_y": 0, "pos_z": -4671.114750}, # 1f bath
+    "Billiards Room":        {"room_no": 12, "pos_x": -963.755737, "pos_y": 0, "pos_z": -3055.808110}, # Billiards
+    "Projection Room":       {"room_no": 13, "pos_x": 281.914215, "pos_y": 0, "pos_z": -3137.967530}, # Projection
+    "Twins' Room":           {"room_no": 25, "pos_x": -1729.586790, "pos_y": 550, "pos_z": 116.055779}, # Twins
+    "Nursery":               {"room_no": 24, "pos_x": -3331.658690, "pos_y": 550, "pos_z": -198.970337}, # Nursery
+    "Master Bedroom":        {"room_no": 33, "pos_x": -3365.857670, "pos_y": 550, "pos_z": -1513.529660}, # Master bed
+    "Study":                 {"room_no": 34, "pos_x": -1696.352290, "pos_y": 550, "pos_z": -1605.182980}, # Study
+    "Parlor":                {"room_no": 35, "pos_x": -43.294357, "pos_y": 550, "pos_z": --1775.288450}, # Parlor
+    "Anteroom":              {"room_no": 39, "pos_x": -1.503195, "pos_y": 550, "pos_z": -3087.626950}, # Anteroom
+    "Wardrobe":              {"room_no": 38, "pos_x": -1789.859250, "pos_y": 550, "pos_z": -3303.123780}, # Wardrobe
+    "Nana's Room":           {"room_no": 46, "pos_x": 173.368210, "pos_y": 550, "pos_z": -4615.553220}, # Nana
+    "2F Bathroom":           {"room_no": 45, "pos_x": -1902.854130, "pos_y": 550, "pos_z": -4660.501950}, # 2f bath
+    "Tea Room":              {"room_no": 47, "pos_x": -2873.639400, "pos_y": 550, "pos_z": -4770.667970}, # tea
+    "Observatory":           {"room_no": 41, "pos_x": 3596.065920, "pos_y": 550, "pos_z": -3220.102780}, # observa
+    "Astral Hall":           {"room_no": 40, "pos_x": -2333.168700, "pos_y": 570, "pos_z": -3326.229000}, # astral
+    "Sitting Room":          {"room_no": 27, "pos_x": 2225.465090, "pos_y": 550, "pos_z": -98.163559}, # sitting
+    "Guest Room":            {"room_no": 28, "pos_x": 2949.315430, "pos_y": 550, "pos_z": -149.029785}, # guest
+    "Safari Room":           {"room_no": 52, "pos_x": 2718.783450, "pos_y": 1100, "pos_z": -131.375854}, # safari
+    "Ceramics Studio":       {"room_no": 55, "pos_x": -2397.3373540, "pos_y": 1100, "pos_z": -1579.717410}, # ceramics
 }
 
 exp_spawns: dict[str,dict[str, int]] = {
-    "Telephone Room":    {"room_no": 50, "pos_x": 1, "pos_y": 1, "pos_z": 1},  # Telephone
-    "Laundry Room":      {"room_no": 5, "pos_x": 1, "pos_y": 1, "pos_z": 1}, # Laundry
 }
 
 
@@ -189,7 +216,7 @@ def connect_regions(world: "LMWorld"):
     lmconnect(world, "West Attic Hallway", "Telephone Room", "Telephone Room Key", 52)
     lmconnect(world, "Telephone Room", "Clockwork Room", "Clockwork Key", 53)
     lmconnect(world, "Armory", "Ceramics Studio", "Ceramics Studio Key", 50)
-    lmconnect(world, "Clockwork Room", "Roof", one_way=True)
+    lmconnect(world, "Clockwork Room", "Roof", rule=lambda state: state.has("Defeat Clockwork", world.player))
     lmconnect(world, "Roof", "Sealed Room", one_way=True),
     lmconnect(world, "Basement Stairwell", "Breaker Room", "Breaker Room Key", 71)
     lmconnect(world, "Basement Stairwell", "Cellar", "Cellar Key", 68)
