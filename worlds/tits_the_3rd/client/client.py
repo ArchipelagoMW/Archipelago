@@ -38,7 +38,7 @@ class TitsThe3rdContext(CommonContext):
     def __init__(self, server_address: Optional[str], password: Optional[str]) -> None:
         super().__init__(server_address, password)
         self.game = "Trails in the Sky the 3rd"
-        self.items_handling = 0b011  # items from both your own and other worlds are sent through AP.
+        self.items_handling = 0b111  # Fully Remote
         self.game_interface = None
         self.world_player_identifier: bytes = b"\x00\x00\x00\x00"
         self.location_ids = None
@@ -48,10 +48,19 @@ class TitsThe3rdContext(CommonContext):
         self.item_ap_id_to_name = None
         self.last_received_item_index = -1
         self.non_local_locations: Set[int] = set()
+        self.non_local_locations_initiated = False
 
         self.items_to_be_sent_notification = queue.Queue()
 
         self.critical_section_lock = asyncio.Lock()
+
+    def init_game_interface(self):
+        logger.info("Initiating Game Interface")
+        if not self.install_game_mod():
+            raise Exception("Error Installing Game Mod")
+        logger.info("Finish installing game mod")
+        # self.install_dt_patch() #TODO: implement this when we actually have something for this
+        self.game_interface = TitsThe3rdMemoryIO(self.exit_event)
 
     def install_game_mod(self):
         game_dir = Path(get_settings().tits_the_3rd_options.game_installation_path)
@@ -63,6 +72,15 @@ class TitsThe3rdContext(CommonContext):
         scena_temp_folder = lb_ark_folder / "ED6_DT21_BASE"
         game_mod_folder = lb_ark_folder / "ED6_DT21"
         os.makedirs(lb_ark_folder, exist_ok=True)
+        if "player.txt" in os.listdir(lb_ark_folder):
+            with open(lb_ark_folder / "player.txt") as player_id_file:
+                if player_id_file.read() == f"{self.auth}-{self.seed_name}":
+                    logger.info("Player has not changed. Skip installing patch")
+                    return True
+
+        with open(lb_ark_folder / "player.txt", "w") as player_id_file:
+            player_id_file.write(f"{self.auth}-{self.seed_name}")
+
         if os.path.exists(game_mod_folder):  # Remove previously installed mod for a clean install
             shutil.rmtree(game_mod_folder)
 
@@ -104,6 +122,7 @@ class TitsThe3rdContext(CommonContext):
         self.items_to_be_sent_notification = queue.Queue()
         self.locations_checked = set()
         self.non_local_locations = set()
+        self.non_local_locations_initiated = False
 
     async def server_auth(self, password_requested: bool = False):
         """Wrapper for login."""
@@ -122,17 +141,15 @@ class TitsThe3rdContext(CommonContext):
             self.world_player_identifier = (hashlib.sha256(self.world_player_identifier.encode()).digest())[:4]
             self.location_ids = set(args["missing_locations"] + args["checked_locations"])
             self.locations_checked = set(args["checked_locations"])
-            if not self.install_game_mod():
-                raise Exception("Error Installing Game Mod")
-            logger.info("Finished Installing Game Mod")
-            self.game_interface = TitsThe3rdMemoryIO(self.exit_event)
 
             asyncio.create_task(self.send_msgs([{"cmd": "LocationScouts", "locations": self.location_ids}]))
 
         elif cmd == "LocationInfo":
-            for item in [NetworkItem(*item) for item in args["locations"]]:
-                if self.player_names[item.player] != self.slot_info[self.slot].name:
-                    self.non_local_locations.add(item.location)
+            if not self.non_local_locations_initiated:
+                for item in [NetworkItem(*item) for item in args["locations"]]:
+                    if self.player_names[item.player] != self.slot_info[self.slot].name:
+                        self.non_local_locations.add(item.location)
+                self.non_local_locations_initiated = True
 
         elif cmd == "RoomInfo":
             self.seed_name = args["seed_name"]
@@ -155,7 +172,7 @@ class TitsThe3rdContext(CommonContext):
             - RoomInfo package recieved (self.seed_name is set)
             - World player identifier is calculated based on the seed and player name (self.world_player_identifier is set)
         """
-        return self.auth and self.seed_name and self.world_player_identifier
+        return self.auth and self.seed_name and self.world_player_identifier and self.non_local_locations_initiated
 
     async def give_item(self):
         self.last_received_item_index = self.game_interface.read_last_item_receive_index()
@@ -164,27 +181,38 @@ class TitsThe3rdContext(CommonContext):
         except IndexError:
             current_item = None
 
+        result = False
+
         if current_item:
             item_id = current_item.item
-            if item_id is None or item_id >= 500000:  # Special case where we don't actually want to give anything but just acknowledge it
+            # Special case where we don't actually want to give anything but just acknowledge it
+            if item_id is None or item_id >= 500000:
+                result = True
+            # Unlock location
+            elif get_item_id(ItemName.area_min_id) <= item_id <= get_item_id(ItemName.area_max_id):
+                result = self.game_interface.unlock_area(item_id - get_item_id(ItemName.area_min_id))
+            # Unlock character
+            elif get_item_id(ItemName.character_min_id) <= item_id <= get_item_id(ItemName.character_max_id):
+                result = self.game_interface.unlock_character(item_id - get_item_id(ItemName.character_min_id))
+            # Give Mira
+            elif get_item_id(ItemName.mira_min_id) <= item_id <= get_item_id(ItemName.mira_max_id):
+                result = self.game_interface.give_mira(item_id - get_item_id(ItemName.mira_min_id))
+            # Give lower element sepith
+            elif get_item_id(ItemName.lower_elements_sepith_min_id) <= item_id <= get_item_id(ItemName.lower_elements_sepith_max_id):
+                result = self.game_interface.give_low_sepith(item_id - get_item_id(ItemName.lower_elements_sepith_min_id))
+            # Give higher element sepith
+            elif get_item_id(ItemName.higher_elements_sepith_min_id) <= item_id <= get_item_id(ItemName.higher_elements_sepith_max_id):
+                result = self.game_interface.give_high_sepith(item_id - get_item_id(ItemName.higher_elements_sepith_min_id))
+            # Give Recipe
+            elif get_item_id(ItemName.recipe_min_id) <= item_id <= get_item_id(ItemName.recipe_max_id):
+                result = self.game_interface.give_recipe(item_id - get_item_id(ItemName.recipe_min_id))
+            # Just a normal item
+            else:
+                result = self.game_interface.give_item(item_id, 1)
+            if result:
                 while self.game_interface.is_in_event():
                     await asyncio.sleep(0.1)
                 self.game_interface.write_last_item_receive_index(self.last_received_item_index + 1)
-            else:
-                if item_id == get_item_id(ItemName.easy_paella_recipe):  # Recipe, default to mira cause we don't have that one yet
-                    result = self.game_interface.give_mira(1000)
-                elif item_id == get_item_id(ItemName.mira_300):  # 300 Mira
-                    result = self.game_interface.give_mira(300)
-                elif item_id == get_item_id(ItemName.lower_elements_sepith_50):  # 50 low sepith
-                    result = self.game_interface.give_low_sepith(50)
-                elif item_id == get_item_id(ItemName.higher_elements_sepith_50):  # 50 high sepith
-                    result = self.game_interface.give_high_sepith(50)
-                else:  # normal item
-                    result = self.game_interface.give_item(item_id, 1)
-                if result:
-                    while self.game_interface.is_in_event():
-                        await asyncio.sleep(0.1)
-                    self.game_interface.write_last_item_receive_index(self.last_received_item_index + 1)
             await asyncio.sleep(0.1)
 
     async def send_item(self):
@@ -226,7 +254,6 @@ class TitsThe3rdContext(CommonContext):
                 if location_id in self.non_local_locations:
                     self.items_to_be_sent_notification.put(location_id)
 
-
 async def tits_the_3rd_watcher(ctx: TitsThe3rdContext):
     """
     Client loop, watching the Trails in the Sky the 3rd game process.
@@ -244,6 +271,9 @@ async def tits_the_3rd_watcher(ctx: TitsThe3rdContext):
             ctx.reset_client_state()
             await ctx.wait_for_ap_connection()
             continue
+
+        if not ctx.game_interface:
+            ctx.init_game_interface()
 
         if not ctx.game_interface.is_connected():
             await ctx.game_interface.connect()
@@ -269,9 +299,7 @@ async def tits_the_3rd_watcher(ctx: TitsThe3rdContext):
 
         except Exception as err:
             logger.warning("*******************************")
-            logger.warning(
-                "Encountered error. Please post a message to the thread on the AP discord: https://discord.com/channels/731205301247803413/1217595862872490065"
-            )
+            logger.warning("Encountered error. Please post a message to the thread on the AP discord: https://discord.com/channels/731205301247803413/1217595862872490065")
             logger.warning("*******************************")
             logger.exception(str(err))
             # attempt to reconnect at the top of the loop

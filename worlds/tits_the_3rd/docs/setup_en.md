@@ -25,6 +25,8 @@ top text field of the client and click Connect.
 4. If this is your first time connecting, the client will ask for your `Trails in the Sky 3rd` installation folder.
     - If you want to change this settings you can do so inside the `host.yaml` file.
 5. The client will appear to be frozen for a few seconds to install the game mod.
+    - This step is skipped if the player has not changed.
+    - To force the patching again, delete `player.txt` file in the LB-ARK folder.
 6. When the client says `Waiting for connection to Trails in the Sky the 3rd game instance...` you can start the game.
 7. Start a new game or load from a previous AP save.
 
@@ -34,7 +36,11 @@ On a new AP game launch, the game will store a unique save id into the game save
 
 ## Changes to the Base Game
 
-1. For a new game, you will start inside the Hermit Garden. To start sending or receiving item, interact with the Stone Monument or enter the Jade Corridor. This will only happen once.
+1. For a new game, you will start inside the Hermit Garden. To start the game proper:
+    - Open the party organizer from the top left and exit out with `Cancel` option.
+    - You will start receiving your initial party members and items.
+    - Use the cube warp functionality to warp back to the garden.
+    - You can now start the game.
 2. You can return the Lusitania by interacting with the Hermit Garden Monument.
 3. You start the game with the teleportation-capable Cube.
 

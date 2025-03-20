@@ -9,5 +9,6 @@ class RegionName:
     lusitania = "Lusitania"
     hermit_garden = "Hermit's Garden"
     jade_corridor_start = "Jade Corridor Start"
-    jade_corridor_post_tita_gate = "Jade Corridor Post Tita Gate"
-    jade_corridor_post_julia_gate = "Jade Corridor Post Julia Gate"
+    jade_corridor_expansion_area_1 = "Jade Corridor First Expansion Area"
+    jade_corridor_expansion_area_2 = "Jade Corridor Second Expansion Area"
+    jade_corridor_arseille = "Jade Corridor Airship Arseille"

@@ -25,6 +25,78 @@
             {
                 "functionNumber": 34,
                 "functionName": "send_item"
+            },
+            {
+                "functionNumber": 35,
+                "functionName": "unlock_area"
+            },
+            {
+                "functionNumber": 36,
+                "functionName": "unlock_easy_paella"
+            },
+            {
+                "functionNumber": 10,
+                "functionName": "unlock_estelle"
+            },
+            {
+                "functionNumber": 11,
+                "functionName": "unlock_joshua"
+            },
+            {
+                "functionNumber": 12,
+                "functionName": "unlock_scherazard"
+            },
+            {
+                "functionNumber": 13,
+                "functionName": "unlock_olivier"
+            },
+            {
+                "functionNumber": 14,
+                "functionName": "unlock_kloe"
+            },
+            {
+                "functionNumber": 15,
+                "functionName": "unlock_agate"
+            },
+            {
+                "functionNumber": 16,
+                "functionName": "unlock_tita"
+            },
+            {
+                "functionNumber": 17,
+                "functionName": "unlock_zin"
+            },
+            {
+                "functionNumber": 8,
+                "functionName": "unlock_kevin"
+            },
+            {
+                "functionNumber": 18,
+                "functionName": "unlock_anelace"
+            },
+            {
+                "functionNumber": 19,
+                "functionName": "unlock_josette"
+            },
+            {
+                "functionNumber": 20,
+                "functionName": "unlock_richard"
+            },
+            {
+                "functionNumber": 21,
+                "functionName": "unlock_mueller"
+            },
+            {
+                "functionNumber": 22,
+                "functionName": "unlock_julia"
+            },
+            {
+                "functionNumber": 9,
+                "functionName": "unlock_ries"
+            },
+            {
+                "functionNumber": 23,
+                "functionName": "unlock_renne"
             }
         ]
     }

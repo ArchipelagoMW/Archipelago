@@ -43,6 +43,13 @@ def create_locations(multiworld: MultiWorld, player: int):
         multiworld: The multiworld object.
         player: The player number.
     """
+    create_location(multiworld, player, RegionName.hermit_garden, LocationName.kevin_initial_weapon)
+    create_location(multiworld, player, RegionName.hermit_garden, LocationName.kevin_initial_armor)
+    create_location(multiworld, player, RegionName.hermit_garden, LocationName.kevin_initial_boots)
+    create_location(multiworld, player, RegionName.hermit_garden, LocationName.ries_initial_weapon)
+    create_location(multiworld, player, RegionName.hermit_garden, LocationName.ries_initial_armor)
+    create_location(multiworld, player, RegionName.hermit_garden, LocationName.ries_initial_boots)
+
     create_location(multiworld, player, RegionName.lusitania, LocationName.lusitania_chest_bedroom_beside_banquet)
     create_location(multiworld, player, RegionName.lusitania, LocationName.lusitania_chest_bedroom_past_library)
     create_location(multiworld, player, RegionName.lusitania, LocationName.lusitania_chest_bedroom_past_casino_left)
@@ -51,26 +58,48 @@ def create_locations(multiworld: MultiWorld, player: int):
     create_location(multiworld, player, RegionName.jade_corridor_start, LocationName.jade_corridor_chest_first_hall_straight_from_start)
     create_location(multiworld, player, RegionName.jade_corridor_start, LocationName.jade_corridor_chest_first_hall_elevated_platform)
     create_location(multiworld, player, RegionName.jade_corridor_start, LocationName.jade_corridor_chest_first_hall_before_first_warp)
+    create_location(multiworld, player, RegionName.jade_corridor_start, LocationName.sealing_stone_tita)
+    create_location(multiworld, player, RegionName.jade_corridor_start, LocationName.sealing_stone_jade_corridor_1_unlock)
+    create_location(multiworld, player, RegionName.jade_corridor_start, LocationName.sealing_stone_arseille_unlock)
+    create_location(multiworld, player, RegionName.jade_corridor_start, LocationName.tita_initial_weapon)
+    create_location(multiworld, player, RegionName.jade_corridor_start, LocationName.tita_initial_armor)
+    create_location(multiworld, player, RegionName.jade_corridor_start, LocationName.tita_initial_boots)
+    create_location(multiworld, player, RegionName.jade_corridor_start, LocationName.tita_orbment_item_1)
+    create_location(multiworld, player, RegionName.jade_corridor_start, LocationName.tita_orbment_item_2)
+    create_location(multiworld, player, RegionName.jade_corridor_start, LocationName.tita_orbment_item_3)
+    create_location(multiworld, player, RegionName.jade_corridor_start, LocationName.tita_orbment_item_4)
 
-    create_location(multiworld, player, RegionName.jade_corridor_post_tita_gate, LocationName.jade_corridor_chest_down_from_checkpoint_lowered_platform_second_chest)
-    create_location(multiworld, player, RegionName.jade_corridor_post_tita_gate, LocationName.jade_corridor_chest_down_from_checkpoint_lowered_platform_third_chest)
-    create_location(multiworld, player, RegionName.jade_corridor_post_tita_gate, LocationName.jade_corridor_chest_down_from_checkpoint_lowered_platform_first_chest)
-    create_location(multiworld, player, RegionName.jade_corridor_post_tita_gate, LocationName.jade_corridor_chest_left_of_sun_door_one)
-    create_location(multiworld, player, RegionName.jade_corridor_post_tita_gate, LocationName.jade_corridor_chest_right_of_sun_door_one)
-    create_location(multiworld, player, RegionName.jade_corridor_post_tita_gate, LocationName.jade_corridor_chest_arseille_deck)
-    create_location(multiworld, player, RegionName.jade_corridor_post_tita_gate, LocationName.jade_corridor_chest_arseille_confrence_room)
-    create_location(multiworld, player, RegionName.jade_corridor_post_tita_gate, LocationName.jade_corridor_chest_arseille_kitchen)
-    create_location(multiworld, player, RegionName.jade_corridor_post_tita_gate, LocationName.jade_corridor_chest_arseille_bedroom_one)
-    create_location(multiworld, player, RegionName.jade_corridor_post_tita_gate, LocationName.jade_corridor_chest_arseille_bedroom_two)
+    create_location(multiworld, player, RegionName.jade_corridor_expansion_area_1, LocationName.jade_corridor_chest_down_from_checkpoint_lowered_platform_second_chest)
+    create_location(multiworld, player, RegionName.jade_corridor_expansion_area_1, LocationName.jade_corridor_chest_down_from_checkpoint_lowered_platform_third_chest)
+    create_location(multiworld, player, RegionName.jade_corridor_expansion_area_1, LocationName.jade_corridor_chest_down_from_checkpoint_lowered_platform_first_chest)
+    create_location(multiworld, player, RegionName.jade_corridor_expansion_area_1, LocationName.jade_corridor_chest_left_of_sun_door_one)
+    create_location(multiworld, player, RegionName.jade_corridor_expansion_area_1, LocationName.jade_corridor_chest_right_of_sun_door_one)
 
-    create_location(multiworld, player, RegionName.jade_corridor_post_julia_gate, LocationName.jade_corridor_chest_left_from_checkpoint_first_chest)
-    create_location(multiworld, player, RegionName.jade_corridor_post_julia_gate, LocationName.jade_corridor_chest_left_from_checkpoint_second_chest)
-    create_location(multiworld, player, RegionName.jade_corridor_post_julia_gate, LocationName.jade_corridor_chest_left_from_checkpoint_third_chest)
-    create_location(multiworld, player, RegionName.jade_corridor_post_julia_gate, LocationName.jade_corridor_chest_left_from_checkpoint_fourth_chest)
-    create_location(multiworld, player, RegionName.jade_corridor_post_julia_gate, LocationName.chapter1_boss_defeated)
+    create_location(multiworld, player, RegionName.jade_corridor_arseille, LocationName.jade_corridor_chest_arseille_deck)
+    create_location(multiworld, player, RegionName.jade_corridor_arseille, LocationName.jade_corridor_chest_arseille_confrence_room)
+    create_location(multiworld, player, RegionName.jade_corridor_arseille, LocationName.jade_corridor_chest_arseille_kitchen)
+    create_location(multiworld, player, RegionName.jade_corridor_arseille, LocationName.jade_corridor_chest_arseille_bedroom_one)
+    create_location(multiworld, player, RegionName.jade_corridor_arseille, LocationName.jade_corridor_chest_arseille_bedroom_two)
+    create_location(multiworld, player, RegionName.jade_corridor_arseille, LocationName.sealing_stone_julia)
+    create_location(multiworld, player, RegionName.jade_corridor_arseille, LocationName.sealing_stone_jade_corridor_2_unlock)
+    create_location(multiworld, player, RegionName.jade_corridor_arseille, LocationName.julia_initial_weapon)
+    create_location(multiworld, player, RegionName.jade_corridor_arseille, LocationName.julia_initial_armor)
+    create_location(multiworld, player, RegionName.jade_corridor_arseille, LocationName.julia_initial_boots)
+    create_location(multiworld, player, RegionName.jade_corridor_arseille, LocationName.julia_orbment_item_1)
+    create_location(multiworld, player, RegionName.jade_corridor_arseille, LocationName.julia_orbment_item_2)
+    create_location(multiworld, player, RegionName.jade_corridor_arseille, LocationName.julia_orbment_item_3)
+    create_location(multiworld, player, RegionName.jade_corridor_arseille, LocationName.julia_orbment_item_4)
+    create_location(multiworld, player, RegionName.jade_corridor_arseille, LocationName.julia_orbment_item_5)
+    create_location(multiworld, player, RegionName.jade_corridor_arseille, LocationName.julia_orbment_item_6)
+    create_location(multiworld, player, RegionName.jade_corridor_arseille, LocationName.julia_orbment_item_7)
 
+    create_location(multiworld, player, RegionName.jade_corridor_expansion_area_2, LocationName.jade_corridor_chest_left_from_checkpoint_first_chest)
+    create_location(multiworld, player, RegionName.jade_corridor_expansion_area_2, LocationName.jade_corridor_chest_left_from_checkpoint_second_chest)
+    create_location(multiworld, player, RegionName.jade_corridor_expansion_area_2, LocationName.jade_corridor_chest_left_from_checkpoint_third_chest)
+    create_location(multiworld, player, RegionName.jade_corridor_expansion_area_2, LocationName.jade_corridor_chest_left_from_checkpoint_fourth_chest)
+    create_location(multiworld, player, RegionName.jade_corridor_expansion_area_2, LocationName.chapter1_boss_defeated)
 
-location_table: Dict[str, int] = {
+chapter_1_chests: Dict[str, int] = {
     LocationName.lusitania_chest_bedroom_beside_banquet: 9720,
     LocationName.lusitania_chest_bedroom_past_library: 9721,
     LocationName.lusitania_chest_bedroom_past_casino_left: 9722,
@@ -92,7 +121,53 @@ location_table: Dict[str, int] = {
     LocationName.jade_corridor_chest_left_from_checkpoint_second_chest: 9881,
     LocationName.jade_corridor_chest_left_from_checkpoint_third_chest: 9884,
     LocationName.jade_corridor_chest_left_from_checkpoint_fourth_chest: 9885,
+}
+
+chapter_1_characters: Dict[str, int] = {
+    # Sealing Stones
+    LocationName.sealing_stone_tita: 9740,
+    LocationName.sealing_stone_jade_corridor_1_unlock: 2256,
+    LocationName.sealing_stone_arseille_unlock: 2258,
+    LocationName.sealing_stone_julia: 9753,
+    LocationName.sealing_stone_jade_corridor_2_unlock: 2257,
+    # Kevin
+    LocationName.kevin_initial_weapon: 1180,
+    LocationName.kevin_initial_armor: 1181,
+    LocationName.kevin_initial_boots: 1182,
+    # Ries
+    LocationName.ries_initial_weapon: 1240,
+    LocationName.ries_initial_armor: 1241,
+    LocationName.ries_initial_boots: 1242,
+    # Tita
+    LocationName.tita_initial_weapon: 1160,
+    LocationName.tita_initial_armor: 1161,
+    LocationName.tita_initial_boots: 1162,
+    LocationName.tita_orbment_item_1: 1163,
+    LocationName.tita_orbment_item_2: 1164,
+    LocationName.tita_orbment_item_3: 1165,
+    LocationName.tita_orbment_item_4: 1166,
+    # Julia
+    LocationName.julia_initial_weapon: 1230,
+    LocationName.julia_initial_armor: 1231,
+    LocationName.julia_initial_boots: 1232,
+    LocationName.julia_orbment_item_1: 1233,
+    LocationName.julia_orbment_item_2: 1234,
+    LocationName.julia_orbment_item_3: 1235,
+    LocationName.julia_orbment_item_4: 1236,
+    LocationName.julia_orbment_item_5: 1237,
+    LocationName.julia_orbment_item_6: 1238,
+    LocationName.julia_orbment_item_7: 1239,
+}
+
+boss_locations: Dict[str, int] = {
     LocationName.chapter1_boss_defeated: 9757,
+}
+
+
+location_table: Dict[str, int] = {
+    **chapter_1_chests,
+    **chapter_1_characters,
+    **boss_locations,
 }
 
 location_groups: Dict[str, Set[str]] = {}

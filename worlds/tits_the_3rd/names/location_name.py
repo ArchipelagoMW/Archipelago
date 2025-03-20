@@ -25,4 +25,39 @@ class LocationName:
     jade_corridor_chest_left_from_checkpoint_second_chest = "Jade Corridor Chest (Left From Checkpoint Second Chest)" # 9881
     jade_corridor_chest_left_from_checkpoint_third_chest = "Jade Corridor Chest (Left From Checkpoint Third Chest)" # 9884
     jade_corridor_chest_left_from_checkpoint_fourth_chest = "Jade Corridor Chest (Left From Checkpoint Fourth Chest)" # 9885
+
     chapter1_boss_defeated = "Defeat Bennu (Chapter 1 Boss)"  # 9757
+
+    sealing_stone_tita = "Sealing Stone - Tita"  # 9740
+    sealing_stone_jade_corridor_1_unlock = "Sealing Stone - Unlock Jade Corridor 1"  # 2256
+    sealing_stone_arseille_unlock = "Sealing Stone - Unlock Arseille"  # 2258
+
+    sealing_stone_julia = "Sealing Stone - Julia"  # 9753
+    sealing_stone_jade_corridor_2_unlock = "Sealing Stone - Unlock Jade Corridor 2"  # 2257
+
+    tita_initial_weapon = "Tita's Initial Equipment - Weapon"  # 1160
+    tita_initial_armor = "Tita's Initial Equipment - Armor"  # 1161
+    tita_initial_boots = "Tita's Initial Equipment - Boots"  # 1162
+    tita_orbment_item_1 = "Tita's Orbment - Quartz 1"  # 1163
+    tita_orbment_item_2 = "Tita's Orbment - Quartz 2"  # 1164
+    tita_orbment_item_3 = "Tita's Orbment - Quartz 3"  # 1165
+    tita_orbment_item_4 = "Tita's Orbment - Quartz 4"  # 1166
+
+    kevin_initial_weapon = "Kevin's Initial Equipment - Weapon"  # 1180
+    kevin_initial_armor = "Kevin's Initial Equipment - Armor"  # 1181
+    kevin_initial_boots = "Kevin's Initial Equipment - Boots"  # 1182
+
+    julia_initial_weapon = "Julia's Initial Equipment - Weapon"  # 1230
+    julia_initial_armor = "Julia's Initial Equipment - Armor"  # 1231
+    julia_initial_boots = "Julia's Initial Equipment - Boots"  # 1232
+    julia_orbment_item_1 = "Julia's Orbment - Quartz 1"  # 1233
+    julia_orbment_item_2 = "Julia's Orbment - Quartz 2"  # 1234
+    julia_orbment_item_3 = "Julia's Orbment - Quartz 3"  # 1235
+    julia_orbment_item_4 = "Julia's Orbment - Quartz 4"  # 1236
+    julia_orbment_item_5 = "Julia's Orbment - Quartz 5"  # 1237
+    julia_orbment_item_6 = "Julia's Orbment - Quartz 6"  # 1238
+    julia_orbment_item_7 = "Julia's Orbment - Quartz 7"  # 1239
+
+    ries_initial_weapon = "Ries' Initial Equipment - Weapon"  # 1240
+    ries_initial_armor = "Ries' Initial Equipment - Armor"  # 1241
+    ries_initial_boots = "Ries' Initial Equipment - Boots"  # 1242

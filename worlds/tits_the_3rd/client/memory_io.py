@@ -54,6 +54,25 @@ class TitsThe3rdMemoryIO():
     OFFSET_WPID: int = OFFSET_FLAG_0 + (9504 // 8) # Flag 9504 - 9536
     FLAG_SHOULD_WRITE_WPID: int = 9496
     OFFSET_ITEMS_RECEIVED_INDEX = OFFSET_FLAG_0 + (1024 // 8)
+    CHARACTER_ID_TO_NAME = {
+        0: "estelle",
+        1: "joshua",
+        2: "scherazard",
+        3: "olivier",
+        4: "kloe",
+        5: "agate",
+        6: "tita",
+        7: "zin",
+        8: "kevin",
+        9: "anelace",
+        10: "josette",
+        11: "richard",
+        12: "mueller",
+        13: "julia",
+        14: "ries",
+        15: "renne",
+    }
+    RECIPE_ID_TO_NAME = {1: "easy_paella"}
 
     def __init__(self, exit_event: asyncio.Event):
         self.tits_the_3rd_mem: pymem.Pymem = None
@@ -377,7 +396,7 @@ class TitsThe3rdMemoryIO():
                 return None
             self.scena_offsets[scena_id] = address
 
-        if self.tits_the_3rd_mem.read_bytes(self.scena_offsets[scena_id], 2) != b"AP":
+        if self.tits_the_3rd_mem.read_bytes(self.scena_offsets[scena_id], len(scena_id)) != scena_id:
             del self.scena_offsets[scena_id]
             address = self.tits_the_3rd_mem.pattern_scan_all(scena_id)
             if not address:
@@ -471,4 +490,20 @@ class TitsThe3rdMemoryIO():
         # if not address:
         #     return False
         self.call_scena(self.scena_functions["send_item"])
+        return True
+
+    def unlock_area(self, area_flag: int):
+        if self.write_flag(area_flag, True):
+            self.call_scena(self.scena_functions["unlock_area"])
+            return True
+        return False
+
+    def unlock_character(self, character_id: int):
+        character_name = self.CHARACTER_ID_TO_NAME[character_id]
+        self.call_scena(self.scena_functions[f"unlock_{character_name}"])
+        return True
+
+    def give_recipe(self, recipe_id: int):
+        character_name = self.RECIPE_ID_TO_NAME[recipe_id]
+        self.call_scena(self.scena_functions[f"unlock_{character_name}"])
         return True
