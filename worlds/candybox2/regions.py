@@ -15,7 +15,7 @@ from .locations import candy_box_locations, CandyBox2Location, village_shop_loca
     wishing_well_octopus_king_crown_locations, wishing_well_giant_spoon_locations, hole_locations, \
     desert_fortress_locations, teapot_quest_locations, xinopherydron_quest_locations, ledge_room_quest_locations, \
     castle_trap_room_locations, squirrel_tree_locations, the_sea_locations, lonely_house_locations, dig_spot_locations, \
-    yourself_fight_locations
+    yourself_fight_locations, castle_dark_room_locations
 from .options import CandyBox2Options
 from .rules import weapon_is_at_least, armor_is_at_least
 
@@ -109,6 +109,8 @@ def create_regions(world):
 
     _, castle_trap_room_entrance = populate_region(multiworld, player, CandyBox2Region("The Trap Room", player, multiworld, "The Trap Room"), castle_trap_room_locations, castle)
     mark_quest_entrance(world, castle_trap_room_entrance, "Castle Trap Room Click")
+
+    populate_region(multiworld, player, CandyBox2Region("The Dark Room", player, multiworld, "The Dark Room"), castle_dark_room_locations, castle)
 
     _, castle_egg_room_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Castle Egg Room", player, multiworld, "The Castle Egg Room"), castle_egg_room_locations, castle, lambda state: state.has("Rocket Boots", player))
     mark_quest_entrance(world, castle_egg_room_quest_entrance, "Castle Egg Room Click")
