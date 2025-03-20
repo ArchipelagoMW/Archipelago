@@ -214,7 +214,7 @@ locations_for_region: dict[str, list[str]] = {
         ChestID.SEABED_POWER_BRACELET.display_name,
         ChestID.GHOST_SHIP.display_name,
     ],
-    RegionName.SEABED_SECRET_CAVE: [
+    RegionName.SEABED_SECRET_COVE: [
         ChestID.SEABED_SECRET_TL.display_name,
         ChestID.SEABED_SECRET_TR.display_name,
         ChestID.SEABED_SECRET_BL.display_name,
@@ -496,7 +496,7 @@ exits_for_region: dict[str, list[ExitData]] = {
     ],
     RegionName.GHOST_SHIP: [
         ExitData(
-            RegionName.SEABED_SECRET_CAVE,
+            RegionName.SEABED_SECRET_COVE,
             [
                 NPCID.MERMAID_PEARL.display_name,
                 NPCID.DOLPHIN_SECRET_CAVE.display_name,
@@ -595,7 +595,12 @@ exits_for_region: dict[str, list[ExitData]] = {
     RegionName.WORLD_OF_EVIL: [
         ExitData(
             RegionName.DEATHTOLL,
-            [ItemID.SOULARMOR.display_name, ItemID.SOULBLADE.display_name, ItemID.PHOENIX.display_name],
+            [
+                ItemID.SOULARMOR.display_name,
+                ItemID.SOULBLADE.display_name,
+                ItemID.PHOENIX.display_name,
+                SoulID.SOUL_MAGICIAN.display_name,
+            ],
             [],
             RuleFlag.PHOENIX_CUTSCENE,
         )
@@ -625,6 +630,7 @@ exits_for_region_open_deathtoll: dict[str, list[ExitData]] = {
                 ItemID.SOULARMOR.display_name,
                 ItemID.SOULBLADE.display_name,
                 ItemID.PHOENIX.display_name,
+                SoulID.SOUL_MAGICIAN.display_name,
             ],
         )
     ],

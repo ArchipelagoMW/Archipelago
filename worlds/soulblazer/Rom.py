@@ -245,7 +245,7 @@ def write_patch(world: "SoulBlazerWorld", patch: SoulBlazerProcedurePatch) -> No
             patch.write_token(
                 APTokenTypes.WRITE,
                 Addresses.WEAPON_REQUIRED_LEVEL_DATA + (2 * i),
-                sword_level_requirements[indicies_wep[i]],
+                sword_level_requirements[indicies_wep[i]].to_bytes(1, "little"),
             )
 
     patch.write_token(APTokenTypes.WRITE, Addresses.TEXT_SPEED, world.options.text_speed.value.to_bytes(1, "little"))

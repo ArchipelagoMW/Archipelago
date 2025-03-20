@@ -632,3 +632,4 @@ class SoulID(WithDisplayName, IntEnum):
     SOUL_SHIELD    = 0x02
     SOUL_DETECTION = 0x03
     SOUL_REALITY   = 0x04
+

@@ -1,8 +1,14 @@
 from dataclasses import dataclass, replace
-from dataclass_wizard import YAMLWizard
 from BaseClasses import ItemClassification
+from . import get_data_file_bytes
 from .Enums import ItemID, IDOffset, NPCID, SoulID
-from ..Util import int_to_bcd
+from ..Util import int_to_bcd, is_frozen
+
+
+if is_frozen():
+    from ..dataclass_wizard import YAMLWizard
+else:
+    from dataclass_wizard import YAMLWizard
 
 
 @dataclass(frozen=True)
@@ -70,8 +76,7 @@ class SoulBlazerItemsData(YAMLWizard):
         ]
 
 
-# TODO: Load YAML here or in Items.py?
-items_data: SoulBlazerItemsData = SoulBlazerItemsData.from_yaml_file("worlds/soulblazer/Data/SoulBlazerItems.yaml")
+items_data: SoulBlazerItemsData = SoulBlazerItemsData.from_yaml(get_data_file_bytes("SoulBlazerItems.yaml"))
 """A collection of SoulBlazer Item data loaded from SoulBlazerItems.yaml."""
 
 ItemID.display_names = {

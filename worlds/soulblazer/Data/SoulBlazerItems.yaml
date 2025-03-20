@@ -979,7 +979,7 @@ npc-releases:
   operand: 310
   classification: 0
   description: Leo's Lab - Releases the doll in the chapel on the 2nd floor. Has no use.
-- name: Excercising Chest of Drawers
+- name: Exercising Chest of Drawers
   id: 253
   operand: 311
   classification: 0

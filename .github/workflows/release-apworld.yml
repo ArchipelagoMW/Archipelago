@@ -19,9 +19,22 @@ jobs:
     steps:
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV  # tag vX.Y.Z will become "env.AP_WORLD_NAME APWorld vX.Y.Z"
-      - uses: actions/checkout@v4
+      - name: Checkout APWorld Repo
+        uses: actions/checkout@v4
         with:
           sparse-checkout: worlds/${{ env.AP_WORLD_DIR }}
+      - name: Checkout dataclass-wizard dependancy library
+        uses: actions/checkout@v4
+        with:
+          repository: Tranquilite0/dataclass-wizard
+          path: ./dataclass-wizard
+          sparse-checkout: |
+            LICENCE
+            dataclass_wizard
+      - name: Copy dataclass-wizard to APWorld Directory
+        run: |
+          cp ./dataclass-wizard/dataclass_wizard ./worlds/${{ env.AP_WORLD_DIR }}
+          cp ./dataclass-wizard/LICENCE ./worlds/${{ env.AP_WORLD_DIR }}/dataclass_wizard
       - name: Create AP World Archive
         run: |
           mkdir dist

@@ -314,14 +314,14 @@ chests:
   description: Act 7 - World of Evil South - West Warp Chest
   type: Chest
   flag: HAS_MAGIC
-- name: World of Evil North - East Cooridor Chest
+- name: World of Evil North - East Corridor Chest
   id: 63
-  description: Act 7 - World of Evil North - East Cooridor Chest
+  description: Act 7 - World of Evil North - East Corridor Chest
   type: Chest
   flag: NONE
-- name: Dazzling Space - East Block Cooridor Chest
+- name: Dazzling Space - East Block Corridor Chest
   id: 64
-  description: Act 7 - Dazzling Space - East Block Cooridor Chest
+  description: Act 7 - Dazzling Space - East Block Corridor Chest
   type: Chest
   flag: NONE
 - name: Dazzling Space - Chest West of Entrance
