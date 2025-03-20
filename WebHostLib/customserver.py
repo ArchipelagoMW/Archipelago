@@ -247,8 +247,23 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
         raise Exception("Worlds system should not be loaded in the custom server.")
 
     import gc
-    ssl_context = load_server_cert(cert_file, cert_key_file) if cert_file else None
-    del cert_file, cert_key_file, ponyconfig
+
+    if not cert_file:
+        def get_ssl_context():
+            return None
+    else:
+        load_date = None
+        ssl_context = load_server_cert(cert_file, cert_key_file)
+
+        def get_ssl_context():
+            nonlocal load_date, ssl_context
+            today = datetime.date.today()
+            if load_date != today:
+                ssl_context = load_server_cert(cert_file, cert_key_file)
+                load_date = today
+            return ssl_context
+
+    del ponyconfig
     gc.collect()  # free intermediate objects used during setup
 
     loop = asyncio.get_event_loop()
@@ -263,12 +278,12 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                 assert ctx.server is None
                 try:
                     ctx.server = websockets.serve(
-                        functools.partial(server, ctx=ctx), ctx.host, ctx.port, ssl=ssl_context)
+                        functools.partial(server, ctx=ctx), ctx.host, ctx.port, ssl=get_ssl_context())
 
                     await ctx.server
                 except OSError:  # likely port in use
                     ctx.server = websockets.serve(
-                        functools.partial(server, ctx=ctx), ctx.host, 0, ssl=ssl_context)
+                        functools.partial(server, ctx=ctx), ctx.host, 0, ssl=get_ssl_context())
 
                     await ctx.server
                 port = 0
