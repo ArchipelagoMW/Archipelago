@@ -275,7 +275,7 @@ RECV_ITEMS_IGNORE: list[int] = [8127, 8125, 8130, 8131, 8132]
 
 
 ICE_TRAP_EQUIV = ["Freeze Trap", "Frozen Trap"]
-BOMB_EQUIV = []
+BOMB_EQUIV = ["TNT Barrel"]
 BANANA_TRAP_EQUIV = ["Stun Trap"]
 GHOST_EQUIV = ["OmoTrap"]
 POISON_MUSH_EQUIV = ["Poison Trap", "Tiny Trap"]
