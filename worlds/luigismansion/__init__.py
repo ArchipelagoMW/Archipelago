@@ -57,7 +57,6 @@ class LMWeb(WebWorld):
     option_groups = [
         OptionGroup("Extra Locations", [
             LuigiOptions.Furnisanity,
-            LuigiOptions.Plants,
             LuigiOptions.Toadsanity,
             LuigiOptions.Boosanity,
             LuigiOptions.Portrification,
@@ -181,20 +180,6 @@ class LMWorld(World):
                     else:
                         pass
                 region.locations.append(entry)
-        if self.options.plantsanity:
-            for location, data in PLANT_LOCATION_TABLE.items():
-                region = self.get_region(data.region)
-                entry = LMLocation(self.player, location, region, data)
-                if len(entry.access) != 0:
-                    # if entry.code == 70:     # Placed here for eventual Huge Flower Support
-                    #    add_rule(entry,
-                    #             lambda state: state.has("Progressive Flower", self.player, 4)
-                    #             and Rules.can_fst_water(state, player))
-                    # else:
-                    for item in entry.access:
-                        if item == "Water Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                region.locations.append(entry)
         if "Full" in self.options.furnisanity.value:
             for location, data in FURNITURE_LOCATION_TABLE.items():
                 region = self.get_region(data.region)
@@ -252,7 +237,13 @@ class LMWorld(World):
                     case "Treasure":
                         LOCATION_DICT = {
                             **LOCATION_DICT,
-                            **TREASURES_LOCATION_TABLE
+                            **TREASURES_LOCATION_TABLE,
+                            **PLANT_LOCATION_TABLE
+                        }
+                    case "Plants":
+                        LOCATION_DICT = {
+                            **LOCATION_DICT,
+                            **PLANT_LOCATION_TABLE
                         }
             for location, data in LOCATION_DICT.items():
                 region = self.get_region(data.region)
@@ -755,7 +746,6 @@ class LMWorld(World):
             "door rando list": self.open_doors,
             "ghost elements": self.ghost_affected_regions,
             "toadsanity": self.options.toadsanity.value,
-            "plantsanity": self.options.plantsanity.value,
             "furnisanity": self.options.furnisanity.value,
             "boosanity": self.options.boosanity.value,
             "portrait ghosts": self.options.portrification.value,

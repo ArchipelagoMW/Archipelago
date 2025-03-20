@@ -177,13 +177,6 @@ class HintDistribution(Choice):
     option_disabled = 5
     default = 0
 
-
-class Plants(Toggle):
-    """Adds all plants to location pool"""
-    display_name = "Plantsanity"
-    internal_name = "plantsanity"
-
-
 class PickupAnim(Toggle):
     """Disable Luigi's pickup animations"""
     display_name = "Pickup Animation"
@@ -225,15 +218,17 @@ class Furnisanity(OptionSet):
 
     "Storage" includes things like barrels, boxes and shelves
 
+    "Plants" includes all waterable plants in the mansion
+
     "Drawers" includes dressers, drawers, end tables and similar items
 
-    "Treasures" turns on only locations that contain treasure in the vanilla game. Will combine with  other settings
+    "Treasures" turns on only locations that contain treasure (including all plants) in the vanilla game. Does not create duplicate locations
 
     "Full" turns on all furniture locations and will override any other specified groups
     """
     display_name = "Furnisanity"
     internal_name = "furnisanity"
-    valid_keys = {"Hangables", "Ceiling", "Seating", "Surfaces", "Storage", "Drawers", "Decor", "Full", "Treasures"}
+    valid_keys = {"Hangables", "Ceiling", "Seating", "Surfaces", "Plants", "Storage", "Drawers", "Decor", "Full", "Treasures"}
 
 
 class BooGates(Toggle):
@@ -480,7 +475,6 @@ class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     portrait_hints: PortraitHints
     hint_distribution: HintDistribution
     toadsanity: Toadsanity
-    plantsanity: Plants
     furnisanity: Furnisanity
     boosanity: Boosanity
     portrification: Portrification
