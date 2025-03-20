@@ -46,7 +46,8 @@ all_non_event_items_table = {name: data.code for name, data in item_data_table.i
 item_names: Set[str] = set(entry["name"] for entry in items_data)
 
 prog_items = set(entry["name"] for entry in items_data
-                 if entry["type"] == "progression" and entry["code"] is not None)
+                 if (entry["type"] == "progression" or entry["type"] == "progression_skip_balancing")
+                 and entry["code"] is not None)
 
 item_name_groups = {
     # Auto-generated groups
