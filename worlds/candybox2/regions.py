@@ -90,7 +90,7 @@ def create_regions(world):
 
     populate_region(multiworld, player, CandyBox2Region("The Sorceress' Hut", player, multiworld, "The Sorceress' Hut"), sorceress_hut_locations, world_map_3)
 
-    _, sea_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Sea", player, multiworld, "The Sea"), the_sea_locations, world_map_4)
+    _, sea_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Sea", player, multiworld, "The Sea"), the_sea_locations, world_map_4, lambda state: weapon_is_at_least(state, player, "Enchanted Monkey Wizard Staff") and armor_is_at_least(state, player, "Lightweight Body Armour"))
     mark_quest_entrance(world, sea_quest_entrance, "The Sea Click")
 
     # The Forest

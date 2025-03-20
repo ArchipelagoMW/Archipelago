@@ -33,6 +33,16 @@ def set_rules(world: World, player: int):
     add_rule(world.get_location("Tribal Spear Acquired"), lambda state: weapon_is_at_least(state, player, "Enchanted Monkey Wizard Staff") and state.has("Octopus King Crown with Jaspers", player) and armor_is_at_least(state, player, "Lightweight Body Armour"))
     add_rule(world.get_location("Four Chocolate Bars in The Hole Acquired"), lambda state: weapon_is_at_least(state, player, "Enchanted Monkey Wizard Staff") and state.has("Octopus King Crown with Jaspers", player) and armor_is_at_least(state, player, "Lightweight Body Armour"))
 
+    # The Sea rules
+    add_rule(world.get_location("The Red Fin Acquired"),
+             lambda state: state.has("Red Enchanted Gloves", player) and state.has("Octopus King Crown with Jaspers",
+                                                                                   player))
+    add_rule(world.get_location("The Green Fin Acquired"),
+             lambda state: state.has("Red Enchanted Gloves", player) and state.has("Octopus King Crown with Jaspers",
+                                                                                   player))
+    add_rule(world.get_location("The Purple Fin Acquired"),
+             lambda state: state.has("Red Enchanted Gloves", player) and state.has("Octopus King Crown with Jaspers",
+                                                                                   player))
 
 def weapon_is_at_least(state: CollectionState, player: int, minimum_weapon: str):
     for weapon in weapons[weapons.index(minimum_weapon):]:

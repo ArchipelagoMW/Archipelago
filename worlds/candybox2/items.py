@@ -49,7 +49,7 @@ items: dict[str, CandyBox2ItemData] = {
     "Polished Silver Sword": CandyBox2ItemData(candy_box_2_base_id + 25, 1, ItemClassification.progression),
     "Lightweight Body Armour": CandyBox2ItemData(candy_box_2_base_id + 26, 1, ItemClassification.progression),
     "Scythe": CandyBox2ItemData(candy_box_2_base_id + 27, 1, ItemClassification.progression),
-    "Red Enchanted Gloves": CandyBox2ItemData(candy_box_2_base_id + 28, 1, ItemClassification.useful),
+    "Red Enchanted Gloves": CandyBox2ItemData(candy_box_2_base_id + 28, 1, ItemClassification.progression),
     "Pink Enchanted Gloves": CandyBox2ItemData(candy_box_2_base_id + 29, 1, ItemClassification.useful),
     "Summoning Tribal Spear": CandyBox2ItemData(candy_box_2_base_id + 30, 1, ItemClassification.progression),
     "Enchanted Monkey Wizard Staff": CandyBox2ItemData(candy_box_2_base_id + 31, 1, ItemClassification.progression),
