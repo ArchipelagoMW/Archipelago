@@ -261,8 +261,21 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     games[slot] = multiworld.game[slot]
                     slot_info[slot] = NetUtils.NetworkSlot(group["name"], multiworld.game[slot], multiworld.player_types[slot],
                                                            group_members=sorted(group["players"]))
-                precollected_items = {player: [item.code for item in world_precollected if type(item.code) == int]
-                                      for player, world_precollected in multiworld.precollected_items.items()}
+                precollected_items = {player: [] for player in multiworld.player_ids}
+                for player, world_precollected in multiworld.precollected_items.items():
+                    if not world_precollected:
+                        continue
+
+                    if player in multiworld.groups:
+                        targets = multiworld.groups[player]["players"]
+                    else:
+                        targets = [player]
+
+                    current_list = [item.code for item in world_precollected if type(item.code) == int]
+
+                    for target_player in targets:
+                        precollected_items[target_player].extend(current_list)
+
                 precollected_hints = {player: set() for player in range(1, multiworld.players + 1 + len(multiworld.groups))}
 
                 for slot in multiworld.player_ids:
