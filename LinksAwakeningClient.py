@@ -558,9 +558,6 @@ class LinksAwakeningContext(CommonContext):
 
         self.ui = LADXManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
-
-    async def send_checks(self):
-        await self.check_locations(self.found_checks)
     
     async def send_new_entrances(self, entrances: typing.Dict[str, str]):
         # Store the entrances we find on the server for future sessions
@@ -613,7 +610,7 @@ class LinksAwakeningContext(CommonContext):
 
     def new_checks(self, item_ids, ladxr_ids):
         self.found_checks.update(item_ids)
-        create_task_log_exception(self.send_checks())
+        create_task_log_exception(self.check_locations(self.found_checks))
         if self.magpie_enabled:
             create_task_log_exception(self.magpie.send_new_checks(ladxr_ids))
 
@@ -720,7 +717,7 @@ class LinksAwakeningContext(CommonContext):
 
                     if self.last_resend + 5.0 < now:
                         self.last_resend = now
-                        await self.send_checks()
+                        await self.check_locations(self.found_checks)
                     if self.magpie_enabled:
                         try:
                             self.magpie.set_checks(self.client.tracker.all_checks)
