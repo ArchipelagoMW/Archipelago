@@ -4,7 +4,6 @@ import abc
 import functools
 import logging
 import math
-import numbers
 import random
 import typing
 import enum
@@ -217,7 +216,7 @@ class FreeText(Option[str]):
     def get_option_name(cls, value: str) -> str:
         return value
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if isinstance(other, self.__class__):
             return other.value == self.value
         elif isinstance(other, str):
@@ -226,21 +225,14 @@ class FreeText(Option[str]):
             raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
 
 
-class NumericOption(Option[int], numbers.Integral, abc.ABC):
+class NumericOption(Option[int], abc.ABC):
     default = 0
 
-    # note: some of the `typing.Any`` here is a result of unresolved issue in python standards
-    # `int` is not a `numbers.Integral` according to the official typestubs
-    # (even though isinstance(5, numbers.Integral) == True)
-    # https://github.com/python/typing/issues/272
-    # https://github.com/python/mypy/issues/3186
-    # https://github.com/microsoft/pyright/issues/1575
-
-    def __eq__(self, other: typing.Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         if isinstance(other, NumericOption):
             return self.value == other.value
         else:
-            return typing.cast(bool, self.value == other)
+            return self.value == other
 
     def __lt__(self, other: typing.Union[int, NumericOption]) -> bool:
         if isinstance(other, NumericOption):
@@ -268,6 +260,9 @@ class NumericOption(Option[int], numbers.Integral, abc.ABC):
 
     def __bool__(self) -> bool:
         return bool(self.value)
+
+    def __index__(self) -> int:
+        return self.value
 
     def __int__(self) -> int:
         return self.value
@@ -353,11 +348,11 @@ class NumericOption(Option[int], numbers.Integral, abc.ABC):
     def __pos__(self) -> int:
         return +(self.value)
 
-    def __pow__(self, exponent: numbers.Complex, modulus: typing.Optional[numbers.Integral] = None) -> int:
-        if not (modulus is None):
-            assert isinstance(exponent, numbers.Integral)
-            return pow(self.value, exponent, modulus)  # type: ignore
-        return self.value ** exponent  # type: ignore
+    def __pow__(self, exponent: complex, modulus: int | None = None) -> typing.Any:
+        if modulus is None:
+            return self.value ** exponent
+        assert isinstance(exponent, int)
+        return pow(self.value, exponent, modulus)
 
     def __rand__(self, other: typing.Any) -> int:
         return int(other) & self.value
