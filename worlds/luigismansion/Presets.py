@@ -19,7 +19,6 @@ all_random_settings = {
     LMOptions.HintDistribution.internal_name:          "random",
     LMOptions.Toadsanity.internal_name:                "random",
     LMOptions.Plants.internal_name:                    "random",
-    LMOptions.Furnisanity.internal_name:               "random",
     LMOptions.Boosanity.internal_name:                 "random",
     LMOptions.Portrification.internal_name:            "random",
     LMOptions.Lightsanity.internal_name:               "random",
@@ -57,7 +56,7 @@ all_random_settings = {
 allsanity_settings = {
     LMOptions.Toadsanity.internal_name:                "true",
     LMOptions.Plants.internal_name:                    "true",
-    LMOptions.Furnisanity.internal_name:               "true",
+    LMOptions.Furnisanity.internal_name:               ["Full"],
     LMOptions.Boosanity.internal_name:                 "true",
     LMOptions.Portrification.internal_name:            "true",
     LMOptions.Lightsanity.internal_name:               "true",

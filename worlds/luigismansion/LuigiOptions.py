@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Toggle, Range, PerGameCommonOptions, Choice, StartInventoryPool, DeathLinkMixin
+from Options import Toggle, Range, PerGameCommonOptions, Choice, StartInventoryPool, DeathLinkMixin, OptionSet
 
 
 class LuigiWalkSpeed(Choice):
@@ -208,12 +208,32 @@ class Walksanity(Toggle):
     internal_name = "walksanity"
 
 
-class Furnisanity(Toggle):
+class Furnisanity(OptionSet):
     """
-    Adds interactable objects, such a dressers, paintings, candles, and light fixtures, to the location pool
+    Adds interactable objects, such a dressers, paintings, candles, and light fixtures, to the location pool.
+
+    Different sets of locations can be added within the list. Valid strings are:
+    "Hangables" includes items on walls such as paintings and other decor
+
+    "Decor" includes items such as instruments and suits of armor
+
+    "Ceiling" includes ceiling fans and lights attached to the ceiling
+
+    "Seating" includes chairs, stools and other typs of seating
+
+    "Surfaces" includes tables and other flat items
+
+    "Storage" includes things like barrels, boxes and shelves
+
+    "Drawers" includes dressers, drawers, end tables and similar items
+
+    "Treasures" turns on only locations that contain treasure in the vanilla game. Will combine with  other settings
+
+    "Full" turns on all furniture locations and will override any other specified groups
     """
     display_name = "Furnisanity"
     internal_name = "furnisanity"
+    valid_keys = {"Hangables", "Ceiling", "Seating", "Surfaces", "Storage", "Drawers", "Decor", "Full", "Treasures"}
 
 
 class BooGates(Toggle):
@@ -441,6 +461,7 @@ class BooAnger(Toggle):
     display_name = "Angry Boos"
     internal_name = "boo_anger"
     default = 0
+
 
 
 @dataclass
