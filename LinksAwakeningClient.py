@@ -506,7 +506,7 @@ class LinksAwakeningContext(CommonContext):
     la_task = None
     client = None
     # TODO: does this need to re-read on reset?
-    found_checks = []
+    found_checks = set()
     last_resend = time.time()
 
     magpie_enabled = False
@@ -560,6 +560,11 @@ class LinksAwakeningContext(CommonContext):
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
     async def send_checks(self):
+        self.found_checks -= self.checked_locations
+
+        if len(self.found_checks) == 0:
+            return
+
         message = [{"cmd": "LocationChecks", "locations": self.found_checks}]
         await self.send_msgs(message)
     
@@ -613,7 +618,7 @@ class LinksAwakeningContext(CommonContext):
             self.client.pending_deathlink = True
 
     def new_checks(self, item_ids, ladxr_ids):
-        self.found_checks += item_ids
+        self.found_checks.update(item_ids)
         create_task_log_exception(self.send_checks())
         if self.magpie_enabled:
             create_task_log_exception(self.magpie.send_new_checks(ladxr_ids))
