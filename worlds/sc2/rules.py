@@ -1447,7 +1447,7 @@ class SC2Logic:
             or state.has(item_names.SOA_PROGRESSIVE_PROXY_PYLON, self.player, count=2)
             or (state.has(item_names.SOA_PROGRESSIVE_PROXY_PYLON, self.player)
                 and (state.has_any(item_groups.gateway_units + [item_names.ELDER_PROBES, item_names.PROBE_WARPIN], self.player)
-                    or (state.has(item_names.WARP_HARMONIZATION, self.player)
+                    or (state.has_any((item_names.WARP_HARMONIZATION, item_names.PROGRESSIVE_WARP_RELOCATE), self.player)
                         and state.has_any(item_groups.protoss_ground_wa, self.player)
                     )
                 )
