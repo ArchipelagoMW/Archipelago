@@ -337,7 +337,9 @@ class SC2Logic:
                 and state.count(item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK, self.player) >= 2
             )
         )
-
+    
+    def terran_any_anti_air_or_science_vessels(self, state: CollectionState) -> bool:
+        return self.terran_any_anti_air(state) or state.has(item_names.SCIENCE_VESSEL, self.player)
 
     def terran_basic_anti_air(self, state: CollectionState) -> bool:
         """
@@ -930,6 +932,24 @@ class SC2Logic:
             self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_FLYER_ATTACK, state),
             self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE, state),
         )
+    
+    def zerg_any_gap_transport(self, state: CollectionState) -> bool:
+        """Any way for zerg to get any ground unit across gaps longer than viper yoink range."""
+        return (
+            state.has_any((
+                item_names.NYDUS_WORM,
+                item_names.ECHIDNA_WORM,
+                item_names.OVERLORD_VENTRAL_SACS,
+                item_names.YGGDRASIL,
+            ), self.player)
+            or (self.morph_ravager(state) and state.has(item_names.RAVAGER_DEEP_TUNNEL, self.player))
+            or state.has_all((
+                item_names.INFESTED_SIEGE_TANK,
+                item_names.INFESTED_SIEGE_TANK_DEEP_TUNNEL,
+                item_names.OVERLORD_GENERATE_CREEP,
+            ), self.player)
+            or state.has_all((item_names.SWARM_QUEEN_DEEP_TUNNEL, item_names.OVERLORD_OVERSEER_ASPECT), self.player)  # Deep tunnel to a creep tumor
+        )
 
     def zerg_very_hard_mission_weapon_armor_level(self, state: CollectionState) -> bool:
         return self.zerg_army_weapon_armor_upgrade_min_level(state) >= self.get_very_hard_required_upgrade_level()
@@ -1416,6 +1436,23 @@ class SC2Logic:
 
     def protoss_common_unit(self, state: CollectionState) -> bool:
         return state.has_any(self.basic_protoss_units, self.player)
+    
+    def protoss_any_gap_transport(self, state: CollectionState) -> bool:
+        """Can get ground units across large gaps, larger than blink range"""
+        return  (
+            state.has_any((
+                item_names.WARP_PRISM,
+                item_names.ARBITER,
+            ), self.player)
+            or state.has(item_names.SOA_PROGRESSIVE_PROXY_PYLON, self.player, count=2)
+            or (state.has(item_names.SOA_PROGRESSIVE_PROXY_PYLON, self.player)
+                and (state.has_any(item_groups.gateway_units + [item_names.ELDER_PROBES, item_names.PROBE_WARPIN], self.player)
+                    or (state.has(item_names.WARP_HARMONIZATION, self.player)
+                        and state.has_any(item_groups.protoss_ground_wa, self.player)
+                    )
+                )
+            )
+        )
     
     def protoss_any_anti_air_unit_or_soa_any_protoss(self, state: CollectionState) -> bool:
         return (
