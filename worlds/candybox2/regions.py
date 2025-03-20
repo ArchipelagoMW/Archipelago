@@ -2,7 +2,7 @@ from enum import IntEnum
 from typing import Callable, Optional
 
 from BaseClasses import Region, MultiWorld, Entrance, CollectionState
-from entrance_rando import disconnect_entrance_for_randomization, randomize_entrances
+from entrance_rando import disconnect_entrance_for_randomization, randomize_entrances, ERPlacementState
 from .locations import candy_box_locations, CandyBox2Location, village_shop_locations, village_house_1_locations, \
     village_locations, village_cellar_locations, map_stage_1_locations, map_stage_2_locations, map_stage_7_locations, \
     map_stage_6_locations, map_stage_5_locations, map_stage_4_locations, map_stage_3_locations, desert_locations, \
@@ -16,7 +16,6 @@ from .locations import candy_box_locations, CandyBox2Location, village_shop_loca
     desert_fortress_locations, teapot_quest_locations, xinopherydron_quest_locations, ledge_room_quest_locations, \
     castle_trap_room_locations, squirrel_tree_locations, the_sea_locations, lonely_house_locations, dig_spot_locations, \
     yourself_fight_locations, castle_dark_room_locations
-from .options import CandyBox2Options
 from .rules import weapon_is_at_least, armor_is_at_least
 
 
@@ -171,6 +170,21 @@ def mark_x_quest_entrance(world, entrance: Entrance, name: str):
 
 def connect_entrances(world):
     if world.options.quest_randomisation == "off":
+        return
+
+    if hasattr(world.multiworld, "re_gen_passthrough"):
+        placements = getattr(world.multiworld, "re_gen_passthrough")["Candy Box 2"]
+        placement_state = ERPlacementState(world, True)
+
+        er_targets = dict([(entrance.name, entrance) for region in world.multiworld.get_regions(world.player)
+                             for entrance in region.entrances if not entrance.parent_region])
+
+        exits = dict([(ex.name, ex) for region in world.multiworld.get_regions(world.player)
+                        for ex in region.exits if not ex.connected_region])
+
+        for x in placements:
+            placement_state.connect(exits[x[0]], er_targets[x[1]])
+        world.entrance_randomisation = placement_state
         return
 
     if world.options.quest_randomisation == "except_x_potion_quest":

@@ -44,6 +44,9 @@ class CandyBox2World(World):
     def connect_entrances(self) -> None:
         connect_entrances(self)
 
+    def interpret_slot_data(self, slot):
+        return slot["entranceInformation"]
+
     def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
         return {
             "uuid": str(uuid.uuid4()),
