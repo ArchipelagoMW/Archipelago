@@ -705,10 +705,26 @@ class Range(NumericOption):
                             f"random-range-high-<min>-<max>, or random-range-<min>-<max>.")
 
     @classmethod
-    def custom_range(cls, text) -> Range:
-        textsplit = text.split("-")
+    def custom_range(cls, text: str) -> Range:
+        numeric_text: str = text[len("random-range-"):]
+        if numeric_text.startswith(("low", "middle", "high")):
+            numeric_text = numeric_text.split("-", 1)[1]
+        textsplit = numeric_text.split("-")
+        if len(textsplit) > 2:  # looks like there may be minus signs, which will now be empty string from the split
+            new_textsplit: typing.List[str] = []
+            next_negative: bool = False
+            for element in textsplit:
+                if not element:  # empty string -> next element gets a minus sign in front
+                    next_negative = True
+                elif next_negative:
+                    new_textsplit.append("-"+element)
+                    next_negative = False
+                else:
+                    new_textsplit.append(element)
+            textsplit = new_textsplit
+            del next_negative, new_textsplit
         try:
-            random_range = [int(textsplit[len(textsplit) - 2]), int(textsplit[len(textsplit) - 1])]
+            random_range = [int(textsplit[0]), int(textsplit[1])]
         except ValueError:
             raise ValueError(f"Invalid random range {text} for option {cls.__name__}")
         random_range.sort()
