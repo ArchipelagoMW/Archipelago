@@ -560,13 +560,7 @@ class LinksAwakeningContext(CommonContext):
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
     async def send_checks(self):
-        self.found_checks -= self.checked_locations
-
-        if len(self.found_checks) == 0:
-            return
-
-        message = [{"cmd": "LocationChecks", "locations": self.found_checks}]
-        await self.send_msgs(message)
+        await self.check_locations(self.found_checks)
     
     async def send_new_entrances(self, entrances: typing.Dict[str, str]):
         # Store the entrances we find on the server for future sessions
