@@ -53,14 +53,6 @@ def set_episode1_rules(player, multiworld, pro):
         state.has("The Focus (MAP04) - Red keycard", player, 1))
 
     # The Waste Tunnels (MAP05)
-    set_rule(multiworld.get_entrance("Hub -> The Waste Tunnels (MAP05) Main", player), lambda state:
-       (state.has("The Waste Tunnels (MAP05)", player, 1) and
-        state.has("Shotgun", player, 1) and
-        state.has("Chaingun", player, 1) and
-        state.has("Super Shotgun", player, 1)) and
-       (state.has("Rocket launcher", player, 1) or
-        state.has("Plasma gun", player, 1) or
-        state.has("BFG9000", player, 1)))
     set_rule(multiworld.get_entrance("The Waste Tunnels (MAP05) Main -> The Waste Tunnels (MAP05) Red", player), lambda state:
         state.has("The Waste Tunnels (MAP05) - Red keycard", player, 1))
     set_rule(multiworld.get_entrance("The Waste Tunnels (MAP05) Main -> The Waste Tunnels (MAP05) Blue", player), lambda state:
@@ -71,18 +63,22 @@ def set_episode1_rules(player, multiworld, pro):
         state.has("The Waste Tunnels (MAP05) - Blue keycard", player, 1))
     set_rule(multiworld.get_entrance("The Waste Tunnels (MAP05) Yellow -> The Waste Tunnels (MAP05) Blue", player), lambda state:
         state.has("The Waste Tunnels (MAP05) - Yellow keycard", player, 1))
+    set_rule(multiworld.get_entrance("Hub -> The Waste Tunnels (MAP05) Start", player), lambda state:
+        state.has("The Waste Tunnels (MAP05)", player, 1))
+    set_rule(multiworld.get_entrance("The Waste Tunnels (MAP05) Start -> The Waste Tunnels (MAP05) Main", player), lambda state:
+       (state.has("Shotgun", player, 1) and
+        state.has("Super Shotgun", player, 1)) and       (state.has("Chaingun", player, 1) or
+        state.has("Plasma gun", player, 1)))
 
     # The Crusher (MAP06)
     set_rule(multiworld.get_entrance("Hub -> The Crusher (MAP06) Main", player), lambda state:
        (state.has("The Crusher (MAP06)", player, 1) and
-        state.has("Shotgun", player, 1) and
-        state.has("Chaingun", player, 1) and
-        state.has("Super Shotgun", player, 1)) and
-       (state.has("Rocket launcher", player, 1) or
-        state.has("Plasma gun", player, 1) or
-        state.has("BFG9000", player, 1)))
+        state.has("Shotgun", player, 1)) and
+       (state.has("Plasma gun", player, 1) or
+        state.has("Chaingun", player, 1)))
     set_rule(multiworld.get_entrance("The Crusher (MAP06) Main -> The Crusher (MAP06) Blue", player), lambda state:
-        state.has("The Crusher (MAP06) - Blue keycard", player, 1))
+        state.has("The Crusher (MAP06) - Blue keycard", player, 1) and
+        state.has("Super Shotgun", player, 1))
     set_rule(multiworld.get_entrance("The Crusher (MAP06) Blue -> The Crusher (MAP06) Red", player), lambda state:
         state.has("The Crusher (MAP06) - Red keycard", player, 1))
     set_rule(multiworld.get_entrance("The Crusher (MAP06) Blue -> The Crusher (MAP06) Main", player), lambda state:
@@ -95,14 +91,14 @@ def set_episode1_rules(player, multiworld, pro):
         state.has("The Crusher (MAP06) - Red keycard", player, 1))
 
     # Dead Simple (MAP07)
-    set_rule(multiworld.get_entrance("Hub -> Dead Simple (MAP07) Main", player), lambda state:
-       (state.has("Dead Simple (MAP07)", player, 1) and
-        state.has("Shotgun", player, 1) and
+    set_rule(multiworld.get_entrance("Hub -> Dead Simple (MAP07) Start", player), lambda state:
+        state.has("Dead Simple (MAP07)", player, 1))
+    set_rule(multiworld.get_entrance("Dead Simple (MAP07) Start -> Dead Simple (MAP07) Main", player), lambda state:
+       (state.has("Shotgun", player, 1) and
         state.has("Chaingun", player, 1) and
-        state.has("Super Shotgun", player, 1)) and
-       (state.has("Rocket launcher", player, 1) or
+        state.has("Super Shotgun", player, 1)) and       (state.has("BFG9000", player, 1) or
         state.has("Plasma gun", player, 1) or
-        state.has("BFG9000", player, 1)))
+        state.has("Rocket launcher", player, 1)))
 
     # Tricks and Traps (MAP08)
     set_rule(multiworld.get_entrance("Hub -> Tricks and Traps (MAP08) Main", player), lambda state:
@@ -119,34 +115,34 @@ def set_episode1_rules(player, multiworld, pro):
         state.has("Tricks and Traps (MAP08) - Yellow skull key", player, 1))
 
     # The Pit (MAP09)
-    set_rule(multiworld.get_entrance("Hub -> The Pit (MAP09) Main", player), lambda state:
-       (state.has("The Pit (MAP09)", player, 1) and
-        state.has("Shotgun", player, 1) and
-        state.has("Chaingun", player, 1) and
-        state.has("Super Shotgun", player, 1)) and
-       (state.has("Rocket launcher", player, 1) or
-        state.has("Plasma gun", player, 1) or
-        state.has("BFG9000", player, 1)))
     set_rule(multiworld.get_entrance("The Pit (MAP09) Main -> The Pit (MAP09) Yellow", player), lambda state:
         state.has("The Pit (MAP09) - Yellow keycard", player, 1))
     set_rule(multiworld.get_entrance("The Pit (MAP09) Main -> The Pit (MAP09) Blue", player), lambda state:
         state.has("The Pit (MAP09) - Blue keycard", player, 1))
     set_rule(multiworld.get_entrance("The Pit (MAP09) Yellow -> The Pit (MAP09) Main", player), lambda state:
         state.has("The Pit (MAP09) - Yellow keycard", player, 1))
+    set_rule(multiworld.get_entrance("Hub -> The Pit (MAP09) Start", player), lambda state:
+        state.has("The Pit (MAP09)", player, 1))
+    set_rule(multiworld.get_entrance("The Pit (MAP09) Start -> The Pit (MAP09) Main", player), lambda state:
+       (state.has("Shotgun", player, 1) and
+        state.has("Chaingun", player, 1) and
+        state.has("Super Shotgun", player, 1)) and       (state.has("BFG9000", player, 1) or
+        state.has("Plasma gun", player, 1) or
+        state.has("Rocket launcher", player, 1)))
 
     # Refueling Base (MAP10)
-    set_rule(multiworld.get_entrance("Hub -> Refueling Base (MAP10) Main", player), lambda state:
-       (state.has("Refueling Base (MAP10)", player, 1) and
-        state.has("Shotgun", player, 1) and
-        state.has("Chaingun", player, 1) and
-        state.has("Super Shotgun", player, 1)) and
-       (state.has("Rocket launcher", player, 1) or
-        state.has("Plasma gun", player, 1) or
-        state.has("BFG9000", player, 1)))
     set_rule(multiworld.get_entrance("Refueling Base (MAP10) Main -> Refueling Base (MAP10) Yellow", player), lambda state:
         state.has("Refueling Base (MAP10) - Yellow keycard", player, 1))
     set_rule(multiworld.get_entrance("Refueling Base (MAP10) Yellow -> Refueling Base (MAP10) Yellow Blue", player), lambda state:
         state.has("Refueling Base (MAP10) - Blue keycard", player, 1))
+    set_rule(multiworld.get_entrance("Hub -> Refueling Base (MAP10) Start", player), lambda state:
+        state.has("Refueling Base (MAP10)", player, 1))
+    set_rule(multiworld.get_entrance("Refueling Base (MAP10) Start -> Refueling Base (MAP10) Main", player), lambda state:
+       (state.has("Shotgun", player, 1) and
+        state.has("Chaingun", player, 1) and
+        state.has("Super Shotgun", player, 1)) and       (state.has("BFG9000", player, 1) or
+        state.has("Plasma gun", player, 1) or
+        state.has("Rocket launcher", player, 1)))
 
     # Circle of Death (MAP11)
     set_rule(multiworld.get_entrance("Hub -> Circle of Death (MAP11) Main", player), lambda state:
@@ -165,18 +161,19 @@ def set_episode1_rules(player, multiworld, pro):
 
 def set_episode2_rules(player, multiworld, pro):
     # The Factory (MAP12)
-    set_rule(multiworld.get_entrance("Hub -> The Factory (MAP12) Main", player), lambda state:
-       (state.has("The Factory (MAP12)", player, 1) and
-        state.has("Shotgun", player, 1) and
-        state.has("Chaingun", player, 1) and
-        state.has("Super Shotgun", player, 1)) and
-       (state.has("Rocket launcher", player, 1) or
-        state.has("Plasma gun", player, 1) or
-        state.has("BFG9000", player, 1)))
-    set_rule(multiworld.get_entrance("The Factory (MAP12) Main -> The Factory (MAP12) Yellow", player), lambda state:
+    set_rule(multiworld.get_entrance("The Factory (MAP12) Indoors -> The Factory (MAP12) Yellow", player), lambda state:
         state.has("The Factory (MAP12) - Yellow keycard", player, 1))
-    set_rule(multiworld.get_entrance("The Factory (MAP12) Main -> The Factory (MAP12) Blue", player), lambda state:
+    set_rule(multiworld.get_entrance("The Factory (MAP12) Indoors -> The Factory (MAP12) Blue", player), lambda state:
         state.has("The Factory (MAP12) - Blue keycard", player, 1))
+    set_rule(multiworld.get_entrance("Hub -> The Factory (MAP12) Outdoors", player), lambda state:
+        state.has("The Factory (MAP12)", player, 1))
+    set_rule(multiworld.get_entrance("The Factory (MAP12) Outdoors -> The Factory (MAP12) Main", player), lambda state:
+        state.has("Super Shotgun", player, 1) or
+        state.has("Plasma gun", player, 1))
+    set_rule(multiworld.get_entrance("The Factory (MAP12) Main -> The Factory (MAP12) Indoors", player), lambda state:
+       (state.has("Super Shotgun", player, 1) and
+        state.has("Chaingun", player, 1)) and       (state.has("BFG9000", player, 1) or
+        state.has("Plasma gun", player, 1)))
 
     # Downtown (MAP13)
     set_rule(multiworld.get_entrance("Hub -> Downtown (MAP13) Main", player), lambda state:
@@ -307,54 +304,56 @@ def set_episode2_rules(player, multiworld, pro):
 
 def set_episode3_rules(player, multiworld, pro):
     # Nirvana (MAP21)
-    set_rule(multiworld.get_entrance("Hub -> Nirvana (MAP21) Main", player), lambda state:
-       (state.has("Nirvana (MAP21)", player, 1) and
-        state.has("Shotgun", player, 1) and
-        state.has("Chaingun", player, 1) and
-        state.has("Super Shotgun", player, 1)) and
-       (state.has("Rocket launcher", player, 1) or
-        state.has("Plasma gun", player, 1) or
-        state.has("BFG9000", player, 1)))
     set_rule(multiworld.get_entrance("Nirvana (MAP21) Main -> Nirvana (MAP21) Yellow", player), lambda state:
-        state.has("Nirvana (MAP21) - Yellow skull key", player, 1))
+       (state.has("Super Shotgun", player, 1) and
+        state.has("Chaingun", player, 1) and
+        state.has("Nirvana (MAP21) - Yellow skull key", player, 1)) and       (state.has("Plasma gun", player, 1) or
+        state.has("BFG9000", player, 1)))
     set_rule(multiworld.get_entrance("Nirvana (MAP21) Yellow -> Nirvana (MAP21) Main", player), lambda state:
         state.has("Nirvana (MAP21) - Yellow skull key", player, 1))
     set_rule(multiworld.get_entrance("Nirvana (MAP21) Yellow -> Nirvana (MAP21) Magenta", player), lambda state:
         state.has("Nirvana (MAP21) - Red skull key", player, 1) and
         state.has("Nirvana (MAP21) - Blue skull key", player, 1))
-    set_rule(multiworld.get_entrance("Nirvana (MAP21) Magenta -> Nirvana (MAP21) Yellow", player), lambda state:
-        state.has("Nirvana (MAP21) - Red skull key", player, 1) and
-        state.has("Nirvana (MAP21) - Blue skull key", player, 1))
+    set_rule(multiworld.get_entrance("Hub -> Nirvana (MAP21) Start", player), lambda state:
+        state.has("Nirvana (MAP21)", player, 1))
+    set_rule(multiworld.get_entrance("Nirvana (MAP21) Start -> Nirvana (MAP21) Main", player), lambda state:
+        state.has("Super Shotgun", player, 1) or
+        state.has("Plasma gun", player, 1))
+    set_rule(multiworld.get_entrance("Nirvana (MAP21) Pro Magenta -> Nirvana (MAP21) Magenta", player), lambda state:
+        state.has("Nirvana (MAP21) - Red skull key", player, 1))
 
     # The Catacombs (MAP22)
-    set_rule(multiworld.get_entrance("Hub -> The Catacombs (MAP22) Main", player), lambda state:
-       (state.has("The Catacombs (MAP22)", player, 1) and
-        state.has("Shotgun", player, 1) and
-        state.has("Chaingun", player, 1) and
-        state.has("Super Shotgun", player, 1)) and
-       (state.has("BFG9000", player, 1) or
-        state.has("Rocket launcher", player, 1) or
-        state.has("Plasma gun", player, 1)))
     set_rule(multiworld.get_entrance("The Catacombs (MAP22) Main -> The Catacombs (MAP22) Blue", player), lambda state:
         state.has("The Catacombs (MAP22) - Blue skull key", player, 1))
     set_rule(multiworld.get_entrance("The Catacombs (MAP22) Main -> The Catacombs (MAP22) Red", player), lambda state:
         state.has("The Catacombs (MAP22) - Red skull key", player, 1))
     set_rule(multiworld.get_entrance("The Catacombs (MAP22) Red -> The Catacombs (MAP22) Main", player), lambda state:
         state.has("The Catacombs (MAP22) - Red skull key", player, 1))
+    set_rule(multiworld.get_entrance("Hub -> The Catacombs (MAP22) Early", player), lambda state:
+       (state.has("The Catacombs (MAP22)", player, 1)) and
+       (state.has("Shotgun", player, 1) or
+        state.has("Super Shotgun", player, 1) or
+        state.has("Plasma gun", player, 1)))
+    set_rule(multiworld.get_entrance("The Catacombs (MAP22) Early -> The Catacombs (MAP22) Main", player), lambda state:
+       (state.has("Shotgun", player, 1) and
+        state.has("Chaingun", player, 1) and
+        state.has("Super Shotgun", player, 1)) and       (state.has("BFG9000", player, 1) or
+        state.has("Plasma gun", player, 1) or
+        state.has("Rocket launcher", player, 1)))
 
-    # Barrels o Fun (MAP23)
-    set_rule(multiworld.get_entrance("Hub -> Barrels o Fun (MAP23) Main", player), lambda state:
-       (state.has("Barrels o Fun (MAP23)", player, 1) and
+    # Barrels o' Fun (MAP23)
+    set_rule(multiworld.get_entrance("Hub -> Barrels o' Fun (MAP23) Main", player), lambda state:
+       (state.has("Barrels o' Fun (MAP23)", player, 1) and
         state.has("Shotgun", player, 1) and
         state.has("Chaingun", player, 1) and
         state.has("Super Shotgun", player, 1)) and
        (state.has("Rocket launcher", player, 1) or
         state.has("Plasma gun", player, 1) or
         state.has("BFG9000", player, 1)))
-    set_rule(multiworld.get_entrance("Barrels o Fun (MAP23) Main -> Barrels o Fun (MAP23) Yellow", player), lambda state:
-        state.has("Barrels o Fun (MAP23) - Yellow skull key", player, 1))
-    set_rule(multiworld.get_entrance("Barrels o Fun (MAP23) Yellow -> Barrels o Fun (MAP23) Main", player), lambda state:
-        state.has("Barrels o Fun (MAP23) - Yellow skull key", player, 1))
+    set_rule(multiworld.get_entrance("Barrels o' Fun (MAP23) Main -> Barrels o' Fun (MAP23) Yellow", player), lambda state:
+        state.has("Barrels o' Fun (MAP23) - Yellow skull key", player, 1))
+    set_rule(multiworld.get_entrance("Barrels o' Fun (MAP23) Yellow -> Barrels o' Fun (MAP23) Main", player), lambda state:
+        state.has("Barrels o' Fun (MAP23) - Yellow skull key", player, 1))
 
     # The Chasm (MAP24)
     set_rule(multiworld.get_entrance("Hub -> The Chasm (MAP24) Main", player), lambda state:
@@ -365,24 +364,26 @@ def set_episode3_rules(player, multiworld, pro):
         state.has("Plasma gun", player, 1) and
         state.has("BFG9000", player, 1) and
         state.has("Super Shotgun", player, 1))
-    set_rule(multiworld.get_entrance("The Chasm (MAP24) Main -> The Chasm (MAP24) Red", player), lambda state:
+    set_rule(multiworld.get_entrance("The Chasm (MAP24) Main -> The Chasm (MAP24) Blue", player), lambda state:
+        state.has("The Chasm (MAP24) - Blue keycard", player, 1))
+    set_rule(multiworld.get_entrance("The Chasm (MAP24) Red -> The Chasm (MAP24) Blue", player), lambda state:
         state.has("The Chasm (MAP24) - Red keycard", player, 1))
-    set_rule(multiworld.get_entrance("The Chasm (MAP24) Red -> The Chasm (MAP24) Main", player), lambda state:
+    set_rule(multiworld.get_entrance("The Chasm (MAP24) Blue -> The Chasm (MAP24) Red", player), lambda state:
         state.has("The Chasm (MAP24) - Red keycard", player, 1))
 
     # Bloodfalls (MAP25)
-    set_rule(multiworld.get_entrance("Hub -> Bloodfalls (MAP25) Main", player), lambda state:
-        state.has("Bloodfalls (MAP25)", player, 1) and
-        state.has("Shotgun", player, 1) and
-        state.has("Chaingun", player, 1) and
-        state.has("Rocket launcher", player, 1) and
-        state.has("Plasma gun", player, 1) and
-        state.has("BFG9000", player, 1) and
-        state.has("Super Shotgun", player, 1))
     set_rule(multiworld.get_entrance("Bloodfalls (MAP25) Main -> Bloodfalls (MAP25) Blue", player), lambda state:
-        state.has("Bloodfalls (MAP25) - Blue skull key", player, 1))
+       (state.has("Bloodfalls (MAP25) - Blue skull key", player, 1)) and       (state.has("Rocket launcher", player, 1) or
+        state.has("Plasma gun", player, 1) or
+        state.has("BFG9000", player, 1)))
     set_rule(multiworld.get_entrance("Bloodfalls (MAP25) Blue -> Bloodfalls (MAP25) Main", player), lambda state:
         state.has("Bloodfalls (MAP25) - Blue skull key", player, 1))
+    set_rule(multiworld.get_entrance("Hub -> Bloodfalls (MAP25) Start", player), lambda state:
+        state.has("Bloodfalls (MAP25)", player, 1))
+    set_rule(multiworld.get_entrance("Bloodfalls (MAP25) Start -> Bloodfalls (MAP25) Main", player), lambda state:
+        state.has("Super Shotgun", player, 1) and
+        state.has("Chaingun", player, 1) and
+        state.has("Shotgun", player, 1))
 
     # The Abandoned Mines (MAP26)
     set_rule(multiworld.get_entrance("Hub -> The Abandoned Mines (MAP26) Main", player), lambda state:
@@ -451,36 +452,34 @@ def set_episode3_rules(player, multiworld, pro):
         state.has("Super Shotgun", player, 1))
 
     # Icon of Sin (MAP30)
-    set_rule(multiworld.get_entrance("Hub -> Icon of Sin (MAP30) Main", player), lambda state:
-        state.has("Icon of Sin (MAP30)", player, 1) and
-        state.has("Rocket launcher", player, 1) and
+    set_rule(multiworld.get_entrance("Hub -> Icon of Sin (MAP30) Start", player), lambda state:
+        state.has("Icon of Sin (MAP30)", player, 1))
+    set_rule(multiworld.get_entrance("Icon of Sin (MAP30) Start -> Icon of Sin (MAP30) Main", player), lambda state:
         state.has("Shotgun", player, 1) and
-        state.has("Chaingun", player, 1) and
+        state.has("Rocket launcher", player, 1) and
         state.has("Plasma gun", player, 1) and
+        state.has("Chaingun", player, 1) and
         state.has("BFG9000", player, 1) and
         state.has("Super Shotgun", player, 1))
 
 
 def set_episode4_rules(player, multiworld, pro):
-    # Wolfenstein2 (MAP31)
-    set_rule(multiworld.get_entrance("Hub -> Wolfenstein2 (MAP31) Main", player), lambda state:
-       (state.has("Wolfenstein2 (MAP31)", player, 1) and
-        state.has("Shotgun", player, 1) and
-        state.has("Chaingun", player, 1) and
-        state.has("Super Shotgun", player, 1)) and
-       (state.has("Rocket launcher", player, 1) or
-        state.has("Plasma gun", player, 1) or
-        state.has("BFG9000", player, 1)))
+    # Wolfenstein (MAP31)
+    set_rule(multiworld.get_entrance("Hub -> Wolfenstein (MAP31) Main", player), lambda state:
+       (state.has("Wolfenstein (MAP31)", player, 1) and
+        state.has("Chaingun", player, 1)) and
+       (state.has("Shotgun", player, 1) or
+        state.has("Super Shotgun", player, 1)))
 
-    # Grosse2 (MAP32)
-    set_rule(multiworld.get_entrance("Hub -> Grosse2 (MAP32) Main", player), lambda state:
-       (state.has("Grosse2 (MAP32)", player, 1) and
-        state.has("Shotgun", player, 1) and
+    # Grosse (MAP32)
+    set_rule(multiworld.get_entrance("Hub -> Grosse (MAP32) Start", player), lambda state:
+        state.has("Grosse (MAP32)", player, 1))
+    set_rule(multiworld.get_entrance("Grosse (MAP32) Start -> Grosse (MAP32) Main", player), lambda state:
+       (state.has("Shotgun", player, 1) and
         state.has("Chaingun", player, 1) and
-        state.has("Super Shotgun", player, 1)) and
-       (state.has("Rocket launcher", player, 1) or
+        state.has("Super Shotgun", player, 1)) and       (state.has("BFG9000", player, 1) or
         state.has("Plasma gun", player, 1) or
-        state.has("BFG9000", player, 1)))
+        state.has("Rocket launcher", player, 1)))
 
 
 def set_rules(doom_ii_world: "DOOM2World", included_episodes, pro):

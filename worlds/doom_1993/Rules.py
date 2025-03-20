@@ -23,10 +23,6 @@ def set_episode1_rules(player, multiworld, pro):
         state.has("Nuclear Plant (E1M2) - Red keycard", player, 1))
 
     # Toxin Refinery (E1M3)
-    set_rule(multiworld.get_entrance("Hub -> Toxin Refinery (E1M3) Main", player), lambda state:
-       (state.has("Toxin Refinery (E1M3)", player, 1)) and
-       (state.has("Shotgun", player, 1) or
-        state.has("Chaingun", player, 1)))
     set_rule(multiworld.get_entrance("Toxin Refinery (E1M3) Main -> Toxin Refinery (E1M3) Blue", player), lambda state:
         state.has("Toxin Refinery (E1M3) - Blue keycard", player, 1))
     set_rule(multiworld.get_entrance("Toxin Refinery (E1M3) Blue -> Toxin Refinery (E1M3) Yellow", player), lambda state:
@@ -35,12 +31,13 @@ def set_episode1_rules(player, multiworld, pro):
         state.has("Toxin Refinery (E1M3) - Blue keycard", player, 1))
     set_rule(multiworld.get_entrance("Toxin Refinery (E1M3) Yellow -> Toxin Refinery (E1M3) Blue", player), lambda state:
         state.has("Toxin Refinery (E1M3) - Yellow keycard", player, 1))
+    set_rule(multiworld.get_entrance("Hub -> Toxin Refinery (E1M3) Start", player), lambda state:
+        state.has("Toxin Refinery (E1M3)", player, 1))
+    set_rule(multiworld.get_entrance("Toxin Refinery (E1M3) Start -> Toxin Refinery (E1M3) Main", player), lambda state:
+        state.has("Shotgun", player, 1) or
+        state.has("Chaingun", player, 1))
 
     # Command Control (E1M4)
-    set_rule(multiworld.get_entrance("Hub -> Command Control (E1M4) Main", player), lambda state:
-        state.has("Command Control (E1M4)", player, 1) and
-        state.has("Shotgun", player, 1) and
-        state.has("Chaingun", player, 1))
     set_rule(multiworld.get_entrance("Command Control (E1M4) Main -> Command Control (E1M4) Blue", player), lambda state:
         state.has("Command Control (E1M4) - Blue keycard", player, 1) or
         state.has("Command Control (E1M4) - Yellow keycard", player, 1))
@@ -50,6 +47,11 @@ def set_episode1_rules(player, multiworld, pro):
     set_rule(multiworld.get_entrance("Command Control (E1M4) Blue -> Command Control (E1M4) Main", player), lambda state:
         state.has("Command Control (E1M4) - Yellow keycard", player, 1) or
         state.has("Command Control (E1M4) - Blue keycard", player, 1))
+    set_rule(multiworld.get_entrance("Hub -> Command Control (E1M4) Start", player), lambda state:
+        state.has("Command Control (E1M4)", player, 1))
+    set_rule(multiworld.get_entrance("Command Control (E1M4) Start -> Command Control (E1M4) Main", player), lambda state:
+        state.has("Shotgun", player, 1) and
+        state.has("Chaingun", player, 1))
 
     # Phobos Lab (E1M5)
     set_rule(multiworld.get_entrance("Hub -> Phobos Lab (E1M5) Main", player), lambda state:
@@ -83,11 +85,6 @@ def set_episode1_rules(player, multiworld, pro):
         state.has("Central Processing (E1M6) - Yellow keycard", player, 1))
 
     # Computer Station (E1M7)
-    set_rule(multiworld.get_entrance("Hub -> Computer Station (E1M7) Main", player), lambda state:
-        state.has("Computer Station (E1M7)", player, 1) and
-        state.has("Shotgun", player, 1) and
-        state.has("Chaingun", player, 1) and
-        state.has("Rocket launcher", player, 1))
     set_rule(multiworld.get_entrance("Computer Station (E1M7) Main -> Computer Station (E1M7) Red", player), lambda state:
         state.has("Computer Station (E1M7) - Red keycard", player, 1))
     set_rule(multiworld.get_entrance("Computer Station (E1M7) Main -> Computer Station (E1M7) Yellow", player), lambda state:
@@ -103,6 +100,12 @@ def set_episode1_rules(player, multiworld, pro):
         state.has("Computer Station (E1M7) - Red keycard", player, 1))
     set_rule(multiworld.get_entrance("Computer Station (E1M7) Courtyard -> Computer Station (E1M7) Yellow", player), lambda state:
         state.has("Computer Station (E1M7) - Yellow keycard", player, 1))
+    set_rule(multiworld.get_entrance("Hub -> Computer Station (E1M7) Start", player), lambda state:
+        state.has("Computer Station (E1M7)", player, 1))
+    set_rule(multiworld.get_entrance("Computer Station (E1M7) Start -> Computer Station (E1M7) Main", player), lambda state:
+        state.has("Shotgun", player, 1) and
+        state.has("Rocket launcher", player, 1) and
+        state.has("Chaingun", player, 1))
 
     # Phobos Anomaly (E1M8)
     set_rule(multiworld.get_entrance("Hub -> Phobos Anomaly (E1M8) Start", player), lambda state:
@@ -172,15 +175,16 @@ def set_episode2_rules(player, multiworld, pro):
         state.has("Refinery (E2M3) - Blue keycard", player, 1))
 
     # Deimos Lab (E2M4)
-    set_rule(multiworld.get_entrance("Hub -> Deimos Lab (E2M4) Main", player), lambda state:
-        state.has("Deimos Lab (E2M4)", player, 1) and
-        state.has("Shotgun", player, 1) and
-        state.has("Chaingun", player, 1) and
-        state.has("Plasma gun", player, 1))
     set_rule(multiworld.get_entrance("Deimos Lab (E2M4) Main -> Deimos Lab (E2M4) Blue", player), lambda state:
         state.has("Deimos Lab (E2M4) - Blue keycard", player, 1))
     set_rule(multiworld.get_entrance("Deimos Lab (E2M4) Blue -> Deimos Lab (E2M4) Yellow", player), lambda state:
         state.has("Deimos Lab (E2M4) - Yellow keycard", player, 1))
+    set_rule(multiworld.get_entrance("Hub -> Deimos Lab (E2M4) Start", player), lambda state:
+        state.has("Deimos Lab (E2M4)", player, 1))
+    set_rule(multiworld.get_entrance("Deimos Lab (E2M4) Start -> Deimos Lab (E2M4) Main", player), lambda state:
+        state.has("Shotgun", player, 1) and
+        state.has("Plasma gun", player, 1) and
+        state.has("Chaingun", player, 1))
 
     # Command Center (E2M5)
     set_rule(multiworld.get_entrance("Hub -> Command Center (E2M5) Main", player), lambda state:
@@ -238,11 +242,11 @@ def set_episode2_rules(player, multiworld, pro):
         state.has("Spawning Vats (E2M7) - Red keycard", player, 1))
 
     # Tower of Babel (E2M8)
-    set_rule(multiworld.get_entrance("Hub -> Tower of Babel (E2M8) Main", player), lambda state:
-       (state.has("Tower of Babel (E2M8)", player, 1) and
-        state.has("Shotgun", player, 1) and
-        state.has("Chaingun", player, 1)) and
-       (state.has("Rocket launcher", player, 1) or
+    set_rule(multiworld.get_entrance("Hub -> Tower of Babel (E2M8) Start", player), lambda state:
+        state.has("Tower of Babel (E2M8)", player, 1))
+    set_rule(multiworld.get_entrance("Tower of Babel (E2M8) Start -> Tower of Babel (E2M8) Main", player), lambda state:
+       (state.has("Chaingun", player, 1) and
+        state.has("Shotgun", player, 1)) and       (state.has("Rocket launcher", player, 1) or
         state.has("Plasma gun", player, 1) or
         state.has("BFG9000", player, 1)))
 
@@ -321,13 +325,6 @@ def set_episode3_rules(player, multiworld, pro):
         state.has("House of Pain (E3M4) - Yellow skull key", player, 1))
 
     # Unholy Cathedral (E3M5)
-    set_rule(multiworld.get_entrance("Hub -> Unholy Cathedral (E3M5) Main", player), lambda state:
-       (state.has("Unholy Cathedral (E3M5)", player, 1) and
-        state.has("Chaingun", player, 1) and
-        state.has("Shotgun", player, 1)) and
-       (state.has("Rocket launcher", player, 1) or
-        state.has("Plasma gun", player, 1) or
-        state.has("BFG9000", player, 1)))
     set_rule(multiworld.get_entrance("Unholy Cathedral (E3M5) Main -> Unholy Cathedral (E3M5) Yellow", player), lambda state:
         state.has("Unholy Cathedral (E3M5) - Yellow skull key", player, 1))
     set_rule(multiworld.get_entrance("Unholy Cathedral (E3M5) Main -> Unholy Cathedral (E3M5) Blue", player), lambda state:
@@ -336,6 +333,13 @@ def set_episode3_rules(player, multiworld, pro):
         state.has("Unholy Cathedral (E3M5) - Blue skull key", player, 1))
     set_rule(multiworld.get_entrance("Unholy Cathedral (E3M5) Yellow -> Unholy Cathedral (E3M5) Main", player), lambda state:
         state.has("Unholy Cathedral (E3M5) - Yellow skull key", player, 1))
+    set_rule(multiworld.get_entrance("Hub -> Unholy Cathedral (E3M5) Start", player), lambda state:
+        state.has("Unholy Cathedral (E3M5)", player, 1))
+    set_rule(multiworld.get_entrance("Unholy Cathedral (E3M5) Start -> Unholy Cathedral (E3M5) Main", player), lambda state:
+       (state.has("Chaingun", player, 1) and
+        state.has("Shotgun", player, 1)) and       (state.has("Plasma gun", player, 1) or
+        state.has("Rocket launcher", player, 1) or
+        state.has("BFG9000", player, 1)))
 
     # Mt. Erebus (E3M6)
     set_rule(multiworld.get_entrance("Hub -> Mt. Erebus (E3M6) Main", player), lambda state:

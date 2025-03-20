@@ -26,7 +26,7 @@ map_names: List[str] = [
     'Gotcha! (MAP20)',
     'Nirvana (MAP21)',
     'The Catacombs (MAP22)',
-    'Barrels o Fun (MAP23)',
+    "Barrels o' Fun (MAP23)",
     'The Chasm (MAP24)',
     'Bloodfalls (MAP25)',
     'The Abandoned Mines (MAP26)',
@@ -34,6 +34,6 @@ map_names: List[str] = [
     'The Spirit World (MAP28)',
     'The Living End (MAP29)',
     'Icon of Sin (MAP30)',
-    'Wolfenstein2 (MAP31)',
-    'Grosse2 (MAP32)',
+    'Wolfenstein (MAP31)',
+    'Grosse (MAP32)',
 ]
