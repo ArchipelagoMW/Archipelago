@@ -277,7 +277,7 @@ class WL4Client(BizHawkClient):
         inventory_result = await bizhawk.guarded_read(
             bizhawk_ctx,
             [read(inventory_address, len(Passage) * 6 * 4)],
-            guard16(main_game_mode_address, main),
+            [guard16(main_game_mode_address, main)],
         )
         collection_result = await bizhawk.guarded_read(
             bizhawk_ctx,
@@ -339,7 +339,7 @@ class WL4Client(BizHawkClient):
 
         game_mode = await self.get_game_mode(bizhawk_ctx)
         main, sub = game_mode
-        if main != GAMEMODE_SELECT and sub not in SELECT_EJECTION_STATES:
+        if main != GAMEMODE_SELECT or sub not in SELECT_EJECTION_STATES:
             return
 
         read_result = await bizhawk.guarded_read(
