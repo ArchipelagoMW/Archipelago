@@ -1445,6 +1445,7 @@ class SC2Logic:
                 item_names.ARBITER,
             ), self.player)
             or state.has(item_names.SOA_PROGRESSIVE_PROXY_PYLON, self.player, count=2)
+            or state.has_all((item_names.MISTWING, item_names.MISTWING_PILOT), self.player)
             or (state.has(item_names.SOA_PROGRESSIVE_PROXY_PYLON, self.player)
                 and (state.has_any(item_groups.gateway_units + [item_names.ELDER_PROBES, item_names.PROBE_WARPIN], self.player)
                     or (state.has_any((item_names.WARP_HARMONIZATION, item_names.PROGRESSIVE_WARP_RELOCATE), self.player)
