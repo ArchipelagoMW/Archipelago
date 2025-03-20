@@ -69,7 +69,7 @@ def create_regions(world):
     populate_region(multiworld, player, CandyBox2Region("The Dig Spot", player, multiworld, "The Dig Spot"), dig_spot_locations, world_map_2)
 
     # The Wishing Well
-    wishing_well, _ = populate_region(multiworld, player, CandyBox2Region("The Wishing Well", player, multiworld, "The Wishing Well"), wishing_well_locations, world_map_2)
+    wishing_well, _ = populate_region(multiworld, player, CandyBox2Region("The Wishing Well", player, multiworld, "The Wishing Well"), wishing_well_locations, world_map_2, lambda state: state.has("Chocolate Bar", player))
     populate_region(multiworld, player, CandyBox2Region("The Wishing Well (Unlocked Gloves)", player, multiworld, "The Wishing Well"), wishing_well_glove_locations, wishing_well, lambda state: state.has("Leather Gloves", player))
     populate_region(multiworld, player, CandyBox2Region("The Wishing Well (Unlocked Tribal Spear)", player, multiworld, "The Wishing Well"), wishing_well_tribal_spear_locations, wishing_well, lambda state: state.has("Tribal Spear", player))
     populate_region(multiworld, player, CandyBox2Region("The Wishing Well (Unlocked Monkey Wizard Staff)", player, multiworld, "The Wishing Well"), wishing_well_monkey_wizard_staff_locations, wishing_well, lambda state: state.has("Monkey Wizard Staff", player))
