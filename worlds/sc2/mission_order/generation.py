@@ -422,6 +422,7 @@ def create_region(
     name: str,
     slot: Optional[SC2MOGenMission] = None,
 ) -> Region:
+    MAX_UNIT_REQUIREMENT = 5
     region = Region(name, world.player, world.multiworld)
 
     from ..locations import LocationType
@@ -458,8 +459,10 @@ def create_region(
             if mission_needs_unit and not unit_given and location_data.type == easiest_category:
                 location = create_minimal_logic_location(world, location_data, region, location_cache, 0)
                 unit_given = True
+            elif location_data.type == LocationType.MASTERY:
+                location = create_minimal_logic_location(world, location_data, region, location_cache, MAX_UNIT_REQUIREMENT)
             else:
-                location = create_minimal_logic_location(world, location_data, region, location_cache, min(slot.min_depth, 5) + mission_needs_unit)
+                location = create_minimal_logic_location(world, location_data, region, location_cache, min(slot.min_depth, MAX_UNIT_REQUIREMENT) + mission_needs_unit)
         else:
             location = create_location(world.player, location_data, region, location_cache)
         region.locations.append(location)
