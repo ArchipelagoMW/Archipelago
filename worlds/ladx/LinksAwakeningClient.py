@@ -3,9 +3,6 @@ ModuleUpdate.update()
 
 import Utils
 
-if __name__ == "__main__":
-    Utils.init_logging("LinksAwakeningContext", exception_logger="Client")
-
 import asyncio
 import base64
 import binascii
@@ -26,13 +23,13 @@ import typing
 from CommonClient import (CommonContext, get_base_parser, gui_enabled, logger,
                           server_loop)
 from NetUtils import ClientStatus
-from worlds.ladx.Common import BASE_ID as LABaseID
-from worlds.ladx.GpsTracker import GpsTracker
-from worlds.ladx.TrackerConsts import storage_key
-from worlds.ladx.ItemTracker import ItemTracker
-from worlds.ladx.LADXR.checkMetadata import checkMetadataTable
-from worlds.ladx.Locations import get_locations_to_id, meta_to_name
-from worlds.ladx.Tracker import LocationTracker, MagpieBridge
+from .Common import BASE_ID as LABaseID
+from .GpsTracker import GpsTracker
+from .TrackerConsts import storage_key
+from .ItemTracker import ItemTracker
+from .LADXR.checkMetadata import checkMetadataTable
+from .Locations import get_locations_to_id, meta_to_name
+from .Tracker import LocationTracker, MagpieBridge
 
 
 class GameboyException(Exception):
@@ -139,7 +136,7 @@ class RAGameboy():
     def set_checks_range(self, checks_start, checks_size):
         self.checks_start = checks_start
         self.checks_size = checks_size
-    
+
     def set_location_range(self, location_start, location_size, critical_addresses):
         self.location_start = location_start
         self.location_size = location_size
@@ -237,7 +234,7 @@ class RAGameboy():
         self.cache[start:start + len(hram_block)] = hram_block
 
         self.last_cache_read = time.time()
-    
+
     async def read_memory_block(self, address: int, size: int):
         block = bytearray()
         remaining_size = size
@@ -245,7 +242,7 @@ class RAGameboy():
             chunk = await self.async_read_memory(address + len(block), remaining_size)
             remaining_size -= len(chunk)
             block += chunk
-        
+
         return block
 
     async def read_memory_cache(self, addresses):
@@ -514,8 +511,8 @@ class LinksAwakeningContext(CommonContext):
     magpie_task = None
     won = False
 
-    @property 
-    def slot_storage_key(self): 
+    @property
+    def slot_storage_key(self):
         return f"{self.slot_info[self.slot].name}_{storage_key}"
 
     def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str], magpie: typing.Optional[bool]) -> None:
@@ -562,7 +559,7 @@ class LinksAwakeningContext(CommonContext):
     async def send_checks(self):
         message = [{"cmd": "LocationChecks", "locations": self.found_checks}]
         await self.send_msgs(message)
-    
+
     async def send_new_entrances(self, entrances: typing.Dict[str, str]):
         # Store the entrances we find on the server for future sessions
         message = [{
@@ -601,12 +598,12 @@ class LinksAwakeningContext(CommonContext):
             logger.info("victory!")
             await self.send_msgs(message)
             self.won = True
-    
+
     async def request_found_entrances(self):
         await self.send_msgs([{"cmd": "Get", "keys": [self.slot_storage_key]}])
 
-        # Ask for updates so that players can co-op entrances in a seed  
-        await self.send_msgs([{"cmd": "SetNotify", "keys": [self.slot_storage_key]}])  
+        # Ask for updates so that players can co-op entrances in a seed
+        await self.send_msgs([{"cmd": "SetNotify", "keys": [self.slot_storage_key]}])
 
     async def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
         if self.ENABLE_DEATHLINK:
@@ -642,12 +639,12 @@ class LinksAwakeningContext(CommonContext):
         if cmd == "Connected":
             self.game = self.slot_info[self.slot].game
             self.slot_data = args.get("slot_data", {})
-            
+
         # TODO - use watcher_event
         if cmd == "ReceivedItems":
             for index, item in enumerate(args["items"], start=args["index"]):
                 self.client.recvd_checks[index] = item
-        
+
         if cmd == "Retrieved" and self.magpie_enabled and self.slot_storage_key in args["keys"]:
             self.client.gps_tracker.receive_found_entrances(args["keys"][self.slot_storage_key])
 
@@ -727,7 +724,7 @@ class LinksAwakeningContext(CommonContext):
                             self.magpie.set_checks(self.client.tracker.all_checks)
                             await self.magpie.set_item_tracker(self.client.item_tracker)
                             self.magpie.slot_data = self.slot_data
-                            
+
                             if self.client.gps_tracker.needs_found_entrances:
                                 await self.request_found_entrances()
                                 self.client.gps_tracker.needs_found_entrances = False
@@ -767,42 +764,44 @@ def run_game(romfile: str) -> None:
         except FileNotFoundError:
             logger.error(f"Couldn't launch ROM, {args[0]} is missing")
 
-async def main():
-    parser = get_base_parser(description="Link's Awakening Client.")
-    parser.add_argument("--url", help="Archipelago connection url")
-    parser.add_argument("--no-magpie", dest='magpie', default=True, action='store_false', help="Disable magpie bridge")
-    parser.add_argument('diff_file', default="", type=str, nargs="?",
-                        help='Path to a .apladx Archipelago Binary Patch file')
+def launch(*launch_args):
+    async def main():
+        parser = get_base_parser(description="Link's Awakening Client.")
+        parser.add_argument("--url", help="Archipelago connection url")
+        parser.add_argument("--no-magpie", dest='magpie', default=True, action='store_false', help="Disable magpie bridge")
+        parser.add_argument('diff_file', default="", type=str, nargs="?",
+                            help='Path to a .apladx Archipelago Binary Patch file')
 
-    args = parser.parse_args()
+        args = parser.parse_args(launch_args)
 
-    if args.diff_file:
-        import Patch
-        logger.info("patch file was supplied - creating rom...")
-        meta, rom_file = Patch.create_rom_file(args.diff_file)
-        if "server" in meta and not args.connect:
-            args.connect = meta["server"]
-        logger.info(f"wrote rom file to {rom_file}")
+        if args.diff_file:
+            import Patch
+            logger.info("patch file was supplied - creating rom...")
+            meta, rom_file = Patch.create_rom_file(args.diff_file)
+            if "server" in meta and not args.connect:
+                args.connect = meta["server"]
+            logger.info(f"wrote rom file to {rom_file}")
 
 
-    ctx = LinksAwakeningContext(args.connect, args.password, args.magpie)
+        ctx = LinksAwakeningContext(args.connect, args.password, args.magpie)
 
-    ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
+        ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 
-    # TODO: nothing about the lambda about has to be in a lambda
-    ctx.la_task = create_task_log_exception(ctx.run_game_loop())
-    if gui_enabled:
-        ctx.run_gui()
-    ctx.run_cli()
+        # TODO: nothing about the lambda about has to be in a lambda
+        ctx.la_task = create_task_log_exception(ctx.run_game_loop())
+        if gui_enabled:
+            ctx.run_gui()
+        ctx.run_cli()
 
-    # Down below run_gui so that we get errors out of the process
-    if args.diff_file:
-        run_game(rom_file)
+        # Down below run_gui so that we get errors out of the process
+        if args.diff_file:
+            run_game(rom_file)
 
-    await ctx.exit_event.wait()
-    await ctx.shutdown()
+        await ctx.exit_event.wait()
+        await ctx.shutdown()
 
-if __name__ == '__main__':
+    Utils.init_logging("LinksAwakeningContext", exception_logger="Client")
+
     colorama.just_fix_windows_console()
     asyncio.run(main())
     colorama.deinit()

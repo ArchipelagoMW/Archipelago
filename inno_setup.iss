@@ -84,6 +84,7 @@ Type: dirifempty; Name: "{app}"
 
 [InstallDelete]
 Type: files; Name: "{app}\lib\worlds\_bizhawk.apworld"
+Type: files; Name: "{app}\ArchipelagoLinksAwakeningClient.exe"
 Type: files; Name: "{app}\ArchipelagoLttPClient.exe"
 Type: files; Name: "{app}\ArchipelagoPokemonClient.exe"
 Type: files; Name: "{app}\data\lua\connector_pkmn_rb.lua"
@@ -198,8 +199,8 @@ Root: HKCR; Subkey: "{#MyAppName}mm2patch\shell\open\command";  ValueData: """{a
 
 Root: HKCR; Subkey: ".apladx";                                   ValueData: "{#MyAppName}ladxpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}ladxpatch";                     ValueData: "Archipelago Links Awakening DX Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
-Root: HKCR; Subkey: "{#MyAppName}ladxpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoLinksAwakeningClient.exe,0";                           ValueType: string;  ValueName: "";
-Root: HKCR; Subkey: "{#MyAppName}ladxpatch\shell\open\command";  ValueData: """{app}\ArchipelagoLinksAwakeningClient.exe"" ""%1""";                  ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}ladxpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoLauncher.exe,0";                           ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}ladxpatch\shell\open\command";  ValueData: """{app}\ArchipelagoLauncher.exe"" ""%1""";                  ValueType: string;  ValueName: "";
 
 Root: HKCR; Subkey: ".aptloz";                                   ValueData: "{#MyAppName}tlozpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}tlozpatch";                     ValueData: "Archipelago The Legend of Zelda Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
