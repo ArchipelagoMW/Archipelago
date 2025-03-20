@@ -9,8 +9,11 @@ import Utils
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 
 from worlds.AutoWorld import World
+from . import Theme_Duels, Limited_Duels, cards
+from .boosterpack_contents import contents
+from .boosterpacks_data import booster_pack_data, reverse_rarities
 from .items import item_to_index
-from .rom_values import banlist_ids, function_addresses, structure_deck_selection
+from .rom_values import banlist_ids, structure_deck_selection
 
 MD5Europe = "020411d3b08f5639eb8cb878283f84bf"
 MD5America = "b8a7c976b28172995fe9e465d654297a"
@@ -28,9 +31,64 @@ class YGO06ProcedurePatch(APProcedurePatch, APTokenMixin):
 
 
 def write_tokens(world: World, patch: YGO06ProcedurePatch):
-    structure_deck = structure_deck_selection.get(world.options.structure_deck.value)
     # set structure deck
-    patch.write_token(APTokenTypes.WRITE, 0x000FD0AA, struct.pack("<B", structure_deck))
+    if not world.structure_deck:
+        structure_deck = structure_deck_selection.get(world.options.structure_deck.value)
+        patch.write_token(APTokenTypes.WRITE, 0x000FD0AA, struct.pack("<B", structure_deck))
+    else:
+        patch.write_token(APTokenTypes.WRITE, 0x000FD0AA, struct.pack("<B", 0x1))
+    # override Starter Deck
+    if world.options.starter_deck.value == world.options.starter_deck.option_remove:
+        for i in range(0, 40):
+            patch.write_token(APTokenTypes.WRITE, 0x01e5f884 + (i * 2),
+                              struct.pack("<H", 0x0))
+    elif world.starter_deck:
+        pointer = 0
+        for card, amount in world.starter_deck.items():
+            for i in range(0, amount):
+                patch.write_token(APTokenTypes.WRITE, 0x01e5f884 + pointer,
+                                  struct.pack("<H", card.starter_id))
+                pointer = pointer + 2
+
+    # override Structure Deck
+    if world.structure_deck:
+        pointer = 0
+        for card, amount in world.structure_deck.items():
+            patch.write_token(APTokenTypes.WRITE, 0x1e5fa58 + pointer,
+                              struct.pack("<H", card.structure_id + amount))
+            pointer = pointer + 4
+        patch.write_token(APTokenTypes.WRITE, 0x1e5fd58, struct.pack("<B", len(world.structure_deck)))
+        deck_name = "\x00"
+        if world.options.structure_deck.value == world.options.structure_deck.option_worst:
+            deck_name = "Worst Deck\x00"
+        elif world.options.structure_deck.value == world.options.structure_deck.option_custom:
+            deck_name = "Custom Deck\x00"
+        else:
+            deck_name = "Random Deck\x00"
+        for j, b in enumerate(deck_name.encode("ascii")):
+            patch.write_token(APTokenTypes.WRITE, 0x1dc9f56 + j, struct.pack("<B", b))
+
+    # override set contents
+    if world.booster_pack_contents:
+        for name, data in booster_pack_data.items():
+            pointer = data.pointer
+            for card, rarity in world.booster_pack_contents[name].items():
+                card_data = cards[card]
+                if world.options.normalize_booster_pack_rarities.value:
+                    rarity = "Common"
+                patch.write_token(APTokenTypes.WRITE, pointer, struct.pack("<H", card_data.starter_id))
+                patch.write_token(APTokenTypes.WRITE, pointer + 2,
+                                  struct.pack("<H", reverse_rarities[rarity] + card_data.art))
+                pointer += 4
+
+    elif world.options.normalize_booster_pack_rarities.value:
+        for name, data in booster_pack_data.items():
+            pointer = data.pointer
+            for card, rarity in contents[name].items():
+                card_data = cards[card]
+                patch.write_token(APTokenTypes.WRITE, pointer + 2,
+                                  struct.pack("<H", 0x0 + card_data.art))
+                pointer += 4
     # set banlist
     banlist = world.options.banlist
     patch.write_token(APTokenTypes.WRITE, 0xF4496, struct.pack("<B", banlist_ids.get(banlist.value)))
@@ -56,58 +114,27 @@ def write_tokens(world: World, patch: YGO06ProcedurePatch):
         inventory_map[index] = inventory_map[index] | (1 << bit)
     for i in range(32):
         patch.write_token(APTokenTypes.WRITE, 0xE9DC + i, struct.pack("<B", inventory_map[i]))
+
     # set unlock conditions for the last 3 campaign opponents
-    third_tier_5 = (
-        world.options.third_tier_5_campaign_boss_challenges.value
-        if world.options.third_tier_5_campaign_boss_unlock_condition.value == 1
-        else world.options.third_tier_5_campaign_boss_campaign_opponents.value
-    )
-    patch.write_token(APTokenTypes.WRITE, 0xEEFA, struct.pack("<B", third_tier_5))
+    patch.write_token(APTokenTypes.WRITE, 0xef9c,
+                      struct.pack("<B", world.options.third_tier_5_campaign_boss_campaign_opponents.value))
+    patch.write_token(APTokenTypes.WRITE, 0xef9d,
+                      struct.pack("<B", world.options.fourth_tier_5_campaign_boss_campaign_opponents.value))
+    patch.write_token(APTokenTypes.WRITE, 0xef9e,
+                      struct.pack("<B", world.options.final_campaign_boss_campaign_opponents.value))
+    patch.write_token(APTokenTypes.WRITE, 0xef9f,
+                      struct.pack("<B", world.options.third_tier_5_campaign_boss_challenges.value))
+    patch.write_token(APTokenTypes.WRITE, 0xefa0,
+                      struct.pack("<B", world.options.fourth_tier_5_campaign_boss_challenges.value))
+    patch.write_token(APTokenTypes.WRITE, 0xefa1,
+                      struct.pack("<B", world.options.final_campaign_boss_challenges.value))
 
-    fourth_tier_5 = (
-        world.options.fourth_tier_5_campaign_boss_challenges.value
-        if world.options.fourth_tier_5_campaign_boss_unlock_condition.value == 1
-        else world.options.fourth_tier_5_campaign_boss_campaign_opponents.value
-    )
-    patch.write_token(APTokenTypes.WRITE, 0xEF10, struct.pack("<B", fourth_tier_5))
-    final = (
-        world.options.final_campaign_boss_challenges.value
-        if world.options.final_campaign_boss_unlock_condition.value == 1
-        else world.options.final_campaign_boss_campaign_opponents.value
-    )
-    patch.write_token(APTokenTypes.WRITE, 0xEF22, struct.pack("<B", final))
-
-    patch.write_token(
-        APTokenTypes.WRITE,
-        0xEEF8,
-        struct.pack(
-            "<B",
-            int((function_addresses.get(world.options.third_tier_5_campaign_boss_unlock_condition.value) - 0xEEFA) / 2),
-        ),
-    )
-    patch.write_token(
-        APTokenTypes.WRITE,
-        0xEF0E,
-        struct.pack(
-            "<B",
-            int(
-                (function_addresses.get(world.options.fourth_tier_5_campaign_boss_unlock_condition.value) - 0xEF10) / 2
-            ),
-        ),
-    )
-    patch.write_token(
-        APTokenTypes.WRITE,
-        0xEF20,
-        struct.pack(
-            "<B", int((function_addresses.get(world.options.final_campaign_boss_unlock_condition.value) - 0xEF22) / 2)
-        ),
-    )
     # set starting money
     patch.write_token(APTokenTypes.WRITE, 0xF4734, struct.pack("<I", world.options.starting_money))
     patch.write_token(APTokenTypes.WRITE, 0xE70C, struct.pack("<B", world.options.money_reward_multiplier.value))
     patch.write_token(APTokenTypes.WRITE, 0xE6E4, struct.pack("<B", world.options.money_reward_multiplier.value))
     # normalize booster packs if option is set
-    if world.options.normalize_boosters_packs.value:
+    if world.options.normalize_booster_pack_prices.value:
         booster_pack_price = world.options.booster_pack_prices.value.to_bytes(2, "little")
         for booster in range(51):
             space = booster * 16
@@ -130,6 +157,20 @@ def write_tokens(world: World, patch: YGO06ProcedurePatch):
         patch.write_token(APTokenTypes.WRITE, 0x10 + j, struct.pack("<B", b))
     for j, b in enumerate(world.playerName):
         patch.write_token(APTokenTypes.WRITE, 0x30 + j, struct.pack("<B", b))
+    # set up goal in status screen
+    patch.write_token(APTokenTypes.WRITE, 0xec7b6,
+                      struct.pack("<B", world.options.final_campaign_boss_challenges.value))
+    # set up total limited and theme duels in status screen
+    limited = 0
+    theme = 0
+    for l in world.multiworld.get_locations(world.player):
+        if l.name in Limited_Duels:
+            theme = theme + 1
+        if l.name in Theme_Duels:
+            limited = limited + 1
+
+    patch.write_token(APTokenTypes.WRITE, 0xec968, struct.pack("<B", limited))
+    patch.write_token(APTokenTypes.WRITE, 0xeca4e, struct.pack("<B", theme))
 
     patch.write_file("token_data.bin", patch.get_token_binary())
 
