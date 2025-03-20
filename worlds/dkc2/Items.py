@@ -104,6 +104,7 @@ trap_name_to_value: typing.Dict[str, int] = {
     "Confuse Trap":         STARTING_ID + 0x0041,  # Reverse Trap
     "Frozen Trap":          STARTING_ID + 0x0040,  # Freeze Trap
     "Paralyze Trap":        STARTING_ID + 0x0040,  # Freeze Trap
+    "Stun Trap":            STARTING_ID + 0x0040,  # Freeze Trap
     "Reversal Trap":        STARTING_ID + 0x0041,  # Reverse Trap
     "Fuzzy Trap":           STARTING_ID + 0x0041,  # Reverse Trap
     "Confusion Trap":       STARTING_ID + 0x0041,  # Reverse Trap
@@ -114,6 +115,9 @@ trap_name_to_value: typing.Dict[str, int] = {
     "Thwimp Trap":          STARTING_ID + 0x0044,  # TNT Barrel Trap
     "Sticky Floor Trap":    STARTING_ID + 0x0042,  # Honey Trap 
     "Sticky Hands Trap":    STARTING_ID + 0x0042,  # Honey Trap 
+    "Bomb":                 STARTING_ID + 0x0044,  # TNT Barrel Trap
+    "Banana Trap":          STARTING_ID + 0x0043,  # Ice Trap
+    "Gooey Bag":            STARTING_ID + 0x0044,  # TNT Barrel Trap
 }
 
 trap_value_to_name: typing.Dict[int, str] = {
