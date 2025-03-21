@@ -1068,6 +1068,10 @@ SURFACES_LOCATION_TABLE = {
                                          update_ram_addr=[LMRamData(in_game_room_id=28)]),
     "Sue Pea's Bed (Guest Room)": LMLocationData("Guest Room", 578, "Furniture", 420, ["Water Element Medal"],
                                                  update_ram_addr=[LMRamData(in_game_room_id=29)]),
+    "Tea Room West Table": LMLocationData("Tea Room", 862, "Furniture", 538, [],
+                                         update_ram_addr=[LMRamData(in_game_room_id=50)]),
+    "Tea Room East Table": LMLocationData("Tea Room", 863, "Furniture", 539, [],
+                                         update_ram_addr=[LMRamData(in_game_room_id=50)]),
     # "Twins' Room Bunk Bed": LMLocationData("Twins' Room", 182, "Furniture", 425, [], 27), #TODO Prevents Speedy Spirit Spawn?
     # "Breaker Room Table": LMLocationData("Breaker Room", 445, "Furniture", 44, [], 69), # TODO Prevents Speedy Spirit Spawn
 }
@@ -1556,6 +1560,18 @@ WDYM_LOCATION_TABLE ={
                                          update_ram_addr=[LMRamData(in_game_room_id=24)]),
     "Courtyard Tree by Woman Statue": LMLocationData("Courtyard", 860, "Plant", 141, ["Water Element Medal"],
                                          update_ram_addr=[LMRamData(in_game_room_id=24)]),
+    "Courtyard Laundry Bar": LMLocationData("Courtyard", 861, "Furniture", 314, [],
+                                                     update_ram_addr=[LMRamData(in_game_room_id=24)]),
+    "Cellar Fence": LMLocationData("Cellar", 864, "Furniture", 9, [],
+                                     update_ram_addr=[LMRamData(in_game_room_id=66)]),
+    "Pipe Room Fence": LMLocationData("Pipe Room", 865, "Furniture", 23, [],
+                                       update_ram_addr=[LMRamData(in_game_room_id=68)]),
+    "Safari Room L Cheetah Carpet": LMLocationData("Safari Room", 866, "Furniture", 628, [],
+                                                  update_ram_addr=[LMRamData(in_game_room_id=55)]),
+    "Safari Room R Cheetah Carpet": LMLocationData("Safari Room", 867, "Furniture", 629, [],
+                                                   update_ram_addr=[LMRamData(in_game_room_id=55)]),
+    "Safari Room C Cheetah Carpet": LMLocationData("Safari Room", 868, "Furniture", 683, [],
+                                                   update_ram_addr=[LMRamData(in_game_room_id=55)]),
 }
 
 
