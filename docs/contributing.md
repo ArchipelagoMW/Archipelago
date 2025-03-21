@@ -1,4 +1,4 @@
-# Contributing
+# Contributing Guidelines
 
 All contributions are welcome, though we have a few requests of contributors, whether they be for core, webhost, or new 
 game contributions:
@@ -11,7 +11,7 @@ game contributions:
   It is strongly recommended that unit tests are used to avoid regression and to ensure everything is still working.
   If you wish to contribute by adding a new game, please take a look at
   the [logic unit test documentation](/docs/tests.md).
-  If you wish to contribute to the website, please take a look at [these tests](/test/webhost).
+  If you wish to contribute to the website, please take a look at [these tests](https://github.com/ArchipelagoMW/Archipelago/tree/main/test/webhost).
 
 * **Do not introduce unit test failures/regressions.**
   Archipelago supports multiple versions of Python. You may need to download older Python versions to fully test
@@ -34,7 +34,7 @@ game contributions:
 
 Other than these requests, we tend to judge code on a case-by-case basis.
 
-For contribution to the website, please refer to the [WebHost README](/WebHostLib/README.md).
+For contribution to the website, please refer to the [WebHost README](https://github.com/ArchipelagoMW/Archipelago/blob/main/WebHostLib/README.md).
 
 If you want to contribute to the core, you will be subject to stricter review on your pull requests. It is recommended
 that you get in touch with other core maintainers via the [Discord](https://archipelago.gg/discord).
@@ -45,5 +45,5 @@ which details what is required to implement support for a game, and has tips on 
 If you want to merge a new game into the main Archipelago repo, please make sure to read the responsibilities as a
 [world maintainer](/docs/world%20maintainer.md).
 
-For other questions, feel free to explore the [main documentation folder](/docs), and ask us questions in the
+For other questions, feel free to explore the [main documentation folder](https://github.com/ArchipelagoMW/Archipelago/tree/main/docs), and ask us questions in the
 #ap-world-dev channel of the [Discord](https://archipelago.gg/discord).
