@@ -90,6 +90,7 @@ class LMWeb(WebWorld):
             LuigiOptions.HeartWeight,
         ]),
         OptionGroup("QOL Changes", [
+            LuigiOptions.TrapLink,
             LuigiOptions.LuigiFearAnim,
             LuigiOptions.PickupAnim,
             LuigiOptions.LuigiWalkSpeed,
@@ -777,5 +778,6 @@ class LMWorld(World):
             "enemizer": self.options.enemizer.value,
             "spawn_region": self.origin_region_name,
             "death_link": self.options.death_link.value,
+            "trap_link": self.options.trap_link.value,
             "apworld version": CLIENT_VERSION
         }

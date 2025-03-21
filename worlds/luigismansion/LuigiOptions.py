@@ -468,6 +468,13 @@ class BooAnger(Toggle):
     default = 0
 
 
+class TrapLink(Toggle):
+    """
+    Games that support traplink will all receive similar traps when a matching trap is sent from another traplink game
+    """
+    display_name = "TrapLink"
+    internal_name = "trap_link"
+
 
 @dataclass
 class LMOptions(DeathLinkMixin, PerGameCommonOptions):
@@ -498,6 +505,14 @@ class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     balcony_boo_count: BalconyBooCount
     final_boo_count: FinalBooCount
     king_boo_health: KingBooHealth
+    boo_health_option: BooHealthOption
+    boo_health_value: BooHealthValue
+    boo_speed: BooSpeed
+    boo_escape_time: BooEscapeTime
+    boo_anger: BooAnger
+    chest_types: ChestTypes
+    trap_chests: TrapChestType
+    trap_link: TrapLink
     bundle_weight: BundleWeight
     coin_weight: CoinWeight
     bill_weight: BillWeight
@@ -509,11 +524,4 @@ class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     banana_trap_weight: BananaTrapWeight
     nothing_weight: NothingWeight
     heart_weight: HeartWeight
-    boo_health_option: BooHealthOption
-    boo_health_value: BooHealthValue
-    boo_speed: BooSpeed
-    boo_escape_time: BooEscapeTime
-    boo_anger: BooAnger
-    chest_types: ChestTypes
-    trap_chests: TrapChestType
     start_inventory_from_pool: StartInventoryPool
