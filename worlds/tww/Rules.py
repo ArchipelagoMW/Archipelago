@@ -95,9 +95,9 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists(
         "Outset Island - Orca - Give 10 Knight's Crests",
         lambda state: state.has("Spoils Bag", player)
-        and can_farm_knights_crests(state, player)
         and can_sword_fight_with_orca(state, player)
-        and has_magic_meter(state, player),
+        and has_magic_meter(state, player)
+        and can_farm_knights_crests(state, player),
     )
     # set_rule_if_exists("Outset Island - Orca - Hit 500 Times", lambda state: can_sword_fight_with_orca(state, player))
     set_rule_if_exists(
