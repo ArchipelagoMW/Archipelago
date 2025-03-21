@@ -12,6 +12,8 @@ from .regions import create_regions, connect_entrances
 from .rules import set_rules
 
 
+EXPECTED_CLIENT_VERSION = "20250321-1+"
+
 class CandyBox2World(World):
     """Text-based web game with fun ASCII art"""
 
@@ -52,6 +54,7 @@ class CandyBox2World(World):
             "uuid": str(uuid.uuid4()),
             "entranceInformation": self.original_entrances if self.options.quest_randomisation == "off" else self.entrance_randomisation.pairings,
             "deathLink": self.options.death_link.value,
+            "expectedClientVersion": EXPECTED_CLIENT_VERSION
         }
 
     def set_rules(self) -> None:
