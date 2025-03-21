@@ -245,6 +245,9 @@ class LMContext(CommonContext):
             self.boo_final_count = int(args["slot_data"]["final boo count"])
             if "death_link" in args["slot_data"]:
                 Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
+            if "trap_link" in args["slot_data"] and "TrapLink" not in self.tags:
+                self.tags.add("TrapLink")
+
 
     def on_deathlink(self, data: dict[str, Any]):
         """
