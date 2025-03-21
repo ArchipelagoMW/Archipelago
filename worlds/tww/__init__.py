@@ -172,7 +172,7 @@ class TWWWorld(World):
         # TODO: Calculate filler items dynamically
         override_as_filler = []
         if not options.progression_dungeons:
-            override_as_filler.extend(item_name_groups["Small Keys"] + item_name_groups["Big Keys"])
+            override_as_filler.extend(item_name_groups["Small Keys"] | item_name_groups["Big Keys"])
             override_as_filler.extend(("Command Melody", "Earth God's Lyric", "Wind God's Aria"))
         if not options.progression_short_sidequests:
             override_as_filler.extend(("Maggie's Letter", "Moblin's Letter"))
