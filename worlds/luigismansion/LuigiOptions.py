@@ -233,6 +233,14 @@ class Furnisanity(OptionSet):
     valid_keys = {"Hangables", "Ceiling", "Candles", "Seating", "Surfaces", "Plants", "Storage", "Drawers", "Decor", "Full", "Treasures"}
 
 
+class EarlyFirstKey(Toggle):
+    """
+    If enabled, this will attempt to find a key that lets you out of your starting room nad place it early in your own world.
+    """
+    display_name = "Early First Key"
+    internal_name = "early_first_key"
+
+
 class BooGates(Toggle):
     """
     Toggle the events that prevent progress unless a certain number of boos have been caught
@@ -471,6 +479,7 @@ class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     fear_animation: LuigiFearAnim
     pickup_animation: PickupAnim
     random_music: RandomMusic
+    early_first_key: EarlyFirstKey
     door_rando: DoorRando
     enemizer: Enemizer
     random_spawn: RandomSpawn

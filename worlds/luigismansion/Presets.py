@@ -14,6 +14,7 @@ all_random_settings = {
     LMOptions.StartHiddenMansion.internal_name:        "random",
     LMOptions.PickupAnim.internal_name:                "random",
     LMOptions.RandomMusic.internal_name:               "random",
+    LMOptions.EarlyFirstKey.internal_name:             "random",
     LMOptions.DoorRando.internal_name:                 "random",
     LMOptions.PortraitHints.internal_name:             "random",
     LMOptions.HintDistribution.internal_name:          "random",

@@ -74,6 +74,7 @@ class LMWeb(WebWorld):
             LuigiOptions.Enemizer,
             LuigiOptions.DoorRando,
             LuigiOptions.RandomSpawn,
+            LuigiOptions.EarlyFirstKey,
         ]),
         OptionGroup("Filler Weights", [
             LuigiOptions.BundleWeight,
@@ -630,6 +631,7 @@ class LMWorld(World):
             exclude += ["Poltergust 4000"]
         if self.options.boo_radar == 2:
             exclude += ["Boo Radar"]
+        item_list = []
         for item, data in ITEM_TABLE.items():
             if data.doorid in self.open_doors.keys() and self.open_doors.get(data.doorid) == 1:
                 exclude += [item]
@@ -639,7 +641,17 @@ class LMWorld(World):
                 copies_to_place = 1
             copies_to_place = 0 if copies_to_place - exclude.count(item) <= 0 else copies_to_place - exclude.count(item)
             for _ in range(copies_to_place):
+                item_list += item
                 self.itempool.append(self.create_item(item))
+        if self.options.early_first_key.value == 1:
+            early_key = ""
+            for key in spawn_locations[self.origin_region_name]["key"]:
+                if key in item_list:
+                    early_key = key
+                    break
+            if len(early_key) > 0:
+                self.multiworld.local_early_items[self.player][early_key] = 1
+
         # Calculate the number of additional filler items to create to fill all locations
         n_locations = len(self.multiworld.get_unfilled_locations(self.player))
         n_items = len(self.pre_fill_items) + len(self.itempool)
