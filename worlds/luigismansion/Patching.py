@@ -1526,6 +1526,9 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
                                     item_appear_entry["item0"] == actor_item_name)
         item_appear_entry_idx = filtered_item_appear[len(filtered_item_appear) - 1]
 
+        if item_data["loc_enum"] in [184, 185, 138, 139, 140, 141]:
+            furniture_info.info_file_field_entries[item_data["loc_enum"]]["move"] = "34"
+
         furniture_info.info_file_field_entries[item_data["loc_enum"]]["item_table"] = (
             item_appear_info.info_file_field_entries.index(item_appear_entry_idx))
 

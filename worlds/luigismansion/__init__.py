@@ -219,6 +219,11 @@ class LMWorld(World):
                             **LOCATION_DICT,
                             **SEATING_LOCATION_TABLE
                         }
+                    case "Candles":
+                        LOCATION_DICT = {
+                            **LOCATION_DICT,
+                            **CANDLES_LOCATION_TABLE
+                        }
                     case "Surfaces":
                         LOCATION_DICT = {
                             **LOCATION_DICT,
@@ -234,7 +239,7 @@ class LMWorld(World):
                             **LOCATION_DICT,
                             **DRAWERS_LOCATION_TABLE
                         }
-                    case "Treasure":
+                    case "Treasures":
                         LOCATION_DICT = {
                             **LOCATION_DICT,
                             **TREASURES_LOCATION_TABLE,

@@ -212,6 +212,8 @@ class Furnisanity(OptionSet):
 
     "Ceiling" includes ceiling fans and lights attached to the ceiling
 
+    "Candles" includes any candles tat can be interacted with
+
     "Seating" includes chairs, stools and other typs of seating
 
     "Surfaces" includes tables and other flat items
@@ -228,7 +230,7 @@ class Furnisanity(OptionSet):
     """
     display_name = "Furnisanity"
     internal_name = "furnisanity"
-    valid_keys = {"Hangables", "Ceiling", "Seating", "Surfaces", "Plants", "Storage", "Drawers", "Decor", "Full", "Treasures"}
+    valid_keys = {"Hangables", "Ceiling", "Candles", "Seating", "Surfaces", "Plants", "Storage", "Drawers", "Decor", "Full", "Treasures"}
 
 
 class BooGates(Toggle):
