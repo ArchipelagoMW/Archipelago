@@ -8,6 +8,7 @@
 *.apl2ac
 *.apm3
 *.apmc
+*.apmp1
 *.apz5
 *.aptloz
 *.apemerald
@@ -31,6 +32,7 @@
 *.apsave
 *.BIN
 *.puml
+*.iso
 
 setups
 build
