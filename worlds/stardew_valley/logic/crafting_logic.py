@@ -16,7 +16,7 @@ from ..data.craftable_data import CraftingRecipe, all_crafting_recipes_by_name
 from ..data.recipe_source import CutsceneSource, ShopTradeSource, ArchipelagoSource, LogicSource, SpecialOrderSource, \
     FestivalShopSource, QuestSource, StarterSource, ShopSource, SkillSource, MasterySource, FriendshipSource, SkillCraftsanitySource
 from ..locations import locations_by_tag, LocationTags
-from ..options import Craftsanity, SpecialOrderLocations, ExcludeGingerIsland, SkillProgression
+from ..options import Craftsanity, SpecialOrderLocations, ExcludeGingerIsland
 from ..stardew_rule import StardewRule, True_, False_
 from ..strings.region_names import Region
 
@@ -48,7 +48,7 @@ SkillLogicMixin, SpecialOrderLogicMixin, CraftingLogicMixin, QuestLogicMixin]]):
             else:
                 return self.logic.crafting.received_recipe(recipe.item)
         if isinstance(recipe.source, QuestSource):
-            if self.options.quest_locations < 0:
+            if self.options.quest_locations.has_no_story_quests():
                 return self.logic.crafting.can_learn_recipe(recipe)
             else:
                 return self.logic.crafting.received_recipe(recipe.item)
@@ -101,12 +101,13 @@ SkillLogicMixin, SpecialOrderLogicMixin, CraftingLogicMixin, QuestLogicMixin]]):
         craftsanity_prefix = "Craft "
         all_recipes_names = []
         exclude_island = self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
-        exclude_masteries = self.options.skill_progression != SkillProgression.option_progressive_with_masteries
+        exclude_masteries = not self.content.features.skill_progression.are_masteries_shuffled
         for location in locations_by_tag[LocationTags.CRAFTSANITY]:
             if not location.name.startswith(craftsanity_prefix):
                 continue
             if exclude_island and LocationTags.GINGER_ISLAND in location.tags:
                 continue
+            # FIXME Remove when recipes are in content packs
             if exclude_masteries and LocationTags.REQUIRES_MASTERIES in location.tags:
                 continue
             if location.mod_name and location.mod_name not in self.options.mods:
