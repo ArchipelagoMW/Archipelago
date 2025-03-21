@@ -1526,6 +1526,7 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
                                     item_appear_entry["item0"] == actor_item_name)
         item_appear_entry_idx = filtered_item_appear[len(filtered_item_appear) - 1]
 
+        # Adjust move types for WDYM furniture items. Trees require water, obviously
         if item_data["loc_enum"] in [184, 185, 138, 139, 140, 141]:
             furniture_info.info_file_field_entries[item_data["loc_enum"]]["move"] = 34
         if item_data["loc_enum"] in [9, 23, 314, 538, 539, 628, 629, 683]:

@@ -1548,9 +1548,9 @@ TREASURES_LOCATION_TABLE = {
 WDYM_LOCATION_TABLE ={
     "Roof Entry Hut": LMLocationData("Roof", 854, "Furniture", 716, [],
                                                               update_ram_addr=[LMRamData(in_game_room_id=63)]),
-    "Graveyard West Tree": LMLocationData("Graveyard", 855, "Furniture", 184, [],
+    "Graveyard West Tree": LMLocationData("Graveyard", 855, "Furniture", 184, ["Water Element Medal"],
                                                               update_ram_addr=[LMRamData(in_game_room_id=15)]),
-    "Graveyard East Tree": LMLocationData("Graveyard", 856, "Furniture", 185, [],
+    "Graveyard East Tree": LMLocationData("Graveyard", 856, "Furniture", 185, ["Water Element Medal"],
                                                               update_ram_addr=[LMRamData(in_game_room_id=15)]),
     "Courtyard Far West Tree": LMLocationData("Courtyard", 857, "Plant", 139, ["Water Element Medal"],
                                          update_ram_addr=[LMRamData(in_game_room_id=24)]),
