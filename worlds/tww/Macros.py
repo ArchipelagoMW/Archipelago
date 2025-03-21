@@ -41,10 +41,6 @@ def can_use_magic_armor(state: CollectionState, player: int) -> bool:
     return state.has("Magic Armor", player) and has_magic_meter(state, player)
 
 
-def can_use_hurricane_spin(state: CollectionState, player: int) -> bool:
-    return state.has("Hurricane Spin", player) and has_magic_meter(state, player)
-
-
 def can_aim_mirror_shield(state: CollectionState, player: int) -> bool:
     return has_mirror_shield(state, player) and (
         state.has_any(["Wind Waker", "Grappling Hook", "Boomerang", "Deku Leaf", "Hookshot"], player)
@@ -117,20 +113,8 @@ def has_deluxe_picto_box(state: CollectionState, player: int) -> bool:
     return state.has("Progressive Picto Box", player, 2)
 
 
-def has_60_bomb_bomb_bag(state: CollectionState, player: int) -> bool:
-    return state.has("Bomb Bag Capacity Upgrade", player, 1)
-
-
-def has_99_bomb_bomb_bag(state: CollectionState, player: int) -> bool:
-    return state.has("Bomb Bag Capacity Upgrade", player, 2)
-
-
-def has_60_arrow_quiver(state: CollectionState, player: int) -> bool:
+def has_any_quiver_upgrade(state: CollectionState, player: int) -> bool:
     return state.has("Quiver Capacity Upgrade", player, 1)
-
-
-def has_99_arrow_quiver(state: CollectionState, player: int) -> bool:
-    return state.has("Quiver Capacity Upgrade", player, 2)
 
 
 def has_magic_meter(state: CollectionState, player: int) -> bool:
@@ -209,7 +193,6 @@ def can_reach_earth_temple_sun_statue_room(state: CollectionState, player: int) 
         can_play_command_melody(state, player)
         and can_defeat_red_chuchus(state, player)
         and can_defeat_green_chuchus(state, player)
-        and can_defeat_dark_chuchus(state, player)
     )
 
 
@@ -804,18 +787,6 @@ def can_defeat_bokoblins(state: CollectionState, player: int) -> bool:
     )
 
 
-def can_defeat_green_bokoblins(state: CollectionState, player: int) -> bool:
-    return can_defeat_bokoblins(state, player)
-
-
-def can_defeat_blue_bokoblins(state: CollectionState, player: int) -> bool:
-    return can_defeat_bokoblins(state, player)
-
-
-def can_defeat_pink_bokoblins(state: CollectionState, player: int) -> bool:
-    return can_defeat_bokoblins(state, player)
-
-
 def can_defeat_moblins(state: CollectionState, player: int) -> bool:
     return (
         state.has_any(["Bombs", "Skull Hammer"], player)
@@ -887,10 +858,6 @@ def can_defeat_blue_chuchus(state: CollectionState, player: int) -> bool:
 
 def can_get_blue_chu_jelly_from_blue_chuchus(state: CollectionState, player: int) -> bool:
     return can_defeat_blue_chuchus(state, player) or state.has("Grappling Hook", player)
-
-
-def can_defeat_dark_chuchus(state: CollectionState, player: int) -> bool:
-    return True
 
 
 def can_defeat_keese(state: CollectionState, player: int) -> bool:
@@ -995,10 +962,6 @@ def can_defeat_armos(state: CollectionState, player: int) -> bool:
     )
 
 
-def can_defeat_armos_knights(state: CollectionState, player: int) -> bool:
-    return state.has("Bombs", player) or has_light_arrows(state, player)
-
-
 def can_defeat_big_octos(state: CollectionState, player: int) -> bool:
     return state.has_any(["Bombs", "Boomerang"], player) or has_heros_bow(state, player)
 
@@ -1006,7 +969,7 @@ def can_defeat_big_octos(state: CollectionState, player: int) -> bool:
 def can_defeat_12_eye_big_octos(state: CollectionState, player: int) -> bool:
     return (
         state.has_any(["Bombs", "Boomerang"], player)
-        or (has_heros_bow(state, player) and has_60_arrow_quiver(state, player))
+        or (has_heros_bow(state, player) and has_any_quiver_upgrade(state, player))
         or has_light_arrows(state, player)
     )
 
@@ -1046,18 +1009,6 @@ def can_defeat_redeads(state: CollectionState, player: int) -> bool:
     )
 
 
-def can_defeat_poes(state: CollectionState, player: int) -> bool:
-    return True
-
-
-def can_defeat_poes_without_light_ray(state: CollectionState, player: int) -> bool:
-    return (
-        state.has_any(["Boomerang", "Hookshot", "Skull Hammer", "Grappling Hook"], player)
-        or has_heros_sword(state, player)
-        or has_heros_bow(state, player)
-    )
-
-
 def can_defeat_jalhalla_poes(state: CollectionState, player: int) -> bool:
     return (
         state.has_any(["Bombs", "Skull Hammer"], player)
@@ -1090,52 +1041,12 @@ def can_defeat_morths(state: CollectionState, player: int) -> bool:
     )
 
 
-def can_defeat_rats(state: CollectionState, player: int) -> bool:
-    return (
-        state.has_any(["Bombs", "Boomerang", "Skull Hammer", "Grappling Hook"], player)
-        or has_heros_sword(state, player)
-        or has_heros_bow(state, player)
-    )
-
-
 def can_defeat_bombchus(state: CollectionState, player: int) -> bool:
     return (
         state.has_any(["Boomerang", "Skull Hammer", "Grappling Hook"], player)
         or has_heros_sword(state, player)
         or has_heros_bow(state, player)
     )
-
-
-def can_cut_down_dexivines(state: CollectionState, player: int) -> bool:
-    return (
-        state.has_any(["Bombs", "Boomerang", "Skull Hammer", "Grappling Hook", "Hookshot"], player)
-        or has_heros_sword(state, player)
-        or has_heros_bow(state, player)
-    )
-
-
-def can_defeat_dexivines(state: CollectionState, player: int) -> bool:
-    return False
-
-
-def can_defeat_freshwater_octoroks(state: CollectionState, player: int) -> bool:
-    return state.has_any(["Boomerang", "Hookshot"], player) or has_heros_bow(state, player)
-
-
-def can_defeat_saltwater_octoroks(state: CollectionState, player: int) -> bool:
-    return state.has_any(["Boomerang", "Hookshot"], player) or has_heros_bow(state, player)
-
-
-def can_defeat_beamos(state: CollectionState, player: int) -> bool:
-    return True
-
-
-def can_defeat_gyorgs(state: CollectionState, player: int) -> bool:
-    return state.has("Boomerang", player) or has_heros_bow(state, player) or state.has("Hookshot", player)
-
-
-def can_defeat_gunboats(state: CollectionState, player: int) -> bool:
-    return state.has("Bombs", player)
 
 
 def can_defeat_gohma(state: CollectionState, player: int) -> bool:

@@ -149,8 +149,6 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         and can_aim_mirror_shield(state, player)
         and can_defeat_redeads(state, player)
         and can_defeat_blue_bubbles(state, player)
-        and can_defeat_dark_chuchus(state, player)
-        and can_defeat_poes(state, player)
         and can_defeat_stalfos(state, player)
         and state.has("Skull Hammer", player),
     )
@@ -865,7 +863,6 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         lambda state: state.has("Ghost Ship Chart", player)
         and can_play_ballad_of_gales(state, player)
         and can_defeat_wizzrobes(state, player)
-        and can_defeat_poes(state, player)
         and can_defeat_redeads(state, player)
         and can_defeat_stalfos(state, player),
     )
