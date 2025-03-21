@@ -13,7 +13,7 @@ from .locations import candy_box_locations, CandyBox2Location, village_shop_loca
     wishing_well_locations, wishing_well_glove_locations, wishing_well_tribal_spear_locations, \
     wishing_well_monkey_wizard_staff_locations, wishing_well_knight_body_armour_locations, \
     wishing_well_octopus_king_crown_locations, wishing_well_giant_spoon_locations, hole_locations, \
-    desert_fortress_locations, teapot_quest_locations, xinopherydron_quest_locations, ledge_room_quest_locations, \
+    desert_fortress_locations, teapot_quest_locations, xinopherydon_quest_locations, ledge_room_quest_locations, \
     castle_trap_room_locations, squirrel_tree_locations, the_sea_locations, lonely_house_locations, dig_spot_locations, \
     yourself_fight_locations, castle_dark_room_locations
 from .rules import weapon_is_at_least, armor_is_at_least
@@ -61,7 +61,7 @@ def create_regions(world):
     populate_region(multiworld, player, CandyBox2Region("The Lonely House", player, multiworld, "The Lonely House"), lonely_house_locations, world_map_1)
 
     # The Desert
-    _, desert_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Desert", player, multiworld, "The Desert"), desert_locations, world_map_1, lambda state: weapon_is_at_least(state, player, "Iron Axe"))
+    _, desert_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Desert", player, multiworld, "The Desert"), desert_locations, world_map_1)
     mark_quest_entrance(world, desert_quest_entrance, "The Desert Click")
 
     # This is connected to world_map_2 because it is only accessible once you see the stones in the cave
@@ -78,32 +78,32 @@ def create_regions(world):
 
     # The Cave
     the_cave, _ = populate_region(multiworld, player, CandyBox2Region("The Cave", player, multiworld, "The Cave"), cave_locations, world_map_2)
-    _, octopus_king_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Octopus King Quest", player, multiworld, "The Octopus King"), octopus_king_locations, the_cave, lambda state: state.has("The Sorceress' Cauldron", player) and weapon_is_at_least(state, player, "The Troll's Bludgeon") and armor_is_at_least(state, player, "Lightweight Body Armour"))
+    _, octopus_king_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Octopus King Quest", player, multiworld, "The Octopus King"), octopus_king_locations, the_cave)
     mark_quest_entrance(world, octopus_king_quest_entrance, "The Octopus King Click")
-    _, naked_monkey_wizard_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Naked Monkey Wizard", player, multiworld, "The Naked Monkey Wizard"), naked_monkey_wizard_locations, the_cave, lambda state: state.has("Boots of Introspection", player) and state.has("The Beginners' Grimoire", player) and state.has("Octopus King Crown with Jaspers", player) and weapon_is_at_least(state, player, "The Troll's Bludgeon") and armor_is_at_least(state, player, "Lightweight Body Armour"))
+    _, naked_monkey_wizard_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Naked Monkey Wizard", player, multiworld, "The Naked Monkey Wizard"), naked_monkey_wizard_locations, the_cave)
     mark_quest_entrance(world, naked_monkey_wizard_quest_entrance, "Naked Monkey Wizard Click")
 
     # The Bridge
-    _, bridge_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Bridge", player, multiworld, "The Bridge"), bridge_locations, world_map_2, lambda state: weapon_is_at_least(state, player, "Polished Silver Sword"))
+    _, bridge_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Bridge", player, multiworld, "The Bridge"), bridge_locations, world_map_2)
     mark_quest_entrance(world, bridge_quest_entrance, "The Bridge Click")
 
     populate_region(multiworld, player, CandyBox2Region("The Sorceress' Hut", player, multiworld, "The Sorceress' Hut"), sorceress_hut_locations, world_map_3)
 
-    _, sea_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Sea", player, multiworld, "The Sea"), the_sea_locations, world_map_4, lambda state: weapon_is_at_least(state, player, "Enchanted Monkey Wizard Staff") and armor_is_at_least(state, player, "Lightweight Body Armour"))
+    _, sea_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Sea", player, multiworld, "The Sea"), the_sea_locations, world_map_4)
     mark_quest_entrance(world, sea_quest_entrance, "The Sea Click")
 
     # The Forest
-    _, forest_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Forest", player, multiworld, "The Forest"), forest_locations, world_map_4, lambda state: weapon_is_at_least(state, player, "Enchanted Monkey Wizard Staff") and state.has("Octopus King Crown with Jaspers", player) and armor_is_at_least(state, player, "Lightweight Body Armour"))
+    _, forest_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Forest", player, multiworld, "The Forest"), forest_locations, world_map_4)
     mark_quest_entrance(world, forest_quest_entrance, "The Forest Click")
 
     # The Castle
-    _, castle_entrance_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Castle Entrance", player, multiworld, "The Castle Entrance"), castle_entrance_locations, world_map_5, lambda state: weapon_is_at_least(state, player, "Enchanted Monkey Wizard Staff") and state.has("Octopus King Crown with Jaspers", player) and armor_is_at_least(state, player, "Lightweight Body Armour") and state.has("Unicorn Horn", player) and state.has("Xinopherydon Claw", player))
+    _, castle_entrance_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Castle Entrance", player, multiworld, "The Castle Entrance"), castle_entrance_locations, world_map_5)
     mark_quest_entrance(world, castle_entrance_quest_entrance, "Castle Entrance Click")
 
     _, hole_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Hole", player, multiworld, "The Hole"), hole_locations, world_map_5)
     mark_quest_entrance(world, hole_quest_entrance, "Hole Click")
 
-    _, giant_nougat_monster_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Giant Nougat Monster", player, multiworld, "The Giant Nougat Monster"), giant_nougat_monster_locations, castle, lambda state: weapon_is_at_least(state, player, "Summoning Tribal Spear") and state.has("Boots of Introspection", player) and state.has("Octopus King Crown with Obsidian", player))
+    _, giant_nougat_monster_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Giant Nougat Monster", player, multiworld, "The Giant Nougat Monster"), giant_nougat_monster_locations, castle)
     mark_quest_entrance(world, giant_nougat_monster_quest_entrance, "Giant Nougat Monster Click")
 
     _, castle_trap_room_entrance = populate_region(multiworld, player, CandyBox2Region("The Trap Room", player, multiworld, "The Trap Room"), castle_trap_room_locations, castle)
@@ -111,7 +111,7 @@ def create_regions(world):
 
     populate_region(multiworld, player, CandyBox2Region("The Dark Room", player, multiworld, "The Dark Room"), castle_dark_room_locations, castle)
 
-    _, castle_egg_room_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Castle Egg Room", player, multiworld, "The Castle Egg Room"), castle_egg_room_locations, castle, lambda state: state.has("Rocket Boots", player))
+    _, castle_egg_room_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Castle Egg Room", player, multiworld, "The Castle Egg Room"), castle_egg_room_locations, castle)
     mark_quest_entrance(world, castle_egg_room_quest_entrance, "Castle Egg Room Click")
 
     dragon_room, _ = populate_region(multiworld, player, CandyBox2Region("Dragon Room", player, multiworld, "The Dragon Room"), dragon_locations, castle)
@@ -119,26 +119,26 @@ def create_regions(world):
     # The lighthouse is parented to the dragon room because its puzzles are dependent on reaching the dragon first
     populate_region(multiworld, player, CandyBox2Region("The Lighthouse", player, multiworld, "The Lighthouse"), lighthouse_locations, dragon_room)
 
-    _, hell_quest_entrance = populate_region(multiworld, player, CandyBox2Region("Hell", player, multiworld, "Hell"), hell_locations, dragon_room, lambda state: state.has("Black Magic Grimoire", player) and state.has("Boots of Introspection", player) and state.has("Enchanted Monkey Wizard Staff", player))
+    _, hell_quest_entrance = populate_region(multiworld, player, CandyBox2Region("Hell", player, multiworld, "Hell"), hell_locations, dragon_room)
     mark_quest_entrance(world, hell_quest_entrance, "Hell Room Click")
 
-    _, the_developer_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Developer Quest", player, multiworld, "The Developer Quest"), the_developer_fight_locations, dragon_room, lambda state: weapon_is_at_least(state, player, "Scythe") and state.has("The Sorceress' Cauldron", player) and state.has("Xinopherydon Claw", player))
+    _, the_developer_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Developer Quest", player, multiworld, "The Developer Quest"), the_developer_fight_locations, dragon_room)
     mark_quest_entrance(world, the_developer_quest_entrance, "The Developer Quest Click")
 
     # The Desert Fortress
     desert_fortress, _ = populate_region(multiworld, player, CandyBox2Region("The Desert Fortress", player, multiworld, "The Desert Fortress"), desert_fortress_locations, world_map_1, lambda state: state.has("Desert Fortress Key", player))
 
-    _, xinopherydron_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Xinopherydron Quest", player, multiworld, "The Xinopherydron Quest"), xinopherydron_quest_locations, desert_fortress, lambda state: state.has("Enchanted Monkey Wizard Staff", player) or state.has("Octopus King Crown with Jaspers", player))
-    mark_quest_entrance(world, xinopherydron_quest_entrance, "The Xinopherydron Quest Click")
+    _, xinopherydon_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Xinopherydon Quest", player, multiworld, "The Xinopherydron Quest"), xinopherydon_quest_locations, desert_fortress)
+    mark_quest_entrance(world, xinopherydon_quest_entrance, "The Xinopherydon Quest Click")
 
-    _, teapot_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Teapot Quest", player, multiworld, "The Teapot Quest"), teapot_quest_locations, desert_fortress, lambda state: weapon_is_at_least(state, player, "Scythe") and state.has("Octopus King Crown with Obsidian", player) and state.has("The Sorceress' Cauldron", player) and state.has("Xinopherydon Claw", player))
+    _, teapot_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Teapot Quest", player, multiworld, "The Teapot Quest"), teapot_quest_locations, desert_fortress)
     mark_quest_entrance(world, teapot_quest_entrance, "The Teapot Quest Click")
 
-    _, ledge_room_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Ledge Room Quest", player, multiworld, "The Ledge Room Quest"), ledge_room_quest_locations, desert_fortress, lambda state: (state.has("Octopus King Crown with Obsidian", player) and state.has("The Pogo Stick", player) and (state.has("A desert bird feather", player) or state.has("Rocket Boots", player))))
+    _, ledge_room_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The Ledge Room Quest", player, multiworld, "The Ledge Room Quest"), ledge_room_quest_locations, desert_fortress)
     mark_quest_entrance(world, ledge_room_quest_entrance, "The Ledge Room Quest Click")
 
     # X Potion region
-    _, x_potion_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The X Potion Quest", player, multiworld, "The X Potion Quest"), yourself_fight_locations, candy_box, lambda state: state.has("The Sorceress' Cauldron", player) and state.has("The Octopus King Crown", player))
+    _, x_potion_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The X Potion Quest", player, multiworld, "The X Potion Quest"), yourself_fight_locations, candy_box, lambda state: state.has("The Sorceress' Cauldron", player))
     mark_x_quest_entrance(world, x_potion_quest_entrance, "The X Potion Quest Click")
 
 def populate_region(world: MultiWorld, player: int, region: CandyBox2Region, locations: dict[str, int], parent: Region | None, rule: Optional[Callable[[CollectionState], bool]] = None):
