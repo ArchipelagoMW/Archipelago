@@ -108,14 +108,14 @@ class TestRules(unittest.TestCase):
         take_over_ai_allies: int = options.TakeOverAIAllies.default,
         kerrigan_presence: int = options.KerriganPresence.default,
         # setting this to everywhere catches one extra logic check for Amon's Fall without missing any
-        spear_of_adun_passive_presence: int = options.SpearOfAdunAutonomouslyCastAbilityPresence.option_everywhere,
+        spear_of_adun_passive_presence: int = options.SpearOfAdunPassiveAbilityPresence.option_everywhere,
     ) -> TestWorld:
         test_world = TestWorld()
         test_world.options.required_tactics.value = required_tactics
         test_world.options.all_in_map.value = all_in_map
         test_world.options.take_over_ai_allies.value = take_over_ai_allies
         test_world.options.kerrigan_presence.value = kerrigan_presence
-        test_world.options.spear_of_adun_autonomously_cast_ability_presence.value = spear_of_adun_passive_presence
+        test_world.options.spear_of_adun_passive_ability_presence.value = spear_of_adun_passive_presence
         test_world.logic = SC2Logic(test_world)  # type: ignore
         return test_world
 

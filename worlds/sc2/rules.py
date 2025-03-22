@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Set, Optional, Callable, Dict, Tuple
 from BaseClasses import CollectionState, Location
 from .options import (
     get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap,
-    GrantStoryTech, GrantStoryLevels, SpearOfAdunAutonomouslyCastAbilityPresence,
+    GrantStoryTech, GrantStoryLevels, SpearOfAdunPassiveAbilityPresence,
     SpearOfAdunPresence, MissionOrder, EnableMorphling,
     get_enabled_campaigns, get_enabled_races,
 )
@@ -42,7 +42,7 @@ class SC2Logic:
         self.basic_zerg_units = get_basic_units(self.logic_level, SC2Race.ZERG)
         self.basic_protoss_units = get_basic_units(self.logic_level, SC2Race.PROTOSS)
         self.spear_of_adun_presence = SpearOfAdunPresence.default if world is None else world.options.spear_of_adun_presence.value
-        self.spear_of_adun_autonomously_cast_presence = get_option_value(world, "spear_of_adun_autonomously_cast_ability_presence")
+        self.spear_of_adun_passive_presence = get_option_value(world, "spear_of_adun_passive_ability_presence")
         self.enabled_campaigns = get_enabled_campaigns(world)
         self.mission_order = get_option_value(world, "mission_order")
         self.generic_upgrade_missions = get_option_value(world, "generic_upgrade_missions")
@@ -2271,7 +2271,7 @@ class SC2Logic:
                             or self.protoss_fleet(state)
                         )
                         and (self.terran_sustainable_mech_heal(state)
-                            or (self.spear_of_adun_autonomously_cast_presence == SpearOfAdunAutonomouslyCastAbilityPresence.option_everywhere
+                            or (self.spear_of_adun_passive_presence == SpearOfAdunPassiveAbilityPresence.option_everywhere
                                  and state.has(item_names.RECONSTRUCTION_BEAM, self.player)
                             )
                         )

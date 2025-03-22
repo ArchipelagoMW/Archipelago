@@ -34,8 +34,8 @@ from .options import (
     LocationInclusion, ExtraLocations, MasteryLocations, SpeedrunLocations, PreventativeLocations, ChallengeLocations,
     VanillaLocations,
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
-    SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
-    SpearOfAdunAutonomouslyCastPresentInNoBuild, EnableVoidTrade, VoidTradeAgeLimit, void_trade_age_limits_ms,
+    SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunPassiveAbilityPresence,
+    SpearOfAdunPassivesPresentInNoBuild, EnableVoidTrade, VoidTradeAgeLimit, void_trade_age_limits_ms,
     DifficultyDamageModifier, MissionOrderScouting, GenericUpgradeResearchSpeedup, MercenaryHighlanders
 )
 from .mission_order.slot_data import CampaignSlotData, LayoutSlotData, MissionSlotData
@@ -392,8 +392,8 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             ConfigurableOptionInfo('soa_in_nobuilds', 'spear_of_adun_present_in_no_build', options.SpearOfAdunPresentInNoBuild, can_break_logic=True),
             # Note(mm): Technically SOA passive presence is in the logic for Amon's Fall if Takeover AI Allies is true,
             # but that's edge case enough I don't think we should warn about it.
-            ConfigurableOptionInfo('soa_passive_presence', 'spear_of_adun_autonomously_cast_ability_presence', options.SpearOfAdunAutonomouslyCastAbilityPresence),
-            ConfigurableOptionInfo('soa_passives_in_nobuilds', 'spear_of_adun_autonomously_cast_present_in_no_build', options.SpearOfAdunAutonomouslyCastPresentInNoBuild),
+            ConfigurableOptionInfo('soa_passive_presence', 'spear_of_adun_passive_ability_presence', options.SpearOfAdunPassiveAbilityPresence),
+            ConfigurableOptionInfo('soa_passives_in_nobuilds', 'spear_of_adun_passive_present_in_no_build', options.SpearOfAdunPassivesPresentInNoBuild),
             ConfigurableOptionInfo('max_upgrade_level', 'max_upgrade_level', options.MaxUpgradeLevel, ConfigurableOptionType.INTEGER),
             ConfigurableOptionInfo('generic_upgrade_research', 'generic_upgrade_research', options.GenericUpgradeResearch),
             ConfigurableOptionInfo('generic_upgrade_research_speedup', 'generic_upgrade_research_speedup', options.GenericUpgradeResearchSpeedup),
@@ -633,8 +633,8 @@ class SC2Context(CommonContext):
         self.take_over_ai_allies: int = TakeOverAIAllies.default
         self.spear_of_adun_presence = SpearOfAdunPresence.option_not_present
         self.spear_of_adun_present_in_no_build = SpearOfAdunPresentInNoBuild.option_false
-        self.spear_of_adun_autonomously_cast_ability_presence = SpearOfAdunAutonomouslyCastAbilityPresence.option_not_present
-        self.spear_of_adun_autonomously_cast_present_in_no_build = SpearOfAdunAutonomouslyCastPresentInNoBuild.option_false
+        self.spear_of_adun_passive_ability_presence = SpearOfAdunPassiveAbilityPresence.option_not_present
+        self.spear_of_adun_passive_present_in_no_build = SpearOfAdunPassivesPresentInNoBuild.option_false
         self.minerals_per_item: int = 15  # For backwards compat with games generated pre-0.4.5
         self.vespene_per_item: int =  15  # For backwards compat with games generated pre-0.4.5
         self.starting_supply_per_item: int = 2  # For backwards compat with games generated pre-0.4.5
@@ -836,8 +836,12 @@ class SC2Context(CommonContext):
             self.take_over_ai_allies = args["slot_data"].get("take_over_ai_allies", TakeOverAIAllies.option_false)
             self.spear_of_adun_presence = args["slot_data"].get("spear_of_adun_presence", SpearOfAdunPresence.option_not_present)
             self.spear_of_adun_present_in_no_build = args["slot_data"].get("spear_of_adun_present_in_no_build", SpearOfAdunPresentInNoBuild.option_false)
-            self.spear_of_adun_autonomously_cast_ability_presence = args["slot_data"].get("spear_of_adun_autonomously_cast_ability_presence", SpearOfAdunAutonomouslyCastAbilityPresence.option_not_present)
-            self.spear_of_adun_autonomously_cast_present_in_no_build = args["slot_data"].get("spear_of_adun_autonomously_cast_present_in_no_build", SpearOfAdunAutonomouslyCastPresentInNoBuild.option_false)
+            if self.slot_data_version < 4:
+                self.spear_of_adun_passive_ability_presence = args["slot_data"].get("spear_of_adun_autonomously_cast_ability_presence", SpearOfAdunPassiveAbilityPresence.option_not_present)
+                self.spear_of_adun_passive_present_in_no_build = args["slot_data"].get("spear_of_adun_autonomously_cast_present_in_no_build", SpearOfAdunPassivesPresentInNoBuild.option_false)
+            else:
+                self.spear_of_adun_passive_ability_presence = args["slot_data"].get("spear_of_adun_passive_ability_presence", SpearOfAdunPassiveAbilityPresence.option_not_present)
+                self.spear_of_adun_passive_present_in_no_build = args["slot_data"].get("spear_of_adun_passive_present_in_no_build", SpearOfAdunPassivesPresentInNoBuild.option_false)
             self.minerals_per_item = args["slot_data"].get("minerals_per_item", 15)
             self.vespene_per_item = args["slot_data"].get("vespene_per_item", 15)
             self.starting_supply_per_item = args["slot_data"].get("starting_supply_per_item", 2)
@@ -1516,13 +1520,13 @@ def caclulate_soa_options(ctx: SC2Context) -> int:
     # Bits 3,4
     # Autocasts
     soa_autocasts_presence_value = 0
-    if ctx.spear_of_adun_autonomously_cast_ability_presence == SpearOfAdunAutonomouslyCastAbilityPresence.option_not_present:
+    if ctx.spear_of_adun_passive_ability_presence == SpearOfAdunPassiveAbilityPresence.option_not_present:
         soa_autocasts_presence_value = 0
-    elif ctx.spear_of_adun_autonomously_cast_ability_presence == SpearOfAdunAutonomouslyCastAbilityPresence.option_lotv_protoss:
+    elif ctx.spear_of_adun_passive_ability_presence == SpearOfAdunPassiveAbilityPresence.option_lotv_protoss:
         soa_autocasts_presence_value = 1
-    elif ctx.spear_of_adun_autonomously_cast_ability_presence == SpearOfAdunAutonomouslyCastAbilityPresence.option_protoss:
+    elif ctx.spear_of_adun_passive_ability_presence == SpearOfAdunPassiveAbilityPresence.option_protoss:
         soa_autocasts_presence_value = 2
-    elif ctx.spear_of_adun_autonomously_cast_ability_presence == SpearOfAdunAutonomouslyCastAbilityPresence.option_everywhere:
+    elif ctx.spear_of_adun_passive_ability_presence == SpearOfAdunPassiveAbilityPresence.option_everywhere:
         soa_autocasts_presence_value = 3
     # Guardian Shell breaks without SoA on version 4+, but can be generated without SoA on version 3
     if ctx.slot_data_version < 4 and soa_autocasts_presence_value < 2:
@@ -1531,7 +1535,7 @@ def caclulate_soa_options(ctx: SC2Context) -> int:
 
     # Bit 5
     # Autocasts in no-builds
-    if ctx.spear_of_adun_autonomously_cast_present_in_no_build == SpearOfAdunAutonomouslyCastPresentInNoBuild.option_true:
+    if ctx.spear_of_adun_passive_present_in_no_build == SpearOfAdunPassivesPresentInNoBuild.option_true:
         result |= 1 << 5
 
     return result

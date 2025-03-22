@@ -395,7 +395,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
                 SC2Race.PROTOSS.get_title(),
             },
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
-            'spear_of_adun_max_autonomously_cast_abilities': target_number,
+            'spear_of_adun_max_passive_abilities': target_number,
         }
 
         self.generate_world(world_options)
