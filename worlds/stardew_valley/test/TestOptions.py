@@ -2,9 +2,10 @@ import itertools
 
 from BaseClasses import ItemClassification
 from Options import NamedRange
-from . import SVTestCase, allsanity_no_mods_6_x_x, allsanity_mods_6_x_x, solo_multiworld, SVTestBase
+from . import SVTestCase, solo_multiworld, SVTestBase
 from .assertion import WorldAssertMixin
 from .long.option_names import all_option_choices
+from .options.presets import allsanity_no_mods_6_x_x, allsanity_mods_6_x_x
 from .. import items_by_group, Group, StardewValleyWorld
 from ..locations import locations_by_tag, LocationTags, location_table
 from ..options import ExcludeGingerIsland, ToolProgression, Goal, SeasonRandomization, TrapItems, SpecialOrderLocations, ArcadeMachineLocations
