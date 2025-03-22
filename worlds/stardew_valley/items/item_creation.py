@@ -688,7 +688,7 @@ def remove_excluded_items_island_mods(items, exclude_ginger_island: bool, mods: 
 
 
 def generate_filler_choice_pool(options: StardewValleyOptions) -> list[str]:
-    include_traps = options.trap_items != TrapItems.option_no_traps
+    include_traps = options.trap_difficulty != TrapDifficulty.option_no_traps
     exclude_island = options.exclude_ginger_island == ExcludeGingerIsland.option_true
 
     available_filler = get_all_filler_items(include_traps, exclude_island)
