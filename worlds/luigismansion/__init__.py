@@ -58,6 +58,7 @@ class LMWeb(WebWorld):
         OptionGroup("Extra Locations", [
             LuigiOptions.Furnisanity,
             LuigiOptions.Toadsanity,
+            LuigiOptions.GoldMice,
             LuigiOptions.Boosanity,
             LuigiOptions.Portrification,
             LuigiOptions.SpeedySpirits,
@@ -266,22 +267,17 @@ class LMWorld(World):
                         else:
                             add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
                 region.locations.append(entry)
-
+        if self.options.gold_mice:
+            for location, data in GOLD_MICE_LOCATION_TABLE.items():
+                region = self.get_region(data.region)
+                entry = LMLocation(self.player, location, region, data)
+                add_rule(entry, lambda state: state.has("Blackout", self.player), "and")
+                region.locations.append(entry)
         if self.options.speedy_spirits:
             for location, data in SPEEDY_LOCATION_TABLE.items():
                 region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
                 add_rule(entry, lambda state: state.has("Blackout", self.player), "and")
-                if len(entry.access) != 0:
-                    for item in entry.access:
-                        if item == "Fire Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                        elif item == "Water Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                        elif item == "Ice Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                        else:
-                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
                 region.locations.append(entry)
         if self.options.portrification:
             for location, data in PORTRAIT_LOCATION_TABLE.items():
@@ -328,7 +324,7 @@ class LMWorld(World):
                     add_rule(entry, lambda state: state.can_reach_location("Graveyard Clear Chest", self.player))
                 elif entry.code in [778, 782, 784, 789, 790, 851]:
                     add_rule(entry, lambda state: state.can_reach_location("Balcony Clear Chest", self.player))
-                elif entry.code == 757 and self.options.enemizer.value == 0:
+                elif entry.code == 757 and self.options.enemizer.value != 2:
                     add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
                 if len(entry.access) != 0:
                     for item in entry.access:
@@ -764,6 +760,7 @@ class LMWorld(World):
             "door rando list": self.open_doors,
             "ghost elements": self.ghost_affected_regions,
             "toadsanity": self.options.toadsanity.value,
+            "gold_mice": self.options.gold_mice.value,
             "furnisanity": self.options.furnisanity.value,
             "boosanity": self.options.boosanity.value,
             "portrait ghosts": self.options.portrification.value,

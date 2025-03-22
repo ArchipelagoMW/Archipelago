@@ -476,6 +476,14 @@ class TrapLink(Toggle):
     internal_name = "trap_link"
 
 
+class GoldMice(Toggle):
+    """
+    Adds Gold Mice as locations to be checked.
+    """
+    display_name = " Gold Mice"
+    internal_name = "gold_mice"
+
+
 @dataclass
 class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     rank_requirement: RankRequirement
@@ -493,6 +501,7 @@ class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     portrait_hints: PortraitHints
     hint_distribution: HintDistribution
     toadsanity: Toadsanity
+    gold_mice: GoldMice
     furnisanity: Furnisanity
     boosanity: Boosanity
     portrification: Portrification

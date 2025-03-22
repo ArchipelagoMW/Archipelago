@@ -1660,7 +1660,6 @@ SPEEDY_LOCATION_TABLE: dict[str, LMLocationData] = {
 }
 
 GOLD_MICE_LOCATION_TABLE: dict[str, LMLocationData] = {
-    # TODO split into separate option
     "Study Cheese Gold Mouse":        LMLocationData("Study", 659, "Mouse", 75, [], remote_only=True,
         update_ram_addr=[LMRamData(0x803D5DC4, bit_position=4, in_game_room_id=35)]),
     "Fortune Teller Cheese Mouse":    LMLocationData("Fortune-Teller's Room", 660, "Mouse", 52, [], remote_only=True,
