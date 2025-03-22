@@ -558,7 +558,12 @@ exits_for_region: Dict[str, List[ExitData]] = {
     RegionName.WORLD_OF_EVIL: [
         ExitData(
             RegionName.DEATHTOLL,
-            [ItemName.SOULARMOR, ItemName.SOULBLADE, ItemName.PHOENIX],
+            [
+                ItemName.SOULARMOR,
+                ItemName.SOULBLADE,
+                ItemName.PHOENIX,
+                ItemName.SOUL_MAGICIAN,
+            ],
             [],
             RuleFlag.PHOENIX_CUTSCENE,
         )
@@ -588,6 +593,7 @@ exits_for_region_open_deathtoll: Dict[str, List[ExitData]] = {
                 ItemName.SOULARMOR,
                 ItemName.SOULBLADE,
                 ItemName.PHOENIX,
+                ItemName.SOUL_MAGICIAN,
             ],
         )
     ],
