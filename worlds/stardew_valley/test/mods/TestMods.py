@@ -1,7 +1,7 @@
+from BaseClasses import  ItemClassification
 from .. import SVTestBase, SVTestCase, allsanity_mods_6_x_x
 from ..assertion import ModAssertMixin, WorldAssertMixin
-from ... import items, Group, ItemClassification
-from ... import options
+from ... import options, items, Group
 
 
 class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
@@ -95,3 +95,17 @@ class TestNoGingerIslandModItemGeneration(SVTestBase):
                     self.assertNotIn(progression_item.name, all_created_items)
                 else:
                     self.assertIn(progression_item.name, all_created_items)
+
+
+class TestVanillaLogicAlternativeWhenQuestsAreNotRandomized(WorldAssertMixin, SVTestBase):
+    """We often forget to add an alternative rule that works when quests are not randomized. When this happens, some
+    Location are not reachable because they depend on items that are only added to the pool when quests are randomized.
+    """
+    options = allsanity_mods_6_x_x() | {
+        options.QuestLocations.internal_name: options.QuestLocations.special_range_names["none"],
+        options.Goal.internal_name: options.Goal.option_perfection,
+    }
+
+    def test_given_no_quest_all_mods_when_generate_then_can_reach_everything(self):
+        self.collect_everything()
+        self.assert_can_reach_everything(self.multiworld)
