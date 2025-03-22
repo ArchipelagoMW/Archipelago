@@ -14,10 +14,23 @@ from .rules import set_rules
 
 EXPECTED_CLIENT_VERSION = "20250321-1+"
 
+class CandyBox2WebWorld(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up Candy Box 2 for Archipelago.",
+        "English",
+        "guide_en.md",
+        "setup/en",
+        ["Victor Tran"]
+    )]
+
+    location_descriptions = location_descriptions
+
 class CandyBox2World(World):
     """Text-based web game with fun ASCII art"""
 
     game = "Candy Box 2"
+    web = CandyBox2WebWorld()
     base_id = 1
     location_name_to_id = locations
     item_name_to_id = {name: data.code for name, data in items.items() if data.code is not None}
@@ -78,15 +91,3 @@ class CandyBox2World(World):
         slot_data = self.fill_slot_data()
         for entrance in slot_data.get("entranceInformation", []):
             spoiler_handle.write(f"{entrance[0]} -> {entrance[1]}\n")
-
-class CandyBox2WebWorld(WebWorld):
-    tutorials = [Tutorial(
-        "Multiworld Setup Guide",
-        "A guide to setting up Candy Box 2 for Archipelago.",
-        "English",
-        "guide_en.md",
-        "setup/en",
-        ["Victor Tran"]
-    )]
-
-    location_descriptions = location_descriptions
