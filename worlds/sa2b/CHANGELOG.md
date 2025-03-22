@@ -6,22 +6,22 @@
 ### Features:
 - New Goal
   - Minigame Madness
-    - Win a certain number of each type of Minigame Trap, then defeat the Finalhazard to win!
+	- Win a certain number of each type of Minigame Trap, then defeat the Finalhazard to win!
 	- How many of each Minigame are required can be set by an Option
 	- When the required amount of a Minigame has been received, that Minigame can be replayed in the Chao World Lobby
 - New optional Location Checks
   - Bigsanity
-    - Go fishing with Big in each stage for a Location Check
+	- Go fishing with Big in each stage for a Location Check
   - Itemboxsanity
-    - Either Extra Life Boxes or All Item Boxes
+	- Either Extra Life Boxes or All Item Boxes
 - New Items
   - New Traps
-    - Literature Trap
+	- Literature Trap
 	- Controller Drift Trap
 	- Poison Trap
 	- Bee Trap
   - New Minigame Traps
-    - Breakout Trap
+	- Breakout Trap
 	- Fishing Trap
 	- Trivia Trap
 	- Pokemon Trivia Trap
