@@ -418,6 +418,12 @@ class MultiWorld():
     def get_regions(self, player: Optional[int] = None) -> Collection[Region]:
         return self.regions if player is None else self.regions.region_cache[player].values()
 
+    def get_reachable_regions(self, state: Optional[CollectionState] = None,
+                                player: Optional[int] = None) -> List[Region]:
+        """Retrieve every region that can be reached from the `player` with the given `state`"""
+        state: CollectionState = state if state else self.state
+        return [region for region in self.get_regions(player) if region.can_reach(state)]
+
     def get_region(self, region_name: str, player: int) -> Region:
         return self.regions.region_cache[player][region_name]
 
@@ -492,6 +498,12 @@ class MultiWorld():
         return Utils.RepeatableChain(tuple(self.regions.entrance_cache[player].values()
                                            for player in self.regions.entrance_cache))
 
+    def get_reachable_entrances(self, state: Optional[CollectionState] = None,
+                                player: Optional[int] = None) -> List[Entrance]:
+        """Retrieve every entrance that can be reached from the `player` with the given `state`"""
+        state: CollectionState = state if state else self.state
+        return [entrance for entrance in self.get_entrances(player) if entrance.can_reach(state)]
+
     def register_indirect_condition(self, region: Region, entrance: Entrance):
         """Report that access to this Region can result in unlocking this Entrance,
         state.can_reach(Region) in the Entrance's traversal condition, as opposed to pure transition logic."""
@@ -509,7 +521,9 @@ class MultiWorld():
     def get_filled_locations(self, player: Optional[int] = None) -> List[Location]:
         return [location for location in self.get_locations(player) if location.item is not None]
 
-    def get_reachable_locations(self, state: Optional[CollectionState] = None, player: Optional[int] = None) -> List[Location]:
+    def get_reachable_locations(self, state: Optional[CollectionState] = None,
+                                player: Optional[int] = None) -> List[Location]:
+        """Retrieve every entrances that can be reached from the `player` with the given `state`"""
         state: CollectionState = state if state else self.state
         return [location for location in self.get_locations(player) if location.can_reach(state)]
 
