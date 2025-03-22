@@ -19,24 +19,24 @@ candy_box_locations = {
 village_locations = {}
 
 village_shop_locations = {
-    "Top Lollipop": 100,
-    "Centre Lollipop": 101,
-    "Bottom Lollipop": 102,
-    "Chocolate Bar": 103,
-    "Time Ring": 104,
-    "Candy Merchant's Hat": 105,
-    "Leather Gloves": 106,
-    "Leather Boots": 107
+    "Village Shop Top Lollipop": 100,
+    "Village Shop Centre Lollipop": 101,
+    "Village Shop Bottom Lollipop": 102,
+    "Village Shop Chocolate Bar": 103,
+    "Village Shop Time Ring": 104,
+    "Village Shop Candy Merchant's Hat": 105,
+    "Village Shop Leather Gloves": 106,
+    "Village Shop Leather Boots": 107
 }
 
 village_house_1_locations = {
-    "Lollipop on the bookshelf": 200,
-    "Lollipop in the bookshelf": 201,
-    "Lollipop under the rug": 202
+    "Village House Lollipop on the bookshelf": 200,
+    "Village House Lollipop in the bookshelf": 201,
+    "Village House Lollipop under the rug": 202
 }
 
 village_cellar_locations = {
-    "Cellar Quest": 300
+    "Cellar Quest Cleared": 300
 }
 
 # Cleared rat quest
@@ -63,12 +63,12 @@ map_stage_6_locations = {}
 map_stage_7_locations = {}
 
 desert_locations = {
-    "Desert Quest": 1100,
-    "Desert Bird Feather": 1101,
+    "Desert Quest Cleared": 1100,
+    "Desert Bird Feather Acquired": 1101,
 }
 
 bridge_locations = {
-    "Bridge Quest": 1200,
+    "Troll Defeated": 1200,
     "The Troll's Bludgeon Acquired": 1201
 }
 
@@ -79,48 +79,48 @@ cave_locations = {
 }
 
 forest_locations = {
-    "Forest Quest": 1400
+    "Forest Quest Cleared": 1400
 }
 
 castle_entrance_locations = {
-    "Castle Entrance Quest": 1500,
+    "Castle Entrance Quest Cleared": 1500,
     "Knight Body Armour Acquired": 1501,
 }
 
 giant_nougat_monster_locations = {
-    "The Giant Nougat Monster Quest": 1600
+    "The Giant Nougat Monster Defeated": 1600
 }
 
 village_house_2_locations = {}
 
 sorceress_hut_locations = {
-    "Lollipop on the shelves": 1800,
-    "Beginner's Grimoire": 1801,
-    "Advanced Grimoire": 1802,
-    "Sorceress' Cauldron": 1803,
-    "Sorceress' Hat": 1804,
+    "Sorceress' Hut Lollipop on the shelves": 1800,
+    "Sorceress' Hut Beginner's Grimoire": 1801,
+    "Sorceress' Hut Advanced Grimoire": 1802,
+    "Sorceress' Hut Cauldron": 1803,
+    "Sorceress' Hut Hat": 1804,
 }
 
 octopus_king_locations = {
-    "Octopus King Quest": 1900
+    "Octopus King Defeated": 1900
 }
 
 naked_monkey_wizard_locations = {
-    "Monkey Wizard Quest": 2000,
+    "Monkey Wizard Defeated": 2000,
 }
 
 castle_egg_room_locations = {
-    "Egg Room Chest": 2100
+    "Egg Room Quest cleared": 2100
 }
 
 dragon_locations = {}
 
 hell_locations = {
-    "Kill the Devil": 2300
+    "Devil Defeated": 2300
 }
 
 the_developer_fight_locations = {
-    "Kill the Developer": 2400
+    "The Developer Defeated": 2400
 }
 
 lighthouse_locations = {
@@ -128,24 +128,24 @@ lighthouse_locations = {
 }
 
 forge_1_locations = {
-    "Lollipop on Exhaust Chute": 2600,
-    "Buy Wooden Sword": 2601
+    "Village Forge Lollipop on Exhaust Chute": 2600,
+    "Village Forge Buy Wooden Sword": 2601
 }
 
 forge_2_locations = {
-    "Buy Iron Axe": 2700
+    "Village Forge Buy Iron Axe": 2700
 }
 
 forge_3_locations = {
-    "Buy Polished Silver Sword": 2800,
+    "Village Forge Buy Polished Silver Sword": 2800,
 }
 
 forge_4_locations = {
-    "Buy Lightweight Body Armour": 2900
+    "Village Forge Buy Lightweight Body Armour": 2900
 }
 
 forge_5_locations = {
-    "Buy Scythe": 3000
+    "Village Forge Buy Scythe": 3000
 }
 
 wishing_well_locations = {}
@@ -177,22 +177,22 @@ wishing_well_giant_spoon_locations = {
 }
 
 hole_locations = {
-    "Tribal Spear Acquired": 3700,
-    "Desert Fortress Key Acquired": 3701,
-    "Heart Pendant Acquired": 3702,
-    "Black Magic Grimoire Acquired": 3703,
-    "Four Chocolate Bars in The Hole Acquired": 3704
+    "The Hole Tribal Warrior Defeated": 3700,
+    "The Hole Desert Fortress Key Acquired": 3701,
+    "The Hole Heart Pendant Acquired": 3702,
+    "The Hole Black Magic Grimoire Acquired": 3703,
+    "The Hole Four Chocolate Bars in The Hole Acquired": 3704
 }
 
 desert_fortress_locations = {}
 
 teapot_quest_locations = {
-    "Giant Spoon Acquired": 3900
+    "Teapot Defeated": 3900
 }
 
 xinopherydon_quest_locations = {
-    "Xinopherydon Claw Acquired": 4000,
-    "Unicorn Horn Acquired": 4001
+    "Xinopherydon Defeated": 4000,
+    "Xinopherydon Quest Unicorn Horn Acquired": 4001
 }
 
 ledge_room_quest_locations = {
@@ -231,7 +231,7 @@ lonely_house_locations = {
 }
 
 yourself_fight_locations = {
-    "Boots of Introspection Acquired": 4800
+    "Yourself Defeated": 4800
 }
 
 castle_bakehouse_locations = {
