@@ -176,7 +176,7 @@ ENEMIZER_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Kitchen Clear Chest": LMLocationData("Kitchen", 53, "Chest", 5, [],
         update_ram_addr=[LMRamData(0x803CDF60, bit_position=2, in_game_room_id=7, ram_byte_size=2)]),
     "1F Bathroom Shelf Key": LMLocationData("1F Bathroom", 54, "Freestanding", 3, [],
-        update_ram_addr=[LMRamData(0x803D33A6, bit_position=6, in_game_room_id=21, ram_byte_size=2)]),
+        update_ram_addr=[LMRamData(0x803D33A6, bit_position=6, in_game_room_id=21)]),
     "Graveyard Clear Chest": LMLocationData("Graveyard", 711, "Chest", 11, [],
         update_ram_addr=[LMRamData(0x803CDF70, bit_position=2, in_game_room_id=15, ram_byte_size=2)]),
     "Courtyard Clear Chest": LMLocationData("Courtyard", 55, "Chest", 14, [],
