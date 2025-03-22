@@ -182,7 +182,7 @@ class PeaksOfWorld(World):
 
         elif self.options.goal.value == Goal.option_all:
             self.multiworld.completion_condition[self.player] = lambda state: all(
-                state.can_reach_location(loc.name, self.player) for loc in self.get_locations())
+                state.can_reach_location(loc.name, self.player) for loc in self.multiworld.get_locations(self.player))
 
     def fill_slot_data(self) -> dict[str, Any]:
         return self.options.as_dict("death_link", "goal", "rope_unlock_mode", casing="camel")
