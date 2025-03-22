@@ -8,8 +8,7 @@ class TestBitFlagsVanilla(SVTestBase):
                BuildingProgression.internal_name: BuildingProgression.option_vanilla}
 
     def test_options_are_not_detected_as_progressive(self):
-        world_options = self.world.options
-        tool_progressive = world_options.tool_progression & ToolProgression.option_progressive
+        tool_progressive = self.world.content.features.tool_progression.is_progressive
         building_progressive = self.world.content.features.building_progression.is_progressive
         self.assertFalse(tool_progressive)
         self.assertFalse(building_progressive)
@@ -25,8 +24,7 @@ class TestBitFlagsVanillaCheap(SVTestBase):
                BuildingProgression.internal_name: BuildingProgression.option_vanilla_cheap}
 
     def test_options_are_not_detected_as_progressive(self):
-        world_options = self.world.options
-        tool_progressive = world_options.tool_progression & ToolProgression.option_progressive
+        tool_progressive = self.world.content.features.tool_progression.is_progressive
         building_progressive = self.world.content.features.building_progression.is_progressive
         self.assertFalse(tool_progressive)
         self.assertFalse(building_progressive)
@@ -42,8 +40,7 @@ class TestBitFlagsVanillaVeryCheap(SVTestBase):
                BuildingProgression.internal_name: BuildingProgression.option_vanilla_very_cheap}
 
     def test_options_are_not_detected_as_progressive(self):
-        world_options = self.world.options
-        tool_progressive = world_options.tool_progression & ToolProgression.option_progressive
+        tool_progressive = self.world.content.features.tool_progression.is_progressive
         building_progressive = self.world.content.features.building_progression.is_progressive
         self.assertFalse(tool_progressive)
         self.assertFalse(building_progressive)
@@ -59,8 +56,7 @@ class TestBitFlagsProgressive(SVTestBase):
                BuildingProgression.internal_name: BuildingProgression.option_progressive}
 
     def test_options_are_detected_as_progressive(self):
-        world_options = self.world.options
-        tool_progressive = world_options.tool_progression & ToolProgression.option_progressive
+        tool_progressive = self.world.content.features.tool_progression.is_progressive
         building_progressive = self.world.content.features.building_progression.is_progressive
         self.assertTrue(tool_progressive)
         self.assertTrue(building_progressive)
@@ -76,8 +72,7 @@ class TestBitFlagsProgressiveCheap(SVTestBase):
                BuildingProgression.internal_name: BuildingProgression.option_progressive_cheap}
 
     def test_options_are_detected_as_progressive(self):
-        world_options = self.world.options
-        tool_progressive = world_options.tool_progression & ToolProgression.option_progressive
+        tool_progressive = self.world.content.features.tool_progression.is_progressive
         building_progressive = self.world.content.features.building_progression.is_progressive
         self.assertTrue(tool_progressive)
         self.assertTrue(building_progressive)
@@ -93,8 +88,7 @@ class TestBitFlagsProgressiveVeryCheap(SVTestBase):
                BuildingProgression.internal_name: BuildingProgression.option_progressive_very_cheap}
 
     def test_options_are_detected_as_progressive(self):
-        world_options = self.world.options
-        tool_progressive = world_options.tool_progression & ToolProgression.option_progressive
+        tool_progressive = self.world.content.features.tool_progression.is_progressive
         building_progressive = self.world.content.features.building_progression.is_progressive
         self.assertTrue(tool_progressive)
         self.assertTrue(building_progressive)
