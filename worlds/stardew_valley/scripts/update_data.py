@@ -12,7 +12,7 @@ from typing import List
 
 from worlds.stardew_valley import LocationData
 from worlds.stardew_valley.items import load_item_csv, Group, ItemData
-from worlds.stardew_valley.locations import load_location_csv, LocationTags
+from worlds.stardew_valley.locations import load_location_csv
 
 RESOURCE_PACK_CODE_OFFSET = 5000
 script_folder = Path(__file__)
@@ -56,9 +56,9 @@ if __name__ == "__main__":
                                        and item.code_without_offset is not None) + 1)
 
     resource_pack_counter = itertools.count(max(item.code_without_offset
-                                       for item in loaded_items
-                                       if Group.RESOURCE_PACK in item.groups
-                                       and item.code_without_offset is not None) + 1)
+                                                for item in loaded_items
+                                                if Group.RESOURCE_PACK in item.groups
+                                                and item.code_without_offset is not None) + 1)
     items_to_write = []
     for item in loaded_items:
         if item.code_without_offset is None:

@@ -67,7 +67,8 @@ class BlasphemousWorld(World):
 
     def generate_early(self):
         if not self.options.starting_location.randomized:
-            if self.options.starting_location == "mourning_havoc" and self.options.difficulty < 2:
+            if (self.options.starting_location == "knot_of_words" or self.options.starting_location == "rooftops" \
+                or self.options.starting_location == "mourning_havoc") and self.options.difficulty < 2:
                 raise OptionError(f"[Blasphemous - '{self.player_name}'] "
                                 f"{self.options.starting_location} cannot be chosen if Difficulty is lower than Hard.")
 
@@ -83,6 +84,8 @@ class BlasphemousWorld(World):
             locations: List[int] = [ 0, 1, 2, 3, 4, 5, 6 ]
 
             if self.options.difficulty < 2:
+                locations.remove(4)
+                locations.remove(5)
                 locations.remove(6)
 
             if self.options.dash_shuffle:
@@ -102,6 +105,9 @@ class BlasphemousWorld(World):
 
         if not self.options.wall_climb_shuffle:
             self.multiworld.push_precollected(self.create_item("Wall Climb Ability"))
+
+        if self.options.thorn_shuffle == "local_only":
+            self.options.local_items.value.add("Thorn Upgrade")
 
         if not self.options.boots_of_pleading:
             self.disabled_locations.append("RE401")
@@ -200,9 +206,6 @@ class BlasphemousWorld(World):
 
         if not self.options.skill_randomizer:
             self.place_items_from_dict(skill_dict)
-
-        if self.options.thorn_shuffle == "local_only":
-            self.options.local_items.value.add("Thorn Upgrade")
         
 
     def place_items_from_set(self, location_set: Set[str], name: str):
