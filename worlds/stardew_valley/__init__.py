@@ -1,7 +1,7 @@
 import logging
 import typing
 from random import Random
-from typing import Dict, Any, Iterable, Optional, List, TextIO, cast
+from typing import Dict, Any, Iterable, Optional, List, TextIO
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from Options import PerGameCommonOptions
@@ -314,29 +314,6 @@ class StardewValleyWorld(World):
         if not self.filler_item_pool_names:
             self.filler_item_pool_names = generate_filler_choice_pool(self.options)
         return self.random.choice(self.filler_item_pool_names)
-
-    def generate_filler_item_pool_names(self):
-        include_traps, exclude_island = self.get_filler_item_rules()
-        available_filler = get_all_filler_items(include_traps, exclude_island)
-        available_filler = remove_limited_amount_packs(available_filler)
-        self.filler_item_pool_names = [item.name for item in available_filler]
-
-    def get_filler_item_rules(self):
-        if self.player in self.multiworld.groups:
-            link_group = self.multiworld.groups[self.player]
-            include_traps = True
-            exclude_island = False
-            for player in link_group["players"]:
-                if self.multiworld.game[player] != self.game:
-                    continue
-                player_options = cast(StardewValleyOptions, self.multiworld.worlds[player].options)
-                if player_options.trap_difficulty == TrapDifficulty.option_no_traps:
-                    include_traps = False
-                if player_options.exclude_ginger_island == ExcludeGingerIsland.option_true:
-                    exclude_island = True
-            return include_traps, exclude_island
-        else:
-            return self.options.trap_difficulty != TrapDifficulty.option_no_traps, self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         """Write to the spoiler header. If individual it's right at the end of that player's options,
