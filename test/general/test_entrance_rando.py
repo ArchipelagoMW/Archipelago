@@ -218,7 +218,7 @@ class TestRandomizeEntrances(unittest.TestCase):
         self.assertEqual(80, len(result.pairings))
         self.assertEqual(80, len(result.placements))
 
-    def test_coupling(self):
+    def test_coupled(self):
         """tests that in coupled mode, all 2 way transitions have an inverse"""
         multiworld = generate_test_multiworld()
         generate_disconnected_region_grid(multiworld, 5)
@@ -235,6 +235,36 @@ class TestRandomizeEntrances(unittest.TestCase):
                                      on_connect=verify_coupled)
         # if we didn't visit every placement the verification on_connect doesn't really mean much
         self.assertEqual(len(result.placements), seen_placement_count)
+
+    def test_uncoupled_succeeds_stage1_indirect_condition(self):
+        multiworld = generate_test_multiworld()
+        menu = multiworld.get_region("Menu", 1)
+        generate_entrance_pair(menu, "_right", ERTestGroups.RIGHT)
+        end = Region("End", 1, multiworld)
+        multiworld.regions.append(end)
+        generate_entrance_pair(end, "_left", ERTestGroups.LEFT)
+        multiworld.register_indirect_condition(end, None)
+
+        result = randomize_entrances(multiworld.worlds[1], False, directionally_matched_group_lookup)
+        self.assertSetEqual({
+            ("Menu_right", "End_left"),
+            ("End_left", "Menu_right")
+        }, set(result.pairings))
+
+    def test_coupled_succeeds_stage1_indirect_condition(self):
+        multiworld = generate_test_multiworld()
+        menu = multiworld.get_region("Menu", 1)
+        generate_entrance_pair(menu, "_right", ERTestGroups.RIGHT)
+        end = Region("End", 1, multiworld)
+        multiworld.regions.append(end)
+        generate_entrance_pair(end, "_left", ERTestGroups.LEFT)
+        multiworld.register_indirect_condition(end, None)
+
+        result = randomize_entrances(multiworld.worlds[1], True, directionally_matched_group_lookup)
+        self.assertSetEqual({
+            ("Menu_right", "End_left"),
+            ("End_left", "Menu_right")
+        }, set(result.pairings))
 
     def test_uncoupled(self):
         """tests that in uncoupled mode, no transitions have an (intentional) inverse"""
