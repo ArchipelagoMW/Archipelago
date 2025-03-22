@@ -102,6 +102,16 @@ def set_rules(world: World, player: int):
     # X Potion
     add_rule(world.get_location("Boots of Introspection Acquired"), lambda state: state.has("The Octopus King Crown", player))
 
+    # Sorceress items
+    add_rule(world.get_location("Beginner's Grimoire"), lambda state: can_grow_lollipops(state, player))
+    add_rule(world.get_location("Advanced Grimoire"), lambda state: can_grow_lollipops(state, player))
+    add_rule(world.get_location("Sorceress' Hat"), lambda state: can_grow_lollipops(state, player))
+    add_rule(world.get_location("Sorceress' Cauldron"), lambda state: can_grow_lollipops(state, player))
+
+    # Merchant items
+    add_rule(world.get_location("Chocolate Bar"), lambda state: can_farm_candies(state, player))
+    add_rule(world.get_location("Candy Merchant's Hat"), lambda state: can_farm_candies(state, player))
+
 def weapon_is_at_least(state: CollectionState, player: int, minimum_weapon: str):
     for weapon in weapons[weapons.index(minimum_weapon):]:
         if state.has(weapon, player):
@@ -113,3 +123,17 @@ def armor_is_at_least(state: CollectionState, player: int, minimum_armor: str):
         if state.has(armor, player):
             return True
     return False
+
+def chocolate_count(state: CollectionState, player: int):
+    return state.count("Chocolate Bar", player) + (4 * state.count("4 Chocolate Bars", player)) + (3 * state.count("3 Chocolate Bars", player))
+
+def lollipop_count(state: CollectionState, player: int):
+    return state.count("3 Lollipops", player)*3 + state.count("Lollipop", player)
+
+# Allows the player to plant enough lollipops at the farm for 1/minute
+def can_grow_lollipops(state: CollectionState, player: int):
+    return lollipop_count(state, player) >= 11
+
+# Ideally allows the player to stumble upon a quest they can use to farm candies
+def can_farm_candies(state: CollectionState, player: int):
+    return can_grow_lollipops(state, player) or state.count("Progressive World Map", player) >= 3
