@@ -5,8 +5,6 @@ import pkgutil
 import tempfile
 import typing
 import logging
-import re
-
 import bsdiff4
 
 import settings
@@ -14,13 +12,12 @@ from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Loc
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 from .Common import *
-from . import ItemIconGuessing
+from .ForeignItemIcons import ForeignItemIconMatcher
 from .Items import (DungeonItemData, DungeonItemType, ItemName, LinksAwakeningItem, TradeItemData,
                     ladxr_item_to_la_item_name, links_awakening_items, links_awakening_items_by_name,
                     links_awakening_item_name_groups)
 from .LADXR import generator
 from .LADXR.itempool import ItemPool as LADXRItemPool
-from .LADXR.locations.constants import CHEST_ITEMS
 from .LADXR.locations.instrument import Instrument
 from .LADXR.logic import Logic as LADXRLogic
 from .LADXR.main import get_parser
@@ -420,44 +417,6 @@ class LinksAwakeningWorld(World):
         fill_restrictive(self.multiworld, partial_all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True, single_player_placement=True, allow_partial=False)
 
 
-    name_cache = {}
-    # Tries to associate an icon from another game with an icon we have
-    def guess_icon_for_other_world(self, foreign_item):
-        if not self.name_cache:
-            for item in ladxr_item_to_la_item_name.keys():
-                self.name_cache[item] = item
-                splits = item.split("_")
-                for word in item.split("_"):
-                    if word not in ItemIconGuessing.BLOCKED_ASSOCIATIONS and not word.isnumeric():
-                        self.name_cache[word] = item
-            for name in ItemIconGuessing.SYNONYMS.values():
-                assert name in self.name_cache, name
-                assert name in CHEST_ITEMS, name
-            self.name_cache.update(ItemIconGuessing.SYNONYMS)
-            pluralizations = {k + "S": v for k, v in self.name_cache.items()}
-            self.name_cache = pluralizations | self.name_cache
-
-        uppered = foreign_item.name.upper()
-        foreign_game = self.multiworld.game[foreign_item.player]
-        phrases = ItemIconGuessing.PHRASES.copy()
-        if foreign_game in ItemIconGuessing.GAME_SPECIFIC_PHRASES:
-            phrases.update(ItemIconGuessing.GAME_SPECIFIC_PHRASES[foreign_game])
-
-        for phrase, icon in phrases.items():
-            if phrase.upper() in uppered:
-                return icon
-        # pattern for breaking down camelCase, also separates out digits
-        pattern = re.compile(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=\d)")
-        possibles = pattern.sub(' ', foreign_item.name).upper()
-        for ch in "[]()_":
-            possibles = possibles.replace(ch, " ")
-        possibles = possibles.split()
-        for name in possibles:
-            if name in self.name_cache:
-                return self.name_cache[name]
-
-        return "TRADING_ITEM_LETTER"
-
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld):
         rom_file = get_base_rom_path()
@@ -465,6 +424,7 @@ class LinksAwakeningWorld(World):
             raise FileNotFoundError(rom_file)
 
     def generate_output(self, output_directory: str):
+        matcher = ForeignItemIconMatcher()
         # copy items back to locations
         for r in self.multiworld.get_regions(self.player):
             for loc in r.locations:
@@ -478,7 +438,8 @@ class LinksAwakeningWorld(World):
                     # If the item name contains "sword", use a sword icon, etc
                     # Otherwise, use a cute letter as the icon
                     elif self.options.foreign_item_icons == 'guess_by_name':
-                        loc.ladxr_item.item = self.guess_icon_for_other_world(loc.item)
+                        game = self.multiworld.game[loc.item.player]
+                        loc.ladxr_item.item = matcher.get_icon_for_other_world(loc.item.name, game)
                         loc.ladxr_item.setCustomItemName(loc.item.name)
 
                     else:
@@ -486,7 +447,7 @@ class LinksAwakeningWorld(World):
                             loc.ladxr_item.item = 'PIECE_OF_POWER'
                         else:
                             loc.ladxr_item.item = 'GUARDIAN_ACORN'
-                        loc.ladxr_item.custom_item_name = loc.item.name
+                        loc.ladxr_item.setCustomItemName = loc.item.name
 
                     if loc.item:
                         loc.ladxr_item.item_owner = loc.item.player
