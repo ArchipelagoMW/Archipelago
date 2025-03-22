@@ -223,7 +223,7 @@ class LuigisMansionRandomizer:
         list_events = ["03", "22", "24", "29", "33", "35", "38", "50", "61", "64", "65",
                        "66", "67", "68", "71", "72", "74", "75", "82", "86", "87", "88", "89", "90"]
         if self.output_data["Options"]["gold_mice"] == 1:
-            list_events += [95, 97, 98, 99, 100]
+            list_events += ["95", "97", "98", "99", "100"]
         for custom_event in list_events:
             self.update_custom_event(custom_event, True)
 
