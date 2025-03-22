@@ -121,7 +121,7 @@ magics:
   operand: 0
   classification: 1
   description: Shoots a Phoenix Projectile whenever you swing your sword. Costs 2 gems per swing. Requires the Soul Blade and Soul Armor to be equipped to use.
-inventory-items:
+inventory_items:
 - name: Goat's Food
   id: 25
   operand: 0
@@ -322,7 +322,7 @@ inventory-items:
   operand: 0
   classification: 2
   description: Equip to consume no gems when casting magic.
-misc-items:
+misc_items:
 - name: Nothing
   id: 0
   operand: 0
@@ -338,7 +338,7 @@ misc-items:
   operand: 250
   classification: 0
   description: A (possibly) random quantity of EXP.
-npc-releases:
+npc_releases:
 - name: Village Chief's House
   id: 253
   operand: 2
@@ -1210,7 +1210,7 @@ souls:
   operand: 4
   classification: 1
   description: Allows you to see the hidden passages in Magridd Castle in Act 6.
-special-items:
+special_items:
 - name: Victory
   id: 250
   operand: 0

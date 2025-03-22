@@ -1,14 +1,9 @@
 from dataclasses import dataclass, replace
 from BaseClasses import ItemClassification
-from . import get_data_file_bytes
+from . import get_data_file_bytes, dw
 from .Enums import ItemID, IDOffset, NPCID, SoulID
-from ..Util import int_to_bcd, is_frozen
+from ..Util import int_to_bcd
 
-
-if is_frozen():
-    from ..dataclass_wizard import YAMLWizard
-else:
-    from dataclass_wizard import YAMLWizard
 
 
 @dataclass(frozen=True)
@@ -52,7 +47,7 @@ class SoulBlazerItemData:
 
 
 @dataclass(frozen=True)
-class SoulBlazerItemsData(YAMLWizard):
+class SoulBlazerItemsData(dw.YAMLWizard):
     swords: list[SoulBlazerItemData]
     armors: list[SoulBlazerItemData]
     magics: list[SoulBlazerItemData]

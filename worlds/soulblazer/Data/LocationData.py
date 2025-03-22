@@ -1,14 +1,6 @@
 from dataclasses import dataclass
 from .Enums import LocationType, RuleFlag, IDOffset, LairID, ChestID, NPCRewardID
-from . import get_data_file_bytes
-from ..Util import is_frozen
-
-# Installing packages from requirements.txt is not supported from frozen AP installs for
-# dynamically loaded AP Worlds. This can be simplified if/when the world is merged into AP.
-if is_frozen():
-    from ..dataclass_wizard import YAMLWizard
-else:
-    from dataclass_wizard import YAMLWizard
+from . import get_data_file_bytes, dw
 
 
 @dataclass(frozen=True)
@@ -35,7 +27,7 @@ class SoulBlazerLocationData:
 
 
 @dataclass(frozen=True)
-class SoulBlazerLocationsData(YAMLWizard):
+class SoulBlazerLocationsData(dw.YAMLWizard):
     chests: list[SoulBlazerLocationData]
     lairs: list[SoulBlazerLocationData]
     npc_rewards: list[SoulBlazerLocationData]

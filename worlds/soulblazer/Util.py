@@ -113,7 +113,3 @@ class Rectangle:
     def contains(self, x: int, y: int) -> bool:
         return self.x <= x <= self.x + self.width and self.y <= y <= self.y + self.height
 
-
-def is_frozen() -> bool:
-    """Check if the current execution environment has been compiled by cx_Freeze."""
-    return getattr(sys, "frozen", False)
