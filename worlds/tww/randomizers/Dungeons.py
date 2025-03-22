@@ -210,7 +210,7 @@ def modify_dungeon_location_rules(multiworld: MultiWorld) -> None:
                         add_item_rule(
                             location,
                             lambda item: item.name != "DRC Big Key"
-                            and (item.player, "DRC Small Key") in dungeon_specific,
+                            or (item.player, "DRC Small Key") in dungeon_specific,
                         )
 
                     # Add item rule to ensure dungeon items are in their own dungeon when they should be.
