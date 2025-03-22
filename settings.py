@@ -282,7 +282,8 @@ class Group:
                 attr = cast(object, getattr(self, name))
                 attr_cls = type_hints[name] if name in type_hints else attr.__class__
                 attr_cls_origin = typing.get_origin(attr_cls)
-                while attr_cls_origin is Union:  # resolve to first type for doc string
+                # resolve to first type for doc string
+                while attr_cls_origin is Union or attr_cls_origin is types.UnionType:
                     attr_cls = typing.get_args(attr_cls)[0]
                     attr_cls_origin = typing.get_origin(attr_cls)
                 if attr_cls.__doc__ and attr_cls.__module__ != "builtins":
@@ -791,7 +792,17 @@ class Settings(Group):
         if location:
             from Utils import parse_yaml
             with open(location, encoding="utf-8-sig") as f:
-                options = parse_yaml(f.read())
+                from yaml.error import MarkedYAMLError
+                try:
+                    options = parse_yaml(f.read())
+                except MarkedYAMLError as ex:
+                    if ex.problem_mark:
+                        f.seek(0)
+                        lines = f.readlines()
+                        problem_line = lines[ex.problem_mark.line]
+                        error_line = " " * ex.problem_mark.column + "^"
+                        raise Exception(f"{ex.context} {ex.problem}\n{problem_line}{error_line}")
+                    raise ex
                 # TODO: detect if upgrade is required
                 # TODO: once we have a cache for _world_settings_name_cache, detect if any game section is missing
                 self.update(options or {})

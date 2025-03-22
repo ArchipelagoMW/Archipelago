@@ -1,4 +1,5 @@
 import logging
+import typing
 from random import Random
 from typing import Dict, Any, Iterable, Optional, List, TextIO, cast
 
@@ -18,6 +19,7 @@ from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRand
 from .options.forced_options import force_change_options_if_incompatible
 from .options.option_groups import sv_option_groups
 from .options.presets import sv_options_presets
+from .options.worlds_group import apply_most_restrictive_options
 from .regions import create_regions
 from .rules import set_rules
 from .stardew_rule import True_, StardewRule, HasProgressionPercent
@@ -89,6 +91,16 @@ class StardewValleyWorld(World):
     randomized_entrances: Dict[str, str]
 
     total_progression_items: int
+
+    @classmethod
+    def create_group(cls, multiworld: MultiWorld, new_player_id: int, players: set[int]) -> World:
+        world_group = super().create_group(multiworld, new_player_id, players)
+
+        group_options = typing.cast(StardewValleyOptions, world_group.options)
+        worlds_options = [typing.cast(StardewValleyOptions, multiworld.worlds[player].options) for player in players]
+        apply_most_restrictive_options(group_options, worlds_options)
+
+        return world_group
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
@@ -300,7 +312,7 @@ class StardewValleyWorld(World):
 
     def get_filler_item_name(self) -> str:
         if not self.filler_item_pool_names:
-            self.generate_filler_item_pool_names()
+            self.filler_item_pool_names = generate_filler_choice_pool(self.options)
         return self.random.choice(self.filler_item_pool_names)
 
     def generate_filler_item_pool_names(self):
