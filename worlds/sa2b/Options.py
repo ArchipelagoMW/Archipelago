@@ -520,7 +520,7 @@ class LevelGateCosts(Choice):
     option_low = 0
     option_medium = 1
     option_high = 2
-    default = 2
+    default = 0
 
 
 class MaximumEmblemCap(Range):
