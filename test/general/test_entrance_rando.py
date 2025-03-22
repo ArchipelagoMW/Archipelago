@@ -146,10 +146,9 @@ class TestDisconnectForRandomization(unittest.TestCase):
         e = r1.create_exit("e")
         e.randomization_type = EntranceType.ONE_WAY
         e.randomization_group = 1
-        e.vanilla_target_name = "foo"
         e.connect(r2)
 
-        disconnect_entrance_for_randomization(e)
+        disconnect_entrance_for_randomization(e, one_way_target_name="foo")
 
         self.assertIsNone(e.connected_region)
         self.assertEqual([], r1.entrances)
@@ -182,10 +181,9 @@ class TestDisconnectForRandomization(unittest.TestCase):
         e = r1.create_exit("e")
         e.randomization_type = EntranceType.ONE_WAY
         e.randomization_group = 1
-        e.vanilla_target_name = "foo"
         e.connect(r2)
 
-        disconnect_entrance_for_randomization(e, 2)
+        disconnect_entrance_for_randomization(e, 2, "foo")
 
         self.assertIsNone(e.connected_region)
         self.assertEqual([], r1.entrances)
