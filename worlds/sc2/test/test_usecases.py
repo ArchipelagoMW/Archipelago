@@ -424,7 +424,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         self.assertLessEqual(len(nova_weapons), target_number)
 
 
-    def test_nova_max_gadgets(self):
+    def test_nova_max_abilities(self):
         target_number: int = 3
         world_options = {
             'mission_order': options.MissionOrder.option_grid,
@@ -433,7 +433,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
                 SC2Race.TERRAN.get_title(),
             },
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
-            'nova_max_gadgets': target_number,
+            'nova_max_abilities': target_number,
         }
 
         self.generate_world(world_options)

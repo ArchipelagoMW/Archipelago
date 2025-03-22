@@ -773,6 +773,7 @@ class SpearOfAdunMaxActiveAbilities(Range):
 
     Note: Warp in Reinforcements is treated as a second level of Warp in Pylon
     """
+    display_name = "Spear of Adun Maximum Active Abilities"
     range_start = 0
     range_end = sum([item.quantity for item_name, item in item_tables.get_full_item_list().items() if item_name in item_tables.spear_of_adun_calldowns])
     default = range_end
@@ -783,6 +784,7 @@ class SpearOfAdunMaxAutocastAbilities(Range):
     Determines the maximum number of Spear of Adun autonomously cast abilities that can be present in the game
     Additional abilities may spawn if those are required to beat the game.
     """
+    display_name = "Spear of Adun Maximum Passive Abilities"
     range_start = 0
     range_end = sum(item.quantity for item_name, item in item_tables.get_full_item_list().items() if item_name in item_tables.spear_of_adun_castable_passives)
     default = range_end
@@ -831,21 +833,24 @@ class NovaMaxWeapons(Range):
 
     Note: Nova can swap between unlocked weapons anytime during the gameplay.
     """
+    display_name = "Nova Maximum Weapons"
     range_start = 0
     range_end = len(nova_weapons)
     default = range_end
 
 
-class NovaMaxGadgets(Range):
+class NovaMaxAbilities(Range):
     """
-    Determines maximum number of Nova gadgets that can be present in the game
-    Additional gadgets may spawn if those are required to beat the game.
+    Determines maximum number of Nova non-weapon abilities that can be present in the game
+    Additional abilities may spawn if those are required to beat the game.
 
-    Note: Nova can use any unlocked gadget anytime during the gameplay.
+    Note: Nova can use any unlocked ability anytime during gameplay.
     """
+    display_name = "Nova Maximum Abilities"
     range_start = 0
     range_end = len(nova_gadgets)
     default = range_end
+
 
 class NovaGhostOfAChanceVariant(Choice):
     """
@@ -1246,12 +1251,14 @@ class LowestMaximumSupply(Range):
 
 class ResearchCostReductionPerItem(Range):
     """
-    Controls how much weapon/armor research cost is cut per item.
+    Controls how much weapon/armor research cost is cut per research cost filler item.
     Affects both minerals and vespene.
     """
+    display_name = "Upgrade Cost Discount Per Item"
     range_start = 0
     range_end = 10
     default = 2
+
 
 class FillerRatio(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
     """
@@ -1397,7 +1404,7 @@ class Starcraft2Options(PerGameCommonOptions):
     grant_story_tech: GrantStoryTech
     grant_story_levels: GrantStoryLevels
     nova_max_weapons: NovaMaxWeapons
-    nova_max_gadgets: NovaMaxGadgets
+    nova_max_abilities: NovaMaxAbilities
     nova_ghost_of_a_chance_variant: NovaGhostOfAChanceVariant
     take_over_ai_allies: TakeOverAIAllies
     locked_items: LockedItems
@@ -1487,7 +1494,7 @@ option_groups = [
     ]),
     OptionGroup("Nova", [
         NovaMaxWeapons,
-        NovaMaxGadgets,
+        NovaMaxAbilities,
         NovaGhostOfAChanceVariant,
     ]),
     OptionGroup("Race Specific Options", [

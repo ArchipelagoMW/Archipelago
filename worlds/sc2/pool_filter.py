@@ -282,7 +282,7 @@ class ValidInventory:
 
         nova_gadget_items = [item for item in inventory if item.name in item_groups.nova_gadgets]
         self.world.random.shuffle(nova_gadget_items)
-        cull_items_over_maximum(nova_gadget_items, self.world.options.nova_max_gadgets.value)
+        cull_items_over_maximum(nova_gadget_items, self.world.options.nova_max_abilities.value)
 
         # Determining if the full-size inventory can complete campaign
         # Note(mm): Now that user excludes are checked against logic, this can probably never fail unless there's a bug.
