@@ -1,0 +1,7 @@
+<CANCEL>
+<RAMDOMJMP>"case1"
+
+<CASE>"case1"
+<GENON>"gr5"
+<END>
+
