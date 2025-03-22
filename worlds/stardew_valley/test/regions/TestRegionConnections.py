@@ -49,20 +49,17 @@ class TestModsConnections(unittest.TestCase):
 
     def test_region_exits_lead_somewhere(self):
         for mod_region_data in region_data_by_content_pack.values():
-            with self.subTest(mod=mod_region_data.mod_name):
-                for region in mod_region_data.regions:
-                    if region.flag == MergeFlag.REMOVE_EXITS:
-                        continue
+            for region in mod_region_data.regions:
+                if MergeFlag.REMOVE_EXITS in region.flag:
+                    continue
 
-                    with self.subTest(region=region.name):
-                        for exit_ in region.exits:
-                            self.assertIn(exit_, self.all_connections_by_name,
-                                          f"{region.name} is leading to {exit_} but it does not exist.")
+                with self.subTest(mod=mod_region_data.mod_name, region=region.name):
+                    for exit_ in region.exits:
+                        self.assertIn(exit_, self.all_connections_by_name, f"{region.name} is leading to {exit_} but it does not exist.")
 
     def test_connection_lead_somewhere(self):
         for mod_region_data in region_data_by_content_pack.values():
-            with self.subTest(mod=mod_region_data.mod_name):
-                for connection in mod_region_data.connections:
-                    with self.subTest(connection=connection.name):
-                        self.assertIn(connection.destination, self.all_regions_by_name,
-                                      f"{connection.name} is leading to {connection.destination} but it does not exist.")
+            for connection in mod_region_data.connections:
+                with self.subTest(mod=mod_region_data.mod_name, connection=connection.name):
+                    self.assertIn(connection.destination, self.all_regions_by_name,
+                                  f"{connection.name} is leading to {connection.destination} but it does not exist.")
