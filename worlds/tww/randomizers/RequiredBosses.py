@@ -78,7 +78,7 @@ class RequiredBossesRandomizer:
         if len(remaining_dungeon_options) < num_remaining:
             raise OptionError(
                 "Could not select required bosses to satisfy options set by the user. "
-                "After removing the excluded dungeons, there are not enough to meet the desired number of required"
+                "After removing the excluded dungeons, there are not enough to meet the desired number of required "
                 "bosses."
             )
 
