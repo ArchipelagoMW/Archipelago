@@ -15,7 +15,7 @@ class TestGenerateManyWorlds(GoalAssertMixin, OptionAssertMixin, WorldAssertMixi
         seed = get_seed()
         world_options = generate_random_world_options(seed + self.n)
 
-        print(f"Generating solo multiworld with seed {seed} for Stardew Valley...")
+        print(f"Generating solo multiworld with seed {seed} for Stardew Valley... ")
         with solo_multiworld(world_options, seed=seed, world_caching=False) as (multiworld, _):
             self.assert_multiworld_is_valid(multiworld)
 
