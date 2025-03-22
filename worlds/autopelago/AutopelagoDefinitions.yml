@@ -153,7 +153,7 @@ items:
     - ['Plate of Spaghetti', [well_fed]]
     - ['Freshly Baked Bread', [well_fed]]
     - ['Taco Salad that is Only Tacos', [well_fed]]
-    - ['Subscription to the Cheese of the Month Club', [well_fed, well_fed, well_fed]]
+    - [['Subscription to the Cheese of the Month Club', 'Subscription to Spider of the Month Club'], [well_fed, well_fed, well_fed]]
     - ['Soup with a Hair in it', [well_fed, startled]]
     - ['Can of Spam', [well_fed]]
     - ['Fruit Roll-Up', [well_fed]]
@@ -162,19 +162,19 @@ items:
     - ['Mundane Pickle', [well_fed]]
     - ['Finest Potion', [energized, lucky]]
     - ['Extra Crunchy Peanut Butter', [well_fed]]
-    - ['Cheesenado', [well_fed, well_fed, well_fed, startled]]
+    - [['Cheesenado', 'Spidernado'], [well_fed, well_fed, well_fed, startled]]
     - ['Bowl of Cereal', [well_fed]]
     - ['Cake', [well_fed]]
     - ['Dungeon Bread', [well_fed]]
     - ['Gallon of Diet Soda', [well_fed, energized]]
     - ['Apple wearing Jeans', [well_fed, stylish]]
-    - ['Macaroni and Cheese', [well_fed]]
-    - ['Pint of Ice Cream', [well_fed]]
+    - [['Macaroni and Cheese', 'Macaroni and Spiders'], [well_fed]]
+    - [['Pint of Ice Cream', 'Pint of Iced Spiders'], [well_fed]]
     - ['Protein Shake', [well_fed, confident]]
-    - ['Tray of Lasagna', [well_fed]]
+    - [['Tray of Lasagna', 'Tray of Spider-filled Lasagna'], [well_fed]]
     - ['Best Burgers in Town', [well_fed, well_fed]]
     - ['Pack of Pickled Peppers', [well_fed]]
-    - ['Sword made out of Chocolate', [well_fed, confident]]
+    - [['Sword made out of Chocolate', 'Sword made out of Spider-Based Chocolate'], [well_fed, confident]]
     - ['Lovely Bunch of Coconuts', [well_fed]]
     - ['Faux Dalmatian-Skin Coat', [stylish]]
     - ['Bedazzled Cowboy Boots', [stylish]]
@@ -250,7 +250,7 @@ items:
     - ['Lovely Meatloaf', [well_fed]]
     - ['Mug of Burnt Bean Water', [energized]]
     - ['Cup of Fancy Leaf Water', [energized]]
-    - ['Microwave Full of Brownies', [well_fed]]
+    - [['Microwave Full of Brownies', 'Microwave Full of Spider-Based Brownies'], [well_fed]]
     - ['Dreihander', [confident]]
     - ['A Reasonably Priced Textbook', [smart]]
     - ['Sandwich that is Literally One Mile Tall', [well_fed, well_fed, well_fed, well_fed, well_fed, well_fed, distracted]]
@@ -258,7 +258,7 @@ items:
 
 
 
-    - name: 'A Cookie'
+    - name: ['A Cookie', 'A Spider Chip Cookie']
       auras_granted: [well_fed]
       flavor_text: 'We all know what happens when you give a MOUSE a cookie...'
 
@@ -287,7 +287,7 @@ items:
 
         'Minecraft':
           - ['Pie of Ender', [well_fed]]
-          - ['Structure Compass (Cheese Wheel)', [smart]]
+          - [['Structure Compass (Cheese Wheel)', 'Structure Compass (Spider Wheel)'], [smart]]
           - ['Enchanted Netherite Fishing Rod', [confident]]
           - ['Carbonated Potion of Swiftness II', [energized]]
 
@@ -297,7 +297,7 @@ items:
 
         'Stardew Valley':
           - ['Prismatic Chard', [well_fed]]
-          - ['Cheese Seeds', [well_fed]]
+          - [['Cheese Seeds', 'Spider Seeds'], [well_fed]]
           - ['JojaMart Sale Coupon', [lucky]]
           - ['Pickled Dust Sprite', [well_fed]]
 
@@ -314,7 +314,7 @@ items:
           - ['Validation Rupee', [confident]]
 
         'Factorio':
-          - ['Cheese Science Pack', [well_fed]]
+          - [['Cheese Science Pack', 'Spider Science Pack'], [well_fed]]
 
         'Super Mario World':
           - ['Charging Chuck''s Helmet', [confident]]
@@ -328,7 +328,7 @@ items:
           - ['Siegward''s Jar of Pickled Onions', [well_fed]]
 
         'Yacht Dice':
-          - ['Block of Swiss Carved Like A Die', [well_fed]]
+          - [['Block of Swiss Carved Like A Die', 'Ball of Spiders Carved Like A Die'], [well_fed]]
 
         'Celeste 64':
           - ['One Raspberry', [well_fed]]
@@ -338,7 +338,7 @@ items:
           - ['Misplaced Keycard', [lucky]]
 
         'OpenRCT2':
-          - ['Cheese Stall', [well_fed]]
+          - [['Cheese Stall', 'Spider Stall'], [well_fed]]
           - name: '1 Rat Guest'
             rat_count: 1
 
@@ -427,7 +427,7 @@ items:
     - ['Waldo''s Home Address', [conspiratorial]]
     - ['Stapler in Jell-O', [sluggish]]
     - ['Radioactive Green Ooze', [startled, sluggish, upset_tummy]]
-    - ['Bottle of Spilled Milk', [unlucky]]
+    - [['Bottle of Spilled Milk', 'Bottle of Spilled Spiders'], [unlucky]]
     - ['Just Some Sludge', [sluggish]]
     - ['Sticky Video Game Controller', [sluggish]]
     - ['Lice-filled Wig', [distracted]]
@@ -458,7 +458,7 @@ items:
 
         'Ocarina of Time':
           - ['Overly-Talkative Fairy in a Bottle', [distracted]]
-          - ['Spoiled Lon Lon Milk', [upset_tummy]]
+          - [['Spoiled Lon Lon Milk', 'Spoiled Bottle of Lon Lon Skulltulas'], [upset_tummy]]
           - ['Unhappy Mask Salesman', [startled]]
 
         'Pokemon Emerald':
@@ -637,7 +637,7 @@ items:
     - ['Updog', []]
     - ['Just a regular ol'' chest, trust me', []]
     - ['Blown Fuse', []]
-    - ['Cheese Strats', []]
+    - [['Cheese Strats', 'Spider Strats'], []]
     - ['Cosmic Ray Bit Flip', []]
 
     - game_specific:
@@ -657,14 +657,14 @@ items:
           - ['Peeko''s Boating License', []]
 
         'Kingdom Hearts 2':
-          - ['Proof of Cheese', []]
+          - [['Proof of Cheese', 'Proof of Spiders'], []]
 
         'Minecraft':
           - ['Gnawing III Book', []]
-          - ['Progressive Cheesecrafting', []]
+          - [['Progressive Cheesecrafting', 'Progressive Spidercrafting'], []]
           - ['Netherite Bed', []]
           - ['Shattered Ender Pearl', []]
-          - ['Spawn Egg (Cheese Golem)', []]
+          - [['Spawn Egg (Cheese Golem)', 'Spawn Egg (Spider Golem)'], []]
 
         'Super Mario World':
           - ['Dinosaur Land Travel Brochure', []]
@@ -717,7 +717,7 @@ items:
           - ['Photograph of Celeste Mountain', []]
 
         'OpenRCT2':
-          - ['Allow Brie Removal', []]
+          - [['Allow Brie Removal', 'Allow Spiderweb Removal'], []]
 
         'Links Awakening DX':
           - ['Pocket Full of Koho Lint', []]
