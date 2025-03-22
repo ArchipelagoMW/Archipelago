@@ -433,6 +433,14 @@ class LuigisMansionRandomizer:
 
     # Updates various DOL Offsets per the desired changes of the AP user
     def update_dol_offsets(self):
+        # Edits for DOL max space offsets.
+        self.dol.data.seek(0x8) # Physical Section Address
+        self.dol.data.write(int.to_bytes(0x39FA20))
+        self.dol.data.seek(0x50)  # Virtual Section Address
+        self.dol.data.write(int.to_bytes(0x804DD940))
+        self.dol.data.seek(0x98)  # Section Size
+        self.dol.data.write(int.to_bytes(0x1000))
+
         # Walk Speed
         if self.output_data["Options"]["walk_speed"] == 0:
             walk_speed = 16784
