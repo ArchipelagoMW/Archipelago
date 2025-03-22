@@ -16,7 +16,7 @@ from .locations import candy_box_locations, CandyBox2Location, village_shop_loca
     desert_fortress_locations, teapot_quest_locations, xinopherydon_quest_locations, ledge_room_quest_locations, \
     castle_trap_room_locations, squirrel_tree_locations, the_sea_locations, lonely_house_locations, dig_spot_locations, \
     yourself_fight_locations, castle_dark_room_locations
-from .rules import weapon_is_at_least, armor_is_at_least, chocolate_count
+from .rules import weapon_is_at_least, armor_is_at_least, chocolate_count, can_farm_candies
 
 
 class CandyBox2Region(Region):
@@ -51,9 +51,9 @@ def create_regions(world):
 
     forge_1, _ = populate_region(multiworld, player, CandyBox2Region("The Forge 1", player, multiworld, "The Forge in the village"), forge_1_locations, village)
     forge_2, _ = populate_region(multiworld, player, CandyBox2Region("The Forge 2", player, multiworld, "The Forge in the village"), forge_2_locations, forge_1)
-    forge_3, _ = populate_region(multiworld, player, CandyBox2Region("The Forge 3", player, multiworld, "The forge in the village"), forge_3_locations, forge_2)
-    forge_4, _ = populate_region(multiworld, player, CandyBox2Region("The Forge 4", player, multiworld, "The forge in the village"), forge_4_locations, forge_3, lambda state: state.has("Progressive World Map", player, 3))
-    forge_5, _ = populate_region(multiworld, player, CandyBox2Region("The Forge 5", player, multiworld, "The forge in the village"), forge_5_locations, forge_4, lambda state: state.has("Progressive World Map", player, 6))
+    forge_3, _ = populate_region(multiworld, player, CandyBox2Region("The Forge 3", player, multiworld, "The forge in the village"), forge_3_locations, forge_2, lambda state: can_farm_candies(state, player))
+    forge_4, _ = populate_region(multiworld, player, CandyBox2Region("The Forge 4", player, multiworld, "The forge in the village"), forge_4_locations, forge_3, lambda state: can_farm_candies(state, player) and state.has("Progressive World Map", player, 3))
+    forge_5, _ = populate_region(multiworld, player, CandyBox2Region("The Forge 5", player, multiworld, "The forge in the village"), forge_5_locations, forge_4, lambda state: can_farm_candies(state, player) and state.has("Progressive World Map", player, 6))
 
     # The Squirrel Tree
     populate_region(multiworld, player, CandyBox2Region("A tree", player, multiworld, "The squirrel's tree"), squirrel_tree_locations, world_map_1)
