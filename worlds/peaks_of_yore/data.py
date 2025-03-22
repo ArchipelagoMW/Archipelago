@@ -7,6 +7,21 @@ class PeaksOfYoreRegion(IntEnum):
     INTERMEDIATE = 1
     ADVANCED = 2
     EXPERT = 3
+    NONE = 4
+
+
+class PeaksOfYoreItemLocationType(IntEnum):
+    PEAK = 0
+    ROPE = 1
+    ARTEFACT = 2
+    BOOK = 3
+    BIRDSEED = 4
+    TOOL = 5
+    EXTRA = 6
+    FREESOLO = 7
+    TIMEATTACK_TIME = 8
+    TIMEATTACK_HOLDS = 9
+    TIMEATTACK_ROPES = 10
 
 
 class LocationData:
@@ -34,6 +49,199 @@ class ItemData:
         self.id = item_id
         self.classification = classification
 
+
+class ItemOrLocation:  # since a good 50% of locations are also items and the other way around
+    name: str          # I'm storing them both in a single class
+    id: int
+    classification: ItemClassification
+
+    def __init__(self, name: str, index: int, classification: ItemClassification = ItemClassification.filler):
+        self.name = name
+        self.id = index
+        self.classification = classification
+
+
+peak_offset: int = 1
+rope_offset: int = 1000
+artefact_offset: int = 2000
+book_offset: int = 3000
+bird_seed_offset: int = 4000
+tool_offset: int = 5000
+extra_item_offset: int = 6000
+free_solo_peak_offset: int = 7000
+time_attack_time_offset: int = 8000
+time_attack_ropes_offset: int = 9000
+time_attack_holds_offset: int = 10000
+
+peaks_list: dict[PeaksOfYoreRegion, set[ItemOrLocation]] = {
+    PeaksOfYoreRegion.FUNDAMENTALS: {
+        ItemOrLocation("Greenhorn's Top", 0),
+        ItemOrLocation('Paltry Peak', 1),
+        ItemOrLocation('Old Mill', 2),
+        ItemOrLocation('Gray Gully', 3),
+        ItemOrLocation('Lighthouse', 4),
+        ItemOrLocation('Old Man Of Sjor', 5),
+        ItemOrLocation('Giants Shelf', 6),
+        ItemOrLocation("Evergreen's End", 7),
+        ItemOrLocation('The Twins', 8),
+        ItemOrLocation("Old Grove's Skelf", 9),
+        ItemOrLocation("Land's End", 10),
+        ItemOrLocation("Hangman's Leap", 11),
+        ItemOrLocation('Old Langr', 12),
+        ItemOrLocation('Aldr Grotto', 13),
+        ItemOrLocation('Three Brothers', 14),
+        ItemOrLocation("Walter's Crag", 15),
+        ItemOrLocation('The Great Crevice', 16),
+        ItemOrLocation('Old Hagger', 17),
+        ItemOrLocation('Ugsome Storr', 18),
+        ItemOrLocation('Wuthering Crest', 19)
+    },
+    PeaksOfYoreRegion.INTERMEDIATE: {
+        ItemOrLocation("Porter's Boulders", 20),
+        ItemOrLocation("Jotunn's Thumb", 21),
+        ItemOrLocation('Old Skerry', 22),
+        ItemOrLocation('Hamarr Stone', 23),
+        ItemOrLocation("Giant's Nose", 24),
+        ItemOrLocation("Walter's Boulder", 25),
+        ItemOrLocation('Sundered Sons', 26),
+        ItemOrLocation("Old Weald's Boulder", 27),
+        ItemOrLocation('Leaning Spire', 28),
+        ItemOrLocation('Cromlech', 29),
+    },
+    PeaksOfYoreRegion.ADVANCED: {
+        ItemOrLocation("Walker's Pillar", 30),
+        ItemOrLocation('Eldenhorn', 31),
+        ItemOrLocation('Great Gaol', 32),
+        ItemOrLocation('St. Haelga', 33),
+        ItemOrLocation("Ymir's Shadow", 34),
+    },
+    PeaksOfYoreRegion.EXPERT: {
+        ItemOrLocation('Great Bulwark', 35),
+        ItemOrLocation('Solemn Tempest', 36),
+    },
+    PeaksOfYoreRegion.NONE: {}
+}
+
+ropes_list: dict[PeaksOfYoreRegion, set[ItemOrLocation]] = {
+    PeaksOfYoreRegion.FUNDAMENTALS: {
+        ItemOrLocation('Walters Crag: Rope (Co-Climb)', 0),     # the in game ropes are shuffled around a bit,
+        ItemOrLocation('Old Man Of Sjor: Rope', 4),             # this is also why they are like this here
+        ItemOrLocation('Hangman\'s Leap: Rope', 5),
+        ItemOrLocation('Ugsome Storr: Rope', 6),
+        ItemOrLocation('Wuthering Crest: Rope', 9),
+        ItemOrLocation('Walter\'s Crag: Rope', 11),
+        ItemOrLocation('Land\'s End: Rope', 12),
+        ItemOrLocation('Evergreen\'s End: Rope', 13),
+        ItemOrLocation('Great Crevice: Rope', 14),
+        ItemOrLocation('Old Hagger Rope', 15),
+    },
+    PeaksOfYoreRegion.INTERMEDIATE: {},
+    PeaksOfYoreRegion.ADVANCED: {
+        ItemOrLocation('Walkers Pillar: Rope (Co-Climb)', 1),
+        ItemOrLocation('Great Gaol: Rope (Encounter)', 2),
+        ItemOrLocation('St. Haelga: Rope (Encounter)', 3),
+        ItemOrLocation('Eldenhorn: Rope', 7),
+        ItemOrLocation('Ymir\'s Shadow: Rope', 8),
+        ItemOrLocation('Great Gaol: Rope', 10),
+    },
+    PeaksOfYoreRegion.EXPERT: {},
+    PeaksOfYoreRegion.NONE: {}
+}
+
+artefacts_list: dict[PeaksOfYoreRegion, set[ItemOrLocation]] = {
+    PeaksOfYoreRegion.FUNDAMENTALS: {
+        ItemOrLocation('Hat', 0),
+        ItemOrLocation('Fisherman\'s Cap', 1),
+        ItemOrLocation('Safety Helmet', 2),
+        ItemOrLocation('Climbing Shoe', 3),
+        ItemOrLocation('Shovel', 4),
+        ItemOrLocation('Sleeping Bag', 5),
+        ItemOrLocation('Backpack', 6),
+        ItemOrLocation('Coffee Box (Old Langr)', 7),
+        ItemOrLocation('Coffee Box (Wuthering Crest)', 8),
+        ItemOrLocation('Picture Piece #1 (Gray Gully)', 14),
+        ItemOrLocation('Picture Piece #2 (Land\'s End)', 15),
+        ItemOrLocation('Picture Piece #3 (The Great Crevice)', 16),
+        ItemOrLocation('Fundamentals Trophy', 19),
+    },
+    PeaksOfYoreRegion.INTERMEDIATE: {
+        ItemOrLocation('Intermediate Trophy', 11),
+    },
+    PeaksOfYoreRegion.ADVANCED: {
+        ItemOrLocation('Chalk Box (Walker\'s Pillar)', 9),
+        ItemOrLocation('Chalk Box (Eldenhorn)', 10),
+        ItemOrLocation('Advanced Trophy', 12),
+        ItemOrLocation('Picture Piece #4 (St. Haelga)', 17),
+        ItemOrLocation('Picture Frame', 18),
+    },
+    PeaksOfYoreRegion.EXPERT: {
+        ItemOrLocation('Expert Trophy', 13),
+    },
+    PeaksOfYoreRegion.NONE: {}
+}
+
+books_list: dict[PeaksOfYoreRegion, set[ItemOrLocation]] = {
+    PeaksOfYoreRegion.FUNDAMENTALS: {},
+    PeaksOfYoreRegion.INTERMEDIATE: {},
+    PeaksOfYoreRegion.ADVANCED: {},
+    PeaksOfYoreRegion.EXPERT: {},
+    PeaksOfYoreRegion.NONE: {
+        ItemOrLocation('Fundamentals Book', 0, ItemClassification.progression),
+        ItemOrLocation('Intermediate Book', 1, ItemClassification.progression),
+        ItemOrLocation('Advanced Book', 2, ItemClassification.progression),
+        ItemOrLocation('Expert Book', 3, ItemClassification.progression),
+    }
+}
+
+bird_seeds_list: dict[PeaksOfYoreRegion, set[ItemOrLocation]] = {
+    PeaksOfYoreRegion.FUNDAMENTALS: {
+        ItemOrLocation('Bird Seed (Three Brothers)', 0),
+    },
+    PeaksOfYoreRegion.INTERMEDIATE: {
+        ItemOrLocation('Bird Seed (Old Skerry)', 1),
+    },
+    PeaksOfYoreRegion.ADVANCED: {
+        ItemOrLocation('Bird Seed (Great Gaol)', 2),
+        ItemOrLocation('Bird Seed (Eldenhorn)', 3),
+    },
+    PeaksOfYoreRegion.EXPERT: {},
+    PeaksOfYoreRegion.NONE: {}
+}
+
+tools_list: dict[PeaksOfYoreRegion, set[ItemOrLocation]] = {
+    PeaksOfYoreRegion.FUNDAMENTALS: {},
+    PeaksOfYoreRegion.INTERMEDIATE: {},
+    PeaksOfYoreRegion.ADVANCED: {},
+    PeaksOfYoreRegion.EXPERT: {},
+    PeaksOfYoreRegion.NONE: {
+        ItemOrLocation('Pipe', 0, ItemClassification.useful),
+        ItemOrLocation('Rope Length Upgrade', 1, ItemClassification.progression),
+        ItemOrLocation('Barometer', 2, ItemClassification.useful),
+        ItemOrLocation('Progressive Crampons', 3, ItemClassification.progression),
+        ItemOrLocation('Monocular', 4, ItemClassification.useful),
+        ItemOrLocation('Phonograph', 5, ItemClassification.filler),
+        ItemOrLocation('Pocketwatch', 6, ItemClassification.useful),
+        ItemOrLocation('Chalkbag', 7, ItemClassification.useful),
+        ItemOrLocation('Rope Unlock', 8, ItemClassification.progression),
+        ItemOrLocation('Coffee Unlock', 9, ItemClassification.useful),
+        ItemOrLocation('Oil Lamp', 10, ItemClassification.useful),
+        ItemOrLocation('Left Hand', 11, ItemClassification.progression),
+        ItemOrLocation('Right Hand', 12, ItemClassification.progression),
+    }
+}
+
+extra_items_list: dict[PeaksOfYoreRegion, set[ItemOrLocation]] = {
+    PeaksOfYoreRegion.FUNDAMENTALS: {},
+    PeaksOfYoreRegion.INTERMEDIATE: {},
+    PeaksOfYoreRegion.ADVANCED: {},
+    PeaksOfYoreRegion.EXPERT: {},
+    PeaksOfYoreRegion.NONE: {
+        ItemOrLocation('Extra Rope', 0, ItemClassification.filler),
+        ItemOrLocation('Extra Chalk', 1, ItemClassification.filler),
+        ItemOrLocation('Extra Coffee', 2, ItemClassification.filler),
+        ItemOrLocation('Extra Seed', 3, ItemClassification.filler)
+    }
+}
 
 full_location_list: list[LocationData] = [
     LocationData("Greenhorn's Top", 'Peak', 1, PeaksOfYoreRegion.FUNDAMENTALS),
