@@ -1,3 +1,5 @@
+from Fill import distribute_items_restrictive
+
 from ..options import ElevatorsComeToYou
 from ..test import WitnessTestBase
 
@@ -36,9 +38,15 @@ class TestMiscOptions(WitnessTestBase):
         "death_link_amnesty": 3,
         "laser_hints": True,
         "hint_amount": 40,
-        "area_hint_percentage": 100,
+        "area_hint_percentage": 75,
         "vague_hints": "experimental",
     }
+
+    run_default_tests = False
+
+    def test_hints(self):
+        distribute_items_restrictive(self.multiworld)
+        self.world.fill_slot_data()
 
 
 class TestMaxEntityShuffle(WitnessTestBase):
