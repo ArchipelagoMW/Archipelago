@@ -199,11 +199,16 @@ item_table: Dict[str, ItemData] = {
     'Chaos Trap': ItemData('Trap', 1337186, 0, trap=True),
     'Neurotoxin Trap': ItemData('Trap', 1337187, 0, trap=True),
     'Bee Trap': ItemData('Trap', 1337188, 0, trap=True),
-    'Laser Access A': ItemData('Relic', 1337189, progression=True),
-    'Laser Access I': ItemData('Relic', 1337191, progression=True),
-    'Laser Access M': ItemData('Relic', 1337192, progression=True),
+    'Laser Access A': ItemData('Laser Access', 1337189, progression=True),
+    'Laser Access I': ItemData('Laser Access', 1337191, progression=True),
+    'Laser Access M': ItemData('Laser Access', 1337192, progression=True),
     'Throw Stun Trap': ItemData('Trap', 1337193, 0, trap=True),
-    # 1337194 - 1337248 Reserved
+    'Lab Access Genza': ItemData('Lab Access', 1337194, progression=True),
+    'Lab Access Experiment': ItemData('Lab Access', 1337195, progression=True),
+    'Lab Access Research': ItemData('Lab Access', 1337196, progression=True),
+    'Lab Access Dynamo': ItemData('Lab Access', 1337197, progression=True),
+    'Drawbridge Key': ItemData('Key', 1337198, progression=True),
+    # 1337199 - 1337248 Reserved
     'Max Sand': ItemData('Stat', 1337249, 14)
 }
 
@@ -251,6 +256,17 @@ starter_progression_items: Tuple[str, ...] = (
     'Succubus Hairpin',
     'Timespinner Wheel',
     'Timespinner Wheel',
+    'Twin Pyramid Key',
+    'Celestial Sash',
+    'Lightwall',
+    'Modern Warp Beacon',
+    'Timeworn Warp Beacon',
+    'Mysterious Warp Beacon'
+)
+
+pyramid_start_starter_progression_items: Tuple[str, ...] = (
+    'Succubus Hairpin',
+    'Succubus Hairpin',
     'Twin Pyramid Key',
     'Celestial Sash',
     'Lightwall',

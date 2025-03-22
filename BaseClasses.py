@@ -869,21 +869,40 @@ class CollectionState():
     def has(self, item: str, player: int, count: int = 1) -> bool:
         return self.prog_items[player][item] >= count
 
+    # for loops are specifically used in all/any/count methods, instead of all()/any()/sum(), to avoid the overhead of
+    # creating and iterating generator instances. In `return all(player_prog_items[item] for item in items)`, the
+    # argument to all() would be a new generator instance, for example.
     def has_all(self, items: Iterable[str], player: int) -> bool:
         """Returns True if each item name of items is in state at least once."""
-        return all(self.prog_items[player][item] for item in items)
+        player_prog_items = self.prog_items[player]
+        for item in items:
+            if not player_prog_items[item]:
+                return False
+        return True
 
     def has_any(self, items: Iterable[str], player: int) -> bool:
         """Returns True if at least one item name of items is in state at least once."""
-        return any(self.prog_items[player][item] for item in items)
+        player_prog_items = self.prog_items[player]
+        for item in items:
+            if player_prog_items[item]:
+                return True
+        return False
 
     def has_all_counts(self, item_counts: Mapping[str, int], player: int) -> bool:
         """Returns True if each item name is in the state at least as many times as specified."""
-        return all(self.prog_items[player][item] >= count for item, count in item_counts.items())
+        player_prog_items = self.prog_items[player]
+        for item, count in item_counts.items():
+            if player_prog_items[item] < count:
+                return False
+        return True
 
     def has_any_count(self, item_counts: Mapping[str, int], player: int) -> bool:
         """Returns True if at least one item name is in the state at least as many times as specified."""
-        return any(self.prog_items[player][item] >= count for item, count in item_counts.items())
+        player_prog_items = self.prog_items[player]
+        for item, count in item_counts.items():
+            if player_prog_items[item] >= count:
+                return True
+        return False
 
     def count(self, item: str, player: int) -> int:
         return self.prog_items[player][item]
@@ -911,11 +930,20 @@ class CollectionState():
 
     def count_from_list(self, items: Iterable[str], player: int) -> int:
         """Returns the cumulative count of items from a list present in state."""
-        return sum(self.prog_items[player][item_name] for item_name in items)
+        player_prog_items = self.prog_items[player]
+        total = 0
+        for item_name in items:
+            total += player_prog_items[item_name]
+        return total
 
     def count_from_list_unique(self, items: Iterable[str], player: int) -> int:
         """Returns the cumulative count of items from a list present in state. Ignores duplicates of the same item."""
-        return sum(self.prog_items[player][item_name] > 0 for item_name in items)
+        player_prog_items = self.prog_items[player]
+        total = 0
+        for item_name in items:
+            if player_prog_items[item_name] > 0:
+                total += 1
+        return total
 
     # item name group related
     def has_group(self, item_name_group: str, player: int, count: int = 1) -> bool:
