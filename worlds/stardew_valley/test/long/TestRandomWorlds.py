@@ -6,8 +6,6 @@ from .. import SVTestCase, skip_long_tests, solo_multiworld
 from ..assertion import GoalAssertMixin, OptionAssertMixin, WorldAssertMixin
 from ..options.option_names import generate_random_world_options
 
-number_worlds = 10 if skip_long_tests() else 1000
-
 
 @classvar_matrix(n=range(10 if skip_long_tests() else 1000))
 class TestGenerateManyWorlds(GoalAssertMixin, OptionAssertMixin, WorldAssertMixin, SVTestCase):

@@ -22,7 +22,7 @@ TOOLS = {"Hoe", "Pickaxe", "Axe", "Watering Can", "Trash Can", "Fishing Rod"}
 class TestGenerateDynamicOptions(WorldAssertMixin, SVTestCase):
     option_and_choice: ClassVar[tuple[str, str]]
 
-    def test_given_special_range_when_generate_then_basic_checks(self):
+    def test_given_option_and_choice_when_generate_then_basic_checks(self):
         option, choice = self.option_and_choice
         world_options = {option: choice}
         with solo_multiworld(world_options) as (multiworld, stardew_world):
