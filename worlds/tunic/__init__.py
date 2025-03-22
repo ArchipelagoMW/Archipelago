@@ -438,6 +438,9 @@ class TunicWorld(World):
         if self.options.shuffle_fuses:
             for item_name, item_data in item_table.items():
                 if item_data.item_group == "Fuses":
+                    if item_name == "Cathedral - Activate Fuse" and self.options.entrance_rando:
+                        self.multiworld.push_precollected(self.create_item("Cathedral - Activate Fuse"))
+                        continue
                     items_to_create[item_name] = 1
 
         if self.options.shuffle_bells:
