@@ -145,7 +145,7 @@ class StardewValleyWorld(World):
 
     def create_items(self):
         self.precollect_starting_season()
-        self.precollect_farm_type_items()
+        self.precollect_building_items()
         items_to_exclude = [excluded_items
                             for excluded_items in self.multiworld.precollected_items[self.player]
                             if not item_table[excluded_items.name].has_any_group(Group.RESOURCE_PACK,
@@ -200,9 +200,16 @@ class StardewValleyWorld(World):
         starting_season = self.create_item(self.random.choice(season_pool))
         self.multiworld.push_precollected(starting_season)
 
-    def precollect_farm_type_items(self):
-        if self.options.farm_type == FarmType.option_meadowlands and self.options.building_progression & BuildingProgression.option_progressive:
-            self.multiworld.push_precollected(self.create_item("Progressive Coop"))
+    def precollect_building_items(self):
+        building_progression = self.content.features.building_progression
+        # Not adding items when building are vanilla because the buildings are already placed in the world.
+        if not building_progression.is_progressive:
+            return
+
+        for building in building_progression.starting_buildings:
+            item, quantity = building_progression.to_progressive_item(building)
+            for _ in range(quantity):
+                self.multiworld.push_precollected(self.create_item(item))
 
     def setup_logic_events(self):
         def register_event(name: str, region: str, rule: StardewRule):
