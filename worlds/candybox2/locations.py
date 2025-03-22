@@ -234,6 +234,14 @@ yourself_fight_locations = {
     "Boots of Introspection Acquired": 4800
 }
 
+castle_bakehouse_locations = {
+    "Bake Pain au Chocolat 1": 4900,
+    "Bake Pain au Chocolat 2": 4901,
+    "Bake Pain au Chocolat 3": 4902,
+    "Bake Pain au Chocolat 4": 4903,
+    "Bake Pain au Chocolat 5": 4904,
+}
+
 locations = {
     **candy_box_locations,
     **village_locations,
@@ -286,4 +294,5 @@ locations = {
     **dig_spot_locations,
     **lonely_house_locations,
     **yourself_fight_locations,
+    **castle_bakehouse_locations,
 }
