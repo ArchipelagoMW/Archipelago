@@ -1432,7 +1432,6 @@ option_groups = [
     OptionGroup("Difficulty Settings", [
         GameDifficulty,
         GameSpeed,
-        # VanillaItemsOnly,
         StarterUnit,
         RequiredTactics,
         NerfUnitBaselines,
@@ -1463,6 +1462,7 @@ option_groups = [
         GenericUpgradeResearch,
         GenericUpgradeResearchSpeedup,
         GenericUpgradeItems,
+        # VanillaItemsOnly,
     ]),
     OptionGroup("Kerrigan", [
         KerriganPresence,
@@ -1512,6 +1512,7 @@ option_groups = [
         MaximumSupplyPerItem,
         MaximumSupplyReductionPerItem,
         LowestMaximumSupply,
+        ResearchCostReductionPerItem,
         FillerRatio,
     ]),
     OptionGroup("Inclusions & Exclusions", [
@@ -1521,6 +1522,7 @@ option_groups = [
         ExcludedMissions,
     ]),
     OptionGroup("Advanced Gameplay", [
+        MissionOrderScouting,
         DifficultyDamageModifier,
         TakeOverAIAllies,
         EnableVoidTrade,
