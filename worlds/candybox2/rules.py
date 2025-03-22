@@ -105,7 +105,7 @@ def set_rules(world: World, player: int):
     # Sorceress items
     add_rule(world.get_location("Beginner's Grimoire"), lambda state: can_grow_lollipops(state, player))
     add_rule(world.get_location("Advanced Grimoire"), lambda state: can_grow_lollipops(state, player))
-    add_rule(world.get_location("Sorceress' Hat"), lambda state: can_grow_lollipops(state, player))
+    add_rule(world.get_location("Sorceress' Hat"), lambda state: can_farm_lollipops(state, player))
     add_rule(world.get_location("Sorceress' Cauldron"), lambda state: can_grow_lollipops(state, player))
 
     # Merchant items
@@ -134,6 +134,9 @@ def lollipop_count(state: CollectionState, player: int):
 def can_grow_lollipops(state: CollectionState, player: int):
     return lollipop_count(state, player) >= 11
 
+def can_farm_lollipops(state: CollectionState, player: int):
+    return can_grow_lollipops(state, player) and state.has("Pitchfork", player) and state.has("The Shell Powder", player) and state.has("The Green Fin", player)
+
 # Ideally allows the player to stumble upon a quest they can use to farm candies
 def can_farm_candies(state: CollectionState, player: int):
-    return can_grow_lollipops(state, player) or state.count("Progressive World Map", player) >= 3
+    return can_farm_lollipops(state, player)
