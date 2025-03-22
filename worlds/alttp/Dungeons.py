@@ -66,7 +66,7 @@ def create_dungeons(world: "ALTTPWorld"):
 
     def make_dungeon(name, default_boss, dungeon_regions, big_key, small_keys, dungeon_items):
         dungeon = Dungeon(name, dungeon_regions, big_key,
-                          [] if multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal else small_keys,
+                          [] if multiworld.worlds[player].options.small_key_shuffle == small_key_shuffle.option_universal else small_keys,
                           dungeon_items, player)
         for item in dungeon.all_items:
             item.dungeon = dungeon
@@ -143,7 +143,7 @@ def create_dungeons(world: "ALTTPWorld"):
                       item_factory(['Small Key (Turtle Rock)'] * 6, world),
                       item_factory(['Map (Turtle Rock)', 'Compass (Turtle Rock)'], world))
 
-    if multiworld.mode[player] != 'inverted':
+    if multiworld.worlds[player].options.mode != 'inverted':
         AT = make_dungeon('Agahnims Tower', 'Agahnim', ['Agahnims Tower', 'Agahnim 1'], None,
                           item_factory(['Small Key (Agahnims Tower)'] * 4, world), [])
         GT = make_dungeon('Ganons Tower', 'Agahnim2',
