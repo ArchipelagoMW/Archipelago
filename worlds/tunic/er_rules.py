@@ -718,8 +718,10 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     atoll_statue = regions["Ruined Atoll"].connect(
         connecting_region=regions["Ruined Atoll Statue"],
         rule=lambda state: has_ability(prayer, state, world)
-        and ((((has_ladder("Ladders in South Atoll", state, world)
-             # shoot fuse and have the shot hit you mid-LS
+        and (((((has_ladder("Ladders in South Atoll", state, world)
+                 and state.has_any((laurels, grapple), player)
+                 and (has_sword(state, player) or state.has_any((gun, fire_wand), player)))
+                # shoot fuse and have the shot hit you mid-LS
                 or (can_ladder_storage(state, world) and state.has(fire_wand, player)
                     and options.ladder_storage >= LadderStorage.option_hard))) and not options.shuffle_fuses)
              or (state.has_all((atoll_northwest_fuse, atoll_northeast_fuse, atoll_southwest_fuse, atoll_southeast_fuse), player)
@@ -1123,6 +1125,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     swamp_mid_to_cath = regions["Swamp Mid"].connect(
         connecting_region=regions["Swamp to Cathedral Main Entrance Region"],
         rule=lambda state: (has_ability(prayer, state, world)
+                            and has_sword(state, player)
                             and (state.has(laurels, player)
                                  # blam yourself in the face with a wand shot off the fuse
                                  or (can_ladder_storage(state, world) and state.has(fire_wand, player)
