@@ -9,7 +9,7 @@ from .AutopelagoDefinitions import GAME_NAME, version_stamp, AutopelagoGameRequi
     location_name_to_progression_item_name, game_specific_nonprogression_items, generic_nonprogression_item_table, \
     total_available_rat_count, max_required_rat_count, AutopelagoNonProgressionItemType, \
     autopelago_item_classification_of, location_name_to_nonprogression_item, autopelago_regions, item_name_groups, \
-    location_name_groups
+    location_name_groups, lactose_names, lactose_intolerant_names
 from .options import ArchipelagoGameOptions, VictoryLocation, EnabledBuffs, EnabledTraps, ChangedTargetMessages, \
     EnterGoModeMessages, EnterBKModeMessages, RemindBKModeMessages, ExitBKModeMessages, CompleteGoalMessages
 
@@ -175,8 +175,9 @@ class AutopelagoWorld(World):
 
         self.multiworld.itempool += new_items
 
-        nonprogression_item_table = {c: [item_name for item_name in items] for c, items in
-                                     generic_nonprogression_item_table.items()}
+        excluded_names = lactose_names if self.options.lactose_intolerant.value else lactose_intolerant_names
+        nonprogression_item_table = {c: [item_name for item_name in items if item_name not in excluded_names]
+                                     for c, items in generic_nonprogression_item_table.items()}
         dlc_games = {game for game in game_specific_nonprogression_items}
         for category, items in nonprogression_item_table.items():
             self.multiworld.random.shuffle(items)
@@ -249,6 +250,7 @@ class AutopelagoWorld(World):
             'msg_remind_bk': self.options.msg_remind_bk.value,
             'msg_exit_bk': self.options.msg_exit_bk.value,
             'msg_completed_goal': self.options.msg_completed_goal.value,
+            'lactose_intolerant': not not self.options.lactose_intolerant,
 
             # not working yet:
             # 'death_link': not not self.options.death_link,

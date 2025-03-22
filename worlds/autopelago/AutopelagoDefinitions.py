@@ -8,26 +8,58 @@ from Utils import parse_yaml
 
 GAME_NAME = "Autopelago"
 BASE_ID = 300000
+lactose_names = set()
+lactose_intolerant_names = set()
+
 
 class AutopelagoItemDefinitionCls(TypedDict):
-    name: str
+    name: Union[str, List[str]]
     rat_count: NotRequired[int]
     flavor_text: NotRequired[str]
     auras_granted: NotRequired[List[str]]
 
 
-AutopelagoItemDefinition = Union[str, List[Union[str, List[str]]], AutopelagoItemDefinitionCls]
+AutopelagoItemDefinition = Union[Tuple[Union[str, List[str]], List[str]], AutopelagoItemDefinitionCls]
 AutopelagoItemDefinitionsSimple = Dict[str, AutopelagoItemDefinition]
 AutopelagoGameSpecificItemGroup = Dict[Literal['game_specific'], Dict[str, List[AutopelagoItemDefinition]]]
 AutopelagoNonProgressionGroupItems = List[Union[AutopelagoItemDefinition, AutopelagoGameSpecificItemGroup]]
 AutopelagoNonProgressionItemType = Literal['useful_nonprogression', 'trap', 'filler']
 
 
-def _name_of(item: AutopelagoItemDefinition):
+def _to_normal_name(name_or_list: Union[str, List[str]]) -> str:
+    if isinstance(name_or_list, str):
+        return name_or_list
+    else:
+        return name_or_list[0]
+
+
+def _normal_name_of(item: AutopelagoItemDefinition):
     return \
-        item if isinstance(item, str) else \
-        item[0] if isinstance(item, list) else \
-        item['name']
+        _to_normal_name(item[0]) if isinstance(item, list) else \
+        _to_normal_name(item['name'])
+
+
+def _to_lactose_intolerant_name(name_or_list: Union[str, List[str]]) -> str:
+    if isinstance(name_or_list, str):
+        return name_or_list
+    else:
+        return name_or_list[1]
+
+
+def _lactose_intolerant_name_of(item: AutopelagoItemDefinition):
+    return \
+        _to_lactose_intolerant_name(item[0]) if isinstance(item, list) else \
+        _to_lactose_intolerant_name(item['name'])
+
+
+def _names_of(item: AutopelagoItemDefinition):
+    normal_name = _normal_name_of(item)
+    lactose_intolerant_name = _lactose_intolerant_name_of(item)
+    if normal_name == lactose_intolerant_name:
+        return [normal_name]
+    lactose_names.add(normal_name)
+    lactose_intolerant_names.add(lactose_intolerant_name)
+    return [normal_name, lactose_intolerant_name]
 
 
 def _rat_count_of(item: AutopelagoItemDefinition):
@@ -36,10 +68,10 @@ def _rat_count_of(item: AutopelagoItemDefinition):
 
 def _auras_of(item: AutopelagoItemDefinition) -> List[str]:
     return \
-        [] if isinstance(item, str) else \
         item[1] if isinstance(item, list) else \
         item['auras_granted'] if 'auras_granted' in item else \
         []
+
 
 def autopelago_item_classification_of(item: AutopelagoNonProgressionItemType):
     if item == 'useful_nonprogression':
@@ -163,48 +195,43 @@ item_name_to_id: Dict[str, int] = {}
 
 for k, v in ((k, v) for k, v in _defs['items'].items() if
              k not in {'rats', 'useful_nonprogression', 'trap', 'filler'}):
-    _name = _name_of(v)
-    item_name_to_auras[_name] = _auras_of(v)
-    item_name_to_id[_name] = next(_item_id_gen)
-    item_name_to_classification[_name] = ItemClassification.progression
-    rat_count = _rat_count_of(v)
-    if rat_count and rat_count > 0:
-        item_name_to_rat_count[_name] = rat_count
-    item_key_to_name[k] = _name
+    v: AutopelagoItemDefinition
+    for _name in _names_of(v):
+        item_name_to_auras[_name] = _auras_of(v)
+        item_name_to_id[_name] = next(_item_id_gen)
+        item_name_to_classification[_name] = ItemClassification.progression
+        rat_count = _rat_count_of(v)
+        if rat_count and rat_count > 0:
+            item_name_to_rat_count[_name] = rat_count
+        item_key_to_name[k] = _name
 
 for k, v in _defs['items']['rats'].items():
-    _name = _name_of(v)
-    item_name_to_auras[_name] = _auras_of(v)
-    item_name_to_id[_name] = next(_item_id_gen)
-    item_name_to_classification[_name] = ItemClassification.progression
-    item_name_to_rat_count[_name] = _rat_count_of(v) or 1
-    item_key_to_name[k] = _name
+    for _name in _names_of(v):
+        item_name_to_auras[_name] = _auras_of(v)
+        item_name_to_id[_name] = next(_item_id_gen)
+        item_name_to_classification[_name] = ItemClassification.progression
+        item_name_to_rat_count[_name] = _rat_count_of(v) or 1
+        item_key_to_name[k] = _name
 
 
 def _append_nonprogression(k: AutopelagoNonProgressionItemType):
     item_classification = autopelago_item_classification_of(k)
     for i in _defs['items'][k]:
-        if isinstance(i, str):
-            generic_nonprogression_item_table[k].append(i)
-            item_name_to_id[i] = next(_item_id_gen)
-            item_name_to_classification[i] = item_classification
-            item_name_to_auras[i] = _auras_of(i)
-            continue
-
         if isinstance(i, list):
-            generic_nonprogression_item_table[k].append(i[0])
-            item_name_to_id[i[0]] = next(_item_id_gen)
-            item_name_to_classification[i[0]] = item_classification
-            item_name_to_auras[i[0]] = _auras_of(i)
+            for _name in _names_of(i):
+                generic_nonprogression_item_table[k].append(_name)
+                item_name_to_id[_name] = next(_item_id_gen)
+                item_name_to_classification[_name] = item_classification
+                item_name_to_auras[_name] = _auras_of(i)
             continue
 
         if 'game_specific' not in i:
-            _name = _name_of(i)
-            generic_nonprogression_item_table[k].append(_name)
-            item_name_to_id[_name] = next(_item_id_gen)
-            item_name_to_classification[_name] = item_classification
-            item_name_to_rat_count[_name] = _rat_count_of(i) or 0
-            item_name_to_auras[_name] = _auras_of(i)
+            for _name in _names_of(i):
+                generic_nonprogression_item_table[k].append(_name)
+                item_name_to_id[_name] = next(_item_id_gen)
+                item_name_to_classification[_name] = item_classification
+                item_name_to_rat_count[_name] = _rat_count_of(i) or 0
+                item_name_to_auras[_name] = _auras_of(i)
             continue
 
         for g, v in i['game_specific'].items():
@@ -212,18 +239,11 @@ def _append_nonprogression(k: AutopelagoNonProgressionItemType):
                 game_specific_nonprogression_items[g] = {}
             game_specific_nonprogression_items[g][k] = []
             for it in v:
-                if isinstance(it, str):
-                    game_specific_nonprogression_items[g][k].append(it)
-                    item_name_to_id[it] = next(_item_id_gen)
-                    item_name_to_classification[it] = item_classification
-                    item_name_to_auras[it] = _auras_of(i)
-                    continue
-
-                if isinstance(it, list):
-                    game_specific_nonprogression_items[g][k].append(it[0])
-                    item_name_to_id[it[0]] = next(_item_id_gen)
-                    item_name_to_classification[it[0]] = item_classification
-                    item_name_to_auras[it[0]] = _auras_of(it)
+                for _name in _names_of(it):
+                    game_specific_nonprogression_items[g][k].append(_name)
+                    item_name_to_id[_name] = next(_item_id_gen)
+                    item_name_to_classification[_name] = item_classification
+                    item_name_to_auras[_name] = _auras_of(it)
 
 
 _append_nonprogression('useful_nonprogression')

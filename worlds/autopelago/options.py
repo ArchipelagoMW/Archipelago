@@ -230,6 +230,11 @@ class CompleteGoalMessages(RatChatMessages):
     )
 
 
+class LactoseIntolerantMode(Toggle):
+    """Replaces all references to lactose-containing products with less offensive ones."""
+    display_name = "Lactose Intolerant Mode"
+
+
 @dataclass
 class ArchipelagoGameOptions(PerGameCommonOptions):
     fill_with_determination: FillWithDetermination
@@ -242,6 +247,7 @@ class ArchipelagoGameOptions(PerGameCommonOptions):
     msg_remind_bk: RemindBKModeMessages
     msg_exit_bk: ExitBKModeMessages
     msg_completed_goal: CompleteGoalMessages
+    lactose_intolerant: LactoseIntolerantMode
 
     # not working yet:
     # death_link: DeathLink

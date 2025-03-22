@@ -4,7 +4,9 @@
 version_stamp: '0.9.0'
 
 items:
-  moon_shoes: 'Moon Shoes'
+  moon_shoes:
+    name: 'Moon Shoes'
+    flavor_text: 'All done here, let''s bounce.'
   mongoose_in_a_combat_spacecraft:
     name: 'Mongoose in a Combat Spacecraft'
     flavor_text: 'Do an aileron roll!'
