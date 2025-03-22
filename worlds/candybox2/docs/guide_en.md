@@ -1,4 +1,4 @@
-# Candy Box 2
+# Candy Box 2 Multiworld Setup Guide
 
 ## Configuring your YAML file
 

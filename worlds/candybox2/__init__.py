@@ -2,7 +2,7 @@ import typing
 import uuid
 from typing import TextIO
 
-from BaseClasses import CollectionState
+from BaseClasses import CollectionState, Tutorial
 from entrance_rando import ERPlacementState
 from worlds.AutoWorld import World, WebWorld
 from .locations import location_descriptions, locations
@@ -80,4 +80,13 @@ class CandyBox2World(World):
             spoiler_handle.write(f"{entrance[0]} -> {entrance[1]}\n")
 
 class CandyBox2WebWorld(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up Candy Box 2 for Archipelago.",
+        "English",
+        "guide_en.md",
+        "setup/en",
+        ["Victor Tran"]
+    )]
+
     location_descriptions = location_descriptions
