@@ -7,9 +7,9 @@ from .Items import castable_magic_names, sword_names, emblem_names, redhot_names
 # if TYPE_CHECKING:
 #    from . import SoulBlazerWorld
 
-metal_cutting_swords = [ItemID.ZANTETSUSWORD.display_name, ItemID.SOULBLADE.display_name]
-spirit_cutting_swords = [ItemID.SPIRITSWORD.display_name, ItemID.SOULBLADE.display_name]
-thunder_items = [ItemID.THUNDERRING.display_name, *metal_cutting_swords]
+metal_cutting_swords = [ItemID.ZANTETSUSWORD.full_name, ItemID.SOULBLADE.full_name]
+spirit_cutting_swords = [ItemID.SPIRITSWORD.full_name, ItemID.SOULBLADE.full_name]
+thunder_items = [ItemID.THUNDERRING.full_name, *metal_cutting_swords]
 
 
 def no_requirement(state: CollectionState, player: int | None = None) -> bool:
@@ -29,7 +29,7 @@ def has_thunder(state: CollectionState, player: int) -> bool:
 
 
 def has_magic(state: CollectionState, player: int) -> bool:
-    return state.has(SoulID.SOUL_MAGICIAN.display_name, player) and state.has_any(castable_magic_names, player)
+    return state.has(SoulID.SOUL_MAGICIAN.full_name, player) and state.has_any(castable_magic_names, player)
 
 
 def has_sword(state: CollectionState, player: int) -> bool:
@@ -42,7 +42,7 @@ def has_stones(state: CollectionState, player: int) -> bool:
 
 
 def has_phoenix_cutscene(state: CollectionState, player: int) -> bool:
-    return state.can_reach_location(NPCRewardID.MOUNTAIN_KING.display_name, player)
+    return state.can_reach_location(NPCRewardID.MOUNTAIN_KING.full_name, player)
 
 
 rule_for_flag = {
@@ -60,159 +60,159 @@ rule_for_flag = {
 # we put these location-specific dependencies here.
 location_dependencies: dict[str, list[str]] = {
     # Act 1 - Grass Valley
-    NPCRewardID.TOOL_SHOP_OWNER.display_name: [NPCID.TOOL_SHOP_OWNER.display_name],
-    NPCRewardID.EMBLEM_A_TILE.display_name: [NPCID.IVY.display_name, NPCID.IVY_EMBLEM_A.display_name],
-    NPCRewardID.GOAT_PEN_CORNER.display_name: [NPCID.GOAT_HERB.display_name],
-    NPCRewardID.TEDDY.display_name: [NPCID.TOOL_SHOP_OWNER.display_name, NPCID.TEDDY.display_name],
-    NPCRewardID.PASS_TILE.display_name: [NPCID.IVY.display_name, NPCID.TULIP_PASS.display_name],
-    NPCRewardID.TILE_IN_CHILDS_SECRET_CAVE.display_name: [NPCID.BOY_CAVE.display_name, ItemID.APASS.display_name],
-    NPCRewardID.RECOVERY_SWORD_CRYSTAL.display_name: [
-        NPCID.IVY_RECOVERY_SWORD.display_name,
-        NPCID.BOY_CAVE.display_name,
-        ItemID.APASS.display_name,
+    NPCRewardID.TOOL_SHOP_OWNER.full_name: [NPCID.TOOL_SHOP_OWNER.full_name],
+    NPCRewardID.EMBLEM_A_TILE.full_name: [NPCID.IVY.full_name, NPCID.IVY_EMBLEM_A.full_name],
+    NPCRewardID.GOAT_PEN_CORNER.full_name: [NPCID.GOAT_HERB.full_name],
+    NPCRewardID.TEDDY.full_name: [NPCID.TOOL_SHOP_OWNER.full_name, NPCID.TEDDY.full_name],
+    NPCRewardID.PASS_TILE.full_name: [NPCID.IVY.full_name, NPCID.TULIP_PASS.full_name],
+    NPCRewardID.TILE_IN_CHILDS_SECRET_CAVE.full_name: [NPCID.BOY_CAVE.full_name, ItemID.APASS.full_name],
+    NPCRewardID.RECOVERY_SWORD_CRYSTAL.full_name: [
+        NPCID.IVY_RECOVERY_SWORD.full_name,
+        NPCID.BOY_CAVE.full_name,
+        ItemID.APASS.full_name,
     ],
-    NPCRewardID.VILLAGE_CHIEF.display_name: [NPCID.VILLAGE_CHIEF.display_name, NPCID.OLD_WOMAN.display_name],
-    LairID.OLD_MAN.display_name: [NPCID.LISA.display_name, ItemID.DREAMROD.display_name],
-    ChestID.UNDERGROUND_CASTLE_LEOS_BRUSH.display_name: [NPCID.LISA.display_name, ItemID.DREAMROD.display_name],
+    NPCRewardID.VILLAGE_CHIEF.full_name: [NPCID.VILLAGE_CHIEF.full_name, NPCID.OLD_WOMAN.full_name],
+    LairID.OLD_MAN.full_name: [NPCID.LISA.full_name, ItemID.DREAMROD.full_name],
+    ChestID.UNDERGROUND_CASTLE_LEOS_BRUSH.full_name: [NPCID.LISA.full_name, ItemID.DREAMROD.full_name],
     # Act 2 - Greenwood
-    NPCRewardID.REDHOT_MIRROR_BIRD.display_name: [NPCID.BIRD_RED_HOT_MIRROR.display_name],
-    NPCRewardID.MAGIC_BELL_CRYSTAL.display_name: [
+    NPCRewardID.REDHOT_MIRROR_BIRD.full_name: [NPCID.BIRD_RED_HOT_MIRROR.full_name],
+    NPCRewardID.MAGIC_BELL_CRYSTAL.full_name: [
         *emblem_names,
-        NPCID.DEER_MAGIC_BELL.display_name,
-        NPCID.CROCODILE3.display_name,
+        NPCID.DEER_MAGIC_BELL.full_name,
+        NPCID.CROCODILE3.full_name,
     ],
-    NPCRewardID.WOODSTIN_TRIO.display_name: [
-        NPCID.DEER.display_name,
-        NPCID.SQUIRREL3.display_name,
-        NPCID.DOG3.display_name,
+    NPCRewardID.WOODSTIN_TRIO.full_name: [
+        NPCID.DEER.full_name,
+        NPCID.SQUIRREL3.full_name,
+        NPCID.DOG3.full_name,
     ],
-    NPCRewardID.GREENWOOD_LEAVES_TILE.display_name: [
-        NPCID.MOLE_SOUL_OF_LIGHT.display_name,
-        NPCID.CROCODILE.display_name,
-        NPCID.CROCODILE2.display_name,
-        NPCID.BIRD_GREENWOOD_LEAF.display_name,
-        ItemID.DREAMROD.display_name,
+    NPCRewardID.GREENWOOD_LEAVES_TILE.full_name: [
+        NPCID.MOLE_SOUL_OF_LIGHT.full_name,
+        NPCID.CROCODILE.full_name,
+        NPCID.CROCODILE2.full_name,
+        NPCID.BIRD_GREENWOOD_LEAF.full_name,
+        ItemID.DREAMROD.full_name,
     ],
-    NPCRewardID.SHIELD_BRACELET_MOLE.display_name: [
-        NPCID.MOLE.display_name,
-        NPCID.MOLE_SHIELD_BRACELET.display_name,
-        ItemID.MOLESRIBBON.display_name,
+    NPCRewardID.SHIELD_BRACELET_MOLE.full_name: [
+        NPCID.MOLE.full_name,
+        NPCID.MOLE_SHIELD_BRACELET.full_name,
+        ItemID.MOLESRIBBON.full_name,
     ],
-    NPCRewardID.PSYCHO_SWORD_SQUIRREL.display_name: [
-        NPCID.SQUIRREL_PSYCHO_SWORD.display_name,
-        ItemID.DELICIOUSSEEDS.display_name,
+    NPCRewardID.PSYCHO_SWORD_SQUIRREL.full_name: [
+        NPCID.SQUIRREL_PSYCHO_SWORD.full_name,
+        ItemID.DELICIOUSSEEDS.full_name,
     ],
-    NPCRewardID.EMBLEM_C_SQUIRREL.display_name: [
-        NPCID.SQUIRREL_EMBLEM_C.display_name,
-        NPCID.SQUIRREL_PSYCHO_SWORD.display_name,
+    NPCRewardID.EMBLEM_C_SQUIRREL.full_name: [
+        NPCID.SQUIRREL_EMBLEM_C.full_name,
+        NPCID.SQUIRREL_PSYCHO_SWORD.full_name,
     ],
-    NPCRewardID.GREENWOODS_GUARDIAN.display_name: [NPCID.GREENWOODS_GUARDIAN.display_name],
-    NPCRewardID.MOLE_SOUL_OF_LIGHT.display_name: [NPCID.MOLE_SOUL_OF_LIGHT.display_name],
-    ChestID.GREENWOOD_ICE_ARMOR.display_name: [
-        NPCID.MOLE.display_name,
-        NPCID.SQUIRREL_ICE_ARMOR.display_name,
-        ItemID.DREAMROD.display_name,
+    NPCRewardID.GREENWOODS_GUARDIAN.full_name: [NPCID.GREENWOODS_GUARDIAN.full_name],
+    NPCRewardID.MOLE_SOUL_OF_LIGHT.full_name: [NPCID.MOLE_SOUL_OF_LIGHT.full_name],
+    ChestID.GREENWOOD_ICE_ARMOR.full_name: [
+        NPCID.MOLE.full_name,
+        NPCID.SQUIRREL_ICE_ARMOR.full_name,
+        ItemID.DREAMROD.full_name,
     ],
-    ChestID.GREENWOOD_TUNNELS.display_name: [NPCID.MONMO.display_name, NPCID.MOLE3.display_name],
+    ChestID.GREENWOOD_TUNNELS.full_name: [NPCID.MONMO.full_name, NPCID.MOLE3.full_name],
     # Act 3 - St Elles
-    NPCRewardID.NORTHEASTERN_MERMAID_HERB.display_name: [NPCID.MERMAID.display_name, NPCID.DOLPHIN2.display_name],
-    NPCRewardID.MAGIC_FLARE_MERMAID.display_name: [
-        NPCID.MERMAID_MAGIC_FLARE.display_name,
-        NPCID.MERMAID_BUBBLE_ARMOR.display_name,
+    NPCRewardID.NORTHEASTERN_MERMAID_HERB.full_name: [NPCID.MERMAID.full_name, NPCID.DOLPHIN2.full_name],
+    NPCRewardID.MAGIC_FLARE_MERMAID.full_name: [
+        NPCID.MERMAID_MAGIC_FLARE.full_name,
+        NPCID.MERMAID_BUBBLE_ARMOR.full_name,
     ],
-    NPCRewardID.REDHOT_STICK_MERMAID.display_name: [NPCID.MERMAID_RED_HOT_STICK.display_name],
-    NPCRewardID.LUE.display_name: [
-        NPCID.LUE.display_name,
-        NPCID.DOLPHIN_SAVES_LUE.display_name,
-        NPCID.MERMAID_PEARL.display_name,
+    NPCRewardID.REDHOT_STICK_MERMAID.full_name: [NPCID.MERMAID_RED_HOT_STICK.full_name],
+    NPCRewardID.LUE.full_name: [
+        NPCID.LUE.full_name,
+        NPCID.DOLPHIN_SAVES_LUE.full_name,
+        NPCID.MERMAID_PEARL.full_name,
     ],
     # Logical mermaids tears. TODO: move to separate list for optional logic toggle
-    NPCRewardID.MERMAID_QUEEN.display_name: [NPCID.MERMAID_QUEEN.display_name],
-    NPCRewardID.ANGELFISH_SOUL_OF_SHIELD.display_name: [NPCID.ANGELFISH_SOUL_OF_SHIELD.display_name],
-    LairID.MERMAID3.display_name: [ItemID.MERMAIDSTEARS.display_name],
-    LairID.MERMAID_STATUE_BLESTER.display_name: [ItemID.MERMAIDSTEARS.display_name],
-    ChestID.DUREAN_CRITICAL_SWORD.display_name: [ItemID.MERMAIDSTEARS.display_name],
+    NPCRewardID.MERMAID_QUEEN.full_name: [NPCID.MERMAID_QUEEN.full_name],
+    NPCRewardID.ANGELFISH_SOUL_OF_SHIELD.full_name: [NPCID.ANGELFISH_SOUL_OF_SHIELD.full_name],
+    LairID.MERMAID3.full_name: [ItemID.MERMAIDSTEARS.full_name],
+    LairID.MERMAID_STATUE_BLESTER.full_name: [ItemID.MERMAIDSTEARS.full_name],
+    ChestID.DUREAN_CRITICAL_SWORD.full_name: [ItemID.MERMAIDSTEARS.full_name],
     # Act 4 - Mountain of Souls
-    NPCRewardID.MOUNTAIN_KING.display_name: [
-        NPCID.DANCING_GRANDMA.display_name,
-        NPCID.DANCING_GRANDMA2.display_name,
+    NPCRewardID.MOUNTAIN_KING.full_name: [
+        NPCID.DANCING_GRANDMA.full_name,
+        NPCID.DANCING_GRANDMA2.full_name,
         *redhot_names,
     ],
-    NPCRewardID.MUSHROOM_SHOES_BOY.display_name: [NPCID.BOY_MUSHROOM_SHOES.display_name],
-    NPCRewardID.EMBLEM_E_SNAIL.display_name: [NPCID.SNAIL_EMBLEM_E.display_name],
+    NPCRewardID.MUSHROOM_SHOES_BOY.full_name: [NPCID.BOY_MUSHROOM_SHOES.full_name],
+    NPCRewardID.EMBLEM_E_SNAIL.full_name: [NPCID.SNAIL_EMBLEM_E.full_name],
     # Also includes path from lune to sleeping mushroom for the two locations locked behind mushroom's dream.
-    NPCRewardID.EMBLEM_F_TILE.display_name: [
-        NPCID.MUSHROOM_EMBLEM_F.display_name,
-        NPCID.GRANDPA5.display_name,
-        NPCID.MUSHROOM2.display_name,
-        ItemID.DREAMROD.display_name,
+    NPCRewardID.EMBLEM_F_TILE.full_name: [
+        NPCID.MUSHROOM_EMBLEM_F.full_name,
+        NPCID.GRANDPA5.full_name,
+        NPCID.MUSHROOM2.full_name,
+        ItemID.DREAMROD.full_name,
     ],
-    LairID.SNAIL_EMBLEM_E.display_name: [
-        NPCID.MUSHROOM_EMBLEM_F.display_name,
-        NPCID.GRANDPA5.display_name,
-        NPCID.MUSHROOM2.display_name,
-        ItemID.DREAMROD.display_name,
+    LairID.SNAIL_EMBLEM_E.full_name: [
+        NPCID.MUSHROOM_EMBLEM_F.full_name,
+        NPCID.GRANDPA5.full_name,
+        NPCID.MUSHROOM2.full_name,
+        ItemID.DREAMROD.full_name,
     ],
     # Act 5 - Leo's Lab
-    NPCRewardID.EMBLEM_G_UNDER_CHEST_OF_DRAWERS.display_name: [
-        NPCID.CHEST_OF_DRAWERS_MYSTIC_ARMOR.display_name,
-        NPCID.GREAT_DOOR.display_name,
-        ItemID.DOORKEY.display_name,
+    NPCRewardID.EMBLEM_G_UNDER_CHEST_OF_DRAWERS.full_name: [
+        NPCID.CHEST_OF_DRAWERS_MYSTIC_ARMOR.full_name,
+        NPCID.GREAT_DOOR.full_name,
+        ItemID.DOORKEY.full_name,
     ],
-    NPCRewardID.CHEST_OF_DRAWERS_MYSTIC_ARMOR.display_name: [
-        NPCID.CHEST_OF_DRAWERS_MYSTIC_ARMOR.display_name,
-        NPCID.GREAT_DOOR.display_name,
-        ItemID.DOORKEY.display_name,
+    NPCRewardID.CHEST_OF_DRAWERS_MYSTIC_ARMOR.full_name: [
+        NPCID.CHEST_OF_DRAWERS_MYSTIC_ARMOR.full_name,
+        NPCID.GREAT_DOOR.full_name,
+        ItemID.DOORKEY.full_name,
     ],
-    NPCRewardID.HERB_PLANT_IN_LEOS_LAB.display_name: [
-        NPCID.PLANT_HERB.display_name,
-        NPCID.MOUSE.display_name,
-        NPCID.CAT.display_name,
-        NPCID.CAT2.display_name,
-        ItemID.ACTINIDIALEAVES.display_name,
+    NPCRewardID.HERB_PLANT_IN_LEOS_LAB.full_name: [
+        NPCID.PLANT_HERB.full_name,
+        NPCID.MOUSE.full_name,
+        NPCID.CAT.full_name,
+        NPCID.CAT2.full_name,
+        ItemID.ACTINIDIALEAVES.full_name,
     ],
-    NPCRewardID.SPARK_BOMB_MOUSE.display_name: [
-        NPCID.MOUSE_SPARK_BOMB.display_name,
-        NPCID.MOUSE.display_name,
-        NPCID.CAT.display_name,
-        NPCID.CAT2.display_name,
-        ItemID.ACTINIDIALEAVES.display_name,
+    NPCRewardID.SPARK_BOMB_MOUSE.full_name: [
+        NPCID.MOUSE_SPARK_BOMB.full_name,
+        NPCID.MOUSE.full_name,
+        NPCID.CAT.full_name,
+        NPCID.CAT2.full_name,
+        ItemID.ACTINIDIALEAVES.full_name,
     ],
-    NPCRewardID.LEOS_CAT_DOOR_KEY.display_name: [NPCID.CAT_DOOR_KEY.display_name, ItemID.DREAMROD.display_name],
-    NPCRewardID.ACTINIDIA_PLANT.display_name: [NPCID.PLANT_ACTINIDIA_LEAVES.display_name],
-    NPCRewardID.CHEST_OF_DRAWERS_HERB.display_name: [NPCID.CHEST_OF_DRAWERS2.display_name],
-    NPCRewardID.MARIE.display_name: [NPCID.MARIE.display_name],
+    NPCRewardID.LEOS_CAT_DOOR_KEY.full_name: [NPCID.CAT_DOOR_KEY.full_name, ItemID.DREAMROD.full_name],
+    NPCRewardID.ACTINIDIA_PLANT.full_name: [NPCID.PLANT_ACTINIDIA_LEAVES.full_name],
+    NPCRewardID.CHEST_OF_DRAWERS_HERB.full_name: [NPCID.CHEST_OF_DRAWERS2.full_name],
+    NPCRewardID.MARIE.full_name: [NPCID.MARIE.full_name],
     # Potentially optional icearmor requirement.
-    NPCRewardID.POWER_PLANT_CRYSTAL.display_name: [ItemID.ICEARMOR.display_name],
-    NPCRewardID.GREAT_DOOR_SOUL_OF_DETECTION.display_name: [NPCID.GREAT_DOOR_SOUL_OF_DETECTION.display_name],
-    LairID.DOLL.display_name: [ItemID.ICEARMOR.display_name],
-    LairID.MARIE.display_name: [ItemID.ICEARMOR.display_name],
+    NPCRewardID.POWER_PLANT_CRYSTAL.full_name: [ItemID.ICEARMOR.full_name],
+    NPCRewardID.GREAT_DOOR_SOUL_OF_DETECTION.full_name: [NPCID.GREAT_DOOR_SOUL_OF_DETECTION.full_name],
+    LairID.DOLL.full_name: [ItemID.ICEARMOR.full_name],
+    LairID.MARIE.full_name: [ItemID.ICEARMOR.full_name],
     # Act 6 - Magridd Castle
-    NPCRewardID.ELEMENTAL_MAIL_SOLDIER.display_name: [
-        NPCID.SOLDIER_ELEMENTAL_MAIL.display_name,
-        ItemID.DREAMROD.display_name,
+    NPCRewardID.ELEMENTAL_MAIL_SOLDIER.full_name: [
+        NPCID.SOLDIER_ELEMENTAL_MAIL.full_name,
+        ItemID.DREAMROD.full_name,
     ],
-    NPCRewardID.SUPER_BRACELET_TILE.display_name: [
-        NPCID.DR_LEO.display_name,
-        NPCID.SOLDIER_WITH_LEO.display_name,
-        NPCID.SOLDIER_DOK.display_name,
-        NPCID.QUEEN_MAGRIDD.display_name,
+    NPCRewardID.SUPER_BRACELET_TILE.full_name: [
+        NPCID.DR_LEO.full_name,
+        NPCID.SOLDIER_WITH_LEO.full_name,
+        NPCID.SOLDIER_DOK.full_name,
+        NPCID.QUEEN_MAGRIDD.full_name,
     ],
-    NPCRewardID.QUEEN_MAGRIDD_VIP_CARD.display_name: [NPCID.QUEEN_MAGRIDD.display_name],
-    NPCRewardID.PLATINUM_CARD_SOLDIER.display_name: [
-        NPCID.SOLDIER_PLATINUM_CARD.display_name,
-        NPCID.SINGER_CONCERT_HALL.display_name,
-        ItemID.HARPSTRING.display_name,
+    NPCRewardID.QUEEN_MAGRIDD_VIP_CARD.full_name: [NPCID.QUEEN_MAGRIDD.full_name],
+    NPCRewardID.PLATINUM_CARD_SOLDIER.full_name: [
+        NPCID.SOLDIER_PLATINUM_CARD.full_name,
+        NPCID.SINGER_CONCERT_HALL.full_name,
+        ItemID.HARPSTRING.full_name,
     ],
-    NPCRewardID.MAID_HERB.display_name: [NPCID.MAID_HERB.display_name],  # anything else?
-    NPCRewardID.EMBLEM_H_TILE.display_name: [NPCID.SOLDIER_CASTLE.display_name],
-    NPCRewardID.KING_MAGRIDD.display_name: [NPCID.KING_MAGRIDD.display_name, NPCID.SOLDIER_CASTLE.display_name],
-    NPCRewardID.LEO_ON_THE_AIRSHIP_DECK.display_name: [],
-    NPCRewardID.SOLDIER_SOUL_OF_REALITY.display_name: [NPCID.SOLDIER_SOUL_OF_REALITY.display_name],
-    LairID.KING_MAGRIDD.display_name: [ItemID.AIRSHIPKEY.display_name],
+    NPCRewardID.MAID_HERB.full_name: [NPCID.MAID_HERB.full_name],  # anything else?
+    NPCRewardID.EMBLEM_H_TILE.full_name: [NPCID.SOLDIER_CASTLE.full_name],
+    NPCRewardID.KING_MAGRIDD.full_name: [NPCID.KING_MAGRIDD.full_name, NPCID.SOLDIER_CASTLE.full_name],
+    NPCRewardID.LEO_ON_THE_AIRSHIP_DECK.full_name: [],
+    NPCRewardID.SOLDIER_SOUL_OF_REALITY.full_name: [NPCID.SOLDIER_SOUL_OF_REALITY.full_name],
+    LairID.KING_MAGRIDD.full_name: [ItemID.AIRSHIPKEY.full_name],
     # Act 7 - World of Evil
-    ChestID.DAZZLING_SPACE_SE.display_name: [ItemID.SOULARMOR.display_name],
-    ChestID.DAZZLING_SPACE_SW.display_name: [ItemID.SOULARMOR.display_name],
+    ChestID.DAZZLING_SPACE_SE.full_name: [ItemID.SOULARMOR.full_name],
+    ChestID.DAZZLING_SPACE_SW.full_name: [ItemID.SOULARMOR.full_name],
 }
 
 

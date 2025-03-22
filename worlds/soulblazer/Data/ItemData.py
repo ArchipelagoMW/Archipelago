@@ -79,7 +79,7 @@ class SoulBlazerItemsData(YAMLWizard):
 items_data: SoulBlazerItemsData = SoulBlazerItemsData.from_yaml(get_data_file_bytes("SoulBlazerItems.yaml"))
 """A collection of SoulBlazer Item data loaded from SoulBlazerItems.yaml."""
 
-ItemID.display_names = {
+ItemID.full_names = {
     data.id: data.name
     for data in [
         *items_data.swords,
@@ -90,10 +90,10 @@ ItemID.display_names = {
         *items_data.special_items,
     ]
 }
-ItemID.display_names.update(
+ItemID.full_names.update(
     {ItemID.LAIR_RELEASE: "Lair Release", ItemID.SOUL: "Soul", ItemID.REMOTE_ITEM: "Remote Item"}
 )
 
-NPCID.display_names = {data.operand: data.name for data in items_data.npc_releases}
+NPCID.full_names = {data.operand: data.name for data in items_data.npc_releases}
 
-SoulID.display_names = {data.operand: data.name for data in items_data.souls}
+SoulID.full_names = {data.operand: data.name for data in items_data.souls}

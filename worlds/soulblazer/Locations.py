@@ -38,20 +38,20 @@ locations_by_name = {
 locations_by_address = {data.address: data for data in locations_data.all_locations}
 
 boss_lair_names = {
-    LairID.VILLAGE_CHIEF.display_name,
-    LairID.GREENWOODS_GUARDIAN.display_name,
-    LairID.MERMAID_QUEEN.display_name,
-    LairID.MOUNTAIN_KING.display_name,
-    LairID.MARIE.display_name,
-    LairID.KING_MAGRIDD.display_name,
+    LairID.VILLAGE_CHIEF.full_name,
+    LairID.GREENWOODS_GUARDIAN.full_name,
+    LairID.MERMAID_QUEEN.full_name,
+    LairID.MOUNTAIN_KING.full_name,
+    LairID.MARIE.full_name,
+    LairID.KING_MAGRIDD.full_name,
 }
 
 village_leader_names = {
-    NPCRewardID.VILLAGE_CHIEF.display_name,
-    NPCRewardID.GREENWOODS_GUARDIAN.display_name,
-    NPCRewardID.MERMAID_QUEEN.display_name,
-    NPCRewardID.NOME.display_name,
-    NPCRewardID.MARIE.display_name,
-    NPCRewardID.KING_MAGRIDD.display_name,
+    NPCRewardID.VILLAGE_CHIEF.full_name,
+    NPCRewardID.GREENWOODS_GUARDIAN.full_name,
+    NPCRewardID.MERMAID_QUEEN.full_name,
+    NPCRewardID.NOME.full_name,
+    NPCRewardID.MARIE.full_name,
+    NPCRewardID.KING_MAGRIDD.full_name,
 }
 

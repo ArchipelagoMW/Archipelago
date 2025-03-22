@@ -49,8 +49,8 @@ locations_data: SoulBlazerLocationsData = SoulBlazerLocationsData.from_yaml(
     get_data_file_bytes("SoulBlazerLocations.yaml")
 )
 
-ChestID.display_names = {data.id: data.name for data in locations_data.chests}
+ChestID.full_names = {data.id: data.name for data in locations_data.chests}
 
-LairID.display_names = {data.id: data.name for data in locations_data.lairs}
+LairID.full_names = {data.id: data.name for data in locations_data.lairs}
 
-NPCRewardID.display_names = {data.id: data.name for data in locations_data.npc_rewards}
+NPCRewardID.full_names = {data.id: data.name for data in locations_data.npc_rewards}

@@ -79,16 +79,16 @@ def create_exp_pool(world: "SoulBlazerWorld") -> list[int]:
 
 def create_itempool(world: "SoulBlazerWorld") -> list[SoulBlazerItem]:
     itempool = [world.create_item(name) for name in unique_item_names]
-    itempool += [world.create_item(ItemID.MEDICALHERB.display_name) for _ in range(herb_count_vanilla)]
-    itempool += [world.create_item(ItemID.STRANGEBOTTLE.display_name) for _ in range(bottle_count_vanilla)]
+    itempool += [world.create_item(ItemID.MEDICALHERB.full_name) for _ in range(herb_count_vanilla)]
+    itempool += [world.create_item(ItemID.STRANGEBOTTLE.full_name) for _ in range(bottle_count_vanilla)]
     # TODO: Add option to replace nothings with... something?
-    itempool += [world.create_item(ItemID.NOTHING.display_name) for _ in range(nothing_count_vanilla)]
+    itempool += [world.create_item(ItemID.NOTHING.full_name) for _ in range(nothing_count_vanilla)]
     world.gem_items = [
-        world.create_item(ItemID.GEMS.display_name).set_operand(value) for value in create_gem_pool(world)
+        world.create_item(ItemID.GEMS.full_name).set_operand(value) for value in create_gem_pool(world)
     ]
     itempool += world.gem_items
     world.exp_items = [
-        world.create_item(ItemID.EXP.display_name).set_operand(value) for value in create_exp_pool(world)
+        world.create_item(ItemID.EXP.full_name).set_operand(value) for value in create_exp_pool(world)
     ]
     itempool += world.exp_items
 
@@ -105,45 +105,45 @@ magic_names = [data.name for data in items_data.magics]
 castable_magic_names = [data.name for data in items_data.magics if data.id != ItemID.PHOENIX]
 
 emblem_names = [
-    ItemID.EMBLEMA.display_name,
-    ItemID.EMBLEMB.display_name,
-    ItemID.EMBLEMC.display_name,
-    ItemID.EMBLEMD.display_name,
-    ItemID.EMBLEME.display_name,
-    ItemID.EMBLEMF.display_name,
-    ItemID.EMBLEMG.display_name,
-    ItemID.EMBLEMH.display_name,
+    ItemID.EMBLEMA.full_name,
+    ItemID.EMBLEMB.full_name,
+    ItemID.EMBLEMC.full_name,
+    ItemID.EMBLEMD.full_name,
+    ItemID.EMBLEME.full_name,
+    ItemID.EMBLEMF.full_name,
+    ItemID.EMBLEMG.full_name,
+    ItemID.EMBLEMH.full_name,
 ]
 
 redhot_names = [
-    ItemID.REDHOTMIRROR.display_name,
-    ItemID.REDHOTBALL.display_name,
-    ItemID.REDHOTSTICK.display_name,
+    ItemID.REDHOTMIRROR.full_name,
+    ItemID.REDHOTBALL.full_name,
+    ItemID.REDHOTSTICK.full_name,
 ]
 
 stone_names = [
-    ItemID.BROWNSTONE.display_name,
-    ItemID.GREENSTONE.display_name,
-    ItemID.BLUESTONE.display_name,
-    ItemID.SILVERSTONE.display_name,
-    ItemID.PURPLESTONE.display_name,
-    ItemID.BLACKSTONE.display_name,
+    ItemID.BROWNSTONE.full_name,
+    ItemID.GREENSTONE.full_name,
+    ItemID.BLUESTONE.full_name,
+    ItemID.SILVERSTONE.full_name,
+    ItemID.PURPLESTONE.full_name,
+    ItemID.BLACKSTONE.full_name,
 ]
 
 soul_names = [data.name for data in items_data.souls]
 
 repeatable_item_names = [
-    ItemID.NOTHING.display_name,
-    ItemID.MEDICALHERB.display_name,
-    ItemID.STRANGEBOTTLE.display_name,
-    ItemID.GEMS.display_name,
-    ItemID.EXP.display_name,
+    ItemID.NOTHING.full_name,
+    ItemID.MEDICALHERB.full_name,
+    ItemID.STRANGEBOTTLE.full_name,
+    ItemID.GEMS.full_name,
+    ItemID.EXP.full_name,
 ]
 
 unique_item_names = [
     data.name
     for data in items_data.all_items
-    if data.name not in repeatable_item_names and data.name != ItemID.VICTORY.display_name
+    if data.name not in repeatable_item_names and data.name != ItemID.VICTORY.full_name
 ]
 
 all_items_by_name = {data.name: data for data in items_data.all_items}

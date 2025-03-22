@@ -52,16 +52,16 @@ class IDOffset(IntEnum):
     """ID Offset for Soul rewards."""
 
 
-class WithDisplayName():
-    display_names: dict[int,str] = {}
+class WithFullName():
+    full_names: dict[int,str] = {}
     @property
-    def display_name (self) -> str:
-        return self.display_names[self.value]
+    def full_name (self) -> str:
+        return self.full_names[self.value]
     
 
 #TODO: Move back to Names?
 
-class ChestID(WithDisplayName, IntEnum):
+class ChestID(WithFullName, IntEnum):
     TRIAL_ROOM                     = 0
     GRASS_VALLEY_SECRET_CAVE_LEFT  = 1
     GRASS_VALLEY_SECRET_CAVE_RIGHT = 2
@@ -130,7 +130,7 @@ class ChestID(WithDisplayName, IntEnum):
     DAZZLING_SPACE_SW              = 65
 
 
-class ItemID(WithDisplayName, IntEnum):
+class ItemID(WithFullName, IntEnum):
     NOTHING         = 0x00
 
     #Swords
@@ -215,7 +215,7 @@ class ItemID(WithDisplayName, IntEnum):
     GEMS            = 0xFF
 
 #TODO: redo enum names based on renamified NPCs.
-class LairID(WithDisplayName, IntEnum):
+class LairID(WithFullName, IntEnum):
     OLD_WOMAN                     = 2
     TOOL_SHOP_OWNER               = 6
     TULIP                         = 7
@@ -386,7 +386,7 @@ class LairID(WithDisplayName, IntEnum):
     SOLDIER11                     = 402
     KING_MAGRIDD                  = 405
 
-class NPCID(WithDisplayName, IntEnum):
+class NPCID(WithFullName, IntEnum):
     OLD_WOMAN                     = 2
     TOOL_SHOP_OWNER               = 6
     TULIP                         = 7
@@ -557,7 +557,7 @@ class NPCID(WithDisplayName, IntEnum):
     SOLDIER11                     = 402
     KING_MAGRIDD                  = 405
 
-class NPCRewardID(WithDisplayName, IntEnum):
+class NPCRewardID(WithFullName, IntEnum):
     TOOL_SHOP_OWNER                  = 0x00
     EMBLEM_A_TILE                    = 0x01
     GOAT_PEN_CORNER                  = 0x02
@@ -626,7 +626,7 @@ class NPCRewardID(WithDisplayName, IntEnum):
     GREAT_DOOR_SOUL_OF_DETECTION     = 0x3F
     SOLDIER_SOUL_OF_REALITY          = 0x40
 
-class SoulID(WithDisplayName, IntEnum):
+class SoulID(WithFullName, IntEnum):
     SOUL_MAGICIAN  = 0x00
     SOUL_LIGHT     = 0x01
     SOUL_SHIELD    = 0x02
