@@ -80,10 +80,10 @@ class CandyBox2World(World):
 
     def completion_rule(self, state: CollectionState):
         return state.has("Progressive World Map", self.player, 7) and \
-            state.has("The P Stone", self.player) and \
-            state.has("The L Stone", self.player) and \
-            state.has("The A Stone", self.player) and \
-            state.has("The Y Stone", self.player) and \
+            state.has("P Stone", self.player) and \
+            state.has("L Stone", self.player) and \
+            state.has("A Stone", self.player) and \
+            state.has("Y Stone", self.player) and \
             state.has("Locked Candy Box", self.player)
 
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
