@@ -40,8 +40,6 @@ class SatisfactoryWorld(World):
 
 
     def generate_early(self) -> None:
-        self.options.final_elevator_package.value = 1
-
         self.state_logic = StateLogic(self.player, self.options)
         self.critical_path = CriticalPathCalculator(self.game_logic, self.random, self.options)
         self.items = Items(self.player, self.game_logic, self.random, self.options, self.critical_path)
@@ -88,19 +86,14 @@ class SatisfactoryWorld(World):
     def set_rules(self) -> None:
         resource_sink_goal: bool = "AWESOME Sink Points" in self.options.goal_selection
 
-        last_elevator_tier: int = \
-            len(self.game_logic.space_elevator_tiers) if resource_sink_goal \
-                else self.options.final_elevator_package.value
-        
-        required_parts: Set[str] = set(self.game_logic.space_elevator_tiers[last_elevator_tier - 1].keys())
+        required_parts: Set[str] = \
+            set(self.game_logic.space_elevator_tiers[self.options.final_elevator_package.value - 1].keys())
 
         if resource_sink_goal:
             required_parts.union(self.game_logic.buildings["AWESOME Sink"].inputs)
 
-        required_parts_tuple: Tuple[str, ...] = tuple(required_parts)
-
         self.multiworld.completion_condition[self.player] = \
-            lambda state: self.state_logic.can_produce_all(state, required_parts_tuple)
+            lambda state: self.state_logic.can_produce_all(state, required_parts)
 
 
     def collect(self, state: CollectionState, item: Item) -> bool:
@@ -146,6 +139,7 @@ class SatisfactoryWorld(World):
                     "EnergyLink": bool(self.options.energy_link)
                 }
             },
+            "SlotDataVersion": 1,
             "DeathLink": bool(self.options.death_link)
         }
 
