@@ -10,10 +10,15 @@ class LMRamData(NamedTuple):
     item_count: Optional[int] = None
 
 class StringByteFunction:
-    # Encodes a provided string to UTF-8 format. Adds padding until the expected length is reached.
-    # If provided string is longer than expected length, raise an exception
     @staticmethod
     def string_to_bytes(user_string: str, encoded_byte_length: int):
+        """
+        Encodes a provided string to UTF-8 format. Adds padding until the expected length is reached.
+        If provided string is longer than expected length, raise an exception
+
+        :param user_string: String that needs to be encoded to bytes.
+        :param encoded_byte_length: Expected length of the provided string.
+        """
         encoded_string = user_string.encode('utf-8')
 
         if len(encoded_string) < encoded_byte_length:
@@ -24,9 +29,13 @@ class StringByteFunction:
 
         return encoded_string
 
-    # Strips the un-necessary padding / bytes that are not a part of the core string.
     @staticmethod
     def byte_string_strip(bytes_input: bytes):
+        """
+        Strips the un-necessary padding / bytes that are not a part of the core string.
+
+        :param bytes_input: User provided byte array, which will convert to string.
+        """
         result = []
 
         for single_byte in bytes_input:
