@@ -435,9 +435,9 @@ class LuigisMansionRandomizer:
     def update_dol_offsets(self):
         # Edits for DOL max space offsets.
         self.dol.data.seek(0x8) # Physical Section Address
-        self.dol.data.write(int.to_bytes(0x39FA20))
+        self.dol.data.write(bytes.fromhex("39FA20"))
         self.dol.data.seek(0x50)  # Virtual Section Address
-        self.dol.data.write(int.to_bytes(0x804DD940))
+        self.dol.data.write(bytes.fromhex("804DD940"))
         self.dol.data.seek(0x98)  # Section Size
         self.dol.data.write(int.to_bytes(0x1000))
 
@@ -453,16 +453,16 @@ class LuigisMansionRandomizer:
 
         # Vacuum Speed
         if any("Poltergust 4000" in key for key in self.output_data["Options"]["start_inventory"]):
-            vac_speed = [0x38, 0x00, 0x00, 0x0F]
+            vac_speed = "3800000F"
         else:
-            vac_speed = [0x80, 0x0D, 0x01, 0x60]
+            vac_speed = "800D0160"
         self.dol.data.seek(0x7EA28)
-        self.dol.data.write(struct.pack(">BBBB", *vac_speed))
+        self.dol.data.write(bytes.fromhex(vac_speed))
 
         # Fix Boos to properly spawn
         self.dol.data.seek(0x12DCC9)
-        boo_data = [0x00, 0x00, 0x05]
-        self.dol.data.write(struct.pack(">BBB", *boo_data))
+        boo_data = "000005"
+        self.dol.data.write(bytes.fromhex(boo_data))
 
         # Turn off pickup animations
         if self.output_data["Options"]["pickup_animation"] == 1:
