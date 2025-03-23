@@ -44,9 +44,9 @@ chests:
   description: Act 1 - Leo's Painting Room 2 - Metal Enemies Chest
   type: Chest
   flag: CAN_CUT_METAL
-- name: Greenwood - Sleepy Stump Chest 
+- name: Greenwood - Sleeping Stump Chest 
   id: 9
-  description: Act 2 - Greenwood - Sleepy Stump Chest (I believe I can fly)
+  description: Act 2 - Greenwood - Sleeping Stump Chest (I believe I can fly)
   type: Chest
   flag: NONE
 - name: Greenwood Tunnels - Mole's Chest
@@ -174,29 +174,29 @@ chests:
   description: Act 3 - Seabed North-West - Chest in South-East Cove
   type: Chest
   flag: NONE
-- name: Mountain Slopes South - South-East Chest Down the Slide
+- name: Mountain Slopes Base - South-East Chest Down the Slide
   id: 35
-  description: Act 4 - Mountain Slopes South - South-East Chest Down the Slide
+  description: Act 4 - Mountain Slopes Base - South-East Chest Down the Slide
   type: Chest
   flag: NONE
-- name: Mountain Slopes North - Buried Treasure Left-Most Chest
+- name: Mountain Slopes Ascent - Buried Treasure Left-Most Chest
   id: 36
-  description: Act 4 - Mountain Slopes North - Buried Treasure Left-Most Chest
+  description: Act 4 - Mountain Slopes Ascent - Buried Treasure Left-Most Chest
   type: Chest
   flag: NONE
-- name: Mountain Slopes North - Buried Treasure Middle-Left Chest
+- name: Mountain Slopes Ascent - Buried Treasure Middle-Left Chest
   id: 37
-  description: Act 4 - Mountain Slopes North - Buried Treasure Middle-Left Chest
+  description: Act 4 - Mountain Slopes Ascent - Buried Treasure Middle-Left Chest
   type: Chest
   flag: NONE
-- name: Mountain Slopes North - Buried Treasure Middle-Right Chest
+- name: Mountain Slopes Ascent - Buried Treasure Middle-Right Chest
   id: 38
-  description: Act 4 - Mountain Slopes North - Buried Treasure Middle-Right Chest
+  description: Act 4 - Mountain Slopes Ascent - Buried Treasure Middle-Right Chest
   type: Chest
   flag: NONE
-- name: Mountain Slopes North - Buried Treasure Right-Most Chest
+- name: Mountain Slopes Ascent - Buried Treasure Right-Most Chest
   id: 39
-  description: Act 4 - Mountain Slopes North - Buried Treasure Right-Most Chest
+  description: Act 4 - Mountain Slopes Ascent - Buried Treasure Right-Most Chest
   type: Chest
   flag: NONE
 - name: Laynole West - North Invisible Bridge Chest
@@ -760,34 +760,34 @@ lairs:
   description: Act 3 - Seabed - Lair 194 - South-East Corner Lair
   type: Lair
   flag: NONE
-- name: Mountain Slopes South - Mid Level Lair
+- name: Mountain Slopes Base - Mid Level Lair
   id: 201
-  description: Act 4 - Mountain Slopes South - Lair 202 - Mid Level Lair
+  description: Act 4 - Mountain Slopes Base - Lair 202 - Mid Level Lair
   type: Lair
   flag: NONE
-- name: Mountain Slopes South - Mountain Base Lair
+- name: Mountain Slopes Base - Mountain Base Lair
   id: 202
-  description: Act 4 - Mountain Slopes South - Lair 202 - Mountain Base Lair
+  description: Act 4 - Mountain Slopes Base - Lair 202 - Mountain Base Lair
   type: Lair
   flag: NONE
-- name: Mountain Slopes South - Lair Up on the Ledge
+- name: Mountain Slopes Base - Lair Up on the Ledge
   id: 203
-  description: Act 4 - Mountain Slopes South - Lair 203 - Lair Up on the Ledge
+  description: Act 4 - Mountain Slopes Base - Lair 203 - Lair Up on the Ledge
   type: Lair
   flag: NONE
-- name: Mountain Slopes North - Lair at Top of the Slide
+- name: Mountain Slopes Ascent - Lair at Top of the Slide
   id: 204
-  description: Act 4 - Mountain Slopes North - Lair 204 - Lair at Top of the Slide
+  description: Act 4 - Mountain Slopes Ascent - Lair 204 - Lair at Top of the Slide
   type: Lair
   flag: NONE
-- name: Mountain Slopes North - Path through the Snow Right Lair
+- name: Mountain Slopes Ascent - Path through the Snow Right Lair
   id: 211
-  description: Act 4 - Mountain Slopes North - Lair 211 - Path through the Snow Right Lair
+  description: Act 4 - Mountain Slopes Ascent - Lair 211 - Path through the Snow Right Lair
   type: Lair
   flag: NONE
-- name: Mountain Slopes North - Path through the Snow Left Lair
+- name: Mountain Slopes Ascent - Path through the Snow Left Lair
   id: 212
-  description: Act 4 - Mountain Slopes North - Lair 212 - Path through the Snow Left Lair
+  description: Act 4 - Mountain Slopes Ascent - Lair 212 - Path through the Snow Left Lair
   type: Lair
   flag: NONE
 - name: Lune Passage - Lair Under the Waterfall
@@ -1221,9 +1221,9 @@ npc-rewards:
   description: Act 1 - Grass Valley - Hideout Cliff Crystal Fairy's Item
   type: NPC Reward
   flag: NONE
-- name: Grass Valley Treasure Cave - Crystal's Item
+- name: Grass Valley Treasure Room - Crystal's Item
   id: 9
-  description: Act 1 - Grass Valley Treasure Cave - Crystal Fairy's Item
+  description: Act 1 - Grass Valley Treasure Room - Crystal Fairy's Item
   type: NPC Reward
   flag: NONE
 - name: Underground Castle West - Crystal on Ledge's Item
@@ -1253,7 +1253,7 @@ npc-rewards:
   flag: NONE
 - name: Greenwood Tunnels - Turbo's Bones Tile
   id: 15
-  description: Act 2 - Greenwood Tunnels - Turbo's Bones Tile (Locked behind Sleepy Bird)
+  description: Act 2 - Greenwood Tunnels - Turbo's Bones Tile (Locked behind Sleeping Bird)
   type: NPC Reward
   flag: NONE
 - name: Greenwood Tunnels - Mole's Reward
@@ -1346,14 +1346,14 @@ npc-rewards:
   description: Act 5 - Leo's Lab 1F - Mousehole Plant's Item
   type: NPC Reward
   flag: NONE
-- name: Leo's Lab 2F - Sleepy Cat's Item
+- name: Leo's Lab 2F - Sleeping Cat's Item
   id: 34
-  description: Act 5 - Leo's Lab 2F - Sleepy Cat's Item
+  description: Act 5 - Leo's Lab 2F - Sleeping Cat's Item
   type: NPC Reward
   flag: NONE
-- name: Leo's Lab 2F - Dancing Plant's Item
+- name: Leo's Lab 2F - Actinidia Plant's Item
   id: 35
-  description: Act 5 - Leo's Lab 2F - Dancing Plant's Item
+  description: Act 5 - Leo's Lab 2F - Actinidia Plant's Item
   type: NPC Reward
   flag: NONE
 - name: Leo's Lab Attic - Chest of Drawer's Item
@@ -1366,9 +1366,9 @@ npc-rewards:
   description: Act 5 - Leo's Lab Attic - Marie the Doll's Item
   type: NPC Reward
   flag: NONE
-- name: Leo's Lab Mouse Hole - Mouse's Reward
+- name: Leo's Lab Mousehole - Mouse with Gift's Item
   id: 38
-  description: Act 5 - Leo's Lab Mouse Hole - Mouse's Reward
+  description: Act 5 - Leo's Lab Mousehole - Mouse with Gift's Item
   type: NPC Reward
   flag: NONE
 - name: Leo's Lab B2 - South-West Crystal's Item
@@ -1386,9 +1386,9 @@ npc-rewards:
   description: Act 5 - Power Plant - Crystal Fairy's Item
   type: NPC Reward
   flag: CAN_CUT_METAL
-- name: Magridd Castle Town - Sleepy Soldier's Item
+- name: Magridd Castle Town - Sleeping Soldier's Item
   id: 42
-  description: Act 6 - Magridd Castle Town - Sleepy Soldier's Item
+  description: Act 6 - Magridd Castle Town - Sleeping Soldier's Item
   type: NPC Reward
   flag: NONE
 - name: Magridd Castle Town - Secret Tile Under the Queen
@@ -1451,9 +1451,9 @@ npc-rewards:
   description: Act 3 - Seabed Sanctuary - Mermaid Queen's Item
   type: NPC Reward
   flag: NONE
-- name: Seabed Sanctuary - Common House Top Mermaid's Gift
+- name: Seabed Sanctuary - Common House North Mermaid's Item
   id: 55
-  description: Act 3 - Seabed Sanctuary - Common House Top Mermaid's Gift
+  description: Act 3 - Seabed Sanctuary - Common House North Mermaid's Item
   type: NPC Reward
   flag: NONE
 - name: Seabed Sanctuary - Lue the Dolphin's Item 

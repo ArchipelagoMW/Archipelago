@@ -161,7 +161,7 @@ inventory_items:
   id: 32
   operand: 0
   classification: 1
-  description: Give to the Sleepy Dolphin to release the path to the secret cove.
+  description: Give to the Sleeping Dolphin to release the path to the secret cove.
 - name: Mermaid's Tears
   id: 33
   operand: 0
@@ -191,7 +191,7 @@ inventory_items:
   id: 38
   operand: 0
   classification: 1
-  description: Actinidea Leaves. Use in Leo's Lab to lure the cats out of the main room so the mice will let you into their home.
+  description: Actinidia Leaves. Use in Leo's Lab to lure the cats out of the main room so the mice will let you into their home.
 - name: a door key
   id: 39
   operand: 0
@@ -424,11 +424,11 @@ npc_releases:
   operand: 29
   classification: 0
   description: Grass Valley - Releases the Lonely Goat. Will give you a tour of Grass Valley but otherwise has no use.
-- name: Sleepy Tulip
+- name: Sleeping Tulip
   id: 253
   operand: 34
   classification: 1
-  description: Grass Valley - Releases the Sleepy Tulip. Push it to the left for an item.
+  description: Grass Valley - Releases the Sleeping Tulip. Push it to the left for an item.
 - name: Boy in Hut
   id: 253
   operand: 35
@@ -458,7 +458,7 @@ npc_releases:
   id: 253
   operand: 43
   classification: 1
-  description: Grass Valley - Releases the ivy which leads to the ledge overlooking the Sleepy Tulip which has a secret item tile.
+  description: Grass Valley - Releases the ivy which leads to the ledge overlooking the Sleeping Tulip which has a secret item tile.
 - name: Ivy to Hideout Crystal
   id: 253
   operand: 44
@@ -499,7 +499,7 @@ npc_releases:
   operand: 63
   classification: 1
   description: Greenwood - Releases one of the Woodstin Trio. Release all three for an item.
-- name: Gift-Giving Mole
+- name: Mole with Gift
   id: 253
   operand: 64
   classification: 1
@@ -544,17 +544,17 @@ npc_releases:
   operand: 80
   classification: 1
   description: Greenwood - Releases Greenwood's Guardian. He'll give you an item and open the way to the next world.
-- name: Hole to Sleepy Stump
+- name: Mole Hole to Sleeping Stump
   id: 253
   operand: 81
   classification: 1
-  description: Greenwood - Releases the center mole hole leading to the island with the sleepy stump. Also releases the Ghost Mole who wants the Mole's Ribbon.
+  description: Greenwood - Releases the center mole hole leading to the island with the sleeping stump. Also releases the Ghost Mole who wants the Mole's Ribbon.
 - name: Dog Waiter
   id: 253
   operand: 86
   classification: 0
   description: Greenwood - Releases the Dog Waiter (now YOU are on the menu). Has no use.
-- name: Sleepy Stump
+- name: Sleeping Stump and Squirrel
   id: 253
   operand: 88
   classification: 1
@@ -573,7 +573,7 @@ npc_releases:
   id: 253
   operand: 91
   classification: 1
-  description: Greenwood - Releases the crocodile leading from the center island to the graveyard. Needed to reach the Sleepy Bird.
+  description: Greenwood - Releases the crocodile leading from the center island to the graveyard. Needed to reach the Sleeping Bird.
 - name: Peekaboo Mole
   id: 253
   operand: 92
@@ -584,7 +584,7 @@ npc_releases:
   operand: 93
   classification: 1
   description: Greenwood - Releases the leader of the Woodstin Trio (you know him well). Release all three for an item.
-- name: Sleepy Bird
+- name: Sleeping Bird
   id: 253
   operand: 97
   classification: 1
@@ -739,11 +739,11 @@ npc_releases:
   operand: 185
   classification: 1
   description: Seabed Sanctuary - Releases the North-West Mermaid statue which will open the path to the Ghost Ship.
-- name: Sleepy Dolphin
+- name: Sleeping Dolphin
   id: 253
   operand: 187
   classification: 1
-  description: Seabed Sanctuary - Releases the Sleepy Dolphin in prison area. Enter the dolphin's dream and give them the Big Pearl to open the path to the secret cove.
+  description: Seabed Sanctuary - Releases the Sleeping Dolphin in prison area. Enter the dolphin's dream and give them the Big Pearl to open the path to the secret cove.
 - name: Mermaid Queen's Attendant Right
   id: 253
   operand: 189
@@ -808,12 +808,12 @@ npc_releases:
   id: 253
   operand: 215
   classification: 0
-  description: Mountain of Souls - Releases the Boy in Jail (What did he do to deserve this?) Has no use.
-- name: Sleepy Mushroom
+  description: Mountain of Souls - Releases the Boy in Jail (What did he do?) Has no use.
+- name: Sleeping Mushroom
   id: 253
   operand: 221
   classification: 1
-  description: Mountain of Souls - Releases the Sleepy Mushroom in the unlocked jail cell. Enter his dream to open a path in Lune leading to a lair and a secret tile.
+  description: Mountain of Souls - Releases the Sleeping Mushroom in the unlocked jail cell. Enter his dream to open a path in Lune leading to a lair and a secret tile.
 - name: Dancing Grandma Right
   id: 253
   operand: 225
@@ -888,7 +888,7 @@ npc_releases:
   id: 253
   operand: 252
   classification: 1
-  description: Mountain of Souls - Releases a sleepy grandpa and the south-east lake on the path to the jail. No need to enter his dreams.
+  description: Mountain of Souls - Releases a sleeping grandpa and the south-east lake on the path to the jail. No need to enter his dreams.
 - name: Grandpa Guarding Lune
   id: 253
   operand: 254
@@ -908,7 +908,7 @@ npc_releases:
   id: 253
   operand: 265
   classification: 1
-  description: Leo's Lab - Releases the plant on the other end of the mouse hole which will give you an item.
+  description: Leo's Lab - Releases the plant on the other end of the mousehole which will give you an item.
 - name: West Lab Plant
   id: 253
   operand: 267
@@ -923,7 +923,7 @@ npc_releases:
   id: 253
   operand: 269
   classification: 1
-  description: Leo's Lab - Releases the 1 of the 2 cats stalking mice in the main room of the first floor. Lure them out of the room with the Actinidea Leaves to have the mice let you into their hole.
+  description: Leo's Lab - Releases the 1 of the 2 cats stalking mice in the main room of the first floor. Lure them out of the room with the Actinidia Leaves to have the mice let you into their hole.
 - name: Great Door to Lab
   id: 253
   operand: 274
@@ -933,7 +933,7 @@ npc_releases:
   id: 253
   operand: 276
   classification: 1
-  description: Leo's Lab - Releases the 1 of the 2 cats stalking mice in the main room of the first floor. Lure them out of the room with the Actinidea Leaves to have the mice let you into their hole.
+  description: Leo's Lab - Releases the 1 of the 2 cats stalking mice in the main room of the first floor. Lure them out of the room with the Actinidia Leaves to have the mice let you into their hole.
 - name: Locked Door to South-West Room
   id: 253
   operand: 282
@@ -959,16 +959,16 @@ npc_releases:
   operand: 290
   classification: 1
   description: Leo's Lab - Releases the steps leading up to the 2nd floor.
-- name: Sleepy Cat
+- name: Sleeping Cat
   id: 253
   operand: 294
   classification: 1
-  description: Leo's Lab - Releases the Sleepy Cat on the 2nd floor. Enter their dreams to receive an item.
+  description: Leo's Lab - Releases the Sleeping Cat on the 2nd floor. Enter their dreams to receive an item.
 - name: Mouse Outside Hole
   id: 253
   operand: 297
   classification: 1
-  description: Leo's Lab - Releases the mouse outside of the mouse hole. They wont let you in until you lure the two cats out of the room with the Actinidea Leaves.
+  description: Leo's Lab - Releases the mouse outside of the mousehole. They wont let you in until you lure the two cats out of the room with the Actinidia Leaves.
 - name: Marie the Doll
   id: 253
   operand: 303
@@ -993,17 +993,17 @@ npc_releases:
   id: 253
   operand: 315
   classification: 0
-  description: Leo's Lab - Releases the 1st of 2 mice running in a circle in the mouse hole. Has no use.
+  description: Leo's Lab - Releases the 1st of 2 mice running in a circle in the mousehole. Has no use.
 - name: Mouse with Gift
   id: 253
   operand: 316
   classification: 1
-  description: Leo's Lab - Releases the mouse in the mouse hole that will give you an item.
-- name: Mouse on 2nd Floor
+  description: Leo's Lab - Releases the mouse in the mousehole that will give you an item.
+- name: Bedroom Mouse
   id: 253
   operand: 318
   classification: 0
-  description: Leo's Lab - Releases the mouse on the 2nd floor. Has no use.
+  description: Leo's Lab - Releases the mouse in the 2nd floor bedroom. Has no use.
 - name: Great Door with Soul
   id: 253
   operand: 322
@@ -1029,16 +1029,16 @@ npc_releases:
   operand: 332
   classification: 1
   description: Leo's Lab - Releases the chest of drawer in the attic which will give you an item.
-- name: Plant by Town Models
+- name: Actinidia Plant
   id: 253
   operand: 333
   classification: 1
-  description: Leo's Lab - Releases the plant on the 2nd floor by the town models. Will give you an item.
+  description: Leo's Lab - Releases the Actinidia Plant on the 2nd floor by the town models. May or may not have actinidia leaves.
 - name: Circling Mouse 2
   id: 253
   operand: 338
   classification: 0
-  description: Leo's Lab - Releases the 2nd of 2 mice running in a circle in the mouse hole. Has no use.
+  description: Leo's Lab - Releases the 2nd of 2 mice running in a circle in the mousehole. Has no use.
 - name: Cat in Attic
   id: 253
   operand: 339
@@ -1063,12 +1063,12 @@ npc_releases:
   id: 253
   operand: 351
   classification: 0
-  description: Magridd Castle Town - Releases the soldier who will give you a hint about what the sleepy soldier has.
-- name: Sleepy Soldier
+  description: Magridd Castle Town - Releases the soldier who will give you a hint about what the Sleeping Soldier has.
+- name: Sleeping Soldier
   id: 253
   operand: 353
   classification: 1
-  description: Magridd Castle Town - Releases the Sleepy Soldier. Enter their dreams to receive an item.
+  description: Magridd Castle Town - Releases the Sleeping Soldier. Enter their dreams to receive an item.
 - name: Patrolling Soldier
   id: 253
   operand: 354
@@ -1124,7 +1124,7 @@ npc_releases:
   operand: 382
   classification: 0
   description: Magridd Castle Town - Releases the maid in the concert hall. Has no use.
-- name: Queen Magridd (gives VIP Card)
+- name: Queen Magridd
   id: 253
   operand: 383
   classification: 1

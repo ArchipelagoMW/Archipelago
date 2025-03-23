@@ -34,7 +34,7 @@ jobs:
       - name: Copy dataclass-wizard to APWorld Directory
         run: |
           cp -R ./dataclass-wizard/dataclass_wizard ./worlds/${{ env.AP_WORLD_DIR }}/Data
-          cp ./dataclass-wizard/LICENCE ./worlds/${{ env.AP_WORLD_DIR }}/Data/dataclass_wizard
+          cp ./dataclass-wizard/LICENSE ./worlds/${{ env.AP_WORLD_DIR }}/Data/dataclass_wizard
       - name: Create AP World Archive
         run: |
           mkdir dist

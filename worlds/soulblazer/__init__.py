@@ -185,7 +185,7 @@ class SoulBlazerWorld(World):
             # replace it with a "Victory" item
             victory = self.create_item(ItemID.VICTORY.full_name)
             self.pre_fill_items.append(victory)
-            self.multiworld.get_location(NPCRewardID.MAGIC_BELL_CRYSTAL.full_name, self.player).place_locked_item(
+            self.multiworld.get_location(NPCRewardID.MASTER_CRYSTAL.full_name, self.player).place_locked_item(
                 victory
             )
         else:
