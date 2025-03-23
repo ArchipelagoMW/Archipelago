@@ -80,6 +80,8 @@ Currently, the following games are supported:
 * Saving Princess
 * Castlevania: Circle of the Moon
 * Inscryption
+* Civilization VI
+* The Legend of Zelda: The Wind Waker
 * Wargroove 2
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
