@@ -840,14 +840,15 @@ class NovaMaxWeapons(Range):
     default = range_end
 
 
-class NovaMaxAbilities(Range):
+class NovaMaxGadgets(Range):
     """
-    Determines maximum number of Nova non-weapon abilities that can be present in the game
-    Additional abilities may spawn if those are required to beat the game.
+    Determines maximum number of Nova gadgets that can be present in the game.
+    Gadgets are a vanilla category including 2 grenade abilities, Stim, Holo Decoy, and Ionic Force Field.
+    Additional gadgets may spawn if those are required to beat the game.
 
     Note: Nova can use any unlocked ability anytime during gameplay.
     """
-    display_name = "Nova Maximum Abilities"
+    display_name = "Nova Maximum Gadgets"
     range_start = 0
     range_end = len(nova_gadgets)
     default = range_end
@@ -1405,7 +1406,7 @@ class Starcraft2Options(PerGameCommonOptions):
     grant_story_tech: GrantStoryTech
     grant_story_levels: GrantStoryLevels
     nova_max_weapons: NovaMaxWeapons
-    nova_max_abilities: NovaMaxAbilities
+    nova_max_gadgets: NovaMaxGadgets
     nova_ghost_of_a_chance_variant: NovaGhostOfAChanceVariant
     take_over_ai_allies: TakeOverAIAllies
     locked_items: LockedItems
@@ -1495,7 +1496,7 @@ option_groups = [
     ]),
     OptionGroup("Nova", [
         NovaMaxWeapons,
-        NovaMaxAbilities,
+        NovaMaxGadgets,
         NovaGhostOfAChanceVariant,
     ]),
     OptionGroup("Race Specific Options", [
