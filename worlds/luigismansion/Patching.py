@@ -1517,6 +1517,9 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
         if not (item_data["type"] == "Furniture" or item_data["type"] == "Plant"):
             continue
 
+        if output_data["Options"]["extra_boo_spots"] == 1:
+            furniture_info.info_file_field_entries[item_data["loc_enum"]]["telesa_hide"] = 10
+
         actor_item_name = __get_item_name(item_data, int(output_data["Slot"]))
 
         # Replace the furnitureinfo entry to spawn an item from the "itemappeartable".

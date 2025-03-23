@@ -107,6 +107,7 @@ class LMWeb(WebWorld):
             LuigiOptions.BooSpeed,
             LuigiOptions.BooEscapeTime,
             LuigiOptions.BooAnger,
+            LuigiOptions.ExtraBooSpots,
             LuigiOptions.ChestTypes,
             LuigiOptions.TrapChestType,
         ]),

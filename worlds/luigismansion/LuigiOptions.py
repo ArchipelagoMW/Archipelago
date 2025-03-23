@@ -484,6 +484,14 @@ class GoldMice(Toggle):
     internal_name = "gold_mice"
 
 
+class ExtraBooSpots(Toggle):
+    """
+    Adds extra spots for boos to hide in when furniture locations have been added to the pool
+    """
+    display_name = "Extra Boo Spots"
+    internal_name = "extra_boo_spots"
+
+
 @dataclass
 class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     rank_requirement: RankRequirement
@@ -519,6 +527,7 @@ class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     boo_speed: BooSpeed
     boo_escape_time: BooEscapeTime
     boo_anger: BooAnger
+    extra_boo_spots: ExtraBooSpots
     chest_types: ChestTypes
     trap_chests: TrapChestType
     trap_link: TrapLink
