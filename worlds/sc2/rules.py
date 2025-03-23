@@ -1030,7 +1030,8 @@ class SC2Logic:
                 state.has(item_names.INFESTED_SIEGE_TANK, self.player)
                 and (
                         state.has_all({item_names.INFESTOR, item_names.INFESTOR_INFESTED_TERRAN}, self.player)
-                        or state.has_any((item_names.INFESTED_BUNKER, item_names.INFESTED_MARINE), self.player)
+                        or state.has(item_names.INFESTED_BUNKER, self.player)
+                        or (self.advanced_tactics and state.has(item_names.INFESTED_MARINE, self.player))
                         or state.count(item_names.INFESTED_SIEGE_TANK_PROGRESSIVE_AUTOMATED_MITOSIS, self.player) >= (1 if self.advanced_tactics else 2)
                 )
         )
