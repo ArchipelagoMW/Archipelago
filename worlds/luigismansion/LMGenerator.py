@@ -439,7 +439,7 @@ class LuigisMansionRandomizer:
         self.dol.data.seek(0x50)  # Virtual Section Address
         self.dol.data.write(bytes.fromhex("804DD940"))
         self.dol.data.seek(0x98)  # Section Size
-        self.dol.data.write(int.to_bytes(0x1000))
+        self.dol.data.write(bytes.fromhex("1000"))
 
         # Walk Speed
         if self.output_data["Options"]["walk_speed"] == 0:
