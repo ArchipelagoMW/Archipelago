@@ -22,7 +22,7 @@ players to rely upon each other to complete their game.
 
 While a multiworld game traditionally requires all players to be playing the same game, a multi-game multiworld allows
 players to randomize any of the supported games, and send items between them. This allows players of different
-games to interact with one another in a single multiplayer environment.  Archipelago supports multi-game multiworld.
+games to interact with one another in a single multiplayer environment.  Archipelago supports multi-game multiworlds.
 Here is a list of our [Supported Games](https://archipelago.gg/games).
 
 ## Can I generate a single-player game with Archipelago?

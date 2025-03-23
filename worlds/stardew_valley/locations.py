@@ -11,7 +11,7 @@ from .data.game_item import ItemTag
 from .data.museum_data import all_museum_items
 from .mods.mod_data import ModNames
 from .options import ExcludeGingerIsland, ArcadeMachineLocations, SpecialOrderLocations, Museumsanity, \
-    FestivalLocations, BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression, FarmType
+    FestivalLocations, BuildingProgression, ElevatorProgression, BackpackProgression, FarmType
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
 from .strings.goal_names import Goal
 from .strings.quest_names import ModQuest, Quest
@@ -191,7 +191,7 @@ def extend_cropsanity_locations(randomized_locations: List[LocationData], conten
 
 
 def extend_quests_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
-    if options.quest_locations < 0:
+    if options.quest_locations.has_no_story_quests():
         return
 
     story_quest_locations = locations_by_tag[LocationTags.STORY_QUEST]
@@ -317,7 +317,7 @@ def extend_mandatory_locations(randomized_locations: List[LocationData], options
 
 
 def extend_situational_quest_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
-    if options.quest_locations < 0:
+    if options.quest_locations.has_no_story_quests():
         return
     if ModNames.distant_lands in options.mods:
         if ModNames.alecto in options.mods:
@@ -473,7 +473,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_bundle_locations(randomized_locations, bundle_rooms)
     extend_backpack_locations(randomized_locations, options)
 
-    if options.tool_progression & ToolProgression.option_progressive:
+    if content.features.tool_progression.is_progressive:
         randomized_locations.extend(locations_by_tag[LocationTags.TOOL_UPGRADE])
 
     extend_elevator_locations(randomized_locations, options)
