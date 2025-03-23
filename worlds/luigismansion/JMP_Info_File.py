@@ -6,35 +6,12 @@ from pkgutil import get_data
 
 from gclib.rarc import RARC
 from .JMP_Field_Header import JMPFieldHeader
+from .Helper_Functions import StringByteFunction as sbf
 
 IMPORTANT_HEADER_BYTE_LENGTH = 16
 FIELD_DATA_BYTE_LENGTH = 12
 INTEGER_BYTE_LENGTH = 4
 STRING_BYTE_LENGTH = 32
-
-# Strips the un-necessary padding / bytes that are not a part of the core string.
-def byte_string_strip(bytes_input: bytes):
-    result = []
-
-    for single_byte in bytes_input:
-        if single_byte < 32 or single_byte > 127:
-            break
-        result.append(chr(single_byte))
-
-    return ''.join(result)
-
-# Encodes a provided string to UTF-8 format. Adds padding until the expected length is reached.
-# If provided string is longer than expected length, raise an exception
-def string_to_bytes(user_string: str, encoded_byte_length: int):
-    encoded_string = user_string.encode('utf-8')
-
-    if len(encoded_string) < encoded_byte_length:
-        encoded_string += b'\x00' * (encoded_byte_length - len(encoded_string))
-    elif len(encoded_string) > encoded_byte_length:
-        raise Exception("Provided string '" + user_string + "' was longer than the expected byte length of '" +
-                        str(encoded_byte_length) + "', which will not be accepted by the info file.")
-
-    return encoded_string
 
 class JMPInfoFile:
     __header_byte_length = 0
@@ -120,7 +97,7 @@ class JMPInfoFile:
                         int_val = (current_bytes & jmp_header.get_field_bitmask) >> jmp_header.get_field_shift_bit
                         data_line_info[jmp_header.get_field_name] = int_val
                     case "Str":
-                        str_val = byte_string_strip(current_line.read(STRING_BYTE_LENGTH))
+                        str_val = sbf.byte_string_strip(current_line.read(STRING_BYTE_LENGTH))
                         data_line_info[jmp_header.get_field_name] = str_val
                     case "Flt":
                         flt_val = struct.unpack(">f", current_line.read(INTEGER_BYTE_LENGTH))[0]
@@ -190,7 +167,7 @@ class JMPInfoFile:
                         self.info_file_entry.data.write(struct.pack(">I", new_val))
                     case "Str":
                         current_val = data_line[jmp_header.get_field_name]
-                        str_val = byte_string_strip(self.info_file_entry.data.read(STRING_BYTE_LENGTH))
+                        str_val = sbf.byte_string_strip(self.info_file_entry.data.read(STRING_BYTE_LENGTH))
 
                         if len(str_val) > len(current_val):
                             length_to_use = len(str_val)
@@ -198,7 +175,7 @@ class JMPInfoFile:
                             length_to_use = len(current_val)
 
                         if length_to_use < STRING_BYTE_LENGTH:
-                            current_val = string_to_bytes(current_val, length_to_use+1)
+                            current_val = sbf.string_to_bytes(current_val, length_to_use+1)
 
 
                         self.info_file_entry.data.seek(data_field_offset + jmp_header.get_field_start_bit)
