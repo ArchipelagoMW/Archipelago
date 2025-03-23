@@ -75,3 +75,6 @@ class KH2CommandProcessor(ClientCommandProcessor):
         """Removes player from the deathlink blacklist"""
         if player_name in self.ctx.deathlink_blacklist:
             self.ctx.deathlink_blacklist.remove(player_name)
+
+    #def _cmd_kill(self):
+    #    self.ctx.kh2_write_byte(0x810000, 1)

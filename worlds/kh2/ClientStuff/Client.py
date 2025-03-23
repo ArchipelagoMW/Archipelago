@@ -131,7 +131,10 @@ class KH2Context(CommonContext):
                     pass
             elif os.path.exists(self.kh2_client_settings_join):
                 with open(self.kh2_client_settings_join) as f:
-                    self.client_settings = json.load(f)
+                    # if the file isnt empty load it
+                    temp_json = json.load(f)
+                    if temp_json != {}:
+                        self.client_settings = temp_json
 
         self.hitlist_bounties = 0
         # hooked object
@@ -524,10 +527,13 @@ class KH2Context(CommonContext):
     async def is_dead(self):
         #General Death link logic: if hp is 0 and sora has 5 drive gauge and deathlink flag isnt set
         # if deathlink is on and script is hasnt killed sora and sora isnt dead
-        if self.deathlink_toggle and self.kh2_read_byte(0x810000) == 0 and self.kh2_read_longlong(self.isDead) != 0:
+        if self.deathlink_toggle and self.kh2_read_byte(0x810000) == 0 and self.kh2_read_byte(0x810001) != 0:
             # set deathlink flag so it doesn't send out bunch
             # basically making the game think it got its death from a deathlink instead of from the game
-            self.kh2_write_int(0x810000, 1)
+            self.kh2_write_byte(0x810000, 1)
+            # 0x810001 is set to 1 when you die via the goa script. This is done because the polling rate for the client can miss a death
+            # but the lua script runs eveery frame so we cant miss them now
+            self.kh2_write_byte(0x810001, 0)
             Room = self.kh2_read_byte(self.Now + 0x01)
             Event = self.kh2_read_byte(self.Now + 0x08)
             if (Room, Event) in DeathLinkPair.keys():
