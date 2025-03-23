@@ -387,6 +387,65 @@ def roll_linked_options(weights: dict) -> dict:
     return weights
 
 
+def compare_results(
+        yaml_value: Union[str, int, bool, dict, list],
+        trigger_value: Union[str, int, bool, dict, list],
+        comparator: str):
+    if yaml_value is None:
+        return False
+    if isinstance(yaml_value, (str, bool, int)) and isinstance(trigger_value, (str, bool, int)):
+        yaml_value = str(yaml_value).lower()
+        trigger_value = str(trigger_value).lower()
+    if comparator == "=":
+        return yaml_value == trigger_value
+    if comparator == "!=":
+        return yaml_value != trigger_value
+    try:
+        yaml_value = int(yaml_value)
+        trigger_value = int(trigger_value)
+    except (ValueError, TypeError):
+        raise Exception("Value of option_name and option_result must be integers if comparison is not = or !=")
+    if comparator == "<":
+        return yaml_value < trigger_value
+    if comparator == "<=":
+        return yaml_value <= trigger_value
+    if comparator == ">":
+        return yaml_value > trigger_value
+    if comparator == ">=":
+        return yaml_value >= trigger_value
+    raise ValueError(f"option_compare must be one of [=,<,<=,>=,>,!=]")
+
+
+def compare_triggers(option_set: dict, currently_targeted_weights: dict) -> bool:
+    result = True
+    advanced = copy.deepcopy(option_set["option_advanced"])
+    result = result and compare_results(currently_targeted_weights[advanced[0][0]], advanced[0][2], advanced[0][1])
+    for x in range(1, len(advanced), 2):
+        if str(advanced[x]).lower() in ["|", "or"]:
+            if result:
+                return True
+            result = True
+        elif str(advanced[x]).lower() in ["&", "and"]:
+            if not result:
+                continue
+        else:
+            raise Exception(f"Unions must be chosen from: [&, 'and', |, 'or']. Please check trigger entry {x+1}")
+        entry = advanced[x+1]
+        result = result and compare_results(currently_targeted_weights[entry[0]], entry[2], entry[1])
+    return result
+
+
+def trigger_option_resolution(option_set: dict) -> list:
+    key = get_choice("option_name", option_set)
+    if "option_compare" in option_set:
+        return [[key, get_choice("option_compare", option_set), get_choice("option_result", option_set)]]
+    if "option_range" in option_set:
+        min_value = option_set["option_range"][0]
+        max_value = option_set["option_range"][1]
+        return [[key, ">=", min_value], "&", [key, "<=", max_value]]
+    return [[key, "=", get_choice("option_result", option_set)]]
+
+
 def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
     weights = copy.deepcopy(weights)  # make sure we don't write back to other weights sets in same_settings
     weights["_Generator_Version"] = Utils.__version__
@@ -396,21 +455,35 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
             category = option_set.get("option_category", None)
             if category:
                 currently_targeted_weights = currently_targeted_weights[category]
-            key = get_choice("option_name", option_set)
-            if key not in currently_targeted_weights:
-                logging.warning(f'Specified option name {option_set["option_name"]} did not '
-                                f'match with a root option. '
-                                f'This is probably in error.')
-            trigger_result = get_choice("option_result", option_set)
-            result = get_choice(key, currently_targeted_weights)
-            currently_targeted_weights[key] = result
-            if result == trigger_result and roll_percentage(get_choice("percentage", option_set, 100)):
+            if "option_advanced" not in option_set:
+                option_set["option_advanced"] = trigger_option_resolution(option_set)
+            advanced = option_set["option_advanced"]
+            if len(advanced) % 2 != 1:
+                raise Exception("option_advanced has an illegal number of entries. Please check trigger and fix.")
+            for x in range(0, len(advanced), 2):
+                if advanced[x][0] not in currently_targeted_weights:
+                    logging.warning(f'Specified option name {advanced[x][0]} did not '
+                                    f'match with a root option. '
+                                    f'This is probably in error.')
+                currently_targeted_weights[advanced[x][0]] = get_choice(advanced[x][0], currently_targeted_weights)
+                if len(advanced[x]) == 2:
+                    advanced[x].insert(1, "=")
+                if len(advanced[x]) == 3:
+                    if advanced[x][1] not in ["<", "<=", ">", ">=", "=", "!="]:
+                        raise Exception(f"option_advanced has an illegal comparator in block {x}. "
+                                        f"Please check trigger and fix.")
+                else:
+                    raise Exception(f"options_advanced is malformed. "
+                                    f"Block {x} should have either 2 or 3 entries, but had {len(advanced[x])}.\n")
+            if (compare_triggers(option_set, currently_targeted_weights) and
+                    roll_percentage(get_choice("percentage", option_set, 100))):
                 for category_name, category_options in option_set["options"].items():
                     currently_targeted_weights = weights
                     if category_name:
                         currently_targeted_weights = currently_targeted_weights[category_name]
-                    update_weights(currently_targeted_weights, category_options, "Triggered", option_set["option_name"])
-            valid_keys.add(key)
+                    update_weights(currently_targeted_weights, category_options, "Triggered", f"Trigger {i + 1}")
+            for x in range(0, len(advanced), 2):
+                valid_keys.add(advanced[x][0])
         except Exception as e:
             raise ValueError(f"Your trigger number {i + 1} is invalid. "
                              f"Please fix your triggers.") from e
