@@ -784,6 +784,7 @@ class SpearOfAdunMaxAutocastAbilities(Range):
     """
     Determines the maximum number of Spear of Adun passive abilities that can be present in the game
     Additional abilities may spawn if those are required to beat the game.
+    Does not affect building abilities like Orbital Assimilators or Warp Harmonization.
     """
     display_name = "Spear of Adun Maximum Passive Abilities"
     range_start = 0
