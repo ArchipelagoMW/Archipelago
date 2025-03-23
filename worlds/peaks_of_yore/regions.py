@@ -1,10 +1,13 @@
 from typing import NamedTuple
 
-from BaseClasses import Region
+from BaseClasses import Region, Location
 from .options import PeaksOfYoreOptions
 from worlds.AutoWorld import World
-from .locations import get_locations, get_location_names_by_type, PeaksOfYoreLocation
-from .data import PeaksOfYoreRegion
+from .data import *
+
+
+class PeaksOfYoreLocation(Location):
+    game = "Peaks of Yore"
 
 
 class RegionLocationInfo(NamedTuple):
@@ -48,23 +51,52 @@ def create_poy_regions(world: World, options: PeaksOfYoreOptions) -> RegionLocat
     return result
 
 
-def create_region(region_name: str, region_enum: PeaksOfYoreRegion, item_requirements: dict[str: int],
+def create_region(name: str, region_enum: PeaksOfYoreRegion, item_requirements: dict[str, int],
                   cabin_region: Region, world: World, options: PeaksOfYoreOptions) -> RegionLocationInfo:
-    region = Region(region_name, world.player, world.multiworld)
+    peaks_region = Region(name, world.player, world.multiworld)
 
-    peaks = get_location_names_by_type(region_enum, "Peak")
-    if "Solemn Tempest" in peaks and options.disable_solemn_tempest:
-        peaks.remove("Solemn Tempest")
+    ropes: dict[str: int] = locations_to_dict(ropes_list[region_enum])
+    artefacts: dict[str: int] = locations_to_dict(artefacts_list[region_enum])
+    bird_seeds: dict[str: int] = locations_to_dict(bird_seeds_list[region_enum])
+    # simple things above
+    # shenanigans below
 
-    peaks_in_pool = peaks
-    artefacts_in_pool = get_location_names_by_type(region_enum, "Artefact")
+    regional_peaks_list: list[ItemOrLocation] = peaks_list[region_enum]
+    removeST: bool = False
+    if region_enum == PeaksOfYoreRegion.EXPERT and options.disable_solemn_tempest:
+        removeST = True
+        for peak in regional_peaks_list:
+            if peak.id == 37:
+                regional_peaks_list.remove(peak)
 
-    locations = {k: v for k, v in get_locations(region_enum).items() if
-                 ((not options.disable_solemn_tempest) or not (k == "Solemn Tempest" or
-                                                               k == "Solemn Tempest (Free Solo)"))
-                 and options.include_free_solo or "(Free Solo)" not in k}
+    peaks: dict[str: int] = locations_to_dict(regional_peaks_list)
 
-    region.add_locations(locations, PeaksOfYoreLocation)
-    cabin_region.connect(region, region_name + " Connection", lambda state: state.has_all_counts(item_requirements,
-                                                                                                 world.player))
-    return RegionLocationInfo(artefacts_in_pool, peaks_in_pool)
+    free_solo_peaks: dict[str: int] = {}
+    if options.include_free_solo and region_enum not in (PeaksOfYoreRegion.FUNDAMENTALS,
+                                                         PeaksOfYoreRegion.INTERMEDIATE):
+        free_solo_peaks = locations_to_dict(free_solo_peak_list[region_enum])
+        if removeST:
+            free_solo_peaks.pop("Solemn Tempest (Free Solo)")
+
+    all_locations: dict[str: int] = {**ropes, **artefacts, **bird_seeds, **peaks, **free_solo_peaks}
+
+    peaks_region.add_locations(all_locations, PeaksOfYoreLocation)
+    cabin_region.connect(peaks_region, name + " Connection", lambda state: state.has_all_counts(item_requirements,
+                                                                                                world.player))
+
+    if options.include_time_attack:
+        time_attack_time: dict[str: int] = locations_to_dict(time_attack_time_list[region_enum])
+        time_attack_ropes: dict[str: int] = locations_to_dict(time_attack_ropes_list[region_enum])
+        time_attack_holds: dict[str: int] = locations_to_dict(time_attack_holds_list[region_enum])
+
+        time_attack_region = Region(name + " (Time Attack)", world.player, world.multiworld)
+        time_attack_region.add_locations({**time_attack_time, **time_attack_ropes, **time_attack_holds},
+                                         PeaksOfYoreLocation)
+        peaks_region.connect(time_attack_region, name + " Time Attack Connection",
+                             lambda state: state.has("Pocketwatch", world.player))
+
+    return RegionLocationInfo([*artefacts.keys()], [*peaks.keys(), *free_solo_peaks.keys()])
+
+
+def locations_to_dict(locations: list[ItemOrLocation]) -> dict[str: int]:
+    return {loc.name: loc.id for loc in locations}

@@ -117,6 +117,10 @@ class IncludeFreeSolo(Toggle):
     """Add Free Solo Peaks to the pool"""
     display_name = "Include Free Solo Peaks"
 
+class IncludeTimeAttack(Toggle):
+    """Adds beating peak time, hold and rope counts as checks"""
+    display_name = "Include Time Attack Challenges"
+
 
 poy_option_groups = [
     OptionGroup("Starting Items", [
@@ -133,7 +137,8 @@ poy_option_groups = [
         EnableAdvanced,
         EnableExpert,
         DisableSolemnTempest,
-        IncludeFreeSolo
+        IncludeFreeSolo,
+        IncludeTimeAttack
     ]),
 ]
 
@@ -154,4 +159,5 @@ class PeaksOfYoreOptions(PerGameCommonOptions):
     enable_expert: EnableExpert
     disable_solemn_tempest: DisableSolemnTempest
     include_free_solo: IncludeFreeSolo
+    include_time_attack: IncludeTimeAttack
     start_inventory_from_pool: StartInventoryPool

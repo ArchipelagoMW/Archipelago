@@ -5,8 +5,8 @@ from Options import Toggle, OptionError
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial, Item
 from .options import PeaksOfYoreOptions, Goal, StartingBook, RopeUnlockMode, StartingHands, poy_option_groups
-from .data import full_item_table, full_location_table
-from .locations import get_locations
+from .data import *
+
 from .regions import create_poy_regions, RegionLocationInfo
 
 
@@ -121,7 +121,7 @@ class PeaksOfWorld(World):
                 continue
             local_itempool.append(self.create_item(name))
 
-        for tool in [item for item in full_item_table.values() if item.type == "Tool"]:
+        for tool in get_all_items_or_locations(tools_list):
             if (tool.name != "Barometer" or not self.options.start_with_barometer) \
                     and (tool.name != "Oil Lamp" or not self.options.start_with_oil_lamp):
                 if tool.name == "Progressive Crampons":
@@ -151,13 +151,13 @@ class PeaksOfWorld(World):
                 else:
                     local_itempool.append(self.create_item(tool.name))
 
-        for rope in [item for item in full_item_table.values() if item.type == "Rope"]:
+        for rope in get_all_items_or_locations(ropes_list):
             local_itempool.append(self.create_item(rope.name))
 
-        for birdSeed in [item for item in full_item_table.values() if item.type == "Bird Seed"]:
+        for birdSeed in get_all_items_or_locations(bird_seeds_list):
             local_itempool.append(self.create_item(birdSeed.name))
 
-        for artefact in [item for item in full_item_table.values() if item.type == "Artefact"]:
+        for artefact in get_all_items_or_locations(artefacts_list):
             local_itempool.append(self.create_item(artefact.name))
 
         if len(local_itempool) < remaining_items:
