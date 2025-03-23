@@ -1,6 +1,5 @@
 import hashlib
 import os
-import re
 import io
 import struct
 import random
@@ -12,6 +11,7 @@ from pkgutil import get_data
 from .Hints import PORTRAIT_HINTS
 from .JMP_Info_File import JMPInfoFile
 from .Patching import *
+from .Helper_Functions import StringByteFunction as sbf
 
 from gclib import fs_helpers as fs
 from gclib.gcm import GCM
@@ -66,7 +66,7 @@ class LuigisMansionRandomizer:
         magic_seed = str(self.output_data["Seed"])[0:19]
         bin_data = self.gcm.read_file_data("sys/boot.bin")
         bin_data.seek(0x01)
-        bin_data.write(struct.pack("21s", (magic_seed + "01").encode()))
+        bin_data.write(sbf.string_to_bytes(magic_seed, len(magic_seed)))
         self.gcm.changed_files["sys/boot.bin"] = bin_data
 
 
@@ -401,7 +401,7 @@ class LuigisMansionRandomizer:
                 event_text_data = next((info_files for info_files in event_arc.file_entries if
                                         info_files.name == name_to_find)).data
                 event_str = event_text_data.getvalue().decode('utf-8', errors='replace')
-                music_to_replace = re.findall(r'\<BGM\>\(\d+\)', event_str)
+                music_to_replace = re.findall(r'<BGM>\(\d+\)', event_str)
 
                 if music_to_replace:
                     for music_match in music_to_replace:
