@@ -138,7 +138,7 @@ class RoomConnection:
             self.source.dir == DoorDirection.right and self.dest.dir != DoorDirection.left or
             self.source.dir == DoorDirection.up and self.dest.dir != DoorDirection.down or
             self.source.dir == DoorDirection.down and self.dest.dir != DoorDirection.up):
-            raise Exception(f"Door {source.name} and Door {dest.name} have mismatched directions.")
+            raise Exception(f"Door {source.name} ({self.source.dir}) and Door {dest.name} ({self.dest.dir}) have mismatched directions.")
 
 
 class Level:
