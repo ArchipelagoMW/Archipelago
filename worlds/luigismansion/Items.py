@@ -273,6 +273,8 @@ RECV_OWN_GAME_ITEMS: list[int] = [
 # List of received items to ignore because they are handled elsewhere
 RECV_ITEMS_IGNORE: list[int] = [8127, 8125, 8130, 8131, 8132]
 
+# List of health related items, which are used to not exceed max health
+HEALTH_RELATED_ITEMS: list[int] = [8128, 8129]
 
 ICE_TRAP_EQUIV = ["Freeze Trap", "Frozen Trap"]
 BOMB_EQUIV = ["TNT Barrel"]

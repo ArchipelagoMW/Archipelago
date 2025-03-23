@@ -5,17 +5,18 @@ import traceback
 
 import NetUtils
 import Utils
-from typing import Any, Optional, Collection
+from typing import Any, Collection
 
 import dolphin_memory_engine as dme
 
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from worlds import AutoWorldRegister
 from settings import get_settings, Settings
+from worlds.cv64.data.iname import cure_ampoule
 
 from . import CLIENT_VERSION
 from .LMGenerator import LuigisMansionRandomizer
-from .Items import ALL_ITEMS_TABLE, RECV_ITEMS_IGNORE, RECV_OWN_GAME_ITEMS, BOO_AP_ID_LIST
+from .Items import *
 from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV
 
 CONNECTION_REFUSED_GAME_STATUS = (
@@ -397,7 +398,11 @@ class LMContext(CommonContext):
                     if not addr_to_update.pointer_offset is None:
                         curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
             [addr_to_update.pointer_offset]), byte_size))
-                        curr_val+= addr_to_update.item_count
+                        if item.item in HEALTH_RELATED_ITEMS:
+                            #TODO come back and update this, if user chosen max health is supported.
+                            curr_val = min(curr_val + addr_to_update.item_count, 100)
+                        else:
+                            curr_val+= addr_to_update.item_count
                         dme.write_bytes(dme.follow_pointers(addr_to_update.ram_addr,
             [addr_to_update.pointer_offset]), curr_val.to_bytes(byte_size, 'big'))
                     else:
