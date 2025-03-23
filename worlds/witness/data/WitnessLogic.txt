@@ -206,7 +206,7 @@ Door - 0x0A24B (Flood Room Entry) - 0x0A249
 159043 - 0x0A14C (Pond Room Near Reflection EP) - True - True
 159044 - 0x0A14D (Pond Room Far Reflection EP) - True - True
 
-Desert Flood Room (Desert) - Desert Elevator Room - 0x0C316:
+Desert Flood Room (Desert) - Desert Elevator Room - 0x0C316 - Desert Flood Room Underwater - 0x1C260:
 158097 - 0x1C2DF (Reduce Water Level Far Left) - True - True
 158098 - 0x1831E (Reduce Water Level Far Right) - True - True
 158099 - 0x1C260 (Reduce Water Level Near Left) - True - True
@@ -223,6 +223,8 @@ Desert Flood Room (Desert) - Desert Elevator Room - 0x0C316:
 158110 - 0x18076 (Flood Room 6) - 0x17ECA & 0x1C260 & 0x1831C - True
 Door - 0x0C316 (Elevator Room Entry) - 0x18076
 159034 - 0x337F8 (Flood Room EP) - 0x1C2DF - True
+
+Desert Flood Room Underwater (Desert):
 
 Desert Elevator Room (Desert) - Desert Behind Elevator - 0x01317:
 158111 - 0x17C31 (Elevator Room Transparent) - True - True
@@ -501,7 +503,7 @@ Laser - 0x17C65 (Laser) - 0x17CA4
 159121 - 0x03BE3 (Garden Right EP) - True - True
 159122 - 0x0A409 (Wall EP) - True - True
 
-Inside Monastery (Monastery):
+Inside Monastery (Monastery) - Monastery North Shutters - 0x09D9B:
 158213 - 0x09D9B (Shutters Control) - True - Dots
 158214 - 0x193A7 (Inside 1) - 0x00037 - True
 158215 - 0x193AA (Inside 2) - 0x193A7 - True
@@ -512,6 +514,8 @@ Inside Monastery (Monastery):
 159135 - 0x034AF (Right Shutter EP) - 0x09D9B - True
 
 Monastery Garden (Monastery):
+
+Monastery North Shutters (Monastery):
 
 ==Town==
 
@@ -637,9 +641,13 @@ Door - 0x3CCDF (Exit Right) - 0x33AB2
 159556 - 0x33A2A (Door EP) - 0x03553 - True
 159558 - 0x33B06 (Church EP) - 0x0354E - True
 
+==Southern Peninsula==
+
+Southern Peninsula (Southern Peninsula) - Main Island - True:
+
 ==Jungle==
 
-Jungle (Jungle) - Main Island - True - The Ocean - 0x17CDF:
+Jungle (Jungle) - Main Island - True - The Ocean - 0x17CDF - Jungle Under Popup Wall - 0x1475B:
 158251 - 0x17CDF (Shore Boat Spawn) - True - Boat
 158609 - 0x17F9B (Discard) - True - Triangles
 158252 - 0x002C4 (First Row 1) - True - True
@@ -669,6 +677,8 @@ Door - 0x3873B (Laser Shortcut) - 0x337FA
 159151 - 0x289F5 (Tree Halo EP) - True - True
 159350 - 0x035CB (Bamboo CCW EP) - True - True
 159351 - 0x035CF (Bamboo CW EP) - True - True
+
+Jungle Under Popup Wall (Jungle):
 
 Outside Jungle River (Jungle) - Main Island - True - Monastery Garden - 0x0CF2A - Jungle Vault - 0x15287:
 158267 - 0x17CAA (Monastery Garden Shortcut Panel) - True - True
@@ -712,8 +722,10 @@ Bunker Ultraviolet Room (Bunker) - Bunker Elevator Section - 0x0A08D:
 158285 - 0x17E67 (UV Room 2) - 0x17E63 & 0x34BC6 - Colored Squares & Black/White Squares
 Door - 0x0A08D (Elevator Room Entry) - 0x17E67
 
-Bunker Elevator Section (Bunker) - Bunker Elevator - TrueOneWay:
+Bunker Elevator Section (Bunker) - Bunker Elevator - TrueOneWay - Bunker Under Elevator - 0x0A079 | Bunker Green Room | Bunker Cyan Room | Bunker Laser Platform:
 159311 - 0x035F5 (Tinted Door EP) - 0x17C79 - True
+
+Bunker Under Elevator (Bunker):
 
 Bunker Elevator (Bunker) - Bunker Elevator Section - 0x0A079 - Bunker Cyan Room - 0x0A079 - Bunker Green Room - 0x0A079 - Bunker Laser Platform - 0x0A079 - Outside Bunker - 0x0A079:
 158286 - 0x0A079 (Elevator Control) - True - Colored Squares & Black/White Squares
@@ -1005,7 +1017,7 @@ Mountaintop (Mountaintop) - Mountain Floor 1 - 0x17C34:
 Mountain Floor 1 (Mountain Floor 1) - Mountain Floor 1 Bridge - 0x09E39:
 158408 - 0x09E39 (Light Bridge Controller) - True - Black/White Squares & Colored Squares & Eraser
 
-Mountain Floor 1 Bridge (Mountain Floor 1) - Mountain Floor 1 At Door - TrueOneWay:
+Mountain Floor 1 Bridge (Mountain Floor 1) - Mountain Floor 1 At Door - TrueOneWay - Mountain Floor 1 Trash Pillar - TrueOneWay - Mountain Floor 1 Back Section - TrueOneWay:
 158409 - 0x09E7A (Right Row 1) - True - Black/White Squares & Dots
 158410 - 0x09E71 (Right Row 2) - 0x09E7A - Black/White Squares & Dots
 158411 - 0x09E72 (Right Row 3) - 0x09E71 - Black/White Squares & Shapers & Dots
@@ -1018,11 +1030,15 @@ Mountain Floor 1 Bridge (Mountain Floor 1) - Mountain Floor 1 At Door - TrueOneW
 158418 - 0x09E6C (Left Row 5) - 0x09E79 - Stars & Black/White Squares & Stars + Same Colored Symbol
 158419 - 0x09E6F (Left Row 6) - 0x09E6C - Stars & Rotated Shapers & Shapers
 158420 - 0x09E6B (Left Row 7) - 0x09E6F - Stars & Dots
+158424 - 0x09EAD (Trash Pillar 1) - True - Black/White Squares & Shapers
+158425 - 0x09EAF (Trash Pillar 2) - 0x09EAD - Black/White Squares & Shaper
+
+Mountain Floor 1 Trash Pillar (Mountain Floor 1):
+
+Mountain Floor 1 Back Section (Mountain Floor 1):
 158421 - 0x33AF5 (Back Row 1) - True - Black/White Squares & Symmetry
 158422 - 0x33AF7 (Back Row 2) - 0x33AF5 - Black/White Squares & Stars
 158423 - 0x09F6E (Back Row 3) - 0x33AF7 - Symmetry & Dots
-158424 - 0x09EAD (Trash Pillar 1) - True - Black/White Squares & Shapers
-158425 - 0x09EAF (Trash Pillar 2) - 0x09EAD - Black/White Squares & Shapers
 
 Mountain Floor 1 At Door (Mountain Floor 1) - Mountain Floor 2 - 0x09E54:
 Door - 0x09E54 (Exit) - 0x09EAF & 0x09F6E & 0x09E6B & 0x09E7B
@@ -1098,14 +1114,16 @@ Elevator (Mountain Bottom Floor):
 Mountain Pink Bridge EP (Mountain Floor 2):
 159312 - 0x09D63 (Pink Bridge EP) - 0x09E39 - True
 
-Mountain Path to Caves (Mountain Bottom Floor) - Caves - 0x2D77D:
+Mountain Path to Caves (Mountain Bottom Floor) - Caves - 0x2D77D - Caves Entry Door - TrueOneWay:
 158447 - 0x00FF8 (Caves Entry Panel) - True - Triangles & Black/White Squares
 Door - 0x2D77D (Caves Entry) - 0x00FF8
 158448 - 0x334E1 (Rock Control) - True - True
 
 ==Caves==
 
-Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Caves Path to Challenge - 0x019A5:
+Caves Entry Door (Caves):
+
+Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Caves Path to Challenge - 0x019A5 - Caves Entry Door - TrueOneWay:
 158451 - 0x335AB (Elevator Inside Control) - True - Dots & Black/White Squares
 158452 - 0x335AC (Elevator Upper Outside Control) - 0x335AB - Black/White Squares
 158453 - 0x3369D (Elevator Lower Outside Control) - 0x335AB - Black/White Squares & Dots
@@ -1219,3 +1237,7 @@ The Ocean (Boat) - Main Island - TrueOneWay - Swamp Near Boat - TrueOneWay - Tre
 159521 - 0x33879 (Tutorial Reflection EP) - True - True
 159522 - 0x03C19 (Tutorial Moss EP) - True - True
 159531 - 0x035C9 (Cargo Box EP) - 0x0A0C9 - True
+
+==Easter Eggs==
+
+Easter Eggs (Easter Eggs) - Entry - True:
