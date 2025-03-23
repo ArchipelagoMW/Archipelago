@@ -483,13 +483,13 @@ class GameLogic:
         "Packaged Nitrogen Gas": (
             Recipe("Packaged Nitrogen Gas", "Packager", ("Nitrogen Gas", "Empty Fluid Tank")), ),
         "Packaged Oil": (
-            Recipe("Packaged Oil", "Packager", ("Crude Oil", "Empty Fluid Tank")), ),
+            Recipe("Packaged Oil", "Packager", ("Crude Oil", "Empty Canister")), ),
         "Packaged Sulfuric Acid": (
-            Recipe("Packaged Sulfuric Acid", "Packager", ("Sulfuric Acid", "Empty Fluid Tank")), ),
+            Recipe("Packaged Sulfuric Acid", "Packager", ("Sulfuric Acid", "Empty Canister")), ),
         "Packaged Turbofuel": (
-            Recipe("Packaged Turbofuel", "Packager", ("Turbofuel", "Empty Fluid Tank")), ),
+            Recipe("Packaged Turbofuel", "Packager", ("Turbofuel", "Empty Canister")), ),
         "Packaged Water": (
-            Recipe("Packaged Water", "Packager", ("Water", "Empty Fluid Tank")), ),
+            Recipe("Packaged Water", "Packager", ("Water", "Empty Canister")), ),
         "Turbofuel": (
             Recipe("Turbofuel", "Refinery", ("Fuel", "Compacted Coal")),
             Recipe("Turbo Heavy Fuel", "Refinery", ("Heavy Oil Residue", "Compacted Coal")),

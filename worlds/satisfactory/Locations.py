@@ -203,8 +203,9 @@ class Locations():
         self.items = items
         self.critical_path = critical_path
 
-    def get_base_location_table(self) -> List[LocationData]:
-        return [
+
+    def get_base_location_table(self, max_tier: int) -> List[LocationData]:
+        all_locations = [
             MamSlot("Alien Organisms", "Inflated Pocket Dimension", 1338500),
             MamSlot("Alien Organisms", "Hostile Organism Detection", 1338501),
             MamSlot("Alien Organisms", "Expanded Toolbelt", 1338502),
@@ -273,15 +274,15 @@ class Locations():
             MamSlot("Sulfur", "Explosive Rebar", 1338565),
             MamSlot("Sulfur", "Cluster Nobelisk", 1338566),
             MamSlot("Sulfur", "Experimental Power Generation", 1338567),
-            MamSlot("Sulfur", "Turbo Rifle Ammo", 1338568),
+            # 1338568 Turbo Rifle Ammo
             MamSlot("Sulfur", "Turbo Fuel", 1338569),
             MamSlot("Sulfur", "Expanded Toolbelt", 1338570),
-            MamSlot("Sulfur", "Nuclear Deterrent Development", 1338571),
+            # 1338571 Nuclear Deterrent Development
 
             # 1.0
-            MamSlot("Power Slugs", "Synthetic Power Shards", 1338572),
-            MamSlot("Sulfur", "Rocket Fuel", 1338573),
-            MamSlot("Sulfur", "Ionized Fuel", 1338574),
+            # 1338572 Synthetic Power Shards
+            # 1338573 Rocket Fuel
+            # 1338574 Ionized Fuel
             MamSlot("Alien Technology", "SAM Analysis", 1338575),
             MamSlot("Alien Technology", "SAM Reanimation", 1338576),
             MamSlot("Alien Technology", "SAM Fluctuator", 1338577),
@@ -300,7 +301,7 @@ class Locations():
             MamSlot("Alien Technology", "Alien Energy Harvesting", 1338590),
             MamSlot("Alien Technology", "Production Amplifier", 1338591),
             MamSlot("Alien Technology", "Power Augmenter", 1338592),
-            MamSlot("Alien Technology", "Alien Power Matrix", 1338593),
+            # 1338593 Alien Power Matrix
             # 1.0
 
             # 1338600 - 1338699 - Harddrives - Harddrives
@@ -317,10 +318,32 @@ class Locations():
             ShopSlot(self.state_logic, 10, 50, 1338709)
         ]
 
+        #TODO: should be based on self.game_logic
+        if 4 <= max_tier:
+            all_locations.append(MamSlot("Power Slugs", "Synthetic Power Shards", 1338572))
+        if 4 <= max_tier:
+            all_locations.append(MamSlot("Alien Technology", "Alien Power Matrix", 1338593))
+        if 2 <= max_tier:
+            all_locations.append(MamSlot("Sulfur", "Turbo Rifle Ammo", 1338568))
+        if 2 <= max_tier:
+            all_locations.append(MamSlot("Sulfur", "Nuclear Deterrent Development", 1338571))
+        if 3 <= max_tier:
+            all_locations.append(MamSlot("Sulfur", "Rocket Fuel", 1338573))
+        if 4 <= max_tier:
+            all_locations.append(MamSlot("Sulfur", "Ionized Fuel", 1338574))
+
+        return all_locations
+
     def get_locations_for_data_package(self) -> Dict[str, int]:
         "Must include all possible location names and their id's"
 
-        location_table = self.get_base_location_table()
+        # 1338000 - 1338499 - Milestones
+        # 1338500 - 1338599 - Mam
+        # 1338600 - 1338699 - Harddrives
+        # 1338700 - 1338709 - Shop
+        # 1338999 - Upper bound
+
+        location_table = self.get_base_location_table(self.max_tiers)
         location_table.extend(self.get_hub_locations(True, self.max_tiers))
         location_table.extend(self.get_drop_pod_locations(True, self.max_tiers, set()))
         location_table.append(LocationData("Overworld", "UpperBound", 1338999))
@@ -335,7 +358,7 @@ class Locations():
 
         max_tier_for_game = min(self.options.final_elevator_package * 2, len(self.game_logic.hub_layout))
 
-        location_table = self.get_base_location_table()
+        location_table = self.get_base_location_table(max_tier_for_game)
         location_table.extend(self.get_hub_locations(False, max_tier_for_game))
         location_table.extend(self.get_drop_pod_locations(False, max_tier_for_game, self.critical_path.potential_required_parts))
         location_table.extend(self.get_logical_event_locations(self.options.final_elevator_package))

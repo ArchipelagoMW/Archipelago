@@ -462,6 +462,13 @@ class Items:
         "Recipe: Tempered Copper Ingot": ItemData(G.Recipe, 1338458, C.progression),
 # 1.0
 
+# Missed
+        "Recipe: Iron Pipe": ItemData(G.Recipe, 1338459, C.progression),
+        "Recipe: Biocoal": ItemData(G.Recipe, 1338460, C.useful),
+        "Recipe: Charcoal": ItemData(G.Recipe, 1338461, C.useful),
+        "Recipe: Sloppy Alumina": ItemData(G.Recipe, 1338462, C.progression),
+# Missed
+
         #1338459 - 1338599 Reserved for future recipes
 
         #1338400 - 1338899 buildings / others
