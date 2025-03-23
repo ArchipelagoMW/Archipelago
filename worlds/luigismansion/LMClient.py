@@ -12,7 +12,6 @@ import dolphin_memory_engine as dme
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from worlds import AutoWorldRegister
 from settings import get_settings, Settings
-from worlds.cv64.data.iname import cure_ampoule
 
 from . import CLIENT_VERSION
 from .LMGenerator import LuigisMansionRandomizer
