@@ -73,7 +73,8 @@ class SatisfactoryWorld(World):
         locations: List[LocationData] = \
             Locations(self.game_logic, self.options, self.state_logic, self.items, self.critical_path).get_locations()
         create_regions_and_return_locations(
-            self.multiworld, self.options, self.player, self.game_logic, self.state_logic, locations)
+            self.multiworld, self.options, self.player, self.game_logic, self.state_logic, self.critical_path,
+            locations)
 
 
     def create_items(self) -> None:

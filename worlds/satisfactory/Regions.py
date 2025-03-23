@@ -4,6 +4,7 @@ from .Locations import LocationData
 from .GameLogic import GameLogic, PowerInfrastructureLevel
 from .StateLogic import StateLogic
 from .Options import SatisfactoryOptions, Placement
+from .CriticalPathCalculator import CriticalPathCalculator
 
 class SatisfactoryLocation(Location):
     game: str = "Satisfactory"
@@ -29,13 +30,12 @@ class SatisfactoryLocation(Location):
         return not item.advancement
 
 
-def create_regions_and_return_locations(world: MultiWorld, options: SatisfactoryOptions, player: int, 
-            game_logic: GameLogic, state_logic: StateLogic, locations: List[LocationData]):
+def create_regions_and_return_locations(world: MultiWorld, options: SatisfactoryOptions, player: int,
+        game_logic: GameLogic, state_logic: StateLogic, critical_path: CriticalPathCalculator,
+        locations: List[LocationData]):
     
     region_names: List[str] = [
         "Overworld",
-        "Gas Area",
-        "Radioactive Area",
         "Mam",
         "AWESOME Shop"
     ]
@@ -50,14 +50,15 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
             region_names.append(f"Hub {hub_tier}-{minestone}")
 
     for building_name, building in game_logic.buildings.items():
-        if building.can_produce:
+        if building.can_produce and building_name in critical_path.potential_required_buildings:
             region_names.append(building_name)
 
     for tree_name, tree in game_logic.man_trees.items():
         region_names.append(tree_name)
 
         for node in tree.nodes:
-            region_names.append(f"{tree_name}: {node.name}")
+            if node.minimal_tier <= options.final_elevator_package:
+                region_names.append(f"{tree_name}: {node.name}")
 
     locations_per_region: Dict[str, LocationData] = get_locations_per_region(locations)
     regions: Dict[str, Region] = create_regions(world, player, locations_per_region, region_names)
@@ -107,10 +108,6 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
     if options.final_elevator_package >= 5:    
         connect(regions, "Hub Tier 8", "Hub Tier 9", lambda state: state.has("Elevator Tier 4", player))
 
-    connect(regions, "Overworld", "Gas Area", lambda state:
-                                state_logic.can_produce_all(state, ("Gas Mask", "Gas Filter")))
-    connect(regions, "Overworld", "Radioactive Area", lambda state:
-                                state_logic.can_produce_all(state, ("Hazmat Suit", "Iodine Infused Filter")))
     connect(regions, "Overworld", "Mam", lambda state: state_logic.can_build(state, "MAM"))
     connect(regions, "Overworld", "AWESOME Shop", lambda state:
                                 state_logic.can_build_all(state, ("AWESOME Shop", "AWESOME Sink")))
@@ -130,7 +127,7 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
                 can_produce_all_allowing_handcrafting(parts_per_milestone.keys()))
             
     for building_name, building in game_logic.buildings.items():
-        if building.can_produce:
+        if building.can_produce and building_name in critical_path.potential_required_buildings:
             connect(regions, "Overworld", building_name,
                 lambda state, building_name=building_name: state_logic.can_build(state, building_name))
         
@@ -138,13 +135,17 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
         connect(regions, "Mam", tree_name)
 
         for node in tree.nodes:
+            if node.minimal_tier > options.final_elevator_package:
+                continue
+
             if not node.depends_on:
                 connect(regions, tree_name, f"{tree_name}: {node.name}",
                     lambda state, parts=node.unlock_cost.keys(): state_logic.can_produce_all(state, parts))
             else:
                 for parent in node.depends_on:
-                    connect(regions, f"{tree_name}: {parent}", f"{tree_name}: {node.name}", 
-                        lambda state, parts=node.unlock_cost.keys(): state_logic.can_produce_all(state, parts))
+                    if f"{tree_name}: {parent}" in region_names:
+                        connect(regions, f"{tree_name}: {parent}", f"{tree_name}: {node.name}", 
+                            lambda state, parts=node.unlock_cost.keys(): state_logic.can_produce_all(state, parts))
 
 
 def throwIfAnyLocationIsNotAssignedToARegion(regions: Dict[str, Region], regionNames: Set[str]):

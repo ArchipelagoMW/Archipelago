@@ -37,16 +37,6 @@ class CriticalPathCalculator:
             self.select_minimal_required_parts_for(tree.access_items)
 
             for node in tree.nodes:
-                # Bullet Guidance System - Rifle Ammo
-                # Stun Rebar - Iron Rebar
-                # Radar Technology - Heavy Modular Frame
-                # Turbo Rifle Ammo - Packaged Turbofuel, Rifle Ammo
-                # Nuclear Deterrent Development - Encased Uranium Cell
-                # Rocket Fuel - Packaged Turbofuel
-                # Ionized Fuel - Ionized Fuel
-                if node.name == "Hostile Organism Detection":
-                    Debug = True
-
                 if node.minimal_tier > options.final_elevator_package:
                     continue
 
@@ -62,6 +52,10 @@ class CriticalPathCalculator:
         self.select_minimal_required_parts_for_building("Foundation")
         self.select_minimal_required_parts_for_building("Walls Orange")
         self.select_minimal_required_parts_for_building("Power Storage")
+
+        #equipment
+        self.select_minimal_required_parts_for(self.logic.recipes["Hazmat Suit"][0].inputs)
+        self.select_minimal_required_parts_for(self.logic.recipes["Iodine Infused Filter"][0].inputs)
 
         for i in range(1, self.potential_required_belt_speed + 1):
             self.select_minimal_required_parts_for_building(f"Conveyor Mk.{i}")
@@ -102,20 +96,11 @@ class CriticalPathCalculator:
             if part in self.potential_required_parts:
                 continue
 
-            if part == "Radio Control Unit":
-                Debug = True
-
             self.potential_required_parts.add(part)
 
             for recipe in self.logic.recipes[part]:
-                if part == "Fuel":
-                    Debug = True
-
                 if recipe.minimal_tier > self.options.final_elevator_package:
                     continue
-
-                if recipe.minimal_belt_speed == 5:
-                    Debug = True
 
                 self.potential_required_belt_speed = \
                     max(self.potential_required_belt_speed, recipe.minimal_belt_speed)
@@ -128,9 +113,6 @@ class CriticalPathCalculator:
                     self.potential_required_radioactive = True
 
                 if recipe.building:
-                    if recipe.building == "Blender":
-                        debug = True
-
                     self.select_minimal_required_parts_for(self.logic.buildings[recipe.building].inputs)
                     self.potential_required_buildings.add(recipe.building)
 

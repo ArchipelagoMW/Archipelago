@@ -48,9 +48,6 @@ class Part(LocationData):
     def can_produce_any_recipe_for_part(self, state_logic: StateLogic, recipes: Iterable[Recipe], 
                                         name: str, items: Items) -> Callable[[CollectionState], bool]:
         def can_build_by_any_recipe(state: CollectionState) -> bool:
-            if name == "Iron Ingot":
-                debug = True
-
             if items.precalculated_progression_recipes and name in items.precalculated_progression_recipes:
                 can_produce: bool = state_logic.can_produce_specific_recipe_for_part(
                     state, items.precalculated_progression_recipes[name])
@@ -81,9 +78,6 @@ class EventBuilding(LocationData):
             ) -> Callable[[CollectionState], bool]:
 
         def can_build(state: CollectionState) -> bool:
-            if building.name == "Building: Manufacturer":
-                debug = True
-
             return (building.implicitly_unlocked or state_logic.has_recipe(state, building)) \
                 and state_logic.can_power(state, building.power_requirement) \
                 and state_logic.can_produce_all_allowing_handcrafting(state, game_logic, building.inputs)
@@ -102,9 +96,6 @@ class PowerInfrastructure(LocationData):
             ) -> Callable[[CollectionState], bool]:
 
         def can_power(state: CollectionState) -> bool:
-            if powerLevel == PowerInfrastructureLevel.Automated:
-                debug = True
-
             return any(state_logic.can_power(state, level) for level in PowerInfrastructureLevel if level > powerLevel)\
                 or any(state_logic.can_build(state, recipe.building) and 
                        state_logic.can_produce_all_allowing_handcrafting(state, game_logic, recipe.inputs) 
@@ -157,12 +148,6 @@ class DropPod(LocationData):
         # we currently do not know how many hdd require gas or radioactive protection
         # coordinates are for us to reference them, there is no real link between coordinate and check
         def get_region(gassed: Optional[bool], radioactive: Optional[bool]) -> str:
-            #if radioactive:
-            #    return "Radioactive Area"
-            #elif gassed:
-            #    return "Gas Area"
-            #else:
-            #    return "Overworld"
             return f"Hub Tier {tier}"
 
         def get_rule(unlocked_by: Optional[str], power_needed: int) -> Callable[[CollectionState], bool]:
@@ -319,17 +304,17 @@ class Locations():
         ]
 
         #TODO: should be based on self.game_logic
-        if 4 <= max_tier:
+        if max_tier > 8:
             all_locations.append(MamSlot("Power Slugs", "Synthetic Power Shards", 1338572))
-        if 4 <= max_tier:
+        if max_tier > 8:
             all_locations.append(MamSlot("Alien Technology", "Alien Power Matrix", 1338593))
-        if 2 <= max_tier:
+        if max_tier > 2:
             all_locations.append(MamSlot("Sulfur", "Turbo Rifle Ammo", 1338568))
-        if 2 <= max_tier:
+        if max_tier > 2:
             all_locations.append(MamSlot("Sulfur", "Nuclear Deterrent Development", 1338571))
-        if 3 <= max_tier:
+        if max_tier > 4:
             all_locations.append(MamSlot("Sulfur", "Rocket Fuel", 1338573))
-        if 4 <= max_tier:
+        if max_tier > 6:
             all_locations.append(MamSlot("Sulfur", "Ionized Fuel", 1338574))
 
         return all_locations

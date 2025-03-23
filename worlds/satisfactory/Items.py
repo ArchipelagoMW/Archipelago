@@ -840,8 +840,8 @@ class Items:
                 if not (data.category & G.BasicNeeds) and name not in instance.critical_path.potential_required_recipes_names:
                     type = C.filler
                     logging.info(f"Dropping... {name}")
-                else:
-                    logging.warning(f"Required .. {name}")
+                #else:
+                #    logging.warning(f"Required .. {name}")
 
         return Item(name, type, data.code, player)
 
@@ -888,7 +888,7 @@ class Items:
         filler_pool_size: int = number_of_locations - len(pool)
         if (filler_pool_size < 0):
             raise Exception(f"Location pool starved, trying to add {len(pool)} items to {number_of_locations} locations")
-
+        logging.warning(f"Itempool size: {len(pool)}, number of locations: {number_of_locations}, spare: {filler_pool_size}")
         for _ in range(filler_pool_size):
             item = self.create_item(self, self.get_filler_item_name(random, options), self.player)
             pool.append(item)
