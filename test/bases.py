@@ -275,32 +275,13 @@ class WorldTestBase(unittest.TestCase):
         """Asserts that the game can be beaten with the current state"""
         self.assertEqual(self.multiworld.can_beat_game(self.multiworld.state), beatable)
 
-    def reachableSpot(self, state: CollectionState, resolution_hint:str = "Location") -> typing.List[str]:
-        """
-        Retrieve a list of spot that can be reached from the current player with the given `state`.
-        The `resolution_hint` parameter specifies which kind of sport to look at. It can take
-        "Location", "Entrance" or "Region" as values. Defaults to "Location".
-        """
-        assert resolution_hint in ("Location", "Region", "Entrance")
-        if resolution_hint == "Region":
-            reachable_spot: typing.List[str] = [location.name for location in
-                                         self.multiworld.get_reachable_regions(state, self.player)]
-        elif resolution_hint == "Entrance":
-            reachable_spot: typing.List[str] = [location.name for location in
-                                         self.multiworld.get_reachable_entrances(state, self.player)]
-        else:
-            reachable_spot: typing.List[str] = [location.name for location in
-                                         self.multiworld.get_reachable_locations(state, self.player)]
-        return reachable_spot
-
-
-    def assertAccessWith(self, spots:typing.List[str], item_names:typing.List[str],
-                         initial_items:typing.List[str] = None, resolution_hint:str = "Location"):
+    def assertAccessWith(self, spots: typing.List[str], item_names: typing.List[str],
+                         initial_items: typing.List[str] = None, resolution_hint: str = "Location"):
         """
         Assert that when the items are not collect, the spots are not reachable, but when
         the items are collected, the spots are accessible. Also assert that no other new spots can be
         accessed when the items are collected.
-        The `resolution_hint` parameter specifies which kind of sport to look at. It can take
+        The `resolution_hint` parameter specifies which kind of spot to look for. It can take
         "Location", "Entrance" or "Region" as values. Defaults to "Location".
         """
         if initial_items is None:
@@ -309,23 +290,23 @@ class WorldTestBase(unittest.TestCase):
         state = CollectionState(self.multiworld)
         for item in initial_items:
             state.collect(self.get_item_by_name(item))
-        reachable_spot_before = self.reachableSpot(state, resolution_hint)
+        reachable_spot_before = self.multiworld.reachable_spot(state, self.player, resolution_hint)
         for spot in spots:
             self.assertFalse(state.can_reach(spot, resolution_hint, self.player),
-                             str(spot) + " is reachable without any items")
+                             f"{spot} is reachable without {item_names}")
         items = self.get_items_by_name(item_names)
         for item in items:
             state.collect(item)
-        reachable_spot_after = self.reachableSpot(state, resolution_hint)
+        reachable_spot_after = self.multiworld.reachable_spot(state, self.player, resolution_hint)
         for spot in reachable_spot_before:
             reachable_spot_after.remove(spot)
         for spot in spots:
-            reachable_spot_after.remove(spot)
             self.assertTrue(state.can_reach(spot, resolution_hint, self.player),
-                            str(spot) + " is not reachable with " + str(item_names))
+                            f"{spot} is not reachable with {item_names}")
+            reachable_spot_after.remove(spot)
         if len(reachable_spot_after) > 0:
-            self.assertTrue(len(reachable_spot_after) == 0, "Reachable with " + str(item_names) +
-                            " but not without: " + str(reachable_spot_after))
+            self.assertTrue(len(reachable_spot_after) == 0,
+                            f"Reachable with {item_names} but not without: {reachable_spot_after}")
 
     # following tests are automatically run
     @property
