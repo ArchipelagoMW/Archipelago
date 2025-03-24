@@ -477,7 +477,7 @@ act_completions = {
     "Act Completion (Rush Hour)": LocData(2000311210, "Rush Hour",
                                           dlc_flags=HatDLC.dlc2,
                                           hookshot=True,
-                                          required_hats=[HatType.ICE, HatType.BREWING]),
+                                          required_hats=[HatType.ICE, HatType.BREWING, HatType.DWELLER]),
 
     "Act Completion (Time Rift - Rumbi Factory)": LocData(2000312736, "Time Rift - Rumbi Factory",
                                                           dlc_flags=HatDLC.dlc2),
