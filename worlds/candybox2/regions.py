@@ -158,7 +158,7 @@ def mark_quest_entrance(world, entrance: Entrance, name: str):
 
     entrance.name = name
     entrance.randomization_group = Groups.QUESTS
-    disconnect_entrance_for_randomization(entrance, Groups.QUESTS)
+    disconnect_entrance_for_randomization(entrance, Groups.QUESTS, entrance.connected_region.name)
 
 def mark_x_quest_entrance(world, entrance: Entrance, name: str):
     world.original_entrances.append((name, entrance.connected_region.name))
@@ -167,7 +167,7 @@ def mark_x_quest_entrance(world, entrance: Entrance, name: str):
 
     entrance.name = name
     entrance.randomization_group = Groups.X_QUEST
-    disconnect_entrance_for_randomization(entrance, Groups.X_QUEST)
+    disconnect_entrance_for_randomization(entrance, Groups.X_QUEST, entrance.connected_region.name)
 
 def connect_entrances(world):
     if world.options.quest_randomisation == "off":
