@@ -492,8 +492,8 @@ class World(metaclass=AutoWorldRegister):
         """
         Class level stage of generate_output. Gets run once per world type per multiworld before the instanced calls. As
         this method gets called from a threadpool, do not use multiworld.random here. If any last-second randomization
-        needs to be done, use one of your worlds' random or seed a new random object. Called before the instance method,
-        but as they are all threaded no guarantee it completes first unless the other threads await it.
+        needs to be done, use one of your worlds' random or seed a new random object. As these calls are all threaded,
+        there is no guarantee this method will complete before the instance methods unless the other threads await it.
 
         :param multiworld: The multiworld object for this generation.
         :param output_directory: The path to the directory where the output file should be written.
