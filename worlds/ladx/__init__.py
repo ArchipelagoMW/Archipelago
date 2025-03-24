@@ -444,7 +444,7 @@ class LinksAwakeningWorld(World):
             phrases.update(ItemIconGuessing.GAME_SPECIFIC_PHRASES[foreign_game])
 
         for phrase, icon in phrases.items():
-            if phrase in uppered:
+            if phrase.upper() in uppered:
                 return icon
         # pattern for breaking down camelCase, also separates out digits
         pattern = re.compile(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=\d)")
