@@ -12,7 +12,7 @@ from worlds.AutoWorld import call_all
 from .assertion import RuleAssertMixin
 from .options.utils import fill_namespace_with_default, parse_class_option_keys, fill_dataclass_with_default
 from .. import StardewValleyWorld, StardewItem
-from ..options import StardewValleyOption
+from ..options import StardewValleyOption, options
 
 logger = logging.getLogger(__name__)
 
@@ -232,7 +232,7 @@ def should_cache_world(test_options):
 
     trap_distribution = test_options[trap_distribution_key]
     for key in trap_distribution:
-        if trap_distribution[key] != TrapDistribution.default_weight:
+        if trap_distribution[key] != options.TrapDistribution.default_weight:
             return False
 
     return True
