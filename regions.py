@@ -10,7 +10,7 @@ from .data import Passage
 from .items import ItemType, WL4Item, filter_item_names, wl4_data_from_ap_id
 from .locations import WL4Location
 from .region_data import LocationData, passage_levels, level_table, passage_boss_table, golden_diva
-from .rules import Requirement, has, has_all
+from .rules import Requirement, has, has_all, has_treasures
 from .options import OpenDoors, Portal
 
 if TYPE_CHECKING:
@@ -127,10 +127,14 @@ def create_regions(world: WL4World):
         diva_location = create_event(golden_diva_region, golden_diva.name, 'Escape the Pyramid')
         golden_diva_region.locations.append(diva_location)
         add_rule(diva_location, golden_diva.kill_rule.apply_world(world))
+        if (world.options.goal.needs_treasure_hunt()):
+            add_rule(diva_location, has_treasures().apply_world(world))
     regions.append(golden_diva_region)
 
     if world.options.goal.is_treasure_hunt():
-        pyramid.locations.append(create_event(pyramid, "Sound Room Emergency Exit", 'Escape the Pyramid'))
+        emergency_exit = create_event(pyramid, "Sound Room Emergency Exit", 'Escape the Pyramid')
+        emergency_exit.access_rule = has_treasures().apply_world(world)
+        pyramid.locations.append(emergency_exit)
 
     world.multiworld.regions.extend(regions)
 
