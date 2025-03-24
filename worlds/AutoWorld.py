@@ -352,6 +352,8 @@ class World(metaclass=AutoWorldRegister):
         """
         Checks that a game is capable of generating, such as checking for some base file like a ROM.
         This gets called once per present world type. Not run for unittests since they don't produce output.
+
+        :param multiworld: The multiworld object for this generation.
         """
 
     def generate_early(self) -> None:
@@ -364,6 +366,8 @@ class World(metaclass=AutoWorldRegister):
     def stage_generate_early(cls, multiworld: "MultiWorld") -> None:
         """
         Class level stage of generate_early. Gets run once per world type per multiworld after all the instanced calls.
+
+        :param multiworld: The multiworld object for this generation.
         """
 
     def create_regions(self) -> None:
@@ -373,6 +377,8 @@ class World(metaclass=AutoWorldRegister):
     def stage_create_regions(cls, multiworld: "MultiWorld") -> None:
         """
         Class level stage of create_regions. Gets run once per world type per multiworld after all the instanced calls.
+
+        :param multiworld: The multiworld object for this generation.
         """
 
     def create_items(self) -> None:
@@ -385,6 +391,8 @@ class World(metaclass=AutoWorldRegister):
     def stage_create_items(cls, multiworld: "MultiWorld") -> None:
         """
         Class level stage of create_items. Gets run once per world type per multiworld after all the instanced calls.
+
+        :param multiworld: The multiworld object for this generation.
         """
 
     def set_rules(self) -> None:
@@ -394,6 +402,8 @@ class World(metaclass=AutoWorldRegister):
     def stage_set_rules(cls, multiworld: "MultiWorld") -> None:
         """
         Class level stage of set_rules. Gets run once per world type per multiworld after all the instanced calls.
+
+        :param multiworld: The multiworld object for this generation.
         """
 
     def connect_entrances(self) -> None:
@@ -403,7 +413,9 @@ class World(metaclass=AutoWorldRegister):
     def stage_connect_entrances(cls, multiworld: "MultiWorld") -> None:
         """
         Class level stage of connect_entrances. Gets run once per world type per multiworld after all the instanced
-         calls.
+        calls.
+
+        :param multiworld: The multiworld object for this generation.
         """
 
     def generate_basic(self) -> None:
@@ -416,6 +428,8 @@ class World(metaclass=AutoWorldRegister):
     def stage_generate_basic(cls, multiworld: "MultiWorld") -> None:
         """
         Class level stage of generate_basic. Gets run once per world type per multiworld after all the instanced calls.
+
+        :param multiworld: The multiworld object for this generation.
         """
 
     def pre_fill(self) -> None:
@@ -425,6 +439,8 @@ class World(metaclass=AutoWorldRegister):
     def stage_pre_fill(cls, multiworld: "MultiWorld") -> None:
         """
         Class level stage of pre_fill. Gets run once per world type per multiworld after all the instanced calls.
+
+        :param multiworld: The multiworld object for this generation.
         """
 
     def fill_hook(self,
@@ -432,7 +448,14 @@ class World(metaclass=AutoWorldRegister):
                   usefulitempool: list["Item"],
                   filleritempool: list["Item"],
                   fill_locations: list["Location"]) -> None:
-        """Special method that gets called as part of distribute_items_restrictive (main fill)."""
+        """
+        Special method that gets called as part of distribute_items_restrictive (main fill).
+
+        :param progitempool: The pool of progression items to be placed.
+        :param usefulitempool: The pool of useful items to be placed.
+        :param filleritempool: The pool of filler items to be placed.
+        :param fill_locations: All locations that still need to be filled.
+        """
 
     @classmethod
     def stage_fill_hook(cls,
@@ -443,6 +466,12 @@ class World(metaclass=AutoWorldRegister):
                         fill_locations: list["Location"]) -> None:
         """
         Class level stage of fill_hook. Gets run once per world type per multiworld after all the instanced calls.
+
+        :param multiworld: The multiworld object for this generation.
+        :param prog_item_pool: The pool of progression items to be placed.
+        :param useful_item_pool: The pool of useful items to be placed.
+        :param filler_item_pool: The pool of filler items to be placed.
+        :param fill_locations: All locations that still need to be filled.
         """
 
     def post_fill(self) -> None:
@@ -455,12 +484,16 @@ class World(metaclass=AutoWorldRegister):
     def stage_post_fill(cls, multiworld: "MultiWorld") -> None:
         """
         Class level stage of post_fill. Gets run once per world type per multiworld after all the instanced calls.
+
+        :param multiworld: The multiworld object for this generation.
         """
 
     def generate_output(self, output_directory: str) -> None:
         """
         This method gets called from a threadpool, do not use multiworld.random here.
         If you need any last-second randomization, use self.random instead.
+
+        :param output_directory: The path to the directory where the output file should be written.
         """
 
     @classmethod
@@ -469,19 +502,22 @@ class World(metaclass=AutoWorldRegister):
         Class level stage of generate_output. Gets run once per world type per multiworld before the instanced calls. As
         this method gets called from a threadpool, do not use multiworld.random here. If any last-second randomization
         needs to be done, use one of your worlds' random or seed a new random object.
+
+        :param multiworld: The multiworld object for this generation.
+        :param output_directory: The path to the directory where the output file should be written.
         """
 
     def fill_slot_data(self) -> Mapping[str, Any]:  # json of WebHostLib.models.Slot
         """
-        What is returned from this function will be in the `slot_data` field
-        in the `Connected` network package.
-        It should be a `dict` with `str` keys, and should be serializable with json.
-
         This is a way the generator can give custom data to the client.
         The client will receive this as JSON in the `Connected` response.
 
         The generation does not wait for `generate_output` to complete before calling this.
         `threading.Event` can be used if you need to wait for something from `generate_output`.
+
+        :return: This method should return a `dict` with `str` keys, and should be serializable with json. This
+        dictionary will then get serialized into the multidata and accessible via the `slot_data` field in the
+        `Connected` network package.
         """
         # The reason for the `Mapping` type annotation, rather than `dict`
         # is so that type checkers won't worry about the mutability of `dict`,
@@ -492,6 +528,9 @@ class World(metaclass=AutoWorldRegister):
         """
         Fill in additional entrance information text into locations, which is displayed when hinted.
         structure is {player_id: {location_id: text}} You will need to insert your own player_id.
+
+        :param hint_data: The dictionary your hint_data should be added to. Structure is
+        {player_id: {location_id: text}}. You will need to insert your own player_id.
         """
 
     @classmethod
@@ -499,15 +538,28 @@ class World(metaclass=AutoWorldRegister):
         """
         Class level stage of extend_hint_information. Gets run once per world type per multiworld after all the
         instanced calls.
+
+        :param multiworld: The multiworld object for this generation.
+        :param hint_data: The dictionary your hint_data should be added to. Structure is
+         {player_id: {location_id: text}}. You will need to insert your own player_id.
         """
 
     def modify_multidata(self, multidata: dict[str, Any]) -> None:  # TODO: TypedDict for multidata?
-        """For deeper modification of server multidata."""
+        """
+        For deeper modification of server multidata, such as adding additional custom connection names.
+
+        :param multidata: The multidata of the multiworld in its current state. Anything added to this must be
+        pickleable.
+        """
 
     @classmethod
     def stage_modify_multidata(cls, multiworld: "MultiWorld", multidata: dict[str, Any]) -> None:
         """
         Class level stage of modify_multidata. Gets run once per world type per multiworld after all the instanced calls.
+
+        :param multiworld: The multiworld object for this generation.
+        :param multidata: The multidata of the multiworld in its current state. Anything added to this must be
+        pickleable.
         """
 
     # Spoiler writing is optional, these may not get called.
@@ -515,6 +567,9 @@ class World(metaclass=AutoWorldRegister):
         """
         Write to the spoiler header. Called after writing the current player's options, but before the next player's
         options.
+
+        :param spoiler_handle: The spoiler file for this generation. The file is already open when this method is
+        called.
         """
 
     @classmethod
@@ -522,27 +577,48 @@ class World(metaclass=AutoWorldRegister):
         """
         Class level stage of write_spoiler_header. Gets run once per world type per multiworld. This is called after
         writing the common header, but before the player specific information.
+
+        :param multiworld: The multiworld object for this generation.
+        :param spoiler_handle: The spoiler file for this generation. The file is already open when this method is
+        called.
         """
 
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
         """
-        Write to the spoiler "middle", this is after the per-player options and before locations,
-        meant for useful or interesting info.
+        Write to the spoiler "middle", this is after the per-player options and topology information, but before
+        locations information. Meant for useful or interesting info.
+
+        :param spoiler_handle: The spoiler file for this generation. The file is already open when this method is
+        called.
         """
 
     @classmethod
     def stage_write_spoiler(cls, multiworld: "MultiWorld", spoiler_handle: TextIO) -> None:
         """
         Class level stage of write_spoiler. Gets run once per world type per multiworld after all the instanced calls.
+
+        :param multiworld: The multiworld object for this generation.
+        :param spoiler_handle: The spoiler file for this generation. The file is already open when this method is
+        called.
         """
 
     def write_spoiler_end(self, spoiler_handle: TextIO) -> None:
-        """Write to the end of the spoiler"""
+        """
+        Write to the end of the spoiler. Called after all other spoiler information has been written.
+
+        :param spoiler_handle: The spoiler file for this generation. The file is already open when this method is
+        called.
+        """
 
     @classmethod
     def stage_write_spoiler_end(cls, multiworld: "MultiWorld", spoiler_handle: TextIO) -> None:
         """
-        Class level stage of write_spoiler_end. Gets run once per world type per multiworld after all the instanced calls.
+        Class level stage of write_spoiler_end. Gets run once per world type per multiworld after all the instanced
+        calls.
+
+        :param multiworld: The multiworld object for this generation.
+        :param spoiler_handle: The spoiler file for this generation. The file is already open when this method is
+        called.
         """
 
     # end of ordered Main.py calls
@@ -550,12 +626,19 @@ class World(metaclass=AutoWorldRegister):
     def create_item(self, name: str) -> "Item":
         """
         Create an item for this world type and player.
-        Warning: this may be called with self.world = None, for example by MultiServer
+        Warning: this may be called with self.world = None, for example by MultiServer.
+
+        :param name: The name of the item to be created.
+        :return: The created item.
         """
         raise NotImplementedError
 
     def get_filler_item_name(self) -> str:
-        """Called when the item pool needs to be filled with additional items to match location count."""
+        """
+        Called when the item pool needs to be filled with additional items to match location count.
+
+        :return: The name of the item to be created.
+        """
         logging.warning(f"World {self} is generating a filler item without custom filler pool.")
         return self.multiworld.random.choice(tuple(self.item_name_to_id.keys()))
 
@@ -564,6 +647,11 @@ class World(metaclass=AutoWorldRegister):
         """
         Creates a group, which is an instance of World that is responsible for multiple others.
         An example case is ItemLinks creating these.
+
+        :param multiworld: The multiworld object for this generation.
+        :param new_player_id: The new player id for the created group.
+        :param players: The players that belong to this group.
+        :return: The created group's world.
         """
         # TODO remove loop when worlds use options dataclass
         for option_key, option in cls.options_dataclass.type_hints.items():
@@ -579,10 +667,11 @@ class World(metaclass=AutoWorldRegister):
     def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> str | None:
         """
         Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
-        Collect None to skip item.
+
         :param state: CollectionState to collect into
         :param item: Item to decide on if it should be collected into state
         :param remove: indicate if this is meant to remove from state instead of adding.
+        :return: The name of the item to collect into state. If None is returned the item will be skipped/not collected.
         """
         if item.advancement:
             return item.name
@@ -592,12 +681,20 @@ class World(metaclass=AutoWorldRegister):
         """
         Used to return items that need to be collected when creating a fresh all_state, but don't exist in the
         multiworld itempool.
+
+        :return: Items that should be collected by a new all_state, but not in the multiworld itempool.
         """
         return []
 
     # these two methods can be extended for pseudo-items on state
     def collect(self, state: "CollectionState", item: "Item") -> bool:
-        """Called when an item is collected in to state. Useful for things such as progressive items or currency."""
+        """
+        Called when an item is collected in to state. Useful for things such as progressive items or currency.
+
+        :param state: The current CollectionState instance this item should be collected into.
+        :param item: The item to be collected.
+        :return: True if the item was collected into state, False otherwise.
+        """
         name = self.collect_item(state, item)
         if name:
             state.prog_items[self.player][name] += 1
@@ -605,7 +702,13 @@ class World(metaclass=AutoWorldRegister):
         return False
 
     def remove(self, state: "CollectionState", item: "Item") -> bool:
-        """Called when an item is removed from to state. Useful for things such as progressive items or currency."""
+        """
+        Called when an item is removed from to state. Useful for things such as progressive items or currency.
+
+        :param state: The current CollectionState instance this item should be removed from.
+        :param item: The item to be removed.
+        :return: True if the item was removed from state, False otherwise.
+        """
         name = self.collect_item(state, item, True)
         if name:
             state.prog_items[self.player][name] -= 1
