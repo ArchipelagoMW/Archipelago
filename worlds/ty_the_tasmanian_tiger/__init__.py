@@ -21,7 +21,7 @@ class Ty1Web(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["xMcacutt"]
+        ["xMcacutt", "Dashieswag92"]
     )
 
     tutorials = [setup_en]
