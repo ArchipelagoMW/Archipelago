@@ -263,7 +263,8 @@ class AttackTrapCount(TrapCount):
 
 
 class TeleportTrapCount(TrapCount):
-    """Trap items that when received trigger a random teleport."""
+    """Trap items that when received trigger a random teleport.
+    It is ensured the player can walk back to where they got teleported from."""
     display_name = "Teleport Traps"
 
 
