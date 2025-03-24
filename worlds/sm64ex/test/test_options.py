@@ -3,6 +3,18 @@ from .. import Options
 from ..Locations import loc100Coin_table, location_table
 from ..Regions import sm64_entrances_to_level, sm64_level_to_paintings, sm64_level_to_secrets
 
+# Levels with at least one star without a movement rule
+valid_move_randomizer_start_courses = [
+    "Bob-omb Battlefield", "Jolly Roger Bay", "Cool, Cool Mountain",
+    "Big Boo's Haunt", "Lethal Lava Land", "Shifting Sand Land",
+    "Dire, Dire Docks", "Snowman's Land"
+]
+
+valid_move_randomizer_start_entrances = {
+    level: entrance
+    for (level, entrance) in sm64_entrances_to_level.items()
+    if level in valid_move_randomizer_start_courses
+}
 
 # Coin Star Logic
 class EnableCoinStarsTestBase(SM64TestBase):
@@ -52,7 +64,7 @@ class VanillaCoinStarsTestBase(SM64TestBase):
                 item_in_loc = self.world.get_location(loc).item
                 assert item_in_loc.name == "Power Star"
                 # By default, these test bases are single player multiworld.
-                # In any other case, we should test that they belong to their respective worldS.
+                # In any other case, we should test that they belong to their respective worlds.
 
 
 # Exclamation Boxes
@@ -76,7 +88,7 @@ class ExclamationBoxesOffTestBase(SM64TestBase):
                 item_in_loc = self.world.get_location(loc).item
                 assert item_in_loc.name == "1Up Mushroom"
                 # By default, these test bases are single player multiworld.
-                # In any other case, we should test that they belong to their respective worldS.
+                # In any other case, we should test that they belong to their respective worlds.
 
 # Entrance Randomizer
 class EntranceRandoOffTestBase(SM64TestBase):
@@ -183,14 +195,7 @@ class CourseEntrancesMoveTestBase(SM64TestBase):
         assert self.world.area_connections[bob_level_id] not in sm64_level_to_secrets.keys()
         assert self.world.area_connections[bob_level_id] in sm64_level_to_paintings.keys()
         # BoB goes to level with at least one star without a movement rule.
-        valid_move_randomizer_start_courses = [
-            "Bob-omb Battlefield", "Jolly Roger Bay", "Cool, Cool Mountain",
-            "Big Boo's Haunt", "Lethal Lava Land", "Shifting Sand Land",
-            "Dire, Dire Docks", "Snowman's Land"
-        ]
-        valid_move_randomizer_start_levels = {level: entrance for (level, entrance) in sm64_entrances_to_level.items()
-                                              if entrance not in valid_move_randomizer_start_courses}
-        assert self.world.area_connections[bob_level_id] in valid_move_randomizer_start_levels.values()
+        assert self.world.area_connections[bob_level_id] in valid_move_randomizer_start_entrances.values()
 
     def test_BitFS_entrance(self):
         bitfs_level_id = sm64_entrances_to_level["Bowser in the Fire Sea"]
@@ -200,14 +205,7 @@ class CourseEntrancesMoveTestBase(SM64TestBase):
     def test_WF_entrance(self):
         wf_level_id = sm64_entrances_to_level["Whomp's Fortress"]
         # WF goes to level with at least one star without a movement rule.
-        valid_move_randomizer_start_courses = [
-            "Bob-omb Battlefield", "Jolly Roger Bay", "Cool, Cool Mountain",
-            "Big Boo's Haunt", "Lethal Lava Land", "Shifting Sand Land",
-            "Dire, Dire Docks", "Snowman's Land"
-        ]
-        valid_move_randomizer_start_levels = {level: entrance for (level, entrance) in sm64_entrances_to_level.items()
-                                              if level in valid_move_randomizer_start_courses}
-        assert self.world.area_connections[wf_level_id] in valid_move_randomizer_start_levels.values()
+        assert self.world.area_connections[wf_level_id] in valid_move_randomizer_start_entrances.values()
 
 class SeparateEntrancesMoveTestBase(SM64TestBase):
     options = {
@@ -221,14 +219,7 @@ class SeparateEntrancesMoveTestBase(SM64TestBase):
         assert self.world.area_connections[bob_level_id] not in sm64_level_to_secrets.keys()
         assert self.world.area_connections[bob_level_id] in sm64_level_to_paintings.keys()
         # BoB goes to level with at least one star without a movement rule.
-        valid_move_randomizer_start_courses = [
-            "Bob-omb Battlefield", "Jolly Roger Bay", "Cool, Cool Mountain",
-            "Big Boo's Haunt", "Lethal Lava Land", "Shifting Sand Land",
-            "Dire, Dire Docks", "Snowman's Land"
-        ]
-        valid_move_randomizer_start_levels = {level: entrance for (level, entrance) in sm64_entrances_to_level.items()
-                                              if entrance not in valid_move_randomizer_start_courses}
-        assert self.world.area_connections[bob_level_id] in valid_move_randomizer_start_levels.values()
+        assert self.world.area_connections[bob_level_id] in valid_move_randomizer_start_entrances.values()
 
     def test_BitFS_entrance(self):
         bitfs_level_id = sm64_entrances_to_level["Bowser in the Fire Sea"]
@@ -238,14 +229,7 @@ class SeparateEntrancesMoveTestBase(SM64TestBase):
     def test_WF_entrance(self):
         wf_level_id = sm64_entrances_to_level["Whomp's Fortress"]
         # WF goes to level with at least one star without a movement rule.
-        valid_move_randomizer_start_courses = [
-            "Bob-omb Battlefield", "Jolly Roger Bay", "Cool, Cool Mountain",
-            "Big Boo's Haunt", "Lethal Lava Land", "Shifting Sand Land",
-            "Dire, Dire Docks", "Snowman's Land"
-        ]
-        valid_move_randomizer_start_levels = {level: entrance for (level, entrance) in sm64_entrances_to_level.items()
-                                              if level in valid_move_randomizer_start_courses}
-        assert self.world.area_connections[wf_level_id] in valid_move_randomizer_start_levels.values()
+        assert self.world.area_connections[wf_level_id] in valid_move_randomizer_start_entrances.values()
 
 
 class AllEntrancesMoveTestBase(SM64TestBase):
@@ -257,14 +241,7 @@ class AllEntrancesMoveTestBase(SM64TestBase):
     def test_BoB_entrance(self):
         bob_level_id = sm64_entrances_to_level["Bob-omb Battlefield"]
         # BoB goes to level with at least one star without a movement rule.
-        valid_move_randomizer_start_courses = [
-            "Bob-omb Battlefield", "Jolly Roger Bay", "Cool, Cool Mountain",
-            "Big Boo's Haunt", "Lethal Lava Land", "Shifting Sand Land",
-            "Dire, Dire Docks", "Snowman's Land"
-        ]
-        valid_move_randomizer_start_levels = {level: entrance for (level, entrance) in sm64_entrances_to_level.items()
-                                              if level in valid_move_randomizer_start_courses}
-        assert self.world.area_connections[bob_level_id] in valid_move_randomizer_start_levels.values()
+        assert self.world.area_connections[bob_level_id] in valid_move_randomizer_start_entrances.values()
 
     def test_BitFS_entrance(self):
         bitfs_level_id = sm64_entrances_to_level["Bowser in the Fire Sea"]
@@ -274,14 +251,7 @@ class AllEntrancesMoveTestBase(SM64TestBase):
     def test_WF_entrance(self):
         wf_level_id = sm64_entrances_to_level["Whomp's Fortress"]
         # WF goes to level with at least one star without a movement rule.
-        valid_move_randomizer_start_courses = [
-            "Bob-omb Battlefield", "Jolly Roger Bay", "Cool, Cool Mountain",
-            "Big Boo's Haunt", "Lethal Lava Land", "Shifting Sand Land",
-            "Dire, Dire Docks", "Snowman's Land"
-        ]
-        valid_move_randomizer_start_levels = {level: entrance for (level, entrance) in sm64_entrances_to_level.items()
-                                              if level in valid_move_randomizer_start_courses}
-        assert self.world.area_connections[wf_level_id] in valid_move_randomizer_start_levels.values()
+        assert self.world.area_connections[wf_level_id] in valid_move_randomizer_start_entrances.values()
 
     def test_CotMC_entrance(self):
         cotmc_level_id = sm64_entrances_to_level["Cavern of the Metal Cap"]
