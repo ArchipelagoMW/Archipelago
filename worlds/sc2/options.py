@@ -460,9 +460,15 @@ class GenericUpgradeItems(Choice):
 class VanillaItemsOnly(Toggle):
     """If turned on, the item pool is limited only to items that appear in the main 3 vanilla campaigns.
     Weapon/Armour upgrades are unaffected; use max_upgrade_level to control maximum level.
-    locked_items may override these exclusions."""
+    Locked Items may override these exclusions."""
     display_name = "Vanilla Items Only"
 
+
+class ExcludeOverpoweredItems(Toggle):
+    """
+    If turned on, the most powerful items are disabled. Locked Items may override these exclusions.
+    """
+    display_name = "Exclude Overpowered Items"
 
 # Current maximum number of upgrades for a unit
 MAX_UPGRADES_OPTION = 13
@@ -1421,6 +1427,7 @@ class Starcraft2Options(PerGameCommonOptions):
     difficulty_curve: DifficultyCurve
     exclude_very_hard_missions: ExcludeVeryHardMissions
     vanilla_items_only: VanillaItemsOnly
+    exclude_overpowered_items: ExcludeOverpoweredItems
     victory_cache: VictoryCache
     vanilla_locations: VanillaLocations
     extra_locations: ExtraLocations
@@ -1476,7 +1483,6 @@ option_groups = [
         GenericUpgradeResearch,
         GenericUpgradeResearchSpeedup,
         GenericUpgradeItems,
-        # VanillaItemsOnly,
     ]),
     OptionGroup("Kerrigan", [
         KerriganPresence,
@@ -1533,6 +1539,8 @@ option_groups = [
         LockedItems,
         ExcludedItems,
         UnexcludedItems,
+        VanillaItemsOnly,
+        ExcludeOverpoweredItems,
         ExcludedMissions,
     ]),
     OptionGroup("Advanced Gameplay", [

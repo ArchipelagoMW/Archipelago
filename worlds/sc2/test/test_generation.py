@@ -7,7 +7,8 @@ from .test_base import Sc2SetupTestBase
 from .. import mission_groups, mission_tables, options, locations, SC2Mission, SC2Campaign, SC2Race
 from ..item import item_groups, item_tables, item_names
 from .. import get_all_missions, get_random_first_mission
-from ..options import EnabledCampaigns, NovaGhostOfAChanceVariant, MissionOrder
+from ..options import EnabledCampaigns, NovaGhostOfAChanceVariant, MissionOrder, ExcludeOverpoweredItems, \
+    VanillaItemsOnly
 
 
 class TestItemFiltering(Sc2SetupTestBase):
@@ -979,4 +980,50 @@ class TestItemFiltering(Sc2SetupTestBase):
 
         self.assertGreater(len({item_names.NOVA_C20A_CANISTER_RIFLE, item_names.NOVA_DOMINATION}.intersection(itempool)), 0)
 
+    def test_exclude_overpowered_items(self) -> None:
+        world_options = {
+            'mission_order': MissionOrder.option_grid,
+            'exclude_overpowered_items': ExcludeOverpoweredItems.option_true,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+            'selected_races': [SC2Race.TERRAN.get_title()],
+        }
 
+        self.generate_world(world_options)
+        itempool = [item.name for item in self.multiworld.itempool]
+        regen_biosteel_items = [item for item in itempool if item == item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL]
+        atx_laser_battery_items = [item for item in itempool if item == item_names.BATTLECRUISER_ATX_LASER_BATTERY]
+
+        self.assertEqual(len(regen_biosteel_items), 2) # Progressive, only top level is excluded
+        self.assertEqual(len(atx_laser_battery_items), 0) # Non-progressive
+
+    def test_exclude_overpowered_items_not_excluded(self) -> None:
+        world_options = {
+            'mission_order': MissionOrder.option_grid,
+            'exclude_overpowered_items': ExcludeOverpoweredItems.option_false,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+            'selected_races': [SC2Race.TERRAN.get_title()],
+        }
+
+        self.generate_world(world_options)
+        itempool = [item.name for item in self.multiworld.itempool]
+        regen_biosteel_items = [item for item in itempool if item == item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL]
+        atx_laser_battery_items = [item for item in itempool if item == item_names.BATTLECRUISER_ATX_LASER_BATTERY]
+
+        self.assertEqual(len(regen_biosteel_items), 3)
+        self.assertEqual(len(atx_laser_battery_items), 1)
+
+    def test_exclude_overpowered_items_vanilla_only(self) -> None:
+        world_options = {
+            'mission_order': MissionOrder.option_grid,
+            'exclude_overpowered_items': ExcludeOverpoweredItems.option_true,
+            'vanilla_items_only': VanillaItemsOnly.option_true,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+            'selected_races': [SC2Race.TERRAN.get_title()],
+        }
+
+        self.generate_world(world_options)
+        itempool = [item.name for item in self.multiworld.itempool]
+        # Regen biosteel is in both of the lists
+        regen_biosteel_items = [item for item in itempool if item == item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL]
+
+        self.assertEqual(len(regen_biosteel_items), 1) # One stack shall remain

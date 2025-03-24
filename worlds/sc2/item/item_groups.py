@@ -778,7 +778,7 @@ item_name_groups[ItemGroupNames.WAR_COUNCIL] = [
     if item_data.type in (item_tables.ProtossItemType.War_Council, item_tables.ProtossItemType.War_Council_2)
 ]
 
-item_name_groups[ItemGroupNames.OVERPOWERED_ITEMS] = [
+item_name_groups[ItemGroupNames.OVERPOWERED_ITEMS] = overpowered_items = [
     # Terran general
     item_names.SIEGE_TANK_GRADUATING_RANGE,
     item_names.SIEGE_TANK_RESOURCE_EFFICIENCY,
