@@ -1,3 +1,4 @@
+import csv
 import hashlib
 import os
 import io
@@ -8,6 +9,7 @@ from pathlib import Path
 import yaml
 from pkgutil import get_data
 
+from . import data
 from .Hints import PORTRAIT_HINTS
 from .JMP_Info_File import JMPInfoFile
 from .Patching import *
@@ -478,10 +480,12 @@ class LuigisMansionRandomizer:
         self.dol.data.seek(0x396578)
         self.dol.data.write(struct.pack(">B", *scare_val))
 
+        # Store Player name
         lm_player_name = str(self.output_data["Name"]).strip()
         self.dol.data.seek(0x311660)
         self.dol.data.write(struct.pack(str(len(lm_player_name)) + "s", lm_player_name.encode()))
 
+        # Change King Boo's Health
         king_boo_health = int(self.output_data["Options"]["king_boo_health"])
         self.dol.data.seek(0x399228)
         self.dol.data.write(struct.pack(">H", king_boo_health))
@@ -489,8 +493,16 @@ class LuigisMansionRandomizer:
         # Save all changes to the DOL itself.
         new_dol_sect = DOLSection(0x39FA20, 0x804DD940, 0x1000)
         self.dol.sections[2] = new_dol_sect
+        from importlib.resources import files
+        with files(data).joinpath("dol_diff.csv").open() as file:
+            hex_reader = csv.DictReader(file)
+            for line in hex_reader:
+                self.dol.data.seek(int(line["addr"], 16))
+                self.dol.data.write(bytes.fromhex(line["val"]))
         self.dol.save_changes()
         self.gcm.changed_files["sys/main.dol"] = self.dol.data
+
+
 
 
     def update_custom_event(self, event_number: str, check_local_folder: bool, non_local_str="",
