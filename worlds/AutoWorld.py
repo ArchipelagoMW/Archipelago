@@ -720,36 +720,90 @@ class World(metaclass=AutoWorldRegister):
 
     # following methods should not need to be overridden.
     def create_filler(self) -> "Item":
+        """
+        Helper method to create a new filler item.
+
+        :return: The newly created filler item.
+        """
         return self.create_item(self.get_filler_item_name())
 
     # convenience methods
     def get_location(self, location_name: str) -> "Location":
+        """
+        Helper method to get a particular location for this player.
+
+        :param location_name: The name of the location to get.
+        :return: The location.
+        """
         return self.multiworld.get_location(location_name, self.player)
 
     def get_locations(self) -> "Iterable[Location]":
+        """
+        Helper method to get all locations for this player.
+
+        :return: All locations currently registered for this player.
+        """
         return self.multiworld.get_locations(self.player)
 
     def get_entrance(self, entrance_name: str) -> "Entrance":
+        """
+        Helper method to get a particular entrance for this player.
+
+        :param entrance_name: The name of the entrance to get.
+        :return: The entrance.
+        """
         return self.multiworld.get_entrance(entrance_name, self.player)
 
     def get_entrances(self) -> "Iterable[Entrance]":
+        """
+        Helper method to get all entrances for this player.
+
+        :return: All entrances currently registered for this player.
+        """
         return self.multiworld.get_entrances(self.player)
 
     def get_region(self, region_name: str) -> "Region":
+        """
+        Helper method to get a particular region for this player.
+
+        :param region_name: The name of the region to get.
+        :return: The region.
+        """
         return self.multiworld.get_region(region_name, self.player)
 
     def get_regions(self) -> "Iterable[Region]":
+        """
+        Helper method to get all regions for this player.
+
+        :return: All regions currently registered for this player.
+        """
         return self.multiworld.get_regions(self.player)
 
     def push_precollected(self, item: Item) -> None:
+        """
+        Helper method to add an item to start inventory. This will collect it into the multiworld state, as well as
+        consider it always precollected in any newly created `CollectionState`s.
+
+        :param item: The item to precollect.
+        """
         self.multiworld.push_precollected(item)
 
     @property
     def player_name(self) -> str:
+        """
+        Helper to get the name of this world's player.
+
+        :return: The player name
+        """
         return self.multiworld.get_player_name(self.player)
 
     @classmethod
     def get_data_package_data(cls) -> "GamesPackage":
+        """
+        Calculates the datapackage for this World. Executed during world loading.
+
+        :return: This game's datapackage.
+        """
         sorted_item_name_groups = {
             name: sorted(cls.item_name_groups[name]) for name in sorted(cls.item_name_groups)
         }
