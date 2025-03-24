@@ -406,7 +406,7 @@ async def get_info(ctx: FactorioContext, rcon_client: factorio_rcon.RCONClient):
     ctx.auth = info["slot_name"]
     ctx.seed_name = info["seed_name"]
     death_link = info["death_link"]
-    ctx.energy_link_increment = info.get("energy_link", 0)
+    ctx.energy_link_increment = int(info.get("energy_link", 0))
     logger.debug(f"Energy Link Increment: {ctx.energy_link_increment}")
     if ctx.energy_link_increment and ctx.ui:
         ctx.ui.enable_energy_link()
