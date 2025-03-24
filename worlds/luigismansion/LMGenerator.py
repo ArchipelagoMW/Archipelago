@@ -57,10 +57,12 @@ class LuigisMansionRandomizer:
         self.export_disc_to_folder = export_disc_to_folder
 
         # Verifies we have a valid installation of Luigi's Mansion USA. There are some regional file differences.
-        # After verifying, this will also read the entire iso, including system files and the content files
         self.__verify_supported_version()
+
+        # After verifying, this will also read the entire iso, including system files and their content
         self.gcm = GCM(self.clean_iso_path)
         self.gcm.read_entire_disc()
+        self.dol = DOL()
 
         # Change game ID so save files are different
         magic_seed = str(self.output_data["Seed"])[0:19]
@@ -68,12 +70,6 @@ class LuigisMansionRandomizer:
         bin_data.seek(0x01)
         bin_data.write(sbf.string_to_bytes(magic_seed, len(magic_seed)))
         self.gcm.changed_files["sys/boot.bin"] = bin_data
-
-
-        # Find the main DOL file, which is the main file used for GC and Wii games.
-        dol_data = self.gcm.read_file_data("sys/main.dol")
-        self.dol = DOL()
-        self.dol.read(dol_data)
 
         # Important note: SZP are just RARC / Arc files that are yay0 compressed, at least for Luigi's Mansion
         # Get Arc automatically handles decompressing RARC data from yay0, but compressing is on us later.
@@ -204,10 +200,7 @@ class LuigisMansionRandomizer:
 
     def save_randomized_iso(self):
         random.seed(self.output_data["Seed"])
-        # Save the changes of main.dol
         self.update_dol_offsets()
-        self.dol.save_changes()
-        self.gcm.changed_files["sys/main.dol"] = self.dol.data
 
         # TODO Move into its own function?
         # Get Output data required information
@@ -433,6 +426,10 @@ class LuigisMansionRandomizer:
 
     # Updates various DOL Offsets per the desired changes of the AP user
     def update_dol_offsets(self):
+        # Find the main DOL file, which is the main file used for GC and Wii games.
+        dol_data = self.gcm.read_file_data("sys/main.dol")
+        self.dol.read(dol_data)
+
         # Edits for DOL max space offsets.
         self.dol.data.seek(0x8) # Physical Section Address
         self.dol.data.write(bytes.fromhex("39FA20"))
@@ -496,6 +493,10 @@ class LuigisMansionRandomizer:
         king_boo_health = int(self.output_data["Options"]["king_boo_health"])
         self.dol.data.seek(0x399228)
         self.dol.data.write(struct.pack(">H", king_boo_health))
+
+        # Save all changes to the DOL itself.
+        self.dol.save_changes()
+        self.gcm.changed_files["sys/main.dol"] = self.dol.data
 
 
     def update_custom_event(self, event_number: str, check_local_folder: bool, non_local_str="",
