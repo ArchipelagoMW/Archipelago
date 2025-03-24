@@ -7,7 +7,7 @@ import sys
 import time
 from random import Random
 from dataclasses import make_dataclass
-from typing import Any, Callable, ClassVar, FrozenSet, Iterable, Mapping, TextIO, TYPE_CHECKING, Type, Optional
+from typing import Any, Callable, ClassVar, FrozenSet, Iterable, Mapping, TextIO, TYPE_CHECKING, Optional
 
 from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
 from BaseClasses import CollectionState
@@ -21,7 +21,8 @@ perf_logger = logging.getLogger("performance")
 
 
 class AutoWorldRegister(type):
-    world_types: dict[str, Type[World]] = {}
+    world_types: ClassVar[dict[str, type[World]]] = {}
+
     __file__: str
     zip_path: str | None
     settings_key: str
@@ -250,7 +251,7 @@ class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
 
-    options_dataclass: ClassVar[Type[PerGameCommonOptions]] = PerGameCommonOptions
+    options_dataclass: ClassVar[type[PerGameCommonOptions]] = PerGameCommonOptions
     """link your Options mapping"""
     options: PerGameCommonOptions
     """resulting options for the player of this world"""
@@ -555,7 +556,8 @@ class World(metaclass=AutoWorldRegister):
     @classmethod
     def stage_modify_multidata(cls, multiworld: "MultiWorld", multidata: dict[str, Any]) -> None:
         """
-        Class level stage of modify_multidata. Gets run once per world type per multiworld after all the instanced calls.
+        Class level stage of modify_multidata. Gets run once per world type per multiworld after all the instanced
+        calls.
 
         :param multiworld: The multiworld object for this generation.
         :param multidata: The multidata of the multiworld in its current state. Anything added to this must be
