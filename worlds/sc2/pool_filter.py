@@ -273,7 +273,7 @@ class ValidInventory:
 
         spear_of_adun_autocasts = [item for item in inventory if item.name in spear_of_adun_castable_passives]
         self.world.random.shuffle(spear_of_adun_autocasts)
-        cull_items_over_maximum(spear_of_adun_autocasts, self.world.options.spear_of_adun_max_autonomously_cast_abilities.value)
+        cull_items_over_maximum(spear_of_adun_autocasts, self.world.options.spear_of_adun_max_passive_abilities.value)
 
         # Nova items
         nova_weapon_items = [item for item in inventory if item.name in item_groups.nova_weapons]

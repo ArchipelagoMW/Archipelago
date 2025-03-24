@@ -2273,6 +2273,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                 and logic.terran_competent_comp(state)
                 and logic.terran_base_trasher(state)
             ),
+            flags=LocationFlag.BASEBUST,
         ),
         make_location_data(SC2Mission.ENEMY_INTELLIGENCE.mission_name, "Victory", SC2NCO_LOC_ID_OFFSET + 300, LocationType.VICTORY,
             logic.enemy_intelligence_third_stage_requirement,

@@ -730,17 +730,18 @@ class SpearOfAdunPresentInNoBuild(Toggle):
     display_name = "Spear of Adun Present in No-Build"
 
 
-class SpearOfAdunAutonomouslyCastAbilityPresence(Choice):
+class SpearOfAdunPassiveAbilityPresence(Choice):
     """
-    Determines availability of Spear of Adun powers, that are autonomously cast.
-    Affects abilities like Reconstruction Beam or Overwatch
+    Determines availability of Spear of Adun passive powers.
+    Affects abilities like Reconstruction Beam or Overwatch.
+    Does not affect building abilities like Orbital Assimilators or Warp Harmonization.
 
     Not Presents: Autocasts are not available.
     LotV Protoss: Spear of Adun autocasts are only available in LotV main campaign
     Protoss: Spear of Adun autocasts are available in any Protoss mission
     Everywhere: Spear of Adun autocasts are available in any mission of any race
     """
-    display_name = "Spear of Adun Autonomously Cast Powers Presence"
+    display_name = "Spear of Adun Passive Ability Presence"
     option_not_present = 0
     option_lotv_protoss = 1
     option_protoss = 2
@@ -756,14 +757,14 @@ class SpearOfAdunAutonomouslyCastAbilityPresence(Choice):
             return super().get_option_name(value)
 
 
-class SpearOfAdunAutonomouslyCastPresentInNoBuild(Toggle):
+class SpearOfAdunPassivesPresentInNoBuild(Toggle):
     """
     Determines if Spear of Adun autocasts are available in no-build missions.
 
-    If turned on, Spear of Adun autocasts are available in missions specified under "Spear of Adun Autonomously Cast Powers Presence".
+    If turned on, Spear of Adun autocasts are available in missions specified under "Spear of Adun Passive Ability Presence".
     If turned off, Spear of Adun autocasts are unavailable in all no-build missions
     """
-    display_name = "Spear of Adun Autonomously Cast Powers Present in No-Build"
+    display_name = "Spear of Adun Passive Abilities Present in No-Build"
 
 
 class SpearOfAdunMaxActiveAbilities(Range):
@@ -773,6 +774,7 @@ class SpearOfAdunMaxActiveAbilities(Range):
 
     Note: Warp in Reinforcements is treated as a second level of Warp in Pylon
     """
+    display_name = "Spear of Adun Maximum Active Abilities"
     range_start = 0
     range_end = sum([item.quantity for item_name, item in item_tables.get_full_item_list().items() if item_name in item_tables.spear_of_adun_calldowns])
     default = range_end
@@ -780,9 +782,11 @@ class SpearOfAdunMaxActiveAbilities(Range):
 
 class SpearOfAdunMaxAutocastAbilities(Range):
     """
-    Determines the maximum number of Spear of Adun autonomously cast abilities that can be present in the game
+    Determines the maximum number of Spear of Adun passive abilities that can be present in the game
     Additional abilities may spawn if those are required to beat the game.
+    Does not affect building abilities like Orbital Assimilators or Warp Harmonization.
     """
+    display_name = "Spear of Adun Maximum Passive Abilities"
     range_start = 0
     range_end = sum(item.quantity for item_name, item in item_tables.get_full_item_list().items() if item_name in item_tables.spear_of_adun_castable_passives)
     default = range_end
@@ -831,6 +835,7 @@ class NovaMaxWeapons(Range):
 
     Note: Nova can swap between unlocked weapons anytime during the gameplay.
     """
+    display_name = "Nova Maximum Weapons"
     range_start = 0
     range_end = len(nova_weapons)
     default = range_end
@@ -838,14 +843,17 @@ class NovaMaxWeapons(Range):
 
 class NovaMaxGadgets(Range):
     """
-    Determines maximum number of Nova gadgets that can be present in the game
+    Determines maximum number of Nova gadgets that can be present in the game.
+    Gadgets are a vanilla category including 2 grenade abilities, Stim, Holo Decoy, and Ionic Force Field.
     Additional gadgets may spawn if those are required to beat the game.
 
-    Note: Nova can use any unlocked gadget anytime during the gameplay.
+    Note: Nova can use any unlocked ability anytime during gameplay.
     """
+    display_name = "Nova Maximum Gadgets"
     range_start = 0
     range_end = len(nova_gadgets)
     default = range_end
+
 
 class NovaGhostOfAChanceVariant(Choice):
     """
@@ -1246,12 +1254,14 @@ class LowestMaximumSupply(Range):
 
 class ResearchCostReductionPerItem(Range):
     """
-    Controls how much weapon/armor research cost is cut per item.
+    Controls how much weapon/armor research cost is cut per research cost filler item.
     Affects both minerals and vespene.
     """
+    display_name = "Upgrade Cost Discount Per Item"
     range_start = 0
     range_end = 10
     default = 2
+
 
 class FillerRatio(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
     """
@@ -1390,10 +1400,10 @@ class Starcraft2Options(PerGameCommonOptions):
     nerf_unit_baselines: NerfUnitBaselines
     spear_of_adun_presence: SpearOfAdunPresence
     spear_of_adun_present_in_no_build: SpearOfAdunPresentInNoBuild
-    spear_of_adun_autonomously_cast_ability_presence: SpearOfAdunAutonomouslyCastAbilityPresence
-    spear_of_adun_autonomously_cast_present_in_no_build: SpearOfAdunAutonomouslyCastPresentInNoBuild
+    spear_of_adun_passive_ability_presence: SpearOfAdunPassiveAbilityPresence
+    spear_of_adun_passive_present_in_no_build: SpearOfAdunPassivesPresentInNoBuild
     spear_of_adun_max_active_abilities: SpearOfAdunMaxActiveAbilities
-    spear_of_adun_max_autonomously_cast_abilities: SpearOfAdunMaxAutocastAbilities
+    spear_of_adun_max_passive_abilities: SpearOfAdunMaxAutocastAbilities
     grant_story_tech: GrantStoryTech
     grant_story_levels: GrantStoryLevels
     nova_max_weapons: NovaMaxWeapons
@@ -1432,7 +1442,6 @@ option_groups = [
     OptionGroup("Difficulty Settings", [
         GameDifficulty,
         GameSpeed,
-        # VanillaItemsOnly,
         StarterUnit,
         RequiredTactics,
         NerfUnitBaselines,
@@ -1463,6 +1472,7 @@ option_groups = [
         GenericUpgradeResearch,
         GenericUpgradeResearchSpeedup,
         GenericUpgradeItems,
+        # VanillaItemsOnly,
     ]),
     OptionGroup("Kerrigan", [
         KerriganPresence,
@@ -1480,8 +1490,8 @@ option_groups = [
     OptionGroup("Spear of Adun", [
         SpearOfAdunPresence,
         SpearOfAdunPresentInNoBuild,
-        SpearOfAdunAutonomouslyCastAbilityPresence,
-        SpearOfAdunAutonomouslyCastPresentInNoBuild,
+        SpearOfAdunPassiveAbilityPresence,
+        SpearOfAdunPassivesPresentInNoBuild,
         SpearOfAdunMaxActiveAbilities,
         SpearOfAdunMaxAutocastAbilities,
     ]),
@@ -1512,6 +1522,7 @@ option_groups = [
         MaximumSupplyPerItem,
         MaximumSupplyReductionPerItem,
         LowestMaximumSupply,
+        ResearchCostReductionPerItem,
         FillerRatio,
     ]),
     OptionGroup("Inclusions & Exclusions", [
@@ -1521,6 +1532,7 @@ option_groups = [
         ExcludedMissions,
     ]),
     OptionGroup("Advanced Gameplay", [
+        MissionOrderScouting,
         DifficultyDamageModifier,
         TakeOverAIAllies,
         EnableVoidTrade,
