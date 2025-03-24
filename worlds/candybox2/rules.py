@@ -81,7 +81,7 @@ def set_rules(world: World, player: int):
     add_rule(world.get_location("Rocket Boots Acquired"), lambda state: can_fly(state, player) or (state.has("Boots of Introspection", player) and can_jump(state, player) and (state.has("Octopus King Crown with Obsidian", player) or state.has("Summoning Tribal Spear", player))))
 
     # Hell rules
-    add_rule(world.get_location("Devil Defeated"), lambda state: state.has("Black Magic Grimoire", player) and state.has("Boots of Introspection", player) and state.has("Enchanted Monkey Wizard Staff", player))
+    add_rule(world.get_location("Devil Defeated"), lambda state: state.has("Black Magic Grimoire", player) and state.has("Unicorn Horn", player) and state.has("Boots of Introspection", player) and armor_is_at_least(state, player, "Enchanted Knight Body Armour") and state.has("Pink Enchanted Gloves") and state.has("Enchanted Monkey Wizard Staff", player))
 
     # Developer rules
     add_rule(world.get_location("The Developer Defeated"), lambda state: state.has("Purple Fin", player) and state.has("Beginners' Grimoire"))
