@@ -84,7 +84,7 @@ def set_rules(world: World, player: int):
     add_rule(world.get_location("Devil Defeated"), lambda state: state.has("Black Magic Grimoire", player) and state.has("Boots of Introspection", player) and state.has("Enchanted Monkey Wizard Staff", player))
 
     # Developer rules
-    add_rule(world.get_location("The Developer Defeated"), lambda state: weapon_is_at_least(state, player, "Scythe") and state.has("Sorceress' Cauldron", player) and state.has("Xinopherydon Claw", player))
+    add_rule(world.get_location("The Developer Defeated"), lambda state: state.has("Purple Fin", player) and state.has("Beginners' Grimoire"))
 
     # The Sea rules
 

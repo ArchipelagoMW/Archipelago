@@ -78,7 +78,7 @@ items: dict[str, CandyBox2ItemData] = {
     "Shell Powder": CandyBox2ItemData(candy_box_2_base_id + 54, 1, ItemClassification.progression),
     "Red Fin": CandyBox2ItemData(candy_box_2_base_id + 55, 1, ItemClassification.useful),
     "Green Fin": CandyBox2ItemData(candy_box_2_base_id + 56, 1, ItemClassification.progression),
-    "Purple Fin": CandyBox2ItemData(candy_box_2_base_id + 57, 1, ItemClassification.useful),
+    "Purple Fin": CandyBox2ItemData(candy_box_2_base_id + 57, 1, ItemClassification.progression),
     "Locked Candy Box": CandyBox2ItemData(candy_box_2_base_id + 58, 1, ItemClassification.progression | ItemClassification.useful),
     "Boots of Introspection": CandyBox2ItemData(candy_box_2_base_id + 59, 1, ItemClassification.progression),
     "Pain au Chocolat": CandyBox2ItemData(candy_box_2_base_id + 60, 5, ItemClassification.useful),
