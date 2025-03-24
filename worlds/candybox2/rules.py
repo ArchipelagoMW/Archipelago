@@ -6,6 +6,7 @@ from worlds.generic.Rules import set_rule, add_rule
 weapons = [
     "Wooden Sword",
     "Iron Axe",
+    "Tribal Spear",
     "Monkey Wizard Staff",
     "Polished Silver Sword",
     "Troll's Bludgeon",
@@ -34,8 +35,11 @@ def can_escape_hole(state: CollectionState, player: int):
     return can_fly(state, player) or state.has("Beginners' Grimoire", player)
 
 def sea_entrance(state: CollectionState, player: int):
-    return weapon_is_at_least(state, player, "Enchanted Monkey Wizard Staff") and armor_is_at_least(state, player,
+    return weapon_is_at_least(state, player, "Summoning Tribal Spear") and has_projectiles(state, player) and armor_is_at_least(state, player,
                                                                                              "Lightweight Body Armour")
+
+def can_beat_sharks(state: CollectionState, player: int):
+    return sea_entrance(state, player) and weapon_is_at_least(state, player, "Enchanted Monkey Wizard Staff")
 
 def set_rules(world: World, player: int):
 
@@ -72,7 +76,7 @@ def set_rules(world: World, player: int):
     add_rule(world.get_location("Knight Body Armour Acquired"), lambda state: weapon_is_at_least(state, player, "Enchanted Monkey Wizard Staff") and state.has("Octopus King Crown with Jaspers", player) and armor_is_at_least(state, player, "Lightweight Body Armour") and state.has("Unicorn Horn", player) and state.has("Xinopherydon Claw", player))
 
     # Castle rules
-    add_rule(world.get_location("The Giant Nougat Monster Defeated"), lambda state: weapon_is_at_least(state, player, "Summoning Tribal Spear") and state.has("Boots of Introspection", player) and state.has("Octopus King Crown with Obsidian", player))
+    add_rule(world.get_location("The Giant Nougat Monster Defeated"), lambda state: state.has("Purple Fin", player) and weapon_is_at_least(state, player, "Summoning Tribal Spear") and state.has("Boots of Introspection", player) and state.has("Octopus King Crown with Obsidian", player))
 
     # The Desert Fortress
     add_rule(world.get_location("Xinopherydon Defeated"), lambda state: can_fly(state, player) and (state.has("Enchanted Monkey Wizard Staff", player) or state.has("Octopus King Crown with Jaspers", player)))
@@ -95,14 +99,20 @@ def set_rules(world: World, player: int):
              lambda state: sea_entrance(state, player))
 
     add_rule(world.get_location("The Red Fin Acquired"),
-             lambda state: sea_entrance(state, player) and state.has("Red Enchanted Gloves", player) and state.has("Octopus King Crown with Jaspers",
-                                                                                   player))
+             lambda state: can_beat_sharks(state, player) and state.has("Red Enchanted Gloves", player)
+                           and state.has("Octopus King Crown with Jaspers", player))
+
     add_rule(world.get_location("The Green Fin Acquired"),
-             lambda state: sea_entrance(state, player) and state.has("Red Enchanted Gloves", player) and state.has("Octopus King Crown with Jaspers",
-                                                                                   player))
+             lambda state: can_beat_sharks(state, player)
+                           and state.has("Advanced Grimoire", player)
+                           and state.has("Red Enchanted Gloves", player)
+                           and state.has("Octopus King Crown with Jaspers", player))
+
     add_rule(world.get_location("The Purple Fin Acquired"),
-             lambda state: sea_entrance(state, player) and state.has("Red Enchanted Gloves", player) and state.has("Octopus King Crown with Jaspers",
-                                                                                   player))
+             lambda state: can_beat_sharks(state, player) and state.has("Heart Pendant", player)
+                           and state.has("Heart Plug", player)
+                           and state.has("Advanced Grimoire", player) and state.has("Red Enchanted Gloves", player)
+                           and state.has("Octopus King Crown with Jaspers", player))
 
     # X Potion
     add_rule(world.get_location("Yourself Defeated"), lambda state: state.has("Octopus King Crown", player))
