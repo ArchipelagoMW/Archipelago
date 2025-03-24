@@ -1649,7 +1649,7 @@ def update_boo_table(telesa_info, output_data):
     hp_unit = 0
     if output_data["Options"]["boo_health_option"] == 2:
         max_sphere = 0
-        for loc_name, loc_info in output_data["Locations"]:
+        for loc_name, loc_info in output_data["Locations"].items():
             if loc_info["type"] != "Boo":
                 continue
             if max_sphere < loc_info["boo_sphere"]:
@@ -1663,7 +1663,7 @@ def update_boo_table(telesa_info, output_data):
         elif output_data["Options"]["boo_health_option"] == 1:
             x["str_hp"] = randint(1,999)
         elif output_data["Options"]["boo_health_option"] == 2:
-            for loc_name, loc_info in output_data["Locations"]:
+            for loc_name, loc_info in output_data["Locations"].items():
                 if loc_info["room_no"] != x["init_room"] or loc_info["type"] != "Boo":
                     continue
                 x["str_hp"] = ceil(hp_unit*loc_info["boo_sphere"]) if ceil(hp_unit*loc_info["boo_sphere"]) <= output_data["Options"]["boo_health_value"] else output_data["Options"]["boo_health_value"]
