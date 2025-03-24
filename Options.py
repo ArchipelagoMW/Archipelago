@@ -1505,12 +1505,16 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
     import os
 
     import yaml
-    from jinja2 import Template
+    from jinja2 import Template, Environment
+    from inspect import cleandoc
 
     from worlds import AutoWorldRegister
     from Utils import local_path, __version__
 
     full_path: str
+
+    jinja_env = Environment()
+    jinja_env.filters["cleandoc"] = cleandoc
 
     os.makedirs(target_folder, exist_ok=True)
 
@@ -1546,7 +1550,7 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
             option_groups = get_option_groups(world)
             with open(local_path("data", "options.yaml")) as f:
                 file_data = f.read()
-            res = Template(file_data).render(
+            res = jinja_env.from_string(file_data).render(
                 option_groups=option_groups,
                 __version__=__version__, game=game_name, yaml_dump=yaml_dump_scalar,
                 dictify_range=dictify_range,
