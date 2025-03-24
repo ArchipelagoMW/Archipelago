@@ -145,7 +145,7 @@ class SatisfactoryWorld(World):
 
 
     def write_spoiler(self, spoiler_handle: TextIO):
-        self.items.write_progression_chain(self.multiworld, spoiler_handle)
+        pass
 
 
     def get_filler_item_name(self) -> str:

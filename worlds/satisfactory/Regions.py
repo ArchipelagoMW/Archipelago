@@ -50,7 +50,7 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
             region_names.append(f"Hub {hub_tier}-{minestone}")
 
     for building_name, building in game_logic.buildings.items():
-        if building.can_produce and building_name in critical_path.potential_required_buildings:
+        if building.can_produce and building_name in critical_path.required_buildings:
             region_names.append(building_name)
 
     for tree_name, tree in game_logic.man_trees.items():
@@ -127,7 +127,7 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
                 can_produce_all_allowing_handcrafting(parts_per_milestone.keys()))
             
     for building_name, building in game_logic.buildings.items():
-        if building.can_produce and building_name in critical_path.potential_required_buildings:
+        if building.can_produce and building_name in critical_path.required_buildings:
             connect(regions, "Overworld", building_name,
                 lambda state, building_name=building_name: state_logic.can_build(state, building_name))
         

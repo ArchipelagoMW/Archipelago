@@ -48,23 +48,7 @@ class Part(LocationData):
     def can_produce_any_recipe_for_part(self, state_logic: StateLogic, recipes: Iterable[Recipe], 
                                         name: str, items: Items) -> Callable[[CollectionState], bool]:
         def can_build_by_any_recipe(state: CollectionState) -> bool:
-            if items.precalculated_progression_recipes and name in items.precalculated_progression_recipes:
-                can_produce: bool = state_logic.can_produce_specific_recipe_for_part(
-                    state, items.precalculated_progression_recipes[name])
-                
-                can_produce_anyway: bool
-                if can_produce:
-                    return can_produce
-                else:
-                    can_produce_anyway = \
-                        any(state_logic.can_produce_specific_recipe_for_part(state, recipe) for recipe in recipes)
-
-                    if can_produce_anyway:
-                        debug = True
-
-                    return False # can_produce_anyway
-            else:
-                return any(state_logic.can_produce_specific_recipe_for_part(state, recipe) for recipe in recipes)
+            return any(state_logic.can_produce_specific_recipe_for_part(state, recipe) for recipe in recipes)
 
         return can_build_by_any_recipe
 
@@ -140,7 +124,7 @@ class ShopSlot(LocationData):
         return can_purchase
 
 
-class DropPod(LocationData):
+class HardDrive(LocationData):
     def __init__(self, data: DropPodData, state_logic: Optional[StateLogic],
             locationId: int, tier: int, can_hold_progression: bool):
 
@@ -330,7 +314,7 @@ class Locations():
 
         location_table = self.get_base_location_table(self.max_tiers)
         location_table.extend(self.get_hub_locations(True, self.max_tiers))
-        location_table.extend(self.get_drop_pod_locations(True, self.max_tiers, set()))
+        location_table.extend(self.get_hard_drive_locations(True, self.max_tiers, set()))
         location_table.append(LocationData("Overworld", "UpperBound", 1338999))
 
         return {location.name: location.code for location in location_table}
@@ -345,7 +329,7 @@ class Locations():
 
         location_table = self.get_base_location_table(max_tier_for_game)
         location_table.extend(self.get_hub_locations(False, max_tier_for_game))
-        location_table.extend(self.get_drop_pod_locations(False, max_tier_for_game, self.critical_path.potential_required_parts))
+        location_table.extend(self.get_hard_drive_locations(False, max_tier_for_game,self.critical_path.required_parts))
         location_table.extend(self.get_logical_event_locations(self.options.final_elevator_package))
 
         return location_table
@@ -392,22 +376,22 @@ class Locations():
         location_table.extend(
             part 
             for part_name, recipes in self.game_logic.recipes.items() 
-            if part_name in self.critical_path.potential_required_parts
+            if part_name in self.critical_path.required_parts
             for part in Part.get_parts(self.state_logic, recipes, part_name, self.items, final_elevator_tier))
         location_table.extend(
             EventBuilding(self.game_logic, self.state_logic, name, building) 
             for name, building in self.game_logic.buildings.items()
-            if name in self.critical_path.potential_required_buildings)
+            if name in self.critical_path.required_buildings)
         location_table.extend(
             PowerInfrastructure(self.game_logic, self.state_logic, power_level, recipes) 
             for power_level, recipes in self.game_logic.requirement_per_powerlevel.items()
-            if power_level <= self.critical_path.potential_required_power)
+            if power_level <= self.critical_path.required_power_level)
 
         return location_table
     
-    def get_drop_pod_locations(self, for_data_package: bool, max_tier: int, available_parts: set[str]) \
+    def get_hard_drive_locations(self, for_data_package: bool, max_tier: int, available_parts: set[str]) \
                                                                                                 -> List[LocationData]:
-        drop_pod_locations: List[DropPod] = []
+        hard_drive_locations: List[HardDrive] = []
 
         bucket_size: int
         drop_pod_data: List[DropPodData]
@@ -422,18 +406,16 @@ class Locations():
 
         for location_id in range(self.drop_pod_location_id_start, self.drop_pod_location_id_end + 1):
             if for_data_package:
-                drop_pod_locations.append(DropPod(DropPodData(0, 0, 0, None, 0), None, location_id, 1, False))
+                hard_drive_locations.append(HardDrive(DropPodData(0, 0, 0, None, 0), None, location_id, 1, False))
             else:
                 location_id_normalized: int = location_id - self.drop_pod_location_id_start
-
-                if location_id_normalized == 81:
-                    debug = True
 
                 data: DropPodData = drop_pod_data[location_id_normalized]
                 can_hold_progression: bool = location_id_normalized < self.options.hard_drive_progression_limit.value
                 tier = min(ceil((location_id_normalized + 1) / bucket_size), max_tier)
 
                 if not data.item or data.item in available_parts:
-                    drop_pod_locations.append(DropPod(data, self.state_logic, location_id, tier, can_hold_progression))
+                    hard_drive_locations.append(
+                        HardDrive(data, self.state_logic, location_id, tier, can_hold_progression))
 
-        return drop_pod_locations
+        return hard_drive_locations

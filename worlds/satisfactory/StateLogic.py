@@ -60,9 +60,6 @@ class StateLogic:
         return not parts or all(can_handcraft_part(part) for part in parts)
 
     def can_produce_specific_recipe_for_part(self, state: CollectionState, recipe: Recipe) -> bool:
-        if recipe.name == "Recipe: Iron Ingot":
-            debug = True
-
         if recipe.needs_pipes and (
                 not self.can_build_any(state, ("Pipes Mk.1", "Pipes Mk.2")) or
                 not self.can_build_any(state, ("Pipeline Pump Mk.1", "Pipeline Pump Mk.2"))):
