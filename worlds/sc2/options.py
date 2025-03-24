@@ -432,8 +432,8 @@ class GenericUpgradeResearchSpeedup(Toggle):
 class GenericUpgradeItems(Choice):
     """Determines how weapon and armor upgrades are split into items.
 
-    All options produce a number of levels of each item equal to the MaxUpgradeLevel.
-    The examples below consider MaxUpgradeLevel=3.
+    All options produce a number of levels of each item equal to the Maximum Upgrade Level.
+    The examples below consider a Maximum Upgrade Level of 3.
 
     Does nothing if upgrades are unlocked by completed mission counts.
 
