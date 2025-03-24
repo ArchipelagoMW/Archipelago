@@ -57,7 +57,7 @@ class LevelUnlockStyle(Choice):
 
     Checks: The first level is unlocked from the start but all other levels are unlocked via checks
 
-    Checks - No Bosses: The first level is unlocked from the start. Bosses are unlocked via hub Thunder Egg counts. All other levels are unlocked via checks
+    Checks - No Bosses: The first level will be unlocked from the start. Bosses can be unlocked via hub Thunder Egg counts. All other levels must be unlocked via checks
     """
     display_name = "Level Unlock Style"
     option_vanilla = 0
@@ -180,6 +180,51 @@ class TrapFill(Range):
     default = 0
 
 
+class AcidTrapWeight(Range):
+    """The weight of Acid Traps in the trap pool.
+    Acid Traps cause the screen to shift colors."""
+    display_name = "Acid Trap Weight"
+    range_start = 0
+    range_end = 100
+    default = 20
+
+
+class ExitTrapWeight(Range):
+    """The weight of Exit Traps in the trap pool.
+    Exit Traps immediately force you out of the current level, putting you back in Rainbow Cliffs."""
+    display_name = "Exit Trap Weight"
+    range_start = 0
+    range_end = 100
+    default = 20
+
+
+class GravityTrapWeight(Range):
+    """The weight of Gravity Traps in the trap pool.
+    Gravity Traps cause Ty to fall much faster, and limit his jump height."""
+    display_name = "Gravity Trap Weight"
+    range_start = 0
+    range_end = 100
+    default = 20
+
+
+class KnockedDownTrapWeight(Range):
+    """The weight of Knocked Down Traps in the trap pool.
+    Knocked Down Traps knock you over and set your health to 1"""
+    display_name = "Knocked Down Trap Weight"
+    range_start = 0
+    range_end = 100
+    default = 20
+
+
+class SlowTrapWeight(Range):
+    """The weight of Slow Traps in the trap pool.
+    Slow Traps cause Ty to move slower."""
+    display_name = "Slow Trap Weight"
+    range_start = 0
+    range_end = 100
+    default = 20
+
+
 ty1_option_groups = [
     OptionGroup("Goal Options", [
         Goal,
@@ -205,7 +250,12 @@ ty1_option_groups = [
         Lifesanity
     ]),
     OptionGroup("Traps", [
-        TrapFill
+        TrapFill,
+        AcidTrapWeight,
+        ExitTrapWeight,
+        GravityTrapWeight,
+        KnockedDownTrapWeight,
+        SlowTrapWeight
     ]),
     OptionGroup("Death Link", [
         DeathLink
@@ -239,3 +289,8 @@ class Ty1Options(PerGameCommonOptions):
 
     death_link: DeathLink
     trap_fill_percentage: TrapFill
+    AcidTrapWeight: AcidTrapWeight
+    ExitTrapWeight: ExitTrapWeight
+    GravityTrapWeight: GravityTrapWeight
+    KnockedDownTrapWeight: KnockedDownTrapWeight
+    SlowTrapWeight: SlowTrapWeight
