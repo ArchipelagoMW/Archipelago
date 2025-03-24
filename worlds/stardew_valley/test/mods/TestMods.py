@@ -1,11 +1,12 @@
 import random
 
 from BaseClasses import get_seed, ItemClassification
-from .. import SVTestBase, SVTestCase, allsanity_mods_6_x_x, fill_dataclass_with_default
+from .. import SVTestBase, SVTestCase
 from ..assertion import ModAssertMixin, WorldAssertMixin
-from ... import Group, ItemClassification, create_content
+from ..options.presets import allsanity_mods_6_x_x
+from ..options.utils import fill_dataclass_with_default
+from ... import options, Group, create_content
 from ...items import item_data
-from ... import options
 from ...mods.mod_data import ModNames
 from ...options import SkillProgression, Walnutsanity
 from ...options.options import all_mods
