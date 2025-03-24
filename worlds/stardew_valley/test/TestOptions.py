@@ -3,9 +3,10 @@ from typing import ClassVar
 
 from BaseClasses import ItemClassification
 from test.param import classvar_matrix
-from . import SVTestCase, allsanity_no_mods_6_x_x, allsanity_mods_6_x_x, solo_multiworld, SVTestBase
+from . import SVTestCase, solo_multiworld, SVTestBase
 from .assertion import WorldAssertMixin
 from .options.option_names import all_option_choices
+from .options.presets import allsanity_no_mods_6_x_x, allsanity_mods_6_x_x
 from .. import items_by_group, Group
 from ..locations import locations_by_tag, LocationTags, location_table
 from ..options import ExcludeGingerIsland, ToolProgression, Goal, SeasonRandomization, TrapItems, SpecialOrderLocations, ArcadeMachineLocations
