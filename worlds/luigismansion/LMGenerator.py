@@ -15,7 +15,7 @@ from .Helper_Functions import StringByteFunction as sbf
 
 from gclib import fs_helpers as fs
 from gclib.gcm import GCM
-from gclib.dol import DOL
+from gclib.dol import DOL, DOLSection
 from gclib.rarc import RARC
 from gclib.yaz0_yay0 import Yay0
 
@@ -430,14 +430,6 @@ class LuigisMansionRandomizer:
         dol_data = self.gcm.read_file_data("sys/main.dol")
         self.dol.read(dol_data)
 
-        # Edits for DOL max space offsets.
-        self.dol.data.seek(0x8) # Physical Section Address
-        self.dol.data.write(bytes.fromhex("39FA20"))
-        self.dol.data.seek(0x50)  # Virtual Section Address
-        self.dol.data.write(bytes.fromhex("804DD940"))
-        self.dol.data.seek(0x98)  # Section Size
-        self.dol.data.write(bytes.fromhex("1000"))
-
         # Walk Speed
         if self.output_data["Options"]["walk_speed"] == 0:
             walk_speed = 16784
@@ -495,6 +487,8 @@ class LuigisMansionRandomizer:
         self.dol.data.write(struct.pack(">H", king_boo_health))
 
         # Save all changes to the DOL itself.
+        new_dol_sect = DOLSection(0x39FA20, 0x804DD940, 0x1000)
+        self.dol.sections[2] = new_dol_sect
         self.dol.save_changes()
         self.gcm.changed_files["sys/main.dol"] = self.dol.data
 
