@@ -75,8 +75,8 @@ def set_rules(world: World, player: int):
     add_rule(world.get_location("The Giant Nougat Monster Defeated"), lambda state: weapon_is_at_least(state, player, "Summoning Tribal Spear") and state.has("Boots of Introspection", player) and state.has("Octopus King Crown with Obsidian", player))
 
     # The Desert Fortress
-    add_rule(world.get_location("Xinopherydon Defeated"), lambda state: can_fly(state, player) and state.has("Enchanted Monkey Wizard Staff", player) or state.has("Octopus King Crown with Jaspers", player))
-    add_rule(world.get_location("Xinopherydon Quest Unicorn Horn Acquired"), lambda state: state.has("Pogo Stick", player) and state.has("Rocket Boots", player))
+    add_rule(world.get_location("Xinopherydon Defeated"), lambda state: can_fly(state, player) and (state.has("Enchanted Monkey Wizard Staff", player) or state.has("Octopus King Crown with Jaspers", player)))
+    add_rule(world.get_location("Xinopherydon Quest Unicorn Horn Acquired"), lambda state: can_fly(state, player))
     add_rule(world.get_location("Teapot Defeated"), lambda state: weapon_is_at_least(state, player, "Scythe") and state.has("Octopus King Crown with Obsidian", player) and state.has("Sorceress' Cauldron", player) and state.has("Xinopherydon Claw", player))
     add_rule(world.get_location("Rocket Boots Acquired"), lambda state: can_fly(state, player) or (state.has("Boots of Introspection", player) and can_jump(state, player) and (state.has("Octopus King Crown with Obsidian", player) or state.has("Summoning Tribal Spear", player))))
 
