@@ -37,11 +37,16 @@ def get_app() -> "Flask":
     parser = argparse.ArgumentParser(allow_abbrev=False)
     parser.add_argument('--config_override', default=None,
                         help="Path to yaml config file that overrules config.yaml.")
+    parser.add_argument('--port', default=None,
+                        help="Port on which to host Archipelago website.")
     args = parser.parse_known_args()[0]
     if args.config_override:
         import yaml
         app.config.from_file(os.path.abspath(args.config_override), yaml.safe_load)
         logging.info(f"Updated config from {args.config_override}")
+    if args.port:
+        app.config["PORT"] = args.port
+        logging.info(f"PORT was set to {app.config['PORT']}")
     if not app.config["HOST_ADDRESS"]:
         logging.info("Getting public IP, as HOST_ADDRESS is empty.")
         app.config["HOST_ADDRESS"] = Utils.get_public_ipv4()
