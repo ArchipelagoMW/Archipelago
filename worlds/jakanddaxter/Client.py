@@ -20,6 +20,7 @@ from pymem.exception import ProcessNotFound
 # Archipelago imports
 import ModuleUpdate
 import Utils
+import settings
 
 from CommonClient import ClientCommandProcessor, CommonContext, server_loop, gui_enabled
 from NetUtils import ClientStatus
@@ -433,12 +434,12 @@ async def run_game(ctx: JakAndDaxterContext):
         ctx.on_log_warn(logger, "Compiler not running, attempting to start.")
 
     try:
-        settings = Utils.get_settings()
-        auto_detect_root_directory = settings["jakanddaxter_options"]["auto_detect_root_directory"]
+        ap_settings = settings.get_settings()
+        auto_detect_root_directory = ap_settings.jakanddaxter_options.auto_detect_root_directory
         if auto_detect_root_directory:
             root_path = find_root_directory(ctx)
         else:
-            root_path = settings["jakanddaxter_options"]["root_directory"]
+            root_path = ap_settings.jakanddaxter_options.root_directory
 
             # Always trust your instincts... the user may not have entered their root_directory properly.
             # We don't have to do this check if the root directory was auto-detected.

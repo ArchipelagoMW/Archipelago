@@ -4,7 +4,6 @@ from typing import Any, ClassVar, Callable, Union, cast
 
 # Archipelago imports
 import settings
-import Utils
 
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import components, Component, launch_subprocess, Type, icon_paths
@@ -249,7 +248,8 @@ class JakAndDaxterWorld(World):
         # For the fairness of other players in a multiworld game, enforce some friendly limitations on our options,
         # so we don't cause chaos during seed generation. These friendly limits should **guarantee** a successful gen.
         # We would have done this earlier, but we needed to sort the power cell thresholds first.
-        enforce_friendly_options = Utils.get_settings()["jakanddaxter_options"]["enforce_friendly_options"]
+        ap_settings = settings.get_settings()
+        enforce_friendly_options = ap_settings.jakanddaxter_options.enforce_friendly_options
         if enforce_friendly_options:
             if self.multiworld.players > 1:
                 from .Rules import enforce_multiplayer_limits
