@@ -1,6 +1,7 @@
 from BaseClasses import  ItemClassification
-from .. import SVTestBase, SVTestCase, allsanity_mods_6_x_x
+from .. import SVTestBase, SVTestCase
 from ..assertion import ModAssertMixin, WorldAssertMixin
+from ..options.presets import allsanity_mods_6_x_x
 from ... import options, items, Group
 
 
