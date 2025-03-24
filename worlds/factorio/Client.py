@@ -255,7 +255,8 @@ async def game_watcher(ctx: FactorioContext):
                         if "DeathLink" in ctx.tags:
                             async_start(ctx.send_death())
                     if ctx.energy_link_increment:
-                        in_world_bridges = data["energy_bridges"]
+                        # 1 + quality * 0.3 for each bridge
+                        in_world_bridges: float = data["energy_bridges"]
                         if in_world_bridges:
                             in_world_energy = data["energy"]
                             if in_world_energy < (ctx.energy_link_increment * in_world_bridges):
@@ -263,14 +264,14 @@ async def game_watcher(ctx: FactorioContext):
                                 ctx.last_deplete = time.time()
                                 async_start(ctx.send_msgs([{
                                     "cmd": "Set", "key": ctx.energylink_key, "operations":
-                                        [{"operation": "add", "value": -ctx.energy_link_increment * in_world_bridges},
+                                        [{"operation": "add", "value": int(-ctx.energy_link_increment * in_world_bridges)},
                                          {"operation": "max", "value": 0}],
                                     "last_deplete": ctx.last_deplete
                                 }]))
                             # Above Capacity - (len(Bridges) * ENERGY_INCREMENT)
                             elif in_world_energy > (in_world_bridges * ctx.energy_link_increment * 5) - \
                                     ctx.energy_link_increment * in_world_bridges:
-                                value = ctx.energy_link_increment * in_world_bridges
+                                value = int(ctx.energy_link_increment * in_world_bridges)
                                 async_start(ctx.send_msgs([{
                                     "cmd": "Set", "key": ctx.energylink_key, "operations":
                                         [{"operation": "add", "value": value}]
