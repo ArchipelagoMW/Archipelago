@@ -18625,8 +18625,8 @@
                             "closes_behind": false
                         }
                     ],
-                    "checkpoint": "",
-                    "checkpoint_region": ""
+                    "checkpoint": "Search",
+                    "checkpoint_region": "south"
                 },
                 {
                     "name": "d-01",
@@ -21934,7 +21934,7 @@
                             "connections": [
                                 {
                                     "dest": "goal",
-                                    "rule": [ [ "red_boosters", "dash_refills", "dash-switch" ] ]
+                                    "rule": [ [ "red_boosters", "dash_refills", "dash_switches" ] ]
                                 }
                             ],
                             "locations": [

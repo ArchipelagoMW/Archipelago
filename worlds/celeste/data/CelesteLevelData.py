@@ -1316,6 +1316,13 @@ all_doors: Dict[str, Door] = {
 
     "5b_d-05_west": Door("5b_d-05_west", "5b_d-05", DoorDirection.left, False, False),
 
+    "5c_00_east": Door("5c_00_east", "5c_00", DoorDirection.right, False, False),
+
+    "5c_01_west": Door("5c_01_west", "5c_01", DoorDirection.left, False, False),
+    "5c_01_east": Door("5c_01_east", "5c_01", DoorDirection.right, False, False),
+
+    "5c_02_west": Door("5c_02_west", "5c_02", DoorDirection.left, False, False),
+
 }
 
 all_region_connections: Dict[str, RegionConnection] = {
@@ -2646,6 +2653,14 @@ all_region_connections: Dict[str, RegionConnection] = {
 
     "5b_d-05_west---5b_d-05_goal": RegionConnection("5b_d-05_west", "5b_d-05_goal", [[ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks, ItemName.springs, ItemName.swap_blocks, ], ]),
 
+    "5c_00_west---5c_00_east": RegionConnection("5c_00_west", "5c_00_east", [[ItemName.swap_blocks, ItemName.dash_refills, ], ]),
+    "5c_00_east---5c_00_west": RegionConnection("5c_00_east", "5c_00_west", [[ItemName.swap_blocks, ItemName.dash_refills, ], ]),
+
+    "5c_01_west---5c_01_east": RegionConnection("5c_01_west", "5c_01_east", [[ItemName.swap_blocks, ], ]),
+    "5c_01_east---5c_01_west": RegionConnection("5c_01_east", "5c_01_west", [[ItemName.cannot_access, ], ]),
+
+    "5c_02_west---5c_02_goal": RegionConnection("5c_02_west", "5c_02_goal", [[ItemName.red_boosters, ItemName.dash_refills, ItemName.dash_switches, ], ]),
+
 }
 
 all_locations: Dict[str, LevelLocation] = {
@@ -2863,6 +2878,10 @@ all_locations: Dict[str, LevelLocation] = {
     "5b_b-09_binoculars": LevelLocation("5b_b-09_binoculars", "Mirror Temple B - Room b-09 Binoculars", "5b_b-09_bottom", LocationType.binoculars, []),
     "5b_d-05_clear": LevelLocation("5b_d-05_clear", "Mirror Temple B - Level Clear", "5b_d-05_goal", LocationType.level_clear, []),
     "5b_d-05_golden": LevelLocation("5b_d-05_golden", "Mirror Temple B - Golden Strawberry", "5b_d-05_goal", LocationType.golden_strawberry, [[ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks, ItemName.theo_crystal, ItemName.dash_refills, ItemName.springs, ItemName.coins, ItemName.swap_blocks, ], ]),
+
+    "5c_02_binoculars": LevelLocation("5c_02_binoculars", "Mirror Temple C - Room 02 Binoculars", "5c_02_west", LocationType.binoculars, []),
+    "5c_02_clear": LevelLocation("5c_02_clear", "Mirror Temple C - Level Clear", "5c_02_goal", LocationType.level_clear, []),
+    "5c_02_golden": LevelLocation("5c_02_golden", "Mirror Temple C - Golden Strawberry", "5c_02_goal", LocationType.golden_strawberry, [[ItemName.red_boosters, ItemName.dash_refills, ItemName.dash_switches, ItemName.swap_blocks, ], ]),
 
 }
 
@@ -4229,6 +4248,15 @@ all_regions: Dict[str, PreRegion] = {
     "5b_d-05_west": PreRegion("5b_d-05_west", "5b_d-05", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "5b_d-05_west"], [loc for _, loc in all_locations.items() if loc.region_name == "5b_d-05_west"]),
     "5b_d-05_goal": PreRegion("5b_d-05_goal", "5b_d-05", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "5b_d-05_goal"], [loc for _, loc in all_locations.items() if loc.region_name == "5b_d-05_goal"]),
 
+    "5c_00_west": PreRegion("5c_00_west", "5c_00", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "5c_00_west"], [loc for _, loc in all_locations.items() if loc.region_name == "5c_00_west"]),
+    "5c_00_east": PreRegion("5c_00_east", "5c_00", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "5c_00_east"], [loc for _, loc in all_locations.items() if loc.region_name == "5c_00_east"]),
+
+    "5c_01_west": PreRegion("5c_01_west", "5c_01", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "5c_01_west"], [loc for _, loc in all_locations.items() if loc.region_name == "5c_01_west"]),
+    "5c_01_east": PreRegion("5c_01_east", "5c_01", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "5c_01_east"], [loc for _, loc in all_locations.items() if loc.region_name == "5c_01_east"]),
+
+    "5c_02_west": PreRegion("5c_02_west", "5c_02", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "5c_02_west"], [loc for _, loc in all_locations.items() if loc.region_name == "5c_02_west"]),
+    "5c_02_goal": PreRegion("5c_02_goal", "5c_02", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "5c_02_goal"], [loc for _, loc in all_locations.items() if loc.region_name == "5c_02_goal"]),
+
 }
 
 all_room_connections: Dict[str, RoomConnection] = {
@@ -4705,6 +4733,9 @@ all_room_connections: Dict[str, RoomConnection] = {
     "5b_d-03_east---5b_d-04_west": RoomConnection("5b", all_doors["5b_d-03_east"], all_doors["5b_d-04_west"]),
     "5b_d-04_east---5b_d-05_west": RoomConnection("5b", all_doors["5b_d-04_east"], all_doors["5b_d-05_west"]),
 
+    "5c_00_east---5c_01_west": RoomConnection("5c", all_doors["5c_00_east"], all_doors["5c_01_west"]),
+    "5c_01_east---5c_02_west": RoomConnection("5c", all_doors["5c_01_east"], all_doors["5c_02_west"]),
+
 }
 
 all_rooms: Dict[str, Room] = {
@@ -5070,7 +5101,7 @@ all_rooms: Dict[str, Room] = {
     "5a_c-11": Room("5a", "5a_c-11", "Mirror Temple A - Room c-11", [reg for _, reg in all_regions.items() if reg.room_name == "5a_c-11"], [door for _, door in all_doors.items() if door.room_name == "5a_c-11"]),
     "5a_c-09": Room("5a", "5a_c-09", "Mirror Temple A - Room c-09", [reg for _, reg in all_regions.items() if reg.room_name == "5a_c-09"], [door for _, door in all_doors.items() if door.room_name == "5a_c-09"]),
     "5a_c-13": Room("5a", "5a_c-13", "Mirror Temple A - Room c-13", [reg for _, reg in all_regions.items() if reg.room_name == "5a_c-13"], [door for _, door in all_doors.items() if door.room_name == "5a_c-13"]),
-    "5a_d-00": Room("5a", "5a_d-00", "Mirror Temple A - Room d-00", [reg for _, reg in all_regions.items() if reg.room_name == "5a_d-00"], [door for _, door in all_doors.items() if door.room_name == "5a_d-00"]),
+    "5a_d-00": Room("5a", "5a_d-00", "Mirror Temple A - Room d-00", [reg for _, reg in all_regions.items() if reg.room_name == "5a_d-00"], [door for _, door in all_doors.items() if door.room_name == "5a_d-00"], "Search", "5a_d-00_south"),
     "5a_d-01": Room("5a", "5a_d-01", "Mirror Temple A - Room d-01", [reg for _, reg in all_regions.items() if reg.room_name == "5a_d-01"], [door for _, door in all_doors.items() if door.room_name == "5a_d-01"]),
     "5a_d-09": Room("5a", "5a_d-09", "Mirror Temple A - Room d-09", [reg for _, reg in all_regions.items() if reg.room_name == "5a_d-09"], [door for _, door in all_doors.items() if door.room_name == "5a_d-09"]),
     "5a_d-04": Room("5a", "5a_d-04", "Mirror Temple A - Room d-04", [reg for _, reg in all_regions.items() if reg.room_name == "5a_d-04"], [door for _, door in all_doors.items() if door.room_name == "5a_d-04"]),
@@ -5124,6 +5155,10 @@ all_rooms: Dict[str, Room] = {
     "5b_d-04": Room("5b", "5b_d-04", "Mirror Temple B - Room d-04", [reg for _, reg in all_regions.items() if reg.room_name == "5b_d-04"], [door for _, door in all_doors.items() if door.room_name == "5b_d-04"]),
     "5b_d-05": Room("5b", "5b_d-05", "Mirror Temple B - Room d-05", [reg for _, reg in all_regions.items() if reg.room_name == "5b_d-05"], [door for _, door in all_doors.items() if door.room_name == "5b_d-05"]),
 
+    "5c_00": Room("5c", "5c_00", "Mirror Temple C - Room 00", [reg for _, reg in all_regions.items() if reg.room_name == "5c_00"], [door for _, door in all_doors.items() if door.room_name == "5c_00"], "Start", "5c_00_west"),
+    "5c_01": Room("5c", "5c_01", "Mirror Temple C - Room 01", [reg for _, reg in all_regions.items() if reg.room_name == "5c_01"], [door for _, door in all_doors.items() if door.room_name == "5c_01"]),
+    "5c_02": Room("5c", "5c_02", "Mirror Temple C - Room 02", [reg for _, reg in all_regions.items() if reg.room_name == "5c_02"], [door for _, door in all_doors.items() if door.room_name == "5c_02"]),
+
 }
 
 all_levels: Dict[str, Level] = {
@@ -5142,6 +5177,7 @@ all_levels: Dict[str, Level] = {
     "4c": Level("4c", "Golden Ridge C", [room for _, room in all_rooms.items() if room.level_name == "4c"], [room_con for _, room_con in all_room_connections.items() if room_con.level_name == "4c"]),
     "5a": Level("5a", "Mirror Temple A", [room for _, room in all_rooms.items() if room.level_name == "5a"], [room_con for _, room_con in all_room_connections.items() if room_con.level_name == "5a"]),
     "5b": Level("5b", "Mirror Temple B", [room for _, room in all_rooms.items() if room.level_name == "5b"], [room_con for _, room_con in all_room_connections.items() if room_con.level_name == "5b"]),
+    "5c": Level("5c", "Mirror Temple C", [room for _, room in all_rooms.items() if room.level_name == "5c"], [room_con for _, room_con in all_room_connections.items() if room_con.level_name == "5c"]),
 
 }
 
