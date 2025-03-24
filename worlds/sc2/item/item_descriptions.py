@@ -697,7 +697,7 @@ item_descriptions = {
     item_names.BROOD_LORD_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(DISPLAY_NAME_BROOD_LORD),
     item_names.INFESTOR_INFESTED_TERRAN: _ability_desc("Infestors", "Spawn Infested Terran"),
     item_names.INFESTOR_MICROBIAL_SHROUD: _ability_desc("Infestors", "Microbial Shroud", "reduces incoming damage from air units in an area"),
-    item_names.SPORE_CRAWLER_BIO_BONUS: "Spore Crawler +30 bonus damage against biological units.",
+    item_names.SPORE_CRAWLER_BIO_BONUS: "Spore Crawler gain +30 bonus damage against biological units.",
     item_names.SWARM_QUEEN_SPAWN_LARVAE: _ability_desc("Swarm Queens", "Spawn Larvae"),
     item_names.SWARM_QUEEN_DEEP_TUNNEL: _ability_desc("Swarm Queens", "Deep Tunnel"),
     item_names.SWARM_QUEEN_ORGANIC_CARAPACE: "Swarm Queens gain +25 life.",
