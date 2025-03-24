@@ -195,9 +195,8 @@ def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
 def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
     world_types = {multiworld.worlds[player].__class__ for player in multiworld.player_ids}
     for world_type in sorted(world_types, key=lambda world: world.__name__):
-        stage_callable = getattr(world_type, f"stage_{method_name}", None)
-        if stage_callable:
-            _timed_call(stage_callable, multiworld, *args)
+        stage_callable = getattr(world_type, f"stage_{method_name}")
+        _timed_call(stage_callable, multiworld, *args)
 
 
 class WebWorld(metaclass=WebWorldRegister):
