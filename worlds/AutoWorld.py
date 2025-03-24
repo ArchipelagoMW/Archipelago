@@ -488,6 +488,18 @@ class World(metaclass=AutoWorldRegister):
         :param multiworld: The multiworld object for this generation.
         """
 
+    @classmethod
+    def stage_generate_output(cls, multiworld: "MultiWorld", output_directory: str) -> None:
+        """
+        Class level stage of generate_output. Gets run once per world type per multiworld before the instanced calls. As
+        this method gets called from a threadpool, do not use multiworld.random here. If any last-second randomization
+        needs to be done, use one of your worlds' random or seed a new random object. Called before the instance method,
+        but as they are all threaded no guarantee it completes first unless the other threads await it.
+
+        :param multiworld: The multiworld object for this generation.
+        :param output_directory: The path to the directory where the output file should be written.
+        """
+
     def generate_output(self, output_directory: str) -> None:
         """
         This method gets called from a threadpool, do not use multiworld.random here.
@@ -495,34 +507,6 @@ class World(metaclass=AutoWorldRegister):
 
         :param output_directory: The path to the directory where the output file should be written.
         """
-
-    @classmethod
-    def stage_generate_output(cls, multiworld: "MultiWorld", output_directory: str) -> None:
-        """
-        Class level stage of generate_output. Gets run once per world type per multiworld before the instanced calls. As
-        this method gets called from a threadpool, do not use multiworld.random here. If any last-second randomization
-        needs to be done, use one of your worlds' random or seed a new random object.
-
-        :param multiworld: The multiworld object for this generation.
-        :param output_directory: The path to the directory where the output file should be written.
-        """
-
-    def fill_slot_data(self) -> Mapping[str, Any]:  # json of WebHostLib.models.Slot
-        """
-        This is a way the generator can give custom data to the client.
-        The client will receive this as JSON in the `Connected` response.
-
-        The generation does not wait for `generate_output` to complete before calling this.
-        `threading.Event` can be used if you need to wait for something from `generate_output`.
-
-        :return: This method should return a `dict` with `str` keys, and should be serializable with json. This
-        dictionary will then get serialized into the multidata and accessible via the `slot_data` field in the
-        `Connected` network package.
-        """
-        # The reason for the `Mapping` type annotation, rather than `dict`
-        # is so that type checkers won't worry about the mutability of `dict`,
-        # so you can have more specific typing in your world implementation.
-        return {}
 
     def extend_hint_information(self, hint_data: dict[int, dict[int, str]]):
         """
@@ -544,6 +528,23 @@ class World(metaclass=AutoWorldRegister):
          {player_id: {location_id: text}}. You will need to insert your own player_id.
         """
 
+    def fill_slot_data(self) -> Mapping[str, Any]:  # json of WebHostLib.models.Slot
+        """
+        This is a way the generator can give custom data to the client.
+        The client will receive this as JSON in the `Connected` response.
+
+        The generation does not wait for `generate_output` to complete before calling this.
+        `threading.Event` can be used if you need to wait for something from `generate_output`.
+
+        :return: This method should return a `dict` with `str` keys, and should be serializable with json. This
+        dictionary will then get serialized into the multidata and accessible via the `slot_data` field in the
+        `Connected` network package.
+        """
+        # The reason for the `Mapping` type annotation, rather than `dict`
+        # is so that type checkers won't worry about the mutability of `dict`,
+        # so you can have more specific typing in your world implementation.
+        return {}
+
     def modify_multidata(self, multidata: dict[str, Any]) -> None:  # TODO: TypedDict for multidata?
         """
         For deeper modification of server multidata, such as adding additional custom connection names.
@@ -562,16 +563,6 @@ class World(metaclass=AutoWorldRegister):
         pickleable.
         """
 
-    # Spoiler writing is optional, these may not get called.
-    def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
-        """
-        Write to the spoiler header. Called after writing the current player's options, but before the next player's
-        options.
-
-        :param spoiler_handle: The spoiler file for this generation. The file is already open when this method is
-        called.
-        """
-
     @classmethod
     def stage_write_spoiler_header(cls, multiworld: "MultiWorld", spoiler_handle: TextIO) -> None:
         """
@@ -579,6 +570,16 @@ class World(metaclass=AutoWorldRegister):
         writing the common header, but before the player specific information.
 
         :param multiworld: The multiworld object for this generation.
+        :param spoiler_handle: The spoiler file for this generation. The file is already open when this method is
+        called.
+        """
+
+    # Spoiler writing is optional, these may not get called.
+    def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
+        """
+        Write to the spoiler header. Called after writing the current player's options, but before the next player's
+        options.
+
         :param spoiler_handle: The spoiler file for this generation. The file is already open when this method is
         called.
         """
