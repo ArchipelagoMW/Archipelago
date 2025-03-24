@@ -20,8 +20,9 @@ It is generally recommended that you use a virtual environment to run python bas
 3. Run the command `source venv/bin/activate` to activate the virtual environment.
 4. If you want to exit the virtual environment, run the command `deactivate`.
 ## Steps to Run the Clients 
-1. If your game doesn't have a patch file, run the command `python3 SNIClient.py`, changing the filename with the file of the client you want to run.
-2. If your game does have a patch file, move the base rom to the Archipelago directory and run the command `python3 SNIClient.py 'patchfile'` with the filename extension for the patch file (apsm, aplttp, apsmz3, etc.) included and changing the filename with the file of the client you want to run.
+1. Run the command `python3 Launcher.py`.
+1. If your game doesn't have a patch file, just click the desired client in the right side column.
+2. If your game does have a patch file, click the 'Open Patch' button and navigate to your patch file (the filename extension will look something like apsm, aplttp, apsmz3, etc.).
 3. Your client should now be running and rom created (where applicable).
 ## Additional Steps for SNES Games
 1. If using RetroArch, the instructions to set up your emulator [here in the Link to the Past setup guide](https://archipelago.gg/tutorial/A%20Link%20to%20the%20Past/multiworld/en) also work on the macOS version of RetroArch.
