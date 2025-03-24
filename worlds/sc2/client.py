@@ -2194,6 +2194,6 @@ def force_settings_save_on_close() -> None:
 
 
 def launch():
-    colorama.init()
+    colorama.just_fix_windows_console()
     asyncio.run(main())
     colorama.deinit()
