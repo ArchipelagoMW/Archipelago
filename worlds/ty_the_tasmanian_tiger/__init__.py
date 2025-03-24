@@ -43,6 +43,7 @@ class Ty1World(World):
     portal_map: typing.List[int] = [Ty1LevelCode.A1.value, Ty1LevelCode.A2.value, Ty1LevelCode.A3.value,
                                     Ty1LevelCode.B1.value, Ty1LevelCode.B2.value, Ty1LevelCode.B3.value,
                                     Ty1LevelCode.C1.value, Ty1LevelCode.C2.value, Ty1LevelCode.C3.value]
+    trap_weights = {}
 
     web = Ty1Web()
 
@@ -111,6 +112,13 @@ class Ty1World(World):
                 raise OptionError()
             else:
                 print("[INFO] Ty1 - Extra Theggs and Cogs have been reduced to avoid unplaced items.")
+        self.trap_weights = {
+            "Knocked Down Trap": self.options.knocked_down_trap_weight.value,
+            "Slow Trap": self.options.slow_trap_weight.value,
+            "Gravity Trap": self.options.gravity_trap_weight.value,
+            "Acid Trap": self.options.acid_trap_weight.value,
+            "Exit Trap": self.options.exit_trap_weight.value,
+        }
 
     def create_item(self, name: str) -> Item:
         item_info = ty1_item_table[name]

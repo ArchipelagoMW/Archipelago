@@ -289,8 +289,8 @@ class Ty1Options(PerGameCommonOptions):
 
     death_link: DeathLink
     trap_fill_percentage: TrapFill
-    AcidTrapWeight: AcidTrapWeight
-    ExitTrapWeight: ExitTrapWeight
-    GravityTrapWeight: GravityTrapWeight
-    KnockedDownTrapWeight: KnockedDownTrapWeight
-    SlowTrapWeight: SlowTrapWeight
+    acid_trap_weight: AcidTrapWeight
+    exit_trap_weight: ExitTrapWeight
+    gravity_trap_weight: GravityTrapWeight
+    knocked_down_trap_weight: KnockedDownTrapWeight
+    slow_trap_weight: SlowTrapWeight

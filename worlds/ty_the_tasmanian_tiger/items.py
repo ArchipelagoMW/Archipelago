@@ -1,6 +1,6 @@
 from typing import Dict, Optional
 
-import worlds.ty_the_tasmanian_tiger.options
+
 from BaseClasses import Item, ItemClassification, MultiWorld, Location
 from worlds.ty_the_tasmanian_tiger.regions import ty1_levels, Ty1LevelCode
 from worlds.ty_the_tasmanian_tiger.options import Ty1Options
@@ -18,10 +18,10 @@ def get_junk_item_names(rand, k: int) -> str:
     return junk
 
 
-def get_trap_item_names(rand, k: int) -> str:
+def get_trap_item_names(world, rand, k: int) -> str:
     traps = rand.choices(
-        list(trap_weights.keys()),
-        weights=list(trap_weights.values()),
+        list(world.trap_weights.keys()),
+        weights=list(world.trap_weights.values()),
         k=k)
     return traps
 
@@ -133,7 +133,7 @@ def create_items(world: MultiWorld, options: Ty1Options, player: int):
     junk = get_junk_item_names(world.random, junk_count)
     for name in junk:
         create_single(name, world, player)
-    traps = get_trap_item_names(world.random, trap_count)
+    traps = get_trap_item_names(world.worlds[player], world.random, trap_count)
     for name in traps:
         create_single(name, world, player)
     world.itempool += world.worlds[player].itempool
@@ -270,11 +270,5 @@ junk_weights = {
 }
 
 
-trap_weights = {
-    "Knocked Down Trap": worlds.ty_the_tasmanian_tiger.options.KnockedDownTrapWeight.value,
-    "Slow Trap": worlds.ty_the_tasmanian_tiger.options.SlowTrapWeight.value,
-    "Gravity Trap": worlds.ty_the_tasmanian_tiger.options.GravityTrapWeight.value,
-    "Acid Trap": worlds.ty_the_tasmanian_tiger.options.AcidTrapWeight.value,
-    "Exit Trap": worlds.ty_the_tasmanian_tiger.options.ExitTrapWeight.value,
-}
+
 
