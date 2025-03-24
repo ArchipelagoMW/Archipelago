@@ -382,6 +382,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Overworld Tunnel Turret"],
         rule=lambda state: state.has(laurels, player))
 
+    # always have access to Overworld, so connecting back isn't needed
     # regions["Overworld Tunnel Turret"].connect(
     #     connecting_region=regions["Overworld"],
     #     rule=lambda state: state.has_any({grapple, laurels}, player))
