@@ -417,11 +417,14 @@ class BooHealthOption(Choice):
     Choice: Use Boo Health Value to set all boos to the specified value
 
     Random Values: Every boo has a different, randomly chosen health value between 1 and 999
+
+    Boo Health by Sphere: Boos will receive health values based on the spheres they are in. Boo Health Value will determine the highest health a Boo can have
     """
     display_name = "Boo Health Option"
     internal_name = "boo_health_option"
     option_choice = 0
     option_random_values = 1
+    option_boo_health_by_sphere = 2
     default = 0
 
 class BooHealthValue(Range):

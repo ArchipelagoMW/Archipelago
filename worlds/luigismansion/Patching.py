@@ -1,4 +1,5 @@
 import re
+from math import ceil
 from random import choice, randint
 
 from .Regions import spawn_locations
@@ -1645,6 +1646,15 @@ def update_enemy_info(enemy_info, output_data):
 
 
 def update_boo_table(telesa_info, output_data):
+    hp_unit = 0
+    if output_data["Options"]["boo_health_option"] == 2:
+        max_sphere = 0
+        for loc_name, loc_info in output_data["Locations"]:
+            if loc_info["type"] != "Boo":
+                continue
+            if max_sphere < loc_info["boo_sphere"]:
+                max_sphere = loc_info["boo_sphere"]
+        hp_unit = output_data["Options"]["boo_health_value"]/max_sphere
     for x in telesa_info.info_file_field_entries:
         x["accel"] = 3.000000
         x["max_speed"] = output_data["Options"]["boo_speed"]
@@ -1652,6 +1662,11 @@ def update_boo_table(telesa_info, output_data):
             x["str_hp"] = output_data["Options"]["boo_health_value"]
         elif output_data["Options"]["boo_health_option"] == 1:
             x["str_hp"] = randint(1,999)
+        elif output_data["Options"]["boo_health_option"] == 2:
+            for loc_name, loc_info in output_data["Locations"]:
+                if loc_info["room_no"] != x["init_room"] or loc_info["type"] != "Boo":
+                    continue
+                x["str_hp"] = ceil(hp_unit*loc_info["boo_sphere"]) if ceil(hp_unit*loc_info["boo_sphere"]) <= output_data["Options"]["boo_health_value"] else output_data["Options"]["boo_health_value"]
         x["move_time"] = output_data["Options"]["boo_escape_time"]
         x["attack"] = output_data["Options"]["boo_anger"]
 

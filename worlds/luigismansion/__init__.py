@@ -1,5 +1,6 @@
 import math
 import os
+import threading
 from dataclasses import fields
 from typing import ClassVar
 
@@ -7,7 +8,7 @@ import yaml
 
 import Options
 import settings
-from BaseClasses import Tutorial, Item, ItemClassification
+from BaseClasses import Tutorial, Item, ItemClassification, MultiWorld
 from Utils import visualize_regions, local_path
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess, icon_paths
@@ -159,6 +160,8 @@ class LMWorld(World):
         self.ghost_affected_regions: dict[str, str] = GHOST_TO_ROOM
         self.open_doors: dict[int, int] = vanilla_door_state
         self.origin_region_name: str = "Foyer"
+        self.finished_boo_scaling = threading.Event()
+        self.boo_spheres: dict[str, int] = {}
 
     def interpret_slot_data(self, slot_data):
         # There are more clever ways to do this, but all would require much larger changes
@@ -684,6 +687,30 @@ class LMWorld(World):
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Mario's Painting", self.player)
 
+    @classmethod
+    def stage_generate_output(cls, multiworld: MultiWorld, output_directory: str):
+        boo_worlds = [world for world in multiworld.get_game_worlds(cls.game) if world.options.boo_health_option == 2]
+        if not boo_worlds:
+            return
+        players = {world.player for world in boo_worlds}
+        def check_players_done() -> None:
+            done_players = set()
+            for player in players:
+                player_world = multiworld.worlds[player]
+                if len(player_world.boo_spheres.keys()) == len(ROOM_BOO_LOCATION_TABLE.keys()):
+                    player_world.finished_boo_scaling.set()
+                    done_players.add(player)
+            players.difference_update(done_players)
+        for sphere_num, sphere in enumerate(multiworld.get_spheres(), 1):
+            for loc in sphere:
+                if loc.player in players and loc.name in ROOM_BOO_LOCATION_TABLE.keys():
+                    player_world = multiworld.worlds[loc.player]
+                    player_world.boo_spheres.update({loc.name: sphere_num})
+            check_players_done()
+            if not players:
+                return
+
+
     # Output options, locations and doors for patcher
     def generate_output(self, output_directory: str):
         # Output seed name and slot number to seed RNG in randomizer client
@@ -706,16 +733,19 @@ class LMWorld(World):
         output_data["Entrances"] = self.open_doors
         output_data["Room Enemies"] = self.ghost_affected_regions
         output_data["Hints"] = get_hints_by_option(self.multiworld, self.player)
+        if self.options.boo_health_option.value == 2:
+            self.finished_boo_scaling.wait()
 
         # Output which item has been placed at each location
         locations = self.multiworld.get_locations(self.player)
         for location in locations:
-            if location.address is not None:
+            if location.address is not None or (location.name in ROOM_BOO_LOCATION_TABLE.keys()):
                 if location.item:
                     itemid = 0
                     if location.item.player == self.player:
-                        if location.item.type == "Door Key":
-                            itemid = location.item.doorid
+                        if location.address:
+                            if location.item.type == "Door Key":
+                                itemid = location.item.doorid
                         inv_reg_list = dict((v, k) for k, v in REGION_LIST.items())
                         roomid = inv_reg_list[location.parent_region.name]
                         item_info = {
@@ -728,6 +758,9 @@ class LMWorld(World):
                             "type": location.type,
                             "loc_enum": location.jmpentry
                         }
+                        if self.options.boo_health_option.value == 2 and location.name in ROOM_BOO_LOCATION_TABLE.keys():
+                                item_info.update({"boo_sphere": self.boo_spheres[location.name]})
+
                         output_data["Locations"][location.name] = item_info
                     else:
                         inv_reg_list = dict((v, k) for k, v in REGION_LIST.items())
