@@ -4213,7 +4213,8 @@ def set_mission_upgrade_rules_expert(multiworld: MultiWorld, world: World, playe
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
 
         add_rule(multiworld.get_location(LocationName.eternal_engine_itembox_14, player),
-                 lambda state: state.has(ItemName.tails_booster, player))
+                 lambda state: (state.has(ItemName.tails_booster, player) and
+                                state.has(ItemName.tails_bazooka, player)))
 
         add_rule(multiworld.get_location(LocationName.cosmic_wall_itembox_14, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
