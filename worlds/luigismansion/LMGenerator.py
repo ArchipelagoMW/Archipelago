@@ -73,6 +73,16 @@ class LuigisMansionRandomizer:
         bin_data.write(sbf.string_to_bytes(magic_seed, len(magic_seed)))
         self.gcm.changed_files["sys/boot.bin"] = bin_data
 
+        # # Copy obake01 into game_usa/model
+        # obake_copy = self.get_arc("files/model/obake01.szp")
+        # game_usa_edit = self.get_arc("files/Game/game_usa.szp")
+        # game_usa_node = next((game_usa_files for game_usa_files in game_usa_edit.file_entries if
+        #       game_usa_files.name == "model")).node
+        # game_usa_edit.add_new_file("obake01.arc", obake_copy.data, game_usa_node)
+        # game_usa_edit.regenerate_all_file_entries_list()
+        # game_usa_edit.save_changes()
+        # self.gcm.changed_files["files/Game/game_usa.szp"] = Yay0.compress(game_usa_edit.data)
+
         # Important note: SZP are just RARC / Arc files that are yay0 compressed, at least for Luigi's Mansion
         # Get Arc automatically handles decompressing RARC data from yay0, but compressing is on us later.
         self.map_two_file = self.get_arc("files/Map/map2.szp")

@@ -96,6 +96,8 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
         update_ram_addr=[LMRamData(in_game_room_id=51)]),
     "Telephone Room R2 Chest": LMLocationData("Telephone Room", 45, "Furniture", 682, [],
         update_ram_addr=[LMRamData(in_game_room_id=53)]),
+    "Huge Flower (Boneyard)":   LMLocationData("Boneyard", 70, "Chest", 8, ["Water Element Medal"],
+        update_ram_addr=[LMRamData(0x803CDF66, bit_position=2, in_game_room_id=36, ram_byte_size=2)]),
 
     # "Hidden Room Large Chest L": LMLocationData("Hidden Room", 9, "Furniture", 243, [], 1), # TODO Prevents Ghosts Spawn
     # "Hidden Room Large Chest C": LMLocationData("Hidden Room", 10, "Furniture", 241, [], 1), # TODO Prevents Ghosts Spawn
@@ -273,8 +275,6 @@ PLANT_LOCATION_TABLE: dict[str, LMLocationData] = {
         update_ram_addr=[LMRamData(in_game_room_id=28)]),
     "Guest Room Plant": LMLocationData("Guest Room", 92, "Plant", 417, ["Water Element Medal"],
         update_ram_addr=[LMRamData(in_game_room_id=29)]),
-    # TODO need to determine how to make unskippable
-    # "Huge Flower":   LMLocationData("Boneyard", 70, "Chest", ???, ["Water Element Medal"], 11, room_ram_addr=0x803CDF66)
 }
 
 CEILING_LOCATION_TABLE ={
