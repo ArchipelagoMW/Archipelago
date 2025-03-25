@@ -117,6 +117,7 @@ ITEM_TABLE: dict[str, LMItemData] = { #TODO need to validate these are all corre
     "Poltergust 4000": LMItemData("Upgrade", 64, IC.useful, update_ram_addr=[LMRamData(0x80081CC8, item_count=0)]),
     "Gold Diamond": LMItemData("Money", 65, IC.progression,
         update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x344, ram_byte_size=4, item_count=1)]),
+    "Progressive Flower": LMItemData("Flower Stage", 140, IC.progression)
 }
 
 BOO_ITEM_TABLE: dict[str, LMItemData] = {
@@ -276,7 +277,7 @@ RECV_OWN_GAME_ITEMS: list[int] = [
     list(LMItem.get_apid(value.code) for value in BOO_ITEM_TABLE.values()), 8063, 8064]
 
 # List of received items to ignore because they are handled elsewhere
-RECV_ITEMS_IGNORE: list[int] = [8127]
+RECV_ITEMS_IGNORE: list[int] = [8127, 8140]
 
 # List of health related items, which are used to not exceed max health
 HEALTH_RELATED_ITEMS: list[int] = [8128, 8129]
