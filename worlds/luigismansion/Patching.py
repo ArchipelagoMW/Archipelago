@@ -1264,21 +1264,21 @@ def update_treasure_table(treasure_info, character_info, output_data, teiden: bo
 
 
             # Find the proper chest in the proper room by looking comparing the Room ID.
-            if x["name"].find("takara") != -1 and x["room_no"] == item_data["room_no"]:
-                # Replace the Chest visuals with something that matches the item name in "characterinfo".
+            if (x["name"].find("takara") != -1 and x["room_no"] == item_data["room_no"]) or item_data["room_no"] == 11:
                 chest_size = 0
-                if output_data["Options"]["chest_types"] == 0:
-                    x["name"] = __get_item_chest_visual(item_data["name"], 0, item_data["classification"], output_data["Options"]["trap_chests"], output_data["Slot"], item_data["player"])
-                    if item_data["door_id"] == 0:
-                        chest_size = __get_chest_size_from_item(item_data["name"], 0, item_data["classification"], output_data["Options"]["trap_chests"], output_data["Slot"], item_data["player"])
+                if item_data["room_no"] != 11:
+                    # Replace the Chest visuals with something that matches the item name in "characterinfo".
+                    if output_data["Options"]["chest_types"] == 0:
+                        x["name"] = __get_item_chest_visual(item_data["name"], 0, item_data["classification"], output_data["Options"]["trap_chests"], output_data["Slot"], item_data["player"])
+                        if item_data["door_id"] == 0:
+                            chest_size = __get_chest_size_from_item(item_data["name"], 0, item_data["classification"], output_data["Options"]["trap_chests"], output_data["Slot"], item_data["player"])
+                        else:
+                            chest_size = __get_chest_size_from_key(item_data["door_id"])
                     else:
-                        chest_size = __get_chest_size_from_key(item_data["door_id"])
-                else:
-                    x["name"] = __get_item_chest_visual(item_data["name"], output_data["Options"]["chest_types"], item_data["classification"],
-                                                        output_data["Options"]["trap_chests"], output_data["Slot"], item_data["player"])
-                    chest_size = __get_chest_size_from_item(item_data["name"], output_data["Options"]["chest_types"], item_data["classification"],
+                        x["name"] = __get_item_chest_visual(item_data["name"], output_data["Options"]["chest_types"], item_data["classification"],
                                                             output_data["Options"]["trap_chests"], output_data["Slot"], item_data["player"])
-
+                        chest_size = __get_chest_size_from_item(item_data["name"], output_data["Options"]["chest_types"], item_data["classification"],
+                                                                output_data["Options"]["trap_chests"], output_data["Slot"], item_data["player"])
 
                 # Define the actor name to use from the Location in the generation output.
                 # Act differently if it's a key.
@@ -1292,8 +1292,9 @@ def update_treasure_table(treasure_info, character_info, output_data, teiden: bo
                 emerald_amount = 0
                 ruby_amount = 0
                 diamond_amount = 0
+                rdiamond_amount = 0
                 # Generate a random amount of money if the item is supposed to be a money bundle.
-                if treasure_item_name in ["money", "emerald", "sapphire", "ruby", "diamond"]:
+                if treasure_item_name in ["money", "emerald", "sapphire", "ruby", "diamond", "rdiamond"]:
                     if any((key, val) for (key, val) in filler_items.items() if
                            key == item_data["name"] and val.type == "Money"):
                         int_money_amt = 1
@@ -1317,6 +1318,8 @@ def update_treasure_table(treasure_info, character_info, output_data, teiden: bo
                             ruby_amount = int_money_amt
                         elif "Diamond" in item_data["name"]:
                             diamond_amount = int_money_amt
+                        elif "Gold Diamond" in item_data["name"]:
+                            rdiamond_amount = int_money_amt
                 # Add the entry for the chest in "treasuretable". Also includes the chest size.
                 treasure_info.info_file_field_entries.append({
                     "other": treasure_item_name,
@@ -1333,7 +1336,7 @@ def update_treasure_table(treasure_info, character_info, output_data, teiden: bo
                     "ruby": ruby_amount,
                     "diamond": diamond_amount,
                     "cdiamond": 0,
-                    "rdiamond": 0,
+                    "rdiamond": rdiamond_amount,
                     "effect": 0,
                     "camera": 0
                 })
