@@ -553,6 +553,8 @@ class LMWorld(World):
                             add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
                         else:
                             add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                if location == "Huge Flower (Boneyard)":
+                    add_rule(entry, lambda state: state.has("Progressive Flower", self.player, 3))
                 if entry.code is None:
                     entry.place_locked_item(Item(entry.locked_item, ItemClassification.progression, None, self.player))
                 region.locations.append(entry)
@@ -638,6 +640,8 @@ class LMWorld(World):
                 exclude += [item]
             if data.code == 65:
                 copies_to_place = 5
+            elif data.code ==140:
+                copies_to_place = 3
             else:
                 copies_to_place = 1
             copies_to_place = 0 if copies_to_place - exclude.count(item) <= 0 else copies_to_place - exclude.count(item)
