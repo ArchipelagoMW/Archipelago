@@ -1,3 +1,2 @@
-dolphin-memory-engine==1.2.0; sys_platform != "darwin"
 py-randomprime==1.27.0; sys_platform != "darwin"
 ppc-asm==1.2.1; sys_platform != "darwin"
