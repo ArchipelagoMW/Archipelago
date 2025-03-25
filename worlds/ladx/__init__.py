@@ -310,7 +310,8 @@ class LinksAwakeningWorld(World):
 
             def opens_new_regions(item):
                 collection_state = base_collection_state.copy()
-                collection_state.collect(item)
+                collection_state.collect(item, prevent_sweep=True)
+                collection_state.sweep_for_advancements(self.get_locations())
                 return len(collection_state.reachable_regions[self.player]) > reachable_count
 
             start_items = [item for item in itempool if is_possible_start_item(item)]
@@ -329,7 +330,7 @@ class LinksAwakeningWorld(World):
                 if entrance_mapping['start_house'] not in ['start_house', 'shop']:
                     start_items = [item for item in start_items if item.name != 'Shovel']
                 base_collection_state = CollectionState(self.multiworld)
-                base_collection_state.update_reachable_regions(self.player)
+                base_collection_state.sweep_for_advancements(self.get_locations())
                 reachable_count = len(base_collection_state.reachable_regions[self.player])
                 start_item = next((item for item in start_items if opens_new_regions(item)), None)
 
