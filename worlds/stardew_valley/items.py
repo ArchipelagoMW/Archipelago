@@ -118,7 +118,7 @@ class ItemData:
 
 
 class StardewItemFactory(Protocol):
-    def __call__(self, name: Union[str, ItemData], override_classification: ItemClassification = None) -> Item:
+    def __call__(self, item: Union[str, ItemData], override_classification: ItemClassification = None) -> Item:
         raise NotImplementedError
 
 
@@ -173,6 +173,16 @@ def get_too_many_items_error_message(locations_count: int, items_count: int) -> 
 
 def create_items(item_factory: StardewItemFactory, locations_count: int, items_to_exclude: List[Item],
                  options: StardewValleyOptions, content: StardewContent, random: Random) -> List[Item]:
+    def validating_content_packs_item_factory(item: Union[str, ItemData], override_classification: ItemClassification = None,
+                                              _item_factory=item_factory) -> Item:
+        if isinstance(item, str):
+            item = item_table[item]
+        assert content.are_all_enabled(item.content_packs), \
+            f"Item [{item.name}] requires {item.content_packs} but {item.content_packs.difference(content.registered_packs)} are not enabled."
+        return _item_factory(item, override_classification)
+
+    item_factory = validating_content_packs_item_factory
+
     items = []
     unique_items = create_unique_items(item_factory, options, content, random)
 
@@ -316,7 +326,7 @@ def create_elevators(item_factory: StardewItemFactory, options: StardewValleyOpt
     items.extend([item_factory(item) for item in ["Progressive Mine Elevator"] * 24])
     if content.is_enabled(ModNames.deepwoods):
         items.extend([item_factory(item) for item in ["Progressive Woods Obelisk Sigils"] * 10])
-    if content.is_enabled(ModNames.deepwoods):
+    if content.is_enabled(ModNames.skull_cavern_elevator):
         items.extend([item_factory(item) for item in ["Progressive Skull Cavern Elevator"] * 8])
 
 

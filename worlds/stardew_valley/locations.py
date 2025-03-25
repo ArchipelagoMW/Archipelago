@@ -2,7 +2,7 @@ import csv
 import enum
 from dataclasses import dataclass
 from random import Random
-from typing import Optional, Dict, Protocol, List, Iterable
+from typing import Dict, Protocol, List, Iterable
 
 from . import data
 from .bundles.bundle_room import BundleRoom
@@ -130,7 +130,7 @@ class LocationData:
 
 
 class StardewLocationCollector(Protocol):
-    def __call__(self, name: str, code: Optional[int], region: str) -> None:
+    def __call__(self, name: str, code: int | None, region: str) -> None:
         raise NotImplementedError
 
 
@@ -327,7 +327,7 @@ def extend_mandatory_locations(randomized_locations: List[LocationData], options
 def extend_situational_quest_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
     if options.quest_locations.has_no_story_quests():
         return
-    if content.is_enabled(ModNames.distant_lands):
+    if content.is_enabled(ModNames.distant_lands) and content.is_enabled(ginger_island_content_pack):
         if content.is_enabled(ModNames.alecto):
             randomized_locations.append(location_table[ModQuest.WitchOrder])
         else:
@@ -475,6 +475,14 @@ def create_locations(location_collector: StardewLocationCollector,
                      options: StardewValleyOptions,
                      content: StardewContent,
                      random: Random):
+    def validating_content_packs_location_collector(name: str, code: int | None, region: str, _location_collector=location_collector) -> None:
+        loc = location_table[name]
+        assert content.are_all_enabled(loc.content_packs), \
+            f"Location [{loc.name}] requires {loc.content_packs} but {loc.content_packs.difference(content.registered_packs)} are not enabled."
+        return _location_collector(name, code, region)
+
+    location_collector = validating_content_packs_location_collector
+
     randomized_locations = []
 
     extend_mandatory_locations(randomized_locations, options, content)
