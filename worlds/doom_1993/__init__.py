@@ -57,7 +57,7 @@ class DOOM1993World(World):
         4: "Hell Beneath (E4M1)"
     }
 
-    boss_level_for_episode: List[str] = [
+    all_boss_levels: List[str] = [
         "Phobos Anomaly (E1M8)",
         "Tower of Babel (E2M8)",
         "Dis (E3M8)",
@@ -163,7 +163,7 @@ class DOOM1993World(World):
     def completion_rule(self, state: CollectionState):
         goal_levels = Maps.map_names
         if self.options.goal.value:
-            goal_levels = self.boss_level_for_episode
+            goal_levels = self.all_boss_levels
 
         for map_name in goal_levels:
             if map_name + " - Exit" not in self.location_name_to_id:

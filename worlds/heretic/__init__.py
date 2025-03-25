@@ -57,7 +57,7 @@ class HereticWorld(World):
         5: "Ochre Cliffs (E5M1)"
     }
 
-    boss_level_for_episode: List[str] = [
+    all_boss_levels: List[str] = [
         "Hell's Maw (E1M8)",
         "The Portals of Chaos (E2M8)",
         "D'Sparil's Keep (E3M8)",
@@ -163,7 +163,7 @@ class HereticWorld(World):
     def completion_rule(self, state: CollectionState):
         goal_levels = Maps.map_names
         if self.options.goal.value:
-            goal_levels = self.boss_level_for_episode
+            goal_levels = self.all_boss_levels
 
         for map_name in goal_levels:
             if map_name + " - Exit" not in self.location_name_to_id:
