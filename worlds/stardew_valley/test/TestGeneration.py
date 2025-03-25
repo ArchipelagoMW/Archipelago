@@ -3,7 +3,7 @@ from typing import List
 from BaseClasses import ItemClassification, Item
 from . import SVTestBase
 from .. import items, location_table, options
-from ..content.vanilla.ginger_island import ginger_island_content_pack
+from ..content.content_packs import vanilla_content_pack_names
 from ..items import Group
 from ..locations import LocationTags
 from ..options import Friendsanity, SpecialOrderLocations, Shipsanity, Chefsanity, SeasonRandomization, Craftsanity, ExcludeGingerIsland, SkillProgression, \
@@ -29,7 +29,7 @@ class TestBaseItemGeneration(SVTestBase):
         all_created_items = [item.name for item in self.multiworld.itempool]
         # Ignore all the stuff that the algorithm chooses one of, instead of all, to fulfill logical progression
         items_to_ignore = [event.name for event in items.events]
-        items_to_ignore.extend(item.name for item in items.all_items if item.content_packs and item.content_packs != {ginger_island_content_pack.name})
+        items_to_ignore.extend(item.name for item in items.all_items if not item.content_packs.issubset(vanilla_content_pack_names))
         items_to_ignore.extend(deprecated.name for deprecated in items.items_by_group[Group.DEPRECATED])
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
         items_to_ignore.extend(weapon.name for weapon in items.items_by_group[Group.WEAPON])
@@ -81,7 +81,7 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
         all_created_items = [item.name for item in self.multiworld.itempool]
         # Ignore all the stuff that the algorithm chooses one of, instead of all, to fulfill logical progression
         items_to_ignore = [event.name for event in items.events]
-        items_to_ignore.extend(item.name for item in items.all_items if item.content_packs and item.content_packs != {ginger_island_content_pack.name})
+        items_to_ignore.extend(item.name for item in items.all_items if not item.content_packs.issubset(vanilla_content_pack_names))
         items_to_ignore.extend(deprecated.name for deprecated in items.items_by_group[Group.DEPRECATED])
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.WEAPON])

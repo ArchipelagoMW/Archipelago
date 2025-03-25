@@ -327,8 +327,8 @@ def extend_mandatory_locations(randomized_locations: List[LocationData], options
 def extend_situational_quest_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
     if options.quest_locations.has_no_story_quests():
         return
-    if ModNames.distant_lands in content.registered_packs:
-        if ModNames.alecto in content.registered_packs:
+    if content.is_enabled(ModNames.distant_lands):
+        if content.is_enabled(ModNames.alecto):
             randomized_locations.append(location_table[ModQuest.WitchOrder])
         else:
             randomized_locations.append(location_table[ModQuest.CorruptedCropsTask])
@@ -347,7 +347,7 @@ def extend_backpack_locations(randomized_locations: List[LocationData], options:
     if options.backpack_progression == BackpackProgression.option_vanilla:
         return
     backpack_locations = [location for location in locations_by_tag[LocationTags.BACKPACK]]
-    filtered_backpack_locations = filter_modded_locations(backpack_locations, content)
+    filtered_backpack_locations = filter_content_packs_locations(backpack_locations, content)
     randomized_locations.extend(filtered_backpack_locations)
 
 
@@ -355,7 +355,7 @@ def extend_elevator_locations(randomized_locations: List[LocationData], options:
     if options.elevator_progression == ElevatorProgression.option_vanilla:
         return
     elevator_locations = [location for location in locations_by_tag[LocationTags.ELEVATOR]]
-    filtered_elevator_locations = filter_modded_locations(elevator_locations, content)
+    filtered_elevator_locations = filter_content_packs_locations(elevator_locations, content)
     randomized_locations.extend(filtered_elevator_locations)
 
 
@@ -541,16 +541,6 @@ def filter_farm_type(options: StardewValleyOptions, locations: Iterable[Location
         return (location for location in locations if location.name != Quest.feeding_animals)
 
 
-def filter_ginger_island(content: StardewContent, locations: Iterable[LocationData]) -> Iterable[LocationData]:
-    include_island = content.is_enabled(ginger_island_content_pack)
-    return (location for location in locations if include_island or LocationTags.GINGER_ISLAND not in location.tags)
-
-
-def filter_qi_order_locations(content: StardewContent, locations: Iterable[LocationData]) -> Iterable[LocationData]:
-    include_qi_orders = content.is_enabled(qi_board_content_pack)
-    return (location for location in locations if include_qi_orders or LocationTags.REQUIRES_QI_ORDERS not in location.tags)
-
-
 def filter_masteries_locations(content: StardewContent, locations: Iterable[LocationData]) -> Iterable[LocationData]:
     # FIXME Remove once recipes are handled by the content packs
     if content.features.skill_progression.are_masteries_shuffled:
@@ -558,15 +548,13 @@ def filter_masteries_locations(content: StardewContent, locations: Iterable[Loca
     return (location for location in locations if LocationTags.REQUIRES_MASTERIES not in location.tags)
 
 
-def filter_modded_locations(locations: Iterable[LocationData], content: StardewContent) -> Iterable[LocationData]:
+def filter_content_packs_locations(locations: Iterable[LocationData], content: StardewContent) -> Iterable[LocationData]:
     return (location for location in locations if content.are_all_enabled(location.content_packs))
 
 
 def filter_disabled_locations(options: StardewValleyOptions, content: StardewContent, locations: Iterable[LocationData]) -> Iterable[LocationData]:
     locations_deprecated_filter = filter_deprecated_locations(locations)
     locations_farm_filter = filter_farm_type(options, locations_deprecated_filter)
-    locations_island_filter = filter_ginger_island(content, locations_farm_filter)
-    locations_qi_filter = filter_qi_order_locations(content, locations_island_filter)
-    locations_masteries_filter = filter_masteries_locations(content, locations_qi_filter)
-    locations_mod_filter = filter_modded_locations(locations_masteries_filter, content)
-    return locations_mod_filter
+    locations_masteries_filter = filter_masteries_locations(content, locations_farm_filter)
+    locations_content_packs_filter = filter_content_packs_locations(locations_masteries_filter, content)
+    return locations_content_packs_filter

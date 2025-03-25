@@ -41,7 +41,7 @@ ToolLogicMixin, FishingLogicMixin, CookingLogicMixin, CraftingLogicMixin, MagicL
         return self.can_earn_mod_skill_level(skill, level)
 
     def can_earn_mod_skill_level(self, skill: str, level: int) -> StardewRule:
-        if not skill in self.content.skills:
+        if skill not in self.content.skills:
             return self.logic.false_
 
         if skill == ModSkill.luck:

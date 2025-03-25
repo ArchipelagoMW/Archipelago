@@ -314,9 +314,9 @@ def create_elevators(item_factory: StardewItemFactory, options: StardewValleyOpt
         return
 
     items.extend([item_factory(item) for item in ["Progressive Mine Elevator"] * 24])
-    if ModNames.deepwoods in content.registered_packs:
+    if content.is_enabled(ModNames.deepwoods):
         items.extend([item_factory(item) for item in ["Progressive Woods Obelisk Sigils"] * 10])
-    if ModNames.skull_cavern_elevator in content.registered_packs:
+    if content.is_enabled(ModNames.deepwoods):
         items.extend([item_factory(item) for item in ["Progressive Skull Cavern Elevator"] * 8])
 
 
@@ -400,7 +400,7 @@ def create_special_quest_rewards(item_factory: StardewItemFactory, options: Star
     # items.append(item_factory("Adventurer's Guild")) # Now unlocked always!
     items.append(item_factory(Wallet.club_card))
     items.append(item_factory(Wallet.magnifying_glass))
-    if ModNames.sve in content.registered_packs:
+    if content.is_enabled(ModNames.sve):
         items.append(item_factory(Wallet.bears_knowledge))
     else:
         items.append(item_factory(Wallet.bears_knowledge, ItemClassification.useful))  # Not necessary outside of SVE
@@ -427,7 +427,7 @@ def create_stardrops(item_factory: StardewItemFactory, options: StardewValleyOpt
     items.append(item_factory("Stardrop", stardrops_classification))  # Krobus Stardrop
     if content.features.fishsanity.is_enabled:
         items.append(item_factory("Stardrop", stardrops_classification))  # Master Angler Stardrop
-    if ModNames.deepwoods in content.registered_packs:
+    if content.is_enabled(ModNames.deepwoods):
         items.append(item_factory("Stardrop", stardrops_classification))  # Petting the Unicorn
     if content.features.friendsanity.is_enabled:
         items.append(item_factory("Stardrop", stardrops_classification))  # Spouse Stardrop
@@ -663,7 +663,7 @@ def create_goal_items(item_factory: StardewItemFactory, options: StardewValleyOp
 
 
 def create_archaeology_items(item_factory: StardewItemFactory, content: StardewContent, items: List[Item]):
-    if ModNames.archaeology not in content.registered_packs:
+    if not content.is_enabled(ModNames.archaeology):
         return
 
     items.append(item_factory(Wallet.metal_detector))
@@ -678,19 +678,19 @@ def create_filler_festival_rewards(item_factory: StardewItemFactory, options: St
 
 
 def create_magic_mod_spells(item_factory: StardewItemFactory, content: StardewContent, items: List[Item]):
-    if ModNames.magic not in content.registered_packs:
+    if not content.is_enabled(ModNames.magic):
         return
     items.extend([item_factory(item) for item in items_by_group[Group.MAGIC_SPELL]])
 
 
 def create_deepwoods_pendants(item_factory: StardewItemFactory, content: StardewContent, items: List[Item]):
-    if ModNames.deepwoods not in content.registered_packs:
+    if not content.is_enabled(ModNames.deepwoods):
         return
     items.extend([item_factory(item) for item in ["Pendant of Elders", "Pendant of Community", "Pendant of Depths"]])
 
 
 def create_sve_special_items(item_factory: StardewItemFactory, content: StardewContent, items: List[Item]):
-    if ModNames.sve not in content.registered_packs:
+    if not content.is_enabled(ModNames.sve):
         return
 
     items.extend([item_factory(item) for item in items_by_group[Group.MOD_WARP] if ModNames.sve in item.content_packs])
@@ -727,7 +727,7 @@ def create_unique_filler_items(item_factory: StardewItemFactory, options: Starde
 
 def weapons_count(content: StardewContent):
     weapon_count = 5
-    if ModNames.sve in content.registered_packs:
+    if content.is_enabled(ModNames.sve):
         weapon_count += 1
     return weapon_count
 
@@ -739,10 +739,7 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
     items_already_added_names = [item.name for item in items_already_added]
     useful_resource_packs = [pack for pack in items_by_group[Group.RESOURCE_PACK_USEFUL]
                              if pack.name not in items_already_added_names]
-    trap_items = [trap for trap in items_by_group[Group.TRAP]
-                  if trap.name not in items_already_added_names
-                  and Group.DEPRECATED not in trap.groups
-                  and content.are_all_enabled(trap.content_packs)]
+    trap_items = remove_excluded_items((trap for trap in items_by_group[Group.TRAP] if trap.name not in items_already_added_names), content)
     player_buffs = remove_excluded_items(get_allowed_player_buffs(options.enabled_filler_buffs), content)
 
     priority_filler_items = []
