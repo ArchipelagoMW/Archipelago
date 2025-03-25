@@ -1646,6 +1646,8 @@ def update_enemy_info(enemy_info, output_data):
 
 
 def update_boo_table(telesa_info, output_data):
+    if output_data["Options"]["boo_health_option"] == 3:
+        return
     hp_unit = 0
     if output_data["Options"]["boo_health_option"] == 2:
         max_sphere = 0

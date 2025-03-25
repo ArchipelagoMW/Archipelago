@@ -419,12 +419,15 @@ class BooHealthOption(Choice):
     Random Values: Every boo has a different, randomly chosen health value between 1 and 999
 
     Boo Health by Sphere: Boos will receive health values based on the spheres they are in. Boo Health Value will determine the highest health a Boo can have
+
+    Vanilla: No changes are made to Boos from the base game. Boos with HP over 150 may not be catchable within the current room and logic cannot account for where they move
     """
     display_name = "Boo Health Option"
     internal_name = "boo_health_option"
     option_choice = 0
     option_random_values = 1
     option_boo_health_by_sphere = 2
+    option_vanilla = 3
     default = 0
 
 class BooHealthValue(Range):
