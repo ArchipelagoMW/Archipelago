@@ -490,19 +490,29 @@ class LuigisMansionRandomizer:
         self.dol.data.seek(0x399228)
         self.dol.data.write(struct.pack(">H", king_boo_health))
 
-        # Save all changes to the DOL itself.
-        new_dol_sect = DOLSection(0x39FA20, 0x804DD940, 0x1000)
+        # Replace section two with our own custom section, which is about 1000 hex bytes long.
+        new_dol_size = 0x1000
+        new_dol_sect = DOLSection(0x39FA20, 0x804DD940, new_dol_size)
         self.dol.sections[2] = new_dol_sect
+
+        # Append the extra bytes we expect, to ensure we can write to them in memory.
+        self.dol.data.seek(len(self.dol.data.getvalue()))
+        blank_data = b"\x00" * new_dol_size
+        self.dol.data.write(blank_data)
+
+        # Read in all the other custom DOL changes and update their values to the new value as expected.
         from importlib.resources import files
         with files(data).joinpath("dol_diff.csv").open() as file:
             hex_reader = csv.DictReader(file)
             for line in hex_reader:
-                self.dol.data.seek(int(line["addr"], 16))
-                self.dol.data.write(bytes.fromhex(line["val"]))
+                new_dol_offset, hex_val = int(line["addr"], 16), bytes.fromhex(line["val"])
+                print(f"Updating DOL Offset {new_dol_offset} with hex value: {str(hex_val)}")
+                self.dol.data.seek(new_dol_offset)
+                self.dol.data.write(hex_val)
+
+        # Save all changes to the DOL itself.
         self.dol.save_changes()
         self.gcm.changed_files["sys/main.dol"] = self.dol.data
-
-
 
 
     def update_custom_event(self, event_number: str, check_local_folder: bool, non_local_str="",
