@@ -565,7 +565,7 @@ windy_well_banana_bunch_2 = "Windy Well - Banana Bunch #2 (Next to Klampon)"
 windy_well_banana_coin_4 = "Windy Well - Banana Coin #4 (Rotating Zinger)"
 windy_well_banana_bunch_3 = "Windy Well - Banana Bunch #3 (Rotating Zinger)"
 windy_well_red_balloon = "Windy Well - Red Balloon (Before N)"
-windy_well_banana_bunch_4 = "Windy Well - Banana Bunch #4 (Squawkssign)"
+windy_well_banana_bunch_4 = "Windy Well - Banana Bunch #4 (Squawks sign)"
 
 castle_crush_banana_coin_1 = "Castle Crush - Banana Coin #1 (4-path)"
 castle_crush_banana_bunch_1 = "Castle Crush - Banana Bunch #1 (4-path)"
