@@ -438,7 +438,7 @@ class TunicWorld(World):
         if self.options.shuffle_fuses:
             for item_name, item_data in item_table.items():
                 if item_data.item_group == "Fuses":
-                    if item_name == "Cathedral - Activate Fuse" and self.options.entrance_rando:
+                    if item_name == "Cathedral Elevator Fuse" and self.options.entrance_rando:
                         tunic_items.append(self.create_item(item_name, ItemClassification.useful))
                         continue
                     items_to_create[item_name] = 1
