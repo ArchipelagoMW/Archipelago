@@ -158,7 +158,7 @@ def all_monsters_by_name_given_content_packs(mods: set[str]) -> dict[str, Starde
     return monsters_by_name
 
 
-def all_monsters_by_category_given_content_packs(mods: set[str]) -> dict[str, Tuple[StardewMonster, ...]]:
+def all_monsters_by_category_given_content_packs(mods: set[str]) -> dict[str, tuple[StardewMonster, ...]]:
     monsters_by_category = {}
     for monster in all_monsters:
         current_monster = monster
