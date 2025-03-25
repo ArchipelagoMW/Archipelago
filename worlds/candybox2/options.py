@@ -36,6 +36,21 @@ class LollipopProductionMultiplier(Range):
     default = 1
 
 
+class CandyMerchantHatPrice(Range):
+    """The price (in candies) required to buy the Candy Merchant's Hat."""
+    display_name = "Candy Merchant's Hat Price"
+    range_start = 10000
+    range_end = 1000000000
+    default = 1000000
+
+class SorceressHatPrice(Range):
+    """The price (in lollipops) required to buy the Sorceress' Hat."""
+    display_name = "Sorceress' Hat Price"
+    range_start = 10000
+    range_end = 1000000000
+    default = 1000000000
+
+
 @dataclass
 class CandyBox2Options(PerGameCommonOptions):
     progression_balancing = True
@@ -44,3 +59,5 @@ class CandyBox2Options(PerGameCommonOptions):
     death_link: DeathLink
     candy_production_multiplier: CandyProductionMultiplier
     lollipop_production_multiplier: LollipopProductionMultiplier
+    candy_merchant_hat_price: CandyMerchantHatPrice
+    sorceress_hat_price: SorceressHatPrice

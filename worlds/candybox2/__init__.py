@@ -71,6 +71,10 @@ class CandyBox2World(World):
             "multipliers": {
                 "candies": self.options.candy_production_multiplier.value,
                 "lollipops": self.options.lollipop_production_multiplier.value
+            },
+            "prices": {
+                "candyMerchantHat": self.options.candy_merchant_hat_price.value,
+                "sorceressHat": self.options.sorceress_hat_price.value,
             }
         }
 
