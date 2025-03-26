@@ -281,7 +281,7 @@ RECV_OWN_GAME_ITEMS: list[int] = [
     list(LMItem.get_apid(value.code) for value in BOO_ITEM_TABLE.values()), 8063, 8064]
 
 # List of received items to ignore because they are handled elsewhere
-RECV_ITEMS_IGNORE: list[int] = [8127, 8140]
+RECV_ITEMS_IGNORE: list[int] = [8127]
 
 # List of health related items, which are used to not exceed max health
 HEALTH_RELATED_ITEMS: list[int] = [8128, 8129]
