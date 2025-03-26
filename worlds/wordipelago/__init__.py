@@ -34,7 +34,6 @@ class WordipelagoWorld(World):
     options_dataclass = WordipelagoOptions
     location_name_to_id = get_location_table()
     item_name_to_id = item_table
-    location_count_difference = 0
     starting_items = []
 
     def fill_slot_data(self):
@@ -60,14 +59,14 @@ class WordipelagoWorld(World):
             )
             return {
                 **wordipelago_options,
-                "starting_items": self.starting_items,
-                "world_version": "0.8.3"
+                "world_version": "0.8.4"
             }
             
     def create_item(self, name: str) -> WordipelagoItem:
         return WordipelagoItem(name, item_data_table[name].type, item_data_table[name].code, player=self.player)
 
     def create_items(self) -> None:
+        self.starting_items = []
         item_pool: List[WordipelagoItem] = []
         starting_letters: List[str] = []
         
@@ -147,7 +146,6 @@ class WordipelagoWorld(World):
         if not self.options.unused_letters_unlocked: 
             item_count += 1
 
-        self.location_count_difference = location_count - item_count
         if(location_count > item_count):
             filler_items = location_count - item_count
             percent_modifier = 1
@@ -222,15 +220,6 @@ class WordipelagoWorld(World):
         self.get_location(victory_location_name).place_locked_item(
             WordipelagoItem("Word Master", ItemClassification.progression, None, self.player)
         )
-            # region.add_exits(region_data_table[region_name].connecting_regions)
-
-        # if(location_data_table["Used J"].can_create(self)):
-        #     self.options.exclude_locations.value.add("Used J")
-        #     self.options.exclude_locations.value.add("Used K")
-        #     self.options.exclude_locations.value.add("Used X")
-        #     self.options.exclude_locations.value.add("Used Z")
-        #     self.options.exclude_locations.value.add("Used Q")
-
 
     def set_rules(self):
         create_rules(self)
