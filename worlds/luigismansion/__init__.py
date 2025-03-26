@@ -641,7 +641,7 @@ class LMWorld(World):
                 exclude += [item]
             if data.code == 65:
                 copies_to_place = 5
-            elif data.code ==70:
+            elif data.code == 140:
                 copies_to_place = 3
             else:
                 copies_to_place = 1
