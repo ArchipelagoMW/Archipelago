@@ -33,7 +33,7 @@ class TimeRewardCount(Range):
     """The number of cooldown reduction rewards in the pool"""
     display_name = "Time Reward Count"
     range_start = 0
-    default = 12
+    default = 10
     range_end = 30
 
 class TimeRewardSeconds(Range):
@@ -146,8 +146,8 @@ class ClueItemPointSize(Range):
     """
     display_name = "Clue Item Point Size"
     range_start = 0
-    range_end = 100
-    default = 0
+    range_end = 1000
+    default = 100
     
 class BadGuessTrapPercent(Range):
     """
