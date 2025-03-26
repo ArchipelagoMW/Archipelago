@@ -8,7 +8,7 @@ from settings import FilePath, Group
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components, icon_paths
 from .client_setup import launch_game
-from .connections import CONNECTIONS, RANDOMIZED_CONNECTIONS, TRANSITIONS
+from .connections import CONNECTIONS, RANDOMIZED_CONNECTIONS, TRANSITIONS, REVERSED_RANDOMIZED_CONNECTIONS
 from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS, PROG_ITEMS, TRAPS, \
     USEFUL_ITEMS
 from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded, option_groups, ShuffleTransitions
@@ -298,6 +298,13 @@ class MessengerWorld(World):
                 PlandoConnection("Searing Crags", find_spot(slot_data["portal_exits"][4]), "both"),
                 PlandoConnection("Glacial Peak", find_spot(slot_data["portal_exits"][5]), "both"),
             ]
+            self.options.plando_connections.value = []
+            for connection in [
+                PlandoConnection(REVERSED_RANDOMIZED_CONNECTIONS[TRANSITIONS[transition[0]]], TRANSITIONS[transition[1]], "both")
+                for transition in slot_data["transitions"]
+            ]:
+                if connection.exit in {con.entrance for con in self.options.plando_connections.value}: continue
+                self.options.plando_connections.value.append(connection)
 
         add_closed_portal_reqs(self)
         # i need portal shuffle to happen after rules exist so i can validate it
