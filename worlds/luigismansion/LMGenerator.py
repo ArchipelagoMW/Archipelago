@@ -223,6 +223,7 @@ class LuigisMansionRandomizer:
         washroom_boo_count: int = int(self.output_data["Options"]["washroom_boo_count"])
         balcony_boo_count: int = int(self.output_data["Options"]["balcony_boo_count"])
         final_boo_count: int = int(self.output_data["Options"]["final_boo_count"])
+        luigi_max_health: int = int(self.output_data["Options"]["luigi_max_health"])
 
         # Update all custom events
         list_events = ["03", "22", "24", "29", "33", "35", "38", "50", "61", "64", "65",
@@ -255,6 +256,7 @@ class LuigisMansionRandomizer:
                 event_door_list.append(f"<KEYUNLOCK>({event_door})" + os.linesep)
 
         lines = lines.replace("{DOOR_LIST}", ''.join(event_door_list))
+        lines = lines.replace("{LUIGIMAXHP}", str(luigi_max_health))
 
         self.update_custom_event("48", False, lines)
 
