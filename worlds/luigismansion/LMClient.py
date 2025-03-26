@@ -390,8 +390,8 @@ class LMContext(CommonContext):
             lm_item = ALL_ITEMS_TABLE[lm_item_name]
 
             if lm_item_name == "Progressive Flower": # 00EB, 00EC, 00ED
-                flower_count: int = len([network_item for network_item in self.items_received if network_item.item == 8140])
-                curr_val = (flower_count + 234) if flower_count+234 < 238 else 237
+                flower_count: int = len([netItem for netItem in self.items_received if netItem.item == 8140])
+                curr_val = min(flower_count + 234, 237)
                 dme.write_bytes(lm_item.update_ram_addr.ram_addr,
                                 curr_val.to_bytes(lm_item.update_ram_addr.ram_byte_size, 'big'))
                 last_recv_idx += 1
