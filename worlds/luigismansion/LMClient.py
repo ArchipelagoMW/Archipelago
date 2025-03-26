@@ -389,21 +389,15 @@ class LMContext(CommonContext):
             lm_item_name = self.item_names.lookup_in_game(item.item)
             lm_item = ALL_ITEMS_TABLE[lm_item_name]
 
-            if lm_item_name == "Progressive Flower": # 00EB, 00EC, 00ED
-                flower_count: int = len([netItem for netItem in self.items_received if netItem.item == 8140])
-                curr_val = min(flower_count + 234, 237)
-                dme.write_bytes(lm_item.update_ram_addr.ram_addr,
-                                curr_val.to_bytes(lm_item.update_ram_addr.ram_byte_size, 'big'))
-                last_recv_idx += 1
-                dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
-                continue
-
-
             # TODO optimize all other cases for reading when a pointer is there vs not.
             for addr_to_update in lm_item.update_ram_addr:
                 byte_size = 1 if addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
 
-                if not addr_to_update.item_count is None:
+                if lm_item_name == "Progressive Flower": # 00EB, 00EC, 00ED
+                    flower_count: int = len([netItem for netItem in self.items_received if netItem.item == 8140])
+                    curr_val = min(flower_count + 234, 237)
+                    dme.write_bytes(addr_to_update.ram_addr, curr_val.to_bytes(byte_size, 'big'))
+                elif not addr_to_update.item_count is None:
                     if not addr_to_update.pointer_offset is None:
                         curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
             [addr_to_update.pointer_offset]), byte_size))
