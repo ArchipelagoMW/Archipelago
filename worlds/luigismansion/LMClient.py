@@ -53,7 +53,7 @@ ROOM_ID_OFFSET = 0x35C
 # This flag follows the 2 rooms away rule and resets between reloading the game / save file.
 # A Flag with value 0x00 indicates no interaction, 0x01 indicates it has been interacted with and has either
 # dropped something or had dust, and 0x02 indicates an important item, such as a Mario Item or Elemental Medal.
-FURNITURE_MAIN_TABLE_ID = 0x803CD768
+FURNITURE_MAIN_TABLE_ID = 0x803CD760
 FURNITURE_ADDR_COUNT = 760
 FURN_FLAG_OFFSET = 0x8C
 FURN_ID_OFFSET = 0xBC
