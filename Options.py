@@ -910,13 +910,19 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
 class OptionSet(Option[typing.Set[str]], VerifyKeys):
     default = frozenset()
     supports_weighting = False
+    random_str = None
 
-    def __init__(self, value: typing.Iterable[str]):
+    def __init__(self, value: typing.Iterable[str], random_str: str | None = None):
         self.value = set(deepcopy(value))
+        if random_str:
+            self.random_str = random_str
         super(OptionSet, self).__init__()
 
     @classmethod
     def from_text(cls, text: str):
+        check_text = text.lower().split(",")
+        if cls.valid_keys and len(check_text) == 1 and check_text[0].startswith("random"):
+            return cls({}, check_text[0])
         return cls([option.strip() for option in text.split(",")])
 
     @classmethod
@@ -924,6 +930,54 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
         if is_iterable_except_str(data):
             return cls(data)
         return cls.from_text(str(data))
+
+    def verify(self, world: typing.Type[World], player_name: str, plando_options: PlandoOptions) -> None:
+        if self.random_str and not self.value:
+            choice_list = sorted(self.valid_keys)
+            if self.verify_item_name:
+                choice_list.extend(sorted(world.item_names))
+                if self.convert_name_groups:
+                    choice_list.extend(sorted(world.item_name_groups.keys()))
+            if self.verify_location_name:
+                choice_list.extend(sorted(world.location_names))
+                if self.convert_name_groups:
+                    choice_list.extend(sorted(world.location_name_groups.keys()))
+            if self.random_str == "random":
+                choice_count = random.randint(0, len(choice_list))
+            elif self.random_str == "random-low":
+                choice_count = int(round(random.triangular(0, len(choice_list), 0)))
+            elif self.random_str == "random-high":
+                choice_count = int(round(random.triangular(0, len(choice_list), len(choice_list))))
+            elif self.random_str == "random-middle":
+                choice_count = int(round(random.triangular(0, len(choice_list))))
+            elif self.random_str.startswith("random-range-"):
+                textsplit = self.random_str.split("-")
+                try:
+                    random_range = [int(textsplit[-2]), int(textsplit[-1])]
+                except ValueError:
+                    raise ValueError(f"Invalid random range {self.random_str} for option {self.__name__} "
+                                     f"for player {player_name}")
+                random_range.sort()
+                if random_range[0] < 0 or random_range[1] >= len(choice_list):
+                    raise Exception(
+                        f"{random_range[0]}-{random_range[1]} is outside allowed range "
+                        f"0-{len(choice_list)} for option {self.__name__} for player {player_name}")
+                if self.random_str.startswith("random-range-low"):
+                    choice_count = int(round(random.triangular(random_range[0], random_range[1], random_range[0])))
+                elif self.random_str.startswith("random-range-high"):
+                    choice_count = int(round(random.triangular(random_range[0], random_range[1], random_range[1])))
+                elif self.random_str.startswith("random-range-middle"):
+                    choice_count = int(round(random.triangular(random_range[0], random_range[1])))
+                else:
+                    choice_count = random.randint(random_range[0], random_range[1])
+            else:
+                raise Exception(f"Random text \"{self.random_str}\" for option {self.__name__} for player {player_name}"
+                                f"did not resolve to a recognized pattern."
+                                f"Acceptable values are: random, random-high, random-middle, random-low, "
+                                f"random-range-low-<min>-<max>, random-range-middle-<min>-<max>, "
+                                f"random-range-high-<min>-<max>, or random-range-<min>-<max>.")
+            self.value = set(random.sample(choice_list, k=choice_count))
+        super().verify(self, world, player_name, plando_options)
 
     def get_option_name(self, value):
         return ", ".join(sorted(value))
