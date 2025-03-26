@@ -12,7 +12,7 @@ from .regions import create_regions, connect_entrances
 from .rules import set_rules
 
 
-EXPECTED_CLIENT_VERSION = "20250321-1+"
+EXPECTED_CLIENT_VERSION = "20250326-1"
 
 class CandyBox2WebWorld(WebWorld):
     tutorials = [Tutorial(
