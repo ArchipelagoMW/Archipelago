@@ -53,9 +53,9 @@ class SorceressHatPrice(Range):
 class TeapotHP(Range):
     """The teapot boss's total HP."""
     display_name = "Teapot Boss HP"
-    range_start = 10000
+    range_start = 1000
     range_end = 10000000
-    default = 100000
+    default = 1000000
 
 @dataclass
 class CandyBox2Options(PerGameCommonOptions):
