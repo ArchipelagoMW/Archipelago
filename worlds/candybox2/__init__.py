@@ -75,6 +75,9 @@ class CandyBox2World(World):
             "prices": {
                 "candyMerchantHat": self.options.candy_merchant_hat_price.value,
                 "sorceressHat": self.options.sorceress_hat_price.value,
+            },
+            "health": {
+                "teapot": self.options.teapot_hp.value
             }
         }
 

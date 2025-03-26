@@ -50,6 +50,12 @@ class SorceressHatPrice(Range):
     range_end = 1000000000
     default = 1000000000
 
+class TeapotHP(Range):
+    """The teapot boss's total HP."""
+    display_name = "Teapot Boss HP"
+    range_start = 10000
+    range_end = 10000000
+    default = 100000
 
 @dataclass
 class CandyBox2Options(PerGameCommonOptions):
@@ -61,3 +67,4 @@ class CandyBox2Options(PerGameCommonOptions):
     lollipop_production_multiplier: LollipopProductionMultiplier
     candy_merchant_hat_price: CandyMerchantHatPrice
     sorceress_hat_price: SorceressHatPrice
+    teapot_hp: TeapotHP
