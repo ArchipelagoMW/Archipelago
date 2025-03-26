@@ -389,6 +389,16 @@ class LMContext(CommonContext):
             lm_item_name = self.item_names.lookup_in_game(item.item)
             lm_item = ALL_ITEMS_TABLE[lm_item_name]
 
+            if lm_item_name == "Progressive Flower": # 00EB, 00EC, 00ED
+                flower_count: int = len([network_item for network_item in self.items_received if network_item.item == 8140])
+                curr_val = (flower_count + 234) if flower_count+234 < 238 else 237
+                dme.write_bytes(lm_item.update_ram_addr.ram_addr,
+                                curr_val.to_bytes(lm_item.update_ram_addr.ram_byte_size, 'big'))
+                last_recv_idx += 1
+                dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
+                continue
+
+
             # TODO optimize all other cases for reading when a pointer is there vs not.
             for addr_to_update in lm_item.update_ram_addr:
                 byte_size = 1 if addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size

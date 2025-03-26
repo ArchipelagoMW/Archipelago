@@ -117,7 +117,8 @@ ITEM_TABLE: dict[str, LMItemData] = { #TODO need to validate these are all corre
     "Poltergust 4000": LMItemData("Upgrade", 64, IC.useful, update_ram_addr=[LMRamData(0x80081CC8, item_count=0)]),
     "Gold Diamond": LMItemData("Money", 65, IC.progression,
         update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x344, ram_byte_size=4, item_count=1)]),
-    "Progressive Flower": LMItemData("Flower Stage", 140, IC.progression)
+    "Progressive Flower": LMItemData("Flower Stage", 140, IC.progression,
+        update_ram_addr=[LMRamData(0x80338fc0, ram_byte_size=4)])
 }
 
 BOO_ITEM_TABLE: dict[str, LMItemData] = {
