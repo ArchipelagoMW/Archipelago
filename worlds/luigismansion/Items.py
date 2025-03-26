@@ -224,7 +224,6 @@ BOO_ITEM_TABLE: dict[str, LMItemData] = {
         update_ram_addr=[LMRamData(0x803D5E0A, bit_position=1)]),
 }
 
-# trap items: value of 4 = knockback, value of 5 = chokehold/poison
 filler_items: Dict[str, LMItemData] = {
     "20 Coins & Bills": LMItemData("Money", 119, IC.filler,
         update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x324, ram_byte_size=4, item_count=20),
@@ -264,7 +263,11 @@ filler_items: Dict[str, LMItemData] = {
     "1 Gold Bar": LMItemData("Money", 138, IC.filler,
         update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x32C, ram_byte_size=4, item_count=1)]),
     "2 Gold Bars": LMItemData("Money", 139, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x32C, ram_byte_size=4, item_count=2)])
+        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x32C, ram_byte_size=4, item_count=2)]),
+    "Posession Trap": LMItemData("Trap", 141, IC.trap,
+        update_ram_addr=[LMRamData(0x804ddac0, ram_byte_size=4, item_count=5)]),
+    "Bonk Trap": LMItemData("Trap", 142, IC.trap,
+        update_ram_addr=[LMRamData(0x804ddac0, ram_byte_size=4, item_count=4)]),
 }
 
 ALL_ITEMS_TABLE = {**ITEM_TABLE,

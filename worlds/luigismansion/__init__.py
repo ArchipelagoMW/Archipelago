@@ -88,6 +88,8 @@ class LMWeb(WebWorld):
             LuigiOptions.BombWeight,
             LuigiOptions.IceTrapWeight,
             LuigiOptions.BananaTrapWeight,
+            LuigiOptions.PossTrapWeight,
+            LuigiOptions.BonkTrapWeight,
             LuigiOptions.NothingWeight,
             LuigiOptions.HeartWeight,
         ]),
@@ -686,7 +688,7 @@ class LMWorld(World):
                           self.options.banana_trap_weight.value, self.options.coin_weight.value, twencoin, thircoin,
                           # banana, 10coin, 20coin, 30coin
                           self.options.bill_weight.value, twenbill, self.options.bars_weight.value,
-                          morebar]  # 15bill, 25bill, 1bar, 2bar
+                          morebar, self.options.poss_trap_weight.value, self.options.bonk_trap_weight.value]  # 15bill, 25bill, 1bar, 2bar
         return self.random.choices(filler, weights=filler_weights, k=1)[0]
 
     def set_rules(self):

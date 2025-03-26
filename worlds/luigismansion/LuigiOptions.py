@@ -508,7 +508,25 @@ class LuigiMaxHealth(Range):
     range_end = 1000
     default = 100
 
+class PossTrapWeight(Range):
+    """
+    Set the weight for how often possession traps get chosen as traps.
+    """
+    display_name = "Possession Trap Weight"
+    internal_name = "poss_trap_weight"
+    range_start = 0
+    range_end = 100
+    default = 15
 
+class BonkTrapWeight(Range):
+    """
+    Set the weight for how often bonk traps get chosen as traps.
+    """
+    display_name = "Bonk Trap Weight"
+    internal_name = "bonk_trap_weight"
+    range_start = 0
+    range_end = 100
+    default = 15
 
 @dataclass
 class LMOptions(DeathLinkMixin, PerGameCommonOptions):
@@ -559,6 +577,8 @@ class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     bomb_trap_weight: BombWeight
     ice_trap_weight: IceTrapWeight
     banana_trap_weight: BananaTrapWeight
+    poss_trap_weight: PossTrapWeight
+    bonk_trap_weight: BonkTrapWeight
     nothing_weight: NothingWeight
     heart_weight: HeartWeight
     start_inventory_from_pool: StartInventoryPool
