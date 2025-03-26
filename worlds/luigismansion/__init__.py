@@ -96,6 +96,7 @@ class LMWeb(WebWorld):
             LuigiOptions.LuigiFearAnim,
             LuigiOptions.PickupAnim,
             LuigiOptions.LuigiWalkSpeed,
+            LuigiOptions.LuigiMaxHealth,
             LuigiOptions.BetterVacuum,
             LuigiOptions.KingBooHealth,
             LuigiOptions.StartWithBooRadar,

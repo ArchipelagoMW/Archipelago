@@ -498,6 +498,18 @@ class ExtraBooSpots(Toggle):
     internal_name = "extra_boo_spots"
 
 
+class LuigiMaxHealth(Range):
+    """
+    Adjust Luigi's maximum health value, 1-1000. Values 5 or below should be treated as One-Hit KO
+    """
+    display_name = "Luigi's Maximum Health"
+    internal_name = "luigi_max_health"
+    range_start = 1
+    range_end = 1000
+    default = 100
+
+
+
 @dataclass
 class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     rank_requirement: RankRequirement
@@ -507,6 +519,7 @@ class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     hidden_mansion: StartHiddenMansion
     fear_animation: LuigiFearAnim
     pickup_animation: PickupAnim
+    luigi_max_health: LuigiMaxHealth
     random_music: RandomMusic
     early_first_key: EarlyFirstKey
     door_rando: DoorRando
