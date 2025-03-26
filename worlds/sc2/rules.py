@@ -2395,7 +2395,7 @@ class SC2Logic:
         """
         return state.has_any({
             item_names.MARINE, item_names.REAPER, item_names.MARAUDER, item_names.GHOST, item_names.SPECTRE,
-            item_names.HELLION, item_names.GOLIATH, item_names.WARHOUND, item_names.DIAMONDBACK, item_names.VIKING
+            item_names.HELLION, item_names.GOLIATH, item_names.WARHOUND, item_names.DIAMONDBACK, item_names.VIKING, item_names.DOMINION_TROOPER,
         }, self.player)
 
     def enemy_intelligence_cliff_garrison(self, state: CollectionState) -> bool:
