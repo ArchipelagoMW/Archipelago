@@ -1,5 +1,5 @@
 from .base_logic import BaseLogic
-from ..stardew_rule import StardewRule, And, Or, Has, Count, true_, false_
+from ..stardew_rule import StardewRule, And, Or, Has, Count, true_, false_, HasProgressionPercent
 
 
 class HasLogicMixin(BaseLogic[None]):
@@ -22,6 +22,12 @@ class HasLogicMixin(BaseLogic[None]):
 
     def has_n(self, *items: str, count: int):
         return self.count(count, *(self.has(item) for item in items))
+
+    def has_progress_percent(self, percent: int):
+        assert percent >= 0, "Can't have a negative progress percent"
+        assert percent <= 100, "Can't have a progress percent over 100"
+
+        return HasProgressionPercent(self.player, percent)
 
     @staticmethod
     def count(count: int, *rules: StardewRule) -> StardewRule:
@@ -47,8 +53,14 @@ class HasLogicMixin(BaseLogic[None]):
         return Count(rules, count)
 
     @staticmethod
-    def and_(*rules: StardewRule) -> StardewRule:
-        assert rules, "Can't create a And conditions without rules"
+    def and_(*rules: StardewRule, allow_empty: bool = False) -> StardewRule:
+        """
+        :param rules: The rules to combine
+        :param allow_empty: If True, return true_ when no rules are given. Otherwise, raise an error.
+        """
+        if not rules:
+            assert allow_empty, "Can't create a And conditions without rules"
+            return true_
 
         if len(rules) == 1:
             return rules[0]
@@ -56,8 +68,14 @@ class HasLogicMixin(BaseLogic[None]):
         return And(*rules)
 
     @staticmethod
-    def or_(*rules: StardewRule) -> StardewRule:
-        assert rules, "Can't create a Or conditions without rules"
+    def or_(*rules: StardewRule, allow_empty: bool = False) -> StardewRule:
+        """
+          :param rules: The rules to combine
+          :param allow_empty: If True, return false_ when no rules are given. Otherwise, raise an error.
+          """
+        if not rules:
+            assert allow_empty, "Can't create a Or conditions without rules"
+            return false_
 
         if len(rules) == 1:
             return rules[0]

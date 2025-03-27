@@ -515,9 +515,14 @@ def _populate_sprite_table():
                     logging.debug(f"Spritefile {file} could not be loaded as a valid sprite.")
 
             with concurrent.futures.ThreadPoolExecutor() as pool:
-                for dir in [user_path('data', 'sprites', 'alttpr'), user_path('data', 'sprites', 'custom')]:
+                sprite_paths = [user_path('data', 'sprites', 'alttpr'), user_path('data', 'sprites', 'custom')]
+                for dir in [dir for dir in sprite_paths if os.path.isdir(dir)]:
                     for file in os.listdir(dir):
                         pool.submit(load_sprite_from_file, os.path.join(dir, file))
+
+            if "link" not in _sprite_table:
+                logging.info("Link sprite was not loaded. Loading link from base rom")
+                load_sprite_from_file(get_base_rom_path())
 
 
 class Sprite():
@@ -554,6 +559,11 @@ class Sprite():
             self.sprite = filedata[0x80000:0x87000]
             self.palette = filedata[0xDD308:0xDD380]
             self.glove_palette = filedata[0xDEDF5:0xDEDF9]
+            h = hashlib.md5()
+            h.update(filedata)
+            if h.hexdigest() == LTTPJPN10HASH:
+                self.name = "Link"
+                self.author_name = "Nintendo"
         elif filedata.startswith(b'ZSPR'):
             self.from_zspr(filedata, filename)
         else:
@@ -1547,9 +1557,9 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     rom.write_byte(0x18003B, 0x01 if world.map_shuffle[player] else 0x00)  # maps showing crystals on overworld
 
     # compasses showing dungeon count
-    if local_world.clock_mode or not world.dungeon_counters[player]:
+    if local_world.clock_mode or world.dungeon_counters[player] == 'off':
         rom.write_byte(0x18003C, 0x00)  # Currently must be off if timer is on, because they use same HUD location
-    elif world.dungeon_counters[player] is True:
+    elif world.dungeon_counters[player] == 'on':
         rom.write_byte(0x18003C, 0x02)  # always on
     elif world.compass_shuffle[player] or world.dungeon_counters[player] == 'pickup':
         rom.write_byte(0x18003C, 0x01)  # show on pickup

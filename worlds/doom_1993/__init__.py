@@ -42,7 +42,7 @@ class DOOM1993World(World):
     options: DOOM1993Options
     game = "DOOM 1993"
     web = DOOM1993Web()
-    required_client_version = (0, 3, 9)
+    required_client_version = (0, 5, 0)  # 1.2.0-prerelease or higher
 
     item_name_to_id = {data["name"]: item_id for item_id, data in Items.item_table.items()}
     item_name_groups = Items.item_name_groups
@@ -204,6 +204,15 @@ class DOOM1993World(World):
             count = item["count"] if item["name"] not in self.starting_level_for_episode else item["count"] - 1
             itempool += [self.create_item(item["name"]) for _ in range(count)]
 
+        # Backpack(s) based on options
+        if self.options.split_backpack.value:
+            itempool += [self.create_item("Bullet capacity") for _ in range(self.options.backpack_count.value)]
+            itempool += [self.create_item("Shell capacity") for _ in range(self.options.backpack_count.value)]
+            itempool += [self.create_item("Energy cell capacity") for _ in range(self.options.backpack_count.value)]
+            itempool += [self.create_item("Rocket capacity") for _ in range(self.options.backpack_count.value)]
+        else:
+            itempool += [self.create_item("Backpack") for _ in range(self.options.backpack_count.value)]
+
         # Place end level items in locked locations
         for map_name in Maps.map_names:
             loc_name = map_name + " - Exit"
@@ -265,7 +274,7 @@ class DOOM1993World(World):
         # Was balanced for 3 episodes (We added 4th episode, but keep same ratio)
         count = min(remaining_loc, max(1, int(round(self.items_ratio[item_name] * ep_count / 3))))
         if count == 0:
-            logger.warning("Warning, no ", item_name, " will be placed.")
+            logger.warning(f"Warning, no {item_name} will be placed.")
             return
 
         for i in range(count):
@@ -280,5 +289,15 @@ class DOOM1993World(World):
         # rest. The client needs to know about this so it can modify the door. If the multiworld was generated with
         # an older version, the player would end up stuck.
         slot_data["two_ways_keydoors"] = True
+
+        # Send slot data for ammo capacity values; this must be generic because Heretic uses it too
+        slot_data["ammo1start"] = self.options.max_ammo_bullets.value
+        slot_data["ammo2start"] = self.options.max_ammo_shells.value
+        slot_data["ammo3start"] = self.options.max_ammo_energy_cells.value
+        slot_data["ammo4start"] = self.options.max_ammo_rockets.value
+        slot_data["ammo1add"] = self.options.added_ammo_bullets.value
+        slot_data["ammo2add"] = self.options.added_ammo_shells.value
+        slot_data["ammo3add"] = self.options.added_ammo_energy_cells.value
+        slot_data["ammo4add"] = self.options.added_ammo_rockets.value
 
         return slot_data

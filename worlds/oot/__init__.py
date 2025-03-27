@@ -100,14 +100,15 @@ class OOTWeb(WebWorld):
         ["Edos"]
     )
 
-    setup_es = Tutorial(
-        setup.tutorial_name,
-        setup.description,
-        "Español",
-        "setup_es.md",
-        "setup/es",
-        setup.authors
-    )
+    # Very out of date, requires updating to match current
+    # setup_es = Tutorial(
+    #     setup.tutorial_name,
+    #     setup.description,
+    #     "Español",
+    #     "setup_es.md",
+    #     "setup/es",
+    #     setup.authors
+    # )
 
     setup_fr = Tutorial(
         setup.tutorial_name,
@@ -127,7 +128,7 @@ class OOTWeb(WebWorld):
         ["Held_der_Zeit"]
     )
 
-    tutorials = [setup, setup_es, setup_fr, setup_de]
+    tutorials = [setup, setup_fr, setup_de]
     option_groups = oot_option_groups
 
 

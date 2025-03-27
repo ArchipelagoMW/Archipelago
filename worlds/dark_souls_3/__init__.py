@@ -25,19 +25,10 @@ class DarkSouls3Web(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["Marech"]
+        ["Natalie", "Marech"]
     )
 
-    setup_fr = Tutorial(
-        setup_en.tutorial_name,
-        setup_en.description,
-        "Français",
-        "setup_fr.md",
-        "setup/fr",
-        ["Marech"]
-    )
-
-    tutorials = [setup_en, setup_fr]
+    tutorials = [setup_en]
     option_groups = option_groups
     item_descriptions = item_descriptions
     rich_text_options_doc = True

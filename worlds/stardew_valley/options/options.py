@@ -247,6 +247,14 @@ class ToolProgression(Choice):
     option_progressive_cheap = 0b011  # 3
     option_progressive_very_cheap = 0b101  # 5
 
+    @property
+    def is_vanilla(self):
+        return not self.is_progressive
+
+    @property
+    def is_progressive(self):
+        return bool(self.value & self.option_progressive)
+
 
 class ElevatorProgression(Choice):
     """Shuffle the elevator?
@@ -375,6 +383,12 @@ class QuestLocations(NamedRange):
         "lots": 28,
         "maximum": 56,
     }
+
+    def has_story_quests(self) -> bool:
+        return self.value >= 0
+
+    def has_no_story_quests(self) -> bool:
+        return not self.has_story_quests()
 
 
 class Fishsanity(Choice):

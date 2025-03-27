@@ -370,7 +370,7 @@ if __name__ == "__main__":
 
     import colorama
 
-    colorama.init()
+    colorama.just_fix_windows_console()
 
     asyncio.run(main())
     colorama.deinit()

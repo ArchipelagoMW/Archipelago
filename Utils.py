@@ -443,7 +443,8 @@ class RestrictedUnpickler(pickle.Unpickler):
             else:
                 mod = importlib.import_module(module)
             obj = getattr(mod, name)
-            if issubclass(obj, (self.options_module.Option, self.options_module.PlandoConnection)):
+            if issubclass(obj, (self.options_module.Option, self.options_module.PlandoConnection,
+                                self.options_module.PlandoText)):
                 return obj
         # Forbid everything else.
         raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")

@@ -3,7 +3,8 @@ from dataclasses import dataclass
 from schema import And, Optional, Or, Schema
 
 from Options import Choice, DeathLinkMixin, DefaultOnToggle, ItemsAccessibility, OptionDict, PerGameCommonOptions, \
-    PlandoConnections, Range, StartInventoryPool, Toggle, Visibility
+    PlandoConnections, Range, StartInventoryPool, Toggle
+from . import RANDOMIZED_CONNECTIONS
 from .portals import CHECKPOINTS, PORTALS, SHOP_POINTS
 
 
@@ -27,20 +28,36 @@ class PortalPlando(PlandoConnections):
     - entrance: Searing Crags
       exit: Glacial Peak Portal
     """
+    display_name = "Portal Plando Connections"
     portals = [f"{portal} Portal" for portal in PORTALS]
     shop_points = [point for points in SHOP_POINTS.values() for point in points]
     checkpoints = [point for points in CHECKPOINTS.values() for point in points]
-    portal_entrances = PORTALS
-    portal_exits = portals + shop_points + checkpoints
-    entrances = portal_entrances
-    exits = portal_exits
+
+    entrances = frozenset(PORTALS)
+    exits = frozenset(portals + shop_points + checkpoints)
 
 
-# for back compatibility. To later be replaced with transition plando
-class HiddenPortalPlando(PortalPlando):
-    visibility = Visibility.none
-    entrances = PortalPlando.entrances
-    exits = PortalPlando.exits
+class TransitionPlando(PlandoConnections):
+    """
+    Plando connections to be used with transition shuffle.
+    List of valid connections can be found at https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/messenger/connections.py#L641.
+    Dictionary keys (left) are entrances and values (right) are exits. If transition shuffle is on coupled all plando
+    connections will be coupled. If on decoupled, "entrance" and "exit" will be treated the same, simply making the
+    plando connection one-way from entrance to exit.
+    Example:
+    - entrance: Searing Crags - Top
+      exit: Dark Cave - Right
+      direction: both
+    """
+    display_name = "Transition Plando Connections"
+    entrances = frozenset(RANDOMIZED_CONNECTIONS.keys())
+    exits = frozenset(RANDOMIZED_CONNECTIONS.values())
+
+    @classmethod
+    def can_connect(cls, entrance: str, exit: str) -> bool:
+        if entrance != "Glacial Peak - Left" and entrance.lower() in cls.exits:
+            return exit.lower() in cls.entrances
+        return exit.lower() not in cls.entrances
 
 
 class Logic(Choice):
@@ -226,7 +243,7 @@ class MessengerOptions(DeathLinkMixin, PerGameCommonOptions):
     early_meditation: EarlyMed
     available_portals: AvailablePortals
     shuffle_portals: ShufflePortals
-    # shuffle_transitions: ShuffleTransitions
+    shuffle_transitions: ShuffleTransitions
     goal: Goal
     music_box: MusicBox
     notes_needed: NotesNeeded
@@ -236,4 +253,4 @@ class MessengerOptions(DeathLinkMixin, PerGameCommonOptions):
     shop_price: ShopPrices
     shop_price_plan: PlannedShopPrices
     portal_plando: PortalPlando
-    plando_connections: HiddenPortalPlando
+    plando_connections: TransitionPlando

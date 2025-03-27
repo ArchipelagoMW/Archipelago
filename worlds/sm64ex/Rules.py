@@ -6,7 +6,7 @@ from .Locations import location_table
 from .Options import SM64Options
 from .Regions import connect_regions, SM64Levels, sm64_level_to_paintings, sm64_paintings_to_level,\
 sm64_level_to_secrets, sm64_secrets_to_level, sm64_entrances_to_level, sm64_level_to_entrances
-from .Items import action_item_table
+from .Items import action_item_data_table
 
 def shuffle_dict_keys(world, dictionary: dict) -> dict:
     keys = list(dictionary.keys())
@@ -372,8 +372,9 @@ class RuleFactory:
         item = self.token_table.get(token, None)
         if not item:
             raise Exception(f"Invalid token: '{item}'")
-        if item in action_item_table:
-            if self.move_rando_bitvec & (1 << (action_item_table[item] - action_item_table['Double Jump'])) == 0:
+        if item in action_item_data_table:
+            double_jump_bitvec_offset = action_item_data_table['Double Jump'].code
+            if self.move_rando_bitvec & (1 << (action_item_data_table[item].code - double_jump_bitvec_offset)) == 0:
                 # This action item is not randomized.
                 return True
         return item
