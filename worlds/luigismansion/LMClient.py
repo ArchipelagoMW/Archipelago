@@ -234,8 +234,9 @@ class LMContext(CommonContext):
         super().on_package(cmd, args)
         if cmd == "Connected":  # On Connect
             # Make sure the world version matches
-            if not "apworld version" in args["slot_data"] or args["slot_data"]["apworld version"] != CLIENT_VERSION:
-                local_version = CLIENT_VERSION if str(args["slot_data"]["apworld version"]) else "N/A"
+            if not ("apworld version" in args["slot_data"] and args["slot_data"]["apworld version"] == CLIENT_VERSION):
+                local_version = str(args["slot_data"]["apworld version"]) if (
+                    str(args["slot_data"]["apworld version"])) else "N/A"
                 raise Utils.VersionException("Error! Server was generated with a different Luigi's Mansion APWorld version. " +
                     f"The client version is {CLIENT_VERSION}! Please verify you are using the same APWorld as the " +
                     f"generator, which is '{local_version}'")
