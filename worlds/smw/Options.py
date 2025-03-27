@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from Options import Choice, Range, Toggle, DeathLink, DefaultOnToggle, OptionGroup, PerGameCommonOptions
+from Options import Choice, Range, Toggle, DeathLink, DefaultOnToggle, OptionGroup, PerGameCommonOptions, PlandoTexts
+from .Names.TextBox import default_text_table
 
 
 class Goal(Choice):
@@ -397,6 +398,19 @@ class StartingLifeCount(Range):
     range_end = 99
     default = 5
 
+class TextShuffle(Toggle):
+    """
+    Shuffles text boxes in message blocks with custom text
+    """
+    display_name = "Text Shuffle"
+
+class SMWPlandoTexts(PlandoTexts):
+    """Text plando. Format is:
+    - text: 'This is your text'
+      at: text_key
+      percentage: 100
+    Percentage is an integer from 1 to 100, and defaults to 100 when omitted."""
+    valid_keys = list(default_text_table.keys())
 
 smw_option_groups = [
     OptionGroup("Goal Options", [
@@ -439,6 +453,7 @@ smw_option_groups = [
         MarioPalette,
         LevelPaletteShuffle,
         OverworldPaletteShuffle,
+        TextShuffle,
         StartingLifeCount,
     ]),
 ]
@@ -480,3 +495,5 @@ class SMWOptions(PerGameCommonOptions):
     level_palette_shuffle: LevelPaletteShuffle
     overworld_palette_shuffle: OverworldPaletteShuffle
     starting_life_count: StartingLifeCount
+    text_shuffle: TextShuffle
+    plando_texts: SMWPlandoTexts
