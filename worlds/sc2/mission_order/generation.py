@@ -14,7 +14,9 @@ from ..item import item_names
 from .. import rules
 from .nodes import MissionOrderNode, SC2MOGenMissionOrder, SC2MOGenCampaign, SC2MOGenLayout, SC2MOGenMission
 from .entry_rules import EntryRule, SubRuleEntryRule, ItemEntryRule, CountMissionsEntryRule, BeatMissionsEntryRule
-from .mission_pools import SC2MOGenMissionPools, Difficulty, modified_difficulty_thresholds
+from .mission_pools import (
+    SC2MOGenMissionPools, Difficulty, modified_difficulty_thresholds, STANDARD_DIFFICULTY_FILL_ORDER
+)
 from .options import GENERIC_KEY_NAME, GENERIC_PROGRESSIVE_KEY_NAME
 
 if TYPE_CHECKING:
@@ -293,7 +295,7 @@ def fill_missions(
     locations_per_region = get_locations_per_region(locations)
     regions: List[Region] = [create_region(world, locations_per_region, location_cache, "Menu")]
     locked_ids = [lookup_name_to_mission[mission].id for mission in locked_missions]
-    prefer_easy_missions = world.options.difficulty_curve.value == world.options.difficulty_curve.option_uneven
+    prefer_close_difficulty = world.options.difficulty_curve.value == world.options.difficulty_curve.option_standard
 
     def set_mission_in_slot(slot: SC2MOGenMission, mission: SC2Mission):
         slot.mission = mission
@@ -318,10 +320,12 @@ def fill_missions(
     for difficulty in sorted(mission_order.sorted_missions.keys()):
         world.random.shuffle(mission_order.sorted_missions[difficulty])
         sorted_goals.extend(mission for mission in mission_order.sorted_missions[difficulty] if mission in mission_order.goal_missions)
-    all_slots = [slot for diff in sorted(mission_order.sorted_missions.keys()) for slot in mission_order.sorted_missions[diff]]
     # Sort standard slot difficulties from highest to lowest when using hard bias
-    if not prefer_easy_missions:
-        all_slots.reverse()
+    if prefer_close_difficulty:
+        all_slots = [slot for diff in STANDARD_DIFFICULTY_FILL_ORDER for slot in mission_order.sorted_missions[diff]]
+    else:
+        all_slots = [slot for diff in sorted(mission_order.sorted_missions.keys()) for slot in mission_order.sorted_missions[diff]]
+    # Pick slots with a constrained mission pool first
     all_slots.sort(key = lambda slot: len(slot.option_mission_pool.intersection(mission_pools.master_list)))
     sorted_goals.reverse()
 
@@ -366,7 +370,7 @@ def fill_missions(
     remaining_count = len(all_slots)
     for mission_slot in all_slots:
         try:
-            mission = mission_pools.pull_random_mission(world, mission_slot, prefer_close_difficulty=not prefer_easy_missions)
+            mission = mission_pools.pull_random_mission(world, mission_slot, prefer_close_difficulty=prefer_close_difficulty)
             set_mission_in_slot(mission_slot, mission)
             regions.append(mission_slot.region)
             remaining_count -= 1
