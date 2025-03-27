@@ -251,6 +251,7 @@ class LMContext(CommonContext):
             self.boo_washroom_count = int(args["slot_data"]["washroom boo count"])
             self.boo_balcony_count = int(args["slot_data"]["balcony boo count"])
             self.boo_final_count = int(args["slot_data"]["final boo count"])
+            self.luigimaxhp = int(args["slot_data"]["luigi max health"])
             if "death_link" in args["slot_data"]:
                 Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
             if "trap_link" in args["slot_data"] and "TrapLink" not in self.tags:
@@ -494,7 +495,7 @@ class LMContext(CommonContext):
             [addr_to_update.pointer_offset]), byte_size))
                         if item.item in HEALTH_RELATED_ITEMS:
                             #TODO come back and update this, if user chosen max health is supported.
-                            curr_val = min(curr_val + addr_to_update.item_count, 100)
+                            curr_val = min(curr_val + addr_to_update.item_count, self.luigimaxhp)
                         else:
                             curr_val+= addr_to_update.item_count
                         dme.write_bytes(dme.follow_pointers(addr_to_update.ram_addr,
