@@ -817,5 +817,6 @@ class LMWorld(World):
             "spawn_region": self.origin_region_name,
             "death_link": self.options.death_link.value,
             "trap_link": self.options.trap_link.value,
-            "apworld version": CLIENT_VERSION
+            "apworld version": CLIENT_VERSION,
+            "seed": self.multiworld.seed,
         }
