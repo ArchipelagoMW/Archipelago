@@ -320,7 +320,8 @@ def fill_missions(
     for difficulty in sorted(mission_order.sorted_missions.keys()):
         world.random.shuffle(mission_order.sorted_missions[difficulty])
         sorted_goals.extend(mission for mission in mission_order.sorted_missions[difficulty] if mission in mission_order.goal_missions)
-    # Sort standard slot difficulties from highest to lowest when using hard bias
+    # Sort slots by difficulty, with difficulties sorted by fill order
+    # standard curve/close difficulty fills difficulties out->in, uneven fills easy->hard
     if prefer_close_difficulty:
         all_slots = [slot for diff in STANDARD_DIFFICULTY_FILL_ORDER for slot in mission_order.sorted_missions[diff]]
     else:
