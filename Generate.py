@@ -279,22 +279,30 @@ def get_choice(option, root, value=None) -> Any:
     raise RuntimeError(f"All options specified in \"{option}\" are weighted as zero.")
 
 
-class SafeDict(dict):
-    def __missing__(self, key):
-        return '{' + key + '}'
+class SafeFormatter(string.Formatter):
+    def get_value(self, key, args, kwargs):
+        if isinstance(key, int):
+            if key < len(args):
+                return args[key]
+            else:
+                return "{" + str(key) + "}"
+        else:
+            return kwargs.get(key, "{" + key + "}")
 
 
 def handle_name(name: str, player: int, name_counter: Counter):
     name_counter[name.lower()] += 1
     number = name_counter[name.lower()]
     new_name = "%".join([x.replace("%number%", "{number}").replace("%player%", "{player}") for x in name.split("%%")])
-    new_name = string.Formatter().vformat(new_name, (), SafeDict(number=number,
-                                                                 NUMBER=(number if number > 1 else ''),
-                                                                 player=player,
-                                                                 PLAYER=(player if player > 1 else '')))
+
+    new_name = SafeFormatter().vformat(new_name, (), {"number": number,
+                                                      "NUMBER": (number if number > 1 else ''),
+                                                      "player": player,
+                                                      "PLAYER": (player if player > 1 else '')})
     # Run .strip twice for edge case where after the initial .slice new_name has a leading whitespace.
     # Could cause issues for some clients that cannot handle the additional whitespace.
     new_name = new_name.strip()[:16].strip()
+
     if new_name == "Archipelago":
         raise Exception(f"You cannot name yourself \"{new_name}\"")
     return new_name
