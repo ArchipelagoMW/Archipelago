@@ -40,7 +40,7 @@ def get_item_names_per_category() -> Dict[str, Set[str]]:
     return categories
 
 
-ITEM_TABLE: dict[str, LMItemData] = { #TODO need to validate these are all correct in new format
+ITEM_TABLE: dict[str, LMItemData] = {
     "Heart Key": LMItemData("Door Key", 0, IC.progression, 3, [LMRamData(0x803D5E14, bit_position=3)]),
     "Club Key": LMItemData("Door Key", 1, IC.progression, 42, [LMRamData(0x803D5E19, bit_position=2)]),
     "Diamond Key": LMItemData("Door Key", 2, IC.progression, 59, [LMRamData(0x803D5E1B, bit_position=3)]),
