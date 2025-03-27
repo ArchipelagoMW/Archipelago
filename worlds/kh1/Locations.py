@@ -752,7 +752,7 @@ location_table: Dict[str, KH1LocationData] = {
     "Level 098 (Slot 2)":                                                               KH1LocationData("Levels",           265_8198, "Level Slot 2"),
     "Level 099 (Slot 2)":                                                               KH1LocationData("Levels",           265_8199, "Level Slot 2"),
     "Level 100 (Slot 2)":                                                               KH1LocationData("Levels",           265_8200, "Level Slot 2"),
-    "Complete Phil Cup":                                                                KH1LocationData("Olympus Coliseum", 265_9001, "Reward"),
+    "Complete Phil Cup":                                                                KH1LocationData("Olympus Coliseum", 265_9001, "Static"),
     "Complete Phil Cup Solo":                                                           KH1LocationData("Olympus Coliseum", 265_9002, "Reward"),
     "Complete Phil Cup Time Trial":                                                     KH1LocationData("Olympus Coliseum", 265_9003, "Reward"),
     "Complete Pegasus Cup":                                                             KH1LocationData("Olympus Coliseum", 265_9004, "Reward"),
@@ -766,9 +766,9 @@ location_table: Dict[str, KH1LocationData] = {
     "Complete Hades Cup Time Trial":                                                    KH1LocationData("Olympus Coliseum", 265_9012, "Reward"),
     "Hades Cup Defeat Cloud and Leon Event":                                            KH1LocationData("Olympus Coliseum", 265_9013, "Reward"),
     "Hades Cup Defeat Yuffie Event":                                                    KH1LocationData("Olympus Coliseum", 265_9014, "Reward"),
-    "Hades Cup Defeat Cerberus Event":                                                  KH1LocationData("Olympus Coliseum", 265_9015, "Reward"),
-    "Hades Cup Defeat Behemoth Event":                                                  KH1LocationData("Olympus Coliseum", 265_9016, "Reward"),
-    "Hades Cup Defeat Hades Event":                                                     KH1LocationData("Olympus Coliseum", 265_9017, "Reward"),
+    "Hades Cup Defeat Cerberus Event":                                                  KH1LocationData("Olympus Coliseum", 265_9015, "Static"),
+    "Hades Cup Defeat Behemoth Event":                                                  KH1LocationData("Olympus Coliseum", 265_9016, "Static"),
+    "Hades Cup Defeat Hades Event":                                                     KH1LocationData("Olympus Coliseum", 265_9017, "Static"),
     "Hercules Cup Defeat Cloud Event":                                                  KH1LocationData("Olympus Coliseum", 265_9018, "Reward"),
     "Hercules Cup Yellow Trinity Event":                                                KH1LocationData("Olympus Coliseum", 265_9019, "Static")
 }
