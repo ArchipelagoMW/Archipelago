@@ -233,7 +233,9 @@ class LuigisMansionRandomizer:
         for custom_event in list_events:
             self.update_custom_event(custom_event, True)
 
-        self.update_custom_event("08", True, replace_old_csv=True)
+        lines = get_data(__name__, "data/custom_events/event08.txt").decode('utf-8')
+        lines = lines.replace("{LUIGIMAXHP}", str(luigi_max_health))
+        self.update_custom_event("08", False, lines, replace_old_csv=True)
 
         lines = get_data(__name__, "data/custom_events/event48.txt").decode('utf-8')
 
