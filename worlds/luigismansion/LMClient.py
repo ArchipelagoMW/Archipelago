@@ -10,6 +10,7 @@ from typing import Any, Collection
 import dolphin_memory_engine as dme
 
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
+from NetUtils import NetworkItem
 from worlds import AutoWorldRegister
 from settings import get_settings, Settings
 
@@ -188,6 +189,7 @@ class LMContext(CommonContext):
         self.boo_washroom_count = None
         self.boo_balcony_count = None
         self.boo_final_count = None
+        self.received_trap_link = False
 
         # Used for handling various weird item checks.
         self.last_map_id = 0
@@ -248,6 +250,32 @@ class LMContext(CommonContext):
             if "trap_link" in args["slot_data"] and "TrapLink" not in self.tags:
                 self.tags.add("TrapLink")
 
+        if cmd == "Bounced":
+            if "tags" not in args:
+                return
+            if not hasattr(self, "instance_id"):
+                self.instance_id = time.time()
+
+            source_name = args["data"]["source"]
+            if "TrapLink" in self.tags and "TrapLink" in args["tags"] and source_name != self.slot_info[self.slot].name:
+                trap_name: str = args["data"]["trap_name"]
+                if trap_name not in ACCEPTED_TRAPS or trap_name not in filler_items.keys():
+                    return
+
+                if trap_name in ICE_TRAP_EQUIV:
+                    self.received_trap_link = "Ice Trap"
+                if trap_name in BOMB_EQUIV:
+                    self.received_trap_link = "Bomb"
+                if trap_name in BANANA_TRAP_EQUIV:
+                    self.received_trap_link = "Banana Trap"
+                if trap_name in GHOST_EQUIV:
+                    self.received_trap_link = "Ghost"
+                if trap_name in POISON_MUSH_EQUIV:
+                    self.received_trap_link = "Poison Mushroom"
+                if trap_name in BONK_EQUIV:
+                    self.received_trap_link = "Bonk Trap"
+                if trap_name in POSSESION_EQUIV:
+                    self.received_trap_link = "Possession Trap"
 
     def on_deathlink(self, data: dict[str, Any]):
         """
@@ -348,6 +376,45 @@ class LMContext(CommonContext):
         write_short(dme.follow_pointers(CURR_HEALTH_ADDR, [CURR_HEALTH_OFFSET]), 0)
         return
 
+    async def handle_traplink(self):
+        # Only try to give items if we are in game and alive.
+        if not (self.check_ingame() and self.check_alive()):
+            return
+        if self.received_trap_link:
+            trap = self.received_trap_link
+            lm_item = ALL_ITEMS_TABLE[trap]
+            for addr_to_update in lm_item.update_ram_addr:
+                byte_size = 1 if addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
+                if not addr_to_update.pointer_offset is None:
+                    curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
+                                                                                 [addr_to_update.pointer_offset]),
+                                                             byte_size))
+                    curr_val = (curr_val | (1 << addr_to_update.bit_position))
+                    dme.write_bytes(dme.follow_pointers(addr_to_update.ram_addr,
+                                                        [addr_to_update.pointer_offset]),
+                                    curr_val.to_bytes(byte_size, 'big'))
+                elif addr_to_update.bit_position is None:
+                    curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
+                    curr_val += 1
+                    dme.write_bytes(addr_to_update.ram_addr, curr_val.to_bytes(byte_size, 'big'))
+                else:
+                    curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
+                    curr_val = (curr_val | (1 << addr_to_update.bit_position))
+                    dme.write_bytes(addr_to_update.ram_addr, curr_val.to_bytes(byte_size, 'big'))
+
+    async def send_trap_link(self, trap_name: str):
+        if "TrapLink" not in self.tags or self.slot == None:
+            return
+
+        await self.send_msgs([{
+            "cmd": "Bounce", "tags": ["TrapLink"],
+            "data": {
+                "time": time.time(),
+                "source": self.player_names[self.slot],
+                "trap_name": trap_name
+            }
+        }])
+
     async def lm_give_items(self):
         # Only try to give items if we are in game and alive.
         if not (self.check_ingame() and self.check_alive()):
@@ -367,6 +434,9 @@ class LMContext(CommonContext):
 
         # TODO give items from console
         for item in recv_items:
+            if "TrapLink" in self.tags and item.item in trap_id_list:
+                trap_item_name = self.item_names.lookup_in_game(item.item)
+                await self.send_trap_link(trap_item_name)
             if item.item in RECV_ITEMS_IGNORE or (item.player == self.slot and not
             (item.location in SELF_LOCATIONS_TO_RECV or item.item in RECV_OWN_GAME_ITEMS)):
                 last_recv_idx += 1
@@ -596,6 +666,8 @@ async def dolphin_sync_task(ctx: LMContext):
                         await ctx.update_boo_count_label()
                     if "DeathLink" in ctx.tags:
                         await ctx.check_death()
+                    if "TrapLink" in ctx.tags:
+                        await ctx.handle_traplink
                     await ctx.lm_give_items()
                     await ctx.lm_check_locations()
                     await ctx.lm_update_non_savable_ram()

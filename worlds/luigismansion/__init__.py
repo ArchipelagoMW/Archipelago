@@ -38,7 +38,7 @@ components.append(
 
 icon_paths["archiboolego"] = f"ap:{__name__}/data/archiboolego.png"
 
-CLIENT_VERSION = "0.1.4"
+CLIENT_VERSION = "0.2.0"
 
 class LuigisMansionSettings(settings.Group):
     class ISOFile(settings.UserFilePath):
