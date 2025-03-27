@@ -1,7 +1,7 @@
 import enum
 from typing import Dict
 
-from BaseClasses import MultiWorld, CollectionState
+from BaseClasses import CollectionState
 from worlds.ty_the_tasmanian_tiger.regions import Ty1LevelCode, ty1_levels, ty1_levels_short
 
 
@@ -213,6 +213,10 @@ def get_rules(world):
                 lambda state:
                     has_stopwatch(world, state, Ty1LevelCode.C2) if world.options.gate_time_attacks
                     else state.can_reach_location("BtBS - Koala Crisis", world.player),
+            "BtBS - Koala Crisis":
+                lambda state:
+                    has_rang(world, state, Ty1Rang.FROSTYRANG)
+                    or world.options.logic_difficulty == 1,
             "RMtS - Find 5 Bilbies":
                 lambda state:
                     has_all_bilbies(world, state, Ty1LevelCode.C3),
@@ -257,6 +261,10 @@ def get_rules(world):
                     has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
                     or world.options.logic_difficulty == 1,
             "LLPoF - Golden Cog 5":
+                lambda state:
+                    has_rang(world, state, Ty1Rang.SECOND_RANG)
+                    or world.options.logic_difficulty == 1,
+            "LLPoF - Golden Cog 10":
                 lambda state:
                     has_rang(world, state, Ty1Rang.SECOND_RANG)
                     or world.options.logic_difficulty == 1,
