@@ -10,7 +10,6 @@ from typing import Any, Collection
 import dolphin_memory_engine as dme
 
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
-from NetUtils import NetworkItem
 from worlds import AutoWorldRegister
 from settings import get_settings, Settings
 
@@ -234,12 +233,18 @@ class LMContext(CommonContext):
         super().on_package(cmd, args)
         if cmd == "Connected":  # On Connect
             # Make sure the world version matches
-            if not ("apworld version" in args["slot_data"] and args["slot_data"]["apworld version"] == CLIENT_VERSION):
+            if not args["slot_data"]["apworld version"] == CLIENT_VERSION:
                 local_version = str(args["slot_data"]["apworld version"]) if (
                     str(args["slot_data"]["apworld version"])) else "N/A"
                 raise Utils.VersionException("Error! Server was generated with a different Luigi's Mansion APWorld version. " +
                     f"The client version is {CLIENT_VERSION}! Please verify you are using the same APWorld as the " +
                     f"generator, which is '{local_version}'")
+
+            arg_seed = str(args["slot_data"]["seed"])[0:19]
+            iso_seed = read_string(0x80000001, 19)
+            if arg_seed != iso_seed:
+                raise Exception("Incorrect Randomized Luigi's Mansion ISO file selected; " +
+                                "Please verify that you are using the right file.")
 
             self.boosanity = bool(args["slot_data"]["boosanity"])
             self.rank_req = int(args["slot_data"]["rank requirement"])
@@ -300,6 +305,9 @@ class LMContext(CommonContext):
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
     async def update_boo_count_label(self):
+        if not self.check_ingame():
+            return
+
         from kvui import Label
 
         if not self.boo_count:
@@ -392,6 +400,7 @@ class LMContext(CommonContext):
         # Only try to give items if we are in game and alive.
         if not (self.check_ingame() and self.check_alive()):
             return
+
         if self.received_trap_link:
             trap = self.received_trap_link
             lm_item = ALL_ITEMS_TABLE[trap]
@@ -657,9 +666,6 @@ async def dolphin_sync_task(ctx: LMContext):
     while not ctx.exit_event.is_set():
         try:
             if dme.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
-                if not ctx.check_ingame():
-                    await asyncio.sleep(0.1)
-                    continue
                 if ctx.slot:
                     # Update boo count in LMClient
                     if ctx.ui:
@@ -667,7 +673,7 @@ async def dolphin_sync_task(ctx: LMContext):
                     if "DeathLink" in ctx.tags:
                         await ctx.check_death()
                     if "TrapLink" in ctx.tags:
-                        await ctx.handle_traplink
+                        await ctx.handle_traplink()
                     await ctx.lm_give_items()
                     await ctx.lm_check_locations()
                     await ctx.lm_update_non_savable_ram()
