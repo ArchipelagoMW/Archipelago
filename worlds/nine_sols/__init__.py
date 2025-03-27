@@ -32,8 +32,11 @@ class NineSolsWorld(World):
     def interpret_slot_data(slot_data: Dict[str, Any]) -> Dict[str, Any]:
         return slot_data
 
+    # and this is how we tell Universal Tracker we don't need the yaml
+    ut_can_gen_without_yaml = True
+
     def generate_early(self) -> None:
-        # implement Universal Tracker support
+        # implement .yaml-less Universal Tracker support
         if hasattr(self.multiworld, "generation_is_fake"):
             if hasattr(self.multiworld, "re_gen_passthrough"):
                 if "Nine Sols" in self.multiworld.re_gen_passthrough:
