@@ -18,6 +18,7 @@ code contributors also reported bugs and participated in beta testing.
 * Cristall (@Cristall)
 * WaikinDN (@WaikinDN)
 * blorp77 (@blorp77)
+* Dikhovinka (@AYaroslavskiy91)
 
 ### Additional Assets
 * Alice Voltaire
