@@ -293,7 +293,7 @@ class LMContext(CommonContext):
 
         class LMManager(GameManager):
             logging_pairs = [("Client", "Archipelago")]
-            base_title = "Archipelago Luigi's Mansion Client"
+            base_title = "Luigi's Mansion Client v" + CLIENT_VERSION + " Archipelago v"
 
         self.ui = LMManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
@@ -358,6 +358,17 @@ class LMContext(CommonContext):
             # room id, therefore we should not perform any checks yet.
             if curr_map_id == 2:
                 bool_loaded_in_map = check_if_addr_is_pointer(ROOM_ID_ADDR)
+                if bool_loaded_in_map:
+                    current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
+                    if current_room_id != self.last_room_id:
+                        self.send_msgs([{
+                            "cmd": "Set",
+                            "key": f"lm_room_{self.team}_{self.slot}",
+                            "default": 0,
+                            "want_reply": False,
+                            "operations": [{"operation": "replace", "value": current_room_id}]
+                        }])
+                        self.last_room_id = current_room_id
                 return bool_loaded_in_map
             return True
 
@@ -531,13 +542,10 @@ class LMContext(CommonContext):
             local_loc = self.location_names.lookup_in_game(mis_loc)
             lm_loc_data = ALL_LOCATION_TABLE[local_loc]
 
-            #TODO Maybe helper function can get map id included?
-            # If in Boolossus Arena, check Boo ids
             if current_map_id == 11:
                 if not mis_loc in BOO_AP_ID_LIST:
                     continue
 
-                #TODO account for ram offsets and other similar things.
                 for addr_to_update in lm_loc_data.update_ram_addr:
                     current_boo_state = dme.read_byte(addr_to_update.ram_addr)
                     if (current_boo_state & (1 << addr_to_update.bit_position)) > 0:
@@ -545,17 +553,7 @@ class LMContext(CommonContext):
 
             # If in main mansion map
             elif current_map_id == 2:
-                #TODO move this... maybe to check in game?
                 current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
-                if current_room_id != self.last_room_id:
-                    await self.send_msgs([{
-                        "cmd": "Set",
-                        "key": f"lm_room_{self.team}_{self.slot}",
-                        "default": 0,
-                        "want_reply": False,
-                        "operations": [{"operation": "replace", "value": current_room_id}]
-                    }])
-                    self.last_room_id = current_room_id
 
                 #TODO optimize all other cases for reading when a pointer is there vs not.
                 for addr_to_update in lm_loc_data.update_ram_addr:
@@ -652,6 +650,7 @@ class LMContext(CommonContext):
         return locations
 
 async def dolphin_sync_task(ctx: LMContext):
+    logger.info("Using Luigi's Mansion client v" + CLIENT_VERSION)
     logger.info("Starting Dolphin connector. Use /dolphin for status information.")
 
     while not ctx.exit_event.is_set():
