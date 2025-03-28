@@ -34,7 +34,7 @@ class MMBN3Settings(settings.Group):
         """
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
-    rom_start: typing.Union[RomStart, bool] = True
+    rom_start: RomStart | bool = True
 
 
 class MMBN3Web(WebWorld):
