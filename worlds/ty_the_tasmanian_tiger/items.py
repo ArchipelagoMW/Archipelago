@@ -126,6 +126,9 @@ def create_items(world: MultiWorld, options: Ty1Options, player: int):
                 create_single("Portal - Crikey's Cove", world, player)
                 create_single("Portal - Fluffy's Fjord", world, player)
 
+    if (options.opalsanity):
+        junk_weights["Opal Magnet"] = 0
+
     # Junk
     remaining_locations: int = total_location_count - len(world.worlds[player].itempool)
     trap_count: int = round(remaining_locations * options.trap_fill_percentage / 100)

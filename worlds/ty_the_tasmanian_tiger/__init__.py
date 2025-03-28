@@ -71,6 +71,7 @@ class Ty1World(World):
             "Signsanity": self.options.signsanity.value,
             "Lifesanity": self.options.lifesanity.value,
             "Framesanity": self.options.framesanity.value,
+            "Opalsanity": self.options.opalsanity.value,
             "AdvancedLogic": self.options.logic_difficulty.value,
             "DeathLink": self.options.death_link.value
         }

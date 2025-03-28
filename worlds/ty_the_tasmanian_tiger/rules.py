@@ -256,30 +256,6 @@ def get_rules(world):
             "Snow Worries - Golden Cog 7":
                 lambda state:
                     has_rang(world, state, Ty1Rang.AQUARANG),
-            "Snow Worries - Opal 64":
-                lambda state:
-                    has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
-                    or world.options.logic_difficulty == 1,
-            "Snow Worries - Opal 69":
-                lambda state:
-                has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
-                or world.options.logic_difficulty == 1,
-            "Snow Worries - Opal 74":
-                lambda state:
-                has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
-                or world.options.logic_difficulty == 1,
-            "Snow Worries - Opal 79":
-                lambda state:
-                has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
-                or world.options.logic_difficulty == 1,
-            "Snow Worries - Opal 84":
-                lambda state:
-                has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
-                or world.options.logic_difficulty == 1,
-            "Snow Worries - Opal 85":
-                lambda state:
-                has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
-                or world.options.logic_difficulty == 1,
             "LLPoF - Golden Cog 4":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
@@ -292,18 +268,6 @@ def get_rules(world):
                 lambda state:
                     has_rang(world, state, Ty1Rang.SECOND_RANG)
                     or world.options.logic_difficulty == 1,
-            "LLPoF - Opal 91":
-                lambda state:
-                    has_rang(world, state, Ty1Rang.SECOND_RANG)
-                    or world.options.logic_difficulty == 1,
-            "LLPoF - Opal 98":
-                lambda state:
-                has_rang(world, state, Ty1Rang.SECOND_RANG)
-                or world.options.logic_difficulty == 1,
-            "LLPoF - Opal 101":
-                lambda state:
-                has_rang(world, state, Ty1Rang.SECOND_RANG)
-                or world.options.logic_difficulty == 1,
             "BtBS - Golden Cog 7":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
@@ -367,6 +331,57 @@ def get_rules(world):
                 lambda state:
                     has_rang(world, state, Ty1Rang.FLAMERANG)
                     or (world.options.logic_difficulty == 1 and has_rang(world, state, Ty1Rang.SECOND_RANG)),
+            "Ship Rex - Opal 28":
+                lambda state:
+                    can_go_water(world, state),
+            "Ship Rex - Opal 59":
+                lambda state:
+                    can_go_water(world, state),
+            "Ship Rex - Opal 93":
+                lambda state:
+                    can_go_water(world, state),
+            "Ship Rex - Opal 94":
+                lambda state:
+                    can_go_water(world, state),
+            "Ship Rex - Opal 95":
+                lambda state:
+                    can_go_water(world, state),
+            "Snow Worries - Opal 64":
+                lambda state:
+                    has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
+                    or world.options.logic_difficulty == 1,
+            "Snow Worries - Opal 69":
+                lambda state:
+                    has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
+                    or world.options.logic_difficulty == 1,
+            "Snow Worries - Opal 74":
+                lambda state:
+                    has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
+                    or world.options.logic_difficulty == 1,
+            "Snow Worries - Opal 79":
+                lambda state:
+                    has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
+                    or world.options.logic_difficulty == 1,
+            "Snow Worries - Opal 84":
+                lambda state:
+                    has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
+                    or world.options.logic_difficulty == 1,
+            "Snow Worries - Opal 85":
+                lambda state:
+                    has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
+                    or world.options.logic_difficulty == 1,
+            "LLPoF - Opal 91":
+                lambda state:
+                has_rang(world, state, Ty1Rang.SECOND_RANG)
+                or world.options.logic_difficulty == 1,
+            "LLPoF - Opal 98":
+                lambda state:
+                has_rang(world, state, Ty1Rang.SECOND_RANG)
+                or world.options.logic_difficulty == 1,
+            "LLPoF - Opal 101":
+                lambda state:
+                has_rang(world, state, Ty1Rang.SECOND_RANG)
+                or world.options.logic_difficulty == 1,
             "Attribute - Doomerang":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FLAMERANG) and has_rang(world, state, Ty1Rang.FROSTYRANG),

@@ -133,7 +133,6 @@ def create_regions(world: MultiWorld, options: Ty1Options, player: int):
     create_region(world, player, options, "Lyre, Lyre Pants on Fire")
     create_region(world, player, options, "Lyre, Lyre Pants on Fire - PF")
     create_region(world, player, options, "Beyond the Black Stump")
-    create_region(world, player, options, "Beyond the Black Stump - Behind Burning Logs")
     create_region(world, player, options, "Beyond the Black Stump - PF")
     create_region(world, player, options, "Beyond the Black Stump - Upper Area")
     create_region(world, player, options, "Beyond the Black Stump - Glide Behind the Mountain")
@@ -235,9 +234,6 @@ def connect_all_regions(world: MultiWorld, player: int, options: Ty1Options, por
                     "Snow Worries - Underwater", "Snow Worries - Underwater")
     connect_regions(world, player, "Lyre, Lyre Pants on Fire",
                     "Lyre, Lyre Pants on Fire - PF", "Lyre, Lyre Pants on Fire - PF")
-    connect_regions(world, player, "Beyond the Black Stump",
-                    "Beyond the Black Stump - Behind Burning Logs",
-                    "Beyond the Black Stump Burning Logs")
     connect_regions(world, player, "Beyond the Black Stump",
                     "Beyond the Black Stump - PF", "Beyond the Black Stump - PF")
     connect_regions(world, player, "Beyond the Black Stump",

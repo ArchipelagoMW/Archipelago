@@ -1091,79 +1091,79 @@ elemental_rangs_dict = {
 scales_dict = {
     # Behind right-hand house in A-zone
     "Rainbow Scale 1":
-        LocData(0x8750320, "Bli Bli Station Gate"),
+        LocData(0x8750350, "Bli Bli Station Gate"),
     # Behind left-hand house in A-zone
     "Rainbow Scale 2":
-        LocData(0x8750321, "Bli Bli Station Gate"),
+        LocData(0x8750351, "Bli Bli Station Gate"),
     # In corner hidden behind Julius' lab
     "Rainbow Scale 3":
-        LocData(0x8750322, "Rainbow Cliffs"),
+        LocData(0x8750352, "Rainbow Cliffs"),
     # Under Thunder Egg collector in B-zone
     "Rainbow Scale 4":
-        LocData(0x8750323, "Pippy Beach"),
+        LocData(0x8750353, "Pippy Beach"),
     # Just past flame logs in C-zone
     "Rainbow Scale 5":
-        LocData(0x8750324, "Lake Burril"),
+        LocData(0x8750354, "Lake Burril"),
     # On small ledge on the side of starting pillar
     "Rainbow Scale 6":
-        LocData(0x8750325, "Rainbow Cliffs"),
+        LocData(0x8750355, "Rainbow Cliffs"),
     # Inside waterfall cave
     "Rainbow Scale 7":
-        LocData(0x8750326, "Rainbow Cliffs"),
+        LocData(0x8750356, "Rainbow Cliffs"),
     # Corner island next to waterfall cave
     "Rainbow Scale 8":
-        LocData(0x8750327, "Rainbow Cliffs"),
+        LocData(0x8750357, "Rainbow Cliffs"),
     # Side of path between B-zone and Julius' lab 1
     "Rainbow Scale 9":
-        LocData(0x8750328, "Rainbow Cliffs"),
+        LocData(0x8750358, "Rainbow Cliffs"),
     # Next to extra life
     "Rainbow Scale 10":
-        LocData(0x8750329, "Rainbow Cliffs"),
+        LocData(0x8750359, "Rainbow Cliffs"),
     # Above water next to Julius' lab (pontoon scale)
     "Rainbow Scale 11":
-        LocData(0x875032A, "Rainbow Cliffs"),
+        LocData(0x875035A, "Rainbow Cliffs"),
     # After pillar platforms leading up to C-zone
     "Rainbow Scale 12":
-        LocData(0x875032B, "Rainbow Cliffs"),
+        LocData(0x875035B, "Rainbow Cliffs"),
     # In the water next to pillar platforms leading up to C-zone
     "Rainbow Scale 13":
-        LocData(0x875032C, "Rainbow Cliffs"),
+        LocData(0x875035C, "Rainbow Cliffs"),
     # Behind rock at entrance to B-zone
     "Rainbow Scale 14":
-        LocData(0x875032D, "Rainbow Cliffs"),
+        LocData(0x875035D, "Rainbow Cliffs"),
     # Inside starting pillar
     "Rainbow Scale 15":
-        LocData(0x875032E, "Rainbow Cliffs"),
+        LocData(0x875035E, "Rainbow Cliffs"),
     # Underwater near Julius' lab
     "Rainbow Scale 16":
-        LocData(0x875032F, "Rainbow Cliffs"),
+        LocData(0x875035F, "Rainbow Cliffs"),
     # On wooden platform in C-zone
     "Rainbow Scale 17":
-        LocData(0x8750330, "Lake Burril"),
+        LocData(0x8750360, "Lake Burril"),
     # Under Thunder Egg collector in C-zone
     "Rainbow Scale 18":
-        LocData(0x8750331, "Lake Burril"),
+        LocData(0x8750361, "Lake Burril"),
     # Just past ice wall in B-zone
     "Rainbow Scale 19":
-        LocData(0x8750332, "Pippy Beach"),
+        LocData(0x8750362, "Pippy Beach"),
     # Next to water wheel on wooden walkway at Julius' lab
     "Rainbow Scale 20":
-        LocData(0x8750333, "Rainbow Cliffs"),
+        LocData(0x8750363, "Rainbow Cliffs"),
     # Underwater near waterfall cave
     "Rainbow Scale 21":
-        LocData(0x8750334, "Rainbow Cliffs"),
+        LocData(0x8750364, "Rainbow Cliffs"),
     # Just past E-zone gate
     "Rainbow Scale 22":
-        LocData(0x8750335, "Final Gauntlet"),
+        LocData(0x8750365, "Final Gauntlet"),
     # Hidden around corner in E-zone
     "Rainbow Scale 23":
-        LocData(0x8750336, "Final Gauntlet"),
+        LocData(0x8750366, "Final Gauntlet"),
     # Floating in the air next to starting pillar
     "Rainbow Scale 24":
-        LocData(0x8750337, "Rainbow Cliffs"),
+        LocData(0x8750367, "Rainbow Cliffs"),
     # Under Thunder Egg collector in A-zone
     "Rainbow Scale 25":
-        LocData(0x8750338, "Rainbow Cliffs"),
+        LocData(0x8750368, "Rainbow Cliffs"),
 }
 
 opals_dict = {
@@ -1794,7 +1794,7 @@ opals_dict = {
     "Ship Rex - Opal 25": LocData(0x8756368, "Ship Rex - Beyond Gate"),
     "Ship Rex - Opal 26": LocData(0x8756369, "Ship Rex - Beyond Gate"),
     "Ship Rex - Opal 27": LocData(0x875636A, "Ship Rex - Beyond Gate"),
-    "Ship Rex - Opal 28": LocData(0x875636B, "Ship Rex - Beyond Gate"),
+    "Ship Rex - Opal 28": LocData(0x875636B, "Ship Rex"),
     "Ship Rex - Opal 29": LocData(0x875636C, "Ship Rex - Beyond Gate"),
     "Ship Rex - Opal 30": LocData(0x875636D, "Ship Rex - Beyond Gate"),
     "Ship Rex - Opal 31": LocData(0x875636E, "Ship Rex - Beyond Gate"),
@@ -1825,7 +1825,7 @@ opals_dict = {
     "Ship Rex - Opal 56": LocData(0x8756387, "Ship Rex - Beyond Gate"),
     "Ship Rex - Opal 57": LocData(0x8756388, "Ship Rex - Beyond Gate"),
     "Ship Rex - Opal 58": LocData(0x8756389, "Ship Rex - Beyond Gate"),
-    "Ship Rex - Opal 59": LocData(0x875638A, "Ship Rex - Beyond Gate"),
+    "Ship Rex - Opal 59": LocData(0x875638A, "Ship Rex"),
     "Ship Rex - Opal 60": LocData(0x875638B, "Ship Rex - Beyond Gate"),
     "Ship Rex - Opal 61": LocData(0x875638C, "Ship Rex - Beyond Gate"),
     "Ship Rex - Opal 62": LocData(0x875638D, "Ship Rex - Beyond Gate"),
@@ -1859,9 +1859,9 @@ opals_dict = {
     "Ship Rex - Opal 90": LocData(0x87563A9, "Ship Rex - Beyond Gate"),
     "Ship Rex - Opal 91": LocData(0x87563AA, "Ship Rex - Beyond Gate"),
     "Ship Rex - Opal 92": LocData(0x87563AB, "Ship Rex - Beyond Gate"),
-    "Ship Rex - Opal 93": LocData(0x87563AC, "Ship Rex - Beyond Gate"),
-    "Ship Rex - Opal 94": LocData(0x87563AD, "Ship Rex - Beyond Gate"),
-    "Ship Rex - Opal 95": LocData(0x87563AE, "Ship Rex - Beyond Gate"),
+    "Ship Rex - Opal 93": LocData(0x87563AC, "Ship Rex"),
+    "Ship Rex - Opal 94": LocData(0x87563AD, "Ship Rex"),
+    "Ship Rex - Opal 95": LocData(0x87563AE, "Ship Rex"),
     "Ship Rex - Opal 96": LocData(0x87563AF, "Ship Rex - Beyond Gate"),
     "Ship Rex - Opal 97": LocData(0x87563B0, "Ship Rex - Beyond Gate"),
     "Ship Rex - Opal 98": LocData(0x87563B1, "Ship Rex - Beyond Gate"),
@@ -3452,21 +3452,21 @@ opals_dict = {
     "BtBS - Opal 183": LocData(0x875D406, "Beyond the Black Stump"),
     "BtBS - Opal 184": LocData(0x875D407, "Beyond the Black Stump"),
     "BtBS - Opal 185": LocData(0x875D408, "Beyond the Black Stump"),
-    "BtBS - Opal 186": LocData(0x875D409, "Beyond the Black Stump - Behind Burning Logs"),
-    "BtBS - Opal 187": LocData(0x875D40A, "Beyond the Black Stump - Behind Burning Logs"),
-    "BtBS - Opal 188": LocData(0x875D40B, "Beyond the Black Stump - Behind Burning Logs"),
-    "BtBS - Opal 189": LocData(0x875D40C, "Beyond the Black Stump - Behind Burning Logs"),
-    "BtBS - Opal 190": LocData(0x875D40D, "Beyond the Black Stump - Behind Burning Logs"),
-    "BtBS - Opal 191": LocData(0x875D40E, "Beyond the Black Stump - Behind Burning Logs"),
-    "BtBS - Opal 192": LocData(0x875D40F, "Beyond the Black Stump - Behind Burning Logs"),
-    "BtBS - Opal 193": LocData(0x875D410, "Beyond the Black Stump - Behind Burning Logs"),
-    "BtBS - Opal 194": LocData(0x875D411, "Beyond the Black Stump - Behind Burning Logs"),
-    "BtBS - Opal 195": LocData(0x875D412, "Beyond the Black Stump - Behind Burning Logs"),
-    "BtBS - Opal 196": LocData(0x875D413, "Beyond the Black Stump - Behind Burning Logs"),
-    "BtBS - Opal 197": LocData(0x875D414, "Beyond the Black Stump - Behind Burning Logs"),
-    "BtBS - Opal 198": LocData(0x875D415, "Beyond the Black Stump - Behind Burning Logs"),
-    "BtBS - Opal 199": LocData(0x875D416, "Beyond the Black Stump - Behind Burning Logs"),
-    "BtBS - Opal 200": LocData(0x875D417, "Beyond the Black Stump - Behind Burning Logs"),
+    "BtBS - Opal 186": LocData(0x875D409, "Beyond the Black Stump"),
+    "BtBS - Opal 187": LocData(0x875D40A, "Beyond the Black Stump"),
+    "BtBS - Opal 188": LocData(0x875D40B, "Beyond the Black Stump"),
+    "BtBS - Opal 189": LocData(0x875D40C, "Beyond the Black Stump"),
+    "BtBS - Opal 190": LocData(0x875D40D, "Beyond the Black Stump"),
+    "BtBS - Opal 191": LocData(0x875D40E, "Beyond the Black Stump"),
+    "BtBS - Opal 192": LocData(0x875D40F, "Beyond the Black Stump"),
+    "BtBS - Opal 193": LocData(0x875D410, "Beyond the Black Stump"),
+    "BtBS - Opal 194": LocData(0x875D411, "Beyond the Black Stump"),
+    "BtBS - Opal 195": LocData(0x875D412, "Beyond the Black Stump"),
+    "BtBS - Opal 196": LocData(0x875D413, "Beyond the Black Stump"),
+    "BtBS - Opal 197": LocData(0x875D414, "Beyond the Black Stump"),
+    "BtBS - Opal 198": LocData(0x875D415, "Beyond the Black Stump"),
+    "BtBS - Opal 199": LocData(0x875D416, "Beyond the Black Stump"),
+    "BtBS - Opal 200": LocData(0x875D417, "Beyond the Black Stump"),
     "BtBS - Opal 201": LocData(0x875D418, "Beyond the Black Stump - Upper Area"),
     "BtBS - Opal 202": LocData(0x875D419, "Beyond the Black Stump - Upper Area"),
     "BtBS - Opal 203": LocData(0x875D41A, "Beyond the Black Stump - Upper Area"),
