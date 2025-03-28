@@ -30,7 +30,7 @@ class MMBN3Settings(settings.Group):
         """
         Set this to false to never autostart a rom (such as after patching),
                     true  for operating system default program
-        Alternatively, a path to a program to open the .z64 file with
+        Alternatively, a path to a program to open the .gba file with
         """
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
