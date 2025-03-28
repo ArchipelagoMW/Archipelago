@@ -941,6 +941,7 @@ class SC2Logic:
                 item_names.ECHIDNA_WORM,
                 item_names.OVERLORD_VENTRAL_SACS,
                 item_names.YGGDRASIL,
+                item_names.INFESTED_BANSHEE,
             ), self.player)
             or (self.morph_ravager(state) and state.has(item_names.RAVAGER_DEEP_TUNNEL, self.player))
             or state.has_all((
@@ -1838,6 +1839,7 @@ class SC2Logic:
                 self.morph_impaler(state)
                 or state.has_all({item_names.INFESTED_LIBERATOR, item_names.INFESTED_LIBERATOR_DEFENDER_MODE}, self.player)
                 or self.zerg_infested_tank_with_ammo(state)
+                or state.has(item_names.BILE_LAUNCHER, self.player)
             )
             and (
                 self.morph_devourer(state)
