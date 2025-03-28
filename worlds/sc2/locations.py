@@ -4335,13 +4335,11 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            lambda state: (
                                    logic.terran_common_unit(state)
                                    and logic.terran_basic_anti_air(state))
-                                   or adv_tactics
                            ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "Southwest Psi-link Spire", SC2_RACESWAP_LOC_ID_OFFSET + 6507, LocationType.EXTRA,
                            lambda state: (
                                    logic.terran_common_unit(state)
                                    and logic.terran_competent_anti_air(state))
-                                   or adv_tactics
                            ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "Nafash", SC2_RACESWAP_LOC_ID_OFFSET + 6508, LocationType.EXTRA,
                            lambda state: (
@@ -4373,13 +4371,11 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            lambda state: (
                                    logic.protoss_common_unit(state)
                                    and logic.protoss_basic_anti_air(state))
-                                   or adv_tactics
                            ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "Southwest Psi-link Spire", SC2_RACESWAP_LOC_ID_OFFSET + 6607, LocationType.EXTRA,
                            lambda state: (
                                    logic.protoss_common_unit(state)
                                    and logic.protoss_anti_armor_anti_air(state))
-                                   or adv_tactics
                            ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "Nafash", SC2_RACESWAP_LOC_ID_OFFSET + 6608, LocationType.EXTRA,
                            lambda state: (
