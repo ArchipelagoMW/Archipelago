@@ -2,21 +2,12 @@
 <LUIGISTOP2>
 <FULLSCREEN>
 <FLAGON>(199)
-<CLEARCOUNT>
-<CHECKTELESA>({Count0})({Count1})({Count2})({Count3})({Count4})
-<COUNTJMP>"{Case0}""{Case1}""{Case2}""{Case3}""{Case4}""boos_captured"
-------------------------------------
-<CASE>"not_enough"
 <SE>(95)
 <WINDOW>(0)<COLOR>(4)
 <SAY><COLOR>(3)You require {Count4} boo(s) before\nyou can open this door...
 <ANYKEY>
 <CLOSEWINDOW>(0)
 <FORCEMOVE>(1800.000000)(1200.000000)(-2100.000000)(20)
-<RAMDOMJMP>"EventEnd"
-------------------------------------
-<CASE>"boos_captured"
-<FLAGON>(2)
 <RAMDOMJMP>"EventEnd"
 ------------------------------------
 <CASE>"EventEnd"
