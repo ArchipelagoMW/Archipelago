@@ -1768,9 +1768,6 @@ opals_dict = {
         LocData(0x875047A, "Two Up"),
     "Two Up - Opal 300":
         LocData(0x875047B, "Two Up"),
-    #Walk in the Park
-    "WitP - Opal 1":
-        LocData(0x875047C, "Walk in the Park"),
 
 }
 
@@ -1966,5 +1963,6 @@ ty1_location_table = {
     **signposts_dict,
     **extra_lives_dict,
     **time_attack_challenge_dict,
+    **opals_dict,
     **conditional_items_dict
 }
