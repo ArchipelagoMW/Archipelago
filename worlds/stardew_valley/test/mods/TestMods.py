@@ -1,6 +1,6 @@
 import random
 
-from BaseClasses import get_seed
+from BaseClasses import get_seed, ItemClassification
 from .. import SVTestBase, SVTestCase
 from ..assertion import ModAssertMixin, WorldAssertMixin
 from ..options.presets import allsanity_mods_6_x_x
