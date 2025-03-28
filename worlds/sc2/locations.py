@@ -2914,7 +2914,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         ),
         make_location_data(SC2Mission.HAVENS_FALL_Z.mission_name, "Southwest Gas Pickups", SC2_RACESWAP_LOC_ID_OFFSET + 1309, LocationType.EXTRA,
             lambda state: state.has(item_names.OVERLORD_VENTRAL_SACS, player),
-            hard_rule=logic.zerg_any_gap_transport,
+            hard_rule=logic.zerg_can_collect_pickup_across_gap,
         ),
         make_location_data(SC2Mission.HAVENS_FALL_Z.mission_name, "East Gas Pickups", SC2_RACESWAP_LOC_ID_OFFSET + 1310, LocationType.EXTRA,
             lambda state: (

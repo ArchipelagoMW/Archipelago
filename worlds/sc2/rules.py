@@ -933,8 +933,8 @@ class SC2Logic:
             self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE, state),
         )
     
-    def zerg_any_gap_transport(self, state: CollectionState) -> bool:
-        """Any way for zerg to get any ground unit across gaps longer than viper yoink range."""
+    def zerg_can_collect_pickup_across_gap(self, state: CollectionState) -> bool:
+        """Any way for zerg to get any ground unit across gaps longer than viper yoink range to collect a pickup."""
         return (
             state.has_any((
                 item_names.NYDUS_WORM,
