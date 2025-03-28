@@ -256,6 +256,30 @@ def get_rules(world):
             "Snow Worries - Golden Cog 7":
                 lambda state:
                     has_rang(world, state, Ty1Rang.AQUARANG),
+            "Snow Worries - Opal 64":
+                lambda state:
+                    has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
+                    or world.options.logic_difficulty == 1,
+            "Snow Worries - Opal 69":
+                lambda state:
+                has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
+                or world.options.logic_difficulty == 1,
+            "Snow Worries - Opal 74":
+                lambda state:
+                has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
+                or world.options.logic_difficulty == 1,
+            "Snow Worries - Opal 79":
+                lambda state:
+                has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
+                or world.options.logic_difficulty == 1,
+            "Snow Worries - Opal 84":
+                lambda state:
+                has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
+                or world.options.logic_difficulty == 1,
+            "Snow Worries - Opal 85":
+                lambda state:
+                has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
+                or world.options.logic_difficulty == 1,
             "LLPoF - Golden Cog 4":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
@@ -268,6 +292,18 @@ def get_rules(world):
                 lambda state:
                     has_rang(world, state, Ty1Rang.SECOND_RANG)
                     or world.options.logic_difficulty == 1,
+            "LLPoF - Opal 91":
+                lambda state:
+                    has_rang(world, state, Ty1Rang.SECOND_RANG)
+                    or world.options.logic_difficulty == 1,
+            "LLPoF - Opal 98":
+                lambda state:
+                has_rang(world, state, Ty1Rang.SECOND_RANG)
+                or world.options.logic_difficulty == 1,
+            "LLPoF - Opal 101":
+                lambda state:
+                has_rang(world, state, Ty1Rang.SECOND_RANG)
+                or world.options.logic_difficulty == 1,
             "BtBS - Golden Cog 7":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
@@ -610,12 +646,18 @@ def get_rules(world):
             "Ship Rex - Gate - PF":
                 lambda state:
                     not world.options.frames_require_infra or state.has("Infrarang", world.player),
+            "Bridge on the River Ty - Underwater":
+                lambda state:
+                    can_go_water(world, state),
             "Bridge on the River Ty - PF":
                 lambda state:
                     not world.options.frames_require_infra or state.has("Infrarang", world.player),
             "Bridge on the River Ty - Broken Bridge Glide":
                 lambda state:
                     world.options.logic_difficulty == 1 or has_rang(world, state, Ty1Rang.SECOND_RANG),
+            "Bridge on the River Ty - Beyond Broken Bridge Underwater":
+                lambda state:
+                    can_go_water(world, state),
             "Bridge on the River Ty - Broken Bridge - PF":
                 lambda state:
                     not world.options.frames_require_infra or state.has("Infrarang", world.player),
@@ -628,12 +670,18 @@ def get_rules(world):
             "Lyre, Lyre Pants on Fire - PF":
                 lambda state:
                     not world.options.frames_require_infra or state.has("Infrarang", world.player),
+            "Beyond the Black Stump - Behind Burning Logs":
+                lambda state:
+                    world.options.logic_difficulty == 1 or has_rang(world, state, Ty1Rang.FROSTYRANG),
             "Beyond the Black Stump - PF":
                 lambda state:
                     not world.options.frames_require_infra or state.has("Infrarang", world.player),
             "Beyond the Black Stump - Upper Area":
                 lambda state:
                     world.options.logic_difficulty == 1 or has_rang(world, state, Ty1Rang.SECOND_RANG),
+            "Beyond the Black Stump - Glide":
+                lambda state:
+                    has_rang(world, state, Ty1Rang.SECOND_RANG),
             "Beyond the Black Stump - Upper Area - PF":
                 lambda state:
                     not world.options.frames_require_infra or state.has("Infrarang", world.player),

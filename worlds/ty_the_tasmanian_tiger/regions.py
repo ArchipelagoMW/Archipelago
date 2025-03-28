@@ -120,8 +120,10 @@ def create_regions(world: MultiWorld, options: Ty1Options, player: int):
     create_region(world, player, options, "Ship Rex - Beyond Gate - PF")
     create_region(world, player, options, "Bull's Pen")
     create_region(world, player, options, "Bridge on the River Ty")
+    create_region(world, player, options, "Bridge on the River Ty - Underwater")
     create_region(world, player, options, "Bridge on the River Ty - PF")
     create_region(world, player, options, "Bridge on the River Ty - Beyond Broken Bridge")
+    create_region(world, player, options, "Bridge on the River Ty - Beyond Broken Bridge Underwater")
     create_region(world, player, options, "Bridge on the River Ty - Beyond Broken Bridge - PF")
     create_region(world, player, options, "Snow Worries")
     create_region(world, player, options, "Snow Worries - PF")
@@ -131,8 +133,10 @@ def create_regions(world: MultiWorld, options: Ty1Options, player: int):
     create_region(world, player, options, "Lyre, Lyre Pants on Fire")
     create_region(world, player, options, "Lyre, Lyre Pants on Fire - PF")
     create_region(world, player, options, "Beyond the Black Stump")
+    create_region(world, player, options, "Beyond the Black Stump - Behind Burning Logs")
     create_region(world, player, options, "Beyond the Black Stump - PF")
     create_region(world, player, options, "Beyond the Black Stump - Upper Area")
+    create_region(world, player, options, "Beyond the Black Stump - Glide Behind the Mountain")
     create_region(world, player, options, "Beyond the Black Stump - Upper Area - PF")
     create_region(world, player, options, "Rex Marks the Spot")
     create_region(world, player, options, "Rex Marks the Spot - PF")
@@ -213,10 +217,15 @@ def connect_all_regions(world: MultiWorld, player: int, options: Ty1Options, por
     connect_regions(world, player, "Ship Rex - Beyond Gate",
                     "Ship Rex - Beyond Gate - PF", "Ship Rex - Gate - PF")
     connect_regions(world, player, "Bridge on the River Ty",
+                    "Bridge on the River Ty - Underwater", "Bridge on the River Ty - Underwater")
+    connect_regions(world, player, "Bridge on the River Ty",
                     "Bridge on the River Ty - PF", "Bridge on the River Ty - PF")
     connect_regions(world, player, "Bridge on the River Ty",
                     "Bridge on the River Ty - Beyond Broken Bridge", 
                     "Bridge on the River Ty - Broken Bridge Glide")
+    connect_regions(world, player, "Bridge on the River Ty - Beyond Broken Bridge",
+                    "Bridge on the River Ty - Beyond Broken Bridge Underwater",
+                    "Bridge on the River Ty - Beyond Broken Bridge Underwater")
     connect_regions(world, player, "Bridge on the River Ty - Beyond Broken Bridge",
                     "Bridge on the River Ty - Beyond Broken Bridge - PF", 
                     "Bridge on the River Ty - Broken Bridge - PF")
@@ -227,9 +236,15 @@ def connect_all_regions(world: MultiWorld, player: int, options: Ty1Options, por
     connect_regions(world, player, "Lyre, Lyre Pants on Fire",
                     "Lyre, Lyre Pants on Fire - PF", "Lyre, Lyre Pants on Fire - PF")
     connect_regions(world, player, "Beyond the Black Stump",
+                    "Beyond the Black Stump - Behind Burning Logs",
+                    "Beyond the Black Stump Burning Logs")
+    connect_regions(world, player, "Beyond the Black Stump",
                     "Beyond the Black Stump - PF", "Beyond the Black Stump - PF")
     connect_regions(world, player, "Beyond the Black Stump",
                     "Beyond the Black Stump - Upper Area", "Beyond the Black Stump - Upper Area")
+    connect_regions(world, player, "Beyond the Black Stump - Upper Area",
+                    "Beyond the Black Stump - Glide Behind the Mountain",
+                    "Beyond the Black Stump - Glide")
     connect_regions(world, player, "Beyond the Black Stump - Upper Area",
                     "Beyond the Black Stump - Upper Area - PF", 
                     "Beyond the Black Stump - Upper Area - PF")
