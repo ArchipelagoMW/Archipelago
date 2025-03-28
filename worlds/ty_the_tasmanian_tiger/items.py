@@ -127,6 +127,7 @@ def create_items(world: MultiWorld, options: Ty1Options, player: int):
                 create_single("Portal - Fluffy's Fjord", world, player)
 
     if (options.opalsanity):
+        junk_weights["Picture Frame"] += junk_weights["Opal Magnet"]
         junk_weights["Opal Magnet"] = 0
 
     # Junk

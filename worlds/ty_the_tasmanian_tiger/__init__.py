@@ -56,7 +56,7 @@ class Ty1World(World):
 
     def fill_slot_data(self) -> id:
         return {
-            "ModVersion": "1.1.10",
+            "ModVersion": "1.2.0",
             "Goal": self.options.goal.value,
             "ProgressiveElementals": self.options.progressive_elementals.value,
             "ProgressiveLevel": self.options.progressive_level.value,
