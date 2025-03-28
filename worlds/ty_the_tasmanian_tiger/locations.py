@@ -1207,6 +1207,16 @@ opals_dict = {
         LocData(0x8750362, "Two Up"),
     "Two Up - Opal 20":
         LocData(0x8750363, "Two Up"),
+    "Two Up - Opal 21":
+        LocData(0x8750364, "Two Up"),
+    "Two Up - Opal 22":
+        LocData(0x8750365, "Two Up"),
+    "Two Up - Opal 23":
+        LocData(0x8750366, "Two Up"),
+    "Two Up - Opal 24":
+        LocData(0x8750367, "Two Up"),
+    "Two Up - Opal 25":
+        LocData(0x8750368, "Two Up"),
 }
 
 time_attack_challenge_dict = {
