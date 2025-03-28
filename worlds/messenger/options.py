@@ -82,6 +82,11 @@ class MegaShards(Toggle):
 class LimitedMovement(Choice):
     """
     Removes either rope dart or wingsuit from the itempool. Forces logic to at least hard and accessibility to minimal.
+
+    Off: Both items will be in the pool.
+    Either: One of the items will be removed at random.
+    Dart: Rope Dart will be kept in the pool, causing Wingsuit to be removed.
+    Suit: Wingsuit will be kept in the pool, causing Rope Dart to be removed.
     """
     display_name = "Limited Movement"
     option_off = 0
