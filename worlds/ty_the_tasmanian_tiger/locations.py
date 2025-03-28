@@ -1167,6 +1167,7 @@ scales_dict = {
 }
 
 opals_dict = {
+    #Two Up
     "Two Up - Opal 1":
         LocData(0x8750350, "Two Up"),
     "Two Up - Opal 2":
@@ -1766,7 +1767,11 @@ opals_dict = {
     "Two Up - Opal 299":
         LocData(0x875047A, "Two Up"),
     "Two Up - Opal 300":
-        LocData(0x875047B, "Two Up")
+        LocData(0x875047B, "Two Up"),
+    #Walk in the Park
+    "WitP - Opal 1":
+        LocData(0x875047C, "Walk in the Park"),
+
 }
 
 time_attack_challenge_dict = {
