@@ -170,6 +170,12 @@ class Lifesanity(Toggle):
     display_name = "Lifesanity"
 
 
+class Opalsanity(Toggle):
+    """
+    Determines whether each opal grants a check
+    """
+    display_name = "Opalsanity"
+
 class TrapFill(Range):
     """
     Determines the percentage of the junk fill which is filled with traps.
@@ -247,7 +253,8 @@ ty1_option_groups = [
         FramesRequireInfra,
         Scalesanity,
         Signsanity,
-        Lifesanity
+        Lifesanity,
+        Opalsanity
     ]),
     OptionGroup("Traps", [
         TrapFill,
@@ -286,6 +293,7 @@ class Ty1Options(PerGameCommonOptions):
     scalesanity: Scalesanity
     signsanity: Signsanity
     lifesanity: Lifesanity
+    opalsanity: Opalsanity
 
     death_link: DeathLink
     trap_fill_percentage: TrapFill

@@ -67,6 +67,9 @@ def create_locations(player: int, options: Ty1Options, reg: Region):
     # TIME ATTACK CHALLENGES
     if options.gate_time_attacks:
         create_locations_from_dict(time_attack_challenge_dict, reg, player)
+    # OPALS
+    if options.opalsanity:
+        create_locations_from_dict(opals_dict, reg, player)
 
 
 thunder_eggs_dict = {
@@ -1161,6 +1164,49 @@ scales_dict = {
     # Under Thunder Egg collector in A-zone
     "Rainbow Scale 25":
         LocData(0x8750338, "Rainbow Cliffs"),
+}
+
+opals_dict = {
+    "Two Up - Opal 1":
+        LocData(0x8750350, "Two Up"),
+    "Two Up - Opal 2":
+        LocData(0x8750351, "Two Up"),
+    "Two Up - Opal 3":
+        LocData(0x8750352, "Two Up"),
+    "Two Up - Opal 4":
+        LocData(0x8750353, "Two Up"),
+    "Two Up - Opal 5":
+        LocData(0x8750354, "Two Up"),
+    "Two Up - Opal 6":
+        LocData(0x8750355, "Two Up"),
+    "Two Up - Opal 7":
+        LocData(0x8750356, "Two Up"),
+    "Two Up - Opal 8":
+        LocData(0x8750357, "Two Up"),
+    "Two Up - Opal 9":
+        LocData(0x8750358, "Two Up"),
+    "Two Up - Opal 10":
+        LocData(0x8750359, "Two Up"),
+    "Two Up - Opal 11":
+        LocData(0x875035A, "Two Up"),
+    "Two Up - Opal 12":
+        LocData(0x875035B, "Two Up"),
+    "Two Up - Opal 13":
+        LocData(0x875035C, "Two Up"),
+    "Two Up - Opal 14":
+        LocData(0x875035D, "Two Up"),
+    "Two Up - Opal 15":
+        LocData(0x875035E, "Two Up"),
+    "Two Up - Opal 16":
+        LocData(0x875035F, "Two Up"),
+    "Two Up - Opal 17":
+        LocData(0x8750360, "Two Up"),
+    "Two Up - Opal 18":
+        LocData(0x8750361, "Two Up"),
+    "Two Up - Opal 19":
+        LocData(0x8750362, "Two Up"),
+    "Two Up - Opal 20":
+        LocData(0x8750363, "Two Up"),
 }
 
 time_attack_challenge_dict = {
