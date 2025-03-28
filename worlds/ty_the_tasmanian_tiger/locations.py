@@ -1217,6 +1217,556 @@ opals_dict = {
         LocData(0x8750367, "Two Up"),
     "Two Up - Opal 25":
         LocData(0x8750368, "Two Up"),
+    "Two Up - Opal 26":
+        LocData(0x8750369, "Two Up"),
+    "Two Up - Opal 27":
+        LocData(0x875036A, "Two Up"),
+    "Two Up - Opal 28":
+        LocData(0x875036B, "Two Up"),
+    "Two Up - Opal 29":
+        LocData(0x875036C, "Two Up"),
+    "Two Up - Opal 30":
+        LocData(0x875036D, "Two Up"),
+    "Two Up - Opal 31":
+        LocData(0x875036E, "Two Up"),
+    "Two Up - Opal 32":
+        LocData(0x875036F, "Two Up"),
+    "Two Up - Opal 33":
+        LocData(0x8750370, "Two Up"),
+    "Two Up - Opal 34":
+        LocData(0x8750371, "Two Up"),
+    "Two Up - Opal 35":
+        LocData(0x8750372, "Two Up"),
+    "Two Up - Opal 36":
+        LocData(0x8750373, "Two Up"),
+    "Two Up - Opal 37":
+        LocData(0x8750374, "Two Up"),
+    "Two Up - Opal 38":
+        LocData(0x8750375, "Two Up"),
+    "Two Up - Opal 39":
+        LocData(0x8750376, "Two Up"),
+    "Two Up - Opal 40":
+        LocData(0x8750377, "Two Up"),
+    "Two Up - Opal 41":
+        LocData(0x8750378, "Two Up"),
+    "Two Up - Opal 42":
+        LocData(0x8750379, "Two Up"),
+    "Two Up - Opal 43":
+        LocData(0x875037A, "Two Up"),
+    "Two Up - Opal 44":
+        LocData(0x875037B, "Two Up"),
+    "Two Up - Opal 45":
+        LocData(0x875037C, "Two Up"),
+    "Two Up - Opal 46":
+        LocData(0x875037D, "Two Up"),
+    "Two Up - Opal 47":
+        LocData(0x875037E, "Two Up"),
+    "Two Up - Opal 48":
+        LocData(0x875037F, "Two Up"),
+    "Two Up - Opal 49":
+        LocData(0x8750380, "Two Up"),
+    "Two Up - Opal 50":
+        LocData(0x8750381, "Two Up"),
+    "Two Up - Opal 51":
+        LocData(0x8750382, "Two Up"),
+    "Two Up - Opal 52":
+        LocData(0x8750383, "Two Up"),
+    "Two Up - Opal 53":
+        LocData(0x8750384, "Two Up"),
+    "Two Up - Opal 54":
+        LocData(0x8750385, "Two Up"),
+    "Two Up - Opal 55":
+        LocData(0x8750386, "Two Up"),
+    "Two Up - Opal 56":
+        LocData(0x8750387, "Two Up"),
+    "Two Up - Opal 57":
+        LocData(0x8750388, "Two Up"),
+    "Two Up - Opal 58":
+        LocData(0x8750389, "Two Up"),
+    "Two Up - Opal 59":
+        LocData(0x875038A, "Two Up"),
+    "Two Up - Opal 60":
+        LocData(0x875038B, "Two Up"),
+    "Two Up - Opal 61":
+        LocData(0x875038C, "Two Up"),
+    "Two Up - Opal 62":
+        LocData(0x875038D, "Two Up"),
+    "Two Up - Opal 63":
+        LocData(0x875038E, "Two Up"),
+    "Two Up - Opal 64":
+        LocData(0x875038F, "Two Up"),
+    "Two Up - Opal 65":
+        LocData(0x8750390, "Two Up"),
+    "Two Up - Opal 66":
+        LocData(0x8750391, "Two Up"),
+    "Two Up - Opal 67":
+        LocData(0x8750392, "Two Up"),
+    "Two Up - Opal 68":
+        LocData(0x8750393, "Two Up"),
+    "Two Up - Opal 69":
+        LocData(0x8750394, "Two Up"),
+    "Two Up - Opal 70":
+        LocData(0x8750395, "Two Up"),
+    "Two Up - Opal 71":
+        LocData(0x8750396, "Two Up"),
+    "Two Up - Opal 72":
+        LocData(0x8750397, "Two Up"),
+    "Two Up - Opal 73":
+        LocData(0x8750398, "Two Up"),
+    "Two Up - Opal 74":
+        LocData(0x8750399, "Two Up"),
+    "Two Up - Opal 75":
+        LocData(0x875039A, "Two Up"),
+    "Two Up - Opal 76":
+        LocData(0x875039B, "Two Up"),
+    "Two Up - Opal 77":
+        LocData(0x875039C, "Two Up"),
+    "Two Up - Opal 78":
+        LocData(0x875039D, "Two Up"),
+    "Two Up - Opal 79":
+        LocData(0x875039E, "Two Up"),
+    "Two Up - Opal 80":
+        LocData(0x875039F, "Two Up"),
+    "Two Up - Opal 81":
+        LocData(0x87503A0, "Two Up"),
+    "Two Up - Opal 82":
+        LocData(0x87503A1, "Two Up"),
+    "Two Up - Opal 83":
+        LocData(0x87503A2, "Two Up"),
+    "Two Up - Opal 84":
+        LocData(0x87503A3, "Two Up"),
+    "Two Up - Opal 85":
+        LocData(0x87503A4, "Two Up"),
+    "Two Up - Opal 86":
+        LocData(0x87503A5, "Two Up"),
+    "Two Up - Opal 87":
+        LocData(0x87503A6, "Two Up"),
+    "Two Up - Opal 88":
+        LocData(0x87503A7, "Two Up"),
+    "Two Up - Opal 89":
+        LocData(0x87503A8, "Two Up"),
+    "Two Up - Opal 90":
+        LocData(0x87503A9, "Two Up"),
+    "Two Up - Opal 91":
+        LocData(0x87503AA, "Two Up"),
+    "Two Up - Opal 92":
+        LocData(0x87503AB, "Two Up"),
+    "Two Up - Opal 93":
+        LocData(0x87503AC, "Two Up"),
+    "Two Up - Opal 94":
+        LocData(0x87503AD, "Two Up"),
+    "Two Up - Opal 95":
+        LocData(0x87503AE, "Two Up"),
+    "Two Up - Opal 96":
+        LocData(0x87503AF, "Two Up"),
+    "Two Up - Opal 97":
+        LocData(0x87503B0, "Two Up"),
+    "Two Up - Opal 98":
+        LocData(0x87503B1, "Two Up"),
+    "Two Up - Opal 99":
+        LocData(0x87503B2, "Two Up"),
+    "Two Up - Opal 100":
+        LocData(0x87503B3, "Two Up"),
+    "Two Up - Opal 101":
+        LocData(0x87503B4, "Two Up"),
+    "Two Up - Opal 102":
+        LocData(0x87503B5, "Two Up"),
+    "Two Up - Opal 103":
+        LocData(0x87503B6, "Two Up"),
+    "Two Up - Opal 104":
+        LocData(0x87503B7, "Two Up"),
+    "Two Up - Opal 105":
+        LocData(0x87503B8, "Two Up"),
+    "Two Up - Opal 106":
+        LocData(0x87503B9, "Two Up"),
+    "Two Up - Opal 107":
+        LocData(0x87503BA, "Two Up"),
+    "Two Up - Opal 108":
+        LocData(0x87503BB, "Two Up"),
+    "Two Up - Opal 109":
+        LocData(0x87503BC, "Two Up"),
+    "Two Up - Opal 110":
+        LocData(0x87503BD, "Two Up"),
+    "Two Up - Opal 111":
+        LocData(0x87503BE, "Two Up"),
+    "Two Up - Opal 112":
+        LocData(0x87503BF, "Two Up"),
+    "Two Up - Opal 113":
+        LocData(0x87503C0, "Two Up"),
+    "Two Up - Opal 114":
+        LocData(0x87503C1, "Two Up"),
+    "Two Up - Opal 115":
+        LocData(0x87503C2, "Two Up"),
+    "Two Up - Opal 116":
+        LocData(0x87503C3, "Two Up"),
+    "Two Up - Opal 117":
+    LocData(0x87503C4, "Two Up - Upper Area"),
+    "Two Up - Opal 118":
+        LocData(0x87503C5, "Two Up - Upper Area"),
+    "Two Up - Opal 119":
+        LocData(0x87503C6, "Two Up - Upper Area"),
+    "Two Up - Opal 120":
+        LocData(0x87503C7, "Two Up - Upper Area"),
+    "Two Up - Opal 121":
+        LocData(0x87503C8, "Two Up - Upper Area"),
+    "Two Up - Opal 122":
+        LocData(0x87503C9, "Two Up - Upper Area"),
+    "Two Up - Opal 123":
+        LocData(0x87503CA, "Two Up - Upper Area"),
+    "Two Up - Opal 124":
+        LocData(0x87503CB, "Two Up - Upper Area"),
+    "Two Up - Opal 125":
+        LocData(0x87503CC, "Two Up - Upper Area"),
+    "Two Up - Opal 126":
+        LocData(0x87503CD, "Two Up - Upper Area"),
+    "Two Up - Opal 127":
+        LocData(0x87503CE, "Two Up - Upper Area"),
+    "Two Up - Opal 128":
+        LocData(0x87503CF, "Two Up - Upper Area"),
+    "Two Up - Opal 129":
+        LocData(0x87503D0, "Two Up - Upper Area"),
+    "Two Up - Opal 130":
+        LocData(0x87503D1, "Two Up - Upper Area"),
+    "Two Up - Opal 131":
+        LocData(0x87503D2, "Two Up"),
+    "Two Up - Opal 132":
+        LocData(0x87503D3, "Two Up"),
+    "Two Up - Opal 133":
+        LocData(0x87503D4, "Two Up"),
+    "Two Up - Opal 134":
+        LocData(0x87503D5, "Two Up"),
+    "Two Up - Opal 135":
+        LocData(0x87503D6, "Two Up"),
+    "Two Up - Opal 136":
+        LocData(0x87503D7, "Two Up"),
+    "Two Up - Opal 137":
+        LocData(0x87503D8, "Two Up"),
+    "Two Up - Opal 138":
+        LocData(0x87503D9, "Two Up"),
+    "Two Up - Opal 139":
+        LocData(0x87503DA, "Two Up"),
+    "Two Up - Opal 140":
+        LocData(0x87503DB, "Two Up"),
+    "Two Up - Opal 141":
+        LocData(0x87503DC, "Two Up"),
+    "Two Up - Opal 142":
+        LocData(0x87503DD, "Two Up"),
+    "Two Up - Opal 143":
+        LocData(0x87503DE, "Two Up"),
+    "Two Up - Opal 144":
+        LocData(0x87503DF, "Two Up"),
+    "Two Up - Opal 145":
+        LocData(0x87503E0, "Two Up"),
+    "Two Up - Opal 146":
+        LocData(0x87503E1, "Two Up"),
+    "Two Up - Opal 147":
+        LocData(0x87503E2, "Two Up"),
+    "Two Up - Opal 148":
+        LocData(0x87503E3, "Two Up"),
+    "Two Up - Opal 149":
+        LocData(0x87503E4, "Two Up"),
+    "Two Up - Opal 150":
+        LocData(0x87503E5, "Two Up"),
+    "Two Up - Opal 151":
+        LocData(0x87503E6, "Two Up"),
+    "Two Up - Opal 152":
+        LocData(0x87503E7, "Two Up"),
+    "Two Up - Opal 153":
+        LocData(0x87503E8, "Two Up"),
+    "Two Up - Opal 154":
+        LocData(0x87503E9, "Two Up"),
+    "Two Up - Opal 155":
+        LocData(0x87503EA, "Two Up"),
+    "Two Up - Opal 156":
+        LocData(0x87503EB, "Two Up"),
+    "Two Up - Opal 157":
+        LocData(0x87503EC, "Two Up"),
+    "Two Up - Opal 158":
+        LocData(0x87503ED, "Two Up - Upper Area"),
+    "Two Up - Opal 159":
+        LocData(0x87503EE, "Two Up - Upper Area"),
+    "Two Up - Opal 160":
+        LocData(0x87503EF, "Two Up - Upper Area"),
+    "Two Up - Opal 161":
+        LocData(0x87503F0, "Two Up - Upper Area"),
+    "Two Up - Opal 162":
+        LocData(0x87503F1, "Two Up - Upper Area"),
+    "Two Up - Opal 163":
+        LocData(0x87503F2, "Two Up - Upper Area"),
+    "Two Up - Opal 164":
+        LocData(0x87503F3, "Two Up - Upper Area"),
+    "Two Up - Opal 165":
+        LocData(0x87503F4, "Two Up - Upper Area"),
+    "Two Up - Opal 166":
+        LocData(0x87503F5, "Two Up - Upper Area"),
+    "Two Up - Opal 167":
+        LocData(0x87503F6, "Two Up - Upper Area"),
+    "Two Up - Opal 168":
+        LocData(0x87503F7, "Two Up"),
+    "Two Up - Opal 169":
+        LocData(0x87503F8, "Two Up"),
+    "Two Up - Opal 170":
+        LocData(0x87503F9, "Two Up"),
+    "Two Up - Opal 171":
+        LocData(0x87503FA, "Two Up"),
+    "Two Up - Opal 172":
+        LocData(0x87503FB, "Two Up"),
+    "Two Up - Opal 173":
+        LocData(0x87503FC, "Two Up"),
+    "Two Up - Opal 174":
+        LocData(0x87503FD, "Two Up"),
+    "Two Up - Opal 175":
+        LocData(0x87503FE, "Two Up"),
+    "Two Up - Opal 176":
+        LocData(0x87503FF, "Two Up"),
+    "Two Up - Opal 177":
+        LocData(0x8750400, "Two Up"),
+    "Two Up - Opal 178":
+        LocData(0x8750401, "Two Up"),
+    "Two Up - Opal 179":
+        LocData(0x8750402, "Two Up"),
+    "Two Up - Opal 180":
+        LocData(0x8750403, "Two Up"),
+    "Two Up - Opal 181":
+        LocData(0x8750404, "Two Up"),
+    "Two Up - Opal 182":
+        LocData(0x8750405, "Two Up"),
+    "Two Up - Opal 183":
+        LocData(0x8750406, "Two Up"),
+    "Two Up - Opal 184":
+        LocData(0x8750407, "Two Up"),
+    "Two Up - Opal 185":
+        LocData(0x8750408, "Two Up"),
+    "Two Up - Opal 186":
+        LocData(0x8750409, "Two Up"),
+    "Two Up - Opal 187":
+        LocData(0x875040A, "Two Up"),
+    "Two Up - Opal 188":
+        LocData(0x875040B, "Two Up"),
+    "Two Up - Opal 189":
+        LocData(0x875040C, "Two Up"),
+    "Two Up - Opal 190":
+        LocData(0x875040D, "Two Up"),
+    "Two Up - Opal 191":
+        LocData(0x875040E, "Two Up"),
+    "Two Up - Opal 192":
+        LocData(0x875040F, "Two Up"),
+    "Two Up - Opal 193":
+        LocData(0x8750410, "Two Up"),
+    "Two Up - Opal 194":
+        LocData(0x8750411, "Two Up"),
+    "Two Up - Opal 195":
+        LocData(0x8750412, "Two Up"),
+    "Two Up - Opal 196":
+        LocData(0x8750413, "Two Up"),
+    "Two Up - Opal 197":
+        LocData(0x8750414, "Two Up"),
+    "Two Up - Opal 198":
+        LocData(0x8750415, "Two Up"),
+    "Two Up - Opal 199":
+        LocData(0x8750416, "Two Up"),
+    "Two Up - Opal 200":
+        LocData(0x8750417, "Two Up"),
+    "Two Up - Opal 201":
+        LocData(0x8750418, "Two Up"),
+    "Two Up - Opal 202":
+        LocData(0x8750419, "Two Up"),
+    "Two Up - Opal 203":
+        LocData(0x875041A, "Two Up"),
+    "Two Up - Opal 204":
+        LocData(0x875041B, "Two Up"),
+    "Two Up - Opal 205":
+        LocData(0x875041C, "Two Up"),
+    "Two Up - Opal 206":
+        LocData(0x875041D, "Two Up"),
+    "Two Up - Opal 207":
+        LocData(0x875041E, "Two Up"),
+    "Two Up - Opal 208":
+        LocData(0x875041F, "Two Up"),
+    "Two Up - Opal 209":
+        LocData(0x8750420, "Two Up"),
+    "Two Up - Opal 210":
+        LocData(0x8750421, "Two Up"),
+    "Two Up - Opal 211":
+        LocData(0x8750422, "Two Up"),
+    "Two Up - Opal 212":
+        LocData(0x8750423, "Two Up"),
+    "Two Up - Opal 213":
+        LocData(0x8750424, "Two Up"),
+    "Two Up - Opal 214":
+        LocData(0x8750425, "Two Up"),
+    "Two Up - Opal 215":
+        LocData(0x8750426, "Two Up"),
+    "Two Up - Opal 216":
+        LocData(0x8750427, "Two Up"),
+    "Two Up - Opal 217":
+        LocData(0x8750428, "Two Up"),
+    "Two Up - Opal 218":
+        LocData(0x8750429, "Two Up"),
+    "Two Up - Opal 219":
+        LocData(0x875042A, "Two Up"),
+    "Two Up - Opal 220":
+        LocData(0x875042B, "Two Up"),
+    "Two Up - Opal 221":
+        LocData(0x875042C, "Two Up"),
+    "Two Up - Opal 222":
+        LocData(0x875042D, "Two Up"),
+    "Two Up - Opal 223":
+        LocData(0x875042E, "Two Up"),
+    "Two Up - Opal 224":
+        LocData(0x875042F, "Two Up"),
+    "Two Up - Opal 225":
+        LocData(0x8750430, "Two Up"),
+    "Two Up - Opal 226":
+        LocData(0x8750431, "Two Up"),
+    "Two Up - Opal 227":
+        LocData(0x8750432, "Two Up"),
+    "Two Up - Opal 228":
+        LocData(0x8750433, "Two Up"),
+    "Two Up - Opal 229":
+        LocData(0x8750434, "Two Up"),
+    "Two Up - Opal 230":
+        LocData(0x8750435, "Two Up"),
+    "Two Up - Opal 231":
+        LocData(0x8750436, "Two Up"),
+    "Two Up - Opal 232":
+        LocData(0x8750437, "Two Up"),
+    "Two Up - Opal 233":
+        LocData(0x8750438, "Two Up"),
+    "Two Up - Opal 234":
+        LocData(0x8750439, "Two Up"),
+    "Two Up - Opal 235":
+        LocData(0x875043A, "Two Up"),
+    "Two Up - Opal 236":
+        LocData(0x875043B, "Two Up"),
+    "Two Up - Opal 237":
+        LocData(0x875043C, "Two Up"),
+    "Two Up - Opal 238":
+        LocData(0x875043D, "Two Up"),
+    "Two Up - Opal 239":
+        LocData(0x875043E, "Two Up"),
+    "Two Up - Opal 240":
+        LocData(0x875043F, "Two Up"),
+    "Two Up - Opal 241":
+        LocData(0x8750440, "Two Up"),
+    "Two Up - Opal 242":
+        LocData(0x8750441, "Two Up"),
+    "Two Up - Opal 243":
+        LocData(0x8750442, "Two Up"),
+    "Two Up - Opal 244":
+        LocData(0x8750443, "Two Up"),
+    "Two Up - Opal 245":
+        LocData(0x8750444, "Two Up"),
+    "Two Up - Opal 246":
+        LocData(0x8750445, "Two Up"),
+    "Two Up - Opal 247":
+        LocData(0x8750446, "Two Up"),
+    "Two Up - Opal 248":
+        LocData(0x8750447, "Two Up"),
+    "Two Up - Opal 249":
+        LocData(0x8750448, "Two Up"),
+    "Two Up - Opal 250":
+        LocData(0x8750449, "Two Up"),
+    "Two Up - Opal 251":
+        LocData(0x875044A, "Two Up"),
+    "Two Up - Opal 252":
+        LocData(0x875044B, "Two Up"),
+    "Two Up - Opal 253":
+        LocData(0x875044C, "Two Up"),
+    "Two Up - Opal 254":
+        LocData(0x875044D, "Two Up"),
+    "Two Up - Opal 255":
+        LocData(0x875044E, "Two Up"),
+    "Two Up - Opal 256":
+        LocData(0x875044F, "Two Up"),
+    "Two Up - Opal 257":
+        LocData(0x8750450, "Two Up"),
+    "Two Up - Opal 258":
+        LocData(0x8750451, "Two Up"),
+    "Two Up - Opal 259":
+        LocData(0x8750452, "Two Up"),
+    "Two Up - Opal 260":
+        LocData(0x8750453, "Two Up"),
+    "Two Up - Opal 261":
+        LocData(0x8750454, "Two Up"),
+    "Two Up - Opal 262":
+        LocData(0x8750455, "Two Up"),
+    "Two Up - Opal 263":
+        LocData(0x8750456, "Two Up"),
+    "Two Up - Opal 264":
+        LocData(0x8750457, "Two Up"),
+    "Two Up - Opal 265":
+        LocData(0x8750458, "Two Up"),
+    "Two Up - Opal 266":
+        LocData(0x8750459, "Two Up"),
+    "Two Up - Opal 267":
+        LocData(0x875045A, "Two Up"),
+    "Two Up - Opal 268":
+        LocData(0x875045B, "Two Up"),
+    "Two Up - Opal 269":
+        LocData(0x875045C, "Two Up"),
+    "Two Up - Opal 270":
+        LocData(0x875045D, "Two Up"),
+    "Two Up - Opal 271":
+        LocData(0x875045E, "Two Up"),
+    "Two Up - Opal 272":
+        LocData(0x875045F, "Two Up"),
+    "Two Up - Opal 273":
+        LocData(0x8750460, "Two Up"),
+    "Two Up - Opal 274":
+        LocData(0x8750461, "Two Up"),
+    "Two Up - Opal 275":
+        LocData(0x8750462, "Two Up"),
+    "Two Up - Opal 276":
+        LocData(0x8750463, "Two Up"),
+    "Two Up - Opal 277":
+        LocData(0x8750464, "Two Up"),
+    "Two Up - Opal 278":
+        LocData(0x8750465, "Two Up"),
+    "Two Up - Opal 279":
+        LocData(0x8750466, "Two Up"),
+    "Two Up - Opal 280":
+        LocData(0x8750467, "Two Up"),
+    "Two Up - Opal 281":
+        LocData(0x8750468, "Two Up"),
+    "Two Up - Opal 282":
+        LocData(0x8750469, "Two Up"),
+    "Two Up - Opal 283":
+        LocData(0x875046A, "Two Up"),
+    "Two Up - Opal 284":
+        LocData(0x875046B, "Two Up"),
+    "Two Up - Opal 285":
+        LocData(0x875046C, "Two Up"),
+    "Two Up - Opal 286":
+        LocData(0x875046D, "Two Up"),
+    "Two Up - Opal 287":
+        LocData(0x875046E, "Two Up"),
+    "Two Up - Opal 288":
+        LocData(0x875046F, "Two Up"),
+    "Two Up - Opal 289":
+        LocData(0x8750470, "Two Up"),
+    "Two Up - Opal 290":
+        LocData(0x8750471, "Two Up"),
+    "Two Up - Opal 291":
+        LocData(0x8750472, "Two Up"),
+    "Two Up - Opal 292":
+        LocData(0x8750473, "Two Up"),
+    "Two Up - Opal 293":
+        LocData(0x8750474, "Two Up"),
+    "Two Up - Opal 294":
+        LocData(0x8750475, "Two Up"),
+    "Two Up - Opal 295":
+        LocData(0x8750476, "Two Up"),
+    "Two Up - Opal 296":
+        LocData(0x8750477, "Two Up"),
+    "Two Up - Opal 297":
+        LocData(0x8750478, "Two Up"),
+    "Two Up - Opal 298":
+        LocData(0x8750479, "Two Up"),
+    "Two Up - Opal 299":
+        LocData(0x875047A, "Two Up"),
+    "Two Up - Opal 300":
+        LocData(0x875047B, "Two Up")
 }
 
 time_attack_challenge_dict = {
