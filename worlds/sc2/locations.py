@@ -2919,14 +2919,14 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.HAVENS_FALL_Z.mission_name, "East Gas Pickups", SC2_RACESWAP_LOC_ID_OFFSET + 1310, LocationType.EXTRA,
             lambda state: (
                 logic.zerg_common_unit(state)
-                and state.has_any({item_names.OVERLORD_VENTRAL_SACS, item_names.INFESTED_BANSHEE}), player)
+                and state.has_any({item_names.OVERLORD_VENTRAL_SACS, item_names.INFESTED_BANSHEE}, player)
                 and logic.zerg_competent_anti_air(state)
                 and logic.zerg_defense_rating(state, True) >= 3)
         ),
         make_location_data(SC2Mission.HAVENS_FALL_Z.mission_name, "Southeast Gas Pickups", SC2_RACESWAP_LOC_ID_OFFSET + 1311, LocationType.EXTRA,
             lambda state: (
                 logic.zerg_common_unit(state)
-                and state.has_any({item_names.OVERLORD_VENTRAL_SACS, item_names.INFESTED_BANSHEE}), player)
+                and state.has_any({item_names.OVERLORD_VENTRAL_SACS, item_names.INFESTED_BANSHEE}, player)
                 and logic.zerg_competent_anti_air(state)
                 and logic.zerg_defense_rating(state, True) >= 3)
         ),
