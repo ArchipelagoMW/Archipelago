@@ -176,6 +176,7 @@ class Opalsanity(Toggle):
     """
     display_name = "Opalsanity"
 
+
 class TrapFill(Range):
     """
     Determines the percentage of the junk fill which is filled with traps.
