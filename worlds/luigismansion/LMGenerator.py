@@ -280,55 +280,7 @@ class LuigisMansionRandomizer:
                         not (info_entry["EventNo"] == int(event_no)), self.jmp_event_info_table.info_file_field_entries))
                     continue
 
-                str_not_enough = "not_enough"
-                str_boo_captured = "boos_captured"
-
-                match required_boo_count:
-                    case 1:
-                        lines = lines.replace("{Count0}", "0")
-                        lines = lines.replace("{Count1}", str(required_boo_count))
-                        lines = lines.replace("{Count2}", str(required_boo_count))
-                        lines = lines.replace("{Count3}", str(required_boo_count))
-                        lines = lines.replace("{Count4}", str(required_boo_count))
-                        lines = lines.replace("{Case0}", str_not_enough)
-                        lines = lines.replace("{Case1}", str_boo_captured)
-                        lines = lines.replace("{Case2}", str_boo_captured)
-                        lines = lines.replace("{Case3}", str_boo_captured)
-                        lines = lines.replace("{Case4}", str_boo_captured)
-                    case 2:
-                        lines = lines.replace("{Count0}", "0")
-                        lines = lines.replace("{Count1}", "1")
-                        lines = lines.replace("{Count2}", str(required_boo_count))
-                        lines = lines.replace("{Count3}", str(required_boo_count))
-                        lines = lines.replace("{Count4}", str(required_boo_count))
-                        lines = lines.replace("{Case0}", str_not_enough)
-                        lines = lines.replace("{Case1}", str_not_enough)
-                        lines = lines.replace("{Case2}", str_boo_captured)
-                        lines = lines.replace("{Case3}", str_boo_captured)
-                        lines = lines.replace("{Case4}", str_boo_captured)
-                    case 3:
-                        lines = lines.replace("{Count0}", "0")
-                        lines = lines.replace("{Count1}", "1")
-                        lines = lines.replace("{Count2}", "2")
-                        lines = lines.replace("{Count3}", str(required_boo_count))
-                        lines = lines.replace("{Count4}", str(required_boo_count))
-                        lines = lines.replace("{Case0}", str_not_enough)
-                        lines = lines.replace("{Case1}", str_not_enough)
-                        lines = lines.replace("{Case2}", str_not_enough)
-                        lines = lines.replace("{Case3}", str_boo_captured)
-                        lines = lines.replace("{Case4}", str_boo_captured)
-                    case _:
-                        lines = lines.replace("{Count0}", str(required_boo_count-4))
-                        lines = lines.replace("{Count1}", str(required_boo_count-3))
-                        lines = lines.replace("{Count2}", str(required_boo_count-2))
-                        lines = lines.replace("{Count3}", str(required_boo_count-1))
-                        lines = lines.replace("{Count4}", str(required_boo_count))
-                        lines = lines.replace("{Case0}", str_not_enough)
-                        lines = lines.replace("{Case1}", str_not_enough)
-                        lines = lines.replace("{Case2}", str_not_enough)
-                        lines = lines.replace("{Case3}", str_not_enough)
-                        lines = lines.replace("{Case4}", str_boo_captured)
-
+                lines = lines.replace("{Count4}", str(required_boo_count))
                 self.update_custom_event(event_no, False, lines)
 
         # Update Toad events with hints
