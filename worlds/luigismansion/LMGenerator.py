@@ -29,8 +29,7 @@ class InvalidCleanISOError(Exception): pass
 
 
 class LuigisMansionRandomizer:
-    def __init__(self, clean_iso_path: str, randomized_output_file_path: str, ap_output_data=None,
-                 export_disc_to_folder=False, debug_flag=False):
+    def __init__(self, clean_iso_path: str, randomized_output_file_path: str, ap_output_data=None, debug_flag=False):
         # Takes note of the provided Randomized Folder path and if files should be exported instead of making an ISO.
         select_aplm_path = ap_output_data
         self.debug = debug_flag
@@ -55,8 +54,6 @@ class LuigisMansionRandomizer:
 
         with open(os.path.abspath(select_aplm_path)) as stream:
             self.output_data = yaml.safe_load(stream)
-
-        self.export_disc_to_folder = export_disc_to_folder
 
         # Verifies we have a valid installation of Luigi's Mansion USA. There are some regional file differences.
         self.__verify_supported_version()
@@ -390,9 +387,9 @@ class LuigisMansionRandomizer:
         self.gcm.changed_files["files/Map/map2.szp"] = Yay0.compress(self.map_two_file.data)
 
         # Generator function to combine all necessary files into an ISO file.
-        # Returned information is ignored. # Todo Maybe there is something better to put here?
-        for _, _ in self.export_files_from_memory():  # next_progress_text, files_done
-            continue  # percentage_done = files_done/len(self.gcm.files_by_path)
+        # Returned information is ignored.
+        for _, _ in self.export_files_from_memory():
+            continue
 
     # Updates various DOL Offsets per the desired changes of the AP user
     def update_dol_offsets(self):
@@ -532,20 +529,15 @@ class LuigisMansionRandomizer:
 
     def copy_existing_event(self, new_event_number: str):
         event_path = "files/Event/event" + new_event_number + ".szp"
-        data = self.gcm.read_file_data("files/Event/event64.szp")
-        self.gcm.add_new_file(event_path, data)
+        event_data = self.gcm.read_file_data("files/Event/event64.szp")
+        self.gcm.add_new_file(event_path, event_data)
         return
 
     # If Export to disc is true, Exports the entire file/directory contents of the ISO to specified folder
     # Otherwise, creates a direct ISO file.
     def export_files_from_memory(self):
-        if self.export_disc_to_folder:
-            output_folder_path = os.path.join(
-                Path(self.randomized_output_file_path).parent, "%s Randomized Exported" % RANDOMIZER_NAME)
-            yield from self.gcm.export_disc_to_folder_with_changed_files(output_folder_path)
-        else:
-            yield from self.gcm.export_disc_to_iso_with_changed_files(self.randomized_output_file_path)
+        yield from self.gcm.export_disc_to_iso_with_changed_files(self.randomized_output_file_path)
 
 
 if __name__ == '__main__':
-    unpacked_iso = LuigisMansionRandomizer("", "", None, False, True)
+    unpacked_iso = LuigisMansionRandomizer("", "", None, False)
