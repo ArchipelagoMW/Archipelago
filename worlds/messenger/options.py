@@ -79,11 +79,18 @@ class MegaShards(Toggle):
     display_name = "Shuffle Mega Time Shards"
 
 
-class LimitedMovement(Toggle):
+class LimitedMovement(Choice):
     """
     Removes either rope dart or wingsuit from the itempool. Forces logic to at least hard and accessibility to minimal.
     """
     display_name = "Limited Movement"
+    option_off = 0
+    alias_false = 0
+    option_either = 1
+    alias_true = 1
+    alias_on = 1
+    option_dart = 2
+    option_suit = 3
 
 
 class EarlyMed(Toggle):

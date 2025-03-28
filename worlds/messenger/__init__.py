@@ -11,7 +11,7 @@ from .client_setup import launch_game
 from .connections import CONNECTIONS, RANDOMIZED_CONNECTIONS, TRANSITIONS
 from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS, PROG_ITEMS, TRAPS, \
     USEFUL_ITEMS
-from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded, ShuffleTransitions
+from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded, ShuffleTransitions, LimitedMovement
 from .portals import PORTALS, add_closed_portal_reqs, disconnect_portals, shuffle_portals, validate_portals
 from .regions import LEVELS, MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS
 from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
@@ -131,6 +131,7 @@ class MessengerWorld(World):
     transitions: list[Entrance]
     reachable_locs: bool = False
     filler: dict[str, int]
+    main_movement_items: list[str] = ["Rope Dart", "Wingsuit"]
 
     def generate_early(self) -> None:
         if self.options.goal == Goal.option_power_seal_hunt:
@@ -168,6 +169,14 @@ class MessengerWorld(World):
         self.portal_mapping = []
         self.spoiler_portal_mapping = {}
         self.transitions = []
+        if self.options.limited_movement:
+            if self.options.limited_movement == LimitedMovement.option_dart:
+                self.main_movement_items = ["Rope Dart"]
+            elif self.options.limited_movement == LimitedMovement.option_suit:
+                self.main_movement_items = ["Wingsuit"]
+            else:
+                self.main_movement_items = [self.random.choice(self.main_movement_items)]
+
 
     def create_regions(self) -> None:
         # MessengerRegion adds itself to the multiworld
@@ -190,21 +199,17 @@ class MessengerWorld(World):
 
     def create_items(self) -> None:
         # create items that are always in the item pool
-        main_movement_items = ["Rope Dart", "Wingsuit"]
         precollected_names = [item.name for item in self.multiworld.precollected_items[self.player]]
         itempool: list[MessengerItem] = [
             self.create_item(item)
             for item in self.item_name_to_id
             if item not in {
-                "Power Seal", *NOTES, *FIGURINES, *main_movement_items,
+                "Power Seal", *NOTES, *FIGURINES, *self.__class__.main_movement_items,
                 *precollected_names, *FILLER, *TRAPS,
             }
         ]
 
-        if self.options.limited_movement:
-            itempool.append(self.create_item(self.random.choice(main_movement_items)))
-        else:
-            itempool += [self.create_item(move_item) for move_item in main_movement_items]
+        itempool += [self.create_item(move_item) for move_item in self.main_movement_items]
 
         if self.options.goal == Goal.option_open_music_box:
             # make a list of all notes except those in the player's defined starting inventory, and adjust the
