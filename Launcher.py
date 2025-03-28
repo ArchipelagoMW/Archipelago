@@ -1,11 +1,11 @@
 """
 Archipelago launcher for bundled app.
 
-* if run with a Patch file as argument, launch corresponding client with the patch file as arguments.
-* if run with component name as argument, run it passing argv[2:] as arguments
-* if run without arguments, open launcher GUI
+* If run with a patch file as argument, launch corresponding client with the patch file as an argument.
+* If run with component name as argument, run it passing argv[2:] as arguments.
+* If run without arguments or unknown arguments, open launcher GUI.
 
-Additional components can be added to worlds.LauncherComponents.components
+Additional components can be added to worlds.LauncherComponents.components.
 """
 
 
