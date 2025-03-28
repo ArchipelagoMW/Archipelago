@@ -3,7 +3,8 @@ from enum import Enum
 from typing import List
 
 from worlds.pokepark import FRIENDSHIP_ITEMS, UNLOCK_ITEMS, BERRIES
-from worlds.pokepark.LocationIds import MinigameLocationIds, OverworldPokemonLocationIds, QuestLocationIds
+from worlds.pokepark.LocationIds import MinigameLocationIds, OverworldPokemonLocationIds, QuestLocationIds, \
+    UnlockLocationIds
 from worlds.pokepark.items import PRISM_ITEM, REGION_UNLOCK
 
 pokemon_id_address = 0x8036dc20
@@ -11,10 +12,13 @@ stage_id_address = 0x8036AEF0  # word
 is_in_menu_address = 0x80482F04
 meadow_zone_stage_id = 0x13002E8
 meadow_zone_loadscreen_stage_id = 0x12FFDFC
+meadow_zone_venusaur_stage_id = 0x7D9C7C
 beach_zone_stage_id = 0x1591C24
 beach_zone_loadscreen_stage_id = 0x15916FC
 ice_zone_stage_id= 0x129D6A0
 treehouse_stage_id = 0x13282F8
+cavern_zone_stage_id = 0x111C338
+magma_zone_stage_id = 0x167A9FC
 main_menu_stage_id = 0x6FC360
 main_menu2_stage_id = 0x93BEA0
 main_menu3_stage_id = 0x2A080
@@ -24,6 +28,9 @@ venusaur_minigame_stage_id = 0xA81938
 pelipper_minigame_stage_id = 0xD92358
 gyarados_minigame_stage_id = 0xC61408
 empoleon_minigame_stage_id = 0xBE6D00
+bastidon_minigame_stage_id = 0xD02DA8
+rhyperior_minigame_stage_id = 0xB78444
+blaziken_minigame_stage_id = 0xA85D38
 
 LOADSCREEN_TO_ZONE = {
 meadow_zone_loadscreen_stage_id:meadow_zone_stage_id,
@@ -56,15 +63,17 @@ class MemoryAddress:
     def final_address(self):
         return self.base_address + self.offset
 
+@dataclass
+class UnlockLocation:
+    location: MemoryAddress
+    zone_id: int
+    locationId: int
+    is_blocked_until_location: bool = False
 
 @dataclass
-class UnlockItem:
-    item: MemoryAddress  #
-    itemId: int | None = None
-    location: List[MemoryAddress] | None = None
-    locationId: int | None = None
-    is_blocked_until_location: bool = False
-    blocked_zone:int = None
+class UnlockState:
+    item: MemoryAddress
+    locations: List[UnlockLocation] = field(default_factory=list)
 
 
 @dataclass
@@ -197,6 +206,50 @@ ZONESYSTEM = ZoneSystem(world_state_address=0x8037500D,
                            ),
                        ],
                        fast_travel_flag=0x20),
+                   ZoneState(
+                       item_id=REGION_UNLOCK["Cavern Zone & Magma Zone Unlock"],
+                       world_state_value=0x13f7,
+                       addresses=[
+                           #Cavern zone
+
+                           # magma zone
+                           MemoryAddress(
+                               base_address=0x8037502B,  # clear fire main room
+                               value=0b10000000,
+                               memory_range=MemoryRange.BYTE
+                           ),
+                           MemoryAddress(
+                               base_address=0x8037502A,  # clear fire below
+                               value=0b00000001,
+                               memory_range=MemoryRange.BYTE
+                           ),
+                           MemoryAddress(
+                               base_address=0x8037500C,  # lohgock bridge (map)
+                               value=0b00010000,
+                               memory_range=MemoryRange.BYTE
+                           ),
+                           MemoryAddress(
+                               base_address=0x80375014,  # lohgock bridge
+                               value=0b00001000,
+                               memory_range=MemoryRange.BYTE
+                           ),
+                           MemoryAddress(
+                               base_address=0x80375014,  # lohgock door
+                               value=0b00000100,
+                               memory_range=MemoryRange.BYTE
+                           ),
+                           MemoryAddress(
+                               base_address=0x80375028,  # skip farfetch dialog
+                               value=0b00010000,
+                               memory_range=MemoryRange.BYTE
+                           ),
+                           MemoryAddress(
+                               base_address=0x80375031,  # skip lever dialog
+                               value=0b10000000,
+                               memory_range=MemoryRange.BYTE
+                           ),
+                       ],
+                       fast_travel_flag=0x18), #+0x10 Cavern zone +0x08 magma zone
                ],
                treehouse_gates=[
                    ZoneGateUnlocks(
@@ -213,6 +266,15 @@ ZONESYSTEM = ZoneSystem(world_state_address=0x8037500D,
                        item_ids=[REGION_UNLOCK["Meadow Zone Unlock"]],
                        gate=MemoryAddress(
                            base_address=0x80D52128,
+                           memory_range=MemoryRange.WORD,
+                           value=0x01
+                       )
+                   ),
+                   ZoneGateUnlocks(
+                       stage_id=0x13282F8,
+                       item_ids=[REGION_UNLOCK["Cavern Zone & Magma Zone Unlock"]],
+                       gate=MemoryAddress(
+                           base_address=0x80D53FA8,
                            memory_range=MemoryRange.WORD,
                            value=0x01
                        )
@@ -469,6 +531,24 @@ QUEST_LOCATIONS = [
             value=0b00110000),
         check_mask=0b00110000
     ),
+
+    # Magma Zone
+    QuestLocation(
+        locationId=QuestLocationIds.MEDITITE_QUIZ.value,
+        location=MemoryAddress(
+            base_address=0x80375028,
+            memory_range=MemoryRange.BYTE,
+            value=0b00100000),
+        check_mask=0b00100000
+    ),
+    QuestLocation(
+        locationId=QuestLocationIds.RHYPERIOR_DISC.value,
+        location=MemoryAddress(
+            base_address=0x80375020,
+            memory_range=MemoryRange.BYTE,
+            value=0b10000000),
+        check_mask=0b10000000
+    ),
 ]
 
 MINIGAME_LOCATIONS = [
@@ -607,13 +687,13 @@ MINIGAME_LOCATIONS = [
             memory_range=MemoryRange.HALFWORD,
             value=0x0001),
         stage_id=bulbasaur_minigame_stage_id),
-    # MinigameLocation(
-    #     MinigameLocationIds.PONYTA_DASH.value,
-    #     MemoryAddress(
-    #         base_address=,
-    #         memory_range=MemoryRange.HALFWORD,
-    #         value=0x0001),
-    #     stage_id=bulbasaur_minigame_stage_id),
+    MinigameLocation(
+         MinigameLocationIds.PONYTA_DASH.value,
+         MemoryAddress(
+             base_address=0x80377e78,
+             memory_range=MemoryRange.HALFWORD,
+             value=0x0001),
+         stage_id=bulbasaur_minigame_stage_id),
     MinigameLocation(
         MinigameLocationIds.SHINX_DASH.value,
         MemoryAddress(
@@ -680,13 +760,13 @@ MINIGAME_LOCATIONS = [
     #         memory_range=MemoryRange.HALFWORD,
     #         value=0x0001),
     #     stage_id=venusaur_minigame_stage_id),
-    # MinigameLocation(
-    #     MinigameLocationIds.INFERNAPE_VINE_SWING.value,
-    #     MemoryAddress(
-    #         base_address=,
-    #         memory_range=MemoryRange.HALFWORD,
-    #         value=0x0001),
-    #     stage_id=venusaur_minigame_stage_id),
+    MinigameLocation(
+         MinigameLocationIds.INFERNAPE_VINE_SWING.value,
+         MemoryAddress(
+             base_address=0x80376de0,
+             memory_range=MemoryRange.HALFWORD,
+             value=0x0001),
+         stage_id=venusaur_minigame_stage_id),
     # MinigameLocation(
     #     MinigameLocationIds.LUCARIO_VINE_SWING.value,
     #     MemoryAddress(
@@ -931,13 +1011,13 @@ MINIGAME_LOCATIONS = [
             memory_range=MemoryRange.HALFWORD,
             value=0x0001),
         stage_id=gyarados_minigame_stage_id),
-    # MinigameLocation(
-    #     MinigameLocationIds.PRINPLUP_AQUA.value,
-    #     MemoryAddress(
-    #         base_address=,
-    #         memory_range=MemoryRange.HALFWORD,
-    #         value=0x0001),
-    #     stage_id=gyarados_minigame_stage_id),
+    MinigameLocation(
+         MinigameLocationIds.PRINPLUP_AQUA.value,
+         MemoryAddress(
+             base_address=0x803771d0,
+             memory_range=MemoryRange.HALFWORD,
+             value=0x0001),
+         stage_id=gyarados_minigame_stage_id),
     MinigameLocation(
         MinigameLocationIds.BIBAREL_AQUA.value,
         MemoryAddress(
@@ -1074,6 +1154,327 @@ MINIGAME_LOCATIONS = [
             value=0x0001),
         stage_id=empoleon_minigame_stage_id),
 
+    # Cavern Zone - Bastiodon's Panel Crush
+    MinigameLocation(
+        MinigameLocationIds.PIKACHU_PANEL.value,
+        MemoryAddress(
+            base_address=0x80377728,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=bastidon_minigame_stage_id),
+    # MinigameLocation(
+    #     MinigameLocationIds.SABLEYE_PANEL.value,
+    #     MemoryAddress(
+    #         base_address=0x,
+    #         memory_range=MemoryRange.HALFWORD,
+    #         value=0x0001),
+    #     stage_id=bastidon_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.MEOWTH_PANEL.value,
+        MemoryAddress(
+            base_address=0x80377740,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=bastidon_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.TORCHIC_PANEL.value,
+        MemoryAddress(
+            base_address=0x80377734,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=bastidon_minigame_stage_id),
+    # MinigameLocation(
+    #     MinigameLocationIds.ELECTIVIRE_PANEL.value,
+    #     MemoryAddress(
+    #         base_address=0x,
+    #         memory_range=MemoryRange.HALFWORD,
+    #         value=0x0001),
+    #     stage_id=bastidon_minigame_stage_id),
+    # MinigameLocation(
+    #     MinigameLocationIds.MAGMORTAR_PANEL.value,
+    #     MemoryAddress(
+    #         base_address=0x,
+    #         memory_range=MemoryRange.HALFWORD,
+    #         value=0x0001),
+    #     stage_id=bastidon_minigame_stage_id),
+    MinigameLocation(
+         MinigameLocationIds.HITMONLEE_PANEL.value,
+         MemoryAddress(
+             base_address=0x803776a4,
+            memory_range=MemoryRange.HALFWORD,
+             value=0x0001),
+         stage_id=bastidon_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.URSARING_PANEL.value,
+        MemoryAddress(
+            base_address=0x803776d4,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=bastidon_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.MRMIME_PANEL.value,
+        MemoryAddress(
+            base_address=0x803776ec,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=bastidon_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.RAICHU_PANEL.value,
+        MemoryAddress(
+            base_address=0x803776c8,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=bastidon_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.SUDOWOODO_PANEL.value,
+        MemoryAddress(
+            base_address=0x803776f8,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=bastidon_minigame_stage_id),
+     MinigameLocation(
+         MinigameLocationIds.CHARMANDER_PANEL.value,
+         MemoryAddress(
+             base_address=0x80377704,
+             memory_range=MemoryRange.HALFWORD,
+             value=0x0001),
+         stage_id=bastidon_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.GIBLE_PANEL.value,
+        MemoryAddress(
+            base_address=0x80377710,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=bastidon_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.CHIMCHAR_PANEL.value,
+        MemoryAddress(
+            base_address=0x8037771c,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=bastidon_minigame_stage_id),
+    MinigameLocation(
+         MinigameLocationIds.MAGBY_PANEL.value,
+        MemoryAddress(
+             base_address=0x8037774c,
+            memory_range=MemoryRange.HALFWORD,
+         value=0x0001),
+         stage_id=bastidon_minigame_stage_id),
+
+    # Magma Zone - Rhyperior's Bumper Burn
+    MinigameLocation(
+        MinigameLocationIds.PIKACHU_BUMPER.value,
+        MemoryAddress(
+            base_address=0x80377884,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=rhyperior_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.MAGNEMITE_BUMPER.value,
+        MemoryAddress(
+            base_address=0x803777e8,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=rhyperior_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.RHYPERIOR_BUMPER.value,
+        MemoryAddress(
+            base_address=0x803777e8,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=rhyperior_minigame_stage_id),
+    # MinigameLocation(
+    #     MinigameLocationIds.TYRANITAR_BUMPER.value,
+    #     MemoryAddress(
+    #         base_address=0x,
+    #         memory_range=MemoryRange.HALFWORD,
+    #         value=0x0001),
+    #     stage_id=rhyperior_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.HITMONTOP_BUMPER.value,
+        MemoryAddress(
+            base_address=0x80377800,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=rhyperior_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.FLAREON_BUMPER.value,
+        MemoryAddress(
+            base_address=0x8037780c,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=rhyperior_minigame_stage_id),
+     MinigameLocation(
+         MinigameLocationIds.VENUSAUR_BUMPER.value,
+        MemoryAddress(
+             base_address=0x80377818,
+             memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=rhyperior_minigame_stage_id),
+    # MinigameLocation(
+    #     MinigameLocationIds.SNORLAX_BUMPER.value,
+    #     MemoryAddress(
+    #         base_address=0x,
+    #         memory_range=MemoryRange.HALFWORD,
+    #         value=0x0001),
+    #     stage_id=rhyperior_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.TORTERRA_BUMPER.value,
+        MemoryAddress(
+            base_address=0x80377830,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=rhyperior_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.MAGNEZONE_BUMPER.value,
+        MemoryAddress(
+            base_address=0x8037783c,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=rhyperior_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.CLAYDOL_BUMPER.value,
+        MemoryAddress(
+            base_address=0x80377848,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=rhyperior_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.QUILAVA_BUMPER.value,
+        MemoryAddress(
+            base_address=0x80377854,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=rhyperior_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.TORKOAL_BUMPER.value,
+        MemoryAddress(
+            base_address=0x80377860,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=rhyperior_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.BALTOY_BUMPER.value,
+        MemoryAddress(
+            base_address=0x8037786c,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=rhyperior_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.BONSLY_BUMPER.value,
+        MemoryAddress(
+            base_address=0x80377878,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=rhyperior_minigame_stage_id),
+
+    # Magma Zone - Blaziken's Boulder Bash
+
+    MinigameLocation(
+        MinigameLocationIds.PIKACHU_BOULDER.value,
+        MemoryAddress(
+            base_address=0x803779BC,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=blaziken_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.GEODUDE_BOULDER.value,
+        MemoryAddress(
+            base_address=0x803779c8,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=blaziken_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.PHANPY_BOULDER.value,
+        MemoryAddress(
+            base_address=0x803779d4,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=blaziken_minigame_stage_id),
+    # MinigameLocation(
+    #     MinigameLocationIds.BLAZIKEN_BOULDER.value,
+    #     MemoryAddress(
+    #         base_address=0x,
+    #         memory_range=MemoryRange.HALFWORD,
+    #         value=0x0001),
+    #     stage_id=blaziken_minigame_stage_id),
+    # MinigameLocation(
+    #     MinigameLocationIds.GARCHOMP_BOULDER.value,
+    #     MemoryAddress(
+    #         base_address=0x,
+    #         memory_range=MemoryRange.HALFWORD,
+    #         value=0x0001),
+    #     stage_id=blaziken_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.SCIZOR_BOULDER.value,
+        MemoryAddress(
+            base_address=0x80377944,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=blaziken_minigame_stage_id),
+    # MinigameLocation(
+    #     MinigameLocationIds.MAGMORTAR_BOULDER.value,
+    #     MemoryAddress(
+    #         base_address=0x80377944,
+    #         memory_range=MemoryRange.HALFWORD,
+    #         value=0x0001),
+    #     stage_id=blaziken_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.HITMONCHAN_BOULDER.value,
+        MemoryAddress(
+            base_address=0x8037795c,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=blaziken_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.MACHAMP_BOULDER.value,
+        MemoryAddress(
+            base_address=0x80377968,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=blaziken_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.MAROWAK_BOULDER.value,
+        MemoryAddress(
+            base_address=0x80377980,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=blaziken_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.FARFETCHD_BOULDER.value,
+        MemoryAddress(
+            base_address=0x803779b0,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=blaziken_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.CRANIDOS_BOULDER.value,
+        MemoryAddress(
+            base_address=0x8037798c,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=blaziken_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.CAMERUPT_BOULDER.value,
+        MemoryAddress(
+            base_address=0x80377998,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=blaziken_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.BASTIODON_BOULDER.value,
+        MemoryAddress(
+            base_address=0x80377974,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=blaziken_minigame_stage_id),
+    MinigameLocation(
+        MinigameLocationIds.MAWILE_BOULDER.value,
+        MemoryAddress(
+            base_address=0x803779a4,
+            memory_range=MemoryRange.HALFWORD,
+            value=0x0001),
+        stage_id=blaziken_minigame_stage_id),
 ]
 
 blocked_friendship_itemIds = []
@@ -1165,6 +1566,23 @@ POKEMON_STATES = {
                 friendship_items_to_block=[FRIENDSHIP_ITEMS["Bonsly"]],
                 unlock_items_to_block=[UNLOCK_ITEMS["Sudowoodo Unlock"]],
                 locationId=FRIENDSHIP_ITEMS["Bonsly"]
+            ),
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x803752C4, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x00000005],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Bonsly"]],
+                unlock_items_to_block=[UNLOCK_ITEMS["Sudowoodo Unlock"]],
+                locationId=OverworldPokemonLocationIds.BONSLY_CAVERN.value
+            ),
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x803752C4, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=magma_zone_stage_id,
+                pokemon_ids=[0x00000003],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Bonsly"]],
+                locationId=OverworldPokemonLocationIds.BONSLY_MAGMA.value
             )
         ],
 ),
@@ -1178,6 +1596,14 @@ POKEMON_STATES = {
                 pokemon_ids=[0x0000001a],
                 friendship_items_to_block=[FRIENDSHIP_ITEMS["Sudowoodo"]],
                 locationId=FRIENDSHIP_ITEMS["Sudowoodo"]
+            ),
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x803752D8, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x0000001a],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Sudowoodo"]],
+                locationId=OverworldPokemonLocationIds.SUDOWOODO_CAVERN.value
             )
         ],
 ),
@@ -1304,7 +1730,23 @@ POKEMON_STATES = {
                 pokemon_ids=[0x00000007],
                 friendship_items_to_block=[FRIENDSHIP_ITEMS["Chimchar"]],
                 locationId=FRIENDSHIP_ITEMS["Chimchar"]
-            )
+            ),
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375A94, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x00000004],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Chimchar"]],
+                locationId=OverworldPokemonLocationIds.CHIMCHAR_CAVERN.value
+            ),
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375A94, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=magma_zone_stage_id,
+                pokemon_ids=[0x0000000a],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Chimchar"]],
+                locationId=OverworldPokemonLocationIds.CHIMCHAR_MAGMA.value
+            ),
         ]
 ),
     FRIENDSHIP_ITEMS["Aipom"]: PokemonStateInfo(
@@ -1484,6 +1926,9 @@ POKEMON_STATES = {
                 locationId=FRIENDSHIP_ITEMS["Scyther"]
             )
         ]
+),
+    FRIENDSHIP_ITEMS["Venusaur"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x803754a4, memory_range=MemoryRange.BYTE, value=0x80)
 ),
 
     # Beach Zone Pokemon
@@ -1796,6 +2241,19 @@ POKEMON_STATES = {
             )
         ]
 ),
+    FRIENDSHIP_ITEMS["Mime Jr."]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375940, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375940, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=treehouse_stage_id,
+                pokemon_ids=[0x0000000e],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Mime Jr."]],
+                locationId=FRIENDSHIP_ITEMS["Mime Jr."]
+            )
+        ]
+),
 
     # multiple versions since friendship is possible in multiple region, but for now its juts one location
     FRIENDSHIP_ITEMS["Drifblim"]: PokemonStateInfo(
@@ -1830,6 +2288,22 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=ice_zone_stage_id,
                 pokemon_ids=[0x0000001c],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Drifblim"]],
+                locationId=FRIENDSHIP_ITEMS["Drifblim"]
+            ),
+            PokemonLocation(  # Cavern Zone
+                location=MemoryAddress(base_address=0x80375f94, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x00000018],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Drifblim"]],
+                locationId=FRIENDSHIP_ITEMS["Drifblim"]
+            ),
+            PokemonLocation(  # Magma Zone
+                location=MemoryAddress(base_address=0x80375f94, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x00000019],
                 friendship_items_to_block=[FRIENDSHIP_ITEMS["Drifblim"]],
                 locationId=FRIENDSHIP_ITEMS["Drifblim"]
             )
@@ -1897,6 +2371,14 @@ POKEMON_STATES = {
                 pokemon_ids=[0x00000021, 0x00000007],
                 friendship_items_to_block=[FRIENDSHIP_ITEMS["Teddiursa"]],
                 locationId=FRIENDSHIP_ITEMS["Teddiursa"]
+            ),
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x803756FC, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x00000019],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Teddiursa"]],
+                locationId=OverworldPokemonLocationIds.TEDDIURSA_CAVERN.value
             )
         ]
 ),
@@ -2078,7 +2560,533 @@ POKEMON_STATES = {
         item=MemoryAddress(base_address=0x80375814, memory_range=MemoryRange.BYTE, value=0x80)
 ),
 
-
+    # Cavern Zone
+    #
+    FRIENDSHIP_ITEMS["Magnemite"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375a08, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375a08, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x00000006],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Magnemite"]],
+                locationId=FRIENDSHIP_ITEMS["Magnemite"]
+            ),
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375a08, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x00000028],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Magnemite"]],
+                locationId=OverworldPokemonLocationIds.MAGNEMITE_CAVERN_2.value
+            ),
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375a08, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x00000029],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Magnemite"]],
+                locationId=OverworldPokemonLocationIds.MAGNEMITE_CAVERN_3.value
+            ),
+        ],
+),
+    FRIENDSHIP_ITEMS["Magnezone"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375a1c, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375a1c, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x0000001d],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Magnezone"]],
+                locationId=FRIENDSHIP_ITEMS["Magnezone"]
+            ),
+        ],
+),
+    FRIENDSHIP_ITEMS["Geodude"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375828, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375828, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x00000007],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Geodude"]],
+                locationId=FRIENDSHIP_ITEMS["Geodude"]
+            ),
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375828, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=magma_zone_stage_id,
+                pokemon_ids=[0x00000008],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Geodude"]],
+                locationId=OverworldPokemonLocationIds.GEODUDE_MAGMA.value
+            )
+        ],
+),
+    FRIENDSHIP_ITEMS["Torchic"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375ad0, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375ad0, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x00000002],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Torchic"]],
+                locationId=FRIENDSHIP_ITEMS["Torchic"]
+            ),
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375ad0, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=magma_zone_stage_id,
+                pokemon_ids=[0x00000009],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Torchic"]],
+                locationId=OverworldPokemonLocationIds.TORCHIC_MAGMA.value
+            )
+        ],
+),
+    FRIENDSHIP_ITEMS["Machamp"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x803758c8, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x803758c8, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x0000000d],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Machamp"]],
+                unlock_items_to_block=[UNLOCK_ITEMS["Machamp Unlock"]],
+                locationId=FRIENDSHIP_ITEMS["Machamp"]
+            ),
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x803758c8, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x0000002f],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Machamp"]],
+                locationId=OverworldPokemonLocationIds.MACHAMP_CAVERN_BATTLE.value
+            )
+        ],
+),
+    FRIENDSHIP_ITEMS["Meowth"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375af8, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375af8, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x0000001b],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Meowth"]],
+                locationId=FRIENDSHIP_ITEMS["Meowth"]
+            )
+        ],
+),
+    FRIENDSHIP_ITEMS["Zubat"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375864, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375864, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x00000020,0x00000021,0x00000022,0x00000023,0x00000024,0x00000025,0x00000026,0x00000027,0x0000001f,0x0000000e],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Zubat"]],
+                locationId=FRIENDSHIP_ITEMS["Zubat"]
+            )
+        ],
+),
+    FRIENDSHIP_ITEMS["Cranidos"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x803758a0, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x803758a0, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x0000002d,0x0000000b],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Cranidos"]],
+                locationId=FRIENDSHIP_ITEMS["Cranidos"]
+            )
+        ],
+),
+    FRIENDSHIP_ITEMS["Golbat"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375878, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375878, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x0000002a,0x0000002b],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Golbat"]],
+                locationId=FRIENDSHIP_ITEMS["Golbat"]
+            )
+        ],
+),
+    FRIENDSHIP_ITEMS["Scizor"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375468, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375468, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x0000001c],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Scizor"]],
+                locationId=FRIENDSHIP_ITEMS["Scizor"]
+            )
+        ],
+),
+    FRIENDSHIP_ITEMS["Mawile"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375850, memory_range=MemoryRange.BYTE, value=0x80),
+        # locations=[ # story based
+        #     PokemonLocation(
+        #         location=MemoryAddress(base_address=0x80375850, offset=0x0001, value=0x80,
+        #                                memory_range=MemoryRange.BYTE),
+        #         zone_id=Cavern_zone_stage_id,
+        #         pokemon_ids=[0x00000008],
+        #         friendship_items_to_block=[FRIENDSHIP_ITEMS["Mawile"]],
+        #         locationId=FRIENDSHIP_ITEMS["Mawile"]
+        #     )
+        # ],
+),
+    FRIENDSHIP_ITEMS["Marowak"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x803758b4, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x803758b4, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x0000000c],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Marowak"]],
+                locationId=FRIENDSHIP_ITEMS["Marowak"]
+            )
+        ],
+),
+    FRIENDSHIP_ITEMS["Mr. Mime"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375954, memory_range=MemoryRange.BYTE, value=0x80)
+),
+    FRIENDSHIP_ITEMS["Aron"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375f30, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375f30, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x0000000a],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Aron"]],
+                locationId=FRIENDSHIP_ITEMS["Aron"],
+                is_special_exception=True
+            ),
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375f30, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=magma_zone_stage_id,
+                pokemon_ids=[0x0000000b],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Aron"]],
+                locationId=OverworldPokemonLocationIds.ARON_MAGMA.value,
+                is_special_exception=True
+            ),
+        ],
+),
+    FRIENDSHIP_ITEMS["Dugtrio"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375f6c, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375f6c, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x00000014],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Dugtrio"]],
+                locationId=FRIENDSHIP_ITEMS["Dugtrio"]
+            )
+        ],
+),
+    FRIENDSHIP_ITEMS["Diglett"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375f44, memory_range=MemoryRange.BYTE, value=0x80),
+),
+    FRIENDSHIP_ITEMS["Gible"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x8037583c, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x8037583c, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x00000001,0x00000030],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Gible"]],
+                locationId=FRIENDSHIP_ITEMS["Gible"]
+            )
+        ],
+),
+    FRIENDSHIP_ITEMS["Phanpy"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x8037588c, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x8037588c, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x000002e,0x00000009],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Phanpy"]],
+                is_special_exception=True,
+                locationId=FRIENDSHIP_ITEMS["Phanpy"]
+            )
+        ],
+),
+    FRIENDSHIP_ITEMS["Raichu"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x803758f0, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x803758f0, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x0000010],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Raichu"]],
+                locationId=FRIENDSHIP_ITEMS["Raichu"]
+            )
+        ],
+),
+    FRIENDSHIP_ITEMS["Hitmonlee"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375A30, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375A30, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=cavern_zone_stage_id,
+                pokemon_ids=[0x00000011],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Hitmonlee"]],
+                locationId=FRIENDSHIP_ITEMS["Hitmonlee"]
+            )
+        ],
+),
+    FRIENDSHIP_ITEMS["Bastiodon"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375968, memory_range=MemoryRange.BYTE, value=0x80),
+        # locations=[
+        #     PokemonLocation(
+        #         location=MemoryAddress(base_address=0x80375968, offset=0x0001, value=0x80,
+        #                                memory_range=MemoryRange.BYTE),
+        #         zone_id=Cavern_zone_stage_id,
+        #         pokemon_ids=[0x],
+        #         friendship_items_to_block=[FRIENDSHIP_ITEMS["Bastiodon"]],
+        #         locationId=FRIENDSHIP_ITEMS["Bastiodon"]
+        #     )
+        # ],
+),
+    #
+    # Magma Zone
+    FRIENDSHIP_ITEMS["Camerupt"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x803759B8, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x803759B8, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=magma_zone_stage_id,
+                pokemon_ids=[0x0000014],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Camerupt"]],
+                locationId=FRIENDSHIP_ITEMS["Camerupt"]
+            )
+        ],
+),
+    FRIENDSHIP_ITEMS["Magby"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375a6c, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375a6c, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=magma_zone_stage_id,
+                pokemon_ids=[0x0000001,0x0000001f],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Magby"]],
+                locationId=FRIENDSHIP_ITEMS["Magby"]
+            ),
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375a6c, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=magma_zone_stage_id,
+                pokemon_ids=[0x00000020,0x00000021],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Magby"]],
+                locationId=OverworldPokemonLocationIds.MAGBY_MAGMA_BATTLE.value
+            )
+        ],
+),
+    FRIENDSHIP_ITEMS["Vulpix"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375b20, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375b20, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=magma_zone_stage_id,
+                pokemon_ids=[0x0000029,0x0000000c,0x0000002a],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Vulpix"]],
+                unlock_items_to_block=[UNLOCK_ITEMS["Ninetales Unlock"]],
+                locationId=FRIENDSHIP_ITEMS["Vulpix"]
+            ),
+        ],
+),
+    FRIENDSHIP_ITEMS["Ninetales"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375b34, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375b34, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=magma_zone_stage_id,
+                pokemon_ids=[0x000000e],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Ninetales"]],
+                locationId=FRIENDSHIP_ITEMS["Ninetales"]
+            ),
+        ],
+),
+    FRIENDSHIP_ITEMS["Quilava"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x803759a4, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x803759a4, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=magma_zone_stage_id,
+                pokemon_ids=[0x00000006],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Quilava"]],
+                locationId=FRIENDSHIP_ITEMS["Quilava"]
+            ),
+        ],
+),
+    FRIENDSHIP_ITEMS["Flareon"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375508, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375508, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=magma_zone_stage_id,
+                pokemon_ids=[0x0000000f],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Flareon"]],
+                locationId=FRIENDSHIP_ITEMS["Flareon"]
+            ),
+        ],
+),
+    FRIENDSHIP_ITEMS["Meditite"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375CB0, memory_range=MemoryRange.BYTE, value=0x80),
+),
+    FRIENDSHIP_ITEMS["Infernape"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375aa8, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375aa8, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=magma_zone_stage_id,
+                pokemon_ids=[0x00000012],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Infernape"]],
+                locationId=FRIENDSHIP_ITEMS["Infernape"]
+            ),
+        ],
+),
+    FRIENDSHIP_ITEMS["Farfetch'd"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x803759cc, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x803759cc, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=magma_zone_stage_id,
+                pokemon_ids=[0x00000015],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Farfetch'd"]],
+                locationId=FRIENDSHIP_ITEMS["Farfetch'd"]
+            ),
+        ],
+),
+    FRIENDSHIP_ITEMS["Magcargo"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375FF8, memory_range=MemoryRange.BYTE, value=0x80),
+),
+    FRIENDSHIP_ITEMS["Charmander"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375D28, memory_range=MemoryRange.BYTE, value=0x80),
+),
+    FRIENDSHIP_ITEMS["Ponyta"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375418, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375418, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=magma_zone_stage_id,
+                pokemon_ids=[0x0000001a],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Ponyta"]],
+                locationId=FRIENDSHIP_ITEMS["Ponyta"]
+            ),
+        ],
+),
+    FRIENDSHIP_ITEMS["Torkoal"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x8037597c, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x8037597c, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=magma_zone_stage_id,
+                pokemon_ids=[0x00000023, 0x00000028,0x00000025, 0x00000022, 0x00000027,0x00000024,0x00000026,0x00000005],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Torkoal"]],
+                locationId=FRIENDSHIP_ITEMS["Torkoal"]
+            ),
+        ],
+),
+    FRIENDSHIP_ITEMS["Golem"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375fa8, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375fa8, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=magma_zone_stage_id,
+                pokemon_ids=[0x00000013],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Golem"]],
+                locationId=FRIENDSHIP_ITEMS["Golem"]
+            ),
+        ],
+),
+    FRIENDSHIP_ITEMS["Rhyperior"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375ABC, memory_range=MemoryRange.BYTE, value=0x80),
+),
+    FRIENDSHIP_ITEMS["Baltoy"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x803759e0, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x803759e0, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=magma_zone_stage_id,
+                pokemon_ids=[0x00000004],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Baltoy"]],
+                unlock_items_to_block=[UNLOCK_ITEMS["Claydol Unlock"]],
+                locationId=FRIENDSHIP_ITEMS["Baltoy"]
+            ),
+        ],
+),
+    FRIENDSHIP_ITEMS["Claydol"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x803759f4, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x803759f4, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=magma_zone_stage_id,
+                pokemon_ids=[0x00000007],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Claydol"]],
+                locationId=FRIENDSHIP_ITEMS["Claydol"]
+            ),
+        ],
+),
+    FRIENDSHIP_ITEMS["Hitmonchan"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375a44, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375a44, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=magma_zone_stage_id,
+                pokemon_ids=[0x00000010],
+                unlock_items_to_block=[UNLOCK_ITEMS["Hitmonlee Unlock"]],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Hitmonchan"]],
+                locationId=FRIENDSHIP_ITEMS["Hitmonchan"]
+            ),
+        ],
+),
+    FRIENDSHIP_ITEMS["Hitmontop"]: PokemonStateInfo(
+        item=MemoryAddress(base_address=0x80375a58, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375a58, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=magma_zone_stage_id,
+                pokemon_ids=[0x00000016],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Hitmontop"]],
+                locationId=FRIENDSHIP_ITEMS["Hitmontop"]
+            ),
+        ],
+),
 }
 
 prisma_blocked_itemIds = []
@@ -2124,13 +3132,37 @@ PRISMAS = {
         itemId=PRISM_ITEM["Empoleon Prisma"],
         stage_id=empoleon_minigame_stage_id
     ),
+    PRISM_ITEM["Bastiodon Prisma"]: PrismaItem(
+        item=MemoryAddress(base_address=0x80377684, memory_range=MemoryRange.WORD, value=0x00000003),
+        location=MemoryAddress(base_address=0x80377684, memory_range=MemoryRange.BYTE, value=0x03,
+                               offset=0x7fff + 0x0003),
+        locationId=PRISM_ITEM["Bastiodon Prisma"],
+        itemId=PRISM_ITEM["Bastiodon Prisma"],
+        stage_id=bastidon_minigame_stage_id
+    ),
+    PRISM_ITEM["Rhyperior Prisma"]: PrismaItem(
+        item=MemoryAddress(base_address=0x803777C8, memory_range=MemoryRange.WORD, value=0x00000003),
+        location=MemoryAddress(base_address=0x803777C8, memory_range=MemoryRange.BYTE, value=0x03,
+                               offset=0x7fff + 0x0003),
+        locationId=PRISM_ITEM["Rhyperior Prisma"],
+        itemId=PRISM_ITEM["Rhyperior Prisma"],
+        stage_id=rhyperior_minigame_stage_id
+    ),
+    PRISM_ITEM["Blaziken Prisma"]: PrismaItem(
+        item=MemoryAddress(base_address=0x8037790C, memory_range=MemoryRange.WORD, value=0x00000003),
+        location=MemoryAddress(base_address=0x8037790C, memory_range=MemoryRange.BYTE, value=0x03,
+                               offset=0x7fff + 0x0003),
+        locationId=PRISM_ITEM["Blaziken Prisma"],
+        itemId=PRISM_ITEM["Blaziken Prisma"],
+        stage_id=blaziken_minigame_stage_id
+    ),
 }
 
 BLOCKED_UNLOCKS = []
 
-UNLOCKS = {
+UNLOCKS:dict[int,UnlockState] = {
     # Misc
-    UNLOCK_ITEMS["Drifblim Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Drifblim Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376AD0,
             offset=0x10,
@@ -2141,45 +3173,57 @@ UNLOCKS = {
 
     # Meadow Zone Unlocks
     #
-    UNLOCK_ITEMS["Tropius Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Tropius Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad0,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x00400000
         ),
-        location=[MemoryAddress(
-            base_address=0x80376ad0,
-            offset=0x7FFF + 0x0001,
-            memory_range=MemoryRange.BYTE,
-            value=0x40
+        locations=[UnlockLocation(
+            locationId=UNLOCK_ITEMS["Tropius Unlock"],
+            zone_id=meadow_zone_stage_id,
+            location=MemoryAddress(
+                base_address=0x80376ad0,
+                offset=0x7FFF + 0x0001,
+                memory_range=MemoryRange.BYTE,
+                value=0x40
+            ),
         )],
-        locationId=UNLOCK_ITEMS["Tropius Unlock"]
     ),
 
-    UNLOCK_ITEMS["Pachirisu Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Pachirisu Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad0,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x00000008
         ),
-        location=[MemoryAddress(
-            base_address=0x80376ad0,
-            offset=0x7FFF + 0x0003,
-            memory_range=MemoryRange.BYTE,
-            value=0x08
-        ),
-            MemoryAddress(
-                base_address=0x80376ad0,
-                offset=0x7FFF + 0x0002,
-                memory_range=MemoryRange.BYTE,
-                value=0x40
+        locations=[
+            UnlockLocation(
+                locationId=UNLOCK_ITEMS["Pachirisu Unlock"],
+                location=MemoryAddress(
+                    base_address=0x80376ad0,
+                    offset=0x7FFF + 0x0003,
+                    memory_range=MemoryRange.BYTE,
+                    value=0x08
+                ),
+                zone_id=meadow_zone_stage_id
             ),
+            UnlockLocation(
+                locationId=UNLOCK_ITEMS["Pachirisu Unlock"],
+                location=MemoryAddress(
+                        base_address=0x80376ad0,
+                        offset=0x7FFF + 0x0002,
+                        memory_range=MemoryRange.BYTE,
+                        value=0x40
+                    ),
+                zone_id=meadow_zone_stage_id
+            )
         ],
-        locationId=UNLOCK_ITEMS["Pachirisu Unlock"]
+
     ),
-    UNLOCK_ITEMS["Bonsly Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Bonsly Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376Ad0,
             offset=0x10,
@@ -2187,37 +3231,56 @@ UNLOCKS = {
             value=0x00004000
         )
     ),
-    UNLOCK_ITEMS["Sudowoodo Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Sudowoodo Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad8,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x00400000
         ),
-        location=[MemoryAddress(
-            base_address=0x80376ad8,
-            offset=0x7FFF + 0x0001,
-            memory_range=MemoryRange.BYTE,
-            value=0x40
+        locations=[UnlockLocation(
+            locationId=UNLOCK_ITEMS["Sudowoodo Unlock"],
+            location=MemoryAddress(
+                base_address=0x80376ad8,
+                offset=0x7FFF + 0x0001,
+                memory_range=MemoryRange.BYTE,
+                value=0x40
+            ),
+            zone_id=meadow_zone_stage_id
+        ),
+        UnlockLocation(
+            location=MemoryAddress(
+                base_address=0x80376ad8,
+                offset=0x7FFF + 0x0001,
+                memory_range=MemoryRange.BYTE,
+                value=0x40
+            ),
+            locationId=UnlockLocationIds.SUDOWOODO_CAVERN.value,
+            zone_id=cavern_zone_stage_id
         )],
-        locationId=UNLOCK_ITEMS["Sudowoodo Unlock"]
     ),
-    UNLOCK_ITEMS["Lotad Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Lotad Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad0,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x00000100
         ),
-        location=[MemoryAddress(
-            base_address=0x80376ad0,
-            offset=0x7FFF + 0x0002,
-            memory_range=MemoryRange.BYTE,
-            value=0x80
-        )],
-        locationId=UNLOCK_ITEMS["Lotad Unlock"]
+        locations=[
+          UnlockLocation(
+              location=MemoryAddress(
+                  base_address=0x80376ad0,
+                  offset=0x7FFF + 0x0002,
+                  memory_range=MemoryRange.BYTE,
+                  value=0x80
+              ),
+              locationId=UNLOCK_ITEMS["Lotad Unlock"],
+              zone_id=meadow_zone_stage_id
+          )
+        ],
+
     ),
-    UNLOCK_ITEMS["Shinx Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Shinx Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376Ad0,
             offset=0x10,
@@ -2225,195 +3288,242 @@ UNLOCKS = {
             value=0x00008000
         ),
     ),
-    UNLOCK_ITEMS["Scyther Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Scyther Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad0,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x04000000
         ),
-        location=[MemoryAddress(
-            base_address=0x80376ad0,
-            offset=0x7FFF + 0x0000,
-            memory_range=MemoryRange.BYTE,
-            value=0x04
-        )],
-        locationId=UNLOCK_ITEMS["Scyther Unlock"]
+        locations=[
+            UnlockLocation(
+                location=MemoryAddress(
+                    base_address=0x80376ad0,
+                    offset=0x7FFF + 0x0000,
+                    memory_range=MemoryRange.BYTE,
+                    value=0x04
+                ),
+                locationId=UNLOCK_ITEMS["Scyther Unlock"],
+                zone_id=meadow_zone_stage_id
+            )
+        ],
     ),
-    UNLOCK_ITEMS["Caterpie Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Caterpie Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad0,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x00000200
         ),
-        location=[MemoryAddress(
-            base_address=0x80376ad0,
-            offset=0x7FFF + 0x0002,
-            memory_range=MemoryRange.BYTE,
-            value=0x02
-        )],
-        locationId=UNLOCK_ITEMS["Caterpie Unlock"],
-        is_blocked_until_location=True,
-        blocked_zone=meadow_zone_stage_id
+        locations=[
+            UnlockLocation(
+                location=MemoryAddress(
+                    base_address=0x80376ad0,
+                    offset=0x7FFF + 0x0002,
+                    memory_range=MemoryRange.BYTE,
+                    value=0x02
+                ),
+                locationId=UNLOCK_ITEMS["Caterpie Unlock"],
+                is_blocked_until_location=True,
+                zone_id=meadow_zone_stage_id
+            )
+        ],
     ),
-    UNLOCK_ITEMS["Butterfree Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Butterfree Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad0,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x00200000
         ),
-        location=[MemoryAddress(
-            base_address=0x80376ad0,
-            offset=0x7FFF + 0x0001,
-            memory_range=MemoryRange.BYTE,
-            value=0x20
-        )],
-        locationId=UNLOCK_ITEMS["Butterfree Unlock"]
+        locations=[
+          UnlockLocation(
+              location=MemoryAddress(
+                  base_address=0x80376ad0,
+                  offset=0x7FFF + 0x0001,
+                  memory_range=MemoryRange.BYTE,
+                  value=0x20
+              ),
+              locationId=UNLOCK_ITEMS["Butterfree Unlock"],
+              zone_id=meadow_zone_stage_id
+          )
+        ],
     ),
-    UNLOCK_ITEMS["Chimchar Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Chimchar Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad0,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x00000040
         ),
-        location=[MemoryAddress(
-            base_address=0x80376ad0,
-            offset=0x7FFF + 0x0003,
-            memory_range=MemoryRange.BYTE,
-            value=0x40
-        )],
-        locationId=UNLOCK_ITEMS["Chimchar Unlock"]
+        locations=[
+          UnlockLocation(
+              location=MemoryAddress(
+                  base_address=0x80376ad0,
+                  offset=0x7FFF + 0x0003,
+                  memory_range=MemoryRange.BYTE,
+                  value=0x40
+              ),
+              locationId=UNLOCK_ITEMS["Chimchar Unlock"],
+              zone_id=meadow_zone_stage_id
+          )
+        ],
+
     ),
-    UNLOCK_ITEMS["Ambipom Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Ambipom Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad0,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x01000000
         ),
-        location=[MemoryAddress(
-            base_address=0x80376ad0,
-            offset=0x7FFF + 0x0000,
-            memory_range=MemoryRange.BYTE,
-            value=0x01
+        locations=[UnlockLocation(
+            location=MemoryAddress(
+                base_address=0x80376ad0,
+                offset=0x7FFF + 0x0000,
+                memory_range=MemoryRange.BYTE,
+                value=0x01
+            ),
+            locationId=UNLOCK_ITEMS["Ambipom Unlock"],
+            zone_id=meadow_zone_stage_id
         )],
-        locationId=UNLOCK_ITEMS["Ambipom Unlock"]
     ),
-    UNLOCK_ITEMS["Weedle Unlock"]: UnlockItem(
+
+    UNLOCK_ITEMS["Weedle Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad0,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x00000400
         ),
-        location=[MemoryAddress(
-            base_address=0x80376ad0,
-            offset=0x7FFF + 0x0002,
-            memory_range=MemoryRange.BYTE,
-            value=0x04
+        locations=[UnlockLocation(
+            location=MemoryAddress(
+                base_address=0x80376ad0,
+                offset=0x7FFF + 0x0002,
+                memory_range=MemoryRange.BYTE,
+                value=0x04
+            ),
+            locationId=UNLOCK_ITEMS["Weedle Unlock"],
+            is_blocked_until_location=True,
+            zone_id=meadow_zone_stage_id
         )],
-        locationId=UNLOCK_ITEMS["Weedle Unlock"],
-        is_blocked_until_location=True,
-        blocked_zone=meadow_zone_stage_id
     ),
-    UNLOCK_ITEMS["Shroomish Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Shroomish Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad0,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x00002000
         ),
-        location=[MemoryAddress(
-            base_address=0x80376ad0,
-            offset=0x7FFF + 0x0002,
-            memory_range=MemoryRange.BYTE,
-            value=0x20
+        locations=[UnlockLocation(
+            location=MemoryAddress(
+                base_address=0x80376ad0,
+                offset=0x7FFF + 0x0002,
+                memory_range=MemoryRange.BYTE,
+                value=0x20
+            ),
+            locationId=UNLOCK_ITEMS["Shroomish Unlock"],
+            is_blocked_until_location=True,
+            zone_id=meadow_zone_stage_id
         )],
-        locationId=UNLOCK_ITEMS["Shroomish Unlock"],
-        is_blocked_until_location=True,
-        blocked_zone=meadow_zone_stage_id
+
     ),
-    UNLOCK_ITEMS["Magikarp Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Magikarp Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad0,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x00000080
         ),
-        location=[MemoryAddress(
-            base_address=0x80376ad0,
-            offset=0x7FFF + 0x0003,
-            memory_range=MemoryRange.BYTE,
-            value=0x80
-        )],
-        locationId=UNLOCK_ITEMS["Magikarp Unlock"],
-        is_blocked_until_location=True,
-        blocked_zone=meadow_zone_stage_id
+        locations=[
+          UnlockLocation(
+              location=MemoryAddress(
+                  base_address=0x80376ad0,
+                  offset=0x7FFF + 0x0003,
+                  memory_range=MemoryRange.BYTE,
+                  value=0x80
+              ),
+              locationId=UNLOCK_ITEMS["Magikarp Unlock"],
+              is_blocked_until_location=True,
+              zone_id=meadow_zone_stage_id
+          )
+        ],
     ),
-    UNLOCK_ITEMS["Bidoof Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Bidoof Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad0,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x80000000
         ),
-        location=[MemoryAddress(
-            base_address=0x80376ad0,
-            offset=0x7FFF + 0x0000,
-            memory_range=MemoryRange.BYTE,
-            value=0x80
+        locations=[UnlockLocation(
+            location=MemoryAddress(
+                base_address=0x80376ad0,
+                offset=0x7FFF + 0x0000,
+                memory_range=MemoryRange.BYTE,
+                value=0x80
+            ),
+            locationId=UNLOCK_ITEMS["Bidoof Unlock"],
+            zone_id=meadow_zone_stage_id
         )],
-        locationId=UNLOCK_ITEMS["Bidoof Unlock"]
     ),
-    UNLOCK_ITEMS["Bidoof Unlock 2"]: UnlockItem(
+    UNLOCK_ITEMS["Bidoof Unlock 2"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad4,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x00000001
         ),
-        location=[MemoryAddress(
-            base_address=0x80376ad4,
-            offset=0x7FFF + 0x0003,
-            memory_range=MemoryRange.BYTE,
-            value=0x01
+        locations=[UnlockLocation(
+            location=MemoryAddress(
+                base_address=0x80376ad4,
+                offset=0x7FFF + 0x0003,
+                memory_range=MemoryRange.BYTE,
+                value=0x01
+            ),
+            locationId=UNLOCK_ITEMS["Bidoof Unlock 2"],
+            zone_id=meadow_zone_stage_id
         )],
-        locationId=UNLOCK_ITEMS["Bidoof Unlock 2"]
+
     ),
-    UNLOCK_ITEMS["Bidoof Unlock 3"]: UnlockItem(
+    UNLOCK_ITEMS["Bidoof Unlock 3"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad4,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x00000002
         ),
-        location=[MemoryAddress(
-            base_address=0x80376ad4,
-            offset=0x7FFF + 0x0003,
-            memory_range=MemoryRange.BYTE,
-            value=0x02
+        locations=[UnlockLocation(
+            location=MemoryAddress(
+                base_address=0x80376ad4,
+                offset=0x7FFF + 0x0003,
+                memory_range=MemoryRange.BYTE,
+                value=0x02
+            ),
+            locationId=UNLOCK_ITEMS["Bidoof Unlock 3"],
+            zone_id=meadow_zone_stage_id
         )],
-        locationId=UNLOCK_ITEMS["Bidoof Unlock 3"]
+
     ),
-    UNLOCK_ITEMS["Bibarel Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Bibarel Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad0,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x00800000
         ),
-        location=[MemoryAddress(
-            base_address=0x80376ad0,
-            offset=0x7FFF + 0x0001,
-            memory_range=MemoryRange.BYTE,
-            value=0x80
+        locations=[UnlockLocation(
+            location=MemoryAddress(
+                base_address=0x80376ad0,
+                offset=0x7FFF + 0x0001,
+                memory_range=MemoryRange.BYTE,
+                value=0x80
+            ),
+            locationId=UNLOCK_ITEMS["Bibarel Unlock"],
+            zone_id=meadow_zone_stage_id
         )],
-        locationId=UNLOCK_ITEMS["Bibarel Unlock"]
     ),
-    UNLOCK_ITEMS["Starly Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Starly Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad0,
             offset=0x10,
@@ -2421,7 +3531,7 @@ UNLOCKS = {
             value=0x00100000
         )
     ),
-    UNLOCK_ITEMS["Starly Unlock 2"]: UnlockItem(
+    UNLOCK_ITEMS["Starly Unlock 2"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad4,
             offset=0x10,
@@ -2429,130 +3539,150 @@ UNLOCKS = {
             value=0x00000010
         )
     ),
-    UNLOCK_ITEMS["Torterra Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Torterra Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad0,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x00080000
         ),
-
     ),
 
     # Beach Zone Unlock
     #
-    UNLOCK_ITEMS["Floatzel Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Floatzel Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad4,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x02000000
         ),
-        location=[MemoryAddress(
-            base_address=0x80376ad4,
-            offset=0x7FFF + 0x0000,
-            memory_range=MemoryRange.BYTE,
-            value=0x02
+        locations=[UnlockLocation(
+            location=MemoryAddress(
+                base_address=0x80376ad4,
+                offset=0x7FFF + 0x0000,
+                memory_range=MemoryRange.BYTE,
+                value=0x02
+            ),
+            locationId=UNLOCK_ITEMS["Floatzel Unlock"],
+            zone_id=beach_zone_stage_id
         )],
-        locationId=UNLOCK_ITEMS["Floatzel Unlock"]
     ),
-    UNLOCK_ITEMS["Golduck Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Golduck Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad4,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x01000000
         ),
-        location=[MemoryAddress(
-            base_address=0x80376ad4,
-            offset=0x7FFF + 0x0000,
-            memory_range=MemoryRange.BYTE,
-            value=0x01
+        locations=[UnlockLocation(
+            location=MemoryAddress(
+                base_address=0x80376ad4,
+                offset=0x7FFF + 0x0000,
+                memory_range=MemoryRange.BYTE,
+                value=0x01
+            ),
+            locationId=UNLOCK_ITEMS["Golduck Unlock"],
+            zone_id=beach_zone_stage_id
         )],
-        locationId=UNLOCK_ITEMS["Golduck Unlock"]
+
     ),
-    UNLOCK_ITEMS["Mudkip Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Mudkip Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad4,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x00040000
         ),
-        location=[MemoryAddress(
-            base_address=0x80376ad4,
-            offset=0x7FFF + 0x0001,
-            memory_range=MemoryRange.BYTE,
-            value=0x04
+        locations=[UnlockLocation(
+            location=MemoryAddress(
+                base_address=0x80376ad4,
+                offset=0x7FFF + 0x0001,
+                memory_range=MemoryRange.BYTE,
+                value=0x04
+            ),
+            locationId=UNLOCK_ITEMS["Mudkip Unlock"],
+            zone_id=beach_zone_stage_id
         )],
-        locationId=UNLOCK_ITEMS["Mudkip Unlock"]
     ),
-    UNLOCK_ITEMS["Totodile Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Totodile Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad4,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x00020000
         ),
-        location=[MemoryAddress(
-            base_address=0x80376ad4,
-            offset=0x7FFF + 0x0001,
-            memory_range=MemoryRange.BYTE,
-            value=0x02
+        locations=[UnlockLocation(
+            location=MemoryAddress(
+                base_address=0x80376ad4,
+                offset=0x7FFF + 0x0001,
+                memory_range=MemoryRange.BYTE,
+                value=0x02
+            ),
+            locationId=UNLOCK_ITEMS["Totodile Unlock"],
+            zone_id=beach_zone_stage_id
         )],
-        locationId=UNLOCK_ITEMS["Totodile Unlock"]
+
     ),
-    UNLOCK_ITEMS["Krabby Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Krabby Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad4,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x00010000
         ),
-        location=[MemoryAddress(
-            base_address=0x80376ad4,
-            offset=0x7FFF + 0x0001,
-            memory_range=MemoryRange.BYTE,
-            value=0x01
-        )],
-        locationId=UNLOCK_ITEMS["Krabby Unlock"],
-        is_blocked_until_location=True,
-        blocked_zone=beach_zone_stage_id
+        locations=[
+          UnlockLocation(
+              location=MemoryAddress(
+                  base_address=0x80376ad4,
+                  offset=0x7FFF + 0x0001,
+                  memory_range=MemoryRange.BYTE,
+                  value=0x01
+              ),
+              locationId=UNLOCK_ITEMS["Krabby Unlock"],
+              is_blocked_until_location=True,
+              zone_id=beach_zone_stage_id
+          )
+        ],
+
     ),
-    UNLOCK_ITEMS["Corphish Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Corphish Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad4,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x00080000
         ),
-        location=[MemoryAddress(
-            base_address=0x80376ad4,
-            offset=0x7FFF + 0x0001,
-            memory_range=MemoryRange.BYTE,
-            value=0x08
+        locations=[UnlockLocation(
+            location=MemoryAddress(
+                base_address=0x80376ad4,
+                offset=0x7FFF + 0x0001,
+                memory_range=MemoryRange.BYTE,
+                value=0x08
+            ),
+            locationId=UNLOCK_ITEMS["Corphish Unlock"],
+            is_blocked_until_location=True,
+            zone_id=beach_zone_stage_id
         )],
-        locationId=UNLOCK_ITEMS["Corphish Unlock"],
-        is_blocked_until_location=True,
-        blocked_zone=beach_zone_stage_id
     ),
 
     # Misc
     #
-    UNLOCK_ITEMS["Pikachu Balloon"]: UnlockItem(
+    UNLOCK_ITEMS["Pikachu Balloon"]: UnlockState(
         item=MemoryAddress(
             base_address=0x8037AEC3,
             memory_range=MemoryRange.BYTE,
             value=0x08
         )
     ),
-    UNLOCK_ITEMS["Pikachu Surfboard"]: UnlockItem(
+    UNLOCK_ITEMS["Pikachu Surfboard"]: UnlockState(
         item=MemoryAddress(
             base_address=0x8037AEC3,
             memory_range=MemoryRange.BYTE,
             value=0x01
         )
     ),
-    UNLOCK_ITEMS["Pikachu Snowboard"]: UnlockItem(
+    UNLOCK_ITEMS["Pikachu Snowboard"]: UnlockState(
         item=MemoryAddress(
             base_address=0x8037AEC3,
             memory_range=MemoryRange.BYTE,
@@ -2560,7 +3690,7 @@ UNLOCKS = {
         )
     ),
 
-    UNLOCK_ITEMS["Delibird Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Delibird Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad8,
             offset=0x10,
@@ -2568,7 +3698,7 @@ UNLOCKS = {
             value=0x00000200
         )
     ),
-    UNLOCK_ITEMS["Squirtle Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Squirtle Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad8,
             offset=0x10,
@@ -2576,7 +3706,7 @@ UNLOCKS = {
             value=0x00000800
         )
     ),
-    UNLOCK_ITEMS["Smoochum Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Smoochum Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad8,
             offset=0x10,
@@ -2584,7 +3714,7 @@ UNLOCKS = {
             value=0x00000400
         )
     ),
-    UNLOCK_ITEMS["Sneasel Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Sneasel Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad8,
             offset=0x10,
@@ -2592,7 +3722,7 @@ UNLOCKS = {
             value=0x00000080
         )
     ),
-    UNLOCK_ITEMS["Mamoswine Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Mamoswine Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad8,
             offset=0x10,
@@ -2600,7 +3730,7 @@ UNLOCKS = {
             value=0x00040000
         )
     ),
-    UNLOCK_ITEMS["Glalie Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Glalie Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ae4,
             offset=0x10,
@@ -2608,35 +3738,334 @@ UNLOCKS = {
             value=0x00800000
         )
     ),
-    UNLOCK_ITEMS["Primeape Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Primeape Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad8,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x00002000
         ),
-        location=[MemoryAddress(
-            base_address=0x80376ad8,
-            offset=0x7FFF + 0x0002,
-            memory_range=MemoryRange.BYTE,
-            value=0x20
-        )],
-        locationId=UNLOCK_ITEMS["Primeape Unlock"]
+        locations=[
+            UnlockLocation(
+                location=MemoryAddress(
+                    base_address=0x80376ad8,
+                    offset=0x7FFF + 0x0002,
+                    memory_range=MemoryRange.BYTE,
+                    value=0x20
+                ),
+                locationId=UNLOCK_ITEMS["Primeape Unlock"],
+                zone_id=ice_zone_stage_id
+            )
+        ],
+
     ),
-    UNLOCK_ITEMS["Ursaring Unlock"]: UnlockItem(
+    UNLOCK_ITEMS["Ursaring Unlock"]: UnlockState(
         item=MemoryAddress(
             base_address=0x80376ad8,
             offset=0x10,
             memory_range=MemoryRange.WORD,
             value=0x00004000
         ),
-        location=[MemoryAddress(
+        locations=[
+            UnlockLocation(
+                location=MemoryAddress(
+                    base_address=0x80376ad8,
+                    offset=0x7FFF + 0x0002,
+                    memory_range=MemoryRange.BYTE,
+                    value=0x40
+                ),
+                locationId=UNLOCK_ITEMS["Ursaring Unlock"],
+                zone_id=ice_zone_stage_id
+            )
+        ],
+
+    ),
+
+    # Cavern Zone
+    #
+    #
+    UNLOCK_ITEMS["Magnemite Unlock"]: UnlockState(
+        item=MemoryAddress(
             base_address=0x80376ad8,
-            offset=0x7FFF + 0x0002,
-            memory_range=MemoryRange.BYTE,
-            value=0x40
-        )],
-        locationId=UNLOCK_ITEMS["Ursaring Unlock"]
+            offset=0x10,
+            memory_range=MemoryRange.WORD,
+            value=0x00800000
+        ),
+        locations=[
+            UnlockLocation(
+                location=MemoryAddress(
+                    base_address=0x80376ad8,
+                    offset=0x7FFF + 0x0001,
+                    memory_range=MemoryRange.BYTE,
+                    value=0x80
+                ),
+                locationId=UNLOCK_ITEMS["Magnemite Unlock"],
+                is_blocked_until_location=True,
+                zone_id=cavern_zone_stage_id
+            ),
+
+        ]
+
+    ),
+    UNLOCK_ITEMS["Magnemite Unlock 2"]: UnlockState(
+        item=MemoryAddress(
+            base_address=0x80376ae4,
+            offset=0x10,
+            memory_range=MemoryRange.WORD,
+            value=0x00000080
+        ),
+        locations=[
+            UnlockLocation(
+                location=MemoryAddress(
+                    base_address=0x80376ae4,
+                    offset=0x7FFF + 0x0003,
+                    memory_range=MemoryRange.BYTE,
+                    value=0x80
+                ),
+                locationId=UNLOCK_ITEMS["Magnemite Unlock 2"],
+                is_blocked_until_location=True,
+                zone_id=cavern_zone_stage_id
+            ),
+
+        ]
+
+    ),
+    UNLOCK_ITEMS["Magnemite Unlock 3"]: UnlockState(
+        item=MemoryAddress(
+            base_address=0x80376ae4,
+            offset=0x10,
+            memory_range=MemoryRange.WORD,
+            value=0x00000100
+        ),
+        locations=[
+            UnlockLocation(
+                location=MemoryAddress(
+                    base_address=0x80376ae4,
+                    offset=0x7FFF + 0x0002,
+                    memory_range=MemoryRange.BYTE,
+                    value=0x01
+                ),
+                locationId=UNLOCK_ITEMS["Magnemite Unlock 3"],
+                is_blocked_until_location=True,
+                zone_id=cavern_zone_stage_id
+            ),
+
+        ]
+
+    ),
+    UNLOCK_ITEMS["Magnezone Unlock"]: UnlockState(
+        item=MemoryAddress(
+            base_address=0x80376adc,
+            offset=0x10,
+            memory_range=MemoryRange.WORD,
+            value=0x00000040
+        )
+
+    ),
+    UNLOCK_ITEMS["Diglett Unlock"]: UnlockState(
+        item=MemoryAddress(
+            base_address=0x80376ae0,
+            offset=0x10,
+            memory_range=MemoryRange.WORD,
+            value=0x02000000
+        ),
+        locations=[
+            UnlockLocation(
+                location=MemoryAddress(
+                    base_address=0x80376ae0,
+                    offset=0x7FFF,
+                    memory_range=MemoryRange.BYTE,
+                    value=0x02
+                ),
+                locationId=UNLOCK_ITEMS["Diglett Unlock"],
+                is_blocked_until_location=True,
+                zone_id=cavern_zone_stage_id
+            ),
+
+        ]
+
+    ),
+    UNLOCK_ITEMS["Machamp Unlock"]: UnlockState(
+        item=MemoryAddress(
+            base_address=0x80376ae0,
+            offset=0x10,
+            memory_range=MemoryRange.WORD,
+            value=0x01000000
+        ),
+        locations=[UnlockLocation(
+            location=MemoryAddress(
+                base_address=0x80376ae0,
+                offset=0x7FFF + 0x0000,
+                memory_range=MemoryRange.BYTE,
+                value=0x10
+            ),
+            locationId=UNLOCK_ITEMS["Machamp Unlock"],
+            zone_id=cavern_zone_stage_id
+        )]
+
+    ),
+    UNLOCK_ITEMS["Phanpy Unlock"]: UnlockState(
+        item=MemoryAddress(
+            base_address=0x80376ad8,
+            offset=0x10,
+            memory_range=MemoryRange.WORD,
+            value=0x01000000
+        )
+
+    ),
+    UNLOCK_ITEMS["Raichu Unlock"]: UnlockState(
+        item=MemoryAddress(
+            base_address=0x80376ad8,
+            offset=0x10,
+            memory_range=MemoryRange.WORD,
+            value=0x40000000
+        )
+
+    ),
+
+    # Magma Zone
+    #
+    #
+    UNLOCK_ITEMS["Infernape Unlock"]: UnlockState(
+        item=MemoryAddress(
+            base_address=0x80376adc,
+            offset=0x10,
+            memory_range=MemoryRange.WORD,
+            value=0x00000400
+        ),
+        locations=[UnlockLocation(
+            location=MemoryAddress(
+                base_address=0x80376adc,
+                offset=0x7FFF + 0x0002,
+                memory_range=MemoryRange.BYTE,
+                value=0x04
+            ),
+            locationId=UNLOCK_ITEMS["Infernape Unlock"],
+            zone_id=magma_zone_stage_id
+        )]
+
+    ),
+    UNLOCK_ITEMS["Ninetales Unlock"]: UnlockState(
+        item=MemoryAddress(
+            base_address=0x80376adc,
+            offset=0x10,
+            memory_range=MemoryRange.WORD,
+            value=0x00100000
+        ),
+        locations=[UnlockLocation(
+            location=MemoryAddress(
+                base_address=0x80376adc,
+                offset=0x7FFF + 0x0001,
+                memory_range=MemoryRange.BYTE,
+                value=0x10
+            ),
+            locationId=UNLOCK_ITEMS["Ninetales Unlock"],
+            zone_id=magma_zone_stage_id
+        )]
+
+    ),
+    UNLOCK_ITEMS["Ponyta Unlock"]: UnlockState(
+        item=MemoryAddress(
+            base_address=0x80376ad0,
+            offset=0x10,
+            memory_range=MemoryRange.WORD,
+            value=0x02000000
+        ),
+
+    ),
+    UNLOCK_ITEMS["Torkoal Unlock"]: UnlockState(
+        item=MemoryAddress(
+            base_address=0x80376adc,
+            offset=0x10,
+            memory_range=MemoryRange.WORD,
+            value=0x00000004
+        ),
+
+    ),
+    UNLOCK_ITEMS["Golem Unlock"]: UnlockState(
+        item=MemoryAddress(
+            base_address=0x80376adc,
+            offset=0x10,
+            memory_range=MemoryRange.WORD,
+            value=0x00000800
+        ),
+
+    ),
+    UNLOCK_ITEMS["Baltoy Unlock"]: UnlockState(
+        item=MemoryAddress(
+            base_address=0x80376ae0,
+            offset=0x10,
+            memory_range=MemoryRange.WORD,
+            value=0x10000000
+        ),
+        locations=[
+            UnlockLocation(
+                location=MemoryAddress(
+                    base_address=0x80376ae0,
+                    offset=0x7FFF,
+                    memory_range=MemoryRange.BYTE,
+                    value=0x10
+                ),
+                locationId=UNLOCK_ITEMS["Baltoy Unlock"],
+                is_blocked_until_location=True,
+                zone_id=magma_zone_stage_id
+            ),
+
+        ]
+
+    ),
+    UNLOCK_ITEMS["Claydol Unlock"]: UnlockState(
+        item=MemoryAddress(
+            base_address=0x80376adc,
+            offset=0x10,
+            memory_range=MemoryRange.WORD,
+            value=0x00000010
+        ),
+        locations=[
+            UnlockLocation(
+                location=MemoryAddress(
+                    base_address=0x80376adc,
+                    offset=0x7FFF + 0x0003,
+                    memory_range=MemoryRange.BYTE,
+                    value=0x10
+                ),
+                locationId=UNLOCK_ITEMS["Claydol Unlock"],
+                zone_id=magma_zone_stage_id
+            ),
+
+        ]
+
+    ),
+    UNLOCK_ITEMS["Hitmonchan Unlock"]: UnlockState(
+        item=MemoryAddress(
+            base_address=0x80376adc,
+            offset=0x10,
+            memory_range=MemoryRange.WORD,
+            value=0x00000100
+        ),
+
+    ),
+    UNLOCK_ITEMS["Hitmonlee Unlock"]: UnlockState(
+        item=MemoryAddress(
+            base_address=0x80376ad8,
+            offset=0x10,
+            memory_range=MemoryRange.WORD,
+            value=0x80000000
+        ),
+        locations=[
+            UnlockLocation(
+                location=MemoryAddress(
+                    base_address=0x80376ad8,
+                    offset=0x7FFF + 0x0000,
+                    memory_range=MemoryRange.BYTE,
+                    value=0x80
+                ),
+                locationId=UNLOCK_ITEMS["Hitmonlee Unlock"],
+                zone_id=magma_zone_stage_id
+            ),
+
+        ]
+
     ),
 }
 

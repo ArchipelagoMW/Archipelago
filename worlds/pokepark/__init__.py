@@ -120,7 +120,7 @@ class PokeparkWorld(World):
 
     def _handle_starting_zones(self, pool):
         """Manages starting zones based on selected options."""
-        all_zones = ["Meadow Zone Unlock", "Beach Zone Unlock", "Ice Zone Unlock"]
+        all_zones = ["Meadow Zone Unlock", "Beach Zone Unlock", "Ice Zone Unlock", "Cavern Zone & Magma Zone Unlock"]
 
         if self.options.starting_zone == self.options.starting_zone.option_one:
             # Randomly select one starting zone

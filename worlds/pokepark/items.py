@@ -86,8 +86,59 @@ FRIENDSHIP_ITEMS: dict[str, int] = {
     "Mamoswine":73,
     "Kirlia":74,
     "Quagsire":75,
-    "Empoleon":76
+    "Empoleon":76,
 
+    # Cavern Zone
+    "Magnemite":77,
+    "Geodude": 78,
+    "Torchic":79,
+    "Machamp":80,
+    "Meowth":81,
+    "Zubat":82,
+    "Cranidos":83,
+    "Scizor":84,
+    "Mawile":85,
+    "Marowak":86,
+    "Mr. Mime":87,
+    "Aron":88,
+    "Dugtrio":89,
+    "Gible":90,
+    "Magnezone": 91,
+    "Diglett": 92,
+    "Phanpy":93,
+    "Raichu":94,
+    "Golbat":95,
+    "Bastiodon":96,
+
+    # Magma Zone
+    "Camerupt": 97,
+    "Magby": 98,
+    "Vulpix":99,
+    "Ninetales": 100,
+    "Quilava": 101,
+    "Flareon": 102,
+    "Meditite" : 103,
+    "Infernape": 104,
+    "Farfetch'd": 105,
+    "Magcargo": 106,
+    "Charmander": 107,
+    "Ponyta": 108,
+    "Torkoal": 109,
+    "Golem": 110,
+    "Rhyperior": 111,
+    "Baltoy": 112,
+    "Claydol": 113,
+    "Hitmonchan": 114,
+    "Hitmontop": 115,
+
+    # Meadow Zone
+    "Venusaur": 116,
+
+    # Treehouse
+    "Mime Jr.": 117,
+
+    # Cavern Zone
+    "Hitmonlee": 118
 }
 
 UNLOCK_ITEMS: dict[str,int] = {
@@ -135,8 +186,28 @@ UNLOCK_ITEMS: dict[str,int] = {
     "Mamoswine Unlock": 36000,
     "Glalie Unlock": 37000,
     "Primeape Unlock": 38000,
-    "Ursaring Unlock":39000
+    "Ursaring Unlock":39000,
 
+    # Cavern Zone
+    "Magnemite Unlock": 40000,
+    "Machamp Unlock": 41000,
+    "Magnemite Unlock 2": 42000,
+    "Diglett Unlock": 43000,
+    "Magnemite Unlock 3": 44000,
+    "Magnezone Unlock": 45000,
+    "Phanpy Unlock": 46000,
+    "Raichu Unlock": 47000,
+
+    # Magma Zone
+    "Infernape Unlock": 48000,
+    "Ninetales Unlock": 49000,
+    "Ponyta Unlock": 50000,
+    "Torkoal Unlock": 51000,
+    "Golem Unlock": 52000,
+    "Baltoy Unlock": 53000,
+    "Claydol Unlock": 54000,
+    "Hitmonchan Unlock": 55000,
+    "Hitmonlee Unlock": 56000
 }
 
 BERRIES: dict[str,int] = {
@@ -151,8 +222,10 @@ PRISM_ITEM: dict[str,int] = {
     "Venusaur Prisma": 2000000,
     "Pelipper Prisma": 3000000,
     "Gyarados Prisma": 4000000,
-    "Empoleon Prisma": 5000000
-
+    "Empoleon Prisma": 5000000,
+    "Bastiodon Prisma": 6000000,
+    "Rhyperior Prisma": 7000000,
+    "Blaziken Prisma": 8000000,
 }
 
 POWERS: dict[str,int] = {
@@ -163,6 +236,7 @@ POWERS: dict[str,int] = {
 }
 
 REGION_UNLOCK: dict[str,int] = {
+    "Cavern Zone & Magma Zone Unlock": 66666,
     "Meadow Zone Unlock": 77777,
     "Beach Zone Unlock": 99999,
     "Ice Zone Unlock": 88888

@@ -42,13 +42,13 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
 
     def test_bonsly(self) -> None:
         """Test locations and minigames that require Bonsly"""
-        locations = ["Meadow Zone - Bulbasaur's Daring Dash Minigame - Bonsly"]
+        locations = ["Meadow Zone - Bulbasaur's Daring Dash Minigame - Bonsly", "Magma Zone - Rhyperior's Bumper Burn - Bonsly"]
         items = [["Bonsly"]]
         self.assertAccessDependency(locations, items)
 
     def test_sudowoodo(self) -> None:
         """Test locations and minigames that require Sudowoodo"""
-        locations = []
+        locations = ["Cavern Zone - Bastiodon's Panel Crush - Sudowoodo"]
         items = [["Sudowoodo"]]
         self.assertAccessDependency(locations, items)
 
@@ -83,7 +83,7 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
             # "Blaziken",
             "Chimchar",
             "Croagunk",
-            # "Infernape",
+            "Infernape",
             # "Lucario",
             "Magikarp",
             "Mankey",
@@ -109,7 +109,7 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
             # "Blaziken",
             "Chimchar",
             "Croagunk",
-            # "Infernape",
+            "Infernape",
             # "Lucario",
             "Magikarp",
             "Mankey",
@@ -162,7 +162,8 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
     def test_chimchar(self) -> None:
         """Test locations and minigames that require Chimchar"""
         locations = ["Meadow Zone - Bulbasaur's Daring Dash Minigame - Chimchar",
-                     "Meadow Zone - Venusaur's Vine Swing - Chimchar"]
+                     "Meadow Zone - Venusaur's Vine Swing - Chimchar",
+                     "Cavern Zone - Bastiodon's Panel Crush - Chimchar"]
         items = [["Chimchar"]]
         self.assertAccessDependency(locations, items)
 
@@ -224,9 +225,16 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
 
     def test_torterra(self) -> None:
         """Test locations and minigames that require Torterra"""
-        locations = []
+        locations = ["Magma Zone - Rhyperior's Bumper Burn - Torterra"]
         items = [["Torterra"]]
         self.assertAccessDependency(locations, items)
+
+    def test_venusaur(self) -> None:
+        """Test locations and minigames that require Venusaur"""
+        locations = ["Magma Zone - Rhyperior's Bumper Burn - Venusaur"]
+        items = [["Venusaur"]]
+        self.assertAccessDependency(locations, items)
+
 
     def test_starly(self) -> None:
         """Test locations and minigames that require Starly"""
@@ -389,6 +397,13 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
         locations = []
         items = [["Burmy"]]
         self.assertAccessDependency(locations, items)
+
+    def test_mimejr(self) -> None:
+        """Test locations and minigames that require Mime Jr."""
+        locations = []
+        items = [["Mime Jr."]]
+        self.assertAccessDependency(locations, items)
+
     def test_drifblim(self) -> None:
         """Test locations and minigames that require Drifblim"""
         locations = []
@@ -484,7 +499,7 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
 
     def test_ursaring(self) -> None:
         """Test locations and minigames that require Ursaring"""
-        locations = []
+        locations = ["Cavern Zone - Bastiodon's Panel Crush - Ursaring"]
         items = [["Ursaring"]]
         self.assertAccessDependency(locations, items)
     def test_mamoswine(self) -> None:
@@ -507,6 +522,246 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
         """Test locations and minigames that require Empoleon"""
         locations = ["Beach Zone - Gyarados' Aqua Dash - Empoleon", "Ice Zone - Empoleon's Snow Slide - Empoleon"]
         items = [["Empoleon"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_magnemite(self) -> None:
+        """Test locations and minigames that require Magnemite"""
+        locations = ["Magma Zone - Rhyperior's Bumper Burn - Magnemite"]
+        items = [["Magnemite"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_geodude(self) -> None:
+        """Test locations and minigames that require Geodude"""
+        locations = ["Magma Zone - Blaziken's Boulder Bash - Geodude"]
+        items = [["Geodude"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_torchic(self) -> None:
+        """Test locations and minigames that require Torchic"""
+        locations = ["Cavern Zone - Bastiodon's Panel Crush - Torchic"]
+        items = [["Torchic"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_machamp(self) -> None:
+        """Test locations and minigames that require Machamp"""
+        locations = ["Magma Zone - Blaziken's Boulder Bash - Machamp"]
+        items = [["Machamp"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_meowth(self) -> None:
+        """Test locations and minigames that require Meowth"""
+        locations = ["Cavern Zone - Bastiodon's Panel Crush - Meowth"]
+        items = [["Meowth"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_zubat(self) -> None:
+        """Test locations and minigames that require Zubat"""
+        locations = []
+        items = [["Zubat"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_cranidos(self) -> None:
+        """Test locations and minigames that require Cranidos"""
+        locations = ["Magma Zone - Blaziken's Boulder Bash - Cranidos"]
+        items = [["Cranidos"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_scizor(self) -> None:
+        """Test locations and minigames that require Scizor"""
+        locations = ["Magma Zone - Blaziken's Boulder Bash - Scizor"]
+        items = [["Scizor"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_mawile(self) -> None:
+        """Test locations and minigames that require Mawile"""
+        locations = ["Magma Zone - Blaziken's Boulder Bash - Mawile"]
+        items = [["Mawile"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_marowak(self) -> None:
+        """Test locations and minigames that require Marowak"""
+        locations = ["Magma Zone - Blaziken's Boulder Bash - Marowak"]
+        items = [["Marowak"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_mrmime(self) -> None:
+        """Test locations and minigames that require Mr. Mime"""
+        locations = ["Cavern Zone - Bastiodon's Panel Crush - Mr. Mime"]
+        items = [["Mr. Mime"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_aron(self) -> None:
+        """Test locations and minigames that require Aron"""
+        locations = []
+        items = [["Aron"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_dugtrio(self) -> None:
+        """Test locations and minigames that require Dugtrio"""
+        locations = []
+        items = [["Dugtrio"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_gible(self) -> None:
+        """Test locations and minigames that require Gible"""
+        locations = ["Cavern Zone - Bastiodon's Panel Crush - Gible"]
+        items = [["Gible"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_magnezone(self) -> None:
+        """Test locations and minigames that require Magnezone"""
+        locations = ["Magma Zone - Rhyperior's Bumper Burn - Magnezone"]
+        items = [["Magnezone"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_diglett(self) -> None:
+        """Test locations and minigames that require Diglett"""
+        locations = []
+        items = [["Diglett"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_phanpy(self) -> None:
+        """Test locations and minigames that require Phanpy"""
+        locations = ["Magma Zone - Blaziken's Boulder Bash - Phanpy"]
+        items = [["Phanpy"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_raichu(self) -> None:
+        """Test locations and minigames that require Raichu"""
+        locations = ["Cavern Zone - Bastiodon's Panel Crush - Raichu"]
+        items = [["Raichu"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_golbat(self) -> None:
+        """Test locations and minigames that require Golbat"""
+        locations = []
+        items = [["Golbat"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_bastiodon(self) -> None:
+        """Test locations and minigames that require Bastiodon"""
+        locations = ["Magma Zone - Blaziken's Boulder Bash - Bastiodon"]
+        items = [["Bastiodon"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_hitmonlee(self) -> None:
+        """Test locations and minigames that require Hitmonlee"""
+        locations = ["Cavern Zone - Bastiodon's Panel Crush - Hitmonlee"]
+        items = [["Hitmonlee"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_camerupt(self) -> None:
+        """Test locations and minigames that require Camerupt"""
+        locations = ["Magma Zone - Blaziken's Boulder Bash - Camerupt"]
+        items = [["Camerupt"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_magby(self) -> None:
+        """Test locations and minigames that require Magby"""
+        locations = ["Cavern Zone - Bastiodon's Panel Crush - Magby"]
+        items = [["Magby"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_vulpix(self) -> None:
+        """Test locations and minigames that require Vulpix"""
+        locations = []
+        items = [["Vulpix"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_ninetales(self) -> None:
+        """Test locations and minigames that require Ninetales"""
+        locations = []
+        items = [["Ninetales"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_quilava(self) -> None:
+        """Test locations and minigames that require Quilava"""
+        locations = ["Magma Zone - Rhyperior's Bumper Burn - Quilava"]
+        items = [["Quilava"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_flareon(self) -> None:
+        """Test locations and minigames that require Flareon"""
+        locations = ["Magma Zone - Rhyperior's Bumper Burn - Flareon"]
+        items = [["Flareon"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_meditite(self) -> None:
+        """Test locations and minigames that require Meditite"""
+        locations = []
+        items = [["Meditite"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_infernape(self) -> None:
+        """Test locations and minigames that require Infernape"""
+        locations = ["Meadow Zone - Venusaur's Vine Swing - Infernape"]
+        items = [["Infernape"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_farfetchd(self) -> None:
+        """Test locations and minigames that require Farfetch'd"""
+        locations = ["Magma Zone - Blaziken's Boulder Bash - Farfetch'd"]
+        items = [["Farfetch'd"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_magcargo(self) -> None:
+        """Test locations and minigames that require Magcargo"""
+        locations = []
+        items = [["Magcargo"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_charmander(self) -> None:
+        """Test locations and minigames that require Charmander"""
+        locations = ["Cavern Zone - Bastiodon's Panel Crush - Charmander"]
+        items = [["Charmander"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_ponyta(self) -> None:
+        """Test locations and minigames that require Ponyta"""
+        locations = ["Meadow Zone - Bulbasaur's Daring Dash Minigame - Ponyta"]
+        items = [["Ponyta"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_torkoal(self) -> None:
+        """Test locations and minigames that require Torkoal"""
+        locations = ["Magma Zone - Rhyperior's Bumper Burn - Torkoal"]
+        items = [["Torkoal"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_golem(self) -> None:
+        """Test locations and minigames that require Golem"""
+        locations = []
+        items = [["Golem"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_rhyperior(self) -> None:
+        """Test locations and minigames that require Rhyperior"""
+        locations = ["Magma Zone - Rhyperior's Bumper Burn - Rhyperior"]
+        items = [["Rhyperior"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_baltoy(self) -> None:
+        """Test locations and minigames that require Baltoy"""
+        locations = ["Magma Zone - Rhyperior's Bumper Burn - Baltoy"]
+        items = [["Baltoy"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_claydol(self) -> None:
+        """Test locations and minigames that require Claydol"""
+        locations = ["Magma Zone - Rhyperior's Bumper Burn - Claydol"]
+        items = [["Claydol"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_hitmonchan(self) -> None:
+        """Test locations and minigames that require Hitmonchan"""
+        locations = ["Magma Zone - Blaziken's Boulder Bash - Hitmonchan"]
+        items = [["Hitmonchan"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_hitmontop(self) -> None:
+        """Test locations and minigames that require Hitmontop"""
+        locations = ["Magma Zone - Rhyperior's Bumper Burn - Hitmontop"]
+        items = [["Hitmontop"]]
         self.assertAccessDependency(locations, items)
 
 class TestRegionAccessByFriendship(PokeparkTest):

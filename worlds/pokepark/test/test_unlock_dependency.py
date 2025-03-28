@@ -22,7 +22,7 @@ class TestUnlockDependencies(PokeparkTest):
 
     def test_sudowoodo_unlock(self) -> None:
         """Verify unlock conditions for accessing Sudowoodo in Meadow Zone Overworld"""
-        locations = ["Meadow Zone - Overworld - Sudowoodo"]
+        locations = ["Meadow Zone - Overworld - Sudowoodo", "Cavern Zone - Overworld - Sudowoodo"]
         items = [["Sudowoodo Unlock"]]
         self.assertAccessDependency(locations, items)
 
@@ -235,6 +235,126 @@ class TestUnlockDependencies(PokeparkTest):
         items = [["Ursaring Unlock"]]
         self.assertAccessDependency(locations, items)
 
+    def test_magnemite_unlock(self) -> None:
+        """Verify unlock conditions for accessing Magnemite 1 in Cavern Zone Overworld"""
+
+        locations =["Cavern Zone - Overworld - Magnemite"]
+        items = [["Magnemite Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_magnemite2_unlock(self) -> None:
+        """Verify unlock conditions for accessing Magnemite 2 in Cavern Zone Overworld"""
+
+        locations =["Cavern Zone - Overworld - Magnemite 2"]
+        items = [["Magnemite Unlock 2"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_magnemite3_unlock(self) -> None:
+        """Verify unlock conditions for accessing Magnemite 3 in Cavern Zone Overworld"""
+
+        locations =["Cavern Zone - Overworld - Magnemite 3"]
+        items = [["Magnemite Unlock 3"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_machamp_unlock(self) -> None:
+        """Verify unlock conditions for accessing Battle Machamp in Cavern Zone Overworld"""
+
+        locations =["Cavern Zone - Overworld - Machamp - Battle"]
+        items = [["Machamp Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_diglett_unlock(self) -> None:
+        """Verify that Diglett Unlocks allows no new locations"""
+
+        locations =[]
+        items = [["Diglett Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_magnezone_unlock(self) -> None:
+        """Verify unlock conditions for accessing Magnezone in Cavern Zone Overworld"""
+
+        locations =["Cavern Zone - Overworld - Magnezone"]
+        items = [["Magnezone Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_phanpy_unlock(self) -> None:
+        """Verify unlock conditions for accessing Phanpy in Cavern Zone Overworld"""
+
+        locations =["Cavern Zone - Overworld - Phanpy"]
+        items = [["Phanpy Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_raichu_unlock(self) -> None:
+        """Verify unlock conditions for accessing Raichu in Cavern Zone Overworld"""
+
+        locations =["Cavern Zone - Overworld - Raichu"]
+        items = [["Raichu Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_hitmonlee_unlock(self) -> None:
+        """Verify unlock conditions for accessing Hitmonlee in Cavern Zone Overworld"""
+
+        locations =["Cavern Zone - Overworld - Hitmonlee"]
+        items = [["Hitmonlee Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_infernape_unlock(self) -> None:
+        """Verify unlock conditions for accessing Infernape in Magma Zone Overworld"""
+
+        locations =["Magma Zone - Overworld - Infernape"]
+        items = [["Infernape Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_ninetales_unlock(self) -> None:
+        """Verify unlock conditions for accessing Ninetales in Magma Zone Overworld"""
+
+        locations =["Magma Zone - Overworld - Ninetales"]
+        items = [["Ninetales Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_ponyta_unlock(self) -> None:
+        """Verify unlock conditions for accessing Ponyta in Magma Zone Overworld"""
+
+        locations =["Magma Zone - Overworld - Ponyta"]
+        items = [["Ponyta Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_torkoal_unlock(self) -> None:
+        """Verify unlock conditions for accessing Torkoal in Magma Zone Overworld"""
+
+        locations =["Magma Zone - Overworld - Torkoal"]
+        items = [["Torkoal Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_golem_unlock(self) -> None:
+        """Verify unlock conditions for accessing Golem in Magma Zone Overworld"""
+
+        locations =["Magma Zone - Overworld - Golem"]
+        items = [["Golem Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_baltoy_unlock(self) -> None:
+        """Verify unlock conditions for accessing Baltoy in Magma Zone Overworld"""
+
+        locations =["Magma Zone - Overworld - Baltoy",
+                    "Magma Zone - Overworld - Baltoy Friendship - Pokemon Unlock"]
+        items = [["Baltoy Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_claydol_unlock(self) -> None:
+        """Verify unlock conditions for accessing Claydol in Magma Zone Overworld"""
+
+        locations =["Magma Zone - Overworld - Claydol"]
+        items = [["Claydol Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_hitmonchan_unlock(self) -> None:
+        """Verify unlock conditions for accessing Hitmonchan in Magma Zone Overworld"""
+
+        locations =["Magma Zone - Overworld - Hitmonchan",
+                    "Magma Zone - Overworld - Hitmonchan Friendship - Pokemon Unlock"]
+        items = [["Hitmonchan Unlock"]]
+        self.assertAccessDependency(locations, items)
 
 class TestRegionAccess(PokeparkTest):
     def test_can_reach_beach_zone(self)->None:
@@ -276,9 +396,55 @@ class TestRegionAccess(PokeparkTest):
         self.assertFalse(self.can_reach_region("Ice Zone - Overworld"))
 
     def test_single_locations_reachable_with_ice_zone_unlock(self)->None:
-        """Verify abillity to access Health Power Upgrades"""
+        """Verify abillity to access Iron Tail Power Upgrades with Ice Zone or higher"""
         locations = ["Treehouse - Iron Tail Upgrade 1","Treehouse - Iron Tail Upgrade 2","Treehouse - Iron Tail Upgrade 3"]
-        items = [["Ice Zone Unlock"]]
+        items = [["Ice Zone Unlock"], ["Cavern Zone & Magma Zone Unlock"]]
+        self.assertAccessDependency(locations, items,True)
+
+
+    def test_can_reach_cavern_zone(self)->None:
+        """Verify ability to access Cavern Zone Overworld"""
+
+        self.collect_by_name(["Cavern Zone & Magma Zone Unlock"])
+        self.assertTrue(self.can_reach_region("Cavern Zone - Overworld"))
+
+    def test_can_not_reach_cavern_zone(self)->None:
+        """Verify inability to access Cavern Zone Overworld without unlock"""
+
+        self.assertFalse(self.can_reach_region("Cavern Zone - Overworld"))
+
+    def test_can_not_reach_cavern_zone_with_everything_but_cavern_zone_unlock(self)->None:
+        """Verify inability to access Cavern Zone Overworld without specific unlock"""
+        self.collect_all_but(["Cavern Zone & Magma Zone Unlock"])
+        self.assertFalse(self.can_reach_region("Cavern Zone - Overworld"))
+
+    def test_single_locations_reachable_with_cavern_zone_unlock(self)->None:
+        """Verify abillity to access Mime Jr. with cavern zone and higher"""
+        locations = ["Treehouse - Mime Jr."]
+        items = [["Cavern Zone & Magma Zone Unlock"]]
+        self.assertAccessDependency(locations, items,True)
+
+
+    def test_can_reach_magma_zone(self)->None:
+        """Verify ability to access Magma Zone Overworld"""
+
+        self.collect_by_name(["Cavern Zone & Magma Zone Unlock"])
+        self.assertTrue(self.can_reach_region("Magma Zone - Overworld"))
+
+    def test_can_not_reach_magman_zone(self)->None:
+        """Verify inability to access Magma Zone Overworld without unlock"""
+
+        self.assertFalse(self.can_reach_region("Magma Zone - Overworld"))
+
+    def test_can_not_reach_magma_zone_with_everything_but_magma_zone_unlock(self)->None:
+        """Verify inability to access Magma Zone Overworld without specific unlock"""
+        self.collect_all_but(["Cavern Zone & Magma Zone Unlock"])
+        self.assertFalse(self.can_reach_region("Magma Zone - Overworld"))
+
+    def test_single_locations_reachable_with_magma_zone_unlock(self)->None:
+        """Verify abillity to access Mime Jr. with magma zone and higher"""
+        locations = ["Treehouse - Mime Jr."]
+        items = [["Cavern Zone & Magma Zone Unlock"]]
         self.assertAccessDependency(locations, items,True)
 
     def test_can_reach_meadow_zone(self)->None:

@@ -3,7 +3,8 @@ from typing import Dict, Callable, TYPE_CHECKING
 from BaseClasses import CollectionState, Region, ItemClassification
 from worlds.pokepark import PokeparkItem
 from worlds.pokepark.locations import PokeparkLocation
-from worlds.pokepark.logic import Requirements, PokeparkRegion, REGIONS, PowerRequirement
+from worlds.pokepark.logic import Requirements, PokeparkRegion, REGIONS, PowerRequirement, WorldStateRequirement
+
 if TYPE_CHECKING:
     from . import PokeparkWorld
 
@@ -25,7 +26,29 @@ POWER_REQUIREMENT_CHECKS: Dict[PowerRequirement, Callable] = {
         state.has("Progressive Dash", world.player) or
         state.has("Progressive Iron Tail", world.player)
     ),
-    PowerRequirement.can_farm_berries: lambda state, world: state.has("Progressive Dash",world.player)
+    PowerRequirement.can_farm_berries: lambda state, world: state.has("Progressive Dash",world.player),
+    PowerRequirement.can_play_catch_intermediate: lambda state, world: state.has("Progressive Dash", world.player,count=2),
+}
+WORLD_STATE_REQUIREMENT_CHECKS: Dict[WorldStateRequirement, Callable] = {
+    WorldStateRequirement.none: lambda state, world: True,
+    WorldStateRequirement.meadow_zone_or_higher: lambda state, world: (
+        state.has("Meadow Zone Unlock", world.player) or
+        state.has("Beach Zone Unlock", world.player) or
+        state.has("Ice Zone Unlock", world.player) or
+        state.has("Cavern Zone & Magma Zone Unlock", world.player)
+    ),
+    WorldStateRequirement.beach_zone_or_higher: lambda state, world: (
+            state.has("Beach Zone Unlock", world.player) or
+            state.has("Ice Zone Unlock", world.player) or
+            state.has("Cavern Zone & Magma Zone Unlock", world.player)
+    ),
+    WorldStateRequirement.ice_zone_or_higher: lambda state, world: (
+            state.has("Ice Zone Unlock", world.player) or
+            state.has("Cavern Zone & Magma Zone Unlock", world.player)
+    ),
+    WorldStateRequirement.cavern_and_magma_zone_or_higher: lambda state, world: (
+            state.has("Cavern Zone & Magma Zone Unlock", world.player)
+    ),
 }
 
 def pokepark_requirements_satisfied(state: CollectionState, requirements: Requirements, world: "PokeparkWorld"):
@@ -42,8 +65,9 @@ def pokepark_requirements_satisfied(state: CollectionState, requirements: Requir
     else:
         has_any = True
     has_required_power = POWER_REQUIREMENT_CHECKS[requirements.powers](state, world)
+    has_required_world_state = WORLD_STATE_REQUIREMENT_CHECKS[requirements.world_state](state, world)
 
-    return has_required_unlocks and has_enough_friends and has_required_friends and has_required_prismas and has_any and can_reach_required_locations and has_required_power
+    return has_required_unlocks and has_enough_friends and has_required_friends and has_required_prismas and has_any and can_reach_required_locations and has_required_power and has_required_world_state
 
 
 def create_region(region: PokeparkRegion, world: "PokeparkWorld"):

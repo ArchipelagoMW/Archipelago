@@ -33,3 +33,21 @@ class TestPrismaDependencies(PokeparkTest):
         items = [["Empoleon Prisma"]]
         self.assertAccessDependency(locations, items)
 
+    def test_bastiodon_prisma(self) -> None:
+        """Verify victory conditions for Bastiodon Prisma unlock"""
+        locations = ["Victory"]
+        items = [["Bastiodon Prisma"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_rhyperior_prisma(self) -> None:
+        """Verify victory conditions for Rhyperior Prisma unlock"""
+        locations = ["Victory"]
+        items = [["Rhyperior Prisma"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_blaziken_prisma(self) -> None:
+        """Verify victory conditions for Blaziken Prisma unlock"""
+        locations = ["Victory"]
+        items = [["Blaziken Prisma"]]
+        self.assertAccessDependency(locations, items)
+

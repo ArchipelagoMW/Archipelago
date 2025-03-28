@@ -4,17 +4,17 @@ import traceback
 import dolphin_memory_engine as dme
 
 from CommonClient import logger
-from worlds.pokepark.adresses import  UNLOCKS, \
+from worlds.pokepark.adresses import UNLOCKS, \
     stage_id_address, main_menu_stage_id, main_menu2_stage_id, main_menu3_stage_id, PRISMAS, \
-    POKEMON_STATES, MINIGAME_LOCATIONS, QUEST_LOCATIONS
+    POKEMON_STATES, MINIGAME_LOCATIONS, QUEST_LOCATIONS, pokemon_id_address
 from worlds.pokepark.dme_helper import read_memory, write_memory
 
-delay_seconds = 0.9
+delay_seconds = 0.3
+LAST_KNOWN_POKEMON_ID = 0
 
 
 async def location_watcher(ctx):
-    # Meadow Zone
-    # Beach Zone
+
     minigame_remaining = [
         (loc.location, loc.locationId)
         for loc in MINIGAME_LOCATIONS
@@ -24,23 +24,20 @@ async def location_watcher(ctx):
         for prisma in PRISMAS.values()
         if prisma.location and prisma.locationId
     )
-    quest_remaining = [(quest.location,quest.locationId,quest.check_mask) for quest in QUEST_LOCATIONS]
+    quest_remaining = [(quest.location, quest.locationId, quest.check_mask) for quest in QUEST_LOCATIONS]
     unlock_remaining = [
-        (unlock.location, unlock.locationId)
-        for unlock in UNLOCKS.values()
-        if unlock.location and unlock.locationId
+        location
+        for unlock_state in UNLOCKS.values()
+        for location in unlock_state.locations
     ]
 
-    def check_unlock_locations():
-        for check in unlock_remaining.copy():
-            locations, location_id = check
-
-            for loc in locations:
-                current_value = read_memory(dme,loc)
-                if current_value == loc.value:
-                    ctx.locations_checked.add(location_id)
-                    unlock_remaining.remove(check)
-                    break
+    def check_unlock_locations(stage_id):
+        for location in unlock_remaining.copy():
+            current_value = read_memory(dme, location.location)
+            if current_value == location.location.value and location.zone_id == stage_id:
+                ctx.locations_checked.add(location.locationId)
+                unlock_remaining.remove(location)
+                break
 
     def check_prisma_locations():
         for check in prisma_remaining.copy():
@@ -50,25 +47,33 @@ async def location_watcher(ctx):
                 prisma_remaining.remove(check)
 
     def check_friendship_locations(stage_id):
-        zone_locations = []
+        global LAST_KNOWN_POKEMON_ID
+
+        current_pokemon_id = dme.read_word(pokemon_id_address)
+
+        if current_pokemon_id != 0:
+            LAST_KNOWN_POKEMON_ID = current_pokemon_id
+
+        check_pokemon_id = current_pokemon_id if current_pokemon_id != 0 else LAST_KNOWN_POKEMON_ID
+
         for state in POKEMON_STATES.values():
             if state.locations is not None:
                 for location in state.locations:
-                    if location.zone_id == stage_id and location.location:
-                        zone_locations.append(location)
+                    if (location.zone_id == stage_id and
+                            check_pokemon_id in location.pokemon_ids and
+                            location.location):
 
-        for location in zone_locations:
-            expected_value = location.location.value
-            current_value = read_memory(dme, location.location)
-            if current_value == expected_value:
-                ctx.locations_checked.add(location.locationId)
-                write_memory(dme, location.location, 0x0)
+                        expected_value = location.location.value
+                        current_value = read_memory(dme, location.location)
 
+                        if current_value == expected_value:
+                            ctx.locations_checked.add(location.locationId)
+                            write_memory(dme, location.location, 0x0)
 
     def check_minigame_locations():
         for check in minigame_remaining.copy():
             location, location_id = check
-            current_value = read_memory(dme,location)
+            current_value = read_memory(dme, location)
             if current_value == location.value:
                 ctx.locations_checked.add(location_id)
                 minigame_remaining.remove(check)
@@ -76,8 +81,8 @@ async def location_watcher(ctx):
     def check_quest_locations():
         for check in quest_remaining.copy():
             location, location_id, check_mask = check
-            current_value = read_memory(dme,location)
-            if(current_value & check_mask) == location.value:
+            current_value = read_memory(dme, location)
+            if (current_value & check_mask) == location.value:
                 ctx.locations_checked.add(location_id)
                 quest_remaining.remove(check)
 
@@ -97,7 +102,7 @@ async def location_watcher(ctx):
 
         check_quest_locations()
 
-        check_unlock_locations()
+        check_unlock_locations(stage_id)
 
     while not ctx.exit_event.is_set():
         try:

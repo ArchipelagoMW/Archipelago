@@ -1,5 +1,6 @@
 from . import PokeparkTest
 
+
 class TestFriendCountDependencies(PokeparkTest):
 
     def test_leafeon_friendcount(self) -> None:
@@ -8,7 +9,7 @@ class TestFriendCountDependencies(PokeparkTest):
             "Oddish", "Totodile", "Corsola", "Bidoof", "Wingull",
             "Chimchar", "Mudkip", "Leafeon", "Tropius", "Staravia",
             "Buneary", "Slowpoke", "Caterpie", "Azurill", "Pachirisu",
-            "Ambipom", "Psyduck", "Butterfree", "Shroomish", "Buizel","Chikorita"
+            "Ambipom", "Psyduck", "Butterfree", "Shroomish", "Buizel", "Chikorita"
         ]
         self.collect_by_name(pokemon_set1)
         self.assertTrue(self.can_reach_location("Meadow Zone - Overworld - Leafeon"))
@@ -19,7 +20,7 @@ class TestFriendCountDependencies(PokeparkTest):
             "Mankey", "Pidgeotto", "Spearow", "Weedle", "Bibarel",
             "Turtwig", "Magikarp", "Chatot", "Shinx", "Taillow",
             "Aipom", "Sudowoodo", "Bulbasaur", "Torterra", "Croagunk",
-            "Starly", "Bonsly", "Treecko", "Lotad", "Chikorita","Buizel"
+            "Starly", "Bonsly", "Treecko", "Lotad", "Chikorita", "Buizel"
         ]
         self.collect_by_name(pokemon_set2)
         self.assertTrue(self.can_reach_location("Meadow Zone - Overworld - Leafeon"))
@@ -46,9 +47,6 @@ class TestFriendCountDependencies(PokeparkTest):
         self.collect_by_name(pokemon_set4)
         self.assertFalse(self.can_reach_location("Meadow Zone - Overworld - Leafeon"))
 
-
-
-
     def test_vaporeon_friendcount(self) -> None:
         """Verify Vaporeon access with sufficient Pokemon friendships (first valid set)"""
         pokemon_set1 = [
@@ -60,7 +58,7 @@ class TestFriendCountDependencies(PokeparkTest):
             "Bibarel", "Turtwig", "Magikarp", "Chatot", "Shinx", "Taillow"
         ]
         self.collect_by_name(pokemon_set1)
-        self.collect_by_name("Beach Zone Unlock") # Region unlock removes dependency for tests
+        self.collect_by_name("Beach Zone Unlock")  # Region unlock removes dependency for tests
         self.assertTrue(self.can_reach_location("Beach Zone - Overworld - Vaporeon"))
 
     def test_vaporeon_friendcount2(self) -> None:
@@ -75,7 +73,7 @@ class TestFriendCountDependencies(PokeparkTest):
             "Mankey"
         ]
         self.collect_by_name(pokemon_set2)
-        self.collect_by_name("Beach Zone Unlock") # Region unlock removes dependency for tests
+        self.collect_by_name("Beach Zone Unlock")  # Region unlock removes dependency for tests
         self.assertTrue(self.can_reach_location("Beach Zone - Overworld - Vaporeon"))
 
     def test_vaporeon_friendcount_not_enough(self) -> None:
@@ -88,7 +86,7 @@ class TestFriendCountDependencies(PokeparkTest):
             "Mankey", "Pidgeotto", "Spearow", "Weedle", "Bibarel"
         ]
         self.collect_by_name(pokemon_set3)
-        self.collect_by_name("Beach Zone Unlock") # Region unlock removes dependency for tests
+        self.collect_by_name("Beach Zone Unlock")  # Region unlock removes dependency for tests
         self.assertFalse(self.can_reach_location("Beach Zone - Overworld - Vaporeon"))
 
     def test_vaporeon_friendcount_not_enough2(self) -> None:
@@ -102,7 +100,7 @@ class TestFriendCountDependencies(PokeparkTest):
             "Chimchar", "Mudkip", "Leafeon", "Buneary", "Slowpoke"
         ]
         self.collect_by_name(pokemon_set4)
-        self.collect_by_name("Beach Zone Unlock") # Region unlock removes dependency for tests
+        self.collect_by_name("Beach Zone Unlock")  # Region unlock removes dependency for tests
         self.assertFalse(self.can_reach_location("Beach Zone - Overworld - Vaporeon"))
 
     def test_glaceon_friendcount_valid1(self) -> None:
@@ -199,4 +197,20 @@ class TestFriendCountDependencies(PokeparkTest):
         self.assertFalse(self.can_reach_location("Ice Zone - Overworld - Glaceon"))
 
 
-
+    def test_bastiodon_minigame_access(self) -> None:
+        """Verify bastiodon minigame is accessable with (50 Pokemon friendships)."""
+        pokemon_50_set = [
+            "Chikorita", "Pachirisu", "Bulbasaur", "Munchlax", "Tropius",
+            "Turtwig", "Bonsly", "Sudowoodo", "Buneary", "Shinx",
+            "Mankey", "Spearow", "Croagunk", "Chatot", "Lotad",
+            "Treecko", "Caterpie", "Butterfree", "Chimchar", "Aipom",
+            "Ambipom", "Weedle", "Shroomish", "Magikarp", "Oddish",
+            "Leafeon", "Bidoof", "Bibarel", "Torterra", "Starly",
+            "Scyther", "Buizel", "Psyduck", "Slowpoke", "Azurill",
+            "Totodile", "Mudkip", "Pidgeotto", "Taillow", "Wingull",
+            "Staravia", "Corsola", "Floatzel", "Vaporeon", "Golduck",
+            "Pelipper", "Sharpedo", "Wynaut", "Carvanha", "Krabby"
+        ]
+        self.collect_by_name(pokemon_50_set)
+        self.collect_by_name("Cavern Zone & Magma Zone Unlock")  # Region unlock removes dependency for tests
+        self.assertTrue(self.can_reach_region("Cavern Zone - Bastiodon's Panel Crush"))

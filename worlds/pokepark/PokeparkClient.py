@@ -149,9 +149,7 @@ def refresh_items(ctx:PokeparkContext):
     items = [item for item in ctx.items_received if
              not item.item in blocked_items]
 
-    locations = ctx.locations_checked
-
-    activate_unlock_items(items,locations)
+    activate_unlock_items(items)
 
     activate_friendship_items(items)
 
@@ -161,9 +159,9 @@ def refresh_items(ctx:PokeparkContext):
 
     activate_power_items(items)
 
-def activate_unlock_items(items:list[NetworkItem], locations: set[int]):
+def activate_unlock_items(items:list[NetworkItem]):
     sums = {}
-    for item in set(item.item for item in items):
+    for item in set(networkItem.item for networkItem in items):
         if item in UNLOCKS:
             unlock = UNLOCKS[item]
             addr = unlock.item.final_address

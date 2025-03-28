@@ -18,8 +18,8 @@ LAST_RECEIVED_ITEMS = set()
 LAST_CHECKED_LOCATIONS = set()
 LAST_ZONE = None
 SPECIAL_UNLOCK_LOCATIONS = {
-    item_name: item_data for item_name, item_data in UNLOCKS.items()
-    if item_data.is_blocked_until_location == True
+    item_id: unlock_state for item_id, unlock_state in UNLOCKS.items()
+    if any(location.is_blocked_until_location for location in unlock_state.locations)
 }
 async def location_state_watcher(ctx):
 
@@ -152,12 +152,13 @@ async def location_state_watcher(ctx):
         BLOCKED_UNLOCKS.clear()
 
         for item_name, item_data in SPECIAL_UNLOCK_LOCATIONS.items():
-            if item_data.locationId not in ctx.checked_locations:
-                if (item_data.blocked_zone == current_zone or
+            for location in item_data.locations:
+                if location.locationId not in ctx.checked_locations:
+                    if (location.zone_id == current_zone or
                         (current_zone in LOADSCREEN_TO_ZONE and
-                         item_data.blocked_zone == LOADSCREEN_TO_ZONE[current_zone])):
-                    BLOCKED_UNLOCKS.append(item_name)
-                    write_memory(dme,item_data.item,0x0)
+                         location.zone_id == LOADSCREEN_TO_ZONE[current_zone])):
+                        BLOCKED_UNLOCKS.append(item_name)
+                        write_memory(dme,item_data.item,0x0)
 
     async def _sub():
         if not dme.is_hooked():

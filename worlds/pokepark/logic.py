@@ -2,7 +2,8 @@ from enum import Enum
 from typing import NamedTuple
 
 from worlds.pokepark import FRIENDSHIP_ITEMS
-from worlds.pokepark.LocationIds import MinigameLocationIds, QuestLocationIds, OverworldPokemonLocationIds
+from worlds.pokepark.LocationIds import MinigameLocationIds, QuestLocationIds, OverworldPokemonLocationIds, \
+    UnlockLocationIds
 from worlds.pokepark.items import UNLOCK_ITEMS, PRISM_ITEM
 
 
@@ -15,6 +16,14 @@ class PowerRequirement(Enum):
     can_thunderbolt_overworld = 5
     can_battle_thunderbolt_immune = 6
     can_farm_berries = 7
+    can_play_catch_intermediate = 8
+
+class WorldStateRequirement(Enum):
+    none = 0
+    meadow_zone_or_higher = 1
+    beach_zone_or_higher = 2
+    ice_zone_or_higher = 3
+    cavern_and_magma_zone_or_higher = 4
 
 
 class Requirements(NamedTuple):
@@ -25,6 +34,7 @@ class Requirements(NamedTuple):
     oneof_item_names: list[list[str]] = []
     can_reach_locations: list[str] = []
     powers: PowerRequirement = PowerRequirement.none
+    world_state: WorldStateRequirement = WorldStateRequirement.none
 
 
 class Location(NamedTuple):
@@ -52,7 +62,11 @@ REGIONS: list[PokeparkRegion] = [
                        Location(name="Burmy",
                                 id=FRIENDSHIP_ITEMS["Burmy"],
                                 requirements=Requirements(
-                                    unlock_names=["Ice Zone Unlock"])),
+                                    world_state=WorldStateRequirement.ice_zone_or_higher)),
+                       Location(name="Mime Jr.",
+                                id=FRIENDSHIP_ITEMS["Mime Jr."],
+                                requirements=Requirements(
+                                    world_state=WorldStateRequirement.cavern_and_magma_zone_or_higher)),
                        Location(name="Drifblim",
                                 id=FRIENDSHIP_ITEMS["Drifblim"],
                                 requirements=Requirements(
@@ -109,11 +123,10 @@ REGIONS: list[PokeparkRegion] = [
                                 requirements=Requirements(
                                     can_reach_locations=["Treehouse - Health Upgrade 2"])),
 
-                       # Ice Zone or higher since bound on World State, but for now just ice zone
                        Location(name="Iron Tail Upgrade 1",
                                 id=QuestLocationIds.IRON_TAIL_POWERUP1.value,
                                 requirements=Requirements(
-                                    unlock_names=["Ice Zone Unlock"],
+                                    world_state=WorldStateRequirement.ice_zone_or_higher,
                                     powers=PowerRequirement.can_farm_berries
                                 )),
                        Location(name="Iron Tail Upgrade 2",
@@ -316,7 +329,7 @@ REGIONS: list[PokeparkRegion] = [
                                 requirements=Requirements(
                                     unlock_names=["Scyther Unlock"],
                                     powers=PowerRequirement.can_battle
-                                ))
+                                )),
                    ],
                    unlock_location=[
                        Location(name="Munchlax Friendship - Pokemon Unlock",
@@ -528,10 +541,10 @@ REGIONS: list[PokeparkRegion] = [
                                 requirements=Requirements(
                                     friendship_names=["Scyther"])),
 
-                       # Location(name="Ponyta",
-                       #          id=MinigameLocationIds.PONYTA_DASH.value,
-                       #          requirements=Requirements(
-                       #              friendship_names=["Ponyta"])), #not implemented yet
+                       Location(name="Ponyta",
+                                 id=MinigameLocationIds.PONYTA_DASH.value,
+                                requirements=Requirements(
+                                     friendship_names=["Ponyta"])),
 
                        Location(name="Shinx",
                                 id=MinigameLocationIds.SHINX_DASH.value,
@@ -588,10 +601,10 @@ REGIONS: list[PokeparkRegion] = [
                        #          requirements=Requirements(
                        #              friendship_names=["Blaziken"])),
 
-                       # Location(name="Infernape",
-                       #          id=MinigameLocationIds.INFERNAPE_VINE_SWING.value,
-                       #          requirements=Requirements(
-                       #              friendship_names=["Infernape"])),
+                       Location(name="Infernape",
+                                 id=MinigameLocationIds.INFERNAPE_VINE_SWING.value,
+                                 requirements=Requirements(
+                                     friendship_names=["Infernape"])),
 
                        # Location(name="Lucario",
                        #          id=MinigameLocationIds.LUCARIO_VINE_SWING.value,
@@ -1271,13 +1284,519 @@ REGIONS: list[PokeparkRegion] = [
                                                    friendship_names=["Spheal"])),
                                       ],
                    parent_regions=["Ice Zone - Overworld"]),
+    PokeparkRegion(name="Cavern Zone - Overworld",
+                   display="Cavern Zone - Overworld",
+                   requirements=Requirements(
+                       unlock_names=["Cavern Zone & Magma Zone Unlock"]),
+                   friendship_locations=[
+                       Location(name="Magnemite",
+                                id=FRIENDSHIP_ITEMS["Magnemite"],
+                                requirements=Requirements(
+                                    unlock_names=["Magnemite Unlock"],
+                                    can_reach_locations=["Cavern Zone - Overworld - Magnemite Crate Dash Entrance Area"]
+                                )),
+                       Location(name="Magnemite 2",
+                                id=OverworldPokemonLocationIds.MAGNEMITE_CAVERN_2.value,
+                                requirements=Requirements(
+                                    unlock_names=["Magnemite Unlock 2"],
+                                    can_reach_locations=[
+                                        "Cavern Zone - Overworld - Magnemite Crate Dash Magma Zone Entrance"]
+                                )),
+                       Location(name="Magnemite 3",
+                                id=OverworldPokemonLocationIds.MAGNEMITE_CAVERN_3.value,
+                                requirements=Requirements(
+                                    unlock_names=["Magnemite Unlock 3"],
+                                    can_reach_locations=[
+                                        "Cavern Zone - Overworld - Magnemite Crate Dash Magma Zone Entrance"]
+                                )),
+                       Location(name="Magnezone",
+                                id=FRIENDSHIP_ITEMS["Magnezone"],
+                                requirements=Requirements(
+                                    unlock_names=["Magnezone Unlock"],
+                                    powers=PowerRequirement.can_battle_thunderbolt_immune
+                                )),
+                       Location(name="Geodude",
+                                id=FRIENDSHIP_ITEMS["Geodude"]),
+                       Location(name="Torchic",
+                                id=FRIENDSHIP_ITEMS["Torchic"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_battle
+                                )),
+                       Location(name="Machamp",
+                                id=FRIENDSHIP_ITEMS["Machamp"]),
+                       Location(name="Machamp - Battle",
+                                id=OverworldPokemonLocationIds.MACHAMP_CAVERN_BATTLE.value,
+                                requirements=Requirements(
+                                    unlock_names=["Machamp Unlock"],
+                                    powers=PowerRequirement.can_battle
+                                )),
+                       Location(name="Teddiursa",
+                                id=OverworldPokemonLocationIds.TEDDIURSA_CAVERN.value),
+                       Location(name="Meowth",
+                                id=FRIENDSHIP_ITEMS["Meowth"]),
+                       Location(name="Bonsly",
+                                id=OverworldPokemonLocationIds.BONSLY_CAVERN.value),
+                       Location(name="Chimchar",
+                                id=OverworldPokemonLocationIds.CHIMCHAR_CAVERN.value,
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_battle
+                                )),
+                       Location(name="Cranidos",
+                                id=FRIENDSHIP_ITEMS["Cranidos"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_battle
+                                )),
+                       Location(name="Zubat",
+                                id=FRIENDSHIP_ITEMS["Zubat"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_play_catch
+                                )),
+                       Location(name="Golbat",
+                                id=FRIENDSHIP_ITEMS["Golbat"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_play_catch_intermediate
+                                )),
+                       Location(name="Sudowoodo",
+                                id=OverworldPokemonLocationIds.SUDOWOODO_CAVERN.value,
+                                requirements=Requirements(
+                                    unlock_names=["Sudowoodo Unlock"])),
+                       Location(name="Scizor",
+                                id=FRIENDSHIP_ITEMS["Scizor"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_battle
+                                )),
+                       # Location(name="Mawile", # story only
+                       #          id=FRIENDSHIP_ITEMS["Mawile"],
+                       #          requirements=Requirements(
+                       #              powers=PowerRequirement.can_play_catch #? unsure if dash alone is enough needs testing
+                       #          )),
+                       Location(name="Marowak",
+                                id=FRIENDSHIP_ITEMS["Marowak"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_battle_thunderbolt_immune
+                                )),
+                       Location(name="Aron",
+                                id=FRIENDSHIP_ITEMS["Aron"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_destroy_objects_overworld
+                                )),
+                       Location(name="Dugtrio",
+                                id=FRIENDSHIP_ITEMS["Dugtrio"]),
+                       Location(name="Gible",
+                                id=FRIENDSHIP_ITEMS["Gible"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_battle_thunderbolt_immune
+                                )),
+                       Location(name="Phanpy",
+                                id=FRIENDSHIP_ITEMS["Phanpy"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_destroy_objects_overworld,
+                                    unlock_names=["Phanpy Unlock"]
+                                )),
+                       Location(name="Raichu",
+                                id=FRIENDSHIP_ITEMS["Raichu"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_play_catch_intermediate,
+                                    unlock_names=["Raichu Unlock"]
+                                )),
+                       Location(name="Hitmonlee",
+                                id=FRIENDSHIP_ITEMS["Hitmonlee"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_battle,
+                                    unlock_names=["Hitmonlee Unlock"]
+                                )),
+                   ],
+                   unlock_location=[
+                       Location(name="Magnemite Crate Dash Entrance Area",
+                                id=UNLOCK_ITEMS["Magnemite Unlock"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_destroy_objects_overworld
+                                )),
+                       Location(name="Magnemite Crate Dash Magma Zone Entrance",
+                                id=UNLOCK_ITEMS["Magnemite Unlock 2"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_destroy_objects_overworld
+                                )),
+                       Location(name="Magnemite Crate Dash Deep Inside",
+                                id=UNLOCK_ITEMS["Magnemite Unlock 3"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_destroy_objects_overworld
+                                )),
+                       Location(name="Machamp Friendship - Pokemon Unlock",
+                                id=UNLOCK_ITEMS["Machamp Unlock"],
+                                requirements=Requirements(
+                                    can_reach_locations=["Cavern Zone - Overworld - Machamp"])),
+                       Location(name="Bonsly Friendship - Pokemon Unlock",
+                                id=UnlockLocationIds.SUDOWOODO_CAVERN.value,
+                                requirements=Requirements(
+                                    can_reach_locations=["Cavern Zone - Overworld - Bonsly"])),
+                       Location(name="Diglett Crate Dash",
+                                id=UNLOCK_ITEMS["Diglett Unlock"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_destroy_objects_overworld
+                                )),
+                   ],
+                   quest_locations=[
+
+                   ],
+                   parent_regions=["Treehouse"]),
+PokeparkRegion(name="Cavern Zone - Bastiodon's Panel Crush",
+                   display="Cavern Zone - Bastiodon's Panel Crush",
+               requirements=Requirements(
+                   friendcount=50),
+                   minigame_location=[Location(name="Prisma",
+                                               id=PRISM_ITEM["Bastiodon Prisma"]),
+
+                                      Location(name="Pikachu",
+                                               id=MinigameLocationIds.PIKACHU_PANEL.value),
+                                      # Location(name="Sableye",
+                                      #          id=MinigameLocationIds.SABLEYE_PANEL.value,
+                                      #          requirements=Requirements(
+                                      #              friendship_names=["Sableye"])),
+                                      Location(name="Meowth",
+                                               id=MinigameLocationIds.MEOWTH_PANEL.value,
+                                               requirements=Requirements(
+                                                   friendship_names=["Meowth"])),
+                                      Location(name="Torchic",
+                                               id=MinigameLocationIds.TORCHIC_PANEL.value,
+                                               requirements=Requirements(
+                                                   friendship_names=["Torchic"])),
+                                      # Location(name="Electivire",
+                                      #          id=MinigameLocationIds.ELECTIVIRE_PANEL.value,
+                                      #          requirements=Requirements(
+                                      #              friendship_names=["Electivire"])),
+                                      # Location(name="Magmortar",
+                                      #           id=MinigameLocationIds.MAGMORTAR_PANEL.value,
+                                      #           requirements=Requirements(
+                                      #               friendship_names=["Magmortar"])),
+                                       Location(name="Hitmonlee",
+                                                id=MinigameLocationIds.HITMONLEE_PANEL.value,
+                                                requirements=Requirements(
+                                                    friendship_names=["Hitmonlee"])),
+                                      Location(name="Ursaring",
+                                               id=MinigameLocationIds.URSARING_PANEL.value,
+                                               requirements=Requirements(
+                                                   friendship_names=["Ursaring"])),
+                                      Location(name="Mr. Mime",
+                                               id=MinigameLocationIds.MRMIME_PANEL.value,
+                                               requirements=Requirements(
+                                                   friendship_names=["Mr. Mime"])),
+                                      Location(name="Raichu",
+                                               id=MinigameLocationIds.RAICHU_PANEL.value,
+                                               requirements=Requirements(
+                                                   friendship_names=["Raichu"])),
+                                      Location(name="Sudowoodo",
+                                               id=MinigameLocationIds.SUDOWOODO_PANEL.value,
+                                               requirements=Requirements(
+                                                   friendship_names=["Sudowoodo"])),
+                                      Location(name="Charmander",
+                                                id=MinigameLocationIds.CHARMANDER_PANEL.value,
+                                                requirements=Requirements(
+                                                   friendship_names=["Charmander"])),
+                                      Location(name="Gible",
+                                               id=MinigameLocationIds.GIBLE_PANEL.value,
+                                               requirements=Requirements(
+                                                   friendship_names=["Gible"])),
+                                      Location(name="Chimchar",
+                                               id=MinigameLocationIds.CHIMCHAR_PANEL.value,
+                                               requirements=Requirements(
+                                                   friendship_names=["Chimchar"])),
+                                      Location(name="Magby",
+                                                id=MinigameLocationIds.MAGBY_PANEL.value,
+                                                requirements=Requirements(
+                                                    friendship_names=["Magby"])),
+                                      ],
+                   parent_regions=["Cavern Zone - Overworld"]),
+    PokeparkRegion(name="Magma Zone - Overworld",
+                   display="Magma Zone - Overworld",
+                   requirements=Requirements(
+                       unlock_names=["Cavern Zone & Magma Zone Unlock"]),
+                   friendship_locations=[
+                       Location(name="Aron",
+                                id=OverworldPokemonLocationIds.ARON_MAGMA.value,
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_dash_overworld
+                                )),
+                       Location(name="Torchic",
+                                id=OverworldPokemonLocationIds.TORCHIC_MAGMA.value,
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_battle
+                                )),
+                       Location(name="Chimchar",
+                                id=OverworldPokemonLocationIds.CHIMCHAR_MAGMA.value,
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_battle
+                                )),
+                       Location(name="Geodude",
+                                id=OverworldPokemonLocationIds.GEODUDE_MAGMA.value),
+                       Location(name="Bonsly",
+                                id=OverworldPokemonLocationIds.BONSLY_MAGMA.value),
+                       Location(name="Camerupt",
+                                id=FRIENDSHIP_ITEMS["Camerupt"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_battle_thunderbolt_immune
+                                )),
+                       Location(name="Magby",
+                                id=FRIENDSHIP_ITEMS["Magby"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_play_catch
+                                )),
+                       Location(name="Magby - Battle",
+                                id=OverworldPokemonLocationIds.MAGBY_MAGMA_BATTLE.value,
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_battle
+                                )),
+                       Location(name="Vulpix",
+                                id=FRIENDSHIP_ITEMS["Vulpix"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_play_catch
+                                )),
+                       Location(name="Ninetales",
+                                id=FRIENDSHIP_ITEMS["Ninetales"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_play_catch_intermediate,
+                                    unlock_names=["Ninetales Unlock"]
+                                )),
+                       Location(name="Quilava",
+                                id=FRIENDSHIP_ITEMS["Quilava"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_battle
+                                )),
+                       Location(name="Flareon",
+                                id=FRIENDSHIP_ITEMS["Flareon"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_battle,
+                                    friendcount=61
+                                )),
+                       Location(name="Infernape",
+                                id=FRIENDSHIP_ITEMS["Infernape"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_battle,
+                                    unlock_names=["Infernape Unlock"]
+                                )),
+                       Location(name="Farfetch'd",
+                                id=FRIENDSHIP_ITEMS["Farfetch'd"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_battle
+                                )),
+                       Location(name="Ponyta",
+                                id=FRIENDSHIP_ITEMS["Ponyta"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_play_catch_intermediate,
+                                    unlock_names=["Ponyta Unlock"]
+                                )),
+                       Location(name="Torkoal",
+                                id=FRIENDSHIP_ITEMS["Torkoal"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_battle,
+                                    unlock_names=["Torkoal Unlock"]
+                                )),
+                       Location(name="Golem",
+                                id=FRIENDSHIP_ITEMS["Golem"],
+                                requirements=Requirements(
+                                    unlock_names=["Golem Unlock"]
+                                )),
+                       Location(name="Baltoy",
+                                id=FRIENDSHIP_ITEMS["Baltoy"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_battle_thunderbolt_immune,
+                                    unlock_names=["Baltoy Unlock"]
+                                )),
+                       Location(name="Claydol",
+                                id=FRIENDSHIP_ITEMS["Claydol"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_battle_thunderbolt_immune,
+                                    unlock_names=["Claydol Unlock"]
+                                )),
+                       Location(name="Hitmonchan",
+                                id=FRIENDSHIP_ITEMS["Hitmonchan"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_battle,
+                                    unlock_names=["Hitmonchan Unlock"]
+                                )),
+                       Location(name="Hitmontop",
+                                id=FRIENDSHIP_ITEMS["Hitmontop"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_dash_overworld,
+                                )),
+                   ],
+                   unlock_location=[
+                       Location(name="Chimchar Friendship - Pokemon Unlock",
+                                id=UNLOCK_ITEMS["Infernape Unlock"],
+                                requirements=Requirements(
+                                    can_reach_locations=["Magma Zone - Overworld - Chimchar"])),
+                       Location(name="Vulpix Friendship - Pokemon Unlock",
+                                id=UNLOCK_ITEMS["Ninetales Unlock"],
+                                requirements=Requirements(
+                                    can_reach_locations=["Magma Zone - Overworld - Vulpix"])),
+                       Location(name="Baltoy Crate Dash",
+                                id=UNLOCK_ITEMS["Baltoy Unlock"],
+                                requirements=Requirements(
+                                    powers=PowerRequirement.can_destroy_objects_overworld
+                                )),
+                       Location(name="Baltoy Friendship - Pokemon Unlock",
+                                id=UNLOCK_ITEMS["Claydol Unlock"],
+                                requirements=Requirements(
+                                    can_reach_locations=["Magma Zone - Overworld - Baltoy"])),
+                       Location(name="Hitmonchan Friendship - Pokemon Unlock",
+                                id=UNLOCK_ITEMS["Hitmonlee Unlock"],
+                                requirements=Requirements(
+                                    can_reach_locations=["Magma Zone - Overworld - Hitmonchan"])),
+                   ],
+                   quest_locations=[
+                       Location(name="Meditite Quiz",
+                                id=QuestLocationIds.MEDITITE_QUIZ.value),
+                       Location(name="Rhyperior Iron Disc",
+                                id=QuestLocationIds.RHYPERIOR_DISC.value,
+                                requirements=Requirements(
+                                        powers=PowerRequirement.can_dash_overworld
+                                    )),
+                   ],
+                   parent_regions=["Cavern Zone - Overworld", "Treehouse"]),
+PokeparkRegion(name="Magma Zone - Rhyperior's Bumper Burn",
+                   display="Magma Zone - Rhyperior's Bumper Burn",
+               requirements=Requirements(
+                   can_reach_locations=["Magma Zone - Overworld - Rhyperior Iron Disc"]),
+                   minigame_location=[Location(name="Prisma",
+                                               id=PRISM_ITEM["Rhyperior Prisma"]),
+
+                                      Location(name="Pikachu",
+                                               id=MinigameLocationIds.PIKACHU_BUMPER.value),
+                                      Location(name="Magnemite",
+                                                id=MinigameLocationIds.MAGNEMITE_BUMPER.value,
+                                                requirements=Requirements(
+                                                    friendship_names=["Magnemite"])),
+                                      Location(name="Rhyperior",
+                                               id=MinigameLocationIds.RHYPERIOR_BUMPER.value,
+                                               requirements=Requirements(
+                                                   friendship_names=["Rhyperior"])),
+                                      # Location(name="Tyranitar",
+                                      #          id=MinigameLocationIds.TYRANITAR_BUMPER.value,
+                                      #          requirements=Requirements(
+                                      #              friendship_names=["Tyranitar"])),
+                                      Location(name="Hitmontop",
+                                                id=MinigameLocationIds.HITMONTOP_BUMPER.value,
+                                                requirements=Requirements(
+                                                    friendship_names=["Hitmontop"])),
+                                      Location(name="Flareon",
+                                                 id=MinigameLocationIds.FLAREON_BUMPER.value,
+                                                 requirements=Requirements(
+                                                    friendship_names=["Flareon"])),
+                                      Location(name="Venusaur",
+                                                id=MinigameLocationIds.VENUSAUR_BUMPER.value,
+                                                requirements=Requirements(
+                                                    friendship_names=["Venusaur"])),
+                                      # Location(name="Snorlax",
+                                      #          id=MinigameLocationIds.SNORLAX_BUMPER.value,
+                                      #          requirements=Requirements(
+                                      #              friendship_names=["Snorlax"])),
+                                      Location(name="Torterra",
+                                               id=MinigameLocationIds.TORTERRA_BUMPER.value,
+                                               requirements=Requirements(
+                                                   friendship_names=["Torterra"])),
+                                      Location(name="Magnezone",
+                                               id=MinigameLocationIds.MAGNEZONE_BUMPER.value,
+                                               requirements=Requirements(
+                                                   friendship_names=["Magnezone"])),
+                                      Location(name="Claydol",
+                                               id=MinigameLocationIds.CLAYDOL_BUMPER.value,
+                                               requirements=Requirements(
+                                                   friendship_names=["Claydol"])),
+                                      Location(name="Quilava",
+                                                id=MinigameLocationIds.QUILAVA_BUMPER.value,
+                                                requirements=Requirements(
+                                                    friendship_names=["Quilava"])),
+                                      Location(name="Torkoal",
+                                               id=MinigameLocationIds.TORKOAL_BUMPER.value,
+                                               requirements=Requirements(
+                                                   friendship_names=["Torkoal"])),
+                                      Location(name="Baltoy",
+                                               id=MinigameLocationIds.BALTOY_BUMPER.value,
+                                               requirements=Requirements(
+                                                   friendship_names=["Baltoy"])),
+                                      Location(name="Bonsly",
+                                                id=MinigameLocationIds.BONSLY_BUMPER.value,
+                                                requirements=Requirements(
+                                                    friendship_names=["Bonsly"])),
+                                      ],
+                   parent_regions=["Magma Zone - Overworld"]),
+
+PokeparkRegion(name="Magma Zone - Blaziken's Boulder Bash",
+                   display="Magma Zone - Blaziken's Boulder Bash",
+                   minigame_location=[Location(name="Prisma",
+                                               id=PRISM_ITEM["Blaziken Prisma"]),
+
+                                      Location(name="Pikachu",
+                                               id=MinigameLocationIds.PIKACHU_BOULDER.value),
+                                      Location(name="Geodude",
+                                                id=MinigameLocationIds.GEODUDE_BOULDER.value,
+                                                requirements=Requirements(
+                                                    friendship_names=["Geodude"])),
+                                      Location(name="Phanpy",
+                                               id=MinigameLocationIds.PHANPY_BOULDER.value,
+                                               requirements=Requirements(
+                                                   friendship_names=["Phanpy"])),
+                                      # Location(name="Blaziken",
+                                      #           id=MinigameLocationIds.BLAZIKEN_BOULDER.value,
+                                      #           requirements=Requirements(
+                                      #               friendship_names=["Blaziken"])),
+                                      # Location(name="Garchomp",
+                                      #           id=MinigameLocationIds.GARCHOMP_BOULDER.value,
+                                      #           requirements=Requirements(
+                                      #               friendship_names=["Garchomp"])),
+                                      Location(name="Scizor",
+                                                 id=MinigameLocationIds.SCIZOR_BOULDER.value,
+                                                 requirements=Requirements(
+                                                    friendship_names=["Scizor"])),
+                                      # Location(name="Magmortar",
+                                      #           id=MinigameLocationIds.MAGMORTAR_BOULDER.value,
+                                      #           requirements=Requirements(
+                                      #               friendship_names=["Magmortar"])),
+                                      Location(name="Hitmonchan",
+                                                id=MinigameLocationIds.HITMONCHAN_BOULDER.value,
+                                                requirements=Requirements(
+                                                    friendship_names=["Hitmonchan"])),
+                                      Location(name="Machamp",
+                                               id=MinigameLocationIds.MACHAMP_BOULDER.value,
+                                               requirements=Requirements(
+                                                   friendship_names=["Machamp"])),
+                                      Location(name="Marowak",
+                                               id=MinigameLocationIds.MAROWAK_BOULDER.value,
+                                               requirements=Requirements(
+                                                   friendship_names=["Marowak"])),
+                                      Location(name="Farfetch'd",
+                                               id=MinigameLocationIds.FARFETCHD_BOULDER.value,
+                                               requirements=Requirements(
+                                                   friendship_names=["Farfetch'd"])),
+                                      Location(name="Cranidos",
+                                                id=MinigameLocationIds.CRANIDOS_BOULDER.value,
+                                                requirements=Requirements(
+                                                    friendship_names=["Cranidos"])),
+                                      Location(name="Camerupt",
+                                               id=MinigameLocationIds.CAMERUPT_BOULDER.value,
+                                               requirements=Requirements(
+                                                   friendship_names=["Camerupt"])),
+                                      Location(name="Bastiodon",
+                                               id=MinigameLocationIds.BASTIODON_BOULDER.value,
+                                               requirements=Requirements(
+                                                   friendship_names=["Bastiodon"])),
+                                      Location(name="Mawile",
+                                                id=MinigameLocationIds.MAWILE_BOULDER.value,
+                                                requirements=Requirements(
+                                                    friendship_names=["Mawile"])),
+                                      ],
+                   parent_regions=["Magma Zone - Overworld"]),
+
     PokeparkRegion("Victory Region", "Victory Region",
                    Requirements(prisma_names=
                                 ["Bulbasaur Prisma",
                                  "Venusaur Prisma",
                                  "Pelipper Prisma",
                                  "Gyarados Prisma",
-                                 "Empoleon Prisma"
+                                 "Empoleon Prisma",
+                                 "Bastiodon Prisma",
+                                 "Rhyperior Prisma",
+                                 "Blaziken Prisma"
                                  ]),
                    parent_regions=["Treehouse"])
     # just some Victory Requirements for Demo so that meadow zone can be tested
