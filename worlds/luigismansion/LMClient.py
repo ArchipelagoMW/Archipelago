@@ -154,6 +154,10 @@ class LMCommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, LMContext):
             Utils.async_start(self.ctx.update_death_link(not "DeathLink" in self.ctx.tags), name="Update Deathlink")
 
+    def _cmd_traplink(self):
+        """Toggle traplink from client. Overrides default setting."""
+        if isinstance(self.ctx, LMContext):
+            Utils.async_start(self.ctx.update_trap_link(not "TrapLink" in self.ctx.tags), name="Update Traplink")
 
 class LMContext(CommonContext):
     command_processor = LMCommandProcessor
@@ -205,6 +209,16 @@ class LMContext(CommonContext):
         """
         self.auth = None
         await super().disconnect(allow_autoreconnect)
+
+    async def update_trap_link(self, trap_link: bool):
+        """Helper function to set Trap Link connection tag on/off and update the connection if already connected."""
+        old_tags = self.tags.copy()
+        if trap_link:
+            self.tags.add("TrapLink")
+        else:
+            self.tags -= {"TrapLink"}
+        if old_tags != self.tags and self.server and not self.server.socket.closed:
+            await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
 
     async def server_auth(self, password_requested: bool = False):
         """
