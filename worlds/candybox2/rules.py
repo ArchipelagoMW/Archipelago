@@ -1,9 +1,11 @@
 from BaseClasses import CollectionState
 from worlds.AutoWorld import World
-from worlds.candybox2 import CandyBox2Options
+from worlds.candybox2 import CandyBox2Options, items
+from worlds.candybox2.items import candy_box_2_base_id
 from worlds.generic.Rules import set_rule, add_rule
 
 weapons = [
+    "Nothing (Weapon)",
     "Wooden Sword",
     "Iron Axe",
     "Tribal Spear",
@@ -11,6 +13,7 @@ weapons = [
     "Polished Silver Sword",
     "Troll's Bludgeon",
     "Summoning Tribal Spear",
+    "Giant Spoon",
     "Enchanted Monkey Wizard Staff",
     "Giant Spoon of Doom",
     "Scythe"
@@ -22,8 +25,8 @@ armors = [
     "Enchanted Knight Body Armour"
 ]
 
-def has_projectiles(state: CollectionState, player: int):
-    return state.has("Red Enchanted Gloves", player) or state.has("Octopus King Crown with Jaspers", player) or state.has("Enchanted Monkey Wizard Staff", player)
+def has_projectiles(world, state: CollectionState, player: int):
+    return state.has("Red Enchanted Gloves", player) or state.has("Octopus King Crown with Jaspers", player) or has_weapon(world, state, player, "Enchanted Monkey Wizard Staff")
 
 def can_jump(state: CollectionState, player: int):
     return (state.has("Rocket Boots", player) or state.has("Desert bird feather", player)) and state.has("Pogo Stick", player)
@@ -34,58 +37,77 @@ def can_fly(state: CollectionState, player: int):
 def can_escape_hole(state: CollectionState, player: int):
     return can_fly(state, player) or state.has("Beginners' Grimoire", player)
 
-def sea_entrance(state: CollectionState, player: int):
-    return weapon_is_at_least(state, player, "Summoning Tribal Spear") and has_projectiles(state, player) and armor_is_at_least(state, player,
+def sea_entrance(world, state: CollectionState, player: int):
+    return weapon_is_at_least(world, state, player, "Summoning Tribal Spear") and has_projectiles(world, state,
+                                                                                                  player) and armor_is_at_least(state, player,
                                                                                              "Lightweight Body Armour")
 
-def can_beat_sharks(state: CollectionState, player: int):
-    return sea_entrance(state, player) and weapon_is_at_least(state, player, "Enchanted Monkey Wizard Staff")
+def can_beat_sharks(world, state: CollectionState, player: int):
+    return sea_entrance(world, state, player) and weapon_is_at_least(world, state, player,
+                                                                     "Enchanted Monkey Wizard Staff")
 
 def set_rules(world: World, player: int):
 
     add_rule(world.get_location("Disappointed Emote Chocolate Bar"), lambda state: can_farm_candies(state, player))
 
     # Cellar rules
-    add_rule(world.get_location("Cellar Quest Cleared"), lambda state: weapon_is_at_least(state, player, "Wooden Sword"))
+    add_rule(world.get_location("Cellar Quest Cleared"), lambda state: weapon_is_at_least(world, state, player,
+                                                                                          "Wooden Sword"))
 
     # Desert rules
-    add_rule(world.get_location("Desert Quest Cleared"), lambda state: weapon_is_at_least(state, player, "Iron Axe"))
-    add_rule(world.get_location("Desert Bird Feather Acquired"), lambda state: weapon_is_at_least(state, player, "Iron Axe") and has_projectiles(state, player))
+    add_rule(world.get_location("Desert Quest Cleared"), lambda state: weapon_is_at_least(world, state, player,
+                                                                                          "Iron Axe"))
+    add_rule(world.get_location("Desert Bird Feather Acquired"), lambda state: weapon_is_at_least(world, state, player,
+                                                                                                  "Iron Axe") and has_projectiles(
+        world, state, player))
 
     # Bridge rules
-    add_rule(world.get_location("Troll Defeated"), lambda state: weapon_is_at_least(state, player, "Polished Silver Sword"))
+    add_rule(world.get_location("Troll Defeated"), lambda state: weapon_is_at_least(world, state, player,
+                                                                                    "Polished Silver Sword"))
     add_rule(world.get_location("The Troll's Bludgeon Acquired"),
-            lambda state: weapon_is_at_least(state, player, "Polished Silver Sword"))
+             lambda state: weapon_is_at_least(world, state, player, "Polished Silver Sword"))
 
     # Cave rules
-    add_rule(world.get_location("Octopus King Defeated"), lambda state: state.has("Sorceress' Cauldron", player) and weapon_is_at_least(state, player, "Troll's Bludgeon") and armor_is_at_least(state, player, "Lightweight Body Armour"))
-    add_rule(world.get_location("Monkey Wizard Defeated"), lambda state: state.has("Boots of Introspection", player) and state.has("Beginners' Grimoire", player) and state.has("Octopus King Crown with Jaspers", player) and weapon_is_at_least(state, player, "Troll's Bludgeon") and armor_is_at_least(state, player, "Lightweight Body Armour"))
+    add_rule(world.get_location("Octopus King Defeated"), lambda state: state.has("Sorceress' Cauldron", player) and weapon_is_at_least(
+        world, state, player, "Troll's Bludgeon") and armor_is_at_least(state, player, "Lightweight Body Armour"))
+    add_rule(world.get_location("Monkey Wizard Defeated"), lambda state: state.has("Boots of Introspection", player) and state.has("Beginners' Grimoire", player) and state.has("Octopus King Crown with Jaspers", player) and weapon_is_at_least(
+        world, state, player, "Troll's Bludgeon") and armor_is_at_least(state, player, "Lightweight Body Armour"))
 
     # The Hole rules
     add_rule(world.get_location("The Hole Heart Pendant Acquired"), lambda state: can_jump(state, player))
     add_rule(world.get_location("The Hole Black Magic Grimoire Acquired"), lambda state: can_escape_hole(state, player) and state.has("Sponge", player))
     add_rule(world.get_location("The Hole Desert Fortress Key Acquired"), lambda state: can_escape_hole(state, player) and state.has("Sponge", player) and can_jump(state, player))
-    add_rule(world.get_location("The Hole Tribal Warrior Defeated"), lambda state: can_escape_hole(state, player) and weapon_is_at_least(state, player, "Enchanted Monkey Wizard Staff") and state.has("Octopus King Crown with Jaspers", player) and armor_is_at_least(state, player, "Lightweight Body Armour"))
-    add_rule(world.get_location("The Hole Four Chocolate Bars in The Hole Acquired"), lambda state: can_escape_hole(state, player) and weapon_is_at_least(state, player, "Enchanted Monkey Wizard Staff") and state.has("Octopus King Crown with Jaspers", player) and armor_is_at_least(state, player, "Lightweight Body Armour"))
+    add_rule(world.get_location("The Hole Tribal Warrior Defeated"), lambda state: can_escape_hole(state, player) and weapon_is_at_least(
+        world, state, player, "Enchanted Monkey Wizard Staff") and state.has("Octopus King Crown with Jaspers", player) and armor_is_at_least(state, player, "Lightweight Body Armour"))
+    add_rule(world.get_location("The Hole Four Chocolate Bars in The Hole Acquired"), lambda state: can_escape_hole(state, player) and weapon_is_at_least(
+        world, state, player, "Enchanted Monkey Wizard Staff") and state.has("Octopus King Crown with Jaspers", player) and armor_is_at_least(state, player, "Lightweight Body Armour"))
 
     # The Forest rules
-    add_rule(world.get_location("Forest Quest Cleared"), lambda state: weapon_is_at_least(state, player, "Enchanted Monkey Wizard Staff") and state.has("Octopus King Crown with Jaspers", player) and armor_is_at_least(state, player, "Lightweight Body Armour"))
+    add_rule(world.get_location("Forest Quest Cleared"), lambda state: weapon_is_at_least(world, state, player,
+                                                                                          "Enchanted Monkey Wizard Staff") and state.has("Octopus King Crown with Jaspers", player) and armor_is_at_least(state, player, "Lightweight Body Armour"))
 
     # Castle Entrance rules
-    add_rule(world.get_location("Castle Entrance Quest Cleared"), lambda state: weapon_is_at_least(state, player, "Enchanted Monkey Wizard Staff") and state.has("Octopus King Crown with Jaspers", player) and armor_is_at_least(state, player, "Lightweight Body Armour") and state.has("Unicorn Horn", player) and state.has("Xinopherydon Claw", player))
-    add_rule(world.get_location("Knight Body Armour Acquired"), lambda state: weapon_is_at_least(state, player, "Enchanted Monkey Wizard Staff") and state.has("Octopus King Crown with Jaspers", player) and armor_is_at_least(state, player, "Lightweight Body Armour") and state.has("Unicorn Horn", player) and state.has("Xinopherydon Claw", player))
+    add_rule(world.get_location("Castle Entrance Quest Cleared"), lambda state: weapon_is_at_least(world, state, player,
+                                                                                                   "Enchanted Monkey Wizard Staff") and state.has("Octopus King Crown with Jaspers", player) and armor_is_at_least(state, player, "Lightweight Body Armour") and state.has("Unicorn Horn", player) and state.has("Xinopherydon Claw", player))
+    add_rule(world.get_location("Knight Body Armour Acquired"), lambda state: weapon_is_at_least(world, state, player,
+                                                                                                 "Enchanted Monkey Wizard Staff") and state.has("Octopus King Crown with Jaspers", player) and armor_is_at_least(state, player, "Lightweight Body Armour") and state.has("Unicorn Horn", player) and state.has("Xinopherydon Claw", player))
 
     # Castle rules
-    add_rule(world.get_location("The Giant Nougat Monster Defeated"), lambda state: state.has("Purple Fin", player) and weapon_is_at_least(state, player, "Summoning Tribal Spear") and state.has("Boots of Introspection", player) and state.has("Octopus King Crown with Obsidian", player))
+    add_rule(world.get_location("The Giant Nougat Monster Defeated"), lambda state: state.has("Purple Fin", player) and weapon_is_at_least(
+        world, state, player, "Summoning Tribal Spear") and state.has("Boots of Introspection", player) and state.has("Octopus King Crown with Obsidian", player))
+
+    # Egg Room
+    add_rule(world.get_location("Egg Room Quest cleared"), lambda state: has_weapon(world, state, player, "Nothing (Weapon)"))
 
     # The Desert Fortress
-    add_rule(world.get_location("Xinopherydon Defeated"), lambda state: can_fly(state, player) and (state.has("Enchanted Monkey Wizard Staff", player) or state.has("Octopus King Crown with Jaspers", player)))
+    add_rule(world.get_location("Xinopherydon Defeated"), lambda state: can_fly(state, player) and (has_weapon(world, state, player, "Enchanted Monkey Wizard Staff") or state.has("Octopus King Crown with Jaspers", player)))
     add_rule(world.get_location("Xinopherydon Quest Unicorn Horn Acquired"), lambda state: can_fly(state, player))
-    add_rule(world.get_location("Teapot Defeated"), lambda state: weapon_is_at_least(state, player, "Scythe") and state.has("Octopus King Crown with Obsidian", player) and state.has("Sorceress' Cauldron", player) and state.has("Xinopherydon Claw", player))
-    add_rule(world.get_location("Rocket Boots Acquired"), lambda state: can_fly(state, player) or (state.has("Boots of Introspection", player) and can_jump(state, player) and (state.has("Octopus King Crown with Obsidian", player) or state.has("Summoning Tribal Spear", player))))
+    add_rule(world.get_location("Teapot Defeated"), lambda state: weapon_is_at_least(world, state, player,
+                                                                                     "Scythe") and state.has("Octopus King Crown with Obsidian", player) and state.has("Sorceress' Cauldron", player) and state.has("Xinopherydon Claw", player))
+    add_rule(world.get_location("Rocket Boots Acquired"), lambda state: can_fly(state, player) or (state.has("Boots of Introspection", player) and can_jump(state, player) and (state.has("Octopus King Crown with Obsidian", player) or has_weapon(world, state, player, "Summoning Tribal Spear"))))
 
     # Hell rules
-    add_rule(world.get_location("Devil Defeated"), lambda state: state.has("Black Magic Grimoire", player) and state.has("Unicorn Horn", player) and state.has("Boots of Introspection", player) and armor_is_at_least(state, player, "Enchanted Knight Body Armour") and state.has("Pink Enchanted Gloves", player) and state.has("Enchanted Monkey Wizard Staff", player))
+    add_rule(world.get_location("Devil Defeated"), lambda state: state.has("Black Magic Grimoire", player) and state.has("Unicorn Horn", player) and state.has("Boots of Introspection", player) and armor_is_at_least(state, player, "Enchanted Knight Body Armour") and state.has("Pink Enchanted Gloves", player) and has_weapon(world, state, player, "Enchanted Monkey Wizard Staff"))
 
     # Developer rules
     add_rule(world.get_location("The Developer Defeated"), lambda state: state.has("Purple Fin", player) and state.has("Beginners' Grimoire", player))
@@ -93,23 +115,23 @@ def set_rules(world: World, player: int):
     # The Sea rules
 
     add_rule(world.get_location("The Sponge Acquired"),
-             lambda state: sea_entrance(state, player))
+             lambda state: sea_entrance(world, state, player))
 
     add_rule(world.get_location("The Shell Powder Acquired"),
-             lambda state: sea_entrance(state, player))
+             lambda state: sea_entrance(world, state, player))
 
     add_rule(world.get_location("The Red Fin Acquired"),
-             lambda state: can_beat_sharks(state, player) and state.has("Red Enchanted Gloves", player)
+             lambda state: can_beat_sharks(world, state, player) and state.has("Red Enchanted Gloves", player)
                            and state.has("Octopus King Crown with Jaspers", player))
 
     add_rule(world.get_location("The Green Fin Acquired"),
-             lambda state: can_beat_sharks(state, player)
+             lambda state: can_beat_sharks(world, state, player)
                            and state.has("Advanced Grimoire", player)
                            and state.has("Red Enchanted Gloves", player)
                            and state.has("Octopus King Crown with Jaspers", player))
 
     add_rule(world.get_location("The Purple Fin Acquired"),
-             lambda state: can_beat_sharks(state, player) and state.has("Heart Pendant", player)
+             lambda state: can_beat_sharks(world, state, player) and state.has("Heart Pendant", player)
                            and state.has("Heart Plug", player)
                            and state.has("Advanced Grimoire", player) and state.has("Red Enchanted Gloves", player)
                            and state.has("Octopus King Crown with Jaspers", player))
@@ -127,9 +149,20 @@ def set_rules(world: World, player: int):
     add_rule(world.get_location("Village Shop Chocolate Bar"), lambda state: can_farm_candies(state, player))
     add_rule(world.get_location("Village Shop Candy Merchant's Hat"), lambda state: can_farm_candies(state, player))
 
-def weapon_is_at_least(state: CollectionState, player: int, minimum_weapon: str):
+def has_weapon(world, state: CollectionState, player: int, weapon: str):
+    if state.has(weapon, player):
+        return True
+
+    start_weapon_number = world.options.starting_weapon.value
+    for item in items:
+        if items[item].code - candy_box_2_base_id == start_weapon_number and item == weapon:
+            return True
+
+    return False
+
+def weapon_is_at_least(world, state: CollectionState, player: int, minimum_weapon: str):
     for weapon in weapons[weapons.index(minimum_weapon):]:
-        if state.has(weapon, player):
+        if has_weapon(world, state, player, weapon):
             return True
     return False
 

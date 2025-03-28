@@ -82,4 +82,5 @@ items: dict[str, CandyBox2ItemData] = {
     "Locked Candy Box": CandyBox2ItemData(candy_box_2_base_id + 58, 1, ItemClassification.progression | ItemClassification.useful),
     "Boots of Introspection": CandyBox2ItemData(candy_box_2_base_id + 59, 1, ItemClassification.progression),
     "Pain au Chocolat": CandyBox2ItemData(candy_box_2_base_id + 60, 5, ItemClassification.useful),
+    "Nothing (Weapon)": CandyBox2ItemData(candy_box_2_base_id + 61, 1, ItemClassification.progression),
 }

@@ -6,7 +6,7 @@ from BaseClasses import CollectionState, Tutorial
 from entrance_rando import ERPlacementState
 from worlds.AutoWorld import World, WebWorld
 from .locations import location_descriptions, locations
-from .items import items, CandyBox2Item
+from .items import items, CandyBox2Item, candy_box_2_base_id
 from .options import CandyBox2Options
 from .regions import create_regions, connect_entrances
 from .rules import set_rules
@@ -54,6 +54,8 @@ class CandyBox2World(World):
         for name, data in items.items():
             if data.required_amount > 0:
                 for i in range(data.required_amount):
+                    if self.options.starting_weapon.value == data.code - candy_box_2_base_id:
+                        continue
                     self.multiworld.itempool += [self.create_item(name)]
 
     def connect_entrances(self) -> None:
@@ -78,6 +80,9 @@ class CandyBox2World(World):
             },
             "health": {
                 "teapot": self.options.teapot_hp.value
+            },
+            "defaults": {
+                "weapon": self.options.starting_weapon.value
             }
         }
 

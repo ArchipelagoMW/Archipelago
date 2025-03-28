@@ -57,12 +57,34 @@ class TeapotHP(Range):
     range_end = 10000000
     default = 1000000
 
+class StartingWeapon(Choice):
+    """
+    Select the weapon that you will start the game with
+    """
+    display_name = "Starting Weapon"
+    default = 61
+
+    option_nothing = 61
+    option_wooden_sword = 23
+    option_iron_axe = 24
+    option_tribal_spear = 36
+    option_monkey_wizard_staff = 16
+    option_polished_silver_sword = 25
+    option_trolls_bludgeon = 9
+    option_summoning_tribal_spear = 30
+    option_enchanted_monkey_wizard_staff = 31
+    option_giant_spoon = 37
+    option_giant_spoon_of_doom = 35
+    option_scythe = 27
+
+
 @dataclass
 class CandyBox2Options(PerGameCommonOptions):
     progression_balancing = True
 
     quest_randomisation: QuestRandomisation
     death_link: DeathLink
+    starting_weapon: StartingWeapon
     candy_production_multiplier: CandyProductionMultiplier
     lollipop_production_multiplier: LollipopProductionMultiplier
     candy_merchant_hat_price: CandyMerchantHatPrice

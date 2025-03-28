@@ -46,7 +46,8 @@ def create_regions(world):
     populate_region(multiworld, player, CandyBox2Region("Village House 1", player, multiworld, "The house next to the forge in the village"), village_house_1_locations, village)
     village_house_2, _ = populate_region(multiworld, player, CandyBox2Region("Village House 2", player, multiworld, "The house with the Cellar quest"), village_house_2_locations, village)
 
-    cellar_quest, village_house_quest_entrance = populate_region(multiworld, player, CandyBox2Region("Village Cellar", player, multiworld, "The Rat quest"), village_cellar_locations, village_house_2, lambda state: weapon_is_at_least(state, player, "Wooden Sword"))
+    cellar_quest, village_house_quest_entrance = populate_region(multiworld, player, CandyBox2Region("Village Cellar", player, multiworld, "The Rat quest"), village_cellar_locations, village_house_2, lambda state: weapon_is_at_least(
+        world, state, player, "Wooden Sword"))
     mark_quest_entrance(world, village_house_quest_entrance, "Village House Enter Cellar")
 
     forge_1, _ = populate_region(multiworld, player, CandyBox2Region("The Forge 1", player, multiworld, "The Forge in the village"), forge_1_locations, village)
