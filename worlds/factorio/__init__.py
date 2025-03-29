@@ -532,6 +532,9 @@ class Factorio(World):
                             all_items[name], self.player)
         return item
 
+    def get_filler_item_name(self) -> str:
+        return super().get_filler_item_name()
+
 
 class FactorioLocation(Location):
     game: str = Factorio.game
