@@ -1661,25 +1661,25 @@ SPEEDY_LOCATION_TABLE: dict[str, LMLocationData] = {
 
 GOLD_MICE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Study Cheese Gold Mouse":        LMLocationData("Study", 659, "Mouse", 75, [], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5DC4, bit_position=4, in_game_room_id=35)]),
+        update_ram_addr=[LMRamData(0x803D5DC4, bit_position=4)]),
     "Fortune Teller Cheese Mouse":    LMLocationData("Fortune-Teller's Room", 660, "Mouse", 52, [], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5DC4, bit_position=3, in_game_room_id=3)]),
+        update_ram_addr=[LMRamData(0x803D5DC4, bit_position=3)]),
     "Dining Room Cheese Mouse":       LMLocationData("Dining Room", 661, "Mouse", 53, [], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5DB1, bit_position=7, in_game_room_id=8)]),
+        update_ram_addr=[LMRamData(0x803D5DB1, bit_position=7)]),
     "Tea Room Cheese Mouse":          LMLocationData("Tea Room", 662, "Mouse", 72, [], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5DC4, bit_position=5, in_game_room_id=50)]),
+        update_ram_addr=[LMRamData(0x803D5DC4, bit_position=5)]),
     "Safari Room Cheese Mouse":       LMLocationData("Safari Room", 663, "Mouse", 82, [], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5DC4, bit_position=6, in_game_room_id=55)]),
+        update_ram_addr=[LMRamData(0x803D5DC4, bit_position=6)]),
     "1F Hallway Chance Mouse":        LMLocationData("1F Hallway", 664, "Mouse", 49, [], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5DC4, bit_position=7, in_game_room_id=6)]),
+        update_ram_addr=[LMRamData(0x803D5DC4, bit_position=7)]),
     "Kitchen Chance Mouse":           LMLocationData("Kitchen", 665, "Mouse", 8, [], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5DB1, bit_position=4, in_game_room_id=7)]),
+        update_ram_addr=[LMRamData(0x803D5DB1, bit_position=4)]),
     "Tea Room Chance Mouse":          LMLocationData("Tea Room", 666, "Mouse", 76, [], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5DB1, bit_position=5, in_game_room_id=50)]),
+        update_ram_addr=[LMRamData(0x803D5DB1, bit_position=5)]),
     "2F Rear Hallway Chance Mouse":   LMLocationData("2F Rear Hallway", 667, "Mouse", 71, remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5DB1, bit_position=3, in_game_room_id=32)]),
+        update_ram_addr=[LMRamData(0x803D5DB1, bit_position=3)]),
     "Sealed Room Chance Mouse":       LMLocationData("Sealed Room", 668, "Mouse", 73, remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5DB1, bit_position=6, in_game_room_id=37)])
+        update_ram_addr=[LMRamData(0x803D5DB1, bit_position=6)])
 }
 
 # Individual Boo room Locations
