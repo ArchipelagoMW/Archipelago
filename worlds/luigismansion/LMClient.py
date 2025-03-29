@@ -428,16 +428,12 @@ class LMContext(CommonContext):
             for addr_to_update in lm_item.update_ram_addr:
                 byte_size = 1 if addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
                 if not addr_to_update.pointer_offset is None:
-                    curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
-                                                                                 [addr_to_update.pointer_offset]),
-                                                             byte_size))
-                    curr_val = (curr_val | (1 << addr_to_update.bit_position))
+                    curr_val = addr_to_update.item_count
                     dme.write_bytes(dme.follow_pointers(addr_to_update.ram_addr,
                                                         [addr_to_update.pointer_offset]),
                                     curr_val.to_bytes(byte_size, 'big'))
                 elif addr_to_update.bit_position is None:
-                    curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
-                    curr_val += 1
+                    curr_val = addr_to_update.item_count
                     dme.write_bytes(addr_to_update.ram_addr, curr_val.to_bytes(byte_size, 'big'))
                 else:
                     curr_val = addr_to_update.item_count
