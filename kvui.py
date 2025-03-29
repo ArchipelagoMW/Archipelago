@@ -1004,6 +1004,11 @@ class HintLayout(MDBoxLayout):
         boxlayout.add_widget(AutocompleteHintInput())
         self.add_widget(boxlayout)
 
+    def fix_heights(self):
+        for child in self.children:
+            if hasattr(child, "fix_heights"):
+                getattr(child, "fix_heights")()
+
         
 status_names: typing.Dict[HintStatus, str] = {
     HintStatus.HINT_FOUND: "Found",
