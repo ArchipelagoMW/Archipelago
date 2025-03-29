@@ -528,6 +528,16 @@ class BonkTrapWeight(Range):
     range_end = 100
     default = 15
 
+class GhostTrapWeight(Range):
+    """
+    Set the weight for how often ghosts get chosen as traps.
+    """
+    display_name = "Ghost Weight"
+    internal_name = "ghost_weight"
+    range_start = 0
+    range_end = 100
+    default = 15
+
 @dataclass
 class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     rank_requirement: RankRequirement
@@ -579,6 +589,7 @@ class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     banana_trap_weight: BananaTrapWeight
     poss_trap_weight: PossTrapWeight
     bonk_trap_weight: BonkTrapWeight
+    ghost_weight: GhostTrapWeight
     nothing_weight: NothingWeight
     heart_weight: HeartWeight
     start_inventory_from_pool: StartInventoryPool

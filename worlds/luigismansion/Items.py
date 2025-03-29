@@ -238,7 +238,8 @@ filler_items: Dict[str, LMItemData] = {
         update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x33C, ram_byte_size=4, item_count=1)]),
     "Poison Mushroom": LMItemData("Trap", 125, IC.trap,
         update_ram_addr=[LMRamData(0x804ddac0, ram_byte_size=4, item_count=6)]), # value of 6
-    # "Ghost": LMItemData("Trap", 126, IC.trap),
+    "Ghost": LMItemData("Trap", 126, IC.trap,
+        update_ram_addr=[LMRamData(0x804dda04, ram_byte_size=4)]),
     "Nothing": LMItemData("Nothing Item", 127, IC.filler),
     "Small Heart": LMItemData("Heart", 128, IC.filler,
         update_ram_addr=[LMRamData(0x803D8B40, pointer_offset=0xB8, ram_byte_size=2, item_count=20)]),
