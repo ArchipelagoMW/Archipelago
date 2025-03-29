@@ -659,7 +659,7 @@ class LMWorld(World):
                     early_key = key
                     break
             if len(early_key) > 0:
-                self.multiworld.local_early_items[self.player][early_key] = 1
+                self.multiworld.local_early_items[self.player].update({early_key: 1})
 
         # Calculate the number of additional filler items to create to fill all locations
         n_locations = len(self.multiworld.get_unfilled_locations(self.player))
