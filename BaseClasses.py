@@ -10,7 +10,7 @@ from collections import Counter, deque
 from collections.abc import Collection, MutableSequence
 from enum import IntEnum, IntFlag
 from typing import (AbstractSet, Any, Callable, ClassVar, Dict, Iterable, Iterator, List, Mapping, NamedTuple,
-                    Optional, Protocol, Set, Tuple, Union, TYPE_CHECKING)
+                    Optional, Protocol, Set, Tuple, Union, TYPE_CHECKING, Literal)
 
 from typing_extensions import NotRequired, TypedDict
 
@@ -418,12 +418,6 @@ class MultiWorld():
     def get_regions(self, player: Optional[int] = None) -> Collection[Region]:
         return self.regions if player is None else self.regions.region_cache[player].values()
 
-    def get_reachable_regions(self, state: CollectionState | None = None,
-                                player: int | None = None) -> List[Region]:
-        """Retrieve every region that can be reached from the `player` with the given `state`"""
-        state: CollectionState = state if state else self.state
-        return [region for region in self.get_regions(player) if region.can_reach(state)]
-
     def get_region(self, region_name: str, player: int) -> Region:
         return self.regions.region_cache[player][region_name]
 
@@ -498,12 +492,6 @@ class MultiWorld():
         return Utils.RepeatableChain(tuple(self.regions.entrance_cache[player].values()
                                            for player in self.regions.entrance_cache))
 
-    def get_reachable_entrances(self, state: CollectionState | None = None,
-                                player: int | None = None) -> List[Entrance]:
-        """Retrieve every entrance that can be reached from the `player` with the given `state`"""
-        state: CollectionState = state if state else self.state
-        return [entrance for entrance in self.get_entrances(player) if entrance.can_reach(state)]
-
     def register_indirect_condition(self, region: Region, entrance: Entrance):
         """Report that access to this Region can result in unlocking this Entrance,
         state.can_reach(Region) in the Entrance's traversal condition, as opposed to pure transition logic."""
@@ -515,15 +503,21 @@ class MultiWorld():
         return Utils.RepeatableChain(tuple(self.regions.location_cache[player].values()
                                            for player in self.regions.location_cache))
 
-    def get_unfilled_locations(self, player: Optional[int] = None) -> List[Location]:
+    def get_unfilled_locations(self, player: Optional[int] = None) -> list[Location]:
         return [location for location in self.get_locations(player) if location.item is None]
 
-    def get_filled_locations(self, player: Optional[int] = None) -> List[Location]:
+    def get_filled_locations(self, player: Optional[int] = None) -> list[Location]:
         return [location for location in self.get_locations(player) if location.item is not None]
 
     def get_reachable_locations(self, state: CollectionState | None = None,
-                                player: int | None = None) -> List[Location]:
-        """Retrieve every entrances that can be reached from the `player` with the given `state`"""
+                                player: int | None = None) -> list[Location]:
+        """
+        Retrieve every location that can be reached for the `player` with the given `state`.
+
+        :param CollectionState | None state: The current state of the Multiworld game
+        :param int | None player: The player should have the locations in its world
+        :return: The list of locations that can be reached in the multiworld for the given state
+        """
         state: CollectionState = state if state else self.state
         return [location for location in self.get_locations(player) if location.can_reach(state)]
 
@@ -552,22 +546,6 @@ class MultiWorld():
                 return True
 
         return False
-
-    def reachable_spot(self, state: CollectionState, player: int | None = None,
-                       resolution_hint: str = "Location") -> List[str]:
-        """
-        Retrieve a list of spot that can be reached from the current player with the given `state`.
-        The `resolution_hint` parameter specifies which kind of spot to look for. It can take
-        "Location", "Entrance" or "Region" as values. Defaults to "Location".
-        """
-        assert resolution_hint in ("Location", "Region", "Entrance")
-        if resolution_hint == "Region":
-            reachable_spot: List[str] = [location.name for location in self.get_reachable_regions(state, player)]
-        elif resolution_hint == "Entrance":
-            reachable_spot: List[str] = [location.name for location in self.get_reachable_entrances(state, player)]
-        else:
-            reachable_spot: List[str] = [location.name for location in self.get_reachable_locations(state, player)]
-        return reachable_spot
 
     def has_beaten_game(self, state: CollectionState, player: Optional[int] = None) -> bool:
         if player:
@@ -874,6 +852,32 @@ class CollectionState():
 
     def can_reach_region(self, spot: str, player: int) -> bool:
         return self.multiworld.get_region(spot, player).can_reach(self)
+
+    def get_reachable_entrances(self, player: int | None = None) -> list[Entrance]:
+        """
+        Retrieve every entrance that can be reached for the `player`.
+
+        :param int | None player: The player should have the entrances in its world
+        :return: The list of entrances that can be reached in the multiworld
+        """
+        return [entrance for entrance in self.multiworld.get_entrances(player) if entrance.can_reach(self)]
+
+    def reachable_spots(self, player: int,
+                       resolution_hint: Literal["Location", "Region", "Entrance"] = "Location") -> set[str]:
+        """
+        Retrieve a list of spot that can be reached from the current player with the given `state`.
+        The `resolution_hint` parameter specifies which kind of spot to look for. It can take
+        "Location", "Entrance" or "Region" as values. Defaults to "Location".
+        """
+        assert resolution_hint in ("Location", "Region", "Entrance")
+        if resolution_hint == "Region":
+            reachable_spot: set[str] = set([region.name for region in self.reachable_regions[player]])
+        elif resolution_hint == "Entrance":
+            reachable_spot: set[str] = set([entrance.name for entrance in self.get_reachable_entrances(player)])
+        else:
+            reachable_spot: set[str] = set([location.name for location in
+                                            self.multiworld.get_reachable_locations(self, player)])
+        return reachable_spot
 
     def sweep_for_events(self, locations: Optional[Iterable[Location]] = None) -> None:
         Utils.deprecate("sweep_for_events has been renamed to sweep_for_advancements. The functionality is the same. "
