@@ -1747,7 +1747,7 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, world: World, pla
                                 state.has(ItemName.sonic_bounce_bracelet, player) and
                                 state.has(ItemName.sonic_flame_ring, player)))
 
-        add_rule(multiworld.get_location(LocationName.eqq_quarters_itembox_9, player),
+        add_rule(multiworld.get_location(LocationName.egg_quarters_itembox_9, player),
                  lambda state: state.has(ItemName.rouge_mystic_melody, player))
         add_rule(multiworld.get_location(LocationName.lost_colony_itembox_9, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
@@ -3214,7 +3214,7 @@ def set_mission_upgrade_rules_hard(multiworld: MultiWorld, world: World, player:
                  lambda state: (state.has(ItemName.sonic_light_shoes, player) and
                                 state.has(ItemName.sonic_flame_ring, player)))
 
-        add_rule(multiworld.get_location(LocationName.eqq_quarters_itembox_9, player),
+        add_rule(multiworld.get_location(LocationName.egg_quarters_itembox_9, player),
                  lambda state: state.has(ItemName.rouge_mystic_melody, player))
         add_rule(multiworld.get_location(LocationName.lost_colony_itembox_9, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
