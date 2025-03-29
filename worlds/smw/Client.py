@@ -1,5 +1,6 @@
 import logging
 import time
+from typing import Any
 
 from NetUtils import ClientStatus, NetworkItem, color
 from worlds.AutoSNIClient import SNIClient
