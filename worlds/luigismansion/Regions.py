@@ -112,8 +112,8 @@ spawn_locations = {
                               "key": ["Heart Key", "Butler's Room Key"]}, # Butler
     "Fortune-Teller's Room": {"room_no": 3, "pos_x": 1807.135740, "pos_y": 0, "pos_z": 214.838852,
                               "key": ["Fortune Teller Key", "Mirror Room Key"]}, # Fortune Teller
-    "Mirror Room":           {"room_no": 4, "pos_x": 3343.897950, "pos_y": 0, "pos_z": -114.910957,
-                              "key": ["Heart Key", "Mirror Room Key"]}, # Mirror
+    # "Mirror Room":           {"room_no": 4, "pos_x": 3343.897950, "pos_y": 0, "pos_z": -114.910957,
+    #                           "key": ["Heart Key", "Mirror Room Key"]}, # Mirror
     "Ballroom":              {"room_no": 10, "pos_x": 2854.236820, "pos_y": 0, "pos_z": -1565.909060,
                               "key": ["Ballroom Key", "Storage Room Key"]}, # BaLLROOM
     "Storage Room":          {"room_no": 14, "pos_x": 3412.177250, "pos_y": 0, "pos_z": -3009.698000,
@@ -274,7 +274,6 @@ def connect_regions(world: "LMWorld"):
     lmconnect(world, "2F Washroom", "Foyer", one_way=True)
     lmconnect(world, "2F Bathroom", "Foyer", one_way=True)
     lmconnect(world, "Guest Room", "Foyer", one_way=True)
-    lmconnect(world, "Mirror Room", "Foyer", one_way=True)
     lmconnect(world, "Billiards Room", "Foyer", one_way=True)
     lmconnect(world, "Wardrobe", "Foyer", one_way=True)
     lmconnect(world, "Secret Altar", "Foyer", one_way=True)
