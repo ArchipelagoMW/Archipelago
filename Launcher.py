@@ -268,12 +268,9 @@ def run_gui(path: str, args: Any):
                 """
                 Builds a card widget for a given component.
 
-                Args:
-                    component (Component): The component associated with the button.
+                :param component: The component associated with the button.
 
-                Returns:
-                    The created Card Widget.
-
+                :return: The created Card Widget.
                 """
                 button_card = MDCard(style="filled", padding="4dp", size_hint=(1, None), height=dp(75))
                 button_layout = MDRelativeLayout()
