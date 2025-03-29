@@ -183,6 +183,12 @@ class LMContext(CommonContext):
         self.is_luigi_dead = False
         self.last_health_checked = time.time()
 
+        # Value for Luigi's max health
+        self.luigimaxhp = 100
+
+        # Track if the user has pickup animations turned on.
+        self.pickup_anim_off = False
+
         # Used for handling received items to the client.
         self.already_mentioned_rank_diff = False
         self.game_clear = False
@@ -508,7 +514,6 @@ class LMContext(CommonContext):
                         curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
             [addr_to_update.pointer_offset]), byte_size))
                         if item.item in HEALTH_RELATED_ITEMS:
-                            #TODO come back and update this, if user chosen max health is supported.
                             curr_val = min(curr_val + addr_to_update.item_count, self.luigimaxhp)
                         else:
                             curr_val+= addr_to_update.item_count
@@ -654,15 +659,10 @@ class LMContext(CommonContext):
             vac_speed = "3800000F"
             dme.write_bytes(ALL_ITEMS_TABLE["Poltergust 4000"].update_ram_addr[0].ram_addr, bytes.fromhex(vac_speed))
 
-        #TODO Validate in game display has moved so we don't need this anymore.
-        # Always reset the Boo's location captured RAM byte back to 0, only if it's been captured before.
-        # Although Boo items share the same address, we are not using it currently.
-        #for lm_boo in BOO_LOCATION_TABLE.keys():
-        #    lm_boo_item = BOO_LOCATION_TABLE[lm_boo]
-        #    if not AutoWorldRegister.world_types[self.game].location_name_to_id[lm_boo] in self.checked_locations:
-        #        continue
-        #    boo_caught = dme.read_byte(lm_boo_item.room_ram_addr)
-        #    dme.write_byte(lm_boo_item.room_ram_addr, boo_caught & ~(1 << lm_boo_item.locationbit))
+        # Always adjust Pickup animation issues if the user turned pick up animations off.
+        if self.pickup_anim_off:
+            crown_helper_val = "01"
+            dme.write_bytes(0x804dd9b4, bytes.fromhex(crown_helper_val))
 
         return
 
