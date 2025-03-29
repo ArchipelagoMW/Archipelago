@@ -4,7 +4,7 @@ from Options import Toggle, Range, PerGameCommonOptions, Choice, StartInventoryP
 
 
 class LuigiWalkSpeed(Choice):
-    """Choose how fast Luigi moves"""
+    """Choose how fast Luigi moves. Speeds above normal may cause OoB issues"""
     display_name = "Walk Speed"
     internal_name = "walk_speed"
     option_normal_speed = 0
