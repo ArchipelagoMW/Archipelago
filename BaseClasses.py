@@ -871,6 +871,7 @@ class CollectionState():
         """
         assert resolution_hint in ("Location", "Region", "Entrance")
         if resolution_hint == "Region":
+            self.update_reachable_regions(player)
             reachable_spot: set[str] = set([region.name for region in self.reachable_regions[player]])
         elif resolution_hint == "Entrance":
             reachable_spot: set[str] = set([entrance.name for entrance in self.get_reachable_entrances(player)])

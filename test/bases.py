@@ -282,7 +282,7 @@ class WorldTestBase(unittest.TestCase):
         Assert that when the items are not collect, the spots are not reachable, but when
         the items are collected, the spots became reachable. Also assert that no other new spots can be
         accessed when the items are collected.
-        
+
         :param list[str] spots: The name of the locations/regions/entrances that should become reachable with the items
         :param list[str] item_names: The name of the items that should enable the spots
         :param list[str] initial_items: The initial items that should be initially collected
@@ -294,7 +294,6 @@ class WorldTestBase(unittest.TestCase):
         state = CollectionState(self.multiworld)
         for item in initial_items:
             state.collect(self.get_item_by_name(item))
-        state.update_reachable_regions(self.player)
         reachable_spot_before = state.reachable_spots(self.player, resolution_hint)
         for spot in spots:
             self.assertFalse(state.can_reach(spot, resolution_hint, self.player),
@@ -302,7 +301,6 @@ class WorldTestBase(unittest.TestCase):
         items = self.get_items_by_name(item_names)
         for item in items:
             state.collect(item)
-        state.update_reachable_regions(self.player)
         reachable_spot_after = state.reachable_spots(self.player, resolution_hint) - reachable_spot_before
         for spot in spots:
             self.assertTrue(state.can_reach(spot, resolution_hint, self.player),
