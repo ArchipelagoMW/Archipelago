@@ -211,7 +211,7 @@ def launch(exe, in_terminal=False):
             return
     subprocess.Popen(exe)
 
-def create_shortcut(button, component: Component):
+def create_shortcut(button: Any, component: Component) -> None:
     from pyshortcuts import make_shortcut
     script = sys.argv[0]
     wkdir = Utils.local_path()
@@ -225,7 +225,7 @@ def create_shortcut(button, component: Component):
 refresh_components: Optional[Callable[[], None]] = None
 
 
-def run_gui(path: str, args: Any):
+def run_gui(path: str, args: Any) -> None:
     from kvui import (MDApp, MDFloatLayout, MDGridLayout, MDButton, MDLabel, MDButtonText, MDButtonIcon, ScrollBox,
                       ContainerLayout, Widget, MDBoxLayout, ApAsyncImage)
     from kivy.core.window import Window
@@ -244,7 +244,7 @@ def run_gui(path: str, args: Any):
         container: ContainerLayout
         navigation: MDBoxLayout
         grid: MDGridLayout
-        button_layout: Optional[ScrollBox] = None
+        button_layout: ScrollBox | None = None
 
         def __init__(self, ctx=None, path=None, args=None):
             self.title = self.base_title + " " + Utils.__version__
@@ -259,7 +259,7 @@ def run_gui(path: str, args: Any):
                     self.favorites.extend(persistent["launcher"]["favorites"])
             super().__init__()
 
-        def _refresh_components(self, type_filter: Optional[Sequence[Union[str, Type]]] = None) -> None:
+        def _refresh_components(self, type_filter: Sequence[str | Type] | None = None) -> None:
             if not type_filter:
                 type_filter = [Type.CLIENT, Type.ADJUSTER, Type.TOOL, Type.MISC]
             favorites = "favorites" in type_filter
@@ -281,7 +281,7 @@ def run_gui(path: str, args: Any):
 
                 source = icon_paths[component.icon]
                 image = ApAsyncImage(source=source, size=(40, 40), size_hint_y=None,
-                                   pos_hint={"center_x": 0.1, "center_y": 0.5})
+                                     pos_hint={"center_x": 0.1, "center_y": 0.5})
 
                 button_layout.add_widget(image)
                 button_layout.add_widget(MDLabel(text=component.display_name,
