@@ -1043,7 +1043,7 @@ class HintLog(MDRecycleView):
                    "hint": {"receiving_player": -1, "location": -1, "finding_player": -1, "status": ""}},
         "striped": True,
     }
-    data: typing.List[typing.Any]
+    data: list[typing.Any]
     sort_key: str = ""
     reversed: bool = True
 
