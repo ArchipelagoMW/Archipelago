@@ -104,11 +104,8 @@ class GoalLogic(BaseLogic[StardewLogic]):
     def can_complete_gourmet_chef(self) -> StardewRule:
         cooksanity_prefix = "Cook "
         all_recipes_names = []
-        exclude_island = self.options.exclude_ginger_island == options.ExcludeGingerIsland.option_true
         for location in locations_by_tag[LocationTags.COOKSANITY]:
-            if exclude_island and LocationTags.GINGER_ISLAND in location.tags:
-                continue
-            if location.mod_name and location.mod_name not in self.options.mods:
+            if not self.content.are_all_enabled(location.content_packs):
                 continue
             all_recipes_names.append(location.name[len(cooksanity_prefix):])
         all_recipes = [all_cooking_recipes_by_name[recipe_name] for recipe_name in all_recipes_names]
@@ -117,17 +114,14 @@ class GoalLogic(BaseLogic[StardewLogic]):
     def can_complete_craft_master(self) -> StardewRule:
         craftsanity_prefix = "Craft "
         all_recipes_names = []
-        exclude_island = self.options.exclude_ginger_island == options.ExcludeGingerIsland.option_true
         exclude_masteries = not self.content.features.skill_progression.are_masteries_shuffled
         for location in locations_by_tag[LocationTags.CRAFTSANITY]:
             if not location.name.startswith(craftsanity_prefix):
                 continue
-            if exclude_island and LocationTags.GINGER_ISLAND in location.tags:
-                continue
             # FIXME Remove when recipes are in content packs
             if exclude_masteries and LocationTags.REQUIRES_MASTERIES in location.tags:
                 continue
-            if location.mod_name and location.mod_name not in self.options.mods:
+            if not self.content.are_all_enabled(location.content_packs):
                 continue
             all_recipes_names.append(location.name[len(craftsanity_prefix):])
         all_recipes = [all_crafting_recipes_by_name[recipe_name] for recipe_name in all_recipes_names]
@@ -161,7 +155,7 @@ class GoalLogic(BaseLogic[StardewLogic]):
         else:
             other_rules.append(self.logic.relationship.has_hearts_with_any_bachelor(13))
 
-        if ModNames.deepwoods in self.options.mods:  # Petting the Unicorn
+        if self.content.is_enabled(ModNames.deepwoods):  # Petting the Unicorn
             number_of_stardrops_to_receive += 1
 
         return self.logic.received("Stardrop", number_of_stardrops_to_receive) & self.logic.and_(*other_rules, allow_empty=True)

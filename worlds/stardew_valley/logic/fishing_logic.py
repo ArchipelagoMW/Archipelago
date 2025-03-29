@@ -8,11 +8,10 @@ from .region_logic import RegionLogicMixin
 from .season_logic import SeasonLogicMixin
 from .skill_logic import SkillLogicMixin
 from .tool_logic import ToolLogicMixin
+from ..content.vanilla.qi_board import qi_board_content_pack
 from ..data import fish_data
 from ..data.fish_data import FishItem
-from ..options import ExcludeGingerIsland
-from ..options import SpecialOrderLocations
-from ..stardew_rule import StardewRule, True_, False_
+from ..stardew_rule import StardewRule, True_
 from ..strings.ap_names.mods.mod_items import SVEQuestItem
 from ..strings.craftable_names import Fishing
 from ..strings.fish_names import SVEFish
@@ -65,12 +64,11 @@ SkillLogicMixin]]):
         return self.logic.fishing.can_catch_fish(fish)
 
     def can_start_extended_family_quest(self) -> StardewRule:
-        if self.options.exclude_ginger_island == ExcludeGingerIsland.option_true:
-            return False_()
-        if not self.options.special_order_locations & SpecialOrderLocations.value_qi:
-            return False_()
-        return (self.logic.region.can_reach(Region.qi_walnut_room) &
-                self.logic.and_(*(self.logic.fishing.can_catch_fish(fish) for fish in fish_data.vanilla_legendary_fish)))
+        if self.content.is_enabled(qi_board_content_pack):
+            return (self.logic.region.can_reach(Region.qi_walnut_room) &
+                    self.logic.and_(*(self.logic.fishing.can_catch_fish(fish) for fish in fish_data.vanilla_legendary_fish)))
+
+        return self.logic.false_
 
     def can_catch_quality_fish(self, fish_quality: str) -> StardewRule:
         if fish_quality == FishQuality.basic:

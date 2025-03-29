@@ -12,9 +12,9 @@ from .region_logic import RegionLogicMixin
 from .season_logic import SeasonLogicMixin
 from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
+from ..content.vanilla.base import base_game
 from ..data.harvest import HarvestCropSource
 from ..mods.logic.magic_logic import MagicLogicMixin
-from ..mods.logic.mod_skills_levels import get_mod_skill_levels
 from ..stardew_rule import StardewRule, true_, True_, False_
 from ..strings.craftable_names import Fishing
 from ..strings.machine_names import Machine
@@ -31,7 +31,6 @@ else:
     ModLogicMixin = object
 
 fishing_regions = (Region.beach, Region.town, Region.forest, Region.mountain, Region.island_south, Region.island_west)
-vanilla_skill_items = ("Farming Level", "Mining Level", "Foraging Level", "Fishing Level", "Combat Level")
 
 
 class SkillLogicMixin(BaseLogicMixin):
@@ -108,10 +107,12 @@ CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin, ModLogicMixin]]):
             return True_()
 
         if self.content.features.skill_progression.is_progressive:
-            skills_items = vanilla_skill_items
+            skills = base_game.skills
             if allow_modded_skills:
-                skills_items += get_mod_skill_levels(self.options.mods)
-            return self.logic.received_n(*skills_items, count=level)
+                skills = self.content.skills.values()
+            skill_items = [skill.level_name for skill in skills]
+
+            return self.logic.received_n(*skill_items, count=level)
 
         months_with_4_skills = max(1, (level // 4) - 1)
         months_with_5_skills = max(1, (level // 5) - 1)

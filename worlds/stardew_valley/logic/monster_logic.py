@@ -7,8 +7,8 @@ from .combat_logic import CombatLogicMixin
 from .has_logic import HasLogicMixin
 from .region_logic import RegionLogicMixin
 from .time_logic import TimeLogicMixin, MAX_MONTHS
-from .. import options
 from ..data import monster_data
+from ..data.fish_data import ginger_island_river
 from ..stardew_rule import StardewRule
 from ..strings.generic_names import Generic
 from ..strings.region_names import Region
@@ -24,11 +24,11 @@ class MonsterLogic(BaseLogic[Union[HasLogicMixin, MonsterLogicMixin, RegionLogic
 
     @cached_property
     def all_monsters_by_name(self):
-        return monster_data.all_monsters_by_name_given_mods(self.options.mods.value)
+        return monster_data.all_monsters_by_name_given_content_packs(self.content.registered_packs)
 
     @cached_property
     def all_monsters_by_category(self):
-        return monster_data.all_monsters_by_category_given_mods(self.options.mods.value)
+        return monster_data.all_monsters_by_category_given_content_packs(self.content.registered_packs)
 
     def can_kill(self, monster: Union[str, monster_data.StardewMonster], amount_tier: int = 0) -> StardewRule:
         if amount_tier <= 0:
@@ -63,7 +63,7 @@ class MonsterLogic(BaseLogic[Union[HasLogicMixin, MonsterLogicMixin, RegionLogic
 
     def can_complete_all_monster_slaying_goals(self) -> StardewRule:
         rules = [self.logic.time.has_lived_max_months]
-        exclude_island = self.options.exclude_ginger_island == options.ExcludeGingerIsland.option_true
+        exclude_island = not self.content.is_enabled(ginger_island_river)
         island_regions = [Region.volcano_floor_5, Region.volcano_floor_10, Region.island_west, Region.dangerous_skull_cavern]
         for category in self.all_monsters_by_category:
             if exclude_island and all(all(location in island_regions for location in monster.locations)
