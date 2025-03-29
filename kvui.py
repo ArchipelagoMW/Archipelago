@@ -819,8 +819,8 @@ class HintLayout(BoxLayout):
 
     def fix_heights(self):
         for child in self.children:
-            if hasattr(child, "fix_heights"):
-                getattr(child, "fix_heights")()
+            fix_func = getattr(child, "fix_heights", None):
+            if fix_func: fix_func()
 
         
 status_names: typing.Dict[HintStatus, str] = {
