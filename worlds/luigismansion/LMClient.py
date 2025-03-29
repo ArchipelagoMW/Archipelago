@@ -660,6 +660,11 @@ class LMContext(CommonContext):
             crown_helper_val = "01"
             dme.write_bytes(0x804dd9b4, bytes.fromhex(crown_helper_val))
 
+        # Make it so the displayed Boo counter always appears even if you dont have boo radar or if you haven't caught
+        # a boo in-game yet.
+        if self.boosanity:
+            dme.write_bytes(0x803D5E0B, bytes.fromhex("01"))
+
         return
 
     # TODO remove this in favor of 0.6.0's implementation.
