@@ -443,6 +443,7 @@ class LMContext(CommonContext):
                     curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
                     curr_val = (curr_val | (1 << addr_to_update.bit_position))
                     dme.write_bytes(addr_to_update.ram_addr, curr_val.to_bytes(byte_size, 'big'))
+            self.received_trap_link = False
 
     async def send_trap_link(self, trap_name: str):
         if "TrapLink" not in self.tags or self.slot == None:
