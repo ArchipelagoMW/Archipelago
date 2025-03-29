@@ -246,7 +246,7 @@ filler_items: Dict[str, LMItemData] = {
     "Large Heart": LMItemData("Heart", 129, IC.filler,
         update_ram_addr=[LMRamData(0x803D8B40, pointer_offset=0xB8, ram_byte_size=2, item_count=50)]),
     "Bomb": LMItemData("Trap", 130, IC.trap,
-        update_ram_addr=[LMRamData(0x804ddac0, ram_byte_size=4)]), # value of 1
+        update_ram_addr=[LMRamData(0x804ddac0, ram_byte_size=4, item_count=1)]), # value of 1
     "Ice Trap": LMItemData("Trap", 131, IC.trap,
         update_ram_addr=[LMRamData(0x804ddac0, ram_byte_size=4, item_count=3)]), # value of 3
     "Banana Trap": LMItemData("Trap", 132, IC.trap,
