@@ -9,6 +9,7 @@ from pathlib import Path
 import yaml
 from pkgutil import get_data
 
+from .iso_helper.Update_GameUSA import update_game_usa
 from . import data
 from .Hints import PORTRAIT_HINTS
 from .JMP_Info_File import JMPInfoFile
@@ -70,15 +71,8 @@ class LuigisMansionRandomizer:
         bin_data.write(sbf.string_to_bytes(magic_seed, len(magic_seed)))
         self.gcm.changed_files["sys/boot.bin"] = bin_data
 
-        # # Copy obake01 into game_usa/model
-        # obake_copy = self.get_arc("files/model/obake01.szp")
-        # game_usa_edit = self.get_arc("files/Game/game_usa.szp")
-        # game_usa_node = next((game_usa_files for game_usa_files in game_usa_edit.file_entries if
-        #       game_usa_files.name == "model")).node
-        # game_usa_edit.add_new_file("obake01.arc", obake_copy.data, game_usa_node)
-        # game_usa_edit.regenerate_all_file_entries_list()
-        # game_usa_edit.save_changes()
-        # self.gcm.changed_files["files/Game/game_usa.szp"] = Yay0.compress(game_usa_edit.data)
+        # Updates the Game USA folder to have the correct ghost file we expect.
+        self.gcm = update_game_usa(self.gcm)
 
         # Important note: SZP are just RARC / Arc files that are yay0 compressed, at least for Luigi's Mansion
         # Get Arc automatically handles decompressing RARC data from yay0, but compressing is on us later.
