@@ -27,6 +27,8 @@ class Component:
     """
     display_name: str
     """Used as the GUI button label and the component name in the CLI args"""
+    description: str
+    """Optional description displayed on the GUI underneath the display name"""
     type: Type
     """
     Enum "Type" classification of component intent, for filtering in the Launcher GUI
@@ -58,8 +60,9 @@ class Component:
     def __init__(self, display_name: str, script_name: Optional[str] = None, frozen_name: Optional[str] = None,
                  cli: bool = False, icon: str = 'icon', component_type: Optional[Type] = None,
                  func: Optional[Callable] = None, file_identifier: Optional[Callable[[str], bool]] = None,
-                 game_name: Optional[str] = None, supports_uri: Optional[bool] = False):
+                 game_name: Optional[str] = None, supports_uri: Optional[bool] = False, description: str = "") -> None:
         self.display_name = display_name
+        self.description = description
         self.script_name = script_name
         self.frozen_name = frozen_name or f'Archipelago{script_name}' if script_name else None
         self.icon = icon

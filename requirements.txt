@@ -12,3 +12,6 @@ cython>=3.0.12
 cymem>=2.0.11
 orjson>=3.10.15
 typing_extensions>=4.12.2
+pyshortcuts>=1.9.1
+kivymd @ git+https://github.com/kivymd/KivyMD@5ff9d0d
+kivymd>=2.0.1.dev0
