@@ -3,11 +3,28 @@ from typing import List
 from BaseClasses import ItemClassification, Item
 from . import SVTestBase
 from .. import items, location_table, options
-from ..items import Group
+from ..items import Group, ItemData
 from ..locations import LocationTags
 from ..options import Friendsanity, SpecialOrderLocations, Shipsanity, Chefsanity, SeasonRandomization, Craftsanity, ExcludeGingerIsland, SkillProgression, \
     Booksanity, Walnutsanity
 from ..strings.region_names import Region
+
+
+def get_all_permanent_progression_items() -> List[ItemData]:
+    """Ignore all the stuff that the algorithm chooses one of, instead of all, to fulfill logical progression.
+    """
+    return [
+        item
+        for item in items.all_items
+        if ItemClassification.progression in item.classification
+        if item.mod_name is None
+        if item.name not in {event.name for event in items.events}
+        if item.name not in {deprecated.name for deprecated in items.items_by_group[Group.DEPRECATED]}
+        if item.name not in {season.name for season in items.items_by_group[Group.SEASON]}
+        if item.name not in {weapon.name for weapon in items.items_by_group[Group.WEAPON]}
+        if item.name not in {baby.name for baby in items.items_by_group[Group.BABY]}
+        if item.name != "The Gateway Gazette"
+    ]
 
 
 class TestBaseItemGeneration(SVTestBase):
@@ -25,17 +42,8 @@ class TestBaseItemGeneration(SVTestBase):
     }
 
     def test_all_progression_items_are_added_to_the_pool(self):
-        all_created_items = [item.name for item in self.multiworld.itempool]
-        # Ignore all the stuff that the algorithm chooses one of, instead of all, to fulfill logical progression
-        items_to_ignore = [event.name for event in items.events]
-        items_to_ignore.extend(item.name for item in items.all_items if item.mod_name is not None)
-        items_to_ignore.extend(deprecated.name for deprecated in items.items_by_group[Group.DEPRECATED])
-        items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
-        items_to_ignore.extend(weapon.name for weapon in items.items_by_group[Group.WEAPON])
-        items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
-        items_to_ignore.extend(resource_pack.name for resource_pack in items.items_by_group[Group.RESOURCE_PACK])
-        items_to_ignore.append("The Gateway Gazette")
-        progression_items = [item for item in items.all_items if item.classification & ItemClassification.progression and item.name not in items_to_ignore]
+        all_created_items = set(self.get_all_created_items())
+        progression_items = get_all_permanent_progression_items()
         for progression_item in progression_items:
             with self.subTest(f"{progression_item.name}"):
                 self.assertIn(progression_item.name, all_created_items)
@@ -45,19 +53,19 @@ class TestBaseItemGeneration(SVTestBase):
         self.assertEqual(len(non_event_locations), len(self.multiworld.itempool))
 
     def test_does_not_create_deprecated_items(self):
-        all_created_items = [item.name for item in self.multiworld.itempool]
+        all_created_items = set(self.get_all_created_items())
         for deprecated_item in items.items_by_group[items.Group.DEPRECATED]:
             with self.subTest(f"{deprecated_item.name}"):
                 self.assertNotIn(deprecated_item.name, all_created_items)
 
     def test_does_not_create_more_than_one_maximum_one_items(self):
-        all_created_items = [item.name for item in self.multiworld.itempool]
+        all_created_items = self.get_all_created_items()
         for maximum_one_item in items.items_by_group[items.Group.MAXIMUM_ONE]:
             with self.subTest(f"{maximum_one_item.name}"):
                 self.assertLessEqual(all_created_items.count(maximum_one_item.name), 1)
 
-    def test_does_not_create_exactly_two_items(self):
-        all_created_items = [item.name for item in self.multiworld.itempool]
+    def test_does_not_create_or_create_two_of_exactly_two_items(self):
+        all_created_items = self.get_all_created_items()
         for exactly_two_item in items.items_by_group[items.Group.EXACTLY_TWO]:
             with self.subTest(f"{exactly_two_item.name}"):
                 count = all_created_items.count(exactly_two_item.name)
@@ -77,17 +85,10 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
     }
 
     def test_all_progression_items_except_island_are_added_to_the_pool(self):
-        all_created_items = [item.name for item in self.multiworld.itempool]
-        # Ignore all the stuff that the algorithm chooses one of, instead of all, to fulfill logical progression
-        items_to_ignore = [event.name for event in items.events]
-        items_to_ignore.extend(item.name for item in items.all_items if item.mod_name is not None)
-        items_to_ignore.extend(deprecated.name for deprecated in items.items_by_group[Group.DEPRECATED])
-        items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
-        items_to_ignore.extend(season.name for season in items.items_by_group[Group.WEAPON])
-        items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
-        items_to_ignore.append("The Gateway Gazette")
-        progression_items = [item for item in items.all_items if item.classification & ItemClassification.progression and item.name not in items_to_ignore]
+        all_created_items = set(self.get_all_created_items())
+        progression_items = get_all_permanent_progression_items()
         for progression_item in progression_items:
+
             with self.subTest(f"{progression_item.name}"):
                 if Group.GINGER_ISLAND in progression_item.groups:
                     self.assertNotIn(progression_item.name, all_created_items)
@@ -100,19 +101,19 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
         self.assertEqual(len(non_event_locations), len(self.multiworld.itempool))
 
     def test_does_not_create_deprecated_items(self):
-        all_created_items = [item.name for item in self.multiworld.itempool]
+        all_created_items = self.get_all_created_items()
         for deprecated_item in items.items_by_group[items.Group.DEPRECATED]:
             with self.subTest(f"Deprecated item: {deprecated_item.name}"):
                 self.assertNotIn(deprecated_item.name, all_created_items)
 
     def test_does_not_create_more_than_one_maximum_one_items(self):
-        all_created_items = [item.name for item in self.multiworld.itempool]
+        all_created_items = self.get_all_created_items()
         for maximum_one_item in items.items_by_group[items.Group.MAXIMUM_ONE]:
             with self.subTest(f"{maximum_one_item.name}"):
                 self.assertLessEqual(all_created_items.count(maximum_one_item.name), 1)
 
     def test_does_not_create_exactly_two_items(self):
-        all_created_items = [item.name for item in self.multiworld.itempool]
+        all_created_items = self.get_all_created_items()
         for exactly_two_item in items.items_by_group[items.Group.EXACTLY_TWO]:
             with self.subTest(f"{exactly_two_item.name}"):
                 count = all_created_items.count(exactly_two_item.name)

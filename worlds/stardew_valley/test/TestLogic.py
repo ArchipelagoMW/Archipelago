@@ -49,9 +49,9 @@ class LogicTestBase(RuleAssertMixin, TestCase):
                 self.assert_rule_can_be_resolved(rule, self.multiworld.state)
 
     def test_given_building_rule_then_can_be_resolved(self):
-        for building in self.logic.registry.building_rules.keys():
+        for building in self.world.content.farm_buildings:
             with self.subTest(msg=building):
-                rule = self.logic.registry.building_rules[building]
+                rule = self.logic.building.can_build(building)
                 self.assert_rule_can_be_resolved(rule, self.multiworld.state)
 
     def test_given_quest_rule_then_can_be_resolved(self):

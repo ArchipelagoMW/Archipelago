@@ -3,9 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Dict, Iterable, Set, Any, Mapping, Type, Tuple, Union
 
-from .feature import booksanity, cropsanity, fishsanity, friendsanity, skill_progression, tool_progression
+from .feature import booksanity, cropsanity, fishsanity, friendsanity, skill_progression, building_progression, tool_progression
+from ..data.building import Building
 from ..data.fish_data import FishItem
-from ..data.game_item import GameItem, ItemSource, ItemTag
+from ..data.game_item import GameItem, Source, ItemTag
 from ..data.skill import Skill
 from ..data.villagers_data import Villager
 
@@ -20,16 +21,17 @@ class StardewContent:
     game_items: Dict[str, GameItem] = field(default_factory=dict)
     fishes: Dict[str, FishItem] = field(default_factory=dict)
     villagers: Dict[str, Villager] = field(default_factory=dict)
+    farm_buildings: Dict[str, Building] = field(default_factory=dict)
     skills: Dict[str, Skill] = field(default_factory=dict)
     quests: Dict[str, Any] = field(default_factory=dict)
 
-    def find_sources_of_type(self, types: Union[Type[ItemSource], Tuple[Type[ItemSource]]]) -> Iterable[ItemSource]:
+    def find_sources_of_type(self, types: Union[Type[Source], Tuple[Type[Source]]]) -> Iterable[Source]:
         for item in self.game_items.values():
             for source in item.sources:
                 if isinstance(source, types):
                     yield source
 
-    def source_item(self, item_name: str, *sources: ItemSource):
+    def source_item(self, item_name: str, *sources: Source):
         item = self.game_items.setdefault(item_name, GameItem(item_name))
         item.add_sources(sources)
 
@@ -50,6 +52,7 @@ class StardewContent:
 @dataclass(frozen=True)
 class StardewFeatures:
     booksanity: booksanity.BooksanityFeature
+    building_progression: building_progression.BuildingProgressionFeature
     cropsanity: cropsanity.CropsanityFeature
     fishsanity: fishsanity.FishsanityFeature
     friendsanity: friendsanity.FriendsanityFeature
@@ -70,13 +73,13 @@ class ContentPack:
     # def item_hook
     # ...
 
-    harvest_sources: Mapping[str, Iterable[ItemSource]] = field(default_factory=dict)
+    harvest_sources: Mapping[str, Iterable[Source]] = field(default_factory=dict)
     """Harvest sources contains both crops and forageables, but also fruits from trees, the cave farm and stuff harvested from tapping like maple syrup."""
 
     def harvest_source_hook(self, content: StardewContent):
         ...
 
-    shop_sources: Mapping[str, Iterable[ItemSource]] = field(default_factory=dict)
+    shop_sources: Mapping[str, Iterable[Source]] = field(default_factory=dict)
 
     def shop_source_hook(self, content: StardewContent):
         ...
@@ -86,12 +89,12 @@ class ContentPack:
     def fish_hook(self, content: StardewContent):
         ...
 
-    crafting_sources: Mapping[str, Iterable[ItemSource]] = field(default_factory=dict)
+    crafting_sources: Mapping[str, Iterable[Source]] = field(default_factory=dict)
 
     def crafting_hook(self, content: StardewContent):
         ...
 
-    artisan_good_sources: Mapping[str, Iterable[ItemSource]] = field(default_factory=dict)
+    artisan_good_sources: Mapping[str, Iterable[Source]] = field(default_factory=dict)
 
     def artisan_good_hook(self, content: StardewContent):
         ...
@@ -99,6 +102,11 @@ class ContentPack:
     villagers: Iterable[Villager] = ()
 
     def villager_hook(self, content: StardewContent):
+        ...
+
+    farm_buildings: Iterable[Building] = ()
+
+    def farm_building_hook(self, content: StardewContent):
         ...
 
     skills: Iterable[Skill] = ()

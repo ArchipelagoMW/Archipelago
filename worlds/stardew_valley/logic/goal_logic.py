@@ -44,7 +44,7 @@ class GoalLogic(BaseLogic[StardewLogic]):
             self.logic.museum.can_complete_museum(),
             # Catching every fish not expected
             # Shipping every item not expected
-            self.logic.relationship.can_get_married() & self.logic.building.has_house(2),
+            self.logic.relationship.can_get_married() & self.logic.building.has_building(Building.kids_room),
             self.logic.relationship.has_hearts_with_n(5, 8),  # 5 Friends
             self.logic.relationship.has_hearts_with_n(10, 8),  # 10 friends
             self.logic.pet.has_pet_hearts(5),  # Max Pet
