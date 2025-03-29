@@ -1,4 +1,3 @@
-import random
 from ..utils import log
 from ..utils.utils import getRangeDict, chooseFromRange
 from ..rando.ItemLocContainer import ItemLocation
@@ -23,8 +22,9 @@ class Choice(object):
 
 # simple random choice, that chooses an item first, then a locatio to put it in
 class ItemThenLocChoice(Choice):
-    def __init__(self, restrictions):
+    def __init__(self, restrictions, random):
         super(ItemThenLocChoice, self).__init__(restrictions)
+        self.random = random
 
     def chooseItemLoc(self, itemLocDict, isProg):
         itemList = self.getItemList(itemLocDict)
@@ -49,7 +49,7 @@ class ItemThenLocChoice(Choice):
         return self.chooseItemRandom(itemList)
 
     def chooseItemRandom(self, itemList):
-        return random.choice(itemList)
+        return self.random.choice(itemList)
 
     def chooseLocation(self, locList, item, isProg):
         if len(locList) == 0:
@@ -63,12 +63,12 @@ class ItemThenLocChoice(Choice):
         return self.chooseLocationRandom(locList)
 
     def chooseLocationRandom(self, locList):
-        return random.choice(locList)
+        return self.random.choice(locList)
 
 # Choice specialization for prog speed based filler
 class ItemThenLocChoiceProgSpeed(ItemThenLocChoice):
-    def __init__(self, restrictions, progSpeedParams, distanceProp, services):
-        super(ItemThenLocChoiceProgSpeed, self).__init__(restrictions)
+    def __init__(self, restrictions, progSpeedParams, distanceProp, services, random):
+        super(ItemThenLocChoiceProgSpeed, self).__init__(restrictions, random)
         self.progSpeedParams = progSpeedParams
         self.distanceProp = distanceProp
         self.services = services
@@ -104,7 +104,7 @@ class ItemThenLocChoiceProgSpeed(ItemThenLocChoice):
         if self.restrictions.isLateMorph() and canRollback and len(itemLocDict) == 1:
             item, locList = list(itemLocDict.items())[0]
             if item.Type == 'Morph':
-                morphLocs = self.restrictions.lateMorphCheck(container, locList)
+                morphLocs = self.restrictions.lateMorphCheck(container, locList, self.random)
                 if morphLocs is not None:
                     itemLocDict[item] = morphLocs
                 else:
@@ -115,7 +115,7 @@ class ItemThenLocChoiceProgSpeed(ItemThenLocChoice):
                 assert len(locs) == 1 and locs[0].Name == item.Name
                 return ItemLocation(item, locs[0])
         # late doors check for random door colors
-        if self.restrictions.isLateDoors() and random.random() < self.lateDoorsProb:
+        if self.restrictions.isLateDoors() and self.random.random() < self.lateDoorsProb:
             self.processLateDoors(itemLocDict, ap, container)
         self.progressionItemLocs = progressionItemLocs
         self.ap = ap
@@ -145,14 +145,14 @@ class ItemThenLocChoiceProgSpeed(ItemThenLocChoice):
 
     def chooseLocationProg(self, locs, item):
         locs = self.getLocsSpreadProgression(locs)
-        random.shuffle(locs)
+        self.random.shuffle(locs)
         ret = self.getChooseFunc(self.chooseLocRanges, self.chooseLocFuncs)(locs)
         self.log.debug('chooseLocationProg. ret='+ret.Name)
         return ret
 
     # get choose function from a weighted dict
     def getChooseFunc(self, rangeDict, funcDict):
-        v = chooseFromRange(rangeDict)
+        v = chooseFromRange(rangeDict, self.random)
 
         return funcDict[v]
 
@@ -209,6 +209,6 @@ class ItemThenLocChoiceProgSpeed(ItemThenLocChoice):
         for i in range(len(availableLocations)):
             loc = availableLocations[i]
             d = distances[i]
-            if d == maxDist or random.random() >= self.spreadProb:
+            if d == maxDist or self.random.random() >= self.spreadProb:
                 locs.append(loc)
         return locs
