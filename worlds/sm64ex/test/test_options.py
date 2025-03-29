@@ -263,7 +263,7 @@ class AllEntrancesMoveTestBase(SM64TestBase):
             assert self.world.area_connections[cotmc_level_id] != sm64_entrances_to_level["Dire, Dire Docks"]
 
 # No Strict Requirements
-class NoStrictRequiremntsTestBase(SM64TestBase):
+class NoStrictRequirementsTestBase(SM64TestBase):
     options = {
         "enable_move_rando": Options.EnableMoveRandomizer.option_true,
         "buddy_checks": Options.BuddyChecks.option_true,
