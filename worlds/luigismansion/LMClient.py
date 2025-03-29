@@ -440,8 +440,7 @@ class LMContext(CommonContext):
                     curr_val += 1
                     dme.write_bytes(addr_to_update.ram_addr, curr_val.to_bytes(byte_size, 'big'))
                 else:
-                    curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
-                    curr_val = (curr_val | (1 << addr_to_update.bit_position))
+                    curr_val = addr_to_update.item_count
                     dme.write_bytes(addr_to_update.ram_addr, curr_val.to_bytes(byte_size, 'big'))
             self.received_trap_link = False
 
