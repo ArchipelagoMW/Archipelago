@@ -78,21 +78,6 @@ class LMWeb(WebWorld):
             LuigiOptions.RandomSpawn,
             LuigiOptions.EarlyFirstKey,
         ]),
-        OptionGroup("Filler Weights", [
-            LuigiOptions.BundleWeight,
-            LuigiOptions.CoinWeight,
-            LuigiOptions.BillWeight,
-            LuigiOptions.BarsWeight,
-            LuigiOptions.GemsWeight,
-            LuigiOptions.PoisonTrapWeight,
-            LuigiOptions.BombWeight,
-            LuigiOptions.IceTrapWeight,
-            LuigiOptions.BananaTrapWeight,
-            LuigiOptions.PossTrapWeight,
-            LuigiOptions.BonkTrapWeight,
-            LuigiOptions.NothingWeight,
-            LuigiOptions.HeartWeight,
-        ]),
         OptionGroup("QOL Changes", [
             LuigiOptions.TrapLink,
             LuigiOptions.LuigiFearAnim,
@@ -114,6 +99,22 @@ class LMWeb(WebWorld):
             LuigiOptions.ExtraBooSpots,
             LuigiOptions.ChestTypes,
             LuigiOptions.TrapChestType,
+        ]),
+        OptionGroup("Filler Weights", [
+            LuigiOptions.BundleWeight,
+            LuigiOptions.CoinWeight,
+            LuigiOptions.BillWeight,
+            LuigiOptions.BarsWeight,
+            LuigiOptions.GemsWeight,
+            LuigiOptions.PoisonTrapWeight,
+            LuigiOptions.BombWeight,
+            LuigiOptions.IceTrapWeight,
+            LuigiOptions.BananaTrapWeight,
+            LuigiOptions.PossTrapWeight,
+            LuigiOptions.BonkTrapWeight,
+            LuigiOptions.GhostTrapWeight,
+            LuigiOptions.NothingWeight,
+            LuigiOptions.HeartWeight,
         ]),
     ]
 
@@ -682,7 +683,7 @@ class LMWorld(World):
         filler_weights = [self.options.bundle_weight.value, self.options.gems_weight.value,  # coins & bills, sapphire
                           self.options.gems_weight.value, self.options.gems_weight.value, diamweight,
                           # emerald, ruby, diamond
-                          self.options.poison_trap_weight.value, self.options.nothing_weight.value,
+                          self.options.poison_trap_weight.value, self.options.ghost_weight, self.options.nothing_weight.value,
                           self.options.heart_weight.value, lheart,  # poison mush, nothing, sm heart, l heart
                           self.options.bomb_trap_weight.value, self.options.ice_trap_weight.value,  # bomb, ice
                           self.options.banana_trap_weight.value, self.options.coin_weight.value, twencoin, thircoin,

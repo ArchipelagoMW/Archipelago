@@ -44,6 +44,7 @@ all_random_settings = {
     LMOptions.BananaTrapWeight.internal_name:          "random",
     LMOptions.PossTrapWeight.internal_name:            "random",
     LMOptions.BonkTrapWeight.internal_name:            "random",
+    LMOptions.GhostTrapWeight.internal_name:           "random",
     LMOptions.HeartWeight.internal_name:               "random",
     LMOptions.NothingWeight.internal_name:             "random",
     LMOptions.ChestTypes.internal_name:                "random",
@@ -82,6 +83,7 @@ money_settings = {
     LMOptions.BananaTrapWeight.internal_name:          0,
     LMOptions.PossTrapWeight.internal_name:            0,
     LMOptions.BonkTrapWeight.internal_name:            0,
+    LMOptions.GhostTrapWeight.internal_name:           0,
 }
 
 trap_settings = {
@@ -96,6 +98,7 @@ trap_settings = {
     LMOptions.BananaTrapWeight.internal_name:          100,
     LMOptions.PossTrapWeight.internal_name:            100,
     LMOptions.BonkTrapWeight.internal_name:            100,
+    LMOptions.GhostTrapWeight.internal_name:           100,
 }
 
 lm_options_presets: Dict[str, Dict[str, Any]] = {
