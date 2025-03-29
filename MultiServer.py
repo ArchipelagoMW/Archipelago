@@ -743,7 +743,7 @@ class Context:
             return self.player_names[team, slot]
 
     def notify_hints(self, team: int, hints: typing.List[Hint], only_new: bool = False,
-                     recipients: typing.Sequence[int] = None):
+                     persist_even_if_found: bool = False, recipients: typing.Sequence[int] = None):
         """Send and remember hints."""
         if only_new:
             hints = [hint for hint in hints if hint not in self.hints[team, hint.finding_player]]
@@ -758,8 +758,9 @@ class Context:
             if not hint.local and data not in concerns[hint.finding_player]:
                 concerns[hint.finding_player].append(data)
 
-            # only remember hints that were not already found at the time of creation
-            if not hint.found:
+            # For !hint use cases, only hints that were not already found at the time of creation should be remembered
+            # For LocationScouts use-cases, all hints should be remembered
+            if not hint.found or persist_even_if_found:
                 # since hints are bidirectional, finding player and receiving player,
                 # we can check once if hint already exists
                 if hint not in self.hints[team, hint.finding_player]:
@@ -1937,7 +1938,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                     hints.extend(collect_hint_location_id(ctx, client.team, client.slot, location,
                                                           HintStatus.HINT_UNSPECIFIED))
                 locs.append(NetworkItem(target_item, location, target_player, flags))
-            ctx.notify_hints(client.team, hints, only_new=create_as_hint == 2)
+            ctx.notify_hints(client.team, hints, only_new=create_as_hint == 2, persist_even_if_found=True)
             if locs and create_as_hint:
                 ctx.save()
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
