@@ -28,6 +28,7 @@ class PortalPlando(PlandoConnections):
     - entrance: Searing Crags
       exit: Glacial Peak Portal
     """
+    display_name = "Portal Plando Connections"
     portals = [f"{portal} Portal" for portal in PORTALS]
     shop_points = [point for points in SHOP_POINTS.values() for point in points]
     checkpoints = [point for points in CHECKPOINTS.values() for point in points]
@@ -48,6 +49,7 @@ class TransitionPlando(PlandoConnections):
       exit: Dark Cave - Right
       direction: both
     """
+    display_name = "Transition Plando Connections"
     entrances = frozenset(RANDOMIZED_CONNECTIONS.keys())
     exits = frozenset(RANDOMIZED_CONNECTIONS.values())
 
