@@ -80,7 +80,7 @@ SMW_UNCOLLECTABLE_DRAGON_COINS = [0x24]
 class SMWSNIClient(SNIClient):
     game = "Super Mario World"
     patch_suffix = ".apsmw"
-    slot_data: dict
+    slot_data: dict[str, Any] | None
 
     async def deathlink_kill_player(self, ctx):
         from SNIClient import DeathState, snes_buffered_write, snes_flush_writes, snes_read
@@ -219,12 +219,12 @@ class SMWSNIClient(SNIClient):
             await ctx.update_death_link(bool(death_link[0] & 0b1))
 
         trap_link = await snes_read(ctx, SMW_TRAP_LINK_ACTIVE_ADDR, 1)
-        if trap_link and bool(trap_link[0] & 0b1):
+        if trap_link and bool(trap_link[0] & 0b1) and "TrapLink" not in ctx.tags:
             ctx.tags.add("TrapLink")
             await ctx.send_msgs([{"cmd": "ConnectUpdate", "tags": ctx.tags}])
 
         ring_link = await snes_read(ctx, SMW_RING_LINK_ACTIVE_ADDR, 1)
-        if ring_link and bool(ring_link[0] & 0b1):
+        if ring_link and bool(ring_link[0] & 0b1) and "RingLink" not in ctx.tags:
             ctx.tags.add("RingLink")
             await ctx.send_msgs([{"cmd": "ConnectUpdate", "tags": ctx.tags}])
 

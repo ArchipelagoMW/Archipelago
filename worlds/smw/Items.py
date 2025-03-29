@@ -115,4 +115,6 @@ trap_name_to_value: typing.Dict[str, int] = {
     "Screen Flip Trap":   0xBC001C,  # Reverse Trap
     "Banana Trap":        0xBC0013,  # Ice Trap
     "Bomb":               0xBC001D,  # Thwimp Trap
+    "Bonk Trap":          0xBC0014,  # Stun Trap
+    "Ghost":              0xBC001D,  # Thwimp Trap
 }

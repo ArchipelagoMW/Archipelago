@@ -324,7 +324,7 @@ class SMWWorld(World):
     def set_rules(self):
         set_rules(self)
 
-    def output_trap_weights(self) -> typing.Dict[int, int]:
+    def output_trap_weights(self) -> dict[int, int]:
         trap_data = {}
 
         trap_data[0xBC0013] = self.options.ice_trap_weight.value
