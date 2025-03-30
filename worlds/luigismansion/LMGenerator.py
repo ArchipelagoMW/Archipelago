@@ -418,6 +418,10 @@ class LuigisMansionRandomizer:
         if self.output_data["Options"]["pickup_animation"] == 1:
             pickup_val = [0x01]
             gem_val = [0x05]
+
+            # Write additional code to enable Custom Pickup animations when animations are turned off.
+            self.dol.data.seek(0xAD625)
+            self.dol.data.write(bytes.fromhex("42D0F5"))
         else:
             pickup_val = [0x02]
             gem_val = [0x06]
