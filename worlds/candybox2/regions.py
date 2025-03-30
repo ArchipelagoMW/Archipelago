@@ -16,7 +16,7 @@ from .locations import candy_box_locations, CandyBox2Location, village_shop_loca
     desert_fortress_locations, teapot_quest_locations, xinopherydon_quest_locations, ledge_room_quest_locations, \
     castle_trap_room_locations, squirrel_tree_locations, the_sea_locations, lonely_house_locations, dig_spot_locations, \
     yourself_fight_locations, castle_dark_room_locations, castle_bakehouse_locations
-from .rules import weapon_is_at_least, armor_is_at_least, chocolate_count, can_farm_candies
+from .rules import weapon_is_at_least, armor_is_at_least, chocolate_count, can_farm_candies, can_grow_lollipops
 
 
 class CandyBox2Region(Region):
@@ -140,7 +140,7 @@ def create_regions(world):
     mark_quest_entrance(world, ledge_room_quest_entrance, "The Ledge Room Quest Click")
 
     # X Potion region
-    _, x_potion_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The X Potion Quest", player, multiworld, "The X Potion Quest"), yourself_fight_locations, candy_box, lambda state: state.has("Sorceress' Cauldron", player))
+    _, x_potion_quest_entrance = populate_region(multiworld, player, CandyBox2Region("The X Potion Quest", player, multiworld, "The X Potion Quest"), yourself_fight_locations, candy_box, lambda state: state.has("Sorceress' Cauldron", player) and can_grow_lollipops(state, player))
     mark_x_quest_entrance(world, x_potion_quest_entrance, "The X Potion Quest Click")
 
 def populate_region(world: MultiWorld, player: int, region: CandyBox2Region, locations: dict[str, int], parent: Region | None, rule: Optional[Callable[[CollectionState], bool]] = None):
