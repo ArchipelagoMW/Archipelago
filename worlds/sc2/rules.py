@@ -933,14 +933,15 @@ class SC2Logic:
             self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE, state),
         )
     
-    def zerg_any_gap_transport(self, state: CollectionState) -> bool:
-        """Any way for zerg to get any ground unit across gaps longer than viper yoink range."""
+    def zerg_can_collect_pickup_across_gap(self, state: CollectionState) -> bool:
+        """Any way for zerg to get any ground unit across gaps longer than viper yoink range to collect a pickup."""
         return (
             state.has_any((
                 item_names.NYDUS_WORM,
                 item_names.ECHIDNA_WORM,
                 item_names.OVERLORD_VENTRAL_SACS,
                 item_names.YGGDRASIL,
+                item_names.INFESTED_BANSHEE,
             ), self.player)
             or (self.morph_ravager(state) and state.has(item_names.RAVAGER_DEEP_TUNNEL, self.player))
             or state.has_all((
@@ -1838,6 +1839,7 @@ class SC2Logic:
                 self.morph_impaler(state)
                 or state.has_all({item_names.INFESTED_LIBERATOR, item_names.INFESTED_LIBERATOR_DEFENDER_MODE}, self.player)
                 or self.zerg_infested_tank_with_ammo(state)
+                or state.has(item_names.BILE_LAUNCHER, self.player)
             )
             and (
                 self.morph_devourer(state)
