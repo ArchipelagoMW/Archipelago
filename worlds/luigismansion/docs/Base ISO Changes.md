@@ -1,13 +1,13 @@
 ## Base ISO Changes:
-- Add Plants into the pool as locations
-- Add interactable (Furniture) object within the game into the pool as locations
-- Add Portrait Ghosts into the pool as locations. Must be connected to server
-- Add Toads into the pool as locations. Must be connected to server
-- Add Turning on Lights as checks. Must be connected to server.
-- Add visiting rooms as checks. Must be connected to server.
-- Add Speedy Spirits into the pool as locations. Must be connected to server. These are blackout only, and still count even if they run away, so unmissable
-- Add Boos into the pool as separate locations and items. Only Boo Radar is required for the locations. The in-game Boo counter will not be accurate. 
-- (Optional) Require the player to have obtained enough money to get a specific rank upon completion.
+- Add interactable (Furniture) object within the game into the pool as locations, including plants. Different subgroups can be selected
+(Optional)
+- Add Portrait Ghosts into the pool as locations. Must be connected to server (Optional)
+- Add Toads into the pool as locations. Must be connected to server (Optional)
+- Add turning on Lights as checks. Must be connected to server. (Optional)
+- Add visiting rooms as checks. Must be connected to server. (Optional)
+- Add Speedy Spirits into the pool as locations. Must be connected to server. These are blackout only, and still count even if they run away, so unmissable (Optional)
+- Add Boos into the pool as separate locations and items. Only Boo Radar is required for the locations.  
+- Require the player to have obtained enough money to get a specific rank upon completion. (Optional) 
 - Customize the Boo count requirement for the 1F Washroom, Balcony, and Secret Altar
 - Customize the number of Mario's items needed to trigger the Fortune-teller
 - Randomize the ghost types in certain rooms of the mansion
@@ -23,5 +23,5 @@
 - (Optional) Deathlink (Can be toggled in client)
 - (Optional) Weights for all filler items
 - (Optional) King Boo's health now configurable by YAML option
-- (Optional) Chest Cosmetics can changes based on the item it comtains
+- (Optional) Chest Cosmetics can change based on the item it contains
 - (Optional) Portrait Ghost hearts have hints on them
