@@ -37,5 +37,4 @@ ACTOR>"dkopahead"LOOK>"look_khead"
 <BGM>(26)
 <FRAMEEND>
 <WARP>(4)
-<WAIT>(80)
 <END>
