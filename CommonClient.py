@@ -221,6 +221,11 @@ class ClientCommandProcessor(CommandProcessor):
         async_start(self.ctx.send_msgs([{"cmd": "StatusUpdate", "status": state}]), name="send StatusUpdate")
         return True
 
+    def _cmd_clearchat(self):
+        """Clears the text log"""
+        if self.ctx.ui:
+            self.ctx.ui.log_panels["All"].clear()
+
     def default(self, raw: str):
         """The default message parser to be used when parsing any messages that do not match a command"""
         raw = self.ctx.on_user_say(raw)
