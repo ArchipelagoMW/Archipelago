@@ -224,8 +224,8 @@ class CMItemPool:
         self.items_used[self.world.player]["Progressive King Promotion"] = (
             self.items_used[self.world.player].get("Progressive King Promotion", 0) +
             (2 - self.world.options.fairy_kings.value))
-        self.items_used[self.world.player]["Progressive Engine ELO Lobotomy"] = (
-            self.items_used[self.world.player].get("Progressive Engine ELO Lobotomy", 0) +
+        self.items_used[self.world.player]["Progressive AI Intelligence Malus"] = (
+            self.items_used[self.world.player].get("Progressive AI Intelligence Malus", 0) +
             (5 - self.world.options.max_engine_penalties.value))
         self.items_used[self.world.player]["Progressive Pocket"] = (
             self.items_used[self.world.player].get("Progressive Pocket", 0) +

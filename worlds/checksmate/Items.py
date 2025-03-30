@@ -20,7 +20,7 @@ class CMItemData(NamedTuple):
 
 item_table = {
     "Play as White": CMItemData(4_901_000, ItemClassification.progression, material=50),
-    "Progressive Engine ELO Lobotomy": CMItemData(4_901_001, ItemClassification.useful, quantity=5),
+    "Progressive AI Intelligence Malus": CMItemData(4_901_001, ItemClassification.useful, quantity=5),
     # TODO: stop counting material if the board fills up with 23 pieces+pawns
     "Progressive Pawn": CMItemData(4_901_002, ItemClassification.progression, quantity=60, material=100),
     "Progressive Pawn Forwardness": CMItemData(4_901_003, ItemClassification.filler, quantity=13, parents=[

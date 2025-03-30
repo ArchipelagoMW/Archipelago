@@ -37,7 +37,7 @@ class TestItemPool(CMMockTestCase):
         
         # Check engine penalty limits
         self.assertLessEqual(
-            self.item_pool.items_used[self.world.player]["Progressive Engine ELO Lobotomy"],
+            self.item_pool.items_used[self.world.player]["Progressive AI Intelligence Malus"],
             5 - self.world.options.max_engine_penalties.value
         )
 
