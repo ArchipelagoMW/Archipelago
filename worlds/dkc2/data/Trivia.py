@@ -369,6 +369,139 @@ trivia_easy_diddy_kong_racing = [
     ),
 ]
 
+trivia_easy_donkey_kong_64 = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """  In Donkey Kong 64, which of°""", 
+            """   the following enemies hold°""", 
+            """      Snide's blueprints?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Kasplat°°""", 
+        """Klump°°""", 
+        """Kritter°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """   In Donkey Kong 64, how can°""", 
+            """    players defeat Klobbers?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Throwing an orange°        at them°""", 
+        """With a gun°°""", 
+        """Kicks and punches°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """  In Donkey Kong 64, how many°""", 
+            """   melon slices can be found°""", 
+            """      inside melon crates?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """4°°""", 
+        """2°°""", 
+        """8°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ What's the purpose of Candy's°""", 
+            """     Headphones that can be°""", 
+            """      found inside levels°""", 
+            """       in Donkey Kong 64?°""", 
+            """°""", 
+        ],
+        """Replenish the Kong's°        instrument usage°""", 
+        """Provide ammo to the°        current Kong°""", 
+        """Grant one entire melon°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """  What's the name of the large°""", 
+            """  Kremling locked up in a cage°""", 
+            """ on an island beside Crocodile°""", 
+            """    Isles in Donkey Kong 64?°""", 
+            """°""", 
+        ],
+        """K. Lumsy°°""", 
+        """Cranky K. Rool°°""", 
+        """Giant Viking Kremling°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Donkey Kong 64, which bonus°""", 
+            """ stage asks the player to guide°""", 
+            """     Gnawties into a hole?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Beaver Bother°°""", 
+        """Peril Path Panic°°""", 
+        """Stash Snatch°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Donkey Kong 64, which bonus°""", 
+            """ stage lets the player control°""", 
+            """         a fly swatter?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Big Bug Bash°°""", 
+        """Krazy Kong Klamour°°""", 
+        """Splish Splash Salvage°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Donkey Kong 64, which bonus°""", 
+            """  stage requires the player to°""", 
+            """ defeat every enemy in a maze?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Mad Maze Maul°°""", 
+        """Busy Barrel Barrage°°""", 
+        """Stealthy Snoop°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Donkey Kong 64, which bonus°""", 
+            """   stage requires players to°""", 
+            """       swing from vines?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Speedy Swing Sortie°°""", 
+        """Mad Maze Maul°°""", 
+        """Teetering Turtle Trouble°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Donkey Kong 64, which bonus°""", 
+            """   stage requires players to°""", 
+            """        swim underwater?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Splish Splash Salvage°°""", 
+        """Stash Snatch°°""", 
+        """Speedy Swing Sortie°°""", 
+    ),
+]
+
 trivia_easy_donkey_kong_country_2 = [
     TriviaQuestion(
         [
@@ -519,6 +652,19 @@ trivia_easy_earthbound = [
         """6°°""", 
         """7°°""", 
     ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """     Which party member in°""", 
+            """   EarthBound cannot use PSI?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Jeff°°""", 
+        """Paula°°""", 
+        """Poo°°""", 
+    ),
 ]
 
 trivia_easy_final_fantasy_mystic_quest = [
@@ -547,6 +693,61 @@ trivia_easy_final_fantasy_mystic_quest = [
         """Pazuzu's Tower°°""", 
         """Mac's Ship°°""", 
         """Doom Castle°°""", 
+    ),
+]
+
+trivia_easy_genshin_impact = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """    What's the name of your°""", 
+            """  companion in Genshin Impact?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Paimon°°""", 
+        """Faerie°°""", 
+        """Deimos°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """    Who's the first playable°""", 
+            """      character you obtain°""", 
+            """       in Genshin Impact?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Amber°°""", 
+        """Venti°°""", 
+        """Kaeya°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """    What is Genshin Impact's°""", 
+            """        starting nation?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Mondstadt°°""", 
+        """Natlan°°""", 
+        """Liyue°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """In Genshin Impact, which youkai°""", 
+            """ from Inazuma acts as a courier°""", 
+            """     for Komaniya Express?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Kirara°°""", 
+        """Arataki Itto°°""", 
+        """Yae Miko°°""", 
     ),
 ]
 
@@ -640,6 +841,48 @@ trivia_easy_kirby_64_the_crystal_shards = [
     ),
 ]
 
+trivia_easy_kirby_super_star = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """    Which Kirby Super Star's°""", 
+            """   game features King Dedede°""", 
+            """        as a final boss?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Spring Breeze°°""", 
+        """Milky Way Wishes°°""", 
+        """The Great Cave°        Offensive°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """    Which Kirby Super Star's°""", 
+            """     game features Marx as°""", 
+            """         a final boss?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Milky Way Wishes°°""", 
+        """Spring Breeze°°""", 
+        """The Great Cave°        Offensive°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """    Which Kirby Super Star's°""", 
+            """  game features Wham Bam Rock°""", 
+            """        as a final boss?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """The Great Cave°        Offensive°""", 
+        """Spring Breeze°°""", 
+        """Milky Way Wishes°°""", 
+    ),
+]
+
 trivia_easy_kirbys_dream_land_3 = [
     TriviaQuestion(
         [
@@ -692,6 +935,295 @@ trivia_easy_kirbys_dream_land_3 = [
         """Sir Kibble°°""", 
         """Rocky°°""", 
         """Bobo°°""", 
+    ),
+]
+
+trivia_easy_luigis_mansion = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """ What's the name of the vacuum°""", 
+            """    used to hunt down ghosts°""", 
+            """      in Luigi's Mansion?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Poltergust 3000°°""", 
+        """Ghostbuster 4000°°""", 
+        """Supervacuum 5000°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Luigi's Mansion, which room°""", 
+            """  is the one that has the Boos°""", 
+            """     sealed behind a hatch?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Storage Room°°""", 
+        """Cellar°°""", 
+        """Conservatory°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """ In Luigi's Mansion, which room°""", 
+            """    has a black piano in it?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Conservatory°°""", 
+        """Rec Room°°""", 
+        """Ball Room°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ What's the name of the device°""", 
+            """   Luigi uses to communicate°""", 
+            """     with Professor E. Gadd°""", 
+            """      in Luigi's Mansion?°""", 
+            """°""", 
+        ],
+        """Game Boy Horror°°""", 
+        """Game Boy Horror SP°°""", 
+        """Dual Scream°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """  Which of the following rooms°""", 
+            """   has Fire Elemental Ghosts°""", 
+            """      in Luigi's Mansion?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Butler's Room°°""", 
+        """Breaker Room°°""", 
+        """Pipe Room°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """  Which of the following rooms°""", 
+            """   has Water Elemental Ghosts°""", 
+            """      in Luigi's Mansion?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Washroom 2F°°""", 
+        """Ball Room°°""", 
+        """Hallway 2°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """  Which of the following rooms°""", 
+            """    has Ice Elemental Ghosts°""", 
+            """      in Luigi's Mansion?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Tea Room°°""", 
+        """Armory°°""", 
+        """Sealed Room°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """  Which mice color grants the°""", 
+            """    player a large amount of°""", 
+            """  treasure when catching them°""", 
+            """      in Luigi's Mansion?°""", 
+            """°""", 
+        ],
+        """Gold°°""", 
+        """Blue°°""", 
+        """Purple°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """  In Luigi's Mansion, how many°""", 
+            """   different elemental medals°""", 
+            """        can be obtained?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """3°°""", 
+        """2°°""", 
+        """4°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Luigi's Mansion, what's the°""", 
+            """   name of the Portrait Ghost°""", 
+            """  found in the Billiards Room?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Slim Bankshot°°""", 
+        """Nana°°""", 
+        """Henry°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Luigi's Mansion, what's the°""", 
+            """   name of the Portrait Ghost°""", 
+            """     found in the Rec Room?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Biff Atlas°°""", 
+        """Mr. Luggs°°""", 
+        """Melody Pianissima°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Luigi's Mansion, what's the°""", 
+            """   name of the Portrait Ghost°""", 
+            """ found in the Artist's Studio?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Vincent Van Gore°°""", 
+        """Jarvis°°""", 
+        """Slim Bankshot°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Luigi's Mansion, what's the°""", 
+            """   name of the Portrait Ghost°""", 
+            """    found in the Guest Room?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Sue Pea°°""", 
+        """Uncle Grimmly°°""", 
+        """Shivers°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """  In Luigi's Mansion, how many°""", 
+            """   Mario's items can be found°""", 
+            """      inside the mansion?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """5°°""", 
+        """3°°""", 
+        """6°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """  In Luigi's Mansion, how can°""", 
+            """   you obtain Big Pearls from°""", 
+            """        Portrait Ghosts?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Vacumm at least 90 HP°        in a single turn°""", 
+        """Sucessfully vacuum them°°""", 
+        """Blow dust into their°        hearts°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Luigi's Mansion, which°""", 
+            """   ghost rolls a purple ball°""", 
+            """         at the player?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Bowling Ghost°°""", 
+        """Purple Bomber°°""", 
+        """Purple Puncher°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Luigi's Mansion, which°""", 
+            """   ghost slams the ground in°""", 
+            """   order to hurt the player?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Blue Twirler°°""", 
+        """Ceiling Surprise°°""", 
+        """Mr. Bones°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Luigi's Mansion, which°""", 
+            """   ghosts throw banana peels°""", 
+            """         on the ground?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Garbage Can Ghost°°""", 
+        """Waiter°°""", 
+        """Purple Puncher°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Luigi's Mansion, which area°""", 
+            """ of the game allows players to°""", 
+            """   access to the Hidden Room?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Butler's Room°°""", 
+        """Roof°°""", 
+        """Tea Room°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Luigi's Mansion, which area°""", 
+            """ of the game allows players to°""", 
+            """   access to the Sealed Room?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Roof°°""", 
+        """Butler's Room°°""", 
+        """Guest Room°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Luigi's Mansion, which°""", 
+            """     of the following rooms°""", 
+            """       contains a mirror?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Foyer°°""", 
+        """Balcony°°""", 
+        """Clockwork Room°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Luigi's Mansion, which°""", 
+            """     of the following rooms°""", 
+            """       contains a mirror?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Rec Room°°""", 
+        """Cellar°°""", 
+        """Pipe Room°°""", 
     ),
 ]
 
@@ -750,6 +1282,19 @@ trivia_easy_math = [
         """2°°""", 
         """0°°""", 
         """-2°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """  If I have 10 bananas, and I°""", 
+            """    give Diddy half of them,°""", 
+            """   then K. Rool steals all my°""", 
+            """ bananas while Diddy eats one,°""", 
+            """     how many bananas does°""", 
+            """          Dixie have?°""", 
+        ],
+        """0°°""", 
+        """1°°""", 
+        """4°°""", 
     ),
 ]
 
@@ -945,6 +1490,19 @@ trivia_easy_mega_man_x2 = [
         """Weather Control°°""", 
         """X-Hunter Stage°°""", 
     ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """       Which one of these°""", 
+            """       does not appear in°""", 
+            """          Mega Man X2?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Upwards Dash°°""", 
+        """Ride Armor°°""", 
+        """Double Charged Shot°°""", 
+    ),
 ]
 
 trivia_easy_mega_man_x3 = [
@@ -973,6 +1531,19 @@ trivia_easy_mega_man_x3 = [
         """Blast Hornet°°""", 
         """Sting Chameleon°°""", 
         """Gravity Beetle°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """        In Mega Man X3,°""", 
+            """       which part of the°""", 
+            """     Z-Saber attack causes°""", 
+            """     the most total damage?°""", 
+            """°""", 
+        ],
+        """The beam°°""", 
+        """The slash°°""", 
+        """The tip°°""", 
     ),
 ]
 
@@ -1067,6 +1638,19 @@ trivia_easy_ocarina_of_time = [
         """By reflecting their°        projectiles°""", 
         """By talking to them°°""", 
         """By getting hit by them°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """   In Ocarina of Time, which°""", 
+            """character speaks to Link first?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Navi°°""", 
+        """The Great Deku Tree°°""", 
+        """Saria°°""", 
     ),
 ]
 
@@ -1922,6 +2506,35 @@ trivia_easy_yoshis_island = [
         """Kevin°°""", 
         """Richard°°""", 
     ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """  In Yoshi's Island, how many°""", 
+            """  red coins are in each level?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """20°°""", 
+        """8°°""", 
+        """5°°""", 
+    ),
+]
+
+trivia_easy_zillion = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """ In Zillion, what is a Zillion?°""", 
+            """°""", 
+            """°""", 
+            """°""", 
+        ],
+        """A gun upgrade°°""", 
+        """A really big number°°""", 
+        """Currency°°""", 
+    ),
 ]
 
 trivia_hard_a_link_to_the_past = [
@@ -1996,6 +2609,19 @@ trivia_hard_actraiser = [
 ]
 
 trivia_hard_astalon = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """     In Astalon, who is the°""", 
+            """     Black Knight's mother?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Lydia°°""", 
+        """Medusa°°""", 
+        """The same as Arias's°°""", 
+    ),
 ]
 
 trivia_hard_castlevania_circle_of_the_moon = [
@@ -2124,6 +2750,152 @@ trivia_hard_diddy_kong_racing = [
     ),
 ]
 
+trivia_hard_donkey_kong_64 = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In which Donkey Kong 64 level°""", 
+            """     players can learn the°""", 
+            """    Simium Strainus ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Frantic Factory°°""", 
+        """Crystal Caves°°""", 
+        """Angry Aztec°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In which Donkey Kong 64 level°""", 
+            """     players can learn the°""", 
+            """    Hurtus Cranium ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Jungle Japes°°""", 
+        """Frantic Factory°°""", 
+        """Crystal Caves°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In which Donkey Kong 64 level°""", 
+            """     players can learn the°""", 
+            """  Baboonus Balloonus ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Frantic Factory°°""", 
+        """Fungi Forest°°""", 
+        """Crystal Caves°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In which Donkey Kong 64 level°""", 
+            """     players can learn the°""", 
+            """    Roundum Roundus ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Frantic Factory°°""", 
+        """Crystal Caves°°""", 
+        """Jungle Japes°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In which Donkey Kong 64 level°""", 
+            """     players can learn the°""", 
+            """  Kremlinous Crushum ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Frantic Factory°°""", 
+        """Fungi Forest°°""", 
+        """Creepy Castle°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In which Donkey Kong 64 level°""", 
+            """     players can learn the°""", 
+            """  Big Buttus Bashium ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Fungi Forest°°""", 
+        """Crystal Caves°°""", 
+        """Jungle Japes°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In which Donkey Kong 64 level°""", 
+            """     players can learn the°""", 
+            """ Bigga Buttus Bashium ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Creepy Castle°°""", 
+        """Angry Aztec°°""", 
+        """Fungi Forest°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In which Donkey Kong 64 level°""", 
+            """     players can learn the°""", 
+            """   Warpum Craftious ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Crystal Caves°°""", 
+        """Creepy Castle°°""", 
+        """Frantic Factory°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Donkey Kong 64, which bonus°""", 
+            """  stage requires the player to°""", 
+            """    shoot at golden bananas?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Krazy Kong Klamour°°""", 
+        """Kremling Kosh°°""", 
+        """Beaver Bother°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Donkey Kong 64, which bonus°""", 
+            """   stage features the player°""", 
+            """   controlling a cannon that°""", 
+            """      shoots watermelons?°""", 
+            """°""", 
+        ],
+        """Kremling Kosh°°""", 
+        """Stealthy Snoop°°""", 
+        """Batty Barrel Bandit°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """ In Donkey Kong 64, which bonus°""", 
+            """ stage features Banana Fairies?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Peril Path Panic°°""", 
+        """Stash Snatch°°""", 
+        """Big Bug Bash°°""", 
+    ),
+]
+
 trivia_hard_donkey_kong_country_2 = [
     TriviaQuestion(
         [
@@ -2196,6 +2968,32 @@ trivia_hard_donkey_kong_country_3 = [
 ]
 
 trivia_hard_earthbound = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """     In EarthBound, what is°""", 
+            """     Mondo Mole's greatest°""", 
+            """           weakness?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Paralysis°°""", 
+        """PSI Fire°°""", 
+        """PSI Freeze°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """    Which boss in EarthBound°""", 
+            """       can sometimes drop°""", 
+            """         a Boiled Egg?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Captain Strong°°""", 
+        """Everdred°°""", 
+        """Clumsy Robot°°""", 
+    ),
 ]
 
 trivia_hard_final_fantasy_mystic_quest = [
@@ -2211,6 +3009,178 @@ trivia_hard_final_fantasy_mystic_quest = [
         """WATK*2.25/Count-MonDEF°°""", 
         """WATK*2.5-MonDEF°°""", 
         """WATK*2.5/Count-MonDEF°°""", 
+    ),
+]
+
+trivia_hard_genshin_impact = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Genshin Impact, which unit°""", 
+            """    is responsible for crime°""", 
+            """   investigation in Fontaine?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Marechausse Phantom°°""", 
+        """Spina di Rosula°°""", 
+        """Scions of the Canopy°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """    In Genshin Impact, which°""", 
+            """     Natlan tribe is famous°""", 
+            """       for their mining?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Children of Echoes°°""", 
+        """People of the Springs°°""", 
+        """Scions of the Canopy°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """In Genshin Impact, which Natlan°""", 
+            """   tribe is famous for their°""", 
+            """    predictions and rituals°""", 
+            """ related to the Night Kingdom?°""", 
+            """°""", 
+        ],
+        """Masters of the°        Night-Wind°""", 
+        """Children of Echoes°°""", 
+        """People of the Springs°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """In Genshin Impact, which Natlan°""", 
+            """tribe live alongside Qucusaurs?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Flower-Feather Clan°°""", 
+        """Masters of the°        Night-Wind°""", 
+        """Scions of the Canopy°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """In Genshin Impact, which youkai°""", 
+            """     from Inazuma have the°""", 
+            """      ability to transform°""", 
+            """      into other objects?°""", 
+            """°""", 
+        ],
+        """Bake-Danuki°°""", 
+        """Yumekui-baku°°""", 
+        """Kitsune°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """    In Genshin Impact, which°""", 
+            """ Akademiya Darshan specializes°""", 
+            """      in biology, ecology°""", 
+            """         and medicine?°""", 
+            """°""", 
+        ],
+        """Amurta°°""", 
+        """Haravatat°°""", 
+        """Spantamad°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """    In Genshin Impact, which°""", 
+            """ Akademiya Darshan specializes°""", 
+            """ in semiotics, linguistics and°""", 
+            """         rune studies?°""", 
+            """°""", 
+        ],
+        """Haravatat°°""", 
+        """Rtawahist°°""", 
+        """Vahumana°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """    In Genshin Impact, which°""", 
+            """ Akademiya Darshan specializes°""", 
+            """  in technology, architecture°""", 
+            """     and mechanical skills?°""", 
+            """°""", 
+        ],
+        """Kshahrewar°°""", 
+        """Rtawahist°°""", 
+        """Amurta°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """    In Genshin Impact, which°""", 
+            """ Akademiya Darshan specializes°""", 
+            """ in illuminationism, astronomy°""", 
+            """         and astrology?°""", 
+            """°""", 
+        ],
+        """Rtawahist°°""", 
+        """Haravatat°°""", 
+        """Vahumana°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """    In Genshin Impact, which°""", 
+            """ Akademiya Darshan specializes°""", 
+            """   in elementalism, elemental°""", 
+            """       reactions, alchemy°""", 
+            """         and ley lines?°""", 
+            """°""", 
+        ],
+        """Spantamad°°""", 
+        """Amurta°°""", 
+        """Vahumana°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """    In Genshin Impact, which°""", 
+            """ Akademiya Darshan specializes°""", 
+            """     in aetiology, history,°""", 
+            """    sociology and semantics?°""", 
+            """°""", 
+        ],
+        """Vahumana°°""", 
+        """Rtawahist°°""", 
+        """Kshahrewar°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """ In Genshin Impact, what's the°""", 
+            """   name of Mavuika's weapon?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """A Thousand Blazing Suns°°""", 
+        """Daybreaker°°""", 
+        """Scion of the Blazing°        Sun°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """ In Genshin Impact, what's the°""", 
+            """   name of Zhongli's weapon?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Vortex Vanquisher°°""", 
+        """Staff of the Scarlet°        Sands°""", 
+        """Primordial Jade Cutter°°""", 
     ),
 ]
 
@@ -2330,6 +3300,22 @@ trivia_hard_kirby_64_the_crystal_shards = [
     ),
 ]
 
+trivia_hard_kirby_super_star = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """  Which Kirby Super Star boss°""", 
+            """  is NOT present in The Arena?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Kracko Jr.°°""", 
+        """Dyna Blade°°""", 
+        """Heavy Lobster°°""", 
+    ),
+]
+
 trivia_hard_kirbys_dream_land_3 = [
     TriviaQuestion(
         [
@@ -2369,6 +3355,152 @@ trivia_hard_kirbys_dream_land_3 = [
         """A Nruff°°""", 
         """A parasol°°""", 
         """A Bobo°°""", 
+    ),
+]
+
+trivia_hard_luigis_mansion = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """  Which of the following rooms°""", 
+            """   has Fire Elemental Ghosts°""", 
+            """      in Luigi's Mansion?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Study°°""", 
+        """Kitchen°°""", 
+        """Tea Room°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """  Which of the following rooms°""", 
+            """   has Water Elemental Ghosts°""", 
+            """      in Luigi's Mansion?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Sitting Room°°""", 
+        """Pipe Room°°""", 
+        """Tea Room°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """  Which of the following rooms°""", 
+            """    has Ice Elemental Ghosts°""", 
+            """      in Luigi's Mansion?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Pipe Room°°""", 
+        """Cold Storage°°""", 
+        """Roof°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """  In Luigi's Mansion, which of°""", 
+            """    the following rooms has°""", 
+            """        a cheese inside?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Study°°""", 
+        """Breaker Room°°""", 
+        """Anteroom°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """  In Luigi's Mansion, which of°""", 
+            """    the following rooms has°""", 
+            """        a cheese inside?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Safari Room°°""", 
+        """Sealed Room°°""", 
+        """Armory°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Luigi's Mansion, what's the°""", 
+            """   name of the Portrait Ghost°""", 
+            """       that's only found°""", 
+            """       during a blackout?°""", 
+            """°""", 
+        ],
+        """Uncle Grimmly°°""", 
+        """Sir Weston°°""", 
+        """Shivers°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """ In Luigi's Mansion, where can°""", 
+            """    you find a Red Diamond?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """By watering a plant in°        the balcony°""", 
+        """Vacumm at least 90 HP°        of a ghost in a turn°""", 
+        """Light up a candelabra°        in Astral Hall°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Luigi's Mansion, which°""", 
+            """     of the following rooms°""", 
+            """       contains a mirror?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Hidden Room°°""", 
+        """Butler's Room°°""", 
+        """Ceramics Studio°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Luigi's Mansion, which°""", 
+            """     of the following rooms°""", 
+            """       contains a mirror?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Breaker Room°°""", 
+        """Artist's Room°°""", 
+        """Kitchen°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Luigi's Mansion, which°""", 
+            """     of the following rooms°""", 
+            """       contains a mirror?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Safari Room°°""", 
+        """Projection Room°°""", 
+        """Observatory°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """  In Luigi's Mansion, which of°""", 
+            """  the following rooms contains°""", 
+            """     a fourth wall mirror?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Breaker Room°°""", 
+        """Storage Room°°""", 
+        """Foyer°°""", 
     ),
 ]
 
@@ -2488,6 +3620,19 @@ trivia_hard_mega_man_x = [
         """Ghost Leg°°""", 
         """Drawing Straws°°""", 
         """Rock-Paper-Scissors°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """In Mega Man X, which attack can°""", 
+            """  destroy a Rolling Gabyoall?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Rolling Shield°°""", 
+        """None°°""", 
+        """Hadouken°°""", 
     ),
 ]
 
@@ -3575,6 +4720,22 @@ trivia_hard_vvvvvv = [
 trivia_hard_yoshis_island = [
 ]
 
+trivia_hard_zillion = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Zillion, how does one open°""", 
+            """     the doors blocking the°""", 
+            """        capsule at A-6?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Duck & shoot right wall°°""", 
+        """Code 0 0 0 0 in terminal°°""", 
+        """Unlock room E-5°°""", 
+    ),
+]
+
 trivia_medium_a_link_to_the_past = [
     TriviaQuestion(
         [
@@ -3685,6 +4846,19 @@ trivia_medium_astalon = [
         """35°°""", 
         """25°°""", 
         """45°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Astalon's Cyclops Den, how°""", 
+            """  many Cyclops do you need to°""", 
+            """     slay to face the boss?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """35°°""", 
+        """38°°""", 
+        """40°°""", 
     ),
 ]
 
@@ -3892,6 +5066,204 @@ trivia_medium_diddy_kong_racing = [
     ),
 ]
 
+trivia_medium_donkey_kong_64 = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """  In Donkey Kong 64, which of°""", 
+            """    the following Kremlings°""", 
+            """    is playable in the game?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Krusha°°""", 
+        """Kosha°°""", 
+        """Klump°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """  In Donkey Kong 64, where in°""", 
+            """   Gloomy Galleon the players°""", 
+            """       can find Oysters?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Inside the treasure°        chest°""", 
+        """Below the lighthouse°°""", 
+        """Inside the sunken ship°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """   In Donkey Kong 64, how can°""", 
+            """    players defeat Klobbers?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Playing an instrument°°""", 
+        """With a simian slam°°""", 
+        """Throwing a barrel°        at them°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In which Donkey Kong 64 level°""", 
+            """ players can get Diddy to learn°""", 
+            """   the Simian Spring ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Frantic Factory°°""", 
+        """Jungle Japes°°""", 
+        """Creepy Castle°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In which Donkey Kong 64 level°""", 
+            """ players can get Lanky to learn°""", 
+            """    the Orangstand ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Angry Aztec°°""", 
+        """Fungi Forest°°""", 
+        """Frantic Factory°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In which Donkey Kong 64 level°""", 
+            """ players can get Tiny to learn°""", 
+            """  the Pony Tail Twirl ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Frantic Factory°°""", 
+        """Gloomy Galleon°°""", 
+        """Fungi Forest°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In which Donkey Kong 64 level°""", 
+            """players can get Chunky to learn°""", 
+            """   the Gorilla Gone ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Crystal Caves°°""", 
+        """Fungi Forest°°""", 
+        """Creepy Castle°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In which Donkey Kong 64 level°""", 
+            """players can get Donkey to learn°""", 
+            """   the Baboon Blast ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Jungle Japes°°""", 
+        """Crystal Caves°°""", 
+        """Gloomy Galleon°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Donkey Kong 64, which bonus°""", 
+            """ stage has a slot machine where°""", 
+            """  the players have to line up°""", 
+            """      four bananas to win?°""", 
+            """°""", 
+        ],
+        """Batty Barrel Bandit°°""", 
+        """Krazy Kong Klamour°°""", 
+        """Mad Maze Maul°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Donkey Kong 64, which bonus°""", 
+            """ stage has the player fixed on°""", 
+            """   the center with a gun with°""", 
+            """         infinite ammo?°""", 
+            """°""", 
+        ],
+        """Busy Barrel Barrage°°""", 
+        """Kremling Kosh°°""", 
+        """Batty Barrel Bandit°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Donkey Kong 64, which bonus°""", 
+            """  stage requires the player to°""", 
+            """       avoid TNT Barrels?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Minecart Mayhem°°""", 
+        """Splish Splash Salvage°°""", 
+        """Busy Barrel Barrage°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Donkey Kong 64, which bonus°""", 
+            """   stage features the player°""", 
+            """   controlling a cannon that°""", 
+            """      shoots watermelons?°""", 
+            """°""", 
+        ],
+        """Searchlight Seek°°""", 
+        """Big Bug Bash°°""", 
+        """Stealthy Snoop°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Donkey Kong 64, which bonus°""", 
+            """   stage requires players to°""", 
+            """    collect coins in a maze?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Stash Snatch°°""", 
+        """Stealthy Snoop°°""", 
+        """Mad Maze Maul°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Donkey Kong 64, which bonus°""", 
+            """  stage forces the players to°""", 
+            """      avoid Kremling cops?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Stealthy Snoop°°""", 
+        """Busy Barrel Barrage°°""", 
+        """Searchlight Seek°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """ In Donkey Kong 64, which bonus°""", 
+            """     stage features snakes?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Teetering Turtle Trouble°°""", 
+        """Searchlight Seek°°""", 
+        """Minecart Mayhem°°""", 
+    ),
+]
+
 trivia_medium_donkey_kong_country_2 = [
     TriviaQuestion(
         [
@@ -3990,6 +5362,32 @@ trivia_medium_earthbound = [
         """Offense up°°""", 
         """Defense down°°""", 
     ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In EarthBound, which of these°""", 
+            """     items is NOT in Jeff's°""", 
+            """      starting inventory?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Fresh Egg°°""", 
+        """Ruler°°""", 
+        """Protractor°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   Which of these items does°""", 
+            """    Poo normally start with°""", 
+            """         in EarthBound?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Tiny Ruby°°""", 
+        """Hieroglyph Copy°°""", 
+        """Brain Stone°°""", 
+    ),
 ]
 
 trivia_medium_final_fantasy_mystic_quest = [
@@ -4031,6 +5429,126 @@ trivia_medium_final_fantasy_mystic_quest = [
         """The Void from FF5°°""", 
         """Woodcutting°°""", 
         """Death°°""", 
+    ),
+]
+
+trivia_medium_genshin_impact = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """ Which elements are required to°""", 
+            """   trigger a Burning reaction°""", 
+            """       in Genshin Impact?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Pyro + Dendro°°""", 
+        """Pyro + Cryo°°""", 
+        """Pyro + Electro°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ Which elements are required to°""", 
+            """    trigger a Bloom reaction°""", 
+            """       in Genshin Impact?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Hydro + Dendro°°""", 
+        """Electro + Dendro°°""", 
+        """Pyro + Dendro°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ Which elements are required to°""", 
+            """ trigger an Overloaded reaction°""", 
+            """       in Genshin Impact?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Electro + Pyro°°""", 
+        """Electro + Dendro°°""", 
+        """Electro + Hydro°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ Which elements are required to°""", 
+            """   trigger a Quicken reaction°""", 
+            """       in Genshin Impact?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Electro + Dendro°°""", 
+        """Pyro + Hydro°°""", 
+        """Electro + Hydro°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ Which elements are required to°""", 
+            """    trigger a Melt reaction°""", 
+            """       in Genshin Impact?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Cryo + Pyro°°""", 
+        """Cryo + Hydro°°""", 
+        """Cryo + Dendro°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ Which elements are required to°""", 
+            """  trigger a Vaporize reaction°""", 
+            """       in Genshin Impact?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Hydro + Pyro°°""", 
+        """Hydro + Dendro°°""", 
+        """Cryo + Pyro°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ Which elements are required to°""", 
+            """trigger a Superconduct reaction°""", 
+            """       in Genshin Impact?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Cryo + Electro°°""", 
+        """Electro + Hydro°°""", 
+        """Cryo + Hydro°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ Which elements are required to°""", 
+            """   trigger a Frozen reaction°""", 
+            """       in Genshin Impact?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Cryo + Hydro°°""", 
+        """Electro + Hydro°°""", 
+        """Cryo + Geo°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """   In Genshin Impact, what's°""", 
+            """Yumemizuki Mizuki's profession?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """A clinical psychologist°°""", 
+        """A masseuse°°""", 
+        """A maid°°""", 
     ),
 ]
 
@@ -4111,6 +5629,178 @@ trivia_medium_kirby_64_the_crystal_shards = [
     ),
 ]
 
+trivia_medium_kirby_super_star = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Kirby Super Star, which°""", 
+            """    enemy grants the player°""", 
+            """       the Copy ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """T.A.C.°°""", 
+        """Capsule J°°""", 
+        """Gim°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Kirby Super Star, which°""", 
+            """    enemy grants the player°""", 
+            """       the Yo-Yo ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Gim°°""", 
+        """Simirror°°""", 
+        """Bugzzy°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Kirby Super Star, which°""", 
+            """    enemy grants the player°""", 
+            """      the Plasma ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Plasma Wisp°°""", 
+        """Bio Spark°°""", 
+        """Burnin' Leo°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Kirby Super Star, which°""", 
+            """    enemy grants the player°""", 
+            """       the Ninja ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Bio Spark°°""", 
+        """Poppy Bros. Jr.°°""", 
+        """Bonkers°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Kirby Super Star, which°""", 
+            """    enemy grants the player°""", 
+            """      the Hammer ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Bonkers°°""", 
+        """Capsule J°°""", 
+        """Jukid°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Kirby Super Star, which°""", 
+            """    enemy grants the player°""", 
+            """       the Beam ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Waddle Doo°°""", 
+        """Noddy°°""", 
+        """Bio Spark°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Kirby Super Star, which°""", 
+            """    enemy grants the player°""", 
+            """       the Mike ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Walky°°""", 
+        """Gim°°""", 
+        """T.A.C.°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Kirby Super Star, which°""", 
+            """    enemy grants the player°""", 
+            """        the Jet ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Capsule J°°""", 
+        """Poppy Bros. Jr.°°""", 
+        """Walky°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Kirby Super Star, which°""", 
+            """    enemy grants the player°""", 
+            """       the Bomb ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Poppy Bros. Jr.°°""", 
+        """Rocky°°""", 
+        """Bugzzy°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Kirby Super Star, which°""", 
+            """    enemy grants the player°""", 
+            """      the Suplex ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Jukid°°""", 
+        """Waddle Doo°°""", 
+        """Noddy°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Kirby Super Star, which°""", 
+            """    enemy grants the player°""", 
+            """      the Suplex ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Bugzzy°°""", 
+        """Bonkers°°""", 
+        """Gim°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Kirby Super Star, which°""", 
+            """    enemy grants the player°""", 
+            """      the Cutter ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Sir Kibble°°""", 
+        """Simirror°°""", 
+        """Bugzzy°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Kirby Super Star, which°""", 
+            """    enemy grants the player°""", 
+            """      the Mirror ability?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Simirror°°""", 
+        """Burnin' Leo°°""", 
+        """Chilly°°""", 
+    ),
+]
+
 trivia_medium_kirbys_dream_land_3 = [
     TriviaQuestion(
         [
@@ -4150,6 +5840,178 @@ trivia_medium_kirbys_dream_land_3 = [
         """A raft°°""", 
         """A minecart°°""", 
         """An inner tube°°""", 
+    ),
+]
+
+trivia_medium_luigis_mansion = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """  Which of the following rooms°""", 
+            """   has Fire Elemental Ghosts°""", 
+            """      in Luigi's Mansion?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Cold Storage°°""", 
+        """Courtyard°°""", 
+        """Tea Room°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """  Which of the following rooms°""", 
+            """   has Water Elemental Ghosts°""", 
+            """      in Luigi's Mansion?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Courtyard°°""", 
+        """Graveyard°°""", 
+        """Ceramics Studio°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """  Which of the following rooms°""", 
+            """    has Ice Elemental Ghosts°""", 
+            """      in Luigi's Mansion?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Kitchen°°""", 
+        """Boneyard°°""", 
+        """Dining Room°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ Which bat color reacts to the°""", 
+            """  player activating the vacuum°""", 
+            """      in Luigi's Mansion?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Yellow°°""", 
+        """Blue°°""", 
+        """Purple°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ Which bat color reacts to the°""", 
+            """    player walking near them°""", 
+            """      in Luigi's Mansion?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Purple°°""", 
+        """Yellow°°""", 
+        """Blue°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """  In Luigi's Mansion, which of°""", 
+            """    the following rooms has°""", 
+            """        a cheese inside?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Dining Room°°""", 
+        """Cold Storage°°""", 
+        """Pipe Room°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Luigi's Mansion, what's the°""", 
+            """   name of the Portrait Ghost°""", 
+            """  found in the Master Bedroom?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Lydia°°""", 
+        """Neville°°""", 
+        """Shivers°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Luigi's Mansion, what's the°""", 
+            """   name of the Portrait Ghost°""", 
+            """   found in the Dining Room?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Mr. Luggs°°""", 
+        """Miss Petunia°°""", 
+        """Orville°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Luigi's Mansion, what's the°""", 
+            """  name of the Portrait Ghosts°""", 
+            """   found in the Twins' Room?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Henry & Orville°°""", 
+        """Neville & Lydia°°""", 
+        """Biff & Jarvis°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Luigi's Mansion, what's the°""", 
+            """   name of the Portrait Ghost°""", 
+            """ found in the Ceramics Studio?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Jarvis°°""", 
+        """Sir Weston°°""", 
+        """Vincent Van Gore°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Luigi's Mansion, which°""", 
+            """       ghosts come out of°""", 
+            """       walls and explode?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Spark°°""", 
+        """Blue Blaze°°""", 
+        """Purple Bomber°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Luigi's Mansion, which°""", 
+            """     of the following rooms°""", 
+            """       contains a mirror?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Armory°°""", 
+        """Cold Storage°°""", 
+        """Astral Hall°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Luigi's Mansion, which°""", 
+            """     of the following rooms°""", 
+            """       contains a mirror?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Sealed Room°°""", 
+        """Ball Room°°""", 
+        """Conservatory°°""", 
     ),
 ]
 
@@ -5367,6 +7229,35 @@ trivia_medium_vvvvvv = [
 ]
 
 trivia_medium_yoshis_island = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """   Which Yoshi's Island boss°""", 
+            """       is NOT enhanced by°""", 
+            """         Kamek's magic?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Prince Froggy°°""", 
+        """Marching Milde°°""", 
+        """Raphael the Raven°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """ In Yoshi's Island, what does a°""", 
+            """   flashing egg drop when you°""", 
+            """     hit something with it?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """A red coin°°""", 
+        """Two stars°°""", 
+        """A yellow coin°°""", 
+    ),
+]
+
+trivia_medium_zillion = [
 ]
 
 
@@ -5401,6 +7292,11 @@ trivia_data = {
         trivia_medium_diddy_kong_racing, 
         trivia_hard_diddy_kong_racing,
     ],
+    "Donkey Kong 64": [
+        trivia_easy_donkey_kong_64, 
+        trivia_medium_donkey_kong_64, 
+        trivia_hard_donkey_kong_64,
+    ],
     "Donkey Kong Country 2": [
         trivia_easy_donkey_kong_country_2, 
         trivia_medium_donkey_kong_country_2, 
@@ -5420,6 +7316,11 @@ trivia_data = {
         trivia_easy_final_fantasy_mystic_quest, 
         trivia_medium_final_fantasy_mystic_quest, 
         trivia_hard_final_fantasy_mystic_quest,
+    ],
+    "Genshin Impact": [
+        trivia_easy_genshin_impact, 
+        trivia_medium_genshin_impact, 
+        trivia_hard_genshin_impact,
     ],
     "Hollow Knight": [
         trivia_easy_hollow_knight, 
@@ -5441,10 +7342,20 @@ trivia_data = {
         trivia_medium_kirby_64_the_crystal_shards, 
         trivia_hard_kirby_64_the_crystal_shards,
     ],
+    "Kirby Super Star": [
+        trivia_easy_kirby_super_star, 
+        trivia_medium_kirby_super_star, 
+        trivia_hard_kirby_super_star,
+    ],
     "Kirby's Dream Land 3": [
         trivia_easy_kirbys_dream_land_3, 
         trivia_medium_kirbys_dream_land_3, 
         trivia_hard_kirbys_dream_land_3,
+    ],
+    "Luigi's Mansion": [
+        trivia_easy_luigis_mansion, 
+        trivia_medium_luigis_mansion, 
+        trivia_hard_luigis_mansion,
     ],
     "Majora's Mask Recompiled": [
         trivia_easy_majoras_mask_recompiled, 
@@ -5565,6 +7476,11 @@ trivia_data = {
         trivia_easy_yoshis_island, 
         trivia_medium_yoshis_island, 
         trivia_hard_yoshis_island,
+    ],
+    "Zillion": [
+        trivia_easy_zillion, 
+        trivia_medium_zillion, 
+        trivia_hard_zillion,
     ],
 }
 
