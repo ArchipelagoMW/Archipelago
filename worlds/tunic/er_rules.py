@@ -146,8 +146,8 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Overworld Belltower"],
         rule=lambda state: state.has(laurels, player)
         or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
-    regions["Overworld Belltower"].connect(
-        connecting_region=regions["Overworld"])
+    # regions["Overworld Belltower"].connect(
+    #     connecting_region=regions["Overworld"])
 
     # ice grapple rudeling across rubble, drop bridge, ice grapple rudeling down
     regions["Overworld Belltower"].connect(
@@ -172,17 +172,17 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Overworld Ruined Passage Door"],
         rule=lambda state: state.has(key, player, 2)
         or laurels_zip(state, world))
-    regions["Overworld Ruined Passage Door"].connect(
-        connecting_region=regions["Overworld"],
-        rule=lambda state: laurels_zip(state, world))
+    # regions["Overworld Ruined Passage Door"].connect(
+    #     connecting_region=regions["Overworld"],
+    #     rule=lambda state: laurels_zip(state, world))
 
     regions["Overworld"].connect(
         connecting_region=regions["After Ruined Passage"],
         rule=lambda state: has_ladder("Ladders near Weathervane", state, world)
         or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
-    regions["After Ruined Passage"].connect(
-        connecting_region=regions["Overworld"],
-        rule=lambda state: has_ladder("Ladders near Weathervane", state, world))
+    # regions["After Ruined Passage"].connect(
+    #     connecting_region=regions["Overworld"],
+    #     rule=lambda state: has_ladder("Ladders near Weathervane", state, world))
 
     # for the hard ice grapple, get to the chest after the bomb wall, grab a slime, and grapple push down
     # you can ice grapple through the bomb wall, so no need for shop logic checking
@@ -191,10 +191,10 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: has_ladder("Ladders near Weathervane", state, world)
         or state.has(laurels, player)
         or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
-    regions["Above Ruined Passage"].connect(
-        connecting_region=regions["Overworld"],
-        rule=lambda state: has_ladder("Ladders near Weathervane", state, world)
-        or state.has(laurels, player))
+    # regions["Above Ruined Passage"].connect(
+    #     connecting_region=regions["Overworld"],
+    #     rule=lambda state: has_ladder("Ladders near Weathervane", state, world)
+    #     or state.has(laurels, player))
 
     regions["After Ruined Passage"].connect(
         connecting_region=regions["Above Ruined Passage"],
@@ -209,8 +209,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
     regions["East Overworld"].connect(
         connecting_region=regions["Above Ruined Passage"],
-        rule=lambda state: has_ladder("Ladders near Weathervane", state, world)
-        or state.has(laurels, player))
+        rule=lambda state: has_ladder("Ladders near Weathervane", state, world))
 
     # nmg: ice grapple the slimes, works both ways consistently
     regions["East Overworld"].connect(
@@ -224,9 +223,9 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["East Overworld"],
         rule=lambda state: has_ladder("Ladders near Overworld Checkpoint", state, world)
         or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
-    regions["East Overworld"].connect(
-        connecting_region=regions["Overworld"],
-        rule=lambda state: has_ladder("Ladders near Overworld Checkpoint", state, world))
+    # regions["East Overworld"].connect(
+    #     connecting_region=regions["Overworld"],
+    #     rule=lambda state: has_ladder("Ladders near Overworld Checkpoint", state, world))
 
     regions["East Overworld"].connect(
         connecting_region=regions["Overworld at Patrol Cave"])
@@ -246,9 +245,9 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Overworld above Patrol Cave"],
         rule=lambda state: has_ladder("Ladders near Overworld Checkpoint", state, world)
         or state.has(grapple, player))
-    regions["Overworld above Patrol Cave"].connect(
-        connecting_region=regions["Overworld"],
-        rule=lambda state: has_ladder("Ladders near Overworld Checkpoint", state, world))
+    # regions["Overworld above Patrol Cave"].connect(
+    #     connecting_region=regions["Overworld"],
+    #     rule=lambda state: has_ladder("Ladders near Overworld Checkpoint", state, world))
 
     regions["East Overworld"].connect(
         connecting_region=regions["Overworld above Patrol Cave"],
@@ -311,24 +310,24 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Quarry Entry"],
         rule=lambda state: has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
-    regions["Overworld Quarry Entry"].connect(
-        connecting_region=regions["Overworld"],
-        rule=lambda state: has_ice_grapple_logic(False, IceGrappling.option_easy, state, world))
+    # regions["Overworld Quarry Entry"].connect(
+    #     connecting_region=regions["Overworld"],
+    #     rule=lambda state: has_ice_grapple_logic(False, IceGrappling.option_easy, state, world))
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Swamp Upper Entry"],
         rule=lambda state: state.has(laurels, player))
-    regions["Overworld Swamp Upper Entry"].connect(
-        connecting_region=regions["Overworld"],
-        rule=lambda state: state.has(laurels, player))
+    # regions["Overworld Swamp Upper Entry"].connect(
+    #     connecting_region=regions["Overworld"],
+    #     rule=lambda state: state.has(laurels, player))
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Swamp Lower Entry"],
         rule=lambda state: has_ladder("Ladder to Swamp", state, world)
         or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
-    regions["Overworld Swamp Lower Entry"].connect(
-        connecting_region=regions["Overworld"],
-        rule=lambda state: has_ladder("Ladder to Swamp", state, world))
+    # regions["Overworld Swamp Lower Entry"].connect(
+    #     connecting_region=regions["Overworld"],
+    #     rule=lambda state: has_ladder("Ladder to Swamp", state, world))
 
     regions["East Overworld"].connect(
         connecting_region=regions["Overworld Special Shop Entry"],
@@ -361,28 +360,28 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Overworld Southeast Cross Door"],
         rule=lambda state: has_ability(holy_cross, state, world)
         or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
-    regions["Overworld Southeast Cross Door"].connect(
-        connecting_region=regions["Overworld"],
-        rule=lambda state: has_ability(holy_cross, state, world))
+    # regions["Overworld Southeast Cross Door"].connect(
+    #     connecting_region=regions["Overworld"],
+    #     rule=lambda state: has_ability(holy_cross, state, world))
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Fountain Cross Door"],
         rule=lambda state: has_ability(holy_cross, state, world)
         or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
-    regions["Overworld Fountain Cross Door"].connect(
-        connecting_region=regions["Overworld"])
+    # regions["Overworld Fountain Cross Door"].connect(
+    #     connecting_region=regions["Overworld"])
 
     ow_to_town_portal = regions["Overworld"].connect(
         connecting_region=regions["Overworld Town Portal"],
         rule=lambda state: has_ability(prayer, state, world))
-    regions["Overworld Town Portal"].connect(
-        connecting_region=regions["Overworld"])
+    # regions["Overworld Town Portal"].connect(
+    #     connecting_region=regions["Overworld"])
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Spawn Portal"],
         rule=lambda state: has_ability(prayer, state, world))
-    regions["Overworld Spawn Portal"].connect(
-        connecting_region=regions["Overworld"])
+    # regions["Overworld Spawn Portal"].connect(
+    #     connecting_region=regions["Overworld"])
 
     # nmg: ice grapple through temple door
     regions["Overworld"].connect(
@@ -859,9 +858,9 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
             and options.shuffle_fuses))
     regions["Fortress Exterior from Overworld"].connect(
         connecting_region=regions["Fortress Exterior near cave"],
-        rule=lambda state: state.has(laurels, player) or
-                           (has_ability(prayer, state, world) and state.has(fortress_exterior_fuse_1, player)
-                            if options.shuffle_fuses else has_ability(prayer, state, world)))
+        rule=lambda state: state.has(laurels, player)
+        or (has_ability(prayer, state, world) and state.has(fortress_exterior_fuse_1, player)
+            if options.shuffle_fuses else has_ability(prayer, state, world)))
 
     # shoot far fire pot, enemy gets aggro'd
     regions["Fortress Exterior near cave"].connect(
@@ -1085,12 +1084,12 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     zig_low_miniboss_to_back = regions["Rooted Ziggurat Lower Miniboss Platform"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Back"],
         rule=lambda state: state.has(laurels, player) or (state.has(ziggurat_miniboss_fuse, player) and options.shuffle_fuses)
-                           or (has_sword(state, player) and has_ability(prayer, state, world) and not options.shuffle_fuses))
+        or (has_sword(state, player) and has_ability(prayer, state, world) and not options.shuffle_fuses))
     regions["Rooted Ziggurat Lower Back"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Miniboss Platform"],
         rule=lambda state: state.has(laurels, player)
-                            or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world)
-                            or (state.has(ziggurat_miniboss_fuse, player) and options.shuffle_fuses))
+        or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world)
+        or (state.has(ziggurat_miniboss_fuse, player) and options.shuffle_fuses))
 
     regions["Rooted Ziggurat Lower Back"].connect(
         connecting_region=regions["Rooted Ziggurat Portal Room Entrance"],

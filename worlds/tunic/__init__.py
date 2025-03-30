@@ -576,7 +576,8 @@ class TunicWorld(World):
         # Most non-standard options use ER regions
         if (self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic
                 or self.options.grass_randomizer or self.options.breakable_shuffle
-                or self.options.shuffle_fuses or self.options.shuffle_bells):
+                or self.options.shuffle_fuses or self.options.shuffle_bells
+                or self.options.ladder_storage or self.options.ice_grappling or self.options.laurels_zips):
             portal_pairs = create_er_regions(self)
             if self.options.entrance_rando:
                 # these get interpreted by the game to tell it which entrances to connect
@@ -607,7 +608,8 @@ class TunicWorld(World):
         # same reason as in create_regions
         if (self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic
                 or self.options.grass_randomizer or self.options.breakable_shuffle
-                or self.options.shuffle_fuses or self.options.shuffle_bells):
+                or self.options.shuffle_fuses or self.options.shuffle_bells
+                or self.options.ladder_storage or self.options.ice_grappling or self.options.laurels_zips):
             set_er_location_rules(self)
         else:
             set_region_rules(self)
