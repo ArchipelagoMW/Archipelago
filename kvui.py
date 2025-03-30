@@ -797,6 +797,11 @@ class UILog(RecycleView):
         if len(self.data) > self.messages:
             self.data.pop(0)
 
+    def clear(self):
+        """Clears the log to appear visibly empty"""
+        # Clearing the data causes AssertionErrors related to sizing RecycleView. An empty element fixes this.
+        self.data = [{'text': ''}]
+
     def fix_heights(self):
         """Workaround fix for divergent texture and layout heights"""
         for element in self.children[0].children:
