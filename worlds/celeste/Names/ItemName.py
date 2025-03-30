@@ -2,6 +2,20 @@
 strawberry = "Strawberry"
 raspberry = "Raspberry"
 
+# Traps
+bald_trap        = "Bald Trap"
+literature_trap  = "Literature Trap"
+stun_trap        = "Stun Trap"
+invisible_trap   = "Invisible Trap"
+fast_trap        = "Fast Trap"
+slow_trap        = "Slow Trap"
+ice_trap         = "Ice Trap"
+reverse_trap     = "Reverse Trap"
+screen_flip_trap = "Screen Flip Trap"
+laughter_trap    = "Laughter Trap"
+hiccup_trap      = "Hiccup Trap"
+zoom_trap        = "Zoom Trap"
+
 # Movement
 dash    = "Dash"
 u_dash  = "Up Dash"

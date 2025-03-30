@@ -67,6 +67,21 @@ collectable_item_data_table: Dict[str, CelesteItemData] = {
     ItemName.raspberry:  CelesteItemData(celeste_base_id + 0x1, ItemClassification.filler),
 }
 
+trap_item_data_table: Dict[str, CelesteItemData] = {
+    ItemName.bald_trap:        CelesteItemData(celeste_base_id + 0x20, ItemClassification.trap),
+    ItemName.literature_trap:  CelesteItemData(celeste_base_id + 0x21, ItemClassification.trap),
+    ItemName.stun_trap:        CelesteItemData(celeste_base_id + 0x22, ItemClassification.trap),
+    ItemName.invisible_trap:   CelesteItemData(celeste_base_id + 0x23, ItemClassification.trap),
+    ItemName.fast_trap:        CelesteItemData(celeste_base_id + 0x24, ItemClassification.trap),
+    ItemName.slow_trap:        CelesteItemData(celeste_base_id + 0x25, ItemClassification.trap),
+    ItemName.ice_trap:         CelesteItemData(celeste_base_id + 0x26, ItemClassification.trap),
+    ItemName.reverse_trap:     CelesteItemData(celeste_base_id + 0x28, ItemClassification.trap),
+    ItemName.screen_flip_trap: CelesteItemData(celeste_base_id + 0x29, ItemClassification.trap),
+    ItemName.laughter_trap:    CelesteItemData(celeste_base_id + 0x2A, ItemClassification.trap),
+    ItemName.hiccup_trap:      CelesteItemData(celeste_base_id + 0x2B, ItemClassification.trap),
+    ItemName.zoom_trap:        CelesteItemData(celeste_base_id + 0x2C, ItemClassification.trap),
+}
+
 checkpoint_item_data_table: Dict[str, CelesteItemData] = {}
 
 key_item_data_table: Dict[str, CelesteItemData] = {}
@@ -206,6 +221,7 @@ def add_key_to_table(id: int, name: str):
 
 def generate_item_data_table() -> Dict[int, CelesteItemData]:
     return {**collectable_item_data_table,
+            **trap_item_data_table,
             **checkpoint_item_data_table,
             **key_item_data_table,
             **interactable_item_data_table}

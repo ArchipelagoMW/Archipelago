@@ -114,6 +114,126 @@ class IncludeCSides(Toggle):
     display_name = "Include C-Sides"
 
 
+class JunkFillPercentage(Range):
+    """
+    Replace a percentage of non-required Strawberries in the item pool with junk items
+    """
+    display_name = "Junk Fill Percentage"
+    range_start = 0
+    range_end = 100
+    default = 50
+
+class TrapFillPercentage(Range):
+    """
+    Replace a percentage of junk items in the item pool with random traps
+    """
+    display_name = "Trap Fill Percentage"
+    range_start = 0
+    range_end = 100
+    default = 0
+
+class TrapExpirationAction(Choice):
+    """
+    The type of action which causes traps to wear off
+    """
+    display_name = "Trap Expiration Action"
+    option_return_to_menu = 0
+    option_deaths = 1
+    option_new_screens = 2
+    default = 2
+
+class TrapExpirationAmount(Range):
+    """
+    The amount of the selected Trap Expiration Action that must occur for the trap to wear off
+    """
+    display_name = "Trap Expiration Amount"
+    range_start = 1
+    range_end = 10
+    default = 5
+
+class BaseTrapWeight(Choice):
+    """
+    Base Class for Trap Weights
+    """
+    option_none = 0
+    option_low = 1
+    option_medium = 2
+    option_high = 4
+    default = 2
+
+class BaldTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which makes Maddy bald
+    """
+    display_name = "Bald Trap Weight"
+
+class LiteratureTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which causes the player to read literature
+    """
+    display_name = "Literature Trap Weight"
+
+class StunTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which briefly stuns Maddy
+    """
+    display_name = "Stun Trap Weight"
+
+class InvisibleTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which turns Maddy invisible
+    """
+    display_name = "Invisible Trap Weight"
+
+class FastTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which increases the game speed
+    """
+    display_name = "Fast Trap Weight"
+
+class SlowTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which decreases the game speed
+    """
+    display_name = "Slow Trap Weight"
+
+class IceTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which causes the level to become slippery
+    """
+    display_name = "Ice Trap Weight"
+
+class ReverseTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which causes the controls to be reversed
+    """
+    display_name = "Reverse Trap Weight"
+
+class ScreenFlipTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which causes the screen to be flipped
+    """
+    display_name = "Screen Flip Trap Weight"
+
+class LaughterTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which causes Maddy to laugh uncontrollably
+    """
+    display_name = "Laughter Trap Weight"
+
+class HiccupTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which causes Maddy to hiccup uncontrollably
+    """
+    display_name = "Hiccup Trap Weight"
+
+class ZoomTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which causes the camera to focus on Maddy
+    """
+    display_name = "Zoom Trap Weight"
+
+
 class MadelineHairLength(Choice):
     """
     How long Madeline's hair is
@@ -218,6 +338,24 @@ celeste_option_groups = [
         IncludeBSides,
         IncludeCSides,
     ]),
+    OptionGroup("Junk and Traps", [
+        JunkFillPercentage,
+        TrapFillPercentage,
+        TrapExpirationAction,
+        TrapExpirationAmount,
+        BaldTrapWeight,
+        LiteratureTrapWeight,
+        StunTrapWeight,
+        InvisibleTrapWeight,
+        FastTrapWeight,
+        SlowTrapWeight,
+        IceTrapWeight,
+        ReverseTrapWeight,
+        ScreenFlipTrapWeight,
+        LaughterTrapWeight,
+        HiccupTrapWeight,
+        ZoomTrapWeight,
+    ]),
     OptionGroup("Aesthetic Options", [
         MadelineHairLength,
         MadelineOneDashHairColor,
@@ -292,6 +430,23 @@ class CelesteOptions(PerGameCommonOptions):
     goal_area_checkpointsanity: GoalAreaCheckpointsanity
     total_strawberries: TotalStrawberries
     strawberries_required_percentage: StrawberriesRequiredPercentage
+
+    junk_fill_percentage: JunkFillPercentage
+    trap_fill_percentage: TrapFillPercentage
+    trap_expiration_action: TrapExpirationAction
+    trap_expiration_amount: TrapExpirationAmount
+    bald_trap_weight: BaldTrapWeight
+    literature_trap_weight: LiteratureTrapWeight
+    stun_trap_weight: StunTrapWeight
+    invisible_trap_weight: InvisibleTrapWeight
+    fast_trap_weight: FastTrapWeight
+    slow_trap_weight: SlowTrapWeight
+    ice_trap_weight: IceTrapWeight
+    reverse_trap_weight: ReverseTrapWeight
+    screen_flip_trap_weight: ScreenFlipTrapWeight
+    laughter_trap_weight: LaughterTrapWeight
+    hiccup_trap_weight: HiccupTrapWeight
+    zoom_trap_weight: ZoomTrapWeight
 
     checkpointsanity: Checkpointsanity
     binosanity: Binosanity
