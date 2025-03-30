@@ -31,7 +31,7 @@ CONNECTION_INITIAL_STATUS = "Dolphin connection has not been initiated."
 # This is the address that holds the player's slot name.
 # This way, the player does not have to manually authenticate their slot name.
 SLOT_NAME_ADDR = 0x80314660
-SLOT_NAME_STR_LENGTH = 0x10
+SLOT_NAME_STR_LENGTH = 16
 
 # This Play State address lets us know if the game is playable and ready. This should have a value of 2
 # Map ID is used to confirm Luigi is loading into the Mansion or one of the boss maps.
