@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import PerGameCommonOptions, Choice, DeathLink, Range
+from Options import PerGameCommonOptions, Choice, DeathLink, Range, Toggle
 
 
 class QuestRandomisation(Choice):
@@ -77,6 +77,10 @@ class StartingWeapon(Choice):
     option_giant_spoon_of_doom = 35
     option_scythe = 27
 
+class RandomiseHpBar(Toggle):
+    """Whether the HP Bar must be an item found elsewhere"""
+    display_name = "Randomise HP Bar"
+    default = True
 
 @dataclass
 class CandyBox2Options(PerGameCommonOptions):
@@ -90,3 +94,4 @@ class CandyBox2Options(PerGameCommonOptions):
     candy_merchant_hat_price: CandyMerchantHatPrice
     sorceress_hat_price: SorceressHatPrice
     teapot_hp: TeapotHP
+    randomise_hp_bar: RandomiseHpBar

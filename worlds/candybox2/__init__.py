@@ -56,6 +56,8 @@ class CandyBox2World(World):
                 for i in range(data.required_amount):
                     if self.options.starting_weapon.value == data.code - candy_box_2_base_id:
                         continue
+                    if not self.options.randomise_hp_bar and name == "HP Bar":
+                        continue
                     self.multiworld.itempool += [self.create_item(name)]
 
     def connect_entrances(self) -> None:
@@ -103,3 +105,7 @@ class CandyBox2World(World):
         slot_data = self.fill_slot_data()
         for entrance in slot_data.get("entranceInformation", []):
             spoiler_handle.write(f"{entrance[0]} -> {entrance[1]}\n")
+
+    def generate_basic(self) -> None:
+        if not self.options.randomise_hp_bar:
+            self.multiworld.get_location("HP Bar Unlock", self.player).place_locked_item(self.create_item("HP Bar"))
