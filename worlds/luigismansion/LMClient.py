@@ -287,7 +287,7 @@ class LMContext(CommonContext):
             source_name = args["data"]["source"]
             if "TrapLink" in self.tags and "TrapLink" in args["tags"] and source_name != self.slot_info[self.slot].name:
                 trap_name: str = args["data"]["trap_name"]
-                if trap_name not in ACCEPTED_TRAPS or trap_name not in filler_items.keys():
+                if trap_name not in ACCEPTED_TRAPS:
                     return
 
                 if trap_name in ICE_TRAP_EQUIV:
@@ -431,8 +431,7 @@ class LMContext(CommonContext):
                 if not addr_to_update.pointer_offset is None:
                     curr_val = addr_to_update.item_count
                     dme.write_bytes(dme.follow_pointers(addr_to_update.ram_addr,
-                                                        [addr_to_update.pointer_offset]),
-                                    curr_val.to_bytes(byte_size, 'big'))
+                        [addr_to_update.pointer_offset]), curr_val.to_bytes(byte_size, 'big'))
                 elif addr_to_update.bit_position is None:
                     curr_val = addr_to_update.item_count
                     dme.write_bytes(addr_to_update.ram_addr, curr_val.to_bytes(byte_size, 'big'))
