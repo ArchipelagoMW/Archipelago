@@ -39,23 +39,23 @@ class LollipopProductionMultiplier(Range):
 class CandyMerchantHatPrice(Range):
     """The price (in candies) required to buy the Candy Merchant's Hat."""
     display_name = "Candy Merchant's Hat Price"
-    range_start = 10000
-    range_end = 1000000000
-    default = 1000000
+    range_start = 10_000
+    range_end = 1_000_000_000
+    default = 750_000
 
 class SorceressHatPrice(Range):
     """The price (in lollipops) required to buy the Sorceress' Hat."""
     display_name = "Sorceress' Hat Price"
-    range_start = 10000
-    range_end = 1000000000
-    default = 1000000000
+    range_start = 10_000
+    range_end = 1_000_000_000
+    default = 2_500_000
 
 class TeapotHP(Range):
     """The teapot boss's total HP."""
     display_name = "Teapot Boss HP"
     range_start = 1000
-    range_end = 10000000
-    default = 1000000
+    range_end = 10_000_000
+    default = 100_000
 
 class StartingWeapon(Choice):
     """
