@@ -16,7 +16,7 @@ from settings import get_settings, Settings
 from . import CLIENT_VERSION
 from .LMGenerator import LuigisMansionRandomizer
 from .Items import *
-from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV
+from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV, BOOLOSSUS_AP_ID_LIST
 
 CONNECTION_REFUSED_GAME_STATUS = (
     "Dolphin failed to connect. Please load a randomized ROM for LM. Trying again in 5 seconds..."
@@ -570,7 +570,7 @@ class LMContext(CommonContext):
             lm_loc_data = ALL_LOCATION_TABLE[local_loc]
 
             if current_map_id == 11:
-                if not mis_loc in BOO_AP_ID_LIST:
+                if not mis_loc in BOOLOSSUS_AP_ID_LIST:
                     continue
 
                 for addr_to_update in lm_loc_data.update_ram_addr:
