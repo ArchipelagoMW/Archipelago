@@ -146,9 +146,6 @@ class JMPInfoFile:
             self.info_file_entry.data.write(struct.pack(">i", len(self.info_file_field_entries)))
             self.add_blank_data_lines(len(self.info_file_field_entries) - data_line_count)
 
-        print("Now writing '" + str(len(self.info_file_field_entries)) + "' data entries to JMP file: " +
-              self.info_file_entry.name)
-
         for index, data_line in enumerate(self.info_file_field_entries):
             data_field_offset = self.__header_byte_length+(index*self.__data_line_byte_length)
 
