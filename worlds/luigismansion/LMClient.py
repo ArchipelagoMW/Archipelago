@@ -238,8 +238,8 @@ class LMContext(CommonContext):
             if self.awaiting_rom:
                 return
             self.awaiting_rom = True
-            logger.info("Luigi's Mansion ROM loaded in Dolphin. Waiting for player to load into the Foyer. " +
-                "For new AP seeds, ensure a new save file is selected (or delete an old game).")
+            if dme.is_hooked():
+                logger.info("A game is playing in dolphin, waiting to verify additional details...")
             return
         await self.send_connect()
 
@@ -260,8 +260,8 @@ class LMContext(CommonContext):
                     f"The client version is {CLIENT_VERSION}! Please verify you are using the same APWorld as the " +
                     f"generator, which is '{local_version}'")
 
-            arg_seed = str(args["slot_data"]["seed"])[0:19]
-            iso_seed = read_string(0x80000001, 19)
+            arg_seed = str(args["slot_data"]["seed"])
+            iso_seed = read_string(0x80000001, len(arg_seed))
             if arg_seed != iso_seed:
                 raise Exception("Incorrect Randomized Luigi's Mansion ISO file selected; " +
                                 "Please verify that you are using the right file.")

@@ -65,7 +65,7 @@ class LuigisMansionRandomizer:
         self.dol = DOL()
 
         # Change game ID so save files are different
-        magic_seed = str(self.output_data["Seed"])[0:19]
+        magic_seed = str(self.output_data["Seed"])
         bin_data = self.gcm.read_file_data("sys/boot.bin")
         bin_data.seek(0x01)
         bin_data.write(sbf.string_to_bytes(magic_seed, len(magic_seed)))
