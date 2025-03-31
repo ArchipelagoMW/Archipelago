@@ -994,7 +994,7 @@ def update_observer_info(observer_info):
         "invisible": 1,
         "(Undocumented)": 0,
     })
-    # Turn on flag 12 to stop event38 from reloading
+    # Turn on flag 34 to stop event38 from reloading
     observer_info.info_file_field_entries.append({
         "name": "observer",
         "code_name": "(null)",
