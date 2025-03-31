@@ -2371,8 +2371,8 @@ trivia_easy_terraria = [
         [
             """°""", 
             """°""", 
-            """ In Terraria, what is the color°""", 
-            """      of Retinazer pupil?°""", 
+            """      In Terraria, what is°""", 
+            """    Retinazer's iris color?°""", 
             """°""", 
             """°""", 
         ],
@@ -2384,8 +2384,8 @@ trivia_easy_terraria = [
         [
             """°""", 
             """°""", 
-            """ In Terraria, what is the color°""", 
-            """      of Spazmatism pupil?°""", 
+            """      In Terraria, what is°""", 
+            """    Spazmatism's iris color?°""", 
             """°""", 
             """°""", 
         ],
@@ -2397,7 +2397,7 @@ trivia_easy_terraria = [
         [
             """°""", 
             """  In Terraria, which boss has°""", 
-            """      the spawn message of°""", 
+            """  the following spawn message:°""", 
             """   "The air is getting colder°""", 
             """        around you..."?°""", 
             """°""", 
@@ -2410,9 +2410,9 @@ trivia_easy_terraria = [
         [
             """°""", 
             """  In Terraria, which boss has°""", 
-            """      the spawn message of°""", 
-            """     "This is going to be a°""", 
-            """      terrible night..."?°""", 
+            """  the following spawn message:°""", 
+            """      "This is going to be°""", 
+            """       a terrible night"?°""", 
             """°""", 
         ],
         """The Twins°°""", 
@@ -2422,10 +2422,10 @@ trivia_easy_terraria = [
     TriviaQuestion(
         [
             """°""", 
-            """    In Terraria, what is the°""", 
-            """  name of the soul that drops°""", 
-            """         The Destroyer?°""", 
-            """°""", 
+            """      Which kind of souls°""", 
+            """       The Destroyer from°""", 
+            """         Terraria drops°""", 
+            """         when defeated?°""", 
             """°""", 
         ],
         """Soul of Might°°""", 
@@ -2435,9 +2435,9 @@ trivia_easy_terraria = [
     TriviaQuestion(
         [
             """°""", 
-            """    In Terraria, what is the°""", 
-            """  name of the soul that drops°""", 
-            """        Skeletron Prime?°""", 
+            """ Which kind of souls Skeletron°""", 
+            """   Prime from Terraria drops°""", 
+            """         when defeated?°""", 
             """°""", 
             """°""", 
         ],
@@ -2448,9 +2448,9 @@ trivia_easy_terraria = [
     TriviaQuestion(
         [
             """°""", 
-            """    In Terraria, what is the°""", 
-            """  name of the soul that drops°""", 
-            """           The Twins?°""", 
+            """ Which kind of souls The Twins°""", 
+            """      from Terraria drops°""", 
+            """         when defeated?°""", 
             """°""", 
             """°""", 
         ],
@@ -4531,8 +4531,8 @@ trivia_hard_terraria = [
         [
             """°""", 
             """   In Terraria, which of the°""", 
-            """   following is NOT a debuff°""", 
-            """            candle?°""", 
+            """   following candles doesn't°""", 
+            """       provide a debuff?°""", 
             """°""", 
             """°""", 
         ],
@@ -4543,9 +4543,9 @@ trivia_hard_terraria = [
     TriviaQuestion(
         [
             """°""", 
-            """    In Terraria, what is the°""", 
-            """    drop rate of the Rod of°""", 
-            """            Discord?°""", 
+            """°""", 
+            """  In Terraria, what's the drop°""", 
+            """  rate of the Rod of Discord?°""", 
             """°""", 
             """°""", 
         ],
@@ -4557,8 +4557,8 @@ trivia_hard_terraria = [
         [
             """°""", 
             """°""", 
-            """    In Terraria, what is the°""", 
-            """  drop rate of any Biome Key?°""", 
+            """  In Terraria, what's the drop°""", 
+            """      rate of Biome Keys?°""", 
             """°""", 
             """°""", 
         ],
@@ -4570,7 +4570,7 @@ trivia_hard_terraria = [
         [
             """°""", 
             """   In Terraria, which of the°""", 
-            """      following Yoyos has°""", 
+            """    following yo-yos has the°""", 
             """       highest drop rate?°""", 
             """°""", 
             """°""", 
@@ -4582,9 +4582,9 @@ trivia_hard_terraria = [
     TriviaQuestion(
         [
             """°""", 
-            """   In Terraria, which of the°""", 
-            """    following items is NOT a°""", 
-            """       Rarity Tier Lime?°""", 
+            """  Which of the following items°""", 
+            """  from Terraria doesn't have a°""", 
+            """       Lime rarity tier?°""", 
             """°""", 
             """°""", 
         ],
@@ -4595,9 +4595,9 @@ trivia_hard_terraria = [
     TriviaQuestion(
         [
             """°""", 
-            """   In Terraria, which of the°""", 
-            """    following items is NOT a°""", 
-            """       Rarity Tier Cyan?°""", 
+            """  Which of the following items°""", 
+            """  from Terraria doesn't have a°""", 
+            """       Cyan rarity tier?°""", 
             """°""", 
             """°""", 
         ],
@@ -4608,9 +4608,9 @@ trivia_hard_terraria = [
     TriviaQuestion(
         [
             """°""", 
-            """   In Terraria, which of the°""", 
-            """    following items is NOT a°""", 
-            """       Rarity Tier Pink?°""", 
+            """  Which of the following items°""", 
+            """  from Terraria doesn't have a°""", 
+            """       Pink rarity tier?°""", 
             """°""", 
             """°""", 
         ],
@@ -4621,9 +4621,9 @@ trivia_hard_terraria = [
     TriviaQuestion(
         [
             """°""", 
-            """°""", 
-            """  In Terraria, which enemy can°""", 
-            """  cause the "Blackout" debuff?°""", 
+            """ Which of the following enemies°""", 
+            """    from Terraria causes the°""", 
+            """        Blackout debuff?°""", 
             """°""", 
             """°""", 
         ],
@@ -4634,9 +4634,9 @@ trivia_hard_terraria = [
     TriviaQuestion(
         [
             """°""", 
-            """   In Terraria, which of the°""", 
-            """   following is NOT a debuff°""", 
-            """          in the game?°""", 
+            """°""", 
+            """ Which of the following debuffs°""", 
+            """ isn't a valid one in Terraria?°""", 
             """°""", 
             """°""", 
         ],
@@ -4647,9 +4647,9 @@ trivia_hard_terraria = [
     TriviaQuestion(
         [
             """°""", 
-            """   In Terraria, which of the°""", 
-            """   following is NOT a debuff°""", 
-            """          in the game?°""", 
+            """°""", 
+            """ Which of the following debuffs°""", 
+            """ isn't a valid one in Terraria?°""", 
             """°""", 
             """°""", 
         ],
@@ -4660,9 +4660,9 @@ trivia_hard_terraria = [
     TriviaQuestion(
         [
             """°""", 
-            """   In Terraria, which of the°""", 
-            """   following is NOT a buff in°""", 
-            """           the game?°""", 
+            """°""", 
+            """  Which of the following buffs°""", 
+            """ isn't a valid one in Terraria?°""", 
             """°""", 
             """°""", 
         ],
@@ -4673,9 +4673,9 @@ trivia_hard_terraria = [
     TriviaQuestion(
         [
             """°""", 
-            """   In Terraria, which of the°""", 
-            """  following is NOT a whip buff°""", 
-            """      effect in the game?°""", 
+            """  Which of the following whip°""", 
+            """   buff effects isn't a valid°""", 
+            """        one in Terraria?°""", 
             """°""", 
             """°""", 
         ],
@@ -4686,9 +4686,9 @@ trivia_hard_terraria = [
     TriviaQuestion(
         [
             """°""", 
-            """   In Terraria, which of the°""", 
-            """ following is NOT a flask buff°""", 
-            """          in the game?°""", 
+            """  Which of the following flask°""", 
+            """   buff effects isn't a valid°""", 
+            """        one in Terraria?°""", 
             """°""", 
             """°""", 
         ],
@@ -7171,10 +7171,10 @@ trivia_medium_terraria = [
     TriviaQuestion(
         [
             """°""", 
-            """ In Terraria, what is the name°""", 
-            """   of the achievement you get°""", 
-            """   after defeating Deerclops°""", 
-            """      for the first time?°""", 
+            """ In Terraria, which achievement°""", 
+            """   is granted when you defeat°""", 
+            """ Deerclops for the first time?°""", 
+            """°""", 
             """°""", 
         ],
         """An Eye For An Eye°°""", 
@@ -7184,10 +7184,10 @@ trivia_medium_terraria = [
     TriviaQuestion(
         [
             """°""", 
-            """ In Terraria, what is the name°""", 
-            """   of the achievement you get°""", 
-            """  after defeating Queen Slime°""", 
-            """      for the first time?°""", 
+            """ In Terraria, which achievement°""", 
+            """ is granted after defeating the°""", 
+            """Queen Slime for the first time?°""", 
+            """°""", 
             """°""", 
         ],
         """Just Desserts°°""", 
@@ -7197,10 +7197,10 @@ trivia_medium_terraria = [
     TriviaQuestion(
         [
             """°""", 
-            """   In Terraria, which of the°""", 
-            """   following bosses does NOT°""", 
-            """    have an "about to spawn°""", 
-            """           message"?°""", 
+            """°""", 
+            """  Which Terraria boss doesn't°""", 
+            """     have a spawn message?°""", 
+            """°""", 
             """°""", 
         ],
         """Eater of Worlds°°""", 
@@ -7210,9 +7210,9 @@ trivia_medium_terraria = [
     TriviaQuestion(
         [
             """°""", 
-            """     In Terraria, how many°""", 
-            """ wing-type accessories can you°""", 
-            """  craft with Souls of Flight?°""", 
+            """   In Terraria, how many wing°""", 
+            """   accessories can you craft°""", 
+            """     with Souls of Flight?°""", 
             """°""", 
             """°""", 
         ],
@@ -7258,6 +7258,19 @@ trivia_medium_yoshis_island = [
 ]
 
 trivia_medium_zillion = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """   In Zillion, what items are°""", 
+            """      needed to access the°""", 
+            """        Master Computer?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Red Key Card & Floppys°°""", 
+        """Scope & Key Card°°""", 
+        """Scope & Floppys°°""", 
+    ),
 ]
 
 
