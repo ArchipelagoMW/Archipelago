@@ -458,11 +458,13 @@ def get_rules(world):
             "Attribute - Frostyrang":
                 lambda state:
                     has_theggs(world, state, TheggType.ICE_THEGG, world.options.thegg_gating.value)
-                    and state.has("Platypus Talisman", world.player),
+                    and state.has("Platypus Talisman", world.player)
+                    and state.can_reach_location("Attribute - Flamerang", world.player),
             "Attribute - Zappyrang":
                 lambda state:
                     has_theggs(world, state, TheggType.AIR_THEGG, world.options.thegg_gating.value)
-                    and state.has("Cockatoo Talisman", world.player),
+                    and state.has("Cockatoo Talisman", world.player)
+                    and state.can_reach_location("Attribute - Frostyrang", world.player),
             "Rainbow Scale 11":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FROSTYRANG)
