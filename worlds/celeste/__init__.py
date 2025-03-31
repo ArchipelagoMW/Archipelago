@@ -196,6 +196,7 @@ class CelesteWorld(World):
         return {
             "death_link": self.options.death_link.value,
             "death_link_amnesty": self.options.death_link_amnesty.value,
+            "trap_link": self.options.trap_link.value,
             "strawberries_required": self.strawberries_required,
 
             "checkpointsanity": self.options.checkpointsanity.value,

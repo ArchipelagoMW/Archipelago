@@ -14,6 +14,15 @@ class DeathLinkAmnesty(Range):
     range_end = 30
     default = 10
 
+class TrapLink(Toggle):
+    """
+    Whether your received traps are linked to other players
+
+    You will also receive any linked traps from other players with Trap Link enabled,
+    if you have a weight above "none" set for that trap
+    """
+    display_name = "Trap Link"
+
 
 class GoalArea(Choice):
     """
@@ -424,6 +433,7 @@ def resolve_options(world: World):
 class CelesteOptions(PerGameCommonOptions):
     death_link: DeathLink
     death_link_amnesty: DeathLinkAmnesty
+    trap_link: TrapLink
 
     goal_area: GoalArea
     lock_goal_area: LockGoalArea
