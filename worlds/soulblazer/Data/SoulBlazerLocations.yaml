@@ -1,0 +1,1503 @@
+chests:
+- name: Trial Room - Chest
+  id: 0
+  description: Act 1 - Trial Room - Chest at the Start
+  type: Chest
+  flag: NONE
+- name: Grass Valley Treasure Room - Left Chest
+  id: 1
+  description: Act 1 - Grass Valley Treasure Room - Left Chest
+  type: Chest
+  flag: NONE
+- name: Grass Valley Treasure Room - Right Chest
+  id: 2
+  description: Act 1 - Grass Valley Treasure Room - Right Chest
+  type: Chest
+  flag: NONE
+- name: Underground Castle West - Triangle Torch Chest
+  id: 3
+  description: Act 1 - Underground Castle West - Triangle Torch Chest
+  type: Chest
+  flag: NONE
+- name: Underground Castle West - Triangle Pillar Chest
+  id: 4
+  description: Act 1 - Underground Castle West - Triangle Pillar Chest
+  type: Chest
+  flag: NONE
+- name: Underground Castle West - North-East Island Chest
+  id: 5
+  description: Act 1 - Underground Castle West - North-East Island Chest
+  type: Chest
+  flag: NONE
+- name: Underground Castle East - Dream-Locked Chest
+  id: 6
+  description: Act 1 - Underground Castle East - Dream-Locked Chest
+  type: Chest
+  flag: NONE
+- name: Leo's Painting Room 2 - Center Chest
+  id: 7
+  description: Act 1 - Leo's Painting Room 2 - Center Chest
+  type: Chest
+  flag: NONE
+- name: Leo's Painting Room 2 - Metal Enemies Chest
+  id: 8
+  description: Act 1 - Leo's Painting Room 2 - Metal Enemies Chest
+  type: Chest
+  flag: CAN_CUT_METAL
+- name: Greenwood - Sleeping Stump Chest 
+  id: 9
+  description: Act 2 - Greenwood - Sleeping Stump Chest (I believe I can fly)
+  type: Chest
+  flag: NONE
+- name: Greenwood Tunnels - Mole's Chest
+  id: 10
+  description: Act 2 - Greenwood Tunnels - Mole's Chest (Guide the Mole home)
+  type: Chest
+  flag: NONE
+- name: Water Shrine 1F - Chest Near Exit
+  id: 11
+  description: Act 2 - Water Shrine 1F - Chest Near Exit
+  type: Chest
+  flag: NONE
+- name: Water Shrine B1 - Chest Behind the Waterfall
+  id: 12
+  description: Act 2 - Water Shrine B1 - Chest Behind the Waterfall
+  type: Chest
+  flag: NONE
+- name: Water Shrine B1 - Moving Spike Trap Chest
+  id: 13
+  description: Act 2 - Water Shrine B1 - Moving Spike Trap Chest
+  type: Chest
+  flag: NONE
+- name: Water Shrine B2 - South-West Chest
+  id: 14
+  description: Act 2 - Water Shrine B2 - South-West Chest
+  type: Chest
+  flag: NONE
+- name: Water Shrine B2 - South-East Chest
+  id: 15
+  description: Act 2 - Water Shrine B2 - South-East Chest
+  type: Chest
+  flag: NONE
+- name: Fire Shrine 1F - 2nd Bridge from the Left Chest
+  id: 16
+  description: Act 2 - Fire Shrine 1F - 2nd Bridge from the Left Chest
+  type: Chest
+  flag: NONE
+- name: Fire Shrine B1 - Chest Near the Stairs
+  id: 17
+  description: Act 2 - Fire Shrine B1 - Chest Near the Stairs
+  type: Chest
+  flag: NONE
+- name: Fire Shrine B1 - Metal Enemies Chest
+  id: 18
+  description: Act 2 - Fire Shrine B1 - Metal Enemies Chest
+  type: Chest
+  flag: CAN_CUT_METAL
+- name: Fire Shrine B2 - Triple Scorpion Chest
+  id: 19
+  description: Act 2 - Fire Shrine B2 - Triple Scorpion Chest
+  type: Chest
+  flag: NONE
+- name: Fire Shrine B2 - Chest Near Exit
+  id: 20
+  description: Act 2 - Fire Shrine B2 - Chest Near Exit
+  type: Chest
+  flag: NONE
+- name: Light Shrine 1F - Spirit Enemies Chest
+  id: 21
+  description: Act 2 - Light Shrine 1F - Spirit Enemies Chest
+  type: Chest
+  flag: CAN_CUT_SPIRIT
+- name: Seabed Sanctuary - Common House East Room Chest
+  id: 22
+  description: Act 3 - Seabed Sanctuary - Common House East Room Chest
+  type: Chest
+  flag: NONE
+- name: Seabed Sanctuary - Dolphin Ride Chest
+  id: 23
+  description: Act 3 - Seabed Sanctuary - Dolphin Ride Chest (Ride the dolphin's nose)
+  type: Chest
+  flag: NONE
+- name: Seabed North-West - Secret Cove Top-Left Chest
+  id: 24
+  description: Act 3 - Seabed North-West - Secret Cove Top-Left Chest
+  type: Chest
+  flag: NONE
+- name: Seabed North-West - Secret Cove Top-Right Chest
+  id: 25
+  description: Act 3 - Seabed North-West - Secret Cove Top-Right Chest
+  type: Chest
+  flag: NONE
+- name: Seabed North-West - Secret Cove Bottom-Left Chest
+  id: 26
+  description: Act 3 - Seabed North-West - Secret Cove Bottom-Left Chest
+  type: Chest
+  flag: NONE
+- name: Seabed North-West - Secret Cove Bottom-Right Chest
+  id: 27
+  description: Act 3 - Seabed North-West - Secret Cove Bottom-Right Chest
+  type: Chest
+  flag: NONE
+- name: Southerta - Tree Maze Chest
+  id: 28
+  description: Act 3 - Southerta - Tree Maze Chest
+  type: Chest
+  flag: NONE
+- name: Rockbird - East Lakes Upper Chest
+  id: 29
+  description: Act 3 - Rockbird - East Lakes Upper Chest
+  type: Chest
+  flag: NONE
+- name: Rockbird - East Lakes Lower Chest
+  id: 30
+  description: Act 3 - Rockbird - East Lakes Lower Chest
+  type: Chest
+  flag: NONE
+- name: Durean - East Lava River Chest
+  id: 31
+  description: Act 3 - Durean - East Lava River Chest
+  type: Chest
+  flag: NONE
+- name: Durean - East Island Chest
+  id: 32
+  description: Act 3 - Durean - East Island Chest
+  type: Chest
+  flag: NONE
+- name: Ghost Ship - Chest
+  id: 33
+  description: Act 3 - Ghost Ship - Chest
+  type: Chest
+  flag: NONE
+- name: Seabed North-West - Chest in South-East Cove
+  id: 34
+  description: Act 3 - Seabed North-West - Chest in South-East Cove
+  type: Chest
+  flag: NONE
+- name: Mountain Slopes Base - South-East Chest Down the Slide
+  id: 35
+  description: Act 4 - Mountain Slopes Base - South-East Chest Down the Slide
+  type: Chest
+  flag: NONE
+- name: Mountain Slopes Ascent - Buried Treasure Left-Most Chest
+  id: 36
+  description: Act 4 - Mountain Slopes Ascent - Buried Treasure Left-Most Chest
+  type: Chest
+  flag: NONE
+- name: Mountain Slopes Ascent - Buried Treasure Middle-Left Chest
+  id: 37
+  description: Act 4 - Mountain Slopes Ascent - Buried Treasure Middle-Left Chest
+  type: Chest
+  flag: NONE
+- name: Mountain Slopes Ascent - Buried Treasure Middle-Right Chest
+  id: 38
+  description: Act 4 - Mountain Slopes Ascent - Buried Treasure Middle-Right Chest
+  type: Chest
+  flag: NONE
+- name: Mountain Slopes Ascent - Buried Treasure Right-Most Chest
+  id: 39
+  description: Act 4 - Mountain Slopes Ascent - Buried Treasure Right-Most Chest
+  type: Chest
+  flag: NONE
+- name: Laynole West - North Invisible Bridge Chest
+  id: 40
+  description: Act 4 - Laynole West - North Invisible Bridge Chest
+  type: Chest
+  flag: NONE
+- name: Laynole East - Chest Past the Invisible Bridge
+  id: 41
+  description: Act 4 - Laynole East - Chest Past the Invisible Bridge
+  type: Chest
+  flag: NONE
+- name: Laynole East - Chest Past the Second Invisible Bridge
+  id: 42
+  description: Act 4 - Laynole East - Chest Past the Second Invisible Bridge
+  type: Chest
+  flag: NONE
+- name: Leo's Lab 1F - Free Chest
+  id: 43
+  description: Act 5 - Leo's Lab 1F - Free Chest (No strings attached)
+  type: Chest
+  flag: NONE
+- name: Power Plant - Chest Near Start
+  id: 44
+  description: Act 5 - Power Plant - Chest Near Start
+  type: Chest
+  flag: CAN_CUT_METAL
+- name: Model Town Left - House Maze Chest
+  id: 45
+  description: Act 5 - Model Town Left - House Maze Chest
+  type: Chest
+  flag: NONE
+- name: Model Town Left - North Hilltop Left Chest
+  id: 46
+  description: Act 5 - Model Town Left - North Hilltop Left Chest
+  type: Chest
+  flag: NONE
+- name: Model Town Left - North Hilltop Right Chest
+  id: 47
+  description: Act 5 - Model Town Left - North Hilltop Right Chest
+  type: Chest
+  flag: NONE
+- name: Model Town Right - Center Suberbs Top Chest
+  id: 48
+  description: Act 5 - Model Town Right - Center Suberbs Top Chest
+  type: Chest
+  flag: NONE
+- name: Model Town Right - Center Suberbs Bottom Chest
+  id: 49
+  description: Act 5 - Model Town Right - Center Suberbs Bottom Chest
+  type: Chest
+  flag: NONE
+- name: Magridd Castle B1 - West Chest
+  id: 50
+  description: Act 6 - Magridd Castle B1 - West Chest
+  type: Chest
+  flag: NONE
+- name: Magridd Castle B1 - North-East Corner Chest
+  id: 51
+  description: Act 6 - Magridd Castle B1 - North-East Corner Chest
+  type: Chest
+  flag: NONE
+- name: Magridd Castle B2 - North Invisible Chest
+  id: 52
+  description: Act 6 - Magridd Castle B2 - North Invisible Chest
+  type: Chest
+  flag: NONE
+- name: Magridd Castle B2 - South-West Invisible Chest
+  id: 53
+  description: Act 6 - Magridd Castle B2 - South-West Invisible Chest
+  type: Chest
+  flag: NONE
+- name: Magridd Castle B2 - Fake Dead-End Invisible Chest
+  id: 54
+  description: Act 6 - Magridd Castle B2 - Fake Dead-End Invisible Chest
+  type: Chest
+  flag: NONE
+- name: Magridd Castle B3 - North-West Invisible Chest
+  id: 55
+  description: Act 6 - Magridd Castle B3 - North-West Invisible Chest
+  type: Chest
+  flag: NONE
+- name: Right Tower 2F - Left Chest
+  id: 56
+  description: Act 6 - Right Tower 2F - Left Chest
+  type: Chest
+  flag: NONE
+- name: Right Tower 2F - Right Chest
+  id: 57
+  description: Act 6 - Right Tower 2F - Right Chest
+  type: Chest
+  flag: NONE
+- name: Right Tower 3F - Top-Left Chest
+  id: 58
+  description: Act 6 - Right Tower 3F - Top-Left Chest
+  type: Chest
+  flag: NONE
+- name: Right Tower 3F - Bottom-Right Chest
+  id: 59
+  description: Act 6 - Right Tower 3F - Bottom-Right Chest
+  type: Chest
+  flag: NONE
+- name: World of Evil South - South-West Chest
+  id: 60
+  description: Act 7 - World of Evil South - South-West Chest
+  type: Chest
+  flag: HAS_MAGIC
+- name: World of Evil South - South-East Chest
+  id: 61
+  description: Act 7 - World of Evil South - South-East Chest
+  type: Chest
+  flag: HAS_MAGIC
+- name: World of Evil South - West Warp Chest
+  id: 62
+  description: Act 7 - World of Evil South - West Warp Chest
+  type: Chest
+  flag: HAS_MAGIC
+- name: World of Evil North - East Corridor Chest
+  id: 63
+  description: Act 7 - World of Evil North - East Corridor Chest
+  type: Chest
+  flag: NONE
+- name: Dazzling Space - East Block Corridor Chest
+  id: 64
+  description: Act 7 - Dazzling Space - East Block Corridor Chest
+  type: Chest
+  flag: NONE
+- name: Dazzling Space - Chest West of Entrance
+  id: 65
+  description: Act 7 - Dazzling Space - Chest West of Entrance
+  type: Chest
+  flag: NONE
+lairs:
+- name: Underground Castle West - Lair East of Entrance
+  id: 2
+  description: Act 1 - Underground Castle West - Lair 002 - East of Entrance
+  type: Lair
+  flag: NONE
+- name: Underground Castle West - Lair West of Bridge
+  id: 6
+  description: Act 1 - Underground Castle West - Lair 006 - West of Bridge
+  type: Lair
+  flag: NONE
+- name: Underground Castle West - Lair North of Triangle Torch Chest
+  id: 7
+  description: Act 1 - Underground Castle West - Lair 007 - North of Triangle Torch Chest
+  type: Lair
+  flag: NONE
+- name: Underground Castle West - North-East Lair
+  id: 8
+  description: Act 1 - Underground Castle West - Lair 008 - North-East Lair
+  type: Lair
+  flag: NONE
+- name: Leo's Painting - Solid Arm Boss Lair
+  id: 9
+  description: Act 1 - Leo's Painting - Lair 009 - Solid Arm Boss Lair
+  type: Lair
+  flag: NONE
+- name: Underground Castle West - Plant Cage Lair
+  id: 13
+  description: Act 1 - Underground Castle West - Lair 013 - Plant Cage
+  type: Lair
+  flag: NONE
+- name: Underground Castle West - South-East Island Lair
+  id: 14
+  description: Act 1 - Underground Castle West - Lair 014 - South-East Island
+  type: Lair
+  flag: NONE
+- name: Underground Castle East - Entrance Lair
+  id: 15
+  description: Act 1 - Underground Castle East - Lair 015 - Entrance Lair
+  type: Lair
+  flag: NONE
+- name: Underground Castle East - Southern U Lair
+  id: 16
+  description: Act 1 - Underground Castle East - Lair 016 - Southern U Lair
+  type: Lair
+  flag: NONE
+- name: Underground Castle East - Northern U Lair
+  id: 17
+  description: Act 1 - Underground Castle East - Lair 017 - Northern U Lair
+  type: Lair
+  flag: NONE
+- name: Underground Castle East - Stone Garden Lair
+  id: 18
+  description: Act 1 - Underground Castle East - Lair 018 - Stone Garden Lair
+  type: Lair
+  flag: NONE
+- name: Leo's Painting Room 2 - Entrance Lair
+  id: 19
+  description: Act 1 - Leo's Painting Room 2 - Lair 019 - Entrance Lair
+  type: Lair
+  flag: NONE
+- name: Underground Castle East - 4-Lair Gauntlet Lair
+  id: 21
+  description: Act 1 - Underground Castle East - Lair 021 - 4-Lair Gauntlet Lair
+  type: Lair
+  flag: NONE
+- name: Underground Castle East - Conveyor Dead-End Right Lair
+  id: 22
+  description: Act 1 - Underground Castle East - Lair 022 - Conveyor Dead-End Right Lair
+  type: Lair
+  flag: NONE
+- name: Underground Castle East - Narrow Bridge Lair
+  id: 24
+  description: Act 1 - Underground Castle East - Lair 024 - Narrow Bridge Lair
+  type: Lair
+  flag: NONE
+- name: Underground Castle East - Lair Near Jewel Fairy
+  id: 26
+  description: Act 1 - Underground Castle East - Lair 026 - Lair Near Jewel Fairy
+  type: Lair
+  flag: NONE
+- name: Leo's Painting Room 1 - Exit Lair
+  id: 29
+  description: Act 1 - Leo's Painting Room 1 - Lair 029 - Exit Lair
+  type: Lair
+  flag: NONE
+- name: Leo's Painting Room 3 - North-East Lair
+  id: 34
+  description: Act 1 - Leo's Painting Room 3 - Lair 034 - North-East Lair
+  type: Lair
+  flag: NONE
+- name: Leo's Painting Room 3 - South-East Lair
+  id: 35
+  description: Act 1 - Leo's Painting Room 3 - Lair 035 - South-East Lair
+  type: Lair
+  flag: NONE
+- name: Leo's Painting Room 4 - Left Center Lair
+  id: 37
+  description: Act 1 - Leo's Painting Room 4 - Lair 037 - Left Center Lair
+  type: Lair
+  flag: NONE
+- name: Underground Castle East - Dream-Locked Lair
+  id: 40
+  description: Act 1 - Underground Castle East - Lair 040 - Dream-Locked Lair
+  type: Lair
+  flag: NONE
+- name: Underground Castle West - Lair Above the Elevator
+  id: 41
+  description: Act 1 - Underground Castle West - Lair 041 - Lair Above the Elevator
+  type: Lair
+  flag: NONE
+- name: Underground Castle East - Conveyor Dead-End Left Lair
+  id: 42
+  description: Act 1 - Underground Castle East - Lair 042 - Conveyor Dead-End Left Lair
+  type: Lair
+  flag: NONE
+- name: Leo's Painting Room 3 - North-West Metal Enemies Lair
+  id: 43
+  description: Act 1 - Leo's Painting Room 3 - Lair 043 - North-West Metal Enemies Lair
+  type: Lair
+  flag: CAN_CUT_METAL
+- name: Leo's Painting Room 4 - North Metal Enemies Lair
+  id: 44
+  description: Act 1 - Leo's Painting Room 4 - Lair 044 - North Metal Enemies Lair
+  type: Lair
+  flag: CAN_CUT_METAL
+- name: Leo's Painting Room 1 - Entrance Lair
+  id: 46
+  description: Act 1 - Leo's Painting Room 1 - Lair 046 - Entrance Lair
+  type: Lair
+  flag: NONE
+- name: Leo's Painting Room 3 - Entrance Lair
+  id: 47
+  description: Act 1 - Leo's Painting Room 3 - Lair 047 - Entrance Lair
+  type: Lair
+  flag: NONE
+- name: Light Shrine B1 - North-West Spirit Enemies Lair
+  id: 55
+  description: Act 2 - Light Shrine B1 - Lair 055 - North-West Spirit Enemies Lair
+  type: Lair
+  flag: CAN_CUT_SPIRIT
+- name: Lostside Marsh - Entrance Lair
+  id: 56
+  description: Act 2 - Lostside Marsh - Lair 056 - Entrance Lair
+  type: Lair
+  flag: NONE
+- name: Lostside Marsh - Island West of Water Shrine Lair
+  id: 60
+  description: Act 2 - Lostside Marsh - Lair 060 - Island West of Water Shrine Lair
+  type: Lair
+  flag: NONE
+- name: Lostside Marsh - Lair North of Water Shrine
+  id: 61
+  description: Act 2 - Lostside Marsh - Lair 061 - Lair North of Water Shrine
+  type: Lair
+  flag: NONE
+- name: Lostside Marsh - Lair East of Fire Shrine
+  id: 63
+  description: Act 2 - Lostside Marsh - Lair 063 - Lair East of Fire Shrine
+  type: Lair
+  flag: NONE
+- name: Lostside Marsh - Lair South-West of Light Shrine
+  id: 64
+  description: Act 2 - Lostside Marsh - Lair 064 - Lair South-West of Light Shrine
+  type: Lair
+  flag: NONE
+- name: Light Shrine 1F - North Lair
+  id: 65
+  description: Act 2 - Light Shrine 1F - Lair 065 - North Lair
+  type: Lair
+  flag: NONE
+- name: Water Shrine 1F - Center Island Lair
+  id: 67
+  description: Act 2 - Water Shrine 1F - Lair 067 - Center Island
+  type: Lair
+  flag: NONE
+- name: Water Shrine B1 - Pillars Near Waterfalls Lair
+  id: 70
+  description: Act 2 - Water Shrine B1 - Lair 070 - Pillars Near Waterfalls Lair
+  type: Lair
+  flag: NONE
+- name: Water Shrine B1 - Moving Spike Trap Lair
+  id: 73
+  description: Act 2 - Water Shrine B1 - Lair 073 - Moving Spike Trap Lair
+  type: Lair
+  flag: NONE
+- name: Water Shrine B1 - B2 to 1F Connector Lair
+  id: 74
+  description: Act 2 - Water Shrine B1 - Lair 074 - B2 to 1F Connector Lair
+  type: Lair
+  flag: NONE
+- name: Water Shrine B2 - West Side-Room Lair
+  id: 78
+  description: Act 2 - Water Shrine B2 - Lair 078 - West Side-Room Lair
+  type: Lair
+  flag: NONE
+- name: Water Shrine B2 - North Hallway Lair
+  id: 79
+  description: Act 2 - Water Shrine B2 - Lair 079 - North Hallway Lair
+  type: Lair
+  flag: NONE
+- name: Light Shrine B1 - Elemental Statues Boss Lair
+  id: 80
+  description: Act 2 - Light Shrine B1 - Lair 080 - Elemental Statues Boss Lair
+  type: Lair
+  flag: NONE
+- name: Water Shrine B2 - Statue Room Lair
+  id: 81
+  description: Act 2 - Water Shrine B2 - Lair 081 - Statue Room Lair
+  type: Lair
+  flag: NONE
+- name: Fire Shrine 1F - East-Most Lair
+  id: 86
+  description: Act 2 - Fire Shrine 1F - Lair 081 - East-Most Lair
+  type: Lair
+  flag: NONE
+- name: Fire Shrine B1 - North-West Lair
+  id: 88
+  description: Act 2 - Fire Shrine B1 - Lair 088 - North-West Lair
+  type: Lair
+  flag: NONE
+- name: Fire Shrine B1 - Isolated Room Lair
+  id: 89
+  description: Act 2 - Fire Shrine B1 - Lair 089 - Isolated Room Lair
+  type: Lair
+  flag: NONE
+- name: Fire Shrine B1 - South-East Lair
+  id: 90
+  description: Act 2 - Fire Shrine B1 - Lair 090 - South-East Lair
+  type: Lair
+  flag: NONE
+- name: Fire Shrine B1 - South Lair
+  id: 91
+  description: Act 2 - Fire Shrine B1 - Lair 091 - South Lair
+  type: Lair
+  flag: NONE
+- name: Fire Shrine B2 - Lair West of Stairs
+  id: 92
+  description: Act 2 - Fire Shrine B2 - Lair 092 - Lair West of Stairs
+  type: Lair
+  flag: NONE
+- name: Fire Shrine B2 - Lair Past First Heated Path
+  id: 93
+  description: Act 2 - Fire Shrine B2 - Lair 093 - Lair Past First Heated Path
+  type: Lair
+  flag: NONE
+- name: Fire Shrine B2 - Heated Circle Lair
+  id: 97
+  description: Act 2 - Fire Shrine B2 - Lair 097 - Heated Circle Lair
+  type: Lair
+  flag: NONE
+- name: Fire Shrine B2 - Snaking Path Center Lair
+  id: 98
+  description: Act 2 - Fire Shrine B2 - Lair 098 - Snaking Path Center Lair
+  type: Lair
+  flag: NONE
+- name: Fire Shrine B2 - Snaking Path Narrow Bridge Lair
+  id: 99
+  description: Act 2 - Fire Shrine B2 - Lair 099 - Snaking Path Narrow Bridge Lair
+  type: Lair
+  flag: NONE
+- name: Fire Shrine B2 - Metal Enemies Lair
+  id: 100
+  description: Act 2 - Fire Shrine B2 - Lair 100 - Metal Enemies Lair
+  type: Lair
+  flag: CAN_CUT_METAL
+- name: Light Shrine B1 - East Lair
+  id: 111
+  description: Act 2 - Light Shrine B1 - Lair 111 - East Lair
+  type: Lair
+  flag: NONE
+- name: Light Shrine B1 - Lair Near Portal
+  id: 114
+  description: Act 2 - Light Shrine B1 - Lair 114 - Lair Near Portal
+  type: Lair
+  flag: NONE
+- name: Seabed North-West - Seaweed Maze East Lair
+  id: 124
+  description: Act 3 - Seabed North-West - Lair 124 - Seaweed Maze East Lair
+  type: Lair
+  flag: NONE
+- name: Seabed North-East - Lair South of the Current
+  id: 131
+  description: Act 3 - Seabed North-East - Lair 131 - Lair South of the Current
+  type: Lair
+  flag: NONE
+- name: Seabed North-East - West Nook Lair
+  id: 132
+  description: Act 3 - Seabed North-East - Lair 132 - West Nook Lair
+  type: Lair
+  flag: NONE
+- name: Seabed North-East - Lair Out in the Open
+  id: 134
+  description: Act 3 - Seabed North-East - Lair 134 - Lair Out in the Open
+  type: Lair
+  flag: NONE
+- name: Durean - Western Penninsula Lair
+  id: 138
+  description: Act 3 - Durean - Lair 138 - Western Penninsula Lair
+  type: Lair
+  flag: NONE
+- name: Durean - North Lowest Level Lair
+  id: 139
+  description: Act 3 - Durean - Lair 139 - North Lowest Level Lair
+  type: Lair
+  flag: NONE
+- name: Durean - North Middle Level Lair
+  id: 140
+  description: Act 3 - Durean - Lair 140 - North Middle Level Lair
+  type: Lair
+  flag: NONE
+- name: Durean - North Upper Level Lava Pool Lair
+  id: 141
+  description: Act 3 - Durean - Lair 141 - North Upper Level Lava Pool Lair
+  type: Lair
+  flag: NONE
+- name: Durean - Metal Enemies Lair
+  id: 142
+  description: Act 3 - Durean - Lair 142 - Metal Enemies Lair
+  type: Lair
+  flag: CAN_CUT_METAL
+- name: Durean - Lair West of Entrance
+  id: 143
+  description: Act 3 - Durean - Lair 143 - Lair West of Entrance
+  type: Lair
+  flag: NONE
+- name: Durean - North Middle Level Lava Pool Lair
+  id: 146
+  description: Act 3 - Durean - Lair 146 - North Middle Level Lava Pool Lair
+  type: Lair
+  flag: NONE
+- name: Durean - North-East Island Lair
+  id: 149
+  description: Act 3 - Durean - Lair 149 - North-East Island Lair
+  type: Lair
+  flag: NONE
+- name: Southerta - Tree Island Lair
+  id: 153
+  description: Act 3 - Southerta - Lair 153 - Tree Island Lair
+  type: Lair
+  flag: NONE
+- name: Southerta - Lair North of Warp
+  id: 155
+  description: Act 3 - Southerta - Lair 155 - Lair North of Warp
+  type: Lair
+  flag: NONE
+- name: Southerta - Isolated Lair
+  id: 157
+  description: Act 3 - Southerta - Lair 157 - Isolated Lair (Enter from Seabed)
+  type: Lair
+  flag: NONE
+- name: Southerta - Dried Pond Lair
+  id: 161
+  description: Act 3 - Southerta - Lair 161 - Dried Pond Lair
+  type: Lair
+  flag: NONE
+- name: Southerta - Ambush North Lair
+  id: 164
+  description: Act 3 - Southerta - Lair 164 - Ambush North Lair
+  type: Lair
+  flag: NONE
+- name: Southerta - Ambush South Lair
+  id: 165
+  description: Act 3 - Southerta - Lair 165 - Ambush South Lair
+  type: Lair
+  flag: NONE
+- name: Rockbird - West Center Lake Lair
+  id: 167
+  description: Act 3 - Rockbird - Lair 167 - West Center Lake Lair
+  type: Lair
+  flag: NONE
+- name: Rockbird - Center Lake North-East Lair
+  id: 171
+  description: Act 3 - Rockbird - Lair 171 - Center Lake North-East Lair
+  type: Lair
+  flag: NONE
+- name: Seabed North-West - Seaweed Maze South-West Lair
+  id: 173
+  description: Act 3 - Seabed North-West - Lair 173 - Seaweed Maze South-West Lair
+  type: Lair
+  flag: NONE
+- name: Rockbird - Center Lake South-West Lair
+  id: 177
+  description: Act 3 - Rockbird - Lair 177 - Center Lake South-West Lair
+  type: Lair
+  flag: NONE
+- name: Rockbird - South-West Lake Lair
+  id: 181
+  description: Act 3 - Rockbird - Lair 181 - South-West Lake Lair
+  type: Lair
+  flag: NONE
+- name: Ghost Ship - Floating Skull Boss Lair
+  id: 182
+  description: Act 3 - Ghost Ship - Lair 182 - Floating Skull Boss Lair
+  type: Lair
+  flag: NONE
+- name: Blester - Metal Enemies Lair
+  id: 185
+  description: Act 3 - Blester - Lair 185 - Metal Enemies Lair
+  type: Lair
+  flag: HAS_THUNDER
+- name: Blester - Western Pillars Lair
+  id: 187
+  description: Act 3 - Blester - Lair 187 - Western Pillars Lair
+  type: Lair
+  flag: NONE
+- name: Blester - Lair East of the Entrance
+  id: 189
+  description: Act 3 - Blester - Lair 189 - Lair East of the Entrance
+  type: Lair
+  flag: NONE
+- name: Blester - Lair Further East of the Entrance
+  id: 190
+  description: Act 3 - Blester - Lair 190 - Lair Far-East of the Entrance
+  type: Lair
+  flag: NONE
+- name: Blester - Eastern Pillars Lair
+  id: 192
+  description: Act 3 - Blester - Lair 192 - Eastern Pillars Lair
+  type: Lair
+  flag: NONE
+- name: Seabed - South-West Lair
+  id: 193
+  description: Act 3 - Seabed - Lair 193 - South-West Lair (Path to Durean)
+  type: Lair
+  flag: NONE
+- name: Seabed - South-East Corner Lair
+  id: 194
+  description: Act 3 - Seabed - Lair 194 - South-East Corner Lair
+  type: Lair
+  flag: NONE
+- name: Mountain Slopes Base - Mid Level Lair
+  id: 201
+  description: Act 4 - Mountain Slopes Base - Lair 202 - Mid Level Lair
+  type: Lair
+  flag: NONE
+- name: Mountain Slopes Base - Mountain Base Lair
+  id: 202
+  description: Act 4 - Mountain Slopes Base - Lair 202 - Mountain Base Lair
+  type: Lair
+  flag: NONE
+- name: Mountain Slopes Base - Lair Up on the Ledge
+  id: 203
+  description: Act 4 - Mountain Slopes Base - Lair 203 - Lair Up on the Ledge
+  type: Lair
+  flag: NONE
+- name: Mountain Slopes Ascent - Lair at Top of the Slide
+  id: 204
+  description: Act 4 - Mountain Slopes Ascent - Lair 204 - Lair at Top of the Slide
+  type: Lair
+  flag: NONE
+- name: Mountain Slopes Ascent - Path through the Snow Right Lair
+  id: 211
+  description: Act 4 - Mountain Slopes Ascent - Lair 211 - Path through the Snow Right Lair
+  type: Lair
+  flag: NONE
+- name: Mountain Slopes Ascent - Path through the Snow Left Lair
+  id: 212
+  description: Act 4 - Mountain Slopes Ascent - Lair 212 - Path through the Snow Left Lair
+  type: Lair
+  flag: NONE
+- name: Lune Passage - Lair Under the Waterfall
+  id: 214
+  description: Act 4 - Lune Passage - Lair 214 - Lair Under the Waterfall
+  type: Lair
+  flag: NONE
+- name: Lune Passage - Lair Between Two Cliffs
+  id: 215
+  description: Act 4 - Lune Passage - Lair 215 - Lair Between Two Cliffs
+  type: Lair
+  flag: NONE
+- name: Lune - South-East Corner Lair
+  id: 221
+  description: Act 4 - Lune - Lair 221 - South-East Corner Lair
+  type: Lair
+  flag: NONE
+- name: Lune - Clockwise Gauntlet Lair
+  id: 225
+  description: Act 4 - Lune - Lair 225 - Clockwise Gauntlet Lair
+  type: Lair
+  flag: NONE
+- name: Lune - Counter-Clockwise Gauntlet Lair
+  id: 230
+  description: Act 4 - Lune - Lair 230 - Counter-Clockwise Gauntlet Lair
+  type: Lair
+  flag: NONE
+- name: Lune - Dream-Locked Lair
+  id: 232
+  description: Act 4 - Lune - Lair 232 - Dream-Locked Lair (Return After Mushroom's Dream)
+  type: Lair
+  flag: NONE
+- name: Mountain Summit Cave - Lair After the Ice
+  id: 233
+  description: Act 4 - Mountain Summit Cave - Lair 233 - Lair After the Ice
+  type: Lair
+  flag: NONE
+- name: Mountain Summit Cave - Lair in the Middle of the Ice
+  id: 234
+  description: Act 4 - Mountain Summit Cave - Lair 234 - Lair in the Middle of the Ice
+  type: Lair
+  flag: NONE
+- name: Mountain Summit Cave - Entrance Lair
+  id: 235
+  description: Act 4 - Mountain Summit Cave - Lair 235 - Entrance Lair
+  type: Lair
+  flag: NONE
+- name: Ice Hill - North-East Corner Lair
+  id: 238
+  description: Act 4 - Ice Hill - Lair 238 - North-East Corner Lair
+  type: Lair
+  flag: NONE
+- name: Ice Hill - Center Alcove Left Lair
+  id: 239
+  description: Act 4 - Ice Hill - Lair 239 - Center Alcove Left Lair
+  type: Lair
+  flag: NONE
+- name: Ice Hill - Center Alcove Right Lair
+  id: 240
+  description: Act 4 - Ice Hill - Lair 240 - Center Alcove Right Lair
+  type: Lair
+  flag: NONE
+- name: Ice Hill - Middle Icy Slide Lair
+  id: 242
+  description: Act 4 - Ice Hill - Lair 242 - Middle Icy Slide Lair
+  type: Lair
+  flag: NONE
+- name: Ice Hill - Lair Across the Wall
+  id: 246
+  description: Act 4 - Ice Hill - Lair 246 - Lair Across the Wall
+  type: Lair
+  flag: NONE
+- name: Ice Hill - South-West Corner Lair
+  id: 247
+  description: Act 4 - Ice Hill - Lair 247 - South-West Corner Lair
+  type: Lair
+  flag: NONE
+- name: Laynole West - Lair Amongst the Ice Flowers
+  id: 248
+  description: Act 4 - Laynole West - Lair 248 - Lair Amongst the Ice Flowers
+  type: Lair
+  flag: NONE
+- name: Laynole West - Icy Spiral End Lair
+  id: 250
+  description: Act 4 - Laynole West - Lair 250 - Icy Spiral End Lair
+  type: Lair
+  flag: NONE
+- name: Laynole West - Icy Spiral Center Lair
+  id: 252
+  description: Act 4 - Laynole West - Lair 252 - Icy Spiral Center Lair
+  type: Lair
+  flag: NONE
+- name: Laynole West - South-West Corner Lair
+  id: 254
+  description: Act 4 - Laynole West - Lair 254 - South-West Corner Lair
+  type: Lair
+  flag: NONE
+- name: Laynole West - South Invisible Bridge Lair
+  id: 255
+  description: Act 4 - Laynole West - Lair 255 - South Invisible Bridge Lair
+  type: Lair
+  flag: NONE
+- name: Lune - Poseidon Boss Lair
+  id: 259
+  description: Act 4 - Lune - Lair 259 - Poseidon Boss Lair
+  type: Lair
+  flag: NONE
+- name: Leo's Lab B1 - North-West Platform Lair
+  id: 265
+  description: Act 5 - Leo's Lab B1 - Lair 265 - North-West Platform Lair
+  type: Lair
+  flag: CAN_CUT_METAL
+- name: Leo's Lab B1 - South-West Blocked Pipe Lair
+  id: 267
+  description: Act 5 - Leo's Lab B1 - Lair 267 - South-West Blocked Pipe Lair
+  type: Lair
+  flag: NONE
+- name: Leo's Lab B1 - North-West Triple Pipe Bridge Lair
+  id: 268
+  description: Act 5 - Leo's Lab B1 - Lair 268 - North-West Triple Pipe Bridge Lair
+  type: Lair
+  flag: CAN_CUT_METAL
+- name: Leo's Lab B1 - Platform North of Big Pipe Lair
+  id: 269
+  description: Act 5 - Leo's Lab B1 - Lair 269 - Platform North of Big Pipe Lair
+  type: Lair
+  flag: NONE
+- name: Leo's Lab B1 - North then East Lair
+  id: 274
+  description: Act 5 - Leo's Lab B1 - Lair 274 - North then East Lair
+  type: Lair
+  flag: NONE
+- name: Leo's Lab B1 - South-East Platform off Small Pipes Lair
+  id: 276
+  description: Act 5 - Leo's Lab B1 - Lair 276 - South-East Platform off Small Pipes Lair
+  type: Lair
+  flag: CAN_CUT_METAL
+- name: Leo's Lab B1 - South-East Pipe Gauntlet Top Lair
+  id: 282
+  description: Act 5 - Leo's Lab B1 - Lair 282 - South-East Pipe Gauntlet Top Lair
+  type: Lair
+  flag: CAN_CUT_METAL
+- name: Leo's Lab B1 South-East Pipe Gauntlet Bottom Lair
+  id: 283
+  description: Act 5 - Leo's Lab B1 - Lair 283 - South-East Pipe Gauntlet Bottom Lair
+  type: Lair
+  flag: NONE
+- name: Leo's Lab B2 - Lair Past the Last Fire Pit
+  id: 286
+  description: Act 5 - Leo's Lab B2 - Lair 286 - Lair Past the Last Fire Pit
+  type: Lair
+  flag: NONE
+- name: Leo's Lab B2 - Inverted T Lair
+  id: 288
+  description: Act 5 - Leo's Lab B2 - Lair 288 - Inverted T Lair
+  type: Lair
+  flag: CAN_CUT_METAL
+- name: Leo's Lab B2 - Platform Past the Double Fire Pits Lair
+  id: 290
+  description: Act 5 - Leo's Lab B2 - Lair 290 - Platform Past the Double Fire Pits Lair
+  type: Lair
+  flag: CAN_CUT_METAL
+- name: Leo's Lab B2 - Hot Pipe Second From the Left Lair
+  id: 294
+  description: Act 5 - Leo's Lab B2 - Lair 294 - Hot Pipe Second From the Left Lair
+  type: Lair
+  flag: NONE
+- name: Leo's Lab B2 - LAir Inside the Pipe Tube
+  id: 297
+  description: Act 5 - Leo's Lab B2 - Lair 297 - Lair Inside the Pipe Tube
+  type: Lair
+  flag: CAN_CUT_METAL
+- name: Power Plant - Tin Doll Boss Lair
+  id: 303
+  description: Act 5 - Power Plant - Lair 303 - Tin Doll Boss Lair
+  type: Lair
+  flag: CAN_CUT_METAL
+- name: Power Plant - South-East Gauntlet Lair
+  id: 310
+  description: Act 5 - Power Plant - Lair 310 - South-East Gauntlet Lair
+  type: Lair
+  flag: CAN_CUT_METAL
+- name: Model Town Left - Western Outskirts Lair
+  id: 311
+  description: Act 5 - Model Town Left - Lair 311 - Western Outskirts Lair
+  type: Lair
+  flag: NONE
+- name: Model Town Left - West Small Field Lair
+  id: 313
+  description: Act 5 - Model Town Left - Lair 313 - West Small Field Lair
+  type: Lair
+  flag: NONE
+- name: Model Town Left - West House on the Middle Hill Lair
+  id: 315
+  description: Act 5 - Model Town Left - Lair 311 - West House on the Middle Hill Lair
+  type: Lair
+  flag: NONE
+- name: Model Town Left - West House on the Left Hill Lair
+  id: 316
+  description: Act 5 - Model Town Left - Lair 311 - West House on the Left Hill Lair
+  type: Lair
+  flag: HAS_MAGIC
+- name: Model Town Left - Lair South-West Near the River
+  id: 318
+  description: Act 5 - Model Town Left - Lair 318 - Lair South-West Near the River
+  type: Lair
+  flag: HAS_MAGIC
+- name: Model Town Left - Center Lair West of River
+  id: 322
+  description: Act 5 - Model Town Left - Lair 322 - Center Lair West of River
+  type: Lair
+  flag: NONE
+- name: Model Town Left - House Maze Lair
+  id: 325
+  description: Act 5 - Model Town Left - Lair 330 - House Maze Lair
+  type: Lair
+  flag: HAS_MAGIC
+- name:  Model Town Left - Hilltop Ambush Top Lair
+  id: 330
+  description: Act 5 - Model Town Left - Lair 330 - Hilltop Ambush Top Lair
+  type: Lair
+  flag: HAS_MAGIC
+- name: Model Town Left - Hilltop Ambush Bottom Lair
+  id: 331
+  description: Act 5 - Model Town Left - Lair 331 - Hilltop Ambush Bottom Lair
+  type: Lair
+  flag: HAS_MAGIC
+- name: Model Town Right - Shrinking Houses Lair
+  id: 332
+  description: Act 5 - Model Town Right - Lair 332 - Shrinking Houses Lair
+  type: Lair
+  flag: NONE
+- name: Model Town Right - North-West Purple Pools Lair
+  id: 333
+  description: Act 5 - Model Town Right - Lair 333 - North-West Purple Pools Lair
+  type: Lair
+  flag: NONE
+- name: Model Town Right - South-West Fenced Lair
+  id: 338
+  description: Act 5 - Model Town Right - Lair 338 - South-West Fenced Lair
+  type: Lair
+  flag: NONE
+- name: Model Town Right - North-East Tree-Lined Path Lair
+  id: 339
+  description: Act 5 - Model Town Right - Lair 339 - North-East Tree-Lined Path Lair
+  type: Lair
+  flag: NONE
+- name: Model Town Right - South-East Farm Lair
+  id: 341
+  description: Act 5 - Model Town Right - Lair 339 - South-East Farm Lair
+  type: Lair
+  flag: NONE
+- name: Magridd Castle B1 - North-West Corner Lair
+  id: 345
+  description: Act 6 - Magridd Castle B1 - Lair 345 - North-West Corner Lair
+  type: Lair
+  flag: NONE
+- name: Magridd Castle B1 - Lower Level Center Lair
+  id: 346
+  description: Act 6 - Magridd Castle B1 - Lair 346 - Lower Level Center Lair
+  type: Lair
+  flag: CAN_CUT_SPIRIT
+- name: Magridd Castle B2 - Snake Crossing Lair
+  id: 351
+  description: Act 6 - Magridd Castle B2 - Lair 351 - Snake Crossing Lair
+  type: Lair
+  flag: CAN_CUT_SPIRIT
+- name: Magridd Castle B2 - Spirit Crossing Left Lair
+  id: 353
+  description: Act 6 - Magridd Castle B2 - Lair 353 - Spirit Crossing Left Lair
+  type: Lair
+  flag: CAN_CUT_SPIRIT
+- name: Magridd Castle B2 - Spirit Crossing Right Lair
+  id: 354
+  description: Act 6 - Magridd Castle B2 - Lair 354 - Spirit Crossing Right Lair
+  type: Lair
+  flag: CAN_CUT_SPIRIT
+- name: Magridd Castle B2 - Left Column North Lair
+  id: 358
+  description: Act 6 - Magridd Castle B2 - Lair 360 - Left Column North Lair
+  type: Lair
+  flag: NONE
+- name: Magridd Castle B2 - Left Column South Lair
+  id: 359
+  description: Act 6 - Magridd Castle B2 - Lair 360 - Left Column South Lair
+  type: Lair
+  flag: CAN_CUT_SPIRIT
+- name: Magridd Castle B2 - Right Column Lair
+  id: 360
+  description: Act 6 - Magridd Castle B2 - Lair 360 - Right Column Lair
+  type: Lair
+  flag: NONE
+- name: Magridd Castle B3 - Dodge the 3 Spears Lair
+  id: 363
+  description: Act 6 - Magridd Castle B3 - Lair 363 - Dodge the Three Spears Lair
+  type: Lair
+  flag: CAN_CUT_SPIRIT
+- name: Magridd Castle B3 - Center Right Lair
+  id: 365
+  description: Act 6 - Magridd Castle B3 - Lair 365 - Center Right Lair
+  type: Lair
+  flag: NONE
+- name:  Magridd Castle B3 - East Now-there-are-Spikes-here Lair
+  id: 366
+  description: Act 6 - Magridd Castle B3 - Lair 366 - East Now-there-are-Spikes-here Lair
+  type: Lair
+  flag: NONE
+- name: Magridd Castle B3 - East Used-to-be-Spikes Lair
+  id: 368
+  description: Act 6 - Magridd Castle B3 - Lair 368 - East Used-to-be-Spikes-Here Lair
+  type: Lair
+  flag: CAN_CUT_SPIRIT
+- name: Magridd Castle B3 - Dodge the Two Spears Lair
+  id: 370
+  description: Act 6 - Magridd Castle B3 - Lair 370 - Dodge the Two Spears Lair
+  type: Lair
+  flag: CAN_CUT_SPIRIT
+- name: Left Tower 1F - North-East Corner Lair
+  id: 377
+  description: Act 6 - Left Tower 1F - Lair 377 - North-East Corner Lair
+  type: Lair
+  flag: NONE
+- name: Left Tower 2F - North-West Room Lair
+  id: 382
+  description: Act 6 - Left Tower 2F - Lair 382 - North-West Room Lair
+  type: Lair
+  flag: NONE
+- name: Left Tower 2F - South-East Room Lair
+  id: 383
+  description: Act 6 - Left Tower 2F - Lair 383 - South-East Room Lair
+  type: Lair
+  flag: NONE
+- name: Left Tower 3F - Jail Cells North-West Lair
+  id: 385
+  description: Act 6 - Left Tower 3F - Lair 385 - Jail Cells North-West Lair
+  type: Lair
+  flag: NONE
+- name: Left Tower 3F - Jail Cells North-East Lair
+  id: 386
+  description: Act 6 - Left Tower 3F - Lair 386 - Jail Cells North-East Lair
+  type: Lair
+  flag: NONE
+- name: Left Tower 3F - Jail Cells South-West Lair
+  id: 387
+  description: Act 6 - Left Tower 3F - Lair 387 - Jail Cells South-West Lair
+  type: Lair
+  flag: NONE
+- name: Left Tower 3F - South-East Corner Lair
+  id: 389
+  description: Act 6 - Left Tower 3F - Lair 389 - South-East Corner Lair
+  type: Lair
+  flag: NONE
+- name: Right Tower 1F - North-West Corner Lair
+  id: 390
+  description: Right Tower 1F South-East Corner Lair
+  type: Lair
+  flag: NONE
+- name: Right Tower 1F - South-East Corner Lair
+  id: 391
+  description: Act 6 - Right Tower 1F - Lair 391 - South-East Corner Lair
+  type: Lair
+  flag: NONE
+- name: Right Tower 1F - Center Gauntlet Lair
+  id: 396
+  description: Act 6 - Right Tower 1F - Lair 396 - Center Gauntlet Lair
+  type: Lair
+  flag: NONE
+- name: Right Tower 2F - Center Hidden Room Lair
+  id: 397
+  description: Act 6 - Right Tower 2F - Lair 397 - Center Hidden Room Lair
+  type: Lair
+  flag: NONE
+- name: Right Tower 2F - East Lair
+  id: 399
+  description: Act 6 - Right Tower 2F - Lair 399 - East Lair (Below Chests)
+  type: Lair
+  flag: NONE
+- name: Right Tower 3F - Fireball Shooter Ambush Lair 
+  id: 402
+  description: Act 6 - Right Tower 3F - Lair 399 - Fireball Shooter Ambush Lair
+  type: Lair
+  flag: NONE
+- name: Airship Deck - Demon Falcon Boss Lair
+  id: 405
+  description: Act 6 - Airship Deck - Lair 405 - Demon Falcon Boss Lair
+  type: Lair
+  flag: NONE
+npc-rewards:
+- name: Grass Valley - Tool Shop Owner's Item
+  id: 0
+  description: Act 1 - Grass Valley - Tool Shop Owner's Item
+  type: NPC Reward
+  flag: NONE
+- name: Grass Valley - Secret Tile on Cliff Overlooking Tulip
+  id: 1
+  description: Act 1 - Grass Valley - Secret Tile on Cliff Overlooking Tulip
+  type: NPC Reward
+  flag: NONE
+- name: Grass Valley - Goat Pen Secret Tile (South-East Corner)
+  id: 2
+  description: Act 1 - Grass Valley - Goat Pen Secret Tile (South-East Corner)
+  type: NPC Reward
+  flag: NONE
+- name: Grass Valley - Teddy's Item
+  id: 3
+  description: Act 1 - Grass Valley - Teddy's Item (Toolshop Owner's Son)
+  type: NPC Reward
+  flag: NONE
+- name: Grass Valley - Secret Tile Under Sleeping Tulip (Push Left)
+  id: 4
+  description: Act 1 - Grass Valley - Secret Tile Under Sleeping Tulip (Push Left)
+  type: NPC Reward
+  flag: NONE
+- name: Grass Valley - Hideout Cliff Secret Tile
+  id: 5
+  description: Act 1 - Grass Valley - Hideout Cliff Secret Tile
+  type: NPC Reward
+  flag: NONE
+- name: Grass Valley - Village Chief's item
+  id: 6
+  description: Act 1 - Grass Valley - Village Chief's Item
+  type: NPC Reward
+  flag: NONE
+- name: Trial Room - Magician's Item
+  id: 7
+  description: Act 1 - Magician's item (start of the game)
+  type: NPC Reward
+  flag: HAS_SWORD
+- name: Grass Valley - Hideout Cliff Crystal's Item
+  id: 8
+  description: Act 1 - Grass Valley - Hideout Cliff Crystal Fairy's Item
+  type: NPC Reward
+  flag: NONE
+- name: Grass Valley Treasure Room - Crystal's Item
+  id: 9
+  description: Act 1 - Grass Valley Treasure Room - Crystal Fairy's Item
+  type: NPC Reward
+  flag: NONE
+- name: Underground Castle West - Crystal on Ledge's Item
+  id: 10
+  description: Act 1 - Underground Castle West - Crystal Fairy on Ledge's Item
+  type: NPC Reward
+  flag: NONE
+- name: Greenwood - Shy Bird's Item
+  id: 11
+  description: Act 2 - Greenwood - Shy Bird's Item (Approach from behind)
+  type: NPC Reward
+  flag: NONE
+- name: Greenwood - Master Crystal's Item
+  id: 12
+  description: Act 2 - Greenwood - Master Crystal Fairy's Item (Requries all 8 emblems)
+  type: NPC Reward
+  flag: NONE
+- name: Greenwood - Woodstin Trio's Prize
+  id: 13
+  description: Act 2 - Greenwood - Woodstin Trio's Prize (Always right)
+  type: NPC Reward
+  flag: NONE
+- name: Greedwood - Greenwood's Guardian's Item
+  id: 14
+  description: Act 2 - Greenwood - Greenwood's Guardian's Item
+  type: NPC Reward
+  flag: NONE
+- name: Greenwood Tunnels - Turbo's Bones Tile
+  id: 15
+  description: Act 2 - Greenwood Tunnels - Turbo's Bones Tile (Locked behind Sleeping Bird)
+  type: NPC Reward
+  flag: NONE
+- name: Greenwood Tunnels - Mole's Reward
+  id: 16
+  description: Act 2 - Greenwood Tunnels - Mole's Reward
+  type: NPC Reward
+  flag: NONE
+- name: Greenwood - Hungry Squirrel's Item
+  id: 17
+  description: Act 2 - Greenwood - Hungry Squirrel's Item (Trade Delicious Seeds)
+  type: NPC Reward
+  flag: NONE
+- name: Greenwood - Not-So-Hungry Squirrel's Item
+  id: 18
+  description: Act 2 - Greenwood - Not-So-Hungry Squirrel's Item
+  type: NPC Reward
+  flag: NONE
+- name: Water Shrine B2 - West Secret Tile
+  id: 19
+  description: Act 2 - Water Shrine B2 - West Secret Tile
+  type: NPC Reward
+  flag: NONE
+- name: Fire Shrine B2 - Heated Path Crystal's Item
+  id: 20
+  description: Act 2 - Fire Shrine B2 - Heated Path Crystal Fairy's Item
+  type: NPC Reward
+  flag: NONE
+- name: Lostside Marsh - Crystal Near Light Shrine's Item
+  id: 21
+  description: Act 2 - Lostside Marsh - Crystal Fairy Near Light Shrine's Item
+  type: NPC Reward
+  flag: NONE
+- name: Water Shrine B1 - Moving Spike Trap Crystal's Item
+  id: 22
+  description: Act 2 - Water Shrine B1 - Moving Spike Trap Crystal Fairy's Item
+  type: NPC Reward
+  flag: NONE
+- name: Fire Shrine 1F - Metal Enemies Crystal's Item
+  id: 23
+  description: Act 2 - Fire Shrine 1F - Metal Enemies Crystal Fairy's Item
+  type: NPC Reward
+  flag: CAN_CUT_METAL
+- name: Mountain of Souls - Mountain King's Item
+  id: 24
+  description: Act 4 - Mountain of Souls - Mountain King's Item (Dancing Grandmas!)
+  type: NPC Reward
+  flag: NONE
+- name: Mountain of Souls - Boy with Gift's Item
+  id: 25
+  description: Act 4 - Mountain of Souls - Boy with Gift's Item
+  type: NPC Reward
+  flag: NONE
+- name: Mountain of Souls - Nome the Snail's Item
+  id: 26
+  description: Act 4 - Mountain of Souls - Nome the Snail's Item (Free the Snail!)
+  type: NPC Reward
+  flag: NONE
+- name: Mountain of Souls - Secret Snail's Item
+  id: 27
+  description: Act 4 - Mountain of Souls - Secret Snail's Item (Fake Northern Wall)
+  type: NPC Reward
+  flag: NONE
+- name: Lune - Mushroom's Dream Tile
+  id: 28
+  description: Act 4 - Lune - Mushroom's Dream Tile (Where the Mushroom was in its Dream)
+  type: NPC Reward
+  flag: NONE
+- name: Mountain Summit Cave - Entrance Shortcut Crystal's Item
+  id: 29
+  description: Act 4 - Mountain Summit Cave - Entrance Shortcut Crystal Fairy's Item
+  type: NPC Reward
+  flag: NONE
+- name: Lune Passage - Center of the River Crystal's Item
+  id: 30
+  description: Act 4 - Lune Passage - Center of the River Crystal Fairy's ITem
+  type: NPC Reward
+  flag: NONE
+- name: Leo's Lab 1F - Locked Room Under Chest of Drawers
+  id: 31
+  description: Act 5 - Leo's Lab 1F Locked Room - Under Chest of Drawers (Push to the Left)
+  type: NPC Reward
+  flag: NONE
+- name: Leo's Lab 1F - Locked Room - Inside Chest of Drawers
+  id: 32
+  description: Act 5 - Leo's Lab 1F Locked Room - Inside Chest of Drawers
+  type: NPC Reward
+  flag: NONE
+- name: Leo's Lab 1F - Mousehole Plant's Item
+  id: 33
+  description: Act 5 - Leo's Lab 1F - Mousehole Plant's Item
+  type: NPC Reward
+  flag: NONE
+- name: Leo's Lab 2F - Sleeping Cat's Item
+  id: 34
+  description: Act 5 - Leo's Lab 2F - Sleeping Cat's Item
+  type: NPC Reward
+  flag: NONE
+- name: Leo's Lab 2F - Actinidia Plant's Item
+  id: 35
+  description: Act 5 - Leo's Lab 2F - Actinidia Plant's Item
+  type: NPC Reward
+  flag: NONE
+- name: Leo's Lab Attic - Chest of Drawer's Item
+  id: 36
+  description: Act 5 - Leo's Lab Attic - Chest of Drawer's Item
+  type: NPC Reward
+  flag: NONE
+- name: Leo's Lab Attic - Marie the Doll's Item
+  id: 37
+  description: Act 5 - Leo's Lab Attic - Marie the Doll's Item
+  type: NPC Reward
+  flag: NONE
+- name: Leo's Lab Mousehole - Mouse with Gift's Item
+  id: 38
+  description: Act 5 - Leo's Lab Mousehole - Mouse with Gift's Item
+  type: NPC Reward
+  flag: NONE
+- name: Leo's Lab B2 - South-West Crystal's Item
+  id: 39
+  description: Act 5 - Leo's Lab B2 - South-West Crystal Fairy's Item
+  type: NPC Reward
+  flag: NONE
+- name: Model Town Left - North-East Crystal's Item
+  id: 40
+  description: Act 5 - Model Town Left - North-East Crystal Fairy's Item
+  type: NPC Reward
+  flag: NONE
+- name: Power Plant - Crystal's Item
+  id: 41
+  description: Act 5 - Power Plant - Crystal Fairy's Item
+  type: NPC Reward
+  flag: CAN_CUT_METAL
+- name: Magridd Castle Town - Sleeping Soldier's Item
+  id: 42
+  description: Act 6 - Magridd Castle Town - Sleeping Soldier's Item
+  type: NPC Reward
+  flag: NONE
+- name: Magridd Castle Town - Secret Tile Under the Queen
+  id: 43
+  description: Act 6 - Magridd Castle Town - Secret Tile Under the Queen
+  type: NPC Reward
+  flag: NONE
+- name: Magridd Castle Town - Queen's Item
+  id: 44
+  description: Act 6 - Magridd Castle Town - Queen's Item
+  type: NPC Reward
+  flag: NONE
+- name: Magridd Castle Town - Concert Hall Secret Tile
+  id: 45
+  description: Act 6 - Magridd Castle Town - Concert Hall Secret Tile (Under the Soldier's Feet)
+  type: NPC Reward
+  flag: NONE
+- name: Magridd Castle Town - Maid at the Bar's Item
+  id: 46
+  description: Act 6 - Magridd Castle Town - Maid at the Bar's Item
+  type: NPC Reward
+  flag: NONE
+- name: Magridd Castle Town - Castle Grounds Secret Tile
+  id: 47
+  description: Act 6 - Magridd Castle Town - Castle Grounds Secret Tile
+  type: NPC Reward
+  flag: NONE
+- name: Magridd Castle Town - King Magridd's Item
+  id: 48
+  description: Act 6 - Magridd Castle Town - King Magridd's Item
+  type: NPC Reward
+  flag: NONE
+- name: Airship Dock - Dr. Leo's Item
+  id: 49
+  description: Act 6 - Airship Dock - Dr. Leo's Item
+  type: NPC Reward
+  flag: NONE
+- name: Magridd Castle B1 - North-East Corner Skeleton Tile Item
+  id: 50
+  description: Act 6 - Magridd Castle B1 - North-East Corner Skeleton Tile Item
+  type: NPC Reward
+  flag: NONE
+- name: Seabed Sanctuary - North-East Mermaid's Item
+  id: 51
+  description: Act 3 - Seabed Sanctuary - North-East Mermaid's Item
+  type: NPC Reward
+  flag: NONE
+- name: Seabed Sanctuary - Common House Main Mermaid's Item
+  id: 52
+  description: Act 3 - Seabed Sanctuary - Common House Main Mermaid's Item (Thanks for the house)
+  type: NPC Reward
+  flag: NONE
+- name: Seabed Sanctuary - Common House West Room Mermaid's Item
+  id: 53
+  description: Act 3 - Seabed Sanctuary - Common House West Room Mermaid's Item
+  type: NPC Reward
+  flag: NONE
+- name: Seabed Sanctuary - Mermaid Queen's Item
+  id: 54
+  description: Act 3 - Seabed Sanctuary - Mermaid Queen's Item
+  type: NPC Reward
+  flag: NONE
+- name: Seabed Sanctuary - Common House North Mermaid's Item
+  id: 55
+  description: Act 3 - Seabed Sanctuary - Common House North Mermaid's Item
+  type: NPC Reward
+  flag: NONE
+- name: Seabed Sanctuary - Lue the Dolphin's Item 
+  id: 56
+  description: Act 3 - Seabed Sanctuary - Lue the Dolphin's Item (Jailbreak!)
+  type: NPC Reward
+  flag: NONE
+- name: Rockbird - North-Western Island Crystal's Item
+  id: 57
+  description: Act 3 - Rockbird - North-Western Island Crystal Fairy's Item
+  type: NPC Reward
+  flag: NONE
+- name: Seabed North-East - Crystal South of the Current's Item
+  id: 58
+  description: Act 3 - Seabed North-East - Crystal Fairy South of the Current's Item
+  type: NPC Reward
+  flag: NONE
+- name: Seabed - South-West Crystal's Item
+  id: 59
+  description: Act 3 - Seabed - South-West Crystal Fairy's Item (Path to Durean)
+  type: NPC Reward
+  flag: NONE
+- name: Trail Room - Magician's Soul
+  id: 60
+  description:  Act 1 - Trial Room - Magician's Soul (start of the game)
+  type: NPC Reward
+  flag: HAS_SWORD
+- name: Greenwood Tunnels - Mole's Soul
+  id: 61
+  description: Act 2 - Greenwood Tunnels - Mole's Soul (South-East Hole)
+  type: NPC Reward
+  flag: NONE
+- name: Seabed Sanctuary - Angelfish's Soul
+  id: 62
+  description: Act 3 - Seabed Sanctuary - Angelfish's Soul (South-East Platform)
+  type: NPC Reward
+  flag: NONE
+- name: Leo's Lab 2F - Chapel Door's Soul
+  id: 63
+  description: Act 5 - Leo's Lab 2F - Chapel Door's Soul
+  type: NPC Reward
+  flag: NONE
+- name: Magridd Castle Town - Soldier's Soul
+  id: 64
+  description: Act 6 - Magridd Castle Town - Soldier's Soul (In south house)
+  type: NPC Reward
+  flag: NONE

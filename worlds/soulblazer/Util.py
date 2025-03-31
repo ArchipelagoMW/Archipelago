@@ -1,3 +1,4 @@
+import sys
 from dataclasses import dataclass
 
 
@@ -111,3 +112,4 @@ class Rectangle:
 
     def contains(self, x: int, y: int) -> bool:
         return self.x <= x <= self.x + self.width and self.y <= y <= self.y + self.height
+

@@ -28,13 +28,13 @@ ROCKBIRD = "Act 3 - Rockbird"
 DUREAN = "Act 3 - Durean"
 BLESTER = "Act 3 - Seabed Northeast and Blester"
 GHOST_SHIP = "Act 3 - Seabed Northwest and Ghost Ship"
-SEABED_SECRET_CAVE = "Act 3 - Seabed Secret Cave"
+SEABED_SECRET_COVE = "Act 3 - Seabed Secret Cove"
 
 # Act 4 Regions
 MOUNTAIN_HUB_NORTH_SLOPE = "Act 4 - Mountain Town Hub and North Slope"
 MOUNTAIN_KING = "Act 4 - Mountain King"
 NOME = "Act 4 - Nome"
-LAYNOLE = "Act 4 - Icehill and Laynole 1"
+LAYNOLE = "Act 4 - Ice Hill and Laynole 1"
 LUNE = "Act 4 - Laynole 2 and Lune"
 
 # Act 5 Regions

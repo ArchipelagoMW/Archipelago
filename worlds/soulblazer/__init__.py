@@ -1,30 +1,30 @@
 import dataclasses
 import settings
-import copy
 import os
 from hashlib import blake2b
 from Options import PerGameCommonOptions
-from typing import Any, List, Dict, Optional, ClassVar
+from typing import Any, Optional, ClassVar
 from .Client import SoulBlazerSNIClient
-from .Options import SoulBlazerOptions  # the options we defined earlier
+from .Data.Enums import ItemID, ChestID, NPCRewardID, SoulID
+from .Data.ItemData import items_data
+from .Data.LocationData import locations_data
+from .Options import SoulBlazerOptions
 from .Items import (
     SoulBlazerItem,
-    SoulBlazerItemData,
-    all_items_table,
-    repeatable_items_table,
+    sword_names,
+    castable_magic_names,
+    all_items_by_name,
+    soul_names,
+    stone_names,
     create_itempool,
-    swords_table,
-    castable_magic_table,
-    souls_table,
-    stones_table,
     item_name_groups as item_groups,
 )
-from .Locations import SoulBlazerLocation, all_locations_table, boss_lair_names_table, village_leader_names_table
-from .Names import ItemName, ChestName, NPCRewardName, Addresses, RegionName
+from .Locations import boss_lair_names, village_leader_names
+from .Names import Addresses, RegionName
 from .Regions import create_regions as region_create_regions
 
 # from .Rules import set_rules as rules_set_rules
-from .Rom import SoulBlazerProcedurePatch, write_patch, get_base_rom_path
+from .Rom import SoulBlazerProcedurePatch, write_patch
 from worlds.AutoWorld import WebWorld, World
 from BaseClasses import MultiWorld, Region, Location, Entrance, Item, ItemClassification, Tutorial
 
@@ -54,6 +54,10 @@ class SoulBlazerWeb(WebWorld):
 
     tutorials = [setup_en]
 
+    location_descriptions: dict[str, str] = {data.name: data.description for data in locations_data.all_locations}
+
+    item_descriptions: dict[str, str] = {data.name: data.description for data in items_data.all_items}
+
 
 class SoulBlazerWorld(World):
     """
@@ -71,30 +75,32 @@ class SoulBlazerWorld(World):
 
     topology_present = False
 
-    item_name_to_id = {name: data.code for name, data in all_items_table.items()}
-    location_name_to_id = {name: data.address for name, data in all_locations_table.items()}
+    item_name_to_id = {data.name: data.code for data in items_data.all_items}
+    location_name_to_id = {data.name: data.address for data in locations_data.all_locations}
 
     item_name_groups = item_groups
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
-        self.exp_items: List[SoulBlazerItem]
-        self.gem_items: List[SoulBlazerItem]
-        self.pre_fill_items: List[Item] = []
+        self.exp_items: list[SoulBlazerItem]
+        self.gem_items: list[SoulBlazerItem]
+        self.pre_fill_items: list[Item] = []
         self.rom_name: bytes
         # self.set_rules = set_rules
         # self.create_regions = create_regions
 
     def create_item(self, item: str) -> SoulBlazerItem:
-        return SoulBlazerItem(item, self.player, all_items_table[item])
+        return SoulBlazerItem(self.player, all_items_by_name[item])
 
-    def get_pre_fill_items(self) -> List[Item]:
+    def get_pre_fill_items(self) -> list[Item]:
         return self.pre_fill_items
 
     def create_victory_event(self, region: Region) -> Location:
         """Creates the `"Victory"` item/location event pair"""
-        victory_loc = Location(self.player, ItemName.VICTORY, None, region)
-        victory_loc.place_locked_item(Item(ItemName.VICTORY, ItemClassification.progression, None, self.player))
+        victory_loc = Location(self.player, ItemID.VICTORY.full_name, None, region)
+        victory_loc.place_locked_item(
+            Item(ItemID.VICTORY.full_name, ItemClassification.progression, None, self.player)
+        )
         return victory_loc
 
     @classmethod
@@ -116,8 +122,6 @@ class SoulBlazerWorld(World):
     def create_items(self) -> None:
         itempool = create_itempool(self)
 
-        sword_names = list(swords_table.keys())
-
         # Starting Sword
         if self.options.starting_sword == "randomized":
             starting_sword_name = self.random.choice(sword_names)
@@ -127,40 +131,44 @@ class SoulBlazerWorld(World):
         starting_sword = next(x for x in itempool if x.name == starting_sword_name)
         self.pre_fill_items.append(starting_sword)
         itempool.remove(starting_sword)
-        self.multiworld.get_location(ChestName.TRIAL_ROOM, self.player).place_locked_item(starting_sword)
+        self.multiworld.get_location(ChestID.TRIAL_ROOM.full_name, self.player).place_locked_item(starting_sword)
 
         # Magician Item
         if self.options.magician_item == "vanilla":
-            magician_item_name = ItemName.FLAMEBALL
+            magician_item_name = ItemID.FLAMEBALL.full_name
         elif self.options.magician_item == "random_spell":
-            magician_item_name = self.random.choice(list(castable_magic_table.keys()))
+            magician_item_name = self.random.choice(castable_magic_names)
 
         if self.options.magician_item != "totally_random":
             magician_item = next(x for x in itempool if x.name == magician_item_name)
             self.pre_fill_items.append(magician_item)
             itempool.remove(magician_item)
-            self.multiworld.get_location(NPCRewardName.MAGICIAN, self.player).place_locked_item(magician_item)
+            self.multiworld.get_location(NPCRewardID.MAGICIAN.full_name, self.player).place_locked_item(
+                magician_item
+            )
 
         # Magician Soul
         if self.options.magician_soul == "vanilla":
-            magician_soul_item_name = ItemName.SOUL_MAGICIAN
+            magician_soul_item_name = SoulID.SOUL_MAGICIAN.full_name
         elif self.options.magician_soul == "random_soul":
-            magician_soul_item_name = self.random.choice(list(souls_table.keys()))
+            magician_soul_item_name = self.random.choice(soul_names)
 
         if self.options.magician_soul != "totally_random":
             magician_soul_item = next(x for x in itempool if x.name == magician_soul_item_name)
             self.pre_fill_items.append(magician_soul_item)
             itempool.remove(magician_soul_item)
-            self.multiworld.get_location(NPCRewardName.MAGICIAN_SOUL, self.player).place_locked_item(magician_soul_item)
+            self.multiworld.get_location(NPCRewardID.MAGICIAN_SOUL.full_name, self.player).place_locked_item(
+                magician_soul_item
+            )
 
         # Stones Placement
         if self.options.stones_placement == "vanilla":
-            stones_location_names = village_leader_names_table
+            stones_location_names = village_leader_names
         elif self.options.stones_placement == "bosses":
-            stones_location_names = boss_lair_names_table
+            stones_location_names = boss_lair_names
 
         if self.options.stones_placement != "totally_random":
-            stones = [item for item in itempool if item.name in stones_table.keys()]
+            stones = [item for item in itempool if item.name in stone_names]
             self.pre_fill_items.extend(stones)
             if self.options.stones_placement != "vanilla":
                 self.random.shuffle(stones)
@@ -173,17 +181,21 @@ class SoulBlazerWorld(World):
         # Goal
         if self.options.goal == "emblem_hunt":
             # remove a "nothing" from the item pool
-            itempool.remove(next(x for x in itempool if x.name == ItemName.NOTHING))
+            itempool.remove(next(x for x in itempool if x.name == ItemID.NOTHING.full_name))
             # replace it with a "Victory" item
-            victory = self.create_item(ItemName.VICTORY)
+            victory = self.create_item(ItemID.VICTORY.full_name)
             self.pre_fill_items.append(victory)
-            self.multiworld.get_location(NPCRewardName.MAGIC_BELL_CRYSTAL, self.player).place_locked_item(victory)
+            self.multiworld.get_location(NPCRewardID.MASTER_CRYSTAL.full_name, self.player).place_locked_item(
+                victory
+            )
         else:
             # Create our regular Victory Event on Deathtoll
             region_deathtoll = self.multiworld.get_region(RegionName.DEATHTOLL, self.player)
             region_deathtoll.locations.append(self.create_victory_event(region_deathtoll))
 
-        self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.VICTORY, self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(
+            ItemID.VICTORY.full_name, self.player
+        )
 
         self.multiworld.itempool += itempool
 
@@ -198,10 +210,10 @@ class SoulBlazerWorld(World):
 
     def fill_hook(
         self,
-        progitempool: List["Item"],
-        usefulitempool: List["Item"],
-        filleritempool: List["Item"],
-        fill_locations: List["Location"],
+        progitempool: list[Item],
+        usefulitempool: list[Item],
+        filleritempool: list[Item],
+        fill_locations: list[Location],
     ) -> None:
         pass
 
@@ -218,7 +230,7 @@ class SoulBlazerWorld(World):
 
         patch.write(patch_path)
 
-    def fill_slot_data(self) -> Dict[str, Any]:
+    def fill_slot_data(self) -> dict[str, Any]:
         slot_data = dict()
         slot_data["gem_data"] = {
             f"{item.code}:{item.location.address}:{item.location.player}": item.operand_for_id
@@ -237,10 +249,10 @@ class SoulBlazerWorld(World):
             slot_data[option_name] = option.value
         return slot_data
 
-    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
+    def extend_hint_information(self, hint_data: dict[int, dict[int, str]]):
         pass
 
-    def modify_multidata(self, multidata: Dict[str, Any]) -> None:
+    def modify_multidata(self, multidata: dict[str, Any]) -> None:
         import base64
 
         new_name = base64.b64encode(self.rom_name).decode()

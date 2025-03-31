@@ -13,9 +13,10 @@ from Options import PerGameCommonOptions
 from Utils import read_snes_rom
 from worlds.AutoWorld import World
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
-from .Names import Addresses, ItemID
-from .Items import SoulBlazerItem, SoulBlazerItemData
-from .Locations import SoulBlazerLocation, LocationType, SoulBlazerLocationData
+from .Data.Enums import ItemID, LocationType
+from .Names import Addresses
+from .Items import SoulBlazerItem
+from .Locations import SoulBlazerLocation
 from .Options import SoulBlazerOptions, EquipmentStats
 from .patches import get_patch_bytes
 
