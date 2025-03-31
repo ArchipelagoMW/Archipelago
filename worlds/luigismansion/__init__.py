@@ -253,8 +253,7 @@ class LMWorld(World):
                     case "Treasures":
                         LOCATION_DICT = {
                             **LOCATION_DICT,
-                            **TREASURES_LOCATION_TABLE,
-                            **PLANT_LOCATION_TABLE
+                            **TREASURES_LOCATION_TABLE
                         }
                     case "Plants":
                         LOCATION_DICT = {
