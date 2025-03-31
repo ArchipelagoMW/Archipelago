@@ -336,7 +336,7 @@ class LMContext(CommonContext):
             self.boo_count = Label(text=f"")
             self.ui.connect_layout.add_widget(self.boo_count)
 
-        curr_boo_count = len([item.item for item in self.items_received if item.item in BOO_AP_ID_LIST])
+        curr_boo_count = len(set(([item.item for item in self.items_received if item.item in BOO_AP_ID_LIST])))
 
         self.boo_count.text = f"Boo Count: {curr_boo_count}/50"
 
