@@ -115,7 +115,7 @@ def create_regions_and_locations(world: MultiWorld, player: int, options: Timesp
     connect(world, player, 'The lab', 'The lab (power off)', lambda state: options.lock_key_amadeus or logic.has_doublejump_of_npc(state))
     connect(world, player, 'The lab (power off)', 'The lab', lambda state: not flooded.flood_lab or state.has('Water Mask', player))
     connect(world, player, 'The lab (power off)', 'The lab (upper)', lambda state: logic.has_forwarddash_doublejump(state) and ((not options.lock_key_amadeus) or state.has('Lab Access Genza', player)))
-    connect(world, player, 'The lab (upper)', 'The lab (power off)')
+    connect(world, player, 'The lab (upper)', 'The lab (power off)', lambda state: options.lock_key_amadeus and state.has('Lab Access Genza', player))
     connect(world, player, 'The lab (upper)', 'Emperors tower', logic.has_forwarddash_doublejump)
     connect(world, player, 'The lab (upper)', 'Ancient Pyramid (entrance)', lambda state: state.has_all({'Timespinner Wheel', 'Timespinner Spindle', 'Timespinner Gear 1', 'Timespinner Gear 2', 'Timespinner Gear 3'}, player))
     connect(world, player, 'Emperors tower', 'The lab (upper)')
