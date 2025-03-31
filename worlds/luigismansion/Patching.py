@@ -177,7 +177,7 @@ def update_event_info(event_info, boo_checks: bool, output_data):
         # Make event38 load more than once
         if x["EventNo"] == 38:
             x["EventLoad"] = 0
-            x["disappear_flag"] = 12
+            x["disappear_flag"] = 34
             x["EventIf"] = 2
 
         # Update the Washroom event trigger to be area entry based
@@ -994,7 +994,7 @@ def update_observer_info(observer_info):
         "invisible": 1,
         "(Undocumented)": 0,
     })
-    # Turn on flag 12 to stop event38 from reloading
+    # Turn on flag 34 to stop event38 from reloading
     observer_info.info_file_field_entries.append({
         "name": "observer",
         "code_name": "(null)",
@@ -1011,7 +1011,7 @@ def update_observer_info(observer_info):
         "scale_z": 1.000000,
         "room_no": 57,
         "cond_arg0": 0,
-        "arg0": 12,
+        "arg0": 34,
         "arg1": 0,
         "arg2": 0,
         "arg3": 0,
