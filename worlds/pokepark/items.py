@@ -138,7 +138,43 @@ FRIENDSHIP_ITEMS: dict[str, int] = {
     "Mime Jr.": 117,
 
     # Cavern Zone
-    "Hitmonlee": 118
+    "Hitmonlee": 118,
+
+    # Haunted Zone
+    "Drifloon": 119,
+    "Murkrow": 120,
+    "Honchkrow":121,
+    "Gliscor": 122,
+    "Metapod": 123,
+    "Kakuna": 124,
+
+    # Haunted Zone Mansion
+    "Duskull": 125,
+    "Sableye": 126,
+    "Misdreavus": 127,
+    "Pichu": 128,
+    "Umbreon": 129,
+    "Spinarak": 130,
+    "Abra": 131,
+    "Riolu": 132,
+    "Voltorb": 133,
+    "Elekid": 134,
+    "Electabuzz": 135,
+    "Luxray": 136,
+    "Stunky": 137,
+    "Skuntank": 138,
+    "Breloom": 139,
+    "Mismagius": 140,
+    "Electrode": 141,
+    "Haunter": 142,
+    "Gastly":143,
+    "Dusknoir": 144,
+    "Espeon":145,
+    #Haunted Zone
+    "Tangrowth": 146,
+
+    # Haunted Zone Mansion
+    "Gengar": 147,
 }
 
 UNLOCK_ITEMS: dict[str,int] = {
@@ -207,7 +243,29 @@ UNLOCK_ITEMS: dict[str,int] = {
     "Baltoy Unlock": 53000,
     "Claydol Unlock": 54000,
     "Hitmonchan Unlock": 55000,
-    "Hitmonlee Unlock": 56000
+    "Hitmonlee Unlock": 56000,
+
+    # Haunted Zone
+    "Honchkrow Unlock": 57000,
+    "Metapod Unlock": 58000,
+    "Kakuna Unlock": 59000,
+
+    # Haunted Zone Mansion
+    "Voltorb Unlock": 60000,
+    "Elekid Unlock": 61000,
+    "Electabuzz Unlock": 62000,
+    "Luxray Unlock": 63000,
+    "Stunky Unlock": 64000,
+    "Skuntank Unlock": 65000,
+    "Breloom Unlock": 66000,
+    "Mismagius Unlock": 67000,
+    "Electrode Unlock": 68000,
+    "Haunter Unlock": 69000,
+    "Gastly Unlock": 70000,
+    "Gastly Unlock 2": 71000,
+    "Dusknoir Unlock": 72000,
+    "Espeon Unlock": 73000,
+    "Gengar Unlock": 74000
 }
 
 BERRIES: dict[str,int] = {
@@ -226,6 +284,10 @@ PRISM_ITEM: dict[str,int] = {
     "Bastiodon Prisma": 6000000,
     "Rhyperior Prisma": 7000000,
     "Blaziken Prisma": 8000000,
+    "Tangrowth Prisma": 9000000,
+    "Dusknoir Prisma": 9000001,
+    "Rotom Prisma": 9000002
+
 }
 
 POWERS: dict[str,int] = {
@@ -236,10 +298,13 @@ POWERS: dict[str,int] = {
 }
 
 REGION_UNLOCK: dict[str,int] = {
-    "Cavern Zone & Magma Zone Unlock": 66666,
-    "Meadow Zone Unlock": 77777,
-    "Beach Zone Unlock": 99999,
-    "Ice Zone Unlock": 88888
+    "Meadow Zone Unlock": 99999,
+    "Beach Zone Unlock": 99998,
+    "Ice Zone Unlock": 99997,
+    "Cavern Zone & Magma Zone Unlock": 99996,
+    "Haunted Zone Unlock": 99995,
+
+
 }
 
 ALL_ITEMS_TABLE: dict[str, int] = {

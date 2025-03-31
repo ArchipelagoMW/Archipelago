@@ -1,10 +1,13 @@
 from . import PokeparkTest
 
+
 class TestPrismaDependencies(PokeparkTest):
 
     def test_bulbasaur_prisma(self) -> None:
         """Verify locations and victory conditions for Bulbasaur's Prisma unlock"""
-        locations = ["Meadow Zone - Overworld - Munchlax","Meadow Zone - Overworld - Munchlax Friendship - Pokemon Unlock","Meadow Zone - Overworld - Tropius","Meadow Zone - Overworld - Bulbasaur","Victory"]
+        locations = ["Meadow Zone - Overworld - Munchlax",
+                     "Meadow Zone - Overworld - Munchlax Friendship - Pokemon Unlock",
+                     "Meadow Zone - Overworld - Tropius", "Meadow Zone - Overworld - Bulbasaur", "Victory"]
         items = [["Bulbasaur Prisma"]]
         self.assertAccessDependency(locations, items)
 
@@ -51,3 +54,26 @@ class TestPrismaDependencies(PokeparkTest):
         items = [["Blaziken Prisma"]]
         self.assertAccessDependency(locations, items)
 
+    def test_tangrowth_prisma(self) -> None:
+        """Verify victory conditions for Blaziken Prisma unlock"""
+        locations = ["Victory"]
+        items = [["Tangrowth Prisma"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_dusknoir_prisma(self) -> None:
+        """Verify victory conditions for Blaziken Prisma unlock"""
+        locations = ["Victory",
+                     "Haunted Zone - Overworld - Mansion - Duskull"]
+        items = [["Dusknoir Prisma"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_rotom_prisma(self) -> None:
+        """Verify victory conditions for Blaziken Prisma unlock"""
+        locations = ["Victory",
+                     "Haunted Zone - Overworld - Drifloon",
+                     "Haunted Zone - Overworld - Metapod",
+                     "Haunted Zone - Overworld - Kakuna",
+                     "Haunted Zone - Overworld - Mansion - Spinarak",
+                     "Haunted Zone - Overworld - Mansion - Electrode"]
+        items = [["Rotom Prisma"]]
+        self.assertAccessDependency(locations, items)

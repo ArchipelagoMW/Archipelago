@@ -150,6 +150,57 @@ class MinigameLocationIds(Enum):
     BASTIODON_BOULDER = BERRIES["100 Berries"] + 129
     MAWILE_BOULDER = BERRIES["100 Berries"] + 130
 
+    # Tangrowth's Swing-Along
+    PIKACHU_SWING = BERRIES["100 Berries"] + 131
+    MEOWTH_SWING = BERRIES["100 Berries"] + 132
+    PICHU_SWING = BERRIES["100 Berries"] + 133
+    LUCARIO_SWING = BERRIES["100 Berries"] + 134
+    INFERNAPE_SWING = BERRIES["100 Berries"] + 135
+    BLAZIKEN_SWING = BERRIES["100 Berries"] + 136
+    RIOLU_SWING = BERRIES["100 Berries"] + 137
+    SNEASEL_SWING = BERRIES["100 Berries"] + 138
+    RAICHU_SWING = BERRIES["100 Berries"] + 139
+    AMBIPOM_SWING = BERRIES["100 Berries"] + 140
+    PRIMEAPE_SWING = BERRIES["100 Berries"] + 141
+    AIPOM_SWING = BERRIES["100 Berries"] + 142
+    ELECTABUZZ_SWING = BERRIES["100 Berries"] + 143
+    CHIMCHAR_SWING = BERRIES["100 Berries"] + 144
+    CROAGUNK_SWING = BERRIES["100 Berries"] + 145
+
+    # Dusknoir's Speed Slam
+    PIKACHU_SLAM = BERRIES["100 Berries"] + 146
+    STUNKY_SLAM = BERRIES["100 Berries"] + 147
+    GENGAR_SLAM = BERRIES["100 Berries"] + 148
+    MISMAGIUS_SLAM = BERRIES["100 Berries"] + 149
+    SCIZOR_SLAM = BERRIES["100 Berries"] + 150
+    ESPEON_SLAM = BERRIES["100 Berries"] + 151
+    DUSKNOIR_SLAM = BERRIES["100 Berries"] + 152
+    UMBREON_SLAM = BERRIES["100 Berries"] + 153
+    CRANIDOS_SLAM = BERRIES["100 Berries"] + 154
+    SKUNTANK_SLAM = BERRIES["100 Berries"] + 155
+    ELECTRODE_SLAM = BERRIES["100 Berries"] + 156
+    GASTLY_SLAM = BERRIES["100 Berries"] + 157
+    DUSKULL_SLAM = BERRIES["100 Berries"] + 158
+    MISDREAVUS_SLAM = BERRIES["100 Berries"] + 159
+    KRABBY_SLAM = BERRIES["100 Berries"] + 160
+
+    #Rotom's Spooky Shoot-'em-Up
+    PIKACHU_SHOOT = BERRIES["100 Berries"] + 161
+    MAGNEMITE_SHOOT = BERRIES["100 Berries"] + 162
+    PORYGONZ_SHOOT = BERRIES["100 Berries"] + 163
+    MAGNEZONE_SHOOT = BERRIES["100 Berries"] + 164
+    GENGAR_SHOOT = BERRIES["100 Berries"] + 165
+    MAGMORTAR_SHOOT = BERRIES["100 Berries"] + 166
+    ELECTIVIRE_SHOOT = BERRIES["100 Berries"] + 167
+    MISMAGIUS_SHOOT = BERRIES["100 Berries"] + 168
+    CLAYDOL_SHOOT = BERRIES["100 Berries"] + 169
+    ELECTABUZZ_SHOOT = BERRIES["100 Berries"] + 170
+    HAUNTER_SHOOT = BERRIES["100 Berries"] + 171
+    ABRA_SHOOT = BERRIES["100 Berries"] + 172
+    ELEKID_SHOOT = BERRIES["100 Berries"] + 173
+    MRMIME_SHOOT = BERRIES["100 Berries"] + 174
+    BALTOY_SHOOT = BERRIES["100 Berries"] + 175
+
 class OverworldPokemonLocationIds(Enum):
     STARLY_BEACH = FRIENDSHIP_ITEMS["Starly"] +1000
     KRABBY_ICE = FRIENDSHIP_ITEMS["Krabby"] +1000
@@ -172,9 +223,14 @@ class OverworldPokemonLocationIds(Enum):
     TORCHIC_MAGMA = FRIENDSHIP_ITEMS["Torchic"] +1000
     GEODUDE_MAGMA = FRIENDSHIP_ITEMS["Geodude"] + 1000
     MAGBY_MAGMA_BATTLE = FRIENDSHIP_ITEMS["Magby"] + 1000
+    RAICHU_HAUNTED = FRIENDSHIP_ITEMS["Raichu"]+1000
+    MEOWTH_HAUNTED = FRIENDSHIP_ITEMS["Meowth"] +1000
+    AIPOM_HAUNTED = FRIENDSHIP_ITEMS["Aipom"] +1000
+    AMBIPOM_HAUNTED = FRIENDSHIP_ITEMS["Ambipom"] +1000
 
 class UnlockLocationIds(Enum):
     SUDOWOODO_CAVERN = UNLOCK_ITEMS["Sudowoodo Unlock"] + 1
+    AMBIPOM_HAUNTED = UNLOCK_ITEMS["Ambipom Unlock"] +1
 
 class QuestLocationIds(Enum):
     MEADOW_BIDOOF_HOUSING1 = BERRIES["10 Berries"] + 1

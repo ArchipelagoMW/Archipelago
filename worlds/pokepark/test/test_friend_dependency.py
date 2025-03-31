@@ -42,7 +42,8 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
 
     def test_bonsly(self) -> None:
         """Test locations and minigames that require Bonsly"""
-        locations = ["Meadow Zone - Bulbasaur's Daring Dash Minigame - Bonsly", "Magma Zone - Rhyperior's Bumper Burn - Bonsly"]
+        locations = ["Meadow Zone - Bulbasaur's Daring Dash Minigame - Bonsly",
+                     "Magma Zone - Rhyperior's Bumper Burn - Bonsly"]
         items = [["Bonsly"]]
         self.assertAccessDependency(locations, items)
 
@@ -91,7 +92,7 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
             "Pachirisu",
             "Pikachu",
             "Primeape",
-            # "Tangrowth",
+            "Tangrowth",
             "Treecko",
         ]
         locations = [f"Meadow Zone - Venusaur's Vine Swing - {suffix}"
@@ -117,13 +118,14 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
             "Pachirisu",
             "Pikachu",
             "Primeape",
-            # "Tangrowth",
+            "Tangrowth",
             "Treecko",
         ]
         locations = [f"Meadow Zone - Venusaur's Vine Swing - {suffix}"
                      for suffix in venusaur_minigame_pokemon_names]
         locations.append("Meadow Zone - Bulbasaur's Daring Dash Minigame - Croagunk")
         locations.append("Meadow Zone - Venusaur's Vine Swing - Croagunk")
+        locations.append("Haunted Zone - Tangrowth's Swing-Along - Croagunk")
         items = [["Croagunk"]]
         self.assertAccessDependency(locations, items)
 
@@ -163,19 +165,21 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
         """Test locations and minigames that require Chimchar"""
         locations = ["Meadow Zone - Bulbasaur's Daring Dash Minigame - Chimchar",
                      "Meadow Zone - Venusaur's Vine Swing - Chimchar",
-                     "Cavern Zone - Bastiodon's Panel Crush - Chimchar"]
+                     "Cavern Zone - Bastiodon's Panel Crush - Chimchar",
+                     "Haunted Zone - Tangrowth's Swing-Along - Chimchar"]
         items = [["Chimchar"]]
         self.assertAccessDependency(locations, items)
 
     def test_aipom(self) -> None:
         """Test locations and minigames that require Aipom"""
-        locations = ["Meadow Zone - Venusaur's Vine Swing - Aipom"]
+        locations = ["Meadow Zone - Venusaur's Vine Swing - Aipom", "Haunted Zone - Tangrowth's Swing-Along - Aipom"]
         items = [["Aipom"]]
         self.assertAccessDependency(locations, items)
 
     def test_ambipom(self) -> None:
         """Test locations and minigames that require Ambipom"""
-        locations = ["Meadow Zone - Venusaur's Vine Swing - Ambipom"]
+        locations = ["Meadow Zone - Venusaur's Vine Swing - Ambipom",
+                     "Haunted Zone - Tangrowth's Swing-Along - Ambipom"]
         items = [["Ambipom"]]
         self.assertAccessDependency(locations, items)
 
@@ -234,7 +238,6 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
         locations = ["Magma Zone - Rhyperior's Bumper Burn - Venusaur"]
         items = [["Venusaur"]]
         self.assertAccessDependency(locations, items)
-
 
     def test_starly(self) -> None:
         """Test locations and minigames that require Starly"""
@@ -358,7 +361,7 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
 
     def test_krabby(self) -> None:
         """Test locations and minigames that require Krabby"""
-        locations = []
+        locations = ["Haunted Zone - Mansion - Dusknoir's Speed Slam - Krabby"]
         items = [["Krabby"]]
         self.assertAccessDependency(locations, items)
 
@@ -409,6 +412,7 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
         locations = []
         items = [["Drifblim"]]
         self.assertAccessDependency(locations, items)
+
     def test_lapras(self) -> None:
         """Test locations and minigames that require Lapras"""
         locations = ["Ice Zone - Empoleon's Snow Slide - Lapras"]
@@ -460,11 +464,13 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
                      "Ice Zone - Empoleon's Snow Slide - Squirtle"]
         items = [["Squirtle"]]
         self.assertAccessDependency(locations, items)
+
     def test_glaceon(self) -> None:
         """Test locations and minigames that require Glaceon"""
         locations = ["Ice Zone - Empoleon's Snow Slide - Glaceon"]
         items = [["Glaceon"]]
         self.assertAccessDependency(locations, items)
+
     def test_prinplup(self) -> None:
         """Test locations and minigames that require Prinplup"""
         locations = ["Ice Zone - Empoleon's Snow Slide - Prinplup",
@@ -474,9 +480,10 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
                      "Ice Zone - Overworld - Lower Lift Region - Quagsire"]
         items = [["Prinplup"]]
         self.assertAccessDependency(locations, items)
+
     def test_sneasel(self) -> None:
         """Test locations and minigames that require Sneasel"""
-        locations = []
+        locations = ["Haunted Zone - Tangrowth's Swing-Along - Sneasel"]
         items = [["Sneasel"]]
         self.assertAccessDependency(locations, items)
 
@@ -491,9 +498,11 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
         locations = ["Ice Zone - Empoleon's Snow Slide - Glalie"]
         items = [["Glalie"]]
         self.assertAccessDependency(locations, items)
+
     def test_primeape(self) -> None:
         """Test locations and minigames that require Primeape"""
-        locations = ["Meadow Zone - Venusaur's Vine Swing - Primeape"]
+        locations = ["Meadow Zone - Venusaur's Vine Swing - Primeape",
+                     "Haunted Zone - Tangrowth's Swing-Along - Primeape"]
         items = [["Primeape"]]
         self.assertAccessDependency(locations, items)
 
@@ -502,11 +511,13 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
         locations = ["Cavern Zone - Bastiodon's Panel Crush - Ursaring"]
         items = [["Ursaring"]]
         self.assertAccessDependency(locations, items)
+
     def test_mamoswine(self) -> None:
         """Test locations and minigames that require Mamoswine"""
         locations = []
         items = [["Mamoswine"]]
         self.assertAccessDependency(locations, items)
+
     def test_kirlia(self) -> None:
         """Test locations and minigames that require Kirlia"""
         locations = []
@@ -518,6 +529,7 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
         locations = ["Ice Zone - Empoleon's Snow Slide - Quagsire"]
         items = [["Quagsire"]]
         self.assertAccessDependency(locations, items)
+
     def test_empoleon(self) -> None:
         """Test locations and minigames that require Empoleon"""
         locations = ["Beach Zone - Gyarados' Aqua Dash - Empoleon", "Ice Zone - Empoleon's Snow Slide - Empoleon"]
@@ -526,7 +538,8 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
 
     def test_magnemite(self) -> None:
         """Test locations and minigames that require Magnemite"""
-        locations = ["Magma Zone - Rhyperior's Bumper Burn - Magnemite"]
+        locations = ["Magma Zone - Rhyperior's Bumper Burn - Magnemite",
+                     "Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Magnemite"]
         items = [["Magnemite"]]
         self.assertAccessDependency(locations, items)
 
@@ -550,7 +563,8 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
 
     def test_meowth(self) -> None:
         """Test locations and minigames that require Meowth"""
-        locations = ["Cavern Zone - Bastiodon's Panel Crush - Meowth"]
+        locations = ["Cavern Zone - Bastiodon's Panel Crush - Meowth",
+                     "Haunted Zone - Tangrowth's Swing-Along - Meowth"]
         items = [["Meowth"]]
         self.assertAccessDependency(locations, items)
 
@@ -562,13 +576,15 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
 
     def test_cranidos(self) -> None:
         """Test locations and minigames that require Cranidos"""
-        locations = ["Magma Zone - Blaziken's Boulder Bash - Cranidos"]
+        locations = ["Magma Zone - Blaziken's Boulder Bash - Cranidos",
+                     "Haunted Zone - Mansion - Dusknoir's Speed Slam - Cranidos"]
         items = [["Cranidos"]]
         self.assertAccessDependency(locations, items)
 
     def test_scizor(self) -> None:
         """Test locations and minigames that require Scizor"""
-        locations = ["Magma Zone - Blaziken's Boulder Bash - Scizor"]
+        locations = ["Magma Zone - Blaziken's Boulder Bash - Scizor",
+                     "Haunted Zone - Mansion - Dusknoir's Speed Slam - Scizor"]
         items = [["Scizor"]]
         self.assertAccessDependency(locations, items)
 
@@ -586,7 +602,8 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
 
     def test_mrmime(self) -> None:
         """Test locations and minigames that require Mr. Mime"""
-        locations = ["Cavern Zone - Bastiodon's Panel Crush - Mr. Mime"]
+        locations = ["Cavern Zone - Bastiodon's Panel Crush - Mr. Mime",
+                     "Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Mr. Mime"]
         items = [["Mr. Mime"]]
         self.assertAccessDependency(locations, items)
 
@@ -610,7 +627,8 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
 
     def test_magnezone(self) -> None:
         """Test locations and minigames that require Magnezone"""
-        locations = ["Magma Zone - Rhyperior's Bumper Burn - Magnezone"]
+        locations = ["Magma Zone - Rhyperior's Bumper Burn - Magnezone",
+                     "Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Magnezone"]
         items = [["Magnezone"]]
         self.assertAccessDependency(locations, items)
 
@@ -628,7 +646,8 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
 
     def test_raichu(self) -> None:
         """Test locations and minigames that require Raichu"""
-        locations = ["Cavern Zone - Bastiodon's Panel Crush - Raichu"]
+        locations = ["Cavern Zone - Bastiodon's Panel Crush - Raichu",
+                     "Haunted Zone - Tangrowth's Swing-Along - Raichu"]
         items = [["Raichu"]]
         self.assertAccessDependency(locations, items)
 
@@ -694,7 +713,8 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
 
     def test_infernape(self) -> None:
         """Test locations and minigames that require Infernape"""
-        locations = ["Meadow Zone - Venusaur's Vine Swing - Infernape"]
+        locations = ["Meadow Zone - Venusaur's Vine Swing - Infernape",
+                     "Haunted Zone - Tangrowth's Swing-Along - Infernape"]
         items = [["Infernape"]]
         self.assertAccessDependency(locations, items)
 
@@ -742,13 +762,15 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
 
     def test_baltoy(self) -> None:
         """Test locations and minigames that require Baltoy"""
-        locations = ["Magma Zone - Rhyperior's Bumper Burn - Baltoy"]
+        locations = ["Magma Zone - Rhyperior's Bumper Burn - Baltoy",
+                     "Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Baltoy"]
         items = [["Baltoy"]]
         self.assertAccessDependency(locations, items)
 
     def test_claydol(self) -> None:
         """Test locations and minigames that require Claydol"""
-        locations = ["Magma Zone - Rhyperior's Bumper Burn - Claydol"]
+        locations = ["Magma Zone - Rhyperior's Bumper Burn - Claydol",
+                     "Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Claydol"]
         items = [["Claydol"]]
         self.assertAccessDependency(locations, items)
 
@@ -763,6 +785,184 @@ class TestPokemonFriendshipDependencies(PokeparkTest):
         locations = ["Magma Zone - Rhyperior's Bumper Burn - Hitmontop"]
         items = [["Hitmontop"]]
         self.assertAccessDependency(locations, items)
+
+    def test_drifloon(self) -> None:
+        """Test locations and minigames that require Drifloon"""
+        locations = []
+        items = [["Drifloon"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_murkrow(self) -> None:
+        """Test locations and minigames that require Murkrow"""
+        locations = ["Beach Zone - Pelipper's Circle Circuit - Murkrow"]
+        items = [["Murkrow"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_honchkrow(self) -> None:
+        """Test locations and minigames that require Honchkrow"""
+        locations = ["Beach Zone - Pelipper's Circle Circuit - Honchkrow"]
+        items = [["Honchkrow"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_gliscor(self) -> None:
+        """Test locations and minigames that require Gliscor"""
+        locations = ["Beach Zone - Pelipper's Circle Circuit - Gliscor"]
+        items = [["Gliscor"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_metapod(self) -> None:
+        """Test locations and minigames that require Metapod"""
+        locations = []
+        items = [["Metapod"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_kakuna(self) -> None:
+        """Test locations and minigames that require Kakuna"""
+        locations = []
+        items = [["Kakuna"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_tangrowth(self) -> None:
+        """Test locations and minigames that require Tangrowth"""
+        locations = ["Meadow Zone - Venusaur's Vine Swing - Tangrowth"]
+        items = [["Tangrowth"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_duskull(self) -> None:
+        """Test locations and minigames that require Duskull"""
+        locations = ["Haunted Zone - Mansion - Dusknoir's Speed Slam - Duskull"]
+        items = [["Duskull"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_sableye(self) -> None:
+        """Test locations and minigames that require Sableye"""
+        locations = ["Cavern Zone - Bastiodon's Panel Crush - Sableye"]
+        items = [["Sableye"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_misdreavus(self) -> None:
+        """Test locations and minigames that require Misdreavus"""
+        locations = ["Haunted Zone - Mansion - Dusknoir's Speed Slam - Misdreavus"]
+        items = [["Misdreavus"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_pichu(self) -> None:
+        """Test locations and minigames that require Pichu"""
+        locations = ["Haunted Zone - Tangrowth's Swing-Along - Pichu"]
+        items = [["Pichu"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_umbreon(self) -> None:
+        """Test locations and minigames that require Umbreon"""
+        locations = ["Haunted Zone - Mansion - Dusknoir's Speed Slam - Umbreon"]
+        items = [["Umbreon"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_spinarak(self) -> None:
+        """Test locations and minigames that require Spinarak"""
+        locations = []
+        items = [["Spinarak"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_abra(self) -> None:
+        """Test locations and minigames that require Abra"""
+        locations = ["Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Abra"]
+        items = [["Abra"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_riolu(self) -> None:
+        """Test locations and minigames that require Abra"""
+        locations = ["Haunted Zone - Tangrowth's Swing-Along - Riolu"]
+        items = [["Riolu"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_voltorb(self) -> None:
+        """Test locations and minigames that require Voltorb"""
+        locations = []
+        items = [["Voltorb"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_elekid(self) -> None:
+        """Test locations and minigames that require Elekid"""
+        locations = ["Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Elekid"]
+        items = [["Elekid"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_electabuzz(self) -> None:
+        """Test locations and minigames that require Electabuzz"""
+        locations = ["Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Electabuzz",
+                     "Haunted Zone - Tangrowth's Swing-Along - Electabuzz"]
+        items = [["Electabuzz"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_luxray(self) -> None:
+        """Test locations and minigames that require Luxray"""
+        locations = []
+        items = [["Luxray"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_stunky(self) -> None:
+        """Test locations and minigames that require Stunky"""
+        locations = ["Haunted Zone - Mansion - Dusknoir's Speed Slam - Stunky"]
+        items = [["Stunky"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_skuntank(self) -> None:
+        """Test locations and minigames that require Skuntank"""
+        locations = ["Haunted Zone - Mansion - Dusknoir's Speed Slam - Skuntank"]
+        items = [["Skuntank"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_breloom(self) -> None:
+        """Test locations and minigames that require Breloom"""
+        locations = []
+        items = [["Breloom"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_mismagius(self) -> None:
+        """Test locations and minigames that require Mismagius"""
+        locations = ["Haunted Zone - Mansion - Dusknoir's Speed Slam - Mismagius",
+                     "Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Mismagius"]
+        items = [["Mismagius"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_electrode(self) -> None:
+        """Test locations and minigames that require Electrode"""
+        locations = ["Haunted Zone - Mansion - Dusknoir's Speed Slam - Electrode"]
+        items = [["Electrode"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_haunter(self) -> None:
+        """Test locations and minigames that require Haunter"""
+        locations = ["Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Haunter"]
+        items = [["Haunter"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_gastly(self) -> None:
+        """Test locations and minigames that require Gastly"""
+        locations = ["Haunted Zone - Mansion - Dusknoir's Speed Slam - Gastly"]
+        items = [["Gastly"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_dusknoir(self) -> None:
+        """Test locations and minigames that require Dusknoir"""
+        locations = ["Haunted Zone - Mansion - Dusknoir's Speed Slam - Dusknoir"]
+        items = [["Dusknoir"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_espeon(self) -> None:
+        """Test locations and minigames that require Espeon"""
+        locations = ["Haunted Zone - Mansion - Dusknoir's Speed Slam - Espeon"]
+        items = [["Espeon"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_gengar(self) -> None:
+        """Test locations and minigames that require Gengar"""
+        locations = ["Haunted Zone - Mansion - Dusknoir's Speed Slam - Gengar",
+                     "Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Gengar"]
+        items = [["Gengar"]]
+        self.assertAccessDependency(locations, items)
+
 
 class TestRegionAccessByFriendship(PokeparkTest):
 
@@ -791,14 +991,13 @@ class TestRegionAccessByFriendship(PokeparkTest):
         self.collect_all_but(["Spearow", "Croagunk", "Beach Zone Unlock"])
         self.assertFalse(self.can_reach_region("Meadow Zone - Venusaur's Vine Swing"))
 
-
-    def test_can_reach_ice_zone_lower_lift_with_prinplup(self)-> None:
+    def test_can_reach_ice_zone_lower_lift_with_prinplup(self) -> None:
         """Verify ability to access Ice Zone Lower Lift Region with Prinplup"""
 
         self.collect_by_name(["Prinplup", "Ice Zone Unlock"])
         self.assertTrue(self.can_reach_region("Ice Zone - Overworld - Lower Lift Region"))
 
-    def test_can_not_reach_ice_zone_lower_lift_without_prinplup(self)-> None:
+    def test_can_not_reach_ice_zone_lower_lift_without_prinplup(self) -> None:
         """Verify inability to access Ice Zone Lower Lift Region without Prinplup"""
 
         self.collect_all_but(["Prinplup"])

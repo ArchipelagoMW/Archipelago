@@ -33,7 +33,6 @@ async def state_watcher(ctx):
 
             # Set starting values
             dme.write_byte(0x8037AEC9, 0x37)  # Init status menu
-            dme.write_byte(0x80376AF7, 0x10)  # Activate Celebi
 
             # Skip tutorial elements
             dme.write_byte(0x80375021, 0x20)  # Skip driffzepeli quest
@@ -44,6 +43,14 @@ async def state_watcher(ctx):
             dme.write_word(0x80376DA8, 0x2)  # Init prisma for minigame Venusaur
             dme.write_word(0x803772B8, 0x2)  # Init prisma for minigame Pelipper
             dme.write_word(0x80377174, 0x2)  # Init prisma for minigame Gyarados
+            dme.write_word(0x80377540,0x2)  # Init prisma for minigame Empoleon
+            dme.write_word(0x80377684,0x2)  # Init prisma for minigame Bastiodon
+            dme.write_word(0x803777C8,0x2)  # Init prisma for minigame Rhyperior
+            dme.write_word(0x8037790C,0x2)  # Init prisma for minigame Blaziken
+            dme.write_word(0x80376EEC,0x2)  # Init prisma for minigame Tangrowth
+            dme.write_word(0x80377030,0x2)  # Init prisma for minigame Dusknoir
+            dme.write_word(0x80377A50,0x2)  # Init prisma for minigame Rotom
+
 
             return True
 
@@ -122,7 +129,7 @@ async def state_watcher(ctx):
             else:
                 _sub()
         except Exception as e:
-            logger.error(f"Error in location_state_watcher: {e}")
+            logger.error(f"Error in world_state_watcher: {e}")
             logger.error(f"Traceback: {traceback.format_exc()}")
 
             raise
