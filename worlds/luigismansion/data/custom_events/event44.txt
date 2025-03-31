@@ -4,7 +4,7 @@
 <CASE>"8ON"
 <MENUOFF>
 <LUIGISTOP2>
-<CHOICE>"BlackoutOFF"(4)"Save"(2)"Close"(3)<LISTEND>
+<CHOICE>"BlackoutOFF"(4)"Close"(3)<LISTEND>
 <ANYKEY>
 -------------------------
 <CASE>"8OFF"
