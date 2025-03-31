@@ -148,7 +148,8 @@ class LuigisMansionRandomizer:
     # Uses custom class to load in JMP Info file entry (see more details in JMP_Info_File.py)
     def load_maptwo_info_table(self, jmp_table_name: str):
         jmp_table_entry = JMPInfoFile(self.map_two_file, jmp_table_name)
-        jmp_table_entry.print_header_info()
+        if self.debug:
+            jmp_table_entry.print_header_info()
         return jmp_table_entry
 
     # Updates the existing ARC / RARC file with the provided data for a given info file entry.
@@ -525,7 +526,8 @@ class LuigisMansionRandomizer:
             hex_reader = csv.DictReader(file)
             for line in hex_reader:
                 new_dol_offset, hex_val = int(line["addr"], 16), bytes.fromhex(line["val"])
-                print(f"Updating DOL Offset {new_dol_offset} with hex value: {str(hex_val)}")
+                if self.debug:
+                    print(f"Updating DOL Offset {new_dol_offset} with hex value: {str(hex_val)}")
                 self.dol.data.seek(new_dol_offset)
                 self.dol.data.write(hex_val)
 
