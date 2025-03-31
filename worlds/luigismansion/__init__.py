@@ -478,7 +478,14 @@ class LMWorld(World):
             raise Options.OptionError(f"When Boo Radar is excluded, neither Boosanity nor Boo Gates can be active "
                                       f"This error was found in {self.player_name}'s Luigi's Mansion world. "
                                       f"Their YAML must be fixed")
-        if self.options.random_spawn.value > 0:
+        if hasattr(self.multiworld, "generation_is_fake"):
+            if hasattr(self.multiworld, "re_gen_passthrough"):
+                # We know we're in second gen
+                re_gen = self.multiworld.re_gen_passthrough
+                if self.game in re_gen:  # Are we the tracked game and in final gen
+                    self.origin_region_name = re_gen[self.game][
+                        "spawn_region"]  # this should be the same region from slot data
+        elif self.options.random_spawn.value > 0:
             self.origin_region_name = self.random.choice(list(spawn_locations.keys()))
 
         if hasattr(self.multiworld, "generation_is_fake"):
