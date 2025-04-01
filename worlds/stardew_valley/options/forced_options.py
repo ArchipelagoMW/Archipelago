@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 def force_change_options_if_incompatible(world_options: options.StardewValleyOptions, player: int, player_name: str) -> None:
     force_ginger_island_inclusion_when_goal_is_ginger_island_related(world_options, player, player_name)
     force_walnutsanity_deactivation_when_ginger_island_is_excluded(world_options, player, player_name)
+    force_qi_special_orders_deactivation_when_ginger_island_is_excluded(world_options, player, player_name)
     force_accessibility_to_full_when_goal_requires_all_locations(player, player_name, world_options)
 
 
@@ -33,6 +34,17 @@ def force_walnutsanity_deactivation_when_ginger_island_is_excluded(world_options
         world_options.walnutsanity.value = options.Walnutsanity.preset_none
         logger.warning(f"Walnutsanity requires Ginger Island. "
                        f"Ginger Island was excluded from {player} ({player_name})'s world, so walnutsanity was force disabled")
+
+
+def force_qi_special_orders_deactivation_when_ginger_island_is_excluded(world_options: options.StardewValleyOptions, player: int, player_name: str):
+    ginger_island_is_excluded = world_options.exclude_ginger_island == options.ExcludeGingerIsland.option_true
+    qi_board_is_active = world_options.special_order_locations.value & options.SpecialOrderLocations.value_qi
+
+    if ginger_island_is_excluded and qi_board_is_active:
+        original_option_name = world_options.special_order_locations.current_option_name
+        world_options.special_order_locations.value -= options.SpecialOrderLocations.value_qi
+        logger.warning(f"Mr. Qi's Special Orders requires Ginger Island. "
+                       f"Ginger Island was excluded from {player} ({player_name})'s world, so Special Order Locations was changed from {original_option_name} to {world_options.special_order_locations.current_option_name}")
 
 
 def force_accessibility_to_full_when_goal_requires_all_locations(player, player_name, world_options):

@@ -1,34 +1,23 @@
-import base64
 import copy
-import itertools
 import math
 import os
-import settings
 import typing
-from enum import IntFlag
-from typing import Any, ClassVar, Dict, List, Optional, Set, Tuple
+from typing import ClassVar, Dict, Optional, Tuple
 
-from BaseClasses import Entrance, Item, ItemClassification, MultiWorld, Region, Tutorial, \
-    LocationProgressType
+import settings
+from BaseClasses import Item, ItemClassification, MultiWorld, Tutorial, LocationProgressType
 from Utils import __version__
-from Options import AssembleOptions
 from worlds.AutoWorld import WebWorld, World
-from Fill import fill_restrictive
-from worlds.generic.Rules import add_rule, set_rule
-from .Options import DragonRandoType, DifficultySwitchA, DifficultySwitchB, \
-    AdventureOptions
-from .Rom import get_base_rom_bytes, get_base_rom_path, AdventureDeltaPatch, apply_basepatch, \
-    AdventureAutoCollectLocation
+from worlds.LauncherComponents import Component, components, SuffixIdentifier
 from .Items import item_table, ItemData, nothing_item_id, event_table, AdventureItem, standard_item_max
 from .Locations import location_table, base_location_id, LocationData, get_random_room_in_regions
 from .Offsets import static_item_data_location, items_ram_start, static_item_element_size, item_position_table, \
     static_first_dragon_index, connector_port_offset, yorgle_speed_data_location, grundle_speed_data_location, \
     rhindle_speed_data_location, item_ram_addresses, start_castle_values, start_castle_offset
+from .Options import DragonRandoType, DifficultySwitchA, DifficultySwitchB, AdventureOptions
 from .Regions import create_regions
+from .Rom import get_base_rom_bytes, get_base_rom_path, AdventureDeltaPatch, apply_basepatch, AdventureAutoCollectLocation
 from .Rules import set_rules
-
-
-from worlds.LauncherComponents import Component, components, SuffixIdentifier
 
 # Adventure
 components.append(Component('Adventure Client', 'AdventureClient', file_identifier=SuffixIdentifier('.apadvn')))
