@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from BaseClasses import MultiWorld
 from .option_assert import get_stardew_options
-from ... import options, ExcludeGingerIsland
+from ... import options
 
 
 def is_goal(multiworld: MultiWorld, goal: int) -> bool:
@@ -36,7 +36,7 @@ def is_not_perfection(multiworld: MultiWorld) -> bool:
 class GoalAssertMixin(TestCase):
 
     def assert_ginger_island_is_included(self, multiworld: MultiWorld):
-        self.assertEqual(get_stardew_options(multiworld).exclude_ginger_island, ExcludeGingerIsland.option_false)
+        self.assertEqual(get_stardew_options(multiworld).exclude_ginger_island, options.ExcludeGingerIsland.option_false)
 
     def assert_walnut_hunter_world_is_valid(self, multiworld: MultiWorld):
         if is_not_walnut_hunter(multiworld):

@@ -689,7 +689,9 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     atoll_statue = regions["Ruined Atoll"].connect(
         connecting_region=regions["Ruined Atoll Statue"],
         rule=lambda state: has_ability(prayer, state, world)
-        and (has_ladder("Ladders in South Atoll", state, world)
+        and ((has_ladder("Ladders in South Atoll", state, world)
+              and state.has_any((laurels, grapple), player)
+              and (has_sword(state, player) or state.has_any((fire_wand, gun), player)))
              # shoot fuse and have the shot hit you mid-LS
              or (can_ladder_storage(state, world) and state.has(fire_wand, player)
                  and options.ladder_storage >= LadderStorage.option_hard)))
@@ -855,16 +857,21 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Fortress Courtyard Upper"].connect(
         connecting_region=regions["Fortress Exterior from Overworld"])
 
-    btv_front_to_main = regions["Beneath the Vault Ladder Exit"].connect(
+    regions["Beneath the Vault Ladder Exit"].connect(
+        connecting_region=regions["Beneath the Vault Entry Spot"],
+        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world))
+    regions["Beneath the Vault Entry Spot"].connect(
+        connecting_region=regions["Beneath the Vault Ladder Exit"],
+        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world))
+
+    btv_front_to_main = regions["Beneath the Vault Entry Spot"].connect(
         connecting_region=regions["Beneath the Vault Main"],
-        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world)
-        and has_lantern(state, world)
+        rule=lambda state: has_lantern(state, world)
         # there's some boxes in the way
         and (has_melee(state, player) or state.has_any((gun, grapple, fire_wand, laurels), player)))
     # on the reverse trip, you can lure an enemy over to break the boxes if needed
     regions["Beneath the Vault Main"].connect(
-        connecting_region=regions["Beneath the Vault Ladder Exit"],
-        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world))
+        connecting_region=regions["Beneath the Vault Entry Spot"])
 
     regions["Beneath the Vault Main"].connect(
         connecting_region=regions["Beneath the Vault Back"])
@@ -1078,6 +1085,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     swamp_mid_to_cath = regions["Swamp Mid"].connect(
         connecting_region=regions["Swamp to Cathedral Main Entrance Region"],
         rule=lambda state: (has_ability(prayer, state, world)
+                            and (has_sword(state, player))
                             and (state.has(laurels, player)
                                  # blam yourself in the face with a wand shot off the fuse
                                  or (can_ladder_storage(state, world) and state.has(fire_wand, player)
