@@ -246,16 +246,9 @@ class JakAndDaxterContext(CommonContext):
             self.repl.received_deathlink = True
             super().on_deathlink(data)
 
-    async def ap_inform_location_check(self, location_ids: list[int]):
-        message = [{"cmd": "LocationChecks", "locations": location_ids}]
-        await self.send_msgs(message)
-
+    # We don't need an ap_inform function because check_locations solves that need.
     def on_location_check(self, location_ids: list[int]):
-        create_task_log_exception(self.ap_inform_location_check(location_ids))
-
-    # TODO - Use CommonClient's check_locations function as our async task - AP 0.6.0 ONLY.
-    # def on_location_check(self, location_ids: list[int]):
-    #     create_task_log_exception(self.check_locations(location_ids))
+        create_task_log_exception(self.check_locations(location_ids))
 
     # CommonClient has no finished_game function, so we will have to craft our own. TODO - Update if that changes.
     async def ap_inform_finished_game(self):
@@ -282,7 +275,7 @@ class JakAndDaxterContext(CommonContext):
     def on_deathlink_check(self):
         create_task_log_exception(self.ap_inform_deathlink())
 
-    # Use CommonClient's update_death_link function as our async task.
+    # We don't need an ap_inform function because update_death_link solves that need.
     def on_deathlink_toggle(self):
         create_task_log_exception(self.update_death_link(self.memr.deathlink_enabled))
 
