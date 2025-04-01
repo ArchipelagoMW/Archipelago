@@ -197,15 +197,15 @@ class YamlCreator(MDApp):
 
     def create_option(self, option: typing.Type[Option], name: str) -> Widget:
         option_base = MDBoxLayout(orientation="vertical", )
-        with option_base.canvas:
-            Color(0.2, 0.2, 0.2, 1)
-            option_base.bg_rect = Rectangle(size=option_base.size, pos=option_base.pos)
+        #with option_base.canvas:
+        #    Color(0.2, 0.2, 0.2, 1)
+        #    option_base.bg_rect = Rectangle(size=option_base.size, pos=option_base.pos)
 
-        def redraw(self, args):
-            self.bg_rect.size = self.size
-            self.bg_rect.pos = self.pos
+        #def redraw(self, args):
+        #    self.bg_rect.size = self.size
+        #    self.bg_rect.pos = self.pos
 
-        option_base.bind(pos=redraw, size=redraw)
+        #option_base.bind(pos=redraw, size=redraw)
 
         tooltip = filter_tooltip(option.__doc__)
         option_label = FixedTooltipLabel(text=f"[ref=0|{tooltip}]{getattr(option, 'display_name', name)}")
@@ -292,10 +292,13 @@ class YamlCreator(MDApp):
                     if name and option is not Removed and option.visibility & Visibility.simple_ui:
                         group_box.layout.add_widget(self.create_option(option, name))
                 group_item.box = group_box
+
                 def disable_box(instance):
                     instance.box.disabled = True
+
                 def enable_box(instance):
                     instance.box.disabled = False
+
                 group_item.bind(on_close=disable_box)
                 group_item.bind(on_open=enable_box)
                 group_content.add_widget(group_box)
@@ -313,7 +316,13 @@ class YamlCreator(MDApp):
         for world, cls in sorted(AutoWorldRegister.world_types.items(), key=lambda x: x[0]):
             if world == "Archipelago":
                 continue
-            world_button = MDButton(MDButtonText(world))
+            world_text = MDButtonText(text=world, size_hint_y=None, width=dp(150), pos_hint={"x": 0.03, "center_y": 0.5})
+            world_text.text_size = (world_text.width, None)
+            world_text.bind(width=lambda *x, text=world_text: text.setter('text_size')(text, (text.width, None)),
+                            texture_size=lambda *x, text=world_text: text.setter("height")(text,
+                                                                                           world_text.texture_size[1]))
+            world_button = MDButton(world_text, size_hint_x=None, width=dp(150), theme_width="Custom")
+            world_button.radius = (dp(5), dp(5), dp(5), dp(5))
             world_button.bind(on_release=self.create_options_panel)
             world_button.world_cls = cls
             self.scrollbox.layout.add_widget(world_button)
