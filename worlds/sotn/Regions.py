@@ -3,13 +3,15 @@ from BaseClasses import MultiWorld, Region
 from .Locations import SotnLocation, locations, ZONE, LOCATION_TO_ABREV
 from .Rules import sotn_has_flying, sotn_has_any, sotn_has_wolf, sotn_has_reverse, sotn_has_dracula
 from .Options import SOTNOptions
-from .data.Constants import BASE_LOCATION_ID, EXTENSIONS
+from .data.Constants import EXTENSIONS
 
 
 def create_regions(multiworld: MultiWorld, player: int, options: SOTNOptions) -> None:
     open_no4 = options.open_no4.value
     open_are = options.open_are.value
-    extension = options.extension.value
+    extension = options.item_pool.value
+    boss_locations = options.boss_locations.value
+    enemysanity = options.enemysanity.value
 
     regions_dict = {
         1: Region("Colosseum", player, multiworld),
@@ -163,13 +165,14 @@ def create_regions(multiworld: MultiWorld, player: int, options: SOTNOptions) ->
             loc = LOCATION_TO_ABREV[k]
             if zone == ZONE["NO2"]:
                 # Olrox's Quarters
-                if loc == "" or loc == "" or loc == "":
+                if loc in ["NO2_Broadsword_4", "NO2_Onyx_5", "NO2_Cheese_6", "NO2_Spectral sword_enemy",
+                           "NO2_Blade_enemy", "NO2_Hammer_enemy"]:
                     region = name_to_region["Lower Olrox\'s Quarters"]
                 else:
                     region = name_to_region["Upper Olrox\'s Quarters"]
             elif zone == ZONE["NO4"]:
                 # Underground Caverns
-                if loc == "NO4_Shiitake_35" or loc == "NO4_Life Vessel_6" or loc == "Merman statue":
+                if loc in ["NO4_Shiitake_35", "NO4_Life Vessel_6", "Merman statue", "NO4_Frozen shade_enemy"]:
                     region = name_to_region["Lower Underground Caverns"]
                 elif "Succubus" in k:
                     region = name_to_region["Succubus Underground Caverns"]
@@ -190,13 +193,71 @@ def create_regions(multiworld: MultiWorld, player: int, options: SOTNOptions) ->
             elif zone == ZONE["NP3"]:
                 # Castle Entrance (after visiting Alchemy Laboratory)
                 region = name_to_region["Castle Entrance"]
+            elif zone == ZONE["DRE"]:
+                # Nightmare
+                region = name_to_region["Underground Caverns"]
+            elif zone == ZONE["BO0"]:
+                # Olrox
+                region = name_to_region["Olrox\'s Quarters"]
+            elif zone == ZONE["BO1"]:
+                # Legion
+                region = name_to_region["Catacombs"]
+            elif zone == ZONE["BO2"]:
+                # Werewolf & Minotaur
+                region = name_to_region["Colosseum"]
+            elif zone == ZONE["BO3"]:
+                # Scylla
+                region = name_to_region["Underground Caverns"]
+            elif zone == ZONE["BO4"]:
+                # Dopp10
+                region = name_to_region["Outer Wall"]
+            elif zone == ZONE["BO5"]:
+                # Hippogryph
+                region = name_to_region["Royal Chapel"]
+            elif zone == ZONE["BO7"]:
+                # Cerberus
+                region = name_to_region["Abandoned Mine"]
+            elif zone == ZONE["RBO0"]:
+                # Trio
+                region = name_to_region["Reverse Colosseum"]
+            elif zone == ZONE["RBO1"]:
+                # Beezlebub
+                region = name_to_region["Necromancy Laboratory"]
+            elif zone == ZONE["RBO2"]:
+                # Death
+                region = name_to_region["Cave"]
+            elif zone == ZONE["RBO3"]:
+                # Medusa
+                region = name_to_region["Anti-Chapel"]
+            elif zone == ZONE["RBO4"]:
+                # Creature
+                region = name_to_region["Reverse Outer Wall"]
+            elif zone == ZONE["RBO5"]:
+                # Dopp40
+                region = name_to_region["Reverse Caverns"]
+            elif zone == ZONE["RBO7"]:
+                # Akmodan II
+                region = name_to_region["Death Wing\'s Lair"]
+            elif zone == ZONE["RBO8"]:
+                # Galamoth
+                region = name_to_region["Floating Catacombs"]
+
             else:
                 region = regions_dict[zone]
 
             if k not in added_locations:
                 if loc in EXTENSIONS[extension]:
-                    region.locations.append(SotnLocation(player, k, v["ap_id"] + BASE_LOCATION_ID, region))
-                added_locations.append(k)
+                    region.locations.append(SotnLocation(player, k, v["ap_id"], region))
+                    added_locations.append(k)
+                else:
+                    if boss_locations:
+                        if "boss" in v and v["boss"]:
+                            region.locations.append(SotnLocation(player, k, v["ap_id"], region))
+                            added_locations.append(k)
+                    if enemysanity:
+                        if "enemy" in v and v["enemy"]:
+                            region.locations.append(SotnLocation(player, k, v["ap_id"], region))
+                            added_locations.append(k)
 
     # Add kill Dracula
     region = name_to_region["Reverse Center Cube"]
