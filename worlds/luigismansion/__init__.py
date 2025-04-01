@@ -790,6 +790,8 @@ class LMWorld(World):
                             "loc_enum": location.jmpentry,
                         }
                         output_data["Locations"][location.name] = item_info
+                        if self.options.boo_health_option.value == 2 and location.name in ROOM_BOO_LOCATION_TABLE.keys():
+                                item_info.update({"boo_sphere": self.boo_spheres[location.name]})
                 else:
                     item_info = {"name": "Nothing", "game": "Luigi's Mansion", "classification": "filler"}
                 output_data["Locations"][location.name] = item_info
