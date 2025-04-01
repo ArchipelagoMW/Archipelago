@@ -159,6 +159,10 @@ else:
     signtool = None
 
 
+def sign(p: str):
+    os.system(signtool + p)  # noqa: S6
+
+
 build_platform = sysconfig.get_platform()
 arch_folder = "exe.{platform}-{version}".format(platform=build_platform,
                                                 version=sysconfig.get_python_version())
@@ -408,12 +412,12 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
         if signtool:
             for exe in self.distribution.executables:
                 print(f"Signing {exe.target_name}")
-                os.system(signtool + os.path.join(self.buildfolder, exe.target_name))
+                sign(os.path.join(self.buildfolder, exe.target_name))
             print("Signing SNI")
-            os.system(signtool + os.path.join(self.buildfolder, "SNI", "SNI.exe"))
+            sign(os.path.join(self.buildfolder, "SNI", "SNI.exe"))
             print("Signing OoT Utils")
             for exe_path in (("Compress", "Compress.exe"), ("Decompress", "Decompress.exe")):
-                os.system(signtool + os.path.join(self.buildfolder, "lib", "worlds", "oot", "data", *exe_path))
+                sign(os.path.join(self.buildfolder, "lib", "worlds", "oot", "data", *exe_path))
 
         remove_sprites_from_folder(self.buildfolder / "data" / "sprites" / "alttpr")
 
