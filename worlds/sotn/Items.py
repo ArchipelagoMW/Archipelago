@@ -1,7 +1,5 @@
-from typing import Tuple
 from BaseClasses import ItemClassification, Item
 
-base_item_id = 127000000
 tile_id_offset = 0X80
 
 
@@ -2026,3 +2024,10 @@ relic_id_to_name = {v["id"]: k for k, v in items.items() if v["type"] == "RELIC"
 relic_table = {k: v for k, v in items.items() if v["type"] == "RELIC"}
 progression_items = {k: v for k, v in items.items() if v["classification"] == ItemClassification.progression}
 id_to_item = {v["id"]: v for k, v in items.items()}
+item_id_to_name = {value["id"]: key for key, value in items.items()}
+weapon1 = {k: v for k, v in items.items() if v["type"] == "WEAPON1"}
+shield = {k: v for k, v in items.items() if v["type"] == "SHIELD"}
+armor = {k: v for k, v in items.items() if v["type"] == "ARMOR"}
+helmet = {k: v for k, v in items.items() if v["type"] == "HELMET"}
+cloak = {k: v for k, v in items.items() if v["type"] == "CLOAK"}
+accessory = {k: v for k, v in items.items() if v["type"] == "ACCESSORY"}
