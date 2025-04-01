@@ -13,10 +13,10 @@ from .er_data import portal_mapping, RegionInfo, tunic_er_regions
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
                       LaurelsLocation, LogicRules, LaurelsZips, IceGrappling, LadderStorage, check_options,
                       get_hexagons_in_pool, HexagonQuestAbilityUnlockType)
+from .breakables import breakable_location_name_to_id, breakable_location_groups, breakable_location_table
 from .combat_logic import area_data, CombatState
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection, OptionError
-from decimal import Decimal, ROUND_HALF_UP
 from settings import Group, Bool
 
 
@@ -81,10 +81,13 @@ class TunicWorld(World):
     location_name_groups = location_name_groups
     for group_name, members in grass_location_name_groups.items():
         location_name_groups.setdefault(group_name, set()).update(members)
+    for group_name, members in breakable_location_groups.items():
+        location_name_groups.setdefault(group_name, set()).update(members)
 
     item_name_to_id = item_name_to_id
     location_name_to_id = standard_location_name_to_id.copy()
     location_name_to_id.update(grass_location_name_to_id)
+    location_name_to_id.update(breakable_location_name_to_id)
 
     player_location_table: Dict[str, int]
     ability_unlocks: Dict[str, int]
@@ -110,6 +113,13 @@ class TunicWorld(World):
     ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
 
     def generate_early(self) -> None:
+        try:
+            int(self.settings.disable_local_spoiler)
+        except AttributeError:
+            raise Exception("You have a TUNIC APWorld in your lib/worlds folder and custom_worlds folder.\n"
+                            "This would cause an error at the end of generation.\n"
+                            "Please remove one of them, most likely the one in lib/worlds.")
+
         check_options(self)
 
         if self.options.logic_rules >= LogicRules.option_no_major_glitches:
@@ -151,6 +161,7 @@ class TunicWorld(World):
                 self.options.entrance_rando.value = self.passthrough["entrance_rando"]
                 self.options.shuffle_ladders.value = self.passthrough["shuffle_ladders"]
                 self.options.grass_randomizer.value = self.passthrough.get("grass_randomizer", 0)
+                self.options.breakable_shuffle.value = self.passthrough.get("breakable_shuffle", 0)
                 self.options.fixed_shop.value = self.options.fixed_shop.option_false
                 self.options.laurels_location.value = self.options.laurels_location.option_anywhere
                 self.options.combat_logic.value = self.passthrough["combat_logic"]
@@ -163,7 +174,12 @@ class TunicWorld(World):
 
         if self.options.local_fill == -1:
             if self.options.grass_randomizer:
-                self.options.local_fill.value = 95
+                if self.options.breakable_shuffle:
+                    self.options.local_fill.value = 96
+                else:
+                    self.options.local_fill.value = 95
+            elif self.options.breakable_shuffle:
+                self.options.local_fill.value = 40
             else:
                 self.options.local_fill.value = 0
 
@@ -174,6 +190,13 @@ class TunicWorld(World):
                                   f"in their host.yaml settings")
 
             self.player_location_table.update(grass_location_name_to_id)
+
+        if self.options.breakable_shuffle:
+            if self.options.entrance_rando:
+                self.player_location_table.update(breakable_location_name_to_id)
+            else:
+                self.player_location_table.update({name: num for name, num in breakable_location_name_to_id.items()
+                                                   if not name.startswith("Purgatory")})
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:
@@ -251,7 +274,8 @@ class TunicWorld(World):
         itemclass: ItemClassification = (classification
                                          or (item_data.combat_ic if self.options.combat_logic else None)
                                          or (ItemClassification.progression | ItemClassification.useful
-                                             if name == "Glass Cannon" and self.options.grass_randomizer
+                                             if name == "Glass Cannon"
+                                             and (self.options.grass_randomizer or self.options.breakable_shuffle)
                                              and not self.options.start_with_sword else None)
                                          or (ItemClassification.progression | ItemClassification.useful
                                              if name == "Shield" and self.options.ladder_storage
@@ -272,6 +296,13 @@ class TunicWorld(World):
         for money_fool in fool_tiers[self.options.fool_traps]:
             items_to_create["Fool Trap"] += items_to_create[money_fool]
             items_to_create[money_fool] = 0
+
+        # creating these after the fool traps are made mostly so we don't have to mess with it
+        if self.options.breakable_shuffle:
+            for loc_data in breakable_location_table.values():
+                if not self.options.entrance_rando and loc_data.er_region == "Purgatory":
+                    continue
+                items_to_create[f"Money x{self.random.randint(1, 5)}"] += 1
 
         if self.options.start_with_sword:
             self.multiworld.push_precollected(self.create_item("Sword"))
@@ -465,9 +496,9 @@ class TunicWorld(World):
             self.ability_unlocks["Pages 42-43 (Holy Cross)"] = self.passthrough["Hexagon Quest Holy Cross"]
             self.ability_unlocks["Pages 52-53 (Icebolt)"] = self.passthrough["Hexagon Quest Icebolt"]
 
-        # Ladders and Combat Logic uses ER rules with vanilla connections for easier maintenance
+        # Most non-standard options use ER regions
         if (self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic
-                or self.options.grass_randomizer):
+                or self.options.grass_randomizer or self.options.breakable_shuffle):
             portal_pairs = create_er_regions(self)
             if self.options.entrance_rando:
                 # these get interpreted by the game to tell it which entrances to connect
@@ -495,9 +526,9 @@ class TunicWorld(World):
             victory_region.locations.append(victory_location)
 
     def set_rules(self) -> None:
-        # same reason as in create_regions, could probably be put into create_regions
+        # same reason as in create_regions
         if (self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic
-                or self.options.grass_randomizer):
+                or self.options.grass_randomizer or self.options.breakable_shuffle):
             set_er_location_rules(self)
         else:
             set_region_rules(self)
@@ -602,6 +633,7 @@ class TunicWorld(World):
             "Hexagon Quest Goal": self.options.hexagon_goal.value,
             "Entrance Rando": self.tunic_portal_pairs,
             "disable_local_spoiler": int(self.settings.disable_local_spoiler or self.multiworld.is_race),
+            "breakable_shuffle": self.options.breakable_shuffle.value,
         }
 
         # this would be in a stage if there was an appropriate stage for it
