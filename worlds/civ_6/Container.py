@@ -182,7 +182,7 @@ def generate_goody_hut_sql(world: 'CivVIWorld') -> str:
     """
 
     if world.options.shuffle_goody_hut_rewards:
-        return f"""
+        return """
         UPDATE GoodyHutSubTypes SET Description = NULL WHERE GoodyHut NOT IN ('METEOR_GOODIES', 'GOODYHUT_SAILOR_WONDROUS', 'DUMMY_GOODY_BUILDIER') AND Weight > 0;
 
 INSERT INTO Modifiers
@@ -217,7 +217,7 @@ def generate_update_boosts_sql(world: 'CivVIWorld') -> str:
     """
 
     if world.options.boostsanity:
-        return f"""
+        return """
 UPDATE Boosts
 SET TechnologyType = 'BOOST_' || TechnologyType
 WHERE TechnologyType IS NOT NULL;
