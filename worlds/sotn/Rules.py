@@ -1,7 +1,7 @@
 from worlds.generic.Rules import forbid_item, set_rule, add_rule
 from BaseClasses import MultiWorld, CollectionState
 
-from .Locations import ABREV_TO_LOCATION
+from .Locations import ABREV_TO_LOCATION, ENEMY_LOCATIONS
 from .Items import progression_items
 from .Options import SOTNOptions
 from .data.Constants import EXTENSIONS, RELIC_NAMES
@@ -50,12 +50,61 @@ def sotn_has_spike(state: CollectionState, player: int) -> bool:
 
 
 def set_rules(world: MultiWorld, player: int, options: SOTNOptions) -> None:
-    open_are = options.open_no4.value
-    open_no4 = options.open_are.value
-    extension = options.extension.value
+    open_are = options.open_are.value
+    open_no4 = options.open_no4.value
+    extension = options.item_pool.value
+    boss_locations = options.boss_locations.value
+    enemysanity = options.enemysanity.value
+    fs_enemysanity = options.enemy_scroll.value
 
     location = world.get_location("Reverse Center Cube - Kill Dracula", player)
     set_rule(location, lambda state: sotn_has_dracula(state, player))
+
+    # Forbid relics on boss drop
+    if boss_locations:
+        for loc in ["NZ0_Life Vessel_boss", "NO1_Life Vessel_boss", "LIB_Life Vessel_boss", "NZ1_Life Vessel_boss",
+                    "DAI_Life Vessel_boss", "ARE_Life Vessel_boss", "NO2_Life Vessel_boss", "NO4_Life Vessel_boss",
+                    "CHI_Life Vessel_boss", "CAT_Life Vessel_boss", "RNO4_Life Vessel_boss", "RCAT_Life Vessel_boss",
+                    "RNZ0_Life Vessel_boss"]:
+            location = world.get_location(ABREV_TO_LOCATION[loc], player)
+            for r in RELIC_NAMES:
+                forbid_item(location, r, player)
+
+    # Set rules for bosses not region bound
+    if boss_locations:
+        # Lesser Demon
+        boss = world.get_location(ABREV_TO_LOCATION["LIB_Life Vessel_boss"], player)
+        set_rule(boss, lambda state: sotn_has_any(state, player))
+        # Olrox
+        boss = world.get_location(ABREV_TO_LOCATION["NO2_Life Vessel_boss"], player)
+        add_rule(boss, lambda state: sotn_has_transformation(state, player))
+
+    # Set rules for enemy not region bound
+    if enemysanity:
+        # Venus weed
+        enemy = world.get_location(ABREV_TO_LOCATION["CHI_Venus weed_enemy"], player)
+        set_rule(enemy, lambda state: state.has("Demon card", player))
+        # Flea armor
+        enemy = world.get_location(ABREV_TO_LOCATION["LIB_Flea armor_enemy"], player)
+        set_rule(enemy, lambda state: sotn_has_any(state, player))
+        # Lesser demon
+        enemy = world.get_location(ABREV_TO_LOCATION["LIB_Lesser demon_enemy"], player)
+        set_rule(enemy, lambda state: sotn_has_any(state, player))
+        # Olrox
+        enemy = world.get_location(ABREV_TO_LOCATION["NO2_Olrox_enemy"], player)
+        set_rule(enemy, lambda state: sotn_has_flying(state, player) and sotn_has_transformation(state, player))
+        # Gurkha
+        enemy = world.get_location(ABREV_TO_LOCATION["NO3_Gurkha_enemy"], player)
+        set_rule(enemy, lambda state: state.has("Gravity boots", player) or sotn_has_flying(state, player))
+        # Fishhead
+        enemy = world.get_location(ABREV_TO_LOCATION["NO4_Fishhead_enemy"], player)
+        add_rule(enemy, lambda state: state.has("Holy symbol", player))
+        enemy = world.get_location(ABREV_TO_LOCATION["NO4_Killer fish_enemy"], player)
+        add_rule(enemy, lambda state: state.has("Holy symbol", player))
+        if fs_enemysanity:
+            for loc in ENEMY_LOCATIONS.keys():
+                enemy = world.get_location(loc, player)
+                add_rule(enemy, lambda state: state.has("Spirit orb", player))
 
     # Player might break TOP_Turkey_1 with spell and miss the loot, forbid progression items
     if ABREV_TO_LOCATION["TOP_Turkey_1"] in EXTENSIONS[extension]:
@@ -94,7 +143,7 @@ def set_rules(world: MultiWorld, player: int, options: SOTNOptions) -> None:
     location = world.get_location(ABREV_TO_LOCATION["Soul of bat"], player)
     set_rule(location, lambda state: state.has("Form of mist", player) and sotn_has_any(state, player))
     location = world.get_location(ABREV_TO_LOCATION["Echo of bat"], player)
-    add_rule(location, lambda state: sotn_has_transformation(state, player))
+    add_rule(location, lambda state: sotn_has_flying(state, player) and sotn_has_transformation(state, player))
     location = world.get_location(ABREV_TO_LOCATION["Power of wolf"], player)
     set_rule(location, lambda state: sotn_has_flying(state, player))
     location = world.get_location(ABREV_TO_LOCATION["Skill of wolf"], player)
