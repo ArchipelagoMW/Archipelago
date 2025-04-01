@@ -1,3 +1,11 @@
+# 2.4.1
+
+### Fixes
+
+- Fixed handling of shuffle option for badges/HMs in the case that the player sets those items to nonlocal or uses
+plando to put an item in one of those locations, or in the case that fill gets itself stuck on these items and has to
+retry.
+
 # 2.4.0
 
 ### Features
@@ -14,9 +22,6 @@ _not_ used for logical access (the seed will never require you to catch somethin
 
 - Now excludes the location "Navel Rock Top - Hidden Item Sacred Ash" if your goal is Champion and you didn't randomize
 event tickets.
-- Fixed handling of shuffle option for badges/HMs in the case that the player sets those items to nonlocal or uses
-plando to put an item in one of those locations, or in the case that fill gets itself stuck on these items and has to
-retry.
 
 # 2.3.0
 
