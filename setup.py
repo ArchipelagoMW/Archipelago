@@ -2,6 +2,7 @@ import base64
 import datetime
 import os
 import platform
+import shlex
 import shutil
 import sys
 import sysconfig
@@ -558,7 +559,11 @@ $APPDIR/$exe "$@"
         self.write_desktop()
         self.write_launcher(self.app_exec)
         print(f'{self.app_dir} -> {self.dist_file}')
-        subprocess.call(f'ARCH={build_arch} ./appimagetool -n "{self.app_dir}" "{self.dist_file}"', shell=True)
+        subprocess.call(
+            shlex.join(["./appimagetool", "-n", str(self.app_dir), str(self.dist_file)]),
+            env=dict(os.environ, ARCH=build_arch),
+            shell=True,  # noqa: S602
+        )
 
 
 def find_libs(*args: str) -> Sequence[Tuple[str, str]]:
