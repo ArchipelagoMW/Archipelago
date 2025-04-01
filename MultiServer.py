@@ -47,7 +47,7 @@ from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, Networ
 from BaseClasses import ItemClassification
 
 min_client_version = Version(0, 1, 6)
-colorama.init()
+colorama.just_fix_windows_console()
 
 
 def remove_from_list(container, value):
@@ -783,7 +783,7 @@ class Context:
 
     def get_hint(self, team: int, finding_player: int, seeked_location: int) -> typing.Optional[Hint]:
         for hint in self.hints[team, finding_player]:
-            if hint.location == seeked_location:
+            if hint.location == seeked_location and hint.finding_player == finding_player:
                 return hint
         return None
     
@@ -1135,7 +1135,7 @@ def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, st
     seeked_item_id = item if isinstance(item, int) else ctx.item_names_for_game(ctx.games[slot])[item]
     for finding_player, location_id, item_id, receiving_player, item_flags \
             in ctx.locations.find_item(slots, seeked_item_id):
-        prev_hint = ctx.get_hint(team, slot, location_id)
+        prev_hint = ctx.get_hint(team, finding_player, location_id)
         if prev_hint:
             hints.append(prev_hint)
         else:
