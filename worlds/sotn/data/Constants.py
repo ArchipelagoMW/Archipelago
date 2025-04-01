@@ -1,5 +1,4 @@
-BASE_LOCATION_ID = 127000000
-CURRENT_VERSION = 8
+CURRENT_VERSION = 81
 
 # This is applied to helmet, armor, cloak, and other ids that are sold in
 # the librarian's shop menu or are in an equipment slot
@@ -30,14 +29,14 @@ slots = {'r':  0x097c00,
          'o2': 0x097c18}
 EXTENSIONS = {
     # RELICS+PROG
-    1: RELIC_NAMES + ['CAT_Spike breaker_16', 'CEN_Holy glasses_72803176', 'NO4_Gold ring_10', 'DAI_Silver ring_2',
+    0: RELIC_NAMES + ['CAT_Spike breaker_16', 'CEN_Holy glasses_72803176', 'NO4_Gold ring_10', 'DAI_Silver ring_2',
                       'RARE_Life Vessel_8'],
     # GUARDED
-    2: RELIC_NAMES + ['CAT_Spike breaker_16', 'CEN_Holy glasses_72803176', 'NO4_Gold ring_10', 'DAI_Silver ring_2',
+    1: RELIC_NAMES + ['CAT_Spike breaker_16', 'CEN_Holy glasses_72803176', 'NO4_Gold ring_10', 'DAI_Silver ring_2',
                       'NO4_Crystal cloak_2', 'CAT_Mormegil_3', 'RNO4_Dark blade_23', 'RNZ0_Ring of arcana_8',
                       'RARE_Life Vessel_8'],
     # EQUIPMENT
-    3: RELIC_NAMES + ['CAT_Spike breaker_16', 'CEN_Holy glasses_72803176', 'NO4_Gold ring_10', 'DAI_Silver ring_2',
+    2: RELIC_NAMES + ['CAT_Spike breaker_16', 'CEN_Holy glasses_72803176', 'NO4_Gold ring_10', 'DAI_Silver ring_2',
                       'NO4_Crystal cloak_2', 'CAT_Mormegil_3', 'RNO4_Dark blade_23', 'RNZ0_Ring of arcana_8',
                       'RARE_Life Vessel_8', 'NP3_Jewel sword_9', 'NZ0_Basilard_9', 'NZ0_Sunglasses_6',
                       'NZ0_Cloth cape_2', 'DAI_Mystic pendant_4', 'DAI_Ankh of life_0', 'DAI_Morningstar_1',
@@ -55,7 +54,7 @@ EXTENSIONS = {
                       'RNO4_Alucard shield_0', 'RCHI_Alucard sword_2', 'RCAT_Necklace of j_13', 'RCAT_Diamond_14',
                       'RNO2_Opal_0', 'RNO2_Alucard mail_7', 'RARE_Gram_3', 'RARE_Fury plate_0'],
     # FULL
-    0: ['ARE_Heart Vessel_0', 'ARE_Shield rod_1', 'ARE_Blood cloak_3', 'ARE_Knight shield_4', 'ARE_Library card_5',
+    3: ['ARE_Heart Vessel_0', 'ARE_Shield rod_1', 'ARE_Blood cloak_3', 'ARE_Knight shield_4', 'ARE_Library card_5',
         'ARE_Green tea_6', 'ARE_Holy sword_7', 'Form of mist', 'CAT_Cat-eye circl._0', 'CAT_Icebrand_1',
         'CAT_Walk armor_2', 'CAT_Mormegil_3', 'CAT_Library card_4', 'CAT_Heart Vessel_6', 'CAT_Ballroom mask_7',
         'CAT_Bloodstone_8', 'CAT_Life Vessel_9', 'CAT_Heart Vessel_10', 'CAT_Cross shuriken_11',
