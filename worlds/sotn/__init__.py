@@ -6,14 +6,13 @@ from worlds.AutoWorld import WebWorld, World
 from BaseClasses import Tutorial, MultiWorld, ItemClassification, Item
 from Options import AssembleOptions
 
-from .Items import SotnItem, items, relic_table
+from .Items import SotnItem, items, relic_table, item_id_to_name
 from .Locations import locations, SotnLocation
 from .Regions import create_regions
 from .Rules import set_rules
 from .Options import SOTNOptions, sotn_option_groups
 from .Rom import SotnProcedurePatch, write_tokens
 from .client import SotNClient
-from .data.Constants import BASE_LOCATION_ID
 #from .test_client import SotNTestClient
 
 
@@ -71,8 +70,7 @@ class SotnWorld(World):
     extra_add = ["Duplicator", "Crissaegrim", "Ring of varda", "Mablung sword", "Masamune", "Marsil", "Yasutsuna"]
 
     item_name_to_id: ClassVar[Dict[str, int]] = {name: data["id"] for name, data in items.items()}
-    location_name_to_id: ClassVar[Dict[str, int]] = \
-        {name: data["ap_id"] + BASE_LOCATION_ID for name, data in locations.items()}
+    location_name_to_id: ClassVar[Dict[str, int]] = {name: data["ap_id"] for name, data in locations.items()}
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
@@ -117,13 +115,16 @@ class SotnWorld(World):
         for loc in active_locations:
             if loc.name == "Reverse Center Cube - Kill Dracula":
                 continue
+            if "Enemysanity" in loc.name:
+                continue
+
             vanilla_item = locations[loc.name]["vanilla_item"]
             vanilla_list.append(vanilla_item)
 
         for added in added_list:
             vanilla_list.remove(added)
 
-        if self.options.extra_pool.value:
+        if self.options.powerful_items.value:
             while len(vanilla_list) and len(self.extra_add):
                 vanilla_list.pop(self.random.randrange(len(vanilla_list)))
                 vanilla_list.append(self.extra_add.pop(self.random.randrange(len(self.extra_add))))
@@ -131,6 +132,49 @@ class SotnWorld(World):
         for item in vanilla_list:
             itempool += [self.create_item(item)]
             added_items += 1
+
+        if self.options.enemysanity.value:
+            # Enemysanity adds 141 locations.
+            # TODO: Add an option to customize extra locations
+            extra_vessels = 0
+            extra_equips = 0
+            if self.options.difficult.value == 0:
+                extra_vessels = 50
+                extra_equips = 50
+                itempool += [self.create_item("Spike breaker")]
+                itempool += [self.create_item("Holy glasses")]
+                itempool += [self.create_item("Gold ring")]
+                itempool += [self.create_item("Silver ring")]
+                added_items += 4
+
+                for r in relic_table.keys():
+                    itempool += [self.create_item(r)]
+                    added_items += 1
+            elif self.options.difficult.value == 1:
+                extra_equips = 35
+                extra_vessels = 35
+                itempool += [self.create_item("Spike breaker")]
+                itempool += [self.create_item("Holy glasses")]
+                itempool += [self.create_item("Gold ring")]
+                itempool += [self.create_item("Silver ring")]
+                added_items += 4
+            elif self.options.difficult.value == 2:
+                extra_equips = 15
+                extra_vessels = 15
+
+            added_equip = 0
+            while added_items < total_location and added_equip < extra_equips:
+                rng_item = self.random.choice([i for i in range(1, 259) if i not in [126, 169, 195, 217, 226]])
+                itempool += [self.create_item(item_id_to_name[rng_item])]
+                added_items += 1
+                added_equip += 1
+
+            added_vessel = 0
+            while added_items < total_location and added_vessel < extra_vessels:
+                rng_vessel = self.random.choice([412, 423])
+                itempool += [self.create_item(item_id_to_name[rng_vessel])]
+                added_items += 1
+                added_vessel += 1
 
         # Still have space? Add junk items
         itempool += [self.create_random_junk() for _ in range(total_location - added_items)]
