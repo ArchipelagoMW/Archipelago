@@ -1,11 +1,12 @@
-from typing import List
-from .Items import item_table, ShiversItem
-from .Rules import set_rules
-from BaseClasses import Item, Tutorial, Region, Location
+from typing import Dict, List, Optional
+
+from BaseClasses import Item, ItemClassification, Location, Region, Tutorial
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 from . import Constants, Rules
-from .Options import ShiversOptions
+from .Items import ItemType, SHIVERS_ITEM_ID_OFFSET, ShiversItem, item_table
+from .Options import ShiversOptions, shivers_option_groups
+from .Rules import set_rules
 
 
 class ShiversWeb(WebWorld):
@@ -15,12 +16,15 @@ class ShiversWeb(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["GodlFire", "Mathx2"]
+        ["GodlFire", "Cynbel_Terreus"]
     )]
+    option_groups = shivers_option_groups
+
 
 class ShiversWorld(World):
     """
-    Shivers is a horror themed point and click adventure. Explore the mysteries of Windlenot's Museum of the Strange and Unusual.
+    Shivers is a horror themed point and click adventure.
+    Explore the mysteries of Windlenot's Museum of the Strange and Unusual.
     """
 
     game = "Shivers"
@@ -28,24 +32,41 @@ class ShiversWorld(World):
     web = ShiversWeb()
     options_dataclass = ShiversOptions
     options: ShiversOptions
-
+    set_rules = set_rules
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = Constants.location_name_to_id
-    shivers_item_id_offset = 27000
+    storage_placements = []
     pot_completed_list: List[int]
-
 
     def generate_early(self):
         self.pot_completed_list = []
+
+        # Pot piece shuffle location:
+        if self.options.location_pot_pieces == "own_world":
+            self.options.local_items.value |= {name for name, data in item_table.items() if
+                                               data.type in [ItemType.POT, ItemType.POT_COMPLETE]}
+        elif self.options.location_pot_pieces == "different_world":
+            self.options.non_local_items.value |= {name for name, data in item_table.items() if
+                                                   data.type in [ItemType.POT, ItemType.POT_COMPLETE]}
+
+        # Ixupi captures priority locations:
+        if self.options.ixupi_captures_priority:
+            self.options.priority_locations.value |= (
+                {name for name in self.location_names if name.startswith('Ixupi Captured')}
+            )
 
     def create_item(self, name: str) -> Item:
         data = item_table[name]
         return ShiversItem(name, data.classification, data.code, self.player)
 
-    def create_event(self, region_name: str, event_name: str) -> None:
-        region = self.multiworld.get_region(region_name, self.player)
-        loc = ShiversLocation(self.player, event_name, None, region)
-        loc.place_locked_item(self.create_event_item(event_name))
+    def create_event_location(self, region_name: str, location_name: str, event_name: Optional[str] = None) -> None:
+        region = self.get_region(region_name)
+        loc = ShiversLocation(self.player, location_name, None, region)
+        if event_name is not None:
+            loc.place_locked_item(ShiversItem(event_name, ItemClassification.progression, None, self.player))
+        else:
+            loc.place_locked_item(ShiversItem(location_name, ItemClassification.progression, None, self.player))
+        loc.show_in_spoiler = False
         region.locations.append(loc)
 
     def create_regions(self) -> None:
@@ -56,162 +77,185 @@ class ShiversWorld(World):
             for exit_name in exits:
                 r.create_exit(exit_name)
 
-
         # Bind mandatory connections
         for entr_name, region_name in Constants.region_info["mandatory_connections"]:
-            e = self.multiworld.get_entrance(entr_name, self.player)
-            r = self.multiworld.get_region(region_name, self.player)
+            e = self.get_entrance(entr_name)
+            r = self.get_region(region_name)
             e.connect(r)
         
         # Locations
         # Build exclusion list
-        self.removed_locations = set()
+        removed_locations = set()
         if not self.options.include_information_plaques:
-            self.removed_locations.update(Constants.exclusion_info["plaques"])
+            removed_locations.update(Constants.exclusion_info["plaques"])
         if not self.options.elevators_stay_solved:
-            self.removed_locations.update(Constants.exclusion_info["elevators"])
+            removed_locations.update(Constants.exclusion_info["elevators"])
         if not self.options.early_lightning:
-            self.removed_locations.update(Constants.exclusion_info["lightning"])
+            removed_locations.update(Constants.exclusion_info["lightning"])
 
         # Add locations
         for region_name, locations in Constants.location_info["locations_by_region"].items():
-            region = self.multiworld.get_region(region_name, self.player)
+            region = self.get_region(region_name)
             for loc_name in locations:
-                if loc_name not in self.removed_locations:
+                if loc_name not in removed_locations:
                     loc = ShiversLocation(self.player, loc_name, self.location_name_to_id.get(loc_name, None), region)
                     region.locations.append(loc)
 
+        self.create_event_location("Prehistoric", "Set Skull Dial: Prehistoric")
+        self.create_event_location("Tar River", "Set Skull Dial: Tar River")
+        self.create_event_location("Egypt", "Set Skull Dial: Egypt")
+        self.create_event_location("Burial", "Set Skull Dial: Burial")
+        self.create_event_location("Gods Room", "Set Skull Dial: Gods Room")
+        self.create_event_location("Werewolf", "Set Skull Dial: Werewolf")
+        self.create_event_location("Projector Room", "Viewed Theater Movie")
+        self.create_event_location("Clock Chains", "Clock Chains", "Set Time")
+        self.create_event_location("Clock Tower", "Jukebox", "Set Song")
+        self.create_event_location("Fortune Teller", "Viewed Fortune")
+        self.create_event_location("Orrery", "Orrery", "Aligned Planets")
+        self.create_event_location("Norse Stone", "Norse Stone", "Viewed Norse Stone")
+        self.create_event_location("Beth's Body", "Beth's Body", "Viewed Page 17")
+        self.create_event_location("Windlenot's Body", "Windlenot's Body", "Viewed Egyptian Hieroglyphics Explained")
+        self.create_event_location("Guillotine", "Guillotine", "Lost Your Head")
+
     def create_items(self) -> None:
-        #Add items to item pool
-        itempool = []
+        # Add items to item pool
+        item_pool = []
         for name, data in item_table.items():
-            if data.type in {"key", "ability", "filler2"}:
-                itempool.append(self.create_item(name))
+            if data.type in [ItemType.KEY, ItemType.ABILITY, ItemType.IXUPI_AVAILABILITY]:
+                item_pool.append(self.create_item(name))
 
         # Pot pieces/Completed/Mixed:
-        for i in range(10):
-            if self.options.full_pots == "pieces":
-                itempool.append(self.create_item(self.item_id_to_name[self.shivers_item_id_offset + i]))
-                itempool.append(self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 10 + i]))
-            elif self.options.full_pots == "complete":
-                itempool.append(self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 20 + i]))
-            else:
-                # Roll for if pieces or a complete pot will be used.
-                # Pot Pieces
+        if self.options.full_pots == "pieces":
+            item_pool += [self.create_item(name) for name, data in item_table.items() if data.type == ItemType.POT]
+        elif self.options.full_pots == "complete":
+            item_pool += [self.create_item(name) for name, data in item_table.items() if
+                          data.type == ItemType.POT_COMPLETE]
+        else:
+            # Roll for if pieces or a complete pot will be used.
+            # Pot Pieces
+            pieces = [self.create_item(name) for name, data in item_table.items() if data.type == ItemType.POT]
+            complete = [self.create_item(name) for name, data in item_table.items() if
+                        data.type == ItemType.POT_COMPLETE]
+            for i in range(10):
                 if self.random.randint(0, 1) == 0:
                     self.pot_completed_list.append(0)
-                    itempool.append(self.create_item(self.item_id_to_name[self.shivers_item_id_offset + i]))
-                    itempool.append(self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 10 + i]))
+                    item_pool.append(pieces[i])
+                    item_pool.append(pieces[i + 10])
                 # Completed Pot
                 else:
                     self.pot_completed_list.append(1)
-                    itempool.append(self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 20 + i]))
+                    item_pool.append(complete[i])
 
-        #Add Filler
-        itempool += [self.create_item("Easier Lyre") for i in range(9)]
+        # Add Easier Lyre
+        item_pool += [self.create_item("Easier Lyre") for _ in range(9)]
 
-        #Extra filler is random between Heals and Easier Lyre. Heals weighted 95%.
-        filler_needed = len(self.multiworld.get_unfilled_locations(self.player)) - 24 - len(itempool)
-        itempool += [self.random.choices([self.create_item("Heal"), self.create_item("Easier Lyre")], weights=[95, 5])[0] for i in range(filler_needed)]
+        # Place library escape items. Choose a location to place the escape item
+        library_region = self.get_region("Library")
+        library_location = self.random.choice(
+            [loc for loc in library_region.locations if not loc.name.startswith("Storage: ")]
+        )
 
-        #Place library escape items. Choose a location to place the escape item
-        library_region = self.multiworld.get_region("Library", self.player)
-        librarylocation = self.random.choice([loc for loc in library_region.locations if not loc.name.startswith("Accessible:")])
-
-        #Roll for which escape items will be placed in the Library
+        # Roll for which escape items will be placed in the Library
         library_random = self.random.randint(1, 3)
-        if library_random == 1: 
-            librarylocation.place_locked_item(self.create_item("Crawling"))
+        if library_random == 1:
+            library_location.place_locked_item(self.create_item("Crawling"))
+            item_pool = [item for item in item_pool if item.name != "Crawling"]
+        elif library_random == 2:
+            library_location.place_locked_item(self.create_item("Key for Library"))
+            item_pool = [item for item in item_pool if item.name != "Key for Library"]
+        elif library_random == 3:
+            library_location.place_locked_item(self.create_item("Key for Three Floor Elevator"))
+            library_location_2 = self.random.choice(
+                [loc for loc in library_region.locations if
+                 not loc.name.startswith("Storage: ") and loc != library_location]
+            )
+            library_location_2.place_locked_item(self.create_item("Key for Egypt Room"))
+            item_pool = [item for item in item_pool if
+                         item.name not in ["Key for Three Floor Elevator", "Key for Egypt Room"]]
 
-            itempool = [item for item in itempool if item.name != "Crawling"]
-
-        elif library_random == 2: 
-            librarylocation.place_locked_item(self.create_item("Key for Library Room"))
-
-            itempool = [item for item in itempool if item.name != "Key for Library Room"]
-        elif library_random == 3: 
-            librarylocation.place_locked_item(self.create_item("Key for Three Floor Elevator"))
-            
-            librarylocationkeytwo = self.random.choice([loc for loc in library_region.locations if not loc.name.startswith("Accessible:") and loc != librarylocation])
-            librarylocationkeytwo.place_locked_item(self.create_item("Key for Egypt Room"))
-
-            itempool = [item for item in itempool if item.name not in ["Key for Three Floor Elevator", "Key for Egypt Room"]]
-
-        #If front door option is on, determine which set of keys will be used for lobby access and add front door key to item pool
-        lobby_access_keys = 1
+        # If front door option is on, determine which set of keys will
+        # be used for lobby access and add front door key to item pool
+        lobby_access_keys = 0
         if self.options.front_door_usable:
-            lobby_access_keys = self.random.randint(1, 2)
-            itempool += [self.create_item("Key for Front Door")]
+            lobby_access_keys = self.random.randint(0, 1)
+            item_pool.append(self.create_item("Key for Front Door"))
         else:
-            itempool += [self.create_item("Heal")]
+            item_pool.append(self.create_item("Heal"))
 
-        self.multiworld.itempool += itempool
+        def set_lobby_access_keys(items: Dict[str, int]):
+            if lobby_access_keys == 0:
+                items["Key for Underground Lake"] = 1
+                items["Key for Office Elevator"] = 1
+                items["Key for Office"] = 1
+            else:
+                items["Key for Front Door"] = 1
 
-        #Lobby acess:
+        # Lobby access:
         if self.options.lobby_access == "early":
-            if lobby_access_keys == 1:
-                self.multiworld.early_items[self.player]["Key for Underground Lake Room"] = 1
-                self.multiworld.early_items[self.player]["Key for Office Elevator"] = 1
-                self.multiworld.early_items[self.player]["Key for Office"] = 1
-            elif lobby_access_keys == 2:
-                self.multiworld.early_items[self.player]["Key for Front Door"] = 1
-        if self.options.lobby_access == "local":
-            if lobby_access_keys == 1:
-                self.multiworld.local_early_items[self.player]["Key for Underground Lake Room"] = 1
-                self.multiworld.local_early_items[self.player]["Key for Office Elevator"] = 1
-                self.multiworld.local_early_items[self.player]["Key for Office"] = 1
-            elif lobby_access_keys == 2:
-                self.multiworld.local_early_items[self.player]["Key for Front Door"] = 1
+            set_lobby_access_keys(self.multiworld.early_items[self.player])
+        elif self.options.lobby_access == "local":
+            set_lobby_access_keys(self.multiworld.local_early_items[self.player])
 
-        #Pot piece shuffle location:
-        if self.options.location_pot_pieces == "own_world":
-            self.options.local_items.value |= {name for name, data in item_table.items() if data.type == "pot" or data.type == "pot_type2"}
-        if self.options.location_pot_pieces == "different_world":
-            self.options.non_local_items.value |= {name for name, data in item_table.items() if data.type == "pot" or data.type == "pot_type2"}
+        goal_item_code = SHIVERS_ITEM_ID_OFFSET + 100 + Constants.years_since_sep_30_1980
+        for name, data in item_table.items():
+            if data.type == ItemType.GOAL and data.code == goal_item_code:
+                goal = self.create_item(name)
+                self.get_location("Mystery Solved").place_locked_item(goal)
+
+        # Extra filler is random between Heals and Easier Lyre. Heals weighted 95%.
+        filler_needed = len(self.multiworld.get_unfilled_locations(self.player)) - len(item_pool) - 23
+        item_pool += map(self.create_item, self.random.choices(
+            ["Heal", "Easier Lyre"], weights=[95, 5], k=filler_needed
+        ))
+
+        self.multiworld.itempool += item_pool
 
     def pre_fill(self) -> None:
         # Prefills event storage locations with duplicate pots
-        storagelocs = []
-        storageitems = []
-        self.storage_placements = []
+        storage_locs = []
+        storage_items = []
 
         for locations in Constants.location_info["locations_by_region"].values():
             for loc_name in locations:
-                if loc_name.startswith("Accessible: "):
-                    storagelocs.append(self.multiworld.get_location(loc_name, self.player))
+                if loc_name.startswith("Storage: "):
+                    storage_locs.append(self.get_location(loc_name))
 
-        #Pot pieces/Completed/Mixed:
+        # Pot pieces/Completed/Mixed:
         if self.options.full_pots == "pieces":
-            storageitems += [self.create_item(name) for name, data in item_table.items() if data.type == 'potduplicate']
+            storage_items += [self.create_item(name) for name, data in item_table.items() if
+                              data.type == ItemType.POT_DUPLICATE]
         elif self.options.full_pots == "complete":
-            storageitems += [self.create_item(name) for name, data in item_table.items() if data.type == 'potduplicate_type2']
-            storageitems += [self.create_item("Empty") for i in range(10)]
+            storage_items += [self.create_item(name) for name, data in item_table.items() if
+                              data.type == ItemType.POT_COMPLETE_DUPLICATE]
+            storage_items += [self.create_item("Empty") for _ in range(10)]
         else:
+            pieces = [self.create_item(name) for name, data in item_table.items() if
+                      data.type == ItemType.POT_DUPLICATE]
+            complete = [self.create_item(name) for name, data in item_table.items() if
+                        data.type == ItemType.POT_COMPLETE_DUPLICATE]
             for i in range(10):
-                #Pieces
+                # Pieces
                 if self.pot_completed_list[i] == 0:
-                    storageitems += [self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 70 + i])]
-                    storageitems += [self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 80 + i])]
-                #Complete
+                    storage_items.append(pieces[i])
+                    storage_items.append(pieces[i + 10])
+                # Complete
                 else:
-                    storageitems += [self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 140 + i])]
-                    storageitems += [self.create_item("Empty")]
+                    storage_items.append(complete[i])
+                    storage_items.append(self.create_item("Empty"))
 
-        storageitems += [self.create_item("Empty") for i in range(3)]
+        storage_items += [self.create_item("Empty") for _ in range(3)]
 
-        state = self.multiworld.get_all_state(True)
+        state = self.multiworld.get_all_state(False)
 
-        self.random.shuffle(storagelocs)
-        self.random.shuffle(storageitems)
-        
-        fill_restrictive(self.multiworld, state, storagelocs.copy(), storageitems, True, True)
+        self.random.shuffle(storage_locs)
+        self.random.shuffle(storage_items)
 
-        self.storage_placements = {location.name: location.item.name for location in storagelocs}
+        fill_restrictive(self.multiworld, state, storage_locs.copy(), storage_items, True, True)
 
-    set_rules = set_rules
+        self.storage_placements = {location.name.replace("Storage: ", ""): location.item.name.replace(" DUPE", "") for
+                                   location in storage_locs}
 
     def fill_slot_data(self) -> dict:
-
         return {
             "StoragePlacements": self.storage_placements,
             "ExcludedLocations": list(self.options.exclude_locations.value),

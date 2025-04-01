@@ -18,13 +18,6 @@ def get_world_theme(game_name: str):
     return 'grass'
 
 
-@app.before_request
-def register_session():
-    session.permanent = True  # technically 31 days after the last visit
-    if not session.get("_id", None):
-        session["_id"] = uuid4()  # uniquely identify each session without needing a login
-
-
 @app.errorhandler(404)
 @app.errorhandler(jinja2.exceptions.TemplateNotFound)
 def page_not_found(err):

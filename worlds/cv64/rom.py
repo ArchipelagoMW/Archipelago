@@ -357,8 +357,12 @@ class CV64PatchExtensions(APPatchExtension):
 
         # Make received DeathLinks blow you to smithereens instead of kill you normally.
         if options["death_link"] == DeathLink.option_explosive:
-            rom_data.write_int32(0x27A70, 0x10000008)  # B [forward 0x08]
             rom_data.write_int32s(0xBFC0D0, patches.deathlink_nitro_edition)
+            rom_data.write_int32(0x27A70, 0x10000008)  # B [forward 0x08]
+            rom_data.write_int32(0x27AA0, 0x0C0FFA78)  # JAL	0x803FE9E0
+            rom_data.write_int32s(0xBFE9E0, patches.deathlink_nitro_state_checker)
+            # NOP the function call to subtract Nitro from the inventory after exploding, just in case.
+            rom_data.write_int32(0x32DBC, 0x00000000)
 
         # Set the DeathLink ROM flag if it's on at all.
         if options["death_link"] != DeathLink.option_off:
@@ -680,38 +684,37 @@ class CV64PatchExtensions(APPatchExtension):
 
         # Disable the 3HBs checking and setting flags when breaking them and enable their individual items checking and
         # setting flags instead.
-        if options["multi_hit_breakables"]:
-            rom_data.write_int32(0xE87F8, 0x00000000)  # NOP
-            rom_data.write_int16(0xE836C, 0x1000)
-            rom_data.write_int32(0xE8B40, 0x0C0FF3CD)  # JAL 0x803FCF34
-            rom_data.write_int32s(0xBFCF34, patches.three_hit_item_flags_setter)
-            # Villa foyer chandelier-specific functions (yeah, IDK why KCEK made different functions for this one)
-            rom_data.write_int32(0xE7D54, 0x00000000)  # NOP
-            rom_data.write_int16(0xE7908, 0x1000)
-            rom_data.write_byte(0xE7A5C, 0x10)
-            rom_data.write_int32(0xE7F08, 0x0C0FF3DF)  # JAL 0x803FCF7C
-            rom_data.write_int32s(0xBFCF7C, patches.chandelier_item_flags_setter)
+        rom_data.write_int32(0xE87F8, 0x00000000)  # NOP
+        rom_data.write_int16(0xE836C, 0x1000)
+        rom_data.write_int32(0xE8B40, 0x0C0FF3CD)  # JAL 0x803FCF34
+        rom_data.write_int32s(0xBFCF34, patches.three_hit_item_flags_setter)
+        # Villa foyer chandelier-specific functions (yeah, IDK why KCEK made different functions for this one)
+        rom_data.write_int32(0xE7D54, 0x00000000)  # NOP
+        rom_data.write_int16(0xE7908, 0x1000)
+        rom_data.write_byte(0xE7A5C, 0x10)
+        rom_data.write_int32(0xE7F08, 0x0C0FF3DF)  # JAL 0x803FCF7C
+        rom_data.write_int32s(0xBFCF7C, patches.chandelier_item_flags_setter)
 
-            # New flag values to put in each 3HB vanilla flag's spot
-            rom_data.write_int32(0x10C7C8, 0x8000FF48)  # FoS dirge maiden rock
-            rom_data.write_int32(0x10C7B0, 0x0200FF48)  # FoS S1 bridge rock
-            rom_data.write_int32(0x10C86C, 0x0010FF48)  # CW upper rampart save nub
-            rom_data.write_int32(0x10C878, 0x4000FF49)  # CW Dracula switch slab
-            rom_data.write_int32(0x10CAD8, 0x0100FF49)  # Tunnel twin arrows slab
-            rom_data.write_int32(0x10CAE4, 0x0004FF49)  # Tunnel lonesome bucket pit rock
-            rom_data.write_int32(0x10CB54, 0x4000FF4A)  # UW poison parkour ledge
-            rom_data.write_int32(0x10CB60, 0x0080FF4A)  # UW skeleton crusher ledge
-            rom_data.write_int32(0x10CBF0, 0x0008FF4A)  # CC Behemoth crate
-            rom_data.write_int32(0x10CC2C, 0x2000FF4B)  # CC elevator pedestal
-            rom_data.write_int32(0x10CC70, 0x0200FF4B)  # CC lizard locker slab
-            rom_data.write_int32(0x10CD88, 0x0010FF4B)  # ToE pre-midsavepoint platforms ledge
-            rom_data.write_int32(0x10CE6C, 0x4000FF4C)  # ToSci invisible bridge crate
-            rom_data.write_int32(0x10CF20, 0x0080FF4C)  # CT inverted battery slab
-            rom_data.write_int32(0x10CF2C, 0x0008FF4C)  # CT inverted door slab
-            rom_data.write_int32(0x10CF38, 0x8000FF4D)  # CT final room door slab
-            rom_data.write_int32(0x10CF44, 0x1000FF4D)  # CT Renon slab
-            rom_data.write_int32(0x10C908, 0x0008FF4D)  # Villa foyer chandelier
-            rom_data.write_byte(0x10CF37, 0x04)  # pointer for CT final room door slab item data
+        # New flag values to put in each 3HB vanilla flag's spot
+        rom_data.write_int32(0x10C7C8, 0x8000FF48)  # FoS dirge maiden rock
+        rom_data.write_int32(0x10C7B0, 0x0200FF48)  # FoS S1 bridge rock
+        rom_data.write_int32(0x10C86C, 0x0010FF48)  # CW upper rampart save nub
+        rom_data.write_int32(0x10C878, 0x4000FF49)  # CW Dracula switch slab
+        rom_data.write_int32(0x10CAD8, 0x0100FF49)  # Tunnel twin arrows slab
+        rom_data.write_int32(0x10CAE4, 0x0004FF49)  # Tunnel lonesome bucket pit rock
+        rom_data.write_int32(0x10CB54, 0x4000FF4A)  # UW poison parkour ledge
+        rom_data.write_int32(0x10CB60, 0x0080FF4A)  # UW skeleton crusher ledge
+        rom_data.write_int32(0x10CBF0, 0x0008FF4A)  # CC Behemoth crate
+        rom_data.write_int32(0x10CC2C, 0x2000FF4B)  # CC elevator pedestal
+        rom_data.write_int32(0x10CC70, 0x0200FF4B)  # CC lizard locker slab
+        rom_data.write_int32(0x10CD88, 0x0010FF4B)  # ToE pre-midsavepoint platforms ledge
+        rom_data.write_int32(0x10CE6C, 0x4000FF4C)  # ToSci invisible bridge crate
+        rom_data.write_int32(0x10CF20, 0x0080FF4C)  # CT inverted battery slab
+        rom_data.write_int32(0x10CF2C, 0x0008FF4C)  # CT inverted door slab
+        rom_data.write_int32(0x10CF38, 0x8000FF4D)  # CT final room door slab
+        rom_data.write_int32(0x10CF44, 0x1000FF4D)  # CT Renon slab
+        rom_data.write_int32(0x10C908, 0x0008FF4D)  # Villa foyer chandelier
+        rom_data.write_byte(0x10CF37, 0x04)  # pointer for CT final room door slab item data
 
         # Once-per-frame gameplay checks
         rom_data.write_int32(0x6C848, 0x080FF40D)  # J 0x803FD034
@@ -944,13 +947,19 @@ def write_patch(world: "CV64World", patch: CV64ProcedurePatch, offset_data: Dict
     for loc in active_locations:
         if loc.address is None or get_location_info(loc.name, "type") == "shop" or loc.item.player == world.player:
             continue
-        if len(loc.item.name) > 67:
-            item_name = loc.item.name[0x00:0x68]
+        # If the Item's name is longer than 104 characters, truncate the name to inject at 104.
+        if len(loc.item.name) > 104:
+            item_name = loc.item.name[0:104]
         else:
             item_name = loc.item.name
+        # Get the item's player's name. If it's longer than 16 characters (which can happen if it's an ItemLinked item),
+        # truncate it at 16.
+        player_name = world.multiworld.get_player_name(loc.item.player)
+        if len(player_name) > 16:
+            player_name = player_name[0:16]
+
         inject_address = 0xBB7164 + (256 * (loc.address & 0xFFF))
-        wrapped_name, num_lines = cv64_text_wrap(item_name + "\nfor " +
-                                                 world.multiworld.get_player_name(loc.item.player), 96)
+        wrapped_name, num_lines = cv64_text_wrap(item_name + "\nfor " + player_name, 96)
         patch.write_token(APTokenTypes.WRITE, inject_address, bytes(get_item_text_color(loc) +
                                                                     cv64_string_to_bytearray(wrapped_name)))
         patch.write_token(APTokenTypes.WRITE, inject_address + 255, bytes([num_lines]))
