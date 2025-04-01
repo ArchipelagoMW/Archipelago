@@ -115,7 +115,10 @@ zones = {
             "name": "Nightmare",
             "pos": 0x05af2478,
             "len": 147456,
-            "area_flag": 0x6fc0
+            "items": 0x1928,
+            "area_flag": 0x6fc0,
+            "loot_flag": 0x03bef4,
+            "loot_size": 5
         },
     ZONE["LIB"]:
         {
