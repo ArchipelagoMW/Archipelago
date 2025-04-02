@@ -175,10 +175,12 @@ class ClientCommandProcessor(CommandProcessor):
             self.output("Unreadied.")
         async_start(self.ctx.send_msgs([{"cmd": "StatusUpdate", "status": state}]), name="send StatusUpdate")
 
-    def _cmd_clearchat(self):
-        """Clears the text log"""
+    def _cmd_clearchat(self, which_log: str = "All"):
+        """Clears the specified text log.
+        'All' clears every text log."""
         if self.ctx.ui:
-            self.ctx.ui.log_panels["All"].clear()
+            if not self.ctx.ui.clear_chat(which_log):
+                self.output(f"Unknown tab '{which_log}'")
 
     def default(self, raw: str):
         """The default message parser to be used when parsing any messages that do not match a command"""
