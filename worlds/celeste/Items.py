@@ -27,7 +27,7 @@ level_item_lists: Dict[str, Set[str]] = {
     "5b": {ItemName.swap_blocks, ItemName.red_boosters, ItemName.dash_switches, ItemName.dash_refills, ItemName.coins, ItemName.springs, ItemName.torches, ItemName.seekers, ItemName.theo_crystal, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks},
     "5c": {ItemName.swap_blocks, ItemName.red_boosters, ItemName.dash_switches, ItemName.dash_refills},
 
-    "6a": {ItemName.feathers, ItemName.kevin_blocks, ItemName.dash_refills, ItemName.bumpers, ItemName.springs, ItemName.badeline_boosters, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks},
+    "6a": {ItemName.feathers, ItemName.kevin_blocks, ItemName.dash_refills, ItemName.bumpers, ItemName.springs, ItemName.coins, ItemName.badeline_boosters, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks},
     "6b": {ItemName.feathers, ItemName.kevin_blocks, ItemName.dash_refills, ItemName.bumpers, ItemName.coins, ItemName.springs, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks},
     "6c": {ItemName.feathers, ItemName.kevin_blocks, ItemName.dash_refills, ItemName.bumpers},
 
