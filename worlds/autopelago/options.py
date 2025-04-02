@@ -3,11 +3,13 @@ import logging
 import yaml
 
 from dataclasses import dataclass
-from typing import Any, Mapping, Iterable, Type
+from typing import Any, Mapping, Iterable, Type, TYPE_CHECKING
 
 from Options import Toggle, PerGameCommonOptions, Choice, OptionSet, Range, OptionList, Visibility
 from worlds.AutoWorld import World
 
+if TYPE_CHECKING:
+    from Options import PlandoOptions
 
 class FillWithDetermination(Toggle):
     """Either fills the rat with determination, or does nothing. Perhaps both.
@@ -132,7 +134,7 @@ class RatChatMessages(OptionList):
 
         raise NotImplementedError(f"Cannot convert from non-dict, got {type(data)}")
 
-    def verify(self, world: Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
+    def verify(self, world: Type[World], player_name: str, plando_options: 'PlandoOptions') -> None:
         if len(self.value) == 0:
             logging.warning(f"Settings file tried to set empty rat chat messages for {type(self).__name__} (player: {player_name}). This is not allowed. Reverting them to default.")
             self.value = RatChatMessages.from_any(self.default).value
@@ -236,7 +238,7 @@ class LactoseIntolerantMode(Toggle):
 
 
 @dataclass
-class ArchipelagoGameOptions(PerGameCommonOptions):
+class AutopelagoGameOptions(PerGameCommonOptions):
     fill_with_determination: FillWithDetermination
     victory_location: VictoryLocation
     enabled_buffs: EnabledBuffs

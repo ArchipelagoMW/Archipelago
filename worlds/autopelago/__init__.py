@@ -10,7 +10,7 @@ from .AutopelagoDefinitions import GAME_NAME, version_stamp, AutopelagoGameRequi
     total_available_rat_count, max_required_rat_count, AutopelagoNonProgressionItemType, \
     autopelago_item_classification_of, location_name_to_nonprogression_item, autopelago_regions, item_name_groups, \
     location_name_groups, lactose_names, lactose_intolerant_names
-from .options import ArchipelagoGameOptions, VictoryLocation, EnabledBuffs, EnabledTraps, ChangedTargetMessages, \
+from .options import AutopelagoGameOptions, VictoryLocation, EnabledBuffs, EnabledTraps, ChangedTargetMessages, \
     EnterGoModeMessages, EnterBKModeMessages, RemindBKModeMessages, ExitBKModeMessages, CompleteGoalMessages
 
 from BaseClasses import CollectionState, Item, Location, MultiWorld, Region, Tutorial
@@ -97,8 +97,8 @@ class AutopelagoWorld(World):
     game = GAME_NAME
     topology_present = False  # it's static, so setting this to True isn't actually helpful
     web = AutopelagoWebWorld()
-    options_dataclass = ArchipelagoGameOptions
-    options: ArchipelagoGameOptions
+    options_dataclass = AutopelagoGameOptions
+    options: AutopelagoGameOptions
     victory_location: str
     regions_in_scope: set[str]
     locations_in_scope: set[str]
