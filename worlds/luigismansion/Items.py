@@ -278,8 +278,10 @@ ALL_ITEMS_TABLE = {**ITEM_TABLE,
 
 BOO_AP_ID_LIST: list[int] = [LMItem.get_apid(value.code) for value in BOO_ITEM_TABLE.values()]
 
+# Mario items + Elemental Medals + Traps + Boo Radar + Super Vac + Progressive Flower
 RECV_OWN_GAME_ITEMS: list[int] = [
-    list(LMItem.get_apid(value.code) for value in BOO_ITEM_TABLE.values()), 8063, 8064, 8126, 8140, 8141, 8142]
+    list(LMItem.get_apid(value.code) for value in BOO_ITEM_TABLE.values()), 8055, 8056, 8057, 8058, 8059, 8060,
+    8061, 8062, 8063, 8064, 8126, 8140, 8141, 8142]
 
 # List of received items to ignore because they are handled elsewhere
 RECV_ITEMS_IGNORE: list[int] = [8127]
