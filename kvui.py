@@ -1125,6 +1125,22 @@ class GameManager(ThemedApp):
         hints = self.ctx.stored_data.get(f"_read_hints_{self.ctx.team}_{self.ctx.slot}", [])
         self.hint_log.refresh_hints(hints)
 
+    def clear_chat(self, which_log: str = "All") -> bool:
+        if which_log == "All":
+            for panel in self.ctx.ui.log_panels.values():
+                if isinstance(panel, UILog):
+                    panel.clear()
+            return True
+        elif which_log == self.tabs.default_tab_text:
+            self.ctx.ui.log_panels["All"].clear()
+            return True
+        else:
+            target_panel = self.ctx.ui.log_panels.get(which_log)
+            if target_panel is None:
+                return False
+            if isinstance(target_panel, UILog):
+                self.ctx.ui.log_panels[which_log].clear()
+            return True
 
 class LogtoUI(logging.Handler):
     def __init__(self, on_log):
