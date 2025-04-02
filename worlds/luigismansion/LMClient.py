@@ -5,7 +5,7 @@ import traceback
 
 import NetUtils
 import Utils
-from typing import Any, Collection
+from typing import Any
 
 import dolphin_memory_engine as dme
 
@@ -158,6 +158,12 @@ class LMCommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, LMContext):
             Utils.async_start(self.ctx.update_trap_link(not "TrapLink" in self.ctx.tags), name="Update Traplink")
 
+    def _cmd_jakeasked(self):
+        """Provide debug information from Dolphin's RAM addresses while playing Luigi's Mansion,
+        if the devs ask for it."""
+        if isinstance(self.ctx, LMContext):
+            Utils.async_start(self.ctx.get_debug_info(), name="Get Luigi's Mansion Debug info")
+
 class LMContext(CommonContext):
     command_processor = LMCommandProcessor
     game = "Luigi's Mansion"
@@ -262,8 +268,8 @@ class LMContext(CommonContext):
             arg_seed = str(args["slot_data"]["seed"])
             iso_seed = read_string(0x80000001, len(arg_seed))
             if arg_seed != iso_seed:
-                raise Exception("Incorrect Randomized Luigi's Mansion ISO file selected; " +
-                                "Please verify that you are using the right file.")
+                raise Exception("Incorrect Randomized Luigi's Mansion ISO file selected. The seed does not match." +
+                                "Please verify that you are using the right ISO/seed/APLM file.")
 
             self.boosanity = bool(args["slot_data"]["boosanity"])
             self.pickup_anim_off = bool(args["slot_data"]["pickup animation"])
@@ -391,13 +397,13 @@ class LMContext(CommonContext):
                 if bool_loaded_in_map:
                     current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
                     if current_room_id != self.last_room_id:
-                        self.send_msgs([{
+                        Utils.async_start(self.send_msgs([{
                             "cmd": "Set",
                             "key": f"lm_room_{self.team}_{self.slot}",
                             "default": 0,
                             "want_reply": False,
                             "operations": [{"operation": "replace", "value": current_room_id}]
-                        }])
+                        }]), name="Update Luigi Mansion Room ID")
                         self.last_room_id = current_room_id
                 return bool_loaded_in_map
             return True
@@ -415,6 +421,21 @@ class LMContext(CommonContext):
 
     def set_luigi_dead(self):
         write_short(dme.follow_pointers(CURR_HEALTH_ADDR, [CURR_HEALTH_OFFSET]), 0)
+        return
+
+    async def get_debug_info(self):
+        if not (dme.is_hooked() and self.dolphin_status == CONNECTION_CONNECTED_STATUS) or not self.check_ingame():
+            logger.info("Unable to use this command until you are in a Luigi's Mansion ROM, loaded and connected.")
+            return
+
+        flag_addr_start = 0x803D3399
+        for flag_addr_index in range(0, 32):
+            current_flag_num = flag_addr_index*8
+            curr_val = dme.read_byte(flag_addr_start + flag_addr_index)
+
+            for flag_bit in range(0,8):
+                flag_val = "True" if (curr_val & (1 << flag_bit)) > 0 else "False"
+                logger.info("Flag #" + str(current_flag_num+flag_bit) + " is set to: " + flag_val)
         return
 
     async def handle_traplink(self):
