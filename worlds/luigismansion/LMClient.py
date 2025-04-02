@@ -690,8 +690,8 @@ class LMContext(CommonContext):
             dme.write_bytes(0x803D5E0B, bytes.fromhex("01"))
 
             # Update the in-game counter to reflect how many boos you got.
-            for boo_item in set(([item.item for item in self.items_received if item.item in BOO_AP_ID_LIST])):
-                lm_item_name = self.item_names.lookup_in_game(boo_item.item)
+            for boo_item in [item.item for item in self.items_received if item.item in BOO_AP_ID_LIST]:
+                lm_item_name = self.item_names.lookup_in_game(boo_item)
                 lm_item = ALL_ITEMS_TABLE[lm_item_name]
                 for addr_to_update in lm_item.update_ram_addr:
                     curr_val = dme.read_byte(addr_to_update.ram_addr)
