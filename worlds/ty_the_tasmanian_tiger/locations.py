@@ -1169,7 +1169,7 @@ scales_dict = {
 opals_dict = {
     "Two Up - Opal 1": LocData(0x8754350, "Two Up"),
     "Two Up - Opal 2": LocData(0x8754351, "Two Up"),
-    "Two Up - Opal 3": LocData(0x8754352, "Two Up"),
+    "Two Up - Opal 3": LocData(0x8754352, "Two Up"), 
     "Two Up - Opal 4": LocData(0x8754353, "Two Up"),
     "Two Up - Opal 5": LocData(0x8754354, "Two Up"),
     "Two Up - Opal 6": LocData(0x8754355, "Two Up"),
