@@ -429,13 +429,13 @@ class MultiWorld():
 
     def get_all_state(self, use_cache: bool = False, allow_partial_entrances: bool = False) -> CollectionState:
         """
-        Creates a new CollectionState, and collects all pre_fill items, all items in the multiworld itempool, those
+        Creates a new CollectionState, and collects all precollected items, all items in the multiworld itempool, those
         specified in each worlds' `get_pre_fill_items()`, and then sweeps the multiworld collecting any other items
         it is able to reach, building as complete of a completed game state as possible.
 
         :param use_cache: Deprecated and unused.
         :param allow_partial_entrances: Whether the CollectionState should allow for disconnected entrances while
-         sweeping, such as during entrance randomization.
+         sweeping, such as before entrance randomization is complete.
 
         :return: The completed CollectionState.
         """
