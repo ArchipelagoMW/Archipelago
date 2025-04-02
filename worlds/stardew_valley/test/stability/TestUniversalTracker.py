@@ -30,7 +30,7 @@ class TestUniversalTrackerGenerationIsStable(SVTestBase):
 
         fake_context = Mock()
         fake_context.re_gen_passthrough = {STARDEW_VALLEY: ut_data}
-        args = fill_namespace_with_default({0: self.options})
+        args = fill_namespace_with_default(self.options)
         args.outputpath = None
         args.outputname = None
         args.multi = 1
