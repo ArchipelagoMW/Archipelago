@@ -71,6 +71,8 @@ class CandyBox2World(World):
             "uuid": str(uuid.uuid4()),
             "entranceInformation": self.original_entrances if self.options.quest_randomisation == "off" else self.entrance_randomisation.pairings,
             "deathLink": self.options.death_link.value,
+            "energyLink": self.options.energy_link.value,
+            "gifting": self.options.gifting.value,
             "expectedClientVersion": EXPECTED_CLIENT_VERSION,
             "multipliers": {
                 "candies": self.options.candy_production_multiplier.value,

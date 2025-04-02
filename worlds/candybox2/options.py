@@ -82,6 +82,16 @@ class RandomiseHpBar(Toggle):
     display_name = "Randomise HP Bar"
     default = True
 
+class EnergyLink(Toggle):
+    """Allow sending energy to other worlds. Candy and lollipops can be converted to energy. 25% of the energy is lost in the transfer."""
+    display_name = "Energy Link"
+
+class Gifting(Toggle):
+    """Do you want to enable gifting items to and from other Archipelago slots?
+    Items can only be sent to games that also support gifting"""
+    display_name = "Gifting"
+    default = 1
+
 @dataclass
 class CandyBox2Options(PerGameCommonOptions):
     progression_balancing = True
@@ -95,3 +105,5 @@ class CandyBox2Options(PerGameCommonOptions):
     sorceress_hat_price: SorceressHatPrice
     teapot_hp: TeapotHP
     randomise_hp_bar: RandomiseHpBar
+    energy_link: EnergyLink
+    gifting: Gifting
