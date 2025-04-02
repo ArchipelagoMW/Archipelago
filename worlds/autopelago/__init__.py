@@ -1,6 +1,6 @@
 import logging
 from collections import deque
-from typing import Callable, Dict, Literal, Optional, Set
+from typing import Callable, Literal
 
 from .AutopelagoDefinitions import GAME_NAME, version_stamp, AutopelagoGameRequirement, AutopelagoAllRequirement, \
     AutopelagoAnyRequirement, AutopelagoAnyTwoRequirement, AutopelagoItemRequirement, item_key_to_name, \
@@ -69,7 +69,7 @@ class AutopelagoRegion(Region):
     autopelago_definition: AutopelagoRegionDefinition
 
     def __init__(self, autopelago_definition: AutopelagoRegionDefinition, player: int, multiworld: MultiWorld,
-                 hint: Optional[str] = None):
+                 hint: str | None = None):
         super().__init__(autopelago_definition.key, player, multiworld, hint)
         self.autopelago_definition = autopelago_definition
         self.locations += (AutopelagoLocation(player, loc, self) for loc in autopelago_definition.locations)
@@ -100,8 +100,8 @@ class AutopelagoWorld(World):
     options_dataclass = ArchipelagoGameOptions
     options: ArchipelagoGameOptions
     victory_location: str
-    regions_in_scope: Set[str]
-    locations_in_scope: Set[str]
+    regions_in_scope: set[str]
+    locations_in_scope: set[str]
     option_groups = [
         OptionGroup('Message Text Replacements', [
             ChangedTargetMessages,
@@ -130,12 +130,13 @@ class AutopelagoWorld(World):
     # - hint_blacklist (should it include the goal item?)
 
     def generate_early(self):
-        if self.options.victory_location == VictoryLocation.option_captured_goldfish:
-            self.victory_location = 'Captured Goldfish'
-        elif self.options.victory_location == VictoryLocation.option_secret_cache:
-            self.victory_location = 'Secret Cache'
-        else:
-            self.victory_location = 'Snakes on a Planet'
+        match self.options.victory_location:
+            case VictoryLocation.option_captured_goldfish:
+                self.victory_location = 'Captured Goldfish'
+            case VictoryLocation.option_secret_cache:
+                self.victory_location = 'Secret Cache'
+            case _:
+                self.victory_location = 'Snakes on a Planet'
 
         self.locations_in_scope = set()
         q = deque(('Menu',))
@@ -190,7 +191,7 @@ class AutopelagoWorld(World):
                     items[replacements_made] = item
                     replacements_made += 1
 
-        category_to_next_offset: Dict[AutopelagoNonProgressionItemType, int] = {category: 0 for category in
+        category_to_next_offset: dict[AutopelagoNonProgressionItemType, int] = {category: 0 for category in
                                                                                 generic_nonprogression_item_table}
         next_filler_becomes_trap = False
         nonprog_type: Literal['useful_nonprogression', 'filler', 'trap']
@@ -224,7 +225,7 @@ class AutopelagoWorld(World):
         for r in new_regions.values():
             self.multiworld.regions.append(r)
             req = r.autopelago_definition.requires
-            rule: Optional[Callable[[CollectionState], bool]]
+            rule: Callable[[CollectionState], bool] | None
             rule = None if _is_trivial(req) \
                 else (lambda req_: lambda state: _is_satisfied(self.player, req_, state))(req)
             if self.victory_location in r.autopelago_definition.locations:

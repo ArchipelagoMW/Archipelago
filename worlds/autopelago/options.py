@@ -3,7 +3,7 @@ import logging
 import yaml
 
 from dataclasses import dataclass
-from typing import Any, List, Tuple, Mapping, Iterable, Type
+from typing import Any, Mapping, Iterable, Type
 
 from Options import Toggle, PerGameCommonOptions, Choice, OptionSet, Range, OptionList, Visibility
 from worlds.AutoWorld import World
@@ -87,7 +87,7 @@ class DeathDelaySeconds(Range):
 
 # hack to avoid outputting the messages in flow style
 class RatChatMessagesHack:
-    items: List[Tuple[str, int]]
+    items: list[tuple[str, int]]
     def __init__(self, *args: str):
         self.items = [(arg, 1) for arg in args]
 
@@ -117,7 +117,7 @@ class RatChatMessages(OptionList):
             return super().from_any(data.items)
 
         if isinstance(data, Iterable):
-            res: List[Tuple[str, int]] = []
+            res: list[tuple[str, int]] = []
             for t in data:
                 if isinstance(t, Mapping):
                     if len(t) != 1:
