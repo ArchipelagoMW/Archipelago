@@ -301,7 +301,7 @@ class FF4FEWorld(World):
             if location.area in topology.moon_areas:
                 add_rule(self.get_location(location.name),
                          lambda state: state.has("Darkness Crystal", self.player))
-                if self.options.UnsafeKeyItemPlacement:
+                if not self.options.UnsafeKeyItemPlacement:
                     add_rule(self.get_location(location.name),
                              lambda state: state.has("Hook", self.player) or state.has("Magma Key", self.player))
             # Otherwise, we consult the list of area-specific rules (e.g. Baron Castle requires Baron Key)..

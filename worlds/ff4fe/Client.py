@@ -7,6 +7,7 @@ from worlds.AutoSNIClient import SNIClient
 from . import rom as Rom
 from . import items
 from . import locations
+from .items import character
 from .rom import objective_threshold_size
 
 if typing.TYPE_CHECKING:
@@ -27,6 +28,8 @@ class FF4FEClient(SNIClient):
         self.key_items_with_flags = None
         self.json_doc = None
         self.flags = None
+        self.no_free_characters = False
+        self.no_earned_characters = False
         self.junked_items = None
         self.kept_items = None
 
@@ -144,6 +147,12 @@ class FF4FEClient(SNIClient):
             return
         self.json_doc = json.loads(json_data)
         self.flags = self.json_doc["flags"]
+        flag_list = self.flags.split(" ")
+        character_flags = [flags for flags in flag_list if flags[0] == "C"].pop()
+        if "nofree" in character_flags:
+            self.no_free_characters = True
+        if "noearned" in character_flags:
+            self.no_earned_characters = True
 
 
     async def location_check(self, ctx: SNIContext):
@@ -191,6 +200,24 @@ class FF4FEClient(SNIClient):
                             f'New Check: {reward_found.name} '
                             f'({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
                         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
+        if self.no_free_characters:
+            for location in locations.free_character_locations:
+                location_id = self.location_name_to_id[location]
+                if location_id not in ctx.locations_checked:
+                    ctx.locations_checked.add(location_id)
+                    snes_logger.info(
+                        f'New Check: {location} '
+                        f'({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+                    await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
+        if self.no_earned_characters:
+            for location in locations.earned_character_locations:
+                location_id = self.location_name_to_id[location]
+                if location_id not in ctx.locations_checked:
+                    ctx.locations_checked.add(location_id)
+                    snes_logger.info(
+                        f'New Check: {location} '
+                        f'({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+                    await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
 
 
     async def objective_check(self, ctx):
