@@ -2,6 +2,6 @@
 <FLAGON>(199)
 <BGM>(20)
 <WIPEKIND>(3)
-<WARP>(11)
 <FLAGOFF>(199)
+<WARP>(11)
 <END>
