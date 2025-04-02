@@ -686,8 +686,17 @@ class LMContext(CommonContext):
         # Make it so the displayed Boo counter always appears even if you dont have boo radar or if you haven't caught
         # a boo in-game yet.
         if self.boosanity:
+            # This allows the in-game display to work correctly.
             dme.write_bytes(0x803D5E0B, bytes.fromhex("01"))
 
+            # Update the in-game counter to reflect how many boos you got.
+            for boo_item in set(([item.item for item in self.items_received if item.item in BOO_AP_ID_LIST])):
+                lm_item_name = self.item_names.lookup_in_game(boo_item.item)
+                lm_item = ALL_ITEMS_TABLE[lm_item_name]
+                for addr_to_update in lm_item.update_ram_addr:
+                    curr_val = dme.read_byte(addr_to_update.ram_addr)
+                    curr_val = (curr_val | (1 << addr_to_update.bit_position))
+                    dme.write_byte(addr_to_update.ram_addr, curr_val)
         return
 
 async def dolphin_sync_task(ctx: LMContext):
