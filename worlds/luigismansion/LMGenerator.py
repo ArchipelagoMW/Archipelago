@@ -203,9 +203,6 @@ class LuigisMansionRandomizer:
         self.update_maptwo_info_table(self.jmp_boo_table)
 
     def save_randomized_iso(self):
-        random.seed(self.output_data["Seed"])
-        self.update_dol_offsets()
-
         # TODO Move into its own function?
         # Get Output data required information
         bool_boo_checks: bool = True if self.output_data["Options"]["boo_gates"] == 1 else False
@@ -217,6 +214,9 @@ class LuigisMansionRandomizer:
         balcony_boo_count: int = int(self.output_data["Options"]["balcony_boo_count"])
         final_boo_count: int = int(self.output_data["Options"]["final_boo_count"])
         luigi_max_health: int = int(self.output_data["Options"]["luigi_max_health"])
+
+        random.seed(self.output_data["Seed"])
+        self.update_dol_offsets(bool_boo_rando_on)
 
         # Update all custom events
         list_events = ["03", "22", "24", "29", "33", "35", "38", "50", "61", "64", "65",
@@ -443,7 +443,7 @@ class LuigisMansionRandomizer:
             continue
 
     # Updates various DOL Offsets per the desired changes of the AP user
-    def update_dol_offsets(self):
+    def update_dol_offsets(self, boo_rand_on: bool):
         # Find the main DOL file, which is the main file used for GC and Wii games.
         dol_data = self.gcm.read_file_data("sys/main.dol")
         self.dol.read(dol_data)
@@ -470,6 +470,20 @@ class LuigisMansionRandomizer:
         self.dol.data.seek(0x12DCC9)
         boo_data = "000005"
         self.dol.data.write(bytes.fromhex(boo_data))
+
+        # Turn on custom code handler for boo display counter only if Boo Rando is on.
+        if boo_rand_on:
+            self.dol.data.seek(0x04DB50)
+            boo_custom_code_one = "93C1FFF0"
+            self.dol.data.write(bytes.fromhex(boo_custom_code_one))
+
+            self.dol.data.seek(0x04DBB0)
+            boo_custom_code_two = "4848CDE5"
+            self.dol.data.write(bytes.fromhex(boo_custom_code_two))
+
+            self.dol.data.seek(0x04DC10)
+            boo_custom_code_three = "4848CD85"
+            self.dol.data.write(bytes.fromhex(boo_custom_code_three))
 
         # Turn off pickup animations
         if self.output_data["Options"]["pickup_animation"] == 1:
