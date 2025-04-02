@@ -501,7 +501,7 @@ class LMContext(CommonContext):
             for addr_to_update in lm_item.update_ram_addr:
                 byte_size = 1 if addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
 
-                if lm_item_name == "Progressive Flower": # 00EB, 00EC, 00ED
+                if item.item == 8140: # Progressive Flower, 00EB, 00EC, 00ED
                     flower_count: int = len([netItem for netItem in self.items_received if netItem.item == 8140])
                     curr_val = min(flower_count + 234, 237)
                     dme.write_bytes(addr_to_update.ram_addr, curr_val.to_bytes(byte_size, 'big'))
@@ -650,10 +650,13 @@ class LMContext(CommonContext):
             return
 
         # Always adjust the Vacuum speed as saving and quitting or going to E. Gadds lab could reset it back to normal.
-        vac_id = AutoWorldRegister.world_types[self.game].item_name_to_id["Poltergust 4000"]
-        if any([netItem.item for netItem in self.items_received if netItem.item == vac_id]):
+        if any([netItem.item for netItem in self.items_received if netItem.item == 8064]):
             vac_speed = "3800000F"
-            dme.write_bytes(ALL_ITEMS_TABLE["Poltergust 4000"].update_ram_addr[0].ram_addr, bytes.fromhex(vac_speed))
+            vac_item = next(netItem.item for netItem in self.items_received if netItem.item == 8064)
+            lm_item_name = self.item_names.lookup_in_game(vac_item)
+            lm_item = ALL_ITEMS_TABLE[lm_item_name]
+            for addr_to_update in lm_item.update_ram_addr:
+                dme.write_bytes(addr_to_update.ram_addr, bytes.fromhex(vac_speed))
 
         # Always adjust Pickup animation issues if the user turned pick up animations off.
         if self.pickup_anim_off:
@@ -666,14 +669,6 @@ class LMContext(CommonContext):
             dme.write_bytes(0x803D5E0B, bytes.fromhex("01"))
 
         return
-
-    # TODO remove this in favor of 0.6.0's implementation.
-    async def check_locations(self, locations: Collection[int]) -> set[int]:
-        """Send new location checks to the server. Returns the set of actually new locations that were sent."""
-        locations = set(locations) & self.missing_locations
-        if locations:
-            await self.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(locations)}])
-        return locations
 
 async def dolphin_sync_task(ctx: LMContext):
     logger.info("Using Luigi's Mansion client v" + CLIENT_VERSION)
