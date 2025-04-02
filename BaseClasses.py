@@ -427,11 +427,18 @@ class MultiWorld():
     def get_location(self, location_name: str, player: int) -> Location:
         return self.regions.location_cache[player][location_name]
 
-    def get_all_state(self, use_cache: bool, allow_partial_entrances: bool = False) -> CollectionState:
-        cached = getattr(self, "_all_state", None)
-        if use_cache and cached:
-            return cached.copy()
+    def get_all_state(self, use_cache: bool = False, allow_partial_entrances: bool = False) -> CollectionState:
+        """
+        Creates a new CollectionState, and collects all pre_fill items, all items in the multiworld itempool, those
+        specified in each worlds' `get_pre_fill_items()`, and then sweeps the multiworld collecting any other items
+        it is able to reach, building as complete of a completed game state as possible.
 
+        :param use_cache: Deprecated and unused.
+        :param allow_partial_entrances: Whether the CollectionState should allow for disconnected entrances while
+         sweeping, such as during entrance randomization.
+
+        :return: The completed CollectionState.
+        """
         ret = CollectionState(self, allow_partial_entrances)
 
         for item in self.itempool:
@@ -442,8 +449,6 @@ class MultiWorld():
                 subworld.collect(ret, item)
         ret.sweep_for_advancements()
 
-        if use_cache:
-            self._all_state = ret
         return ret
 
     def get_items(self) -> List[Item]:
