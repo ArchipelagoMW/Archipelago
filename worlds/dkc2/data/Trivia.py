@@ -214,6 +214,9 @@ trivia_easy_actraiser = [
     ),
 ]
 
+trivia_easy_adventure = [
+]
+
 trivia_easy_astalon = [
     TriviaQuestion(
         [
@@ -240,6 +243,22 @@ trivia_easy_astalon = [
         """Blue, Red and White°°""", 
         """Blue, Purple and Green°°""", 
         """Blue, Gray and Orange°°""", 
+    ),
+]
+
+trivia_easy_banjotooie = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """  Banjo-Tooie is the sequel to°""", 
+            """           what game?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Banjo-Kazooie°°""", 
+        """Banjo-Kablooie°°""", 
+        """Yooka-Laylee°°""", 
     ),
 ]
 
@@ -1256,6 +1275,22 @@ trivia_easy_majoras_mask_recompiled = [
     ),
 ]
 
+trivia_easy_mario__luigi_superstar_saga = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """  In Mario & Luigi: Superstar°""", 
+            """   Saga, which Mario brother°""", 
+            """   learns to use Thunderhand?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Luigi°°""", 
+        """Mario°°""", 
+        """Wario°°""", 
+    ),
+]
+
 trivia_easy_math = [
     TriviaQuestion(
         [
@@ -2005,6 +2040,19 @@ trivia_easy_pokemon_red_and_blue = [
         """Yes°°""", 
         """Sometimes°°""", 
     ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """  In Pokemon Red & Blue, which°""", 
+            """ Pokemon is #25 in the Pokedex?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Pikachu°°""", 
+        """Sandslash°°""", 
+        """Oddish°°""", 
+    ),
 ]
 
 trivia_easy_rabiribi = [
@@ -2153,6 +2201,48 @@ trivia_easy_risk_of_rain_2 = [
         """Safer Spaces°°""", 
         """Plasma Shrimp°°""", 
         """Needletick°°""", 
+    ),
+]
+
+trivia_easy_skyward_sword = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """    In Skyward Sword, which°""", 
+            """    tablet is used to access°""", 
+            """          Faron Woods?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Emerald Tablet°°""", 
+        """Amber Tablet°°""", 
+        """Ruby Tablet°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """    In Skyward Sword, which°""", 
+            """    tablet is used to access°""", 
+            """         Eldin Volcano?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Ruby Tablet°°""", 
+        """Emerald Tablet°°""", 
+        """Amber Tablet°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """    In Skyward Sword, which°""", 
+            """    tablet is used to access°""", 
+            """        Lanayru Desert?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Amber Tablet°°""", 
+        """Ruby Tablet°°""", 
+        """Emerald Tablet°°""", 
     ),
 ]
 
@@ -2461,6 +2551,45 @@ trivia_easy_terraria = [
 ]
 
 trivia_easy_the_legend_of_zelda = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """  In The Legend of Zelda, who°""", 
+            """     is the old letter for?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """an Old Woman°°""", 
+        """an Old Man°°""", 
+        """a Moblin°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """  In The Legend of Zelda, who°""", 
+            """        is the bait for?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """A moblin°°""", 
+        """An old man°°""", 
+        """An old woman°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """  In the Legend of Zelda, who°""", 
+            """      offers Link a sword?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """An old man°°""", 
+        """An old woman°°""", 
+        """A moblin°°""", 
+    ),
 ]
 
 trivia_easy_vvvvvv = [
@@ -2519,6 +2648,9 @@ trivia_easy_yoshis_island = [
         """8°°""", 
         """5°°""", 
     ),
+]
+
+trivia_easy_zelda_ii:_the_adventure_of_link = [
 ]
 
 trivia_easy_zillion = [
@@ -2608,6 +2740,22 @@ trivia_hard_actraiser = [
     ),
 ]
 
+trivia_hard_adventure = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """   In Adventure, where would°""", 
+            """      one see the credits?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """In a secret room°°""", 
+        """After they beat the game°°""", 
+        """On the title screen°°""", 
+    ),
+]
+
 trivia_hard_astalon = [
     TriviaQuestion(
         [
@@ -2622,6 +2770,9 @@ trivia_hard_astalon = [
         """Medusa°°""", 
         """The same as Arias's°°""", 
     ),
+]
+
+trivia_hard_banjotooie = [
 ]
 
 trivia_hard_castlevania_circle_of_the_moon = [
@@ -3533,6 +3684,9 @@ trivia_hard_majoras_mask_recompiled = [
     ),
 ]
 
+trivia_hard_mario__luigi_superstar_saga = [
+]
+
 trivia_hard_math = [
     TriviaQuestion(
         [
@@ -4199,6 +4353,9 @@ trivia_hard_rabiribi = [
 trivia_hard_risk_of_rain_2 = [
 ]
 
+trivia_hard_skyward_sword = [
+]
+
 trivia_hard_sonic_adventure_2_battle = [
     TriviaQuestion(
         [
@@ -4720,6 +4877,9 @@ trivia_hard_vvvvvv = [
 trivia_hard_yoshis_island = [
 ]
 
+trivia_hard_zelda_ii:_the_adventure_of_link = [
+]
+
 trivia_hard_zillion = [
     TriviaQuestion(
         [
@@ -4833,6 +4993,22 @@ trivia_medium_actraiser = [
     ),
 ]
 
+trivia_medium_adventure = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """°""", 
+            """ In Adventure, which dragon is°""", 
+            """        yellow in color?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Yorgle°°""", 
+        """Grundle°°""", 
+        """Rhindle°°""", 
+    ),
+]
+
 trivia_medium_astalon = [
     TriviaQuestion(
         [
@@ -4860,6 +5036,9 @@ trivia_medium_astalon = [
         """38°°""", 
         """40°°""", 
     ),
+]
+
+trivia_medium_banjotooie = [
 ]
 
 trivia_medium_castlevania_circle_of_the_moon = [
@@ -6096,6 +6275,9 @@ trivia_medium_majoras_mask_recompiled = [
     ),
 ]
 
+trivia_medium_mario__luigi_superstar_saga = [
+]
+
 trivia_medium_math = [
     TriviaQuestion(
         [
@@ -6819,6 +7001,19 @@ trivia_medium_pokemon_emerald = [
 ]
 
 trivia_medium_pokemon_red_and_blue = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """  Which, of these Pokemon, can°""", 
+            """   only be caught in Pokemon°""", 
+            """   Red and not Pokemon Blue?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Gloom°°""", 
+        """Tangela°°""", 
+        """Meowth°°""", 
+    ),
 ]
 
 trivia_medium_rabiribi = [
@@ -6915,6 +7110,100 @@ trivia_medium_risk_of_rain_2 = [
         """Voidsent Flame°°""", 
         """Lysate Cell°°""", 
         """Weeping Fungus°°""", 
+    ),
+]
+
+trivia_medium_skyward_sword = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """     In Skyward Sword, what°""", 
+            """    are the negative effects°""", 
+            """      of the Cursed Medal?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Disables Adventure Poach°°""", 
+        """Less Treasure Drop°°""", 
+        """Shorter Potion Duration°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """     In Skyward Sword, what°""", 
+            """    is the name of the boss°""", 
+            """     key of Skyview Temple?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Golden Carving°°""", 
+        """Mysterious Crystals°°""", 
+        """Dragon Sculpture°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """     In Skyward Sword, what°""", 
+            """    is the name of the boss°""", 
+            """      key of Earth Temple?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Dragon Sculpture°°""", 
+        """Blessed Idol°°""", 
+        """Ancient Circuit°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """     In Skyward Sword, what°""", 
+            """    is the name of the boss°""", 
+            """     key of Lanayru Mining°""", 
+            """           Facility?°""", 
+            """°""", 
+        ],
+        """Ancient Circuit°°""", 
+        """Golden Carving°°""", 
+        """Mysterious Crystals°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """     In Skyward Sword, what°""", 
+            """    is the name of the boss°""", 
+            """    key of Ancient Cistern?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Blessed Idol°°""", 
+        """Squid Carving°°""", 
+        """Mysterious Crystals°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """     In Skyward Sword, what°""", 
+            """    is the name of the boss°""", 
+            """        key of Sandship?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Squid Carving°°""", 
+        """Golden Carving°°""", 
+        """Blessed Idol°°""", 
+    ),
+    TriviaQuestion(
+        [
+            """°""", 
+            """     In Skyward Sword, what°""", 
+            """    is the name of the boss°""", 
+            """     key of Fire Sanctuary?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Mysterious Crystals°°""", 
+        """Dragon Sculpture°°""", 
+        """Golden Carving°°""", 
     ),
 ]
 
@@ -7257,6 +7546,22 @@ trivia_medium_yoshis_island = [
     ),
 ]
 
+trivia_medium_zelda_ii:_the_adventure_of_link = [
+    TriviaQuestion(
+        [
+            """°""", 
+            """  In Zelda 2, the Adventure of°""", 
+            """  Link, what information does°""", 
+            """         ERROR possess?°""", 
+            """°""", 
+            """°""", 
+        ],
+        """Way to the third palace°°""", 
+        """Bagu's location°°""", 
+        """I AM ERROR°°""", 
+    ),
+]
+
 trivia_medium_zillion = [
     TriviaQuestion(
         [
@@ -7285,10 +7590,20 @@ trivia_data = {
         trivia_medium_actraiser, 
         trivia_hard_actraiser,
     ],
+    "Adventure": [
+        trivia_easy_adventure, 
+        trivia_medium_adventure, 
+        trivia_hard_adventure,
+    ],
     "Astalon": [
         trivia_easy_astalon, 
         trivia_medium_astalon, 
         trivia_hard_astalon,
+    ],
+    "Banjo-Tooie": [
+        trivia_easy_banjotooie, 
+        trivia_medium_banjotooie, 
+        trivia_hard_banjotooie,
     ],
     "Castlevania - Circle of the Moon": [
         trivia_easy_castlevania_circle_of_the_moon, 
@@ -7375,6 +7690,11 @@ trivia_data = {
         trivia_medium_majoras_mask_recompiled, 
         trivia_hard_majoras_mask_recompiled,
     ],
+    "Mario & Luigi Superstar Saga": [
+        trivia_easy_mario__luigi_superstar_saga, 
+        trivia_medium_mario__luigi_superstar_saga, 
+        trivia_hard_mario__luigi_superstar_saga,
+    ],
     "Math": [
         trivia_easy_math, 
         trivia_medium_math, 
@@ -7445,6 +7765,11 @@ trivia_data = {
         trivia_medium_risk_of_rain_2, 
         trivia_hard_risk_of_rain_2,
     ],
+    "Skyward Sword": [
+        trivia_easy_skyward_sword, 
+        trivia_medium_skyward_sword, 
+        trivia_hard_skyward_sword,
+    ],
     "Sonic Adventure 2 Battle": [
         trivia_easy_sonic_adventure_2_battle, 
         trivia_medium_sonic_adventure_2_battle, 
@@ -7489,6 +7814,11 @@ trivia_data = {
         trivia_easy_yoshis_island, 
         trivia_medium_yoshis_island, 
         trivia_hard_yoshis_island,
+    ],
+    "Zelda II: The Adventure of Link": [
+        trivia_easy_zelda_ii:_the_adventure_of_link, 
+        trivia_medium_zelda_ii:_the_adventure_of_link, 
+        trivia_hard_zelda_ii:_the_adventure_of_link,
     ],
     "Zillion": [
         trivia_easy_zillion, 
