@@ -1,20 +1,20 @@
 import yaml
 import os
 import zipfile
+import pkgutil
 import Utils
 from copy import deepcopy
 from .Regions import object_id_table
 from worlds.Files import APPatch
-import pkgutil
 
 settings_template = Utils.parse_yaml(pkgutil.get_data(__name__, "data/settings.yaml"))
 
 
 def generate_output(self, output_directory):
-    def output_item_name(item):
+    def output_item_name(item, progressive_offset=0):
         if item.player == self.player:
             if item.code > 0x420000 + 256:
-                item_name = self.item_id_to_name[item.code - 256]
+                item_name = self.item_id_to_name[(item.code - 256) + min(progressive_offset, 2)]
             else:
                 item_name = item.name
             item_name = "".join(item_name.split("'"))
@@ -72,9 +72,10 @@ def generate_output(self, output_directory):
         "doom_castle_shortcut": tf(self.options.doom_castle_shortcut),
         "sky_coin_mode": cc(self.options.sky_coin_mode),
         "sky_coin_fragments_qty": cc(self.options.shattered_sky_coin_quantity),
-        "enable_spoilers": False,
+        "disable_spoilers": True,
         "progressive_formations": cc(self.options.progressive_formations),
         "map_shuffling": cc(self.options.map_shuffle),
+        "overworld_shuffle": tf(self.options.overworld_shuffle),
         "crest_shuffle": tf(self.options.crest_shuffle),
         "enemizer_groups": cc(self.options.enemizer_groups),
         "shuffle_res_weak_type": tf(self.options.shuffle_res_weak_types),
@@ -85,6 +86,7 @@ def generate_output(self, output_directory):
                                  "Three", "Four"][self.options.available_companions.value],
         "companions_locations": cc(self.options.companions_locations),
         "kaelis_mom_fight_minotaur": tf(self.options.kaelis_mom_fight_minotaur),
+        "hint_mode": cc(self.options.hint_mode)
     }
 
     for option, data in option_writes.items():
@@ -95,10 +97,19 @@ def generate_output(self, output_directory):
                               'utf8')
     self.rom_name_available_event.set()
 
-    setup = {"version": "1.5", "name": self.multiworld.player_name[self.player], "romname": rom_name, "seed":
+    setup = {"version": "1.6", "name": self.multiworld.player_name[self.player], "romname": rom_name, "seed":
              hex(self.random.randint(0, 0xFFFFFFFF)).split("0x")[1].upper()}
 
-    starting_items = [output_item_name(item) for item in self.multiworld.precollected_items[self.player]]
+    progressives = {item: 0 for item in self.item_name_to_id if item.startswith("Progressive")}
+
+    def progressive(item_name):
+        if item_name not in progressives:
+            return 0
+        progressives[item_name] += 1
+        return progressives[item_name]
+    starting_items = [output_item_name(item, progressive(item.name))
+                      for item in self.multiworld.precollected_items[self.player]]
+
     if self.options.sky_coin_mode == "shattered_sky_coin":
         starting_items.append("SkyCoin")
 
@@ -112,6 +123,12 @@ def generate_output(self, output_directory):
         zf.writestr("startingitems.yaml", yaml.dump(starting_items))
         zf.writestr("setup.yaml", yaml.dump(setup))
         zf.writestr("rooms.yaml", yaml.dump(self.rooms))
+        if self.options.hint_mode != "none":
+            self.finished_hint_data_collection.wait()
+            hint_data = [{"content": output_item_name(location.item),
+                          "player": self.multiworld.player_name[location.player],
+                          "location_name": location.name} for location in self.hint_data]
+            zf.writestr("externalplacement.yaml", yaml.dump(hint_data))
 
         APMQ.write_contents(zf)
 

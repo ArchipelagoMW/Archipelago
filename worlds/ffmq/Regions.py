@@ -91,11 +91,9 @@ def create_regions(self):
                         if link["entrance"] in crest_warps:
                             if self.options.crest_shuffle:
                                 spoiler = True
-                        elif self.options.map_shuffle == "everything":
+                        elif "Subregion" in region.name and self.options.overworld_shuffle:
                             spoiler = True
-                        elif "Subregion" in region.name and self.options.map_shuffle not in ("dungeons", "none"):
-                            spoiler = True
-                        elif "Subregion" not in region.name and self.options.map_shuffle not in ("none", "overworld"):
+                        elif "Subregion" not in region.name and self.options.map_shuffle != "none":
                             spoiler = True
 
                         if spoiler:

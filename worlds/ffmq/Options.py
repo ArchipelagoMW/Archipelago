@@ -187,18 +187,25 @@ class TweakFrustratingDungeons(Toggle):
     display_name = "Tweak Frustrating Dungeons"
 
 
+class OverworldShuffle(Toggle):
+    """Shuffle the Overworld."""
+    display_name = "Overworld Shuffle"
+
+
 class MapShuffle(Choice):
-    """None: No shuffle. Overworld: Only shuffle the Overworld locations. Dungeons: Only shuffle the dungeons' floors
-    amongst themselves. Temples and Towns aren't included. Overworld And Dungeons: Shuffle the Overworld and dungeons
-    at the same time. Everything: Shuffle the Overworld, dungeons, temples and towns all amongst each others.
+    """Shuffle dungeon floors.
+    None: No shuffle.
+    Dungeons Internal: Shuffle each individual dungeons' floors. Temples and Towns aren't included.
+    Dungeons Mixed: Mix up all dungeons' floors amongst themselves.
+    Everything: Shuffle the dungeons, temples and towns' floors all amongst each others.
     When dungeons are shuffled, defeating Pazuzu won't teleport you to the 7th floor, you have to get there normally to
-    save the Crystal and get Pazuzu's Chest."""
+    save the Crystal and get Pazuzu's Chest. Some one ways have been blocked in Lava Dome, Giant Tree & Pazuzu's Tower
+    to avoid softlock."""
     display_name = "Map Shuffle"
     option_none = 0
-    option_overworld = 1
-    option_dungeons = 2
-    option_overworld_and_dungeons = 3
-    option_everything = 4
+    option_dungeons_internal = 1
+    option_dungeons_mixed = 2
+    option_everything = 3
     default = 0
 
 
@@ -322,6 +329,25 @@ class KaelisMomFightsMinotaur(Toggle):
     default = 0
 
 
+class HintMode(Choice):
+    """Four NPCs, one in each INN, will reveal the location of an item. NPCs will never hint for an item already in your
+    inventory, so hints may change during playthrough. If Enemy Density is set to 0%, NPCs will refuse to give hints
+    until you have enough GPs to also cover any remaining vendor items.
+    None: No Hints.
+    Free: Hints are given for free.
+    Fixed: All hints will cost that amount of GPs.
+    Progressive: Each time you buy a hint, the cost of the other hints will increment by that amount."""
+    display_name = "Hint Mode"
+    default = 0
+    option_none = 0
+    option_free = 1
+    option_fixed250 = 2
+    option_fixed500 = 3
+    option_fixed1000 = 4
+    option_prog125 = 5
+    option_prog250 = 6
+    option_prog500 = 7
+
 @dataclass
 class FFMQOptions(PerGameCommonOptions):
     accessibility: ItemsAccessibility
@@ -351,8 +377,10 @@ class FFMQOptions(PerGameCommonOptions):
     doom_castle_mode: DoomCastle
     doom_castle_shortcut: DoomCastleShortcut
     tweak_frustrating_dungeons: TweakFrustratingDungeons
+    overworld_shuffle: OverworldShuffle
     map_shuffle: MapShuffle
     crest_shuffle: CrestShuffle
     shuffle_battlefield_rewards: ShuffleBattlefieldRewards
     map_shuffle_seed: MapShuffleSeed
     battlefields_battles_quantities: BattlefieldsBattlesQuantities
+    hint_mode: HintMode
