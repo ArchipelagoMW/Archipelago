@@ -3,6 +3,7 @@ from typing import Dict, List, Any, Tuple, ClassVar, cast
 from enum import IntEnum
 from Options import PerGameCommonOptions, DeathLink, AssembleOptions, Visibility
 from Options import Range, Toggle, OptionSet, StartInventoryPool, NamedRange, Choice
+from schema import Schema, And, Use
 
 class Placement(IntEnum):
     starting_inventory = 0
@@ -40,7 +41,6 @@ class ChoiceMap(Choice, metaclass=ChoiceMapMeta):
         for index, choice in enumerate(self.choices.keys()):
             if index == self.value:
                 return self.choices[choice]
-
 
 class ElevatorTier(NamedRange):
     """
@@ -347,6 +347,8 @@ class GoalSelection(OptionSet):
         # "FICSMAS Tree",
     }
     default = {"Space Elevator Tier"}
+    schema = Schema(And(set, len), 
+                    error = "yaml does not specify a goal, the Satisfactory option `goal_selection` is empty")
 
 class GoalRequirement(Choice):
     """

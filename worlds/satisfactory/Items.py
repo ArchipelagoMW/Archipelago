@@ -1,4 +1,3 @@
-import copy
 from random import Random
 from typing import ClassVar, Dict, Set, List, Tuple, Optional
 from BaseClasses import Item, ItemClassification as C, MultiWorld
@@ -194,7 +193,7 @@ class Items:
         "Small Inflated Pocket Dimension": ItemData(G.Upgrades, 1338188, C.useful, 11),
         "Inflated Pocket Dimension": ItemData(G.Upgrades, 1338189, C.useful, 5),
         "Expanded Toolbelt": ItemData(G.Upgrades, 1338190, C.useful, 5),
-        "Dimensional Depot upload from inventory": ItemData(G.Upgrades | G.BasicNeeds, 1338191, C.useful),
+        "Dimensional Depot upload from inventory": ItemData(G.Upgrades, 1338191, C.useful),
 
         #1338191 - 1338199 Reserved for future equipment/ammo
 
@@ -493,17 +492,17 @@ class Items:
         "Building: Fuel Generator": ItemData(G.Building, 1338618, C.progression),
         "Building: Resource Well Pressurizer": ItemData(G.Building, 1338619, C.progression),
         "Building: Equipment Workshop": ItemData(G.Building, 1338620, C.progression),
-        "Building: AWESOME Sink": ItemData(G.Building | G.BasicNeeds, 1338621, C.progression),
-        "Building: AWESOME Shop": ItemData(G.Building | G.BasicNeeds, 1338622, C.progression),
+        "Building: AWESOME Sink": ItemData(G.Building | G.AlwaysUseful, 1338621, C.progression),
+        "Building: AWESOME Shop": ItemData(G.Building | G.AlwaysUseful, 1338622, C.progression),
         "Building: Painted Beams": ItemData(G.Beams, 1338623, C.filler),
         "Building: Blueprint Designer": ItemData(G.Building, 1338624, C.filler, 0), # unlocked by default
         "Building: Fluid Buffer": ItemData(G.Building, 1338625, C.filler),
         "Building: Industrial Fluid Buffer": ItemData(G.Building, 1338626, C.filler),
         "Building: Jump Pad": ItemData(G.Building, 1338627, C.filler),
         "Building: Ladder": ItemData(G.Building, 1338628, C.filler),
-        "Building: MAM": ItemData(G.Building | G.BasicNeeds, 1338629, C.progression),
+        "Building: MAM": ItemData(G.Building | G.AlwaysUseful, 1338629, C.progression),
         "Building: Personal Storage Box": ItemData(G.Building, 1338630, C.filler),
-        "Building: Power Storage": ItemData(G.Building | G.BasicNeeds, 1338631, C.progression),
+        "Building: Power Storage": ItemData(G.Building | G.AlwaysUseful, 1338631, C.progression),
         "Building: U-Jelly Landing Pad": ItemData(G.Building, 1338632, C.useful),
         "Building: Power Switch": ItemData(G.Building, 1338633, C.useful),
         "Building: Priority Power Switch": ItemData(G.Building, 1338634, C.useful),
@@ -513,8 +512,8 @@ class Items:
         "Building: Power Pole Mk.2": ItemData(G.Building, 1338638, C.useful),
         "Building: Power Pole Mk.3": ItemData(G.Building, 1338639, C.useful),
         "Building: Industrial Storage Container": ItemData(G.Building, 1338640, C.filler),
-        "Building: Conveyor Merger": ItemData(G.Building | G.BasicNeeds, 1338641, C.progression),
-        "Building: Conveyor Splitter": ItemData(G.Building | G.BasicNeeds, 1338642, C.progression),
+        "Building: Conveyor Merger": ItemData(G.Building | G.AlwaysUseful, 1338641, C.progression),
+        "Building: Conveyor Splitter": ItemData(G.Building | G.AlwaysUseful, 1338642, C.progression),
         "Building: Conveyor Mk.1": ItemData(G.Building | G.ConveyorMk1, 1338643, C.progression), # unlocked by default
         "Building: Conveyor Mk.2": ItemData(G.Building | G.ConveyorMk2, 1338644, C.progression),
         "Building: Conveyor Mk.3": ItemData(G.Building | G.ConveyorMk3, 1338645, C.progression),
@@ -564,7 +563,7 @@ class Items:
         #"Building: Beam Support": ItemData(G.Beams, 1338689, C.filler, 0),
         #"Building: Beam Connector": ItemData(G.Beams, 1338690, C.filler, 0),
         #"Building: Beam Connector Double": ItemData(G.Beams, 1338691, C.filler, 0),
-        "Building: Foundation": ItemData(G.Building | G.Foundations | G.BasicNeeds, 1338692, C.progression),
+        "Building: Foundation": ItemData(G.Building | G.Foundations | G.AlwaysUseful, 1338692, C.progression),
         "Building: Half Foundation": ItemData(G.Foundations, 1338693, C.filler, 0),
         "Building: Corner Ramp Pack": ItemData(G.Foundations, 1338694, C.filler, 0),
         "Building: Inverted Ramp Pack": ItemData(G.Foundations, 1338695, C.filler, 0),
@@ -725,15 +724,14 @@ class Items:
 
         if type == C.progression \
             and instance and instance.critical_path.required_item_names \
-            and (data.category & (G.Recipe | G.Building)) and not (data.category & G.BasicNeeds) \
+            and (data.category & (G.Recipe | G.Building)) and not (data.category & G.AlwaysUseful) \
             and name not in instance.critical_path.required_item_names:
-                type = C.filler
-                logging.info(f"Dropping... {name}")
+                type = C.useful
 
         return Item(name, type, data.code, player)
 
 
-    def get_filler_item_name(self, random: Random, options: SatisfactoryOptions) -> str:
+    def get_filler_item_name(self, filler_items: Tuple[str, ...], random: Random, options: SatisfactoryOptions) -> str:
         trap_chance: int = options.trap_chance.value
         enabled_traps: List[str] = options.trap_selection_override.value
 
@@ -745,6 +743,9 @@ class Items:
 
     def get_excluded_items(self, multiworld: MultiWorld, options: SatisfactoryOptions) -> Set[str]:
         excluded_items: Set[str] = set()
+        excluded_items.update("Bundle: "+ part for part in self.critical_path.parts_to_exclude)
+        excluded_items.update(recipe for recipe in self.critical_path.recipes_to_exclude)
+        excluded_items.update("Building: "+ building for building in self.critical_path.buildings_to_exclude)
 
         for item in multiworld.precollected_items[self.player]:
             if item.name in self.item_data \
@@ -775,9 +776,12 @@ class Items:
         filler_pool_size: int = number_of_locations - len(pool)
         if (filler_pool_size < 0):
             raise Exception(f"Location pool starved, trying to add {len(pool)} items to {number_of_locations} locations")
-        logging.warning(f"Itempool size: {len(pool)}, number of locations: {number_of_locations}, spare: {filler_pool_size}")
+
+        filtered_filler_items = tuple(item for item in self.filler_items if item not in excluded_from_pool)
+
         for _ in range(filler_pool_size):
-            item = self.create_item(self, self.get_filler_item_name(random, options), self.player)
+            filler_item_name = self.get_filler_item_name(filtered_filler_items, random, options)
+            item = self.create_item(self, filler_item_name, self.player)
             pool.append(item)
 
         return pool

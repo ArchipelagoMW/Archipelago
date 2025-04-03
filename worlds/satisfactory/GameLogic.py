@@ -191,15 +191,15 @@ class GameLogic:
         "Crude Oil": (
             Recipe("Crude Oil", "Oil Extractor", implicitly_unlocked=True), ),
         "Bauxite": (
-            Recipe("Bauxite", "Miner Mk.1", handcraftable=True, implicitly_unlocked=True), ),
+            Recipe("Bauxite", "Miner Mk.1", handcraftable=True, implicitly_unlocked=True, minimal_tier=2), ),
         "Nitrogen Gas": (
-            Recipe("Nitrogen Gas", "Resource Well Pressurizer", implicitly_unlocked=True), ),
+            Recipe("Nitrogen Gas", "Resource Well Pressurizer", implicitly_unlocked=True, minimal_tier=2), ),
         "Uranium": (
-            Recipe("Uranium", "Miner Mk.1", handcraftable=True, implicitly_unlocked=True), ),
+            Recipe("Uranium", "Miner Mk.1", handcraftable=True, implicitly_unlocked=True, minimal_tier=2), ),
         
         # Special Items
         "Uranium Waste": (
-            Recipe("Uranium Waste", "Nuclear Power Plant", ("Uranium Fuel Rod", "Water"), implicitly_unlocked=True), ),
+            Recipe("Uranium Waste", "Nuclear Power Plant", ("Uranium Fuel Rod", "Water"), implicitly_unlocked=True, minimal_tier=2), ),
         #"Plutonium Waste": (
         #    Recipe("Plutonium Waste", "Nuclear Power Plant", ("Plutonium Fuel Rod", "Water"), implicitly_unlocked=True), ),
 
@@ -280,7 +280,7 @@ class GameLogic:
             Recipe("Wet Concrete", "Refinery", ("Limestone", "Water"), minimal_belt_speed=2)),
         "Silica": (
             Recipe("Silica", "Constructor", ("Raw Quartz", ), handcraftable=True),
-            Recipe("Alumina Solution", "Refinery", ("Bauxite", "Water"), additional_outputs=("Alumina Solution", ), minimal_belt_speed=2),
+            Recipe("Alumina Solution", "Refinery", ("Bauxite", "Water"), additional_outputs=("Alumina Solution", ), minimal_belt_speed=2, minimal_tier=2),
             Recipe("Cheap Silica", "Assembler", ("Raw Quartz", "Limestone")),
             Recipe("Distilled Silica", "Blender", ("Dissolved Silica", "Limestone", "Water"), additional_outputs=("Water", ), minimal_tier=2)),
         "Dissolved Silica": (
@@ -356,18 +356,18 @@ class GameLogic:
             Recipe("Smart Plating", "Assembler", ("Reinforced Iron Plate", "Rotor")), 
             Recipe("Plastic Smart Plating", "Manufacturer", ("Reinforced Iron Plate", "Rotor", "Plastic"))),
         "Versatile Framework": (
-            Recipe("Versatile Framework", "Assembler", ("Modular Frame", "Steel Beam")), 
-            Recipe("Flexible Framework", "Manufacturer", ("Modular Frame", "Steel Beam", "Rubber"))),
+            Recipe("Versatile Framework", "Assembler", ("Modular Frame", "Steel Beam"), minimal_tier=2), 
+            Recipe("Flexible Framework", "Manufacturer", ("Modular Frame", "Steel Beam", "Rubber"), minimal_tier=2)),
         "Automated Wiring": (
-            Recipe("Automated Wiring", "Assembler", ("Stator", "Cable")), 
-            Recipe("Automated Speed Wiring", "Manufacturer", ("Stator", "Wire", "High-Speed Connector"), minimal_belt_speed=2)),
+            Recipe("Automated Wiring", "Assembler", ("Stator", "Cable"), minimal_tier=2), 
+            Recipe("Automated Speed Wiring", "Manufacturer", ("Stator", "Wire", "High-Speed Connector"), minimal_belt_speed=2, minimal_tier=2)),
         "Modular Engine": (
-            Recipe("Modular Engine", "Manufacturer", ("Motor", "Rubber", "Smart Plating")), ), 
+            Recipe("Modular Engine", "Manufacturer", ("Motor", "Rubber", "Smart Plating"), minimal_tier=3), ), 
         "Adaptive Control Unit": (
-            Recipe("Adaptive Control Unit", "Manufacturer", ("Automated Wiring", "Circuit Board", "Heavy Modular Frame", "Computer")), ),
+            Recipe("Adaptive Control Unit", "Manufacturer", ("Automated Wiring", "Circuit Board", "Heavy Modular Frame", "Computer"), minimal_tier=3), ),
         "Portable Miner": (
             Recipe("Portable Miner", "Equipment Workshop", ("Iron Rod", "Iron Plate"), handcraftable=True, minimal_belt_speed=0, implicitly_unlocked=True),
-            Recipe("Automated Miner", "Manufacturer", ("Steel Pipe", "Iron Plate")), ),
+            Recipe("Automated Miner", "Assembler", ("Steel Pipe", "Iron Plate")), ),
         "Alumina Solution": (
             Recipe("Alumina Solution", "Refinery", ("Bauxite", "Water"), additional_outputs=("Silica", ), minimal_belt_speed=2, minimal_tier=2), 
             Recipe("Sloppy Alumina", "Refinery", ("Bauxite", "Water"), minimal_belt_speed=3, minimal_tier=2)),
@@ -433,19 +433,19 @@ class GameLogic:
         "Gas Filter": (
             Recipe("Gas Filter", "Manufacturer", ("Coal", "Rubber", "Fabric"), handcraftable=True), ),
         "Iodine Infused Filter": (
-            Recipe("Iodine Infused Filter", "Manufacturer", ("Gas Filter", "Quickwire", "Aluminum Casing"), handcraftable=True), ),
+            Recipe("Iodine Infused Filter", "Manufacturer", ("Gas Filter", "Quickwire", "Aluminum Casing"), handcraftable=True, minimal_tier=2), ),
         "Hazmat Suit": (
-            Recipe("Hazmat Suit", "Equipment Workshop", ("Rubber", "Plastic", "Fabric", "Alclad Aluminum Sheet"), handcraftable=True, minimal_belt_speed=0), ),
+            Recipe("Hazmat Suit", "Equipment Workshop", ("Rubber", "Plastic", "Fabric", "Alclad Aluminum Sheet"), handcraftable=True, minimal_tier=2), ),
         "Assembly Director System": (
-            Recipe("Assembly Director System", "Assembler", ("Adaptive Control Unit", "Supercomputer")), ),
+            Recipe("Assembly Director System", "Assembler", ("Adaptive Control Unit", "Supercomputer"), minimal_tier=4), ),
         "Magnetic Field Generator": (
-            Recipe("Magnetic Field Generator", "Assembler", ("Versatile Framework", "Electromagnetic Control Rod")), ),
+            Recipe("Magnetic Field Generator", "Assembler", ("Versatile Framework", "Electromagnetic Control Rod"), minimal_tier=4), ),
         "Copper Powder": (
             Recipe("Copper Powder", "Constructor", ("Copper Ingot", ), handcraftable=True), ),
         "Nuclear Pasta": (
             Recipe("Nuclear Pasta", "Particle Accelerator", ("Copper Powder", "Pressure Conversion Cube"), minimal_tier=2), ),
         "Thermal Propulsion Rocket": (
-            Recipe("Thermal Propulsion Rocket", "Manufacturer", ("Modular Engine", "Turbo Motor", "Cooling System", "Fused Modular Frame")), ),
+            Recipe("Thermal Propulsion Rocket", "Manufacturer", ("Modular Engine", "Turbo Motor", "Cooling System", "Fused Modular Frame"), minimal_tier=4), ),
         "Alien Protein": (
             Recipe("Hatcher Protein", "Constructor", ("Hatcher Remains", ), handcraftable=True),
             Recipe("Hog Protein", "Constructor", ("Hog Remains", ), handcraftable=True),
@@ -513,7 +513,7 @@ class GameLogic:
             Recipe("Power Shard (1)", "Constructor", ("Blue Power Slug", ), handcraftable=True),
             Recipe("Power Shard (2)", "Constructor", ("Yellow Power Slug", ), handcraftable=True),
             Recipe("Power Shard (5)", "Constructor", ("Purple Power Slug", ), handcraftable=True),
-            Recipe("Synthetic Power Shard", "Quantum Encoder", ("Dark Matter Residue", "Excited Photonic Matter", "Time Crystal", "Dark Matter Crystal", "Quartz Crystal"), minimal_tier=2)), # 1.0
+            Recipe("Synthetic Power Shard", "Quantum Encoder", ("Dark Matter Residue", "Excited Photonic Matter", "Time Crystal", "Dark Matter Crystal", "Quartz Crystal"), minimal_tier=4)), # 1.0
         "Object Scanner": (
             Recipe("Object Scanner", "Equipment Workshop", ("Reinforced Iron Plate", "Wire", "Screw"), handcraftable=True), ),
         "Xeno-Zapper": (
@@ -559,9 +559,9 @@ class GameLogic:
         "Singularity Cell": (
             Recipe("Singularity Cell", "Manufacturer", ("Nuclear Pasta", "Dark Matter Crystal", "Iron Plate", "Concrete"), minimal_belt_speed=3), ),
         "Biochemical Sculptor": (
-            Recipe("Biochemical Sculptor", "Blender", ("Assembly Director System", "Ficsite Trigon", "Water")), ),
+            Recipe("Biochemical Sculptor", "Blender", ("Assembly Director System", "Ficsite Trigon", "Water"), minimal_tier=5), ),
         "Ballistic Warp Drive": (
-            Recipe("Ballistic Warp Drive", "Manufacturer", ("Thermal Propulsion Rocket", "Singularity Cell", "Superposition Oscillator", "Dark Matter Crystal")), ),
+            Recipe("Ballistic Warp Drive", "Manufacturer", ("Thermal Propulsion Rocket", "Singularity Cell", "Superposition Oscillator", "Dark Matter Crystal"), minimal_tier=5), ),
 
         # All Quantum Encoder recipes have `Dark Matter Residue` set as an input, this hack makes the logic make sure you can get rid of it
         "Dark Matter Residue": (
@@ -574,7 +574,7 @@ class GameLogic:
         "Neural-Quantum Processor": (
             Recipe("Neural-Quantum Processor", "Quantum Encoder", ("Dark Matter Residue", "Excited Photonic Matter", "Time Crystal", "Supercomputer", "Ficsite Trigon")), ),
         "AI Expansion Server": (
-            Recipe("AI Expansion Server", "Quantum Encoder", ("Dark Matter Residue", "Excited Photonic Matter", "Magnetic Field Generator", "Neural-Quantum Processor", "Superposition Oscillator")), ),
+            Recipe("AI Expansion Server", "Quantum Encoder", ("Dark Matter Residue", "Excited Photonic Matter", "Magnetic Field Generator", "Neural-Quantum Processor", "Superposition Oscillator"), minimal_tier=5), ),
         ###
 #1.0
     }

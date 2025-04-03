@@ -9,6 +9,7 @@ from math import ceil, floor
 
 
 class LocationData():
+    __slots__ = ("region", "name", "event_name", "code", "non_progression", "rule")
     region: str
     name: str
     event_name: str
@@ -28,7 +29,7 @@ class LocationData():
 
 class Part(LocationData):
     @staticmethod
-    def get_parts(state_logic: StateLogic, recipes: Tuple[Recipe, ...], name: str, items: Items, 
+    def get_parts(state_logic: StateLogic, recipes: Tuple[Recipe, ...], name: str, 
                                                                     final_elevator_tier: int) -> List[LocationData]:
         recipes_per_region: Dict[str, List[Recipe]] = {}
 
@@ -38,15 +39,15 @@ class Part(LocationData):
 
             recipes_per_region.setdefault(recipe.building or "Overworld", []).append(recipe)
 
-        return [Part(state_logic, region, recipes_for_region, name, items) 
+        return [Part(state_logic, region, recipes_for_region, name) 
                 for region, recipes_for_region in recipes_per_region.items()]
 
-    def __init__(self, state_logic: StateLogic, region: str, recipes: Iterable[Recipe], name: str, items: Items):
-        super().__init__(region, part_event_prefix + name + region, EventId, part_event_prefix + name,
-            rule = self.can_produce_any_recipe_for_part(state_logic, recipes, name, items))
+    def __init__(self, state_logic: StateLogic, region: str, recipes: Iterable[Recipe], name: str):
+        super().__init__(region, part_event_prefix + name + " in " + region, EventId, part_event_prefix + name,
+            rule = self.can_produce_any_recipe_for_part(state_logic, recipes))
 
-    def can_produce_any_recipe_for_part(self, state_logic: StateLogic, recipes: Iterable[Recipe], 
-                                        name: str, items: Items) -> Callable[[CollectionState], bool]:
+    def can_produce_any_recipe_for_part(self, state_logic: StateLogic, recipes: Iterable[Recipe]) \
+                                                                            -> Callable[[CollectionState], bool]:
         def can_build_by_any_recipe(state: CollectionState) -> bool:
             return any(state_logic.can_produce_specific_recipe_for_part(state, recipe) for recipe in recipes)
 
@@ -374,10 +375,10 @@ class Locations():
             for index, parts in enumerate(self.game_logic.space_elevator_tiers)
             if index < self.options.final_elevator_package)
         location_table.extend(
-            part 
+            part
             for part_name, recipes in self.game_logic.recipes.items() 
             if part_name in self.critical_path.required_parts
-            for part in Part.get_parts(self.state_logic, recipes, part_name, self.items, final_elevator_tier))
+            for part in Part.get_parts(self.state_logic, recipes, part_name, final_elevator_tier))
         location_table.extend(
             EventBuilding(self.game_logic, self.state_logic, name, building) 
             for name, building in self.game_logic.buildings.items()

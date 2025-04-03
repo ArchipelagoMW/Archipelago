@@ -19,6 +19,10 @@ class CriticalPathCalculator:
     __potential_required_pipes: bool
     __potential_required_radioactive: bool
 
+    parts_to_exclude: set[str]
+    recipes_to_exclude: set[str]
+    buildings_to_exclude: set[str]
+
     def __init__(self, logic: GameLogic, random: Random, options: SatisfactoryOptions):
         self.logic = logic
         self.random = random
@@ -30,7 +34,6 @@ class CriticalPathCalculator:
 
         self.__potential_required_belt_speed = 1
         self.__potential_required_pipes = False
-        self.__potential_required_radioactive = False
 
         selected_power_infrastructure: dict[int, Recipe] = {}
 
@@ -57,9 +60,8 @@ class CriticalPathCalculator:
         self.select_minimal_required_parts_for_building("Power Storage")
         self.select_minimal_required_parts_for_building("Miner Mk.2")
 
-        #equipment
-        self.select_minimal_required_parts_for(self.logic.recipes["Hazmat Suit"][0].inputs)
-        self.select_minimal_required_parts_for(self.logic.recipes["Iodine Infused Filter"][0].inputs)
+        if self.logic.recipes["Uranium"][0].minimal_tier <= options.final_elevator_package:
+            self.select_minimal_required_parts_for(("Hazmat Suit", "Iodine Infused Filter"))
 
         for i in range(1, self.__potential_required_belt_speed + 1):
             self.select_minimal_required_parts_for_building(f"Conveyor Mk.{i}")
@@ -68,9 +70,6 @@ class CriticalPathCalculator:
             self.select_minimal_required_parts_for_building("Pipes Mk.2")
             self.select_minimal_required_parts_for_building("Pipeline Pump Mk.1")
             self.select_minimal_required_parts_for_building("Pipeline Pump Mk.2")
-        if self.__potential_required_radioactive:
-            self.select_minimal_required_parts_for(self.logic.recipes["Hazmat Suit"][0].inputs)
-            self.select_minimal_required_parts_for(self.logic.recipes["Iodine Infused Filter"][0].inputs)
         for i in range(1, self.required_power_level + 1):
             power_recipe = random.choice(self.logic.requirement_per_powerlevel[i])
             selected_power_infrastructure[i] = power_recipe
@@ -84,6 +83,55 @@ class CriticalPathCalculator:
             if recipe.minimal_tier <= self.options.final_elevator_package
         )
         self.required_item_names.update("Building: "+ building for building in self.required_buildings)
+
+        self.parts_to_exclude = set()
+        self.buildings_to_exclude = set()
+        self.recipes_to_exclude = set(
+            recipe.name
+            for part in self.logic.recipes
+            for recipe in self.logic.recipes[part]
+            if recipe.minimal_tier > self.options.final_elevator_package
+        )
+
+        excluded_count = len(self.recipes_to_exclude)
+        while True:
+            for part in self.logic.recipes:
+                if part in self.parts_to_exclude:
+                    continue
+
+                for recipe in self.logic.recipes[part]:
+                    if recipe.name in self.recipes_to_exclude:
+                        continue
+
+                    if recipe.inputs and any(input in self.parts_to_exclude for input in recipe.inputs):
+                        self.recipes_to_exclude.add(recipe.name)
+
+                if all(r.name in self.recipes_to_exclude for r in self.logic.recipes[part]):
+                    self.parts_to_exclude.add(part)
+
+                new_buildings_to_exclude = set(
+                    building_name
+                    for building_name, building in self.logic.buildings.items()
+                    if building_name not in self.buildings_to_exclude 
+                        and building.inputs and any(input in self.parts_to_exclude for input in building.inputs)
+                )
+
+                self.recipes_to_exclude.update(
+                    recipe_per_part.name
+                    for building_to_exclude in new_buildings_to_exclude
+                    for recipes_per_part in self.logic.recipes.values()
+                    for recipe_per_part in recipes_per_part
+                    if recipe_per_part.building == building_to_exclude
+                )
+
+                self.buildings_to_exclude.update(new_buildings_to_exclude)
+
+            new_length = len(self.recipes_to_exclude)
+            if new_length == excluded_count:
+                break
+            excluded_count = new_length
+
+        Debug = True
 
     def select_minimal_required_parts_for_building(self, building: str) -> None:
         self.select_minimal_required_parts_for(self.logic.buildings[building].inputs)

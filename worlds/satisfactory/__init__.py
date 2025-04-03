@@ -1,5 +1,5 @@
-from typing import Dict, List, Set, TextIO, ClassVar, Tuple
-from BaseClasses import Item, MultiWorld, ItemClassification, CollectionState
+from typing import Dict, List, Set, TextIO, ClassVar
+from BaseClasses import Item, ItemClassification, CollectionState
 from .GameLogic import GameLogic
 from .Items import Items
 from .Locations import Locations, LocationData
@@ -21,7 +21,6 @@ class SatisfactoryWorld(World):
     options_dataclass = SatisfactoryOptions
     options: SatisfactoryOptions
     topology_present = False
-    data_version = 0
     web = SatisfactoryWebWorld()
     origin_region_name = "Overworld"
 
@@ -34,19 +33,10 @@ class SatisfactoryWorld(World):
     items: Items
     critical_path: CriticalPathCalculator
 
-    def __init__(self, multiworld: "MultiWorld", player: int):
-        super().__init__(multiworld, player)
-        self.items = None
-
-
     def generate_early(self) -> None:
         self.state_logic = StateLogic(self.player, self.options)
         self.critical_path = CriticalPathCalculator(self.game_logic, self.random, self.options)
         self.items = Items(self.player, self.game_logic, self.random, self.options, self.critical_path)
-
-        if not self.options.goal_selection.value:
-            raise Exception("""Satisfactory: player {} needs to choose a goal, the option goal_selection is empty"""
-                .format(self.multiworld.player_name[self.player]))
 
         if self.options.mam_logic_placement.value == Placement.starting_inventory:
             self.push_precollected("Building: MAM")
@@ -144,15 +134,15 @@ class SatisfactoryWorld(World):
         }
 
 
-    def write_spoiler(self, spoiler_handle: TextIO):
+    def write_spoiler(self, spoiler_handle: TextIO) -> None:
         pass
 
 
     def get_filler_item_name(self) -> str:
-        return self.items.get_filler_item_name(self.random, self.options)
+        return self.items.get_filler_item_name(self.items.filler_items, self.random, self.options)
 
 
-    def setup_events(self):
+    def setup_events(self) -> None:
         location: SatisfactoryLocation
         for location in self.multiworld.get_locations(self.player):
             if location.address == EventId:

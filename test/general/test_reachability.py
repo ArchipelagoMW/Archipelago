@@ -61,7 +61,8 @@ class TestBase(unittest.TestCase):
                             self.assertFalse(region.can_reach(state))
                     else:
                         with self.subTest("Region should be reached", region=region.name):
-                            self.assertTrue(region.can_reach(state))
+                            if not region.can_reach(state):
+                                self.assertTrue(region.can_reach(state))
 
                 with self.subTest("Completion Condition"):
                     self.assertTrue(multiworld.can_beat_game(state))
