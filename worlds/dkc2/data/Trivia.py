@@ -2650,7 +2650,7 @@ trivia_easy_yoshis_island = [
     ),
 ]
 
-trivia_easy_zelda_ii:_the_adventure_of_link = [
+trivia_easy_zelda_ii_the_adventure_of_link = [
 ]
 
 trivia_easy_zillion = [
@@ -4877,7 +4877,7 @@ trivia_hard_vvvvvv = [
 trivia_hard_yoshis_island = [
 ]
 
-trivia_hard_zelda_ii:_the_adventure_of_link = [
+trivia_hard_zelda_ii_the_adventure_of_link = [
 ]
 
 trivia_hard_zillion = [
@@ -7546,7 +7546,7 @@ trivia_medium_yoshis_island = [
     ),
 ]
 
-trivia_medium_zelda_ii:_the_adventure_of_link = [
+trivia_medium_zelda_ii_the_adventure_of_link = [
     TriviaQuestion(
         [
             """°""", 
@@ -7816,9 +7816,9 @@ trivia_data = {
         trivia_hard_yoshis_island,
     ],
     "Zelda II: The Adventure of Link": [
-        trivia_easy_zelda_ii:_the_adventure_of_link, 
-        trivia_medium_zelda_ii:_the_adventure_of_link, 
-        trivia_hard_zelda_ii:_the_adventure_of_link,
+        trivia_easy_zelda_ii_the_adventure_of_link, 
+        trivia_medium_zelda_ii_the_adventure_of_link, 
+        trivia_hard_zelda_ii_the_adventure_of_link,
     ],
     "Zillion": [
         trivia_easy_zillion, 
