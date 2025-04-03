@@ -8,9 +8,7 @@ def event(name: str):
 
 class Event:
     victory = event("Victory")
-    spring_farming = event("Spring Farming")
-    summer_farming = event("Summer Farming")
-    fall_farming = event("Fall Farming")
-    winter_farming = event("Winter Farming")
 
     received_walnuts = event("Received Walnuts")
+    received_progression_item = event("Received Progression Item")
+    received_progression_percent = event("Received Progression Percent")

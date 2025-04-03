@@ -11,7 +11,7 @@ from .data.game_item import ItemTag
 from .data.museum_data import all_museum_items
 from .mods.mod_data import ModNames
 from .options import ExcludeGingerIsland, ArcadeMachineLocations, SpecialOrderLocations, Museumsanity, \
-    FestivalLocations, BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression, FarmType
+    FestivalLocations, BuildingProgression, ElevatorProgression, BackpackProgression, FarmType
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
 from .strings.goal_names import Goal
 from .strings.quest_names import ModQuest, Quest
@@ -110,6 +110,8 @@ class LocationTags(enum.Enum):
     MAGIC_LEVEL = enum.auto()
     ARCHAEOLOGY_LEVEL = enum.auto()
 
+    DEPRECATED = enum.auto()
+
 
 @dataclass(frozen=True)
 class LocationData:
@@ -189,7 +191,7 @@ def extend_cropsanity_locations(randomized_locations: List[LocationData], conten
 
 
 def extend_quests_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
-    if options.quest_locations < 0:
+    if options.quest_locations.has_no_story_quests():
         return
 
     story_quest_locations = locations_by_tag[LocationTags.STORY_QUEST]
@@ -315,7 +317,7 @@ def extend_mandatory_locations(randomized_locations: List[LocationData], options
 
 
 def extend_situational_quest_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
-    if options.quest_locations < 0:
+    if options.quest_locations.has_no_story_quests():
         return
     if ModNames.distant_lands in options.mods:
         if ModNames.alecto in options.mods:
@@ -471,7 +473,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_bundle_locations(randomized_locations, bundle_rooms)
     extend_backpack_locations(randomized_locations, options)
 
-    if options.tool_progression & ToolProgression.option_progressive:
+    if content.features.tool_progression.is_progressive:
         randomized_locations.extend(locations_by_tag[LocationTags.TOOL_UPGRADE])
 
     extend_elevator_locations(randomized_locations, options)
@@ -519,6 +521,10 @@ def create_locations(location_collector: StardewLocationCollector,
         location_collector(location_data.name, location_data.code, location_data.region)
 
 
+def filter_deprecated_locations(locations: Iterable[LocationData]) -> Iterable[LocationData]:
+    return [location for location in locations if LocationTags.DEPRECATED not in location.tags]
+
+
 def filter_farm_type(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
     # On Meadowlands, "Feeding Animals" replaces "Raising Animals"
     if options.farm_type == FarmType.option_meadowlands:
@@ -549,7 +555,8 @@ def filter_modded_locations(options: StardewValleyOptions, locations: Iterable[L
 
 
 def filter_disabled_locations(options: StardewValleyOptions, content: StardewContent, locations: Iterable[LocationData]) -> Iterable[LocationData]:
-    locations_farm_filter = filter_farm_type(options, locations)
+    locations_deprecated_filter = filter_deprecated_locations(locations)
+    locations_farm_filter = filter_farm_type(options, locations_deprecated_filter)
     locations_island_filter = filter_ginger_island(options, locations_farm_filter)
     locations_qi_filter = filter_qi_order_locations(options, locations_island_filter)
     locations_masteries_filter = filter_masteries_locations(content, locations_qi_filter)
