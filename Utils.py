@@ -1079,6 +1079,7 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
 
 def build_sphinx_docs() -> None:
     """Build Sphinx autodocs."""
+    # noinspection PyUnresolvedReferences
     from sphinx.cmd.build import main as sphinx_main
 
     base_dir = os.path.dirname(__file__)
