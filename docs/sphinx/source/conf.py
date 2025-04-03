@@ -35,6 +35,8 @@ autodoc_default_options = {
     "show-inheritance": True,
 }
 
+myst_enable_extensions = ["html_image"]
+
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 html_theme = "bizstyle"
