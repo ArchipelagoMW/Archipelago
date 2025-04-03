@@ -5,6 +5,7 @@ import functools
 import logging
 import random
 import secrets
+import warnings
 from argparse import Namespace
 from collections import Counter, deque
 from collections.abc import Collection, MutableSequence
@@ -427,7 +428,7 @@ class MultiWorld():
     def get_location(self, location_name: str, player: int) -> Location:
         return self.regions.location_cache[player][location_name]
 
-    def get_all_state(self, use_cache: bool = False, allow_partial_entrances: bool = False) -> CollectionState:
+    def get_all_state(self, use_cache: bool | None = None, allow_partial_entrances: bool = False) -> CollectionState:
         """
         Creates a new CollectionState, and collects all precollected items, all items in the multiworld itempool, those
         specified in each worlds' `get_pre_fill_items()`, and then sweeps the multiworld collecting any other items
@@ -439,6 +440,10 @@ class MultiWorld():
 
         :return: The completed CollectionState.
         """
+        if __debug__ and use_cache is not None:
+            # TODO swap to Utils.deprecate when we want this to crash on source and warn on frozen
+            warnings.warn("multiworld.get_all_state no longer caches all_state and this argument will be removed.",
+                          DeprecationWarning)
         ret = CollectionState(self, allow_partial_entrances)
 
         for item in self.itempool:
