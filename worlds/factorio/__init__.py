@@ -8,11 +8,12 @@ import Utils
 import settings
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import Component, components, Type, launch_subprocess
+from worlds.LauncherComponents import Component, components, Type, launch as launch_component
 from worlds.generic import Rules
 from .Locations import location_pools, location_table
 from .Mod import generate_mod
-from .Options import FactorioOptions, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal, TechCostDistribution
+from .Options import (FactorioOptions, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal,
+                      TechCostDistribution, option_groups)
 from .Shapes import get_shapes
 from .Technologies import base_tech_table, recipe_sources, base_technology_table, \
     all_product_sources, required_technologies, get_rocket_requirements, \
@@ -23,7 +24,7 @@ from .Technologies import base_tech_table, recipe_sources, base_technology_table
 
 def launch_client():
     from .Client import launch
-    launch_subprocess(launch, name="FactorioClient")
+    launch_component(launch, name="FactorioClient")
 
 
 components.append(Component("Factorio Client", "FactorioClient", func=launch_client, component_type=Type.CLIENT))
@@ -61,6 +62,7 @@ class FactorioWeb(WebWorld):
         "setup/en",
         ["Berserker, Farrak Kilhn"]
     )]
+    option_groups = option_groups
 
 
 class FactorioItem(Item):
@@ -75,6 +77,8 @@ all_items["Grenade Trap"] = factorio_base_id - 4
 all_items["Cluster Grenade Trap"] = factorio_base_id - 5
 all_items["Artillery Trap"] = factorio_base_id - 6
 all_items["Atomic Rocket Trap"] = factorio_base_id - 7
+all_items["Atomic Cliff Remover Trap"] = factorio_base_id - 8
+all_items["Inventory Spill Trap"] = factorio_base_id - 9
 
 
 class Factorio(World):
@@ -98,7 +102,7 @@ class Factorio(World):
     item_name_groups = {
         "Progressive": set(progressive_tech_table.keys()),
     }
-    required_client_version = (0, 5, 1)
+    required_client_version = (0, 6, 0)
     if Utils.version_tuple < required_client_version:
         raise Exception(f"Update Archipelago to use this world ({game}).")
     ordered_science_packs: typing.List[str] = MaxSciencePack.get_ordered_science_packs()
@@ -109,6 +113,8 @@ class Factorio(World):
     science_locations: typing.List[FactorioScienceLocation]
     removed_technologies: typing.Set[str]
     settings: typing.ClassVar[FactorioSettings]
+    trap_names: tuple[str] = ("Evolution", "Attack", "Teleport", "Grenade", "Cluster Grenade", "Artillery",
+                              "Atomic Rocket", "Atomic Cliff Remover", "Inventory Spill")
 
     def __init__(self, world, player: int):
         super(Factorio, self).__init__(world, player)
@@ -133,14 +139,11 @@ class Factorio(World):
         random = self.random
         nauvis = Region("Nauvis", player, self.multiworld)
 
-        location_count = len(base_tech_table) - len(useless_technologies) - self.skip_silo + \
-                         self.options.evolution_traps + \
-                         self.options.attack_traps + \
-                         self.options.teleport_traps + \
-                         self.options.grenade_traps + \
-                         self.options.cluster_grenade_traps + \
-                         self.options.atomic_rocket_traps + \
-                         self.options.artillery_traps
+        location_count = len(base_tech_table) - len(useless_technologies) - self.skip_silo
+
+        for name in self.trap_names:
+            name = name.replace(" ", "_").lower()+"_traps"
+            location_count += getattr(self.options, name)
 
         location_pool = []
 
@@ -192,8 +195,8 @@ class Factorio(World):
     def create_items(self) -> None:
         self.custom_technologies = self.set_custom_technologies()
         self.set_custom_recipes()
-        traps = ("Evolution", "Attack", "Teleport", "Grenade", "Cluster Grenade", "Artillery", "Atomic Rocket")
-        for trap_name in traps:
+
+        for trap_name in self.trap_names:
             self.multiworld.itempool.extend(self.create_item(f"{trap_name} Trap") for _ in
                                             range(getattr(self.options,
                                                           f"{trap_name.lower().replace(' ', '_')}_traps")))
@@ -275,9 +278,6 @@ class Factorio(World):
         self.get_location("Rocket Launch").access_rule = lambda state: all(state.has(technology, player)
                                                                            for technology in
                                                                            victory_tech_names)
-        for tech_name in victory_tech_names:
-            if not self.multiworld.get_all_state(True).has(tech_name, player):
-                print(tech_name)
         self.multiworld.completion_condition[player] = lambda state: state.has('Victory', player)
 
     def get_recipe(self, name: str) -> Recipe:

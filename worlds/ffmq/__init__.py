@@ -3,7 +3,6 @@ import settings
 import base64
 import threading
 import requests
-import yaml
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial
 from .Regions import create_regions, location_table, set_rules, stage_set_rules, rooms, non_dead_end_crest_rooms,\
@@ -134,7 +133,7 @@ class FFMQWorld(World):
                         errors.append([api_url, err])
                     else:
                         if response.ok:
-                            world.rooms = rooms_data[query] = yaml.load(response.text, yaml.Loader)
+                            world.rooms = rooms_data[query] = Utils.parse_yaml(response.text)
                             break
                         else:
                             api_urls.remove(api_url)
@@ -152,14 +151,23 @@ class FFMQWorld(World):
         return FFMQItem(name, self.player)
 
     def collect_item(self, state, item, remove=False):
+        if not item.advancement:
+            return None
         if "Progressive" in item.name:
             i = item.code - 256
+            if remove:
+                if state.has(self.item_id_to_name[i+1], self.player):
+                    if state.has(self.item_id_to_name[i+2], self.player):
+                        return self.item_id_to_name[i+2]
+                    return self.item_id_to_name[i+1]
+                return self.item_id_to_name[i]
+
             if state.has(self.item_id_to_name[i], self.player):
                 if state.has(self.item_id_to_name[i+1], self.player):
                     return self.item_id_to_name[i+2]
                 return self.item_id_to_name[i+1]
             return self.item_id_to_name[i]
-        return item.name if item.advancement else None
+        return item.name
 
     def modify_multidata(self, multidata):
         # wait for self.rom_name to be available.

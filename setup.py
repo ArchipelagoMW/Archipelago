@@ -19,7 +19,7 @@ from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple, Union
 
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
-requirement = 'cx-Freeze==7.2.0'
+requirement = 'cx-Freeze==8.0.0'
 try:
     import pkg_resources
     try:
@@ -321,7 +321,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
                                   f"{ex}\nPlease close all AP instances and delete manually.")
 
         # regular cx build
-        self.buildtime = datetime.datetime.utcnow()
+        self.buildtime = datetime.datetime.now(datetime.timezone.utc)
         super().run()
 
         # manually copy built modules to lib folder. cx_Freeze does not know they exist.

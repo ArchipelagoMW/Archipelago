@@ -3,13 +3,23 @@ from __future__ import annotations
 from dataclasses import dataclass
 import typing
 
-from schema import Schema, Optional, And, Or
+from schema import Schema, Optional, And, Or, SchemaError
 
 from Options import Choice, OptionDict, OptionSet, DefaultOnToggle, Range, DeathLink, Toggle, \
-    StartInventoryPool, PerGameCommonOptions
+    StartInventoryPool, PerGameCommonOptions, OptionGroup
 
 # schema helpers
-FloatRange = lambda low, high: And(Or(int, float), lambda f: low <= f <= high)
+class FloatRange:
+    def __init__(self, low, high):
+        self._low = low
+        self._high = high
+
+    def validate(self, value):
+        if not isinstance(value, (float, int)):
+            raise SchemaError(f"should be instance of float or int, but was {value!r}")
+        if not self._low <= value <= self._high:
+            raise SchemaError(f"{value} is not between {self._low} and {self._high}")
+
 LuaBool = Or(bool, And(int, lambda n: n in (0, 1)))
 
 
@@ -225,6 +235,12 @@ class FactorioStartItems(OptionDict):
     """Mapping of Factorio internal item-name to amount granted on start."""
     display_name = "Starting Items"
     default = {"burner-mining-drill": 4, "stone-furnace": 4,  "raw-fish": 50}
+    schema = Schema(
+        {
+            str: And(int, lambda n: n > 0,
+                     error="amount of starting items has to be a positive integer"),
+        }
+    )
 
 
 class FactorioFreeSampleBlacklist(OptionSet):
@@ -247,7 +263,8 @@ class AttackTrapCount(TrapCount):
 
 
 class TeleportTrapCount(TrapCount):
-    """Trap items that when received trigger a random teleport."""
+    """Trap items that when received trigger a random teleport.
+    It is ensured the player can walk back to where they got teleported from."""
     display_name = "Teleport Traps"
 
 
@@ -272,6 +289,12 @@ class AtomicRocketTrapCount(TrapCount):
     display_name = "Atomic Rocket Traps"
 
 
+class AtomicCliffRemoverTrapCount(TrapCount):
+    """Trap items that when received trigger an atomic rocket explosion on a random cliff.
+    Warning: there is no warning. The launch is instantaneous."""
+    display_name = "Atomic Cliff Remover Traps"
+
+
 class EvolutionTrapCount(TrapCount):
     """Trap items that when received increase the enemy evolution."""
     display_name = "Evolution Traps"
@@ -288,12 +311,17 @@ class EvolutionTrapIncrease(Range):
     range_end = 100
 
 
+class InventorySpillTrapCount(TrapCount):
+    """Trap items that when received trigger dropping your main inventory and trash inventory onto the ground."""
+    display_name = "Inventory Spill Traps"
+
+
 class FactorioWorldGen(OptionDict):
     """World Generation settings. Overview of options at https://wiki.factorio.com/Map_generator,
     with in-depth documentation at https://lua-api.factorio.com/latest/Concepts.html#MapGenSettings"""
     display_name = "World Generation"
     # FIXME: do we want default be a rando-optimized default or in-game DS?
-    value: typing.Dict[str, typing.Dict[str, typing.Any]]
+    value: dict[str, dict[str, typing.Any]]
     default = {
         "autoplace_controls": {
             # terrain
@@ -402,7 +430,7 @@ class FactorioWorldGen(OptionDict):
         }
     })
 
-    def __init__(self, value: typing.Dict[str, typing.Any]):
+    def __init__(self, value: dict[str, typing.Any]):
         advanced = {"pollution", "enemy_evolution", "enemy_expansion"}
         self.value = {
             "basic": {k: v for k, v in value.items() if k not in advanced},
@@ -421,7 +449,7 @@ class FactorioWorldGen(OptionDict):
         optional_min_lte_max(enemy_expansion, "min_expansion_cooldown", "max_expansion_cooldown")
 
     @classmethod
-    def from_any(cls, data: typing.Dict[str, typing.Any]) -> FactorioWorldGen:
+    def from_any(cls, data: dict[str, typing.Any]) -> FactorioWorldGen:
         if type(data) == dict:
             return cls(data)
         else:
@@ -435,7 +463,7 @@ class ImportedBlueprint(DefaultOnToggle):
 
 class EnergyLink(Toggle):
     """Allow sending energy to other worlds. 25% of the energy is lost in the transfer."""
-    display_name = "EnergyLink"
+    display_name = "Energy Link"
 
 
 @dataclass
@@ -467,9 +495,44 @@ class FactorioOptions(PerGameCommonOptions):
     cluster_grenade_traps: ClusterGrenadeTrapCount
     artillery_traps: ArtilleryTrapCount
     atomic_rocket_traps: AtomicRocketTrapCount
+    atomic_cliff_remover_traps: AtomicCliffRemoverTrapCount
+    inventory_spill_traps: InventorySpillTrapCount
     attack_traps: AttackTrapCount
     evolution_traps: EvolutionTrapCount
     evolution_trap_increase: EvolutionTrapIncrease
     death_link: DeathLink
     energy_link: EnergyLink
     start_inventory_from_pool: StartInventoryPool
+
+
+option_groups: list[OptionGroup] = [
+    OptionGroup(
+        "Technologies",
+        [
+            TechTreeLayout,
+            Progressive,
+            MinTechCost,
+            MaxTechCost,
+            TechCostDistribution,
+            TechCostMix,
+            RampingTechCosts,
+            TechTreeInformation,
+        ]
+    ),
+    OptionGroup(
+        "Traps",
+        [
+            AttackTrapCount,
+            EvolutionTrapCount,
+            EvolutionTrapIncrease,
+            TeleportTrapCount,
+            GrenadeTrapCount,
+            ClusterGrenadeTrapCount,
+            ArtilleryTrapCount,
+            AtomicRocketTrapCount,
+            AtomicCliffRemoverTrapCount,
+            InventorySpillTrapCount,
+        ],
+        start_collapsed=True
+    ),
+]

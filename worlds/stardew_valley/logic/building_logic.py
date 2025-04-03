@@ -1,3 +1,4 @@
+from functools import cached_property
 from typing import Dict, Union
 
 from Utils import cache_self1
@@ -8,12 +9,12 @@ from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from ..options import BuildingProgression
 from ..stardew_rule import StardewRule, True_, False_, Has
-from ..strings.ap_names.event_names import Event
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.building_names import Building
 from ..strings.fish_names import WaterItem
 from ..strings.material_names import Material
 from ..strings.metal_names import MetalBar
+from ..strings.region_names import Region
 
 has_group = "building"
 
@@ -60,7 +61,7 @@ class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, MoneyLogicMixin, RegionL
                 return True_()
             return self.logic.received(building)
 
-        carpenter_rule = self.logic.received(Event.can_construct_buildings)
+        carpenter_rule = self.logic.building.can_construct_buildings
         if not self.options.building_progression & BuildingProgression.option_progressive:
             return Has(building, self.registry.building_rules, has_group) & carpenter_rule
 
@@ -75,6 +76,10 @@ class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, MoneyLogicMixin, RegionL
             building = " ".join(["Progressive", *building.split(" ")[1:]])
         return self.logic.received(building, count) & carpenter_rule
 
+    @cached_property
+    def can_construct_buildings(self) -> StardewRule:
+        return self.logic.region.can_reach(Region.carpenter)
+
     @cache_self1
     def has_house(self, upgrade_level: int) -> StardewRule:
         if upgrade_level < 1:
@@ -83,7 +88,7 @@ class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, MoneyLogicMixin, RegionL
         if upgrade_level > 3:
             return False_()
 
-        carpenter_rule = self.logic.received(Event.can_construct_buildings)
+        carpenter_rule = self.logic.building.can_construct_buildings
         if self.options.building_progression & BuildingProgression.option_progressive:
             return carpenter_rule & self.logic.received(f"Progressive House", upgrade_level)
 
