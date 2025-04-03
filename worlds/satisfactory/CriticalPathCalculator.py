@@ -131,8 +131,6 @@ class CriticalPathCalculator:
                 break
             excluded_count = new_length
 
-        Debug = True
-
     def select_minimal_required_parts_for_building(self, building: str) -> None:
         self.select_minimal_required_parts_for(self.logic.buildings[building].inputs)
         self.required_buildings.add(building)
