@@ -313,7 +313,7 @@ def create_weapons(item_factory: StardewItemFactory, options: StardewValleyOptio
         return
 
     rings_items = items_by_group[Group.RING]
-    if not content.is_enabled(ginger_island_content_pack):
+    if content.is_disabled(ginger_island_content_pack):
         rings_items = [item for item in rings_items if item.classification is not ItemClassification.filler]
 
     items.extend(item_factory(item) for item in rings_items)
@@ -537,7 +537,7 @@ def create_festival_rewards(item_factory: StardewItemFactory, options: StardewVa
 
 def create_walnuts(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):
     walnutsanity = options.walnutsanity
-    if not content.is_enabled(ginger_island_content_pack) or walnutsanity == Walnutsanity.preset_none:
+    if content.is_disabled(ginger_island_content_pack) or walnutsanity == Walnutsanity.preset_none:
         return
 
     # Give baseline walnuts just to be nice
@@ -565,7 +565,7 @@ def create_walnuts(item_factory: StardewItemFactory, options: StardewValleyOptio
 
 
 def create_walnut_purchase_rewards(item_factory: StardewItemFactory, content: StardewContent, items: List[Item]):
-    if not content.is_enabled(ginger_island_content_pack):
+    if content.is_disabled(ginger_island_content_pack):
         return
 
     items.extend([item_factory("Boat Repair"),
@@ -594,7 +594,7 @@ def special_order_board_item_classification(item: ItemData, need_all_recipes: bo
 
 
 def create_special_order_qi_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):
-    if not content.is_enabled(ginger_island_content_pack):
+    if content.is_disabled(ginger_island_content_pack):
         return
     qi_gem_rewards = []
     if options.bundle_randomization >= BundleRandomization.option_remixed:
@@ -673,7 +673,7 @@ def create_goal_items(item_factory: StardewItemFactory, options: StardewValleyOp
 
 
 def create_archaeology_items(item_factory: StardewItemFactory, content: StardewContent, items: List[Item]):
-    if not content.is_enabled(ModNames.archaeology):
+    if content.is_disabled(ModNames.archaeology):
         return
 
     items.append(item_factory(Wallet.metal_detector))
@@ -688,26 +688,26 @@ def create_filler_festival_rewards(item_factory: StardewItemFactory, options: St
 
 
 def create_magic_mod_spells(item_factory: StardewItemFactory, content: StardewContent, items: List[Item]):
-    if not content.is_enabled(ModNames.magic):
+    if content.is_disabled(ModNames.magic):
         return
     items.extend([item_factory(item) for item in items_by_group[Group.MAGIC_SPELL]])
 
 
 def create_deepwoods_pendants(item_factory: StardewItemFactory, content: StardewContent, items: List[Item]):
-    if not content.is_enabled(ModNames.deepwoods):
+    if content.is_disabled(ModNames.deepwoods):
         return
     items.extend([item_factory(item) for item in ["Pendant of Elders", "Pendant of Community", "Pendant of Depths"]])
 
 
 def create_sve_special_items(item_factory: StardewItemFactory, content: StardewContent, items: List[Item]):
-    if not content.is_enabled(ModNames.sve):
+    if content.is_disabled(ModNames.sve):
         return
 
     items.extend([item_factory(item) for item in items_by_group[Group.MOD_WARP] if ModNames.sve in item.content_packs])
 
 
 def create_quest_rewards_sve(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):
-    if not content.is_enabled(ModNames.sve):
+    if content.is_disabled(ModNames.sve):
         return
 
     ginger_island_included = content.is_enabled(ginger_island_content_pack)

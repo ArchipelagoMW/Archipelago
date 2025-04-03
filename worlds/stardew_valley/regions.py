@@ -649,7 +649,7 @@ def randomize_connections(random: Random, world_options: StardewValleyOptions, c
 
 def remove_excluded_entrances(connections_to_randomize: List[ConnectionData], content: StardewContent) -> List[ConnectionData]:
     # FIXME remove when regions are handled in content packs
-    if not content.is_enabled(content_packs.ginger_island_content_pack):
+    if content.is_disabled(content_packs.ginger_island_content_pack):
         connections_to_randomize = [connection for connection in connections_to_randomize if RandomizationFlag.GINGER_ISLAND not in connection.flag]
     if not content.features.skill_progression.are_masteries_shuffled:
         connections_to_randomize = [connection for connection in connections_to_randomize if RandomizationFlag.MASTERIES not in connection.flag]

@@ -28,7 +28,7 @@ from ...strings.villager_names import ModNPC
 class SVEContentPack(ContentPack):
 
     def fish_hook(self, content: StardewContent):
-        if not content.is_enabled(ginger_island_content_pack):
+        if content.is_disabled(ginger_island_content_pack):
             content.fishes.pop(fish_data.baby_lunaloo.name)
             content.fishes.pop(fish_data.clownfish.name)
             content.fishes.pop(fish_data.lunaloo.name)
@@ -45,7 +45,7 @@ class SVEContentPack(ContentPack):
             content.fishes.pop(fish_data.torpedo_trout.name)
 
     def villager_hook(self, content: StardewContent):
-        if not content.is_enabled(ginger_island_content_pack):
+        if content.is_disabled(ginger_island_content_pack):
             # Remove Lance if Ginger Island is not in content since he is first encountered in Volcano Forge
             content.villagers.pop(villagers_data.lance.name)
 
@@ -56,7 +56,7 @@ class SVEContentPack(ContentPack):
         content.untag_item(SVESeed.stalk, tag=ItemTag.CROPSANITY_SEED)
         content.untag_item(SVESeed.void, tag=ItemTag.CROPSANITY_SEED)
         content.untag_item(SVESeed.ancient_fern, tag=ItemTag.CROPSANITY_SEED)
-        if not content.is_enabled(ginger_island_content_pack):
+        if content.is_disabled(ginger_island_content_pack):
             # Remove Highlands seeds as these are behind Lance existing.
             content.game_items.pop(SVESeed.void)
             content.game_items.pop(SVEVegetable.void_root)

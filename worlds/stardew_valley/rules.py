@@ -232,7 +232,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
 
 
 def set_dangerous_mine_rules(logic, multiworld, player, content: StardewContent):
-    if not content.is_enabled(ginger_island_content_pack):
+    if content.is_disabled(ginger_island_content_pack):
         return
     dangerous_mine_rule = logic.mine.has_mine_elevator_to_floor(120) & logic.region.can_reach(Region.qi_walnut_room)
     set_entrance_rule(multiworld, player, Entrance.dig_to_dangerous_mines_20, dangerous_mine_rule)
@@ -332,7 +332,7 @@ def set_festival_entrance_rules(logic, multiworld, player):
 
 def set_ginger_island_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions, content: StardewContent):
     set_island_entrances_rules(logic, multiworld, player, content)
-    if not content.is_enabled(ginger_island_content_pack):
+    if content.is_disabled(ginger_island_content_pack):
         return
 
     set_boat_repair_rules(logic, multiworld, player)
@@ -881,7 +881,7 @@ def set_friendsanity_rules(logic: StardewLogic, multiworld: MultiWorld, player: 
 
 
 def set_deepwoods_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, content: StardewContent):
-    if not content.is_enabled(ModNames.deepwoods):
+    if content.is_disabled(ModNames.deepwoods):
         return
 
     MultiWorldRules.add_rule(multiworld.get_location("Breaking Up Deep Woods Gingerbread House", player),
@@ -896,7 +896,7 @@ def set_deepwoods_rules(logic: StardewLogic, multiworld: MultiWorld, player: int
 
 
 def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, content: StardewContent):
-    if not content.is_enabled(ModNames.magic):
+    if content.is_disabled(ModNames.magic):
         return
 
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Clear Debris", player),
@@ -955,7 +955,7 @@ def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: i
 
 
 def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, content: StardewContent):
-    if not content.is_enabled(ModNames.sve):
+    if content.is_disabled(ModNames.sve):
         return
 
     set_entrance_rule(multiworld, player, SVEEntrance.forest_to_lost_woods, logic.bundle.can_complete_community_center)
@@ -988,7 +988,7 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, cont
 
 
 def set_sve_ginger_island_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, content: StardewContent):
-    if not content.is_enabled(ginger_island_content_pack):
+    if content.is_disabled(ginger_island_content_pack):
         return
     set_entrance_rule(multiworld, player, SVEEntrance.summit_to_highlands, logic.mod.sve.has_marlon_boat())
     set_entrance_rule(multiworld, player, SVEEntrance.wizard_to_fable_reef, logic.received(SVEQuestItem.fable_reef_portal))
@@ -998,7 +998,7 @@ def set_sve_ginger_island_rules(logic: StardewLogic, multiworld: MultiWorld, pla
 
 
 def set_boarding_house_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, content: StardewContent):
-    if not content.is_enabled(ModNames.boarding_house):
+    if content.is_disabled(ModNames.boarding_house):
         return
     set_entrance_rule(multiworld, player, BoardingHouseEntrance.the_lost_valley_to_lost_valley_ruins, logic.tool.has_tool(Tool.axe, ToolMaterial.iron))
 
@@ -1018,13 +1018,13 @@ def set_entrance_rule(multiworld, player, entrance: str, rule: StardewRule):
 
 
 def set_island_entrance_rule(multiworld, player, entrance: str, rule: StardewRule, content: StardewContent):
-    if not content.is_enabled(ginger_island_content_pack):
+    if content.is_disabled(ginger_island_content_pack):
         return
     set_entrance_rule(multiworld, player, entrance, rule)
 
 
 def set_many_island_entrances_rules(multiworld, player, entrance_rules: Dict[str, StardewRule], content: StardewContent):
-    if not content.is_enabled(ginger_island_content_pack):
+    if content.is_disabled(ginger_island_content_pack):
         return
     for entrance, rule in entrance_rules.items():
         set_entrance_rule(multiworld, player, entrance, rule)

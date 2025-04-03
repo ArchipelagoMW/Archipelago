@@ -55,6 +55,12 @@ class StardewContent:
 
         return content_pack in self.registered_packs
 
+    def is_disabled(self, content_pack: str | ContentPack) -> bool:
+        if isinstance(content_pack, ContentPack):
+            content_pack = content_pack.name
+
+        return content_pack not in self.registered_packs
+
 
 @dataclass(frozen=True)
 class StardewFeatures:
