@@ -38,6 +38,7 @@ jobs:
           python -m pip install --upgrade pip
           python pip install Sphinx
           python pip install myst-parser
+          python ModuleUpdate.py --yes --force
       - name: Sphinx build
         run: |
           python -c "import Utils; Utils.build_sphinx_docs()"
