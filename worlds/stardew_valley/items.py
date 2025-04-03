@@ -100,9 +100,9 @@ class ItemData:
     code_without_offset: int | None
     name: str
     classification: ItemClassification
-    content_packs: frozenset[str] = frozenset()
     """All the content packs required for this item to be available."""
     groups: set[Group] = field(default_factory=frozenset)
+    content_packs: frozenset[str] = frozenset()
 
     def __post_init__(self):
         if not isinstance(self.groups, frozenset):

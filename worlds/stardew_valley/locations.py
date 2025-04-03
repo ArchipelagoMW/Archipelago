@@ -120,9 +120,9 @@ class LocationData:
     code_without_offset: int | None
     region: str
     name: str
-    content_packs: frozenset[str] = frozenset()
     """All the content packs required for this location to be active."""
     tags: frozenset[LocationTags] = frozenset()
+    content_packs: frozenset[str] = frozenset()
 
     @property
     def code(self) -> int | None:
