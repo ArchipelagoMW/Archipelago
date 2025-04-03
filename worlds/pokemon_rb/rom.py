@@ -286,8 +286,6 @@ def generate_output(world: "PokemonRedBlueWorld", output_directory: str):
     patch.write_file("base_patch.bsdiff4", pkgutil.get_data(__name__, f"basepatch_{game_version}.bsdiff4"))
 
     def write_bytes(address: int, data: typing.Sequence[int] | int):
-        if abs(address - 0x3938A) < 0x5:
-            pass
         if isinstance(data, int):
             data = bytes([data])
         else:
