@@ -115,7 +115,7 @@ def create_items(world, world_options: Options.DLCQuestOptions, locations_count:
 
 def create_items_lfod(world_options, created_items, world, excluded_items):
     for item in items_by_group[Group.Freemium]:
-        if item in excluded_items:
+        if item.name in excluded_items:
             excluded_items.remove(item)
             continue
         if item.has_any_group(Group.DLC):
@@ -133,8 +133,8 @@ def create_items_lfod(world_options, created_items, world, excluded_items):
 
 def create_items_basic(world_options, created_items, world, excluded_items):
     for item in items_by_group[Group.DLCQuest]:
-        if item in excluded_items:
-            excluded_items.remove(item)
+        if item.name in excluded_items:
+            excluded_items.remove(item.name)
             continue
         if item.has_any_group(Group.DLC):
             created_items.append(world.create_item(item))

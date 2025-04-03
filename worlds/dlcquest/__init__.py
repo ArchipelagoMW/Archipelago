@@ -65,7 +65,7 @@ class DLCqworld(World):
                                for location in self.multiworld.get_locations(self.player)
                                if not location.advancement])
 
-        items_to_exclude = [excluded_items
+        items_to_exclude = [excluded_items.name
                             for excluded_items in self.multiworld.precollected_items[self.player]]
 
         created_items = create_items(self, self.options, locations_count, items_to_exclude, self.multiworld.random)
