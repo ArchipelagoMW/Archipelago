@@ -120,9 +120,9 @@ class LocationData:
     code_without_offset: int | None
     region: str
     name: str
-    """All the content packs required for this location to be active."""
     tags: frozenset[LocationTags] = frozenset()
     content_packs: frozenset[str] = frozenset()
+    """All the content packs required for this location to be active."""
 
     @property
     def code(self) -> int | None:
@@ -150,7 +150,7 @@ def load_location_csv() -> List[LocationData]:
             if LocationTags.SPECIAL_ORDER_QI in groups or LocationTags.REQUIRES_QI_ORDERS in groups:
                 content_packs |= {qi_board_content_pack.name}
 
-            locations.append(LocationData(location_id, location["region"], location["name"], content_packs, groups))
+            locations.append(LocationData(location_id, location["region"], location["name"], groups, content_packs))
 
     return locations
 

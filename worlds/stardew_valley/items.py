@@ -100,9 +100,9 @@ class ItemData:
     code_without_offset: int | None
     name: str
     classification: ItemClassification
-    """All the content packs required for this item to be available."""
     groups: set[Group] = field(default_factory=frozenset)
     content_packs: frozenset[str] = frozenset()
+    """All the content packs required for this item to be available."""
 
     def __post_init__(self):
         if not isinstance(self.groups, frozenset):
@@ -137,7 +137,7 @@ def load_item_csv():
             if Group.GINGER_ISLAND in groups:
                 content_packs |= {ginger_island_content_pack.name}
 
-            items.append(ItemData(item_id, item["name"], classification, content_packs, groups))
+            items.append(ItemData(item_id, item["name"], classification, groups, content_packs))
     return items
 
 
