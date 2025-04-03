@@ -1,9 +1,7 @@
 Archipelago API Reference
 =========================
 
-Archipelago is still under development, so the API is subject to change. As such, there exists both
-`stable <https://archipelago.gg/docs>`_ and `bleeding edge <https://ArchipelagoMW.github.io/Archipelago>`_ versions of
-this reference document.
+Archipelago is still under development, so the API is subject to change.
 
 ============
 Get Started
