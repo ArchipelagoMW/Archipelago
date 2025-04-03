@@ -11,6 +11,7 @@ from BaseClasses import Item, ItemClassification
 from . import data
 from .content.feature import friendsanity
 from .content.game_content import StardewContent
+from .content.override import override
 from .content.vanilla.ginger_island import ginger_island_content_pack
 from .content.vanilla.qi_board import qi_board_content_pack
 from .data.game_item import ItemTag
@@ -178,7 +179,7 @@ def create_items(item_factory: StardewItemFactory, locations_count: int, items_t
         if isinstance(item, str):
             item = item_table[item]
         assert content.are_all_enabled(item.content_packs), \
-            f"Item [{item.name}] requires {item.content_packs} but {item.content_packs.difference(content.registered_packs)} are not enabled."
+            f"Item [{item.name}] requires {item.content_packs} but {item.content_packs.difference(content.registered_packs)} are not enabled, {content.registered_packs} are enabled."
         return _item_factory(item, override_classification)
 
     item_factory = validating_content_packs_item_factory
@@ -465,7 +466,11 @@ def create_friendsanity_items(item_factory: StardewItemFactory, options: Stardew
         item_name = friendsanity.to_item_name(villager.name)
 
         for _ in content.features.friendsanity.get_randomized_hearts(villager):
-            items.append(item_factory(item_name, ItemClassification.progression))
+            item = item_table[item_name]
+            if ModNames.jasper == villager.mod_name and ModNames.sve in item.content_packs:
+                # The override is needed because some items are shared between jasper mod and sve. We need to create the items with the correct mod.
+                item = override(item, content_packs=frozenset({ModNames.jasper}))
+            items.append(item_factory(item, ItemClassification.progression))
 
     need_pet = options.goal == Goal.option_grandpa_evaluation
     pet_item_classification = ItemClassification.progression_skip_balancing if need_pet else ItemClassification.useful

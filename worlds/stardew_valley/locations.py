@@ -7,6 +7,7 @@ from typing import Dict, Protocol, List, Iterable
 from . import data
 from .bundles.bundle_room import BundleRoom
 from .content.game_content import StardewContent
+from .content.override import override
 from .content.vanilla.ginger_island import ginger_island_content_pack
 from .content.vanilla.qi_board import qi_board_content_pack
 from .data.game_item import ItemTag
@@ -259,7 +260,11 @@ def extend_friendsanity_locations(randomized_locations: List[LocationData], cont
 
     for villager in content.villagers.values():
         for heart in friendsanity.get_randomized_hearts(villager):
-            randomized_locations.append(location_table[friendsanity.to_location_name(villager.name, heart)])
+            location = location_table[friendsanity.to_location_name(villager.name, heart)]
+            if ModNames.jasper == villager.mod_name and ModNames.sve in location.content_packs:
+                # The override is needed because some locations are shared between jasper mod and sve. We need to create the locations with the correct mod.
+                location = override(location, content_packs=frozenset({villager.mod_name}))
+            randomized_locations.append(location)
 
     for heart in friendsanity.get_pet_randomized_hearts():
         randomized_locations.append(location_table[friendsanity.to_location_name(NPC.pet, heart)])
@@ -475,14 +480,6 @@ def create_locations(location_collector: StardewLocationCollector,
                      options: StardewValleyOptions,
                      content: StardewContent,
                      random: Random):
-    def validating_content_packs_location_collector(name: str, code: int | None, region: str, _location_collector=location_collector) -> None:
-        loc = location_table[name]
-        assert content.are_all_enabled(loc.content_packs), \
-            f"Location [{loc.name}] requires {loc.content_packs} but {loc.content_packs.difference(content.registered_packs)} are not enabled."
-        return _location_collector(name, code, region)
-
-    location_collector = validating_content_packs_location_collector
-
     randomized_locations = []
 
     extend_mandatory_locations(randomized_locations, options, content)
@@ -534,6 +531,8 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_situational_quest_locations(randomized_locations, options, content)
 
     for location_data in randomized_locations:
+        assert content.are_all_enabled(location_data.content_packs), \
+            f"Location [{location_data.name}] requires {location_data.content_packs} but {location_data.content_packs.difference(content.registered_packs)} are not enabled, {content.registered_packs} are enabled."
         location_collector(location_data.name, location_data.code, location_data.region)
 
 
