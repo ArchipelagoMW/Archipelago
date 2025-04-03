@@ -1,4 +1,6 @@
 class Machine:
+    dehydrator = "Dehydrator"
+    fish_smoker = "Fish Smoker"
     bee_house = "Bee House"
     bone_mill = "Bone Mill"
     cask = "Cask"
@@ -10,6 +12,7 @@ class Machine:
     enricher = "Enricher"
     furnace = "Furnace"
     geode_crusher = "Geode Crusher"
+    mushroom_log = "Mushroom Log"
     heavy_tapper = "Heavy Tapper"
     keg = "Keg"
     lightning_rod = "Lightning Rod"
@@ -26,4 +29,9 @@ class Machine:
     solar_panel = "Solar Panel"
     tapper = "Tapper"
     worm_bin = "Worm Bin"
+    deluxe_worm_bin = "Deluxe Worm Bin"
+    heavy_furnace = "Heavy Furnace"
+    anvil = "Anvil"
+    mini_forge = "Mini-Forge"
+    bait_maker = "Bait Maker"
 

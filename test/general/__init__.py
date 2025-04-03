@@ -2,9 +2,18 @@ from argparse import Namespace
 from typing import List, Optional, Tuple, Type, Union
 
 from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Region
+from worlds import network_data_package
 from worlds.AutoWorld import World, call_all
 
-gen_steps = ("generate_early", "create_regions", "create_items", "set_rules", "generate_basic", "pre_fill")
+gen_steps = (
+    "generate_early",
+    "create_regions",
+    "create_items",
+    "set_rules",
+    "connect_entrances",
+    "generate_basic",
+    "pre_fill",
+)
 
 
 def setup_solo_multiworld(
@@ -58,6 +67,10 @@ class TestWorld(World):
     item_name_to_id = {}
     location_name_to_id = {}
     hidden = True
+
+
+# add our test world to the data package, so we can test it later
+network_data_package["games"][TestWorld.game] = TestWorld.get_data_package_data()
 
 
 def generate_test_multiworld(players: int = 1) -> MultiWorld:

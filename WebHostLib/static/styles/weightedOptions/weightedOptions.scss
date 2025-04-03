@@ -1,0 +1,274 @@
+html{
+    background-image: url('../../static/backgrounds/grass.png');
+    background-repeat: repeat;
+    background-size: 650px 650px;
+    scroll-padding-top: 90px;
+}
+
+#weighted-options{
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 1rem;
+    color: #eeffeb;
+
+    #weighted-options-header{
+        h1{
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        h1:nth-child(2){
+            font-size: 1.4rem;
+            margin-top: -8px;
+            margin-bottom: 0.5rem;
+        }
+    }
+
+    .js-warning-banner{
+        width: calc(100% - 1rem);
+        padding: 0.5rem;
+        border-radius: 4px;
+        background-color: #f3f309;
+        color: #000000;
+        margin-bottom: 0.5rem;
+        text-align: center;
+    }
+
+    .option-wrapper{
+        width: 100%;
+        margin-bottom: 2rem;
+
+        .add-option-div{
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            margin-bottom: 1rem;
+
+            button{
+                width: auto;
+                height: auto;
+                margin: 0 0 0 0.15rem;
+                padding: 0 0.25rem;
+                border-radius: 4px;
+                cursor: default;
+
+                &:active{
+                    margin-bottom: 1px;
+                }
+            }
+        }
+    }
+
+    p{
+        &.option-description{
+            margin: 0 0 1rem;
+        }
+
+        &.hint-text{
+            margin: 0 0 1rem;
+            font-style: italic;
+        };
+    }
+
+    table{
+        width: 100%;
+        margin-top: 0.5rem;
+        margin-bottom: 1.5rem;
+
+        th, td{
+            border: none;
+        }
+
+        td{
+            padding: 5px;
+        }
+
+        .td-left{
+            font-family: LexendDeca-Regular, sans-serif;
+            padding-right: 1rem;
+            width: 200px;
+        }
+
+        .td-middle{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            padding-right: 1rem;
+        }
+
+        .td-right{
+            width: 4rem;
+            text-align: right;
+        }
+
+        .td-delete{
+            width: 50px;
+            text-align: right;
+        }
+
+        .range-option-delete{
+            cursor: pointer;
+        }
+    }
+
+    #weighted-options-button-row{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-top: 15px;
+    }
+
+    #user-message{
+        display: none;
+        width: calc(100% - 8px);
+        background-color: #ffe86b;
+        border-radius: 4px;
+        color: #000000;
+        padding: 4px;
+        text-align: center;
+
+        &.visible{
+            display: block;
+            cursor: pointer;
+        }
+    }
+
+    h1{
+        font-size: 2.5rem;
+        font-weight: normal;
+        width: 100%;
+        margin-bottom: 0.5rem;
+        color: #ffffff;
+        text-shadow: 1px 1px 4px #000000;
+    }
+
+    h2, details summary.h2{
+        font-size: 2rem;
+        font-weight: normal;
+        border-bottom: 1px solid #ffffff;
+        width: 100%;
+        margin-bottom: 0.5rem;
+        color: #ffe993;
+        text-transform: none;
+        text-shadow: 1px 1px 2px #000000;
+    }
+
+    h3, h4, h5, h6{
+        color: #ffffff;
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+        text-transform: none;
+        cursor: unset;
+    }
+
+    h3{
+        &.option-group-header{
+            margin-top: 0.75rem;
+            font-weight: bold;
+        }
+    }
+
+    a{
+        color: #ffef00;
+        cursor: pointer;
+    }
+
+    input:not([type]){
+        border: 1px solid #000000;
+        padding: 3px;
+        border-radius: 3px;
+        min-width: 150px;
+
+        &:focus{
+            border: 1px solid #ffffff;
+        }
+    }
+
+    .invisible{
+        display: none;
+    }
+
+    .unsupported-option{
+        margin-top: 0.5rem;
+    }
+
+    .set-container, .dict-container, .list-container{
+        display: flex;
+        flex-direction: column;
+        background-color: rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(20, 20, 20, 0.25);
+        border-radius: 3px;
+        color: #ffffff;
+        max-height: 15rem;
+        min-width: 14.5rem;
+        overflow-y: auto;
+        padding-right: 0.25rem;
+        padding-left: 0.25rem;
+        margin-top: 0.5rem;
+
+        .divider{
+            width: 100%;
+            height: 2px;
+            background-color: rgba(20, 20, 20, 0.25);
+            margin-top: 0.125rem;
+            margin-bottom: 0.125rem;
+        }
+
+        .set-entry, .dict-entry, .list-entry{
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            padding-bottom: 0.25rem;
+            padding-top: 0.25rem;
+            user-select: none;
+            line-height: 1rem;
+
+            &:hover{
+                background-color: rgba(20, 20, 20, 0.25);
+            }
+
+            input[type=checkbox]{
+                margin-right: 0.25rem;
+            }
+
+            input[type=number]{
+                max-width: 1.5rem;
+                max-height: 1rem;
+                margin-left: 0.125rem;
+                text-align: center;
+
+                /* Hide arrows on input[type=number] fields */
+                -moz-appearance: textfield;
+                &::-webkit-outer-spin-button, &::-webkit-inner-spin-button{
+                    -webkit-appearance: none;
+                    margin: 0;
+                }
+            }
+
+            label{
+                flex-grow: 1;
+                margin-right: 0;
+                min-width: unset;
+                display: unset;
+            }
+        }
+    }
+}
+
+.hidden{
+    display: none;
+}
+
+@media all and (max-width: 1000px), all and (orientation: portrait){
+    #weighted-options .game-options{
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    #game-options table label{
+        display: block;
+        min-width: 200px;
+    }
+}

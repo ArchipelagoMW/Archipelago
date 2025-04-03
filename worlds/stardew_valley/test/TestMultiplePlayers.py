@@ -19,7 +19,7 @@ class TestDifferentSettings(SVTestCase):
         multiworld = setup_multiworld(multiplayer_options)
 
         self.check_location_rule(multiworld, 1, FestivalCheck.egg_hunt, False)
-        self.check_location_rule(multiworld, 2, FestivalCheck.egg_hunt, True, False)
+        self.check_location_rule(multiworld, 2, FestivalCheck.egg_hunt, True, True)
         self.check_location_rule(multiworld, 3, FestivalCheck.egg_hunt, True, True)
 
     def test_different_money_settings(self):
@@ -51,8 +51,6 @@ class TestDifferentSettings(SVTestCase):
         self.check_location_rule(multiworld, 6, FestivalCheck.rarecrow_4, True, False)
 
     def test_money_rule_caching(self):
-        options_festivals_limited_money = {FestivalLocations.internal_name: FestivalLocations.option_easy,
-                                           StartingMoney.internal_name: 5000}
         options_festivals_limited_money = {FestivalLocations.internal_name: FestivalLocations.option_easy,
                                            StartingMoney.internal_name: 5000}
 

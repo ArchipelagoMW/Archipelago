@@ -1,3 +1,4 @@
+from functools import cached_property
 from typing import Dict, Union
 
 from Utils import cache_self1
@@ -8,12 +9,14 @@ from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from ..options import BuildingProgression
 from ..stardew_rule import StardewRule, True_, False_, Has
-from ..strings.ap_names.event_names import Event
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.building_names import Building
 from ..strings.fish_names import WaterItem
 from ..strings.material_names import Material
 from ..strings.metal_names import MetalBar
+from ..strings.region_names import Region
+
+has_group = "building"
 
 
 class BuildingLogicMixin(BaseLogicMixin):
@@ -42,7 +45,7 @@ class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, MoneyLogicMixin, RegionL
             Building.well: self.logic.money.can_spend(1000) & self.logic.has(Material.stone),
             Building.shipping_bin: self.logic.money.can_spend(250) & self.logic.has(Material.wood),
             Building.kitchen: self.logic.money.can_spend(10000) & self.logic.has(Material.wood) & self.logic.building.has_house(0),
-            Building.kids_room: self.logic.money.can_spend(50000) & self.logic.has(Material.hardwood) & self.logic.building.has_house(1),
+            Building.kids_room: self.logic.money.can_spend(65000) & self.logic.has(Material.hardwood) & self.logic.building.has_house(1),
             Building.cellar: self.logic.money.can_spend(100000) & self.logic.building.has_house(2),
             # @formatter:on
         })
@@ -58,9 +61,9 @@ class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, MoneyLogicMixin, RegionL
                 return True_()
             return self.logic.received(building)
 
-        carpenter_rule = self.logic.received(Event.can_construct_buildings)
+        carpenter_rule = self.logic.building.can_construct_buildings
         if not self.options.building_progression & BuildingProgression.option_progressive:
-            return Has(building, self.registry.building_rules) & carpenter_rule
+            return Has(building, self.registry.building_rules, has_group) & carpenter_rule
 
         count = 1
         if building in [Building.coop, Building.barn, Building.shed]:
@@ -73,6 +76,10 @@ class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, MoneyLogicMixin, RegionL
             building = " ".join(["Progressive", *building.split(" ")[1:]])
         return self.logic.received(building, count) & carpenter_rule
 
+    @cached_property
+    def can_construct_buildings(self) -> StardewRule:
+        return self.logic.region.can_reach(Region.carpenter)
+
     @cache_self1
     def has_house(self, upgrade_level: int) -> StardewRule:
         if upgrade_level < 1:
@@ -81,15 +88,15 @@ class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, MoneyLogicMixin, RegionL
         if upgrade_level > 3:
             return False_()
 
-        carpenter_rule = self.logic.received(Event.can_construct_buildings)
+        carpenter_rule = self.logic.building.can_construct_buildings
         if self.options.building_progression & BuildingProgression.option_progressive:
             return carpenter_rule & self.logic.received(f"Progressive House", upgrade_level)
 
         if upgrade_level == 1:
-            return carpenter_rule & Has(Building.kitchen, self.registry.building_rules)
+            return carpenter_rule & Has(Building.kitchen, self.registry.building_rules, has_group)
 
         if upgrade_level == 2:
-            return carpenter_rule & Has(Building.kids_room, self.registry.building_rules)
+            return carpenter_rule & Has(Building.kids_room, self.registry.building_rules, has_group)
 
         # if upgrade_level == 3:
-        return carpenter_rule & Has(Building.cellar, self.registry.building_rules)
+        return carpenter_rule & Has(Building.cellar, self.registry.building_rules, has_group)

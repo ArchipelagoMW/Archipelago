@@ -6,7 +6,7 @@ from .Locations import location_table
 from .Options import SM64Options
 from .Regions import connect_regions, SM64Levels, sm64_level_to_paintings, sm64_paintings_to_level,\
 sm64_level_to_secrets, sm64_secrets_to_level, sm64_entrances_to_level, sm64_level_to_entrances
-from .Items import action_item_table
+from .Items import action_item_data_table
 
 def shuffle_dict_keys(world, dictionary: dict) -> dict:
     keys = list(dictionary.keys())
@@ -92,9 +92,12 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
     connect_regions(world, player, "Hazy Maze Cave", randomized_entrances_s["Cavern of the Metal Cap"])
     connect_regions(world, player, "Basement", randomized_entrances_s["Vanish Cap under the Moat"],
                     rf.build_rule("GP"))
-    connect_regions(world, player, "Basement", randomized_entrances_s["Bowser in the Fire Sea"],
-                    lambda state: state.has("Power Star", player, star_costs["BasementDoorCost"]) and
-                                  state.can_reach("DDD: Board Bowser's Sub", 'Location', player))
+    entrance = connect_regions(world, player, "Basement", randomized_entrances_s["Bowser in the Fire Sea"],
+                               lambda state: state.has("Power Star", player, star_costs["BasementDoorCost"]) and
+                               state.can_reach("DDD: Board Bowser's Sub", 'Location', player))
+    # Access to "DDD: Board Bowser's Sub" does not require access to other locations or regions, so the only region that
+    # needs to be registered is its parent region.
+    world.register_indirect_condition(world.get_location("DDD: Board Bowser's Sub", player).parent_region, entrance)
 
     connect_regions(world, player, "Menu", "Second Floor", lambda state: state.has("Second Floor Key", player) or state.has("Progressive Key", player, 2))
 
@@ -369,8 +372,9 @@ class RuleFactory:
         item = self.token_table.get(token, None)
         if not item:
             raise Exception(f"Invalid token: '{item}'")
-        if item in action_item_table:
-            if self.move_rando_bitvec & (1 << (action_item_table[item] - action_item_table['Double Jump'])) == 0:
+        if item in action_item_data_table:
+            double_jump_bitvec_offset = action_item_data_table['Double Jump'].code
+            if self.move_rando_bitvec & (1 << (action_item_data_table[item].code - double_jump_bitvec_offset)) == 0:
                 # This action item is not randomized.
                 return True
         return item
