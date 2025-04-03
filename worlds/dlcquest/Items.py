@@ -118,6 +118,7 @@ def create_items_lfod(world_options, created_items, world, excluded_items):
         if item.name in excluded_items:
             excluded_items.remove(item)
             continue
+
         if item.has_any_group(Group.DLC):
             created_items.append(world.create_item(item))
         if item.has_any_group(Group.Item) and world_options.item_shuffle == Options.ItemShuffle.option_shuffled:
@@ -136,6 +137,7 @@ def create_items_basic(world_options, created_items, world, excluded_items):
         if item.name in excluded_items:
             excluded_items.remove(item.name)
             continue
+
         if item.has_any_group(Group.DLC):
             created_items.append(world.create_item(item))
         if item.has_any_group(Group.Item) and world_options.item_shuffle == Options.ItemShuffle.option_shuffled:
