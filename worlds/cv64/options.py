@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from Options import OptionGroup, Choice, DefaultOnToggle, Range, Toggle, PerGameCommonOptions, StartInventoryPool
+from Options import (OptionGroup, Choice, DefaultOnToggle, ItemsAccessibility, PerGameCommonOptions, Range, Toggle,
+                     StartInventoryPool)
 
 
 class CharacterStages(Choice):
@@ -521,6 +522,7 @@ class DeathLink(Choice):
 
 @dataclass
 class CV64Options(PerGameCommonOptions):
+    accessibility: ItemsAccessibility
     start_inventory_from_pool: StartInventoryPool
     character_stages: CharacterStages
     stage_shuffle: StageShuffle

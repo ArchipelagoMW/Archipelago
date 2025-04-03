@@ -1,19 +1,22 @@
+from datetime import date
 from math import floor
 from pkgutil import get_data
-from random import random
-from typing import Any, Collection, Dict, FrozenSet, Iterable, List, Set, Tuple
+from random import Random
+from typing import Collection, FrozenSet, Iterable, List, Optional, Set, Tuple, TypeVar
 
-# A WitnessRule is just an or-chain of and-conditions.
-# It represents the set of all options that could fulfill this requirement.
-# E.g. if something requires "Dots or (Shapers and Stars)", it'd be represented as: {{"Dots"}, {"Shapers, "Stars"}}
-# {} is an unusable requirement.
-# {{}} is an always usable requirement.
-WitnessRule = FrozenSet[FrozenSet[str]]
+from .definition_classes import AreaDefinition, ConnectionDefinition, RegionDefinition, WitnessRule
+
+T = TypeVar("T")
 
 
-def weighted_sample(world_random: random, population: List, weights: List[float], k: int) -> List:
+def cast_not_none(value: Optional[T]) -> T:
+    assert value is not None
+    return value
+
+
+def weighted_sample(world_random: Random, population: List[T], weights: List[float], k: int) -> List[T]:
     positions = range(len(population))
-    indices = []
+    indices: List[int] = []
     while True:
         needed = k - len(indices)
         if not needed:
@@ -54,7 +57,7 @@ def build_weighted_int_list(inputs: Collection[float], total: int) -> List[int]:
     return rounded_output
 
 
-def define_new_region(region_string: str) -> Tuple[Dict[str, Any], Set[Tuple[str, WitnessRule]]]:
+def define_new_region(region_string: str, area: AreaDefinition) -> Tuple[RegionDefinition, List[ConnectionDefinition]]:
     """
     Returns a region object by parsing a line in the logic file
     """
@@ -69,46 +72,40 @@ def define_new_region(region_string: str) -> Tuple[Dict[str, Any], Set[Tuple[str
     region_name = region_name_split[0]
     region_name_simple = region_name_split[1][:-1]
 
-    options = set()
+    options = []
 
     for _ in range(len(line_split) // 2):
         connected_region = line_split.pop(0)
-        corresponding_lambda = line_split.pop(0)
+        traversal_rule_string = line_split.pop(0)
 
-        options.add(
-            (connected_region, parse_lambda(corresponding_lambda))
-        )
+        options.append(ConnectionDefinition(connected_region, parse_witness_rule(traversal_rule_string)))
 
-    region_obj = {
-        "name": region_name,
-        "shortName": region_name_simple,
-        "entities": list(),
-        "physical_entities": list(),
-    }
+    region_obj = RegionDefinition(region_name, region_name_simple, area)
+
     return region_obj, options
 
 
-def parse_lambda(lambda_string) -> WitnessRule:
+def parse_witness_rule(rule_string: str) -> WitnessRule:
     """
-    Turns a lambda String literal like this: a | b & c
-    into a set of sets like this: {{a}, {b, c}}
-    The lambda has to be in DNF.
+    Turns a rule string literal like this: a | b & c
+    into a set of sets (called "WitnessRule") like this: {{a}, {b, c}}
+    The rule string has to be in DNF.
     """
-    if lambda_string == "True":
+    if rule_string == "True":
         return frozenset([frozenset()])
-    split_ands = set(lambda_string.split(" | "))
-    lambda_set = frozenset({frozenset(a.split(" & ")) for a in split_ands})
-
-    return lambda_set
+    split_ands = set(rule_string.split(" | "))
+    return frozenset({frozenset(a.split(" & ")) for a in split_ands})
 
 
-_adjustment_file_cache = dict()
+_adjustment_file_cache = {}
 
 
 def get_adjustment_file(adjustment_file: str) -> List[str]:
     if adjustment_file not in _adjustment_file_cache:
-        data = get_data(__name__, adjustment_file).decode("utf-8")
-        _adjustment_file_cache[adjustment_file] = [line.strip() for line in data.split("\n")]
+        data = get_data(__name__, adjustment_file)
+        if data is None:
+            raise FileNotFoundError(f"Could not find {adjustment_file}")
+        _adjustment_file_cache[adjustment_file] = [line.strip() for line in data.decode("utf-8").split("\n")]
 
     return _adjustment_file_cache[adjustment_file]
 
@@ -197,8 +194,8 @@ def get_caves_except_path_to_challenge_exclusion_list() -> List[str]:
     return get_adjustment_file("settings/Exclusions/Caves_Except_Path_To_Challenge.txt")
 
 
-def get_elevators_come_to_you() -> List[str]:
-    return get_adjustment_file("settings/Door_Shuffle/Elevators_Come_To_You.txt")
+def get_entity_hunt() -> List[str]:
+    return get_adjustment_file("settings/Entity_Hunt.txt")
 
 
 def get_sigma_normal_logic() -> List[str]:
@@ -207,6 +204,10 @@ def get_sigma_normal_logic() -> List[str]:
 
 def get_sigma_expert_logic() -> List[str]:
     return get_adjustment_file("WitnessLogicExpert.txt")
+
+
+def get_umbra_variety_logic() -> List[str]:
+    return get_adjustment_file("WitnessLogicVariety.txt")
 
 
 def get_vanilla_logic() -> List[str]:
@@ -237,7 +238,7 @@ def logical_and_witness_rules(witness_rules: Iterable[WitnessRule]) -> WitnessRu
     A logical formula might look like this: {{a, b}, {c, d}}, which would mean "a & b | c & d".
     These can be easily and-ed by just using the boolean distributive law: (a | b) & c = a & c | a & b.
     """
-    current_overall_requirement = frozenset({frozenset()})
+    current_overall_requirement: FrozenSet[FrozenSet[str]] = frozenset({frozenset()})
 
     for next_dnf_requirement in witness_rules:
         new_requirement: Set[FrozenSet[str]] = set()
@@ -253,3 +254,19 @@ def logical_and_witness_rules(witness_rules: Iterable[WitnessRule]) -> WitnessRu
 
 def logical_or_witness_rules(witness_rules: Iterable[WitnessRule]) -> WitnessRule:
     return optimize_witness_rule(frozenset.union(*witness_rules))
+
+
+def is_easter_time() -> bool:
+    # dateutils would have been nice here, because it has an easter() function.
+    # But adding it as a requirement seems heavier than necessary.
+    # Thus, we just take a range from the earliest to latest possible easter dates.
+
+    today = date.today()
+
+    if today < date(2025, 3, 31): # Don't go live early if 0.6.0 RC3 happens, with a little leeway
+        return False
+
+    earliest_easter_day = date(today.year, 3, 20)  # Earliest possible is 3/22 + 2 day buffer for Good Friday
+    last_easter_day = date(today.year, 4, 26)  # Latest possible is 4/25 + 1 day buffer for Easter Monday
+
+    return earliest_easter_day <= today <= last_easter_day

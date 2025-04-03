@@ -1,14 +1,14 @@
 from copy import deepcopy
-from typing import List, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
-from BaseClasses import CollectionState, PlandoOptions
+from BaseClasses import CollectionState
 from Options import PlandoConnection
 
 if TYPE_CHECKING:
     from . import MessengerWorld
 
 
-PORTALS = [
+PORTALS: list[str] = [
     "Autumn Hills",
     "Riviere Turquoise",
     "Howling Grotto",
@@ -18,7 +18,7 @@ PORTALS = [
 ]
 
 
-SHOP_POINTS = {
+SHOP_POINTS: dict[str, list[str]] = {
     "Autumn Hills": [
         "Climbing Claws",
         "Hope Path",
@@ -113,7 +113,7 @@ SHOP_POINTS = {
 }
 
 
-CHECKPOINTS = {
+CHECKPOINTS: dict[str, list[str]] = {
     "Autumn Hills": [
         "Hope Latch",
         "Key of Hope",
@@ -186,7 +186,7 @@ CHECKPOINTS = {
 }
 
 
-REGION_ORDER = [
+REGION_ORDER: list[str] = [
     "Autumn Hills",
     "Forlorn Temple",
     "Catacombs",
@@ -215,27 +215,30 @@ def shuffle_portals(world: "MessengerWorld") -> None:
 
         if "Portal" in warp:
             exit_string += "Portal"
-            world.portal_mapping.append(int(f"{REGION_ORDER.index(parent)}00"))
+            world.portal_mapping.insert(PORTALS.index(in_portal), int(f"{REGION_ORDER.index(parent)}00"))
         elif warp in SHOP_POINTS[parent]:
             exit_string += f"{warp} Shop"
-            world.portal_mapping.append(int(f"{REGION_ORDER.index(parent)}1{SHOP_POINTS[parent].index(warp)}"))
+            world.portal_mapping.insert(PORTALS.index(in_portal), int(f"{REGION_ORDER.index(parent)}1{SHOP_POINTS[parent].index(warp)}"))
         else:
             exit_string += f"{warp} Checkpoint"
-            world.portal_mapping.append(int(f"{REGION_ORDER.index(parent)}2{CHECKPOINTS[parent].index(warp)}"))
+            world.portal_mapping.insert(PORTALS.index(in_portal), int(f"{REGION_ORDER.index(parent)}2{CHECKPOINTS[parent].index(warp)}"))
 
         world.spoiler_portal_mapping[in_portal] = exit_string
         connect_portal(world, in_portal, exit_string)
 
         return parent
 
-    def handle_planned_portals(plando_connections: List[PlandoConnection]) -> None:
+    def handle_planned_portals(plando_connections: list[PlandoConnection]) -> None:
         """checks the provided plando connections for portals and connects them"""
+        nonlocal available_portals
+
         for connection in plando_connections:
-            if connection.entrance not in PORTALS:
-                continue
             # let it crash here if input is invalid
-            create_mapping(connection.entrance, connection.exit)
+            available_portals.remove(connection.exit)
+            parent = create_mapping(connection.entrance, connection.exit)
             world.plando_portals.append(connection.entrance)
+            if shuffle_type < ShufflePortals.option_anywhere:
+                available_portals = [port for port in available_portals if port not in shop_points[parent]]
 
     shuffle_type = world.options.shuffle_portals
     shop_points = deepcopy(SHOP_POINTS)
@@ -249,10 +252,13 @@ def shuffle_portals(world: "MessengerWorld") -> None:
     world.random.shuffle(available_portals)
 
     plando = world.options.portal_plando.value
-    if not plando:
-        plando = world.options.plando_connections.value
-    if plando and world.multiworld.plando_options & PlandoOptions.connections:
-        handle_planned_portals(plando)
+    if plando and not world.plando_portals:
+        try:
+            handle_planned_portals(plando)
+        # any failure i expect will trigger on available_portals.remove
+        except ValueError:
+            raise ValueError(f"Unable to complete portal plando for Player {world.player_name}. "
+                             f"If you attempted to plando a checkpoint, checkpoints must be shuffled.")
 
     for portal in PORTALS:
         if portal in world.plando_portals:
@@ -276,13 +282,18 @@ def disconnect_portals(world: "MessengerWorld") -> None:
         entrance.connected_region = None
         if portal in world.spoiler_portal_mapping:
             del world.spoiler_portal_mapping[portal]
-    if len(world.portal_mapping) > len(world.spoiler_portal_mapping):
-        world.portal_mapping = world.portal_mapping[:len(world.spoiler_portal_mapping)]
+    if world.plando_portals:
+        indexes = [PORTALS.index(portal) for portal in world.plando_portals]
+        planned_portals = []
+        for index, portal_coord in enumerate(world.portal_mapping):
+            if index in indexes:
+                planned_portals.append(portal_coord)
+        world.portal_mapping = planned_portals
 
 
 def validate_portals(world: "MessengerWorld") -> bool:
-    # if world.options.shuffle_transitions:
-    #     return True
+    if world.options.shuffle_transitions:
+        return True
     new_state = CollectionState(world.multiworld)
     new_state.update_reachable_regions(world.player)
     reachable_locs = 0

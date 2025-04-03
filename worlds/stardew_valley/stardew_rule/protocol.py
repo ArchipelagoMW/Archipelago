@@ -24,7 +24,3 @@ class StardewRule(Protocol):
     @abstractmethod
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
         ...
-
-    @abstractmethod
-    def get_difficulty(self):
-        ...

@@ -5,7 +5,7 @@ from typing import Any, Callable, Dict, List, Optional, Set, Tuple, NamedTuple, 
 from uuid import UUID
 from email.utils import parsedate_to_datetime
 
-from flask import render_template, make_response, Response, request
+from flask import make_response, render_template, request, Request, Response
 from werkzeug.exceptions import abort
 
 from MultiServer import Context, get_saving_second
@@ -79,7 +79,7 @@ class TrackerData:
 
             # Normal lookup tables as well.
             self.item_name_to_id[game] = game_package["item_name_to_id"]
-            self.location_name_to_id[game] = game_package["item_name_to_id"]
+            self.location_name_to_id[game] = game_package["location_name_to_id"]
 
     def get_seed_name(self) -> str:
         """Retrieves the seed name."""
@@ -298,16 +298,24 @@ class TrackerData:
         return self._multidata.get("spheres", [])
 
 
-def _process_if_request_valid(incoming_request, room: Optional[Room]) -> Optional[Response]:
+def _process_if_request_valid(incoming_request: Request, room: Optional[Room]) -> Optional[Response]:
     if not room:
         abort(404)
 
-    if_modified = incoming_request.headers.get("If-Modified-Since", None)
-    if if_modified:
-        if_modified = parsedate_to_datetime(if_modified)
+    if_modified_str: Optional[str] = incoming_request.headers.get("If-Modified-Since", None)
+    if if_modified_str:
+        if_modified = parsedate_to_datetime(if_modified_str)
+        if if_modified.tzinfo is None:
+            abort(400)  # standard requires "GMT" timezone
+        # database may use datetime.utcnow(), which is timezone-naive. convert to timezone-aware.
+        last_activity = room.last_activity
+        if last_activity.tzinfo is None:
+            last_activity = room.last_activity.replace(tzinfo=datetime.timezone.utc)
         # if_modified has less precision than last_activity, so we bring them to same precision
-        if if_modified >= room.last_activity.replace(microsecond=0):
+        if if_modified >= last_activity.replace(microsecond=0):
             return make_response("",  304)
+
+    return None
 
 
 @app.route("/tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>")
@@ -415,6 +423,7 @@ def render_generic_tracker(tracker_data: TrackerData, team: int, player: int) ->
         template_name_or_list="genericTracker.html",
         game_specific_tracker=game in _player_trackers,
         room=tracker_data.room,
+        get_slot_info=tracker_data.get_slot_info,
         team=team,
         player=player,
         player_name=tracker_data.get_room_long_player_names()[team, player],
@@ -438,6 +447,7 @@ def render_generic_multiworld_tracker(tracker_data: TrackerData, enabled_tracker
         enabled_trackers=enabled_trackers,
         current_tracker="Generic",
         room=tracker_data.room,
+        get_slot_info=tracker_data.get_slot_info,
         all_slots=tracker_data.get_all_slots(),
         room_players=tracker_data.get_all_players(),
         locations=tracker_data.get_room_locations(),
@@ -489,7 +499,7 @@ if "Factorio" in network_data_package["games"]:
             (team, player): collections.Counter({
                 tracker_data.item_id_to_name["Factorio"][item_id]: count
                 for item_id, count in tracker_data.get_player_inventory_counts(team, player).items()
-            }) for team, players in tracker_data.get_all_slots().items() for player in players
+            }) for team, players in tracker_data.get_all_players().items() for player in players
             if tracker_data.get_player_game(team, player) == "Factorio"
         }
 
@@ -498,6 +508,7 @@ if "Factorio" in network_data_package["games"]:
             enabled_trackers=enabled_trackers,
             current_tracker="Factorio",
             room=tracker_data.room,
+            get_slot_info=tracker_data.get_slot_info,
             all_slots=tracker_data.get_all_slots(),
             room_players=tracker_data.get_all_players(),
             locations=tracker_data.get_room_locations(),
@@ -630,6 +641,7 @@ if "A Link to the Past" in network_data_package["games"]:
             enabled_trackers=enabled_trackers,
             current_tracker="A Link to the Past",
             room=tracker_data.room,
+            get_slot_info=tracker_data.get_slot_info,
             all_slots=tracker_data.get_all_slots(),
             room_players=tracker_data.get_all_players(),
             locations=tracker_data.get_room_locations(),
@@ -1059,6 +1071,11 @@ if "Timespinner" in network_data_package["games"]:
             "Plasma Orb":          "https://timespinnerwiki.com/mediawiki/images/4/44/Plasma_Orb.png",
             "Kobo":                "https://timespinnerwiki.com/mediawiki/images/c/c6/Familiar_Kobo.png",
             "Merchant Crow":       "https://timespinnerwiki.com/mediawiki/images/4/4e/Familiar_Crow.png",
+            "Laser Access":        "https://timespinnerwiki.com/mediawiki/images/9/99/Historical_Documents.png",
+            "Lab Glasses":         "https://timespinnerwiki.com/mediawiki/images/4/4a/Lab_Glasses.png",
+            "Eye Orb":             "https://timespinnerwiki.com/mediawiki/images/a/a4/Eye_Orb.png",
+            "Lab Coat":            "https://timespinnerwiki.com/mediawiki/images/5/51/Lab_Coat.png", 
+            "Demon":               "https://timespinnerwiki.com/mediawiki/images/f/f8/Familiar_Demon.png", 
         }
 
         timespinner_location_ids = {
@@ -1106,6 +1123,9 @@ if "Timespinner" in network_data_package["games"]:
             timespinner_location_ids["Ancient Pyramid"] += [
                 1337237, 1337238, 1337239,
                 1337240, 1337241, 1337242, 1337243, 1337244, 1337245]
+        if (slot_data["PyramidStart"]):
+            timespinner_location_ids["Ancient Pyramid"] += [
+                1337233, 1337234, 1337235]
 
         display_data = {}
 
@@ -1366,28 +1386,28 @@ if "Starcraft 2" in network_data_package["games"]:
         organics_icon_base_url = "https://0rganics.org/archipelago/sc2wol/"
 
         icons = {
-            "Starting Minerals":                           "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/icons/icon-mineral-protoss.png",
-            "Starting Vespene":                            "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/icons/icon-gas-terran.png",
+            "Starting Minerals":                           github_icon_base_url + "blizzard/icon-mineral-nobg.png",
+            "Starting Vespene":                            github_icon_base_url + "blizzard/icon-gas-terran-nobg.png",
             "Starting Supply":                             github_icon_base_url + "blizzard/icon-supply-terran_nobg.png",
 
-            "Terran Infantry Weapons Level 1":             "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryweaponslevel1.png",
-            "Terran Infantry Weapons Level 2":             "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryweaponslevel2.png",
-            "Terran Infantry Weapons Level 3":             "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryweaponslevel3.png",
-            "Terran Infantry Armor Level 1":               "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryarmorlevel1.png",
-            "Terran Infantry Armor Level 2":               "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryarmorlevel2.png",
-            "Terran Infantry Armor Level 3":               "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryarmorlevel3.png",
-            "Terran Vehicle Weapons Level 1":              "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleweaponslevel1.png",
-            "Terran Vehicle Weapons Level 2":              "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleweaponslevel2.png",
-            "Terran Vehicle Weapons Level 3":              "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleweaponslevel3.png",
-            "Terran Vehicle Armor Level 1":                "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleplatinglevel1.png",
-            "Terran Vehicle Armor Level 2":                "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleplatinglevel2.png",
-            "Terran Vehicle Armor Level 3":                "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleplatinglevel3.png",
-            "Terran Ship Weapons Level 1":                 "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipweaponslevel1.png",
-            "Terran Ship Weapons Level 2":                 "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipweaponslevel2.png",
-            "Terran Ship Weapons Level 3":                 "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipweaponslevel3.png",
-            "Terran Ship Armor Level 1":                   "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipplatinglevel1.png",
-            "Terran Ship Armor Level 2":                   "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipplatinglevel2.png",
-            "Terran Ship Armor Level 3":                   "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipplatinglevel3.png",
+            "Terran Infantry Weapons Level 1":             github_icon_base_url + "blizzard/btn-upgrade-terran-infantryweaponslevel1.png",
+            "Terran Infantry Weapons Level 2":             github_icon_base_url + "blizzard/btn-upgrade-terran-infantryweaponslevel2.png",
+            "Terran Infantry Weapons Level 3":             github_icon_base_url + "blizzard/btn-upgrade-terran-infantryweaponslevel3.png",
+            "Terran Infantry Armor Level 1":               github_icon_base_url + "blizzard/btn-upgrade-terran-infantryarmorlevel1.png",
+            "Terran Infantry Armor Level 2":               github_icon_base_url + "blizzard/btn-upgrade-terran-infantryarmorlevel2.png",
+            "Terran Infantry Armor Level 3":               github_icon_base_url + "blizzard/btn-upgrade-terran-infantryarmorlevel3.png",
+            "Terran Vehicle Weapons Level 1":              github_icon_base_url + "blizzard/btn-upgrade-terran-vehicleweaponslevel1.png",
+            "Terran Vehicle Weapons Level 2":              github_icon_base_url + "blizzard/btn-upgrade-terran-vehicleweaponslevel2.png",
+            "Terran Vehicle Weapons Level 3":              github_icon_base_url + "blizzard/btn-upgrade-terran-vehicleweaponslevel3.png",
+            "Terran Vehicle Armor Level 1":                github_icon_base_url + "blizzard/btn-upgrade-terran-vehicleplatinglevel1.png",
+            "Terran Vehicle Armor Level 2":                github_icon_base_url + "blizzard/btn-upgrade-terran-vehicleplatinglevel2.png",
+            "Terran Vehicle Armor Level 3":                github_icon_base_url + "blizzard/btn-upgrade-terran-vehicleplatinglevel3.png",
+            "Terran Ship Weapons Level 1":                 github_icon_base_url + "blizzard/btn-upgrade-terran-shipweaponslevel1.png",
+            "Terran Ship Weapons Level 2":                 github_icon_base_url + "blizzard/btn-upgrade-terran-shipweaponslevel2.png",
+            "Terran Ship Weapons Level 3":                 github_icon_base_url + "blizzard/btn-upgrade-terran-shipweaponslevel3.png",
+            "Terran Ship Armor Level 1":                   github_icon_base_url + "blizzard/btn-upgrade-terran-shipplatinglevel1.png",
+            "Terran Ship Armor Level 2":                   github_icon_base_url + "blizzard/btn-upgrade-terran-shipplatinglevel2.png",
+            "Terran Ship Armor Level 3":                   github_icon_base_url + "blizzard/btn-upgrade-terran-shipplatinglevel3.png",
 
             "Bunker":                                      "https://static.wikia.nocookie.net/starcraft/images/c/c5/Bunker_SC2_Icon1.jpg",
             "Missile Turret":                              "https://static.wikia.nocookie.net/starcraft/images/5/5f/MissileTurret_SC2_Icon1.jpg",

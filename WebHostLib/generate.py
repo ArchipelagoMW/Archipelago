@@ -31,11 +31,11 @@ def get_meta(options_source: dict, race: bool = False) -> Dict[str, Union[List[s
 
     server_options = {
         "hint_cost": int(options_source.get("hint_cost", ServerOptions.hint_cost)),
-        "release_mode": options_source.get("release_mode", ServerOptions.release_mode),
-        "remaining_mode": options_source.get("remaining_mode", ServerOptions.remaining_mode),
-        "collect_mode": options_source.get("collect_mode", ServerOptions.collect_mode),
+        "release_mode": str(options_source.get("release_mode", ServerOptions.release_mode)),
+        "remaining_mode": str(options_source.get("remaining_mode", ServerOptions.remaining_mode)),
+        "collect_mode": str(options_source.get("collect_mode", ServerOptions.collect_mode)),
         "item_cheat": bool(int(options_source.get("item_cheat", not ServerOptions.disable_item_cheat))),
-        "server_password": options_source.get("server_password", None),
+        "server_password": str(options_source.get("server_password", None)),
     }
     generator_options = {
         "spoiler": int(options_source.get("spoiler", GeneratorOptions.spoiler)),
@@ -81,6 +81,7 @@ def start_generation(options: Dict[str, Union[dict, str]], meta: Dict[str, Any])
     elif len(gen_options) > app.config["MAX_ROLL"]:
         flash(f"Sorry, generating of multiworlds is limited to {app.config['MAX_ROLL']} players. "
               f"If you have a larger group, please generate it yourself and upload it.")
+        return redirect(url_for(request.endpoint, **(request.view_args or {})))
     elif len(gen_options) >= app.config["JOB_THRESHOLD"]:
         gen = Generation(
             options=pickle.dumps({name: vars(options) for name, options in gen_options.items()}),
@@ -134,6 +135,7 @@ def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=Non
                                                                        {"bosses", "items", "connections", "texts"}))
         erargs.skip_prog_balancing = False
         erargs.skip_output = False
+        erargs.csv_output = False
 
         name_counter = Counter()
         for player, (playerfile, settings) in enumerate(gen_options.items(), 1):

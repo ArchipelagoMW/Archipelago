@@ -231,6 +231,13 @@ def generate_yaml(game: str):
 
                 del options[key]
 
+            # Detect keys which end with -range, indicating a NamedRange with a possible custom value
+            elif key_parts[-1].endswith("-range"):
+                if options[key_parts[-1][:-6]] == "custom":
+                    options[key_parts[-1][:-6]] = val
+
+                del options[key]
+
         # Detect random-* keys and set their options accordingly
         for key, val in options.copy().items():
             if key.startswith("random-"):

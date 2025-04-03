@@ -464,7 +464,7 @@ async def track_locations(ctx, roomid, roomdata) -> bool:
             snes_logger.info(f"Discarding recent {len(new_locations)} checks as ROM Status has changed.")
             return False
         else:
-            await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": new_locations}])
+            await ctx.check_locations(new_locations)
     await snes_flush_writes(ctx)
     return True
 
@@ -682,7 +682,7 @@ def get_alttp_settings(romfile: str):
 
         if 'yes' in choice:
             import LttPAdjuster
-            from worlds.alttp.Rom import get_base_rom_path
+            from .Rom import get_base_rom_path
             last_settings.rom = romfile
             last_settings.baserom = get_base_rom_path()
             last_settings.world = None

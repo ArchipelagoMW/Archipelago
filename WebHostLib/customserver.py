@@ -72,6 +72,14 @@ class WebHostContext(Context):
         self.video = {}
         self.tags = ["AP", "WebHost"]
 
+    def __del__(self):
+        try:
+            import psutil
+            from Utils import format_SI_prefix
+            self.logger.debug(f"Context destroyed, Mem: {format_SI_prefix(psutil.Process().memory_info().rss, 1024)}iB")
+        except ImportError:
+            self.logger.debug("Context destroyed")
+
     def _load_game_data(self):
         for key, value in self.static_server_data.items():
             # NOTE: attributes are mutable and shared, so they will have to be copied before being modified
@@ -109,6 +117,7 @@ class WebHostContext(Context):
         self.gamespackage = {"Archipelago": static_gamespackage.get("Archipelago", {})}  # this may be modified by _load
         self.item_name_groups = {"Archipelago": static_item_name_groups.get("Archipelago", {})}
         self.location_name_groups = {"Archipelago": static_location_name_groups.get("Archipelago", {})}
+        missing_checksum = False
 
         for game in list(multidata.get("datapackage", {})):
             game_data = multidata["datapackage"][game]
@@ -124,11 +133,13 @@ class WebHostContext(Context):
                         continue
                     else:
                         self.logger.warning(f"Did not find game_data_package for {game}: {game_data['checksum']}")
+            else:
+                missing_checksum = True  # Game rolled on old AP and will load data package from multidata
             self.gamespackage[game] = static_gamespackage.get(game, {})
             self.item_name_groups[game] = static_item_name_groups.get(game, {})
             self.location_name_groups[game] = static_location_name_groups.get(game, {})
 
-        if not game_data_packages:
+        if not game_data_packages and not missing_checksum:
             # all static -> use the static dicts directly
             self.gamespackage = static_gamespackage
             self.item_name_groups = static_item_name_groups
@@ -249,6 +260,7 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                 ctx = WebHostContext(static_server_data, logger)
                 ctx.load(room_id)
                 ctx.init_save()
+                assert ctx.server is None
                 try:
                     ctx.server = websockets.serve(
                         functools.partial(server, ctx=ctx), ctx.host, ctx.port, ssl=ssl_context)
@@ -279,6 +291,7 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                     ctx.auto_shutdown = Room.get(id=room_id).timeout
                 if ctx.saving:
                     setattr(asyncio.current_task(), "save", lambda: ctx._save(True))
+                assert ctx.shutdown_task is None
                 ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, []))
                 await ctx.shutdown_task
 
@@ -325,10 +338,12 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
         def run(self):
             while 1:
                 next_room = rooms_to_run.get(block=True,  timeout=None)
+                gc.collect()
                 task = asyncio.run_coroutine_threadsafe(start_room(next_room), loop)
                 self._tasks.append(task)
                 task.add_done_callback(self._done)
                 logging.info(f"Starting room {next_room} on {name}.")
+                del task  # delete reference to task object
 
     starter = Starter()
     starter.daemon = True

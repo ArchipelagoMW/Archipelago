@@ -159,7 +159,7 @@ def create_regions(world: "LingoWorld") -> None:
                          RoomAndDoor("Pilgrim Antechamber", "Sun Painting"), EntranceType.PAINTING, False, world)
 
     if early_color_hallways:
-        connect_entrance(regions, regions["Starting Room"], regions["Outside The Undeterred"], "Early Color Hallways",
+        connect_entrance(regions, regions["Starting Room"], regions["Color Hallways"], "Early Color Hallways",
                          None, EntranceType.PAINTING, False, world)
 
     if painting_shuffle:

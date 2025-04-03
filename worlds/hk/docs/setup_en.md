@@ -8,14 +8,20 @@
 
 ## Installing the Archipelago Mod using Lumafly
 1. Launch Lumafly and ensure it locates your Hollow Knight installation directory.
-2. Click the "Install" button near the "Archipelago" mod entry.
-   * If desired, also install "Archipelago Map Mod" to use as an in-game tracker.
+2. Install the Archipelago mods by doing either of the following:
+   * Click one of the links below to allow Lumafly to install the mods. Lumafly will prompt for confirmation.
+     * [Archipelago and dependencies only](https://themulhima.github.io/Lumafly/commands/download/?mods=Archipelago)
+     * [Archipelago with rando essentials](https://themulhima.github.io/Lumafly/commands/download/?mods=Archipelago/Archipelago%20Map%20Mod/RecentItemsDisplay/DebugMod/RandoStats/Additional%20Timelines/CompassAlwaysOn/AdditionalMaps/)
+       (includes Archipelago Map Mod, RecentItemsDisplay, DebugMod, RandoStats, AdditionalTimelines, CompassAlwaysOn,
+       and AdditionalMaps).
+   * Click the "Install" button near the "Archipelago" mod entry. If desired, also install "Archipelago Map Mod"
+     to use as an in-game tracker.
 3. Launch the game, you're all set!
 
 ### What to do if Lumafly fails to find your installation directory
 1. Find the directory manually.
    * Xbox Game Pass:
-      1. Enter the XBox app and move your mouse over "Hollow Knight" on the left sidebar. 
+      1. Enter the Xbox app and move your mouse over "Hollow Knight" on the left sidebar. 
       2. Click the three points then click "Manage".
       3. Go to the "Files" tab and select "Browse...". 
       4. Click "Hollow Knight", then "Content", then click the path bar and copy it.

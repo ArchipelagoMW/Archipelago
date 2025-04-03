@@ -17,6 +17,12 @@ The Archipelago community cannot supply you with this.
 
 ## Installation Procedures
 
+### Linux Setup
+
+1. Download and install [Archipelago](<https://github.com/ArchipelagoMW/Archipelago/releases/latest>). **The installer 
+   file is located in the assets section at the bottom of the version information. You'll likely be looking for the `.AppImage`.**
+2. It is recommended to use either RetroArch or BizHawk if you run on linux, as snes9x-rr isn't compatible.
+
 ### Windows Setup
 
 1. Download and install [Archipelago](<https://github.com/ArchipelagoMW/Archipelago/releases/latest>). **The installer 
@@ -75,8 +81,7 @@ Manually launch the SNI Client, and run the patched ROM in your chosen software 
 
 #### With an emulator
 
-When the client launched automatically, SNI should have also automatically launched in the background. If this is its
-first time launching, you may be prompted to allow it to communicate through the Windows Firewall.
+If this is the first time SNI launches, you may be prompted to allow it to communicate through the Windows Firewall.
 
 ##### snes9x-rr
 
@@ -133,10 +138,10 @@ page: [usb2snes Supported Platforms Page](http://usb2snes.com/#supported-platfor
 
 ### Connect to the Archipelago Server
 
-The patch file which launched your client should have automatically connected you to the AP Server. There are a few
-reasons this may not happen however, including if the game is hosted on the website but was generated elsewhere. If the
-client window shows "Server Status: Not Connected", simply ask the host for the address of the server, and copy/paste it
-into the "Server" input field then press enter.
+SNI serves as the interface between your emulator and the server. Since you launched it manually, you need to tell it what server to connect to. 
+If the server is hosted on Archipelago.gg, get the port the server hosts your game on at the top of the game room (last line before the worlds are listed).
+In the SNI client, either type `/connect address` (where `address` is the address of the server, for example `/connect archipelago.gg:12345`), or type the address and port on the "Server" input field, then press `Connect`.
+If the server is hosted locally, simply ask the host for the address of the server, and copy/paste it into the "Server" input field then press `Connect`.
 
 The client will attempt to reconnect to the new server address, and should momentarily show "Server Status: Connected".
 

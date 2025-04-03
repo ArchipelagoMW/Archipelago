@@ -1,6 +1,7 @@
 from . import ZillionTestBase
 
-from worlds.zillion.options import ZillionJumpLevels, ZillionGunLevels, ZillionOptions, validate
+from .. import ZillionWorld
+from ..options import ZillionJumpLevels, ZillionGunLevels, ZillionOptions, ZillionPriorityDeadEnds, validate
 from zilliandomizer.options import VBLR_CHOICES
 
 
@@ -28,3 +29,17 @@ class OptionsTest(ZillionTestBase):
                 assert getattr(zz_options, option_name) in VBLR_CHOICES
 
     # TODO: test validate with invalid combinations of options
+
+
+class DeadEndsTest(ZillionTestBase):
+    def test_vanilla_dead_end_names(self) -> None:
+        z_world = self.multiworld.worlds[1]
+        assert isinstance(z_world, ZillionWorld)
+        for loc_name in ZillionPriorityDeadEnds.vanilla_dead_ends:
+            assert any(loc.name == loc_name for loc in z_world.my_locations), f"{loc_name=} {z_world.my_locations=}"
+
+    def test_always_dead_end_names(self) -> None:
+        z_world = self.multiworld.worlds[1]
+        assert isinstance(z_world, ZillionWorld)
+        for loc_name in ZillionPriorityDeadEnds.always_dead_ends:
+            assert any(loc.name == loc_name for loc in z_world.my_locations), f"{loc_name=} {z_world.my_locations=}"
