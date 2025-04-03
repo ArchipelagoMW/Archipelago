@@ -32,11 +32,12 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: "3.12"
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          python ModuleUpdate.py --yes --force --append "WebHostLib/requirements.txt"
+          python pip install Sphinx
+          python pip install myst-parser
       - name: Sphinx build
         run: |
           python -c "import Utils; Utils.build_sphinx_docs()"
