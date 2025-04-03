@@ -1071,6 +1071,11 @@ if "Timespinner" in network_data_package["games"]:
             "Plasma Orb":          "https://timespinnerwiki.com/mediawiki/images/4/44/Plasma_Orb.png",
             "Kobo":                "https://timespinnerwiki.com/mediawiki/images/c/c6/Familiar_Kobo.png",
             "Merchant Crow":       "https://timespinnerwiki.com/mediawiki/images/4/4e/Familiar_Crow.png",
+            "Laser Access":        "https://timespinnerwiki.com/mediawiki/images/9/99/Historical_Documents.png",
+            "Lab Glasses":         "https://timespinnerwiki.com/mediawiki/images/4/4a/Lab_Glasses.png",
+            "Eye Orb":             "https://timespinnerwiki.com/mediawiki/images/a/a4/Eye_Orb.png",
+            "Lab Coat":            "https://timespinnerwiki.com/mediawiki/images/5/51/Lab_Coat.png", 
+            "Demon":               "https://timespinnerwiki.com/mediawiki/images/f/f8/Familiar_Demon.png", 
         }
 
         timespinner_location_ids = {
@@ -1118,6 +1123,9 @@ if "Timespinner" in network_data_package["games"]:
             timespinner_location_ids["Ancient Pyramid"] += [
                 1337237, 1337238, 1337239,
                 1337240, 1337241, 1337242, 1337243, 1337244, 1337245]
+        if (slot_data["PyramidStart"]):
+            timespinner_location_ids["Ancient Pyramid"] += [
+                1337233, 1337234, 1337235]
 
         display_data = {}
 

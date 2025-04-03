@@ -18,16 +18,42 @@ class Type(Enum):
 
 
 class Component:
+    """
+    A Component represents a process launchable by Archipelago Launcher, either by a User action in the GUI,
+    by resolving an archipelago://user:pass@host:port link from the WebHost, by resolving a patch file's metadata,
+    or by using a component name arg while running the Launcher in CLI i.e. `ArchipelagoLauncher.exe "Text Client"`
+
+    Expected to be appended to LauncherComponents.component list to be used.
+    """
     display_name: str
+    """Used as the GUI button label and the component name in the CLI args"""
     type: Type
+    """
+    Enum "Type" classification of component intent, for filtering in the Launcher GUI
+    If not set in the constructor, it will be inferred by display_name
+    """
     script_name: Optional[str]
+    """Recommended to use func instead; Name of file to run when the component is called"""
     frozen_name: Optional[str]
+    """Recommended to use func instead; Name of the frozen executable file for this component"""
     icon: str  # just the name, no suffix
+    """Lookup ID for the icon path in LauncherComponents.icon_paths"""
     cli: bool
+    """Bool to control if the component gets launched in an appropriate Terminal for the OS"""
     func: Optional[Callable]
+    """
+    Function that gets called when the component gets launched
+    Any arg besides the component name arg is passed into the func as well, so handling *args is suggested
+    """
     file_identifier: Optional[Callable[[str], bool]]
+    """
+    Function that is run against patch file arg to identify which component is appropriate to launch
+    If the function is an Instance of SuffixIdentifier the suffixes will also be valid for the Open Patch component
+    """
     game_name: Optional[str]
+    """Game name to identify component when handling launch links from WebHost"""
     supports_uri: Optional[bool]
+    """Bool to identify if a component supports being launched by launch links from WebHost"""
 
     def __init__(self, display_name: str, script_name: Optional[str] = None, frozen_name: Optional[str] = None,
                  cli: bool = False, icon: str = 'icon', component_type: Optional[Type] = None,
@@ -61,12 +87,19 @@ class Component:
 processes = weakref.WeakSet()
 
 
-def launch_subprocess(func: Callable, name: str = None, args: Tuple[str, ...] = ()) -> None:
-    global processes
+def launch_subprocess(func: Callable, name: str | None = None, args: Tuple[str, ...] = ()) -> None:
     import multiprocessing
     process = multiprocessing.Process(target=func, name=name, args=args)
     process.start()
     processes.add(process)
+
+
+def launch(func: Callable, name: str | None = None, args: Tuple[str, ...] = ()) -> None:
+    from Utils import is_kivy_running
+    if is_kivy_running():
+        launch_subprocess(func, name, args)
+    else:
+        func(*args)
 
 
 class SuffixIdentifier:
@@ -85,7 +118,7 @@ class SuffixIdentifier:
 
 def launch_textclient(*args):
     import CommonClient
-    launch_subprocess(CommonClient.run_as_textclient, name="TextClient", args=args)
+    launch(CommonClient.run_as_textclient, name="TextClient", args=args)
 
 
 def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, pathlib.Path]]:
