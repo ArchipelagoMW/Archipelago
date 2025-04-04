@@ -15,10 +15,10 @@ def create_regions(kh1world):
     options                                = kh1world.options
     
     regions: Dict[str, KH1RegionData] = {
-        "Menu":             KH1RegionData([], ["Awakening", "Levels"]),
-        "Awakening":        KH1RegionData([],   ["Destiny Islands"]),
-        "Destiny Islands":  KH1RegionData([],   ["Traverse Town"]),
-        "Traverse Town":    KH1RegionData([],   ["World Map"]),
+        "Menu":             KH1RegionData([], ["Awakening", "Levels", "World Map"]),
+        "Awakening":        KH1RegionData([],   []),
+        "Destiny Islands":  KH1RegionData([],   []),
+        "Traverse Town":    KH1RegionData([],   []),
         "Wonderland":       KH1RegionData([],   []),
         "Olympus Coliseum": KH1RegionData([],   []),
         "Deep Jungle":      KH1RegionData([],   []),
@@ -32,7 +32,8 @@ def create_regions(kh1world):
         "100 Acre Wood":    KH1RegionData([],   []),
         "Levels":           KH1RegionData([],   []),
         "Homecoming":       KH1RegionData([],   []),
-        "World Map":        KH1RegionData([],   ["Wonderland", "Olympus Coliseum", "Deep Jungle",
+        "World Map":        KH1RegionData([],   ["Destiny Islands", "Traverse Town", 
+                                         "Wonderland", "Olympus Coliseum", "Deep Jungle",
                                          "Agrabah", "Monstro", "Atlantica",
                                          "Halloween Town", "Neverland", "Hollow Bastion",
                                          "End of the World", "100 Acre Wood", "Homecoming"])
@@ -549,13 +550,13 @@ def create_regions(kh1world):
         regions["Destiny Islands"].locations.append("Destiny Islands Seashore Log under Bridge (Day 1)")
         regions["Destiny Islands"].locations.append("Destiny Islands Seashore Gather Cloth (Day 1)")
         regions["Destiny Islands"].locations.append("Destiny Islands Seashore Gather Rope (Day 1)")
-        regions["Destiny Islands"].locations.append("Destiny Islands Seashore Deliver Kairi Items (Day 1)")
+       #regions["Destiny Islands"].locations.append("Destiny Islands Seashore Deliver Kairi Items (Day 1)")
         regions["Destiny Islands"].locations.append("Destiny Islands Secret Place Gather Mushroom (Day 2)")
         regions["Destiny Islands"].locations.append("Destiny Islands Cove Gather Mushroom Near Zip Line (Day 2)")
         regions["Destiny Islands"].locations.append("Destiny Islands Cove Gather Mushroom in Small Cave (Day 2)")
         regions["Destiny Islands"].locations.append("Destiny Islands Cove Talk to Kairi (Day 2)")
         regions["Destiny Islands"].locations.append("Destiny Islands Gather Drinking Water (Day 2)")
-        regions["Destiny Islands"].locations.append("Destiny Islands Cove Deliver Kairi Items (Day 2)")
+       #regions["Destiny Islands"].locations.append("Destiny Islands Cove Deliver Kairi Items (Day 2)")
         regions["Destiny Islands"].locations.append("Destiny Islands Chest")
     regions["Homecoming"].locations.append("Final Ansem")
     

@@ -509,9 +509,9 @@ class ShortenGoMode(Toggle):
 
 class DestinyIslands(Toggle):
     """
-    If on, Traverse Town will have an additional place to land - Seashore in Destiny Islands.
-    Destiny Islands items will be shuffled into the item pool.
-    Turning in all Destiny Islands items to Kairi sends the player to the final fights.
+    If on, Adds a Destiny Islands item and a number of Raft Materials items to the pool.
+    When "Destiny Islands" is found, Traverse Town will have an additional place to land - Seashore.
+    "Raft Materials" allow progress into Day 2 and to Homecoming.  The amount is defined in Day 2 Materials and Homecoming Materials.
     """
     display_name = "Destiny Islands"
 
@@ -676,6 +676,33 @@ class MinAPCost(Range):
     range_start = 0
     range_end = 2
 
+class Day2Materials(Range):
+    """
+    The amount of Raft Materials required to access Day 2.
+    """
+    display_name = "Day 2 Materials"
+    default = 4
+    range_start = 0
+    range_end = 20
+
+class HomecomingMaterials(Range):
+    """
+    The amount of Raft Materials required to access Homecoming.
+    """
+    display_name = "Homecoming Materials"
+    default = 14
+    range_start = 0
+    range_end = 20
+
+class MaterialsInPool(Range):
+    """
+    The amount of Raft Materials required to access Homecoming.
+    """
+    display_name = "Materials in Pool"
+    default = 16
+    range_start = 0
+    range_end = 20
+
 @dataclass
 class KH1Options(PerGameCommonOptions):
     final_rest_door_key: FinalRestDoorKey
@@ -752,6 +779,9 @@ class KH1Options(PerGameCommonOptions):
     randomize_ap_costs: RandomizeAPCosts
     max_ap_cost: MaxAPCost
     min_ap_cost: MinAPCost
+    day_2_materials: Day2Materials
+    homecoming_materials: HomecomingMaterials
+    materials_in_pool: MaterialsInPool
 
 kh1_option_groups = [
     OptionGroup("Goal", [
@@ -763,6 +793,9 @@ kh1_option_groups = [
         RequiredPostcards,
         RequiredPuppies,
         DestinyIslands,
+        Day2Materials,
+        HomecomingMaterials,
+        MaterialsInPool,
     ]),
     OptionGroup("Locations", [
         SuperBosses,
