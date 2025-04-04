@@ -528,6 +528,7 @@ class PokemonRedBlueWorld(World):
 
     def get_pre_fill_items(self) -> typing.List["Item"]:
         pool = [self.create_item(mon) for mon in poke_data.pokemon_data]
+        pool.append(self.pc_item)
         return pool
 
     @classmethod

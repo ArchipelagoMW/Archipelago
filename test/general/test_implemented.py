@@ -67,7 +67,7 @@ class TestImplemented(unittest.TestCase):
 
                     self.assertTrue(not unreachable,
                                     f"Locations were not reachable with all state before prefill: "
-                                    f"{unreachable}")
+                                    f"{unreachable}. Seed: {multiworld.seed}")
                     
     def test_explicit_indirect_conditions_spheres(self):
         """Tests that worlds using explicit indirect conditions produce identical spheres as when using implicit
