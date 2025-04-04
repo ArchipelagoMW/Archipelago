@@ -66,13 +66,14 @@ check out [world maintainer.md](/docs/world%20maintainer.md).
 
 A bare minimum world implementation must satisfy the following requirements:
 
-* A folder within `/worlds/` that contains an `__init__.py`
-* Any subfolders within `/worlds/{game}` that contain `*.py` files must also an `__init__.py` for frozen build 
+* It has a folder with the name of your game (or an abbreviation) under `/worlds/` 
+* The `/worlds/{game}` folder contains an `__init__.py`
+* Any subfolders within `/worlds/{game}` that contain `*.py` files also contain an `__init__.py` for frozen build 
   packaging
-* At least one game_info doc named with follow the format `{language_code}_{game_name}.md`
-* At least one setup doc, included in the list of 
-  [tutorials](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L213)
-* A `World` subclass where you create your world and define all of its rules
+* The game folder has at least one game_info doc named with follow the format `{language_code}_{game_name}.md`
+* The game folder has at least one setup doc
+* There must be a `World` subclass in your game folder (typically in `/worlds/{game}/__init__.py`) where you create 
+  your world and define all of its rules and features
 
 Within the `World` subclass you should also have:
 
@@ -81,7 +82,10 @@ Within the `World` subclass you should also have:
 subclass for webhost documentation and behaviors
   * In your `WebWorld`, if you wrote a game_info doc in more than one language, override the list of 
     [game info languages](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L210) with the 
-    ones you include
+    ones you include.
+  * In your `WebWorld`, override the list of 
+    [tutorials](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L213) with each tutorial
+    or setup doc you included in the game folder.
 * A mapping for items and locations defining their names and ids for clients to be able to identify them. These are 
   `item_name_to_id` and `location_name_to_id`, respectively.
 * An implementation of `create_item` that can create an item when called by either your code or by another process 
@@ -91,6 +95,7 @@ subclass for webhost documentation and behaviors
     [origin_region_name](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L298-L299)
 * A non-zero number of locations, added to your regions
 * A non-zero number of items **equal** to the number of locations, added to the multiworld itempool
+  * In rare cases, there may be 0-location-0-item games, but this is extremely atypical.
 
 ### Encouraged Features
 
@@ -106,8 +111,14 @@ if possible.
 * A [bug report page](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L220)
 * A list of [option groups](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L226) 
   for better organization on the webhost
-* A list of [options presets](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L223)
+* A dictionary of [options presets](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L223)
   for player convenience
+* A dictionary of [item name groups](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L273)
+  for player convenience
+* A dictionary of 
+  [location name groups](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L276)
+  for player convenience
+  * Other games may also benefit from your name group dictionaries for hints, features, etc.
 
 ### Discouraged or Prohibited Behavior
 
