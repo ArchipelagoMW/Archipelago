@@ -50,7 +50,7 @@ class TestDungeon(LTTPTestBase):
                     state.states[1].reachable_regions.add(region)
                     for exit in region.exits:
                         if exit.connected_region is not None:
-                            state.states[1].reachable_regions.add(exit)
+                            state.states[1].blocked_connections.add(exit)
 
                 for item in items:
                     item.classification = ItemClassification.progression
