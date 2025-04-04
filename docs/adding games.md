@@ -21,24 +21,39 @@ various packets can be found in the [network protocol](/docs/network%20protocol.
 
 ### Hard Requirements
 
-The specific requirements the game client must follow to behave as expected are:
+In order for the game client to behave as expected, it must be able to perform these functions:
 
 * Handle both secure and unsecure websocket connections
-* Detect and react when a location has been "checked" by the player by sending a network packet to the server
-* Receive and parse network packets when the player receives an item from the server, and reward it to the player on
-demand
-  * **Any** of your items can be received any number of times, up to and far surpassing those that the game might
-normally expect from features such as starting inventory, item link replacement, or item cheating
-  * Players and the admin can cheat items to the player at any time with a server command, and these items may not have
-a player or location attributed to them
+* Reconnect if the connection is unstable and lost while playing
 * Be able to change the port for saved connection info
   * Rooms hosted on the website attempt to reserve their port, but since there are a limited number of ports, this
-privilege can be lost, requiring the room to be moved to a new port
-* Reconnect if the connection is unstable and lost while playing
-* Keep an index for items received in order to resync. The ItemsReceived Packets are a single list with guaranteed 
-order.
-* Receive items that were sent to the player while they were not connected to the server
+    privilege can be lost, requiring the room to be moved to a new port
 * Send a status update packet alerting the server that the player has completed their goal
+
+Regarding items and locations, the game client must be able to handle these tasks:
+
+#### Location Handling
+
+Send a network packet to the server when it detects a location has been "checked" by the player in-game.
+
+* It must be able to send checks to the server after reconnecting following a temporary disconnect.
+  * In other words, if the client disconnects from the server, and then the player does in-game actions that should 
+    send checks, the client must cache those actions locally until it is able to reconnect to the server.
+  * It must then sync up with the server by informing it about those actions.
+
+#### Item Handling
+
+Receive and parse network packets from the server when the player receives an item.
+
+* It must reward items to the player on demand, as items can come from other players at any time.
+* It must be able to reward copies of an item, up to and beyond the number the game normally expects. This may happen
+  due to features such as starting inventory, item link replacement, admin commands, or item cheating. **Any** of 
+  your items can be received **any** number of times.
+* Admins and players may use server commands to create items without a player or location attributed to them. The
+  client must be able to handle these items.
+* It must keep an index for items received in order to resync. The ItemsReceived Packets are a single list with a
+  guaranteed order.
+* It must be able to receive items that were sent to the player while they were not connected to the server.
 
 ### Encouraged Features
 
