@@ -359,7 +359,7 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
                 # Not a fan of the following few lines, but they work.
                 temp = MarkupLabel(text=self.text).markup
                 text = "".join(part for part in temp if not part.startswith("["))
-                cmdinput = App.get_running_app().textinput
+                cmdinput = MDApp.get_running_app().textinput
                 if not cmdinput.text:
                     input_text = get_input_text_from_response(text, MDApp.get_running_app().last_autofillable_command)
                     if input_text is not None:
