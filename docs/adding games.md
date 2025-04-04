@@ -68,7 +68,7 @@ A bare minimum world implementation must satisfy the following requirements:
 
 * A folder within `/worlds/` that contains an `__init__.py`
 * Any subfolders within `/worlds/{game}` that contain `*.py` files must also an `__init__.py` for frozen build 
-packaging
+  packaging
 * At least one game_info doc named with follow the format `{language_code}_{game_name}.md`
 * At least one setup doc, included in the list of 
   [tutorials](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L213)
