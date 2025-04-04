@@ -1,6 +1,6 @@
 # Adding Games
 
-Like all contributions to Archipelago, New Game implementations should follow the [Contributing](/docs/contributing.md) 
+Like all contributions to Archipelago, New Game implementations should follow the [Contributing](/docs/contributing.md)
 guide.
 
 Adding a new game to Archipelago has two major parts:
@@ -57,35 +57,38 @@ datapackage information so other game clients can recognize your game data, and 
 written as a Python package to be loaded by Archipelago. This is currently done by creating a fork of the Archipelago
 repository and creating a new world package in `/worlds/`. 
 
-The base World class can be found in [AutoWorld](/worlds/AutoWorld.py). Methods available for your world to call during generation 
-can be found in [BaseClasses](/BaseClasses.py) and [Fill](/Fill.py). Some examples and documentation regarding the API can be found 
-in the [world api doc](/docs/world%20api.md). Before publishing, make sure to also check out [world maintainer.md](/docs/world%20maintainer.md).
+The base World class can be found in [AutoWorld](/worlds/AutoWorld.py). Methods available for your world to call 
+during generation can be found in [BaseClasses](/BaseClasses.py) and [Fill](/Fill.py). Some examples and documentation 
+regarding the API can be found in the [world api doc](/docs/world%20api.md). Before publishing, make sure to also 
+check out [world maintainer.md](/docs/world%20maintainer.md).
 
 ### Hard Requirements
 
 A bare minimum world implementation must satisfy the following requirements:
 
 * A folder within `/worlds/` that contains an `__init__.py`
-* Any subfolders within `/worlds/{game}` that contain `*.py` files must also an `__init__.py` for frozen build packaging
+* Any subfolders within `/worlds/{game}` that contain `*.py` files must also an `__init__.py` for frozen build 
+packaging
 * At least one game_info doc named with follow the format `{language_code}_{game_name}.md`
-* At least one setup doc, included in the list of [tutorials](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L213)
+* At least one setup doc, included in the list of 
+  [tutorials](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L213)
+* A `World` subclass where you create your world and define all of its rules
 
-Within your folder you should have a `World` subclass where you create your world and define all of its rules. 
-It should also contain:
+Within the `World` subclass you should also have:
 
 * A [unique game name](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L260)
 * An [instance](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L295) of a `WebWorld` 
 subclass for webhost documentation and behaviors
   * In your `WebWorld`, if you wrote a game_info doc in more than one language, override the list of 
-  [game info languages](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L210) with the ones you include
+    [game info languages](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L210) with the 
+    ones you include
 * A mapping for items and locations defining their names and ids for clients to be able to identify them. These are 
-`item_name_to_id` and `location_name_to_id`, respectively.
+  `item_name_to_id` and `location_name_to_id`, respectively.
 * An implementation of `create_item` that can create an item when called by either your code or by another process 
-within Archipelago
-* An `options_dataclass` defining the options players have available to them
+  within Archipelago
 * At least one `Region` for your player to start from (i.e. the Origin Region)
   * The default name of this region is "Menu" but you may configure a different name with 
-  [origin_region_name](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L298-L299)
+    [origin_region_name](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L298-L299)
 * A non-zero number of locations, added to your regions
 * A non-zero number of items **equal** to the number of locations, added to the multiworld itempool
 
@@ -94,11 +97,15 @@ within Archipelago
 These are "nice to have" features for a world, but they are not strictly required. It is encouraged to add them 
 if possible.
 
-* An implementation of [get_filler_item_name](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L473)
-
+* An implementation of
+  [get_filler_item_name](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L473)
+* An `options_dataclass` defining the options players have available to them
+  * This should be accompanied by a type hint for `options` with the same class name
 * A [bug report page](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L220)
-* A list of [option groups](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L226) for better
-organization
+* A list of [option groups](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L226) 
+  for better organization on the webhost
+* A list of [options presets](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L223)
+  for player convenience
 
 ### Discouraged or Prohibited Behavior
 
@@ -107,12 +114,12 @@ workarounds or preferred methods which should be used instead:
 
 * All items submitted to the multiworld itempool must not be manually placed by the World. 
   * If you need to place specific items, there are multiple ways to do so, but they should not be added to the 
-  multiworld itempool.
+    multiworld itempool.
 * It is not allowed to use `eval` for most reasons, chiefly due to security concerns. 
 * It is discouraged to use `yaml.load` directly due to security concerns.
   * When possible, use `Utils.yaml_load` instead, as this defaults to the safe loader.
 * When submitting regions or items to the multiworld (`multiworld.regions` and `multiworld.itempool` respectively), 
-**Do not use `=`**. 
+  Do **not** use `=` as this will overwrite all elements for all games in the seed.
   * Instead, use `append`, `extend`, or `+=`. 
 
 ### Notable Caveats
@@ -120,6 +127,5 @@ workarounds or preferred methods which should be used instead:
 * The Origin Region will always be considered the "start" for the player
 * The Origin Region is *always* considered accessible; i.e. the player is expected to always be able to return to the
 start of the game from anywhere
-
 * Regions are simply containers for locations that share similar access rules. They do not have to map to 
 concrete, physical areas within your game and can be more abstract like tech trees or a questline.
