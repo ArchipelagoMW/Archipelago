@@ -151,15 +151,15 @@ class ERPlacementState:
         self.pairings = []
         self.world = world
         self.coupled = coupled
-        self.collection_state = world.multiworld.get_all_state(False, True)
+        self.collection_state = world.multiworld.get_single_player_all_state(False, self.world.player, True)
 
     @property
     def placed_regions(self) -> set[Region]:
-        return self.collection_state.reachable_regions[self.world.player]
+        return self.collection_state.states[self.world.player].reachable_regions
 
     def find_placeable_exits(self, check_validity: bool, usable_exits: list[Entrance]) -> list[Entrance]:
         if check_validity:
-            blocked_connections = self.collection_state.blocked_connections[self.world.player]
+            blocked_connections = self.collection_state.states[self.world.player].blocked_connections
             placeable_randomized_exits = [ex for ex in usable_exits
                                           if not ex.connected_region
                                           and ex in blocked_connections
@@ -176,7 +176,7 @@ class ERPlacementState:
         target_region.entrances.remove(target_entrance)
         source_exit.connect(target_region)
 
-        self.collection_state.stale[self.world.player] = True
+        self.collection_state.states[self.world.player].stale = True
         self.placements.append(source_exit)
         self.pairings.append((source_exit.name, target_entrance.name))
 
@@ -185,13 +185,13 @@ class ERPlacementState:
         copied_state = self.collection_state.copy()
         # simulated connection. A real connection is unsafe because the region graph is shallow-copied and would
         # propagate back to the real multiworld.
-        copied_state.reachable_regions[self.world.player].add(target_entrance.connected_region)
-        copied_state.blocked_connections[self.world.player].remove(source_exit)
-        copied_state.blocked_connections[self.world.player].update(target_entrance.connected_region.exits)
+        copied_state.states[self.world.player].reachable_regions.add(target_entrance.connected_region)
+        copied_state.states[self.world.player].blocked_connections.remove(source_exit)
+        copied_state.states[self.world.player].blocked_connections.update(target_entrance.connected_region.exits)
         copied_state.update_reachable_regions(self.world.player)
         copied_state.sweep_for_advancements()
         # test that at there are newly reachable randomized exits that are ACTUALLY reachable
-        available_randomized_exits = copied_state.blocked_connections[self.world.player]
+        available_randomized_exits = copied_state.states[self.world.player].blocked_connections
         for _exit in available_randomized_exits:
             if _exit.connected_region:
                 continue

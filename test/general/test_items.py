@@ -26,13 +26,13 @@ class TestBase(unittest.TestCase):
                     with self.subTest("Item State Remove", item_name=item_name, game_name=game_name):
                         test_state.remove(item)
 
-                        self.assertEqual(test_state.prog_items, multiworld.state.prog_items,
+                        self.assertEqual(test_state.states[1].prog_items, multiworld.state.states[1].prog_items,
                                          "Item Collect -> Remove should restore empty state.")
                 else:
                     with self.subTest("Item State Collect No Change", item_name=item_name, game_name=game_name):
                         # Non-Advancement should not modify state.
                         test_state.collect(item)
-                        self.assertEqual(test_state.prog_items, multiworld.state.prog_items)
+                        self.assertEqual(test_state.states[1].prog_items, multiworld.state.states[1].prog_items)
 
     def test_item_name_group_has_valid_item(self):
         """Test that all item name groups contain valid items. """

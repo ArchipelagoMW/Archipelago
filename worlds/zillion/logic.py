@@ -90,6 +90,6 @@ class ZillionLogicCache:
         tr = frozenset(self._zz_r.get_locations(have_req))
 
         # save result in cache
-        self._cache[_hash] = (cs.prog_items[self._player].copy(), tr)
+        self._cache[_hash] = (cs.states[self._player].prog_items.copy(), tr)
 
         return tr

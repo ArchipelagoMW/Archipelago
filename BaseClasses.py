@@ -1062,14 +1062,19 @@ class PlayerState:
 
 
 class CollectionState:
-    prog_items: Dict[int, PlayerState]  # TODO for back compatibility, to be removed
-    states: Dict[int, PlayerState]
+    prog_items: dict[int, PlayerState]  # TODO for back compatibility, to be removed
+    states: dict[int, PlayerState]
     multiworld: MultiWorld
-    advancements: Set[Location]
-    path: Dict[Union[Region, Entrance], PathValue]
+    advancements: set[Location]
+    path: dict[Region | Entrance, PathValue]
     allow_partial_entrances: bool
-    additional_init_functions: List[Callable[[CollectionState, MultiWorld], None]] = []
-    additional_copy_functions: List[Callable[[CollectionState, CollectionState], CollectionState]] = []
+    additional_init_functions: list[Callable[[CollectionState, MultiWorld], None]] = []
+    additional_copy_functions: list[Callable[[CollectionState, CollectionState], CollectionState]] = []
+    # TODO for back compatibility, to be removed
+    reachable_regions: dict[int, set[Region]]
+    blocked_connections: dict[int, set[Entrance]]
+    locations_checked: dict[int, set[Location]]
+
 
     def __init__(self,
                  parent: MultiWorld,
@@ -1093,6 +1098,9 @@ class CollectionState:
         self.prog_items = self.states  # assign as a reference for back compatibility
         self.advancements = set()
         self.path = {}
+        self.reachable_regions = {player: state.reachable_regions for player, state in self.states.items()}
+        self.blocked_connections = {player: state.blocked_connections for player, state in self.states.items()}
+        self.locations_checked = {player: state.locations_checked for player, state in self.states.items()}
         for function in self.additional_init_functions:
             function(self, parent)
         for items in [pre_items for player, pre_items in parent.precollected_items.items()

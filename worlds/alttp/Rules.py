@@ -1126,7 +1126,7 @@ def set_trock_key_rules(multiworld, player):
         set_rule(multiworld.get_entrance(entrance, player), lambda state: False)
 
     all_state = multiworld.get_all_state(use_cache=False, allow_partial_entrances=True)
-    all_state.reachable_regions[player] = set()  # wipe reachable regions so that the locked doors actually work
+    all_state.states[player].reachable_regions = set()  # wipe reachable regions so that the locked doors actually work
     all_state.states[player].stale = True
 
     # Check if each of the four main regions of the dungoen can be reached. The previous code section prevents key-costing moves within the dungeon.

@@ -44,13 +44,13 @@ class TestDungeon(LTTPTestBase):
                 else:
                     items = item_factory(items, self.world)
                 state = CollectionState(self.multiworld)
-                state.reachable_regions[1].add(self.multiworld.get_region('Menu', 1))
+                state.states[1].reachable_regions.add(self.multiworld.get_region('Menu', 1))
                 for region_name in self.starting_regions:
                     region = self.multiworld.get_region(region_name, 1)
-                    state.reachable_regions[1].add(region)
+                    state.states[1].reachable_regions.add(region)
                     for exit in region.exits:
                         if exit.connected_region is not None:
-                            state.blocked_connections[1].add(exit)
+                            state.states[1].reachable_regions.add(exit)
 
                 for item in items:
                     item.classification = ItemClassification.progression
