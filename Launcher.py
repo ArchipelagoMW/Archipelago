@@ -22,9 +22,9 @@ from os.path import isfile
 from shutil import which
 from typing import Callable, Optional, Sequence, Tuple, Union, Any
 
-
 if __name__ == "__main__":
     import ModuleUpdate
+
     ModuleUpdate.update()
 
 import settings
@@ -106,7 +106,8 @@ components.extend([
     Component("Generate Template Options", func=generate_yamls),
     Component("Archipelago Website", func=lambda: webbrowser.open("https://archipelago.gg/")),
     Component("Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/8Z65BR2")),
-    Component("Unrated/18+ Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4")),
+    Component("Unrated/18+ Discord Server", icon="discord",
+              func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4")),
     Component("Browse Files", func=browse_files),
 ])
 
@@ -211,6 +212,7 @@ def launch(exe, in_terminal=False):
             return
     subprocess.Popen(exe)
 
+
 def create_shortcut(button: Any, component: Component) -> None:
     from pyshortcuts import make_shortcut
     script = sys.argv[0]
@@ -239,12 +241,16 @@ def run_gui(path: str, args: Any) -> None:
     from kivymd.uix.screen import MDScreen
     from kivymd.uix.snackbar import MDSnackbar, MDSnackbarText
 
+    class LauncherCard(MDCard):
+        component: Component | None
+
     class Launcher(MDApp):
         base_title: str = "Archipelago Launcher"
         container: ContainerLayout
         navigation: MDBoxLayout
         grid: MDGridLayout
         button_layout: ScrollBox | None = None
+        cards: list[LauncherCard]
 
         def __init__(self, ctx=None, path=None, args=None):
             self.title = self.base_title + " " + Utils.__version__
@@ -253,86 +259,88 @@ def run_gui(path: str, args: Any) -> None:
             self.favorites = []
             self.launch_uri = path
             self.launch_args = args
+            self.cards = []
             persistent = Utils.persistent_load()
             if "launcher" in persistent:
                 if "favorites" in persistent["launcher"]:
                     self.favorites.extend(persistent["launcher"]["favorites"])
             super().__init__()
 
-        def _refresh_components(self, type_filter: Sequence[str | Type] | None = None) -> None:
-            if not type_filter:
-                type_filter = [Type.CLIENT, Type.ADJUSTER, Type.TOOL, Type.MISC]
-            favorites = "favorites" in type_filter
-
-            def build_card(component: Component) -> Widget:
-                """
+        def build_card(self, component: Component) -> LauncherCard:
+            """
                 Builds a card widget for a given component.
 
                 :param component: The component associated with the button.
 
                 :return: The created Card Widget.
                 """
-                button_card = MDCard(style="filled", padding="4dp", size_hint=(1, None), height=dp(75))
-                button_layout = MDRelativeLayout()
-                button_card.add_widget(button_layout)
+            button_card = LauncherCard(style="filled", padding="4dp", size_hint=(1, None), height=dp(75))
+            button_card.component = component
+            button_layout = MDRelativeLayout()
+            button_card.add_widget(button_layout)
 
-                source = icon_paths[component.icon]
-                image = ApAsyncImage(source=source, size=(40, 40), size_hint_y=None,
-                                     pos_hint={"center_x": 0.1, "center_y": 0.5})
+            source = icon_paths[component.icon]
+            image = ApAsyncImage(source=source, size=(40, 40), size_hint_y=None,
+                                 pos_hint={"center_x": 0.1, "center_y": 0.5})
 
-                button_layout.add_widget(image)
-                button_layout.add_widget(MDLabel(text=component.display_name,
-                                                 pos_hint={"center_x": 0.5,
-                                                           "center_y": 0.85 if component.description else 0.65},
-                                                 halign="center", font_style="Title", role="medium",
-                                                 theme_text_color="Custom", text_color=self.theme_cls.primaryColor))
-                if component.description:
-                    button_layout.add_widget(MDLabel(text=component.description,
-                                                     pos_hint={"center_x": 0.5, "center_y": 0.35}, halign="center",
-                                                     role="small", theme_text_color="Custom",
-                                                     text_color=self.theme_cls.primaryColor))
+            button_layout.add_widget(image)
+            button_layout.add_widget(MDLabel(text=component.display_name,
+                                             pos_hint={"center_x": 0.5,
+                                                       "center_y": 0.85 if component.description else 0.65},
+                                             halign="center", font_style="Title", role="medium",
+                                             theme_text_color="Custom", text_color=self.theme_cls.primaryColor))
+            if component.description:
+                button_layout.add_widget(MDLabel(text=component.description,
+                                                 pos_hint={"center_x": 0.5, "center_y": 0.35}, halign="center",
+                                                 role="small", theme_text_color="Custom",
+                                                 text_color=self.theme_cls.primaryColor))
 
-                favorite_button = MDIconButton(icon="star" if component.display_name in self.favorites
-                                               else "star-outline",
-                                               style="standard", pos_hint={"center_x": 0.85, "center_y": 0.8},
-                                               theme_text_color="Custom", text_color=self.theme_cls.primaryColor)
-                favorite_button.component = component
+            favorite_button = MDIconButton(icon="star" if component.display_name in self.favorites
+            else "star-outline",
+                                           style="standard", pos_hint={"center_x": 0.85, "center_y": 0.8},
+                                           theme_text_color="Custom", text_color=self.theme_cls.primaryColor)
+            favorite_button.component = component
 
-                def set_favorite(caller):
-                    if caller.component.display_name in self.favorites:
-                        self.favorites.remove(caller.component.display_name)
-                        caller.icon = "star-outline"
-                    else:
-                        self.favorites.append(caller.component.display_name)
-                        caller.icon = "star"
+            def set_favorite(caller):
+                if caller.component.display_name in self.favorites:
+                    self.favorites.remove(caller.component.display_name)
+                    caller.icon = "star-outline"
+                else:
+                    self.favorites.append(caller.component.display_name)
+                    caller.icon = "star"
 
-                favorite_button.bind(on_release=set_favorite)
-                button_layout.add_widget(favorite_button)
-                context_button = MDIconButton(icon="menu", style="standard",
-                                              pos_hint={"center_x": 0.95, "center_y": 0.8}, theme_text_color="Custom",
-                                              text_color=self.theme_cls.primaryColor)
+            favorite_button.bind(on_release=set_favorite)
+            button_layout.add_widget(favorite_button)
+            context_button = MDIconButton(icon="menu", style="standard",
+                                          pos_hint={"center_x": 0.95, "center_y": 0.8}, theme_text_color="Custom",
+                                          text_color=self.theme_cls.primaryColor)
 
-                def open_menu(caller):
-                    caller.menu.open()
+            def open_menu(caller):
+                caller.menu.open()
 
-                menu_items = [
-                    {
-                        "text": "Add shortcut on desktop",
-                        "leading_icon": "laptop",
-                        "on_release": lambda: create_shortcut(context_button, component)
-                    }
-                ]
-                context_button.menu = MDDropdownMenu(caller=context_button, items=menu_items)
-                context_button.bind(on_release=open_menu)
-                button_layout.add_widget(context_button)
+            menu_items = [
+                {
+                    "text": "Add shortcut on desktop",
+                    "leading_icon": "laptop",
+                    "on_release": lambda: create_shortcut(context_button, component)
+                }
+            ]
+            context_button.menu = MDDropdownMenu(caller=context_button, items=menu_items)
+            context_button.bind(on_release=open_menu)
+            button_layout.add_widget(context_button)
 
-                button = MDButton(MDButtonText(text="Open"), pos_hint={"center_x": 0.9, "center_y": 0.25},
-                                  size_hint_y=None,  height=dp(25))
-                button.component = component
-                button.bind(on_release=self.component_action)
-                button_layout.add_widget(button)
+            button = MDButton(MDButtonText(text="Open"), pos_hint={"center_x": 0.9, "center_y": 0.25},
+                              size_hint_y=None, height=dp(25))
+            button.component = component
+            button.bind(on_release=self.component_action)
+            button_layout.add_widget(button)
 
-                return button_card
+            return button_card
+
+        def _refresh_components(self, type_filter: Sequence[str | Type] | None = None) -> None:
+            if not type_filter:
+                type_filter = [Type.CLIENT, Type.ADJUSTER, Type.TOOL, Type.MISC]
+            favorites = "favorites" in type_filter
 
             # clear before repopulating
             assert self.button_layout, "must call `build` first"
@@ -340,15 +348,10 @@ def run_gui(path: str, args: Any) -> None:
             for child in tool_children:
                 self.button_layout.layout.remove_widget(child)
 
-            _tools = {c.display_name: c for c in components if c.type == Type.TOOL}
-            _clients = {c.display_name: c for c in components if c.type == Type.CLIENT}
-            _adjusters = {c.display_name: c for c in components if c.type == Type.ADJUSTER}
-            _miscs = {c.display_name: c for c in components if c.type == Type.MISC}
-
-            for (name, component) in itertools.chain(
-                    _tools.items(), _miscs.items(), _adjusters.items(), _clients.items()):
-                if component.type in type_filter or favorites and component.display_name in self.favorites:
-                    self.button_layout.layout.add_widget(build_card(component))
+            cards = [card for card in self.cards if card.component.type in type_filter
+                     or favorites and card.component.display_name in self.favorites]
+            for card in cards:
+                self.button_layout.layout.add_widget(card)
 
         def build(self):
             from kvui import KivyJSONtoTextParser
@@ -415,6 +418,11 @@ def run_gui(path: str, args: Any) -> None:
             refresh_components = self._refresh_components
 
             Window.bind(on_drop_file=self._on_drop_file)
+
+            for component in components:
+                self.cards.append(self.build_card(component))
+
+            self._refresh_components()
 
             return self.top_screen
 
@@ -516,6 +524,7 @@ if __name__ == '__main__':
     main(parser.parse_args())
 
     from worlds.LauncherComponents import processes
+
     for process in processes:
         # we await all child processes to close before we tear down the process host
         # this makes it feel like each one is its own program, as the Launcher is closed now
