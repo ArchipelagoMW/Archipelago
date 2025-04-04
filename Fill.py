@@ -524,13 +524,13 @@ def distribute_items_restrictive(multiworld: MultiWorld,
             # We'd still prefer to place deprioritized progression items on priority locations over filler items.
             fill_restrictive(multiworld, multiworld.state, prioritylocations, regular_progression,
                              single_player_placement=single_player, swap=False, on_place=mark_for_locking,
-                             name="Priority Retry", one_item_per_player=False, allow_partial=True)
+                             name="Priority Retry 2", one_item_per_player=False, allow_partial=True)
 
         if prioritylocations and deprioritized_progression:
             # retry with deprioritized items AND without one_item_per_player optimisation
             fill_restrictive(multiworld, multiworld.state, prioritylocations, regular_progression,
                              single_player_placement=single_player, swap=False, on_place=mark_for_locking,
-                             name="Priority Retry", one_item_per_player=False)
+                             name="Priority Retry 3", one_item_per_player=False)
 
         # restore original order of progitempool
         progitempool[:] = [item for item in progitempool if not item.location]
