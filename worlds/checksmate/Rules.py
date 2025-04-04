@@ -169,7 +169,9 @@ def set_rules(world: World):
 
         # Add rule for Capture Everything in super-sized mode
         if name == "Capture Everything" and super_sized:
-            add_rule(location, lambda state: state.has("Super-Size Me", world.player))
+            add_rule(location, lambda state: state.has("Super-Size Me", world.player) and 
+                    meets_material_expectations(state, location_table["Capture Everything"].material_expectations_grand, 
+                                             world.player, difficulty, absolute_relaxation))
 
     # Add special move rules
     if opts.enable_tactics.value == opts.enable_tactics.option_all:
