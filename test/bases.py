@@ -159,7 +159,7 @@ class WorldTestBase(unittest.TestCase):
         self.multiworld.game[self.player] = self.game
         self.multiworld.player_name = {self.player: "Tester"}
         self.multiworld.set_seed(seed)
-        self.multiworld.state = CollectionState(self.multiworld, self.player)
+        self.multiworld.state = CollectionState(self.multiworld, players=self.player)
         random.seed(self.multiworld.seed)
         self.multiworld.seed_name = get_seed_name(random)  # only called to get same RNG progression as Generate.py
         args = Namespace()
@@ -249,7 +249,7 @@ class WorldTestBase(unittest.TestCase):
          one of the provided combinations"""
         all_items = [item_name for item_names in possible_items for item_name in item_names]
 
-        state = CollectionState(self.multiworld, self.player)
+        state = CollectionState(self.multiworld, players=self.player)
         self.collect_all_but(all_items, state)
         if only_check_listed:
             for location in locations:
