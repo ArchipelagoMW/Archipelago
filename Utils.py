@@ -47,7 +47,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.6.0"
+__version__ = "0.6.1"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -443,7 +443,8 @@ class RestrictedUnpickler(pickle.Unpickler):
             else:
                 mod = importlib.import_module(module)
             obj = getattr(mod, name)
-            if issubclass(obj, (self.options_module.Option, self.options_module.PlandoConnection)):
+            if issubclass(obj, (self.options_module.Option, self.options_module.PlandoConnection,
+                                self.options_module.PlandoText)):
                 return obj
         # Forbid everything else.
         raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")

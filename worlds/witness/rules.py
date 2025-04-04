@@ -10,7 +10,7 @@ from BaseClasses import CollectionState
 from worlds.generic.Rules import CollectionRule, set_rule
 
 from .data import static_logic as static_witness_logic
-from .data.utils import WitnessRule
+from .data.definition_classes import WitnessRule
 from .player_logic import WitnessPlayerLogic
 
 if TYPE_CHECKING:
@@ -196,6 +196,8 @@ def _has_item(item: str, world: "WitnessWorld",
     if item == "Entity Hunt":
         # Right now, panel hunt is the only type of entity hunt. This may need to be changed later
         return _can_do_panel_hunt(world)
+    if "Eggs" in item:
+        return SimpleItemRepresentation("Egg", int(item.split(" ")[0]))
     if item == "PP2 Weirdness":
         return lambda state: _can_do_expert_pp2(state, world)
     if item == "Theater to Tunnels":
@@ -303,6 +305,11 @@ def make_lambda(entity_hex: str, world: "WitnessWorld") -> Optional[CollectionRu
     return _meets_item_requirements(entity_req, world)
 
 
+def make_region_lambda(region_name: str, world: "WitnessWorld") -> CollectionRule:
+    region = world.get_region(region_name)
+    return lambda state: region.can_reach(state)
+
+
 def set_rules(world: "WitnessWorld") -> None:
     """
     Sets all rules for all locations
@@ -312,8 +319,12 @@ def set_rules(world: "WitnessWorld") -> None:
         real_location = location
 
         if location in world.player_locations.EVENT_LOCATION_TABLE:
-            entity_hex = world.player_logic.EVENT_ITEM_PAIRS[location][1]
-            real_location = static_witness_logic.ENTITIES_BY_HEX[entity_hex]["checkName"]
+            entity_hex_or_region_name = world.player_logic.EVENT_ITEM_PAIRS[location][1]
+            if entity_hex_or_region_name in static_witness_logic.ALL_REGIONS_BY_NAME:
+                set_rule(world.get_location(location), make_region_lambda(entity_hex_or_region_name, world))
+                continue
+
+            real_location = static_witness_logic.ENTITIES_BY_HEX[entity_hex_or_region_name]["checkName"]
 
         associated_entity = world.player_logic.REFERENCE_LOGIC.ENTITIES_BY_NAME[real_location]
         entity_hex = associated_entity["entity_hex"]
