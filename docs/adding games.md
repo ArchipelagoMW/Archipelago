@@ -5,7 +5,7 @@ guide.
 
 Adding a new game to Archipelago has two major parts:
 
-* A Program or Plugin to allow the game to communicate with the Archipelago server (hereafter referred to as "client")
+* Game Modification to communicate with Archipelago server (hereafter referred to as "client")
 * Archipelago Generation and Server integration plugin (hereafter referred to as "world")
 
 This document will attempt to illustrate the bare minimum requirements and expectations of both parts of a new world
