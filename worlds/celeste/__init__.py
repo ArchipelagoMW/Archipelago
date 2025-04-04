@@ -219,6 +219,8 @@ class CelesteWorld(World):
             "madeline_two_dash_hair_color": self.madeline_two_dash_hair_color,
             "madeline_no_dash_hair_color": self.madeline_no_dash_hair_color,
             "madeline_feather_hair_color": self.madeline_feather_hair_color,
+
+            "active_levels": self.active_levels
         }
 
     def output_active_traps(self) -> Dict[int, int]:
