@@ -175,6 +175,9 @@ class ExcludeSongs(SongSet):
     """
     display_name = "Exclude Songs"
 
+class GoalSong(SongSet):
+    """One of these songs will be randomly chosen as your Goal Song."""
+    display_name = "Goal Song"
 
 md_option_groups = [
     OptionGroup("Song Choice", [
@@ -214,6 +217,7 @@ class MuseDashOptions(PerGameCommonOptions):
     death_link: DeathLink
     include_songs: IncludeSongs
     exclude_songs: ExcludeSongs
+    goal_song: GoalSong
 
     # Removed
     allow_just_as_planned_dlc_songs: Removed
