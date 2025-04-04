@@ -41,14 +41,27 @@ These steps can also be followed to launch the game and check for mod updates af
 
 ## Joining a MultiWorld Game
 
+### Automatic Connection on archipelago.gg
+
+1. Go to the room page of the MultiWorld you are going to join.
+2. Click on your slot name on the left side.
+3. Click the "The Messenger" button in the prompt.
+4. Follow the remaining prompts. This process will check that you have the mod installed and will also check for updates
+   before launching The Messenger. If you are using the Steam version of The Messenger you may also get a prompt from
+   Steam asking if the game should be launched with arguments. These arguments are the URI which the mod uses to
+   connect.
+5. Start a new save. You will already be connected in The Messenger and do not need to go through the menus.
+
+### Manual Connection
+
 1. Launch the game
 2. Navigate to `Options > Archipelago Options`
 3. Enter connection info using the relevant option buttons
    * **The game is limited to alphanumerical characters, `.`, and `-`.**
    * This defaults to `archipelago.gg` and does not need to be manually changed if connecting to a game hosted on the
-website.
+     website.
    * If using a name that cannot be entered in the in game menus, there is a config file (APConfig.toml) in the game
-directory. When using this, all connection information must be entered in the file. 
+     directory. When using this, all connection information must be entered in the file. 
 4. Select the `Connect to Archipelago` button
 5. Navigate to save file selection
 6. Start a new game

@@ -16,8 +16,10 @@ from .combat_logic import CombatLogicMixin
 from .cooking_logic import CookingLogicMixin
 from .crafting_logic import CraftingLogicMixin
 from .farming_logic import FarmingLogicMixin
+from .festival_logic import FestivalLogicMixin
 from .fishing_logic import FishingLogicMixin
 from .gift_logic import GiftLogicMixin
+from .goal_logic import GoalLogicMixin
 from .grind_logic import GrindLogicMixin
 from .harvesting_logic import HarvestingLogicMixin
 from .has_logic import HasLogicMixin
@@ -49,8 +51,7 @@ from ..data.museum_data import all_museum_items
 from ..data.recipe_data import all_cooking_recipes
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_logic import ModLogicMixin
-from ..mods.mod_data import ModNames
-from ..options import ExcludeGingerIsland, FestivalLocations, StardewValleyOptions
+from ..options import ExcludeGingerIsland, StardewValleyOptions
 from ..stardew_rule import False_, True_, StardewRule
 from ..strings.animal_names import Animal
 from ..strings.animal_product_names import AnimalProduct
@@ -62,12 +63,10 @@ from ..strings.crop_names import Fruit, Vegetable
 from ..strings.currency_names import Currency
 from ..strings.decoration_names import Decoration
 from ..strings.fertilizer_names import Fertilizer, SpeedGro, RetainingSoil
-from ..strings.festival_check_names import FestivalCheck
 from ..strings.fish_names import Fish, Trash, WaterItem, WaterChest
 from ..strings.flower_names import Flower
 from ..strings.food_names import Meal, Beverage
 from ..strings.forageable_names import Forageable
-from ..strings.fruit_tree_names import Sapling
 from ..strings.generic_names import Generic
 from ..strings.geode_names import Geode
 from ..strings.gift_names import Gift
@@ -94,7 +93,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
                    CombatLogicMixin, MagicLogicMixin, MonsterLogicMixin, ToolLogicMixin, PetLogicMixin, QualityLogicMixin,
                    SkillLogicMixin, FarmingLogicMixin, BundleLogicMixin, FishingLogicMixin, MineLogicMixin, CookingLogicMixin, AbilityLogicMixin,
                    SpecialOrderLogicMixin, QuestLogicMixin, CraftingLogicMixin, ModLogicMixin, HarvestingLogicMixin, SourceLogicMixin,
-                   RequirementLogicMixin, BookLogicMixin, GrindLogicMixin, WalnutLogicMixin):
+                   RequirementLogicMixin, BookLogicMixin, GrindLogicMixin, FestivalLogicMixin, WalnutLogicMixin, GoalLogicMixin):
     player: int
     options: StardewValleyOptions
     content: StardewContent
@@ -281,7 +280,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Material.coal: self.mine.can_mine_in_the_mines_floor_41_80() | self.tool.has_tool(Tool.pan),
             Material.fiber: True_(),
             Material.hardwood: self.tool.has_tool(Tool.axe, ToolMaterial.copper) & (self.region.can_reach(Region.secret_woods) | self.region.can_reach(Region.island_west)),
-            Material.moss: True_(),
+            Material.moss: self.season.has_any_not_winter() & (self.tool.has_tool(Tool.scythe) | self.combat.has_any_weapon) & self.region.can_reach(Region.forest),
             Material.sap: self.ability.can_chop_trees(),
             Material.stone: self.tool.has_tool(Tool.pickaxe),
             Material.wood: self.tool.has_tool(Tool.axe),
@@ -300,7 +299,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Ore.radioactive: self.ability.can_mine_perfectly() & self.region.can_reach(Region.qi_walnut_room),
             RetainingSoil.basic: self.money.can_spend_at(Region.pierre_store, 100),
             RetainingSoil.quality: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
-            Sapling.tea: self.relationship.has_hearts(NPC.caroline, 2) & self.has(Material.fiber) & self.has(Material.wood),
             SpeedGro.basic: self.money.can_spend_at(Region.pierre_store, 100),
             SpeedGro.deluxe: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
             Trash.broken_cd: self.skill.can_crab_pot,
@@ -363,89 +361,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         self.quest.initialize_rules()
         self.quest.update_rules(self.mod.quest.get_modded_quest_rules())
 
-        self.registry.festival_rules.update({
-            FestivalCheck.egg_hunt: self.can_win_egg_hunt(),
-            FestivalCheck.strawberry_seeds: self.money.can_spend(1000),
-            FestivalCheck.dance: self.relationship.has_hearts_with_any_bachelor(4),
-            FestivalCheck.tub_o_flowers: self.money.can_spend(2000),
-            FestivalCheck.rarecrow_5: self.money.can_spend(2500),
-            FestivalCheck.luau_soup: self.can_succeed_luau_soup(),
-            FestivalCheck.moonlight_jellies: True_(),
-            FestivalCheck.moonlight_jellies_banner: self.money.can_spend(800),
-            FestivalCheck.starport_decal: self.money.can_spend(1000),
-            FestivalCheck.smashing_stone: True_(),
-            FestivalCheck.grange_display: self.can_succeed_grange_display(),
-            FestivalCheck.rarecrow_1: True_(),  # only cost star tokens
-            FestivalCheck.fair_stardrop: True_(),  # only cost star tokens
-            FestivalCheck.spirit_eve_maze: True_(),
-            FestivalCheck.jack_o_lantern: self.money.can_spend(2000),
-            FestivalCheck.rarecrow_2: self.money.can_spend(5000),
-            FestivalCheck.fishing_competition: self.can_win_fishing_competition(),
-            FestivalCheck.rarecrow_4: self.money.can_spend(5000),
-            FestivalCheck.mermaid_pearl: self.has(Forageable.secret_note),
-            FestivalCheck.cone_hat: self.money.can_spend(2500),
-            FestivalCheck.iridium_fireplace: self.money.can_spend(15000),
-            FestivalCheck.rarecrow_7: self.money.can_spend(5000) & self.museum.can_donate_museum_artifacts(20),
-            FestivalCheck.rarecrow_8: self.money.can_spend(5000) & self.museum.can_donate_museum_items(40),
-            FestivalCheck.lupini_red_eagle: self.money.can_spend(1200),
-            FestivalCheck.lupini_portrait_mermaid: self.money.can_spend(1200),
-            FestivalCheck.lupini_solar_kingdom: self.money.can_spend(1200),
-            FestivalCheck.lupini_clouds: self.time.has_year_two & self.money.can_spend(1200),
-            FestivalCheck.lupini_1000_years: self.time.has_year_two & self.money.can_spend(1200),
-            FestivalCheck.lupini_three_trees: self.time.has_year_two & self.money.can_spend(1200),
-            FestivalCheck.lupini_the_serpent: self.time.has_year_three & self.money.can_spend(1200),
-            FestivalCheck.lupini_tropical_fish: self.time.has_year_three & self.money.can_spend(1200),
-            FestivalCheck.lupini_land_of_clay: self.time.has_year_three & self.money.can_spend(1200),
-            FestivalCheck.secret_santa: self.gifts.has_any_universal_love,
-            FestivalCheck.legend_of_the_winter_star: True_(),
-            FestivalCheck.rarecrow_3: True_(),
-            FestivalCheck.all_rarecrows: self.region.can_reach(Region.farm) & self.has_all_rarecrows(),
-            FestivalCheck.calico_race: True_(),
-            FestivalCheck.mummy_mask: True_(),
-            FestivalCheck.calico_statue: True_(),
-            FestivalCheck.emily_outfit_service: True_(),
-            FestivalCheck.earthy_mousse: True_(),
-            FestivalCheck.sweet_bean_cake: True_(),
-            FestivalCheck.skull_cave_casserole: True_(),
-            FestivalCheck.spicy_tacos: True_(),
-            FestivalCheck.mountain_chili: True_(),
-            FestivalCheck.crystal_cake: True_(),
-            FestivalCheck.cave_kebab: True_(),
-            FestivalCheck.hot_log: True_(),
-            FestivalCheck.sour_salad: True_(),
-            FestivalCheck.superfood_cake: True_(),
-            FestivalCheck.warrior_smoothie: True_(),
-            FestivalCheck.rumpled_fruit_skin: True_(),
-            FestivalCheck.calico_pizza: True_(),
-            FestivalCheck.stuffed_mushrooms: True_(),
-            FestivalCheck.elf_quesadilla: True_(),
-            FestivalCheck.nachos_of_the_desert: True_(),
-            FestivalCheck.cloppino: True_(),
-            FestivalCheck.rainforest_shrimp: True_(),
-            FestivalCheck.shrimp_donut: True_(),
-            FestivalCheck.smell_of_the_sea: True_(),
-            FestivalCheck.desert_gumbo: True_(),
-            FestivalCheck.free_cactis: True_(),
-            FestivalCheck.monster_hunt: self.monster.can_kill(Monster.serpent),
-            FestivalCheck.deep_dive: self.region.can_reach(Region.skull_cavern_50),
-            FestivalCheck.treasure_hunt: self.region.can_reach(Region.skull_cavern_25),
-            FestivalCheck.touch_calico_statue: self.region.can_reach(Region.skull_cavern_25),
-            FestivalCheck.real_calico_egg_hunter: self.region.can_reach(Region.skull_cavern_100),
-            FestivalCheck.willy_challenge: self.fishing.can_catch_fish(content.fishes[Fish.scorpion_carp]),
-            FestivalCheck.desert_scholar: True_(),
-            FestivalCheck.squidfest_day_1_copper: self.fishing.can_catch_fish(content.fishes[Fish.squid]),
-            FestivalCheck.squidfest_day_1_iron: self.fishing.can_catch_fish(content.fishes[Fish.squid]) & self.has(Fishing.bait),
-            FestivalCheck.squidfest_day_1_gold: self.fishing.can_catch_fish(content.fishes[Fish.squid]) & self.has(Fishing.deluxe_bait),
-            FestivalCheck.squidfest_day_1_iridium: self.fishing.can_catch_fish(content.fishes[Fish.squid]) &
-                                                   self.fishing.has_specific_bait(content.fishes[Fish.squid]),
-            FestivalCheck.squidfest_day_2_copper: self.fishing.can_catch_fish(content.fishes[Fish.squid]),
-            FestivalCheck.squidfest_day_2_iron: self.fishing.can_catch_fish(content.fishes[Fish.squid]) & self.has(Fishing.bait),
-            FestivalCheck.squidfest_day_2_gold: self.fishing.can_catch_fish(content.fishes[Fish.squid]) & self.has(Fishing.deluxe_bait),
-            FestivalCheck.squidfest_day_2_iridium: self.fishing.can_catch_fish(content.fishes[Fish.squid]) &
-                                                   self.fishing.has_specific_bait(content.fishes[Fish.squid]),
-        })
-        for i in range(1, 11):
-            self.registry.festival_rules[f"{FestivalCheck.trout_derby_reward_pattern}{i}"] = self.fishing.can_catch_fish(content.fishes[Fish.rainbow_trout])
+        self.festival.initialize_rules()
 
         self.special_order.initialize_rules()
         self.special_order.update_rules(self.mod.special_order.get_modded_special_orders_rules())
@@ -459,123 +375,10 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
     def can_smelt(self, item: str) -> StardewRule:
         return self.has(Machine.furnace) & self.has(item)
 
-    def can_finish_grandpa_evaluation(self) -> StardewRule:
-        # https://stardewvalleywiki.com/Grandpa
-        rules_worth_a_point = [
-            self.money.can_have_earned_total(50000),  # 50 000g
-            self.money.can_have_earned_total(100000),  # 100 000g
-            self.money.can_have_earned_total(200000),  # 200 000g
-            self.money.can_have_earned_total(300000),  # 300 000g
-            self.money.can_have_earned_total(500000),  # 500 000g
-            self.money.can_have_earned_total(1000000),  # 1 000 000g first point
-            self.money.can_have_earned_total(1000000),  # 1 000 000g second point
-            self.skill.has_total_level(30),  # Total Skills: 30
-            self.skill.has_total_level(50),  # Total Skills: 50
-            self.museum.can_complete_museum(),  # Completing the museum for a point
-            # Catching every fish not expected
-            # Shipping every item not expected
-            self.relationship.can_get_married() & self.building.has_house(2),
-            self.relationship.has_hearts_with_n(5, 8),  # 5 Friends
-            self.relationship.has_hearts_with_n(10, 8),  # 10 friends
-            self.pet.has_pet_hearts(5),  # Max Pet
-            self.bundle.can_complete_community_center,  # Community Center Completion
-            self.bundle.can_complete_community_center,  # CC Ceremony first point
-            self.bundle.can_complete_community_center,  # CC Ceremony second point
-            self.received(Wallet.skull_key),  # Skull Key obtained
-            self.wallet.has_rusty_key(),  # Rusty key obtained
-        ]
-        return self.count(12, *rules_worth_a_point)
-
-    def can_win_egg_hunt(self) -> StardewRule:
-        return True_()
-
-    def can_succeed_luau_soup(self) -> StardewRule:
-        if self.options.festival_locations != FestivalLocations.option_hard:
-            return True_()
-        eligible_fish = (Fish.blobfish, Fish.crimsonfish, Fish.ice_pip, Fish.lava_eel, Fish.legend, Fish.angler, Fish.catfish, Fish.glacierfish,
-                         Fish.mutant_carp, Fish.spookfish, Fish.stingray, Fish.sturgeon, Fish.super_cucumber)
-        fish_rule = self.has_any(*(f for f in eligible_fish if f in self.content.fishes))  # To filter stingray
-        eligible_kegables = (Fruit.ancient_fruit, Fruit.apple, Fruit.banana, Forageable.coconut, Forageable.crystal_fruit, Fruit.mango, Fruit.melon,
-                             Fruit.orange, Fruit.peach, Fruit.pineapple, Fruit.pomegranate, Fruit.rhubarb, Fruit.starfruit, Fruit.strawberry,
-                             Forageable.cactus_fruit, Fruit.cherry, Fruit.cranberries, Fruit.grape, Forageable.spice_berry, Forageable.wild_plum,
-                             Vegetable.hops, Vegetable.wheat)
-        keg_rules = [self.artisan.can_keg(kegable) for kegable in eligible_kegables if kegable in self.content.game_items]
-        aged_rule = self.has(Machine.cask) & self.logic.or_(*keg_rules)
-        # There are a few other valid items, but I don't feel like coding them all
-        return fish_rule | aged_rule
-
-    def can_succeed_grange_display(self) -> StardewRule:
-        if self.options.festival_locations != FestivalLocations.option_hard:
-            return True_()
-
-        animal_rule = self.animal.has_animal(Generic.any)
-        artisan_rule = self.artisan.can_keg(Generic.any) | self.artisan.can_preserves_jar(Generic.any)
-        cooking_rule = self.money.can_spend_at(Region.saloon, 220)  # Salads at the bar are good enough
-        fish_rule = self.skill.can_fish(difficulty=50)
-        forage_rule = self.region.can_reach_any((Region.forest, Region.backwoods))  # Hazelnut always available since the grange display is in fall
-        mineral_rule = self.action.can_open_geode(Generic.any)  # More than half the minerals are good enough
-        good_fruits = (fruit
-                       for fruit in
-                       (Fruit.apple, Fruit.banana, Forageable.coconut, Forageable.crystal_fruit, Fruit.mango, Fruit.orange, Fruit.peach, Fruit.pomegranate,
-                        Fruit.strawberry, Fruit.melon, Fruit.rhubarb, Fruit.pineapple, Fruit.ancient_fruit, Fruit.starfruit)
-                       if fruit in self.content.game_items)
-        fruit_rule = self.has_any(*good_fruits)
-        good_vegetables = (vegeteable
-                           for vegeteable in
-                           (Vegetable.amaranth, Vegetable.artichoke, Vegetable.beet, Vegetable.cauliflower, Forageable.fiddlehead_fern, Vegetable.kale,
-                            Vegetable.radish, Vegetable.taro_root, Vegetable.yam, Vegetable.red_cabbage, Vegetable.pumpkin)
-                           if vegeteable in self.content.game_items)
-        vegetable_rule = self.has_any(*good_vegetables)
-
-        return animal_rule & artisan_rule & cooking_rule & fish_rule & \
-            forage_rule & fruit_rule & mineral_rule & vegetable_rule
-
-    def can_win_fishing_competition(self) -> StardewRule:
-        return self.skill.can_fish(difficulty=60)
-
     def has_island_trader(self) -> StardewRule:
         if self.options.exclude_ginger_island == ExcludeGingerIsland.option_true:
             return False_()
         return self.region.can_reach(Region.island_trader)
-
-    def has_all_stardrops(self) -> StardewRule:
-        other_rules = []
-        number_of_stardrops_to_receive = 0
-        number_of_stardrops_to_receive += 1  # The Mines level 100
-        number_of_stardrops_to_receive += 1  # Old Master Cannoli
-        number_of_stardrops_to_receive += 1  # Museum Stardrop
-        number_of_stardrops_to_receive += 1  # Krobus Stardrop
-
-        # Master Angler Stardrop
-        if self.content.features.fishsanity.is_enabled:
-            number_of_stardrops_to_receive += 1
-        else:
-            other_rules.append(self.fishing.can_catch_every_fish())
-
-        if self.options.festival_locations == FestivalLocations.option_disabled:  # Fair Stardrop
-            other_rules.append(self.season.has(Season.fall))
-        else:
-            number_of_stardrops_to_receive += 1
-
-        # Spouse Stardrop
-        if self.content.features.friendsanity.is_enabled:
-            number_of_stardrops_to_receive += 1
-        else:
-            other_rules.append(self.relationship.has_hearts_with_any_bachelor(13))
-
-        if ModNames.deepwoods in self.options.mods:  # Petting the Unicorn
-            number_of_stardrops_to_receive += 1
-
-        if not other_rules:
-            return self.received("Stardrop", number_of_stardrops_to_receive)
-
-        return self.received("Stardrop", number_of_stardrops_to_receive) & self.logic.and_(*other_rules)
-
-    def has_all_rarecrows(self) -> StardewRule:
-        rules = []
-        for rarecrow_number in range(1, 9):
-            rules.append(self.received(f"Rarecrow #{rarecrow_number}"))
-        return self.logic.and_(*rules)
 
     def has_abandoned_jojamart(self) -> StardewRule:
         return self.received(CommunityUpgrade.movie_theater, 1)

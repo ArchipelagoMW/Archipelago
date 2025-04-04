@@ -16,9 +16,7 @@ class YachtDiceItem(Item):
 
 
 item_table = {
-    # victory item, always placed manually at goal location
-    "Victory": ItemData(16871244000 - 1, ItemClassification.progression),
-    "Dice": ItemData(16871244000, ItemClassification.progression),
+    "Dice": ItemData(16871244000, ItemClassification.progression | ItemClassification.useful),
     "Dice Fragment": ItemData(16871244001, ItemClassification.progression),
     "Roll": ItemData(16871244002, ItemClassification.progression),
     "Roll Fragment": ItemData(16871244003, ItemClassification.progression),
@@ -66,7 +64,7 @@ item_table = {
     # These points are included in the logic and might be necessary to progress.
     "1 Point": ItemData(16871244301, ItemClassification.progression_skip_balancing),
     "10 Points": ItemData(16871244302, ItemClassification.progression),
-    "100 Points": ItemData(16871244303, ItemClassification.progression),
+    "100 Points": ItemData(16871244303, ItemClassification.progression | ItemClassification.useful),
 }
 
 # item groups for better hinting

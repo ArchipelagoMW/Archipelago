@@ -53,7 +53,7 @@
     <table class="range-rows" data-option="{{ option_name }}">
         <tbody>
             {{ RangeRow(option_name, option, option.range_start, option.range_start, True) }}
-            {% if option.range_start < option.default < option.range_end %}
+            {% if option.default is number and option.range_start < option.default < option.range_end %}
                 {{ RangeRow(option_name, option, option.default, option.default, True) }}
             {% endif %}
             {{ RangeRow(option_name, option, option.range_end, option.range_end, True) }}

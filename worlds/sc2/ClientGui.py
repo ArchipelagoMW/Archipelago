@@ -1,7 +1,8 @@
 from typing import *
 import asyncio
 
-from kvui import GameManager, HoverBehavior, ServerToolTip
+from NetUtils import JSONMessagePart
+from kvui import GameManager, HoverBehavior, ServerToolTip, KivyJSONtoTextParser
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.uix.tabbedpanel import TabbedPanelItem
@@ -69,6 +70,18 @@ class MissionLayout(GridLayout):
 class MissionCategory(GridLayout):
     pass
 
+
+class SC2JSONtoKivyParser(KivyJSONtoTextParser):
+    def _handle_text(self, node: JSONMessagePart):
+        if node.get("keep_markup", False):
+            for ref in node.get("refs", []):
+                node["text"] = f"[ref={self.ref_count}|{ref}]{node['text']}[/ref]"
+                self.ref_count += 1
+            return super(KivyJSONtoTextParser, self)._handle_text(node)
+        else:
+            return super()._handle_text(node)
+
+
 class SC2Manager(GameManager):
     logging_pairs = [
         ("Client", "Archipelago"),
@@ -87,6 +100,7 @@ class SC2Manager(GameManager):
 
     def __init__(self, ctx) -> None:
         super().__init__(ctx)
+        self.json_to_kivy_parser = SC2JSONtoKivyParser(ctx)
 
     def clear_tooltip(self) -> None:
         if self.ctx.current_tooltip:
@@ -97,12 +111,9 @@ class SC2Manager(GameManager):
     def build(self):
         container = super().build()
 
-        panel = TabbedPanelItem(text="Starcraft 2 Launcher")
-        panel.content = CampaignScroll()
+        panel = self.add_client_tab("Starcraft 2 Launcher", CampaignScroll())
         self.campaign_panel = MultiCampaignLayout()
         panel.content.add_widget(self.campaign_panel)
-
-        self.tabs.add_widget(panel)
 
         Clock.schedule_interval(self.build_mission_table, 0.5)
 

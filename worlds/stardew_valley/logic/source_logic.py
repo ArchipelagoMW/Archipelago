@@ -12,7 +12,7 @@ from .region_logic import RegionLogicMixin
 from .requirement_logic import RequirementLogicMixin
 from .tool_logic import ToolLogicMixin
 from ..data.artisan import MachineSource
-from ..data.game_item import GenericSource, ItemSource, GameItem, CustomRuleSource
+from ..data.game_item import GenericSource, ItemSource, GameItem, CustomRuleSource, CompoundSource
 from ..data.harvest import ForagingSource, FruitBatsSource, MushroomCaveSource, SeasonalForagingSource, \
     HarvestCropSource, HarvestFruitTreeSource, ArtifactSpotSource
 from ..data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
@@ -25,7 +25,7 @@ class SourceLogicMixin(BaseLogicMixin):
 
 
 class SourceLogic(BaseLogic[Union[SourceLogicMixin, HasLogicMixin, ReceivedLogicMixin, HarvestingLogicMixin, MoneyLogicMixin, RegionLogicMixin,
-ArtisanLogicMixin, ToolLogicMixin, RequirementLogicMixin, GrindLogicMixin]]):
+                                  ArtisanLogicMixin, ToolLogicMixin, RequirementLogicMixin, GrindLogicMixin]]):
 
     def has_access_to_item(self, item: GameItem):
         rules = []
@@ -40,6 +40,10 @@ ArtisanLogicMixin, ToolLogicMixin, RequirementLogicMixin, GrindLogicMixin]]):
         return self.logic.or_(*(self.logic.source.has_access_to(source) & self.logic.requirement.meet_all_requirements(source.other_requirements)
                                 for source in sources))
 
+    def has_access_to_all(self, sources: Iterable[ItemSource]):
+        return self.logic.and_(*(self.logic.source.has_access_to(source) & self.logic.requirement.meet_all_requirements(source.other_requirements)
+                                 for source in sources))
+
     @functools.singledispatchmethod
     def has_access_to(self, source: Any):
         raise ValueError(f"Sources of type{type(source)} have no rule registered.")
@@ -51,6 +55,10 @@ ArtisanLogicMixin, ToolLogicMixin, RequirementLogicMixin, GrindLogicMixin]]):
     @has_access_to.register
     def _(self, source: CustomRuleSource):
         return source.create_rule(self.logic)
+
+    @has_access_to.register
+    def _(self, source: CompoundSource):
+        return self.logic.source.has_access_to_all(source.sources)
 
     @has_access_to.register
     def _(self, source: ForagingSource):

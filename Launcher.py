@@ -16,25 +16,27 @@ import multiprocessing
 import shlex
 import subprocess
 import sys
+import urllib.parse
 import webbrowser
 from os.path import isfile
 from shutil import which
-from typing import Callable, Sequence, Union, Optional
-
-import Utils
-import settings
-from worlds.LauncherComponents import Component, components, Type, SuffixIdentifier, icon_paths
+from typing import Callable, Optional, Sequence, Tuple, Union
 
 if __name__ == "__main__":
     import ModuleUpdate
     ModuleUpdate.update()
 
-from Utils import is_frozen, user_path, local_path, init_logging, open_filename, messagebox, \
-    is_windows, is_macos, is_linux
+import settings
+import Utils
+from Utils import (init_logging, is_frozen, is_linux, is_macos, is_windows, local_path, messagebox, open_filename,
+                   user_path)
+from worlds.LauncherComponents import Component, components, icon_paths, SuffixIdentifier, Type
 
 
 def open_host_yaml():
-    file = settings.get_settings().filename
+    s = settings.get_settings()
+    file = s.filename
+    s.save()
     assert file, "host.yaml missing"
     if is_linux:
         exe = which('sensible-editor') or which('gedit') or \
@@ -101,13 +103,71 @@ components.extend([
     Component("Open host.yaml", func=open_host_yaml),
     Component("Open Patch", func=open_patch),
     Component("Generate Template Options", func=generate_yamls),
+    Component("Archipelago Website", func=lambda: webbrowser.open("https://archipelago.gg/")),
     Component("Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/8Z65BR2")),
     Component("Unrated/18+ Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4")),
     Component("Browse Files", func=browse_files),
 ])
 
 
-def identify(path: Union[None, str]):
+def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
+    url = urllib.parse.urlparse(path)
+    queries = urllib.parse.parse_qs(url.query)
+    launch_args = (path, *launch_args)
+    client_component = None
+    text_client_component = None
+    if "game" in queries:
+        game = queries["game"][0]
+    else:  # TODO around 0.6.0 - this is for pre this change webhost uri's
+        game = "Archipelago"
+    for component in components:
+        if component.supports_uri and component.game_name == game:
+            client_component = component
+        elif component.display_name == "Text Client":
+            text_client_component = component
+
+    if client_component is None:
+        run_component(text_client_component, *launch_args)
+        return
+
+    from kvui import App, Button, BoxLayout, Label, Window
+
+    class Popup(App):
+        def __init__(self):
+            self.title = "Connect to Multiworld"
+            self.icon = r"data/icon.png"
+            super().__init__()
+
+        def build(self):
+            layout = BoxLayout(orientation="vertical")
+            layout.add_widget(Label(text="Select client to open and connect with."))
+            button_row = BoxLayout(orientation="horizontal", size_hint=(1, 0.4))
+
+            text_client_button = Button(
+                text=text_client_component.display_name,
+                on_release=lambda *args: run_component(text_client_component, *launch_args)
+            )
+            button_row.add_widget(text_client_button)
+
+            game_client_button = Button(
+                text=client_component.display_name,
+                on_release=lambda *args: run_component(client_component, *launch_args)
+            )
+            button_row.add_widget(game_client_button)
+
+            layout.add_widget(button_row)
+
+            return layout
+
+        def _stop(self, *largs):
+            # see run_gui Launcher _stop comment for details
+            self.root_window.close()
+            super()._stop(*largs)
+
+    Popup().run()
+
+
+def identify(path: Union[None, str]) -> Tuple[Union[None, str], Union[None, Component]]:
     if path is None:
         return None, None
     for component in components:
@@ -164,9 +224,8 @@ refresh_components: Optional[Callable[[], None]] = None
 
 
 def run_gui():
-    from kvui import App, ContainerLayout, GridLayout, Button, Label, ScrollBox, Widget
+    from kvui import App, ContainerLayout, GridLayout, Button, Label, ScrollBox, Widget, ApAsyncImage
     from kivy.core.window import Window
-    from kivy.uix.image import AsyncImage
     from kivy.uix.relativelayout import RelativeLayout
 
     class Launcher(App):
@@ -177,7 +236,7 @@ def run_gui():
         _client_layout: Optional[ScrollBox] = None
 
         def __init__(self, ctx=None):
-            self.title = self.base_title
+            self.title = self.base_title + " " + Utils.__version__
             self.ctx = ctx
             self.icon = r"data/icon.png"
             super().__init__()
@@ -199,8 +258,8 @@ def run_gui():
                 button.component = component
                 button.bind(on_release=self.component_action)
                 if component.icon != "icon":
-                    image = AsyncImage(source=icon_paths[component.icon],
-                                       size=(38, 38), size_hint=(None, 1), pos=(5, 0))
+                    image = ApAsyncImage(source=icon_paths[component.icon],
+                                         size=(38, 38), size_hint=(None, 1), pos=(5, 0))
                     box_layout = RelativeLayout(size_hint_y=None, height=40)
                     box_layout.add_widget(button)
                     box_layout.add_widget(image)
@@ -299,20 +358,24 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
     elif not args:
         args = {}
 
-    if args.get("Patch|Game|Component", None) is not None:
-        file, component = identify(args["Patch|Game|Component"])
+    path = args.get("Patch|Game|Component|url", None)
+    if path is not None:
+        if path.startswith("archipelago://"):
+            handle_uri(path, args.get("args", ()))
+            return
+        file, component = identify(path)
         if file:
             args['file'] = file
         if component:
             args['component'] = component
         if not component:
-            logging.warning(f"Could not identify Component responsible for {args['Patch|Game|Component']}")
+            logging.warning(f"Could not identify Component responsible for {path}")
 
     if args["update_settings"]:
         update_settings()
-    if 'file' in args:
+    if "file" in args:
         run_component(args["component"], args["file"], *args["args"])
-    elif 'component' in args:
+    elif "component" in args:
         run_component(args["component"], *args["args"])
     elif not args["update_settings"]:
         run_gui()
@@ -322,12 +385,16 @@ if __name__ == '__main__':
     init_logging('Launcher')
     Utils.freeze_support()
     multiprocessing.set_start_method("spawn")  # if launched process uses kivy, fork won't work
-    parser = argparse.ArgumentParser(description='Archipelago Launcher')
+    parser = argparse.ArgumentParser(
+        description='Archipelago Launcher',
+        usage="[-h] [--update_settings] [Patch|Game|Component] [-- component args here]"
+    )
     run_group = parser.add_argument_group("Run")
     run_group.add_argument("--update_settings", action="store_true",
                            help="Update host.yaml and exit.")
-    run_group.add_argument("Patch|Game|Component", type=str, nargs="?",
-                           help="Pass either a patch file, a generated game or the name of a component to run.")
+    run_group.add_argument("Patch|Game|Component|url", type=str, nargs="?",
+                           help="Pass either a patch file, a generated game, the component name to run, or a url to "
+                                "connect with.")
     run_group.add_argument("args", nargs="*",
                            help="Arguments to pass to component.")
     main(parser.parse_args())

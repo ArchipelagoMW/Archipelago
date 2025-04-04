@@ -13,7 +13,7 @@ def set_rules(world: "MLSSWorld", excluded):
     for location in all_locations:
         if "Digspot" in location.name:
             if (world.options.skip_minecart and "Minecart" in location.name) or (
-                world.options.castle_skip and "Bowser" in location.name
+                    world.options.castle_skip and "Bowser" in location.name
             ):
                 continue
             if world.options.chuckle_beans == 0 or world.options.chuckle_beans == 1 and location.id in hidden:
@@ -28,11 +28,14 @@ def set_rules(world: "MLSSWorld", excluded):
                 lambda state: StateLogic.canDig(state, world.player),
             )
         if "Shop" in location.name and "Coffee" not in location.name and location.name not in excluded:
-            forbid_item(world.get_location(location.name), "Hammers", world.player)
             if "Badge" in location.name or "Pants" in location.name:
                 add_rule(
                     world.get_location(location.name),
-                    lambda state: StateLogic.brooch(state, world.player) or StateLogic.rose(state, world.player),
+                    lambda state: (StateLogic.brooch(state, world.player) and StateLogic.fruits(state, world.player)
+                                   and (StateLogic.hammers(state, world.player)
+                                   or StateLogic.fire(state, world.player)
+                                   or StateLogic.thunder(state, world.player)))
+                                   or StateLogic.rose(state, world.player),
                 )
         if location.itemType != 0 and location.name not in excluded:
             if "Bowser" in location.name and world.options.castle_skip:
@@ -99,9 +102,86 @@ def set_rules(world: "MLSSWorld", excluded):
             lambda state: StateLogic.ultra(state, world.player) and StateLogic.thunder(state, world.player),
         )
 
-    forbid_item(
-        world.get_location(LocationName.SSChuckolaMembershipCard), "Nuts", world.player
-    )  # Bandaid Fix
+    if world.options.goal == 1 and not world.options.castle_skip:
+        add_rule(
+            world.get_location(LocationName.BowsersCastleRoyCorridorBlock1),
+            lambda state: StateLogic.canDig(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleRoyCorridorBlock2),
+            lambda state: StateLogic.canDig(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleMiniMarioSidescrollerBlock1),
+            lambda state: StateLogic.canDig(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleMiniMarioSidescrollerBlock2),
+            lambda state: StateLogic.canDig(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleMiniMarioMazeBlock1),
+            lambda state: StateLogic.canDig(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleMiniMarioMazeBlock2),
+            lambda state: StateLogic.canDig(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleBeforeWendyFightBlock1),
+            lambda state: StateLogic.canDig(state, world.player)
+                        and StateLogic.ultra(state, world.player)
+                        and StateLogic.fire(state, world.player)
+                        and StateLogic.canCrash(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleBeforeWendyFightBlock2),
+            lambda state: StateLogic.canDig(state, world.player)
+                          and StateLogic.ultra(state, world.player)
+                          and StateLogic.fire(state, world.player)
+                          and StateLogic.canCrash(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleLarryRoomBlock),
+            lambda state: StateLogic.canDig(state, world.player)
+                          and StateLogic.ultra(state, world.player)
+                          and StateLogic.canDash(state, world.player)
+                          and StateLogic.canCrash(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleWendyLarryHallwayDigspot),
+            lambda state: StateLogic.ultra(state, world.player)
+                          and StateLogic.fire(state, world.player)
+                          and StateLogic.canCrash(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleBeforeFawfulFightBlock1),
+            lambda state: StateLogic.canDig(state, world.player)
+                          and StateLogic.ultra(state, world.player)
+                          and StateLogic.canDash(state, world.player)
+                          and StateLogic.canCrash(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleBeforeFawfulFightBlock2),
+            lambda state: StateLogic.canDig(state, world.player)
+                          and StateLogic.ultra(state, world.player)
+                          and StateLogic.canDash(state, world.player)
+                          and StateLogic.canCrash(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleGreatDoorBlock1),
+            lambda state: StateLogic.canDig(state, world.player)
+                          and StateLogic.ultra(state, world.player)
+                          and StateLogic.canDash(state, world.player)
+                          and StateLogic.canCrash(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleGreatDoorBlock2),
+            lambda state: StateLogic.canDig(state, world.player)
+                          and StateLogic.ultra(state, world.player)
+                          and StateLogic.canDash(state, world.player)
+                          and StateLogic.canCrash(state, world.player)
+        )
 
     add_rule(
         world.get_location(LocationName.HoohooVillageHammerHouseBlock),
@@ -218,9 +298,9 @@ def set_rules(world: "MLSSWorld", excluded):
     add_rule(
         world.get_location(LocationName.BeanbeanOutskirtsUltraHammerUpgrade),
         lambda state: StateLogic.thunder(state, world.player)
-        and StateLogic.pieces(state, world.player)
-        and StateLogic.castleTown(state, world.player)
-        and StateLogic.rose(state, world.player),
+                      and StateLogic.pieces(state, world.player)
+                      and StateLogic.castleTown(state, world.player)
+                      and StateLogic.rose(state, world.player),
     )
     add_rule(
         world.get_location(LocationName.BeanbeanOutskirtsSoloLuigiCaveMole),
@@ -235,27 +315,27 @@ def set_rules(world: "MLSSWorld", excluded):
         lambda state: StateLogic.canDig(state, world.player) and StateLogic.canMini(state, world.player),
     )
     add_rule(
-        world.get_location(LocationName.ChucklehuckWoodsAfterChucklerootBlock1),
+        world.get_location(LocationName.ChucklehuckWoodsPastChucklerootBlock1),
         lambda state: StateLogic.fruits(state, world.player),
     )
     add_rule(
-        world.get_location(LocationName.ChucklehuckWoodsAfterChucklerootBlock2),
+        world.get_location(LocationName.ChucklehuckWoodsPastChucklerootBlock2),
         lambda state: StateLogic.fruits(state, world.player),
     )
     add_rule(
-        world.get_location(LocationName.ChucklehuckWoodsAfterChucklerootBlock3),
+        world.get_location(LocationName.ChucklehuckWoodsPastChucklerootBlock3),
         lambda state: StateLogic.fruits(state, world.player),
     )
     add_rule(
-        world.get_location(LocationName.ChucklehuckWoodsAfterChucklerootBlock4),
+        world.get_location(LocationName.ChucklehuckWoodsPastChucklerootBlock4),
         lambda state: StateLogic.fruits(state, world.player),
     )
     add_rule(
-        world.get_location(LocationName.ChucklehuckWoodsAfterChucklerootBlock5),
+        world.get_location(LocationName.ChucklehuckWoodsPastChucklerootBlock5),
         lambda state: StateLogic.fruits(state, world.player),
     )
     add_rule(
-        world.get_location(LocationName.ChucklehuckWoodsAfterChucklerootBlock6),
+        world.get_location(LocationName.ChucklehuckWoodsPastChucklerootBlock6),
         lambda state: StateLogic.fruits(state, world.player),
     )
     add_rule(
@@ -351,10 +431,6 @@ def set_rules(world: "MLSSWorld", excluded):
         lambda state: StateLogic.ultra(state, world.player),
     )
     add_rule(
-        world.get_location(LocationName.TeeheeValleySoloLuigiMazeRoom1Block),
-        lambda state: StateLogic.ultra(state, world.player),
-    )
-    add_rule(
         world.get_location(LocationName.OhoOasisFirebrand),
         lambda state: StateLogic.canMini(state, world.player),
     )
@@ -403,12 +479,28 @@ def set_rules(world: "MLSSWorld", excluded):
         lambda state: StateLogic.winkle(state, world.player),
     )
     add_rule(
+        world.get_location("Guffawha Ruins Block"),
+        lambda state: StateLogic.thunder(state, world.player),
+    )
+    add_rule(
         world.get_location(LocationName.GwarharLagoonSpangleReward),
         lambda state: StateLogic.spangle(state, world.player),
     )
     add_rule(
         world.get_location(LocationName.PantsShopMomPiranhaFlag1),
         lambda state: StateLogic.brooch(state, world.player) or StateLogic.rose(state, world.player),
+    )
+    add_rule(
+        world.get_location("Chucklehuck Woods Solo Luigi Cave Room 2 Block"),
+        lambda state: StateLogic.brooch(state, world.player) and StateLogic.canDig(state, world.player),
+    )
+    add_rule(
+        world.get_location("Chucklehuck Woods Solo Luigi Cave Room 3 Block 1"),
+        lambda state: StateLogic.brooch(state, world.player) and StateLogic.canDig(state, world.player),
+    )
+    add_rule(
+        world.get_location("Chucklehuck Woods Solo Luigi Cave Room 3 Block 2"),
+        lambda state: StateLogic.brooch(state, world.player) and StateLogic.canDig(state, world.player),
     )
     add_rule(
         world.get_location(LocationName.PantsShopMomPiranhaFlag2),
@@ -462,10 +554,155 @@ def set_rules(world: "MLSSWorld", excluded):
                 lambda state: StateLogic.canCrash(state, world.player),
             )
 
+    if world.options.randomize_bosses.value != 0:
+        if world.options.chuckle_beans != 0:
+            add_rule(
+                world.get_location(LocationName.HoohooMountainHoohoorosRoomDigspot1),
+                lambda state: StateLogic.hammers(state, world.player)
+                              or StateLogic.fire(state, world.player)
+                              or StateLogic.thunder(state, world.player),
+            )
+            add_rule(
+                world.get_location(LocationName.HoohooMountainPastHoohoorosDigspot),
+                lambda state: StateLogic.hammers(state, world.player)
+                              or StateLogic.fire(state, world.player)
+                              or StateLogic.thunder(state, world.player),
+            )
+            add_rule(
+                world.get_location(LocationName.HoohooMountainPastHoohoorosConnectorRoomDigspot1),
+                lambda state: StateLogic.hammers(state, world.player)
+                              or StateLogic.fire(state, world.player)
+                              or StateLogic.thunder(state, world.player),
+            )
+            add_rule(
+                world.get_location(LocationName.HoohooMountainBelowSummitDigspot),
+                lambda state: StateLogic.hammers(state, world.player)
+                              or StateLogic.fire(state, world.player)
+                              or StateLogic.thunder(state, world.player),
+            )
+            add_rule(
+                world.get_location(LocationName.HoohooMountainSummitDigspot),
+                lambda state: StateLogic.hammers(state, world.player)
+                              or StateLogic.fire(state, world.player)
+                              or StateLogic.thunder(state, world.player),
+            )
+            if world.options.chuckle_beans == 2:
+                add_rule(
+                    world.get_location(LocationName.HoohooMountainHoohoorosRoomDigspot2),
+                    lambda state: StateLogic.hammers(state, world.player)
+                                  or StateLogic.fire(state, world.player)
+                                  or StateLogic.thunder(state, world.player),
+                )
+                add_rule(
+                    world.get_location(LocationName.HoohooMountainPastHoohoorosConnectorRoomDigspot2),
+                    lambda state: StateLogic.hammers(state, world.player)
+                                  or StateLogic.fire(state, world.player)
+                                  or StateLogic.thunder(state, world.player),
+                )
+        add_rule(
+            world.get_location(LocationName.HoohooVillageHammers),
+            lambda state: StateLogic.hammers(state, world.player)
+                          or StateLogic.fire(state, world.player)
+                          or StateLogic.thunder(state, world.player),
+        )
+        add_rule(
+            world.get_location(LocationName.HoohooMountainPeasleysRose),
+            lambda state: StateLogic.hammers(state, world.player)
+                          or StateLogic.fire(state, world.player)
+                          or StateLogic.thunder(state, world.player),
+        )
+        add_rule(
+            world.get_location(LocationName.HoohooMountainHoohoorosRoomBlock1),
+            lambda state: StateLogic.hammers(state, world.player)
+                          or StateLogic.fire(state, world.player)
+                          or StateLogic.thunder(state, world.player),
+        )
+        add_rule(
+            world.get_location(LocationName.HoohooMountainHoohoorosRoomBlock2),
+            lambda state: StateLogic.hammers(state, world.player)
+                          or StateLogic.fire(state, world.player)
+                          or StateLogic.thunder(state, world.player),
+        )
+        add_rule(
+            world.get_location(LocationName.HoohooMountainBelowSummitBlock1),
+            lambda state: StateLogic.hammers(state, world.player)
+                          or StateLogic.fire(state, world.player)
+                          or StateLogic.thunder(state, world.player),
+        )
+        add_rule(
+            world.get_location(LocationName.HoohooMountainBelowSummitBlock2),
+            lambda state: StateLogic.hammers(state, world.player)
+                          or StateLogic.fire(state, world.player)
+                          or StateLogic.thunder(state, world.player),
+        )
+        add_rule(
+            world.get_location(LocationName.HoohooMountainBelowSummitBlock3),
+            lambda state: StateLogic.hammers(state, world.player)
+                          or StateLogic.fire(state, world.player)
+                          or StateLogic.thunder(state, world.player),
+        )
+        add_rule(
+            world.get_location(LocationName.HoohooMountainPastHoohoorosBlock1),
+            lambda state: StateLogic.hammers(state, world.player)
+                          or StateLogic.fire(state, world.player)
+                          or StateLogic.thunder(state, world.player),
+        )
+        add_rule(
+            world.get_location(LocationName.HoohooMountainPastHoohoorosBlock2),
+            lambda state: StateLogic.hammers(state, world.player)
+                          or StateLogic.fire(state, world.player)
+                          or StateLogic.thunder(state, world.player),
+        )
+        add_rule(
+            world.get_location(LocationName.HoohooMountainPastHoohoorosConnectorRoomBlock),
+            lambda state: StateLogic.hammers(state, world.player)
+                          or StateLogic.fire(state, world.player)
+                          or StateLogic.thunder(state, world.player),
+        )
+
+    if not world.options.difficult_logic:
+        if world.options.chuckle_beans != 0:
+            add_rule(
+                world.get_location(LocationName.JokesEndNortheastOfBoilerRoom2Digspot),
+                lambda state: StateLogic.canCrash(state, world.player),
+            )
+            add_rule(
+                world.get_location(LocationName.JokesEndNortheastOfBoilerRoom3Digspot),
+                lambda state: StateLogic.canCrash(state, world.player),
+            )
+        add_rule(
+            world.get_location(LocationName.JokesEndNortheastOfBoilerRoom1Block),
+            lambda state: StateLogic.canCrash(state, world.player),
+        )
+        add_rule(
+            world.get_location(LocationName.JokesEndNortheastOfBoilerRoom2Block1),
+            lambda state: StateLogic.canCrash(state, world.player),
+        )
+        add_rule(
+            world.get_location(LocationName.JokesEndFurnaceRoom1Block1),
+            lambda state: StateLogic.canCrash(state, world.player),
+        )
+        add_rule(
+            world.get_location(LocationName.JokesEndFurnaceRoom1Block2),
+            lambda state: StateLogic.canCrash(state, world.player),
+        )
+        add_rule(
+            world.get_location(LocationName.JokesEndFurnaceRoom1Block3),
+            lambda state: StateLogic.canCrash(state, world.player),
+        )
+
     if world.options.coins:
         add_rule(
             world.get_location(LocationName.HoohooMountainBaseBooStatueCaveCoinBlock1),
             lambda state: StateLogic.canCrash(state, world.player) or StateLogic.super(state, world.player),
+        )
+        add_rule(
+            world.get_location("Chucklehuck Woods Solo Luigi Cave Room 1 Coin Block 1"),
+            lambda state: StateLogic.canDig(state, world.player) and StateLogic.brooch(state, world.player),
+        )
+        add_rule(
+            world.get_location("Chucklehuck Woods Solo Luigi Cave Room 1 Coin Block 2"),
+            lambda state: StateLogic.canDig(state, world.player) and StateLogic.brooch(state, world.player),
         )
         add_rule(
             world.get_location(LocationName.HoohooMountainBaseBooStatueCaveCoinBlock2),
@@ -516,7 +753,7 @@ def set_rules(world: "MLSSWorld", excluded):
             lambda state: StateLogic.brooch(state, world.player) and StateLogic.hammers(state, world.player),
         )
         add_rule(
-            world.get_location(LocationName.ChucklehuckWoodsAfterChucklerootCoinBlock),
+            world.get_location(LocationName.ChucklehuckWoodsPastChucklerootCoinBlock),
             lambda state: StateLogic.brooch(state, world.player) and StateLogic.fruits(state, world.player),
         )
         add_rule(
@@ -546,23 +783,23 @@ def set_rules(world: "MLSSWorld", excluded):
         add_rule(
             world.get_location(LocationName.GwarharLagoonFirstUnderwaterAreaRoom2CoinBlock),
             lambda state: StateLogic.canDash(state, world.player)
-            and (StateLogic.membership(state, world.player) or StateLogic.surfable(state, world.player)),
+                          and (StateLogic.membership(state, world.player) or StateLogic.surfable(state, world.player)),
         )
         add_rule(
             world.get_location(LocationName.JokesEndSecondFloorWestRoomCoinBlock),
             lambda state: StateLogic.ultra(state, world.player)
-            and StateLogic.fire(state, world.player)
-            and (
-                StateLogic.membership(state, world.player)
-                or (StateLogic.canDig(state, world.player) and StateLogic.canMini(state, world.player))
-            ),
+                          and StateLogic.fire(state, world.player)
+                          and (StateLogic.membership(state, world.player)
+                          or (StateLogic.canDig(state, world.player)
+                          and StateLogic.canMini(state, world.player))),
         )
         add_rule(
             world.get_location(LocationName.JokesEndNorthofBridgeRoomCoinBlock),
             lambda state: StateLogic.ultra(state, world.player)
-            and StateLogic.fire(state, world.player)
-            and StateLogic.canDig(state, world.player)
-            and (StateLogic.membership(state, world.player) or StateLogic.canMini(state, world.player)),
+                          and StateLogic.fire(state, world.player)
+                          and StateLogic.canDig(state, world.player)
+                          and (StateLogic.membership(state, world.player)
+                          or StateLogic.canMini(state, world.player)),
         )
         if not world.options.difficult_logic:
             add_rule(
