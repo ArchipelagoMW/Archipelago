@@ -208,7 +208,7 @@ class EnvironmentalPuzzlesDifficulty(Choice):
     """
     When "Shuffle Environmental Puzzles" is on, this setting governs which EPs are eligible for the location pool.
     - Eclipse: Every EP in the game is eligible, including the 1-hour-long "Theater Eclipse EP".
-    - Tedious Theater Eclipse EP is excluded from the location pool.
+    - Tedious: Theater Eclipse EP is excluded from the location pool.
     - Normal: several other difficult or long EPs are excluded as well.
     """
     display_name = "Environmental Puzzles Difficulty"
@@ -617,7 +617,7 @@ if is_easter_time():
     easter_special_option_group = OptionGroup("EASTER SPECIAL", [
         EasterEggHunt,
     ])
-    witness_option_groups = [easter_special_option_group, *witness_option_groups]
+    witness_option_groups.insert(2, easter_special_option_group)
 else:
     silly_options_group = next(group for group in witness_option_groups if group.name == "Silly Options")
     silly_options_group.options.append(EasterEggHunt)
