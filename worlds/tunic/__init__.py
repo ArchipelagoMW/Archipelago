@@ -20,7 +20,7 @@ from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_op
 from .combat_logic import area_data, CombatState
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection, OptionError, PerGameCommonOptions, Range, Removed
-from settings import Group, Bool
+from settings import Group, Bool, FilePath
 
 
 class TunicSettings(Group):
@@ -30,8 +30,13 @@ class TunicSettings(Group):
     class LimitGrassRando(Bool):
         """Limits the impact of Grass Randomizer on the multiworld by disallowing local_fill percentages below 95."""
 
+    class UTPoptrackerPath(FilePath):
+        """Path to the user's TUNIC Poptracker Pack."""
+        description = "TUNIC Poptracker Pack root folder"
+
     disable_local_spoiler: Union[DisableLocalSpoiler, bool] = False
     limit_grass_rando: Union[LimitGrassRando, bool] = True
+    ut_poptracker_path: Union[UTPoptrackerPath, str] = UTPoptrackerPath()
 
 
 class TunicWeb(WebWorld):
@@ -67,6 +72,38 @@ class SeedGroup(TypedDict):
     entrance_layout: int  # entrance layout value
     has_decoupled_enabled: bool  # for checking that players don't have conflicting options
     plando: List[PlandoConnection]  # consolidated plando connections for the seed group
+
+
+# for UT poptracker integration map tab switching
+def map_page_index(data: Any) -> int:
+    mapping: dict[str, int] = {
+        "Beneath the Earth": 1,
+        "Beneath the Well": 2,
+        "The Cathedral": 3,
+        "Dark Tomb": 4,
+        "Eastern Vault": 5,
+        "Frog's Domain": 6,
+        "Swamp": 7,
+        "Overworld": 8,
+        "The Quarry": 9,
+        "Ruined Atoll": 10,
+        "West Gardens": 11,
+        "The Grand Library": 12,
+        "East Forest": 13,
+        "The Far Shore": 14,
+        "The Rooted Ziggurat": 15,
+    }
+    print(data)
+    return mapping.get(data, 0)
+
+
+poptracker_data: dict[str, int] = {
+    "[East] Page Near Secret Shop/Page": 509342543,
+    "Special Shop/Secret Page Pickup": 509342558,
+    "[Northeast] Flowers Holy Cross/Use the Holy Cross": 509342573,
+    "Patrol Cave/Normal Chest": 509342549,
+    "Patrol Cave/Holy Cross Chest": 509342588,
+}
 
 
 class TunicWorld(World):
@@ -121,6 +158,7 @@ class TunicWorld(World):
     using_ut: bool  # so we can check if we're using UT only once
     passthrough: Dict[str, Any]
     ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
+    ut_player: int = -1
 
     def generate_early(self) -> None:
         try:
@@ -175,6 +213,8 @@ class TunicWorld(World):
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "TUNIC" in self.multiworld.re_gen_passthrough:
                 self.using_ut = True
+                self.ut_player = self.player
+                self.tracker_world["map_page_setting_key"] = f"Slot:{self.ut_player}:Current Map"
                 self.passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
                 self.options.start_with_sword.value = self.passthrough["start_with_sword"]
                 self.options.keys_behind_bosses.value = self.passthrough["keys_behind_bosses"]
@@ -778,3 +818,13 @@ class TunicWorld(World):
         # returning slot_data so it regens, giving it back in multiworld.re_gen_passthrough
         # we are using re_gen_passthrough over modifying the world here due to complexities with ER
         return slot_data
+
+    tracker_world = {
+        "map_page_maps": ["maps/maps_pop.json"],
+        "map_page_locations": ["locations/locations_pop_er.json"],
+        "map_page_setting_key": f"Slot:{ut_player}:Current Map",
+        "map_page_index": map_page_index,
+        "external_pack_key": "ut_poptracker_path",
+        "poptracker_name_mapping": poptracker_data
+    }
+
