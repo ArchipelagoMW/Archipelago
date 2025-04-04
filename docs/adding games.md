@@ -47,7 +47,7 @@ if possible.
 
 * The player being able to complete checks while offline and sending them when reconnecting
 * If the client is an implementation of [CommonClient](/CommonClient.py), it may have an icon in the Archipelago 
-* Launcher
+  Launcher
 
 ## World
 
