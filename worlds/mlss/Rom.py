@@ -177,10 +177,10 @@ class MLSSPatchExtension(APPatchExtension):
         for pos in enemies:
             stream.seek(pos + 8)
             for _ in range(6):
-                enemy = int.from_bytes(stream.read(1))
+                enemy = int.from_bytes(stream.read(1), "little")
                 if enemy > 0:
                     stream.seek(1, 1)
-                    flag = int.from_bytes(stream.read(1))
+                    flag = int.from_bytes(stream.read(1), "little")
                     if flag == 0x7:
                         break
                     if flag in [0x0, 0x2, 0x4]:
@@ -196,12 +196,12 @@ class MLSSPatchExtension(APPatchExtension):
             stream.seek(pos + 8)
 
             for _ in range(6):
-                enemy = int.from_bytes(stream.read(1))
+                enemy = int.from_bytes(stream.read(1), "little")
                 if enemy > 0 and enemy not in Data.flying and enemy not in Data.pestnut:
                     if enemy == 0x52:
                         chomp = True
                     stream.seek(1, 1)
-                    flag = int.from_bytes(stream.read(1))
+                    flag = int.from_bytes(stream.read(1), "little")
                     if flag not in [0x0, 0x2, 0x4]:
                         stream.seek(1, 1)
                         continue
@@ -234,7 +234,7 @@ class MLSSPatchExtension(APPatchExtension):
                 stream.seek(pos)
                 temp = stream.read(1)
                 stream.seek(pos)
-                stream.write(bytes([temp[0] | 0x8]))
+                stream.write(bytes([temp[0] | 0x80]))
             stream.seek(pos + 1)
             stream.write(groups.pop())
 
@@ -315,6 +315,10 @@ def write_tokens(world: "MLSSWorld", patch: MLSSProcedurePatch) -> None:
         patch.write_token(APTokenTypes.WRITE, 0xD00002, bytes([0x1]))
 
     patch.write_token(APTokenTypes.WRITE, 0xD00003, bytes([world.options.xp_multiplier.value]))
+
+    if world.options.goal == 1:
+        patch.write_token(APTokenTypes.WRITE, 0xD00008, bytes([world.options.goal.value]))
+        patch.write_token(APTokenTypes.WRITE, 0xD00009, bytes([world.options.emblems_required.value]))
 
     if world.options.tattle_hp:
         patch.write_token(APTokenTypes.WRITE, 0xD00000, bytes([0x1]))
@@ -427,4 +431,4 @@ def desc_inject(world: "MLSSWorld", patch: MLSSProcedurePatch, location: Locatio
                 index = value.index(location.address) + 66
 
     dstring = f"{world.multiworld.player_name[item.player]}: {item.name}"
-    patch.write_token(APTokenTypes.WRITE, 0xD11000 + (index * 0x40), dstring.encode("UTF8"))
+    patch.write_token(APTokenTypes.WRITE, 0xD12000 + (index * 0x40), dstring.encode("UTF8"))
