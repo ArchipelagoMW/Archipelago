@@ -40,7 +40,7 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData, world
 
 def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorld"):
     if data.needs_swim:
-        add_rule(etr, lambda state: state.has("Water tablet", world.player) or state.has("Greensprout (Lilypad)",
+        add_rule(etr, lambda state: state.has("Water Tablet", world.player) or state.has("Greensprout (Waterlily)",
                                                                                          world.player))
 
     for e in data.has_events:
@@ -51,7 +51,7 @@ def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorl
 
 
 def set_rules(world: "OkamiWorld"):
-
+    world.multiworld.completion_condition[world.player] = lambda state: state.has("End for now", world.player)
     return
     # set_specific_rules(world)
 

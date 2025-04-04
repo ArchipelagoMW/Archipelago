@@ -1,7 +1,7 @@
 from BaseClasses import Item, ItemClassification, Tutorial, Location, MultiWorld
 from .Items import item_table, create_item, create_multiple_items,create_junk_items,item_frequencies
-from .Regions import create_regions2
-from .Locations import is_location_valid,get_total_locations
+from .Regions import create_regions
+from .Locations import is_location_valid,get_total_locations, get_location_names
 from .Rules import set_rules
 from .Options import create_option_groups, OkamiOptions, slot_data_options
 from worlds.AutoWorld import World, WebWorld, CollectionState
@@ -43,7 +43,6 @@ class OkamiWorld(World):
 
     game = "Okami"
     item_name_to_id = {name: data.code for name, data in item_table.items()}
-    #TODO:Fixme
     location_name_to_id = get_location_names()
     options_dataclass = OkamiOptions
     options: OkamiOptions
@@ -56,7 +55,7 @@ class OkamiWorld(World):
     def create_regions(self):
         # noinspection PyClassVar
 
-        create_regions2(self)
+        create_regions(self)
 
     def create_items(self):
         self.multiworld.itempool += self.create_itempool()

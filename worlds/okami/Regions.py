@@ -2,8 +2,8 @@ from collections.abc import Callable
 from BaseClasses import Region, Entrance, ItemClassification, Location, LocationProgressType, CollectionState
 from .Locations import create_region_locations, create_region_events
 from typing import TYPE_CHECKING, List, Dict, Optional
-from .RegionsData import menu,r100,r122
-from .Types import OkamiLocation, LocData, ExitData
+from .RegionsData import menu,r100,r122,r101,r102
+from .Rules import apply_exit_rules
 
 
 if TYPE_CHECKING:
@@ -11,43 +11,58 @@ if TYPE_CHECKING:
 
 
 okami_regions={
-    **(menu.regions),
-    **(r100.regions),
-    **(r122.regions)
+    **menu.regions,
+    **r100.regions,
+    **r122.regions,
+    **r101.regions,
+    **r102.regions
 }
 
 okami_exits={
     **menu.exits,
     **r100.exits,
     **r122.exits,
+    **r101.exits,
+    **r102.exits
 }
 
 def get_region_name(key:str):
     if key in okami_regions:
         return okami_regions[key]
 
-def create_regions2(world: "OkamiWorld"):
+def create_regions(world: "OkamiWorld"):
     for (key,name) in okami_regions.items():
-        reg=create_region2(world,name)
+        reg=create_region(key,world,name)
+        print("Created Region "+name)
         world.multiworld.regions.append(reg)
     #Second loop to create exits
     for (key,name) in okami_regions.items():
         reg = world.multiworld.get_region(name,world.player)
-        create_region_exits(reg,world)
+        create_region_exits(key, reg, world)
 
-def create_region2(world:"OkamiWorld",region_name:str):
+    for r in world.get_regions():
+        print (r.name)
+        print(r.entrances)
+
+def create_region(region_key:str ,world:"OkamiWorld",region_name:str):
     reg = Region(region_name,world.player, world.multiworld)
-    create_region_locations(reg,world)
-    create_region_events(reg,world)
+    create_region_locations(region_key,reg,world)
+    create_region_events(region_key,reg,world)
     return reg
 
 
-def create_region_exits(reg:Region,world:"OkamiWorld"):
-
-    if reg.name in okami_exits:
-        for (exit_name, exit_data) in okami_exits[reg.name].items():
-            exiting_region=world.multiworld.get_region(get_region_name(exit_data.destination),world.player)
-            reg.connect(exiting_region,exit_name,rule=exit_data.rule)
+def create_region_exits(region_key:str,reg:Region,world:"OkamiWorld"):
+    print ("Creating Exits for "+reg.name)
+    if region_key in okami_exits:
+        for exit_data in okami_exits[region_key]:
+            destination_name =get_region_name(exit_data.destination)
+            if destination_name is None:
+                print('\033[93m' + "Region "+exit_data.destination +" does not exit"+'\033[0m')
+                continue
+            exiting_region=world.multiworld.get_region(destination_name,world.player)
+            ext = reg.connect(exiting_region,exit_data.name)
+            apply_exit_rules(ext,ext.name,exit_data,world)
+            print("Created Exit "+ext.name + " to " + exiting_region.name)
 
 
 # Takes an entrance, removes its old connections, and reconnects it between the two regions specified.

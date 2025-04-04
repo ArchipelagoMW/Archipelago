@@ -16,11 +16,11 @@ exits = {
                         ,doesnt_have_events=["Kamiki Village - Restoring the villagers"]),
                ExitData("Exit to Kamiki", "r102_2",
                         has_events=["Cursed Kamiki - Cutting the peach","Kamiki Village - Restoring the villagers"]),
-               ExitData("Crossing the River", "r_122_2",
+               ExitData("Crossing the River to the Cave of Nagi", "r122_2",
                         has_events=["River of the Heavens - Restoring the River"])],
-    "r122_2": [ExitData("Crossing the River", "r_122_1",
+    "r122_2": [ExitData("Crossing the River to Kamiki Village", "r122_1",
                         has_events=["River of the Heavens - Restoring the River"]),
-               ExitData("Exit to Cave of Nagi", "r_101_1")]
+               ExitData("Exit to Cave of Nagi", "r101_1")]
 }
 events = {
     "r122_1": {
