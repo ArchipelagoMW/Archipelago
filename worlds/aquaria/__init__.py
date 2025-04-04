@@ -110,7 +110,7 @@ class AquariaWorld(World):
         Run before any general steps of the MultiWorld other than options. Useful for getting and adjusting option
         results and determining layouts for entrance rando etc. start inventory gets pushed after this step.
         """
-        self.regions = AquariaRegions(self.multiworld, self.player)
+        self._regions = AquariaRegions(self.multiworld, self.player)
 
     def create_regions(self) -> None:
         """
