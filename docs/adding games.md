@@ -110,16 +110,15 @@ workarounds or preferred methods which should be used instead:
 * It is not allowed to use `eval` for most reasons, chiefly due to security concerns. 
 * It is discouraged to use `yaml.load` directly due to security concerns.
   * When possible, use `Utils.yaml_load` instead, as this defaults to the safe loader.
+* When submitting regions or items to the multiworld (`multiworld.regions` and `multiworld.itempool` respectively), 
+**Do not use `=`**. 
+  * Instead, use `append`, `extend`, or `+=`. 
 
 ### Notable Caveats
 
 * The Origin Region will always be considered the "start" for the player
 * The Origin Region is *always* considered accessible; i.e. the player is expected to always be able to return to the
 start of the game from anywhere
-* When submitting regions or items to the multiworld (`multiworld.regions` and `multiworld.itempool` respectively), use 
-`append`, `extend`, or `+=`. **Do not use `=`**
+
 * Regions are simply containers for locations that share similar access rules. They do not have to map to 
 concrete, physical areas within your game and can be more abstract like tech trees or a questline.
-* Region and Location access rules 
-
-
