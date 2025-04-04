@@ -297,7 +297,7 @@ class World(metaclass=AutoWorldRegister):
 
     origin_region_name: str = "Menu"
     """Name of the Region from which accessibility is tested."""
-    regions: "RegionManager"
+    regions: "RegionManager[Region, Entrance, Location]"
     """Regions for this world instance. Regions should be added to this, and not override it."""
 
     explicit_indirect_conditions: bool = True
