@@ -68,6 +68,7 @@ A bare minimum world implementation must satisfy the following requirements:
 * A folder within `/worlds/` that contains an `__init__.py`
 * Any subfolders within `/worlds/{game}` that contain `*.py` files must also an `__init__.py` for frozen build packaging
 * At least one game_info doc named with follow the format `{language_code}_{game_name}.md`
+* At least one setup doc, included in the list of [tutorials](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L213)
 
 Within your folder you should have a `World` subclass where you create your world and define all of its rules. 
 It should also contain:
@@ -75,12 +76,12 @@ It should also contain:
 * A [unique game name](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L260)
 * An [instance](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L295) of a `WebWorld` 
 subclass for webhost documentation and behaviors
-* A list of [game info languages](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L210)
-that correspond to the game info docs you include
+  * In your `WebWorld`, if you wrote a game_info doc in more than one language, override the list of 
+  [game info languages](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L210) with the ones you include
 * A mapping for items and locations defining their names and ids for clients to be able to identify them. These are 
 `item_name_to_id` and `location_name_to_id`, respectively.
-* An implementation of `create_item` that creates an item when called by both your code and by another process within
-Archipelago
+* An implementation of `create_item` that can create an item when called by either your code or by another process 
+within Archipelago
 * An `options_dataclass` defining the options players have available to them
 * At least one `Region` for your player to start from (i.e. the Origin Region)
   * The default name of this region is "Menu" but you may configure a different name with 
@@ -94,7 +95,7 @@ These are "nice to have" features for a world, but they are not strictly require
 if possible.
 
 * An implementation of [get_filler_item_name](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L473)
-* A list of setup docs or [tutorials](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L213)
+
 * A [bug report page](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L220)
 * A list of [option groups](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L226) for better
 organization
