@@ -48,7 +48,9 @@ class TestHelpers(unittest.TestCase):
             "TestRegion1": lambda state: state.has("test_item", self.player)
         }
 
-        self.multiworld.regions += [Region(region, self.player, self.multiworld, regions[region]) for region in regions]
+        self.multiworld.worlds[self.player].regions += [
+            Region(region, self.player, self.multiworld, hint_text) for region, hint_text in regions.items()
+        ]
 
         with self.subTest("Test Location Creation Helper"):
             for region, loc_pair in locations.items():
