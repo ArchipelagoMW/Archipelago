@@ -221,3 +221,18 @@ const unsetDeletedOption = (optionName, value) => {
     delete deletedOptions[optionName];
   }
 };
+
+const toggleAll = (source, name) => {
+  checkboxes = document.querySelectorAll('input[type=checkbox]');
+  for (var c in checkboxes) {
+    if (checkboxes[c].name.startsWith(name)) {
+      checkboxes[c].checked = source.checked;
+    }
+  }
+  this.indeterminate = false;
+};
+
+const toggleOne = (source, id) => {
+  checkbox = document.getElementById(id);
+  checkbox.indeterminate = true;
+};
