@@ -266,6 +266,8 @@ class VictoryCondition(Choice):
 
 class PanelHuntTotal(Range):
     """
+    Only relevant if the Victory Condition is "Panel Hunt".
+
     Sets the number of random panels that will get marked as "Panel Hunt" panels in the "Panel Hunt" game mode.
     """
     display_name = "Total Panel Hunt panels"
@@ -276,6 +278,8 @@ class PanelHuntTotal(Range):
 
 class PanelHuntRequiredPercentage(Range):
     """
+    Only relevant if the Victory Condition is "Panel Hunt".
+
     Determines the percentage of "Panel Hunt" panels that need to be solved to win.
     """
     display_name = "Percentage of required Panel Hunt panels"
@@ -286,12 +290,13 @@ class PanelHuntRequiredPercentage(Range):
 
 class PanelHuntPostgame(Choice):
     """
+    Only relevant if the Victory Condition is "Panel Hunt".
+
     In panel hunt, there are technically no postgame locations.
     Depending on your options, this can leave Mountain and Caves as two huge areas with Hunt Panels in them that cannot be reached until you get enough lasers to go through the very linear Mountain descent.
     Panel Hunt tends to be more fun when the world is open.
     This option lets you force anything locked by lasers to be disabled, and thus ineligible for Hunt Panels.
     To compensate, the respective mountain box solution (short box / long box) will be forced to be a Hunt Panel.
-    Does nothing if Panel Hunt is not your victory condition.
 
     Note: The "Mountain Lasers" option may also affect locations locked by challenge lasers if the only path to those locations leads through the Mountain Entry.
     """
@@ -307,6 +312,8 @@ class PanelHuntPostgame(Choice):
 
 class PanelHuntDiscourageSameAreaFactor(Range):
     """
+    Only relevant if the Victory Condition is "Panel Hunt".
+
     The greater this value, the less likely it is that many Hunt Panels show up in the same area.
 
     At 0, Hunt Panels will be selected randomly.
@@ -321,6 +328,8 @@ class PanelHuntDiscourageSameAreaFactor(Range):
 
 class PanelHuntPlando(LocationSet):
     """
+    Only relevant if the Victory Condition is "Panel Hunt".
+
     Specify specific hunt panels you want for your panel hunt game.
     """
 
