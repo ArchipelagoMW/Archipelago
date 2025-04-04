@@ -46,8 +46,8 @@ These are "nice to have" features for a client, but they are not strictly requir
 if possible.
 
 * The player being able to complete checks while offline and sending them when reconnecting
-* If the client is an implementation of [CommonClient](/CommonClient.py), it may have an icon in the Archipelago 
-  Launcher
+* If your client appears in the Archipelago Launcher, you may define an icon for it that differentiates it from
+  other clients. The icon size is 38x38 pixels, but it will accept larger images with downscaling.
 
 ## World
 
