@@ -60,7 +60,6 @@ Receive and parse network packets from the server when the player receives an it
 These are "nice to have" features for a client, but they are not strictly required. It is encouraged to add them 
 if possible.
 
-* The player being able to complete checks while offline and sending them when reconnecting
 * If your client appears in the Archipelago Launcher, you may define an icon for it that differentiates it from
   other clients. The icon size is 38x38 pixels, but it will accept larger images with downscaling.
 
