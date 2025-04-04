@@ -72,6 +72,8 @@ class KH1World(World):
             possible_starting_worlds = ["Wonderland", "Olympus Coliseum", "Deep Jungle", "Agrabah", "Monstro", "Halloween Town", "Neverland", "Hollow Bastion"]
             if self.options.atlantica:
                 possible_starting_worlds.append("Atlantica")
+            if self.options.destiny_islands:
+                possible_starting_worlds.append("Destiny Islands")
             if self.options.end_of_the_world_unlock == "item":
                 possible_starting_worlds.append("End of the World")
             starting_worlds = self.random.sample(possible_starting_worlds, min(self.options.starting_worlds.value, len(possible_starting_worlds)))
@@ -136,8 +138,6 @@ class KH1World(World):
         non_filler_item_categories = ["Key", "Magic", "Worlds", "Trinities", "Cups", "Summons", "Abilities", "Shared Abilities", "Keyblades", "Accessory", "Weapons", "Puppies"]
         if self.options.hundred_acre_wood:
             non_filler_item_categories.append("Torn Pages")
-        if self.options.destiny_islands:
-            non_filler_item_categories.append("DI")
         for name, data in item_table.items():
             quantity = data.max_quantity
             if data.category not in non_filler_item_categories:
@@ -183,6 +183,12 @@ class KH1World(World):
                 item_pool += [self.create_item(name) for _ in range(0, self.options.orichalcum_in_pool.value)]
             elif name == "Mythril":
                 item_pool += [self.create_item(name) for _ in range(0, self.options.mythril_in_pool.value)]
+            elif name == "Destiny Islands":
+                if self.options.destiny_islands:
+                    item_pool += [self.create_item(name) for _ in range(0, quantity)]
+            elif name == "Raft Materials":
+                if self.options.destiny_islands:
+                    item_pool += [self.create_item(name) for _ in range(0, self.options.materials_in_pool.value)]
             elif name not in exclude_items:
                 item_pool += [self.create_item(name) for _ in range(0, quantity)]
         
@@ -255,6 +261,7 @@ class KH1World(World):
                     "beep_hack": bool(self.options.beep_hack),
                     "consistent_finishers": bool(self.options.consistent_finishers),
                     "cups": str(self.options.cups.current_key),
+                    "day_2_materials": int(self.options.day_2_materials.value),
                     "death_link": str(self.options.death_link.current_key),
                     "destiny_islands": bool(self.options.destiny_islands),
                     "donald_death_link": bool(self.options.donald_death_link),
@@ -269,11 +276,13 @@ class KH1World(World):
                     "force_stats_on_levels": int(self.options.force_stats_on_levels.value),
                     "four_by_three": bool(self.options.four_by_three),
                     "goofy_death_link": bool(self.options.goofy_death_link),
+                    "homecoming_materials": int(self.options.homecoming_materials.value),
                     "hundred_acre_wood": bool(self.options.hundred_acre_wood),
                     "interact_in_battle": bool(self.options.interact_in_battle),
                     "jungle_slider": bool(self.options.jungle_slider),
                     "keyblades_unlock_chests": bool(self.options.keyblades_unlock_chests),
                     "level_checks": int(self.options.level_checks.value),
+                    "materials_in_pool": int(self.options.materials_in_pool.value),
                     "max_ap_cost": int(self.options.max_ap_cost.value),
                     "min_ap_cost": int(self.options.min_ap_cost.value),
                     "mythril_in_pool": int(self.options.mythril_in_pool.value),
@@ -337,6 +346,15 @@ class KH1World(World):
             if initial_lucky_emblem_settings[i] != new_lucky_emblem_settings[i]:
                 logging.info(f"{self.player_name}'s value {initial_lucky_emblem_settings[i]} for \"{value_names[i]}\" was invalid\n"
                              f"Setting \"{value_names[i]}\" value to {new_lucky_emblem_settings[i]}")
+        
+        value_names = ["Day 2 Materials", "Homecoming Materials", "Materials in Pool"]
+        initial_materials_settings = [self.options.day_2_materials.value, self.options.homecoming_materials.value, self.options.materials_in_pool.value]
+        self.change_numbers_of_materials_to_consider()
+        new_materials_settings = [self.options.day_2_materials.value, self.options.homecoming_materials.value, self.options.materials_in_pool.value]
+        for i in range(3):
+            if initial_materials_settings[i] != new_materials_settings[i]:
+                logging.info(f"{self.player_name}'s value {initial_materials_settings[i]} for \"{value_names[i]}\" was invalid\n"
+                             f"Setting \"{value_names[i]}\" value to {new_materials_settings[i]}")
     
     def change_numbers_of_lucky_emblems_to_consider(self) -> None:
         if self.options.end_of_the_world_unlock == "lucky_emblems" and self.options.final_rest_door_key == "lucky_emblems":
@@ -365,6 +383,11 @@ class KH1World(World):
         if self.options.final_rest_door_key == "lucky_emblems":
             return self.options.required_lucky_emblems_door.value
         return -1
+    
+    def change_numbers_of_materials_to_consider(self) -> None:
+        if self.options.destiny_islands:
+            self.options.day_2_materials.value, self.options.homecoming_materials.value, self.options.materials_in_pool.value = sorted(
+                [self.options.day_2_materials.value, self.options.homecoming_materials.value, self.options.materials_in_pool.value])
     
     def get_remote_location_ids(self):
         remote_location_ids = []

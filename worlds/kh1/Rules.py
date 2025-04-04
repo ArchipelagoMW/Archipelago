@@ -76,21 +76,6 @@ def has_oogie_manor(state: CollectionState, player: int, advanced_logic: bool) -
                 or (advanced_logic and state.has("High Jump", player) and state.has("Progressive Glide", player))
         )
 
-def can_di_finish(state: CollectionState, player: int, destiny_islands: bool) -> bool:
-    return 
-    (
-        state.has_all_counts({
-        "Log": 2,
-        "Cloth": 1,
-        "Rope": 1,
-        "Seagull Egg": 1,
-        "Mushroom": 3,
-        "Coconut": 2,
-        "Fish": 3,
-        "Drinking Water": 1}, player)
-        and destiny_islands
-    )
-
 def set_rules(kh1world):
     multiworld                             = kh1world.multiworld
     player                                 = kh1world.player
@@ -98,6 +83,8 @@ def set_rules(kh1world):
     eotw_required_lucky_emblems            = kh1world.determine_lucky_emblems_required_to_open_end_of_the_world()
     final_rest_door_required_lucky_emblems = kh1world.determine_lucky_emblems_required_to_open_final_rest_door()
     final_rest_door_requirement            = kh1world.options.final_rest_door_key.current_key
+    day_2_materials                        = kh1world.options.day_2_materials.value
+    homecoming_materials                   = kh1world.options.homecoming_materials.value
     
     add_rule(kh1world.get_location("Traverse Town 1st District Candle Puzzle Chest"),
         lambda state: state.has("Progressive Blizzard", player))
@@ -1571,114 +1558,31 @@ def set_rules(kh1world):
             lambda state: state.has("Slides", player))
     if options.destiny_islands:
         add_rule(kh1world.get_location("Destiny Islands Seashore Capture Fish 1 (Day 2)"),
-            lambda state:
-                (
-                    state.has_all_counts({
-                        "Log": 2,
-                        "Cloth": 1,
-                        "Rope": 1}, player)
-                ))
+            lambda state: state.has("Raft Materials", player, day_2_materials))
         add_rule(kh1world.get_location("Destiny Islands Seashore Capture Fish 2 (Day 2)"),
-            lambda state:
-                (
-                    state.has_all_counts({
-                        "Log": 2,
-                        "Cloth": 1,
-                        "Rope": 1}, player)
-                ))
+            lambda state: state.has("Raft Materials", player, day_2_materials))
         add_rule(kh1world.get_location("Destiny Islands Seashore Capture Fish 3 (Day 2)"),
-            lambda state:
-                (
-                    state.has_all_counts({
-                        "Log": 2,
-                        "Cloth": 1,
-                        "Rope": 1}, player)
-                ))
+            lambda state: state.has("Raft Materials", player, day_2_materials))
         add_rule(kh1world.get_location("Destiny Islands Seashore Gather Seagull Egg (Day 2)"),
-            lambda state:
-                (
-                    state.has_all_counts({
-                        "Log": 2,
-                        "Cloth": 1,
-                        "Rope": 1}, player)
-                ))
+            lambda state: state.has("Raft Materials", player, day_2_materials))
         add_rule(kh1world.get_location("Destiny Islands Secret Place Gather Mushroom (Day 2)"),
-            lambda state:
-                (
-                    state.has_all_counts({
-                        "Log": 2,
-                        "Cloth": 1,
-                        "Rope": 1}, player)
-                ))
+            lambda state: state.has("Raft Materials", player, day_2_materials))
         add_rule(kh1world.get_location("Destiny Islands Cove Gather Mushroom Near Zip Line (Day 2)"),
-            lambda state:
-                (
-                    state.has_all_counts({
-                        "Log": 2,
-                        "Cloth": 1,
-                        "Rope": 1}, player)
-                ))
+            lambda state: state.has("Raft Materials", player, day_2_materials))
         add_rule(kh1world.get_location("Destiny Islands Cove Gather Mushroom in Small Cave (Day 2)"),
-            lambda state:
-                (
-                    state.has_all_counts({
-                        "Log": 2,
-                        "Cloth": 1,
-                        "Rope": 1}, player)
-                ))
-        add_rule(kh1world.get_location("Destiny Islands Seashore Deliver Kairi Items (Day 1)"),
-            lambda state:
-                (
-                    state.has_all_counts({
-                        "Log": 2,
-                        "Cloth": 1,
-                        "Rope": 1}, player)
-                ))
+            lambda state: state.has("Raft Materials", player, day_2_materials))
+        #add_rule(kh1world.get_location("Destiny Islands Seashore Deliver Kairi Items (Day 1)"),
+        #    lambda state: state.has("Raft Materials", player, day_2_materials))
         add_rule(kh1world.get_location("Destiny Islands Secret Place Gather Mushroom (Day 2)"),
-            lambda state:
-                (
-                    state.has_all_counts({
-                        "Log": 2,
-                        "Cloth": 1,
-                        "Rope": 1}, player)
-                ))
+            lambda state: state.has("Raft Materials", player, day_2_materials))
         add_rule(kh1world.get_location("Destiny Islands Cove Talk to Kairi (Day 2)"),
-            lambda state:
-                (
-                    state.has_all_counts({
-                        "Log": 2,
-                        "Cloth": 1,
-                        "Rope": 1}, player)
-                ))
+            lambda state: state.has("Raft Materials", player, day_2_materials))
         add_rule(kh1world.get_location("Destiny Islands Gather Drinking Water (Day 2)"),
-            lambda state:
-                (
-                    state.has_all_counts({
-                        "Log": 2,
-                        "Cloth": 1,
-                        "Rope": 1}, player)
-                ))
+            lambda state: state.has("Raft Materials", player, day_2_materials))
         add_rule(kh1world.get_location("Destiny Islands Chest"),
-            lambda state:
-                (
-                    state.has_all_counts({
-                        "Log": 2,
-                        "Cloth": 1,
-                        "Rope": 1}, player)
-                ))
-        add_rule(kh1world.get_location("Destiny Islands Cove Deliver Kairi Items (Day 2)"),
-            lambda state:
-                (
-                    state.has_all_counts({
-                        "Log": 2,
-                        "Cloth": 1,
-                        "Rope": 1,
-                        "Seagull Egg": 1,
-                        "Mushroom": 3,
-                        "Coconut": 2,
-                        "Fish": 3,
-                        "Drinking Water": 1}, player)
-                ))
+            lambda state: state.has("Raft Materials", player, day_2_materials))
+        #add_rule(kh1world.get_location("Destiny Islands Cove Deliver Kairi Items (Day 2)"),
+        #    lambda state: state.has("Raft Materials", player, homecoming_materials))
     for i in range(1,options.level_checks+1):
         add_rule(kh1world.get_location("Level " + str(i+1).rjust(3,'0') + " (Slot 1)"),
             lambda state, level_num=i: (
@@ -1694,7 +1598,10 @@ def set_rules(kh1world):
             has_x_worlds(state, player, 7, options.keyblades_unlock_chests) # In logic, player is strong enough
             and 
             (
-                can_di_finish(state, player, options.destiny_islands) # Can DI Finish
+                ( # Can DI Finish
+                    state.has("Destiny Islands", player)
+                    and state.has("Raft Materials", player, homecoming_materials)
+                )
                 or 
                 (
                     ( # Has access to EotW
@@ -2200,6 +2107,8 @@ def set_rules(kh1world):
                     ))
 
     
+    add_rule(kh1world.get_entrance("Destiny Islands"),
+        lambda state: state.has("Destiny Islands", player))
     add_rule(kh1world.get_entrance("Wonderland"),
         lambda state: state.has("Wonderland", player) and has_x_worlds(state, player, 2, options.keyblades_unlock_chests))
     add_rule(kh1world.get_entrance("Olympus Coliseum"),
