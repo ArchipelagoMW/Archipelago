@@ -358,6 +358,7 @@ loc_group_convert: dict[str, str] = {
     "Beneath the Well Main": "Beneath the Well",
     "Well Boss": "Dark Tomb Checkpoint",
     "Dark Tomb Main": "Dark Tomb",
+    "Magic Dagger House": "West Garden House",
     "Fortress Courtyard Upper": "Fortress Courtyard",
     "Fortress Courtyard Upper pot": "Fortress Courtyard",
     "Fortress Courtyard west pots": "Fortress Courtyard",
@@ -377,6 +378,7 @@ loc_group_convert: dict[str, str] = {
     "Lower Quarry upper pots": "Quarry",
     "Even Lower Quarry": "Quarry",
     "Monastery Back": "Monastery",
+    "Cathedral Main": "Cathedral",
 }
 
 
