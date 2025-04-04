@@ -1,23 +1,10 @@
 from BaseClasses import Item, ItemClassification
-from .Types import OkamiItem, ItemData
-from .Locations import get_total_locations
-from .Rules import get_difficulty
-from .Options import get_total_time_pieces, CTRLogic
+from .Types import OkamiItem, ItemData, BrushTechniques
 from typing import List, Dict, TYPE_CHECKING
 
 
 if TYPE_CHECKING:
     from . import OkamiWorld
-
-
-def create_itempool(world: "OkamiWorld") -> List[Item]:
-    itempool: List[Item] = []
-
-    for name in item_table.keys():
-        item_type: ItemClassification = item_table.get(name).classification
-        itempool += create_multiple_items(world, name, item_frequencies.get(name, 1), item_type)
-    itempool += create_junk_items(world, get_total_locations(world) - len(itempool))
-    return itempool
 
 
 
@@ -53,14 +40,8 @@ def create_junk_items(world: "OkamiWorld", count: int) -> List[Item]:
 
 
 okami_items = {
-    # Brush Techniques
-    "Sunrise": ItemData(0x100, ItemClassification.progression),
-    "Rejuvenation": ItemData(0x101, ItemClassification.progression),
-    #TODO: Probably needs to be progressive at some point.
-    "Power Slash" : ItemData(0x102, ItemClassification.progression),
-
-    # Quest Items
-    "Thunder Brew": ItemData(0x47, ItemClassification.progression),
+    #Equips
+    "Water Tablet": ItemData(0x9c, ItemClassification.progression),
 
     # Other
     "Astral Pouch": ItemData(0x06, ItemClassification.useful),
@@ -70,13 +51,26 @@ okami_items = {
     "Holy Bone S": ItemData(0x8F, ItemClassification.filler),
 }
 
+okami_brush_techniques_items ={
+    # Brush Techniques
+    "Sunrise": ItemData(BrushTechniques.SUNRISE, ItemClassification.progression),
+    "Rejuvenation": ItemData(BrushTechniques.REJUVENATION, ItemClassification.progression),
+    "Progressive Power Slash": ItemData(BrushTechniques.POWER_SLASH, ItemClassification.progression_skip_balancing),
+    "Progressive Cherry Bomb": ItemData(BrushTechniques.CHERRY_BOMB, ItemClassification.progression_skip_balancing),
+    "Greensprout (Waterlily)": ItemData(BrushTechniques.GREENSPROUT_WATERLILY, ItemClassification.progression),
+    "Crescent": ItemData(BrushTechniques.CRESCENT, ItemClassification.progression),
+}
+
 junk_weights ={
     "Holy Bone S":1
 }
 # For items that need to appear more than once
 item_frequencies ={
+    "Holy Bone S":1,
+    "Progressive Power Slash":1,
 }
 
 item_table = {
     **okami_items,
+    **okami_brush_techniques_items
 }

@@ -1,12 +1,10 @@
 from BaseClasses import Item, ItemClassification, Tutorial, Location, MultiWorld
-from .Items import item_table, create_item, create_itempool
-from .Regions import create_regions, randomize_act_entrances, chapter_act_info, create_events, get_shuffled_region
-from .Locations import location_table, contract_locations, is_location_valid, get_location_names, TASKSANITY_START_ID, \
-    get_total_locations
-from .Rules import set_rules, has_paintings
-from .Options import AHITOptions, slot_data_options, adjust_options, RandomizeHatOrder, EndGoal, create_option_groups
+from .Items import item_table, create_item, create_multiple_items,create_junk_items,item_frequencies
+from .Regions import create_regions2
+from .Locations import is_location_valid,get_total_locations
+from .Rules import set_rules
+from .Options import create_option_groups, OkamiOptions, slot_data_options
 from worlds.AutoWorld import World, WebWorld, CollectionState
-from worlds.generic.Rules import add_rule
 from typing import List, Dict, TextIO
 from worlds.LauncherComponents import Component, components, icon_paths, launch as launch_component, Type
 from Utils import local_path
@@ -45,9 +43,10 @@ class OkamiWorld(World):
 
     game = "Okami"
     item_name_to_id = {name: data.code for name, data in item_table.items()}
+    #TODO:Fixme
     location_name_to_id = get_location_names()
-    options_dataclass = AHITOptions
-    options: AHITOptions
+    options_dataclass = OkamiOptions
+    options: OkamiOptions
     web = AWebInTime()
 
     def __init__(self, multiworld: "MultiWorld", player: int):
@@ -57,12 +56,10 @@ class OkamiWorld(World):
     def create_regions(self):
         # noinspection PyClassVar
 
-        create_regions(self)
-
-        create_events(self)
+        create_regions2(self)
 
     def create_items(self):
-        self.multiworld.itempool += create_itempool(self)
+        self.multiworld.itempool += self.create_itempool()
 
     def set_rules(self):
 
@@ -93,3 +90,11 @@ class OkamiWorld(World):
         change = super().remove(state, item)
         return change
 
+    def create_itempool(world: "OkamiWorld") -> List[Item]:
+        itempool: List[Item] = []
+
+        for name in item_table.keys():
+            item_type: ItemClassification = item_table.get(name).classification
+            itempool += create_multiple_items(world, name, item_frequencies.get(name, 1), item_type)
+        itempool += create_junk_items(world, get_total_locations(world) - len(itempool))
+        return itempool
