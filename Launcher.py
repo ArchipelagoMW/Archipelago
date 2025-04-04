@@ -228,7 +228,7 @@ refresh_components: Optional[Callable[[], None]] = None
 
 
 def run_gui(path: str, args: Any) -> None:
-    from kvui import (MDApp, MDFloatLayout, MDGridLayout, MDButton, MDLabel, MDButtonText, MDButtonIcon, ScrollBox,
+    from kvui import (ThemedApp, MDFloatLayout, MDGridLayout, MDButton, MDLabel, MDButtonText, MDButtonIcon, ScrollBox,
                       ContainerLayout, Widget, MDBoxLayout, ApAsyncImage)
     from kivy.core.window import Window
     from kivy.metrics import dp
@@ -244,7 +244,7 @@ def run_gui(path: str, args: Any) -> None:
     class LauncherCard(MDCard):
         component: Component | None
 
-    class Launcher(MDApp):
+    class Launcher(ThemedApp):
         base_title: str = "Archipelago Launcher"
         container: ContainerLayout
         navigation: MDBoxLayout
@@ -354,10 +354,7 @@ def run_gui(path: str, args: Any) -> None:
                 self.button_layout.layout.add_widget(card)
 
         def build(self):
-            from kvui import KivyJSONtoTextParser
-            text_colors = KivyJSONtoTextParser.TextColors()
-            self.theme_cls.theme_style = getattr(text_colors, "theme_style", "Dark")
-            self.theme_cls.primary_palette = getattr(text_colors, "primary_palette", "Green")
+            self.set_colors()
             self.top_screen = MDFloatLayout()
             self.top_screen.md_bg_color = self.theme_cls.backgroundColor
             self.grid = MDGridLayout(cols=2)

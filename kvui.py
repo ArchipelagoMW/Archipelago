@@ -87,6 +87,15 @@ else:
 remove_between_brackets = re.compile(r"\[.*?]")
 
 
+class ThemedApp(MDApp):
+    def set_colors(self):
+        text_colors = KivyJSONtoTextParser.TextColors()
+        self.theme_cls.theme_style = getattr(text_colors, "theme_style", "Dark")
+        self.theme_cls.primary_palette = getattr(text_colors, "primary_palette", "Green")
+        self.theme_cls.dynamic_scheme_name = getattr(text_colors, "dynamic_scheme_name", "TONAL_SPOT")
+        self.theme_cls.dynamic_scheme_contrast = 0.0
+
+
 class ImageIcon(MDButtonIcon, AsyncImage):
     def __init__(self, *args, **kwargs):
         super().__init__(args, kwargs)
@@ -710,7 +719,7 @@ class ClientTabs(MDTabsPrimary):
         self.on_size(self, self.size)
 
 
-class GameManager(MDApp):
+class GameManager(ThemedApp):
     logging_pairs = [
         ("Client", "Archipelago"),
     ]
@@ -759,8 +768,7 @@ class GameManager(MDApp):
         Clock.schedule_once(on_start)
 
     def build(self) -> Layout:
-        self.theme_cls.theme_style = self.json_to_kivy_parser.theme_style
-        self.theme_cls.primary_palette = self.json_to_kivy_parser.primary_palette
+        self.set_colors()
         self.container = ContainerLayout()
 
         self.grid = MainLayout()
@@ -1161,8 +1169,6 @@ class KivyJSONtoTextParser(JSONtoTextParser):
         for name, code in color_codes.items():
             color_codes[name] = getattr(colors, name, code)
         self.color_codes = color_codes
-        self.theme_style = colors.theme_style
-        self.primary_palette = colors.primary_palette
         super().__init__(*args, **kwargs)
 
     def __call__(self, *args, **kwargs):
