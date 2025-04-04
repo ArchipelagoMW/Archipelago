@@ -556,11 +556,11 @@ class MultiWorld():
         return [location for location in self.get_locations(player) if location.item is not None]
 
     def get_reachable_locations(self, state: Optional[CollectionState] = None, player: Optional[int] = None) -> List[Location]:
-        state: CollectionState = state if state else self.state
+        state: CollectionState = state or self.state
         return [location for location in self.get_locations(player) if location.can_reach(state)]
 
     def get_placeable_locations(self, state=None, player=None) -> List[Location]:
-        state: CollectionState = state if state else self.state
+        state: CollectionState = state or self.state
         return [location for location in self.get_locations(player) if location.item is None and location.can_reach(state)]
 
     def get_unfilled_locations_for_players(self, location_names: List[str], players: Iterable[int]):
@@ -601,12 +601,13 @@ class MultiWorld():
             if self.has_beaten_game(state):
                 return True
         prog_locations = {location for location in self.get_locations() if location.item
-                          and location.item.advancement and location not in state.locations_checked}
+                          and location.item.advancement
+                          and location not in state.states[location.player].locations_checked}
 
         while prog_locations:
             sphere: Set[Location] = set()
             # build up spheres of collection radius.
-            # Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
+            # Everything in each sphere is independent of each other in dependencies and only depends on lower spheres
             for location in prog_locations:
                 if location.can_reach(state):
                     sphere.add(location)
@@ -1044,10 +1045,16 @@ class PlayerState:
     def __iter__(self) -> Iterator[str]:
         return self.prog_items.__iter__()
 
-    def __getitem__(self, item) -> int:
+    def __len__(self) -> int:
+        return self.prog_items.__len__()
+
+    def __contains__(self, item: str) -> bool:
+        return item in self.prog_items
+
+    def __getitem__(self, item: str) -> int:
         return self.prog_items[item]
 
-    def __setitem__(self, key, value) -> None:
+    def __setitem__(self, key: Any, value: Any) -> None:
         return self.prog_items.__setitem__(key, value)
 
     def __delitem__(self, key) -> None:
@@ -1060,7 +1067,6 @@ class CollectionState:
     multiworld: MultiWorld
     advancements: Set[Location]
     path: Dict[Union[Region, Entrance], PathValue]
-    locations_checked: Set[Location]
     allow_partial_entrances: bool
     additional_init_functions: List[Callable[[CollectionState, MultiWorld], None]] = []
     additional_copy_functions: List[Callable[[CollectionState, CollectionState], CollectionState]] = []
@@ -1087,10 +1093,10 @@ class CollectionState:
         self.prog_items = self.states  # assign as a reference for back compatibility
         self.advancements = set()
         self.path = {}
-        self.locations_checked = set()
         for function in self.additional_init_functions:
             function(self, parent)
-        for items in parent.precollected_items.values():
+        for items in [pre_items for player, pre_items in parent.precollected_items.items()
+                      if not players or player in players]:
             for item in items:
                 self.collect(item, True)
 
@@ -1183,25 +1189,18 @@ class CollectionState:
 
         :return: The new state.
         """
-        ret = CollectionState(self.multiworld)
+        ret = CollectionState(self.multiworld, self.allow_partial_entrances, tuple(self.states.keys()))
         ret.states = {player: state.copy(ret) for player, state in self.states.items()}
         ret.prog_items = ret.states
-        ret.reachable_regions = {
-            player: self.states[player].reachable_regions.copy() for player in self.states
-        }
-        ret.blocked_connections = {
-            player: self.states[player].blocked_connections for player in self.states
-        }
         ret.advancements = self.advancements.copy()
         ret.path = self.path.copy()
-        ret.locations_checked = self.locations_checked.copy()
         for function in self.additional_copy_functions:
             ret = function(self, ret)
         return ret
 
     def can_reach(self,
                   spot: Location | Entrance | Region | str,
-                  resolution_hint: Literal["Location", "Entrance", "Region"]| None = None,
+                  resolution_hint: Literal["Location", "Entrance", "Region"] | None = None,
                   player: int | None = None) -> bool:
         """
         Check if a spot in the multiworld is reachable with the current state.
