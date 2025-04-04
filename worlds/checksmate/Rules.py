@@ -167,6 +167,10 @@ def set_rules(world: World):
         if item.material_expectations == -1:
             add_rule(location, lambda state: state.has("Super-Size Me", world.player))
 
+        # Add rule for Capture Everything in super-sized mode
+        if name == "Capture Everything" and super_sized:
+            add_rule(location, lambda state: state.has("Super-Size Me", world.player))
+
     # Add special move rules
     if opts.enable_tactics.value == opts.enable_tactics.option_all:
         for fork_loc in ["Fork, Sacrificial", "Fork, True", "Fork, Sacrificial Triple", 
