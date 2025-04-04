@@ -413,7 +413,8 @@ class CommonContext:
             await self.server.socket.close()
         if self.server_task is not None:
             await self.server_task
-        self.ui.update_hints()
+        if self.ui:
+            self.ui.update_hints()
 
     async def send_msgs(self, msgs: typing.List[typing.Any]) -> None:
         """ `msgs` JSON serializable """
