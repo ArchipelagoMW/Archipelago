@@ -192,7 +192,12 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
             base_state, [], multiworld.get_filled_locations(item.player)
             if single_player_placement else None)
         for placement in placements:
-            if multiworld.worlds[placement.item.player].options.accessibility != "minimal" and not placement.can_reach(state):
+            if (
+                multiworld.worlds[placement.item.player].options.accessibility != "minimal"
+                # accessibility_corrections can clean up the case where the location's player is minimal
+                and multiworld.worlds[placement.player].options.accessibility != "minimal"
+                and not placement.can_reach(state)
+            ):
                 placement.item.location = None
                 unplaced_items.append(placement.item)
                 placement.item = None
