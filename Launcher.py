@@ -252,6 +252,7 @@ def run_gui(path: str, args: Any) -> None:
         grid: MDGridLayout = ObjectProperty(None)
         button_layout: ScrollBox = ObjectProperty(None)
         cards: list[LauncherCard]
+        current_filter: Sequence[str | Type] | None
 
         def __init__(self, ctx=None, path=None, args=None):
             self.title = self.base_title + " " + Utils.__version__
@@ -261,10 +262,20 @@ def run_gui(path: str, args: Any) -> None:
             self.launch_uri = path
             self.launch_args = args
             self.cards = []
+            self.current_filter = (Type.CLIENT, Type.TOOL, Type.ADJUSTER, Type.MISC)
             persistent = Utils.persistent_load()
             if "launcher" in persistent:
                 if "favorites" in persistent["launcher"]:
                     self.favorites.extend(persistent["launcher"]["favorites"])
+                if "filter" in persistent["launcher"]:
+                    if persistent["launcher"]["filter"]:
+                        filters = []
+                        for filter in persistent["launcher"]["filter"].split(", "):
+                            if filter == "favorites":
+                                filters.append(filter)
+                            else:
+                                filters.append(Type[filter])
+                        self.current_filter = filters
             super().__init__()
 
         def build_card(self, component: Component) -> LauncherCard:
@@ -351,6 +362,9 @@ def run_gui(path: str, args: Any) -> None:
 
             cards = [card for card in self.cards if card.component.type in type_filter
                      or favorites and card.component.display_name in self.favorites]
+
+            self.current_filter = type_filter
+
             for card in cards:
                 self.button_layout.layout.add_widget(card)
 
@@ -361,7 +375,6 @@ def run_gui(path: str, args: Any) -> None:
             self.button_layout = self.top_screen.ids.button_layout
             self.set_colors()
             self.top_screen.md_bg_color = self.theme_cls.backgroundColor
-            self._refresh_components()
 
             # handle menu
             menu_icons = {
@@ -410,7 +423,7 @@ def run_gui(path: str, args: Any) -> None:
             for component in components:
                 self.cards.append(self.build_card(component))
 
-            self._refresh_components()
+            self._refresh_components(self.current_filter)
 
             return self.top_screen
 
@@ -445,6 +458,8 @@ def run_gui(path: str, args: Any) -> None:
 
         def on_stop(self):
             Utils.persistent_store("launcher", "favorites", self.favorites)
+            Utils.persistent_store("launcher", "filter", ", ".join(filter.name if isinstance(filter, Type) else filter
+                                                                   for filter in self.current_filter))
             super().on_stop()
 
     Launcher(path=path, args=args).run()
