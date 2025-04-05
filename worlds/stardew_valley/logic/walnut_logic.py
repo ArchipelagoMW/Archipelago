@@ -7,8 +7,9 @@ from .combat_logic import CombatLogicMixin
 from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
-from ..options import ExcludeGingerIsland, Walnutsanity
-from ..stardew_rule import StardewRule, False_, True_
+from ..content.vanilla.ginger_island import ginger_island_content_pack
+from ..options import Walnutsanity
+from ..stardew_rule import StardewRule
 from ..strings.ap_names.ap_option_names import WalnutsanityOptionName
 from ..strings.ap_names.event_names import Event
 from ..strings.craftable_names import Furniture
@@ -28,10 +29,10 @@ class WalnutLogic(BaseLogic[Union[WalnutLogicMixin, ReceivedLogicMixin, HasLogic
 AbilityLogicMixin]]):
 
     def has_walnut(self, number: int) -> StardewRule:
-        if self.options.exclude_ginger_island == ExcludeGingerIsland.option_true:
-            return False_()
+        if not self.content.is_enabled(ginger_island_content_pack):
+            return self.logic.false_
         if number <= 0:
-            return True_()
+            return self.logic.true_
 
         if self.options.walnutsanity == Walnutsanity.preset_none:
             return self.can_get_walnuts(number)
