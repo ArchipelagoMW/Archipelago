@@ -19,7 +19,7 @@ from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple, Union
 
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
-requirement = 'cx-Freeze==7.2.0'
+requirement = 'cx-Freeze==8.0.0'
 try:
     import pkg_resources
     try:
@@ -629,12 +629,13 @@ cx_Freeze.setup(
     ext_modules=cythonize("_speedups.pyx"),
     options={
         "build_exe": {
-            "packages": ["worlds", "kivy", "cymem", "websockets"],
+            "packages": ["worlds", "kivy", "cymem", "websockets", "kivymd"],
             "includes": [],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
-                         "pandas", "zstandard"],
+                         "pandas"],
+            "zip_includes": [],
             "zip_include_packages": ["*"],
-            "zip_exclude_packages": ["worlds", "sc2"],
+            "zip_exclude_packages": ["worlds", "sc2", "kivymd"],
             "include_files": [],  # broken in cx 6.14.0, we use more special sauce now
             "include_msvcr": False,
             "replace_paths": ["*."],

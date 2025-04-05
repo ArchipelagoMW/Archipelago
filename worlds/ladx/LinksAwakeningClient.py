@@ -526,9 +526,7 @@ class LinksAwakeningContext(CommonContext):
 
     def run_gui(self) -> None:
         import webbrowser
-        import kvui
-        from kvui import Button, GameManager
-        from kivy.uix.image import Image
+        from kvui import GameManager, ImageButton
 
         class LADXManager(GameManager):
             logging_pairs = [
@@ -541,16 +539,10 @@ class LinksAwakeningContext(CommonContext):
                 b = super().build()
 
                 if self.ctx.magpie_enabled:
-                    button = Button(text="", size=(30, 30), size_hint_x=None,
-                                    on_press=lambda _: webbrowser.open('https://magpietracker.us/?enable_autotracker=1'))
-                    image = Image(size=(16, 16), texture=magpie_logo())
-                    button.add_widget(image)
-
-                    def set_center(_, center):
-                        image.center = center
-                    button.bind(center=set_center)
-
+                    button = ImageButton(texture=magpie_logo(), fit_mode="cover", image_size=(32, 32), size_hint_x=None,
+                                on_press=lambda _: webbrowser.open('https://magpietracker.us/?enable_autotracker=1'))
                     self.connect_layout.add_widget(button)
+
                 return b
 
         self.ui = LADXManager(self)
@@ -635,6 +627,12 @@ class LinksAwakeningContext(CommonContext):
         if cmd == "Connected":
             self.game = self.slot_info[self.slot].game
             self.slot_data = args.get("slot_data", {})
+            # This is sent to magpie over local websocket to make its own connection
+            self.slot_data.update({
+                "server_address": self.server_address,
+                "slot_name": self.player_names[self.slot],
+                "password": self.password,
+            })
 
         # TODO - use watcher_event
         if cmd == "ReceivedItems":
@@ -719,7 +717,9 @@ class LinksAwakeningContext(CommonContext):
                         try:
                             self.magpie.set_checks(self.client.tracker.all_checks)
                             await self.magpie.set_item_tracker(self.client.item_tracker)
-                            self.magpie.slot_data = self.slot_data
+                            if self.slot_data and "slot_data" in self.magpie.features and not self.magpie.has_sent_slot_data:
+                                self.magpie.slot_data = self.slot_data
+                                await self.magpie.send_slot_data()
 
                             if self.client.gps_tracker.needs_found_entrances:
                                 await self.request_found_entrances()
