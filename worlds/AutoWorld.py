@@ -444,16 +444,16 @@ class World(metaclass=AutoWorldRegister):
         """
 
     def fill_hook(self,
-                  progitempool: list["Item"],
-                  usefulitempool: list["Item"],
-                  filleritempool: list["Item"],
+                  prog_item_pool: list["Item"],
+                  useful_item_pool: list["Item"],
+                  filler_item_pool: list["Item"],
                   fill_locations: list["Location"]) -> None:
         """
         Special method that gets called as part of distribute_items_restrictive (main fill).
 
-        :param progitempool: The pool of progression items to be placed.
-        :param usefulitempool: The pool of useful items to be placed.
-        :param filleritempool: The pool of filler items to be placed.
+        :param prog_item_pool: The pool of progression items to be placed.
+        :param useful_item_pool: The pool of useful items to be placed.
+        :param filler_item_pool: The pool of filler items to be placed.
         :param fill_locations: All locations that still need to be filled.
         """
 
