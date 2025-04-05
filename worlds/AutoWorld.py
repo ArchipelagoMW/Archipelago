@@ -83,11 +83,13 @@ class AutoWorldRegister(type):
 
         # construct class
         new_class = super().__new__(mcs, name, bases, dct)
+        new_class.__file__ = sys.modules[new_class.__module__].__file__
         if "game" in dct:
             if dct["game"] in AutoWorldRegister.world_types:
-                raise RuntimeError(f"""Game {dct["game"]} already registered.""")
+                raise RuntimeError(f"""Game {dct["game"]} already registered in 
+                {AutoWorldRegister.world_types[dct["game"]].__file__} when attempting to register from
+                {new_class.__file__}.""")
             AutoWorldRegister.world_types[dct["game"]] = new_class
-        new_class.__file__ = sys.modules[new_class.__module__].__file__
         if ".apworld" in new_class.__file__:
             new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
         if "settings_key" not in dct:
