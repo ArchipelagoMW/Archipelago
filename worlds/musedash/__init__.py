@@ -71,7 +71,6 @@ class MuseDashWorld(World):
 
     # Working Data
     victory_song_name: str = ""
-    chosen_goal_songs: List[str]
     starting_songs: List[str]
     included_songs: List[str]
     needed_token_count: int
@@ -120,18 +119,19 @@ class MuseDashWorld(World):
         start_items = self.options.start_inventory.value.keys()
         include_songs = self.options.include_songs.value
         exclude_songs = self.options.exclude_songs.value
-        self.chosen_goal_songs = list(self.options.goal_song.value)
+        chosen_goal_songs = list(self.options.goal_song.value)
 
         self.starting_songs = [s for s in start_items if s in song_items]
         self.starting_songs = self.md_collection.filter_songs_to_dlc(self.starting_songs, dlc_songs)
         self.included_songs = [s for s in include_songs if s in song_items and s not in self.starting_songs]
         self.included_songs = self.md_collection.filter_songs_to_dlc(self.included_songs, dlc_songs)
 
-        if self.chosen_goal_songs:
-            self.chosen_goal_songs = self.md_collection.filter_songs_to_dlc(self.chosen_goal_songs, dlc_songs)
-            if self.chosen_goal_songs:
-                self.random.shuffle(self.chosen_goal_songs)
-                self.victory_song_name = self.chosen_goal_songs.pop()
+        # Making sure songs chosen for goal are allowed by DLC and remove the chosen from being added to the pool.
+        if chosen_goal_songs:
+            chosen_goal_songs = self.md_collection.filter_songs_to_dlc(chosen_goal_songs, dlc_songs)
+            if chosen_goal_songs:
+                self.random.shuffle(chosen_goal_songs)
+                self.victory_song_name = chosen_goal_songs.pop()
                 if self.victory_song_name in self.starting_songs:
                     self.starting_songs.remove(self.victory_song_name)
                 if self.victory_song_name in self.included_songs:
