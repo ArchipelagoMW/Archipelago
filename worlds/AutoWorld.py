@@ -511,7 +511,6 @@ class World(metaclass=AutoWorldRegister):
     def extend_hint_information(self, hint_data: dict[int, dict[int, str]]):
         """
         Fill in additional entrance information text into locations, which is displayed when hinted.
-        structure is {player_id: {location_id: text}} You will need to insert your own player_id.
 
         :param hint_data: The dictionary your hint_data should be added to. Structure is
         {player_id: {location_id: text}}. You will need to insert your own player_id.
