@@ -361,9 +361,7 @@ def launch(*launch_args: str) -> None:
                 args.name = urllib.parse.unquote(url.username)
             if url.password:
                 args.password = urllib.parse.unquote(url.password)
-            args.patch_file = ""
-
-        if args.patch_file != "":
+        elif args.patch_file != "":
             metadata = _patch_and_run_game(args.patch_file)
             if "server" in metadata:
                 args.connect = metadata["server"]
