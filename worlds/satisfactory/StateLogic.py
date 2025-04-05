@@ -1,4 +1,5 @@
-from typing import Tuple, List, Optional, Set, Iterable
+from typing import Optional
+from collections.abc import Iterable
 from BaseClasses import CollectionState
 from .GameLogic import GameLogic, Recipe, PowerInfrastructureLevel
 from .Options import SatisfactoryOptions
@@ -11,7 +12,7 @@ building_event_prefix = "Can Build: "
 class StateLogic:
     player: int
     options: SatisfactoryOptions
-    initial_unlocked_items: Set[str]
+    initial_unlocked_items: set[str]
 
     def __init__(self, player: int, options: SatisfactoryOptions):
         self.player = player
@@ -42,7 +43,7 @@ class StateLogic:
             state.has_all(map(self.to_part_event, parts), self.player)
 
     def can_produce_all_allowing_handcrafting(self, state: CollectionState, logic: GameLogic, 
-            parts: Optional[Tuple[str, ...]]) -> bool:
+            parts: Optional[tuple[str, ...]]) -> bool:
         
         def can_handcraft_part(part: str) -> bool:
             if self.can_produce(state, part):
@@ -50,7 +51,7 @@ class StateLogic:
             elif part not in logic.handcraftable_recipes:
                 return False
 
-            recipes: List[Recipe] = logic.handcraftable_recipes[part]
+            recipes: list[Recipe] = logic.handcraftable_recipes[part]
 
             return any(
                 self.has_recipe(state, recipe) 

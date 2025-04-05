@@ -1,7 +1,6 @@
 from BaseClasses import Tutorial
 from ..AutoWorld import WebWorld
 
-
 class SatisfactoryWebWorld(WebWorld):
     theme = "dirt"
     setup = Tutorial(

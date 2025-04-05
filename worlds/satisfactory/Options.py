@@ -1,9 +1,9 @@
 from dataclasses import dataclass
-from typing import Dict, List, Any, Tuple, ClassVar, cast
+from typing import ClassVar, Any, cast
 from enum import IntEnum
 from Options import PerGameCommonOptions, DeathLink, AssembleOptions, Visibility
 from Options import Range, Toggle, OptionSet, StartInventoryPool, NamedRange, Choice
-from schema import Schema, And, Use
+from schema import Schema, And
 
 class Placement(IntEnum):
     starting_inventory = 0
@@ -11,7 +11,7 @@ class Placement(IntEnum):
     somewhere = 2
 
 class PlacementLogicMeta(AssembleOptions):
-    def __new__(mcs, name: str, bases: Tuple[type], attrs: Dict[Any, Any]) -> "PlacementLogicMeta":
+    def __new__(mcs, name: str, bases: tuple[type], attrs: dict[Any, Any]) -> "PlacementLogicMeta":
         if "default" in attrs and isinstance(attrs["default"], Placement):
             attrs["default"] = int(attrs["default"])
 
@@ -24,7 +24,7 @@ class PlacementLogic(Choice, metaclass=PlacementLogicMeta):
     option_somewhere = Placement.somewhere
 
 class ChoiceMapMeta(AssembleOptions):
-    def __new__(mcs, name: str, bases: Tuple[type], attrs: Dict[Any, Any]) -> "ChoiceMapMeta":
+    def __new__(mcs, name: str, bases: tuple[type], attrs: dict[Any, Any]) -> "ChoiceMapMeta":
         if "choices" in attrs:
             for index, choice in enumerate(attrs["choices"].keys()):
                 option_name = "option_" + choice.replace(' ', '_')
@@ -35,9 +35,9 @@ class ChoiceMapMeta(AssembleOptions):
 
 class ChoiceMap(Choice, metaclass=ChoiceMapMeta):
     # TODO `default` doesn't do anything, default is always the first `choices` value. if uncommented it messes up the template file generation (caps mismatch)
-    choices: ClassVar[Dict[str, List[str]]]
+    choices: ClassVar[dict[str, list[str]]]
 
-    def get_selected_list(self) -> List[str]:
+    def get_selected_list(self) -> list[str]:
         for index, choice in enumerate(self.choices.keys()):
             if index == self.value:
                 return self.choices[choice]
@@ -55,8 +55,8 @@ class ElevatorTier(NamedRange):
         "one package (tiers 1-2)": 1,
         "two packages (tiers 1-4)": 2,
         "three packages (tiers 1-6)": 3,
-        "four packages (tiers 7-8)": 4,
-        "five packages (tier 9)": 5,
+        "four packages (tiers 1-8)": 4,
+        "five packages (tiers 1-9)": 5,
     }
 
 class ResourceSinkPoints(NamedRange):

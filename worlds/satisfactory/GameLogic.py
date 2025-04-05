@@ -1,4 +1,4 @@
-from typing import Tuple, Optional, Dict, Set, List
+from typing import Optional
 from dataclasses import dataclass
 from enum import IntEnum
 
@@ -11,7 +11,7 @@ class PowerInfrastructureLevel(IntEnum):
     def to_name(self):
         return "Power level: " + self.name
 
-liquids: Set[str] = {
+liquids: set[str] = {
     "Water",
     "Liquid Biofuel",
     "Crude Oil",
@@ -29,7 +29,7 @@ liquids: Set[str] = {
     "Dark Matter Residue"
 }
 
-radio_actives: Set[str] = {
+radio_actives: set[str] = {
     "Uranium",
     "Encased Uranium Cell",
     "Uranium Fuel Rod"
@@ -50,20 +50,20 @@ class Recipe():
     """
     name: str
     building: str
-    inputs: Tuple[str, ...]
+    inputs: tuple[str, ...]
     minimal_belt_speed: int
     handcraftable: bool
     implicitly_unlocked: bool
     """No explicit location/item is needed to unlock this recipe, you have access as soon as dependencies are met (ex. Water, Leaves, tutorial starting items)"""
-    additional_outputs: Tuple[str, ...]
+    additional_outputs: tuple[str, ...]
     minimal_tier: int
 
     needs_pipes: bool
     is_radio_active: bool
 
-    def __init__(self, name: str, building: Optional[str] = None, inputs: Optional[Tuple[str, ...]] = None,
+    def __init__(self, name: str, building: Optional[str] = None, inputs: Optional[tuple[str, ...]] = None,
             minimal_belt_speed: int = 1, handcraftable: bool = False, implicitly_unlocked: bool = False,
-            additional_outputs: Optional[Tuple[str, ...]] = None, minimal_tier: Optional[int] = 1):
+            additional_outputs: Optional[tuple[str, ...]] = None, minimal_tier: Optional[int] = 1):
         self.name = "Recipe: " + name
         self.building = building
         self.inputs = inputs
@@ -73,7 +73,7 @@ class Recipe():
         self.additional_outputs = additional_outputs
         self.minimal_tier = minimal_tier
 
-        all_parts: List[str] = [name]
+        all_parts: list[str] = [name]
         if inputs:
             all_parts += inputs
         if additional_outputs:
@@ -86,7 +86,7 @@ class Building(Recipe):
     power_requirement: Optional[PowerInfrastructureLevel]
     can_produce: bool
 
-    def __init__(self, name: str, inputs: Optional[Tuple[str, ...]] = None,
+    def __init__(self, name: str, inputs: Optional[tuple[str, ...]] = None,
             power_requirement: Optional[PowerInfrastructureLevel] = None, can_produce: bool = True,
             implicitly_unlocked: bool = False):
         super().__init__(name, None, inputs, handcraftable=True, implicitly_unlocked=implicitly_unlocked)
@@ -98,13 +98,13 @@ class Building(Recipe):
 
 class MamNode():
     name: str
-    unlock_cost: Dict[str, int]
+    unlock_cost: dict[str, int]
     """All game items must be submitted to purchase this MamNode"""
-    depends_on: Tuple[str, ...]
+    depends_on: tuple[str, ...]
     """At least one of these prerequisite MamNodes must be unlocked to purchase this MamNode"""
     minimal_tier: Optional[int]
 
-    def __init__(self, name: str, unlock_cost: Dict[str, int], depends_on: Tuple[str, ...],
+    def __init__(self, name: str, unlock_cost: dict[str, int], depends_on: tuple[str, ...],
                  minimal_tier: Optional[int] = 1):
         self.name = name
         self.unlock_cost = unlock_cost
@@ -113,11 +113,11 @@ class MamNode():
 
 
 class MamTree():
-    access_items: Tuple[str, ...]
+    access_items: tuple[str, ...]
     """At least one of these game items must enter the player inventory for this MamTree to be available"""
-    nodes: Tuple[MamNode, ...]
+    nodes: tuple[MamNode, ...]
 
-    def __init__(self, access_items: Tuple[str, ...], nodes: Tuple[MamNode, ...]):
+    def __init__(self, access_items: tuple[str, ...], nodes: tuple[MamNode, ...]):
         self.access_items = access_items
         self.nodes = nodes
 
@@ -134,7 +134,7 @@ class DropPodData:
 
 
 class GameLogic:
-    recipes: Dict[str, Tuple[Recipe, ...]] = {
+    recipes: dict[str, tuple[Recipe, ...]] = {
         # This Dict should only contain items that are used somewhere in a logic chain
 
         # Exploration Items
@@ -499,7 +499,7 @@ class GameLogic:
         "Alien DNA Capsule": (
             Recipe("Alien DNA Capsule", "Constructor", ("Alien Protein", ), handcraftable=True), ),
         "Black Powder": (
-            Recipe("Black Powder", "Assembler", ("Coal", "Sulfur"), handcraftable=True), 
+            Recipe("Black Powder", "Equipment Workshop", ("Coal", "Sulfur"), handcraftable=True), 
             Recipe("Fine Black Powder", "Assembler", ("Sulfur", "Compacted Coal"))),
         "Smokeless Powder": (
             Recipe("Smokeless Powder", "Refinery", ("Black Powder", "Heavy Oil Residue")), ),
@@ -579,7 +579,7 @@ class GameLogic:
 #1.0
     }
 
-    buildings: Dict[str, Building] = {
+    buildings: dict[str, Building] = {
         "Constructor": Building("Constructor", ("Reinforced Iron Plate", "Cable"), PowerInfrastructureLevel.Basic, implicitly_unlocked=True),
         "Assembler": Building("Assembler", ("Reinforced Iron Plate", "Rotor", "Cable"), PowerInfrastructureLevel.Basic),
         "Manufacturer": Building("Manufacturer", ("Motor", "Heavy Modular Frame", "Cable", "Plastic"), PowerInfrastructureLevel.Advanced),
@@ -632,13 +632,13 @@ class GameLogic:
 #1.0
     }
 
-    handcraftable_recipes: Dict[str, List[Recipe]] = {}
+    handcraftable_recipes: dict[str, list[Recipe]] = {}
     for part, recipes_per_part in recipes.items():
         for recipe in recipes_per_part:
             if recipe.handcraftable:
                 handcraftable_recipes.setdefault(part, list()).append(recipe)
 
-    implicitly_unlocked_recipes: Dict[str, Recipe] = { 
+    implicitly_unlocked_recipes: dict[str, Recipe] = { 
         recipe.name: recipe 
         for recipes_per_part in recipes.values()
         for recipe in recipes_per_part if recipe.implicitly_unlocked 
@@ -648,7 +648,7 @@ class GameLogic:
         for building in buildings.values() if building.implicitly_unlocked 
     })
 
-    requirement_per_powerlevel: Dict[PowerInfrastructureLevel, Tuple[Recipe, ...]] = {
+    requirement_per_powerlevel: dict[PowerInfrastructureLevel, tuple[Recipe, ...]] = {
         # no need to polute the logic by including higher level recipes based on previus recipes
         PowerInfrastructureLevel.Basic: (
             Recipe("Biomass Power (Biomass)", "Biomass Burner", ("Biomass", ), implicitly_unlocked=True),
@@ -678,7 +678,7 @@ class GameLogic:
 
     slots_per_milestone: int = 8
 
-    hub_layout: Tuple[Tuple[Dict[str, int], ...], ...] = (
+    hub_layout: tuple[tuple[dict[str, int], ...], ...] = (
         # Regenerate via /Script/Engine.Blueprint'/Archipelago/Debug/CC_BuildHubData.CC_BuildHubData'
         ( # Tier 1
             {"Concrete":200, "Iron Plate":100, "Iron Rod":100, }, # Schematic: Base Building (Schematic_1-1_C)
@@ -744,7 +744,7 @@ class GameLogic:
     )
 
     # Values from /Game/FactoryGame/Schematics/Progression/BP_GamePhaseManager.BP_GamePhaseManager
-    space_elevator_tiers: Tuple[Dict[str, int], ...] = (
+    space_elevator_tiers: tuple[dict[str, int], ...] = (
         { "Smart Plating": 50 },
         { "Smart Plating": 500, "Versatile Framework": 500, "Automated Wiring": 100 },
         { "Versatile Framework": 2500, "Modular Engine": 500, "Adaptive Control Unit": 100 },
@@ -754,7 +754,7 @@ class GameLogic:
 
     # Do not regenerate as format got changed
     # Regenerate via /Script/Engine.Blueprint'/Archipelago/Debug/CC_BuildMamData.CC_BuildMamData'
-    man_trees: Dict[str, MamTree] = {
+    man_trees: dict[str, MamTree] = {
         "Alien Organisms": MamTree(("Hog Remains", "Plasma Spitter Remains", "Stinger Remains", "Hatcher Remains"), ( # Alien Organisms (BPD_ResearchTree_AlienOrganisms_C)
             MamNode("Inflated Pocket Dimension", {"Alien Protein":3,"Cable":1000,}, depends_on=("Bio-Organic Properties", )), #(Research_AOrgans_3_C)
             MamNode("Hostile Organism Detection", {"Alien DNA Capsule":10,"Crystal Oscillator":5,"High-Speed Connector":5,}, depends_on=("Bio-Organic Properties", )), #(Research_AOrganisms_2_C)
@@ -869,7 +869,7 @@ class GameLogic:
         ))
     }
 
-    drop_pods: List[DropPodData] = [
+    drop_pods: list[DropPodData] = [
         # Regenerate via /Script/Engine.Blueprint'/Archipelago/Debug/CC_BuildDropPodLocations.CC_BuildDropPodLocations' 
         DropPodData(-29068, -22640, 17384,  "Encased Industrial Beam", 0), # Unlocks with: 4 x Desc_SteelPlateReinforced_C
         DropPodData(-33340, 5176,   23519,  "Crystal Oscillator", 0), # Unlocks with: 5 x Desc_CrystalOscillator_C

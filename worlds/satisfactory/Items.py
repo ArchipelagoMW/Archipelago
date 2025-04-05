@@ -1,16 +1,14 @@
 from random import Random
-from typing import ClassVar, Dict, Set, List, Tuple, Optional
+from typing import ClassVar, Optional
 from BaseClasses import Item, ItemClassification as C, MultiWorld
 from .GameLogic import GameLogic
 from .Options import SatisfactoryOptions
 from .ItemData import ItemData, ItemGroups as G
 from .Options import SatisfactoryOptions
 from .CriticalPathCalculator import CriticalPathCalculator
-import logging
-
 
 class Items:
-    item_data: ClassVar[Dict[str, ItemData]] = {
+    item_data: ClassVar[dict[str, ItemData]] = {
         # Resource Bundles
         "Bundle: Adaptive Control Unit": ItemData(G.Parts, 1338000),
         "Bundle: AI Limiter": ItemData(G.Parts, 1338001),
@@ -167,7 +165,7 @@ class Items:
         "Bundle: Gas Nobelisk": ItemData(G.Ammo, 1338163),
         "Bundle: Hazmat Suit": ItemData(G.Equipment, 1338164),
         "Bundle: Homing Rifle Ammo": ItemData(G.Ammo, 1338165),
-        "Bundle: Hover Pack": ItemData(G.Equipment, 1338166),
+        "Bundle: Hoverpack": ItemData(G.Equipment, 1338166),
         "Bundle: Iron Rebar": ItemData(G.Ammo, 1338167),
         "Bundle: Jetpack": ItemData(G.Equipment, 1338168),
         "Bundle: Medicinal Inhaler": ItemData(G.Ammo, 1338169),
@@ -195,7 +193,14 @@ class Items:
         "Expanded Toolbelt": ItemData(G.Upgrades, 1338190, C.useful, 5),
         "Dimensional Depot upload from inventory": ItemData(G.Upgrades, 1338191, C.useful),
 
-        #1338191 - 1338199 Reserved for future equipment/ammo
+        # added in 1.1
+        "Recipe: Hoverpack": ItemData(G.Recipe, 1338192, C.useful),
+        "Bundle: Iodine-Infused Filter": ItemData(G.Ammo, 1338193),
+        "Recipe: Jetpack": ItemData(G.Recipe, 1338194, C.useful),
+        "Recipe: Nobelisk Detonator": ItemData(G.Recipe, 1338195, C.progression),
+        "Recipe: Portable Miner": ItemData(G.Equipment, 1338196, C.progression), 
+
+        #1338197 - 1338199 Reserved for future equipment/ammo
 
         #1338200+ Recipes / buildings / schematics
         "Recipe: Reinforced Iron Plate": ItemData(G.Recipe, 1338200, C.progression),
@@ -354,7 +359,7 @@ class Items:
         "Recipe: Plutonium Fuel Rod": ItemData(G.Recipe, 1338353),
         "Recipe: Plutonium Fuel Unit": ItemData(G.Recipe, 1338354),
         "Recipe: Gas Filter": ItemData(G.Recipe, 1338355, C.progression),
-        "Recipe: Iodine Infused Filter": ItemData(G.Recipe, 1338356, C.progression),
+        "Recipe: Iodine-Infused Filter": ItemData(G.Recipe, 1338356, C.progression),
         "Recipe: Assembly Director System": ItemData(G.Recipe, 1338357, C.progression),
         "Recipe: Magnetic Field Generator": ItemData(G.Recipe, 1338358, C.progression),
         "Recipe: Copper Powder": ItemData(G.Recipe, 1338359, C.progression),
@@ -374,7 +379,7 @@ class Items:
         "Recipe: Biomass (Wood)": ItemData(G.Recipe, 1338373, C.progression),
         "Recipe: Biomass (Mycelia)": ItemData(G.Recipe, 1338374, C.progression),
         "Recipe: Biomass (Alien Protein)": ItemData(G.Recipe, 1338375, C.progression),
-        "Recipe: Turbo Rifle Ammo (Packaged)": ItemData(G.Recipe, 1338376),
+        "Recipe: Turbo Rifle Ammo (Packaged)": ItemData(G.Recipe, 1338376, C.useful),
         "Recipe: Fabric": ItemData(G.Recipe, 1338377, C.progression),
         "Recipe: Polyester Fabric": ItemData(G.Recipe, 1338378, C.progression),
         "Recipe: Solid Biofuel": ItemData(G.Recipe, 1338379, C.progression),
@@ -402,15 +407,15 @@ class Items:
         "Recipe: Black Powder": ItemData(G.Recipe, 1338401, C.progression),
         "Recipe: Blade Runners": ItemData(G.Recipe, 1338402, C.useful),
         "Recipe: Chainsaw": ItemData(G.Recipe, 1338403, C.useful),
-        "Recipe: Cluster Nobelisk":  ItemData(G.Recipe, 1338404),
-        "Recipe: Explosive Rebar":  ItemData(G.Recipe, 1338405),
+        "Recipe: Cluster Nobelisk":  ItemData(G.Recipe, 1338404, C.useful),
+        "Recipe: Explosive Rebar":  ItemData(G.Recipe, 1338405, C.useful),
         "Recipe: Factory Cart": ItemData(G.Recipe, 1338406, C.useful),
-        "Recipe: Gas Nobelisk":  ItemData(G.Recipe, 1338407),
+        "Recipe: Gas Nobelisk":  ItemData(G.Recipe, 1338407, C.useful),
         "Recipe: Golden Factory Cart":  ItemData(G.Recipe, 1338408),
-        "Recipe: Homing Rifle Ammo": ItemData(G.Recipe, 1338409),
+        "Recipe: Homing Rifle Ammo": ItemData(G.Recipe, 1338409, C.useful),
         "Recipe: Iron Rebar":  ItemData(G.Recipe, 1338410, C.progression),
         "Recipe: Nobelisk":  ItemData(G.Recipe, 1338411, C.progression),
-        "Recipe: Nuke Nobelisk": ItemData(G.Recipe, 1338412),
+        "Recipe: Nuke Nobelisk": ItemData(G.Recipe, 1338412, C.useful),
         "Recipe: Nutritional Inhaler":  ItemData(G.Recipe, 1338413, C.useful),
         "Recipe: Object Scanner":  ItemData(G.Recipe, 1338414, C.progression),
         "Recipe: Parachute":  ItemData(G.Recipe, 1338415, C.useful),
@@ -418,10 +423,10 @@ class Items:
         "Recipe: Rebar Gun":  ItemData(G.Recipe, 1338417, C.useful),
         "Recipe: Rifle": ItemData(G.Recipe, 1338418, C.useful),
         "Recipe: Rifle Ammo":  ItemData(G.Recipe, 1338419, C.progression),
-        "Recipe: Shatter Rebar":  ItemData(G.Recipe, 1338420),
-        "Recipe: Stun Rebar":  ItemData(G.Recipe, 1338421),
+        "Recipe: Shatter Rebar":  ItemData(G.Recipe, 1338420, C.useful),
+        "Recipe: Stun Rebar":  ItemData(G.Recipe, 1338421, C.useful),
         "Recipe: Therapeutic Inhaler": ItemData(G.Recipe, 1338422, C.useful),
-        "Recipe: Turbo Rifle Ammo":  ItemData(G.Recipe, 1338423),
+        "Recipe: Turbo Rifle Ammo":  ItemData(G.Recipe, 1338423, C.useful),
         "Recipe: Vitamin Inhaler":  ItemData(G.Recipe, 1338424, C.useful),
         "Recipe: Xeno-Basher": ItemData(G.Recipe, 1338425, C.useful),
         "Recipe: Xeno-Zapper":  ItemData(G.Recipe, 1338426, C.useful),
@@ -442,7 +447,7 @@ class Items:
         "Recipe: Turbo Diamonds": ItemData(G.Recipe, 1338439, C.progression),
         "Recipe: Time Crystal": ItemData(G.Recipe, 1338440, C.progression),
         "Recipe: Superposition Oscillator": ItemData(G.Recipe, 1338441, C.progression),
-        #"Recipe: Excited Photonic Matter": ItemData(G.Recipe, 1338442, C.progression), should probably be unlocked with converter
+        #"Recipe: Excited Photonic Matter": ItemData(G.Recipe, 1338442, C.progression), unlocked with converter
         "Recipe: Rocket Fuel": ItemData(G.Recipe, 1338443, C.progression),
         "Recipe: Nitro Rocket Fuel": ItemData(G.Recipe, 1338444, C.progression),
         "Recipe: Ionized Fuel": ItemData(G.Recipe, 1338445, C.useful),
@@ -552,17 +557,11 @@ class Items:
         "Building: Label Sign Bundle": ItemData(G.Building | G.Signs, 1338678, C.filler, 0),
         "Building: Display Sign Bundle": ItemData(G.Building | G.Signs, 1338679, C.filler, 0),
         "Building: Billboard Set": ItemData(G.Building | G.Signs, 1338680, C.filler, 0),
-        "Building: Walls Metal": ItemData(G.Building | G.Walls, 1338681, C.filler, 0),
+        #1338681 Moved to cosmetics
         "Building: Metal Pillar": ItemData(G.Pilars, 1338682, C.filler, 0),
         "Building: Concrete Pillar": ItemData(G.Pilars, 1338683, C.filler, 0),
         "Building: Frame Pillar": ItemData(G.Pilars, 1338684, C.filler, 0),
-        "Building: Walls Concrete": ItemData(G.Building | G.Walls, 1338685, C.filler, 0),
-        #"Building: Big Metal Pillar": ItemData(G.Pilars, 1338686, C.filler, 0),
-        #"Building: Big Concrete Pillar": ItemData(G.Pilars, 1338687, C.filler, 0),
-        #"Building: Big Frame Pillar": ItemData(G.Pilars, 1338688, C.filler, 0),
-        #"Building: Beam Support": ItemData(G.Beams, 1338689, C.filler, 0),
-        #"Building: Beam Connector": ItemData(G.Beams, 1338690, C.filler, 0),
-        #"Building: Beam Connector Double": ItemData(G.Beams, 1338691, C.filler, 0),
+        #1338685 - 1338691 Moved to cosmetics
         "Building: Foundation": ItemData(G.Building | G.Foundations | G.AlwaysUseful, 1338692, C.progression),
         "Building: Half Foundation": ItemData(G.Foundations, 1338693, C.filler, 0),
         "Building: Corner Ramp Pack": ItemData(G.Foundations, 1338694, C.filler, 0),
@@ -570,7 +569,7 @@ class Items:
         "Building: Inverted Corner Ramp Pack": ItemData(G.Foundations, 1338696, C.filler, 0),
         "Building: Quarter Pipes Pack": ItemData(G.Foundations, 1338697, C.filler, 0),
         "Building: Quarter Pipe Extensions Pack": ItemData(G.Foundations, 1338698, C.filler, 0),
-        "Building: Frame foundation": ItemData(G.Foundations, 1338699, C.filler, 0),
+        "Building: Frame Foundation": ItemData(G.Foundations, 1338699, C.filler, 0),
         "Building: Wall Outlet Mk.1": ItemData(G.Building, 1338700, C.useful),
         "Building: Wall Outlet Mk.2": ItemData(G.Building, 1338701, C.useful),
         "Building: Wall Outlet Mk.3": ItemData(G.Building, 1338702, C.useful),
@@ -634,7 +633,7 @@ class Items:
         "Customizer: Caterium Paint Finish": ItemData(G.Customizer, 1338773, C.filler, 0), 
 # 1.0
 
-        #1338773 - 1338799 Reserved for buildings
+        #1338774 - 1338799 Reserved for buildings
 
         # Transports 1338800 - 1338898
         # Drones (including Drone)
@@ -689,14 +688,14 @@ class Items:
 
     non_unique_item_categories: ClassVar[G] = G.Parts | G.Equipment | G.Ammo | G.Trap | G.Upgrades
     pool_item_categories: ClassVar[G] = G.Recipe | G.Building | G.Equipment | G.Transport | G.Upgrades
-    item_names_and_ids: ClassVar[Dict[str, int]] = {name: item_data.code for name, item_data in item_data.items()}
-    filler_items: ClassVar[Tuple[str, ...]] = tuple(item for item, details in item_data.items() 
+    item_names_and_ids: ClassVar[dict[str, int]] = {name: item_data.code for name, item_data in item_data.items()}
+    filler_items: ClassVar[tuple[str, ...]] = tuple(item for item, details in item_data.items() 
                                                     if details.category & (G.Parts | G.Ammo))
 
 
     @classmethod
-    def get_item_names_per_category(cls) -> Dict[str, Set[str]]:
-        categories: Dict[str, Set[str]] = {}
+    def get_item_names_per_category(cls) -> dict[str, set[str]]:
+        categories: dict[str, set[str]] = {}
 
         for name, data in cls.item_data.items():
             for category in data.category:
@@ -731,18 +730,18 @@ class Items:
         return Item(name, type, data.code, player)
 
 
-    def get_filler_item_name(self, filler_items: Tuple[str, ...], random: Random, options: SatisfactoryOptions) -> str:
+    def get_filler_item_name(self, filler_items: tuple[str, ...], random: Random, options: SatisfactoryOptions) -> str:
         trap_chance: int = options.trap_chance.value
-        enabled_traps: List[str] = options.trap_selection_override.value
+        enabled_traps: list[str] = options.trap_selection_override.value
 
         if enabled_traps and random.random() < (trap_chance / 100):
             return random.choice(enabled_traps)
         else:
-            return random.choice(self.filler_items)
+            return random.choice(filler_items)
 
 
-    def get_excluded_items(self, multiworld: MultiWorld, options: SatisfactoryOptions) -> Set[str]:
-        excluded_items: Set[str] = set()
+    def get_excluded_items(self, multiworld: MultiWorld, options: SatisfactoryOptions) -> set[str]:
+        excluded_items: set[str] = set()
         excluded_items.update("Bundle: "+ part for part in self.critical_path.parts_to_exclude)
         excluded_items.update(recipe for recipe in self.critical_path.recipes_to_exclude)
         excluded_items.update("Building: "+ building for building in self.critical_path.buildings_to_exclude)
@@ -758,10 +757,10 @@ class Items:
 
 
     def build_item_pool(self, random: Random, multiworld: MultiWorld, 
-                        options: SatisfactoryOptions, number_of_locations: int) -> List[Item]:
-        excluded_from_pool: Set[str] = self.get_excluded_items(multiworld, options) \
+                        options: SatisfactoryOptions, number_of_locations: int) -> list[Item]:
+        excluded_from_pool: set[str] = self.get_excluded_items(multiworld, options) \
                                            .union(self.logic.implicitly_unlocked_recipes.keys())
-        pool: List[Item] = []
+        pool: list[Item] = []
 
         for name, data in self.item_data.items():
             if data.count > 0 \

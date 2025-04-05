@@ -1,12 +1,12 @@
-from typing import List, Optional, Callable, Tuple, Dict, Iterable, ClassVar
+from typing import ClassVar, Optional
+from collections.abc import Iterable, Callable
+from math import ceil, floor
 from BaseClasses import CollectionState
 from .GameLogic import GameLogic, Recipe, Building, PowerInfrastructureLevel, DropPodData
 from .StateLogic import StateLogic, EventId, part_event_prefix, building_event_prefix
 from .Items import Items
 from .Options import SatisfactoryOptions
 from .CriticalPathCalculator import CriticalPathCalculator
-from math import ceil, floor
-
 
 class LocationData():
     __slots__ = ("region", "name", "event_name", "code", "non_progression", "rule")
@@ -29,9 +29,9 @@ class LocationData():
 
 class Part(LocationData):
     @staticmethod
-    def get_parts(state_logic: StateLogic, recipes: Tuple[Recipe, ...], name: str, 
-                                                                    final_elevator_tier: int) -> List[LocationData]:
-        recipes_per_region: Dict[str, List[Recipe]] = {}
+    def get_parts(state_logic: StateLogic, recipes: tuple[Recipe, ...], name: str, 
+                                                                    final_elevator_tier: int) -> list[LocationData]:
+        recipes_per_region: dict[str, list[Recipe]] = {}
 
         for recipe in recipes:
             if recipe.minimal_tier > final_elevator_tier:
@@ -174,7 +174,7 @@ class Locations():
         self.critical_path = critical_path
 
 
-    def get_base_location_table(self, max_tier: int) -> List[LocationData]:
+    def get_base_location_table(self, max_tier: int) -> list[LocationData]:
         all_locations = [
             MamSlot("Alien Organisms", "Inflated Pocket Dimension", 1338500),
             MamSlot("Alien Organisms", "Hostile Organism Detection", 1338501),
@@ -304,7 +304,7 @@ class Locations():
 
         return all_locations
 
-    def get_locations_for_data_package(self) -> Dict[str, int]:
+    def get_locations_for_data_package(self) -> dict[str, int]:
         "Must include all possible location names and their id's"
 
         # 1338000 - 1338499 - Milestones
@@ -320,7 +320,7 @@ class Locations():
 
         return {location.name: location.code for location in location_table}
 
-    def get_locations(self) -> List[LocationData]:
+    def get_locations(self) -> list[LocationData]:
         "Only return location used in this game based on settings"
 
         if not self.game_logic or not self.options or not self.state_logic or not self.items:
@@ -335,8 +335,8 @@ class Locations():
 
         return location_table
 
-    def get_hub_locations(self, for_data_package: bool, max_tier: int) -> List[LocationData]:
-        location_table: List[LocationData] = []
+    def get_hub_locations(self, for_data_package: bool, max_tier: int) -> list[LocationData]:
+        location_table: list[LocationData] = []
 
         number_of_slots_per_milestone_for_game: int
         if (for_data_package):
@@ -364,8 +364,8 @@ class Locations():
                 
         return location_table
 
-    def get_logical_event_locations(self, final_elevator_tier: int) -> List[LocationData]:
-        location_table: List[LocationData] = []
+    def get_logical_event_locations(self, final_elevator_tier: int) -> list[LocationData]:
+        location_table: list[LocationData] = []
 
         # for performance plan is to upfront calculated everything we need
         # and than create one massive state.has_all for each logical gate (hub tiers, elevator tiers)
@@ -391,17 +391,17 @@ class Locations():
         return location_table
     
     def get_hard_drive_locations(self, for_data_package: bool, max_tier: int, available_parts: set[str]) \
-                                                                                                -> List[LocationData]:
-        hard_drive_locations: List[HardDrive] = []
+                                                                                                -> list[LocationData]:
+        hard_drive_locations: list[HardDrive] = []
 
         bucket_size: int
-        drop_pod_data: List[DropPodData]
+        drop_pod_data: list[DropPodData]
         if for_data_package:
             bucket_size = 0
             drop_pod_data = []
         else:
             bucket_size = floor((self.drop_pod_location_id_end - self.drop_pod_location_id_start) / max_tier)
-            drop_pod_data = self.game_logic.drop_pods
+            drop_pod_data: list[DropPodData] = self.game_logic.drop_pods
             # sort, easily obtainable first, should be deterministic
             drop_pod_data.sort(key = lambda data: ("!" if data.item == None else data.item) + str(data.x - data.z))
 

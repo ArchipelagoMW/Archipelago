@@ -1,5 +1,5 @@
 from enum import IntFlag
-from typing import NamedTuple, Set
+from typing import NamedTuple
 from BaseClasses import ItemClassification
 
 class ItemGroups(IntFlag):

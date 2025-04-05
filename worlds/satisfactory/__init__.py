@@ -1,4 +1,4 @@
-from typing import Dict, List, Set, TextIO, ClassVar
+from typing import TextIO, ClassVar
 from BaseClasses import Item, ItemClassification, CollectionState
 from .GameLogic import GameLogic
 from .Items import Items
@@ -52,13 +52,13 @@ class SatisfactoryWorld(World):
         if not self.options.trap_selection_override.value:
             self.options.trap_selection_override.value = self.options.trap_selection_preset.get_selected_list()
 
-        starting_inventory: List[str] = self.options.starting_inventory_preset.get_selected_list()
+        starting_inventory: list[str] = self.options.starting_inventory_preset.get_selected_list()
         for item_name in starting_inventory:
             self.push_precollected(item_name)
 
 
     def create_regions(self) -> None:
-        locations: List[LocationData] = \
+        locations: list[LocationData] = \
             Locations(self.game_logic, self.options, self.state_logic, self.items, self.critical_path).get_locations()
         create_regions_and_return_locations(
             self.multiworld, self.options, self.player, self.game_logic, self.state_logic, self.critical_path,
@@ -76,8 +76,7 @@ class SatisfactoryWorld(World):
     def set_rules(self) -> None:
         resource_sink_goal: bool = "AWESOME Sink Points" in self.options.goal_selection
 
-        required_parts: Set[str] = \
-            set(self.game_logic.space_elevator_tiers[self.options.final_elevator_package.value - 1].keys())
+        required_parts = set(self.game_logic.space_elevator_tiers[self.options.final_elevator_package.value - 1].keys())
 
         if resource_sink_goal:
             required_parts.union(self.game_logic.buildings["AWESOME Sink"].inputs)
@@ -100,8 +99,8 @@ class SatisfactoryWorld(World):
         return change
 
 
-    def fill_slot_data(self) -> Dict[str, object]:
-        slot_hub_layout: List[List[Dict[str, int]]] = []
+    def fill_slot_data(self) -> dict[str, object]:
+        slot_hub_layout: list[list[dict[str, int]]] = []
 
         for tier, milestones in enumerate(self.game_logic.hub_layout, 1):
             slot_hub_layout.append([])
