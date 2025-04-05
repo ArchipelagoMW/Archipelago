@@ -1,0 +1,30 @@
+<VisualChoice>:
+    id: this
+    text: text
+    MDButtonText:
+        id: text
+        text: this.option.get_option_name(this.option.default if this.option.default != "random" else list(this.option.options.values())[0])
+        theme_text_color: "Primary"
+
+<VisualFreeText>:
+    multiline: False
+    font_size: "15sp"
+    text: self.option.default if isinstance(self.option.default, str) else ""
+
+
+<VisualTextChoice>:
+    id: this
+    orientation: "horizontal"
+    spacing: "5dp"
+    padding: (0, 0, "10dp", 0)
+
+<VisualToggle>:
+    id: this
+    button: button
+    MDIconButton:
+        id: button
+        icon: "checkbox-outline" if this.option.default else "checkbox-blank-outline"
+
+
+ContainerLayout:
+    md_bg_color: app.theme_cls.backgroundColor

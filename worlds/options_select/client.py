@@ -1,11 +1,11 @@
-from kvui import (MDApp, ScrollBox, MainLayout, ContainerLayout, dp, Widget, MDBoxLayout, TooltipLabel, ToolTip,
+from kvui import (ThemedApp, ScrollBox, MainLayout, ContainerLayout, dp, Widget, MDBoxLayout, TooltipLabel, ToolTip,
                   MDLabel, ToggleButton)
 from kivy.animation import Animation
-from kivy.graphics import Rectangle, Color
 from kivy.uix.behaviors.button import ButtonBehavior
 from kivymd.uix.behaviors import RotateBehavior
 from kivymd.uix.anchorlayout import MDAnchorLayout
 from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelContent, MDExpansionPanelHeader
+from kivymd.uix.label import MDIcon
 from kivymd.uix.list import MDListItem, MDListItemTrailingIcon, MDListItemSupportingText
 from kivymd.uix.slider import MDSlider, MDSliderHandle, MDSliderValueLabel
 from kivymd.uix.menu import MDDropdownMenu
@@ -13,7 +13,8 @@ from kivymd.uix.button import MDButton, MDButtonText, MDIconButton
 from kivymd.uix.textfield import MDTextField, MDTextFieldHintText
 from kivymd.uix.dialog import MDDialog, MDDialogHeadlineText, MDDialogContentContainer, MDDialogSupportingText
 from kivymd.uix.divider import MDDivider
-from kivymd.uix.floatlayout import MDFloatLayout
+from kivy.lang.builder import Builder
+from kivy.properties import ObjectProperty
 from kivy.metrics import sp
 from textwrap import dedent
 from copy import deepcopy
@@ -66,7 +67,76 @@ class TrailingPressedIconButton(
     pass
 
 
-class YamlCreator(MDApp):
+class VisualRange(MDBoxLayout):
+    option: typing.Type[Range]
+    name: str
+
+    def __init__(self, *args, option: typing.Type[Range], name: str, **kwargs):
+        self.option = option
+        self.name = name
+        super().__init__(args, kwargs)
+
+
+class VisualNamedRange(MDBoxLayout):
+    option: typing.Type[NamedRange]
+    name: str
+
+    def __init__(self, *args, option: typing.Type[NamedRange], name: str, **kwargs):
+        self.option = option
+        self.name = name
+        super().__init__(args, kwargs)
+
+
+class VisualChoice(MDButton):
+    option: typing.Type[Choice]
+    name: str
+    text: MDButtonText = ObjectProperty(None)
+
+    def __init__(self, *args, option: typing.Type[Choice], name: str, **kwargs):
+        self.option = option
+        self.name = name
+        super().__init__(args, kwargs)
+
+
+class VisualFreeText(MDTextField):
+    option: typing.Type[FreeText] | typing.Type[TextChoice]
+    name: str
+
+    def __init__(self, *args, option: typing.Type[FreeText]| typing.Type[TextChoice], name: str, **kwargs):
+        self.option = option
+        self.name = name
+        super().__init__(args, kwargs)
+
+
+class VisualTextChoice(MDBoxLayout):
+    option: typing.Type[TextChoice]
+    name: str
+    choice: VisualChoice = ObjectProperty(None)
+    text: VisualFreeText = ObjectProperty(None)
+
+    def __init__(self, *args, option: typing.Type[TextChoice], name: str, **kwargs):
+        self.option = option
+        self.name = name
+        super(MDBoxLayout, self).__init__(args, kwargs)
+        self.choice = VisualChoice(option=self.option, name=self.name)
+        self.text = VisualFreeText(option=self.option, name=self.name)
+        self.add_widget(self.choice)
+        self.add_widget(self.text)
+
+
+class VisualToggle(MDBoxLayout):
+    button: MDIconButton = ObjectProperty(None)
+    option: typing.Type[Toggle]
+    name: str
+
+    def __init__(self, *args, option: typing.Type[Toggle], name: str, **kwargs):
+        self.option = option
+        self.name = name
+        super().__init__(args, kwargs)
+
+
+
+class YamlCreator(ThemedApp):
     container: ContainerLayout
     main_layout: MainLayout
     scrollbox: ScrollBox
@@ -159,9 +229,8 @@ class YamlCreator(MDApp):
         self.options[name] = option.default
         return box
 
-    def create_free_text(self, option: typing.Union[typing.Type[FreeText], typing.Type[TextChoice]], name: str):
-        text = MDTextField(multiline=False, font_size=sp(11),
-                           text=option.default if isinstance(option.default, str) else "")
+    def create_free_text(self, option: typing.Type[FreeText] | typing.Type[TextChoice], name: str):
+        text = VisualFreeText(option=option, name=name)
 
         def set_value(instance):
             self.options[name] = instance.text
@@ -170,10 +239,8 @@ class YamlCreator(MDApp):
         return text
 
     def create_choice(self, option: typing.Type[Choice], name: str):
-        def set_button_text(button: MDButton, text: str):
-            for child in button.children:
-                if isinstance(child, MDButtonText):
-                    child.text = text
+        def set_button_text(button: VisualChoice, text: str):
+            button.text.text = text
 
         def set_value(text, value):
             set_button_text(main_button, text)
@@ -185,8 +252,7 @@ class YamlCreator(MDApp):
             dropdown.open()
 
         default_random = option.default == "random"
-        default = option.default if not default_random else list(option.options.values())[0]
-        main_button = MDButton(MDButtonText(text=option.get_option_name(default)))
+        main_button = VisualChoice(option=option, name=name)
         main_button.bind(on_release=open)
 
         items = [
@@ -198,7 +264,6 @@ class YamlCreator(MDApp):
         ]
         dropdown = MDDropdownMenu(caller=main_button, items=items)
         self.options[name] = option.name_lookup[option.default] if not default_random else option.default
-        dropdown.bind(on_select=lambda instance, x: setattr(main_button, '_text', x))
         return main_button
 
     def create_text_choice(self, option: typing.Type[TextChoice], name: str):
@@ -207,31 +272,27 @@ class YamlCreator(MDApp):
                 if isinstance(child, MDButtonText):
                     child.text = text
 
-        choice_button = self.create_choice(option, name)
-        text = self.create_free_text(option, name)
-        box = MDBoxLayout(orientation="vertical")
-        box.add_widget(choice_button)
-        box.add_widget(text)
+        box = VisualTextChoice(option=option, name=name)
 
         def set_value(instance):
-            set_button_text(choice_button, "Custom")
+            set_button_text(box.choice, "Custom")
             self.options[name] = instance.text
 
-        text.bind(on_text_validate=set_value)
+        box.text.bind(on_text_validate=set_value)
         return box
 
     def create_toggle(self, option: typing.Type[Toggle], name: str) -> Widget:
-        def set_value(instance: ToggleButton):
+        def set_value(instance: MDIconButton):
             if instance.icon == "checkbox-outline":
                 instance.icon = "checkbox-blank-outline"
             else:
                 instance.icon = "checkbox-outline"
             self.options[name] = bool(not self.options[name])
 
-        def_icon = "checkbox-outline" if option.default else "checkbox-blank-outline"
-        checkbox = MDIconButton(icon=def_icon)
-        checkbox.bind(on_release=set_value)
         self.options[name] = bool(option.default)
+        checkbox = VisualToggle(option=option, name=name)
+        checkbox.button.bind(on_release=set_value)
+
         return checkbox
 
     def create_popup(self, option: typing.Type[OptionList] | typing.Type[OptionSet], name: str,
@@ -357,7 +418,7 @@ class YamlCreator(MDApp):
         elif issubclass(option, FreeText):
             option_base.add_widget(self.create_free_text(option, name))
         elif issubclass(option, OptionList):
-            option_base.add_widget(self.create_option_set_list(option, name))
+            option_base.add_widget(self.create_option_set_list(option, name, world))
         elif issubclass(option, OptionSet):
             option_base.add_widget(self.create_option_set_list(option, name, world))
         else:
@@ -463,13 +524,9 @@ class YamlCreator(MDApp):
         ) if not panel.is_open else panel.set_chevron_up(chevron)
 
     def build(self):
-        from kvui import KivyJSONtoTextParser
-        text_colors = KivyJSONtoTextParser.TextColors()
-        self.theme_cls.theme_style = getattr(text_colors, "theme_style", "Dark")
-        self.theme_cls.primary_palette = getattr(text_colors, "primary_palette", "Green")
+        self.set_colors()
         self.options = {}
-        self.container = ContainerLayout()
-        self.container.md_bg_color = self.theme_cls.backgroundColor
+        self.container = Builder.load_file(Utils.local_path("data/optionscreator.kv"))
         self.main_layout = MainLayout(cols=2)
         self.container.add_widget(self.main_layout)
         self.scrollbox = ScrollBox(size_hint_x=None, width=dp(150))
