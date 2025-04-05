@@ -445,9 +445,9 @@ class SA2BWorld(World):
         hint_data[self.player] = er_hint_data
 
     @classmethod
-    def stage_fill_hook(cls, multiworld: MultiWorld, progitempool, usefulitempool, filleritempool, fill_locations):
+    def stage_fill_hook(cls, multiworld: MultiWorld, prog_item_pool, useful_item_pool, filler_item_pool, fill_locations):
         if multiworld.get_game_players("Sonic Adventure 2 Battle"):
-            progitempool.sort(
+            prog_item_pool.sort(
                 key=lambda item: 0 if (item.name != 'Emblem') else 1)
 
     def get_levels_per_gate(self) -> list:

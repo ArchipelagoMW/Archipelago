@@ -194,10 +194,7 @@ class MM2World(World):
         goal_location.place_locked_item(MM2Item("Victory", ItemClassification.progression, None, self.player))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
-    def fill_hook(self,
-                  progitempool: List["Item"],
-                  usefulitempool: List["Item"],
-                  filleritempool: List["Item"],
+    def fill_hook(self, prog_item_pool: List["Item"], useful_item_pool: List["Item"], filler_item_pool: List["Item"],
                   fill_locations: List["Location"]) -> None:
         # on a solo gen, fill can try to force Wily into sphere 2, but for most generations this is impossible
         # since MM2 can have a 2 item sphere 1, and 3 items are required for Wily
@@ -226,7 +223,7 @@ class MM2World(World):
             possible_rbm.append(0)  # Heat has 3 locations always, but might need 2 items logically
         if self.options.starting_robot_master.value in affected_rbm:
             rbm_names = list(map(lambda s: rbm_to_item[s], possible_rbm))
-            valid_second = [item for item in progitempool
+            valid_second = [item for item in prog_item_pool
                             if item.name in rbm_names
                             and item.player == self.player]
             placed_item = self.random.choice(valid_second)
@@ -234,7 +231,7 @@ class MM2World(World):
                             f" - Defeated")
             rbm_location = self.get_location(rbm_defeated)
             rbm_location.place_locked_item(placed_item)
-            progitempool.remove(placed_item)
+            prog_item_pool.remove(placed_item)
             fill_locations.remove(rbm_location)
             target_rbm = (placed_item.code & 0xF) - 1
             if self.options.strict_weakness or (self.options.random_weakness
@@ -243,7 +240,7 @@ class MM2World(World):
                 weaknesses = [weapon for weapon in range(1, 9)
                               if self.weapon_damage[weapon][target_rbm] >= minimum_weakness_requirement[weapon]]
                 weapons = list(map(lambda s: weapons_to_name[s], weaknesses))
-                valid_weapons = [item for item in progitempool
+                valid_weapons = [item for item in prog_item_pool
                                  if item.name in weapons
                                  and item.player == self.player]
                 placed_weapon = self.random.choice(valid_weapons)
@@ -251,7 +248,7 @@ class MM2World(World):
                                    if idx == 0x880101 + self.options.starting_robot_master.value)
                 weapon_location = self.get_location(weapon_name)
                 weapon_location.place_locked_item(placed_weapon)
-                progitempool.remove(placed_weapon)
+                prog_item_pool.remove(placed_weapon)
                 fill_locations.remove(weapon_location)
 
     def generate_output(self, output_directory: str) -> None:

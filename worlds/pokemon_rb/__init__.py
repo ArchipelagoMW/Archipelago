@@ -279,14 +279,14 @@ class PokemonRedBlueWorld(World):
         self.multiworld.itempool += self.item_pool
 
     @classmethod
-    def stage_fill_hook(cls, multiworld, progitempool, usefulitempool, filleritempool, fill_locations):
+    def stage_fill_hook(cls, multiworld, prog_item_pool, useful_item_pool, filler_item_pool, fill_locations):
         locs = []
         for world in multiworld.get_game_worlds("Pokemon Red and Blue"):
             locs += world.local_locs
         for loc in sorted(locs):
             if loc.item:
                 continue
-            itempool = progitempool + usefulitempool + filleritempool
+            itempool = prog_item_pool + useful_item_pool + filler_item_pool
             multiworld.random.shuffle(itempool)
             unplaced_items = []
             for i, item in enumerate(itempool):
@@ -294,35 +294,35 @@ class PokemonRedBlueWorld(World):
                                                    and loc.player in multiworld.groups[item.player]["players"]))
                         and loc.can_fill(multiworld.state, item, False)):
                     if item.advancement:
-                        pool = progitempool
+                        pool = prog_item_pool
                     elif item.useful:
-                        pool = usefulitempool
+                        pool = useful_item_pool
                     else:
-                        pool = filleritempool
+                        pool = filler_item_pool
                     for i, check_item in enumerate(pool):
                         if item is check_item:
                             pool.pop(i)
                             break
                     if item.advancement:
-                        state = sweep_from_pool(multiworld.state, progitempool + unplaced_items)
+                        state = sweep_from_pool(multiworld.state, prog_item_pool + unplaced_items)
                     if (not item.advancement) or state.can_reach(loc, "Location", loc.player):
                         multiworld.push_item(loc, item, False)
                         fill_locations.remove(loc)
                         break
                     else:
                         unplaced_items.append(item)
-            progitempool += [item for item in unplaced_items if item.advancement]
-            usefulitempool += [item for item in unplaced_items if item.useful]
-            filleritempool += [item for item in unplaced_items if (not item.advancement) and (not item.useful)]
+            prog_item_pool += [item for item in unplaced_items if item.advancement]
+            useful_item_pool += [item for item in unplaced_items if item.useful]
+            filler_item_pool += [item for item in unplaced_items if (not item.advancement) and (not item.useful)]
 
-    def fill_hook(self, progitempool, usefulitempool, filleritempool, fill_locations):
+    def fill_hook(self, prog_item_pool, useful_item_pool, filler_item_pool, fill_locations):
         if not self.options.badgesanity:
             # Door Shuffle options besides Simple place badges during door shuffling
             if self.options.door_shuffle in ("off", "simple"):
-                badges = [item for item in progitempool if "Badge" in item.name and item.player == self.player]
+                badges = [item for item in prog_item_pool if "Badge" in item.name and item.player == self.player]
                 for badge in badges:
                     self.multiworld.itempool.remove(badge)
-                    progitempool.remove(badge)
+                    prog_item_pool.remove(badge)
                 for attempt in range(6):
                     badgelocs = [
                         self.multiworld.get_location(loc, self.player) for loc in [
@@ -353,7 +353,7 @@ class PokemonRedBlueWorld(World):
                         for location in badgelocs:
                             if location.item:
                                 fill_locations.remove(location)
-                        progitempool += badges
+                        prog_item_pool += badges
                         break
                 else:
                     raise FillError(f"Failed to place badges for player {self.player}")
@@ -362,8 +362,8 @@ class PokemonRedBlueWorld(World):
         if self.options.key_items_only:
             return
 
-        tms = [item for item in usefulitempool + filleritempool if item.name.startswith("TM") and (item.player ==
-               self.player or (item.player in self.multiworld.groups and self.player in
+        tms = [item for item in useful_item_pool + filler_item_pool if item.name.startswith("TM") and (item.player ==
+                                                                                                       self.player or (item.player in self.multiworld.groups and self.player in
                                self.multiworld.groups[item.player]["players"]))]
         if len(tms) > 7:
             for gym_leader in (("Pewter Gym", "Brock"), ("Cerulean Gym", "Misty"), ("Vermilion Gym", "Lt. Surge"),
@@ -387,9 +387,9 @@ class PokemonRedBlueWorld(World):
                         fill_locations.remove(loc)
                         tms.remove(tm)
                         if tm.useful:
-                            usefulitempool.remove(tm)
+                            useful_item_pool.remove(tm)
                         else:
-                            filleritempool.remove(tm)
+                            filler_item_pool.remove(tm)
                         break
                 else:
                     raise Exception("Missing Gym Leader data")

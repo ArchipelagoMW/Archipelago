@@ -671,7 +671,7 @@ class ALTTPWorld(World):
         return ALttPItem(name, self.player, **item_init_table[name])
 
     @classmethod
-    def stage_fill_hook(cls, multiworld, progitempool, usefulitempool, filleritempool, fill_locations):
+    def stage_fill_hook(cls, multiworld, prog_item_pool, useful_item_pool, filler_item_pool, fill_locations):
         trash_counts = {}
         for player in multiworld.get_game_players("A Link to the Past"):
             world = multiworld.worlds[player]
@@ -694,11 +694,11 @@ class ALTTPWorld(World):
                 gtower_locations = locations_mapping[player]
                 multiworld.random.shuffle(gtower_locations)
 
-                while gtower_locations and filleritempool and trash_count > 0:
+                while gtower_locations and filler_item_pool and trash_count > 0:
                     spot_to_fill = gtower_locations.pop()
-                    for index, item in enumerate(filleritempool):
+                    for index, item in enumerate(filler_item_pool):
                         if spot_to_fill.item_rule(item):
-                            filleritempool.pop(index)  # remove from outer fill
+                            filler_item_pool.pop(index)  # remove from outer fill
                             multiworld.push_item(spot_to_fill, item, False)
                             fill_locations.remove(spot_to_fill)  # very slow, unfortunately
                             trash_count -= 1
