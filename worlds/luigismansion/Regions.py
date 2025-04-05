@@ -75,7 +75,7 @@ GHOST_TO_ROOM = {
     "Projection Room": "No Element",
     "Safari Room": "Water",  # "Water",
     "Cellar": "No Element",
-    "Roof": "No Element",
+    "Roof": "Ice",
     "Sealed Room": "No Element",
     "Telephone Room": "No Element",
     "Armory": "No Element",
