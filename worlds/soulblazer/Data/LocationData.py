@@ -1,6 +1,9 @@
 from dataclasses import dataclass
+from typing import Any
+
+from Utils import parse_yaml
 from .Enums import LocationType, RuleFlag, IDOffset, LairID, ChestID, NPCRewardID
-from . import get_data_file_bytes, dw
+from ..Data import get_data_file_bytes, intFromYaml, listFromYaml, strFromYaml
 
 
 @dataclass(frozen=True)
@@ -15,6 +18,16 @@ class SoulBlazerLocationData:
     description: str = ""
     """Detailed description of the location."""
 
+    @staticmethod
+    def from_yaml(yaml: Any) -> "SoulBlazerLocationData":
+        return SoulBlazerLocationData(
+            id = intFromYaml(yaml["id"]),
+            name = strFromYaml(yaml["name"]),
+            type = LocationType.from_yaml(yaml["type"]),
+            flag = RuleFlag.from_yaml(yaml["flag"]),
+            description = strFromYaml(yaml["description"]),
+        )
+
     @property
     def address(self) -> int:
         """The unique ID used by archipelago for this location"""
@@ -27,19 +40,27 @@ class SoulBlazerLocationData:
 
 
 @dataclass(frozen=True)
-class SoulBlazerLocationsData(dw.YAMLWizard):
+class SoulBlazerLocationsData:
     chests: list[SoulBlazerLocationData]
     lairs: list[SoulBlazerLocationData]
     npc_rewards: list[SoulBlazerLocationData]
+
+    @staticmethod
+    def from_yaml(yaml: Any) -> "SoulBlazerLocationsData":
+        return SoulBlazerLocationsData(
+            chests = listFromYaml(yaml["chests"], SoulBlazerLocationData.from_yaml),
+            lairs = listFromYaml(yaml["lairs"], SoulBlazerLocationData.from_yaml),
+            npc_rewards = listFromYaml(yaml["npc-rewards"], SoulBlazerLocationData.from_yaml),
+        )
 
     @property
     def all_locations(self) -> list[SoulBlazerLocationData]:
         return [*self.chests, *self.lairs, *self.npc_rewards]
 
 
-locations_data: SoulBlazerLocationsData = SoulBlazerLocationsData.from_yaml(
-    get_data_file_bytes("SoulBlazerLocations.yaml")
-)
+locations_data_bytes = get_data_file_bytes("SoulBlazerLocations.yaml")
+locations_data_yaml = parse_yaml(locations_data_bytes)
+locations_data: SoulBlazerLocationsData = SoulBlazerLocationsData.from_yaml(locations_data_yaml)
 
 ChestID.full_names = {data.id: data.name for data in locations_data.chests}
 

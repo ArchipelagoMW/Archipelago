@@ -23,18 +23,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           sparse-checkout: worlds/${{ env.AP_WORLD_DIR }}
-      - name: Checkout dataclass-wizard dependancy library
-        uses: actions/checkout@v4
-        with:
-          repository: Tranquilite0/dataclass-wizard
-          path: ./dataclass-wizard
-          sparse-checkout: |
-            LICENCE
-            dataclass_wizard
-      - name: Copy dataclass-wizard to APWorld Directory
-        run: |
-          cp -R ./dataclass-wizard/dataclass_wizard ./worlds/${{ env.AP_WORLD_DIR }}/Data
-          cp ./dataclass-wizard/LICENSE ./worlds/${{ env.AP_WORLD_DIR }}/Data/dataclass_wizard
       - name: Create AP World Archive
         run: |
           mkdir dist

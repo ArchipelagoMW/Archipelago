@@ -1,4 +1,7 @@
 from enum import Enum, IntEnum
+from typing import Any
+
+from ..Data import strFromYaml
 
 class LocationType(Enum):
     CHEST = "Chest"
@@ -7,6 +10,14 @@ class LocationType(Enum):
     """Location checked by talking to an NPC or stepping on an item tile."""
     LAIR = "Lair"
     """Location checked by sealing a monster lair."""
+
+    @staticmethod
+    def from_yaml(yaml: Any) -> "LocationType":
+        tag = strFromYaml(yaml)
+
+        return LocationType(tag)
+
+
 
 class RuleFlag(Enum):
     NONE = "NONE"
@@ -36,6 +47,12 @@ class RuleFlag(Enum):
     Both Dancing Grandmas
     The 3 Red-Hot Items
     """
+
+    @staticmethod
+    def from_yaml(yaml: Any) -> "RuleFlag":
+        tag = strFromYaml(yaml)
+
+        return RuleFlag(tag)
 
 
 class IDOffset(IntEnum):
