@@ -117,21 +117,25 @@ class MuseDashWorld(World):
     def handle_plando(self, available_song_keys: List[str], dlc_songs: Set[str]) -> List[str]:
         song_items = self.md_collection.song_items
 
-        self.chosen_goal_songs = self.options.goal_song.value
         start_items = self.options.start_inventory.value.keys()
         include_songs = self.options.include_songs.value
         exclude_songs = self.options.exclude_songs.value
-
-        if self.chosen_goal_songs != []:
-            self.chosen_goal_songs = self.md_collection.filter_songs_to_dlc(self.chosen_goal_songs, dlc_songs)
-            if self.chosen_goal_songs != []:
-                self.random.shuffle(self.chosen_goal_songs)
-                self.victory_song_name = self.chosen_goal_songs.pop()
+        self.chosen_goal_songs = list(self.options.goal_song.value)
 
         self.starting_songs = [s for s in start_items if s in song_items]
         self.starting_songs = self.md_collection.filter_songs_to_dlc(self.starting_songs, dlc_songs)
         self.included_songs = [s for s in include_songs if s in song_items and s not in self.starting_songs]
         self.included_songs = self.md_collection.filter_songs_to_dlc(self.included_songs, dlc_songs)
+
+        if self.chosen_goal_songs:
+            self.chosen_goal_songs = self.md_collection.filter_songs_to_dlc(self.chosen_goal_songs, dlc_songs)
+            if self.chosen_goal_songs:
+                self.random.shuffle(self.chosen_goal_songs)
+                self.victory_song_name = self.chosen_goal_songs.pop()
+                if self.victory_song_name in self.starting_songs:
+                    self.starting_songs.remove(self.victory_song_name)
+                if self.victory_song_name in self.included_songs:
+                    self.included_songs.remove(self.victory_song_name)
 
         return [s for s in available_song_keys if s not in start_items
                 and s not in include_songs and s not in exclude_songs]
@@ -147,13 +151,13 @@ class MuseDashWorld(World):
         if included_song_count > additional_song_count:
             # If so, we want to thin the list, thus let's get the goal song and starter songs while we are at it.
             self.random.shuffle(self.included_songs)
-            if self.victory_song_name == "":
+            if not self.victory_song_name:
                 self.victory_song_name = self.included_songs.pop()
             while len(self.included_songs) > additional_song_count:
                 next_song = self.included_songs.pop()
                 if len(self.starting_songs) < starting_song_count:
                     self.starting_songs.append(next_song)
-        elif self.victory_song_name == "":
+        elif not self.victory_song_name:
             # If not, choose a random victory song from the available songs
             chosen_song = self.random.randrange(0, len(available_song_keys) + included_song_count)
             if chosen_song < included_song_count:
