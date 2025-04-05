@@ -7,9 +7,15 @@ on:
     paths:
       - "docs/"
       - "BaseClasses.py"
+      - "CommonClient.py"
+      - "entrance_rando.py"
       - "Fill.py"
-      - "Options.py"
       - "NetUtils.py"
+      - "Options.py"
+      - "Patch.py"
+      - "settings.py"
+      - "test/bases.py"
+      - "Utils.py"
       - "worlds/AutoWorld.py"
       - "worlds/generic/Rules.py"
   # allow manual deployment
