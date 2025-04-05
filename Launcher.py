@@ -8,9 +8,7 @@ Archipelago Launcher
 Scroll down to components= to add components to the launcher as well as setup.py
 """
 
-import os
 import argparse
-import itertools
 import logging
 import multiprocessing
 import shlex
@@ -228,14 +226,13 @@ refresh_components: Optional[Callable[[], None]] = None
 
 
 def run_gui(path: str, args: Any) -> None:
-    from kvui import (ThemedApp, MDFloatLayout, MDGridLayout, MDButton, MDLabel, MDButtonText, ScrollBox, ApAsyncImage)
+    from kvui import (ThemedApp, MDFloatLayout, MDGridLayout, ScrollBox)
     from kivy.properties import ObjectProperty
     from kivy.core.window import Window
     from kivy.metrics import dp
     from kivymd.uix.button import MDIconButton
     from kivymd.uix.card import MDCard
     from kivymd.uix.menu import MDDropdownMenu
-    from kivymd.uix.relativelayout import MDRelativeLayout
     from kivymd.uix.snackbar import MDSnackbar, MDSnackbarText
 
     from kivy.lang.builder import Builder
