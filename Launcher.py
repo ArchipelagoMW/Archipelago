@@ -130,7 +130,7 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
     from kivymd.uix.dialog import MDDialog, MDDialogHeadlineText, MDDialogContentContainer, MDDialogSupportingText
     from kivymd.uix.divider import MDDivider
 
-    if client_component is None:
+    if not client_component:
         run_component(text_client_component, *launch_args)
         return
     else:
