@@ -128,7 +128,7 @@ class ImageButton(MDIconButton):
 
 
 class ScrollBox(MDScrollView):
-    layout: ObjectProperty(None)
+    layout: MDBoxLayout = ObjectProperty(None)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
