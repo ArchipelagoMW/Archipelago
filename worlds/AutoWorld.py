@@ -110,6 +110,16 @@ class AutoLogicRegister(type):
             elif not item_name.startswith("__"):
                 if hasattr(CollectionState, item_name):
                     raise Exception(f"Name conflict on Logic Mixin {name} trying to overwrite {item_name}")
+
+                assert callable(function) or "init_mixin" in dct, (
+                    f"{name} defined class variable {item_name} without also having init_mixin.\n\n"
+                    "Explanation:\n"
+                    "Class variables that will be mutated need to be inintialized as instance variables in init_mixin.\n"
+                    "If your LogicMixin variables aren't actually mutable / you don't intend to mutate them, "
+                    "there is no point in using LogixMixin.\n"
+                    "LogicMixin exists to track custom state variables that change when items are collected/removed."
+                )
+
                 setattr(CollectionState, item_name, function)
         return new_class
 
