@@ -348,31 +348,33 @@ This is useful in cases where an item appears in the game world, such as 'ledge 
 | create_as_hint | int | If non-zero, the scouted locations get created and broadcasted as a player-visible hint. <br/>If 2 only new hints are broadcast, however this does not remove them from the LocationInfo reply. |
 
 ### UpdateHint
-Sent to the server to update the status of a Hint. The client must be the 'receiving_player' of the Hint, or the update fails.
+Sent to the server to update the priority of a Hint. The client must be the 'receiving_player' of the Hint, or the update fails.
 
 ### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | player | int | The ID of the player whose location is being hinted for. |
 | location | int | The ID of the location to update the hint for. If no hint exists for this location, the packet is ignored. |
-| status | [HintStatus](#HintStatus) | Optional. If included, sets the status of the hint to this status. Cannot set `HINT_FOUND`, or change the status from `HINT_FOUND`. |
+| priority | [HintPriority](#HintPriority) | Optional. If included, sets the priority of the hint to this priority. |
 
-#### HintStatus
-An enumeration containing the possible hint states.
+#### HintPriority
+An enumeration containing the possible hint priorities. Each of these priorities is specified by the player who will *receive* the hinted item.
 
 ```python
 import enum
-class HintStatus(enum.IntEnum):
-    HINT_UNSPECIFIED = 0  # The receiving player has not specified any status
-    HINT_NO_PRIORITY = 10 # The receiving player has specified that the item is unneeded
-    HINT_AVOID = 20       # The receiving player has specified that the item is detrimental
-    HINT_PRIORITY = 30    # The receiving player has specified that the item is needed
-    HINT_FOUND = 40       # The location has been collected. Status cannot be changed once found.
+class HintPriority(enum.IntEnum):
+    HINT_UNSPECIFIED = 0     # No priority has been specified yet
+    HINT_CAN_SKIP = 10       # The item can be skipped
+    HINT_MIGHT_WANT = 20     # The player is unsure if they want the item or not
+    HINT_AVOID = 30          # The item should be avoided if at all possible
+    HINT_AVOID_FOR_NOW = 40  # The item should be avoided for now, but may be needed later
+    HINT_DESIRED = 50        # The item should be collected, as it will be very helpful
+    HINT_NEEDED = 60         # The item should be collected, as it is necessary to progress
 ```
+- Hints for items with `ItemClassification.trap` AND `ItemClassification.progression` default to `HINT_AVOID_FOR_NOW`.
 - Hints for items with `ItemClassification.trap` default to `HINT_AVOID`.
 - Hints created with `LocationScouts`, `!hint_location`, or similar (hinting a location) default to `HINT_UNSPECIFIED`.
-- Hints created with `!hint` or similar (hinting an item for yourself) default to `HINT_PRIORITY`.
-- Once a hint is collected, its' status is updated to `HINT_FOUND` automatically, and can no longer be changed.
+- Hints created with `!hint` or similar (hinting an item for yourself) default to `HINT_DESIRED`.
 
 ### StatusUpdate
 Sent to the server to update on the sender's status. Examples include readiness or goal completion. (Example: defeated Ganon in A Link to the Past)
@@ -558,7 +560,7 @@ class JSONMessagePart(TypedDict):
     color: Optional[str] # only available if type is a color
     flags: Optional[int] # only available if type is an item_id or item_name
     player: Optional[int] # only available if type is either item or location
-    hint_status: Optional[HintStatus] # only available if type is hint_status
+    hint_priority: Optional[HintPriority] # only available if type is hint_priority
 ```
 
 `type` is used to denote the intent of the message part. This can be used to indicate special information which may be rendered differently depending on client. How these types are displayed in Archipelago's ALttP client is not the end-all be-all. Other clients may choose to interpret and display these messages differently.
@@ -574,7 +576,7 @@ Possible values for `type` include:
 | location_id | Location ID, should be resolved to Location Name |
 | location_name | Location Name, not currently used over network, but supported by reference Clients. |
 | entrance_name | Entrance Name. No ID mapping exists. |
-| hint_status | The [HintStatus](#HintStatus) of the hint. Both `text` and `hint_status` are given. |
+| hint_priority | The [HintPriority](#HintPriority) of the hint. Both `text` and `hint_priority` are given. |
 | color | Regular text that should be colored. Only `type` that will contain `color` data. |
 
 
@@ -678,7 +680,7 @@ class Hint(typing.NamedTuple):
     found: bool
     entrance: str = ""
     item_flags: int = 0
-    status: HintStatus = HintStatus.HINT_UNSPECIFIED
+    priority: HintPriority = HintPriority.HINT_UNSPECIFIED
 ```
 
 ### Data Package Contents
