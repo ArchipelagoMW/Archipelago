@@ -1,7 +1,7 @@
 from enum import Enum, IntEnum
 from typing import Any
 
-from ..Data import strFromYaml
+from ..Data import str_from_yaml
 
 class LocationType(Enum):
     CHEST = "Chest"
@@ -13,7 +13,7 @@ class LocationType(Enum):
 
     @staticmethod
     def from_yaml(yaml: Any) -> "LocationType":
-        tag = strFromYaml(yaml)
+        tag = str_from_yaml(yaml)
 
         return LocationType(tag)
 
@@ -50,7 +50,7 @@ class RuleFlag(Enum):
 
     @staticmethod
     def from_yaml(yaml: Any) -> "RuleFlag":
-        tag = strFromYaml(yaml)
+        tag = str_from_yaml(yaml)
 
         return RuleFlag(tag)
 

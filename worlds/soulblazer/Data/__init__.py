@@ -3,19 +3,19 @@ from typing import Any, Callable, Optional, TypeVar
 
 T = TypeVar('T')
 
-def strFromYaml(yaml: Any) -> str:
+def str_from_yaml(yaml: Any) -> str:
     assert isinstance(yaml, str);
     return yaml
 
-def intFromYaml(yaml: Any) -> int:
+def int_from_yaml(yaml: Any) -> int:
     assert isinstance(yaml, int);
     return yaml
 
-def listFromYaml(yaml: Any, f: Callable[[Any], T]) -> list[T]:
+def list_from_yaml(yaml: Any, f: Callable[[Any], T]) -> list[T]:
     assert isinstance(yaml, list)
     return list(map(f, yaml))
 
-def fromYamlOr(yaml: Any, f: Callable[[Any], T], default: T) -> T:
+def from_yaml_or(yaml: Any, f: Callable[[Any], T], default: T) -> T:
     if yaml is None:
         return default
 

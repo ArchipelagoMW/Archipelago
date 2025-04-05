@@ -4,7 +4,7 @@ from typing import Any
 from BaseClasses import ItemClassification
 from Utils import parse_yaml
 from .Enums import ItemID, IDOffset, NPCID, SoulID
-from ..Data import get_data_file_bytes, fromYamlOr, intFromYaml, listFromYaml, strFromYaml
+from ..Data import get_data_file_bytes, from_yaml_or, int_from_yaml, list_from_yaml, str_from_yaml
 from ..Util import int_to_bcd
 
 @dataclass(frozen=True)
@@ -25,11 +25,11 @@ class SoulBlazerItemData:
     @staticmethod
     def from_yaml(yaml: Any) -> "SoulBlazerItemData":
         return SoulBlazerItemData(
-            name = strFromYaml(yaml["name"]),
-            id = intFromYaml(yaml["id"]),
-            operand = intFromYaml(yaml["operand"]),
-            classification = intFromYaml(yaml["classification"]),
-            description = fromYamlOr(yaml["description"], strFromYaml, ""),
+            name = str_from_yaml(yaml["name"]),
+            id = int_from_yaml(yaml["id"]),
+            operand = int_from_yaml(yaml["operand"]),
+            classification = int_from_yaml(yaml["classification"]),
+            description = from_yaml_or(yaml["description"], str_from_yaml, ""),
         )
 
     def duplicate(self, **changes) -> "SoulBlazerItemData":
@@ -70,14 +70,14 @@ class SoulBlazerItemsData:
     @staticmethod
     def from_yaml(yaml: Any) -> "SoulBlazerItemsData":
         return SoulBlazerItemsData(
-            swords = listFromYaml(yaml["swords"], SoulBlazerItemData.from_yaml),
-            armors = listFromYaml(yaml["armors"], SoulBlazerItemData.from_yaml),
-            magics = listFromYaml(yaml["magics"], SoulBlazerItemData.from_yaml),
-            inventory_items = listFromYaml(yaml["inventory_items"], SoulBlazerItemData.from_yaml),
-            misc_items = listFromYaml(yaml["misc_items"], SoulBlazerItemData.from_yaml),
-            npc_releases = listFromYaml(yaml["npc_releases"], SoulBlazerItemData.from_yaml),
-            souls = listFromYaml(yaml["souls"], SoulBlazerItemData.from_yaml),
-            special_items = listFromYaml(yaml["special_items"], SoulBlazerItemData.from_yaml),
+            swords = list_from_yaml(yaml["swords"], SoulBlazerItemData.from_yaml),
+            armors = list_from_yaml(yaml["armors"], SoulBlazerItemData.from_yaml),
+            magics = list_from_yaml(yaml["magics"], SoulBlazerItemData.from_yaml),
+            inventory_items = list_from_yaml(yaml["inventory_items"], SoulBlazerItemData.from_yaml),
+            misc_items = list_from_yaml(yaml["misc_items"], SoulBlazerItemData.from_yaml),
+            npc_releases = list_from_yaml(yaml["npc_releases"], SoulBlazerItemData.from_yaml),
+            souls = list_from_yaml(yaml["souls"], SoulBlazerItemData.from_yaml),
+            special_items = list_from_yaml(yaml["special_items"], SoulBlazerItemData.from_yaml),
         )
 
     @property

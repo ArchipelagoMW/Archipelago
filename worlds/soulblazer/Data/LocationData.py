@@ -3,7 +3,7 @@ from typing import Any
 
 from Utils import parse_yaml
 from .Enums import LocationType, RuleFlag, IDOffset, LairID, ChestID, NPCRewardID
-from ..Data import get_data_file_bytes, intFromYaml, listFromYaml, strFromYaml
+from ..Data import get_data_file_bytes, int_from_yaml, list_from_yaml, str_from_yaml
 
 
 @dataclass(frozen=True)
@@ -21,11 +21,11 @@ class SoulBlazerLocationData:
     @staticmethod
     def from_yaml(yaml: Any) -> "SoulBlazerLocationData":
         return SoulBlazerLocationData(
-            id = intFromYaml(yaml["id"]),
-            name = strFromYaml(yaml["name"]),
+            id = int_from_yaml(yaml["id"]),
+            name = str_from_yaml(yaml["name"]),
             type = LocationType.from_yaml(yaml["type"]),
             flag = RuleFlag.from_yaml(yaml["flag"]),
-            description = strFromYaml(yaml["description"]),
+            description = str_from_yaml(yaml["description"]),
         )
 
     @property
@@ -48,9 +48,9 @@ class SoulBlazerLocationsData:
     @staticmethod
     def from_yaml(yaml: Any) -> "SoulBlazerLocationsData":
         return SoulBlazerLocationsData(
-            chests = listFromYaml(yaml["chests"], SoulBlazerLocationData.from_yaml),
-            lairs = listFromYaml(yaml["lairs"], SoulBlazerLocationData.from_yaml),
-            npc_rewards = listFromYaml(yaml["npc-rewards"], SoulBlazerLocationData.from_yaml),
+            chests = list_from_yaml(yaml["chests"], SoulBlazerLocationData.from_yaml),
+            lairs = list_from_yaml(yaml["lairs"], SoulBlazerLocationData.from_yaml),
+            npc_rewards = list_from_yaml(yaml["npc-rewards"], SoulBlazerLocationData.from_yaml),
         )
 
     @property
