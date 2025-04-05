@@ -6,7 +6,9 @@ from ..Names import locationName, itemName
 
 class JinjosEnabled(BanjoTooieTestBase):
     options = {
-        "randomize_jinjos": RandomizeJinjos.option_true
+        "randomize_jinjos": RandomizeJinjos.option_true,
+        "game_length": "custom",
+        "custom_worlds": "1,1,1,1,1,1,1,1,51", # add jingaling's jiggy
     }
     def test_item_pool_jinjos(self) -> None:
         jinjo_count = 0
@@ -22,11 +24,14 @@ class JinjosEnabled(BanjoTooieTestBase):
         assert jinjo_count == jinjo_counter
 
     def test_item_pool_jiggies(self) -> None:
-        assert [item.name for item in self.multiworld.itempool].count(itemName.JIGGY) == 89
+        assert [item.name for item in self.multiworld.itempool if item.advancement].count(itemName.JIGGY) == 50
+        assert [item.name for item in self.multiworld.itempool if item.useful].count(itemName.JIGGY) == 20
 
 class JinjosDisabled(BanjoTooieTestBase):
     options = {
-        "randomize_jinjos": RandomizeJinjos.option_false
+        "randomize_jinjos": RandomizeJinjos.option_false,
+        "game_length": "custom",
+        "custom_worlds": "1,1,1,1,1,1,1,1,51", # add jingaling's jiggy
     }
     def test_disabled_item_pool(self) -> None:
         jinjo_counter = 0
@@ -197,7 +202,8 @@ class JinjosDisabled(BanjoTooieTestBase):
         assert jinjos == placed_correctly
 
     def test_item_pool_jiggies(self) -> None:
-        assert [item.name for item in self.multiworld.itempool].count(itemName.JIGGY) == 80
+        assert [item.name for item in self.multiworld.itempool if item.advancement].count(itemName.JIGGY) == 41
+        assert [item.name for item in self.multiworld.itempool if item.useful].count(itemName.JIGGY) == 20
 
 class TestJinjosEnabledIntended(JinjosEnabled, IntendedLogic):
     options = {

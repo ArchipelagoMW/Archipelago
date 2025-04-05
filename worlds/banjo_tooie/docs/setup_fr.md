@@ -10,7 +10,8 @@ Le randomiseur supporte l'Everdrive 3.0 et X7.
 
 -   Emulation sur PC:
     -   BizHawk:  [Les versions de BizHawk (TASVideos)](https://tasvideos.org/BizHawk/ReleaseHistory)
-        -   Nécessite la version <b>2.9.1</b> ou une version plus récente.
+        -   La version <b>2.9.1</b> est présentement supportée, ne le sera plus bientôt.
+        -   La version <b>2.10</b> et les versions plus récentes sont supportées.
         -   Les instructions d'installation de BizHawk sont incluses dans le lien.
         -   Sur Windows, il faut installer les pré-requis avant d'installer BizHawk. Vous pouvez les trouver dans le lien.
 -   Everdrive:

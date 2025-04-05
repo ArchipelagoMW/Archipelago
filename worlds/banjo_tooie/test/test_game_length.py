@@ -1,12 +1,26 @@
 from ..Options import GameLength
+from ..Names import itemName
 from .test_logic import EasyTricksLogic, GlitchesLogic, HardTricksLogic, IntendedLogic
 from . import BanjoTooieTestBase
-
+from math import ceil
 
 class GameLengthTest(BanjoTooieTestBase):
     expected_world_costs = [1, 4, 8, 14, 20, 28, 36, 45, 55]
     def test_check_world_costs(self) -> None:
         assert list(self.world.randomize_worlds.values()) == self.expected_world_costs
+
+    def test_jiggies(self) -> None:
+        expected_progression_jiggies = max(self.expected_world_costs)
+        expected_useful_jiggies = ceil((90 - expected_progression_jiggies) / 2)
+
+        assert sum(1 for item in self.multiworld.itempool
+                       if item.name == itemName.JIGGY and item.advancement) \
+                 == expected_progression_jiggies - 1 # jingaling's
+
+        assert sum(1 for item in self.multiworld.itempool
+                      if item.name == itemName.JIGGY and item.useful) \
+                 == expected_useful_jiggies
+
 
 class GameLengthMinTest(GameLengthTest):
     expected_world_costs = [1, 1, 1, 1, 1, 1, 1, 1, 1]

@@ -1,53 +1,58 @@
 from ..Names import itemName
 from ..Options import BassClefNotes, RandomizeBKMoveList, RandomizeNotes, TrebleclefNotes
 from .test_logic import EasyTricksLogic, GlitchesLogic, HardTricksLogic, IntendedLogic
+from .test_fillers_and_traps import ONLY_BIG_O_PANTS_FILLER
 from . import BanjoTooieTestBase
 
 class TestClefs(BanjoTooieTestBase):
+    options = {
+        "randomize_notes": RandomizeNotes.option_true,
+        **ONLY_BIG_O_PANTS_FILLER
+    }
     def test_clef_count(self) -> None:
-        item_pool_names = [item.name for item in self.multiworld.itempool]
+        item_pool_names = [item.name for item in self.multiworld.itempool if item.advancement]
         assert item_pool_names.count(itemName.BASS) == self.world.options.bass_clef_amount
         assert item_pool_names.count(itemName.TREBLE) == self.world.options.extra_trebleclefs_count + 9
 
-    def test_filler_count(self) -> None:
-        item_pool_names = [item.name for item in self.multiworld.itempool]
+    def test_notes_count(self) -> None:
+        item_pool_names = [item.name for item in self.multiworld.itempool if item.advancement]
 
-        expected_fillers = self.world.options.bass_clef_amount + 3 * self.world.options.extra_trebleclefs_count
-        if self.world.options.randomize_bk_moves == RandomizeBKMoveList.option_none:
-            expected_fillers += 16
-        assert item_pool_names.count(itemName.NONE) == expected_fillers
+        # max jamjars cost is 765. There are 9 trebleclefs by default.
+        progression_notes_default = int((765 - 9*20) / 5)
+
+        assert item_pool_names.count(itemName.NOTE) == max(progression_notes_default - 2 * self.world.options.bass_clef_amount - 4 * self.world.options.extra_trebleclefs_count, 0)
 
 class TestMinClefs(TestClefs):
     options = {
-        "randomize_notes": RandomizeNotes.option_true,
+        **TestClefs.options,
         "bass_clef_amount": 0,
         "extra_trebleclefs_count": 0
     }
 
 class TestNoBassSomeTrebles(TestClefs):
     options = {
-        "randomize_notes": RandomizeNotes.option_true,
+        **TestClefs.options,
         "bass_clef_amount": 0,
         "extra_trebleclefs_count": 15
     }
 
 class TestSomeBassNoTrebles(TestClefs):
     options = {
-        "randomize_notes": RandomizeNotes.option_true,
+        **TestClefs.options,
         "bass_clef_amount": 10,
         "extra_trebleclefs_count": 0
     }
 
 class TestSomeOfEach(TestClefs):
     options = {
-        "randomize_notes": RandomizeNotes.option_true,
+        **TestClefs.options,
         "bass_clef_amount": 15,
         "extra_trebleclefs_count": 10
     }
 
 class TestMaxClefs(TestClefs):
     options = {
-        "randomize_notes": RandomizeNotes.option_true,
+        **TestClefs.options,
         "bass_clef_amount": BassClefNotes.range_end,
         "extra_trebleclefs_count": TrebleclefNotes.range_end
     }

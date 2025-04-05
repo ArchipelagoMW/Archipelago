@@ -68,6 +68,30 @@ class RandomStartEggTest(BanjoTooieTestBase):
                 eggs_in_pool += 1
         assert eggs_in_pool == 4 # One is in the starting inventory.
 
+class RandomSimpleStartEggTest(BanjoTooieTestBase):
+    options = {
+        "randomize_moves": RandomizeBTMoveList.option_true,
+        "randomize_bk_moves": RandomizeBKMoveList.option_all,
+        "egg_behaviour": EggsBehaviour.option_simple_random_starting_egg,
+        "randomize_notes": RandomizeNotes(True),
+    }
+
+    def test_starting_inventory(self) -> None:
+        start_inventory_names = [item.name for item in self.multiworld.precollected_items[self.player]]
+        eggs_in_inventory = 0
+        for egg in [itemName.BEGGS, itemName.FEGGS, itemName.GEGGS, itemName.IEGGS]:
+            if egg in start_inventory_names:
+                eggs_in_inventory += 1
+        assert eggs_in_inventory == 1
+
+    def test_item_pool(self) -> None:
+        item_pool_names = [item.name for item in self.multiworld.itempool]
+        eggs_in_pool = 0
+        for egg in [itemName.BEGGS, itemName.FEGGS, itemName.GEGGS, itemName.IEGGS, itemName.CEGGS]:
+            if egg in item_pool_names:
+                eggs_in_pool += 1
+        assert eggs_in_pool == 4 # One is in the starting inventory.
+
 class ProgressiveEggsTest(BanjoTooieTestBase):
     options = {
         "randomize_moves": RandomizeBTMoveList.option_true,

@@ -10,7 +10,8 @@ Our implementation also supports the Everdrive 3.0 and X7. (USB Support)
 
 -   PC Emulation:
     -   BizHawk:  [BizHawk Releases from TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
-        -   Version <b>2.9.1</b> and later are supported.
+        -   Version <b>2.9.1</b> will be dropping support soon.
+        -   Version <b>2.10</b> and later are supported.
         -   Detailed installation instructions for BizHawk can be found at the above link.
         -   Windows users must run the prereq installer first, which can also be found at the above link.
 -   Everdrive:
@@ -47,7 +48,7 @@ This will create some visual artifacts however, it should not affect gameplay.
     - You can also click "Browse Files" in the Launcher which will take you to this folder
 - Connect the Archipelago Client with the server.
     - To connect the client to the multiserver simply put  `<address>:<port>`  on the textfield on top and press `connect` (if the server uses password, then it will prompt after connection).
-- Open Bizhawk (2.9.1+) and open your patched Banjo-Tooie (US) game
+- Open Bizhawk (2.10+) and open your patched Banjo-Tooie (US) game
 - Once you are in the game title menu or game select screen, drag and drop the banjo_tooie_connector lua script (which can be found in the data/lua folder of Archipelago) onto the Lua console window.
 
 ## Playing on Everdrive

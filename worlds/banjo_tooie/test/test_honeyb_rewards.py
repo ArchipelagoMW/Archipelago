@@ -7,10 +7,6 @@ class TestRandomizedHoneyBRewards(BanjoTooieTestBase):
     options = {
         "honeyb_rewards": EnableHoneyBRewards.option_true,
     }
-    def test_item_pool(self) -> None:
-        item_pool_names = [item.name for item in self.multiworld.itempool]
-        assert item_pool_names.count(itemName.NONE) ==\
-            0 if self.world.options.randomize_bk_moves == RandomizeBKMoveList.option_all else 16
 
     def test_locations(self) -> None:
         location_names = [
@@ -28,10 +24,6 @@ class TestVanillaHoneyBRewards(BanjoTooieTestBase):
     options = {
         "honeyb_rewards": EnableHoneyBRewards.option_false,
     }
-    def test_item_pool(self) -> None:
-        item_pool_names = [item.name for item in self.multiworld.itempool]
-        assert item_pool_names.count(itemName.NONE) ==\
-            (0 if self.world.options.randomize_bk_moves == RandomizeBKMoveList.option_all else 11)
 
     def test_locations(self) -> None:
         location_names = [

@@ -2,14 +2,21 @@ import typing
 from BaseClasses import ItemClassification
 from ...AutoWorld import call_all
 from test.bases import WorldTestBase
-from ..Options import HintClarity, RandomizeBKMoveList, RandomizeBTMoveList, RandomizeSignposts, SignpostHints
+from ..Options import HintClarity, RandomizeBKMoveList, RandomizeBTMoveList, RandomizeSignposts, SignpostHints, AddSignpostHintsToArchipelagoHints
 from . import BanjoTooieTestBase
-from ..Items import moves_table, bk_moves_table, progressive_ability_table
+from ..Items import moves_table, bk_moves_table, progressive_ability_table, all_item_table
+from Fill import distribute_items_restrictive
 
 class TestSignpostsHints(BanjoTooieTestBase):
+    run_default_tests = False
+
     # fill_slot_data needs to be run for these tests to properly run.
     def world_setup(self, seed: typing.Optional[int] = None) -> None:
         super(BanjoTooieTestBase, self).world_setup(seed)
+        if not hasattr(self, "multiworld"):
+            return
+        distribute_items_restrictive(self.multiworld)
+        call_all(self.multiworld, "post_fill")
         call_all(self.multiworld, "fill_slot_data")
 
     def test_hint_count(self) -> None:
@@ -27,10 +34,11 @@ class TestSignpostsHints(BanjoTooieTestBase):
 
         move_hints = 0
         for hint_data in self.world.hints.values():
-            hinted_location = [
-                    location for location in self.world.get_locations()\
-                    if location.address == hint_data.location_id
-                ][0]
+            if hint_data.location_id is None:
+                continue
+
+            hinted_location = self.world.get_location(self.world.location_id_to_name[hint_data.location_id])
+            print(hinted_location, hinted_location.item.name)
             if hinted_location.item.name in move_names:
                 move_hints += 1
 
@@ -41,9 +49,6 @@ class TestSignpostsHints(BanjoTooieTestBase):
         if self.world.options.randomize_bk_moves == RandomizeBKMoveList.option_all:
             possible_moves += 16
 
-
-        if move_hints == 0 and min(self.world.options.signpost_move_hints, possible_moves, self.world.options.signpost_hints) != 0:
-            print([hint.text for hint in self.world.hints.values()])
         assert move_hints >= min(self.world.options.signpost_move_hints, possible_moves, self.world.options.signpost_hints)
 
 
@@ -62,19 +67,52 @@ class TestClearSignpostsHints(TestSignpostsHints):
 
             text = hint_data.text
 
-            finder = self.world.player_name[hinted_location.player]
             location = hinted_location.name
-            receiver = self.world.player_name[hinted_location.item.player]
             item = hinted_location.item.name
 
-            assert finder in text
+            assert 'Your' in text
             assert location in text
-            assert receiver in text
+            assert 'your' in text
             assert item in text
+
+class TestClearSignpostsHintsAddAllHints(TestSignpostsHints):
+    options = {
+        "hint_clarity": HintClarity.option_clear,
+        "add_signpost_hints_to_ap": AddSignpostHintsToArchipelagoHints.option_always
+    }
+    def test_should_add_hint(self) -> None:
+        for hint_data in self.world.hints.values():
+            if not hint_data.location_id:
+                assert not hint_data.should_add_hint
+            else:
+                assert hint_data.should_add_hint
+
+
+class TestClearSignpostsHintsAddAllProgressionHints(TestSignpostsHints):
+    options = {
+        "hint_clarity": HintClarity.option_clear,
+        "add_signpost_hints_to_ap": AddSignpostHintsToArchipelagoHints.option_progression
+    }
+    def test_should_add_hint(self) -> None:
+        for hint_data in self.world.hints.values():
+            if not hint_data.location_id:
+                assert not hint_data.should_add_hint
+                continue
+            hinted_location = [
+                location for location in self.world.get_locations()\
+                if location.address == hint_data.location_id
+            ][0]
+
+            if hinted_location.item.advancement:
+                assert hint_data.should_add_hint
+            else:
+                assert not hint_data.should_add_hint
+
 
 class TestCrypticSignpostsHints(TestSignpostsHints):
     options = {
-        "hint_clarity": HintClarity.option_cryptic
+        "hint_clarity": HintClarity.option_cryptic,
+        "add_signpost_hints_to_ap": AddSignpostHintsToArchipelagoHints.option_always
     }
     def test_accurate_hint_text(self) -> None:
         for hint_data in self.world.hints.values():
@@ -88,18 +126,25 @@ class TestCrypticSignpostsHints(TestSignpostsHints):
 
             text = hint_data.text[::]
 
-            finder = self.world.player_name[hinted_location.player]
             location = hinted_location.name
 
             classification_keywords = {
                 ItemClassification.progression: "wonderful",
+                ItemClassification.progression_skip_balancing: "great",
                 ItemClassification.useful: "good",
-                ItemClassification.filler: "okay",
+                ItemClassification.filler: "useless",
             }
 
-            assert text.find(finder) != -1
-            assert text.find(location) != -1
-            assert classification_keywords[hinted_location.item.classification] in text
+            if hinted_location.item.advancement and all_item_table.get(hinted_location.item.name).qty == 1:
+                keyword = "legendary one-of-a-kind"
+            else:
+                keyword = classification_keywords[hinted_location.item.classification]
+
+
+            assert 'Your' in text
+            assert location in text
+            assert keyword in text, f"Item {hinted_location.item.name} should be {keyword} but was hinted differently."
+            assert not hint_data.should_add_hint
 
 
 class TestClearSignpostsNoHints(TestClearSignpostsHints):

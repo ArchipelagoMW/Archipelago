@@ -1,12 +1,14 @@
 from ..Names import itemName
 from ..Options import RandomizeDoubloons
 from .test_logic import EasyTricksLogic, GlitchesLogic, HardTricksLogic, IntendedLogic
+from .test_fillers_and_traps import ONLY_BIG_O_PANTS_FILLER
 from ..Locations import all_location_table
 from . import BanjoTooieTestBase
 
 class TestRandomizedDoubloons(BanjoTooieTestBase):
     options = {
         "randomize_doubloons": RandomizeDoubloons.option_true,
+        **ONLY_BIG_O_PANTS_FILLER
     }
     def test_item_pool(self) -> None:
         item_pool_names = [item.name for item in self.multiworld.itempool]
@@ -15,6 +17,7 @@ class TestRandomizedDoubloons(BanjoTooieTestBase):
 class TestVanillaDoubloons(BanjoTooieTestBase):
     options = {
         "randomize_doubloons": RandomizeDoubloons.option_false,
+        **ONLY_BIG_O_PANTS_FILLER
     }
     def test_item_pool(self) -> None:
         item_pool_names = [item.name for item in self.multiworld.itempool]

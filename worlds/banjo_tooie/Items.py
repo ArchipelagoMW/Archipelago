@@ -4,7 +4,7 @@ from .Names import itemName, locationName
 
 
 class BanjoTooieItem(Item):
-    # 1230833 (TITRAP) but beware of level access keys that are way higher!
+    # 1230915 (CKWARP2) but beware of level access keys that are way higher!
     game: str = "Banjo-Tooie"
 class ItemData(NamedTuple):
     btid: int = 0
@@ -31,7 +31,7 @@ jiggy_table = {
 }
 
 token_table = {
-    itemName.MUMBOTOKEN:    ItemData(1230798, 20, "progression_skip_balancing", ""),
+    itemName.MUMBOTOKEN:    ItemData(1230798, 20, "progress", ""),
 }
 
 moves_table = {
@@ -65,7 +65,7 @@ moves_table = {
 }
 
 dino_table = {
-        itemName.ROAR:      ItemData(1230780, 1, "progress", locationName.ROARDINO)
+    itemName.ROAR:      ItemData(1230780, 1, "progress", locationName.ROARDINO)
 }
 
 bk_moves_table = {
@@ -136,14 +136,14 @@ level_progress_table = {
 }
 
 misc_collectable_table = {
-    itemName.HONEY:         ItemData(1230512, 25, "useful", ""),
-    itemName.PAGES:         ItemData(1230513, 25, "useful", ""),
+    itemName.HONEY:         ItemData(1230512, 25, "varies", ""),
+    itemName.PAGES:         ItemData(1230513, 25, "varies", ""),
     itemName.DOUBLOON:      ItemData(1230514, 30, "progress", ""),
-    itemName.TREBLE:        ItemData(1230516,  9, "progress", ""),
+    itemName.TREBLE:        ItemData(1230516,  9, "progression_skip_balancing", ""),
     itemName.CHUFFY:        ItemData(1230796,  1, "progress", locationName.CHUFFY),
-    itemName.NOTE:          ItemData(1230797, 144, "progress", ""),
-    itemName.BASS:          ItemData(1230781,  0, "progress", ""),
-    itemName.NONE:          ItemData(1230888,  0, "filler", ""),
+    itemName.NOTE:          ItemData(1230797, 144, "progression_skip_balancing", ""),
+    itemName.BASS:          ItemData(1230781,  0, "progression_skip_balancing", ""),
+    itemName.NONE:          ItemData(1230834,  0, "filler", ""),
     itemName.TTRAP:         ItemData(1230786,  0, "trap", ""),
     itemName.STRAP:         ItemData(1230787,  0, "trap", ""),
     itemName.TRTRAP:        ItemData(1230788,  0, "trap", ""),
@@ -187,6 +187,58 @@ nest_table= {
     itemName.FNEST:           ItemData(1230807,   135, "filler", ""),
 }
 
+silo_table = {
+    itemName.SILOIOHJV:           ItemData(1230870,   1, "progress", locationName.SILOIOHJV),
+    itemName.SILOIOHWH:           ItemData(1230871,   1, "progress", locationName.SILOIOHWH),
+    itemName.SILOIOHPL:           ItemData(1230872,   1, "progress", locationName.SILOIOHPL),
+    itemName.SILOIOHPG:           ItemData(1230873,   1, "progress", locationName.SILOIOHPG),
+    itemName.SILOIOHCT:           ItemData(1230874,   1, "progress", locationName.SILOIOHCT),
+    itemName.SILOIOHWL:           ItemData(1230875,   1, "progress", locationName.SILOIOHWL),
+    itemName.SILOIOHQM:           ItemData(1230876,   1, "progress", locationName.SILOIOHQM),
+}
+
+warp_pad_table = {
+    itemName.WARPMT1:           ItemData(1230877,   1, "progress", locationName.WARPMT1),
+    itemName.WARPMT2:           ItemData(1230878,   1, "progress", locationName.WARPMT2),
+    itemName.WARPMT3:           ItemData(1230879,   1, "progress", locationName.WARPMT3),
+    itemName.WARPMT4:           ItemData(1230880,   1, "progress", locationName.WARPMT4),
+    itemName.WARPMT5:           ItemData(1230881,   1, "progress", locationName.WARPMT5),
+    itemName.WARPGM1:           ItemData(1230882,   1, "progress", locationName.WARPGM1),
+    itemName.WARPGM2:           ItemData(1230883,   1, "progress", locationName.WARPGM2),
+    itemName.WARPGM3:           ItemData(1230884,   1, "progress", locationName.WARPGM3),
+    itemName.WARPGM4:           ItemData(1230885,   1, "progress", locationName.WARPGM4),
+    itemName.WARPGM5:           ItemData(1230886,   1, "progress", locationName.WARPGM5),
+    itemName.WARPWW1:           ItemData(1230887,   1, "progress", locationName.WARPWW1),
+    itemName.WARPWW2:           ItemData(1230888,   1, "progress", locationName.WARPWW2),
+    itemName.WARPWW3:           ItemData(1230889,   1, "progress", locationName.WARPWW3),
+    itemName.WARPWW4:           ItemData(1230890,   1, "progress", locationName.WARPWW4),
+    itemName.WARPWW5:           ItemData(1230891,   1, "progress", locationName.WARPWW5),
+    itemName.WARPJR1:           ItemData(1230892,   1, "progress", locationName.WARPJR1),
+    itemName.WARPJR2:           ItemData(1230893,   1, "progress", locationName.WARPJR2),
+    itemName.WARPJR3:           ItemData(1230894,   1, "progress", locationName.WARPJR3),
+    itemName.WARPJR4:           ItemData(1230895,   1, "progress", locationName.WARPJR4),
+    itemName.WARPJR5:           ItemData(1230896,   1, "progress", locationName.WARPJR5),
+    itemName.WARPTL1:           ItemData(1230897,   1, "progress", locationName.WARPTL1),
+    itemName.WARPTL2:           ItemData(1230898,   1, "progress", locationName.WARPTL2),
+    itemName.WARPTL3:           ItemData(1230899,   1, "progress", locationName.WARPTL3),
+    itemName.WARPTL4:           ItemData(1230900,   1, "progress", locationName.WARPTL4),
+    itemName.WARPTL5:           ItemData(1230901,   1, "progress", locationName.WARPTL5),
+    itemName.WARPGI1:           ItemData(1230902,   1, "progress", locationName.WARPGI1),
+    itemName.WARPGI2:           ItemData(1230903,   1, "progress", locationName.WARPGI2),
+    itemName.WARPGI3:           ItemData(1230904,   1, "progress", locationName.WARPGI3),
+    itemName.WARPGI4:           ItemData(1230905,   1, "progress", locationName.WARPGI4),
+    itemName.WARPGI5:           ItemData(1230906,   1, "progress", locationName.WARPGI5),
+    itemName.WARPHP1:           ItemData(1230907,   1, "progress", locationName.WARPHP1),
+    itemName.WARPHP2:           ItemData(1230908,   1, "progress", locationName.WARPHP2),
+    itemName.WARPHP3:           ItemData(1230909,   1, "progress", locationName.WARPHP3),
+    itemName.WARPHP4:           ItemData(1230910,   1, "progress", locationName.WARPHP4),
+    itemName.WARPHP5:           ItemData(1230911,   1, "progress", locationName.WARPHP5),
+    itemName.WARPCC1:           ItemData(1230912,   1, "progress", locationName.WARPCC1),
+    itemName.WARPCC2:           ItemData(1230913,   1, "progress", locationName.WARPCC2),
+    itemName.WARPCK1:           ItemData(1230914,   1, "progress", locationName.WARPCK1),
+    itemName.WARPCK2:           ItemData(1230915,   1, "progress", locationName.WARPCK2),
+}
+
 
 all_item_table: Dict[str, ItemData] = {
     **moves_table,
@@ -201,7 +253,9 @@ all_item_table: Dict[str, ItemData] = {
     **bk_moves_table,
     **progressive_ability_table,
     **dino_table,
-    **nest_table
+    **nest_table,
+    **silo_table,
+    **warp_pad_table,
 }
 
 all_group_table: Dict[str, Dict[str, ItemData]] = {
@@ -216,5 +270,7 @@ all_group_table: Dict[str, Dict[str, ItemData]] = {
     "stopnswap": stop_n_swap_table,
     "bk_moves": bk_moves_table,
     "dino": dino_table,
-    "nest": nest_table
+    "nest": nest_table,
+    "Silos": silo_table,
+    "Warp Pads": warp_pad_table
 }

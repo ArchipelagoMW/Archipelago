@@ -13,14 +13,6 @@ class TestRandomizedSignposts(BanjoTooieTestBase):
     for locations in SIGNPOST_REGIONS.values():
         tested_locations.extend(locations)
 
-    def test_item_pool(self) -> None:
-        item_pool_names = [item.name for item in self.multiworld.itempool]
-        assert item_pool_names.count(itemName.NONE) == (
-            len(self.tested_locations)
-            if self.world.options.randomize_bk_moves == RandomizeBKMoveList.option_all
-            else len(self.tested_locations) + 16
-        )
-
     def test_locations(self) -> None:
         assert len(self.tested_locations) == 61
         world_location_names = [location.name for location in self.world.get_locations()]
@@ -34,14 +26,6 @@ class TestNonRandomizedSignposts(BanjoTooieTestBase):
     tested_locations = []
     for locations in SIGNPOST_REGIONS.values():
         tested_locations.extend(locations)
-
-    def test_item_pool(self) -> None:
-        item_pool_names = [item.name for item in self.multiworld.itempool]
-        assert item_pool_names.count(itemName.NONE) == (
-            0
-            if self.world.options.randomize_bk_moves == RandomizeBKMoveList.option_all
-            else 16
-        )
 
     def test_locations(self) -> None:
         assert len(self.tested_locations) == 61

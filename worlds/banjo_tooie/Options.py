@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Toggle, DeathLink, PerGameCommonOptions, Choice, DefaultOnToggle, Range, StartInventoryPool, FreeText
+from Options import Toggle, DeathLink, PerGameCommonOptions, Choice, DefaultOnToggle, Range, NamedRange, StartInventoryPool, FreeText
 
 class RandomizeBTMoveList(DefaultOnToggle):
     """Jamjars' & Roysten's Movelist are randomized."""
@@ -149,6 +149,7 @@ class EggsBehaviour(Choice):
     option_start_with_blue_eggs = 0
     option_random_starting_egg = 1
     option_progressive_eggs = 2
+    option_simple_random_starting_egg = 3 #no clockworks
     default = 0
 
 class ProgressiveShoes(Toggle):
@@ -245,9 +246,14 @@ class TrebleclefNotes(Range):
     range_end = 21
     default = 0
 
-class Traps(Toggle):
-    """Swaps out the Big-O-Pants with Traps!"""
-    display_name = "Traps"
+class MaxTraps(NamedRange):
+    """The maximum possible amount of traps that replace fillers in the pool.
+    Notice that the real number of traps is limited by the number of fillers in the pool, which varies depending on your settings."""
+    display_name = "Max Traps"
+    range_start = 0
+    range_end = 100
+    default = 0
+    special_range_names = {"none": 0, "light": 15, "moderate": 30, "mayhem": 70, "unlimited": 99999}
 
 class RandomizeWorldDinoRoar(Toggle):
     """Baby T-Rex's Roar is lost across the MultiWorld. Other players need to help him learn to ROAR!"""
@@ -257,67 +263,119 @@ class EnableNestsanity(Toggle):
     """Eggs and feather nests give checks when you collect them for the first time. They behave as regular egg nests after they have been collected."""
     display_name = "Nestsanity"
 
-class TrapsToNestRatio(Range):
-    """Select a percentage of feather and egg nests items to be replaced with trap items.
-    Requires Traps and Nestsanity to have an effect."""
-    display_name = "Traps to Nests Ratio"
+class ReplaceExtraJiggies(DefaultOnToggle):
+    """Jiggies over the maximum needed to beat the seed (plus a generous buffer) are replaced by fillers/traps.
+       If turned off, you are guranteed exactly 90 jiggies.
+       You can control how likely extra jiggies show up as fillers by extra_jiggies_weight."""
+    display_name = "Replace Extra Jiggies with filler"
+
+class ReplaceExtraNotes(DefaultOnToggle):
+    """Notes over the maximum needed to beat the seed (plus a generous buffer) are replaced by fillers/traps.
+       If turned off, you are guranteed exactly 900 notes in total.
+       You can control how likely extra notes show up as fillers by extra_notes_weight."""
+    display_name = "Replace Extra Notes with filler"
+
+# -- START OF FILLERS WEIGHTS -------------------------------------------------
+
+class ExtraJiggiesWeight(Range):
+    """The weight of Jiggies in the filler pool. Requires replace_extra_jiggies.
+    You are guarenteed enough jigges to open all levels. These are extra."""
+    display_name = "Extra Jiggies Weight"
     range_start = 0
     range_end = 100
-    default = 0
+    default = 15
+
+class ExtraNotesWeight(Range):
+    """The weight of 5 pack notes in the filler pool. Requires randomize_notes and replace_extra_notes.
+    You are guarenteed enough notes to open all jamjars silos. These are extra."""
+    display_name = "Extra 5 Notes Weight"
+    range_start = 0
+    range_end = 100
+    default = 10
+
+class ExtraDoubloonsWeight(Range):
+    """The weight of extra doubloons in the filler pool. Requires randomize_doubloons.
+    You are guarenteed the original 30 doubloons. These are extra."""
+    display_name = "Extra Doubloons Weight"
+    range_start = 0
+    range_end = 100
+    default = 10
+
+class EggNestsWeight(Range):
+    """The weight of Egg nests in the filler pool. The weight is doubled if nestsanity is on."""
+    display_name = "Egg Nests Weight"
+    range_start = 0
+    range_end = 100
+    default = 30
+
+class FeatherNestsWeight(Range):
+    """The weight of Egg nests in the filler pool. The weight is doubled if nestsanity is on."""
+    display_name = "Feather Nests Weight"
+    range_start = 0
+    range_end = 100
+    default = 15
+
+class BigOPantsWeight(Range):
+    """The weight of Big-O-Pants (nothing) in the filler pool."""
+    display_name = "Big-O-Pants Weight"
+    range_start = 0
+    range_end = 100
+    default = 5
 
 class GoldenEggsWeight(Range):
-    """The weight of Golden Eggs in the trap pool.
+    """The weight of Golden Eggs in the filler pool.
     You are forced to use Golden Eggs for a minute upon receiving the trap.
-    Requires Traps and Nestsanity to have an effect"""
+    Requires Max Traps to be nonzero to have an effect"""
     display_name = "Golden Eggs Weight"
     range_start = 0
     range_end = 100
-    default = 40
+    default = 25
 
 class TripTrapWeight(Range):
-    """The weight of Trip Traps in the trap pool.
+    """The weight of Trip Traps in the filler pool.
     You trip upon receiving the trap.
-    Requires Traps to have an effect"""
+    Requires Max Traps to be nonzero to have an effect"""
     display_name = "Trip Trap Weight"
     range_start = 0
     range_end = 100
-    default = 40
+    default = 30
 
 class SlipTrapWeight(Range):
-    """The weight of Slip Traps in the trap pool.
+    """The weight of Slip Traps in the filler pool.
     You slip upon receiving the trap.
-    Requires Traps to have an effect"""
+    Requires Max Traps to be nonzero to have an effect"""
     display_name = "Slip Trap Weight"
     range_start = 0
     range_end = 100
-    default = 40
+    default = 30
 
 class TransformTrapWeight(Range):
-    """The weight of Transform Traps in the trap pool.^
+    """The weight of Transform Traps in the filler pool.
     A transformation animation upon receiving the trap.
-    Requires Traps to have an effect"""
+    Requires Max Traps to be nonzero to have an effect"""
     display_name = "Transform Trap Weight"
     range_start = 0
     range_end = 100
-    default = 40
+    default = 30
 
 class SquishTrapWeight(Range):
-    """The weight of Squish Traps in the trap pool.
+    """The weight of Squish Traps in the filler pool.
     Stomponadon attempts to squish you upon receiving the trap.
-    Requires Traps to have an effect"""
+    Requires Max Traps to be nonzero to have an effect"""
     display_name = "Squish Trap Weight"
     range_start = 0
     range_end = 100
-    default = 20
+    default = 15
 
 class TipTrapWeight(Range):
-    """The weight of Tip Traps in the trap pool.
+    """The weight of Tip Traps in the filler pool.
     You receive a random textbox upon receiving the trap.
-    Requires Traps to have an effect"""
+    Requires Max Traps to be nonzero to have an effect"""
     display_name = "Tip Trap Weight"
     range_start = 0
     range_end = 100
-    default = 40
+    default = 20
+# -- END OF FILLERS WEIGHTS ---------------------------------------------------
 
 class KingJingalingHasJiggy(DefaultOnToggle):
     """King Jingaling will always have a Jiggy for you."""
@@ -380,15 +438,6 @@ class LogicType(Choice):
     option_easy_tricks = 1
     option_hard_tricks = 2
     option_glitches = 3
-    default = 0
-
-class OpenSilos(Choice):
-    """Choose if you want IoH Silos to be closed, randomly open 1, or enable all. If you enabled Randomized Worlds with BK Moves randomized and
-       silos set to none, it will be enforced to one."""
-    display_name = "Open Silos"
-    option_none = 0
-    option_one = 1
-    option_all = 2
     default = 0
 
 class VictoryCondition(Choice):
@@ -492,17 +541,20 @@ class SignpostMoveHints(Range):
     default = 20
 
 # Soon (tm), once this gets merged: https://github.com/ArchipelagoMW/Archipelago/pull/4317
-# class AddSignpostHintsToArchipelagoHints(Choice):
-#     """Choose if a signpost hint is added to the Archipelago hints upon reading the hint.
-#     Never: signpost hints are never added
-#     Progression: hints are added only if the hinted location has a progression item.
-#     Always: hints are always added.
-#     This option only has an effect if signpost hints are enabled."""
-#     display_name = "Add Signpost Hints to Archipelago Hints"
-#     option_never = 0
-#     option_progression = 1
-#     option_always = 2
-#     default = 2
+# we can add hints for other players locations as well
+class AddSignpostHintsToArchipelagoHints(Choice):
+    """Choose if a signpost hint is added to the Archipelago hints upon reading the hint.
+    Due to a limitation, only your own locations will be added as hints; your items in
+    other people worlds won't be hinted.
+    Never: signpost hints are never added
+    Progression: hints are added only if the hinted location has a progression item.
+    Always: hints are always added.
+    This option only has an effect if signpost hints are enabled."""
+    display_name = "Add Signpost Hints to Archipelago Hints"
+    option_never = 0
+    option_progression = 1
+    option_always = 2
+    default = 1
 
 class HintClarity(Choice):
     """Choose how clear hints are.
@@ -513,6 +565,24 @@ class HintClarity(Choice):
     option_clear = 1
     default = 1
 
+
+class OpenSilos(Range):
+    """Choose how many overworld silos are pre-opened.
+    If you have Randomized Worlds, pre-opened silos are guaranteed to lead to the first world.
+    If you enabled Randomized Worlds with BK Moves randomized, you must have at least 2 silos opened."""
+    display_name = "Open Silos"
+    range_start = 0
+    range_end = 7
+    default = 2
+
+class RandomizeSilos(Toggle):
+    """Overworld silos give checks when tagging them. They can only be used once you receive the corresponding item to use a silo."""
+    display_name = "Randomize Silos"
+
+class RandomizeWarpPads(Toggle):
+    """Warp Pads give checks when tagging them. They can only be used once you receive the corresponding item to use a warp pad."""
+    display_name = "Randomize Silos"
+
 @dataclass
 class BanjoTooieOptions(PerGameCommonOptions):
     death_link: DeathLink
@@ -520,6 +590,7 @@ class BanjoTooieOptions(PerGameCommonOptions):
     logic_type: LogicType
 
     victory_condition: VictoryCondition
+    open_hag1: OpenHag1
     minigame_hunt_length: MinigameHuntLength
     boss_hunt_length: BossHuntLength
     jinjo_family_rescue_length: JinjoFamilyRescueLength
@@ -557,25 +628,33 @@ class BanjoTooieOptions(PerGameCommonOptions):
     nestsanity: EnableNestsanity
     randomize_signposts: RandomizeSignposts
 
-    traps: Traps
-    traps_nests_ratio: TrapsToNestRatio
+    replace_extra_jiggies: ReplaceExtraJiggies
+    replace_extra_notes: ReplaceExtraNotes
 
+    extra_jiggies_weight: ExtraJiggiesWeight
+    extra_notes_weight: ExtraNotesWeight
+    extra_doubloons_weight: ExtraDoubloonsWeight
+    egg_nests_weight: EggNestsWeight
+    feather_nests_weight: FeatherNestsWeight
+    big_o_pants_weight: BigOPantsWeight
     golden_eggs_weight: GoldenEggsWeight
     trip_trap_weight: TripTrapWeight
     slip_trap_weight: SlipTrapWeight
     transform_trap_weight: TransformTrapWeight
     squish_trap_weight: SquishTrapWeight
     tip_trap_weight: TipTrapWeight
+    max_traps: MaxTraps
 
     randomize_stations: RandomizeTrainStationSwitches
     randomize_chuffy: RandomizeChuffyTrain
+    randomize_warp_pads: RandomizeWarpPads
+    randomize_silos: RandomizeSilos
+    open_silos: OpenSilos
     jingaling_jiggy: KingJingalingHasJiggy
     skip_puzzles: SkipPuzzles
     randomize_worlds: RandomizeWorlds
     randomize_world_loading_zone: RandomizeWorldZones
-    open_hag1: OpenHag1
     backdoors:Backdoors
-    open_silos: OpenSilos
 
     extra_cheats: ExtraCheats
     easy_canary: EasyCanary
@@ -585,10 +664,10 @@ class BanjoTooieOptions(PerGameCommonOptions):
 
     signpost_hints: SignpostHints
     signpost_move_hints: SignpostMoveHints
-    # add_signpost_hints_to_ap: AddSignpostHintsToArchipelagoHints
+    add_signpost_hints_to_ap: AddSignpostHintsToArchipelagoHints
     hint_clarity: HintClarity
 
-    dialog_character:DialogCharacters # Keep this at the bottom so that the huge list stays at the bottom of the yaml.
+    dialog_character: DialogCharacters # Keep this at the bottom so that the huge list stays at the bottom of the yaml.
 
     start_inventory_from_pool: StartInventoryPool
 

@@ -1,5 +1,5 @@
-from .Options import EggsBehaviour, GameLength, JamjarsSiloCosts, LogicType, ProgressiveEggAim, ProgressiveWaterTraining, RandomizeBKMoveList, OpenSilos
-
+from .Options import EggsBehaviour, GameLength, JamjarsSiloCosts, LogicType, ProgressiveEggAim, ProgressiveWaterTraining, RandomizeBKMoveList
+from Options import OptionError
 from .Names import itemName, regionName, locationName
 from typing import TYPE_CHECKING, List
 from .Locations import all_location_table
@@ -23,7 +23,6 @@ def WorldRandomize(world: BanjoTooieWorld) -> None:
             world.worlds_randomized = bool(passthrough["worlds"] == "true")
             world.starting_egg = passthrough["starting_egg"]
             world.starting_attack = passthrough["starting_attack"]
-            world.single_silo = passthrough["first_silo"]
             world.jamjars_siloname_costs = passthrough["jamjars_siloname_costs"]
             world.loading_zones = passthrough["loading_zones"]
     else:
@@ -67,10 +66,10 @@ def generate_world_order(world: BanjoTooieWorld, worlds: List[str]) -> List[str]
     if world.options.progressive_shoes:
         bad_first_worlds.add(regionName.CK)
     # Not enough collectibles in the overworld to get to Quag
-    if world.options.randomize_bk_moves != RandomizeBKMoveList.option_all and world.options.open_silos == OpenSilos.option_none:
+    if world.options.randomize_bk_moves != RandomizeBKMoveList.option_all and world.options.open_silos < 2:
         bad_first_worlds.update([regionName.GIO, regionName.CK])
     # Without nests, reaching Wasteland might not be possible
-    if world.options.randomize_bk_moves == RandomizeBKMoveList.option_mcjiggy_special and world.options.open_silos == OpenSilos.option_none\
+    if world.options.randomize_bk_moves == RandomizeBKMoveList.option_mcjiggy_special and world.options.open_silos < 2\
         and not world.options.nestsanity:
         bad_first_worlds.update([regionName.CC, regionName.TL])
 
@@ -160,44 +159,58 @@ def randomize_entrance_loading_zones(world: BanjoTooieWorld) -> None:
 
 
 def choose_unlocked_silos(world: BanjoTooieWorld) -> None:
-    if not world.options.randomize_bk_moves == RandomizeBKMoveList.option_all and world.options.open_silos == OpenSilos.option_none:
-        world.single_silo = "NONE"
+    if world.options.open_silos == 0:
+        return
 
-    elif world.options.randomize_bk_moves == RandomizeBKMoveList.option_all and\
-        not world.options.randomize_worlds and world.options.open_silos == OpenSilos.option_none:
-        world.single_silo = "NONE"
+    # Fully random.
+    if world.options.open_silos == 1 or not world.options.randomize_worlds:
+        remaining_silos = [itemName.SILOIOHJV, itemName.SILOIOHWH, itemName.SILOIOHPL, itemName.SILOIOHPG, itemName.SILOIOHCT, itemName.SILOIOHWL, itemName.SILOIOHQM]
+        while len(world.preopened_silos) < world.options.open_silos:
+            silo = world.random.choice(remaining_silos)
+            remaining_silos.remove(silo)
+            world.preopened_silos.append(silo)
 
-    elif world.options.open_silos == OpenSilos.option_all:
-        world.single_silo = "ALL"
-
-    elif world.options.randomize_bk_moves == RandomizeBKMoveList.option_all and world.options.randomize_worlds\
-        or world.options.open_silos == OpenSilos.option_one:
-        # One silo chosen or imposed.
-
+    # A pair leads to the first level.
+    elif world.options.randomize_bk_moves == RandomizeBKMoveList.option_all and world.options.randomize_worlds or world.options.open_silos >= 2:
+        world_silo = ""
         if list(world.randomize_order.keys())[0] == regionName.GIO:
             # GI is special. If loading zones are not randomized, the only way to make progress in the level is by riding the train into the level from Cliff Top.
-            world.single_silo = regionName.IOHQM if world.options.randomize_world_loading_zone else regionName.IOHCT
+            world_silo = itemName.SILOIOHQM if world.options.randomize_world_loading_zone else itemName.SILOIOHCT
         else:
             overworld_lookup = {
-                regionName.MT: world.random.choice([regionName.IOHPL, regionName.IOHPG, regionName.IOHCT, regionName.IOHQM]), # You can already get there, so you get a bonus silo! (Nobody likes Mayahell anyway.)
-                regionName.GM: regionName.IOHPL,
-                regionName.WW: regionName.IOHPG,
-                regionName.JR: regionName.IOHCT,
-                regionName.TL: regionName.IOHWL,
-                regionName.HP: regionName.IOHCT,
-                regionName.CC: regionName.IOHWL,
-                regionName.CK: regionName.IOHQM,
+                regionName.MT: world.random.choice([itemName.SILOIOHPL, itemName.SILOIOHPG, itemName.SILOIOHCT, itemName.SILOIOHWL, itemName.SILOIOHQM]), # You can already get there, so we give a random silo.
+                regionName.GM: itemName.SILOIOHPL,
+                regionName.WW: itemName.SILOIOHPG,
+                regionName.JR: itemName.SILOIOHCT,
+                regionName.TL: itemName.SILOIOHWL,
+                regionName.HP: itemName.SILOIOHCT,
+                regionName.CC: itemName.SILOIOHWL,
+                regionName.CK: itemName.SILOIOHQM,
             }
-            world.single_silo = overworld_lookup[list(world.randomize_order.keys())[0]]
+            world_silo = overworld_lookup[list(world.randomize_order.keys())[0]]
+
+        remaining_silos = [itemName.SILOIOHJV, itemName.SILOIOHWH, itemName.SILOIOHPL, itemName.SILOIOHPG, itemName.SILOIOHCT, itemName.SILOIOHWL, itemName.SILOIOHQM]
+
+        world.preopened_silos.append(world.random.choice([itemName.SILOIOHJV, itemName.SILOIOHWH]))
+        world.preopened_silos.append(world_silo)
+
+        for silo in world.preopened_silos:
+            remaining_silos.remove(silo)
+
+        while len(world.preopened_silos) < world.options.open_silos:
+            silo = world.random.choice(remaining_silos)
+            remaining_silos.remove(silo)
+            world.preopened_silos.append(silo)
     else:
-        raise ValueError("These settings were not considered when randomizing loading zones. Please give us your settings so that we fix it.")
+        raise OptionError("These settings were not considered when randomizing loading zones. Please give us your settings so that we fix it.")
+
 
 def handle_early_moves(world: BanjoTooieWorld) -> None:
     first_level = list(world.randomize_worlds.keys())[0]
     actual_first_level = world.loading_zones[first_level]
 
     # A silo to the first world is not given.
-    if world.options.randomize_bk_moves != RandomizeBKMoveList.option_all and world.single_silo == "NONE":
+    if world.options.randomize_bk_moves != RandomizeBKMoveList.option_all and world.options.open_silos < 2:
         if  first_level != regionName.MT and world.options.logic_type != LogicType.option_easy_tricks:
             world.multiworld.early_items[world.player][itemName.GGRAB] = 1
 

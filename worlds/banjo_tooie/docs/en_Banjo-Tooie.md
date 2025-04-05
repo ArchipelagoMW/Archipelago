@@ -21,6 +21,7 @@ config file.
 - Pause menu contains a new Arhipelago Menu
 - Options to randomize opening of worlds order and randomize world entrances
 - Option to add nest to the list of locations. If it's active, all un-collected nests have the Archipelago logo as their texture
+- Signpost can give out item hints if enabled
 
 ## What items and locations can get shuffled?
 
@@ -41,6 +42,8 @@ config file.
 - T-Rex Roar
 - Nests
 - Traps
+- Isle O' Hag Silos
+- Warp Pads
 
 ## When the player receives an item, what happens?
 

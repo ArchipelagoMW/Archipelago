@@ -62,9 +62,9 @@ deathlink_sent_this_death: we interacted with the multiworld on this death, wait
 bt_loc_name_to_id = network_data_package["games"]["Banjo-Tooie"]["location_name_to_id"]
 bt_itm_name_to_id = network_data_package["games"]["Banjo-Tooie"]["item_name_to_id"]
 script_version: int = 4
-version: str = "V4.2"
-game_append_version: str = "V42"
-patch_md5: str = "af5a3694bebe91130b897ff73c566ed8"
+version: str = "V4.4.2"
+game_append_version: str = "V44"
+patch_md5: str = "e1549e5f99c73ea442e1b78d17fdf66b"
 
 def get_item_value(ap_id):
     return ap_id
@@ -151,6 +151,8 @@ class BanjoTooieContext(CommonContext):
         self.goggles_table = False
         self.dino_kids_table = {}
         self.signpost_table = {}
+        self.warppads_table = {}
+        self.silos_table = {}
         self.nests_table = {}
         self.roar = False
         self.jiggy_table = {}
@@ -165,6 +167,7 @@ class BanjoTooieContext(CommonContext):
         self.sendSlot = False
         self.sync_ready = False
         self.startup = False
+        self.handled_scouts = []
         # AquaPhoenix Contributed with the Gruntilda Insults
         self.death_messages = [
             "Gruntilda:    Did you hear that lovely clack, \n                     My broomstick gave you such a whack!",
@@ -367,7 +370,9 @@ def get_slot_payload(ctx: BanjoTooieContext):
             "slot_token_hunt_length": ctx.slot_data["token_hunt_length"],
             "slot_version": version,
             "slot_silo_costs": ctx.slot_data["jamjars_silo_costs"],
-            "slot_open_silo": ctx.slot_data["first_silo"],
+            "slot_preopened_silo": ctx.slot_data["preopened_silos"],
+            "slot_randomize_warp_pads": ctx.slot_data["randomize_warp_pads"],
+            "slot_randomize_silos": ctx.slot_data["randomize_silos"],
             "slot_zones": ctx.slot_data["loading_zones"],
             "slot_dialog_character": ctx.slot_data["dialog_character"],
             "slot_nestsanity": ctx.slot_data["nestsanity"],
@@ -428,6 +433,8 @@ async def parse_payload(payload: dict, ctx: BanjoTooieContext, force: bool):
     nests = payload["nests"]
     roar_obtain = payload["roar"]
     signposts = payload["signposts"]
+    warp_pads = payload["warppads"]
+    silos = payload["silos"]
     worldslist = payload["worlds"]
     banjo_map = payload["banjo_map"]
 
@@ -482,6 +489,10 @@ async def parse_payload(payload: dict, ctx: BanjoTooieContext, force: bool):
         doubloonlist = {}
     if isinstance(noteslist, list):
         noteslist = {}
+    if isinstance(warp_pads, list):
+        warp_pads = {}
+    if isinstance(silos, list):
+        silos = {}
     if isinstance(hag, bool) == False:
         hag = False
     if isinstance(roar_obtain, bool) == False:
@@ -489,6 +500,7 @@ async def parse_payload(payload: dict, ctx: BanjoTooieContext, force: bool):
 
     if demo == False and ctx.sync_ready == True:
         locs1 = []
+        scouts1 = []
         if ctx.chuffy_table != chuffy:
             ctx.chuffy_table = chuffy
             for locationId, value in chuffy.items():
@@ -537,13 +549,29 @@ async def parse_payload(payload: dict, ctx: BanjoTooieContext, force: bool):
                     locs1.append(int(locationId))
         if ctx.signpost_table != signposts:
                 ctx.signpost_table = signposts
+                actual_hints = ctx.slot_data["hints"]
                 for locationId, value in signposts.items():
                     if value == True:
-#G0go, needs to add cmd to send Hint from ctx.get_slot['hints'][locationId]
-# contains ["location_id"]  (hinted locationID)
-# contains ["location_player_id"] (hinted playerId)
-
                         locs1.append(int(locationId))
+                        hint = actual_hints.get(str(locationId), None)
+
+                        if not hint is None and hint.get('should_add_hint')\
+                          and not hint.get('location_id') is None\
+                          and not hint.get('location_player_id') is None\
+                          and ctx.slot_concerns_self(hint['location_player_id']):
+                            id = hint['location_id']
+                            if not id in ctx.handled_scouts:
+                                scouts1.append(id)
+        if ctx.warppads_table != warp_pads:
+            ctx.warppads_table = warp_pads
+            for locationId, value in warp_pads.items():
+                if value == True:
+                    locs1.append(int(locationId))
+        if ctx.silos_table != silos:
+            ctx.silos_table = silos
+            for locationId, value in silos.items():
+                if value == True:
+                    locs1.append(int(locationId))        
         if ctx.roar != roar_obtain:
             ctx.roar = roar_obtain
             if roar_obtain == True:
@@ -626,6 +654,15 @@ async def parse_payload(payload: dict, ctx: BanjoTooieContext, force: bool):
                     "cmd": "LocationChecks",
                     "locations": locs1
                 }])
+
+        if len(scouts1) > 0:
+            await ctx.send_msgs([{
+                "cmd": "LocationScouts",
+                "locations": scouts1,
+                "create_as_hint": 2
+            }])
+            ctx.handled_scouts.extend(scouts1)
+
         #GAME VICTORY
         #Beat Hag-1
         if hag == True and (ctx.slot_data["victory_condition"] == 0 or ctx.slot_data["victory_condition"] == 4 or\

@@ -4,15 +4,20 @@ from ..Options import OpenHag1, VictoryCondition
 from . import BanjoTooieTestBase
 
 class TestProgressionJiggies(BanjoTooieTestBase):
+    options = {
+        "jingaling_jiggy": "false"
+    }
+
     def _test_progression_jiggies(self, expected_progression_jiggies) -> None:
         assert expected_progression_jiggies == len([
             item.name for item in self.multiworld.itempool
             if item.name == itemName.JIGGY
-            and item.classification == ItemClassification.progression
+            and item.advancement
         ])
 
 class TestOpenHag1WithHag1(TestProgressionJiggies):
     options = {
+        **TestProgressionJiggies.options,
         "open_hag1": OpenHag1.option_true,
         "victory_condition": VictoryCondition.option_hag1
     }
@@ -22,6 +27,7 @@ class TestOpenHag1WithHag1(TestProgressionJiggies):
 
 class TestOpenHag1WithBossesHag1(TestProgressionJiggies):
     options = {
+        **TestProgressionJiggies.options,
         "open_hag1": OpenHag1.option_true,
         "victory_condition": VictoryCondition.option_boss_hunt_and_hag1
     }
@@ -31,6 +37,7 @@ class TestOpenHag1WithBossesHag1(TestProgressionJiggies):
 
 class TestOpenHag1WithBosses(TestProgressionJiggies):
     options = {
+        **TestProgressionJiggies.options,
         "open_hag1": OpenHag1.option_true,
         "victory_condition": VictoryCondition.option_boss_hunt
     }
@@ -40,6 +47,7 @@ class TestOpenHag1WithBosses(TestProgressionJiggies):
 
 class TestClosedHag1WithHag1(TestProgressionJiggies):
     options = {
+        **TestProgressionJiggies.options,
         "open_hag1": OpenHag1.option_false,
         "victory_condition": VictoryCondition.option_hag1
     }
@@ -49,6 +57,7 @@ class TestClosedHag1WithHag1(TestProgressionJiggies):
 
 class TestClosedHag1WithBossesHag1(TestProgressionJiggies):
     options = {
+        **TestProgressionJiggies.options,
         "open_hag1": OpenHag1.option_false,
         "victory_condition": VictoryCondition.option_boss_hunt_and_hag1
     }
@@ -58,6 +67,7 @@ class TestClosedHag1WithBossesHag1(TestProgressionJiggies):
 
 class TestClosedHag1WithBosses(TestProgressionJiggies):
     options = {
+        **TestProgressionJiggies.options,
         "open_hag1": OpenHag1.option_false,
         "victory_condition": VictoryCondition.option_boss_hunt
     }
