@@ -228,15 +228,13 @@ refresh_components: Optional[Callable[[], None]] = None
 
 
 def run_gui(path: str, args: Any) -> None:
-    from kvui import (ThemedApp, MDFloatLayout, MDGridLayout, MDButton, MDLabel, MDButtonText, MDButtonIcon, ScrollBox,
-                      MDBoxLayout, ApAsyncImage)
+    from kvui import (ThemedApp, MDFloatLayout, MDGridLayout, MDButton, MDLabel, MDButtonText, ScrollBox, ApAsyncImage)
     from kivy.properties import ObjectProperty
     from kivy.core.window import Window
     from kivy.metrics import dp
     from kivymd.uix.button import MDIconButton
     from kivymd.uix.card import MDCard
     from kivymd.uix.menu import MDDropdownMenu
-    from kivymd.uix.navigationdrawer import MDNavigationDrawerDivider
     from kivymd.uix.relativelayout import MDRelativeLayout
     from kivymd.uix.snackbar import MDSnackbar, MDSnackbarText
 
@@ -379,7 +377,7 @@ def run_gui(path: str, args: Any) -> None:
             self.button_layout = self.top_screen.ids.button_layout
             self.set_colors()
             self.top_screen.md_bg_color = self.theme_cls.backgroundColor
-            
+
             global refresh_components
             refresh_components = self._refresh_components
 
