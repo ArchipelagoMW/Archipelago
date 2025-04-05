@@ -348,10 +348,10 @@ def accessibility_corrections(multiworld: MultiWorld, state: CollectionState, lo
         if (location.item is not None and location.item.advancement and location.address is not None and not
                 location.locked and location.item.player not in minimal_players):
             pool.append(location.item)
-            state.remove(location.item)
             location.item = None
             if location in state.advancements:
                 state.advancements.remove(location)
+                state.remove(location.item)
             locations.append(location)
     if pool and locations:
         locations.sort(key=lambda loc: loc.progress_type != LocationProgressType.PRIORITY)
@@ -500,22 +500,31 @@ def distribute_items_restrictive(multiworld: MultiWorld,
 
     if prioritylocations:
         # "priority fill"
-        fill_restrictive(multiworld, multiworld.state, prioritylocations, progitempool,
+        maximum_exploration_state = sweep_from_pool(multiworld.state)
+        fill_restrictive(multiworld, maximum_exploration_state, prioritylocations, progitempool,
                          single_player_placement=single_player, swap=False, on_place=mark_for_locking,
-                         name="Priority", one_item_per_player=False)
+                         name="Priority", one_item_per_player=True, allow_partial=True)
+
+        if prioritylocations:
+            # retry with one_item_per_player off because some priority fills can fail to fill with that optimization
+            maximum_exploration_state = sweep_from_pool(multiworld.state)
+            fill_restrictive(multiworld, maximum_exploration_state, prioritylocations, progitempool,
+                            single_player_placement=single_player, swap=False, on_place=mark_for_locking,
+                            name="Priority Retry", one_item_per_player=False)
         accessibility_corrections(multiworld, multiworld.state, prioritylocations, progitempool)
         defaultlocations = prioritylocations + defaultlocations
 
     if progitempool:
         # "advancement/progression fill"
+        maximum_exploration_state = sweep_from_pool(multiworld.state)
         if panic_method == "swap":
-            fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool, swap=True,
+            fill_restrictive(multiworld, maximum_exploration_state, defaultlocations, progitempool, swap=True,
                              name="Progression", single_player_placement=single_player)
         elif panic_method == "raise":
-            fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool, swap=False,
+            fill_restrictive(multiworld, maximum_exploration_state, defaultlocations, progitempool, swap=False,
                              name="Progression", single_player_placement=single_player)
         elif panic_method == "start_inventory":
-            fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool, swap=False,
+            fill_restrictive(multiworld, maximum_exploration_state, defaultlocations, progitempool, swap=False,
                              allow_partial=True, name="Progression", single_player_placement=single_player)
             if progitempool:
                 for item in progitempool:
@@ -531,7 +540,8 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         if progitempool:
             raise FillError(
                 f"Not enough locations for progression items. "
-                f"There are {len(progitempool)} more progression items than there are available locations.",
+                f"There are {len(progitempool)} more progression items than there are available locations.\n"
+                f"Unfilled locations:\n{multiworld.get_unfilled_locations()}.",
                 multiworld=multiworld,
             )
         accessibility_corrections(multiworld, multiworld.state, defaultlocations)
@@ -569,6 +579,26 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         items_counter.update(item.player for item in unplaced)
         print_data = {"items": items_counter, "locations": locations_counter}
         logging.info(f"Per-Player counts: {print_data})")
+
+        more_locations = locations_counter - items_counter
+        more_items = items_counter - locations_counter
+        for player in multiworld.player_ids:
+            if more_locations[player]:
+                logging.error(
+                    f"Player {multiworld.get_player_name(player)} had {more_locations[player]} more locations than items.")
+            elif more_items[player]:
+                logging.warning(
+                    f"Player {multiworld.get_player_name(player)} had {more_items[player]} more items than locations.")
+        if unfilled:
+            raise FillError(
+                f"Unable to fill all locations.\n" +
+                f"Unfilled locations({len(unfilled)}): {unfilled}"
+            )
+        else:
+            logging.warning(
+                f"Unable to place all items.\n" +
+                f"Unplaced items({len(unplaced)}): {unplaced}"
+            )
 
 
 def flood_items(multiworld: MultiWorld) -> None:

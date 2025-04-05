@@ -1,5 +1,6 @@
-from . import SVTestBase, allsanity_no_mods_6_x_x, \
-    allsanity_mods_6_x_x, minimal_locations_maximal_items, minimal_locations_maximal_items_with_island, get_minsanity_options, default_6_x_x
+from . import SVTestBase
+from .options.presets import default_6_x_x, allsanity_no_mods_6_x_x, allsanity_mods_6_x_x_exclude_disabled, get_minsanity_options, \
+    minimal_locations_maximal_items, minimal_locations_maximal_items_with_island
 from .. import location_table
 from ..items import Group, item_table
 
@@ -70,7 +71,7 @@ class TestAllSanitySettingsHasAllExpectedLocations(SVTestBase):
     options = allsanity_no_mods_6_x_x()
 
     def test_allsanity_without_mods_has_at_least_locations(self):
-        expected_locations = 2238
+        expected_locations = 2256
         real_locations = self.get_real_locations()
         number_locations = len(real_locations)
         print(f"Stardew Valley - Allsanity Locations without mods: {number_locations}")
@@ -83,10 +84,10 @@ class TestAllSanitySettingsHasAllExpectedLocations(SVTestBase):
 
 
 class TestAllSanityWithModsSettingsHasAllExpectedLocations(SVTestBase):
-    options = allsanity_mods_6_x_x()
+    options = allsanity_mods_6_x_x_exclude_disabled()
 
     def test_allsanity_with_mods_has_at_least_locations(self):
-        expected_locations = 3096
+        expected_locations = 2908
         real_locations = self.get_real_locations()
         number_locations = len(real_locations)
         print(f"Stardew Valley - Allsanity Locations with all mods: {number_locations}")
