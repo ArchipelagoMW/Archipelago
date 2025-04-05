@@ -242,6 +242,14 @@ def run_gui(path: str, args: Any) -> None:
 
     class LauncherCard(MDCard):
         component: Component | None
+        image: str
+        context_button: MDIconButton = ObjectProperty(None)
+
+        def __init__(self, *args, component: Component | None = None, image_path: str = "", **kwargs):
+            self.component = component
+            self.image = image_path
+            super().__init__(args, kwargs)
+
 
     class Launcher(ThemedApp):
         base_title: str = "Archipelago Launcher"
@@ -276,6 +284,14 @@ def run_gui(path: str, args: Any) -> None:
                         self.current_filter = filters
             super().__init__()
 
+        def set_favorite(self, caller):
+            if caller.component.display_name in self.favorites:
+                self.favorites.remove(caller.component.display_name)
+                caller.icon = "star-outline"
+            else:
+                self.favorites.append(caller.component.display_name)
+                caller.icon = "star"
+
         def build_card(self, component: Component) -> LauncherCard:
             """
                 Builds a card widget for a given component.
@@ -284,46 +300,8 @@ def run_gui(path: str, args: Any) -> None:
 
                 :return: The created Card Widget.
                 """
-            button_card = LauncherCard()
-            button_card.component = component
-            button_layout = MDRelativeLayout()
-            button_card.add_widget(button_layout)
-
-            source = icon_paths[component.icon]
-            image = ApAsyncImage(source=source, size=(40, 40), size_hint_y=None,
-                                 pos_hint={"center_x": 0.1, "center_y": 0.5})
-
-            button_layout.add_widget(image)
-            button_layout.add_widget(MDLabel(text=component.display_name,
-                                             pos_hint={"center_x": 0.5,
-                                                       "center_y": 0.85 if component.description else 0.65},
-                                             halign="center", font_style="Title", role="medium",
-                                             theme_text_color="Custom", text_color=self.theme_cls.primaryColor))
-            if component.description:
-                button_layout.add_widget(MDLabel(text=component.description,
-                                                 pos_hint={"center_x": 0.5, "center_y": 0.35}, halign="center",
-                                                 role="small", theme_text_color="Custom",
-                                                 text_color=self.theme_cls.primaryColor))
-
-            favorite_button = MDIconButton(icon="star" if component.display_name in self.favorites
-            else "star-outline",
-                                           style="standard", pos_hint={"center_x": 0.85, "center_y": 0.8},
-                                           theme_text_color="Custom", text_color=self.theme_cls.primaryColor)
-            favorite_button.component = component
-
-            def set_favorite(caller):
-                if caller.component.display_name in self.favorites:
-                    self.favorites.remove(caller.component.display_name)
-                    caller.icon = "star-outline"
-                else:
-                    self.favorites.append(caller.component.display_name)
-                    caller.icon = "star"
-
-            favorite_button.bind(on_release=set_favorite)
-            button_layout.add_widget(favorite_button)
-            context_button = MDIconButton(icon="menu", style="standard",
-                                          pos_hint={"center_x": 0.95, "center_y": 0.8}, theme_text_color="Custom",
-                                          text_color=self.theme_cls.primaryColor)
+            button_card = LauncherCard(component=component,
+                                       image_path=icon_paths[component.icon])
 
             def open_menu(caller):
                 caller.menu.open()
@@ -332,18 +310,11 @@ def run_gui(path: str, args: Any) -> None:
                 {
                     "text": "Add shortcut on desktop",
                     "leading_icon": "laptop",
-                    "on_release": lambda: create_shortcut(context_button, component)
+                    "on_release": lambda: create_shortcut(button_card.context_button, component)
                 }
             ]
-            context_button.menu = MDDropdownMenu(caller=context_button, items=menu_items)
-            context_button.bind(on_release=open_menu)
-            button_layout.add_widget(context_button)
-
-            button = MDButton(MDButtonText(text="Open"), pos_hint={"center_x": 0.9, "center_y": 0.25},
-                              size_hint_y=None, height=dp(25))
-            button.component = component
-            button.bind(on_release=self.component_action)
-            button_layout.add_widget(button)
+            button_card.context_button.menu = MDDropdownMenu(caller=button_card.context_button, items=menu_items)
+            button_card.context_button.bind(on_release=open_menu)
 
             return button_card
 
