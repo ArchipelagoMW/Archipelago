@@ -123,7 +123,7 @@
 
     {{ OptionTitle(option_name, option) }}
     <div class="option-container">
-        {% for item_name in relevant_keys|sort %}
+        {% for item_name in (relevant_keys if relevant_keys is ordered else relevant_keys|sort) %}
             <div class="option-entry">
                 <label for="{{ option_name }}-{{ item_name }}-qty">{{ item_name }}</label>
                 <input type="number" id="{{ option_name }}-{{ item_name }}-qty" name="{{ option_name }}||{{ item_name }}||qty" value="{{ option.default[item_name]|default("0") }}" data-option-name="{{ option_name }}" data-item-name="{{ item_name }}" />
