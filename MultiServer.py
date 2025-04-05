@@ -15,6 +15,7 @@ import math
 import operator
 import pickle
 import random
+import shlex
 import threading
 import time
 import typing
@@ -27,9 +28,11 @@ ModuleUpdate.update()
 
 if typing.TYPE_CHECKING:
     import ssl
+    from NetUtils import ServerConnection
 
-import websockets
 import colorama
+import websockets
+from websockets.extensions.permessage_deflate import PerMessageDeflate
 try:
     # ponyorm is a requirement for webhost, not default server, so may not be importable
     from pony.orm.dbapiprovider import OperationalError
@@ -40,10 +43,11 @@ import NetUtils
 import Utils
 from Utils import version_tuple, restricted_loads, Version, async_start, get_intended_text
 from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer, Permission, NetworkSlot, \
-    SlotType, LocationStore
+    SlotType, LocationStore, Hint, HintStatus
+from BaseClasses import ItemClassification
 
 min_client_version = Version(0, 1, 6)
-colorama.init()
+colorama.just_fix_windows_console()
 
 
 def remove_from_list(container, value):
@@ -117,13 +121,14 @@ def get_saving_second(seed_name: str, interval: int = 60) -> int:
 
 class Client(Endpoint):
     version = Version(0, 0, 0)
-    tags: typing.List[str] = []
+    tags: typing.List[str]
     remote_items: bool
     remote_start_inventory: bool
     no_items: bool
     no_locations: bool
+    no_text: bool
 
-    def __init__(self, socket: websockets.WebSocketServerProtocol, ctx: Context):
+    def __init__(self, socket: "ServerConnection", ctx: Context) -> None:
         super().__init__(socket)
         self.auth = False
         self.team = None
@@ -173,6 +178,7 @@ class Context:
                       "compatibility": int}
     # team -> slot id -> list of clients authenticated to slot.
     clients: typing.Dict[int, typing.Dict[int, typing.List[Client]]]
+    endpoints: list[Client]
     locations: LocationStore  # typing.Dict[int, typing.Dict[int, typing.Tuple[int, int, int]]]
     location_checks: typing.Dict[typing.Tuple[int, int], typing.Set[int]]
     hints_used: typing.Dict[typing.Tuple[int, int], int]
@@ -184,11 +190,9 @@ class Context:
     slot_info: typing.Dict[int, NetworkSlot]
     generator_version = Version(0, 0, 0)
     checksums: typing.Dict[str, str]
-    item_names: typing.Dict[str, typing.Dict[int, str]] = (
-        collections.defaultdict(lambda: Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})')))
+    item_names: typing.Dict[str, typing.Dict[int, str]]
     item_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
-    location_names: typing.Dict[str, typing.Dict[int, str]] = (
-        collections.defaultdict(lambda: Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})')))
+    location_names: typing.Dict[str, typing.Dict[int, str]]
     location_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
     all_item_and_group_names: typing.Dict[str, typing.Set[str]]
     all_location_and_group_names: typing.Dict[str, typing.Set[str]]
@@ -196,7 +200,6 @@ class Context:
     spheres: typing.List[typing.Dict[int, typing.Set[int]]]
     """ each sphere is { player: { location_id, ... } } """
     logger: logging.Logger
-
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, release_mode: str = "disabled", collect_mode="disabled",
@@ -230,7 +233,7 @@ class Context:
         self.hint_cost = hint_cost
         self.location_check_points = location_check_points
         self.hints_used = collections.defaultdict(int)
-        self.hints: typing.Dict[team_slot, typing.Set[NetUtils.Hint]] = collections.defaultdict(set)
+        self.hints: typing.Dict[team_slot, typing.Set[Hint]] = collections.defaultdict(set)
         self.release_mode: str = release_mode
         self.remaining_mode: str = remaining_mode
         self.collect_mode: str = collect_mode
@@ -268,6 +271,10 @@ class Context:
         self.location_name_groups = {}
         self.all_item_and_group_names = {}
         self.all_location_and_group_names = {}
+        self.item_names = collections.defaultdict(
+            lambda: Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})'))
+        self.location_names = collections.defaultdict(
+            lambda: Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})'))
         self.non_hintable_names = collections.defaultdict(frozenset)
 
         self._load_game_data()
@@ -361,18 +368,28 @@ class Context:
             return True
 
     def broadcast_all(self, msgs: typing.List[dict]):
-        msgs = self.dumper(msgs)
-        endpoints = (endpoint for endpoint in self.endpoints if endpoint.auth)
-        async_start(self.broadcast_send_encoded_msgs(endpoints, msgs))
+        msg_is_text = all(msg["cmd"] == "PrintJSON" for msg in msgs)
+        data = self.dumper(msgs)
+        endpoints = (
+            endpoint
+            for endpoint in self.endpoints
+            if endpoint.auth and not (msg_is_text and endpoint.no_text)
+        )
+        async_start(self.broadcast_send_encoded_msgs(endpoints, data))
 
     def broadcast_text_all(self, text: str, additional_arguments: dict = {}):
         self.logger.info("Notice (all): %s" % text)
         self.broadcast_all([{**{"cmd": "PrintJSON", "data": [{ "text": text }]}, **additional_arguments}])
 
     def broadcast_team(self, team: int, msgs: typing.List[dict]):
-        msgs = self.dumper(msgs)
-        endpoints = (endpoint for endpoint in itertools.chain.from_iterable(self.clients[team].values()))
-        async_start(self.broadcast_send_encoded_msgs(endpoints, msgs))
+        msg_is_text = all(msg["cmd"] == "PrintJSON" for msg in msgs)
+        data = self.dumper(msgs)
+        endpoints = (
+            endpoint
+            for endpoint in itertools.chain.from_iterable(self.clients[team].values())
+            if not (msg_is_text and endpoint.no_text)
+        )
+        async_start(self.broadcast_send_encoded_msgs(endpoints, data))
 
     def broadcast(self, endpoints: typing.Iterable[Client], msgs: typing.List[dict]):
         msgs = self.dumper(msgs)
@@ -386,13 +403,13 @@ class Context:
         await on_client_disconnected(self, endpoint)
 
     def notify_client(self, client: Client, text: str, additional_arguments: dict = {}):
-        if not client.auth:
+        if not client.auth or client.no_text:
             return
         self.logger.info("Notice (Player %s in team %d): %s" % (client.name, client.team + 1, text))
         async_start(self.send_msgs(client, [{"cmd": "PrintJSON", "data": [{ "text": text }], **additional_arguments}]))
 
     def notify_client_multiple(self, client: Client, texts: typing.List[str], additional_arguments: dict = {}):
-        if not client.auth:
+        if not client.auth or client.no_text:
             return
         async_start(self.send_msgs(client,
                                    [{"cmd": "PrintJSON", "data": [{ "text": text }], **additional_arguments}
@@ -427,6 +444,8 @@ class Context:
               use_embedded_server_options: bool):
 
         self.read_data = {}
+        # there might be a better place to put this.
+        self.read_data["race_mode"] = lambda: decoded_obj.get("race_mode", 0)
         mdata_ver = decoded_obj["minimum_versions"]["server"]
         if mdata_ver > version_tuple:
             raise RuntimeError(f"Supplied Multidata (.archipelago) requires a server of at least version {mdata_ver},"
@@ -439,7 +458,7 @@ class Context:
 
         self.slot_info = decoded_obj["slot_info"]
         self.games = {slot: slot_info.game for slot, slot_info in self.slot_info.items()}
-        self.groups = {slot: slot_info.group_members for slot, slot_info in self.slot_info.items()
+        self.groups = {slot: set(slot_info.group_members) for slot, slot_info in self.slot_info.items()
                        if slot_info.type == SlotType.group}
 
         self.clients = {0: {}}
@@ -652,13 +671,29 @@ class Context:
             return max(1, int(self.hint_cost * 0.01 * len(self.locations[slot])))
         return 0
 
-    def recheck_hints(self, team: typing.Optional[int] = None, slot: typing.Optional[int] = None):
+    def recheck_hints(self, team: typing.Optional[int] = None, slot: typing.Optional[int] = None,
+                      changed: typing.Optional[typing.Set[team_slot]] = None) -> None:
+        """Refreshes the hints for the specified team/slot. Providing 'None' for either team or slot
+        will refresh all teams or all slots respectively. If a set is passed for 'changed', each (team,slot)
+        pair that has at least one hint modified will be added to the set.
+        """
         for hint_team, hint_slot in self.hints:
-            if (team is None or team == hint_team) and (slot is None or slot == hint_slot):
-                self.hints[hint_team, hint_slot] = {
-                    hint.re_check(self, hint_team) for hint in
-                    self.hints[hint_team, hint_slot]
-                }
+            if team != hint_team and team is not None:
+                continue  # Check specified team only, all if team is None
+            if slot != hint_slot and slot is not None:
+                continue  # Check specified slot only, all if slot is None
+            new_hints: typing.Set[Hint] = set()
+            for hint in self.hints[hint_team, hint_slot]:
+                new_hint = hint.re_check(self, hint_team)
+                new_hints.add(new_hint)
+                if hint == new_hint:
+                    continue
+                for player in self.slot_set(hint.receiving_player) | {hint.finding_player}:
+                    if changed is not None:
+                        changed.add((hint_team,player))
+                    if slot is not None and slot != player:
+                        self.replace_hint(hint_team, player, hint, new_hint)
+            self.hints[hint_team, hint_slot] = new_hints
 
     def get_rechecked_hints(self, team: int, slot: int):
         self.recheck_hints(team, slot)
@@ -707,7 +742,7 @@ class Context:
         else:
             return self.player_names[team, slot]
 
-    def notify_hints(self, team: int, hints: typing.List[NetUtils.Hint], only_new: bool = False,
+    def notify_hints(self, team: int, hints: typing.List[Hint], only_new: bool = False,
                      recipients: typing.Sequence[int] = None):
         """Send and remember hints."""
         if only_new:
@@ -722,7 +757,8 @@ class Context:
                 concerns[player].append(data)
             if not hint.local and data not in concerns[hint.finding_player]:
                 concerns[hint.finding_player].append(data)
-            # remember hints in all cases
+
+            # only remember hints that were not already found at the time of creation
             if not hint.found:
                 # since hints are bidirectional, finding player and receiving player,
                 # we can check once if hint already exists
@@ -738,13 +774,24 @@ class Context:
             self.on_new_hint(team, slot)
         for slot, hint_data in concerns.items():
             if recipients is None or slot in recipients:
-                clients = self.clients[team].get(slot)
+                clients = filter(lambda c: not c.no_text, self.clients[team].get(slot, []))
                 if not clients:
                     continue
                 client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player != slot)]
                 for client in clients:
                     async_start(self.send_msgs(client, client_hints))
 
+    def get_hint(self, team: int, finding_player: int, seeked_location: int) -> typing.Optional[Hint]:
+        for hint in self.hints[team, finding_player]:
+            if hint.location == seeked_location and hint.finding_player == finding_player:
+                return hint
+        return None
+    
+    def replace_hint(self, team: int, slot: int, old_hint: Hint, new_hint: Hint) -> None:
+        if old_hint in self.hints[team, slot]:
+            self.hints[team, slot].remove(old_hint)
+            self.hints[team, slot].add(new_hint)
+    
     # "events"
 
     def on_goal_achieved(self, client: Client):
@@ -786,7 +833,7 @@ def update_aliases(ctx: Context, team: int):
             async_start(ctx.send_encoded_msgs(client, cmd))
 
 
-async def server(websocket, path: str = "/", ctx: Context = None):
+async def server(websocket: "ServerConnection", path: str = "/", ctx: Context = None) -> None:
     client = Client(websocket, ctx)
     ctx.endpoints.append(client)
 
@@ -877,6 +924,10 @@ async def on_client_joined(ctx: Context, client: Client):
                               "If your client supports it, "
                               "you may have additional local commands you can list with /help.",
                       {"type": "Tutorial"})
+    if not any(isinstance(extension, PerMessageDeflate) for extension in client.socket.extensions):
+        ctx.notify_client(client, "Warning: your client does not support compressed websocket connections! "
+                                  "It may stop working in the future. If you are a player, please report this to the "
+                                  "client's developer.")
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 
@@ -943,9 +994,13 @@ def get_status_string(ctx: Context, team: int, tag: str):
         tagged = len([client for client in ctx.clients[team][slot] if tag in client.tags])
         completion_text = f"({len(ctx.location_checks[team, slot])}/{len(ctx.locations[slot])})"
         tag_text = f" {tagged} of which are tagged {tag}" if connected and tag else ""
-        goal_text = " and has finished." if ctx.client_game_state[team, slot] == ClientStatus.CLIENT_GOAL else "."
+        status_text = (
+            " and has finished." if ctx.client_game_state[team, slot] == ClientStatus.CLIENT_GOAL else
+            " and is ready." if ctx.client_game_state[team, slot] == ClientStatus.CLIENT_READY else
+            "."
+            )
         text += f"\n{ctx.get_aliased_name(team, slot)} has {connected} connection{'' if connected == 1 else 's'}" \
-                f"{tag_text}{goal_text} {completion_text}"
+                f"{tag_text}{status_text} {completion_text}"
     return text
 
 
@@ -1023,21 +1078,37 @@ def send_items_to(ctx: Context, team: int, target_slot: int, *items: NetworkItem
 
 def register_location_checks(ctx: Context, team: int, slot: int, locations: typing.Iterable[int],
                              count_activity: bool = True):
+    slot_locations = ctx.locations[slot]
     new_locations = set(locations) - ctx.location_checks[team, slot]
-    new_locations.intersection_update(ctx.locations[slot])  # ignore location IDs unknown to this multidata
+    new_locations.intersection_update(slot_locations)  # ignore location IDs unknown to this multidata
     if new_locations:
         if count_activity:
             ctx.client_activity_timers[team, slot] = datetime.datetime.now(datetime.timezone.utc)
+
+        sortable: list[tuple[int, int, int, int]] = []
         for location in new_locations:
-            item_id, target_player, flags = ctx.locations[slot][location]
+            # extract all fields to avoid runtime overhead in LocationStore
+            item_id, target_player, flags = slot_locations[location]
+            # sort/group by receiver and item
+            sortable.append((target_player, item_id, location, flags))
+
+        info_texts: list[dict[str, typing.Any]] = []
+        for target_player, item_id, location, flags in sorted(sortable):
             new_item = NetworkItem(item_id, location, slot, flags)
             send_items_to(ctx, team, target_player, new_item)
 
             ctx.logger.info('(Team #%d) %s sent %s to %s (%s)' % (
                 team + 1, ctx.player_names[(team, slot)], ctx.item_names[ctx.slot_info[target_player].game][item_id],
                 ctx.player_names[(team, target_player)], ctx.location_names[ctx.slot_info[slot].game][location]))
-            info_text = json_format_send_event(new_item, target_player)
-            ctx.broadcast_team(team, [info_text])
+            if len(info_texts) >= 140:
+                # split into chunks that are close to compression window of 64K but not too big on the wire
+                # (roughly 1300-2600 bytes after compression depending on repetitiveness)
+                ctx.broadcast_team(team, info_texts)
+                info_texts.clear()
+            info_texts.append(json_format_send_event(new_item, target_player))
+        ctx.broadcast_team(team, info_texts)
+        del info_texts
+        del sortable
 
         ctx.location_checks[team, slot] |= new_locations
         send_new_items(ctx)
@@ -1046,14 +1117,15 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
             "hint_points": get_slot_points(ctx, team, slot),
             "checked_locations": new_locations,  # send back new checks only
         }])
-        old_hints = ctx.hints[team, slot].copy()
-        ctx.recheck_hints(team, slot)
-        if old_hints != ctx.hints[team, slot]:
-            ctx.on_changed_hints(team, slot)
+        updated_slots: typing.Set[tuple[int, int]] = set()
+        ctx.recheck_hints(team, slot, updated_slots)
+        for hint_team, hint_slot in updated_slots:
+            ctx.on_changed_hints(hint_team, hint_slot)
         ctx.save()
 
 
-def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, str]) -> typing.List[NetUtils.Hint]:
+def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, str], auto_status: HintStatus) \
+        -> typing.List[Hint]:
     hints = []
     slots: typing.Set[int] = {slot}
     for group_id, group in ctx.groups.items():
@@ -1063,31 +1135,58 @@ def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, st
     seeked_item_id = item if isinstance(item, int) else ctx.item_names_for_game(ctx.games[slot])[item]
     for finding_player, location_id, item_id, receiving_player, item_flags \
             in ctx.locations.find_item(slots, seeked_item_id):
-        found = location_id in ctx.location_checks[team, finding_player]
-        entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
-        hints.append(NetUtils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance,
-                                   item_flags))
+        prev_hint = ctx.get_hint(team, finding_player, location_id)
+        if prev_hint:
+            hints.append(prev_hint)
+        else:
+            found = location_id in ctx.location_checks[team, finding_player]
+            entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
+            new_status = auto_status
+            if found:
+                new_status = HintStatus.HINT_FOUND
+            elif item_flags & ItemClassification.trap:
+                new_status = HintStatus.HINT_AVOID
+            hints.append(Hint(receiving_player, finding_player, location_id, item_id, found, entrance,
+                                       item_flags, new_status))
 
     return hints
 
 
-def collect_hint_location_name(ctx: Context, team: int, slot: int, location: str) -> typing.List[NetUtils.Hint]:
+def collect_hint_location_name(ctx: Context, team: int, slot: int, location: str, auto_status: HintStatus) \
+        -> typing.List[Hint]:
     seeked_location: int = ctx.location_names_for_game(ctx.games[slot])[location]
-    return collect_hint_location_id(ctx, team, slot, seeked_location)
+    return collect_hint_location_id(ctx, team, slot, seeked_location, auto_status)
 
 
-def collect_hint_location_id(ctx: Context, team: int, slot: int, seeked_location: int) -> typing.List[NetUtils.Hint]:
+def collect_hint_location_id(ctx: Context, team: int, slot: int, seeked_location: int, auto_status: HintStatus) \
+        -> typing.List[Hint]:
+    prev_hint = ctx.get_hint(team, slot, seeked_location)
+    if prev_hint:
+        return [prev_hint]
     result = ctx.locations[slot].get(seeked_location, (None, None, None))
     if any(result):
         item_id, receiving_player, item_flags = result
 
         found = seeked_location in ctx.location_checks[team, slot]
         entrance = ctx.er_hint_data.get(slot, {}).get(seeked_location, "")
-        return [NetUtils.Hint(receiving_player, slot, seeked_location, item_id, found, entrance, item_flags)]
+        new_status = auto_status
+        if found:
+            new_status = HintStatus.HINT_FOUND
+        elif item_flags & ItemClassification.trap:
+            new_status = HintStatus.HINT_AVOID
+        return [Hint(receiving_player, slot, seeked_location, item_id, found, entrance, item_flags,
+                              new_status)]
     return []
 
 
-def format_hint(ctx: Context, team: int, hint: NetUtils.Hint) -> str:
+status_names: typing.Dict[HintStatus, str] = {
+    HintStatus.HINT_FOUND: "(found)",
+    HintStatus.HINT_UNSPECIFIED: "(unspecified)",
+    HintStatus.HINT_NO_PRIORITY: "(no priority)",
+    HintStatus.HINT_AVOID: "(avoid)",
+    HintStatus.HINT_PRIORITY: "(priority)",
+}
+def format_hint(ctx: Context, team: int, hint: Hint) -> str:
     text = f"[Hint]: {ctx.player_names[team, hint.receiving_player]}'s " \
            f"{ctx.item_names[ctx.slot_info[hint.receiving_player].game][hint.item]} is " \
            f"at {ctx.location_names[ctx.slot_info[hint.finding_player].game][hint.location]} " \
@@ -1095,7 +1194,8 @@ def format_hint(ctx: Context, team: int, hint: NetUtils.Hint) -> str:
 
     if hint.entrance:
         text += f" at {hint.entrance}"
-    return text + (". (found)" if hint.found else ".")
+    
+    return text + ". " + status_names.get(hint.status, "(unknown)")
 
 
 def json_format_send_event(net_item: NetworkItem, receiving_player: int):
@@ -1150,7 +1250,10 @@ class CommandProcessor(metaclass=CommandMeta):
         if not raw:
             return
         try:
-            command = raw.split()
+            try:
+                command = shlex.split(raw, comments=False)
+            except ValueError:  # most likely: "ValueError: No closing quotation"
+                command = raw.split()
             basecommand = command[0]
             if basecommand[0] == self.marker:
                 method = self.commands.get(basecommand[1:].lower(), None)
@@ -1496,7 +1599,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
     def get_hints(self, input_text: str, for_location: bool = False) -> bool:
         points_available = get_client_points(self.ctx, self.client)
         cost = self.ctx.get_hint_cost(self.client.slot)
-
+        auto_status = HintStatus.HINT_UNSPECIFIED if for_location else HintStatus.HINT_PRIORITY
         if not input_text:
             hints = {hint.re_check(self.ctx, self.client.team) for hint in
                      self.ctx.hints[self.client.team, self.client.slot]}
@@ -1522,9 +1625,9 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 self.output(f"Sorry, \"{hint_name}\" is marked as non-hintable.")
                 hints = []
             elif not for_location:
-                hints = collect_hints(self.ctx, self.client.team, self.client.slot, hint_id)
+                hints = collect_hints(self.ctx, self.client.team, self.client.slot, hint_id, auto_status)
             else:
-                hints = collect_hint_location_id(self.ctx, self.client.team, self.client.slot, hint_id)
+                hints = collect_hint_location_id(self.ctx, self.client.team, self.client.slot, hint_id, auto_status)
 
         else:
             game = self.ctx.games[self.client.slot]
@@ -1544,16 +1647,16 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     hints = []
                     for item_name in self.ctx.item_name_groups[game][hint_name]:
                         if item_name in self.ctx.item_names_for_game(game):  # ensure item has an ID
-                            hints.extend(collect_hints(self.ctx, self.client.team, self.client.slot, item_name))
+                            hints.extend(collect_hints(self.ctx, self.client.team, self.client.slot, item_name, auto_status))
                 elif not for_location and hint_name in self.ctx.item_names_for_game(game):  # item name
-                    hints = collect_hints(self.ctx, self.client.team, self.client.slot, hint_name)
+                    hints = collect_hints(self.ctx, self.client.team, self.client.slot, hint_name, auto_status)
                 elif hint_name in self.ctx.location_name_groups[game]:  # location group name
                     hints = []
                     for loc_name in self.ctx.location_name_groups[game][hint_name]:
                         if loc_name in self.ctx.location_names_for_game(game):
-                            hints.extend(collect_hint_location_name(self.ctx, self.client.team, self.client.slot, loc_name))
+                            hints.extend(collect_hint_location_name(self.ctx, self.client.team, self.client.slot, loc_name, auto_status))
                 else:  # location name
-                    hints = collect_hint_location_name(self.ctx, self.client.team, self.client.slot, hint_name)
+                    hints = collect_hint_location_name(self.ctx, self.client.team, self.client.slot, hint_name, auto_status)
 
             else:
                 self.output(response)
@@ -1718,7 +1821,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             ctx.clients[team][slot].append(client)
             client.version = args['version']
             client.tags = args['tags']
-            client.no_locations = 'TextOnly' in client.tags or 'Tracker' in client.tags
+            client.no_locations = "TextOnly" in client.tags or "Tracker" in client.tags
+            # set NoText for old PopTracker clients that predate the tag to save traffic
+            client.no_text = "NoText" in client.tags or ("PopTracker" in client.tags and client.version < (0, 5, 1))
             connected_packet = {
                 "cmd": "Connected",
                 "team": client.team, "slot": client.slot,
@@ -1791,6 +1896,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 client.tags = args["tags"]
                 if set(old_tags) != set(client.tags):
                     client.no_locations = 'TextOnly' in client.tags or 'Tracker' in client.tags
+                    client.no_text = "NoText" in client.tags or (
+                        "PopTracker" in client.tags and client.version < (0, 5, 1)
+                    )
                     ctx.broadcast_text_all(
                         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has changed tags "
                         f"from {old_tags} to {client.tags}.",
@@ -1819,19 +1927,63 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             for location in args["locations"]:
                 if type(location) is not int:
                     await ctx.send_msgs(client,
-                                        [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts',
+                                        [{'cmd': 'InvalidPacket', "type": "arguments",
+                                          "text": 'Locations has to be a list of integers',
                                           "original_cmd": cmd}])
                     return
 
                 target_item, target_player, flags = ctx.locations[client.slot][location]
                 if create_as_hint:
-                    hints.extend(collect_hint_location_id(ctx, client.team, client.slot, location))
+                    hints.extend(collect_hint_location_id(ctx, client.team, client.slot, location,
+                                                          HintStatus.HINT_UNSPECIFIED))
                 locs.append(NetworkItem(target_item, location, target_player, flags))
             ctx.notify_hints(client.team, hints, only_new=create_as_hint == 2)
             if locs and create_as_hint:
                 ctx.save()
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
-
+        
+        elif cmd == 'UpdateHint':
+            location = args["location"]
+            player = args["player"]
+            status = args["status"]
+            if not isinstance(player, int) or not isinstance(location, int) \
+                    or (status is not None and not isinstance(status, int)):
+                await ctx.send_msgs(client,
+                                    [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'UpdateHint',
+                                      "original_cmd": cmd}])
+                return
+            hint = ctx.get_hint(client.team, player, location)
+            if not hint:
+                return  # Ignored safely
+            if client.slot not in ctx.slot_set(hint.receiving_player):
+                await ctx.send_msgs(client,
+                                    [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'UpdateHint: No Permission',
+                                      "original_cmd": cmd}])
+                return
+            new_hint = hint
+            if status is None:
+                return
+            try:
+                status = HintStatus(status)
+            except ValueError:
+                await ctx.send_msgs(client,
+                                    [{'cmd': 'InvalidPacket', "type": "arguments",
+                                      "text": 'UpdateHint: Invalid Status', "original_cmd": cmd}])
+                return
+            if status == HintStatus.HINT_FOUND:
+                await ctx.send_msgs(client,
+                                    [{'cmd': 'InvalidPacket', "type": "arguments",
+                                      "text": 'UpdateHint: Cannot manually update status to "HINT_FOUND"', "original_cmd": cmd}])
+                return
+            new_hint = new_hint.re_prioritize(ctx, status)
+            if hint == new_hint:
+                return
+            ctx.replace_hint(client.team, hint.finding_player, hint, new_hint)
+            ctx.replace_hint(client.team, hint.receiving_player, hint, new_hint)
+            ctx.save()
+            ctx.on_changed_hints(client.team, hint.finding_player)
+            ctx.on_changed_hints(client.team, hint.receiving_player)
+        
         elif cmd == 'StatusUpdate':
             update_client_status(ctx, client, args["status"])
 
@@ -1879,6 +2031,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             args["cmd"] = "SetReply"
             value = ctx.stored_data.get(args["key"], args.get("default", 0))
             args["original_value"] = copy.copy(value)
+            args["slot"] = client.slot
             for operation in args["operations"]:
                 func = modify_functions[operation["operation"]]
                 value = func(value, operation["value"])
@@ -1953,8 +2106,10 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     def _cmd_exit(self) -> bool:
         """Shutdown the server"""
-        self.ctx.server.ws_server.close()
-        self.ctx.exit_event.set()
+        try:
+            self.ctx.server.ws_server.close()
+        finally:
+            self.ctx.exit_event.set()
         return True
 
     @mark_raw
@@ -2134,9 +2289,9 @@ class ServerCommandProcessor(CommonCommandProcessor):
                     hints = []
                     for item_name_from_group in self.ctx.item_name_groups[game][item]:
                         if item_name_from_group in self.ctx.item_names_for_game(game):  # ensure item has an ID
-                            hints.extend(collect_hints(self.ctx, team, slot, item_name_from_group))
+                            hints.extend(collect_hints(self.ctx, team, slot, item_name_from_group, HintStatus.HINT_PRIORITY))
                 else:  # item name or id
-                    hints = collect_hints(self.ctx, team, slot, item)
+                    hints = collect_hints(self.ctx, team, slot, item, HintStatus.HINT_PRIORITY)
 
                 if hints:
                     self.ctx.notify_hints(team, hints)
@@ -2170,14 +2325,17 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
             if usable:
                 if isinstance(location, int):
-                    hints = collect_hint_location_id(self.ctx, team, slot, location)
+                    hints = collect_hint_location_id(self.ctx, team, slot, location,
+                                                     HintStatus.HINT_UNSPECIFIED)
                 elif game in self.ctx.location_name_groups and location in self.ctx.location_name_groups[game]:
                     hints = []
                     for loc_name_from_group in self.ctx.location_name_groups[game][location]:
                         if loc_name_from_group in self.ctx.location_names_for_game(game):
-                            hints.extend(collect_hint_location_name(self.ctx, team, slot, loc_name_from_group))
+                            hints.extend(collect_hint_location_name(self.ctx, team, slot, loc_name_from_group,
+                                                                    HintStatus.HINT_UNSPECIFIED))
                 else:
-                    hints = collect_hint_location_name(self.ctx, team, slot, location)
+                    hints = collect_hint_location_name(self.ctx, team, slot, location,
+                                                       HintStatus.HINT_UNSPECIFIED)
                 if hints:
                     self.ctx.notify_hints(team, hints)
                 else:
@@ -2267,6 +2425,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--cert_key', help="Path to SSL Certificate Key file")
     parser.add_argument('--loglevel', default=defaults["loglevel"],
                         choices=['debug', 'info', 'warning', 'error', 'critical'])
+    parser.add_argument('--logtime', help="Add timestamps to STDOUT",
+                        default=defaults["logtime"], action='store_true')
     parser.add_argument('--location_check_points', default=defaults["location_check_points"], type=int)
     parser.add_argument('--hint_cost', default=defaults["hint_cost"], type=int)
     parser.add_argument('--disable_item_cheat', default=defaults["disable_item_cheat"], action='store_true')
@@ -2347,7 +2507,9 @@ def load_server_cert(path: str, cert_key: typing.Optional[str]) -> "ssl.SSLConte
 
 
 async def main(args: argparse.Namespace):
-    Utils.init_logging("Server", loglevel=args.loglevel.lower())
+    Utils.init_logging(name="Server",
+                       loglevel=args.loglevel.lower(),
+                       add_timestamp=args.logtime)
 
     ctx = Context(args.host, args.port, args.server_password, args.password, args.location_check_points,
                   args.hint_cost, not args.disable_item_cheat, args.release_mode, args.collect_mode,

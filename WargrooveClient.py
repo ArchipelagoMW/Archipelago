@@ -267,9 +267,7 @@ class WargrooveContext(CommonContext):
 
             def build(self):
                 container = super().build()
-                panel = TabbedPanelItem(text="Wargroove")
-                panel.content = self.build_tracker()
-                self.tabs.add_widget(panel)
+                self.add_client_tab("Wargroove", self.build_tracker())
                 return container
 
             def build_tracker(self) -> TrackerLayout:
@@ -448,6 +446,6 @@ if __name__ == '__main__':
     parser = get_base_parser(description="Wargroove Client, for text interfacing.")
 
     args, rest = parser.parse_known_args()
-    colorama.init()
+    colorama.just_fix_windows_console()
     asyncio.run(main(args))
     colorama.deinit()
