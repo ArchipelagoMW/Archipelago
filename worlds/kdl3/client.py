@@ -175,11 +175,11 @@ class KDL3SNIClient(SNIClient):
             key, gift = ctx.stored_data[self.giftbox_key].popitem()
             await pop_object(ctx, self.giftbox_key, key)
             # first, special cases
-            traits = [trait["Trait"] for trait in gift["Traits"]]
+            traits = [trait["trait"] for trait in gift["traits"]]
             if "Candy" in traits or "Invincible" in traits:
                 # apply invincibility candy
                 self.item_queue.append(0x43)
-            elif "Tomato" in traits or "tomato" in gift["ItemName"].lower():
+            elif "Tomato" in traits or "tomato" in gift["item_name"].lower():
                 # apply maxim tomato
                 # only want tomatos here, no other vegetable is that good
                 self.item_queue.append(0x42)
@@ -187,7 +187,7 @@ class KDL3SNIClient(SNIClient):
                 # Apply 1-Up
                 self.item_queue.append(0x41)
             elif "Currency" in traits or "Star" in traits:
-                value = gift["ItemValue"]
+                value = gift.get("item_value", 1.0)
                 if value >= 50000:
                     self.item_queue.append(0x46)
                 elif value >= 30000:
@@ -210,8 +210,8 @@ class KDL3SNIClient(SNIClient):
                 # check if it's tasty
                 if any(x in traits for x in ["Consumable", "Food", "Drink", "Heal", "Health"]):
                     # it's tasty!, use quality to decide how much to heal
-                    quality = max((trait["Quality"] for trait in gift["Traits"]
-                                   if trait["Trait"] in ["Consumable", "Food", "Drink", "Heal", "Health"]))
+                    quality = max((trait.get("quality", 1.0) for trait in gift["traits"]
+                                   if trait["trait"] in ["Consumable", "Food", "Drink", "Heal", "Health"]))
                     quality = min(10, quality * 2)
                 else:
                     # it's not really edible, but he'll eat it anyway
@@ -236,23 +236,23 @@ class KDL3SNIClient(SNIClient):
         for slot, info in ctx.stored_data[self.motherbox_key].items():
             if int(slot) == ctx.slot and len(ctx.stored_data[self.motherbox_key]) > 1:
                 continue
-            desire = len(set(info["DesiredTraits"]).intersection([trait["Trait"] for trait in gift_base["Traits"]]))
+            desire = len(set(info["desired_traits"]).intersection([trait["trait"] for trait in gift_base["traits"]]))
             if desire > most_applicable:
                 most_applicable = desire
                 most_applicable_slot = int(slot)
-            elif most_applicable_slot != ctx.slot and most_applicable == -1 and info["AcceptsAnyGift"]:
+            elif most_applicable_slot == ctx.slot and most_applicable == -1 and info["accepts_any_gift"]:
                 # only send to ourselves if no one else will take it
                 most_applicable_slot = int(slot)
         # print(most_applicable, most_applicable_slot)
         item_uuid = uuid.uuid4().hex
         item = {
             **gift_base,
-            "ID": item_uuid,
-            "Sender": ctx.player_names[ctx.slot],
-            "Receiver": ctx.player_names[most_applicable_slot],
-            "SenderTeam": ctx.team,
-            "ReceiverTeam": ctx.team,  # for the moment
-            "IsRefund": False
+            "id": item_uuid,
+            "sender": ctx.player_names[ctx.slot],
+            "receiver": ctx.player_names[most_applicable_slot],
+            "sender_team": ctx.team,
+            "receiver_team": ctx.team,  # for the moment
+            "is_refund": False
         }
         # print(item)
         await update_object(ctx, f"Giftbox;{ctx.team};{most_applicable_slot}", {
