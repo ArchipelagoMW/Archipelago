@@ -424,6 +424,7 @@ class PantherDash(Choice):
 class IncreaseShimmySpeed(Toggle):
     """
     Increases the speed at which characters shimmy left and right while hanging on ledges.
+    Hold Z to use the regular speed in case it's needed to do something.
     """
     display_name = "Increase Shimmy Speed"
 
