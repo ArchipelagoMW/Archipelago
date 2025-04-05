@@ -247,7 +247,6 @@ def run_gui(path: str, args: Any) -> None:
             self.image = image_path
             super().__init__(args, kwargs)
 
-
     class Launcher(ThemedApp):
         base_title: str = "Archipelago Launcher"
         top_screen: MDFloatLayout = ObjectProperty(None)
@@ -333,6 +332,11 @@ def run_gui(path: str, args: Any) -> None:
 
             for card in cards:
                 self.button_layout.layout.add_widget(card)
+
+            top = self.button_layout.children[0].y + self.button_layout.children[0].height \
+                           - self.button_layout.height
+            scroll_percent = self.button_layout.convert_distance_to_scroll(0, top)
+            self.button_layout.scroll_y = max(0, min(1, scroll_percent[1]))
 
         def filter_clients(self, caller):
             self._refresh_components(caller.type)
