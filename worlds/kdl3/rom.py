@@ -7,7 +7,6 @@ import hashlib
 import os
 import struct
 
-import settings
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
 from .aesthetics import get_palette_bytes, kirby_target_palettes, get_kirby_palette, gooey_target_palettes, \
     get_gooey_palette
@@ -594,9 +593,9 @@ def get_base_rom_bytes() -> bytes:
 
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options: settings.Settings = settings.get_settings()
+    from . import KDL3World
     if not file_name:
-        file_name = options["kdl3_options"]["rom_file"]
+        file_name = KDL3World.settings.rom_file
     if not os.path.exists(file_name):
         file_name = Utils.user_path(file_name)
     return file_name
