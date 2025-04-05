@@ -179,3 +179,15 @@
     height: dp(30)
     multiline: False
     write_tab: False
+<ScrollBox>:
+    layout: layout
+    bar_width: "12dp"
+    scroll_wheel_distance: 40
+    do_scroll_x: False
+
+    MDBoxLayout:
+        id: layout
+        orientation: "vertical"
+        spacing: 10
+        size_hint_y: None
+        height: self.minimum_height

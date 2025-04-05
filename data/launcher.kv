@@ -1,0 +1,23 @@
+<LauncherCard>:
+    style: "filled"
+    padding: "4dp"
+    size_hint: 1, None
+    height: "75dp"
+
+MDFloatLayout:
+    id: top_screen
+
+    MDGridLayout:
+        id: grid
+        cols: 2
+        spacing: "5dp"
+        padding: "10dp"
+
+        MDGridLayout:
+            id: navigation
+            cols: 1
+            size_hint_x: 0.25
+
+
+        ScrollBox:
+            id: button_layout

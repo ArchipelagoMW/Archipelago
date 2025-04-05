@@ -128,15 +128,10 @@ class ImageButton(MDIconButton):
 
 
 class ScrollBox(MDScrollView):
-    layout: MDBoxLayout
+    layout: ObjectProperty(None)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.layout = MDBoxLayout(size_hint_y=None)
-        self.layout.bind(minimum_height=self.layout.setter("height"))
-        self.add_widget(self.layout)
-        self.bar_width = dp(12)
-        self.scroll_type = ["bars"]
 
 
 # thanks kivymd

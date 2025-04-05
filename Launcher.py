@@ -229,27 +229,28 @@ refresh_components: Optional[Callable[[], None]] = None
 
 def run_gui(path: str, args: Any) -> None:
     from kvui import (ThemedApp, MDFloatLayout, MDGridLayout, MDButton, MDLabel, MDButtonText, MDButtonIcon, ScrollBox,
-                      ContainerLayout, Widget, MDBoxLayout, ApAsyncImage)
+                      MDBoxLayout, ApAsyncImage)
+    from kivy.properties import ObjectProperty
     from kivy.core.window import Window
     from kivy.metrics import dp
-    from kivy.uix.image import AsyncImage
     from kivymd.uix.button import MDIconButton
     from kivymd.uix.card import MDCard
     from kivymd.uix.menu import MDDropdownMenu
     from kivymd.uix.navigationdrawer import MDNavigationDrawerDivider
     from kivymd.uix.relativelayout import MDRelativeLayout
-    from kivymd.uix.screen import MDScreen
     from kivymd.uix.snackbar import MDSnackbar, MDSnackbarText
+
+    from kivy.lang.builder import Builder
 
     class LauncherCard(MDCard):
         component: Component | None
 
     class Launcher(ThemedApp):
         base_title: str = "Archipelago Launcher"
-        container: ContainerLayout
-        navigation: MDBoxLayout
-        grid: MDGridLayout
-        button_layout: ScrollBox | None = None
+        top_screen: MDFloatLayout = ObjectProperty(None)
+        navigation: MDGridLayout = ObjectProperty(None)
+        grid: MDGridLayout = ObjectProperty(None)
+        button_layout: ScrollBox = ObjectProperty(None)
         cards: list[LauncherCard]
 
         def __init__(self, ctx=None, path=None, args=None):
@@ -274,7 +275,7 @@ def run_gui(path: str, args: Any) -> None:
 
                 :return: The created Card Widget.
                 """
-            button_card = LauncherCard(style="filled", padding="4dp", size_hint=(1, None), height=dp(75))
+            button_card = LauncherCard()
             button_card.component = component
             button_layout = MDRelativeLayout()
             button_card.add_widget(button_layout)
@@ -354,22 +355,12 @@ def run_gui(path: str, args: Any) -> None:
                 self.button_layout.layout.add_widget(card)
 
         def build(self):
+            self.top_screen = Builder.load_file(Utils.local_path("data/launcher.kv"))
+            self.grid = self.top_screen.ids.grid
+            self.navigation = self.top_screen.ids.navigation
+            self.button_layout = self.top_screen.ids.button_layout
             self.set_colors()
-            self.top_screen = MDFloatLayout()
             self.top_screen.md_bg_color = self.theme_cls.backgroundColor
-            self.grid = MDGridLayout(cols=2)
-            self.navigation = MDGridLayout(cols=1, size_hint_x=0.25, width=dp(50))
-            self.top_screen.add_widget(self.grid)
-            self.grid.add_widget(self.navigation)
-            self.button_layout = ScrollBox()
-            self.button_layout.layout.orientation = "vertical"
-            self.button_layout.layout.spacing = 10
-            self.button_layout.scroll_wheel_distance = 40
-            self.button_layout.do_scroll_x = False
-            self.button_layout.scroll_type = ["content", "bars"]
-            self.grid.add_widget(self.button_layout)
-            self.grid.padding = 10
-            self.grid.spacing = 5
             self._refresh_components()
 
             # handle menu
