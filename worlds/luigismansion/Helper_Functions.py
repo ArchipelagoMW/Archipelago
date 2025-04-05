@@ -43,3 +43,7 @@ class StringByteFunction:
             result.append(chr(single_byte))
 
         return ''.join(result)
+
+    @staticmethod
+    def byte_string_strip_null_terminator(bytes_input: bytes):
+        return bytes_input.decode().strip("\0")
