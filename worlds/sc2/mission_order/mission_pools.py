@@ -18,12 +18,22 @@ class Difficulty(IntEnum):
 # TODO figure out an organic way to get these
 DEFAULT_DIFFICULTY_THRESHOLDS = {
     Difficulty.STARTER: 0,
-    Difficulty.EASY: 5,
+    Difficulty.EASY: 10,
     Difficulty.MEDIUM: 35,
     Difficulty.HARD: 65,
-    Difficulty.VERY_HARD: 95,
+    Difficulty.VERY_HARD: 90,
     Difficulty.VERY_HARD + 1: 100
 }
+
+STANDARD_DIFFICULTY_FILL_ORDER = (
+    Difficulty.VERY_HARD,
+    Difficulty.STARTER,
+    Difficulty.HARD,
+    Difficulty.EASY,
+    Difficulty.MEDIUM,
+)
+"""Fill mission slots outer->inner difficulties,
+so if multiple pools get exhausted, they will tend to overflow towards the middle."""
 
 def modified_difficulty_thresholds(min_difficulty: Difficulty, max_difficulty: Difficulty) -> Dict[int, Difficulty]:
     if min_difficulty == Difficulty.RELATIVE:

@@ -2914,19 +2914,19 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         ),
         make_location_data(SC2Mission.HAVENS_FALL_Z.mission_name, "Southwest Gas Pickups", SC2_RACESWAP_LOC_ID_OFFSET + 1309, LocationType.EXTRA,
             lambda state: state.has(item_names.OVERLORD_VENTRAL_SACS, player),
-            hard_rule=logic.zerg_any_gap_transport,
+            hard_rule=logic.zerg_can_collect_pickup_across_gap,
         ),
         make_location_data(SC2Mission.HAVENS_FALL_Z.mission_name, "East Gas Pickups", SC2_RACESWAP_LOC_ID_OFFSET + 1310, LocationType.EXTRA,
             lambda state: (
                 logic.zerg_common_unit(state)
-                and state.has(item_names.OVERLORD_VENTRAL_SACS, player)
+                and state.has_any({item_names.OVERLORD_VENTRAL_SACS, item_names.INFESTED_BANSHEE}, player)
                 and logic.zerg_competent_anti_air(state)
                 and logic.zerg_defense_rating(state, True) >= 3)
         ),
         make_location_data(SC2Mission.HAVENS_FALL_Z.mission_name, "Southeast Gas Pickups", SC2_RACESWAP_LOC_ID_OFFSET + 1311, LocationType.EXTRA,
             lambda state: (
                 logic.zerg_common_unit(state)
-                and state.has(item_names.OVERLORD_VENTRAL_SACS, player)
+                and state.has_any({item_names.OVERLORD_VENTRAL_SACS, item_names.INFESTED_BANSHEE}, player)
                 and logic.zerg_competent_anti_air(state)
                 and logic.zerg_defense_rating(state, True) >= 3)
         ),
@@ -4329,9 +4329,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "Lost Base", SC2_RACESWAP_LOC_ID_OFFSET + 6504, LocationType.EXTRA),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "Northeast Psi-link Spire", SC2_RACESWAP_LOC_ID_OFFSET + 6505, LocationType.EXTRA,
-                           lambda state: (
-                                   logic.terran_common_unit(state)
-                                   and logic.terran_basic_anti_air(state))
+                           lambda state: logic.terran_common_unit(state) or adv_tactics
                            ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "Northwest Psi-link Spire", SC2_RACESWAP_LOC_ID_OFFSET + 6506, LocationType.EXTRA,
                            lambda state: (
@@ -4367,7 +4365,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "Lost Base", SC2_RACESWAP_LOC_ID_OFFSET + 6604, LocationType.EXTRA),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "Northeast Psi-link Spire", SC2_RACESWAP_LOC_ID_OFFSET + 6605, LocationType.EXTRA,
-                           logic.protoss_common_unit
+                           lambda state: logic.protoss_common_unit(state) or adv_tactics
                            ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "Northwest Psi-link Spire", SC2_RACESWAP_LOC_ID_OFFSET + 6606, LocationType.EXTRA,
                            lambda state: (
