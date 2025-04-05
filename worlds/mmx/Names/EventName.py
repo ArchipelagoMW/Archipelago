@@ -1,0 +1,12 @@
+armored_armadillo_clear = "Event: Armored Armadillo - Clear"
+chill_penguin_clear = "Event: Chill Penguin - Clear"
+flame_mammoth_clear = "Event: Flame Mammoth - Clear"
+storm_eagle_clear = "Event: Storm Eagle - Clear"
+sting_chameleon_clear = "Event: Sting Chameleon - Clear"
+spark_mandrill_clear = "Event: Spark Mandrill - Clear"
+boomer_kuwanger_clear = "Event: Boomer Kuwanger - Clear"
+launch_octopus_clear = "Event: Launch Octopus - Clear"
+
+sigma_fortress_1_clear = "Event: Sigma Fortress 1 - Clear"
+sigma_fortress_2_clear = "Event: Sigma Fortress 2 - Clear"
+sigma_fortress_3_clear = "Event: Sigma Fortress 3 - Clear"
