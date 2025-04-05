@@ -215,6 +215,11 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
 
     if not allow_partial and len(unplaced_items) > 0 and len(locations) > 0:
         # There are leftover unplaceable items and locations that won't accept them
+        players = set(item.player for item in unplaced_items) | set(loc.player for loc in locations)
+        for player in sorted(players):
+            items = [item for item in unplaced_items if item.player == player]
+            locs = [loc for loc in locations if loc.player == player]
+            multiworld.worlds[player].fill_error(items, locs)
         if multiworld.can_beat_game():
             logging.warning(
                 f"Not all items placed. Game beatable anyway.\nCould not place:\n"
@@ -535,6 +540,10 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         else:
             raise ValueError(f"Generator Panic Method {panic_method} not recognized.")
         if progitempool:
+            players = set([item.player for item in progitempool])
+            for player in sorted(players):
+                items = [item for item in progitempool if item.player == player]
+                multiworld.worlds[player].fill_error(items, [])
             raise FillError(
                 f"Not enough locations for progression items. "
                 f"There are {len(progitempool)} more progression items than there are available locations.\n"
