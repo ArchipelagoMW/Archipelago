@@ -6,6 +6,8 @@ if typing.TYPE_CHECKING:
 
 
 async def update_object(ctx: "SNIContext", key: str, value: typing.Dict[str, typing.Any]) -> None:
+    print(key)
+    print(value)
     await ctx.send_msgs([
         {
             "cmd": "Set",
@@ -37,9 +39,10 @@ async def initialize_giftboxes(ctx: "SNIContext", giftbox_key: str, motherbox_ke
     ctx.set_notify(motherbox_key, giftbox_key)
     await update_object(ctx, f"Giftboxes;{ctx.team}", {f"{ctx.slot}":
                                                        {
-                                                           "IsOpen": is_open,
+                                                           "is_open": is_open,
                                                            **kdl3_gifting_options
                                                        }})
+    await update_object(ctx, f"Giftbox;{ctx.team};{ctx.slot}", {})
     ctx.client_handler.gifting = is_open
 
 

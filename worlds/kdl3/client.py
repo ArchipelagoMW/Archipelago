@@ -90,7 +90,7 @@ def cmd_gift(self: "SNIClientCommandProcessor") -> None:
     async_start(update_object(self.ctx, f"Giftboxes;{self.ctx.team}", {
         f"{self.ctx.slot}":
             {
-                "IsOpen": handler.gifting,
+                "is_open": handler.gifting,
                 **kdl3_gifting_options
             }
     }))
@@ -276,7 +276,7 @@ class KDL3SNIClient(SNIClient):
             if not self.initialize_gifting:
                 self.giftbox_key = f"Giftbox;{ctx.team};{ctx.slot}"
                 self.motherbox_key = f"Giftboxes;{ctx.team}"
-                enable_gifting = await snes_read(ctx, KDL3_GIFTING_FLAG, 0x01)
+                enable_gifting = await snes_read(ctx, KDL3_GIFTING_FLAG, 0x02)
                 await initialize_giftboxes(ctx, self.giftbox_key, self.motherbox_key, bool(enable_gifting[0]))
                 self.initialize_gifting = True
             # can't check debug anymore, without going and copying the value. might be important later.
@@ -350,19 +350,19 @@ class KDL3SNIClient(SNIClient):
                     self.item_queue.append(item_idx | 0x80)
 
             # handle gifts here
-            gifting_status = await snes_read(ctx, KDL3_GIFTING_FLAG, 0x01)
-            if hasattr(ctx, "gifting") and ctx.gifting:
-                if gifting_status[0]:
+            gifting_status = int.from_bytes(await snes_read(ctx, KDL3_GIFTING_FLAG, 0x02), "little")
+            if hasattr(self, "gifting") and self.gifting:
+                if gifting_status:
                     gift = await snes_read(ctx, KDL3_GIFTING_SEND, 0x01)
                     if gift[0]:
                         # we have a gift to send
                         await self.pick_gift_recipient(ctx, gift[0])
                         snes_buffered_write(ctx, KDL3_GIFTING_SEND, bytes([0x00]))
                 else:
-                    snes_buffered_write(ctx, KDL3_GIFTING_FLAG, bytes([0x01]))
+                    snes_buffered_write(ctx, KDL3_GIFTING_FLAG, bytes([0x01, 0x00]))
             else:
-                if gifting_status[0]:
-                    snes_buffered_write(ctx, KDL3_GIFTING_FLAG, bytes([0x00]))
+                if gifting_status:
+                    snes_buffered_write(ctx, KDL3_GIFTING_FLAG, bytes([0x00, 0x00]))
 
             await snes_flush_writes(ctx)
 
