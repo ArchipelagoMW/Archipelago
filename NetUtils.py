@@ -11,12 +11,14 @@ if typing.TYPE_CHECKING:
 from Utils import ByValue, Version
 
 
-class HintStatus(ByValue, enum.IntEnum):
-    HINT_UNSPECIFIED = 0
-    HINT_NO_PRIORITY = 10
-    HINT_AVOID = 20
-    HINT_PRIORITY = 30
-    HINT_FOUND = 40
+class HintPriority(ByValue, enum.IntEnum):
+    HINT_UNSPECIFIED = 0     # No priority has been specified yet
+    HINT_CAN_SKIP = 10       # The item can be skipped
+    HINT_MIGHT_WANT = 20     # The player is unsure if they want the item or not
+    HINT_AVOID = 30          # The item should be avoided if at all possible
+    HINT_AVOID_FOR_NOW = 40  # The item should be avoided for now, but may be needed later
+    HINT_DESIRED = 50        # The item should be collected, as it will be very helpful
+    HINT_NEEDED = 60         # The item should be collected, as it is necessary to progress
 
 
 class JSONMessagePart(typing.TypedDict, total=False):
@@ -28,8 +30,8 @@ class JSONMessagePart(typing.TypedDict, total=False):
     player: int
     # if type == item indicates item flags
     flags: int
-    # if type == hint_status
-    hint_status: HintStatus
+    # if type == hint_priority
+    hint_priority: HintPriority
 
 
 class ClientStatus(ByValue, enum.IntEnum):
@@ -195,7 +197,7 @@ class JSONTypes(str, enum.Enum):
     location_name = "location_name"
     location_id = "location_id"
     entrance_name = "entrance_name"
-    hint_status = "hint_status"
+    hint_priority = "hint_priority"
 
 
 class JSONtoTextParser(metaclass=HandlerMeta):
@@ -277,8 +279,8 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         node["color"] = 'blue'
         return self._handle_color(node)
 
-    def _handle_hint_status(self, node: JSONMessagePart):
-        node["color"] = status_colors.get(node["hint_status"], "red")
+    def _handle_hint_priority(self, node: JSONMessagePart):
+        node["color"] = priority_colors.get(node["hint_priority"], "red")
         return self._handle_color(node)
 
 
@@ -313,25 +315,29 @@ def add_json_location(parts: list, location_id: int, player: int = 0, **kwargs) 
     parts.append({"text": str(location_id), "player": player, "type": JSONTypes.location_id, **kwargs})
 
 
-status_names: typing.Dict[HintStatus, str] = {
-    HintStatus.HINT_FOUND: "(found)",
-    HintStatus.HINT_UNSPECIFIED: "(unspecified)",
-    HintStatus.HINT_NO_PRIORITY: "(no priority)",
-    HintStatus.HINT_AVOID: "(avoid)",
-    HintStatus.HINT_PRIORITY: "(priority)",
+priority_names: typing.Dict[HintPriority, str] = {
+    HintPriority.HINT_UNSPECIFIED: "(unspecified)",
+    HintPriority.HINT_CAN_SKIP: "(can skip)",
+    HintPriority.HINT_MIGHT_WANT: "(might want)",
+    HintPriority.HINT_AVOID: "(avoid)",
+    HintPriority.HINT_AVOID_FOR_NOW: "(avoid for now)",
+    HintPriority.HINT_DESIRED: "(desired)",
+    HintPriority.HINT_NEEDED: "(needed)",
 }
-status_colors: typing.Dict[HintStatus, str] = {
-    HintStatus.HINT_FOUND: "green",
-    HintStatus.HINT_UNSPECIFIED: "white",
-    HintStatus.HINT_NO_PRIORITY: "slateblue",
-    HintStatus.HINT_AVOID: "salmon",
-    HintStatus.HINT_PRIORITY: "plum",
+priority_colors: typing.Dict[HintPriority, str] = {
+    HintPriority.HINT_UNSPECIFIED: "white",
+    HintPriority.HINT_CAN_SKIP: "slateblue",
+    HintPriority.HINT_MIGHT_WANT: "slateblue",
+    HintPriority.HINT_AVOID: "salmon",
+    HintPriority.HINT_AVOID_FOR_NOW: "salmon",
+    HintPriority.HINT_DESIRED: "plum",
+    HintPriority.HINT_NEEDED: "plum",
 }
 
 
-def add_json_hint_status(parts: list, hint_status: HintStatus, text: typing.Optional[str] = None, **kwargs):
-    parts.append({"text": text if text != None else status_names.get(hint_status, "(unknown)"),
-                  "hint_status": hint_status, "type": JSONTypes.hint_status, **kwargs})
+def add_json_hint_priority(parts: list, hint_priority: HintPriority, text: typing.Optional[str] = None, **kwargs):
+    parts.append({"text": text if text != None else priority_names.get(hint_priority, "(unknown)"),
+                  "hint_priority": hint_priority, "type": JSONTypes.hint_priority, **kwargs})
 
 
 class Hint(typing.NamedTuple):
@@ -342,21 +348,19 @@ class Hint(typing.NamedTuple):
     found: bool
     entrance: str = ""
     item_flags: int = 0
-    status: HintStatus = HintStatus.HINT_UNSPECIFIED
+    priority: HintPriority = HintPriority.HINT_UNSPECIFIED
 
     def re_check(self, ctx, team) -> Hint:
-        if self.found and self.status == HintStatus.HINT_FOUND:
+        if self.found:
             return self
         found = self.location in ctx.location_checks[team, self.finding_player]
         if found:
-            return self._replace(found=found, status=HintStatus.HINT_FOUND)
+            return self._replace(found=found)
         return self
     
-    def re_prioritize(self, ctx, status: HintStatus) -> Hint:
-        if self.found and status != HintStatus.HINT_FOUND:
-            status = HintStatus.HINT_FOUND
-        if status != self.status:
-            return self._replace(status=status)
+    def re_prioritize(self, ctx, priority: HintPriority) -> Hint:
+        if priority != self.priority:
+            return self._replace(priority=priority)
         return self
 
     def __hash__(self):
@@ -378,7 +382,7 @@ class Hint(typing.NamedTuple):
         else:
             add_json_text(parts, "'s World")
         add_json_text(parts, ". ")
-        add_json_hint_status(parts, self.status)
+        add_json_hint_priority(parts, self.priority)
 
         return {"cmd": "PrintJSON", "data": parts, "type": "Hint",
                 "receiving": self.receiving_player,
