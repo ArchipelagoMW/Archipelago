@@ -22,6 +22,7 @@ class AreaStats(NamedTuple):
 
 # the vanilla upgrades/equipment you would have
 area_data: Dict[str, AreaStats] = {
+    # The upgrade page is right by the Well entrance. Upper Overworld by the chest in the top right might need something
     "Overworld": AreaStats(1, 1, 1, 1, 1, 1, 0, ["Stick"]),
     "East Forest": AreaStats(1, 1, 1, 1, 1, 1, 0, ["Sword"]),
     "Before Well": AreaStats(1, 1, 1, 1, 1, 1, 3, ["Sword", "Shield"]),
