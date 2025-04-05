@@ -521,7 +521,7 @@ def create_final_regions(world_options) -> List[RegionData]:
     final_regions.extend(vanilla_regions)
     if world_options.mods is None:
         return final_regions
-    for mod in world_options.mods.value:
+    for mod in sorted(world_options.mods.value):
         if mod not in ModDataList:
             continue
         for mod_region in ModDataList[mod].regions:
@@ -747,8 +747,7 @@ def swap_one_random_connection(regions_by_name, connections_by_name, randomized_
     randomized_connections_already_shuffled = {connection: randomized_connections[connection]
                                                for connection in randomized_connections
                                                if connection != randomized_connections[connection]}
-    unreachable_regions_names_leading_somewhere = tuple([region for region in unreachable_regions
-                                                         if len(regions_by_name[region].exits) > 0])
+    unreachable_regions_names_leading_somewhere = [region for region in sorted(unreachable_regions) if len(regions_by_name[region].exits) > 0]
     unreachable_regions_leading_somewhere = [regions_by_name[region_name] for region_name in unreachable_regions_names_leading_somewhere]
     unreachable_regions_exits_names = [exit_name for region in unreachable_regions_leading_somewhere for exit_name in region.exits]
     unreachable_connections = [connections_by_name[exit_name] for exit_name in unreachable_regions_exits_names]
