@@ -1,4 +1,4 @@
-from typing import Dict, List, NamedTuple, Optional
+from typing import NamedTuple, Optional
 
 from BaseClasses import Location, Region
 from worlds.generic.Rules import set_rule
@@ -19,10 +19,10 @@ class CelesteLocationData(NamedTuple):
     address: Optional[int] = None
 
 
-checkpoint_location_data_table: Dict[str, CelesteLocationData] = {}
-key_location_data_table: Dict[str, CelesteLocationData] = {}
+checkpoint_location_data_table: dict[str, CelesteLocationData] = {}
+key_location_data_table: dict[str, CelesteLocationData] = {}
 
-location_id_offsets: Dict[LocationType, int] = {
+location_id_offsets: dict[LocationType, int] = {
     LocationType.strawberry:        celeste_base_id,
     LocationType.golden_strawberry: celeste_base_id + 0x100,
     LocationType.cassette:          celeste_base_id + 0x200,
@@ -36,10 +36,12 @@ location_id_offsets: Dict[LocationType, int] = {
 }
 
 
-def generate_location_table(level_data: Dict[str, Level]):
+def generate_location_table() -> dict[str, int]:
+    from .Levels import Level, LocationType, load_logic_data
+    level_data: dict[str, Level] = load_logic_data()
     location_table = {}
 
-    location_counts: Dict[LocationType, int] = {
+    location_counts: dict[LocationType, int] = {
         LocationType.strawberry:        0,
         LocationType.golden_strawberry: 0,
         LocationType.cassette:          0,
@@ -84,9 +86,9 @@ def create_regions_and_locations(world):
     menu_region = Region("Menu", world.player, world.multiworld)
     world.multiworld.regions.append(menu_region)
 
-    world.active_checkpoint_names: List[str] = []
-    world.active_key_names: List[str] = []
-    world.active_clutter_names: List[str] = []
+    world.active_checkpoint_names: list[str] = []
+    world.active_key_names: list[str] = []
+    world.active_clutter_names: list[str] = []
 
     for _, level in world.level_data.items():
         if level.name not in world.active_levels:
@@ -157,3 +159,28 @@ def create_regions_and_locations(world):
             if room_connection.two_way:
                 dest_region = world.multiworld.get_region(room_connection.dest.name, world.player)
                 dest_region.add_exits([room_connection.source.name])
+
+
+location_data_table: dict[str, int] = generate_location_table()
+
+
+def generate_location_groups() -> dict[str, list[str]]:
+    from .Levels import Level, LocationType, load_logic_data
+    level_data: dict[str, Level] = load_logic_data()
+
+    location_groups: dict[str, list[str]] = {
+        "Strawberries": [name for name, id in location_data_table.items() if id >= location_id_offsets[LocationType.strawberry] and id < location_id_offsets[LocationType.golden_strawberry]],
+        "Golden Strawberries": [name for name, id in location_data_table.items() if id >= location_id_offsets[LocationType.golden_strawberry] and id < location_id_offsets[LocationType.cassette]],
+        "Cassettes": [name for name, id in location_data_table.items() if id >= location_id_offsets[LocationType.cassette] and id < location_id_offsets[LocationType.crystal_heart]],
+        "Crystal Hearts": [name for name, id in location_data_table.items() if id >= location_id_offsets[LocationType.crystal_heart] and id < location_id_offsets[LocationType.checkpoint]],
+        "Checkpoints": [name for name, id in location_data_table.items() if id >= location_id_offsets[LocationType.checkpoint] and id < location_id_offsets[LocationType.level_clear]],
+        "Level Clears": [name for name, id in location_data_table.items() if id >= location_id_offsets[LocationType.level_clear] and id < location_id_offsets[LocationType.key]],
+        "Keys": [name for name, id in location_data_table.items() if id >= location_id_offsets[LocationType.key] and id < location_id_offsets[LocationType.binoculars]],
+        "Binoculars": [name for name, id in location_data_table.items() if id >= location_id_offsets[LocationType.binoculars] and id < location_id_offsets[LocationType.room_enter]],
+        "Rooms": [name for name, id in location_data_table.items() if id >= location_id_offsets[LocationType.room_enter]],
+    }
+
+    for _, level in level_data.items():
+        location_groups.update({level.display_name: [loc_name for loc_name, id in location_data_table.items() if level.display_name in loc_name]})
+
+    return location_groups

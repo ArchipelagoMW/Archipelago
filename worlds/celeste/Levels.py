@@ -1,7 +1,6 @@
 from __future__ import annotations
 from copy import deepcopy
 from enum import IntEnum
-from typing import Callable, Dict, List
 
 from BaseClasses import CollectionState
 
@@ -48,10 +47,10 @@ class PreRegion:
     name: str
     room_name: str
     room: Room
-    connections: List[RegionConnection]
-    locations: List[LevelLocation]
+    connections: list[RegionConnection]
+    locations: list[LevelLocation]
 
-    def __init__(self, name: str, room_name: str, connections: List[RegionConnection], locations: List[LevelLocation]):
+    def __init__(self, name: str, room_name: str, connections: list[RegionConnection], locations: list[LevelLocation]):
         self.name = name
         self.room_name = room_name
         self.connections = deepcopy(connections)
@@ -66,11 +65,11 @@ class RegionConnection:
     source: PreRegion
     destination_name: str
     destination: PreRegion
-    possible_access: List[List[str]]
+    possible_access: list[list[str]]
 
     # TODO: Assign the actual regions here after the structure is built
 
-    def __init__(self, source_name: str, destination_name: str, possible_access: List[List[str]] = []):
+    def __init__(self, source_name: str, destination_name: str, possible_access: list[list[str]] = []):
         self.source_name = source_name
         self.destination_name = destination_name
         self.possible_access = deepcopy(possible_access)
@@ -82,9 +81,9 @@ class LevelLocation:
     region_name: str
     region: PreRegion
     loc_type: LocationType
-    possible_access: List[List[str]]
+    possible_access: list[list[str]]
 
-    def __init__(self, name: str, display_name: str, region_name: str, loc_type: LocationType, possible_access: List[List[str]] = []):
+    def __init__(self, name: str, display_name: str, region_name: str, loc_type: LocationType, possible_access: list[list[str]] = []):
         self.name = name
         self.display_name = display_name
         self.region_name = region_name
@@ -95,12 +94,12 @@ class Room:
     level_name: str
     name: str
     display_name: str
-    regions: List[PreRegion]
-    doors: List[Door]
+    regions: list[PreRegion]
+    doors: list[Door]
     checkpoint: str
     checkpoint_region: str
 
-    def __init__(self, level_name: str, name: str, display_name: str, regions: List[PreRegion], doors: List[Door], checkpoint: str = None, checkpoint_region: str = None):
+    def __init__(self, level_name: str, name: str, display_name: str, regions: list[PreRegion], doors: list[Door], checkpoint: str = None, checkpoint_region: str = None):
         self.level_name = level_name
         self.name = name
         self.display_name = display_name
@@ -144,17 +143,17 @@ class RoomConnection:
 class Level:
     name: str
     display_name: str
-    rooms: List[Room]
-    room_connections: List[RoomConnection]
+    rooms: list[Room]
+    room_connections: list[RoomConnection]
 
-    def __init__(self, name: str, display_name: str, rooms: List[Room], room_connections: List[RoomConnection]):
+    def __init__(self, name: str, display_name: str, rooms: list[Room], room_connections: list[RoomConnection]):
         self.name = name
         self.display_name = display_name
         self.rooms = deepcopy(rooms)
         self.room_connections = deepcopy(room_connections)
 
 
-def load_logic_data() -> Dict[str, Level]:
+def load_logic_data() -> dict[str, Level]:
     from .data.CelesteLevelData import all_levels
 
     #for _, level in all_levels.items():

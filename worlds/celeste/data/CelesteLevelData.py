@@ -1,8 +1,7 @@
-from typing import Dict, List
 from ..Levels import Level, Room, PreRegion, LevelLocation, RegionConnection, RoomConnection, Door, DoorDirection, LocationType
 from ..Names import ItemName
 
-all_doors: Dict[str, Door] = {
+all_doors: dict[str, Door] = {
     "0a_-1_east": Door("0a_-1_east", "0a_-1", DoorDirection.right, False, False),
 
     "0a_0_west": Door("0a_0_west", "0a_0", DoorDirection.left, False, False),
@@ -1612,7 +1611,7 @@ all_doors: Dict[str, Door] = {
 
 }
 
-all_region_connections: Dict[str, RegionConnection] = {
+all_region_connections: dict[str, RegionConnection] = {
     "0a_-1_main---0a_-1_east": RegionConnection("0a_-1_main", "0a_-1_east", []),
     "0a_-1_east---0a_-1_main": RegionConnection("0a_-1_east", "0a_-1_main", []),
 
@@ -3195,7 +3194,7 @@ all_region_connections: Dict[str, RegionConnection] = {
 
 }
 
-all_locations: Dict[str, LevelLocation] = {
+all_locations: dict[str, LevelLocation] = {
     "0a_3_clear": LevelLocation("0a_3_clear", "Prologue - Level Clear", "0a_3_east", LocationType.level_clear, []),
 
     "1a_2_strawberry": LevelLocation("1a_2_strawberry", "Forsaken City A - Room 2 Strawberry", "1a_2_west", LocationType.strawberry, [[ItemName.springs, ], ]),
@@ -3433,7 +3432,7 @@ all_locations: Dict[str, LevelLocation] = {
 
 }
 
-all_regions: Dict[str, PreRegion] = {
+all_regions: dict[str, PreRegion] = {
     "0a_-1_main": PreRegion("0a_-1_main", "0a_-1", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "0a_-1_main"], [loc for _, loc in all_locations.items() if loc.region_name == "0a_-1_main"]),
     "0a_-1_east": PreRegion("0a_-1_east", "0a_-1", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "0a_-1_east"], [loc for _, loc in all_locations.items() if loc.region_name == "0a_-1_east"]),
 
@@ -5100,7 +5099,7 @@ all_regions: Dict[str, PreRegion] = {
 
 }
 
-all_room_connections: Dict[str, RoomConnection] = {
+all_room_connections: dict[str, RoomConnection] = {
     "0a_-1_east---0a_0_west": RoomConnection("0a", all_doors["0a_-1_east"], all_doors["0a_0_west"]),
     "0a_0_north---0a_0b_south": RoomConnection("0a", all_doors["0a_0_north"], all_doors["0a_0b_south"]),
     "0a_0_east---0a_1_west": RoomConnection("0a", all_doors["0a_0_east"], all_doors["0a_1_west"]),
@@ -5679,7 +5678,7 @@ all_room_connections: Dict[str, RoomConnection] = {
 
 }
 
-all_rooms: Dict[str, Room] = {
+all_rooms: dict[str, Room] = {
     "0a_-1": Room("0a", "0a_-1", "Prologue - Room -1", [reg for _, reg in all_regions.items() if reg.room_name == "0a_-1"], [door for _, door in all_doors.items() if door.room_name == "0a_-1"]),
     "0a_0": Room("0a", "0a_0", "Prologue - Room 0", [reg for _, reg in all_regions.items() if reg.room_name == "0a_0"], [door for _, door in all_doors.items() if door.room_name == "0a_0"], "Start", "0a_0_west"),
     "0a_0b": Room("0a", "0a_0b", "Prologue - Room 0b", [reg for _, reg in all_regions.items() if reg.room_name == "0a_0b"], [door for _, door in all_doors.items() if door.room_name == "0a_0b"]),
@@ -6198,7 +6197,7 @@ all_rooms: Dict[str, Room] = {
 
 }
 
-all_levels: Dict[str, Level] = {
+all_levels: dict[str, Level] = {
     "0a": Level("0a", "Prologue", [room for _, room in all_rooms.items() if room.level_name == "0a"], [room_con for _, room_con in all_room_connections.items() if room_con.level_name == "0a"]),
     "1a": Level("1a", "Forsaken City A", [room for _, room in all_rooms.items() if room.level_name == "1a"], [room_con for _, room_con in all_room_connections.items() if room_con.level_name == "1a"]),
     "1b": Level("1b", "Forsaken City B", [room for _, room in all_rooms.items() if room.level_name == "1b"], [room_con for _, room_con in all_room_connections.items() if room_con.level_name == "1b"]),

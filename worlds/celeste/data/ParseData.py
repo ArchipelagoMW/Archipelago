@@ -1,13 +1,12 @@
 import json
-from typing import Dict, List
 
-all_doors: List[str] = []
-all_region_connections: List[str] = []
-all_locations: List[str] = []
-all_regions: List[str] = []
-all_room_connections: List[str] = []
-all_rooms: List[str] = []
-all_levels: List[str] = []
+all_doors: list[str] = []
+all_region_connections: list[str] = []
+all_locations: list[str] = []
+all_regions: list[str] = []
+all_room_connections: list[str] = []
+all_rooms: list[str] = []
+all_levels: list[str] = []
 
 
 data_file = open('CelesteLevelData.json')
@@ -146,41 +145,40 @@ import sys
 out_file = open("CelesteLevelData.py", "w")
 sys.stdout = out_file
 
-print("from typing import Dict, List")
 print("from ..Levels import Level, Room, PreRegion, LevelLocation, RegionConnection, RoomConnection, Door, DoorDirection, LocationType")
 print("from ..Names import ItemName")
 print("")
-print("all_doors: Dict[str, Door] = {")
+print("all_doors: dict[str, Door] = {")
 for line in all_doors:
     print(line)
 print("}")
 print("")
-print("all_region_connections: Dict[str, RegionConnection] = {")
+print("all_region_connections: dict[str, RegionConnection] = {")
 for line in all_region_connections:
     print(line)
 print("}")
 print("")
-print("all_locations: Dict[str, LevelLocation] = {")
+print("all_locations: dict[str, LevelLocation] = {")
 for line in all_locations:
     print(line)
 print("}")
 print("")
-print("all_regions: Dict[str, PreRegion] = {")
+print("all_regions: dict[str, PreRegion] = {")
 for line in all_regions:
     print(line)
 print("}")
 print("")
-print("all_room_connections: Dict[str, RoomConnection] = {")
+print("all_room_connections: dict[str, RoomConnection] = {")
 for line in all_room_connections:
     print(line)
 print("}")
 print("")
-print("all_rooms: Dict[str, Room] = {")
+print("all_rooms: dict[str, Room] = {")
 for line in all_rooms:
     print(line)
 print("}")
 print("")
-print("all_levels: Dict[str, Level] = {")
+print("all_levels: dict[str, Level] = {")
 for line in all_levels:
     print(line)
 print("}")

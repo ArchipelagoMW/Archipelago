@@ -1,16 +1,15 @@
 from copy import deepcopy
 import math
-from typing import Dict, List, Set
 
 from BaseClasses import ItemClassification, Location, MultiWorld, Region, Tutorial
 from Utils import visualize_regions
 from worlds.AutoWorld import WebWorld, World
 
-from .Items import CelesteItem, generate_item_table, generate_item_data_table, level_item_lists, trap_item_data_table
-from .Locations import CelesteLocation, generate_location_table, checkpoint_location_data_table
+from .Items import CelesteItem, generate_item_table, generate_item_data_table, generate_item_groups, level_item_lists, trap_item_data_table
+from .Locations import CelesteLocation, location_data_table, generate_location_groups, checkpoint_location_data_table, location_id_offsets
 from .Names import ItemName, LocationName
 from .Options import CelesteOptions, celeste_option_groups, resolve_options
-from .Levels import Level, load_logic_data
+from .Levels import Level, LocationType, load_logic_data
 
 
 class CelesteWebWorld(WebWorld):
@@ -38,9 +37,13 @@ class CelesteWorld(World):
     web = CelesteWebWorld()
     options_dataclass = CelesteOptions
     options: CelesteOptions
-    level_data: Dict[str, Level] = load_logic_data()
-    location_name_to_id = generate_location_table(level_data)
-    item_name_to_id = generate_item_table()
+
+    level_data: dict[str, Level] = load_logic_data()
+
+    location_name_to_id: dict[str, int] = location_data_table
+    location_name_groups: dict[str, list[str]] = generate_location_groups()
+    item_name_to_id: dict[str, int] = generate_item_table()
+    item_name_groups: dict[str, list[str]] = generate_item_groups()
 
 
     # Instance Data
@@ -49,8 +52,8 @@ class CelesteWorld(World):
     madeline_no_dash_hair_color: int
     madeline_feather_hair_color: int
 
-    active_levels: Set[str]
-    active_items: Set[str]
+    active_levels: set[str]
+    active_items: set[str]
 
 
     @classmethod
@@ -113,7 +116,7 @@ class CelesteWorld(World):
             return CelesteItem(name, ItemClassification.progression, None, self.player)
 
     def create_items(self) -> None:
-        item_pool: List[CelesteItem] = []
+        item_pool: list[CelesteItem] = []
 
         location_count: int = len(self.get_locations())
 
@@ -223,7 +226,7 @@ class CelesteWorld(World):
             "active_levels": self.active_levels
         }
 
-    def output_active_traps(self) -> Dict[int, int]:
+    def output_active_traps(self) -> dict[int, int]:
         trap_data = {}
 
         trap_data[0x20] = self.options.bald_trap_weight.value

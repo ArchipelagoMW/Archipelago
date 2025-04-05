@@ -1,10 +1,10 @@
-from typing import Dict, List, NamedTuple, Optional, Set
+from typing import NamedTuple, Optional
 
 from BaseClasses import Item, ItemClassification
 from .Names import ItemName
 
 
-level_item_lists: Dict[str, Set[str]] = {
+level_item_lists: dict[str, set[str]] = {
     "0a": {},
 
     "1a": {ItemName.springs, ItemName.traffic_blocks, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks},
@@ -62,12 +62,12 @@ class CelesteItemData(NamedTuple):
     type: ItemClassification = ItemClassification.filler
 
 
-collectable_item_data_table: Dict[str, CelesteItemData] = {
+collectable_item_data_table: dict[str, CelesteItemData] = {
     ItemName.strawberry: CelesteItemData(celeste_base_id + 0x0, ItemClassification.progression_skip_balancing),
     ItemName.raspberry:  CelesteItemData(celeste_base_id + 0x1, ItemClassification.filler),
 }
 
-trap_item_data_table: Dict[str, CelesteItemData] = {
+trap_item_data_table: dict[str, CelesteItemData] = {
     ItemName.bald_trap:        CelesteItemData(celeste_base_id + 0x20, ItemClassification.trap),
     ItemName.literature_trap:  CelesteItemData(celeste_base_id + 0x21, ItemClassification.trap),
     ItemName.stun_trap:        CelesteItemData(celeste_base_id + 0x22, ItemClassification.trap),
@@ -82,11 +82,11 @@ trap_item_data_table: Dict[str, CelesteItemData] = {
     ItemName.zoom_trap:        CelesteItemData(celeste_base_id + 0x2C, ItemClassification.trap),
 }
 
-checkpoint_item_data_table: Dict[str, CelesteItemData] = {}
+checkpoint_item_data_table: dict[str, CelesteItemData] = {}
 
-key_item_data_table: Dict[str, CelesteItemData] = {}
+key_item_data_table: dict[str, CelesteItemData] = {}
 
-old_checkpoint_item_data_table: Dict[str, CelesteItemData] = {
+old_checkpoint_item_data_table: dict[str, CelesteItemData] = {
     ItemName.fc_a_checkpoint_1: CelesteItemData(celeste_base_id + 0x100 + 0x00, ItemClassification.progression),
     ItemName.fc_a_checkpoint_2: CelesteItemData(celeste_base_id + 0x100 + 0x01, ItemClassification.progression),
 
@@ -166,7 +166,7 @@ old_checkpoint_item_data_table: Dict[str, CelesteItemData] = {
     ItemName.farewell_checkpoint_8: CelesteItemData(celeste_base_id + 0x100 + 0x87, ItemClassification.progression),
 }
 
-interactable_item_data_table: Dict[str, CelesteItemData] = {
+interactable_item_data_table: dict[str, CelesteItemData] = {
     ItemName.springs:              CelesteItemData(celeste_base_id + 0x200 + 0x00, ItemClassification.progression),
     ItemName.traffic_blocks:       CelesteItemData(celeste_base_id + 0x200 + 0x01, ItemClassification.progression),
     ItemName.pink_cassette_blocks: CelesteItemData(celeste_base_id + 0x200 + 0x02, ItemClassification.progression),
@@ -219,12 +219,25 @@ def add_checkpoint_to_table(id: int, name: str):
 def add_key_to_table(id: int, name: str):
     key_item_data_table[name] = CelesteItemData(id, ItemClassification.progression)
 
-def generate_item_data_table() -> Dict[int, CelesteItemData]:
+def generate_item_data_table() -> dict[int, CelesteItemData]:
     return {**collectable_item_data_table,
             **trap_item_data_table,
             **checkpoint_item_data_table,
             **key_item_data_table,
             **interactable_item_data_table}
 
-def generate_item_table() -> Dict[str, int]:
+
+def generate_item_table() -> dict[str, int]:
     return {name: data.code for name, data in generate_item_data_table().items() if data.code is not None}
+
+
+def generate_item_groups() -> dict[str, list[str]]:
+    item_groups: dict[str, list[str]] = {
+        "Collectables":  list(collectable_item_data_table.keys()),
+        "Traps":         list(trap_item_data_table.keys()),
+        "Checkpoints":   list(checkpoint_item_data_table.keys()),
+        "Keys":          list(key_item_data_table.keys()),
+        "Interactables": list(interactable_item_data_table.keys()),
+    }
+
+    return item_groups
