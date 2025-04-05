@@ -762,7 +762,7 @@ location_table: List[LocationDict] = [
         'game_id': "graf385"},
     {'name': "Tagged 389 Graffiti Spots",
         'stage': Stages.Misc,
-        'game_id': "graf379"},
+        'game_id': "graf389"},
 ]
 
 

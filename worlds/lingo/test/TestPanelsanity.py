@@ -3,7 +3,7 @@ from . import LingoTestBase
 
 class TestPanelHunt(LingoTestBase):
     options = {
-        "shuffle_doors": "complex",
+        "shuffle_doors": "doors",
         "location_checks": "insanity",
         "victory_condition": "level_2",
         "level_2_requirement": "15"

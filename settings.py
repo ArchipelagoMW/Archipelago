@@ -3,15 +3,16 @@ Application settings / host.yaml interface using type hints.
 This is different from player options.
 """
 
+import os
 import os.path
 import shutil
 import sys
+import types
 import typing
 import warnings
 from enum import IntEnum
 from threading import Lock
 from typing import cast, Any, BinaryIO, ClassVar, Dict, Iterator, List, Optional, TextIO, Tuple, Union, TypeVar
-import os
 
 __all__ = [
     "get_settings", "fmt_doc", "no_gui",
@@ -108,7 +109,7 @@ class Group:
     def get_type_hints(cls) -> Dict[str, Any]:
         """Returns resolved type hints for the class"""
         if cls._type_cache is None:
-            if not isinstance(next(iter(cls.__annotations__.values())), str):
+            if not cls.__annotations__ or not isinstance(next(iter(cls.__annotations__.values())), str):
                 # non-str: assume already resolved
                 cls._type_cache = cls.__annotations__
             else:
@@ -162,8 +163,13 @@ class Group:
             else:
                 # assign value, try to upcast to type hint
                 annotation = self.get_type_hints().get(k, None)
-                candidates = [] if annotation is None else \
-                    typing.get_args(annotation) if typing.get_origin(annotation) is Union else [annotation]
+                candidates = (
+                    [] if annotation is None else (
+                        typing.get_args(annotation)
+                        if typing.get_origin(annotation) in (Union, types.UnionType)
+                        else [annotation]
+                    )
+                )
                 none_type = type(None)
                 for cls in candidates:
                     assert isinstance(cls, type), f"{self.__class__.__name__}.{k}: type {cls} not supported in settings"
@@ -264,15 +270,20 @@ class Group:
             # fetch class to avoid going through getattr
             cls = self.__class__
             type_hints = cls.get_type_hints()
+            entries = [e for e in self]
+            if not entries:
+                # write empty dict for empty Group with no instance values
+                cls._dump_value({}, f, indent="  " * level)
             # validate group
             for name in cls.__annotations__.keys():
                 assert hasattr(cls, name), f"{cls}.{name} is missing a default value"
             # dump ordered members
-            for name in self:
+            for name in entries:
                 attr = cast(object, getattr(self, name))
                 attr_cls = type_hints[name] if name in type_hints else attr.__class__
                 attr_cls_origin = typing.get_origin(attr_cls)
-                while attr_cls_origin is Union:  # resolve to first type for doc string
+                # resolve to first type for doc string
+                while attr_cls_origin is Union or attr_cls_origin is types.UnionType:
                     attr_cls = typing.get_args(attr_cls)[0]
                     attr_cls_origin = typing.get_origin(attr_cls)
                 if attr_cls.__doc__ and attr_cls.__module__ != "builtins":
@@ -593,6 +604,7 @@ class ServerOptions(Group):
     savefile: Optional[str] = None
     disable_save: bool = False
     loglevel: str = "info"
+    logtime: bool = False
     server_password: Optional[ServerPassword] = None
     disable_item_cheat: Union[DisableItemCheat, bool] = False
     location_check_points: LocationCheckPoints = LocationCheckPoints(1)
@@ -671,6 +683,8 @@ class GeneratorOptions(Group):
     race: Race = Race(0)
     plando_options: PlandoOptions = PlandoOptions("bosses, connections, texts")
     panic_method: PanicMethod = PanicMethod("swap")
+    loglevel: str = "info"
+    logtime: bool = False
 
 
 class SNIOptions(Group):
@@ -778,7 +792,17 @@ class Settings(Group):
         if location:
             from Utils import parse_yaml
             with open(location, encoding="utf-8-sig") as f:
-                options = parse_yaml(f.read())
+                from yaml.error import MarkedYAMLError
+                try:
+                    options = parse_yaml(f.read())
+                except MarkedYAMLError as ex:
+                    if ex.problem_mark:
+                        f.seek(0)
+                        lines = f.readlines()
+                        problem_line = lines[ex.problem_mark.line]
+                        error_line = " " * ex.problem_mark.column + "^"
+                        raise Exception(f"{ex.context} {ex.problem}\n{problem_line}{error_line}")
+                    raise ex
                 # TODO: detect if upgrade is required
                 # TODO: once we have a cache for _world_settings_name_cache, detect if any game section is missing
                 self.update(options or {})
@@ -798,6 +822,7 @@ class Settings(Group):
             atexit.register(autosave)
 
     def save(self, location: Optional[str] = None) -> None:  # as above
+        from Utils import parse_yaml
         location = location or self._filename
         assert location, "No file specified"
         temp_location = location + ".tmp"  # not using tempfile to test expected file access
@@ -807,10 +832,18 @@ class Settings(Group):
         # can't use utf-8-sig because it breaks backward compat: pyyaml on Windows with bytes does not strip the BOM
         with open(temp_location, "w", encoding="utf-8") as f:
             self.dump(f)
-        # replace old with new
-        if os.path.exists(location):
+            f.flush()
+            if hasattr(os, "fsync"):
+                os.fsync(f.fileno())
+        # validate new file is valid yaml
+        with open(temp_location, encoding="utf-8") as f:
+            parse_yaml(f.read())
+        # replace old with new, try atomic operation first
+        try:
+            os.rename(temp_location, location)
+        except (OSError, FileExistsError):
             os.unlink(location)
-        os.rename(temp_location, location)
+            os.rename(temp_location, location)
         self._filename = location
 
     def dump(self, f: TextIO, level: int = 0) -> None:
@@ -832,7 +865,6 @@ def get_settings() -> Settings:
     with _lock:  # make sure we only have one instance
         res = getattr(get_settings, "_cache", None)
         if not res:
-            import os
             from Utils import user_path, local_path
             filenames = ("options.yaml", "host.yaml")
             locations: List[str] = []

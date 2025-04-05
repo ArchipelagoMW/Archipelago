@@ -1,8 +1,14 @@
+import logging
 from dataclasses import dataclass
-from typing import Dict, Any
+from typing import Dict, Any, TYPE_CHECKING
+
+from decimal import Decimal, ROUND_HALF_UP
+
 from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PlandoConnections,
-                     PerGameCommonOptions, OptionGroup)
+                     PerGameCommonOptions, OptionGroup, Visibility, NamedRange)
 from .er_data import portal_mapping
+if TYPE_CHECKING:
+    from . import TunicWorld
 
 
 class SwordProgression(DefaultOnToggle):
@@ -24,40 +30,21 @@ class StartWithSword(Toggle):
 class KeysBehindBosses(Toggle):
     """
     Places the three hexagon keys behind their respective boss fight in your world.
+    If playing Hexagon Quest, it will place three gold hexagons at the boss locations.
     """
     internal_name = "keys_behind_bosses"
     display_name = "Keys Behind Bosses"
 
 
-class AbilityShuffling(Toggle):
+class AbilityShuffling(DefaultOnToggle):
     """
     Locks the usage of Prayer, Holy Cross*, and the Icebolt combo until the relevant pages of the manual have been found.
-    If playing Hexagon Quest, abilities are instead randomly unlocked after obtaining 25%, 50%, and 75% of the required Hexagon goal amount.
+    If playing Hexagon Quest, abilities are instead randomly unlocked after obtaining 25%, 50%, and 75% of the required
+    Hexagon goal amount, unless the option is set to have them unlock via pages instead.
     * Certain Holy Cross usages are still allowed, such as the free bomb codes, the seeking spell, and other player-facing codes.
     """
     internal_name = "ability_shuffling"
     display_name = "Shuffle Abilities"
-
-
-class LogicRules(Choice):
-    """
-    Set which logic rules to use for your world.
-    Restricted: Standard logic, no glitches.
-    No Major Glitches: Sneaky Laurels zips, ice grapples through doors, shooting the west bell, and boss quick kills are included in logic.
-    * Ice grappling through the Ziggurat door is not in logic since you will get stuck in there without Prayer.
-    Unrestricted: Logic in No Major Glitches, as well as ladder storage to get to certain places early.
-    * Torch is given to the player at the start of the game due to the high softlock potential with various tricks. Using the torch is not required in logic.
-    * Using Ladder Storage to get to individual chests is not in logic to avoid tedium.
-    * Getting knocked out of the air by enemies during Ladder Storage to reach places is not in logic, except for in Rooted Ziggurat Lower. This is so you're not punished for playing with enemy rando on.
-    """
-    internal_name = "logic_rules"
-    display_name = "Logic Rules"
-    option_restricted = 0
-    option_no_major_glitches = 1
-    alias_nmg = 1
-    option_unrestricted = 2
-    alias_ur = 2
-    default = 0
 
 
 class Lanternless(Toggle):
@@ -105,14 +92,16 @@ class HexagonGoal(Range):
     """
     internal_name = "hexagon_goal"
     display_name = "Gold Hexagons Required"
-    range_start = 15
-    range_end = 50
+    range_start = 1
+    range_end = 100
     default = 20
 
 
 class ExtraHexagonPercentage(Range):
     """
     How many extra Gold Questagons are shuffled into the item pool, taken as a percentage of the goal amount.
+    The max number of Gold Questagons that can be in the item pool is 100, so this option may be overridden and/or
+    reduced if the Hexagon Goal amount is greater than 50.
     """
     internal_name = "extra_hexagon_percentage"
     display_name = "Percentage of Extra Gold Hexagons"
@@ -121,19 +110,37 @@ class ExtraHexagonPercentage(Range):
     default = 50
 
 
+class HexagonQuestAbilityUnlockType(Choice):
+    """
+    Determines how abilities are unlocked when playing Hexagon Quest with Shuffled Abilities enabled.
+
+    Hexagons: A new ability is randomly unlocked after obtaining 25%, 50%, and 75% of the required Hexagon goal amount. Requires at least 3 Gold Hexagons in the item pool, or 15 if Keys Behind Bosses is enabled.
+    Pages: Abilities are unlocked by finding specific pages in the manual.
+
+    This option does nothing if Shuffled Abilities is not enabled.
+    """
+    internal_name = "hexagon_quest_ability_type"
+    display_name = "Hexagon Quest Ability Unlocks"
+    option_hexagons = 0
+    option_pages = 1
+    default = 0
+
+
 class EntranceRando(TextChoice):
     """
     Randomize the connections between scenes.
     A small, very lost fox on a big adventure.
-    
+
     If you set this option's value to a string, it will be used as a custom seed.
     Every player who uses the same custom seed will have the same entrances, choosing the most restrictive settings among these players for the purpose of pairing entrances.
     """
     internal_name = "entrance_rando"
     display_name = "Entrance Rando"
     alias_false = 0
+    alias_off = 0
     option_no = 0
     alias_true = 1
+    alias_on = 1
     option_yes = 1
     default = 0
 
@@ -171,41 +178,201 @@ class ShuffleLadders(Toggle):
     """
     internal_name = "shuffle_ladders"
     display_name = "Shuffle Ladders"
-    
-    
+
+
+class GrassRandomizer(Toggle):
+    """
+    Turns over 6,000 blades of grass and bushes in the game into checks.
+    """
+    internal_name = "grass_randomizer"
+    display_name = "Grass Randomizer"
+
+
+class LocalFill(NamedRange):
+    """
+    Choose the percentage of your filler/trap items that will be kept local or distributed to other TUNIC players with this option enabled.
+    If you have Grass Randomizer enabled, this option must be set to 95% or higher to avoid flooding the item pool. The host can remove this restriction by turning off the limit_grass_rando setting in host.yaml.
+    This option defaults to 95% if you have Grass Randomizer enabled, and to 0% otherwise.
+    This option ignores items placed in your local_items or non_local_items.
+    This option does nothing in single player games.
+    """
+    internal_name = "local_fill"
+    display_name = "Local Fill Percent"
+    range_start = 0
+    range_end = 98
+    special_range_names = {
+        "default": -1
+    }
+    default = -1
+    visibility = Visibility.template | Visibility.complex_ui | Visibility.spoiler
+
+
 class TunicPlandoConnections(PlandoConnections):
+    """
+    Generic connection plando. Format is:
+    - entrance: "Entrance Name"
+      exit: "Exit Name"
+      percentage: 100
+    Percentage is an integer from 0 to 100 which determines whether that connection will be made. Defaults to 100 if omitted.
+    """
     entrances = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
     exits = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
 
     duplicate_exits = True
 
 
+class CombatLogic(Choice):
+    """
+    If enabled, the player will logically require a combination of stat upgrade items and equipment to get some checks or navigate to some areas, with a goal of matching the vanilla combat difficulty.
+    The player may still be expected to run past enemies, reset aggro (by using a checkpoint or doing a scene transition), or find sneaky paths to checks.
+    This option marks many more items as progression and may force weapons much earlier than normal.
+    Bosses Only makes it so that additional combat logic is only added to the boss fights and the Gauntlet.
+    If disabled, the standard, looser logic is used. The standard logic does not include stat upgrades, just minimal weapon requirements, such as requiring a Sword or Magic Wand for Quarry, or not requiring a weapon for Swamp.
+    """
+    internal_name = "combat_logic"
+    display_name = "More Combat Logic"
+    option_off = 0
+    option_bosses_only = 1
+    option_on = 2
+    default = 0
+
+
+class LaurelsZips(Toggle):
+    """
+    Choose whether to include using the Hero's Laurels to zip through gates, doors, and tricky spots.
+    Notable inclusions are the Monastery gate, Ruined Passage door, Old House gate, Forest Grave Path gate, and getting from the Back of Swamp to the Middle of Swamp.
+    """
+    internal_name = "laurels_zips"
+    display_name = "Laurels Zips Logic"
+
+
+class IceGrappling(Choice):
+    """
+    Choose whether grappling frozen enemies is in logic.
+    Easy includes ice grappling enemies that are in range without luring them. May include clips through terrain.
+    Medium includes using ice grapples to push enemies through doors or off ledges without luring them. Also includes bringing an enemy over to the Temple Door to grapple through it.
+    Hard includes luring or grappling enemies to get to where you want to go.
+    Enabling any of these difficulty options will give the player the Torch to return to the Overworld checkpoint to avoid softlocks. Using the Torch is considered in logic.
+    Note: You will still be expected to ice grapple to the slime in East Forest from below with this option off.
+    """
+    internal_name = "ice_grappling"
+    display_name = "Ice Grapple Logic"
+    option_off = 0
+    option_easy = 1
+    option_medium = 2
+    option_hard = 3
+    default = 0
+
+
+class LadderStorage(Choice):
+    """
+    Choose whether Ladder Storage is in logic.
+    Easy includes uses of Ladder Storage to get to open doors over a long distance without too much difficulty. May include convenient elevation changes (going up Mountain stairs, stairs in front of Special Shop, etc.).
+    Medium includes the above as well as changing your elevation using the environment and getting knocked down by melee enemies mid-LS.
+    Hard includes the above as well as going behind the map to enter closed doors from behind, shooting a fuse with the magic wand to knock yourself down at close range, and getting into the Cathedral Secret Legend room mid-LS.
+    Enabling any of these difficulty options will give the player the Torch to return to the Overworld checkpoint to avoid softlocks. Using the Torch is considered in logic.
+    Opening individual chests while doing ladder storage is excluded due to tedium.
+    Knocking yourself out of LS with a bomb is excluded due to the problematic nature of consumables in logic.
+    """
+    internal_name = "ladder_storage"
+    display_name = "Ladder Storage Logic"
+    option_off = 0
+    option_easy = 1
+    option_medium = 2
+    option_hard = 3
+    default = 0
+
+
+class LadderStorageWithoutItems(Toggle):
+    """
+    If disabled, you logically require Stick, Sword, Magic Orb, or Shield to perform Ladder Storage.
+    If enabled, you will be expected to perform Ladder Storage without progression items.
+    This can be done with the plushie code, a Golden Coin, Prayer, and many other options.
+
+    This option has no effect if you do not have Ladder Storage Logic enabled.
+    """
+    internal_name = "ladder_storage_without_items"
+    display_name = "Ladder Storage without Items"
+
+
+class LogicRules(Choice):
+    """
+    This option has been superseded by the individual trick options.
+    If set to nmg, it will set Ice Grappling to medium and Laurels Zips on.
+    If set to ur, it will do nmg as well as set Ladder Storage to medium.
+    It is here to avoid breaking old yamls, and will be removed at a later date.
+    """
+    visibility = Visibility.none
+    internal_name = "logic_rules"
+    display_name = "Logic Rules"
+    option_restricted = 0
+    option_no_major_glitches = 1
+    alias_nmg = 1
+    option_unrestricted = 2
+    alias_ur = 2
+    default = 0
+
+
+class BreakableShuffle(Toggle):
+    """
+    Turns approximately 250 breakable objects in the game into checks.
+    """
+    internal_name = "breakable_shuffle"
+    display_name = "Breakable Shuffle"
+
+
 @dataclass
 class TunicOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
+
     sword_progression: SwordProgression
     start_with_sword: StartWithSword
     keys_behind_bosses: KeysBehindBosses
     ability_shuffling: AbilityShuffling
-    shuffle_ladders: ShuffleLadders
-    entrance_rando: EntranceRando
-    fixed_shop: FixedShop
-    logic_rules: LogicRules
     fool_traps: FoolTraps
+    laurels_location: LaurelsLocation
+
     hexagon_quest: HexagonQuest
     hexagon_goal: HexagonGoal
     extra_hexagon_percentage: ExtraHexagonPercentage
+    hexagon_quest_ability_type: HexagonQuestAbilityUnlockType
+
+    shuffle_ladders: ShuffleLadders
+    grass_randomizer: GrassRandomizer
+    breakable_shuffle: BreakableShuffle
+    local_fill: LocalFill
+
+    entrance_rando: EntranceRando
+    fixed_shop: FixedShop
+
+    combat_logic: CombatLogic
     lanternless: Lanternless
     maskless: Maskless
-    laurels_location: LaurelsLocation
+    laurels_zips: LaurelsZips
+    ice_grappling: IceGrappling
+    ladder_storage: LadderStorage
+    ladder_storage_without_items: LadderStorageWithoutItems
+
     plando_connections: TunicPlandoConnections
-      
+
+    logic_rules: LogicRules
+
 
 tunic_option_groups = [
+    OptionGroup("Hexagon Quest Options", [
+        HexagonQuest,
+        HexagonGoal,
+        ExtraHexagonPercentage,
+        HexagonQuestAbilityUnlockType
+    ]),
     OptionGroup("Logic Options", [
-        LogicRules,
+        CombatLogic,
         Lanternless,
         Maskless,
+        LaurelsZips,
+        IceGrappling,
+        LadderStorage,
+        LadderStorageWithoutItems
     ])
 ]
 
@@ -222,10 +389,33 @@ tunic_option_presets: Dict[str, Dict[str, Any]] = {
     "Glace Mode": {
         "accessibility": "minimal",
         "ability_shuffling": True,
-        "entrance_rando": "yes",
+        "entrance_rando": True,
         "fool_traps": "onslaught",
-        "logic_rules": "unrestricted",
+        "laurels_zips": True,
+        "ice_grappling": "hard",
+        "ladder_storage": "hard",
+        "ladder_storage_without_items": True,
         "maskless": True,
         "lanternless": True,
     },
 }
+
+
+def check_options(world: "TunicWorld"):
+    options = world.options
+    if options.hexagon_quest and options.ability_shuffling and options.hexagon_quest_ability_type == HexagonQuestAbilityUnlockType.option_hexagons:
+        total_hexes = get_hexagons_in_pool(world)
+        min_hexes = 3
+
+        if options.keys_behind_bosses:
+            min_hexes = 15
+        if total_hexes < min_hexes:
+            logging.warning(f"TUNIC: Not enough Gold Hexagons in {world.player_name}'s item pool for Hexagon Ability Shuffle with the selected options. Ability Shuffle mode will be switched to Pages.")
+            options.hexagon_quest_ability_type.value = HexagonQuestAbilityUnlockType.option_pages
+
+
+def get_hexagons_in_pool(world: "TunicWorld"):
+    # Calculate number of hexagons in item pool
+    options = world.options
+    return min(int((Decimal(100 + options.extra_hexagon_percentage) / 100 * options.hexagon_goal)
+                    .to_integral_value(rounding=ROUND_HALF_UP)), 100)

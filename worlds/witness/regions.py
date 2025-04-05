@@ -3,15 +3,17 @@ Defines Region for The Witness, assigns locations to them,
 and connects them with the proper requirements
 """
 from collections import defaultdict
-from typing import TYPE_CHECKING, Dict, List, Set, Tuple
+from typing import TYPE_CHECKING, Dict, List, Optional, Set, Tuple
 
 from BaseClasses import Entrance, Region
 
 from worlds.generic.Rules import CollectionRule
 
 from .data import static_logic as static_witness_logic
-from .data.utils import WitnessRule, optimize_witness_rule
-from .locations import WitnessPlayerLocations, static_witness_locations
+from .data.definition_classes import WitnessRule
+from .data.static_logic import StaticWitnessLogicObj
+from .data.utils import optimize_witness_rule
+from .locations import WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
 
 if TYPE_CHECKING:
@@ -21,11 +23,25 @@ if TYPE_CHECKING:
 class WitnessPlayerRegions:
     """Class that defines Witness Regions"""
 
-    player_locations = None
-    logic = None
+    def __init__(self, player_locations: WitnessPlayerLocations, world: "WitnessWorld") -> None:
+        difficulty = world.options.puzzle_randomization
+
+        self.reference_logic: StaticWitnessLogicObj
+        if difficulty == "sigma_normal":
+            self.reference_logic = static_witness_logic.sigma_normal
+        elif difficulty == "sigma_expert":
+            self.reference_logic = static_witness_logic.sigma_expert
+        elif difficulty == "umbra_variety":
+            self.reference_logic = static_witness_logic.umbra_variety
+        else:
+            self.reference_logic = static_witness_logic.vanilla
+
+        self.player_locations = player_locations
+        self.two_way_entrance_register: Dict[Tuple[str, str], List[Entrance]] = defaultdict(lambda: [])
+        self.created_region_names: Set[str] = set()
 
     @staticmethod
-    def make_lambda(item_requirement: WitnessRule, world: "WitnessWorld") -> CollectionRule:
+    def make_lambda(item_requirement: WitnessRule, world: "WitnessWorld") -> Optional[CollectionRule]:
         from .rules import _meets_item_requirements
 
         """
@@ -36,7 +52,7 @@ class WitnessPlayerRegions:
         return _meets_item_requirements(item_requirement, world)
 
     def connect_if_possible(self, world: "WitnessWorld", source: str, target: str, req: WitnessRule,
-                            regions_by_name: Dict[str, Region]):
+                            regions_by_name: Dict[str, Region]) -> None:
         """
         connect two regions and set the corresponding requirement
         """
@@ -66,7 +82,9 @@ class WitnessPlayerRegions:
             source_region
         )
 
-        connection.access_rule = self.make_lambda(final_requirement, world)
+        rule = self.make_lambda(final_requirement, world)
+        if rule is not None:
+            connection.access_rule = rule
 
         source_region.exits.append(connection)
         connection.connect(target_region)
@@ -89,28 +107,54 @@ class WitnessPlayerRegions:
         """
         from . import create_region
 
-        all_locations = set()
-        regions_by_name = dict()
+        all_locations: Set[str] = set()
+        regions_by_name: Dict[str, Region] = {}
 
         regions_to_create = {
             k: v for k, v in self.reference_logic.ALL_REGIONS_BY_NAME.items()
             if k not in player_logic.UNREACHABLE_REGIONS
         }
 
+        event_locations_per_region: Dict[str, Dict[str, int]] = defaultdict(dict)
+
+        for event_location, event_item_and_entity in player_logic.EVENT_ITEM_PAIRS.items():
+            entity_or_region = event_item_and_entity[1]
+            if entity_or_region in static_witness_logic.ALL_REGIONS_BY_NAME:
+                region_name = entity_or_region
+                order = -1
+            else:
+                region = static_witness_logic.ENTITIES_BY_HEX[event_item_and_entity[1]]["region"]
+                if region is None:
+                    region_name = "Entry"
+                else:
+                    region_name = region.name
+                order = self.reference_logic.ENTITIES_BY_HEX[entity_or_region]["order"]
+            event_locations_per_region[region_name][event_location] = order
+
         for region_name, region in regions_to_create.items():
-            locations_for_this_region = [
-                self.reference_logic.ENTITIES_BY_HEX[panel]["checkName"] for panel in region["entities"]
-                if self.reference_logic.ENTITIES_BY_HEX[panel]["checkName"]
-                in self.player_locations.CHECK_LOCATION_TABLE
+            location_entities_for_this_region = [
+                self.reference_logic.ENTITIES_BY_HEX[entity] for entity in region.logical_entities
             ]
-            locations_for_this_region += [
-                static_witness_locations.get_event_name(panel) for panel in region["entities"]
-                if static_witness_locations.get_event_name(panel) in self.player_locations.EVENT_LOCATION_TABLE
-            ]
+            locations_for_this_region = {
+                entity["checkName"]: entity["order"] for entity in location_entities_for_this_region
+                if entity["checkName"] in self.player_locations.CHECK_LOCATION_TABLE
+            }
+
+            events = event_locations_per_region[region_name]
+            locations_for_this_region.update(events)
+
+            # First, sort by keys.
+            locations_for_this_region = dict(sorted(locations_for_this_region.items()))
+
+            # Then, sort by game order (values)
+            locations_for_this_region = dict(sorted(
+                locations_for_this_region.items(),
+                key=lambda location_name_and_order: location_name_and_order[1]
+            ))
 
             all_locations = all_locations | set(locations_for_this_region)
 
-            new_region = create_region(world, region_name, self.player_locations, locations_for_this_region)
+            new_region = create_region(world, region_name, self.player_locations, list(locations_for_this_region))
 
             regions_by_name[region_name] = new_region
 
@@ -121,17 +165,3 @@ class WitnessPlayerRegions:
         for region_name, region in regions_to_create.items():
             for connection in player_logic.CONNECTIONS_BY_REGION_NAME[region_name]:
                 self.connect_if_possible(world, region_name, connection[0], connection[1], regions_by_name)
-
-    def __init__(self, player_locations: WitnessPlayerLocations, world: "WitnessWorld") -> None:
-        difficulty = world.options.puzzle_randomization
-
-        if difficulty == "sigma_normal":
-            self.reference_logic = static_witness_logic.sigma_normal
-        elif difficulty == "sigma_expert":
-            self.reference_logic = static_witness_logic.sigma_expert
-        elif difficulty == "none":
-            self.reference_logic = static_witness_logic.vanilla
-
-        self.player_locations = player_locations
-        self.two_way_entrance_register: Dict[Tuple[str, str], List[Entrance]] = defaultdict(lambda: [])
-        self.created_region_names: Set[str] = set()

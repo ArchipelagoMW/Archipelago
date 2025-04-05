@@ -72,6 +72,14 @@ class WebHostContext(Context):
         self.video = {}
         self.tags = ["AP", "WebHost"]
 
+    def __del__(self):
+        try:
+            import psutil
+            from Utils import format_SI_prefix
+            self.logger.debug(f"Context destroyed, Mem: {format_SI_prefix(psutil.Process().memory_info().rss, 1024)}iB")
+        except ImportError:
+            self.logger.debug("Context destroyed")
+
     def _load_game_data(self):
         for key, value in self.static_server_data.items():
             # NOTE: attributes are mutable and shared, so they will have to be copied before being modified
@@ -109,6 +117,7 @@ class WebHostContext(Context):
         self.gamespackage = {"Archipelago": static_gamespackage.get("Archipelago", {})}  # this may be modified by _load
         self.item_name_groups = {"Archipelago": static_item_name_groups.get("Archipelago", {})}
         self.location_name_groups = {"Archipelago": static_location_name_groups.get("Archipelago", {})}
+        missing_checksum = False
 
         for game in list(multidata.get("datapackage", {})):
             game_data = multidata["datapackage"][game]
@@ -124,11 +133,13 @@ class WebHostContext(Context):
                         continue
                     else:
                         self.logger.warning(f"Did not find game_data_package for {game}: {game_data['checksum']}")
+            else:
+                missing_checksum = True  # Game rolled on old AP and will load data package from multidata
             self.gamespackage[game] = static_gamespackage.get(game, {})
             self.item_name_groups[game] = static_item_name_groups.get(game, {})
             self.location_name_groups[game] = static_location_name_groups.get(game, {})
 
-        if not game_data_packages:
+        if not game_data_packages and not missing_checksum:
             # all static -> use the static dicts directly
             self.gamespackage = static_gamespackage
             self.item_name_groups = static_item_name_groups
@@ -168,16 +179,27 @@ def get_random_port():
 def get_static_server_data() -> dict:
     import worlds
     data = {
-        "non_hintable_names": {},
-        "gamespackage": worlds.network_data_package["games"],
-        "item_name_groups": {world_name: world.item_name_groups for world_name, world in
-                             worlds.AutoWorldRegister.world_types.items()},
-        "location_name_groups": {world_name: world.location_name_groups for world_name, world in
-                                 worlds.AutoWorldRegister.world_types.items()},
+        "non_hintable_names": {
+            world_name: world.hint_blacklist
+            for world_name, world in worlds.AutoWorldRegister.world_types.items()
+        },
+        "gamespackage": {
+            world_name: {
+                key: value
+                for key, value in game_package.items()
+                if key not in ("item_name_groups", "location_name_groups")
+            }
+            for world_name, game_package in worlds.network_data_package["games"].items()
+        },
+        "item_name_groups": {
+            world_name: world.item_name_groups
+            for world_name, world in worlds.AutoWorldRegister.world_types.items()
+        },
+        "location_name_groups": {
+            world_name: world.location_name_groups
+            for world_name, world in worlds.AutoWorldRegister.world_types.items()
+        },
     }
-
-    for world_name, world in worlds.AutoWorldRegister.world_types.items():
-        data["non_hintable_names"][world_name] = world.hint_blacklist
 
     return data
 
@@ -238,6 +260,7 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                 ctx = WebHostContext(static_server_data, logger)
                 ctx.load(room_id)
                 ctx.init_save()
+                assert ctx.server is None
                 try:
                     ctx.server = websockets.serve(
                         functools.partial(server, ctx=ctx), ctx.host, ctx.port, ssl=ssl_context)
@@ -266,12 +289,16 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                     ctx.logger.exception("Could not determine port. Likely hosting failure.")
                 with db_session:
                     ctx.auto_shutdown = Room.get(id=room_id).timeout
+                if ctx.saving:
+                    setattr(asyncio.current_task(), "save", lambda: ctx._save(True))
+                assert ctx.shutdown_task is None
                 ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, []))
                 await ctx.shutdown_task
 
             except (KeyboardInterrupt, SystemExit):
                 if ctx.saving:
                     ctx._save()
+                    setattr(asyncio.current_task(), "save", None)
             except Exception as e:
                 with db_session:
                     room = Room.get(id=room_id)
@@ -281,8 +308,12 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
             else:
                 if ctx.saving:
                     ctx._save()
+                    setattr(asyncio.current_task(), "save", None)
             finally:
                 try:
+                    ctx.save_dirty = False  # make sure the saving thread does not write to DB after final wakeup
+                    ctx.exit_event.set()  # make sure the saving thread stops at some point
+                    # NOTE: async saving should probably be an async task and could be merged with shutdown_task
                     with (db_session):
                         # ensure the Room does not spin up again on its own, minute of safety buffer
                         room = Room.get(id=room_id)
@@ -294,13 +325,34 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                     rooms_shutting_down.put(room_id)
 
     class Starter(threading.Thread):
+        _tasks: typing.List[asyncio.Future]
+
+        def __init__(self):
+            super().__init__()
+            self._tasks = []
+
+        def _done(self, task: asyncio.Future):
+            self._tasks.remove(task)
+            task.result()
+
         def run(self):
             while 1:
                 next_room = rooms_to_run.get(block=True,  timeout=None)
-                asyncio.run_coroutine_threadsafe(start_room(next_room), loop)
+                gc.collect()
+                task = asyncio.run_coroutine_threadsafe(start_room(next_room), loop)
+                self._tasks.append(task)
+                task.add_done_callback(self._done)
                 logging.info(f"Starting room {next_room} on {name}.")
+                del task  # delete reference to task object
 
     starter = Starter()
     starter.daemon = True
     starter.start()
-    loop.run_forever()
+    try:
+        loop.run_forever()
+    finally:
+        # save all tasks that want to be saved during shutdown
+        for task in asyncio.all_tasks(loop):
+            save: typing.Optional[typing.Callable[[], typing.Any]] = getattr(task, "save", None)
+            if save:
+                save()

@@ -5,7 +5,8 @@ class TestMasteryWhenVictoryIsTheEnd(LingoTestBase):
     options = {
         "mastery_achievements": "22",
         "victory_condition": "the_end",
-        "shuffle_colors": "true"
+        "shuffle_colors": "true",
+        "shuffle_postgame": "true",
     }
 
     def test_requirement(self):
@@ -43,7 +44,8 @@ class TestMasteryBlocksDependents(LingoTestBase):
     options = {
         "mastery_achievements": "24",
         "shuffle_colors": "true",
-        "location_checks": "insanity"
+        "location_checks": "insanity",
+        "victory_condition": "level_2",
     }
 
     def test_requirement(self):

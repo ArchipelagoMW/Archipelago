@@ -2,14 +2,13 @@ import json
 import re
 import subprocess
 import sys
+import unittest
 
 from BaseClasses import get_seed
 from .. import SVTestCase
 
 # <function Location.<lambda> at 0x102ca98a0>
 lambda_regex = re.compile(r"^<function Location\.<lambda> at (.*)>$")
-# Python 3.10.2\r\n
-python_version_regex = re.compile(r"^Python (\d+)\.(\d+)\.(\d+)\s*$")
 
 
 class TestGenerationIsStable(SVTestCase):
@@ -18,9 +17,8 @@ class TestGenerationIsStable(SVTestCase):
 
     def test_all_locations_and_items_are_the_same_between_two_generations(self):
         if self.skip_long_tests:
-            return
+            raise unittest.SkipTest("Long tests disabled")
 
-        # seed = get_seed(33778671150797368040) # troubleshooting seed
         seed = get_seed()
 
         output_a = subprocess.check_output([sys.executable, '-m', 'worlds.stardew_valley.test.stability.StabilityOutputScript', '--seed', str(seed)])
@@ -50,3 +48,6 @@ class TestGenerationIsStable(SVTestCase):
             # We check that the actual rule has the same order to make sure it is evaluated in the same order,
             #  so performance tests are repeatable as much as possible.
             self.assertEqual(rule_a, rule_b, f"Location rule of {location_a} at index {i} is different between both executions. Seed={seed}")
+
+        for key, value in result_a["slot_data"].items():
+            self.assertEqual(value, result_b["slot_data"][key], f"Slot data {key} is different between both executions. Seed={seed}")

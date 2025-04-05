@@ -176,7 +176,7 @@ class WargrooveContext(CommonContext):
                 if not os.path.isfile(path):
                     open(path, 'w').close()
                     # Announcing commander unlocks
-                    item_name = self.item_names.lookup_in_slot(network_item.item)
+                    item_name = self.item_names.lookup_in_game(network_item.item)
                     if item_name in faction_table.keys():
                         for commander in faction_table[item_name]:
                             logger.info(f"{commander.name} has been unlocked!")
@@ -197,7 +197,7 @@ class WargrooveContext(CommonContext):
                     open(print_path, 'w').close()
                     with open(print_path, 'w') as f:
                         f.write("Received " +
-                                self.item_names.lookup_in_slot(network_item.item) +
+                                self.item_names.lookup_in_game(network_item.item) +
                                 " from " +
                                 self.player_names[network_item.player])
                         f.close()
@@ -214,17 +214,11 @@ class WargrooveContext(CommonContext):
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
         from kvui import GameManager, HoverBehavior, ServerToolTip
-        from kivy.uix.tabbedpanel import TabbedPanelItem
+        from kivymd.uix.tab import MDTabsItem, MDTabsItemText
         from kivy.lang import Builder
-        from kivy.uix.button import Button
         from kivy.uix.togglebutton import ToggleButton
         from kivy.uix.boxlayout import BoxLayout
-        from kivy.uix.gridlayout import GridLayout
-        from kivy.uix.image import AsyncImage, Image
-        from kivy.uix.stacklayout import StackLayout
         from kivy.uix.label import Label
-        from kivy.properties import ColorProperty
-        from kivy.uix.image import Image
         import pkgutil
 
         class TrackerLayout(BoxLayout):
@@ -267,9 +261,7 @@ class WargrooveContext(CommonContext):
 
             def build(self):
                 container = super().build()
-                panel = TabbedPanelItem(text="Wargroove")
-                panel.content = self.build_tracker()
-                self.tabs.add_widget(panel)
+                self.add_client_tab("Wargroove", self.build_tracker())
                 return container
 
             def build_tracker(self) -> TrackerLayout:
@@ -342,7 +334,7 @@ class WargrooveContext(CommonContext):
             faction_items = 0
             faction_item_names = [faction + ' Commanders' for faction in faction_table.keys()]
             for network_item in self.items_received:
-                if self.item_names.lookup_in_slot(network_item.item) in faction_item_names:
+                if self.item_names.lookup_in_game(network_item.item) in faction_item_names:
                     faction_items += 1
             starting_groove = (faction_items - 1) * self.starting_groove_multiplier
             # Must be an integer larger than 0
@@ -448,6 +440,6 @@ if __name__ == '__main__':
     parser = get_base_parser(description="Wargroove Client, for text interfacing.")
 
     args, rest = parser.parse_known_args()
-    colorama.init()
+    colorama.just_fix_windows_console()
     asyncio.run(main(args))
     colorama.deinit()

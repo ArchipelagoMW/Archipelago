@@ -1,12 +1,10 @@
-from worlds.adventure import location_table
-from worlds.adventure.Options import BatLogic, DifficultySwitchB, DifficultySwitchA
+from .Options import BatLogic, DifficultySwitchB
 from worlds.generic.Rules import add_rule, set_rule, forbid_item
-from BaseClasses import LocationProgressType
 
 
 def set_rules(self) -> None:
     world = self.multiworld
-    use_bat_logic = world.bat_logic[self.player].value == BatLogic.option_use_logic
+    use_bat_logic = self.options.bat_logic.value == BatLogic.option_use_logic
 
     set_rule(world.get_entrance("YellowCastlePort", self.player),
              lambda state: state.has("Yellow Key", self.player))
@@ -28,7 +26,7 @@ def set_rules(self) -> None:
                  lambda state: state.has("Bridge", self.player) or
                                state.has("Magnet", self.player))
 
-    dragon_slay_check = world.dragon_slay_check[self.player].value
+    dragon_slay_check = self.options.dragon_slay_check.value
     if dragon_slay_check:
         if self.difficulty_switch_b == DifficultySwitchB.option_hard_with_unlock_item:
             set_rule(world.get_location("Slay Yorgle", self.player),
