@@ -641,7 +641,7 @@ class World(metaclass=AutoWorldRegister):
         :return: The name of the item to be created.
         """
         logging.warning(f"World {self} is generating a filler item without custom filler pool.")
-        return self.multiworld.random.choice(tuple(self.item_name_to_id.keys()))
+        return self.random.choice(tuple(self.item_name_to_id.keys()))
 
     @classmethod
     def create_group(cls, multiworld: "MultiWorld", new_player_id: int, players: set[int]) -> World:
@@ -782,9 +782,9 @@ class World(metaclass=AutoWorldRegister):
     def push_precollected(self, item: Item) -> None:
         """
         Helper method to add an item to start inventory. This will collect it into the multiworld state, as well as
-        consider it always precollected in any newly created `CollectionState`s.
+        consider it always pre-collected in any newly created `CollectionState`s.
 
-        :param item: The item to precollect.
+        :param item: The item to pre-collect.
         """
         self.multiworld.push_precollected(item)
 
