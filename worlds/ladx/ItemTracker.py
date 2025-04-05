@@ -1,11 +1,15 @@
 import json
-gameStateAddress = 0xDB95
-validGameStates = {0x0B, 0x0C}
-gameStateResetThreshold = 0x06
 
 inventorySlotCount = 16
 inventoryStartAddress = 0xDB00
 inventoryEndAddress = inventoryStartAddress + inventorySlotCount
+
+rupeesHigh = 0xDB5D
+rupeesLow = 0xDB5E
+addRupeesHigh = 0xDB8F
+addRupeesLow = 0xDB90
+removeRupeesHigh = 0xDB91
+removeRupeesLow = 0xDB92
 
 inventoryItemIds = {
     0x02: 'BOMB',
@@ -98,10 +102,11 @@ dungeonItemOffsets = {
     'STONE_BEAK{}': 2,
     'NIGHTMARE_KEY{}': 3,
     'KEY{}': 4,
+    'UNUSED_KEY{}': 4,
 }
 
 class Item:
-    def __init__(self, id, address, threshold=0, mask=None, increaseOnly=False, count=False, max=None):
+    def __init__(self, id, address, threshold=0, mask=None, increaseOnly=False, count=False, max=None, encodedCount=True):
         self.id = id
         self.address = address
         self.threshold = threshold
@@ -112,6 +117,7 @@ class Item:
         self.rawValue = 0
         self.diff = 0
         self.max = max
+        self.encodedCount = encodedCount
 
     def set(self, byte, extra):
         oldValue = self.value
@@ -121,7 +127,7 @@ class Item:
         
         if not self.count:
             byte = int(byte > self.threshold)
-        else:
+        elif self.encodedCount:
             # LADX seems to store one decimal digit per nibble
             byte = byte - (byte // 16 * 6)
         
@@ -165,6 +171,7 @@ class ItemTracker:
             Item('BOOMERANG', None),
             Item('TOADSTOOL', None),
             Item('ROOSTER', None),
+            Item('RUPEE_COUNT', None, count=True, encodedCount=False),
             Item('SWORD', 0xDB4E, count=True),
             Item('POWER_BRACELET', 0xDB43, count=True),
             Item('SHIELD', 0xDB44, count=True),
@@ -219,9 +226,9 @@ class ItemTracker:
 
         self.itemDict = {item.id: item for item in self.items}
 
-    async def readItems(state):
-        extraItems = state.extraItems
-        missingItems = {x for x in state.items if x.address == None}
+    async def readItems(self):
+        extraItems = self.extraItems
+        missingItems = {x for x in self.items if x.address == None and x.id != 'RUPEE_COUNT'}
         
         # Add keys for opened key doors
         for i in range(len(dungeonKeyDoors)):
@@ -230,16 +237,16 @@ class ItemTracker:
 
             for address, masks in dungeonKeyDoors[i].items():
                 for mask in masks:
-                    value = await state.readRamByte(address) & mask
+                    value = await self.readRamByte(address) & mask
                     if value > 0:
                         extraItems[item] += 1
 
         # Main inventory items
         for i in range(inventoryStartAddress, inventoryEndAddress):
-            value = await state.readRamByte(i)
+            value = await self.readRamByte(i)
 
             if value in inventoryItemIds:
-                item = state.itemDict[inventoryItemIds[value]]
+                item = self.itemDict[inventoryItemIds[value]]
                 extra = extraItems[item.id] if item.id in extraItems else 0
                 item.set(1, extra)
                 missingItems.remove(item)
@@ -249,9 +256,21 @@ class ItemTracker:
             item.set(0, extra)
         
         # All other items
-        for item in [x for x in state.items if x.address]:
+        for item in [x for x in self.items if x.address]:
             extra = extraItems[item.id] if item.id in extraItems else 0
-            item.set(await state.readRamByte(item.address), extra)
+            item.set(await self.readRamByte(item.address), extra)
+        
+        # The current rupee count is BCD, but the add/remove values are not
+        currentRupees = self.calculateRupeeCount(await self.readRamByte(rupeesHigh), await self.readRamByte(rupeesLow))
+        addingRupees = (await self.readRamByte(addRupeesHigh) << 8) +  await self.readRamByte(addRupeesLow)
+        removingRupees = (await self.readRamByte(removeRupeesHigh) << 8) + await self.readRamByte(removeRupeesLow)
+        self.itemDict['RUPEE_COUNT'].set(currentRupees + addingRupees - removingRupees, 0)
+    
+    def calculateRupeeCount(self, high: int, low: int) -> int:
+        return (high - (high // 16 * 6)) * 100 + (low - (low // 16 * 6))
+    
+    def setExtraItem(self, item: str, qty: int) -> None:
+        self.extraItems[item] = qty
 
     async def sendItems(self, socket, diff=False):
         if not self.items: 
@@ -259,7 +278,6 @@ class ItemTracker:
         message = {
             "type":"item",
             "refresh": True,
-            "version":"1.0",
             "diff": diff,
             "items": [],
         }

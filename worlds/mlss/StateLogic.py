@@ -1,3 +1,6 @@
+from .Options import Goal
+
+
 def canDig(state, player):
     return state.has("Green Goblet", player) and state.has("Hammers", player)
 
@@ -105,8 +108,9 @@ def surfable(state, player):
     )
 
 
-def postJokes(state, player):
-    return (
+def postJokes(state, player, goal):
+    if goal == Goal.option_vanilla: # Logic for beating jokes end without beanstar emblems
+        return (
         surfable(state, player)
         and canDig(state, player)
         and dressBeanstar(state, player)
@@ -115,7 +119,13 @@ def postJokes(state, player):
         and brooch(state, player)
         and rose(state, player)
         and canDash(state, player)
-    )
+        )
+    else: # Logic for beating jokes end with beanstar emblems
+        return (
+        surfable(state, player)
+        and canDig(state, player)
+        and canDash(state, player)
+        )
 
 
 def teehee(state, player):
@@ -153,3 +163,10 @@ def birdo_shop(state, player):
 
 def fungitown_birdo_shop(state, player):
     return state.can_reach("Fungitown Shop Birdo Flag", "Region", player)
+
+def soul(state, player):
+    return (ultra(state, player)
+            and canMini(state, player)
+            and canDig(state, player)
+            and canDash(state, player)
+            and canCrash(state, player))

@@ -1,7 +1,8 @@
 import unittest
 from unittest.mock import Mock
 
-from .. import SVTestBase, allsanity_mods_6_x_x, fill_namespace_with_default
+from .. import SVTestBase, fill_namespace_with_default
+from ..options.presets import allsanity_mods_6_x_x
 from ... import STARDEW_VALLEY, FarmType, BundleRandomization, EntranceRandomization
 
 

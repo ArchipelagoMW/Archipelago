@@ -47,7 +47,7 @@ from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, Networ
 from BaseClasses import ItemClassification
 
 min_client_version = Version(0, 1, 6)
-colorama.init()
+colorama.just_fix_windows_console()
 
 
 def remove_from_list(container, value):

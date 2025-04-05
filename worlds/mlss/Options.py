@@ -2,13 +2,13 @@ from Options import Choice, Toggle, StartInventoryPool, PerGameCommonOptions, Ra
 from dataclasses import dataclass
 
 
-class BowsersCastleSkip(Toggle):
+class SkipBowsersCastle(Toggle):
     """
-    Skip straight from the entrance hall to Bowletta in Bowser's Castle.
+    Skip straight from the Entrance Hall to Bowletta in Bowser's Castle.
     All Bowser's Castle locations will be removed from the location pool.
     """
 
-    display_name = "Bowser's Castle Skip"
+    display_name = "Skip Bowser's Castle"
 
 
 class ExtraPipes(Toggle):
@@ -272,13 +272,47 @@ class ChuckleBeans(Choice):
     option_all = 2
     default = 2
 
+class Goal(Choice):
+    """
+    Vanilla: Complete jokes end with the required items and defeat Birdo to unlock Bowser's Castle.
+
+    Emblem Hunt: Find the required number of Beanstar Emblems to gain access to Bowser's Castle.
+    """
+    display_name = "Goal"
+    option_vanilla = 0
+    option_emblem_hunt = 1
+    default = 0
+
+class EmblemsRequired(Range):
+    """
+    Number of Beanstar Emblems to collect to unlock Bowser's Castle.
+
+    If Goal is not Emblem Hunt, this does nothing.
+    """
+    display_name = "Emblems Required"
+    range_start = 1
+    range_end = 100
+    default = 50
+
+
+class EmblemsAmount(Range):
+    """
+    Number of Beanstar Emblems that are in the pool.
+
+    If Goal is not Emblem Hunt, this does nothing.
+    """
+    display_name = "Emblems Available"
+    range_start = 1
+    range_end = 150
+    default = 75
+
 
 @dataclass
 class MLSSOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     coins: Coins
     difficult_logic: DifficultLogic
-    castle_skip: BowsersCastleSkip
+    castle_skip: SkipBowsersCastle
     extra_pipes: ExtraPipes
     skip_minecart: SkipMinecart
     disable_surf: DisableSurf
@@ -286,6 +320,9 @@ class MLSSOptions(PerGameCommonOptions):
     harhalls_pants: Removed
     block_visibility: HiddenVisible
     chuckle_beans: ChuckleBeans
+    goal: Goal
+    emblems_required: EmblemsRequired
+    emblems_amount: EmblemsAmount
     music_options: MusicOptions
     randomize_sounds: RandomSounds
     randomize_enemies: RandomizeEnemies

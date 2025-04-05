@@ -255,7 +255,8 @@ async def game_watcher(ctx: FactorioContext):
                         if "DeathLink" in ctx.tags:
                             async_start(ctx.send_death())
                     if ctx.energy_link_increment:
-                        in_world_bridges = data["energy_bridges"]
+                        # 1 + quality * 0.3 for each bridge
+                        in_world_bridges: float = data["energy_bridges"]
                         if in_world_bridges:
                             in_world_energy = data["energy"]
                             if in_world_energy < (ctx.energy_link_increment * in_world_bridges):
@@ -263,14 +264,14 @@ async def game_watcher(ctx: FactorioContext):
                                 ctx.last_deplete = time.time()
                                 async_start(ctx.send_msgs([{
                                     "cmd": "Set", "key": ctx.energylink_key, "operations":
-                                        [{"operation": "add", "value": -ctx.energy_link_increment * in_world_bridges},
+                                        [{"operation": "add", "value": int(-ctx.energy_link_increment * in_world_bridges)},
                                          {"operation": "max", "value": 0}],
                                     "last_deplete": ctx.last_deplete
                                 }]))
                             # Above Capacity - (len(Bridges) * ENERGY_INCREMENT)
                             elif in_world_energy > (in_world_bridges * ctx.energy_link_increment * 5) - \
                                     ctx.energy_link_increment * in_world_bridges:
-                                value = ctx.energy_link_increment * in_world_bridges
+                                value = int(ctx.energy_link_increment * in_world_bridges)
                                 async_start(ctx.send_msgs([{
                                     "cmd": "Set", "key": ctx.energylink_key, "operations":
                                         [{"operation": "add", "value": value}]
@@ -406,7 +407,7 @@ async def get_info(ctx: FactorioContext, rcon_client: factorio_rcon.RCONClient):
     ctx.auth = info["slot_name"]
     ctx.seed_name = info["seed_name"]
     death_link = info["death_link"]
-    ctx.energy_link_increment = info.get("energy_link", 0)
+    ctx.energy_link_increment = int(info.get("energy_link", 0))
     logger.debug(f"Energy Link Increment: {ctx.energy_link_increment}")
     if ctx.energy_link_increment and ctx.ui:
         ctx.ui.enable_energy_link()
@@ -530,7 +531,7 @@ server_args = ("--rcon-port", rcon_port, "--rcon-password", rcon_password)
 def launch():
     import colorama
     global executable, server_settings, server_args
-    colorama.init()
+    colorama.just_fix_windows_console()
 
     if server_settings:
         server_settings = os.path.abspath(server_settings)

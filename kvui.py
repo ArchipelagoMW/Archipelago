@@ -296,7 +296,7 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
             else:
                 # Not a fan of the following few lines, but they work.
                 temp = MarkupLabel(text=self.text).markup
-                text = "".join(part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
+                text = "".join(part for part in temp if not part.startswith("["))
                 cmdinput = App.get_running_app().textinput
                 if not cmdinput.text:
                     input_text = get_input_text_from_response(text, App.get_running_app().last_autofillable_command)
@@ -816,6 +816,12 @@ class HintLayout(BoxLayout):
         boxlayout.add_widget(Label(text="New Hint:", size_hint_x=None, size_hint_y=None, height=dp(30)))
         boxlayout.add_widget(AutocompleteHintInput())
         self.add_widget(boxlayout)
+
+    def fix_heights(self):
+        for child in self.children:
+            fix_func = getattr(child, "fix_heights", None)
+            if fix_func:
+                fix_func()
 
         
 status_names: typing.Dict[HintStatus, str] = {

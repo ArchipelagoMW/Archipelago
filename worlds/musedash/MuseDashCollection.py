@@ -24,9 +24,10 @@ class MuseDashCollections:
         MUSE_PLUS_DLC,
         "CHUNITHM COURSE MUSE",  # Part of Muse Plus. Goes away 22nd May 2027.
         "maimai DX Limited-time Suite",  # Part of Muse Plus. Goes away 31st Jan 2026.
-        "MSR Anthology",  # Now no longer available.
+        "MSR Anthology",  # Goes away January 26, 2026. 
         "Miku in Museland",  # Paid DLC not included in Muse Plus
         "Rin Len's Mirrorland",  # Paid DLC not included in Muse Plus
+        "MSR Anthology_Vol.02", # Goes away January 26, 2026. 
     ]
 
     REMOVED_SONGS = [
@@ -51,11 +52,13 @@ class MuseDashCollections:
         "Nyaa SFX Trap": STARTING_CODE + 8,
         "Error SFX Trap": STARTING_CODE + 9,
         "Focus Line Trap": STARTING_CODE + 10,
+        "Beefcake SFX Trap": STARTING_CODE + 11,
     }
 
     sfx_trap_items: List[str] = [
         "Nyaa SFX Trap",
         "Error SFX Trap",
+        "Beefcake SFX Trap",
     ]
 
     filler_items: Dict[str, int] = {

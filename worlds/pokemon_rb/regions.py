@@ -1579,6 +1579,18 @@ def create_regions(world):
                     world.item_pool.append(item)
 
     world.random.shuffle(world.item_pool)
+    if not world.options.key_items_only:
+        if "Player's House 2F - Player's PC" in world.options.exclude_locations:
+            acceptable_item = lambda item: item.excludable
+        elif "Player's House 2F - Player's PC" in world.options.priority_locations:
+            acceptable_item = lambda item: item.advancement
+        else:
+            acceptable_item = lambda item: True
+        for i, item in enumerate(world.item_pool):
+            if acceptable_item(item):
+                world.pc_item = world.item_pool.pop(i)
+                break
+
     advancement_items = [item.name for item in world.item_pool if item.advancement] \
                         + [item.name for item in world.multiworld.precollected_items[world.player] if
                            item.advancement]
@@ -2402,6 +2414,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                 loc.place_locked_item(badge)
 
         state = multiworld.state.copy()
+        state.allow_partial_entrances = True
         for item, data in item_table.items():
             if (data.id or item in poke_data.pokemon_data) and data.classification == ItemClassification.progression \
                     and ("Badge" not in item or world.options.badgesanity):

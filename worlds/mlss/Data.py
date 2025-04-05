@@ -153,7 +153,6 @@ enemies = [
     0x50458C,
     0x5045AC,
     0x50468C,
-    # 0x5046CC, 6 enemy formation
     0x5046EC,
     0x50470C
 ]
@@ -166,6 +165,7 @@ bosses = [
     0x50360C,
     0x5037AC,
     0x5037CC,
+    0x50396C,
     0x503A8C,
     0x503D6C,
     0x503F0C,

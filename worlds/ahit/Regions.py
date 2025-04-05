@@ -347,7 +347,7 @@ def create_regions(world: "HatInTimeWorld"):
     sf_act3 = create_region_and_connect(world, "Toilet of Doom", "Subcon Forest - Act 3", subcon_forest)
     sf_act4 = create_region_and_connect(world, "Queen Vanessa's Manor", "Subcon Forest - Act 4", subcon_forest)
     sf_act5 = create_region_and_connect(world, "Mail Delivery Service", "Subcon Forest - Act 5", subcon_forest)
-    create_region_and_connect(world, "Your Contract has Expired", "Subcon Forest - Finale", subcon_forest)
+    sf_finale = create_region_and_connect(world, "Your Contract has Expired", "Subcon Forest - Finale", subcon_forest)
 
     # ------------------------------------------- ALPINE SKYLINE ------------------------------------------ #
     alpine_skyline = create_region_and_connect(world, "Alpine Skyline",  "Telescope -> Alpine Skyline", spaceship)
@@ -386,11 +386,24 @@ def create_regions(world: "HatInTimeWorld"):
     create_rift_connections(world, create_region(world, "Time Rift - Bazaar"))
 
     sf_area: Region = create_region(world, "Subcon Forest Area")
+    sf_behind_boss_firewall: Region = create_region(world, "Subcon Forest Behind Boss Firewall")
+    sf_boss_arena: Region = create_region(world, "Subcon Forest Boss Arena")
+    sf_area.connect(sf_behind_boss_firewall, "SF Area -> SF Behind Boss Firewall")
+    sf_behind_boss_firewall.connect(sf_boss_arena, "SF Behind Boss Firewall -> SF Boss Arena")
     sf_act1.connect(sf_area, "Subcon Forest Entrance CO")
     sf_act2.connect(sf_area, "Subcon Forest Entrance SW")
     sf_act3.connect(sf_area, "Subcon Forest Entrance TOD")
     sf_act4.connect(sf_area, "Subcon Forest Entrance QVM")
     sf_act5.connect(sf_area, "Subcon Forest Entrance MDS")
+    # YCHE puts the player directly in the boss arena, with no access to the rest of Subcon Forest by default.
+    sf_finale.connect(sf_boss_arena, "Subcon Forest Entrance YCHE")
+    # To support the Snatcher Hover expert logic for Act Completion (Your Contract has Expired), the act completion has
+    # to go in a separate region because the Snatcher Hover gives direct access to the Act Completion, but does not
+    # give access to the act itself.
+    sf_finale_post_fight: Region = create_region(world, "Your Contract has Expired - Post Fight")
+    # This connection must never have any rules placed on it because they will not be inherited when setting up act
+    # connections, only the rules for the entrances to the act and the rules for the Act Completion are inherited.
+    sf_finale.connect(sf_finale_post_fight, "YCHE -> YCHE - Post Fight")
 
     create_rift_connections(world, create_region(world, "Time Rift - Sleepy Subcon"))
     create_rift_connections(world, create_region(world, "Time Rift - Pipe"))
@@ -945,6 +958,16 @@ def get_shuffled_region(world: "HatInTimeWorld", region: str) -> str:
             for name in chapter_act_info.keys():
                 if chapter_act_info[name] == key:
                     return name
+
+
+def get_region_shuffled_to(world: "HatInTimeWorld", region: str) -> str:
+    if world.options.ActRandomizer:
+        original_ci: str = chapter_act_info[region]
+        shuffled_ci = world.act_connections[original_ci]
+        return next(act_name for act_name, ci in chapter_act_info.items()
+                    if ci == shuffled_ci)
+    else:
+        return region
 
 
 def get_region_location_count(world: "HatInTimeWorld", region_name: str, included_only: bool = True) -> int:

@@ -8,12 +8,13 @@ from worlds.AutoWorld import WebWorld, World
 from .AestheticData import chao_name_conversion, sample_chao_names, totally_real_item_names, \
                            all_exits, all_destinations, multi_rooms, single_rooms, room_to_exits_map, exit_to_room_map, valid_kindergarten_exits
 from .GateBosses import get_gate_bosses, get_boss_rush_bosses, get_boss_name
-from .Items import SA2BItem, ItemData, item_table, upgrades_table, emeralds_table, junk_table, trap_table, item_groups, \
-                   eggs_table, fruits_table, seeds_table, hats_table, animals_table, chaos_drives_table
-from .Locations import SA2BLocation, all_locations, setup_locations, chao_animal_event_location_table, black_market_location_table
-from .Missions import get_mission_table, get_mission_count_table, get_first_and_last_cannons_core_missions
+from .Items import SA2BItem, ItemData, item_table, upgrades_table, emeralds_table, junk_table, minigame_trap_table, item_groups, \
+                   eggs_table, fruits_table, seeds_table, hats_table, animals_table, chaos_drives_table, event_table
+from .Locations import SA2BLocation, all_locations, location_groups, setup_locations, chao_animal_event_location_table, black_market_location_table
+from .Missions import get_mission_table, get_mission_count_table, get_first_and_last_cannons_core_missions, print_mission_orders_to_spoiler
 from .Names import ItemName, LocationName
 from .Options import SA2BOptions, sa2b_option_groups
+from .Presets import sa2b_options_presets
 from .Regions import create_regions, shuffleable_regions, connect_regions, LevelGate, gate_0_whitelist_regions, \
     gate_0_blacklist_regions
 from .Rules import set_rules
@@ -33,6 +34,7 @@ class SA2BWeb(WebWorld):
 
     tutorials = [setup_en]
     option_groups = sa2b_option_groups
+    options_presets = sa2b_options_presets
 
 
 def check_for_impossible_shuffle(shuffled_levels: typing.List[int], gate_0_range: int, multiworld: MultiWorld):
@@ -60,11 +62,14 @@ class SA2BWorld(World):
     topology_present = False
 
     item_name_groups = item_groups
+    location_name_groups = location_groups
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = all_locations
 
     location_table: typing.Dict[str, int]
 
+    shuffled_region_list: typing.List[int]
+    levels_per_gate: typing.List[int]
     mission_map: typing.Dict[int, int]
     mission_count_map: typing.Dict[int, int]
     emblems_for_cannons_core: int
@@ -78,7 +83,7 @@ class SA2BWorld(World):
 
     def fill_slot_data(self) -> dict:
         return {
-            "ModVersion": 203,
+            "ModVersion": 204,
             "Goal": self.options.goal.value,
             "MusicMap": self.generate_music_data(),
             "VoiceMap": self.generate_voice_data(),
@@ -89,14 +94,20 @@ class SA2BWorld(World):
             "MusicShuffle": self.options.music_shuffle.value,
             "Narrator": self.options.narrator.value,
             "MinigameTrapDifficulty": self.options.minigame_trap_difficulty.value,
+            "BigFishingDifficulty": self.options.big_fishing_difficulty.value,
             "RingLoss": self.options.ring_loss.value,
             "RingLink": self.options.ring_link.value,
+            "TrapLink": self.options.trap_link.value,
             "RequiredRank": self.options.required_rank.value,
+            "MinigameMadnessAmount": self.options.minigame_madness_requirement.value,
+            "LogicDifficulty": self.options.logic_difficulty.value,
             "ChaoKeys": self.options.keysanity.value,
             "Whistlesanity": self.options.whistlesanity.value,
             "GoldBeetles": self.options.beetlesanity.value,
             "OmochaoChecks": self.options.omosanity.value,
             "AnimalChecks": self.options.animalsanity.value,
+            "ItemBoxChecks": self.options.itemboxsanity.value,
+            "BigChecks": self.options.bigsanity.value,
             "KartRaceChecks": self.options.kart_race_checks.value,
             "ChaoStadiumChecks": self.options.chao_stadium_checks.value,
             "ChaoRaceDifficulty": self.options.chao_race_difficulty.value,
@@ -122,6 +133,7 @@ class SA2BWorld(World):
             "GateCosts": self.gate_costs,
             "GateBosses": self.gate_bosses,
             "BossRushMap": self.boss_rush_map,
+            "ActiveTraps": self.output_active_traps(),
             "PlayerNum": self.player,
         }
 
@@ -151,12 +163,42 @@ class SA2BWorld(World):
 
             valid_trap_weights = self.options.exposition_trap_weight.value + \
                                  self.options.reverse_trap_weight.value + \
-                                 self.options.pong_trap_weight.value
+                                 self.options.literature_trap_weight.value + \
+                                 self.options.controller_drift_trap_weight.value + \
+                                 self.options.poison_trap_weight.value + \
+                                 self.options.bee_trap_weight.value + \
+                                 self.options.pong_trap_weight.value + \
+                                 self.options.breakout_trap_weight.value + \
+                                 self.options.fishing_trap_weight.value + \
+                                 self.options.trivia_trap_weight.value + \
+                                 self.options.pokemon_trivia_trap_weight.value + \
+                                 self.options.pokemon_count_trap_weight.value + \
+                                 self.options.number_sequence_trap_weight.value + \
+                                 self.options.light_up_path_trap_weight.value + \
+                                 self.options.pinball_trap_weight.value + \
+                                 self.options.math_quiz_trap_weight.value + \
+                                 self.options.snake_trap_weight.value + \
+                                 self.options.input_sequence_trap_weight.value
 
             if valid_trap_weights == 0:
                 self.options.exposition_trap_weight.value = 4
                 self.options.reverse_trap_weight.value = 4
+                self.options.literature_trap_weight.value = 4
+                self.options.controller_drift_trap_weight.value = 4
+                self.options.poison_trap_weight.value = 4
+                self.options.bee_trap_weight.value = 4
                 self.options.pong_trap_weight.value = 4
+                self.options.breakout_trap_weight.value = 4
+                self.options.fishing_trap_weight.value = 4
+                self.options.trivia_trap_weight.value = 4
+                self.options.pokemon_trivia_trap_weight.value = 4
+                self.options.pokemon_count_trap_weight.value = 4
+                self.options.number_sequence_trap_weight.value = 4
+                self.options.light_up_path_trap_weight.value = 4
+                self.options.pinball_trap_weight.value = 4
+                self.options.math_quiz_trap_weight.value = 4
+                self.options.snake_trap_weight.value = 4
+                self.options.input_sequence_trap_weight.value = 4
 
             if self.options.kart_race_checks.value == 0:
                 self.options.kart_race_checks.value = 2
@@ -164,8 +206,8 @@ class SA2BWorld(World):
             self.gate_bosses = {}
             self.boss_rush_map = {}
         else:
-            self.gate_bosses   = get_gate_bosses(self.multiworld, self)
-            self.boss_rush_map = get_boss_rush_bosses(self.multiworld, self)
+            self.gate_bosses   = get_gate_bosses(self)
+            self.boss_rush_map = get_boss_rush_bosses(self)
 
     def create_regions(self):
         self.mission_map       = get_mission_table(self.multiworld, self, self.player)
@@ -177,7 +219,7 @@ class SA2BWorld(World):
         # Not Generate Basic
         self.black_market_costs = dict()
 
-        if self.options.goal.value in [0, 2, 4, 5, 6]:
+        if self.options.goal.value in [0, 2, 4, 5, 6, 8]:
             self.multiworld.get_location(LocationName.finalhazard, self.player).place_locked_item(self.create_item(ItemName.maria))
         elif self.options.goal.value == 1:
             self.multiworld.get_location(LocationName.green_hill, self.player).place_locked_item(self.create_item(ItemName.maria))
@@ -202,7 +244,7 @@ class SA2BWorld(World):
         if self.options.goal.value != 3:
             # Fill item pool with all required items
             for item in {**upgrades_table}:
-                itempool += [self.create_item(item, False, self.options.goal.value)]
+                itempool += [self.create_item(item, None, self.options.goal.value)]
 
             if self.options.goal.value in [1, 2, 6]:
                 # Some flavor of Chaos Emerald Hunt
@@ -211,6 +253,25 @@ class SA2BWorld(World):
 
             # Black Market
             itempool += [self.create_item(ItemName.market_token) for _ in range(self.options.black_market_slots.value)]
+
+            if self.options.goal.value in [8]:
+                available_locations: int = total_required_locations - len(itempool) - self.options.number_of_level_gates.value
+
+                while (self.options.minigame_madness_requirement.value * len(minigame_trap_table)) > available_locations:
+                    self.options.minigame_madness_requirement.value -= 1
+
+                while (self.options.minigame_madness_minimum.value * len(minigame_trap_table)) > available_locations:
+                    self.options.minigame_madness_minimum.value -= 1
+
+                traps_to_create: int = max(self.options.minigame_madness_minimum.value, self.options.minigame_madness_requirement.value)
+
+                # Minigame Madness
+                for item in {**minigame_trap_table}:
+                    for i in range(traps_to_create):
+                        classification: ItemClassification = ItemClassification.trap
+                        if i < self.options.minigame_madness_requirement.value:
+                            classification |= ItemClassification.progression
+                        itempool.append(self.create_item(item, classification))
 
             black_market_unlock_mult = 1.0
             if self.options.black_market_unlock_costs.value == 0:
@@ -235,12 +296,12 @@ class SA2BWorld(World):
         elif self.options.level_gate_costs.value == 1:
             gate_cost_mult = 0.8
 
-        shuffled_region_list = list(range(30))
+        self.shuffled_region_list = list(range(30))
         emblem_requirement_list = list()
-        self.multiworld.random.shuffle(shuffled_region_list)
-        levels_per_gate = self.get_levels_per_gate()
+        self.multiworld.random.shuffle(self.shuffled_region_list)
+        self.levels_per_gate = self.get_levels_per_gate()
 
-        check_for_impossible_shuffle(shuffled_region_list, math.ceil(levels_per_gate[0]), self.multiworld)
+        check_for_impossible_shuffle(self.shuffled_region_list, math.ceil(self.levels_per_gate[0]), self.multiworld)
         levels_added_to_gate = 0
         total_levels_added = 0
         current_gate = 0
@@ -250,11 +311,11 @@ class SA2BWorld(World):
         gates = list()
         gates.append(LevelGate(0))
         for i in range(30):
-            gates[current_gate].gate_levels.append(shuffled_region_list[i])
+            gates[current_gate].gate_levels.append(self.shuffled_region_list[i])
             emblem_requirement_list.append(current_gate_emblems)
             levels_added_to_gate += 1
             total_levels_added += 1
-            if levels_added_to_gate >= levels_per_gate[current_gate]:
+            if levels_added_to_gate >= self.levels_per_gate[current_gate]:
                 current_gate += 1
                 if current_gate > self.options.number_of_level_gates.value:
                     current_gate = self.options.number_of_level_gates.value
@@ -265,18 +326,19 @@ class SA2BWorld(World):
                     self.gate_costs[current_gate] = current_gate_emblems
                 levels_added_to_gate = 0
 
-        self.region_emblem_map = dict(zip(shuffled_region_list, emblem_requirement_list))
+        self.region_emblem_map = dict(zip(self.shuffled_region_list, emblem_requirement_list))
 
         first_cannons_core_mission, final_cannons_core_mission = get_first_and_last_cannons_core_missions(self.mission_map, self.mission_count_map)
 
         connect_regions(self.multiworld, self, self.player, gates, self.emblems_for_cannons_core, self.gate_bosses, self.boss_rush_map, first_cannons_core_mission, final_cannons_core_mission)
 
         max_required_emblems = max(max(emblem_requirement_list), self.emblems_for_cannons_core)
+        max_required_emblems = min(int(max_required_emblems * 1.1), total_emblem_count)
         itempool += [self.create_item(ItemName.emblem) for _ in range(max_required_emblems)]
 
         non_required_emblems = (total_emblem_count - max_required_emblems)
         junk_count = math.floor(non_required_emblems * (self.options.junk_fill_percentage.value / 100.0))
-        itempool += [self.create_item(ItemName.emblem, True) for _ in range(non_required_emblems - junk_count)]
+        itempool += [self.create_item(ItemName.emblem, ItemClassification.filler) for _ in range(non_required_emblems - junk_count)]
 
         # Carve Traps out of junk_count
         trap_weights = []
@@ -291,7 +353,22 @@ class SA2BWorld(World):
         trap_weights += ([ItemName.slow_trap] * self.options.slow_trap_weight.value)
         trap_weights += ([ItemName.cutscene_trap] * self.options.cutscene_trap_weight.value)
         trap_weights += ([ItemName.reverse_trap] * self.options.reverse_trap_weight.value)
+        trap_weights += ([ItemName.literature_trap] * self.options.literature_trap_weight.value)
+        trap_weights += ([ItemName.controller_drift_trap] * self.options.controller_drift_trap_weight.value)
+        trap_weights += ([ItemName.poison_trap] * self.options.poison_trap_weight.value)
+        trap_weights += ([ItemName.bee_trap] * self.options.bee_trap_weight.value)
         trap_weights += ([ItemName.pong_trap] * self.options.pong_trap_weight.value)
+        trap_weights += ([ItemName.breakout_trap] * self.options.breakout_trap_weight.value)
+        trap_weights += ([ItemName.fishing_trap] * self.options.fishing_trap_weight.value)
+        trap_weights += ([ItemName.trivia_trap] * self.options.trivia_trap_weight.value)
+        trap_weights += ([ItemName.pokemon_trivia_trap] * self.options.pokemon_trivia_trap_weight.value)
+        trap_weights += ([ItemName.pokemon_count_trap] * self.options.pokemon_count_trap_weight.value)
+        trap_weights += ([ItemName.number_sequence_trap] * self.options.number_sequence_trap_weight.value)
+        trap_weights += ([ItemName.light_up_path_trap] * self.options.light_up_path_trap_weight.value)
+        trap_weights += ([ItemName.pinball_trap] * self.options.pinball_trap_weight.value)
+        trap_weights += ([ItemName.math_quiz_trap] * self.options.math_quiz_trap_weight.value)
+        trap_weights += ([ItemName.snake_trap] * self.options.snake_trap_weight.value)
+        trap_weights += ([ItemName.input_sequence_trap] * self.options.input_sequence_trap_weight.value)
 
         junk_count += extra_junk_count
         trap_count = 0 if (len(trap_weights) == 0) else math.ceil(junk_count * (self.options.trap_fill_percentage.value / 100.0))
@@ -347,11 +424,15 @@ class SA2BWorld(World):
 
 
 
-    def create_item(self, name: str, force_non_progression=False, goal=0) -> Item:
-        data = item_table[name]
+    def create_item(self, name: str, force_classification=None, goal=0) -> Item:
+        data = None
+        if name in event_table:
+            data = event_table[name]
+        else:
+            data = item_table[name]
 
-        if force_non_progression:
-            classification = ItemClassification.filler
+        if force_classification is not None:
+            classification = force_classification
         elif name == ItemName.emblem or \
              name in emeralds_table.keys() or \
              (name == ItemName.knuckles_shovel_claws and goal in [4, 5]):
@@ -380,9 +461,16 @@ class SA2BWorld(World):
         set_rules(self.multiworld, self, self.player, self.gate_bosses, self.boss_rush_map, self.mission_map, self.mission_count_map, self.black_market_costs)
 
     def write_spoiler(self, spoiler_handle: typing.TextIO):
+        print_mission_orders_to_spoiler(self.mission_map,
+                                        self.mission_count_map,
+                                        self.shuffled_region_list,
+                                        self.levels_per_gate,
+                                        self.multiworld.player_name[self.player],
+                                        spoiler_handle)
+
         if self.options.number_of_level_gates.value > 0 or self.options.goal.value in [4, 5, 6]:
             spoiler_handle.write("\n")
-            header_text = "Sonic Adventure 2 Bosses for {}:\n"
+            header_text = "SA2 Bosses for {}:\n"
             header_text = header_text.format(self.multiworld.player_name[self.player])
             spoiler_handle.write(header_text)
 
@@ -435,12 +523,12 @@ class SA2BWorld(World):
                     continue
                 level_region = exit.connected_region
                 for location in level_region.locations:
-                    er_hint_data[location.address] = gate_name
+                    if location.address != None:
+                        er_hint_data[location.address] = gate_name
 
         for i in range(self.options.black_market_slots.value):
             location = self.multiworld.get_location(LocationName.chao_black_market_base + str(i + 1), self.player)
             er_hint_data[location.address] = str(self.black_market_costs[i]) + " " + str(ItemName.market_token)
-
 
         hint_data[self.player] = er_hint_data
 
@@ -448,7 +536,7 @@ class SA2BWorld(World):
     def stage_fill_hook(cls, multiworld: MultiWorld, progitempool, usefulitempool, filleritempool, fill_locations):
         if multiworld.get_game_players("Sonic Adventure 2 Battle"):
             progitempool.sort(
-                key=lambda item: 0 if (item.name != 'Emblem') else 1)
+                key=lambda item: 0 if ("Emblem" in item.name and item.game == "Sonic Adventure 2 Battle") else 1)
 
     def get_levels_per_gate(self) -> list:
         levels_per_gate = list()
@@ -485,6 +573,39 @@ class SA2BWorld(World):
                 levels_to_distribute -= 1
 
         return levels_per_gate
+
+    def output_active_traps(self) -> typing.Dict[int, int]:
+        trap_data = {}
+
+        trap_data[0x30] = self.options.omochao_trap_weight.value
+        trap_data[0x31] = self.options.timestop_trap_weight.value
+        trap_data[0x32] = self.options.confusion_trap_weight.value
+        trap_data[0x33] = self.options.tiny_trap_weight.value
+        trap_data[0x34] = self.options.gravity_trap_weight.value
+        trap_data[0x35] = self.options.exposition_trap_weight.value
+        trap_data[0x37] = self.options.ice_trap_weight.value
+        trap_data[0x38] = self.options.slow_trap_weight.value
+        trap_data[0x39] = self.options.cutscene_trap_weight.value
+        trap_data[0x3A] = self.options.reverse_trap_weight.value
+        trap_data[0x3B] = self.options.literature_trap_weight.value
+        trap_data[0x3C] = self.options.controller_drift_trap_weight.value
+        trap_data[0x3D] = self.options.poison_trap_weight.value
+        trap_data[0x3E] = self.options.bee_trap_weight.value
+
+        trap_data[0x50] = self.options.pong_trap_weight.value
+        trap_data[0x51] = self.options.breakout_trap_weight.value
+        trap_data[0x52] = self.options.fishing_trap_weight.value
+        trap_data[0x53] = self.options.trivia_trap_weight.value
+        trap_data[0x54] = self.options.pokemon_trivia_trap_weight.value
+        trap_data[0x55] = self.options.pokemon_count_trap_weight.value
+        trap_data[0x56] = self.options.number_sequence_trap_weight.value
+        trap_data[0x57] = self.options.light_up_path_trap_weight.value
+        trap_data[0x58] = self.options.pinball_trap_weight.value
+        trap_data[0x59] = self.options.math_quiz_trap_weight.value
+        trap_data[0x5A] = self.options.snake_trap_weight.value
+        trap_data[0x5B] = self.options.input_sequence_trap_weight.value
+
+        return trap_data
 
     def any_chao_locations_active(self) -> bool:
         if self.options.chao_race_difficulty.value > 0 or \
@@ -686,7 +807,6 @@ class SA2BWorld(World):
         exit_choice = self.random.choice(valid_kindergarten_exits)
         exit_room = exit_to_room_map[exit_choice]
         all_exits_copy.remove(exit_choice)
-        multi_rooms_copy.remove(exit_room)
 
         destination = 0x06
         single_rooms_copy.remove(destination)
@@ -723,7 +843,8 @@ class SA2BWorld(World):
 
             er_layout[exit_choice] = destination
 
-            reverse_exit = self.random.choice(room_to_exits_map[destination])
+            possible_reverse_exits = [exit for exit in room_to_exits_map[destination] if exit in all_exits_copy]
+            reverse_exit = self.random.choice(possible_reverse_exits)
 
             er_layout[reverse_exit] = exit_room
 
