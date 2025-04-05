@@ -23,7 +23,7 @@ MDFloatLayout:
                 id: all
                 style: "text"
                 type: (Type.CLIENT, Type.TOOL, Type.ADJUSTER, Type.MISC)
-                on_release: root.app.filter_clients(self)
+                on_release: app.filter_clients(self)
 
                 MDButtonIcon:
                     icon: "asterisk"
@@ -33,7 +33,7 @@ MDFloatLayout:
                 id: client
                 style: "text"
                 type: (Type.CLIENT, )
-                on_release: root.app.filter_clients(self)
+                on_release: app.filter_clients(self)
 
                 MDButtonIcon:
                     icon: "controller"
@@ -43,7 +43,7 @@ MDFloatLayout:
                 id: Tool
                 style: "text"
                 type: (Type.TOOL, )
-                on_release: root.app.filter_clients(self)
+                on_release: app.filter_clients(self)
 
                 MDButtonIcon:
                     icon: "desktop-classic"
@@ -53,7 +53,7 @@ MDFloatLayout:
                 id: adjuster
                 style: "text"
                 type: (Type.ADJUSTER, )
-                on_release: root.app.filter_clients(self)
+                on_release: app.filter_clients(self)
 
                 MDButtonIcon:
                     icon: "wrench"
@@ -63,7 +63,7 @@ MDFloatLayout:
                 id: misc
                 style: "text"
                 type: (Type.MISC, )
-                on_release: root.app.filter_clients(self)
+                on_release: app.filter_clients(self)
 
                 MDButtonIcon:
                     icon: "dots-horizontal-circle-outline"
@@ -74,7 +74,7 @@ MDFloatLayout:
                 id: favorites
                 style: "text"
                 type: ("favorites", )
-                on_release: root.app.filter_clients(self)
+                on_release: app.filter_clients(self)
 
                 MDButtonIcon:
                     icon: "star"

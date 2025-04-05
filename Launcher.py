@@ -371,7 +371,6 @@ def run_gui(path: str, args: Any) -> None:
 
         def build(self):
             self.top_screen = Builder.load_file(Utils.local_path("data/launcher.kv"))
-            self.top_screen.app = self
             self.grid = self.top_screen.ids.grid
             self.navigation = self.top_screen.ids.navigation
             self.button_layout = self.top_screen.ids.button_layout
