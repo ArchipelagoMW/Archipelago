@@ -2041,7 +2041,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 value = func(value, operation["value"])
             ctx.stored_data[args["key"]] = args["value"] = value
             targets = set(ctx.stored_data_notification_clients[args["key"]])
-            if args.get("want_reply", True):
+            if args.get("want_reply", False):
                 targets.add(client)
             if targets:
                 ctx.broadcast(targets, [args])
