@@ -14,7 +14,7 @@ from .item.item_tables import (
 from . import location_groups
 from .item import FilterItem, ItemFilterFlags, StarcraftItem, item_groups, item_names, item_tables, item_parents
 from .locations import (
-	get_locations, DEFAULT_LOCATION_LIST, get_location_types, get_location_flags, 
+	get_locations, DEFAULT_LOCATION_LIST, get_location_types, get_location_flags,
     get_plando_locations, LocationType, lookup_location_id_to_type
 )
 from .mission_order.layout_types import Gauntlet
@@ -67,6 +67,7 @@ class Starcraft2WebWorld(WebWorld):
     )
 
     tutorials = [setup_en, setup_fr, custom_mission_orders_en]
+    game_info_languages = ["en", "fr"]
     option_groups = option_groups
 
 
@@ -225,11 +226,11 @@ class SC2World(World):
                     assert location.address is not None
                     assert location.item is not None
                     if lookup_location_id_to_type[location.address] == LocationType.VICTORY_CACHE:
-                        # Ensure that if there are multiple items given for finishing a mission and that at least 
+                        # Ensure that if there are multiple items given for finishing a mission and that at least
                         # one is progressive, the flag kept is progressive.
                         location_name = self.location_id_to_name[(location.address // VICTORY_MODULO) * VICTORY_MODULO]
                         old_classification = mission_item_classification.get(location_name, 0)
-                        mission_item_classification[location_name] = old_classification | location.item.classification.as_flag() 
+                        mission_item_classification[location_name] = old_classification | location.item.classification.as_flag()
                     else:
                         mission_item_classification[location.name] = location.item.classification.as_flag()
             slot_data["mission_item_classification"] = mission_item_classification
@@ -440,7 +441,7 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
             if item.name not in item_groups.soa_items:
                 item.flags |= ItemFilterFlags.FilterExcluded
             continue
-        
+
         # Faction units
         if (not terran_build_missions
             and item.data.type in (item_tables.TerranItemType.Unit, item_tables.TerranItemType.Building, item_tables.TerranItemType.Mercenary)
@@ -472,7 +473,7 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
                 )
             ):
                 item.flags |= ItemFilterFlags.FilterExcluded
-        
+
         # Faction +attack/armour upgrades
         if (item.data.type == item_tables.TerranItemType.Upgrade
             and not terran_build_missions
@@ -531,11 +532,11 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
             soa_missions = [m for m in soa_missions if m.campaign == SC2Campaign.LOTV]
         if world.options.spear_of_adun_presence in [SpearOfAdunPresence.option_lotv_protoss, SpearOfAdunPresence.option_protoss]:
             soa_missions = [m for m in soa_missions if MissionFlag.Protoss in m.flags]
-        
+
         soa_presence = len(soa_missions) > 0
     else:
         soa_presence = False
-    
+
     # Check if SOA passives should be present
     if world.options.spear_of_adun_passive_ability_presence != SpearOfAdunPassiveAbilityPresence.option_not_present:
         soa_missions = missions
@@ -545,7 +546,7 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
             soa_missions = [m for m in soa_missions if m.campaign == SC2Campaign.LOTV]
         if world.options.spear_of_adun_passive_ability_presence in [SpearOfAdunPassiveAbilityPresence.option_protoss, SpearOfAdunPassiveAbilityPresence.option_lotv_protoss]:
             soa_missions = [m for m in soa_missions if MissionFlag.Protoss in m.flags]
-        
+
         soa_passive_presence = len(soa_missions) > 0
     else:
         soa_passive_presence = False
@@ -554,14 +555,14 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
         # Filter Nova equipment if you never get Nova
         if not nova_missions and (item.name in item_groups.nova_equipment):
             item.flags |= ItemFilterFlags.FilterExcluded
-        
+
         # Todo(mm): How should no-build only / grant_story_tech affect excluding Kerrigan items?
         # Exclude Primal form based on Kerrigan presence or primal form option
         if (item.data.type == item_tables.ZergItemType.Primal_Form
             and ((not kerrigan_is_present) or world.options.kerrigan_primal_status != KerriganPrimalStatus.option_item)
         ):
             item.flags |= ItemFilterFlags.FilterExcluded
-        
+
         # Remove Kerrigan abilities if there's no kerrigan
         if item.data.type == item_tables.ZergItemType.Ability:
             if not kerrigan_is_present:
@@ -569,7 +570,7 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
                 item.flags |= ItemFilterFlags.FilterExcluded
             elif world.options.grant_story_tech and not kerrigan_build_missions:
                 item.flags |= ItemFilterFlags.FilterExcluded
-        
+
         # Remove Spear of Adun if it's off
         if item.name in item_tables.spear_of_adun_calldowns and not soa_presence:
             item.flags |= ItemFilterFlags.FilterExcluded
@@ -577,7 +578,7 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
         # Remove Spear of Adun passives
         if item.name in item_tables.spear_of_adun_castable_passives and not soa_passive_presence:
             item.flags |= ItemFilterFlags.FilterExcluded
-        
+
         # Remove Psi Disrupter and Hive Mind Emulator if you never play a build TvZ
         if (item.name in (item_names.HIVE_MIND_EMULATOR, item_names.PSI_DISRUPTER)
             and not tvz_build_missions
@@ -617,7 +618,7 @@ def flag_start_inventory(world: SC2World, item_list: List[FilterItem]) -> None:
 
     if starter_unit != StarterUnit.option_off:
         flag_start_unit(world, item_list, starter_unit)
-    
+
     flag_start_abilities(world, item_list)
 
 
@@ -655,7 +656,7 @@ def flag_start_unit(world: SC2World, item_list: List[FilterItem], starter_unit: 
             if item.name in basic_units
             and ItemFilterFlags.StartInventory not in item.flags
         ]
-        
+
         # For Sudden Strike, starter units need an upgrade to help them get around
         nco_support_items = {
             item_names.REAPER: item_names.REAPER_SPIDER_MINES,
@@ -675,7 +676,7 @@ def flag_start_unit(world: SC2World, item_list: List[FilterItem], starter_unit: 
         local_basic_unit = [item for item in basic_unit_options if ItemFilterFlags.NonLocal not in item.flags]
         if local_basic_unit:
             basic_unit_options = local_basic_unit
-        
+
         unit = world.random.choice(basic_unit_options)
         unit.flags |= ItemFilterFlags.StartInventory
 
@@ -713,7 +714,7 @@ def flag_start_abilities(world: SC2World, item_list: List[FilterItem]) -> None:
     for tier in ability_tiers:
         abilities_in_tier = kerrigan_actives[tier].union(kerrigan_passives[tier])
         potential_starter_abilities = [
-            item for item in item_list 
+            item for item in item_list
             if item.name in abilities_in_tier
             and (ItemFilterFlags.UserExcluded|ItemFilterFlags.StartInventory|ItemFilterFlags.Plando) & item.flags == 0
         ]
