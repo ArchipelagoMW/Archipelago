@@ -9,16 +9,17 @@ import uuid
 from NetUtils import ClientStatus
 from Options import Toggle
 import Utils
-import worlds._bizhawk as bizhawk
-from worlds._bizhawk.client import BizHawkClient
+import worlds._polyemu as polyemu
 
 from .data import BASE_OFFSET, POKEDEX_OFFSET, data
 from .options import Goal, RemoteItems
 from .util import pokemon_data_to_json, json_to_pokemon_data
 
 if TYPE_CHECKING:
-    from worlds._bizhawk.context import BizHawkClientContext
+    from worlds._polyemu.context import PolyEmuClientContext
 
+
+DOMAINS = polyemu.PLATFORMS.GBA
 
 EXPECTED_ROM_NAME = "pokemon emerald version / AP 5"
 
@@ -123,9 +124,9 @@ SHOAL_CAVE_MAPS = tuple(data.constants[map_name] for map_name in [
 ])
 
 
-class PokemonEmeraldClient(BizHawkClient):
+class PokemonEmeraldClient(polyemu.PolyEmuClient):
     game = "Pokemon Emerald"
-    system = "GBA"
+    platform = polyemu.PLATFORMS.GBA
     patch_suffix = ".apemerald"
 
     local_checked_locations: Set[int]
@@ -161,12 +162,12 @@ class PokemonEmeraldClient(BizHawkClient):
         self.current_map = None
         self.queued_received_trade = None
 
-    async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
+    async def validate_rom(self, ctx: "PolyEmuClientContext") -> bool:
         from CommonClient import logger
 
         try:
             # Check ROM name/patch version
-            rom_name_bytes = ((await bizhawk.read(ctx.bizhawk_ctx, [(0x108, 32, "ROM")]))[0])
+            rom_name_bytes = ((await polyemu.read(ctx.polyemu_ctx, [(0x108, 32, DOMAINS.ROM)]))[0])
             rom_name = bytes([byte for byte in rom_name_bytes if byte != 0]).decode("ascii")
             if not rom_name.startswith("pokemon emerald version"):
                 return False
@@ -181,24 +182,25 @@ class PokemonEmeraldClient(BizHawkClient):
                 return False
         except UnicodeDecodeError:
             return False
-        except bizhawk.RequestFailedError:
+        except polyemu.errors.ConnectionLostError:
             return False  # Should verify on the next pass
 
         ctx.game = self.game
         ctx.items_handling = 0b001
         ctx.want_slot_data = True
-        ctx.watcher_timeout = 0.125
+        # ctx.watcher_timeout = 0.125
+        ctx.watcher_timeout = 1
 
         self.initialize_client()
 
         return True
 
-    async def set_auth(self, ctx: "BizHawkClientContext") -> None:
+    async def set_auth(self, ctx: "PolyEmuClientContext") -> None:
         import base64
-        auth_raw = (await bizhawk.read(ctx.bizhawk_ctx, [(data.rom_addresses["gArchipelagoInfo"], 16, "ROM")]))[0]
+        auth_raw = (await polyemu.read(ctx.polyemu_ctx, [(data.rom_addresses["gArchipelagoInfo"], 16, DOMAINS.ROM)]))[0]
         ctx.auth = base64.b64encode(auth_raw).decode("utf-8")
 
-    async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
+    async def game_watcher(self, ctx: "PolyEmuClientContext") -> None:
         if ctx.server is None or ctx.server.socket.closed or ctx.slot_data is None:
             return
 
@@ -232,21 +234,21 @@ class PokemonEmeraldClient(BizHawkClient):
             guards["IN OVERWORLD"] = (
                 data.ram_addresses["gMain"] + 4,
                 (data.ram_addresses["CB2_Overworld"] + 1).to_bytes(4, "little"),
-                "System Bus"
+                DOMAINS.SYSTEM
             )
 
             # Read save block addresses
-            read_result = await bizhawk.read(
-                ctx.bizhawk_ctx,
+            read_result = await polyemu.read(
+                ctx.polyemu_ctx,
                 [
-                    (data.ram_addresses["gSaveBlock1Ptr"], 4, "System Bus"),
-                    (data.ram_addresses["gSaveBlock2Ptr"], 4, "System Bus"),
+                    (data.ram_addresses["gSaveBlock1Ptr"], 4, DOMAINS.SYSTEM),
+                    (data.ram_addresses["gSaveBlock2Ptr"], 4, DOMAINS.SYSTEM),
                 ]
             )
 
             # Checks that the save data hasn't moved
-            guards["SAVE BLOCK 1"] = (data.ram_addresses["gSaveBlock1Ptr"], read_result[0], "System Bus")
-            guards["SAVE BLOCK 2"] = (data.ram_addresses["gSaveBlock2Ptr"], read_result[1], "System Bus")
+            guards["SAVE BLOCK 1"] = (data.ram_addresses["gSaveBlock1Ptr"], read_result[0], DOMAINS.SYSTEM)
+            guards["SAVE BLOCK 2"] = (data.ram_addresses["gSaveBlock2Ptr"], read_result[1], DOMAINS.SYSTEM)
 
             sb1_address = int.from_bytes(guards["SAVE BLOCK 1"][1], "little")
             sb2_address = int.from_bytes(guards["SAVE BLOCK 2"][1], "little")
@@ -257,18 +259,18 @@ class PokemonEmeraldClient(BizHawkClient):
             await self.handle_wonder_trade(ctx, guards)
 
             # Read flags in 2 chunks
-            read_result = await bizhawk.guarded_read(
-                ctx.bizhawk_ctx,
-                [(sb1_address + 0x1450, 0x96, "System Bus")],  # Flags
+            read_result = await polyemu.guarded_read(
+                ctx.polyemu_ctx,
+                [(sb1_address + 0x1450, 0x96, DOMAINS.SYSTEM)],  # Flags
                 [guards["IN OVERWORLD"], guards["SAVE BLOCK 1"]]
             )
             if read_result is None:  # Not in overworld, or save block moved
                 return
             flag_bytes = read_result[0]
 
-            read_result = await bizhawk.guarded_read(
-                ctx.bizhawk_ctx,
-                [(sb1_address + 0x14E6, 0x96, "System Bus")],  # Flags continued
+            read_result = await polyemu.guarded_read(
+                ctx.polyemu_ctx,
+                [(sb1_address + 0x14E6, 0x96, DOMAINS.SYSTEM)],  # Flags continued
                 [guards["IN OVERWORLD"], guards["SAVE BLOCK 1"]]
             )
             if read_result is not None:
@@ -278,9 +280,9 @@ class PokemonEmeraldClient(BizHawkClient):
             pokedex_caught_bytes = bytes(0)
             if ctx.slot_data["dexsanity"] == Toggle.option_true:
                 # Read pokedex flags
-                read_result = await bizhawk.guarded_read(
-                    ctx.bizhawk_ctx,
-                    [(sb2_address + 0x28, 0x34, "System Bus")],
+                read_result = await polyemu.guarded_read(
+                    ctx.polyemu_ctx,
+                    [(sb2_address + 0x28, 0x34, DOMAINS.SYSTEM)],
                     [guards["IN OVERWORLD"], guards["SAVE BLOCK 2"]]
                 )
                 if read_result is not None:
@@ -406,19 +408,19 @@ class PokemonEmeraldClient(BizHawkClient):
                         "operations": [{"operation": "or", "value": legendary_bitfield}],
                     }])
                     self.local_defeated_legendaries = caught_legendaries
-        except bizhawk.RequestFailedError:
+        except polyemu.ConnectionLostError:
             # Exit handler and return to main loop to reconnect
             pass
 
-    async def handle_tracker_info(self, ctx: "BizHawkClientContext", guards: Dict[str, Tuple[int, bytes, str]]) -> None:
+    async def handle_tracker_info(self, ctx: "PolyEmuClientContext", guards: Dict[str, Tuple[int, bytes, str]]) -> None:
         # Current map
         sb1_address = int.from_bytes(guards["SAVE BLOCK 1"][1], "little")
 
-        read_result = await bizhawk.guarded_read(
-            ctx.bizhawk_ctx,
+        read_result = await polyemu.guarded_read(
+            ctx.polyemu_ctx,
             [
-                (sb1_address + 0x4, 2, "System Bus"),  # Current map
-                (sb1_address + 0x1450 + (data.constants["FLAG_SYS_SHOAL_TIDE"] // 8), 1, "System Bus"),
+                (sb1_address + 0x4, 2, DOMAINS.SYSTEM),  # Current map
+                (sb1_address + 0x1450 + (data.constants["FLAG_SYS_SHOAL_TIDE"] // 8), 1, DOMAINS.SYSTEM),
             ],
             [guards["IN OVERWORLD"], guards["SAVE BLOCK 1"]]
         )
@@ -439,7 +441,7 @@ class PokemonEmeraldClient(BizHawkClient):
                 },
             }])
 
-    async def handle_death_link(self, ctx: "BizHawkClientContext", guards: Dict[str, Tuple[int, bytes, str]]) -> None:
+    async def handle_death_link(self, ctx: "PolyEmuClientContext", guards: Dict[str, Tuple[int, bytes, str]]) -> None:
         """
         Checks whether the player has died while connected and sends a death link if so. Queues a death link in the game
         if a new one has been received.
@@ -452,11 +454,11 @@ class PokemonEmeraldClient(BizHawkClient):
             sb1_address = int.from_bytes(guards["SAVE BLOCK 1"][1], "little")
             sb2_address = int.from_bytes(guards["SAVE BLOCK 2"][1], "little")
 
-            read_result = await bizhawk.guarded_read(
-                ctx.bizhawk_ctx, [
-                    (sb1_address + 0x177C + (52 * 4), 4, "System Bus"),  # White out stat
-                    (sb1_address + 0x177C + (22 * 4), 4, "System Bus"),  # Canary stat
-                    (sb2_address + 0xAC, 4, "System Bus"),               # Encryption key
+            read_result = await polyemu.guarded_read(
+                ctx.polyemu_ctx, [
+                    (sb1_address + 0x177C + (52 * 4), 4, DOMAINS.SYSTEM),  # White out stat
+                    (sb1_address + 0x177C + (22 * 4), 4, DOMAINS.SYSTEM),  # Canary stat
+                    (sb2_address + 0xAC, 4, DOMAINS.SYSTEM),               # Encryption key
                 ],
                 [guards["SAVE BLOCK 1"], guards["SAVE BLOCK 2"]]
             )
@@ -479,9 +481,9 @@ class PokemonEmeraldClient(BizHawkClient):
                     if self.ignore_next_death_link:
                         self.ignore_next_death_link = False
                     else:
-                        await bizhawk.write(
-                            ctx.bizhawk_ctx,
-                            [(data.ram_addresses["gArchipelagoDeathLinkQueued"], [1], "System Bus")]
+                        await polyemu.write(
+                            ctx.polyemu_ctx,
+                            [(data.ram_addresses["gArchipelagoDeathLinkQueued"], [1], DOMAINS.SYSTEM)]
                         )
 
                 if self.death_counter is None:
@@ -492,7 +494,7 @@ class PokemonEmeraldClient(BizHawkClient):
                     self.ignore_next_death_link = True
                     self.death_counter = times_whited_out
 
-    async def handle_received_items(self, ctx: "BizHawkClientContext", guards: Dict[str, Tuple[int, bytes, str]]) -> None:
+    async def handle_received_items(self, ctx: "PolyEmuClientContext", guards: Dict[str, Tuple[int, bytes, str]]) -> None:
         """
         Checks the index of the most recently received item and whether the item queue is full. Writes the next item
         into the game if necessary.
@@ -501,11 +503,11 @@ class PokemonEmeraldClient(BizHawkClient):
 
         sb1_address = int.from_bytes(guards["SAVE BLOCK 1"][1], "little")
 
-        read_result = await bizhawk.guarded_read(
-            ctx.bizhawk_ctx,
+        read_result = await polyemu.guarded_read(
+            ctx.polyemu_ctx,
             [
-                (sb1_address + 0x3778, 2, "System Bus"),      # Number of received items
-                (received_item_address + 4, 1, "System Bus")  # Received item struct full?
+                (sb1_address + 0x3778, 2, DOMAINS.SYSTEM),      # Number of received items
+                (received_item_address + 4, 1, DOMAINS.SYSTEM)  # Received item struct full?
             ],
             [guards["IN OVERWORLD"], guards["SAVE BLOCK 1"]]
         )
@@ -520,14 +522,14 @@ class PokemonEmeraldClient(BizHawkClient):
         if num_received_items < len(ctx.items_received) and received_item_is_empty:
             next_item = ctx.items_received[num_received_items]
             should_display = 1 if next_item.flags & 1 or next_item.player == ctx.slot else 0
-            await bizhawk.write(ctx.bizhawk_ctx, [
-                (received_item_address + 0, (next_item.item - BASE_OFFSET).to_bytes(2, "little"), "System Bus"),
-                (received_item_address + 2, (num_received_items + 1).to_bytes(2, "little"), "System Bus"),
-                (received_item_address + 4, [1], "System Bus"),
-                (received_item_address + 5, [should_display], "System Bus"),
+            await polyemu.write(ctx.polyemu_ctx, [
+                (received_item_address + 0, (next_item.item - BASE_OFFSET).to_bytes(2, "little"), DOMAINS.SYSTEM),
+                (received_item_address + 2, (num_received_items + 1).to_bytes(2, "little"), DOMAINS.SYSTEM),
+                (received_item_address + 4, [1], DOMAINS.SYSTEM),
+                (received_item_address + 5, [should_display], DOMAINS.SYSTEM),
             ])
 
-    async def handle_wonder_trade(self, ctx: "BizHawkClientContext", guards: Dict[str, Tuple[int, bytes, str]]) -> None:
+    async def handle_wonder_trade(self, ctx: "PolyEmuClientContext", guards: Dict[str, Tuple[int, bytes, str]]) -> None:
         """
         Read wonder trade status from save data and either send a queued pokemon to data storage or attempt to retrieve
         one from data storage and write it into the save.
@@ -536,11 +538,11 @@ class PokemonEmeraldClient(BizHawkClient):
 
         sb1_address = int.from_bytes(guards["SAVE BLOCK 1"][1], "little")
 
-        read_result = await bizhawk.guarded_read(
-            ctx.bizhawk_ctx,
+        read_result = await polyemu.guarded_read(
+            ctx.polyemu_ctx,
             [
-                (sb1_address + 0x377C, 0x50, "System Bus"),  # Wonder trade data
-                (sb1_address + 0x37CC, 1, "System Bus"),     # Is wonder trade sent
+                (sb1_address + 0x377C, 0x50, DOMAINS.SYSTEM),  # Wonder trade data
+                (sb1_address + 0x37CC, 1, DOMAINS.SYSTEM),     # Is wonder trade sent
             ],
             [guards["IN OVERWORLD"], guards["SAVE BLOCK 1"]]
         )
@@ -552,9 +554,9 @@ class PokemonEmeraldClient(BizHawkClient):
             if trade_is_sent == 0 and wonder_trade_pokemon_data[19] == 2:
                 # Game has wonder trade data to send. Send it to data storage, remove it from the game's memory,
                 # and mark that the game is waiting on receiving a trade
-                success = await bizhawk.guarded_write(ctx.bizhawk_ctx, [
-                    (sb1_address + 0x377C, bytes(0x50), "System Bus"),
-                    (sb1_address + 0x37CC, [1], "System Bus"),
+                success = await polyemu.guarded_write(ctx.polyemu_ctx, [
+                    (sb1_address + 0x377C, bytes(0x50), DOMAINS.SYSTEM),
+                    (sb1_address + 0x37CC, [1], DOMAINS.SYSTEM),
                 ], [guards["SAVE BLOCK 1"]])
                 if success:
                     Utils.async_start(self.wonder_trade_send(ctx, pokemon_data_to_json(wonder_trade_pokemon_data)))
@@ -562,8 +564,8 @@ class PokemonEmeraldClient(BizHawkClient):
                 # Game is waiting on receiving a trade.
                 if self.queued_received_trade is not None:
                     # Client is holding a trade, ready to write it into the game
-                    success = await bizhawk.guarded_write(ctx.bizhawk_ctx, [
-                        (sb1_address + 0x377C, json_to_pokemon_data(self.queued_received_trade), "System Bus"),
+                    success = await polyemu.guarded_write(ctx.polyemu_ctx, [
+                        (sb1_address + 0x377C, json_to_pokemon_data(self.queued_received_trade), DOMAINS.SYSTEM),
                     ], [guards["SAVE BLOCK 1"]])
 
                     # Notify the player if it was written, otherwise hold it for the next loop
@@ -588,7 +590,7 @@ class PokemonEmeraldClient(BizHawkClient):
                     # Very approximate "time since last loop", but extra delay is fine for this
                     self.wonder_trade_cooldown_timer -= int(ctx.watcher_timeout * 1000)
 
-    async def wonder_trade_acquire(self, ctx: "BizHawkClientContext", keep_trying: bool = False) -> Optional[dict]:
+    async def wonder_trade_acquire(self, ctx: "PolyEmuClientContext", keep_trying: bool = False) -> Optional[dict]:
         """
         Acquires a lock on the `pokemon_wonder_trades_{ctx.team}` key in
         datastorage. Locking the key means you have exclusive access
@@ -656,7 +658,7 @@ class PokemonEmeraldClient(BizHawkClient):
             self.wonder_trade_cooldown = 5000
             return reply
 
-    async def wonder_trade_send(self, ctx: "BizHawkClientContext", data: str) -> None:
+    async def wonder_trade_send(self, ctx: "PolyEmuClientContext", data: str) -> None:
         """
         Sends a wonder trade pokemon to data storage
         """
@@ -680,7 +682,7 @@ class PokemonEmeraldClient(BizHawkClient):
 
         logger.info("Wonder trade sent! We'll notify you here when a trade has been found.")
 
-    async def wonder_trade_receive(self, ctx: "BizHawkClientContext") -> Optional[str]:
+    async def wonder_trade_receive(self, ctx: "PolyEmuClientContext") -> Optional[str]:
         """
         Tries to pop a pokemon out of the wonder trades. Returns `None` if
         for some reason it can't immediately remove a compatible pokemon.
@@ -721,7 +723,7 @@ class PokemonEmeraldClient(BizHawkClient):
 
         return reply["value"][str(wonder_trade_slot)][1]
 
-    def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
+    def on_package(self, ctx: "PolyEmuClientContext", cmd: str, args: dict) -> None:
         if cmd == "Connected":
             Utils.async_start(ctx.send_msgs([{
                 "cmd": "SetNotify",
