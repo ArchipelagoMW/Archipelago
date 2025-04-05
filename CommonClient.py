@@ -99,7 +99,7 @@ class ClientCommandProcessor(CommandProcessor):
             self.ctx.on_print_json({"data": parts, "cmd": "PrintJSON"})
         return True
 
-    def get_current_datapackage(self) -> Dict[str, Any]:
+    def get_current_datapackage(self) -> dict[str, typing.Any]:
         """Return datapackage for current game if known"""
         if not self.ctx.game:
             return {}
