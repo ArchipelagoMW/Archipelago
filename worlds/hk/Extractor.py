@@ -453,8 +453,9 @@ with open(os.path.join(os.path.dirname(__file__), "ExtractedData.py"), "wt") as 
         py.write(f"{name} = {var}\n")
 
 
-template_env: jinja2.Environment = \
-    jinja2.Environment(loader=jinja2.FileSystemLoader([os.path.join(os.path.dirname(__file__), "templates")]))
+template_env = jinja2.Environment(  # noqa: S701
+    loader=jinja2.FileSystemLoader([os.path.join(os.path.dirname(__file__), "templates")])
+)
 rules_template = template_env.get_template("RulesTemplate.pyt")
 rules = rules_template.render(location_rules=location_rules, one_ways=one_ways, connectors_rules=connectors_rules,
                               event_rules=event_rules)

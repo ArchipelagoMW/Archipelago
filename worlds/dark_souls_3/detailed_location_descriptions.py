@@ -9,7 +9,8 @@ import html
 import os
 import re
 import requests
-import yaml
+
+import Utils
 
 from .Locations import location_dictionary
 
@@ -22,7 +23,7 @@ if __name__ == '__main__':
     response = requests.get(url)
     if response.status_code != 200:
         raise Exception(f"Got {response.status_code} when downloading static randomizer locations")
-    annotations = yaml.load(response.text, Loader=yaml.Loader)
+    annotations = Utils.parse_yaml(response.text)
 
     static_to_archi_regions = {
         area['Name']: area['Archipelago']

@@ -19,8 +19,6 @@ from .Technologies import tech_table, recipes, free_sample_exclusions, progressi
 if TYPE_CHECKING:
     from . import Factorio
 
-template_env: Optional[jinja2.Environment] = None
-
 data_template: Optional[jinja2.Template] = None
 data_final_template: Optional[jinja2.Template] = None
 locale_template: Optional[jinja2.Template] = None
@@ -102,7 +100,7 @@ def generate_mod(world: "Factorio", output_directory: str):
                 return data, name, lambda: False
 
             template_env: Optional[jinja2.Environment] = \
-                jinja2.Environment(loader=jinja2.FunctionLoader(load_template))
+                jinja2.Environment(loader=jinja2.FunctionLoader(load_template))  # noqa: S701
 
             data_template = template_env.get_template("data.lua")
             data_final_template = template_env.get_template("data-final-fixes.lua")
