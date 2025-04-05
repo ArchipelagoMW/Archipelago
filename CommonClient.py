@@ -99,13 +99,11 @@ class ClientCommandProcessor(CommandProcessor):
             self.ctx.on_print_json({"data": parts, "cmd": "PrintJSON"})
         return True
 
-    def get_current_datapackage(self):
+    def get_current_datapackage(self) -> Dict[str, Any]:
         """Return datapackage for current game if known"""
         if not self.ctx.game:
             return {}
-        checksum = self.ctx.checksums.get(self.ctx.game)
-        if not checksum:
-            return AutoWorldRegister.world_types[self.ctx.game]
+        checksum = self.ctx.checksums[self.ctx.game]
         return Utils.load_data_package_for_checksum(self.ctx.game, checksum)
 
     def _cmd_missing(self, filter_text = "") -> bool:
@@ -139,7 +137,7 @@ class ClientCommandProcessor(CommandProcessor):
             self.output("No missing location checks found.")
         return True
 
-    def output_datapackage_part(self, key: str, name: str):
+    def output_datapackage_part(self, key: str, name: str) -> None:
         if not self.ctx.game:
             self.output(f"No game set, cannot determine {name}.")
             return False
@@ -153,15 +151,15 @@ class ClientCommandProcessor(CommandProcessor):
         for key in lookup:
             self.output(key)
 
-    def _cmd_items(self):
+    def _cmd_items(self) -> None:
         """List all item names for the currently running game."""
         self.output_datapackage_part("item_name_to_id", "Item Names")
 
-    def _cmd_locations(self):
+    def _cmd_locations(self) -> None:
         """List all location names for the currently running game."""
         self.output_datapackage_part("location_name_to_id", "Location Names")
 
-    def output_group_part(self, group_key: str, filter_key: str, name: str):
+    def output_group_part(self, group_key: str, filter_key: str, name: str) -> None:
         if not self.ctx.game:
             self.output(f"No game set, cannot determine existing {name} Groups.")
             return False
@@ -185,12 +183,12 @@ class ClientCommandProcessor(CommandProcessor):
                 self.output(group)
 
     @mark_raw
-    def _cmd_item_groups(self, key=""):
+    def _cmd_item_groups(self, key="") -> None:
         """List all item group names for the currently running game."""
         self.output_group_part("item_name_groups", key, "Item")
 
     @mark_raw
-    def _cmd_location_groups(self, key=""):
+    def _cmd_location_groups(self, key="") -> None:
         """List all location group names for the currently running game."""
         self.output_group_part("location_name_groups", key, "Location")
 
