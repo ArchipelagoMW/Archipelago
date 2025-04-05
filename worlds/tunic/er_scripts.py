@@ -330,7 +330,11 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                 else:
                     if not portal2:
                         raise Exception(f"Could not find entrance named {p_exit} for "
-                                        f"plando connections in {player_name}'s YAML.")
+                                        f"plando connections in {player_name}'s YAML.\n"
+                                        f"If you are using Universal Tracker, the most likely reason for this error "
+                                        f"is that the host generated with a newer version of the APWorld.\n"
+                                        f"Please check the TUNIC Randomizer Github and place the newest APWorld in your "
+                                        f"custom_worlds folder, and remove the one in lib/worlds if there is one there.")
                     dead_ends.remove(portal2)
 
             # update the traversal chart to say you can get from portal1's region to portal2's and vice versa
