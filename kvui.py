@@ -7,7 +7,6 @@ import re
 import io
 import pkgutil
 from collections import deque
-
 assert "kivy" not in sys.modules, "kvui should be imported before kivy for frozen compatibility"
 
 if sys.platform == "win32":
@@ -58,6 +57,7 @@ from kivy.animation import Animation
 from kivy.uix.popup import Popup
 from kivy.uix.image import AsyncImage
 from kivymd.app import MDApp
+from kivymd.uix.dialog import MDDialog, MDDialogHeadlineText, MDDialogSupportingText, MDDialogContentContainer
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.boxlayout import MDBoxLayout
@@ -679,7 +679,7 @@ class CommandPromptTextInput(MDTextField):
         self.text = self._command_history[self._command_history_index]
 
 
-class MessageBoxLabel(Label):
+class MessageBoxLabel(MDLabel):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self._label.refresh()
@@ -700,36 +700,34 @@ class MessageBox(Popup):
         self.height += max(0, label.height - 18)
 
 
-class ButtonsPrompt(Popup):
+class ButtonsPrompt(MDDialog):
     def __init__(self, title: str, text: str, response: typing.Callable[[str], None],
-                 *prompts: str, **kwargs):
-        layout = BoxLayout(orientation="vertical")
+                 *prompts: str, **kwargs) -> None:
+        """
+        Customizable popup box that lets you create any number of buttons. The text of the pressed button is returned to
+        the callback.
+
+        :param title: The title of the popup.
+        :param text: The message prompt in the popup.
+        :param response: A callable that will get called when the user presses a button. The prompt will not close
+         itself so should be done here if you want to close it when certain buttons are pressed.
+        :param prompts: Any number of strings to be used for the buttons.
+        """
+        layout = MDBoxLayout(orientation="vertical")
         label = MessageBoxLabel(text=text)
         layout.add_widget(label)
 
-        def on_release(button: Button, *args):
-            self.dismiss()
+        def on_release(button: MDButton, *args) -> None:
             response(button.text)
 
-        num_rows = math.ceil(len(prompts) / 2)
-        if len(prompts) % 2 == 0:
-            button_rows = [(prompts[i], prompts[i+1]) for i in range(0, len(prompts), 2)]
-        else:
-            button_rows = [(prompts[i], prompts[i + 1]) for i in range(0, len(prompts) - 1, 2)]
-            button_rows.append((prompts[-1],))
-        for i in range(num_rows):
-            button_layout = BoxLayout(orientation="horizontal", size_hint_y=0.4)
-            for prompt in button_rows[i]:
-                button = Button(text=prompt, on_release=on_release)
-                button.text_size = button.width + 45, button.height
-                button.halign = "center"
-                button.valign = "middle"
-                button_layout.add_widget(button)
-            layout.add_widget(button_layout)
+        buttons = [MDDivider()]
+        for prompt in prompts:
+            button = MDButton(MDButtonText(text=prompt), on_release=on_release, style="text")
+            button.text = prompt
+            buttons.extend([button, MDDivider()])
 
-        separator_color = [47 / 255., 167 / 255., 212 / 255, 1.]
-        super().__init__(title=title, content=layout, size_hint=(0.4, 0.4), width=max(100, int(label.width) + 40),
-                         separator_color=separator_color, auto_dismiss=False, **kwargs)
+        super().__init__(MDDialogHeadlineText(text=title), MDDialogSupportingText(text=text),
+                         MDDialogContentContainer(*buttons, orientation="vertical"), **kwargs)
 
 
 class ClientTabs(MDTabsPrimary):
