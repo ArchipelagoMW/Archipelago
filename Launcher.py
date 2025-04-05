@@ -368,53 +368,18 @@ def run_gui(path: str, args: Any) -> None:
             for card in cards:
                 self.button_layout.layout.add_widget(card)
 
+        def filter_clients(self, caller):
+            self._refresh_components(caller.type)
+
         def build(self):
             self.top_screen = Builder.load_file(Utils.local_path("data/launcher.kv"))
+            self.top_screen.app = self
             self.grid = self.top_screen.ids.grid
             self.navigation = self.top_screen.ids.navigation
             self.button_layout = self.top_screen.ids.button_layout
             self.set_colors()
             self.top_screen.md_bg_color = self.theme_cls.backgroundColor
-
-            # handle menu
-            menu_icons = {
-                "Client": "controller",
-                "Tool": "desktop-classic",
-                "Adjuster": "wrench",
-                "Misc": "dots-horizontal-circle-outline"
-            }
-
-            def filter_clients(caller):
-                self._refresh_components(caller.type)
-
-            all_item = MDButton(
-                MDButtonIcon(icon="asterisk"),
-                MDButtonText(text="All"),
-                style="text"
-            )
-            all_item.type = (Type.CLIENT, Type.TOOL, Type.ADJUSTER, Type.MISC)
-            all_item.bind(on_release=filter_clients)
-            self.navigation.add_widget(all_item)
-            for type in (Type.CLIENT, Type.TOOL, Type.ADJUSTER, Type.MISC):
-                name = str(type).rsplit(".")[1].title()
-                item = MDButton(
-                    MDButtonIcon(icon=menu_icons[name]),
-                    MDButtonText(text=name),
-                    style="text"
-                )
-                item.type = (type,)
-                item.bind(on_release=filter_clients)
-                self.navigation.add_widget(item)
-            favorite_item = MDButton(
-                MDButtonIcon(icon="star"),
-                MDButtonText(text="Favorites"),
-                style="text"
-            )
-            favorite_item.type = ("favorites",)
-            favorite_item.bind(on_release=filter_clients)
-            self.navigation.add_widget(favorite_item)
-            self.navigation.add_widget(MDNavigationDrawerDivider())
-
+            
             global refresh_components
             refresh_components = self._refresh_components
 

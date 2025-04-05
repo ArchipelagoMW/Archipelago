@@ -4,6 +4,7 @@
     size_hint: 1, None
     height: "75dp"
 
+#:import Type worlds.LauncherComponents.Type
 MDFloatLayout:
     id: top_screen
 
@@ -17,6 +18,70 @@ MDFloatLayout:
             id: navigation
             cols: 1
             size_hint_x: 0.25
+
+            MDButton:
+                id: all
+                style: "text"
+                type: (Type.CLIENT, Type.TOOL, Type.ADJUSTER, Type.MISC)
+                on_release: root.app.filter_clients(self)
+
+                MDButtonIcon:
+                    icon: "asterisk"
+                MDButtonText:
+                    text: "All"
+            MDButton:
+                id: client
+                style: "text"
+                type: (Type.CLIENT, )
+                on_release: root.app.filter_clients(self)
+
+                MDButtonIcon:
+                    icon: "controller"
+                MDButtonText:
+                    text: "Client"
+            MDButton:
+                id: Tool
+                style: "text"
+                type: (Type.TOOL, )
+                on_release: root.app.filter_clients(self)
+
+                MDButtonIcon:
+                    icon: "desktop-classic"
+                MDButtonText:
+                    text: "Tool"
+            MDButton:
+                id: adjuster
+                style: "text"
+                type: (Type.ADJUSTER, )
+                on_release: root.app.filter_clients(self)
+
+                MDButtonIcon:
+                    icon: "wrench"
+                MDButtonText:
+                    text: "Adjuster"
+            MDButton:
+                id: misc
+                style: "text"
+                type: (Type.MISC, )
+                on_release: root.app.filter_clients(self)
+
+                MDButtonIcon:
+                    icon: "dots-horizontal-circle-outline"
+                MDButtonText:
+                    text: "Misc"
+
+            MDButton:
+                id: favorites
+                style: "text"
+                type: ("favorites", )
+                on_release: root.app.filter_clients(self)
+
+                MDButtonIcon:
+                    icon: "star"
+                MDButtonText:
+                    text: "Favorites"
+
+            MDNavigationDrawerDivider:
 
 
         ScrollBox:
