@@ -8,6 +8,8 @@ import enum
 import subprocess
 from typing import Any
 
+import urllib
+
 from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser, server_loop, logger, gui_enabled
 import Patch
 import Utils
@@ -252,7 +254,14 @@ def launch(*launch_args: str) -> None:
         parser.add_argument("patch_file", default="", type=str, nargs="?", help="Path to an Archipelago patch file")
         args = parser.parse_args(launch_args)
 
-        if args.patch_file != "":
+        if args.patch_file.startswith("archipelago://"):
+            url = urllib.parse.urlparse(args.patch_file)
+            args.connect = url.netloc
+            if url.username:
+                args.name = urllib.parse.unquote(url.username)
+            if url.password:
+                args.password = urllib.parse.unquote(url.password)
+        elif args.patch_file != "":
             metadata = _patch_and_run_game(args.patch_file)
             if "server" in metadata:
                 args.connect = metadata["server"]
