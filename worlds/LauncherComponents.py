@@ -18,16 +18,42 @@ class Type(Enum):
 
 
 class Component:
+    """
+    A Component represents a process launchable by Archipelago Launcher, either by a User action in the GUI,
+    by resolving an archipelago://user:pass@host:port link from the WebHost, by resolving a patch file's metadata,
+    or by using a component name arg while running the Launcher in CLI i.e. `ArchipelagoLauncher.exe "Text Client"`
+
+    Expected to be appended to LauncherComponents.component list to be used.
+    """
     display_name: str
+    """Used as the GUI button label and the component name in the CLI args"""
     type: Type
+    """
+    Enum "Type" classification of component intent, for filtering in the Launcher GUI
+    If not set in the constructor, it will be inferred by display_name
+    """
     script_name: Optional[str]
+    """Recommended to use func instead; Name of file to run when the component is called"""
     frozen_name: Optional[str]
+    """Recommended to use func instead; Name of the frozen executable file for this component"""
     icon: str  # just the name, no suffix
+    """Lookup ID for the icon path in LauncherComponents.icon_paths"""
     cli: bool
+    """Bool to control if the component gets launched in an appropriate Terminal for the OS"""
     func: Optional[Callable]
+    """
+    Function that gets called when the component gets launched
+    Any arg besides the component name arg is passed into the func as well, so handling *args is suggested
+    """
     file_identifier: Optional[Callable[[str], bool]]
+    """
+    Function that is run against patch file arg to identify which component is appropriate to launch
+    If the function is an Instance of SuffixIdentifier the suffixes will also be valid for the Open Patch component
+    """
     game_name: Optional[str]
+    """Game name to identify component when handling launch links from WebHost"""
     supports_uri: Optional[bool]
+    """Bool to identify if a component supports being launched by launch links from WebHost"""
 
     def __init__(self, display_name: str, script_name: Optional[str] = None, frozen_name: Optional[str] = None,
                  cli: bool = False, icon: str = 'icon', component_type: Optional[Type] = None,
@@ -61,12 +87,19 @@ class Component:
 processes = weakref.WeakSet()
 
 
-def launch_subprocess(func: Callable, name: str = None, args: Tuple[str, ...] = ()) -> None:
-    global processes
+def launch_subprocess(func: Callable, name: str | None = None, args: Tuple[str, ...] = ()) -> None:
     import multiprocessing
     process = multiprocessing.Process(target=func, name=name, args=args)
     process.start()
     processes.add(process)
+
+
+def launch(func: Callable, name: str | None = None, args: Tuple[str, ...] = ()) -> None:
+    from Utils import is_kivy_running
+    if is_kivy_running():
+        launch_subprocess(func, name, args)
+    else:
+        func(*args)
 
 
 class SuffixIdentifier:
@@ -85,7 +118,7 @@ class SuffixIdentifier:
 
 def launch_textclient(*args):
     import CommonClient
-    launch_subprocess(CommonClient.run_as_textclient, name="TextClient", args=args)
+    launch(CommonClient.run_as_textclient, name="TextClient", args=args)
 
 
 def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, pathlib.Path]]:
@@ -100,10 +133,16 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
 
     apworld_path = pathlib.Path(apworld_src)
 
-    module_name = pathlib.Path(apworld_path.name).stem
     try:
         import zipfile
-        zipfile.ZipFile(apworld_path).open(module_name + "/__init__.py")
+        zip = zipfile.ZipFile(apworld_path)
+        directories = [f.name for f in zipfile.Path(zip).iterdir() if f.is_dir()]
+        if len(directories) == 1 and directories[0] in apworld_path.stem:
+            module_name = directories[0]
+            apworld_name = module_name + ".apworld"
+        else:
+            raise Exception("APWorld appears to be invalid or damaged. (expected a single directory)")
+        zip.open(module_name + "/__init__.py")
     except ValueError as e:
         raise Exception("Archive appears invalid or damaged.") from e
     except KeyError as e:
@@ -122,7 +161,7 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
     # TODO: run generic test suite over the apworld.
     # TODO: have some kind of version system to tell from metadata if the apworld should be compatible.
 
-    target = pathlib.Path(worlds.user_folder) / apworld_path.name
+    target = pathlib.Path(worlds.user_folder) / apworld_name
     import shutil
     shutil.copyfile(apworld_path, target)
 
@@ -201,6 +240,7 @@ components: List[Component] = [
 ]
 
 
+# if registering an icon from within an apworld, the format "ap:module.name/path/to/file.png" can be used
 icon_paths = {
     'icon': local_path('data', 'icon.png'),
     'mcicon': local_path('data', 'mcicon.png'),
