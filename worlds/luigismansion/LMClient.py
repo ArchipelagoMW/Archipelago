@@ -448,15 +448,11 @@ class LMContext(CommonContext):
             lm_item = ALL_ITEMS_TABLE[trap]
             for addr_to_update in lm_item.update_ram_addr:
                 byte_size = 1 if addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
+                curr_val = addr_to_update.item_count
                 if not addr_to_update.pointer_offset is None:
-                    curr_val = addr_to_update.item_count
                     dme.write_bytes(dme.follow_pointers(addr_to_update.ram_addr,
                         [addr_to_update.pointer_offset]), curr_val.to_bytes(byte_size, 'big'))
-                elif addr_to_update.bit_position is None:
-                    curr_val = addr_to_update.item_count
-                    dme.write_bytes(addr_to_update.ram_addr, curr_val.to_bytes(byte_size, 'big'))
                 else:
-                    curr_val = addr_to_update.item_count
                     dme.write_bytes(addr_to_update.ram_addr, curr_val.to_bytes(byte_size, 'big'))
             self.received_trap_link = False
 
@@ -520,7 +516,14 @@ class LMContext(CommonContext):
             for addr_to_update in lm_item.update_ram_addr:
                 byte_size = 1 if addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
 
-                if item.item == 8140: # Progressive Flower, 00EB, 00EC, 00ED
+                if item.item in trap_id_list:
+                    curr_val = addr_to_update.item_count
+                    if not addr_to_update.pointer_offset is None:
+                        dme.write_bytes(dme.follow_pointers(addr_to_update.ram_addr,
+                        [addr_to_update.pointer_offset]), curr_val.to_bytes(byte_size, 'big'))
+                    else:
+                        dme.write_bytes(addr_to_update.ram_addr, curr_val.to_bytes(byte_size, 'big'))
+                elif item.item == 8140: # Progressive Flower, 00EB, 00EC, 00ED
                     flower_count: int = len([netItem for netItem in self.items_received if netItem.item == 8140])
                     curr_val = min(flower_count + 234, 237)
                     dme.write_bytes(addr_to_update.ram_addr, curr_val.to_bytes(byte_size, 'big'))
