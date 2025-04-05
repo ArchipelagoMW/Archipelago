@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Dict, Callable, Optional
 from worlds.generic.Rules import set_rule, add_rule
 from .locations import location_table, LocationDict
 from .creatures import all_creatures, aggressive, suffix, hatchable, containment
-from .options import AggressiveScanLogic, SwimRule
+from .options import AggressiveScanLogic, SwimRule, PropulsionCannonLogic
 import math
 
 if TYPE_CHECKING:
@@ -227,13 +227,21 @@ def is_radiated(x: float, y: float, z: float) -> bool:
 
 
 def can_access_location(state: "CollectionState", player: int, loc: LocationDict) -> bool:
-    need_laser_cutter = loc.get("need_laser_cutter", False)
-    if need_laser_cutter and not has_laser_cutter(state, player):
-        return False
+    propulsion_cannon_logic: PropulsionCannonLogic = state.multiworld.worlds[player].options.propulsion_cannon_logic
+    if propulsion_cannon_logic.value == 2:
+        cannon_logic_control = loc.get("cannon_logic_control", 0)
+    else:
+        cannon_logic_control = 0
+        
+    if not has_laser_cutter(state, player):
+        need_laser_cutter = loc.get("need_laser_cutter", False)
+        if need_laser_cutter or (cannon_logic_control == 2):
+            return False
 
-    need_propulsion_cannon = loc.get("need_propulsion_cannon", False)
-    if need_propulsion_cannon and not has_propulsion_cannon(state, player):
-        return False
+    if not has_propulsion_cannon(state, player):
+        need_propulsion_cannon = loc.get("need_propulsion_cannon", False)
+        if need_propulsion_cannon and (cannon_logic_control == 0):
+            return False
 
     pos = loc["position"]
     pos_x = pos["x"]
