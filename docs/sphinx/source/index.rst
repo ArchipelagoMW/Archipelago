@@ -42,5 +42,9 @@ the requirements of not only contributing to the main project, but the requireme
     fill
     entrance_rando
     utils
+    patch
+    settings
     netutils
     test
+    commonclient
+    kvui
