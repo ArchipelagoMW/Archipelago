@@ -74,7 +74,8 @@ class SatisfactoryWorld(World):
 
 
     def set_rules(self) -> None:
-        resource_sink_goal: bool = "AWESOME Sink Points" in self.options.goal_selection
+        resource_sink_goal: bool = "AWESOME Sink Points (total)" in self.options.goal_selection \
+                                or "AWESOME Sink Points (per minute)" in self.options.goal_selection
 
         required_parts = set(self.game_logic.space_elevator_tiers[self.options.final_elevator_package.value - 1].keys())
 
@@ -109,7 +110,8 @@ class SatisfactoryWorld(World):
                  for part, amount in parts.items():
                     # ItemIDs of bundles are shared with their component item
                     bundled_name = f"Bundle: {part}"
-                    slot_hub_layout[tier - 1][milestone - 1][self.item_name_to_id[bundled_name]] = amount
+                    multiplied_amount = max(amount * (self.options.milestone_cost_multiplier / 100), 1)
+                    slot_hub_layout[tier - 1][milestone - 1][self.item_name_to_id[bundled_name]] = multiplied_amount
 
         return {
             "Data": {
@@ -119,8 +121,8 @@ class SatisfactoryWorld(World):
                     "GoalSelection": self.options.goal_selection.value,
                     "GoalRequirement": self.options.goal_requirement.value,
                     "FinalElevatorTier": self.options.final_elevator_package.value,
-                    "FinalResourceSinkPoints": self.options.final_awesome_sink_points.value,
-                    "EnableHardDriveGacha": True if self.options.hard_drive_progression_limit else False,
+                    "FinalResourceSinkPointsTotal": self.options.final_awesome_sink_points_total.value,
+                    "FinalResourceSinkPointsPerMinute": self.options.final_awesome_sink_points_per_minute.value,
                     "FreeSampleEquipment": self.options.free_sample_equipment.value,
                     "FreeSampleBuildings": self.options.free_sample_buildings.value,
                     "FreeSampleParts": self.options.free_sample_parts.value,
