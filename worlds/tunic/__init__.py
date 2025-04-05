@@ -18,7 +18,7 @@ from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_op
                       LaurelsLocation, LaurelsZips, IceGrappling, LadderStorage, EntranceLayout,
                       check_options, LocalFill, get_hexagons_in_pool, HexagonQuestAbilityUnlockType)
 from .combat_logic import area_data, CombatState
-import ut_stuff
+from . import ut_stuff
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection, OptionError, PerGameCommonOptions, Range, Removed
 from settings import Group, Bool, FilePath
@@ -33,7 +33,7 @@ class TunicSettings(Group):
 
     class UTPoptrackerPath(FilePath):
         """Path to the user's TUNIC Poptracker Pack."""
-        description = "TUNIC Poptracker Pack root folder"
+        description = "TUNIC Poptracker Pack zip file"
 
     disable_local_spoiler: Union[DisableLocalSpoiler, bool] = False
     limit_grass_rando: Union[LimitGrassRando, bool] = True
@@ -754,12 +754,13 @@ class TunicWorld(World):
         return slot_data
 
     # for setting up the poptracker integration
-    tracker_world = {
-        "map_page_maps": ["maps/maps_pop.json"],
-        "map_page_locations": ["locations/locations_pop_er.json"],
-        "map_page_setting_key": f"Slot:{ut_player}:Current Map",
-        "map_page_index": ut_stuff.map_page_index,
-        "external_pack_key": "ut_poptracker_path",
-        "poptracker_name_mapping": ut_stuff.poptracker_data
-    }
+    # uncomment when it's optional to use the map
+    # tracker_world = {
+    #     "map_page_maps": ["maps/maps_pop.json"],
+    #     "map_page_locations": ["locations/locations_pop_er.json"],
+    #     "map_page_setting_key": f"Slot:{ut_player}:Current Map",
+    #     "map_page_index": ut_stuff.map_page_index,
+    #     "external_pack_key": "ut_poptracker_path",
+    #     "poptracker_name_mapping": ut_stuff.poptracker_data
+    # }
 
