@@ -1,14 +1,14 @@
 Kivy UI
 =======
 
-.. autoclass:: GameManager
+.. autoclass:: kvui.GameManager
     :members:
 
-.. autoclass:: APAsyncImage
+.. autoclass:: kvui.APAsyncImage
     :members:
 
-.. autoclass:: KivyJSONToTextParser
+.. autoclass:: kvui.KivyJSONToTextParser
     :members:
 
-.. autoclass:: MessageBox
+.. autoclass:: kvui.MessageBox
     :members:
