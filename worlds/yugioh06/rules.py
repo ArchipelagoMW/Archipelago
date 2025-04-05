@@ -39,10 +39,10 @@ def set_rules(world):
         "No Trap Cards Bonus": lambda state: yugioh06_difficulty(state, player, 2),
         "No Damage Bonus": lambda state: state.has_group("Campaign Boss Beaten", player, 3),
         "Low Deck Bonus": lambda state: state.has_any(["Reasoning", "Monster Gate", "Magical Merchant"], player) and
-                                        yugioh06_difficulty(state, player, 3),
+                                        yugioh06_difficulty(state, player, 2),
         "Extremely Low Deck Bonus":
             lambda state: state.has_any(["Reasoning", "Monster Gate", "Magical Merchant"], player) and
-                          yugioh06_difficulty(state, player, 2),
+                          yugioh06_difficulty(state, player, 3),
         "Opponent's Turn Finish Bonus": lambda state: yugioh06_difficulty(state, player, 2),
         "Exactly 0 LP Bonus": lambda state: yugioh06_difficulty(state, player, 2),
         "Reversal Finish Bonus": lambda state: yugioh06_difficulty(state, player, 2),

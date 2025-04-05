@@ -7,7 +7,7 @@ id,name,classification,groups,mod_name
 19,Glittering Boulder Removed,progression,COMMUNITY_REWARD,
 20,Minecarts Repair,useful,COMMUNITY_REWARD,
 21,Bus Repair,progression,COMMUNITY_REWARD,
-22,Progressive Movie Theater,progression,COMMUNITY_REWARD,
+22,Progressive Movie Theater,"progression,trap",COMMUNITY_REWARD,
 23,Stardrop,progression,,
 24,Progressive Backpack,progression,,
 25,Rusty Sword,filler,"WEAPON,DEPRECATED",
@@ -474,7 +474,7 @@ id,name,classification,groups,mod_name
 507,Resource Pack: 40 Calico Egg,useful,"FESTIVAL",
 508,Resource Pack: 35 Calico Egg,useful,"FESTIVAL",
 509,Resource Pack: 30 Calico Egg,useful,"FESTIVAL",
-510,Book: The Art O' Crabbing,useful,"FESTIVAL",
+510,Book: The Art O' Crabbing,progression,"FESTIVAL",
 511,Mr Qi's Plane Ride,progression,,
 521,Power: Price Catalogue,useful,"BOOK_POWER",
 522,Power: Mapping Cave Systems,useful,"BOOK_POWER",
@@ -819,6 +819,7 @@ id,name,classification,groups,mod_name
 5289,Prismatic Shard,filler,"RESOURCE_PACK",
 5290,Stardrop Tea,filler,"RESOURCE_PACK",
 5291,Resource Pack: 2 Artifact Trove,filler,"RESOURCE_PACK",
+5292,Resource Pack: 20 Cinder Shard,filler,"GINGER_ISLAND,RESOURCE_PACK",
 10001,Luck Level,progression,SKILL_LEVEL_UP,Luck Skill
 10002,Magic Level,progression,SKILL_LEVEL_UP,Magic
 10003,Socializing Level,progression,SKILL_LEVEL_UP,Socializing Skill
@@ -927,6 +928,7 @@ id,name,classification,groups,mod_name
 10518,Aurora Vineyard Tablet,progression,,Stardew Valley Expanded
 10519,Scarlett's Job Offer,progression,,Stardew Valley Expanded
 10520,Morgan's Schooling,progression,,Stardew Valley Expanded
+10521,Aurora Vineyard Reclamation,progression,,Stardew Valley Expanded
 10601,Magic Elixir Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Magic
 10602,Travel Core Recipe,progression,CRAFTSANITY,Magic
 10603,Haste Elixir Recipe,progression,CRAFTSANITY,Stardew Valley Expanded

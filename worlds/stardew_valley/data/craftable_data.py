@@ -1,7 +1,7 @@
 from typing import Dict, List, Optional
 
 from .recipe_source import RecipeSource, StarterSource, QueenOfSauceSource, ShopSource, SkillSource, FriendshipSource, ShopTradeSource, CutsceneSource, \
-    ArchipelagoSource, LogicSource, SpecialOrderSource, FestivalShopSource, QuestSource, MasterySource
+    ArchipelagoSource, LogicSource, SpecialOrderSource, FestivalShopSource, QuestSource, MasterySource, SkillCraftsanitySource
 from ..mods.mod_data import ModNames
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.artisan_good_names import ArtisanGood
@@ -11,10 +11,10 @@ from ..strings.craftable_names import Bomb, Fence, Sprinkler, WildSeeds, Floor, 
 from ..strings.crop_names import Fruit, Vegetable
 from ..strings.currency_names import Currency
 from ..strings.fertilizer_names import Fertilizer, RetainingSoil, SpeedGro
-from ..strings.fish_names import Fish, WaterItem, ModTrash
+from ..strings.fish_names import Fish, WaterItem, ModTrash, Trash
 from ..strings.flower_names import Flower
 from ..strings.food_names import Meal
-from ..strings.forageable_names import Forageable, SVEForage, DistantLandsForageable, Mushroom
+from ..strings.forageable_names import Forageable, DistantLandsForageable, Mushroom
 from ..strings.gift_names import Gift
 from ..strings.ingredient_names import Ingredient
 from ..strings.machine_names import Machine
@@ -61,6 +61,11 @@ def cutscene_recipe(name: str, region: str, friend: str, hearts: int, ingredient
 
 def skill_recipe(name: str, skill: str, level: int, ingredients: Dict[str, int], mod_name: Optional[str] = None) -> CraftingRecipe:
     source = SkillSource(skill, level)
+    return create_recipe(name, ingredients, source, mod_name)
+
+
+def skill_craftsanity_recipe(name: str, skill: str, level: int, ingredients: Dict[str, int], mod_name: Optional[str] = None) -> CraftingRecipe:
+    source = SkillCraftsanitySource(skill, level)
     return create_recipe(name, ingredients, source, mod_name)
 
 
@@ -249,7 +254,9 @@ bait_maker = skill_recipe(Machine.bait_maker, Skill.fishing, 6, {MetalBar.iron: 
 charcoal_kiln = skill_recipe(Machine.charcoal_kiln, Skill.foraging, 2, {Material.wood: 20, MetalBar.copper: 2})
 
 crystalarium = skill_recipe(Machine.crystalarium, Skill.mining, 9, {Material.stone: 99, MetalBar.gold: 5, MetalBar.iridium: 2, ArtisanGood.battery_pack: 1})
-furnace = skill_recipe(Machine.furnace, Skill.mining, 1, {Ore.copper: 20, Material.stone: 25})
+# In-Game, the Furnace recipe is completely unique. It is the only recipe that is obtained in a cutscene after doing a skill-related action.
+# So it has a custom source that needs both the craftsanity item from AP and the skill, if craftsanity is enabled.
+furnace = skill_craftsanity_recipe(Machine.furnace, Skill.mining, 1, {Ore.copper: 20, Material.stone: 25})
 geode_crusher = special_order_recipe(Machine.geode_crusher, SpecialOrder.cave_patrol, {MetalBar.gold: 2, Material.stone: 50, Mineral.diamond: 1})
 mushroom_log = skill_recipe(Machine.mushroom_log, Skill.foraging, 4, {Material.hardwood: 10, Material.moss: 10})
 heavy_tapper = ap_recipe(Machine.heavy_tapper, {Material.hardwood: 30, MetalBar.radioactive: 1})
@@ -311,7 +318,8 @@ travel_charm = shop_recipe(ModCraftable.travel_core, Region.adventurer_guild, 25
 preservation_chamber = skill_recipe(ModMachine.preservation_chamber, ModSkill.archaeology, 1,
                                     {MetalBar.copper: 1, Material.wood: 15, ArtisanGood.oak_resin: 30},
                                     ModNames.archaeology)
-restoration_table = skill_recipe(ModMachine.restoration_table, ModSkill.archaeology, 1, {Material.wood: 15, MetalBar.copper: 1, MetalBar.iron: 1}, ModNames.archaeology)
+restoration_table = skill_recipe(ModMachine.restoration_table, ModSkill.archaeology, 1, {Material.wood: 15, MetalBar.copper: 1, MetalBar.iron: 1},
+                                 ModNames.archaeology)
 preservation_chamber_h = skill_recipe(ModMachine.hardwood_preservation_chamber, ModSkill.archaeology, 6, {MetalBar.copper: 1, Material.hardwood: 15,
                                                                                                           ArtisanGood.oak_resin: 30}, ModNames.archaeology)
 grinder = skill_recipe(ModMachine.grinder, ModSkill.archaeology, 2, {Artifact.rusty_cog: 10, MetalBar.iron: 5, ArtisanGood.battery_pack: 1},
@@ -323,12 +331,14 @@ glass_path = skill_recipe(ModFloor.glass_path, ModSkill.archaeology, 3, {Artifac
 glass_fence = skill_recipe(ModCraftable.glass_fence, ModSkill.archaeology, 7, {Artifact.glass_shards: 5}, ModNames.archaeology)
 bone_path = skill_recipe(ModFloor.bone_path, ModSkill.archaeology, 4, {Fossil.bone_fragment: 1}, ModNames.archaeology)
 rust_path = skill_recipe(ModFloor.rusty_path, ModSkill.archaeology, 2, {ModTrash.rusty_scrap: 2}, ModNames.archaeology)
-rusty_brazier = skill_recipe(ModCraftable.rusty_brazier, ModSkill.archaeology, 3, {ModTrash.rusty_scrap: 10, Material.coal: 1, Material.fiber: 1}, ModNames.archaeology)
+rusty_brazier = skill_recipe(ModCraftable.rusty_brazier, ModSkill.archaeology, 3, {ModTrash.rusty_scrap: 10, Material.coal: 1, Material.fiber: 1},
+                             ModNames.archaeology)
 bone_fence = skill_recipe(ModCraftable.bone_fence, ModSkill.archaeology, 8, {Fossil.bone_fragment: 2}, ModNames.archaeology)
 water_shifter = skill_recipe(ModCraftable.water_shifter, ModSkill.archaeology, 4, {Material.wood: 40, MetalBar.copper: 4}, ModNames.archaeology)
 wooden_display = skill_recipe(ModCraftable.wooden_display, ModSkill.archaeology, 1, {Material.wood: 25}, ModNames.archaeology)
 hardwood_display = skill_recipe(ModCraftable.hardwood_display, ModSkill.archaeology, 7, {Material.hardwood: 10}, ModNames.archaeology)
-lucky_ring = skill_recipe(Ring.lucky_ring, ModSkill.archaeology, 8, {Artifact.elvish_jewelry: 1, AnimalProduct.rabbit_foot: 5, Mineral.tigerseye: 1}, ModNames.archaeology)
+lucky_ring = skill_recipe(Ring.lucky_ring, ModSkill.archaeology, 8, {Artifact.elvish_jewelry: 1, AnimalProduct.rabbit_foot: 5, Mineral.tigerseye: 1},
+                          ModNames.archaeology)
 volcano_totem = skill_recipe(ModConsumable.volcano_totem, ModSkill.archaeology, 9, {Material.cinder_shard: 5, Artifact.rare_disc: 1, Artifact.dwarf_gadget: 1},
                              ModNames.archaeology)
 haste_elixir = shop_recipe(ModEdible.haste_elixir, SVERegion.alesia_shop, 35000, {Loot.void_essence: 35, ModLoot.void_soul: 5, Ingredient.sugar: 1,
@@ -370,5 +380,13 @@ composter = skill_recipe(ModMachine.composter, ModSkill.binning, 4, {Material.wo
 recycling_bin = skill_recipe(ModMachine.recycling_bin, ModSkill.binning, 7, {MetalBar.iron: 3, Material.fiber: 10, MetalBar.gold: 2}, ModNames.binning_skill)
 advanced_recycling_machine = skill_recipe(ModMachine.advanced_recycling_machine, ModSkill.binning, 9,
                                           {MetalBar.iridium: 5, ArtisanGood.battery_pack: 2, MetalBar.quartz: 10}, ModNames.binning_skill)
+
+coppper_slot_machine = skill_recipe(ModMachine.copper_slot_machine, ModSkill.luck, 2, {MetalBar.copper: 15, Material.stone: 1, Material.wood: 1,
+                                                                                       Material.fiber: 1, Material.sap: 1, Loot.slime: 1,
+                                                                                       Forageable.salmonberry: 1, Material.clay: 1, Trash.joja_cola: 1}, ModNames.luck_skill)
+
+gold_slot_machine = skill_recipe(ModMachine.gold_slot_machine, ModSkill.luck, 4, {MetalBar.gold: 15, ModMachine.copper_slot_machine: 1}, ModNames.luck_skill)
+iridium_slot_machine = skill_recipe(ModMachine.iridium_slot_machine, ModSkill.luck, 4, {MetalBar.iridium: 15, ModMachine.gold_slot_machine: 1}, ModNames.luck_skill)
+radioactive_slot_machine = skill_recipe(ModMachine.radioactive_slot_machine, ModSkill.luck, 4, {MetalBar.radioactive: 15, ModMachine.iridium_slot_machine: 1}, ModNames.luck_skill)
 
 all_crafting_recipes_by_name = {recipe.item: recipe for recipe in all_crafting_recipes}
