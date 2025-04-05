@@ -124,7 +124,7 @@
     {% endif %}
 
     <div class="dict-container">
-        {% for item_name in relevant_keys|sort %}
+        {% for item_name in (relevant_keys if relevant_keys is ordered else relevant_keys|sort) %}
             <div class="dict-entry">
                 <label for="{{ option_name }}-{{ item_name }}-qty">{{ item_name }}</label>
                 <input
