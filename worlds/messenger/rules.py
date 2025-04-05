@@ -26,15 +26,15 @@ class MessengerRules:
         maximum_price = (world.multiworld.get_location("The Shop - Demon's Bane", self.player).cost +
                          world.multiworld.get_location("The Shop - Focused Power Sense", self.player).cost)
         self.maximum_price = min(maximum_price, world.total_shards)
-        self.required_seals = max(1, world.required_seals)
+        self.required_seals = world.required_seals
 
         # dict of connection names and requirements to traverse the exit
         self.connection_rules = {
             # from ToTHQ
             "Artificer's Portal":
-                lambda state: state.has_all({"Demon King Crown", "Magic Firefly"}, self.player),
+                lambda state: state.has("Demon King Crown", self.player),
             "Shrink Down":
-                lambda state: state.has_all(NOTES, self.player) or self.has_enough_seals(state),
+                lambda state: state.has_all(NOTES, self.player),
             # the shop
             "Money Sink":
                 lambda state: state.has("Money Wrench", self.player) and self.can_shop(state),
@@ -267,6 +267,8 @@ class MessengerRules:
             # tower of time
             "Tower of Time Seal - Time Waster":
                 self.has_dart,
+            # corrupted future
+            "Corrupted Future - Key of Courage": lambda state: state.has("Magic Firefly", self.player),
             # cloud ruins
             "Time Warp Mega Shard":
                 lambda state: self.has_vertical(state) or self.can_dboost(state),
@@ -313,6 +315,9 @@ class MessengerRules:
             "Water Mega Shard":
                 self.has_dart,
         }
+
+        if self.required_seals:
+            self.connection_rules["Shrink Down"] = self.has_enough_seals
 
     def has_wingsuit(self, state: CollectionState) -> bool:
         return state.has("Wingsuit", self.player)
@@ -367,7 +372,7 @@ class MessengerRules:
             add_rule(multiworld.get_entrance("Shrink Down", self.player), self.has_dart)
         multiworld.completion_condition[self.player] = lambda state: state.has("Do the Thing!", self.player)
         if self.world.options.accessibility:  # not locations accessibility
-            set_self_locking_items(self.world, self.player)
+            set_self_locking_items(self.world)
 
 
 class MessengerHardRules(MessengerRules):
@@ -527,9 +532,11 @@ class MessengerOOBRules(MessengerRules):
         self.world.options.accessibility.value = MessengerAccessibility.option_minimal
 
 
-def set_self_locking_items(world: "MessengerWorld", player: int) -> None:
+def set_self_locking_items(world: "MessengerWorld") -> None:
     # locations where these placements are always valid
     allow_self_locking_items(world.get_location("Searing Crags - Key of Strength").parent_region, "Power Thistle")
     allow_self_locking_items(world.get_location("Sunken Shrine - Key of Love"), "Sun Crest", "Moon Crest")
-    allow_self_locking_items(world.get_location("Corrupted Future - Key of Courage").parent_region, "Demon King Crown")
     allow_self_locking_items(world.get_location("Elemental Skylands Seal - Water"), "Currents Master")
+    if not world.options.shuffle_transitions:
+        allow_self_locking_items(world.get_location("Corrupted Future - Key of Courage").parent_region,
+                                 "Demon King Crown")

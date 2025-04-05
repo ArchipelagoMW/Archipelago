@@ -9,6 +9,7 @@ configuration file.
 
 All Ixupi pot pieces are randomized. Keys have been added to the game to lock off different rooms in the museum, 
 these are randomized. Crawling has been added and is required to use any crawl space.
+Randomization can also control if Ixupi pots are in pieces, mixed, or complete, and in which worlds they will show up in.
 
 ## What is considered a location check in Shivers?
 
@@ -27,4 +28,5 @@ Victory is achieved when the player has captured the required number Ixupi set i
 
 ## Encountered a bug?
 
-Please contact GodlFire or Cynbel_Terreus on Discord for bugs related to Shivers world generation or the Shivers Randomizer.
+Please contact GodlFire or Cynbel_Terreus on Discord for bugs related to Shivers world generation or the Shivers Randomizer. 
+You may also open issues for the Shivers Randomizer Client [here](https://github.com/Shivers-Randomizer/Shivers-Randomizer/issues).

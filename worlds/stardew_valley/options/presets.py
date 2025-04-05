@@ -122,7 +122,7 @@ medium_settings = {
     options.Friendsanity.internal_name:             options.Friendsanity.option_starting_npcs,
     options.FriendsanityHeartSize.internal_name:    4,
     options.Booksanity.internal_name:               options.Booksanity.option_power_skill,
-    options.Walnutsanity.internal_name:             [WalnutsanityOptionName.puzzles],
+    options.Walnutsanity.internal_name:             options.Walnutsanity.preset_none,
     options.NumberOfMovementBuffs.internal_name:    6,
     options.EnabledFillerBuffs.internal_name:       options.EnabledFillerBuffs.preset_all,
     options.ExcludeGingerIsland.internal_name:      options.ExcludeGingerIsland.option_true,

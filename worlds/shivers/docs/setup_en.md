@@ -5,12 +5,12 @@
 
 - [Shivers (GOG version)](https://www.gog.com/en/game/shivers) or original disc
 - [ScummVM](https://www.scummvm.org/downloads/) version 2.7.0 or later
-- [Shivers Randomizer](https://github.com/GodlFire/Shivers-Randomizer-CSharp/releases/latest) Latest release version
+- [Shivers Randomizer Client](https://github.com/Shivers-Randomizer/Shivers-Randomizer/releases/latest) Latest release version
 
 ## Optional Software
 
 - [PopTracker](https://github.com/black-sliver/PopTracker/releases/)
-  - [Jax's Shivers PopTracker pack](https://github.com/blazik-barth/Shivers-Tracker/releases/)
+  - [Shivers PopTracker pack](https://github.com/Shivers-Randomizer/Shivers-AP-Tracker/releases/latest)
 
 ## Setup ScummVM for Shivers
 
@@ -59,7 +59,9 @@ validator page: [YAML Validation page](/mysterycheck)
 
 ## What is a check
 
-- Every puzzle
-- Every puzzle hint/solution
-- Every document that is considered a Flashback
+- All puzzles
+- All puzzle hints or solutions
+- All documents that are considered Flashbacks
+- All Ixupi captures (Lightning only if early)
 - Optionally information plaques
+- Optionally elevators

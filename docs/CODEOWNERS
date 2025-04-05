@@ -45,6 +45,9 @@
 # ChecksFinder
 /worlds/checksfinder/ @SunCatMC
 
+# Civilization VI
+/worlds/civ6/ @hesto2
+
 # Clique
 /worlds/clique/ @ThePhar
 
@@ -210,6 +213,9 @@
 
 # Wargroove
 /worlds/wargroove/ @FlySniper
+
+# The Wind Waker
+/worlds/tww/ @tanjo3
 
 # The Witness
 /worlds/witness/ @NewSoupVi @blastron

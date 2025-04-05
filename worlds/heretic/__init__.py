@@ -41,7 +41,7 @@ class HereticWorld(World):
     options: HereticOptions
     game = "Heretic"
     web = HereticWeb()
-    required_client_version = (0, 3, 9)
+    required_client_version = (0, 5, 0)  # 1.2.0-prerelease or higher
 
     item_name_to_id = {data["name"]: item_id for item_id, data in Items.item_table.items()}
     item_name_groups = Items.item_name_groups
@@ -49,18 +49,18 @@ class HereticWorld(World):
     location_name_to_id = {data["name"]: loc_id for loc_id, data in Locations.location_table.items()}
     location_name_groups = Locations.location_name_groups
 
-    starting_level_for_episode: List[str] = [
-        "The Docks (E1M1)",
-        "The Crater (E2M1)",
-        "The Storehouse (E3M1)",
-        "Catafalque (E4M1)",
-        "Ochre Cliffs (E5M1)"
-    ]
+    starting_level_for_episode: Dict[int, str] = {
+        1: "The Docks (E1M1)",
+        2: "The Crater (E2M1)",
+        3: "The Storehouse (E3M1)",
+        4: "Catafalque (E4M1)",
+        5: "Ochre Cliffs (E5M1)"
+    }
 
-    boss_level_for_episode: List[str] = [
+    all_boss_levels: List[str] = [
         "Hell's Maw (E1M8)",
         "The Portals of Chaos (E2M8)",
-        "D'Sparil'S Keep (E3M8)",
+        "D'Sparil's Keep (E3M8)",
         "Shattered Bridge (E4M8)",
         "Field of Judgement (E5M8)"
     ]
@@ -82,6 +82,7 @@ class HereticWorld(World):
     def __init__(self, multiworld: MultiWorld, player: int):
         self.included_episodes = [1, 1, 1, 0, 0]
         self.location_count = 0
+        self.starting_levels = []
 
         super().__init__(multiworld, player)
 
@@ -99,6 +100,14 @@ class HereticWorld(World):
         # If no episodes selected, select Episode 1
         if self.get_episode_count() == 0:
             self.included_episodes[0] = 1
+
+        self.starting_levels = [level_name for (episode, level_name) in self.starting_level_for_episode.items()
+                                if self.included_episodes[episode - 1]]
+
+        # For Solo Episode 1, place the Yellow Key for E1M1 early.
+        # Gives the generator five potential placements (plus the forced key) instead of only two.
+        if self.get_episode_count() == 1 and self.included_episodes[0]:
+            self.multiworld.early_items[self.player]["The Docks (E1M1) - Yellow key"] = 1
 
     def create_regions(self):
         pro = self.options.pro.value
@@ -154,7 +163,7 @@ class HereticWorld(World):
     def completion_rule(self, state: CollectionState):
         goal_levels = Maps.map_names
         if self.options.goal.value:
-            goal_levels = self.boss_level_for_episode
+            goal_levels = self.all_boss_levels
 
         for map_name in goal_levels:
             if map_name + " - Exit" not in self.location_name_to_id:
@@ -203,8 +212,19 @@ class HereticWorld(World):
             if item["episode"] != -1 and not self.included_episodes[item["episode"] - 1]:
                 continue
 
-            count = item["count"] if item["name"] not in self.starting_level_for_episode else item["count"] - 1
+            count = item["count"] if item["name"] not in self.starting_levels else item["count"] - 1
             itempool += [self.create_item(item["name"]) for _ in range(count)]
+
+        # Bag(s) of Holding based on options
+        if self.options.split_bag_of_holding.value:
+            itempool += [self.create_item("Crystal Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+            itempool += [self.create_item("Ethereal Arrow Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+            itempool += [self.create_item("Claw Orb Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+            itempool += [self.create_item("Rune Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+            itempool += [self.create_item("Flame Orb Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+            itempool += [self.create_item("Mace Sphere Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+        else:
+            itempool += [self.create_item("Bag of Holding") for _ in range(self.options.bag_of_holding_count.value)]
 
         # Place end level items in locked locations
         for map_name in Maps.map_names:
@@ -225,9 +245,8 @@ class HereticWorld(World):
             self.location_count -= 1
 
         # Give starting levels right away
-        for i in range(len(self.included_episodes)):
-            if self.included_episodes[i]:
-                self.multiworld.push_precollected(self.create_item(self.starting_level_for_episode[i]))
+        for map_name in self.starting_levels:
+            self.multiworld.push_precollected(self.create_item(map_name))
         
         # Give Computer area maps if option selected
         if self.options.start_with_map_scrolls.value:
@@ -274,7 +293,7 @@ class HereticWorld(World):
         episode_count = self.get_episode_count()
         count = min(remaining_loc, max(1, self.items_ratio[item_name] * episode_count))
         if count == 0:
-            logger.warning("Warning, no " + item_name + " will be placed.")
+            logger.warning(f"Warning, no {item_name} will be placed.")
             return
 
         for i in range(count):
@@ -289,5 +308,19 @@ class HereticWorld(World):
         slot_data["episode3"] = self.included_episodes[2]
         slot_data["episode4"] = self.included_episodes[3]
         slot_data["episode5"] = self.included_episodes[4]
+
+        # Send slot data for ammo capacity values; this must be generic because Doom uses it too
+        slot_data["ammo1start"] = self.options.max_ammo_crystals.value
+        slot_data["ammo2start"] = self.options.max_ammo_arrows.value
+        slot_data["ammo3start"] = self.options.max_ammo_claw_orbs.value
+        slot_data["ammo4start"] = self.options.max_ammo_runes.value
+        slot_data["ammo5start"] = self.options.max_ammo_flame_orbs.value
+        slot_data["ammo6start"] = self.options.max_ammo_spheres.value
+        slot_data["ammo1add"] = self.options.added_ammo_crystals.value
+        slot_data["ammo2add"] = self.options.added_ammo_arrows.value
+        slot_data["ammo3add"] = self.options.added_ammo_claw_orbs.value
+        slot_data["ammo4add"] = self.options.added_ammo_runes.value
+        slot_data["ammo5add"] = self.options.added_ammo_flame_orbs.value
+        slot_data["ammo6add"] = self.options.added_ammo_spheres.value
 
         return slot_data

@@ -85,38 +85,11 @@ class TestGrievanceHard(BlasphemousTestBase):
     }
 
 
-class TestKnotOfWordsEasy(BlasphemousTestBase):
-    options = {
-        "starting_location": "knot_of_words",
-        "difficulty": "easy"
-    }
-
-
-class TestKnotOfWordsNormal(BlasphemousTestBase):
-    options = {
-        "starting_location": "knot_of_words",
-        "difficulty": "normal"
-    }
-
-
+# knot of the three words, rooftops, and mourning and havoc can't be selected on easy or normal. hard only
 class TestKnotOfWordsHard(BlasphemousTestBase):
     options = {
         "starting_location": "knot_of_words",
         "difficulty": "hard"
-    }
-
-
-class TestRooftopsEasy(BlasphemousTestBase):
-    options = {
-        "starting_location": "rooftops",
-        "difficulty": "easy"
-    }
-
-
-class TestRooftopsNormal(BlasphemousTestBase):
-    options = {
-        "starting_location": "rooftops",
-        "difficulty": "normal"
     }
 
 
@@ -127,7 +100,6 @@ class TestRooftopsHard(BlasphemousTestBase):
     }
 
 
-# mourning and havoc can't be selected on easy or normal. hard only
 class TestMourningHavocHard(BlasphemousTestBase):
     options = {
         "starting_location": "mourning_havoc",

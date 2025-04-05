@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Callable, Dict, List, Optional, Tuple
 
 from BaseClasses import CollectionState, ItemClassification, Region
 
-from .data import data
+from .data import EncounterType, data
 from .items import PokemonEmeraldItem
 from .locations import PokemonEmeraldLocation
 
@@ -19,11 +19,11 @@ def create_regions(world: "PokemonEmeraldWorld") -> Dict[str, Region]:
     Also creates and places events and connects regions via warps and the exits defined in the JSON.
     """
     # Used in connect_to_map_encounters. Splits encounter categories into "subcategories" and gives them names
-    # and rules so the rods can only access their specific slots.
-    encounter_categories: Dict[str, List[Tuple[Optional[str], range, Optional[Callable[[CollectionState], bool]]]]] = {
-        "LAND": [(None, range(0, 12), None)],
-        "WATER": [(None, range(0, 5), None)],
-        "FISHING": [
+    # and rules so the rods can only access their specific slots. Rock smash encounters are not considered in logic.
+    encounter_categories: Dict[EncounterType, List[Tuple[Optional[str], range, Optional[Callable[[CollectionState], bool]]]]] = {
+        EncounterType.LAND: [(None, range(0, 12), None)],
+        EncounterType.WATER: [(None, range(0, 5), None)],
+        EncounterType.FISHING: [
             ("OLD_ROD", range(0, 2), lambda state: state.has("Old Rod", world.player)),
             ("GOOD_ROD", range(2, 5), lambda state: state.has("Good Rod", world.player)),
             ("SUPER_ROD", range(5, 10), lambda state: state.has("Super Rod", world.player)),
@@ -41,19 +41,19 @@ def create_regions(world: "PokemonEmeraldWorld") -> Dict[str, Region]:
         These regions are created lazily and dynamically so as not to bother with unused maps.
         """
         # For each of land, water, and fishing, connect the region if indicated by include_slots
-        for i, encounter_category in enumerate(encounter_categories.items()):
+        for i, (encounter_type, subcategories) in enumerate(encounter_categories.items()):
             if include_slots[i]:
-                region_name = f"{map_name}_{encounter_category[0]}_ENCOUNTERS"
+                region_name = f"{map_name}_{encounter_type.value}_ENCOUNTERS"
 
                 # If the region hasn't been created yet, create it now
                 try:
                     encounter_region = world.multiworld.get_region(region_name, world.player)
                 except KeyError:
                     encounter_region = Region(region_name, world.player, world.multiworld)
-                    encounter_slots = getattr(data.maps[map_name], f"{encounter_category[0].lower()}_encounters").slots
+                    encounter_slots = data.maps[map_name].encounters[encounter_type].slots
 
                     # Subcategory is for splitting fishing rods; land and water only have one subcategory
-                    for subcategory in encounter_category[1]:
+                    for subcategory in subcategories:
                         # Want to create locations per species, not per slot
                         # encounter_categories includes info on which slots belong to which subcategory
                         unique_species = []

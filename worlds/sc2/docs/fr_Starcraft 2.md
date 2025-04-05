@@ -2,6 +2,8 @@
 
 ## Quel est l'effet de la *randomization* sur ce jeu ?
 
+### *Items* et *locations*
+
 Les éléments qui suivent sont les *items* qui sont *randomized* et qui doivent être débloqués pour être utilisés dans 
 le jeu:
 1. La capacité de produire des unités, excepté les drones/probes/scv.
@@ -37,21 +39,33 @@ Quand vous recevez un *item*, il devient immédiatement disponible, même pendan
 la boîte de texte situé dans le coin en haut à droite de *StarCraft 2*.
 L'acquisition d'un *item* est aussi indiquée dans le client d'Archipelago.
 
+### *Mission order*
+
+Les missions et l'ordre dans lequel elles doivent être complétées, dénoté *mission order*, peuvent également être 
+*randomized*.
+Les quatre campagnes de *StarCraft 2* peuvent être utilisées pour remplir le *mission order*.
+Notez que les missions d'évolution de *Heart of the Swarm* ne sont pas incluses dans le *randomizer*.
+Par défaut, le *mission order* suit la structure des campagnes sélectionnées, mais plusieurs autres options sont 
+disponibles, comme *blitz*, *grid*, etc.
+
 Les missions peuvent être lancées par le client *StarCraft 2 Archipelago*, via l'interface graphique de l'onglet 
 *StarCraft 2 Launcher*.
 Les segments qui se passent sur l'*Hyperion*, un Léviathan et la *Spear of Adun* ne sont pas inclus.
-De plus, les points de progression tels que les crédits ou la Solarite ne sont pas utilisés dans *StarCraft 2 
+De plus, les points de progression, tels que les crédits ou la Solarite, ne sont pas utilisés dans *StarCraft 2 
 Archipelago*.
+Les missions accessibles ont leur nom en bleu, tandis que celles où toutes les *locations* ont été collectées 
+apparaissent en blanc.
+En plaçant votre souris sur une mission, les *locations* non collectées s’affichent, classées par catégorie.
+Les missions qui ne sont pas accessibles ont leur nom en gris et leurs prérequis seront également affichés à cet endroit.
+
 
 ## Quel est le but de ce jeu quand il est *randomized*?
 
 Le but est de réussir la mission finale du *mission order* (e.g. *blitz*, *grid*, etc.).
-Le fichier de configuration yaml permet de spécifier le *mission order*, lesquelles des quatre campagnes de 
-*StarCraft 2* peuvent être utilisées pour remplir le *mission order* et comment les missions sont distribuées dans le 
-*mission order*. 
+Le fichier de configuration yaml permet de spécifier le *mission order*, quelle combinaison des quatre campagnes de 
+*StarCraft 2* peuvent être utilisée et comment les missions sont distribuées dans le *mission order*. 
 Étant donné que les deux premières options déterminent le nombre de missions dans un monde de *StarCraft 2*, elles 
 peuvent être utilisées pour moduler le temps nécessaire pour terminer le monde. 
-Notez que les missions d'évolution de Heart of the Swarm ne sont pas incluses dans le *randomizer*.
 
 ## Quelles sont les modifications non aléatoires comparativement à la version de base de *StarCraft 2*
 
@@ -89,9 +103,7 @@ Les fichiers existants vont être écrasés.
 * `/game_speed [game_speed]` Remplace la vitesse du jeu pour le monde.  
     * Les options sont *default*, *slower*, *slow*, *normal*, *fast*, and *faster*.
 * `/color [faction] [color]` Remplace la couleur d'une des *factions* qui est jouable. 
-    * Les options de *faction*: raynor, kerrigan, primal, protoss, nova.
-    * Les options de couleur: *white*, *red*, *blue*, *teal*, *purple*, *yellow*, *orange*, *green*, *lightpink*, 
-*violet*, *lightgrey*, *darkgreen*, *brown*, *lightgreen*, *darkgrey*, *pink*, *rainbow*, *random*, *default*.
+    * Si la commande est lancée sans option, la liste des *factions* et des couleurs disponibles sera affichée.
 * `/option [option_name] [option_value]` Permet de changer un option normalement définit dans le *yaml*. 
     * Si la commande est lancée sans option, la liste des options qui sont modifiables va être affichée.
     * Les options qui peuvent être changées avec cette commande incluent sauter les cinématiques  automatiquement, la 
@@ -114,6 +126,19 @@ De plus, les améliorations sont regroupées sous leurs unités/bâtiments corre
 Un paramètre de filtrage peut aussi être fourni, e.g., `/received Thor`, pour limiter le nombre d'*items* affichés.
 Tous les *items* dont le nom, la race ou le nom de groupe contient le paramètre fourni seront affichés.
 
+## Particularités dans un multiworld
+
+### *Collect on goal completion*
+
+L'une des options par défaut des *multiworlds* est qu'une fois qu'un monde a atteint son objectif final, il collecte 
+tous ses *items*, incluant ceux dans les autres mondes.
+Si vous ne souhaitez pas que cela se produise, vous devez demander à la personne générant le *multiworld* de changer 
+l'option *Collect Permission*.
+Si la génération n'est pas effectuée via le site web, la personne qui effectue la génération doit modifier l'option 
+`collect_mode` dans son fichier *host.yaml* avant la génération.
+Si le *multiworld* a déjà été généré, l'hôte peut utiliser la commande `/option collect_mode [valeur]` pour modifier 
+cette option.
+
 ## Problèmes connus
 
 - *StarCraft 2 Archipelago* ne supporte pas le chargement d'une sauvegarde. 
@@ -123,3 +148,7 @@ normalement à l'aise.
 Pour redémarrer une mission, utilisez le client de *StarCraft 2 Archipelago*.
 - Un rapport d'erreur est souvent généré lorsqu'une mission est fermée. 
 Cela n'affecte pas le jeu et peut être ignoré.
+- Actuellement, le client de *StarCraft 2* utilise la *location* associée à la victoire d'une mission pour déterminer 
+si celle-ci a été complétée.
+En conséquence, la fonctionnalité *collect* d'*Archipelago* peut rendre accessible des missions connectées à une 
+mission que vous n'avez pas terminée.

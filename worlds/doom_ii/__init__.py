@@ -43,7 +43,7 @@ class DOOM2World(World):
     options: DOOM2Options
     game = "DOOM II"
     web = DOOM2Web()
-    required_client_version = (0, 3, 9)
+    required_client_version = (0, 5, 0)  # 1.2.0-prerelease or higher
 
     item_name_to_id = {data["name"]: item_id for item_id, data in Items.item_table.items()}
     item_name_groups = Items.item_name_groups
@@ -51,11 +51,11 @@ class DOOM2World(World):
     location_name_to_id = {data["name"]: loc_id for loc_id, data in Locations.location_table.items()}
     location_name_groups = Locations.location_name_groups
 
-    starting_level_for_episode: List[str] = [
-        "Entryway (MAP01)",
-        "The Factory (MAP12)",
-        "Nirvana (MAP21)"
-    ]
+    starting_level_for_episode: Dict[int, str] = {
+        1: "Entryway (MAP01)",
+        2: "The Factory (MAP12)",
+        3: "Nirvana (MAP21)"
+    }
 
     # Item ratio that scales depending on episode count. These are the ratio for 3 episode. In DOOM1.
     # The ratio have been tweaked seem, and feel good.
@@ -77,6 +77,7 @@ class DOOM2World(World):
     def __init__(self, multiworld: MultiWorld, player: int):
         self.included_episodes = [1, 1, 1, 0]
         self.location_count = 0
+        self.starting_levels = []
 
         super().__init__(multiworld, player)
 
@@ -94,6 +95,14 @@ class DOOM2World(World):
         # If no episodes selected, select Episode 1
         if self.get_episode_count() == 0:
             self.included_episodes[0] = 1
+
+        self.starting_levels = [level_name for (episode, level_name) in self.starting_level_for_episode.items()
+                                if self.included_episodes[episode - 1]]
+
+        # If soloing MAP21-MAP30, we need to mark a weapon as early to help generation succeed
+        if self.get_episode_count() == 1 and self.included_episodes[2]:
+            early_weapon = self.random.choice(["Super Shotgun", "Plasma gun"])
+            self.multiworld.early_items[self.player][early_weapon] = 1
 
     def create_regions(self):
         pro = self.options.pro.value
@@ -193,8 +202,17 @@ class DOOM2World(World):
             if item["episode"] != -1 and not self.included_episodes[item["episode"] - 1]:
                 continue
 
-            count = item["count"] if item["name"] not in self.starting_level_for_episode else item["count"] - 1
+            count = item["count"] if item["name"] not in self.starting_levels else item["count"] - 1
             itempool += [self.create_item(item["name"]) for _ in range(count)]
+
+        # Backpack(s) based on options
+        if self.options.split_backpack.value:
+            itempool += [self.create_item("Bullet capacity") for _ in range(self.options.backpack_count.value)]
+            itempool += [self.create_item("Shell capacity") for _ in range(self.options.backpack_count.value)]
+            itempool += [self.create_item("Energy cell capacity") for _ in range(self.options.backpack_count.value)]
+            itempool += [self.create_item("Rocket capacity") for _ in range(self.options.backpack_count.value)]
+        else:
+            itempool += [self.create_item("Backpack") for _ in range(self.options.backpack_count.value)]
 
         # Place end level items in locked locations
         for map_name in Maps.map_names:
@@ -215,9 +233,8 @@ class DOOM2World(World):
             self.location_count -= 1
 
         # Give starting levels right away
-        for i in range(len(self.starting_level_for_episode)):
-            if self.included_episodes[i]:
-                self.multiworld.push_precollected(self.create_item(self.starting_level_for_episode[i]))
+        for map_name in self.starting_levels:
+            self.multiworld.push_precollected(self.create_item(map_name))
         
         # Give Computer area maps if option selected
         if start_with_computer_area_maps:
@@ -258,11 +275,23 @@ class DOOM2World(World):
         # Was balanced based on DOOM 1993's first 3 episodes
         count = min(remaining_loc, max(1, int(round(self.items_ratio[item_name] * ep_count / 3))))
         if count == 0:
-            logger.warning("Warning, no ", item_name, " will be placed.")
+            logger.warning(f"Warning, no {item_name} will be placed.")
             return
 
         for i in range(count):
             itempool.append(self.create_item(item_name))
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        return self.options.as_dict("difficulty", "random_monsters", "random_pickups", "random_music", "flip_levels", "allow_death_logic", "pro", "death_link", "reset_level_on_death", "episode1", "episode2", "episode3", "episode4")
+        slot_data = self.options.as_dict("difficulty", "random_monsters", "random_pickups", "random_music", "flip_levels", "allow_death_logic", "pro", "death_link", "reset_level_on_death", "episode1", "episode2", "episode3", "episode4")
+
+        # Send slot data for ammo capacity values; this must be generic because Heretic uses it too
+        slot_data["ammo1start"] = self.options.max_ammo_bullets.value
+        slot_data["ammo2start"] = self.options.max_ammo_shells.value
+        slot_data["ammo3start"] = self.options.max_ammo_energy_cells.value
+        slot_data["ammo4start"] = self.options.max_ammo_rockets.value
+        slot_data["ammo1add"] = self.options.added_ammo_bullets.value
+        slot_data["ammo2add"] = self.options.added_ammo_shells.value
+        slot_data["ammo3add"] = self.options.added_ammo_energy_cells.value
+        slot_data["ammo4add"] = self.options.added_ammo_rockets.value
+
+        return slot_data
