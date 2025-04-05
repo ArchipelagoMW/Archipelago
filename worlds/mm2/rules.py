@@ -92,7 +92,7 @@ def set_rules(world: "MM2World") -> None:
         world.wily_5_weapons = slot_data["wily_5_weapons"]
     else:
         if world.options.random_weakness == RandomWeaknesses.option_shuffled:
-            weapon_tables = [table for weapon, table in weapon_damage.items() if weapon not in (0, 8)]
+            weapon_tables = [table.copy() for weapon, table in weapon_damage.items() if weapon not in (0, 8)]
             world.random.shuffle(weapon_tables)
             for i in range(1, 8):
                 world.weapon_damage[i] = weapon_tables.pop()
@@ -135,41 +135,47 @@ def set_rules(world: "MM2World") -> None:
                         world.weapon_damage[weapon][i] = 0
 
         for p_boss in world.options.plando_weakness:
+            boss = bosses[p_boss]
             for p_weapon in world.options.plando_weakness[p_boss]:
-                if world.options.plando_weakness[p_boss][p_weapon] < minimum_weakness_requirement[p_weapon] \
-                    and not any(w != p_weapon
-                                and world.weapon_damage[w][bosses[p_boss]] > minimum_weakness_requirement[w]
-                                for w in world.weapon_damage):
+                weapon = weapons_to_id[p_weapon]
+                if world.options.plando_weakness[p_boss][p_weapon] < minimum_weakness_requirement[weapon] \
+                        and not any(w != weapon
+                                    and world.weapon_damage[w][boss] >= minimum_weakness_requirement[w]
+                                    for w in world.weapon_damage):
                     # we need to replace this weakness
-                    weakness = world.random.choice([key for key in world.weapon_damage if key != p_weapon])
-                    world.weapon_damage[weakness][bosses[p_boss]] = minimum_weakness_requirement[weakness]
-                world.weapon_damage[weapons_to_id[p_weapon]][bosses[p_boss]] \
-                    = world.options.plando_weakness[p_boss][p_weapon]
+                    weakness = world.random.choice([key for key in world.weapon_damage if key != weapon])
+                    world.weapon_damage[weakness][boss] = minimum_weakness_requirement[weakness]
+                world.weapon_damage[weapon][boss] = world.options.plando_weakness[p_boss][p_weapon]
 
         # handle special cases
         for boss in range(14):
             for weapon in (1, 2, 3, 6, 8):
                 if (0 < world.weapon_damage[weapon][boss] < minimum_weakness_requirement[weapon] and
-                        not any(world.weapon_damage[i][boss] >= minimum_weakness_requirement[weapon]
+                        not any(world.weapon_damage[i][boss] >= minimum_weakness_requirement[i]
                                 for i in range(9) if i != weapon)):
                     # Weapon does not have enough possible ammo to kill the boss, raise the damage
-                    if boss == 9:
-                        if weapon in (1, 6):
-                            # Atomic Fire and Crash Bomber cannot be Picopico-kun's only weakness
-                            world.weapon_damage[weapon][boss] = 0
-                            weakness = world.random.choice((2, 3, 4, 5, 7, 8))
-                            world.weapon_damage[weakness][boss] = minimum_weakness_requirement[weakness]
-                    elif boss == 11:
-                        if weapon == 1:
-                            # Atomic Fire cannot be Boobeam Trap's only weakness
-                            world.weapon_damage[weapon][boss] = 0
-                            weakness = world.random.choice((2, 3, 4, 5, 6, 7, 8))
-                            world.weapon_damage[weakness][boss] = minimum_weakness_requirement[weakness]
-                    else:
-                        world.weapon_damage[weapon][boss] = minimum_weakness_requirement[weapon]
+                    world.weapon_damage[weapon][boss] = minimum_weakness_requirement[weapon]
+
+        for weapon in (1, 6):
+            if (world.weapon_damage[weapon][9] >= minimum_weakness_requirement[weapon] and
+                    not any(world.weapon_damage[i][9] >= minimum_weakness_requirement[i]
+                            for i in range(9) if i not in (1, 6))):
+                # Atomic Fire and Crash Bomber cannot be Picopico-kun's only weakness
+                world.weapon_damage[weapon][9] = 0
+                weakness = world.random.choice((2, 3, 4, 5, 7, 8))
+                world.weapon_damage[weakness][9] = minimum_weakness_requirement[weakness]
+
+        if (world.weapon_damage[1][11] >= minimum_weakness_requirement[1] and
+                not any(world.weapon_damage[i][11] >= minimum_weakness_requirement[i]
+                        for i in range(9) if i != 1)):
+            # Atomic Fire cannot be Boobeam Trap's only weakness
+            world.weapon_damage[1][11] = 0
+            weakness = world.random.choice((2, 3, 4, 5, 6, 7, 8))
+            world.weapon_damage[weakness][11] = minimum_weakness_requirement[weakness]
 
         if world.weapon_damage[0][world.options.starting_robot_master.value] < 1:
-            world.weapon_damage[0][world.options.starting_robot_master.value] = weapon_damage[0][world.options.starting_robot_master.value]
+            world.weapon_damage[0][world.options.starting_robot_master.value] = \
+                weapon_damage[0][world.options.starting_robot_master.value]
 
         # final special case
         # There's a vanilla crash if Time Stopper kills Wily phase 1
@@ -218,9 +224,10 @@ def set_rules(world: "MM2World") -> None:
                     # we are out of weapons that can actually damage the boss
                     # so find the weapon that has the most uses, and apply that as an additional weakness
                     # it should be impossible to be out of energy, simply because even if every boss took 1 from
-                    # Quick Boomerang and no other, it would only be 28 off from defeating all 9, which Metal Blade should
-                    # be able to cover
-                    wp, max_uses = max((weapon, weapon_energy[weapon] // weapon_costs[weapon]) for weapon in weapon_weight
+                    # Quick Boomerang and no other, it would only be 28 off from defeating all 9,
+                    # which Metal Blade should be able to cover
+                    wp, max_uses = max((weapon, weapon_energy[weapon] // weapon_costs[weapon])
+                                       for weapon in weapon_weight
                                        if weapon != 0 and (weapon != 8 or boss != 12))
                     # Wily Machine cannot under any circumstances take damage from Time Stopper, prevent this
                     world.weapon_damage[wp][boss] = minimum_weakness_requirement[wp]

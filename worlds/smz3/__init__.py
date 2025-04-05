@@ -87,6 +87,21 @@ class SMZ3World(World):
         self.rom_name_available_event = threading.Event()
         self.locations: Dict[str, Location] = {}
         self.unreachable = []
+        self.junkItemsNames = [item.name for item in [
+            ItemType.Arrow,
+            ItemType.OneHundredRupees,
+            ItemType.TenArrows,
+            ItemType.ThreeBombs,
+            ItemType.OneRupee,
+            ItemType.FiveRupees,
+            ItemType.TwentyRupees,
+            ItemType.FiftyRupees,
+            ItemType.ThreeHundredRupees,
+            ItemType.ETank,
+            ItemType.Missile,
+            ItemType.Super,
+            ItemType.PowerBomb
+        ]]
         super().__init__(world, player)
 
     @classmethod
@@ -202,6 +217,10 @@ class SMZ3World(World):
         SMZ3World.location_names = frozenset(self.smz3World.locationLookup.keys())
 
         self.multiworld.state.smz3state[self.player] = TotalSMZ3Item.Progression([])
+
+        if not self.smz3World.Config.Keysanity:
+            # Dungeons items here are not in the itempool and will be prefilled locally so they must stay local
+            self.options.non_local_items.value -= frozenset(item_name for item_name in self.item_names if TotalSMZ3Item.Item.IsNameDungeonItem(item_name))
     
     def create_items(self):
         self.dungeon = TotalSMZ3Item.Item.CreateDungeonPool(self.smz3World)
@@ -218,8 +237,6 @@ class SMZ3World(World):
             progressionItems = self.progression + self.dungeon + self.keyCardsItems + self.SmMapsItems
         else:
             progressionItems = self.progression
-            # Dungeons items here are not in the itempool and will be prefilled locally so they must stay local
-            self.options.non_local_items.value -= frozenset(item_name for item_name in self.item_names if TotalSMZ3Item.Item.IsNameDungeonItem(item_name))
             for item in self.keyCardsItems:
                 self.multiworld.push_precollected(SMZ3Item(item.Type.name, ItemClassification.filler, item.Type, self.item_name_to_id[item.Type.name], self.player, item))
 
@@ -230,7 +247,7 @@ class SMZ3World(World):
         self.multiworld.itempool += itemPool
 
     def set_rules(self):
-        # SM G4 is logically required to access Ganon's Tower in SMZ3
+        # SM G4 is logically required to complete Ganon's Tower
         self.multiworld.completion_condition[self.player] = lambda state: \
             self.smz3World.GetRegion("Ganon's Tower").CanEnter(state.smz3state[self.player]) and \
             self.smz3World.GetRegion("Ganon's Tower").TowerAscend(state.smz3state[self.player]) and \

@@ -484,8 +484,7 @@ def generate_itempool(world):
     if multiworld.randomize_cost_types[player]:
         # Heart and Arrow costs require all Heart Container/Pieces and Arrow Upgrades to be advancement items for logic
         for item in items:
-            if (item.name in ("Boss Heart Container", "Sanctuary Heart Container", "Piece of Heart")
-                    or "Arrow Upgrade" in item.name):
+            if item.name in ("Boss Heart Container", "Sanctuary Heart Container", "Piece of Heart"):
                 item.classification = ItemClassification.progression
     else:
         # Otherwise, logic has some branches where having 4 hearts is one possible requirement (of several alternatives)
@@ -713,7 +712,7 @@ def get_pool_core(world, player: int):
         pool.remove("Rupees (20)")
 
     if retro_bow:
-        replace = {'Single Arrow', 'Arrows (10)', 'Arrow Upgrade (+5)', 'Arrow Upgrade (+10)', 'Arrow Upgrade (50)'}
+        replace = {'Single Arrow', 'Arrows (10)', 'Arrow Upgrade (+5)', 'Arrow Upgrade (+10)', 'Arrow Upgrade (70)'}
         pool = ['Rupees (5)' if item in replace else item for item in pool]
     if world.small_key_shuffle[player] == small_key_shuffle.option_universal:
         pool.extend(diff.universal_keys)

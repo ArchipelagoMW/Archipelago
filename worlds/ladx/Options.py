@@ -57,7 +57,7 @@ class TextShuffle(DefaultOffToggle):
 
 class Rooster(DefaultOnToggle, LADXROption):
     """
-    [On] Adds the rooster to the item pool. 
+    [On] Adds the rooster to the item pool.
     [Off] The rooster spot is still a check giving an item. But you will never find the rooster. In that case, any rooster spot is accessible without rooster by other means.
     """
     display_name = "Rooster"
@@ -70,7 +70,7 @@ class Boomerang(Choice):
     [Gift] The boomerang salesman will give you a random item, and the boomerang is shuffled.
     """
     display_name = "Boomerang"
-    
+
     normal = 0
     gift = 1
     default = gift
@@ -156,7 +156,7 @@ class ShuffleSmallKeys(DungeonItemShuffle):
     [Own Dungeons] The item will be within a dungeon in your world
     [Own World] The item will be somewhere in your world
     [Any World] The item could be anywhere
-    [Different World] The item will be somewhere in another world 
+    [Different World] The item will be somewhere in another world
     """
     display_name = "Shuffle Small Keys"
     ladxr_item = "KEY"
@@ -223,7 +223,7 @@ class Goal(Choice, LADXROption):
     The Goal of the game
     [Instruments] The Wind Fish's Egg will only open if you have the required number of Instruments of the Sirens, and play the Ballad of the Wind Fish.
     [Seashells] The Egg will open when you bring 20 seashells. The Ballad and Ocarina are not needed.
-    [Open] The Egg will start pre-opened.  
+    [Open] The Egg will start pre-opened.
     """
     display_name = "Goal"
     ladxr_name = "goal"
@@ -278,11 +278,21 @@ class MusicChangeCondition(Choice):
 # [Start with 1] normal game, you just start with 1 heart instead of 3.
 # [Low max] replace heart containers with heart pieces."""),
 
-#             Setting('hardmode', 'Gameplay', 'X', 'Hard mode', options=[('none', '', 'Disabled'), ('oracle', 'O', 'Oracle'), ('hero', 'H', 'Hero'), ('ohko', '1', 'One hit KO')], default='none',
-#                 description="""
-# [Oracle] Less iframes and heath from drops. Bombs damage yourself. Water damages you without flippers. No piece of power or acorn.
-# [Hero] Switch version hero mode, double damage, no heart/fairy drops.
-# [One hit KO] You die on a single hit, always."""),
+
+class HardMode(Choice, LADXROption):
+    """
+    [Oracle] Less iframes and health from drops. Bombs damage yourself. Water damages you without flippers. No piece of power or acorn.
+    [Hero] Switch version hero mode, double damage, no heart/fairy drops.
+    [One hit KO] You die on a single hit, always.
+    """
+    display_name = "Hard Mode"
+    ladxr_name = "hardmode"
+    option_none = 0
+    option_oracle = 1
+    option_hero = 2
+    option_ohko = 3
+    default = option_none
+
 
 #             Setting('steal', 'Gameplay', 't', 'Stealing from the shop',
 #                 options=[('always', 'a', 'Always'), ('never', 'n', 'Never'), ('default', '', 'Normal')], default='default',
@@ -303,49 +313,61 @@ class Bowwow(Choice):
 
 class Overworld(Choice, LADXROption):
     """
-    [Dungeon Dive] Create a different overworld where all the dungeons are directly accessible and almost no chests are located in the overworld.
-    [Tiny dungeons] All dungeons only consist of a boss fight and a instrument reward. Rest of the dungeon is removed.
+    [Open Mabe] Replaces rock on the east side of Mabe Village with bushes, allowing access to Ukuku Prairie without Power Bracelet.
     """
     display_name = "Overworld"
     ladxr_name = "overworld"
     option_normal = 0
-    option_dungeon_dive = 1
-    option_tiny_dungeons = 2
-    # option_shuffled = 3
+    option_open_mabe = 1
     default = option_normal
 
 
 # Setting('superweapons', 'Special', 'q', 'Enable super weapons', default=False,
 #    description='All items will be more powerful, faster, harder, bigger stronger. You name it.'),
-# Setting('quickswap', 'User options', 'Q', 'Quickswap', options=[('none', '', 'Disabled'), ('a', 'a', 'Swap A button'), ('b', 'b', 'Swap B button')], default='none',
-#    description='Adds that the select button swaps with either A or B. The item is swapped with the top inventory slot. The map is not available when quickswap is enabled.',
-#    aesthetic=True),
-#             Setting('textmode', 'User options', 'f', 'Text mode', options=[('fast', '', 'Fast'), ('default', 'd', 'Normal'), ('none', 'n', 'No-text')], default='fast',
-#                 description="""[Fast] makes text appear twice as fast.
-# [No-Text] removes all text from the game""", aesthetic=True),
-#             Setting('lowhpbeep', 'User options', 'p', 'Low HP beeps', options=[('none', 'D', 'Disabled'), ('slow', 'S', 'Slow'), ('default', 'N', 'Normal')], default='slow',
-#                 description='Slows or disables the low health beeping sound', aesthetic=True),
-#             Setting('noflash', 'User options', 'l', 'Remove flashing lights', default=True,
-#                 description='Remove the flashing light effects from Mamu, shopkeeper and MadBatter. Useful for capture cards and people that are sensitive for these things.',
-#                 aesthetic=True),
-#             Setting('nagmessages', 'User options', 'S', 'Show nag messages', default=False,
-#                 description='Enables the nag messages normally shown when touching stones and crystals',
-#                 aesthetic=True),
-#             Setting('gfxmod', 'User options', 'c', 'Graphics', options=gfx_options, default='',
-#                 description='Generally affects at least Link\'s sprite, but can alter any graphics in the game',
-#                 aesthetic=True),
-#             Setting('linkspalette', 'User options', 'C', "Link's color",
-#                 options=[('-1', '-', 'Normal'), ('0', '0', 'Green'), ('1', '1', 'Yellow'), ('2', '2', 'Red'), ('3', '3', 'Blue'),
-#                          ('4', '4', '?? A'), ('5', '5', '?? B'), ('6', '6', '?? C'), ('7', '7', '?? D')], default='-1', aesthetic=True,
-#                 description="""Allows you to force a certain color on link.
-# [Normal] color of link depends on the tunic.
-# [Green/Yellow/Red/Blue] forces link into one of these colors.
-# [?? A/B/C/D] colors of link are usually inverted and color depends on the area you are in."""),
-#             Setting('music', 'User options', 'M', 'Music', options=[('', '', 'Default'), ('random', 'r', 'Random'), ('off', 'o', 'Disable')], default='',
-#                 description="""
-# [Random] Randomizes overworld and dungeon music'
-# [Disable] no music in the whole game""",
-#                 aesthetic=True),
+
+
+class Quickswap(Choice, LADXROption):
+    """
+    Adds that the SELECT button swaps with either A or B. The item is swapped with the top inventory slot. The map is not available when quickswap is enabled.
+    """
+    display_name = "Quickswap"
+    ladxr_name = "quickswap"
+    option_none = 0
+    option_a = 1
+    option_b = 2
+    default = option_none
+
+
+class TextMode(Choice, LADXROption):
+    """
+    [Fast] Makes text appear twice as fast
+    """
+    display_name = "Text Mode"
+    ladxr_name = "textmode"
+    option_normal = 0
+    option_fast = 1
+    default = option_fast
+
+
+class LowHpBeep(Choice, LADXROption):
+    """
+    Slows or disables the low health beeping sound.
+    """
+    display_name = "Low HP Beep"
+    ladxr_name = "lowhpbeep"
+    option_default = 0
+    option_slow = 1
+    option_none = 2
+    default = option_default
+
+
+class NoFlash(DefaultOnToggle, LADXROption):
+    """
+    Remove the flashing light effects from Mamu, shopkeeper and MadBatter. Useful for capture cards and people that are sensitive to these things.
+    """
+    display_name = "No Flash"
+    ladxr_name = "noflash"
+
 
 class BootsControls(Choice):
     """
@@ -447,7 +469,7 @@ class GfxMod(FreeText, LADXROption):
 
 class Palette(Choice):
     """
-    Sets the palette for the game. 
+    Sets the palette for the game.
     Note: A few places aren't patched, such as the menu and a few color dungeon tiles.
     [Normal] The vanilla palette
     [1-Bit] One bit of color per channel
@@ -505,6 +527,39 @@ class InGameHints(DefaultOnToggle):
     display_name = "In-game Hints"
 
 
+class TarinsGift(Choice):
+    """
+    [Local Progression] Forces Tarin's gift to be an item that immediately opens up local checks.
+    Has little effect in single player games, and isn't always necessary with randomized entrances.
+    [Bush Breaker] Forces Tarin's gift to be an item that can destroy bushes.
+    [Any Item] Tarin's gift can be any item for any world
+    """
+    display_name = "Tarin's Gift"
+    option_local_progression = 0
+    option_bush_breaker = 1
+    option_any_item = 2
+    default = option_local_progression
+
+
+class StabilizeItemPool(DefaultOffToggle):
+    """
+    By default, rupees in the item pool may be randomly swapped with bombs, arrows, powders, or capacity upgrades. This option disables that swapping, which is useful for plando.
+    """
+    display_name = "Stabilize Item Pool"
+
+
+class ForeignItemIcons(Choice):
+    """
+    Choose how to display foreign items.
+    [Guess By Name] Foreign items can look like any Link's Awakening item.
+    [Indicate Progression] Foreign items are either a Piece of Power (progression) or Guardian Acorn (non-progression).
+    """
+    display_name = "Foreign Item Icons"
+    option_guess_by_name = 0
+    option_indicate_progression = 1
+    default = option_guess_by_name
+
+
 ladx_option_groups = [
     OptionGroup("Goal Options", [
         Goal,
@@ -524,9 +579,14 @@ ladx_option_groups = [
     OptionGroup("Miscellaneous", [
         TradeQuest,
         Rooster,
+        TarinsGift,
+        Overworld,
         TrendyGame,
         InGameHints,
         NagMessages,
+        StabilizeItemPool,
+        Quickswap,
+        HardMode,
         BootsControls
     ]),
     OptionGroup("Experimental", [
@@ -537,22 +597,26 @@ ladx_option_groups = [
         LinkPalette,
         Palette,
         TextShuffle,
+        ForeignItemIcons,
         APTitleScreen,
         GfxMod,
         Music,
-        MusicChangeCondition
+        MusicChangeCondition,
+        LowHpBeep,
+        TextMode,
+        NoFlash,
     ])
 ]
 
 @dataclass
 class LinksAwakeningOptions(PerGameCommonOptions):
     logic: Logic
-    # 'heartpiece': DefaultOnToggle, # description='Includes heart pieces in the item pool'),                
-    # 'seashells': DefaultOnToggle, # description='Randomizes the secret sea shells hiding in the ground/trees. (chest are always randomized)'),                
-    # 'heartcontainers': DefaultOnToggle, # description='Includes boss heart container drops in the item pool'),                
-    # 'instruments': DefaultOffToggle, # description='Instruments are placed on random locations, dungeon goal will just contain a random item.'),                
+    # 'heartpiece': DefaultOnToggle, # description='Includes heart pieces in the item pool'),
+    # 'seashells': DefaultOnToggle, # description='Randomizes the secret sea shells hiding in the ground/trees. (chest are always randomized)'),
+    # 'heartcontainers': DefaultOnToggle, # description='Includes boss heart container drops in the item pool'),
+    # 'instruments': DefaultOffToggle, # description='Instruments are placed on random locations, dungeon goal will just contain a random item.'),
     tradequest: TradeQuest  # description='Trade quest items are randomized, each NPC takes its normal trade quest item, but gives a random item'),
-    # 'witch': DefaultOnToggle, # description='Adds both the toadstool and the reward for giving the toadstool to the witch to the item pool'),                
+    # 'witch': DefaultOnToggle, # description='Adds both the toadstool and the reward for giving the toadstool to the witch to the item pool'),
     rooster: Rooster  # description='Adds the rooster to the item pool. Without this option, the rooster spot is still a check giving an item. But you will never find the rooster. Any rooster spot is accessible without rooster by other means.'),
     # 'boomerang': Boomerang,
     # 'randomstartlocation': DefaultOffToggle, # 'Randomize where your starting house is located'),
@@ -571,6 +635,7 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     gfxmod: GfxMod
     palette: Palette
     text_shuffle: TextShuffle
+    foreign_item_icons: ForeignItemIcons
     shuffle_nightmare_keys: ShuffleNightmareKeys
     shuffle_small_keys: ShuffleSmallKeys
     shuffle_maps: ShuffleMaps
@@ -582,7 +647,15 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     nag_messages: NagMessages
     ap_title_screen: APTitleScreen
     boots_controls: BootsControls
+    quickswap: Quickswap
+    hard_mode: HardMode
+    low_hp_beep: LowHpBeep
+    text_mode: TextMode
+    no_flash: NoFlash
     in_game_hints: InGameHints
+    tarins_gift: TarinsGift
+    overworld: Overworld
+    stabilize_item_pool: StabilizeItemPool
 
     warp_improvements: Removed
     additional_warp_points: Removed
