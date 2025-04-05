@@ -285,7 +285,7 @@ class SMWorld(World):
         for src, dest in self.variaRando.randoExec.areaGraph.InterAreaTransitions:
             src_region = self.multiworld.get_region(src.Name, self.player)
             dest_region = self.multiworld.get_region(dest.Name, self.player)
-            if src.Name + "->" + dest.Name not in self.multiworld.regions.entrance_cache[self.player]:
+            if src.Name + "->" + dest.Name not in self.regions.entrance_cache:
                 src_region.exits.append(Entrance(self.player, src.Name + "->" + dest.Name, src_region))
             srcDestEntrance = self.multiworld.get_entrance(src.Name + "->" + dest.Name, self.player)
             srcDestEntrance.connect(dest_region)

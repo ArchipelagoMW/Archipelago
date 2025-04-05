@@ -2096,7 +2096,7 @@ dungeon_song_locations = [
 # Sets all Drop locations to a unique name in order to avoid name issues and to identify locations in the spoiler
 # Also cause them to not be shown in the list of locations, only in playthrough
 def set_drop_location_names(ootworld):
-    for region in ootworld.regions:
+    for region in ootworld._regions:
         for location in region.locations:
             if location.type == 'Drop': 
                 location.name = location.parent_region.name + " " + location.name
