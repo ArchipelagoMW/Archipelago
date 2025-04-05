@@ -36,10 +36,9 @@ Regarding items and locations, the game client must be able to handle these task
 
 Send a network packet to the server when it detects a location has been "checked" by the player in-game.
 
-* It must be able to send checks to the server after reconnecting following a temporary disconnect.
-  * In other words, if the client disconnects from the server, and then the player does in-game actions that should 
-    send checks, the client must cache those actions locally until it is able to reconnect to the server.
-  * It must then sync up with the server by informing it about those actions.
+* If actions were taken in game that would usually trigger a location check, and those actions can only ever be taken 
+  once, but the client was not connected when they happened: The client must send those location checks on connection 
+  so that they are not permanently lost, e.g. by reading flags in the game state or save file.
 
 #### Item Handling
 
