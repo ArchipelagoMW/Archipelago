@@ -19,7 +19,7 @@ from .logic.logic import StardewLogic
 from .logic.time_logic import MAX_MONTHS
 from .logic.tool_logic import tool_upgrade_prices
 from .mods.mod_data import ModNames
-from .options import BuildingProgression, ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
+from .options import ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
     Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, StardewValleyOptions, Walnutsanity
 from .stardew_rule import And, StardewRule, true_
 from .stardew_rule.indirect_connection import look_for_indirect_connection
@@ -71,7 +71,7 @@ def set_rules(world):
     set_tool_rules(logic, multiworld, player, world_content)
     set_skills_rules(logic, multiworld, player, world_content)
     set_bundle_rules(bundle_rooms, logic, multiworld, player, world_options)
-    set_building_rules(logic, multiworld, player, world_options)
+    set_building_rules(logic, multiworld, player, world_content)
     set_cropsanity_rules(logic, multiworld, player, world_content)
     set_story_quests_rules(all_location_names, logic, multiworld, player, world_options)
     set_special_order_rules(all_location_names, logic, multiworld, player, world_options)
@@ -130,15 +130,19 @@ def set_tool_rules(logic: StardewLogic, multiworld, player, content: StardewCont
         MultiWorldRules.set_rule(tool_upgrade_location, logic.tool.has_tool(tool, previous))
 
 
-def set_building_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
-    if not world_options.building_progression & BuildingProgression.option_progressive:
+def set_building_rules(logic: StardewLogic, multiworld, player, content: StardewContent):
+    building_progression = content.features.building_progression
+    if not building_progression.is_progressive:
         return
 
-    for building in locations.locations_by_tag[LocationTags.BUILDING_BLUEPRINT]:
-        if building.mod_name is not None and building.mod_name not in world_options.mods:
+    for building in content.farm_buildings.values():
+        if building.name in building_progression.starting_buildings:
             continue
-        MultiWorldRules.set_rule(multiworld.get_location(building.name, player),
-                                 logic.registry.building_rules[building.name.replace(" Blueprint", "")])
+
+        location_name = building_progression.to_location_name(building.name)
+
+        MultiWorldRules.set_rule(multiworld.get_location(location_name, player),
+                                 logic.building.can_build(building.name))
 
 
 def set_bundle_rules(bundle_rooms: List[BundleRoom], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
@@ -241,7 +245,7 @@ def set_dangerous_mine_rules(logic, multiworld, player, world_options: StardewVa
 
 
 def set_farm_buildings_entrance_rules(logic, multiworld, player):
-    set_entrance_rule(multiworld, player, Entrance.downstairs_to_cellar, logic.building.has_house(3))
+    set_entrance_rule(multiworld, player, Entrance.downstairs_to_cellar, logic.building.has_building(Building.cellar))
     set_entrance_rule(multiworld, player, Entrance.use_desert_obelisk, logic.can_use_obelisk(Transportation.desert_obelisk))
     set_entrance_rule(multiworld, player, Entrance.enter_greenhouse, logic.received("Greenhouse"))
     set_entrance_rule(multiworld, player, Entrance.enter_coop, logic.building.has_building(Building.coop))
