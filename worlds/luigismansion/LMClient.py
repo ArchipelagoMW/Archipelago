@@ -517,7 +517,6 @@ class LMContext(CommonContext):
             lm_item_name = self.item_names.lookup_in_game(item.item)
             lm_item = ALL_ITEMS_TABLE[lm_item_name]
 
-            # TODO optimize all other cases for reading when a pointer is there vs not.
             for addr_to_update in lm_item.update_ram_addr:
                 byte_size = 1 if addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
 
@@ -535,10 +534,6 @@ class LMContext(CommonContext):
                             curr_val+= addr_to_update.item_count
                         dme.write_bytes(dme.follow_pointers(addr_to_update.ram_addr,
             [addr_to_update.pointer_offset]), curr_val.to_bytes(byte_size, 'big'))
-                    elif addr_to_update.bit_position is None:
-                        curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
-                        curr_val += addr_to_update.item_count
-                        dme.write_bytes(addr_to_update.ram_addr, curr_val.to_bytes(byte_size, 'big'))
                     else:
                         curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
                         curr_val += addr_to_update.item_count
@@ -550,31 +545,17 @@ class LMContext(CommonContext):
                         curr_val = (curr_val | (1 << addr_to_update.bit_position))
                         dme.write_bytes(dme.follow_pointers(addr_to_update.ram_addr,
             [addr_to_update.pointer_offset]), curr_val.to_bytes(byte_size, 'big'))
-                    elif addr_to_update.bit_position is None:
-                        curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
-                        curr_val += 1
-                        dme.write_bytes(addr_to_update.ram_addr, curr_val.to_bytes(byte_size, 'big'))
                     else:
                         curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
-                        curr_val = (curr_val | (1 << addr_to_update.bit_position))
+                        if not addr_to_update.bit_position is None:
+                            curr_val = (curr_val | (1 << addr_to_update.bit_position))
+                        else:
+                            curr_val += 1
                         dme.write_bytes(addr_to_update.ram_addr, curr_val.to_bytes(byte_size, 'big'))
 
             # Update the last received index to ensure we don't receive the same item over and over.
             last_recv_idx += 1
             dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
-
-            if item.item in BOO_AP_ID_LIST:
-                curr_boo_count = len([item.item for item in self.items_received if item.item in BOO_AP_ID_LIST])
-                if curr_boo_count >= self.boo_washroom_count:
-                    boo_val = dme.read_byte(BOO_WASHROOM_FLAG_ADDR)
-                    dme.write_byte(BOO_WASHROOM_FLAG_ADDR, (boo_val | (1 << BOO_WASHROOM_FLAG_BIT)))
-                if curr_boo_count >= self.boo_balcony_count:
-                    boo_val = dme.read_byte(BOO_BALCONY_FLAG_ADDR)
-                    dme.write_byte(BOO_BALCONY_FLAG_ADDR, (boo_val | (1 << BOO_BALCONY_FLAG_BIT)))
-                if curr_boo_count >= self.boo_final_count:
-                    boo_val = dme.read_byte(BOO_FINAL_FLAG_ADDR)
-                    dme.write_byte(BOO_FINAL_FLAG_ADDR, (boo_val | (1 << BOO_FINAL_FLAG_BIT)))
-
         return
 
     async def lm_check_locations(self):
@@ -690,13 +671,26 @@ class LMContext(CommonContext):
             dme.write_bytes(0x803D5E0B, bytes.fromhex("01"))
 
             # Update the in-game counter to reflect how many boos you got.
-            for boo_item in [item.item for item in self.items_received if item.item in BOO_AP_ID_LIST]:
+            boo_received_list = [item.item for item in self.items_received if item.item in BOO_AP_ID_LIST]
+
+            for boo_item in boo_received_list:
                 lm_item_name = self.item_names.lookup_in_game(boo_item)
                 lm_item = ALL_ITEMS_TABLE[lm_item_name]
                 for addr_to_update in lm_item.update_ram_addr:
                     curr_val = dme.read_byte(addr_to_update.ram_addr)
                     curr_val = (curr_val | (1 << addr_to_update.bit_position))
                     dme.write_byte(addr_to_update.ram_addr, curr_val)
+
+            curr_boo_count = len(set(boo_received_list))
+            if curr_boo_count >= self.boo_washroom_count:
+                boo_val = dme.read_byte(BOO_WASHROOM_FLAG_ADDR)
+                dme.write_byte(BOO_WASHROOM_FLAG_ADDR, (boo_val | (1 << BOO_WASHROOM_FLAG_BIT)))
+            if curr_boo_count >= self.boo_balcony_count:
+                boo_val = dme.read_byte(BOO_BALCONY_FLAG_ADDR)
+                dme.write_byte(BOO_BALCONY_FLAG_ADDR, (boo_val | (1 << BOO_BALCONY_FLAG_BIT)))
+            if curr_boo_count >= self.boo_final_count:
+                boo_val = dme.read_byte(BOO_FINAL_FLAG_ADDR)
+                dme.write_byte(BOO_FINAL_FLAG_ADDR, (boo_val | (1 << BOO_FINAL_FLAG_BIT)))
         return
 
 async def dolphin_sync_task(ctx: LMContext):
