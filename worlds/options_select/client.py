@@ -70,18 +70,9 @@ class TrailingPressedIconButton(
 class VisualRange(MDBoxLayout):
     option: typing.Type[Range]
     name: str
+    slider: MDSlider = ObjectProperty(None)
 
     def __init__(self, *args, option: typing.Type[Range], name: str, **kwargs):
-        self.option = option
-        self.name = name
-        super().__init__(args, kwargs)
-
-
-class VisualNamedRange(MDBoxLayout):
-    option: typing.Type[NamedRange]
-    name: str
-
-    def __init__(self, *args, option: typing.Type[NamedRange], name: str, **kwargs):
         self.option = option
         self.name = name
         super().__init__(args, kwargs)
@@ -98,11 +89,25 @@ class VisualChoice(MDButton):
         super().__init__(args, kwargs)
 
 
+class VisualNamedRange(MDBoxLayout):
+    option: typing.Type[NamedRange]
+    name: str
+    range: VisualRange = ObjectProperty(None)
+    choice: MDButton = ObjectProperty(None)
+
+    def __init__(self, *args, option: typing.Type[NamedRange], name: str, range: VisualRange, **kwargs):
+        self.option = option
+        self.name = name
+        super().__init__(args, kwargs)
+        self.range = range
+        self.add_widget(self.range)
+
+
 class VisualFreeText(MDTextField):
     option: typing.Type[FreeText] | typing.Type[TextChoice]
     name: str
 
-    def __init__(self, *args, option: typing.Type[FreeText]| typing.Type[TextChoice], name: str, **kwargs):
+    def __init__(self, *args, option: typing.Type[FreeText] | typing.Type[TextChoice], name: str, **kwargs):
         self.option = option
         self.name = name
         super().__init__(args, kwargs)
@@ -114,12 +119,13 @@ class VisualTextChoice(MDBoxLayout):
     choice: VisualChoice = ObjectProperty(None)
     text: VisualFreeText = ObjectProperty(None)
 
-    def __init__(self, *args, option: typing.Type[TextChoice], name: str, **kwargs):
+    def __init__(self, *args, option: typing.Type[TextChoice], name: str, choice: VisualChoice,
+                 text: VisualFreeText, **kwargs):
         self.option = option
         self.name = name
         super(MDBoxLayout, self).__init__(args, kwargs)
-        self.choice = VisualChoice(option=self.option, name=self.name)
-        self.text = VisualFreeText(option=self.option, name=self.name)
+        self.choice = choice
+        self.text = text
         self.add_widget(self.choice)
         self.add_widget(self.text)
 
@@ -164,19 +170,11 @@ class YamlCreator(ThemedApp):
 
     def create_range(self, option: typing.Type[Range], name: str):
         def update_text(slider, touch):
-            slider.text.text = f"{slider.value:.0f}"
             self.options[name] = int(slider.value)
             return
 
-        box = MDBoxLayout(spacing=15, orientation="horizontal")
-        slider = MDSlider(MDSliderHandle(), MDSliderValueLabel(), min=option.range_start, max=option.range_end,
-                          value=option.default, step=1, step_point_size=0)
-        number_label = MDLabel(text=str(option.default))
-        slider.text = number_label
-        slider.bind(on_touch_move=update_text)
-        box.add_widget(slider)
-        box.slider = slider
-        box.add_widget(number_label)
+        box = VisualRange(option=option, name=name)
+        box.slider.bind(on_touch_move=update_text)
         self.options[name] = option.default
         return box
 
@@ -188,27 +186,24 @@ class YamlCreator(ThemedApp):
                 # we should validate the touch here,
                 # but this is much cheaper
                 self.options[name] = slider.value
-                set_button_text(main_button, "Custom")
+                set_button_text(box.choice, "Custom")
 
         def set_button_text(button: MDButton, text: str):
-            for child in button.children:
-                if isinstance(child, MDButtonText):
-                    child.text = text
+            button.text.text = text
 
         def set_value(text):
-            set_button_text(main_button, text)
+            box.range.slider.value = min(max(option.special_range_names[text.lower()], option.range_start),
+                                         option.range_end)
+            set_button_text(box.choice, text)
             self.options[name] = text.lower()
-            slider_box.slider.value = option.special_range_names[text.lower()]
-            slider_box.slider.text.text = f"{slider_box.slider.value:.0f}"
-            slider_box.slider.dropdown.dismiss()
+            box.range.slider.dropdown.dismiss()
 
         def open(button):
             # for some reason this fixes an issue causing some to not open
-            slider_box.slider.dropdown.open()
+            box.range.slider.dropdown.open()
 
-        box = MDBoxLayout(orientation="vertical", spacing=5)
-        slider_box = self.create_range(option, name)
-        slider_box.slider.bind(on_touch_move=set_to_custom)
+        box = VisualNamedRange(option=option, name=name, range=self.create_range(option, name))
+        box.range.slider.bind(on_touch_move=set_to_custom)
         items = [
             {
                 "text": choice.title(),
@@ -216,16 +211,8 @@ class YamlCreator(ThemedApp):
             }
             for choice in option.special_range_names
         ]
-        slider_box.slider.dropdown = MDDropdownMenu(caller=slider_box.slider, items=items)
-        if option.default in option.special_range_names.values():
-            default = list(option.special_range_names.keys())[list(option.special_range_names.values())
-            .index(option.default)]
-        else:
-            default = "Custom"
-        main_button = MDButton(MDButtonText(text=default.title()))
-        main_button.bind(on_release=open)
-        box.add_widget(main_button)
-        box.add_widget(slider_box)
+        box.range.slider.dropdown = MDDropdownMenu(caller=box.range.slider, items=items)
+        box.choice.bind(on_release=open)
         self.options[name] = option.default
         return box
 
@@ -272,7 +259,8 @@ class YamlCreator(ThemedApp):
                 if isinstance(child, MDButtonText):
                     child.text = text
 
-        box = VisualTextChoice(option=option, name=name)
+        box = VisualTextChoice(option=option, name=name, choice=self.create_choice(option, name),
+                               text=self.create_free_text(option, name))
 
         def set_value(instance):
             set_button_text(box.choice, "Custom")
