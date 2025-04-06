@@ -232,6 +232,12 @@ class SlowTrapWeight(Range):
     default = 20
 
 
+class MulTyLink(Toggle):
+    """Whether other players connecting to the same slot should see each other.
+    This is soft limited to 8 players per slot. Use with caution."""
+    display_name = "Mul-Ty Link"
+
+
 ty1_option_groups = [
     OptionGroup("Goal Options", [
         Goal,
@@ -268,6 +274,9 @@ ty1_option_groups = [
     OptionGroup("Death Link", [
         DeathLink
     ]),
+    OptionGroup("Mul-Ty Link", [
+        MulTyLink
+    ])
 ]
 
 
@@ -303,3 +312,5 @@ class Ty1Options(PerGameCommonOptions):
     gravity_trap_weight: GravityTrapWeight
     knocked_down_trap_weight: KnockedDownTrapWeight
     slow_trap_weight: SlowTrapWeight
+
+    mul_ty_link: MulTyLink

@@ -73,7 +73,8 @@ class Ty1World(World):
             "Framesanity": self.options.framesanity.value,
             "Opalsanity": self.options.opalsanity.value,
             "AdvancedLogic": self.options.logic_difficulty.value,
-            "DeathLink": self.options.death_link.value
+            "DeathLink": self.options.death_link.value,
+            "MulTyLink": self.options.mul_ty_link.value
         }
 
     def generate_early(self) -> None:
