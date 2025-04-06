@@ -63,7 +63,6 @@ def copy_tutorials_files_to_static():
 
     from worlds.AutoWorld import AutoWorldRegister
     worlds = {}
-    data = []
     for game, world in AutoWorldRegister.world_types.items():
         if hasattr(world.web, 'tutorials') and (not world.hidden or game == 'Archipelago'):
             worlds[game] = world

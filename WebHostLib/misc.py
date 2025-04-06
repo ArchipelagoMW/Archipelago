@@ -25,7 +25,7 @@ def render_markdown(path: str) -> str:
         document = f.read()
     return markdown.markdown(
         document,
-        extensions=["mdx_breakless_lists"],
+        extensions=["mdx_breakless_lists", "markdown.extensions.fenced_code"],
         extension_configs={"toc": {"anchorlink": True}}
     )
 
