@@ -248,8 +248,6 @@ class Locations():
             MamSlot("Sulfur", "Turbo Fuel", 1338569),
             MamSlot("Sulfur", "Expanded Toolbelt", 1338570),
             # 1338571 Nuclear Deterrent Development
-
-            # 1.0
             # 1338572 Synthetic Power Shards
             # 1338573 Rocket Fuel
             # 1338574 Ionized Fuel
@@ -272,10 +270,8 @@ class Locations():
             MamSlot("Alien Technology", "Production Amplifier", 1338591),
             MamSlot("Alien Technology", "Power Augmenter", 1338592),
             # 1338593 Alien Power Matrix
-            # 1.0
-
+            MamSlot("Quartz", "Material Resonance Screening", 1338594),
             # 1338600 - 1338699 - Harddrives - Harddrives
-
             ShopSlot(self.state_logic, 1, 3, 1338700),
             ShopSlot(self.state_logic, 2, 3, 1338701),
             ShopSlot(self.state_logic, 3, 5, 1338702),
@@ -288,7 +284,6 @@ class Locations():
             ShopSlot(self.state_logic, 10, 50, 1338709)
         ]
 
-        #TODO: should be based on self.game_logic
         if max_tier > 8:
             all_locations.append(MamSlot("Power Slugs", "Synthetic Power Shards", 1338572))
         if max_tier > 8:

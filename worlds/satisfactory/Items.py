@@ -496,7 +496,7 @@ class Items:
         "Building: Equipment Workshop": ItemData(G.Building, 1338620, C.progression),
         "Building: AWESOME Sink": ItemData(G.Building | G.AlwaysUseful, 1338621, C.progression),
         "Building: AWESOME Shop": ItemData(G.Building | G.AlwaysUseful, 1338622, C.progression),
-        "Building: Painted Beams": ItemData(G.Beams, 1338623, C.filler),
+        "Building: Structural Beam Pack": ItemData(G.Beams, 1338623, C.filler),
         "Building: Blueprint Designer": ItemData(G.Building, 1338624, C.filler, 0), # unlocked by default
         "Building: Fluid Buffer": ItemData(G.Building, 1338625, C.filler),
         "Building: Industrial Fluid Buffer": ItemData(G.Building, 1338626, C.filler),
@@ -526,7 +526,7 @@ class Items:
         "Building: Conveyor Lift Mk.3": ItemData(G.Building | G.ConveyorMk3, 1338650, C.useful),
         "Building: Conveyor Lift Mk.4": ItemData(G.Building | G.ConveyorMk4, 1338651, C.useful),
         "Building: Conveyor Lift Mk.5": ItemData(G.Building | G.ConveyorMk5, 1338652, C.useful),
-        "Building: Metal Beams": ItemData(G.Beams, 1338653, C.filler, 0),
+        "Building: Cable Beam Pack": ItemData(G.Beams, 1338653, C.filler, 0),
         "Building: Stackable Conveyor Pole": ItemData(G.Building | G.ConveyorSupports, 1338654, C.useful),
         "Building: Conveyor Wall Mount": ItemData(G.Building | G.ConveyorSupports, 1338655, C.useful, 0),
         "Building: Conveyor Lift Floor Hole": ItemData(G.Building | G.ConveyorSupports, 1338656, C.useful, 0),
@@ -596,7 +596,15 @@ class Items:
         "Building: Conveyor Lift Mk.6": ItemData(G.Building | G.ConveyorMk6, 1338726, C.useful),
         "Building: Alien Power Augmenter": ItemData(G.Building, 1338727, C.progression),
         "Building: Dimensional Depot Uploader": ItemData(G.Building, 1338728, C.useful),
-        #1338729 - 1338749 Reserved for Cosmetics
+# Added in 1.1
+        "Building: Priority Merger": ItemData(G.Building, 1338729, C.useful),
+        "Building: Conveyor Wall Hole": ItemData(G.Building, 1338730, C.useful),
+        "Building: Conveyor Throughput Monitor": ItemData(G.Building, 1338731, C.useful),
+        "Building: Basic Shelf Unit": ItemData(G.Building, 1338732, C.useful),
+        "Building: Beam Expansion Pack": ItemData(G.Beams, 1338733, C.filler, 0),
+        "Building: Ventilation Bundle": ItemData(G.Building, 1338734, C.filler, 0),
+###
+        #1338729 - 1338749 Reserved for buildings
         "Customizer: Asphalt Foundation Material": ItemData(G.Customizer | G.Foundations, 1338750, C.filler, 0),
         "Customizer: Concrete Foundation Material": ItemData(G.Customizer | G.Foundations, 1338751, C.filler, 0),
         "Customizer: Concrete Wall Material": ItemData(G.Customizer | G.Walls, 1338752, C.filler, 0),
@@ -622,12 +630,12 @@ class Items:
         "Customizer: Carbon Steel Finish": ItemData(G.Customizer, 1338772, C.filler, 0), 
         "Customizer: Caterium Paint Finish": ItemData(G.Customizer, 1338773, C.filler, 0), 
 
-        #1338774 - 1338799 Reserved for buildings
+        #1338774 - 1338799 Reserved for Cosmetics
 
-        # Transports 1338800 - 1338898
+        # Transports 1338800 - 1338899
         # Drones (including Drone)
         "Transport: Drones": ItemData(G.Transport, 1338800, C.useful),
-        # Trains (including Empty Platform, rails, station, locomotive)
+        # Trains (including Empty Platform, rails, station, locomotive, train stop) # 1.1
         "Transport: Trains": ItemData(G.Transport | G.Trains, 1338801, C.useful),
         "Transport: Fluid Trains": ItemData(G.Transport | G.Trains, 1338802, C.useful),
         # Tracker / Truck (including truck station)
@@ -642,6 +650,8 @@ class Items:
         "Transport: Hypertube Floor Hole": ItemData(G.Transport | G.HyperTubes, 1338810, C.filler),
         "Transport: Hypertube Wall Support": ItemData(G.Transport | G.HyperTubes, 1338811, C.filler),
         "Transport: Hypertube Wall Hole": ItemData(G.Transport | G.HyperTubes, 1338812, C.filler),
+        # Personal Elevator (including additional floors)
+        "Transport: Personal Elevator": ItemData(G.Transport, 1338813, C.useful), # 1.1
 
         #1338900 - 1338998 Handled by trap system (includes a few non-trap things)
         # Regenerate via /Script/Blutility.EditorUtilityWidgetBlueprint'/Archipelago/Debug/EU_GenerateTrapIds.EU_GenerateTrapIds'
