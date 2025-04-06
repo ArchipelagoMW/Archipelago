@@ -1206,20 +1206,20 @@ class Region:
     def add_event(
         self,
         location_name: str,
-        location_type: Location | None = None,
         item_name: str | None = None,
-        item_type: Location | None = None,
         rule: Callable[[CollectionState], bool] | None = None,
+        location_type: Location | None = None,
+        item_type: Location | None = None,
         show_in_spoiler: bool = True,
     ) -> Item:
         """
         Adds an event location/item pair to the region.
 
         :param location_name: Name for the event location.
-        :param location_type: Location class to create the event location with. Defaults to BaseClasses.Location.
         :param item_name: Name for the event item. If not provided, defaults to location_name.
-        :param item_type: Item class to create the event item with. Defaults to BaseClasses.Item.
         :param rule: Callable to determine access for this event location within its region.
+        :param location_type: Location class to create the event location with. Defaults to BaseClasses.Location.
+        :param item_type: Item class to create the event item with. Defaults to BaseClasses.Item.
         :param show_in_spoiler: Will be passed along to the created event Location's show_in_spoiler attribute.
         :return: The created Event Item
         """
