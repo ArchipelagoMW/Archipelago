@@ -4,7 +4,7 @@ from .. import JakAndDaxterWorld
 from ..Rules import can_free_scout_flies, can_fight, can_reach_orbs_level
 
 
-def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxterRegion]:
+def build_regions(level_name: str, world: JakAndDaxterWorld) -> tuple[JakAndDaxterRegion, ...]:
     multiworld = world.multiworld
     options = world.options
     player = world.player
@@ -75,13 +75,13 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
     # Requires defeating the plant boss (combat).
     temple_int_post_blue.connect(temple_exit, rule=lambda state: can_fight(state, player))
 
-    multiworld.regions.append(main_area)
-    multiworld.regions.append(lurker_machine)
-    multiworld.regions.append(river)
-    multiworld.regions.append(temple_exit)
-    multiworld.regions.append(temple_exterior)
-    multiworld.regions.append(temple_int_pre_blue)
-    multiworld.regions.append(temple_int_post_blue)
+    world.level_to_regions[level_name].append(main_area)
+    world.level_to_regions[level_name].append(lurker_machine)
+    world.level_to_regions[level_name].append(river)
+    world.level_to_regions[level_name].append(temple_exit)
+    world.level_to_regions[level_name].append(temple_exterior)
+    world.level_to_regions[level_name].append(temple_int_pre_blue)
+    world.level_to_regions[level_name].append(temple_int_post_blue)
 
     # If Per-Level Orbsanity is enabled, build the special Orbsanity Region. This is a virtual region always
     # accessible to Main Area. The Locations within are automatically checked when you collect enough orbs.
@@ -97,4 +97,4 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
         multiworld.regions.append(orbs)
         main_area.connect(orbs)
 
-    return [main_area, temple_int_post_blue]
+    return main_area, temple_int_post_blue

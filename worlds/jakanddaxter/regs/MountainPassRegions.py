@@ -6,7 +6,7 @@ from ..locs import ScoutLocations as Scouts
 from worlds.generic.Rules import add_rule
 
 
-def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxterRegion]:
+def build_regions(level_name: str, world: JakAndDaxterWorld) -> tuple[JakAndDaxterRegion, ...]:
     multiworld = world.multiworld
     options = world.options
     player = world.player
@@ -42,9 +42,9 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
 
     shortcut.connect(race)
 
-    multiworld.regions.append(main_area)
-    multiworld.regions.append(race)
-    multiworld.regions.append(shortcut)
+    world.level_to_regions[level_name].append(main_area)
+    world.level_to_regions[level_name].append(race)
+    world.level_to_regions[level_name].append(shortcut)
 
     # If Per-Level Orbsanity is enabled, build the special Orbsanity Region. This is a virtual region always
     # accessible to Main Area. The Locations within are automatically checked when you collect enough orbs.
@@ -61,4 +61,4 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
         main_area.connect(orbs)
 
     # Return race required for inter-level connections.
-    return [main_area, race]
+    return main_area, race

@@ -6,7 +6,7 @@ from ..Rules import can_free_scout_flies, can_fight, can_reach_orbs_level
 
 
 # God help me... here we go.
-def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxterRegion]:
+def build_regions(level_name: str, world: JakAndDaxterWorld) -> tuple[JakAndDaxterRegion | None, ...]:
     multiworld = world.multiworld
     options = world.options
     player = world.player
@@ -100,13 +100,13 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
 
     final_boss.connect(rotating_tower)  # Take elevator back down.
 
-    multiworld.regions.append(main_area)
-    multiworld.regions.append(robot_scaffolding)
-    multiworld.regions.append(jump_pad_room)
-    multiworld.regions.append(blast_furnace)
-    multiworld.regions.append(bunny_room)
-    multiworld.regions.append(rotating_tower)
-    multiworld.regions.append(final_boss)
+    world.level_to_regions[level_name].append(main_area)
+    world.level_to_regions[level_name].append(robot_scaffolding)
+    world.level_to_regions[level_name].append(jump_pad_room)
+    world.level_to_regions[level_name].append(blast_furnace)
+    world.level_to_regions[level_name].append(bunny_room)
+    world.level_to_regions[level_name].append(rotating_tower)
+    world.level_to_regions[level_name].append(final_boss)
 
     # If Per-Level Orbsanity is enabled, build the special Orbsanity Region. This is a virtual region always
     # accessible to Main Area. The Locations within are automatically checked when you collect enough orbs.
@@ -127,8 +127,8 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
         final_door = JakAndDaxterRegion("Final Door", player, multiworld, level_name, 0)
         final_boss.connect(final_door, rule=lambda state: state.has("Power Cell", player, 100))
 
-        multiworld.regions.append(final_door)
+        world.level_to_regions[level_name].append(final_door)
 
-        return [main_area, final_boss, final_door]
+        return main_area, final_boss, final_door
     else:
-        return [main_area, final_boss, None]
+        return main_area, final_boss, None

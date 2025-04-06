@@ -225,8 +225,16 @@ class JakAndDaxterWorld(World):
     power_cell_thresholds: list[int]
     trap_weights: tuple[list[str], list[int]]
 
+    # Store a dictionary of levels to regions for faster access.
+    level_to_regions: dict[str, list[JakAndDaxterRegion]]
+
     # Handles various options validation, rules enforcement, and caching of important information.
     def generate_early(self) -> None:
+
+        # Initialize the level-region dictionary.
+        self.level_to_regions = {}
+        for level_name in level_table:
+            self.level_to_regions[level_name] = []
 
         # Cache the power cell threshold values for quicker reference.
         self.power_cell_thresholds = [
@@ -306,6 +314,10 @@ class JakAndDaxterWorld(World):
     def create_regions(self) -> None:
         from .Regions import create_regions
         create_regions(self)
+
+        for level in self.level_to_regions:
+            for region in self.level_to_regions[level]:
+                self.multiworld.regions.append(region)
 
         # from Utils import visualize_regions
         # visualize_regions(self.multiworld.get_region("Menu", self.player), "jakanddaxter.puml")

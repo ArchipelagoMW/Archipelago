@@ -5,7 +5,7 @@ from .. import JakAndDaxterWorld
 from ..Rules import can_free_scout_flies, can_fight, can_reach_orbs_level
 
 
-def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxterRegion]:
+def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegion:
     multiworld = world.multiworld
     options = world.options
     player = world.player
@@ -80,13 +80,13 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
     blue_ridge.connect(main_area)
     cannon_tower.connect(main_area)
 
-    multiworld.regions.append(main_area)
-    multiworld.regions.append(pelican)
-    multiworld.regions.append(flut_flut_egg)
-    multiworld.regions.append(eco_harvesters)
-    multiworld.regions.append(green_ridge)
-    multiworld.regions.append(blue_ridge)
-    multiworld.regions.append(cannon_tower)
+    world.level_to_regions[level_name].append(main_area)
+    world.level_to_regions[level_name].append(pelican)
+    world.level_to_regions[level_name].append(flut_flut_egg)
+    world.level_to_regions[level_name].append(eco_harvesters)
+    world.level_to_regions[level_name].append(green_ridge)
+    world.level_to_regions[level_name].append(blue_ridge)
+    world.level_to_regions[level_name].append(cannon_tower)
 
     # If Per-Level Orbsanity is enabled, build the special Orbsanity Region. This is a virtual region always
     # accessible to Main Area. The Locations within are automatically checked when you collect enough orbs.
@@ -102,4 +102,4 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
         multiworld.regions.append(orbs)
         main_area.connect(orbs)
 
-    return [main_area]
+    return main_area

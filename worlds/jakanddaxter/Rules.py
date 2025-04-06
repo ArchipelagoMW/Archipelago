@@ -1,5 +1,5 @@
 import typing
-from BaseClasses import MultiWorld, CollectionState
+from BaseClasses import CollectionState
 from Options import OptionError
 from . import JakAndDaxterWorld
 from .Options import (EnableOrbsanity,
@@ -13,7 +13,6 @@ from .Options import (EnableOrbsanity,
 from .locs import CellLocations as Cells
 from .Locations import location_table
 from .Levels import level_table
-from .regs.RegionBase import JakAndDaxterRegion
 
 
 def set_orb_trade_rule(world: JakAndDaxterWorld):
@@ -22,13 +21,13 @@ def set_orb_trade_rule(world: JakAndDaxterWorld):
 
     if options.enable_orbsanity == EnableOrbsanity.option_off:
         world.can_trade = lambda state, required_orbs, required_previous_trade: (
-            can_trade_vanilla(state, player, required_orbs, required_previous_trade))
+            can_trade_vanilla(state, player, world, required_orbs, required_previous_trade))
     else:
         world.can_trade = lambda state, required_orbs, required_previous_trade: (
-            can_trade_orbsanity(state, player, required_orbs, required_previous_trade))
+            can_trade_orbsanity(state, player, world, required_orbs, required_previous_trade))
 
 
-def recalculate_reachable_orbs(state: CollectionState, player: int) -> None:
+def recalculate_reachable_orbs(state: CollectionState, player: int, world: JakAndDaxterWorld) -> None:
 
     if not state.prog_items[player]["Reachable Orbs Fresh"]:
 
@@ -36,34 +35,33 @@ def recalculate_reachable_orbs(state: CollectionState, player: int) -> None:
         # when a specific bundle of orbs in one level may unlock access to another.
         for level in level_table:
             state.prog_items[player][f"{level} Reachable Orbs".strip()] = (
-                count_reachable_orbs_level(state, player, state.multiworld, level))
+                count_reachable_orbs_level(state, world, level))
 
         # Also recalculate the global count, still used even when Orbsanity is Off.
-        state.prog_items[player]["Reachable Orbs"] = count_reachable_orbs_global(state, player, state.multiworld)
+        state.prog_items[player]["Reachable Orbs"] = count_reachable_orbs_global(state, world)
         state.prog_items[player]["Reachable Orbs Fresh"] = True
 
 
 def count_reachable_orbs_global(state: CollectionState,
-                                player: int,
-                                multiworld: MultiWorld) -> int:
+                                world: JakAndDaxterWorld) -> int:
 
     accessible_orbs = 0
     # Cast all regions upfront to access their unique attributes.
-    for region in typing.cast(typing.List[JakAndDaxterRegion], multiworld.get_regions(player)):
-        # Rely on short-circuiting to skip region.can_reach whenever possible.
-        if region.orb_count > 0 and region.can_reach(state):
-            accessible_orbs += region.orb_count
+    for level_name in world.level_to_regions:
+        for region in world.level_to_regions[level_name]:
+            # Rely on short-circuiting to skip region.can_reach whenever possible.
+            if region.orb_count > 0 and region.can_reach(state):
+                accessible_orbs += region.orb_count
     return accessible_orbs
 
 
 def count_reachable_orbs_level(state: CollectionState,
-                               player: int,
-                               multiworld: MultiWorld,
+                               world: JakAndDaxterWorld,
                                level_name: str = "") -> int:
 
     accessible_orbs = 0
     # Cast all regions upfront to access their unique attributes.
-    for region in typing.cast(typing.List[JakAndDaxterRegion], multiworld.get_regions(player)):
+    for region in world.level_to_regions[level_name]:
         # Rely on short-circuiting to skip region.can_reach whenever possible.
         if region.level_name == level_name and region.orb_count > 0 and region.can_reach(state):
             accessible_orbs += region.orb_count
@@ -75,7 +73,7 @@ def can_reach_orbs_global(state: CollectionState,
                           world: JakAndDaxterWorld,
                           bundle: int) -> bool:
 
-    recalculate_reachable_orbs(state, player)
+    recalculate_reachable_orbs(state, player, world)
     return state.has("Reachable Orbs", player, world.orb_bundle_size * (bundle + 1))
 
 
@@ -85,16 +83,18 @@ def can_reach_orbs_level(state: CollectionState,
                          level_name: str,
                          bundle: int) -> bool:
 
-    recalculate_reachable_orbs(state, player)
+    recalculate_reachable_orbs(state, player, world)
     return state.has(f"{level_name} Reachable Orbs", player, world.orb_bundle_size * (bundle + 1))
 
 
 def can_trade_vanilla(state: CollectionState,
                       player: int,
+                      world: JakAndDaxterWorld,
                       required_orbs: int,
                       required_previous_trade: typing.Optional[int] = None) -> bool:
 
-    recalculate_reachable_orbs(state, player)  # With Orbsanity Off, Reachable Orbs are in fact Tradeable Orbs.
+    # With Orbsanity Off, Reachable Orbs are in fact Tradeable Orbs.
+    recalculate_reachable_orbs(state, player, world)
     if required_previous_trade:
         name_of_previous_trade = location_table[Cells.to_ap_id(required_previous_trade)]
         return (state.has("Reachable Orbs", player, required_orbs)
@@ -104,10 +104,12 @@ def can_trade_vanilla(state: CollectionState,
 
 def can_trade_orbsanity(state: CollectionState,
                         player: int,
+                        world: JakAndDaxterWorld,
                         required_orbs: int,
                         required_previous_trade: typing.Optional[int] = None) -> bool:
 
-    recalculate_reachable_orbs(state, player)  # Yes, even Orbsanity trades may unlock access to new Reachable Orbs.
+    # Yes, even Orbsanity trades may unlock access to new Reachable Orbs.
+    recalculate_reachable_orbs(state, player, world)
     if required_previous_trade:
         name_of_previous_trade = location_table[Cells.to_ap_id(required_previous_trade)]
         return (state.has("Tradeable Orbs", player, required_orbs)

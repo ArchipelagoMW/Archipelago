@@ -4,7 +4,7 @@ from .. import JakAndDaxterWorld
 from ..Rules import can_free_scout_flies, can_fight, can_reach_orbs_level
 
 
-def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxterRegion]:
+def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegion:
     multiworld = world.multiworld
     options = world.options
     player = world.player
@@ -121,19 +121,19 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
                        state.has("Double Jump", player)             # Capsule is a convenient exit to the level.
                        or can_fight(state, player))
 
-    multiworld.regions.append(main_area)
-    multiworld.regions.append(first_room_upper)
-    multiworld.regions.append(first_room_lower)
-    multiworld.regions.append(first_room_orb_cache)
-    multiworld.regions.append(first_hallway)
-    multiworld.regions.append(second_room)
-    multiworld.regions.append(center_complex)
-    multiworld.regions.append(color_platforms)
-    multiworld.regions.append(quick_platforms)
-    multiworld.regions.append(first_slide)
-    multiworld.regions.append(capsule_room)
-    multiworld.regions.append(second_slide)
-    multiworld.regions.append(helix_room)
+    world.level_to_regions[level_name].append(main_area)
+    world.level_to_regions[level_name].append(first_room_upper)
+    world.level_to_regions[level_name].append(first_room_lower)
+    world.level_to_regions[level_name].append(first_room_orb_cache)
+    world.level_to_regions[level_name].append(first_hallway)
+    world.level_to_regions[level_name].append(second_room)
+    world.level_to_regions[level_name].append(center_complex)
+    world.level_to_regions[level_name].append(color_platforms)
+    world.level_to_regions[level_name].append(quick_platforms)
+    world.level_to_regions[level_name].append(first_slide)
+    world.level_to_regions[level_name].append(capsule_room)
+    world.level_to_regions[level_name].append(second_slide)
+    world.level_to_regions[level_name].append(helix_room)
 
     # If Per-Level Orbsanity is enabled, build the special Orbsanity Region. This is a virtual region always
     # accessible to Main Area. The Locations within are automatically checked when you collect enough orbs.
@@ -149,4 +149,4 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
         multiworld.regions.append(orbs)
         main_area.connect(orbs)
 
-    return [main_area]
+    return main_area

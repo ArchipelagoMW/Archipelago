@@ -5,7 +5,7 @@ from .. import JakAndDaxterWorld
 from ..Rules import can_fight, can_reach_orbs_level
 
 
-def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxterRegion]:
+def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegion:
     multiworld = world.multiworld
     options = world.options
     player = world.player
@@ -135,23 +135,23 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
     fourth_tether.connect(last_tar_pit, rule=lambda state: can_jump_farther(state, player))
     fourth_tether.connect(main_area)  # Fall down.
 
-    multiworld.regions.append(main_area)
-    multiworld.regions.append(first_bats)
-    multiworld.regions.append(first_jump_pad)
-    multiworld.regions.append(first_tether)
-    multiworld.regions.append(first_tether_rat_colony)
-    multiworld.regions.append(second_jump_pad)
-    multiworld.regions.append(first_pole_course)
-    multiworld.regions.append(second_tether)
-    multiworld.regions.append(second_bats)
-    multiworld.regions.append(third_jump_pad)
-    multiworld.regions.append(fourth_jump_pad)
-    multiworld.regions.append(flut_flut_pad)
-    multiworld.regions.append(flut_flut_course)
-    multiworld.regions.append(farthy_snacks)
-    multiworld.regions.append(box_field)
-    multiworld.regions.append(last_tar_pit)
-    multiworld.regions.append(fourth_tether)
+    world.level_to_regions[level_name].append(main_area)
+    world.level_to_regions[level_name].append(first_bats)
+    world.level_to_regions[level_name].append(first_jump_pad)
+    world.level_to_regions[level_name].append(first_tether)
+    world.level_to_regions[level_name].append(first_tether_rat_colony)
+    world.level_to_regions[level_name].append(second_jump_pad)
+    world.level_to_regions[level_name].append(first_pole_course)
+    world.level_to_regions[level_name].append(second_tether)
+    world.level_to_regions[level_name].append(second_bats)
+    world.level_to_regions[level_name].append(third_jump_pad)
+    world.level_to_regions[level_name].append(fourth_jump_pad)
+    world.level_to_regions[level_name].append(flut_flut_pad)
+    world.level_to_regions[level_name].append(flut_flut_course)
+    world.level_to_regions[level_name].append(farthy_snacks)
+    world.level_to_regions[level_name].append(box_field)
+    world.level_to_regions[level_name].append(last_tar_pit)
+    world.level_to_regions[level_name].append(fourth_tether)
 
     # If Per-Level Orbsanity is enabled, build the special Orbsanity Region. This is a virtual region always
     # accessible to Main Area. The Locations within are automatically checked when you collect enough orbs.
@@ -167,4 +167,4 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
         multiworld.regions.append(orbs)
         main_area.connect(orbs)
 
-    return [main_area]
+    return main_area

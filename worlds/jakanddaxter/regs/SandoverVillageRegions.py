@@ -4,7 +4,7 @@ from .. import JakAndDaxterWorld
 from ..Rules import can_free_scout_flies, can_reach_orbs_level
 
 
-def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxterRegion]:
+def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegion:
     multiworld = world.multiworld
     options = world.options
     player = world.player
@@ -58,10 +58,10 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
     yakow_cliff.connect(main_area)
     oracle_platforms.connect(main_area)
 
-    multiworld.regions.append(main_area)
-    multiworld.regions.append(orb_cache_cliff)
-    multiworld.regions.append(yakow_cliff)
-    multiworld.regions.append(oracle_platforms)
+    world.level_to_regions[level_name].append(main_area)
+    world.level_to_regions[level_name].append(orb_cache_cliff)
+    world.level_to_regions[level_name].append(yakow_cliff)
+    world.level_to_regions[level_name].append(oracle_platforms)
 
     # If Per-Level Orbsanity is enabled, build the special Orbsanity Region. This is a virtual region always
     # accessible to Main Area. The Locations within are automatically checked when you collect enough orbs.
@@ -77,4 +77,4 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
         multiworld.regions.append(orbs)
         main_area.connect(orbs)
 
-    return [main_area]
+    return main_area

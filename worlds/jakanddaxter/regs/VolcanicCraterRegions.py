@@ -5,7 +5,7 @@ from ..Rules import can_free_scout_flies, can_reach_orbs_level
 from ..locs import ScoutLocations as Scouts
 
 
-def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxterRegion]:
+def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegion:
     multiworld = world.multiworld
     options = world.options
     player = world.player
@@ -30,7 +30,7 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
     # Approach the gondola to get this check.
     main_area.add_special_locations([105])
 
-    multiworld.regions.append(main_area)
+    world.level_to_regions[level_name].append(main_area)
 
     # If Per-Level Orbsanity is enabled, build the special Orbsanity Region. This is a virtual region always
     # accessible to Main Area. The Locations within are automatically checked when you collect enough orbs.
@@ -46,4 +46,4 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
         multiworld.regions.append(orbs)
         main_area.connect(orbs)
 
-    return [main_area]
+    return main_area

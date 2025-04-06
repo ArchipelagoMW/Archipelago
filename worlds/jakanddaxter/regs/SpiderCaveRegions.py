@@ -4,7 +4,7 @@ from .. import JakAndDaxterWorld
 from ..Rules import can_free_scout_flies, can_fight, can_reach_orbs_level
 
 
-def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxterRegion]:
+def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegion:
     multiworld = world.multiworld
     options = world.options
     player = world.player
@@ -95,17 +95,17 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
     # Requires yellow eco switch.
     spider_tunnel.connect(spider_tunnel_crates, rule=lambda state: state.has("Yellow Eco Switch", player))
 
-    multiworld.regions.append(main_area)
-    multiworld.regions.append(dark_crystals)
-    multiworld.regions.append(dark_cave)
-    multiworld.regions.append(robot_cave)
-    multiworld.regions.append(scaffolding_level_zero)
-    multiworld.regions.append(scaffolding_level_one)
-    multiworld.regions.append(scaffolding_level_two)
-    multiworld.regions.append(scaffolding_level_three)
-    multiworld.regions.append(pole_course)
-    multiworld.regions.append(spider_tunnel)
-    multiworld.regions.append(spider_tunnel_crates)
+    world.level_to_regions[level_name].append(main_area)
+    world.level_to_regions[level_name].append(dark_crystals)
+    world.level_to_regions[level_name].append(dark_cave)
+    world.level_to_regions[level_name].append(robot_cave)
+    world.level_to_regions[level_name].append(scaffolding_level_zero)
+    world.level_to_regions[level_name].append(scaffolding_level_one)
+    world.level_to_regions[level_name].append(scaffolding_level_two)
+    world.level_to_regions[level_name].append(scaffolding_level_three)
+    world.level_to_regions[level_name].append(pole_course)
+    world.level_to_regions[level_name].append(spider_tunnel)
+    world.level_to_regions[level_name].append(spider_tunnel_crates)
 
     # If Per-Level Orbsanity is enabled, build the special Orbsanity Region. This is a virtual region always
     # accessible to Main Area. The Locations within are automatically checked when you collect enough orbs.
@@ -121,4 +121,4 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
         multiworld.regions.append(orbs)
         main_area.connect(orbs)
 
-    return [main_area]
+    return main_area

@@ -4,7 +4,7 @@ from .. import JakAndDaxterWorld
 from ..Rules import can_free_scout_flies, can_fight, can_reach_orbs_level
 
 
-def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxterRegion]:
+def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegion:
     multiworld = world.multiworld
     options = world.options
     player = world.player
@@ -98,18 +98,18 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
     arena.connect(lower_approach)              # Run.
     arena.connect(far_side)                    # Run.
 
-    multiworld.regions.append(main_area)
-    multiworld.regions.append(muse_course)
-    multiworld.regions.append(zoomer)
-    multiworld.regions.append(ship)
-    multiworld.regions.append(far_side)
-    multiworld.regions.append(far_side_cliff)
-    multiworld.regions.append(far_side_cache)
-    multiworld.regions.append(barrel_course)
-    multiworld.regions.append(cannon)
-    multiworld.regions.append(upper_approach)
-    multiworld.regions.append(lower_approach)
-    multiworld.regions.append(arena)
+    world.level_to_regions[level_name].append(main_area)
+    world.level_to_regions[level_name].append(muse_course)
+    world.level_to_regions[level_name].append(zoomer)
+    world.level_to_regions[level_name].append(ship)
+    world.level_to_regions[level_name].append(far_side)
+    world.level_to_regions[level_name].append(far_side_cliff)
+    world.level_to_regions[level_name].append(far_side_cache)
+    world.level_to_regions[level_name].append(barrel_course)
+    world.level_to_regions[level_name].append(cannon)
+    world.level_to_regions[level_name].append(upper_approach)
+    world.level_to_regions[level_name].append(lower_approach)
+    world.level_to_regions[level_name].append(arena)
 
     # If Per-Level Orbsanity is enabled, build the special Orbsanity Region. This is a virtual region always
     # accessible to Main Area. The Locations within are automatically checked when you collect enough orbs.
@@ -125,4 +125,4 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
         multiworld.regions.append(orbs)
         main_area.connect(orbs)
 
-    return [main_area]
+    return main_area

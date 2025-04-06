@@ -6,7 +6,7 @@ from ..Rules import can_free_scout_flies, can_fight, can_reach_orbs_level
 
 
 # God help me... here we go.
-def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxterRegion]:
+def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegion:
     multiworld = world.multiworld
     options = world.options
     player = world.player
@@ -166,22 +166,22 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
     bunny_cave_end.connect(fort_exterior)
 
     # I really hope that is everything.
-    multiworld.regions.append(main_area)
-    multiworld.regions.append(glacier_lurkers)
-    multiworld.regions.append(blockers)
-    multiworld.regions.append(snowball_canyon)
-    multiworld.regions.append(frozen_box_cave)
-    multiworld.regions.append(frozen_box_cave_crates)
-    multiworld.regions.append(ice_skating_rink)
-    multiworld.regions.append(flut_flut_course)
-    multiworld.regions.append(fort_exterior)
-    multiworld.regions.append(bunny_cave_start)
-    multiworld.regions.append(bunny_cave_end)
-    multiworld.regions.append(switch_cave)
-    multiworld.regions.append(fort_interior)
-    multiworld.regions.append(fort_interior_caches)
-    multiworld.regions.append(fort_interior_base)
-    multiworld.regions.append(fort_interior_course_end)
+    world.level_to_regions[level_name].append(main_area)
+    world.level_to_regions[level_name].append(glacier_lurkers)
+    world.level_to_regions[level_name].append(blockers)
+    world.level_to_regions[level_name].append(snowball_canyon)
+    world.level_to_regions[level_name].append(frozen_box_cave)
+    world.level_to_regions[level_name].append(frozen_box_cave_crates)
+    world.level_to_regions[level_name].append(ice_skating_rink)
+    world.level_to_regions[level_name].append(flut_flut_course)
+    world.level_to_regions[level_name].append(fort_exterior)
+    world.level_to_regions[level_name].append(bunny_cave_start)
+    world.level_to_regions[level_name].append(bunny_cave_end)
+    world.level_to_regions[level_name].append(switch_cave)
+    world.level_to_regions[level_name].append(fort_interior)
+    world.level_to_regions[level_name].append(fort_interior_caches)
+    world.level_to_regions[level_name].append(fort_interior_base)
+    world.level_to_regions[level_name].append(fort_interior_course_end)
 
     # If Per-Level Orbsanity is enabled, build the special Orbsanity Region. This is a virtual region always
     # accessible to Main Area. The Locations within are automatically checked when you collect enough orbs.
@@ -197,4 +197,4 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
         multiworld.regions.append(orbs)
         main_area.connect(orbs)
 
-    return [main_area]
+    return main_area

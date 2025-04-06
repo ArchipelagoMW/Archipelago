@@ -5,7 +5,7 @@ from ..Rules import can_reach_orbs_level
 from ..locs import CellLocations as Cells, ScoutLocations as Scouts
 
 
-def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxterRegion]:
+def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegion:
     multiworld = world.multiworld
     options = world.options
     player = world.player
@@ -16,7 +16,7 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
     main_area.add_cell_locations(Cells.locFC_cellTable.keys())
     main_area.add_fly_locations(Scouts.locFC_scoutTable.keys())
 
-    multiworld.regions.append(main_area)
+    world.level_to_regions[level_name].append(main_area)
 
     # If Per-Level Orbsanity is enabled, build the special Orbsanity Region. This is a virtual region always
     # accessible to Main Area. The Locations within are automatically checked when you collect enough orbs.
@@ -32,4 +32,4 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
         multiworld.regions.append(orbs)
         main_area.connect(orbs)
 
-    return [main_area]
+    return main_area
