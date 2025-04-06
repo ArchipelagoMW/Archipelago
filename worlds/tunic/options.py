@@ -215,6 +215,7 @@ class ShuffleFuses(Toggle):
     internal_name = "shuffle_fuses"
     display_name = "Shuffle Fuses"
 
+
 class ShuffleBells(Toggle):
     """
     The East and West bells are shuffled into the item pool and must be found in order to unlock the Sealed Temple.
@@ -222,6 +223,7 @@ class ShuffleBells(Toggle):
     """
     internal_name = "shuffle_bells"
     display_name = "Shuffle Bells"
+
 
 class GrassRandomizer(Toggle):
     """

@@ -199,6 +199,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     laurels_location = world.options.laurels_location
     decoupled = world.options.decoupled
     shuffle_fuses = bool(world.options.shuffle_fuses.value)
+    shuffle_bells = bool(world.options.shuffle_bells.value)
     traversal_reqs = deepcopy(traversal_requirements)
     has_laurels = True
     waterfall_plando = False
@@ -299,7 +300,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     start_region = "Overworld"
     connected_regions.add(start_region)
     connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_tricks,
-                                                 shuffle_fuses)
+                                                 shuffle_fuses, shuffle_bells)
 
     if world.options.entrance_rando.value in EntranceRando.options.values():
         plando_connections = world.options.plando_connections.value
@@ -522,7 +523,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
 
         # if we have plando connections, our connected regions may change somewhat
         connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_tricks,
-                                                     shuffle_fuses)
+                                                     shuffle_fuses, shuffle_bells)
 
     # if there are an odd number of shops after plando, add another one, except in decoupled where it doesn't matter
     if not decoupled and len(world.used_shop_numbers) % 2 == 1:
@@ -639,7 +640,8 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                         cr = connected_regions.copy()
                         cr.add(portal.region)
                         if "Secret Gathering Place" not in update_reachable_regions(cr, traversal_reqs, has_laurels,
-                                                                                    logic_tricks, shuffle_fuses):
+                                                                                    logic_tricks, shuffle_fuses,
+                                                                                    shuffle_bells):
                             continue
                     # if not waterfall_plando, then we just want to pair secret gathering place now
                     elif portal.region != "Secret Gathering Place":
@@ -689,7 +691,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         if not has_laurels and "Secret Gathering Place" in connected_regions:
             has_laurels = True
         connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_tricks,
-                                                     shuffle_fuses)
+                                                     shuffle_fuses, shuffle_bells)
         portal_pairs[portal1] = portal2
         two_plus_direction_tracker[portal1.direction] -= 1
         two_plus_direction_tracker[portal2.direction] -= 1
@@ -764,7 +766,8 @@ def create_randomized_entrances(world: "TunicWorld", portal_pairs: Dict[Portal, 
 
 
 def update_reachable_regions(connected_regions: Set[str], traversal_reqs: Dict[str, Dict[str, List[List[str]]]],
-                             has_laurels: bool, logic: Tuple[bool, int, int], shuffle_fuses: bool) -> Set[str]:
+                             has_laurels: bool, logic: Tuple[bool, int, int], shuffle_fuses: bool,
+                             shuffle_bells: bool) -> Set[str]:
     zips, ice_grapples, ls = logic
     # starting count, so we can run it again if this changes
     region_count = len(connected_regions)
@@ -799,6 +802,9 @@ def update_reachable_regions(connected_regions: Set[str], traversal_reqs: Dict[s
                     elif req == "Fuse Shuffle":
                         if not shuffle_fuses:
                             break
+                    elif req == "Bell Shuffle":
+                        if not shuffle_bells:
+                            break
                 else:
                     met_traversal_reqs = True
                     break
@@ -808,7 +814,7 @@ def update_reachable_regions(connected_regions: Set[str], traversal_reqs: Dict[s
     # if the length of connected_regions changed, we got new regions, so we want to check those new origins
     if region_count != len(connected_regions):
         connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic,
-                                                     shuffle_fuses)
+                                                     shuffle_fuses, shuffle_bells)
 
     return connected_regions
 
