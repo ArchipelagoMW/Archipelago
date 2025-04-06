@@ -194,8 +194,7 @@ class MM2World(World):
         goal_location.place_locked_item(MM2Item("Victory", ItemClassification.progression, None, self.player))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
-    def fill_hook(self, prog_item_pool: List["Item"], useful_item_pool: List["Item"], filler_item_pool: List["Item"],
-                  fill_locations: List["Location"]) -> None:
+    def fill_hook(self, prog_item_pool: List["Item"], useful_item_pool: List["Item"], filler_item_pool: List["Item"], fill_locations: List["Location"]) -> None:
         # on a solo gen, fill can try to force Wily into sphere 2, but for most generations this is impossible
         # since MM2 can have a 2 item sphere 1, and 3 items are required for Wily
         if self.multiworld.players > 1:
