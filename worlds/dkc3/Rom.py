@@ -2,7 +2,6 @@ import Utils
 from Utils import read_snes_rom
 from worlds.AutoWorld import World
 from worlds.Files import APDeltaPatch
-from .Locations import lookup_id_to_name, all_locations
 from .Levels import level_list, level_dict
 
 USHASH = '120abf304f0c40fe059f6a192ed4f947'
@@ -434,9 +433,9 @@ level_music_ids = [
     0x21,
 ]
 
-class LocalRom(object):
+class LocalRom:
 
-    def __init__(self, file, patch=True, vanillaRom=None, name=None, hash=None):
+    def __init__(self, file, name=None, hash=None):
         self.name = name
         self.hash = hash
         self.orig_buffer = None
@@ -457,7 +456,7 @@ class LocalRom(object):
     def read_byte(self, address: int) -> int:
         return self.buffer[address]
 
-    def read_bytes(self, startaddress: int, length: int) -> bytes:
+    def read_bytes(self, startaddress: int, length: int) -> bytearray:
         return self.buffer[startaddress:startaddress + length]
 
     def write_byte(self, address: int, value: int):

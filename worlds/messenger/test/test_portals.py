@@ -4,6 +4,10 @@ from ..portals import PORTALS
 
 
 class PortalTestBase(MessengerTestBase):
+    options = {
+        "available_portals": 3,
+    }
+
     def test_portal_reqs(self) -> None:
         """tests the paths to open a portal if only that portal is closed with vanilla connections."""
         # portal and requirements to reach it if it's the only closed portal

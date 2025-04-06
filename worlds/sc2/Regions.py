@@ -50,7 +50,7 @@ def create_vanilla_regions(
     names: Dict[str, int] = {}
 
     # Generating all regions and locations for each enabled campaign
-    for campaign in enabled_campaigns:
+    for campaign in sorted(enabled_campaigns):
         for region_name in vanilla_mission_req_table[campaign].keys():
             regions.append(create_region(world, locations_per_region, location_cache, region_name))
     world.multiworld.regions += regions
@@ -180,7 +180,7 @@ def create_vanilla_regions(
         connect(world, names, "Menu", "Dark Whispers")
         connect(world, names, "Dark Whispers", "Ghosts in the Fog",
                 lambda state: state.has("Beat Dark Whispers", player))
-        connect(world, names, "Dark Whispers", "Evil Awoken",
+        connect(world, names, "Ghosts in the Fog", "Evil Awoken",
                 lambda state: state.has("Beat Ghosts in the Fog", player))
 
     if SC2Campaign.LOTV in enabled_campaigns:
@@ -250,7 +250,7 @@ def create_vanilla_regions(
         connect(world, names, "Enemy Intelligence", "Trouble In Paradise",
                 lambda state: state.has("Beat Enemy Intelligence", player))
         connect(world, names, "Trouble In Paradise", "Night Terrors",
-                lambda state: state.has("Beat Evacuation", player))
+                lambda state: state.has("Beat Trouble In Paradise", player))
         connect(world, names, "Night Terrors", "Flashpoint",
                 lambda state: state.has("Beat Night Terrors", player))
         connect(world, names, "Flashpoint", "In the Enemy's Shadow",

@@ -43,8 +43,8 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a config file?
 
-The [Player Settings](/games/Kirby's%20Dream%20Land%203/player-settings) page on the website allows you to configure
-your personal settings and export a config file from them.
+The [Player Options](/games/Kirby's%20Dream%20Land%203/player-options) page on the website allows you to configure
+your personal options and export a config file from them.
 
 ### Verifying your config file
 
@@ -53,7 +53,7 @@ If you would like to validate your config file to make sure it works, you may do
 
 ## Generating a Single-Player Game
 
-1. Navigate to the [Player Settings](/games/Kirby's%20Dream%20Land%203/player-settings) page, configure your options,
+1. Navigate to the [Player Options](/games/Kirby's%20Dream%20Land%203/player-options) page, configure your options,
    and click the "Generate Game" button.
 2. You will be presented with a "Seed Info" page.
 3. Click the "Create New Room" link.

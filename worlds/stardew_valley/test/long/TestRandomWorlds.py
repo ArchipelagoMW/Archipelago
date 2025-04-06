@@ -1,10 +1,11 @@
 import random
+import unittest
 from typing import Dict
 
 from BaseClasses import MultiWorld, get_seed
 from Options import NamedRange, Range
 from .option_names import options_to_include
-from .. import setup_solo_multiworld, SVTestCase
+from .. import SVTestCase
 from ..assertion import GoalAssertMixin, OptionAssertMixin, WorldAssertMixin
 
 
@@ -16,12 +17,6 @@ def get_option_choices(option) -> Dict[str, int]:
     elif option.options:
         return option.options
     return {}
-
-
-def generate_random_multiworld(world_id: int):
-    world_options = generate_random_world_options(world_id)
-    multiworld = setup_solo_multiworld(world_options, seed=world_id)
-    return multiworld
 
 
 def generate_random_world_options(seed: int) -> Dict[str, int]:
@@ -57,7 +52,8 @@ def get_number_log_steps(number_worlds: int) -> int:
 class TestGenerateManyWorlds(GoalAssertMixin, OptionAssertMixin, WorldAssertMixin, SVTestCase):
     def test_generate_many_worlds_then_check_results(self):
         if self.skip_long_tests:
-            return
+            raise unittest.SkipTest("Long tests disabled")
+
         number_worlds = 10 if self.skip_long_tests else 1000
         seed = get_seed()
         self.generate_and_check_many_worlds(number_worlds, seed)

@@ -44,7 +44,7 @@ Please note that Noita only allows you to type certain characters for your slot 
 These characters are: `` !#$%&'()+,-.0123456789;=@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{}~<>|\/``
 
 ### Where do I get a YAML?
-You can use the [game settings page for Noita](/games/Noita/player-settings) here on the Archipelago website to
+You can use the [game options page for Noita](/games/Noita/player-options) here on the Archipelago website to
 generate a YAML using a graphical interface.
 
 ## Poptracker Pack

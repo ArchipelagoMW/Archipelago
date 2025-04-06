@@ -1,19 +1,20 @@
 import os
 import pkgutil
+import pickle
 from io import BytesIO
 from typing import Dict, List, Set
 
-import pickle
-
-from .datatypes import Door, Painting, Panel, Progression, Room
+from .datatypes import Door, Painting, Panel, PanelDoor, Progression, Room
 
 ALL_ROOMS: List[Room] = []
 DOORS_BY_ROOM: Dict[str, Dict[str, Door]] = {}
 PANELS_BY_ROOM: Dict[str, Dict[str, Panel]] = {}
+PANEL_DOORS_BY_ROOM: Dict[str, Dict[str, PanelDoor]] = {}
 PAINTINGS: Dict[str, Painting] = {}
 
-PROGRESSIVE_ITEMS: List[str] = []
-PROGRESSION_BY_ROOM: Dict[str, Dict[str, Progression]] = {}
+PROGRESSIVE_ITEMS: Set[str] = set()
+PROGRESSIVE_DOORS_BY_ROOM: Dict[str, Dict[str, Progression]] = {}
+PROGRESSIVE_PANELS_BY_ROOM: Dict[str, Dict[str, Progression]] = {}
 
 PAINTING_ENTRANCES: int = 0
 PAINTING_EXIT_ROOMS: Set[str] = set()
@@ -21,11 +22,16 @@ PAINTING_EXITS: int = 0
 REQUIRED_PAINTING_ROOMS: List[str] = []
 REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS: List[str] = []
 
+SUNWARP_ENTRANCES: List[str] = []
+SUNWARP_EXITS: List[str] = []
+
 SPECIAL_ITEM_IDS: Dict[str, int] = {}
 PANEL_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
 DOOR_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
 DOOR_ITEM_IDS: Dict[str, Dict[str, int]] = {}
 DOOR_GROUP_ITEM_IDS: Dict[str, int] = {}
+PANEL_DOOR_ITEM_IDS: Dict[str, Dict[str, int]] = {}
+PANEL_GROUP_ITEM_IDS: Dict[str, int] = {}
 PROGRESSIVE_ITEM_IDS: Dict[str, int] = {}
 
 HASHES: Dict[str, str] = {}
@@ -66,6 +72,20 @@ def get_door_group_item_id(name: str):
     return DOOR_GROUP_ITEM_IDS[name]
 
 
+def get_panel_door_item_id(room: str, name: str):
+    if room not in PANEL_DOOR_ITEM_IDS or name not in PANEL_DOOR_ITEM_IDS[room]:
+        raise Exception(f"Item ID for panel door {room} - {name} not found in ids.yaml.")
+
+    return PANEL_DOOR_ITEM_IDS[room][name]
+
+
+def get_panel_group_item_id(name: str):
+    if name not in PANEL_GROUP_ITEM_IDS:
+        raise Exception(f"Item ID for panel group {name} not found in ids.yaml.")
+
+    return PANEL_GROUP_ITEM_IDS[name]
+
+
 def get_progressive_item_id(name: str):
     if name not in PROGRESSIVE_ITEM_IDS:
         raise Exception(f"Item ID for progressive item {name} not found in ids.yaml.")
@@ -76,15 +96,18 @@ def get_progressive_item_id(name: str):
 def load_static_data_from_file():
     global PAINTING_ENTRANCES, PAINTING_EXITS
 
+    from . import datatypes
+    from Utils import safe_builtins
+
     class RenameUnpickler(pickle.Unpickler):
         def find_class(self, module, name):
-            renamed_module = module
-            if module == "datatypes":
-                renamed_module = "worlds.lingo.datatypes"
+            if module in ("worlds.lingo.datatypes", "datatypes"):
+                return getattr(datatypes, name)
+            elif module == "builtins" and name in safe_builtins:
+                return getattr(safe_builtins, name)
+            raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")
 
-            return super(RenameUnpickler, self).find_class(renamed_module, name)
-
-    file = pkgutil.get_data(__name__, os.path.join("data", "generated.dat"))
+    file = pkgutil.get_data(__name__, "data/generated.dat")
     pickdata = RenameUnpickler(BytesIO(file)).load()
         
     HASHES.update(pickdata["HASHES"])
@@ -92,18 +115,24 @@ def load_static_data_from_file():
     ALL_ROOMS.extend(pickdata["ALL_ROOMS"])
     DOORS_BY_ROOM.update(pickdata["DOORS_BY_ROOM"])
     PANELS_BY_ROOM.update(pickdata["PANELS_BY_ROOM"])
-    PROGRESSIVE_ITEMS.extend(pickdata["PROGRESSIVE_ITEMS"])
-    PROGRESSION_BY_ROOM.update(pickdata["PROGRESSION_BY_ROOM"])
+    PANEL_DOORS_BY_ROOM.update(pickdata["PANEL_DOORS_BY_ROOM"])
+    PROGRESSIVE_ITEMS.update(pickdata["PROGRESSIVE_ITEMS"])
+    PROGRESSIVE_DOORS_BY_ROOM.update(pickdata["PROGRESSIVE_DOORS_BY_ROOM"])
+    PROGRESSIVE_PANELS_BY_ROOM.update(pickdata["PROGRESSIVE_PANELS_BY_ROOM"])
     PAINTING_ENTRANCES = pickdata["PAINTING_ENTRANCES"]
     PAINTING_EXIT_ROOMS.update(pickdata["PAINTING_EXIT_ROOMS"])
     PAINTING_EXITS = pickdata["PAINTING_EXITS"]
     REQUIRED_PAINTING_ROOMS.extend(pickdata["REQUIRED_PAINTING_ROOMS"])
     REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS.extend(pickdata["REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS"])
+    SUNWARP_ENTRANCES.extend(pickdata["SUNWARP_ENTRANCES"])
+    SUNWARP_EXITS.extend(pickdata["SUNWARP_EXITS"])
     SPECIAL_ITEM_IDS.update(pickdata["SPECIAL_ITEM_IDS"])
     PANEL_LOCATION_IDS.update(pickdata["PANEL_LOCATION_IDS"])
     DOOR_LOCATION_IDS.update(pickdata["DOOR_LOCATION_IDS"])
     DOOR_ITEM_IDS.update(pickdata["DOOR_ITEM_IDS"])
     DOOR_GROUP_ITEM_IDS.update(pickdata["DOOR_GROUP_ITEM_IDS"])
+    PANEL_DOOR_ITEM_IDS.update(pickdata["PANEL_DOOR_ITEM_IDS"])
+    PANEL_GROUP_ITEM_IDS.update(pickdata["PANEL_GROUP_ITEM_IDS"])
     PROGRESSIVE_ITEM_IDS.update(pickdata["PROGRESSIVE_ITEM_IDS"])
 
 
