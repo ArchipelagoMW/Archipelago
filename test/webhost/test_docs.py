@@ -4,10 +4,15 @@ import os
 
 from werkzeug.utils import secure_filename
 
+import WebHost
 from worlds.AutoWorld import AutoWorldRegister
 
 
 class TestDocs(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        WebHost.copy_tutorials_files_to_static()
+
     def test_has_tutorial(self):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             if not world_type.hidden:
