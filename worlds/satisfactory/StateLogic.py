@@ -1,4 +1,5 @@
-from typing import Tuple, List, Optional, Set, Iterable
+from typing import Optional
+from collections.abc import Iterable
 from BaseClasses import CollectionState
 from .GameLogic import GameLogic, Recipe, PowerInfrastructureLevel
 from .Options import SatisfactoryOptions
@@ -11,7 +12,7 @@ building_event_prefix = "Can Build: "
 class StateLogic:
     player: int
     options: SatisfactoryOptions
-    initial_unlocked_items: Set[str]
+    initial_unlocked_items: set[str]
 
     def __init__(self, player: int, options: SatisfactoryOptions):
         self.player = player
@@ -38,14 +39,11 @@ class StateLogic:
         return power_level is None or state.has(building_event_prefix + power_level.to_name(), self.player)
 
     def can_produce_all(self, state: CollectionState, parts: Optional[Iterable[str]]) -> bool:
-        if parts and "SAM" in parts:
-            debug = "Now"
-
-        return parts is None or \
+       return parts is None or \
             state.has_all(map(self.to_part_event, parts), self.player)
 
     def can_produce_all_allowing_handcrafting(self, state: CollectionState, logic: GameLogic, 
-            parts: Optional[Tuple[str, ...]]) -> bool:
+            parts: Optional[tuple[str, ...]]) -> bool:
         
         def can_handcraft_part(part: str) -> bool:
             if self.can_produce(state, part):
@@ -53,7 +51,7 @@ class StateLogic:
             elif part not in logic.handcraftable_recipes:
                 return False
 
-            recipes: List[Recipe] = logic.handcraftable_recipes[part]
+            recipes: list[Recipe] = logic.handcraftable_recipes[part]
 
             return any(
                 self.has_recipe(state, recipe) 
@@ -79,8 +77,10 @@ class StateLogic:
             and self.can_build(state, recipe.building) \
             and self.can_produce_all(state, recipe.inputs)
     
-    def is_game_phase(self, state: CollectionState, phase: int) -> bool:
-        return state.has(f"Elevator Tier {phase}", self.player)
+    def is_elevator_tier(self, state: CollectionState, phase: int) -> bool:
+        limited_phase = min(self.options.final_elevator_package, phase)
+        
+        return state.has(f"Elevator Tier {limited_phase}", self.player)
     
     @staticmethod
     def to_part_event(part: str) -> str:

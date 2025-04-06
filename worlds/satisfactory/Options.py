@@ -1,8 +1,9 @@
 from dataclasses import dataclass
-from typing import Dict, List, Any, Tuple, ClassVar, cast
+from typing import ClassVar, Any, cast
 from enum import IntEnum
-from Options import PerGameCommonOptions, DeathLink, AssembleOptions, Visibility
-from Options import Range, Toggle, OptionSet, StartInventoryPool, NamedRange, Choice
+from Options import PerGameCommonOptions, DeathLinkMixin, AssembleOptions, Visibility
+from Options import Range, NamedRange, Toggle, DefaultOnToggle, OptionSet, StartInventoryPool, Choice
+from schema import Schema, And
 
 class Placement(IntEnum):
     starting_inventory = 0
@@ -10,7 +11,7 @@ class Placement(IntEnum):
     somewhere = 2
 
 class PlacementLogicMeta(AssembleOptions):
-    def __new__(mcs, name: str, bases: Tuple[type], attrs: Dict[Any, Any]) -> "PlacementLogicMeta":
+    def __new__(mcs, name: str, bases: tuple[type], attrs: dict[Any, Any]) -> "PlacementLogicMeta":
         if "default" in attrs and isinstance(attrs["default"], Placement):
             attrs["default"] = int(attrs["default"])
 
@@ -23,7 +24,7 @@ class PlacementLogic(Choice, metaclass=PlacementLogicMeta):
     option_somewhere = Placement.somewhere
 
 class ChoiceMapMeta(AssembleOptions):
-    def __new__(mcs, name: str, bases: Tuple[type], attrs: Dict[Any, Any]) -> "ChoiceMapMeta":
+    def __new__(mcs, name: str, bases: tuple[type], attrs: dict[Any, Any]) -> "ChoiceMapMeta":
         if "choices" in attrs:
             for index, choice in enumerate(attrs["choices"].keys()):
                 option_name = "option_" + choice.replace(' ', '_')
@@ -34,36 +35,36 @@ class ChoiceMapMeta(AssembleOptions):
 
 class ChoiceMap(Choice, metaclass=ChoiceMapMeta):
     # TODO `default` doesn't do anything, default is always the first `choices` value. if uncommented it messes up the template file generation (caps mismatch)
-    choices: ClassVar[Dict[str, List[str]]]
+    choices: ClassVar[dict[str, list[str]]]
 
-    def get_selected_list(self) -> List[str]:
+    def get_selected_list(self) -> list[str]:
         for index, choice in enumerate(self.choices.keys()):
             if index == self.value:
                 return self.choices[choice]
 
-
 class ElevatorTier(NamedRange):
     """
-    Ship these Space Elevator packages to finish.
-    Does nothing if *Space Elevator Tier* goal is not enabled.
+    Put these Shipments to Space Elevator packages in logic.
+    if your goal selection contains *Space Elevator Tier* then the goal will be to complete these shipments.
     """
     display_name = "Goal: Space Elevator shipment"
     default = 2
     range_start = 1
-    range_end = 4
+    range_end = 5
     special_range_names = {
         "one package (tiers 1-2)": 1,
         "two packages (tiers 1-4)": 2,
         "three packages (tiers 1-6)": 3,
-        "four packages (tiers 7-8)": 4,
-        "five packages (tier 9)": 5,
+        "four packages (tiers 1-8)": 4,
+        "five packages (tiers 1-9)": 5,
     }
 
-class ResourceSinkPoints(NamedRange):
+class ResourceSinkPointsTotal(NamedRange):
     """
+    Does nothing if *AWESOME Sink Points (total)* goal is not enabled.
+
     Sink an amount of items totalling this amount of points to finish.
     This setting is a *point count*, not a *coupon* count!
-    Does nothing if *AWESOME Sink Points* goal is not enabled.
 
     In the base game, it takes 347 coupons to unlock every non-repeatable purchase, or 1895 coupons to purchase every non-producible item.
 
@@ -72,7 +73,7 @@ class ResourceSinkPoints(NamedRange):
     If you have *Free Samples* enabled, consider setting this higher so that you can't reach the goal just by sinking your Free Samples.
     """
     # Coupon data for above comment from https://satisfactory.wiki.gg/wiki/AWESOME_Shop
-    display_name = "Goal: AWESOME Sink points"
+    display_name = "Goal: AWESOME Sink points total"
     default = 2166000
     range_start = 2166000
     range_end = 18436379500
@@ -97,6 +98,37 @@ class ResourceSinkPoints(NamedRange):
         "900 coupons (~13b points)": 13433475000,
         "950 coupons (~16b points)": 15803241000,
         "1000 coupons (~18b points)": 18436379500
+    }
+
+class ResourceSinkPointsPerMinute(NamedRange):
+    """
+    Does nothing if *AWESOME Sink Points (per minute)* goal is not enabled.
+
+    Continuously Sink an amount of items to maintain a sink points per minute of this amount of points for 10 minutes to finish.
+    This setting is in *points per minute* on the orange track so no DNA Capsules!
+
+    Use the **TFIT - Ficsit Information Tool** mod or the Satisfactory wiki to find out how many points items are worth.
+    """
+    # Coupon data for above comment from https://satisfactory.wiki.gg/wiki/AWESOME_Shop
+    display_name = "Goal: AWESOME Sink points per minute"
+    default = 50000
+    range_start = 1000
+    range_end = 10000000
+    special_range_names = {
+        "~500 screw/min": 1000,
+        "~100 reinforced iron plate/min": 12000,
+        "~100 stator/min": 24000,
+        "~100 modular frame/min": 40000,
+        "~100 smart plating/min": 50000,
+        "~20 crystal oscillator/min": 60000,
+        "~50 motor/min": 76000,
+        "~10 heavy modular frame/min": 100000,
+        "~10 radio control unit": 300000,
+        "~10 heavy modular frame/min": 625000,
+        "~10 supercomputer/min": 1000000,
+        "~10 pressure conversion cube/min": 2500000,
+        "~10 nuclear pasta/min": 5000000,
+        "~4 ballistic warp drive/min": 10000000,
     }
 
 class HardDriveProgressionLimit(Range):
@@ -242,7 +274,7 @@ class TrapSelectionOverride(OptionSet):
     valid_keys = _trap_types
     default = {}
 
-class EnergyLink(Toggle):
+class EnergyLink(DefaultOnToggle):
     """
     Allow transferring energy to and from other worlds using the Power Storage building.
     No energy is lost in the transfer on Satisfactory's side, but other worlds may have other settings.
@@ -334,6 +366,31 @@ class StartingInventoryPreset(ChoiceMap):
     }
     # default = "Archipelago" # TODO `default` doesn't do anything, default is always the first `choices` value. if uncommented it messes up the template file generation (caps mismatch)
 
+class ExplorationCollectableCount(Range):
+    """
+    Does nothing if *Exploration Collectables* goal is not enabled.
+
+    Collect this amount of Mercer Spheres and Summer Sloops each to finish.
+    """
+    display_name = "Goal: Exploration Collectables"
+    default = 20
+    range_start = 20
+    range_end = 100
+
+class MilestoneCostMultiplier(Range):
+    """
+    Multiplies the amount of resources needed to unlock a milestone by this factor
+
+    The value is in percentage:
+    50 = half cost
+    100 = normal milestone cost
+    200 = double the cost
+    """
+    display_name = "Milestone cost multiplier %"
+    default = 100
+    range_start = 1
+    range_end = 500
+
 class GoalSelection(OptionSet):
     """
     What will be your goal(s)?
@@ -342,11 +399,14 @@ class GoalSelection(OptionSet):
     display_name = "Select your Goals"
     valid_keys = {
         "Space Elevator Tier",
-        "AWESOME Sink Points",
-        # "Exploration",
-        # "FICSMAS Tree",
+        "AWESOME Sink Points (total)",
+        "AWESOME Sink Points (per minute)",
+        "Exploration Collectables",
+        # "Erect a FICSMAS Tree",
     }
     default = {"Space Elevator Tier"}
+    schema = Schema(And(set, len), 
+                    error = "yaml does not specify a goal, the Satisfactory option `goal_selection` is empty")
 
 class GoalRequirement(Choice):
     """
@@ -366,11 +426,13 @@ class ExperimentalGeneration(Toggle):
     visibility = Visibility.none
 
 @dataclass
-class SatisfactoryOptions(PerGameCommonOptions):
+class SatisfactoryOptions(PerGameCommonOptions, DeathLinkMixin):
     goal_selection: GoalSelection
     goal_requirement: GoalRequirement
     final_elevator_package: ElevatorTier
-    final_awesome_sink_points: ResourceSinkPoints
+    final_awesome_sink_points_total: ResourceSinkPointsTotal
+    final_awesome_sink_points_per_minute: ResourceSinkPointsPerMinute
+    final_exploration_collectables_amount: ExplorationCollectableCount
     hard_drive_progression_limit: HardDriveProgressionLimit
     free_sample_equipment: FreeSampleEquipment
     free_sample_buildings: FreeSampleBuildings
@@ -381,10 +443,10 @@ class SatisfactoryOptions(PerGameCommonOptions):
     awesome_logic_placement: AwesomeLogic
     energy_link_logic_placement: EnergyLinkLogic
     splitter_placement: SplitterLogic
+    milestone_cost_multiplier: MilestoneCostMultiplier
     trap_chance: TrapChance
     trap_selection_preset: TrapSelectionPreset
     trap_selection_override: TrapSelectionOverride
-    death_link: DeathLink
     energy_link: EnergyLink
     start_inventory_from_pool: StartInventoryPool
     experimental_generation: ExperimentalGeneration
