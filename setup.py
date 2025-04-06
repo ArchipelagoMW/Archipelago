@@ -2,6 +2,7 @@ import base64
 import datetime
 import os
 import platform
+import shlex
 import shutil
 import sys
 import sysconfig
@@ -157,6 +158,10 @@ if os.path.exists("X:/pw.txt"):
                r'" /fd sha256 /tr http://timestamp.digicert.com/ '
 else:
     signtool = None
+
+
+def sign(p: str):
+    os.system(signtool + p)  # noqa: S6
 
 
 build_platform = sysconfig.get_platform()
@@ -408,12 +413,12 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
         if signtool:
             for exe in self.distribution.executables:
                 print(f"Signing {exe.target_name}")
-                os.system(signtool + os.path.join(self.buildfolder, exe.target_name))
+                sign(os.path.join(self.buildfolder, exe.target_name))
             print("Signing SNI")
-            os.system(signtool + os.path.join(self.buildfolder, "SNI", "SNI.exe"))
+            sign(os.path.join(self.buildfolder, "SNI", "SNI.exe"))
             print("Signing OoT Utils")
             for exe_path in (("Compress", "Compress.exe"), ("Decompress", "Decompress.exe")):
-                os.system(signtool + os.path.join(self.buildfolder, "lib", "worlds", "oot", "data", *exe_path))
+                sign(os.path.join(self.buildfolder, "lib", "worlds", "oot", "data", *exe_path))
 
         remove_sprites_from_folder(self.buildfolder / "data" / "sprites" / "alttpr")
 
@@ -554,7 +559,11 @@ $APPDIR/$exe "$@"
         self.write_desktop()
         self.write_launcher(self.app_exec)
         print(f'{self.app_dir} -> {self.dist_file}')
-        subprocess.call(f'ARCH={build_arch} ./appimagetool -n "{self.app_dir}" "{self.dist_file}"', shell=True)
+        subprocess.call(
+            shlex.join(["./appimagetool", "-n", str(self.app_dir), str(self.dist_file)]),
+            env=dict(os.environ, ARCH=build_arch),
+            shell=True,  # noqa: S602
+        )
 
 
 def find_libs(*args: str) -> Sequence[Tuple[str, str]]:
