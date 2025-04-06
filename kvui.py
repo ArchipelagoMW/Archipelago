@@ -93,13 +93,13 @@ class ThemedApp(MDApp):
         self.theme_cls.theme_style = getattr(text_colors, "theme_style", "Dark")
         self.theme_cls.primary_palette = getattr(text_colors, "primary_palette", "Green")
         self.theme_cls.dynamic_scheme_name = getattr(text_colors, "dynamic_scheme_name", "TONAL_SPOT")
-        self.theme_cls.dynamic_scheme_contrast = 0.0
+        self.theme_cls.dynamic_scheme_contrast = getattr(text_colors, "dynamic_scheme_contrast", 0.0)
 
 
 class ImageIcon(MDButtonIcon, AsyncImage):
     def __init__(self, *args, **kwargs):
         super().__init__(args, kwargs)
-        self.image = AsyncImage(**kwargs)
+        self.image = ApAsyncImage(**kwargs)
         self.add_widget(self.image)
 
     def add_widget(self, widget, index=0, canvas=None):
@@ -114,7 +114,7 @@ class ImageButton(MDIconButton):
             if val != "None":
                 image_args[kwarg.replace("image_", "")] = val
         super().__init__()
-        self.image = AsyncImage(**image_args)
+        self.image = ApAsyncImage(**image_args)
 
         def set_center(button, center):
             self.image.center_x = self.center_x
