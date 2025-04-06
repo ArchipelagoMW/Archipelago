@@ -46,7 +46,6 @@ def count_reachable_orbs_global(state: CollectionState,
                                 world: JakAndDaxterWorld) -> int:
 
     accessible_orbs = 0
-    # Cast all regions upfront to access their unique attributes.
     for level_name in world.level_to_regions:
         for region in world.level_to_regions[level_name]:
             # Rely on short-circuiting to skip region.can_reach whenever possible.
@@ -60,7 +59,6 @@ def count_reachable_orbs_level(state: CollectionState,
                                level_name: str = "") -> int:
 
     accessible_orbs = 0
-    # Cast all regions upfront to access their unique attributes.
     for region in world.level_to_regions[level_name]:
         # Rely on short-circuiting to skip region.can_reach whenever possible.
         if region.orb_count > 0 and region.can_reach(state):
