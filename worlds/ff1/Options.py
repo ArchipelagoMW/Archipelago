@@ -1,6 +1,6 @@
-from typing import Dict
+from dataclasses import dataclass
 
-from Options import OptionDict
+from Options import OptionDict, PerGameCommonOptions
 
 
 class Locations(OptionDict):
@@ -18,8 +18,8 @@ class Rules(OptionDict):
     display_name = "rules"
 
 
-ff1_options: Dict[str, OptionDict] = {
-    "locations": Locations,
-    "items": Items,
-    "rules": Rules
-}
+@dataclass
+class FF1Options(PerGameCommonOptions):
+    locations: Locations
+    items: Items
+    rules: Rules

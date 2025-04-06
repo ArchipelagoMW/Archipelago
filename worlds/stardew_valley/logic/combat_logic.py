@@ -3,10 +3,11 @@ from typing import Union
 
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
+from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from ..mods.logic.magic_logic import MagicLogicMixin
-from ..stardew_rule import StardewRule, Or, False_
+from ..stardew_rule import StardewRule, False_
 from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.performance_names import Performance
 
@@ -19,7 +20,7 @@ class CombatLogicMixin(BaseLogicMixin):
         self.combat = CombatLogic(*args, **kwargs)
 
 
-class CombatLogic(BaseLogic[Union[CombatLogicMixin, RegionLogicMixin, ReceivedLogicMixin, MagicLogicMixin]]):
+class CombatLogic(BaseLogic[Union[HasLogicMixin, CombatLogicMixin, RegionLogicMixin, ReceivedLogicMixin, MagicLogicMixin]]):
     @cache_self1
     def can_fight_at_level(self, level: str) -> StardewRule:
         if level == Performance.basic:
@@ -42,16 +43,20 @@ class CombatLogic(BaseLogic[Union[CombatLogicMixin, RegionLogicMixin, ReceivedLo
 
     @cached_property
     def has_decent_weapon(self) -> StardewRule:
-        return Or(*(self.logic.received(weapon, 2) for weapon in valid_weapons))
+        return self.logic.or_(*(self.logic.received(weapon, 2) for weapon in valid_weapons))
 
     @cached_property
     def has_good_weapon(self) -> StardewRule:
-        return Or(*(self.logic.received(weapon, 3) for weapon in valid_weapons))
+        return self.logic.or_(*(self.logic.received(weapon, 3) for weapon in valid_weapons))
 
     @cached_property
     def has_great_weapon(self) -> StardewRule:
-        return Or(*(self.logic.received(weapon, 4) for weapon in valid_weapons))
+        return self.logic.or_(*(self.logic.received(weapon, 4) for weapon in valid_weapons))
 
     @cached_property
     def has_galaxy_weapon(self) -> StardewRule:
-        return Or(*(self.logic.received(weapon, 5) for weapon in valid_weapons))
+        return self.logic.or_(*(self.logic.received(weapon, 5) for weapon in valid_weapons))
+
+    @cached_property
+    def has_slingshot(self) -> StardewRule:
+        return self.logic.received(APWeapon.slingshot)

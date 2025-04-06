@@ -55,4 +55,21 @@ dependencies. Vanilla would always be first, then anything that depends only on 
 3. In `create_items`, AP items are unpacked, and randomized.
 4. In `set_rules`, the rules are applied to the AP entrances and locations. Each content pack have to apply the proper rules for their entrances and locations.
     - (idea) To begin this step, sphere 0 could be simplified instantly as sphere 0 regions and items are already known.
-5. Nothing to do in `generate_basic`. 
+5. Nothing to do in `generate_basic`.
+
+## Item Sources
+
+Instead of containing rules directly, items would contain sources that would then be transformed into rules. Using a single dispatch mechanism, the sources will
+be associated to their actual logic.
+
+This system is extensible and easily maintainable in the ways that it decouple the rule and the actual items. Any "type" of item could be used with any "type"
+of source (Monster drop and fish can have foraging sources).
+
+- Mods requiring special rules can remove sources from vanilla content or wrap them to add their own logic (Magic add sources for some items), or change the
+  rules for monster drop sources.
+- (idea) A certain difficulty level (or maybe tags) could be added to the source, to enable or disable them given settings chosen by the player. Someone with a
+  high grinding tolerance can enable "hard" or "grindy" sources. Some source that are pushed back in further spheres can be replaced by less forgiving sources
+  if easy logic is disabled. For instance, anything that requires money could be accessible as soon as you can sell something to someone (even wood).
+
+Items are classified by their source. An item with a fishing or a crab pot source is considered a fish, an item dropping from a monster is a monster drop. An
+item with a foraging source is a forageable. Items can fit in multiple categories. 

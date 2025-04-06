@@ -1368,9 +1368,9 @@ def get_locations(world: Optional[World]) -> Tuple[LocationData, ...]:
                      lambda state: logic.templars_charge_requirement(state)),
         LocationData("Templar's Charge", "Templar's Charge: Southeast Power Core", SC2LOTV_LOC_ID_OFFSET + 1903, LocationType.EXTRA,
                      lambda state: logic.templars_charge_requirement(state)),
-        LocationData("Templar's Charge", "Templar's Charge: West Hybrid Statis Chamber", SC2LOTV_LOC_ID_OFFSET + 1904, LocationType.VANILLA,
+        LocationData("Templar's Charge", "Templar's Charge: West Hybrid Stasis Chamber", SC2LOTV_LOC_ID_OFFSET + 1904, LocationType.VANILLA,
                      lambda state: logic.templars_charge_requirement(state)),
-        LocationData("Templar's Charge", "Templar's Charge: Southeast Hybrid Statis Chamber", SC2LOTV_LOC_ID_OFFSET + 1905, LocationType.VANILLA,
+        LocationData("Templar's Charge", "Templar's Charge: Southeast Hybrid Stasis Chamber", SC2LOTV_LOC_ID_OFFSET + 1905, LocationType.VANILLA,
                      lambda state: logic.protoss_fleet(state)),
         LocationData("Templar's Return", "Templar's Return: Victory", SC2LOTV_LOC_ID_OFFSET + 2000, LocationType.VICTORY,
                      lambda state: logic.templars_return_requirement(state)),
@@ -1387,7 +1387,7 @@ def get_locations(world: Optional[World]) -> Tuple[LocationData, ...]:
                      lambda state: logic.templars_return_requirement(state)),
         LocationData("The Host", "The Host: Victory", SC2LOTV_LOC_ID_OFFSET + 2100, LocationType.VICTORY,
                      lambda state: logic.the_host_requirement(state)),
-        LocationData("The Host", "The Host: Southeast Void Shard", SC2LOTV_LOC_ID_OFFSET + 2101, LocationType.VICTORY,
+        LocationData("The Host", "The Host: Southeast Void Shard", SC2LOTV_LOC_ID_OFFSET + 2101, LocationType.EXTRA,
                      lambda state: logic.the_host_requirement(state)),
         LocationData("The Host", "The Host: South Void Shard", SC2LOTV_LOC_ID_OFFSET + 2102, LocationType.EXTRA,
                      lambda state: logic.the_host_requirement(state)),
@@ -1445,11 +1445,11 @@ def get_locations(world: Optional[World]) -> Tuple[LocationData, ...]:
         LocationData("The Escape", "The Escape: Agent Stone", SC2NCO_LOC_ID_OFFSET + 105, LocationType.VANILLA,
                      lambda state: logic.the_escape_requirement(state)),
         LocationData("Sudden Strike", "Sudden Strike: Victory", SC2NCO_LOC_ID_OFFSET + 200, LocationType.VICTORY,
-                     lambda state: logic.sudden_strike_can_reach_objectives(state)),
+                     lambda state: logic.sudden_strike_requirement(state)),
         LocationData("Sudden Strike", "Sudden Strike: Research Center", SC2NCO_LOC_ID_OFFSET + 201, LocationType.VANILLA,
                      lambda state: logic.sudden_strike_can_reach_objectives(state)),
         LocationData("Sudden Strike", "Sudden Strike: Weaponry Labs", SC2NCO_LOC_ID_OFFSET + 202, LocationType.VANILLA,
-                     lambda state: logic.sudden_strike_requirement(state)),
+                     lambda state: logic.sudden_strike_can_reach_objectives(state)),
         LocationData("Sudden Strike", "Sudden Strike: Brutalisk", SC2NCO_LOC_ID_OFFSET + 203, LocationType.EXTRA,
                      lambda state: logic.sudden_strike_requirement(state)),
         LocationData("Enemy Intelligence", "Enemy Intelligence: Victory", SC2NCO_LOC_ID_OFFSET + 300, LocationType.VICTORY,
@@ -1620,7 +1620,7 @@ def get_locations(world: Optional[World]) -> Tuple[LocationData, ...]:
         plando_locations = get_plando_locations(world)
         exclude_locations = get_option_value(world, "exclude_locations")
         location_table = [location for location in location_table
-                          if (LocationType is LocationType.VICTORY or location.name not in exclude_locations)
+                          if (location.type is LocationType.VICTORY or location.name not in exclude_locations)
                           and location.type not in excluded_location_types
                           or location.name in plando_locations]
     for i, location_data in enumerate(location_table):

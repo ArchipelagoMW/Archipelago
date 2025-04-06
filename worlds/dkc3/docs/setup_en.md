@@ -45,8 +45,8 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a config file?
 
-The Player Settings page on the website allows you to configure your personal settings and export a config file from
-them. Player settings page: [Donkey Kong Country 3 Player Settings Page](/games/Donkey%20Kong%20Country%203/player-settings)
+The Player Options page on the website allows you to configure your personal options and export a config file from
+them. Player options page: [Donkey Kong Country 3 Player Options Page](/games/Donkey%20Kong%20Country%203/player-options)
 
 ### Verifying your config file
 
@@ -55,8 +55,8 @@ validator page: [YAML Validation page](/check)
 
 ## Generating a Single-Player Game
 
-1. Navigate to the Player Settings page, configure your options, and click the "Generate Game" button.
-    - Player Settings page: [Donkey Kong Country 3 Player Settings Page](/games/Donkey%20Kong%20Country%203/player-settings)
+1. Navigate to the Player Options page, configure your options, and click the "Generate Game" button.
+    - Player Options page: [Donkey Kong Country 3 Player Options Page](/games/Donkey%20Kong%20Country%203/player-options)
 2. You will be presented with a "Seed Info" page.
 3. Click the "Create New Room" link.
 4. You will be presented with a server page, from which you can download your patch file.

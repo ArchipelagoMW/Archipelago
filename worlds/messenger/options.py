@@ -1,16 +1,63 @@
 from dataclasses import dataclass
-from typing import Dict
 
 from schema import And, Optional, Or, Schema
 
-from Options import Accessibility, Choice, DeathLinkMixin, DefaultOnToggle, OptionDict, PerGameCommonOptions, Range, \
-    StartInventoryPool, Toggle
+from Options import Choice, DeathLinkMixin, DefaultOnToggle, ItemsAccessibility, OptionDict, PerGameCommonOptions, \
+    PlandoConnections, Range, StartInventoryPool, Toggle
+from . import RANDOMIZED_CONNECTIONS
+from .portals import CHECKPOINTS, PORTALS, SHOP_POINTS
 
 
-class MessengerAccessibility(Accessibility):
-    default = Accessibility.option_locations
+class MessengerAccessibility(ItemsAccessibility):
     # defaulting to locations accessibility since items makes certain items self-locking
-    __doc__ = Accessibility.__doc__.replace(f"default {Accessibility.default}", f"default {default}")
+    default = ItemsAccessibility.option_full
+    __doc__ = ItemsAccessibility.__doc__
+
+
+class PortalPlando(PlandoConnections):
+    """
+    Plando connections to be used with portal shuffle. Direction is ignored.
+    List of valid connections can be found here: https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/messenger/portals.py#L12.
+    The entering Portal should *not* have "Portal" appended.
+    For the exits, those in checkpoints and shops should just be the name of the spot, while portals should have " Portal" at the end.
+    Example:
+    - entrance: Riviere Turquoise
+      exit: Wingsuit
+    - entrance: Sunken Shrine
+      exit: Sunny Day
+    - entrance: Searing Crags
+      exit: Glacial Peak Portal
+    """
+    display_name = "Portal Plando Connections"
+    portals = [f"{portal} Portal" for portal in PORTALS]
+    shop_points = [point for points in SHOP_POINTS.values() for point in points]
+    checkpoints = [point for points in CHECKPOINTS.values() for point in points]
+
+    entrances = frozenset(PORTALS)
+    exits = frozenset(portals + shop_points + checkpoints)
+
+
+class TransitionPlando(PlandoConnections):
+    """
+    Plando connections to be used with transition shuffle.
+    List of valid connections can be found at https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/messenger/connections.py#L641.
+    Dictionary keys (left) are entrances and values (right) are exits. If transition shuffle is on coupled all plando
+    connections will be coupled. If on decoupled, "entrance" and "exit" will be treated the same, simply making the
+    plando connection one-way from entrance to exit.
+    Example:
+    - entrance: Searing Crags - Top
+      exit: Dark Cave - Right
+      direction: both
+    """
+    display_name = "Transition Plando Connections"
+    entrances = frozenset(RANDOMIZED_CONNECTIONS.keys())
+    exits = frozenset(RANDOMIZED_CONNECTIONS.values())
+
+    @classmethod
+    def can_connect(cls, entrance: str, exit: str) -> bool:
+        if entrance != "Glacial Peak - Left" and entrance.lower() in cls.exits:
+            return exit.lower() in cls.entrances
+        return exit.lower() not in cls.entrances
 
 
 class Logic(Choice):
@@ -88,7 +135,7 @@ class ShuffleTransitions(Choice):
 
 
 class Goal(Choice):
-    """Requirement to finish the game."""
+    """Requirement to finish the game. To win with the power seal hunt goal, you must enter the Music Box through the shop chest."""
     display_name = "Goal"
     option_open_music_box = 0
     option_power_seal_hunt = 1
@@ -123,6 +170,11 @@ class RequiredSeals(Range):
     default = range_end
 
 
+class Traps(Toggle):
+    """Whether traps should be included in the itempool."""
+    display_name = "Include Traps"
+
+
 class ShopPrices(Range):
     """Percentage modifier for shuffled item prices in shops"""
     display_name = "Shop Prices Modifier"
@@ -131,7 +183,7 @@ class ShopPrices(Range):
     default = 100
 
 
-def planned_price(location: str) -> Dict[Optional, Or]:
+def planned_price(location: str) -> dict[Optional, Or]:
     return {
         Optional(location): Or(
             And(int, lambda n: n >= 0),
@@ -191,11 +243,14 @@ class MessengerOptions(DeathLinkMixin, PerGameCommonOptions):
     early_meditation: EarlyMed
     available_portals: AvailablePortals
     shuffle_portals: ShufflePortals
-    # shuffle_transitions: ShuffleTransitions
+    shuffle_transitions: ShuffleTransitions
     goal: Goal
     music_box: MusicBox
     notes_needed: NotesNeeded
     total_seals: AmountSeals
     percent_seals_required: RequiredSeals
+    traps: Traps
     shop_price: ShopPrices
     shop_price_plan: PlannedShopPrices
+    portal_plando: PortalPlando
+    plando_connections: TransitionPlando

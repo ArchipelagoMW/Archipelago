@@ -25,8 +25,8 @@ options.
 
 ### Where do I get a config file?
 
-The Player Settings page on the website allows you to configure your personal settings and export a config file from
-them. Factorio player settings page: [Factorio Settings Page](/games/Factorio/player-settings)
+The Player Options page on the website allows you to configure your personal options and export a config file from
+them. Factorio player options page: [Factorio Options Page](/games/Factorio/player-options)
 
 ### Verifying your config file
 
@@ -133,7 +133,7 @@ This allows you to host your own Factorio game.
 For additional client features, issue the `/help` command in the Archipelago Client. Once connected to the AP server,
 you can also issue the `!help` command to learn about additional commands like `!hint`.
 For more information about the commands you can use, see the [Commands Guide](/tutorial/Archipelago/commands/en) and
-[Other Settings](#other-settings).
+[Other Options](#other-options).
 
 ## Allowing Other People to Join Your Game
 
@@ -148,11 +148,11 @@ For more information about the commands you can use, see the [Commands Guide](/t
 By default, peaceful mode is disabled. There are two methods to enable peaceful mode:
 
 ### By config file
-You can specify Factorio game settings such as peaceful mode and terrain and resource generation parameters in your
-config .yaml file by including the `world_gen` setting. This setting is currently not supported by the web UI, so you'll
+You can specify Factorio game options such as peaceful mode and terrain and resource generation parameters in your
+config .yaml file by including the `world_gen` option. This option is currently not supported by the web UI, so you'll
 have to manually create or edit your config file with a text editor of your choice.
 The [template file](/static/generated/configs/Factorio.yaml) is a good starting point and contains the default value of
-the `world_gen` setting. If you already have a config file you may also just copy that setting over from the template.
+the `world_gen` option. If you already have a config file you may also just copy that option over from the template.
 To enable peaceful mode, simply replace `peaceful_mode: false` with `peaceful_mode: true`. Finally, use the
 [.yaml checker](/check) to ensure your file is valid.
 
@@ -165,7 +165,7 @@ enable peaceful mode by entering the following commands into your Archipelago Fa
 ```
 (If this warns you that these commands may disable achievements, you may need to repeat them for them to take effect.)
 
-## Other Settings
+## Other Options
 
 ### filter_item_sends
 

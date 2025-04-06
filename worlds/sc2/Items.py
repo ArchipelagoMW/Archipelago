@@ -661,11 +661,11 @@ item_table = {
                  description=RESOURCE_EFFICIENCY_DESCRIPTION_TEMPLATE.format("HERC")),
     ItemNames.HERC_JUGGERNAUT_PLATING:
         ItemData(285 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 16, SC2Race.TERRAN,
-                 parent_item=ItemNames.WARHOUND, origin={"ext"},
+                 parent_item=ItemNames.HERC, origin={"ext"},
                  description="Increases HERC armor by 2."),
     ItemNames.HERC_KINETIC_FOAM:
         ItemData(286 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 17, SC2Race.TERRAN,
-                 parent_item=ItemNames.WARHOUND, origin={"ext"},
+                 parent_item=ItemNames.HERC, origin={"ext"},
                  description="Increases HERC life by 50."),
 
     ItemNames.HELLION_TWIN_LINKED_FLAMETHROWER:
@@ -1274,16 +1274,16 @@ item_table = {
                  description="Defensive structure. Slows the attack and movement speeds of all nearby Zerg units."),
     ItemNames.STRUCTURE_ARMOR:
         ItemData(620 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 9, SC2Race.TERRAN,
-                 description="Increases armor of all Terran structures by 2."),
+                 description="Increases armor of all Terran structures by 2.", origin={"ext"}),
     ItemNames.HI_SEC_AUTO_TRACKING:
         ItemData(621 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 10, SC2Race.TERRAN,
-                 description="Increases attack range of all Terran structures by 1."),
+                 description="Increases attack range of all Terran structures by 1.", origin={"ext"}),
     ItemNames.ADVANCED_OPTICS:
         ItemData(622 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 11, SC2Race.TERRAN,
-                 description="Increases attack range of all Terran mechanical units by 1."),
+                 description="Increases attack range of all Terran mechanical units by 1.", origin={"ext"}),
     ItemNames.ROGUE_FORCES:
         ItemData(623 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 12, SC2Race.TERRAN,
-                 description="Mercenary calldowns are no longer limited by charges."),
+                 description="Mercenary calldowns are no longer limited by charges.", origin={"ext"}),
 
     ItemNames.ZEALOT:
         ItemData(700 + SC2WOL_ITEM_ID_OFFSET, "Unit", 0, SC2Race.PROTOSS,
@@ -2369,7 +2369,8 @@ progressive_if_ext = {
     ItemNames.BATTLECRUISER_PROGRESSIVE_MISSILE_PODS,
     ItemNames.THOR_PROGRESSIVE_IMMORTALITY_PROTOCOL,
     ItemNames.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM,
-    ItemNames.DIAMONDBACK_PROGRESSIVE_TRI_LITHIUM_POWER_CELL
+    ItemNames.DIAMONDBACK_PROGRESSIVE_TRI_LITHIUM_POWER_CELL,
+    ItemNames.PROGRESSIVE_ORBITAL_COMMAND
 }
 
 kerrigan_actives: typing.List[typing.Set[str]] = [

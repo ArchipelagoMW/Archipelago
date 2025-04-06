@@ -1,6 +1,5 @@
-from typing import Dict
-
-from Options import Choice, Option, Toggle
+from dataclasses import dataclass
+from Options import Choice, Toggle, PerGameCommonOptions, StartInventoryPool
 
 
 class HardMode(Toggle):
@@ -25,10 +24,11 @@ class ButtonColor(Choice):
     option_black = 11
 
 
-clique_options: Dict[str, type(Option)] = {
-    "color": ButtonColor,
-    "hard_mode": HardMode,
+@dataclass
+class CliqueOptions(PerGameCommonOptions):
+    color: ButtonColor
+    hard_mode: HardMode
+    start_inventory_from_pool: StartInventoryPool
 
     # DeathLink is always on. Always.
-    # "death_link": DeathLink,
-}
+    # death_link: DeathLink
