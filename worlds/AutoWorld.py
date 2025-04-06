@@ -485,6 +485,16 @@ class World(metaclass=AutoWorldRegister):
         logging.warning(f"World {self} is generating a filler item without custom filler pool.")
         return self.multiworld.random.choice(tuple(self.item_name_to_id.keys()))
 
+    def completion_condition(self, state: CollectionState) -> bool:
+        """
+        Called to determine if the player can currently reach the goal or "win".
+
+        :param state: The CollectionState to check for the goal with.
+
+        :return: True if the player can reach their goal.
+        """
+        return True
+
     @classmethod
     def create_group(cls, multiworld: "MultiWorld", new_player_id: int, players: Set[int]) -> World:
         """
