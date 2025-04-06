@@ -232,7 +232,7 @@ PLANT_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Wardrobe Balcony Plant L (in Corner)": LMLocationData("Wardrobe Balcony", 68, "Plant", 476,
         ["Water Element Medal"], update_ram_addr=[LMRamData(in_game_room_id=40)]),
     "Master Bedroom Plant": LMLocationData("Master Bedroom", 69, "Plant", 542, ["Water Element Medal"],
-        update_ram_addr=[LMRamData(in_game_room_id=24)]),
+        update_ram_addr=[LMRamData(in_game_room_id=34)]),
     "Courtyard SW Plant": LMLocationData("Courtyard", 71, "Plant", 142, ["Water Element Medal"],
         update_ram_addr=[LMRamData(in_game_room_id=24)]),
     "Courtyard NW Plant": LMLocationData("Courtyard", 72, "Plant", 143, ["Water Element Medal"],
