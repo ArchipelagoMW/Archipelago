@@ -81,7 +81,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     del item_digits, location_digits, item_count, location_count
 
     # This assertion method should not be necessary to run if we are not outputting any multidata.
-    if not args.skip_output:
+    if not args.skip_output and not args.spoiler_only:
         AutoWorld.call_stage(multiworld, "assert_generate")
 
     AutoWorld.call_all(multiworld, "generate_early")
@@ -148,7 +148,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     else:
         multiworld.worlds[1].options.non_local_items.value = set()
         multiworld.worlds[1].options.local_items.value = set()
-    
+
+    AutoWorld.call_all(multiworld, "connect_entrances")
     AutoWorld.call_all(multiworld, "generate_basic")
 
     # remove starting inventory from pool items.
@@ -223,6 +224,15 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     logger.info(f'Beginning output...')
     outfilebase = 'AP_' + multiworld.seed_name
 
+    if args.spoiler_only:
+        if args.spoiler > 1:
+            logger.info('Calculating playthrough.')
+            multiworld.spoiler.create_playthrough(create_paths=args.spoiler > 2)
+
+        multiworld.spoiler.to_file(output_path('%s_Spoiler.txt' % outfilebase))
+        logger.info('Done. Skipped multidata modification. Total time: %s', time.perf_counter() - start)
+        return multiworld
+
     output = tempfile.TemporaryDirectory()
     with output as temp_dir:
         output_players = [player for player in multiworld.player_ids if AutoWorld.World.generate_output.__code__
@@ -242,6 +252,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
             def write_multidata():
                 import NetUtils
+                from NetUtils import HintStatus
                 slot_data = {}
                 client_versions = {}
                 games = {}
@@ -266,10 +277,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 for slot in multiworld.player_ids:
                     slot_data[slot] = multiworld.worlds[slot].fill_slot_data()
 
-                def precollect_hint(location):
+                def precollect_hint(location: Location, auto_status: HintStatus):
                     entrance = er_hint_data.get(location.player, {}).get(location.address, "")
                     hint = NetUtils.Hint(location.item.player, location.player, location.address,
-                                         location.item.code, False, entrance, location.item.flags, False)
+                                         location.item.code, False, entrance, location.item.flags, auto_status)
                     precollected_hints[location.player].add(hint)
                     if location.item.player not in multiworld.groups:
                         precollected_hints[location.item.player].add(hint)
@@ -288,13 +299,16 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                             f"{locations_data[location.player][location.address]}")
                         locations_data[location.player][location.address] = \
                             location.item.code, location.item.player, location.item.flags
+                        auto_status = HintStatus.HINT_AVOID if location.item.trap else HintStatus.HINT_PRIORITY
                         if location.name in multiworld.worlds[location.player].options.start_location_hints:
-                            precollect_hint(location)
+                            if not location.item.trap:  # Unspecified status for location hints, except traps
+                                auto_status = HintStatus.HINT_UNSPECIFIED
+                            precollect_hint(location, auto_status)
                         elif location.item.name in multiworld.worlds[location.item.player].options.start_hints:
-                            precollect_hint(location)
+                            precollect_hint(location, auto_status)
                         elif any([location.item.name in multiworld.worlds[player].options.start_hints
                                   for player in multiworld.groups.get(location.item.player, {}).get("players", [])]):
-                            precollect_hint(location)
+                            precollect_hint(location, auto_status)
 
                 # embedded data package
                 data_package = {
