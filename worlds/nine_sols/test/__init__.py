@@ -1,6 +1,5 @@
 import os
 import sys
-from typing import List
 
 from test.bases import WorldTestBase, CollectionState
 
@@ -13,7 +12,7 @@ if path not in sys.path:
 class NineSolsTestBase(WorldTestBase):
     game = "Nine Sols"
 
-    def makeStateWith(self, item_names: List[str]) -> CollectionState:
+    def makeStateWith(self, item_names: list[str]) -> CollectionState:
         state = CollectionState(self.multiworld)
         for i in self.get_items_by_name(item_names):
             state.collect(i)
@@ -22,20 +21,20 @@ class NineSolsTestBase(WorldTestBase):
     def getLocationCount(self) -> int:
         return sum(1 for _ in self.multiworld.get_locations(1))
 
-    def isReachableWith(self, location_name: str, item_names: List[str]) -> bool:
+    def isReachableWith(self, location_name: str, item_names: list[str]) -> bool:
         state = self.makeStateWith(item_names)
         return state.can_reach_location(location_name, 1)
 
-    def assertReachableWith(self, location_name: str, item_names: List[str]) -> None:
+    def assertReachableWith(self, location_name: str, item_names: list[str]) -> None:
         self.assertTrue(self.isReachableWith(location_name, item_names))
 
-    def assertNotReachableWith(self, location_name: str, item_names: List[str]) -> None:
+    def assertNotReachableWith(self, location_name: str, item_names: list[str]) -> None:
         self.assertFalse(self.isReachableWith(location_name, item_names))
 
     # we can't realistically prove there is no other combination of items that works,
     # so what this actually tests is having all item_names is enough to reach the location,
     # and missing any one of those item_names is not enough to reach it.
-    def requiresAllOf(self, location_name: str, item_names: List[str]) -> bool:
+    def requiresAllOf(self, location_name: str, item_names: list[str]) -> bool:
         items = self.get_items_by_name(item_names)
         state = CollectionState(self.multiworld)
 
@@ -56,13 +55,13 @@ class NineSolsTestBase(WorldTestBase):
 
     # Note that pre-collected items like Launch Codes are ignored by AP reachability logic,
     # so it doesn't matter
-    def assertRequiresAllOf(self, location_name: str, item_names: List[str]) -> None:
+    def assertRequiresAllOf(self, location_name: str, item_names: list[str]) -> None:
         self.assertTrue(self.requiresAllOf(location_name, item_names))
 
     # Checks that the listed locations requiresAllOf(item_names), and that
     # every other location in the multiworld does not requiresAllOf(item_names).
     # This may have unintuitive results for locations which can be reached multiple ways.
-    def assertEverywhereRequiringAllOf(self, location_names: List[str], item_names: List[str]) -> None:
+    def assertEverywhereRequiringAllOf(self, location_names: list[str], item_names: list[str]) -> None:
         for location in self.multiworld.get_locations():
             if location.name in location_names:
                 self.assertTrue(

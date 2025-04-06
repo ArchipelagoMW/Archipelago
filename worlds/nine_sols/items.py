@@ -1,6 +1,6 @@
 import pkgutil
 import typing
-from typing import Dict, List, NamedTuple, Optional, Set
+from typing import NamedTuple, Optional
 
 from BaseClasses import Item, ItemClassification
 from Utils import restricted_loads
@@ -32,7 +32,7 @@ item_types_map = {
     "trap": ItemClassification.trap
 }
 
-item_data_table: Dict[str, NineSolsItemData] = {}
+item_data_table: dict[str, NineSolsItemData] = {}
 for items_data_entry in items_data:
     item_data_table[items_data_entry["name"]] = NineSolsItemData(
         name=items_data_entry["name"],
@@ -43,7 +43,7 @@ for items_data_entry in items_data:
 
 all_non_event_items_table = {name: data.code for name, data in item_data_table.items() if data.code is not None}
 
-item_names: Set[str] = set(entry["name"] for entry in items_data)
+item_names: set[str] = set(entry["name"] for entry in items_data)
 
 prog_items = set(entry["name"] for entry in items_data
                  if (entry["type"] == "progression" or entry["type"] == "progression_skip_balancing")
@@ -103,8 +103,8 @@ def create_items(world: "NineSolsWorld") -> None:
 
     items_to_create = {k: v for k, v in item_data_table.items() if should_generate(v.category, options)}
 
-    prog_and_useful_items: List[NineSolsItem] = []
-    unique_filler: List[NineSolsItem] = []
+    prog_and_useful_items: list[NineSolsItem] = []
+    unique_filler: list[NineSolsItem] = []
     for name, item in items_to_create.items():
         if item.code is None:
             # here we rely on our event items and event locations having identical names

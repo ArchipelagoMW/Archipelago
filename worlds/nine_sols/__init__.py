@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 from BaseClasses import Tutorial
 from worlds.AutoWorld import WebWorld, World
@@ -29,7 +29,7 @@ class NineSolsWorld(World):
 
     # this is how we tell the Universal Tracker we want to use re_gen_passthrough
     @staticmethod
-    def interpret_slot_data(slot_data: Dict[str, Any]) -> Dict[str, Any]:
+    def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
         return slot_data
 
     # and this is how we tell Universal Tracker we don't need the yaml

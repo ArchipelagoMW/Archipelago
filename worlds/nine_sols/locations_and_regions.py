@@ -1,7 +1,7 @@
 import json
 import pkgutil
 import typing
-from typing import Any, Dict, List, NamedTuple, Optional, Set
+from typing import Any, NamedTuple, Optional
 
 from BaseClasses import CollectionState, Location, Region
 from Utils import restricted_loads
@@ -23,7 +23,7 @@ class NineSolsLocationData(NamedTuple):
 
 
 class NineSolsRegionData(NamedTuple):
-    connecting_regions: List[str] = []
+    connecting_regions: list[str] = []
 
 
 pickled_data = pkgutil.get_data(__name__, "shared_static_logic/static_logic.pickle")
@@ -32,7 +32,7 @@ locations_data = unpickled_data["LOCATIONS"]
 connections_data = unpickled_data["CONNECTIONS"]
 
 
-location_data_table: Dict[str, NineSolsLocationData] = {}
+location_data_table: dict[str, NineSolsLocationData] = {}
 for location_datum in locations_data:
     location_data_table[location_datum["name"]] = NineSolsLocationData(
         address=location_datum["address"],
@@ -43,7 +43,7 @@ for location_datum in locations_data:
 all_non_event_locations_table = {name: data.address for name, data
                                  in location_data_table.items() if data.address is not None}
 
-location_names: Set[str] = set(entry["name"] for entry in locations_data)
+location_names: set[str] = set(entry["name"] for entry in locations_data)
 
 afm = set(n for n in location_names if n.startswith("AF (Monitoring): "))
 afe = set(n for n in location_names if n.startswith("AF (Elevator): "))
@@ -118,7 +118,7 @@ location_name_groups = {
 }
 
 
-region_data_table: Dict[str, NineSolsRegionData] = {}
+region_data_table: dict[str, NineSolsRegionData] = {}
 
 
 def create_regions(world: "NineSolsWorld") -> None:
@@ -192,7 +192,7 @@ def create_regions(world: "NineSolsWorld") -> None:
 
 # In particular: this eval_rule() function is the main piece of code which will have to
 # be implemented in both languages, so it's important we keep the implementations in sync
-def eval_rule(state: CollectionState, p: int, rule: List[Any]) -> bool:
+def eval_rule(state: CollectionState, p: int, rule: list[Any]) -> bool:
     return all(eval_criterion(state, p, criterion) for criterion in rule)
 
 
@@ -230,11 +230,11 @@ def eval_criterion(state: CollectionState, p: int, criterion: Any) -> bool:
 # you must also use multiworld.register_indirect_condition."
 # And to call register_indirect_condition, we need to know what regions a rule is referencing.
 # Figuring out the regions referenced by a rule ends up being very similar to evaluating that rule.
-def regions_referenced_by_rule(rule: List[Any]) -> List[str]:
+def regions_referenced_by_rule(rule: list[Any]) -> list[str]:
     return [region for criterion in rule for region in regions_referenced_by_criterion(criterion)]
 
 
-def regions_referenced_by_criterion(criterion: Any) -> List[str]:
+def regions_referenced_by_criterion(criterion: Any) -> list[str]:
     # see eval_criterion comments
     if isinstance(criterion, list):
         return [region for sub_criterion in criterion for region in regions_referenced_by_criterion(sub_criterion)]
