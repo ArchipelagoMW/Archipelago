@@ -120,7 +120,7 @@ def can_free_scout_flies(state: CollectionState, player: int) -> bool:
 
 
 def can_fight(state: CollectionState, player: int) -> bool:
-    return state.has_any({"Jump Dive", "Jump Kick", "Punch", "Kick"}, player)
+    return state.has_any(("Jump Dive", "Jump Kick", "Punch", "Kick"), player)
 
 
 def enforce_multiplayer_limits(world: JakAndDaxterWorld):

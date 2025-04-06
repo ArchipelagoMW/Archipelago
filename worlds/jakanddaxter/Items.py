@@ -122,11 +122,11 @@ trap_item_table = {
 # All Items
 # While we're here, do all the ID conversions needed.
 item_table = {
-    **{Cells.to_ap_id(k): cell_item_table[k] for k in cell_item_table},
-    **{Scouts.to_ap_id(k): scout_item_table[k] for k in scout_item_table},
-    **{Specials.to_ap_id(k): special_item_table[k] for k in special_item_table},
-    **{Caches.to_ap_id(k): move_item_table[k] for k in move_item_table},
-    **{Orbs.to_ap_id(k): orb_item_table[k] for k in orb_item_table},
-    **{jak1_max - k: trap_item_table[k] for k in trap_item_table},
+    **{Cells.to_ap_id(k): name for k, name in cell_item_table.items()},
+    **{Scouts.to_ap_id(k): name for k, name in scout_item_table.items()},
+    **{Specials.to_ap_id(k): name for k, name in special_item_table.items()},
+    **{Caches.to_ap_id(k): name for k, name in move_item_table.items()},
+    **{Orbs.to_ap_id(k): name for k, name in orb_item_table.items()},
+    **{jak1_max - k: name for k, name in trap_item_table.items()},
     jak1_max: "Green Eco Pill"  # Filler item.
 }

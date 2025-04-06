@@ -16,7 +16,8 @@ class EnableOrbsanity(Choice):
     """Include bundles of Precursor Orbs as checks. Every time you collect the chosen number of orbs, you will trigger
     another check.
 
-    "Per Level" means bundles are for each level in the game. "Global" means bundles carry over level to level.
+    Per Level: bundles are for each level in the game.
+    Global: bundles carry over level to level.
 
     This adds a number of Items and Locations to the pool inversely proportional to the size of the bundle.
     For example, if your bundle size is 20 orbs, you will add 100 items to the pool. If your bundle size is 250 orbs,
@@ -29,7 +30,7 @@ class EnableOrbsanity(Choice):
 
 
 class GlobalOrbsanityBundleSize(Choice):
-    """Set the orb bundle size for Global Orbsanity. This only applies if "Enable Orbsanity" is set to "Global."
+    """The orb bundle size for Global Orbsanity. This only applies if "Enable Orbsanity" is set to "Global."
     There are 2000 orbs in the game, so your bundle size must be a factor of 2000.
 
     Multiplayer Minimum: 10
@@ -61,7 +62,7 @@ class GlobalOrbsanityBundleSize(Choice):
 
 
 class PerLevelOrbsanityBundleSize(Choice):
-    """Set the orb bundle size for Per Level Orbsanity. This only applies if "Enable Orbsanity" is set to "Per Level."
+    """The orb bundle size for Per Level Orbsanity. This only applies if "Enable Orbsanity" is set to "Per Level."
     There are 50, 150, or 200 orbs per level, so your bundle size must be a factor of 50.
 
     Multiplayer Minimum: 10"""
@@ -77,7 +78,7 @@ class PerLevelOrbsanityBundleSize(Choice):
 
 
 class FireCanyonCellCount(Range):
-    """Set the number of power cells you need to cross Fire Canyon.
+    """The number of power cells you need to cross Fire Canyon.
 
     Multiplayer Maximum: 30
     Singleplayer Maximum: 34"""
@@ -90,7 +91,7 @@ class FireCanyonCellCount(Range):
 
 
 class MountainPassCellCount(Range):
-    """Set the number of power cells you need to reach Klaww and cross Mountain Pass.
+    """The number of power cells you need to reach Klaww and cross Mountain Pass.
 
     Multiplayer Maximum: 60
     Singleplayer Maximum: 63"""
@@ -103,7 +104,7 @@ class MountainPassCellCount(Range):
 
 
 class LavaTubeCellCount(Range):
-    """Set the number of power cells you need to cross Lava Tube.
+    """The number of power cells you need to cross Lava Tube.
 
     Multiplayer Maximum: 90
     Singleplayer Maximum: 99"""
@@ -116,7 +117,7 @@ class LavaTubeCellCount(Range):
 
 
 class EnableOrderedCellCounts(DefaultOnToggle):
-    """Reorders the Cell Count requirements for vehicle sections to be in ascending order.
+    """Reorder the Cell Count requirements for vehicle sections to be in ascending order.
 
     For example, if Fire Canyon Cell Count, Mountain Pass Cell Count, and Lava Tube Cell Count are 60, 30, and 40
     respectively, they will be reordered to 30, 40, and 60."""

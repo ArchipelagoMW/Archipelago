@@ -139,8 +139,8 @@ class JakAndDaxterWorld(World):
 
     # Stored as {ID: Name} pairs, these must now be swapped to {Name: ID} pairs.
     # Remember, the game ID and various offsets for each item type have already been calculated.
-    item_name_to_id = {item_table[k]: k for k in item_table}
-    location_name_to_id = {location_table[k]: k for k in location_table}
+    item_name_to_id = {name: k for k, name in item_table.items()}
+    location_name_to_id = {name: k for k, name in location_table.items()}
     item_name_groups = {
         "Power Cells": set(cell_item_table.values()),
         "Scout Flies": set(scout_item_table.values()),
@@ -222,34 +222,31 @@ class JakAndDaxterWorld(World):
     total_prog_cells: int = 0
     total_trap_cells: int = 0
     total_filler_cells: int = 0
-    power_cell_thresholds: list[int] = []
-    trap_weights: tuple[list[str], list[int]] = ({}, {})
+    power_cell_thresholds: list[int]
+    trap_weights: tuple[list[str], list[int]]
 
     # Handles various options validation, rules enforcement, and caching of important information.
     def generate_early(self) -> None:
 
         # Cache the power cell threshold values for quicker reference.
-        self.power_cell_thresholds = []
-        self.power_cell_thresholds.append(self.options.fire_canyon_cell_count.value)
-        self.power_cell_thresholds.append(self.options.mountain_pass_cell_count.value)
-        self.power_cell_thresholds.append(self.options.lava_tube_cell_count.value)
-        self.power_cell_thresholds.append(100)  # The 100 Power Cell Door.
+        self.power_cell_thresholds = [
+            self.options.fire_canyon_cell_count.value,
+            self.options.mountain_pass_cell_count.value,
+            self.options.lava_tube_cell_count.value,
+            100,  # The 100 Power Cell Door.
+        ]
 
         # Order the thresholds ascending and set the options values to the new order.
-        try:
-            if self.options.enable_ordered_cell_counts:
-                self.power_cell_thresholds.sort()
-                self.options.fire_canyon_cell_count.value = self.power_cell_thresholds[0]
-                self.options.mountain_pass_cell_count.value = self.power_cell_thresholds[1]
-                self.options.lava_tube_cell_count.value = self.power_cell_thresholds[2]
-        except IndexError:
-            pass  # Skip if not possible.
+        if self.options.enable_ordered_cell_counts:
+            self.power_cell_thresholds.sort()
+            self.options.fire_canyon_cell_count.value = self.power_cell_thresholds[0]
+            self.options.mountain_pass_cell_count.value = self.power_cell_thresholds[1]
+            self.options.lava_tube_cell_count.value = self.power_cell_thresholds[2]
 
         # For the fairness of other players in a multiworld game, enforce some friendly limitations on our options,
         # so we don't cause chaos during seed generation. These friendly limits should **guarantee** a successful gen.
         # We would have done this earlier, but we needed to sort the power cell thresholds first.
-        ap_settings = settings.get_settings()
-        enforce_friendly_options = ap_settings.jakanddaxter_options.enforce_friendly_options
+        enforce_friendly_options = self.settings.enforce_friendly_options
         if enforce_friendly_options:
             if self.multiworld.players > 1:
                 from .Rules import enforce_multiplayer_limits
@@ -395,7 +392,7 @@ class JakAndDaxterWorld(World):
         # Manually fill the item pool with a weighted assortment of trap items, equal to the sum of
         # total_trap_cells + total_trap_orb_bundles. Only do this if one or more traps have weights > 0.
         names, weights = self.trap_weights
-        if sum(weights) > 0:
+        if sum(weights):
             total_traps = self.total_trap_cells + self.total_trap_orb_bundles
             trap_list = self.random.choices(names, weights=weights, k=total_traps)
             self.multiworld.itempool += [self.create_item(trap_name) for trap_name in trap_list]
