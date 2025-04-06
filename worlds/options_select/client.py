@@ -141,6 +141,38 @@ class VisualToggle(MDBoxLayout):
         super().__init__(args, kwargs)
 
 
+class VisualListSet(MDDialog):
+    button: MDIconButton = ObjectProperty(None)
+    option: typing.Type[OptionSet] | typing.Type[OptionList]
+    scrollbox: ScrollBox = ObjectProperty(None)
+    add: MDIconButton = ObjectProperty(None)
+    save: MDButton = ObjectProperty(None)
+
+    def __init__(self, *args, option: typing.Type[OptionSet] | typing.Type[OptionList], name: str, **kwargs):
+        self.option = option
+        self.name = name
+        super().__init__(args, kwargs)
+
+    def remove_item(self, button: MDIconButton):
+        list_item = button.parent
+        self.scrollbox.layout.remove_widget(list_item)
+
+    def add_generic_item(self, key: str = "New Item"):
+        item = MDListItem(theme_bg_color="Custom", md_bg_color=self.theme_cls.surfaceContainerLowColor)
+        text = MDTextField(text=key, id="value", pos_hint={"center_x": 0.5, "center_y": 0.5}, size_hint_x=None,
+                           width=dp(400))
+        item.text = text
+        item.ids.text_container.add_widget(text)
+        item.add_widget(MDIconButton(icon="minus", on_release=self.remove_item, pos_hint={"center_x": 0.95,
+                                                                                     "center_y": 0.5}))
+        self.scrollbox.layout.add_widget(item)
+
+    def add_set_item(self, key: str):
+        text = MDListItemSupportingText(text=key, id="value")
+        item = MDListItem(text, MDIconButton(icon="minus", on_release=self.remove_item))
+        item.text = text
+        self.scrollbox.layout.add_widget(item)
+
 
 class YamlCreator(ThemedApp):
     container: ContainerLayout
@@ -287,25 +319,6 @@ class YamlCreator(ThemedApp):
                      world: typing.Type[World]):
         # Despite taking verify keys, we're only supporting Set/List
         # Dict may be feasible in the future, but it needs additional typing work
-        def remove_item(button: MDIconButton):
-            list_item = button.parent
-            scrollbox.layout.remove_widget(list_item)
-
-        def add_generic_item(key: str = "New Item"):
-            item = MDListItem(theme_bg_color="Custom", md_bg_color=self.theme_cls.surfaceContainerLowColor)
-            text = MDTextField(text=key, id="value", pos_hint={"center_x": 0.5, "center_y": 0.5}, size_hint_x=None,
-                               width=dp(400))
-            item.text = text
-            item.ids.text_container.add_widget(text)
-            item.add_widget(MDIconButton(icon="minus", on_release=remove_item, pos_hint={"center_x": 0.95,
-                                                                                         "center_y": 0.5}))
-            scrollbox.layout.add_widget(item)
-
-        def add_set_item(key: str):
-            text = MDListItemSupportingText(text=key, id="value")
-            item = MDListItem(text, MDIconButton(icon="minus", on_release=remove_item))
-            item.text = text
-            scrollbox.layout.add_widget(item)
 
         valid_keys = deepcopy(option.valid_keys)
         if option.verify_item_name:
@@ -314,38 +327,29 @@ class YamlCreator(ThemedApp):
             valid_keys += list(world.location_name_to_id.keys())
 
         def apply_changes(button):
-            if valid_keys:
+            if isinstance(option, OptionList):
                 if name not in self.options:
                     self.options[name] = []
                 self.options[name].clear()
-                for list_item in scrollbox.layout.children:
+                for list_item in dialog.scrollbox.layout.children:
                     self.options[name].append(getattr(list_item.text, "text"))
             else:
                 if name not in self.options:
                     self.options[name] = set()
                 self.options[name].clear()
-                for list_item in scrollbox.layout.children:
-                    if isinstance(list_item.text, MDTextField):
-                        text = getattr(list_item.text, "text")
-                    else:
-                        text = getattr(list_item.text, "_text")
-                    self.options[name].add()
+                for list_item in dialog.scrollbox.layout.children:
+                    self.options[name].add(getattr(list_item.text, "text"))
             dialog.dismiss()
 
-        content = MDDialogContentContainer(MDDivider(), orientation="vertical")
-        add_button = MDIconButton(icon="plus", pos_hint={"center_x": 1, "center_y": 0.5})
-        content.add_widget(add_button)
-        scrollbox = ScrollBox(size_hint_y=None)
-        scrollbox.layout.md_bg_color = self.theme_cls.surfaceContainerLowColor
-        scrollbox.layout.theme_bg_color = "Custom"
-        scrollbox.layout.spacing = dp(5)
-        scrollbox.layout.padding = [0, dp(5), 0, 0]
-        scrollbox.layout.orientation = "vertical"
-        scrollbox.do_scroll_x = False
-        content.add_widget(scrollbox)
+        dialog = VisualListSet(option=option, name=name)
+        dialog.scrollbox.layout.md_bg_color = self.theme_cls.surfaceContainerLowColor
+        dialog.scrollbox.layout.theme_bg_color = "Custom"
+        dialog.scrollbox.layout.spacing = dp(5)
+        dialog.scrollbox.layout.padding = [0, dp(5), 0, 0]
+
         if valid_keys:
             def add_item(text):
-                add_set_item(text)
+                dialog.add_set_item(text)
                 dropdown.dismiss()
 
             menu_items = [
@@ -355,26 +359,16 @@ class YamlCreator(ThemedApp):
                 }
                 for choice in valid_keys
             ]
-            dropdown = MDDropdownMenu(caller=add_button, items=menu_items)
-            add_button.bind(on_release=lambda x: dropdown.open())
+            dropdown = MDDropdownMenu(caller=dialog.add, items=menu_items)
+            dialog.add.bind(on_release=lambda x: dropdown.open())
             for item in sorted(option.default):
-                add_set_item(item)
+                dialog.add_set_item(item)
         else:
-            add_button.bind(on_release=lambda x: add_generic_item())
+            dialog.add.bind(on_release=lambda x: dialog.add_generic_item())
             for item in sorted(option.default):
-                add_generic_item(item)
+                dialog.add_generic_item(item)
 
-        content.add_widget(MDButton(MDButtonText(text="Save"), on_release=apply_changes))
-
-        dialog = MDDialog(
-            # Headline
-            MDDialogHeadlineText(text=getattr(option, 'display_name', name)),
-            # Text
-            MDDialogSupportingText(text="Add or Remove Entries"),
-            # Content
-            content
-
-        )
+        dialog.save.bind(on_release=apply_changes)
         dialog.open()
 
     def create_option_set_list(self, option: typing.Type[OptionList] | typing.Type[OptionSet], name: str,
@@ -386,7 +380,7 @@ class YamlCreator(ThemedApp):
         option_base = MDBoxLayout(orientation="vertical", size_hint_y=None)
 
         tooltip = filter_tooltip(option.__doc__)
-        option_label = FixedTooltipLabel(text=f"[ref=0|{tooltip}]{getattr(option, 'display_name', name)}")
+        option_label = TooltipLabel(text=f"[ref=0|{tooltip}]{getattr(option, 'display_name', name)}")
         label_box = MDBoxLayout(orientation="horizontal")
         label_anchor = MDAnchorLayout(anchor_x="right", anchor_y="center")
         label_anchor.add_widget(option_label)
@@ -410,7 +404,7 @@ class YamlCreator(ThemedApp):
         elif issubclass(option, OptionSet):
             option_base.add_widget(self.create_option_set_list(option, name, world))
         else:
-            option_base.add_widget(MDLabel(text="This option isn't supported by the yaml maker.\n"
+            option_base.add_widget(MDLabel(text="This option isn't supported by the option creator.\n"
                                                 "Please edit your yaml manually to set this option."))
 
         if option_can_be_randomized(option):

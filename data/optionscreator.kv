@@ -12,7 +12,7 @@
         step_point_size: 0
         MDSliderHandle:
 
-        MDSliderValueLabel
+        MDSliderValueLabel:
 
 <VisualChoice>:
     id: this
@@ -57,6 +57,32 @@
         id: button
         icon: "checkbox-outline" if this.option.default else "checkbox-blank-outline"
 
+<VisualListSet>:
+    id: this
+    scrollbox: scrollbox
+    add: add
+    save: save
+
+    MDDialogHeadlineText:
+        text: getattr(this.option, "display_name", this.name)
+
+    MDDialogSupportingText:
+        text: "Add or Remove Entries"
+
+    MDDialogContentContainer:
+        orientation: "vertical"
+        MDDivider:
+        MDIconButton:
+            id: add
+            icon: "plus"
+            pos_hint: {"center_x": 1, "center_y": 0.5}
+        ScrollBox:
+            id: scrollbox
+            size_hint_y: None
+        MDButton:
+            id: save
+            MDButtonText:
+                text: "Save Changes"
 
 ContainerLayout:
     md_bg_color: app.theme_cls.backgroundColor
