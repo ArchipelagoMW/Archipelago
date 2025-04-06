@@ -189,6 +189,7 @@ md_option_groups = [
         StreamerModeEnabled,
         IncludeSongs,
         ExcludeSongs,
+        GoalSong,
     ]),
     OptionGroup("Difficulty", [
         GradeNeeded,
