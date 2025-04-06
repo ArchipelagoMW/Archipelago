@@ -97,6 +97,7 @@ class LuigisMansionRandomizer:
             self.jmp_teiden_enemy_info_table = self.load_maptwo_info_table("teidenenemyinfo")
             self.jmp_teiden_observer_info_table = self.load_maptwo_info_table("teidenobserverinfo")
         self.jmp_teiden_character_info_table = self.load_maptwo_info_table("teidencharacterinfo")
+        self.jmp_iyapoo_table = self.load_maptwo_info_table("iyapootable")
 
         # Saves the randomized iso file, with all files updated.
         self.save_randomized_iso()
@@ -183,6 +184,7 @@ class LuigisMansionRandomizer:
             update_teiden_enemy_info(self.jmp_enemy_info_table, self.jmp_teiden_enemy_info_table)
             update_teiden_observer_info(self.jmp_observer_info_table, self.jmp_teiden_observer_info_table)
         update_boo_table(self.jmp_boo_table, self.output_data)
+        update_iyapoo_table(self.jmp_iyapoo_table, self.output_data)
 
         # Updates all the data entries in each jmp table in the szp file.
         self.update_maptwo_info_table(self.jmp_character_info_table)
@@ -201,6 +203,7 @@ class LuigisMansionRandomizer:
             self.update_maptwo_info_table(self.jmp_teiden_enemy_info_table)
             self.update_maptwo_info_table(self.jmp_teiden_observer_info_table)
         self.update_maptwo_info_table(self.jmp_boo_table)
+        self.update_maptwo_info_table(self.jmp_iyapoo_table)
 
     def save_randomized_iso(self):
         # TODO Move into its own function?

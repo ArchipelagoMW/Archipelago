@@ -6,6 +6,15 @@
         "hp_amount",
         "is_escape"
     ],
+    "iyapootable": [
+        "name",
+        "coin",
+        "bill",
+        "gold",
+        "sapphire",
+        "emerald",
+        "ruby"
+    ],
     "itemappeartable": [
         "item0",
         "item1",

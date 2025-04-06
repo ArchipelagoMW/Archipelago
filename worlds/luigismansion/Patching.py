@@ -1676,6 +1676,13 @@ def update_boo_table(telesa_info, output_data):
         x["attack"] = output_data["Options"]["boo_anger"]
 
 
+def update_iyapoo_table(iyapoo_table, output_data):
+    for iyapoo in iyapoo_table.info_file_field_entries:
+        iyapoo["other"] = "----"
+
+    #TODO Define more features here
+
+
 def apply_new_ghost(enemy_info_entry, element):
     # The list of ghosts that can replace the vanilla ones. Only includes the ones without elements.
     # Excludes Skul ghosts as well unless the railinfo jmp table is updated.
