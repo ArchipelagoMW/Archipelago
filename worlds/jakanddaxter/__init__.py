@@ -1,4 +1,5 @@
 # Python standard libraries
+from collections import defaultdict
 from math import ceil
 from typing import Any, ClassVar, Callable, Union, cast
 
@@ -232,9 +233,7 @@ class JakAndDaxterWorld(World):
     def generate_early(self) -> None:
 
         # Initialize the level-region dictionary.
-        self.level_to_regions = {}
-        for level_name in level_table:
-            self.level_to_regions[level_name] = []
+        self.level_to_regions = defaultdict(list)
 
         # Cache the power cell threshold values for quicker reference.
         self.power_cell_thresholds = [
@@ -315,9 +314,9 @@ class JakAndDaxterWorld(World):
         from .Regions import create_regions
         create_regions(self)
 
-        for level in self.level_to_regions:
-            for region in self.level_to_regions[level]:
-                self.multiworld.regions.append(region)
+        # Don't forget to add the created regions to the multiworld!
+        for level_regions in self.level_to_regions.values():
+            self.multiworld.regions.extend(level_regions)
 
         # from Utils import visualize_regions
         # visualize_regions(self.multiworld.get_region("Menu", self.player), "jakanddaxter.puml")

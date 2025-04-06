@@ -46,8 +46,8 @@ def count_reachable_orbs_global(state: CollectionState,
                                 world: JakAndDaxterWorld) -> int:
 
     accessible_orbs = 0
-    for level_name in world.level_to_regions:
-        for region in world.level_to_regions[level_name]:
+    for level_regions in world.level_to_regions.values():
+        for region in level_regions:
             # Rely on short-circuiting to skip region.can_reach whenever possible.
             if region.orb_count > 0 and region.can_reach(state):
                 accessible_orbs += region.orb_count
