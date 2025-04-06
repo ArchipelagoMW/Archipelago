@@ -791,6 +791,15 @@ def write_tokens(world: "SotnWorld", patch: SotnProcedurePatch):
     enemysanity_items = []
 
     for loc in world.multiworld.get_locations(world.player):
+        # Save Jewel of open item
+        if loc.name == "Long Library - Librarian Shop Item":
+            item_data = items["Secret boots"]
+            if loc.item.player == world.player:
+                item_data = items[loc.item.name]
+            jewel_item = item_data["id"]
+            patch.write_token(APTokenTypes.WRITE, 0xf4f3a, jewel_item.to_bytes(2))
+            patch.write_token(APTokenTypes.WRITE, 0x438d6d2, jewel_item.to_bytes(2, "little"))
+
         if loc.item and loc.item.player == world.player:
             if loc.item.name == "Victory":
                 continue
@@ -812,10 +821,6 @@ def write_tokens(world: "SotnWorld", patch: SotnProcedurePatch):
 
             # Relic locations
             if "vanilla_item" in loc_data and loc_data["vanilla_item"] in RELIC_NAMES:
-                if loc_data["vanilla_item"] == "Jewel of open":
-                    jewel_item = item_data["id"]
-                    patch.write_token(APTokenTypes.WRITE, 0xf4f3a, jewel_item.to_bytes(2))
-                    patch.write_token(APTokenTypes.WRITE, 0x438d6d2, jewel_item.to_bytes(2, "little"))
                 # Change relic for a relic
                 if item_data["type"] == "RELIC":
                     if loc_data["vanilla_item"] == "Jewel of open":
@@ -937,7 +942,7 @@ def write_tokens(world: "SotnWorld", patch: SotnProcedurePatch):
                         print(f"ERROR in {loc_data}")
         # Off world items
         elif loc.item and loc.item.player != world.player:
-            # Save enemysanity locations TODO: Does enemysanity keep order???
+            # Save enemysanity locations
             if "Enemysanity" in loc.name:
                 enemysanity_items.append(0xfff)
                 continue
@@ -954,10 +959,7 @@ def write_tokens(world: "SotnWorld", patch: SotnProcedurePatch):
             if "vanilla_item" in loc_data and loc_data["vanilla_item"] in RELIC_NAMES:
                 vanilla = loc_data["vanilla_item"]
                 if vanilla == "Jewel of open":
-                    patch.write_token(APTokenTypes.WRITE, 0xf4f3a, (257).to_bytes(2))
-                    patch.write_token(APTokenTypes.WRITE, 0x438d6d2, (257).to_bytes(2, "little"))
-                    # replace_shop_relic_with_item(item_data, patch)  # TODO Guess secret boots cant be on shop
-                    replace_shop_relic_with_item(items["Secret boots"], patch)
+                    replace_shop_relic_with_item(item_data, patch)
                 elif vanilla == "Heart of vlad":
                     opts = {"relic": loc_data, "item": item_data, "entry": 0x034950, "inj": 0x047900}
                     replace_boss_relic_with_item(opts, patch)
@@ -995,6 +997,8 @@ def write_tokens(world: "SotnWorld", patch: SotnProcedurePatch):
                     for add in loc_data["addresses"]:
                         patch.write_token(APTokenTypes.WRITE, add, new_value.to_bytes(2, "little"))
                 elif "vanilla_item" in loc_data and loc_data["vanilla_item"] == "Holy glasses":
+                    # Holy glasses is no-offset item
+                    item_id = tile_value(item_data, {"no_offset": True})
                     for address in loc_data["addresses"]:
                         patch.write_token(APTokenTypes.WRITE, address, item_id.to_bytes(2, "little"))
                 elif "trio" in loc_data:
@@ -1291,7 +1295,7 @@ def write_tokens(world: "SotnWorld", patch: SotnProcedurePatch):
         if "Enemysanity" in k:
             continue
         if k not in filled_locations and randomize_items:
-            if "no_offset" in v or v["ap_id"] == 39:
+            if "no_offset" in v or v["ap_id"] == 40:
                 offset_locations[k] = v
             else:
                 non_locations[k] = v
@@ -1383,7 +1387,7 @@ def write_tokens(world: "SotnWorld", patch: SotnProcedurePatch):
     if options_dict["hp_mod"] != 0:
         hp_mod = options_dict["hp_mod"]
     if options_dict["atk_mod"] != 0:
-        atk_mod = options_dict["att_mod"]
+        atk_mod = options_dict["atk_mod"]
 
     modify_enemies(xp_mod, drop_mod, hp_mod, atk_mod, patch)
     player_name = world.multiworld.get_player_name(world.player)
