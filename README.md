@@ -1,6 +1,9 @@
 # [Archipelago](https://archipelago.gg) ![Discord Shield](https://discordapp.com/api/guilds/731205301247803413/widget.png?style=shield) | [Install](https://github.com/ArchipelagoMW/Archipelago/releases)
 
-[Video guide here](https://youtu.be/F_yL3QM4qYw)
+[Instalattion video guide here](https://youtu.be/F_yL3QM4qYw)
+
+[0.81 changes](https://youtu.be/w-Y_4slbMtA)
+
 ## Symphony of the Night
 Symphony of the Night is a metroidvania from playstation 1
 
