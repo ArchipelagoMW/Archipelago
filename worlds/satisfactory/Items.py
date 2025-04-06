@@ -53,7 +53,7 @@ class Items:
         "Bundle: FICSIT Coupon": ItemData(G.Parts, 1338040),
         "Bundle: AI Expansion Server": ItemData(G.Parts, 1338041), #1.0
         "Bundle: Fused Modular Frame": ItemData(G.Parts, 1338042),
-        "Bundle: Hard Drive": ItemData(G.Parts, 1338043),
+        "Bundle: Hard Drive": ItemData(G.Parts, 1338043, count=0),
         "Bundle: Heat Sink": ItemData(G.Parts, 1338044),
         "Bundle: Heavy Modular Frame": ItemData(G.Parts, 1338045),
         "Bundle: High-Speed Connector": ItemData(G.Parts, 1338046),
@@ -67,7 +67,7 @@ class Items:
         "Bundle: Leaves": ItemData(G.Parts, 1338054),
         "Bundle: Limestone": ItemData(G.Parts, 1338055),
         "Bundle: Magnetic Field Generator": ItemData(G.Parts, 1338056),
-        "Bundle: Mercer Sphere": ItemData(G.Parts, 1338057),
+        "Bundle: Mercer Sphere": ItemData(G.Parts, 1338057, count=0),
         "Bundle: Modular Engine": ItemData(G.Parts, 1338058),
         "Bundle: Modular Frame": ItemData(G.Parts, 1338059),
         "Bundle: Motor": ItemData(G.Parts, 1338060),
@@ -92,7 +92,7 @@ class Items:
         "Bundle: Plutonium Pellet": ItemData(G.Trap, 1338079, C.trap),
         "Bundle: Plutonium Waste": ItemData(G.Trap, 1338080, C.trap),
         "Bundle: Polymer Resin": ItemData(G.Parts, 1338081),
-        "Bundle: Power Shard": ItemData(G.Parts, 1338082),
+        "Bundle: Power Shard": ItemData(G.Parts, 1338082, count=0),
         "Bundle: Confusing Creature Statue": ItemData(G.Parts, 1338083),
         "Bundle: Pressure Conversion Cube": ItemData(G.Parts, 1338084),
         "Bundle: Alien Power Matrix": ItemData(G.Parts, 1338085), #1.0
@@ -109,7 +109,7 @@ class Items:
         "Bundle: Smart Plating": ItemData(G.Parts, 1338096),
         "Bundle: Smokeless Powder": ItemData(G.Parts, 1338097),
         "Bundle: Solid Biofuel": ItemData(G.Parts, 1338098),
-        "Bundle: Somersloop": ItemData(G.Parts, 1338099),
+        "Bundle: Somersloop": ItemData(G.Parts, 1338099, count=0),
         "Bundle: Stator": ItemData(G.Parts, 1338100),
         "Bundle: Silver Hog Statue": ItemData(G.Parts, 1338101),
         "Bundle: Steel Beam": ItemData(G.Parts, 1338102),
@@ -131,7 +131,6 @@ class Items:
         "Bundle: Stinger Remains": ItemData(G.Parts, 1338118),
         "Bundle: Hatcher Remains": ItemData(G.Parts, 1338119),
         "Bundle: Alien DNA Capsule": ItemData(G.Parts, 1338120),
-# 1.0
         "Bundle: Diamonds": ItemData(G.Parts, 1338121),
         "Bundle: Time Crystal": ItemData(G.Parts, 1338122),
         "Bundle: Ficsite Ingot": ItemData(G.Parts, 1338123),
@@ -144,63 +143,58 @@ class Items:
         "Bundle: Ficsonium Fuel Rod": ItemData(G.Trap, 1338130, C.trap),
         "Bundle: Packaged Rocket Fuel": ItemData(G.Parts, 1338131),
         "Bundle: Packaged Ionized Fuel": ItemData(G.Parts, 1338132),
-# 1.0
-
         #1338131 - 1338149 Reserved for future parts
-
-        # Equipment / Ammo
+        #1338150 - 1338199 Equipment / Ammo
         "Bundle: Bacon Agaric": ItemData(G.Ammo, 1338150),
         "Bundle: Beryl Nut": ItemData(G.Ammo, 1338151),
-        "Bundle: Blade Runners": ItemData(G.Equipment, 1338152),
-        "Bundle: Boom Box": ItemData(G.Equipment, 1338153),
-        "Bundle: Chainsaw": ItemData(G.Equipment, 1338154),
+        "Bundle: Blade Runners": ItemData(G.Equipment, 1338152, count=0),
+        "Bundle: Boom Box": ItemData(G.Equipment, 1338153, count=0),
+        "Bundle: Chainsaw": ItemData(G.Equipment, 1338154, count=0),
         "Bundle: Cluster Nobelisk": ItemData(G.Ammo, 1338155),
-        #"Bundle: Color Gun": ItemData(G.Equipment, 1338156), Removed in U8
-        "Bundle: Cup": ItemData(G.Equipment, 1338157),
+        "Bundle: Iodine-Infused Filter": ItemData(G.Ammo, 1338156), #1.1
+        "Bundle: Cup": ItemData(G.Equipment, 1338157, count=0),
         "Bundle: Cup (gold)": ItemData(G.Equipment, 1338158, count=0),
         "Bundle: Explosive Rebar": ItemData(G.Ammo, 1338159),
-        "Bundle: Factory Cart": ItemData(G.Equipment, 1338160),
+        "Bundle: Factory Cart": ItemData(G.Equipment, 1338160, count=0),
         "Bundle: Factory Cart (golden)": ItemData(G.Equipment, 1338161, count=0),
-        "Bundle: Gas Mask": ItemData(G.Equipment, 1338162),
+        "Bundle: Gas Mask": ItemData(G.Equipment, 1338162, count=0),
         "Bundle: Gas Nobelisk": ItemData(G.Ammo, 1338163),
-        "Bundle: Hazmat Suit": ItemData(G.Equipment, 1338164),
+        "Bundle: Hazmat Suit": ItemData(G.Equipment, 1338164, count=0),
         "Bundle: Homing Rifle Ammo": ItemData(G.Ammo, 1338165),
-        "Bundle: Hoverpack": ItemData(G.Equipment, 1338166),
+        "Bundle: Hoverpack": ItemData(G.Equipment, 1338166, count=0),
         "Bundle: Iron Rebar": ItemData(G.Ammo, 1338167),
-        "Bundle: Jetpack": ItemData(G.Equipment, 1338168),
+        "Bundle: Jetpack": ItemData(G.Equipment, 1338168, count=0),
         "Bundle: Medicinal Inhaler": ItemData(G.Ammo, 1338169),
         "Bundle: Nobelisk": ItemData(G.Ammo, 1338170),
-        "Bundle: Nobelisk Detonator": ItemData(G.Equipment, 1338171),
+        "Bundle: Nobelisk Detonator": ItemData(G.Equipment, 1338171, count=0),
         "Bundle: Nuke Nobelisk": ItemData(G.Ammo, 1338172),
-        "Bundle: Object Scanner": ItemData(G.Equipment, 1338173),
+        "Bundle: Object Scanner": ItemData(G.Equipment, 1338173, count=0),
         "Bundle: Paleberry": ItemData(G.Ammo, 1338174),
-        "Bundle: Parachute": ItemData(G.Equipment, 1338175),
+        "Bundle: Parachute": ItemData(G.Equipment, 1338175, count=0),
         "Bundle: Pulse Nobelisk": ItemData(G.Ammo, 1338176),
-        "Bundle: Rebar Gun": ItemData(G.Equipment, 1338177),
-        "Bundle: Rifle": ItemData(G.Equipment, 1338178),
+        "Bundle: Rebar Gun": ItemData(G.Equipment, 1338177, count=0),
+        "Bundle: Rifle": ItemData(G.Equipment, 1338178, count=0),
         "Bundle: Rifle Ammo": ItemData(G.Ammo, 1338179),
         "Bundle: Shatter Rebar": ItemData(G.Ammo, 1338180),
         "Bundle: Stun Rebar": ItemData(G.Ammo, 1338181),
         "Bundle: Turbo Rifle Ammo": ItemData(G.Ammo, 1338182),
-        "Bundle: Xeno-Basher": ItemData(G.Equipment, 1338183),
-        "Bundle: Xeno-Zapper": ItemData(G.Equipment, 1338184),
-        "Bundle: Zipline": ItemData(G.Equipment, 1338185),
-        "Bundle: Portable Miner": ItemData(G.Equipment, 1338186),
+        "Bundle: Xeno-Basher": ItemData(G.Equipment, 1338183, count=0),
+        "Bundle: Xeno-Zapper": ItemData(G.Equipment, 1338184, count=0),
+        "Bundle: Zipline": ItemData(G.Equipment, 1338185, count=0),
+        "Bundle: Portable Miner": ItemData(G.Equipment, 1338186, count=0),
         "Bundle: Gas Filter": ItemData(G.Ammo, 1338187),
-        # Other
+        # Special cases
         "Small Inflated Pocket Dimension": ItemData(G.Upgrades, 1338188, C.useful, 11),
         "Inflated Pocket Dimension": ItemData(G.Upgrades, 1338189, C.useful, 5),
         "Expanded Toolbelt": ItemData(G.Upgrades, 1338190, C.useful, 5),
         "Dimensional Depot upload from inventory": ItemData(G.Upgrades, 1338191, C.useful),
-
-        # added in 1.1
-        "Recipe: Hoverpack": ItemData(G.Recipe, 1338192, C.useful),
-        "Bundle: Iodine-Infused Filter": ItemData(G.Ammo, 1338193),
-        "Recipe: Jetpack": ItemData(G.Recipe, 1338194, C.useful),
-        "Recipe: Nobelisk Detonator": ItemData(G.Recipe, 1338195, C.progression),
-        "Recipe: Portable Miner": ItemData(G.Equipment, 1338196, C.progression), 
-
-        #1338197 - 1338199 Reserved for future equipment/ammo
+# added in 1.1
+        "Bundle of Three: Power Shards": ItemData(G.Parts, 1338192),
+        "Bundle of Three: Mercer Spheres": ItemData(G.Parts, 1338193),
+        "Bundle of Four: Somersloops": ItemData(G.Parts, 1338194),
+        "Bundle of Three: Hard Drives": ItemData(G.Parts, 1338195),
+#
+        #1338196 - 1338199 Reserved for future equipment/ammo
 
         #1338200+ Recipes / buildings / schematics
         "Recipe: Reinforced Iron Plate": ItemData(G.Recipe, 1338200, C.progression),
@@ -466,15 +460,18 @@ class Items:
         "Recipe: Tempered Copper Ingot": ItemData(G.Recipe, 1338458, C.progression),
 # 1.0
 
-# Missed
+# added in 1.1 or missed
         "Recipe: Iron Pipe": ItemData(G.Recipe, 1338459, C.progression),
         "Recipe: Biocoal": ItemData(G.Recipe, 1338460, C.useful),
         "Recipe: Charcoal": ItemData(G.Recipe, 1338461, C.useful),
         "Recipe: Sloppy Alumina": ItemData(G.Recipe, 1338462, C.progression),
-# Missed
+        "Recipe: Hoverpack": ItemData(G.Recipe, 1338463, C.useful),
+        "Recipe: Jetpack": ItemData(G.Recipe, 1338464, C.useful),
+        "Recipe: Nobelisk Detonator": ItemData(G.Recipe, 1338465, C.progression),
+        "Recipe: Portable Miner": ItemData(G.Recipe, 1338466, C.progression),
+# 
 
-        #1338459 - 1338599 Reserved for future recipes
-
+        #1338467 - 1338599 Reserved for future recipes
         #1338400 - 1338899 buildings / others
         "Building: Constructor": ItemData(G.Building, 1338600, C.progression), # unlocked by default
         "Building: Assembler": ItemData(G.Building, 1338601, C.progression),
@@ -557,11 +554,11 @@ class Items:
         "Building: Label Sign Bundle": ItemData(G.Building | G.Signs, 1338678, C.filler, 0),
         "Building: Display Sign Bundle": ItemData(G.Building | G.Signs, 1338679, C.filler, 0),
         "Building: Billboard Set": ItemData(G.Building | G.Signs, 1338680, C.filler, 0),
-        #1338681 Moved to cosmetics
+        #1338681 Moved to cosmetics - 1.1
         "Building: Metal Pillar": ItemData(G.Pilars, 1338682, C.filler, 0),
         "Building: Concrete Pillar": ItemData(G.Pilars, 1338683, C.filler, 0),
         "Building: Frame Pillar": ItemData(G.Pilars, 1338684, C.filler, 0),
-        #1338685 - 1338691 Moved to cosmetics
+        #1338685 - 1338691 Moved to cosmetics - 1.1
         "Building: Foundation": ItemData(G.Building | G.Foundations | G.AlwaysUseful, 1338692, C.progression),
         "Building: Half Foundation": ItemData(G.Foundations, 1338693, C.filler, 0),
         "Building: Corner Ramp Pack": ItemData(G.Foundations, 1338694, C.filler, 0),
@@ -592,8 +589,6 @@ class Items:
         "Building: Gates": ItemData(G.Walls, 1338719, C.filler, 0),
         "Building: Roofs": ItemData(G.Walls, 1338720, C.filler, 0),
         "Building: Roof Corners": ItemData(G.Walls, 1338721, C.filler, 0),
-
-# 1.0
         "Building: Converter": ItemData(G.Building, 1338722, C.progression),
         "Building: Quantum Encoder": ItemData(G.Building, 1338723, C.progression),
         "Building: Portal": ItemData(G.Building, 1338724, C.filler),
@@ -601,10 +596,7 @@ class Items:
         "Building: Conveyor Lift Mk.6": ItemData(G.Building | G.ConveyorMk6, 1338726, C.useful),
         "Building: Alien Power Augmenter": ItemData(G.Building, 1338727, C.progression),
         "Building: Dimensional Depot Uploader": ItemData(G.Building, 1338728, C.useful),
-# 1.0
-
         #1338729 - 1338749 Reserved for Cosmetics
-
         "Customizer: Asphalt Foundation Material": ItemData(G.Customizer | G.Foundations, 1338750, C.filler, 0),
         "Customizer: Concrete Foundation Material": ItemData(G.Customizer | G.Foundations, 1338751, C.filler, 0),
         "Customizer: Concrete Wall Material": ItemData(G.Customizer | G.Walls, 1338752, C.filler, 0),
@@ -622,8 +614,6 @@ class Items:
         "Customizer: Number Patterns": ItemData(G.Customizer | G.Foundations, 1338764, C.filler, 0),
         "Customizer: Pathway Patterns": ItemData(G.Customizer | G.Foundations, 1338765, C.filler, 0),
         "Customizer: Factory Zone Patterns": ItemData(G.Customizer | G.Foundations, 1338766, C.filler, 0),
-
-# 1.0
         "Customizer: Steel-Framed Windows": ItemData(G.Customizer | G.Walls, 1338767, C.filler, 0), 
         "Customizer: Construction Fences": ItemData(G.Customizer, 1338768, C.filler, 0), 
         "Customizer: Unpainted Finish": ItemData(G.Customizer, 1338769, C.filler, 0), 
@@ -631,26 +621,22 @@ class Items:
         "Customizer: Chrome Paint Finish": ItemData(G.Customizer, 1338771, C.filler, 0), 
         "Customizer: Carbon Steel Finish": ItemData(G.Customizer, 1338772, C.filler, 0), 
         "Customizer: Caterium Paint Finish": ItemData(G.Customizer, 1338773, C.filler, 0), 
-# 1.0
 
         #1338774 - 1338799 Reserved for buildings
 
         # Transports 1338800 - 1338898
         # Drones (including Drone)
         "Transport: Drones": ItemData(G.Transport, 1338800, C.useful),
-
         # Trains (including Empty Platform, rails, station, locomotive)
         "Transport: Trains": ItemData(G.Transport | G.Trains, 1338801, C.useful),
         "Transport: Fluid Trains": ItemData(G.Transport | G.Trains, 1338802, C.useful),
-
         # Tracker / Truck (including truck station)
         "Transport: Tractor": ItemData(G.Transport | G.Vehicles, 1338803, C.useful),
         "Transport: Truck": ItemData(G.Transport | G.Vehicles, 1338804, C.useful),
         "Transport: Explorer": ItemData(G.Transport | G.Vehicles, 1338805, C.useful),
         "Transport: Factory Cart": ItemData(G.Transport | G.Vehicles, 1338806, C.useful),
         "Transport: Factory Cart (golden)": ItemData(G.Transport | G.Vehicles, 1338807, C.filler),
-        "Transport: Cyber Wagon": ItemData(G.Transport | G.Vehicles, 1338808, C.filler),
-
+        "Transport: Cyber Wagon": ItemData(G.Transport | G.Vehicles | G.Trap, 1338808, C.filler),
         # Hypertubes (including supports / pipes / entrance / holes)
         "Transport: Hypertube": ItemData(G.Transport | G.HyperTubes, 1338809, C.useful),
         "Transport: Hypertube Floor Hole": ItemData(G.Transport | G.HyperTubes, 1338810, C.filler),
@@ -682,8 +668,182 @@ class Items:
         "Trap: Can of Beans": ItemData(G.Trap, 1338920, C.trap),
         "Trap: Fart Cloud": ItemData(G.Trap, 1338921, C.trap),
 
-        #Item id range upper bound
-        "Building: Space Elevator": ItemData(G.Building, 1338999, C.progression)
+        "Building: Space Elevator": ItemData(G.Building, 1338999, C.progression),
+
+        # Resource singles
+        "Single: Adaptive Control Unit": ItemData(G.Parts, 1339000, count=0),
+        "Single: AI Limiter": ItemData(G.Parts, 1339001, count=0),
+        "Single: Alclad Aluminum Sheet": ItemData(G.Parts, 1339002, count=0),
+        "Single: Blue Power Slug": ItemData(G.Parts, 1339003, count=0),
+        "Single: Yellow Power Slug": ItemData(G.Parts, 1339004, count=0),
+        "Single: Alien Protein": ItemData(G.Parts, 1339005, count=0),
+        "Single: Purple Power Slug": ItemData(G.Parts, 1339006, count=0),
+        "Single: Aluminum Casing": ItemData(G.Parts, 1339007, count=0),
+        "Single: Aluminum Ingot": ItemData(G.Parts, 1339008, count=0),
+        "Single: Aluminum Scrap": ItemData(G.Parts, 1339009, count=0),
+        "Single: Assembly Director System": ItemData(G.Parts, 1339010, count=0),
+        "Single: Automated Wiring": ItemData(G.Parts, 1339011, count=0),
+        "Single: Battery": ItemData(G.Parts, 1339012, count=0),
+        "Single: Bauxite": ItemData(G.Parts, 1339013, count=0),
+        "Single: Neural-Quantum Processor": ItemData(G.Parts, 1339014, count=0),
+        "Single: Biomass": ItemData(G.Parts, 1339015, count=0),
+        "Single: Black Powder": ItemData(G.Parts, 1339016, count=0),
+        "Single: Cable": ItemData(G.Parts, 1339017, count=0),
+        "Single: Caterium Ingot": ItemData(G.Parts, 1339018, count=0),
+        "Single: Caterium Ore": ItemData(G.Parts, 1339019, count=0),
+        "Single: Circuit Board": ItemData(G.Parts, 1339020, count=0),
+        "Single: Coal": ItemData(G.Parts, 1339021, count=0),
+        "Single: Singularity Cell": ItemData(G.Parts, 1339022, count=0),
+        "Single: Compacted Coal": ItemData(G.Parts, 1339023, count=0),
+        "Single: Computer": ItemData(G.Parts, 1339024, count=0),
+        "Single: Concrete": ItemData(G.Parts, 1339025, count=0),
+        "Single: Cooling System": ItemData(G.Parts, 1339026, count=0),
+        "Single: Copper Ingot": ItemData(G.Parts, 1339027, count=0),
+        "Single: Copper Ore": ItemData(G.Parts, 1339028, count=0),
+        "Single: Copper Powder": ItemData(G.Parts, 1339029, count=0),
+        "Single: Copper Sheet": ItemData(G.Parts, 1339030, count=0),
+        "Single: Adequate Pioneering Statue": ItemData(G.Parts, 1339031, count=0),
+        "Single: Crystal Oscillator": ItemData(G.Parts, 1339032, count=0),
+        "Single: Electromagnetic Control Rod": ItemData(G.Parts, 1339033, count=0),
+        "Single: Empty Canister": ItemData(G.Parts, 1339034, count=0),
+        "Single: Empty Fluid Tank": ItemData(G.Parts, 1339035, count=0),
+        "Single: Encased Industrial Beam": ItemData(G.Parts, 1339036, count=0),
+        "Single: Encased Plutonium Cell": ItemData(G.Trap, 1339037, C.trap, count=0),
+        "Single: Encased Uranium Cell": ItemData(G.Trap, 1339038, C.trap, count=0),
+        "Single: Fabric": ItemData(G.Parts, 1339039, count=0),
+        "Single: FICSIT Coupon": ItemData(G.Parts, 1339040, count=0),
+        "Single: AI Expansion Server": ItemData(G.Parts, 1339041, count=0),
+        "Single: Fused Modular Frame": ItemData(G.Parts, 1339042, count=0),
+        "Single: Hard Drive": ItemData(G.Parts, 1339043, count=0),
+        "Single: Heat Sink": ItemData(G.Parts, 1339044, count=0),
+        "Single: Heavy Modular Frame": ItemData(G.Parts, 1339045, count=0),
+        "Single: High-Speed Connector": ItemData(G.Parts, 1339046, count=0),
+        "Single: Satisfactory Pioneering Statue": ItemData(G.Parts, 1339047, count=0),
+        "Single: Pretty Good Pioneering Statue": ItemData(G.Parts, 1339048, count=0),
+        "Single: Iron Ingot": ItemData(G.Parts, 1339049, count=0),
+        "Single: Iron Ore": ItemData(G.Parts, 1339050, count=0),
+        "Single: Iron Plate": ItemData(G.Parts, 1339051, count=0),
+        "Single: Iron Rod": ItemData(G.Parts, 1339052, count=0),
+        "Single: Golden Nut Statue": ItemData(G.Parts, 1339053, count=0),
+        "Single: Leaves": ItemData(G.Parts, 1339054, count=0),
+        "Single: Limestone": ItemData(G.Parts, 1339055, count=0),
+        "Single: Magnetic Field Generator": ItemData(G.Parts, 1339056, count=0),
+        "Single: Mercer Sphere": ItemData(G.Parts, 1339057, count=0),
+        "Single: Modular Engine": ItemData(G.Parts, 1339058, count=0),
+        "Single: Modular Frame": ItemData(G.Parts, 1339059, count=0),
+        "Single: Motor": ItemData(G.Parts, 1339060, count=0),
+        "Single: Mycelia": ItemData(G.Parts, 1339061, count=0),
+        "Single: Non-fissile Uranium": ItemData(G.Trap, 1339062, C.trap, count=0),
+        "Single: Nuclear Pasta": ItemData(G.Parts, 1339063, count=0),
+        "Single: Lizard Doggo Statue": ItemData(G.Parts, 1339064, count=0),
+        "Single: Organic Data Capsule": ItemData(G.Parts, 1339065, count=0),
+        "Single: Packaged Alumina Solution": ItemData(G.Parts, 1339066, count=0),
+        "Single: Packaged Fuel": ItemData(G.Parts, 1339067, count=0),
+        "Single: Packaged Heavy Oil Residue": ItemData(G.Parts, 1339068, count=0),
+        "Single: Packaged Liquid Biofuel": ItemData(G.Parts, 1339069, count=0),
+        "Single: Packaged Nitric Acid": ItemData(G.Parts, 1339070, count=0),
+        "Single: Packaged Nitrogen Gas": ItemData(G.Parts, 1339071, count=0),
+        "Single: Packaged Oil": ItemData(G.Parts, 1339072, count=0),
+        "Single: Packaged Sulfuric Acid": ItemData(G.Parts, 1339073, count=0),
+        "Single: Packaged Turbofuel": ItemData(G.Parts, 1339074, count=0),
+        "Single: Packaged Water": ItemData(G.Parts, 1339075, count=0),
+        "Single: Petroleum Coke": ItemData(G.Parts, 1339076, count=0),
+        "Single: Plastic": ItemData(G.Parts, 1339077, count=0),
+        "Single: Plutonium Fuel Rod": ItemData(G.Trap, 1339078, C.trap, count=0),
+        "Single: Plutonium Pellet": ItemData(G.Trap, 1339079, C.trap, count=0),
+        "Single: Plutonium Waste": ItemData(G.Trap, 1339080, C.trap, count=0),
+        "Single: Polymer Resin": ItemData(G.Parts, 1339081, count=0),
+        "Single: Power Shard": ItemData(G.Parts, 1339082, count=0),
+        "Single: Confusing Creature Statue": ItemData(G.Parts, 1339083, count=0),
+        "Single: Pressure Conversion Cube": ItemData(G.Parts, 1339084, count=0),
+        "Single: Alien Power Matrix": ItemData(G.Parts, 1339085, count=0),
+        "Single: Quartz Crystal": ItemData(G.Parts, 1339086, count=0),
+        "Single: Quickwire": ItemData(G.Parts, 1339087, count=0),
+        "Single: Radio Control Unit": ItemData(G.Parts, 1339088, count=0),
+        "Single: Raw Quartz": ItemData(G.Parts, 1339089, count=0),
+        "Single: Reinforced Iron Plate": ItemData(G.Parts, 1339090, count=0),
+        "Single: Rotor": ItemData(G.Parts, 1339091, count=0),
+        "Single: Rubber": ItemData(G.Parts, 1339092, count=0),
+        "Single: SAM": ItemData(G.Parts, 1339093, count=0),
+        "Single: Screw": ItemData(G.Parts, 1339094, count=0),
+        "Single: Silica": ItemData(G.Parts, 1339095, count=0),
+        "Single: Smart Plating": ItemData(G.Parts, 1339096, count=0),
+        "Single: Smokeless Powder": ItemData(G.Parts, 1339097, count=0),
+        "Single: Solid Biofuel": ItemData(G.Parts, 1339098, count=0),
+        "Single: Somersloop": ItemData(G.Parts, 1339099, count=0),
+        "Single: Stator": ItemData(G.Parts, 1339100, count=0),
+        "Single: Silver Hog Statue": ItemData(G.Parts, 1339101, count=0),
+        "Single: Steel Beam": ItemData(G.Parts, 1339102, count=0),
+        "Single: Steel Ingot": ItemData(G.Parts, 1339103, count=0),
+        "Single: Steel Pipe": ItemData(G.Parts, 1339104, count=0),
+        "Single: Sulfur": ItemData(G.Parts, 1339105, count=0),
+        "Single: Supercomputer": ItemData(G.Parts, 1339106, count=0),
+        "Single: Superposition Oscillator": ItemData(G.Parts, 1339107, count=0),
+        "Single: Thermal Propulsion Rocket": ItemData(G.Parts, 1339108, count=0),
+        "Single: Turbo Motor": ItemData(G.Parts, 1339109, count=0),
+        "Single: Hog Remains": ItemData(G.Parts, 1339110, count=0),
+        "Single: Uranium": ItemData(G.Trap, 1339111, C.trap, count=0),
+        "Single: Uranium Fuel Rod": ItemData(G.Trap, 1339112, C.trap, count=0),
+        "Single: Uranium Waste": ItemData(G.Trap, 1339113, C.trap, count=0),
+        "Single: Versatile Framework": ItemData(G.Parts, 1339114, count=0),
+        "Single: Wire": ItemData(G.Parts, 1339115, count=0),
+        "Single: Wood": ItemData(G.Parts, 1339116, count=0),
+        "Single: Plasma Spitter Remains": ItemData(G.Parts, 1339117, count=0),
+        "Single: Stinger Remains": ItemData(G.Parts, 1339118, count=0),
+        "Single: Hatcher Remains": ItemData(G.Parts, 1339119, count=0),
+        "Single: Alien DNA Capsule": ItemData(G.Parts, 1339120, count=0),
+        "Single: Diamonds": ItemData(G.Parts, 1339121, count=0),
+        "Single: Time Crystal": ItemData(G.Parts, 1339122, count=0),
+        "Single: Ficsite Ingot": ItemData(G.Parts, 1339123, count=0),
+        "Single: Ficsite Trigon": ItemData(G.Parts, 1339124, count=0),
+        "Single: Reanimated SAM": ItemData(G.Parts, 1339125, count=0),
+        "Single: SAM Fluctuator": ItemData(G.Parts, 1339126, count=0),
+        "Single: Biochemical Sculptor": ItemData(G.Parts, 1339127, count=0),
+        "Single: Ballistic Warp Drive": ItemData(G.Parts, 1339128, count=0),
+        "Single: Ficsonium": ItemData(G.Trap, 1339129, C.trap, count=0),
+        "Single: Ficsonium Fuel Rod": ItemData(G.Trap, 1339130, C.trap, count=0),
+        "Single: Packaged Rocket Fuel": ItemData(G.Parts, 1339131, count=0),
+        "Single: Packaged Ionized Fuel": ItemData(G.Parts, 1339132, count=0),
+        #1339133 - 1339149 Reserved for future parts
+        #1339150 - 1339199 Equipment / Ammo
+        "Single: Bacon Agaric": ItemData(G.Ammo, 1339150, count=0),
+        "Single: Beryl Nut": ItemData(G.Ammo, 1339151, count=0),
+        "Single: Blade Runners": ItemData(G.Equipment, 1339152),
+        "Single: Boom Box": ItemData(G.Equipment, 1339153),
+        "Single: Chainsaw": ItemData(G.Equipment, 1339154),
+        "Single: Cluster Nobelisk": ItemData(G.Ammo, 1339155, count=0),
+        "Single: Iodine-Infused Filter": ItemData(G.Ammo, 1339156, count=0), #1.1
+        "Single: Cup": ItemData(G.Equipment, 1339157),
+        "Single: Cup (gold)": ItemData(G.Equipment, 1339158, count=0),
+        "Single: Explosive Rebar": ItemData(G.Ammo, 1339159, count=0),
+        "Single: Factory Cart": ItemData(G.Equipment, 1339160),
+        "Single: Factory Cart (golden)": ItemData(G.Equipment, 1339161, count=0),
+        "Single: Gas Mask": ItemData(G.Equipment, 1339162),
+        "Single: Gas Nobelisk": ItemData(G.Ammo, 1339163, count=0),
+        "Single: Hazmat Suit": ItemData(G.Equipment, 1339164),
+        "Single: Homing Rifle Ammo": ItemData(G.Ammo, 1339165, count=0),
+        "Single: Hoverpack": ItemData(G.Equipment, 1339166),
+        "Single: Iron Rebar": ItemData(G.Ammo, 1339167, count=0),
+        "Single: Jetpack": ItemData(G.Equipment, 1339168),
+        "Single: Medicinal Inhaler": ItemData(G.Ammo, 1339169, count=0),
+        "Single: Nobelisk": ItemData(G.Ammo, 1339170, count=0),
+        "Single: Nobelisk Detonator": ItemData(G.Equipment, 1339171),
+        "Single: Nuke Nobelisk": ItemData(G.Ammo, 1339172, count=0),
+        "Single: Object Scanner": ItemData(G.Equipment, 1339173),
+        "Single: Paleberry": ItemData(G.Ammo, 1339174, count=0),
+        "Single: Parachute": ItemData(G.Equipment, 1339175),
+        "Single: Pulse Nobelisk": ItemData(G.Ammo, 1339176, count=0),
+        "Single: Rebar Gun": ItemData(G.Equipment, 1339177),
+        "Single: Rifle": ItemData(G.Equipment, 1339178),
+        "Single: Rifle Ammo": ItemData(G.Ammo, 1339179, count=0),
+        "Single: Shatter Rebar": ItemData(G.Ammo, 1339180, count=0),
+        "Single: Stun Rebar": ItemData(G.Ammo, 1339181, count=0),
+        "Single: Turbo Rifle Ammo": ItemData(G.Ammo, 1339182, count=0),
+        "Single: Xeno-Basher": ItemData(G.Equipment, 1339183),
+        "Single: Xeno-Zapper": ItemData(G.Equipment, 1339184),
+        "Single: Zipline": ItemData(G.Equipment, 1339185),
+        "Single: Portable Miner": ItemData(G.Equipment, 1339186),
+        "Single: Gas Filter": ItemData(G.Ammo, 1339187, count=0)
     }
 
     non_unique_item_categories: ClassVar[G] = G.Parts | G.Equipment | G.Ammo | G.Trap | G.Upgrades
