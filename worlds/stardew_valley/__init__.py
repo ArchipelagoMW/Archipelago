@@ -1,7 +1,7 @@
 import logging
 import typing
 from random import Random
-from typing import Dict, Any, Iterable, Optional, List, TextIO, cast
+from typing import Dict, Any, Iterable, Optional, List, TextIO
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from Options import PerGameCommonOptions
@@ -75,7 +75,9 @@ if TRACKER_ENABLED:
             "Stardew Valley Tracker",
             func=launch_client,
             component_type=Type.CLIENT,
-            icon='stardew'
+            icon='stardew',
+            description="A Stardew Valley text client integrated with Universal Tracker\n"
+                        " supporting specific commands to query the logic",
         ))
 
         icon_paths['stardew'] = f"ap:{__name__}/stardew.png"
