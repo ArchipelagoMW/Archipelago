@@ -21,12 +21,18 @@ def get_world_theme(game_name: str) -> str:
 def render_markdown(path: str) -> str:
     import markdown
 
-    with open(path) as f:
+    with open(path, encoding="utf-8-sig") as f:
         document = f.read()
     return markdown.markdown(
         document,
-        extensions=["mdx_breakless_lists", "markdown.extensions.fenced_code"],
-        extension_configs={"toc": {"anchorlink": True}}
+        extensions=[
+            "mdx_breakless_lists",
+            "markdown.extensions.fenced_code",
+            "markdown.extensions.smarty",
+        ],
+        extension_configs={
+            "toc": {"anchorlink": True},
+        }
     )
 
 
