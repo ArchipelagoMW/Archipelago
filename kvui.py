@@ -90,10 +90,10 @@ remove_between_brackets = re.compile(r"\[.*?]")
 class ThemedApp(MDApp):
     def set_colors(self):
         text_colors = KivyJSONtoTextParser.TextColors()
-        self.theme_cls.theme_style = getattr(text_colors, "theme_style", "Dark")
-        self.theme_cls.primary_palette = getattr(text_colors, "primary_palette", "Green")
-        self.theme_cls.dynamic_scheme_name = getattr(text_colors, "dynamic_scheme_name", "TONAL_SPOT")
-        self.theme_cls.dynamic_scheme_contrast = getattr(text_colors, "dynamic_scheme_contrast", 0.0)
+        self.theme_cls.theme_style = text_colors.theme_style
+        self.theme_cls.primary_palette = text_colors.primary_palette
+        self.theme_cls.dynamic_scheme_name = text_colors.dynamic_scheme_name
+        self.theme_cls.dynamic_scheme_contrast = text_colors.dynamic_scheme_contrast
 
 
 class ImageIcon(MDButtonIcon, AsyncImage):
