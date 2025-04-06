@@ -63,7 +63,7 @@ def count_reachable_orbs_level(state: CollectionState,
     # Cast all regions upfront to access their unique attributes.
     for region in world.level_to_regions[level_name]:
         # Rely on short-circuiting to skip region.can_reach whenever possible.
-        if region.level_name == level_name and region.orb_count > 0 and region.can_reach(state):
+        if region.orb_count > 0 and region.can_reach(state):
             accessible_orbs += region.orb_count
     return accessible_orbs
 
