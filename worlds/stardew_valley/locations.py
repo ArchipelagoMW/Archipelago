@@ -115,6 +115,7 @@ class LocationTags(enum.Enum):
     DIFFICULT_SECRET = enum.auto()
     SECRET_NOTE = enum.auto()
     REPLACES_PREVIOUS_LOCATION = enum.auto()
+    ANY_MOVIE = enum.auto()
     MOVIE = enum.auto()
     MOVIE_SNACK = enum.auto()
 
@@ -518,6 +519,8 @@ def extend_movies_locations(randomized_locations: List[LocationData], options: S
         return
 
     locations = []
+    if options.moviesanity == Moviesanity.option_one:
+        locations.extend(locations_by_tag[LocationTags.ANY_MOVIE])
     if options.moviesanity >= Moviesanity.option_all_movies:
         locations.extend(locations_by_tag[LocationTags.MOVIE])
     if options.moviesanity >= Moviesanity.option_all_movies_and_all_snacks:

@@ -27,6 +27,7 @@ from .logic_event import all_logic_events
 from .mine_logic import MineLogicMixin
 from .money_logic import MoneyLogicMixin
 from .monster_logic import MonsterLogicMixin
+from .movie_logic import MovieLogicMixin
 from .museum_logic import MuseumLogicMixin
 from .pet_logic import PetLogicMixin
 from .quality_logic import QualityLogicMixin
@@ -96,7 +97,8 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
                    CombatLogicMixin, MagicLogicMixin, MonsterLogicMixin, ToolLogicMixin, PetLogicMixin, QualityLogicMixin,
                    SkillLogicMixin, FarmingLogicMixin, BundleLogicMixin, FishingLogicMixin, MineLogicMixin, CookingLogicMixin, AbilityLogicMixin,
                    SpecialOrderLogicMixin, QuestLogicMixin, CraftingLogicMixin, ModLogicMixin, HarvestingLogicMixin, SourceLogicMixin,
-                   RequirementLogicMixin, BookLogicMixin, GrindLogicMixin, FestivalLogicMixin, WalnutLogicMixin, GoalLogicMixin, SpecialItemsLogicMixin):
+                   RequirementLogicMixin, BookLogicMixin, GrindLogicMixin, FestivalLogicMixin, WalnutLogicMixin, GoalLogicMixin, SpecialItemsLogicMixin,
+                   MovieLogicMixin):
     player: int
     options: StardewValleyOptions
     content: StardewContent

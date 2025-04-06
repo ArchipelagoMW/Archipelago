@@ -651,9 +651,10 @@ class Moviesanity(Choice):
     None: No movie checks
     One: There is a check for watching a movie, regardless of which
     All Movies: Watching all individual movies are checks
-    All Movies With Loved Snacks: Watching movies only counts if you invite someone and buy them a loved snack
-    All Movies And All Snacks: Watch all movies, and purchase all the snacks once
-    All Movies And All Loved Snacks: Watch all movies, and purchase all the snacks for someone who loves them
+    All Movies Loved: Watching all individual movies are checks, but you have to invite someone who loves it
+    All Movies With Loved Snacks: Watching movies only counts if you invite someone who loves it and buy them a loved snack
+    All Movies And All Snacks: Watch all movies with someone who loves them, and purchase all the snacks once
+    All Movies And All Loved Snacks: Watch all movies with someone who loves them, and purchase all the snacks for someone who loves them
     """
     internal_name = "moviesanity"
     display_name = "Moviesanity"
@@ -661,9 +662,10 @@ class Moviesanity(Choice):
     option_none = 0
     option_one = 1
     option_all_movies = 2
-    option_all_movies_with_loved_snack = 3
-    option_all_movies_and_all_snacks = 4
-    option_all_movies_and_all_loved_snacks = 5
+    option_all_movies_loved = 3
+    option_all_movies_with_loved_snack = 4
+    option_all_movies_and_all_snacks = 5
+    option_all_movies_and_all_loved_snacks = 6
 
 
 class Secretsanity(OptionSet):

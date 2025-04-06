@@ -24,7 +24,7 @@ from .logic.tool_logic import tool_upgrade_prices
 from .mods.mod_data import ModNames
 from .options import SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
     Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, StardewValleyOptions, Walnutsanity
-from .options.options import FarmType
+from .options.options import FarmType, Moviesanity
 from .stardew_rule import And, StardewRule, true_
 from .stardew_rule.indirect_connection import look_for_indirect_connection
 from .stardew_rule.rule_explain import explain
@@ -47,6 +47,7 @@ from .strings.food_names import Meal
 from .strings.forageable_names import Forageable
 from .strings.generic_names import Generic
 from .strings.geode_names import Geode
+from .strings.gift_names import Gift
 from .strings.machine_names import Machine
 from .strings.material_names import Material
 from .strings.metal_names import Artifact as ArtifactName, MetalBar, Mineral
@@ -212,8 +213,8 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     set_entrance_rule(multiworld, player, Entrance.town_to_sewer, logic.wallet.has_rusty_key())
     set_entrance_rule(multiworld, player, Entrance.enter_abandoned_jojamart, logic.has_abandoned_jojamart())
     movie_theater_rule = logic.has_movie_theater()
-    set_entrance_rule(multiworld, player, Entrance.enter_movie_theater, movie_theater_rule)
     set_entrance_rule(multiworld, player, Entrance.purchase_movie_ticket, movie_theater_rule)
+    set_entrance_rule(multiworld, player, Entrance.enter_movie_theater, movie_theater_rule & logic.has(Gift.movie_ticket))
     set_entrance_rule(multiworld, player, Entrance.take_bus_to_desert, logic.received("Bus Repair") & logic.money.can_spend(500))
     set_entrance_rule(multiworld, player, Entrance.enter_skull_cavern, logic.received(Wallet.skull_key))
     set_entrance_rule(multiworld, player, LogicEntrance.talk_to_mines_dwarf,
@@ -865,10 +866,28 @@ def set_arcade_machine_rules(logic: StardewLogic, multiworld: MultiWorld, player
 
 
 def set_movie_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions, content: StardewContent):
-    if world_options.moviesanity.value <= Moviesanity.option_none:
+    moviesanity = world_options.moviesanity.value
+    if moviesanity <= Moviesanity.option_none:
         return
 
-
+    if moviesanity >= Moviesanity.option_all_movies_loved:
+        watch_prefix = "Watch "
+        for movie_location in locations.locations_by_tag[LocationTags.MOVIE]:
+            movie_name = movie_location.name[len(watch_prefix):]
+            if moviesanity == Moviesanity.option_all_movies_loved or moviesanity == Moviesanity.option_all_movies_and_all_snacks:
+                rule = logic.movie.can_watch_movie_with_loving_npc(movie_name)
+            else:
+                rule = logic.movie.can_watch_movie_with_loving_npc_and_snack(movie_name)
+            add_rule(multiworld, player, movie_location.name, rule)
+    if moviesanity >= Moviesanity.option_all_movies_and_all_snacks:
+        snack_prefix = "Share "
+        for snack_location in locations.locations_by_tag[LocationTags.MOVIE_SNACK]:
+            snack_name = snack_location.name[len(snack_prefix):]
+            if moviesanity == Moviesanity.option_all_movies_and_all_loved_snacks:
+                rule = logic.movie.can_buy_snack_for_someone_who_loves_it(snack_name)
+            else:
+                rule = logic.movie.can_buy_snack(snack_name)
+            add_rule(multiworld, player, snack_location.name, rule)
 
 
 def set_secrets_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions, content: StardewContent):
