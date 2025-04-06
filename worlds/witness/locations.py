@@ -19,7 +19,7 @@ class WitnessPlayerLocations:
     def __init__(self, world: "WitnessWorld", player_logic: WitnessPlayerLogic) -> None:
         """Defines locations AFTER logic changes due to options"""
 
-        self.PANEL_TYPES_TO_SHUFFLE = {"General", "Good Boi"}
+        self.PANEL_TYPES_TO_SHUFFLE = {"General", "Good Boi", "Easter Egg Total"}
         self.CHECK_LOCATIONS = static_witness_locations.GENERAL_LOCATIONS.copy()
 
         if world.options.shuffle_discarded_panels:
