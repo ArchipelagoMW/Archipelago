@@ -82,6 +82,16 @@ class TestDefaultWorld(NineSolsTestBase):
     def test_default_world(self):
         self.assertEqual(self.getLocationCount(), 323)  # 318 default locations + 5 events
 
+        # we don't assert on the whole slot_data dict because e.g. apworld_version would be tautological
+        # instead we assert on the set of keys to make sure we haven't forgotten to test a new one
+        slot_data = self.world.fill_slot_data()
+        self.assertSetEqual(set(slot_data.keys()), {
+            'apworld_version',
+            'skip_soulscape_platforming'
+        })
+        # now for the "real" slot_data tests on our default world:
+        self.assertEqual(slot_data['skip_soulscape_platforming'], 0)
+
         # breathing tests for logic assertion helpers
         self.assertReachableWith("Central Hall: Examine Launch Memoral", [])
         self.assertNotReachableWith("Central Hall: Examine Council Tenets", [])
