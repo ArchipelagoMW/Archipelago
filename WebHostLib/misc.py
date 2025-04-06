@@ -12,7 +12,7 @@ from . import app, cache
 from .models import Seed, Room, Command, UUID, uuid4
 
 
-def get_world_theme(game_name: str):
+def get_world_theme(game_name: str) -> str:
     if game_name in AutoWorldRegister.world_types:
         return AutoWorldRegister.world_types[game_name].web.theme
     return 'grass'
@@ -47,17 +47,18 @@ def start_playing():
 @cache.cached()
 def game_info(game, lang):
     """Game Info Pages"""
-    game = secure_filename(game)
+    theme = get_world_theme(game)
+    secure_game_name = secure_filename(game)
     lang = secure_filename(lang)
     document = render_markdown(os.path.join(
         app.static_folder, "generated", "docs",
-        game, f"{lang}_{game}.md"
+        secure_game_name, f"{lang}_{secure_game_name}.md"
     ))
     return render_template(
         "markdown_document.html",
         title=f"{game} Guide",
         html_from_markdown=document,
-        theme=get_world_theme(game),
+        theme=theme,
     )
 
 
@@ -75,18 +76,19 @@ def games():
 @app.route('/tutorial/<string:game>/<string:file>/<string:lang>')
 @cache.cached()
 def tutorial(game: str, file: str, lang: str):
-    game = secure_filename(game)
+    theme = get_world_theme(game)
+    secure_game_name = secure_filename(game)
     file = secure_filename(file)
     lang = secure_filename(lang)
     document = render_markdown(os.path.join(
         app.static_folder, "generated", "docs",
-        game, f"{file}_{lang}.md"
+        secure_game_name, f"{file}_{lang}.md"
     ))
     return render_template(
         "markdown_document.html",
         title=f"{game} Guide",
         html_from_markdown=document,
-        theme=get_world_theme(game),
+        theme=theme,
     )
 
 
