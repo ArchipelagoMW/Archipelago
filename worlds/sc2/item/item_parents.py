@@ -197,7 +197,7 @@ parent_present[parent_names.STALKER_CLASS] = AnyOf(
     (item_names.STALKER, item_names.SLAYER, item_names.INSTIGATOR),
     main_item=item_names.STALKER,
 )
-parent_present[parent_names.SUPPLICANT_AND_ASCENDANT] = AnyOf(
+parent_present[parent_names.SUPPLICANT_AND_ASCENDANT] = AllOf(
     (item_names.SUPPLICANT, item_names.ASCENDANT),
     main_item=item_names.ASCENDANT,
 )

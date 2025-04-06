@@ -406,7 +406,7 @@ class ValidInventory:
 
         # Removing extra dependencies
         # Transport Hook
-        if self.logical_inventory.get(item_names.MEDIVAC):
+        if not self.logical_inventory.get(item_names.MEDIVAC):
             # Don't allow L2 Siege Tank Transport Hook without Medivac
             inventory_transport_hooks = [item for item in inventory if item.name == item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
             removable_transport_hooks = [item for item in inventory_transport_hooks if not (ItemFilterFlags.Unexcludable & item.filter_flags)]
