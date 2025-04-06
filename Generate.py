@@ -219,7 +219,8 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
     name_counter = Counter()
     erargs.player_options = {}
 
-    for player in range(1, args.multi + 1):
+    player = 1
+    while player <= args.multi:
         path = player_path_cache[player]
         if not path:
             raise RuntimeError(f'No weights specified for player {player}')
@@ -242,6 +243,8 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
                 elif player not in erargs.name:  # if name was not specified, generate it from filename
                     erargs.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
                 erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
+
+                player += 1
         except Exception as e:
             logging.exception(f"Exception reading settings in file {path}")
             player_errors.append(
