@@ -10,7 +10,7 @@
 Kingdom Hearts II Final Mix from the [Epic Games Store](https://store.epicgames.com/en-US/discover/kingdom-hearts) or [Steam](https://store.steampowered.com/app/2552430/KINGDOM_HEARTS_HD_1525_ReMIX/)
 
 - Follow this Guide to set up these requirements [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/)
-    1. Version 3.4.0 or greater OpenKH Mod Manager with Panacea
+    1. Version 25.01.26.0 or greater OpenKH Mod Manager with Panacea
     2. Lua Backend from the OpenKH Mod Manager
     3. Install the mod `KH2FM-Mods-Num/GoA-ROM-Edition` using OpenKH Mod Manager
 - Needed for Archipelago 
