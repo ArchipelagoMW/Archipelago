@@ -1220,7 +1220,7 @@ class Region:
         :param item_name: Name for the event item. If not provided, defaults to location_name.
         :param item_type: Item class to create the event item with. Defaults to BaseClasses.Item.
         :param rule: Callable to determine access for this event location within its region.
-        :param show_in_spoiler: Will be passed along to the
+        :param show_in_spoiler: Will be passed along to the created event Location's show_in_spoiler attribute.
         :return: The created Event Item
         """
         if location_type is None:
