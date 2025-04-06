@@ -125,12 +125,12 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
         elif component.display_name == "Text Client":
             text_client_component = component
 
-    from kvui import ButtonsPrompt
 
     if not client_component:
         run_component(text_client_component, *launch_args)
         return
     else:
+        from kvui import ButtonsPrompt
         component_options = {
             text_client_component.display_name: text_client_component,
             **{component.display_name: component for component in client_component}
@@ -217,7 +217,6 @@ def run_gui(path: str, args: Any) -> None:
     from kivymd.uix.button import MDIconButton
     from kivymd.uix.card import MDCard
     from kivymd.uix.menu import MDDropdownMenu
-    from kivymd.uix.relativelayout import MDRelativeLayout
     from kivymd.uix.snackbar import MDSnackbar, MDSnackbarText
 
     from kivy.lang.builder import Builder
