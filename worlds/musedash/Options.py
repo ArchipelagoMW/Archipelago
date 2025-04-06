@@ -176,7 +176,11 @@ class ExcludeSongs(SongSet):
     display_name = "Exclude Songs"
 
 class GoalSong(SongSet):
-    """One of these songs will be randomly chosen as your Goal Song."""
+    """
+    One of the selected song will be guaranteed to show up as the final Goal Song.
+    - You must have the DLC enabled to play these songs.
+    - If no songs are chosen, then the song will be randomly chosen from the available songs.
+    """
     display_name = "Goal Song"
 
 md_option_groups = [
