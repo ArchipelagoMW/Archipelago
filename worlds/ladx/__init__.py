@@ -589,4 +589,6 @@ class LinksAwakeningWorld(World):
                 for option, value in dataclasses.asdict(self.options).items() if option in slot_options_display_name
             })
 
+            slot_data.update({"entrance_mapping": self.ladxr_logic.world_setup.entrance_mapping})
+
         return slot_data
