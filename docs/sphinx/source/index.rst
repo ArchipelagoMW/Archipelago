@@ -47,4 +47,3 @@ the requirements of not only contributing to the main project, but the requireme
     netutils
     test
     commonclient
-    kvui
