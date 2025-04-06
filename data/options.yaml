@@ -28,9 +28,9 @@
 name: Player{number}
 
 # Used to describe your yaml. Useful if you have multiple files.
-description: Default {{ game }} Template
+description: {{ yaml_dump("Default %s Template" % game) }}
 
-game: {{ game }}
+game: {{ yaml_dump(game) }}
 requires:
   version: {{ __version__ }} # Version of Archipelago required for this yaml to work as expected.
 
@@ -44,7 +44,7 @@ requires:
     {%- endfor -%}
 {% endmacro %}
 
-{{ game }}:
+{{ yaml_dump(game) }}:
   {%- for group_name, group_options in option_groups.items() %}
   # {{ group_name }}
 

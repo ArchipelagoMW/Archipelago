@@ -80,7 +80,7 @@ class NumberRollFragmentsPerRoll(Range):
     """
     Rolls can be split into fragments, gathering enough will give you an extra roll.
     You start with one roll, and there will always be one full roll in the pool.
-    The other three rolls are split into fragments, according to this option.
+    The other rolls are split into fragments, according to this option.
     Setting this to 1 fragment per roll just puts "Roll" objects in the pool.
     """
 

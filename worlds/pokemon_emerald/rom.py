@@ -73,6 +73,7 @@ _FANFARES: Dict[str, int] = {
     "MUS_OBTAIN_SYMBOL":       318,
     "MUS_REGISTER_MATCH_CALL": 135,
 }
+_EVOLUTION_FANFARE_INDEX = list(_FANFARES.keys()).index("MUS_EVOLVED")
 
 CAVE_EVENT_NAME_TO_ID = {
     "TERRA_CAVE_ROUTE_114_1": 1,
@@ -661,6 +662,15 @@ def write_tokens(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePat
         # Shuffle the lists, pair new tracks with original tracks, set the new track ids, and set new fanfare durations
         randomized_fanfares = [fanfare_name for fanfare_name in _FANFARES]
         world.random.shuffle(randomized_fanfares)
+
+        # Prevent the evolution fanfare from receiving the poke flute by swapping it with something else.
+        # The poke flute sound causes the evolution scene to get stuck for like 40 seconds
+        if randomized_fanfares[_EVOLUTION_FANFARE_INDEX] == "MUS_RG_POKE_FLUTE":
+            swap_index = (_EVOLUTION_FANFARE_INDEX + 1) % len(_FANFARES)
+            temp = randomized_fanfares[_EVOLUTION_FANFARE_INDEX]
+            randomized_fanfares[_EVOLUTION_FANFARE_INDEX] = randomized_fanfares[swap_index]
+            randomized_fanfares[swap_index] = temp
+
         for i, fanfare_pair in enumerate(zip(_FANFARES.keys(), randomized_fanfares)):
             patch.write_token(
                 APTokenTypes.WRITE,
@@ -686,12 +696,10 @@ def _set_encounter_tables(world: "PokemonEmeraldWorld", patch: PokemonEmeraldPro
     }
     """
     for map_data in world.modified_maps.values():
-        tables = [map_data.land_encounters, map_data.water_encounters, map_data.fishing_encounters]
-        for table in tables:
-            if table is not None:
-                for i, species_id in enumerate(table.slots):
-                    address = table.address + 2 + (4 * i)
-                    patch.write_token(APTokenTypes.WRITE, address, struct.pack("<H", species_id))
+        for table in map_data.encounters.values():
+            for i, species_id in enumerate(table.slots):
+                address = table.address + 2 + (4 * i)
+                patch.write_token(APTokenTypes.WRITE, address, struct.pack("<H", species_id))
 
 
 def _set_species_info(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePatch, easter_egg: Tuple[int, int]) -> None:
