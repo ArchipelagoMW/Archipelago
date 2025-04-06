@@ -453,11 +453,13 @@ class World(metaclass=AutoWorldRegister):
         :param multiworld: The multiworld object for this generation.
         """
 
-    def fill_hook(self,
-                  prog_item_pool: list["Item"],
-                  useful_item_pool: list["Item"],
-                  filler_item_pool: list["Item"],
-                  fill_locations: list["Location"]) -> None:
+    def fill_hook(
+            self,
+                prog_item_pool: list["Item"],
+                useful_item_pool: list["Item"],
+                filler_item_pool: list["Item"],
+                fill_locations: list["Location"],
+    ) -> None:
         """
         Special method that gets called as part of distribute_items_restrictive (main fill).
 
@@ -468,12 +470,14 @@ class World(metaclass=AutoWorldRegister):
         """
 
     @classmethod
-    def stage_fill_hook(cls,
-                        multiworld: "MultiWorld",
-                        prog_item_pool: list["Item"],
-                        useful_item_pool: list["Item"],
-                        filler_item_pool: list["Item"],
-                        fill_locations: list["Location"]) -> None:
+    def stage_fill_hook(
+            cls,
+            multiworld: "MultiWorld",
+            prog_item_pool: list["Item"],
+            useful_item_pool: list["Item"],
+            filler_item_pool: list["Item"],
+            fill_locations: list["Location"],
+    ) -> None:
         """
         Class level stage of fill_hook. Gets run once per world type per multiworld after all the instanced calls.
 
