@@ -1663,7 +1663,7 @@ PORTRAIT_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Sue Pea, the Dozing Girl": LMLocationData("Guest Room", 636, "Portrait", 78, ["Water Element Medal"],
         remote_only=True, update_ram_addr=[LMRamData(0x803D5DB9, bit_position=5, in_game_room_id=29)]),
     "Uncle Grimmly, Hermit of the Darkness": LMLocationData("Wardrobe", 637, "Portrait", 16, ["Blackout"],
-        remote_only=True, update_ram_addr=[LMRamData(0x803D5DBB, bit_position=3, in_game_room_id=3)]),
+        remote_only=True, update_ram_addr=[LMRamData(0x803D5DBB, bit_position=3, in_game_room_id=41)]),
     "Boolossus, the Jumbo Ghost": LMLocationData("Balcony", 638, "Portrait", 56, ["Ice Element Medal"],
         remote_only=True, update_ram_addr=[LMRamData(0x803D5DBF, bit_position=4, in_game_room_id=62)]),
     "Jarvis, the Jar Collector": LMLocationData("Ceramics Studio", 639, "Portrait", 0, ["Ice Element Medal"],
