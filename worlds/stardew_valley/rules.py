@@ -197,7 +197,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     movie_theater_rule = logic.has_movie_theater()
     set_entrance_rule(multiworld, player, Entrance.enter_movie_theater, movie_theater_rule)
     set_entrance_rule(multiworld, player, Entrance.purchase_movie_ticket, movie_theater_rule)
-    set_entrance_rule(multiworld, player, Entrance.take_bus_to_desert, logic.received("Bus Repair"))
+    set_entrance_rule(multiworld, player, Entrance.take_bus_to_desert, logic.received("Bus Repair") & logic.money.can_spend_at(Region.bus_stop, 500))
     set_entrance_rule(multiworld, player, Entrance.enter_skull_cavern, logic.received(Wallet.skull_key))
     set_entrance_rule(multiworld, player, LogicEntrance.talk_to_mines_dwarf,
                       logic.wallet.can_speak_dwarf() & logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron))
