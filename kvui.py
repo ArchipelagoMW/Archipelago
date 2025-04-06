@@ -43,8 +43,8 @@ from kivy.core.image import ImageLoader, ImageLoaderBase, ImageData
 from kivy.base import ExceptionHandler, ExceptionManager
 from kivy.clock import Clock
 from kivy.factory import Factory
-from kivy.properties import BooleanProperty, ObjectProperty, NumericProperty
-from kivy.metrics import dp
+from kivy.properties import BooleanProperty, ObjectProperty, NumericProperty, StringProperty
+from kivy.metrics import dp, sp
 from kivy.uix.widget import Widget
 from kivy.uix.layout import Layout
 from kivy.utils import escape_markup
@@ -286,11 +286,15 @@ class TooltipLabel(HovererableLabel, MDTooltip):
         self._tooltip = None
 
 
-class ServerLabel(HovererableLabel, MDTooltip):
+class ServerLabel(HoverBehavior, MDTooltip, MDBoxLayout):
     tooltip_display_delay = 0.1
+    text: str = StringProperty("Server:")
 
     def __init__(self, *args, **kwargs):
-        super(HovererableLabel, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+        self.add_widget(MDIcon(icon="information", font_size=sp(15)))
+        self.add_widget(TooltipLabel(text=self.text, pos_hint={"center_x": 0.5, "center_y": 0.5},
+                                     font_size=sp(15)))
         self._tooltip = ServerToolTip(text="Test")
 
     def on_enter(self):
@@ -830,7 +834,7 @@ class GameManager(ThemedApp):
         self.connect_layout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(40),
                                           spacing=5, padding=(5, 10))
         # top part
-        server_label = ServerLabel(halign="center")
+        server_label = ServerLabel(width=dp(75))
         self.connect_layout.add_widget(server_label)
         self.server_connect_bar = ConnectBarTextInput(text=self.ctx.suggested_address or "archipelago.gg:",
                                                       pos_hint={"center_x": 0.5, "center_y": 0.5})
@@ -1219,7 +1223,23 @@ class E(ExceptionHandler):
 class KivyJSONtoTextParser(JSONtoTextParser):
     # dummy class to absorb kvlang definitions
     class TextColors(Widget):
-        pass
+        white: str = StringProperty("FFFFFF")
+        black: str = StringProperty("000000")
+        red: str = StringProperty("EE0000")
+        green: str = StringProperty("00FF7F")
+        yellow: str = StringProperty("FAFAD2")
+        blue: str = StringProperty("6495ED")
+        magenta: str = StringProperty("EE00EE")
+        cyan: str = StringProperty("00EEEE")
+        slateblue: str = StringProperty("6D8BE8")
+        plum: str = StringProperty("AF99EF")
+        salmon: str = StringProperty("FA8072")
+        orange: str = StringProperty("FF7700")
+        # KivyMD parameters
+        theme_style: str = StringProperty("Dark")
+        primary_palette: str = StringProperty("Lightsteelblue")
+        dynamic_scheme_name: str = StringProperty("VIBRANT")
+        dynamic_scheme_contrast: int = NumericProperty(0)
 
     def __init__(self, *args, **kwargs):
         # we grab the color definitions from the .kv file, then overwrite the JSONtoTextParser default entries

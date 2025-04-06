@@ -16,21 +16,24 @@
     orange: "FF7700"  # Used for command echo
     # KivyMD theming parameters
     theme_style: "Dark" # Light/Dark
-    primary_palette: "Green" # Many options
-    dynamic_scheme_name: "TONAL_SPOT"
+    primary_palette: "Lightsteelblue" # Many options
+    dynamic_scheme_name: "VIBRANT"
     dynamic_scheme_contrast: 0.0
 <MDLabel>:
     color: self.theme_cls.primaryColor
 <TooltipLabel>:
     adaptive_height: True
-    font_size: dp(20)
+    theme_font_size: "Custom"
+    font_size: "20dp"
     markup: True
     halign: "left"
 <SelectableLabel>:
     size_hint: 1, None
+    theme_text_color: "Custom"
+    text_color: 1, 1, 1, 1
     canvas.before:
         Color:
-            rgba: (.0, 0.9, .1, .3) if self.selected else self.theme_cls.surfaceContainerLowColor
+            rgba: (self.theme_cls.primaryColor[0], self.theme_cls.primaryColor[1], self.theme_cls.primaryColor[2], .3) if self.selected else self.theme_cls.surfaceContainerLowestColor
         Rectangle:
             size: self.size
             pos: self.pos
