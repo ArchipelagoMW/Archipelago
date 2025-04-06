@@ -432,8 +432,8 @@ class GameLogic:
         #    Recipe("Plutonium Fuel Unit", "Assembler", ("Encased Plutonium Cell", "Pressure Conversion Cube"))),
         "Gas Filter": (
             Recipe("Gas Filter", "Manufacturer", ("Coal", "Rubber", "Fabric"), handcraftable=True), ),
-        "Iodine Infused Filter": (
-            Recipe("Iodine Infused Filter", "Manufacturer", ("Gas Filter", "Quickwire", "Aluminum Casing"), handcraftable=True, minimal_tier=2), ),
+        "Iodine-Infused Filter": (
+            Recipe("Iodine-Infused Filter", "Manufacturer", ("Gas Filter", "Quickwire", "Aluminum Casing"), handcraftable=True, minimal_tier=2), ),
         "Hazmat Suit": (
             Recipe("Hazmat Suit", "Equipment Workshop", ("Rubber", "Plastic", "Fabric", "Alclad Aluminum Sheet"), handcraftable=True, minimal_tier=2), ),
         "Assembly Director System": (

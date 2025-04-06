@@ -66,7 +66,7 @@ class StateLogic:
                 not self.can_build_any(state, ("Pipeline Pump Mk.1", "Pipeline Pump Mk.2"))):
             return False
         
-        if recipe.is_radio_active and not self.can_produce_all(state, ("Hazmat Suit", "Iodine Infused Filter")): 
+        if recipe.is_radio_active and not self.can_produce_all(state, ("Hazmat Suit", "Iodine-Infused Filter")): 
             return False
         
         if not self.options.experimental_generation and recipe.minimal_belt_speed and \

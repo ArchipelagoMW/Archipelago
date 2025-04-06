@@ -61,7 +61,7 @@ class CriticalPathCalculator:
         self.select_minimal_required_parts_for_building("Miner Mk.2")
 
         if self.logic.recipes["Uranium"][0].minimal_tier <= options.final_elevator_package:
-            self.select_minimal_required_parts_for(("Hazmat Suit", "Iodine Infused Filter"))
+            self.select_minimal_required_parts_for(("Hazmat Suit", "Iodine-Infused Filter"))
 
         for i in range(1, self.__potential_required_belt_speed + 1):
             self.select_minimal_required_parts_for_building(f"Conveyor Mk.{i}")
