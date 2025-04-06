@@ -157,6 +157,8 @@
     font_size: dp(18)
     pos_hint: {'center_y': 0.5, 'center_x': 0.5}
     halign: "left"
+    theme_text_color: "Custom"
+    text_color: (1, 1, 1, 1)
     canvas.before:
         Color:
             rgba: 0.2, 0.2, 0.2, 1
@@ -175,11 +177,25 @@
             rectangle: self.x-2, self.y-2, self.width+4, self.height+4
 <ServerToolTip>:
     pos_hint: {'center_y': 0.5, 'center_x': 0.5}
-<AutocompleteHintInput>
+<AutocompleteHintInput>:
     size_hint_y: None
-    height: dp(30)
+    height: "30dp"
     multiline: False
     write_tab: False
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+<ConnectBarTextInput>:
+    height: "30dp"
+    multiline: False
+    write_tab: False
+    role: "medium"
+    size_hint_y: None
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+<CommandPromptTextInput>:
+    size_hint_y: None
+    height: "30dp"
+    multiline: False
+    write_tab: False
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
 <ScrollBox>:
     layout: layout
     bar_width: "12dp"

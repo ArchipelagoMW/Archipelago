@@ -60,7 +60,7 @@ from kivymd.app import MDApp
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.tab.tab import MDTabsPrimary, MDTabsItem, MDTabsItemText, MDTabsCarousel
+from kivymd.uix.tab.tab import MDTabsSecondary, MDTabsItem, MDTabsItemText, MDTabsCarousel
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.menu.menu import MDDropdownTextItem
 from kivymd.uix.dropdownitem import MDDropDownItem, MDDropDownItemText
@@ -164,6 +164,26 @@ class ToggleButton(MDButton, ToggleButtonBehavior):
                     child.theme_icon_color = "Custom"
                 child.text_color = self.theme_cls.primaryColor
                 child.icon_color = self.theme_cls.primaryColor
+
+
+# thanks kivymd
+class ResizableTextField(MDTextField):
+    """
+    Resizable MDTextField that manually overrides the builtin sizing.
+
+    Note that in order to use this, the sizing must be specified from within a .kv rule.
+    """
+    def __init__(self, *args, **kwargs):
+        # cursed rules override
+        rules = Builder.match(self)
+        textfield = next((rule for rule in rules if rule.name == f"<MDTextField>"), None)
+        if textfield:
+            subclasses = rules[rules.index(textfield) + 1:]
+            for subclass in subclasses:
+                height_rule = subclass.properties.get("height", None)
+                if height_rule:
+                    height_rule.ignore_prev = True
+        super().__init__(args, kwargs)
 
 
 # I was surprised to find this didn't already exist in kivy :(
@@ -383,7 +403,6 @@ class MarkupDropdownTextItem(MDDropdownTextItem):
         for child in self.children:
             if child.__class__ == MDLabel:
                 child.markup = True
-        print(self.text)
     # Currently, this only lets us do markup on text that does not have any icons
     # Create new TextItems as needed
 
@@ -461,7 +480,7 @@ class MarkupDropdown(MDDropdownMenu):
             self.menu.data = self._items
 
 
-class AutocompleteHintInput(MDTextField):
+class AutocompleteHintInput(ResizableTextField):
     min_chars = NumericProperty(3)
 
     def __init__(self, **kwargs):
@@ -621,7 +640,7 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
             self.selected = is_selected
 
 
-class ConnectBarTextInput(MDTextField):
+class ConnectBarTextInput(ResizableTextField):
     def insert_text(self, substring, from_undo=False):
         s = substring.replace("\n", "").replace("\r", "")
         return super(ConnectBarTextInput, self).insert_text(s, from_undo=from_undo)
@@ -631,7 +650,7 @@ def is_command_input(string: str) -> bool:
     return len(string) > 0 and string[0] in "/!"
 
 
-class CommandPromptTextInput(MDTextField):
+class CommandPromptTextInput(ResizableTextField):
     MAXIMUM_HISTORY_MESSAGES = 50
 
     def __init__(self, **kwargs) -> None:
@@ -697,14 +716,54 @@ class MessageBox(Popup):
         self.height += max(0, label.height - 18)
 
 
-class ClientTabs(MDTabsPrimary):
+class ClientTabs(MDTabsSecondary):
     carousel: MDTabsCarousel
     lock_swiping = True
 
     def __init__(self, *args, **kwargs):
         self.carousel = MDTabsCarousel(lock_swiping=True)
-        super().__init__(*args, MDDivider(size_hint_y=None, height=dp(4)), self.carousel, **kwargs)
+        super().__init__(*args, MDDivider(size_hint_y=None, height=dp(1)), self.carousel, **kwargs)
         self.size_hint_y = 1
+
+    def _check_panel_height(self, *args):
+        self.ids.tab_scroll.height = dp(38)
+
+    def update_indicator(
+        self, x: float = 0.0, w: float = 0.0, instance: MDTabsItem = None
+    ) -> None:
+        def update_indicator(*args):
+            indicator_pos = (0, 0)
+            indicator_size = (0, 0)
+
+            item_text_object = self._get_tab_item_text_icon_object()
+
+            if item_text_object:
+                tab_text_width = item_text_object.texture_size[0]
+                indicator_pos = (
+                    instance.x
+                    + (instance.width / 2 - tab_text_width / 2)
+                    + dp(4),
+                    self.indicator.pos[1]
+                    if not self._tabs_carousel
+                    else self._tabs_carousel.height,
+                )
+                indicator_size = (
+                    tab_text_width - dp(8),
+                    self.indicator_height,
+                )
+
+            Animation(
+                pos=indicator_pos,
+                size=indicator_size,
+                d=0 if not self.indicator_anim else self.indicator_duration,
+                t=self.indicator_transition,
+            ).start(self.indicator)
+
+        if not instance:
+            self.indicator.pos = (x, self.indicator.pos[1])
+            self.indicator.size = (w, self.indicator_height)
+        else:
+            Clock.schedule_once(update_indicator)
 
     def remove_tab(self, tab, content=None):
         if content is None:
@@ -768,19 +827,19 @@ class GameManager(ThemedApp):
 
         self.grid = MainLayout()
         self.grid.cols = 1
-        self.connect_layout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(70),
+        self.connect_layout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(40),
                                           spacing=5, padding=(5, 10))
         # top part
         server_label = ServerLabel(halign="center")
         self.connect_layout.add_widget(server_label)
         self.server_connect_bar = ConnectBarTextInput(text=self.ctx.suggested_address or "archipelago.gg:",
-                                                      size_hint_y=None, role="medium",
-                                                      height=dp(70), multiline=False, write_tab=False)
+                                                      pos_hint={"center_x": 0.5, "center_y": 0.5})
 
         def connect_bar_validate(sender):
             if not self.ctx.server:
                 self.connect_button_action(sender)
 
+        self.server_connect_bar.height = dp(30)
         self.server_connect_bar.bind(on_text_validate=connect_bar_validate)
         self.connect_layout.add_widget(self.server_connect_bar)
         self.server_connect_button = MDButton(MDButtonText(text="Connect"), style="filled", size=(dp(100), dp(70)),
@@ -793,7 +852,7 @@ class GameManager(ThemedApp):
         self.grid.add_widget(self.progressbar)
 
         # middle part
-        self.tabs = ClientTabs()
+        self.tabs = ClientTabs(pos_hint={"center_x": 0.5, "center_y": 0.5})
         self.tabs.add_widget(MDTabsItem(MDTabsItemText(text="All" if len(self.logging_pairs) > 1 else "Archipelago")))
         self.log_panels["All"] = self.tabs.default_tab_content = UILog(*(logging.getLogger(logger_name)
                                                                              for logger_name, name in
@@ -821,7 +880,7 @@ class GameManager(ThemedApp):
         self.grid.add_widget(self.main_area_container)
 
         # bottom part
-        bottom_layout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(70), spacing=5, padding=(5, 10))
+        bottom_layout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(40), spacing=5, padding=(5, 10))
         info_button = MDButton(MDButtonText(text="Command:"), radius=5, style="filled", size=(dp(100), dp(70)),
                                size_hint_x=None, size_hint_y=None, pos_hint={"center_y": 0.575})
         info_button.bind(on_release=self.command_button_action)
@@ -843,6 +902,10 @@ class GameManager(ThemedApp):
         port_start = s.find(":", ipv6_end if ipv6_end > 0 else host_start) + 1
         self.server_connect_bar.focus = True
         self.server_connect_bar.select_text(port_start if port_start > 0 else host_start, len(s))
+
+        from kivy.core.window import Window
+        from kivy.modules import console
+        console.create_console(Window, self.container)
 
         return self.container
 
@@ -1002,8 +1065,9 @@ class HintLayout(MDBoxLayout):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        boxlayout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(55))
-        boxlayout.add_widget(MDLabel(text="New Hint:", size_hint_x=None, size_hint_y=None, height=dp(55)))
+        boxlayout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(40))
+        boxlayout.add_widget(MDLabel(text="New Hint:", size_hint_x=None, size_hint_y=None,
+                                     height=dp(40), width=dp(75), halign="center", valign="center"))
         boxlayout.add_widget(AutocompleteHintInput())
         self.add_widget(boxlayout)
 
