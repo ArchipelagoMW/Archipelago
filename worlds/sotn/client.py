@@ -14,13 +14,10 @@ from .Locations import ZONE_LOCATIONS, locations, AP_ID_TO_NAME, ENEMY_LOCATIONS
 
 # TODO:
 #  Visual glitches on Richter dialog
-#  Visual glitch on sliding door after defeating Lesser Demon
 
 # Ideas:
-# Check seed before sending checks
 # Lock red doors for progression
 # Chairsanity
-# Enemysanity need faerie scroll -Seraphin Eveles Patch bestiary
 # # No-logic rules
 
 if TYPE_CHECKING:
@@ -64,6 +61,8 @@ class SotNClient(BizHawkClient):
         self.received_death = False
         self.last_death_link = 0
         self.died_zone = {}
+        self.at_librarian = False
+        self.watching_tactics = False
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
@@ -146,6 +145,12 @@ class SotNClient(BizHawkClient):
                             ]
                         )
                         self.room_id = room_id
+                        if self.at_librarian:
+                            if room_id == 0x9870:
+                                self.at_librarian = False
+                        if room_id == 0x9470:
+                            self.at_librarian = True
+
                 except KeyError:
                     self.cur_zone = None
 
@@ -267,7 +272,9 @@ class SotNClient(BizHawkClient):
                     if self.cur_zone["name"] == "Shaft/Dracula":
                         dracula_hp = await self.read_int(ctx, 0x076ed6, 2, "MainRAM")
                         if dracula_hp == 0 or dracula_hp > 60000:
-                            dracula_dead = True
+                            alucard_hp = await self.read_int(ctx, 0x097ba0, 4, "MainRAM")
+                            if alucard_hp != 0:
+                                dracula_dead = True
 
                     # Are we entered Cave zone?
                     if not self.break_chi_wall and self.cur_zone["name"] == "Cave":
@@ -317,6 +324,10 @@ class SotNClient(BizHawkClient):
                     for location in cur_locations:
                         for name, loc in location.items():
                             if loc["ap_id"] in self.checked_locations:
+                                continue
+
+                            # Process only Librarian item when inside to prevent tactics trigger checks
+                            if self.at_librarian and name != "Long Library - Librarian Shop Item":
                                 continue
 
                             # Did we change area during location loop?
@@ -405,7 +416,7 @@ class SotNClient(BizHawkClient):
                         f_s = await self.read_int(ctx, 0x097973, 1, "MainRAM")
                         if f_s != 0:
                             self.enemy_scroll = "READY"
-                            # We just loot Faerie scroll erase bestiary
+                            # We just loot Faerie scroll erase bestiary thanks Seraphin Eveles for that idea
                             address = 0x03bf7c
                             # Byte 1 keep Dracula and Warg(NO3)
                             await bizhawk.write(ctx.bizhawk_ctx, [(address, b'\x81', "MainRAM")])
