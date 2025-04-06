@@ -23,14 +23,11 @@ def render_markdown(path: str) -> str:
 
     with open(path) as f:
         document = f.read()
-    return markdown.markdown(document,  extensions=["mdx_breakless_lists"])
-
-
-@app.before_request
-def register_session():
-    session.permanent = True  # technically 31 days after the last visit
-    if not session.get("_id", None):
-        session["_id"] = uuid4()  # uniquely identify each session without needing a login
+    return markdown.markdown(
+        document,
+        extensions=["mdx_breakless_lists"],
+        extension_configs={"toc": {"anchorlink": True}}
+    )
 
 
 @app.errorhandler(404)
@@ -106,13 +103,7 @@ def faq(lang: str):
     return render_template(
         "markdown_document.html",
         title="Frequently Asked Questions",
-        html_from_markdown=markdown.markdown(
-            document,
-            extensions=["toc", "mdx_breakless_lists"],
-            extension_configs={
-                "toc": {"anchorlink": True}
-            }
-        ),
+        html_from_markdown=document,
     )
 
 
@@ -123,13 +114,7 @@ def glossary(lang: str):
     return render_template(
         "markdown_document.html",
         title="Glossary",
-        html_from_markdown=markdown.markdown(
-            document,
-            extensions=["toc", "mdx_breakless_lists"],
-            extension_configs={
-                "toc": {"anchorlink": True}
-            }
-        ),
+        html_from_markdown=document,
     )
 
 
