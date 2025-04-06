@@ -119,7 +119,7 @@ class MuseDashWorld(World):
         start_items = self.options.start_inventory.value.keys()
         include_songs = self.options.include_songs.value
         exclude_songs = self.options.exclude_songs.value
-        chosen_goal_songs = list(self.options.goal_song.value)
+        chosen_goal_songs = sorted(list(self.options.goal_song.value))
 
         self.starting_songs = [s for s in start_items if s in song_items]
         self.starting_songs = self.md_collection.filter_songs_to_dlc(self.starting_songs, dlc_songs)
