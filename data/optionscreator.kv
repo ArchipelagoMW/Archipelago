@@ -86,3 +86,56 @@
 
 ContainerLayout:
     md_bg_color: app.theme_cls.backgroundColor
+
+    MainLayout:
+        id: main
+        cols: 2
+
+        ScrollBox:
+            id: scrollbox
+            size_hint_x: None
+            width: "150dp"
+
+        MainLayout:
+            id: player_layout
+            rows: 2
+
+            MDBoxLayout:
+                id: player_options
+                orientation: "horizontal"
+                height: "60dp"
+                size_hint_y: None
+                padding: [0, "20dp", 0, 0]
+                spacing: "20dp"
+
+                MDTextField:
+                    id: player_name
+                    multiline: False
+
+                    MDTextFieldHintText:
+                        text: "Player Name"
+
+                    MDTextFieldMaxLengthText:
+                        max_text_length: 16
+
+                MDBoxLayout:
+                    orientation: "vertical"
+                    spacing: "5dp"
+
+                    MDLabel:
+                        id: game
+                        text: "Game: None"
+                        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+                    MDButton:
+                        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                        on_press: app.export_options(self)
+                        theme_width: "Custom"
+                        size_hint_x: 1
+
+                        MDButtonText:
+                            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                            text: "Export Options"
+            MainLayout:
+                cols: 1
+                id: options

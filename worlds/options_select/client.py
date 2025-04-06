@@ -186,7 +186,7 @@ class YamlCreator(ThemedApp):
     current_game: str
     options: typing.Dict[str, typing.Any]
 
-    def export_options(self, _: Widget):
+    def export_options(self, button: Widget):
         if self.name_input.text and self.current_game:
             file_name = save_filename("Export Options File As...", [("YAML", ["*.yaml"])],
                                       Utils.get_file_safe_name(f"{self.name_input.text}.yaml"))
@@ -509,11 +509,8 @@ class YamlCreator(ThemedApp):
         self.set_colors()
         self.options = {}
         self.container = Builder.load_file(Utils.local_path("data/optionscreator.kv"))
-        self.main_layout = MainLayout(cols=2)
-        self.container.add_widget(self.main_layout)
-        self.scrollbox = ScrollBox(size_hint_x=None, width=dp(150))
-        self.scrollbox.do_scroll_x = False
-        self.scrollbox.layout.orientation = "vertical"
+        self.main_layout = self.container.ids.main
+        self.scrollbox = self.container.ids.scrollbox
         for world, cls in sorted(AutoWorldRegister.world_types.items(), key=lambda x: x[0]):
             if world == "Archipelago":
                 continue
@@ -523,28 +520,16 @@ class YamlCreator(ThemedApp):
             world_text.bind(width=lambda *x, text=world_text: text.setter('text_size')(text, (text.width, None)),
                             texture_size=lambda *x, text=world_text: text.setter("height")(text,
                                                                                            world_text.texture_size[1]))
-            world_button = MDButton(world_text, size_hint_x=None, width=dp(150), theme_width="Custom")
-            world_button.radius = (dp(5), dp(5), dp(5), dp(5))
+            world_button = MDButton(world_text, size_hint_x=None, width=dp(150), theme_width="Custom",
+                                    radius=(dp(5), dp(5), dp(5), dp(5)))
             world_button.bind(on_release=self.create_options_panel)
             world_button.world_cls = cls
             self.scrollbox.layout.add_widget(world_button)
-        self.main_panel = MainLayout(rows=2)
-        self.player_options = MDBoxLayout(orientation="horizontal", height=dp(60), size_hint_y=None, spacing=dp(5),
-                                          padding=[0, dp(10), 0, 0])
-        button_box = MDBoxLayout(orientation="vertical", spacing=dp(2))
-        self.game_label = MDLabel(text="Game: None", pos_hint={"center_x": 0.5, "center_y": 0.5})
-        button_box.add_widget(self.game_label)
-        self.name_input = MDTextField(MDTextFieldHintText(text="Player Name"), multiline=False)
-        self.player_options.add_widget(self.name_input)
-        export_button = MDButton(MDButtonText(text="Export Options"), pos_hint={"center_x": 0.5, "center_y": 0.5})
-        export_button.bind(on_press=self.export_options)
-        button_box.add_widget(export_button)
-        self.player_options.add_widget(button_box)
-        self.option_layout = MainLayout(cols=1)
-        self.main_panel.add_widget(self.player_options)
-        self.main_panel.add_widget(self.option_layout)
-        self.main_layout.add_widget(self.scrollbox)
-        self.main_layout.add_widget(self.main_panel)
+        self.main_panel = self.container.ids.player_layout
+        self.player_options = self.container.ids.player_options
+        self.game_label = self.container.ids.game
+        self.name_input = self.container.ids.player_name
+        self.option_layout = self.container.ids.options
 
         return self.container
 
