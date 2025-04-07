@@ -52,7 +52,7 @@ LauncherComponents.components.append(
 )
 
 
-LauncherComponents.icon_paths['openrct2icon'] = local_path('data', 'openrct2icon.png')
+LauncherComponents.icon_paths['openrct2icon'] = f"ap:{__name__}/icons/openrct2icon.png"
 
 def get_previous_region_from_OpenRCT2_location(location_number: int):
     if location_number <= 2:
