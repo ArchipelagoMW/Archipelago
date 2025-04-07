@@ -28,13 +28,19 @@ def set_rules(tloz_world: "TLoZWorld"):
                 add_rule(tloz_world.get_location(location.name),
                          lambda state: state.has_group("weapons", player))
             #  This part of the loop sets up an expected amount of defense needed for each dungeon
-            if i > 0:  # Don't need an extra heart for Level 1
+            if tloz_world.options.DefenseLogic == 0: # Easy Defense Logic. One heart per dungeon plus three extra.
                 add_rule(tloz_world.get_location(location.name),
-                         lambda state, hearts=i: state.has("Heart Container", player, hearts) or
-                                       (state.has("Blue Ring", player) and
-                                        state.has("Heart Container", player, int(hearts / 2))) or
-                                       (state.has("Red Ring", player) and
-                                        state.has("Heart Container", player, int(hearts / 4))))
+                         lambda state, hearts=i: state.has("Heart Container", player, hearts + 3))
+                if i > 3: # Blue Ring guaranteed before level 5 on Easy.
+                    add_rule(tloz_world.get_location(location.name), lambda state: state.has("Blue Ring", player))
+            if tloz_world.options.DefenseLogic == 1: # Moderate Defense Logic. One effective heart per dungeon.
+                if i > 0:  # Don't need an extra heart for Level 1
+                    add_rule(tloz_world.get_location(location.name),
+                             lambda state, hearts=i: state.has("Heart Container", player, hearts) or
+                                           (state.has("Blue Ring", player) and
+                                            state.has("Heart Container", player, int(hearts / 2))) or
+                                           (state.has("Red Ring", player) and
+                                            state.has("Heart Container", player, int(hearts / 4))))
             if "Pols Voice" in location.name:  # This enemy needs specific weapons
                 add_rule(tloz_world.get_location(location.name),
                          lambda state: state.has_group("swords", player) or

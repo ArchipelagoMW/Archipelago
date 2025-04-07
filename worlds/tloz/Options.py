@@ -45,6 +45,18 @@ class WeaponLogic(Choice):
     option_moderate = 1
     option_hard = 2
 
+class DefenseLogic(Choice):
+    """What level of defensive power is logically required for later dungeons.
+    Easy means you're guaranteed to have one Heart Container per previous dungeon level plus three additional,
+    and the Blue Ring is guaranteed to be available before levels 5 and later.
+    Moderate means you're guaranteed to have one extra heart per previous dungeon level,
+    taking into account available Rings.
+    Hard means no safety logic is added, so all hearts and rings could be in any location."""
+    display_name = "Defense Logic"
+    option_easy = 0
+    option_moderate = 1
+    option_hard = 2
+
 class EntranceShuffle(Choice):
     """Shuffle entrances around.
     Dungeons means only dungeon entrances will be shuffled with each other.
@@ -69,11 +81,14 @@ class RandomizeWarpCaves(Toggle):
     """Include the Take Any Road caves in entrance randomization"""
     display_name = "Randomize Warp Caves"
 
+
+
 @dataclass
 class TlozOptions(PerGameCommonOptions):
     ExpandedPool: ExpandedPool
     TriforceLocations: TriforceLocations
     StartingPosition: StartingPosition
     WeaponLogic: WeaponLogic
+    DefenseLogic: DefenseLogic
     EntranceShuffle: EntranceShuffle
     RandomizeWarpCaves: RandomizeWarpCaves

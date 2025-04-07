@@ -10,7 +10,6 @@ import Utils
 from BaseClasses import ItemClassification
 from worlds.Files import APDeltaPatch, APProcedurePatch, APTokenMixin, APPatchExtension
 
-
 NA10CHECKSUM = '337bd6f1a1163df31bf2633665589ab0'
 ROM_PLAYER_LIMIT = 65535
 ROM_NAME = 0x10
@@ -141,12 +140,8 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options = Utils.get_options()
-    if not file_name:
-        file_name = options["tloz_options"]["rom_file"]
-    if not os.path.exists(file_name):
-        file_name = Utils.user_path(file_name)
-    return file_name
+    from worlds.tloz import TLoZWorld
+    return TLoZWorld.settings.rom_file
 
 class TLOZPatchExtension(APPatchExtension):
     game = "The Legend of Zelda"

@@ -13,15 +13,15 @@ class LogicTestBase(TLOZTestBase):
 class WeaponLogicEasyTest(LogicTestBase):
     options = {
         "WeaponLogic": "easy",
+        "DefenseLogic": "hard",
         "ExpandedPool": "true",
         "StartingPosition": "very_dangerous",
     }
 
-
     def test_sword(self) -> None:
         """Test the locations that will require the Sword: all dungeon locations"""
         locations = Locations.all_level_locations
-        items = [["Sword", "White Sword", "Magical Sword", *WeaponLogicEasyTest.supplementary_items]]
+        items = [["Sword", "White Sword", "Magical Sword", *LogicTestBase.supplementary_items]]
         self.assertAccessDependency(locations, items, only_check_listed=True)
 
     def test_white_sword(self) -> None:
@@ -29,19 +29,20 @@ class WeaponLogicEasyTest(LogicTestBase):
 
         locations = [*Locations.level_locations[3], *Locations.level_locations[4], *Locations.level_locations[5],
                      *Locations.level_locations[6], *Locations.level_locations[7], *Locations.level_locations[8], ]
-        items = [["White Sword", "Magical Sword", *WeaponLogicEasyTest.supplementary_items]]
+        items = [["White Sword", "Magical Sword", *LogicTestBase.supplementary_items]]
         self.assertAccessDependency(locations, items, only_check_listed=True)
 
     def test_magical_sword(self) -> None:
         """Test the locations that will require the Magical Sword: levels 6, 8, and 9"""
 
         locations = [*Locations.level_locations[5], *Locations.level_locations[7], *Locations.level_locations[8], ]
-        items = [["Magical Sword", *WeaponLogicEasyTest.supplementary_items]]
+        items = [["Magical Sword", *LogicTestBase.supplementary_items]]
         self.assertAccessDependency(locations, items, only_check_listed=True)
 
 class WeaponLogicModerateTest(LogicTestBase):
     options = {
         "WeaponLogic": "moderate",
+        "DefenseLogic": "hard",
         "ExpandedPool": "true",
         "StartingPosition": "very_dangerous"
     }
@@ -49,13 +50,28 @@ class WeaponLogicModerateTest(LogicTestBase):
     def test_sword(self) -> None:
         """Test the locations that will require the Sword: all dungeon locations"""
         locations = Locations.all_level_locations
-        items = [["Sword", "White Sword", "Magical Sword", *WeaponLogicEasyTest.supplementary_items]]
+        items = [["Sword", "White Sword", "Magical Sword", *LogicTestBase.supplementary_items]]
         self.assertAccessDependency(locations, items, only_check_listed=True)
 
     def test_white_sword(self) -> None:
         """Test the locations that will require the White Sword: all levels 4+"""
         locations = [*Locations.level_locations[3], *Locations.level_locations[4], *Locations.level_locations[5],
                      *Locations.level_locations[6], *Locations.level_locations[7], *Locations.level_locations[8], ]
-        items = [["White Sword", "Magical Sword", *WeaponLogicEasyTest.supplementary_items],
-                 ["Magical Rod", "Magical Sword", *WeaponLogicEasyTest.supplementary_items]]
+        items = [["White Sword", "Magical Sword", *LogicTestBase.supplementary_items],
+                 ["Magical Rod", "Magical Sword", *LogicTestBase.supplementary_items]]
         self.assertAccessDependency(locations, items, only_check_listed=True)
+
+class DefenseLogicEasyTest(LogicTestBase):
+    options = {
+        "WeaponLogic": "hard",
+        "DefenseLogic": "easy",
+        "ExpandedPool": "true",
+        "StartingPosition": "very_dangerous"
+    }
+
+    def test_hearts_needed(self):
+        items_held = [[*LogicTestBase.supplementary_items, "Heart Container", "Heart Container", "Heart Container"]]
+        for level in Locations.level_locations:
+            locations = [*level]
+            self.assertAccessDependency(locations, items_held, only_check_listed=True)
+            items_held[0].append("Heart Container")
