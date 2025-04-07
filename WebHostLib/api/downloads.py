@@ -49,8 +49,8 @@ def get_latest_release() -> None:
                 ArchipelagoInstaller(id=name, name=filename, url=download_url, downloads=0)
             else:
                 # we have the latest file so no need to download it again
-                # if filename == db_entry.name:
-                #     continue
+                if filename == db_entry.name:
+                    continue
                 # TODO write current downloads number somewhere?
                 db_entry.set(name=filename, url=download_url, downloads=0)
                 download_file(download_url, build_path, filename)
