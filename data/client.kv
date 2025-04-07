@@ -21,6 +21,10 @@
     dynamic_scheme_contrast: 0.0
 <MDLabel>:
     color: self.theme_cls.primaryColor
+<BaseButton>:
+    ripple_effect: False
+<MDTabsItemBase>:
+    ripple_effect: False
 <TooltipLabel>:
     adaptive_height: True
     theme_font_size: "Custom"
@@ -157,6 +161,7 @@
 <ToolTip>:
     size: self.texture_size
     size_hint: None, None
+    theme_font_size: "Custom"
     font_size: dp(18)
     pos_hint: {'center_y': 0.5, 'center_x': 0.5}
     halign: "left"
