@@ -1,0 +1,9 @@
+[
+    {
+        "name": "radiant_pagoda",
+        "location_size": 24,
+        "location_border_thickness": 2,
+        "location_shape": "rect",
+        "img": "./rp.png"
+    }
+]

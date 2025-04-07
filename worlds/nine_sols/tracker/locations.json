@@ -1,0 +1,39 @@
+[
+    {
+        "name": "Radiant Pagoda",
+        "short_name": "unused",
+        "access_rules": [],
+        "visibility_rules": [],
+        "chest_unopened_img": "./red.png",
+        "chest_opened_img": "./green.png",
+        "overlay_background": "#000000",
+        "color": "#ff0000",
+        "parent": "parent's name",
+        "children": [
+            {
+                "name": "Defeat General Yingzhao",
+                "chest_unopened_img": "./red.png",
+                "chest_opened_img": "./green.png",
+                "map_locations": [
+                    {
+                        "map": "radiant_pagoda",
+                        "x": 500,
+                        "y": 60,
+                        "size": 100,
+                        "border_thickness": 2,
+                        "shape": "rect"
+                    }
+                ],
+                "sections": [
+                    {
+                        "name": "Section Name???",
+                        "chest_unopened_img": "./red.png",
+                        "chest_opened_img": "./green.png",
+                        "item_count": 1,
+                        "hosted_item": "Jin x800"
+                    }
+                ]
+            }
+        ]
+    }
+]

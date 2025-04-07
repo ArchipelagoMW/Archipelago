@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, ClassVar
 
 from BaseClasses import Tutorial
 from worlds.AutoWorld import WebWorld, World
@@ -34,6 +34,16 @@ class NineSolsWorld(World):
 
     # and this is how we tell Universal Tracker we don't need the yaml
     ut_can_gen_without_yaml = True
+
+    tracker_world: ClassVar = {
+        "map_page_folder": "tracker",
+        "map_page_maps": "maps.json",
+        "map_page_locations": "locations.json",
+        #  "map_page_setting_key" : <optional tag that informs which data storage key will be watched for auto tabbing>
+        #  "map_page_index" : <optional function with signature Callable[Any,int] that will control the auto tabbing>
+        #  "external_pack_key" : <optional string that is the name of the setting string that UT reads in order to find the external pop tracker pack>
+        #  "poptracker_name_mapping" : <optional Dict that maps the poptracker pack names to the location id as they exist in the datapackage >
+    }
 
     def generate_early(self) -> None:
         # implement .yaml-less Universal Tracker support
