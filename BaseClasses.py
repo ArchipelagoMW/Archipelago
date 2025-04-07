@@ -78,8 +78,6 @@ class MultiWorld():
     indirect_connections: Dict[Region, Set[Entrance]]
     exclude_locations: Dict[int, Options.ExcludeLocations]
     priority_locations: Dict[int, Options.PriorityLocations]
-    local_locations: Dict[int, Options.LocalLocations]
-    non_local_loatcions: Dict[int, Options.NonLocalLocations]
     start_inventory: Dict[int, Options.StartInventory]
     start_hints: Dict[int, Options.StartHints]
     start_location_hints: Dict[int, Options.StartLocationHints]
@@ -430,7 +428,8 @@ class MultiWorld():
         return self.regions.location_cache[player][location_name]
 
     def get_location_if_available(self, location_name: str, player: int) -> Optional[Location]:
-        """Like get_location, but returns None if the location isn't in the world.
+        """Like `self.get_location`, but returns `None` if the location isn't in
+        the world.
 
         This still throws an exception if the location name isn't even recognized.
         """
