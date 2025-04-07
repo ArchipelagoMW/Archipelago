@@ -411,8 +411,8 @@ class OpenRCT2World(World):
                             unlock["RidePrereq"] = \
                                 [self.random.randint(1, 3), chosen_prereq, excitement, intensity, nausea, length, total_customers]
                         elif (chosen_prereq in item_info["tracked_rides"]
-                              and (self.options.scenario_length.value == "synchronous_short" or 
-                              self.options.scenario_length.value == "synchronous_long")):
+                              and (self.options.scenario_length.value == 0 or #Sync Short
+                              self.options.scenario_length.value == 1)):#Sync Long
                             unlock["RidePrereq"] = [self.random.randint(1, 3), chosen_prereq, 0, 0, 0, 0, total_customers]
                         else:
                             if number > 100:
