@@ -174,7 +174,7 @@ class LingoWorld(World):
             "death_link", "victory_condition", "shuffle_colors", "shuffle_doors", "shuffle_paintings", "shuffle_panels",
             "enable_pilgrimage", "sunwarp_access", "mastery_achievements", "level_2_requirement", "location_checks",
             "early_color_hallways", "pilgrimage_allows_roof_access", "pilgrimage_allows_paintings", "shuffle_sunwarps",
-            "group_doors", "speed_boost_mode"
+            "group_doors", "speed_boost_mode", "shuffle_postgame"
         ]
 
         slot_data = {
