@@ -66,6 +66,5 @@ class GameDataPackage(db.Entity):
 class ArchipelagoInstaller(db.Entity):
     id = PrimaryKey(str)
     name = Required(str)
-    data = Required(bytes)
     url = Required(str)
     downloads = Required(int)

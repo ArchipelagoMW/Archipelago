@@ -17,6 +17,8 @@ import logging
 import warnings
 
 from argparse import Namespace
+from urllib.request import Request
+
 from settings import Settings, get_settings
 from time import sleep
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
@@ -1074,3 +1076,25 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
     if isinstance(obj, str):
         return False
     return isinstance(obj, typing.Iterable)
+
+def download_file(download_url: str | Request, out_directory: str | os.PathLike, filename: str) -> None:
+    import tempfile, urllib.request, shutil
+
+    if not os.path.exists(out_directory):
+        os.makedirs(out_directory)
+    temp_dir = os.path.join(tempfile.gettempdir(), "Archipelago", "Downloads")
+    if not os.path.exists(temp_dir):
+        os.makedirs(temp_dir)
+    asset_path = os.path.join(out_directory, filename)
+    temp_path = os.path.join(temp_dir, f"{filename}.tmp")
+    try:
+        with urllib.request.urlopen(download_url) as response:
+            with open(temp_path, "wb") as file:
+                shutil.copyfileobj(response, file)
+        os.rename(temp_path, asset_path)
+    except Exception as e:
+        if os.path.exists(asset_path):
+            os.remove(asset_path)
+        elif os.path.exists(temp_path):
+            os.remove(temp_path)
+        raise e
