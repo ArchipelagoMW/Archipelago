@@ -286,6 +286,7 @@ id,region,name,tags,content_packs
 416,Carpenter Shop,Kitchen Blueprint,BUILDING_BLUEPRINT,
 417,Carpenter Shop,Kids Room Blueprint,BUILDING_BLUEPRINT,
 418,Carpenter Shop,Cellar Blueprint,BUILDING_BLUEPRINT,
+419,Carpenter Shop,Pet Bowl Blueprint,BUILDING_BLUEPRINT,
 501,Town,Introductions,"STORY_QUEST",
 502,Town,How To Win Friends,"STORY_QUEST",
 503,Farm,Getting Started,"STORY_QUEST",
