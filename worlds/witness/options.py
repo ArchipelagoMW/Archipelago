@@ -15,6 +15,7 @@ from Options import (
     Range,
     Removed,
     Toggle,
+    Visibility,
 )
 
 from .data import static_logic as static_witness_logic
