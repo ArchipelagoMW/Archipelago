@@ -1,51 +1,92 @@
 [
     {
+        "name": "Radiant Pagoda",
+        "children": [
+            {
+                "name": "Defeat General Yingzhao",
+                "sections": [{ "name": "Defeat General Yingzhao" }],
+                "map_locations": [{
+                    "map": "radiant_pagoda",
+                    "x": 500,
+                    "y": 50
+                }]
+            }
+        ]
+    },
+    {
         "name": "Sky Tower",
         "children": [
             {
-                "name": "Defeat General Yingzha",
-                "sections": [
-                    {
-                        "name": "Defeat General Yingzhao"
-                    }
-                ],
-                "map_locations": [
-                    {
-                        "map": "sky_tower",
-                        "x": 500,
-                        "y": 60
-                    }
-                ]
+                "name": "Above Lower Elevator",
+                "sections": [{ "name": "Sky Tower: Above Lower Elevator" }],
+                "map_locations": [{
+                    "map": "sky_tower",
+                    "x": 210,
+                    "y": 660
+                }]
             },
             {
-                "name": "Sky Tower: By Root Node",
-                "sections": [
-                    {
-                        "name": "Sky Tower: By Root Node"
-                    }
-                ],
-                "map_locations": [
-                    {
-                        "map": "sky_tower",
-                        "x": 400,
-                        "y": 60
-                    }
-                ]
+                "name": "Wall Climb Platform",
+                "sections": [{ "name": "Sky Tower: Wall Climb Platform" }],
+                "map_locations": [{
+                    "map": "sky_tower",
+                    "x": 360,
+                    "y": 520
+                }]
             },
             {
-                "name": "Sky Tower: Stowaway's Tianhuo Flower",
-                "sections": [
-                    {
-                        "name": "Sky Tower: Stowaway's Tianhuo Flower"
-                    }
-                ],
-                "map_locations": [
-                    {
-                        "map": "sky_tower",
-                        "x": 600,
-                        "y": 60
-                    }
-                ]
+                "name": "Surrounded By Hazards",
+                "sections": [{ "name": "Sky Tower: Surrounded By Hazards" }],
+                "map_locations": [{
+                    "map": "sky_tower",
+                    "x": 300,
+                    "y": 350
+                }]
+            },
+            {
+                "name": "Ropes Below Root Node",
+                "sections": [{ "name": "Sky Tower: Ropes Below Root Node" }],
+                "map_locations": [{
+                    "map": "sky_tower",
+                    "x": 410,
+                    "y": 200
+                }]
+            },
+            {
+                "name": "Stowaway's Tianhuo Flower",
+                "sections": [{ "name": "Sky Tower: Stowaway's Tianhuo Flower" }],
+                "map_locations": [{
+                    "map": "sky_tower",
+                    "x": 270,
+                    "y": 180
+                }]
+            },
+            {
+                "name": "Examine Stowaway's Belongings",
+                "sections": [{ "name": "Sky Tower: Examine Stowaway's Belongings" }],
+                "map_locations": [{
+                    "map": "sky_tower",
+                    "x": 245,
+                    "y": 180
+                }]
+            },
+            {
+                "name": "By Root Node",
+                "sections": [{ "name": "Sky Tower: By Root Node" }],
+                "map_locations": [{
+                    "map": "sky_tower",
+                    "x": 345,
+                    "y": 140
+                }]
+            },
+            {
+                "name": "Pink Water Near Root Node",
+                "sections": [{ "name": "Sky Tower: Pink Water Near Root Node" }],
+                "map_locations": [{
+                    "map": "sky_tower",
+                    "x": 620,
+                    "y": 140
+                }]
             }
         ]
     }
