@@ -5,7 +5,7 @@ import dataclasses
 from logging import error, info, warning
 from typing import Any, Dict, List, Optional, cast
 
-from BaseClasses import CollectionState, Entrance, Item, Location, LocationProgressType, Region, Tutorial, Visibility
+from BaseClasses import CollectionState, Entrance, Item, Location, LocationProgressType, Region, Tutorial
 
 from Options import OptionError, PerGameCommonOptions, Toggle
 from worlds.AutoWorld import WebWorld, World
