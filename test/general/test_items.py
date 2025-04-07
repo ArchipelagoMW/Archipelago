@@ -1,5 +1,6 @@
 import unittest
 
+from BaseClasses import CollectionState
 from worlds.AutoWorld import AutoWorldRegister, call_all
 from . import setup_solo_multiworld
 
@@ -8,11 +9,30 @@ class TestBase(unittest.TestCase):
     def test_create_item(self):
         """Test that a world can successfully create all items in its datapackage"""
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            proxy_world = setup_solo_multiworld(world_type, ()).worlds[1]
+            multiworld = setup_solo_multiworld(world_type, steps=("generate_early", "create_regions", "create_items"))
+            proxy_world = multiworld.worlds[1]
             for item_name in world_type.item_name_to_id:
+                test_state = CollectionState(multiworld)
                 with self.subTest("Create Item", item_name=item_name, game_name=game_name):
                     item = proxy_world.create_item(item_name)
+
+                with self.subTest("Item Name", item_name=item_name, game_name=game_name):
                     self.assertEqual(item.name, item_name)
+
+                if item.advancement:
+                    with self.subTest("Item State Collect", item_name=item_name, game_name=game_name):
+                        test_state.collect(item, True)
+
+                    with self.subTest("Item State Remove", item_name=item_name, game_name=game_name):
+                        test_state.remove(item)
+
+                        self.assertEqual(test_state.prog_items, multiworld.state.prog_items,
+                                         "Item Collect -> Remove should restore empty state.")
+                else:
+                    with self.subTest("Item State Collect No Change", item_name=item_name, game_name=game_name):
+                        # Non-Advancement should not modify state.
+                        test_state.collect(item)
+                        self.assertEqual(test_state.prog_items, multiworld.state.prog_items)
 
     def test_item_name_group_has_valid_item(self):
         """Test that all item name groups contain valid items. """
