@@ -213,7 +213,7 @@
 {% endmacro %}
 
 {% macro RandomizeButton(option_name, option) %}
-    <div class="randomize-button" data-tooltip="Toggle randomization for this option!">
+    <div class="randomize-button" data-tooltip="Pick a random value for this option.">
         <label for="random-{{ option_name }}">
             <input type="checkbox" id="random-{{ option_name }}" name="random-{{ option_name }}" class="randomize-checkbox" data-option-name="{{ option_name }}" {{ "checked" if option.default == "random" }} />
             🎲

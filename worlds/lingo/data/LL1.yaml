@@ -100,6 +100,8 @@
   # paintings is an array of paintings in the room. This is used for painting
   # shuffling.
   # - id:             The internal painting ID from the LINGO map.
+  # - display_name:   The name of the painting location when showed in the
+  #                   tracker. Not needed for disabled paintings.
   # - enter_only:     If true, painting shuffling will not place a warp exit on
   #                   this painting.
   # - exit_only:      If true, painting shuffling will not place a warp entrance
@@ -226,6 +228,7 @@
           - HIDDEN
     paintings:
       - id: arrows_painting
+        display_name: Overhead Painting
         exit_only: True
         orientation: south
       - id: arrows_painting2
@@ -234,7 +237,24 @@
       - id: arrows_painting3
         disable: True
         move: True
+      - id: symmetry_painting_a_starter
+        display_name: Left Near Painting
+        enter_only: True
+        orientation: west
+        move: True
+        required_door:
+          room: The Wondrous (Doorknob)
+          door: Painting Shortcut
+      - id: eyes_yellow_painting2
+        display_name: Left Far Painting
+        enter_only: True
+        orientation: west
+        move: True
+        required_door:
+          room: Outside The Agreeable
+          door: Painting Shortcut
       - id: garden_painting_tower2
+        display_name: Front Left Painting
         enter_only: True
         orientation: north
         move: True
@@ -242,20 +262,15 @@
           room: Hedge Maze
           door: Painting Shortcut
       - id: flower_painting_8
+        display_name: Front Right Painting
         enter_only: True
         orientation: north
         move: True
         required_door:
           room: Courtyard
           door: Painting Shortcut
-      - id: symmetry_painting_a_starter
-        enter_only: True
-        orientation: west
-        move: True
-        required_door:
-          room: The Wondrous (Doorknob)
-          door: Painting Shortcut
       - id: pencil_painting6
+        display_name: Right Far Painting
         enter_only: True
         orientation: east
         move: True
@@ -263,18 +278,12 @@
           room: Outside The Bold
           door: Painting Shortcut
       - id: blueman_painting_3
+        display_name: Right Near Painting
         enter_only: True
         orientation: east
         move: True
         required_door:
           room: Outside The Undeterred
-          door: Painting Shortcut
-      - id: eyes_yellow_painting2
-        enter_only: True
-        orientation: west
-        move: True
-        required_door:
-          room: Outside The Agreeable
           door: Painting Shortcut
   Hidden Room:
     entrances:
@@ -340,6 +349,7 @@
           - OPEN
     paintings:
       - id: owl_painting
+        display_name: Painting
         orientation: north
   The Seeker:
     entrances:
@@ -599,6 +609,7 @@
           - OPEN
     paintings:
       - id: maze_painting
+        display_name: Near Traveled Painting
         orientation: west
     sunwarps:
       - dots: 1
@@ -630,6 +641,7 @@
           door: Eights
     paintings:
       - id: smile_painting_6
+        display_name: Painting
         orientation: north
   Sunwarps:
     # This is a special, meta-ish room.
@@ -968,6 +980,7 @@
         required_door:
           door: Eye Wall
       - id: smile_painting_4
+        display_name: Near Discerning Painting
         orientation: south
     sunwarps:
       - dots: 1
@@ -1068,6 +1081,7 @@
         tag: midwhite
     paintings:
       - id: west_afar
+        display_name: Painting
         orientation: south
   The Tenacious:
     entrances:
@@ -1392,6 +1406,7 @@
           - RIGHT
     paintings:
       - id: eyes_yellow_painting
+        display_name: Near Hallway Painting
         orientation: east
     sunwarps:
       - dots: 6
@@ -1451,6 +1466,7 @@
           - FIRE
     paintings:
       - id: pencil_painting7
+        display_name: Compass Room Painting
         orientation: north
   Dread Hallway:
     entrances:
@@ -1698,6 +1714,7 @@
           - GAZE
     paintings:
       - id: garden_painting_tower
+        display_name: Painting
         orientation: north
   The Fearless (First Floor):
     entrances:
@@ -2077,6 +2094,7 @@
             panel: A
     paintings:
       - id: crown_painting
+        display_name: Near Achievement Painting
         orientation: east
   Eight Alcove:
     entrances:
@@ -2088,6 +2106,7 @@
         door: Eight Door (Outside The Initiated)
     paintings:
       - id: eight_painting2
+        display_name: Eight Alcove Painting
         orientation: north
   Eight Room:
     entrances:
@@ -2108,6 +2127,7 @@
         tag: forbid
     paintings:
       - id: eight_painting
+        display_name: Eight Room Painting
         orientation: south
         exit_only: True
         required: True
@@ -2340,8 +2360,10 @@
             panel: YELLOW
     paintings:
       - id: arrows_painting_6
+        display_name: Left Painting
         orientation: east
       - id: flower_painting_5
+        display_name: Right Painting
         orientation: south
     sunwarps:
       - dots: 2
@@ -2430,6 +2452,7 @@
           door: Eights
     paintings:
       - id: smile_painting_8
+        display_name: Hot Crusts Painting
         orientation: north
     sunwarps:
       - dots: 2
@@ -2531,10 +2554,13 @@
           - SIZE (Big)
     paintings:
       - id: hi_solved_painting3
+        display_name: Cellar Replica Painting
         orientation: south
       - id: hi_solved_painting2
+        display_name: Cellar Painting
         orientation: south
       - id: east_afar
+        display_name: Seasons Area Painting
         orientation: north
   Orange Tower Sixth Floor:
     entrances:
@@ -2546,25 +2572,35 @@
         painting: True
     paintings:
       - id: arrows_painting_10
+        display_name: Back Left Painting
         orientation: east
-      - id: owl_painting_3
-        orientation: north
-      - id: clock_painting
-        orientation: west
       - id: scenery_painting_5d_2
+        display_name: Left Near Painting
         orientation: south
-      - id: symmetry_painting_b_7
-        orientation: north
       - id: panda_painting_2
+        display_name: Left Middle Painting
         orientation: south
-      - id: crown_painting2
-        orientation: north
       - id: colors_painting2
+        display_name: Left Far Painting
         orientation: south
-      - id: cherry_painting2
-        orientation: east
-      - id: hi_solved_painting
+      - id: clock_painting
+        display_name: Front Left Painting
         orientation: west
+      - id: hi_solved_painting
+        display_name: Front Right Painting
+        orientation: west
+      - id: crown_painting2
+        display_name: Right Far Painting
+        orientation: north
+      - id: owl_painting_3
+        display_name: Right Middle Painting
+        orientation: north
+      - id: symmetry_painting_b_7
+        display_name: Right Near Painting
+        orientation: north
+      - id: cherry_painting2
+        display_name: Back Right Painting
+        orientation: east
   Ending Area:
     entrances:
       Orange Tower Sixth Floor:
@@ -2660,6 +2696,7 @@
             panel: MASTERY
     paintings:
       - id: map_painting2
+        display_name: Painting
         orientation: north
         enter_only: True # otherwise you might just skip the whole game!
         req_blocked_when_no_doors: True # owl hallway in vanilla doors
@@ -2755,6 +2792,7 @@
         non_counting: True
     paintings:
       - id: arrows_painting_11
+        display_name: Painting
         orientation: east
         req_blocked_when_no_doors: True # owl hallway in vanilla doors
   Courtyard:
@@ -2817,6 +2855,7 @@
             panel: GREEN
     paintings:
       - id: flower_painting_7
+        display_name: Courtyard Painting
         orientation: north
   Yellow Backside Area:
     entrances:
@@ -2838,6 +2877,7 @@
           door: Nines
     paintings:
       - id: blueman_painting
+        display_name: Near Nine Painting
         orientation: east
   First Second Third Fourth:
     # We are separating this door + its panels into its own room because they
@@ -3173,6 +3213,7 @@
         achievement: The Colorful
     paintings:
       - id: arrows_painting_12
+        display_name: Painting
         orientation: north
     progression:
       Progressive Colorful:
@@ -3296,13 +3337,17 @@
           - STRAYS
     paintings:
       - id: arrows_painting_8
+        display_name: Near Maze Painting
         orientation: south
       - id: maze_painting_2
+        display_name: Maze Side Middle Painting
         orientation: north
       - id: owl_painting_2
+        display_name: Orange Side Middle Painting
         orientation: south
         required_when_no_doors: True
       - id: clock_painting_4
+        display_name: Near Orange Painting
         orientation: north
   Outside The Initiated:
     entrances:
@@ -3490,8 +3535,10 @@
           - OXEN
     paintings:
       - id: clock_painting_5
+        display_name: Brown Puzzles Painting
         orientation: east
       - id: smile_painting_1
+        display_name: Near Eight Painting
         orientation: north
     sunwarps:
       - dots: 3
@@ -3866,8 +3913,10 @@
           - BEGIN
     paintings:
       - id: pencil_painting2
+        display_name: Near Bold Painting
         orientation: west
       - id: north_missing2
+        display_name: Directions Area Painting
         orientation: north
   The Bold:
     entrances:
@@ -4189,12 +4238,14 @@
             panel: FOUR
     paintings:
       - id: maze_painting_3
+        display_name: Near Four Painting
         enter_only: True
         orientation: north
         move: True
         required_door:
           door: Green Painting
       - id: blueman_painting_2
+        display_name: Near Undeterred Painting
         orientation: east
     sunwarps:
       - dots: 4
@@ -4557,6 +4608,7 @@
             panel: NINE
     paintings:
       - id: smile_painting_5
+        display_name: Near Eight Painting
         enter_only: True
         orientation: east
         required_door:
@@ -4742,10 +4794,13 @@
           - LEARN
     paintings:
       - id: smile_painting_7
+        display_name: Near Turn/Return Painting
         orientation: south
       - id: flower_painting_4
+        display_name: Back Area Right Painting
         orientation: south
       - id: pencil_painting3
+        display_name: Back Area Left Painting
         enter_only: True
         orientation: east
         move: True
@@ -4753,8 +4808,10 @@
           room: Number Hunt
           door: First Six
       - id: boxes_painting
+        display_name: Near Directions Painting
         orientation: south
       - id: cherry_painting
+        display_name: Alcove Painting
         orientation: east
     sunwarps:
       - dots: 6
@@ -4848,8 +4905,10 @@
           - GREEN
     paintings:
       - id: arrows_painting_7
+        display_name: Near Sunwarp Painting
         orientation: east
       - id: fruitbowl_painting3
+        display_name: Hidden Painting
         orientation: west
         enter_only: True
         required_door:
@@ -4888,6 +4947,7 @@
         tag: forbid
     paintings:
       - id: colors_painting
+        display_name: Painting
         orientation: south
   The Bearer:
     entrances:
@@ -5369,6 +5429,7 @@
             panel: ANTECHAMBER
     paintings:
       - id: pencil_painting5
+        display_name: Left Painting
         orientation: south
   The Steady (Lemon):
     entrances:
@@ -5391,6 +5452,7 @@
           - MELON
     paintings:
       - id: pencil_painting4
+        display_name: Right Painting
         orientation: south
   The Steady (Topaz):
     entrances:
@@ -6012,6 +6074,7 @@
             panel: NIGHT
     paintings:
       - id: smile_painting_9
+        display_name: Smiley Painting
         orientation: north
         exit_only: True
   The Artistic (Panda):
@@ -6124,6 +6187,7 @@
             panel: BOWELS
     paintings:
       - id: panda_painting_3
+        display_name: Panda Painting
         exit_only: True
         orientation: south
         required_when_no_doors: True
@@ -6235,6 +6299,7 @@
             panel: THING
     paintings:
       - id: boxes_painting2
+        display_name: Lattice Painting
         orientation: south
         exit_only: True
         required_when_no_doors: True
@@ -6344,6 +6409,7 @@
             panel: ROOT
     paintings:
       - id: cherry_painting3
+        display_name: Apple Painting
         orientation: north
         exit_only: True
         required_when_no_doors: True
@@ -6490,8 +6556,10 @@
           - NEAR
     paintings:
       - id: eye_painting_2
+        display_name: Near Pillar Painting
         orientation: west
       - id: smile_painting_2
+        display_name: Near Window Painting
         orientation: north
   Far Window:
     entrances:
@@ -6512,6 +6580,7 @@
         door: Exit
     paintings:
       - id: arrows_painting_5
+        display_name: Lobby Painting
         orientation: east
   Outside The Wondrous:
     entrances:
@@ -6562,9 +6631,11 @@
             panel: SHRINK
     paintings:
       - id: symmetry_painting_a_1
+        display_name: Doorknob Upper Painting
         orientation: east
         exit_only: True
       - id: symmetry_painting_b_1
+        display_name: Doorknob Lower Painting
         orientation: south
   The Wondrous (Bookcase):
     entrances:
@@ -6576,6 +6647,7 @@
         tag: midblue
     paintings:
       - id: symmetry_painting_a_3
+        display_name: Bookcase Painting
         orientation: west
         exit_only: True
       - id: symmetry_painting_b_3
@@ -6590,6 +6662,7 @@
         tag: midyellow
     paintings:
       - id: symmetry_painting_a_5
+        display_name: Chandelier Painting
         orientation: east
       - id: symmetry_painting_b_5
         disable: True
@@ -6603,6 +6676,7 @@
         tag: botbrown
     paintings:
       - id: symmetry_painting_b_4
+        display_name: Window Painting
         orientation: north
         exit_only: True
       - id: symmetry_painting_a_4
@@ -6627,8 +6701,10 @@
         tag: midyellow
     paintings:
       - id: symmetry_painting_a_2
+        display_name: Table Lower Painting
         orientation: west
       - id: symmetry_painting_b_2
+        display_name: Table Upper Painting
         orientation: south
         exit_only: True
         required: True
@@ -6669,6 +6745,7 @@
           - Achievement
     paintings:
       - id: arrows_painting_9
+        display_name: Exit Painting
         enter_only: True
         orientation: south
         move: True
@@ -6676,9 +6753,11 @@
           door: Exit
         req_blocked_when_no_doors: True # the wondrous (table) in vanilla doors
       - id: symmetry_painting_a_6
+        display_name: Fireplace Upper Painting
         orientation: west
         exit_only: True
       - id: symmetry_painting_b_6
+        display_name: Fireplace Lower Painting
         orientation: north
         req_blocked_when_no_doors: True # the wondrous (table) in vanilla doors
   Arrow Garden:
@@ -6700,6 +6779,7 @@
         tag: midwhite
     paintings:
       - id: flower_painting_6
+        display_name: Painting
         orientation: south
   Hallway Room (1):
     entrances:
@@ -6758,6 +6838,7 @@
           - TOWER
     paintings:
       - id: panda_painting
+        display_name: Painting
         orientation: south
     progression:
       Progressive Hallway Room:
@@ -6945,6 +7026,7 @@
         tag: midwhite
     paintings:
       - id: south_afar
+        display_name: Painting
         orientation: south
   Outside The Wanderer:
     entrances:
@@ -7123,16 +7205,21 @@
         panels:
           - ORDER
     paintings:
-      - id: smile_painting_3
-        orientation: west
       - id: flower_painting_2
+        display_name: Left Near Painting
         orientation: east
-      - id: scenery_painting_0a
-        orientation: north
       - id: map_painting
+        display_name: Left Far Painting
         orientation: east
       - id: fruitbowl_painting4
+        display_name: Center Front Painting
         orientation: south
+      - id: scenery_painting_0a
+        display_name: Center Back Painting
+        orientation: north
+      - id: smile_painting_3
+        display_name: Right Far Painting
+        orientation: west
     progression:
       Progressive Art Gallery:
         doors:
@@ -7493,6 +7580,7 @@
             panel: WORD
     paintings:
       - id: arrows_painting_3
+        display_name: Circle Painting
         orientation: north
   Rhyme Room (Looped Square):
     entrances:
@@ -7675,6 +7763,7 @@
           - INNOVATIVE (Bottom)
     paintings:
       - id: arrows_painting_4
+        display_name: Target Painting
         orientation: north
   Room Room:
     # This is a bit of a weird room. You can't really get to it from the roof.
@@ -7944,8 +8033,10 @@
           - CAT
     paintings:
       - id: arrows_painting_2
+        display_name: Left Painting
         orientation: east
       - id: clock_painting_2
+        display_name: Right Painting
         orientation: east
         exit_only: True
         required: True
@@ -8022,6 +8113,7 @@
         tag: midbrown
     paintings:
       - id: clock_painting_3
+        display_name: Painting
         orientation: east
         req_blocked: True # outside the wise (with or without door shuffle)
   The Red:
@@ -8492,6 +8584,7 @@
           - OPTICS
     paintings:
       - id: hi_solved_painting4
+        display_name: Painting
         orientation: south
         req_blocked_when_no_doors: True # owl hallway in vanilla doors
   Challenge Room:
