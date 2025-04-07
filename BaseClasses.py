@@ -427,7 +427,7 @@ class MultiWorld():
     def get_location(self, location_name: str, player: int) -> Location:
         return self.regions.location_cache[player][location_name]
 
-    def get_location_if_available(self, location_name: str, player: int) -> Optional[Location]:
+    def get_location_if_available(self, location_name: str, player: int) -> Location | None:
         """Like `self.get_location`, but returns `None` if the location isn't in
         the world.
 
