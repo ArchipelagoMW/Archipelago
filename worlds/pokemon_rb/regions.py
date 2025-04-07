@@ -1587,7 +1587,11 @@ def create_regions(world):
         else:
             acceptable_item = lambda item: True
         for i, item in enumerate(world.item_pool):
-            if acceptable_item(item):
+            if acceptable_item(item) and ("Badge" not in item.name
+                                          and "Trap" not in item.name
+                                          and item.name != "Pokedex"
+                                          and "Coins" not in item.name
+                                          and "Progressive" not in item.name):
                 world.pc_item = world.item_pool.pop(i)
                 break
 
