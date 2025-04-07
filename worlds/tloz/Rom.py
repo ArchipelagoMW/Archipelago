@@ -11,8 +11,12 @@ from BaseClasses import ItemClassification
 from worlds.Files import APDeltaPatch, APProcedurePatch, APTokenMixin, APPatchExtension
 
 NA10CHECKSUM = '337bd6f1a1163df31bf2633665589ab0'
-ROM_PLAYER_LIMIT = 65535
-ROM_NAME = 0x10
+rom_name_location = 0x00
+rom_name_length = 0x20
+header_length = 0x10
+player_name_location = 0x20
+player_name_length = 0x40
+major_offsets_location = 0x60
 bit_positions = [0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80]
 candle_shop = bit_positions[4]
 arrow_shop = bit_positions[3]
@@ -99,10 +103,10 @@ cave_type_flags = {
 }
 
 warp_cave_offset = 0x19344
-starting_sword_cave_location_byte = 0x50
-white_sword_pond_location_byte = 0x51
-magical_sword_grave_location_byte = 0x52
-letter_cave_location_byte = 0x53
+starting_sword_cave_location_byte = 0x70
+white_sword_pond_location_byte = 0x71
+magical_sword_grave_location_byte = 0x72
+letter_cave_location_byte = 0x73
 
 shop_correspondance = {
     "Arrow Shop": arrow_shop,
@@ -215,12 +219,12 @@ class TLOZPatchExtension(APPatchExtension):
         with open(get_base_rom_path(), 'rb') as rom:
             rom_data = TLOZPatchExtension.apply_base_patch(rom)
             rom_data = TLOZPatchExtension.write_entrances(rom_data, placements["entrance_randomizer_set"])
-        rom_name = bytearray(placements["meta"]["rom_name"][:0x20], "utf8")[:0x20]
-        rom_name.extend([0] * (0x20 - len(rom_name)))
-        rom_data[0x10:0x30] = rom_name
-        player_name = bytearray(placements["meta"]["player_name"], 'utf8')[:0x20]
-        player_name.extend([0] * (0x20 - len(player_name)))
-        rom_data[0x30:0x50] = player_name
+        rom_name = bytearray(placements["meta"]["rom_name"][:rom_name_length], "utf8")[:rom_name_length]
+        rom_name.extend([0] * (rom_name_length - len(rom_name)))
+        rom_data[rom_name_location + header_length:rom_name_location + header_length + rom_name_length] = rom_name
+        player_name = bytearray(placements["meta"]["player_name"], 'utf8')[:player_name_length]
+        player_name.extend([0] * (player_name_length - len(player_name)))
+        rom_data[player_name_location + header_length:player_name_location + header_length + player_name_length] = player_name
 
         # Write each location's new data in
         for location, item in placements.items():

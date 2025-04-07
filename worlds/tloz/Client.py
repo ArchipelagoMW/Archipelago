@@ -16,19 +16,13 @@ if TYPE_CHECKING:
 base_id = 7000
 logger = logging.getLogger("Client")
 
-WRAM_NAMES = {
-    "NesHawk": "Battery RAM",
-    "SubNESHawk": "Battery RAM",
-    "QuickNes": "WRAM",
-}
-
 class TLOZClient(BizHawkClient):
     game = "The Legend of Zelda"
     system = "NES"
     patch_suffix = ".aptloz"
 
     def __init__(self):
-        self.wram = "RAM" # Placeholder value
+        self.wram = "RAM"
         self.sram = "WRAM"
         self.rom = "PRG ROM"
         self.bonus_items = []
@@ -40,31 +34,31 @@ class TLOZClient(BizHawkClient):
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
             # Check ROM name/patch version
-            rom_name = ((await bizhawk.read(ctx.bizhawk_ctx, [(Rom.ROM_NAME - 0x10, 3, self.rom)]))[0]).decode("ascii")
+            rom_name = ((await bizhawk.read(ctx.bizhawk_ctx, [(Rom.rom_name_location, 3, self.rom)]))[0]).decode("ascii")
             if rom_name != "LOZ":
                 return False
-            nes_core = (await bizhawk.get_cores(ctx.bizhawk_ctx))["NES"]
         except bizhawk.RequestFailedError:
             return False  # Not able to get a response, say no for now
 
         ctx.game = self.game
         ctx.items_handling = 0b101
         ctx.want_slot_data = True
-        self.wram = WRAM_NAMES[nes_core]
 
         return True
 
     async def set_auth(self, ctx: "BizHawkClientContext") -> None:
         import base64
-        auth_raw = (await bizhawk.read(ctx.bizhawk_ctx, [(0x00, 0x20, "PRG ROM")]))[0]
-        ctx.auth = base64.b64encode(auth_raw).decode("utf-8")
+        auth_raw = (await bizhawk.read(
+            ctx.bizhawk_ctx,
+            [(Rom.player_name_location, Rom.player_name_length, "PRG ROM")]))[0]
+        ctx.auth = auth_raw.decode().replace('\x00', ' ').strip()
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         if ctx.server is None or ctx.server.socket.closed or ctx.slot_data is None:
             return
         try:
             if self.major_location_offsets is None:
-                location_offsets = await self.read_rom(ctx, 0x40, 4)
+                location_offsets = await self.read_rom(ctx, Rom.major_offsets_location, 4)
                 self.major_location_offsets = deepcopy(Locations.major_location_offsets)
                 self.major_location_offsets["Starting Sword Cave"] = location_offsets[0]
                 self.major_location_offsets["White Sword Pond"] = location_offsets[1]
