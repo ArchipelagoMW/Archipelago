@@ -1765,7 +1765,7 @@ ROOM_BOO_LOCATION_TABLE: dict[str, LMLocationData] = {
         update_ram_addr=[LMRamData(0x803D5E05, bit_position=5, in_game_room_id=26)]),
     "Twins' Room Boo": LMLocationData("Twins' Room", 675, "Boo", 14, [], remote_only=True,
         update_ram_addr=[LMRamData(0x803D5E05, bit_position=6, in_game_room_id=27)]),
-    "Sitting Room Boo": LMLocationData("Sitting Room", 691, "Boo", 15, ["Fire Element Medal"], remote_only=True,
+    "Sitting Room Boo": LMLocationData("Sitting Room", 691, "Boo", 15, ["Fire Element Medal", "Water Element Medal"], remote_only=True,
         update_ram_addr=[LMRamData(0x803D5E05, bit_position=7, in_game_room_id=28)]),
     "Guest Room Boo": LMLocationData("Guest Room", 692, "Boo", 16, ["Water Element Medal"], remote_only=True,
         update_ram_addr=[LMRamData(0x803D5E06, bit_position=0, in_game_room_id=29)]),
