@@ -363,11 +363,11 @@ An enumeration containing the possible hint states.
 ```python
 import enum
 class HintStatus(enum.IntEnum):
-    HINT_FOUND = 0        # The location has been collected. Status cannot be changed once found.
-    HINT_UNSPECIFIED = 1  # The receiving player has not specified any status
+    HINT_UNSPECIFIED = 0  # The receiving player has not specified any status
     HINT_NO_PRIORITY = 10 # The receiving player has specified that the item is unneeded
     HINT_AVOID = 20       # The receiving player has specified that the item is detrimental
     HINT_PRIORITY = 30    # The receiving player has specified that the item is needed
+    HINT_FOUND = 40       # The location has been collected. Status cannot be changed once found.
 ```
 - Hints for items with `ItemClassification.trap` default to `HINT_AVOID`.
 - Hints created with `LocationScouts`, `!hint_location`, or similar (hinting a location) default to `HINT_UNSPECIFIED`.
@@ -756,8 +756,8 @@ Tags are represented as a list of strings, the common client tags follow:
 ### DeathLink
 A special kind of Bounce packet that can be supported by any AP game. It targets the tag "DeathLink" and carries the following data:
 
-| Name   | Type  | Notes                                                                                                                                                  |
-|--------|-------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| time   | float | Unix Time Stamp of time of death.                                                                                                                      |
-| cause  | str   | Optional. Text to explain the cause of death. When provided, or checked, this should contain the player name, ex. "Berserker was run over by a train." |
-| source | str   | Name of the player who first died. Can be a slot name, but can also be a name from within a multiplayer game.                                          |
+| Name   | Type  | Notes                                                                                                                                                                            |
+|--------|-------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| time   | float | Unix Time Stamp of time of death.                                                                                                                                                |
+| cause  | str   | Optional. Text to explain the cause of death. When provided, or checked, if the string is non-empty, it should contain the player name, ex. "Berserker was run over by a train." |
+| source | str   | Name of the player who first died. Can be a slot name, but can also be a name from within a multiplayer game.                                                                    |
