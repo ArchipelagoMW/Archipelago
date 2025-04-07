@@ -522,13 +522,13 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         if prioritylocations and deprioritized_progression:
             # There are no more regular progression items that can be placed on any priority locations.
             # We'd still prefer to place deprioritized progression items on priority locations over filler items.
-            fill_restrictive(multiworld, multiworld.state, prioritylocations, regular_progression,
+            fill_restrictive(multiworld, multiworld.state, prioritylocations, deprioritized_progression,
                              single_player_placement=single_player, swap=False, on_place=mark_for_locking,
                              name="Priority Retry 2", one_item_per_player=False, allow_partial=True)
 
         if prioritylocations and deprioritized_progression:
             # retry with deprioritized items AND without one_item_per_player optimisation
-            fill_restrictive(multiworld, multiworld.state, prioritylocations, regular_progression,
+            fill_restrictive(multiworld, multiworld.state, prioritylocations, deprioritized_progression,
                              single_player_placement=single_player, swap=False, on_place=mark_for_locking,
                              name="Priority Retry 3", one_item_per_player=False)
 
