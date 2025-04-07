@@ -1012,10 +1012,10 @@ class AquariaRegions:
                  lambda state: _has_hot_soup(state, self.player))
         add_rule(self.multiworld.get_location(AquariaLocationNames.SUN_TEMPLE_BOSS_PATH_FIRST_CLIFF_BULB, self.player),
                  lambda state: _has_beast_and_soup_form(state, self.player) or
-                               state.has(ItemNames.LUMEREAN_GOD_BEATED, self.player), combine="or")
+                               state.has(ItemNames.LUMEREAN_GOD_BEATED, self.player))
         add_rule(self.multiworld.get_location(AquariaLocationNames.SUN_TEMPLE_BOSS_PATH_SECOND_CLIFF_BULB, self.player),
                  lambda state: _has_beast_and_soup_form(state, self.player) or
-                               state.has(ItemNames.LUMEREAN_GOD_BEATED, self.player), combine="or")
+                               state.has(ItemNames.LUMEREAN_GOD_BEATED, self.player))
         add_rule(
             self.multiworld.get_location(AquariaLocationNames.THE_VEIL_TOP_RIGHT_AREA_BULB_AT_THE_TOP_OF_THE_WATERFALL,
                                          self.player),
