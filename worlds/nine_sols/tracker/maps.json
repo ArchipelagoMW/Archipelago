@@ -1,9 +1,166 @@
 [
     {
+        "name": "sky_tower",
+        "img": "./sky_tower.webp"
+    },
+    {
+        "name": "abandoned_mines",
+        "img": "./abandoned_mines.png"
+    },
+    {
+        "name": "agrarian_hall",
+        "img": "./agrarian_hall.png"
+    },
+    {
+        "name": "ancient_stone_pillar",
+        "img": "./ancient_stone_pillar.png"
+    },
+    {
+        "name": "apeman_facility_depths",
+        "img": "./apeman_facility_depths.webp"
+    },
+    {
+        "name": "apeman_facility_elevator",
+        "img": "./apeman_facility_elevator.png"
+    },
+    {
+        "name": "apeman_facility_monitoring",
+        "img": "./apeman_facility_monitoring.png"
+    },
+    {
+        "name": "boundless_repository",
+        "img": "./boundless_repository.webp"
+    },
+    {
+        "name": "cortex_center",
+        "img": "./cortex_center.webp"
+    },
+    {
+        "name": "central_transport_hub",
+        "img": "./central_transport_hub.png"
+    },
+    {
+        "name": "empyrean_district_living_area",
+        "img": "./empyrean_district_living_area.webp"
+    },
+    {
+        "name": "empyrean_district_passages",
+        "img": "./empyrean_district_passages.webp"
+    },
+    {
+        "name": "empyrean_district_sanctum",
+        "img": "./empyrean_district_sanctum.png"
+    },
+    {
+        "name": "factory_great_hall",
+        "img": "./factory_great_hall.webp"
+    },
+    {
+        "name": "factory_machine_room",
+        "img": "./factory_machine_room.webp"
+    },
+    {
+        "name": "factory_production_area",
+        "img": "./factory_production_area.webp"
+    },
+    {
+        "name": "factory_underground",
+        "img": "./factory_underground.png"
+    },
+    {
+        "name": "four_seasons_pavilion",
+        "img": "./four_seasons_pavilion.webp"
+    },
+    {
+        "name": "galactic_dock",
+        "img": "./galactic_dock.webp"
+    },
+    {
+        "name": "greenhouse",
+        "img": "./greenhouse.webp"
+    },
+    {
+        "name": "grotto_of_scriptures_east",
+        "img": "./grotto_of_scriptures_east.png"
+    },
+    {
+        "name": "grotto_of_scriptures_entry",
+        "img": "./grotto_of_scriptures_entry.webp"
+    },
+    {
+        "name": "grotto_of_scriptures_west",
+        "img": "./grotto_of_scriptures_west.png"
+    },
+    {
+        "name": "inner_warehouse",
+        "img": "./inner_warehouse.png"
+    },
+    {
+        "name": "lake_yaochi_ruins",
+        "img": "./lake_yaochi_ruins.webp"
+    },
+    {
+        "name": "livestock_harvesting_platform",
+        "img": "./livestock_harvesting_platform.png"
+    },
+    {
+        "name": "central_hall",
+        "img": "./central_hall.webp"
+    },
+    {
+        "name": "nobility_hall",
+        "img": "./nobility_hall.png"
+    },
+    {
+        "name": "outer_warehouse",
+        "img": "./outer_warehouse.png"
+    },
+    {
+        "name": "power_reservoir_central",
+        "img": "./power_reservoir_central.webp"
+    },
+    {
+        "name": "power_reservoir_east",
+        "img": "./power_reservoir_east.webp"
+    },
+    {
+        "name": "power_reservoir_west",
+        "img": "./power_reservoir_west.png"
+    },
+    {
+        "name": "prison",
+        "img": "./prison.png"
+    },
+    {
         "name": "radiant_pagoda",
-        "location_size": 24,
-        "location_border_thickness": 2,
-        "location_shape": "rect",
-        "img": "./rp.png"
+        "img": "./radiant_pagoda.png"
+    },
+    {
+        "name": "shengwu_hall",
+        "img": "./shengwu_hall.png"
+    },
+    {
+        "name": "tiandao_research_center",
+        "img": "./tiandao_research_center.webp"
+    },
+    {
+        "name": "tianhuo_research_institute",
+        "img": "./tianhuo_research_institute.webp"
+    },
+    {
+        "name": "underground_cave",
+        "img": "./underground_cave.png"
+    },
+    {
+        "name": "water_and_oxygen_synthesis",
+        "img": "./water_and_oxygen_synthesis.webp"
+    },
+    {
+        "name": "yangu_hall",
+        "img": "./yangu_hall.png"
+    },
+    {
+        "name": "yinglong_canal",
+        "img": "./yinglong_canal.png"
     }
 ]
