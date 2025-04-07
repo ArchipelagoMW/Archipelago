@@ -1,11 +1,4 @@
-from typing import Union
-
 from .base_logic import BaseLogicMixin, BaseLogic
-from .mine_logic import MineLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .relationship_logic import RelationshipLogicMixin
-from .skill_logic import SkillLogicMixin
 from ..data.movies import movies_by_name, npc_snacks, Snack
 from ..stardew_rule import StardewRule, Or
 
@@ -16,7 +9,7 @@ class MovieLogicMixin(BaseLogicMixin):
         self.movie = MovieLogic(*args, **kwargs)
 
 
-class MovieLogic(BaseLogic[Union[MovieLogicMixin, RegionLogicMixin, ReceivedLogicMixin, RelationshipLogicMixin, SkillLogicMixin, MineLogicMixin]]):
+class MovieLogic(BaseLogic):
 
     def can_watch_movie_with_loving_npc(self, movie_name: str) -> StardewRule:
         movie = movies_by_name[movie_name]

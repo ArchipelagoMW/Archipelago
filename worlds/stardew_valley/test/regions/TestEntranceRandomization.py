@@ -6,7 +6,7 @@ from unittest.mock import patch, Mock
 from BaseClasses import get_seed, MultiWorld, Entrance
 from test.param import classvar_matrix
 from ..assertion import WorldAssertMixin
-from ..bases import SVTestCase, solo_multiworld
+from ..bases import SVTestCase, solo_multiworld, setup_solo_multiworld
 from ... import options
 from ...mods.mod_data import ModNames
 from ...options import EntranceRandomization, ExcludeGingerIsland, SkillProgression
@@ -124,3 +124,28 @@ def explore_regions_up_to_blockers(blocked_entrances: Collection[str], multiworl
             regions_to_explore.append(exit_.connected_region)
 
     return explored_regions
+
+
+class TestEntranceRandoSpecificCases(SVTestCase):
+    def test_pierre_can_be_randomized_in_the_desert(self):
+        world_options = {
+            options.EntranceRandomization: EntranceRandomization.option_buildings,
+            options.ExcludeGingerIsland: ExcludeGingerIsland.option_true,
+        }
+
+        multiworld = setup_solo_multiworld(world_options, _steps=["generate_early", "create_regions", "create_items", "set_rules"])
+        world = multiworld.worlds[1]
+        world.random = Mock()
+
+        def sort_entrances_to_place_pierre_and_oasis_first(entrances: list[Entrance]) -> None:
+            # This completely on the fact that
+            #  1. GER calls `shuffle` on the list of entrances and exits;
+            #  2. Both Pierre's and Oasis are not dead end so they are randomized in the first batch of entrances.
+            # Might break if the implementation changes :)
+            entrances.sort(key=lambda x: 0 if "Desert to Oasis" in x.name or "Pierre's General Store to Town" in x.name else 1)
+
+        world.random.shuffle = sort_entrances_to_place_pierre_and_oasis_first
+
+        world.connect_entrances()
+
+        self.assertEqual("Desert", multiworld.get_region("Pierre's General Store", 1).entrances[0].parent_region.name)
