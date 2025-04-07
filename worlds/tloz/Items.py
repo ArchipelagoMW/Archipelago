@@ -7,7 +7,6 @@ filler = ItemClassification.filler
 useful = ItemClassification.useful
 trap = ItemClassification.trap
 
-
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
     classification: ItemClassification

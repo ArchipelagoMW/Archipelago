@@ -2,7 +2,14 @@ from copy import deepcopy
 
 from BaseClasses import CollectionState
 from worlds.AutoWorld import World
+from .Options import is_sword_cave_shuffled
 
+option_off = 0
+option_dungeons = 1
+option_major = 2
+option_open = 3
+option_major_open = 4
+option_all = 5
 
 def has_bombs(state: CollectionState, player: int):
     return state.has_group("weapons", player)
@@ -151,17 +158,17 @@ def create_entrance_randomizer_set(world: World):
     screens = []
     destinations = []
     shuffled_entrances = []
-    if world.options.EntranceShuffle.value == 0:
+    if world.options.EntranceShuffle == option_off:
         return overworld_entrances
-    elif world.options.EntranceShuffle.value == 1:
+    elif world.options.EntranceShuffle == option_dungeons:
         shuffled_entrances = [*dungeon_entrances]
-    elif world.options.EntranceShuffle.value == 2:
+    elif world.options.EntranceShuffle == option_major:
         shuffled_entrances = [*major_entrances]
-    elif world.options.EntranceShuffle.value == 3:
+    elif world.options.EntranceShuffle == option_open:
         shuffled_entrances = [*open_entrances]
-    elif world.options.EntranceShuffle.value == 4:
+    elif world.options.EntranceShuffle == option_major_open:
         shuffled_entrances = list({*major_entrances, *open_entrances})
-    elif world.options.EntranceShuffle.value == 5:
+    elif world.options.EntranceShuffle == option_all:
         shuffled_entrances = [*all_entrances]
     if world.options.RandomizeWarpCaves == True:
         shuffled_entrances.extend(warp_caves)
@@ -178,7 +185,7 @@ def create_entrance_randomizer_set(world: World):
         overworld_entrances[screen] = (overworld_entrances[screen][0], destination)
     starting_sword_cave = [screen for screen, dest in overworld_entrances.items() if dest[1] == "Starting Sword Cave"][0]
 
-    while starting_sword_cave not in open_entrances and world.options.EntranceShuffle.value in [2, 4, 5]:
+    while (starting_sword_cave not in open_entrances and is_sword_cave_shuffled(world.options.EntranceShuffle.value)):
         world.random.shuffle(screens)
         world.random.shuffle(destinations)
         new_destinations = {screen[0]: screen[1] for screen in zip(screens, destinations)}

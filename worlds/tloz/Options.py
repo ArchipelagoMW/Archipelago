@@ -92,3 +92,9 @@ class TlozOptions(PerGameCommonOptions):
     DefenseLogic: DefenseLogic
     EntranceShuffle: EntranceShuffle
     RandomizeWarpCaves: RandomizeWarpCaves
+
+
+def is_sword_cave_shuffled(option_value) -> bool:
+    # A couple of things care if Starting Sword Cave is in the shuffle. This centralizes the check for that.
+    check_list = [EntranceShuffle.option_open, EntranceShuffle.option_major_open, EntranceShuffle.option_all]
+    return option_value in check_list

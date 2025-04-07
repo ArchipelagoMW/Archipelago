@@ -1,6 +1,6 @@
 import logging
 from copy import deepcopy
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
 from NetUtils import ClientStatus
 
@@ -27,7 +27,8 @@ class TLOZClient(BizHawkClient):
         self.rom = "PRG ROM"
         self.bonus_items = []
         self.major_location_offsets = None
-        self.guard_list = [(Rom.game_mode, [0x05], self.wram)] # 0x05 is normal gameplay in overworld or dungeon
+        self.base_guard_list = [(Rom.game_mode, [0x05], self.wram)] # 0x05 is normal gameplay in overworld or dungeon
+        self.guard_list = [(Rom.game_mode, [0x05], self.wram)]
 
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
@@ -54,16 +55,12 @@ class TLOZClient(BizHawkClient):
         try:
             if self.major_location_offsets is None:
                 location_offsets = await self.read_rom(ctx, 0x40, 4)
-                location_offsets = bytearray(location_offsets)
-                starting_sword_cave_location = location_offsets[0]
-                white_sword_pond_location = location_offsets[1]
-                magical_sword_grave_location = location_offsets[2]
-                letter_cave_location = location_offsets[3]
                 self.major_location_offsets = deepcopy(Locations.major_location_offsets)
-                self.major_location_offsets["Starting Sword Cave"] = starting_sword_cave_location
-                self.major_location_offsets["White Sword Pond"] = white_sword_pond_location
-                self.major_location_offsets["Magical Sword Grave"] = magical_sword_grave_location
-                self.major_location_offsets["Letter Cave"] = letter_cave_location
+                self.major_location_offsets["Starting Sword Cave"] = location_offsets[0]
+                self.major_location_offsets["White Sword Pond"] = location_offsets[1]
+                self.major_location_offsets["Magical Sword Grave"] = location_offsets[2]
+                self.major_location_offsets["Letter Cave"] = location_offsets[3]
+            self.guard_list = [*self.base_guard_list]
             await self.check_victory(ctx)
             await self.location_check(ctx)
             await self.received_items_check(ctx)
@@ -75,15 +72,16 @@ class TLOZClient(BizHawkClient):
             # The connector didn't respond. Exit handler and return to main loop to reconnect
             pass
 
-    async def check_victory(self, ctx):
+    async def check_victory(self, ctx: "BizHawkClientContext"):
         game_mode = await self.read_ram_value(ctx, Rom.game_mode)
         if game_mode == 19 and ctx.finished_game == False:
+            ctx.finished_game = True
             await ctx.send_msgs([
                 {"cmd": "StatusUpdate",
                  "status": ClientStatus.CLIENT_GOAL}
             ])
 
-    async def location_check(self, ctx):
+    async def location_check(self, ctx: "BizHawkClientContext"):
         locations_checked = []
         overworld_data = await self.read_ram_values_guarded(ctx, Rom.overworld_status_block, 0x80)
         underworld_early_data = await self.read_ram_values_guarded(ctx, Rom.underworld_early_status_block, 0x80)
@@ -91,13 +89,13 @@ class TLOZClient(BizHawkClient):
         if overworld_data is None or underworld_early_data is None or underworld_late_data is None:
             return
         for location, index in self.major_location_offsets.items():
-            if (int(overworld_data[index]) & 0x10) > 0:
+            if (overworld_data[index] & 0x10) > 0:
                 locations_checked.append(Locations.location_table[location])
         for location, index in Locations.floor_location_game_offsets_early.items():
-            if (int(underworld_early_data[index]) & 0x10 > 0):
+            if (underworld_early_data[index] & 0x10) > 0:
                 locations_checked.append(Locations.location_table[location])
         for location, index in Locations.floor_location_game_offsets_late.items():
-            if (int(underworld_late_data[index]) & 0x10 > 0):
+            if (underworld_late_data[index] & 0x10) > 0:
                 locations_checked.append(Locations.location_table[location])
 
         left_shop_slots = await self.read_ram_value_guarded(ctx, Rom.left_shop_slots)
@@ -133,18 +131,17 @@ class TLOZClient(BizHawkClient):
                 locations_checked.append(Locations.location_table[f"Take Any Item Left"])
                 self.bonus_items.append(ctx.slot_data["TakeAnyRight"])
 
-        found_locations = ctx.check_locations(locations_checked)
+        found_locations = await ctx.check_locations(locations_checked)
         for location in found_locations:
             ctx.locations_checked.add(location)
             location_name = ctx.location_names.lookup_in_game(location)
             logger.info(
                 f'New Check: {location_name} ({len(ctx.locations_checked)}/'
                 f'{len(ctx.missing_locations) + len(ctx.checked_locations)})')
-            await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [location]}])
 
 
 
-    async def received_items_check(self, ctx):
+    async def received_items_check(self, ctx: "BizHawkClientContext"):
         items_received_count_low = await self.read_ram_value_guarded(ctx, Rom.items_obtained_low)
         items_received_count_high = await self.read_ram_value_guarded(ctx, Rom.items_obtained_high)
         if items_received_count_low is None or items_received_count_high is None:
@@ -160,10 +157,10 @@ class TLOZClient(BizHawkClient):
             new_items_received_count_high = items_received_count_value // 256
             new_items_received_count_low_write = (Rom.items_obtained_low, [new_items_received_count_low], self.wram)
             new_items_received_count_high_write = (Rom.items_obtained_high, [new_items_received_count_high], self.wram)
-            write_list: List[tuple[int, List[int], str]] = [new_items_received_count_low_write, new_items_received_count_high_write]
+            write_list: list[tuple[int, list[int], str]] = [new_items_received_count_low_write, new_items_received_count_high_write]
             await self.write_item(ctx, current_item_name, write_list)
 
-    async def resolve_shop_items(self, ctx):
+    async def resolve_shop_items(self, ctx: "BizHawkClientContext"):
         left_shop_slots = await self.read_ram_value_guarded(ctx, Rom.left_shop_slots)
         middle_shop_slots = await self.read_ram_value_guarded(ctx, Rom.middle_shop_slots)
         right_shop_slots = await self.read_ram_value_guarded(ctx, Rom.right_shop_slots)
@@ -185,7 +182,7 @@ class TLOZClient(BizHawkClient):
         right_shop_write = (Rom.right_shop_slots, [right_shop_slots], self.wram)
         await self.write(ctx, [left_shop_write, middle_shop_write, right_shop_write])
 
-    async def resolve_triforce_fragments(self, ctx):
+    async def resolve_triforce_fragments(self, ctx: "BizHawkClientContext"):
         current_triforce_count = await self.read_ram_value_guarded(ctx, Rom.triforce_count)
         if current_triforce_count is None:
             return
@@ -193,7 +190,7 @@ class TLOZClient(BizHawkClient):
         write_list = [(Rom.triforce_fragments, [current_triforce_byte], self.wram)]
         await self.write(ctx, write_list)
 
-    async def write_item(self, ctx, item_name, write_list: List[tuple[int, List[int], str]]):
+    async def write_item(self, ctx, item_name, write_list: list[tuple[int, list[int], str]]):
         item_game_id = Items.item_game_ids[item_name]
         if item_name == "Bomb":
             item_game_id = 0x29 # Hack to allow bombs to be shown being lifted.
@@ -203,23 +200,25 @@ class TLOZClient(BizHawkClient):
         write_list.extend([lift_write, timer_write, sound_write])
         await self.handle_item(ctx, item_name, write_list)
 
-    async def resolve_bonus_items(self, ctx):
+    async def resolve_bonus_items(self, ctx: "BizHawkClientContext"):
         for item in self.bonus_items:
             current_item_name = ctx.item_names.lookup_in_game(item, ctx.game)
             await self.write_item(ctx, current_item_name, [])
         self.bonus_items.clear()
 
-    async def handle_item(self, ctx, item_name, write_list: List[tuple[int, List[int], str]]):
+    async def handle_item(self, ctx: "BizHawkClientContext", item_name, write_list: list[tuple[int, list[int], str]]):
         # No nice way to do this, since basically every item needs to be handled a little differently.
         if item_name == "Sword":
             current_sword_value = await self.read_ram_value_guarded(ctx, Rom.sword)
             if current_sword_value is None:
                 return
+            self.guard_list.append((Rom.sword, [current_sword_value], self.wram))
             write_list.append((Rom.sword, [max(1, current_sword_value)], self.wram))
         elif item_name == "White Sword":
             current_sword_value = await self.read_ram_value_guarded(ctx, Rom.sword)
             if current_sword_value is None:
                 return
+            self.guard_list.append((Rom.sword, [current_sword_value], self.wram))
             write_list.append((Rom.sword, [max(2, current_sword_value)], self.wram))
         elif item_name == "Magical Sword":
             write_list.append((Rom.sword, [3], self.wram))
@@ -228,6 +227,7 @@ class TLOZClient(BizHawkClient):
             current_max_bombs_value = await self.read_ram_value_guarded(ctx, Rom.max_bombs)
             if current_bombs_value is None or current_max_bombs_value is None:
                 return
+            self.guard_list.append((Rom.bombs, [current_bombs_value], self.wram))
             write_list.append((Rom.bombs, [min(current_max_bombs_value, current_bombs_value + 4)], self.wram))
         elif item_name == "Bow":
             write_list.append((Rom.bow, [1], self.wram))
@@ -235,6 +235,7 @@ class TLOZClient(BizHawkClient):
             current_arrow_value = await self.read_ram_value_guarded(ctx, Rom.arrow)
             if current_arrow_value is None:
                 return
+            self.guard_list.append((Rom.arrow, [current_arrow_value], self.wram))
             write_list.append((Rom.arrow, [max(1, current_arrow_value)], self.wram))
         elif item_name == "Silver Arrow":
             write_list.append((Rom.arrow, [2], self.wram))
@@ -242,6 +243,7 @@ class TLOZClient(BizHawkClient):
             current_candle_value = await self.read_ram_value_guarded(ctx, Rom.candle)
             if current_candle_value is None:
                 return
+            self.guard_list.append((Rom.candle, [current_candle_value], self.wram))
             write_list.append((Rom.candle, [max(1, current_candle_value)], self.wram))
         elif item_name == "Red Candle":
             write_list.append(((Rom.candle, [2], self.wram)))
@@ -251,6 +253,7 @@ class TLOZClient(BizHawkClient):
             current_potion_value = await self.read_ram_value_guarded(ctx, Rom.potion)
             if current_potion_value is None:
                 return
+            self.guard_list.append((Rom.potion, [current_potion_value], self.wram))
             write_list.append((Rom.potion, [max(1, current_potion_value)], self.wram))
         elif item_name == "Water of Life (Red)":
             write_list.append((Rom.potion, [2], self.wram))
@@ -264,6 +267,7 @@ class TLOZClient(BizHawkClient):
             current_ring_value = await self.read_ram_value_guarded(ctx, Rom.ring)
             if current_ring_value is None:
                 return
+            self.guard_list.append((Rom.ring, [current_ring_value], self.wram))
             if current_ring_value < 2:
                 write_list.append((Rom.ring, [max(1, current_ring_value)], self.wram))
                 write_list.extend([(0x0B92, [0x32], self.sram), (0x0804, [0x32], self.sram)]) # Palette data
@@ -284,11 +288,13 @@ class TLOZClient(BizHawkClient):
                 return
             current_container_count = min(((current_heart_byte_value & 0xF0) >> 4) + 1, 15)
             current_hearts_count = min((current_heart_byte_value & 0x0F) + 1, 15)
+            self.guard_list.append((Rom.heart_containers, [current_heart_byte_value], self.wram))
             write_list.append((Rom.heart_containers, [(current_container_count << 4) | current_hearts_count], self.wram))
         elif item_name == "Triforce Fragment":
             current_triforce_value = await self.read_ram_value_guarded(ctx, Rom.triforce_count)
             if current_triforce_value is None:
                 return
+            self.guard_list.append((Rom.triforce_count, [current_triforce_value], self.wram))
             write_list.append((Rom.triforce_count, [min(current_triforce_value + 1, 8)], self.wram))
         elif item_name == "Boomerang":
             write_list.append((Rom.boomerang, [1], self.wram))
@@ -300,6 +306,7 @@ class TLOZClient(BizHawkClient):
             current_heart_byte_value = await self.read_ram_value_guarded(ctx, Rom.heart_containers)
             if current_heart_byte_value is None:
                 return
+            self.guard_list.append((Rom.heart_containers, [current_heart_byte_value], self.wram))
             current_container_count = ((current_heart_byte_value & 0xF0) >> 4)
             current_hearts_count = current_heart_byte_value & 0x0F
             if current_hearts_count >= current_container_count:
@@ -312,6 +319,7 @@ class TLOZClient(BizHawkClient):
             current_heart_byte_value = await self.read_ram_value_guarded(ctx, Rom.heart_containers)
             if current_heart_byte_value is None:
                 return
+            self.guard_list.append((Rom.heart_containers, [current_heart_byte_value], self.wram))
             current_container_count = ((current_heart_byte_value & 0xF0) >> 4)
             current_hearts_count = current_heart_byte_value & 0x0F
             if (current_hearts_count + 3) >= current_container_count:
@@ -325,30 +333,31 @@ class TLOZClient(BizHawkClient):
             current_rupees_to_add_value = await self.read_ram_value_guarded(ctx, Rom.rupees_to_add)
             if current_rupees_to_add_value is None:
                 return
+            self.guard_list.append((Rom.rupees_to_add, [current_rupees_to_add_value], self.wram))
             write_list.append((Rom.rupees_to_add, [min(current_rupees_to_add_value + 5, 255)], self.wram))
         elif item_name == "Small Key":
             current_keys = await self.read_ram_value_guarded(ctx, Rom.keys)
             if current_keys is None:
                 return
+            self.guard_list.append((Rom.keys, [current_keys], self.wram))
             write_list.append((Rom.keys, [min(current_keys + 1, 255)], self.wram))
         elif item_name == "Food":
-            write_list.append((Rom.keys, [1], self.wram))
+            write_list.append((Rom.food, [1], self.wram))
         await self.write(ctx, write_list)
 
 
     async def read_ram_value(self, ctx, location):
-        value = ((await bizhawk.read(ctx.bizhawk_ctx, [(location, 1, self.wram)]))[0])
-        return int.from_bytes(value, "little")
+        return (await bizhawk.read(ctx.bizhawk_ctx, [(location, 1, self.wram)]))[0][0]
 
-    async def read_ram_value_guarded(self, ctx, location):
+    async def read_ram_value_guarded(self, ctx: "BizHawkClientContext", location):
         value = await bizhawk.guarded_read(ctx.bizhawk_ctx,
                                            [(location, 1, self.wram)],
                                            self.guard_list)
         if value is None:
             return None
-        return int.from_bytes(value[0], "little")
+        return value[0][0]
 
-    async def read_ram_values_guarded(self, ctx, location, size):
+    async def read_ram_values_guarded(self, ctx: "BizHawkClientContext", location, size):
         value = await bizhawk.guarded_read(ctx.bizhawk_ctx,
                                           [(location, size, self.wram)],
                                           self.guard_list)
@@ -356,8 +365,8 @@ class TLOZClient(BizHawkClient):
             return None
         return value[0]
 
-    async def read_rom(self, ctx, location, size):
+    async def read_rom(self, ctx: "BizHawkClientContext", location, size):
         return (await bizhawk.read(ctx.bizhawk_ctx, [(location, size, self.rom)]))[0]
 
-    async def write(self, ctx, write_list: List[tuple[int, List[int], str]]):
+    async def write(self, ctx: "BizHawkClientContext", write_list: list[tuple[int, list[int], str]]):
         return await bizhawk.guarded_write(ctx.bizhawk_ctx, write_list, self.guard_list)
