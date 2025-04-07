@@ -20,7 +20,7 @@ boss_rules = {
     "Dark Elf Slot": ["TwinHarp"],
     "Valvalis Slot": ["Earth Crystal", "Magus Sisters Slot Defeated"],
     "Golbez Slot": ["Calbrena Slot Defeated"],
-    "Dark Imps Slot": ["Tower Key"],
+    "Dark Imp Slot": ["Tower Key"],
     "Rubicant Slot": ["King and Queen Slot Defeated"],
     "Odin Slot": ["Baron Key", "Baigan Slot Defeated"],
     "CPU Slot": ["Elements Slot Defeated"],
