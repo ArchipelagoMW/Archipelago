@@ -312,7 +312,7 @@ def extend_special_order_locations(randomized_locations: List[LocationData], opt
         randomized_locations.extend(qi_orders)
 
 
-def extend_walnut_purchase_locations(randomized_locations: List[LocationData], content: StardewContent):
+def extend_walnut_purchase_locations(randomized_locations: list[LocationData], content: StardewContent):
     if content.is_disabled(ginger_island_content_pack):
         return
     randomized_locations.append(location_table["Repair Ticket Machine"])
