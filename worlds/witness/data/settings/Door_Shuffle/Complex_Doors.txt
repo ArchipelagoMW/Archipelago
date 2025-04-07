@@ -67,7 +67,7 @@ Bunker UV Room Entry (Door)
 Bunker Elevator Room Entry (Door)
 Swamp Entry (Door)
 Swamp Between Bridges First Door
-Swamp Platform Shortcut Door
+Swamp Platform Shortcut (Door)
 Swamp Cyan Water Pump (Door)
 Swamp Between Bridges Second Door
 Swamp Red Water Pump (Door)
@@ -92,7 +92,7 @@ Caves Pillar Door
 Caves Mountain Shortcut (Door)
 Caves Swamp Shortcut (Door)
 Challenge Entry (Door)
-Challenge Tunnels Entry (Door)
+Tunnels Entry (Door)
 Tunnels Theater Shortcut (Door)
 Tunnels Desert Shortcut (Door)
 Tunnels Town Shortcut (Door)

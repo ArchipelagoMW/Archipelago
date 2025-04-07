@@ -44,10 +44,11 @@ jobs:
       - name: Get a recent python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '~3.12.7'
+          check-latest: true
       - name: Install build-time dependencies
         run: |
-          echo "PYTHON=python3.11" >> $GITHUB_ENV
+          echo "PYTHON=python3.12" >> $GITHUB_ENV
           wget -nv https://github.com/AppImage/AppImageKit/releases/download/$APPIMAGETOOL_VERSION/appimagetool-x86_64.AppImage
           chmod a+rx appimagetool-x86_64.AppImage
           ./appimagetool-x86_64.AppImage --appimage-extract
@@ -63,13 +64,13 @@ jobs:
           # charset-normalizer was somehow incomplete in the github runner
           "${{ env.PYTHON }}" -m venv venv
           source venv/bin/activate
-          "${{ env.PYTHON }}" -m pip install --upgrade pip PyGObject charset-normalizer
+          "${{ env.PYTHON }}" -m pip install --upgrade pip "PyGObject<3.51.0" charset-normalizer
           python setup.py build_exe --yes bdist_appimage --yes
           echo -e "setup.py build output:\n `ls build`"
           echo -e "setup.py dist output:\n `ls dist`"
           cd dist && export APPIMAGE_NAME="`ls *.AppImage`" && cd ..
           export TAR_NAME="${APPIMAGE_NAME%.AppImage}.tar.gz"
-          (cd build && DIR_NAME="`ls | grep exe`" && mv "$DIR_NAME" Archipelago && tar -czvf ../dist/$TAR_NAME Archipelago && mv Archipelago "$DIR_NAME")
+          (cd build && DIR_NAME="`ls | grep exe`" && mv "$DIR_NAME" Archipelago && tar -cv Archipelago | gzip -8 > ../dist/$TAR_NAME && mv Archipelago "$DIR_NAME")
           echo "APPIMAGE_NAME=$APPIMAGE_NAME" >> $GITHUB_ENV
           echo "TAR_NAME=$TAR_NAME" >> $GITHUB_ENV
       # - code above copied from build.yml -

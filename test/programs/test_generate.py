@@ -9,6 +9,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import Generate
+import Main
 
 
 class TestGenerateMain(unittest.TestCase):
@@ -58,7 +59,7 @@ class TestGenerateMain(unittest.TestCase):
                     '--player_files_path', str(self.abs_input_dir),
                     '--outputpath', self.output_tempdir.name]
         print(f'Testing Generate.py {sys.argv} in {os.getcwd()}')
-        Generate.main()
+        Main.main(*Generate.main())
 
         self.assertOutput(self.output_tempdir.name)
 
@@ -67,7 +68,7 @@ class TestGenerateMain(unittest.TestCase):
                     '--player_files_path', str(self.rel_input_dir),
                     '--outputpath', self.output_tempdir.name]
         print(f'Testing Generate.py {sys.argv} in {os.getcwd()}')
-        Generate.main()
+        Main.main(*Generate.main())
 
         self.assertOutput(self.output_tempdir.name)
 
@@ -86,8 +87,53 @@ class TestGenerateMain(unittest.TestCase):
             sys.argv = [sys.argv[0], '--seed', '0',
                         '--outputpath', self.output_tempdir.name]
             print(f'Testing Generate.py {sys.argv} in {os.getcwd()}, player_files_path={self.yaml_input_dir}')
-            Generate.main()
+            Main.main(*Generate.main())
         finally:
             user_path.cached_path = user_path_backup
 
         self.assertOutput(self.output_tempdir.name)
+
+
+class TestGenerateWeights(TestGenerateMain):
+    """Tests Generate.py using a weighted file to generate for multiple players."""
+
+    # this test will probably break if something in generation is changed that affects the seed before the weights get processed
+    # can be fixed by changing the expected_results dict
+    generate_dir = TestGenerateMain.generate_dir
+    run_dir = TestGenerateMain.run_dir
+    abs_input_dir = Path(__file__).parent / "data" / "weights"
+    rel_input_dir = abs_input_dir.relative_to(run_dir)  # directly supplied relative paths are relative to cwd
+    yaml_input_dir = abs_input_dir.relative_to(generate_dir)  # yaml paths are relative to user_path
+
+    # don't need to run these tests
+    test_generate_absolute = None
+    test_generate_relative = None
+
+    def test_generate_yaml(self):
+        from settings import get_settings
+        from Utils import user_path, local_path
+        settings = get_settings()
+        settings.generator.player_files_path = settings.generator.PlayerFilesPath(self.yaml_input_dir)
+        settings.generator.players = 5  # arbitrary number, should be enough
+        settings._filename = None
+        user_path_backup = user_path.cached_path
+        user_path.cached_path = local_path()
+        try:
+            sys.argv = [sys.argv[0], "--seed", "1"]
+            namespace, seed = Generate.main()
+        finally:
+            user_path.cached_path = user_path_backup
+
+        # there's likely a better way to do this, but hardcode the results from seed 1 to ensure they're always this
+        expected_results = {
+            "accessibility": [0, 2, 0, 2, 2],
+            "progression_balancing": [0, 50, 99, 0, 50],
+        }
+
+        self.assertEqual(seed, 1)
+        for option_name, results in expected_results.items():
+            for player, result in enumerate(results, 1):
+                self.assertEqual(
+                    result, getattr(namespace, option_name)[player].value,
+                    "Generated results from weights file did not match expected value."
+                )

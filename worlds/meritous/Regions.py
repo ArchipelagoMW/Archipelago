@@ -13,7 +13,7 @@ def _generate_entrances(player: int, entrance_list: [str], parent: Region):
     return [Entrance(player, entrance, parent) for entrance in entrance_list]
 
 
-def create_regions(world: MultiWorld, player: int):
+def create_regions(multiworld: MultiWorld, player: int):
     regions = ["First", "Second", "Third", "Last"]
     bosses = ["Meridian", "Ataraxia", "Merodach"]
 
@@ -23,7 +23,7 @@ def create_regions(world: MultiWorld, player: int):
         if x == 0:
             insidename = "Menu"
 
-        region = Region(insidename, player, world)
+        region = Region(insidename, player, multiworld)
         for store in ["Alpha Cache", "Beta Cache", "Gamma Cache", "Reward Chest"]:
             for y in range(1, 7):
                 loc_name = f"{store} {(x * 6) + y}"
@@ -42,26 +42,26 @@ def create_regions(world: MultiWorld, player: int):
                                                          "Back to the entrance with the Knife"],
                                                 region)
 
-        world.regions += [region]
+        multiworld.regions += [region]
 
     for x, boss in enumerate(bosses):
-        boss_region = Region(boss, player, world)
+        boss_region = Region(boss, player, multiworld)
         boss_region.locations += [
             MeritousLocation(player, boss, location_table[boss], boss_region),
             MeritousLocation(player, f"{boss} Defeat", None, boss_region)
         ]
         boss_region.exits = _generate_entrances(player, [f"To {regions[x + 1]} Quarter"], boss_region)
-        world.regions.append(boss_region)
+        multiworld.regions.append(boss_region)
 
-    region_final_boss = Region("Final Boss", player, world)
+    region_final_boss = Region("Final Boss", player, multiworld)
     region_final_boss.locations += [MeritousLocation(
         player, "Wervyn Anixil", None, region_final_boss)]
-    world.regions.append(region_final_boss)
+    multiworld.regions.append(region_final_boss)
 
-    region_tfb = Region("True Final Boss", player, world)
+    region_tfb = Region("True Final Boss", player, multiworld)
     region_tfb.locations += [MeritousLocation(
         player, "Wervyn Anixil?", None, region_tfb)]
-    world.regions.append(region_tfb)
+    multiworld.regions.append(region_tfb)
 
     entrance_map = {
         "To Meridian": {
@@ -103,6 +103,6 @@ def create_regions(world: MultiWorld, player: int):
 
     for entrance in entrance_map:
         connection_data = entrance_map[entrance]
-        connection = world.get_entrance(entrance, player)
+        connection = multiworld.get_entrance(entrance, player)
         connection.access_rule = connection_data["rule"]
-        connection.connect(world.get_region(connection_data["to"], player))
+        connection.connect(multiworld.get_region(connection_data["to"], player))

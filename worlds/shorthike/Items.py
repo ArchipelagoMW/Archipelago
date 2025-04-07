@@ -10,15 +10,15 @@ class ItemDict(TypedDict):
 base_id = 82000
 
 item_table: List[ItemDict] = [
-    {"name": "Stick", "id": base_id + 1, "count": 8, "classification": ItemClassification.progression_skip_balancing},
+    {"name": "Stick", "id": base_id + 1, "count": 0, "classification": ItemClassification.progression_skip_balancing},
     {"name": "Seashell", "id": base_id + 2, "count": 23, "classification": ItemClassification.progression_skip_balancing},
     {"name": "Golden Feather", "id": base_id + 3, "count": 0, "classification": ItemClassification.progression},
     {"name": "Silver Feather", "id": base_id + 4, "count": 0, "classification": ItemClassification.useful},
     {"name": "Bucket", "id": base_id + 5, "count": 0, "classification": ItemClassification.progression},
     {"name": "Bait", "id": base_id + 6, "count": 2, "classification": ItemClassification.filler},
-    {"name": "Fishing Rod", "id": base_id + 7, "count": 2, "classification": ItemClassification.progression},
+    {"name": "Progressive Fishing Rod", "id": base_id + 7, "count": 2, "classification": ItemClassification.progression},
     {"name": "Shovel", "id": base_id + 8, "count": 1, "classification": ItemClassification.progression},
-    {"name": "Toy Shovel", "id": base_id + 9, "count": 5, "classification": ItemClassification.progression_skip_balancing},
+    {"name": "Toy Shovel", "id": base_id + 9, "count": 0, "classification": ItemClassification.progression_skip_balancing},
     {"name": "Compass", "id": base_id + 10, "count": 1, "classification": ItemClassification.useful},
     {"name": "Medal", "id": base_id + 11, "count": 3, "classification": ItemClassification.filler},
     {"name": "Shell Necklace", "id": base_id + 12, "count": 1, "classification": ItemClassification.progression},
@@ -36,7 +36,7 @@ item_table: List[ItemDict] = [
     {"name": "Headband", "id": base_id + 24, "count": 1, "classification": ItemClassification.progression},
     {"name": "Running Shoes", "id": base_id + 25, "count": 1, "classification": ItemClassification.useful},
     {"name": "Camping Permit", "id": base_id + 26, "count": 1, "classification": ItemClassification.progression},
-    {"name": "Walkie Talkie", "id": base_id + 27, "count": 1, "classification": ItemClassification.useful},
+    {"name": "Walkie Talkie", "id": base_id + 27, "count": 0, "classification": ItemClassification.useful},
     
     # Not in the item pool for now
     #{"name": "Boating Manual", "id": base_id + ~, "count": 1, "classification": ItemClassification.filler},
@@ -48,9 +48,9 @@ item_table: List[ItemDict] = [
     {"name": "21 Coins", "id": base_id + 31, "count": 2, "classification": ItemClassification.filler},
     {"name": "25 Coins", "id": base_id + 32, "count": 7, "classification": ItemClassification.filler},
     {"name": "27 Coins", "id": base_id + 33, "count": 1, "classification": ItemClassification.filler},
-    {"name": "32 Coins", "id": base_id + 34, "count": 1, "classification": ItemClassification.filler},
-    {"name": "33 Coins", "id": base_id + 35, "count": 6, "classification": ItemClassification.filler},
-    {"name": "50 Coins", "id": base_id + 36, "count": 1, "classification": ItemClassification.filler},
+    {"name": "32 Coins", "id": base_id + 34, "count": 1, "classification": ItemClassification.useful},
+    {"name": "33 Coins", "id": base_id + 35, "count": 6, "classification": ItemClassification.useful},
+    {"name": "50 Coins", "id": base_id + 36, "count": 1, "classification": ItemClassification.useful},
 
     # Filler item determined by settings
     {"name": "13 Coins", "id": base_id + 37, "count": 0, "classification": ItemClassification.filler},

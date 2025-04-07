@@ -1,4 +1,4 @@
-# This is a sample configuration for the Web host.  
+# This is a sample configuration for the Web host.
 # If you wish to change any of these,  rename this file to config.yaml
 # Default values are shown here.  Uncomment and change the values as desired.
 
@@ -25,10 +25,16 @@
 
 # Secret key used to determine important things like cookie authentication of room/seed page ownership.
 # If you wish to deploy, uncomment the following line and set it to something not easily guessable.
-# SECRET_KEY: "Your secret key here" 
+# SECRET_KEY: "Your secret key here"
 
-# TODO
-#JOB_THRESHOLD: 2
+# Slot limit to post a generation to Generator process pool instead of rolling directly in WebHost process
+#JOB_THRESHOLD: 1
+
+# After what time in seconds should generation be aborted, freeing the queue slot. Can be set to None to disable.
+#JOB_TIME: 600
+
+# Memory limit for Generator processes in bytes, -1 for unlimited. Currently only works on Linux.
+#GENERATOR_MEMORY_LIMIT: 4294967296
 
 # waitress uses one thread for I/O, these are for processing of view that get sent
 #WAITRESS_THREADS: 10
@@ -38,15 +44,16 @@
 #  provider: "sqlite"
 #  filename: "ap.db3" # This MUST be the ABSOLUTE PATH to the file.
 #  create_db: true
-  
+
 # Maximum number of players that are allowed to be rolled on the server. After this limit, one should roll locally and upload the results.
 #MAX_ROLL: 20
 
 # TODO
 #CACHE_TYPE: "simple"
 
-# TODO
-#JSON_AS_ASCII: false
-
 # Host Address.  This is the address encoded into the patch that will be used for client auto-connect.
 #HOST_ADDRESS: archipelago.gg
+
+# Asset redistribution rights.  If true, the host affirms they have been given explicit permission to redistribute
+# the proprietary assets in WebHostLib
+#ASSET_RIGHTS: false
