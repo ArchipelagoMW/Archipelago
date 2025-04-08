@@ -1,9 +1,8 @@
 from worlds.AutoWorld import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
-from .Types import LocData, ExitData
+from .Types import LocData, ExitData, BrushTechniques
 from BaseClasses import Location, Entrance, Region
 from typing import TYPE_CHECKING, List, Callable, Union, Dict
-from .Items import okami_brush_techniques_items
 
 if TYPE_CHECKING:
     from . import OkamiWorld
@@ -18,9 +17,9 @@ def has_cherry_bomb_level(state: CollectionState, world: "OkamiWorld", level: in
 
 
 def has_brush_technique(state: CollectionState, world: "OkamiWorld", technique: int) -> bool:
-    for name, data in okami_brush_techniques_items.items():
-        if data.code == technique:
-            return state.has(name, world.player, 1)
+    for b in BrushTechniques:
+        if b.value.code == technique:
+            return state.has(b.value.item_name, world.player, 1)
     # Never supposed to go here , hopefully it would make the gen crash if we put an invalid power requirement, instead of creating in invalid seed ?
     return False
 

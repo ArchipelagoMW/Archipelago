@@ -1,5 +1,6 @@
 from BaseClasses import Item, ItemClassification, Tutorial, Location, MultiWorld
-from .Items import item_table, create_item, create_multiple_items,create_junk_items,item_frequencies
+from .Items import item_table, create_item, create_multiple_items, create_junk_items, item_frequencies, \
+    create_brush_techniques_items, get_item_name_to_id_dict
 from .Regions import create_regions
 from .Locations import is_location_valid,get_total_locations, get_location_names
 from .Rules import set_rules
@@ -42,7 +43,7 @@ class OkamiWorld(World):
     """
 
     game = "Okami"
-    item_name_to_id = {name: data.code for name, data in item_table.items()}
+    item_name_to_id = get_item_name_to_id_dict()
     location_name_to_id = get_location_names()
     options_dataclass = OkamiOptions
     options: OkamiOptions
@@ -91,7 +92,7 @@ class OkamiWorld(World):
 
     def create_itempool(world: "OkamiWorld") -> List[Item]:
         itempool: List[Item] = []
-
+        itempool += create_brush_techniques_items(world)
         for name in item_table.keys():
             item_type: ItemClassification = item_table.get(name).classification
             itempool += create_multiple_items(world, name, item_frequencies.get(name, 1), item_type)
