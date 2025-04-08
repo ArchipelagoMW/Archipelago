@@ -742,7 +742,7 @@ class LinksAwakeningContext(CommonContext):
                 await asyncio.sleep(1.0)
 
 def run_game(romfile: str) -> None:
-    auto_start = typing.cast(typing.Union[bool, str], LinksAwakeningWorld.settings.rom_start)
+    auto_start = LinksAwakeningWorld.settings.rom_start
 
     if auto_start is True:
         import webbrowser
