@@ -1,0 +1,24 @@
+https://github.com/ArchipelagoMW/Archipelago/tree/main/worlds/dark_souls_3
+er mod tools Smithbox, and Dark Script 3
+
+Run python generate.py   need yaml in players
+Or python launcher.py    so you can gen template options
+
+
+
+Now I just need to label every single item :worry:
+
+
+options for how many stonesword keys the player wants, smth like 100 but only 34 needed
+
+
+
+Ideas
+
+gracesanity, graces are checks
+option to turn off healing item randomiztion, start with
+scadutree options, start with, not random, only within dlc, anywhere
+
+
+dlc start / dlc only
+only randomize key items in the pool, everything else randomized local  DO THIS!!!

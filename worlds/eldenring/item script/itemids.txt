@@ -1,0 +1,2464 @@
+ItemNames:
+  accessory:
+    1000: Crimson Amber Medallion
+    1001: Crimson Amber Medallion +1
+    1002: Crimson Amber Medallion +2
+    1010: Cerulean Amber Medallion
+    1011: Cerulean Amber Medallion +1
+    1012: Cerulean Amber Medallion +2
+    1020: Viridian Amber Medallion
+    1021: Viridian Amber Medallion +1
+    1022: Viridian Amber Medallion +2
+    1030: Arsenal Charm
+    1031: Arsenal Charm +1
+    1032: Great-Jar's Arsenal
+    1040: Erdtree's Favor
+    1041: Erdtree's Favor +1
+    1042: Erdtree's Favor +2
+    1050: Radagon's Scarseal
+    1051: Radagon's Soreseal
+    1060: Starscourge Heirloom
+    1070: Prosthesis-Wearer Heirloom
+    1080: Stargazer Heirloom
+    1090: Two Fingers Heirloom
+    1100: Silver Scarab
+    1110: Gold Scarab
+    1140: Moon of Nokstella
+    1150: Green Turtle Talisman
+    1160: Stalwart Horn Charm
+    1161: Stalwart Horn Charm +1
+    1170: Immunizing Horn Charm
+    1171: Immunizing Horn Charm +1
+    1180: Clarifying Horn Charm
+    1181: Clarifying Horn Charm +1
+    1190: Prince of Death's Pustule
+    1191: Prince of Death's Cyst
+    1200: Mottled Necklace
+    1201: Mottled Necklace +1
+    1210: Bull-Goat's Talisman
+    1220: Marika's Scarseal
+    1221: Marika's Soreseal
+    1230: Warrior Jar Shard
+    1231: Shard of Alexander
+    1250: Millicent's Prosthesis
+    2000: Magic Scorpion Charm
+    2010: Lightning Scorpion Charm
+    2020: Fire Scorpion Charm
+    2030: Sacred Scorpion Charm
+    2040: Red-Feathered Branchsword
+    2050: Ritual Sword Talisman
+    2060: Spear Talisman
+    2070: Hammer Talisman
+    2080: Winged Sword Insignia
+    2081: Rotten Winged Sword Insignia
+    2090: Dagger Talisman
+    2100: Arrow's Reach Talisman
+    2110: Blue Dancer Charm
+    2120: Twinblade Talisman
+    2130: Axe Talisman
+    2140: Lance Talisman
+    2150: Arrow's Sting Talisman
+    2160: Lord of Blood's Exultation
+    2170: Kindred of Rot's Exultation
+    2180: Claw Talisman
+    2190: Roar Medallion
+    2200: Curved Sword Talisman
+    2210: Companion Jar
+    2220: Perfumer's Talisman
+    3000: Graven-School Talisman
+    3001: Graven-Mass Talisman
+    3040: Faithful's Canvas Talisman
+    3050: Flock's Canvas Talisman
+    3060: Old Lord's Talisman
+    3070: Radagon Icon
+    3080: Primal Glintstone Blade
+    3090: Godfrey Icon
+    4000: Dragoncrest Shield Talisman
+    4001: Dragoncrest Shield Talisman +1
+    4002: Dragoncrest Shield Talisman +2
+    4003: Dragoncrest Greatshield Talisman
+    4010: Spelldrake Talisman
+    4011: Spelldrake Talisman +1
+    4012: Spelldrake Talisman +2
+    4020: Flamedrake Talisman
+    4021: Flamedrake Talisman +1
+    4022: Flamedrake Talisman +2
+    4030: Boltdrake Talisman
+    4031: Boltdrake Talisman +1
+    4032: Boltdrake Talisman +2
+    4040: Haligdrake Talisman
+    4041: Haligdrake Talisman +1
+    4042: Haligdrake Talisman +2
+    4050: Pearldrake Talisman
+    4051: Pearldrake Talisman +1
+    4052: Pearldrake Talisman +2
+    4060: Crucible Scale Talisman
+    4070: Crucible Feather Talisman
+    4080: Blue-Feathered Branchsword
+    4090: Ritual Shield Talisman
+    4100: Greatshield Talisman
+    4110: Crucible Knot Talisman
+    5000: Crimson Seed Talisman
+    5010: Cerulean Seed Talisman
+    5020: Blessed Dew Talisman
+    5030: Taker's Cameo
+    5040: Godskin Swaddling Cloth
+    5050: Assassin's Crimson Dagger
+    5060: Assassin's Cerulean Dagger
+    6000: Crepus's Vial
+    6010: Concealing Veil
+    6020: Carian Filigreed Crest
+    6040: Longtail Cat Talisman
+    6050: Shabriri's Woe
+    6060: Daedicar's Woe
+    6070: Sacrificial Twig
+    6080: Furled Finger's Trick-Mirror
+    6090: Host's Trick-Mirror
+    6110: Ancestral Spirit's Horn
+    7000: Crimson Amber Medallion +3
+    7010: Cerulean Amber Medallion +3
+    7020: Viridian Amber Medallion +3
+    7030: Two-Headed Turtle Talisman
+    7040: Stalwart Horn Charm +2
+    7050: Immunizing Horn Charm +2
+    7060: Clarifying Horn Charm +2
+    7080: Mottled Necklace +2
+    7090: Spelldrake Talisman +3
+    7100: Flamedrake Talisman +3
+    7110: Boltdrake Talisman +3
+    7120: Golden Braid
+    7130: Pearldrake Talisman +3
+    7140: Crimson Seed Talisman +1
+    7150: Cerulean Seed Talisman +1
+    8000: Blessed Blue Dew Talisman
+    8010: Fine Crucible Feather Talisman
+    8020: Outer God Heirloom
+    8030: Shattered Stone Talisman
+    8040: Two-Handed Sword Talisman
+    8050: Crusade Insignia
+    8060: Aged One's Exultation
+    8070: Arrow's Soaring Sting Talisman
+    8090: Pearl Shield Talisman
+    8100: Dried Bouquet
+    8110: Smithing Talisman
+    8120: Ailment Talisman
+    8130: Retaliatory Crossed-Tree
+    8140: Lacerating Crossed-Tree
+    8150: Sharpshot Talisman
+    8160: St. Trina's Smile
+    8170: Talisman of the Dread
+    8180: Enraged Divine Beast
+    8190: Beloved Stardust
+    8200: Talisman of Lord's Bestowal
+    8210: Verdigris Discus
+    8220: Rellana's Cameo
+    8230: Blade of Mercy
+    8240: Talisman of All Crucibles
+  gem:
+    10000: "Ash of War: Lion's Claw"
+    10100: 'Ash of War: Impaling Thrust'
+    10300: 'Ash of War: Spinning Slash'
+    10500: 'Ash of War: Charge Forth'
+    10600: 'Ash of War: Stamp (Upward Cut)'
+    10700: 'Ash of War: Stamp (Sweep)'
+    10800: 'Ash of War: Blood Tax'
+    10900: 'Ash of War: Repeating Thrust'
+    11000: 'Ash of War: Wild Strikes'
+    11200: 'Ash of War: Double Slash'
+    11300: "Ash of War: Prelate's Charge"
+    11400: 'Ash of War: Unsheathe'
+    11500: 'Ash of War: Square Off'
+    11600: 'Ash of War: Giant Hunt'
+    11800: "Ash of War: Loretta's Slash"
+    11900: 'Ash of War: Poison Moth Flight'
+    12000: 'Ash of War: Spinning Weapon'
+    12200: 'Ash of War: Storm Assault'
+    12300: 'Ash of War: Stormcaller'
+    12400: 'Ash of War: Sword Dance'
+    20100: 'Ash of War: Sacred Blade'
+    20200: 'Ash of War: Ice Spear'
+    20300: 'Ash of War: Glintstone Pebble'
+    20400: 'Ash of War: Bloody Slash'
+    20500: 'Ash of War: Lifesteal Fist'
+    20700: 'Ash of War: Eruption'
+    20800: 'Ash of War: Prayerful Strike'
+    20900: 'Ash of War: Gravitas'
+    21000: 'Ash of War: Storm Blade'
+    21200: 'Ash of War: Earthshaker'
+    21300: 'Ash of War: Golden Land'
+    21400: 'Ash of War: Flaming Strike'
+    21600: 'Ash of War: Thunderbolt'
+    21700: 'Ash of War: Lightning Slash'
+    21800: 'Ash of War: Carian Grandeur'
+    21900: 'Ash of War: Carian Greatsword'
+    22000: 'Ash of War: Vacuum Slice'
+    22100: 'Ash of War: Black Flame Tornado'
+    22200: 'Ash of War: Sacred Ring of Light'
+    22400: 'Ash of War: Blood Blade'
+    22500: 'Ash of War: Phantom Slash'
+    22600: 'Ash of War: Spectral Lance'
+    22700: 'Ash of War: Chilling Mist'
+    22800: 'Ash of War: Poisonous Mist'
+    30000: 'Ash of War: Shield Bash'
+    30100: 'Ash of War: Barricade Shield'
+    30200: 'Ash of War: Parry'
+    30500: 'Ash of War: Carian Retaliation'
+    30600: 'Ash of War: Storm Wall'
+    30700: 'Ash of War: Golden Parry'
+    30800: 'Ash of War: Shield Crash'
+    30900: 'Ash of War: No Skill'
+    31000: "Ash of War: Thops's Barrier"
+    40000: 'Ash of War: Through and Through'
+    40100: 'Ash of War: Barrage'
+    40200: 'Ash of War: Mighty Shot'
+    40400: 'Ash of War: Enchanted Shot'
+    40500: 'Ash of War: Sky Shot'
+    40600: 'Ash of War: Rain of Arrows'
+    50100: 'Ash of War: Hoarfrost Stomp'
+    50200: 'Ash of War: Storm Stomp'
+    50300: 'Ash of War: Kick'
+    50400: 'Ash of War: Lightning Ram'
+    50500: 'Ash of War: Flame of the Redmanes'
+    50600: 'Ash of War: Ground Slam'
+    50700: 'Ash of War: Golden Slam'
+    50800: 'Ash of War: Waves of Darkness'
+    50900: "Ash of War: Hoarah Loux's Earthshaker"
+    60000: 'Ash of War: Determination'
+    60100: "Ash of War: Royal Knight's Resolve"
+    60200: "Ash of War: Assassin's Gambit"
+    60300: 'Ash of War: Golden Vow'
+    60400: 'Ash of War: Sacred Order'
+    60500: 'Ash of War: Shared Order'
+    60600: 'Ash of War: Seppuku'
+    60700: 'Ash of War: Cragblade'
+    65000: 'Ash of War: Barbaric Roar'
+    65100: 'Ash of War: War Cry'
+    65200: "Ash of War: Beast's Roar"
+    65300: "Ash of War: Troll's Roar"
+    70000: 'Ash of War: Endure'
+    70100: 'Ash of War: Vow of the Indomitable'
+    70200: 'Ash of War: Holy Ground'
+    80000: 'Ash of War: Quickstep'
+    80100: "Ash of War: Bloodhound's Step"
+    80200: 'Ash of War: Raptor of the Mists'
+    85000: "Ash of War: White Shadow's Lure"
+    200000: 'Ash of War: Dryleaf Whirlwind'
+    200100: 'Ash of War: Aspects of the Crucible: Wings'
+    402000: 'Ash of War: Piercing Throw'
+    403000: 'Ash of War: Scattershot Throw'
+    404000: 'Ash of War: Wall of Sparks'
+    405000: 'Ash of War: Rolling Sparks'
+    406000: 'Ash of War: Raging Beast'
+    410000: 'Ash of War: Swift Slash'
+    412000: 'Ash of War: Wing Stance'
+    413000: 'Ash of War: Blinkbolt'
+    414000: 'Ash of War: Flame Skewer'
+    415000: "Ash of War: Savage Lion's Claw"
+    416000: 'Ash of War: Divine Beast Frost Stomp'
+    417000: 'Ash of War: Flame Spear'
+    418000: 'Ash of War: Carian Sovereignty'
+    419000: 'Ash of War: Shriek of Sorrow'
+    422000: 'Ash of War: Ghostflame Call'
+    505000: 'Ash of War: The Poison Flower Blooms Twice'
+  goods:
+    100: Tarnished's Furled Finger
+    101: Duelist's Furled Finger
+    102: Bloody Finger
+    103: Finger Severer
+    104: White Cipher Ring
+    105: Blue Cipher Ring
+    106: Tarnished's Wizened Finger
+    108: Taunter's Tongue
+    110: Small Red Effigy
+    111: Festering Bloody Finger
+    112: Recusant Finger
+    130: Spectral Steed Whistle
+    150: Furlcalling Finger Remedy
+    190: Rune Arc
+    191: Godrick's Great Rune (Restored)
+    192: Radahn's Great Rune (Restored)
+    193: Morgott's Great Rune (Restored)
+    194: Rykard's Great Rune (Restored)
+    195: Mohg's Great Rune (Restored)
+    196: Malenia's Great Rune (Restored)
+    250: Flask of Wondrous Physick
+    810: Rowa Raisin
+    811: Sweet Raisin
+    812: Frozen Raisin
+    820: Boiled Crab
+    830: Boiled Prawn
+    900: Neutralizing Boluses
+    910: Stanching Boluses
+    920: Thawfrost Boluses
+    930: Stimulating Boluses
+    940: Preserving Boluses
+    950: Rejuvenating Boluses
+    960: Clarifying Boluses
+    1001: Flask of Crimson Tears
+    1051: Flask of Cerulean Tears
+    1100: Pickled Turtle Neck
+    1110: Immunizing Cured Meat
+    1120: Invigorating Cured Meat
+    1140: Dappled Cured Meat
+    1150: Spellproof Dried Liver
+    1160: Fireproof Dried Liver
+    1170: Lightningproof Dried Liver
+    1180: Holyproof Dried Liver
+    1190: Silver-Pickled Fowl Foot
+    1200: Gold-Pickled Fowl Foot
+    1210: Exalted Flesh
+    1235: Raw Meat Dumpling
+    1240: Shabriri Grape
+    1290: Starlight Shards
+    1310: Immunizing White Cured Meat
+    1320: Invigorating White Cured Meat
+    1330: Clarifying White Cured Meat
+    1340: Dappled White Cured Meat
+    1400: Fire Grease
+    1410: Lightning Grease
+    1420: Magic Grease
+    1430: Holy Grease
+    1440: Blood Grease
+    1450: Soporific Grease
+    1460: Poison Grease
+    1470: Freezing Grease
+    1480: Dragonwound Grease
+    1490: Rot Grease
+    1500: Drawstring Fire Grease
+    1510: Drawstring Lightning Grease
+    1530: Drawstring Holy Grease
+    1540: Drawstring Blood Grease
+    1560: Drawstring Poison Grease
+    1690: Shield Grease
+    1700: Throwing Dagger
+    1710: Bone Dart
+    1720: Poisonbone Dart
+    1730: Kukri
+    1740: Crystal Dart
+    1750: Fan Daggers
+    1760: Ruin Fragment
+    1830: Explosive Stone
+    1831: Explosive Stone Clump
+    1840: Poisoned Stone
+    1841: Poisoned Stone Clump
+    2020: Rainbow Stone
+    2030: Glowstone
+    2040: Telescope
+    2050: Grace Mimic
+    2070: Lantern
+    2080: Blasphemous Claw
+    2090: Deathroot
+    2100: Soft Cotton
+    2120: Soap
+    2130: Celestial Dew
+    2140: Margit's Shackle
+    2150: Mohg's Shackle
+    2160: Pureblood Knight's Medal
+    2190: Miquella's Needle
+    2200: Prattling Pate "Hello"
+    2201: Prattling Pate "Thank you"
+    2202: Prattling Pate "Apologies"
+    2203: Prattling Pate "Wonderful"
+    2204: Prattling Pate "Please help"
+    2205: Prattling Pate "My beloved"
+    2206: Prattling Pate "Let's get to it"
+    2207: Prattling Pate "You're beautiful"
+    2900: Golden Rune [1]
+    2901: Golden Rune [2]
+    2902: Golden Rune [3]
+    2903: Golden Rune [4]
+    2904: Golden Rune [5]
+    2905: Golden Rune [6]
+    2906: Golden Rune [7]
+    2907: Golden Rune [8]
+    2908: Golden Rune [9]
+    2909: Golden Rune [10]
+    2910: Golden Rune [11]
+    2911: Golden Rune [12]
+    2912: Golden Rune [13]
+    2913: Numen's Rune
+    2914: Hero's Rune [1]
+    2915: Hero's Rune [2]
+    2916: Hero's Rune [3]
+    2917: Hero's Rune [4]
+    2918: Hero's Rune [5]
+    2919: Lord's Rune
+    2950: Remembrance of the Grafted
+    2951: Remembrance of the Starscourge
+    2952: Remembrance of the Omen King
+    2953: Remembrance of the Blasphemous
+    2954: Remembrance of the Rot Goddess
+    2955: Remembrance of the Blood Lord
+    2956: Remembrance of the Black Blade
+    2957: Remembrance of Hoarah Loux
+    2958: Remembrance of the Dragonlord
+    2959: Remembrance of the Full Moon Queen
+    2960: Remembrance of the Lichdragon
+    2961: Remembrance of the Fire Giant
+    2962: Remembrance of the Regal Ancestor
+    2963: Elden Remembrance
+    2964: Remembrance of the Naturalborn
+    3000: Ancestral Infant's Head
+    3010: Omen Bairn
+    3011: Regal Omen Bairn
+    3030: Cuckoo Glintstone
+    3040: Mimic's Veil
+    3050: Glintstone Scrap
+    3051: Large Glintstone Scrap
+    3060: Gravity Stone Fan
+    3070: Gravity Stone Chunk
+    3080: Wraith Calling Bell
+    3310: Warming Stone
+    3311: Frenzyflame Stone
+    3350: Bewitching Branch
+    3360: Baldachin's Blessing
+    3361: Radiant Baldachin's Blessing
+    4000: Glintstone Pebble
+    4001: Great Glintstone Shard
+    4010: Swift Glintstone Shard
+    4020: Glintstone Cometshard
+    4021: Comet
+    4030: Shard Spiral
+    4040: Glintstone Stars
+    4050: Star Shower
+    4060: Crystal Barrage
+    4070: Glintstone Arc
+    4080: Cannon of Haima
+    4090: Crystal Burst
+    4100: Shatter Earth
+    4110: Rock Blaster
+    4120: Gavel of Haima
+    4130: Terra Magica
+    4140: Starlight
+    4200: Comet Azur
+    4210: Founding Rain of Stars
+    4220: Stars of Ruin
+    4300: Glintblade Phalanx
+    4301: Carian Phalanx
+    4302: Greatblade Phalanx
+    4360: Rennala's Full Moon
+    4361: Ranni's Dark Moon
+    4370: Magic Downpour
+    4380: Loretta's Greatbow
+    4381: Loretta's Mastery
+    4390: Magic Glintblade
+    4400: Glintstone Icecrag
+    4410: Zamor Ice Storm
+    4420: Freezing Mist
+    4430: Carian Greatsword
+    4431: Adula's Moonblade
+    4440: Carian Slicer
+    4450: Carian Piercer
+    4460: Scholar's Armament
+    4470: Scholar's Shield
+    4480: Lucidity
+    4490: Frozen Armament
+    4500: Shattering Crystal
+    4510: Crystal Release
+    4520: Crystal Torrent
+    4600: Ambush Shard
+    4610: Night Shard
+    4620: Night Comet
+    4630: Thops's Barrier
+    4640: Carian Retaliation
+    4650: Eternal Darkness
+    4660: Unseen Blade
+    4670: Unseen Form
+    4700: Meteorite
+    4701: Meteorite of Astel
+    4710: Rock Sling
+    4720: Gravity Well
+    4721: Collapsing Stars
+    4800: Magma Shot
+    4810: Gelmir's Fury
+    4820: Roiling Magma
+    4830: Rykard's Rancor
+    4900: Briars of Sin
+    4910: Briars of Punishment
+    5000: Rancorcall
+    5001: Ancient Death Rancor
+    5010: Explosive Ghostflame
+    5020: Fia's Mist
+    5030: Tibia's Summons
+    5040: Death Lightning
+    5100: Oracle Bubbles
+    5110: Great Oracular Bubble
+    6000: Catch Flame
+    6001: O, Flame!
+    6010: Flame Sling
+    6020: Flame, Fall Upon Them
+    6030: Whirl, O Flame!
+    6040: Flame, Cleanse Me
+    6050: Flame, Grant Me Strength
+    6060: Flame, Protect Me
+    6100: Giantsflame Take Thee
+    6110: Flame of the Fell God
+    6120: Burn, O Flame!
+    6210: Black Flame
+    6220: Surge, O Flame!
+    6230: Scouring Black Flame
+    6240: Black Flame Ritual
+    6250: Black Flame Blade
+    6260: Black Flame's Protection
+    6270: Noble Presence
+    6300: Bloodflame Talons
+    6310: Bloodboon
+    6320: Bloodflame Blade
+    6330: Barrier of Gold
+    6340: Protection of the Erdtree
+    6400: Rejection
+    6410: Wrath of Gold
+    6420: Urgent Heal
+    6421: Heal
+    6422: Great Heal
+    6423: Lord's Heal
+    6424: Erdtree Heal
+    6430: Blessing's Boon
+    6431: Blessing of the Erdtree
+    6440: Cure Poison
+    6441: Lord's Aid
+    6450: Flame Fortification
+    6460: Magic Fortification
+    6470: Lightning Fortification
+    6480: Divine Fortification
+    6490: Lord's Divine Fortification
+    6500: Night Maiden's Mist
+    6510: Assassin's Approach
+    6520: Shadow Bait
+    6530: Darkness
+    6600: Golden Vow (Incantation)
+    6700: Discus of Light
+    6701: Triple Rings of Light
+    6710: Radagon's Rings of Light
+    6720: Elden Stars
+    6730: Law of Regression
+    6740: Immutable Shield
+    6750: Litany of Proper Death
+    6760: Law of Causality
+    6770: Order's Blade
+    6780: Order Healing
+    6800: Bestial Sling
+    6810: Stone of Gurranq
+    6820: Beast Claw (Incantation)
+    6830: Gurranq's Beast Claw
+    6840: Bestial Vitality
+    6850: Bestial Constitution
+    6900: Lightning Spear
+    6910: Ancient Dragons' Lightning Strike
+    6920: Lightning Strike
+    6921: Frozen Lightning Spear
+    6930: Honed Bolt
+    6940: Ancient Dragons' Lightning Spear
+    6941: Fortissax's Lightning Spear
+    6950: Lansseax's Glaive
+    6960: Electrify Armament
+    6970: Vyke's Dragonbolt
+    6971: Dragonbolt Blessing
+    7000: Dragonfire
+    7001: Agheel's Flame
+    7010: Magma Breath
+    7011: Theodorix's Magma
+    7020: Dragonice
+    7021: Borealis's Mist
+    7030: Rotten Breath
+    7031: Ekzykes's Decay
+    7040: Glintstone Breath
+    7041: Smarag's Glintstone Breath
+    7050: Placidusax's Ruin
+    7060: Dragonclaw
+    7080: Dragonmaw
+    7090: Greyoll's Roar
+    7200: Pest Threads
+    7210: Swarm of Flies
+    7220: Poison Mist
+    7230: Poison Armament
+    7240: Scarlet Aeonia
+    7300: Inescapable Frenzy
+    7310: The Flame of Frenzy
+    7311: Unendurable Frenzy
+    7320: Frenzied Burst
+    7330: Howl of Shabriri
+    7500: 'Aspects of the Crucible: Tail'
+    7510: 'Aspects of the Crucible: Horns'
+    7520: 'Aspects of the Crucible: Breath'
+    7530: Black Blade
+    7900: Fire's Deadly Sin
+    7903: Golden Lightning Fortification
+    8000: Stonesword Key
+    8010: Rusty Key
+    8105: Dectus Medallion (Left)
+    8106: Dectus Medallion (Right)
+    8107: Rold Medallion
+    8109: Academy Glintstone Key
+    8111: Carian Inverted Statue
+    8121: Dark Moon Ring
+    8126: Fingerprint Grape
+    8127: Letter from Volcano Manor (Istvan)
+    8128: Tonic of Forgetfulness
+    8129: Serpent's Amnion
+    8131: Irina's Letter
+    8132: Letter from Volcano Manor (Rileigh)
+    8133: Red Letter
+    8134: Drawing-Room Key
+    8136: Rya's Necklace
+    8137: Volcano Manor Invitation
+    8142: Amber Starlight
+    8143: Seluvis's Introduction
+    8144: Sellen's Primal Glintstone
+    8146: Miniature Ranni
+    8148: Godrick's Great Rune
+    8149: Radahn's Great Rune
+    8150: Morgott's Great Rune
+    8151: Rykard's Great Rune
+    8152: Mohg's Great Rune
+    8153: Malenia's Great Rune
+    8154: Lord of Blood's Favor
+    8155: Lord of Blood's Favor (Soaked)
+    8158: Spirit Calling Bell
+    8159: Fingerslayer Blade
+    8161: Sewing Needle
+    8162: Gold Sewing Needle
+    8163: Tailoring Tools
+    8164: Seluvis's Potion
+    8166: Amber Draught
+    8167: Letter to Patches
+    8168: Dancer's Castanets
+    8169: Sellian Sealbreaker
+    8171: Chrysalids' Memento
+    8172: Black Knifeprint
+    8173: Letter to Bernahl
+    8174: Academy Glintstone Key (Thops)
+    8175: Haligtree Secret Medallion (Left)
+    8176: Haligtree Secret Medallion (Right)
+    8182: Mending Rune of Perfect Order
+    8183: Mending Rune of the Death-Prince
+    8184: Mending Rune of the Fell Curse
+    8185: Larval Tear
+    8186: Imbued Sword Key
+    8188: Golden Tailoring Tools
+    8190: Knifeprint Clue
+    8191: Cursemark of Death
+    8193: Seedbed Curse
+    8194: The Stormhawk King
+    8196: Unalloyed Gold Needle (Milicent)
+    8197: Sewer-Gaol Key
+    8198: Meeting Place Map
+    8199: Discarded Palace Key
+    8200: '"Homing Instinct" Painting'
+    8201: '"Resurrection" Painting'
+    8202: "\"Champion's Song\" Painting"
+    8203: '"Sorcerer" Painting'
+    8204: '"Prophecy" Painting'
+    8205: '"Flightless Bird" Painting'
+    8206: '"Redmane" Painting'
+    8221: Zorayas's Letter
+    8222: Alexander's Innards
+    8223: Rogier's Letter
+    8224: "Note: The Preceptor's Secret"
+    8225: Weathered Map
+    8500: Crafting Kit
+    8590: Whetstone Knife
+    8600: 'Map: Limgrave, West'
+    8601: 'Map: Weeping Peninsula'
+    8602: 'Map: Limgrave, East'
+    8603: 'Map: Liurnia, East'
+    8604: 'Map: Liurnia, North'
+    8605: 'Map: Liurnia, West'
+    8606: 'Map: Altus Plateau'
+    8607: 'Map: Leyndell, Royal Capital'
+    8608: 'Map: Mt. Gelmir'
+    8609: 'Map: Caelid'
+    8610: 'Map: Dragonbarrow'
+    8611: 'Map: Mountaintops of the Giants, West'
+    8612: 'Map: Mountaintops of the Giants, East'
+    8613: 'Map: Ainsel River'
+    8614: 'Map: Lake of Rot'
+    8615: 'Map: Siofra River'
+    8616: 'Map: Mohgwyn Palace'
+    8617: 'Map: Deeproot Depths'
+    8618: 'Map: Consecrated Snowfield'
+    8660: Mirage Riddle
+    8700: 'Note: Hidden Cave'
+    8701: 'Note: Imp Shades'
+    8702: 'Note: Flask of Wondrous Physick'
+    8703: 'Note: Stonedigger Trolls'
+    8704: 'Note: Wandering Mausoleum'
+    8705: 'Note: Unseen Assassins'
+    8707: 'Note: Flame Chariots'
+    8708: 'Note: Demi-human Mobs'
+    8709: 'Note: Land Squirts'
+    8710: "Note: Gravity's Advantage"
+    8711: 'Note: Revenants'
+    8712: 'Note: Waypoint Ruins'
+    8713: 'Note: Gateway'
+    8714: "Note: Miquella's Needle"
+    8715: 'Note: Frenzied Flame Village'
+    8716: 'Note: The Lord of Frenzied Flame'
+    8717: 'Note: Below the Capital'
+    8850: Conspectus Scroll
+    8851: Royal House Scroll
+    8855: Fire Monks' Prayerbook
+    8856: Giant's Prayerbook
+    8857: Godskin Prayerbook
+    8858: Two Fingers' Prayerbook
+    8859: Assassin's Prayerbook
+    8862: Golden Order Principia
+    8864: Dragon Cult Prayerbook
+    8865: Ancient Dragon Prayerbook
+    8866: Academy Scroll
+    8910: Pidia's Bell Bearing
+    8911: Seluvis's Bell Bearing
+    8912: Patches' Bell Bearing
+    8913: Sellen's Bell Bearing
+    8915: D's Bell Bearing
+    8916: Bernahl's Bell Bearing
+    8917: Miriel's Bell Bearing
+    8918: Gostoc's Bell Bearing
+    8919: Thops's Bell Bearing
+    8920: Kalé's Bell Bearing
+    8921: Nomadic Merchant's Bell Bearing [1]
+    8922: Nomadic Merchant's Bell Bearing [2]
+    8923: Nomadic Merchant's Bell Bearing [3]
+    8924: Nomadic Merchant's Bell Bearing [4]
+    8925: Nomadic Merchant's Bell Bearing [5]
+    8926: Isolated Merchant's Bell Bearing [1]
+    8927: Isolated Merchant's Bell Bearing [2]
+    8928: Nomadic Merchant's Bell Bearing [6]
+    8929: Hermit Merchant's Bell Bearing [1]
+    8930: Nomadic Merchant's Bell Bearing [7]
+    8931: Nomadic Merchant's Bell Bearing [8]
+    8932: Nomadic Merchant's Bell Bearing [9]
+    8933: Nomadic Merchant's Bell Bearing [10]
+    8935: Isolated Merchant's Bell Bearing [3]
+    8936: Hermit Merchant's Bell Bearing [2]
+    8937: Abandoned Merchant's Bell Bearing
+    8938: Hermit Merchant's Bell Bearing [3]
+    8939: Imprisoned Merchant's Bell Bearing
+    8940: Iji's Bell Bearing
+    8941: Rogier's Bell Bearing
+    8942: Blackguard's Bell Bearing
+    8943: Corhyn's Bell Bearing
+    8944: Gowry's Bell Bearing
+    8945: Bone Peddler's Bell Bearing
+    8946: Meat Peddler's Bell Bearing
+    8947: Medicine Peddler's Bell Bearing
+    8948: Gravity Stone Peddler's Bell Bearing
+    8951: Smithing-Stone Miner's Bell Bearing [1]
+    8952: Smithing-Stone Miner's Bell Bearing [2]
+    8953: Smithing-Stone Miner's Bell Bearing [3]
+    8954: Smithing-Stone Miner's Bell Bearing [4]
+    8955: Somberstone Miner's Bell Bearing [1]
+    8956: Somberstone Miner's Bell Bearing [2]
+    8957: Somberstone Miner's Bell Bearing [3]
+    8958: Somberstone Miner's Bell Bearing [4]
+    8959: Somberstone Miner's Bell Bearing [5]
+    8960: Glovewort Picker's Bell Bearing [1]
+    8961: Glovewort Picker's Bell Bearing [2]
+    8962: Glovewort Picker's Bell Bearing [3]
+    8963: Ghost-Glovewort Picker's Bell Bearing [1]
+    8964: Ghost-Glovewort Picker's Bell Bearing [2]
+    8965: Ghost-Glovewort Picker's Bell Bearing [3]
+    8970: Iron Whetblade
+    8971: Red-Hot Whetblade
+    8972: Sanctified Whetblade
+    8973: Glintstone Whetblade
+    8974: Black Whetblade
+    8975: Unalloyed Gold Needle (Broken)
+    8976: Unalloyed Gold Needle (Fixed)
+    8977: Valkyrie's Prosthesis
+    8978: Sellia's Secret
+    8979: Beast Eye
+    8980: Weathered Dagger
+    9300: Nomadic Warrior's Cookbook [1]
+    9301: Nomadic Warrior's Cookbook [3]
+    9302: Nomadic Warrior's Cookbook [6]
+    9303: Nomadic Warrior's Cookbook [10]
+    9305: Nomadic Warrior's Cookbook [7]
+    9306: Nomadic Warrior's Cookbook [12]
+    9307: Nomadic Warrior's Cookbook [19]
+    9308: Nomadic Warrior's Cookbook [13]
+    9309: Nomadic Warrior's Cookbook [23]
+    9310: Nomadic Warrior's Cookbook [17]
+    9311: Nomadic Warrior's Cookbook [2]
+    9312: Nomadic Warrior's Cookbook [21]
+    9313: Missionary's Cookbook [6]
+    9320: Armorer's Cookbook [1]
+    9321: Armorer's Cookbook [2]
+    9322: Nomadic Warrior's Cookbook [11]
+    9323: Nomadic Warrior's Cookbook [20]
+    9325: Armorer's Cookbook [7]
+    9326: Armorer's Cookbook [4]
+    9327: Nomadic Warrior's Cookbook [18]
+    9328: Armorer's Cookbook [3]
+    9329: Nomadic Warrior's Cookbook [16]
+    9330: Armorer's Cookbook [6]
+    9331: Armorer's Cookbook [5]
+    9340: Glintstone Craftsman's Cookbook [4]
+    9341: Glintstone Craftsman's Cookbook [1]
+    9342: Glintstone Craftsman's Cookbook [5]
+    9343: Nomadic Warrior's Cookbook [9]
+    9344: Glintstone Craftsman's Cookbook [8]
+    9345: Glintstone Craftsman's Cookbook [2]
+    9346: Glintstone Craftsman's Cookbook [6]
+    9347: Glintstone Craftsman's Cookbook [7]
+    9348: Glintstone Craftsman's Cookbook [3]
+    9360: Missionary's Cookbook [2]
+    9361: Missionary's Cookbook [1]
+    9363: Missionary's Cookbook [5]
+    9364: Missionary's Cookbook [4]
+    9365: Missionary's Cookbook [3]
+    9380: Nomadic Warrior's Cookbook [4]
+    9383: Nomadic Warrior's Cookbook [5]
+    9384: Perfumer's Cookbook [1]
+    9385: Perfumer's Cookbook [2]
+    9386: Perfumer's Cookbook [3]
+    9387: Nomadic Warrior's Cookbook [14]
+    9388: Nomadic Warrior's Cookbook [8]
+    9389: Nomadic Warrior's Cookbook [22]
+    9390: Nomadic Warrior's Cookbook [15]
+    9391: Nomadic Warrior's Cookbook [24]
+    9392: Perfumer's Cookbook [4]
+    9400: Ancient Dragon Apostle's Cookbook [1]
+    9401: Ancient Dragon Apostle's Cookbook [2]
+    9402: Ancient Dragon Apostle's Cookbook [4]
+    9403: Ancient Dragon Apostle's Cookbook [3]
+    9420: Fevor's Cookbook [1]
+    9421: Fevor's Cookbook [3]
+    9422: Fevor's Cookbook [2]
+    9423: Missionary's Cookbook [7]
+    9440: Frenzied's Cookbook [1]
+    9441: Frenzied's Cookbook [2]
+    9500: Cracked Pot
+    9501: Ritual Pot
+    9510: Perfume Bottle
+    10000: Glass Shard
+    10010: Golden Seed
+    10020: Sacred Tear
+    10030: Memory Stone
+    10040: Talisman Pouch
+    10060: Dragon Heart
+    10070: Lost Ashes of War
+    10080: Great Rune of the Unborn
+    10100: Smithing Stone [1]
+    10101: Smithing Stone [2]
+    10102: Smithing Stone [3]
+    10103: Smithing Stone [4]
+    10104: Smithing Stone [5]
+    10105: Smithing Stone [6]
+    10106: Smithing Stone [7]
+    10107: Smithing Stone [8]
+    10140: Ancient Dragon Smithing Stone
+    10160: Somber Smithing Stone [1]
+    10161: Somber Smithing Stone [2]
+    10162: Somber Smithing Stone [3]
+    10163: Somber Smithing Stone [4]
+    10164: Somber Smithing Stone [5]
+    10165: Somber Smithing Stone [6]
+    10166: Somber Smithing Stone [7]
+    10167: Somber Smithing Stone [8]
+    10168: Somber Ancient Dragon Smithing Stone
+    10200: Somber Smithing Stone [9]
+    10900: Grave Glovewort [1]
+    10901: Grave Glovewort [2]
+    10902: Grave Glovewort [3]
+    10903: Grave Glovewort [4]
+    10904: Grave Glovewort [5]
+    10905: Grave Glovewort [6]
+    10906: Grave Glovewort [7]
+    10907: Grave Glovewort [8]
+    10908: Grave Glovewort [9]
+    10909: Great Grave Glovewort
+    10910: Ghost Glovewort [1]
+    10911: Ghost Glovewort [2]
+    10912: Ghost Glovewort [3]
+    10913: Ghost Glovewort [4]
+    10914: Ghost Glovewort [5]
+    10915: Ghost Glovewort [6]
+    10916: Ghost Glovewort [7]
+    10917: Ghost Glovewort [8]
+    10918: Ghost Glovewort [9]
+    10919: Great Ghost Glovewort
+    11000: Crimsonspill Crystal Tear
+    11001: Greenspill Crystal Tear
+    11002: Crimson Crystal Tear
+    11003: Crimson Crystal Tear (Alternate)
+    11004: Cerulean Crystal Tear
+    11005: Cerulean Crystal Tear (Alternate)
+    11006: Speckled Hardtear
+    11007: Crimson Bubbletear
+    11008: Opaline Bubbletear
+    11009: Crimsonburst Crystal Tear
+    11010: Greenburst Crystal Tear
+    11011: Opaline Hardtear
+    11012: Winged Crystal Tear
+    11013: Thorny Cracked Tear
+    11014: Spiked Cracked Tear
+    11015: Windy Crystal Tear
+    11016: Ruptured Crystal Tear
+    11017: Ruptured Crystal Tear (Alternate)
+    11018: Leaden Hardtear
+    11019: Twiggy Cracked Tear
+    11020: Crimsonwhorl Bubbletear
+    11021: Strength-knot Crystal Tear
+    11022: Dexterity-knot Crystal Tear
+    11023: Intelligence-knot Crystal Tear
+    11024: Faith-knot Crystal Tear
+    11025: Cerulean Hidden Tear
+    11026: Stonebarb Cracked Tear
+    11027: Purifying Crystal Tear
+    11028: Flame-Shrouding Cracked Tear
+    11029: Magic-Shrouding Cracked Tear
+    11030: Lightning-Shrouding Cracked Tear
+    11031: Holy-Shrouding Cracked Tear
+    15000: Sliver of Meat
+    15010: Beast Liver
+    15020: Lump of Flesh
+    15030: Beast Blood
+    15040: Old Fang
+    15050: Budding Horn
+    15060: Flight Pinion
+    15080: Four-Toed Fowl Foot
+    15090: Turtle Neck Meat
+    15100: Human Bone Shard
+    15110: Great Dragonfly Head
+    15120: Slumbering Egg
+    15130: Crab Eggs
+    15140: Land Octopus Ovary
+    15150: Miranda Powder
+    15160: Strip of White Flesh
+    15340: Thin Beast Bones
+    15341: Hefty Beast Bone
+    15400: String
+    15410: Living Jar Shard
+    15420: Albinauric Bloodclot
+    15430: Stormhawk Feather
+    20650: Poisonbloom
+    20651: Trina's Lily
+    20652: Fulgurbloom
+    20653: Miquella's Lily
+    20654: Grave Violet
+    20660: Faded Erdleaf Flower
+    20680: Erdleaf Flower
+    20681: Altus Bloom
+    20682: Fire Blossom
+    20683: Golden Sunflower
+    20685: Tarnished Golden Sunflower
+    20690: Herba
+    20691: Arteria Leaf
+    20710: Dewkissed Herba
+    20720: Rowa Fruit
+    20721: Golden Rowa
+    20722: Rimed Rowa
+    20723: Bloodrose
+    20740: Eye of Yelough
+    20750: Crystal Bud
+    20751: Rimed Crystal Bud
+    20753: Sacramental Bud
+    20760: Mushroom
+    20761: Melted Mushroom
+    20770: Toxic Mushroom
+    20775: Root Resin
+    20780: Cracked Crystal
+    20795: Sanctuary Stone
+    20800: Nascent Butterfly
+    20801: Aeonian Butterfly
+    20802: Smoldering Butterfly
+    20810: Silver Firefly
+    20811: Gold Firefly
+    20812: Glintstone Firefly
+    20820: Golden Centipede
+    20825: Silver Tear Husk
+    20830: Gold-Tinged Excrement
+    20831: Blood-Tainted Excrement
+    20840: Cave Moss
+    20841: Budding Cave Moss
+    20842: Crystal Cave Moss
+    20845: Yellow Ember
+    20850: Volcanic Stone
+    20852: Formic Rock
+    20855: Gravel Stone
+    200000: Black Knife Tiche
+    201000: Banished Knight Oleg
+    202000: Banished Knight Engvall
+    203000: Fanged Imp Ashes
+    204000: Latenna the Albinauric
+    205000: Nomad Ashes
+    206000: Nightmaiden & Swordstress Puppets
+    207000: Mimic Tear Ashes
+    208000: Crystalian Ashes
+    209000: Ancestral Follower Ashes
+    210000: Winged Misbegotten Ashes
+    211000: Albinauric Ashes
+    212000: Skeletal Militiaman Ashes
+    213000: Skeletal Bandit Ashes
+    214000: Oracle Envoy Ashes
+    215000: Putrid Corpse Ashes
+    216000: Depraved Perfumer Carmaan
+    217000: Perfumer Tricia
+    218000: Glintstone Sorcerer Ashes
+    219000: Twinsage Sorcerer Ashes
+    220000: Page Ashes
+    221000: Battlemage Hugues
+    222000: Clayman Ashes
+    223000: Cleanrot Knight Finlay
+    224000: Kindred of Rot Ashes
+    225000: Marionette Soldier Ashes
+    226000: Avionette Soldier Ashes
+    227000: Fire Monk Ashes
+    228000: Blackflame Monk Amon
+    229000: Man-Serpent Ashes
+    230000: Azula Beastman Ashes
+    231000: Kaiden Sellsword Ashes
+    232000: Lone Wolf Ashes
+    233000: Giant Rat Ashes
+    234000: Demi-Human Ashes
+    235000: Rotten Stray Ashes
+    236000: Spirit Jellyfish Ashes
+    237000: Warhawk Ashes
+    238000: Stormhawk Deenh
+    239000: Bloodhound Knight Floh
+    240000: Wandering Noble Ashes
+    241000: Noble Sorcerer Ashes
+    242000: Vulgar Militia Ashes
+    243000: Mad Pumpkin Head Ashes
+    244000: Land Squirt Ashes
+    245000: Miranda Sprout Ashes
+    246000: Soldjars of Fortune Ashes
+    247000: Omenkiller Rollo
+    248000: Greatshield Soldier Ashes
+    249000: Archer Ashes
+    250000: Godrick Soldier Ashes
+    251000: Raya Lucaria Soldier Ashes
+    252000: Leyndell Soldier Ashes
+    253000: Radahn Soldier Ashes
+    254000: Mausoleum Soldier Ashes
+    255000: Haligtree Soldier Ashes
+    256000: Ancient Dragon Knight Kristoff
+    257000: Redmane Knight Ogha
+    258000: Lhutel the Headless
+    259000: Nepheli Loux Puppet
+    260000: Dung Eater Puppet
+    261000: Finger Maiden Therolina Puppet
+    262000: Dolores the Sleeping Arrow Puppet
+    263000: Jarwight Puppet
+    2000900: Blessing of Marika
+    2001105: Dragonscale Flesh
+    2001110: Fingerprint Nostrum
+    2001120: Spellproof Pickled Liver
+    2001130: Fireproof Pickled Liver
+    2001140: Lightningproof Pickled Liver
+    2001150: Holyproof Pickled Liver
+    2001170: Well-Pickled Turtle Neck
+    2001200: Scorpion Stew
+    2001201: Gourmet Scorpion Stew
+    2001202: Scorpion Stew (Drop)
+    2001203: Gourmet Scorpion Stew (Drop)
+    2001210: Sacred Bloody Flesh
+    2001220: Silver Horn Tender
+    2001230: Golden Horn Tender
+    2001400: Messmerfire Grease
+    2001410: Dragonbolt Grease
+    2001420: Royal Magic Grease
+    2001480: Dragon Communion Grease
+    2001500: Drawstring Messmerfire Grease
+    2001520: Drawstring Royal Magic Grease
+    2001530: Drawstring Golden Grease
+    2001600: Festive Grease
+    2001700: Innard Meat
+    2001710: Dragon Communion Harpoon
+    2002000: Polter Stone
+    2002010: Rock Heart
+    2002020: Priestess Heart
+    2002030: Lamenter's Mask
+    2002100: Ancient Dragon's Blessing
+    2002120: Iris of Grace
+    2002130: Iris of Occultation
+    2002140: Thiollier's Concoction
+    2002150: Prattling Pate "Lamentation"
+    2002900: Remembrance of the Wild Boar Rider
+    2002901: Remembrance of the Impaler
+    2002902: Remembrance of the Shadow Sunflower
+    2002903: Remembrance of the Twin Moon Knight
+    2002904: Remembrance of the Saint of the Bud
+    2002905: Remembrance of the Dancing Lion
+    2002907: Remembrance of a God and a Lord
+    2002908: Remembrance of the Lord of Frenzied Flame
+    2002909: Remembrance of the Mother of Fingers
+    2002910: Remembrance of Putrescence
+    2002950: Leda's Rune
+    2002951: Broken Rune
+    2002952: Shadow Realm Rune [1]
+    2002953: Shadow Realm Rune [2]
+    2002954: Shadow Realm Rune [3]
+    2002955: Shadow Realm Rune [4]
+    2002956: Shadow Realm Rune [5]
+    2002957: Shadow Realm Rune [6]
+    2002958: Shadow Realm Rune [7]
+    2002959: Rune of an Unsung Hero
+    2002960: Marika's Rune
+    2003000: Bondstone
+    2003130: Horned Bairn
+    2003140: Perfumed Oil of Ranah
+    2003150: Call of Tibia
+    2003160: Surging Frenzied Flame
+    2003170: Golden Vow (Consumable)
+    2003180: Fire Coil
+    2003190: Fire Spritestone
+    2003200: Glinting Nail
+    2003310: Sunwarmth Stone
+    2004300: Miriam's Vanishing
+    2004310: Glintblade Trio
+    2004320: Rellana's Twin Moons
+    2004500: Glintstone Nail
+    2004510: Glintstone Nails
+    2004700: Blades of Stone
+    2004710: Gravitational Missile
+    2004900: Mantle of Thorns
+    2004910: Impenetrable Thorns
+    2005000: Rings of Spectral Light
+    2006200: Vortex of Putrescence
+    2006210: Mass of Putrescence
+    2006300: Furious Blade of Ansbach
+    2006400: Heal from Afar
+    2006650: 'Aspects of the Crucible: Thorns'
+    2006660: 'Aspects of the Crucible: Bloom'
+    2006670: Minor Erdtree
+    2006680: Land of Shadow
+    2006690: Wrath from Afar
+    2006700: Light of Miquella
+    2006710: Multilayered Ring of Light
+    2006800: Roar of Rugalea
+    2006900: Knight's Lightning Spear
+    2006910: Dragonbolt of Florissax
+    2006920: Electrocharge
+    2007000: Bayle's Tyranny
+    2007010: Bayle's Flame Lightning
+    2007020: Ghostflame Breath
+    2007200: Rotten Butterflies
+    2007210: Pest-Thread Spears
+    2007300: Midra's Flame of Frenzy
+    2007410: Fleeting Microcosm
+    2007420: Cherishing Fingers
+    2007600: Watchful Spirit
+    2007700: Golden Arcs
+    2007710: Giant Golden Arc
+    2007720: Spira
+    2007730: Divine Beast Tornado
+    2007740: Divine Bird Feathers
+    2007800: Fire Serpent
+    2007810: Rain of Fire
+    2007820: Messmer's Orb
+    2008000: Miquella's Great Rune
+    2008003: Igon's Furled Finger
+    2008004: Well Depths Key
+    2008005: Gaol Upper Level Key
+    2008006: Gaol Lower Level Key
+    2008007: Cross Map
+    2008008: Hole-Laden Necklace
+    2008011: Heart of Bayle
+    2008012: New Cross Map
+    2008013: Storeroom Key
+    2008014: Secret Rite Scroll
+    2008015: Letter for Freyja
+    2008016: Ruins Map
+    2008017: Ruins Map (2nd)
+    2008018: Ruins Map (3rd)
+    2008019: Black Syrup
+    2008021: Messmer's Kindling
+    2008025: Furnace Keeper's Note
+    2008027: Castle Cross Message
+    2008028: Ancient Ruins Cross Message
+    2008029: Monk's Missive
+    2008030: Storehouse Cross Message
+    2008031: 'Note: Sealed Spiritsprings'
+    2008032: Torn Diary Page
+    2008033: Larval Tear (DLC)
+    2008034: Message from Leda
+    2008036: Prayer Room Key
+    2008037: Tower of Shadow Message
+    2008200: '"Incursion" Painting'
+    2008201: '"The Sacred Tower" Painting'
+    2008202: '"Domain of Dragons" Painting'
+    2008600: 'Map: Gravesite Plain'
+    2008601: 'Map: Scadu Altus'
+    2008602: 'Map: Southern Shore'
+    2008603: 'Map: Rauh Ruins'
+    2008604: 'Map: Abyss'
+    2008900: Moore's Bell Bearing
+    2008901: Ymir's Bell Bearing
+    2008902: Herbalist's Bell Bearing
+    2008903: Mushroom-Seller's Bell Bearing [1]
+    2008904: Mushroom-Seller's Bell Bearing [2]
+    2008905: Greasemonger's Bell Bearing
+    2008906: Moldmonger's Bell Bearing
+    2008907: Igon's Bell Bearing
+    2008908: Spellmachinist's Bell Bearing
+    2008909: String-Seller's Bell Bearing
+    2009004: O Mother
+    2009301: Forager Brood Cookbook [6]
+    2009302: Forager Brood Cookbook [1]
+    2009303: Forager Brood Cookbook [2]
+    2009304: Forager Brood Cookbook [3]
+    2009305: Forager Brood Cookbook [4]
+    2009306: Forager Brood Cookbook [5]
+    2009307: Igon's Cookbook [2]
+    2009308: Finger-Weaver's Cookbook [2]
+    2009309: Greater Potentate's Cookbook [1]
+    2009310: Greater Potentate's Cookbook [4]
+    2009311: Greater Potentate's Cookbook [5]
+    2009312: Greater Potentate's Cookbook [12]
+    2009313: Greater Potentate's Cookbook [7]
+    2009314: Greater Potentate's Cookbook [9]
+    2009315: Greater Potentate's Cookbook [10]
+    2009316: Greater Potentate's Cookbook [11]
+    2009317: Mad Craftsman's Cookbook [2]
+    2009318: Greater Potentate's Cookbook [8]
+    2009319: Greater Potentate's Cookbook [3]
+    2009320: Greater Potentate's Cookbook [13]
+    2009321: Greater Potentate's Cookbook [14]
+    2009322: Greater Potentate's Cookbook [6]
+    2009323: Greater Potentate's Cookbook [2]
+    2009324: Ancient Dragon Knight's Cookbook [1]
+    2009325: Mad Craftsman's Cookbook [1]
+    2009326: St. Trina Disciple's Cookbook [1]
+    2009327: Fire Knight's Cookbook [1]
+    2009328: Ancient Dragon Knight's Cookbook [2]
+    2009329: Loyal Knight's Cookbook
+    2009330: Battlefield Priest's Cookbook [1]
+    2009331: Igon's Cookbook [1]
+    2009332: Battlefield Priest's Cookbook [2]
+    2009333: Forager Brood Cookbook [7]
+    2009334: St. Trina Disciple's Cookbook [3]
+    2009335: Grave Keeper's Cookbook [2]
+    2009336: Antiquity Scholar's Cookbook [2]
+    2009337: Tibia's Cookbook
+    2009338: Mad Craftsman's Cookbook [3]
+    2009339: Battlefield Priest's Cookbook [3]
+    2009340: Fire Knight's Cookbook [2]
+    2009341: Antiquity Scholar's Cookbook [1]
+    2009342: Finger-Weaver's Cookbook [1]
+    2009343: Battlefield Priest's Cookbook [4]
+    2009344: Grave Keeper's Cookbook [1]
+    2009345: St. Trina Disciple's Cookbook [2]
+    2009500: Hefty Cracked Pot
+    2010000: Scadutree Fragment
+    2010100: Revered Spirit Ash
+    2011000: Viridian Hidden Tear
+    2011010: Crimsonburst Dried Tear
+    2011020: Crimson-Sapping Cracked Tear
+    2011030: Cerulean-Sapping Cracked Tear
+    2011040: Oil-Soaked Tear
+    2011050: Bloodsucking Cracked Tear
+    2011060: Glovewort Crystal Tear
+    2011070: Deflecting Hardtear
+    2015000: Beast Horn
+    2015010: Spirit Calculus
+    2015020: Pearlescent Scale
+    2015030: Scorpion Liver
+    2015040: Fly Mold
+    2020001: Rada Fruit
+    2020002: Redflesh Mushroom
+    2020003: Whiteflesh Mushroom
+    2020004: Knot Resin
+    2020005: Dewgem
+    2020006: Black Pyrefly
+    2020007: Glintslab Firefly
+    2020008: Yellow Fulgurbloom
+    2020009: Shadow Sunflower
+    2020010: Toxic Mossling
+    2020011: Scarlet Bud
+    2020012: Sanguine Amaryllis
+    2020013: Frozen Maggot
+    2020014: Deep-Purple Lily
+    2020015: Nectarblood Burgeon
+    2020016: Winter-Lantern Fly
+    2020017: Swollen Grape
+    2020018: Grave Keeper's Brainpan
+    2020019: Horn-Strewn Excrement
+    2020020: Gas Stone
+    2020021: Ghostflame Bloom
+    2020022: Grave Cricket
+    2020023: Dragon's Calorbloom
+    2020024: Finger Mimic
+    2020025: Empyrean-Blood Burgeon
+    2020026: Congealed Putrescence
+    2020027: Roundrock
+    2020028: Spiritgrave Stone
+    2020029: Rauh Burrow
+    2020030: Ember of Messmer
+    2020031: Blessed Bone Shard
+    2020032: Red Fulgurbloom
+    2020033: Nailstone
+    2020034: Sharp Gravel Stone
+    2020035: Furnace Visage
+    2200000: Curseblade Meera
+    2201000: Bloodfiend Hexer's Ashes
+    2202000: Gravebird Ashes
+    2203000: Fire Knight Hilde
+    2204000: Spider Scorpion Ashes
+    2205000: Inquisitor Ashes
+    2206000: Demi-Human Swordsman Yosh
+    2207000: Messmer Soldier Ashes
+    2208000: Black Knight Commander Andreas
+    2209000: Black Knight Captain Huw
+    2210000: Bigmouth Imp Ashes
+    2211000: Man-Fly Ashes
+    2212000: Taylew the Golem Smith
+    2213000: Divine Bird Warrior Ornis
+    2214000: Horned Warrior Ashes
+    2215000: Ancient Dragon Florissax
+    2217000: Fingercreeper Ashes
+    2218000: Fire Knight Queelign
+    2219000: Swordhand of Night Jolán
+    2219001: Swordhand of Night Jolán +1
+    2219002: Swordhand of Night Jolán +2
+    2219003: Swordhand of Night Jolán +3
+    2219004: Swordhand of Night Jolán +4
+    2219005: Swordhand of Night Jolán +5
+    2219006: Swordhand of Night Jolán +6
+    2219007: Swordhand of Night Jolán +7
+    2219008: Swordhand of Night Jolán +8
+    2219009: Swordhand of Night Jolán +9
+    2219010: Swordhand of Night Jolán +10
+    2220000: Jolán and Anna
+    2220001: Jolán and Anna +1
+    2220002: Jolán and Anna +2
+    2220003: Jolán and Anna +3
+    2220004: Jolán and Anna +4
+    2220005: Jolán and Anna +5
+    2220006: Jolán and Anna +6
+    2220007: Jolán and Anna +7
+    2220008: Jolán and Anna +8
+    2220009: Jolán and Anna +9
+    2220010: Jolán and Anna +10
+  protector:
+    40000: Iron Helmet
+    40100: Scale Armor
+    40200: Iron Gauntlets
+    40300: Leather Trousers
+    50000: Kaiden Helm
+    50100: Kaiden Armor
+    50200: Kaiden Gauntlets
+    50300: Kaiden Trousers
+    60000: Drake Knight Helm
+    60100: Drake Knight Armor
+    60200: Drake Knight Gauntlets
+    60300: Drake Knight Greaves
+    80000: Scaled Helm
+    80100: Scaled Armor
+    80200: Scaled Gauntlets
+    80300: Scaled Greaves
+    90000: Perfumer Hood
+    90100: Perfumer Robe
+    90200: Perfumer Gloves
+    90300: Perfumer Sarong
+    100000: Traveler's Hat
+    100100: Perfumer's Traveling Garb
+    100200: Traveler's Gloves
+    100300: Traveler's Slops
+    120000: Alberich's Pointed Hat
+    120100: Alberich's Robe
+    120200: Alberich's Bracers
+    120300: Alberich's Trousers
+    130000: Spellblade's Pointed Hat
+    130100: Spellblade's Traveling Attire
+    130200: Spellblade's Gloves
+    130300: Spellblade's Trousers
+    140000: Bull-Goat Helm
+    140100: Bull-Goat Armor
+    140200: Bull-Goat Gauntlets
+    140300: Bull-Goat Greaves
+    150000: Iron Kasa
+    150100: Ronin's Armor
+    150200: Ronin's Gauntlets
+    150300: Ronin's Greaves
+    160000: Guilty Hood
+    160100: Cloth Garb
+    160300: Cloth Trousers
+    170000: Black Wolf Mask
+    170100: Blaidd's Armor
+    170200: Blaidd's Gauntlets
+    170300: Blaidd's Greaves
+    180000: Black Knife Hood
+    180100: Black Knife Armor
+    180200: Black Knife Gauntlets
+    180300: Black Knife Greaves
+    190000: Exile Hood
+    190100: Exile Armor
+    190200: Exile Gauntlets
+    190300: Exile Greaves
+    200000: Banished Knight Helm
+    200100: Banished Knight Armor
+    200200: Banished Knight Gauntlets
+    200300: Banished Knight Greaves
+    201000: Banished Knight Helm (Altered)
+    201100: Banished Knight Armor (Altered)
+    210000: Briar Helm
+    210100: Briar Armor
+    210200: Briar Gauntlets
+    210300: Briar Greaves
+    220000: Page Hood
+    220100: Page Garb
+    220300: Page Trousers
+    230000: Night's Cavalry Helm
+    230100: Night's Cavalry Armor
+    230200: Night's Cavalry Gauntlets
+    230300: Night's Cavalry Greaves
+    240000: Blue Silver Mail Hood
+    240100: Blue Silver Mail Armor
+    240200: Blue Silver Bracelets
+    240300: Blue Silver Mail Skirt
+    250000: Nomadic Merchant's Chapeau
+    250100: Nomadic Merchant's Finery
+    250300: Nomadic Merchant's Trousers
+    260000: Malformed Dragon Helm
+    260100: Malformed Dragon Armor
+    260200: Malformed Dragon Gauntlets
+    260300: Malformed Dragon Greaves
+    270000: Tree Sentinel Helm
+    270100: Tree Sentinel Armor
+    270200: Tree Sentinel Gauntlets
+    270300: Tree Sentinel Greaves
+    280000: Royal Knight Helm
+    280100: Royal Knight Armor
+    280200: Royal Knight Gauntlets
+    280300: Royal Knight Greaves
+    290000: Nox Monk Hood
+    290100: Nox Monk Armor
+    290200: Nox Bracelets
+    290300: Nox Greaves
+    292000: Nox Swordstress Crown
+    292100: Nox Swordstress Armor
+    293000: Night Maiden Twin Crown
+    293100: Night Maiden Armor
+    300000: Great Horned Headband
+    300100: Fur Raiment
+    300300: Fur Leggings
+    301000: Shining Horned Headband
+    301100: Shaman Furs
+    301300: Shaman Leggings
+    310000: Duelist Helm
+    310100: Gravekeeper Cloak
+    310300: Duelist Greaves
+    320000: Sanguine Noble Hood
+    320100: Sanguine Noble Robe
+    320300: Sanguine Noble Waistcloth
+    330000: Guardian Mask
+    330100: Guardian Garb (Full Bloom)
+    330200: Guardian Bracers
+    330300: Guardian Greaves
+    331100: Guardian Garb
+    340000: Cleanrot Helm
+    340100: Cleanrot Armor
+    340200: Cleanrot Gauntlets
+    340300: Cleanrot Greaves
+    350000: Fire Monk Hood
+    350100: Fire Monk Armor
+    350200: Fire Monk Gauntlets
+    350300: Fire Monk Greaves
+    351000: Blackflame Monk Hood
+    351100: Blackflame Monk Armor
+    351200: Blackflame Monk Gauntlets
+    351300: Blackflame Monk Greaves
+    360000: Fire Prelate Helm
+    360100: Fire Prelate Armor
+    360200: Fire Prelate Gauntlets
+    360300: Fire Prelate Greaves
+    361100: Fire Prelate Armor (Altered)
+    370000: Aristocrat Headband
+    370100: Aristocrat Garb
+    370300: Aristocrat Boots
+    371100: Aristocrat Garb (Altered)
+    380000: Aristocrat Hat
+    380100: Aristocrat Coat
+    390000: Old Aristocrat Cowl
+    390100: Old Aristocrat Gown
+    390300: Old Aristocrat Shoes
+    420000: Vulgar Militia Helm
+    420100: Vulgar Militia Armor
+    420200: Vulgar Militia Gauntlets
+    420300: Vulgar Militia Greaves
+    430000: Sage Hood
+    430100: Sage Robe
+    430300: Sage Trousers
+    440000: Pumpkin Helm
+    460000: Elden Lord Crown
+    460100: Elden Lord Armor
+    460200: Elden Lord Bracers
+    460300: Elden Lord Greaves
+    470000: Radahn's Redmane Helm
+    470100: Radahn's Lion Armor
+    470200: Radahn's Gauntlets
+    470300: Radahn's Greaves
+    480100: Lord of Blood's Robe
+    510000: Queen's Crescent Crown
+    510100: Queen's Robe
+    510200: Queen's Bracelets
+    510300: Queen's Leggings
+    520000: Godskin Apostle Hood
+    520100: Godskin Apostle Robe
+    520200: Godskin Apostle Bracelets
+    520300: Godskin Apostle Trousers
+    530000: Godskin Noble Hood
+    530100: Godskin Noble Robe
+    530200: Godskin Noble Bracelets
+    530300: Godskin Noble Trousers
+    540000: Depraved Perfumer Headscarf
+    540100: Depraved Perfumer Robe
+    540200: Depraved Perfumer Gloves
+    540300: Depraved Perfumer Trousers
+    570000: Crucible Axe Helm
+    570100: Crucible Axe Armor
+    570200: Crucible Gauntlets
+    570300: Crucible Greaves
+    571000: Crucible Tree Helm
+    571100: Crucible Tree Armor
+    580000: Lusat's Glintstone Crown
+    580100: Lusat's Robe
+    580200: Lusat's Manchettes
+    580300: Old Sorcerer's Legwraps
+    581000: Azur's Glintstone Crown
+    581100: Azur's Glintstone Robe
+    581200: Azur's Manchettes
+    590000: All-Knowing Helm
+    590100: All-Knowing Armor
+    590200: All-Knowing Gauntlets
+    590300: All-Knowing Greaves
+    600000: Twinned Helm
+    600100: Twinned Armor
+    600200: Twinned Gauntlets
+    600300: Twinned Greaves
+    620000: Prophet Blindfold
+    620100: Corhyn's Robe
+    620300: Prophet Trousers
+    622100: Prophet Robe
+    630000: Astrologer Hood
+    630100: Astrologer Robe
+    630200: Astrologer Gloves
+    630300: Astrologer Trousers
+    640000: Lionel's Helm
+    640100: Lionel's Armor
+    640200: Lionel's Gauntlets
+    640300: Lionel's Greaves
+    650000: Hoslow's Helm
+    650100: Hoslow's Armor
+    650200: Hoslow's Gauntlets
+    650300: Hoslow's Greaves
+    651000: Diallos's Mask
+    660000: Vagabond Knight Helm
+    660100: Vagabond Knight Armor
+    660200: Vagabond Knight Gauntlets
+    660300: Vagabond Knight Greaves
+    670000: Blue Cloth Cowl
+    670100: Blue Cloth Vest
+    670200: Warrior Gauntlets
+    670300: Warrior Greaves
+    680000: White Mask
+    680200: War Surgeon Gloves
+    680300: War Surgeon Trousers
+    681100: War Surgeon Gown (Altered)
+    690000: Royal Remains Helm
+    690100: Royal Remains Armor
+    690200: Royal Remains Gauntlets
+    690300: Royal Remains Greaves
+    720000: Beast Champion Helm
+    720200: Beast Champion Gauntlets
+    720300: Beast Champion Greaves
+    721100: Beast Champion Armor (Altered)
+    730000: Champion Headband
+    730100: Champion Pauldron
+    730200: Champion Bracers
+    730300: Champion Gaiters
+    740000: Crimson Hood
+    740100: Noble's Traveling Garb
+    740200: Noble's Gloves
+    740300: Noble's Trousers
+    741000: Navy Hood
+    760000: Maliketh's Helm
+    760100: Maliketh's Armor
+    760200: Maliketh's Gauntlets
+    760300: Maliketh's Greaves
+    770000: Malenia's Winged Helm
+    770100: Malenia's Armor
+    770200: Malenia's Gauntlet
+    770300: Malenia's Greaves
+    780000: Veteran's Helm
+    780100: Veteran's Armor
+    780200: Veteran's Gauntlets
+    780300: Veteran's Greaves
+    790000: Bloodhound Knight Helm
+    790100: Bloodhound Knight Armor
+    790200: Bloodhound Knight Gauntlets
+    790300: Bloodhound Knight Greaves
+    800000: Festive Hood
+    800100: Festive Garb
+    801100: Festive Garb (Altered)
+    802000: Blue Festive Hood
+    802100: Blue Festive Garb
+    810000: Commoner's Headband
+    810100: Commoner's Garb
+    810300: Commoner's Shoes
+    811000: Commoner's Headband (Altered)
+    812000: Commoner's Simple Garb
+    820000: Envoy Crown
+    830000: Twinsage Glintstone Crown
+    830100: Raya Lucarian Robe
+    830200: Sorcerer Manchettes
+    830300: Sorcerer Leggings
+    831000: Olivinus Glintstone Crown
+    832000: Lazuli Glintstone Crown
+    833000: Karolos Glintstone Crown
+    834000: Witch's Glintstone Crown
+    840000: Marionette Soldier Helm
+    840100: Marionette Soldier Armor
+    850000: Marionette Soldier Birdhelm
+    860000: Raging Wolf Helm
+    860100: Raging Wolf Armor
+    860200: Raging Wolf Gauntlets
+    860300: Raging Wolf Greaves
+    870000: Land of Reeds Helm
+    870100: Land of Reeds Armor
+    870200: Land of Reeds Gauntlets
+    870300: Land of Reeds Greaves
+    872000: Okina Mask
+    872100: White Reed Armor
+    872200: White Reed Gauntlets
+    872300: White Reed Greaves
+    880000: Confessor Hood
+    880100: Confessor Armor
+    880200: Confessor Gloves
+    880300: Confessor Boots
+    890000: Prisoner Iron Mask
+    890100: Prisoner Clothing
+    890300: Prisoner Trousers
+    891000: Blackguard's Iron Mask
+    900000: Traveling Maiden Hood
+    900100: Traveling Maiden Robe
+    900200: Traveling Maiden Gloves
+    900300: Traveling Maiden Boots
+    902000: Finger Maiden Fillet
+    902100: Finger Maiden Robe
+    902300: Finger Maiden Shoes
+    910000: Preceptor's Big Hat
+    910100: Preceptor's Long Gown
+    910200: Preceptor's Gloves
+    910300: Preceptor's Trousers
+    911000: Mask of Confidence
+    930000: Skeletal Mask
+    930100: Raptor's Black Feathers
+    930200: Bandit Manchettes
+    930300: Bandit Boots
+    931100: Bandit Garb
+    940000: Eccentric's Hood
+    940100: Eccentric's Armor
+    940200: Eccentric's Manchettes
+    940300: Eccentric's Breeches
+    950000: Fingerprint Helm
+    950100: Fingerprint Armor
+    950200: Fingerprint Gauntlets
+    950300: Fingerprint Greaves
+    960000: Consort's Mask
+    960100: Consort's Robe
+    960300: Consort's Trousers
+    961000: Ruler's Mask
+    961100: Ruler's Robe
+    962100: Upper-Class Robe
+    963000: Marais Mask
+    963100: Marais Robe
+    963200: Bloodsoaked Manchettes
+    964000: Bloodsoaked Mask
+    964100: Official's Attire
+    970000: Omen Helm
+    970100: Omen Armor
+    970200: Omen Gauntlets
+    970300: Omen Greaves
+    980000: Carian Knight Helm
+    980100: Carian Knight Armor
+    980200: Carian Knight Gauntlets
+    980300: Carian Knight Greaves
+    990000: Hierodas Glintstone Crown
+    990200: Errant Sorcerer Manchettes
+    990300: Errant Sorcerer Boots
+    991100: Errant Sorcerer Robe (Altered)
+    1000000: Haima Glintstone Crown
+    1000100: Battlemage Robe
+    1000200: Battlemage Manchettes
+    1000300: Battlemage Legwraps
+    1010000: Snow Witch Hat
+    1010100: Snow Witch Robe
+    1010300: Snow Witch Skirt
+    1020100: Traveler's Clothes
+    1020200: Traveler's Manchettes
+    1020300: Traveler's Boots
+    1030000: Juvenile Scholar Cap
+    1030100: Juvenile Scholar Robe
+    1040000: Radiant Gold Mask
+    1040100: Goldmask's Rags
+    1040200: Gold Bracelets
+    1040300: Gold Waistwrap
+    1050100: Fell Omen Cloak
+    1060000: Albinauric Mask
+    1060100: Dirty Chainmail
+    1070000: Zamor Mask
+    1070100: Zamor Armor
+    1070200: Zamor Bracelets
+    1070300: Zamor Legwraps
+    1080000: Imp Head (Cat)
+    1081000: Imp Head (Fanged)
+    1082000: Imp Head (Long-Tongued)
+    1083000: Imp Head (Corpse)
+    1084000: Imp Head (Wolf)
+    1085000: Imp Head (Elder)
+    1090000: Silver Tear Mask
+    1100000: Chain Coif
+    1100100: Chain Armor
+    1100200: Gauntlets
+    1100300: Chain Leggings
+    1101000: Greathelm
+    1101100: Eye Surcoat
+    1102100: Tree Surcoat
+    1110000: Octopus Head
+    1120000: Jar
+    1130000: Mushroom Head
+    1130100: Mushroom Body
+    1130200: Mushroom Arms
+    1130300: Mushroom Legs
+    1300000: Nox Mirrorhelm
+    1301000: Iji's Mirrorhelm
+    1400000: Black Hood
+    1400100: Leather Armor
+    1400200: Leather Gloves
+    1400300: Leather Boots
+    1401000: Bandit Mask
+    1500000: Knight Helm
+    1500100: Knight Armor
+    1500200: Knight Gauntlets
+    1500300: Knight Greaves
+    1600000: Greathood
+    1700000: Godrick Soldier Helm
+    1700100: Tree-and-Beast Surcoat
+    1700200: Godrick Soldier Gauntlets
+    1700300: Godrick Soldier Greaves
+    1710000: Raya Lucarian Helm
+    1710100: Cuckoo Surcoat
+    1710200: Raya Lucarian Gauntlets
+    1710300: Raya Lucarian Greaves
+    1720000: Leyndell Soldier Helm
+    1720100: Erdtree Surcoat
+    1720200: Leyndell Soldier Gauntlets
+    1720300: Leyndell Soldier Greaves
+    1730000: Radahn Soldier Helm
+    1730100: Redmane Surcoat
+    1730200: Radahn Soldier Gauntlets
+    1730300: Radahn Soldier Greaves
+    1740100: Mausoleum Surcoat
+    1740200: Mausoleum Gauntlets
+    1740300: Mausoleum Greaves
+    1750000: Haligtree Helm
+    1750100: Haligtree Crest Surcoat
+    1750200: Haligtree Gauntlets
+    1750300: Haligtree Greaves
+    1760000: Gelmir Knight Helm
+    1760100: Gelmir Knight Armor
+    1760200: Gelmir Knight Gauntlets
+    1760300: Gelmir Knight Greaves
+    1770000: Godrick Knight Helm
+    1770100: Godrick Knight Armor
+    1770200: Godrick Knight Gauntlets
+    1770300: Godrick Knight Greaves
+    1780000: Cuckoo Knight Helm
+    1780100: Cuckoo Knight Armor
+    1780200: Cuckoo Knight Gauntlets
+    1780300: Cuckoo Knight Greaves
+    1790000: Leyndell Knight Helm
+    1790100: Leyndell Knight Armor
+    1790200: Leyndell Knight Gauntlets
+    1790300: Leyndell Knight Greaves
+    1800000: Redmane Knight Helm
+    1800100: Redmane Knight Armor
+    1800200: Redmane Knight Gauntlets
+    1800300: Redmane Knight Greaves
+    1810100: Mausoleum Knight Armor
+    1810200: Mausoleum Knight Gauntlets
+    1810300: Mausoleum Knight Greaves
+    1820000: Haligtree Knight Helm
+    1820100: Haligtree Knight Armor
+    1820200: Haligtree Knight Gauntlets
+    1820300: Haligtree Knight Greaves
+    1830000: Foot Soldier Cap
+    1830100: Chain-Draped Tabard
+    1830200: Foot Soldier Gauntlets
+    1830300: Foot Soldier Greaves
+    1840000: Foot Soldier Helmet
+    1840100: Foot Soldier Tabard
+    1850000: Gilded Foot Soldier Cap
+    1850100: Leather-Draped Tabard
+    1860000: Foot Soldier Helm
+    1860100: Scarlet Tabard
+    1870100: Bloodsoaked Tabard
+    1880000: Sacred Crown Helm
+    1880100: Ivory-Draped Tabard
+    1890000: Omensmirk Mask
+    1890100: Omenkiller Robe
+    1890200: Omenkiller Long Gloves
+    1890300: Omenkiller Boots
+    1900000: Ash-of-War Scarab
+    1901000: Incantation Scarab
+    1902000: Glintstone Scarab
+    1910000: Crimson Tear Scarab
+    1920000: Cerulean Tear Scarab
+    1930100: Deathbed Dress
+    1940000: Fia's Hood
+    1940100: Fia's Robe
+    1980000: Highwayman Hood
+    1980100: Highwayman Cloth Armor
+    1980200: Highwayman Gauntlets
+    1990000: High Page Hood
+    1990100: High Page Clothes
+    2000000: Rotten Duelist Helm
+    2000100: Rotten Gravekeeper Cloak
+    2000300: Rotten Duelist Greaves
+    2010000: Mushroom Crown
+    2020000: Black Dumpling
+    2030000: Lazuli Robe
+    3000000: Dane's Hat
+    3000100: Dryleaf Robe
+    3000200: Dryleaf Arm Wraps
+    3000300: Dryleaf Cuissardes
+    3010000: Gaius's Helm
+    3010100: Gaius's Armor
+    3010200: Gaius's Gauntlets
+    3010300: Gaius's Greaves
+    5000000: Oathseeker Knight Helm
+    5000100: Leda's Armor
+    5000200: Oathseeker Knight Gauntlets
+    5000300: Oathseeker Knight Greaves
+    5002100: Oathseeker Knight Armor
+    5010000: Verdigris Helm
+    5010100: Verdigris Armor
+    5010200: Verdigris Gauntlets
+    5010300: Verdigris Greaves
+    5020000: Pelt of Ralva
+    5020100: Iron Rivet Armor
+    5020200: Iron Rivet Gauntlets
+    5020300: Iron Rivet Greaves
+    5021000: Fang Helm
+    5030000: Thiollier's Mask
+    5030100: Thiollier's Garb
+    5030200: Thiollier's Gloves
+    5030300: Thiollier's Trousers
+    5060000: High Priest Hat
+    5060100: High Priest Robe
+    5060200: High Priest Gloves
+    5060300: High Priest Undergarments
+    5070000: Caterpillar Mask
+    5070100: Braided Cord Robe
+    5070200: Braided Arm Wraps
+    5070300: Soiled Loincloth
+    5080000: Dancer's Hood
+    5080100: Dancer's Dress
+    5080200: Dancer's Bracer
+    5080300: Dancer's Trousers
+    5090000: Helm of Night
+    5090100: Armor of Night
+    5090200: Gauntlets of Night
+    5090300: Greaves of Night
+    5100000: Igon's Helm
+    5100100: Igon's Armor
+    5100200: Igon's Gauntlets
+    5100300: Igon's Loincloth
+    5110000: Wise Man's Mask
+    5110100: Ansbach's Attire
+    5110200: Ansbach's Manchettes
+    5110300: Ansbach's Boots
+    5120000: Freyja's Helm
+    5120100: Freyja's Armor
+    5120200: Freyja's Gauntlets
+    5120300: Freyja's Greaves
+    5130000: Helm of Solitude
+    5130100: Armor of Solitude
+    5130200: Gauntlets of Solitude
+    5130300: Greaves of Solitude
+    5140000: Messmer Soldier Helm
+    5140100: Messmer Soldier Armor
+    5140200: Messmer Soldier Gauntlets
+    5140300: Messmer Soldier Greaves
+    5150000: Black Knight Helm
+    5150100: Black Knight Armor
+    5150200: Black Knight Gauntlets
+    5150300: Black Knight Greaves
+    5160000: Rakshasa Helm
+    5160100: Rakshasa Armor
+    5160200: Rakshasa Gauntlets
+    5160300: Rakshasa Greaves
+    5180000: Fire Knight Helm
+    5180100: Fire Knight Armor
+    5180200: Fire Knight Gauntlets
+    5180300: Fire Knight Greaves
+    5182000: Death Mask Helm
+    5183000: Winged Serpent Helm
+    5184000: Salza's Hood
+    5190000: Leather Headband
+    5190100: Gloried Attire
+    5190200: Leather Arm Wraps
+    5190300: Leather Leg Wraps
+    5191000: Leather Crown
+    5191100: Highland Attire
+    5200000: Death Knight Helm
+    5200100: Death Knight Armor
+    5200200: Death Knight Gauntlets
+    5200300: Death Knight Greaves
+    5210000: Curseblade Mask
+    5210100: Ascetic's Loincloth
+    5210200: Ascetic's Wrist Guards
+    5210300: Ascetic's Ankle Guards
+    5220000: Messmer's Helm
+    5220100: Messmer's Armor
+    5220200: Messmer's Gauntlets
+    5220300: Messmer's Greaves
+    5230000: Gravebird Helm
+    5230100: Gravebird's Blackquill Armor
+    5230200: Gravebird Bracelets
+    5230300: Gravebird Anklets
+    5231100: Gravebird Armor
+    5240000: Common Soldier Helm
+    5240100: Common Soldier Cloth Armor
+    5240200: Common Soldier Gauntlets
+    5240300: Common Soldier Greaves
+    5250000: Horned Warrior Helm
+    5250100: Horned Warrior Armor
+    5250200: Horned Warrior Gauntlets
+    5250300: Horned Warrior Greaves
+    5252000: Divine Beast Helm
+    5252100: Divine Beast Warrior Armor
+    5253000: Divine Bird Helm
+    5253100: Divine Bird Warrior Armor
+    5253200: Divine Bird Warrior Gauntlets
+    5253300: Divine Bird Warrior Greaves
+    5260000: Rellana's Helm
+    5260100: Rellana's Armor
+    5260200: Rellana's Gloves
+    5260300: Rellana's Greaves
+    5270000: Young Lion's Helm
+    5270100: Young Lion's Armor
+    5270200: Young Lion's Gauntlets
+    5270300: Young Lion's Greaves
+    5272000: Circlet of Light
+    5280000: Shadow Militiaman Helm
+    5280100: Shadow Militiaman Armor
+    5280200: Shadow Militiaman Gauntlets
+    5280300: Shadow Militiaman Greaves
+    5290000: Divine Beast Head
+    5300000: St. Trina's Blossom
+    5310000: Crucible Hammer-Helm
+    5320000: Greatjar
+    5330000: Imp Head (Lion)
+  weapon:
+    1000000: Dagger
+    1010000: Black Knife
+    1020000: Parrying Dagger
+    1030000: Miséricorde
+    1040000: Reduvia
+    1050000: Crystal Knife
+    1060000: Celebrant's Sickle
+    1070000: Glintstone Kris
+    1080000: Scorpion's Stinger
+    1090000: Great Knife
+    1100000: Wakizashi
+    1110000: Cinquedea
+    1130000: Ivory Sickle
+    1140000: Bloodstained Dagger
+    1150000: Erdsteel Dagger
+    1160000: Blade of Calling
+    1500000: Main-gauche
+    1510000: Fire Knight's Shortsword
+    2000000: Longsword
+    2010000: Short Sword
+    2020000: Broadsword
+    2040000: Lordsworn's Straight Sword
+    2050000: Weathered Straight Sword
+    2060000: Ornamental Straight Sword
+    2070000: Golden Epitaph
+    2080000: Nox Flowing Sword
+    2090000: Inseparable Sword
+    2110000: Coded Sword
+    2140000: Sword of Night and Flame
+    2150000: Crystal Sword
+    2180000: Carian Knight's Sword
+    2190000: Sword of St. Trina
+    2200000: Miquellan Knight's Sword
+    2210000: Cane Sword
+    2220000: Regalia of Eochaid
+    2230000: Noble's Slender Sword
+    2240000: Warhawk's Talon
+    2250000: Lazuli Glintstone Sword
+    2260000: Rotten Crystal Sword
+    2510000: Velvet Sword of St. Trina
+    2520000: Star-Lined Sword
+    2530000: Carian Sorcery Sword
+    2540000: Stone-Sheathed Sword
+    2550000: Sword of Light
+    2560000: Sword of Darkness
+    3000000: Bastard Sword
+    3010000: Forked Greatsword
+    3020000: Iron Greatsword
+    3030000: Lordsworn's Greatsword
+    3040000: Knight's Greatsword
+    3050000: Flamberge
+    3060000: Ordovis's Greatsword
+    3070000: Alabaster Lord's Sword
+    3080000: Banished Knight's Greatsword
+    3090000: Dark Moon Greatsword
+    3100000: Sacred Relic Sword
+    3130000: Helphen's Steeple
+    3140000: Blasphemous Blade
+    3150000: Marais Executioner's Sword
+    3160000: Sword of Milos
+    3170000: Golden Order Greatsword
+    3180000: Claymore
+    3190000: Gargoyle's Greatsword
+    3200000: Death's Poker
+    3210000: Gargoyle's Blackblade
+    3500000: Sword Lance
+    3510000: Greatsword of Damnation
+    3520000: Lizard Greatsword
+    3550000: Greatsword of Solitude
+    4000000: Greatsword
+    4010000: Watchdog's Greatsword
+    4020000: Maliketh's Black Blade
+    4030000: Troll's Golden Sword
+    4040000: Zweihander
+    4050000: Starscourge Greatsword
+    4060000: Royal Greatsword
+    4070000: Godslayer's Greatsword
+    4080000: Ruins Greatsword
+    4100000: Grafted Blade Greatsword
+    4110000: Troll Knight's Sword
+    4500000: Ancient Meteoric Ore Greatsword
+    4520000: Fire Knight's Greatsword
+    4530000: Greatsword of Radahn (Lord)
+    4540000: Moonrithyll's Knight Sword
+    4550000: Greatsword of Radahn (Light)
+    5000000: Estoc
+    5010000: Cleanrot Knight's Sword
+    5020000: Rapier
+    5030000: Rogier's Rapier
+    5040000: Antspur Rapier
+    5050000: Frozen Needle
+    5060000: Noble's Estoc
+    6000000: Bloody Helice
+    6010000: Godskin Stitcher
+    6020000: Great Épée
+    6040000: Dragon King's Cragblade
+    6500000: Queelign's Greatsword
+    7000000: Falchion
+    7010000: Beastman's Curved Sword
+    7020000: Shotel
+    7030000: Shamshir
+    7040000: Bandit's Curved Sword
+    7050000: Magma Blade
+    7060000: Flowing Curved Sword
+    7070000: Wing of Astel
+    7080000: Scavenger's Curved Sword
+    7100000: Eclipse Shotel
+    7110000: Serpent-God's Curved Sword
+    7120000: Mantis Blade
+    7140000: Scimitar
+    7150000: Grossmesser
+    7500000: Spirit Sword
+    7510000: Falx
+    7520000: Dancing Blade of Ranah
+    7530000: Horned Warrior's Sword
+    8010000: Onyx Lord's Greatsword
+    8020000: Dismounter
+    8030000: Bloodhound's Fang
+    8040000: Magma Wyrm's Scalesword
+    8050000: Zamor Curved Sword
+    8060000: Omen Cleaver
+    8070000: Monk's Flameblade
+    8080000: Beastman's Cleaver
+    8100000: Morgott's Cursed Sword
+    8500000: Putrescence Cleaver
+    8510000: Freyja's Greatsword
+    8520000: Horned Warrior's Greatsword
+    9000000: Uchigatana
+    9010000: Nagakiba
+    9020000: Hand of Malenia
+    9030000: Meteoric Ore Blade
+    9040000: Rivers of Blood
+    9060000: Moonveil
+    9070000: Dragonscale Blade
+    9080000: Serpentbone Blade
+    9500000: Sword of Night
+    10000000: Twinblade
+    10010000: Godskin Peeler
+    10030000: Twinned Knight Swords
+    10050000: Eleonora's Poleblade
+    10080000: Gargoyle's Twinblade
+    10090000: Gargoyle's Black Blades
+    10500000: Euporia
+    10510000: Black Steel Twinblade
+    11000000: Mace
+    11010000: Club
+    11030000: Curved Club
+    11040000: Warpick
+    11050000: Morning Star
+    11060000: Varré's Bouquet
+    11070000: Spiked Club
+    11080000: Hammer
+    11090000: Monk's Flamemace
+    11100000: Envoy's Horn
+    11110000: Scepter of the All-Knowing
+    11120000: Nox Flowing Hammer
+    11130000: Ringed Finger
+    11140000: Stone Club
+    11150000: Marika's Hammer
+    11500000: Flowerstone Gavel
+    12000000: Large Club
+    12010000: Greathorn Hammer
+    12020000: Battle Hammer
+    12060000: Great Mace
+    12080000: Curved Great Club
+    12130000: Celebrant's Skull
+    12140000: Pickaxe
+    12150000: Beastclaw Greathammer
+    12160000: Envoy's Long Horn
+    12170000: Cranial Vessel Candlestand
+    12180000: Great Stars
+    12190000: Brick Hammer
+    12200000: Devourer's Scepter
+    12210000: Rotten Battle Hammer
+    12500000: Smithscript Greathammer
+    12510000: Anvil Hammer
+    12520000: Black Steel Greathammer
+    12530000: Bloodfiend's Arm
+    13000000: Nightrider Flail
+    13010000: Flail
+    13020000: Family Heads
+    13030000: Bastard's Stars
+    13040000: Chainlink Flail
+    13500000: Serpent Flail
+    14000000: Battle Axe
+    14010000: Forked Hatchet
+    14020000: Hand Axe
+    14030000: Jawbone Axe
+    14040000: Iron Cleaver
+    14050000: Ripple Blade
+    14060000: Celebrant's Cleaver
+    14080000: Icerind Hatchet
+    14100000: Highland Axe
+    14110000: Sacrificial Axe
+    14120000: Rosus' Axe
+    14140000: Stormhawk Axe
+    14500000: Smithscript Axe
+    14510000: Death Knight's Twin Axes
+    14520000: Messmer Soldier's Axe
+    14540000: Forked-Tongue Hatchet
+    15000000: Greataxe
+    15010000: Warped Axe
+    15020000: Great Omenkiller Cleaver
+    15030000: Crescent Moon Axe
+    15040000: Axe of Godrick
+    15050000: Longhaft Axe
+    15060000: Rusted Anchor
+    15080000: Executioner's Greataxe
+    15110000: Winged Greathorn
+    15120700: Sacred Butchering Knife
+    15130000: Gargoyle's Great Axe
+    15140000: Gargoyle's Black Axe
+    15500000: Death Knight's Longhaft Axe
+    15510000: Bonny Butchering Knife
+    16000000: Short Spear
+    16010000: Spear
+    16020000: Crystal Spear
+    16030000: Clayman's Harpoon
+    16040000: Cleanrot Spear
+    16050000: Partisan
+    16060000: Celebrant's Rib-Rake
+    16070000: Pike
+    16080000: Torchpole
+    16090000: Bolt of Gransax
+    16110000: Cross-Naginata
+    16120000: Death Ritual Spear
+    16130000: Inquisitor's Girandole
+    16140000: Spiked Spear
+    16150000: Iron Spear
+    16160000: Rotten Crystal Spear
+    16500000: Smithscript Spear
+    16520000: Swift Spear
+    16540000: Bloodfiend's Fork
+    16550000: Bloodfiend's Sacred Spear
+    17010000: Mohgwyn's Sacred Spear
+    17020000: Siluria's Tree
+    17030000: Serpent-Hunter
+    17050000: Vyke's War Spear
+    17060000: Lance
+    17070000: Treespear
+    17500000: Spear of the Impaler
+    17510000: Messmer Soldier's Spear
+    17520000: Barbed Staff-Spear
+    18000000: Halberd
+    18010000: Pest's Glaive
+    18020000: Lucerne
+    18030000: Banished Knight's Halberd
+    18040000: Commander's Standard
+    18050000: Nightrider Glaive
+    18060000: Ripple Crescent Halberd
+    18070000: Vulgar Militia Saw
+    18080000: Golden Halberd
+    18090000: Glaive
+    18100000: Loretta's War Sickle
+    18110000: Guardian's Swordspear
+    18130000: Vulgar Militia Shotel
+    18140000: Dragon Halberd
+    18150000: Gargoyle's Halberd
+    18160000: Gargoyle's Black Halberd
+    18500000: Spirit Glaive
+    18510000: Poleblade of the Bud
+    19000000: Scythe
+    19010000: Grave Scythe
+    19020000: Halo Scythe
+    19060000: Winged Scythe
+    19500000: Obsidian Lamina
+    20000000: Whip
+    20020000: Thorned Whip
+    20030000: Magma Whip Candlestick
+    20050000: Hoslow's Petal Whip
+    20060000: Giant's Red Braid
+    20070000: Urumi
+    20500000: Tooth Whip
+    21000000: Caestus
+    21010000: Spiked Caestus
+    21060000: Grafted Dragon
+    21070000: Iron Ball
+    21080000: Star Fist
+    21100000: Katar
+    21110000: Clinging Bone
+    21120000: Veteran's Prosthesis
+    21130000: Cipher Pata
+    21500000: Thiollier's Hidden Needle
+    21510000: Pata
+    21520000: Poisoned Hand
+    21530000: Madding Hand
+    21540000: Golem Fist
+    21550000: Shield of Night
+    22000000: Hookclaws
+    22010000: Venomous Fang
+    22020000: Bloodhound Claws
+    22030000: Raptor Talons
+    22500000: Claws of Night
+    23000000: Prelate's Inferno Crozier
+    23010000: Watchdog's Staff
+    23020000: Great Club
+    23030000: Envoy's Greathorn
+    23040000: Duelist Greataxe
+    23050000: Axe of Godfrey
+    23060000: Dragon Greatclaw
+    23070000: Staff of the Avatar
+    23080000: Fallingstar Beast Jaw
+    23100000: Ghiza's Wheel
+    23110000: Giant-Crusher
+    23120000: Golem's Halberd
+    23130000: Troll's Hammer
+    23140000: Rotten Staff
+    23150000: Rotten Greataxe
+    23500000: Devonia's Hammer
+    23510000: Shadow Sunflower Blossom
+    23520000: Gazing Finger
+    24000000: Torch
+    24020000: Steel-Wire Torch
+    24040000: St. Trina's Torch
+    24050000: Ghostflame Torch
+    24060000: Beast-Repellent Torch
+    24070000: Sentry's Torch
+    24500000: Nanaya's Torch
+    24510000: Lamenting Visage
+    30000000: Buckler
+    30010000: Perfumer's Shield
+    30020000: Man-Serpent's Shield
+    30030000: Rickety Shield
+    30040000: Pillory Shield
+    30060000: Beastman's Jar-Shield
+    30070000: Red Thorn Roundshield
+    30080000: Scripture Wooden Shield
+    30090000: Riveted Wooden Shield
+    30100000: Blue-White Wooden Shield
+    30110000: Rift Shield
+    30120000: Iron Roundshield
+    30130000: Gilded Iron Shield
+    30140000: Ice Crest Shield
+    30150000: Smoldering Shield
+    30190000: Spiralhorn Shield
+    30200000: Coil Shield
+    30510000: Smithscript Shield
+    31000000: Kite Shield
+    31010000: Marred Leather Shield
+    31020000: Marred Wooden Shield
+    31030000: Banished Knight's Shield
+    31040000: Albinauric Shield
+    31050000: Sun Realm Shield
+    31060000: Silver Mirrorshield
+    31070000: Round Shield
+    31080000: Scorpion Kite Shield
+    31090000: Twinbird Kite Shield
+    31100000: Blue-Gold Kite Shield
+    31130000: Brass Shield
+    31140000: Great Turtle Shell
+    31170000: Shield of the Guilty
+    31190000: Carian Knight's Shield
+    31230000: Large Leather Shield
+    31240000: Horse Crest Wooden Shield
+    31250000: Candletree Wooden Shield
+    31260000: Flame Crest Wooden Shield
+    31270000: Hawk Crest Wooden Shield
+    31280000: Beast Crest Heater Shield
+    31290000: Red Crest Heater Shield
+    31300000: Blue Crest Heater Shield
+    31310000: Eclipse Crest Heater Shield
+    31320000: Inverted Hawk Heater Shield
+    31330000: Heater Shield
+    31340000: Black Leather Shield
+    31500000: Messmer Soldier Shield
+    31510000: Wolf Crest Shield
+    31520000: Serpent Crest Shield
+    31530000: Golden Lion Shield
+    32000000: Dragon Towershield
+    32020000: Distinguished Greatshield
+    32030000: Crucible Hornshield
+    32040000: Dragonclaw Shield
+    32050000: Briar Greatshield
+    32080000: Erdtree Greatshield
+    32090000: Golden Beast Crest Shield
+    32120000: Jellyfish Shield
+    32130000: Fingerprint Stone Shield
+    32140000: Icon Shield
+    32150000: One-Eyed Shield
+    32160000: Visage Shield
+    32170000: Spiked Palisade Shield
+    32190000: Manor Towershield
+    32200000: Crossed-Tree Towershield
+    32210000: Inverted Hawk Towershield
+    32220000: Ant's Skull Plate
+    32230000: Redmane Greatshield
+    32240000: Eclipse Crest Greatshield
+    32250000: Cuckoo Greatshield
+    32260000: Golden Greatshield
+    32270000: Gilded Greatshield
+    32280000: Haligtree Crest Greatshield
+    32290000: Wooden Greatshield
+    32300000: Lordsworn's Shield
+    32500000: Black Steel Greatshield
+    32520000: Verdigris Greatshield
+    33000000: Glintstone Staff
+    33040000: Crystal Staff
+    33050000: Gelmir Glintstone Staff
+    33060000: Demi-Human Queen's Staff
+    33090000: Carian Regal Scepter
+    33120000: Digger's Staff
+    33130000: Astrologer's Staff
+    33170000: Carian Glintblade Staff
+    33180000: Prince of Death's Staff
+    33190000: Albinauric Staff
+    33200000: Academy Glintstone Staff
+    33210000: Carian Glintstone Staff
+    33230000: Azur's Glintstone Staff
+    33240000: Lusat's Glintstone Staff
+    33250000: Meteorite Staff
+    33260000: Staff of the Guilty
+    33270000: Rotten Crystal Staff
+    33280000: Staff of Loss
+    33510000: Staff of the Great Beyond
+    33520000: Maternal Staff
+    34000000: Finger Seal
+    34010000: Godslayer's Seal
+    34020000: Giant's Seal
+    34030000: Gravel Stone Seal
+    34040000: Clawmark Seal
+    34060000: Golden Order Seal
+    34070000: Erdtree Seal
+    34080000: Dragon Communion Seal
+    34090000: Frenzied Flame Seal
+    34500000: Dryleaf Seal
+    34510000: Fire Knight's Seal
+    34520000: Spiraltree Seal
+    40000000: Shortbow
+    40010000: Misbegotten Shortbow
+    40020000: Red Branch Shortbow
+    40030000: Harp Bow
+    40050000: Composite Bow
+    40500000: Bone Bow
+    41000000: Longbow
+    41010000: Albinauric Bow
+    41020000: Horn Bow
+    41030000: Erdtree Bow
+    41040000: Serpent Bow
+    41060000: Pulley Bow
+    41070000: Black Bow
+    41510000: Ansbach's Longbow
+    42000000: Lion Greatbow
+    42010000: Golem Greatbow
+    42030000: Erdtree Greatbow
+    42040000: Greatbow
+    42500000: Igon's Greatbow
+    43000000: Soldier's Crossbow
+    43020000: Light Crossbow
+    43030000: Heavy Crossbow
+    43050000: Pulley Crossbow
+    43060000: Full Moon Crossbow
+    43080000: Arbalest
+    43110000: Crepus's Black-Key Crossbow
+    43500000: Repeating Crossbow
+    43510000: Spread Crossbow
+    44000000: Hand Ballista
+    44010000: Jar Cannon
+    44500000: Rabbath's Cannon
+    50000000: Arrow
+    50010000: Fire Arrow
+    50020000: Serpent Arrow
+    50040000: St. Trina's Arrow
+    50060000: Shattershard Arrow (Fletched)
+    50080000: Rainbow Stone Arrow (Fletched)
+    50090000: Golden Arrow
+    50100000: Dwelling Arrow
+    50240000: Spiritflame Arrow
+    51000000: Great Arrow
+    51010000: Golem's Great Arrow
+    51020000: Golden Great Arrow
+    51030000: Golem's Magic Arrow
+    51040000: Radahn's Spear
+    51500000: Igon's Harpoon
+    52000000: Bolt
+    52010000: Lightning Bolt
+    52020000: Perfumer's Bolt
+    52030000: Black-Key Bolt
+    52040000: Burred Bolt
+    52050000: Meteor Bolt
+    52060000: Explosive Bolt
+    52070000: Golden Bolt
+    52080000: Lordsworn's Bolt
+    52190000: Flaming Bolt
+    53000000: Ballista Bolt
+    53010000: Lightning Greatbolt
+    53020000: Explosive Greatbolt
+    53500000: Rabbath's Greatbolt
+    60500000: Dryleaf Arts
+    60510000: Dane's Footwork
+    61500000: Firespark Perfume Bottle
+    61510000: Chilling Perfume Bottle
+    61520000: Frenzyflame Perfume Bottle
+    61530000: Lightning Perfume Bottle
+    61540000: Deadly Poison Perfume Bottle
+    62500000: Dueling Shield
+    62510000: Carian Thrusting Shield
+    63500000: Smithscript Dagger
+    64500000: Backhand Blade
+    64510000: Smithscript Cirque
+    64520000: Curseblade's Cirque
+    66500000: Great Katana
+    66510000: Dragon-Hunter's Great Katana
+    66520000: Rakshasa's Great Katana
+    67500000: Milady
+    67510000: Leda's Sword
+    67520000: Rellana's Twin Blades
+    68500000: Beast Claw
+    68510000: Red Bear's Claw
