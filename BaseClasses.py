@@ -1463,7 +1463,7 @@ class EntranceType(IntEnum):
 
 
 class Entrance:
-    access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
+    access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)  # TODO deprecate
     hide_path: bool = False
     player: int
     name: str
@@ -1491,6 +1491,33 @@ class Entrance:
             return True
 
         return False
+
+    def player_can_reach(self, state: PlayerState) -> bool:
+        """
+        Checks if the player can reach this region. Falls back to the default method call if the world has a custom
+        implementation.
+
+        :param state: The state object of this player.
+
+        :return: Whether the player can currently reach this entrance.
+        """
+        # TODO have worlds move to new method and deprecate old
+        # custom override
+        if self.can_reach != Location.can_reach:
+            return self.can_reach(state._parent)
+
+        if self.parent_region.player_can_reach(state) and self.player_access_rule(state):
+            if not self.hide_path and self not in state._parent.path:
+                # TODO we should probably split up path too?
+                state._parent.path[self] = (
+                    self.name,
+                    state._parent.path.get(self.parent_region, (self.parent_region.name, None)),
+                )
+            return True
+        return False
+
+    def player_access_rule(self, state: PlayerState) -> bool:
+        return self.access_rule(state._parent)
 
     def connect(self, region: Region, addresses: Any = None, target: Any = None) -> None:
         self.connected_region = region
@@ -1625,6 +1652,23 @@ class Region:
             state.update_reachable_regions(self.player)
         return self in state.states[self.player].reachable_regions
 
+    def player_can_reach(self, state: PlayerState) -> bool:
+        """
+        Determines if the player can currently reach this region.
+
+        :param state: The state to check access with
+
+        :return: Whether this region is reachable
+        """
+        # TODO deprecate
+        # custom implementation
+        if self.can_reach != Region.can_reach:
+            return self.can_reach(state._parent)
+
+        if state.stale:
+            state.update_reachable_regions()
+        return self in state.reachable_regions
+
     @property
     def hint_text(self) -> str:
         return self._hint_text if self._hint_text else self.name
@@ -1723,7 +1767,7 @@ class Location:
     show_in_spoiler: bool = True
     progress_type: LocationProgressType = LocationProgressType.DEFAULT
     always_allow: Callable[[CollectionState, Item], bool] = staticmethod(lambda state, item: False)
-    access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
+    access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True) # TODO deprecate
     item_rule: Callable[[Item], bool] = staticmethod(lambda item: True)
     item: Optional[Item] = None
 
@@ -1747,6 +1791,18 @@ class Location:
         # Region.can_reach is just a cache lookup, so placing it first for faster abort on average
         assert self.parent_region, f"called can_reach on a Location \"{self}\" with no parent_region"
         return self.parent_region.can_reach(state) and self.access_rule(state)
+
+    def player_can_reach(self, state: PlayerState) -> bool:
+        # TODO deprecate
+        if self.can_reach != Location.can_reach:
+            return self.can_reach(state._parent)
+
+        assert self.parent_region, f"Called can_reach on a Location \"{self}\" with no parent_region"
+        return self.parent_region.player_can_reach(state) and self.player_access_rule(state)
+
+    # TODO make this a staticmethod on the class once the old way is deprecated
+    def player_access_rule(self, state: PlayerState) -> bool:
+        return self.access_rule(state._parent)
 
     def place_locked_item(self, item: Item):
         if self.item:
