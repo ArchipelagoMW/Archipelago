@@ -589,8 +589,7 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
                                     if self.entrance_text != "Vanilla"
                                     else "", ". (", self.status_text.lower(), ")"))
                     temp = MarkupLabel(text).markup
-                    text = "".join(
-                        part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
+                    text = "".join(part for part in temp if not part.startswith("["))
                     Clipboard.copy(escape_markup(text).replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]"))
                     return self.parent.select_with_touch(self.index, touch)
         else:
