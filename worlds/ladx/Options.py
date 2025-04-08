@@ -53,8 +53,8 @@ class Logic(Choice, LADXROption):
 
 class TradeQuest(DefaultOffToggle, LADXROption):
     """
-    Adds the trade items to the pool (the trade locations will always be local
-    items).
+    Trade quest items are randomized. Each NPC takes its normal trade quest
+    item, but gives a random item.
     """
     display_name = "Trade Quest"
     ladxr_name = "tradequest"
