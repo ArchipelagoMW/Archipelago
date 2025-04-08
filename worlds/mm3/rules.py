@@ -355,6 +355,8 @@ def set_rules(world: "MM3World") -> None:
         for location in etank_1ups["Hard Man Stage"]:
             add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
         add_rule(world.get_location(names.top_man_c6), lambda state: has_rush_vertical(state, world.player))
+        for location in (names.spark_man_c1, names.spark_man_c2):
+            add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
         add_rule(world.get_location(names.doc_needle_c2), lambda state: has_rush_jet(state, world.player))
         add_rule(world.get_location(names.doc_needle_c3), lambda state: has_rush_jet(state, world.player))
         add_rule(world.get_location(names.doc_gemini_c1), lambda state: has_rush_vertical(state, world.player))

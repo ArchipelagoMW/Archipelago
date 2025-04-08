@@ -11,7 +11,7 @@ from .items import (item_table, item_names, MM3Item, filler_item_weights, robot_
 from .locations import (MM3Location, mm3_regions, MM3Region, energy_pickups, etank_1ups, lookup_location_to_id,
                         location_groups)
 from .rom import patch_rom, MM3ProcedurePatch, MM3LCHASH, MM3VCHASH, PROTEUSHASH, MM3NESHASH
-from .options import MM3Options
+from .options import MM3Options, Consumables
 from .client import MegaMan3Client
 from .rules import set_rules, weapon_damage, robot_masters, weapons_to_name, minimum_weakness_requirement
 import os
@@ -122,12 +122,12 @@ class MM3World(World):
                 if location.address is None and location.name is not gamma:
                     location.place_locked_item(MM3Item(location.name, ItemClassification.progression,
                                                        None, self.player))
-            if self.options.consumables in (self.options.consumables.option_1up_etank,
-                                            self.options.consumables.option_all):
+            if self.options.consumables in (Consumables.option_1up_etank,
+                                            Consumables.option_all):
                 if region in etank_1ups:
                     stage.add_locations(etank_1ups[region], MM3Location)
-            if self.options.consumables in (self.options.consumables.option_weapon_health,
-                                            self.options.consumables.option_all):
+            if self.options.consumables in (Consumables.option_weapon_health,
+                                            Consumables.option_all):
                 if region in energy_pickups:
                     stage.add_locations(energy_pickups[region], MM3Location)
             self.multiworld.regions.append(stage)
@@ -156,11 +156,11 @@ class MM3World(World):
         itempool.extend([self.create_item(name) for name in robot_master_weapon_table.keys()])
         itempool.extend([self.create_item(name) for name in rush_item_table.keys()])
         total_checks = 31
-        if self.options.consumables in (self.options.consumables.option_1up_etank,
-                                        self.options.consumables.option_all):
+        if self.options.consumables in (Consumables.option_1up_etank,
+                                        Consumables.option_all):
             total_checks += 33
-        if self.options.consumables in (self.options.consumables.option_weapon_health,
-                                        self.options.consumables.option_all):
+        if self.options.consumables in (Consumables.option_weapon_health,
+                                        Consumables.option_all):
             total_checks += 106
         remaining = total_checks - len(itempool)
         itempool.extend([self.create_item(name)
@@ -190,9 +190,9 @@ class MM3World(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def fill_hook(self,
-                  progitempool: List["Item"],
-                  usefulitempool: List["Item"],
-                  filleritempool: List["Item"],
+                  prog_item_pool: List["Item"],
+                  useful_item_pool: List["Item"],
+                  filler_item_pool: List["Item"],
                   fill_locations: List["Location"]) -> None:
         # on a solo gen, fill can try to force Wily into sphere 2, but for most generations this is impossible
         # MM3 is worse than MM2 here, some of the RBMs can also require Rush
@@ -209,10 +209,10 @@ class MM3World(World):
             7: shadow_man_stage
         }
         affected_rbm = [2, 3]  # Gemini and Hard will always have this happen
-        possible_rbm = [0, 7]  # Air and Flash are always valid targets, due to Rush Marine/Jet receive
+        possible_rbm = [0, 7]  # Needle and Shadow are always valid targets, due to Rush Marine/Jet receive
         if self.options.consumables:
             possible_rbm.extend([4, 5])  # every stage has at least one of each consumable
-            if self.options.consumables == self.options.consumables.option_weapon_health:
+            if self.options.consumables in (Consumables.option_weapon_health, Consumables.option_all):
                 possible_rbm.extend([1, 6])
             else:
                 affected_rbm.extend([1, 6])
@@ -220,7 +220,7 @@ class MM3World(World):
             affected_rbm.extend([1, 4, 5, 6])  # only two checks on non consumables
         if self.options.starting_robot_master.value in affected_rbm:
             rbm_names = list(map(lambda s: rbm_to_item[s], possible_rbm))
-            valid_second = [item for item in progitempool
+            valid_second = [item for item in prog_item_pool
                             if item.name in rbm_names
                             and item.player == self.player]
             placed_item = self.random.choice(valid_second)
@@ -228,7 +228,7 @@ class MM3World(World):
                             f" - Defeated")
             rbm_location = self.get_location(rbm_defeated)
             rbm_location.place_locked_item(placed_item)
-            progitempool.remove(placed_item)
+            prog_item_pool.remove(placed_item)
             fill_locations.remove(rbm_location)
             target_rbm = (placed_item.code & 0xF) - 1
             if self.options.strict_weakness or (self.options.random_weakness
@@ -237,7 +237,7 @@ class MM3World(World):
                 weaknesses = [weapon for weapon in range(1, 9)
                               if self.weapon_damage[weapon][target_rbm] >= minimum_weakness_requirement[weapon]]
                 weapons = list(map(lambda s: weapons_to_name[s], weaknesses))
-                valid_weapons = [item for item in progitempool
+                valid_weapons = [item for item in prog_item_pool
                                  if item.name in weapons
                                  and item.player == self.player]
                 placed_weapon = self.random.choice(valid_weapons)
@@ -245,7 +245,7 @@ class MM3World(World):
                                    if idx == 0x890101 + self.options.starting_robot_master.value)
                 weapon_location = self.get_location(weapon_name)
                 weapon_location.place_locked_item(placed_weapon)
-                progitempool.remove(placed_weapon)
+                prog_item_pool.remove(placed_weapon)
                 fill_locations.remove(weapon_location)
 
     def generate_output(self, output_directory: str) -> None:
