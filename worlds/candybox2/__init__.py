@@ -11,7 +11,6 @@ from .options import CandyBox2Options
 from .regions import create_regions, connect_entrances
 from .rules import set_rules
 
-
 EXPECTED_CLIENT_VERSION = "20250331-1+"
 
 class CandyBox2WebWorld(WebWorld):
@@ -39,7 +38,11 @@ class CandyBox2World(World):
     topology_present = True
 
     entrance_randomisation: ERPlacementState = None
-    original_entrances: list[tuple[str, str]] = []
+    original_entrances: list[tuple[str, str]]
+
+    def __init__(self, multiworld, player):
+        super(CandyBox2World, self).__init__(multiworld, player)
+        self.original_entrances: list[tuple[str, str]] = []
 
     def create_regions(self) -> None:
         return create_regions(self)

@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import Callable, Optional
+from typing import Callable, Optional, TYPE_CHECKING
 
 from BaseClasses import Region, MultiWorld, Entrance, CollectionState
 from entrance_rando import disconnect_entrance_for_randomization, randomize_entrances, ERPlacementState
@@ -19,6 +19,9 @@ from .locations import candy_box_locations, CandyBox2Location, village_shop_loca
 from .rules import weapon_is_at_least, armor_is_at_least, chocolate_count, can_farm_candies, can_grow_lollipops
 
 
+if TYPE_CHECKING:
+    from . import CandyBox2World
+
 class CandyBox2Region(Region):
     pass
 
@@ -26,7 +29,7 @@ class Groups(IntEnum):
     QUESTS = 1
     X_QUEST = 2
 
-def create_regions(world):
+def create_regions(world: "CandyBox2World"):
     multiworld = world.multiworld
     player = world.player
 
@@ -152,7 +155,7 @@ def populate_region(world: MultiWorld, player: int, region: CandyBox2Region, loc
 
     return region, entrance
 
-def mark_quest_entrance(world, entrance: Entrance, name: str):
+def mark_quest_entrance(world: "CandyBox2World", entrance: Entrance, name: str):
     world.original_entrances.append((name, entrance.connected_region.name))
     if world.options.quest_randomisation == "off":
         return
@@ -161,7 +164,7 @@ def mark_quest_entrance(world, entrance: Entrance, name: str):
     entrance.randomization_group = Groups.QUESTS
     disconnect_entrance_for_randomization(entrance, Groups.QUESTS, entrance.connected_region.name)
 
-def mark_x_quest_entrance(world, entrance: Entrance, name: str):
+def mark_x_quest_entrance(world: "CandyBox2World", entrance: Entrance, name: str):
     world.original_entrances.append((name, entrance.connected_region.name))
     if world.options.quest_randomisation == "off":
         return
@@ -170,7 +173,7 @@ def mark_x_quest_entrance(world, entrance: Entrance, name: str):
     entrance.randomization_group = Groups.X_QUEST
     disconnect_entrance_for_randomization(entrance, Groups.X_QUEST, entrance.connected_region.name)
 
-def connect_entrances(world):
+def connect_entrances(world: "CandyBox2World"):
     if world.options.quest_randomisation == "off":
         return
 

@@ -1,8 +1,11 @@
+from typing import TYPE_CHECKING
+
 from BaseClasses import CollectionState
-from worlds.AutoWorld import World
-from worlds.candybox2 import CandyBox2Options, items
-from worlds.candybox2.items import candy_box_2_base_id
-from worlds.generic.Rules import set_rule, add_rule
+from worlds.candybox2.items import candy_box_2_base_id, items
+from worlds.generic.Rules import add_rule
+
+if TYPE_CHECKING:
+    from . import CandyBox2World
 
 weapons = [
     "Nothing (Weapon)",
@@ -25,7 +28,7 @@ armors = [
     "Enchanted Knight Body Armour"
 ]
 
-def has_projectiles(world, state: CollectionState, player: int):
+def has_projectiles(world: "CandyBox2World", state: CollectionState, player: int):
     return state.has("Red Enchanted Gloves", player) or state.has("Octopus King Crown with Jaspers", player) or has_weapon(world, state, player, "Enchanted Monkey Wizard Staff")
 
 def can_jump(state: CollectionState, player: int):
@@ -37,16 +40,16 @@ def can_fly(state: CollectionState, player: int):
 def can_escape_hole(state: CollectionState, player: int):
     return can_fly(state, player) or state.has("Beginners' Grimoire", player)
 
-def sea_entrance(world, state: CollectionState, player: int):
+def sea_entrance(world: "CandyBox2World", state: CollectionState, player: int):
     return weapon_is_at_least(world, state, player, "Summoning Tribal Spear") and has_projectiles(world, state,
                                                                                                   player) and armor_is_at_least(state, player,
                                                                                              "Lightweight Body Armour")
 
-def can_beat_sharks(world, state: CollectionState, player: int):
+def can_beat_sharks(world: "CandyBox2World", state: CollectionState, player: int):
     return sea_entrance(world, state, player) and weapon_is_at_least(world, state, player,
                                                                      "Enchanted Monkey Wizard Staff")
 
-def set_rules(world: World, player: int):
+def set_rules(world: "CandyBox2World", player: int):
 
     add_rule(world.get_location("Disappointed Emote Chocolate Bar"), lambda state: can_farm_candies(state, player))
 
@@ -149,7 +152,7 @@ def set_rules(world: World, player: int):
     add_rule(world.get_location("Village Shop Chocolate Bar"), lambda state: can_farm_candies(state, player))
     add_rule(world.get_location("Village Shop Candy Merchant's Hat"), lambda state: can_farm_candies(state, player))
 
-def has_weapon(world, state: CollectionState, player: int, weapon: str):
+def has_weapon(world: "CandyBox2World", state: CollectionState, player: int, weapon: str):
     if state.has(weapon, player):
         return True
 
@@ -160,7 +163,7 @@ def has_weapon(world, state: CollectionState, player: int, weapon: str):
 
     return False
 
-def weapon_is_at_least(world, state: CollectionState, player: int, minimum_weapon: str):
+def weapon_is_at_least(world: "CandyBox2World", state: CollectionState, player: int, minimum_weapon: str):
     for weapon in weapons[weapons.index(minimum_weapon):]:
         if has_weapon(world, state, player, weapon):
             return True
