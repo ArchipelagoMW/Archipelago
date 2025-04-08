@@ -794,6 +794,12 @@ class PlayerState:
         ret.locations_checked = self.locations_checked.copy()
         return ret
 
+    def update_reachable_regions(self) -> None:
+        """
+        Determines and updates the reachability of the player's world.
+        """
+        self._parent.update_reachable_regions(self.player)
+
     def sweep_for_advancements(self, locations: Iterable[Location] | None = None) -> None:
         """
         Sweeps this player's world.

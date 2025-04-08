@@ -5,7 +5,7 @@ import time
 from collections import deque
 from collections.abc import Callable, Iterable
 
-from BaseClasses import CollectionState, Entrance, Region, EntranceType
+from BaseClasses import CollectionState, Entrance, PlayerState, Region, EntranceType
 from Options import Accessibility
 from worlds.AutoWorld import World
 
@@ -143,6 +143,8 @@ class ERPlacementState:
     """The world which is having its entrances randomized"""
     collection_state: CollectionState
     """The CollectionState backing the entrance randomization logic"""
+    player_state: PlayerState
+    """The individual PlayerState from the larger CollectionState"""
     coupled: bool
     """Whether entrance randomization is operating in coupled mode"""
 
@@ -152,14 +154,15 @@ class ERPlacementState:
         self.world = world
         self.coupled = coupled
         self.collection_state = world.multiworld.get_single_player_all_state(False, self.world.player, True)
+        self.player_state = self.collection_state.states[self.world.player]
 
     @property
     def placed_regions(self) -> set[Region]:
-        return self.collection_state.states[self.world.player].reachable_regions
+        return self.player_state.reachable_regions
 
     def find_placeable_exits(self, check_validity: bool, usable_exits: list[Entrance]) -> list[Entrance]:
         if check_validity:
-            blocked_connections = self.collection_state.states[self.world.player].blocked_connections
+            blocked_connections = self.player_state.blocked_connections
             placeable_randomized_exits = [ex for ex in usable_exits
                                           if not ex.connected_region
                                           and ex in blocked_connections
@@ -176,22 +179,23 @@ class ERPlacementState:
         target_region.entrances.remove(target_entrance)
         source_exit.connect(target_region)
 
-        self.collection_state.states[self.world.player].stale = True
+        self.player_state.stale = True
         self.placements.append(source_exit)
         self.pairings.append((source_exit.name, target_entrance.name))
 
     def test_speculative_connection(self, source_exit: Entrance, target_entrance: Entrance,
                                     usable_exits: set[Entrance]) -> bool:
         copied_state = self.collection_state.copy()
+        copied_player_state = copied_state.states[self.world.player]
         # simulated connection. A real connection is unsafe because the region graph is shallow-copied and would
         # propagate back to the real multiworld.
-        copied_state.states[self.world.player].reachable_regions.add(target_entrance.connected_region)
-        copied_state.states[self.world.player].blocked_connections.remove(source_exit)
-        copied_state.states[self.world.player].blocked_connections.update(target_entrance.connected_region.exits)
-        copied_state.update_reachable_regions(self.world.player)
-        copied_state.sweep_for_advancements()
+        copied_player_state.reachable_regions.add(target_entrance.connected_region)
+        copied_player_state.blocked_connections.remove(source_exit)
+        copied_player_state.blocked_connections.update(target_entrance.connected_region.exits)
+        copied_player_state.update_reachable_regions()
+        copied_player_state.sweep_for_advancements()
         # test that at there are newly reachable randomized exits that are ACTUALLY reachable
-        available_randomized_exits = copied_state.states[self.world.player].blocked_connections
+        available_randomized_exits = copied_player_state.blocked_connections
         for _exit in available_randomized_exits:
             if _exit.connected_region:
                 continue
@@ -353,7 +357,7 @@ def randomize_entrances(
         entrance_lookup.add(entrance)
 
     # place the menu region and connected start region(s)
-    er_state.collection_state.update_reachable_regions(world.player)
+    er_state.player_state.update_reachable_regions()
 
     def do_placement(source_exit: Entrance, target_entrance: Entrance) -> None:
         placed_exits, removed_entrances = er_state.connect(source_exit, target_entrance)
@@ -361,8 +365,8 @@ def randomize_entrances(
         for entrance in removed_entrances:
             entrance_lookup.remove(entrance)
         # propagate new connections
-        er_state.collection_state.update_reachable_regions(world.player)
-        er_state.collection_state.sweep_for_advancements()
+        er_state.player_state.update_reachable_regions()
+        er_state.player_state.sweep_for_advancements()
         if on_connect:
             on_connect(er_state, placed_exits)
 
