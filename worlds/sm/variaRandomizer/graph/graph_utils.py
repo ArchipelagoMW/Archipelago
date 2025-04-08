@@ -1,4 +1,5 @@
 import copy
+import random
 from ..logic.logic import Logic
 from ..utils.parameters import Knows
 from ..graph.location import locationsDict
@@ -135,8 +136,7 @@ class GraphUtils:
                 refused[apName] = cause
         return ret, refused
 
-    @staticmethod
-    def updateLocClassesStart(startGraphArea, split, possibleMajLocs, preserveMajLocs, nLocs, random):
+    def updateLocClassesStart(startGraphArea, split, possibleMajLocs, preserveMajLocs, nLocs):
         locs = locationsDict
         preserveMajLocs = [locs[locName] for locName in preserveMajLocs if locs[locName].isClass(split)]
         possLocs = [locs[locName] for locName in possibleMajLocs][:nLocs]
@@ -160,8 +160,7 @@ class GraphUtils:
         ap = getAccessPoint(startApName)
         return ap.Start['patches'] if 'patches' in ap.Start else []
 
-    @staticmethod
-    def createBossesTransitions(random):
+    def createBossesTransitions():
         transitions = vanillaBossesTransitions
         def isVanilla():
             for t in vanillaBossesTransitions:
@@ -181,15 +180,13 @@ class GraphUtils:
                 transitions.append((src,dst))
         return transitions
 
-    @staticmethod
-    def createAreaTransitions(lightAreaRando=False, *, random):
+    def createAreaTransitions(lightAreaRando=False):
         if lightAreaRando:
-            return GraphUtils.createLightAreaTransitions(random=random)
+            return GraphUtils.createLightAreaTransitions()
         else:
-            return GraphUtils.createRegularAreaTransitions(random=random)
+            return GraphUtils.createRegularAreaTransitions()
 
-    @staticmethod
-    def createRegularAreaTransitions(apList=None, apPred=None, *, random):
+    def createRegularAreaTransitions(apList=None, apPred=None):
         if apList is None:
             apList = Logic.accessPoints
         if apPred is None:
@@ -242,8 +239,7 @@ class GraphUtils:
             transitions.append((ap.Name, ap.Name))
 
     # crateria can be forced in corner cases
-    @staticmethod
-    def createMinimizerTransitions(startApName, locLimit, forcedAreas=None, *, random):
+    def createMinimizerTransitions(startApName, locLimit, forcedAreas=None):
         if forcedAreas is None:
             forcedAreas = []
         if startApName == 'Ceres':
@@ -320,8 +316,7 @@ class GraphUtils:
         GraphUtils.log.debug("FINAL MINIMIZER areas: "+str(areas))
         return transitions
 
-    @staticmethod
-    def createLightAreaTransitions(random):
+    def createLightAreaTransitions():
         # group APs by area
         aps = {}
         totalCount = 0
@@ -412,8 +407,7 @@ class GraphUtils:
 
         return rooms
 
-    @staticmethod
-    def escapeAnimalsTransitions(graph, possibleTargets, firstEscape, random):
+    def escapeAnimalsTransitions(graph, possibleTargets, firstEscape):
         n = len(possibleTargets)
         assert (n < 4 and firstEscape is not None) or (n <= 4 and firstEscape is None), "Invalid possibleTargets list: " + str(possibleTargets)
         GraphUtils.log.debug("escapeAnimalsTransitions. possibleTargets="+str(possibleTargets)+", firstEscape="+str(firstEscape))

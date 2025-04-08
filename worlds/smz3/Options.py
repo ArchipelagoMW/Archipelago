@@ -1,6 +1,5 @@
 import typing
-
-from Options import Choice, Option, PerGameCommonOptions, Toggle, DefaultOnToggle, Range, ItemsAccessibility, StartInventoryPool
+from Options import Choice, Option, PerGameCommonOptions, Toggle, DefaultOnToggle, Range, ItemsAccessibility
 from dataclasses import dataclass
 
 class SMLogic(Choice):
@@ -130,7 +129,6 @@ class EnergyBeep(DefaultOnToggle):
 
 @dataclass
 class SMZ3Options(PerGameCommonOptions):
-    start_inventory_from_pool: StartInventoryPool
     accessibility: ItemsAccessibility
     sm_logic: SMLogic
     sword_location: SwordLocation

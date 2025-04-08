@@ -500,7 +500,7 @@ def main():
 
     import colorama
 
-    colorama.just_fix_windows_console()
+    colorama.init()
 
     asyncio.run(_main())
     colorama.deinit()

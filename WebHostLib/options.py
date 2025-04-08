@@ -6,7 +6,7 @@ from typing import Dict, Union
 from docutils.core import publish_parts
 
 import yaml
-from flask import redirect, render_template, request, Response, abort
+from flask import redirect, render_template, request, Response
 
 import Options
 from Utils import local_path
@@ -142,10 +142,7 @@ def weighted_options_old():
 @app.route("/games/<string:game>/weighted-options")
 @cache.cached()
 def weighted_options(game: str):
-    try:
-        return render_options_page("weightedOptions/weightedOptions.html", game, is_complex=True)
-    except KeyError:
-        return abort(404)
+    return render_options_page("weightedOptions/weightedOptions.html", game, is_complex=True)
 
 
 @app.route("/games/<string:game>/generate-weighted-yaml", methods=["POST"])
@@ -200,10 +197,7 @@ def generate_weighted_yaml(game: str):
 @app.route("/games/<string:game>/player-options")
 @cache.cached()
 def player_options(game: str):
-    try:
-        return render_options_page("playerOptions/playerOptions.html", game, is_complex=False)
-    except KeyError:
-        return abort(404)
+    return render_options_page("playerOptions/playerOptions.html", game, is_complex=False)
 
 
 # YAML generator for player-options

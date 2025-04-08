@@ -1,5 +1,4 @@
-from collections import Counter
-from collections.abc import Mapping
+from typing import Dict, FrozenSet, Mapping, Tuple, List, Counter as _Counter
 
 from BaseClasses import CollectionState
 
@@ -36,7 +35,7 @@ def set_randomizer_locs(cs: CollectionState, p: int, zz_r: Randomizer) -> int:
     return _hash
 
 
-def item_counts(cs: CollectionState, p: int) -> tuple[tuple[str, int], ...]:
+def item_counts(cs: CollectionState, p: int) -> Tuple[Tuple[str, int], ...]:
     """
     the zilliandomizer items that player p has collected
 
@@ -45,11 +44,11 @@ def item_counts(cs: CollectionState, p: int) -> tuple[tuple[str, int], ...]:
     return tuple((item_name, cs.count(item_name, p)) for item_name in item_name_to_id)
 
 
-_cache_miss: tuple[None, frozenset[Location]] = (None, frozenset())
+_cache_miss: Tuple[None, FrozenSet[Location]] = (None, frozenset())
 
 
 class ZillionLogicCache:
-    _cache: dict[int, tuple[Counter[str], frozenset[Location]]]
+    _cache: Dict[int, Tuple[_Counter[str], FrozenSet[Location]]]
     """ `{ hash: (counter_from_prog_items, accessible_zz_locations) }` """
     _player: int
     _zz_r: Randomizer
@@ -61,7 +60,7 @@ class ZillionLogicCache:
         self._zz_r = zz_r
         self._id_to_zz_item = id_to_zz_item
 
-    def cs_to_zz_locs(self, cs: CollectionState) -> frozenset[Location]:
+    def cs_to_zz_locs(self, cs: CollectionState) -> FrozenSet[Location]:
         """
         given an Archipelago `CollectionState`,
         returns frozenset of accessible zilliandomizer locations
@@ -77,7 +76,7 @@ class ZillionLogicCache:
             return locs
 
         # print("cache miss")
-        have_items: list[Item] = []
+        have_items: List[Item] = []
         for name, count in counts:
             have_items.extend([self._id_to_zz_item[item_name_to_id[name]]] * count)
         # have_req is the result of converting AP CollectionState to zilliandomizer collection state

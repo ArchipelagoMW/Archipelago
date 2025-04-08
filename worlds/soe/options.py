@@ -309,7 +309,7 @@ class SoEOptions(PerGameCommonOptions):
 
     @property
     def flags(self) -> str:
-        flags = 'AGBo'  # configures auto-tracker to AP's fill
+        flags = ''
         for field in fields(self):
             option = getattr(self, field.name)
             if isinstance(option, (EvermizerFlag, EvermizerFlags)):

@@ -5,7 +5,7 @@ import os.path
 import subprocess
 import urllib.request
 from shutil import which
-from typing import Any
+from typing import Any, Optional
 from zipfile import ZipFile
 from Utils import open_file
 
@@ -17,7 +17,7 @@ from Utils import is_windows, messagebox, tuplize_version
 MOD_URL = "https://api.github.com/repos/alwaysintreble/TheMessengerRandomizerModAP/releases/latest"
 
 
-def ask_yes_no_cancel(title: str, text: str) -> bool | None:
+def ask_yes_no_cancel(title: str, text: str) -> Optional[bool]:
     """
     Wrapper for tkinter.messagebox.askyesnocancel, that creates a popup dialog box with yes, no, and cancel buttons.
 
@@ -31,6 +31,7 @@ def ask_yes_no_cancel(title: str, text: str) -> bool | None:
     ret = messagebox.askyesnocancel(title, text)
     root.update()
     return ret
+
 
 
 def launch_game(*args) -> None:

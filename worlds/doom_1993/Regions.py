@@ -33,11 +33,9 @@ regions:List[RegionDict] = [
 
     # Toxin Refinery (E1M3)
     {"name":"Toxin Refinery (E1M3) Main",
-     "connects_to_hub":False,
+     "connects_to_hub":True,
      "episode":1,
-     "connections":[
-        {"target":"Toxin Refinery (E1M3) Blue","pro":False},
-        {"target":"Toxin Refinery (E1M3) Start","pro":False}]},
+     "connections":[{"target":"Toxin Refinery (E1M3) Blue","pro":False}]},
     {"name":"Toxin Refinery (E1M3) Blue",
      "connects_to_hub":False,
      "episode":1,
@@ -48,20 +46,15 @@ regions:List[RegionDict] = [
      "connects_to_hub":False,
      "episode":1,
      "connections":[{"target":"Toxin Refinery (E1M3) Blue","pro":False}]},
-    {"name":"Toxin Refinery (E1M3) Start",
-     "connects_to_hub":True,
-     "episode":1,
-     "connections":[{"target":"Toxin Refinery (E1M3) Main","pro":False}]},
 
     # Command Control (E1M4)
     {"name":"Command Control (E1M4) Main",
-     "connects_to_hub":False,
+     "connects_to_hub":True,
      "episode":1,
      "connections":[
         {"target":"Command Control (E1M4) Blue","pro":False},
         {"target":"Command Control (E1M4) Yellow","pro":False},
-        {"target":"Command Control (E1M4) Ledge","pro":True},
-        {"target":"Command Control (E1M4) Start","pro":False}]},
+        {"target":"Command Control (E1M4) Ledge","pro":True}]},
     {"name":"Command Control (E1M4) Blue",
      "connects_to_hub":False,
      "episode":1,
@@ -79,10 +72,6 @@ regions:List[RegionDict] = [
         {"target":"Command Control (E1M4) Main","pro":False},
         {"target":"Command Control (E1M4) Blue","pro":False},
         {"target":"Command Control (E1M4) Yellow","pro":False}]},
-    {"name":"Command Control (E1M4) Start",
-     "connects_to_hub":True,
-     "episode":1,
-     "connections":[{"target":"Command Control (E1M4) Main","pro":False}]},
 
     # Phobos Lab (E1M5)
     {"name":"Phobos Lab (E1M5) Main",
@@ -137,12 +126,11 @@ regions:List[RegionDict] = [
 
     # Computer Station (E1M7)
     {"name":"Computer Station (E1M7) Main",
-     "connects_to_hub":False,
+     "connects_to_hub":True,
      "episode":1,
      "connections":[
         {"target":"Computer Station (E1M7) Red","pro":False},
-        {"target":"Computer Station (E1M7) Yellow","pro":False},
-        {"target":"Computer Station (E1M7) Start","pro":False}]},
+        {"target":"Computer Station (E1M7) Yellow","pro":False}]},
     {"name":"Computer Station (E1M7) Blue",
      "connects_to_hub":False,
      "episode":1,
@@ -162,10 +150,6 @@ regions:List[RegionDict] = [
      "connects_to_hub":False,
      "episode":1,
      "connections":[{"target":"Computer Station (E1M7) Yellow","pro":False}]},
-    {"name":"Computer Station (E1M7) Start",
-     "connects_to_hub":True,
-     "episode":1,
-     "connections":[{"target":"Computer Station (E1M7) Main","pro":False}]},
 
     # Phobos Anomaly (E1M8)
     {"name":"Phobos Anomaly (E1M8) Main",
@@ -254,11 +238,9 @@ regions:List[RegionDict] = [
 
     # Deimos Lab (E2M4)
     {"name":"Deimos Lab (E2M4) Main",
-     "connects_to_hub":False,
+     "connects_to_hub":True,
      "episode":2,
-     "connections":[
-        {"target":"Deimos Lab (E2M4) Blue","pro":False},
-        {"target":"Deimos Lab (E2M4) Start","pro":False}]},
+     "connections":[{"target":"Deimos Lab (E2M4) Blue","pro":False}]},
     {"name":"Deimos Lab (E2M4) Blue",
      "connects_to_hub":False,
      "episode":2,
@@ -269,10 +251,6 @@ regions:List[RegionDict] = [
      "connects_to_hub":False,
      "episode":2,
      "connections":[{"target":"Deimos Lab (E2M4) Blue","pro":False}]},
-    {"name":"Deimos Lab (E2M4) Start",
-     "connects_to_hub":True,
-     "episode":2,
-     "connections":[{"target":"Deimos Lab (E2M4) Main","pro":False}]},
 
     # Command Center (E2M5)
     {"name":"Command Center (E2M5) Main",
@@ -336,13 +314,9 @@ regions:List[RegionDict] = [
 
     # Tower of Babel (E2M8)
     {"name":"Tower of Babel (E2M8) Main",
-     "connects_to_hub":False,
-     "episode":2,
-     "connections":[{"target":"Tower of Babel (E2M8) Start","pro":False}]},
-    {"name":"Tower of Babel (E2M8) Start",
      "connects_to_hub":True,
      "episode":2,
-     "connections":[{"target":"Tower of Babel (E2M8) Main","pro":False}]},
+     "connections":[]},
 
     # Fortress of Mystery (E2M9)
     {"name":"Fortress of Mystery (E2M9) Main",
@@ -418,22 +392,17 @@ regions:List[RegionDict] = [
 
     # Unholy Cathedral (E3M5)
     {"name":"Unholy Cathedral (E3M5) Main",
-     "connects_to_hub":False,
+     "connects_to_hub":True,
      "episode":3,
      "connections":[
         {"target":"Unholy Cathedral (E3M5) Yellow","pro":False},
-        {"target":"Unholy Cathedral (E3M5) Blue","pro":False},
-        {"target":"Unholy Cathedral (E3M5) Start","pro":False}]},
+        {"target":"Unholy Cathedral (E3M5) Blue","pro":False}]},
     {"name":"Unholy Cathedral (E3M5) Blue",
      "connects_to_hub":False,
      "episode":3,
      "connections":[{"target":"Unholy Cathedral (E3M5) Main","pro":False}]},
     {"name":"Unholy Cathedral (E3M5) Yellow",
      "connects_to_hub":False,
-     "episode":3,
-     "connections":[{"target":"Unholy Cathedral (E3M5) Main","pro":False}]},
-    {"name":"Unholy Cathedral (E3M5) Start",
-     "connects_to_hub":True,
      "episode":3,
      "connections":[{"target":"Unholy Cathedral (E3M5) Main","pro":False}]},
 

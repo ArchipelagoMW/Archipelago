@@ -1,4 +1,7 @@
-LOCATIONS: dict[str, list[str]] = {
+from typing import Dict, List
+
+
+LOCATIONS: Dict[str, List[str]] = {
     "Ninja Village - Nest": [
         "Ninja Village - Candle",
         "Ninja Village - Astral Seed",
@@ -198,7 +201,7 @@ LOCATIONS: dict[str, list[str]] = {
 }
 
 
-SUB_REGIONS: dict[str, list[str]] = {
+SUB_REGIONS: Dict[str, List[str]] = {
     "Ninja Village": [
         "Right",
     ],
@@ -382,7 +385,7 @@ SUB_REGIONS: dict[str, list[str]] = {
 
 
 # order is slightly funky here for back compat
-MEGA_SHARDS: dict[str, list[str]] = {
+MEGA_SHARDS: Dict[str, List[str]] = {
     "Autumn Hills - Lakeside Checkpoint": ["Autumn Hills Mega Shard"],
     "Forlorn Temple - Outside Shop": ["Hidden Entrance Mega Shard"],
     "Catacombs - Top Left": ["Catacombs Mega Shard"],
@@ -411,7 +414,7 @@ MEGA_SHARDS: dict[str, list[str]] = {
 }
 
 
-REGION_CONNECTIONS: dict[str, dict[str, str]] = {
+REGION_CONNECTIONS: Dict[str, Dict[str, str]] = {
     "Menu": {"Tower HQ": "Start Game"},
     "Tower HQ": {
         "Autumn Hills - Portal": "ToTHQ Autumn Hills Portal",
@@ -433,7 +436,7 @@ REGION_CONNECTIONS: dict[str, dict[str, str]] = {
 
 
 # regions that don't have sub-regions
-LEVELS: list[str] = [
+LEVELS: List[str] = [
     "Menu",
     "Tower HQ",
     "The Shop",

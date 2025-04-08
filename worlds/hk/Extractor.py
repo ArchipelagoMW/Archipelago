@@ -9,7 +9,11 @@ import ast
 
 import jinja2
 
-from ast import unparse
+try:
+    from ast import unparse
+except ImportError:
+    # Py 3.8 and earlier compatibility module
+    from astunparse import unparse
 
 from Utils import get_text_between
 

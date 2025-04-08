@@ -20,10 +20,11 @@ from collections import defaultdict
 from typing import TYPE_CHECKING, Dict, List, Set, Tuple, cast
 
 from .data import static_logic as static_witness_logic
-from .data.definition_classes import ConnectionDefinition, WitnessRule
 from .data.item_definition_classes import DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
 from .data.static_logic import StaticWitnessLogicObj
 from .data.utils import (
+    WitnessRule,
+    define_new_region,
     get_boat,
     get_caves_except_path_to_challenge_exclusion_list,
     get_complex_additional_panels,
@@ -33,6 +34,7 @@ from .data.utils import (
     get_discard_exclusion_list,
     get_early_caves_list,
     get_early_caves_start_list,
+    get_elevators_come_to_you,
     get_entity_hunt,
     get_ep_all_individual,
     get_ep_easy,
@@ -47,7 +49,7 @@ from .data.utils import (
     get_vault_exclusion_list,
     logical_and_witness_rules,
     logical_or_witness_rules,
-    parse_witness_rule,
+    parse_lambda,
 )
 from .entity_hunt import EntityHuntPicker
 
@@ -73,16 +75,13 @@ class WitnessPlayerLogic:
 
         self.UNREACHABLE_REGIONS: Set[str] = set()
 
-        self.THEORETICAL_BASE_ITEMS: Set[str] = set()
         self.THEORETICAL_ITEMS: Set[str] = set()
-        self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()
-        self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()
-
-        self.PARENT_ITEM_COUNT_PER_BASE_ITEM: Dict[str, int] = defaultdict(lambda: 1)
-        self.PROGRESSIVE_LISTS: Dict[str, List[str]] = {}
+        self.THEORETICAL_ITEMS_NO_MULTI: Set[str] = set()
+        self.MULTI_AMOUNTS: Dict[str, int] = defaultdict(lambda: 1)
+        self.MULTI_LISTS: Dict[str, List[str]] = {}
+        self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI: Set[str] = set()
+        self.PROG_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()
         self.DOOR_ITEMS_BY_ID: Dict[str, List[str]] = {}
-        self.FORBIDDEN_DOORS: Set[str] = set()
-
         self.STARTING_INVENTORY: Set[str] = set()
 
         self.DIFFICULTY = world.options.puzzle_randomization
@@ -97,10 +96,10 @@ class WitnessPlayerLogic:
         elif self.DIFFICULTY == "none":
             self.REFERENCE_LOGIC = static_witness_logic.vanilla
 
-        self.CONNECTIONS_BY_REGION_NAME_THEORETICAL: Dict[str, List[ConnectionDefinition]] = copy.deepcopy(
+        self.CONNECTIONS_BY_REGION_NAME_THEORETICAL: Dict[str, Set[Tuple[str, WitnessRule]]] = copy.deepcopy(
             self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME
         )
-        self.CONNECTIONS_BY_REGION_NAME: Dict[str, List[ConnectionDefinition]] = copy.deepcopy(
+        self.CONNECTIONS_BY_REGION_NAME: Dict[str, Set[Tuple[str, WitnessRule]]] = copy.deepcopy(
             self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME
         )
         self.DEPENDENT_REQUIREMENTS_BY_HEX: Dict[str, Dict[str, WitnessRule]] = copy.deepcopy(
@@ -118,8 +117,6 @@ class WitnessPlayerLogic:
         self.PRE_PICKED_HUNT_ENTITIES: Set[str] = set()
         self.HUNT_ENTITIES: Set[str] = set()
 
-        self.AVAILABLE_EASTER_EGGS: Set[str] = set()
-        self.AVAILABLE_EASTER_EGGS_PER_REGION: Dict[str, int] = {}
         self.ALWAYS_EVENT_NAMES_BY_HEX = {
             "0x00509": "+1 Laser",
             "0x012FB": "+1 Laser (Unredirected)",
@@ -155,9 +152,6 @@ class WitnessPlayerLogic:
             picker = EntityHuntPicker(self, world, self.PRE_PICKED_HUNT_ENTITIES)
             self.HUNT_ENTITIES = picker.pick_panel_hunt_panels(world.options.panel_hunt_total.value)
 
-        if world.options.easter_egg_hunt:
-            self.finalize_easter_eggs(world)
-
         # Finalize which items actually exist in the MultiWorld and which get grouped into progressive items.
         self.finalize_items()
 
@@ -178,7 +172,7 @@ class WitnessPlayerLogic:
 
         entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity_hex]
 
-        if entity_obj["region"] is not None and entity_obj["region"].name in self.UNREACHABLE_REGIONS:
+        if entity_obj["region"] is not None and entity_obj["region"]["name"] in self.UNREACHABLE_REGIONS:
             return frozenset()
 
         # For the requirement of an entity, we consider two things:
@@ -189,22 +183,21 @@ class WitnessPlayerLogic:
 
         # Remove any items that don't actually exist in the settings (e.g. Symbol Shuffle turned off)
         these_items = frozenset({
-            subset.intersection(self.THEORETICAL_BASE_ITEMS)
+            subset.intersection(self.THEORETICAL_ITEMS_NO_MULTI)
             for subset in these_items
         })
 
         # Update the list of "items that are actually being used by any entity"
         for subset in these_items:
-            self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME.update(subset)
+            self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI.update(subset)
 
-        # If this entity is opened by a door item that exists in the itempool, add that item to its requirements.
-        # Also, remove any original power requirements this entity might have had.
-        if entity_hex in self.DOOR_ITEMS_BY_ID and entity_hex not in self.FORBIDDEN_DOORS:
+        # Handle door entities (door shuffle)
+        if entity_hex in self.DOOR_ITEMS_BY_ID:
             # If this entity is opened by a door item that exists in the itempool, add that item to its requirements.
             door_items = frozenset({frozenset([item]) for item in self.DOOR_ITEMS_BY_ID[entity_hex]})
 
             for dependent_item in door_items:
-                self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME.update(dependent_item)
+                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI.update(dependent_item)
 
             these_items = logical_and_witness_rules([door_items, these_items])
 
@@ -245,8 +238,6 @@ class WitnessPlayerLogic:
                 if option_entity in {"7 Lasers", "11 Lasers", "7 Lasers + Redirect", "11 Lasers + Redirect",
                                      "PP2 Weirdness", "Theater to Tunnels", "Entity Hunt"}:
                     new_items = frozenset({frozenset([option_entity])})
-                elif "Eggs" in option_entity:
-                    new_items = frozenset({frozenset([option_entity])})
                 elif option_entity in self.DISABLE_EVERYTHING_BEHIND:
                     new_items = frozenset()
                 else:
@@ -270,7 +261,7 @@ class WitnessPlayerLogic:
                         new_items = theoretical_new_items
                         if dep_obj["region"] and entity_obj["region"] != dep_obj["region"]:
                             new_items = frozenset(
-                                frozenset(possibility | {dep_obj["region"].name})
+                                frozenset(possibility | {dep_obj["region"]["name"]})
                                 for possibility in new_items
                             )
 
@@ -308,10 +299,10 @@ class WitnessPlayerLogic:
 
             self.THEORETICAL_ITEMS.add(item_name)
             if isinstance(static_witness_logic.ALL_ITEMS[item_name], ProgressiveItemDefinition):
-                self.THEORETICAL_BASE_ITEMS.update(cast(ProgressiveItemDefinition,
-                                                        static_witness_logic.ALL_ITEMS[item_name]).child_item_names)
+                self.THEORETICAL_ITEMS_NO_MULTI.update(cast(ProgressiveItemDefinition,
+                                                            static_witness_logic.ALL_ITEMS[item_name]).child_item_names)
             else:
-                self.THEORETICAL_BASE_ITEMS.add(item_name)
+                self.THEORETICAL_ITEMS_NO_MULTI.add(item_name)
 
             if static_witness_logic.ALL_ITEMS[item_name].category in [ItemCategory.DOOR, ItemCategory.LASER]:
                 entity_hexes = cast(DoorItemDefinition, static_witness_logic.ALL_ITEMS[item_name]).panel_id_hexes
@@ -325,21 +316,17 @@ class WitnessPlayerLogic:
 
             self.THEORETICAL_ITEMS.discard(item_name)
             if isinstance(static_witness_logic.ALL_ITEMS[item_name], ProgressiveItemDefinition):
-                self.THEORETICAL_BASE_ITEMS.difference_update(
+                self.THEORETICAL_ITEMS_NO_MULTI.difference_update(
                     cast(ProgressiveItemDefinition, static_witness_logic.ALL_ITEMS[item_name]).child_item_names
                 )
             else:
-                self.THEORETICAL_BASE_ITEMS.discard(item_name)
+                self.THEORETICAL_ITEMS_NO_MULTI.discard(item_name)
 
             if static_witness_logic.ALL_ITEMS[item_name].category in [ItemCategory.DOOR, ItemCategory.LASER]:
                 entity_hexes = cast(DoorItemDefinition, static_witness_logic.ALL_ITEMS[item_name]).panel_id_hexes
                 for entity_hex in entity_hexes:
                     if entity_hex in self.DOOR_ITEMS_BY_ID and item_name in self.DOOR_ITEMS_BY_ID[entity_hex]:
                         self.DOOR_ITEMS_BY_ID[entity_hex].remove(item_name)
-
-        if adj_type == "Forbidden Doors":
-            entity_hex = line[:7]
-            self.FORBIDDEN_DOORS.add(entity_hex)
 
         if adj_type == "Starting Inventory":
             self.STARTING_INVENTORY.add(line)
@@ -359,11 +346,11 @@ class WitnessPlayerLogic:
             line_split = line.split(" - ")
 
             requirement = {
-                "entities": parse_witness_rule(line_split[1]),
+                "entities": parse_lambda(line_split[1]),
             }
 
             if len(line_split) > 2:
-                required_items = parse_witness_rule(line_split[2])
+                required_items = parse_lambda(line_split[2])
                 items_actually_in_the_game = [
                     item_name for item_name, item_definition in static_witness_logic.ALL_ITEMS.items()
                     if item_definition.category is ItemCategory.SYMBOL
@@ -393,32 +380,34 @@ class WitnessPlayerLogic:
 
             return
 
+        if adj_type == "Region Changes":
+            new_region_and_options = define_new_region(line + ":")
+
+            self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[new_region_and_options[0]["name"]] = new_region_and_options[1]
+
+            return
+
         if adj_type == "New Connections":
-            # This adjustment type does not actually reverse the connection if it could be reversed.
-            # If needed, this might be added later
             line_split = line.split(" - ")
             source_region = line_split[0]
             target_region = line_split[1]
             panel_set_string = line_split[2]
 
             for connection in self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region]:
-                if connection.target_region == target_region:
+                if connection[0] == target_region:
                     self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].remove(connection)
 
                     if panel_set_string == "TrueOneWay":
-                        # This means the connection can be completely replaced
-                        only_connection = ConnectionDefinition(target_region, frozenset({frozenset(["TrueOneWay"])}))
-                        self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].append(only_connection)
-                    else:
-                        combined_rule = logical_or_witness_rules(
-                            [connection.traversal_rule, parse_witness_rule(panel_set_string)]
+                        self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].add(
+                            (target_region, frozenset({frozenset(["TrueOneWay"])}))
                         )
-                        combined_connection = ConnectionDefinition(target_region, combined_rule)
-                        self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].append(combined_connection)
+                    else:
+                        new_lambda = logical_or_witness_rules([connection[1], parse_lambda(panel_set_string)])
+                        self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].add((target_region, new_lambda))
                     break
             else:
-                new_connection = ConnectionDefinition(target_region, parse_witness_rule(panel_set_string))
-                self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].append(new_connection)
+                new_conn = (target_region, parse_lambda(panel_set_string))
+                self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].add(new_conn)
 
         if adj_type == "Added Locations":
             if "0x" in line:
@@ -537,55 +526,6 @@ class WitnessPlayerLogic:
 
         return postgame_adjustments
 
-    def set_easter_egg_requirements(self, world: "WitnessWorld") -> None:
-        eggs_per_check, logically_required_eggs_per_check = world.options.easter_egg_hunt.get_step_and_logical_step()
-
-        for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items():
-            if entity_obj["entityType"] != "Easter Egg Total":
-                continue
-
-            direct_egg_count = int(entity_obj["checkName"].split(" ")[0])
-
-            if direct_egg_count % eggs_per_check:
-                self.COMPLETELY_DISABLED_ENTITIES.add(entity_hex)
-
-            requirement = direct_egg_count // eggs_per_check * logically_required_eggs_per_check
-            self.DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex] = {
-                "entities": frozenset({frozenset({f"{requirement} Eggs"})})
-            }
-
-    def finalize_easter_eggs(self, world: "WitnessWorld") -> None:
-        self.AVAILABLE_EASTER_EGGS = {
-            entity_hex for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items()
-            if entity_obj["entityType"] == "Easter Egg" and self.solvability_guaranteed(entity_hex)
-        }
-        max_eggs = len(self.AVAILABLE_EASTER_EGGS)
-
-        self.AVAILABLE_EASTER_EGGS_PER_REGION = defaultdict(int)
-        for entity_hex in self.AVAILABLE_EASTER_EGGS:
-            region_name = static_witness_logic.ENTITIES_BY_HEX[entity_hex]["region"].name
-            self.AVAILABLE_EASTER_EGGS_PER_REGION[region_name] += 1
-
-        eggs_per_check, logically_required_eggs_per_check = world.options.easter_egg_hunt.get_step_and_logical_step()
-
-        for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items():
-            if entity_obj["entityType"] != "Easter Egg Total":
-                continue
-            if entity_hex in self.COMPLETELY_DISABLED_ENTITIES:
-                continue
-
-            direct_egg_count = int(entity_obj["checkName"].split(" ", 1)[0])
-            logically_required_egg_count = direct_egg_count // eggs_per_check * logically_required_eggs_per_check
-            if direct_egg_count > max_eggs:
-                self.COMPLETELY_DISABLED_ENTITIES.add(entity_hex)
-                continue
-
-            self.ADDED_CHECKS.add(entity_obj["checkName"])
-            if logically_required_egg_count > max_eggs:
-                # Exclude and set logic to require every egg
-                self.EXCLUDED_ENTITIES.add(entity_hex)
-                self.REQUIREMENTS_BY_HEX[entity_hex] = frozenset({frozenset({f"{max_eggs} Eggs"})})
-
     def make_options_adjustments(self, world: "WitnessWorld") -> None:
         """Makes logic adjustments based on options"""
         adjustment_linesets_in_order = []
@@ -684,39 +624,8 @@ class WitnessPlayerLogic:
         if world.options.early_caves == "add_to_pool" and not remote_doors:
             adjustment_linesets_in_order.append(get_early_caves_list())
 
-        if "Quarry Elevator" in world.options.elevators_come_to_you:
-            adjustment_linesets_in_order.append([
-                "New Connections:",
-                "Quarry - Quarry Elevator - TrueOneWay",
-                "Outside Quarry - Quarry Elevator - TrueOneWay",
-            ])
-        if "Bunker Elevator" in world.options.elevators_come_to_you:
-            adjustment_linesets_in_order.append([
-                "New Connections:",
-                "Outside Bunker - Bunker Elevator - TrueOneWay",
-                "Bunker Elevator Section - Bunker Under Elevator - "
-                "0x0A079 | Bunker Green Room | Bunker Cyan Room | Bunker Laser Platform | Outside Bunker",
-            ])
-        if "Swamp Long Bridge" in world.options.elevators_come_to_you:
-            adjustment_linesets_in_order.append([
-                "New Connections:",
-                "Outside Swamp - Swamp Long Bridge - TrueOneWay",
-                "Swamp Near Boat - Swamp Long Bridge - TrueOneWay",
-                "Requirement Changes:",
-                "0x035DE - 0x17E2B - True",  # Swamp Purple Sand Bottom EP
-            ])
-        # if "Town Maze Rooftop Bridge" in world.options.elevators_come_to_you:
-        #     adjustment_linesets_in_order.append([
-        #         "New Connections:"
-        #         "Town Red Rooftop - Town Maze Rooftop - TrueOneWay"
-
-        if world.options.easter_egg_hunt:
-            self.set_easter_egg_requirements(world)
-        else:
-            self.COMPLETELY_DISABLED_ENTITIES.update({
-                entity_hex for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items()
-                if "Easter Egg" in entity_obj["entityType"]
-            })
+        if world.options.elevators_come_to_you:
+            adjustment_linesets_in_order.append(get_elevators_come_to_you())
 
         if world.options.victory_condition == "panel_hunt":
             adjustment_linesets_in_order.append(get_entity_hunt())
@@ -754,9 +663,6 @@ class WitnessPlayerLogic:
             if loc_obj["entityType"] == "EP":
                 self.COMPLETELY_DISABLED_ENTITIES.add(loc_obj["entity_hex"])
 
-            if loc_obj["entityType"] == "Easter Egg":
-                self.COMPLETELY_DISABLED_ENTITIES.add(loc_obj["entity_hex"])
-
             elif loc_obj["entityType"] == "Panel":
                 self.EXCLUDED_ENTITIES.add(loc_obj["entity_hex"])
 
@@ -776,7 +682,7 @@ class WitnessPlayerLogic:
 
                 self.make_single_adjustment(current_adjustment_type, line)
 
-        for entity_id in self.COMPLETELY_DISABLED_ENTITIES | self.FORBIDDEN_DOORS:
+        for entity_id in self.COMPLETELY_DISABLED_ENTITIES:
             if entity_id in self.DOOR_ITEMS_BY_ID:
                 del self.DOOR_ITEMS_BY_ID[entity_id]
 
@@ -801,7 +707,7 @@ class WitnessPlayerLogic:
                 next_region = regions_to_check.pop()
 
                 for region_exit in self.CONNECTIONS_BY_REGION_NAME[next_region]:
-                    target = region_exit.target_region
+                    target = region_exit[0]
 
                     if target in reachable_regions:
                         continue
@@ -849,7 +755,7 @@ class WitnessPlayerLogic:
 
             # First, entities in unreachable regions are obviously themselves unreachable.
             for region in new_unreachable_regions:
-                for entity in static_witness_logic.ALL_REGIONS_BY_NAME[region].physical_entities:
+                for entity in static_witness_logic.ALL_REGIONS_BY_NAME[region]["physical_entities"]:
                     # Never disable the Victory Location.
                     if entity == self.VICTORY_LOCATION:
                         continue
@@ -884,11 +790,11 @@ class WitnessPlayerLogic:
             if not new_unreachable_regions and not newly_discovered_disabled_entities:
                 return
 
-    def reduce_connection_requirement(self, connection: ConnectionDefinition) -> ConnectionDefinition:
+    def reduce_connection_requirement(self, connection: Tuple[str, WitnessRule]) -> WitnessRule:
         all_possibilities = []
 
         # Check each traversal option individually
-        for option in connection.traversal_rule:
+        for option in connection[1]:
             individual_entity_requirements: List[WitnessRule] = []
             for entity in option:
                 # If a connection requires solving a disabled entity, it is not valid.
@@ -906,7 +812,7 @@ class WitnessPlayerLogic:
                     entity_req = self.get_entity_requirement(entity)
 
                     if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity]["region"]:
-                        region_name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity]["region"].name
+                        region_name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity]["region"]["name"]
                         entity_req = logical_and_witness_rules([entity_req, frozenset({frozenset({region_name})})])
 
                     individual_entity_requirements.append(entity_req)
@@ -914,7 +820,7 @@ class WitnessPlayerLogic:
             # Merge all possible requirements into one DNF condition.
             all_possibilities.append(logical_and_witness_rules(individual_entity_requirements))
 
-        return ConnectionDefinition(connection.target_region, logical_or_witness_rules(all_possibilities))
+        return logical_or_witness_rules(all_possibilities)
 
     def make_dependency_reduced_checklist(self) -> None:
         """
@@ -937,7 +843,7 @@ class WitnessPlayerLogic:
         self.REQUIREMENTS_BY_HEX = {}
         self.USED_EVENT_NAMES_BY_HEX = defaultdict(list)
         self.CONNECTIONS_BY_REGION_NAME = {}
-        self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME = set()
+        self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI = set()
 
         # Make independent requirements for entities
         for entity_hex in self.DEPENDENT_REQUIREMENTS_BY_HEX.keys():
@@ -947,14 +853,14 @@ class WitnessPlayerLogic:
 
         # Make independent region connection requirements based on the entities they require
         for region, connections in self.CONNECTIONS_BY_REGION_NAME_THEORETICAL.items():
-            new_connections = []
+            new_connections = set()
 
             for connection in connections:
-                reduced_connection = self.reduce_connection_requirement(connection)
+                overall_requirement = self.reduce_connection_requirement(connection)
 
                 # If there is a way to use this connection, add it.
-                if reduced_connection.can_be_traversed:
-                    new_connections.append(reduced_connection)
+                if overall_requirement:
+                    new_connections.add((connection[0], overall_requirement))
 
             self.CONNECTIONS_BY_REGION_NAME[region] = new_connections
 
@@ -962,18 +868,18 @@ class WitnessPlayerLogic:
         """
         Finalise which items are used in the world, and handle their progressive versions.
         """
-        for item in self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME:
+        for item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI:
             if item not in self.THEORETICAL_ITEMS:
                 progressive_item_name = static_witness_logic.get_parent_progressive_item(item)
-                self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME.add(progressive_item_name)
+                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(progressive_item_name)
                 child_items = cast(ProgressiveItemDefinition,
                                    static_witness_logic.ALL_ITEMS[progressive_item_name]).child_item_names
-                progressive_list = [child_item for child_item in child_items
-                              if child_item in self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME]
-                self.PARENT_ITEM_COUNT_PER_BASE_ITEM[item] = progressive_list.index(item) + 1
-                self.PROGRESSIVE_LISTS[progressive_item_name] = progressive_list
+                multi_list = [child_item for child_item in child_items
+                              if child_item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI]
+                self.MULTI_AMOUNTS[item] = multi_list.index(item) + 1
+                self.MULTI_LISTS[progressive_item_name] = multi_list
             else:
-                self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME.add(item)
+                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(item)
 
     def solvability_guaranteed(self, entity_hex: str) -> bool:
         return not (
@@ -993,6 +899,7 @@ class WitnessPlayerLogic:
 
         # Gather quick references to relevant options
         eps_shuffled = world.options.shuffle_EPs
+        come_to_you = world.options.elevators_come_to_you
         difficulty = world.options.puzzle_randomization
         discards_shuffled = world.options.shuffle_discarded_panels
         boat_shuffled = world.options.shuffle_boat
@@ -1003,10 +910,6 @@ class WitnessPlayerLogic:
         doors = world.options.shuffle_doors
         shortbox_req = world.options.mountain_lasers
         longbox_req = world.options.challenge_lasers
-        eggs_exist = world.options.easter_egg_hunt
-
-        swamp_bridge_comes_to_you = "Swamp Long Bridge" in world.options.elevators_come_to_you
-        quarry_elevator_comes_to_you = "Quarry Elevator" in world.options.elevators_come_to_you
 
         # Make some helper booleans so it is easier to follow what's going on
         mountain_upper_is_in_postgame = (
@@ -1020,17 +923,17 @@ class WitnessPlayerLogic:
         # It is easier to think about when these items *are* required, so we make that dict first
         # If the entity is disabled anyway, we don't need to consider that case
         is_item_required_dict = {
-            "0x03750": eps_shuffled or eggs_exist,  # Monastery Garden Entry Door
+            "0x03750": eps_shuffled,  # Monastery Garden Entry Door
             "0x275FA": eps_shuffled,  # Boathouse Hook Control
             "0x17D02": eps_shuffled,  # Windmill Turn Control
             "0x0368A": symbols_shuffled or door_panels,  # Quarry Stoneworks Stairs Door
             "0x3865F": symbols_shuffled or door_panels or eps_shuffled,  # Quarry Boathouse 2nd Barrier
-            "0x17CC4": quarry_elevator_comes_to_you or eps_shuffled,  # Quarry Elevator Panel
-            "0x17E2B": swamp_bridge_comes_to_you and boat_shuffled or eps_shuffled,  # Swamp Long Bridge
-            "0x0CF2A": eggs_exist,  # Jungle Monastery Garden Shortcut
+            "0x17CC4": come_to_you or eps_shuffled,  # Quarry Elevator Panel
+            "0x17E2B": come_to_you and boat_shuffled or eps_shuffled,  # Swamp Long Bridge
+            "0x0CF2A": False,  # Jungle Monastery Garden Shortcut
             "0x0364E": False,  # Monastery Laser Shortcut Door
             "0x03713": remote_doors,  # Monastery Laser Shortcut Panel
-            "0x03313": eggs_exist,  # Orchard Second Gate
+            "0x03313": False,  # Orchard Second Gate
             "0x337FA": remote_doors,  # Jungle Bamboo Laser Shortcut Panel
             "0x3873B": False,  # Jungle Bamboo Laser Shortcut Door
             "0x335AB": False,  # Caves Elevator Controls
@@ -1059,7 +962,7 @@ class WitnessPlayerLogic:
         Makes event-item pairs for entities with associated events, unless these entities are disabled.
         """
 
-        self.USED_EVENT_NAMES_BY_HEX[self.VICTORY_LOCATION].append("Victory")
+        self.ALWAYS_EVENT_NAMES_BY_HEX[self.VICTORY_LOCATION] = "Victory"
 
         for event_hex, event_name in self.ALWAYS_EVENT_NAMES_BY_HEX.items():
             self.USED_EVENT_NAMES_BY_HEX[event_hex].append(event_name)
@@ -1092,10 +995,5 @@ class WitnessPlayerLogic:
             entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity_hex]
             entity_name = entity_obj["checkName"]
             self.EVENT_ITEM_PAIRS[entity_name + " (Panel Hunt)"] = ("+1 Panel Hunt", entity_hex)
-
-        for region_name, easter_egg_count in self.AVAILABLE_EASTER_EGGS_PER_REGION.items():
-            plural = "s" if easter_egg_count != 1 else ""
-            event_name = f"+{easter_egg_count} Easter Egg{plural}"
-            self.EVENT_ITEM_PAIRS[f"{region_name} Easter Egg{plural}"] = (event_name, region_name)
 
         return

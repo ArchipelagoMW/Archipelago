@@ -1,4 +1,3 @@
-from ..options import ElevatorsComeToYou
 from ..test import WitnessTestBase
 
 # These are just some random options combinations, just to catch whether I broke anything obvious
@@ -20,7 +19,7 @@ class TestExpertNonRandomizedEPs(WitnessTestBase):
 class TestVanillaAutoElevatorsPanels(WitnessTestBase):
     options = {
         "puzzle_randomization": "none",
-        "elevators_come_to_you": ElevatorsComeToYou.valid_keys - ElevatorsComeToYou.default,  # Opposite of default
+        "elevators_come_to_you": True,
         "shuffle_doors": "panels",
         "victory_condition": "mountain_box_short",
         "early_caves": True,
@@ -61,11 +60,4 @@ class TestPostgameGroupedDoors(WitnessTestBase):
         "shuffle_doors": "doors",
         "door_groupings": "regional",
         "victory_condition": "elevator",
-    }
-
-
-class TestPostgamePanels(WitnessTestBase):
-    options = {
-        "victory_condition": "mountain_box_long",
-        "shuffle_postgame": True
     }

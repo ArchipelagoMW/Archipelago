@@ -37,8 +37,8 @@ base_info = {
     "description": "Integration client for the Archipelago Randomizer",
     "factorio_version": "2.0",
     "dependencies": [
-        "base >= 2.0.28",
-        "? quality >= 2.0.28",
+        "base >= 2.0.15",
+        "? quality >= 2.0.15",
         "! space-age",
         "? science-not-invited",
         "? factory-levels"

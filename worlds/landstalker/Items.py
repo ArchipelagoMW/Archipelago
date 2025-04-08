@@ -1,7 +1,8 @@
 from typing import Dict, List, NamedTuple
 
 from BaseClasses import Item, ItemClassification
-from .Constants import BASE_ITEM_ID
+
+BASE_ITEM_ID = 4000
 
 
 class LandstalkerItem(Item):

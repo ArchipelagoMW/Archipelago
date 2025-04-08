@@ -177,11 +177,7 @@ def randomize_rock_tunnel(data, random):
         if random.randint(0, 1):
             floor(10, 7)
             floor(11, 7)
-            if current_map[10][13]==1:
-                # (13,10) is floor
-                tall(random.randint(14, 16), 8)
-            else:
-                tall(random.randint(12, 16), 8)
+            tall(random.randint(12, 17), 8)
         else:
             floor(12, 5)
             floor(12, 6)
@@ -189,10 +185,8 @@ def randomize_rock_tunnel(data, random):
             wide(17, random.randint(3, 5))
         r = random.choice([1, 3])
         floor(12, r)
-        floor(12, r + 1)
-        if current_map[4][12] + current_map[5][12] == 2:
-            # (12,4) and (12,5) are floor
-            wide(11,4)
+        floor(12,  + 1)
+
     elif c == 2:
         r = random.randint(0, 6)
         if r == 0:
@@ -227,9 +221,6 @@ def randomize_rock_tunnel(data, random):
             #early block
             wide(13, random.randint(2, 5))
             tall(random.randint(14, 15), 1)
-            if not 1 in (current_map[1][14],current_map[2][13]):
-                # wide(13,2) and tall(14,1) overlap
-                single(13,2)
         elif r == 1:
             if random.randint(0, 1):
                 tall(16, 5)
@@ -252,34 +243,19 @@ def randomize_rock_tunnel(data, random):
         r = random.randint(r, 6)
         if r == 6:
             #late open
-            if random.randint(0, 1):
-                floor(1, 14)
-                floor(2, 14)
-            else:
-                floor(3, 14)
-                floor(4, 14)
+            r2 = random.randint(0, 2)
+            floor(1 + (r2 * 2), 14)
+            floor(2 + (r2 * 2), 14)
         elif r == 5:
-            if random.randint(0,1):
-                floor(6, 12)
-                floor(6, 13)
-            else:
-                floor(5, 14)
-                floor(6, 14)
+            floor(6, 12)
+            floor(6, 13)
         elif r == 4:
             if random.randint(0, 1):
                 floor(6, 11)
                 floor(7, 11)
             else:
                 floor(8, 11)
-                if current_map[12][10]==32:
-                    # (10,12) is wide
-                    single(9, 11)
-                else:
-                    floor(9, 11)
-            if 31 in (current_map[8][6],current_map[8][7]):
-                # (6,7) or (7,7) are tall
-                floor(6, 10)
-                wide(7, 9)
+                floor(9, 11)
         elif r == 3:
             floor(9, 9)
             floor(9, 10)

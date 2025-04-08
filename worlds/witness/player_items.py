@@ -2,12 +2,11 @@
 Defines progression, junk and event items for The Witness
 """
 import copy
-from typing import TYPE_CHECKING, Dict, List, Set
+from typing import TYPE_CHECKING, Dict, List, Set, cast
 
 from BaseClasses import Item, ItemClassification, MultiWorld
 
 from .data import static_items as static_witness_items
-from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import (
     DoorItemDefinition,
     ItemCategory,
@@ -31,13 +30,6 @@ class WitnessItem(Item):
     Item from the game The Witness
     """
     game: str = "The Witness"
-    eggs: int = 0
-
-    @classmethod
-    def make_egg_event(cls, item_name: str, player: int):
-        ret = cls(item_name, ItemClassification.progression, None, player)
-        ret.eggs = int(item_name[1:].split(" ", 1)[0])
-        return ret
 
 
 class WitnessPlayerItems:
@@ -61,11 +53,12 @@ class WitnessPlayerItems:
         # Remove all progression items that aren't actually in the game.
         self.item_data = {
             name: data for (name, data) in self.item_data.items()
-            if ItemClassification.progression not in data.classification
-            or name in player_logic.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME
+            if data.classification not in
+               {ItemClassification.progression, ItemClassification.progression_skip_balancing}
+               or name in player_logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME
         }
 
-        # Downgrade door items and make lasers local if local lasers is on
+        # Downgrade door items
         for item_name, item_data in self.item_data.items():
             if not isinstance(item_data.definition, DoorItemDefinition):
                 continue
@@ -73,20 +66,17 @@ class WitnessPlayerItems:
             if all(not self._logic.solvability_guaranteed(e_hex) for e_hex in item_data.definition.panel_id_hexes):
                 item_data.classification = ItemClassification.useful
 
-            if item_data.definition.category == ItemCategory.LASER and self._world.options.shuffle_lasers == "local":
-                item_data.local_only = True
-
         # Build the mandatory item list.
         self._mandatory_items: Dict[str, int] = {}
 
         # Add progression items to the mandatory item list.
         progression_dict = {
             name: data for (name, data) in self.item_data.items()
-            if ItemClassification.progression in data.classification
+            if data.classification in {ItemClassification.progression, ItemClassification.progression_skip_balancing}
         }
         for item_name, item_data in progression_dict.items():
             if isinstance(item_data.definition, ProgressiveItemDefinition):
-                num_progression = len(self._logic.PROGRESSIVE_LISTS[item_name])
+                num_progression = len(self._logic.MULTI_LISTS[item_name])
                 self._mandatory_items[item_name] = num_progression
             else:
                 self._mandatory_items[item_name] = 1
@@ -109,46 +99,6 @@ class WitnessPlayerItems:
             location_name = player_logic.EVENT_ITEM_PAIRS[event_location][0]
             self.item_data[location_name] = ItemData(None, ItemDefinition(0, ItemCategory.EVENT),
                                                      ItemClassification.progression, False)
-
-        # Determine which items should be progression + useful, if they exist in some capacity.
-        # Note: Some of these may need to be updated for the "independent symbols" PR.
-        self._proguseful_items = {
-            "Dots", "Stars", "Shapers", "Black/White Squares",
-            "Caves Shortcuts", "Caves Mountain Shortcut (Door)", "Caves Swamp Shortcut (Door)",
-            "Boat",
-        }
-
-        if self._world.options.shuffle_EPs == "individual":
-            self._proguseful_items |= {
-                "Town Obelisk Key",  # Most checks
-                "Monastery Obelisk Key",  # Most sphere 1 checks, and also super dense ("Jackpot" vibes)}
-            }
-
-        if self._world.options.shuffle_discarded_panels:
-            # Discards only give a moderate amount of checks, but are very spread out and a lot of them are in sphere 1.
-            # Thus, you really want to have the discard-unlocking item as quickly as possible.
-
-            if self._world.options.puzzle_randomization in ("none", "sigma_normal"):
-                self._proguseful_items.add("Triangles")
-            elif self._world.options.puzzle_randomization == "sigma_expert":
-                self._proguseful_items.add("Arrows")
-            # Discards require two symbols in Variety, so the "sphere 1 unlocking power" of Arrows is not there.
-        if self._world.options.puzzle_randomization == "sigma_expert":
-            self._proguseful_items.add("Triangles")
-            self._proguseful_items.add("Full Dots")
-            self._proguseful_items.add("Stars + Same Colored Symbol")
-            self._proguseful_items.discard("Stars")  # Stars are not that useful on their own.
-        if self._world.options.puzzle_randomization == "umbra_variety":
-            self._proguseful_items.add("Triangles")
-
-        # This needs to be improved when the improved independent&progressive symbols PR is merged
-        for item in list(self._proguseful_items):
-            self._proguseful_items.add(static_witness_logic.get_parent_progressive_item(item))
-
-        for item_name, item_data in self.item_data.items():
-            if item_name in self._proguseful_items:
-                item_data.classification |= ItemClassification.useful
-
 
     def get_mandatory_items(self) -> Dict[str, int]:
         """
@@ -232,15 +182,17 @@ class WitnessPlayerItems:
         # Sort the output for consistency across versions if the implementation changes but the logic does not.
         return sorted(output)
 
-    def get_door_item_ids_in_pool(self) -> List[int]:
+    def get_door_ids_in_pool(self) -> List[int]:
         """
-        Returns the ids of all door items that exist in the pool.
+        Returns the total set of all door IDs that are controlled by items in the pool.
         """
+        output: List[int] = []
+        for item_name, item_data in dict(self.item_data.items()).items():
+            if not isinstance(item_data.definition, DoorItemDefinition):
+                continue
+            output += [int(hex_string, 16) for hex_string in item_data.definition.panel_id_hexes]
 
-        return [
-            cast_not_none(item_data.ap_code) for item_data in self.item_data.values()
-            if isinstance(item_data.definition, DoorItemDefinition)
-        ]
+        return output
 
     def get_symbol_ids_not_in_pool(self) -> List[int]:
         """
@@ -262,3 +214,5 @@ class WitnessPlayerItems:
                 output[cast_not_none(item.ap_code)] = [cast_not_none(static_witness_items.ITEM_DATA[child_item].ap_code)
                                                        for child_item in item.definition.child_item_names]
         return output
+
+

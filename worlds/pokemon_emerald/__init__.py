@@ -8,26 +8,25 @@ import os
 import pkgutil
 from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar, TextIO, Union
 
-from BaseClasses import CollectionState, ItemClassification, MultiWorld, Tutorial, LocationProgressType
+from BaseClasses import ItemClassification, MultiWorld, Tutorial, LocationProgressType
 from Fill import FillError, fill_restrictive
 from Options import OptionError, Toggle
 import settings
 from worlds.AutoWorld import WebWorld, World
 
 from .client import PokemonEmeraldClient  # Unused, but required to register with BizHawkClient
-from .data import LEGENDARY_POKEMON, MapData, SpeciesData, TrainerData, LocationCategory, data as emerald_data
-from .groups import ITEM_GROUPS, LOCATION_GROUPS
-from .items import PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification, offset_item_value
-from .locations import (PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_by_category,
-                        set_free_fly, set_legendary_cave_entrances)
+from .data import LEGENDARY_POKEMON, MapData, SpeciesData, TrainerData, data as emerald_data
+from .items import (ITEM_GROUPS, PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification,
+                    offset_item_value)
+from .locations import (LOCATION_GROUPS, PokemonEmeraldLocation, create_location_label_to_id_map,
+                        create_locations_with_tags, set_free_fly, set_legendary_cave_entrances)
 from .opponents import randomize_opponent_parties
 from .options import (Goal, DarkCavesRequireFlash, HmRequirements, ItemPoolType, PokemonEmeraldOptions,
-                      RandomizeWildPokemon, RandomizeBadges, RandomizeHms, NormanRequirement, OPTION_GROUPS)
+                      RandomizeWildPokemon, RandomizeBadges, RandomizeHms, NormanRequirement)
 from .pokemon import (get_random_move, get_species_id_by_label, randomize_abilities, randomize_learnsets,
                       randomize_legendary_encounters, randomize_misc_pokemon, randomize_starters,
                       randomize_tm_hm_compatibility,randomize_types, randomize_wild_encounters)
 from .rom import PokemonEmeraldProcedurePatch, write_tokens 
-from .util import get_encounter_type_label
 
 
 class PokemonEmeraldWebWorld(WebWorld):
@@ -64,7 +63,6 @@ class PokemonEmeraldWebWorld(WebWorld):
     )
 
     tutorials = [setup_en, setup_es, setup_sv]
-    option_groups = OPTION_GROUPS
 
 
 class PokemonEmeraldSettings(settings.Group):
@@ -100,7 +98,6 @@ class PokemonEmeraldWorld(World):
 
     required_client_version = (0, 4, 6)
 
-    item_pool: List[PokemonEmeraldItem]
     badge_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]]
     hm_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]]
     free_fly_location_id: int
@@ -136,10 +133,9 @@ class PokemonEmeraldWorld(World):
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
-        from .sanity_check import validate_regions, validate_group_maps
+        from .sanity_check import validate_regions
 
         assert validate_regions()
-        assert validate_group_maps()
 
     def get_filler_item_name(self) -> str:
         return "Great Ball"
@@ -186,7 +182,7 @@ class PokemonEmeraldWorld(World):
 
         # In race mode we don't patch any item location information into the ROM
         if self.multiworld.is_race and not self.options.remote_items:
-            logging.warning("Pokemon Emerald: Forcing player %s (%s) to use remote items due to race mode.",
+            logging.warning("Pokemon Emerald: Forcing Player %s (%s) to use remote items due to race mode.",
                             self.player, self.player_name)
             self.options.remote_items.value = Toggle.option_true
 
@@ -198,7 +194,7 @@ class PokemonEmeraldWorld(World):
 
             # Prevent setting the number of required legendaries higher than the number of enabled legendaries
             if self.options.legendary_hunt_count.value > len(self.options.allowed_legendary_hunt_encounters.value):
-                logging.warning("Pokemon Emerald: Legendary hunt count for player %s (%s) higher than number of allowed "
+                logging.warning("Pokemon Emerald: Legendary hunt count for Player %s (%s) higher than number of allowed "
                                 "legendary encounters. Reducing to number of allowed encounters.", self.player,
                                 self.player_name)
                 self.options.legendary_hunt_count.value = len(self.options.allowed_legendary_hunt_encounters.value)
@@ -235,45 +231,30 @@ class PokemonEmeraldWorld(World):
                 max_norman_count = 4
 
         if self.options.norman_count.value > max_norman_count:
-            logging.warning("Pokemon Emerald: Norman requirements for player %s (%s) are unsafe in combination with "
+            logging.warning("Pokemon Emerald: Norman requirements for Player %s (%s) are unsafe in combination with "
                             "other settings. Reducing to 4.", self.player, self.player_name)
             self.options.norman_count.value = max_norman_count
 
-        # Shuffled badges/hms will always be placed locally, so add them to local_items
-        if self.options.badges == RandomizeBadges.option_shuffle:
-            self.options.local_items.value.update(self.item_name_groups["Badge"])
-
-        if self.options.hms == RandomizeHms.option_shuffle:
-            self.options.local_items.value.update(self.item_name_groups["HM"])
-
     def create_regions(self) -> None:
         from .regions import create_regions
-        all_regions = create_regions(self)
+        regions = create_regions(self)
 
-        # Categories with progression items always included
-        categories = {
-            LocationCategory.BADGE,
-            LocationCategory.HM,
-            LocationCategory.KEY,
-            LocationCategory.ROD,
-            LocationCategory.BIKE,
-            LocationCategory.TICKET
-        }
+        tags = {"Badge", "HM", "KeyItem", "Rod", "Bike", "EventTicket"}  # Tags with progression items always included
         if self.options.overworld_items:
-            categories.add(LocationCategory.OVERWORLD_ITEM)
+            tags.add("OverworldItem")
         if self.options.hidden_items:
-            categories.add(LocationCategory.HIDDEN_ITEM)
+            tags.add("HiddenItem")
         if self.options.npc_gifts:
-            categories.add(LocationCategory.GIFT)
+            tags.add("NpcGift")
         if self.options.berry_trees:
-            categories.add(LocationCategory.BERRY_TREE)
+            tags.add("BerryTree")
         if self.options.dexsanity:
-            categories.add(LocationCategory.POKEDEX)
+            tags.add("Pokedex")
         if self.options.trainersanity:
-            categories.add(LocationCategory.TRAINER)
-        create_locations_by_category(self, all_regions, categories)
+            tags.add("Trainer")
+        create_locations_with_tags(self, regions, tags)
 
-        self.multiworld.regions.extend(all_regions.values())
+        self.multiworld.regions.extend(regions.values())
 
         # Exclude locations which are always locked behind the player's goal
         def exclude_locations(location_names: List[str]):
@@ -306,12 +287,6 @@ class PokemonEmeraldWorld(World):
                     "Safari Zone SE - Hidden Item in South Grass 1",
                     "Safari Zone SE - Hidden Item in South Grass 2",
                     "Safari Zone SE - Item in Grass",
-                ])
-
-            # Sacred ash is on Navel Rock, which is locked behind the event tickets
-            if not self.options.event_tickets:
-                exclude_locations([
-                    "Navel Rock Top - Hidden Item Sacred Ash",
                 ])
         elif self.options.goal == Goal.option_steven:
             exclude_locations([
@@ -350,21 +325,21 @@ class PokemonEmeraldWorld(World):
         # Filter progression items which shouldn't be shuffled into the itempool.
         # Their locations will still exist, but event items will be placed and
         # locked at their vanilla locations instead.
-        filter_categories = set()
+        filter_tags = set()
 
         if not self.options.key_items:
-            filter_categories.add(LocationCategory.KEY)
+            filter_tags.add("KeyItem")
         if not self.options.rods:
-            filter_categories.add(LocationCategory.ROD)
+            filter_tags.add("Rod")
         if not self.options.bikes:
-            filter_categories.add(LocationCategory.BIKE)
+            filter_tags.add("Bike")
         if not self.options.event_tickets:
-            filter_categories.add(LocationCategory.TICKET)
+            filter_tags.add("EventTicket")
 
         if self.options.badges in {RandomizeBadges.option_vanilla, RandomizeBadges.option_shuffle}:
-            filter_categories.add(LocationCategory.BADGE)
+            filter_tags.add("Badge")
         if self.options.hms in {RandomizeHms.option_vanilla, RandomizeHms.option_shuffle}:
-            filter_categories.add(LocationCategory.HM)
+            filter_tags.add("HM")
 
         # If Badges and HMs are set to the `shuffle` option, don't add them to
         # the normal item pool, but do create their items and save them and
@@ -372,26 +347,26 @@ class PokemonEmeraldWorld(World):
         if self.options.badges == RandomizeBadges.option_shuffle:
             self.badge_shuffle_info = [
                 (location, self.create_item_by_code(location.default_item_code))
-                for location in [l for l in item_locations if emerald_data.locations[l.key].category == LocationCategory.BADGE]
+                for location in [l for l in item_locations if "Badge" in l.tags]
             ]
         if self.options.hms == RandomizeHms.option_shuffle:
             self.hm_shuffle_info = [
                 (location, self.create_item_by_code(location.default_item_code))
-                for location in [l for l in item_locations if emerald_data.locations[l.key].category == LocationCategory.HM]
+                for location in [l for l in item_locations if "HM" in l.tags]
             ]
 
         # Filter down locations to actual items that will be filled and create
         # the itempool.
-        item_locations = [location for location in item_locations if emerald_data.locations[location.key].category not in filter_categories]
+        item_locations = [location for location in item_locations if len(filter_tags & location.tags) == 0]
         default_itempool = [self.create_item_by_code(location.default_item_code) for location in item_locations]
 
+        # Take the itempool as-is
         if self.options.item_pool_type == ItemPoolType.option_shuffled:
-            # Take the itempool as-is
-            self.item_pool = default_itempool
+            self.multiworld.itempool += default_itempool
+
+        # Recreate the itempool from random items
         elif self.options.item_pool_type in (ItemPoolType.option_diverse, ItemPoolType.option_diverse_balanced):
-            # Recreate the itempool from random items
-            item_categories = ["Ball", "Healing", "Rare Candy", "Vitamin", "Evolution Stone",
-                               "Money", "TM", "Held", "Misc", "Berry"]
+            item_categories = ["Ball", "Heal", "Candy", "Vitamin", "EvoStone", "Money", "TM", "Held", "Misc", "Berry"]
 
             # Count occurrences of types of vanilla items in pool
             item_category_counter = Counter()
@@ -399,7 +374,6 @@ class PokemonEmeraldWorld(World):
                 if not item.advancement:
                     item_category_counter.update([tag for tag in item.tags if tag in item_categories])
 
-            self.item_pool = []
             item_category_weights = [item_category_counter.get(category) for category in item_categories]
             item_category_weights = [weight if weight is not None else 0 for weight in item_category_weights]
 
@@ -444,50 +418,47 @@ class PokemonEmeraldWorld(World):
                         item_code = self.random.choice(fill_item_candidates_by_category[category])
                     item = self.create_item_by_code(item_code)
 
-                self.item_pool.append(item)
+                self.multiworld.itempool.append(item)
 
-        self.multiworld.itempool += self.item_pool
+    def set_rules(self) -> None:
+        from .rules import set_rules
+        set_rules(self)
 
+    def generate_basic(self) -> None:
+        # Create auth
+        # self.auth = self.random.randbytes(16)  # Requires >=3.9
+        self.auth = self.random.getrandbits(16 * 8).to_bytes(16, "little")
+
+        randomize_types(self)
+        randomize_wild_encounters(self)
         set_free_fly(self)
         set_legendary_cave_entrances(self)
 
         # Key items which are considered in access rules but not randomized are converted to events and placed
         # in their vanilla locations so that the player can have them in their inventory for logic.
-        def convert_unrandomized_items_to_events(category: LocationCategory) -> None:
+        def convert_unrandomized_items_to_events(tag: str) -> None:
             for location in self.multiworld.get_locations(self.player):
-                assert isinstance(location, PokemonEmeraldLocation)
-                if location.key is not None and emerald_data.locations[location.key].category == category:
+                if location.tags is not None and tag in location.tags:
                     location.place_locked_item(self.create_event(self.item_id_to_name[location.default_item_code]))
                     location.progress_type = LocationProgressType.DEFAULT
                     location.address = None
 
         if self.options.badges == RandomizeBadges.option_vanilla:
-            convert_unrandomized_items_to_events(LocationCategory.BADGE)
+            convert_unrandomized_items_to_events("Badge")
         if self.options.hms == RandomizeHms.option_vanilla:
-            convert_unrandomized_items_to_events(LocationCategory.HM)
+            convert_unrandomized_items_to_events("HM")
         if not self.options.rods:
-            convert_unrandomized_items_to_events(LocationCategory.ROD)
+            convert_unrandomized_items_to_events("Rod")
         if not self.options.bikes:
-            convert_unrandomized_items_to_events(LocationCategory.BIKE)
+            convert_unrandomized_items_to_events("Bike")
         if not self.options.event_tickets:
-            convert_unrandomized_items_to_events(LocationCategory.TICKET)
+            convert_unrandomized_items_to_events("EventTicket")
         if not self.options.key_items:
-            convert_unrandomized_items_to_events(LocationCategory.KEY)
+            convert_unrandomized_items_to_events("KeyItem")
 
-    def set_rules(self):
-        from .rules import set_rules
-        set_rules(self)
-
-    def connect_entrances(self):
-        randomize_wild_encounters(self)
-        self.shuffle_badges_hms()
-        # For entrance randomization, disconnect entrances here, randomize map, then
-        # undo badge/HM placement and re-shuffle them in the new map.
-
-    def shuffle_badges_hms(self) -> None:
-        my_progression_items = [item for item in self.item_pool if item.advancement]
-        my_locations = list(self.get_locations())
-
+    def pre_fill(self) -> None:
+        # Badges and HMs that are set to shuffle need to be placed at
+        # their own subset of locations
         if self.options.badges == RandomizeBadges.option_shuffle:
             badge_locations: List[PokemonEmeraldLocation]
             badge_items: List[PokemonEmeraldItem]
@@ -512,20 +483,41 @@ class PokemonEmeraldWorld(World):
                 badge_priority["Knuckle Badge"] = 0
             badge_items.sort(key=lambda item: badge_priority.get(item.name, 0))
 
-            # Build state
-            state = CollectionState(self.multiworld)
-            for item in my_progression_items:
-                state.collect(item, True)
-            # If HM shuffle is on, HMs are neither placed in locations nor in
-            # the item pool, so we also need to collect them.
+            # Un-exclude badge locations, since we need to put progression items on them
+            for location in badge_locations:
+                location.progress_type = LocationProgressType.DEFAULT \
+                    if location.progress_type == LocationProgressType.EXCLUDED \
+                    else location.progress_type
+
+            collection_state = self.multiworld.get_all_state(False)
+
+            # If HM shuffle is on, HMs are not placed and not in the pool, so
+            # `get_all_state` did not contain them. Collect them manually for
+            # this fill. We know that they will be included in all state after
+            # this stage.
             if self.hm_shuffle_info is not None:
                 for _, item in self.hm_shuffle_info:
-                    state.collect(item, True)
-            state.sweep_for_advancements(my_locations)
+                    collection_state.collect(item)
 
-            # Shuffle badges
-            self.fill_subset_with_retries(badge_items, badge_locations, state)
+            # In specific very constrained conditions, fill_restrictive may run
+            # out of swaps before it finds a valid solution if it gets unlucky.
+            # This is a band-aid until fill/swap can reliably find those solutions.
+            attempts_remaining = 2
+            while attempts_remaining > 0:
+                attempts_remaining -= 1
+                self.random.shuffle(badge_locations)
+                try:
+                    fill_restrictive(self.multiworld, collection_state, badge_locations, badge_items,
+                                     single_player_placement=True, lock=True, allow_excluded=True)
+                    break
+                except FillError as exc:
+                    if attempts_remaining == 0:
+                        raise exc
 
+                    logging.debug(f"Failed to shuffle badges for player {self.player}. Retrying.")
+                    continue
+
+        # Badges are guaranteed to be either placed or in the multiworld's itempool now
         if self.options.hms == RandomizeHms.option_shuffle:
             hm_locations: List[PokemonEmeraldLocation]
             hm_items: List[PokemonEmeraldItem]
@@ -548,56 +540,33 @@ class PokemonEmeraldWorld(World):
             if self.options.badges == RandomizeBadges.option_vanilla and \
                     self.options.require_flash in (DarkCavesRequireFlash.option_both, DarkCavesRequireFlash.option_only_granite_cave):
                 hm_priority["HM05 Flash"] = 0
-            hm_items.sort(key=lambda item: hm_priority.get(item.name, 0), reverse=True)
+            hm_items.sort(key=lambda item: hm_priority.get(item.name, 0))
 
-            # Build state
-            # Badges are either in the item pool, or already placed and collected during sweep
-            state = CollectionState(self.multiworld)
-            for item in my_progression_items:
-                state.collect(item, True)
-            state.sweep_for_advancements(my_locations)
+            # Un-exclude HM locations, since we need to put progression items on them
+            for location in hm_locations:
+                location.progress_type = LocationProgressType.DEFAULT \
+                    if location.progress_type == LocationProgressType.EXCLUDED \
+                    else location.progress_type
 
-            # Shuffle HMs
-            self.fill_subset_with_retries(hm_items, hm_locations, state)
+            collection_state = self.multiworld.get_all_state(False)
 
-    def fill_subset_with_retries(self, items: list[PokemonEmeraldItem], locations: list[PokemonEmeraldLocation], state: CollectionState):
-        # Un-exclude locations, since we need to put progression items on them
-        for location in locations:
-            location.progress_type = LocationProgressType.DEFAULT \
-                if location.progress_type == LocationProgressType.EXCLUDED \
-                else location.progress_type
+            # In specific very constrained conditions, fill_restrictive may run
+            # out of swaps before it finds a valid solution if it gets unlucky.
+            # This is a band-aid until fill/swap can reliably find those solutions.
+            attempts_remaining = 2
+            while attempts_remaining > 0:
+                attempts_remaining -= 1
+                self.random.shuffle(hm_locations)
+                try:
+                    fill_restrictive(self.multiworld, collection_state, hm_locations, hm_items,
+                                     single_player_placement=True, lock=True, allow_excluded=True)
+                    break
+                except FillError as exc:
+                    if attempts_remaining == 0:
+                        raise exc
 
-        # In specific very constrained conditions, `fill_restrictive` may run
-        # out of swaps before it finds a valid solution if it gets unlucky.
-        attempts_remaining = 2
-        while attempts_remaining > 0:
-            attempts_remaining -= 1
-            locations_copy = locations.copy()
-            items_copy = items.copy()
-            self.random.shuffle(locations_copy)
-            try:
-                fill_restrictive(self.multiworld, state, locations_copy, items_copy, single_player_placement=True,
-                                 lock=True)
-                break
-            except FillError as exc:
-                if attempts_remaining <= 0:
-                    raise exc
-
-                # Undo partial item placement
-                for location in locations:
-                    location.locked = False
-                    if location.item is not None:
-                        location.item.location = None
-                        location.item = None
-
-                logging.debug(f"Failed to shuffle items for player {self.player} ({self.player_name}). Retrying.")
-                continue
-
-    def generate_basic(self) -> None:
-        # Create auth
-        self.auth = self.random.randbytes(16)
-
-        randomize_types(self)
+                    logging.debug(f"Failed to shuffle HMs for player {self.player}. Retrying.")
+                    continue
 
     def generate_output(self, output_directory: str) -> None:
         self.modified_trainers = copy.deepcopy(emerald_data.trainers)
@@ -650,12 +619,20 @@ class PokemonEmeraldWorld(World):
             spoiler_handle.write(f"\n\nWild Pokemon ({self.player_name}):\n\n")
 
             species_maps = defaultdict(set)
-            for map_data in self.modified_maps.values():
-                for encounter_type, encounter_data in map_data.encounters.items():
-                    for i, encounter in enumerate(encounter_data.slots):
-                        species_maps[encounter].add(f"{map_data.label} ({get_encounter_type_label(encounter_type, i)})")
+            for map in self.modified_maps.values():
+                if map.land_encounters is not None:
+                    for encounter in map.land_encounters.slots:
+                        species_maps[encounter].add(map.name[4:])
 
-            lines = [f"{emerald_data.species[species].label}: {', '.join(sorted(maps))}\n"
+                if map.water_encounters is not None:
+                    for encounter in map.water_encounters.slots:
+                        species_maps[encounter].add(map.name[4:])
+
+                if map.fishing_encounters is not None:
+                    for encounter in map.fishing_encounters.slots:
+                        species_maps[encounter].add(map.name[4:])
+
+            lines = [f"{emerald_data.species[species].label}: {', '.join(maps)}\n"
                      for species, maps in species_maps.items()]
             lines.sort()
             for line in lines:
@@ -667,14 +644,35 @@ class PokemonEmeraldWorld(World):
         if self.options.dexsanity:
             from collections import defaultdict
 
+            slot_to_rod = {
+                0: "_OLD_ROD",
+                1: "_OLD_ROD",
+                2: "_GOOD_ROD",
+                3: "_GOOD_ROD",
+                4: "_GOOD_ROD",
+                5: "_SUPER_ROD",
+                6: "_SUPER_ROD",
+                7: "_SUPER_ROD",
+                8: "_SUPER_ROD",
+                9: "_SUPER_ROD",
+            }
+
             species_maps = defaultdict(set)
-            for map_data in self.modified_maps.values():
-                for encounter_type, encounter_data in map_data.encounters.items():
-                    for i, encounter in enumerate(encounter_data.slots):
-                        species_maps[encounter].add(f"{map_data.label} ({get_encounter_type_label(encounter_type, i)})")
+            for map in self.modified_maps.values():
+                if map.land_encounters is not None:
+                    for encounter in map.land_encounters.slots:
+                        species_maps[encounter].add(map.name[4:] + "_GRASS")
+
+                if map.water_encounters is not None:
+                    for encounter in map.water_encounters.slots:
+                        species_maps[encounter].add(map.name[4:] + "_WATER")
+
+                if map.fishing_encounters is not None:
+                    for slot, encounter in enumerate(map.fishing_encounters.slots):
+                        species_maps[encounter].add(map.name[4:] + slot_to_rod[slot])
 
             hint_data[self.player] = {
-                self.location_name_to_id[f"Pokedex - {emerald_data.species[species].label}"]: ", ".join(sorted(maps))
+                self.location_name_to_id[f"Pokedex - {emerald_data.species[species].label}"]: ", ".join(maps)
                 for species, maps in species_maps.items()
             }
 

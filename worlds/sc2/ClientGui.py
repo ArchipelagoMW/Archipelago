@@ -5,7 +5,7 @@ from NetUtils import JSONMessagePart
 from kvui import GameManager, HoverBehavior, ServerToolTip, KivyJSONtoTextParser
 from kivy.app import App
 from kivy.clock import Clock
-from kivymd.uix.tab import MDTabsItem, MDTabsItemText
+from kivy.uix.tabbedpanel import TabbedPanelItem
 from kivy.uix.gridlayout import GridLayout
 from kivy.lang import Builder
 from kivy.uix.label import Label

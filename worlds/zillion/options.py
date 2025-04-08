@@ -1,6 +1,7 @@
 from collections import Counter
 from dataclasses import dataclass
-from typing import ClassVar, Literal, TypeGuard
+from typing import ClassVar, Dict, Literal, Tuple
+from typing_extensions import TypeGuard  # remove when Python >= 3.10
 
 from Options import Choice, DefaultOnToggle, NamedRange, OptionGroup, PerGameCommonOptions, Range, Removed, Toggle
 
@@ -107,7 +108,7 @@ class ZillionStartChar(Choice):
     display_name = "start character"
     default = "random"
 
-    _name_capitalization: ClassVar[dict[int, Chars]] = {
+    _name_capitalization: ClassVar[Dict[int, Chars]] = {
         option_jj: "JJ",
         option_apple: "Apple",
         option_champ: "Champ",
@@ -232,7 +233,6 @@ class ZillionSkill(Range):
     range_start = 0
     range_end = 5
     default = 2
-    display_name = "skill"
 
 
 class ZillionStartingCards(NamedRange):
@@ -263,27 +263,13 @@ class ZillionMapGen(Choice):
     option_full = 2
     default = 0
 
-    def zz_value(self) -> Literal["none", "rooms", "full"]:
+    def zz_value(self) -> Literal['none', 'rooms', 'full']:
         if self.value == ZillionMapGen.option_none:
             return "none"
         if self.value == ZillionMapGen.option_rooms:
             return "rooms"
         assert self.value == ZillionMapGen.option_full
         return "full"
-
-
-class ZillionPriorityDeadEnds(DefaultOnToggle):
-    """
-    Single locations that are in a dead end behind a door
-    (example: vanilla Apple location)
-    are prioritized for progression items.
-    """
-    display_name = "priority dead ends"
-
-    vanilla_dead_ends: ClassVar = frozenset(("E-5 top far right", "J-4 top left"))
-    """ dead ends when not generating these rooms """
-    always_dead_ends: ClassVar = frozenset(("A-6 top right",))
-    """ dead ends in rooms that never get generated """
 
 
 @dataclass
@@ -307,7 +293,6 @@ class ZillionOptions(PerGameCommonOptions):
     skill: ZillionSkill
     starting_cards: ZillionStartingCards
     map_gen: ZillionMapGen
-    priority_dead_ends: ZillionPriorityDeadEnds
 
     room_gen: Removed
 
@@ -320,7 +305,7 @@ z_option_groups = [
 ]
 
 
-def convert_item_counts(ic: Counter[str]) -> ZzItemCounts:
+def convert_item_counts(ic: "Counter[str]") -> ZzItemCounts:
     tr: ZzItemCounts = {
         ID.card: ic["ID Card"],
         ID.red: ic["Red ID Card"],
@@ -334,7 +319,7 @@ def convert_item_counts(ic: Counter[str]) -> ZzItemCounts:
     return tr
 
 
-def validate(options: ZillionOptions) -> tuple[ZzOptions, Counter[str]]:
+def validate(options: ZillionOptions) -> "Tuple[ZzOptions, Counter[str]]":
     """
     adjusts options to make game completion possible
 

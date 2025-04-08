@@ -100,15 +100,14 @@ class OOTWeb(WebWorld):
         ["Edos"]
     )
 
-    # Very out of date, requires updating to match current
-    # setup_es = Tutorial(
-    #     setup.tutorial_name,
-    #     setup.description,
-    #     "Español",
-    #     "setup_es.md",
-    #     "setup/es",
-    #     setup.authors
-    # )
+    setup_es = Tutorial(
+        setup.tutorial_name,
+        setup.description,
+        "Español",
+        "setup_es.md",
+        "setup/es",
+        setup.authors
+    )
 
     setup_fr = Tutorial(
         setup.tutorial_name,
@@ -128,9 +127,8 @@ class OOTWeb(WebWorld):
         ["Held_der_Zeit"]
     )
 
-    tutorials = [setup, setup_fr, setup_de]
+    tutorials = [setup, setup_es, setup_fr, setup_de]
     option_groups = oot_option_groups
-    game_info_languages = ["en", "de"]
 
 
 class OOTWorld(World):
@@ -584,7 +582,8 @@ class OOTWorld(World):
                     new_exit = OOTEntrance(self.player, self.multiworld, '%s -> %s' % (new_region.name, exit), new_region)
                     new_exit.vanilla_connected_region = exit
                     new_exit.rule_string = rule
-                    self.parser.parse_spot_rule(new_exit)
+                    if self.options.logic_rules != 'no_logic':
+                        self.parser.parse_spot_rule(new_exit)
                     if new_exit.never:
                         logger.debug('Dropping unreachable exit: %s', new_exit.name)
                     else:

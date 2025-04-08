@@ -1,6 +1,6 @@
 import typing
 
-from BaseClasses import Item
+from BaseClasses import Item, ItemClassification
 from .Names import ItemName
 
 

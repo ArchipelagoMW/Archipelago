@@ -37,8 +37,7 @@ def add_path_requirements(world: "LandstalkerWorld"):
         name = data["fromId"] + " -> " + data["toId"]
 
         # Determine required items to reach this region
-        # WORLD_PATHS_JSON is shared by all Landstalker worlds, so a copy is made to prevent modifying the original
-        required_items = data["requiredItems"].copy() if "requiredItems" in data else []
+        required_items = data["requiredItems"] if "requiredItems" in data else []
         if "itemsPlacedWhenCrossing" in data:
             required_items += data["itemsPlacedWhenCrossing"]
 

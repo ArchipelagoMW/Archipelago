@@ -1625,6 +1625,6 @@ def get_location_offset(mission_id):
 
 
 def launch():
-    colorama.just_fix_windows_console()
+    colorama.init()
     asyncio.run(main())
     colorama.deinit()

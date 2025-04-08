@@ -6,7 +6,6 @@ class SongData(NamedTuple):
     """Special data container to contain the metadata of each song to make filtering work."""
 
     code: Optional[int]
-    uid: str
     album: str
     streamer_mode: bool
     easy: Optional[int]

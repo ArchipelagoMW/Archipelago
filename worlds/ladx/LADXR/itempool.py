@@ -68,12 +68,10 @@ DEFAULT_ITEM_POOL = {
 
 
 class ItemPool:
-    def __init__(self, logic, settings, rnd, stabilize_item_pool: bool):
+    def __init__(self, logic, settings, rnd):
         self.__pool = {}
         self.__setup(logic, settings)
-
-        if not stabilize_item_pool:
-            self.__randomizeRupees(settings, rnd)
+        self.__randomizeRupees(settings, rnd)
 
     def add(self, item, count=1):
         self.__pool[item] = self.__pool.get(item, 0) + count

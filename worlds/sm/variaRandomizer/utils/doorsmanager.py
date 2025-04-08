@@ -1,3 +1,4 @@
+import random
 from enum import IntEnum,IntFlag
 import copy
 from ..logic.smbool import SMBool
@@ -122,7 +123,7 @@ class Door(object):
         else:
             return [color for color in colorsList if color not in self.forbiddenColors]
 
-    def randomize(self, allowGreyDoors, random):
+    def randomize(self, allowGreyDoors):
         if self.canRandomize():
             if self.canGrey and allowGreyDoors:
                 self.setColor(random.choice(self.filterColorList(colorsListGrey)))
@@ -346,9 +347,9 @@ class DoorsManager():
             currentDoors['CrabShaftRight'].forceBlue()
 
     @staticmethod
-    def randomize(allowGreyDoors, player, random):
+    def randomize(allowGreyDoors, player):
         for door in DoorsManager.doorsDict[player].values():
-            door.randomize(allowGreyDoors, random)
+            door.randomize(allowGreyDoors)
         # set both ends of toilet to the same color to avoid soft locking in area rando
         toiletTop = DoorsManager.doorsDict[player]['PlasmaSparkBottom']
         toiletBottom = DoorsManager.doorsDict[player]['OasisTop']

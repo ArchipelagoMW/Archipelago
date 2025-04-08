@@ -1,12 +1,13 @@
 from . import SVTestBase
 from .assertion import WorldAssertMixin
 from .. import options
+from ..options import Goal, QuestLocations
 
 
 class TestCrypticNoteNoQuests(WorldAssertMixin, SVTestBase):
     options = {
-        options.Goal.internal_name: options.Goal.option_cryptic_note,
-        options.QuestLocations.internal_name: "none"
+        Goal.internal_name: Goal.option_cryptic_note,
+        QuestLocations.internal_name: "none"
     }
 
     def test_given_option_pair_then_basic_checks(self):
@@ -15,8 +16,8 @@ class TestCrypticNoteNoQuests(WorldAssertMixin, SVTestBase):
 
 class TestCompleteCollectionNoQuests(WorldAssertMixin, SVTestBase):
     options = {
-        options.Goal.internal_name: options.Goal.option_complete_collection,
-        options.QuestLocations.internal_name: "none"
+        Goal.internal_name: Goal.option_complete_collection,
+        QuestLocations.internal_name: "none"
     }
 
     def test_given_option_pair_then_basic_checks(self):
@@ -25,8 +26,8 @@ class TestCompleteCollectionNoQuests(WorldAssertMixin, SVTestBase):
 
 class TestProtectorOfTheValleyNoQuests(WorldAssertMixin, SVTestBase):
     options = {
-        options.Goal.internal_name: options.Goal.option_protector_of_the_valley,
-        options.QuestLocations.internal_name: "none"
+        Goal.internal_name: Goal.option_protector_of_the_valley,
+        QuestLocations.internal_name: "none"
     }
 
     def test_given_option_pair_then_basic_checks(self):
@@ -35,8 +36,8 @@ class TestProtectorOfTheValleyNoQuests(WorldAssertMixin, SVTestBase):
 
 class TestCraftMasterNoQuests(WorldAssertMixin, SVTestBase):
     options = {
-        options.Goal.internal_name: options.Goal.option_craft_master,
-        options.QuestLocations.internal_name: "none"
+        Goal.internal_name: Goal.option_craft_master,
+        QuestLocations.internal_name: "none"
     }
 
     def test_given_option_pair_then_basic_checks(self):
@@ -45,7 +46,7 @@ class TestCraftMasterNoQuests(WorldAssertMixin, SVTestBase):
 
 class TestCraftMasterNoSpecialOrder(WorldAssertMixin, SVTestBase):
     options = {
-        options.Goal.internal_name: options.Goal.option_craft_master,
+        options.Goal.internal_name: Goal.option_craft_master,
         options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.alias_disabled,
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
         options.Craftsanity.internal_name: options.Craftsanity.option_none

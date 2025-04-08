@@ -3,7 +3,7 @@ import base64
 import io
 import pkgutil
 import platform
-from typing import Any, ClassVar, Coroutine, Protocol, cast
+from typing import Any, ClassVar, Coroutine, Dict, List, Optional, Protocol, Tuple, cast
 
 from CommonClient import CommonContext, server_loop, gui_enabled, \
     ClientCommandProcessor, logger, get_base_parser
@@ -11,7 +11,6 @@ from NetUtils import ClientStatus
 from Utils import async_start
 
 import colorama
-from typing_extensions import override
 
 from zilliandomizer.zri.memory import Memory, RescueInfo
 from zilliandomizer.zri import events
@@ -36,11 +35,11 @@ class ZillionCommandProcessor(ClientCommandProcessor):
 
 
 class ToggleCallback(Protocol):
-    def __call__(self) -> object: ...
+    def __call__(self) -> None: ...
 
 
 class SetRoomCallback(Protocol):
-    def __call__(self, rooms: list[list[int]]) -> object: ...
+    def __call__(self, rooms: List[List[int]]) -> None: ...
 
 
 class ZillionContext(CommonContext):
@@ -48,7 +47,7 @@ class ZillionContext(CommonContext):
     command_processor = ZillionCommandProcessor
     items_handling = 1  # receive items from other players
 
-    known_name: str | None
+    known_name: Optional[str]
     """ This is almost the same as `auth` except `auth` is reset to `None` when server disconnects, and this isn't. """
 
     from_game: "asyncio.Queue[events.EventFromGame]"
@@ -57,11 +56,11 @@ class ZillionContext(CommonContext):
     """ local checks watched by server """
     next_item: int
     """ index in `items_received` """
-    ap_id_to_name: dict[int, str]
-    ap_id_to_zz_id: dict[int, int]
+    ap_id_to_name: Dict[int, str]
+    ap_id_to_zz_id: Dict[int, int]
     start_char: Chars = "JJ"
-    rescues: dict[int, RescueInfo] = {}
-    loc_mem_to_id: dict[int, int] = {}
+    rescues: Dict[int, RescueInfo] = {}
+    loc_mem_to_id: Dict[int, int] = {}
     got_room_info: asyncio.Event
     """ flag for connected to server """
     got_slot_data: asyncio.Event
@@ -120,22 +119,22 @@ class ZillionContext(CommonContext):
         self.finished_game = False
         self.items_received.clear()
 
-    @override
-    def on_deathlink(self, data: dict[str, Any]) -> None:
+    # override
+    def on_deathlink(self, data: Dict[str, Any]) -> None:
         self.to_game.put_nowait(events.DeathEventToGame())
         return super().on_deathlink(data)
 
-    @override
+    # override
     async def server_auth(self, password_requested: bool = False) -> None:
         if password_requested and not self.password:
             await super().server_auth(password_requested)
         if not self.auth:
-            logger.info("waiting for connection to game...")
+            logger.info('waiting for connection to game...')
             return
         logger.info("logging in to server...")
         await self.send_connect()
 
-    @override
+    # override
     def run_gui(self) -> None:
         from kvui import GameManager
         from kivy.core.text import Label as CoreLabel
@@ -155,10 +154,10 @@ class ZillionContext(CommonContext):
                 MAP_WIDTH: ClassVar[int] = 281
 
                 map_background: CoreImage
-                _number_textures: list[Texture] = []
-                rooms: list[list[int]] = []
+                _number_textures: List[Texture] = []
+                rooms: List[List[int]] = []
 
-                def __init__(self, **kwargs: Any) -> None:  # noqa: ANN401
+                def __init__(self, **kwargs: Any) -> None:
                     super().__init__(**kwargs)
 
                     FILE_NAME = "empty-zillion-map-row-col-labels-281.png"
@@ -184,7 +183,7 @@ class ZillionContext(CommonContext):
                         label.refresh()
                         self._number_textures.append(label.texture)
 
-                def update_map(self, *args: Any) -> None:  # noqa: ANN401
+                def update_map(self, *args: Any) -> None:
                     self.canvas.clear()
 
                     with self.canvas:
@@ -204,7 +203,6 @@ class ZillionContext(CommonContext):
                                     num_texture = self._number_textures[num]
                                     Rectangle(texture=num_texture, size=num_texture.size, pos=pos)
 
-            @override
             def build(self) -> Layout:
                 container = super().build()
                 self.map_widget = ZillionManager.MapPanel(size_hint_x=None, width=ZillionManager.MapPanel.MAP_WIDTH)
@@ -218,18 +216,17 @@ class ZillionContext(CommonContext):
                     self.map_widget.width = 0
                 self.container.do_layout()
 
-            def set_rooms(self, rooms: list[list[int]]) -> None:
+            def set_rooms(self, rooms: List[List[int]]) -> None:
                 self.map_widget.rooms = rooms
                 self.map_widget.update_map()
 
         self.ui = ZillionManager(self)
-        self.ui_toggle_map = lambda: isinstance(self.ui, ZillionManager) and self.ui.toggle_map_width()
-        self.ui_set_rooms = lambda rooms: isinstance(self.ui, ZillionManager) and self.ui.set_rooms(rooms)
+        self.ui_toggle_map = lambda: self.ui.toggle_map_width()
+        self.ui_set_rooms = lambda rooms: self.ui.set_rooms(rooms)
         run_co: Coroutine[Any, Any, None] = self.ui.async_run()
         self.ui_task = asyncio.create_task(run_co, name="UI")
 
-    @override
-    def on_package(self, cmd: str, args: dict[str, Any]) -> None:
+    def on_package(self, cmd: str, args: Dict[str, Any]) -> None:
         self.room_item_numbers_to_ui()
         if cmd == "Connected":
             logger.info("logged in to Archipelago server")
@@ -241,7 +238,7 @@ class ZillionContext(CommonContext):
             if "start_char" not in slot_data:
                 logger.warning("invalid Zillion `Connected` packet, `slot_data` missing `start_char`")
                 return
-            self.start_char = slot_data["start_char"]
+            self.start_char = slot_data['start_char']
             if self.start_char not in {"Apple", "Champ", "JJ"}:
                 logger.warning("invalid Zillion `Connected` packet, "
                                f"`slot_data` `start_char` has invalid value: {self.start_char}")
@@ -262,7 +259,7 @@ class ZillionContext(CommonContext):
                 self.rescues[0 if rescue_id == "0" else 1] = ri
 
             if "loc_mem_to_id" not in slot_data:
-                logger.warning("invalid Zillion `Connected` packet, `slot_data` missing `loc_mem_to_id`")
+                logger.warn("invalid Zillion `Connected` packet, `slot_data` missing `loc_mem_to_id`")
                 return
             loc_mem_to_id = slot_data["loc_mem_to_id"]
             self.loc_mem_to_id = {}
@@ -289,7 +286,7 @@ class ZillionContext(CommonContext):
             if "keys" not in args:
                 logger.warning(f"invalid Retrieved packet to ZillionClient: {args}")
                 return
-            keys = cast(dict[str, str | None], args["keys"])
+            keys = cast(Dict[str, Optional[str]], args["keys"])
             doors_b64 = keys.get(f"zillion-{self.auth}-doors", None)
             if doors_b64:
                 logger.info("received door data from server")
@@ -324,9 +321,9 @@ class ZillionContext(CommonContext):
                 if server_id in self.missing_locations:
                     self.ap_local_count += 1
                     n_locations = len(self.missing_locations) + len(self.checked_locations) - 1  # -1 to ignore win
-                    logger.info(f"New Check: {loc_name} ({self.ap_local_count}/{n_locations})")
+                    logger.info(f'New Check: {loc_name} ({self.ap_local_count}/{n_locations})')
                     async_start(self.send_msgs([
-                        {"cmd": "LocationChecks", "locations": [server_id]}
+                        {"cmd": 'LocationChecks', "locations": [server_id]}
                     ]))
                 else:
                     # This will happen a lot in Zillion,
@@ -337,7 +334,7 @@ class ZillionContext(CommonContext):
             elif isinstance(event_from_game, events.WinEventFromGame):
                 if not self.finished_game:
                     async_start(self.send_msgs([
-                        {"cmd": "LocationChecks", "locations": [loc_name_to_id["J-6 bottom far left"]]},
+                        {"cmd": 'LocationChecks', "locations": [loc_name_to_id["J-6 bottom far left"]]},
                         {"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}
                     ]))
                     self.finished_game = True
@@ -365,24 +362,24 @@ class ZillionContext(CommonContext):
                 ap_id = self.items_received[index].item
                 from_name = self.player_names[self.items_received[index].player]
                 # TODO: colors in this text, like sni client?
-                logger.info(f"received {self.ap_id_to_name[ap_id]} from {from_name}")
+                logger.info(f'received {self.ap_id_to_name[ap_id]} from {from_name}')
             self.to_game.put_nowait(
                 events.ItemEventToGame(zz_item_ids)
             )
             self.next_item = len(self.items_received)
 
 
-def name_seed_from_ram(data: bytes) -> tuple[str, str]:
+def name_seed_from_ram(data: bytes) -> Tuple[str, str]:
     """ returns player name, and end of seed string """
     if len(data) == 0:
         # no connection to game
         return "", "xxx"
-    null_index = data.find(b"\x00")
+    null_index = data.find(b'\x00')
     if null_index == -1:
         logger.warning(f"invalid game id in rom {repr(data)}")
         null_index = len(data)
     name = data[:null_index].decode()
-    null_index_2 = data.find(b"\x00", null_index + 1)
+    null_index_2 = data.find(b'\x00', null_index + 1)
     if null_index_2 == -1:
         null_index_2 = len(data)
     seed_name = data[null_index + 1:null_index_2].decode()
@@ -482,8 +479,8 @@ async def zillion_sync_task(ctx: ZillionContext) -> None:
 
 async def main() -> None:
     parser = get_base_parser()
-    parser.add_argument("diff_file", default="", type=str, nargs="?",
-                        help="Path to a .apzl Archipelago Binary Patch file")
+    parser.add_argument('diff_file', default="", type=str, nargs="?",
+                        help='Path to a .apzl Archipelago Binary Patch file')
     # SNI parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
     args = parser.parse_args()
     print(args)
@@ -516,6 +513,6 @@ async def main() -> None:
 
 
 def launch() -> None:
-    colorama.just_fix_windows_console()
+    colorama.init()
     asyncio.run(main())
     colorama.deinit()

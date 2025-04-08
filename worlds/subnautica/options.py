@@ -112,7 +112,8 @@ class AggressiveScanLogic(Choice):
 
 
 class SubnauticaDeathLink(DeathLink):
-    __doc__ = DeathLink.__doc__ + "\n\n    Note: can be toggled via in-game console command \"deathlink\"."
+    """When you die, everyone dies. Of course the reverse is true too.
+    Note: can be toggled via in-game console command "deathlink"."""
 
 
 class FillerItemsDistribution(ItemDict):

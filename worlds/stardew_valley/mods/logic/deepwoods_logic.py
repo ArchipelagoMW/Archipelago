@@ -1,5 +1,6 @@
 from typing import Union
 
+from ... import options
 from ...logic.base_logic import BaseLogicMixin, BaseLogic
 from ...logic.combat_logic import CombatLogicMixin
 from ...logic.cooking_logic import CookingLogicMixin
@@ -44,9 +45,9 @@ CookingLogicMixin]]):
                          self.logic.received(ModTransportation.woods_obelisk))
 
         tier = int(depth / 25) + 1
-        if self.content.features.skill_progression.is_progressive:
-            combat_level = min(10, max(0, tier + 5))
-            rules.append(self.logic.skill.has_level(Skill.combat, combat_level))
+        if self.options.skill_progression >= options.SkillProgression.option_progressive:
+            combat_tier = min(10, max(0, tier + 5))
+            rules.append(self.logic.skill.has_level(Skill.combat, combat_tier))
 
         return self.logic.and_(*rules)
 

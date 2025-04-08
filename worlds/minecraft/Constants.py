@@ -3,7 +3,7 @@ import json
 import pkgutil
 
 def load_data_file(*args) -> dict:
-    fname = "/".join(["data", *args])
+    fname = os.path.join("data", *args)
     return json.loads(pkgutil.get_data(__name__, fname).decode())
 
 # For historical reasons, these values are different.

@@ -261,7 +261,7 @@ if __name__ == '__main__':
 
     parser = get_base_parser()
     args = parser.parse_args()
-    colorama.just_fix_windows_console()
+    colorama.init()
 
     asyncio.run(main(args))
     colorama.deinit()

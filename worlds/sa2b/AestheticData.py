@@ -150,26 +150,6 @@ sample_chao_names = [
 	"Hubert",
 	"Corvus",
 	"Nigel",
-	"Benjamin",
-	"Gooey",
-	"Maddy",
-	"AFGNCAAP",
-	"Reinhardt",
-	"Claire",
-	"Yoshi",
-	"Peasley",
-	"Faux",
-	"Naija",
-	"Kaiba",
-	"Hat Kid",
-	"TzTokJad",
-	"Sora",
-	"WoodMan",
-	"Yachty",
-	"Grieve",
-	"Portia",
-	"Graves",
-	"Kaycee",
 ]
 
 totally_real_item_names = [
@@ -260,35 +240,6 @@ totally_real_item_names = [
 	"Ladder",
 
 	"Visible Dots",
-
-	"CooCoo",
-
-	"Blueberry",
-
-	"Ear of Luigi",
-
-	"Mega Nut",
-
-	"DUELIST ALLIANCE",
-	"DUEL OVERLOAD",
-	"POWER OF THE ELEMENTS",
-	"S:P Little Knight",
-	"Red-Eyes Dark Dragoon",
-
-	"Fire Hat",
-
-	"Area: Taverly",
-	"Area: Meiyerditch",
-	"Fire Cape",
-
-	"Donald Zeta Flare",
-
-	"Category One of a Kind",
-	"Category Fuller House",
-
-	"Passive Camoflage",
-
-	"Earth Card",
 ]
 
 all_exits = [

@@ -57,9 +57,7 @@ WORLD_REGIONS_JSON = [
         "name": "Route between Gumi and Ryuma",
         "canBeHintedAsRequired": False,
         "nodeIds": [
-            "route_gumi_ryuma",
-            "tibor_tree",
-            "mercator_gate_tree"
+            "route_gumi_ryuma"
         ]
     },
     {
@@ -159,8 +157,7 @@ WORLD_REGIONS_JSON = [
         "hintName": "in Greenmaze",
         "nodeIds": [
             "greenmaze_pre_whistle",
-            "greenmaze_post_whistle",
-            "greenmaze_post_whistle_tree"
+            "greenmaze_post_whistle"
         ]
     },
     {
@@ -168,8 +165,7 @@ WORLD_REGIONS_JSON = [
         "canBeHintedAsRequired": False,
         "nodeIds": [
             "verla_shore",
-            "verla_shore_cliff",
-            "verla_shore_tree"
+            "verla_shore_cliff"
         ]
     },
     {
@@ -248,8 +244,7 @@ WORLD_REGIONS_JSON = [
         "name": "Mountainous Area",
         "hintName": "in the mountainous area",
         "nodeIds": [
-            "mountainous_area",
-            "mountainous_area_tree"
+            "mountainous_area"
         ]
     },
     {

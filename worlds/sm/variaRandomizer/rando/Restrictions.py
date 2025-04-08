@@ -1,4 +1,4 @@
-import copy
+import copy, random
 from ..utils import log
 from ..graph.graph_utils import getAccessPoint
 from ..rando.ItemLocContainer import getLocListStr
@@ -112,7 +112,7 @@ class Restrictions(object):
             return item.Class == "Minor"
 
     # return True if we can keep morph as a possibility
-    def lateMorphCheck(self, container, possibleLocs, random):
+    def lateMorphCheck(self, container, possibleLocs):
         # the closer we get to the limit the higher the chances of allowing morph
         proba = random.randint(0, self.lateMorphLimit)
         if self.split == 'Full':

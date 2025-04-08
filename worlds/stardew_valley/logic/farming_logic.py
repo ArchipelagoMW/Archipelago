@@ -10,16 +10,17 @@ from .season_logic import SeasonLogicMixin
 from .tool_logic import ToolLogicMixin
 from .. import options
 from ..stardew_rule import StardewRule, True_, false_
+from ..strings.ap_names.event_names import Event
 from ..strings.fertilizer_names import Fertilizer
-from ..strings.region_names import Region, LogicRegion
+from ..strings.region_names import Region
 from ..strings.season_names import Season
 from ..strings.tool_names import Tool
 
-farming_region_by_season = {
-    Season.spring: LogicRegion.spring_farming,
-    Season.summer: LogicRegion.summer_farming,
-    Season.fall: LogicRegion.fall_farming,
-    Season.winter: LogicRegion.winter_farming,
+farming_event_by_season = {
+    Season.spring: Event.spring_farming,
+    Season.summer: Event.summer_farming,
+    Season.fall: Event.fall_farming,
+    Season.winter: Event.winter_farming,
 }
 
 
@@ -53,7 +54,7 @@ class FarmingLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogi
         if isinstance(seasons, str):
             seasons = (seasons,)
 
-        return self.logic.or_(*(self.logic.region.can_reach(farming_region_by_season[season]) for season in seasons))
+        return self.logic.or_(*(self.logic.received(farming_event_by_season[season]) for season in seasons))
 
     def has_island_farm(self) -> StardewRule:
         if self.options.exclude_ginger_island == options.ExcludeGingerIsland.option_false:

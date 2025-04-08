@@ -31,7 +31,6 @@ class CliqueWebWorld(WebWorld):
     )
     
     tutorials = [setup_en, setup_de]
-    game_info_languages = ["en", "de"]
 
 
 class CliqueWorld(World):

@@ -1,14 +1,14 @@
 from copy import deepcopy
-from typing import TYPE_CHECKING
+from typing import List, TYPE_CHECKING
 
-from BaseClasses import CollectionState
+from BaseClasses import CollectionState, PlandoOptions
 from Options import PlandoConnection
 
 if TYPE_CHECKING:
     from . import MessengerWorld
 
 
-PORTALS: list[str] = [
+PORTALS = [
     "Autumn Hills",
     "Riviere Turquoise",
     "Howling Grotto",
@@ -18,7 +18,7 @@ PORTALS: list[str] = [
 ]
 
 
-SHOP_POINTS: dict[str, list[str]] = {
+SHOP_POINTS = {
     "Autumn Hills": [
         "Climbing Claws",
         "Hope Path",
@@ -113,7 +113,7 @@ SHOP_POINTS: dict[str, list[str]] = {
 }
 
 
-CHECKPOINTS: dict[str, list[str]] = {
+CHECKPOINTS = {
     "Autumn Hills": [
         "Hope Latch",
         "Key of Hope",
@@ -186,7 +186,7 @@ CHECKPOINTS: dict[str, list[str]] = {
 }
 
 
-REGION_ORDER: list[str] = [
+REGION_ORDER = [
     "Autumn Hills",
     "Forlorn Temple",
     "Catacombs",
@@ -228,7 +228,7 @@ def shuffle_portals(world: "MessengerWorld") -> None:
 
         return parent
 
-    def handle_planned_portals(plando_connections: list[PlandoConnection]) -> None:
+    def handle_planned_portals(plando_connections: List[PlandoConnection]) -> None:
         """checks the provided plando connections for portals and connects them"""
         nonlocal available_portals
 
@@ -252,7 +252,9 @@ def shuffle_portals(world: "MessengerWorld") -> None:
     world.random.shuffle(available_portals)
 
     plando = world.options.portal_plando.value
-    if plando and not world.plando_portals:
+    if not plando:
+        plando = world.options.plando_connections.value
+    if plando and world.multiworld.plando_options & PlandoOptions.connections and not world.plando_portals:
         try:
             handle_planned_portals(plando)
         # any failure i expect will trigger on available_portals.remove
@@ -292,8 +294,8 @@ def disconnect_portals(world: "MessengerWorld") -> None:
 
 
 def validate_portals(world: "MessengerWorld") -> bool:
-    if world.options.shuffle_transitions:
-        return True
+    # if world.options.shuffle_transitions:
+    #     return True
     new_state = CollectionState(world.multiworld)
     new_state.update_reachable_regions(world.player)
     reachable_locs = 0

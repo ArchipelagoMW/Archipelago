@@ -260,8 +260,7 @@ def create_items(self) -> None:
         items.append(i)
 
     for item_group in ("Key Items", "Spells", "Armors", "Helms", "Shields", "Accessories", "Weapons"):
-        # Sort for deterministic order
-        for item in sorted(self.item_name_groups[item_group]):
+        for item in self.item_name_groups[item_group]:
             add_item(item)
 
     if self.options.brown_boxes == "include":

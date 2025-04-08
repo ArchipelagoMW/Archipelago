@@ -42,5 +42,10 @@ window.addEventListener('load', () => {
                 scrollTarget?.scrollIntoView();
             }
         });
+    }).catch((error) => {
+        console.error(error);
+        gameInfo.innerHTML =
+            `<h2>This page is out of logic!</h2>
+            <h3>Click <a href="${window.location.origin}">here</a> to return to safety.</h3>`;
     });
 });

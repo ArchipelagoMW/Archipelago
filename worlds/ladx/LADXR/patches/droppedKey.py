@@ -24,10 +24,14 @@ notSpecialSideView:
         ld   a, $06 ; giveItemMultiworld
         rst  8
         
-        ;Show message
+        ldh  a, [$F1] ; Load active sprite variant to see if this is just a normal small key
+        cp   $1A
+        jr   z, isAKey
+        
+        ;Show message (if not a key)
         ld   a, $0A ; showMessageMultiworld
         rst  8
-
+isAKey:
         ret
     """))
     rom.patch(0x03, 0x24B7, "3E", "3E")  # sanity check

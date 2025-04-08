@@ -1,4 +1,5 @@
-import sys
+
+import sys, random
 from collections import defaultdict
 from ..rando.Items import ItemManager
 from ..utils.utils import getRangeDict, chooseFromRange
@@ -31,11 +32,11 @@ class RandoSettings(object):
     def isPlandoRando(self):
         return self.PlandoOptions is not None
 
-    def getItemManager(self, smbm, nLocs, bossesItems, random):
+    def getItemManager(self, smbm, nLocs, bossesItems):
         if not self.isPlandoRando():
-            return ItemManager(self.restrictions['MajorMinor'], self.qty, smbm, nLocs, bossesItems, self.maxDiff, random)
+            return ItemManager(self.restrictions['MajorMinor'], self.qty, smbm, nLocs, bossesItems, self.maxDiff)
         else:
-            return ItemManager('Plando', self.qty, smbm, nLocs, bossesItems, self.maxDiff, random)
+            return ItemManager('Plando', self.qty, smbm, nLocs, bossesItems, self.maxDiff)
 
     def getExcludeItems(self, locations):
         if not self.isPlandoRando():
@@ -93,7 +94,7 @@ class ProgSpeedParameters(object):
         self.restrictions = restrictions
         self.nLocs = nLocs
 
-    def getVariableSpeed(self, random):
+    def getVariableSpeed(self):
         ranges = getRangeDict({
             'slowest':7,
             'slow':20,
@@ -101,7 +102,7 @@ class ProgSpeedParameters(object):
             'fast':27,
             'fastest':11
         })
-        return chooseFromRange(ranges, random)
+        return chooseFromRange(ranges)
 
     def getMinorHelpProb(self, progSpeed):
         if self.restrictions.split != 'Major':
@@ -133,7 +134,7 @@ class ProgSpeedParameters(object):
     def isSlow(self, progSpeed):
         return progSpeed == "slow" or (progSpeed == "slowest" and self.restrictions.split == "Chozo")
 
-    def getItemLimit(self, progSpeed, random):
+    def getItemLimit(self, progSpeed):
         itemLimit = self.nLocs
         if self.isSlow(progSpeed):
             itemLimit = int(self.nLocs*0.209) # 21 for 105

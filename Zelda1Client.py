@@ -386,7 +386,7 @@ if __name__ == '__main__':
     parser.add_argument('diff_file', default="", type=str, nargs="?",
                         help='Path to a Archipelago Binary Patch file')
     args = parser.parse_args()
-    colorama.just_fix_windows_console()
+    colorama.init()
 
     asyncio.run(main(args))
     colorama.deinit()

@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from Utils import output_path
-import argparse, os.path, json, sys, shutil, copy, requests
+import argparse, os.path, json, sys, shutil, random, copy, requests
 
 from .rando.RandoSettings import RandoSettings, GraphSettings
 from .rando.RandoExec import RandoExec
@@ -39,7 +39,7 @@ objectives = defaultMultiValues['objective']
 tourians = defaultMultiValues['tourian']
 areaRandomizations = defaultMultiValues['areaRandomization']
 
-def randomMulti(args, param, defaultMultiValues, random):
+def randomMulti(args, param, defaultMultiValues):
     value = args[param]
 
     isRandom = False
@@ -250,11 +250,10 @@ class VariaRandomizer:
     parser.add_argument('--tourianList', help="list to choose from when random",
                         dest='tourianList', nargs='?', default=None)
 
-    def __init__(self, options, rom, player, seed, random):
+    def __init__(self, options, rom, player):
         # parse args       
         self.args = copy.deepcopy(VariaRandomizer.parser.parse_args(["--logic", "varia"])) #dummy custom args to skip parsing _sys.argv while still get default values
         self.player = player
-        self.random = random
         args = self.args
         args.rom = rom
         # args.startLocation = to_pascal_case_with_space(options.startLocation.current_key)
@@ -324,13 +323,11 @@ class VariaRandomizer:
 
         logger.debug("preset: {}".format(preset))
 
-        # Archipelago provides a seed for the multiworld.
-        self.seed = seed
-        # # if no seed given, choose one
-        # if args.seed == 0:
-        #     self.seed = random.randrange(sys.maxsize)
-        # else:
-        #     self.seed = args.seed
+        # if no seed given, choose one
+        if args.seed == 0:
+            self.seed = random.randrange(sys.maxsize)
+        else:
+            self.seed = args.seed
         logger.debug("seed: {}".format(self.seed))
 
         if args.raceMagic is not None:
@@ -363,12 +360,12 @@ class VariaRandomizer:
         logger.debug("maxDifficulty: {}".format(self.maxDifficulty))
 
         # handle random parameters with dynamic pool of values
-        (_, progSpeed) = randomMulti(args.__dict__, "progressionSpeed", speeds, random)
-        (_, progDiff) = randomMulti(args.__dict__, "progressionDifficulty", progDiffs, random)
-        (majorsSplitRandom, args.majorsSplit) = randomMulti(args.__dict__, "majorsSplit", majorsSplits, random)
-        (_, self.gravityBehaviour) = randomMulti(args.__dict__, "gravityBehaviour", gravityBehaviours, random)
-        (_, args.tourian) = randomMulti(args.__dict__, "tourian", tourians, random)
-        (areaRandom, args.area) = randomMulti(args.__dict__, "area", areaRandomizations, random)
+        (_, progSpeed) = randomMulti(args.__dict__, "progressionSpeed", speeds)
+        (_, progDiff) = randomMulti(args.__dict__, "progressionDifficulty", progDiffs)
+        (majorsSplitRandom, args.majorsSplit) = randomMulti(args.__dict__, "majorsSplit", majorsSplits)
+        (_, self.gravityBehaviour) = randomMulti(args.__dict__, "gravityBehaviour", gravityBehaviours)
+        (_, args.tourian) = randomMulti(args.__dict__, "tourian", tourians)
+        (areaRandom, args.area) = randomMulti(args.__dict__, "area", areaRandomizations)
         areaRandomization = args.area in ['light', 'full']
         lightArea = args.area == 'light'
     
@@ -629,7 +626,7 @@ class VariaRandomizer:
             if args.objective:
                 if (args.objectiveRandom):
                     availableObjectives = [goal for goal in objectives if goal != "collect 100% items"] if "random" in args.objectiveList else args.objectiveList
-                    self.objectivesManager.setRandom(args.nbObjective, availableObjectives, self.random)
+                    self.objectivesManager.setRandom(args.nbObjective, availableObjectives)
                 else:
                     maxActiveGoals = Objectives.maxActiveGoals - addedObjectives
                     if len(args.objective) > maxActiveGoals:
@@ -663,7 +660,7 @@ class VariaRandomizer:
         #    print("energyQty:{}".format(energyQty))
 
         #try:
-        self.randoExec = RandoExec(seedName, args.vcr, randoSettings, graphSettings, self.player, self.random)
+        self.randoExec = RandoExec(seedName, args.vcr, randoSettings, graphSettings, self.player)
         self.container = self.randoExec.randomize()
         # if we couldn't find an area layout then the escape graph is not created either
         # and getDoorConnections will crash if random escape is activated.
@@ -683,7 +680,7 @@ class VariaRandomizer:
             #dumpErrorMsg(args.output, self.randoExec.errorMsg)
             raise Exception("Can't generate " + self.fileName + " with the given parameters: {}".format(self.randoExec.errorMsg))
 
-    def PatchRom(self, customPrePatchApply = None, customPostPatchApply = None) -> RomPatcher:
+    def PatchRom(self, outputFilename, customPrePatchApply = None, customPostPatchApply = None):
         args = self.args
         optErrMsgs = self.optErrMsgs
 
@@ -693,7 +690,7 @@ class VariaRandomizer:
                             'gameend.ips', 'grey_door_animals.ips', 'low_timer.ips', 'metalimals.ips',
                             'phantoonimals.ips', 'ridleyimals.ips']
             if args.escapeRando == False:
-                args.patches.append(self.random.choice(animalsPatches))
+                args.patches.append(random.choice(animalsPatches))
                 args.patches.append("Escape_Animals_Change_Event")
             else:
                 optErrMsgs.append("Ignored animals surprise because of escape randomization")
@@ -761,11 +758,11 @@ class VariaRandomizer:
             # args.output is not None: generate local json named args.output
             if args.rom is not None:
                 # patch local rom
-                # romFileName = args.rom
-                # shutil.copyfile(romFileName, outputFilename)
-                romPatcher = RomPatcher(settings=patcherSettings, magic=args.raceMagic, player=self.player, random=self.random)
+                romFileName = args.rom
+                shutil.copyfile(romFileName, outputFilename)
+                romPatcher = RomPatcher(settings=patcherSettings, romFileName=outputFilename, magic=args.raceMagic, player=self.player)
             else:
-                romPatcher = RomPatcher(settings=patcherSettings, magic=args.raceMagic, random=self.random)
+                romPatcher = RomPatcher(settings=patcherSettings, magic=args.raceMagic)
 
             if customPrePatchApply != None:
                 customPrePatchApply(romPatcher)
@@ -782,12 +779,24 @@ class VariaRandomizer:
                 #msg = randoExec.errorMsg
                 msg = ''
 
-            return romPatcher
-
+            if args.rom is None: # web mode
+                data = romPatcher.romFile.data
+                self.fileName = '{}.sfc'.format(self.fileName)
+                data["fileName"] = self.fileName
+                # error msg in json to be displayed by the web site
+                data["errorMsg"] = msg
+                # replaced parameters to update stats in database
+                if len(self.forcedArgs) > 0:
+                    data["forcedArgs"] = self.forcedArgs
+                with open(outputFilename, 'w') as jsonFile:
+                    json.dump(data, jsonFile)
+            else: # CLI mode
+                if msg != "":
+                    print(msg)
         except Exception as e:
             import traceback
             traceback.print_exc(file=sys.stdout)
-            raise Exception("Error patching: ({}: {})".format(type(e).__name__, e))
+            raise Exception("Error patching {}: ({}: {})".format(outputFilename, type(e).__name__, e))
             #dumpErrorMsg(args.output, msg)
 
 #        if stuck == True:

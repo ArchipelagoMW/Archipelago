@@ -1,9 +1,10 @@
 import typing
 
-from BaseClasses import Region, Entrance
-from worlds.AutoWorld import World
+from BaseClasses import MultiWorld, Region, Entrance
+from .Items import DKC3Item
 from .Locations import DKC3Location
 from .Names import LocationName, ItemName
+from worlds.AutoWorld import World
 
 
 def create_regions(world: World, active_locations):

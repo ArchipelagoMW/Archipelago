@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from typing import Dict
 
-from Options import Choice, DefaultOnToggle, DeathLink, Range, Toggle, PerGameCommonOptions
+from dataclasses import dataclass
+from Options import Choice, Option, DefaultOnToggle, DeathLink, Range, Toggle, PerGameCommonOptions
 
 
 class FreeincarnateMax(Range):

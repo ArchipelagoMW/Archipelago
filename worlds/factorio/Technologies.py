@@ -63,19 +63,17 @@ class FactorioElement:
 
 
 class Technology(FactorioElement):  # maybe make subclass of Location?
+    has_modifier: bool
     factorio_id: int
     progressive: Tuple[str]
     unlocks: Union[Set[str], bool]  # bool case is for progressive technologies
-    modifiers: list[str]
 
     def __init__(self, technology_name: str, factorio_id: int, progressive: Tuple[str] = (),
-                 modifiers: list[str] = None, unlocks: Union[Set[str], bool] = None):
+                 has_modifier: bool = False, unlocks: Union[Set[str], bool] = None):
         self.name = technology_name
         self.factorio_id = factorio_id
         self.progressive = progressive
-        if modifiers is None:
-            modifiers = []
-        self.modifiers =  modifiers
+        self.has_modifier = has_modifier
         if unlocks:
             self.unlocks = unlocks
         else:
@@ -83,10 +81,6 @@ class Technology(FactorioElement):  # maybe make subclass of Location?
 
     def __hash__(self):
         return self.factorio_id
-
-    @property
-    def has_modifier(self) -> bool:
-        return bool(self.modifiers)
 
     def get_custom(self, world, allowed_packs: Set[str], player: int) -> CustomTechnology:
         return CustomTechnology(self, world, allowed_packs, player)
@@ -197,14 +191,13 @@ class Machine(FactorioElement):
 
 
 recipe_sources: Dict[str, Set[str]] = {}  # recipe_name -> technology source
-mining_with_fluid_sources: set[str] = set()
 
 # recipes and technologies can share names in Factorio
 for technology_name, data in sorted(techs_future.result().items()):
     technology = Technology(
         technology_name,
         factorio_tech_id,
-        modifiers=data.get("modifiers", []),
+        has_modifier=data["has_modifier"],
         unlocks=set(data["unlocks"]) - start_unlocked_recipes,
     )
     factorio_tech_id += 1
@@ -212,8 +205,7 @@ for technology_name, data in sorted(techs_future.result().items()):
     technology_table[technology_name] = technology
     for recipe_name in technology.unlocks:
         recipe_sources.setdefault(recipe_name, set()).add(technology_name)
-    if "mining-with-fluid" in technology.modifiers:
-        mining_with_fluid_sources.add(technology_name)
+
 del techs_future
 
 recipes = {}
@@ -229,8 +221,6 @@ for resource_name, resource_data in resources_future.result().items():
         "energy": resource_data["mining_time"],
         "category": resource_data["category"]
     }
-    if "required_fluid" in resource_data:
-        recipe_sources.setdefault(f"mining-{resource_name}", set()).update(mining_with_fluid_sources)
 del resources_future
 
 for recipe_name, recipe_data in raw_recipes.items():
@@ -441,9 +431,7 @@ for root in sorted_rows:
     factorio_tech_id += 1
     progressive_technology = Technology(root, factorio_tech_id,
                                         tuple(progressive),
-                                        modifiers=sorted(set.union(
-                                            *(set(technology_table[tech].modifiers) for tech in progressive)
-                                        )),
+                                        has_modifier=any(technology_table[tech].has_modifier for tech in progressive),
                                         unlocks=any(technology_table[tech].unlocks for tech in progressive),)
     progressive_tech_table[root] = progressive_technology.factorio_id
     progressive_technology_table[root] = progressive_technology

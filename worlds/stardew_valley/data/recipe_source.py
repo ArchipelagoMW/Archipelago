@@ -106,7 +106,7 @@ class MasterySource(RecipeSource):
         self.skill = skill
 
     def __repr__(self):
-        return f"MasterySource {self.skill}"
+        return f"MasterySource at level {self.level} {self.skill}"
 
 
 class ShopSource(RecipeSource):

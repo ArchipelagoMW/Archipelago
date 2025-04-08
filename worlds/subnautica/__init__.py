@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import itertools
 from typing import List, Dict, Any, cast
 
@@ -9,11 +10,13 @@ from . import items
 from . import locations
 from . import creatures
 from . import options
-from .items import item_table, group_items
+from .items import item_table, group_items, items_by_type, ItemType
 from .rules import set_rules
 
+logger = logging.getLogger("Subnautica")
 
-class SubnauticaWeb(WebWorld):
+
+class SubnaticaWeb(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up the Subnautica randomizer connected to an Archipelago Multiworld",
@@ -35,7 +38,7 @@ class SubnauticaWorld(World):
     You must find a cure for yourself, build an escape rocket, and leave the planet.
     """
     game = "Subnautica"
-    web = SubnauticaWeb()
+    web = SubnaticaWeb()
 
     item_name_to_id = {data.name: item_id for item_id, data in items.item_table.items()}
     location_name_to_id = all_locations

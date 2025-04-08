@@ -119,14 +119,11 @@ mission_orders: typing.List[typing.List[int]] = [
     [4, 5, 3, 2, 1],
 ]
 
-### 0: Sonic
-### 1: Tails
-### 2: Knuckles
-### 3: Shadow
-### 4: Eggman
-### 5: Rouge
-### 6: Kart
-### 7: Cannon's Core
+### 0: Speed
+### 1: Mech
+### 2: Hunt
+### 3: Kart
+### 4: Cannon's Core
 level_styles: typing.List[int] = [
     0,
     2,
@@ -136,7 +133,7 @@ level_styles: typing.List[int] = [
     2,
     1,
     2,
-    6,
+    3,
     1,
     0,
     2,
@@ -145,22 +142,22 @@ level_styles: typing.List[int] = [
     0,
     0,
 
-    4,
-    5,
-    4,
+    1,
+    2,
+    1,
+    0,
+    2,
+    1,
+    1,
+    2,
+    0,
     3,
-    5,
-    4,
-    4,
-    5,
-    3,
-    6,
-    3,
-    5,
-    4,
-    3,
+    0,
+    2,
+    1,
+    0,
 
-    7,
+    4,
 ]
 
 stage_name_prefixes: typing.List[str] = [
@@ -204,33 +201,21 @@ def get_mission_count_table(multiworld: MultiWorld, world: World, player: int):
         for level in range(31):
             mission_count_table[level] = 0
     else:
-        sonic_active_missions = 1
-        tails_active_missions = 1
-        knuckles_active_missions = 1
-        shadow_active_missions = 1
-        eggman_active_missions = 1
-        rouge_active_missions = 1
+        speed_active_missions = 1
+        mech_active_missions = 1
+        hunt_active_missions = 1
         kart_active_missions = 1
         cannons_core_active_missions = 1
 
         for i in range(2,6):
-            if getattr(world.options, "sonic_mission_" + str(i), None):
-                sonic_active_missions += 1
+            if getattr(world.options, "speed_mission_" + str(i), None):
+                speed_active_missions += 1
 
-            if getattr(world.options, "tails_mission_" + str(i), None):
-                tails_active_missions += 1
+            if getattr(world.options, "mech_mission_" + str(i), None):
+                mech_active_missions += 1
 
-            if getattr(world.options, "knuckles_mission_" + str(i), None):
-                knuckles_active_missions += 1
-
-            if getattr(world.options, "shadow_mission_" + str(i), None):
-                shadow_active_missions += 1
-
-            if getattr(world.options, "eggman_mission_" + str(i), None):
-                eggman_active_missions += 1
-
-            if getattr(world.options, "rouge_mission_" + str(i), None):
-                rouge_active_missions += 1
+            if getattr(world.options, "hunt_mission_" + str(i), None):
+                hunt_active_missions += 1
 
             if getattr(world.options, "kart_mission_" + str(i), None):
                 kart_active_missions += 1
@@ -238,22 +223,16 @@ def get_mission_count_table(multiworld: MultiWorld, world: World, player: int):
             if getattr(world.options, "cannons_core_mission_" + str(i), None):
                 cannons_core_active_missions += 1
 
-        sonic_active_missions        = min(sonic_active_missions, world.options.sonic_mission_count.value)
-        tails_active_missions        = min(tails_active_missions, world.options.tails_mission_count.value)
-        knuckles_active_missions     = min(knuckles_active_missions, world.options.knuckles_mission_count.value)
-        shadow_active_missions       = min(shadow_active_missions, world.options.sonic_mission_count.value)
-        eggman_active_missions       = min(eggman_active_missions, world.options.eggman_mission_count.value)
-        rouge_active_missions        = min(rouge_active_missions, world.options.rouge_mission_count.value)
+        speed_active_missions        = min(speed_active_missions, world.options.speed_mission_count.value)
+        mech_active_missions         = min(mech_active_missions, world.options.mech_mission_count.value)
+        hunt_active_missions         = min(hunt_active_missions, world.options.hunt_mission_count.value)
         kart_active_missions         = min(kart_active_missions, world.options.kart_mission_count.value)
         cannons_core_active_missions = min(cannons_core_active_missions, world.options.cannons_core_mission_count.value)
 
         active_missions: typing.List[typing.List[int]] = [
-            sonic_active_missions,
-            tails_active_missions,
-            knuckles_active_missions,
-            shadow_active_missions,
-            eggman_active_missions,
-            rouge_active_missions,
+            speed_active_missions,
+            mech_active_missions,
+            hunt_active_missions,
             kart_active_missions,
             cannons_core_active_missions
         ]
@@ -273,34 +252,22 @@ def get_mission_table(multiworld: MultiWorld, world: World, player: int):
         for level in range(31):
             mission_table[level] = 0
     else:
-        sonic_active_missions: typing.List[int] = [1]
-        tails_active_missions: typing.List[int] = [1]
-        knuckles_active_missions: typing.List[int] = [1]
-        shadow_active_missions: typing.List[int] = [1]
-        eggman_active_missions: typing.List[int] = [1]
-        rouge_active_missions: typing.List[int] = [1]
+        speed_active_missions: typing.List[int] = [1]
+        mech_active_missions: typing.List[int] = [1]
+        hunt_active_missions: typing.List[int] = [1]
         kart_active_missions: typing.List[int] = [1]
         cannons_core_active_missions: typing.List[int] = [1]
 
         # Add included missions
         for i in range(2,6):
-            if getattr(world.options, "sonic_mission_" + str(i), None):
-                sonic_active_missions.append(i)
+            if getattr(world.options, "speed_mission_" + str(i), None):
+                speed_active_missions.append(i)
 
-            if getattr(world.options, "tails_mission_" + str(i), None):
-                tails_active_missions.append(i)
+            if getattr(world.options, "mech_mission_" + str(i), None):
+                mech_active_missions.append(i)
 
-            if getattr(world.options, "knuckles_mission_" + str(i), None):
-                knuckles_active_missions.append(i)
-
-            if getattr(world.options, "shadow_mission_" + str(i), None):
-                shadow_active_missions.append(i)
-
-            if getattr(world.options, "eggman_mission_" + str(i), None):
-                eggman_active_missions.append(i)
-
-            if getattr(world.options, "rouge_mission_" + str(i), None):
-                rouge_active_missions.append(i)
+            if getattr(world.options, "hunt_mission_" + str(i), None):
+                hunt_active_missions.append(i)
 
             if getattr(world.options, "kart_mission_" + str(i), None):
                 kart_active_missions.append(i)
@@ -309,12 +276,9 @@ def get_mission_table(multiworld: MultiWorld, world: World, player: int):
                 cannons_core_active_missions.append(i)
 
         active_missions: typing.List[typing.List[int]] = [
-            sonic_active_missions,
-            tails_active_missions,
-            knuckles_active_missions,
-            shadow_active_missions,
-            eggman_active_missions,
-            rouge_active_missions,
+            speed_active_missions,
+            mech_active_missions,
+            hunt_active_missions,
             kart_active_missions,
             cannons_core_active_missions
         ]
@@ -364,60 +328,13 @@ def get_mission_table(multiworld: MultiWorld, world: World, player: int):
 
 
 def get_first_and_last_cannons_core_missions(mission_map: typing.Dict[int, int], mission_count_map: typing.Dict[int, int]):
-    mission_count = mission_count_map[30]
-    mission_order: typing.List[int] = mission_orders[mission_map[30]]
-    stage_prefix: str = stage_name_prefixes[30]
+        mission_count = mission_count_map[30]
+        mission_order: typing.List[int] = mission_orders[mission_map[30]]
+        stage_prefix: str = stage_name_prefixes[30]
 
-    first_mission_number = mission_order[0]
-    last_mission_number = mission_order[mission_count - 1]
-    first_location_name: str = stage_prefix + str(first_mission_number)
-    last_location_name: str = stage_prefix + str(last_mission_number)
+        first_mission_number = mission_order[0]
+        last_mission_number = mission_order[mission_count - 1]
+        first_location_name: str = stage_prefix + str(first_mission_number)
+        last_location_name: str = stage_prefix + str(last_mission_number)
 
-    return first_location_name, last_location_name
-
-
-def print_mission_orders_to_spoiler(mission_map: typing.Dict[int, int],
-                                    mission_count_map: typing.Dict[int, int],
-                                    shuffled_region_list: typing.Dict[int, int],
-                                    levels_per_gate: typing.Dict[int, int],
-                                    player_name: str,
-                                    spoiler_handle: typing.TextIO):
-    spoiler_handle.write("\n")
-    header_text = "SA2 Mission Orders for {}:\n"
-    header_text = header_text.format(player_name)
-    spoiler_handle.write(header_text)
-
-    level_index = 0
-    for gate_idx in range(len(levels_per_gate)):
-        gate_len = levels_per_gate[gate_idx]
-        gate_levels = shuffled_region_list[int(level_index):int(level_index+gate_len)]
-        gate_levels.sort()
-
-        gate_text = "Gate {}:\n"
-        gate_text = gate_text.format(gate_idx)
-        spoiler_handle.write(gate_text)
-
-        for i in range(len(gate_levels)):
-            stage = gate_levels[i]
-            mission_count = mission_count_map[stage]
-            mission_order: typing.List[int] = mission_orders[mission_map[stage]]
-            stage_prefix: str = stage_name_prefixes[stage]
-
-            for mission in range(mission_count):
-                stage_prefix += str(mission_order[mission]) + " "
-
-            spoiler_handle.write(stage_prefix)
-            spoiler_handle.write("\n")
-
-        level_index += gate_len
-        spoiler_handle.write("\n")
-
-    mission_count = mission_count_map[30]
-    mission_order: typing.List[int] = mission_orders[mission_map[30]]
-    stage_prefix: str = stage_name_prefixes[30]
-
-    for mission in range(mission_count):
-        stage_prefix += str(mission_order[mission]) + " "
-
-    spoiler_handle.write(stage_prefix)
-    spoiler_handle.write("\n\n")
+        return first_location_name, last_location_name

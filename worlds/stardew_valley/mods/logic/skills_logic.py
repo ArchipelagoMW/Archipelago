@@ -13,6 +13,7 @@ from ...logic.region_logic import RegionLogicMixin
 from ...logic.relationship_logic import RelationshipLogicMixin
 from ...logic.tool_logic import ToolLogicMixin
 from ...mods.mod_data import ModNames
+from ...options import SkillProgression
 from ...stardew_rule import StardewRule, False_, True_, And
 from ...strings.building_names import Building
 from ...strings.craftable_names import ModCraftable, ModMachine
@@ -36,7 +37,7 @@ ToolLogicMixin, FishingLogicMixin, CookingLogicMixin, CraftingLogicMixin, MagicL
         if level <= 0:
             return True_()
 
-        if self.content.features.skill_progression.is_progressive:
+        if self.options.skill_progression == SkillProgression.option_progressive:
             return self.logic.received(f"{skill} Level", level)
 
         return self.can_earn_mod_skill_level(skill, level)
@@ -84,15 +85,13 @@ ToolLogicMixin, FishingLogicMixin, CookingLogicMixin, CraftingLogicMixin, MagicL
     def can_earn_archaeology_skill_level(self, level: int) -> StardewRule:
         shifter_rule = True_()
         preservation_rule = True_()
-        if self.content.features.skill_progression.is_progressive:
+        if self.options.skill_progression == self.options.skill_progression.option_progressive:
             shifter_rule = self.logic.has(ModCraftable.water_shifter)
             preservation_rule = self.logic.has(ModMachine.hardwood_preservation_chamber)
         if level >= 8:
-            tool_rule = self.logic.tool.has_tool(Tool.pan, ToolMaterial.iridium) & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.gold)
-            return tool_rule & shifter_rule & preservation_rule
+            return (self.logic.tool.has_tool(Tool.pan, ToolMaterial.iridium) & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.gold)) & shifter_rule & preservation_rule
         if level >= 5:
-            tool_rule = self.logic.tool.has_tool(Tool.pan, ToolMaterial.gold) & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.iron)
-            return tool_rule & shifter_rule
+            return (self.logic.tool.has_tool(Tool.pan, ToolMaterial.gold) & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.iron)) & shifter_rule
         if level >= 3:
             return self.logic.tool.has_tool(Tool.pan, ToolMaterial.iron) | self.logic.tool.has_tool(Tool.hoe, ToolMaterial.copper)
         return self.logic.tool.has_tool(Tool.pan, ToolMaterial.copper) | self.logic.tool.has_tool(Tool.hoe, ToolMaterial.basic)

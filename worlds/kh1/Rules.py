@@ -236,11 +236,6 @@ def set_rules(kh1world):
             state.has("Progressive Glide", player)
             or
             (
-                state.has("High Jump", player, 2)
-                and state.has("Footprints", player)
-            )
-            or
-            (
                 options.advanced_logic
                 and state.has_all({
                     "High Jump",
@@ -250,11 +245,6 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Wonderland Tea Party Garden Above Lotus Forest Entrance 1st Chest"),
         lambda state: (
             state.has("Progressive Glide", player)
-            or
-            (
-                state.has("High Jump", player, 2)
-                and state.has("Footprints", player)
-            )
             or
             (
                 options.advanced_logic
@@ -268,6 +258,7 @@ def set_rules(kh1world):
         
            state.has("Footprints", player)
            or (options.advanced_logic and state.has("Progressive Glide", player))
+           or state.has("High Jump", player, 2)
         ))
     add_rule(kh1world.get_location("Wonderland Tea Party Garden Across From Bizarre Room Entrance Chest"),
         lambda state: (
@@ -385,7 +376,7 @@ def set_rules(kh1world):
         lambda state: state.has("White Trinity", player))
     add_rule(kh1world.get_location("Monstro Chamber 6 Other Platform Chest"),
         lambda state: (
-            state.has_all(("High Jump", "Progressive Glide"), player)
+            state.has("High Jump", player)
             or (options.advanced_logic and state.has("Combo Master", player))
         ))
     add_rule(kh1world.get_location("Monstro Chamber 6 Platform Near Chamber 5 Entrance Chest"),
@@ -395,7 +386,7 @@ def set_rules(kh1world):
         ))
     add_rule(kh1world.get_location("Monstro Chamber 6 Raised Area Near Chamber 1 Entrance Chest"),
         lambda state: (
-            state.has_all(("High Jump", "Progressive Glide"), player)
+            state.has("High Jump", player)
             or (options.advanced_logic and state.has("Combo Master", player))
         ))
     add_rule(kh1world.get_location("Halloween Town Moonlight Hill White Trinity Chest"),
@@ -604,7 +595,6 @@ def set_rules(kh1world):
         lambda state: (
             state.has("Green Trinity", player)
             and has_all_magic_lvx(state, player, 2)
-            and has_defensive_tools(state, player)
         ))
     add_rule(kh1world.get_location("Neverland Hold Flight 2nd Chest"),
         lambda state: (
@@ -720,7 +710,8 @@ def set_rules(kh1world):
         lambda state: state.has("White Trinity", player))
     add_rule(kh1world.get_location("End of the World Giant Crevasse 5th Chest"),
         lambda state: (
-            state.has("Progressive Glide", player)
+            state.has("High Jump", player) 
+            or state.has("Progressive Glide", player)
         ))
     add_rule(kh1world.get_location("End of the World Giant Crevasse 1st Chest"),
         lambda state: (
@@ -1450,11 +1441,10 @@ def set_rules(kh1world):
                 has_emblems(state, player, options.keyblades_unlock_chests)
                 and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
-                and state.has("Progressive Blizzard", player, 3)
             ))
         add_rule(kh1world.get_location("Agrabah Defeat Kurt Zisa Zantetsuken Event"),
             lambda state: (
-                has_emblems(state, player, options.keyblades_unlock_chests) and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) and has_defensive_tools(state, player) and state.has("Progressive Blizzard", player, 3)
+                has_emblems(state, player, options.keyblades_unlock_chests) and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) and has_defensive_tools(state, player)
             ))
     if options.super_bosses or options.goal.current_key == "sephiroth":
         add_rule(kh1world.get_location("Olympus Coliseum Defeat Sephiroth Ansem's Report 12"),
