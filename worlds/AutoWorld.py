@@ -524,8 +524,8 @@ class World(metaclass=AutoWorldRegister):
         """Called when an item is removed from to state. Useful for things such as progressive items or currency."""
         name = self.collect_item(state, item, True)
         if name:
-            state.states[self.player][name] -= 1
-            if state.states[self.player][name] < 1:
+            state.states[self.player].prog_items[name] -= 1
+            if state.states[self.player].prog_items[name] < 1:
                 del (state.states[self.player].prog_items[name])
             return True
         return False
