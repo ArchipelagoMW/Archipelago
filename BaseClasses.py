@@ -1007,6 +1007,7 @@ class CollectionState():
         :param player: The player the item is for.
         :param count: How many of the item to add.
         """
+        assert count > 0
         self.prog_items[player][item] += count
 
     def remove(self, item: Item):
@@ -1025,6 +1026,7 @@ class CollectionState():
         :param player: The player the item is for.
         :param count: How many of the item to remove.
         """
+        assert count > 0
         self.prog_items[player][item] -= count
         if self.prog_items[player][item] < 1:
             del (self.prog_items[player][item])
