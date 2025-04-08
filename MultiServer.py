@@ -47,7 +47,7 @@ from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, Networ
 from BaseClasses import ItemClassification
 
 min_client_version = Version(0, 1, 6)
-colorama.init()
+colorama.just_fix_windows_console()
 
 
 def remove_from_list(container, value):
@@ -66,9 +66,13 @@ def pop_from_container(container, value):
     return container
 
 
-def update_dict(dictionary, entries):
-    dictionary.update(entries)
-    return dictionary
+def update_container_unique(container, entries):
+    if isinstance(container, list):
+        existing_container_as_set = set(container)
+        container.extend([entry for entry in entries if entry not in existing_container_as_set])
+    else:
+        container.update(entries)
+    return container
 
 
 def queue_gc():
@@ -109,7 +113,7 @@ modify_functions = {
     # lists/dicts:
     "remove": remove_from_list,
     "pop": pop_from_container,
-    "update": update_dict,
+    "update": update_container_unique,
 }
 
 
@@ -783,7 +787,7 @@ class Context:
 
     def get_hint(self, team: int, finding_player: int, seeked_location: int) -> typing.Optional[Hint]:
         for hint in self.hints[team, finding_player]:
-            if hint.location == seeked_location:
+            if hint.location == seeked_location and hint.finding_player == finding_player:
                 return hint
         return None
     
@@ -1135,7 +1139,7 @@ def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, st
     seeked_item_id = item if isinstance(item, int) else ctx.item_names_for_game(ctx.games[slot])[item]
     for finding_player, location_id, item_id, receiving_player, item_flags \
             in ctx.locations.find_item(slots, seeked_item_id):
-        prev_hint = ctx.get_hint(team, slot, location_id)
+        prev_hint = ctx.get_hint(team, finding_player, location_id)
         if prev_hint:
             hints.append(prev_hint)
         else:
@@ -2037,7 +2041,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 value = func(value, operation["value"])
             ctx.stored_data[args["key"]] = args["value"] = value
             targets = set(ctx.stored_data_notification_clients[args["key"]])
-            if args.get("want_reply", True):
+            if args.get("want_reply", False):
                 targets.add(client)
             if targets:
                 ctx.broadcast(targets, [args])

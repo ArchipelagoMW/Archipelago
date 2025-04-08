@@ -1,10 +1,12 @@
 import random
 
 from BaseClasses import get_seed
-from .. import SVTestBase, SVTestCase, allsanity_mods_6_x_x, fill_dataclass_with_default
+from .. import SVTestBase, SVTestCase
+from ..TestGeneration import get_all_permanent_progression_items
 from ..assertion import ModAssertMixin, WorldAssertMixin
-from ... import items, Group, ItemClassification, create_content
-from ... import options
+from ..options.presets import allsanity_mods_6_x_x
+from ..options.utils import fill_dataclass_with_default
+from ... import options, Group, create_content
 from ...mods.mod_data import ModNames
 from ...options import SkillProgression, Walnutsanity
 from ...options.options import all_mods
@@ -108,17 +110,8 @@ class TestBaseItemGeneration(SVTestBase):
     }
 
     def test_all_progression_items_are_added_to_the_pool(self):
-        all_created_items = [item.name for item in self.multiworld.itempool]
-        # Ignore all the stuff that the algorithm chooses one of, instead of all, to fulfill logical progression
-        items_to_ignore = [event.name for event in items.events]
-        items_to_ignore.extend(deprecated.name for deprecated in items.items_by_group[Group.DEPRECATED])
-        items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
-        items_to_ignore.extend(weapon.name for weapon in items.items_by_group[Group.WEAPON])
-        items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
-        items_to_ignore.extend(resource_pack.name for resource_pack in items.items_by_group[Group.RESOURCE_PACK])
-        items_to_ignore.append("The Gateway Gazette")
-        progression_items = [item for item in items.all_items if item.classification & ItemClassification.progression
-                             and item.name not in items_to_ignore]
+        all_created_items = self.get_all_created_items()
+        progression_items = get_all_permanent_progression_items()
         for progression_item in progression_items:
             with self.subTest(f"{progression_item.name}"):
                 self.assertIn(progression_item.name, all_created_items)
@@ -138,17 +131,8 @@ class TestNoGingerIslandModItemGeneration(SVTestBase):
     }
 
     def test_all_progression_items_except_island_are_added_to_the_pool(self):
-        all_created_items = [item.name for item in self.multiworld.itempool]
-        # Ignore all the stuff that the algorithm chooses one of, instead of all, to fulfill logical progression
-        items_to_ignore = [event.name for event in items.events]
-        items_to_ignore.extend(deprecated.name for deprecated in items.items_by_group[Group.DEPRECATED])
-        items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
-        items_to_ignore.extend(weapon.name for weapon in items.items_by_group[Group.WEAPON])
-        items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
-        items_to_ignore.extend(resource_pack.name for resource_pack in items.items_by_group[Group.RESOURCE_PACK])
-        items_to_ignore.append("The Gateway Gazette")
-        progression_items = [item for item in items.all_items if item.classification & ItemClassification.progression
-                             and item.name not in items_to_ignore]
+        all_created_items = self.get_all_created_items()
+        progression_items = get_all_permanent_progression_items()
         for progression_item in progression_items:
             with self.subTest(f"{progression_item.name}"):
                 if Group.GINGER_ISLAND in progression_item.groups:
@@ -188,3 +172,17 @@ class TestModEntranceRando(SVTestCase):
 
                 self.assertEqual(len(set(randomized_connections.values())), len(randomized_connections.values()),
                                  f"Connections are duplicated in randomization.")
+
+
+class TestVanillaLogicAlternativeWhenQuestsAreNotRandomized(WorldAssertMixin, SVTestBase):
+    """We often forget to add an alternative rule that works when quests are not randomized. When this happens, some
+    Location are not reachable because they depend on items that are only added to the pool when quests are randomized.
+    """
+    options = allsanity_mods_6_x_x() | {
+        options.QuestLocations.internal_name: options.QuestLocations.special_range_names["none"],
+        options.Goal.internal_name: options.Goal.option_perfection,
+    }
+
+    def test_given_no_quest_all_mods_when_generate_then_can_reach_everything(self):
+        self.collect_everything()
+        self.assert_can_reach_everything(self.multiworld)

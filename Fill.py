@@ -348,10 +348,10 @@ def accessibility_corrections(multiworld: MultiWorld, state: CollectionState, lo
         if (location.item is not None and location.item.advancement and location.address is not None and not
                 location.locked and location.item.player not in minimal_players):
             pool.append(location.item)
-            state.remove(location.item)
             location.item = None
             if location in state.advancements:
                 state.advancements.remove(location)
+                state.remove(location.item)
             locations.append(location)
     if pool and locations:
         locations.sort(key=lambda loc: loc.progress_type != LocationProgressType.PRIORITY)
@@ -534,20 +534,20 @@ def distribute_items_restrictive(multiworld: MultiWorld,
 
         # restore original order of progitempool
         progitempool[:] = [item for item in progitempool if not item.location]
-
         accessibility_corrections(multiworld, multiworld.state, prioritylocations, progitempool)
         defaultlocations = prioritylocations + defaultlocations
 
     if progitempool:
         # "advancement/progression fill"
+        maximum_exploration_state = sweep_from_pool(multiworld.state)
         if panic_method == "swap":
-            fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool, swap=True,
+            fill_restrictive(multiworld, maximum_exploration_state, defaultlocations, progitempool, swap=True,
                              name="Progression", single_player_placement=single_player)
         elif panic_method == "raise":
-            fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool, swap=False,
+            fill_restrictive(multiworld, maximum_exploration_state, defaultlocations, progitempool, swap=False,
                              name="Progression", single_player_placement=single_player)
         elif panic_method == "start_inventory":
-            fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool, swap=False,
+            fill_restrictive(multiworld, maximum_exploration_state, defaultlocations, progitempool, swap=False,
                              allow_partial=True, name="Progression", single_player_placement=single_player)
             if progitempool:
                 for item in progitempool:
