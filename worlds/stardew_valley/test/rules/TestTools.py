@@ -1,5 +1,6 @@
 from collections import Counter
 
+from BaseClasses import CollectionState
 from .. import SVTestBase
 from ... import options
 from ...options import ToolProgression, SeasonRandomization
@@ -14,9 +15,12 @@ class TestProgressiveToolsLogic(SVTestBase):
         SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
     }
 
-    def test_sturgeon(self):
-        self.multiworld.state.prog_items = {1: Counter()}
+    def world_setup(self, *args, **kwargs):
+        super().world_setup(*args, **kwargs)
+        self.multiworld.precollected_items[self.player] = []
+        self.multiworld.state = CollectionState(self.multiworld)
 
+    def test_sturgeon(self):
         sturgeon_rule = self.world.logic.has("Sturgeon")
         self.assert_rule_false(sturgeon_rule, self.multiworld.state)
 
