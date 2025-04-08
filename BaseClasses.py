@@ -857,7 +857,8 @@ class CollectionState():
         """
         Retrieve every entrance that can be reached for the `player`.
 
-        :param int | None player: The player should have the entrances in its world
+        :param player: The player to get the entrances of. Gets all entrances if None.
+
         :return: The list of entrances that can be reached in the multiworld
         """
         return [entrance for entrance in self.multiworld.get_entrances(player) if entrance.can_reach(self)]
