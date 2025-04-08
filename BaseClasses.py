@@ -1424,7 +1424,7 @@ class CollectionState:
 
         :return: The total of unique items from the list in state.
         """
-        return self.states[player].has_group_unique(item_name_group)
+        return self.states[player].count_group_unique(item_name_group)
 
     # Item related
     def collect(self, item: Item, prevent_sweep: bool = False, location: Optional[Location] = None) -> bool:
