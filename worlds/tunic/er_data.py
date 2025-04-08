@@ -679,8 +679,9 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Fortress Courtyard": RegionInfo("Fortress Courtyard"),
     "Fortress Courtyard Upper": RegionInfo("Fortress Courtyard"),
     "Beneath the Vault Ladder Exit": RegionInfo("Fortress Basement"),
-    "Beneath the Vault Main": RegionInfo("Fortress Basement"),  # the vanilla entry point
-    "Beneath the Vault Back": RegionInfo("Fortress Basement"),  # the vanilla exit point
+    "Beneath the Vault Entry Spot": RegionInfo("Fortress Basement"),  # where the boxes are
+    "Beneath the Vault Main": RegionInfo("Fortress Basement"),
+    "Beneath the Vault Back": RegionInfo("Fortress Basement"),
     "Eastern Vault Fortress": RegionInfo("Fortress Main"),
     "Eastern Vault Fortress Gold Door": RegionInfo("Fortress Main"),
     "Fortress East Shortcut Upper": RegionInfo("Fortress East"),
@@ -1421,11 +1422,17 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
 
     "Beneath the Vault Ladder Exit": {
+        "Beneath the Vault Entry Spot":
+            [],
+    },
+    "Beneath the Vault Entry Spot": {
         "Beneath the Vault Main":
+            [],
+        "Beneath the Vault Ladder Exit":
             [],
     },
     "Beneath the Vault Main": {
-        "Beneath the Vault Ladder Exit":
+        "Beneath the Vault Entry Spot":
             [],
         "Beneath the Vault Back":
             [],
