@@ -85,6 +85,7 @@ trap_item_data_table: dict[str, CelesteItemData] = {
 checkpoint_item_data_table: dict[str, CelesteItemData] = {}
 
 key_item_data_table: dict[str, CelesteItemData] = {}
+gem_item_data_table: dict[str, CelesteItemData] = {}
 
 old_checkpoint_item_data_table: dict[str, CelesteItemData] = {
     ItemName.fc_a_checkpoint_1: CelesteItemData(celeste_base_id + 0x100 + 0x00, ItemClassification.progression),
@@ -219,11 +220,15 @@ def add_checkpoint_to_table(id: int, name: str):
 def add_key_to_table(id: int, name: str):
     key_item_data_table[name] = CelesteItemData(id, ItemClassification.progression)
 
+def add_gem_to_table(id: int, name: str):
+    gem_item_data_table[name] = CelesteItemData(id, ItemClassification.progression)
+
 def generate_item_data_table() -> dict[int, CelesteItemData]:
     return {**collectable_item_data_table,
             **trap_item_data_table,
             **checkpoint_item_data_table,
             **key_item_data_table,
+            **gem_item_data_table,
             **interactable_item_data_table}
 
 
@@ -237,6 +242,7 @@ def generate_item_groups() -> dict[str, list[str]]:
         "Traps":         list(trap_item_data_table.keys()),
         "Checkpoints":   list(checkpoint_item_data_table.keys()),
         "Keys":          list(key_item_data_table.keys()),
+        "Gems":          list(gem_item_data_table.keys()),
         "Interactables": list(interactable_item_data_table.keys()),
     }
 

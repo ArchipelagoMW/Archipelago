@@ -30,6 +30,7 @@ location_id_offsets: dict[LocationType, int] = {
     LocationType.checkpoint:        celeste_base_id + 0x400,
     LocationType.level_clear:       celeste_base_id + 0x500,
     LocationType.key:               celeste_base_id + 0x600,
+    LocationType.gem:               celeste_base_id + 0x6A0,
     LocationType.binoculars:        celeste_base_id + 0x700,
     LocationType.room_enter:        celeste_base_id + 0x800,
     LocationType.clutter:           None,
@@ -49,6 +50,7 @@ def generate_location_table() -> dict[str, int]:
         LocationType.checkpoint:        0,
         LocationType.level_clear:       0,
         LocationType.key:               0,
+        LocationType.gem:               0,
         LocationType.binoculars:        0,
         LocationType.room_enter:        0,
     }
@@ -79,6 +81,10 @@ def generate_location_table() -> dict[str, int]:
                             from .Items import add_key_to_table
                             add_key_to_table(location_id, location.display_name)
 
+                        if location.loc_type == LocationType.gem:
+                            from .Items import add_gem_to_table
+                            add_gem_to_table(location_id, location.display_name)
+
     return location_table
 
 
@@ -88,6 +94,7 @@ def create_regions_and_locations(world):
 
     world.active_checkpoint_names: list[str] = []
     world.active_key_names: list[str] = []
+    world.active_gem_names: list[str] = []
     world.active_clutter_names: list[str] = []
 
     for _, level in world.level_data.items():
@@ -111,6 +118,9 @@ def create_regions_and_locations(world):
 
                     if level_location.loc_type == LocationType.key:
                         world.active_key_names.append(level_location.display_name)
+
+                    if level_location.loc_type == LocationType.gem:
+                        world.active_gem_names.append(level_location.display_name)
 
                     location_rule = lambda state: True
                     if len(level_location.possible_access) > 0:
@@ -175,7 +185,8 @@ def generate_location_groups() -> dict[str, list[str]]:
         "Crystal Hearts": [name for name, id in location_data_table.items() if id >= location_id_offsets[LocationType.crystal_heart] and id < location_id_offsets[LocationType.checkpoint]],
         "Checkpoints": [name for name, id in location_data_table.items() if id >= location_id_offsets[LocationType.checkpoint] and id < location_id_offsets[LocationType.level_clear]],
         "Level Clears": [name for name, id in location_data_table.items() if id >= location_id_offsets[LocationType.level_clear] and id < location_id_offsets[LocationType.key]],
-        "Keys": [name for name, id in location_data_table.items() if id >= location_id_offsets[LocationType.key] and id < location_id_offsets[LocationType.binoculars]],
+        "Keys": [name for name, id in location_data_table.items() if id >= location_id_offsets[LocationType.key] and id < location_id_offsets[LocationType.gem]],
+        "Gems": [name for name, id in location_data_table.items() if id >= location_id_offsets[LocationType.gem] and id < location_id_offsets[LocationType.binoculars]],
         "Binoculars": [name for name, id in location_data_table.items() if id >= location_id_offsets[LocationType.binoculars] and id < location_id_offsets[LocationType.room_enter]],
         "Rooms": [name for name, id in location_data_table.items() if id >= location_id_offsets[LocationType.room_enter]],
     }

@@ -85,6 +85,12 @@ class Keysanity(Toggle):
     """
     display_name = "Keysanity"
 
+class Gemsanity(Toggle):
+    """
+    Determines whether Summit Gems are shuffled into the item pool
+    """
+    display_name = "Gemsanity"
+
 class Roomsanity(Toggle):
     """
     Determines whether entering individual rooms sends location checks
@@ -341,6 +347,7 @@ celeste_option_groups = [
         Checkpointsanity,
         Binosanity,
         Keysanity,
+        Gemsanity,
         Roomsanity,
         IncludeCore,
         IncludeFarewell,
@@ -461,6 +468,7 @@ class CelesteOptions(PerGameCommonOptions):
     checkpointsanity: Checkpointsanity
     binosanity: Binosanity
     keysanity: Keysanity
+    gemsanity: Gemsanity
     roomsanity: Roomsanity
     include_goldens: IncludeGoldens
     include_core: IncludeCore

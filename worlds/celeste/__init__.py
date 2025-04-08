@@ -78,8 +78,7 @@ class CelesteWorld(World):
 
         resolve_options(self)
 
-        self.active_levels = {"0a", "1a", "2a", "3a", "4a", "5a", "6a"}
-        #self.active_levels = {"0a", "1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a"}
+        self.active_levels = {"0a", "1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a"}
         if self.options.include_core:
             self.active_levels.add("9a")
         if self.options.include_farewell:
@@ -134,6 +133,14 @@ class CelesteWorld(World):
             for item_name in self.active_key_names:
                 key_loc: Location = self.multiworld.get_location(item_name, self.player)
                 key_loc.place_locked_item(self.create_item(item_name))
+                location_count -= 1
+
+        if self.options.gemsanity:
+            item_pool += [self.create_item(item_name) for item_name in self.active_gem_names]
+        else:
+            for item_name in self.active_gem_names:
+                gem_loc: Location = self.multiworld.get_location(item_name, self.player)
+                gem_loc.place_locked_item(self.create_item(item_name))
                 location_count -= 1
 
         for item_name in self.active_clutter_names:

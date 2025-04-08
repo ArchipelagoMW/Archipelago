@@ -16,6 +16,7 @@ class LocationType(IntEnum):
     binoculars = 7
     room_enter = 8
     clutter = 9
+    gem = 10
 
 class DoorDirection(IntEnum):
     up = 0
