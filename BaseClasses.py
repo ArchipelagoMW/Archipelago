@@ -557,11 +557,13 @@ class MultiWorld():
 
     def get_reachable_locations(self, state: Optional[CollectionState] = None, player: Optional[int] = None) -> List[Location]:
         state: CollectionState = state or self.state
-        return [location for location in self.get_locations(player) if location.can_reach(state)]
+        return [location for location in self.get_locations(player)
+                if location.player_can_reach(state.states[location.player])]
 
     def get_placeable_locations(self, state=None, player=None) -> List[Location]:
         state: CollectionState = state or self.state
-        return [location for location in self.get_locations(player) if location.item is None and location.can_reach(state)]
+        return [location for location in self.get_locations(player)
+                if location.item is None and location.player_can_reach(state.states[location.player])]
 
     def get_unfilled_locations_for_players(self, location_names: List[str], players: Iterable[int]):
         for player in players:
@@ -609,7 +611,7 @@ class MultiWorld():
             # build up spheres of collection radius.
             # Everything in each sphere is independent of each other in dependencies and only depends on lower spheres
             for location in prog_locations:
-                if location.can_reach(state):
+                if location.player_can_reach(state.states[location.player]):
                     sphere.add(location)
 
             if not sphere:
@@ -640,7 +642,7 @@ class MultiWorld():
             sphere: Set[Location] = set()
 
             for location in locations:
-                if location.can_reach(state):
+                if location.player_can_reach(state.states[location.player]):
                     sphere.add(location)
             yield sphere
             if not sphere:
@@ -676,13 +678,13 @@ class MultiWorld():
             while done_events:
                 done_events = set()
                 for event in events:
-                    if event.can_reach(state):
+                    if event.player_can_reach(state.states[event.player]):
                         state.collect(event.item, True, event)
                         done_events.add(event)
                 events -= done_events
 
             for location in locations:
-                if location.can_reach(state):
+                if location.player_can_reach(state.states[location.player]):
                     sphere.add(location)
 
             yield sphere
@@ -1141,7 +1143,11 @@ class CollectionState:
         else:
             self._update_reachable_regions_auto_indirect_conditions(player_state, queue)
 
-    def _update_reachable_regions_explicit_indirect_conditions(self, player_state: PlayerState, queue: deque) -> None:
+    def _update_reachable_regions_explicit_indirect_conditions(
+            self,
+            player_state: PlayerState,
+            queue: deque[Entrance],
+    ) -> None:
         """
         Runs BFS on the queue, determining what is now reachable and updating the player state. Adds indirect
         connections to the queue when relevant but require explicit declaration.
@@ -1155,7 +1161,7 @@ class CollectionState:
             new_region = connection.connected_region
             if new_region in player_state.reachable_regions:
                 player_state.blocked_connections.remove(connection)
-            elif connection.can_reach(self):
+            elif connection.player_can_reach(player_state):
                 if self.allow_partial_entrances and not new_region:
                     continue
                 assert new_region, f"tried to search through an Entrance \"{connection}\" with no connected Region"
@@ -1170,7 +1176,11 @@ class CollectionState:
                     if new_entrance in player_state.blocked_connections and new_entrance not in queue:
                         queue.append(new_entrance)
 
-    def _update_reachable_regions_auto_indirect_conditions(self, player_state: PlayerState, queue: deque) -> None:
+    def _update_reachable_regions_auto_indirect_conditions(
+            self,
+            player_state: PlayerState,
+            queue: deque[Entrance],
+    ) -> None:
         """
         Runs BFS on the queue, determining what is now reachable and updating the player state. Continuously iterates
         through all blocked connections until new connections are no longer found.
@@ -1187,7 +1197,7 @@ class CollectionState:
                 new_region = connection.connected_region
                 if new_region in player_state.reachable_regions:
                     player_state.blocked_connections.remove(connection)
-                elif connection.can_reach(self):
+                elif connection.player_can_reach(player_state):
                     if self.allow_partial_entrances and not new_region:
                         continue
                     assert new_region, f"tried to search through an Entrance \"{connection}\" with no connected Region"
@@ -1238,16 +1248,16 @@ class CollectionState:
             else:
                 # default to Region
                 return self.can_reach_region(spot, player)
-        return spot.can_reach(self)
+        return spot.player_can_reach(self.states[spot.player])
 
     def can_reach_location(self, spot: str, player: int) -> bool:
-        return self.multiworld.get_location(spot, player).can_reach(self)
+        return self.multiworld.get_location(spot, player).player_can_reach(self.states[player])
 
     def can_reach_entrance(self, spot: str, player: int) -> bool:
-        return self.multiworld.get_entrance(spot, player).can_reach(self)
+        return self.multiworld.get_entrance(spot, player).player_can_reach(self.states[player])
 
     def can_reach_region(self, spot: str, player: int) -> bool:
-        return self.multiworld.get_region(spot, player).can_reach(self)
+        return self.multiworld.get_region(spot, player).player_can_reach(self.states[player])
 
     def sweep_for_events(self, locations: Optional[Iterable[Location]] = None) -> None:
         Utils.deprecate("sweep_for_events has been renamed to sweep_for_advancements. The functionality is the same. "
@@ -1262,7 +1272,8 @@ class CollectionState:
         locations = {location for location in locations if location.advancement and location not in self.advancements}
 
         while reachable_advancements:
-            reachable_advancements = {location for location in locations if location.can_reach(self)}
+            reachable_advancements = {location for location in locations
+                                      if location.player_can_reach(self.states[location.player])}
             locations -= reachable_advancements
             for advancement in reachable_advancements:
                 self.advancements.add(advancement)
@@ -1784,7 +1795,7 @@ class Location:
         ) or (
             (self.progress_type != LocationProgressType.EXCLUDED or not (item.advancement or item.useful))
             and self.item_rule(item)
-            and (not check_access or self.can_reach(state))
+            and (not check_access or self.player_can_reach(state.states[self.player]))
         ))
 
     def can_reach(self, state: CollectionState) -> bool:

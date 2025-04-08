@@ -192,7 +192,8 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
             base_state, [], multiworld.get_filled_locations(item.player)
             if single_player_placement else None)
         for placement in placements:
-            if multiworld.worlds[placement.item.player].options.accessibility != "minimal" and not placement.can_reach(state):
+            if (multiworld.worlds[placement.item.player].options.accessibility != "minimal" and
+                    not placement.player_can_reach(state.states[placement.player])):
                 placement.item.location = None
                 unplaced_items.append(placement.item)
                 placement.item = None
@@ -343,7 +344,7 @@ def accessibility_corrections(multiworld: MultiWorld, state: CollectionState, lo
     maximum_exploration_state = sweep_from_pool(state, pool)
     minimal_players = {player for player in multiworld.player_ids if multiworld.worlds[player].options.accessibility == "minimal"}
     unreachable_locations = [location for location in multiworld.get_locations() if location.player in minimal_players and
-                             not location.can_reach(maximum_exploration_state)]
+                             not location.player_can_reach(maximum_exploration_state.states[location.player])]
     for location in unreachable_locations:
         if (location.item is not None and location.item.advancement and location.address is not None and not
                 location.locked and location.item.player not in minimal_players):
@@ -360,7 +361,8 @@ def accessibility_corrections(multiworld: MultiWorld, state: CollectionState, lo
 
 def inaccessible_location_rules(multiworld: MultiWorld, state: CollectionState, locations):
     maximum_exploration_state = sweep_from_pool(state)
-    unreachable_locations = [location for location in locations if not location.can_reach(maximum_exploration_state)]
+    unreachable_locations = [location for location in locations
+                             if not location.player_can_reach(maximum_exploration_state.states[location.player])]
     if unreachable_locations:
         def forbid_important_item_rule(item: Item):
             return not ((item.classification & 0b0011) and multiworld.worlds[item.player].options.accessibility != 'minimal')
@@ -386,7 +388,7 @@ def distribute_early_items(multiworld: MultiWorld,
         base_state = multiworld.state.copy()
         base_state.sweep_for_advancements(locations=(loc for loc in multiworld.get_filled_locations() if loc.address is None))
         for i, loc in enumerate(fill_locations):
-            if loc.can_reach(base_state):
+            if loc.player_can_reach(base_state.states[loc.player]):
                 if loc.progress_type == LocationProgressType.PRIORITY:
                     early_priority_locations.append(loc)
                 else:
