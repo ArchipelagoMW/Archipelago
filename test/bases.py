@@ -293,7 +293,7 @@ class WorldTestBase(unittest.TestCase):
         if not (self.run_default_tests and self.constructed):
             return
         with self.subTest("Game", game=self.game, seed=self.multiworld.seed):
-            state = self.multiworld.get_single_player_all_state(False, self.player)
+            state = self.multiworld.get_all_state(players=self.player)
             for location in self.multiworld.get_locations():
                 with self.subTest("Location should be reached", location=location.name):
                     reachable = location.can_reach(state)
@@ -307,7 +307,7 @@ class WorldTestBase(unittest.TestCase):
         if not (self.run_default_tests and self.constructed):
             return
         with self.subTest("Game", game=self.game, seed=self.multiworld.seed):
-            state = CollectionState(self.multiworld, self.player)
+            state = CollectionState(self.multiworld, players=self.player)
             locations = self.multiworld.get_reachable_locations(state, self.player)
             self.assertGreater(len(locations), 0,
                                "Need to be able to reach at least one location to get started.")
@@ -321,7 +321,7 @@ class WorldTestBase(unittest.TestCase):
         # basically a shortened reimplementation of this method from core, in order to force the check is done
         def fulfills_accessibility() -> bool:
             locations = list(self.multiworld.get_locations(1))
-            state = CollectionState(self.multiworld, self.player)
+            state = CollectionState(self.multiworld, players=self.player)
             while locations:
                 sphere: typing.List[Location] = []
                 for n in range(len(locations) - 1, -1, -1):
