@@ -427,69 +427,52 @@ class MultiWorld():
     def get_location(self, location_name: str, player: int) -> Location:
         return self.regions.location_cache[player][location_name]
 
-    def get_single_player_all_state(self,
-                                    use_cache: bool,
-                                    player: int,
-                                    allow_partial_entrances: bool = False) -> CollectionState:
+    def get_all_state(
+            self,
+            use_cache: bool = False,
+            allow_partial_entrances: bool = False,
+            players: int | Iterable[int] | None = None,
+    ) -> CollectionState:
         """
-        Gets all state for a specific player. Can be cached and later reused.
+        Gets a collectionstate for the requested player/s. Can be cached and later reused.
 
-        :param use_cache: Whether this state should be added to or retrieved via caching.
-        :param player: The player to create the state for.
+        :param use_cache: Whether this state should be added to or retrieved via caching. Not cached if players is an
+         iterable.
         :param allow_partial_entrances: Whether traversal through unconnected entrances should be ignored or throw.
+        :param players: The player or players to create the state for.
         """
-        cached = getattr(self, f"_player_state_{player}", None)
-        if use_cache and cached:
-            return cached
+        if players is None and use_cache:
+            cached = getattr(self, "_all_state", None)
+            if cached:
+                return cached.copy()
+        elif isinstance(players, int) and use_cache:
+            cached = getattr(self, f"_player_state_{players}", None)
+            if cached:
+                return cached # since it's for the specific player it should be fine for the world to modify it
 
-        ret = CollectionState(self, allow_partial_entrances, player)
-
-        world = self.worlds[player]
-        for item in [item for item in self.itempool if item.player == player]:
-            world.collect(ret, item)
-        for item in self.worlds[player].get_pre_fill_items():
-            world.collect(ret, item)
-
-        ret.states[player].sweep_for_advancements()
-
-        if use_cache:
-            setattr(self, f"_player_state{player}", ret)
-        return ret
-
-    def get_players_all_state(self, players: Iterable[int], allow_partial_entrances: bool = False) -> CollectionState:
-        """
-        Gets an all state for a specific subset of players. Cannot be cached.
-
-        :param players: The players the state should collect the items of and sweep for.
-        :param allow_partial_entrances: Whether traversal through unconnected entrances should be ignored or throw.
-        """
         ret = CollectionState(self, allow_partial_entrances, players)
-        for item in [item for item in self.itempool if item.player in players]:
+
+        if players is None:
+            state_players = self.player_ids
+        elif isinstance(players, int):
+            state_players = [players]
+        else:
+            state_players = players
+
+        for item in [item for item in self.itempool if item.player in state_players]:
             self.worlds[item.player].collect(ret, item)
-        for player in players:
-            world = self.worlds[player]
-            for item in world.get_pre_fill_items():
-                world.collect(ret, item)
-        ret.sweep_for_events()
-        return ret
-
-    def get_all_state(self, use_cache: bool, allow_partial_entrances: bool = False) -> CollectionState:
-        cached = getattr(self, "_all_state", None)
-        if use_cache and cached:
-            return cached.copy()
-
-        ret = CollectionState(self, allow_partial_entrances)
-
-        for item in self.itempool:
-            self.worlds[item.player].collect(ret, item)
-        for player in self.player_ids:
+        for player in state_players:
             subworld = self.worlds[player]
             for item in subworld.get_pre_fill_items():
                 subworld.collect(ret, item)
         ret.sweep_for_advancements()
 
         if use_cache:
-            self._all_state = ret
+            if isinstance(players, tuple):
+                self._all_state = ret
+                return ret.copy()
+            elif isinstance(players, int):
+                setattr(self, f"_player_state_{players}", ret)
         return ret
 
     def get_items(self) -> List[Item]:
@@ -813,7 +796,7 @@ class PlayerState:
             groups = self._multiworld.get_player_groups(self.player)
             groups.add(self.player)
             locations = [loc for loc in self._multiworld.get_filled_locations()
-                         if loc.player in groups or loc.item.player in groups]
+                         if loc.player in groups]
         self._parent.sweep_for_advancements(locations)
 
     def collect(self, item: Item | Iterable[Item], prevent_sweep: bool = False,
@@ -1090,7 +1073,7 @@ class CollectionState:
     def __init__(self,
                  parent: MultiWorld,
                  allow_partial_entrances: bool = False,
-                 players: Iterable[int] | int | None = None) -> None:
+                 players: int | Iterable[int] | None = None) -> None:
         """
         A macro state manager containing individual player states, used for determining multiworld accessibility.
 
@@ -1266,7 +1249,12 @@ class CollectionState:
 
     def sweep_for_advancements(self, locations: Optional[Iterable[Location]] = None) -> None:
         if locations is None:
-            locations = self.multiworld.get_filled_locations()
+            players = set(self.states.keys())
+            if len(players) < self.multiworld.players:
+                groups = {self.multiworld.get_player_groups(player) for player in players} | players
+                locations = [loc for loc in self.multiworld.get_filled_locations() if loc in groups]
+            else:
+                locations = self.multiworld.get_filled_locations()
         reachable_advancements = True
         # since the loop has a good chance to run more than once, only filter the advancements once
         locations = {location for location in locations if location.advancement and location not in self.advancements}

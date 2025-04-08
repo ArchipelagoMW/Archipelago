@@ -153,7 +153,7 @@ class ERPlacementState:
         self.pairings = []
         self.world = world
         self.coupled = coupled
-        self.collection_state = world.multiworld.get_single_player_all_state(False, self.world.player, True)
+        self.collection_state = world.multiworld.get_all_state(False, True, self.world.player)
         self.player_state = self.collection_state.states[self.world.player]
 
     @property
