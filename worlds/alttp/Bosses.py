@@ -119,7 +119,9 @@ def KholdstareDefeatRule(state, player: int) -> bool:
 
 
 def VitreousDefeatRule(state, player: int) -> bool:
-    return can_shoot_arrows(state, player) or has_melee_weapon(state, player)
+    return ((can_shoot_arrows(state, player) and can_use_bombs(state, player, 10))
+            or can_shoot_arrows(state, player, 35) or state.has("Silver Bow", player)
+            or has_melee_weapon(state, player))
 
 
 def TrinexxDefeatRule(state, player: int) -> bool:

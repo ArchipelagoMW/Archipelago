@@ -7,7 +7,7 @@ from ..utils.doorsmanager import DoorsManager, IndicatorFlag
 from ..utils.objectives import Objectives
 from ..graph.graph_utils import GraphUtils, getAccessPoint, locIdsByAreaAddresses, graphAreas
 from ..logic.logic import Logic
-from ..rom.rom import RealROM, snes_to_pc, pc_to_snes
+from ..rom.rom import FakeROM, snes_to_pc, pc_to_snes
 from ..rom.addresses import Addresses
 from ..rom.rom_patches import RomPatches
 from ..patches.patchaccess import PatchAccess
@@ -49,13 +49,13 @@ class RomPatcher:
         'DoorsColors': ['beam_doors_plms.ips', 'beam_doors_gfx.ips', 'red_doors.ips']
     }
 
-    def __init__(self, settings=None, romFileName=None, magic=None, player=0):
+    def __init__(self, settings=None, romFileName=None, magic=None, player=0, *, random):
         self.log = log.get('RomPatcher')
         self.settings = settings
-        self.romFileName = romFileName
+        #self.romFileName = romFileName
         self.patchAccess = PatchAccess()
         self.race = None
-        self.romFile = RealROM(romFileName)
+        self.romFile = FakeROM()
         #if magic is not None:
         #    from rom.race_mode import RaceModePatcher
         #    self.race = RaceModePatcher(self, magic)
@@ -76,6 +76,7 @@ class RomPatcher:
             0x93ea: self.forceRoomCRE
         }
         self.player = player
+        self.random = random
 
     def patchRom(self):
         self.applyIPSPatches()
@@ -312,7 +313,7 @@ class RomPatcher:
             self.applyStartAP(self.settings["startLocation"], plms, doors)
             self.applyPLMs(plms)
         except Exception as e:
-            raise Exception("Error patching {}. ({})".format(self.romFileName, e))
+            raise Exception("Error patching. ({})".format(e))
 
     def applyIPSPatch(self, patchName, patchDict=None, ipsDir=None):
         if patchDict is None:
@@ -493,11 +494,12 @@ class RomPatcher:
 
     def commitIPS(self):
         self.romFile.ipsPatch(self.ipsPatches)
+        self.ipsPatches = []
 
     def writeSeed(self, seed):
-        random.seed(seed)
-        seedInfo = random.randint(0, 0xFFFF)
-        seedInfo2 = random.randint(0, 0xFFFF)
+        r = random.Random(seed)
+        seedInfo = r.randint(0, 0xFFFF)
+        seedInfo2 = r.randint(0, 0xFFFF)
         self.romFile.writeWord(seedInfo, snes_to_pc(0xdfff00))
         self.romFile.writeWord(seedInfo2)
 
@@ -1065,7 +1067,7 @@ class RomPatcher:
 
     def writeObjectives(self, itemLocs, tourian):
         objectives = Objectives.objDict[self.player]
-        objectives.writeGoals(self.romFile)
+        objectives.writeGoals(self.romFile, self.random)
         objectives.writeIntroObjectives(self.romFile, tourian)
         self.writeItemsMasks(itemLocs)
         # hack bomb_torizo.ips to wake BT in all cases if necessary, ie chozo bots objective is on, and nothing at bombs

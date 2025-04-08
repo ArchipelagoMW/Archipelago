@@ -19,6 +19,7 @@ from .farming_logic import FarmingLogicMixin
 from .festival_logic import FestivalLogicMixin
 from .fishing_logic import FishingLogicMixin
 from .gift_logic import GiftLogicMixin
+from .goal_logic import GoalLogicMixin
 from .grind_logic import GrindLogicMixin
 from .harvesting_logic import HarvestingLogicMixin
 from .has_logic import HasLogicMixin
@@ -50,8 +51,7 @@ from ..data.museum_data import all_museum_items
 from ..data.recipe_data import all_cooking_recipes
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_logic import ModLogicMixin
-from ..mods.mod_data import ModNames
-from ..options import ExcludeGingerIsland, FestivalLocations, StardewValleyOptions
+from ..options import ExcludeGingerIsland, StardewValleyOptions
 from ..stardew_rule import False_, True_, StardewRule
 from ..strings.animal_names import Animal
 from ..strings.animal_product_names import AnimalProduct
@@ -67,7 +67,6 @@ from ..strings.fish_names import Fish, Trash, WaterItem, WaterChest
 from ..strings.flower_names import Flower
 from ..strings.food_names import Meal, Beverage
 from ..strings.forageable_names import Forageable
-from ..strings.fruit_tree_names import Sapling
 from ..strings.generic_names import Generic
 from ..strings.geode_names import Geode
 from ..strings.gift_names import Gift
@@ -94,7 +93,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
                    CombatLogicMixin, MagicLogicMixin, MonsterLogicMixin, ToolLogicMixin, PetLogicMixin, QualityLogicMixin,
                    SkillLogicMixin, FarmingLogicMixin, BundleLogicMixin, FishingLogicMixin, MineLogicMixin, CookingLogicMixin, AbilityLogicMixin,
                    SpecialOrderLogicMixin, QuestLogicMixin, CraftingLogicMixin, ModLogicMixin, HarvestingLogicMixin, SourceLogicMixin,
-                   RequirementLogicMixin, BookLogicMixin, GrindLogicMixin, FestivalLogicMixin, WalnutLogicMixin):
+                   RequirementLogicMixin, BookLogicMixin, GrindLogicMixin, FestivalLogicMixin, WalnutLogicMixin, GoalLogicMixin):
     player: int
     options: StardewValleyOptions
     content: StardewContent
@@ -281,7 +280,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Material.coal: self.mine.can_mine_in_the_mines_floor_41_80() | self.tool.has_tool(Tool.pan),
             Material.fiber: True_(),
             Material.hardwood: self.tool.has_tool(Tool.axe, ToolMaterial.copper) & (self.region.can_reach(Region.secret_woods) | self.region.can_reach(Region.island_west)),
-            Material.moss: True_(),
+            Material.moss: self.season.has_any_not_winter() & (self.tool.has_tool(Tool.scythe) | self.combat.has_any_weapon) & self.region.can_reach(Region.forest),
             Material.sap: self.ability.can_chop_trees(),
             Material.stone: self.tool.has_tool(Tool.pickaxe),
             Material.wood: self.tool.has_tool(Tool.axe),
@@ -300,7 +299,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Ore.radioactive: self.ability.can_mine_perfectly() & self.region.can_reach(Region.qi_walnut_room),
             RetainingSoil.basic: self.money.can_spend_at(Region.pierre_store, 100),
             RetainingSoil.quality: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
-            Sapling.tea: self.relationship.has_hearts(NPC.caroline, 2) & self.has(Material.fiber) & self.has(Material.wood),
             SpeedGro.basic: self.money.can_spend_at(Region.pierre_store, 100),
             SpeedGro.deluxe: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
             Trash.broken_cd: self.skill.can_crab_pot,
@@ -377,70 +375,10 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
     def can_smelt(self, item: str) -> StardewRule:
         return self.has(Machine.furnace) & self.has(item)
 
-    def can_finish_grandpa_evaluation(self) -> StardewRule:
-        # https://stardewvalleywiki.com/Grandpa
-        rules_worth_a_point = [
-            self.money.can_have_earned_total(50000),  # 50 000g
-            self.money.can_have_earned_total(100000),  # 100 000g
-            self.money.can_have_earned_total(200000),  # 200 000g
-            self.money.can_have_earned_total(300000),  # 300 000g
-            self.money.can_have_earned_total(500000),  # 500 000g
-            self.money.can_have_earned_total(1000000),  # 1 000 000g first point
-            self.money.can_have_earned_total(1000000),  # 1 000 000g second point
-            self.skill.has_total_level(30),  # Total Skills: 30
-            self.skill.has_total_level(50),  # Total Skills: 50
-            self.museum.can_complete_museum(),  # Completing the museum for a point
-            # Catching every fish not expected
-            # Shipping every item not expected
-            self.relationship.can_get_married() & self.building.has_house(2),
-            self.relationship.has_hearts_with_n(5, 8),  # 5 Friends
-            self.relationship.has_hearts_with_n(10, 8),  # 10 friends
-            self.pet.has_pet_hearts(5),  # Max Pet
-            self.bundle.can_complete_community_center,  # Community Center Completion
-            self.bundle.can_complete_community_center,  # CC Ceremony first point
-            self.bundle.can_complete_community_center,  # CC Ceremony second point
-            self.received(Wallet.skull_key),  # Skull Key obtained
-            self.wallet.has_rusty_key(),  # Rusty key obtained
-        ]
-        return self.count(12, *rules_worth_a_point)
-
     def has_island_trader(self) -> StardewRule:
         if self.options.exclude_ginger_island == ExcludeGingerIsland.option_true:
             return False_()
         return self.region.can_reach(Region.island_trader)
-
-    def has_all_stardrops(self) -> StardewRule:
-        other_rules = []
-        number_of_stardrops_to_receive = 0
-        number_of_stardrops_to_receive += 1  # The Mines level 100
-        number_of_stardrops_to_receive += 1  # Old Master Cannoli
-        number_of_stardrops_to_receive += 1  # Museum Stardrop
-        number_of_stardrops_to_receive += 1  # Krobus Stardrop
-
-        # Master Angler Stardrop
-        if self.content.features.fishsanity.is_enabled:
-            number_of_stardrops_to_receive += 1
-        else:
-            other_rules.append(self.fishing.can_catch_every_fish())
-
-        if self.options.festival_locations == FestivalLocations.option_disabled:  # Fair Stardrop
-            other_rules.append(self.season.has(Season.fall))
-        else:
-            number_of_stardrops_to_receive += 1
-
-        # Spouse Stardrop
-        if self.content.features.friendsanity.is_enabled:
-            number_of_stardrops_to_receive += 1
-        else:
-            other_rules.append(self.relationship.has_hearts_with_any_bachelor(13))
-
-        if ModNames.deepwoods in self.options.mods:  # Petting the Unicorn
-            number_of_stardrops_to_receive += 1
-
-        if not other_rules:
-            return self.received("Stardrop", number_of_stardrops_to_receive)
-
-        return self.received("Stardrop", number_of_stardrops_to_receive) & self.logic.and_(*other_rules)
 
     def has_abandoned_jojamart(self) -> StardewRule:
         return self.received(CommunityUpgrade.movie_theater, 1)
