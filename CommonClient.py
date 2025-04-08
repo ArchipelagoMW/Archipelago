@@ -413,7 +413,8 @@ class CommonContext:
             await self.server.socket.close()
         if self.server_task is not None:
             await self.server_task
-        self.ui.update_hints()
+        if self.ui:
+            self.ui.update_hints()
 
     async def send_msgs(self, msgs: typing.List[typing.Any]) -> None:
         """ `msgs` JSON serializable """
@@ -624,9 +625,6 @@ class CommonContext:
 
     def consume_network_data_package(self, data_package: dict):
         self.update_data_package(data_package)
-        current_cache = Utils.persistent_load().get("datapackage", {}).get("games", {})
-        current_cache.update(data_package["games"])
-        Utils.persistent_store("datapackage", "games", current_cache)
         logger.info(f"Got new ID/Name DataPackage for {', '.join(data_package['games'])}")
         for game, game_data in data_package["games"].items():
             Utils.store_data_package_for_checksum(game, game_data)
@@ -709,8 +707,16 @@ class CommonContext:
         logger.exception(msg, exc_info=exc_info, extra={'compact_gui': True})
         self._messagebox_connection_loss = self.gui_error(msg, exc_info[1])
 
-    def make_gui(self) -> typing.Type["kvui.GameManager"]:
-        """To return the Kivy App class needed for run_gui so it can be overridden before being built"""
+    def make_gui(self) -> "type[kvui.GameManager]":
+        """
+        To return the Kivy `App` class needed for `run_gui` so it can be overridden before being built
+
+        Common changes are changing `base_title` to update the window title of the client and
+        updating `logging_pairs` to automatically make new tabs that can be filled with their respective logger.
+
+        ex. `logging_pairs.append(("Foo", "Bar"))`
+        will add a "Bar" tab which follows the logger returned from `logging.getLogger("Foo")`
+        """
         from kvui import GameManager
 
         class TextManager(GameManager):
@@ -899,6 +905,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             ctx.disconnected_intentionally = True
             ctx.event_invalid_game()
         elif 'IncompatibleVersion' in errors:
+            ctx.disconnected_intentionally = True
             raise Exception('Server reported your client version as incompatible. '
                             'This probably means you have to update.')
         elif 'InvalidItemsHandling' in errors:
@@ -1087,7 +1094,7 @@ def run_as_textclient(*args):
             if password_requested and not self.password:
                 await super(TextContext, self).server_auth(password_requested)
             await self.get_username()
-            await self.send_connect()
+            await self.send_connect(game="")
 
         def on_package(self, cmd: str, args: dict):
             if cmd == "Connected":
@@ -1119,7 +1126,7 @@ def run_as_textclient(*args):
     args = handle_url_arg(args, parser=parser)
 
     # use colorama to display colored text highlighting on windows
-    colorama.init()
+    colorama.just_fix_windows_console()
 
     asyncio.run(main(args))
     colorama.deinit()
