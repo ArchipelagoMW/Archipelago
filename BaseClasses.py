@@ -802,7 +802,10 @@ class PlayerState:
          world.
         """
         if locations is None:
-            locations = self._multiworld.get_filled_locations(self.player)
+            groups = self._multiworld.get_player_groups(self.player)
+            groups.add(self.player)
+            locations = [loc for loc in self._multiworld.get_filled_locations()
+                         if loc.player in groups or loc.item.player in groups]
         self._parent.sweep_for_advancements(locations)
 
     def collect(self, item: Item | Iterable[Item], prevent_sweep: bool = False,
