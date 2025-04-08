@@ -85,7 +85,6 @@ def set_rules(world: "SDWorld", player: int):
             "Kani",
             "RedChasm1Chest",
             "RedChasm2Chest1",
-            "RedChasm2Chest2",
             "RedChasmReunionChest",
             "Kingoose1",
             "Kingoose2",
@@ -97,6 +96,10 @@ def set_rules(world: "SDWorld", player: int):
             "KaniWeapon1",
             "KaniWeapon2",
             "KaniWeapon3",   
+        ],
+        if red2(state,player) and state.has(("Red Key",player)) [
+        #Need access to Red1 and own the Red Key
+            "RedChasm2Chest2",
         ],
     }
 

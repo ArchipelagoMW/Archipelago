@@ -47,8 +47,8 @@ item_table: Dict[str, SDItemData] = {
         "Morning Ray"           SDItemData("Card",          7),
         "Zoner"                 SDItemData("Card",          304),
         "Cold As Ice"           SDItemData("Card",          5),
-        "Strife"                SDItemData("Card",          6,          ItemClassification.useful,          2),
-        "RATD"                  SDItemData("Card",          4),
+        "Strife"                SDItemData("Card",          6),
+        "RATD"                  SDItemData("Card",          4          ItemClassification.useful,          2),
     #MP3s   
         "Freddie Freeloader"    SDItemData("MP3",           1063),
         "Flossophy"             SDItemData("MP3",           1044),
