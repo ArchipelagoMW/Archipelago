@@ -3,7 +3,9 @@
 
 {% block head %}
     <title>Generation in Progress</title>
-    <meta http-equiv="refresh" content="1">
+    <noscript>
+        <meta http-equiv="refresh" content="1">
+    </noscript>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/waitSeed.css") }}"/>
 {% endblock %}
 
@@ -15,5 +17,32 @@
             Waiting for game to generate, this page auto-refreshes to check.
         </div>
     </div>
+    <script>
+        let waitSeedDiv = document.getElementById('wait-seed');
+        function checkStatus() {
+            fetch('{{ url_for("api.wait_seed_api", seed=seed_id) }}')
+                .then(response => {
+                    if (response.status === 202) {
+                        response.json().then(data => {
+                            waitSeedDiv.innerHTML = `
+                            <h1>Generation in Progress</h1>
+                            <p>${data.text}</p>
+                        `;
+                            setTimeout(checkStatus, 1000); // Continue polling
+                        });
+                    } else {
+                        location.reload();
+                    }
+                })
+                .catch(error => {
+                    waitSeedDiv.innerHTML = `
+                    <h1>Generation progress unknown</h1>
+                    <p>Fetch error: ${error.message} (Last checked: ${new Date().toLocaleTimeString()})</p>
+                `;
+                    setTimeout(checkStatus, 1000);
+                });
+        }
+        setTimeout(checkStatus, 1000);
+    </script>
     {% include 'islandFooter.html' %}
 {% endblock %}
