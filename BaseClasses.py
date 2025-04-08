@@ -866,9 +866,12 @@ class CollectionState():
     def reachable_spots(self, player: int,
                        resolution_hint: Literal["Location", "Region", "Entrance"] = "Location") -> set[str]:
         """
-        Retrieve a list of spot that can be reached from the current player with the given `state`.
-        The `resolution_hint` parameter specifies which kind of spot to look for. It can take
-        "Location", "Entrance" or "Region" as values. Defaults to "Location".
+        Retrieve a set of spots that can be reached by the current player with the given `state`.
+
+        :param player: The current player.
+        :param resolution_hint: Which kind of spot to look for.
+
+        :return: The set of reachable spots.        
         """
         assert resolution_hint in ("Location", "Region", "Entrance")
         if resolution_hint == "Region":
