@@ -1043,7 +1043,7 @@ item_descriptions = {
     item_names.IMMORTAL_IMPROVED_BARRIER: "Immortal War Council upgrade. The Immortal's Barrier ability absorbs an additional +100 damage.",
     item_names.VANGUARD_RAPIDFIRE_CANNON: "Vanguard War Council upgrade. Vanguards attack 60% faster.",
     item_names.VANGUARD_FUSION_MORTARS: "Vanguard War Council upgrade. Vanguards deal +7 damage to armored targets per attack.",
-    item_names.ANNIHILATOR_AERIAL_TRACKING: "Annihilator War Council upgrade. The Annihilator's Shadow Cannon ability can now target air units.",
+    item_names.ANNIHILATOR_TWILIGHT_CHASSIS: "Annihilator War Council upgrade. The Annihilator gains +100 maximum life.",
     item_names.STALWART_ARC_INDUCERS: "Stalwart War Council upgrade. Stalwarts damage up to 3 additional units when attacking.",
     item_names.COLOSSUS_FIRE_LANCE: "Colossus War Council upgrade. Colossi set the ground on fire with their attacks, dealing damage to enemies over time.",
     item_names.WRATHWALKER_AERIAL_TRACKING: "Wrathwalker War Council upgrade. Wrathwalkers can now target air units.",
