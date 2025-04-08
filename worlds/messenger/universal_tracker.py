@@ -4,14 +4,14 @@ from .portals import find_spot
 from .transitions import TRANSITIONS
 
 
-def reverse_portal_exits_into_portal_plando(portal_exists: list[int]) -> list[PlandoConnection]:
+def reverse_portal_exits_into_portal_plando(portal_exits: list[int]) -> list[PlandoConnection]:
     return [
-        PlandoConnection("Autumn Hills", find_spot(portal_exists[0]), "both"),
-        PlandoConnection("Riviere Turquoise", find_spot(portal_exists[1]), "both"),
-        PlandoConnection("Howling Grotto", find_spot(portal_exists[2]), "both"),
-        PlandoConnection("Sunken Shrine", find_spot(portal_exists[3]), "both"),
-        PlandoConnection("Searing Crags", find_spot(portal_exists[4]), "both"),
-        PlandoConnection("Glacial Peak", find_spot(portal_exists[5]), "both"),
+        PlandoConnection("Autumn Hills", find_spot(portal_exits[0]), "both"),
+        PlandoConnection("Riviere Turquoise", find_spot(portal_exits[1]), "both"),
+        PlandoConnection("Howling Grotto", find_spot(portal_exits[2]), "both"),
+        PlandoConnection("Sunken Shrine", find_spot(portal_exits[3]), "both"),
+        PlandoConnection("Searing Crags", find_spot(portal_exits[4]), "both"),
+        PlandoConnection("Glacial Peak", find_spot(portal_exits[5]), "both"),
     ]
 
 
