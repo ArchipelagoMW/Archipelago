@@ -5,6 +5,8 @@ Description: Unit test used to test accessibility of locations with and without 
 """
 
 from . import AquariaTestBase
+from ..Items import ItemNames
+from ..Locations import AquariaLocationNames
 
 
 class SunFormAccessTest(AquariaTestBase):
@@ -13,16 +15,16 @@ class SunFormAccessTest(AquariaTestBase):
     def test_sun_form_location(self) -> None:
         """Test locations that require sun form"""
         locations = [
-            "First secret",
-            "The Whale, Verse Egg",
-            "Abyss right area, bulb behind the rock in the whale room",
-            "Octopus Cave, Dumbo Egg",
-            "Beating Octopus Prime",
-            "Sunken City, bulb on top of the boss area",
-            "Beating the Golem",
-            "Sunken City cleared",
-            "Final Boss area, bulb in the boss third form room",
-            "Objective complete"
+            AquariaLocationNames.FIRST_SECRET,
+            AquariaLocationNames.THE_WHALE_VERSE_EGG,
+            AquariaLocationNames.ABYSS_RIGHT_AREA_BULB_BEHIND_THE_ROCK_IN_THE_WHALE_ROOM,
+            AquariaLocationNames.OCTOPUS_CAVE_DUMBO_EGG,
+            AquariaLocationNames.BEATING_OCTOPUS_PRIME,
+            AquariaLocationNames.SUNKEN_CITY_BULB_ON_TOP_OF_THE_BOSS_AREA,
+            AquariaLocationNames.BEATING_THE_GOLEM,
+            AquariaLocationNames.SUNKEN_CITY_CLEARED,
+            AquariaLocationNames.FINAL_BOSS_AREA_BULB_IN_THE_BOSS_THIRD_FORM_ROOM,
+            AquariaLocationNames.OBJECTIVE_COMPLETE
         ]
-        items = [["Sun form"]]
+        items = [[ItemNames.SUN_FORM]]
         self.assertAccessDependency(locations, items)

@@ -96,13 +96,13 @@ class MM2World(World):
     location_name_groups = location_groups
     web = MM2WebWorld()
     rom_name: bytearray
-    world_version: Tuple[int, int, int] = (0, 3, 1)
+    world_version: Tuple[int, int, int] = (0, 3, 2)
     wily_5_weapons: Dict[int, List[int]]
 
-    def __init__(self, world: MultiWorld, player: int):
+    def __init__(self, multiworld: MultiWorld, player: int):
         self.rom_name = bytearray()
         self.rom_name_available_event = threading.Event()
-        super().__init__(world, player)
+        super().__init__(multiworld, player)
         self.weapon_damage = deepcopy(weapon_damage)
         self.wily_5_weapons = {}
 

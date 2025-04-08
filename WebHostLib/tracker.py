@@ -423,6 +423,7 @@ def render_generic_tracker(tracker_data: TrackerData, team: int, player: int) ->
         template_name_or_list="genericTracker.html",
         game_specific_tracker=game in _player_trackers,
         room=tracker_data.room,
+        get_slot_info=tracker_data.get_slot_info,
         team=team,
         player=player,
         player_name=tracker_data.get_room_long_player_names()[team, player],
@@ -446,6 +447,7 @@ def render_generic_multiworld_tracker(tracker_data: TrackerData, enabled_tracker
         enabled_trackers=enabled_trackers,
         current_tracker="Generic",
         room=tracker_data.room,
+        get_slot_info=tracker_data.get_slot_info,
         all_slots=tracker_data.get_all_slots(),
         room_players=tracker_data.get_all_players(),
         locations=tracker_data.get_room_locations(),
@@ -497,7 +499,7 @@ if "Factorio" in network_data_package["games"]:
             (team, player): collections.Counter({
                 tracker_data.item_id_to_name["Factorio"][item_id]: count
                 for item_id, count in tracker_data.get_player_inventory_counts(team, player).items()
-            }) for team, players in tracker_data.get_all_slots().items() for player in players
+            }) for team, players in tracker_data.get_all_players().items() for player in players
             if tracker_data.get_player_game(team, player) == "Factorio"
         }
 
@@ -506,6 +508,7 @@ if "Factorio" in network_data_package["games"]:
             enabled_trackers=enabled_trackers,
             current_tracker="Factorio",
             room=tracker_data.room,
+            get_slot_info=tracker_data.get_slot_info,
             all_slots=tracker_data.get_all_slots(),
             room_players=tracker_data.get_all_players(),
             locations=tracker_data.get_room_locations(),
@@ -638,6 +641,7 @@ if "A Link to the Past" in network_data_package["games"]:
             enabled_trackers=enabled_trackers,
             current_tracker="A Link to the Past",
             room=tracker_data.room,
+            get_slot_info=tracker_data.get_slot_info,
             all_slots=tracker_data.get_all_slots(),
             room_players=tracker_data.get_all_players(),
             locations=tracker_data.get_room_locations(),
@@ -1067,6 +1071,11 @@ if "Timespinner" in network_data_package["games"]:
             "Plasma Orb":          "https://timespinnerwiki.com/mediawiki/images/4/44/Plasma_Orb.png",
             "Kobo":                "https://timespinnerwiki.com/mediawiki/images/c/c6/Familiar_Kobo.png",
             "Merchant Crow":       "https://timespinnerwiki.com/mediawiki/images/4/4e/Familiar_Crow.png",
+            "Laser Access":        "https://timespinnerwiki.com/mediawiki/images/9/99/Historical_Documents.png",
+            "Lab Glasses":         "https://timespinnerwiki.com/mediawiki/images/4/4a/Lab_Glasses.png",
+            "Eye Orb":             "https://timespinnerwiki.com/mediawiki/images/a/a4/Eye_Orb.png",
+            "Lab Coat":            "https://timespinnerwiki.com/mediawiki/images/5/51/Lab_Coat.png", 
+            "Demon":               "https://timespinnerwiki.com/mediawiki/images/f/f8/Familiar_Demon.png", 
         }
 
         timespinner_location_ids = {
@@ -1114,6 +1123,9 @@ if "Timespinner" in network_data_package["games"]:
             timespinner_location_ids["Ancient Pyramid"] += [
                 1337237, 1337238, 1337239,
                 1337240, 1337241, 1337242, 1337243, 1337244, 1337245]
+        if (slot_data["PyramidStart"]):
+            timespinner_location_ids["Ancient Pyramid"] += [
+                1337233, 1337234, 1337235]
 
         display_data = {}
 

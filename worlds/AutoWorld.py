@@ -7,7 +7,7 @@ import sys
 import time
 from random import Random
 from dataclasses import make_dataclass
-from typing import (Any, Callable, ClassVar, Dict, FrozenSet, List, Mapping, Optional, Set, TextIO, Tuple,
+from typing import (Any, Callable, ClassVar, Dict, FrozenSet, Iterable, List, Mapping, Optional, Set, TextIO, Tuple,
                     TYPE_CHECKING, Type, Union)
 
 from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
@@ -33,7 +33,10 @@ class AutoWorldRegister(type):
         # lazy loading + caching to minimize runtime cost
         if cls.__settings is None:
             from settings import get_settings
-            cls.__settings = get_settings()[cls.settings_key]
+            try:
+                cls.__settings = get_settings()[cls.settings_key]
+            except AttributeError:
+                return None
         return cls.__settings
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
@@ -107,6 +110,16 @@ class AutoLogicRegister(type):
             elif not item_name.startswith("__"):
                 if hasattr(CollectionState, item_name):
                     raise Exception(f"Name conflict on Logic Mixin {name} trying to overwrite {item_name}")
+
+                assert callable(function) or "init_mixin" in dct, (
+                    f"{name} defined class variable {item_name} without also having init_mixin.\n\n"
+                    "Explanation:\n"
+                    "Class variables that will be mutated need to be inintialized as instance variables in init_mixin.\n"
+                    "If your LogicMixin variables aren't actually mutable / you don't intend to mutate them, "
+                    "there is no point in using LogixMixin.\n"
+                    "LogicMixin exists to track custom state variables that change when items are collected/removed."
+                )
+
                 setattr(CollectionState, item_name, function)
         return new_class
 
@@ -375,6 +388,10 @@ class World(metaclass=AutoWorldRegister):
         """Method for setting the rules on the World's regions and locations."""
         pass
 
+    def connect_entrances(self) -> None:
+        """Method to finalize the source and target regions of the World's entrances"""
+        pass
+
     def generate_basic(self) -> None:
         """
         Useful for randomizing things that don't affect logic but are better to be determined before the output stage.
@@ -531,11 +548,23 @@ class World(metaclass=AutoWorldRegister):
     def get_location(self, location_name: str) -> "Location":
         return self.multiworld.get_location(location_name, self.player)
 
+    def get_locations(self) -> "Iterable[Location]":
+        return self.multiworld.get_locations(self.player)
+
     def get_entrance(self, entrance_name: str) -> "Entrance":
         return self.multiworld.get_entrance(entrance_name, self.player)
 
+    def get_entrances(self) -> "Iterable[Entrance]":
+        return self.multiworld.get_entrances(self.player)
+
     def get_region(self, region_name: str) -> "Region":
         return self.multiworld.get_region(region_name, self.player)
+
+    def get_regions(self) -> "Iterable[Region]":
+        return self.multiworld.get_regions(self.player)
+
+    def push_precollected(self, item: Item) -> None:
+        self.multiworld.push_precollected(item)
 
     @property
     def player_name(self) -> str:
