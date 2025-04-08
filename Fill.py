@@ -1,7 +1,9 @@
 import collections
 import itertools
 import logging
+import sys
 import typing
+import time
 from collections import Counter, deque
 
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld
@@ -20,8 +22,78 @@ class FillError(RuntimeError):
         super().__init__(*args)
 
 
-def _log_fill_progress(name: str, placed: int, total_items: int) -> None:
-    logging.info(f"Current fill step ({name}) at {placed}/{total_items} items placed.")
+class FillLogger():
+    min_size: int = 1000
+    """ min_size -- minimum number of items we care about reporting """
+    min_time: float = 0.25
+    """ min_time -- minimum time (in seconds) between reports (for dynamic logging) """
+    step: int = 1000
+    """ step -- minimum number of items between reports (for fixed logging) """
+    is_debug: bool = False
+
+    def __init__(self, total_items: int):
+        self.start_time = time.time()
+        self.prev_time = time.time()
+        self.cur_time = time.time()
+        self.step = max(round(total_items * 0.1), 1000)
+        self.total_items = total_items
+        self.is_debug = logging.getLogger().isEnabledFor(logging.DEBUG)
+
+    def log_fill_progress(self, name: str, placed: int, final: bool = False) -> None:
+        # never print the small stuff
+        if self.total_items < self.min_size:
+            return
+
+        self.log_fixed(name, placed, final)
+        if not self.is_debug:
+            self.log_dynamic(name, placed, final)
+
+    def log_fixed(self, name: str, placed: int, final: bool) -> None:
+        """ Intended for logging to files and during debugging. Only logs a fixed number of times (10 or fewer)."""
+        if not final and placed % self.step:
+            return
+
+        extra_args = {}
+        if not self.is_debug:
+            extra_args = {"NoStream": True}
+
+        status = "Finished" if final else "Current"
+        pct = round(100 * (placed / self.total_items), 2)
+        logging.info(f"{status} fill step ({name}) at {placed}/{self.total_items} ({pct}%) items placed.",
+                     extra=extra_args)
+
+    def log_dynamic(self, name: str, placed: int, final: bool) -> None:
+        """
+        Intended for standard terminal/console output, log lines overwrite each other (via carriage return)
+        so in the end only one log line shows for each phase.
+        """
+        self.cur_time = time.time()
+
+        # Always print final, otherwise skip if the time between prints is too short
+        if not final and self.cur_time - self.prev_time < self.min_time:
+            return
+
+        # Update our sliding window
+        self.prev_time = self.cur_time
+
+        # time's hour field only goes to 24 (mod 24); calculate hours by hand
+        status = "Finished" if final else "Current"
+        pct = round(100 * (placed / self.total_items), 2)
+        diff = round(self.cur_time - self.start_time)
+        hrs = int(diff / 3600)
+        elapsed = time.strftime(f"{hrs:02}h:%Mm:%Ss", time.gmtime(diff))
+
+        # Store the terminator in case someone else is doing something interesting
+        old_term = logging.StreamHandler.terminator
+        if not final:
+            logging.StreamHandler.terminator = '\r'
+
+        logging.info(f"{status} fill step ({name}) at {placed}/{self.total_items} "
+                     f"({pct}%) items placed [{elapsed} elapsed].",
+                     extra={"NoFile": True})
+
+        # restore the terminator
+        logging.StreamHandler.terminator = old_term
 
 
 def sweep_from_pool(base_state: CollectionState, itempool: typing.Sequence[Item] = tuple(),
@@ -62,6 +134,8 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
     # for progress logging
     total = min(len(item_pool), len(locations))
     placed = 0
+
+    fill_log = FillLogger(total)
 
     while any(reachable_items.values()) and locations:
         if one_item_per_player:
@@ -178,13 +252,13 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
             spot_to_fill.locked = lock
             placements.append(spot_to_fill)
             placed += 1
-            if not placed % 1000:
-                _log_fill_progress(name, placed, total)
+
+            fill_log.log_fill_progress(name, placed)
+
             if on_place:
                 on_place(spot_to_fill)
 
-    if total > 1000:
-        _log_fill_progress(name, placed, total)
+    fill_log.log_fill_progress(name, placed, final=True)
 
     if cleanup_required:
         # validate all placements and remove invalid ones
@@ -241,6 +315,7 @@ def remaining_fill(multiworld: MultiWorld,
     placements: typing.List[Location] = []
     swapped_items: typing.Counter[typing.Tuple[int, str]] = Counter()
     total = min(len(itempool),  len(locations))
+    fill_log = FillLogger(total)
     placed = 0
 
     # Optimisation: Decide whether to do full location.can_fill check (respect excluded), or only check the item rule
@@ -303,11 +378,9 @@ def remaining_fill(multiworld: MultiWorld,
         multiworld.push_item(spot_to_fill, item_to_place, False)
         placements.append(spot_to_fill)
         placed += 1
-        if not placed % 1000:
-            _log_fill_progress(name, placed, total)
+        fill_log.log_fill_progress(name, placed)
 
-    if total > 1000:
-        _log_fill_progress(name, placed, total)
+    fill_log.log_fill_progress(name, placed, final=True)
 
     if unplaced_items and locations:
         # There are leftover unplaceable items and locations that won't accept them
