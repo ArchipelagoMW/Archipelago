@@ -1208,8 +1208,8 @@ class Region:
         location_name: str,
         item_name: str | None = None,
         rule: Callable[[CollectionState], bool] | None = None,
-        location_type: Location | None = None,
-        item_type: Location | None = None,
+        location_type: type[Location] | None = None,
+        item_type: type[Item] | None = None,
         show_in_spoiler: bool = True,
     ) -> Item:
         """
