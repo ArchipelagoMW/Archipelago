@@ -1502,7 +1502,7 @@ class Entrance:
         """
         # TODO have worlds move to new method and deprecate old
         # custom override
-        if self.can_reach != Location.can_reach:
+        if self.can_reach.__code__ is not Entrance.can_reach.__code__:
             return self.can_reach(state._parent)
 
         if self.parent_region.player_can_reach(state) and self.player_access_rule(state):
@@ -1516,6 +1516,7 @@ class Entrance:
         return False
 
     def player_access_rule(self, state: PlayerState) -> bool:
+        # TODO replace with staticmethod that returns True after old code is removed
         return self.access_rule(state._parent)
 
     def connect(self, region: Region, addresses: Any = None, target: Any = None) -> None:
@@ -1661,7 +1662,7 @@ class Region:
         """
         # TODO deprecate
         # custom implementation
-        if self.can_reach != Region.can_reach:
+        if self.can_reach.__code__ is not Region.can_reach.__code__:
             return self.can_reach(state._parent)
 
         if state.stale:
@@ -1793,7 +1794,7 @@ class Location:
 
     def player_can_reach(self, state: PlayerState) -> bool:
         # TODO deprecate
-        if self.can_reach != Location.can_reach:
+        if self.can_reach.__code__ is not Location.can_reach.__code__:
             return self.can_reach(state._parent)
 
         assert self.parent_region, f"Called can_reach on a Location \"{self}\" with no parent_region"
