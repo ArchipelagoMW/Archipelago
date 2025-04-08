@@ -93,6 +93,8 @@ def create_general_pool(world: World, location_count: int, key_item_count: int):
     if world.options.ItemRandomization.current_key == "standard":
         refined_set = [item for item in refined_set if item.tier < 6]
     required_useful_count = len(world.options.priority_locations.value)
+    if world.options.HeroChallenge != "none" and not world.options.ForgeTheCrystal:
+        required_useful_count -= 1
     extra_filler_locations = sorted(world.options.exclude_locations.value & {location.name for location in major_locations})
     if not world.is_vanilla_game():
         required_useful_count += 1

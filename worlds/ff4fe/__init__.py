@@ -406,12 +406,14 @@ class FF4FEWorld(World):
 
     def pre_fill(self) -> None:
         major_locations = set(locations.major_location_names) & self.options.priority_locations.value
-        location_set = set(self.get_locations()) - {self.get_location(location) for location in major_locations}
+        location_set = set(self.multiworld.get_unfilled_locations()) - {self.get_location(location) for location in major_locations}
+        location_set = sorted(location_set)
+        self.random.shuffle(location_set)
         itempool = [item for item in self.multiworld.itempool
                     if (item.name == "DkMatter" and item.player == self.player)]
         for item in itempool:
             self.multiworld.itempool.remove(item)
-        fill_restrictive(self.multiworld, self.multiworld.state, sorted(location_set), itempool, allow_partial=True)
+        fill_restrictive(self.multiworld, self.multiworld.state, location_set, itempool, allow_partial=True)
 
     def post_fill(self) -> None:
         unfilled_locations = self.multiworld.get_unfilled_locations(self.player)
