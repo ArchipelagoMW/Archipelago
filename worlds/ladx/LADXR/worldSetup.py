@@ -113,11 +113,9 @@ class WorldSetup:
         elif settings.goal in {"seashells", "bingo", "bingo-full"}:
             self.goal = settings.goal
         elif settings.goal == "specific":
+            instrument_count = max(1, ap_options.instrument_count.value)
             instruments = [c for c in "12345678"]
             rnd.shuffle(instruments)
-            instrument_count = ap_options.instrument_count.value
-            if instrument_count < 2 or instrument_count > 6:
-                instrument_count = 4
             self.goal = "=" + "".join(instruments[:instrument_count])
         elif "-" in settings.goal:
             a, b = settings.goal.split("-")
