@@ -1026,6 +1026,8 @@ class CollectionState():
         :param count: How many of the item to remove.
         """
         self.prog_items[player][item] -= count
+        if self.prog_items[player][item] < 1:
+            del (self.prog_items[player][item])
 
 
 class EntranceType(IntEnum):
