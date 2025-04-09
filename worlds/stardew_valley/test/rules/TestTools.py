@@ -1,11 +1,9 @@
-from collections import Counter
-
-from BaseClasses import CollectionState
 from .. import SVTestBase
 from ... import options
 from ...options import ToolProgression, SeasonRandomization
 from ...strings.entrance_names import Entrance
 from ...strings.region_names import Region
+from ...strings.season_names import Season
 from ...strings.tool_names import Tool, ToolMaterial
 
 
@@ -15,12 +13,10 @@ class TestProgressiveToolsLogic(SVTestBase):
         SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
     }
 
-    def world_setup(self, *args, **kwargs):
-        super().world_setup(*args, **kwargs)
-        self.multiworld.precollected_items[self.player] = []
-        self.multiworld.state = CollectionState(self.multiworld)
-
     def test_sturgeon(self):
+        for season in Season.all:
+            self.remove_one_by_name(season)
+
         sturgeon_rule = self.world.logic.has("Sturgeon")
         self.assert_rule_false(sturgeon_rule, self.multiworld.state)
 
@@ -55,7 +51,8 @@ class TestProgressiveToolsLogic(SVTestBase):
         self.assert_rule_false(sturgeon_rule, self.multiworld.state)
 
     def test_old_master_cannoli(self):
-        self.multiworld.state.prog_items = {1: Counter()}
+        for season in Season.all:
+            self.remove_one_by_name(season)
 
         self.multiworld.state.collect(self.create_item("Progressive Axe"))
         self.multiworld.state.collect(self.create_item("Progressive Axe"))
