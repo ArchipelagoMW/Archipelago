@@ -1,5 +1,6 @@
 from typing import List
 
+from ..strings.season_names import Season
 from ..strings.villager_names import NPC
 
 movies_by_name = dict()
@@ -7,8 +8,8 @@ snacks_by_name = dict()
 npc_snacks = dict()
 
 
-def movie(movie_name: str, loving_npcs: List[str]):
-    movie = Movie(movie_name, loving_npcs)
+def movie(movie_name: str, season: str, loving_npcs: List[str]):
+    movie = Movie(movie_name, season, loving_npcs)
     movies_by_name[movie_name] = movie
     return movie
 
@@ -25,10 +26,12 @@ def snack(snack_name: str, category: str, loving_npcs: List[str]):
 
 class Movie:
     name: str
+    season: str
     loving_npcs: List[str]
 
-    def __init__(self, name: str, loving_npcs: List[str]):
+    def __init__(self, name: str, season: str, loving_npcs: List[str]):
         self.name = name
+        self.season = season
         self.loving_npcs = loving_npcs
 
 
@@ -44,14 +47,14 @@ class Snack:
 
 
 class MovieName:
-    brave_sapling = movie("The Brave Little Sapling", [NPC.caroline, NPC.dwarf, NPC.jas, NPC.penny, NPC.sandy, NPC.vincent])
-    prairie_king = movie("Journey Of The Prairie King: The Motion Picture", [NPC.caroline, NPC.dwarf, NPC.jas, NPC.robin, NPC.sandy, NPC.vincent])
-    mysterium = movie("Mysterium", [NPC.abigail, NPC.dwarf, NPC.elliott, NPC.leah, NPC.sandy, NPC.sebastian, NPC.wizard])
-    miracle_coldstar_ranch = movie("The Miracle At Coldstar Ranch", [NPC.dwarf, NPC.emily, NPC.evelyn, NPC.gus, NPC.harvey, NPC.marnie, NPC.sandy])
-    natural_wonders = movie("Natural Wonders: Exploring Our Vibrant World", [NPC.demetrius, NPC.dwarf, NPC.jas, NPC.leo, NPC.lewis, NPC.maru, NPC.sandy])
-    wumbus = movie("Wumbus", [NPC.alex, NPC.demetrius, NPC.dwarf, NPC.gus, NPC.jas, NPC.maru, NPC.pierre, NPC.sam, NPC.sandy, NPC.shane, NPC.vincent])
-    howls_in_rain = movie("It Howls In The Rain", [NPC.abigail, NPC.alex, NPC.dwarf, NPC.sandy, NPC.sebastian, NPC.shane])
-    zuzu_city_express = movie("The Zuzu City Express", [NPC.dwarf, NPC.evelyn, NPC.george, NPC.harvey, NPC.jodi, NPC.sandy])
+    brave_sapling = movie("The Brave Little Sapling", Season.spring, [NPC.caroline, NPC.dwarf, NPC.jas, NPC.penny, NPC.sandy, NPC.vincent])
+    prairie_king = movie("Journey Of The Prairie King: The Motion Picture", Season.summer, [NPC.caroline, NPC.dwarf, NPC.jas, NPC.robin, NPC.sandy, NPC.vincent])
+    mysterium = movie("Mysterium", Season.fall, [NPC.abigail, NPC.dwarf, NPC.elliott, NPC.leah, NPC.sandy, NPC.sebastian, NPC.wizard])
+    miracle_coldstar_ranch = movie("The Miracle At Coldstar Ranch", Season.winter, [NPC.dwarf, NPC.emily, NPC.evelyn, NPC.gus, NPC.harvey, NPC.marnie, NPC.sandy])
+    natural_wonders = movie("Natural Wonders: Exploring Our Vibrant World", Season.spring, [NPC.demetrius, NPC.dwarf, NPC.jas, NPC.leo, NPC.lewis, NPC.maru, NPC.sandy])
+    wumbus = movie("Wumbus", Season.summer, [NPC.alex, NPC.demetrius, NPC.dwarf, NPC.gus, NPC.jas, NPC.maru, NPC.pierre, NPC.sam, NPC.sandy, NPC.shane, NPC.vincent])
+    howls_in_rain = movie("It Howls In The Rain", Season.fall, [NPC.abigail, NPC.alex, NPC.dwarf, NPC.sandy, NPC.sebastian, NPC.shane])
+    zuzu_city_express = movie("The Zuzu City Express", Season.winter, [NPC.dwarf, NPC.evelyn, NPC.george, NPC.harvey, NPC.jodi, NPC.sandy])
 
 
 class SnackCategory:
@@ -64,7 +67,7 @@ class SnackCategory:
 class SnackName:
     apple_slices = snack("Apple Slices", SnackCategory.sweet, [NPC.harvey])
     black_licorice = snack("Black Licorice", SnackCategory.sweet, [NPC.george, NPC.krobus, NPC.wizard])
-    cappucino_mousse_cake = snack("Cappuccino Mousse Cake", SnackCategory.sweet, [NPC.elliott, NPC.evelyn, NPC.gus, NPC.haley])
+    cappuccino_mousse_cake = snack("Cappuccino Mousse Cake", SnackCategory.sweet, [NPC.elliott, NPC.evelyn, NPC.gus, NPC.haley])
     chocolate_popcorn = snack("Chocolate Popcorn", SnackCategory.sweet, [NPC.jodi])
     cotton_candy = snack("Cotton Candy", SnackCategory.sweet, [NPC.penny, NPC.sandy])
     fries = snack("Fries", SnackCategory.salty, [NPC.clint])

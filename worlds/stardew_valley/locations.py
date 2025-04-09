@@ -598,6 +598,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_quests_locations(randomized_locations, options, content)
     extend_book_locations(randomized_locations, content)
     extend_walnutsanity_locations(randomized_locations, options)
+    extend_movies_locations(randomized_locations, options, content)
     extend_secrets_locations(randomized_locations, options, content)
 
     # Mods

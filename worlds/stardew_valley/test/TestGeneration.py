@@ -7,7 +7,7 @@ from ..content.content_packs import vanilla_content_pack_names
 from ..items import Group, ItemData, item_data
 from ..locations import LocationTags
 from ..options import Friendsanity, SpecialOrderLocations, Shipsanity, Chefsanity, SeasonRandomization, Craftsanity, ExcludeGingerIsland, SkillProgression, \
-    Booksanity, Walnutsanity, Secretsanity
+    Booksanity, Walnutsanity, Secretsanity, Moviesanity
 from ..strings.region_names import Region
 
 
@@ -40,6 +40,7 @@ class TestBaseItemGeneration(SVTestBase):
         Craftsanity.internal_name: Craftsanity.option_all,
         Booksanity.internal_name: Booksanity.option_all,
         Walnutsanity.internal_name: Walnutsanity.preset_all,
+        Moviesanity.internal_name: Moviesanity.option_all_movies_and_all_loved_snacks,
         Secretsanity.internal_name: Secretsanity.preset_all,
     }
 
@@ -84,6 +85,7 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
         Craftsanity.internal_name: Craftsanity.option_all,
         ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
         Booksanity.internal_name: Booksanity.option_all,
+        Moviesanity.internal_name: Moviesanity.option_all_movies_and_all_loved_snacks,
         Secretsanity.internal_name: Secretsanity.preset_all,
     }
 

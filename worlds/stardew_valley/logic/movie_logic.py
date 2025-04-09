@@ -13,7 +13,7 @@ class MovieLogic(BaseLogic):
 
     def can_watch_movie_with_loving_npc(self, movie_name: str) -> StardewRule:
         movie = movies_by_name[movie_name]
-        return self.logic.relationship.can_meet_any(movie.loving_npcs)
+        return self.logic.season.has(movie.season) & self.logic.relationship.can_meet_any(movie.loving_npcs)
 
     def can_watch_movie_with_loving_npc_and_snack(self, movie_name: str) -> StardewRule:
         movie = movies_by_name[movie_name]

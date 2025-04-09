@@ -505,7 +505,7 @@ def create_booksanity_items(item_factory: StardewItemFactory, content: StardewCo
 
 
 def create_movie_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    if options.moviesanity.value <= Moviesanity.option_none:
+    if options.moviesanity.value < Moviesanity.option_all_movies:
         return
 
     items.extend(item_factory(item) for item in items_by_group[Group.MOVIESANITY])
