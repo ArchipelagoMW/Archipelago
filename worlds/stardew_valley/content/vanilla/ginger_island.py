@@ -1,11 +1,15 @@
 from .pelican_town import pelican_town as pelican_town_content_pack
 from ..game_content import ContentPack, StardewContent
 from ...data import villagers_data, fish_data
+from ...data.animal import Animal, OstrichIncubatorSource
 from ...data.game_item import ItemTag, Tag
 from ...data.harvest import ForagingSource, HarvestFruitTreeSource, HarvestCropSource
 from ...data.requirement import WalnutRequirement
 from ...data.shop import ShopSource
+from ...strings.animal_names import Animal as AnimalNames
+from ...strings.animal_product_names import AnimalProduct
 from ...strings.book_names import Book
+from ...strings.building_names import Building
 from ...strings.crop_names import Fruit, Vegetable
 from ...strings.fish_names import Fish
 from ...strings.forageable_names import Forageable, Mushroom
@@ -81,5 +85,12 @@ ginger_island_content_pack = GingerIslandContentPack(
     ),
     villagers=(
         villagers_data.leo,
+    ),
+    animals=(
+        Animal(AnimalNames.ostrich,
+               required_building=Building.barn,
+               sources=(
+                   OstrichIncubatorSource(AnimalProduct.ostrich_egg_starter),
+               )),
     )
 )
