@@ -16,7 +16,7 @@ from .portals import PORTALS, add_closed_portal_reqs, disconnect_portals, shuffl
 from .regions import LEVELS, MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS
 from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
 from .shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS, shuffle_shop_prices
-from .subclasses import MessengerEntrance, MessengerItem, MessengerRegion, MessengerShopLocation
+from .subclasses import MessengerEntrance, MessengerItem, MessengerLocation, MessengerRegion, MessengerShopLocation
 from .transitions import shuffle_transitions
 
 components.append(
@@ -50,7 +50,7 @@ class MessengerWeb(WebWorld):
     tutorials = [tut_en]
 
 
-class MessengerWorld(World):
+class MessengerWorld(World[MessengerRegion, MessengerEntrance, MessengerLocation, MessengerItem]):
     """
     As a demon army besieges his village, a young ninja ventures through a cursed world, to deliver a scroll paramount
     to his clan’s survival. What begins as a classic action platformer soon unravels into an expansive time-traveling
