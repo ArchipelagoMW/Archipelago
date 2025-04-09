@@ -197,7 +197,7 @@ class StardewValleyWorld(World):
         if self.options.season_randomization == SeasonRandomization.option_randomized_not_winter:
             season_pool = [season for season in season_pool if season.name != "Winter"]
 
-        starting_season = self.create_item(self.random.choice(season_pool))
+         starting_season = self.create_item(self.random.choice(season_pool))
         self.multiworld.push_precollected(starting_season)
 
     def precollect_building_items(self):

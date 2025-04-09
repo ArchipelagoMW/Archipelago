@@ -26,6 +26,9 @@ class AnimalProduct:
     large_goat_milk = "Large Goat Milk"
     large_milk = "Large Milk"
     milk = "Milk"
+    ostrich_egg_starter = "Ostrich Egg (Starter)"
+    """This item does not really exist and should never end up being displayed. 
+    It's there to patch the loop in logic because of the Chicken-and-egg problem."""
     ostrich_egg = "Ostrich Egg"
     rabbit_foot = "Rabbit's Foot"
     roe = "Roe"
