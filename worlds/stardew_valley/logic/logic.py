@@ -156,14 +156,13 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             AnimalProduct.duck_egg: self.has(AnimalProduct.duck_egg_starter) | self.animal.has_animal(Animal.duck),
             AnimalProduct.duck_feather: self.animal.has_happy_animal(Animal.duck),
             AnimalProduct.egg: self.has(AnimalProduct.egg_starter) | self.animal.has_animal(Animal.chicken),
-            AnimalProduct.goat_milk: self.has(Animal.goat),
+            AnimalProduct.goat_milk: self.animal.has_animal(Animal.goat),
             AnimalProduct.golden_egg: self.has(AnimalProduct.golden_egg_starter) | self.animal.has_animal(Animal.golden_chicken),
             AnimalProduct.large_brown_egg: self.animal.has_happy_animal(Animal.chicken),
             AnimalProduct.large_egg: self.animal.has_happy_animal(Animal.chicken),
             AnimalProduct.large_goat_milk: self.animal.has_happy_animal(Animal.goat),
             AnimalProduct.large_milk: self.animal.has_happy_animal(Animal.cow),
             AnimalProduct.milk: self.animal.has_animal(Animal.cow),
-            AnimalProduct.ostrich_egg: self.has(AnimalProduct.ostrich_egg_starter) | self.has(Animal.ostrich),
             AnimalProduct.rabbit_foot: self.animal.has_happy_animal(Animal.rabbit),
             AnimalProduct.roe: self.skill.can_fish() & self.building.has_building(Building.fish_pond),
             AnimalProduct.squid_ink: self.mine.can_mine_in_the_mines_floor_81_120() | (self.building.has_building(Building.fish_pond) & self.has(Fish.squid)),
@@ -180,7 +179,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             AnimalProduct.dinosaur_egg_starter: false_, # Dinosaur eggs are also part of the museum rules, and I don't want to touch them yet.
             AnimalProduct.egg_starter: false_,  # It could be purchased at the Desert Festival, but festival logic is quite a mess, so not considering it yet...
             AnimalProduct.golden_egg_starter: self.received(AnimalProduct.golden_egg) & (self.money.can_spend_at(Region.ranch, 100000) | self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 100)),
-            AnimalProduct.ostrich_egg_starter: self.tool.can_forage(Generic.any, Region.island_north, True) & self.has(Forageable.journal_scrap) & self.region.can_reach(Region.volcano_floor_5),
             AnimalProduct.void_egg_starter: self.money.can_spend_at(Region.sewer, 5000) | (self.building.has_building(Building.fish_pond) & self.has(Fish.void_salmon)),
             ArtisanGood.aged_roe: self.artisan.can_preserves_jar(AnimalProduct.roe),
             ArtisanGood.battery_pack: (self.has(Machine.lightning_rod) & self.season.has_any_not_winter()) | self.has(Machine.solar_panel),
