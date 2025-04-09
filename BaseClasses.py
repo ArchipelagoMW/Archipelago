@@ -111,24 +111,6 @@ class RegionManager(Generic[_T_Reg, _T_Ent, _T_Loc]):
             return len(self.multiworld.get_regions())
         return len(self.region_cache.values())
 
-    def get_regions(self) -> Iterable[_T_Reg]:
-        return self.region_cache.values()
-
-    def get_region(self, name: str) -> _T_Reg:
-        return self.region_cache[name]
-
-    def get_locations(self) -> Iterable[_T_Loc]:
-        return self.location_cache.values()
-
-    def get_location(self, name: str) -> _T_Loc:
-        return self.location_cache[name]
-
-    def get_entrances(self) -> Iterable[_T_Ent]:
-        return self.entrance_cache.values()
-
-    def get_entrance(self, name: str) -> _T_Ent:
-        return self.entrance_cache[name]
-
 
 class MultiWorld():
     debug_types = False
@@ -455,18 +437,18 @@ class MultiWorld():
 
     def get_regions(self, player: Optional[int] = None) -> Iterable[Region]:
         if player is not None:
-            return self.worlds[player].regions.get_regions()
-        return Utils.RepeatableChain(tuple(self.worlds[player].regions.get_regions()
+            return self.worlds[player].get_regions()
+        return Utils.RepeatableChain(tuple(self.worlds[player].get_regions()
                                            for player in self.get_all_ids()))
 
     def get_region(self, region_name: str, player: int) -> Region:
-        return self.worlds[player].regions.get_region(region_name)
+        return self.worlds[player].get_region(region_name)
 
     def get_entrance(self, entrance_name: str, player: int) -> Entrance:
-        return self.worlds[player].regions.get_entrance(entrance_name)
+        return self.worlds[player].get_entrance(entrance_name)
 
     def get_location(self, location_name: str, player: int) -> Location:
-        return self.worlds[player].regions.get_location(location_name)
+        return self.worlds[player].get_location(location_name)
 
     def get_all_state(self, use_cache: bool, allow_partial_entrances: bool = False) -> CollectionState:
         cached = getattr(self, "_all_state", None)
@@ -529,8 +511,8 @@ class MultiWorld():
 
     def get_entrances(self, player: Optional[int] = None) -> Iterable[Entrance]:
         if player is not None:
-            return self.worlds[player].regions.get_entrances()
-        return Utils.RepeatableChain(tuple(self.worlds[player].regions.get_entrances()
+            return self.worlds[player].get_entrances()
+        return Utils.RepeatableChain(tuple(self.worlds[player].get_entrances()
                                            for player in self.get_all_ids()))
 
     def register_indirect_condition(self, region: Region, entrance: Entrance):
@@ -540,8 +522,8 @@ class MultiWorld():
 
     def get_locations(self, player: Optional[int] = None) -> Iterable[Location]:
         if player is not None:
-            return self.worlds[player].regions.get_locations()
-        return Utils.RepeatableChain(tuple(self.worlds[player].regions.get_locations()
+            return self.worlds[player].get_locations()
+        return Utils.RepeatableChain(tuple(self.worlds[player].get_locations()
                                            for player in self.get_all_ids()))
 
     def get_unfilled_locations(self, player: Optional[int] = None) -> List[Location]:
@@ -878,13 +860,13 @@ class CollectionState():
         return spot.can_reach(self)
 
     def can_reach_location(self, spot: str, player: int) -> bool:
-        return self.multiworld.get_location(spot, player).can_reach(self)
+        return self.multiworld.worlds[player].get_location(spot).can_reach(self)
 
     def can_reach_entrance(self, spot: str, player: int) -> bool:
-        return self.multiworld.get_entrance(spot, player).can_reach(self)
+        return self.multiworld.worlds[player].get_entrance(spot).can_reach(self)
 
     def can_reach_region(self, spot: str, player: int) -> bool:
-        return self.multiworld.get_region(spot, player).can_reach(self)
+        return self.multiworld.worlds[player].get_region(spot).can_reach(self)
 
     def sweep_for_events(self, locations: Optional[Iterable[Location]] = None) -> None:
         Utils.deprecate("sweep_for_events has been renamed to sweep_for_advancements. The functionality is the same. "
@@ -1288,7 +1270,7 @@ class Region:
             exits = dict.fromkeys(exits)
         return [
             self.connect(
-                self.multiworld.get_region(connecting_region, self.player),
+                self.multiworld.worlds[self.player].get_region(connecting_region),
                 name,
                 rules[connecting_region] if rules and connecting_region in rules else None,
             )

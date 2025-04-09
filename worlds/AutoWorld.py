@@ -540,22 +540,22 @@ class World(Generic[_T_Reg, _T_Ent, _T_Loc, _T_Item], metaclass=AutoWorldRegiste
 
     # convenience methods
     def get_location(self, location_name: str) -> _T_Loc:
-        return self.regions.get_location(location_name)
+        return self.regions.location_cache[location_name]
 
     def get_locations(self) -> Iterable[_T_Loc]:
-        return self.regions.get_locations()
+        return self.regions.location_cache.values()
 
     def get_entrance(self, entrance_name: str) -> _T_Ent:
-        return self.regions.get_entrance(entrance_name)
+        return self.regions.entrance_cache[entrance_name]
 
     def get_entrances(self) -> Iterable[_T_Ent]:
-        return self.regions.get_entrances()
+        return self.regions.entrance_cache.values()
 
     def get_region(self, region_name: str) -> _T_Reg:
-        return self.regions.get_region(region_name)
+        return self.regions.region_cache[region_name]
 
     def get_regions(self) -> Iterable[_T_Reg]:
-        return self.regions.get_regions()
+        return self.regions.region_cache.values()
 
     def push_precollected(self, item: Item) -> None:
         self.multiworld.push_precollected(item)
