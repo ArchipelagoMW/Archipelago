@@ -514,8 +514,8 @@ class MultiWorld():
         """
         Retrieve every location that can be reached for the `player` with the given `state`.
 
-        :param CollectionState | None state: The current state of the Multiworld game
-        :param int | None player: The player should have the locations in its world
+        :param state: The current state of the Multiworld game
+        :param player: The player should have the locations in its world
         :return: The list of locations that can be reached in the multiworld for the given state
         """
         state: CollectionState = state if state else self.state
@@ -874,8 +874,8 @@ class CollectionState():
         :return: The set of reachable spots.        
         """
         assert resolution_hint in ("Location", "Region", "Entrance")
+        self.update_reachable_regions(player)
         if resolution_hint == "Region":
-            self.update_reachable_regions(player)
             reachable_spot: set[str] = set([region.name for region in self.reachable_regions[player]])
         elif resolution_hint == "Entrance":
             reachable_spot: set[str] = set([entrance.name for entrance in self.get_reachable_entrances(player)])

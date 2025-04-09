@@ -283,10 +283,10 @@ class WorldTestBase(unittest.TestCase):
         the items are collected, the spots became reachable. Also assert that no other new spots can be
         accessed when the items are collected.
 
-        :param list[str] spots: The name of the locations/regions/entrances that should become reachable with the items
-        :param list[str] item_names: The name of the items that should enable the spots
-        :param list[str] initial_items: The initial items that should be initially collected
-        :param Literal resolution_hint: The type of "spots" (can be "Location", "Region" or "Entrance")
+        :param spots: The name of the locations/regions/entrances that should become reachable with the items
+        :param item_names: The name of the items that should enable the spots
+        :param initial_items: The initial items that should be initially collected
+        :param resolution_hint: The type of "spots" (can be "Location", "Region" or "Entrance")
         """
         if initial_items is None:
             initial_items = []
