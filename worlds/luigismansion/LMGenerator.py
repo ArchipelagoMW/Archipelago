@@ -32,19 +32,9 @@ class InvalidCleanISOError(Exception): pass
 class LuigisMansionRandomizer:
     def __init__(self, clean_iso_path: str, randomized_output_file_path: str, ap_output_data=None, debug_flag=False):
         # Takes note of the provided Randomized Folder path and if files should be exported instead of making an ISO.
-        select_aplm_path = ap_output_data
         self.debug = debug_flag
-        if self.debug:
-            self.clean_iso_path = filedialog.askopenfilename(title="Select your NA iso file",
-                                                             filetypes=[("ISO Files", ".iso")])
-            self.randomized_output_file_path = os.path.join(
-                Path(os.path.dirname(self.clean_iso_path)).parent, "%s Randomized.iso" % RANDOMIZER_NAME)
-            if ap_output_data is None:
-                select_aplm_path = filedialog.askopenfilename(title="Select your APLM File",
-                                                              filetypes=[("APLM Files", ".aplm")])
-        else:
-            self.clean_iso_path = clean_iso_path
-            self.randomized_output_file_path = randomized_output_file_path
+        self.clean_iso_path = clean_iso_path
+        self.randomized_output_file_path = randomized_output_file_path
 
         try:
             if os.path.isfile(randomized_output_file_path):
@@ -53,7 +43,7 @@ class LuigisMansionRandomizer:
         except IOError:
             raise Exception("'" + randomized_output_file_path + "' is currently in use by another program.")
 
-        with open(os.path.abspath(select_aplm_path)) as stream:
+        with open(os.path.abspath(ap_output_data)) as stream:
             self.output_data = yaml.safe_load(stream)
 
         # Verifies we have a valid installation of Luigi's Mansion USA. There are some regional file differences.
@@ -613,4 +603,4 @@ class LuigisMansionRandomizer:
 
 
 if __name__ == '__main__':
-    unpacked_iso = LuigisMansionRandomizer("", "", None, False)
+    print("Run this from Launcher.py instead.")
