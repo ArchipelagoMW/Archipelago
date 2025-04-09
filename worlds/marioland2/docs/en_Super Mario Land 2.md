@@ -12,6 +12,11 @@ Where there are secret exits, the secret exit will be a separate location check.
 that does not have a separate check for its secret exit. The Hippo Zone secret exit will still bring you to the Space
 Zone.
 
+Ringing the Midway Bells in each level that has one will register a location check. If the "Shuffle Midway Bells" option
+is turned on, then ringing the bell will not grant the checkpoint, and instead you must obtain the Midway Bell item from
+the item pool to gain the checkpoint for that level. Holding SELECT while loading into a level where you have unlocked
+the Midway Bell checkpoint will start you at the beginning of the level.
+
 Unlocking paths to new levels requires finding or receiving Zone Progression items. For example, receiving the first
 "Turtle Zone Progression" will unlock the path from Turtle Zone 1 to Turtle Zone 2. Paths to secret levels are separate
 items, so Turtle Zone Secret will open the path from Turtle Zone 2 to the Turtle Zone Secret Course.
@@ -36,8 +41,6 @@ Additionally, the following items can be shuffled depending on your YAML options
 regardless of whether the coin is actually obtained in that location.
 - Mario Coin Fragments: As an alternative to shuffling the 6 Golden Coins, you can shuffle Mario Coin Fragments,
 a chosen percentage of which are needed to assemble the Mario Coin. You will start with the other 5 coins.
-- Midway Bells: ringing bells results in a location check, and the midway check points are shuffled as items.
-Note that you may have to backtrack from the midway point to reach some secret exits!
 - Normal Mode/Easy Mode: you can start the game in Normal Mode with an Easy Mode "upgrade" in the item pool, or start in
 Easy Mode with a Normal Mode "trap" item, swapping the difficulty.
 - Auto Scroll: auto-scrolling levels can be set to not auto scroll until this trap item is received.
