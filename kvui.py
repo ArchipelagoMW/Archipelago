@@ -731,7 +731,7 @@ class ClientTabs(MDTabsSecondary):
     lock_swiping = True
 
     def __init__(self, *args, **kwargs):
-        self.carousel = MDTabsCarousel(lock_swiping=True)
+        self.carousel = MDTabsCarousel(lock_swiping=True, anim_move_duration=0.2)
         super().__init__(*args, MDDivider(size_hint_y=None, height=dp(1)), self.carousel, **kwargs)
         self.size_hint_y = 1
 
@@ -781,6 +781,21 @@ class ClientTabs(MDTabsSecondary):
         self.ids.container.remove_widget(tab)
         self.carousel.remove_widget(content)
         self.on_size(self, self.size)
+
+
+class CommandButton(MDButton, MDTooltip):
+    def __init__(self, *args, manager: "GameManager", **kwargs):
+        super().__init__(*args, **kwargs)
+        self.manager = manager
+        self._tooltip = ToolTip(text="Test")
+
+    def on_enter(self):
+        self._tooltip.text = self.manager.commandprocessor.get_help_text()
+        self._tooltip.font_size = dp(20 - (len(self._tooltip.text) // 400))  # mostly guessing on the numbers here
+        self.display_tooltip()
+
+    def on_leave(self):
+        self.animation_tooltip_dismiss()
 
 
 class GameManager(ThemedApp):
@@ -891,8 +906,9 @@ class GameManager(ThemedApp):
 
         # bottom part
         bottom_layout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(40), spacing=5, padding=(5, 10))
-        info_button = MDButton(MDButtonText(text="Command:"), radius=5, style="filled", size=(dp(100), dp(70)),
-                               size_hint_x=None, size_hint_y=None, pos_hint={"center_y": 0.575})
+        info_button = CommandButton(MDButtonText(text="Command:", halign="left"), manager=self, radius=5,
+                                    style="filled", size=(dp(100), dp(70)), size_hint_x=None, size_hint_y=None,
+                                    pos_hint={"center_y": 0.575})
         info_button.bind(on_release=self.command_button_action)
         bottom_layout.add_widget(info_button)
         self.textinput = CommandPromptTextInput(size_hint_y=None, height=dp(30), multiline=False, write_tab=False)
