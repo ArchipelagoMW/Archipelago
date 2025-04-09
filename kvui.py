@@ -186,6 +186,12 @@ class ResizableTextField(MDTextField):
         super().__init__(args, kwargs)
 
 
+def on_release(self: MDButton, *args):
+    super(MDButton, self).on_release(args)
+    self.on_leave()
+
+MDButton.on_release = on_release
+
 # I was surprised to find this didn't already exist in kivy :(
 class HoverBehavior(object):
     """originally from https://stackoverflow.com/a/605348110"""
