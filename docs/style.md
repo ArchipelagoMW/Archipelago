@@ -41,18 +41,18 @@
 
 ## HTML
 
-* Indent with 2 spaces for new code.
+* Indent with 4 spaces for new code.
 * kebab-case for ids and classes.
 
-## CSS
+## CSS / SCSS
 
-* Indent with 2 spaces for new code.
+* Indent with 4 spaces for new code.
 * `{` on the same line as the selector.
-* No space between selector and `{`.
+* Space between selector and `{`.
 
 ## JS
 
-* Indent with 2 spaces.
-* Indent `case` inside `switch ` with 2 spaces.
+* Indent with 4 spaces.
+* Indent `case` inside `switch ` with 4 spaces.
 * Use single quotes.
 * Semicolons are required after every statement.
