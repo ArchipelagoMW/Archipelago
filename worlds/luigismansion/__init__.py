@@ -38,7 +38,7 @@ components.append(
 
 icon_paths["archiboolego"] = f"ap:{__name__}/data/archiboolego.png"
 
-CLIENT_VERSION = "0.2.4"
+CLIENT_VERSION = "0.2.5"
 
 class LuigisMansionSettings(settings.Group):
     class ISOFile(settings.UserFilePath):
@@ -719,7 +719,8 @@ class LMWorld(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Mario's Painting", self.player)
 
     @classmethod
-    def stage_generate_output(cls, multiworld: MultiWorld, output_directory: str):
+    def stage_generate_output(cls, multiworld: MultiWorld):
+        lm_worlds = [world for world in multiworld.get_game_worlds(cls.game)]
         boo_worlds = [world for world in multiworld.get_game_worlds(cls.game) if world.options.boo_health_option == 2]
         if not boo_worlds:
             return
