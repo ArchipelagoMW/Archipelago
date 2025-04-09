@@ -846,7 +846,7 @@ HANGABLES_LOCATION_TABLE = {
     "Graveyard Downspout": LMLocationData("Graveyard", 320, "Furniture", 186, [],
                                           update_ram_addr=[LMRamData(in_game_room_id=15)]),
     "2F Rear Hallway Picture": LMLocationData("2F Rear Hallway", 368, "Furniture", 520, [],
-                                              update_ram_addr=[LMRamData(in_game_room_id=46)]),
+                                              update_ram_addr=[LMRamData(in_game_room_id=47)]),
     "2F Washroom Picture": LMLocationData("2F Washroom", 381, "Furniture", 444, [],
                                           update_ram_addr=[LMRamData(in_game_room_id=45)]),
     "Nana's Room Painting": LMLocationData("Nana's Room", 400, "Furniture", 388, [],
