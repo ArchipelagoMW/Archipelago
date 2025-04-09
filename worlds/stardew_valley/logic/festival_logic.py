@@ -155,11 +155,14 @@ SkillLogicMixin, RegionLogicMixin, ActionLogicMixin, MonsterLogicMixin, Relation
         if self.options.festival_locations != FestivalLocations.option_hard:
             return self.logic.true_
 
-        good_animal_products = (  # Other animal products are not counted in the animal product category
+        good_animal_products = [  # Other animal products are not counted in the animal product category
             AnimalProduct.duck_egg, AnimalProduct.duck_feather, AnimalProduct.egg, AnimalProduct.goat_milk, AnimalProduct.golden_egg, AnimalProduct.large_egg,
             AnimalProduct.large_goat_milk, AnimalProduct.large_milk, AnimalProduct.milk, AnimalProduct.ostrich_egg, AnimalProduct.rabbit_foot,
             AnimalProduct.void_egg, AnimalProduct.wool
-        )
+        ]
+        if AnimalProduct.ostrich_egg not in self.content.game_items:
+            # When ginger island is excluded, ostrich egg is not available
+            good_animal_products.remove(AnimalProduct.ostrich_egg)
         animal_rule = self.logic.has_any(*good_animal_products)
 
         artisan_rule = self.logic.artisan.can_keg(Generic.any) | self.logic.artisan.can_preserves_jar(Generic.any)
