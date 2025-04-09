@@ -5,8 +5,6 @@ import zipfile
 from worlds.Files import APContainer
 
 
-from .MetroidPrimeInterface import GAMES, HUD_MESSAGE_DURATION
-
 if TYPE_CHECKING:
     from ppc_asm.assembler.ppc import GeneralRegister  # type: ignore
 
@@ -136,6 +134,7 @@ def construct_hook_patch(game_version: str, progressive_beams: bool) -> List[int
         GeneralRegister,
     )
     from ppc_asm import assembler
+    from .MetroidPrimeInterface import GAMES, HUD_MESSAGE_DURATION
     import py_randomprime  # type: ignore
 
     symbols = py_randomprime.symbols_for_version(game_version)
