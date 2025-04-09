@@ -155,7 +155,8 @@ SkillLogicMixin, RegionLogicMixin, ActionLogicMixin, MonsterLogicMixin, Relation
         if self.options.festival_locations != FestivalLocations.option_hard:
             return self.logic.true_
 
-        good_animal_products = [  # Other animal products are not counted in the animal product category
+        # Other animal products are not counted in the animal product category
+        good_animal_products = [
             AnimalProduct.duck_egg, AnimalProduct.duck_feather, AnimalProduct.egg, AnimalProduct.goat_milk, AnimalProduct.golden_egg, AnimalProduct.large_egg,
             AnimalProduct.large_goat_milk, AnimalProduct.large_milk, AnimalProduct.milk, AnimalProduct.ostrich_egg, AnimalProduct.rabbit_foot,
             AnimalProduct.void_egg, AnimalProduct.wool
