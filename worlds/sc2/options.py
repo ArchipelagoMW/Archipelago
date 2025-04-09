@@ -488,8 +488,8 @@ class EnsureGenericItems(Range):
 
 class MinNumberOfUpgrades(Range):
     """
-    Set a minimum to the number of upgrades a unit/structure can have.
-    Note that most units have 4 or 6 upgrades.
+    Set a minimum to the number of upgrade items a unit/structure can have.
+    Note that most units have 4 to 6 upgrades.
     If a unit has fewer upgrades than the minimum, it will have all of its upgrades.
 
     Doesn't affect shared unit upgrades.
@@ -502,8 +502,9 @@ class MinNumberOfUpgrades(Range):
 
 class MaxNumberOfUpgrades(Range):
     """
-    Set a maximum to the number of upgrades a unit/structure can have. -1 is used to define unlimited.
-    Note that most unit have 4 to 6 upgrades.
+    Set a maximum to the number of upgrade items a unit/structure can have.
+    -1 is used to define unlimited.
+    Note that most units have 4 to 6 upgrades.
 
     Doesn't affect shared unit upgrades.
     """
