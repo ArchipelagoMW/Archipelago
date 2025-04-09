@@ -24,11 +24,11 @@ def owns_yellow_key(state: CollectionState, player: int) -> bool:
 #For Zone Checks we'll try to Lambda from the StateLogic file which will have all the rules to enter a zone. This way we don't have to repeat stuff.
 #Return if the player is allowed access to Red Zone 1
 def red(state: CollectionState, player: int) -> bool:
-    lambda state: StateLogic.red(state, world.player)
+    return StateLogic.red(state, world.player)
 
 #Return if the player is allowed access to Red Zone 2 (Behind Yellow Door)
 def red2(state: CollectionState, player: int) -> bool:
-    lambda state: StateLogic.red2(state, world.player)
+    return StateLogic.red2(state, world.player)
 ###Sawyer: After this point we would start adding the other zones.
 
 ###Sawyer: Here we would place the ReCollections
