@@ -110,6 +110,15 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     del local_early
             del early
 
+        # items can't be both local and non-local, prefer local
+        multiworld.worlds[player].options.non_local_items.value -= multiworld.worlds[player].options.local_items.value
+        multiworld.worlds[player].options.non_local_items.value -= set(multiworld.local_early_items[player])
+
+    # Clear non-applicable local and non-local items.
+    if multiworld.players == 1:
+        multiworld.worlds[1].options.non_local_items.value = set()
+        multiworld.worlds[1].options.local_items.value = set()
+
     logger.info('Creating MultiWorld.')
     AutoWorld.call_all(multiworld, "create_regions")
 
@@ -117,12 +126,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     AutoWorld.call_all(multiworld, "create_items")
 
     logger.info('Calculating Access Rules.')
-
-    for player in multiworld.player_ids:
-        # items can't be both local and non-local, prefer local
-        multiworld.worlds[player].options.non_local_items.value -= multiworld.worlds[player].options.local_items.value
-        multiworld.worlds[player].options.non_local_items.value -= set(multiworld.local_early_items[player])
-
     AutoWorld.call_all(multiworld, "set_rules")
 
     for player in multiworld.player_ids:
@@ -143,11 +146,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         multiworld.worlds[player].options.priority_locations.value -= world_excluded_locations
 
     # Set local and non-local item rules.
+    # This function is called so late because worlds might otherwise overwrite item_rules which are how locality works
     if multiworld.players > 1:
         locality_rules(multiworld)
-    else:
-        multiworld.worlds[1].options.non_local_items.value = set()
-        multiworld.worlds[1].options.local_items.value = set()
 
     AutoWorld.call_all(multiworld, "connect_entrances")
     AutoWorld.call_all(multiworld, "generate_basic")
