@@ -57,15 +57,16 @@ class HasNameAndPlayer(Protocol):
 _T_Reg = TypeVar("_T_Reg", bound="Region")
 _T_Ent = TypeVar("_T_Ent", bound="Entrance")
 _T_Loc = TypeVar("_T_Loc", bound="Location")
+_T_Item = TypeVar("_T_Item", bound="Item")
 
 
 class RegionManager(Generic[_T_Reg, _T_Ent, _T_Loc]):
     region_cache: Dict[str, _T_Reg]
     entrance_cache: Dict[str, _T_Ent]
     location_cache: Dict[str, _T_Loc]
-    multiworld: "MultiWorld"
+    multiworld: MultiWorld
 
-    def __init__(self, multiworld: "MultiWorld" = None):
+    def __init__(self, multiworld: MultiWorld = None):
         # players is no longer needed. The multiworld is passed in here so we can reference the worlds' caches
         # while they continue to use multiworld.regions
         # TODO remove later
@@ -74,11 +75,11 @@ class RegionManager(Generic[_T_Reg, _T_Ent, _T_Loc]):
         self.entrance_cache = {}
         self.location_cache = {}
 
-    def __iadd__(self, other: Iterable[Region]):
+    def __iadd__(self, other: Iterable[_T_Reg]):
         self.extend(other)
         return self
 
-    def append(self, region: Region):
+    def append(self, region: _T_Reg):
         # TODO
         if self.multiworld is not None:
             region_cache = self.multiworld.worlds[region.player].regions.region_cache
@@ -104,7 +105,7 @@ class RegionManager(Generic[_T_Reg, _T_Ent, _T_Loc]):
         else:
             yield from self.region_cache.values()
 
-    def __len__(self):
+    def __len__(self) -> int:
         # TODO
         if self.multiworld is not None:
             return len(self.multiworld.get_regions())
