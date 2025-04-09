@@ -63,8 +63,9 @@ class GameDataPackage(db.Entity):
     data = Required(bytes)
 
 
-class ArchipelagoInstaller(db.Entity):
-    id = PrimaryKey(str)
-    name = Required(str)
+class ArchipelagoDownload(db.Entity):
+    id = PrimaryKey(UUID, default=uuid4)
+    version = Required(str)
+    platform = Required(str)
     url = Required(str)
     downloads = Required(int)
