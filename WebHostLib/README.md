@@ -17,4 +17,4 @@ Design changes have to fit the overall design.
 
 Introduction of JS dependencies should first be discussed on Discord or in a draft PR.
 
-See also style guide in [docs/style.md](/docs/style.md) for the style guide.
+See also [docs/style.md](/docs/style.md) for the style guide.
