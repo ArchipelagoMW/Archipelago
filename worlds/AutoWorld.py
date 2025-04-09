@@ -11,8 +11,10 @@ from typing import (Any, Callable, ClassVar, Dict, FrozenSet, Generic, Iterable,
                     Tuple, TYPE_CHECKING, Type, Union)
 
 from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
-from BaseClasses import (CollectionState, Item, Location, MultiWorld, RegionManager, _T_Reg, _T_Ent, _T_Loc, _T_Item,
-                         Tutorial)
+from BaseClasses import (
+    CollectionState, Entrance, Item, Location, MultiWorld, Region, RegionManager, _T_Reg, _T_Ent, _T_Loc, _T_Item,
+    Tutorial,
+)
 
 if TYPE_CHECKING:
     from . import GamesPackage
@@ -22,7 +24,7 @@ perf_logger = logging.getLogger("performance")
 
 
 class AutoWorldRegister(type):
-    world_types: Dict[str, Type[World]] = {}
+    world_types: Dict[str, Type[World[Region, Entrance, Location, Item]]] = {}
     __file__: str
     zip_path: Optional[str]
     settings_key: str
