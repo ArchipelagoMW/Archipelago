@@ -814,6 +814,7 @@ item_name_groups[ItemGroupNames.OVERPOWERED_ITEMS] = overpowered_items = [
     item_names.SOA_SOLAR_BOMBARDMENT,
 
     # Protoss general
+    item_names.QUATRO,
     item_names.MOTHERSHIP_INTEGRATED_POWER,
 ]
 
