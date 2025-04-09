@@ -5,7 +5,7 @@ from Options import NumericOption
 from typing import Any, Dict, List, Optional, TextIO, Union, cast
 from logging import info
 
-from worlds.metroidprime.data.Tricks import Tricks
+from .data.Tricks import Tricks
 
 from .Logic import Logic
 from .data.RoomNames import RoomName
