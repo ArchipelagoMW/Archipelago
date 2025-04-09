@@ -1,5 +1,6 @@
 {% extends 'pageWrapper.html' %}
 {% import "macros.html" as macros %}
+{% set show_footer = True %}
 
 {% block head %}
     <title>Generation in Progress</title>
@@ -15,5 +16,4 @@
             Waiting for game to generate, this page auto-refreshes to check.
         </div>
     </div>
-    {% include 'islandFooter.html' %}
 {% endblock %}
