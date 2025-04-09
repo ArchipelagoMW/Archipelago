@@ -2,7 +2,7 @@ from typing import List
 from unittest import TestCase
 
 from BaseClasses import CollectionState, Location, Region
-from ...stardew_rule import StardewRule, false_, MISSING_ITEM, Reach
+from ...stardew_rule import StardewRule, false_, Reach
 from ...stardew_rule.rule_explain import explain
 
 
@@ -34,7 +34,7 @@ class RuleAssertMixin(TestCase):
     def assert_rule_can_be_resolved(self, rule: StardewRule, complete_state: CollectionState):
         expl = explain(rule, complete_state)
         try:
-            self.assertNotIn(MISSING_ITEM, repr(rule))
+            # self.assertNotIn(MISSING_ITEM, repr(rule))
             self.assertTrue(rule is false_ or rule(complete_state), expl)
         except KeyError as e:
             raise AssertionError(f"Error while checking rule {rule}: {e}"

@@ -207,9 +207,6 @@ pelican_town = ContentPack(
         Beverage.coffee: (ShopSource(money_price=300, shop_region=Region.saloon),),
 
         # Books
-        Book.animal_catalogue: (
-            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
-            ShopSource(money_price=5000, shop_region=Region.ranch),),
         Book.book_of_mysteries: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             MysteryBoxSource(amount=38),),  # After 38 boxes, there are 49.99% chances player received the book.

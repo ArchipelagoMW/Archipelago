@@ -9,6 +9,7 @@ from .vanilla.pelican_town import pelican_town
 from .vanilla.qi_board import qi_board_content_pack
 from .vanilla.the_desert import the_desert
 from .vanilla.the_farm import the_farm
+from .vanilla.the_forest import marnies_ranch
 from .vanilla.the_mines import the_mines
 
 assert base_game
@@ -17,6 +18,7 @@ assert pelican_town
 assert qi_board_content_pack
 assert the_desert
 assert the_farm
+assert marnies_ranch
 assert the_mines
 
 # Dynamically register everything currently in the mods folder. This would ideally be done through a metaclass, but I have not looked into that yet.

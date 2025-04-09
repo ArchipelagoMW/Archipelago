@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from typing import Dict, Iterable, Set, Any, Mapping, Type, Tuple, Union
 
 from .feature import booksanity, cropsanity, fishsanity, friendsanity, skill_progression, building_progression, tool_progression
-from ..data.building import Building
+from ..data.building import Building, Animal
 from ..data.fish_data import FishItem
 from ..data.game_item import GameItem, Source, ItemTag
 from ..data.skill import Skill
@@ -22,6 +22,7 @@ class StardewContent:
     fishes: Dict[str, FishItem] = field(default_factory=dict)
     villagers: Dict[str, Villager] = field(default_factory=dict)
     farm_buildings: Dict[str, Building] = field(default_factory=dict)
+    animals: Dict[str, Animal] = field(default_factory=dict)
     skills: Dict[str, Skill] = field(default_factory=dict)
     quests: Dict[str, Any] = field(default_factory=dict)
 
@@ -107,6 +108,11 @@ class ContentPack:
     farm_buildings: Iterable[Building] = ()
 
     def farm_building_hook(self, content: StardewContent):
+        ...
+
+    animals: Iterable[Animal] = ()
+
+    def animal_hook(self, content: StardewContent):
         ...
 
     skills: Iterable[Skill] = ()
