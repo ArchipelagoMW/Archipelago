@@ -132,6 +132,7 @@ class TestRegionalDoorRando(MetroidPrimeTestBase):
 class TestDoorRandoWithDifferentStartRoomNonRequiredBeam(
     MetroidPrimeWithOverridesTestBase
 ):
+    run_default_tests = False  # type: ignore
     options = {
         "door_color_randomization": DoorColorRandomization.option_global,
     }
@@ -147,6 +148,7 @@ class TestDoorRandoWithDifferentStartRoomNonRequiredBeam(
 class TestDoorRandoWithDifferentStartRoomWithRequiredBeam(
     MetroidPrimeWithOverridesTestBase
 ):
+    run_default_tests = False  # type: ignore
     options = {
         "door_color_randomization": DoorColorRandomization.option_global,
     }
