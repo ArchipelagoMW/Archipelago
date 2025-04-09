@@ -15,7 +15,7 @@ from .data.game_item import ItemTag
 from .logic.logic_event import all_events
 from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
-    BuildingProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
+    ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
     Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Walnutsanity, EnabledFillerBuffs
 from .strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName
 from .strings.ap_names.ap_weapon_names import APWeapon
@@ -225,7 +225,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_tools(item_factory, content, items)
     create_skills(item_factory, content, items)
     create_wizard_buildings(item_factory, options, items)
-    create_carpenter_buildings(item_factory, options, items)
+    create_carpenter_buildings(item_factory, content, items)
     items.append(item_factory("Railroad Boulder Removed"))
     items.append(item_factory(CommunityUpgrade.fruit_bats))
     items.append(item_factory(CommunityUpgrade.mushroom_boxes))
@@ -264,7 +264,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
 
 def create_raccoons(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
     number_progressive_raccoons = 9
-    if options.quest_locations < 0:
+    if options.quest_locations.has_no_story_quests():
         number_progressive_raccoons = number_progressive_raccoons - 1
 
     items.extend(item_factory(item) for item in [CommunityUpgrade.raccoon] * number_progressive_raccoons)
@@ -353,30 +353,14 @@ def create_wizard_buildings(item_factory: StardewItemFactory, options: StardewVa
         items.append(item_factory("Woods Obelisk"))
 
 
-def create_carpenter_buildings(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    building_option = options.building_progression
-    if not building_option & BuildingProgression.option_progressive:
+def create_carpenter_buildings(item_factory: StardewItemFactory, content: StardewContent, items: List[Item]):
+    building_progression = content.features.building_progression
+    if not building_progression.is_progressive:
         return
-    items.append(item_factory("Progressive Coop"))
-    items.append(item_factory("Progressive Coop"))
-    items.append(item_factory("Progressive Coop"))
-    items.append(item_factory("Progressive Barn"))
-    items.append(item_factory("Progressive Barn"))
-    items.append(item_factory("Progressive Barn"))
-    items.append(item_factory("Well"))
-    items.append(item_factory("Silo"))
-    items.append(item_factory("Mill"))
-    items.append(item_factory("Progressive Shed"))
-    items.append(item_factory("Progressive Shed", ItemClassification.useful))
-    items.append(item_factory("Fish Pond"))
-    items.append(item_factory("Stable"))
-    items.append(item_factory("Slime Hutch"))
-    items.append(item_factory("Shipping Bin"))
-    items.append(item_factory("Progressive House"))
-    items.append(item_factory("Progressive House"))
-    items.append(item_factory("Progressive House"))
-    if ModNames.tractor in options.mods:
-        items.append(item_factory("Tractor Garage"))
+
+    for building in content.farm_buildings.values():
+        item_name, _ = building_progression.to_progressive_item(building.name)
+        items.append(item_factory(item_name))
 
 
 def create_quest_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
@@ -387,7 +371,7 @@ def create_quest_rewards(item_factory: StardewItemFactory, options: StardewValle
 
 
 def create_special_quest_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    if options.quest_locations < 0:
+    if options.quest_locations.has_no_story_quests():
         return
     # items.append(item_factory("Adventurer's Guild")) # Now unlocked always!
     items.append(item_factory(Wallet.club_card))
@@ -698,7 +682,7 @@ def create_quest_rewards_sve(item_factory: StardewItemFactory, options: StardewV
     if not exclude_ginger_island:
         items.extend([item_factory(item) for item in SVEQuestItem.sve_always_quest_items_ginger_island])
 
-    if options.quest_locations < 0:
+    if options.quest_locations.has_no_story_quests():
         return
 
     items.extend([item_factory(item) for item in SVEQuestItem.sve_quest_items])
