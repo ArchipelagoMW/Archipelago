@@ -156,9 +156,8 @@ def has_weapon(world: "CandyBox2World", state: CollectionState, player: int, wea
     if state.has(weapon, player):
         return True
 
-    start_weapon_number = world.options.starting_weapon.value
     for item in items:
-        if items[item].code - candy_box_2_base_id == start_weapon_number and item == weapon:
+        if items[item].code - candy_box_2_base_id == world.starting_weapon and item == weapon:
             return True
 
     return False

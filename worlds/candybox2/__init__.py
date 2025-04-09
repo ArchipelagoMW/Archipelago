@@ -38,11 +38,22 @@ class CandyBox2World(World):
     topology_present = True
 
     entrance_randomisation: ERPlacementState = None
+    should_randomize_hp_bar: bool
+    starting_weapon: int
     original_entrances: list[tuple[str, str]]
 
     def __init__(self, multiworld, player):
         super(CandyBox2World, self).__init__(multiworld, player)
+        self.should_randomize_hp_bar = False
+        self.starting_weapon = 0
         self.original_entrances: list[tuple[str, str]] = []
+
+    def is_ut_regen(self):
+        return hasattr(self.multiworld, "re_gen_passthrough")
+
+    def generate_early(self) -> None:
+        self.should_randomize_hp_bar = self.multiworld.re_gen_passthrough["Candy Box 2"]["defaults"]["hpBarRandomized"] if self.is_ut_regen() else self.options.randomise_hp_bar.value
+        self.starting_weapon = self.multiworld.re_gen_passthrough["Candy Box 2"]["defaults"]["weapon"] if self.is_ut_regen() else self.options.starting_weapon.value
 
     def create_regions(self) -> None:
         return create_regions(self)
@@ -67,7 +78,7 @@ class CandyBox2World(World):
         connect_entrances(self)
 
     def interpret_slot_data(self, slot):
-        return slot["entranceInformation"]
+        return slot
 
     def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
         return {
@@ -89,7 +100,8 @@ class CandyBox2World(World):
                 "teapot": self.options.teapot_hp.value
             },
             "defaults": {
-                "weapon": self.options.starting_weapon.value
+                "weapon": self.options.starting_weapon.value,
+                "hpBarRandomized": self.options.randomise_hp_bar.value
             }
         }
 
@@ -112,5 +124,5 @@ class CandyBox2World(World):
             spoiler_handle.write(f"{entrance[0]} -> {entrance[1]}\n")
 
     def generate_basic(self) -> None:
-        if not self.options.randomise_hp_bar:
+        if not self.should_randomize_hp_bar:
             self.multiworld.get_location("HP Bar Unlock", self.player).place_locked_item(self.create_item("HP Bar"))

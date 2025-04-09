@@ -16,8 +16,8 @@ from .locations import candy_box_locations, CandyBox2Location, village_shop_loca
     desert_fortress_locations, teapot_quest_locations, xinopherydon_quest_locations, ledge_room_quest_locations, \
     castle_trap_room_locations, squirrel_tree_locations, the_sea_locations, lonely_house_locations, dig_spot_locations, \
     yourself_fight_locations, castle_dark_room_locations, castle_bakehouse_locations
-from .rules import weapon_is_at_least, armor_is_at_least, chocolate_count, can_farm_candies, can_grow_lollipops
-
+from .rules import weapon_is_at_least, armor_is_at_least, chocolate_count, can_farm_candies, can_grow_lollipops, \
+    has_weapon
 
 if TYPE_CHECKING:
     from . import CandyBox2World
@@ -74,11 +74,11 @@ def create_regions(world: "CandyBox2World"):
     # The Wishing Well
     wishing_well, _ = populate_region(multiworld, player, CandyBox2Region("The Wishing Well", player, multiworld, "The Wishing Well"), wishing_well_locations, world_map_2, lambda state: chocolate_count(state, player) >= 13)
     populate_region(multiworld, player, CandyBox2Region("The Wishing Well (Unlocked Gloves)", player, multiworld, "The Wishing Well"), wishing_well_glove_locations, wishing_well, lambda state: state.has("Leather Gloves", player))
-    populate_region(multiworld, player, CandyBox2Region("The Wishing Well (Unlocked Tribal Spear)", player, multiworld, "The Wishing Well"), wishing_well_tribal_spear_locations, wishing_well, lambda state: state.has("Tribal Spear", player))
-    populate_region(multiworld, player, CandyBox2Region("The Wishing Well (Unlocked Monkey Wizard Staff)", player, multiworld, "The Wishing Well"), wishing_well_monkey_wizard_staff_locations, wishing_well, lambda state: state.has("Monkey Wizard Staff", player))
+    populate_region(multiworld, player, CandyBox2Region("The Wishing Well (Unlocked Tribal Spear)", player, multiworld, "The Wishing Well"), wishing_well_tribal_spear_locations, wishing_well, lambda state: has_weapon(world, state, player, "Tribal Spear"))
+    populate_region(multiworld, player, CandyBox2Region("The Wishing Well (Unlocked Monkey Wizard Staff)", player, multiworld, "The Wishing Well"), wishing_well_monkey_wizard_staff_locations, wishing_well, lambda state: has_weapon(world, state, player, "Monkey Wizard Staff"))
     populate_region(multiworld, player, CandyBox2Region("The Wishing Well (Unlocked Knight Body Armour)", player, multiworld, "The Wishing Well"), wishing_well_knight_body_armour_locations, wishing_well, lambda state: state.has("Knight Body Armour", player))
     populate_region(multiworld, player, CandyBox2Region("The Wishing Well (Unlocked Octopus King Crown)", player, multiworld, "The Wishing Well"), wishing_well_octopus_king_crown_locations, wishing_well, lambda state: state.has("Octopus King Crown", player))
-    populate_region(multiworld, player, CandyBox2Region("The Wishing Well (Unlocked Giant Spoon)", player, multiworld, "The Wishing Well"), wishing_well_giant_spoon_locations, wishing_well, lambda state: state.has("Giant Spoon", player))
+    populate_region(multiworld, player, CandyBox2Region("The Wishing Well (Unlocked Giant Spoon)", player, multiworld, "The Wishing Well"), wishing_well_giant_spoon_locations, wishing_well, lambda state: has_weapon(world, state, player, "Giant Spoon"))
 
     # The Cave
     the_cave, _ = populate_region(multiworld, player, CandyBox2Region("The Cave", player, multiworld, "The Cave"), cave_locations, world_map_2)
@@ -178,7 +178,7 @@ def connect_entrances(world: "CandyBox2World"):
         return
 
     if hasattr(world.multiworld, "re_gen_passthrough"):
-        placements = getattr(world.multiworld, "re_gen_passthrough")["Candy Box 2"]
+        placements = getattr(world.multiworld, "re_gen_passthrough")["Candy Box 2"]["entranceInformation"]
         placement_state = ERPlacementState(world, True)
 
         er_targets = dict([(entrance.name, entrance) for region in world.multiworld.get_regions(world.player)
