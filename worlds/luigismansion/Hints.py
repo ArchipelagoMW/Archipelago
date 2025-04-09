@@ -1,7 +1,9 @@
 from pkgutil import get_data
-from typing import Dict, Any, List
+from typing import Dict, Any, List, TYPE_CHECKING
 
 from BaseClasses import Location,  MultiWorld
+if TYPE_CHECKING:
+    from . import LMWorld
 
 ALWAYS_HINT = ["Madame Clairvoya", "Foyer Toad", "Wardrobe Balcony Toad", "1F Washroom Toad", "Courtyard Toad",
                "Left Telephone", "Center Telephone", "Right Telephone"]
@@ -27,95 +29,63 @@ def get_other_items(multiworld: MultiWorld, player: int, loc, hinted_loc, other_
     return loc
 
 
-def get_hints_by_option(multiworld: MultiWorld, player: int) -> Dict[str, Dict[str, Any]]:
-    world = multiworld.worlds[player]
-    hint_data = {}
-    already_hinted_locations: List[Location] = []
-    hint_list = ALWAYS_HINT
-    jokes = get_data(__name__, "data/jokes.txt").decode('utf-8')
+def get_hints_by_option(multiworld: MultiWorld, player_hints: set[int]) -> None:
+    all_items = multiworld.get_items()
     prog_items = [item for item in multiworld.get_items() if item.advancement]
     prog_no_skip = [items for items in prog_items if not items.skip_in_prog_balancing]
     other_items = [item for item in multiworld.get_items() if not item.advancement]
-    if world.options.portrait_hints == 1:
-        hint_list = [*ALWAYS_HINT, *PORTRAIT_HINTS]
-    for name in hint_list:
-        if name == "Madame Clairvoya":
-            if world.open_doors[72] == 0:
-                loc: Location = multiworld.find_item("Spade Key", player)
-            else:
-                iname: str = world.random.choice(["Mario's Glove", "Mario's Letter", "Mario's Hat", "Mario's Star",
-                                                 "Mario's Shoe"])
-                loc: Location = multiworld.find_item(iname, player)
-            if world.options.hint_distribution.value == 4:
-                hintfo = f"<SAY><COLOR>(7){multiworld.player_name[loc.item.player]}'s<COLOR>(5)\\n{loc.item.name}"+ \
-                    f"\n<ANYKEY>\n<SAY><COLOR>(0)is somewhere in<COLOR>(3)\\n{multiworld.player_name[loc.player]}'s\\n{loc.game}"
-            elif world.options.hint_distribution.value == 1:
-                joke = world.random.choice(str.splitlines(jokes)).replace("\\n", "\n")
-                hintfo = f"<SAY><COLOR>(0){joke}"
-            elif world.options.hint_distribution.value == 5:
-                hintfo = "<SAY><COLOR>(2)I see you've turned off hints"
-            else:
-                hintfo = f"<SAY><COLOR>(7){multiworld.player_name[loc.item.player]}'s<COLOR>(5)\\n{loc.item.name}" + \
-                    f"\n<ANYKEY>\n<SAY><COLOR>(0)can be found at<COLOR>(1)\\n{multiworld.player_name[loc.player]}'s" + \
-                    f"\\n{loc.name}"
-            hint = {name: hintfo}
-            already_hinted_locations.append(loc)
-            hint_data.update(hint)
-        else:
-            loc: Any = None
-            if world.options.hint_distribution.value == 0 or world.options.hint_distribution.value == 4:
-                hint_type = world.random.choices(["Prog", "Other"], [60, 40], k=1)[0]
-                if hint_type == "Prog":
-                    loc = get_progression_only_items(multiworld, player, loc, already_hinted_locations, prog_no_skip)
+    for player_int in player_hints:
+        world: "LMWorld" = multiworld.worlds[player_int]
+        already_hinted_locations: List[Location] = []
+        hint_list = ALWAYS_HINT
+        if world.options.portrait_hints == 1:
+            hint_list += PORTRAIT_HINTS
+        for name in hint_list:
+            if name == "Madame Clairvoya":
+                if world.open_doors[72] == 0:
+                    loc: Location = multiworld.find_item("Spade Key", player_int)
                 else:
-                    loc = get_other_items(multiworld, player, loc, already_hinted_locations, other_items)
-            elif world.options.hint_distribution.value == 3 or world.options.hint_distribution.value == 1:
-                hint_type = world.random.choices(["Prog", "Other"], [90, 10], k=1)[0]
-                if hint_type == "Prog":
-                    loc = get_progression_only_items(multiworld, player, loc, already_hinted_locations, prog_no_skip)
-                else:
-                    loc = get_other_items(multiworld, player, loc, already_hinted_locations, other_items)
-            elif world.options.hint_distribution.value == 2 or world.options.hint_distribution.value == 5:
-                while loc is None:
-                    item = multiworld.worlds[player].random.choice(multiworld.get_items())
-                    if item.location not in already_hinted_locations:
-                        loc: Location = item.location
-            if loc.item.advancement:
-                icolor = 5
-            elif loc.item.trap:
-                icolor = 2
+                    iname: str = world.random.choice(["Mario's Glove", "Mario's Letter", "Mario's Hat", "Mario's Star",
+                                                     "Mario's Shoe"])
+                    loc: Location = multiworld.find_item(iname, player_int)
+                hint = {name: {"Item": loc.item.name,
+                               "Location": loc.name,
+                               "Player": multiworld.player_name[loc.player],
+                               "Game": loc.game,
+                               "Class": "Prog"}}
+                already_hinted_locations.append(loc)
+                world.hints.update(hint)
             else:
-                icolor = 6
-            if name in ALWAYS_HINT:
-                if world.options.hint_distribution == 4:
-                    hintfo = f"<SAY><COLOR>(7){multiworld.player_name[loc.item.player]}'s<COLOR>({icolor})\\n" + \
-                        f"{loc.item.name}\n<ANYKEY>\n<SAY><COLOR>(0)is somewhere in<COLOR>(3)\\n " + \
-                        f"{multiworld.player_name[loc.player]}'s\\n{loc.game}"
-                elif world.options.hint_distribution == 5:
-                    hintfo = "<SAY><COLOR>(2)I see you've turned off hints"
-                elif world.options.hint_distribution.value == 1:
-                    joke = world.random.choice(str.splitlines(jokes)).replace("\\n", "\n")
-                    hintfo = f"<SAY><COLOR>(0){joke}"
+                loc: Any = None
+                if world.options.hint_distribution.value == 0 or world.options.hint_distribution.value == 4:
+                    hint_type = world.random.choices(["Prog", "Other"], [60, 40], k=1)[0]
+                    if hint_type == "Prog":
+                        loc = get_progression_only_items(multiworld, player_int, loc, already_hinted_locations, prog_no_skip)
+                    else:
+                        loc = get_other_items(multiworld, player_int, loc, already_hinted_locations, other_items)
+                elif world.options.hint_distribution.value == 3 or world.options.hint_distribution.value == 1:
+                    hint_type = world.random.choices(["Prog", "Other"], [90, 10], k=1)[0]
+                    if hint_type == "Prog":
+                        loc = get_progression_only_items(multiworld, player_int, loc, already_hinted_locations, prog_no_skip)
+                    else:
+                        loc = get_other_items(multiworld, player_int, loc, already_hinted_locations, other_items)
+                elif world.options.hint_distribution.value == 2 or world.options.hint_distribution.value == 5:
+                    while loc is None:
+                        item = multiworld.worlds[player_int].random.choice(all_items)
+                        if item.location not in already_hinted_locations:
+                            loc: Location = item.location
+                if loc.item.advancement:
+                    icolor = "Prog"
+                elif loc.item.trap:
+                    icolor = "Trap"
                 else:
-                    hintfo = f"<SAY><COLOR>(7){multiworld.player_name[loc.item.player]}'s<COLOR>({icolor})\\n " + \
-                        f"{loc.item.name}\n<ANYKEY>\n<SAY><COLOR>(0)can be found at<COLOR>(1)\\n " + \
-                        f"{multiworld.player_name[loc.player]}'s\\n {loc.name}"
-            else:
-                if world.options.hint_distribution == 4:
-                    hintfo = f"<COLOR>(7){multiworld.player_name[loc.item.player]}'s\n<COLOR>({icolor})" + \
-                        f"{loc.item.name}\n<COLOR>(0)is somewhere in\n<COLOR>(3) " + \
-                        f"{multiworld.player_name[loc.player]}'s\n{loc.game}"
-                elif world.options.hint_distribution == 5:
-                    hintfo = "<COLOR>(2)I see you've turned off hints"
-                elif world.options.hint_distribution.value == 1:
-                    joke = world.random.choice(str.splitlines(jokes)).replace("\\\\n", "\n")
-                    hintfo = f"<COLOR>(0){joke}"
-                else:
-                    hintfo = f"<COLOR>(7){multiworld.player_name[loc.item.player]}'s\n<COLOR>({icolor})" + \
-                        f"{loc.item.name}\n<COLOR>(0)can be found at\n<COLOR>(1)" + \
-                        f"{multiworld.player_name[loc.player]}'s\n{loc.name}"
-            hint = {name: hintfo}
-            already_hinted_locations.append(loc)
-            hint_data.update(hint)
+                    icolor = "Other"
+                hint = {name: {"Item": loc.item.name,
+                               "Location": loc.name,
+                               "Player": multiworld.player_name[loc.player],
+                               "Game": loc.game,
+                               "Class": icolor}}
+                already_hinted_locations.append(loc)
+                world.hints.update(hint)
+        world.finished_hints.set()
 
-    return hint_data

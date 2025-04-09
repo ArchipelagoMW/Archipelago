@@ -19,7 +19,7 @@ from Options import OptionGroup
 from .Items import ITEM_TABLE, LMItem, get_item_names_per_category, filler_items, ALL_ITEMS_TABLE, BOO_ITEM_TABLE
 from .Locations import *
 from . import LuigiOptions
-from .Hints import get_hints_by_option
+from .Hints import get_hints_by_option, ALWAYS_HINT, PORTRAIT_HINTS
 from .Presets import lm_options_presets
 from .Regions import *
 from . import Rules
@@ -165,8 +165,10 @@ class LMWorld(World):
         self.ghost_affected_regions: dict[str, str] = GHOST_TO_ROOM
         self.open_doors: dict[int, int] = vanilla_door_state
         self.origin_region_name: str = "Foyer"
+        self.finished_hints = threading.Event()
         self.finished_boo_scaling = threading.Event()
         self.boo_spheres: dict[str, int] = {}
+        self.hints: dict[str, dict[str, str]] = {}
 
     def interpret_slot_data(self, slot_data):
         # There are more clever ways to do this, but all would require much larger changes
@@ -720,26 +722,32 @@ class LMWorld(World):
 
     @classmethod
     def stage_generate_output(cls, multiworld: MultiWorld):
-        lm_worlds = [world for world in multiworld.get_game_worlds(cls.game)]
+        hint_worlds = [world for world in multiworld.get_game_worlds(cls.game)
+                       if (world.options.boo_health_option != 5 and world.options.boo_health_option != 1)]
         boo_worlds = [world for world in multiworld.get_game_worlds(cls.game) if world.options.boo_health_option == 2]
+        if not boo_worlds and not hint_worlds:
+            return
+        player_hints = {world.player for world in hint_worlds}
+        if player_hints:
+            get_hints_by_option(multiworld, player_hints)
         if not boo_worlds:
             return
-        players = {world.player for world in boo_worlds}
-        def check_players_done() -> None:
+        boo_players = {world.player for world in boo_worlds}
+        def check_boo_players_done() -> None:
             done_players = set()
-            for player in players:
+            for player in boo_players:
                 player_world = multiworld.worlds[player]
                 if len(player_world.boo_spheres.keys()) == len(ROOM_BOO_LOCATION_TABLE.keys()):
                     player_world.finished_boo_scaling.set()
                     done_players.add(player)
-            players.difference_update(done_players)
+            boo_players.difference_update(done_players)
         for sphere_num, sphere in enumerate(multiworld.get_spheres(), 1):
             for loc in sphere:
-                if loc.player in players and loc.name in ROOM_BOO_LOCATION_TABLE.keys():
+                if loc.player in boo_players and loc.name in ROOM_BOO_LOCATION_TABLE.keys():
                     player_world = multiworld.worlds[loc.player]
                     player_world.boo_spheres.update({loc.name: sphere_num})
-            check_players_done()
-            if not players:
+            check_boo_players_done()
+            if not boo_players:
                 return
 
 
@@ -764,7 +772,9 @@ class LMWorld(World):
 
         output_data["Entrances"] = self.open_doors
         output_data["Room Enemies"] = self.ghost_affected_regions
-        output_data["Hints"] = get_hints_by_option(self.multiworld, self.player)
+        if self.options.hint_distribution != 5 and self.options.hint_distribution != 1:
+            self.finished_hints.wait()
+            output_data["Hints"] = self.hints
         if self.options.boo_health_option.value == 2:
             self.finished_boo_scaling.wait()
 
