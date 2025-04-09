@@ -1,29 +1,12 @@
-from typing import Dict, NamedTuple, Optional, Set
-
-from BaseClasses import Location
-#Sawyer: Same as before, I'll be using Rogue Legacy as a base here.
-
-class SDLocation(Location):
-    game: str = "Silver Daze"
+from typing import Dict, NamedTuple, Optional
+from worlds.silverdaze.Rules import party
+from worlds.silverdaze.Rules import key
 
 
 class SDLocationData(NamedTuple):
     category: str
     rule: list = None
     id: Optional[str] = None
-
-
-def get_locations_by_category(category: str) -> Dict[str, SDLocationData]:
-    location_dict: Dict[str, SDLocationData] = {}
-    for name, data in location_table.items():
-        if data.category == category:
-            location_dict.setdefault(name, data)
-
-    return location_dict
-
-def Party():
-    return
-
 
 location_table: Dict[str, SDLocationData] = {
     # Start Game
@@ -32,10 +15,10 @@ location_table: Dict[str, SDLocationData] = {
     "StarterHealToken1":             SDLocationData("Start Game",           [],   "StarterHealToken1"),
     "StarterHealToken2":             SDLocationData("Start Game",           [],   "StarterHealToken2"),
     # Grey Zone 1
-    "GeoJoin":                       SDLocationData("Grey Zone",            [Party(1)],   "GeoJoin"),
-    "Cotton2Chest1":                 SDLocationData("Grey Zone",            [],   "Cotton2Chest1"),
-    "Cotton3Chest1":                 SDLocationData("Grey Zone",            [],   "Cotton3Chest1"),
-    "YellowKey":                     SDLocationData("Grey Zone",            [],    "YellowKey"),
+    "GeoJoin":                       SDLocationData("Grey Zone",            [party(1)],   "GeoJoin"),
+    "Cotton2Chest1":                 SDLocationData("Grey Zone",            [party(1)],   "Cotton2Chest1"),
+    "Cotton3Chest1":                 SDLocationData("Grey Zone",            [party(1)],   "Cotton3Chest1"),
+    "YellowKey":                     SDLocationData("Grey Zone",            [party(1)],    "YellowKey"),
     # Grey Zone 2
     "Hub2Chest1":                    SDLocationData("Grey Zone 2",          [],   "Hub2Chest1"),
     # Red Zone 1
@@ -57,7 +40,7 @@ location_table: Dict[str, SDLocationData] = {
     # Grey Zone Red Chest
     "Hub2Chest2":                    SDLocationData("Red Zone 2",           [],   "Hub2Chest2"),
     # Boss Drops
-    "QuoDefender1":                  SDLocationData("",                 [],   "QuoDefender1"),
+    "QuoDefender1":                  SDLocationData("",                     [],   "QuoDefender1"),
     "QuoDefender2":                  SDLocationData("Boss",                 [],   "QuoDefender2"),
     "QuoDefender3":                  SDLocationData("Boss",                 [],   "QuoDefender3"),
     "Kingoose1":                     SDLocationData("Boss",                 [],   "Kingoose1"),
