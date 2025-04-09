@@ -34,17 +34,8 @@ class LuigisMansionRandomizer:
         # Takes note of the provided Randomized Folder path and if files should be exported instead of making an ISO.
         select_aplm_path = ap_output_data
         self.debug = debug_flag
-        if self.debug:
-            self.clean_iso_path = filedialog.askopenfilename(title="Select your NA iso file",
-                                                             filetypes=[("ISO Files", ".iso")])
-            self.randomized_output_file_path = os.path.join(
-                Path(os.path.dirname(self.clean_iso_path)).parent, "%s Randomized.iso" % RANDOMIZER_NAME)
-            if ap_output_data is None:
-                select_aplm_path = filedialog.askopenfilename(title="Select your APLM File",
-                                                              filetypes=[("APLM Files", ".aplm")])
-        else:
-            self.clean_iso_path = clean_iso_path
-            self.randomized_output_file_path = randomized_output_file_path
+        self.clean_iso_path = clean_iso_path
+        self.randomized_output_file_path = randomized_output_file_path
 
         try:
             if os.path.isfile(randomized_output_file_path):
