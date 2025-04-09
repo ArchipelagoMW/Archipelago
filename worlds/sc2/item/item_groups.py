@@ -793,6 +793,9 @@ item_name_groups[ItemGroupNames.OVERPOWERED_ITEMS] = overpowered_items = [
     item_names.BRAINWASHING,
     item_names.KHALAI_TAKEOVER,
 
+    # Zerg Mind Control
+    item_names.INFESTOR,
+
     # Nova
     item_names.NOVA_PLASMA_RIFLE,
 
