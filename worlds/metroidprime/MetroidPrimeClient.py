@@ -29,12 +29,12 @@ from .DolphinClient import (
     get_num_dolphin_instances,
 )
 from .Locations import METROID_PRIME_LOCATION_BASE, PICKUP_LOCATIONS
+from .data.MetroidPrimeLevel import MetroidPrimeLevel
 from .MetroidPrimeInterface import (
     HUD_MESSAGE_DURATION,
     ConnectionState,
     InventoryItemData,
     MetroidPrimeInterface,
-    MetroidPrimeLevel,
     MetroidPrimeSuit,
 )
 
@@ -166,7 +166,7 @@ class MetroidPrimeContext(CommonContext):
             base_title = "Archipelago Metroid Prime Client"
 
         self.ui = MetroidPrimeManager(self)
-        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")  # type: ignore
 
 
 def update_connection_status(ctx: MetroidPrimeContext, status: ConnectionState):

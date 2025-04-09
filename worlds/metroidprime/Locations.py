@@ -1,7 +1,7 @@
 from typing import Dict, List, Tuple
 from BaseClasses import Location
 
-from .MetroidPrimeInterface import MetroidPrimeLevel
+from .data.MetroidPrimeLevel import MetroidPrimeLevel
 
 METROID_PRIME_LOCATION_BASE = 5031100
 

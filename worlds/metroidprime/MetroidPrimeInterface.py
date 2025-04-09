@@ -2,6 +2,8 @@ from logging import Logger
 import struct
 from typing import Any, Dict, Optional, Union
 
+from .data.MetroidPrimeLevel import MetroidPrimeLevel
+
 from .DolphinClient import GC_GAME_ID_ADDRESS, DolphinClient, DolphinException
 from enum import Enum
 import py_randomprime  # type: ignore
@@ -109,19 +111,6 @@ class MetroidPrimeSuit(Enum):
             if suit.name == key:
                 return suit
         return None
-
-
-class MetroidPrimeLevel(Enum):
-    """Game worlds with their corresponding IDs in memory"""
-
-    Impact_Crater = 3241871825
-    Phendrana_Drifts = 2831049361
-    Frigate_Orpheon = 361692695
-    Magmoor_Caverns = 1056449404
-    Phazon_Mines = 2980859237
-    Tallon_Overworld = 972217896
-    Chozo_Ruins = 2214002543
-    End_of_Game = 332894565
 
 
 def world_by_id(id: int) -> Optional[MetroidPrimeLevel]:
