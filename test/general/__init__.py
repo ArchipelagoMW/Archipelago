@@ -1,7 +1,7 @@
 from argparse import Namespace
 from typing import List, Optional, Tuple, Type, Union
 
-from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Region
+from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, MultiWorld, Region
 from worlds import network_data_package
 from worlds.AutoWorld import World, call_all
 
@@ -17,7 +17,9 @@ gen_steps = (
 
 
 def setup_solo_multiworld(
-    world_type: Type[World], steps: Tuple[str, ...] = gen_steps, seed: Optional[int] = None
+        world_type: type[World[Region, Entrance, Location, Item]],
+        steps: tuple[str, ...] = gen_steps,
+        seed: int | None = None
 ) -> MultiWorld:
     """
     Creates a multiworld with a single player of `world_type`, sets default options, and calls provided gen steps.
@@ -31,8 +33,11 @@ def setup_solo_multiworld(
     return setup_multiworld(world_type, steps, seed)
 
 
-def setup_multiworld(worlds: Union[List[Type[World]], Type[World]], steps: Tuple[str, ...] = gen_steps,
-                     seed: Optional[int] = None) -> MultiWorld:
+def setup_multiworld(
+        worlds: list[type[World[Region, Entrance, Location, Item]]] | type[World[Region, Entrance, Location, Item]],
+        steps: tuple[str, ...] = gen_steps,
+        seed: int | None = None,
+) -> MultiWorld:
     """
     Creates a multiworld with a player for each provided world type, allowing duplicates, setting default options, and
     calling the provided gen steps.
