@@ -17,6 +17,7 @@ ModuleUpdate.update()
 import Utils
 import json
 import logging
+import settings
 
 if __name__ == "__main__":
     Utils.init_logging("WargrooveClient", exception_logger="Client")
@@ -78,31 +79,58 @@ class WargrooveContext(CommonContext):
         self.syncing = False
         self.awaiting_bridge = False
         # self.game_communication_path: files go in this path to pass data between us and the actual game
+        game_options = settings.get_settings()["wargroove_options"]
+
+        # Validate the AppData directory with Wargroove save data.
+        # By default, Windows sets an environment variable we can leverage.
+        # However, other OSes don't usually have this value set, so we need to rely on a settings value instead.
+        appdata_wargroove = None
         if "appdata" in os.environ:
-            options = Utils.get_options()
-            root_directory = os.path.join(options["wargroove_options"]["root_directory"])
-            data_directory = os.path.join("lib", "worlds", "wargroove", "data")
-            dev_data_directory = os.path.join("worlds", "wargroove", "data")
-            appdata_wargroove = os.path.expandvars(os.path.join("%APPDATA%", "Chucklefish", "Wargroove"))
-            if not os.path.isfile(os.path.join(root_directory, "win64_bin", "wargroove64.exe")):
-                print_error_and_close("WargrooveClient couldn't find wargroove64.exe. "
-                                      "Unable to infer required game_communication_path")
-            self.game_communication_path = os.path.join(root_directory, "AP")
-            if not os.path.exists(self.game_communication_path):
-                os.makedirs(self.game_communication_path)
-            self.remove_communication_files()
-            atexit.register(self.remove_communication_files)
-            if not os.path.isdir(appdata_wargroove):
-                print_error_and_close("WargrooveClient couldn't find Wargoove in appdata!"
-                                      "Boot Wargroove and then close it to attempt to fix this error")
-            if not os.path.isdir(data_directory):
-                data_directory = dev_data_directory
-            if not os.path.isdir(data_directory):
-                print_error_and_close("WargrooveClient couldn't find Wargoove mod and save files in install!")
-            shutil.copytree(data_directory, appdata_wargroove, dirs_exist_ok=True)
+            appdata_wargroove = os.environ['appdata']
         else:
-            print_error_and_close("WargrooveClient couldn't detect system type. "
-                                  "Unable to infer required game_communication_path")
+            try:
+                appdata_wargroove = game_options["save_directory"]
+            except FileNotFoundError:
+                print_error_and_close("WargrooveClient couldn't detect a path to the AppData folder.\n"
+                                      "Unable to infer required game_communication_path.\n"
+                                      "Try setting the \"save_directory\" value in your local options file "
+                                      "to the AppData folder containing your Wargroove saves.")
+        appdata_wargroove = os.path.expandvars(os.path.join(appdata_wargroove, "Chucklefish", "Wargroove"))
+        if not os.path.isdir(appdata_wargroove):
+            print_error_and_close(f"WargrooveClient couldn't find Wargroove data in your AppData folder.\n"
+                                  f"Looked in \"{appdata_wargroove}\".\n"
+                                  f"If you haven't yet booted the game at least once, boot Wargroove "
+                                  f"and then close it to attempt to fix this error.\n"
+                                  f"If the AppData folder above seems wrong, try setting the "
+                                  f"\"save_directory\" value in your local options file "
+                                  f"to the AppData folder containing your Wargroove saves.")
+
+        # Check for the Wargroove game executable path.
+        # This should always be set regardless of the OS.
+        root_directory = os.path.join(game_options["root_directory"])
+        data_directory = os.path.join("lib", "worlds", "wargroove", "data")
+        dev_data_directory = os.path.join("worlds", "wargroove", "data")
+        if not os.path.isfile(os.path.join(root_directory, "win64_bin", "wargroove64.exe")):
+            print_error_and_close(f"WargrooveClient couldn't find wargroove64.exe in "
+                                  f"\"{root_directory}/win64_bin/\".\n"
+                                  f"Unable to infer required game_communication_path.\n"
+                                  f"Please verify the \"root_directory\" value in your local "
+                                  f"options file is set correctly.")
+        self.game_communication_path = os.path.join(root_directory, "AP")
+        if not os.path.exists(self.game_communication_path):
+            os.makedirs(self.game_communication_path)
+        self.remove_communication_files()
+        atexit.register(self.remove_communication_files)
+
+        # Make sure the Wargroove mod is where we expect.
+        # If it isn't, uh.... panic???
+        if not os.path.isdir(data_directory):
+            data_directory = dev_data_directory
+        if not os.path.isdir(data_directory):
+            print_error_and_close(f"WargrooveClient couldn't find Wargoove mod and save files in install!\n"
+                                  f"Please make sure the mod files exist in \"{data_directory}\" "
+                                  f"and reinstall Archipelago if they are missing.")
+        shutil.copytree(data_directory, appdata_wargroove, dirs_exist_ok=True)
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
