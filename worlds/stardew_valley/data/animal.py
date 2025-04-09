@@ -1,6 +1,9 @@
 from dataclasses import dataclass, field
 
 from .game_item import Source
+from ..strings.animal_names import Animal as AnimalName
+
+assert AnimalName
 
 
 @dataclass(frozen=True)

@@ -1,7 +1,6 @@
 from .pelican_town import pelican_town as pelican_town_content_pack
 from ..game_content import ContentPack
-from ...data.animal import IncubatorSource
-from ...data.building import Animal
+from ...data.animal import IncubatorSource, Animal, AnimalName
 from ...data.harvest import FruitBatsSource, MushroomCaveSource
 from ...data.shop import ShopSource
 from ...strings.animal_product_names import AnimalProduct
@@ -47,57 +46,60 @@ the_farm = ContentPack(
         ),
     },
     animals=(
-        Animal("Chicken",
+        Animal(AnimalName.chicken,
                required_building=Building.coop,
                sources=(
                    ShopSource(shop_region=Region.ranch, money_price=800),
                    IncubatorSource(AnimalProduct.egg_starter)
                )),
-        Animal("Cow",
+        Animal(AnimalName.cow,
                required_building=Building.barn,
                sources=(
                    ShopSource(shop_region=Region.ranch, money_price=1500),
                )),
-        Animal("Goat",
+        Animal(AnimalName.goat,
                required_building=Building.big_barn,
                sources=(
                    ShopSource(shop_region=Region.ranch, money_price=4000),
                )),
-        Animal("Duck",
+        Animal(AnimalName.duck,
                required_building=Building.big_coop,
                sources=(
                    ShopSource(shop_region=Region.ranch, money_price=1200),
                    IncubatorSource(AnimalProduct.duck_egg_starter)
                )),
-        Animal("Sheep",
+        Animal(AnimalName.sheep,
                required_building=Building.deluxe_barn,
                sources=(
                    ShopSource(shop_region=Region.ranch, money_price=8000),
                )),
-        Animal("Rabbit",
+        Animal(AnimalName.rabbit,
                required_building=Building.deluxe_coop,
                sources=(
                    ShopSource(shop_region=Region.ranch, money_price=8000),
                )),
-        Animal("Pig",
+        Animal(AnimalName.pig,
                required_building=Building.deluxe_barn,
                sources=(
                    ShopSource(shop_region=Region.ranch, money_price=16000),
                )),
-        Animal("Void Chicken",
+        Animal(AnimalName.void_chicken,
                required_building=Building.big_coop,
                sources=(
                    IncubatorSource(AnimalProduct.void_egg_starter),
                )),
-        Animal("Golden Chicken",
+        Animal(AnimalName.golden_chicken,
                required_building=Building.big_coop,
                sources=(
                    IncubatorSource(AnimalProduct.golden_egg_starter),
                )),
-        Animal("Dinosaur",
+        Animal(AnimalName.dinosaur,
                required_building=Building.big_coop,
                sources=(
-                   IncubatorSource(AnimalProduct.dinosaur_egg_starter),
+                   # We should use the starter item here, but since the dinosaur egg is also an artifact, it's part of the museum rules
+                   # and I do not want to touch it yet.
+                   # IncubatorSource(AnimalProduct.dinosaur_egg_starter),
+                   IncubatorSource(AnimalProduct.dinosaur_egg),
                )),
     )
 )
