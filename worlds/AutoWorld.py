@@ -400,10 +400,10 @@ class World(Generic[_T_Reg, _T_Ent, _T_Loc, _T_Item], metaclass=AutoWorldRegiste
         pass
 
     def fill_hook(self,
-                  progitempool: List[_T_Item],
-                  usefulitempool: List[_T_Item],
-                  filleritempool: List[_T_Item],
-                  fill_locations: List[_T_Loc]) -> None:
+                  progitempool: List["Item"],
+                  usefulitempool: List["Item"],
+                  filleritempool: List["Item"],
+                  fill_locations: List["Location"]) -> None:
         """Special method that gets called as part of distribute_items_restrictive (main fill)."""
         pass
 
