@@ -630,26 +630,26 @@ class ForeignItemIcons(Choice):
 
 ladx_option_groups = [
     OptionGroup("Gameplay Adjustments", [
+        InGameHints,
+        TarinsGift,
         HardMode,
         TrendyGame,
-        TarinsGift,
-        InGameHints,
     ]),
     OptionGroup("World Layout", [
-        Warps,
         Overworld,
+        Warps,
         DungeonShuffle,
         EntranceShuffle,
     ]),
     OptionGroup("Item Pool", [
-        TradeQuest,
-        Rooster,
         ShuffleInstruments,
         ShuffleNightmareKeys,
         ShuffleSmallKeys,
         ShuffleMaps,
         ShuffleCompasses,
         ShuffleStoneBeaks,
+        TradeQuest,
+        Rooster,
         StabilizeItemPool,
     ]),
     OptionGroup("Quality of Life & Aesthetic", [
@@ -657,10 +657,10 @@ ladx_option_groups = [
         Quickswap,
         BootsControls,
         ForeignItemIcons,
-        APTitleScreen,
         GfxMod,
         LinkPalette,
         Palette,
+        APTitleScreen,
         TextShuffle,
         TextMode,
         Music,
