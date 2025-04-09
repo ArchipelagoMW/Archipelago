@@ -5,8 +5,6 @@ from Options import NumericOption
 from typing import Any, Dict, List, Optional, TextIO, Union, cast
 from logging import info
 
-from .data.Tricks import Tricks
-
 from .Logic import Logic
 from .data.RoomNames import RoomName
 from .data.PhazonMines import PhazonMinesAreaData
@@ -14,6 +12,7 @@ from .data.PhendranaDrifts import PhendranaDriftsAreaData
 from .data.MagmoorCaverns import MagmoorCavernsAreaData
 from .data.ChozoRuins import ChozoRuinsAreaData
 from .data.TallonOverworld import TallonOverworldAreaData
+from .data.Tricks import Tricks
 from .BlastShieldRando import (
     WorldBlastShieldMapping,
     apply_blast_shield_mapping,
