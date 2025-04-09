@@ -118,7 +118,7 @@ class MultiWorld():
     plando_texts: List[Dict[str, str]]
     plando_items: List[List[Dict[str, Any]]]
     plando_connections: List
-    worlds: Dict[int, "AutoWorld.World"]
+    worlds: Dict[int, "AutoWorld.World[Region, Entrance, Location, Item]"]
     groups: Dict[int, Group]
     regions: RegionManager
     itempool: List[Item]
