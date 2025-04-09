@@ -220,12 +220,14 @@ Sent to clients to provide what is known as a 'data package' which contains info
 Sent to clients after a client requested this message be sent to them, more info in the [Bounce](#Bounce) package.
 
 #### Arguments
-| Name | Type | Notes |
-| ---- | ---- | ----- |
-| games | list\[str\] | Optional. Game names this message is targeting |
-| slots | list\[int\] | Optional. Player slot IDs that this message is targeting |
-| tags | list\[str\] | Optional. Client [Tags](#Tags) this message is targeting |
-| data | dict | The data in the [Bounce](#Bounce) package copied |
+| Name     | Type        | Notes                                                                                                          |
+|----------|-------------|----------------------------------------------------------------------------------------------------------------|
+| teams    | list\[int\] | Optional. Teams this message is targeting. Default assumed value when the key is not present is own team.      |
+| games    | list\[str\] | Optional. Game names this message is targeting                                                                 |
+| slots    | list\[int\] | Optional. Player slot IDs that this message is targeting                                                       |
+| tags     | list\[str\] | Optional. Client [Tags](#Tags) this message is targeting                                                       |
+| operator | str         | Optional. Specifies whether the "teams", games", "slots" and "tags" conditions were chained via "or" or "and". |
+| data     | dict        | The data in the [Bounce](#Bounce) package copied                                                               |
 
 ### InvalidPacket
 Sent to clients if the server caught a problem with a packet. This only occurs for errors that are explicitly checked for.
@@ -400,15 +402,17 @@ Requests the data package from the server. Does not require client authenticatio
 
 ### Bounce
 Send this message to the server, tell it which clients should receive the message and 
-the server will forward the message to all those targets to which any one requirement applies.
+the server will forward the message to all those targets to which any one requirement applies (or all requirements, if the "and" operator is chosen).
 
 #### Arguments
-| Name | Type | Notes |
-| ------ | ----- | ------ |
-| games | list\[str\] | Optional. Game names that should receive this message |
-| slots | list\[int\] | Optional. Player IDs that should receive this message |
-| tags | list\[str\] | Optional. Client tags that should receive this message |
-| data | dict | Any data you want to send |
+| Name     | Type        | Notes                                                                                                                       |
+|----------|-------------|-----------------------------------------------------------------------------------------------------------------------------|
+| teams    | list\[int\] | Optional. Teams that should receive this message. Defaults to own team.                                                     |
+| games    | list\[str\] | Optional. Game names that should receive this message                                                                       |
+| slots    | list\[int\] | Optional. Player IDs that should receive this message                                                                       |
+| tags     | list\[str\] | Optional. Client tags that should receive this message                                                                      |
+| operator | str         | Optional. Controls whether the "teams", games", "slots" and "tags" conditions are chained via "or" or "and". Default: "or". |
+| data     | dict        | Any data you want to send                                                                                                   |
 
 ### Get
 Used to request a single or multiple values from the server's data storage, see the [Set](#Set) package for how to write values to the data storage. A Get package will be answered with a [Retrieved](#Retrieved) package.
