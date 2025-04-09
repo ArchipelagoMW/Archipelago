@@ -25,7 +25,7 @@ class OSRSWeb(WebWorld):
         "Multiworld Setup Guide",
         "A guide to setting up the Old School Runescape Randomizer connected to an Archipelago Multiworld",
         "English",
-        "docs/setup_en.md",
+        "setup_en.md",
         "setup/en",
         ["digiholic"]
     )

@@ -12,10 +12,28 @@ from . import app, cache
 from .models import Seed, Room, Command, UUID, uuid4
 
 
-def get_world_theme(game_name: str):
+def get_world_theme(game_name: str) -> str:
     if game_name in AutoWorldRegister.world_types:
         return AutoWorldRegister.world_types[game_name].web.theme
     return 'grass'
+
+
+def render_markdown(path: str) -> str:
+    import markdown
+
+    with open(path, encoding="utf-8-sig") as f:
+        document = f.read()
+    return markdown.markdown(
+        document,
+        extensions=[
+            "mdx_breakless_lists",
+            "markdown.extensions.fenced_code",
+            "markdown.extensions.smarty",
+        ],
+        extension_configs={
+            "toc": {"anchorlink": True},
+        }
+    )
 
 
 @app.errorhandler(404)
@@ -31,23 +49,29 @@ def start_playing():
     return render_template(f"startPlaying.html")
 
 
-# Game Info Pages
 @app.route('/games/<string:game>/info/<string:lang>')
 @cache.cached()
 def game_info(game, lang):
-    try:
-        world = AutoWorldRegister.world_types[game]
-        if lang not in world.web.game_info_languages:
-            raise KeyError("Sorry, this game's info page is not available in that language yet.")
-    except KeyError:
-        return abort(404)
-    return render_template('gameInfo.html', game=game, lang=lang, theme=get_world_theme(game))
+    """Game Info Pages"""
+    theme = get_world_theme(game)
+    secure_game_name = secure_filename(game)
+    lang = secure_filename(lang)
+    document = render_markdown(os.path.join(
+        app.static_folder, "generated", "docs",
+        secure_game_name, f"{lang}_{secure_game_name}.md"
+    ))
+    return render_template(
+        "markdown_document.html",
+        title=f"{game} Guide",
+        html_from_markdown=document,
+        theme=theme,
+    )
 
 
-# List of supported games
 @app.route('/games')
 @cache.cached()
 def games():
+    """List of supported games"""
     worlds = {}
     for game, world in AutoWorldRegister.world_types.items():
         if not world.hidden:
@@ -57,14 +81,21 @@ def games():
 
 @app.route('/tutorial/<string:game>/<string:file>/<string:lang>')
 @cache.cached()
-def tutorial(game, file, lang):
-    try:
-        world = AutoWorldRegister.world_types[game]
-        if lang not in [tut.link.split("/")[1] for tut in world.web.tutorials]:
-            raise KeyError("Sorry, the tutorial is not available in that language yet.")
-    except KeyError:
-        return abort(404)
-    return render_template("tutorial.html", game=game, file=file, lang=lang, theme=get_world_theme(game))
+def tutorial(game: str, file: str, lang: str):
+    theme = get_world_theme(game)
+    secure_game_name = secure_filename(game)
+    file = secure_filename(file)
+    lang = secure_filename(lang)
+    document = render_markdown(os.path.join(
+        app.static_folder, "generated", "docs",
+        secure_game_name, f"{file}_{lang}.md"
+    ))
+    return render_template(
+        "markdown_document.html",
+        title=f"{game} Guide",
+        html_from_markdown=document,
+        theme=theme,
+    )
 
 
 @app.route('/tutorial/')
@@ -76,38 +107,22 @@ def tutorial_landing():
 @app.route('/faq/<string:lang>/')
 @cache.cached()
 def faq(lang: str):
-    import markdown
-    with open(os.path.join(app.static_folder, "assets", "faq", secure_filename(lang)+".md")) as f:
-        document = f.read()
+    document = render_markdown(os.path.join(app.static_folder, "assets", "faq", secure_filename(lang)+".md"))
     return render_template(
         "markdown_document.html",
         title="Frequently Asked Questions",
-        html_from_markdown=markdown.markdown(
-            document,
-            extensions=["toc", "mdx_breakless_lists"],
-            extension_configs={
-                "toc": {"anchorlink": True}
-            }
-        ),
+        html_from_markdown=document,
     )
 
 
 @app.route('/glossary/<string:lang>/')
 @cache.cached()
 def glossary(lang: str):
-    import markdown
-    with open(os.path.join(app.static_folder, "assets", "glossary", secure_filename(lang)+".md")) as f:
-        document = f.read()
+    document = render_markdown(os.path.join(app.static_folder, "assets", "glossary", secure_filename(lang)+".md"))
     return render_template(
         "markdown_document.html",
         title="Glossary",
-        html_from_markdown=markdown.markdown(
-            document,
-            extensions=["toc", "mdx_breakless_lists"],
-            extension_configs={
-                "toc": {"anchorlink": True}
-            }
-        ),
+        html_from_markdown=document,
     )
 
 
