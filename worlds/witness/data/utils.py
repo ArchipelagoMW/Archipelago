@@ -2,16 +2,11 @@ from datetime import date
 from math import floor
 from pkgutil import get_data
 from random import Random
-from typing import Any, Collection, Dict, FrozenSet, Iterable, List, Optional, Set, Tuple, TypeVar
+from typing import Collection, FrozenSet, Iterable, List, Optional, Set, Tuple, TypeVar
+
+from .definition_classes import AreaDefinition, ConnectionDefinition, RegionDefinition, WitnessRule
 
 T = TypeVar("T")
-
-# A WitnessRule is just an or-chain of and-conditions.
-# It represents the set of all options that could fulfill this requirement.
-# E.g. if something requires "Dots or (Shapers and Stars)", it'd be represented as: {{"Dots"}, {"Shapers, "Stars"}}
-# {} is an unusable requirement.
-# {{}} is an always usable requirement.
-WitnessRule = FrozenSet[FrozenSet[str]]
 
 
 def cast_not_none(value: Optional[T]) -> T:
@@ -62,7 +57,7 @@ def build_weighted_int_list(inputs: Collection[float], total: int) -> List[int]:
     return rounded_output
 
 
-def define_new_region(region_string: str, area: dict[str, Any]) -> Tuple[Dict[str, Any], Set[Tuple[str, WitnessRule]]]:
+def define_new_region(region_string: str, area: AreaDefinition) -> Tuple[RegionDefinition, List[ConnectionDefinition]]:
     """
     Returns a region object by parsing a line in the logic file
     """
@@ -77,35 +72,28 @@ def define_new_region(region_string: str, area: dict[str, Any]) -> Tuple[Dict[st
     region_name = region_name_split[0]
     region_name_simple = region_name_split[1][:-1]
 
-    options = set()
+    options = []
 
     for _ in range(len(line_split) // 2):
         connected_region = line_split.pop(0)
-        corresponding_lambda = line_split.pop(0)
+        traversal_rule_string = line_split.pop(0)
 
-        options.add(
-            (connected_region, parse_lambda(corresponding_lambda))
-        )
+        options.append(ConnectionDefinition(connected_region, parse_witness_rule(traversal_rule_string)))
 
-    region_obj = {
-        "name": region_name,
-        "shortName": region_name_simple,
-        "entities": [],
-        "physical_entities": [],
-        "area": area,
-    }
+    region_obj = RegionDefinition(region_name, region_name_simple, area)
+
     return region_obj, options
 
 
-def parse_lambda(lambda_string: str) -> WitnessRule:
+def parse_witness_rule(rule_string: str) -> WitnessRule:
     """
-    Turns a lambda String literal like this: a | b & c
-    into a set of sets like this: {{a}, {b, c}}
-    The lambda has to be in DNF.
+    Turns a rule string literal like this: a | b & c
+    into a set of sets (called "WitnessRule") like this: {{a}, {b, c}}
+    The rule string has to be in DNF.
     """
-    if lambda_string == "True":
+    if rule_string == "True":
         return frozenset([frozenset()])
-    split_ands = set(lambda_string.split(" | "))
+    split_ands = set(rule_string.split(" | "))
     return frozenset({frozenset(a.split(" & ")) for a in split_ands})
 
 
@@ -274,6 +262,10 @@ def is_easter_time() -> bool:
     # Thus, we just take a range from the earliest to latest possible easter dates.
 
     today = date.today()
+
+    if today < date(2025, 3, 31): # Don't go live early if 0.6.0 RC3 happens, with a little leeway
+        return False
+
     earliest_easter_day = date(today.year, 3, 20)  # Earliest possible is 3/22 + 2 day buffer for Good Friday
     last_easter_day = date(today.year, 4, 26)  # Latest possible is 4/25 + 1 day buffer for Easter Monday
 

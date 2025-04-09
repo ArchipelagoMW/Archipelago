@@ -23,9 +23,9 @@ def setup_early_items(multiworld, options: stardew_options.StardewValleyOptions,
 
     add_seasonal_candidates(early_candidates, options)
 
-    if options.building_progression & stardew_options.BuildingProgression.option_progressive:
+    if content.features.building_progression.is_progressive:
         early_forced.append(Building.shipping_bin)
-        if options.farm_type != stardew_options.FarmType.option_meadowlands:
+        if Building.coop not in content.features.building_progression.starting_buildings:
             early_candidates.append("Progressive Coop")
         early_candidates.append("Progressive Barn")
 
@@ -41,7 +41,7 @@ def setup_early_items(multiworld, options: stardew_options.StardewValleyOptions,
     if fishing is not None and content.features.skill_progression.is_progressive:
         early_forced.append(fishing.level_name)
 
-    if options.quest_locations >= 0:
+    if options.quest_locations.has_story_quests():
         early_candidates.append(Wallet.magnifying_glass)
 
     if options.special_order_locations & stardew_options.SpecialOrderLocations.option_board:

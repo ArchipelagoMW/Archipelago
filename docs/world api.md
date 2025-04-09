@@ -606,8 +606,8 @@ from .items import get_item_type
 
 def set_rules(self) -> None:
     # For some worlds this step can be omitted if either a Logic mixin 
-    # (see below) is used, it's easier to apply the rules from data during
-    # location generation or everything is in generate_basic
+    # (see below) is used or it's easier to apply the rules from data during
+    # location generation
 
     # set a simple rule for an region
     set_rule(self.multiworld.get_entrance("Boss Door", self.player),
