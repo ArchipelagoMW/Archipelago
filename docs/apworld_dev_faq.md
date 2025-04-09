@@ -71,13 +71,13 @@ Opting out of using indirect conditions should only be used by games that *reall
 
 ### I uploaded the generated output of my world to the webhost and webhost is erroring on corrupted multidata
 
-The error `Count not load multidata. File may be corrupted or incompatible.` on uploading a locally generated file is caused because output multidata is the pickled representation of the data that the server needs to know. It may come
+The error `Could not load multidata. File may be corrupted or incompatible.` occurs when uploading a locally generated file where there is an issue with the multidata contained within it. It may come
 with a descriptive issue like `(No module named 'worlds.myworld')` or `(global 'worlds.myworld.names.ItemNames' is forbidden)`
 
-Pickling is a way to compress python objects as-is in a way that they can be decompressed and be used to rebuild the
-python objects, this means that if you use custom class instances that end up in multidata that the server would need
-to load those custom classes to decompress the data, which can fail either because the world module is unknown or the
-class it's attempting to import to decompress is deemed unsafe.
+Pickling is a way to compress python objects such that they can be decompressed and be used to rebuild the
+python objects. This means that if one of your custom class instances ends up in the multidata, the server would not be able
+to load that custom class to decompress the data, which can fail either because the custom class is unknown (because it cannot load your world module)
+or the class it's attempting to import to decompress is deemed unsafe.
 
 Common situations where this can happen is:
 * Using Option instances directly in slot_data ex. `using options.option_name` instead of `options.option_name.value`,
