@@ -154,7 +154,8 @@ class LMWorld(World):
     required_client_version = (0, 6, 0)
     web = LMWeb()
 
-
+    using_ut: bool # so we can check if we're using UT only once
+    ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
 
 
     def __init__(self, *args, **kwargs):
@@ -477,37 +478,53 @@ class LMWorld(World):
             raise Options.OptionError(f"When Boo Radar is excluded, neither Boosanity nor Boo Gates can be active "
                                       f"This error was found in {self.player_name}'s Luigi's Mansion world. "
                                       f"Their YAML must be fixed")
-        if hasattr(self.multiworld, "generation_is_fake"):
-            if hasattr(self.multiworld, "re_gen_passthrough"):
-                # We know we're in second gen
-                re_gen = self.multiworld.re_gen_passthrough
-                if self.game in re_gen:  # Are we the tracked game and in final gen
-                    self.origin_region_name = re_gen[self.game][
-                        "spawn_region"]  # this should be the same region from slot data
+        
+        if hasattr(self.multiworld, "re_gen_passthrough"):
+            if "Luigi's Mansion" in self.multiworld.re_gen_passthrough:
+                self.using_ut = True
+                passthrough = self.multiworld.re_gen_passthrough["Luigi's Mansion"]
+                self.options.rank_requirement.value = passthrough["rank requirement"]
+                self.options.good_vacuum.value = passthrough["better vacuum"]
+                self.options.door_rando.value = passthrough["door rando"]
+                self.options.toadsanity.value = passthrough["toadsanity"]
+                self.options.gold_mice.value = passthrough["gold_mice"]
+                self.options.furnisanity.value = passthrough["furnisanity"]
+                self.options.boosanity.value = passthrough["boosanity"]
+                self.options.portrification.value = passthrough["portrait ghosts"]
+                self.options.speedy_spirits.value = passthrough["speedy spirits"]
+                self.options.lightsanity.value = passthrough["lightsanity"]
+                self.options.walksanity.value = passthrough["walksanity"]
+                self.options.mario_items.value = passthrough["clairvoya requirement"]
+                self.options.boo_gates.value = passthrough["boo gates"]
+                self.options.washroom_boo_count.value = passthrough["washroom boo count"]
+                self.options.balcony_boo_count.value = passthrough["balcony boo count"]
+                self.options.final_boo_count.value = passthrough["final boo count"]
+                self.options.enemizer.value = passthrough["enemizer"]
+                self.options.luigi_max_health.value = passthrough["luigi max health"]
+            else:
+                self.using_ut = False
+        else:
+            self.using_ut = False
+
+        if self.using_ut:
+            # We know we're in second gen
+            self.origin_region_name = passthrough["spawn_region"]  # this should be the same region from slot data
         elif self.options.random_spawn.value > 0:
             self.origin_region_name = self.random.choice(list(spawn_locations.keys()))
 
-        if hasattr(self.multiworld, "generation_is_fake"):
-            if hasattr(self.multiworld, "re_gen_passthrough"):
-                # We know we're in second gen
-                re_gen = self.multiworld.re_gen_passthrough
-                if self.game in re_gen:  # Are we the tracked game and in final gen
-                    self.ghost_affected_regions = re_gen[self.game][
-                        "ghost elements"]  # this should be the same list from slot data
+        if self.using_ut:
+            # We know we're in second gen
+            self.ghost_affected_regions = passthrough["ghost elements"]  # this should be the same list from slot data
         elif self.options.enemizer == 1:
             set_ghost_type(self, self.ghost_affected_regions)
         elif self.options.enemizer == 2:
             for key in self.ghost_affected_regions.keys():
                 self.ghost_affected_regions[key] = "No Element"
 
-        if hasattr(self.multiworld, "generation_is_fake"):
-            if hasattr(self.multiworld, "re_gen_passthrough"):
-                # We know we're in second gen
-                re_gen = self.multiworld.re_gen_passthrough
-                if self.game in re_gen:  # Are we the tracked game and in final gen
-                    self.open_doors = re_gen[self.game][
-                        "door rando list"]  # this should be the same list from slot data
-                    self.open_doors = {int(k): v for k, v in self.open_doors.items()}
+        if self.using_ut:
+            # We know we're in second gen
+            self.open_doors = passthrough["door rando list"]  # this should be the same list from slot data
+            self.open_doors = {int(k): v for k, v in self.open_doors.items()}
         elif self.options.door_rando == 1:
             k = list(self.open_doors.keys())
             v = list(self.open_doors.values())
