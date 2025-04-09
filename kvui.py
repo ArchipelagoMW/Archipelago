@@ -935,13 +935,19 @@ class GameManager(ThemedApp):
 
         return self.container
 
-    def add_client_tab(self, title: str, content: Widget) -> Widget:
+    def add_client_tab(self, title: str, content: Widget, index: int = -1) -> Widget:
         """Adds a new tab to the client window with a given title, and provides a given Widget as its content.
          Returns the new tab widget, with the provided content being placed on the tab as content."""
         new_tab = MDTabsItem(MDTabsItemText(text=title))
         new_tab.content = content
-        self.tabs.add_widget(new_tab)
-        self.tabs.carousel.add_widget(new_tab.content)
+        if -1 < index <= len(self.tabs.carousel.slides):
+            new_tab.bind(on_release=self.tabs.set_active_item)
+            new_tab._tabs = self.tabs
+            self.tabs.ids.container.add_widget(new_tab, index=index)
+            self.tabs.carousel.add_widget(new_tab.content, index=len(self.tabs.carousel.slides) - index)
+        else:
+            self.tabs.add_widget(new_tab)
+            self.tabs.carousel.add_widget(new_tab.content)
         return new_tab
 
     def update_texts(self, dt):
@@ -1200,6 +1206,7 @@ class HintLog(MDRecycleView):
 
 
 class ApAsyncImage(AsyncImage):
+
     def is_uri(self, filename: str) -> bool:
         if filename.startswith("ap:"):
             return True
