@@ -112,6 +112,7 @@ subclass for webhost documentation and behaviors
 * A set 
   [completion condition](https://github.com/ArchipelagoMW/Archipelago/blob/main/BaseClasses.py#L77) (aka "goal") for
   the player.
+  * Use your player as the index (`multiworld.completion_condition[player]`) for your world's completion goal.
 
 ### Encouraged Features
 
@@ -150,9 +151,6 @@ workarounds or preferred methods which should be used instead:
 * When submitting regions or items to the multiworld (`multiworld.regions` and `multiworld.itempool` respectively), 
   do **not** use `=` as this will overwrite all elements for all games in the seed.
   * Instead, use `append`, `extend`, or `+=`.
-* When setting the completion condition (`multiworld.completion_condition`), do **not** use `=` as this will overwrite 
-  the goal for all games in the seed.
-  * Instead, set the goal using your player as the index (`multiworld.completion_condition[player]`).
 
 ### Notable Caveats
 
