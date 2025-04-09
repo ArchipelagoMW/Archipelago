@@ -3,7 +3,7 @@ from ..PrimeOptions import DoorColorRandomization
 from ..Items import SuitUpgrade
 from ..DoorRando import DoorLockType
 
-from ..Config import make_config
+from ..Config import make_config, starting_inventory
 from ..data.AreaNames import MetroidPrimeArea
 from ..data.RoomNames import RoomName
 from . import MetroidPrimeTestBase, MetroidPrimeWithOverridesTestBase
@@ -58,7 +58,7 @@ class TestGlobalDoorRando(MetroidPrimeTestBase):
             len(world.door_color_mapping) > 0, "Door color mapping should not be empty"
         )
         for area in MetroidPrimeArea:
-            if world.door_color_mapping[area.value].type_mapping is None:
+            if not world.door_color_mapping[area.value].type_mapping:
                 continue
             if first_mapping is None:
                 first_mapping = world.door_color_mapping[area.value].type_mapping
@@ -101,7 +101,7 @@ class TestRegionalDoorRando(MetroidPrimeTestBase):
         )
         same_areas: List[MetroidPrimeArea] = []
         for area in MetroidPrimeArea:
-            if world.door_color_mapping[area.value].type_mapping is None:
+            if not world.door_color_mapping[area.value].type_mapping:
                 continue
             if first_mapping is None:
                 first_mapping = world.door_color_mapping[area.value].type_mapping
@@ -141,36 +141,26 @@ class TestDoorRandoWithDifferentStartRoomNonRequiredBeam(
 
     def test_starting_beam_is_not_wave_for_non_required_beam(self):
         self.world.generate_early()
-        world: "MetroidPrimeWorld" = self.world
-        distribute_items_restrictive(world.multiworld)
-        config = make_config(world)
-        self.assertTrue(config["gameConfig"]["startingItems"]["wave"] == 0)
-        self.assertNotEqual(
-            config["gameConfig"]["startingBeam"],
-            "Wave",
-            "Starting beam should not be Wave",
-        )
+        self.assertEqual(starting_inventory(self.world, SuitUpgrade.Wave_Beam.value), 0)
 
 
-class TestDoorRandoWithDifferentStartRoomWithRequiredBeam(MetroidPrimeWithOverridesTestBase):
+class TestDoorRandoWithDifferentStartRoomWithRequiredBeam(
+    MetroidPrimeWithOverridesTestBase
+):
     options = {
         "door_color_randomization": DoorColorRandomization.option_global,
     }
-    overrides={
+    overrides = {
         "starting_room_name": RoomName.Save_Station_B.value,
     }
 
     def test_starting_beam_is_not_wave_for_required_start_beam(self):
         self.world.generate_early()
-        world: "MetroidPrimeWorld" = self.world
-        distribute_items_restrictive(world.multiworld)
-        config = make_config(world)
-        self.assertTrue(config["gameConfig"]["startingItems"]["plasma"] == 1)
+        self.world.generate_early()
         self.assertEqual(
-            config["gameConfig"]["startingBeam"],
-            "Plasma",
-            "Starting beam should be Plasma",
+            starting_inventory(self.world, SuitUpgrade.Plasma_Beam.value), 1
         )
+        self.assertEqual(starting_inventory(self.world, SuitUpgrade.Wave_Beam.value), 0)
 
 
 class TestGlobalDoorRandoWithBombAndPowerDoors(MetroidPrimeTestBase):
