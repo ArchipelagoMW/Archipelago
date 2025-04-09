@@ -1251,8 +1251,9 @@ class CollectionState:
         if locations is None:
             players = set(self.states.keys())
             if len(players) < self.multiworld.players:
-                groups = {self.multiworld.get_player_groups(player) for player in players} | players
-                locations = [loc for loc in self.multiworld.get_filled_locations() if loc in groups]
+                for player in players:
+                    players |= self.multiworld.get_player_groups(player)
+                locations = [loc for loc in self.multiworld.get_filled_locations() if loc in players]
             else:
                 locations = self.multiworld.get_filled_locations()
         reachable_advancements = True
