@@ -1345,12 +1345,6 @@ class OOTWorld(World):
         return [entrance for entrance in self.get_shufflable_entrances(type=type, only_primary=only_primary) if
                 entrance.shuffled]
 
-    def get_locations(self):
-        return self.multiworld.get_locations(self.player)
-
-    def get_entrances(self):
-        return self.multiworld.get_entrances(self.player)
-
     def is_major_item(self, item: OOTItem):
         if item.type == 'Token':
             return self.bridge == 'tokens' or self.lacs_condition == 'tokens'
