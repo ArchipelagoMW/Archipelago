@@ -30,7 +30,7 @@ components.append(
         description="Launch The Messenger.\nInstalls and checks for updates for the randomizer.")
 )
 
-icon_paths["The Messenger"] = f"ap:worlds.messenger/assets/component_icon.png"
+icon_paths["The Messenger"] = f"ap:{__name__}/assets/component_icon.png"
 
 
 class MessengerSettings(Group):
