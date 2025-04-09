@@ -1584,7 +1584,8 @@ def create_regions(world):
             return ("Badge" not in item.name and "Trap" not in item.name and item.name != "Pokedex"
                     and "Coins" not in item.name and "Progressive" not in item.name
                     and ("Player's House 2F - Player's PC" not in world.options.exclude_locations or item.excludable)
-                    and ("Player's House 2F - Player's PC" not in world.options.priority_locations or item.advancement))
+                    and ("Player's House 2F - Player's PC" in world.options.exclude_locations or
+                         "Player's House 2F - Player's PC" not in world.options.priority_locations or item.advancement))
         for i, item in enumerate(world.item_pool):
             if acceptable_item(item) and (item.name not in world.options.non_local_items.value):
                 world.pc_item = world.item_pool.pop(i)
