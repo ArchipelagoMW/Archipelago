@@ -228,7 +228,8 @@ def construct_hook_patch(game_version: str, progressive_beams: bool) -> List[int
 
 
 def _load_player_state_to_r6(game_version: str) -> List[int]:
-    from ppc_asm.assembler.ppc import lis, ori, lwz, r6, r5
+    from ppc_asm.assembler.ppc import lis, ori, lwz, r6
+    from .MetroidPrimeInterface import GAMES
 
     cstate_manager_global = GAMES[game_version]["cstate_manager_global"]
     return [
@@ -250,6 +251,7 @@ def _load_player_state_to_r6(game_version: str) -> List[int]:
 def construct_progressive_beam_patch(
     game_version: str, progressive_beams: bool
 ) -> List[int]:
+    from .MetroidPrimeInterface import GAMES
     from ppc_asm.assembler.ppc import (
         addi,
         bl,
