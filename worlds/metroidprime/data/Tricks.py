@@ -3,7 +3,7 @@ from enum import Enum
 from typing import Callable, TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from ..data.RoomNames import RoomName
+from .RoomNames import RoomName
 from ..Items import SuitUpgrade
 
 if TYPE_CHECKING:
