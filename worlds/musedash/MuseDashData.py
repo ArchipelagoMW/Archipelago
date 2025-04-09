@@ -627,4 +627,10 @@ SONG_DATA: Dict[str, SongData] = {
     "Sharp Bubbles": SongData(2900751, "83-3", "Cosmic Radio 2024", True, 7, 9, 11),
     "Replay": SongData(2900752, "83-4", "Cosmic Radio 2024", True, 5, 7, 9),
     "Cosmic Dusty Girl": SongData(2900753, "83-5", "Cosmic Radio 2024", True, 5, 7, 9),
+    "Meow Rock feat. Chun Ge, Yuan Shen": SongData(2900754, "84-0", "Muse Dash Legend", True, None, None, None),
+    "Even if you make an old radio song with AI": SongData(2900755, "84-1", "Muse Dash Legend", False, 3, 6, 8),
+    "Unusual Sketchbook": SongData(2900756, "84-2", "Muse Dash Legend", True, 6, 8, 11),
+    "TransientTears": SongData(2900757, "84-3", "Muse Dash Legend", True, 6, 8, 11),
+    "SHOOTING*STAR": SongData(2900758, "84-4", "Muse Dash Legend", False, 5, 7, 9),
+    "But the Blue Bird is Already Dead": SongData(2900759, "84-5", "Muse Dash Legend", False, 6, 8, 10),
 }
