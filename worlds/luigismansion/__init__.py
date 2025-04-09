@@ -721,9 +721,9 @@ class LMWorld(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Mario's Painting", self.player)
 
     @classmethod
-    def stage_generate_output(cls, multiworld: MultiWorld):
+    def stage_generate_output(cls, multiworld: MultiWorld, output_directory: str):
         hint_worlds = [world for world in multiworld.get_game_worlds(cls.game)
-                       if (world.options.boo_health_option != 5 and world.options.boo_health_option != 1)]
+                       if (world.options.hint_distribution.value != 5 and world.options.hint_distribution.value != 1)]
         boo_worlds = [world for world in multiworld.get_game_worlds(cls.game) if world.options.boo_health_option == 2]
         if not boo_worlds and not hint_worlds:
             return
