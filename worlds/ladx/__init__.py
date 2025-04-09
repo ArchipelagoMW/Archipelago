@@ -26,8 +26,10 @@ from .LADXR.logic import Logic as LADXRLogic
 from .LADXR.main import get_parser
 from .LADXR.settings import Settings as LADXRSettings
 from .LADXR.worldSetup import WorldSetup as LADXRWorldSetup
-from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
-                        create_regions_from_ladxr, get_locations_to_id,
+from .Locations import (LinksAwakeningLocation,
+                        LinksAwakeningRegion,
+                        create_regions_from_ladxr,
+                        links_awakening_location_name_to_id,
                         links_awakening_location_name_groups)
 from .Options import DungeonItemShuffle, ShuffleInstruments, LinksAwakeningOptions, ladx_option_groups
 from .Rom import LADXDeltaPatch, get_base_rom_path
@@ -108,7 +110,7 @@ class LinksAwakeningWorld(World):
 
     item_name_to_data = links_awakening_items_by_name
 
-    location_name_to_id = get_locations_to_id()
+    location_name_to_id = links_awakening_location_name_to_id()
 
     # Items can be grouped using their names to allow easy checking if any item
     # from that group has been collected. Group names can also be used for !hint
@@ -551,7 +553,7 @@ class LinksAwakeningWorld(World):
         return self.random.choices(self.filler_choices, self.filler_weights)[0]
 
     def fill_slot_data(self):
-        slot_data = {}
+        slot_data = { "death_link": self.options.death_link.value }
 
         if not self.multiworld.is_race:
             # all of these option are NOT used by the LADX- or Text-Client.
@@ -581,7 +583,7 @@ class LinksAwakeningWorld(World):
             ]
 
             # use the default behaviour to grab options
-            slot_data = self.options.as_dict(*slot_options)
+            slot_data.update(self.options.as_dict(*slot_options))
 
             # for options which should not get the internal int value but the display name use the extra handling
             slot_data.update({
