@@ -29,12 +29,11 @@ class GoldenCoinsRequired(Range):
 class MarioCoinFragmentPercentage(Range):
     """
     Percentage of filler items to be replaced with Mario Coin Fragments. Note that the Coinsanity and Coinsanity
-    Checks options will greatly impact the number of replaceable filler items. There may be as few as 6 available
-    slots for Mario Coin Fragments if Coinsanity is off.
+    Checks options will greatly impact the number of replaceable filler items.
     """
     display_name = "Mario Coin Fragment Percentage"
     range_start = 1
-    range_end = 100
+    range_end = 50
     default = 20
 
 
@@ -50,9 +49,10 @@ class MarioCoinFragmentsRequiredPercentage(Range):
 
 class ShuffleMidwayBells(Toggle):
     """
-    Shuffle the Midway Bells into the item pool. Ringing a bell will trigger a location check.
-    Obtaining a Midway Bell will be permanent, and some levels will require backtracking from the midway point to reach
-    secret exits.
+    Shuffle Midway Bells into the item pool. You can always start at the beginning of a level after obtaining the
+    Midway Bell by holding SELECT while entering the level (until you load into the level).
+    The Midway Bells in levels will trigger location checks whether this option is on or not, but they will only
+    set the checkpoint if this is off, otherwise you must obtain the Midway Bell item from the item pool.
     """
     display_name = "Shuffle Midway Bells"
 

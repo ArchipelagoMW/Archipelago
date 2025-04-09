@@ -163,8 +163,6 @@ class MarioLand2World(World):
                 self.multiworld.regions.append(region)
                 created_regions.append(region_name)
 
-            if "Midway Bell" in location_name and not self.options.shuffle_midway_bells:
-                continue
             if location_name == "Mario's Castle - Midway Bell" and not self.options.marios_castle_midway_bell:
                 continue
             region.locations.append(MarioLand2Location(self.player, location_name,

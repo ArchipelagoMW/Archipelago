@@ -11,6 +11,7 @@ logger = logging.getLogger("Client")
 
 BANK_EXCHANGE_RATE = 20000000000
 
+overworld_music = (0x05, 0x06, 0x0D, 0x0E, 0x10, 0x12, 0x1B, 0x1C, 0x1E)
 
 class MarioLand2Client(BizHawkClient):
     system = ("GB", "SGB")
@@ -188,7 +189,7 @@ class MarioLand2Client(BizHawkClient):
         if items_received:
             data_writes.append((0x00F0, write_num_items_received, "CartRAM"))
 
-        if midway_point == 0xFF and midway_bells:
+        if midway_point == 0xFF and (midway_bells or music in overworld_music):
             # after registering the check for the midway bell, clear the value just for safety.
             data_writes.append((0x02A0, [0], "CartRAM"))
 
