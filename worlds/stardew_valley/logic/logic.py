@@ -153,11 +153,11 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             AnimalProduct.brown_egg: self.animal.has_animal(Animal.chicken),
             AnimalProduct.chicken_egg: self.has_any(AnimalProduct.egg, AnimalProduct.brown_egg, AnimalProduct.large_egg, AnimalProduct.large_brown_egg),
             AnimalProduct.cow_milk: self.has_any(AnimalProduct.milk, AnimalProduct.large_milk),
-            AnimalProduct.duck_egg: self.has(AnimalProduct.duck_egg_starter) | self.animal.has_animal(Animal.duck),
+            AnimalProduct.duck_egg: self.animal.has_animal(Animal.duck), # Should also check starter
             AnimalProduct.duck_feather: self.animal.has_happy_animal(Animal.duck),
-            AnimalProduct.egg: self.has(AnimalProduct.egg_starter) | self.animal.has_animal(Animal.chicken),
+            AnimalProduct.egg: self.animal.has_animal(Animal.chicken), # Should also check starter
             AnimalProduct.goat_milk: self.animal.has_animal(Animal.goat),
-            AnimalProduct.golden_egg: self.has(AnimalProduct.golden_egg_starter) | self.animal.has_animal(Animal.golden_chicken),
+            AnimalProduct.golden_egg: self.has(AnimalProduct.golden_egg_starter), # Should also check golden chicken if there was an alternative to obtain it without golden egg
             AnimalProduct.large_brown_egg: self.animal.has_happy_animal(Animal.chicken),
             AnimalProduct.large_egg: self.animal.has_happy_animal(Animal.chicken),
             AnimalProduct.large_goat_milk: self.animal.has_happy_animal(Animal.goat),
@@ -168,7 +168,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             AnimalProduct.squid_ink: self.mine.can_mine_in_the_mines_floor_81_120() | (self.building.has_building(Building.fish_pond) & self.has(Fish.squid)),
             AnimalProduct.sturgeon_roe: self.has(Fish.sturgeon) & self.building.has_building(Building.fish_pond),
             AnimalProduct.truffle: self.animal.has_animal(Animal.pig) & self.season.has_any_not_winter(),
-            AnimalProduct.void_egg: self.has(AnimalProduct.void_egg_starter) | self.animal.has_animal(Animal.void_chicken),
+            AnimalProduct.void_egg: self.has(AnimalProduct.void_egg_starter), # Should also check void chicken if there was an alternative to obtain it without void egg
             AnimalProduct.wool: self.animal.has_animal(Animal.rabbit) | self.animal.has_animal(Animal.sheep),
             AnimalProduct.slime_egg_green: self.has(Machine.slime_egg_press) & self.has(Loot.slime),
             AnimalProduct.slime_egg_blue: self.has(Machine.slime_egg_press) & self.has(Loot.slime) & self.time.has_lived_months(3),

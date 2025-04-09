@@ -50,7 +50,8 @@ the_farm = ContentPack(
                required_building=Building.coop,
                sources=(
                    ShopSource(shop_region=Region.ranch, money_price=800),
-                   IncubatorSource(AnimalProduct.egg_starter)
+                   # For now there is no way to obtain the starter item, so this adds additional rules in the system for nothing.
+                   # IncubatorSource(AnimalProduct.egg_starter)
                )),
         Animal(AnimalName.cow,
                required_building=Building.barn,
@@ -66,7 +67,8 @@ the_farm = ContentPack(
                required_building=Building.big_coop,
                sources=(
                    ShopSource(shop_region=Region.ranch, money_price=1200),
-                   IncubatorSource(AnimalProduct.duck_egg_starter)
+                   # For now there is no way to obtain the starter item, so this adds additional rules in the system for nothing.
+                   # IncubatorSource(AnimalProduct.duck_egg_starter)
                )),
         Animal(AnimalName.sheep,
                required_building=Building.deluxe_barn,
