@@ -15,10 +15,6 @@ class DKC2Item(Item):
     game = "Donkey Kong Country 2"
 
 # Item tables
-event_table = {
-    ItemName.victory:           ItemData(STARTING_ID + 0x0000, ItemClassification.progression_skip_balancing),
-}
-
 worlds_table = {
     ItemName.gangplank_galleon:     ItemData(STARTING_ID + 0x0001, ItemClassification.progression | ItemClassification.useful),
     ItemName.crocodile_cauldron:    ItemData(STARTING_ID + 0x0002, ItemClassification.progression | ItemClassification.useful),
@@ -179,7 +175,6 @@ item_groups = {
 }
 
 item_table = {
-    **event_table,
     **mcguffin_table,
     **worlds_table,
     **lost_world_table,
