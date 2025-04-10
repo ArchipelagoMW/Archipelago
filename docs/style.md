@@ -43,6 +43,7 @@
 
 * Indent with 4 spaces for new code.
 * kebab-case for ids and classes.
+* Avoid using on* attributes (onclick, etc.).
 
 ## CSS / SCSS
 
@@ -55,4 +56,5 @@
 * Indent with 4 spaces.
 * Indent `case` inside `switch ` with 4 spaces.
 * Prefer double quotation marks (`"`).
-* Semicolons are required after every statement.
+* Use [IIFEs](https://developer.mozilla.org/docs/Glossary/IIFE) to avoid polluting global scope.
+* Use addEventListener.
