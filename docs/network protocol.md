@@ -339,7 +339,8 @@ This is useful in cases where an item appears in the game world, such as 'ledge 
 Note that LocationScouts with a non-zero `create_as_hint` value will _always_ create a **persistent** hint (listed in the Hints tab of concerning players' TextClients), even if the location was already found. If this is not desired behavior, you need to prevent sending LocationScouts with `create_as_hint` for already found locations in your client-side code.
 
 #### Arguments
-:| ---- | ---- | ----- |
+| Name | Type | Notes |
+| ---- | ---- | ----- |
 | locations | list\[int\] | The ids of the locations seen by the client. May contain any number of locations, even ones sent before; duplicates do not cause issues with the Archipelago server. |
 | create_as_hint | int | If non-zero, the scouted locations get created and broadcasted as a player-visible hint. <br/>If 2 only new hints are broadcast, however this does not remove them from the LocationInfo reply. |
 
