@@ -28,6 +28,7 @@ class PortalPlando(PlandoConnections):
     - entrance: Searing Crags
       exit: Glacial Peak Portal
     """
+    display_name = "Portal Plando Connections"
     portals = [f"{portal} Portal" for portal in PORTALS]
     shop_points = [point for points in SHOP_POINTS.values() for point in points]
     checkpoints = [point for points in CHECKPOINTS.values() for point in points]
@@ -48,6 +49,7 @@ class TransitionPlando(PlandoConnections):
       exit: Dark Cave - Right
       direction: both
     """
+    display_name = "Transition Plando Connections"
     entrances = frozenset(RANDOMIZED_CONNECTIONS.keys())
     exits = frozenset(RANDOMIZED_CONNECTIONS.values())
 
@@ -145,7 +147,9 @@ class MusicBox(DefaultOnToggle):
 
 
 class NotesNeeded(Range):
-    """How many notes are needed to access the Music Box."""
+    """
+    How many notes need to be found in order to access the Music Box. 6 are always needed to enter, so this places the others in your start inventory.
+    """
     display_name = "Notes Needed"
     range_start = 1
     range_end = 6
