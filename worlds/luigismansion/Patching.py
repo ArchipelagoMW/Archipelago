@@ -197,6 +197,7 @@ def update_event_info(event_info, boo_checks: bool, output_data):
 
         # Update the King Boo event trigger to be area entry based
         if boo_checks and x["EventNo"] == 16:
+            x["CharacterName"] = ""
             x["pos_x"] = 2260.000000
             x["pos_y"] = -450.000000
             x["pos_z"] = -5300.000000
