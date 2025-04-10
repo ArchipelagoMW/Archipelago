@@ -632,22 +632,6 @@ class GameLogic:
 #1.0
     }
 
-    handcraftable_recipes: dict[str, list[Recipe]] = {}
-    for part, recipes_per_part in recipes.items():
-        for recipe in recipes_per_part:
-            if recipe.handcraftable:
-                handcraftable_recipes.setdefault(part, list()).append(recipe)
-
-    implicitly_unlocked_recipes: dict[str, Recipe] = { 
-        recipe.name: recipe 
-        for recipes_per_part in recipes.values()
-        for recipe in recipes_per_part if recipe.implicitly_unlocked 
-    }
-    implicitly_unlocked_recipes.update({ 
-        building.name: building
-        for building in buildings.values() if building.implicitly_unlocked 
-    })
-
     requirement_per_powerlevel: dict[PowerInfrastructureLevel, tuple[Recipe, ...]] = {
         # no need to polute the logic by including higher level recipes based on previus recipes
         PowerInfrastructureLevel.Basic: (

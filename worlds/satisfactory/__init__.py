@@ -34,8 +34,8 @@ class SatisfactoryWorld(World):
     critical_path: CriticalPathCalculator
 
     def generate_early(self) -> None:
-        self.state_logic = StateLogic(self.player, self.options)
         self.critical_path = CriticalPathCalculator(self.game_logic, self.random, self.options)
+        self.state_logic = StateLogic(self.player, self.options, self.critical_path)
         self.items = Items(self.player, self.game_logic, self.random, self.options, self.critical_path)
 
         if self.options.mam_logic_placement.value == Placement.starting_inventory:

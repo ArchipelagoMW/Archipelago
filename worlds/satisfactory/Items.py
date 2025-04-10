@@ -929,7 +929,7 @@ class Items:
     def build_item_pool(self, random: Random, multiworld: MultiWorld, 
                         options: SatisfactoryOptions, number_of_locations: int) -> list[Item]:
         excluded_from_pool: set[str] = self.get_excluded_items(multiworld, options) \
-                                           .union(self.logic.implicitly_unlocked_recipes.keys())
+                                           .union(self.critical_path.implicitly_unlocked)
         pool: list[Item] = []
 
         for name, data in self.item_data.items():

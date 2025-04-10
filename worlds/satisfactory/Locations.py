@@ -63,7 +63,7 @@ class EventBuilding(LocationData):
             ) -> Callable[[CollectionState], bool]:
 
         def can_build(state: CollectionState) -> bool:
-            return (building.implicitly_unlocked or state_logic.has_recipe(state, building)) \
+            return state_logic.has_recipe(state, building) \
                 and state_logic.can_power(state, building.power_requirement) \
                 and state_logic.can_produce_all_allowing_handcrafting(state, game_logic, building.inputs)
 

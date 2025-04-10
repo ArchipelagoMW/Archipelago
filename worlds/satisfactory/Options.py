@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import ClassVar, Any, cast
 from enum import IntEnum
-from Options import PerGameCommonOptions, DeathLinkMixin, AssembleOptions, Visibility
+from Options import PerGameCommonOptions, DeathLinkMixin, AssembleOptions, Visibility, OptionGroup
 from Options import Range, NamedRange, Toggle, DefaultOnToggle, OptionSet, StartInventoryPool, Choice
 from schema import Schema, And
 
@@ -30,11 +30,13 @@ class ChoiceMapMeta(AssembleOptions):
                 option_name = "option_" + choice.replace(' ', '_')
                 attrs[option_name] = index
 
+                if "default" in attrs and attrs["default"] == choice:
+                    attrs["default"] = index
+
         cls = super(ChoiceMapMeta, mcs).__new__(mcs, name, bases, attrs)
         return cast(ChoiceMapMeta, cls)
 
 class ChoiceMap(Choice, metaclass=ChoiceMapMeta):
-    # TODO `default` doesn't do anything, default is always the first `choices` value. if uncommented it messes up the template file generation (caps mismatch)
     choices: ClassVar[dict[str, list[str]]]
 
     def get_selected_list(self) -> list[str]:
@@ -47,7 +49,7 @@ class ElevatorTier(NamedRange):
     Put these Shipments to Space Elevator packages in logic.
     if your goal selection contains *Space Elevator Tier* then the goal will be to complete these shipments.
     """
-    display_name = "Goal: Space Elevator shipment"
+    display_name = "Space Elevator shipments in logic"
     default = 2
     range_start = 1
     range_end = 5
@@ -73,7 +75,7 @@ class ResourceSinkPointsTotal(NamedRange):
     If you have *Free Samples* enabled, consider setting this higher so that you can't reach the goal just by sinking your Free Samples.
     """
     # Coupon data for above comment from https://satisfactory.wiki.gg/wiki/AWESOME_Shop
-    display_name = "Goal: AWESOME Sink points total"
+    display_name = "AWESOME Sink points total"
     default = 2166000
     range_start = 2166000
     range_end = 18436379500
@@ -110,7 +112,7 @@ class ResourceSinkPointsPerMinute(NamedRange):
     Use the **TFIT - Ficsit Information Tool** mod or the Satisfactory wiki to find out how many points items are worth.
     """
     # Coupon data for above comment from https://satisfactory.wiki.gg/wiki/AWESOME_Shop
-    display_name = "Goal: AWESOME Sink points per minute"
+    display_name = "AWESOME Sink points per minute"
     default = 50000
     range_start = 1000
     range_end = 10000000
@@ -124,7 +126,7 @@ class ResourceSinkPointsPerMinute(NamedRange):
         "~50 motor/min": 76000,
         "~10 heavy modular frame/min": 100000,
         "~10 radio control unit": 300000,
-        "~10 heavy modular frame/min": 625000,
+        "~10 fused modular frame/min": 625000,
         "~10 supercomputer/min": 1000000,
         "~10 pressure conversion cube/min": 2500000,
         "~10 nuclear pasta/min": 5000000,
@@ -253,8 +255,8 @@ class TrapSelectionPreset(ChoiceMap):
     """
     display_name = "Trap Presets"
     choices = {
-        "Normal": ["Trap: Doggo with Pulse Nobelisk", "Trap: Doggo with Gas Nobelisk", "Trap: Hog", "Trap: Alpha Hog", "Trap: Hatcher", "Trap: Elite Hatcher", "Trap: Small Stinger", "Trap: Stinger", "Trap: Spitter", "Trap: Alpha Spitter", "Trap: Not the Bees", "Trap: Nuclear Waste Drop", "Bundle: Uranium", "Bundle: Non-fissile Uranium", "Trap: Can of Beans", "Trap: Fart Cloud"],
         "Gentle": ["Trap: Doggo with Pulse Nobelisk", "Trap: Hog", "Trap: Spitter", "Trap: Can of Beans"],
+        "Normal": ["Trap: Doggo with Pulse Nobelisk", "Trap: Doggo with Gas Nobelisk", "Trap: Hog", "Trap: Alpha Hog", "Trap: Hatcher", "Trap: Elite Hatcher", "Trap: Small Stinger", "Trap: Stinger", "Trap: Spitter", "Trap: Alpha Spitter", "Trap: Not the Bees", "Trap: Nuclear Waste Drop", "Bundle: Uranium", "Bundle: Non-fissile Uranium", "Trap: Can of Beans", "Trap: Fart Cloud"],
         "Harder": ["Trap: Doggo with Pulse Nobelisk", "Trap: Doggo with Nuke Nobelisk", "Trap: Doggo with Gas Nobelisk", "Trap: Alpha Hog", "Trap: Cliff Hog", "Trap: Spore Flower", "Trap: Hatcher", "Trap: Elite Hatcher", "Trap: Stinger", "Trap: Alpha Spitter", "Trap: Not the Bees", "Trap: Fart Cloud", "Trap: Nuclear Waste Drop", "Trap: Plutonium Waste Drop", "Bundle: Uranium", "Bundle: Uranium Fuel Rod", "Bundle: Uranium Waste", "Bundle: Plutonium Fuel Rod", "Bundle: Plutonium Pellet", "Bundle: Plutonium Waste", "Bundle: Non-fissile Uranium"],
         "All": list(_trap_types),
         "Ruthless": ["Trap: Doggo with Nuke Nobelisk", "Trap: Nuclear Hog", "Trap: Cliff Hog", "Trap: Elite Hatcher", "Trap: Spore Flower", "Trap: Gas Stinger", "Trap: Nuclear Waste Drop", "Trap: Plutonium Waste Drop", "Bundle: Uranium Fuel Rod", "Bundle: Uranium Waste", "Bundle: Plutonium Fuel Rod", "Bundle: Plutonium Pellet", "Bundle: Plutonium Waste", "Bundle: Non-fissile Uranium", "Bundle: Ficsonium", "Bundle: Ficsonium Fuel Rod"],
@@ -263,7 +265,7 @@ class TrapSelectionPreset(ChoiceMap):
         "Nicholas Cage": ["Trap: Hatcher", "Trap: Elite Hatcher", "Trap: Not the Bees"],
         "Fallout": ["Trap: Doggo with Nuke Nobelisk", "Trap: Nuclear Hog", "Trap: Nuclear Waste Drop", "Trap: Plutonium Waste Drop", "Bundle: Uranium", "Bundle: Uranium Fuel Rod", "Bundle: Uranium Waste", "Bundle: Plutonium Fuel Rod", "Bundle: Plutonium Waste", "Bundle: Ficsonium", "Bundle: Ficsonium Fuel Rod"],
     }
-    # default="Normal" # TODO `default` doesn't do anything, default is always the first `choices` value. if uncommented it messes up the template file generation (caps mismatch)
+    default="Normal"
 
 class TrapSelectionOverride(OptionSet):
     """
@@ -358,13 +360,13 @@ class StartingInventoryPreset(ChoiceMap):
     """
     display_name = "Starting Goodies Presets"
     choices = {
-        "Archipelago": _default_starting_items,
         "Barebones": [], # Nothing but the xeno zapper
         "Skip Tutorial Inspired": _skip_tutorial_starting_items,
+        "Archipelago": _default_starting_items,
         "Foundations": _default_plus_foundations_starting_items,
         "Foundation Lover": _foundation_lover_starting_items
     }
-    # default = "Archipelago" # TODO `default` doesn't do anything, default is always the first `choices` value. if uncommented it messes up the template file generation (caps mismatch)
+    default = "Archipelago"
 
 class ExplorationCollectableCount(Range):
     """
@@ -372,7 +374,7 @@ class ExplorationCollectableCount(Range):
 
     Collect this amount of Mercer Spheres and Summer Sloops each to finish.
     """
-    display_name = "Goal: Exploration Collectables"
+    display_name = "Exploration Collectables"
     default = 20
     range_start = 20
     range_end = 100
@@ -417,22 +419,20 @@ class GoalRequirement(Choice):
     option_require_all_goals = 1
     default = 0
 
-class ExperimentalGeneration(Toggle):
+class RandomizeTier0(DefaultOnToggle):
     """
-    Attempts to only mark recipes as progression if they are on your path to victory.
-    WARNING: has a very high change of generation failure and should therefore only be used in single player games.
+    Randomizer the way you obtain basic parts such as ingots and wire
     """
-    display_name = "Experimental Generation"
-    visibility = Visibility.none
+    display_name = "Randomize tier 0 recipes"
 
 @dataclass
 class SatisfactoryOptions(PerGameCommonOptions, DeathLinkMixin):
     goal_selection: GoalSelection
     goal_requirement: GoalRequirement
     final_elevator_package: ElevatorTier
-    final_awesome_sink_points_total: ResourceSinkPointsTotal
-    final_awesome_sink_points_per_minute: ResourceSinkPointsPerMinute
-    final_exploration_collectables_amount: ExplorationCollectableCount
+    goal_awesome_sink_points_total: ResourceSinkPointsTotal
+    goal_awesome_sink_points_per_minute: ResourceSinkPointsPerMinute
+    goal_exploration_collectables_amount: ExplorationCollectableCount
     hard_drive_progression_limit: HardDriveProgressionLimit
     free_sample_equipment: FreeSampleEquipment
     free_sample_buildings: FreeSampleBuildings
@@ -449,4 +449,80 @@ class SatisfactoryOptions(PerGameCommonOptions, DeathLinkMixin):
     trap_selection_override: TrapSelectionOverride
     energy_link: EnergyLink
     start_inventory_from_pool: StartInventoryPool
-    experimental_generation: ExperimentalGeneration
+    randomize_tier_0: RandomizeTier0
+
+option_groups = [
+    OptionGroup("Game Scope", [
+        ElevatorTier,
+        HardDriveProgressionLimit
+    ]),
+    OptionGroup("Goal Selection", [
+        GoalSelection,
+        GoalRequirement,
+        ResourceSinkPointsTotal,
+        ResourceSinkPointsPerMinute,
+        ExplorationCollectableCount
+    ]),
+    OptionGroup("Placement logic", [
+        StartingInventoryPreset,
+        RandomizeTier0,
+        MamLogic,
+        AwesomeLogic,
+        SplitterLogic,
+        EnergyLinkLogic
+    ], start_collapsed = True),
+    OptionGroup("Free Samples", [
+        FreeSampleEquipment,
+        FreeSampleBuildings,
+        FreeSampleParts,
+        FreeSampleRadioactive
+    ], start_collapsed = True),
+    OptionGroup("Traps", [
+        TrapChance,
+        TrapSelectionPreset,
+        TrapSelectionOverride
+    ], start_collapsed = True)
+]
+
+option_presets: dict[str, dict[str, Any]] = {
+    "Short": {
+        "final_elevator_package": 1,
+        "goal_selection": {"Space Elevator Tier", "AWESOME Sink Points (total)"},
+        "goal_requirement": GoalRequirement.option_require_any_one_goal,
+        "goal_awesome_sink_points_total": 17804500, # 100 coupons
+        "hard_drive_progression_limit": 20,
+        "starting_inventory_preset": 3, # "Foundations"
+        "randomize_tier_0": False,
+        "mam_logic_placement": int(Placement.starting_inventory),
+        "awesome_logic_placement": int(Placement.starting_inventory),
+        "energy_link_logic_placement": int(Placement.starting_inventory),
+        "splitter_placement": int(Placement.starting_inventory),
+        "milestone_cost_multiplier": 50,
+        "trap_selection_preset": 1 # Gentle
+    },
+    "Long": {
+        "final_elevator_package": 3,
+        "goal_selection": {"Space Elevator Tier", "AWESOME Sink Points (per minute)"},
+        "goal_requirement": GoalRequirement.option_require_all_goals,
+        "goal_awesome_sink_points_per_minute": 100000, # ~10 heavy modular frame/min
+        "hard_drive_progression_limit": 60,
+        "mam_logic_placement": int(Placement.somewhere),
+        "awesome_logic_placement": int(Placement.somewhere),
+        "energy_link_logic_placement": int(Placement.somewhere),
+        "splitter_placement": int(Placement.somewhere),
+        "trap_selection_preset": 3 # Harder
+    },
+    "Extra long": {
+        "final_elevator_package": 5,
+        "goal_selection": {"Space Elevator Tier", "AWESOME Sink Points (per minute)"},
+        "goal_requirement": GoalRequirement.option_require_all_goals,
+        "goal_awesome_sink_points_per_minute": 625000, # ~10 fused modular frame/min
+        "hard_drive_progression_limit": 100,
+        "mam_logic_placement": int(Placement.somewhere),
+        "awesome_logic_placement": int(Placement.somewhere),
+        "energy_link_logic_placement": int(Placement.somewhere),
+        "splitter_placement": int(Placement.somewhere),
+        "milestone_cost_multiplier": 300,
+        "trap_selection_preset": 4 # All
+    }
+} 

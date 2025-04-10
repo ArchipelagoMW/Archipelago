@@ -1,4 +1,5 @@
 from BaseClasses import Tutorial
+from .Options import option_groups, option_presets
 from ..AutoWorld import WebWorld
 
 class SatisfactoryWebWorld(WebWorld):
@@ -13,3 +14,6 @@ class SatisfactoryWebWorld(WebWorld):
     )
     tutorials = [setup]
     rich_text_options_doc = True
+
+    option_groups = option_groups
+    options_presets = option_presets
