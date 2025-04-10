@@ -246,7 +246,7 @@ class CelesteWorld(World):
 
             "active_levels": self.active_levels,
             "goal_area": self.goal_area,
-            "lock_goal_area": self.options.lock_goal_area,
+            "lock_goal_area": self.options.lock_goal_area.value,
             "strawberries_required": self.strawberries_required,
 
             "checkpointsanity": self.options.checkpointsanity.value,
