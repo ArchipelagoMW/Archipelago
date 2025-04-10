@@ -71,16 +71,17 @@ Opting out of using indirect conditions should only be used by games that *reall
 
 ### I uploaded the generated output of my world to the webhost and webhost is erroring on corrupted multidata
 
-The error `Could not load multidata. File may be corrupted or incompatible.` occurs when uploading a locally generated file where there is an issue with the multidata contained within it. It may come
-with a descriptive issue like `(No module named 'worlds.myworld')` or `(global 'worlds.myworld.names.ItemNames' is forbidden)`
+The error `Could not load multidata. File may be corrupted or incompatible.` occurs when uploading a locally generated
+file where there is an issue with the multidata contained within it. It may come with a descriptive issue like
+`(No module named 'worlds.myworld')` or `(global 'worlds.myworld.names.ItemNames' is forbidden)`
 
 Pickling is a way to compress python objects such that they can be decompressed and be used to rebuild the
-python objects. This means that if one of your custom class instances ends up in the multidata, the server would not be able
-to load that custom class to decompress the data, which can fail either because the custom class is unknown (because it cannot load your world module)
-or the class it's attempting to import to decompress is deemed unsafe.
+python objects. This means that if one of your custom class instances ends up in the multidata, the server would not
+be able to load that custom class to decompress the data, which can fail either because the custom class is unknown
+(because it cannot load your world module) or the class it's attempting to import to decompress is deemed unsafe.
 
 Common situations where this can happen include:
 * Using Option instances directly in slot_data. Ex: using `options.option_name` instead of `options.option_name.value`.
   Also, consider using the `options.as_dict("option_name", "option_two")` helper.
-* Using enums as Location/Item names in the datapackage. When building out `location_name_to_id`
-  and `item_name_to_id`, make sure that you are not using your enum class for either the names or ids in these mappings.
+* Using enums as Location/Item names in the datapackage. When building out `location_name_to_id` and `item_name_to_id`,
+  make sure that you are not using your enum class for either the names or ids in these mappings.
