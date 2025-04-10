@@ -3510,9 +3510,9 @@ class DKC2ExpertRules(DKC2Rules):
                 lambda state: self.can_cling(state) and self.can_carry(state) and self.has_kannons(state),
 
             LocationName.parrot_chute_panic_clear:
-                lambda state: self.can_hover(state) or self.has_squawks(state),
+                lambda state: (self.has_both_kongs(state) and self.can_hover(state) and self.can_carry(state)) or self.has_squawks(state),
             LocationName.parrot_chute_panic_kong:
-                lambda state: self.can_hover(state) or self.has_squawks(state),
+                lambda state: (self.has_both_kongs(state) and self.can_hover(state) and self.can_carry(state)) or self.has_squawks(state),
             LocationName.parrot_chute_panic_dk_coin:
                 lambda state: self.can_hover(state) or self.has_diddy(state),
             LocationName.parrot_chute_panic_bonus_1:
@@ -3623,7 +3623,8 @@ class DKC2ExpertRules(DKC2Rules):
                     )
                 ),
             LocationName.clappers_cavern_dk_coin:
-                self.can_team_attack,
+                lambda state: self.can_team_attack(state) and 
+                    (self.can_cling(state) or self.has_clapper(state) or (self.can_hover(state) and self.can_swim(state))),
             LocationName.clappers_cavern_bonus_1:
                 lambda state: self.can_cling(state) and self.can_team_attack(state),
             LocationName.clappers_cavern_bonus_2:
@@ -3631,15 +3632,15 @@ class DKC2ExpertRules(DKC2Rules):
 
             LocationName.chain_link_chamber_clear:
                 lambda state: self.can_climb(state) and (
-                    self.can_cling(state) or self.has_kannons(state)
+                    self.can_cling(state) or (self.has_kannons(state) and self.has_controllable_barrels(state))
                 ),
             LocationName.chain_link_chamber_kong:
                 lambda state: self.can_climb(state) and (
-                    self.can_cling(state) or self.has_kannons(state)
+                    self.can_cling(state) or (self.has_kannons(state) and self.has_controllable_barrels(state))
                 ),
             LocationName.chain_link_chamber_dk_coin:
                 lambda state: self.can_climb(state) and (
-                    self.can_cling(state) or self.has_kannons(state)
+                    self.can_cling(state) or (self.has_kannons(state) and self.has_controllable_barrels(state))
                 ),
             LocationName.chain_link_chamber_bonus_1:
                 lambda state: self.can_climb(state) and self.can_cling(state) and self.can_carry(state),
@@ -4131,7 +4132,7 @@ class DKC2ExpertRules(DKC2Rules):
             LocationName.bramble_blast_banana_bunch_1:
                 self.can_team_attack,
             LocationName.bramble_blast_banana_bunch_2:
-                self.has_kannons,
+                lambda state: self.has_both_kongs(state) or self.has_kannons(state),
             LocationName.bramble_blast_banana_bunch_3:
                 self.has_kannons,
             LocationName.bramble_blast_banana_coin_1:
@@ -4349,13 +4350,14 @@ class DKC2ExpertRules(DKC2Rules):
             LocationName.parrot_chute_panic_banana_bunch_1:
                 lambda state: (self.has_both_kongs(state) and self.can_hover(state)) or self.has_squawks(state),
             LocationName.parrot_chute_panic_banana_coin_3:
-                self.has_squawks,
+                lambda state: (self.has_both_kongs(state) and self.can_hover(state) and self.can_carry(state)) or self.has_squawks(state),
             LocationName.parrot_chute_panic_banana_bunch_2:
-                self.has_squawks,
+                lambda state: (self.has_both_kongs(state) and self.can_hover(state) and self.can_carry(state)) or self.has_squawks(state),
             LocationName.parrot_chute_panic_banana_coin_4:
-                self.has_squawks,
+                lambda state: (self.has_both_kongs(state) and self.can_hover(state) and self.can_carry(state)) or self.has_squawks(state),
             LocationName.parrot_chute_panic_banana_coin_5:
-                lambda state: self.has_squawks(state) and self.has_controllable_barrels(state)
+                lambda state: ((self.has_both_kongs(state) and self.can_hover(state) and self.can_carry(state)) or self.has_squawks(state)) 
+                and self.has_controllable_barrels(state)
                     and (self.can_team_attack(state) or self.can_cartwheel(state)),
 
             LocationName.web_woods_banana_coin_1:
@@ -4703,7 +4705,9 @@ class DKC2ExpertRules(DKC2Rules):
             LocationName.klobber_karnage_banana_bunch_3:
                 self.true,
             LocationName.klobber_karnage_banana_coin_3:
-                self.true,
+                lambda state: (self.has_diddy(state) and (self.can_use_dixie_barrels(state) and self.can_use_diddy_barrels(state)))
+                               or (self.can_team_attack(state) and self.has_controllable_barrels(state)
+                ),
             LocationName.klobber_karnage_banana_bunch_4:
                 self.has_controllable_barrels,
             LocationName.klobber_karnage_banana_bunch_5:
