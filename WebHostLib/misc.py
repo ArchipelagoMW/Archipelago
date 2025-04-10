@@ -115,7 +115,7 @@ def glossary(lang: str):
 @app.route("/downloads")
 @cache.cached()
 def downloads():
-    return render_template("downloads.html", version=__version__)
+    return render_template("downloads.html")
 
 
 @app.route('/seed/<suuid:seed>')

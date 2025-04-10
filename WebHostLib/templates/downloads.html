@@ -22,10 +22,10 @@
 
 {% block body %}
     <div class="downloads-wrapper">
-        <h1>Download Archipelago {{ version }}</h1>
+        <h1>Download Latest Archipelago Release</h1>
         <br/>
         <ul class="downloads">
-            <li><a href="https://github.com/ArchipelagoMW/Archipelago/releases/tag/{{ version }}">Patch Notes</a></li>
+            <li><a href="https://github.com/ArchipelagoMW/Archipelago/releases/latest">Patch Notes</a></li>
             <li><a href="{{ url_for("api.get_download", build="windows") }}">Download for Windows 10+</a></li>
             <li><a href="{{ url_for("api.get_download", build="appimage") }}">Download for Linux (AppImage)</a></li>
             <li><a href="{{ url_for("api.get_download", build="tar") }}">Download for Linux (.tar.gz)</a></li>
