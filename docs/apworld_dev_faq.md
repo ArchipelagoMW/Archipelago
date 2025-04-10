@@ -72,7 +72,7 @@ Opting out of using indirect conditions should only be used by games that *reall
 ### I uploaded the generated output of my world to the webhost and webhost is erroring on corrupted multidata
 
 The error `Could not load multidata. File may be corrupted or incompatible.` occurs when uploading a locally generated
-file where there is an issue with the multidata contained within it. It may come with a descriptive issue like
+file where there is an issue with the multidata contained within it. It may come with a description like
 `(No module named 'worlds.myworld')` or `(global 'worlds.myworld.names.ItemNames' is forbidden)`
 
 Pickling is a way to compress python objects such that they can be decompressed and be used to rebuild the
