@@ -11,7 +11,7 @@ from ..strings.region_names import Region
 
 
 def get_all_permanent_progression_items() -> List[ItemData]:
-    """Ignore all the stuff that the algorithm chooses one of, instead of all, to fulfill logical progression. 
+    """Ignore all the stuff that the algorithm chooses one of, instead of all, to fulfill logical progression.
     """
     return [
         item

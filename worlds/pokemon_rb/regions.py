@@ -1580,16 +1580,22 @@ def create_regions(world):
 
     world.random.shuffle(world.item_pool)
     if not world.options.key_items_only:
-        if "Player's House 2F - Player's PC" in world.options.exclude_locations:
-            acceptable_item = lambda item: item.excludable
-        elif "Player's House 2F - Player's PC" in world.options.priority_locations:
-            acceptable_item = lambda item: item.advancement
-        else:
-            acceptable_item = lambda item: True
+        def acceptable_item(item):
+            return ("Badge" not in item.name and "Trap" not in item.name and item.name != "Pokedex"
+                    and "Coins" not in item.name and "Progressive" not in item.name
+                    and ("Player's House 2F - Player's PC" not in world.options.exclude_locations or item.excludable)
+                    and ("Player's House 2F - Player's PC" in world.options.exclude_locations or
+                         "Player's House 2F - Player's PC" not in world.options.priority_locations or item.advancement))
         for i, item in enumerate(world.item_pool):
-            if acceptable_item(item):
+            if acceptable_item(item) and (item.name not in world.options.non_local_items.value):
                 world.pc_item = world.item_pool.pop(i)
                 break
+        else:
+            for i, item in enumerate(world.item_pool):
+                if acceptable_item(item):
+                    world.pc_item = world.item_pool.pop(i)
+                    break
+
 
     advancement_items = [item.name for item in world.item_pool if item.advancement] \
                         + [item.name for item in world.multiworld.precollected_items[world.player] if
@@ -2414,6 +2420,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                 loc.place_locked_item(badge)
 
         state = multiworld.state.copy()
+        state.allow_partial_entrances = True
         for item, data in item_table.items():
             if (data.id or item in poke_data.pokemon_data) and data.classification == ItemClassification.progression \
                     and ("Badge" not in item or world.options.badgesanity):

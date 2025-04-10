@@ -7,7 +7,7 @@ class TestBooksLogic(SVTestBase):
         options.Booksanity.internal_name: options.Booksanity.option_all,
     }
 
-    def test_need_weapon_for_mapping_cave_systems(self):
+    def test_can_get_mapping_cave_systems_with_weapon_and_time(self):
         self.collect_lots_of_money(0.5)
 
         location = "Read Mapping Cave Systems"
