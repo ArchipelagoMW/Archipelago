@@ -17,6 +17,7 @@ from ..data.recipe_data import RecipeSource, StarterSource, ShopSource, SkillSou
 from ..data.recipe_source import CutsceneSource, ShopTradeSource
 from ..options import Chefsanity
 from ..stardew_rule import StardewRule, True_, False_
+from ..strings.building_names import Building
 from ..strings.region_names import LogicRegion
 from ..strings.skill_names import Skill
 from ..strings.tv_channel_names import Channel
@@ -32,7 +33,7 @@ class CookingLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogi
 BuildingLogicMixin, RelationshipLogicMixin, SkillLogicMixin, CookingLogicMixin]]):
     @cached_property
     def can_cook_in_kitchen(self) -> StardewRule:
-        return self.logic.building.has_house(1) | self.logic.skill.has_level(Skill.foraging, 9)
+        return self.logic.building.has_building(Building.kitchen) | self.logic.skill.has_level(Skill.foraging, 9)
 
     # Should be cached
     def can_cook(self, recipe: CookingRecipe = None) -> StardewRule:
