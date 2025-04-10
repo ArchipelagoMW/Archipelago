@@ -456,6 +456,14 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
 
 
 def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.bosses):
+    """
+    Roll options from specified weights, usually originating from a .yaml options file.
+
+    Important note:
+    The same weights dict is shared between all slots using the same yaml (e.g. generic weights file for filler slots).
+    This means it should never be modified without making a deepcopy first.
+    """
+
     from worlds import AutoWorldRegister
 
     if "linked_options" in weights:
