@@ -65,6 +65,7 @@ class EnemiesDensity(Choice):
     option_three_quarter = 1
     option_half = 2
     option_quarter = 3
+    option_none = 4
 
 
 class EnemyScaling(Choice):

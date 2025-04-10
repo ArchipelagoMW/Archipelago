@@ -91,14 +91,13 @@ def create_regions(self):
                             if self.options.crest_shuffle:
                                 self.multiworld.spoiler.set_entrance(entrance_names[link["entrance"]],
                                                                      connect_room.name, 'both', self.player)
-                        else:
-                            if "Subregion" in region.name and self.options.overworld_shuffle:
-                                self.multiworld.spoiler.set_entrance(
-                                    entrance_names[link["entrance"]].replace("Overworld", f"Overworld {region.name}"),
-                                    connect_room.name, 'both', self.player)
-                            elif self.options.map_shuffle:
-                                self.multiworld.spoiler.set_entrance(entrance_names[link["entrance"]],
-                                                                     connect_room.name, 'both', self.player)
+                        elif "Subregion" in region.name and self.options.overworld_shuffle:
+                            self.multiworld.spoiler.set_entrance(
+                                entrance_names[link["entrance"]].replace("Overworld", f"Overworld {region.name}"),
+                                connect_room.name, 'both', self.player)
+                        elif self.options.map_shuffle:
+                            self.multiworld.spoiler.set_entrance(entrance_names[link["entrance"]],
+                                                                 connect_room.name, 'both', self.player)
 
                     if link["access"]:
                         process_rules(connection, link["access"])
@@ -121,6 +120,9 @@ non_dead_end_crest_warps = [
     'Kaidge Temple - Mobius Teleporter Script', 'Windia Kid House Basement - Mobius Teleporter',
     'Windia Old People House Basement - Mobius Teleporter Script',
 ]
+
+
+vendor_locations = ["Aquaria - Vendor", "Fireburg - Vendor", "Windia - Vendor"]
 
 
 def set_rules(self) -> None:
@@ -204,6 +206,28 @@ def set_rules(self) -> None:
     elif self.options.sky_coin_mode in ("standard", "start_with"):
         self.multiworld.get_entrance("Focus Tower 1F - Sky Door", self.player).access_rule = \
             lambda state: state.has("Sky Coin", self.player)
+
+    if self.options.enemies_density == "none":
+        for location in vendor_locations:
+            if self.options.accessibility == "full":
+                self.multiworld.get_location(location, self.player).progress_type = LocationProgressType.EXCLUDED
+            else:
+                self.multiworld.get_location(location, self.player).access_rule = lambda state: False
+
+
+def stage_set_rules(multiworld):
+    # If there's no enemies, there's no repeatable income sources
+    no_enemies_players = [player for player in multiworld.get_game_players("Final Fantasy Mystic Quest")
+                          if multiworld.worlds[player].options.enemies_density == "none"]
+    if (len([item for item in multiworld.itempool if item.excludable]) >
+        len([player for player in no_enemies_players
+             if multiworld.worlds[player].options.accessibility != "minimal"]) * 3):
+        for player in no_enemies_players:
+            for location in vendor_locations:
+                if multiworld.worlds[player].options.accessibility == "full":
+                    multiworld.get_location(location, player).progress_type = LocationProgressType.EXCLUDED
+                else:
+                    multiworld.get_location(location, player).access_rule = lambda state: False
 
 
 class FFMQLocation(Location):
