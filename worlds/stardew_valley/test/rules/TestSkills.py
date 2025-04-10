@@ -34,14 +34,14 @@ class TestSkillProgressionProgressive(SVTestBase):
             self.remove_by_name(f"{skill} Level")
 
             for level in range(1, 11):
-                location = f"Level {level} {skill}"
+                location_name = f"Level {level} {skill}"
 
-                with self.subTest(location):
+                with self.subTest(location_name):
                     if level > 1:
-                        self.assert_cannot_reach_location(location)
+                        self.assert_cannot_reach_location(location_name)
                         self.collect(f"{skill} Level")
 
-                    self.assert_can_reach_location(location)
+                    self.assert_can_reach_location(location_name)
 
             self.reset_collection_state()
 

@@ -13,7 +13,6 @@ class TestCraftsanityLogic(SVTestBase):
     }
 
     def test_can_craft_recipe(self):
-        location = "Craft Marble Brazier"
         self.collect([self.create_item("Progressive Pickaxe")] * 4)
         self.collect([self.create_item("Progressive Fishing Rod")] * 4)
         self.collect([self.create_item("Progressive Sword")] * 4)
@@ -22,17 +21,16 @@ class TestCraftsanityLogic(SVTestBase):
         self.collect([self.create_item("Combat Level")] * 10)
         self.collect([self.create_item("Fishing Level")] * 10)
         self.collect_all_the_money()
-        self.assert_cannot_reach_location(location)
+        self.assert_cannot_reach_location("Craft Marble Brazier")
 
         self.multiworld.state.collect(self.create_item("Marble Brazier Recipe"))
-        self.assert_can_reach_location(location)
+        self.assert_can_reach_location("Craft Marble Brazier")
 
     def test_can_learn_crafting_recipe(self):
-        location = "Marble Brazier Recipe"
-        self.assert_cannot_reach_location(location)
+        self.assert_cannot_reach_location("Marble Brazier Recipe")
 
         self.collect_lots_of_money()
-        self.assert_can_reach_location(location)
+        self.assert_can_reach_location("Marble Brazier Recipe")
 
     def test_can_craft_festival_recipe(self):
         recipe = all_crafting_recipes_by_name["Jack-O-Lantern"]
