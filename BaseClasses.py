@@ -76,11 +76,7 @@ class MultiWorld():
     progression_balancing: Dict[int, Options.ProgressionBalancing]
     completion_condition: Dict[int, Callable[[CollectionState], bool]]
     indirect_connections: Dict[Region, Set[Entrance]]
-    exclude_locations: Dict[int, Options.ExcludeLocations]
-    priority_locations: Dict[int, Options.PriorityLocations]
-    start_inventory: Dict[int, Options.StartInventory]
-    start_hints: Dict[int, Options.StartHints]
-    start_location_hints: Dict[int, Options.StartLocationHints]
+    start_items_remove_from_pool: dict[int, Counter]
     item_links: Dict[int, Options.ItemLinks]
 
     game: Dict[int, str]
@@ -159,7 +155,7 @@ class MultiWorld():
         self.early_items = {player: {} for player in self.player_ids}
         self.local_early_items = {player: {} for player in self.player_ids}
         self.indirect_connections = {}
-        self.start_inventory_from_pool: Dict[int, Options.StartInventoryPool] = {}
+        self.start_items_remove_from_pool = {player: Counter() for player in self.player_ids}
 
         for player in range(1, players + 1):
             def set_player_attr(attr: str, val) -> None:
@@ -238,9 +234,10 @@ class MultiWorld():
         from worlds import AutoWorld
 
         item_links = {}
+        self.item_links = {player: self.worlds[player].options.item_links for player in self.player_ids}
         replacement_prio = [False, True, None]
         for player in self.player_ids:
-            for item_link in self.worlds[player].options.item_links.value:
+            for item_link in self.item_links[player]:
                 if item_link["name"] in item_links:
                     if item_links[item_link["name"]]["game"] != self.game[player]:
                         raise Exception(f"Cannot ItemLink across games. Link: {item_link['name']}")
@@ -376,6 +373,91 @@ class MultiWorld():
                         items_to_add.append(AutoWorld.call_single(self, "create_filler", item_player))
                 self.random.shuffle(items_to_add)
                 self.itempool.extend(items_to_add[:itemcount - len(self.itempool)])
+
+    def collect_starting_inventory(self) -> None:
+        """
+        Collects the player specified starting inventory into state and stores what needs to be removed from the pool
+        later.
+        """
+        from Options import StartInventoryPool
+        for player in self.player_ids:
+            for item_name, count in self.worlds[player].options.start_inventory.value.items():
+                if isinstance(self.worlds[player].options.start_inventory, StartInventoryPool):
+                    self.start_items_remove_from_pool[player][item_name] = count
+                for _ in range(count):
+                    self.push_precollected(self.create_item(item_name, player))
+    
+            for item_name, count in getattr(
+                    self.worlds[player].options,
+                    "start_inventory_from_pool",
+                    StartInventoryPool({})
+            ).value.items():
+                self.start_items_remove_from_pool[player][item_name] = count
+                for _ in range(count):
+                    self.push_precollected(self.create_item(item_name, player))
+            for item_name, count in self.start_items_remove_from_pool[player].items():
+                # remove from_pool items also from early items handling, as starting is plenty early.
+                early = self.early_items[player].get(item_name, 0)
+                if early:
+                    self.early_items[player][item_name] = max(0, early-count)
+                    self.start_items_remove_from_pool[player][item_name] -= early
+                    remaining_count = count-early
+                    if remaining_count > 0:
+                        local_early = self.local_early_items[player].get(item_name, 0)
+                        if local_early:
+                            self.early_items[player][item_name] = max(0, local_early - remaining_count)
+                            self.start_items_remove_from_pool[player][item_name] -= local_early
+                        del local_early
+                del early
+        # filter out any items that went to 0 or negative from early items
+        self.start_items_remove_from_pool = {
+            player: Counter(
+                {
+                    item_name: count
+                    for item_name, count in self.start_items_remove_from_pool[player].items()
+                    if count > 0
+                }
+            ) for player in self.player_ids
+        }
+
+    def remove_starting_inventory_from_pool(self) -> None:
+        """
+        Removes starting inventory flagged for removal from the itempool, logging a warning for anything it can't find.
+        """
+        # remove starting inventory from pool items.
+        # Because some worlds don't actually create items during create_items this has to be as late as possible.
+        target_per_player = {
+            player: sum(target_items.values())
+            for player, target_items in self.start_items_remove_from_pool.items()
+        }
+    
+        if target_per_player:
+            new_itempool: List[Item] = []
+    
+            # Make new itempool with start_inventory_from_pool items removed
+            for item in self.itempool:
+                if self.start_items_remove_from_pool[item.player].get(item.name, 0):
+                    self.start_items_remove_from_pool[item.player][item.name] -= 1
+                else:
+                    new_itempool.append(item)
+    
+            # Create filler in place of the removed items, warn if any items couldn't be found in the multiworld itempool
+            for player, target in target_per_player.items():
+                unfound_items = {
+                    item: count for item, count in self.start_items_remove_from_pool[player].items() if count
+                }
+    
+                if unfound_items:
+                    player_name = self.get_player_name(player)
+                    logging.getLogger().warning(
+                        f"{player_name} tried to remove items from their pool that don't exist: {unfound_items}"
+                    )
+    
+                needed_items = target_per_player[player] - sum(unfound_items.values())
+                new_itempool += [self.worlds[player].create_filler() for _ in range(needed_items)]
+    
+            assert len(self.itempool) == len(new_itempool), "Item Pool amounts should not change."
+            self.itempool[:] = new_itempool
 
     def secure(self):
         self.random = ThreadBarrierProxy(secrets.SystemRandom())
