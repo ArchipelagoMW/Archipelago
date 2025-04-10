@@ -10,10 +10,10 @@ from worlds.alttp.test import LTTPTestBase
 class TestVanilla(TestBase, LTTPTestBase):
     def setUp(self):
         self.world_setup()
-        self.multiworld.glitches_required[1] = GlitchesRequired.from_any("no_glitches")
+        self.multiworld.worlds[1].options.glitches_required = GlitchesRequired.from_any("no_glitches")
         self.multiworld.worlds[1].difficulty_requirements = difficulties['normal']
-        self.multiworld.bombless_start[1].value = True
-        self.multiworld.shuffle_capacity_upgrades[1].value = 2
+        self.multiworld.worlds[1].options.bombless_start.value = True
+        self.multiworld.worlds[1].options.shuffle_capacity_upgrades.value = 2
         self.multiworld.worlds[1].er_seed = 0
         self.multiworld.worlds[1].create_regions()
         self.multiworld.worlds[1].create_items()
