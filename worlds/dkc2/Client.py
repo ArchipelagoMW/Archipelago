@@ -77,11 +77,11 @@ class DKC2SNIClient(SNIClient):
     def __init__(self):
         super().__init__()
         self.game_state = False
-        self.using_newer_client = False
         self.energy_link_enabled = False
         self.received_trap_link = False
         self.barrel_request = ""
         self.current_map = 0
+        self.barrel_label = None
 
 
     async def validate_rom(self, ctx):
@@ -91,8 +91,8 @@ class DKC2SNIClient(SNIClient):
         rom_name = await snes_read(ctx, DKC2_ROMHASH_START, ROMHASH_SIZE)
 
         if rom_name is None or setting_data is None or rom_name == bytes([0] * ROMHASH_SIZE) or rom_name[:4] != b"DKC2":
-            if "barrel" in ctx.command_processor.commands:
-                ctx.command_processor.commands.pop("barrel")
+            if "request" in ctx.command_processor.commands:
+                ctx.command_processor.commands.pop("request")
             return False
 
         ctx.game = self.game
@@ -107,8 +107,8 @@ class DKC2SNIClient(SNIClient):
         if energy_link and "EnergyLink" not in ctx.tags:
             ctx.tags.add("EnergyLink")
             update_tags = True
-            if "barrel" not in ctx.command_processor.commands:
-                ctx.command_processor.commands["barrel"] = cmd_barrel
+            if "request" not in ctx.command_processor.commands:
+                ctx.command_processor.commands["request"] = cmd_request
 
         trap_link = setting_data[0x1A]
         if trap_link and "TrapLink" not in ctx.tags:
@@ -289,6 +289,9 @@ class DKC2SNIClient(SNIClient):
                 await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                 ctx.finished_game = True
                 return
+            
+        # Add a label that shows how many Barrels are left
+        await self.handle_barrel_label(ctx)
 
         # Send current map to poptracker
         reached_levels = await snes_read(ctx, DKC2_TRACKED_LEVELS, 0x20)
@@ -561,6 +564,21 @@ class DKC2SNIClient(SNIClient):
 
         await snes_flush_writes(ctx)
 
+    async def handle_barrel_label(self, ctx):
+        try:
+            from kvui import MDLabel as Label
+        except ModuleNotFoundError:
+            from kvui import Label
+        from SNIClient import snes_read
+
+        if not self.barrel_label:
+            self.barrel_label = Label(text=f"", size_hint_x=None, width=120, halign="center")
+            ctx.ui.connect_layout.add_widget(self.barrel_label)
+
+        barrels = await snes_read(ctx, DKC2_SRAM + 0x48, 0x02)
+        if barrels is not None:
+            barrel_count = int.from_bytes(barrels, "little")
+            self.barrel_label.text = f"Barrels: {barrel_count}"
 
     async def handle_trap_link(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
@@ -630,7 +648,6 @@ class DKC2SNIClient(SNIClient):
 
         if cmd == "Connected":
             self.slot_data = args.get("slot_data", None)
-            self.using_newer_client = True
             self.barrel_request = ""
             if self.slot_data["energy_link"]:
                 ctx.set_notify(f"EnergyLink{ctx.team}")
@@ -687,8 +704,7 @@ class DKC2SNIClient(SNIClient):
                 
                 self.received_trap_link = NetworkItem(trap_name_to_value[trap_name], None, None)
 
-
-def cmd_barrel(self):
+def cmd_request(self):
     """
     Request a DK Barrel from the banana pool (EnergyLink).
     """
@@ -697,9 +713,6 @@ def cmd_barrel(self):
     if (not self.ctx.server) or self.ctx.server.socket.closed or not self.ctx.client_handler.game_state:
         logger.info(f"Must be connected to server and in game.")
     else:
-        if self.ctx.client_handler.using_newer_client is False:
-            logger.info(f"This function is only enabled for Archipelago 0.6.0.")
-            return
         if self.ctx.client_handler.barrel_request != "":
             logger.info(f"You already have a DK Barrel in queue.")
             return
