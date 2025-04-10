@@ -56,5 +56,6 @@
 * Indent with 4 spaces.
 * Indent `case` inside `switch ` with 4 spaces.
 * Prefer double quotation marks (`"`).
+* Semicolons are required after every statement.
 * Use [IIFEs](https://developer.mozilla.org/docs/Glossary/IIFE) to avoid polluting global scope.
 * Use addEventListener.
