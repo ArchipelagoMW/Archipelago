@@ -3,4 +3,7 @@ mpyq>=0.2.5
 portpicker>=1.5.2
 aiohttp>=3.8.4
 loguru>=0.7.0
-protobuf==3.20.3
+# This was commented out because gRPC requires a newer version of protobuf
+# gRPC is used for the SNI connector
+# Don't let this get merged until a solution is found
+# protobuf==3.20.3
