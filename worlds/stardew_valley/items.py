@@ -69,7 +69,7 @@ class Group(enum.Enum):
     TRAP = enum.auto()
     BONUS = enum.auto()
     MAXIMUM_ONE = enum.auto()
-    EXACTLY_TWO = enum.auto()
+    AT_LEAST_TWO = enum.auto()
     DEPRECATED = enum.auto()
     RESOURCE_PACK_USEFUL = enum.auto()
     SPECIAL_ORDER_BOARD = enum.auto()
@@ -752,10 +752,10 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
 
     while available_item_slots > 0:
         resource_pack = random.choice(all_filler_packs)
-        exactly_2 = Group.EXACTLY_TWO in resource_pack.groups
+        exactly_2 = Group.AT_LEAST_TWO in resource_pack.groups
         while exactly_2 and available_item_slots == 1:
             resource_pack = random.choice(all_filler_packs)
-            exactly_2 = Group.EXACTLY_TWO in resource_pack.groups
+            exactly_2 = Group.AT_LEAST_TWO in resource_pack.groups
         classification = ItemClassification.useful if resource_pack.classification == ItemClassification.progression else resource_pack.classification
         items.append(item_factory(resource_pack, classification))
         available_item_slots -= 1
@@ -802,7 +802,7 @@ def generate_filler_choice_pool(options: StardewValleyOptions) -> list[str]:
 
 
 def remove_limited_amount_packs(packs):
-    return [pack for pack in packs if Group.MAXIMUM_ONE not in pack.groups and Group.EXACTLY_TWO not in pack.groups]
+    return [pack for pack in packs if Group.MAXIMUM_ONE not in pack.groups and Group.AT_LEAST_TWO not in pack.groups]
 
 
 def get_all_filler_items(include_traps: bool, exclude_ginger_island: bool) -> List[ItemData]:
