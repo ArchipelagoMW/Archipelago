@@ -54,5 +54,5 @@
 
 * Indent with 4 spaces.
 * Indent `case` inside `switch ` with 4 spaces.
-* Use single quotes.
+* Prefer double quotation marks (`"`).
 * Semicolons are required after every statement.
