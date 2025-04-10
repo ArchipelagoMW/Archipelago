@@ -1,4 +1,3 @@
-<FLAGON>(199)
 <MENUOFF>
 <LUIGISTOP2>
 <FULLSCREEN>
@@ -8,7 +7,36 @@
 -------------------------
 <CASE>"Hint"
 <WINDOW>(0)<COLOR>(9)
-{HintText}
+<RAMDOMJMP>"{HintType}"
+-------------------------
+<CASE>"SpecificHint"
+<SPEAK>(5)
+<ANYKEY>
+<SAY><COLOR>(0)Can be found at:
+<ANYKEY>
+<SPEAK>(6)
+<ANYKEY>
+<CLOSEWINDOW>(0)
+<RAMDOMJMP>"BadEnd"
+-------------------------
+<CASE>"VagueHint"
+<SPEAK>(5)
+<ANYKEY>
+<SAY><COLOR>(0)Is somewhere in:
+<ANYKEY>
+<SPEAK>(6)
+<ANYKEY>
+<CLOSEWINDOW>(0)
+<RAMDOMJMP>"BadEnd"
+-------------------------
+<CASE>"DisabledHint"
+<SPEAK>(7)
+<ANYKEY>
+<CLOSEWINDOW>(0)
+<RAMDOMJMP>"BadEnd"
+-------------------------
+<CASE>"JokeHint"
+<SPEAK>(8)
 <ANYKEY>
 <CLOSEWINDOW>(0)
 <RAMDOMJMP>"BadEnd"
@@ -78,7 +106,7 @@
 ------------
 <CASE>"MissingItems"
 <WINDOW>(0)<COLOR>(9)
-<SAY>Come back again once you've collected\n {MarioCount} <COLOR>(2)Mario<Color>(0) items
+<SPEAK>(4)
 <ANYKEY>
 <CLOSEWINDOW>(0)
 <BGM>(7)
@@ -88,5 +116,4 @@
 <NORMALSCREEN>
 <LUIGIFREE2>
 <MENUON>
-<FLAGOFF>(199)
 <END>
