@@ -1,18 +1,15 @@
 import typing
-from typing import Union
 
 from .base_logic import BaseLogicMixin, BaseLogic
-from .building_logic import BuildingLogicMixin
-from .has_logic import HasLogicMixin
 from ..stardew_rule import StardewRule
 from ..strings.building_names import Building
 from ..strings.forageable_names import Forageable
 from ..strings.machine_names import Machine
 
 if typing.TYPE_CHECKING:
-    from .source_logic import SourceLogicMixin
-
-    assert SourceLogicMixin
+    from .logic import StardewLogic
+else:
+    StardewLogic = object
 
 
 class AnimalLogicMixin(BaseLogicMixin):
@@ -21,7 +18,7 @@ class AnimalLogicMixin(BaseLogicMixin):
         self.animal = AnimalLogic(*args, **kwargs)
 
 
-class AnimalLogic(BaseLogic[Union[AnimalLogicMixin, HasLogicMixin, BuildingLogicMixin, 'SourceLogicMixin']]):
+class AnimalLogic(BaseLogic[StardewLogic]):
 
     def can_incubate(self, egg_item: str) -> StardewRule:
         return self.logic.building.has_building(Building.coop) & self.logic.has(egg_item)
