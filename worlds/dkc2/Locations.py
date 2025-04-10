@@ -679,6 +679,7 @@ location_groups = {
     "Black Ice Battle": {location for location in all_locations.keys() if "Black Ice Battle" in location},
     "Klobber Karnage": {location for location in all_locations.keys() if "Klobber Karnage" in location},
     "Fiery Furnace": {location for location in all_locations.keys() if "Fiery Furnace" in location},
+    "Animal Antics": {location for location in all_locations.keys() if "Animal Antics" in location},
     "Swanky": {location for location in all_locations.keys() if "Swanky" in location},
 }
 
