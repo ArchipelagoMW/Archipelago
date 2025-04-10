@@ -17,22 +17,11 @@ class Logic(Choice):
     display_name = "Logic"
 
 
-class BrownBoxes(Choice):
-    """Include the 201 brown box locations from the original game. Brown Boxes are all the boxes that contained a
-    consumable in the original game. If shuffle is chosen, the consumables contained will be shuffled but the brown
-    boxes will not be Archipelago location checks."""
-    option_exclude = 0
-    option_include = 1
-    option_shuffle = 2
-    default = 1
-    display_name = "Brown Boxes"
-
-
 class SkyCoinMode(Choice):
     """Configure how the Sky Coin is acquired. With standard, the Sky Coin will be placed randomly. With Start With, the
     Sky Coin will be in your inventory at the start of the game. With Save The Crystals, the Sky Coin will be acquired
     once you save all 4 crystals. With Shattered Sky Coin, the Sky Coin is split in 40 fragments; you can enter Doom
-    Castle once the required amount is found. Shattered Sky Coin will force brown box locations to be included."""
+    Castle once the required amount is found."""
     option_standard = 0
     option_start_with = 1
     option_save_the_crystals = 2
@@ -76,7 +65,6 @@ class EnemiesDensity(Choice):
     option_three_quarter = 1
     option_half = 2
     option_quarter = 3
-    option_none = 4
 
 
 class EnemyScaling(Choice):
@@ -352,7 +340,6 @@ class HintMode(Choice):
 class FFMQOptions(PerGameCommonOptions):
     accessibility: ItemsAccessibility
     logic: Logic
-    brown_boxes: BrownBoxes
     sky_coin_mode: SkyCoinMode
     shattered_sky_coin_quantity: ShatteredSkyCoinQuantity
     starting_weapon: StartingWeapon

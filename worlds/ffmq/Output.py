@@ -48,7 +48,7 @@ def generate_output(self, output_directory):
     option_writes = {
         "enemies_density": cc(self.options.enemies_density),
         "chests_shuffle": "Include",
-        "shuffle_boxes_content": self.options.brown_boxes == "shuffle",
+        "shuffle_boxes_content": False,
         "npcs_shuffle": "Include",
         "battlefields_shuffle": "Include",
         "logic_options": cc(self.options.logic),

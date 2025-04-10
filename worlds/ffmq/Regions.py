@@ -67,8 +67,8 @@ def create_regions(self):
             location_table else None, object["type"], object["access"],
             self.create_item(yaml_item(object["on_trigger"][0])) if object["type"] == "Trigger" else None) for object in
             room["game_objects"] if "Hero Chest" not in object["name"] and object["type"] not in ("BattlefieldGp",
-            "BattlefieldXp") and (object["type"] != "Box" or self.options.brown_boxes == "include") and
-            not (object["name"] == "Kaeli Companion" and not object["on_trigger"])], room["links"]))
+            "BattlefieldXp") and not (object["name"] == "Kaeli Companion" and not object["on_trigger"])],
+            room["links"]))
 
     dark_king_room = self.multiworld.get_region("Doom Castle Dark King Room", self.player)
     dark_king = FFMQLocation(self.player, "Dark King", None, "Trigger", [])
@@ -87,18 +87,19 @@ def create_regions(self):
                     connection = Entrance(self.player, entrance_names[link["entrance"]] if "entrance" in link and
                                           link["entrance"] != -1 else f"{region.name} to {connect_room.name}", region)
                     if "entrance" in link and link["entrance"] != -1:
-                        spoiler = False
                         if link["entrance"] in crest_warps:
                             if self.options.crest_shuffle:
-                                spoiler = True
-                        elif "Subregion" in region.name and self.options.overworld_shuffle:
-                            spoiler = True
-                        elif "Subregion" not in region.name and self.options.map_shuffle != "none":
-                            spoiler = True
+                                self.multiworld.spoiler.set_entrance(entrance_names[link["entrance"]],
+                                                                     connect_room.name, 'both', self.player)
+                        else:
+                            if "Subregion" in region.name and self.options.overworld_shuffle:
+                                self.multiworld.spoiler.set_entrance(
+                                    entrance_names[link["entrance"]].replace("Overworld", f"Overworld {region.name}"),
+                                    connect_room.name, 'both', self.player)
+                            elif self.options.map_shuffle:
+                                self.multiworld.spoiler.set_entrance(entrance_names[link["entrance"]],
+                                                                     connect_room.name, 'both', self.player)
 
-                        if spoiler:
-                            self.multiworld.spoiler.set_entrance(entrance_names[link["entrance"]], connect_room.name,
-                                                                 'both', self.player)
                     if link["access"]:
                         process_rules(connection, link["access"])
                     region.exits.append(connection)
@@ -122,9 +123,6 @@ non_dead_end_crest_warps = [
 ]
 
 
-vendor_locations = ["Aquaria - Vendor", "Fireburg - Vendor", "Windia - Vendor"]
-
-
 def set_rules(self) -> None:
     self.multiworld.completion_condition[self.player] = lambda state: state.has("Dark King", self.player)
 
@@ -136,7 +134,10 @@ def set_rules(self) -> None:
     add_rule(self.multiworld.get_location("Dullahan", self.player), hard_boss_logic)
 
     if self.options.map_shuffle:
-        for boss in ("Freezer Crab", "Ice Golem", "Jinn", "Medusa", "Dualhead Hydra"):
+        for boss in ("SnowCrab", "Ice Golem", "Jinn", "Medusa", "Dualhead Hydra"):
+            if boss == "SnowCrab":
+                if "SnowCrab" not in self.multiworld.regions.location_cache[self.player]:
+                    boss = "Freezer Crab"
             loc = self.multiworld.get_location(boss, self.player)
             checked_regions = {loc.parent_region}
 
@@ -158,7 +159,7 @@ def set_rules(self) -> None:
                       ["MagicMirror"])
         process_rules(self.multiworld.get_entrance("Overworld - Volcano", self.player),
                       ["Mask"])
-        if self.options.map_shuffle in ("none", "overworld"):
+        if self.options.map_shuffle:
             process_rules(self.multiworld.get_entrance("Overworld - Bone Dungeon", self.player),
                           ["Bomb"])
             process_rules(self.multiworld.get_entrance("Overworld - Wintry Cave", self.player),
@@ -203,27 +204,6 @@ def set_rules(self) -> None:
     elif self.options.sky_coin_mode in ("standard", "start_with"):
         self.multiworld.get_entrance("Focus Tower 1F - Sky Door", self.player).access_rule = \
             lambda state: state.has("Sky Coin", self.player)
-
-
-def stage_set_rules(multiworld):
-    # If there's no enemies, there's no repeatable income sources
-    no_enemies_players = [player for player in multiworld.get_game_players("Final Fantasy Mystic Quest")
-                          if multiworld.worlds[player].options.enemies_density == "none"]
-    if (
-        len([item for item in multiworld.itempool if item.excludable]) >
-        len([player
-             for player in no_enemies_players
-             if multiworld.worlds[player].options.accessibility != "minimal"]) * 3
-    ):
-        for player in no_enemies_players:
-            for location in vendor_locations:
-                if multiworld.worlds[player].options.accessibility == "full":
-                    multiworld.get_location(location, player).progress_type = LocationProgressType.EXCLUDED
-                else:
-                    multiworld.get_location(location, player).access_rule = lambda state: False
-    else:
-        raise Exception(f"Not enough filler/trap items for FFMQ players with full and items accessibility. "
-                        f"Add more items or change the 'Enemies Density' option to something besides 'none'")
 
 
 class FFMQLocation(Location):
