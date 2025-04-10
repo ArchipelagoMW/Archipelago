@@ -3,9 +3,7 @@ import hashlib
 import os
 import io
 import struct
-import random
 import yaml
-from pkgutil import get_data
 
 from .iso_helper.Update_GameUSA import update_game_usa
 from . import data
@@ -13,7 +11,7 @@ from .Hints import PORTRAIT_HINTS
 from .JMP_Info_File import JMPInfoFile
 from .Patching import *
 from .Helper_Functions import StringByteFunction as sbf
-from .Events import *
+from .iso_helper.Events import *
 
 from gclib import fs_helpers as fs
 from gclib.gcm import GCM
@@ -54,7 +52,8 @@ class LuigisMansionRandomizer:
         self.dol = DOL()
 
         # Change game ID so save files are different
-        magic_seed = str(self.output_data["Seed"])
+        self.seed = self.output_data["Seed"]
+        magic_seed = str(self.seed)
         bin_data = self.gcm.read_file_data("sys/boot.bin")
         bin_data.seek(0x01)
         bin_data.write(sbf.string_to_bytes(magic_seed, len(magic_seed)))
@@ -130,8 +129,7 @@ class LuigisMansionRandomizer:
     # Get an ARC / RARC / SZP file from within the ISO / ROM
     def get_arc(self, arc_path):
         arc_path = arc_path.replace("\\", "/")
-        data = self.gcm.read_file_data(arc_path)
-        arc = RARC(data)  # Automatically decompresses Yay0
+        arc = RARC(self.gcm.read_file_data(arc_path))  # Automatically decompresses Yay0
         arc.read()
         return arc
 
@@ -199,15 +197,17 @@ class LuigisMansionRandomizer:
         # Get Output data required information
         bool_boo_checks: bool = True if self.output_data["Options"]["boo_gates"] == 1 else False
         bool_boo_rando_on: bool = True if self.output_data["Options"]["boosanity"] == 1 else False
-        required_mario_item_count: int = int(self.output_data["Options"]["mario_items"])
+        req_mario_count: str = str(self.output_data["Options"]["mario_items"])
         bool_randomize_music: bool = True if self.output_data["Options"]["random_music"] == 1 else False
-        bool_portrait_hints: bool = True if self.output_data["Options"]["portrait_hints"] == 1 else False
+        # bool_portrait_hints: bool = True if self.output_data["Options"]["portrait_hints"] == 1 else False
         washroom_boo_count: int = int(self.output_data["Options"]["washroom_boo_count"])
         balcony_boo_count: int = int(self.output_data["Options"]["balcony_boo_count"])
         final_boo_count: int = int(self.output_data["Options"]["final_boo_count"])
         luigi_max_health: int = int(self.output_data["Options"]["luigi_max_health"])
+        hint_dist: int = int(self.output_data["Options"]["hint_distribution"])
+        madam_hint_dict: dict[str, str] = self.output_data["Hints"]["Madame Clairvoya"] if (
+            self.output_data["Hints"]["Madame Clairvoya"]) else None
 
-        random.seed(self.output_data["Seed"])
         self.update_dol_offsets(bool_boo_rando_on)
 
         # Update all custom events
@@ -324,7 +324,7 @@ class LuigisMansionRandomizer:
                 self.update_custom_event(event_no, False, lines)
 
         # Update Toad events with hints
-        in_game_hint_events = ["04", "17", "32", "44", "63", "92", "93", "94"]
+        """in_game_hint_events = ["04", "17", "32", "44", "63", "92", "93", "94"]
         for event_no in in_game_hint_events:
             hintfo: str = ""
             match event_no:
@@ -358,27 +358,12 @@ class LuigisMansionRandomizer:
                   info_files.name == "message78.csv").data = portrait_csv
             portrait_scan_event.save_changes()
             self.gcm.changed_files["files/Event/event78.szp"] = (
-                Yay0.compress(portrait_scan_event.data))
+                Yay0.compress(portrait_scan_event.data))"""
 
-        # Update Madame Clairvoya's event to check mario items.
-        lines = get_data(__name__, "data/custom_events/event36.txt").decode('utf-8')
-        lines = lines.replace("{MarioCount}", str(required_mario_item_count))
-        lines = lines.replace("{HintText}", str(self.output_data["Hints"]["Madame Clairvoya"]))
-
-        cases_to_replace = ["{CaseZero}", "{CaseOne}", "{CaseTwo}", "{CaseThree}", "{CaseFour}", "{CaseFive}"]
-        str_good_end = "GoodEnd"
-        str_bad_end = "MissingItems"
-
-        for i in range(0, 6):
-            if i >= required_mario_item_count:
-                lines = lines.replace(cases_to_replace[i], str_good_end)
-            else:
-                lines = lines.replace(cases_to_replace[i], str_bad_end)
-
-        self.update_custom_event("36", False, lines, replace_old_csv=True)
+        self.gcm = randomize_clairvoya(self.gcm, req_mario_count, hint_dist, madam_hint_dict, self.seed)
 
         if bool_randomize_music:
-            self.gcm = randomize_music(self.gcm)
+            self.gcm = randomize_music(self.gcm, self.seed)
 
         self.update_maptwo_jmp_tables()
 
