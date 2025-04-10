@@ -835,4 +835,5 @@ item_name_groups[ItemGroupNames.UNRELEASED_ITEMS] = [
     item_names.NIGHT_HAWK,
     item_names.NIGHT_WOLF,
     item_names.EMPERORS_SHADOW_SOVEREIGN_TACTICAL_MISSILES,
+    item_names.ASCENDANT_ARCHON_MERGE,
 ]
