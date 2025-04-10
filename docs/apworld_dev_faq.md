@@ -79,8 +79,8 @@ python objects. This means that if one of your custom class instances ends up in
 to load that custom class to decompress the data, which can fail either because the custom class is unknown (because it cannot load your world module)
 or the class it's attempting to import to decompress is deemed unsafe.
 
-Common situations where this can happen is:
-* Using Option instances directly in slot_data ex. `using options.option_name` instead of `options.option_name.value`,
-  also consider using `options.as_dict("option_name", "option_two")` as a helper
-* Using enums as Location/Item names in the datapackage, when building out location_name_to_id
-  or item_name_to_id make sure to use the underlying str: id mapping
+Common situations where this can happen include:
+* Using Option instances directly in slot_data. Ex: using `options.option_name` instead of `options.option_name.value`.
+  Also, consider using the `options.as_dict("option_name", "option_two")` helper.
+* Using enums as Location/Item names in the datapackage. When building out `location_name_to_id`
+  and `item_name_to_id`, make sure the names you are loading in are actually strings and not your enum class.
