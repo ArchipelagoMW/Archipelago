@@ -83,4 +83,4 @@ Common situations where this can happen include:
 * Using Option instances directly in slot_data. Ex: using `options.option_name` instead of `options.option_name.value`.
   Also, consider using the `options.as_dict("option_name", "option_two")` helper.
 * Using enums as Location/Item names in the datapackage. When building out `location_name_to_id`
-  and `item_name_to_id`, make sure the names you are loading in are actually strings and not your enum class.
+  and `item_name_to_id`, make sure that you are not using your enum class for either the names or ids in these mappings.
