@@ -9,8 +9,8 @@ from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .season_logic import SeasonLogicMixin
 from .time_logic import TimeLogicMixin
+from ..content.vanilla.qi_board import qi_board_content_pack
 from ..data.shop import ShopSource
-from ..options import SpecialOrderLocations
 from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_, true_
 from ..strings.currency_names import Currency
 from ..strings.region_names import Region, LogicRegion
@@ -97,7 +97,7 @@ GrindLogicMixin, ShippingLogicMixin]]):
         if currency == Currency.qi_coin:
             return self.logic.region.can_reach(Region.casino) & self.logic.time.has_lived_months(amount // 1000)
         if currency == Currency.qi_gem:
-            if self.options.special_order_locations & SpecialOrderLocations.value_qi:
+            if self.content.is_enabled(qi_board_content_pack):
                 number_rewards = min(len(qi_gem_rewards), max(1, (amount // 10)))
                 return self.logic.received_n(*qi_gem_rewards, count=number_rewards)
             number_rewards = 2

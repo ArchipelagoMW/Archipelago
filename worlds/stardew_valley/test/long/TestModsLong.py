@@ -55,13 +55,13 @@ class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
             with self.solo_world_sub_test(f"Goal: {goal}, {option.internal_name}: {value}", world_options, world_caching=False) as (multiworld, _):
                 self.assert_basic_checks(multiworld)
 
-    @unittest.skip
+    # @unittest.skip
     def test_troubleshoot_option(self):
         seed = get_seed(78709133382876990000)
 
         world_options = {
-            options.EntranceRandomization: options.EntranceRandomization.option_buildings,
-            options.Mods: ModNames.sve
+            options.Mods: ModNames.jasper,
+            options.Friendsanity: options.Friendsanity.option_all
         }
 
         with self.solo_world_sub_test(world_options=world_options, seed=seed, world_caching=False) as (multiworld, _):
