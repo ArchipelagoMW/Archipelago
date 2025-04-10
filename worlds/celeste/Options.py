@@ -29,11 +29,15 @@ class GoalArea(Choice):
     What Area must be cleared to gain access to the Epilogue and complete the game
     """
     display_name = "Goal Area"
-    option_Summit_A = 0
-    option_Core_A = 3
-    option_Empty_Space = 6
-    option_Farewell = 7
-    option_Farewell_Golden = 8
+    option_the_summit_a = 0
+    option_the_summit_b = 1
+    option_the_summit_c = 2
+    option_core_a = 3
+    option_core_b = 4
+    option_core_c = 5
+    option_empty_space = 6
+    option_farewell = 7
+    option_farewell_golden = 8
     default = 0
 
 class LockGoalArea(DefaultOnToggle):

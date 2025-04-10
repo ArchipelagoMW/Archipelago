@@ -148,14 +148,22 @@ def create_regions_and_locations(world):
 
             if room.checkpoint != None:
                 checkpoint_rule = lambda state: True
-                if room.checkpoint != "Start":
+                if room.checkpoint == "Start":
+                    if level.name == world.goal_area and world.options.lock_goal_area:
+                        world.goal_start_region: str = room.checkpoint_region
+                    elif level.name == "8a":
+                        world.epilogue_start_region: str = room.checkpoint_region
+                    else:
+                        menu_region.add_exits([room.checkpoint_region], {room.checkpoint_region: checkpoint_rule})
+                else:
                     checkpoint_location_name = level.display_name + " - " + room.checkpoint
                     world.active_checkpoint_names.append(checkpoint_location_name)
                     checkpoint_rule = lambda state, checkpoint_location_name=checkpoint_location_name: state.has(checkpoint_location_name, world.player)
                     room_region.add_locations({
                         checkpoint_location_name: world.location_name_to_id[checkpoint_location_name]
                     }, CelesteLocation)
-                menu_region.add_exits([room.checkpoint_region], {room.checkpoint_region: checkpoint_rule})
+
+                    menu_region.add_exits([room.checkpoint_region], {room.checkpoint_region: checkpoint_rule})
 
             if world.options.roomsanity:
                 room_location_name = room.display_name

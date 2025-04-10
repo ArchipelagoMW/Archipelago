@@ -5,6 +5,44 @@ from enum import IntEnum
 from BaseClasses import CollectionState
 
 
+goal_area_option_to_name: dict[int, str] = {
+    0: "7a",
+    1: "7b",
+    2: "7c",
+    3: "9a",
+    4: "9b",
+    5: "9c",
+    6: "10a",
+    7: "10b",
+    8: "10c",
+}
+
+
+goal_area_option_to_display_name: dict[int, str] = {
+    0: "The Summit A",
+    1: "The Summit B",
+    2: "The Summit C",
+    3: "Core A",
+    4: "Core B",
+    5: "Core C",
+    6: "Farewell",
+    7: "Farewell",
+    8: "Farewell",
+}
+
+goal_area_to_location_name: dict[str, str] = {
+    "7a": "The Summit A - Level Clear",
+    "7b": "The Summit B - Level Clear",
+    "7c": "The Summit C - Level Clear",
+    "9a": "Core A - Level Clear",
+    "9b": "Core B - Level Clear",
+    "9c": "Core C - Level Clear",
+    "10a": "Farewell - Crystal Heart",
+    "10b": "Farewell - Level Clear",
+    "10c": "Farewell - Golden Strawberry",
+}
+
+
 class LocationType(IntEnum):
     strawberry = 0
     golden_strawberry = 1

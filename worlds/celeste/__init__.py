@@ -9,7 +9,7 @@ from .Items import CelesteItem, generate_item_table, generate_item_data_table, g
 from .Locations import CelesteLocation, location_data_table, generate_location_groups, checkpoint_location_data_table, location_id_offsets
 from .Names import ItemName, LocationName
 from .Options import CelesteOptions, celeste_option_groups, resolve_options
-from .Levels import Level, LocationType, load_logic_data
+from .Levels import Level, LocationType, load_logic_data, goal_area_option_to_name, goal_area_option_to_display_name, goal_area_to_location_name
 
 
 class CelesteWebWorld(WebWorld):
@@ -78,6 +78,8 @@ class CelesteWorld(World):
 
         resolve_options(self)
 
+        self.goal_area: str = goal_area_option_to_name[self.options.goal_area.value]
+
         self.active_levels = {"0a", "1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a"}
         if self.options.include_core:
             self.active_levels.add("9a")
@@ -92,6 +94,13 @@ class CelesteWorld(World):
             self.active_levels.update({"1c", "2c", "3c", "4c", "5c", "6c", "7c"})
             if self.options.include_core:
                 self.active_levels.add("9c")
+
+        self.active_levels.add(self.goal_area)
+        if self.goal_area == "9c":
+            self.active_levels.add("9b")
+            self.active_levels.add("9a")
+        elif self.goal_area == "9b":
+            self.active_levels.add("9a")
 
         self.active_items = set()
         for level in self.active_levels:
@@ -119,14 +128,31 @@ class CelesteWorld(World):
 
         location_count: int = len(self.get_locations())
 
-        if self.options.checkpointsanity:
-            item_pool += [self.create_item(item_name) for item_name in self.active_checkpoint_names]
-        else:
-            for item_name in self.active_checkpoint_names:
+        # Goal Items
+        goal_item_loc: Location = self.multiworld.get_location(goal_area_to_location_name[self.goal_area], self.player)
+        goal_item_loc.place_locked_item(self.create_item(ItemName.house_keys))
+        location_count -= 1
+
+        epilogue_region: Region = self.multiworld.get_region(self.epilogue_start_region, self.player)
+        epilogue_region.add_locations({ItemName.victory: None }, CelesteLocation)
+        victory_loc: Location = self.multiworld.get_location(ItemName.victory, self.player)
+        victory_loc.place_locked_item(self.create_item(ItemName.victory))
+
+        # Checkpoints
+        for item_name in self.active_checkpoint_names:
+            if self.options.checkpointsanity:
+                if not self.options.goal_area_checkpointsanity and goal_area_option_to_display_name[self.options.goal_area] in item_name:
+                    checkpoint_loc: Location = self.multiworld.get_location(item_name, self.player)
+                    checkpoint_loc.place_locked_item(self.create_item(item_name))
+                    location_count -= 1
+                else:
+                    item_pool.append(self.create_item(item_name))
+            else:
                 checkpoint_loc: Location = self.multiworld.get_location(item_name, self.player)
                 checkpoint_loc.place_locked_item(self.create_item(item_name))
                 location_count -= 1
 
+        # Keys
         if self.options.keysanity:
             item_pool += [self.create_item(item_name) for item_name in self.active_key_names]
         else:
@@ -135,6 +161,7 @@ class CelesteWorld(World):
                 key_loc.place_locked_item(self.create_item(item_name))
                 location_count -= 1
 
+        # Summit Gems
         if self.options.gemsanity:
             item_pool += [self.create_item(item_name) for item_name in self.active_gem_names]
         else:
@@ -143,18 +170,28 @@ class CelesteWorld(World):
                 gem_loc.place_locked_item(self.create_item(item_name))
                 location_count -= 1
 
+        # Clutter Events
         for item_name in self.active_clutter_names:
             clutter_loc: Location = self.multiworld.get_location(item_name, self.player)
             clutter_loc.place_locked_item(self.create_item(item_name))
             location_count -= 1
 
+        # Interactables
         item_pool += [self.create_item(item_name) for item_name in sorted(self.active_items)]
 
+        # Strawberries
         real_total_strawberries: int = min(self.options.total_strawberries.value, location_count - len(item_pool))
         self.strawberries_required = int(real_total_strawberries * (self.options.strawberries_required_percentage / 100))
 
+        menu_region = self.multiworld.get_region("Menu", self.player)
+        if getattr(self, "goal_start_region", None):
+            menu_region.add_exits([self.goal_start_region], {self.goal_start_region: lambda state: state.has(ItemName.strawberry, self.player, self.strawberries_required)})
+
+        menu_region.add_exits([self.epilogue_start_region], {self.epilogue_start_region: lambda state: (state.has(ItemName.strawberry, self.player, self.strawberries_required) and state.has(ItemName.house_keys, self.player))})
+
         item_pool += [self.create_item(ItemName.strawberry) for _ in range(self.strawberries_required)]
 
+        # Filler and Traps
         non_required_strawberries = (real_total_strawberries - self.strawberries_required)
         replacement_filler_count = math.floor(non_required_strawberries * (self.options.junk_fill_percentage.value / 100.0))
         remaining_extra_strawberries = non_required_strawberries - replacement_filler_count
@@ -194,8 +231,7 @@ class CelesteWorld(World):
 
 
     def set_rules(self) -> None:
-        from .Rules import set_rules
-        set_rules(self)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.victory, self.player)
 
     #def generate_output(self, output_directory: str):
     #    visualize_regions(self.multiworld.get_region("Menu", self.player), f"Player{self.player}.puml", show_entrance_names=False,
@@ -207,6 +243,10 @@ class CelesteWorld(World):
             "death_link": self.options.death_link.value,
             "death_link_amnesty": self.options.death_link_amnesty.value,
             "trap_link": self.options.trap_link.value,
+
+            "active_levels": self.active_levels,
+            "goal_area": self.goal_area,
+            "lock_goal_area": self.options.lock_goal_area,
             "strawberries_required": self.strawberries_required,
 
             "checkpointsanity": self.options.checkpointsanity.value,
@@ -229,8 +269,6 @@ class CelesteWorld(World):
             "madeline_two_dash_hair_color": self.madeline_two_dash_hair_color,
             "madeline_no_dash_hair_color": self.madeline_no_dash_hair_color,
             "madeline_feather_hair_color": self.madeline_feather_hair_color,
-
-            "active_levels": self.active_levels
         }
 
     def output_active_traps(self) -> dict[int, int]:

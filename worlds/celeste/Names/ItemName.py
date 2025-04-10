@@ -2,6 +2,10 @@
 strawberry = "Strawberry"
 raspberry = "Raspberry"
 
+# Goal Items
+house_keys = "Granny's House Keys"
+victory = "Victory"
+
 # Traps
 bald_trap        = "Bald Trap"
 literature_trap  = "Literature Trap"

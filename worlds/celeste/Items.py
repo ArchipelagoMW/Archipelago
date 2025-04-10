@@ -67,6 +67,10 @@ collectable_item_data_table: dict[str, CelesteItemData] = {
     ItemName.raspberry:  CelesteItemData(celeste_base_id + 0x1, ItemClassification.filler),
 }
 
+goal_item_data_table: dict[str, CelesteItemData] = {
+    ItemName.house_keys: CelesteItemData(celeste_base_id + 0x10, ItemClassification.progression_skip_balancing),
+}
+
 trap_item_data_table: dict[str, CelesteItemData] = {
     ItemName.bald_trap:        CelesteItemData(celeste_base_id + 0x20, ItemClassification.trap),
     ItemName.literature_trap:  CelesteItemData(celeste_base_id + 0x21, ItemClassification.trap),
@@ -225,6 +229,7 @@ def add_gem_to_table(id: int, name: str):
 
 def generate_item_data_table() -> dict[int, CelesteItemData]:
     return {**collectable_item_data_table,
+            **goal_item_data_table,
             **trap_item_data_table,
             **checkpoint_item_data_table,
             **key_item_data_table,
