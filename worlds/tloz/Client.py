@@ -330,6 +330,7 @@ class TLOZClient(BizHawkClient):
                 write_list.append((Rom.partial_hearts, [0xFF], self.wram))
                 write_list.append((Rom.heart_containers, [(current_container_count << 4) | current_container_count], self.wram))
             else:
+                current_hearts_count = min(current_hearts_count + 3, 15)
                 write_list.append((Rom.heart_containers, [(current_container_count << 4) | current_hearts_count], self.wram))
         elif item_name == "Clock":
             write_list.append((Rom.clock, [1], self.wram))
