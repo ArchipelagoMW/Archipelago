@@ -26,6 +26,7 @@ import typing
 from CommonClient import (CommonContext, get_base_parser, gui_enabled, logger,
                           server_loop)
 from NetUtils import ClientStatus
+from worlds.ladx import LinksAwakeningWorld
 from worlds.ladx.Common import BASE_ID as LABaseID
 from worlds.ladx.GpsTracker import GpsTracker
 from worlds.ladx.TrackerConsts import storage_key
@@ -139,7 +140,7 @@ class RAGameboy():
     def set_checks_range(self, checks_start, checks_size):
         self.checks_start = checks_start
         self.checks_size = checks_size
-    
+
     def set_location_range(self, location_start, location_size, critical_addresses):
         self.location_start = location_start
         self.location_size = location_size
@@ -237,7 +238,7 @@ class RAGameboy():
         self.cache[start:start + len(hram_block)] = hram_block
 
         self.last_cache_read = time.time()
-    
+
     async def read_memory_block(self, address: int, size: int):
         block = bytearray()
         remaining_size = size
@@ -245,7 +246,7 @@ class RAGameboy():
             chunk = await self.async_read_memory(address + len(block), remaining_size)
             remaining_size -= len(chunk)
             block += chunk
-        
+
         return block
 
     async def read_memory_cache(self, addresses):
@@ -514,8 +515,8 @@ class LinksAwakeningContext(CommonContext):
     magpie_task = None
     won = False
 
-    @property 
-    def slot_storage_key(self): 
+    @property
+    def slot_storage_key(self):
         return f"{self.slot_info[self.slot].name}_{storage_key}"
 
     def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str], magpie: typing.Optional[bool]) -> None:
@@ -529,9 +530,7 @@ class LinksAwakeningContext(CommonContext):
 
     def run_gui(self) -> None:
         import webbrowser
-        import kvui
-        from kvui import Button, GameManager
-        from kivy.uix.image import Image
+        from kvui import GameManager, ImageButton
 
         class LADXManager(GameManager):
             logging_pairs = [
@@ -544,21 +543,15 @@ class LinksAwakeningContext(CommonContext):
                 b = super().build()
 
                 if self.ctx.magpie_enabled:
-                    button = Button(text="", size=(30, 30), size_hint_x=None,
-                                    on_press=lambda _: webbrowser.open('https://magpietracker.us/?enable_autotracker=1'))
-                    image = Image(size=(16, 16), texture=magpie_logo())
-                    button.add_widget(image)
-
-                    def set_center(_, center):
-                        image.center = center
-                    button.bind(center=set_center)
-
+                    button = ImageButton(texture=magpie_logo(), fit_mode="cover", image_size=(32, 32), size_hint_x=None,
+                                on_press=lambda _: webbrowser.open('https://magpietracker.us/?enable_autotracker=1'))
                     self.connect_layout.add_widget(button)
+
                 return b
 
         self.ui = LADXManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
-    
+
     async def send_new_entrances(self, entrances: typing.Dict[str, str]):
         # Store the entrances we find on the server for future sessions
         message = [{
@@ -597,12 +590,12 @@ class LinksAwakeningContext(CommonContext):
             logger.info("victory!")
             await self.send_msgs(message)
             self.won = True
-    
+
     async def request_found_entrances(self):
         await self.send_msgs([{"cmd": "Get", "keys": [self.slot_storage_key]}])
 
-        # Ask for updates so that players can co-op entrances in a seed  
-        await self.send_msgs([{"cmd": "SetNotify", "keys": [self.slot_storage_key]}])  
+        # Ask for updates so that players can co-op entrances in a seed
+        await self.send_msgs([{"cmd": "SetNotify", "keys": [self.slot_storage_key]}])
 
     async def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
         if self.ENABLE_DEATHLINK:
@@ -638,12 +631,18 @@ class LinksAwakeningContext(CommonContext):
         if cmd == "Connected":
             self.game = self.slot_info[self.slot].game
             self.slot_data = args.get("slot_data", {})
-            
+            # This is sent to magpie over local websocket to make its own connection
+            self.slot_data.update({
+                "server_address": self.server_address,
+                "slot_name": self.player_names[self.slot],
+                "password": self.password,
+            })
+
         # TODO - use watcher_event
         if cmd == "ReceivedItems":
             for index, item in enumerate(args["items"], start=args["index"]):
                 self.client.recvd_checks[index] = item
-        
+
         if cmd == "Retrieved" and self.magpie_enabled and self.slot_storage_key in args["keys"]:
             self.client.gps_tracker.receive_found_entrances(args["keys"][self.slot_storage_key])
 
@@ -722,8 +721,10 @@ class LinksAwakeningContext(CommonContext):
                         try:
                             self.magpie.set_checks(self.client.tracker.all_checks)
                             await self.magpie.set_item_tracker(self.client.item_tracker)
-                            self.magpie.slot_data = self.slot_data
-                            
+                            if self.slot_data and "slot_data" in self.magpie.features and not self.magpie.has_sent_slot_data:
+                                self.magpie.slot_data = self.slot_data
+                                await self.magpie.send_slot_data()
+
                             if self.client.gps_tracker.needs_found_entrances:
                                 await self.request_found_entrances()
                                 self.client.gps_tracker.needs_found_entrances = False
@@ -741,8 +742,8 @@ class LinksAwakeningContext(CommonContext):
                 await asyncio.sleep(1.0)
 
 def run_game(romfile: str) -> None:
-    auto_start = typing.cast(typing.Union[bool, str],
-                            Utils.get_options()["ladx_options"].get("rom_start", True))
+    auto_start = LinksAwakeningWorld.settings.rom_start
+
     if auto_start is True:
         import webbrowser
         webbrowser.open(romfile)

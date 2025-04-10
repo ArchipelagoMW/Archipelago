@@ -8,7 +8,6 @@ from .. import SVTestCase, solo_multiworld, skip_long_tests
 from ..assertion.world_assert import WorldAssertMixin
 from ..options.option_names import all_option_choices
 from ... import options
-from ...mods.mod_data import ModNames
 
 
 @unittest.skip
@@ -16,13 +15,11 @@ class TestDynamicOptionDebug(WorldAssertMixin, SVTestCase):
 
     def test_option_pair_debug(self):
         option_dict = {
-            options.Goal.internal_name: options.Goal.option_master_angler,
-            options.QuestLocations.internal_name: -1,
-            options.Fishsanity.internal_name: options.Fishsanity.option_all,
-            options.Mods.internal_name: frozenset({ModNames.sve}),
+            options.Goal.internal_name: options.Goal.option_cryptic_note,
+            options.EntranceRandomization.internal_name: options.EntranceRandomization.option_buildings,
         }
         for i in range(1):
-            seed = get_seed()
+            seed = get_seed(76312028554502615508)
             with self.subTest(f"Seed: {seed}"):
                 print(f"Seed: {seed}")
                 with solo_multiworld(option_dict, seed=seed) as (multiworld, _):
