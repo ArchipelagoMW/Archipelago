@@ -312,7 +312,7 @@ class LinksAwakeningWorld(World):
                 collection_state = base_collection_state.copy()
                 collection_state.collect(item, prevent_sweep=True)
                 collection_state.sweep_for_advancements(self.get_locations())
-                return len(collection_state.reachable_regions[self.player]) > reachable_count
+                return len(collection_state.states[self.player].reachable_regions) > reachable_count
 
             start_items = [item for item in itempool if is_possible_start_item(item)]
             self.random.shuffle(start_items)
@@ -331,7 +331,7 @@ class LinksAwakeningWorld(World):
                     start_items = [item for item in start_items if item.name != 'Shovel']
                 base_collection_state = CollectionState(self.multiworld)
                 base_collection_state.sweep_for_advancements(self.get_locations())
-                reachable_count = len(base_collection_state.reachable_regions[self.player])
+                reachable_count = len(base_collection_state.states[self.player].reachable_regions)
                 start_item = next((item for item in start_items if opens_new_regions(item)), None)
 
             if start_item:

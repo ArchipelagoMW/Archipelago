@@ -159,7 +159,7 @@ class WorldTestBase(unittest.TestCase):
         self.multiworld.game[self.player] = self.game
         self.multiworld.player_name = {self.player: "Tester"}
         self.multiworld.set_seed(seed)
-        self.multiworld.state = CollectionState(self.multiworld)
+        self.multiworld.state = CollectionState(self.multiworld, players=self.player)
         random.seed(self.multiworld.seed)
         self.multiworld.seed_name = get_seed_name(random)  # only called to get same RNG progression as Generate.py
         args = Namespace()
@@ -249,7 +249,7 @@ class WorldTestBase(unittest.TestCase):
          one of the provided combinations"""
         all_items = [item_name for item_names in possible_items for item_name in item_names]
 
-        state = CollectionState(self.multiworld)
+        state = CollectionState(self.multiworld, players=self.player)
         self.collect_all_but(all_items, state)
         if only_check_listed:
             for location in locations:
@@ -293,7 +293,7 @@ class WorldTestBase(unittest.TestCase):
         if not (self.run_default_tests and self.constructed):
             return
         with self.subTest("Game", game=self.game, seed=self.multiworld.seed):
-            state = self.multiworld.get_all_state(False)
+            state = self.multiworld.get_all_state(players=self.player)
             for location in self.multiworld.get_locations():
                 with self.subTest("Location should be reached", location=location.name):
                     reachable = location.can_reach(state)
@@ -307,7 +307,7 @@ class WorldTestBase(unittest.TestCase):
         if not (self.run_default_tests and self.constructed):
             return
         with self.subTest("Game", game=self.game, seed=self.multiworld.seed):
-            state = CollectionState(self.multiworld)
+            state = CollectionState(self.multiworld, players=self.player)
             locations = self.multiworld.get_reachable_locations(state, self.player)
             self.assertGreater(len(locations), 0,
                                "Need to be able to reach at least one location to get started.")
@@ -321,7 +321,7 @@ class WorldTestBase(unittest.TestCase):
         # basically a shortened reimplementation of this method from core, in order to force the check is done
         def fulfills_accessibility() -> bool:
             locations = list(self.multiworld.get_locations(1))
-            state = CollectionState(self.multiworld)
+            state = CollectionState(self.multiworld, players=self.player)
             while locations:
                 sphere: typing.List[Location] = []
                 for n in range(len(locations) - 1, -1, -1):
