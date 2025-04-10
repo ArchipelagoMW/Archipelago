@@ -749,6 +749,14 @@ boss_connections = {
     RegionName.stronghold_showdown_map: RegionName.stronghold_showdown_level,
 }
 
+lost_world_levels = (
+    RegionName.jungle_jinx_map,
+    RegionName.black_ice_battle_map,
+    RegionName.klobber_karnage_map,
+    RegionName.fiery_furnace_map,
+    RegionName.animal_antics_map,
+)
+
 level_rom_data = {
     RegionName.pirate_panic_level:          [0x34DD6F+9, 0x34DD7E],
     RegionName.mainbrace_mayhem_level:      [0x34DD9C+9, 0x34DDB3],

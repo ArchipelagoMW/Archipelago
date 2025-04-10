@@ -88,6 +88,23 @@ class ExtraLostWorldRocks(Range):
     range_end = 5
     default = 3
 
+class LostWorldRockPlacement(Choice):
+    """
+    Determines how Lost World Rocks will be placed in the multiworld
+    - **anywhere**: Placed anywhere in the multiworld
+    - **lost_world_level_clear**: Forced in Level Clears found in Lost World
+      This option always creates 5 rocks. Extra lost world rocks aren't created.
+    - **lost_world_anywhere**: Forced in anywhere in Lost World
+
+    These options listens to Excluded Locations, it won't force you to deal with levels you don't want to deal with.
+    However, if it can place an item due to excluded locations AP will place them anywhere in the multiworld.
+    """
+    display_name = "Lost World Rock Behavior"
+    option_anywhere = 0
+    option_lost_world_level_clear = 1
+    option_lost_world_anywhere = 2
+    default = 1
+
 class AbilityShuffle(OptionSet):
     """
     Which abilities will be added as items in the item pool
@@ -472,6 +489,7 @@ dkc2_option_groups = [
         FlyingKrockTokens,
         LostWorldRocks,
         ExtraLostWorldRocks,
+        LostWorldRockPlacement,
     ]),
     OptionGroup("Locations", [
         Logic,
@@ -534,6 +552,7 @@ class DKC2Options(PerGameCommonOptions):
     krock_boss_tokens: FlyingKrockTokens
     lost_world_rocks: LostWorldRocks
     extra_lost_world_rocks: ExtraLostWorldRocks
+    lost_world_rock_placement: LostWorldRockPlacement
     logic: Logic
     shuffle_levels: ShuffleLevels
     shuffle_abilities: AbilityShuffle
