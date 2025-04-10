@@ -301,7 +301,7 @@ class Factorio(World):
                 start_location_hints.add(loc.name)
 
     def collect_item(self, state, item, remove=False):
-        if item.advancement and item.name in progressive_technology_table:
+        if item.name in progressive_technology_table:
             prog_table = progressive_technology_table[item.name].progressive
             if remove:
                 for item_name in reversed(prog_table):
