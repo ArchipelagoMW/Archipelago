@@ -1487,6 +1487,8 @@ class SC2Logic:
                 item_names.DRAGOON, item_names.ADEPT,
                 item_names.SENTRY, item_names.ENERGIZER,
                 item_names.HIGH_TEMPLAR, item_names.SIGNIFIER, item_names.ASCENDANT, item_names.DARK_ARCHON,
+                # Robo
+                item_names.ANNIHILATOR,
                 # Stargate
                 item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR,
                 item_names.SCOUT, item_names.MISTWING, item_names.CALADRIUS, item_names.OPPRESSOR,
@@ -1502,12 +1504,6 @@ class SC2Logic:
             or state.has_all((item_names.WRATHWALKER, item_names.WRATHWALKER_AERIAL_TRACKING), self.player)
             or state.has_all((item_names.DISRUPTOR, item_names.DISRUPTOR_PERFECTED_POWER), self.player)
             or state.has_all((item_names.IMMORTAL, item_names.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING_MECHANICS), self.player)
-            or (state.has(item_names.ANNIHILATOR, self.player)
-                and state.has_any((
-                    item_names.ANNIHILATOR_AERIAL_TRACKING,
-                    item_names.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING_MECHANICS,
-                ), self.player)
-            )
             or state.has_all((item_names.SKIRMISHER, item_names.SKIRMISHER_PEER_CONTEMPT), self.player)
             or state.has_all((item_names.TRIREME, item_names.TRIREME_SOLAR_BEAM), self.player)
             or (
