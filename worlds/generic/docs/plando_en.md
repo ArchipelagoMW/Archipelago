@@ -28,63 +28,107 @@ requires:
 ``` 
 
 ## Item Plando
-Item plando allows a player to place an item in a specific location or specific locations, or place multiple items into a
-list of specific locations both in their own game or in another player's game.
+Item plando allows a player to place an item in a specific location or specific locations, or place multiple items into 
+a list of specific locations both in their own game or in another player's game.
 
-* The options for item plando are `from_pool`, `world`, `percentage`, `force`, `count`, and either `item` and
-  `location`, or `items` and `locations`.
-    * `from_pool` determines if the item should be taken *from* the item pool or *added* to it. This can be true or
-      false and defaults to true if omitted.
-    * `world` is the target world to place the item in.
-        * It gets ignored if only one world is generated.
-        * Can be a number, name, true, false, null, or a list. False is the default.
-            * If a number is used, it targets that slot or player number in the multiworld.
-            * If a name is used, it will target the world with that player name.
-            * If set to true, it will be any player's world besides your own.
-            * If set to false, it will target your own world.
-            * If set to null, it will target a random world in the multiworld.
-            * If a list of names is used, it will target the games with the player names specified.
-    * `force` determines whether the generator will fail if the item can't be placed in the location. Can be true, false,
-      or silent. Silent is the default.
-        * If set to true, the item must be placed and the generator will throw an error if it is unable to do so.
-        * If set to false, the generator will log a warning if the placement can't be done but will still generate.
-        * If set to silent and the placement fails, it will be ignored entirely.
-    * `percentage` is the percentage chance for the relevant block to trigger. This can be any value from 0 to 100 and
-      if omitted will default to 100.
-    * Single Placement is when you use a plando block to place a single item at a single location.
-        * `item` is the item you would like to place and `location` is the location to place it.
-    * Multi Placement uses a plando block to place multiple items in multiple locations until either list is exhausted.
-        * `items` defines the items to use, each with a number for the amount. Using `true` instead of a number uses however many of that item are in your item pool.
-        * `locations` is a list of possible locations those items can be placed in.
-            * Some special location group names can be specified:
-                * `early_locations` will add all sphere 1 locations (locations logically reachable only with your starting inventory)
-                * `non_early_locations` will add all locations beyond sphere 1 (locations that require finding at least one item before they become logically reachable)
-        * Using the multi placement method, placements are picked randomly.
+To add item plando to your player yaml, you should first decide if you are placing a single item or multiple items.
 
-    * `count` can be used to set the maximum number of items placed from the block. The default is 1 if using `item` and False if using `items`
-        * If a number is used, it will try to place this number of items.
-        * If set to false, it will try to place as many items from the block as it can.
-        * If `min` and `max` are defined, it will try to place a number of items between these two numbers at random.
+* **Single Placement** uses a plando block to place a single item at a single location. Under the `plando_items`
+  block, you would add a new list element `- item` with the item you would like to place, followed by `location` with 
+  the location to place it.
+* **Multi Placement** uses a plando block to place multiple items in multiple locations until either list is exhausted. 
+  Using the multi placement method, placements are picked randomly.
+  * The `items` list defines the items to use. Each item name should be followed by a colon and a value.
+    * A numerical value indicates the amount of that item.
+    * A `true` value uses all copies of that item that are in your item pool.
+  * The `locations` list defines possible locations those items can be placed in. Some special location group names 
+    can be specified:
+    * `early_locations` will add all sphere 1 locations (locations logically reachable only with your starting 
+      inventory).
+    * `non_early_locations` will add all locations beyond sphere 1 (locations that require finding at least one item 
+      before they become logically reachable).
+
+The other options for item plando are `from_pool`, `world`, `percentage`, `force`, `count`. These are available for
+both Single Placement and Multi Placement.
+
+* `from_pool` determines if the item should be taken *from* the item pool or *added* to it. 
+  * `false`: Add to the item pool.
+  * `true`: Take from the item pool. **(Default)**
+* `world` is the target world to place the item in. It gets ignored if only one world is generated.
+  * **A number:** Use this slot or player number in the multiworld.
+  * **A name:** Use the world with that player name.
+  * **A list of names:** Use the worlds with the player names specified.
+  * `true`: Locations will be in any player's world besides your own.
+  * `false`: Locations will be in your own world. **(Default)**
+  * `null`: Locations will be in a random world in the multiworld.
+* `force` determines whether the generator will fail if the item can't be placed in the location. 
+  * `true`: The generator will throw an error if it is unable to place an item.
+  * `false`: The generator will log a warning if it is unable to place an item, but it will still generate.
+  * `silent`: If the placement fails, it will be ignored entirely. **(Default)**
+* `percentage` is the percentage chance for the relevant block to trigger. 
+  * This can be any number from 0 to 100. **(Default: 100)**
+* `count` can be used to set the maximum number of items placed from the block. The default is 1 if using `item` and 
+  False if using `items`
+  * **A number:** It will try to place this number of items. **(Default: 1 if Single Placement is used)**
+  * `false`: It will try to place as many items from the block as it can. **(Default if Multi Placement is used)**
+  * **If `min` and `max` are defined,** it will try to place a number of items between these two numbers at random.
 
 
 ### Available Items and Locations
 
-A list of all available items and locations can be found in the [website's datapackage](/datapackage). The items and locations will be in the `"item_name_to_id"` and `"location_name_to_id"` sections of the relevant game. You do not need the quotes but the name must be entered in the same as it appears on that page and is case-sensitive.
+A list of all available items and locations can be found in the [website's datapackage](/datapackage). The items and locations 
+will be in the `"item_name_to_id"` and `"location_name_to_id"` sections of the relevant game. You do not need the 
+quotes but the name must be entered in the same as it appears on that page and is case-sensitive.
 
 ### Examples
+```yaml
+  plando_items:
+    # Example block - Slay the Spire
+    - items:
+        Boss Relic: 3
+      locations:
+        - Boss Relic 1
+        - Boss Relic 2
+        - Boss Relic 3
+```
+This block will lock 3 Boss Relic items on the 3 Boss Relic locations. The world value has not been specified, so these 
+locations must be in this player's own world by default.
 
 ```yaml
   plando_items:
-    # example block 1 - Timespinner
-    - item:
-        Empire Orb: 1
-        Radiant Orb: 1
-      location: Starter Chest 1
-      from_pool: true
+  # Example block - A Link to the Past
+    - items:
+        Progressive Sword: 4
+      world:
+        - BobsSlaytheSpire
+        - BobsRogueLegacy
+      count:
+        min: 1
+        max: 4
+```
+This block will attempt to place a random number, between 1 and 4, of Progressive Swords into any locations within the 
+game slots named "BobsSlaytheSpire" and "BobsRogueLegacy."
+
+```yaml
+  plando_items:
+  # Example block - Secret of Evermore
+    - items:
+        Levitate: 1
+        Revealer: 1
+        Energize: 1
+      locations:
+        - Master Sword Pedestal
+        - Boss Relic 1
       world: true
-      percentage: 50
-  
-    # example block 2 - Ocarina of Time
+      count: 2
+```
+This block will choose 2 from the Levitate, Revealer, and Energize items at random and attempt to put them into the 
+locations named "Master Sword Pedestal" and "Boss Relic 1". Because the world value is True, these locations must be 
+in other players' worlds.
+
+```yaml
+  plando_items:
+    # Example block - Ocarina of Time
     - items:
         Kokiri Sword: 1
         Biggoron Sword: 1
@@ -103,16 +147,28 @@ A list of all available items and locations can be found in the [website's datap
         - Shadow Temple Hover Boots Chest
         - Spirit Temple Silver Gauntlets Chest
       world: false
-  
-    # example block 3 - Slay the Spire
-    - items:
-        Boss Relic: 3
-      locations:
-        - Boss Relic 1
-        - Boss Relic 2
-        - Boss Relic 3
-  
-    # example block 4 - Factorio
+```
+This block will place the player's swords, bow, magic meter, strength upgrades, and hookshots in the dungeon major item 
+chests. Because the world value is False, these locations must be in this player's own world.
+
+```yaml
+  plando_items:
+    # Example block - Timespinner
+    - item:
+        Empire Orb: 1
+        Radiant Orb: 1
+      location: Starter Chest 1
+      from_pool: true
+      world: true
+      percentage: 50
+```
+This block will place a single item, either the Empire Orb or Radiant Orb, on the location "Starter Chest 1". The world 
+value is True, so this location must be in another player's world. It then removes the chosen item from the item
+pool. Unlike the previous examples, which will always trigger, this block only has a 50% chance to trigger.
+
+```yaml
+  plando_items:
+    # Example block - Factorio
     - items:
         progressive-electric-energy-distribution: 2
         electric-energy-accumulators: 1
@@ -124,40 +180,10 @@ A list of all available items and locations can be found in the [website's datap
         - steel-processing
       percentage: 80
       force: true
-  
-  # example block 5 - Secret of Evermore
-    - items:
-        Levitate: 1
-        Revealer: 1
-        Energize: 1
-      locations:
-        - Master Sword Pedestal
-        - Boss Relic 1
-      world: true
-      count: 2
-  
-  # example block 6 - A Link to the Past
-    - items:
-        Progressive Sword: 4
-      world:
-        - BobsSlaytheSpire
-        - BobsRogueLegacy
-      count:
-        min: 1
-        max: 4
 ```
-1. This block has a 50% chance to occur, and if it does, it will place either the Empire Orb or Radiant Orb on another
-player's Starter Chest 1 and removes the chosen item from the item pool.
-2. This block will always trigger and will place the player's swords, bow, magic meter, strength upgrades, and hookshots
-in their own dungeon major item chests.
-3. This block will always trigger and will lock boss relics on the bosses.
-4. This block has an 80% chance of occurring, and when it does, it will place all but 1 of the items randomly among the
-four locations chosen here.
-5. This block will always trigger and will attempt to place a random 2 of Levitate, Revealer and Energize into
-other players' Master Sword Pedestals or Boss Relic 1 locations.
-6. This block will always trigger and will attempt to place a random number, between 1 and 4, of progressive swords
-into any locations within the game slots named BobsSlaytheSpire and BobsRogueLegacy.
-
+This block lists 5 items but only 4 locations, so it will place all but 1 of the items randomly among the locations 
+chosen here. This block has an 80% chance of occurring. Because force is True, the Generator will fail if it cannot
+place one of the selected items (not including the fifth item).
 
 ## Boss Plando
 
