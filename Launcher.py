@@ -475,7 +475,7 @@ def check_for_update(skip_version: str) -> None:
             return
         if answer == "No":
             return
-        elif answer == "Skip Version":
+        if answer == "Skip Version":
             Utils.persistent_store("launcher", "skip_update", version.as_simple_string())
             return
         # download and install the latest Archipelago release
