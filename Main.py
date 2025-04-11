@@ -182,7 +182,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 logger.warning(f"{player_name} tried to remove items from their pool that don't exist: {unfound_items}")
 
             needed_items = target_per_player[player] - sum(unfound_items.values())
-            new_itempool += [multiworld.worlds[player].create_filler() for _ in range(needed_items)]
+            new_itempool += [multiworld.worlds[player].create_filler(AutoWorld.FillerReason.start_inventory_from_pool)
+                             for _ in range(needed_items)]
 
         assert len(multiworld.itempool) == len(new_itempool), "Item Pool amounts should not change."
         multiworld.itempool[:] = new_itempool
