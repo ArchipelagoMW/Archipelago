@@ -444,7 +444,8 @@ class MultiWorld():
     def get_location(self, location_name: str, player: int) -> Location:
         return self.regions.location_cache[player][location_name]
 
-    def get_all_state(self, use_cache: bool, collect_pre_fill_items: bool = True, allow_partial_entrances: bool = False) -> CollectionState:
+    def get_all_state(self, use_cache: bool, allow_partial_entrances: bool = False,
+                      collect_pre_fill_items: bool = True) -> CollectionState:
         cached = getattr(self, "_all_state", None)
         if use_cache and cached:
             return cached.copy()
