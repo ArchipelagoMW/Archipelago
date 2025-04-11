@@ -22,7 +22,7 @@ DEFAULT_TEST_SEED = get_seed()
 logger.info(f"Default Test Seed: {DEFAULT_TEST_SEED}")
 
 
-def skip_base_tests() -> bool:
+def skip_default_tests() -> bool:
     return not bool(os.environ.get("base", False))
 
 
@@ -31,20 +31,10 @@ def skip_long_tests() -> bool:
 
 
 class SVTestCase(unittest.TestCase):
-    # Set False to not skip some 'extra' tests
-    skip_base_tests: bool = True
-    # Set False to run tests that take long
-    skip_long_tests: bool = True
-
-    @classmethod
-    def setUpClass(cls) -> None:
-        super().setUpClass()
-        base_tests_key = "base"
-        if base_tests_key in os.environ:
-            cls.skip_base_tests = skip_base_tests()
-        long_tests_key = "long"
-        if long_tests_key in os.environ:
-            cls.skip_long_tests = skip_long_tests()
+    skip_default_tests: bool = skip_default_tests()
+    """Set False to not skip the base fill tests"""
+    skip_long_tests: bool = skip_long_tests()
+    """Set False to run tests that take long"""
 
     @contextmanager
     def solo_world_sub_test(self, msg: Optional[str] = None,
@@ -102,7 +92,7 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
 
     @property
     def run_default_tests(self) -> bool:
-        if self.skip_base_tests:
+        if self.skip_default_tests:
             return False
         return super().run_default_tests
 
