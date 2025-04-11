@@ -27,7 +27,10 @@ class TestTroubleshootMods(WorldAssertMixin, ModAssertMixin, SVTestCase):
             self.assert_stray_mod_items(world_options[options.Mods], multiworld)
 
 
-@unittest.skipIf(skip_long_tests(), "Long tests disabled")
+if skip_long_tests():
+    raise unittest.SkipTest("Long tests disabled")
+
+
 @classvar_matrix(mod_pair=combinations(sorted(all_mods), 2))
 class TestGenerateModsPairs(WorldAssertMixin, ModAssertMixin, SVTestCase):
     mod_pair: ClassVar[tuple[str, str]]
@@ -40,10 +43,6 @@ class TestGenerateModsPairs(WorldAssertMixin, ModAssertMixin, SVTestCase):
         with solo_multiworld(world_options, world_caching=False) as (multiworld, _):
             self.assert_basic_checks(multiworld)
             self.assert_stray_mod_items(list(self.mod_pair), multiworld)
-
-
-if skip_long_tests():
-    raise unittest.SkipTest("Long tests disabled")
 
 
 @classvar_matrix(mod=all_mods, option_and_choice=all_option_choices)
