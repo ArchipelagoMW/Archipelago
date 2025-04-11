@@ -35,8 +35,8 @@ GrindLogicMixin, ShippingLogicMixin]]):
 
     @cache_self1
     def can_have_earned_total(self, amount: int) -> StardewRule:
-        if amount < 1000:
-            return True_()
+        if amount <= 1000:
+            return self.logic.true_
 
         pierre_rule = self.logic.region.can_reach_all((Region.pierre_store, Region.forest))
         willy_rule = self.logic.region.can_reach_all((Region.fish_shop, LogicRegion.fishing))
@@ -44,19 +44,19 @@ GrindLogicMixin, ShippingLogicMixin]]):
         robin_rule = self.logic.region.can_reach_all((Region.carpenter, Region.secret_woods))
         shipping_rule = self.logic.shipping.can_use_shipping_bin
 
-        if amount < 2000:
+        if amount <= 2500:
             selling_any_rule = pierre_rule | willy_rule | clint_rule | robin_rule | shipping_rule
             return selling_any_rule
 
-        if amount < 5000:
+        if amount <= 5000:
             selling_all_rule = (pierre_rule & willy_rule & clint_rule & robin_rule) | shipping_rule
             return selling_all_rule
 
-        if amount < 10000:
+        if amount <= 10000:
             return shipping_rule
 
         seed_rules = self.logic.region.can_reach(Region.pierre_store)
-        if amount < 40000:
+        if amount <= 40000:
             return shipping_rule & seed_rules
 
         percent_progression_items_needed = min(90, amount // 20000)

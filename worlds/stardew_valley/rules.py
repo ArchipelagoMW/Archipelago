@@ -201,7 +201,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     movie_theater_rule = logic.has_movie_theater()
     set_entrance_rule(multiworld, player, Entrance.enter_movie_theater, movie_theater_rule)
     set_entrance_rule(multiworld, player, Entrance.purchase_movie_ticket, movie_theater_rule)
-    set_entrance_rule(multiworld, player, Entrance.take_bus_to_desert, logic.received("Bus Repair"))
+    set_entrance_rule(multiworld, player, Entrance.take_bus_to_desert, logic.received("Bus Repair") & logic.money.can_spend(500))
     set_entrance_rule(multiworld, player, Entrance.enter_skull_cavern, logic.received(Wallet.skull_key))
     set_entrance_rule(multiworld, player, LogicEntrance.talk_to_mines_dwarf,
                       logic.wallet.can_speak_dwarf() & logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron))
@@ -362,7 +362,7 @@ def set_island_entrances_rules(logic: StardewLogic, multiworld, player, world_op
         Entrance.use_island_obelisk: logic.can_use_obelisk(Transportation.island_obelisk),
         Entrance.use_farm_obelisk: logic.can_use_obelisk(Transportation.farm_obelisk),
         Entrance.fish_shop_to_boat_tunnel: boat_repaired,
-        Entrance.boat_to_ginger_island: boat_repaired,
+        Entrance.boat_to_ginger_island: boat_repaired & logic.money.can_spend(1000),
         Entrance.island_south_to_west: logic.received("Island West Turtle"),
         Entrance.island_south_to_north: logic.received("Island North Turtle"),
         Entrance.island_west_to_islandfarmhouse: logic.received("Island Farmhouse"),
