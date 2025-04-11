@@ -1,19 +1,28 @@
-from typing import ClassVar
-
-from typing import Dict, FrozenSet, Tuple, Any
+import os
 from argparse import Namespace
+from typing import ClassVar
+from typing import Dict, FrozenSet, Tuple, Any
 
 from BaseClasses import MultiWorld
 from test.bases import WorldTestBase
-from .. import DLCqworld
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
 from worlds.AutoWorld import call_all
+from .. import DLCqworld
 
 
 class DLCQuestTestBase(WorldTestBase):
     game = "DLCQuest"
     world: DLCqworld
     player: ClassVar[int] = 1
+    # Set False to run tests that take long
+    skip_long_tests: bool = True
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        super().setUpClass()
+        long_tests_key = "long"
+        if long_tests_key in os.environ:
+            cls.skip_long_tests = not bool(os.environ[long_tests_key])
 
     def world_setup(self, *args, **kwargs):
         super().world_setup(*args, **kwargs)
