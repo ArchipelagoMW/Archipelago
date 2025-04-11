@@ -22,21 +22,19 @@ DEFAULT_TEST_SEED = get_seed()
 logger.info(f"Default Test Seed: {DEFAULT_TEST_SEED}")
 
 
-class SVTestCase(unittest.TestCase):
-    # Set False to not skip some 'extra' tests
-    skip_base_tests: bool = True
-    # Set False to run tests that take long
-    skip_long_tests: bool = True
+def skip_default_tests() -> bool:
+    return not bool(os.environ.get("base", False))
 
-    @classmethod
-    def setUpClass(cls) -> None:
-        super().setUpClass()
-        base_tests_key = "base"
-        if base_tests_key in os.environ:
-            cls.skip_base_tests = not bool(os.environ[base_tests_key])
-        long_tests_key = "long"
-        if long_tests_key in os.environ:
-            cls.skip_long_tests = not bool(os.environ[long_tests_key])
+
+def skip_long_tests() -> bool:
+    return not bool(os.environ.get("long", False))
+
+
+class SVTestCase(unittest.TestCase):
+    skip_default_tests: bool = skip_default_tests()
+    """Set False to not skip the base fill tests"""
+    skip_long_tests: bool = skip_long_tests()
+    """Set False to run tests that take long"""
 
     @contextmanager
     def solo_world_sub_test(self, msg: Optional[str] = None,
@@ -94,7 +92,7 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
 
     @property
     def run_default_tests(self) -> bool:
-        if self.skip_base_tests:
+        if self.skip_default_tests:
             return False
         return super().run_default_tests
 
@@ -196,21 +194,22 @@ def solo_multiworld(world_options: Optional[Dict[Union[str, StardewValleyOption]
         yield multiworld, multiworld.worlds[1]
     else:
         multiworld = setup_solo_multiworld(world_options, seed)
-        multiworld.lock.acquire()
-        world = multiworld.worlds[1]
+        try:
+            multiworld.lock.acquire()
+            world = multiworld.worlds[1]
 
-        original_state = multiworld.state.copy()
-        original_itempool = multiworld.itempool.copy()
-        unfilled_locations = multiworld.get_unfilled_locations(1)
+            original_state = multiworld.state.copy()
+            original_itempool = multiworld.itempool.copy()
+            unfilled_locations = multiworld.get_unfilled_locations(1)
 
-        yield multiworld, world
+            yield multiworld, world
 
-        multiworld.state = original_state
-        multiworld.itempool = original_itempool
-        for location in unfilled_locations:
-            location.item = None
-
-        multiworld.lock.release()
+            multiworld.state = original_state
+            multiworld.itempool = original_itempool
+            for location in unfilled_locations:
+                location.item = None
+        finally:
+            multiworld.lock.release()
 
 
 # Mostly a copy of test.general.setup_solo_multiworld, I just don't want to change the core.
