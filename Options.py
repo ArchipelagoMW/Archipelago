@@ -153,9 +153,6 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.current_option_name})"
 
-    def __hash__(self) -> int:
-        return hash(self.value)
-
     @property
     def current_key(self) -> str:
         return self.name_lookup[self.value]
@@ -426,8 +423,6 @@ class Toggle(NumericOption):
     def get_option_name(cls, value):
         return ["No", "Yes"][int(value)]
 
-    __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
-
 
 class DefaultOnToggle(Toggle):
     default = 1
@@ -486,8 +481,6 @@ class Choice(NumericOption):
             return False
         else:
             raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
-
-    __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
 
 
 class TextChoice(Choice):
