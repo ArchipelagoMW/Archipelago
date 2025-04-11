@@ -28,51 +28,70 @@ requires:
 ``` 
 
 ## Item Plando
+
 Item plando allows a player to place an item in a specific location or specific locations, or place multiple items into 
 a list of specific locations both in their own game or in another player's game.
 
-To add item plando to your player yaml, you should first decide if you are placing a single item or multiple items.
+To add item plando to your player yaml, you add a new Block with a list element, starting with a dash `-`, under the 
+`plando_items` block. Your block should start with `item` if you want to do Single Placement, or `items` if you want 
+to do Multi Placement.
 
-* **Single Placement** uses a plando block to place a single item at a single location. Under the `plando_items`
-  block, you would add a new list element `- item` with the item you would like to place, followed by `location` with 
-  the location to place it.
-* **Multi Placement** uses a plando block to place multiple items in multiple locations until either list is exhausted. 
-  Using the multi placement method, placements are picked randomly.
-  * The `items` list defines the items to use. Each item name should be followed by a colon and a value.
-    * A numerical value indicates the amount of that item.
-    * A `true` value uses all copies of that item that are in your item pool.
-  * The `locations` list defines possible locations those items can be placed in. Some special location group names 
-    can be specified:
-    * `early_locations` will add all sphere 1 locations (locations logically reachable only with your starting 
-      inventory).
-    * `non_early_locations` will add all locations beyond sphere 1 (locations that require finding at least one item 
-      before they become logically reachable).
+After you define `item/items`, you would add another element (without a dash `-`) for `location` or `locations`, 
+depending on if you want to fill in one location or many. 
 
-The other options for item plando are `from_pool`, `world`, `percentage`, `force`, `count`. These are available for
-both Single Placement and Multi Placement.
+You may do any combination of `item/items` and `location/locations` in a plando block, but the important takeaways are:
+* The block only places items in locations **until the shorter of the two lists is completed.**
+* An `item` block will only place a **single item** no matter how many you define it.
+* A `location` block will only fill a **single location** no matter how many you define.
 
-* `from_pool` determines if the item should be taken *from* the item pool or *added* to it. 
-  * `false`: Add to the item pool.
-  * `true`: Take from the item pool. **(Default)**
-* `world` is the target world to place the item in. It gets ignored if only one world is generated.
-  * **A number:** Use this slot or player number in the multiworld.
-  * **A name:** Use the world with that player name.
-  * **A list of names:** Use the worlds with the player names specified.
-  * `true`: Locations will be in any player's world besides your own.
-  * `false`: Locations will be in your own world. **(Default)**
-  * `null`: Locations will be in a random world in the multiworld.
-* `force` determines whether the generator will fail if the item can't be placed in the location. 
-  * `true`: The generator will throw an error if it is unable to place an item.
-  * `false`: The generator will log a warning if it is unable to place an item, but it will still generate.
-  * `silent`: If the placement fails, it will be ignored entirely. **(Default)**
-* `percentage` is the percentage chance for the relevant block to trigger. 
-  * This can be any integer from 0 to 100. **(Default: 100)**
-* `count` can be used to set the maximum number of items placed from the block. The default is 1 if using `item` and 
-  False if using `items`
-  * **A number:** It will try to place this number of items.
-  * `false`: It will try to place as many items from the block as it can.
-  * **If `min` and `max` are defined,** it will try to place a number of items between these two numbers at random.
+Once you are satisfied with your block, you may continue to define new blocks, each starting with a `-`. 
 
+Each block can have several different options to tailor it the way you like.
+
+### `items`
+The `items` list defines the items to use. Each item name should be followed by a colon and a value.
+* A numerical value indicates the amount of that item.
+* A `true` value uses all copies of that item that are in your item pool.
+
+### `locations` 
+The `locations` list defines possible locations those items can be placed in. Some special location group names can be 
+specified:
+  * `early_locations` will add all sphere 1 locations (locations logically reachable only with your starting 
+    inventory).
+  * `non_early_locations` will add all locations beyond sphere 1 (locations that require finding at least one item 
+    before they become logically reachable).
+
+### `from_pool`
+This option determines if the item should be taken *from* the item pool or *added* to it. 
+* `false`: Add to the item pool.
+* `true`: Take from the item pool. **(Default)**
+
+### `world`
+This option is the target world to place the item in. It gets ignored if only one world is generated.
+* **A number:** Use this slot or player number in the multiworld.
+* **A name:** Use the world with that player name.
+* **A list of names:** Use the worlds with the player names specified.
+* `true`: Locations will be in any player's world besides your own.
+* `false`: Locations will be in your own world. **(Default)**
+* `null`: Locations will be in a random world in the multiworld.
+
+### `force` 
+This option determines whether the generator will fail if the item can't be placed in the location. 
+* `true`: The generator will throw an error if it is unable to place an item.
+* `false`: The generator will log a warning if it is unable to place an item, but it will still generate.
+* `silent`: If the placement fails, it will be ignored entirely. **(Default)**
+
+### `percentage` 
+This option is the percentage chance for the relevant block to trigger. This can be any integer from 0 to 100. 
+**(Default: 100)**
+
+### `count` 
+This option sets the number of items placed from the block. 
+* **Default: 1 if using `item` or `location`, and `false` otherwise.**
+* **A number:** It will try to place this number of items.
+* `false`: It will try to place as many items from the block as it can.
+* **If `min` is defined,** it will try to place a random number of items higher than `min` (can be combined with `max`).
+* **If `max` is defined,** it will try to place a random number of items lower than `max` (can be combined with `min`).
 
 ### Available Items and Locations
 
@@ -80,7 +99,7 @@ A list of all available items and locations can be found in the [website's datap
 will be in the `"item_name_to_id"` and `"location_name_to_id"` sections of the relevant game. You do not need the 
 quotes but the name must be entered in the same as it appears on that page and is case-sensitive.
 
-### Examples
+## Item Plando Examples
 ```yaml
   plando_items:
     # Example block - Slay the Spire
@@ -123,7 +142,7 @@ game slots named "BobsSlaytheSpire" and "BobsRogueLegacy."
       count: 2
 ```
 This block will choose 2 from the Levitate, Revealer, and Energize items at random and attempt to put them into the 
-locations named "Master Sword Pedestal" and "Boss Relic 1". Because the world value is True, these locations must be 
+locations named "Master Sword Pedestal" and "Boss Relic 1". Because the world value is `true`, these locations must be 
 in other players' worlds.
 
 ```yaml
@@ -146,10 +165,11 @@ in other players' worlds.
         - Water Temple Longshot Chest
         - Shadow Temple Hover Boots Chest
         - Spirit Temple Silver Gauntlets Chest
-      world: false
+      from_pool: false
 ```
 This block will place the player's swords, bow, magic meter, strength upgrades, and hookshots in the dungeon major item 
-chests. Because the world value is False, these locations must be in this player's own world.
+chests. Because the from_pool value is `false`, a copy of these items is added to these locations, while the originals
+remain in the item pool to be shuffled.
 
 ```yaml
   plando_items:
@@ -158,13 +178,14 @@ chests. Because the world value is False, these locations must be in this player
         Empire Orb: 1
         Radiant Orb: 1
       location: Starter Chest 1
-      from_pool: true
+      from_pool: false
       world: true
       percentage: 50
 ```
 This block will place a single item, either the Empire Orb or Radiant Orb, on the location "Starter Chest 1". The world 
-value is True, so this location must be in another player's world. It then removes the chosen item from the item
-pool. Unlike the previous examples, which will always trigger, this block only has a 50% chance to trigger.
+value is `true`, so this location must be in another player's world. Because the from_pool value is `false`, a copy of 
+these items is added to these locations, while the originals remain in the item pool to be shuffled. Unlike the 
+previous examples, which will always trigger, this block only has a 50% chance to trigger.
 
 ```yaml
   plando_items:
@@ -180,10 +201,14 @@ pool. Unlike the previous examples, which will always trigger, this block only h
         - steel-processing
       percentage: 80
       force: true
+      from_pool: true
+      world: false
 ```
 This block lists 5 items but only 4 locations, so it will place all but 1 of the items randomly among the locations 
 chosen here. This block has an 80% chance of occurring. Because force is `true`, the Generator will fail if it cannot
-place one of the selected items (not including the fifth item).
+place one of the selected items (not including the fifth item). From_pool and World have been set to their default
+values here, but they can be omitted and have the same result: items will be removed from the pool, and the locations
+are in this player's own world. 
 
 ## Boss Plando
 
