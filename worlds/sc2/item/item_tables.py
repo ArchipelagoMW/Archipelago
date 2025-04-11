@@ -341,10 +341,10 @@ item_table = {
                  parent=item_names.MARINE),
     item_names.MEDIC_RESTORATION:
         ItemData(223 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_1, 22, SC2Race.TERRAN,
-                 classification=ItemClassification.filler, parent=item_names.MEDIC),
+                 parent=item_names.MEDIC),
     item_names.MEDIC_OPTICAL_FLARE:
         ItemData(224 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_1, 23, SC2Race.TERRAN,
-                 classification=ItemClassification.filler, parent=item_names.MEDIC),
+                 parent=item_names.MEDIC),
     item_names.MEDIC_RESOURCE_EFFICIENCY:
         ItemData(225 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_1, 24, SC2Race.TERRAN,
                  parent=item_names.MEDIC),
@@ -367,8 +367,7 @@ item_table = {
         ItemData(231 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_1, 28, SC2Race.TERRAN,
                  parent=item_names.MARAUDER),
     item_names.SCV_HOSTILE_ENVIRONMENT_ADAPTATION:
-        ItemData(232 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_1, 29, SC2Race.TERRAN,
-                 classification=ItemClassification.filler),
+        ItemData(232 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_1, 29, SC2Race.TERRAN),
     item_names.MEDIC_ADAPTIVE_MEDPACKS:
         ItemData(233 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_2, 0, SC2Race.TERRAN,
                  classification=ItemClassification.progression, parent=item_names.MEDIC),
@@ -775,7 +774,7 @@ item_table = {
                  parent=item_names.RAVEN),
     item_names.RAVEN_ANTI_ARMOR_MISSILE:
         ItemData(368 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_5, 17, SC2Race.TERRAN,
-                 classification=ItemClassification.filler, parent=item_names.RAVEN),
+                 parent=item_names.RAVEN),
     item_names.RAVEN_INTERNAL_TECH_MODULE:
         ItemData(369 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_5, 18, SC2Race.TERRAN,
                  parent=item_names.RAVEN),
@@ -1864,7 +1863,7 @@ item_table = {
     item_names.DRAGOON_SINGULARITY_CHARGE: ItemData(310 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 10, SC2Race.PROTOSS, parent=item_names.DRAGOON),
     item_names.DRAGOON_ENHANCED_STRIDER_SERVOS: ItemData(311 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 11, SC2Race.PROTOSS, parent=item_names.DRAGOON),
     item_names.SCOUT_COMBAT_SENSOR_ARRAY: ItemData(312 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 12, SC2Race.PROTOSS, parent=parent_names.SCOUT_CLASS),
-    item_names.SCOUT_APIAL_SENSORS: ItemData(313 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 13, SC2Race.PROTOSS, classification=ItemClassification.filler, parent=item_names.SCOUT),
+    item_names.SCOUT_APIAL_SENSORS: ItemData(313 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 13, SC2Race.PROTOSS, parent=item_names.SCOUT),
     item_names.SCOUT_GRAVITIC_THRUSTERS: ItemData(314 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 14, SC2Race.PROTOSS, parent=parent_names.SCOUT_CLASS),
     item_names.SCOUT_ADVANCED_PHOTON_BLASTERS: ItemData(315 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 15, SC2Race.PROTOSS, parent=parent_names.SCOUT_OR_OPPRESSOR_OR_MISTWING),
     item_names.TEMPEST_TECTONIC_DESTABILIZERS: ItemData(316 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 16, SC2Race.PROTOSS, parent=item_names.TEMPEST),
@@ -1916,7 +1915,7 @@ item_table = {
     item_names.DARK_TEMPLAR_AVENGER_BLOOD_HUNTER_RESOURCE_EFFICIENCY: ItemData(356 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 26, SC2Race.PROTOSS, parent=parent_names.DARK_TEMPLAR_CLASS),
     item_names.DARK_TEMPLAR_DARK_ARCHON_MELD: ItemData(357 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 27, SC2Race.PROTOSS, classification=ItemClassification.progression, parent=item_names.DARK_TEMPLAR),
     item_names.HIGH_TEMPLAR_SIGNIFIER_UNSHACKLED_PSIONIC_STORM: ItemData(358 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 28, SC2Race.PROTOSS, parent=parent_names.STORM_CASTER),
-    item_names.HIGH_TEMPLAR_SIGNIFIER_HALLUCINATION: ItemData(359 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 29, SC2Race.PROTOSS, classification=ItemClassification.filler, parent=parent_names.STORM_CASTER),
+    item_names.HIGH_TEMPLAR_SIGNIFIER_HALLUCINATION: ItemData(359 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 29, SC2Race.PROTOSS, parent=parent_names.STORM_CASTER),
     item_names.HIGH_TEMPLAR_SIGNIFIER_KHAYDARIN_AMULET: ItemData(360 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 0, SC2Race.PROTOSS, parent=parent_names.STORM_CASTER),
     item_names.ARCHON_HIGH_ARCHON: ItemData(361 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 1, SC2Race.PROTOSS, classification=ItemClassification.progression, parent=parent_names.ARCHON_SOURCE),
     item_names.DARK_ARCHON_FEEDBACK: ItemData(362 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 2, SC2Race.PROTOSS, classification=ItemClassification.progression, parent=parent_names.DARK_ARCHON_SOURCE),
