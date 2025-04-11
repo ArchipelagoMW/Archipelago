@@ -120,6 +120,13 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                     swap_attempts = ((i, location, unsafe)
                                      for unsafe in (False, True)
                                      for i, location in enumerate(placements))
+
+                    # Useful and advancement items cannot normally be placed on excluded locations.
+                    cannot_be_excluded = item_to_place.useful or item_to_place.advancement
+                    # always_allow rules are normally ignored if the item has been forced to be placed non-locally.
+                    non_local_items = base_state.multiworld.worlds[item_to_place.player].options.non_local_items.value
+                    ignores_always_allow = item_to_place.name in non_local_items
+
                     for (i, location, unsafe) in swap_attempts:
                         placed_item = location.item
                         # Unplaceable items can sometimes be swapped infinitely. Limit the
@@ -127,6 +134,24 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                         swap_count = swapped_items[placed_item.player, placed_item.name, unsafe]
                         if swap_count > 1:
                             continue
+
+                        # `can_fill` is usually the default implementation. When it is, it is safe to check the parts of
+                        # `can_fill` that do not require a CollectionState first, before running the expensive sweep to
+                        # create the `swap_state` CollectionState that will be passed as an argument to `can_fill()`.
+                        if getattr(location.can_fill, "__code__", None) is Location.can_fill.__code__:
+                            # Check if the location initially rejects placement of `item_to_place`.
+                            if (
+                                    # Check if the LocationProgressType prevents placement.
+                                    (location.progress_type == LocationProgressType.EXCLUDED and cannot_be_excluded)
+                                    # Check if the item_rule prevents placement. The default item_rule allows placement.
+                                    or (location.item_rule is not Location.item_rule
+                                        and not location.item_rule(item_to_place))
+                            ):
+                                # The location initially rejects placement, but check if its always_allow could allow
+                                # placement anyway.
+                                if ignores_always_allow or location.always_allow is Location.always_allow:
+                                    # The default always_allow always returns `False`.
+                                    continue
 
                         location.item = None
                         placed_item.location = None
