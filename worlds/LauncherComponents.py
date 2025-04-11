@@ -226,8 +226,6 @@ components: List[Component] = [
     Component('OoT Adjuster', 'OoTAdjuster'),
     # FF1
     Component('FF1 Client', 'FF1Client'),
-    # TLoZ
-    Component('Zelda 1 Client', 'Zelda1Client', file_identifier=SuffixIdentifier('.aptloz')),
     # ChecksFinder
     Component('ChecksFinder Client', 'ChecksFinderClient'),
     # Starcraft 2
