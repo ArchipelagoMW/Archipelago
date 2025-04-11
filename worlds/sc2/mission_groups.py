@@ -195,6 +195,6 @@ mission_groups[MissionGroupNames.PLANET_AIUR_MISSIONS] = [
 
 for mission in SC2Mission:
     if mission.flags & MissionFlag.HasRaceSwap:
-        short_name = mission.mission_name[:mission.mission_name.find(' (')]
+        short_name = mission.get_short_name()
         mission_groups[short_name] = [mission_var.mission_name for mission_var in SC2Mission
                                       if short_name in mission_var.mission_name]
