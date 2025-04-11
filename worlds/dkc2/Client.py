@@ -567,7 +567,7 @@ class DKC2SNIClient(SNIClient):
     async def handle_barrel_label(self, ctx):
         try:
             from kvui import MDLabel as Label
-        except ModuleNotFoundError:
+        except ImportError:
             from kvui import Label
         from SNIClient import snes_read
 
