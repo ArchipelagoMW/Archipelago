@@ -7,7 +7,7 @@ from Options import (
     Choice,
     DefaultOnToggle,
     LocationSet,
-    OptionDict,
+    OptionCounter,
     OptionError,
     OptionGroup,
     OptionSet,
@@ -414,23 +414,25 @@ class TrapPercentage(Range):
     default = 20
 
 
-class TrapWeights(OptionDict):
+_default_trap_weights = {
+    trap_name: item_definition.weight
+    for trap_name, item_definition in static_witness_logic.ALL_ITEMS.items()
+    if isinstance(item_definition, WeightedItemDefinition) and item_definition.category is ItemCategory.TRAP
+}
+
+
+class TrapWeights(OptionCounter):
     """
     Specify the weights determining how many copies of each trap item will be in your itempool.
-    If you don't want a specific type of trap, you can set the weight for it to 0 (Do not delete the entry outright!).
+    If you don't want a specific type of trap, you can set the weight for it to 0.
     If you set all trap weights to 0, you will get no traps, bypassing the "Trap Percentage" option.
     """
     display_name = "Trap Weights"
-    schema = Schema({
-        trap_name: And(int, lambda n: n >= 0)
-        for trap_name, item_definition in static_witness_logic.ALL_ITEMS.items()
-        if isinstance(item_definition, WeightedItemDefinition) and item_definition.category is ItemCategory.TRAP
-    })
-    default = {
-        trap_name: item_definition.weight
-        for trap_name, item_definition in static_witness_logic.ALL_ITEMS.items()
-        if isinstance(item_definition, WeightedItemDefinition) and item_definition.category is ItemCategory.TRAP
-    }
+    valid_keys = _default_trap_weights.keys()
+
+    min = 0
+
+    default = _default_trap_weights
 
 
 class PuzzleSkipAmount(Range):
