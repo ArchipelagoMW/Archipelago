@@ -57,7 +57,7 @@ from kivy.animation import Animation
 from kivy.uix.popup import Popup
 from kivy.uix.image import AsyncImage
 from kivymd.app import MDApp
-from kivymd.uix.dialog import MDDialog, MDDialogHeadlineText, MDDialogSupportingText, MDDialogContentContainer
+from kivymd.uix.dialog import MDDialog, MDDialogHeadlineText, MDDialogSupportingText, MDDialogButtonContainer
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.boxlayout import MDBoxLayout
@@ -722,12 +722,22 @@ class ButtonsPrompt(MDDialog):
 
         buttons = [MDDivider()]
         for prompt in prompts:
-            button = MDButton(MDButtonText(text=prompt), on_release=on_release, style="text")
+            button = MDButton(
+                MDButtonText(text=prompt, pos_hint={"center_x": 0.5, "center_y": 0.5}),
+                on_release=on_release,
+                style="text",
+                theme_width="Custom",
+                size_hint_x=1,
+            )
             button.text = prompt
             buttons.extend([button, MDDivider()])
 
-        super().__init__(MDDialogHeadlineText(text=title), MDDialogSupportingText(text=text),
-                         MDDialogContentContainer(*buttons, orientation="vertical"), **kwargs)
+        super().__init__(
+            MDDialogHeadlineText(text=title),
+            MDDialogSupportingText(text=text),
+            MDDialogButtonContainer(*buttons, orientation="vertical"),
+            **kwargs,
+        )
 
 
 class ClientTabs(MDTabsPrimary):
