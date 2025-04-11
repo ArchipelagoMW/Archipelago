@@ -368,8 +368,6 @@ def run_gui(path: str, args: Any) -> None:
                 handle_uri(self.launch_uri, self.launch_args)
                 self.launch_uri = None
                 self.launch_args = None
-
-        def on_start(self):
             launcher_settings = Utils.persistent_load().get("launcher", {})
             if not launcher_settings:
                 launcher_settings["auto_update"] = True
@@ -471,6 +469,10 @@ def check_for_update(skip_version: str) -> None:
     from kvui import ButtonsPrompt
 
     def handle_user_update(answer: str) -> None:
+        if answer == "Patch Notes":
+            import webbrowser
+            webbrowser.open(remote_data["html_url"])
+            return
         if answer == "No":
             return
         elif answer == "Skip Version":
@@ -533,7 +535,7 @@ def check_for_update(skip_version: str) -> None:
         f"Currently installed: {Utils.version_tuple.as_simple_string()}.\n"
         f"Would you like to update?",
         handle_user_update,
-        "Yes", "No", "Skip Version"
+        "Patch Notes", "Yes", "No", "Skip Version"
     ).open()
 
 
