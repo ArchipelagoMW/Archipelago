@@ -24,14 +24,14 @@ class SatisfactoryWorld(World):
     web = SatisfactoryWebWorld()
     origin_region_name = "Overworld"
 
-    item_name_to_id = Items.item_names_and_ids
-    location_name_to_id = Locations().get_locations_for_data_package()
-    item_name_groups = Items.get_item_names_per_category()
-
     game_logic: ClassVar[GameLogic] = GameLogic()
     state_logic: StateLogic
     items: Items
     critical_path: CriticalPathCalculator
+
+    item_name_to_id = Items.item_names_and_ids
+    location_name_to_id = Locations().get_locations_for_data_package()
+    item_name_groups = Items.get_item_names_per_category(game_logic)
 
     def generate_early(self) -> None:
         self.critical_path = CriticalPathCalculator(self.game_logic, self.random, self.options)

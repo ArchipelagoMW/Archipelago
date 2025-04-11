@@ -37,21 +37,8 @@ class CriticalPathCalculator:
 
         selected_power_infrastructure: dict[int, Recipe] = {}
         
-        self.implicitly_unlocked: set[str] = { 
-            recipe.name
-            for recipes_per_part in logic.recipes.values()
-            for recipe in recipes_per_part if recipe.implicitly_unlocked 
-        }
-        self.implicitly_unlocked.update({ 
-            building.name
-            for building in logic.buildings.values() if building.implicitly_unlocked 
-        })
 
-        self.handcraftable_parts: dict[str, list[Recipe]] = {}
-        for part, recipes_per_part in logic.recipes.items():
-            for recipe in recipes_per_part:
-                if recipe.handcraftable:
-                    self.handcraftable_parts.setdefault(part, list()).append(recipe)
+        self.configure_implicitly_unlocked_and_handcraftable_parts()
 
         self.select_minimal_required_parts_for(self.logic.space_elevator_tiers[options.final_elevator_package-1].keys())
 
@@ -100,6 +87,44 @@ class CriticalPathCalculator:
         }
         self.required_item_names.update({"Building: "+ building for building in self.required_buildings})
 
+        self.calculate_excluded_things()
+
+
+    def select_minimal_required_parts_for_building(self, building: str) -> None:
+        self.select_minimal_required_parts_for(self.logic.buildings[building].inputs)
+        self.required_buildings.add(building)
+
+
+    def select_minimal_required_parts_for(self, parts: Optional[Iterable[str]]) -> None:
+        if parts is None:
+            return
+
+        for part in parts:
+            if part in self.required_parts:
+                continue
+
+            self.required_parts.add(part)
+
+            for recipe in self.logic.recipes[part]:
+                if recipe.minimal_tier > self.options.final_elevator_package:
+                    continue
+
+                self.__potential_required_belt_speed = \
+                    max(self.__potential_required_belt_speed, recipe.minimal_belt_speed)
+
+                self.select_minimal_required_parts_for(recipe.inputs)
+
+                if recipe.building:
+                    self.select_minimal_required_parts_for(self.logic.buildings[recipe.building].inputs)
+                    self.required_buildings.add(recipe.building)
+
+                    if self.logic.buildings[recipe.building].power_requirement:
+                        self.required_power_level = \
+                            max(self.required_power_level, 
+                                self.logic.buildings[recipe.building].power_requirement)
+
+
+    def calculate_excluded_things(self) -> None:
         self.parts_to_exclude = set()
         self.buildings_to_exclude = set()
         self.recipes_to_exclude = {
@@ -148,35 +173,24 @@ class CriticalPathCalculator:
             excluded_count = new_length
 
 
-    def select_minimal_required_parts_for_building(self, building: str) -> None:
-        self.select_minimal_required_parts_for(self.logic.buildings[building].inputs)
-        self.required_buildings.add(building)
+    def configure_implicitly_unlocked_and_handcraftable_parts(self) -> None:
+        self.implicitly_unlocked: set[str] = { 
+            recipe.name
+            for recipes_per_part in self.logic.recipes.values()
+            for recipe in recipes_per_part if recipe.implicitly_unlocked 
+        }
+        self.implicitly_unlocked.update({ 
+            building.name
+            for building in self.logic.buildings.values() if building.implicitly_unlocked 
+        })
 
+        self.handcraftable_parts: dict[str, list[Recipe]] = {}
+        for part, recipes_per_part in self.logic.recipes.items():
+            for recipe in recipes_per_part:
+                if recipe.handcraftable:
+                    self.handcraftable_parts.setdefault(part, []).append(recipe)
 
-    def select_minimal_required_parts_for(self, parts: Optional[Iterable[str]]) -> None:
-        if parts is None:
-            return
-
-        for part in parts:
-            if part in self.required_parts:
-                continue
-
-            self.required_parts.add(part)
-
-            for recipe in self.logic.recipes[part]:
-                if recipe.minimal_tier > self.options.final_elevator_package:
-                    continue
-
-                self.__potential_required_belt_speed = \
-                    max(self.__potential_required_belt_speed, recipe.minimal_belt_speed)
-
-                self.select_minimal_required_parts_for(recipe.inputs)
-
-                if recipe.building:
-                    self.select_minimal_required_parts_for(self.logic.buildings[recipe.building].inputs)
-                    self.required_buildings.add(recipe.building)
-
-                    if self.logic.buildings[recipe.building].power_requirement:
-                        self.required_power_level = \
-                            max(self.required_power_level, 
-                                self.logic.buildings[recipe.building].power_requirement)
+        if self.options.randomize_tier_0:
+            pass
+            #decide what to re-randomize, like smelter / iron ingot etc
+            #self.implicitly_unlocked.remove("") 

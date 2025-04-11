@@ -864,14 +864,18 @@ class Items:
 
 
     @classmethod
-    def get_item_names_per_category(cls) -> dict[str, set[str]]:
-        categories: dict[str, set[str]] = {}
+    def get_item_names_per_category(cls, game_logic: GameLogic) -> dict[str, set[str]]:
+        groups: dict[str, set[str]] = {}
+
+        # To allow hinting for first part recipe in logic
+        for part, recipes in game_logic.recipes.items():
+            groups[part] = {recipe.name for recipe in recipes}
 
         for name, data in cls.item_data.items():
             for category in data.category:
-                categories.setdefault(category.name, set()).add(name)
+                groups.setdefault(category.name, set()).add(name)
                 
-        return categories
+        return groups
 
     player: int
     logic: GameLogic
@@ -902,7 +906,7 @@ class Items:
 
     def get_filler_item_name(self, filler_items: tuple[str, ...], random: Random, options: SatisfactoryOptions) -> str:
         trap_chance: int = options.trap_chance.value
-        enabled_traps: List[str] = list(options.trap_selection_override.value)
+        enabled_traps: list[str] = list(options.trap_selection_override.value)
 
         if enabled_traps and random.random() < (trap_chance / 100):
             return random.choice(enabled_traps)
