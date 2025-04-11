@@ -19,7 +19,7 @@ class TestItemLinksEverythingIncluded(SVTestBase):
                 continue
             filler_generated.append(filler)
             self.assertNotIn(Group.MAXIMUM_ONE, item_table[filler].groups)
-            self.assertNotIn(Group.EXACTLY_TWO, item_table[filler].groups)
+            self.assertNotIn(Group.AT_LEAST_TWO, item_table[filler].groups)
             if Group.TRAP in item_table[filler].groups:
                 at_least_one_trap = True
             if Group.GINGER_ISLAND in item_table[filler].groups:
@@ -46,7 +46,7 @@ class TestItemLinksNoIsland(SVTestBase):
             filler_generated.append(filler)
             self.assertNotIn(Group.GINGER_ISLAND, item_table[filler].groups)
             self.assertNotIn(Group.MAXIMUM_ONE, item_table[filler].groups)
-            self.assertNotIn(Group.EXACTLY_TWO, item_table[filler].groups)
+            self.assertNotIn(Group.AT_LEAST_TWO, item_table[filler].groups)
             if Group.TRAP in item_table[filler].groups:
                 at_least_one_trap = True
             if len(filler_generated) >= max_number_filler:
@@ -70,7 +70,7 @@ class TestItemLinksNoTraps(SVTestBase):
             filler_generated.append(filler)
             self.assertNotIn(Group.TRAP, item_table[filler].groups)
             self.assertNotIn(Group.MAXIMUM_ONE, item_table[filler].groups)
-            self.assertNotIn(Group.EXACTLY_TWO, item_table[filler].groups)
+            self.assertNotIn(Group.AT_LEAST_TWO, item_table[filler].groups)
             if Group.GINGER_ISLAND in item_table[filler].groups:
                 at_least_one_island = True
             if len(filler_generated) >= max_number_filler:
@@ -94,7 +94,7 @@ class TestItemLinksNoTrapsAndIsland(SVTestBase):
             self.assertNotIn(Group.GINGER_ISLAND, item_table[filler].groups)
             self.assertNotIn(Group.TRAP, item_table[filler].groups)
             self.assertNotIn(Group.MAXIMUM_ONE, item_table[filler].groups)
-            self.assertNotIn(Group.EXACTLY_TWO, item_table[filler].groups)
+            self.assertNotIn(Group.AT_LEAST_TWO, item_table[filler].groups)
             if len(filler_generated) >= max_number_filler:
                 break
         self.assertGreaterEqual(len(filler_generated), max_number_filler)
