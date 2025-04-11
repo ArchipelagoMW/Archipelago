@@ -436,6 +436,10 @@ class KH2World(World):
         for location in keyblade_locations:
             location.locked = True
 
+    def get_pre_fill_items(self) -> List["Item"]:
+        return [self.create_item(item) for item in [*DonaldAbility_Table.keys(), *GoofyAbility_Table.keys(),
+                                                    *SupportAbility_Table.keys()]]
+
     def starting_invo_verify(self):
         """
         Making sure the player doesn't put too many abilities in their starting inventory.

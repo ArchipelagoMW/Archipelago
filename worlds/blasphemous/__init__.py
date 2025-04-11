@@ -207,7 +207,6 @@ class BlasphemousWorld(World):
         if not self.options.skill_randomizer:
             self.place_items_from_dict(skill_dict)
         
-
     def place_items_from_set(self, location_set: Set[str], name: str):
         for loc in location_set:
             self.get_location(loc).place_locked_item(self.create_item(name))
