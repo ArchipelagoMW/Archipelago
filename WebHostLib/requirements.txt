@@ -9,3 +9,4 @@ bokeh>=3.6.3
 markupsafe>=3.0.2
 Markdown>=3.7
 mdx-breakless-lists>=1.0.1
+setproctitle>=1.3.5
