@@ -66,11 +66,11 @@ both Single Placement and Multi Placement.
   * `false`: The generator will log a warning if it is unable to place an item, but it will still generate.
   * `silent`: If the placement fails, it will be ignored entirely. **(Default)**
 * `percentage` is the percentage chance for the relevant block to trigger. 
-  * This can be any number from 0 to 100. **(Default: 100)**
+  * This can be any integer from 0 to 100. **(Default: 100)**
 * `count` can be used to set the maximum number of items placed from the block. The default is 1 if using `item` and 
   False if using `items`
-  * **A number:** It will try to place this number of items. **(Default: 1 if Single Placement is used)**
-  * `false`: It will try to place as many items from the block as it can. **(Default if Multi Placement is used)**
+  * **A number:** It will try to place this number of items.
+  * `false`: It will try to place as many items from the block as it can.
   * **If `min` and `max` are defined,** it will try to place a number of items between these two numbers at random.
 
 
@@ -182,7 +182,7 @@ pool. Unlike the previous examples, which will always trigger, this block only h
       force: true
 ```
 This block lists 5 items but only 4 locations, so it will place all but 1 of the items randomly among the locations 
-chosen here. This block has an 80% chance of occurring. Because force is True, the Generator will fail if it cannot
+chosen here. This block has an 80% chance of occurring. Because force is `true`, the Generator will fail if it cannot
 place one of the selected items (not including the fifth item).
 
 ## Boss Plando
