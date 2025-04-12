@@ -234,6 +234,7 @@ def run_gui(path: str, args: Any) -> None:
     from kivymd.uix.card import MDCard
     from kivymd.uix.menu import MDDropdownMenu
     from kivymd.uix.snackbar import MDSnackbar, MDSnackbarText
+    from kivymd.uix.textfield import MDTextField
 
     from kivy.lang.builder import Builder
 
@@ -253,6 +254,7 @@ def run_gui(path: str, args: Any) -> None:
         navigation: MDGridLayout = ObjectProperty(None)
         grid: MDGridLayout = ObjectProperty(None)
         button_layout: ScrollBox = ObjectProperty(None)
+        search_box: MDTextField = ObjectProperty(None)
         cards: list[LauncherCard]
         current_filter: Sequence[str | Type] | None
 
@@ -338,14 +340,34 @@ def run_gui(path: str, args: Any) -> None:
             scroll_percent = self.button_layout.convert_distance_to_scroll(0, top)
             self.button_layout.scroll_y = max(0, min(1, scroll_percent[1]))
 
-        def filter_clients(self, caller):
+        def filter_clients_by_type(self, caller):
             self._refresh_components(caller.type)
+
+        def filter_clients_by_name(self, instance, name):
+            if len(name) == 0:
+                self._refresh_components(self.current_filter)
+                return
+
+            if len(name) > 2:
+                # clear before repopulating
+                assert self.button_layout, "must call `build` first"
+                tool_children = reversed(self.button_layout.layout.children)
+                for child in tool_children:
+                    self.button_layout.layout.remove_widget(child)
+
+                name_scores = Utils.get_fuzzy_results(name, [card.component.display_name for card in self.cards])
+                card_scores = [(card, name_score[1])
+                               for name_score in name_scores if name_score[1] > 25  # Score threshold
+                               for card in self.cards if card.component.display_name == name_score[0]]
+                for card_score in sorted(card_scores, key=lambda t: t[1], reverse=True):
+                    self.button_layout.layout.add_widget(card_score[0])
 
         def build(self):
             self.top_screen = Builder.load_file(Utils.local_path("data/launcher.kv"))
             self.grid = self.top_screen.ids.grid
             self.navigation = self.top_screen.ids.navigation
             self.button_layout = self.top_screen.ids.button_layout
+            self.search_box = self.top_screen.ids.search_box
             self.set_colors()
             self.top_screen.md_bg_color = self.theme_cls.backgroundColor
 
