@@ -193,22 +193,25 @@ class LuigisMansionRandomizer:
         self.update_maptwo_info_table(self.jmp_iyapoo_table)
 
     def save_randomized_iso(self):
-        # TODO Move into its own function?
         # Get Output data required information
-        bool_boo_checks: bool = True if self.output_data["Options"]["boo_gates"] == 1 else False
-        bool_boo_rando_on: bool = True if self.output_data["Options"]["boosanity"] == 1 else False
+        bool_boo_rando_enabled: bool = True if self.output_data["Options"]["boosanity"] == 1 else False
         req_mario_count: str = str(self.output_data["Options"]["mario_items"])
+        luigi_max_health: int = int(self.output_data["Options"]["luigi_max_health"])
         bool_randomize_music: bool = True if self.output_data["Options"]["random_music"] == 1 else False
-        bool_portrait_hints: bool = True if self.output_data["Options"]["portrait_hints"] == 1 else False
+
+        # Boo related options
+        bool_boo_checks: bool = True if self.output_data["Options"]["boo_gates"] == 1 else False
         washroom_boo_count: int = int(self.output_data["Options"]["washroom_boo_count"])
         balcony_boo_count: int = int(self.output_data["Options"]["balcony_boo_count"])
         final_boo_count: int = int(self.output_data["Options"]["final_boo_count"])
-        luigi_max_health: int = int(self.output_data["Options"]["luigi_max_health"])
+
+        # Hint options
         hint_dist: int = int(self.output_data["Options"]["hint_distribution"])
         hint_list: dict[str, dict[str, str]] = self.output_data["Hints"]
         madam_hint_dict: dict[str, str] = hint_list["Madame Clairvoya"] if hint_list["Madame Clairvoya"] else None
+        bool_portrait_hints: bool = True if self.output_data["Options"]["portrait_hints"] == 1 else False
 
-        self.update_dol_offsets(bool_boo_rando_on)
+        self.update_dol_offsets(bool_boo_rando_enabled)
 
         # Update all custom events
         list_events = ["03", "22", "24", "29", "33", "35", "38", "50", "61", "64", "65",
@@ -252,7 +255,6 @@ class LuigisMansionRandomizer:
         if bool_boo_checks:
             boo_list_events = ["16", "47", "96"]
             for event_no in boo_list_events:
-                lines = get_data(__name__, "data/custom_events/event" + event_no + ".txt").decode('utf-8')
                 if event_no == "16":
                     required_boo_count = final_boo_count
                 elif event_no == "47":
@@ -261,67 +263,10 @@ class LuigisMansionRandomizer:
                     required_boo_count = balcony_boo_count
 
                 if required_boo_count == 0:
-                    self.jmp_event_info_table.info_file_field_entries = list(filter(lambda info_entry:
-                        not (info_entry["EventNo"] == int(event_no)), self.jmp_event_info_table.info_file_field_entries))
+                    self.jmp_event_info_table.info_file_field_entries = list(filter(lambda info_entry: not (
+                        info_entry["EventNo"] == int(event_no)), self.jmp_event_info_table.info_file_field_entries))
                     continue
-
-                # TODO optimize this?
-                if not bool_boo_rando_on:
-                    str_not_enough = "not_enough"
-                    str_boo_captured = "boos_captured"
-                    str_begin_case = "CheckBoos"
-
-                    match required_boo_count:
-                        case 1:
-                            lines = lines.replace("{Count0}", "0")
-                            lines = lines.replace("{Count1}", str(required_boo_count))
-                            lines = lines.replace("{Count2}", str(required_boo_count))
-                            lines = lines.replace("{Count3}", str(required_boo_count))
-                            lines = lines.replace("{Count4}", str(required_boo_count))
-                            lines = lines.replace("{Case0}", str_not_enough)
-                            lines = lines.replace("{Case1}", str_boo_captured)
-                            lines = lines.replace("{Case2}", str_boo_captured)
-                            lines = lines.replace("{Case3}", str_boo_captured)
-                            lines = lines.replace("{Case4}", str_boo_captured)
-                        case 2:
-                            lines = lines.replace("{Count0}", "0")
-                            lines = lines.replace("{Count1}", "1")
-                            lines = lines.replace("{Count2}", str(required_boo_count))
-                            lines = lines.replace("{Count3}", str(required_boo_count))
-                            lines = lines.replace("{Count4}", str(required_boo_count))
-                            lines = lines.replace("{Case0}", str_not_enough)
-                            lines = lines.replace("{Case1}", str_not_enough)
-                            lines = lines.replace("{Case2}", str_boo_captured)
-                            lines = lines.replace("{Case3}", str_boo_captured)
-                            lines = lines.replace("{Case4}", str_boo_captured)
-                        case 3:
-                            lines = lines.replace("{Count0}", "0")
-                            lines = lines.replace("{Count1}", "1")
-                            lines = lines.replace("{Count2}", "2")
-                            lines = lines.replace("{Count3}", str(required_boo_count))
-                            lines = lines.replace("{Count4}", str(required_boo_count))
-                            lines = lines.replace("{Case0}", str_not_enough)
-                            lines = lines.replace("{Case1}", str_not_enough)
-                            lines = lines.replace("{Case2}", str_not_enough)
-                            lines = lines.replace("{Case3}", str_boo_captured)
-                            lines = lines.replace("{Case4}", str_boo_captured)
-                        case _:
-                            lines = lines.replace("{Count0}", str(required_boo_count-4))
-                            lines = lines.replace("{Count1}", str(required_boo_count-3))
-                            lines = lines.replace("{Count2}", str(required_boo_count-2))
-                            lines = lines.replace("{Count3}", str(required_boo_count-1))
-                            lines = lines.replace("{Count4}", str(required_boo_count))
-                            lines = lines.replace("{Case0}", str_not_enough)
-                            lines = lines.replace("{Case1}", str_not_enough)
-                            lines = lines.replace("{Case2}", str_not_enough)
-                            lines = lines.replace("{Case3}", str_not_enough)
-                            lines = lines.replace("{Case4}", str_boo_captured)
-                else:
-                    str_begin_case = "not_enough"
-
-                lines = lines.replace("{Count4}", str(required_boo_count))
-                lines = lines.replace("{CaseBegin}", str_begin_case)
-                self.update_custom_event(event_no, False, lines)
+                self.gcm = update_boo_gates(self.gcm, event_no, required_boo_count, bool_boo_rando_enabled)
 
         # Update Toad events with hints
         """in_game_hint_events = ["04", "17", "32", "44", "63", "92", "93", "94"]
