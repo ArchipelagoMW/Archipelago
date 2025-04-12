@@ -7,6 +7,7 @@ from gclib.gcm import GCM
 from gclib.rarc import RARC, RARCNode, RARCFileEntry
 from gclib.yaz0_yay0 import Yay0
 
+from..Hints import PORTRAIT_HINTS
 
 MAIN_PKG_NAME = "worlds.luigismansion.LMGenerator"
 
@@ -55,6 +56,42 @@ def randomize_music(gcm: GCM, seed: str) -> GCM:
         event_arc.save_changes()
         gcm.changed_files[lm_event.file_path] = Yay0.compress(event_arc.data)
     return gcm
+
+def write_portrait_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict[str, dict[str,str]],
+                        seed: str) -> GCM:
+    csv_lines = get_data(MAIN_PKG_NAME, "data/custom_csvs/message78.csv").decode('utf-8')
+    for portrait_name, portrait_hint in all_hints:
+        if portrait_name not in PORTRAIT_HINTS:
+            continue
+        match hint_distribution_choice:
+            case 4:
+                match portrait_hint["Class"]:
+                    case "Prog":
+                        item_color = "5"
+                    case "Trap":
+                        item_color = "2"
+                    case _:
+                        item_color = "6"
+                hintfo = (f"<COLOR>(7)"+portrait_hint["Rec Player"]+"'s<COLOR>("+item_color+")\\n"+portrait_hint["Item"]+
+                          f"\\n<COLOR>(0)is somewhere in<COLOR>(3)\\n"+portrait_hint["Send Player"]+"'s\\n"+portrait_hint["Game"])
+                csv_lines = csv_lines.replace(f"{portrait_name}", hintfo)
+            case 1:
+                jokes = get_data(MAIN_PKG_NAME, "data/jokes.txt").decode('utf-8')
+                random.seed(seed)
+                joke_hint = random.choice(str.splitlines(jokes)).replace("\\\\n", "\n")
+                csv_lines = csv_lines.replace(f"{portrait_name}", joke_hint)
+            case _:
+                match portrait_hint["Class"]:
+                    case "Prog":
+                        item_color = "5"
+                    case "Trap":
+                        item_color = "2"
+                    case _:
+                        item_color = "6"
+                hintfo = (f"<COLOR>(7)"+portrait_hint["Rec Player"]+"'s<COLOR>("+item_color+")\\n"+portrait_hint["Item"]+
+                          f"\\n<COLOR>(0)can be found at<COLOR>(1)\\n"+portrait_hint["Send Player"]+"'s\\n"+portrait_hint["Location"])
+                csv_lines = csv_lines.replace(f"{portrait_name}", hintfo)
+
 
 def randomize_clairvoya(gcm: GCM, req_mario_count: str, hint_distribution_choice: int,
     madame_hint: dict[str, str], seed: str) -> GCM:
