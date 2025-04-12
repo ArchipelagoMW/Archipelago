@@ -226,34 +226,32 @@ class ColorChoice(Choice):
 
 
 class PlayerColorTerranRaynor(ColorChoice):
-    """Determines in-game team color for playable Raynor's Raiders (Terran) factions."""
+    """Determines in-game player team color in Wings of Liberty missions."""
     display_name = "Terran Player Color (Raynor)"
 
 
 class PlayerColorProtoss(ColorChoice):
-    """Determines in-game team color for playable Protoss factions."""
+    """Determines in-game player team color in Legacy of the Void missions."""
     display_name = "Protoss Player Color"
 
 
 class PlayerColorZerg(ColorChoice):
-    """Determines in-game team color for playable Zerg factions before Kerrigan becomes Primal Kerrigan."""
+    """Determines in-game player team color in Heart of the Swarm missions before unlocking Primal Kerrigan."""
     display_name = "Zerg Player Color"
 
 
 class PlayerColorZergPrimal(ColorChoice):
-    """Determines in-game team color for playable Zerg factions after Kerrigan becomes Primal Kerrigan."""
+    """Determines in-game player team color in Heart of the Swarm after unlocking Primal Kerrigan."""
     display_name = "Zerg Player Color (Primal)"
 
 
 class PlayerColorNova(ColorChoice):
-    """Determines in-game team color for playable Zerg factions after Kerrigan becomes Primal Kerrigan."""
+    """Determines in-game player team color in Nova Covert Ops missions."""
     display_name = "Terran Player Color (Nova)"
 
 
 class EnabledCampaigns(OptionSet):
-    """
-    Determines which campaign's missions will be used
-    """
+    """Determines which campaign's missions will be used"""
     display_name = "Enabled Campaigns"
     valid_keys = {campaign.campaign_name for campaign in SC2Campaign if campaign != SC2Campaign.GLOBAL}
     default = valid_keys
@@ -490,8 +488,8 @@ class EnsureGenericItems(Range):
 
 class MinNumberOfUpgrades(Range):
     """
-    Set a minimum to the number of upgrades a unit/structure can have.
-    Note that most units have 4 or 6 upgrades.
+    Set a minimum to the number of upgrade items a unit/structure can have.
+    Note that most units have 4 to 6 upgrades.
     If a unit has fewer upgrades than the minimum, it will have all of its upgrades.
 
     Doesn't affect shared unit upgrades.
@@ -504,8 +502,9 @@ class MinNumberOfUpgrades(Range):
 
 class MaxNumberOfUpgrades(Range):
     """
-    Set a maximum to the number of upgrades a unit/structure can have. -1 is used to define unlimited.
-    Note that most unit have 4 to 6 upgrades.
+    Set a maximum to the number of upgrade items a unit/structure can have.
+    -1 is used to define unlimited.
+    Note that most units have 4 to 6 upgrades.
 
     Doesn't affect shared unit upgrades.
     """

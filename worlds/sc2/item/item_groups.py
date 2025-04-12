@@ -793,6 +793,9 @@ item_name_groups[ItemGroupNames.OVERPOWERED_ITEMS] = overpowered_items = [
     item_names.BRAINWASHING,
     item_names.KHALAI_TAKEOVER,
 
+    # Zerg Mind Control
+    item_names.INFESTOR,
+
     # Nova
     item_names.NOVA_PLASMA_RIFLE,
 
@@ -811,6 +814,7 @@ item_name_groups[ItemGroupNames.OVERPOWERED_ITEMS] = overpowered_items = [
     item_names.SOA_SOLAR_BOMBARDMENT,
 
     # Protoss general
+    item_names.QUATRO,
     item_names.MOTHERSHIP_INTEGRATED_POWER,
 ]
 
@@ -831,4 +835,5 @@ item_name_groups[ItemGroupNames.UNRELEASED_ITEMS] = [
     item_names.NIGHT_HAWK,
     item_names.NIGHT_WOLF,
     item_names.EMPERORS_SHADOW_SOVEREIGN_TACTICAL_MISSILES,
+    item_names.ASCENDANT_ARCHON_MERGE,
 ]
