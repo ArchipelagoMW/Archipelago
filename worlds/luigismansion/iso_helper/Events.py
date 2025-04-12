@@ -22,8 +22,67 @@ def get_arc(gcm: GCM, arc_path):
     return arc
 
 
-def update_boo_gates():
-    pass
+def update_boo_gates(gcm: GCM, event_no: str, req_boo_count: int, boo_rando_enabled: bool) -> GCM:
+    lines = get_data(__name__, "data/custom_events/event" + event_no + ".txt").decode('utf-8')
+    if boo_rando_enabled:
+        str_begin_case = "not_enough"
+        lines = lines.replace("{Count0}", str(0)).replace("{Count1}", str(0))
+        lines = lines.replace("{Count2}", str(0)).replace("{Count3}", str(0))
+        lines = lines.replace("{Count4}", str(req_boo_count)).replace("{CaseBegin}", str_begin_case)
+        return __update_custom_event(gcm, event_no, True, lines, None)
+
+    str_begin_case = "CheckBoos"
+    lines = lines.replace("{CaseBegin}", str_begin_case)
+
+    str_not_enough = "not_enough"
+    str_boo_captured = "boos_captured"
+    match req_boo_count:
+        case 1:
+            lines = lines.replace("{Count0}", "0")
+            lines = lines.replace("{Count1}", str(req_boo_count))
+            lines = lines.replace("{Count2}", str(req_boo_count))
+            lines = lines.replace("{Count3}", str(req_boo_count))
+            lines = lines.replace("{Count4}", str(req_boo_count))
+            lines = lines.replace("{Case0}", str_not_enough)
+            lines = lines.replace("{Case1}", str_boo_captured)
+            lines = lines.replace("{Case2}", str_boo_captured)
+            lines = lines.replace("{Case3}", str_boo_captured)
+            lines = lines.replace("{Case4}", str_boo_captured)
+        case 2:
+            lines = lines.replace("{Count0}", "0")
+            lines = lines.replace("{Count1}", "1")
+            lines = lines.replace("{Count2}", str(req_boo_count))
+            lines = lines.replace("{Count3}", str(req_boo_count))
+            lines = lines.replace("{Count4}", str(req_boo_count))
+            lines = lines.replace("{Case0}", str_not_enough)
+            lines = lines.replace("{Case1}", str_not_enough)
+            lines = lines.replace("{Case2}", str_boo_captured)
+            lines = lines.replace("{Case3}", str_boo_captured)
+            lines = lines.replace("{Case4}", str_boo_captured)
+        case 3:
+            lines = lines.replace("{Count0}", "0")
+            lines = lines.replace("{Count1}", "1")
+            lines = lines.replace("{Count2}", "2")
+            lines = lines.replace("{Count3}", str(req_boo_count))
+            lines = lines.replace("{Count4}", str(req_boo_count))
+            lines = lines.replace("{Case0}", str_not_enough)
+            lines = lines.replace("{Case1}", str_not_enough)
+            lines = lines.replace("{Case2}", str_not_enough)
+            lines = lines.replace("{Case3}", str_boo_captured)
+            lines = lines.replace("{Case4}", str_boo_captured)
+        case _:
+            lines = lines.replace("{Count0}", str(req_boo_count - 4))
+            lines = lines.replace("{Count1}", str(req_boo_count - 3))
+            lines = lines.replace("{Count2}", str(req_boo_count - 2))
+            lines = lines.replace("{Count3}", str(req_boo_count - 1))
+            lines = lines.replace("{Count4}", str(req_boo_count))
+            lines = lines.replace("{Case0}", str_not_enough)
+            lines = lines.replace("{Case1}", str_not_enough)
+            lines = lines.replace("{Case2}", str_not_enough)
+            lines = lines.replace("{Case3}", str_not_enough)
+            lines = lines.replace("{Case4}", str_boo_captured)
+
+    return __update_custom_event(gcm, event_no, True, lines, None)
 
 # Randomizes all the music in all the event.txt files.
 def randomize_music(gcm: GCM, seed: str) -> GCM:
@@ -98,7 +157,7 @@ def write_portrait_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dic
                           "\\n<COLOR>(0)can be found at<COLOR>(1)\\n"+portrait_hint["Send Player"]+"'s\\n"+portrait_hint["Location"])
                 csv_lines = csv_lines.replace(f"{portrait_name}", hintfo)
 
-    return __update_custom_event_non_local(gcm, "78", True, None, csv_lines)
+    return __update_custom_event(gcm, "78", True, None, csv_lines)
 
 # Updates clairvoya's hints and mario item information based on the options selected.
 def randomize_clairvoya(gcm: GCM, req_mario_count: str, hint_distribution_choice: int,
@@ -159,10 +218,10 @@ def randomize_clairvoya(gcm: GCM, req_mario_count: str, hint_distribution_choice
         else:
             lines = lines.replace(cases_to_replace[i], str_bad_end)
 
-    return __update_custom_event_non_local(gcm, "36", True, lines, csv_lines)
+    return __update_custom_event(gcm, "36", True, lines, csv_lines)
 
 # Using the provided txt or csv lines for a given event file, updates the actual szp file in memory with this data.
-def __update_custom_event_non_local(gcm: GCM, event_number: str, delete_all_other_files: bool,
+def __update_custom_event(gcm: GCM, event_number: str, delete_all_other_files: bool,
     event_txt=None, event_csv=None) -> GCM:
     if not event_txt and not event_csv:
         raise Exception("Cannot have both the event text and csv text be null/empty.")
