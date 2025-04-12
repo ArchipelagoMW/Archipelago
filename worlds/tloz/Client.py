@@ -1,5 +1,5 @@
 import logging
-from copy import deepcopy
+from copy import deepcopy, copy
 from typing import TYPE_CHECKING
 
 from NetUtils import ClientStatus
@@ -16,6 +16,12 @@ if TYPE_CHECKING:
 base_id = 7000
 logger = logging.getLogger("Client")
 
+WRAM_NAMES = {
+    "NesHawk": "Battery RAM",
+    "SubNESHawk": "Battery RAM",
+    "QuickNes": "WRAM",
+}
+
 class TLOZClient(BizHawkClient):
     game = "The Legend of Zelda"
     system = "NES"
@@ -23,12 +29,13 @@ class TLOZClient(BizHawkClient):
 
     def __init__(self):
         self.wram = "RAM"
-        self.sram = "WRAM"
+        self.sram = "WRAM" # Placeholder
         self.rom = "PRG ROM"
         self.bonus_items = []
         self.major_location_offsets = None
         self.base_guard_list = [(Rom.game_mode, [0x05], self.wram)] # 0x05 is normal gameplay in overworld or dungeon
         self.guard_list = [(Rom.game_mode, [0x05], self.wram)]
+        self.take_any_item_ids = None
 
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
@@ -37,12 +44,15 @@ class TLOZClient(BizHawkClient):
             rom_name = ((await bizhawk.read(ctx.bizhawk_ctx, [(Rom.rom_name_location, 3, self.rom)]))[0]).decode("ascii")
             if rom_name != "LOZ":
                 return False
-        except bizhawk.RequestFailedError:
+            nes_core = (await bizhawk.get_cores(ctx.bizhawk_ctx))["NES"]
+        except (bizhawk.RequestFailedError, UnicodeDecodeError):
             return False  # Not able to get a response, say no for now
 
         ctx.game = self.game
         ctx.items_handling = 0b101
         ctx.want_slot_data = True
+
+        self.sram_name = WRAM_NAMES[nes_core]
 
         return True
 
@@ -64,6 +74,12 @@ class TLOZClient(BizHawkClient):
                 self.major_location_offsets["White Sword Pond"] = location_offsets[1]
                 self.major_location_offsets["Magical Sword Grave"] = location_offsets[2]
                 self.major_location_offsets["Letter Cave"] = location_offsets[3]
+            if self.take_any_item_ids is None:
+                from . import TLoZWorld
+                self.take_any_item_ids = {}
+                self.take_any_item_ids["Left"] = TLoZWorld.item_name_to_id["Take Any Item Left"]
+                self.take_any_item_ids["Middle"] = TLoZWorld.item_name_to_id["Take Any Item Middle"]
+                self.take_any_item_ids["Right"] = TLoZWorld.item_name_to_id["Take Any Item Right"]
             self.guard_list = [*self.base_guard_list]
             await self.check_victory(ctx)
             await self.location_check(ctx)
@@ -125,14 +141,14 @@ class TLOZClient(BizHawkClient):
         if take_any_caves_checked is None:
             return
         if take_any_caves_checked >= 4:
-            if "Take Any Item Left" not in ctx.checked_locations:
+            if self.take_any_item_ids["Left"] not in ctx.checked_locations:
                 locations_checked.append(Locations.location_table[f"Take Any Item Left"])
                 self.bonus_items.append(ctx.slot_data["TakeAnyLeft"])
-            if "Take Any Item Middle" not in ctx.checked_locations:
-                locations_checked.append(Locations.location_table[f"Take Any Item Left"])
+            if self.take_any_item_ids["Middle"] not in ctx.checked_locations:
+                locations_checked.append(Locations.location_table[f"Take Any Item Middle"])
                 self.bonus_items.append(ctx.slot_data["TakeAnyMiddle"])
-            if "Take Any Item Right" not in ctx.checked_locations:
-                locations_checked.append(Locations.location_table[f"Take Any Item Left"])
+            if self.take_any_item_ids["Right"] not in ctx.checked_locations:
+                locations_checked.append(Locations.location_table[f"Take Any Item Right"])
                 self.bonus_items.append(ctx.slot_data["TakeAnyRight"])
 
         found_locations = await ctx.check_locations(locations_checked)
@@ -150,8 +166,7 @@ class TLOZClient(BizHawkClient):
         items_received_count_high = await self.read_ram_value_guarded(ctx, Rom.items_obtained_high)
         if items_received_count_low is None or items_received_count_high is None:
             return
-        items_received_count = list([items_received_count_low, items_received_count_high])
-        items_received_count_value = int.from_bytes(items_received_count, "little")
+        items_received_count_value = (items_received_count_high << 8) | items_received_count_low
         if items_received_count_value < len(ctx.items_received):
             current_item = ctx.items_received[items_received_count_value]
             current_item_id = current_item.item
@@ -202,13 +217,16 @@ class TLOZClient(BizHawkClient):
         timer_write = (Rom.item_lift_timer, [128], self.wram) # 128 frames of lifting an item
         sound_write = (Rom.sound_effect_queue, [4], self.wram) # "Found secret" sound
         write_list.extend([lift_write, timer_write, sound_write])
-        await self.handle_item(ctx, item_name, write_list)
+        return await self.handle_item(ctx, item_name, write_list)
 
     async def resolve_bonus_items(self, ctx: "BizHawkClientContext"):
+        new_bonus_items = copy(self.bonus_items)
         for item in self.bonus_items:
             current_item_name = ctx.item_names.lookup_in_game(item, ctx.game)
-            await self.write_item(ctx, current_item_name, [])
-        self.bonus_items.clear()
+            success = await self.write_item(ctx, current_item_name, [])
+            if success:
+                new_bonus_items.remove(item)
+        self.bonus_items = new_bonus_items
 
     async def handle_item(self, ctx: "BizHawkClientContext", item_name, write_list: list[tuple[int, list[int], str]]):
         # No nice way to do this, since basically every item needs to be handled a little differently.
@@ -330,6 +348,7 @@ class TLOZClient(BizHawkClient):
                 write_list.append((Rom.partial_hearts, [0xFF], self.wram))
                 write_list.append((Rom.heart_containers, [(current_container_count << 4) | current_container_count], self.wram))
             else:
+                current_hearts_count = min(current_hearts_count + 3, 15)
                 write_list.append((Rom.heart_containers, [(current_container_count << 4) | current_hearts_count], self.wram))
         elif item_name == "Clock":
             write_list.append((Rom.clock, [1], self.wram))
@@ -347,7 +366,7 @@ class TLOZClient(BizHawkClient):
             write_list.append((Rom.keys, [min(current_keys + 1, 255)], self.wram))
         elif item_name == "Food":
             write_list.append((Rom.food, [1], self.wram))
-        await self.write(ctx, write_list)
+        return await self.write(ctx, write_list)
 
 
     async def read_ram_value(self, ctx, location):
