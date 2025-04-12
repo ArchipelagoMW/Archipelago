@@ -93,7 +93,7 @@ def update_blackout_event(gcm: GCM) -> GCM:
 
 # Updates all common events
 def update_common_events(gcm: GCM, randomize_mice: bool) -> GCM:
-    list_custom_events = ["03", "22", "24", "29", "33", "35", "38", "48", "50", "61", "64", "65",
+    list_custom_events = ["03", "22", "24", "29", "33", "35", "38", "50", "61", "64", "65",
      "66", "67", "68", "71", "72", "74", "75", "82", "86", "87", "88", "89", "90"]
     if randomize_mice:
         list_custom_events += ["95", "97", "98", "99", "100"]
@@ -350,7 +350,7 @@ def __update_custom_event(gcm: GCM, event_number: str, delete_all_other_files: b
     event_txt_file = "event" + event_number + ".txt"
     event_csv_file = "message" + (event_number if not event_number.startswith("0") else event_number[1:]) + ".csv"
 
-    if event_csv:
+    if event_txt:
         if not any(info_files for info_files in custom_event.file_entries if info_files.name == event_txt_file):
             raise Exception(f"Unable to find an info file with name '{event_txt_file}' in provided RARC file.")
         lines = BytesIO(event_txt.encode('utf-8'))
