@@ -1,5 +1,5 @@
 from kvui import (ThemedApp, ScrollBox, MainLayout, ContainerLayout, dp, Widget, MDBoxLayout, TooltipLabel, ToolTip,
-                  MDLabel, ToggleButton)
+                  MDLabel, ToggleButton, MarkupDropdown)
 from kivy.animation import Animation
 from kivy.uix.behaviors.button import ButtonBehavior
 from kivymd.uix.behaviors import RotateBehavior
@@ -11,6 +11,8 @@ from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.button import MDButton, MDButtonText, MDIconButton
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.dialog import MDDialog
+from kivy.core.text.markup import MarkupLabel
+from kivy.utils import escape_markup
 from kivy.lang.builder import Builder
 from kivy.properties import ObjectProperty
 from textwrap import dedent
@@ -144,11 +146,19 @@ class VisualListSet(MDDialog):
     scrollbox: ScrollBox = ObjectProperty(None)
     add: MDIconButton = ObjectProperty(None)
     save: MDButton = ObjectProperty(None)
+    input: MDTextField = ObjectProperty(None)
+    dropdown: MDDropdownMenu
+    valid_keys: typing.Iterable[str]
 
-    def __init__(self, *args, option: typing.Type[OptionSet] | typing.Type[OptionList], name: str, **kwargs):
+    def __init__(self, *args, option: typing.Type[OptionSet] | typing.Type[OptionList],
+                 name: str, valid_keys: typing.Iterable[str],  **kwargs):
         self.option = option
         self.name = name
+        self.valid_keys = valid_keys
         super().__init__(args, kwargs)
+        self.dropdown = MarkupDropdown(caller=self.input, border_margin=dp(2),
+                                       width=self.input.width, position="bottom")
+        self.input.bind(text=self.on_text)
 
     def remove_item(self, button: MDIconButton):
         list_item = button.parent
@@ -169,6 +179,35 @@ class VisualListSet(MDDialog):
         item = MDListItem(text, MDIconButton(icon="minus", on_release=self.remove_item))
         item.text = text
         self.scrollbox.layout.add_widget(item)
+
+    def on_text(self, instance, value):
+        if not self.valid_keys:
+            return
+        if len(value) >= 3:
+            self.dropdown.items.clear()
+
+            def on_press(text):
+                split_text = MarkupLabel(text=text, markup=True).markup
+                self.input.set_text(self.input, "".join(text_frag for text_frag in split_text
+                                                    if not text_frag.startswith("[")))
+            lowered = value.lower()
+            for item_name in self.valid_keys:
+                try:
+                    index = item_name.lower().index(lowered)
+                except ValueError:
+                    pass  # substring not found
+                else:
+                    text = escape_markup(item_name)
+                    text = text[:index] + "[b]" + text[index:index+len(value)]+"[/b]"+text[index+len(value):]
+                    self.dropdown.items.append({
+                        "text": text,
+                        "on_release": lambda txt=text: on_press(txt),
+                        "markup": True
+                    })
+            if not self.dropdown.parent:
+                self.dropdown.open()
+        else:
+            self.dropdown.dismiss()
 
 
 class YamlCreator(ThemedApp):
@@ -314,7 +353,7 @@ class YamlCreator(ThemedApp):
 
     def create_popup(self, option: typing.Type[OptionList] | typing.Type[OptionSet], name: str,
                      world: typing.Type[World]):
-        # Despite taking verify keys, we're only supporting Set/List
+        # We're only supporting Set/List
         # Dict may be feasible in the future, but it needs additional typing work
 
         valid_keys = deepcopy(option.valid_keys)
@@ -338,7 +377,7 @@ class YamlCreator(ThemedApp):
                     self.options[name].add(getattr(list_item.text, "text"))
             dialog.dismiss()
 
-        dialog = VisualListSet(option=option, name=name)
+        dialog = VisualListSet(option=option, name=name, valid_keys=valid_keys)
         dialog.scrollbox.layout.md_bg_color = self.theme_cls.surfaceContainerLowColor
         dialog.scrollbox.layout.theme_bg_color = "Custom"
         dialog.scrollbox.layout.spacing = dp(5)
@@ -527,6 +566,10 @@ class YamlCreator(ThemedApp):
         self.game_label = self.container.ids.game
         self.name_input = self.container.ids.player_name
         self.option_layout = self.container.ids.options
+
+        from kivy.modules.console import create_console
+        from kivy.core.window import Window
+        create_console(Window, self.container)
 
         return self.container
 

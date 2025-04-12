@@ -57,11 +57,15 @@
         id: button
         icon: "checkbox-outline" if this.option.default else "checkbox-blank-outline"
 
+<VisualListSetEntry@ResizableTextField>:
+    height: "20dp"
+
 <VisualListSet>:
     id: this
     scrollbox: scrollbox
     add: add
     save: save
+    input: input
 
     MDDialogHeadlineText:
         text: getattr(this.option, "display_name", this.name)
@@ -69,16 +73,26 @@
     MDDialogSupportingText:
         text: "Add or Remove Entries"
 
+
+
     MDDialogContentContainer:
         orientation: "vertical"
         MDDivider:
-        MDIconButton:
-            id: add
-            icon: "plus"
-            pos_hint: {"center_x": 1, "center_y": 0.5}
+        MDBoxLayout:
+            orientation: "horizontal"
+            VisualListSetEntry:
+                id: input
+                height: "20dp"
+
+            MDIconButton:
+                id: add
+                icon: "plus"
+                pos_hint: {"center_x": 1, "center_y": 0.5}
         ScrollBox:
             id: scrollbox
             size_hint_y: None
+            theme_bg_color: "Custom"
+            md_bg_color: app.theme_cls.surfaceContainerLowColor
         MDButton:
             id: save
             MDButtonText:
