@@ -2,7 +2,6 @@ import os
 import pkgutil
 import typing
 
-from settings import get_settings
 import Utils
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 
