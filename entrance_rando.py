@@ -50,13 +50,15 @@ class EntranceLookup:
     _random: random.Random
     _expands_graph_cache: dict[Entrance, bool]
     _coupled: bool
+    _usable_exits: set[Entrance]
 
-    def __init__(self, rng: random.Random, coupled: bool):
+    def __init__(self, rng: random.Random, coupled: bool, usable_exits: set[Entrance]):
         self.dead_ends = EntranceLookup.GroupLookup()
         self.others = EntranceLookup.GroupLookup()
         self._random = rng
         self._expands_graph_cache = {}
         self._coupled = coupled
+        self._usable_exits = usable_exits
 
     def _can_expand_graph(self, entrance: Entrance) -> bool:
         """
@@ -95,7 +97,8 @@ class EntranceLookup:
                 # randomizable exits which are not reverse of the incoming entrance.
                 # uncoupled mode is an exception because in this case going back in the door you just came in could
                 # actually lead somewhere new
-                if not exit_.connected_region and (not self._coupled or exit_.name != entrance.name):
+                if (not exit_.connected_region and (not self._coupled or exit_.name != entrance.name)
+                        and exit_ in self._usable_exits):
                     self._expands_graph_cache[entrance] = True
                     return True
                 elif exit_.connected_region and exit_.connected_region not in visited:
@@ -333,7 +336,6 @@ def randomize_entrances(
 
     start_time = time.perf_counter()
     er_state = ERPlacementState(world, coupled)
-    entrance_lookup = EntranceLookup(world.random, coupled)
     # similar to fill, skip validity checks on entrances if the game is beatable on minimal accessibility
     perform_validity_check = True
 
@@ -349,6 +351,7 @@ def randomize_entrances(
 
     # used when membership checks are needed on the exit list, e.g. speculative sweep
     exits_set = set(exits)
+    entrance_lookup = EntranceLookup(world.random, coupled, exits_set)
     for entrance in er_targets:
         entrance_lookup.add(entrance)
 
