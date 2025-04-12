@@ -9,13 +9,13 @@
     MDRelativeLayout:
         ApAsyncImage:
             source: main.image
-            size: (40, 40)
+            size: (48, 48)
             size_hint_y: None
             pos_hint: {"center_x": 0.1, "center_y": 0.5}
 
         MDLabel:
             text: main.component.display_name
-            pos_hint:{"center_x": 0.5, "center_y": 0.85 if main.component.description else 0.65}
+            pos_hint:{"center_x": 0.5, "center_y": 0.75 if main.component.description else 0.65}
             halign: "center"
             font_style: "Title"
             role: "medium"
