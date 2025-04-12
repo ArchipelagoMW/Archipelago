@@ -346,13 +346,14 @@ def run_gui(path: str, args: Any) -> None:
         def filter_clients_by_name(self, caller: MDTextField, name: str) -> None:
             if len(name) == 0:
                 self._refresh_components(self.current_filter)
-            else:
-                sub_matches = [card for card in self.cards
-                               if name.lower() in card.component.display_name.lower()
-                               and card.component.type != Type.HIDDEN]
-                self.button_layout.layout.clear_widgets()
-                for card in sub_matches:
-                    self.button_layout.layout.add_widget(card)
+                return
+
+            sub_matches = [card for card in self.cards
+                           if name.lower() in card.component.display_name.lower()
+                           and card.component.type != Type.HIDDEN]
+            self.button_layout.layout.clear_widgets()
+            for card in sub_matches:
+                self.button_layout.layout.add_widget(card)
 
         def build(self):
             self.top_screen = Builder.load_file(Utils.local_path("data/launcher.kv"))
