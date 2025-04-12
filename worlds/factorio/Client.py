@@ -234,8 +234,7 @@ async def game_watcher(ctx: FactorioContext):
                         f"Connected Multiworld is not the expected one {data['seed_name']} != {ctx.seed_name}")
                 else:
                     data = data["info"]
-                    research_data = data["research_done"]
-                    research_data = {int(tech_name.split("-")[1]) for tech_name in research_data}
+                    research_data: set[int] = {int(tech_name.split("-")[1]) for tech_name in data["research_done"]}
                     victory = data["victory"]
                     await ctx.update_death_link(data["death_link"])
                     ctx.multiplayer = data.get("multiplayer", False)
@@ -249,14 +248,15 @@ async def game_watcher(ctx: FactorioContext):
                             f"New researches done: "
                             f"{[ctx.location_names.lookup_in_game(rid) for rid in research_data - ctx.locations_checked]}")
                         ctx.locations_checked = research_data
-                        await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(research_data)}])
+                        await ctx.check_locations(research_data)
                     death_link_tick = data.get("death_link_tick", 0)
                     if death_link_tick != ctx.death_link_tick:
                         ctx.death_link_tick = death_link_tick
                         if "DeathLink" in ctx.tags:
                             async_start(ctx.send_death())
                     if ctx.energy_link_increment:
-                        in_world_bridges = data["energy_bridges"]
+                        # 1 + quality * 0.3 for each bridge
+                        in_world_bridges: float = data["energy_bridges"]
                         if in_world_bridges:
                             in_world_energy = data["energy"]
                             if in_world_energy < (ctx.energy_link_increment * in_world_bridges):
@@ -264,14 +264,14 @@ async def game_watcher(ctx: FactorioContext):
                                 ctx.last_deplete = time.time()
                                 async_start(ctx.send_msgs([{
                                     "cmd": "Set", "key": ctx.energylink_key, "operations":
-                                        [{"operation": "add", "value": -ctx.energy_link_increment * in_world_bridges},
+                                        [{"operation": "add", "value": int(-ctx.energy_link_increment * in_world_bridges)},
                                          {"operation": "max", "value": 0}],
                                     "last_deplete": ctx.last_deplete
                                 }]))
                             # Above Capacity - (len(Bridges) * ENERGY_INCREMENT)
                             elif in_world_energy > (in_world_bridges * ctx.energy_link_increment * 5) - \
                                     ctx.energy_link_increment * in_world_bridges:
-                                value = ctx.energy_link_increment * in_world_bridges
+                                value = int(ctx.energy_link_increment * in_world_bridges)
                                 async_start(ctx.send_msgs([{
                                     "cmd": "Set", "key": ctx.energylink_key, "operations":
                                         [{"operation": "add", "value": value}]
@@ -407,7 +407,7 @@ async def get_info(ctx: FactorioContext, rcon_client: factorio_rcon.RCONClient):
     ctx.auth = info["slot_name"]
     ctx.seed_name = info["seed_name"]
     death_link = info["death_link"]
-    ctx.energy_link_increment = info.get("energy_link", 0)
+    ctx.energy_link_increment = int(info.get("energy_link", 0))
     logger.debug(f"Energy Link Increment: {ctx.energy_link_increment}")
     if ctx.energy_link_increment and ctx.ui:
         ctx.ui.enable_energy_link()
@@ -531,7 +531,7 @@ server_args = ("--rcon-port", rcon_port, "--rcon-password", rcon_password)
 def launch():
     import colorama
     global executable, server_settings, server_args
-    colorama.init()
+    colorama.just_fix_windows_console()
 
     if server_settings:
         server_settings = os.path.abspath(server_settings)

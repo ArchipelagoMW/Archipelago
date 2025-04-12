@@ -1,19 +1,20 @@
+import itertools
 import logging
 import os
 import threading
 import unittest
-from argparse import Namespace
 from contextlib import contextmanager
 from typing import Dict, ClassVar, Iterable, Tuple, Optional, List, Union, Any
 
-from BaseClasses import MultiWorld, CollectionState, PlandoOptions, get_seed, Location, Item, ItemClassification
-from Options import VerifyKeys
+from BaseClasses import MultiWorld, CollectionState, get_seed, Location, Item
 from test.bases import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
 from worlds.AutoWorld import call_all
 from .assertion import RuleAssertMixin
-from .. import StardewValleyWorld, options, StardewItem
-from ..options import StardewValleyOptions, StardewValleyOption
+from .options.utils import fill_namespace_with_default, parse_class_option_keys, fill_dataclass_with_default
+from .. import StardewValleyWorld, StardewItem, StardewRule
+from ..logic.time_logic import MONTH_COEFFICIENT
+from ..options import StardewValleyOption
 
 logger = logging.getLogger(__name__)
 
@@ -21,178 +22,19 @@ DEFAULT_TEST_SEED = get_seed()
 logger.info(f"Default Test Seed: {DEFAULT_TEST_SEED}")
 
 
-def default_6_x_x():
-    return {
-        options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.default,
-        options.BackpackProgression.internal_name: options.BackpackProgression.default,
-        options.Booksanity.internal_name: options.Booksanity.default,
-        options.BuildingProgression.internal_name: options.BuildingProgression.default,
-        options.BundlePrice.internal_name: options.BundlePrice.default,
-        options.BundleRandomization.internal_name: options.BundleRandomization.default,
-        options.Chefsanity.internal_name: options.Chefsanity.default,
-        options.Cooksanity.internal_name: options.Cooksanity.default,
-        options.Craftsanity.internal_name: options.Craftsanity.default,
-        options.Cropsanity.internal_name: options.Cropsanity.default,
-        options.ElevatorProgression.internal_name: options.ElevatorProgression.default,
-        options.EntranceRandomization.internal_name: options.EntranceRandomization.default,
-        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.default,
-        options.FestivalLocations.internal_name: options.FestivalLocations.default,
-        options.Fishsanity.internal_name: options.Fishsanity.default,
-        options.Friendsanity.internal_name: options.Friendsanity.default,
-        options.FriendsanityHeartSize.internal_name: options.FriendsanityHeartSize.default,
-        options.Goal.internal_name: options.Goal.default,
-        options.Mods.internal_name: options.Mods.default,
-        options.Monstersanity.internal_name: options.Monstersanity.default,
-        options.Museumsanity.internal_name: options.Museumsanity.default,
-        options.NumberOfMovementBuffs.internal_name: options.NumberOfMovementBuffs.default,
-        options.EnabledFillerBuffs.internal_name: options.EnabledFillerBuffs.default,
-        options.QuestLocations.internal_name: options.QuestLocations.default,
-        options.SeasonRandomization.internal_name: options.SeasonRandomization.default,
-        options.Shipsanity.internal_name: options.Shipsanity.default,
-        options.SkillProgression.internal_name: options.SkillProgression.default,
-        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.default,
-        options.ToolProgression.internal_name: options.ToolProgression.default,
-        options.TrapItems.internal_name: options.TrapItems.default,
-        options.Walnutsanity.internal_name: options.Walnutsanity.default
-    }
+def skip_default_tests() -> bool:
+    return not bool(os.environ.get("base", False))
 
 
-def allsanity_no_mods_6_x_x():
-    return {
-        options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_full_shuffling,
-        options.BackpackProgression.internal_name: options.BackpackProgression.option_progressive,
-        options.Booksanity.internal_name: options.Booksanity.option_all,
-        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
-        options.BundlePrice.internal_name: options.BundlePrice.option_expensive,
-        options.BundleRandomization.internal_name: options.BundleRandomization.option_thematic,
-        options.Chefsanity.internal_name: options.Chefsanity.option_all,
-        options.Cooksanity.internal_name: options.Cooksanity.option_all,
-        options.Craftsanity.internal_name: options.Craftsanity.option_all,
-        options.Cropsanity.internal_name: options.Cropsanity.option_enabled,
-        options.ElevatorProgression.internal_name: options.ElevatorProgression.option_progressive,
-        options.EntranceRandomization.internal_name: options.EntranceRandomization.option_disabled,
-        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
-        options.FestivalLocations.internal_name: options.FestivalLocations.option_hard,
-        options.Fishsanity.internal_name: options.Fishsanity.option_all,
-        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
-        options.FriendsanityHeartSize.internal_name: 1,
-        options.Goal.internal_name: options.Goal.option_perfection,
-        options.Mods.internal_name: frozenset(),
-        options.Monstersanity.internal_name: options.Monstersanity.option_progressive_goals,
-        options.Museumsanity.internal_name: options.Museumsanity.option_all,
-        options.EnabledFillerBuffs.internal_name: options.EnabledFillerBuffs.preset_all,
-        options.NumberOfMovementBuffs.internal_name: 12,
-        options.QuestLocations.internal_name: 56,
-        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_randomized,
-        options.Shipsanity.internal_name: options.Shipsanity.option_everything,
-        options.SkillProgression.internal_name: options.SkillProgression.option_progressive_with_masteries,
-        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
-        options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
-        options.TrapItems.internal_name: options.TrapItems.option_nightmare,
-        options.Walnutsanity.internal_name: options.Walnutsanity.preset_all
-    }
-
-
-def allsanity_mods_6_x_x():
-    allsanity = allsanity_no_mods_6_x_x()
-    allsanity.update({options.Mods.internal_name: frozenset(options.Mods.valid_keys)})
-    return allsanity
-
-
-def get_minsanity_options():
-    return {
-        options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_disabled,
-        options.BackpackProgression.internal_name: options.BackpackProgression.option_vanilla,
-        options.Booksanity.internal_name: options.Booksanity.option_none,
-        options.BuildingProgression.internal_name: options.BuildingProgression.option_vanilla,
-        options.BundlePrice.internal_name: options.BundlePrice.option_very_cheap,
-        options.BundleRandomization.internal_name: options.BundleRandomization.option_vanilla,
-        options.Chefsanity.internal_name: options.Chefsanity.option_none,
-        options.Cooksanity.internal_name: options.Cooksanity.option_none,
-        options.Craftsanity.internal_name: options.Craftsanity.option_none,
-        options.Cropsanity.internal_name: options.Cropsanity.option_disabled,
-        options.ElevatorProgression.internal_name: options.ElevatorProgression.option_vanilla,
-        options.EntranceRandomization.internal_name: options.EntranceRandomization.option_disabled,
-        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
-        options.FestivalLocations.internal_name: options.FestivalLocations.option_disabled,
-        options.Fishsanity.internal_name: options.Fishsanity.option_none,
-        options.Friendsanity.internal_name: options.Friendsanity.option_none,
-        options.FriendsanityHeartSize.internal_name: 8,
-        options.Goal.internal_name: options.Goal.option_bottom_of_the_mines,
-        options.Mods.internal_name: frozenset(),
-        options.Monstersanity.internal_name: options.Monstersanity.option_none,
-        options.Museumsanity.internal_name: options.Museumsanity.option_none,
-        options.EnabledFillerBuffs.internal_name: options.EnabledFillerBuffs.preset_none,
-        options.NumberOfMovementBuffs.internal_name: 0,
-        options.QuestLocations.internal_name: -1,
-        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_disabled,
-        options.Shipsanity.internal_name: options.Shipsanity.option_none,
-        options.SkillProgression.internal_name: options.SkillProgression.option_vanilla,
-        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_vanilla,
-        options.ToolProgression.internal_name: options.ToolProgression.option_vanilla,
-        options.TrapItems.internal_name: options.TrapItems.option_no_traps,
-        options.Walnutsanity.internal_name: options.Walnutsanity.preset_none
-    }
-
-
-def minimal_locations_maximal_items():
-    min_max_options = {
-        options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_disabled,
-        options.BackpackProgression.internal_name: options.BackpackProgression.option_vanilla,
-        options.Booksanity.internal_name: options.Booksanity.option_none,
-        options.BuildingProgression.internal_name: options.BuildingProgression.option_vanilla,
-        options.BundlePrice.internal_name: options.BundlePrice.option_expensive,
-        options.BundleRandomization.internal_name: options.BundleRandomization.option_shuffled,
-        options.Chefsanity.internal_name: options.Chefsanity.option_none,
-        options.Cooksanity.internal_name: options.Cooksanity.option_none,
-        options.Craftsanity.internal_name: options.Craftsanity.option_none,
-        options.Cropsanity.internal_name: options.Cropsanity.option_disabled,
-        options.ElevatorProgression.internal_name: options.ElevatorProgression.option_vanilla,
-        options.EntranceRandomization.internal_name: options.EntranceRandomization.option_disabled,
-        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
-        options.FestivalLocations.internal_name: options.FestivalLocations.option_disabled,
-        options.Fishsanity.internal_name: options.Fishsanity.option_none,
-        options.Friendsanity.internal_name: options.Friendsanity.option_none,
-        options.FriendsanityHeartSize.internal_name: 8,
-        options.Goal.internal_name: options.Goal.option_craft_master,
-        options.Mods.internal_name: frozenset(),
-        options.Monstersanity.internal_name: options.Monstersanity.option_none,
-        options.Museumsanity.internal_name: options.Museumsanity.option_none,
-        options.EnabledFillerBuffs.internal_name: options.EnabledFillerBuffs.preset_all,
-        options.NumberOfMovementBuffs.internal_name: 12,
-        options.QuestLocations.internal_name: -1,
-        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_randomized,
-        options.Shipsanity.internal_name: options.Shipsanity.option_none,
-        options.SkillProgression.internal_name: options.SkillProgression.option_vanilla,
-        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_vanilla,
-        options.ToolProgression.internal_name: options.ToolProgression.option_vanilla,
-        options.TrapItems.internal_name: options.TrapItems.option_nightmare,
-        options.Walnutsanity.internal_name: options.Walnutsanity.preset_none
-    }
-    return min_max_options
-
-
-def minimal_locations_maximal_items_with_island():
-    min_max_options = minimal_locations_maximal_items()
-    min_max_options.update({options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false})
-    return min_max_options
+def skip_long_tests() -> bool:
+    return not bool(os.environ.get("long", False))
 
 
 class SVTestCase(unittest.TestCase):
-    # Set False to not skip some 'extra' tests
-    skip_base_tests: bool = True
-    # Set False to run tests that take long
-    skip_long_tests: bool = True
-
-    @classmethod
-    def setUpClass(cls) -> None:
-        super().setUpClass()
-        base_tests_key = "base"
-        if base_tests_key in os.environ:
-            cls.skip_base_tests = not bool(os.environ[base_tests_key])
-        long_tests_key = "long"
-        if long_tests_key in os.environ:
-            cls.skip_long_tests = not bool(os.environ[long_tests_key])
+    skip_default_tests: bool = skip_default_tests()
+    """Set False to not skip the base fill tests"""
+    skip_long_tests: bool = skip_long_tests()
+    """Set False to run tests that take long"""
 
     @contextmanager
     def solo_world_sub_test(self, msg: Optional[str] = None,
@@ -236,7 +78,6 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
 
         self.original_state = self.multiworld.state.copy()
         self.original_itempool = self.multiworld.itempool.copy()
-        self.original_prog_item_count = world.total_progression_items
         self.unfilled_locations = self.multiworld.get_unfilled_locations(1)
         if self.constructed:
             self.world = world  # noqa
@@ -246,31 +87,29 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
         self.multiworld.itempool = self.original_itempool
         for location in self.unfilled_locations:
             location.item = None
-        self.world.total_progression_items = self.original_prog_item_count
 
         self.multiworld.lock.release()
 
     @property
     def run_default_tests(self) -> bool:
-        if self.skip_base_tests:
+        if self.skip_default_tests:
             return False
         return super().run_default_tests
 
+    def collect_months(self, months: int) -> None:
+        real_total_prog_items = self.world.total_progression_items
+        percent = months * MONTH_COEFFICIENT
+        self.collect("Stardrop", real_total_prog_items * 100 // percent)
+        self.world.total_progression_items = real_total_prog_items
+
     def collect_lots_of_money(self, percent: float = 0.25):
-        self.multiworld.state.collect(self.world.create_item("Shipping Bin"), prevent_sweep=False)
-        real_total_prog_items = self.multiworld.worlds[self.player].total_progression_items
+        self.collect("Shipping Bin")
+        real_total_prog_items = self.world.total_progression_items
         required_prog_items = int(round(real_total_prog_items * percent))
-        for i in range(required_prog_items):
-            self.multiworld.state.collect(self.world.create_item("Stardrop"), prevent_sweep=False)
-        self.multiworld.worlds[self.player].total_progression_items = real_total_prog_items
+        self.collect("Stardrop", required_prog_items)
 
     def collect_all_the_money(self):
-        self.multiworld.state.collect(self.world.create_item("Shipping Bin"), prevent_sweep=False)
-        real_total_prog_items = self.multiworld.worlds[self.player].total_progression_items
-        required_prog_items = int(round(real_total_prog_items * 0.95))
-        for i in range(required_prog_items):
-            self.multiworld.state.collect(self.world.create_item("Stardrop"), prevent_sweep=False)
-        self.multiworld.worlds[self.player].total_progression_items = real_total_prog_items
+        self.collect_lots_of_money(0.95)
 
     def collect_everything(self):
         non_event_items = [item for item in self.multiworld.get_items() if item.code]
@@ -278,7 +117,8 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
             self.multiworld.state.collect(item)
 
     def collect_all_except(self, item_to_not_collect: str):
-        for item in self.multiworld.get_items():
+        non_event_items = [item for item in self.multiworld.get_items() if item.code]
+        for item in non_event_items:
             if item.name != item_to_not_collect:
                 self.multiworld.state.collect(item)
 
@@ -290,31 +130,55 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
 
     def collect(self, item: Union[str, Item, Iterable[Item]], count: int = 1) -> Union[None, Item, List[Item]]:
         assert count > 0
+
         if not isinstance(item, str):
             super().collect(item)
             return
+
         if count == 1:
             item = self.create_item(item)
             self.multiworld.state.collect(item)
             return item
+
         items = []
         for i in range(count):
             item = self.create_item(item)
             self.multiworld.state.collect(item)
             items.append(item)
+
         return items
 
     def create_item(self, item: str) -> StardewItem:
-        created_item = self.world.create_item(item)
-        if created_item.classification == ItemClassification.progression:
-            self.multiworld.worlds[self.player].total_progression_items -= 1
-        return created_item
+        return self.world.create_item(item)
+
+    def get_all_created_items(self) -> list[str]:
+        return [item.name for item in itertools.chain(self.multiworld.get_items(), self.multiworld.precollected_items[self.player])]
 
     def remove_one_by_name(self, item: str) -> None:
         self.remove(self.create_item(item))
 
-    def reset_collection_state(self):
+    def reset_collection_state(self) -> None:
         self.multiworld.state = self.original_state.copy()
+
+    def assert_rule_true(self, rule: StardewRule, state: CollectionState | None = None) -> None:
+        if state is None:
+            state = self.multiworld.state
+        super().assert_rule_true(rule, state)
+
+    def assert_rule_false(self, rule: StardewRule, state: CollectionState | None = None) -> None:
+        if state is None:
+            state = self.multiworld.state
+        super().assert_rule_false(rule, state)
+
+    def assert_can_reach_location(self, location: Location | str, state: CollectionState | None = None) -> None:
+        if state is None:
+            state = self.multiworld.state
+        super().assert_can_reach_location(location, state)
+
+    def assert_cannot_reach_location(self, location: Location | str, state: CollectionState | None = None) -> None:
+        if state is None:
+            state = self.multiworld.state
+        super().assert_cannot_reach_location(location, state)
 
 
 pre_generated_worlds = {}
@@ -330,23 +194,22 @@ def solo_multiworld(world_options: Optional[Dict[Union[str, StardewValleyOption]
         yield multiworld, multiworld.worlds[1]
     else:
         multiworld = setup_solo_multiworld(world_options, seed)
-        multiworld.lock.acquire()
-        world = multiworld.worlds[1]
+        try:
+            multiworld.lock.acquire()
+            world = multiworld.worlds[1]
 
-        original_state = multiworld.state.copy()
-        original_itempool = multiworld.itempool.copy()
-        unfilled_locations = multiworld.get_unfilled_locations(1)
-        original_prog_item_count = world.total_progression_items
+            original_state = multiworld.state.copy()
+            original_itempool = multiworld.itempool.copy()
+            unfilled_locations = multiworld.get_unfilled_locations(1)
 
-        yield multiworld, world
+            yield multiworld, world
 
-        multiworld.state = original_state
-        multiworld.itempool = original_itempool
-        for location in unfilled_locations:
-            location.item = None
-        multiworld.total_progression_items = original_prog_item_count
-
-        multiworld.lock.release()
+            multiworld.state = original_state
+            multiworld.itempool = original_itempool
+            for location in unfilled_locations:
+                location.item = None
+        finally:
+            multiworld.lock.release()
 
 
 # Mostly a copy of test.general.setup_solo_multiworld, I just don't want to change the core.
@@ -369,15 +232,7 @@ def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOp
     multiworld = setup_base_solo_multiworld(StardewValleyWorld, (), seed=seed)
     # print(f"Seed: {multiworld.seed}") # Uncomment to print the seed for every test
 
-    args = Namespace()
-    for name, option in StardewValleyWorld.options_dataclass.type_hints.items():
-        value = option.from_any(test_options.get(name, option.default))
-
-        if issubclass(option, VerifyKeys):
-            # Values should already be verified, but just in case...
-            value.verify(StardewValleyWorld, "Tester", PlandoOptions.bosses)
-
-        setattr(args, name, {1: value})
+    args = fill_namespace_with_default(test_options)
     multiworld.set_options(args)
 
     if "start_inventory" in test_options:
@@ -397,24 +252,6 @@ def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOp
     return multiworld
 
 
-def parse_class_option_keys(test_options: Optional[Dict]) -> dict:
-    """ Now the option class is allowed as key. """
-    if test_options is None:
-        return {}
-    parsed_options = {}
-
-    for option, value in test_options.items():
-        if hasattr(option, "internal_name"):
-            assert option.internal_name not in test_options, "Defined two times by class and internal_name"
-            parsed_options[option.internal_name] = value
-        else:
-            assert option in StardewValleyOptions.type_hints, \
-                f"All keys of world_options must be a possible Stardew Valley option, {option} is not."
-            parsed_options[option] = value
-
-    return parsed_options
-
-
 def search_world_cache(cache: Dict[frozenset, MultiWorld], frozen_options: frozenset) -> Optional[MultiWorld]:
     try:
         return cache[frozen_options]
@@ -430,16 +267,6 @@ def add_to_world_cache(cache: Dict[frozenset, MultiWorld], frozen_options: froze
     cache[frozen_options] = multi_world
 
 
-def complete_options_with_default(options_to_complete=None) -> StardewValleyOptions:
-    if options_to_complete is None:
-        options_to_complete = {}
-
-    for name, option in StardewValleyOptions.type_hints.items():
-        options_to_complete[name] = option.from_any(options_to_complete.get(name, option.default))
-
-    return StardewValleyOptions(**options_to_complete)
-
-
 def setup_multiworld(test_options: Iterable[Dict[str, int]] = None, seed=None) -> MultiWorld:  # noqa
     if test_options is None:
         test_options = []
@@ -451,22 +278,10 @@ def setup_multiworld(test_options: Iterable[Dict[str, int]] = None, seed=None) -
     for i in range(1, len(test_options) + 1):
         multiworld.game[i] = StardewValleyWorld.game
         multiworld.player_name.update({i: f"Tester{i}"})
-    args = create_args(test_options)
+    args = fill_namespace_with_default(test_options)
     multiworld.set_options(args)
 
     for step in gen_steps:
         call_all(multiworld, step)
 
     return multiworld
-
-
-def create_args(test_options):
-    args = Namespace()
-    for name, option in StardewValleyWorld.options_dataclass.type_hints.items():
-        options = {}
-        for i in range(1, len(test_options) + 1):
-            player_options = test_options[i - 1]
-            value = option(player_options[name]) if name in player_options else option.from_any(option.default)
-            options.update({i: value})
-        setattr(args, name, options)
-    return args

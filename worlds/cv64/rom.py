@@ -644,6 +644,9 @@ class CV64PatchExtensions(APPatchExtension):
             # Replace the PowerUp in the Forest Special1 Bridge 3HB rock with an L jewel if 3HBs aren't randomized
             if not options["multi_hit_breakables"]:
                 rom_data.write_byte(0x10C7A1, 0x03)
+            # Replace the PowerUp in one of the lizard lockers if the lizard locker items aren't randomized.
+            if not options["lizard_locker_items"]:
+                rom_data.write_byte(0xBFCA07, 0x03)
         # Change the appearance of the Pot-Pourri to that of a larger PowerUp regardless of the above setting, so other
         # game PermaUps are distinguishable.
         rom_data.write_int32s(0xEE558, [0x06005F08, 0x3FB00000, 0xFFFFFF00])
@@ -684,38 +687,41 @@ class CV64PatchExtensions(APPatchExtension):
 
         # Disable the 3HBs checking and setting flags when breaking them and enable their individual items checking and
         # setting flags instead.
-        if options["multi_hit_breakables"]:
-            rom_data.write_int32(0xE87F8, 0x00000000)  # NOP
-            rom_data.write_int16(0xE836C, 0x1000)
-            rom_data.write_int32(0xE8B40, 0x0C0FF3CD)  # JAL 0x803FCF34
-            rom_data.write_int32s(0xBFCF34, patches.three_hit_item_flags_setter)
-            # Villa foyer chandelier-specific functions (yeah, IDK why KCEK made different functions for this one)
-            rom_data.write_int32(0xE7D54, 0x00000000)  # NOP
-            rom_data.write_int16(0xE7908, 0x1000)
-            rom_data.write_byte(0xE7A5C, 0x10)
-            rom_data.write_int32(0xE7F08, 0x0C0FF3DF)  # JAL 0x803FCF7C
-            rom_data.write_int32s(0xBFCF7C, patches.chandelier_item_flags_setter)
+        rom_data.write_int32(0xE87F8, 0x00000000)  # NOP
+        rom_data.write_int16(0xE836C, 0x1000)
+        rom_data.write_int32(0xE8B40, 0x0C0FF3CD)  # JAL 0x803FCF34
+        rom_data.write_int32s(0xBFCF34, patches.three_hit_item_flags_setter)
+        # Villa foyer chandelier-specific functions (yeah, IDK why KCEK made different functions for this one)
+        rom_data.write_int32(0xE7D54, 0x00000000)  # NOP
+        rom_data.write_int16(0xE7908, 0x1000)
+        rom_data.write_byte(0xE7A5C, 0x10)
+        rom_data.write_int32(0xE7F08, 0x0C0FF3DF)  # JAL 0x803FCF7C
+        rom_data.write_int32s(0xBFCF7C, patches.chandelier_item_flags_setter)
 
-            # New flag values to put in each 3HB vanilla flag's spot
-            rom_data.write_int32(0x10C7C8, 0x8000FF48)  # FoS dirge maiden rock
-            rom_data.write_int32(0x10C7B0, 0x0200FF48)  # FoS S1 bridge rock
-            rom_data.write_int32(0x10C86C, 0x0010FF48)  # CW upper rampart save nub
-            rom_data.write_int32(0x10C878, 0x4000FF49)  # CW Dracula switch slab
-            rom_data.write_int32(0x10CAD8, 0x0100FF49)  # Tunnel twin arrows slab
-            rom_data.write_int32(0x10CAE4, 0x0004FF49)  # Tunnel lonesome bucket pit rock
-            rom_data.write_int32(0x10CB54, 0x4000FF4A)  # UW poison parkour ledge
-            rom_data.write_int32(0x10CB60, 0x0080FF4A)  # UW skeleton crusher ledge
-            rom_data.write_int32(0x10CBF0, 0x0008FF4A)  # CC Behemoth crate
-            rom_data.write_int32(0x10CC2C, 0x2000FF4B)  # CC elevator pedestal
-            rom_data.write_int32(0x10CC70, 0x0200FF4B)  # CC lizard locker slab
-            rom_data.write_int32(0x10CD88, 0x0010FF4B)  # ToE pre-midsavepoint platforms ledge
-            rom_data.write_int32(0x10CE6C, 0x4000FF4C)  # ToSci invisible bridge crate
-            rom_data.write_int32(0x10CF20, 0x0080FF4C)  # CT inverted battery slab
-            rom_data.write_int32(0x10CF2C, 0x0008FF4C)  # CT inverted door slab
-            rom_data.write_int32(0x10CF38, 0x8000FF4D)  # CT final room door slab
-            rom_data.write_int32(0x10CF44, 0x1000FF4D)  # CT Renon slab
-            rom_data.write_int32(0x10C908, 0x0008FF4D)  # Villa foyer chandelier
-            rom_data.write_byte(0x10CF37, 0x04)  # pointer for CT final room door slab item data
+        # New flag values to put in each 3HB vanilla flag's spot
+        rom_data.write_int32(0x10C7C8, 0x8000FF48)  # FoS dirge maiden rock
+        rom_data.write_int32(0x10C7B0, 0x0200FF48)  # FoS S1 bridge rock
+        rom_data.write_int32(0x10C86C, 0x0010FF48)  # CW upper rampart save nub
+        rom_data.write_int32(0x10C878, 0x4000FF49)  # CW Dracula switch slab
+        rom_data.write_int32(0x10CAD8, 0x0100FF49)  # Tunnel twin arrows slab
+        rom_data.write_int32(0x10CAE4, 0x0004FF49)  # Tunnel lonesome bucket pit rock
+        rom_data.write_int32(0x10CB54, 0x4000FF4A)  # UW poison parkour ledge
+        rom_data.write_int32(0x10CB60, 0x0080FF4A)  # UW skeleton crusher ledge
+        rom_data.write_int32(0x10CBF0, 0x0008FF4A)  # CC Behemoth crate
+        rom_data.write_int32(0x10CC2C, 0x2000FF4B)  # CC elevator pedestal
+        rom_data.write_int32(0x10CC70, 0x0200FF4B)  # CC lizard locker slab
+        rom_data.write_int32(0x10CD88, 0x0010FF4B)  # ToE pre-midsavepoint platforms ledge
+        rom_data.write_int32(0x10CE6C, 0x4000FF4C)  # ToSci invisible bridge crate
+        rom_data.write_int32(0x10CF20, 0x0080FF4C)  # CT inverted battery slab
+        rom_data.write_int32(0x10CF2C, 0x0008FF4C)  # CT inverted door slab
+        rom_data.write_int32(0x10CF38, 0x8000FF4D)  # CT final room door slab
+        rom_data.write_int32(0x10CF44, 0x1000FF4D)  # CT Renon slab
+        rom_data.write_int32(0x10C908, 0x0008FF4D)  # Villa foyer chandelier
+
+        # Change the pointer to the Clock Tower final room 3HB door slab drops to not share its values with those of the
+        # 3HB slab near Renon at the top of the room.
+        if options["multi_hit_breakables"]:
+            rom_data.write_byte(0x10CF37, 0x04)
 
         # Once-per-frame gameplay checks
         rom_data.write_int32(0x6C848, 0x080FF40D)  # J 0x803FD034
@@ -1001,6 +1007,7 @@ def write_patch(world: "CV64World", patch: CV64ProcedurePatch, offset_data: Dict
         "multi_hit_breakables": world.options.multi_hit_breakables.value,
         "drop_previous_sub_weapon": world.options.drop_previous_sub_weapon.value,
         "countdown": world.options.countdown.value,
+        "lizard_locker_items": world.options.lizard_locker_items.value,
         "shopsanity": world.options.shopsanity.value,
         "panther_dash": world.options.panther_dash.value,
         "big_toss": world.options.big_toss.value,

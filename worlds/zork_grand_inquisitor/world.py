@@ -176,7 +176,7 @@ class ZorkGrandInquisitorWorld(World):
 
         if start_with_hotspot_items:
             item: ZorkGrandInquisitorItems
-            for item in items_with_tag(ZorkGrandInquisitorTags.HOTSPOT):
+            for item in sorted(items_with_tag(ZorkGrandInquisitorTags.HOTSPOT), key=lambda item: item.name):
                 self.multiworld.push_precollected(self.create_item(item.value))
 
     def create_item(self, name: str) -> ZorkGrandInquisitorItem:
