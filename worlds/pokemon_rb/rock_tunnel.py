@@ -338,6 +338,6 @@ def randomize_rock_tunnel(patch: "typing.Union[PokemonBlueProcedurePatch, Pokemo
         current_map = map2f
         check_addable_block(map2f, disallowed2F)
 
-    patch.write_token(APTokenTypes.WRITE, rom_addresses["Map_Rock_Tunnel1F"], bytes(b for row in map1f for b in row))
-    patch.write_token(APTokenTypes.WRITE, rom_addresses["Map_Rock_TunnelB1F"], bytes(b for row in map2f for b in row))
+    patch.write_token(APTokenTypes.WRITE, rom_addresses["Map_Rock_Tunnel1F"], bytes([b for row in map1f for b in row]))
+    patch.write_token(APTokenTypes.WRITE, rom_addresses["Map_Rock_TunnelB1F"], bytes([b for row in map2f for b in row]))
     return seed
