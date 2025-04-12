@@ -104,7 +104,7 @@ class SC2World(World):
         self.filler_ratio = FillerRatio.default
         self.logic = None
 
-    def create_item(self, name: str) -> Item:
+    def create_item(self, name: str) -> StarcraftItem:
         data = get_full_item_list()[name]
         return StarcraftItem(name, data.classification, data.code, self.player)
 

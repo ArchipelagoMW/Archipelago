@@ -1,7 +1,7 @@
 import logging
 from typing import Callable, Dict, List, Set, Union, Tuple, TYPE_CHECKING, Iterable
 
-from BaseClasses import Location
+from BaseClasses import Location, LocationProgressType, ItemClassification
 from .item import StarcraftItem, ItemFilterFlags, item_names, item_parents, item_groups
 from .item.item_groups import nova_weapons
 from .item.item_tables import item_table, TerranItemType, ZergItemType, ProtossItemType, spear_of_adun_calldowns, \
@@ -311,6 +311,8 @@ class ValidInventory:
             dont_remove_flags: ItemFilterFlags,
             remove_flag: ItemFilterFlags = ItemFilterFlags.Removed,
         ) -> bool:
+            if len(removable) == 0:
+                return False
             item = self.world.random.choice(removable)
             # Do not remove item if it would drop upgrades below minimum
             if min_upgrades_per_unit > 0:
@@ -467,6 +469,13 @@ def filter_items(world: 'SC2World', location_cache: List[Location], item_pool: L
     """
     open_locations = [location for location in location_cache if location.item is None]
     inventory_size = len(open_locations)
+    # Most of the excluded locations get actually removed but Victory ones are mandatory in order to allow the game
+    # to progress normally. Since regular items aren't flagged as filler, we need to generate enough filler for those
+    # locations as we need to have something that can be actually placed there.
+    # Therefore, we reserve those to be filler.
+    excluded_locations = [location for location in open_locations if location.name in world.options.exclude_locations.value]
+    reserved_filler_count = len(excluded_locations)
+    target_nonfiller_item_count = inventory_size - reserved_filler_count
     filler_amount = (inventory_size * world.options.filler_percentage) // 100
     if world.options.required_tactics.value == RequiredTactics.option_no_logic:
         mission_requirements = []
@@ -474,5 +483,9 @@ def filter_items(world: 'SC2World', location_cache: List[Location], item_pool: L
         mission_requirements = [(location.name, location.access_rule) for location in location_cache]
     valid_inventory = ValidInventory(world, item_pool)
 
-    valid_items = valid_inventory.generate_reduced_inventory(inventory_size, filler_amount, mission_requirements)
+    valid_items = valid_inventory.generate_reduced_inventory(target_nonfiller_item_count, filler_amount, mission_requirements)
+    for _ in range(reserved_filler_count):
+        filler_item = world.create_item(world.get_filler_item_name())
+        filler_item.classification = ItemClassification.filler # Must be flagged as Filler, even if it's a Kerrigan level
+        valid_items.append(filler_item)
     return valid_items
