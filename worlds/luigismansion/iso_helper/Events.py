@@ -21,6 +21,11 @@ def get_arc(gcm: GCM, arc_path):
     arc.read()
     return arc
 
+
+def update_boo_gates():
+    pass
+
+# Randomizes all the music in all the event.txt files.
 def randomize_music(gcm: GCM, seed: str) -> GCM:
     list_ignore_events = ["event00.szp"]
     event_dir = gcm.get_or_create_dir_file_entry("files/Event")
@@ -57,6 +62,7 @@ def randomize_music(gcm: GCM, seed: str) -> GCM:
         gcm.changed_files[lm_event.file_path] = Yay0.compress(event_arc.data)
     return gcm
 
+# Updates all portrait ghost hints, if the option is turned on.
 def write_portrait_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict[str, dict[str,str]],
                         seed: str) -> GCM:
     csv_lines = get_data(MAIN_PKG_NAME, "data/custom_csvs/message78.csv").decode('utf-8')
@@ -94,7 +100,7 @@ def write_portrait_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dic
 
     return __update_custom_event_non_local(gcm, "78", True, None, csv_lines)
 
-
+# Updates clairvoya's hints and mario item information based on the options selected.
 def randomize_clairvoya(gcm: GCM, req_mario_count: str, hint_distribution_choice: int,
     madame_hint: dict[str, str], seed: str) -> GCM:
     # Update Madame Clairvoya's event to check mario items.
@@ -155,6 +161,7 @@ def randomize_clairvoya(gcm: GCM, req_mario_count: str, hint_distribution_choice
 
     return __update_custom_event_non_local(gcm, "36", True, lines, csv_lines)
 
+# Using the provided txt or csv lines for a given event file, updates the actual szp file in memory with this data.
 def __update_custom_event_non_local(gcm: GCM, event_number: str, delete_all_other_files: bool,
     event_txt=None, event_csv=None) -> GCM:
     if not event_txt and not event_csv:
@@ -195,6 +202,7 @@ def __update_custom_event_non_local(gcm: GCM, event_number: str, delete_all_othe
     gcm.changed_files["files/Event/event" + event_number + ".szp"] = Yay0.compress(custom_event.data)
     return gcm
 
+# Small function to identify all files that need to be deleted within a given event.
 def __get_all_files_to_delete(custom_rarc: RARC, curr_dir_node: RARCNode, keep_file_list: list[str]) -> {RARCFileEntry}:
     files_to_delete: {RARCFileEntry} = set()
     directories_to_ignore = [".", ".."]
