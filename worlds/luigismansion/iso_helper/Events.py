@@ -72,8 +72,8 @@ def write_portrait_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dic
                         item_color = "2"
                     case _:
                         item_color = "6"
-                hintfo = (f"<COLOR>(7)"+portrait_hint["Rec Player"]+"'s<COLOR>("+item_color+")\\n"+portrait_hint["Item"]+
-                          f"\\n<COLOR>(0)is somewhere in<COLOR>(3)\\n"+portrait_hint["Send Player"]+"'s\\n"+portrait_hint["Game"])
+                hintfo = ("'"+portrait_hint["Rec Player"]+"'s<COLOR>("+item_color+")\\n"+portrait_hint["Item"]+
+                          "\\n<COLOR>(0)is somewhere in\\n<COLOR>(3)\\n"+portrait_hint["Send Player"]+"'s\\n"+portrait_hint["Game"])
                 csv_lines = csv_lines.replace(f"{portrait_name}", hintfo)
             case 1:
                 jokes = get_data(MAIN_PKG_NAME, "data/jokes.txt").decode('utf-8')
@@ -88,9 +88,11 @@ def write_portrait_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dic
                         item_color = "2"
                     case _:
                         item_color = "6"
-                hintfo = (f"<COLOR>(7)"+portrait_hint["Rec Player"]+"'s<COLOR>("+item_color+")\\n"+portrait_hint["Item"]+
-                          f"\\n<COLOR>(0)can be found at<COLOR>(1)\\n"+portrait_hint["Send Player"]+"'s\\n"+portrait_hint["Location"])
+                hintfo = (portrait_hint["Rec Player"]+"'s<COLOR>("+item_color+")\\n"+portrait_hint["Item"]+
+                          "\\n<COLOR>(0)can be found at<COLOR>(1)\\n"+portrait_hint["Send Player"]+"'s\\n"+portrait_hint["Location"])
                 csv_lines = csv_lines.replace(f"{portrait_name}", hintfo)
+
+    return __update_custom_event_non_local(gcm, "78", True, None, csv_lines)
 
 
 def randomize_clairvoya(gcm: GCM, req_mario_count: str, hint_distribution_choice: int,
@@ -151,26 +153,30 @@ def randomize_clairvoya(gcm: GCM, req_mario_count: str, hint_distribution_choice
         else:
             lines = lines.replace(cases_to_replace[i], str_bad_end)
 
-    __update_custom_event_pre_loaded(gcm, "36", True, lines, csv_lines)
-    return gcm
+    return __update_custom_event_non_local(gcm, "36", True, lines, csv_lines)
 
-def __update_custom_event_pre_loaded(gcm: GCM, event_number: str, delete_all_other_files: bool,
-    event_txt: str, event_csv=None):
+def __update_custom_event_non_local(gcm: GCM, event_number: str, delete_all_other_files: bool,
+    event_txt=None, event_csv=None) -> GCM:
+    if not event_txt and not event_csv:
+        raise Exception("Cannot have both the event text and csv text be null/empty.")
+
     custom_event = get_arc(gcm, "files/Event/event" + event_number + ".szp")
     event_txt_file = "event" + event_number + ".txt"
     event_csv_file = "message" + (event_number if not event_number.startswith("0") else event_number[1:]) + ".csv"
 
-    if not any(info_files for info_files in custom_event.file_entries if info_files.name == event_txt_file):
-        raise Exception(f"Unable to find an info file with name '{event_txt_file}' in provided RARC file.")
-
-    lines = BytesIO(event_txt.encode('utf-8'))
-    next((info_files for info_files in custom_event.file_entries if info_files.name == event_txt_file)).data = lines
+    if event_csv:
+        if not any(info_files for info_files in custom_event.file_entries if info_files.name == event_txt_file):
+            raise Exception(f"Unable to find an info file with name '{event_txt_file}' in provided RARC file.")
+        lines = BytesIO(event_txt.encode('utf-8'))
+        next((info_files for info_files in custom_event.file_entries if
+              info_files.name == event_txt_file)).data = lines
 
     if event_csv:
         if not any(info_files for info_files in custom_event.file_entries if info_files.name == event_csv_file):
             raise Exception(f"Unable to find an info file with name '{event_csv_file}' in provided RARC file.")
-        lines = BytesIO(event_csv.encode('utf-8'))
-        next((info_files for info_files in custom_event.file_entries if info_files.name == event_csv_file)).data = lines
+        csv_lines = BytesIO(event_csv.encode('utf-8'))
+        next((info_files for info_files in custom_event.file_entries if
+              info_files.name == event_csv_file)).data = csv_lines
 
     if delete_all_other_files:
         files_to_keep: list[str] = [event_txt_file, ".", ".."]
