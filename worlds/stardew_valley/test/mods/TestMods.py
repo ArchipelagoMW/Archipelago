@@ -1,87 +1,64 @@
 import random
+from typing import ClassVar
 
-from BaseClasses import get_seed, ItemClassification
-from .. import SVTestBase, SVTestCase
+from BaseClasses import get_seed
+from test.param import classvar_matrix
+from .. import SVTestBase, SVTestCase, solo_multiworld
+from ..TestGeneration import get_all_permanent_progression_items
 from ..assertion import ModAssertMixin, WorldAssertMixin
 from ..options.presets import allsanity_mods_6_x_x
 from ..options.utils import fill_dataclass_with_default
-from ... import options, items, Group, create_content
+from ... import options, Group, create_content
 from ...mods.mod_data import ModNames
-from ...options import SkillProgression, Walnutsanity
 from ...options.options import all_mods
 from ...regions import RandomizationFlag, randomize_connections, create_final_connections_and_regions
 
 
-class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
-
-    def test_given_single_mods_when_generate_then_basic_checks(self):
-        for mod in options.Mods.valid_keys:
-            world_options = {options.Mods: mod, options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false}
-            with self.solo_world_sub_test(f"Mod: {mod}", world_options) as (multi_world, _):
-                self.assert_basic_checks(multi_world)
-                self.assert_stray_mod_items(mod, multi_world)
-
-    # The following tests validate that ER still generates winnable and logically-sane games with given mods.
-    # Mods that do not interact with entrances are skipped
-    # Not all ER settings are tested, because 'buildings' is, essentially, a superset of all others
-    def test_deepwoods_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.deepwoods, options.EntranceRandomization.option_buildings)
-
-    def test_juna_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.juna, options.EntranceRandomization.option_buildings)
-
-    def test_jasper_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.jasper, options.EntranceRandomization.option_buildings)
-
-    def test_alec_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.alec, options.EntranceRandomization.option_buildings)
-
-    def test_yoba_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.yoba, options.EntranceRandomization.option_buildings)
-
-    def test_eugene_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.eugene, options.EntranceRandomization.option_buildings)
-
-    def test_ayeisha_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.ayeisha, options.EntranceRandomization.option_buildings)
-
-    def test_riley_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.riley, options.EntranceRandomization.option_buildings)
-
-    def test_sve_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.sve, options.EntranceRandomization.option_buildings)
-
-    def test_alecto_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.alecto, options.EntranceRandomization.option_buildings)
-
-    def test_lacey_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.lacey, options.EntranceRandomization.option_buildings)
-
-    def test_boarding_house_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.boarding_house, options.EntranceRandomization.option_buildings)
-
-    def test_all_mods_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(all_mods, options.EntranceRandomization.option_buildings)
-
-    def perform_basic_checks_on_mod_with_er(self, mods: str | set[str], er_option: int) -> None:
-        if isinstance(mods, str):
-            mods = {mods}
-        world_options = {
-            options.EntranceRandomization: er_option,
-            options.Mods: frozenset(mods),
-            options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false
-        }
-        with self.solo_world_sub_test(f"entrance_randomization: {er_option}, Mods: {mods}", world_options) as (multi_world, _):
-            self.assert_basic_checks(multi_world)
+class TestCanGenerateAllsanityWithMods(WorldAssertMixin, ModAssertMixin, SVTestCase):
 
     def test_allsanity_all_mods_when_generate_then_basic_checks(self):
-        with self.solo_world_sub_test(world_options=allsanity_mods_6_x_x()) as (multi_world, _):
+        with solo_multiworld(allsanity_mods_6_x_x()) as (multi_world, _):
             self.assert_basic_checks(multi_world)
 
     def test_allsanity_all_mods_exclude_island_when_generate_then_basic_checks(self):
         world_options = allsanity_mods_6_x_x()
         world_options.update({options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true})
-        with self.solo_world_sub_test(world_options=world_options) as (multi_world, _):
+        with solo_multiworld(world_options) as (multi_world, _):
+            self.assert_basic_checks(multi_world)
+
+
+@classvar_matrix(mod=all_mods)
+class TestCanGenerateWithEachMod(WorldAssertMixin, ModAssertMixin, SVTestCase):
+    mod: ClassVar[str]
+
+    def test_given_single_mods_when_generate_then_basic_checks(self):
+        world_options = {
+            options.Mods: self.mod,
+            options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false
+        }
+        with solo_multiworld(world_options) as (multi_world, _):
+            self.assert_basic_checks(multi_world)
+            self.assert_stray_mod_items(self.mod, multi_world)
+
+
+@classvar_matrix(mod=all_mods.difference([
+    ModNames.ginger, ModNames.distant_lands, ModNames.skull_cavern_elevator, ModNames.wellwick, ModNames.magic, ModNames.binning_skill, ModNames.big_backpack,
+    ModNames.luck_skill, ModNames.tractor, ModNames.shiko, ModNames.archaeology, ModNames.delores, ModNames.socializing_skill, ModNames.cooking_skill
+]))
+class TestCanGenerateEachModWithEntranceRandomizationBuildings(WorldAssertMixin, SVTestCase):
+    """The following tests validate that ER still generates winnable and logically-sane games with given mods.
+    Mods that do not interact with entrances are skipped
+    Not all ER settings are tested, because 'buildings' is, essentially, a superset of all others
+    """
+    mod: ClassVar[str]
+
+    def test_given_mod_when_generate_then_basic_checks(self) -> None:
+        world_options = {
+            options.EntranceRandomization: options.EntranceRandomization.option_buildings,
+            options.Mods: self.mod,
+            options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false
+        }
+        with solo_multiworld(world_options, world_caching=False) as (multi_world, _):
             self.assert_basic_checks(multi_world)
 
 
@@ -104,22 +81,13 @@ class TestBaseItemGeneration(SVTestBase):
         options.Chefsanity.internal_name: options.Chefsanity.option_all,
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
         options.Booksanity.internal_name: options.Booksanity.option_all,
-        Walnutsanity.internal_name: Walnutsanity.preset_all,
+        options.Walnutsanity.internal_name: options.Walnutsanity.preset_all,
         options.Mods.internal_name: frozenset(options.Mods.valid_keys)
     }
 
     def test_all_progression_items_are_added_to_the_pool(self):
-        all_created_items = [item.name for item in self.multiworld.itempool]
-        # Ignore all the stuff that the algorithm chooses one of, instead of all, to fulfill logical progression
-        items_to_ignore = [event.name for event in items.events]
-        items_to_ignore.extend(deprecated.name for deprecated in items.items_by_group[Group.DEPRECATED])
-        items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
-        items_to_ignore.extend(weapon.name for weapon in items.items_by_group[Group.WEAPON])
-        items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
-        items_to_ignore.extend(resource_pack.name for resource_pack in items.items_by_group[Group.RESOURCE_PACK])
-        items_to_ignore.append("The Gateway Gazette")
-        progression_items = [item for item in items.all_items if item.classification & ItemClassification.progression
-                             and item.name not in items_to_ignore]
+        all_created_items = self.get_all_created_items()
+        progression_items = get_all_permanent_progression_items()
         for progression_item in progression_items:
             with self.subTest(f"{progression_item.name}"):
                 self.assertIn(progression_item.name, all_created_items)
@@ -139,17 +107,8 @@ class TestNoGingerIslandModItemGeneration(SVTestBase):
     }
 
     def test_all_progression_items_except_island_are_added_to_the_pool(self):
-        all_created_items = [item.name for item in self.multiworld.itempool]
-        # Ignore all the stuff that the algorithm chooses one of, instead of all, to fulfill logical progression
-        items_to_ignore = [event.name for event in items.events]
-        items_to_ignore.extend(deprecated.name for deprecated in items.items_by_group[Group.DEPRECATED])
-        items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
-        items_to_ignore.extend(weapon.name for weapon in items.items_by_group[Group.WEAPON])
-        items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
-        items_to_ignore.extend(resource_pack.name for resource_pack in items.items_by_group[Group.RESOURCE_PACK])
-        items_to_ignore.append("The Gateway Gazette")
-        progression_items = [item for item in items.all_items if item.classification & ItemClassification.progression
-                             and item.name not in items_to_ignore]
+        all_created_items = self.get_all_created_items()
+        progression_items = get_all_permanent_progression_items()
         for progression_item in progression_items:
             with self.subTest(f"{progression_item.name}"):
                 if Group.GINGER_ISLAND in progression_item.groups:
@@ -168,7 +127,7 @@ class TestModEntranceRando(SVTestCase):
             sv_options = fill_dataclass_with_default({
                 options.EntranceRandomization.internal_name: option,
                 options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
-                SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
+                options.SkillProgression.internal_name: options.SkillProgression.option_progressive_with_masteries,
                 options.Mods.internal_name: frozenset(options.Mods.valid_keys)
             })
             content = create_content(sv_options)

@@ -43,6 +43,7 @@ class FFMQWebWorld(WebWorld):
         )
     
     tutorials = [setup_en, setup_fr]
+    game_info_languages = ["en", "fr"]
 
 
 class FFMQWorld(World):
