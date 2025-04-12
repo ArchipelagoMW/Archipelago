@@ -292,6 +292,7 @@ class LuigisMansionRandomizer:
             self.update_custom_event(event_no, False, lines, replace_old_csv=True)"""
 
         self.gcm = randomize_clairvoya(self.gcm, req_mario_count, hint_dist, madam_hint_dict, self.seed)
+        self.gcm = write_in_game_hints(self.gcm, hint_dist, hint_list, self.seed)
 
         if bool_portrait_hints:
             self.gcm = write_portrait_hints(self.gcm, hint_dist, hint_list, self.seed)
