@@ -216,8 +216,8 @@ class LuigisMansionRandomizer:
 
         self.update_dol_offsets(bool_boo_rando_enabled)
 
-        update_common_events(self.gcm, bool_randomize_mice)
-        update_intro_and_lab_events(self.gcm, bool_hidden_mansion, max_health, start_inv_list, door_to_close_list)
+        self.gcm = update_common_events(self.gcm, bool_randomize_mice)
+        self.gcm = update_intro_and_lab_events(self.gcm, bool_hidden_mansion, max_health, start_inv_list, door_to_close_list)
 
         if bool_boo_checks:
             boo_list_events = ["16", "47", "96"]
@@ -365,54 +365,6 @@ class LuigisMansionRandomizer:
         # Save all changes to the DOL itself.
         self.dol.save_changes()
         self.gcm.changed_files["sys/main.dol"] = self.dol.data
-
-
-    def update_custom_event(self, event_number: str, check_local_folder: bool, non_local_str="",
-                            custom_made: bool = False, replace_old_csv: bool = False):
-        # TODO Update custom events to remove any camera files or anything else related.
-        if not check_local_folder and not non_local_str:
-            raise Exception("If the custom event does not exist in the local data folder, an event string must be " +
-                            "provided to overwrite an existing event.")
-        if not custom_made:
-            custom_event = self.get_arc("files/Event/event" + event_number + ".szp")
-            name_to_find = "event" + event_number + ".txt"
-        else:
-            custom_event = self.get_arc("files/Event/event64.szp")
-            name_to_find = "event64.txt"
-            next((info_files for info_files in custom_event.file_entries if
-                  info_files.name == name_to_find)).name = "event" + event_number + ".txt"
-            name_to_find = "event" + event_number + ".txt"
-
-        if not any(info_files for info_files in custom_event.file_entries if info_files.name == name_to_find):
-            raise Exception(f"Unable to find an info file with name '{name_to_find}' in provided RARC file.")
-
-        if check_local_folder:
-            lines = io.BytesIO(get_data(__name__, f"data/custom_events/{name_to_find}"))
-        else:
-            lines = io.BytesIO(non_local_str.encode('utf-8'))
-
-        next((info_files for info_files in custom_event.file_entries if info_files.name == name_to_find)).data = lines
-
-        # Some events don't have a CSV, so no need to set it to blank lines
-        # TODO update this to not use a template CSV, as it is now blank.
-        updated_event_number = event_number if not event_number.startswith("0") else event_number[1:]
-        if replace_old_csv:
-            name_to_find = "message" + updated_event_number + ".csv"
-            lines = io.BytesIO(get_data(__name__, f"data/custom_csvs/{name_to_find}"))
-            next((info_files for info_files in custom_event.file_entries if
-                  info_files.name == name_to_find)).data = lines
-        else:
-            bool_csv_lines = any((info_files for info_files in custom_event.file_entries if
-                                  info_files.name == "message" + updated_event_number + ".csv"))
-
-            if bool_csv_lines:
-                csv_lines = io.BytesIO(get_data(__name__, "data/custom_events/TemplateCSV.csv"))
-                next((info_files for info_files in custom_event.file_entries if
-                      info_files.name == "message" + updated_event_number + ".csv")).data = csv_lines
-
-        custom_event.save_changes()
-        self.gcm.changed_files["files/Event/event" + event_number + ".szp"] = (
-            Yay0.compress(custom_event.data))
 
     # If Export to disc is true, Exports the entire file/directory contents of the ISO to specified folder
     # Otherwise, creates a direct ISO file.
