@@ -582,7 +582,7 @@ def generate_output(world: "PokemonRedBlueWorld", output_directory: str):
         for shop in range(1, 11):
             write_bytes(rom_addresses[f"Shop{shop}"], shop_data)
     if world.options.stonesanity:
-        write_bytes(rom_addresses[f"Shop_Stones"], [0xFE, 1, item_table["Poke Doll"].id - 172000000, 0xFF])
+        write_bytes(rom_addresses["Shop_Stones"], [0xFE, 1, item_table["Poke Doll"].id - 172000000, 0xFF])
 
     price = str(world.options.master_ball_price.value).zfill(6)
     price = [int(price[:2], 16), int(price[2:4], 16), int(price[4:], 16)]
