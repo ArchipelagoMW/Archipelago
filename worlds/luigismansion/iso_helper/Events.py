@@ -7,6 +7,7 @@ from gclib.gcm import GCM
 from gclib.rarc import RARC, RARCNode, RARCFileEntry
 from gclib.yaz0_yay0 import Yay0
 
+from .. import ALWAYS_HINT
 from..Hints import PORTRAIT_HINTS
 
 MAIN_PKG_NAME = "worlds.luigismansion.LMGenerator"
@@ -219,6 +220,77 @@ def randomize_clairvoya(gcm: GCM, req_mario_count: str, hint_distribution_choice
             lines = lines.replace(cases_to_replace[i], str_bad_end)
 
     return __update_custom_event(gcm, "36", True, lines, csv_lines)
+
+def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict[str, dict[str, str]], seed: str) -> GCM:
+    for hint_name, hint_data in all_hints:
+        if hint_name not in ALWAYS_HINT or hint_name == "Madame Clairvoya":
+            continue
+        event_no: int = 0
+        match hint_name:
+            case "Courtyard Toad":
+                event_no = 4
+            case "Foyer Toad":
+                event_no = 17
+            case "Wardrobe Balcony Toad":
+                event_no = 32
+            case "1F Washroom Toad":
+                event_no = 63
+            case "Center Telephone":
+                event_no = 92
+            case "Left Telephone":
+                event_no = 93
+            case "Right Telephone":
+                event_no = 94
+
+        if event_no == 4:
+            lines = get_data(MAIN_PKG_NAME, "data/custom_events/event04.txt").decode('utf-8')
+        else:
+            lines = get_data(MAIN_PKG_NAME, "data/custom_events/event"+str(event_no)+".txt").decode('utf-8')
+        csv_lines = get_data(MAIN_PKG_NAME, "data/custom_csvs/message"+str(event_no)+".csv").decode('utf-8')
+        match hint_distribution_choice:
+            case 4:
+                match hint_data["Class"]:
+                    case "Prog":
+                        item_color = "5"
+                    case "Trap":
+                        item_color = "2"
+                    case _:
+                        item_color = "6"
+                csv_lines = csv_lines.replace("{RecPlayer}", hint_data["Rec Player"])
+                csv_lines = csv_lines.replace("{ItemColor}", item_color)
+                csv_lines = csv_lines.replace("{ItemName}", hint_data["Item"])
+                csv_lines = csv_lines.replace("{SendPlayer}", hint_data["Send Player"])
+                csv_lines = csv_lines.replace("{WorldOrLoc}", hint_data["Game"])
+                case_type = "VagueHint"
+            case 5:
+                case_type = "DisabledHint"
+            case 1:
+                jokes = get_data(MAIN_PKG_NAME, "data/jokes.txt").decode('utf-8')
+                random.seed(seed)
+                joke_hint = random.choice(str.splitlines(jokes)).replace("\\\\n", "\n")
+                csv_lines = csv_lines.replace("{JokeText}", joke_hint)
+                case_type = "JokeHint"
+            case _:
+                match hint_data["Class"]:
+                    case "Prog":
+                        item_color = "5"
+                    case "Trap":
+                        item_color = "2"
+                    case _:
+                        item_color = "6"
+                csv_lines = csv_lines.replace("{RecPlayer}", hint_data["Rec Player"])
+                csv_lines = csv_lines.replace("{ItemColor}", item_color)
+                csv_lines = csv_lines.replace("{ItemName}", hint_data["Item"])
+                csv_lines = csv_lines.replace("{SendPlayer}", hint_data["Send Player"])
+                csv_lines = csv_lines.replace("{WorldOrLoc}", hint_data["Location"])
+                case_type = "SpecificHint"
+
+        lines = lines.replace("{HintType}", case_type)
+
+        if event_no == 4:
+            return __update_custom_event(gcm, "04", True, lines, csv_lines)
+        else:
+            return __update_custom_event(gcm, str(event_no), True, lines, csv_lines)
 
 # Using the provided txt or csv lines for a given event file, updates the actual szp file in memory with this data.
 def __update_custom_event(gcm: GCM, event_number: str, delete_all_other_files: bool,
