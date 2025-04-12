@@ -346,26 +346,13 @@ def run_gui(path: str, args: Any) -> None:
         def filter_clients_by_name(self, caller: MDTextField, name: str) -> None:
             if len(name) == 0:
                 self._refresh_components(self.current_filter)
-                return
-            name = name
-            sub_matches = [card for card in self.cards if name.lower() in card.component.display_name.lower()]
-            self.button_layout.layout.clear_widgets()
-
-            for card in sub_matches:
-                self.button_layout.layout.add_widget(card)
-
-            if len(name) < 3:
-                return
             else:
-                name_scores = Utils.get_fuzzy_results(name, [card.component.display_name for card in self.cards])
-                card_scores = [
-                    (card, score)
-                    for name, score in name_scores if score > 25  # Score threshold
-                    for card in self.cards
-                    if card.component.display_name == name and card not in sub_matches
-                ]
-                for card_score in sorted(card_scores, key=lambda t: t[1], reverse=True):
-                    self.button_layout.layout.add_widget(card_score[0])
+                sub_matches = [card for card in self.cards
+                               if name.lower() in card.component.display_name.lower()
+                               and card.component.type != Type.HIDDEN]
+                self.button_layout.layout.clear_widgets()
+                for card in sub_matches:
+                    self.button_layout.layout.add_widget(card)
 
         def build(self):
             self.top_screen = Builder.load_file(Utils.local_path("data/launcher.kv"))
