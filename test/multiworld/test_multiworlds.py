@@ -78,4 +78,11 @@ class TestTwoPlayerMulti(MultiworldTestBase):
         with self.subTest("filling multiworld", games=world_type.game, seed=self.multiworld.seed):
             distribute_items_restrictive(self.multiworld)
             call_all(self.multiworld, "post_fill")
+            with self.subTest("Validating placements", seed=self.multiworld.seed):
+                post_fill_placements = self.multiworld.get_locations()
+                call_all(self.multiworld, "post_balancing")
+                post_balance_placements = self.multiworld.get_locations()
+                for fill_placement, balance_placement in zip(post_fill_placements, post_balance_placements):
+                    self.assertEqual(fill_placement, balance_placement, "Locations were modified in post_balancing")
+                    self.assertEqual(fill_placement.item, balance_placement.item, "Items were moved in post_balancing")
             self.assertTrue(self.fulfills_accessibility(), "Collected all locations, but can't beat the game")
