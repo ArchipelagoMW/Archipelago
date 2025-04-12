@@ -20,9 +20,7 @@ class DLCQuestTestBase(WorldTestBase):
     @classmethod
     def setUpClass(cls) -> None:
         super().setUpClass()
-        long_tests_key = "long"
-        if long_tests_key in os.environ:
-            cls.skip_long_tests = not bool(os.environ[long_tests_key])
+        cls.skip_long_tests = not bool(os.environ.get("long"))
 
     def world_setup(self, *args, **kwargs):
         super().world_setup(*args, **kwargs)
