@@ -7,8 +7,7 @@ from gclib.gcm import GCM
 from gclib.rarc import RARC, RARCNode, RARCFileEntry
 from gclib.yaz0_yay0 import Yay0
 
-from .. import ALWAYS_HINT
-from..Hints import PORTRAIT_HINTS
+from..Hints import PORTRAIT_HINTS, ALWAYS_HINT
 
 MAIN_PKG_NAME = "worlds.luigismansion.LMGenerator"
 
