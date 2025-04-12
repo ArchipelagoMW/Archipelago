@@ -214,6 +214,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     else:
         logger.info("Progression balancing skipped.")
 
+    AutoWorld.call_all(multiworld, "post_balancing")
+
     # we're about to output using multithreading, so we're removing the global random state to prevent accidental use
     multiworld.random.passthrough = False
 
