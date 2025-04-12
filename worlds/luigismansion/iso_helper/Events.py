@@ -85,6 +85,51 @@ def update_boo_gates(gcm: GCM, event_no: str, req_boo_count: int, boo_rando_enab
 
     return __update_custom_event(gcm, event_no, True, lines, None)
 
+# Updates the event txt and csv for blackout
+def update_blackout_event(gcm: GCM) -> GCM:
+    lines = get_data(MAIN_PKG_NAME, "data/custom_events/event44.txt").decode('utf-8')
+    csv_lines = get_data(MAIN_PKG_NAME, "data/custom_csvs/message44.csv").decode('utf-8')
+    return __update_custom_event(gcm, "44", True, lines, csv_lines)
+
+# Updates all common events
+def update_common_events(gcm: GCM, randomize_mice: bool) -> GCM:
+    list_custom_events = ["03", "22", "24", "29", "33", "35", "38", "50", "61", "64", "65",
+     "66", "67", "68", "71", "72", "74", "75", "82", "86", "87", "88", "89", "90"]
+    if randomize_mice:
+        list_custom_events += ["95", "97", "98", "99", "100"]
+
+    for custom_event in list_custom_events:
+        lines = get_data(MAIN_PKG_NAME, "data/custom_events/event" + custom_event +".txt").decode('utf-8')
+        gcm = __update_custom_event(gcm, custom_event, True, lines, None)
+
+    return gcm
+
+# Update the intro event and E. Gadd event as needed.
+def update_intro_and_lab_events(gcm: GCM, hidden_mansion: bool, max_health: str, start_inv: list[str],
+    doors_to_open: dict[int, int]) -> GCM:
+    lines = get_data(__name__, "data/custom_events/event08.txt").decode('utf-8')
+    lines = lines.replace("{LUIGIMAXHP}", max_health)
+    gcm = __update_custom_event(gcm, "08", True, lines, None)
+
+    lines = get_data(__name__, "data/custom_events/event48.txt").decode('utf-8')
+    lines = lines.replace("{MANSION_TYPE}", "<URALUIGI>" if hidden_mansion else "<OMOTELUIGI>")
+
+    include_radar = ""
+    if any("Boo Radar" in key for key in start_inv):
+        include_radar = "<FLAGON>(73)\n<FLAGON>(75)"
+    lines = lines.replace("{BOO RADAR}", include_radar)
+
+    event_door_list: list[str] = []
+    door_list: dict[int, int] = doors_to_open
+
+    for event_door in door_list:
+        event_door_list.append(("<KEYLOCK>" if door_list.get(event_door) == 0 else "<KEYUNLOCK>")+f"({event_door})\n")
+
+    lines = lines.replace("{DOOR_LIST}", ''.join(event_door_list))
+    lines = lines.replace("{LUIGIMAXHP}", max_health)
+
+    return __update_custom_event(gcm, "48", True, lines, None)
+
 # Randomizes all the music in all the event.txt files.
 def randomize_music(gcm: GCM, seed: str) -> GCM:
     list_ignore_events = ["event00.szp"]
@@ -163,7 +208,6 @@ def write_portrait_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dic
 # Updates clairvoya's hints and mario item information based on the options selected.
 def randomize_clairvoya(gcm: GCM, req_mario_count: str, hint_distribution_choice: int,
     madame_hint: dict[str, str], seed: str) -> GCM:
-    # Update Madame Clairvoya's event to check mario items.
     lines = get_data(MAIN_PKG_NAME, "data/custom_events/event36.txt").decode('utf-8')
     csv_lines = get_data(MAIN_PKG_NAME, "data/custom_csvs/message36.csv").decode('utf-8')
 
@@ -221,7 +265,10 @@ def randomize_clairvoya(gcm: GCM, req_mario_count: str, hint_distribution_choice
 
     return __update_custom_event(gcm, "36", True, lines, csv_lines)
 
-def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict[str, dict[str, str]], seed: str) -> GCM:
+# Writes all the in game hints for everything except clairvoya
+def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict[str, dict[str, str]],
+    seed: str) -> GCM:
+
     for hint_name, hint_data in all_hints:
         if hint_name not in ALWAYS_HINT or hint_name == "Madame Clairvoya":
             continue
@@ -247,6 +294,7 @@ def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict
         else:
             lines = get_data(MAIN_PKG_NAME, "data/custom_events/event"+str(event_no)+".txt").decode('utf-8')
         csv_lines = get_data(MAIN_PKG_NAME, "data/custom_csvs/message"+str(event_no)+".csv").decode('utf-8')
+
         match hint_distribution_choice:
             case 4:
                 match hint_data["Class"]:
@@ -289,8 +337,7 @@ def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict
 
         if event_no == 4:
             return __update_custom_event(gcm, "04", True, lines, csv_lines)
-        else:
-            return __update_custom_event(gcm, str(event_no), True, lines, csv_lines)
+        return __update_custom_event(gcm, str(event_no), True, lines, csv_lines)
 
 # Using the provided txt or csv lines for a given event file, updates the actual szp file in memory with this data.
 def __update_custom_event(gcm: GCM, event_number: str, delete_all_other_files: bool,

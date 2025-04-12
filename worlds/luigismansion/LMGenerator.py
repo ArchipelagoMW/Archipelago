@@ -196,8 +196,12 @@ class LuigisMansionRandomizer:
         # Get Output data required information
         bool_boo_rando_enabled: bool = True if self.output_data["Options"]["boosanity"] == 1 else False
         req_mario_count: str = str(self.output_data["Options"]["mario_items"])
-        luigi_max_health: int = int(self.output_data["Options"]["luigi_max_health"])
-        bool_randomize_music: bool = True if self.output_data["Options"]["random_music"] == 1 else False
+        max_health: str = str(self.output_data["Options"]["luigi_max_health"])
+        door_to_close_list: dict[int, int] = dict(self.output_data["Entrances"])
+        start_inv_list: list[str] = list(self.output_data["Options"]["start_inventory"])
+        bool_randomize_music: bool = True if int(self.output_data["Options"]["random_music"]) == 1 else False
+        bool_randomize_mice: bool = True if int(self.output_data["Options"]["gold_mice"]) == 1 else False
+        bool_hidden_mansion: bool = True if int(self.output_data["Options"]["hidden_mansion"]) == 1 else False
 
         # Boo related options
         bool_boo_checks: bool = True if self.output_data["Options"]["boo_gates"] == 1 else False
@@ -213,44 +217,8 @@ class LuigisMansionRandomizer:
 
         self.update_dol_offsets(bool_boo_rando_enabled)
 
-        # Update all custom events
-        list_events = ["03", "22", "24", "29", "33", "35", "38", "50", "61", "64", "65",
-                       "66", "67", "68", "71", "72", "74", "75", "82", "86", "87", "88", "89", "90"]
-        if self.output_data["Options"]["gold_mice"] == 1:
-            list_events += ["95", "97", "98", "99", "100"]
-        for custom_event in list_events:
-            self.update_custom_event(custom_event, True)
-
-        lines = get_data(__name__, "data/custom_events/event08.txt").decode('utf-8')
-        lines = lines.replace("{LUIGIMAXHP}", str(luigi_max_health))
-        self.update_custom_event("08", False, lines, replace_old_csv=True)
-
-        lines = get_data(__name__, "data/custom_events/event48.txt").decode('utf-8')
-
-        if self.output_data["Options"]["hidden_mansion"] == 1:
-            mansion_type = "<URALUIGI>"
-        else:
-            mansion_type = "<OMOTELUIGI>"
-        lines = lines.replace("{MANSION_TYPE}", mansion_type)
-
-        include_radar = ""
-        if any("Boo Radar" in key for key in self.output_data["Options"]["start_inventory"]):
-            include_radar = "<FLAGON>(73)" + os.linesep + "<FLAGON>(75)"
-        lines = lines.replace("{BOO RADAR}", include_radar)
-
-        event_door_list: list[str] = []
-        door_list: dict[int, int] = self.output_data["Entrances"]
-
-        for event_door in door_list:
-            if door_list.get(event_door) == 0:
-                event_door_list.append(f"<KEYLOCK>({event_door})" + os.linesep)
-            else:
-                event_door_list.append(f"<KEYUNLOCK>({event_door})" + os.linesep)
-
-        lines = lines.replace("{DOOR_LIST}", ''.join(event_door_list))
-        lines = lines.replace("{LUIGIMAXHP}", str(luigi_max_health))
-
-        self.update_custom_event("48", False, lines)
+        update_common_events(self.gcm, bool_randomize_mice)
+        update_intro_and_lab_events(self.gcm, bool_hidden_mansion, max_health, start_inv_list, door_to_close_list)
 
         if bool_boo_checks:
             boo_list_events = ["16", "47", "96"]
@@ -268,28 +236,7 @@ class LuigisMansionRandomizer:
                     continue
                 self.gcm = update_boo_gates(self.gcm, event_no, required_boo_count, bool_boo_rando_enabled)
 
-        # Update Toad events with hints
-        """in_game_hint_events = ["04", "17", "32", "44", "63", "92", "93", "94"]
-        for event_no in in_game_hint_events:
-            hintfo: str = ""
-            match event_no:
-                case "04":
-                    hintfo = self.output_data["Hints"]["Courtyard Toad"]
-                case "17":
-                    hintfo = self.output_data["Hints"]["Foyer Toad"]
-                case "32":
-                    hintfo = self.output_data["Hints"]["Wardrobe Balcony Toad"]
-                case "63":
-                    hintfo = self.output_data["Hints"]["1F Washroom Toad"]
-                case "92":
-                    hintfo = self.output_data["Hints"]["Center Telephone"]
-                case "93":
-                    hintfo = self.output_data["Hints"]["Left Telephone"]
-                case "94":
-                    hintfo = self.output_data["Hints"]["Right Telephone"]
-            lines = get_data(__name__, "data/custom_events/event" + event_no + ".txt").decode('utf-8')
-            lines = lines.replace("{HintText}", str(hintfo))
-            self.update_custom_event(event_no, False, lines, replace_old_csv=True)"""
+        self.gcm = update_blackout_event(self.gcm)
 
         self.gcm = randomize_clairvoya(self.gcm, req_mario_count, hint_dist, madam_hint_dict, self.seed)
         self.gcm = write_in_game_hints(self.gcm, hint_dist, hint_list, self.seed)
