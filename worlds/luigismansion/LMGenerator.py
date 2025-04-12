@@ -199,7 +199,7 @@ class LuigisMansionRandomizer:
         bool_boo_rando_on: bool = True if self.output_data["Options"]["boosanity"] == 1 else False
         req_mario_count: str = str(self.output_data["Options"]["mario_items"])
         bool_randomize_music: bool = True if self.output_data["Options"]["random_music"] == 1 else False
-        # bool_portrait_hints: bool = True if self.output_data["Options"]["portrait_hints"] == 1 else False
+        bool_portrait_hints: bool = True if self.output_data["Options"]["portrait_hints"] == 1 else False
         washroom_boo_count: int = int(self.output_data["Options"]["washroom_boo_count"])
         balcony_boo_count: int = int(self.output_data["Options"]["balcony_boo_count"])
         final_boo_count: int = int(self.output_data["Options"]["final_boo_count"])
@@ -346,8 +346,10 @@ class LuigisMansionRandomizer:
             lines = lines.replace("{HintText}", str(hintfo))
             self.update_custom_event(event_no, False, lines, replace_old_csv=True)"""
 
-        self.gcm = write_portrait_hints(self.gcm, hint_dist, hint_list, self.seed)
         self.gcm = randomize_clairvoya(self.gcm, req_mario_count, hint_dist, madam_hint_dict, self.seed)
+
+        if bool_portrait_hints:
+            self.gcm = write_portrait_hints(self.gcm, hint_dist, hint_list, self.seed)
 
         if bool_randomize_music:
             self.gcm = randomize_music(self.gcm, self.seed)
