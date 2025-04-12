@@ -31,7 +31,8 @@ class PokemonRedProcedurePatch(APProcedurePatch, APTokenMixin):
 
     @classmethod
     def get_source_data(cls) -> bytes:
-        with open(get_settings().pokemon_rb_options.red_rom_file, "rb") as infile:
+        from . import PokemonRedBlueWorld
+        with open(PokemonRedBlueWorld.settings.red_rom_file, "rb") as infile:
             base_rom_bytes = bytes(infile.read())
 
         return base_rom_bytes
@@ -50,7 +51,8 @@ class PokemonBlueProcedurePatch(APProcedurePatch, APTokenMixin):
 
     @classmethod
     def get_source_data(cls) -> bytes:
-        with open(get_settings().pokemon_rb_options.blue_rom_file, "rb") as infile:
+        from . import PokemonRedBlueWorld
+        with open(PokemonRedBlueWorld.settings.blue_rom_file, "rb") as infile:
             base_rom_bytes = bytes(infile.read())
 
         return base_rom_bytes
