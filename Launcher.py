@@ -102,8 +102,7 @@ components.extend([
     Component("Open host.yaml", func=open_host_yaml,
               description="Open the host.yaml file to change settings for generation,\ngames, and more."),
     Component("Open Patch", func=open_patch,
-              description="Open a patch file, downloaded from the room page or\n"
-              "provided by the host, to play Archipelago."),
+              description="Open a patch file, downloaded from the room page or\nprovided by the host."),
     Component("Generate Template Options", func=generate_yamls,
               description="Generate template YAMLs for currently installed games."),
     Component("Archipelago Website", func=lambda: webbrowser.open("https://archipelago.gg/"),
