@@ -153,3 +153,30 @@ fish_tank_bundles_remixed.remove(crab_pot_bundle_thematic)
 fish_tank_bundles_remixed.append(crab_pot_bundle_vanilla)
 
 fish_tank_remixed = BundleRoomTemplate(CCRoom.fish_tank, fish_tank_bundles_remixed, 6)
+
+# Boiler Room
+
+# Where to put radioactive bar?
+treasure_hunter_items = [emerald, aquamarine, ruby, amethyst, topaz, jade, diamond]
+treasure_hunter_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.treasure_hunter, treasure_hunter_items, 6, 5)
+
+engineer_items = [iridium_ore.as_amount(5), battery_pack, refined_quartz.as_amount(5), diamond]
+engineer_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.engineer, engineer_items, 3, 3)
+
+demolition_items = [cherry_bomb, bomb, mega_bomb, explosive_ammo]
+demolition_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.demolition, demolition_items, 3, 3)
+
+recycling_items = [stone, coal, iron_ore, wood, cloth, refined_quartz]
+recycling_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.recycling, recycling_items, 4, 4)
+
+archaeologist_items = [golden_mask, golden_relic, ancient_drum, dwarf_gadget, dwarvish_helm, prehistoric_handaxe, bone_flute, anchor, prehistoric_tool,
+                       chicken_statue, rusty_cog, rusty_spur, rusty_spoon, ancient_sword, ornamental_fan, elvish_jewelry, ancient_doll, chipped_amphora]
+archaeologist_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.archaeologist, archaeologist_items, 6, 3)
+
+paleontologist_items = [prehistoric_scapula, prehistoric_tibia, prehistoric_skull, skeletal_hand, prehistoric_rib, prehistoric_vertebra, skeletal_tail,
+                        nautilus_fossil, amphibian_fossil, palm_fossil, trilobite]
+paleontologist_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.paleontologist, paleontologist_items, 6, 3)
+
+boiler_room_bundles_remixed = [*boiler_room_bundles_thematic, treasure_hunter_bundle, engineer_bundle,
+                               demolition_bundle, recycling_bundle, archaeologist_bundle, paleontologist_bundle]
+boiler_room_remixed = BundleRoomTemplate(CCRoom.boiler_room, boiler_room_bundles_remixed, 3)
