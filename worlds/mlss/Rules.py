@@ -148,12 +148,13 @@ def set_rules(world: "MLSSWorld", excluded):
                           and StateLogic.canDash(state, world.player)
                           and StateLogic.canCrash(state, world.player)
         )
-        add_rule(
-            world.get_location(LocationName.BowsersCastleWendyLarryHallwayDigspot),
-            lambda state: StateLogic.ultra(state, world.player)
-                          and StateLogic.fire(state, world.player)
-                          and StateLogic.canCrash(state, world.player)
-        )
+        if world.options.chuckle_beans != 0:
+            add_rule(
+                world.get_location(LocationName.BowsersCastleWendyLarryHallwayDigspot),
+                lambda state: StateLogic.ultra(state, world.player)
+                              and StateLogic.fire(state, world.player)
+                              and StateLogic.canCrash(state, world.player)
+            )
         add_rule(
             world.get_location(LocationName.BowsersCastleBeforeFawfulFightBlock1),
             lambda state: StateLogic.canDig(state, world.player)
