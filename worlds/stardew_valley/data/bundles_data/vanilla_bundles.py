@@ -1,5 +1,5 @@
 from .bundle_items_data import *
-from ...bundles.bundle import DeepBundleTemplate, BundleTemplate
+from ...bundles.bundle import DeepBundleTemplate, BundleTemplate, MoneyBundleTemplate
 from ...bundles.bundle_item import BundleItem
 from ...bundles.bundle_room import BundleRoomTemplate
 from ...content.vanilla.base import all_fruits, all_vegetables
@@ -9,6 +9,8 @@ from ...strings.fish_names import Fish
 from ...strings.forageable_names import all_edible_mushrooms
 
 # Giant Stump
+from ...strings.quality_names import ArtisanQuality, FishQuality
+
 all_specific_jellies = [BundleItem(ArtisanGood.jelly, flavor=fruit, source=BundleItem.Sources.content) for fruit in all_fruits]
 all_specific_pickles = [BundleItem(ArtisanGood.pickles, flavor=vegetable, source=BundleItem.Sources.content) for vegetable in all_vegetables]
 all_specific_dried_fruits = [*[BundleItem(ArtisanGood.dried_fruit, flavor=fruit, source=BundleItem.Sources.content) for fruit in all_fruits],
@@ -121,3 +123,45 @@ adventurer_bundle_vanilla = BundleTemplate(CCRoom.boiler_room, BundleName.advent
 
 boiler_room_bundles_vanilla = [blacksmith_bundle_vanilla, geologist_bundle_vanilla, adventurer_bundle_vanilla]
 boiler_room_vanilla = BundleRoomTemplate(CCRoom.boiler_room, boiler_room_bundles_vanilla, 3)
+
+# Bulletin Board
+chef_items_vanilla = [maple_syrup, fiddlehead_fern, truffle, poppy, maki_roll, fried_egg]
+chef_bundle_vanilla = BundleTemplate(CCRoom.bulletin_board, BundleName.chef, chef_items_vanilla, 6, 6)
+
+dye_items_vanilla = [red_mushroom, sea_urchin, sunflower, duck_feather, aquamarine, red_cabbage]
+dye_bundle_vanilla = BundleTemplate(CCRoom.bulletin_board, BundleName.dye, dye_items_vanilla, 6, 6)
+
+field_research_items_vanilla = [purple_mushroom, nautilus_shell, chub, frozen_geode]
+field_research_bundle_vanilla = BundleTemplate(CCRoom.bulletin_board, BundleName.field_research, field_research_items_vanilla, 4, 4)
+
+fodder_items_vanilla = [wheat.as_amount(10), hay.as_amount(10), apple.as_amount(3)]
+fodder_bundle_vanilla = BundleTemplate(CCRoom.bulletin_board, BundleName.fodder, fodder_items_vanilla, 3, 3)
+
+enchanter_items_vanilla = [oak_resin, wine, rabbit_foot, pomegranate]
+enchanter_bundle_vanilla = BundleTemplate(CCRoom.bulletin_board, BundleName.enchanter, enchanter_items_vanilla, 4, 4)
+
+bulletin_board_bundles_vanilla = [chef_bundle_vanilla, dye_bundle_vanilla, field_research_bundle_vanilla, fodder_bundle_vanilla, enchanter_bundle_vanilla]
+bulletin_board_vanilla = BundleRoomTemplate(CCRoom.bulletin_board, bulletin_board_bundles_vanilla, 5)
+
+# Abandoned Joja Mart
+missing_bundle_items_vanilla = [wine.as_quality(ArtisanQuality.silver), dinosaur_mayo, prismatic_shard, caviar,
+                                ancient_fruit.as_quality_crop(), void_salmon.as_quality(FishQuality.gold)]
+missing_bundle_vanilla = BundleTemplate(CCRoom.abandoned_joja_mart, BundleName.missing_bundle, missing_bundle_items_vanilla, 6, 5)
+
+abandoned_joja_mart_bundles_vanilla = [missing_bundle_vanilla]
+abandoned_joja_mart_vanilla = BundleRoomTemplate(CCRoom.abandoned_joja_mart, abandoned_joja_mart_bundles_vanilla, 1)
+
+
+# Vault
+vault_2500_gold = BundleItem.money_bundle(2500)
+vault_5000_gold = BundleItem.money_bundle(5000)
+vault_10000_gold = BundleItem.money_bundle(10000)
+vault_25000_gold = BundleItem.money_bundle(25000)
+
+vault_2500_bundle = MoneyBundleTemplate(CCRoom.vault, BundleName.money_2500, vault_2500_gold)
+vault_5000_bundle = MoneyBundleTemplate(CCRoom.vault, BundleName.money_5000, vault_5000_gold)
+vault_10000_bundle = MoneyBundleTemplate(CCRoom.vault, BundleName.money_10000, vault_10000_gold)
+vault_25000_bundle = MoneyBundleTemplate(CCRoom.vault, BundleName.money_25000, vault_25000_gold)
+
+vault_bundles_vanilla = [vault_2500_bundle, vault_5000_bundle, vault_10000_bundle, vault_25000_bundle]
+vault_vanilla = BundleRoomTemplate(CCRoom.vault, vault_bundles_vanilla, 4)

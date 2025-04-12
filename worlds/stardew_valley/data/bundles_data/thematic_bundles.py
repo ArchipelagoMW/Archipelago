@@ -4,6 +4,8 @@ from ...bundles.bundle_room import BundleRoomTemplate
 from ...strings.bundle_names import CCRoom, BundleName
 
 # Giant Stump
+from ...strings.quality_names import ArtisanQuality, FishQuality
+
 raccoon_fish_items_flat = [*raccoon_crab_pot_fish_items, *raccoon_smoked_fish_items]
 raccoon_fish_bundle_thematic = BundleTemplate(CCRoom.raccoon_requests, BundleName.raccoon_fish, raccoon_fish_items_flat, 3, 2)
 raccoon_artisan_bundle_thematic = BundleTemplate(CCRoom.raccoon_requests, BundleName.raccoon_artisan, raccoon_artisan_items, 3, 2)
@@ -105,3 +107,52 @@ adventurer_bundle_thematic = BundleTemplate.extend_from(adventurer_bundle_vanill
 
 boiler_room_bundles_thematic = [blacksmith_bundle_thematic, geologist_bundle_thematic, adventurer_bundle_thematic]
 boiler_room_thematic = BundleRoomTemplate(CCRoom.boiler_room, boiler_room_bundles_thematic, 3)
+
+# Bulletin Board
+
+# More recipes?
+chef_items_thematic = [maki_roll, fried_egg, omelet, pizza, hashbrowns, pancakes, bread, tortilla,
+                       farmer_s_lunch, survival_burger, dish_o_the_sea, miner_s_treat, roots_platter, salad,
+                       cheese_cauliflower, parsnip_soup, fried_mushroom, salmon_dinner, pepper_poppers, spaghetti,
+                       sashimi, blueberry_tart, algae_soup, pale_broth, chowder]
+chef_bundle_thematic = BundleTemplate.extend_from(chef_bundle_vanilla, chef_items_thematic)
+
+dye_red_items = [cranberries, hot_pepper, radish, rhubarb, spaghetti, strawberry, tomato, tulip, red_mushroom]
+dye_orange_items = [poppy, pumpkin, apricot, orange, spice_berry, winter_root]
+dye_yellow_items = [corn, parsnip, summer_spangle, sunflower, starfruit]
+dye_green_items = [fiddlehead_fern, kale, artichoke, bok_choy, green_bean, cactus_fruit, duck_feather, dinosaur_egg]
+dye_blue_items = [blueberry, blue_jazz, blackberry, crystal_fruit, aquamarine]
+dye_purple_items = [beet, crocus, eggplant, red_cabbage, sweet_pea, iridium_bar, sea_urchin, amaranth]
+dye_items_thematic = [dye_red_items, dye_orange_items, dye_yellow_items, dye_green_items, dye_blue_items, dye_purple_items]
+dye_bundle_thematic = DeepBundleTemplate(CCRoom.bulletin_board, BundleName.dye, dye_items_thematic, 6, 6)
+
+field_research_items_thematic = [*field_research_items_vanilla, geode, magma_geode, omni_geode,
+                                 rainbow_shell, amethyst, bream, carp]
+field_research_bundle_thematic = BundleTemplate.extend_from(field_research_bundle_vanilla, field_research_items_thematic)
+
+fodder_items_thematic = [*fodder_items_vanilla, kale.as_amount(3), corn.as_amount(3), green_bean.as_amount(3),
+                         potato.as_amount(3), green_algae.as_amount(5), white_algae.as_amount(3)]
+fodder_bundle_thematic = BundleTemplate.extend_from(fodder_bundle_vanilla, fodder_items_thematic)
+
+enchanter_items_thematic = [*enchanter_items_vanilla, purple_mushroom, solar_essence,
+                            super_cucumber, void_essence, fire_quartz, frozen_tear, jade]
+enchanter_bundle_thematic = BundleTemplate.extend_from(enchanter_bundle_vanilla, enchanter_items_thematic)
+
+bulletin_board_bundles_thematic = [chef_bundle_thematic, dye_bundle_thematic, field_research_bundle_thematic, fodder_bundle_thematic, enchanter_bundle_thematic]
+bulletin_board_thematic = BundleRoomTemplate(CCRoom.bulletin_board, bulletin_board_bundles_thematic, 5)
+
+# Abandoned Joja Mart
+missing_bundle_items_thematic = [*missing_bundle_items_vanilla, pale_ale.as_quality(ArtisanQuality.silver), beer.as_quality(ArtisanQuality.silver),
+                                 mead.as_quality(ArtisanQuality.silver),
+                                 cheese.as_quality(ArtisanQuality.silver), goat_cheese.as_quality(ArtisanQuality.silver), void_mayo, cloth, green_tea,
+                                 truffle_oil, diamond,
+                                 sweet_gem_berry.as_quality_crop(), starfruit.as_quality_crop(),
+                                 tea_leaves.as_amount(5), lava_eel.as_quality(FishQuality.gold), scorpion_carp.as_quality(FishQuality.gold),
+                                 blobfish.as_quality(FishQuality.gold)]
+missing_bundle_thematic = BundleTemplate.extend_from(missing_bundle_vanilla, missing_bundle_items_thematic)
+abandoned_joja_mart_bundles_thematic = [missing_bundle_thematic]
+abandoned_joja_mart_thematic = BundleRoomTemplate(CCRoom.abandoned_joja_mart, abandoned_joja_mart_bundles_thematic, 1)
+
+# Vault
+vault_bundles_thematic = vault_bundles_vanilla
+vault_thematic = BundleRoomTemplate(CCRoom.vault, vault_bundles_thematic, 4)

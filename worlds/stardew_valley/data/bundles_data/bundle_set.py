@@ -1,31 +1,30 @@
-from . import crafts_room_vanilla
+from typing import Dict, List
+
+from .meme_bundles import community_center_meme_bundles
+from .remixed_anywhere_bundles import community_center_remixed_anywhere
+from .remixed_bundles import pantry_remixed, crafts_room_remixed, fish_tank_remixed, boiler_room_remixed, bulletin_board_remixed, vault_remixed, \
+    abandoned_joja_mart_remixed, giant_stump_remixed
+from .thematic_bundles import pantry_thematic, crafts_room_thematic, fish_tank_thematic, boiler_room_thematic, bulletin_board_thematic, vault_thematic, \
+    abandoned_joja_mart_thematic, giant_stump_thematic
+from .vanilla_bundles import crafts_room_vanilla, pantry_vanilla, fish_tank_vanilla, boiler_room_vanilla, \
+    bulletin_board_vanilla, vault_vanilla, abandoned_joja_mart_vanilla, giant_stump_vanilla
 from ...bundles.bundle_room import BundleRoomTemplate
 
 
 class BundleSet:
-    pantry: BundleRoomTemplate
-    crafts_room: BundleRoomTemplate
-    fish_tank: BundleRoomTemplate
-    boiler_room: BundleRoomTemplate
-    bulletin_board: BundleRoomTemplate
-    vault: BundleRoomTemplate
-    abandoned_joja_mart: BundleRoomTemplate
-    giant_stump: BundleRoomTemplate
+    bundles_by_room: Dict[str, BundleRoomTemplate]
 
-    def __init__(self, pantry: BundleRoomTemplate, crafts_room: BundleRoomTemplate, fish_tank: BundleRoomTemplate, boiler_room: BundleRoomTemplate,
-                 bulletin_board: BundleRoomTemplate, vault: BundleRoomTemplate, abandoned_joja_mart: BundleRoomTemplate, giant_stump: BundleRoomTemplate):
-        self.pantry = pantry
-        self.crafts_room = crafts_room
-        self.fish_tank = fish_tank
-        self.boiler_room = boiler_room
-        self.bulletin_board = bulletin_board
-        self.vault = vault
-        self.abandoned_joja_mart = abandoned_joja_mart
-        self.giant_stump = giant_stump
+    def __init__(self, bundle_rooms: List[BundleRoomTemplate]):
+        self.bundles_by_room = {bundle_room.name: bundle_room for bundle_room in bundle_rooms}
 
 
-vanilla_bundles = BundleSet(pantry_vanilla, crafts_room_vanilla, fish_tank_vanilla, boiler_room_vanilla, bulletin_board_vanilla, vault_vanilla, abandoned_joja_mart_vanilla, giant_stump_vanilla)
-thematic_bundles = BundleSet()
-thematic_bundles = BundleSet()
-shuffled_bundles = BundleSet()
-meme_bundles = BundleSet()
+vanilla_bundles = BundleSet([pantry_vanilla, crafts_room_vanilla, fish_tank_vanilla, boiler_room_vanilla, bulletin_board_vanilla,
+                             vault_vanilla, abandoned_joja_mart_vanilla, giant_stump_vanilla])
+thematic_bundles = BundleSet([pantry_thematic, crafts_room_thematic, fish_tank_thematic, boiler_room_thematic, bulletin_board_thematic,
+                              vault_thematic, abandoned_joja_mart_thematic, giant_stump_thematic])
+remixed_bundles = BundleSet([pantry_remixed, crafts_room_remixed, fish_tank_remixed, boiler_room_remixed, bulletin_board_remixed,
+                              vault_remixed, abandoned_joja_mart_remixed, giant_stump_remixed])
+remixed_anywhere_bundles = BundleSet([community_center_remixed_anywhere, abandoned_joja_mart_remixed, giant_stump_remixed])
+
+# shuffled_bundles = BundleSet()
+meme_bundles = BundleSet([community_center_meme_bundles, abandoned_joja_mart_remixed, giant_stump_remixed])

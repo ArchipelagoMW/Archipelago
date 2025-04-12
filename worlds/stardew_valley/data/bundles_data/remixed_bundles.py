@@ -1,5 +1,5 @@
 from .thematic_bundles import *
-from ...bundles.bundle import IslandBundleTemplate, FestivalBundleTemplate
+from ...bundles.bundle import IslandBundleTemplate, FestivalBundleTemplate, CurrencyBundleTemplate
 from ...bundles.bundle_room import BundleRoomTemplate
 from ...content import content_packs
 from ...strings.bundle_names import CCRoom
@@ -180,3 +180,60 @@ paleontologist_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.paleontolo
 boiler_room_bundles_remixed = [*boiler_room_bundles_thematic, treasure_hunter_bundle, engineer_bundle,
                                demolition_bundle, recycling_bundle, archaeologist_bundle, paleontologist_bundle]
 boiler_room_remixed = BundleRoomTemplate(CCRoom.boiler_room, boiler_room_bundles_remixed, 3)
+
+# Bulletin Board
+children_items = [salmonberry.as_amount(10), cookie, ancient_doll, ice_cream, cranberry_candy, ginger_ale,
+                  grape.as_amount(10), pink_cake, snail, fairy_rose, plum_pudding]
+children_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.children, children_items, 4, 3)
+
+forager_items = [salmonberry.as_amount(50), blackberry.as_amount(50), wild_plum.as_amount(20), snow_yam.as_amount(20),
+                 common_mushroom.as_amount(20), grape.as_amount(20), spring_onion.as_amount(20)]
+forager_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.forager, forager_items, 3, 2)
+
+home_cook_items = [egg.as_amount(10), milk.as_amount(10), wheat_flour.as_amount(100), sugar.as_amount(100), vinegar.as_amount(100),
+                   chocolate_cake, pancakes, rhubarb_pie]
+home_cook_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.home_cook, home_cook_items, 3, 3)
+
+helper_items = [prize_ticket, mystery_box.as_amount(5), gold_mystery_box]
+helper_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.helper, helper_items, 2, 2)
+
+spirit_eve_items = [jack_o_lantern, corn.as_amount(10), bat_wing.as_amount(10)]
+spirit_eve_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.spirit_eve, spirit_eve_items, 3, 3)
+
+winter_star_items = [holly.as_amount(5), plum_pudding, stuffing, powdermelon.as_amount(5)]
+winter_star_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.winter_star, winter_star_items, 2, 2)
+
+bartender_items = [shrimp_cocktail, triple_shot_espresso, ginger_ale, cranberry_candy, beer, pale_ale, pina_colada]
+bartender_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.bartender, bartender_items, 3, 3)
+
+calico_items = [calico_egg.as_amount(200), calico_egg.as_amount(200), calico_egg.as_amount(200), calico_egg.as_amount(200),
+                magic_rock_candy, mega_bomb.as_amount(10), mystery_box.as_amount(10), mixed_seeds.as_amount(50),
+                strawberry_seeds.as_amount(20),
+                spicy_eel.as_amount(5), crab_cakes.as_amount(5), eggplant_parmesan.as_amount(5),
+                pumpkin_soup.as_amount(5), lucky_lunch.as_amount(5) ]
+calico_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.calico, calico_items, 2, 2)
+
+raccoon_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.raccoon, raccoon_foraging_items, 4, 4)
+
+bulletin_board_bundles_remixed = [*bulletin_board_bundles_thematic, children_bundle, forager_bundle, home_cook_bundle,
+                                  helper_bundle, spirit_eve_bundle, winter_star_bundle, bartender_bundle, calico_bundle, raccoon_bundle]
+bulletin_board_remixed = BundleRoomTemplate(CCRoom.bulletin_board, bulletin_board_bundles_remixed, 5)
+
+# Abandoned Joja Mart
+abandoned_joja_mart_remixed = abandoned_joja_mart_thematic
+
+# Vault
+vault_gambler_items = BundleItem(Currency.qi_coin, 10000)
+vault_gambler_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.gambler, vault_gambler_items)
+
+vault_carnival_items = BundleItem(Currency.star_token, 2500, source=BundleItem.Sources.festival)
+vault_carnival_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.carnival, vault_carnival_items)
+
+vault_walnut_hunter_items = BundleItem(Currency.golden_walnut, 25)
+vault_walnut_hunter_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.walnut_hunter, vault_walnut_hunter_items)
+
+vault_qi_helper_items = BundleItem(Currency.qi_gem, 25, source=BundleItem.Sources.island)
+vault_qi_helper_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.qi_helper, vault_qi_helper_items)
+
+vault_bundles_remixed = [*vault_bundles_vanilla, vault_gambler_bundle, vault_qi_helper_bundle, vault_carnival_bundle]  # , vault_walnut_hunter_bundle
+vault_remixed = BundleRoomTemplate(CCRoom.vault, vault_bundles_remixed, 4)
