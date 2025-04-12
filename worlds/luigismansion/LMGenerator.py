@@ -205,8 +205,8 @@ class LuigisMansionRandomizer:
         final_boo_count: int = int(self.output_data["Options"]["final_boo_count"])
         luigi_max_health: int = int(self.output_data["Options"]["luigi_max_health"])
         hint_dist: int = int(self.output_data["Options"]["hint_distribution"])
-        madam_hint_dict: dict[str, str] = self.output_data["Hints"]["Madame Clairvoya"] if (
-            self.output_data["Hints"]["Madame Clairvoya"]) else None
+        hint_list: dict[str, dict[str, str]] = self.output_data["Hints"]
+        madam_hint_dict: dict[str, str] = hint_list["Madame Clairvoya"] if hint_list["Madame Clairvoya"] else None
 
         self.update_dol_offsets(bool_boo_rando_on)
 
@@ -344,22 +344,9 @@ class LuigisMansionRandomizer:
                     hintfo = self.output_data["Hints"]["Right Telephone"]
             lines = get_data(__name__, "data/custom_events/event" + event_no + ".txt").decode('utf-8')
             lines = lines.replace("{HintText}", str(hintfo))
-            self.update_custom_event(event_no, False, lines, replace_old_csv=True)
+            self.update_custom_event(event_no, False, lines, replace_old_csv=True)"""
 
-        # Update Portrait Ghost heart scans if those hints are turned on
-        if self.output_data["Options"]["portrait_hints"] == 1:
-            portrait_scan_event = self.get_arc("files/Event/event78.szp")
-            portrait_csv = get_data(__name__, "data/custom_csvs/message78.csv").decode('utf-8')
-            for name in PORTRAIT_HINTS:
-                hintfo = self.output_data["Hints"][name]
-                portrait_csv = portrait_csv.replace(f"{name}", str(hintfo))
-            portrait_csv = io.BytesIO(portrait_csv.encode('utf-8'))
-            next(info_files for info_files in portrait_scan_event.file_entries if
-                  info_files.name == "message78.csv").data = portrait_csv
-            portrait_scan_event.save_changes()
-            self.gcm.changed_files["files/Event/event78.szp"] = (
-                Yay0.compress(portrait_scan_event.data))"""
-
+        self.gcm = write_portrait_hints(self.gcm, hint_dist, hint_list, self.seed)
         self.gcm = randomize_clairvoya(self.gcm, req_mario_count, hint_dist, madam_hint_dict, self.seed)
 
         if bool_randomize_music:
