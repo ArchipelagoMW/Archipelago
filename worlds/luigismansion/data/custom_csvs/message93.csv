@@ -1,0 +1,6 @@
+IGNORE
+<COLOR>(7){RecPlayer}'s{BreakHere}<COLOR>({ItemColor}){ItemName}
+<COLOR>(1){SendPlayer}'s{BreakHere}<COLOR>(1){WorldOrLoc}
+<COLOR>(0)Due to unforeseen circumstances,{BreakHere}<COLOR>(0)the phones have been disconnected.{BreakHere}<COLOR>(0)Perhaps, next time, enable hints.
+{JokeText}
+IGNORE
