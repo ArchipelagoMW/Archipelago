@@ -211,7 +211,7 @@ class LuigisMansionRandomizer:
         # Hint options
         hint_dist: int = int(self.output_data["Options"]["hint_distribution"])
         hint_list: dict[str, dict[str, str]] = self.output_data["Hints"]
-        madam_hint_dict: dict[str, str] = hint_list["Madame Clairvoya"] if hint_list["Madame Clairvoya"] else None
+        madam_hint_dict: dict[str, str] = hint_list["Madame Clairvoya"] if "Madame Clairvoya" in hint_list else None
         bool_portrait_hints: bool = True if self.output_data["Options"]["portrait_hints"] == 1 else False
 
         self.update_dol_offsets(bool_boo_rando_enabled)
