@@ -1,3 +1,4 @@
+import copy
 import unittest
 from typing import ClassVar, List, Tuple
 from unittest import TestCase
@@ -79,10 +80,14 @@ class TestTwoPlayerMulti(MultiworldTestBase):
             distribute_items_restrictive(self.multiworld)
             call_all(self.multiworld, "post_fill")
             with self.subTest("Validating placements", seed=self.multiworld.seed):
-                post_fill_placements = self.multiworld.get_locations()
+                post_fill_placements = {location.name: location.item.name
+                                        for location in self.multiworld.get_locations()}
                 call_all(self.multiworld, "post_balancing")
-                post_balance_placements = self.multiworld.get_locations()
-                for fill_placement, balance_placement in zip(post_fill_placements, post_balance_placements):
-                    self.assertEqual(fill_placement, balance_placement, "Locations were modified in post_balancing")
-                    self.assertEqual(fill_placement.item, balance_placement.item, "Items were moved in post_balancing")
+                post_balance_placements = {location.name: location.item.name
+                                        for location in self.multiworld.get_locations()}
+                for fill_placement, balance_placement in zip(post_fill_placements.items(),
+                                                             post_balance_placements.items()):
+                    self.assertEqual(fill_placement[0], balance_placement[0],
+                                     "Locations were modified in post_balancing")
+                    self.assertEqual(fill_placement[1], balance_placement[1], "Items were moved in post_balancing")
             self.assertTrue(self.fulfills_accessibility(), "Collected all locations, but can't beat the game")
