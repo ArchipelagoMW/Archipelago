@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import ClassVar, Any, cast
 from enum import IntEnum
-from Options import PerGameCommonOptions, DeathLinkMixin, AssembleOptions, Visibility, OptionGroup
+from Options import PerGameCommonOptions, DeathLinkMixin, AssembleOptions, OptionGroup
 from Options import Range, NamedRange, Toggle, DefaultOnToggle, OptionSet, StartInventoryPool, Choice
 from schema import Schema, And
 
@@ -421,9 +421,13 @@ class GoalRequirement(Choice):
 
 class RandomizeTier0(DefaultOnToggle):
     """
-    Randomizer the way you obtain basic parts such as ingots and wire
+    Randomizes the recipes used to craft the default unlocked parts:
+    Iron Ingot, Iron Plate, Iron Rod, Copper Ingot, Wire, Concrete, Screw, Reinforced Iron Plate
+
+    * They could require usage of Foundries or Assemblers that will than also get unlocked by default if needed
+    * They could require other ores to be mixed in
     """
-    display_name = "Randomize tier 0 recipes"
+    display_name = "Randomize default part recipes"
 
 @dataclass
 class SatisfactoryOptions(PerGameCommonOptions, DeathLinkMixin):
@@ -449,7 +453,7 @@ class SatisfactoryOptions(PerGameCommonOptions, DeathLinkMixin):
     trap_selection_override: TrapSelectionOverride
     energy_link: EnergyLink
     start_inventory_from_pool: StartInventoryPool
-    randomize_tier_0: RandomizeTier0
+    randomize_starter_recipes: RandomizeTier0
 
 option_groups = [
     OptionGroup("Game Scope", [
@@ -492,7 +496,7 @@ option_presets: dict[str, dict[str, Any]] = {
         "goal_awesome_sink_points_total": 17804500, # 100 coupons
         "hard_drive_progression_limit": 20,
         "starting_inventory_preset": 3, # "Foundations"
-        "randomize_tier_0": False,
+        "randomizer_starter_recipes": False,
         "mam_logic_placement": int(Placement.starting_inventory),
         "awesome_logic_placement": int(Placement.starting_inventory),
         "energy_link_logic_placement": int(Placement.starting_inventory),

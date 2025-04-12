@@ -205,7 +205,7 @@ class GameLogic:
 
         # Recipes
         "Reinforced Iron Plate": (
-            Recipe("Reinforced Iron Plate", "Assembler", ("Iron Plate", "Screw"), handcraftable=True, implicitly_unlocked=True),
+            Recipe("Reinforced Iron Plate", "Assembler", ("Iron Plate", "Screw")),
             Recipe("Adhered Iron Plate", "Assembler", ("Iron Plate", "Rubber")),
             Recipe("Bolted Iron Plate", "Assembler", ("Iron Plate", "Screw"), minimal_belt_speed=3),
             Recipe("Stitched Iron Plate", "Assembler", ("Iron Plate", "Wire"))),
@@ -225,19 +225,19 @@ class GameLogic:
             Recipe("Residual Rubber", "Refinery", ("Polymer Resin", "Water")),
             Recipe("Recycled Rubber", "Refinery", ("Plastic", "Fuel"))),
         "Iron Plate": (
-            Recipe("Iron Plate", "Constructor", ("Iron Ingot", ), handcraftable=True, implicitly_unlocked=True),
+            Recipe("Iron Plate", "Constructor", ("Iron Ingot", )),
             Recipe("Coated Iron Plate", "Assembler", ("Iron Ingot", "Plastic"), minimal_belt_speed=2),
             Recipe("Steel Cast Plate", "Foundry", ("Iron Ingot", "Steel Ingot"))),
         "Iron Rod": (
-            Recipe("Iron Rod", "Constructor", ("Iron Ingot", ), handcraftable=True, implicitly_unlocked=True),
+            Recipe("Iron Rod", "Constructor", ("Iron Ingot", )),
             Recipe("Steel Rod", "Constructor", ("Steel Ingot", )),
             Recipe("Aluminum Rod", "Constructor", ("Aluminum Ingot", ))),
         "Screw": (
-            Recipe("Screw", "Constructor", ("Iron Rod", ), handcraftable=True, implicitly_unlocked=True),
+            Recipe("Screw", "Constructor", ("Iron Rod", )),
             Recipe("Cast Screw", "Constructor", ("Iron Ingot", )),
             Recipe("Steel Screw", "Constructor", ("Steel Beam", ), minimal_belt_speed=3)),
         "Wire": (
-            Recipe("Wire", "Constructor", ("Copper Ingot", ), handcraftable=True, implicitly_unlocked=True),
+            Recipe("Wire", "Constructor", ("Copper Ingot", )),
             Recipe("Fused Wire", "Assembler", ("Copper Ingot", "Caterium Ingot"), minimal_belt_speed=2),
             Recipe("Iron Wire", "Constructor", ("Iron Ingot", )),
             Recipe("Caterium Wire", "Constructor", ("Caterium Ingot", ), minimal_belt_speed=2)),
@@ -274,7 +274,7 @@ class GameLogic:
             Recipe("Diluted Fuel", "Blender", ("Heavy Oil Residue", "Water"), minimal_tier=2),
             Recipe("Residual Fuel", "Refinery", ("Heavy Oil Residue", ))),
         "Concrete": (
-            Recipe("Concrete", "Constructor", ("Limestone", ), handcraftable=True, implicitly_unlocked=True),
+            Recipe("Concrete", "Constructor", ("Limestone", )),
             Recipe("Fine Concrete", "Assembler", ("Limestone", "Silica")),
             Recipe("Rubber Concrete", "Assembler", ("Limestone", "Rubber")),
             Recipe("Wet Concrete", "Refinery", ("Limestone", "Water"), minimal_belt_speed=2)),
@@ -291,7 +291,7 @@ class GameLogic:
             Recipe("Fused Quartz Crystal", "Foundry", ("Raw Quartz", "Coal"), minimal_belt_speed=2),
             Recipe("Quartz Purification", "Refinery", ("Raw Quartz", "Nitric Acid"), additional_outputs=("Dissolved Silica", ), minimal_belt_speed=2, minimal_tier=2)),
         "Iron Ingot": (
-            Recipe("Iron Ingot", "Smelter", ("Iron Ore", ), handcraftable=True, implicitly_unlocked=True),
+            Recipe("Iron Ingot", "Smelter", ("Iron Ore", )),
             Recipe("Pure Iron Ingot", "Refinery", ("Iron Ore", "Water"), minimal_belt_speed=2),
             Recipe("Iron Alloy Ingot", "Foundry", ("Iron Ore", "Copper Ore")),
             Recipe("Basic Iron Ingot", "Foundry", ("Iron Ore", "Limestone")),
@@ -302,7 +302,7 @@ class GameLogic:
             Recipe("Compacted Steel Ingot", "Foundry", ("Iron Ore", "Compacted Coal")),
             Recipe("Solid Steel Ingot", "Foundry", ("Iron Ingot", "Coal"))),
         "Copper Ingot": (
-            Recipe("Copper Ingot", "Smelter", ("Copper Ore", ), handcraftable=True, implicitly_unlocked=True),
+            Recipe("Copper Ingot", "Smelter", ("Copper Ore", )),
             Recipe("Copper Alloy Ingot", "Foundry", ("Copper Ore", "Iron Ore"), minimal_belt_speed=2),
             Recipe("Pure Copper Ingot", "Refinery", ("Copper Ore", "Water")),
             Recipe("Leached Copper Ingot", "Refinery", ("Copper Ore", "Sulfuric Acid"), minimal_belt_speed=2),
@@ -580,7 +580,7 @@ class GameLogic:
     }
 
     buildings: dict[str, Building] = {
-        "Constructor": Building("Constructor", ("Reinforced Iron Plate", "Cable"), PowerInfrastructureLevel.Basic, implicitly_unlocked=True),
+        "Constructor": Building("Constructor", ("Reinforced Iron Plate", "Cable"), PowerInfrastructureLevel.Basic),
         "Assembler": Building("Assembler", ("Reinforced Iron Plate", "Rotor", "Cable"), PowerInfrastructureLevel.Basic),
         "Manufacturer": Building("Manufacturer", ("Motor", "Heavy Modular Frame", "Cable", "Plastic"), PowerInfrastructureLevel.Advanced),
         "Packager": Building("Packager", ("Steel Beam", "Rubber", "Plastic"), PowerInfrastructureLevel.Basic),
@@ -597,7 +597,7 @@ class GameLogic:
         "Miner Mk.3": Building("Miner Mk.3", ("Steel Pipe", "Supercomputer", "Fused Modular Frame", "Turbo Motor"), PowerInfrastructureLevel.Advanced, can_produce=False),
         "Oil Extractor": Building("Oil Extractor", ("Motor", "Encased Industrial Beam", "Cable")),
         "Water Extractor": Building("Water Extractor", ("Copper Sheet", "Reinforced Iron Plate", "Rotor")),
-        "Smelter": Building("Smelter", ("Iron Rod", "Wire"), PowerInfrastructureLevel.Basic, implicitly_unlocked=True),
+        "Smelter": Building("Smelter", ("Iron Rod", "Wire"), PowerInfrastructureLevel.Basic),
         "Foundry": Building("Foundry", ("Modular Frame", "Rotor", "Concrete"), PowerInfrastructureLevel.Basic),
         "Resource Well Pressurizer": Building("Resource Well Pressurizer", ("Wire", "Rubber", "Encased Industrial Beam", "Motor", "Steel Beam", "Plastic"), PowerInfrastructureLevel.Advanced),
         "Equipment Workshop": Building("Equipment Workshop", ("Iron Plate", "Iron Rod"), implicitly_unlocked=True),
@@ -744,20 +744,20 @@ class GameLogic:
             MamNode("Hostile Organism Detection", {"Alien DNA Capsule":10,"Crystal Oscillator":5,"High-Speed Connector":5,}, depends_on=("Bio-Organic Properties", )), #(Research_AOrganisms_2_C)
             MamNode("Expanded Toolbelt", {"Alien DNA Capsule":5,"Steel Beam":500,}, depends_on=("Inflated Pocket Dimension", )), #(Research_ACarapace_3_C)
             MamNode("Bio-Organic Properties", {"Alien Protein":5,}, depends_on=("Spitter Research", "Hog Research", "Hatcher Research", "Stinger Research")), #(Research_AO_DNACapsule_C)
-            MamNode("Stinger Research", {"Stinger Remains":1,}, depends_on=()), #(Research_AO_Stinger_C)
-            MamNode("Hatcher Research", {"Hatcher Remains":1,}, depends_on=()), #(Research_AO_Hatcher_C)
-            MamNode("Hog Research", {"Hog Remains":1,}, depends_on=()), #(Research_ACarapace_0_C)
-            MamNode("Spitter Research", {"Plasma Spitter Remains":1,}, depends_on=()), #(Research_AOrgans_0_C)
+            MamNode("Stinger Research", {"Stinger Remains":1,}, depends_on=tuple()), #(Research_AO_Stinger_C)
+            MamNode("Hatcher Research", {"Hatcher Remains":1,}, depends_on=tuple()), #(Research_AO_Hatcher_C)
+            MamNode("Hog Research", {"Hog Remains":1,}, depends_on=tuple()), #(Research_ACarapace_0_C)
+            MamNode("Spitter Research", {"Plasma Spitter Remains":1,}, depends_on=tuple()), #(Research_AOrgans_0_C)
             MamNode("Structural Analysis", {"Alien DNA Capsule":5,"Iron Rod":100,}, depends_on=("Bio-Organic Properties", )), #(Research_AO_Pre_Rebar_C)
             MamNode("Protein Inhaler", {"Alien Protein":2,"Beryl Nut":20,"Rotor":50,}, depends_on=("Bio-Organic Properties", )), #(Research_AOrgans_2_C)
             MamNode("The Rebar Gun", {"Rotor":25,"Reinforced Iron Plate":50,"Screw":500,}, depends_on=("Structural Analysis", )), #(Research_ACarapace_2_C)
         )),
         # 1.0
         "Alien Technology": MamTree(("SAM", "Mercer Sphere", "Somersloop"), (
-            MamNode("SAM Analysis", {"SAM":10,}, depends_on=()),
+            MamNode("SAM Analysis", {"SAM":10,}, depends_on=tuple()),
             MamNode("SAM Reanimation", {"SAM":20,}, depends_on=("SAM Analysis",)),
             MamNode("SAM Fluctuator", {"Reanimated SAM":10,"Steel Pipe":100,"Wire":200,}, depends_on=("SAM Reanimation",)),
-            MamNode("Mercer Sphere Analysis", {"Mercer Sphere":1,}, depends_on=()),
+            MamNode("Mercer Sphere Analysis", {"Mercer Sphere":1,}, depends_on=tuple()),
             MamNode("Dimensional Depot", {"Mercer Sphere":1,"SAM Fluctuator":11,}, depends_on=("Mercer Sphere Analysis", "SAM Fluctuator")),
             MamNode("Manual Depot Uploader", {"Mercer Sphere":3,"Computer":17,"SAM Fluctuator":19,}, depends_on=("Dimensional Depot",)),
             MamNode("Depot Expansion (200%)", {"Mercer Sphere":3,"SAM Fluctuator":47,}, depends_on=("Dimensional Depot",)),
@@ -768,7 +768,7 @@ class GameLogic:
             MamNode("Upload Upgrade: 60/min", {"Mercer Sphere":7,"SAM Fluctuator":103,}, depends_on=("Upload Upgrade: 30/min",)),
             MamNode("Upload Upgrade: 120/min", {"Mercer Sphere":13,"SAM Fluctuator":151,}, depends_on=("Upload Upgrade: 60/min",)),
             MamNode("Upload Upgrade: 240/min", {"Mercer Sphere":23,"SAM Fluctuator":199,}, depends_on=("Upload Upgrade: 120/min",)),
-            MamNode("Somersloop Analysis", {"Somersloop":1,}, depends_on=()),
+            MamNode("Somersloop Analysis", {"Somersloop":1,}, depends_on=tuple()),
             MamNode("Alien Energy Harvesting", {"SAM Fluctuator":10,}, depends_on=("Somersloop Analysis", "SAM Fluctuator")),
             MamNode("Production Amplifier", {"Somersloop":1,"SAM Fluctuator":100,"Circuit Board":50,}, depends_on=("Alien Energy Harvesting",)),
             MamNode("Power Augmenter", {"Somersloop":1,"SAM Fluctuator":100,"Computer":50,}, depends_on=("Alien Energy Harvesting",)),
@@ -779,7 +779,7 @@ class GameLogic:
             MamNode("Caterium Electronics", {"Quickwire":100,}, depends_on=("Quickwire", )), #(Research_Caterium_3_C)
             MamNode("Bullet Guidance System", {"High-Speed Connector":10,"Rifle Ammo":500,}, depends_on=("High-Speed Connector", )), #(Research_Caterium_6_3_C)
             MamNode("High-Speed Connector", {"Quickwire":500,"Plastic":50,}, depends_on=("Caterium Electronics", )), #(Research_Caterium_5_C)
-            MamNode("Caterium", {"Caterium Ore":10,}, depends_on=()), #(Research_Caterium_0_C)
+            MamNode("Caterium", {"Caterium Ore":10,}, depends_on=tuple()), #(Research_Caterium_0_C)
             MamNode("Caterium Ingots", {"Caterium Ore":50,}, depends_on=("Caterium", )), #(Research_Caterium_1_C)
             MamNode("Quickwire", {"Caterium Ingot":50,}, depends_on=("Caterium Ingots", )), #(Research_Caterium_2_C)
             MamNode("Power Switch", {"Steel Beam":100,"AI Limiter":50,}, depends_on=("AI Limiter", )), #(Research_Caterium_4_1_2_C)
@@ -806,15 +806,15 @@ class GameLogic:
             MamNode("Gas Mask", {"Coal":10,"Fabric":50,"Steel Pipe":50}, depends_on=("Fabric", )), # 1.0
         )),
         "Nutrients": MamTree(("Paleberry", "Beryl Nut", "Bacon Agaric"), ( # Nutrients (BPD_ResearchTree_Nutrients_C)
-            MamNode("Bacon Agaric", {"Bacon Agaric":1,}, depends_on=()), #(Research_Nutrients_2_C)
-            MamNode("Beryl Nut", {"Beryl Nut":5,}, depends_on=()), #(Research_Nutrients_1_C)
-            MamNode("Paleberry", {"Paleberry":2,}, depends_on=()), #(Research_Nutrients_0_C)
+            MamNode("Bacon Agaric", {"Bacon Agaric":1,}, depends_on=tuple()), #(Research_Nutrients_2_C)
+            MamNode("Beryl Nut", {"Beryl Nut":5,}, depends_on=tuple()), #(Research_Nutrients_1_C)
+            MamNode("Paleberry", {"Paleberry":2,}, depends_on=tuple()), #(Research_Nutrients_0_C)
             MamNode("Nutritional Processor", {"Modular Frame":25,"Steel Pipe":50,"Wire":500,}, depends_on=("Beryl Nut", "Bacon Agaric", "Paleberry")), #(Research_Nutrients_3_C)
             MamNode("Nutritional Inhaler", {"Bacon Agaric":2,"Paleberry":4,"Beryl Nut":10,}, depends_on=("Nutritional Processor", )), #(Research_Nutrients_4_C)
         )),
         "Power Slugs": MamTree(("Blue Power Slug", ), ( # Power Slugs (BPD_ResearchTree_PowerSlugs_C)
             MamNode("Slug Scanning", {"Iron Rod":50,"Wire":100,"Screw":200,}, depends_on=("Blue Power Slugs", )), #(Research_PowerSlugs_3_C)
-            MamNode("Blue Power Slugs", {"Blue Power Slug":1,}, depends_on=()), #(Research_PowerSlugs_1_C)
+            MamNode("Blue Power Slugs", {"Blue Power Slug":1,}, depends_on=tuple()), #(Research_PowerSlugs_1_C)
             MamNode("Yellow Power Shards", {"Yellow Power Slug":1,"Rotor":25,"Cable":100,}, depends_on=("Blue Power Slugs", )), #(Research_PowerSlugs_4_C)
             MamNode("Purple Power Shards", {"Purple Power Slug":1,"Modular Frame":25,"Copper Sheet":100,}, depends_on=("Yellow Power Shards", )), #(Research_PowerSlugs_5_C)
             MamNode("Overclock Production", {"Power Shard":1,"Iron Plate":50,"Wire":50,}, depends_on=("Blue Power Slugs", )), #(Research_PowerSlugs_2_C)
@@ -823,7 +823,7 @@ class GameLogic:
         "Quartz": MamTree(("Raw Quartz", ), ( # Quartz (BPD_ResearchTree_Quartz_C)
             MamNode("Crystal Oscillator", {"Quartz Crystal":100,"Reinforced Iron Plate":50,}, depends_on=("Quartz Crystals", )), #(Research_Quartz_2_C)
             MamNode("Quartz Crystals", {"Raw Quartz":20,}, depends_on=("Quartz", )), #(Research_Quartz_1_1_C)
-            MamNode("Quartz", {"Raw Quartz":10,}, depends_on=()), #(Research_Quartz_0_C)
+            MamNode("Quartz", {"Raw Quartz":10,}, depends_on=tuple()), #(Research_Quartz_0_C)
             MamNode("Shatter Rebar", {"Quartz Crystal":30,"Iron Rebar":150,}, depends_on=("Quartz Crystals", )), #(Research_Quartz_2_1_C)
             MamNode("Silica", {"Raw Quartz":20,}, depends_on=("Quartz", )), #(Research_Quartz_1_2_C)
             MamNode("Explosive Resonance Application", {"Crystal Oscillator":5,"Nobelisk":100,}, depends_on=("Crystal Oscillator", )), #(Research_Quartz_3_4_C)
@@ -837,7 +837,7 @@ class GameLogic:
         "Sulfur": MamTree(("Sulfur", ), ( # Sulfur (BPD_ResearchTree_Sulfur_C)
             MamNode("The Nobelisk Detonator", {"Black Powder":50,"Steel Pipe":100,"Cable":200,}, depends_on=("Black Powder", )), #(Research_Sulfur_3_1_C)
             MamNode("Smokeless Powder", {"Black Powder":100,"Plastic":50,}, depends_on=("Black Powder", )), #(Research_Sulfur_3_C)
-            MamNode("Sulfur", {"Sulfur":10,}, depends_on=()), #(Research_Sulfur_0_C)
+            MamNode("Sulfur", {"Sulfur":10,}, depends_on=tuple()), #(Research_Sulfur_0_C)
             MamNode("Inflated Pocket Dimension", {"Smokeless Powder":50,"Computer":50,}, depends_on=("Nuclear Deterrent Development", "Turbo Rifle Ammo", "Cluster Nobelisk", "The Rifle")), #(Research_Sulfur_6_C)
             MamNode("The Rifle", {"Smokeless Powder":50,"Motor":100,"Rubber":200,}, depends_on=("Smokeless Powder", )), #(Research_Sulfur_4_1_C)
             MamNode("Compacted Coal", {"Hard Drive":1,"Sulfur":25,"Coal":25,}, depends_on=("Experimental Power Generation", )), #(Research_Sulfur_CompactedCoal_C)

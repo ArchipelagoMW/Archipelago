@@ -50,9 +50,11 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
         for minestone, _ in enumerate(milestones_per_hub_tier, 1):
             region_names.append(f"Hub {hub_tier}-{minestone}")
 
-    for building_name, building in game_logic.buildings.items():
-        if building.can_produce and building_name in critical_path.required_buildings:
-            region_names.append(building_name)
+    region_names += [
+        building_name
+        for building_name, building in game_logic.buildings.items()
+        if building.can_produce and building_name in critical_path.required_buildings
+    ]
 
     for tree_name, tree in game_logic.man_trees.items():
         region_names.append(tree_name)
@@ -150,10 +152,7 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
 
 
 def throwIfAnyLocationIsNotAssignedToARegion(regions: dict[str, Region], regionNames: set[str]):
-    existingRegions = set()
-
-    for region in regions.keys():
-        existingRegions.add(region)
+    existingRegions = set(regions.keys())
 
     if (regionNames - existingRegions):
         raise Exception(f"Satisfactory: the following regions are used in locations: {regionNames - existingRegions}, but no such region exists")
@@ -165,22 +164,20 @@ def create_region(world: MultiWorld, player: int,
     region = Region(name, player, world)
 
     if name in locations_per_region:
-        for location_data in locations_per_region[name]:
-            location = SatisfactoryLocation(player, location_data, region)
-            region.locations.append(location)
+        region.locations += [
+            SatisfactoryLocation(player, location_data, region)
+            for location_data in locations_per_region[name]
+        ]
 
     return region
 
 
 def create_regions(world: MultiWorld, player: int, locations_per_region: dict[str, list[LocationData]],
                     region_names: list[str]) -> dict[str, Region]:
-
-    regions: dict[str, Region] = {}
-
-    for name in region_names:
-        regions[name] = create_region(world, player, locations_per_region, name)
-
-    return regions
+    return {
+        name : create_region(world, player, locations_per_region, name)
+        for name in region_names
+    }
 
 
 def connect(regions: dict[str, Region], source: str, target: str, 

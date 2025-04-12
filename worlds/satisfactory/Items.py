@@ -947,14 +947,14 @@ class Items:
                         pool.append(item)
 
         filler_pool_size: int = number_of_locations - len(pool)
+        
         if (filler_pool_size < 0):
             raise Exception(f"Location pool starved, trying to add {len(pool)} items to {number_of_locations} locations")
 
         filtered_filler_items = tuple(item for item in self.filler_items if item not in excluded_from_pool)
-
-        for _ in range(filler_pool_size):
-            filler_item_name = self.get_filler_item_name(filtered_filler_items, random, options)
-            item = self.create_item(self, filler_item_name, self.player)
-            pool.append(item)
+        pool += [
+            self.create_item(self, self.get_filler_item_name(filtered_filler_items, random, options), self.player)
+            for _ in range(filler_pool_size)
+        ]
 
         return pool
