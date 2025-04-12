@@ -1,14 +1,15 @@
 from random import Random
 from typing import List, Tuple
 
-from .bundle import Bundle
-from .bundle_room import BundleRoom, BundleRoomTemplate
-from ..content import StardewContent
-from ..data.bundle_data import pantry_vanilla, crafts_room_vanilla, fish_tank_vanilla, boiler_room_vanilla, bulletin_board_vanilla, vault_vanilla, \
+from worlds.stardew_valley.data.bundles_data.bundle_data import pantry_vanilla, crafts_room_vanilla, fish_tank_vanilla, boiler_room_vanilla, \
+    bulletin_board_vanilla, vault_vanilla, \
     pantry_thematic, crafts_room_thematic, fish_tank_thematic, boiler_room_thematic, bulletin_board_thematic, vault_thematic, pantry_remixed, \
     crafts_room_remixed, fish_tank_remixed, boiler_room_remixed, bulletin_board_remixed, vault_remixed, all_bundle_items_except_money, \
     abandoned_joja_mart_thematic, abandoned_joja_mart_vanilla, abandoned_joja_mart_remixed, raccoon_vanilla, raccoon_thematic, raccoon_remixed, \
     community_center_remixed_anywhere
+from .bundle import Bundle
+from .bundle_room import BundleRoom, BundleRoomTemplate
+from ..content import StardewContent
 from ..logic.logic import StardewLogic
 from ..options import BundleRandomization, StardewValleyOptions
 
