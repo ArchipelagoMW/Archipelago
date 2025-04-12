@@ -24,7 +24,7 @@ def get_arc(gcm: GCM, arc_path):
 
 
 def update_boo_gates(gcm: GCM, event_no: str, req_boo_count: int, boo_rando_enabled: bool) -> GCM:
-    lines = get_data(__name__, "data/custom_events/event" + event_no + ".txt").decode('utf-8')
+    lines = get_data(MAIN_PKG_NAME, "data/custom_events/event" + event_no + ".txt").decode('utf-8')
     if boo_rando_enabled:
         str_begin_case = "not_enough"
         lines = lines.replace("{Count0}", str(0)).replace("{Count1}", str(0))
