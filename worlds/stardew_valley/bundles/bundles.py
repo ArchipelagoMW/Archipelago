@@ -1,15 +1,14 @@
 from random import Random
 from typing import List, Tuple
 
-from worlds.stardew_valley.data.bundles_data.bundle_data import pantry_vanilla, crafts_room_vanilla, fish_tank_vanilla, boiler_room_vanilla, \
-    bulletin_board_vanilla, vault_vanilla, \
-    pantry_thematic, crafts_room_thematic, fish_tank_thematic, boiler_room_thematic, bulletin_board_thematic, vault_thematic, pantry_remixed, \
-    crafts_room_remixed, fish_tank_remixed, boiler_room_remixed, bulletin_board_remixed, vault_remixed, all_bundle_items_except_money, \
-    abandoned_joja_mart_thematic, abandoned_joja_mart_vanilla, abandoned_joja_mart_remixed, raccoon_vanilla, raccoon_thematic, raccoon_remixed, \
-    community_center_remixed_anywhere
 from .bundle import Bundle
 from .bundle_room import BundleRoom, BundleRoomTemplate
 from ..content import StardewContent
+from ..data.bundles_data.bundle_data import pantry_vanilla, crafts_room_vanilla, fish_tank_vanilla, boiler_room_vanilla, bulletin_board_vanilla, vault_vanilla, \
+    pantry_thematic, crafts_room_thematic, fish_tank_thematic, boiler_room_thematic, bulletin_board_thematic, vault_thematic, pantry_remixed, \
+    crafts_room_remixed, fish_tank_remixed, boiler_room_remixed, bulletin_board_remixed, vault_remixed, all_bundle_items_except_money, \
+    abandoned_joja_mart_thematic, abandoned_joja_mart_vanilla, abandoned_joja_mart_remixed, giant_stump_vanilla, giant_stump_thematic, giant_stump_remixed, \
+    community_center_remixed_anywhere
 from ..logic.logic import StardewLogic
 from ..options import BundleRandomization, StardewValleyOptions
 
@@ -37,7 +36,7 @@ def get_vanilla_bundles(random: Random, content: StardewContent, options: Starde
     bulletin_board = bulletin_board_vanilla.create_bundle_room(random, content, options)
     vault = vault_vanilla.create_bundle_room(random, content, options)
     abandoned_joja_mart = abandoned_joja_mart_vanilla.create_bundle_room(random, content, options)
-    raccoon = raccoon_vanilla.create_bundle_room(random, content, options)
+    raccoon = giant_stump_vanilla.create_bundle_room(random, content, options)
     fix_raccoon_bundle_names(raccoon)
     return [pantry, crafts_room, fish_tank, boiler_room, bulletin_board, vault, abandoned_joja_mart, raccoon]
 
@@ -50,7 +49,7 @@ def get_thematic_bundles(random: Random, content: StardewContent, options: Stard
     bulletin_board = bulletin_board_thematic.create_bundle_room(random, content, options)
     vault = vault_thematic.create_bundle_room(random, content, options)
     abandoned_joja_mart = abandoned_joja_mart_thematic.create_bundle_room(random, content, options)
-    raccoon = raccoon_thematic.create_bundle_room(random, content, options)
+    raccoon = giant_stump_thematic.create_bundle_room(random, content, options)
     fix_raccoon_bundle_names(raccoon)
     return [pantry, crafts_room, fish_tank, boiler_room, bulletin_board, vault, abandoned_joja_mart, raccoon]
 
@@ -63,7 +62,7 @@ def get_remixed_bundles(random: Random, content: StardewContent, options: Starde
     bulletin_board = bulletin_board_remixed.create_bundle_room(random, content, options)
     vault = vault_remixed.create_bundle_room(random, content, options)
     abandoned_joja_mart = abandoned_joja_mart_remixed.create_bundle_room(random, content, options)
-    raccoon = raccoon_remixed.create_bundle_room(random, content, options)
+    raccoon = giant_stump_remixed.create_bundle_room(random, content, options)
     fix_raccoon_bundle_names(raccoon)
     return [pantry, crafts_room, fish_tank, boiler_room, bulletin_board, vault, abandoned_joja_mart, raccoon]
 
@@ -83,7 +82,7 @@ def get_remixed_bundles_anywhere(random: Random, content: StardewContent, option
 
     vault = vault_remixed.create_bundle_room(random, content, options)
     abandoned_joja_mart = abandoned_joja_mart_remixed.create_bundle_room(random, content, options)
-    raccoon = raccoon_remixed.create_bundle_room(random, content, options)
+    raccoon = giant_stump_remixed.create_bundle_room(random, content, options)
     fix_raccoon_bundle_names(raccoon)
     return [pantry, crafts_room, fish_tank, boiler_room, bulletin_board, vault, abandoned_joja_mart, raccoon]
 

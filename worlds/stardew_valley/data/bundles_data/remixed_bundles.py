@@ -1,10 +1,11 @@
 from .thematic_bundles import *
-from ...bundles.bundle import IslandBundleTemplate
+from ...bundles.bundle import IslandBundleTemplate, FestivalBundleTemplate
 from ...bundles.bundle_room import BundleRoomTemplate
+from ...content import content_packs
 from ...strings.bundle_names import CCRoom
 
 # Giant Stump
-from ...strings.quality_names import ForageQuality
+from ...strings.quality_names import ForageQuality, FishQuality
 
 giant_stump_bundles_remixed = giant_stump_bundles_thematic
 giant_stump_remixed = BundleRoomTemplate(CCRoom.raccoon_requests, giant_stump_bundles_remixed, 8)
@@ -88,3 +89,67 @@ dry_bundle = BundleTemplate(CCRoom.pantry, BundleName.dry, dry_items, 6, 3)
 pantry_bundles_remixed = [*pantry_bundles_thematic, rare_crops_bundle, fish_farmer_bundle, garden_bundle,
                           brewer_bundle, orchard_bundle, island_crops_bundle, agronomist_bundle, slime_farmer_bundle, sommelier_bundle, dry_bundle]
 pantry_remixed = BundleRoomTemplate(CCRoom.pantry, pantry_bundles_remixed, 6)
+
+# Fish Tank
+trash_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.trash, crab_pot_trash_items, 4, 4)
+
+spring_fish_items = [herring, halibut, shad, flounder, sunfish, sardine, catfish, anchovy, smallmouth_bass, eel, legend]
+spring_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.spring_fish, spring_fish_items, 4, 4)
+
+summer_fish_items = [tuna, pike, red_mullet, sturgeon, red_snapper, super_cucumber, tilapia, pufferfish, rainbow_trout,
+                     octopus, dorado, halibut, shad, flounder, sunfish, crimsonfish]
+summer_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.summer_fish, summer_fish_items, 4, 4)
+
+fall_fish_items = [red_snapper, super_cucumber, tilapia, shad, sardine, catfish, anchovy, smallmouth_bass, eel, midnight_carp,
+                   walleye, sea_cucumber, tiger_trout, albacore, salmon, angler]
+fall_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.fall_fish, fall_fish_items, 4, 4)
+
+winter_fish_items = [perch, squid, lingcod, tuna, pike, red_mullet, sturgeon, red_snapper, herring, halibut, sardine,
+                     midnight_carp, sea_cucumber, tiger_trout, albacore, glacierfish]
+winter_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.winter_fish, winter_fish_items, 4, 4)
+
+rain_fish_items = [red_snapper, shad, catfish, eel, walleye]
+rain_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.rain_fish, rain_fish_items, 3, 3)
+
+quality_fish_items = sorted({
+    item.as_quality(FishQuality.gold).as_amount(2)
+    for item in [*river_fish_items_thematic, *lake_fish_items_thematic, *ocean_fish_items_thematic]
+})
+quality_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.quality_fish, quality_fish_items, 4, 3)
+
+master_fisher_items = [lava_eel, scorpion_carp, octopus, blobfish, lingcod, ice_pip, super_cucumber, stingray, void_salmon, pufferfish]
+master_fisher_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.master_fisher, master_fisher_items, 4, 2)
+
+legendary_fish_items = [angler, legend, mutant_carp, crimsonfish, glacierfish]
+legendary_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.legendary_fish, legendary_fish_items, 4, 2)
+
+island_fish_items = [lionfish, blue_discus, stingray]
+island_fish_bundle = IslandBundleTemplate(CCRoom.fish_tank, BundleName.island_fish, island_fish_items, 3, 3)
+
+tackle_items = [spinner, dressed_spinner, trap_bobber, sonar_bobber, cork_bobber, lead_bobber, treasure_hunter, barbed_hook, curiosity_lure, quality_bobber]
+tackle_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.tackle, tackle_items, 3, 2)
+
+bait_items = [bait, magnet, wild_bait, magic_bait, challenge_bait, deluxe_bait, targeted_bait]
+bait_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.bait, bait_items, 3, 2)
+
+# This bundle could change based on content packs, once the fish are properly in it. Until then, I'm not sure how, so pelican town only
+specific_bait_items = [BundleItem(ArtisanGood.targeted_bait, flavor=fish.name).as_amount(10) for fish in content_packs.pelican_town.fishes]
+specific_bait_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.specific_bait, specific_bait_items, 6, 3)
+
+deep_fishing_items = [blobfish, spook_fish, midnight_squid, sea_cucumber, super_cucumber, octopus, pearl, seaweed]
+deep_fishing_bundle = FestivalBundleTemplate(CCRoom.fish_tank, BundleName.deep_fishing, deep_fishing_items, 4, 3)
+
+smokeable_fish = [Fish.largemouth_bass, Fish.bream, Fish.bullhead, Fish.chub, Fish.ghostfish, Fish.flounder, Fish.shad, Fish.rainbow_trout, Fish.tilapia,
+                  Fish.red_mullet, Fish.tuna, Fish.midnight_carp, Fish.salmon, Fish.perch]
+fish_smoker_items = [BundleItem(ArtisanGood.smoked_fish, flavor=fish) for fish in smokeable_fish]
+fish_smoker_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.fish_smoker, fish_smoker_items, 6, 3)
+
+fish_tank_bundles_remixed = [*fish_tank_bundles_thematic, spring_fish_bundle, summer_fish_bundle, fall_fish_bundle, winter_fish_bundle, trash_bundle,
+                             rain_fish_bundle, quality_fish_bundle, master_fisher_bundle, legendary_fish_bundle, tackle_bundle, bait_bundle,
+                             specific_bait_bundle, deep_fishing_bundle, fish_smoker_bundle]
+
+# In Remixed, the trash items are in the recycling bundle, so we don't use the thematic version of the crab pot bundle that added trash items to it
+fish_tank_bundles_remixed.remove(crab_pot_bundle_thematic)
+fish_tank_bundles_remixed.append(crab_pot_bundle_vanilla)
+
+fish_tank_remixed = BundleRoomTemplate(CCRoom.fish_tank, fish_tank_bundles_remixed, 6)

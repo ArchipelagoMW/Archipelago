@@ -84,3 +84,27 @@ artisan_bundle_vanilla = BundleTemplate(CCRoom.pantry, BundleName.artisan, artis
 pantry_bundles_vanilla = [spring_crops_bundle_vanilla, summer_crops_bundle_vanilla, fall_crops_bundle_vanilla,
                           quality_crops_bundle_vanilla, animal_bundle_vanilla, artisan_bundle_vanilla]
 pantry_vanilla = BundleRoomTemplate(CCRoom.pantry, pantry_bundles_vanilla, 6)
+
+# Fish Tank
+river_fish_items_vanilla = [sunfish, catfish, shad, tiger_trout]
+river_fish_bundle_vanilla = BundleTemplate(CCRoom.fish_tank, BundleName.river_fish, river_fish_items_vanilla, 4, 4)
+
+lake_fish_items_vanilla = [largemouth_bass, carp, bullhead, sturgeon]
+lake_fish_bundle_vanilla = BundleTemplate(CCRoom.fish_tank, BundleName.lake_fish, lake_fish_items_vanilla, 4, 4)
+
+ocean_fish_items_vanilla = [sardine, tuna, red_snapper, tilapia]
+ocean_fish_bundle_vanilla = BundleTemplate(CCRoom.fish_tank, BundleName.ocean_fish, ocean_fish_items_vanilla, 4, 4)
+
+night_fish_items_vanilla = [walleye, bream, eel]
+night_fish_bundle_vanilla = BundleTemplate(CCRoom.fish_tank, BundleName.night_fish, night_fish_items_vanilla, 3, 3)
+
+crab_pot_items_vanilla = [lobster, crayfish, crab, cockle, mussel, shrimp, snail, periwinkle, oyster, clam]
+crab_pot_trash_items = [trash, driftwood, soggy_newspaper, broken_cd, broken_glasses]
+crab_pot_bundle_vanilla = BundleTemplate(CCRoom.fish_tank, BundleName.crab_pot, crab_pot_items_vanilla, 10, 5)
+
+specialty_fish_items_vanilla = [pufferfish, ghostfish, sandfish, woodskip]
+specialty_fish_bundle_vanilla = BundleTemplate(CCRoom.fish_tank, BundleName.specialty_fish, specialty_fish_items_vanilla, 4, 4)
+
+fish_tank_bundles_vanilla = [river_fish_bundle_vanilla, lake_fish_bundle_vanilla, ocean_fish_bundle_vanilla,
+                             night_fish_bundle_vanilla, crab_pot_bundle_vanilla, specialty_fish_bundle_vanilla]
+fish_tank_vanilla = BundleRoomTemplate(CCRoom.fish_tank, fish_tank_bundles_vanilla, 6)
