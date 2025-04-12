@@ -57,7 +57,7 @@ disallowed2F = [[16, 2], [17, 2], [18, 2], [15, 5], [15, 6], [10, 10], [11, 10],
                 [11, 1]]
 
 
-def randomize_rock_tunnel(patch: "typing.Union[PokemonBlueProcedurePatch, PokemonRedProcedurePatch]", random: random.Random):
+def randomize_rock_tunnel(patch: "PokemonRedProcedurePatch | PokemonBlueProcedurePatch", random: random.Random):
     seed = random.randint(0, 999999999999999999)
     random.seed(seed)
 

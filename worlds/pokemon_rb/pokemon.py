@@ -11,7 +11,7 @@ if typing.TYPE_CHECKING:
     from .rom import PokemonRedProcedurePatch, PokemonBlueProcedurePatch
 
 
-def set_mon_palettes(world: "PokemonRedBlueWorld", patch: "typing.Union[PokemonRedProcedurePatch, PokemonBlueProcedurePatch]"):
+def set_mon_palettes(world: "PokemonRedBlueWorld", patch: "PokemonRedProcedurePatch | PokemonBlueProcedurePatch"):
     if world.options.randomize_pokemon_palettes == "vanilla":
         return
     pallet_map = {
