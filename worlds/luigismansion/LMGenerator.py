@@ -467,12 +467,6 @@ class LuigisMansionRandomizer:
         self.gcm.changed_files["files/Event/event" + event_number + ".szp"] = (
             Yay0.compress(custom_event.data))
 
-    def copy_existing_event(self, new_event_number: str):
-        event_path = "files/Event/event" + new_event_number + ".szp"
-        event_data = self.gcm.read_file_data("files/Event/event64.szp")
-        self.gcm.add_new_file(event_path, event_data)
-        return
-
     # If Export to disc is true, Exports the entire file/directory contents of the ISO to specified folder
     # Otherwise, creates a direct ISO file.
     def export_files_from_memory(self):
