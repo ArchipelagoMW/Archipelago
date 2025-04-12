@@ -77,9 +77,9 @@ class TLOZClient(BizHawkClient):
             if self.take_any_item_ids is None:
                 from . import TLoZWorld
                 self.take_any_item_ids = {}
-                self.take_any_item_ids["Left"] = TLoZWorld.item_name_to_id["Take Any Item Left"]
-                self.take_any_item_ids["Middle"] = TLoZWorld.item_name_to_id["Take Any Item Middle"]
-                self.take_any_item_ids["Right"] = TLoZWorld.item_name_to_id["Take Any Item Right"]
+                self.take_any_item_ids["Left"] = TLoZWorld.location_name_to_id["Take Any Item Left"]
+                self.take_any_item_ids["Middle"] = TLoZWorld.location_name_to_id["Take Any Item Middle"]
+                self.take_any_item_ids["Right"] = TLoZWorld.location_name_to_id["Take Any Item Right"]
             self.guard_list = [*self.base_guard_list]
             await self.check_victory(ctx)
             await self.location_check(ctx)
