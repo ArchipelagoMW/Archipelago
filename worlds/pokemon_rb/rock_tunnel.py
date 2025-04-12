@@ -58,13 +58,11 @@ disallowed2F = [[16, 2], [17, 2], [18, 2], [15, 5], [15, 6], [10, 10], [11, 10],
 
 
 def randomize_rock_tunnel(patch: typing.Union["PokemonBlueProcedurePatch", "PokemonRedProcedurePatch"], random: random.Random):
-    import copy
-
     seed = random.randint(0, 999999999999999999)
     random.seed(seed)
 
-    map1f = copy.deepcopy(layout1F)
-    map2f = copy.deepcopy(layout2F)
+    map1f = [row.copy() for row in layout1F]
+    map2f = [row.copy() for row in layout2F]
 
     current_map = map1f
 
