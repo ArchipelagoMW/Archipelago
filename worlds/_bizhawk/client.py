@@ -20,7 +20,7 @@ def launch_client(*args) -> None:
 
 component = Component("BizHawk Client", "BizHawkClient", component_type=Type.CLIENT, func=launch_client,
                       file_identifier=SuffixIdentifier(),
-                      description="Open the BizHawk client to play ROM-based games.")
+                      description="Open the BizHawk client, to play games using the Bizhawk emulator.")
 components.append(component)
 
 
