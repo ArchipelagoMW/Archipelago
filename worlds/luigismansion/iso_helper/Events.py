@@ -128,7 +128,7 @@ def update_intro_and_lab_events(gcm: GCM, hidden_mansion: bool, max_health: str,
     lines = lines.replace("{DOOR_LIST}", ''.join(event_door_list))
     lines = lines.replace("{LUIGIMAXHP}", max_health)
 
-    return __update_custom_event(gcm, "48", True, lines, None)
+    return __update_custom_event(gcm, "48", False, lines, None)
 
 # Randomizes all the music in all the event.txt files.
 def randomize_music(gcm: GCM, seed: str) -> GCM:
