@@ -7,7 +7,8 @@ from gclib.gcm import GCM
 from gclib.rarc import RARC, RARCNode, RARCFileEntry
 from gclib.yaz0_yay0 import Yay0
 
-from..Hints import PORTRAIT_HINTS, ALWAYS_HINT
+from .. import ALWAYS_HINT
+from .. Hints import PORTRAIT_HINTS
 
 MAIN_PKG_NAME = "worlds.luigismansion.LMGenerator"
 
@@ -335,8 +336,9 @@ def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict
         lines = lines.replace("{HintType}", case_type)
 
         if event_no == 4:
-            return __update_custom_event(gcm, "04", True, lines, csv_lines)
-        return __update_custom_event(gcm, str(event_no), True, lines, csv_lines)
+            gcm = __update_custom_event(gcm, "04", True, lines, csv_lines)
+        gcm = __update_custom_event(gcm, str(event_no), True, lines, csv_lines)
+    return gcm
 
 # Using the provided txt or csv lines for a given event file, updates the actual szp file in memory with this data.
 def __update_custom_event(gcm: GCM, event_number: str, delete_all_other_files: bool,

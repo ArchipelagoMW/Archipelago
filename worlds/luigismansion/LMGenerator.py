@@ -7,7 +7,6 @@ import yaml
 
 from .iso_helper.Update_GameUSA import update_game_usa
 from . import data
-from .Hints import PORTRAIT_HINTS
 from .JMP_Info_File import JMPInfoFile
 from .Patching import *
 from .Helper_Functions import StringByteFunction as sbf
