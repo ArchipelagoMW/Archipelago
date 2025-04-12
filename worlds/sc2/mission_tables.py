@@ -109,6 +109,12 @@ class SC2Mission(Enum):
         self.map_file = map_file
         self.flags = flags
 
+    def get_short_name(self):
+        if self.mission_name.find(' (') == -1:
+            return self.mission_name
+        else:
+            return self.mission_name[:self.mission_name.find(' (')]
+
     # Wings of Liberty
     LIBERATION_DAY = 1, "Liberation Day", SC2Campaign.WOL, "Mar Sara", SC2Race.ANY, MissionPools.STARTER, "ap_liberation_day", MissionFlag.Terran|MissionFlag.NoBuild|MissionFlag.VsTerran
     THE_OUTLAWS = 2, "The Outlaws (Terran)", SC2Campaign.WOL, "Mar Sara", SC2Race.TERRAN, MissionPools.EASY, "ap_the_outlaws", MissionFlag.Terran|MissionFlag.VsTerran|MissionFlag.HasRaceSwap
@@ -384,7 +390,7 @@ lookup_name_to_mission: Dict[str, SC2Mission] = {
 for mission in SC2Mission:
     if MissionFlag.HasRaceSwap in mission.flags and ' (' in mission.mission_name:
         # Short names for non-race-swapped missions for client compatibility
-        short_name = mission.mission_name[:mission.mission_name.find(' (')]
+        short_name = mission.get_short_name()
         lookup_name_to_mission[short_name] = mission
 
 lookup_id_to_campaign: Dict[int, SC2Campaign] = {
