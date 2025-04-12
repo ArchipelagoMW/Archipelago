@@ -5,17 +5,14 @@ from kivy.uix.behaviors.button import ButtonBehavior
 from kivymd.uix.behaviors import RotateBehavior
 from kivymd.uix.anchorlayout import MDAnchorLayout
 from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelContent, MDExpansionPanelHeader
-from kivymd.uix.label import MDIcon
 from kivymd.uix.list import MDListItem, MDListItemTrailingIcon, MDListItemSupportingText
-from kivymd.uix.slider import MDSlider, MDSliderHandle, MDSliderValueLabel
+from kivymd.uix.slider import MDSlider
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.button import MDButton, MDButtonText, MDIconButton
-from kivymd.uix.textfield import MDTextField, MDTextFieldHintText
-from kivymd.uix.dialog import MDDialog, MDDialogHeadlineText, MDDialogContentContainer, MDDialogSupportingText
-from kivymd.uix.divider import MDDivider
+from kivymd.uix.textfield import MDTextField
+from kivymd.uix.dialog import MDDialog
 from kivy.lang.builder import Builder
 from kivy.properties import ObjectProperty
-from kivy.metrics import sp
 from textwrap import dedent
 from copy import deepcopy
 import Utils
@@ -536,3 +533,7 @@ class YamlCreator(ThemedApp):
 
 def launch():
     YamlCreator().run()
+
+
+if __name__ == "__main__":
+    launch()
