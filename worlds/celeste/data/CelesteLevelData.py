@@ -4370,6 +4370,7 @@ all_region_connections: dict[str, RegionConnection] = {
 }
 
 all_locations: dict[str, LevelLocation] = {
+    "0a_-1_car": LevelLocation("0a_-1_car", "Prologue - Car", "0a_-1_main", LocationType.car, []),
     "0a_3_clear": LevelLocation("0a_3_clear", "Prologue - Level Clear", "0a_3_east", LocationType.level_clear, []),
 
     "1a_2_strawberry": LevelLocation("1a_2_strawberry", "Forsaken City A - Room 2 Strawberry", "1a_2_west", LocationType.strawberry, [[ItemName.springs, ], ]),
@@ -4683,6 +4684,7 @@ all_locations: dict[str, LevelLocation] = {
     "7c_03_golden": LevelLocation("7c_03_golden", "The Summit C - Golden Strawberry", "7c_03_goal", LocationType.golden_strawberry, [[ItemName.pink_clouds, ItemName.dash_refills, ItemName.springs, ItemName.coins, ItemName.badeline_boosters, ], ]),
 
 
+    "9a_0x_car": LevelLocation("9a_0x_car", "Core A - Car", "9a_0x_east", LocationType.car, []),
     "9a_b-06_strawberry": LevelLocation("9a_b-06_strawberry", "Core A - Room b-06 Strawberry", "9a_b-06_east", LocationType.strawberry, [[ItemName.fire_ice_balls, ItemName.core_toggles, ItemName.core_blocks, ItemName.dash_refills, ItemName.bumpers, ItemName.coins, ], ]),
     "9a_c-00b_strawberry": LevelLocation("9a_c-00b_strawberry", "Core A - Room c-00b Strawberry", "9a_c-00b_west", LocationType.strawberry, [[ItemName.fire_ice_balls, ItemName.core_toggles, ItemName.dash_refills, ItemName.bumpers, ], ]),
     "9a_c-02_strawberry": LevelLocation("9a_c-02_strawberry", "Core A - Room c-02 Strawberry", "9a_c-02_west", LocationType.strawberry, [[ItemName.core_blocks, ItemName.core_toggles, ItemName.dash_refills, ItemName.bumpers, ], ]),

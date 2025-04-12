@@ -252,6 +252,8 @@ class CelesteWorld(World):
             "checkpointsanity": self.options.checkpointsanity.value,
             "binosanity": self.options.binosanity.value,
             "keysanity": self.options.keysanity.value,
+            "gemsanity": self.options.gemsanity.value,
+            "carsanity": self.options.carsanity.value,
             "roomsanity": self.options.roomsanity.value,
             "include_goldens": self.options.include_goldens.value,
 

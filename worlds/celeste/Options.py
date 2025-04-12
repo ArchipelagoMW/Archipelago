@@ -95,6 +95,12 @@ class Gemsanity(Toggle):
     """
     display_name = "Gemsanity"
 
+class Carsanity(Toggle):
+    """
+    Determines whether riding on cars grants location checks
+    """
+    display_name = "Carsanity"
+
 class Roomsanity(Toggle):
     """
     Determines whether entering individual rooms sends location checks
@@ -105,7 +111,7 @@ class IncludeGoldens(Toggle):
     """
     Determines whether collecting Golden Strawberries sends location checks
     """
-    display_name = "Roomsanity"
+    display_name = "Include Goldens"
 
 
 class IncludeCore(Toggle):
@@ -352,6 +358,7 @@ celeste_option_groups = [
         Binosanity,
         Keysanity,
         Gemsanity,
+        Carsanity,
         Roomsanity,
         IncludeCore,
         IncludeFarewell,
@@ -473,6 +480,7 @@ class CelesteOptions(PerGameCommonOptions):
     binosanity: Binosanity
     keysanity: Keysanity
     gemsanity: Gemsanity
+    carsanity: Carsanity
     roomsanity: Roomsanity
     include_goldens: IncludeGoldens
     include_core: IncludeCore

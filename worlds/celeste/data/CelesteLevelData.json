@@ -14,6 +14,14 @@
                                     "dest": "east",
                                     "rule": []
                                 }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "car",
+                                    "display_name": "Car",
+                                    "type": "car",
+                                    "rule": []
+                                }
                             ]
                         },
                         {
@@ -33191,7 +33199,15 @@
                     "regions": [
                         {
                             "name": "east",
-                            "connections": []
+                            "connections": [],
+                            "locations": [
+                                {
+                                    "name": "car",
+                                    "display_name": "Car",
+                                    "type": "car",
+                                    "rule": []
+                                }
+                            ]
                         }
                     ],
                     "doors": [
