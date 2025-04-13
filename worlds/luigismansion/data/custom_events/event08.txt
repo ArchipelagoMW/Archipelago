@@ -6,7 +6,8 @@
 <ACTOR>"demo_luigi"<HP>({LUIGIMAXHP})
 <FRAMEEND>
 <ACTOR>"demo_hakase"<ACT>"TALK06"
-<WINDOW>(0)<COLOR>(1)<SPEAK>(0)
+<WINDOW>(0)<COLOR>(1)
+<SPEAK>(0)
 <SE>(132)
 <ANYKEY>
 <CAMTARGET>"demo_hakase"(180)
@@ -19,9 +20,10 @@
 <CASE>"minigame"
 <ACTOR>"demo_hakase"<ACT>"TALK06"
 <ACTOR>"demo_luigi"<ACT>"DM_NOD_01"
-<WINDOW>(0)<COLOR>(1)<SPEAK>(7)
+<SPEAK>(7)
 <SE>(108)
 <ANYKEY>
+<CLOSEWINDOW>(0)
 <FRAMESTART>
 <WARP>(3)
 <FRAMEEND>
@@ -30,9 +32,10 @@
 <CASE>"back"
 <ACTOR>"demo_hakase"<ACT>"TALK06"
 <ACTOR>"demo_luigi"<ACT>"DM_NOD_01"
-<WINDOW>(0)<COLOR>(1)<SPEAK>(6)
+<SPEAK>(6)
 <SE>(106)
 <ANYKEY>
+<CLOSEWINDOW>(0)
 <FRAMESTART>
 <OMOTELUIGI>
 <OPENING>
@@ -42,9 +45,10 @@
 <CASE>"gallary"
 <ACTOR>"demo_hakase"<ACT>"TALK06"
 <ACTOR>"demo_luigi"<ACT>"DM_NOD_01"
-<WINDOW>(0)<COLOR>(1)<SPEAK>(5)
+<SPEAK>(5)
 <SE>(105)
 <ANYKEY>
+<CLOSEWINDOW>(0)
 <FRAMESTART>
 <WARP>(6)
 <FRAMEEND>
@@ -53,9 +57,10 @@
 <CASE>"urayasiki"
 <ACTOR>"demo_hakase"<ACT>"TALK06"
 <ACTOR>"demo_luigi"<ACT>"DM_NOD_01"
-<WINDOW>(0)<COLOR>(1)<SPEAK>(6)
+<SPEAK>(6)
 <SE>(107)
 <ANYKEY>
+<CLOSEWINDOW>(0)
 <FRAMESTART>
 <URALUIGI>
 <OPENING>
