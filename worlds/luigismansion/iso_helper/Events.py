@@ -268,9 +268,9 @@ def randomize_clairvoya(gcm: GCM, req_mario_count: str, hint_distribution_choice
 # Writes all the in game hints for everything except clairvoya
 def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict[str, dict[str, str]],
     seed: str) -> GCM:
-
-    for hint_name, hint_data in all_hints:
-        if hint_name not in ALWAYS_HINT or hint_name == "Madame Clairvoya":
+    random.seed(seed)
+    for hint_name in ALWAYS_HINT:
+        if hint_name == "Madame Clairvoya":
             continue
         event_no: int = 0
         match hint_name:
@@ -288,6 +288,8 @@ def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict
                 event_no = 93
             case "Right Telephone":
                 event_no = 94
+        if hint_distribution_choice != 1 and hint_distribution_choice != 5:
+            hint_data = all_hints[hint_name]
 
         if event_no == 4:
             lines = get_data(MAIN_PKG_NAME, "data/custom_events/event04.txt").decode('utf-8')
@@ -314,7 +316,6 @@ def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict
                 case_type = "DisabledHint"
             case 1:
                 jokes = get_data(MAIN_PKG_NAME, "data/jokes.txt").decode('utf-8')
-                random.seed(seed)
                 joke_hint = random.choice(str.splitlines(jokes)).replace("\\\\n", "\n")
                 csv_lines = csv_lines.replace("{JokeText}", joke_hint)
                 case_type = "JokeHint"
@@ -333,11 +334,13 @@ def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict
                 csv_lines = csv_lines.replace("{WorldOrLoc}", hint_data["Location"])
                 case_type = "SpecificHint"
 
+        csv_lines = csv_lines.replace("{BreakHere}", "\n")
         lines = lines.replace("{HintType}", case_type)
 
         if event_no == 4:
             gcm = __update_custom_event(gcm, "04", True, lines, csv_lines)
-        gcm = __update_custom_event(gcm, str(event_no), True, lines, csv_lines)
+        else:
+            gcm = __update_custom_event(gcm, str(event_no), True, lines, csv_lines)
     return gcm
 
 # Using the provided txt or csv lines for a given event file, updates the actual szp file in memory with this data.
