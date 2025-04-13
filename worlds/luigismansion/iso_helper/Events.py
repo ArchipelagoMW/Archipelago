@@ -109,7 +109,8 @@ def update_intro_and_lab_events(gcm: GCM, hidden_mansion: bool, max_health: str,
     doors_to_open: dict[int, int]) -> GCM:
     lines = get_data(MAIN_PKG_NAME, "data/custom_events/event08.txt").decode('utf-8')
     lines = lines.replace("{LUIGIMAXHP}", max_health)
-    gcm = __update_custom_event(gcm, "08", True, lines, None)
+    csv_lines = get_data(MAIN_PKG_NAME, "data/custom_csvs/message8.csv").decode('utf-8')
+    gcm = __update_custom_event(gcm, "08", True, lines, csv_lines)
 
     lines = get_data(MAIN_PKG_NAME, "data/custom_events/event48.txt").decode('utf-8')
     lines = lines.replace("{MANSION_TYPE}", "<URALUIGI>" if hidden_mansion else "<OMOTELUIGI>")
