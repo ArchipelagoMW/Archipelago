@@ -268,6 +268,7 @@ def randomize_clairvoya(gcm: GCM, req_mario_count: str, hint_distribution_choice
 # Writes all the in game hints for everything except clairvoya
 def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict[str, dict[str, str]],
     seed: str) -> GCM:
+    random.seed(seed)
     for hint_name in ALWAYS_HINT:
         if hint_name == "Madame Clairvoya":
             continue
@@ -315,7 +316,6 @@ def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict
                 case_type = "DisabledHint"
             case 1:
                 jokes = get_data(MAIN_PKG_NAME, "data/jokes.txt").decode('utf-8')
-                random.seed(seed)
                 joke_hint = random.choice(str.splitlines(jokes)).replace("\\\\n", "\n")
                 csv_lines = csv_lines.replace("{JokeText}", joke_hint)
                 case_type = "JokeHint"
