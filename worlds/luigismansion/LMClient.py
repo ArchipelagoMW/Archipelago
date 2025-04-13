@@ -693,18 +693,18 @@ async def dolphin_sync_task(ctx: LMContext):
             continue
 
 async def give_player_items(ctx: LMContext):
-    def wait_for_next_loop(time_to_wait: float):
-        asyncio.sleep(time_to_wait)
+    async def wait_for_next_loop(time_to_wait: float):
+        await asyncio.sleep(time_to_wait)
 
     while not ctx.exit_event.is_set():
         # Only try to give items if we are in game and alive.
         if not (ctx.check_ingame() and ctx.check_alive()):
-            wait_for_next_loop(3)
+            await wait_for_next_loop(3)
             continue
 
         last_recv_idx = dme.read_word(LAST_RECV_ITEM_ADDR)
         if len(ctx.items_received) == last_recv_idx:
-            wait_for_next_loop(0.5)
+            await wait_for_next_loop(0.5)
             continue
 
         # Filter for only items where we have not received yet. If same slot, only receive locations from pre-approved
@@ -727,25 +727,25 @@ async def give_player_items(ctx: LMContext):
                 dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
                 continue
 
-            item_name_display = lm_item_name
-            if len(lm_item_name) > RECV_MAX_STRING_LENGTH:
-                item_name_display = lm_item_name[0:RECV_MAX_STRING_LENGTH] + "..."
-            dme.write_bytes(RECV_ITEM_NAME_ADDR, sbf.string_to_bytes(item_name_display, RECV_LINE_STRING_LENGTH))
-
-            loc_name_display = ctx.location_names.lookup_in_game(item.location)
-            if len(loc_name_display) > RECV_MAX_STRING_LENGTH:
-                loc_name_display = loc_name_display[0:RECV_MAX_STRING_LENGTH] + "..."
-            dme.write_bytes(RECV_ITEM_LOC_ADDR, sbf.string_to_bytes(loc_name_display, RECV_LINE_STRING_LENGTH))
-
-            recv_name_display = ctx.player_names[item.player]
-            if len(recv_name_display) > RECV_MAX_STRING_LENGTH:
-                recv_name_display = recv_name_display[0:RECV_MAX_STRING_LENGTH] + "..."
-            dme.write_bytes(RECV_ITEM_SENDER_ADDR, sbf.string_to_bytes(recv_name_display, RECV_LINE_STRING_LENGTH))
-
-            dme.write_bytes(RECV_ITEM_DISPLAY_TIMER_ADDR, bytes.fromhex(RECV_DEFAULT_TIMER_IN_HEX))
-            wait_for_next_loop(int(RECV_DEFAULT_TIMER_IN_HEX, 16))
-            while dme.read_byte(RECV_ITEM_DISPLAY_VIZ_ADDR) > 0:
-                wait_for_next_loop(0.1)
+            # item_name_display = lm_item_name
+            # if len(lm_item_name) > RECV_MAX_STRING_LENGTH:
+            #     item_name_display = lm_item_name[0:RECV_MAX_STRING_LENGTH] + "..."
+            # dme.write_bytes(RECV_ITEM_NAME_ADDR, sbf.string_to_bytes(item_name_display, RECV_LINE_STRING_LENGTH))
+            #
+            # loc_name_display = ctx.location_names.lookup_in_game(item.location)
+            # if len(loc_name_display) > RECV_MAX_STRING_LENGTH:
+            #     loc_name_display = loc_name_display[0:RECV_MAX_STRING_LENGTH] + "..."
+            # dme.write_bytes(RECV_ITEM_LOC_ADDR, sbf.string_to_bytes(loc_name_display, RECV_LINE_STRING_LENGTH))
+            #
+            # recv_name_display = ctx.player_names[item.player]
+            # if len(recv_name_display) > RECV_MAX_STRING_LENGTH:
+            #     recv_name_display = recv_name_display[0:RECV_MAX_STRING_LENGTH] + "..."
+            # dme.write_bytes(RECV_ITEM_SENDER_ADDR, sbf.string_to_bytes(recv_name_display, RECV_LINE_STRING_LENGTH))
+            #
+            # dme.write_bytes(RECV_ITEM_DISPLAY_TIMER_ADDR, bytes.fromhex(RECV_DEFAULT_TIMER_IN_HEX))
+            # await wait_for_next_loop(int(RECV_DEFAULT_TIMER_IN_HEX, 16))
+            # while dme.read_byte(RECV_ITEM_DISPLAY_VIZ_ADDR) > 0:
+            #     await wait_for_next_loop(0.1)
 
             for addr_to_update in lm_item.update_ram_addr:
                 byte_size = 1 if addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
@@ -798,7 +798,7 @@ async def give_player_items(ctx: LMContext):
             # Update the last received index to ensure we don't receive the same item over and over.
             last_recv_idx += 1
             dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
-        wait_for_next_loop(0.5)
+        await wait_for_next_loop(0.5)
 
 
 
