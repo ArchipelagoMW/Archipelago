@@ -175,11 +175,7 @@ class DamageMultiplier(Range):
 
 
 class BRCDeathLink(DeathLink):
-    """
-    When you die, everyone dies. The reverse is also true.
-    
-    This can be changed later in the options menu inside the Archipelago phone app.
-    """
+    __doc__ = DeathLink.__doc__ + "\n\n    This can be changed later in the options menu inside the Archipelago phone app."
 
 
 @dataclass

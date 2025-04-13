@@ -287,13 +287,13 @@ class BadStartingWeapons(Toggle):
 
 class DonaldDeathLink(Toggle):
     """
-    If Donald is KO'ed, so is Sora.  If Death Link is toggled on in your client, this will send a death to everyone.
+    If Donald is KO'ed, so is Sora.  If Death Link is toggled on in your client, this will send a death to everyone who enabled death link.
     """
     display_name = "Donald Death Link"
 
 class GoofyDeathLink(Toggle):
     """
-    If Goofy is KO'ed, so is Sora.  If Death Link is toggled on in your client, this will send a death to everyone.
+    If Goofy is KO'ed, so is Sora.  If Death Link is toggled on in your client, this will send a death to everyone who enabled death link.
     """
     display_name = "Goofy Death Link"
 
