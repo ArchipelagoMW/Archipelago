@@ -727,25 +727,25 @@ async def give_player_items(ctx: LMContext):
                 dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
                 continue
 
-            item_name_display = lm_item_name
-            if len(lm_item_name) > RECV_MAX_STRING_LENGTH:
-                item_name_display = lm_item_name[0:RECV_MAX_STRING_LENGTH] + "..."
-            dme.write_bytes(RECV_ITEM_NAME_ADDR, sbf.string_to_bytes(item_name_display, RECV_LINE_STRING_LENGTH))
-
-            loc_name_display = ctx.location_names.lookup_in_game(item.location)
-            if len(loc_name_display) > RECV_MAX_STRING_LENGTH:
-                loc_name_display = loc_name_display[0:RECV_MAX_STRING_LENGTH] + "..."
-            dme.write_bytes(RECV_ITEM_LOC_ADDR, sbf.string_to_bytes(loc_name_display, RECV_LINE_STRING_LENGTH))
-
-            recv_name_display = ctx.player_names[item.player]
-            if len(recv_name_display) > RECV_MAX_STRING_LENGTH:
-                recv_name_display = recv_name_display[0:RECV_MAX_STRING_LENGTH] + "..."
-            dme.write_bytes(RECV_ITEM_SENDER_ADDR, sbf.string_to_bytes(recv_name_display, RECV_LINE_STRING_LENGTH))
-
-            dme.write_bytes(RECV_ITEM_DISPLAY_TIMER_ADDR, bytes.fromhex(RECV_DEFAULT_TIMER_IN_HEX))
-            await wait_for_next_loop(int(RECV_DEFAULT_TIMER_IN_HEX, 16))
-            while dme.read_byte(RECV_ITEM_DISPLAY_VIZ_ADDR) > 0:
-                await wait_for_next_loop(0.1)
+            # item_name_display = lm_item_name
+            # if len(lm_item_name) > RECV_MAX_STRING_LENGTH:
+            #     item_name_display = lm_item_name[0:RECV_MAX_STRING_LENGTH] + "..."
+            # dme.write_bytes(RECV_ITEM_NAME_ADDR, sbf.string_to_bytes(item_name_display, RECV_LINE_STRING_LENGTH))
+            #
+            # loc_name_display = ctx.location_names.lookup_in_game(item.location)
+            # if len(loc_name_display) > RECV_MAX_STRING_LENGTH:
+            #     loc_name_display = loc_name_display[0:RECV_MAX_STRING_LENGTH] + "..."
+            # dme.write_bytes(RECV_ITEM_LOC_ADDR, sbf.string_to_bytes(loc_name_display, RECV_LINE_STRING_LENGTH))
+            #
+            # recv_name_display = ctx.player_names[item.player]
+            # if len(recv_name_display) > RECV_MAX_STRING_LENGTH:
+            #     recv_name_display = recv_name_display[0:RECV_MAX_STRING_LENGTH] + "..."
+            # dme.write_bytes(RECV_ITEM_SENDER_ADDR, sbf.string_to_bytes(recv_name_display, RECV_LINE_STRING_LENGTH))
+            #
+            # dme.write_bytes(RECV_ITEM_DISPLAY_TIMER_ADDR, bytes.fromhex(RECV_DEFAULT_TIMER_IN_HEX))
+            # await wait_for_next_loop(int(RECV_DEFAULT_TIMER_IN_HEX, 16))
+            # while dme.read_byte(RECV_ITEM_DISPLAY_VIZ_ADDR) > 0:
+            #     await wait_for_next_loop(0.1)
 
             for addr_to_update in lm_item.update_ram_addr:
                 byte_size = 1 if addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
