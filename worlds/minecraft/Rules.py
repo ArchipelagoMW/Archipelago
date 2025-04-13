@@ -297,7 +297,8 @@ def get_rules_lookup(world, player: int):
             "Spooky Scary Skeleton": lambda state: basic_combat(world, state, player),
             "Two by Two": lambda state: has_iron_ingots(world, state, player)
                                         and state.has("Bucket", player)
-                                        and can_adventure(world, state, player),
+                                        and state.can_reach_region("Village", player)
+                                        and state.has("Brush", player),
             "Two Birds, One Arrow": lambda state: craft_crossbow(world, state, player)
                                                   and can_enchant(world, state, player),
             "Who's the Pillager Now?": lambda state: craft_crossbow(world, state, player),
