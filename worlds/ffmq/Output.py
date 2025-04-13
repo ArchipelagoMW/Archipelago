@@ -78,6 +78,7 @@ def generate_output(self, output_directory):
         "overworld_shuffle": tf(self.options.overworld_shuffle),
         "crest_shuffle": tf(self.options.crest_shuffle),
         "enemizer_groups": cc(self.options.enemizer_groups),
+        "progressive_enemizer": cc(self.options.progressive_enemizer),
         "shuffle_res_weak_type": tf(self.options.shuffle_res_weak_types),
         "companion_leveling_type": cc(self.options.companion_leveling_type),
         "companion_spellbook_type": cc(self.options.companion_spellbook_type),

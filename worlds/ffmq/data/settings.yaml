@@ -78,6 +78,9 @@ Final Fantasy Mystic Quest:
     MobsOnly: 0
     MobsBosses: 0
     MobsBossesDK: 0
+  progressive_enemizer:
+    true: 0
+    false: 0
   shuffle_res_weak_type:
     true: 0
     false: 0

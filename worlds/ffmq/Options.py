@@ -108,17 +108,26 @@ class BossesScalingUpper(EnemyScaling):
 
 
 class EnemizerAttacks(Choice):
-    """Shuffles enemy attacks. Standard: No shuffle. Safe: Randomize every attack but leave out self-destruct and Dark
-    King attacks. Chaos: Randomize and include self-destruct and Dark King attacks. Self Destruct: Every enemy
-    self-destructs. Simple Shuffle: Instead of randomizing, shuffle one monster's attacks to another. Dark King is left
-    vanilla."""
+    """Shuffles enemy attacks. Standard: No shuffle. Balanced: Randomize every attack, but remove self-destruct
+    and multiply; only the Dark Castle's bosses can get Dark King attacks.
+    Balanced Expert: Same as balanced, but enemies tends to have stronger attacks.
+    Chaos: Randomize and include self-destruct and Dark King attacks.
+    Self Destruct: Every enemy self-destructs.
+    Simple Shuffle: Instead of randomizing, shuffle one monster's attacks to another. Dark King is left vanilla."""
     display_name = "Enemizer Attacks"
     option_normal = 0
-    option_safe = 1
-    option_chaos = 2
-    option_self_destruct = 3
-    option_simple_shuffle = 4
+    option_balanced = 1
+    option_balanced_expert = 2
+    option_chaos = 3
+    option_self_destruct = 4
+    option_simple_shuffle = 5
     default = 0
+
+
+class ProgressiveEnemizer(Toggle):
+    """Enemies of the same type will share the same attack pool."""
+    default = 0
+    display_name = "Progressive Enemizer"
 
 
 class EnemizerGroups(Choice):
@@ -358,6 +367,7 @@ class FFMQOptions(PerGameCommonOptions):
     bosses_scaling_lower: BossesScalingLower
     bosses_scaling_upper: BossesScalingUpper
     enemizer_attacks: EnemizerAttacks
+    progressive_enemizer: ProgressiveEnemizer
     enemizer_groups: EnemizerGroups
     shuffle_res_weak_types: ShuffleResWeakType
     shuffle_enemies_position: ShuffleEnemiesPositions
