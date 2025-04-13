@@ -465,8 +465,7 @@ def get_rules_lookup(world, player: int):
             "Planting the Past": lambda state: can_excavate(world, state, player),
             "Crafting a New Look": lambda state: has_iron_ingots(world, state, player)
                                                  and (
-                                                   can_adventure(world, state, player)  # Maybe streamline this one
-                                                   or fortress_loot(world, state, player)
+                                                   fortress_loot(world, state, player)
                                                    or (
                                                     state.can_reach_region("Pillager Outpost", player)
                                                     and basic_combat(world, state, player)
@@ -490,16 +489,15 @@ def get_rules_lookup(world, player: int):
                                                    (  # Water Breathing Potions
                                                     state.has("Fishing Rod", player)
                                                     and can_brew_potions(world, state, player)
-                                                    )
-                                                    or (  # Milk/Axolotls, Water Breathing/Respiration
-                                                     state.has("Bucket", player)
-                                                     and can_enchant(world, state, player)
-                                                    )
+                                                   )
+                                                   or (
+                                                    state.has("Bucket", player)  # Milk/Axolotls
+                                                    and can_enchant(world, state, player)  # Respiration
+                                                   )
                                                  ),
             "Respecting the Remnants": lambda state: can_excavate(world, state, player),
             "Careful Restoration": lambda state: can_excavate(world, state, player),
             "The Power of Books": lambda state: state.has("Progressive Tools", player, 2),
-
         }
     }
     return rules_lookup
