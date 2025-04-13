@@ -792,9 +792,10 @@ class Context:
         return None
     
     def replace_hint(self, team: int, slot: int, old_hint: Hint, new_hint: Hint) -> None:
-        if old_hint in self.hints[team, slot]:
-            self.hints[team, slot].remove(old_hint)
-            self.hints[team, slot].add(new_hint)
+        for real_slot in self.slot_set(slot):
+            if old_hint in self.hints[team, real_slot]:
+                self.hints[team, real_slot].remove(old_hint)
+                self.hints[team, real_slot].add(new_hint)
     
     # "events"
 
