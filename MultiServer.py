@@ -2004,21 +2004,21 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             msg = ctx.dumper([args])
 
             teams = set(args.get("teams", client.team))
-            games = set(args["games"]) if "games" in args else None
-            tags = set(args["tags"]) if "tags" in args else None
-            slots = set(args["slots"]) if "slots" in args else None
+            games = set(args.get("games", []))
+            tags = set(args.get("tags", []))
+            slots = set(args.get("slots", []))
 
             def teams_match(target: Client) -> bool:
                 return target.team in teams
 
             def games_match(target: Client) -> bool:
-                return games is None or ctx.games[target.slot] in games
+                return len(games) == 0 or ctx.games[target.slot] in games
 
             def tags_match(target: Client) -> bool:
-                return tags is None or bool(set(target.tags) & tags)
+                return len(tags) == 0 or bool(set(target.tags) & tags)
 
             def slots_match(target: Client) -> bool:
-                return slots is None or target.slot in slots
+                return len(slots) == 0 or target.slot in slots
 
             boolean_operator = args.get("operator", "legacy")
 

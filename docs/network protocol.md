@@ -405,7 +405,7 @@ Send this message to the server, tell it which clients should receive the messag
 the message to all those targets to which the requirements ("teams", "games", "slots", "tags") apply according
 to the operator chosen:
 - "or": Conditions are chained with "or".
-- "and": Conditions are chained with "and". If a condition isn't present in the packet, it evaluates as True.
+- "and": Conditions are chained with "and". Important note: If a condition is empty, it evaluates as **True**.
 - "legacy": Evaluates as `teams and (games or slots or tags)`.
 
 #### Arguments
