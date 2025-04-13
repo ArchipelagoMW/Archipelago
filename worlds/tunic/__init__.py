@@ -162,9 +162,17 @@ class TunicWorld(World):
                 self.options.shuffle_ladders.value = self.passthrough["shuffle_ladders"]
                 self.options.grass_randomizer.value = self.passthrough.get("grass_randomizer", 0)
                 self.options.breakable_shuffle.value = self.passthrough.get("breakable_shuffle", 0)
-                self.options.fixed_shop.value = self.options.fixed_shop.option_false
                 self.options.laurels_location.value = self.options.laurels_location.option_anywhere
                 self.options.combat_logic.value = self.passthrough["combat_logic"]
+
+                for source, dest in self.passthrough["Entrance Rando"].items():
+                    if (source == "ziggurat2020_3, ziggurat2020_1_zig2_skip"
+                            or dest == "ziggurat2020_3, ziggurat2020_1_zig2_skip"):
+                        self.options.fixed_shop.value = self.options.fixed_shop.option_true
+                        break
+                else:
+                    self.options.fixed_shop.value = self.options.fixed_shop.option_false
+
             else:
                 self.using_ut = False
         else:
