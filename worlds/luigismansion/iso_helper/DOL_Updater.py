@@ -102,7 +102,7 @@ def update_dol_offsets(gcm: GCM, dol: DOL, start_inv: list[str], walk_speed: int
     dol.data.write(blank_data)
 
     # Read in all the other custom DOL changes and update their values to the new value as expected.
-    custom_dol_code = get_data(MAIN_PKG_NAME, "data/lm_custom_code.bin")
+    custom_dol_code = get_data(MAIN_PKG_NAME, "data/lm_custom_code.lmco")
     dol.data.seek(CUSTOM_CODE_OFFSET_START)
     dol.data.write(custom_dol_code)
 
