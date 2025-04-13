@@ -5,83 +5,83 @@ presently, Archipelago is also the randomizer itself.
 
 Currently, the following games are supported:
 
-* The Legend of Zelda: A Link to the Past
-* Factorio
-* Minecraft
-* Subnautica
-* Slay the Spire
-* Risk of Rain 2
-* The Legend of Zelda: Ocarina of Time
-* Timespinner
-* Super Metroid
-* Secret of Evermore
-* Final Fantasy
-* Rogue Legacy
-* VVVVVV
-* Raft
-* Super Mario 64
-* Meritous
-* Super Metroid/Link to the Past combo randomizer (SMZ3)
-* ChecksFinder
+* A Hat in Time
+* A Short Hike
+* Adventure
+* Aquaria
 * ArchipIDLE
+* Blasphemous
+* Bomb Rush Cyberfunk
+* Bumper Stickers
+* Castlevania 64
+* Castlevania: Circle of the Moon
+* Celeste 64
+* ChecksFinder
+* Civilization VI
+* Clique
+* Dark Souls 3
+* DLC Quest
+* Donkey Kong Country 3
+* DOOM 1993
+* DOOM II
+* Factorio
+* Faxanadu
+* Final Fantasy
+* Final Fantasy Mystic Quest
+* Heretic
 * Hollow Knight
-* The Witness
+* Hylics 2
+* Inscryption
+* Kingdom Hearts 1
+* Kingdom Hearts 2
+* Kirby's Dream Land 3
+* Landstalker: The Treasures of King Nole
+* Lingo
+* Lufia II Ancient Cave
+* Mario & Luigi: Superstar Saga
+* Mega Man 2
+* Mega Man Battle Network 3: Blue Version
+* Meritous
+* Minecraft
+* Muse Dash
+* Noita
+* Old School Runescape
+* Overcooked! 2
+* Pokémon Emerald
+* Pokémon Red and Blue
+* Raft
+* Risk of Rain 2
+* Rogue Legacy
+* Saving Princess
+* Secret of Evermore
+* Shivers
+* Slay the Spire
 * Sonic Adventure 2: Battle
 * Starcraft 2
-* Donkey Kong Country 3
-* Dark Souls 3
-* Super Mario World
-* Pokémon Red and Blue
-* Hylics 2
-* Overcooked! 2
-* Zillion
-* Lufia II Ancient Cave
-* Blasphemous
-* Wargroove
 * Stardew Valley
-* The Legend of Zelda
-* The Messenger
-* Kingdom Hearts 2
-* The Legend of Zelda: Link's Awakening DX
-* Clique
-* Adventure
-* DLC Quest
-* Noita
-* Undertale
-* Bumper Stickers
-* Mega Man Battle Network 3: Blue Version
-* Muse Dash
-* DOOM 1993
+* Subnautica
+* Super Mario 64
+* Super Mario World
+* Super Metroid
+* Super Metroid/Link to the Past combo randomizer (SMZ3)
 * Terraria
-* Lingo
-* Pokémon Emerald
-* DOOM II
-* Shivers
-* Heretic
-* Landstalker: The Treasures of King Nole
-* Final Fantasy Mystic Quest
-* TUNIC
-* Kirby's Dream Land 3
-* Celeste 64
-* Zork Grand Inquisitor
-* Castlevania 64
-* A Short Hike
-* Yoshi's Island
-* Mario & Luigi: Superstar Saga
-* Bomb Rush Cyberfunk
-* Aquaria
-* Yu-Gi-Oh! Ultimate Masters: World Championship Tournament 2006
-* A Hat in Time
-* Old School Runescape
-* Kingdom Hearts 1
-* Mega Man 2
-* Yacht Dice
-* Faxanadu
-* Saving Princess
-* Castlevania: Circle of the Moon
-* Inscryption
-* Civilization VI
+* The Legend of Zelda
+* The Legend of Zelda: A Link to the Past
+* The Legend of Zelda: Link's Awakening DX
+* The Legend of Zelda: Ocarina of Time
 * The Legend of Zelda: The Wind Waker
+* The Messenger
+* The Witness
+* Timespinner
+* TUNIC
+* Undertale
+* VVVVVV
+* Wargroove
+* Yacht Dice
+* Yoshi's Island
+* Yu-Gi-Oh! Ultimate Masters: World Championship Tournament 2006
+* Zillion
+* Zork Grand Inquisitor
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled
