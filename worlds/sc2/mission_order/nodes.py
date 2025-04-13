@@ -204,8 +204,8 @@ class SC2MOGenCampaign(MissionOrderNode):
         self.option_goal = data["goal"]
         self.option_entry_rules = data["entry_rules"]
         self.option_unique_progression_track = data["unique_progression_track"]
-        self.option_min_difficulty = data["min_difficulty"]
-        self.option_max_difficulty = data["max_difficulty"]
+        self.option_min_difficulty = Difficulty(data["min_difficulty"])
+        self.option_max_difficulty = Difficulty(data["max_difficulty"])
         self.option_single_layout_campaign = data["single_layout_campaign"]
         self.layouts = []
         self.exits = []
@@ -332,8 +332,8 @@ class SC2MOGenLayout(MissionOrderNode):
         self.option_missions = data.pop("missions")
         self.option_entry_rules = data.pop("entry_rules")
         self.option_unique_progression_track = data.pop("unique_progression_track")
-        self.option_min_difficulty = data.pop("min_difficulty")
-        self.option_max_difficulty = data.pop("max_difficulty")
+        self.option_min_difficulty = Difficulty(data.pop("min_difficulty"))
+        self.option_max_difficulty = Difficulty(data.pop("max_difficulty"))
         self.missions = []
         self.entrances = []
         self.exits = []
@@ -343,7 +343,8 @@ class SC2MOGenLayout(MissionOrderNode):
             raise ValueError(f"Layout \"{self.option_name}\" has a size of 0.")
 
         # Build base layout
-        self.layout_type: LayoutType = self.option_type(self.option_size)
+        from . import layout_types
+        self.layout_type: LayoutType = getattr(layout_types, self.option_type)(self.option_size)
         unused = self.layout_type.set_options(data)
         if len(unused) > 0:
             logging.warning(f"SC2 ({world.player_name}): Layout \"{self.option_name}\" has unknown options: {list(unused.keys())}")

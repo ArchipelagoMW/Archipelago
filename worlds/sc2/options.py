@@ -6,7 +6,7 @@ from datetime import timedelta
 from Options import (
     Choice, Toggle, DefaultOnToggle, OptionSet, Range,
     PerGameCommonOptions, Option, VerifyKeys, StartInventory,
-    is_iterable_except_str, OptionGroup, Visibility
+    is_iterable_except_str, OptionGroup, Visibility, ItemDict
 )
 from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
@@ -1272,7 +1272,7 @@ class ResearchCostReductionPerItem(Range):
     default = 2
 
 
-class FillerRatio(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
+class FillerItemsDistribution(ItemDict):
     """
     Controls the relative probability of each filler item being generated over others.
     Items that are bound to specific race or option are automatically eliminated.
@@ -1285,77 +1285,19 @@ class FillerRatio(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
         item_names.MAX_SUPPLY: 1,
         item_names.SHIELD_REGENERATION: 1,
         item_names.BUILDING_CONSTRUCTION_SPEED: 1,
-        item_names.KERRIGAN_LEVELS_1: 1,
+        item_names.KERRIGAN_LEVELS_1: 0,
         item_names.UPGRADE_RESEARCH_SPEED: 1,
         item_names.UPGRADE_RESEARCH_COST: 1,
         item_names.REDUCED_MAX_SUPPLY: 0,
     }
-    simple_names = {
-        "minerals": item_names.STARTING_MINERALS,
-        "gas": item_names.STARTING_VESPENE,
-        "vespene": item_names.STARTING_VESPENE,
-        "supply": item_names.STARTING_SUPPLY,
-        "max supply": item_names.MAX_SUPPLY,
-        "maximum supply": item_names.MAX_SUPPLY,
-        "shields": item_names.SHIELD_REGENERATION,
-        "shield regen": item_names.SHIELD_REGENERATION,
-        "shield regeneration": item_names.SHIELD_REGENERATION,
-        "build speed": item_names.BUILDING_CONSTRUCTION_SPEED,
-        "construction speed": item_names.BUILDING_CONSTRUCTION_SPEED,
-        "supply trap": item_names.REDUCED_MAX_SUPPLY,
-        "reduced max supply": item_names.REDUCED_MAX_SUPPLY,
-        "kerrigan levels": item_names.KERRIGAN_LEVELS_1,
-        "kerrigan level": item_names.KERRIGAN_LEVELS_1,
-        "research speed": item_names.UPGRADE_RESEARCH_SPEED,
-        "research cost": item_names.UPGRADE_RESEARCH_COST,
-    }
-    supports_weighting = False
-    display_name = "Filler Item Ratios"
-    minimum_value: int = 0
+    valid_keys = default.keys()
+    display_name = "Filler Items Distribution"
 
-    def __init__(self, value: Dict[str, int]) -> None:
-        self.value = {key: val for key, val in value.items()}
-
-    @classmethod
-    def from_any(cls, data: Union[List[str], Dict[str, int]]) -> 'FillerRatio':
-        if isinstance(data, dict):
-            for key, value in data.items():
-                if not isinstance(value, int):
-                    raise ValueError(f"Invalid type in '{cls.display_name}': element '{key}' maps to '{value}', expected an integer")
-                if value < cls.minimum_value:
-                    raise ValueError(f"Invalid value for '{cls.display_name}': element '{key}' maps to {value}, which is less than the minimum ({cls.minimum_value})")
-            return cls(data)
-        else:
-            raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
-
-    def verify(self, world: Type['World'], player_name: str, plando_options: PlandoOptions) -> None:
-        """Overridden version of function from Options.VerifyKeys for a better error message"""
-        new_value: dict[str, int] = {}
-        name_mapping = {
-            item_name.casefold(): item_name for item_name in self.default
-        }
-        name_mapping.update(self.simple_names)
-        for key_name in self.value:
-            item_name = name_mapping.get(key_name.casefold())
-            if item_name is None:
-                raise ValueError(
-                    f"Unknown key {key_name} in option filler_ratio. "
-                    f"Valid names are ({', '.join(list(self.default) + list(self.simple_names))})"
-                )
-            new_value[item_name] = new_value.get(item_name, 0) + self.value[key_name]
-        self.value = new_value
-
-    def get_option_name(self, value):
-        return ", ".join(f"{key}: {v}" for key, v in value.items())
-
-    def __getitem__(self, item: str) -> int:
-        return self.value.__getitem__(item)
-
-    def __iter__(self) -> Iterator[str]:
-        return self.value.__iter__()
-
-    def __len__(self) -> int:
-        return self.value.__len__()
+    def __init__(self, value: Dict[str, int]):
+        # Allow zeros that the parent class doesn't allow
+        if any(item_count < 0 for item_count in value.values()):
+            raise Exception("Cannot have negative item weight.")
+        super(ItemDict, self).__init__(value)
 
 
 @dataclass
@@ -1443,7 +1385,7 @@ class Starcraft2Options(PerGameCommonOptions):
     maximum_supply_reduction_per_item: MaximumSupplyReductionPerItem
     lowest_maximum_supply: LowestMaximumSupply
     research_cost_reduction_per_item: ResearchCostReductionPerItem
-    filler_ratio: FillerRatio
+    filler_items_distribution: FillerItemsDistribution
     mission_order_scouting: MissionOrderScouting
 
     custom_mission_order: CustomMissionOrder
@@ -1532,7 +1474,7 @@ option_groups = [
         MaximumSupplyReductionPerItem,
         LowestMaximumSupply,
         ResearchCostReductionPerItem,
-        FillerRatio,
+        FillerItemsDistribution,
     ]),
     OptionGroup("Inclusions & Exclusions", [
         LockedItems,

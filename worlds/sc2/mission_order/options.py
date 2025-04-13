@@ -25,19 +25,19 @@ from .presets_static import (
     preset_lotv_epilogue, preset_lotv, preset_nco
 )
 from .presets_scripted import make_golden_path
-
+from ...alttp import difficulties
 
 GENERIC_KEY_NAME = "Key".casefold()
 GENERIC_PROGRESSIVE_KEY_NAME = "Progressive Key".casefold()
 
 STR_OPTION_VALUES: Dict[str, Dict[str, Any]] = {
     "type": {
-        "column": Column, "grid": Grid, "hopscotch": Hopscotch, "gauntlet": Gauntlet, "blitz": Blitz,
-        "canvas": Canvas,
+        "column": Column.__name__, "grid": Grid.__name__, "hopscotch": Hopscotch.__name__, "gauntlet": Gauntlet.__name__, "blitz": Blitz.__name__,
+        "canvas": Canvas.__name__,
     },
     "difficulty": {
-        "relative": Difficulty.RELATIVE, "starter": Difficulty.STARTER, "easy": Difficulty.EASY,
-        "medium": Difficulty.MEDIUM, "hard": Difficulty.HARD, "very hard": Difficulty.VERY_HARD
+        "relative": Difficulty.RELATIVE.value, "starter": Difficulty.STARTER.value, "easy": Difficulty.EASY.value,
+        "medium": Difficulty.MEDIUM.value, "hard": Difficulty.HARD.value, "very hard": Difficulty.VERY_HARD.value
     },
     "preset": {
         "none": lambda _: {},
@@ -90,7 +90,7 @@ ItemEntryRule = {
     "items": {str: int}
 }
 EntryRule = Or(SubRuleEntryRule, MissionCountEntryRule, BeatMissionsEntryRule, ItemEntryRule)
-
+SchemaDifficulty = Or(*[value.value for value in Difficulty])
 
 class CustomMissionOrder(OptionDict):
     """
@@ -135,15 +135,15 @@ class CustomMissionOrder(OptionDict):
             "entry_rules": [EntryRule],
             "unique_progression_track": int,
             "goal": bool,
-            "min_difficulty": Difficulty,
-            "max_difficulty": Difficulty,
+            "min_difficulty": SchemaDifficulty,
+            "max_difficulty": SchemaDifficulty,
             "single_layout_campaign": bool,
             # Layouts
             str: {
                 "display_name": [str],
                 "unique_name": bool,
                 # Type options
-                "type": lambda val: issubclass(val, LayoutType),
+                "type": lambda val: issubclass(globals()[val], LayoutType),
                 "size": IntOne,
                 # Link options
                 "exit": bool,
@@ -152,8 +152,8 @@ class CustomMissionOrder(OptionDict):
                 "unique_progression_track": int,
                 # Mission pool options
                 "mission_pool": {int},
-                "min_difficulty": Difficulty,
-                "max_difficulty": Difficulty,
+                "min_difficulty": SchemaDifficulty,
+                "max_difficulty": SchemaDifficulty,
                 # Allow arbitrary options for layout types
                 Optional(str): Or(int, str, bool, [Or(int, str, bool)]),
                 # Mission slots
@@ -166,7 +166,7 @@ class CustomMissionOrder(OptionDict):
                     Optional("next"): [Or(int, str)],
                     Optional("entry_rules"): [EntryRule],
                     Optional("mission_pool"): {int},
-                    Optional("difficulty"): Difficulty,
+                    Optional("difficulty"): SchemaDifficulty,
                     Optional("victory_cache"): IntZeroToTen,
                 }],
             },

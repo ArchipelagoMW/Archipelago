@@ -811,14 +811,14 @@ class TestItemFiltering(Sc2SetupTestBase):
     
     def test_setting_filter_weight_to_zero_excludes_that_item(self) -> None:
         world_options = {
-            'filler_ratio': {
-                'minerals': 0,
-                'gas': 1,
-                'supply': 0,
-                'max supply': 0,
-                'supply trap': 0,
-                'shields': 0,
-                'build speed': 0,
+            'filler_items_distribution': {
+                item_names.STARTING_MINERALS: 0,
+                item_names.STARTING_VESPENE: 1,
+                item_names.STARTING_SUPPLY: 0,
+                item_names.MAX_SUPPLY: 0,
+                item_names.REDUCED_MAX_SUPPLY: 0,
+                item_names.SHIELD_REGENERATION: 0,
+                item_names.BUILDING_CONSTRUCTION_SPEED: 0,
             },
             # Exclude many items to get filler to generate
             'excluded_items': {
@@ -846,14 +846,14 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_shields_filler_doesnt_appear_if_no_protoss_missions_appear(self) -> None:
         world_options = {
-            'filler_ratio': {
-                'minerals': 1,
-                'gas': 0,
-                'supply': 0,
-                'max supply': 0,
-                'supply trap': 1,
-                'shields': 1,
-                'build speed': 0,
+            'filler_items_distribution': {
+                item_names.STARTING_MINERALS: 1,
+                item_names.STARTING_VESPENE: 0,
+                item_names.STARTING_SUPPLY: 0,
+                item_names.MAX_SUPPLY: 0,
+                item_names.REDUCED_MAX_SUPPLY: 1,
+                item_names.SHIELD_REGENERATION: 1,
+                item_names.BUILDING_CONSTRUCTION_SPEED: 0,
             },
             # Exclude many items to get filler to generate
             'excluded_items': {
