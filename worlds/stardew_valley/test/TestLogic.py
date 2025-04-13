@@ -3,11 +3,11 @@ import unittest
 from unittest import TestCase, SkipTest
 
 from BaseClasses import MultiWorld
-from worlds.stardew_valley.data.bundles_data.bundle_data import all_bundle_items_except_money
 from . import setup_solo_multiworld
 from .assertion import RuleAssertMixin
 from .options.presets import allsanity_mods_6_x_x, minimal_locations_maximal_items
 from .. import StardewValleyWorld
+from ..data.bundles_data.bundle_data import all_bundle_items_except_money
 from ..logic.logic import StardewLogic
 from ..options import BundleRandomization
 
