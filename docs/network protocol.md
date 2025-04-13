@@ -368,18 +368,22 @@ Requests the data package from the server. Does not require client authenticatio
 | games | list\[str\]  | Optional. If specified, will only send back the specified data. Such as, \["Factorio"\] -> Datapackage with only Factorio data. |
 
 ### Bounce
-Send this message to the server, tell it which clients should receive the message and 
-the server will forward the message to all those targets to which any one requirement applies (or all requirements, if the "and" operator is chosen).
+Send this message to the server, tell it which clients should receive the message and the server will forward
+the message to all those targets to which the requirements ("teams", "games", "slots", "tags") apply according
+to the operator chosen:
+- "or": Conditions are chained with "or".
+- "and": Conditions are chained with "and". If a condition isn't present in the packet, it evaluates as True.
+- "legacy": Evaluates as `teams and (games or slots or tags)`.
 
 #### Arguments
-| Name     | Type        | Notes                                                                                                                       |
-|----------|-------------|-----------------------------------------------------------------------------------------------------------------------------|
-| teams    | list\[int\] | Optional. Teams that should receive this message. Defaults to own team.                                                     |
-| games    | list\[str\] | Optional. Game names that should receive this message                                                                       |
-| slots    | list\[int\] | Optional. Player IDs that should receive this message                                                                       |
-| tags     | list\[str\] | Optional. Client tags that should receive this message                                                                      |
-| operator | str         | Optional. Controls whether the "teams", games", "slots" and "tags" conditions are chained via "or" or "and". Default: "or". |
-| data     | dict        | Any data you want to send                                                                                                   |
+| Name     | Type        | Notes                                                                                                                                           |
+|----------|-------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| teams    | list\[int\] | Optional. Teams that should receive this message. Defaults to own team.                                                                         |
+| games    | list\[str\] | Optional. Game names that should receive this message                                                                                           |
+| slots    | list\[int\] | Optional. Player IDs that should receive this message                                                                                           |
+| tags     | list\[str\] | Optional. Client tags that should receive this message                                                                                          |
+| operator | str         | Optional. Controls how the "teams", games", "slots" and "tags" conditions are chained. Options are "or", "and" and "legacy". Default: "legacy". |
+| data     | dict        | Any data you want to send                                                                                                                       |
 
 ### Get
 Used to request a single or multiple values from the server's data storage, see the [Set](#Set) package for how to write values to the data storage. A Get package will be answered with a [Retrieved](#Retrieved) package.

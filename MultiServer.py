@@ -1826,32 +1826,41 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             msg = ctx.dumper([args])
 
             teams = set(args.get("teams", client.team))
-            boolean_operator = args.get("operator", "or")
+            games = set(args["games"]) if "games" in args else None
+            tags = set(args["tags"]) if "tags" in args else None
+            slots = set(args["slots"]) if "slots" in args else None
 
-            if boolean_operator not in ("or", "and"):
+            def teams_match(target: Client) -> bool:
+                return target.team in teams
+
+            def games_match(target: Client) -> bool:
+                return games is None or ctx.games[target.slot] in games
+
+            def tags_match(target: Client) -> bool:
+                return tags is None or bool(set(target.tags) & tags)
+
+            def slots_match(target: Client) -> bool:
+                return slots is None or target.slot in slots
+
+            boolean_operator = args.get("operator", "legacy")
+
+            if boolean_operator == "legacy":
+                def client_condition(target: Client) -> bool:
+                    return teams_match(target) and (games_match(target) or tags_match(target) or slots_match(target))
+            elif boolean_operator == "or":
+                def client_condition(target: Client) -> bool:
+                    return teams_match(target) or games_match(target) or tags_match(target) or slots_match(target)
+            elif boolean_operator == "and":
+                def client_condition(target: Client) -> bool:
+                    return teams_match(target) and games_match(target) and tags_match(target) and slots_match(target)
+            else:
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
-                                              "text": "Bounce", "original_cmd": cmd}])
+                                    "text": "Bounce", "original_cmd": cmd}])
                 return
 
-            conditions = [lambda bounceclient: bounceclient.team in teams]
-            if "games" in args:
-                games = set(args["games"])
-                conditions.append(lambda bounceclient: ctx.games[bounceclient.slot] in games)
-            if "tags" in args:
-                tags = set(args["tags"])
-                conditions.append(lambda bounceclient: set(bounceclient.tags) & tags)
-            if "slots" in args:
-                slots = set(args["slots"])
-                conditions.append(lambda bounceclient: bounceclient.slot in slots)
-
-            condition_concatenator = any if boolean_operator == "or" else all
-
-            for bounceclient in ctx.endpoints:
-                if client.team != bounceclient.team:
-                    continue
-
-                if condition_concatenator(condition(bounceclient) for condition in conditions):
-                    await ctx.send_encoded_msgs(bounceclient, msg)
+            for bounce_client in ctx.endpoints:
+                if client_condition(bounce_client):
+                    await ctx.send_encoded_msgs(bounce_client, msg)
 
         elif cmd == "Get":
             if "keys" not in args or type(args["keys"]) != list:
