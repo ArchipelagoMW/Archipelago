@@ -36,13 +36,13 @@ def get_vanilla_bundles(random: Random, content: StardewContent, options: Starde
 
 
 def get_thematic_bundles(random: Random, content: StardewContent, options: StardewValleyOptions) -> List[BundleRoom]:
-    generated_bundle_rooms = {room_name: thematic_bundles.bundles_by_room[room_name].create_bundle_room(random, content, options) for room_name in vanilla_bundles.bundles_by_room}
+    generated_bundle_rooms = {room_name: thematic_bundles.bundles_by_room[room_name].create_bundle_room(random, content, options) for room_name in thematic_bundles.bundles_by_room}
     fix_raccoon_bundle_names(generated_bundle_rooms[CCRoom.raccoon_requests])
     return list(generated_bundle_rooms.values())
 
 
 def get_remixed_bundles(random: Random, content: StardewContent, options: StardewValleyOptions) -> List[BundleRoom]:
-    generated_bundle_rooms = {room_name: remixed_bundles.bundles_by_room[room_name].create_bundle_room(random, content, options) for room_name in vanilla_bundles.bundles_by_room}
+    generated_bundle_rooms = {room_name: remixed_bundles.bundles_by_room[room_name].create_bundle_room(random, content, options) for room_name in remixed_bundles.bundles_by_room}
     fix_raccoon_bundle_names(generated_bundle_rooms[CCRoom.raccoon_requests])
     return list(generated_bundle_rooms.values())
 
