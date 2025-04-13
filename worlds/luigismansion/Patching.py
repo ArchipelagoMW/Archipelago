@@ -1259,7 +1259,7 @@ def update_treasure_table(treasure_info, character_info, output_data, teiden: bo
             x["pos_z"] = -4830.000000
 
         for item_name, item_data in output_data["Locations"].items():
-            # Ignore output data not related to chests that are not chests.
+            # Ignore output data not related to checks that are not chests.
             if not item_data["type"] == "Chest":
                 continue
 
@@ -1323,7 +1323,7 @@ def update_treasure_table(treasure_info, character_info, output_data, teiden: bo
                             rdiamond_amount = int_money_amt
                 # Add the entry for the chest in "treasuretable". Also includes the chest size.
                 treasure_info.info_file_field_entries.append({
-                    "other": treasure_item_name,
+                    "other": treasure_item_name if not "rdiamond" else "",
                     "room": item_data["room_no"],
                     "size": chest_size,
                     "coin": coin_amount,
