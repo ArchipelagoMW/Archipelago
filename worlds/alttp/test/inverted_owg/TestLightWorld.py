@@ -40,40 +40,46 @@ class TestLightWorld(TestInvertedOWG):
 
             ["Chicken House", False, []],
             ["Chicken House", False, [], ['Moon Pearl']],
-            ["Chicken House", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Chicken House", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Chicken House", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Pegasus Boots']],
 
             ["Aginah's Cave", False, []],
             ["Aginah's Cave", False, [], ['Moon Pearl']],
-            ["Aginah's Cave", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Aginah's Cave", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Aginah's Cave", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Pegasus Boots']],
 
             ["Sahasrahla's Hut - Left", False, []],
             ["Sahasrahla's Hut - Left", False, [], ['Moon Pearl', 'Magic Mirror']],
             ["Sahasrahla's Hut - Left", False, [], ['Moon Pearl', 'Pegasus Boots']],
+            ["Sahasrahla's Hut - Left", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)', 'Pegasus Boots']],
             ["Sahasrahla's Hut - Left", True, ['Moon Pearl', 'Pegasus Boots']],
             ["Sahasrahla's Hut - Left", True, ['Magic Mirror', 'Pegasus Boots']],
             ##todo: Damage boost superbunny not in logic
             #["Sahasrahla's Hut - Left", True, ['Beat Agahnim 1', 'Pegasus Boots']],
-            ["Sahasrahla's Hut - Left", True, ['Moon Pearl', 'Beat Agahnim 1']],
+            ["Sahasrahla's Hut - Left", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Beat Agahnim 1']],
 
             ["Sahasrahla's Hut - Middle", False, []],
             ["Sahasrahla's Hut - Middle", False, [], ['Moon Pearl', 'Magic Mirror']],
             ["Sahasrahla's Hut - Middle", False, [], ['Moon Pearl', 'Pegasus Boots']],
+            ["Sahasrahla's Hut - Middle", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)', 'Pegasus Boots']],
             ["Sahasrahla's Hut - Middle", True, ['Moon Pearl', 'Pegasus Boots']],
             ["Sahasrahla's Hut - Middle", True, ['Magic Mirror', 'Pegasus Boots']],
             #["Sahasrahla's Hut - Middle", True, ['Beat Agahnim 1', 'Pegasus Boots']],
-            ["Sahasrahla's Hut - Middle", True, ['Moon Pearl', 'Beat Agahnim 1']],
+            ["Sahasrahla's Hut - Middle", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Beat Agahnim 1']],
 
             ["Sahasrahla's Hut - Right", False, []],
             ["Sahasrahla's Hut - Right", False, [], ['Moon Pearl', 'Magic Mirror']],
             ["Sahasrahla's Hut - Right", False, [], ['Moon Pearl', 'Pegasus Boots']],
+            ["Sahasrahla's Hut - Right", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)', 'Pegasus Boots']],
             ["Sahasrahla's Hut - Right", True, ['Moon Pearl', 'Pegasus Boots']],
             ["Sahasrahla's Hut - Right", True, ['Magic Mirror', 'Pegasus Boots']],
             #["Sahasrahla's Hut - Right", True, ['Beat Agahnim 1', 'Pegasus Boots']],
-            ["Sahasrahla's Hut - Right", True, ['Moon Pearl', 'Beat Agahnim 1']],
+            ["Sahasrahla's Hut - Right", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Beat Agahnim 1']],
 
             ["Kakariko Well - Top", False, []],
             ["Kakariko Well - Top", False, [], ['Moon Pearl']],
-            ["Kakariko Well - Top", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Kakariko Well - Top", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Kakariko Well - Top", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Pegasus Boots']],
 
             ["Kakariko Well - Left", False, []],
             ["Kakariko Well - Left", True, ['Moon Pearl', 'Pegasus Boots']],
@@ -101,7 +107,8 @@ class TestLightWorld(TestInvertedOWG):
 
             ["Blind's Hideout - Top", False, []],
             ["Blind's Hideout - Top", False, [], ['Moon Pearl']],
-            ["Blind's Hideout - Top", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Blind's Hideout - Top", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Blind's Hideout - Top", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Pegasus Boots']],
 
             ["Blind's Hideout - Left", False, []],
             ["Blind's Hideout - Left", False, [], ['Moon Pearl', 'Magic Mirror']],
@@ -134,27 +141,33 @@ class TestLightWorld(TestInvertedOWG):
 
             ["Mini Moldorm Cave - Far Left", False, []],
             ["Mini Moldorm Cave - Far Left", False, [], ['Moon Pearl']],
-            ["Mini Moldorm Cave - Far Left", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Mini Moldorm Cave - Far Left", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Mini Moldorm Cave - Far Left", True, ['Bomb Upgrade (+5)', 'Progressive Sword', 'Moon Pearl', 'Pegasus Boots']],
 
             ["Mini Moldorm Cave - Left", False, []],
             ["Mini Moldorm Cave - Left", False, [], ['Moon Pearl']],
-            ["Mini Moldorm Cave - Left", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Mini Moldorm Cave - Left", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Mini Moldorm Cave - Left", True, ['Bomb Upgrade (+5)', 'Progressive Sword', 'Moon Pearl', 'Pegasus Boots']],
 
             ["Mini Moldorm Cave - Right", False, []],
             ["Mini Moldorm Cave - Right", False, [], ['Moon Pearl']],
-            ["Mini Moldorm Cave - Right", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Mini Moldorm Cave - Right", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Mini Moldorm Cave - Right", True, ['Bomb Upgrade (+5)', 'Progressive Sword', 'Moon Pearl', 'Pegasus Boots']],
 
             ["Mini Moldorm Cave - Far Right", False, []],
             ["Mini Moldorm Cave - Far Right", False, [], ['Moon Pearl']],
-            ["Mini Moldorm Cave - Far Right", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Mini Moldorm Cave - Far Right", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Mini Moldorm Cave - Far Right", True, ['Bomb Upgrade (+5)', 'Progressive Sword', 'Moon Pearl', 'Pegasus Boots']],
 
             ["Mini Moldorm Cave - Generous Guy", False, []],
             ["Mini Moldorm Cave - Generous Guy", False, [], ['Moon Pearl']],
-            ["Mini Moldorm Cave - Generous Guy", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Mini Moldorm Cave - Generous Guy", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Mini Moldorm Cave - Generous Guy", True, ['Bomb Upgrade (+5)', 'Progressive Sword', 'Moon Pearl', 'Pegasus Boots']],
 
             ["Ice Rod Cave", False, []],
             ["Ice Rod Cave", False, [], ['Moon Pearl']],
-            ["Ice Rod Cave", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Ice Rod Cave", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Ice Rod Cave", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Pegasus Boots']],
             #I don't think so
             #["Ice Rod Cave", True, ['Magic Mirror', 'Pegasus Boots', 'BigRedBomb']],
             #["Ice Rod Cave", True, ['Magic Mirror', 'Beat Agahnim 1', 'BigRedBomb']],
@@ -236,7 +249,8 @@ class TestLightWorld(TestInvertedOWG):
 
             ["Graveyard Cave", False, []],
             ["Graveyard Cave", False, [], ['Moon Pearl']],
-            ["Graveyard Cave", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Graveyard Cave", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Graveyard Cave", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Pegasus Boots']],
 
             ["Checkerboard Cave", False, []],
             ["Checkerboard Cave", False, [], ['Progressive Glove']],

@@ -5,9 +5,18 @@ import enum
 import warnings
 from json import JSONEncoder, JSONDecoder
 
-import websockets
+if typing.TYPE_CHECKING:
+    from websockets import WebSocketServerProtocol as ServerConnection
 
 from Utils import ByValue, Version
+
+
+class HintStatus(ByValue, enum.IntEnum):
+    HINT_UNSPECIFIED = 0
+    HINT_NO_PRIORITY = 10
+    HINT_AVOID = 20
+    HINT_PRIORITY = 30
+    HINT_FOUND = 40
 
 
 class JSONMessagePart(typing.TypedDict, total=False):
@@ -19,6 +28,8 @@ class JSONMessagePart(typing.TypedDict, total=False):
     player: int
     # if type == item indicates item flags
     flags: int
+    # if type == hint_status
+    hint_status: HintStatus
 
 
 class ClientStatus(ByValue, enum.IntEnum):
@@ -79,6 +90,7 @@ class NetworkItem(typing.NamedTuple):
     item: int
     location: int
     player: int
+    """ Sending player, except in LocationInfo (from LocationScouts), where it is the receiving player. """
     flags: int = 0
 
 
@@ -140,7 +152,7 @@ decode = JSONDecoder(object_hook=_object_hook).decode
 
 
 class Endpoint:
-    socket: websockets.WebSocketServerProtocol
+    socket: "ServerConnection"
 
     def __init__(self, socket):
         self.socket = socket
@@ -183,6 +195,7 @@ class JSONTypes(str, enum.Enum):
     location_name = "location_name"
     location_id = "location_id"
     entrance_name = "entrance_name"
+    hint_status = "hint_status"
 
 
 class JSONtoTextParser(metaclass=HandlerMeta):
@@ -198,7 +211,8 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         "slateblue": "6D8BE8",
         "plum": "AF99EF",
         "salmon": "FA8072",
-        "white": "FFFFFF"
+        "white": "FFFFFF",
+        "orange": "FF7700",
     }
 
     def __init__(self, ctx):
@@ -222,7 +236,7 @@ class JSONtoTextParser(metaclass=HandlerMeta):
 
     def _handle_player_id(self, node: JSONMessagePart):
         player = int(node["text"])
-        node["color"] = 'magenta' if player == self.ctx.slot else 'yellow'
+        node["color"] = 'magenta' if self.ctx.slot_concerns_self(player) else 'yellow'
         node["text"] = self.ctx.player_names[player]
         return self._handle_color(node)
 
@@ -247,7 +261,7 @@ class JSONtoTextParser(metaclass=HandlerMeta):
 
     def _handle_item_id(self, node: JSONMessagePart):
         item_id = int(node["text"])
-        node["text"] = self.ctx.item_names[item_id]
+        node["text"] = self.ctx.item_names.lookup_in_slot(item_id, node["player"])
         return self._handle_item_name(node)
 
     def _handle_location_name(self, node: JSONMessagePart):
@@ -255,12 +269,16 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         return self._handle_color(node)
 
     def _handle_location_id(self, node: JSONMessagePart):
-        item_id = int(node["text"])
-        node["text"] = self.ctx.location_names[item_id]
+        location_id = int(node["text"])
+        node["text"] = self.ctx.location_names.lookup_in_slot(location_id, node["player"])
         return self._handle_location_name(node)
 
     def _handle_entrance_name(self, node: JSONMessagePart):
         node["color"] = 'blue'
+        return self._handle_color(node)
+
+    def _handle_hint_status(self, node: JSONMessagePart):
+        node["color"] = status_colors.get(node["hint_status"], "red")
         return self._handle_color(node)
 
 
@@ -271,7 +289,8 @@ class RawJSONtoTextParser(JSONtoTextParser):
 
 color_codes = {'reset': 0, 'bold': 1, 'underline': 4, 'black': 30, 'red': 31, 'green': 32, 'yellow': 33, 'blue': 34,
                'magenta': 35, 'cyan': 36, 'white': 37, 'black_bg': 40, 'red_bg': 41, 'green_bg': 42, 'yellow_bg': 43,
-               'blue_bg': 44, 'magenta_bg': 45, 'cyan_bg': 46, 'white_bg': 47}
+               'blue_bg': 44, 'magenta_bg': 45, 'cyan_bg': 46, 'white_bg': 47,
+               'plum': 35, 'slateblue': 34, 'salmon': 31,}  # convert ui colors to terminal colors
 
 
 def color_code(*args):
@@ -290,8 +309,29 @@ def add_json_item(parts: list, item_id: int, player: int = 0, item_flags: int = 
     parts.append({"text": str(item_id), "player": player, "flags": item_flags, "type": JSONTypes.item_id, **kwargs})
 
 
-def add_json_location(parts: list, item_id: int, player: int = 0, **kwargs) -> None:
-    parts.append({"text": str(item_id), "player": player, "type": JSONTypes.location_id, **kwargs})
+def add_json_location(parts: list, location_id: int, player: int = 0, **kwargs) -> None:
+    parts.append({"text": str(location_id), "player": player, "type": JSONTypes.location_id, **kwargs})
+
+
+status_names: typing.Dict[HintStatus, str] = {
+    HintStatus.HINT_FOUND: "(found)",
+    HintStatus.HINT_UNSPECIFIED: "(unspecified)",
+    HintStatus.HINT_NO_PRIORITY: "(no priority)",
+    HintStatus.HINT_AVOID: "(avoid)",
+    HintStatus.HINT_PRIORITY: "(priority)",
+}
+status_colors: typing.Dict[HintStatus, str] = {
+    HintStatus.HINT_FOUND: "green",
+    HintStatus.HINT_UNSPECIFIED: "white",
+    HintStatus.HINT_NO_PRIORITY: "slateblue",
+    HintStatus.HINT_AVOID: "salmon",
+    HintStatus.HINT_PRIORITY: "plum",
+}
+
+
+def add_json_hint_status(parts: list, hint_status: HintStatus, text: typing.Optional[str] = None, **kwargs):
+    parts.append({"text": text if text != None else status_names.get(hint_status, "(unknown)"),
+                  "hint_status": hint_status, "type": JSONTypes.hint_status, **kwargs})
 
 
 class Hint(typing.NamedTuple):
@@ -302,14 +342,21 @@ class Hint(typing.NamedTuple):
     found: bool
     entrance: str = ""
     item_flags: int = 0
+    status: HintStatus = HintStatus.HINT_UNSPECIFIED
 
     def re_check(self, ctx, team) -> Hint:
-        if self.found:
+        if self.found and self.status == HintStatus.HINT_FOUND:
             return self
         found = self.location in ctx.location_checks[team, self.finding_player]
         if found:
-            return Hint(self.receiving_player, self.finding_player, self.location, self.item, found, self.entrance,
-                        self.item_flags)
+            return self._replace(found=found, status=HintStatus.HINT_FOUND)
+        return self
+    
+    def re_prioritize(self, ctx, status: HintStatus) -> Hint:
+        if self.found and status != HintStatus.HINT_FOUND:
+            status = HintStatus.HINT_FOUND
+        if status != self.status:
+            return self._replace(status=status)
         return self
 
     def __hash__(self):
@@ -331,10 +378,7 @@ class Hint(typing.NamedTuple):
         else:
             add_json_text(parts, "'s World")
         add_json_text(parts, ". ")
-        if self.found:
-            add_json_text(parts, "(found)", type="color", color="green")
-        else:
-            add_json_text(parts, "(not found)", type="color", color="red")
+        add_json_hint_status(parts, self.status)
 
         return {"cmd": "PrintJSON", "data": parts, "type": "Hint",
                 "receiving": self.receiving_player,
@@ -380,6 +424,8 @@ class _LocationStore(dict, typing.MutableMapping[int, typing.Dict[int, typing.Tu
         checked = state[team, slot]
         if not checked:
             # This optimizes the case where everyone connects to a fresh game at the same time.
+            if slot not in self:
+                raise KeyError(slot)
             return []
         return [location_id for
                 location_id in self[slot] if
@@ -396,12 +442,12 @@ class _LocationStore(dict, typing.MutableMapping[int, typing.Dict[int, typing.Tu
                 location_id not in checked]
 
     def get_remaining(self, state: typing.Dict[typing.Tuple[int, int], typing.Set[int]], team: int, slot: int
-                      ) -> typing.List[int]:
+                      ) -> typing.List[typing.Tuple[int, int]]:
         checked = state[team, slot]
         player_locations = self[slot]
-        return sorted([player_locations[location_id][0] for
-                       location_id in player_locations if
-                       location_id not in checked])
+        return sorted([(player_locations[location_id][1], player_locations[location_id][0]) for
+                        location_id in player_locations if
+                        location_id not in checked])
 
 
 if typing.TYPE_CHECKING:  # type-check with pure python implementation until we have a typing stub

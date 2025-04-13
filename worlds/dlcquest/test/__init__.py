@@ -1,19 +1,26 @@
-from typing import ClassVar
-
-from typing import Dict, FrozenSet, Tuple, Any
+import os
 from argparse import Namespace
+from typing import ClassVar
+from typing import Dict, FrozenSet, Tuple, Any
 
 from BaseClasses import MultiWorld
-from test.TestBase import WorldTestBase
-from .. import DLCqworld
+from test.bases import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
 from worlds.AutoWorld import call_all
+from .. import DLCqworld
 
 
 class DLCQuestTestBase(WorldTestBase):
     game = "DLCQuest"
     world: DLCqworld
     player: ClassVar[int] = 1
+    # Set False to run tests that take long
+    skip_long_tests: bool = True
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        super().setUpClass()
+        cls.skip_long_tests = not bool(os.environ.get("long"))
 
     def world_setup(self, *args, **kwargs):
         super().world_setup(*args, **kwargs)
@@ -37,8 +44,7 @@ def setup_dlc_quest_solo_multiworld(test_options=None, seed=None, _cache: Dict[F
     if frozen_options in _cache:
         return _cache[frozen_options]
 
-    multiworld = setup_base_solo_multiworld(DLCqworld, ())
-    multiworld.set_seed(seed)
+    multiworld = setup_base_solo_multiworld(DLCqworld, (), seed=seed)
     # print(f"Seed: {multiworld.seed}") # Uncomment to print the seed for every test
     args = Namespace()
     for name, option in DLCqworld.options_dataclass.type_hints.items():

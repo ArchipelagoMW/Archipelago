@@ -1,5 +1,6 @@
 #cython: language_level=3
-#distutils: language = c++
+#distutils: language = c
+#distutils: depends = intset.h
 
 """
 Provides faster implementation of some core parts.
@@ -13,7 +14,6 @@ from cpython cimport PyObject
 from typing import Any, Dict, Iterable, Iterator, Generator, Sequence, Tuple, TypeVar, Union, Set, List, TYPE_CHECKING
 from cymem.cymem cimport Pool
 from libc.stdint cimport int64_t, uint32_t
-from libcpp.set cimport set as std_set
 from collections import defaultdict
 
 cdef extern from *:
@@ -30,6 +30,27 @@ ctypedef int64_t ap_id_t
 
 cdef ap_player_t MAX_PLAYER_ID = 1000000  # limit the size of indexing array
 cdef size_t INVALID_SIZE = <size_t>(-1)  # this is all 0xff... adding 1 results in 0, but it's not negative
+
+# configure INTSET for player
+cdef extern from *:
+    """
+    #define INTSET_NAME ap_player_set
+    #define INTSET_TYPE uint32_t  // has to match ap_player_t
+    """
+
+# create INTSET for player
+cdef extern from "intset.h":
+    """
+    #undef INTSET_NAME
+    #undef INTSET_TYPE
+    """
+    ctypedef struct ap_player_set:
+        pass
+
+    ap_player_set* ap_player_set_new(size_t bucket_count) nogil
+    void ap_player_set_free(ap_player_set* set) nogil
+    bint ap_player_set_add(ap_player_set* set, ap_player_t val) nogil
+    bint ap_player_set_contains(ap_player_set* set, ap_player_t val) nogil
 
 
 cdef struct LocationEntry:
@@ -48,6 +69,15 @@ cdef struct IndexEntry:
     size_t count
 
 
+if TYPE_CHECKING:
+    State = Dict[Tuple[int, int], Set[int]]
+else:
+    State = Union[Tuple[int, int], Set[int], defaultdict]
+
+T = TypeVar('T')
+
+
+@cython.auto_pickle(False)
 cdef class LocationStore:
     """Compact store for locations and their items in a MultiServer"""
     # The original implementation uses Dict[int, Dict[int, Tuple(int, int, int]]
@@ -77,18 +107,6 @@ cdef class LocationStore:
         size += sum(sizeof(proxy) for proxy in self._proxies)
         size += sizeof(self._raw_proxies[0]) * self.sender_index_size
         return size
-
-    def __cinit__(self, locations_dict: Dict[int, Dict[int, Sequence[int]]]) -> None:
-        self._mem = None
-        self._keys = None
-        self._items = None
-        self._proxies = None
-        self._len = 0
-        self.entries = NULL
-        self.entry_count = 0
-        self.sender_index = NULL
-        self.sender_index_size = 0
-        self._raw_proxies = NULL
 
     def __init__(self, locations_dict: Dict[int, Dict[int, Sequence[int]]]) -> None:
         self._mem = Pool()
@@ -127,9 +145,15 @@ cdef class LocationStore:
             warnings.warn("Game has no locations")
 
         # allocate the arrays and invalidate index (0xff...)
-        self.entries = <LocationEntry*>self._mem.alloc(count, sizeof(LocationEntry))
+        if count:
+            # leaving entries as NULL if there are none, makes potential memory errors more visible
+            self.entries = <LocationEntry*>self._mem.alloc(count, sizeof(LocationEntry))
         self.sender_index = <IndexEntry*>self._mem.alloc(max_sender + 1, sizeof(IndexEntry))
         self._raw_proxies = <PyObject**>self._mem.alloc(max_sender + 1, sizeof(PyObject*))
+
+        assert (not self.entries) == (not count)
+        assert self.sender_index
+        assert self._raw_proxies
 
         # build entries and index
         cdef size_t i = 0
@@ -180,8 +204,6 @@ cdef class LocationStore:
             raise KeyError(key)
         return <object>self._raw_proxies[key]
 
-    T = TypeVar('T')
-
     def get(self, key: int, default: T) -> Union[PlayerLocationProxy, T]:
         # calling into self.__getitem__ here is slow, but this is not used in MultiServer
         try:
@@ -196,7 +218,7 @@ cdef class LocationStore:
     def find_item(self, slots: Set[int], seeked_item_id: int) -> Generator[Tuple[int, int, int, int, int], None, None]:
         cdef ap_id_t item = seeked_item_id
         cdef ap_player_t receiver
-        cdef std_set[ap_player_t] receivers
+        cdef ap_player_set* receivers
         cdef size_t slot_count = len(slots)
         if slot_count == 1:
             # specialized implementation for single slot
@@ -208,13 +230,20 @@ cdef class LocationStore:
                             yield entry.sender, entry.location, entry.item, entry.receiver, entry.flags
         elif slot_count:
             # generic implementation with lookup in set
-            for receiver in slots:
-                receivers.insert(receiver)
-            with nogil:
-                for entry in self.entries[:self.entry_count]:
-                    if entry.item == item and receivers.count(entry.receiver):
-                        with gil:
-                            yield entry.sender, entry.location, entry.item, entry.receiver, entry.flags
+            receivers = ap_player_set_new(min(1023, slot_count))  # limit top level struct to 16KB
+            if not receivers:
+                raise MemoryError()
+            try:
+                for receiver in slots:
+                    if not ap_player_set_add(receivers, receiver):
+                        raise MemoryError()
+                with nogil:
+                    for entry in self.entries[:self.entry_count]:
+                        if entry.item == item and ap_player_set_contains(receivers, entry.receiver):
+                            with gil:
+                                yield entry.sender, entry.location, entry.item, entry.receiver, entry.flags
+            finally:
+                ap_player_set_free(receivers)
 
     def get_for_player(self, slot: int) -> Dict[int, Set[int]]:
         cdef ap_player_t receiver = slot
@@ -229,12 +258,11 @@ cdef class LocationStore:
                         all_locations[sender].add(entry.location)
         return all_locations
 
-    if TYPE_CHECKING:
-        State = Dict[Tuple[int, int], Set[int]]
-    else:
-        State = Union[Tuple[int, int], Set[int], defaultdict]
-
     def get_checked(self, state: State, team: int, slot: int) -> List[int]:
+        cdef ap_player_t sender = slot
+        if sender < 0 or sender >= self.sender_index_size:
+            raise KeyError(slot)
+
         # This used to validate checks actually exist. A remnant from the past.
         # If the order of locations becomes relevant at some point, we could not do sorted(set), so leaving it.
         cdef set checked = state[team, slot]
@@ -246,7 +274,6 @@ cdef class LocationStore:
 
         # Unless the set is close to empty, it's cheaper to use the python set directly, so we do that.
         cdef LocationEntry* entry
-        cdef ap_player_t sender = slot
         cdef size_t start = self.sender_index[sender].start
         cdef size_t count = self.sender_index[sender].count
         return [entry.location for
@@ -256,9 +283,11 @@ cdef class LocationStore:
     def get_missing(self, state: State, team: int, slot: int) -> List[int]:
         cdef LocationEntry* entry
         cdef ap_player_t sender = slot
+        if sender < 0 or sender >= self.sender_index_size:
+            raise KeyError(slot)
+        cdef set checked = state[team, slot]
         cdef size_t start = self.sender_index[sender].start
         cdef size_t count = self.sender_index[sender].count
-        cdef set checked = state[team, slot]
         if not len(checked):
             # Skip `in` if none have been checked.
             # This optimizes the case where everyone connects to a fresh game at the same time.
@@ -270,17 +299,20 @@ cdef class LocationStore:
                     entry in self.entries[start:start + count] if
                     entry.location not in checked]
 
-    def get_remaining(self, state: State, team: int, slot: int) -> List[int]:
+    def get_remaining(self, state: State, team: int, slot: int) -> List[Tuple[int, int]]:
         cdef LocationEntry* entry
         cdef ap_player_t sender = slot
+        if sender < 0 or sender >= self.sender_index_size:
+            raise KeyError(slot)
+        cdef set checked = state[team, slot]
         cdef size_t start = self.sender_index[sender].start
         cdef size_t count = self.sender_index[sender].count
-        cdef set checked = state[team, slot]
-        return sorted([entry.item for
-                       entry in self.entries[start:start+count] if
-                       entry.location not in checked])
+        return sorted([(entry.receiver, entry.item) for
+                        entry in self.entries[start:start+count] if
+                        entry.location not in checked])
 
 
+@cython.auto_pickle(False)
 @cython.internal  # unsafe. disable direct import
 cdef class PlayerLocationProxy:
     cdef LocationStore _store
@@ -310,7 +342,8 @@ cdef class PlayerLocationProxy:
         cdef LocationEntry* entry = NULL
         # binary search
         cdef size_t l = self._store.sender_index[self._player].start
-        cdef size_t r = l + self._store.sender_index[self._player].count
+        cdef size_t e = l + self._store.sender_index[self._player].count
+        cdef size_t r = e
         cdef size_t m
         while l < r:
             m = (l + r) // 2
@@ -319,7 +352,7 @@ cdef class PlayerLocationProxy:
                 l = m + 1
             else:
                 r = m
-        if entry:  # count != 0
+        if l < e:
             entry = self._store.entries + l
             if entry.location == loc:
                 return entry
@@ -330,8 +363,6 @@ cdef class PlayerLocationProxy:
         if entry:
             return entry.item, entry.receiver, entry.flags
         raise KeyError(f"No location {key} for player {self._player}")
-
-    T = TypeVar('T')
 
     def get(self, key: int, default: T) -> Union[Tuple[int, int, int], T]:
         cdef LocationEntry* entry = self._get(key)

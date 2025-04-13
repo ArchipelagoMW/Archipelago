@@ -1,22 +1,19 @@
 from __future__ import annotations
 
-import logging
 import itertools
 from typing import List, Dict, Any, cast
 
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
+from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from . import items
 from . import locations
 from . import creatures
 from . import options
-from .items import item_table, group_items, items_by_type, ItemType
+from .items import item_table, group_items
 from .rules import set_rules
 
-logger = logging.getLogger("Subnautica")
 
-
-class SubnaticaWeb(WebWorld):
+class SubnauticaWeb(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up the Subnautica randomizer connected to an Archipelago Multiworld",
@@ -38,18 +35,19 @@ class SubnauticaWorld(World):
     You must find a cure for yourself, build an escape rocket, and leave the planet.
     """
     game = "Subnautica"
-    web = SubnaticaWeb()
+    web = SubnauticaWeb()
 
     item_name_to_id = {data.name: item_id for item_id, data in items.item_table.items()}
     location_name_to_id = all_locations
-    option_definitions = options.option_definitions
-
-    data_version = 10
-    required_client_version = (0, 4, 1)
-
+    options_dataclass = options.SubnauticaOptions
+    options: options.SubnauticaOptions
+    required_client_version = (0, 5, 0)
+    origin_region_name = "Planet 4546B"
     creatures_to_scan: List[str]
 
     def generate_early(self) -> None:
+        if not self.options.filler_items_distribution.weights_pair[1][-1]:
+            raise Exception("Filler Items Distribution needs at least one positive weight.")
         if self.options.early_seaglide:
             self.multiworld.local_early_items[self.player]["Seaglide Fragment"] = 2
 
@@ -65,12 +63,8 @@ class SubnauticaWorld(World):
             creature_pool, self.options.creature_scans.value)
 
     def create_regions(self):
-        # Create Regions
-        menu_region = Region("Menu", self.player, self.multiworld)
+        # Create Region
         planet_region = Region("Planet 4546B", self.player, self.multiworld)
-
-        # Link regions together
-        menu_region.connect(planet_region, "Lifepod 5")
 
         # Create regular locations
         location_names = itertools.chain((location["name"] for location in locations.location_table.values()),
@@ -92,13 +86,10 @@ class SubnauticaWorld(World):
                 # make the goal event the victory "item"
                 location.item.name = "Victory"
 
-        # Register regions to multiworld
-        self.multiworld.regions += [
-            menu_region,
-            planet_region
-        ]
+        # Register region to multiworld
+        self.multiworld.regions.append(planet_region)
 
-    # refer to Rules.py
+    # refer to rules.py
     set_rules = set_rules
 
     def create_items(self):
@@ -115,7 +106,7 @@ class SubnauticaWorld(World):
                 for i in range(item.count):
                     subnautica_item = self.create_item(item.name)
                     if item.name == "Neptune Launch Platform":
-                        self.multiworld.get_location("Aurora - Captain Data Terminal", self.player).place_locked_item(
+                        self.get_location("Aurora - Captain Data Terminal").place_locked_item(
                             subnautica_item)
                     else:
                         pool.append(subnautica_item)
@@ -128,8 +119,8 @@ class SubnauticaWorld(World):
                 pool.append(self.create_item(name))
             extras -= group_amount
 
-        for item_name in self.multiworld.random.sample(
-            # list of high-count important fragments as priority filler
+        for item_name in self.random.sample(
+                # list of high-count important fragments as priority filler
                 [
                     "Cyclops Engine Fragment",
                     "Cyclops Hull Fragment",
@@ -140,7 +131,7 @@ class SubnauticaWorld(World):
                     "Modification Station Fragment",
                     "Moonpool Fragment",
                     "Laser Cutter Fragment",
-                 ],
+                ],
                 k=min(extras, 9)):
             item = self.create_item(item_name)
             pool.append(item)
@@ -175,20 +166,11 @@ class SubnauticaWorld(World):
                               item_table[item_id].classification,
                               item_id, player=self.player)
 
-    def create_region(self, name: str, region_locations=None, exits=None):
-        ret = Region(name, self.player, self.multiworld)
-        if region_locations:
-            for location in region_locations:
-                loc_id = self.location_name_to_id.get(location, None)
-                location = SubnauticaLocation(self.player, location, loc_id, ret)
-                ret.locations.append(location)
-        if exits:
-            for region_exit in exits:
-                ret.exits.append(Entrance(self.player, region_exit, ret))
-        return ret
-
     def get_filler_item_name(self) -> str:
-        return item_table[self.multiworld.random.choice(items_by_type[ItemType.resource])].name
+        item_names, cum_item_weights = self.options.filler_items_distribution.weights_pair
+        return self.random.choices(item_names,
+                                   cum_weights=cum_item_weights,
+                                   k=1)[0]
 
 
 class SubnauticaLocation(Location):

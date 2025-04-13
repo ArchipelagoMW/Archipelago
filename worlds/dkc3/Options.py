@@ -1,12 +1,14 @@
-import typing
+from dataclasses import dataclass
 
-from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionList
+from Options import Choice, Range, Toggle, DefaultOnToggle, OptionGroup, PerGameCommonOptions
 
 
 class Goal(Choice):
     """
     Determines the goal of the seed
+
     Knautilus: Scuttle the Knautilus in Krematoa and defeat Baron K. Roolenstein
+
     Banana Bird Hunt: Find a certain number of Banana Birds and rescue their mother
     """
     display_name = "Goal"
@@ -25,6 +27,7 @@ class IncludeTradeSequence(Toggle):
 class DKCoinsForGyrocopter(Range):
     """
     How many DK Coins are needed to unlock the Gyrocopter
+
     Note: Achieving this number before unlocking the Turbo Ski will cause the game to grant you a
     one-time upgrade to the next non-unlocked boat, until you return to Funky. Logic does not assume
     that you will use this.
@@ -92,6 +95,7 @@ class LevelShuffle(Toggle):
 class Difficulty(Choice):
     """
     Which Difficulty Level to use
+
     NORML: The Normal Difficulty
     HARDR: Many DK Barrels are removed
     TUFST: Most DK Barrels and all Midway Barrels are removed
@@ -158,21 +162,42 @@ class StartingLifeCount(Range):
     default = 5
 
 
-dkc3_options: typing.Dict[str, type(Option)] = {
-    #"death_link": DeathLink,                                 # Disabled
-    "goal": Goal,
-    #"include_trade_sequence": IncludeTradeSequence,          # Disabled
-    "dk_coins_for_gyrocopter": DKCoinsForGyrocopter,
-    "krematoa_bonus_coin_cost": KrematoaBonusCoinCost,
-    "percentage_of_extra_bonus_coins": PercentageOfExtraBonusCoins,
-    "number_of_banana_birds": NumberOfBananaBirds,
-    "percentage_of_banana_birds": PercentageOfBananaBirds,
-    "kongsanity": KONGsanity,
-    "level_shuffle": LevelShuffle,
-    "difficulty": Difficulty,
-    "autosave": Autosave,
-    "merry": MERRY,
-    "music_shuffle": MusicShuffle,
-    "kong_palette_swap": KongPaletteSwap,
-    "starting_life_count": StartingLifeCount,
-}
+dkc3_option_groups = [
+    OptionGroup("Goal Options", [
+        Goal,
+        KrematoaBonusCoinCost,
+        PercentageOfExtraBonusCoins,
+        NumberOfBananaBirds,
+        PercentageOfBananaBirds,
+    ]),
+    OptionGroup("Aesthetics", [
+        Autosave,
+        MERRY,
+        MusicShuffle,
+        KongPaletteSwap,
+        StartingLifeCount,
+    ]),
+]
+
+
+@dataclass
+class DKC3Options(PerGameCommonOptions):
+    #death_link: DeathLink                                 # Disabled
+    #include_trade_sequence: IncludeTradeSequence          # Disabled
+
+    goal: Goal
+    krematoa_bonus_coin_cost: KrematoaBonusCoinCost
+    percentage_of_extra_bonus_coins: PercentageOfExtraBonusCoins
+    number_of_banana_birds: NumberOfBananaBirds
+    percentage_of_banana_birds: PercentageOfBananaBirds
+
+    dk_coins_for_gyrocopter: DKCoinsForGyrocopter
+    kongsanity: KONGsanity
+    level_shuffle: LevelShuffle
+    difficulty: Difficulty
+
+    autosave: Autosave
+    merry: MERRY
+    music_shuffle: MusicShuffle
+    kong_palette_swap: KongPaletteSwap
+    starting_life_count: StartingLifeCount

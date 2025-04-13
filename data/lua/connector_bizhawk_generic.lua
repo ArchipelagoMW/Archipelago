@@ -22,6 +22,10 @@ SOFTWARE.
 
 local SCRIPT_VERSION = 1
 
+-- Set to log incoming requests
+-- Will cause lag due to large console output
+local DEBUG = false
+
 --[[
 This script expects to receive JSON and will send JSON back. A message should
 be a list of 1 or more requests which will be executed in order. Each request
@@ -116,6 +120,14 @@ Response:
     Returns the hash of the currently loaded ROM calculated by BizHawk.
 
     Expected Response Type: `HASH_RESPONSE`
+
+- `MEMORY_SIZE`  
+    Returns the size in bytes of the specified memory domain.
+
+    Expected Response Type: `MEMORY_SIZE_RESPONSE`
+
+    Additional Fields:
+    - `domain` (`string`): The name of the memory domain to check
 
 - `GUARD`  
     Checks a section of memory against `expected_data`. If the bytes starting
@@ -212,6 +224,12 @@ Response:
     Additional Fields:
     - `value` (`string`): The returned hash
 
+- `MEMORY_SIZE_RESPONSE`  
+    Contains the size in bytes of the specified memory domain.
+
+    Additional Fields:
+    - `value` (`number`): The size of the domain in bytes
+
 - `GUARD_RESPONSE`  
     The result of an attempted `GUARD` request.
 
@@ -271,10 +289,6 @@ local base64 = require("base64")
 local socket = require("socket")
 local json = require("json")
 
--- Set to log incoming requests
--- Will cause lag due to large console output
-local DEBUG = false
-
 local SOCKET_PORT_FIRST = 43055
 local SOCKET_PORT_RANGE_SIZE = 5
 local SOCKET_PORT_LAST = SOCKET_PORT_FIRST + SOCKET_PORT_RANGE_SIZE
@@ -330,18 +344,28 @@ function unlock ()
     client_socket:settimeout(0)
 end
 
-function process_request (req)
-    local res = {}
+request_handlers = {
+    ["PING"] = function (req)
+        local res = {}
 
-    if req["type"] == "PING" then
         res["type"] = "PONG"
 
-    elseif req["type"] == "SYSTEM" then
+        return res
+    end,
+
+    ["SYSTEM"] = function (req)
+        local res = {}
+
         res["type"] = "SYSTEM_RESPONSE"
         res["value"] = emu.getsystemid()
 
-    elseif req["type"] == "PREFERRED_CORES" then
+        return res
+    end,
+
+    ["PREFERRED_CORES"] = function (req)
+        local res = {}
         local preferred_cores = client.getconfig().PreferredCores
+
         res["type"] = "PREFERRED_CORES_RESPONSE"
         res["value"] = {}
         res["value"]["NES"] = preferred_cores.NES
@@ -354,14 +378,30 @@ function process_request (req)
         res["value"]["PCECD"] = preferred_cores.PCECD
         res["value"]["SGX"] = preferred_cores.SGX
 
-    elseif req["type"] == "HASH" then
+        return res
+    end,
+
+    ["HASH"] = function (req)
+        local res = {}
+
         res["type"] = "HASH_RESPONSE"
         res["value"] = rom_hash
 
-    elseif req["type"] == "GUARD" then
-        res["type"] = "GUARD_RESPONSE"
-        local expected_data = base64.decode(req["expected_data"])
+        return res
+    end,
 
+    ["MEMORY_SIZE"] = function (req)
+        local res = {}
+
+        res["type"] = "MEMORY_SIZE_RESPONSE"
+        res["value"] = memory.getmemorydomainsize(req["domain"])
+
+        return res
+    end,
+
+    ["GUARD"] = function (req)
+        local res = {}
+        local expected_data = base64.decode(req["expected_data"])
         local actual_data = memory.read_bytes_as_array(req["address"], #expected_data, req["domain"])
 
         local data_is_validated = true
@@ -372,39 +412,83 @@ function process_request (req)
             end
         end
 
+        res["type"] = "GUARD_RESPONSE"
         res["value"] = data_is_validated
         res["address"] = req["address"]
 
-    elseif req["type"] == "LOCK" then
+        return res
+    end,
+
+    ["LOCK"] = function (req)
+        local res = {}
+
         res["type"] = "LOCKED"
         lock()
 
-    elseif req["type"] == "UNLOCK" then
+        return res
+    end,
+
+    ["UNLOCK"] = function (req)
+        local res = {}
+
         res["type"] = "UNLOCKED"
         unlock()
 
-    elseif req["type"] == "READ" then
+        return res
+    end,
+
+    ["READ"] = function (req)
+        local res = {}
+
         res["type"] = "READ_RESPONSE"
         res["value"] = base64.encode(memory.read_bytes_as_array(req["address"], req["size"], req["domain"]))
 
-    elseif req["type"] == "WRITE" then
+        return res
+    end,
+
+    ["WRITE"] = function (req)
+        local res = {}
+
         res["type"] = "WRITE_RESPONSE"
         memory.write_bytes_as_array(req["address"], base64.decode(req["value"]), req["domain"])
 
-    elseif req["type"] == "DISPLAY_MESSAGE" then
+        return res
+    end,
+
+    ["DISPLAY_MESSAGE"] = function (req)
+        local res = {}
+
         res["type"] = "DISPLAY_MESSAGE_RESPONSE"
         message_queue:push(req["message"])
 
-    elseif req["type"] == "SET_MESSAGE_INTERVAL" then
+        return res
+    end,
+
+    ["SET_MESSAGE_INTERVAL"] = function (req)
+        local res = {}
+
         res["type"] = "SET_MESSAGE_INTERVAL_RESPONSE"
         message_interval = req["value"]
 
-    else
+        return res
+    end,
+
+    ["default"] = function (req)
+        local res = {}
+
         res["type"] = "ERROR"
         res["err"] = "Unknown command: "..req["type"]
-    end
 
-    return res
+        return res
+    end,
+}
+
+function process_request (req)
+    if request_handlers[req["type"]] then
+        return request_handlers[req["type"]](req)
+    else
+        return request_handlers["default"](req)
+    end
 end
 
 -- Receive data from AP client and send message back
@@ -552,9 +636,11 @@ end)
 
 if bizhawk_major < 2 or (bizhawk_major == 2 and bizhawk_minor < 7) then
     print("Must use BizHawk 2.7.0 or newer")
-elseif bizhawk_major > 2 or (bizhawk_major == 2 and bizhawk_minor > 9) then
-    print("Warning: This version of BizHawk is newer than this script. If it doesn't work, consider downgrading to 2.9.")
 else
+    if bizhawk_major > 2 or (bizhawk_major == 2 and bizhawk_minor > 10) then
+        print("Warning: This version of BizHawk is newer than this script. If it doesn't work, consider downgrading to 2.10.")
+    end
+
     if emu.getsystemid() == "NULL" then
         print("No ROM is loaded. Please load a ROM.")
         while emu.getsystemid() == "NULL" do

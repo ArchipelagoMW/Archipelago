@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import datetime
 
 from Options import Choice, DeathLink, NamedRange, PerGameCommonOptions
 
@@ -48,6 +49,20 @@ class CoinSanityRange(NamedRange):
         "normal": 20,
         "high": 50,
     }
+    if datetime.datetime.today().month == 4:
+        if datetime.datetime.today().day == 1:
+            special_range_names["surprise"] = -1
+        else:
+            special_range_names["coin piece"] = -1
+
+
+class PermanentCoins(Choice):
+    """If purchasing a pack decreases your current coins amounts."""
+    internal_name = "permanent_coins"
+    display_name = "Permanent Coins"
+    option_false = 0
+    option_true = 1
+    default = 0
 
 
 class EndingChoice(Choice):
@@ -83,6 +98,7 @@ class DLCQuestOptions(PerGameCommonOptions):
     double_jump_glitch: DoubleJumpGlitch
     coinsanity: CoinSanity
     coinbundlequantity: CoinSanityRange
+    permanent_coins: PermanentCoins
     time_is_money: TimeIsMoney
     ending_choice: EndingChoice
     campaign: Campaign

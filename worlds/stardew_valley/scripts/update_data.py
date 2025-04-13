@@ -34,14 +34,15 @@ def write_item_csv(items: List[ItemData]):
 
 def write_location_csv(locations: List[LocationData]):
     with open((script_folder.parent.parent / "data/locations.csv").resolve(), "w", newline="") as file:
-        write = csv.DictWriter(file, ["id", "region", "name", "tags"])
+        write = csv.DictWriter(file, ["id", "region", "name", "tags", "mod_name"])
         write.writeheader()
         for location in locations:
             location_dict = {
                 "id": location.code_without_offset,
                 "name": location.name,
                 "region": location.region,
-                "tags": ",".join(sorted(group.name for group in location.tags))
+                "tags": ",".join(sorted(group.name for group in location.tags)),
+                "mod_name": location.mod_name
             }
             write.writerow(location_dict)
 
@@ -55,9 +56,9 @@ if __name__ == "__main__":
                                        and item.code_without_offset is not None) + 1)
 
     resource_pack_counter = itertools.count(max(item.code_without_offset
-                                       for item in loaded_items
-                                       if Group.RESOURCE_PACK in item.groups
-                                       and item.code_without_offset is not None) + 1)
+                                                for item in loaded_items
+                                                if Group.RESOURCE_PACK in item.groups
+                                                and item.code_without_offset is not None) + 1)
     items_to_write = []
     for item in loaded_items:
         if item.code_without_offset is None:
@@ -76,12 +77,11 @@ if __name__ == "__main__":
     location_counter = itertools.count(max(location.code_without_offset
                                            for location in loaded_locations
                                            if location.code_without_offset is not None) + 1)
-
     locations_to_write = []
     for location in loaded_locations:
         if location.code_without_offset is None:
             locations_to_write.append(
-                LocationData(next(location_counter), location.region, location.name, location.tags))
+                LocationData(next(location_counter), location.region, location.name, location.mod_name, location.tags))
             continue
 
         locations_to_write.append(location)

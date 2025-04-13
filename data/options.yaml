@@ -17,10 +17,10 @@
 # A. This is a .yaml file. You are allowed to use most characters.
 #    To test if your yaml is valid or not, you can use this website:
 #        http://www.yamllint.com/
-#    You can also verify your Archipelago settings are valid at this site:
+#    You can also verify that your Archipelago options are valid at this site:
 #        https://archipelago.gg/check
 
-# Your name in-game. Spaces will be replaced with underscores and there is a 16-character limit.
+# Your name in-game, limited to 16 characters.
 #     {player} will be replaced with the player's slot number.
 #     {PLAYER} will be replaced with the player's slot number, if that slot number is greater than 1.
 #     {number} will be replaced with the counter value of the name.
@@ -28,9 +28,9 @@
 name: Player{number}
 
 # Used to describe your yaml. Useful if you have multiple files.
-description: Default {{ game }} Template
+description: {{ yaml_dump("Default %s Template" % game) }}
 
-game: {{ game }}
+game: {{ yaml_dump(game) }}
 requires:
   version: {{ __version__ }} # Version of Archipelago required for this yaml to work as expected.
 
@@ -44,8 +44,11 @@ requires:
     {%- endfor -%}
 {% endmacro %}
 
-{{ game }}:
-  {%- for option_key, option in options.items() %}
+{{ yaml_dump(game) }}:
+  {%- for group_name, group_options in option_groups.items() %}
+  # {{ group_name }}
+
+  {%- for option_key, option in group_options.items() %}
   {{ option_key }}:
     {%- if option.__doc__ %}
     # {{ option.__doc__
@@ -65,21 +68,22 @@ requires:
 
     {%- elif option.options -%}
     {%- for suboption_option_id, sub_option_name in option.name_lookup.items() %}
-    {{ sub_option_name }}: {% if suboption_option_id == option.default %}50{% else %}0{% endif %}
+    {{ yaml_dump(sub_option_name) }}: {% if suboption_option_id == option.default %}50{% else %}0{% endif %}
     {%- endfor -%}
 
     {%- if option.name_lookup[option.default] not in option.options %}
-    {{ option.default }}: 50
+    {{ yaml_dump(option.default) }}: 50
     {%- endif -%}
 
     {%- elif option.default is string %}
-    {{ option.default }}: 50
+    {{ yaml_dump(option.default) }}: 50
 
     {%- elif option.default is iterable and option.default is not mapping %}
     {{ option.default | list }}
 
     {%- else %}
-    {{ yaml_dump(option.default) | trim | indent(4, first=false) }}
+    {{ yaml_dump(option.default) | indent(4, first=false) }}
     {%- endif -%}
     {{ "\n" }}
+  {%- endfor %}
   {%- endfor %}

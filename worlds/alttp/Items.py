@@ -1,12 +1,13 @@
 import typing
 
 from BaseClasses import ItemClassification as IC
+from worlds.AutoWorld import World
 
 
 def GetBeemizerItem(world, player: int, item):
     item_name = item if isinstance(item, str) else item.name
 
-    if item_name not in trap_replaceable:
+    if item_name not in trap_replaceable or player in world.groups:
         return item
 
     # first roll - replaceable item should be replaced, within beemizer_total_chance
@@ -17,13 +18,10 @@ def GetBeemizerItem(world, player: int, item):
     if not world.beemizer_trap_chance[player] or world.random.random() > (world.beemizer_trap_chance[player] / 100):
         return "Bee" if isinstance(item, str) else world.create_item("Bee", player)
     else:
-        return "Bee Trap" if isinstance(item, str) else world.create_item("Bee Trap", player)        
+        return "Bee Trap" if isinstance(item, str) else world.create_item("Bee Trap", player)
 
 
-# should be replaced with direct world.create_item(item) call in the future
-def ItemFactory(items: typing.Union[str, typing.Iterable[str]], player: int):
-    from worlds.alttp import ALTTPWorld
-    world = ALTTPWorld(None, player)
+def item_factory(items: typing.Union[str, typing.Iterable[str]], world: World):
     ret = []
     singleton = False
     if isinstance(items, str):
@@ -112,13 +110,15 @@ item_table = {'Bow': ItemData(IC.progression, None, 0x0B, 'You have\nchosen the\
               'Crystal 7': ItemData(IC.progression, 'Crystal', (0x08, 0x34, 0x64, 0x40, 0x7C, 0x06), None, None, None, None, None, None, "a blue crystal"),
               'Single Arrow': ItemData(IC.filler, None, 0x43, 'a lonely arrow\nsits here.', 'and the arrow', 'stick-collecting kid', 'sewing needle for sale', 'fungus for arrow', 'archer boy sews again', 'an arrow'),
               'Arrows (10)': ItemData(IC.filler, None, 0x44, 'This will give\nyou ten shots\nwith your bow!', 'and the arrow pack','stick-collecting kid', 'sewing kit for sale', 'fungus for arrows', 'archer boy sews again','ten arrows'),
-              'Arrow Upgrade (+10)': ItemData(IC.filler, None, 0x54, 'increase arrow\nstorage, low\nlow price', 'and the quiver', 'quiver-enlarging kid', 'arrow boost for sale', 'witch and more skewers', 'upgrade boy sews more again', 'arrow capacity'),
-              'Arrow Upgrade (+5)': ItemData(IC.filler, None, 0x53, 'increase arrow\nstorage, low\nlow price', 'and the quiver', 'quiver-enlarging kid', 'arrow boost for sale', 'witch and more skewers', 'upgrade boy sews more again', 'arrow capacity'),
+              'Arrow Upgrade (+10)': ItemData(IC.progression_skip_balancing, None, 0x54, 'increase arrow\nstorage, low\nlow price', 'and the quiver', 'quiver-enlarging kid', 'arrow boost for sale', 'witch and more skewers', 'upgrade boy sews more again', 'arrow capacity'),
+              'Arrow Upgrade (+5)': ItemData(IC.progression_skip_balancing, None, 0x53, 'increase arrow\nstorage, low\nlow price', 'and the quiver', 'quiver-enlarging kid', 'arrow boost for sale', 'witch and more skewers', 'upgrade boy sews more again', 'arrow capacity'),
+              'Arrow Upgrade (70)': ItemData(IC.progression_skip_balancing, None, 0x4D, 'increase arrow\nstorage, low\nlow price', 'and the quiver', 'quiver-enlarging kid', 'arrow boost for sale', 'witch and more skewers', 'upgrade boy sews more again', 'arrow capacity'),
               'Single Bomb': ItemData(IC.filler, None, 0x27, 'I make things\ngo BOOM! But\njust once.', 'and the explosion', 'the bomb-holding kid', 'firecracker for sale', 'blend fungus into bomb', '\'splosion boy explodes again', 'a bomb'),
               'Bombs (3)': ItemData(IC.filler, None, 0x28, 'I make things\ngo triple\nBOOM!!!', 'and the explosions', 'the bomb-holding kid', 'firecrackers for sale', 'blend fungus into bombs', '\'splosion boy explodes again', 'three bombs'),
               'Bombs (10)': ItemData(IC.filler, None, 0x31, 'I make things\ngo BOOM! Ten\ntimes!', 'and the explosions', 'the bomb-holding kid', 'firecrackers for sale', 'blend fungus into bombs', '\'splosion boy explodes again', 'ten bombs'),
-              'Bomb Upgrade (+10)': ItemData(IC.filler, None, 0x52, 'increase bomb\nstorage, low\nlow price', 'and the bomb bag', 'boom-enlarging kid', 'bomb boost for sale', 'the shroom goes boom', 'upgrade boy explodes more again', 'bomb capacity'),
-              'Bomb Upgrade (+5)': ItemData(IC.filler, None, 0x51, 'increase bomb\nstorage, low\nlow price', 'and the bomb bag', 'boom-enlarging kid', 'bomb boost for sale', 'the shroom goes boom', 'upgrade boy explodes more again', 'bomb capacity'),
+              'Bomb Upgrade (+10)': ItemData(IC.progression, None, 0x52, 'increase bomb\nstorage, low\nlow price', 'and the bomb bag', 'boom-enlarging kid', 'bomb boost for sale', 'the shroom goes boom', 'upgrade boy explodes more again', 'bomb capacity'),
+              'Bomb Upgrade (+5)': ItemData(IC.progression, None, 0x51, 'increase bomb\nstorage, low\nlow price', 'and the bomb bag', 'boom-enlarging kid', 'bomb boost for sale', 'the shroom goes boom', 'upgrade boy explodes more again', 'bomb capacity'),
+              'Bomb Upgrade (50)': ItemData(IC.progression, None, 0x4C, 'increase bomb\nstorage, low\nlow price', 'and the bomb bag', 'boom-enlarging kid', 'bomb boost for sale', 'the shroom goes boom', 'upgrade boy explodes more again', 'bomb capacity'),
               'Blue Mail': ItemData(IC.useful, None, 0x22, 'Now you\'re a\nblue elf!', 'and the banana hat', 'the protected kid', 'banana hat for sale', 'the clothing store', 'tailor boy banana hatted again', 'the Blue Mail'),
               'Red Mail': ItemData(IC.useful, None, 0x23, 'Now you\'re a\nred elf!', 'and the eggplant hat', 'well-protected kid', 'purple hat for sale', 'the nice clothing store', 'tailor boy fears nothing again', 'the Red Mail'),
               'Progressive Mail': ItemData(IC.useful, None, 0x60, 'time for a\nchange of\nclothes?', 'and the unknown hat', 'the protected kid', 'new hat for sale', 'the clothing store', 'tailor boy has threads again', 'some armor'),
@@ -222,6 +222,7 @@ item_table = {'Bow': ItemData(IC.progression, None, 0x0B, 'You have\nchosen the\
               'Return Smith': ItemData(IC.progression, 'Event', None, None, None, None, None, None, None, None),
               'Pick Up Purple Chest': ItemData(IC.progression, 'Event', None, None, None, None, None, None, None, None),
               'Open Floodgate': ItemData(IC.progression, 'Event', None, None, None, None, None, None, None, None),
+              'Capacity Upgrade Shop': ItemData(IC.progression, 'Event', None, None, None, None, None, None, None, None),
               }
 
 item_init_table = {name: data.as_init_dict() for name, data in item_table.items()}
@@ -287,5 +288,5 @@ progression_items = {name for name in everything if
                      item_table[name].classification in {IC.progression, IC.progression_skip_balancing}}
 item_name_groups['Progression Items'] = progression_items
 item_name_groups['Non Progression Items'] = everything - progression_items
-
+item_name_groups['Upgrades'] = {name for name in everything if 'Upgrade' in name}
 trap_replaceable = item_name_groups['Rupees'] | {'Arrows (10)', 'Single Bomb', 'Bombs (3)', 'Bombs (10)', 'Nothing'}

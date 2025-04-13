@@ -207,7 +207,7 @@ Clothier;                           Npc;                                        
 Dungeon;                            ;                                           Skeletron;
 Dungeon Heist;                      Achievement;                                Dungeon;
 Bone;                               ;                                           Dungeon | (@calamity & #Skeletron);
-Bewitching Table;                   Minions(1);                                 Dungeon;
+Bewitching Table;                   Minions(1);                                 Dungeon | (Witch Doctor & Wizard);
 Mechanic;                           ;                                           Dungeon;
 Wire;                               ;                                           Mechanic;
 Decryption Computer;                Calamity;                                   Mysterious Circuitry & Dubious Plating & Wire;
@@ -234,9 +234,9 @@ Spider Armor;                       ArmorMinions(3);                            
 Cross Necklace;                     ;                                           Wall of Flesh;
 Altar;                              ;                                           Wall of Flesh & @hammer(80);
 Begone, Evil!;                      Achievement;                                Altar;
-Cobalt Ore;                         ;                                           ((~@calamity & Altar) | (@calamity & Wall of Flesh)) & @pickaxe(100);
+Cobalt Ore;                         ;                                           (((~@calamity & Altar) | (@calamity & Wall of Flesh)) & @pickaxe(100)) | Wall of Flesh;
 Extra Shiny!;                       Achievement;                                Cobalt Ore | Mythril Ore | Adamantite Ore | Chlorophyte Ore;
-Cobalt Bar;                         ;                                           Cobalt Ore;
+Cobalt Bar;                         ;                                           Cobalt Ore | Wall of Flesh;
 Cobalt Pickaxe;                     Pickaxe(110);                               Cobalt Bar;
 Soul of Night;                      ;                                           Wall of Flesh | (@calamity & Altar);
 Hallow;                             ;                                           Wall of Flesh;
@@ -249,7 +249,7 @@ Blessed Apple;                      ;                                           
 Rod of Discord;                     ;                                           Hallow;
 Gelatin World Tour;                 Achievement | Grindy;                       Dungeon & Wall of Flesh & Hallow & #King Slime;
 Soul of Flight;                     ;                                           Wall of Flesh;
-Head in the Clouds;                 Achievement;                                (Soul of Flight & ((Hardmode Anvil & (Soul of Light | Soul of Night | Pixie Dust | Wall of Flesh | Solar Eclipse | @mech_boss(1) | Plantera | Spectre Bar | #Golem)) | (Shroomite Bar & Autohammer) | #Mourning Wood | #Pumpking)) | Steampunker | (Wall of Flesh & Witch Doctor) | (Solar Eclipse & Plantera) | #Everscream | #Old One's Army Tier 3 | #Empress of Light | #Duke Fishron | (Fragment & Luminite Bar & Ancient Manipulator); // Leaf Wings are Post-Plantera in 1.4.4
+Head in the Clouds;                 Achievement;                                @grindy | (Soul of Flight & ((Hardmode Anvil & (Soul of Light | Soul of Night | Pixie Dust | Wall of Flesh | Solar Eclipse | @mech_boss(1) | Plantera | Spectre Bar | #Golem)) | (Shroomite Bar & Autohammer) | #Mourning Wood | #Pumpking)) | Steampunker | (Wall of Flesh & Witch Doctor) | (Solar Eclipse & Plantera) | #Everscream | #Old One's Army Tier 3 | #Empress of Light | #Duke Fishron | (Fragment & Luminite Bar & Ancient Manipulator); // Leaf Wings are Post-Plantera in 1.4.4
 Bunny;                              Npc;                                        Zoologist & Wall of Flesh; // Extremely simplified
 Forbidden Fragment;                 ;                                           Sandstorm & Wall of Flesh;
 Astral Infection;                   Calamity;                                   Wall of Flesh;
@@ -274,13 +274,13 @@ Pirate;                             Npc;                                        
 Queen Slime;                        Location | Item;                            Hallow;
 
 // Aquatic Scourge
-Mythril Ore;                        ;                                           ((~@calamity & Altar) | (@calamity & @mech_boss(1))) & @pickaxe(110);
-Mythril Bar;                        ;                                           Mythril Ore;
+Mythril Ore;                        ;                                           (((~@calamity & Altar) | (@calamity & @mech_boss(1))) & @pickaxe(110)) | (Wall of Flesh & (~@calamity | @mech_boss(1)));
+Mythril Bar;                        ;                                           Mythril Ore | (Wall of Flesh & (~@calamity | @mech_boss(1)));
 Hardmode Anvil;                     ;                                           Mythril Bar;
 Mythril Pickaxe;                    Pickaxe(150);                               Hardmode Anvil & Mythril Bar;
-Adamantite Ore;                     ;                                           ((~@calamity & Altar) | (@calamity & @mech_boss(2))) & @pickaxe(150);
+Adamantite Ore;                     ;                                           (((~@calamity & Altar) | (@calamity & @mech_boss(2))) & @pickaxe(150)) | (Wall of Flesh & (~@calamity | @mech_boss(2)));
 Hardmode Forge;                     ;                                           Hardmode Anvil & Adamantite Ore & Hellforge;
-Adamantite Bar;                     ;                                           Hardmode Forge & Adamantite Ore;
+Adamantite Bar;                     ;                                           (Hardmode Forge & Adamantite Ore) | (Wall of Flesh & (~@calamity | @mech_boss(2)));
 Adamantite Pickaxe;                 Pickaxe(180);                               Hardmode Anvil & Adamantite Bar;
 Forbidden Armor;                    ArmorMinions(2);                            Hardmode Anvil & Adamantite Bar & Forbidden Fragment;
 Aquatic Scourge;                    Calamity | Location | Item;
@@ -385,7 +385,7 @@ Armored Digger;                     Calamity | Location | Item;                 
 Temple Raider;                      Achievement;                                #Plantera;
 Lihzahrd Temple;                    ;                                           #Plantera | (Plantera & Actuator) | @pickaxe(210) | (@calamity & Hardmode Anvil & Soul of Light & Soul of Night);
 Solar Eclipse;                      ;                                           Lihzahrd Temple & Wall of Flesh;
-Broken Hero Sword;                  ;                                           (Solar Eclipse & Plantera) | (@calamity & #Calamitas Clone);
+Broken Hero Sword;                  ;                                           (Solar Eclipse & Plantera & @mech_boss(3)) | (@calamity & #Calamitas Clone);
 Terra Blade;                        ;                                           Hardmode Anvil & True Night's Edge & True Excalibur & Broken Hero Sword & (~@calamity | Living Shard);
 Sword of the Hero;                  Achievement;                                Terra Blade;
 Kill the Sun;                       Achievement;                                Solar Eclipse;

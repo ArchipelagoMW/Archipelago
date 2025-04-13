@@ -1,24 +1,39 @@
 from __future__ import annotations
 
 import abc
-import logging
-from copy import deepcopy
-from dataclasses import dataclass
 import functools
+import logging
 import math
 import numbers
 import random
 import typing
+import enum
+from collections import defaultdict
 from copy import deepcopy
+from dataclasses import dataclass
 
 from schema import And, Optional, Or, Schema
+from typing_extensions import Self
 
-from Utils import get_fuzzy_results
+from Utils import get_file_safe_name, get_fuzzy_results, is_iterable_except_str, output_path
 
 if typing.TYPE_CHECKING:
-    from BaseClasses import PlandoOptions
+    from BaseClasses import MultiWorld, PlandoOptions
     from worlds.AutoWorld import World
     import pathlib
+
+
+class OptionError(ValueError):
+    pass
+
+
+class Visibility(enum.IntFlag):
+    none = 0b0000
+    template = 0b0001
+    simple_ui = 0b0010  # show option in simple menus, such as player-options
+    complex_ui = 0b0100  # show option in complex menus, such as weighted-options
+    spoiler = 0b1000
+    all = 0b1111
 
 
 class AssembleOptions(abc.ABCMeta):
@@ -39,9 +54,14 @@ class AssembleOptions(abc.ABCMeta):
         attrs["name_lookup"].update({option_id: name for name, option_id in new_options.items()})
         options.update(new_options)
         # apply aliases, without name_lookup
-        aliases = {name[6:].lower(): option_id for name, option_id in attrs.items() if
-                   name.startswith("alias_")}
+        aliases = attrs["aliases"] = {name[6:].lower(): option_id for name, option_id in attrs.items() if
+                                      name.startswith("alias_")}
 
+        assert (
+            name in {"Option", "VerifyKeys"} or  # base abstract classes don't need default
+            "default" in attrs or
+            any(hasattr(base, "default") for base in bases)
+        ), f"Option class {name} needs default value"
         assert "random" not in aliases, "Choice option 'random' cannot be manually assigned."
 
         # auto-alias Off and On being parsed as True and False
@@ -59,6 +79,7 @@ class AssembleOptions(abc.ABCMeta):
                 def verify(self, *args, **kwargs) -> None:
                     for f in verifiers:
                         f(self, *args, **kwargs)
+
                 attrs["verify"] = verify
             else:
                 assert verifiers, "class Option is supposed to implement def verify"
@@ -96,7 +117,8 @@ T = typing.TypeVar('T')
 
 class Option(typing.Generic[T], metaclass=AssembleOptions):
     value: T
-    default = 0
+    default: typing.ClassVar[typing.Any]  # something that __init__ will be able to convert to the correct type
+    visibility = Visibility.all
 
     # convert option_name_long into Name Long as display_name, otherwise name_long is the result.
     # Handled in get_option_name()
@@ -105,9 +127,28 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     # can be weighted between selections
     supports_weighting = True
 
+    rich_text_doc: typing.Optional[bool] = None
+    """Whether the WebHost should render the Option's docstring as rich text.
+
+    If this is True, the Option's docstring is interpreted as reStructuredText_,
+    the standard Python markup format. In the WebHost, it's rendered to HTML so
+    that lists, emphasis, and other rich text features are displayed properly.
+
+    If this is False, the docstring is instead interpreted as plain text, and
+    displayed as-is on the WebHost with whitespace preserved.
+
+    If this is None, it inherits the value of `WebWorld.rich_text_options_doc`. For
+    backwards compatibility, this defaults to False, but worlds are encouraged to
+    set it to True and use reStructuredText for their Option documentation.
+
+    .. _reStructuredText: https://docutils.sourceforge.io/rst.html
+    """
+
     # filled by AssembleOptions:
-    name_lookup: typing.Dict[T, str]
-    options: typing.Dict[str, int]
+    name_lookup: typing.ClassVar[typing.Dict[T, str]]  # type: ignore
+    # https://github.com/python/typing/discussions/1460 the reason for this type: ignore
+    options: typing.ClassVar[typing.Dict[str, int]]
+    aliases: typing.ClassVar[typing.Dict[str, int]]
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.current_option_name})"
@@ -118,12 +159,6 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     @property
     def current_key(self) -> str:
         return self.name_lookup[self.value]
-
-    def get_current_option_name(self) -> str:
-        """Deprecated. use current_option_name instead. TODO remove around 0.4"""
-        logging.warning(DeprecationWarning(f"get_current_option_name for {self.__class__.__name__} is deprecated."
-                                           f" use current_option_name instead. Worlds should use {self}.current_key"))
-        return self.current_option_name
 
     @property
     def current_option_name(self) -> str:
@@ -160,6 +195,8 @@ class FreeText(Option[str]):
     """Text option that allows users to enter strings.
     Needs to be validated by the world or option definition."""
 
+    default = ""
+
     def __init__(self, value: str):
         assert isinstance(value, str), "value of FreeText must be a string"
         self.value = value
@@ -180,9 +217,18 @@ class FreeText(Option[str]):
     def get_option_name(cls, value: str) -> str:
         return value
 
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return other.value == self.value
+        elif isinstance(other, str):
+            return other == self.value
+        else:
+            raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
+
 
 class NumericOption(Option[int], numbers.Integral, abc.ABC):
     default = 0
+
     # note: some of the `typing.Any`` here is a result of unresolved issue in python standards
     # `int` is not a `numbers.Integral` according to the official typestubs
     # (even though isinstance(5, numbers.Integral) == True)
@@ -356,7 +402,8 @@ class Toggle(NumericOption):
     default = 0
 
     def __init__(self, value: int):
-        assert value == 0 or value == 1, "value of Toggle can only be 0 or 1"
+        # if user puts in an invalid value, make it valid
+        value = int(bool(value))
         self.value = value
 
     @classmethod
@@ -449,7 +496,7 @@ class TextChoice(Choice):
 
     def __init__(self, value: typing.Union[str, int]):
         assert isinstance(value, str) or isinstance(value, int), \
-            f"{value} is not a valid option for {self.__class__.__name__}"
+            f"'{value}' is not a valid option for '{self.__class__.__name__}'"
         self.value = value
 
     @property
@@ -570,17 +617,17 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
                 used_locations.append(location)
                 used_bosses.append(boss)
                 if not cls.valid_boss_name(boss):
-                    raise ValueError(f"{boss.title()} is not a valid boss name.")
+                    raise ValueError(f"'{boss.title()}' is not a valid boss name.")
                 if not cls.valid_location_name(location):
-                    raise ValueError(f"{location.title()} is not a valid boss location name.")
+                    raise ValueError(f"'{location.title()}' is not a valid boss location name.")
                 if not cls.can_place_boss(boss, location):
-                    raise ValueError(f"{location.title()} is not a valid location for {boss.title()} to be placed.")
+                    raise ValueError(f"'{location.title()}' is not a valid location for {boss.title()} to be placed.")
             else:
                 if cls.duplicate_bosses:
                     if not cls.valid_boss_name(option):
-                        raise ValueError(f"{option} is not a valid boss name.")
+                        raise ValueError(f"'{option}' is not a valid boss name.")
                 else:
-                    raise ValueError(f"{option.title()} is not formatted correctly.")
+                    raise ValueError(f"'{option.title()}' is not formatted correctly.")
 
     @classmethod
     def can_place_boss(cls, boss: str, location: str) -> bool:
@@ -598,7 +645,7 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
         if isinstance(self.value, int):
             return
         from BaseClasses import PlandoOptions
-        if not(PlandoOptions.bosses & plando_options):
+        if not (PlandoOptions.bosses & plando_options):
             # plando is disabled but plando options were given so pull the option and change it to an int
             option = self.value.split(";")[-1]
             self.value = self.options[option]
@@ -642,9 +689,9 @@ class Range(NumericOption):
     @classmethod
     def weighted_range(cls, text) -> Range:
         if text == "random-low":
-            return cls(cls.triangular(cls.range_start, cls.range_end, cls.range_start))
+            return cls(cls.triangular(cls.range_start, cls.range_end, 0.0))
         elif text == "random-high":
-            return cls(cls.triangular(cls.range_start, cls.range_end, cls.range_end))
+            return cls(cls.triangular(cls.range_start, cls.range_end, 1.0))
         elif text == "random-middle":
             return cls(cls.triangular(cls.range_start, cls.range_end))
         elif text.startswith("random-range-"):
@@ -670,11 +717,11 @@ class Range(NumericOption):
                 f"{random_range[0]}-{random_range[1]} is outside allowed range "
                 f"{cls.range_start}-{cls.range_end} for option {cls.__name__}")
         if text.startswith("random-range-low"):
-            return cls(cls.triangular(random_range[0], random_range[1], random_range[0]))
+            return cls(cls.triangular(random_range[0], random_range[1], 0.0))
         elif text.startswith("random-range-middle"):
             return cls(cls.triangular(random_range[0], random_range[1]))
         elif text.startswith("random-range-high"):
-            return cls(cls.triangular(random_range[0], random_range[1], random_range[1]))
+            return cls(cls.triangular(random_range[0], random_range[1], 1.0))
         else:
             return cls(random.randint(random_range[0], random_range[1]))
 
@@ -692,8 +739,16 @@ class Range(NumericOption):
         return str(self.value)
 
     @staticmethod
-    def triangular(lower: int, end: int, tri: typing.Optional[int] = None) -> int:
-        return int(round(random.triangular(lower, end, tri), 0))
+    def triangular(lower: int, end: int, tri: float = 0.5) -> int:
+        """
+        Integer triangular distribution for `lower` inclusive to `end` inclusive.
+
+        Expects `lower <= end` and `0.0 <= tri <= 1.0`. The result of other inputs is undefined.
+        """
+        # Use the continuous range [lower, end + 1) to produce an integer result in [lower, end].
+        # random.triangular is actually [a, b] and not [a, b), so there is a very small chance of getting exactly b even
+        # when a != b, so ensure the result is never more than `end`.
+        return min(end, math.floor(random.triangular(0.0, 1.0, tri) * (end - lower + 1) + lower))
 
 
 class NamedRange(Range):
@@ -707,6 +762,12 @@ class NamedRange(Range):
         elif value > self.range_end and value not in self.special_range_names.values():
             raise Exception(f"{value} is higher than maximum {self.range_end} for option {self.__class__.__name__} " +
                             f"and is also not one of the supported named special values: {self.special_range_names}")
+
+        # See docstring
+        for key in self.special_range_names:
+            if key != key.lower():
+                raise Exception(f"{self.__class__.__name__} has an invalid special_range_names key: {key}. "
+                                f"NamedRange keys must use only lowercase letters, and ideally should be snake_case.")
         self.value = value
 
     @classmethod
@@ -717,39 +778,9 @@ class NamedRange(Range):
         return super().from_text(text)
 
 
-class SpecialRange(NamedRange):
-    special_range_cutoff = 0
-
-    # TODO: remove class SpecialRange, earliest 3 releases after 0.4.3
-    def __new__(cls, value: int) -> SpecialRange:
-        from Utils import deprecate
-        deprecate(f"Option type {cls.__name__} is a subclass of SpecialRange, which is deprecated and pending removal. "
-                  "Consider switching to NamedRange, which supports all use-cases of SpecialRange, and more. In "
-                  "NamedRange, range_start specifies the lower end of the regular range, while special values can be "
-                  "placed anywhere (below, inside, or above the regular range).")
-        return super().__new__(cls, value)
-
-    @classmethod
-    def weighted_range(cls, text) -> Range:
-        if text == "random-low":
-            return cls(cls.triangular(cls.special_range_cutoff, cls.range_end, cls.special_range_cutoff))
-        elif text == "random-high":
-            return cls(cls.triangular(cls.special_range_cutoff, cls.range_end, cls.range_end))
-        elif text == "random-middle":
-            return cls(cls.triangular(cls.special_range_cutoff, cls.range_end))
-        elif text.startswith("random-range-"):
-            return cls.custom_range(text)
-        elif text == "random":
-            return cls(random.randint(cls.special_range_cutoff, cls.range_end))
-        else:
-            raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. "
-                            f"Acceptable values are: random, random-high, random-middle, random-low, "
-                            f"random-range-low-<min>-<max>, random-range-middle-<min>-<max>, "
-                            f"random-range-high-<min>-<max>, or random-range-<min>-<max>.")
-
-
 class FreezeValidKeys(AssembleOptions):
     def __new__(mcs, name, bases, attrs):
+        assert not "_valid_keys" in attrs, "'_valid_keys' gets set by FreezeValidKeys, define 'valid_keys' instead."
         if "valid_keys" in attrs:
             attrs["_valid_keys"] = frozenset(attrs["valid_keys"])
         return super(FreezeValidKeys, mcs).__new__(mcs, name, bases, attrs)
@@ -764,17 +795,22 @@ class VerifyKeys(metaclass=FreezeValidKeys):
     verify_location_name: bool = False
     value: typing.Any
 
-    @classmethod
-    def verify_keys(cls, data: typing.List[str]):
-        if cls.valid_keys:
-            data = set(data)
-            dataset = set(word.casefold() for word in data) if cls.valid_keys_casefold else set(data)
-            extra = dataset - cls._valid_keys
+    def verify_keys(self) -> None:
+        if self.valid_keys:
+            data = set(self.value)
+            dataset = set(word.casefold() for word in data) if self.valid_keys_casefold else set(data)
+            extra = dataset - self._valid_keys
             if extra:
-                raise Exception(f"Found unexpected key {', '.join(extra)} in {cls}. "
-                                f"Allowed keys: {cls._valid_keys}.")
+                raise OptionError(
+                    f"Found unexpected key {', '.join(extra)} in {getattr(self, 'display_name', self)}. "
+                    f"Allowed keys: {self._valid_keys}."
+                )
 
     def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
+        try:
+            self.verify_keys()
+        except OptionError as validation_error:
+            raise OptionError(f"Player {player_name} has invalid option keys:\n{validation_error}")
         if self.convert_name_groups and self.verify_item_name:
             new_value = type(self.value)()  # empty container of whatever value is
             for item_name in self.value:
@@ -789,20 +825,23 @@ class VerifyKeys(metaclass=FreezeValidKeys):
             for item_name in self.value:
                 if item_name not in world.item_names:
                     picks = get_fuzzy_results(item_name, world.item_names, limit=1)
-                    raise Exception(f"Item {item_name} from option {self} "
-                                    f"is not a valid item name from {world.game}. "
+                    raise Exception(f"Item '{item_name}' from option '{self}' "
+                                    f"is not a valid item name from '{world.game}'. "
                                     f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
         elif self.verify_location_name:
             for location_name in self.value:
                 if location_name not in world.location_names:
                     picks = get_fuzzy_results(location_name, world.location_names, limit=1)
-                    raise Exception(f"Location {location_name} from option {self} "
-                                    f"is not a valid location name from {world.game}. "
+                    raise Exception(f"Location '{location_name}' from option '{self}' "
+                                    f"is not a valid location name from '{world.game}'. "
                                     f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
 
+    def __iter__(self) -> typing.Iterator[typing.Any]:
+        return self.value.__iter__()
 
+    
 class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mapping[str, typing.Any]):
-    default: typing.Dict[str, typing.Any] = {}
+    default = {}
     supports_weighting = False
 
     def __init__(self, value: typing.Dict[str, typing.Any]):
@@ -811,7 +850,6 @@ class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mappin
     @classmethod
     def from_any(cls, data: typing.Dict[str, typing.Any]) -> OptionDict:
         if type(data) == dict:
-            cls.verify_keys(data)
             return cls(data)
         else:
             raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
@@ -833,6 +871,8 @@ class ItemDict(OptionDict):
     verify_item_name = True
 
     def __init__(self, value: typing.Dict[str, int]):
+        if any(item_count is None for item_count in value.values()):
+            raise Exception("Items must have counts associated with them. Please provide positive integer values in the format \"item\": count .")
         if any(item_count < 1 for item_count in value.values()):
             raise Exception("Cannot have non-positive item counts.")
         super(ItemDict, self).__init__(value)
@@ -843,11 +883,11 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
     # If only unique entries are needed and input order of elements does not matter, OptionSet should be used instead.
     # Not a docstring so it doesn't get grabbed by the options system.
 
-    default: typing.List[typing.Any] = []
+    default = ()
     supports_weighting = False
 
-    def __init__(self, value: typing.List[typing.Any]):
-        self.value = deepcopy(value)
+    def __init__(self, value: typing.Iterable[typing.Any]):
+        self.value = list(deepcopy(value))
         super(OptionList, self).__init__()
 
     @classmethod
@@ -856,8 +896,7 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
 
     @classmethod
     def from_any(cls, data: typing.Any):
-        if type(data) == list:
-            cls.verify_keys(data)
+        if is_iterable_except_str(data):
             return cls(data)
         return cls.from_text(str(data))
 
@@ -869,7 +908,7 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
 
 
 class OptionSet(Option[typing.Set[str]], VerifyKeys):
-    default: typing.Union[typing.Set[str], typing.FrozenSet[str]] = frozenset()
+    default = frozenset()
     supports_weighting = False
 
     def __init__(self, value: typing.Iterable[str]):
@@ -882,8 +921,7 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
 
     @classmethod
     def from_any(cls, data: typing.Any):
-        if isinstance(data, (list, set, frozenset)):
-            cls.verify_keys(data)
+        if is_iterable_except_str(data):
             return cls(data)
         return cls.from_text(str(data))
 
@@ -899,26 +937,297 @@ class ItemSet(OptionSet):
     convert_name_groups = True
 
 
+class PlandoText(typing.NamedTuple):
+    at: str
+    text: typing.List[str]
+    percentage: int = 100
+
+
+PlandoTextsFromAnyType = typing.Union[
+    typing.Iterable[typing.Union[typing.Mapping[str, typing.Any], PlandoText, typing.Any]], typing.Any
+]
+
+
+class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
+    default = ()
+    supports_weighting = False
+    display_name = "Plando Texts"
+
+    def __init__(self, value: typing.Iterable[PlandoText]) -> None:
+        self.value = list(deepcopy(value))
+        super().__init__()
+
+    def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
+        from BaseClasses import PlandoOptions
+        if self.value and not (PlandoOptions.texts & plando_options):
+            # plando is disabled but plando options were given so overwrite the options
+            self.value = []
+            logging.warning(f"The plando texts module is turned off, "
+                            f"so text for {player_name} will be ignored.")
+        else:
+            super().verify(world, player_name, plando_options)
+
+    def verify_keys(self) -> None:
+        if self.valid_keys:
+            data = set(text.at for text in self)
+            dataset = set(word.casefold() for word in data) if self.valid_keys_casefold else set(data)
+            extra = dataset - self._valid_keys
+            if extra:
+                raise OptionError(
+                    f"Invalid \"at\" placement {', '.join(extra)} in {getattr(self, 'display_name', self)}. "
+                    f"Allowed placements: {self._valid_keys}."
+                )
+
+    @classmethod
+    def from_any(cls, data: PlandoTextsFromAnyType) -> Self:
+        texts: typing.List[PlandoText] = []
+        if isinstance(data, typing.Iterable):
+            for text in data:
+                if isinstance(text, typing.Mapping):
+                    if random.random() < float(text.get("percentage", 100)/100):
+                        at = text.get("at", None)
+                        if at is not None:
+                            if isinstance(at, dict):
+                                if at:
+                                    at = random.choices(list(at.keys()),
+                                                        weights=list(at.values()), k=1)[0]
+                                else:
+                                    raise OptionError("\"at\" must be a valid string or weighted list of strings!")
+                            given_text = text.get("text", [])
+                            if isinstance(given_text, dict):
+                                if not given_text:
+                                    given_text = []
+                                else:
+                                    given_text = random.choices(list(given_text.keys()),
+                                                                weights=list(given_text.values()), k=1)
+                            if isinstance(given_text, str):
+                                given_text = [given_text]
+                            texts.append(PlandoText(
+                                at,
+                                given_text,
+                                text.get("percentage", 100)
+                            ))
+                        else:
+                            raise OptionError("\"at\" must be a valid string or weighted list of strings!")
+                elif isinstance(text, PlandoText):
+                    if random.random() < float(text.percentage/100):
+                        texts.append(text)
+                else:
+                    raise Exception(f"Cannot create plando text from non-dictionary type, got {type(text)}")
+            return cls(texts)
+        else:
+            raise NotImplementedError(f"Cannot Convert from non-list, got {type(data)}")
+
+    @classmethod
+    def get_option_name(cls, value: typing.List[PlandoText]) -> str:
+        return str({text.at: " ".join(text.text) for text in value})
+
+    def __iter__(self) -> typing.Iterator[PlandoText]:
+        yield from self.value
+
+    def __getitem__(self, index: typing.SupportsIndex) -> PlandoText:
+        return self.value.__getitem__(index)
+
+    def __len__(self) -> int:
+        return self.value.__len__()
+
+
+class ConnectionsMeta(AssembleOptions):
+    def __new__(mcs, name: str, bases: tuple[type, ...], attrs: dict[str, typing.Any]):
+        if name != "PlandoConnections":
+            assert "entrances" in attrs, f"Please define valid entrances for {name}"
+            attrs["entrances"] = frozenset((connection.lower() for connection in attrs["entrances"]))
+            assert "exits" in attrs, f"Please define valid exits for {name}"
+            attrs["exits"] = frozenset((connection.lower() for connection in attrs["exits"]))
+        if "__doc__" not in attrs:
+            attrs["__doc__"] = PlandoConnections.__doc__
+        cls = super().__new__(mcs, name, bases, attrs)
+        return cls
+
+
+class PlandoConnection(typing.NamedTuple):
+    class Direction:
+        entrance = "entrance"
+        exit = "exit"
+        both = "both"
+
+    entrance: str
+    exit: str
+    direction: typing.Literal["entrance", "exit", "both"]  # TODO: convert Direction to StrEnum once 3.8 is dropped
+    percentage: int = 100
+
+
+PlandoConFromAnyType = typing.Union[
+    typing.Iterable[typing.Union[typing.Mapping[str, typing.Any], PlandoConnection, typing.Any]], typing.Any
+]
+
+
+class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=ConnectionsMeta):
+    """Generic connections plando. Format is:
+    - entrance: "Entrance Name"
+      exit: "Exit Name"
+      direction: "Direction"
+      percentage: 100
+    Direction must be one of 'entrance', 'exit', or 'both', and defaults to 'both' if omitted.
+    Percentage is an integer from 1 to 100, and defaults to 100 when omitted."""
+
+    display_name = "Plando Connections"
+
+    default = ()
+    supports_weighting = False
+
+    entrances: typing.ClassVar[typing.AbstractSet[str]]
+    exits: typing.ClassVar[typing.AbstractSet[str]]
+
+    duplicate_exits: bool = False
+    """Whether or not exits should be allowed to be duplicate."""
+
+    def __init__(self, value: typing.Iterable[PlandoConnection]):
+        self.value = list(deepcopy(value))
+        super(PlandoConnections, self).__init__()
+
+    @classmethod
+    def validate_entrance_name(cls, entrance: str) -> bool:
+        return entrance.lower() in cls.entrances
+
+    @classmethod
+    def validate_exit_name(cls, exit: str) -> bool:
+        return exit.lower() in cls.exits
+
+    @classmethod
+    def can_connect(cls, entrance: str, exit: str) -> bool:
+        """Checks that a given entrance can connect to a given exit.
+        By default, this will always return true unless overridden."""
+        return True
+
+    @classmethod
+    def validate_plando_connections(cls, connections: typing.Iterable[PlandoConnection]) -> None:
+        used_entrances: typing.List[str] = []
+        used_exits: typing.List[str] = []
+        for connection in connections:
+            entrance = connection.entrance
+            exit = connection.exit
+            direction = connection.direction
+            if direction not in (PlandoConnection.Direction.entrance,
+                                 PlandoConnection.Direction.exit,
+                                 PlandoConnection.Direction.both):
+                raise ValueError(f"Unknown direction: {direction}")
+            if entrance in used_entrances:
+                raise ValueError(f"Duplicate Entrance {entrance} not allowed.")
+            if not cls.duplicate_exits and exit in used_exits:
+                raise ValueError(f"Duplicate Exit {exit} not allowed.")
+            used_entrances.append(entrance)
+            used_exits.append(exit)
+            if not cls.validate_entrance_name(entrance):
+                raise ValueError(f"'{entrance.title()}' is not a valid entrance.")
+            if not cls.validate_exit_name(exit):
+                raise ValueError(f"'{exit.title()}' is not a valid exit.")
+            if not cls.can_connect(entrance, exit):
+                raise ValueError(f"Connection between '{entrance.title()}' and '{exit.title()}' is invalid.")
+
+    @classmethod
+    def from_any(cls, data: PlandoConFromAnyType) -> Self:
+        if not isinstance(data, typing.Iterable):
+            raise Exception(f"Cannot create plando connections from non-List value, got {type(data)}.")
+
+        value: typing.List[PlandoConnection] = []
+        for connection in data:
+            if isinstance(connection, typing.Mapping):
+                percentage = connection.get("percentage", 100)
+                if random.random() < float(percentage / 100):
+                    entrance = connection.get("entrance", None)
+                    if is_iterable_except_str(entrance):
+                        entrance = random.choice(sorted(entrance))
+                    exit = connection.get("exit", None)
+                    if is_iterable_except_str(exit):
+                        exit = random.choice(sorted(exit))
+                    direction = connection.get("direction", "both")
+
+                    if not entrance or not exit:
+                        raise Exception("Plando connection must have an entrance and an exit.")
+                    value.append(PlandoConnection(
+                        entrance,
+                        exit,
+                        direction,
+                        percentage
+                    ))
+            elif isinstance(connection, PlandoConnection):
+                if random.random() < float(connection.percentage / 100):
+                    value.append(connection)
+            else:
+                raise Exception(f"Cannot create connection from non-Dict type, got {type(connection)}.")
+        cls.validate_plando_connections(value)
+        return cls(value)
+
+    def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
+        from BaseClasses import PlandoOptions
+        if self.value and not (PlandoOptions.connections & plando_options):
+            # plando is disabled but plando options were given so overwrite the options
+            self.value = []
+            logging.warning(f"The plando connections module is turned off, "
+                            f"so connections for {player_name} will be ignored.")
+
+    @classmethod
+    def get_option_name(cls, value: typing.List[PlandoConnection]) -> str:
+        return ", ".join(["%s %s %s" % (connection.entrance,
+                                        "<=>" if connection.direction == PlandoConnection.Direction.both else
+                                        "<=" if connection.direction == PlandoConnection.Direction.exit else
+                                        "=>",
+                                        connection.exit) for connection in value])
+
+    def __getitem__(self, index: typing.SupportsIndex) -> PlandoConnection:
+        return self.value.__getitem__(index)
+
+    def __iter__(self) -> typing.Iterator[PlandoConnection]:
+        yield from self.value
+
+    def __len__(self) -> int:
+        return len(self.value)
+
+
 class Accessibility(Choice):
-    """Set rules for reachability of your items/locations.
-    Locations: ensure everything can be reached and acquired.
-    Items: ensure all logically relevant items can be acquired.
-    Minimal: ensure what is needed to reach your goal can be acquired."""
+    """
+    Set rules for reachability of your items/locations.
+
+    **Full:** ensure everything can be reached and acquired.
+
+    **Minimal:** ensure what is needed to reach your goal can be acquired.
+    """
     display_name = "Accessibility"
-    option_locations = 0
-    option_items = 1
+    rich_text_doc = True
+    option_full = 0
     option_minimal = 2
     alias_none = 2
+    alias_locations = 0
+    alias_items = 0
+    default = 0
+
+
+class ItemsAccessibility(Accessibility):
+    """
+    Set rules for reachability of your items/locations.
+
+    **Full:** ensure everything can be reached and acquired.
+
+    **Minimal:** ensure what is needed to reach your goal can be acquired.
+
+    **Items:** ensure all logically relevant items can be acquired. Some items, such as keys, may be self-locking, and
+    some locations may be inaccessible.
+    """
+    option_items = 1
     default = 1
 
 
 class ProgressionBalancing(NamedRange):
     """A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
-    A lower setting means more getting stuck. A higher setting means less getting stuck."""
+
+    A lower setting means more getting stuck. A higher setting means less getting stuck.
+    """
     default = 50
     range_start = 0
     range_end = 99
     display_name = "Progression Balancing"
+    rich_text_doc = True
     special_range_names = {
         "disabled": 0,
         "normal": 50,
@@ -932,7 +1241,7 @@ class OptionsMetaProperty(type):
                 bases: typing.Tuple[type, ...],
                 attrs: typing.Dict[str, typing.Any]) -> "OptionsMetaProperty":
         for attr_type in attrs.values():
-            assert not isinstance(attr_type, AssembleOptions),\
+            assert not isinstance(attr_type, AssembleOptions), \
                 f"Options for {name} should be type hinted on the class, not assigned"
         return super().__new__(mcs, name, bases, attrs)
 
@@ -948,13 +1257,18 @@ class CommonOptions(metaclass=OptionsMetaProperty):
     progression_balancing: ProgressionBalancing
     accessibility: Accessibility
 
-    def as_dict(self, *option_names: str, casing: str = "snake") -> typing.Dict[str, typing.Any]:
+    def as_dict(self,
+                *option_names: str,
+                casing: typing.Literal["snake", "camel", "pascal", "kebab"] = "snake",
+                toggles_as_bools: bool = False) -> typing.Dict[str, typing.Any]:
         """
         Returns a dictionary of [str, Option.value]
-        
+
         :param option_names: names of the options to return
         :param casing: case of the keys to return. Supports `snake`, `camel`, `pascal`, `kebab`
+        :param toggles_as_bools: whether toggle options should be output as bools instead of strings
         """
+        assert option_names, "options.as_dict() was used without any option names."
         option_results = {}
         for option_name in option_names:
             if option_name in type(self).type_hints:
@@ -974,6 +1288,8 @@ class CommonOptions(metaclass=OptionsMetaProperty):
                 value = getattr(self, option_name).value
                 if isinstance(value, set):
                     value = sorted(value)
+                elif toggles_as_bools and issubclass(type(self).type_hints[option_name], Toggle):
+                    value = bool(value)
                 option_results[display_name] = value
             else:
                 raise ValueError(f"{option_name} not found in {tuple(type(self).type_hints)}")
@@ -983,29 +1299,36 @@ class CommonOptions(metaclass=OptionsMetaProperty):
 class LocalItems(ItemSet):
     """Forces these items to be in their native world."""
     display_name = "Local Items"
+    rich_text_doc = True
 
 
 class NonLocalItems(ItemSet):
     """Forces these items to be outside their native world."""
-    display_name = "Not Local Items"
+    display_name = "Non-local Items"
+    rich_text_doc = True
 
 
 class StartInventory(ItemDict):
     """Start with these items."""
     verify_item_name = True
     display_name = "Start Inventory"
+    rich_text_doc = True
 
 
 class StartInventoryPool(StartInventory):
     """Start with these items and don't place them in the world.
-    The game decides what the replacement items will be."""
+
+    The game decides what the replacement items will be.
+    """
     verify_item_name = True
     display_name = "Start Inventory from Pool"
+    rich_text_doc = True
 
 
 class StartHints(ItemSet):
-    """Start with these item's locations prefilled into the !hint command."""
+    """Start with these item's locations prefilled into the ``!hint`` command."""
     display_name = "Start Hints"
+    rich_text_doc = True
 
 
 class LocationSet(OptionSet):
@@ -1014,28 +1337,33 @@ class LocationSet(OptionSet):
 
 
 class StartLocationHints(LocationSet):
-    """Start with these locations and their item prefilled into the !hint command"""
+    """Start with these locations and their item prefilled into the ``!hint`` command."""
     display_name = "Start Location Hints"
+    rich_text_doc = True
 
 
 class ExcludeLocations(LocationSet):
-    """Prevent these locations from having an important item"""
+    """Prevent these locations from having an important item."""
     display_name = "Excluded Locations"
+    rich_text_doc = True
 
 
 class PriorityLocations(LocationSet):
-    """Prevent these locations from having an unimportant item"""
+    """Prevent these locations from having an unimportant item."""
     display_name = "Priority Locations"
+    rich_text_doc = True
 
 
 class DeathLink(Toggle):
-    """When you die, everyone dies. Of course the reverse is true too."""
+    """When you die, everyone who enabled death link dies. Of course, the reverse is true too."""
     display_name = "Death Link"
+    rich_text_doc = True
 
 
 class ItemLinks(OptionList):
     """Share part of your item pool with other players."""
     display_name = "Item Links"
+    rich_text_doc = True
     default = []
     schema = Schema([
         {
@@ -1050,7 +1378,8 @@ class ItemLinks(OptionList):
     ])
 
     @staticmethod
-    def verify_items(items: typing.List[str], item_link: str, pool_name: str, world, allow_item_groups: bool = True) -> typing.Set:
+    def verify_items(items: typing.List[str], item_link: str, pool_name: str, world,
+                     allow_item_groups: bool = True) -> typing.Set:
         pool = set()
         for item_name in items:
             if item_name not in world.item_names and (not allow_item_groups or item_name not in world.item_name_groups):
@@ -1058,8 +1387,8 @@ class ItemLinks(OptionList):
                 picks_group = get_fuzzy_results(item_name, world.item_name_groups.keys(), limit=1)
                 picks_group = f" or '{picks_group[0][0]}' ({picks_group[0][1]}% sure)" if allow_item_groups else ""
 
-                raise Exception(f"Item {item_name} from item link {item_link} "
-                                f"is not a valid item from {world.game} for {pool_name}. "
+                raise Exception(f"Item '{item_name}' from item link '{item_link}' "
+                                f"is not a valid item from '{world.game}' for '{pool_name}'. "
                                 f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure){picks_group}")
             if allow_item_groups:
                 pool |= world.item_name_groups.get(item_name, {item_name})
@@ -1096,6 +1425,19 @@ class ItemLinks(OptionList):
                 raise Exception(f"item_link {link['name']} has {intersection} "
                                 f"items in both its local_items and non_local_items pool.")
             link.setdefault("link_replacement", None)
+            link["item_pool"] = list(pool)
+
+
+class Removed(FreeText):
+    """This Option has been Removed."""
+    rich_text_doc = True
+    default = ""
+    visibility = Visibility.none
+
+    def __init__(self, value: str):
+        if value:
+            raise Exception("Option removed, please update your options file.")
+        super().__init__(value)
 
 
 @dataclass
@@ -1110,7 +1452,56 @@ class PerGameCommonOptions(CommonOptions):
     item_links: ItemLinks
 
 
-def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True):
+@dataclass
+class DeathLinkMixin:
+    death_link: DeathLink
+
+
+class OptionGroup(typing.NamedTuple):
+    """Define a grouping of options."""
+    name: str
+    """Name of the group to categorize these options in for display on the WebHost and in generated YAMLS."""
+    options: typing.List[typing.Type[Option[typing.Any]]]
+    """Options to be in the defined group."""
+    start_collapsed: bool = False
+    """Whether the group will start collapsed on the WebHost options pages."""
+
+
+item_and_loc_options = [LocalItems, NonLocalItems, StartInventory, StartInventoryPool, StartHints,
+                        StartLocationHints, ExcludeLocations, PriorityLocations, ItemLinks]
+"""
+Options that are always populated in "Item & Location Options" Option Group. Cannot be moved to another group.
+If desired, a custom "Item & Location Options" Option Group can be defined, but only for adding additional options to
+it.
+"""
+
+
+def get_option_groups(world: typing.Type[World], visibility_level: Visibility = Visibility.template) -> typing.Dict[
+        str, typing.Dict[str, typing.Type[Option[typing.Any]]]]:
+    """Generates and returns a dictionary for the option groups of a specified world."""
+    option_to_name = {option: option_name for option_name, option in world.options_dataclass.type_hints.items()}
+
+    ordered_groups = {group.name: group.options for group in world.web.option_groups}
+
+    # add a default option group for uncategorized options to get thrown into
+    if "Game Options" not in ordered_groups:
+        grouped_options = set(option for group in ordered_groups.values() for option in group)
+        ungrouped_options = [option for option in option_to_name if option not in grouped_options]
+        # only add the game options group if we have ungrouped options
+        if ungrouped_options:
+            ordered_groups = {**{"Game Options": ungrouped_options}, **ordered_groups}
+
+    return {
+        group: {
+            option_to_name[option]: option
+            for option in group_options
+            if (visibility_level in option.visibility and option in option_to_name)
+        }
+        for group, group_options in ordered_groups.items()
+    }
+
+
+def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True) -> None:
     import os
 
     import yaml
@@ -1146,47 +1537,62 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
         return data, notes
 
+    def yaml_dump_scalar(scalar) -> str:
+        # yaml dump may add end of document marker and newlines.
+        return yaml.dump(scalar).replace("...\n", "").strip()
+
     for game_name, world in AutoWorldRegister.world_types.items():
         if not world.hidden or generate_hidden:
-            all_options: typing.Dict[str, AssembleOptions] = world.options_dataclass.type_hints
-
+            option_groups = get_option_groups(world)
             with open(local_path("data", "options.yaml")) as f:
                 file_data = f.read()
             res = Template(file_data).render(
-                options=all_options,
-                __version__=__version__, game=game_name, yaml_dump=yaml.dump,
+                option_groups=option_groups,
+                __version__=__version__, game=game_name, yaml_dump=yaml_dump_scalar,
                 dictify_range=dictify_range,
             )
 
             del file_data
 
-            with open(os.path.join(target_folder, game_name + ".yaml"), "w", encoding="utf-8-sig") as f:
+            with open(os.path.join(target_folder, get_file_safe_name(game_name) + ".yaml"), "w", encoding="utf-8-sig") as f:
                 f.write(res)
 
 
-if __name__ == "__main__":
+def dump_player_options(multiworld: MultiWorld) -> None:
+    from csv import DictWriter
 
-    from worlds.alttp.Options import Logic
-    import argparse
+    game_players = defaultdict(list)
+    for player, game in multiworld.game.items():
+        game_players[game].append(player)
+    game_players = dict(sorted(game_players.items()))
 
-    map_shuffle = Toggle
-    compass_shuffle = Toggle
-    key_shuffle = Toggle
-    big_key_shuffle = Toggle
-    hints = Toggle
-    test = argparse.Namespace()
-    test.logic = Logic.from_text("no_logic")
-    test.map_shuffle = map_shuffle.from_text("ON")
-    test.hints = hints.from_text('OFF')
-    try:
-        test.logic = Logic.from_text("overworld_glitches_typo")
-    except KeyError as e:
-        print(e)
-    try:
-        test.logic_owg = Logic.from_text("owg")
-    except KeyError as e:
-        print(e)
-    if test.map_shuffle:
-        print("map_shuffle is on")
-    print(f"Hints are {bool(test.hints)}")
-    print(test)
+    output = []
+    per_game_option_names = [
+        getattr(option, "display_name", option_key)
+        for option_key, option in PerGameCommonOptions.type_hints.items()
+    ]
+    all_option_names = per_game_option_names.copy()
+    for game, players in game_players.items():
+        game_option_names = per_game_option_names.copy()
+        for player in players:
+            world = multiworld.worlds[player]
+            player_output = {
+                "Game": multiworld.game[player],
+                "Name": multiworld.get_player_name(player),
+                "ID": player,
+            }
+            output.append(player_output)
+            for option_key, option in world.options_dataclass.type_hints.items():
+                if option.visibility == Visibility.none:
+                    continue
+                display_name = getattr(option, "display_name", option_key)
+                player_output[display_name] = getattr(world.options, option_key).current_option_name
+                if display_name not in game_option_names:
+                    all_option_names.append(display_name)
+                    game_option_names.append(display_name)
+
+    with open(output_path(f"generate_{multiworld.seed_name}.csv"), mode="w", newline="") as file:
+        fields = ["ID", "Game", "Name", *all_option_names]
+        writer = DictWriter(file, fields)
+        writer.writeheader()
+        writer.writerows(output)

@@ -2,9 +2,10 @@ import functools
 import logging
 from typing import Any, Dict, List, Set
 
-from BaseClasses import Entrance, CollectionState, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
+from BaseClasses import Entrance, CollectionState, Item, Location, MultiWorld, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
-from . import Items, Locations, Maps, Options, Regions, Rules
+from . import Items, Locations, Maps, Regions, Rules
+from .Options import HereticOptions
 
 logger = logging.getLogger("Heretic")
 
@@ -36,11 +37,11 @@ class HereticWorld(World):
     """
     Heretic is a dark fantasy first-person shooter video game released in December 1994. It was developed by Raven Software.
     """
-    option_definitions = Options.options
+    options_dataclass = HereticOptions
+    options: HereticOptions
     game = "Heretic"
     web = HereticWeb()
-    data_version = 3
-    required_client_version = (0, 3, 9)
+    required_client_version = (0, 5, 0)  # 1.2.0-prerelease or higher
 
     item_name_to_id = {data["name"]: item_id for item_id, data in Items.item_table.items()}
     item_name_groups = Items.item_name_groups
@@ -48,18 +49,18 @@ class HereticWorld(World):
     location_name_to_id = {data["name"]: loc_id for loc_id, data in Locations.location_table.items()}
     location_name_groups = Locations.location_name_groups
 
-    starting_level_for_episode: List[str] = [
-        "The Docks (E1M1)",
-        "The Crater (E2M1)",
-        "The Storehouse (E3M1)",
-        "Catafalque (E4M1)",
-        "Ochre Cliffs (E5M1)"
-    ]
+    starting_level_for_episode: Dict[int, str] = {
+        1: "The Docks (E1M1)",
+        2: "The Crater (E2M1)",
+        3: "The Storehouse (E3M1)",
+        4: "Catafalque (E4M1)",
+        5: "Ochre Cliffs (E5M1)"
+    }
 
-    boss_level_for_espidoes: List[str] = [
+    all_boss_levels: List[str] = [
         "Hell's Maw (E1M8)",
         "The Portals of Chaos (E2M8)",
-        "D'Sparil'S Keep (E3M8)",
+        "D'Sparil's Keep (E3M8)",
         "Shattered Bridge (E4M8)",
         "Field of Judgement (E5M8)"
     ]
@@ -70,6 +71,7 @@ class HereticWorld(World):
         "Tome of Power": 16,
         "Silver Shield": 10,
         "Enchanted Shield": 5,
+        "Torch": 5,
         "Morph Ovum": 3,
         "Mystic Urn": 2,
         "Chaos Device": 1,
@@ -77,27 +79,39 @@ class HereticWorld(World):
         "Shadowsphere": 1
     }
 
-    def __init__(self, world: MultiWorld, player: int):
+    def __init__(self, multiworld: MultiWorld, player: int):
         self.included_episodes = [1, 1, 1, 0, 0]
         self.location_count = 0
+        self.starting_levels = []
 
-        super().__init__(world, player)
+        super().__init__(multiworld, player)
 
     def get_episode_count(self):
         return functools.reduce(lambda count, episode: count + episode, self.included_episodes)
 
     def generate_early(self):
         # Cache which episodes are included
-        for i in range(5):
-            self.included_episodes[i] = getattr(self.multiworld, f"episode{i + 1}")[self.player].value
+        self.included_episodes[0] = self.options.episode1.value
+        self.included_episodes[1] = self.options.episode2.value
+        self.included_episodes[2] = self.options.episode3.value
+        self.included_episodes[3] = self.options.episode4.value
+        self.included_episodes[4] = self.options.episode5.value
 
         # If no episodes selected, select Episode 1
         if self.get_episode_count() == 0:
             self.included_episodes[0] = 1
 
+        self.starting_levels = [level_name for (episode, level_name) in self.starting_level_for_episode.items()
+                                if self.included_episodes[episode - 1]]
+
+        # For Solo Episode 1, place the Yellow Key for E1M1 early.
+        # Gives the generator five potential placements (plus the forced key) instead of only two.
+        if self.get_episode_count() == 1 and self.included_episodes[0]:
+            self.multiworld.early_items[self.player]["The Docks (E1M1) - Yellow key"] = 1
+
     def create_regions(self):
-        pro = getattr(self.multiworld, "pro")[self.player].value
-        check_sanity = getattr(self.multiworld, "check_sanity")[self.player].value
+        pro = self.options.pro.value
+        check_sanity = self.options.check_sanity.value
 
         # Main regions
         menu_region = Region("Menu", self.player, self.multiworld)
@@ -148,8 +162,8 @@ class HereticWorld(World):
 
     def completion_rule(self, state: CollectionState):
         goal_levels = Maps.map_names
-        if getattr(self.multiworld, "goal")[self.player].value:
-            goal_levels = self.boss_level_for_espidoes
+        if self.options.goal.value:
+            goal_levels = self.all_boss_levels
 
         for map_name in goal_levels:
             if map_name + " - Exit" not in self.location_name_to_id:
@@ -167,8 +181,8 @@ class HereticWorld(World):
         return True
 
     def set_rules(self):
-        pro = getattr(self.multiworld, "pro")[self.player].value
-        allow_death_logic = getattr(self.multiworld, "allow_death_logic")[self.player].value
+        pro = self.options.pro.value
+        allow_death_logic = self.options.allow_death_logic.value
 
         Rules.set_rules(self, self.included_episodes, pro)
         self.multiworld.completion_condition[self.player] = lambda state: self.completion_rule(state)
@@ -177,7 +191,7 @@ class HereticWorld(World):
         # platform) Unless the user allows for it.
         if not allow_death_logic:
             for death_logic_location in Locations.death_logic_locations:
-                self.multiworld.exclude_locations[self.player].value.add(death_logic_location)
+                self.options.exclude_locations.value.add(death_logic_location)
     
     def create_item(self, name: str) -> HereticItem:
         item_id: int = self.item_name_to_id[name]
@@ -185,7 +199,7 @@ class HereticWorld(World):
 
     def create_items(self):
         itempool: List[HereticItem] = []
-        start_with_map_scrolls: bool = getattr(self.multiworld, "start_with_map_scrolls")[self.player].value
+        start_with_map_scrolls: bool = self.options.start_with_map_scrolls.value
 
         # Items
         for item_id, item in Items.item_table.items():
@@ -198,8 +212,19 @@ class HereticWorld(World):
             if item["episode"] != -1 and not self.included_episodes[item["episode"] - 1]:
                 continue
 
-            count = item["count"] if item["name"] not in self.starting_level_for_episode else item["count"] - 1
+            count = item["count"] if item["name"] not in self.starting_levels else item["count"] - 1
             itempool += [self.create_item(item["name"]) for _ in range(count)]
+
+        # Bag(s) of Holding based on options
+        if self.options.split_bag_of_holding.value:
+            itempool += [self.create_item("Crystal Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+            itempool += [self.create_item("Ethereal Arrow Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+            itempool += [self.create_item("Claw Orb Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+            itempool += [self.create_item("Rune Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+            itempool += [self.create_item("Flame Orb Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+            itempool += [self.create_item("Mace Sphere Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+        else:
+            itempool += [self.create_item("Bag of Holding") for _ in range(self.options.bag_of_holding_count.value)]
 
         # Place end level items in locked locations
         for map_name in Maps.map_names:
@@ -220,12 +245,11 @@ class HereticWorld(World):
             self.location_count -= 1
 
         # Give starting levels right away
-        for i in range(len(self.included_episodes)):
-            if self.included_episodes[i]:
-                self.multiworld.push_precollected(self.create_item(self.starting_level_for_episode[i]))
+        for map_name in self.starting_levels:
+            self.multiworld.push_precollected(self.create_item(map_name))
         
         # Give Computer area maps if option selected
-        if getattr(self.multiworld, "start_with_map_scrolls")[self.player].value:
+        if self.options.start_with_map_scrolls.value:
             for item_id, item_dict in Items.item_table.items():
                 item_episode = item_dict["episode"]
                 if item_episode > 0:
@@ -238,6 +262,7 @@ class HereticWorld(World):
         self.create_ratioed_items("Mystic Urn", itempool)
         self.create_ratioed_items("Ring of Invincibility", itempool)
         self.create_ratioed_items("Shadowsphere", itempool)
+        self.create_ratioed_items("Torch", itempool)
         self.create_ratioed_items("Timebomb of the Ancients", itempool)
         self.create_ratioed_items("Tome of Power", itempool)
         self.create_ratioed_items("Silver Shield", itempool)
@@ -268,14 +293,14 @@ class HereticWorld(World):
         episode_count = self.get_episode_count()
         count = min(remaining_loc, max(1, self.items_ratio[item_name] * episode_count))
         if count == 0:
-            logger.warning("Warning, no " + item_name + " will be placed.")
+            logger.warning(f"Warning, no {item_name} will be placed.")
             return
 
         for i in range(count):
             itempool.append(self.create_item(item_name))
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        slot_data = self.options.as_dict("difficulty", "random_monsters", "random_pickups", "random_music", "allow_death_logic", "pro", "death_link", "reset_level_on_death", "check_sanity")
+        slot_data = self.options.as_dict("goal", "difficulty", "random_monsters", "random_pickups", "random_music", "allow_death_logic", "pro", "death_link", "reset_level_on_death", "check_sanity")
 
         # Make sure we send proper episode settings
         slot_data["episode1"] = self.included_episodes[0]
@@ -283,5 +308,19 @@ class HereticWorld(World):
         slot_data["episode3"] = self.included_episodes[2]
         slot_data["episode4"] = self.included_episodes[3]
         slot_data["episode5"] = self.included_episodes[4]
+
+        # Send slot data for ammo capacity values; this must be generic because Doom uses it too
+        slot_data["ammo1start"] = self.options.max_ammo_crystals.value
+        slot_data["ammo2start"] = self.options.max_ammo_arrows.value
+        slot_data["ammo3start"] = self.options.max_ammo_claw_orbs.value
+        slot_data["ammo4start"] = self.options.max_ammo_runes.value
+        slot_data["ammo5start"] = self.options.max_ammo_flame_orbs.value
+        slot_data["ammo6start"] = self.options.max_ammo_spheres.value
+        slot_data["ammo1add"] = self.options.added_ammo_crystals.value
+        slot_data["ammo2add"] = self.options.added_ammo_arrows.value
+        slot_data["ammo3add"] = self.options.added_ammo_claw_orbs.value
+        slot_data["ammo4add"] = self.options.added_ammo_runes.value
+        slot_data["ammo5add"] = self.options.added_ammo_flame_orbs.value
+        slot_data["ammo6add"] = self.options.added_ammo_spheres.value
 
         return slot_data

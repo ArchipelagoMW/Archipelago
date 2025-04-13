@@ -1,8 +1,8 @@
 # Pokémon Red and Blue
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 config file.
 
 ## What does randomization do to this game?
@@ -12,7 +12,7 @@ always able to be completed, but because of the item shuffle the player may need
 would in the vanilla game.
 
 A great many things besides item placement can be randomized, such as the location of Pokémon, their stats, types, etc.,
-depending on your yaml settings.
+depending on your yaml options.
 
 Many baseline changes are made to the game, including:
 
@@ -21,13 +21,13 @@ Many baseline changes are made to the game, including:
 * You can hold B to run (or bike extra fast!).
 * You can hold select while talking to a trainer to re-battle them.
 * You can select "Pallet Warp" below the "Continue" option to warp to Pallet Town as you load your save.
-* Mew can be encountered at the S.S. Anne dock truck. This can be randomized depending on your settings.
+* Mew can be encountered at the S.S. Anne dock truck. This can be randomized depending on your options.
 * The S.S. Anne will never depart.
 * Seafoam Islands entrances are swapped. This means you need Strength to travel through from Cinnabar Island to Fuchsia
 City. You also cannot Surf onto the water from the end of Seafoam Islands going backwards if you have not yet dropped
 the boulders.
 * After obtaining one of the fossil item checks in Mt Moon, the remaining item can be received from the Cinnabar Lab
-fossil scientist. This may require reviving a number of fossils, depending on your settings.
+fossil scientist. This may require reviving a number of fossils, depending on your options.
 * Obedience depends on the total number of badges you have obtained instead of depending on specific badges.
 * Pokémon that evolve by trading can also evolve by reaching level 35.
 * Evolution stones are reusable key items.
@@ -41,6 +41,8 @@ and repeatable source of money.
 * You can disable and re-enable experience gains by talking to an aide in Oak's Lab.
 * You can reset static encounters (Poké Flute encounter, legendaries, and the trap Poké Ball battles in Power Plant)
 for any Pokémon you have defeated but not caught, by talking to an aide in Oak's Lab.
+* Dungeons normally hidden on the Town Map are now present, and the "Sea Cottage" has been removed. This is to allow
+Simple Door Shuffle to update the locations of all of the dungeons on the Town Map.
 
 ## What items and locations get shuffled?
 
@@ -58,11 +60,12 @@ and Safari Zone. Adds 4 extra item locations to Rock Tunnel B1F
 * Split Card Key: Splits the Card Key into 10 different Card Keys, one for each floor of Silph Co that has locked doors.
 Adds 9 location checks to friendly NPCs in Silph Co. You can also choose Progressive Card Keys to always obtain the
 keys in order from Card Key 2F to Card Key 11F.
-* Trainersanity: Adds location checks to 317 trainers. Does not include scripted trainers, most of which disappear
+* Trainersanity: Adds location checks to trainers. You may choose between 0 and 317 trainersanity checks. Trainers
+will be randomly selected to be given checks. Does not include scripted trainers, most of which disappear
 after battling them, but also includes Gym Leaders. You must talk to the trainer after defeating them to receive
-your prize. Adds 317 random filler items to the item pool
-* Dexsanity: Location checks occur when registering Pokémon as owned in the Pokédex. You can choose a percentage
-of Pokémon to have checks added to, chosen randomly. You can identify which Pokémon have location checks by an empty
+your prize. Adds random filler items to the item pool.
+* Dexsanity: Location checks occur when registering Pokémon as owned in the Pokédex. You can choose between 0 and 151
+Pokémon to have checks added to, chosen randomly. You can identify which Pokémon have location checks by an empty
 Poké Ball icon shown in battle or in the Pokédex menu.
 
 ## Which items can be in another player's world?

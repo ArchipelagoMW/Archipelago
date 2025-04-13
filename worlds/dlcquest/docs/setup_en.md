@@ -19,7 +19,7 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a YAML file?
 
-You can customize your settings by visiting the [DLC Quest Player Settings Page](/games/DLCQuest/player-settings)
+You can customize your options by visiting the [DLC Quest Player Options Page](/games/DLCQuest/player-options)
 
 ## Joining a MultiWorld Game
 

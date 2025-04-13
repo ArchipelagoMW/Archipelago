@@ -11,8 +11,8 @@ class TestInvertedBombRules(LTTPTestBase):
 
     def setUp(self):
         self.world_setup()
-        self.multiworld.mode[1] = "inverted"
-        self.multiworld.difficulty_requirements[1] = difficulties['normal']
+        self.multiworld.worlds[1].difficulty_requirements = difficulties['normal']
+        self.multiworld.mode[1].value = 2
         create_inverted_regions(self.multiworld, 1)
         self.multiworld.worlds[1].create_dungeons()
 

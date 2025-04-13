@@ -182,9 +182,22 @@ def create_coinsanity_locations_lfod(has_coinsanity: bool, coin_bundle_size: int
 def create_coinsanity_locations(has_coinsanity: bool, coin_bundle_size: int, player: int, region: Region, last_coin_number: int, campaign_prefix: str):
     if not has_coinsanity:
         return
+    if coin_bundle_size == -1:
+        create_coinsanity_piece_locations(player, region, last_coin_number, campaign_prefix)
+        return
+
 
     coin_bundle_needed = math.ceil(last_coin_number / coin_bundle_size)
     for i in range(1, coin_bundle_needed + 1):
         number_coins = min(last_coin_number, coin_bundle_size * i)
         item_coin = f"{campaign_prefix}: {number_coins} Coin"
         region.locations += [DLCQuestLocation(player, item_coin, location_table[item_coin], region)]
+
+
+def create_coinsanity_piece_locations(player: int, region: Region, total_coin: int, campaign_prefix:str):
+
+    pieces_needed = total_coin * 10
+    for i in range(1, pieces_needed + 1):
+        number_piece = i
+        item_piece = f"{campaign_prefix}: {number_piece} Coin Piece"
+        region.locations += [DLCQuestLocation(player, item_piece, location_table[item_piece], region)]

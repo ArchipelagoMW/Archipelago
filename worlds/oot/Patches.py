@@ -29,14 +29,14 @@ from .TextBox import character_table, NORMAL_LINE_WIDTH, rom_safe_text
 from .texture_util import ci4_rgba16patch_to_ci8, rgba16_patch
 from .Utils import __version__
 
-from worlds.Files import APContainer
+from worlds.Files import APPatch
 from Utils import __version__ as ap_version
 
 AP_PROGRESSION = 0xD4
 AP_JUNK = 0xD5
 
 
-class OoTContainer(APContainer):
+class OoTContainer(APPatch):
     game: str = 'Ocarina of Time'
 
     def __init__(self, patch_data: bytes, base_path: str, output_directory: str,
@@ -208,8 +208,8 @@ def patch_rom(world, rom):
 
     # Fix Ice Cavern Alcove Camera
     if not world.dungeon_mq['Ice Cavern']:
-        rom.write_byte(0x2BECA25,0x01);
-        rom.write_byte(0x2BECA2D,0x01);
+        rom.write_byte(0x2BECA25,0x01)
+        rom.write_byte(0x2BECA2D,0x01)
 
     # Fix GS rewards to be static
     rom.write_int32(0xEA3934, 0)
@@ -944,7 +944,7 @@ def patch_rom(world, rom):
 
         scene_table = 0x00B71440
         for scene in range(0x00, 0x65):
-            scene_start = rom.read_int32(scene_table + (scene * 0x14));
+            scene_start = rom.read_int32(scene_table + (scene * 0x14))
             add_scene_exits(scene_start)
 
         return exit_table
@@ -1632,10 +1632,10 @@ def patch_rom(world, rom):
         reward_text = None
     elif getattr(location.item, 'looks_like_item', None) is not None:
         jabu_item = location.item.looks_like_item
-        reward_text = create_fake_name(getHint(getItemGenericName(location.item.looks_like_item), True).text)
+        reward_text = create_fake_name(getHint(getItemGenericName(location.item.looks_like_item), world.hint_rng, True).text)
     else:
         jabu_item = location.item
-        reward_text = getHint(getItemGenericName(location.item), True).text
+        reward_text = getHint(getItemGenericName(location.item), world.hint_rng, True).text
 
     # Update "Princess Ruto got the Spiritual Stone!" text before the midboss in Jabu
     if reward_text is None:
@@ -1687,7 +1687,7 @@ def patch_rom(world, rom):
 
     # Sets hooks for gossip stone changes
 
-    symbol = rom.sym("GOSSIP_HINT_CONDITION");
+    symbol = rom.sym("GOSSIP_HINT_CONDITION")
 
     if world.hints == 'none':
         rom.write_int32(symbol, 0)
@@ -2200,7 +2200,7 @@ def patch_rom(world, rom):
                 elif world.shuffle_bosses != 'off':
                     vanilla_reward = world.get_location(boss_name).vanilla_item
                     vanilla_reward_location = world.multiworld.find_item(vanilla_reward, world.player) # hinted_dungeon_reward_locations[vanilla_reward.name]
-                    area = HintArea.at(vanilla_reward_location).text(world.clearer_hints, preposition=True)
+                    area = HintArea.at(vanilla_reward_location).text(world.hint_rng, world.clearer_hints, preposition=True)
                     compass_message = "\x13\x75\x08You found the \x05\x41Compass\x05\x40\x01for %s\x05\x40!\x01The %s can be found\x01%s!\x09" % (dungeon_name, vanilla_reward, area)
                 else:
                     boss_location = next(filter(lambda loc: loc.type == 'Boss', world.get_entrance(f'{dungeon} Boss Door -> {boss_name} Boss Room').connected_region.locations))
@@ -2264,9 +2264,9 @@ def patch_rom(world, rom):
 
     # text shuffle
     if world.text_shuffle == 'except_hints':
-        permutation = shuffle_messages(messages, except_hints=True)
+        permutation = shuffle_messages(messages, world.random, except_hints=True)
     elif world.text_shuffle == 'complete':
-        permutation = shuffle_messages(messages, except_hints=False)
+        permutation = shuffle_messages(messages, world.random, except_hints=False)
 
     # update warp song preview text boxes
     update_warp_song_text(messages, world)
@@ -2358,7 +2358,7 @@ def patch_rom(world, rom):
 
     # Write numeric seed truncated to 32 bits for rng seeding
     # Overwritten with new seed every time a new rng value is generated
-    rng_seed = world.multiworld.per_slot_randoms[world.player].getrandbits(32)
+    rng_seed = world.random.getrandbits(32)
     rom.write_int32(rom.sym('RNG_SEED_INT'), rng_seed)
     # Static initial seed value for one-time random actions like the Hylian Shield discount
     rom.write_int32(rom.sym('RANDOMIZER_RNG_SEED'), rng_seed)
@@ -2560,7 +2560,7 @@ def scene_get_actors(rom, actor_func, scene_data, scene, alternate=None, process
             room_count = rom.read_byte(scene_data + 1)
             room_list = scene_start + (rom.read_int32(scene_data + 4) & 0x00FFFFFF)
             for _ in range(0, room_count):
-                room_data = rom.read_int32(room_list);
+                room_data = rom.read_int32(room_list)
 
                 if not room_data in processed_rooms:
                     actors.update(room_get_actors(rom, actor_func, room_data, scene))
@@ -2591,7 +2591,7 @@ def get_actor_list(rom, actor_func):
     actors = {}
     scene_table = 0x00B71440
     for scene in range(0x00, 0x65):
-        scene_data = rom.read_int32(scene_table + (scene * 0x14));
+        scene_data = rom.read_int32(scene_table + (scene * 0x14))
         actors.update(scene_get_actors(rom, actor_func, scene_data, scene))
     return actors
 
@@ -2605,7 +2605,7 @@ def get_override_itemid(override_table, scene, type, flags):
 def remove_entrance_blockers(rom):
     def remove_entrance_blockers_do(rom, actor_id, actor, scene):
         if actor_id == 0x014E and scene == 97:
-            actor_var = rom.read_int16(actor + 14);
+            actor_var = rom.read_int16(actor + 14)
             if actor_var == 0xFF01:
                 rom.write_int16(actor + 14, 0x0700)
     get_actor_list(rom, remove_entrance_blockers_do)
@@ -2789,7 +2789,7 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
                 purchase_text = '\x08%s  %d Rupees\x09\x01%s\x01\x1B\x05\x42Buy\x01Don\'t buy\x05\x40\x02' % (split_item_name[0], location.price, split_item_name[1])
             else:
                 if item_display.game == "Ocarina of Time":
-                    shop_item_name = getSimpleHintNoPrefix(item_display)
+                    shop_item_name = getSimpleHintNoPrefix(item_display, world.random)
                 else:
                     shop_item_name = item_display.name
 

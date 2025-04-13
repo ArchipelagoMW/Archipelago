@@ -1,7 +1,7 @@
 import Utils
 from Utils import read_snes_rom
+from worlds.AutoWorld import World
 from worlds.Files import APDeltaPatch
-from .Locations import lookup_id_to_name, all_locations
 from .Levels import level_list, level_dict
 
 USHASH = '120abf304f0c40fe059f6a192ed4f947'
@@ -433,9 +433,9 @@ level_music_ids = [
     0x21,
 ]
 
-class LocalRom(object):
+class LocalRom:
 
-    def __init__(self, file, patch=True, vanillaRom=None, name=None, hash=None):
+    def __init__(self, file, name=None, hash=None):
         self.name = name
         self.hash = hash
         self.orig_buffer = None
@@ -456,7 +456,7 @@ class LocalRom(object):
     def read_byte(self, address: int) -> int:
         return self.buffer[address]
 
-    def read_bytes(self, startaddress: int, length: int) -> bytes:
+    def read_bytes(self, startaddress: int, length: int) -> bytearray:
         return self.buffer[startaddress:startaddress + length]
 
     def write_byte(self, address: int, value: int):
@@ -475,11 +475,10 @@ class LocalRom(object):
 
 
 
-def patch_rom(world, rom, player, active_level_list):
-    local_random = world.per_slot_randoms[player]
+def patch_rom(world: World, rom: LocalRom, active_level_list):
 
     # Boomer Costs
-    bonus_coin_cost = world.krematoa_bonus_coin_cost[player]
+    bonus_coin_cost = world.options.krematoa_bonus_coin_cost
     inverted_bonus_coin_cost = 0x100 - bonus_coin_cost
     rom.write_byte(0x3498B9, inverted_bonus_coin_cost)
     rom.write_byte(0x3498BA, inverted_bonus_coin_cost)
@@ -491,7 +490,7 @@ def patch_rom(world, rom, player, active_level_list):
     rom.write_byte(0x349862, bonus_coin_cost)
 
     # Gyrocopter Costs
-    dk_coin_cost = world.dk_coins_for_gyrocopter[player]
+    dk_coin_cost = world.options.dk_coins_for_gyrocopter
     rom.write_byte(0x3484A6, dk_coin_cost)
     rom.write_byte(0x3484D5, dk_coin_cost)
     rom.write_byte(0x3484D7, 0x90)
@@ -508,8 +507,8 @@ def patch_rom(world, rom, player, active_level_list):
     rom.write_bytes(0x34ACD0, bytearray([0xEA, 0xEA]))
 
     # Banana Bird Costs
-    if world.goal[player] == "banana_bird_hunt":
-        banana_bird_cost = math.floor(world.number_of_banana_birds[player] * world.percentage_of_banana_birds[player] / 100.0)
+    if world.options.goal == "banana_bird_hunt":
+        banana_bird_cost = math.floor(world.options.number_of_banana_birds * world.options.percentage_of_banana_birds / 100.0)
         rom.write_byte(0x34AB85, banana_bird_cost)
         rom.write_byte(0x329FD8, banana_bird_cost)
         rom.write_byte(0x32A025, banana_bird_cost)
@@ -528,65 +527,65 @@ def patch_rom(world, rom, player, active_level_list):
 
     # Palette Swap
     rom.write_byte(0x3B96A5, 0xD0)
-    if world.kong_palette_swap[player] == "default":
+    if world.options.kong_palette_swap == "default":
         rom.write_byte(0x3B96A9, 0x00)
         rom.write_byte(0x3B96A8, 0x00)
-    elif world.kong_palette_swap[player] == "purple":
+    elif world.options.kong_palette_swap == "purple":
         rom.write_byte(0x3B96A9, 0x00)
         rom.write_byte(0x3B96A8, 0x3C)
-    elif world.kong_palette_swap[player] == "spooky":
+    elif world.options.kong_palette_swap == "spooky":
         rom.write_byte(0x3B96A9, 0x00)
         rom.write_byte(0x3B96A8, 0xA0)
-    elif world.kong_palette_swap[player] == "dark":
+    elif world.options.kong_palette_swap == "dark":
         rom.write_byte(0x3B96A9, 0x05)
         rom.write_byte(0x3B96A8, 0xA0)
-    elif world.kong_palette_swap[player] == "chocolate":
+    elif world.options.kong_palette_swap == "chocolate":
         rom.write_byte(0x3B96A9, 0x1D)
         rom.write_byte(0x3B96A8, 0xA0)
-    elif world.kong_palette_swap[player] == "shadow":
+    elif world.options.kong_palette_swap == "shadow":
         rom.write_byte(0x3B96A9, 0x45)
         rom.write_byte(0x3B96A8, 0xA0)
-    elif world.kong_palette_swap[player] == "red_gold":
+    elif world.options.kong_palette_swap == "red_gold":
         rom.write_byte(0x3B96A9, 0x5D)
         rom.write_byte(0x3B96A8, 0xA0)
-    elif world.kong_palette_swap[player] == "gbc":
+    elif world.options.kong_palette_swap == "gbc":
         rom.write_byte(0x3B96A9, 0x20)
         rom.write_byte(0x3B96A8, 0x3C)
-    elif world.kong_palette_swap[player] == "halloween":
+    elif world.options.kong_palette_swap == "halloween":
         rom.write_byte(0x3B96A9, 0x70)
         rom.write_byte(0x3B96A8, 0x3C)
 
-    if world.music_shuffle[player]:
+    if world.options.music_shuffle:
         for address in music_rom_data:
-            rand_song = local_random.choice(level_music_ids)
+            rand_song = world.random.choice(level_music_ids)
             rom.write_byte(address, rand_song)
 
     # Starting Lives
-    rom.write_byte(0x9130, world.starting_life_count[player].value)
-    rom.write_byte(0x913B, world.starting_life_count[player].value)
+    rom.write_byte(0x9130, world.options.starting_life_count.value)
+    rom.write_byte(0x913B, world.options.starting_life_count.value)
 
     # Cheat options
     cheat_bytes = [0x00, 0x00]
 
-    if world.merry[player]:
+    if world.options.merry:
         cheat_bytes[0] |= 0x01
 
-    if world.autosave[player]:
+    if world.options.autosave:
         cheat_bytes[0] |= 0x02
 
-    if world.difficulty[player] == "tufst":
+    if world.options.difficulty == "tufst":
         cheat_bytes[0] |= 0x80
         cheat_bytes[1] |= 0x80
-    elif world.difficulty[player] == "hardr":
+    elif world.options.difficulty == "hardr":
         cheat_bytes[0] |= 0x00
         cheat_bytes[1] |= 0x00
-    elif world.difficulty[player] == "norml":
+    elif world.options.difficulty == "norml":
         cheat_bytes[1] |= 0x40
 
     rom.write_bytes(0x8303, bytearray(cheat_bytes))
 
     # Handle Level Shuffle Here
-    if world.level_shuffle[player]:
+    if world.options.level_shuffle:
         for i in range(len(active_level_list)):
             rom.write_byte(level_dict[level_list[i]].nameIDAddress, level_dict[active_level_list[i]].nameID)
             rom.write_byte(level_dict[level_list[i]].levelIDAddress, level_dict[active_level_list[i]].levelID)
@@ -611,7 +610,7 @@ def patch_rom(world, rom, player, active_level_list):
         rom.write_byte(0x34C213, (0x32 + level_dict[active_level_list[25]].levelID))
         rom.write_byte(0x34C21B, (0x32 + level_dict[active_level_list[26]].levelID))
 
-    if world.goal[player] == "knautilus":
+    if world.options.goal == "knautilus":
         # Swap Kastle KAOS and Knautilus
         rom.write_byte(0x34D4E1, 0xC2)
         rom.write_byte(0x34D4E2, 0x24)
@@ -621,7 +620,7 @@ def patch_rom(world, rom, player, active_level_list):
         rom.write_byte(0x32F339, 0x55)
 
     # Handle KONGsanity Here
-    if world.kongsanity[player]:
+    if world.options.kongsanity:
         # Arich's Hoard KONGsanity fix
         rom.write_bytes(0x34BA8C, bytearray([0xEA, 0xEA]))
 
@@ -668,7 +667,7 @@ def patch_rom(world, rom, player, active_level_list):
     rom.write_bytes(0x32A5EE, bytearray([0x00, 0x03, 0x50, 0x4F, 0x52, 0x59, 0x47, 0x4F, 0x4E, 0xC5])) # "PORYGONE"
 
     from Utils import __version__
-    rom.name = bytearray(f'D3{__version__.replace(".", "")[0:3]}_{player}_{world.seed:11}\0', 'utf8')[:21]
+    rom.name = bytearray(f'D3{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x7FC0, rom.name)
 

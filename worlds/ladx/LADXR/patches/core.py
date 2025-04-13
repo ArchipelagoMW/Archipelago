@@ -1,9 +1,11 @@
+from .. import assembler
 from ..assembler import ASM
 from ..entranceInfo import ENTRANCE_INFO
 from ..roomEditor import RoomEditor, ObjectWarp, ObjectHorizontal
 from ..backgroundEditor import BackgroundEditor
 from .. import utils
 
+from ...Options import BootsControls
 
 def bugfixWrittingWrongRoomStatus(rom):
     # The normal rom contains a pretty nasty bug where door closing triggers in D7/D8 can effect doors in
@@ -391,7 +393,7 @@ OAMData:
         db  $20, $20, $20, $00 ;I
         db  $20, $28, $28, $00 ;M
         db  $20, $30, $18, $00 ;E
-        
+
         db  $20, $70, $16, $00 ;D
         db  $20, $78, $18, $00 ;E
         db  $20, $80, $10, $00 ;A
@@ -408,7 +410,7 @@ OAMData:
         db  $68, $38, $%02x, $00 ;0
         db  $68, $40, $%02x, $00 ;0
         db  $68, $48, $%02x, $00 ;0
-        
+
     """ % ((((check_count // 100) % 10) * 2) | 0x40, (((check_count // 10) % 10) * 2) | 0x40, ((check_count % 10) * 2) | 0x40), 0x469D), fill_nop=True)
     # Lower line of credits roll into XX XX XX
     rom.patch(0x17, 0x0784, 0x082D, ASM("""
@@ -425,7 +427,7 @@ OAMData:
         call updateOAM
         ld   a, [$B001] ; seconds
         call updateOAM
-        
+
         ld   a, [$DB58] ; death count high
         call updateOAM
         ld   a, [$DB57] ; death count low
@@ -473,7 +475,7 @@ OAMData:
         db  $68, $18, $40, $00 ;0
         db  $68, $20, $40, $00 ;0
         db  $68, $28, $40, $00 ;0
-        
+
     """, 0x4784), fill_nop=True)
 
     # Grab the "mostly" complete A-Z font
@@ -538,6 +540,97 @@ OAMData:
         gfx_low = "\n".join([line.split(" ")[n] for line in tile_graphics.split("\n")[8:]])
         rom.banks[0x38][0x1400+n*0x20:0x1410+n*0x20] = utils.createTileData(gfx_high)
         rom.banks[0x38][0x1410+n*0x20:0x1420+n*0x20] = utils.createTileData(gfx_low)
+
+def addBootsControls(rom, boots_controls: BootsControls):
+    if boots_controls == BootsControls.option_vanilla:
+        return
+    consts = {
+          "INVENTORY_PEGASUS_BOOTS": 0x8,
+          "INVENTORY_POWER_BRACELET": 0x3,
+          "UsePegasusBoots": 0x1705,
+          "J_A": (1 << 4),
+          "J_B": (1 << 5),
+          "wAButtonSlot": 0xDB01,
+          "wBButtonSlot": 0xDB00,
+          "wPegasusBootsChargeMeter": 0xC14B,
+          "hPressedButtonsMask": 0xCB
+    }
+    for c,v in consts.items():
+        assembler.const(c, v)
+
+    BOOTS_START_ADDR = 0x11E8
+    condition = {
+        BootsControls.option_bracelet: """
+        ld   a, [hl]
+        ; Check if we are using the bracelet
+        cp   INVENTORY_POWER_BRACELET
+        jr   z, .yesBoots
+        """,
+        BootsControls.option_press_a: """
+        ; Check if we are using the A slot
+        cp  J_A
+        jr  z, .yesBoots
+        ld   a, [hl]
+        """,
+        BootsControls.option_press_b: """
+        ; Check if we are using the B slot
+        cp  J_B
+        jr  z, .yesBoots
+        ld   a, [hl]
+        """
+    }[boots_controls.value]
+    
+    # The new code fits exactly within Nintendo's poorly space optimzied code while having more features
+    boots_code = assembler.ASM("""
+CheckBoots:
+    ; check if we own boots
+    ld  a, [wCollectedTunics]
+    and  $04
+    ; if not, move on to the next inventory item (shield)
+    jr z, .out
+
+    ; Check the B button
+    ld  hl, wBButtonSlot
+    ld   d, J_B
+    call  .maybeBoots
+                               
+    ; Check the A button
+    inc l ; l = wAButtonSlot - done this way to save a byte or two
+    ld   d, J_A
+    call  .maybeBoots
+                               
+    ; If neither, reset charge meter and bail
+    xor  a
+    ld   [wPegasusBootsChargeMeter], a
+    jr .out
+
+.maybeBoots:
+    ; Check if we are holding this button even
+    ldh  a, [hPressedButtonsMask]
+    and  d
+    ret  z
+    """
+    # Check the special condition (also loads the current item for button into a)
+    + condition +
+    """
+    ; Check if we are just using boots regularly
+    cp INVENTORY_PEGASUS_BOOTS
+    ret  nz
+.yesBoots:
+    ; We're using boots! Do so.
+    call UsePegasusBoots
+    ; If we return now we will go back into CheckBoots, we don't want that
+    ; We instead want to move onto the next item
+    ; but if we don't cleanup, the next "ret" will take us back there again
+    ; So we pop the return address off of the stack
+    pop af
+.out:
+    """, BOOTS_START_ADDR)
+
+
+
+    original_code = 'fa00dbfe08200ff0cbe6202805cd05171804afea4bc1fa01dbfe08200ff0cbe6102805cd05171804afea4bc1'
+    rom.patch(0, BOOTS_START_ADDR, original_code, boots_code, fill_nop=True)
 
 def addWarpImprovements(rom, extra_warps):
     # Patch in a warp icon
@@ -623,9 +716,7 @@ def addWarpImprovements(rom, extra_warps):
 
     # Allow cursor to move over black squares
     # This allows warping to undiscovered areas - a fine cheat, but needs a check for wOverworldRoomStatus in the warp code
-    CHEAT_WARP_ANYWHERE = False
-    if CHEAT_WARP_ANYWHERE:
-        rom.patch(0x01, 0x1AE8, None, ASM("jp $5AF5"))
+    rom.patch(0x01, 0x1AE8, None, ASM("jp $5AF5"))
 
     # This disables the arrows around the selection bubble
     #rom.patch(0x01, 0x1B6F, None, ASM("ret"), fill_nop=True)
@@ -704,8 +795,14 @@ def addWarpImprovements(rom, extra_warps):
 TeleportHandler:
 
     ld  a, [$DBB4] ; Load the current selected tile
-    ; TODO: check if actually revealed so we can have free movement
-    ; Check cursor against different tiles to see if we are selecting a warp
+    ld   hl, wOverworldRoomStatus
+    ld   e, a                                     ; $5D38: $5F
+    ld   d, $00                                   ; $5D39: $16 $00
+    add  hl, de                                   ; $5D3B: $19
+    ld   a, [hl]
+    and  $80
+    jr z, exit
+    ld  a, [$DBB4] ; Load the current selected tile
     {warp_jump}
     jr exit
 
@@ -739,4 +836,3 @@ success:
 exit:
     ret
         """))
-

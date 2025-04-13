@@ -27,6 +27,7 @@ including the exclamation point.
 - `!countdown <number of seconds>` Starts a countdown using the given seconds value. Useful for synchronizing starts.
   Defaults to 10 seconds if no argument is provided.
 - `!alias <alias>` Sets your alias, which allows you to use commands with the alias rather than your provided name.
+  `!alias` on its own will reset the alias to the player's original name.
 - `!admin <command>` Executes a command as if you typed it into the server console. Remote administration must be
   enabled.
 
@@ -42,9 +43,9 @@ including the exclamation point.
 
 ### Collect/Release
 - `!collect` Grants you all the remaining items for your world by collecting them from all games. Typically used after 
-goal completion.
-- `!release` Releases all items contained in your world to other worlds. Typically, done automatically by the sever, but
-can be configured to allow/require manual usage of this command.
+  goal completion.
+- `!release` Releases all items contained in your world to other worlds. Typically, done automatically by the server,
+  but can be configured to allow/require manual usage of this command.
 
 ### Cheats
 - `!getitem <item>` Cheats an item to the currently connected slot, if it is enabled in the server.
@@ -65,6 +66,7 @@ can be configured to allow/require manual usage of this command.
   argument is provided.
 - `/option <option name> <option value>` Set a server option. For a list of options, use the `/options` command.
 - `/alias <player name> <alias name>` Assign a player an alias, allowing you to reference the player by the alias in commands.
+  `!alias <player name>` on its own will reset the alias to the player's original name.
 
 
 ### Collect/Release
@@ -95,7 +97,9 @@ The following commands are available in the clients that use the CommonClient, f
 - `/received` Displays all the items you have received from all players, including yourself.
 - `/missing` Displays all the locations along with their current status (checked/missing).
 - `/items` Lists all the item names for the current game.
+- `/item_groups` Lists all the item group names for the current game.
 - `/locations` Lists all the location names for the current game.
+- `/location_groups` Lists all the location group names for the current game.
 - `/ready` Sends ready status to the server.
 - Typing anything that doesn't start with `/` will broadcast a message to all players.
 

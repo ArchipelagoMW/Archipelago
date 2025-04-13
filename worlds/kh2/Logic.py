@@ -606,11 +606,11 @@ hard_data_xemnas = {
     ItemName.LimitForm:      1,
 }
 final_leveling_access = {
-    LocationName.MemorysSkyscaperMythrilCrystal,
+    LocationName.RoxasEventLocation,
     LocationName.GrimReaper2,
     LocationName.Xaldin,
     LocationName.StormRider,
-    LocationName.SunsetTerraceAbilityRing
+    LocationName.UndergroundConcourseMythrilGem
 }
 
 multi_form_region_access = {

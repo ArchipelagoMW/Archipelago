@@ -9,7 +9,7 @@ from BaseClasses import Region, Entrance, Item, Tutorial, ItemClassification, Lo
 from worlds.AutoWorld import World, WebWorld
 
 from . import Constants
-from .Options import minecraft_options
+from .Options import MinecraftOptions
 from .Structures import shuffle_structures
 from .ItemPool import build_item_pool, get_junk_item_names
 from .Rules import set_rules
@@ -37,7 +37,7 @@ class MinecraftWebWorld(WebWorld):
     bug_report_page = "https://github.com/KonoTyran/Minecraft_AP_Randomizer/issues/new?assignees=&labels=bug&template=bug_report.yaml&title=%5BBug%5D%3A+Brief+Description+of+bug+here"
 
     setup = Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up the Archipelago Minecraft software on your computer. This guide covers"
         "single-player, multiworld, and related software.",
         "English",
@@ -83,8 +83,9 @@ class MinecraftWorld(World):
     structures, and materials to create a portal to another world. Defeat the Ender Dragon, and claim
     victory!
     """
-    game: str = "Minecraft"
-    option_definitions = minecraft_options
+    game = "Minecraft"
+    options_dataclass = MinecraftOptions
+    options: MinecraftOptions
     settings: typing.ClassVar[MinecraftSettings]
     topology_present = True
     web = MinecraftWebWorld()
@@ -92,25 +93,23 @@ class MinecraftWorld(World):
     item_name_to_id = Constants.item_name_to_id
     location_name_to_id = Constants.location_name_to_id
 
-    data_version = 7
-
     def _get_mc_data(self) -> Dict[str, Any]:
         exits = [connection[0] for connection in Constants.region_info["default_connections"]]
         return {
-            'world_seed': self.multiworld.per_slot_randoms[self.player].getrandbits(32),
+            'world_seed': self.random.getrandbits(32),
             'seed_name': self.multiworld.seed_name,
-            'player_name': self.multiworld.get_player_name(self.player),
+            'player_name': self.player_name,
             'player_id': self.player,
             'client_version': client_version,
             'structures': {exit: self.multiworld.get_entrance(exit, self.player).connected_region.name for exit in exits},
-            'advancement_goal': self.multiworld.advancement_goal[self.player].value,
-            'egg_shards_required': min(self.multiworld.egg_shards_required[self.player].value,
-                                       self.multiworld.egg_shards_available[self.player].value),
-            'egg_shards_available': self.multiworld.egg_shards_available[self.player].value,
-            'required_bosses': self.multiworld.required_bosses[self.player].current_key,
-            'MC35': bool(self.multiworld.send_defeated_mobs[self.player].value),
-            'death_link': bool(self.multiworld.death_link[self.player].value),
-            'starting_items': str(self.multiworld.starting_items[self.player].value),
+            'advancement_goal': self.options.advancement_goal.value,
+            'egg_shards_required': min(self.options.egg_shards_required.value,
+                                       self.options.egg_shards_available.value),
+            'egg_shards_available': self.options.egg_shards_available.value,
+            'required_bosses': self.options.required_bosses.current_key,
+            'MC35': bool(self.options.send_defeated_mobs.value),
+            'death_link': bool(self.options.death_link.value),
+            'starting_items': json.dumps(self.options.starting_items.value),
             'race': self.multiworld.is_race,
         }
 
@@ -131,7 +130,7 @@ class MinecraftWorld(World):
         loc.place_locked_item(self.create_event_item(event_name))
         region.locations.append(loc)
 
-    def create_event_item(self, name: str) -> None:
+    def create_event_item(self, name: str) -> Item:
         item = self.create_item(name)
         item.classification = ItemClassification.progression
         return item
@@ -178,15 +177,10 @@ class MinecraftWorld(World):
             f.write(b64encode(bytes(json.dumps(data), 'utf-8')))
 
     def fill_slot_data(self) -> dict:
-        slot_data = self._get_mc_data()
-        for option_name in minecraft_options:
-            option = getattr(self.multiworld, option_name)[self.player]
-            if slot_data.get(option_name, None) is None and type(option.value) in {str, int}:
-                slot_data[option_name] = int(option.value)
-        return slot_data
+        return self._get_mc_data()
 
     def get_filler_item_name(self) -> str:
-        return get_junk_item_names(self.multiworld.random, 1)[0]
+        return get_junk_item_names(self.random, 1)[0]
 
 
 class MinecraftLocation(Location):

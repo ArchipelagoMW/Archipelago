@@ -3,12 +3,10 @@ from . import LingoTestBase
 
 class TestComplexProgressiveHallwayRoom(LingoTestBase):
     options = {
-        "shuffle_doors": "complex"
+        "shuffle_doors": "doors"
     }
 
     def test_item(self):
-        self.remove_forced_good_item()
-
         self.assertFalse(self.multiworld.state.can_reach("Outside The Agreeable", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Hallway Room (2)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Hallway Room (3)", "Region", self.player))
@@ -56,12 +54,11 @@ class TestComplexProgressiveHallwayRoom(LingoTestBase):
 
 class TestSimpleHallwayRoom(LingoTestBase):
     options = {
-        "shuffle_doors": "simple"
+        "shuffle_doors": "doors",
+        "group_doors": "true",
     }
 
     def test_item(self):
-        self.remove_forced_good_item()
-
         self.assertFalse(self.multiworld.state.can_reach("Outside The Agreeable", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Hallway Room (2)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Hallway Room (3)", "Region", self.player))
@@ -85,18 +82,16 @@ class TestSimpleHallwayRoom(LingoTestBase):
 
 class TestProgressiveArtGallery(LingoTestBase):
     options = {
-        "shuffle_doors": "complex",
+        "shuffle_doors": "doors",
         "shuffle_colors": "false",
     }
 
     def test_item(self):
-        self.remove_forced_good_item()
-
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery (Second Floor)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery (Third Floor)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery (Fourth Floor)", "Region", self.player))
-        self.assertFalse(self.can_reach_location("Art Gallery - ONE ROAD MANY TURNS"))
+        self.assertFalse(self.can_reach_location("Art Gallery - ORDER"))
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower Fifth Floor", "Region", self.player))
 
         self.collect_by_name(["Second Room - Exit Door", "Crossroads - Tower Entrance",
@@ -105,7 +100,7 @@ class TestProgressiveArtGallery(LingoTestBase):
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery (Second Floor)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery (Third Floor)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery (Fourth Floor)", "Region", self.player))
-        self.assertFalse(self.can_reach_location("Art Gallery - ONE ROAD MANY TURNS"))
+        self.assertFalse(self.can_reach_location("Art Gallery - ORDER"))
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower Fifth Floor", "Region", self.player))
 
         progressive_gallery_room = self.get_items_by_name("Progressive Art Gallery")
@@ -115,7 +110,7 @@ class TestProgressiveArtGallery(LingoTestBase):
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Second Floor)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery (Third Floor)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery (Fourth Floor)", "Region", self.player))
-        self.assertFalse(self.can_reach_location("Art Gallery - ONE ROAD MANY TURNS"))
+        self.assertFalse(self.can_reach_location("Art Gallery - ORDER"))
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower Fifth Floor", "Region", self.player))
 
         self.collect(progressive_gallery_room[1])
@@ -123,7 +118,7 @@ class TestProgressiveArtGallery(LingoTestBase):
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Second Floor)", "Region", self.player))
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Third Floor)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery (Fourth Floor)", "Region", self.player))
-        self.assertFalse(self.can_reach_location("Art Gallery - ONE ROAD MANY TURNS"))
+        self.assertFalse(self.can_reach_location("Art Gallery - ORDER"))
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower Fifth Floor", "Region", self.player))
 
         self.collect(progressive_gallery_room[2])
@@ -131,7 +126,7 @@ class TestProgressiveArtGallery(LingoTestBase):
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Second Floor)", "Region", self.player))
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Third Floor)", "Region", self.player))
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Fourth Floor)", "Region", self.player))
-        self.assertFalse(self.can_reach_location("Art Gallery - ONE ROAD MANY TURNS"))
+        self.assertFalse(self.can_reach_location("Art Gallery - ORDER"))
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower Fifth Floor", "Region", self.player))
 
         self.collect(progressive_gallery_room[3])
@@ -139,15 +134,15 @@ class TestProgressiveArtGallery(LingoTestBase):
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Second Floor)", "Region", self.player))
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Third Floor)", "Region", self.player))
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Fourth Floor)", "Region", self.player))
-        self.assertTrue(self.can_reach_location("Art Gallery - ONE ROAD MANY TURNS"))
+        self.assertTrue(self.can_reach_location("Art Gallery - ORDER"))
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower Fifth Floor", "Region", self.player))
 
-        self.collect(progressive_gallery_room[4])
+        self.collect_by_name("Orange Tower Fifth Floor - Quadruple Intersection")
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery", "Region", self.player))
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Second Floor)", "Region", self.player))
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Third Floor)", "Region", self.player))
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Fourth Floor)", "Region", self.player))
-        self.assertTrue(self.can_reach_location("Art Gallery - ONE ROAD MANY TURNS"))
+        self.assertTrue(self.can_reach_location("Art Gallery - ORDER"))
         self.assertTrue(self.multiworld.state.can_reach("Orange Tower Fifth Floor", "Region", self.player))
 
 
@@ -162,7 +157,7 @@ class TestNoDoorsArtGallery(LingoTestBase):
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery (Second Floor)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery (Third Floor)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery (Fourth Floor)", "Region", self.player))
-        self.assertFalse(self.can_reach_location("Art Gallery - ONE ROAD MANY TURNS"))
+        self.assertFalse(self.can_reach_location("Art Gallery - ORDER"))
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower Fifth Floor", "Region", self.player))
 
         self.collect_by_name("Yellow")
@@ -170,7 +165,7 @@ class TestNoDoorsArtGallery(LingoTestBase):
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Second Floor)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery (Third Floor)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery (Fourth Floor)", "Region", self.player))
-        self.assertFalse(self.can_reach_location("Art Gallery - ONE ROAD MANY TURNS"))
+        self.assertFalse(self.can_reach_location("Art Gallery - ORDER"))
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower Fifth Floor", "Region", self.player))
 
         self.collect_by_name("Brown")
@@ -178,7 +173,7 @@ class TestNoDoorsArtGallery(LingoTestBase):
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Second Floor)", "Region", self.player))
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Third Floor)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery (Fourth Floor)", "Region", self.player))
-        self.assertFalse(self.can_reach_location("Art Gallery - ONE ROAD MANY TURNS"))
+        self.assertFalse(self.can_reach_location("Art Gallery - ORDER"))
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower Fifth Floor", "Region", self.player))
 
         self.collect_by_name("Blue")
@@ -186,7 +181,7 @@ class TestNoDoorsArtGallery(LingoTestBase):
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Second Floor)", "Region", self.player))
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Third Floor)", "Region", self.player))
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Fourth Floor)", "Region", self.player))
-        self.assertFalse(self.can_reach_location("Art Gallery - ONE ROAD MANY TURNS"))
+        self.assertFalse(self.can_reach_location("Art Gallery - ORDER"))
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower Fifth Floor", "Region", self.player))
 
         self.collect_by_name(["Orange", "Gray"])
@@ -194,5 +189,5 @@ class TestNoDoorsArtGallery(LingoTestBase):
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Second Floor)", "Region", self.player))
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Third Floor)", "Region", self.player))
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Fourth Floor)", "Region", self.player))
-        self.assertTrue(self.can_reach_location("Art Gallery - ONE ROAD MANY TURNS"))
+        self.assertTrue(self.can_reach_location("Art Gallery - ORDER"))
         self.assertTrue(self.multiworld.state.can_reach("Orange Tower Fifth Floor", "Region", self.player))

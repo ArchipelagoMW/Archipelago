@@ -50,8 +50,8 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a config file?
 
-The Player Settings page on the website allows you to configure your personal settings and export a config file from
-them. Player settings page: [Ocarina of Time Player Settings Page](/games/Ocarina%20of%20Time/player-settings)
+The Player Options page on the website allows you to configure your personal options and export a config file from
+them. Player options page: [Ocarina of Time Player Options Page](/games/Ocarina%20of%20Time/player-options)
 
 ### Verifying your config file
 

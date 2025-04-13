@@ -1,5 +1,21 @@
 {% extends 'tablepage.html' %}
 
+{%- macro games(slots) -%}
+    {%- set gameList = [] -%}
+    {%- set maxGamesToShow = 10 -%}
+
+    {%- for slot in (slots|list|sort(attribute="player_id"))[:maxGamesToShow] -%}
+        {% set player = "#" + slot["player_id"]|string + " " + slot["player_name"] + " : " + slot["game"] -%}
+        {% set _ = gameList.append(player) -%}
+    {%- endfor -%}
+
+    {%- if slots|length > maxGamesToShow -%}
+        {% set _ = gameList.append("... and " + (slots|length - maxGamesToShow)|string + " more") -%}
+    {%- endif -%}
+
+    {{ gameList|join('\n') }}
+{%- endmacro -%}
+
 {% block head %}
     {{ super() }}
     <title>User Content</title>
@@ -25,6 +41,7 @@
                             <th class="center">Players</th>
                             <th>Created (UTC)</th>
                             <th>Last Activity (UTC)</th>
+                            <th>Mark for deletion</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -32,9 +49,12 @@
                             <tr>
                                 <td><a href="{{ url_for("view_seed", seed=room.seed.id) }}">{{ room.seed.id|suuid }}</a></td>
                                 <td><a href="{{ url_for("host_room", room=room.id) }}">{{ room.id|suuid }}</a></td>
-                                <td>{{ room.seed.slots|length }}</td>
+                                <td title="{{ games(room.seed.slots) }}">
+                                    {{ room.seed.slots|length }}
+                                </td>
                                 <td>{{ room.creation_time.strftime("%Y-%m-%d %H:%M") }}</td>
                                 <td>{{ room.last_activity.strftime("%Y-%m-%d %H:%M") }}</td>
+                                <td><a href="{{ url_for("disown_room", room=room.id) }}">Delete next maintenance.</a></td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -51,21 +71,28 @@
                             <th>Seed</th>
                             <th class="center">Players</th>
                             <th>Created (UTC)</th>
+                            <th>Mark for deletion</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for seed in seeds %}
                             <tr>
                                 <td><a href="{{ url_for("view_seed", seed=seed.id) }}">{{ seed.id|suuid }}</a></td>
-                                <td>{% if seed.multidata %}{{ seed.slots|length }}{% else %}1{% endif %}
+                                <td title="{{ games(seed.slots) }}">
+                                    {% if seed.multidata %}
+                                        {{ seed.slots|length }}
+                                    {% else %}
+                                        1
+                                    {% endif %}
                                 </td>
                                 <td>{{ seed.creation_time.strftime("%Y-%m-%d %H:%M") }}</td>
+                                <td><a href="{{ url_for("disown_seed", seed=seed.id) }}">Delete next maintenance.</a></td>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             {% else %}
-                You have no generated any seeds yet!
+                You have not generated any seeds yet!
             {% endif %}
         </div>
     </div>

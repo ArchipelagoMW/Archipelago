@@ -1,21 +1,22 @@
-import os
-import typing
+import dataclasses
 import math
+import os
 import threading
+import typing
 
 import settings
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
-from .Items import DKC3Item, ItemData, item_table, inventory_table, junk_table
-from .Locations import DKC3Location, all_locations, setup_locations
-from .Options import dkc3_options
-from .Regions import create_regions, connect_regions
-from .Levels import level_list
-from .Rules import set_rules
-from .Names import ItemName, LocationName
-from .Client import DKC3SNIClient
+from Options import PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
+from .Client import DKC3SNIClient
+from .Items import DKC3Item, ItemData, item_table, inventory_table, junk_table
+from .Levels import level_list
+from .Locations import DKC3Location, all_locations, setup_locations
+from .Names import ItemName, LocationName
+from .Options import DKC3Options, dkc3_option_groups
+from .Regions import create_regions, connect_regions
 from .Rom import LocalRom, patch_rom, get_base_rom_path, DKC3DeltaPatch
-import Patch
+from .Rules import set_rules
 
 
 class DK3Settings(settings.Group):
@@ -39,8 +40,10 @@ class DKC3Web(WebWorld):
         "setup/en",
         ["PoryGone"]
     )
-    
+
     tutorials = [setup_en]
+
+    option_groups = dkc3_option_groups
 
 
 class DKC3World(World):
@@ -50,10 +53,12 @@ class DKC3World(World):
     mystery of why Donkey Kong and Diddy disappeared while on vacation.
     """
     game: str = "Donkey Kong Country 3"
-    option_definitions = dkc3_options
     settings: typing.ClassVar[DK3Settings]
+
+    options_dataclass = DKC3Options
+    options: DKC3Options
+
     topology_present = False
-    data_version = 2
     #hint_blacklist = {LocationName.rocket_rush_flag}
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
@@ -74,24 +79,25 @@ class DKC3World(World):
 
     def _get_slot_data(self):
         return {
-            #"death_link": self.world.death_link[self.player].value,
+            #"death_link": self.options.death_link.value,
             "active_levels": self.active_level_list,
         }
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
-        for option_name in dkc3_options:
-            option = getattr(self.multiworld, option_name)[self.player]
+        for option_name in (attr.name for attr in dataclasses.fields(DKC3Options)
+                            if attr not in dataclasses.fields(PerGameCommonOptions)):
+            option = getattr(self.options, option_name)
             slot_data[option_name] = option.value
 
         return slot_data
 
     def create_regions(self):
-        location_table = setup_locations(self.multiworld, self.player)
-        create_regions(self.multiworld, self.player, location_table)
+        location_table = setup_locations(self)
+        create_regions(self, location_table)
 
         # Not generate basic
-        self.topology_present = self.multiworld.level_shuffle[self.player].value
+        self.topology_present = self.options.level_shuffle.value
         itempool: typing.List[DKC3Item] = []
 
         # Levels
@@ -103,12 +109,12 @@ class DKC3World(World):
         number_of_cogs = 4
         self.multiworld.get_location(LocationName.rocket_rush_flag, self.player).place_locked_item(self.create_item(ItemName.krematoa_cog))
         number_of_bosses = 8
-        if self.multiworld.goal[self.player] == "knautilus":
+        if self.options.goal == "knautilus":
             self.multiworld.get_location(LocationName.kastle_kaos, self.player).place_locked_item(self.create_item(ItemName.victory))
             number_of_bosses = 7
         else:
             self.multiworld.get_location(LocationName.banana_bird_mother, self.player).place_locked_item(self.create_item(ItemName.victory))
-            number_of_banana_birds = self.multiworld.number_of_banana_birds[self.player]
+            number_of_banana_birds = self.options.number_of_banana_birds
 
         # Bosses
         total_required_locations += number_of_bosses
@@ -116,15 +122,15 @@ class DKC3World(World):
         # Secret Caves
         total_required_locations += 13
 
-        if self.multiworld.kongsanity[self.player]:
+        if self.options.kongsanity:
             total_required_locations += 39
 
         ## Brothers Bear
-        if False:#self.world.include_trade_sequence[self.player]:
+        if False:#self.options.include_trade_sequence:
             total_required_locations += 10
 
-        number_of_bonus_coins = (self.multiworld.krematoa_bonus_coin_cost[self.player] * 5)
-        number_of_bonus_coins += math.ceil((85 - number_of_bonus_coins) * self.multiworld.percentage_of_extra_bonus_coins[self.player] / 100)
+        number_of_bonus_coins = (self.options.krematoa_bonus_coin_cost * 5)
+        number_of_bonus_coins += math.ceil((85 - number_of_bonus_coins) * self.options.percentage_of_extra_bonus_coins / 100)
 
         itempool += [self.create_item(ItemName.bonus_coin) for _ in range(number_of_bonus_coins)]
         itempool += [self.create_item(ItemName.dk_coin) for _ in range(41)]
@@ -142,20 +148,17 @@ class DKC3World(World):
 
         self.active_level_list = level_list.copy()
 
-        if self.multiworld.level_shuffle[self.player]:
-            self.multiworld.random.shuffle(self.active_level_list)
+        if self.options.level_shuffle:
+            self.random.shuffle(self.active_level_list)
 
-        connect_regions(self.multiworld, self.player, self.active_level_list)
+        connect_regions(self, self.active_level_list)
 
         self.multiworld.itempool += itempool
 
     def generate_output(self, output_directory: str):
         try:
-            world = self.multiworld
-            player = self.player
-
             rom = LocalRom(get_base_rom_path())
-            patch_rom(self.multiworld, rom, self.player, self.active_level_list)
+            patch_rom(self, rom, self.active_level_list)
 
             self.active_level_list.append(LocationName.rocket_rush_region)
 
@@ -163,15 +166,15 @@ class DKC3World(World):
             rom.write_to_file(rompath)
             self.rom_name = rom.name
 
-            patch = DKC3DeltaPatch(os.path.splitext(rompath)[0]+DKC3DeltaPatch.patch_file_ending, player=player,
-                                   player_name=world.player_name[player], patched_path=rompath)
+            patch = DKC3DeltaPatch(os.path.splitext(rompath)[0]+DKC3DeltaPatch.patch_file_ending, player=self.player,
+                                   player_name=self.multiworld.player_name[self.player], patched_path=rompath)
             patch.write()
         except:
             raise
         finally:
+            self.rom_name_available_event.set()  # make sure threading continues and errors are collected
             if os.path.exists(rompath):
                 os.unlink(rompath)
-            self.rom_name_available_event.set() # make sure threading continues and errors are collected
 
     def modify_multidata(self, multidata: dict):
         import base64
@@ -183,6 +186,7 @@ class DKC3World(World):
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
+    def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
         if self.topology_present:
             world_names = [
             LocationName.lake_orangatanga_region,
@@ -197,10 +201,16 @@ class DKC3World(World):
             er_hint_data = {}
             for world_index in range(len(world_names)):
                 for level_index in range(5):
-                    level_region = self.multiworld.get_region(self.active_level_list[world_index * 5 + level_index], self.player)
+                    level_id: int = world_index * 5 + level_index
+
+                    if level_id >= len(self.active_level_list):
+                        break
+
+                    level_region = self.multiworld.get_region(self.active_level_list[level_id], self.player)
                     for location in level_region.locations:
                         er_hint_data[location.address] = world_names[world_index]
-            multidata['er_hint_data'][self.player] = er_hint_data
+
+            hint_data[self.player] = er_hint_data
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
         data = item_table[name]
@@ -220,4 +230,4 @@ class DKC3World(World):
         return self.multiworld.random.choice(list(junk_table.keys()))
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player)
+        set_rules(self)

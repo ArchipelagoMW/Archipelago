@@ -157,7 +157,7 @@ class KH2Rules:
 
     def form_list_unlock(self, state: CollectionState, parent_form_list, level_required, fight_logic=False) -> bool:
         form_access = {parent_form_list}
-        if self.multiworld.AutoFormLogic[self.player] and state.has(ItemName.SecondChance, self.player) and not fight_logic:
+        if self.world.options.AutoFormLogic and state.has(ItemName.SecondChance, self.player) and not fight_logic:
             if parent_form_list == ItemName.MasterForm:
                 if state.has(ItemName.DriveConverter, self.player):
                     form_access.add(auto_form_dict[parent_form_list])
@@ -170,8 +170,8 @@ class KH2Rules:
         forms_available = 0
         form_list = [ItemName.ValorForm, ItemName.WisdomForm, ItemName.LimitForm, ItemName.MasterForm,
                      ItemName.FinalForm]
-        if self.world.multiworld.FinalFormLogic[self.player] != "no_light_and_darkness":
-            if self.world.multiworld.FinalFormLogic[self.player] == "light_and_darkness":
+        if self.world.options.FinalFormLogic != "no_light_and_darkness":
+            if self.world.options.FinalFormLogic == "light_and_darkness":
                 if state.has(ItemName.LightDarkness, self.player) and state.has_any(set(form_list), self.player):
                     forms_available += 1
                     form_list.remove(ItemName.FinalForm)
@@ -194,8 +194,8 @@ class KH2WorldRules(KH2Rules):
             RegionName.Oc:                 lambda state: self.oc_unlocked(state, 1),
             RegionName.Oc2:                lambda state: self.oc_unlocked(state, 2),
 
+            #twtnw1 is actually the roxas fight region thus roxas requires 1 way to the dawn
             RegionName.Twtnw2:             lambda state: self.twtnw_unlocked(state, 2),
-            # These will be swapped and First Visit lock for twtnw is in development.
             # RegionName.Twtnw1: lambda state: self.lod_unlocked(state, 2),
 
             RegionName.Ht:                 lambda state: self.ht_unlocked(state, 1),
@@ -263,7 +263,10 @@ class KH2WorldRules(KH2Rules):
 
         weapon_region = self.multiworld.get_region(RegionName.Keyblade, self.player)
         for location in weapon_region.locations:
-            add_rule(location, lambda state: state.has(exclusion_table["WeaponSlots"][location.name], self.player))
+            if location.name in exclusion_table["WeaponSlots"]:  # shop items and starting items are not in this list
+                exclusion_item = exclusion_table["WeaponSlots"][location.name]
+                add_rule(location, lambda state, e_item=exclusion_item: state.has(e_item, self.player))
+
             if location.name in Goofy_Checks:
                 add_item_rule(location, lambda item: item.player == self.player and item.name in GoofyAbility_Table.keys())
             elif location.name in Donald_Checks:
@@ -273,34 +276,35 @@ class KH2WorldRules(KH2Rules):
 
     def set_kh2_goal(self):
         final_xemnas_location = self.multiworld.get_location(LocationName.FinalXemnasEventLocation, self.player)
-        if self.multiworld.Goal[self.player] == "three_proofs":
+        if self.world.options.Goal == "three_proofs":
             final_xemnas_location.access_rule = lambda state: self.kh2_has_all(three_proofs, state)
-            if self.multiworld.FinalXemnas[self.player]:
+            if self.world.options.FinalXemnas:
                 self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
             else:
                 self.multiworld.completion_condition[self.player] = lambda state: self.kh2_has_all(three_proofs, state)
         # lucky emblem hunt
-        elif self.multiworld.Goal[self.player] == "lucky_emblem_hunt":
-            final_xemnas_location.access_rule = lambda state: state.has(ItemName.LuckyEmblem, self.player, self.multiworld.LuckyEmblemsRequired[self.player].value)
-            if self.multiworld.FinalXemnas[self.player]:
+        elif self.world.options.Goal == "lucky_emblem_hunt":
+            final_xemnas_location.access_rule = lambda state: state.has(ItemName.LuckyEmblem, self.player, self.world.options.LuckyEmblemsRequired.value)
+            if self.world.options.FinalXemnas:
                 self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
             else:
-                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.LuckyEmblem, self.player, self.multiworld.LuckyEmblemsRequired[self.player].value)
+                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.LuckyEmblem, self.player, self.world.options.LuckyEmblemsRequired.value)
         # hitlist if == 2
-        elif self.multiworld.Goal[self.player] == "hitlist":
-            final_xemnas_location.access_rule = lambda state: state.has(ItemName.Bounty, self.player, self.multiworld.BountyRequired[self.player].value)
-            if self.multiworld.FinalXemnas[self.player]:
+        elif self.world.options.Goal == "hitlist":
+            final_xemnas_location.access_rule = lambda state: state.has(ItemName.Bounty, self.player, self.world.options.BountyRequired.value)
+            if self.world.options.FinalXemnas:
                 self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
             else:
-                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Bounty, self.player, self.multiworld.BountyRequired[self.player].value)
+                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Bounty, self.player, self.world.options.BountyRequired.value)
         else:
-            final_xemnas_location.access_rule = lambda state: state.has(ItemName.Bounty, self.player, self.multiworld.BountyRequired[self.player].value) and \
-                                                              state.has(ItemName.LuckyEmblem, self.player, self.multiworld.LuckyEmblemsRequired[self.player].value)
-            if self.multiworld.FinalXemnas[self.player]:
+          
+            final_xemnas_location.access_rule = lambda state: state.has(ItemName.Bounty, self.player, self.world.options.BountyRequired.value) and \
+                                                              state.has(ItemName.LuckyEmblem, self.player, self.world.options.LuckyEmblemsRequired.value)
+            if self.world.options.FinalXemnas:
                 self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
             else:
-                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Bounty, self.player, self.multiworld.BountyRequired[self.player].value) and \
-                                                                                  state.has(ItemName.LuckyEmblem, self.player, self.multiworld.LuckyEmblemsRequired[self.player].value)
+                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Bounty, self.player, self.world.options.BountyRequired.value) and \
+                                                                                  state.has(ItemName.LuckyEmblem, self.player, self.world.options.LuckyEmblemsRequired.value)
 
 
 class KH2FormRules(KH2Rules):
@@ -354,6 +358,16 @@ class KH2FormRules(KH2Rules):
             RegionName.Master: lambda state: self.multi_form_region_access(),
             RegionName.Final:  lambda state: self.final_form_region_access(state)
         }
+        # Accessing Final requires being able to reach one of the locations in final_leveling_access, but reaching a
+        # location requires being able to reach the region the location is in, so an indirect condition is required.
+        # The access rules of each of the locations in final_leveling_access do not check for being able to reach other
+        # locations or other regions, so it is only the parent region of each location that needs to be added as an
+        # indirect condition.
+        self.form_region_indirect_condition_regions = {
+            RegionName.Final: {
+                self.world.get_location(location).parent_region for location in final_leveling_access
+            }
+        }
 
     def final_form_region_access(self, state: CollectionState) -> bool:
         """
@@ -387,12 +401,15 @@ class KH2FormRules(KH2Rules):
         for region_name in drive_form_list:
             if region_name == RegionName.Summon and not self.world.options.SummonLevelLocationToggle:
                 continue
+            indirect_condition_regions = self.form_region_indirect_condition_regions.get(region_name, ())
             # could get the location of each of these, but I feel like that would be less optimal
             region = self.multiworld.get_region(region_name, self.player)
             # if region_name in form_region_rules
             if region_name != RegionName.Summon:
                 for entrance in region.entrances:
                     entrance.access_rule = self.form_region_rules[region_name]
+                    for indirect_condition_region in indirect_condition_regions:
+                        self.multiworld.register_indirect_condition(indirect_condition_region, entrance)
             for loc in region.locations:
                 loc.access_rule = self.form_rules[loc.name]
 
@@ -409,7 +426,7 @@ class KH2FightRules(KH2Rules):
     # if skip rules are of return false
     def __init__(self, world: KH2World) -> None:
         super().__init__(world)
-        self.fight_logic = self.multiworld.FightLogic[self.player].current_key
+        self.fight_logic = world.options.FightLogic.current_key
 
         self.fight_region_rules = {
             RegionName.ShanYu:            lambda state: self.get_shan_yu_rules(state),
@@ -905,8 +922,8 @@ class KH2FightRules(KH2Rules):
         # normal:both gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus
         # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus
         sephiroth_rules = {
-            "easy":   self.kh2_dict_count(easy_sephiroth_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([donald_limit], state) >= 1,
-            "normal": self.kh2_dict_count(normal_sephiroth_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
+            "easy":   self.kh2_dict_count(easy_sephiroth_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state),
+            "normal": self.kh2_dict_count(normal_sephiroth_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([gap_closer], state) >= 1,
             "hard":   self.kh2_dict_count(hard_sephiroth_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2,
         }
         return sephiroth_rules[self.fight_logic]
@@ -935,7 +952,7 @@ class KH2FightRules(KH2Rules):
 
     def get_cor_skip_first_rules(self, state: CollectionState) -> bool:
         # if option is not allow skips return false else run rules
-        if not self.multiworld.CorSkipToggle[self.player]:
+        if not self.world.options.CorSkipToggle:
             return False
         # easy: aerial dodge 3,master form,fire
         # normal: aerial dodge 2, master form,fire
