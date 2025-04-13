@@ -106,7 +106,7 @@ def update_dol_offsets(gcm: GCM, dol: DOL, start_inv: list[str], walk_speed: int
     dol.data.seek(CUSTOM_CODE_OFFSET_START)
     dol.data.write(custom_dol_code)
 
-    dol_csv_offsets = get_data(MAIN_PKG_NAME, "data/dol_diff.csv").decode("utf-8")
+    dol_csv_offsets = get_data(MAIN_PKG_NAME, "data/dol_diff.csv").decode("utf-8").splitlines()
     for csv_line in dol_csv_offsets:
         dol_addr, dol_val = csv_line.split(",")
         dol.data.seek(int(dol_addr, 16))
