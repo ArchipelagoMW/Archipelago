@@ -6,14 +6,17 @@ from .data import get_all_map_tags, get_excluded_map_tags
 #https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/options%20api.md
 
 class TargetTime(Range):
-    """Determines what time you must drive on a map for it to be considered completed. You can enter any number from 0 - 300.
+    """Determines what time you must drive on a map for it to be considered completed. 
+    You can enter any number from 0 - 300.
     
     0   = Bronze Medal
     100 = Silver Medal
     200 = Gold Medal
     300 = Author Medal
 
-    If you choose a value inbetween two medals, your target time will be a mix of those two medals. For example, a value of 250 will make your target time halfway between the gold and author medals. A value of 120 will make your target time 20% of the way from the silver medal to the gold medal.
+    If you choose a value inbetween two medals, your target time will be a mix of those two medals. 
+    For example, a value of 250 will make your target time halfway between the gold and author medals. 
+    A value of 120 will make your target time 20% of the way from the silver medal to the gold medal.
 
     The the quickest medal equal to or below your target time is made your progression medal.
     """
@@ -49,7 +52,8 @@ class MedalRequirement(Range):
 class SkipPercentage(Range):
     """The number of map skips in the item pool, calculated as a percetage of the total number of maps.
     
-    If a map is broken or impossible or you get stuck, use the /reroll command in the client to replace the currently loaded map with a new one.
+    If a map is broken or impossible or you get stuck, use the /reroll command in the client to replace 
+    the currently loaded map with a new one.
     """
     display_name = "Map Skip Item Percentage"
     range_start = 0
@@ -57,7 +61,8 @@ class SkipPercentage(Range):
     default = 10
 
 class MapTags(OptionSet):
-    """Tags that maps from Trackmania Exchange are allowed to have. If none of these tags are checked, it will default to allowing all tags."""
+    """Tags that maps from Trackmania Exchange are allowed to have. If none of these tags are checked, 
+    it will default to allowing all tags."""
     display_name = "Allowed TMX Tags"
     valid_keys = get_all_map_tags()
 
@@ -74,9 +79,6 @@ class MapETags(OptionSet):
 
 @dataclass
 class TrackmaniaOptions(PerGameCommonOptions):
-    # start_inventory_from_pool: StartInventory
-    # progression_balancing : ProgressionBalancing
-
     target_time: TargetTime
     series_number : SeriesNumber
     series_map_number: SeriesMapNumber
@@ -85,37 +87,3 @@ class TrackmaniaOptions(PerGameCommonOptions):
     map_tags: MapTags
     map_tags_inclusive: MapTagsInclusive
     map_etags: MapETags
-
-
-# def create_option_groups() -> List[OptionGroup]:
-#     option_group_list: List[OptionGroup] = []
-#     for name, options in tm_option_groups.items():
-#         option_group_list.append(OptionGroup(name=name, options=options))
-
-#     return option_group_list
-
-# tm_option_groups: Dict[str, List[Any]] = {
-#     "General Options": [EndGoal, ShuffleStorybookPages, ShuffleAlpineZiplines, ShuffleSubconPaintings,
-#                         ShuffleActContracts, MinPonCost, MaxPonCost, BadgeSellerMinItems, BadgeSellerMaxItems,
-#                         LogicDifficulty, NoPaintingSkips, CTRLogic],
-
-#     "Act Options": [ActRandomizer, StartingChapter, LowestChapterCost, HighestChapterCost,
-#                     ChapterCostIncrement, ChapterCostMinDifference, FinalChapterMinCost, FinalChapterMaxCost,
-#                     FinaleShuffle, ActPlando, ActBlacklist],
-
-#     "Item Options": [StartWithCompassBadge, CompassBadgeMode, RandomizeHatOrder, YarnAvailable, YarnCostMin,
-#                      YarnCostMax, MinExtraYarn, HatItems, UmbrellaLogic, MaxExtraTimePieces, YarnBalancePercent,
-#                      TimePieceBalancePercent],
-
-#     "Arctic Cruise Options": [EnableDLC1, Tasksanity, TasksanityTaskStep, TasksanityCheckCount,
-#                               ShipShapeCustomTaskGoal, ExcludeTour],
-
-#     "Nyakuza Metro Options": [EnableDLC2, MetroMinPonCost, MetroMaxPonCost, NyakuzaThugMinShopItems,
-#                               NyakuzaThugMaxShopItems, BaseballBat, NoTicketSkips],
-
-#     "Death Wish Options": [EnableDeathWish, DWTimePieceRequirement, DWShuffle, DWShuffleCountMin, DWShuffleCountMax,
-#                            DWEnableBonus, DWAutoCompleteBonuses, DWExcludeAnnoyingContracts, DWExcludeAnnoyingBonuses,
-#                            DWExcludeCandles, DeathWishOnly],
-
-#     "Trap Options": [TrapChance, BabyTrapWeight, LaserTrapWeight, ParadeTrapWeight]
-# }

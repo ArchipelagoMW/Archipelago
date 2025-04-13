@@ -1,10 +1,22 @@
 import settings
 import typing
-from .options import TrackmaniaOptions  # the options we defined earlier
-from .items import trackmania_items, trackmania_item_groups, create_itempool, create_item  # data used below to add items to the World
-from .locations import build_locations, create_regions  # same as above
+from .options import TrackmaniaOptions
+from .items import trackmania_items, trackmania_item_groups, create_itempool, create_item
+from .locations import build_locations
+from .regions import create_regions
 from worlds.AutoWorld import World, WebWorld
+from worlds.LauncherComponents import Component, components, icon_paths, launch as launch_component, Type
+from Utils import local_path
 from BaseClasses import Region, Location, Entrance, Item, ItemClassification, Tutorial
+
+def launch_client():
+    from .client import launch
+    launch_component(launch, name="TMClient")
+
+components.append(Component("Trackmania Client", "TMClient", func=launch_client,
+                            component_type=Type.CLIENT, icon='ngowo'))
+
+icon_paths['ngowo'] = local_path('data', 'ngowo.png')
 
 class Webmania(WebWorld):
     theme = "ice"
@@ -17,6 +29,7 @@ class Webmania(WebWorld):
         "setup/en",
         ["SerialBoxes"]
     )]
+    rich_text_options_doc = True
 
 class TrackmaniaWorld(World):
     """Trackmania is a mechanically deep arcade racing game that is easy to pick up and addicting to master!
@@ -24,6 +37,7 @@ class TrackmaniaWorld(World):
     game = "Trackmania"  # name of the game/world
     options_dataclass = TrackmaniaOptions  # options the player can set
     options: TrackmaniaOptions  # typing hints for option results
+    web = Webmania()
 
     item_name_to_id = trackmania_items
     location_name_to_id = build_locations()
@@ -36,5 +50,6 @@ class TrackmaniaWorld(World):
     def create_items(self):
         self.multiworld.itempool += create_itempool(self)
 
+    #rules are also generated with the regions
     def create_regions(self):
         create_regions(self)

@@ -18,8 +18,7 @@ trackmania_items: dict[str,int] = {
 }
 
 trackmania_item_groups = {
-        "Medals": {"Bronze Medal", "Silver Medal", "Gold Medal", "Author Medal"},
-        "Filler": {"Filler Item"},
+        "Medals": {"Bronze Medal", "Silver Medal", "Gold Medal", "Author Medal"}
 }
 
 #Item classification for most of our items is dependent on the target_time setting, so it cannot be hardcoded.
@@ -60,9 +59,10 @@ def create_itempool(world: "TrackmaniaWorld") -> List[Item]:
     itempool += create_medals(world, "Gold Medal", 200, total_map_count)
     itempool += create_medals(world, "Author Medal", 300, total_map_count)
 
-    skipCount = round(float(total_map_count) * (world.options.skip_percentage / 100.0))
-    itempool += create_items(world, "Map Skip", skipCount)
-    itempool += create_items(world,"Filler Item", total_map_count - skipCount)
+    #each map has one additional check for reaching the target time we can fill with skips and filler
+    skip_count = round(float(total_map_count) * (world.options.skip_percentage / 100.0))
+    itempool += create_items(world, "Map Skip", skip_count)
+    itempool += create_items(world,"Filler Item", total_map_count - skip_count)
 
     return itempool
 
