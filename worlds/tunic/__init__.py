@@ -165,13 +165,10 @@ class TunicWorld(World):
                 self.options.laurels_location.value = self.options.laurels_location.option_anywhere
                 self.options.combat_logic.value = self.passthrough["combat_logic"]
 
-                for source, dest in self.passthrough["Entrance Rando"].items():
-                    if (source == "ziggurat2020_3, ziggurat2020_1_zig2_skip"
-                            or dest == "ziggurat2020_3, ziggurat2020_1_zig2_skip"):
-                        self.options.fixed_shop.value = self.options.fixed_shop.option_true
-                        break
-                else:
-                    self.options.fixed_shop.value = self.options.fixed_shop.option_false
+                self.options.fixed_shop.value = self.options.fixed_shop.option_false
+                if ("ziggurat2020_3, ziggurat2020_1_zig2_skip" in self.passthrough["Entrance Rando"].keys()
+                        or "ziggurat2020_3, ziggurat2020_1_zig2_skip" in self.passthrough["Entrance Rando"].values()):
+                    self.options.fixed_shop.value = self.options.fixed_shop.option_true
 
             else:
                 self.using_ut = False
