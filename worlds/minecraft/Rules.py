@@ -267,20 +267,20 @@ def get_rules_lookup(player: int):
             "Smells Interesting": lambda state: can_excavate(state, player),
             "Little Sniffs": lambda state: can_excavate(state, player),
             "Planting the Past": lambda state: can_excavate(state, player),
-            "Crafting a New Look": lambda state: (has_iron_ingots(state, player) and # Maybe streamline this one
+            "Crafting a New Look": lambda state: (has_iron_ingots(state, player) and  # Maybe streamline this one
                 (can_adventure(state, player) or
                     fortress_loot(state, player) or
-                    (state.can_reach("Pillager Outpost", 'Region', player) and basic_combat(state, player)) or
-                    (state.can_reach("Bastion Remnant", 'Region', player) and basic_combat(state, player)) or
-                    (state.can_reach("End City", 'Region', player) and basic_combat(state, player)))),
-            "Smithing with Style": lambda state: (can_excavate(state, player) and # Wayfinder Armor Trim
-                fortress_loot(state, player) and # Rib Armor Trim
-                (state.can_reach("Village", 'Region', player) or overworld_villager(state, player)) and  # Explorer Maps for the Vex and Tide Armor Trims
-                state.can_reach("Bastion Remnant", 'Region', player) and  # Snout Armor Trim
-                state.can_reach("End City", 'Region', player) and  # Spire Armor Trim
-                state.has("Progressive Tools", player, 2) and  # Ward and Silence Armor Trims
+                    (state.can_reach_region("Pillager Outpost", player) and basic_combat(state, player)) or
+                    (state.can_reach_region("Bastion Remnant", player) and basic_combat(state, player)) or
+                    (state.can_reach_region("End City", player) and basic_combat(state, player)))),
+            "Smithing with Style": lambda state: (can_excavate(state, player) and  # Wayfinder Armor Trim
+                fortress_loot(state, player) and  # Rib Armor Trim
+                overworld_villager(state, player) and  # Explorer Maps for the Vex and Tide Armor Trims
+                state.can_reach_region("Bastion Remnant", player) and  # Snout Armor Trim
+                state.can_reach_region("End City", player) and  # Spire Armor Trim
+                state.has("Progressive Tools", player, 2) and  # Compass for Explorer Maps; Ward and Silence Armor Trims
                 ((state.has("Fishing Rod", player) and can_brew_potions(state, player)) or  # Water Breathing Potions for the Tide Armor Trim
-                (state.has("Bucket", player) and can_enchant(state, player)))),  # Access to Milk/Aqua Affinity and Axolotls/Respiration for the Tide Armor Trim
+                    (state.has("Bucket", player) and can_enchant(state, player)))),  # Access to Milk/Aqua Affinity and Axolotls/Respiration for the Tide Armor Trim
             "Respecting the Remnants": lambda state: can_excavate(state, player),
             "Careful Restoration": lambda state: can_excavate(state, player),
             "The Power of Books": lambda state: state.has("Progressive Tools", player, 2),
