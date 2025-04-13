@@ -665,7 +665,7 @@ class LMContext(CommonContext):
         # Always adjust Pickup animation issues if the user turned pick up animations off.
         if self.pickup_anim_off:
             crown_helper_val = "01"
-            dme.write_bytes(0x804dd9b4, bytes.fromhex(crown_helper_val))
+            dme.write_bytes(0x804de024, bytes.fromhex(crown_helper_val))
 
         # Make it so the displayed Boo counter always appears even if you dont have boo radar or if you haven't caught
         # a boo in-game yet.
