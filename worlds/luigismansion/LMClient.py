@@ -18,6 +18,7 @@ from .LMGenerator import LuigisMansionRandomizer
 from .Items import *
 from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV, BOOLOSSUS_AP_ID_LIST
 from .Regions import spawn_locations
+from .Helper_Functions import StringByteFunction as sbf
 
 CONNECTION_REFUSED_GAME_STATUS = (
     "Dolphin failed to connect. Please load a randomized ROM for LM. Trying again in 5 seconds..."
@@ -62,6 +63,16 @@ FURN_ID_OFFSET = 0xBC
 # This is a short of length 0x02 which contains the last received index of the item that was given to Luigi
 # This index is updated every time a new item is received.
 LAST_RECV_ITEM_ADDR = 0x803CDEBA
+
+# These addresses are related to displaying text in game.
+RECV_DEFAULT_TIMER_IN_HEX = "5A" # 3 Seconds
+RECV_ITEM_DISPLAY_TIMER_ADDR = 0x804DD95B
+RECV_ITEM_DISPLAY_VIZ_ADDR = 0x804DD95F
+RECV_ITEM_NAME_ADDR = 0x804DE088
+RECV_ITEM_LOC_ADDR = 0x804DE0B0
+RECV_ITEM_SENDER_ADDR = 0x804DE0D0
+RECV_MAX_STRING_LENGTH = 24
+RECV_LINE_STRING_LENGTH = 27
 
 # This is the flag address we use to determine if Luigi is currently in an Event.
 # If this flag is on, do NOT send any items / receive them.
@@ -490,32 +501,37 @@ class LMContext(CommonContext):
             dme.write_word(LAST_RECV_ITEM_ADDR, len(self.items_received))
             return
 
-        # TODO give items from console
         for item in recv_items:
+            lm_item_name = self.item_names.lookup_in_game(item.item)
+            lm_item = ALL_ITEMS_TABLE[lm_item_name]
+
             if "TrapLink" in self.tags and item.item in trap_id_list:
-                trap_item_name = self.item_names.lookup_in_game(item.item)
-                await self.send_trap_link(trap_item_name)
+                await self.send_trap_link(lm_item_name)
             if item.item in RECV_ITEMS_IGNORE or (item.player == self.slot and not
             (item.location in SELF_LOCATIONS_TO_RECV or item.item in RECV_OWN_GAME_ITEMS)):
                 last_recv_idx += 1
                 dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
                 continue
 
-            # TODO remove this after an in-game message / dolphin client message is received per item.
-            #   Note: Common Client does already have a variation of messages supported though.
-            """# Add a received message in the client for the item that is about to be received.
-            parts = []
-            NetUtils.add_json_text(parts, "Received ")
-            NetUtils.add_json_item(parts, item.item, self.slot, item.flags)
-            NetUtils.add_json_text(parts, " from ")
-            NetUtils.add_json_location(parts, item.location, item.player)
-            NetUtils.add_json_text(parts, " by ")
-            NetUtils.add_json_text(parts, item.player, type=NetUtils.JSONTypes.player_id)
-            self.on_print_json({"data": parts, "cmd": "PrintJSON"})"""
+            item_name_display = lm_item_name
+            if len(lm_item_name) > RECV_MAX_STRING_LENGTH:
+                item_name_display = lm_item_name[0:RECV_MAX_STRING_LENGTH] + "..."
+            dme.write_bytes(RECV_ITEM_NAME_ADDR, sbf.string_to_bytes(item_name_display, RECV_LINE_STRING_LENGTH))
 
-            # Get the current LM Item so we can get the various named tuple fields easier.
-            lm_item_name = self.item_names.lookup_in_game(item.item)
-            lm_item = ALL_ITEMS_TABLE[lm_item_name]
+            loc_name_display = self.location_names.lookup_in_game(item.location)
+            if len(loc_name_display) > RECV_MAX_STRING_LENGTH:
+                loc_name_display = loc_name_display[0:RECV_MAX_STRING_LENGTH] + "..."
+            dme.write_bytes(RECV_ITEM_LOC_ADDR, sbf.string_to_bytes(loc_name_display, RECV_LINE_STRING_LENGTH))
+
+            recv_name_display = self.player_names[item.player]
+            if len(recv_name_display) > RECV_MAX_STRING_LENGTH:
+                recv_name_display = recv_name_display[0:RECV_MAX_STRING_LENGTH] + "..."
+            dme.write_bytes(RECV_ITEM_SENDER_ADDR, sbf.string_to_bytes(recv_name_display, RECV_LINE_STRING_LENGTH))
+
+            dme.write_bytes(RECV_ITEM_DISPLAY_TIMER_ADDR, bytes.fromhex(RECV_DEFAULT_TIMER_IN_HEX))
+            await asyncio.sleep(0.1)
+            while dme.read_byte(RECV_ITEM_DISPLAY_VIZ_ADDR) > 0:
+                await asyncio.sleep(0.3)
 
             for addr_to_update in lm_item.update_ram_addr:
                 byte_size = 1 if addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
