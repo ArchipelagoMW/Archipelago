@@ -287,7 +287,7 @@ def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict
                 event_no = 93
             case "Right Telephone":
                 event_no = 94
-        if hint_distribution_choice != 1 or hint_distribution_choice != 5
+        if hint_distribution_choice != 1 or hint_distribution_choice != 5:
             hint_data = all_hints[hint_name]
 
         if event_no == 4:
