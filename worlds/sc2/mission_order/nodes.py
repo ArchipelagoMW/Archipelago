@@ -204,8 +204,8 @@ class SC2MOGenCampaign(MissionOrderNode):
         self.option_goal = data["goal"]
         self.option_entry_rules = data["entry_rules"]
         self.option_unique_progression_track = data["unique_progression_track"]
-        self.option_min_difficulty = data["min_difficulty"]
-        self.option_max_difficulty = data["max_difficulty"]
+        self.option_min_difficulty = Difficulty(data["min_difficulty"])
+        self.option_max_difficulty = Difficulty(data["max_difficulty"])
         self.option_single_layout_campaign = data["single_layout_campaign"]
         self.layouts = []
         self.exits = []
@@ -332,8 +332,8 @@ class SC2MOGenLayout(MissionOrderNode):
         self.option_missions = data.pop("missions")
         self.option_entry_rules = data.pop("entry_rules")
         self.option_unique_progression_track = data.pop("unique_progression_track")
-        self.option_min_difficulty = data.pop("min_difficulty")
-        self.option_max_difficulty = data.pop("max_difficulty")
+        self.option_min_difficulty = Difficulty(data.pop("min_difficulty"))
+        self.option_max_difficulty = Difficulty(data.pop("max_difficulty"))
         self.missions = []
         self.entrances = []
         self.exits = []
