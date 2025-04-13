@@ -63,7 +63,9 @@ def fortress_loot(world: "MinecraftWorld", state: CollectionState, player: int) 
 
 
 def can_excavate(world: "MinecraftWorld", state: CollectionState, player: int) -> bool:
-    return has_copper_ingots(world, state, player) and state.has('Brush', player) and can_adventure(state, player)
+    return (has_copper_ingots(world, state, player) and state.has('Brush', player)
+            and can_adventure(world, state, player)
+           )
 
 
 def can_brew_potions(world: "MinecraftWorld", state: CollectionState, player: int) -> bool:
