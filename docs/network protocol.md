@@ -220,14 +220,14 @@ Sent to clients to provide what is known as a 'data package' which contains info
 Sent to clients after a client requested this message be sent to them, more info in the [Bounce](#Bounce) package.
 
 #### Arguments
-| Name     | Type        | Notes                                                                                                          |
-|----------|-------------|----------------------------------------------------------------------------------------------------------------|
-| teams    | list\[int\] | Optional. Teams this message is targeting. Default assumed value when the key is not present is own team.      |
-| games    | list\[str\] | Optional. Game names this message is targeting                                                                 |
-| slots    | list\[int\] | Optional. Player slot IDs that this message is targeting                                                       |
-| tags     | list\[str\] | Optional. Client [Tags](#Tags) this message is targeting                                                       |
-| operator | str         | Optional. Specifies whether the "teams", games", "slots" and "tags" conditions were chained via "or" or "and". |
-| data     | dict        | The data in the [Bounce](#Bounce) package copied                                                               |
+| Name     | Type        | Notes                                                                                                                                      |
+|----------|-------------|--------------------------------------------------------------------------------------------------------------------------------------------|
+| teams    | list\[int\] | Optional. Teams this message is targeting. Default assumed value when the key is not present is own team.                                  |
+| games    | list\[str\] | Optional. Game names this message is targeting                                                                                             |
+| slots    | list\[int\] | Optional. Player slot IDs that this message is targeting                                                                                   |
+| tags     | list\[str\] | Optional. Client [Tags](#Tags) this message is targeting                                                                                   |
+| operator | str         | Optional. Specifies whether the "teams", games", "slots" and "tags" conditions are chained via "or", "and" or using the "legacy" operator. |
+| data     | dict        | The data in the [Bounce](#Bounce) package copied                                                                                           |
 
 ### InvalidPacket
 Sent to clients if the server caught a problem with a packet. This only occurs for errors that are explicitly checked for.
