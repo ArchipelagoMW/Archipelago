@@ -203,7 +203,6 @@ class LuigisMansionRandomizer:
         bool_fear_anim_disabled: bool = True if int(self.output_data["Options"]["fear_animation"]) == 1 else False
         player_name: str = str(self.output_data["Name"])
         king_boo_health: int = int(self.output_data["Options"]["king_boo_health"])
-        random_spawn_loc: str = self.output_data["Options"]["spawn"]
 
         # Boo related options
         bool_boo_checks: bool = True if self.output_data["Options"]["boo_gates"] == 1 else False
@@ -218,8 +217,7 @@ class LuigisMansionRandomizer:
         bool_portrait_hints: bool = True if self.output_data["Options"]["portrait_hints"] == 1 else False
 
         self.gcm, self.dol = update_dol_offsets(self.gcm, self.dol, start_inv_list, walk_speed, player_name,
-            random_spawn_loc, king_boo_health, bool_fear_anim_disabled, bool_pickup_anim_enabled,
-            bool_boo_rando_enabled)
+            king_boo_health, bool_fear_anim_disabled, bool_pickup_anim_enabled, bool_boo_rando_enabled)
 
         self.gcm = update_common_events(self.gcm, bool_randomize_mice)
         self.gcm = update_intro_and_lab_events(self.gcm, bool_hidden_mansion, max_health, start_inv_list, door_to_close_list)

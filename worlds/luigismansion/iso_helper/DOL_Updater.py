@@ -4,14 +4,12 @@ from pkgutil import get_data
 from gclib.dol import DOL, DOLSection
 from gclib.gcm import GCM
 
-from ..Regions import spawn_locations
-
 MAIN_PKG_NAME = "worlds.luigismansion.LMGenerator"
 CUSTOM_CODE_OFFSET_START = 0x39FA20
 
 # Updates the main DOL file, which is the main file used for GC and Wii games. This section includes some custom code
 # inside the DOL file itself.
-def update_dol_offsets(gcm: GCM, dol: DOL, start_inv: list[str], walk_speed: int, slot_name: str, random_spawn: str,
+def update_dol_offsets(gcm: GCM, dol: DOL, start_inv: list[str], walk_speed: int, slot_name: str,
     king_boo_health: int, fear_anim_disabled: bool, pickup_anim_enabled: bool, boo_rand_on: bool) -> (GCM, DOL):
     # Find the main 
     dol_data = gcm.read_file_data("sys/main.dol")
@@ -112,14 +110,14 @@ def update_dol_offsets(gcm: GCM, dol: DOL, start_inv: list[str], walk_speed: int
         dol.data.seek(int(dol_addr, 16))
         dol.data.write(bytes.fromhex(dol_val))
 
-    if not random_spawn == "Foyer":
-        spawn_info: dict = spawn_locations[random_spawn]
-        dol.data.seek(0x3A0140)
-        dol.data.write(struct.pack("f", spawn_info["pos_x"]))
-        dol.data.seek(0x3A0144)
-        dol.data.write(struct.pack("f", spawn_info["pos_y"]))
-        dol.data.seek(0x3A0148)
-        dol.data.write(struct.pack("f", spawn_info["pos_z"]))
+    #if not random_spawn == "Foyer":
+    #    spawn_info: dict = spawn_locations[random_spawn]
+    #    dol.data.seek(0x3A0140)
+    #    dol.data.write(struct.pack("f", spawn_info["pos_x"]))
+    #    dol.data.seek(0x3A0144)
+    #    dol.data.write(struct.pack("f", spawn_info["pos_y"]))
+    #    dol.data.seek(0x3A0148)
+    #    dol.data.write(struct.pack("f", spawn_info["pos_z"]))
 
     # Save all changes to the DOL itself.
     dol.save_changes()

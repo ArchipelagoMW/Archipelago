@@ -2,6 +2,7 @@ import asyncio
 import os
 import time
 import traceback
+import struct
 
 import NetUtils
 import Utils
@@ -16,6 +17,7 @@ from . import CLIENT_VERSION
 from .LMGenerator import LuigisMansionRandomizer
 from .Items import *
 from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV, BOOLOSSUS_AP_ID_LIST
+from .Regions import spawn_locations
 
 CONNECTION_REFUSED_GAME_STATUS = (
     "Dolphin failed to connect. Please load a randomized ROM for LM. Trying again in 5 seconds..."
@@ -188,8 +190,9 @@ class LMContext(CommonContext):
         self.is_luigi_dead = False
         self.last_health_checked = time.time()
 
-        # Value for Luigi's max health
+        # Value for Luigi's max health and starting location
         self.luigimaxhp = 100
+        self.spawn = "Foyer"
 
         # Track if the user has pickup animations turned on.
         self.pickup_anim_off = False
@@ -278,6 +281,7 @@ class LMContext(CommonContext):
             self.boo_balcony_count = int(args["slot_data"]["balcony boo count"])
             self.boo_final_count = int(args["slot_data"]["final boo count"])
             self.luigimaxhp = int(args["slot_data"]["luigi max health"])
+            self.spawn = str(args["slot_data"]["spawn_region"])
             if "death_link" in args["slot_data"]:
                 Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
             if "trap_link" in args["slot_data"] and "TrapLink" not in self.tags:
@@ -652,6 +656,12 @@ class LMContext(CommonContext):
     async def lm_update_non_savable_ram(self):
         if not (self.check_ingame() and self.check_alive()):
             return
+
+        if not self.spawn == "Foyer":
+            spawn_info: dict = spawn_locations[self.spawn]
+            dme.write_bytes(0x804de060, struct.pack("f", spawn_info["pos_x"]))
+            dme.write_bytes(0x804de064, struct.pack("f", spawn_info["pos_y"]))
+            dme.write_bytes(0x804de068, struct.pack("f", spawn_info["pos_z"]))
 
         # Always adjust the Vacuum speed as saving and quitting or going to E. Gadds lab could reset it back to normal.
         if any([netItem.item for netItem in self.items_received if netItem.item == 8064]):
