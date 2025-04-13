@@ -61,6 +61,10 @@ class ArtisanGood:
     def specific_bait(cls, fish: str) -> str:
         return f"{cls.targeted_bait} [{fish}]"
 
+    @classmethod
+    def specific_aged_roe(cls, fish: str) -> str:
+        return f"{cls.aged_roe} [{fish}]"
+
 
 class ModArtisanGood:
     pterodactyl_egg = "Pterodactyl Egg"

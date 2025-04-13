@@ -46,3 +46,7 @@ class AnimalProduct:
     It's there to patch the loop in logic because of the Chicken-and-egg problem."""
     void_egg = "Void Egg"
     wool = "Wool"
+
+    @classmethod
+    def specific_roe(cls, fish: str) -> str:
+        return f"{cls.roe} [{fish}]"

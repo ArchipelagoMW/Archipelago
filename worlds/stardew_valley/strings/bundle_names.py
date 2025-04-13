@@ -106,3 +106,8 @@ class BundleName:
     raccoon_artisan = "Raccoon Artisan"
     raccoon_food = "Raccoon Food"
     raccoon_foraging = "Raccoon Foraging"
+
+
+class MemeBundleName:
+    burger_king = cc_bundle("Burger King Bundle")
+    capitalist = cc_bundle("Capitalist Bundle")

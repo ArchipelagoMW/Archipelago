@@ -1,10 +1,11 @@
+from .meme_bundles_data.capitalist_bundle import capitalist_items
 from .remixed_bundles import *
+from ...strings.bundle_names import MemeBundleName
 
 burger_king_items = [survival_burger, joja_cola, apple_slices, ice_cream, strange_doll, strange_doll_green, hashbrowns, infinity_crown]
 burger_king_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.burger_king, burger_king_items, 6, 3)
 
-capitalist_items = [survival_burger, joja_cola, apple_slices, ice_cream, strange_doll, strange_doll_green, hashbrowns, infinity_crown]
-capitalist_bundle = BundleTemplate(CCRoom.vault, MemeBundleName.burger_king, burger_king_items, 6, 3)
+capitalist_bundle = BundleTemplate(CCRoom.vault, MemeBundleName.capitalist, capitalist_items, 12, 2)
 
 pantry_bundles_meme = []
 pantry_meme = BundleRoomTemplate(CCRoom.pantry, pantry_bundles_meme, 6)

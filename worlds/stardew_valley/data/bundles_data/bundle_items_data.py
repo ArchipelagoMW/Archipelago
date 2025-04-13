@@ -9,8 +9,10 @@ from ...strings.fish_names import Fish, WaterItem, Trash
 from ...strings.flower_names import Flower
 from ...strings.food_names import Meal, Beverage
 from ...strings.forageable_names import Forageable, Mushroom
+from ...strings.fruit_tree_names import Sapling
 from ...strings.geode_names import Geode
 from ...strings.gift_names import Gift
+from ...strings.hat_names import Hat
 from ...strings.ingredient_names import Ingredient
 from ...strings.material_names import Material
 from ...strings.metal_names import Fossil, Ore, MetalBar, Mineral, Artifact
@@ -239,6 +241,7 @@ copper_bar = BundleItem(MetalBar.copper)
 iron_Bar = BundleItem(MetalBar.iron)
 gold_bar = BundleItem(MetalBar.gold)
 iridium_bar = BundleItem(MetalBar.iridium)
+radioactive_bar = BundleItem(MetalBar.radioactive)
 refined_quartz = BundleItem(MetalBar.quartz)
 coal = BundleItem(Material.coal, 5)
 iridium_ore = BundleItem(Ore.iridium)
@@ -423,4 +426,41 @@ gold_mystery_box = BundleItem(Consumable.gold_mystery_box, source=BundleItem.Sou
 calico_egg = BundleItem(Currency.calico_egg)
 
 apple_slices = BundleItem(ArtisanGood.specific_dried_fruit(Fruit.apple))
+
 infinity_crown = BundleItem(Hat.infinity_crown)
+bowler_hat = BundleItem(Hat.bowler)
+sombrero = BundleItem(Hat.sombrero)
+
+ancient_fruit_wine = BundleItem(ArtisanGood.specific_wine(Fruit.ancient_fruit))
+dried_ancient_fruit = BundleItem(ArtisanGood.specific_dried_fruit(Fruit.ancient_fruit))
+ancient_fruit_jelly = BundleItem(ArtisanGood.specific_jelly(Fruit.ancient_fruit))
+starfruit_wine = BundleItem(ArtisanGood.specific_wine(Fruit.starfruit))
+dried_starfruit = BundleItem(ArtisanGood.specific_dried_fruit(Fruit.starfruit))
+starfruit_jelly = BundleItem(ArtisanGood.specific_jelly(Fruit.starfruit))
+rhubarb_wine = BundleItem(ArtisanGood.specific_wine(Fruit.rhubarb))
+dried_rhubarb = BundleItem(ArtisanGood.specific_dried_fruit(Fruit.rhubarb))
+melon_wine = BundleItem(ArtisanGood.specific_wine(Fruit.melon))
+dried_melon = BundleItem(ArtisanGood.specific_dried_fruit(Fruit.melon))
+pineapple_wine = BundleItem(ArtisanGood.specific_wine(Fruit.pineapple))
+dried_pineapple = BundleItem(ArtisanGood.specific_dried_fruit(Fruit.pineapple))
+strawberry_wine = BundleItem(ArtisanGood.specific_wine(Fruit.strawberry))
+dried_strawberry = BundleItem(ArtisanGood.specific_dried_fruit(Fruit.strawberry))
+pumpkin_juice = BundleItem(ArtisanGood.specific_juice(Vegetable.pumpkin))
+
+aged_lava_eel_roe = BundleItem(ArtisanGood.specific_aged_roe(Fish.lava_eel))
+aged_crimsonfish_roe = BundleItem(ArtisanGood.specific_aged_roe(Fish.crimsonfish))
+aged_angler_roe = BundleItem(ArtisanGood.specific_aged_roe(Fish.angler))
+legend_roe = BundleItem(AnimalProduct.specific_roe(Fish.legend))
+aged_legend_roe = BundleItem(ArtisanGood.specific_aged_roe(Fish.legend))
+aged_glacierfish_roe = BundleItem(ArtisanGood.specific_aged_roe(Fish.glacierfish))
+aged_mutant_carp_roe = BundleItem(ArtisanGood.specific_aged_roe(Fish.mutant_carp))
+
+mystic_syrup = BundleItem(ArtisanGood.mystic_syrup)
+apple_sapling = BundleItem(Sapling.apple)
+apricot_sapling = BundleItem(Sapling.apricot)
+banana_sapling = BundleItem(Sapling.banana)
+cherry_sapling = BundleItem(Sapling.cherry)
+mango_sapling = BundleItem(Sapling.mango)
+orange_sapling = BundleItem(Sapling.orange)
+peach_sapling = BundleItem(Sapling.peach)
+pomegranate_sapling = BundleItem(Sapling.pomegranate)
