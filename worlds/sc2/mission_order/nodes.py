@@ -343,7 +343,8 @@ class SC2MOGenLayout(MissionOrderNode):
             raise ValueError(f"Layout \"{self.option_name}\" has a size of 0.")
 
         # Build base layout
-        self.layout_type: LayoutType = self.option_type(self.option_size)
+        from . import layout_types
+        self.layout_type: LayoutType = getattr(layout_types, self.option_type)(self.option_size)
         unused = self.layout_type.set_options(data)
         if len(unused) > 0:
             logging.warning(f"SC2 ({world.player_name}): Layout \"{self.option_name}\" has unknown options: {list(unused.keys())}")
