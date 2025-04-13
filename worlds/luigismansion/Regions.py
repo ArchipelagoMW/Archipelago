@@ -88,38 +88,38 @@ GHOST_TO_ROOM = {
 }
 
 spawn_locations = {
-    # "Hidden Room":           {"room_no": 1, "pos_x": -1803.157350, "pos_y": 0.000000, "pos_z": 153.575714,
-    #                           "key": ["Heart Key", "Butler's Room Key"]}, # Hidden
-    # "Courtyard":             {"room_no": 23, "pos_x": 1613.042970, "pos_y": 9.000000, "pos_z": -5663.574710,
-    #                           "key": ["Club Key", "Heart Key", "North Rec Room Key"]}, # Courtyard
-    # "Clockwork Room":        {"room_no": 56, "pos_x": 10.759588, "pos_y": 1100.000000, "pos_z": -1649.743900,
-    #                           "key": ["Heart Key", "Clockwork Room Key"]}, # Clockwork
+    "Hidden Room":           {"room_no": 1, "pos_x": -1803.157350, "pos_y": 0.000000, "pos_z": 153.575714,
+                              "key": ["Heart Key", "Butler's Room Key"]}, # Hidden
+    "Courtyard":             {"room_no": 23, "pos_x": 1613.042970, "pos_y": 9.000000, "pos_z": -5663.574710,
+                              "key": ["Club Key", "Heart Key", "North Rec Room Key"]}, # Courtyard
+    "Clockwork Room":        {"room_no": 56, "pos_x": 10.759588, "pos_y": 1100.000000, "pos_z": -1649.743900,
+                              "key": ["Heart Key", "Clockwork Room Key"]}, # Clockwork
     "Foyer":                 {"room_no": 2, "pos_x": -7.640748, "pos_y": 0.000000, "pos_z": 145.174300,
                               "key": ["Heart Key", "Family Hallway Key", "Parlor Key"]}, # Foyer
-    # "Rec Room":              {"room_no": 22, "pos_x": 3517.026860, "pos_y": 0.000000, "pos_z": -4646.33203,
-    #                           "key": ["Heart Key", "North Rec Room Key", "South Rec Room Key"]}, # Rec Room
-    # "Laundry Room":          {"room_no": 5, "pos_x": -3165.112550, "pos_y": 0, "pos_z": -804.770508,
-    #                           "key": ["Laundry Key", "Butler's Rom Key"]},  # Laundry
-    # "Telephone Room":        {"room_no": 50, "pos_x": -9.812825, "pos_y": 1100, "pos_z": 118.738243,
-    #                           "key": ["Telephone Room Key", "Clockwork Room Key"]}, # Telephone
-    # "Butler's Room":         {"room_no": 0, "pos_x": -3391.8396, "pos_y": 0, "pos_z": 114.336197,
-    #                           "key": ["Heart Key", "Butler's Room Key"]}, # Butler
-    # "Conservatory":          {"room_no": 21, "pos_x": 780.405884, "pos_y": 0, "pos_z": -4662.089840,
-    #                           "key": ["Conservatory Key", "Heart Key"]}, # Conservatory
-    # "Billiards Room":        {"room_no": 12, "pos_x": -963.755737, "pos_y": 0, "pos_z": -3055.808110,
-    #                           "key": ["Heart Key", "Billiards Room Key"]}, # Billiards
-    # "Twins' Room":           {"room_no": 25, "pos_x": -1729.586790, "pos_y": 550, "pos_z": 116.055779,
-    #                           "key": ["Twins' Room Key", "Family Hallway Key"]}, # Twins
-    # "Nursery":               {"room_no": 24, "pos_x": -3331.658690, "pos_y": 550, "pos_z": -198.970337,
-    #                           "key": ["Nursery Key", "Family Hallway Key"]}, # Nursery
-    # "Master Bedroom":        {"room_no": 33, "pos_x": -3365.857670, "pos_y": 550, "pos_z": -1513.529660,
-    #                           "key": ["Heart Key", "Master Bedroom Key"]}, # Master bed
-    # "Study":                 {"room_no": 34, "pos_x": -1696.352290, "pos_y": 550, "pos_z": -1605.182980,
-    #                           "key": ["Study Key", "Family Hallway Key"]}, # Study Errors and neville's Chair doesn't spawn?
-    # "Parlor":                {"room_no": 35, "pos_x": -43.294357, "pos_y": 550, "pos_z": -1775.288450,
-    #                           "key": ["Parlor Key", "Heart Key", "Anteroom Key"]}, # Parlor
-    # "Nana's Room":           {"room_no": 46, "pos_x": 173.368210, "pos_y": 550, "pos_z": -4615.553220,
-    #                           "key": ["Nana's Room Key", "Upper 2F Stairwell Key"]}, # Nana
+    "Rec Room":              {"room_no": 22, "pos_x": 3517.026860, "pos_y": 0.000000, "pos_z": -4646.33203,
+                              "key": ["Heart Key", "North Rec Room Key", "South Rec Room Key"]}, # Rec Room
+    "Laundry Room":          {"room_no": 5, "pos_x": -3165.112550, "pos_y": 0, "pos_z": -804.770508,
+                              "key": ["Laundry Key", "Butler's Rom Key"]},  # Laundry
+    "Telephone Room":        {"room_no": 50, "pos_x": -9.812825, "pos_y": 1100, "pos_z": 118.738243,
+                              "key": ["Telephone Room Key", "Clockwork Room Key"]}, # Telephone
+    "Butler's Room":         {"room_no": 0, "pos_x": -3391.8396, "pos_y": 0, "pos_z": 114.336197,
+                              "key": ["Heart Key", "Butler's Room Key"]}, # Butler
+    "Conservatory":          {"room_no": 21, "pos_x": 780.405884, "pos_y": 0, "pos_z": -4662.089840,
+                              "key": ["Conservatory Key", "Heart Key"]}, # Conservatory
+    "Billiards Room":        {"room_no": 12, "pos_x": -963.755737, "pos_y": 0, "pos_z": -3055.808110,
+                              "key": ["Heart Key", "Billiards Room Key"]}, # Billiards
+    "Twins' Room":           {"room_no": 25, "pos_x": -1729.586790, "pos_y": 550, "pos_z": 116.055779,
+                              "key": ["Twins' Room Key", "Family Hallway Key"]}, # Twins
+    "Nursery":               {"room_no": 24, "pos_x": -3331.658690, "pos_y": 550, "pos_z": -198.970337,
+                              "key": ["Nursery Key", "Family Hallway Key"]}, # Nursery
+    "Master Bedroom":        {"room_no": 33, "pos_x": -3365.857670, "pos_y": 550, "pos_z": -1513.529660,
+                              "key": ["Heart Key", "Master Bedroom Key"]}, # Master bed
+    "Study":                 {"room_no": 34, "pos_x": -1696.352290, "pos_y": 550, "pos_z": -1605.182980,
+                              "key": ["Study Key", "Family Hallway Key"]}, # Study Errors and neville's Chair doesn't spawn?
+    "Parlor":                {"room_no": 35, "pos_x": -43.294357, "pos_y": 550, "pos_z": -1775.288450,
+                              "key": ["Parlor Key", "Heart Key", "Anteroom Key"]}, # Parlor
+    "Nana's Room":           {"room_no": 46, "pos_x": 173.368210, "pos_y": 550, "pos_z": -4615.553220,
+                              "key": ["Nana's Room Key", "Upper 2F Stairwell Key"]}, # Nana
 }
 
 exp_spawns: dict[str,dict[str, int]] = {
@@ -265,24 +265,6 @@ def connect_regions(world: "LMWorld"):
     lmconnect(world, "Altar Hallway", "Secret Altar", "Spade Key", 72,
             lambda state, boo_count=world.options.final_boo_count: state.has_group("Boo", world.player, boo_count)
                           or state.has("Boo", world.player, boo_count))
-    # Mirror warps
-    lmconnect(world, "Armory", "Foyer", one_way=True)
-    lmconnect(world, "Sealed Room", "Foyer", one_way=True)
-    lmconnect(world, "Master Bedroom", "Foyer", one_way=True)
-    lmconnect(world, "Rec Room", "Foyer", one_way=True)
-    lmconnect(world, "1F Bathroom", "Foyer", one_way=True)
-    lmconnect(world, "1F Washroom", "Foyer", one_way=True)
-    lmconnect(world, "2F Washroom", "Foyer", one_way=True)
-    lmconnect(world, "2F Bathroom", "Foyer", one_way=True)
-    lmconnect(world, "Guest Room", "Foyer", one_way=True)
-    lmconnect(world, "Billiards Room", "Foyer", one_way=True)
-    lmconnect(world, "Wardrobe", "Foyer", one_way=True)
-    lmconnect(world, "Secret Altar", "Foyer", one_way=True)
-    lmconnect(world, "Storage Room", "Foyer", one_way=True)
-    lmconnect(world, "The Well", "Foyer", one_way=True)
-    lmconnect(world, "Safari Room", "Foyer", one_way=True)
-    lmconnect(world, "Breaker Room", "Foyer", one_way=True)
-    lmconnect(world, "Hidden Room", "Foyer", one_way=True)
 
 
 REGION_LIST = {
