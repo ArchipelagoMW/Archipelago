@@ -268,9 +268,8 @@ def randomize_clairvoya(gcm: GCM, req_mario_count: str, hint_distribution_choice
 # Writes all the in game hints for everything except clairvoya
 def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict[str, dict[str, str]],
     seed: str) -> GCM:
-
-    for hint_name, hint_data in all_hints:
-        if hint_name not in ALWAYS_HINT or hint_name == "Madame Clairvoya":
+    for hint_name in ALWAYS_HINT:
+        if hint_name == "Madame Clairvoya":
             continue
         event_no: int = 0
         match hint_name:
@@ -288,6 +287,7 @@ def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict
                 event_no = 93
             case "Right Telephone":
                 event_no = 94
+        hint_data = all_hints[hint_name]
 
         if event_no == 4:
             lines = get_data(MAIN_PKG_NAME, "data/custom_events/event04.txt").decode('utf-8')
