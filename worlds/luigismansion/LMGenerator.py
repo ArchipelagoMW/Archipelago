@@ -1,11 +1,9 @@
-import csv
 import hashlib
 import os
-import struct
 import yaml
 
+from worlds.luigismansion.iso_helper.DOL_Updater import update_dol_offsets
 from .iso_helper.Update_GameUSA import update_game_usa
-from . import data
 from .JMP_Info_File import JMPInfoFile
 from .Patching import *
 from .Helper_Functions import StringByteFunction as sbf
@@ -13,7 +11,7 @@ from .iso_helper.Events import *
 
 from gclib import fs_helpers as fs
 from gclib.gcm import GCM
-from gclib.dol import DOL, DOLSection
+from gclib.dol import DOL
 from gclib.rarc import RARC
 from gclib.yaz0_yay0 import Yay0
 
@@ -218,7 +216,8 @@ class LuigisMansionRandomizer:
         madam_hint_dict: dict[str, str] = hint_list["Madame Clairvoya"] if "Madame Clairvoya" in hint_list else None
         bool_portrait_hints: bool = True if self.output_data["Options"]["portrait_hints"] == 1 else False
 
-        self.update_dol_offsets(bool_boo_rando_enabled)
+        self.gcm, self.dol = update_dol_offsets(self.gcm, self.dol, start_inv_list, walk_speed, player_name,
+            king_boo_health, bool_fear_anim_disabled, bool_pickup_anim_enabled, bool_boo_rando_enabled)
 
         self.gcm = update_common_events(self.gcm, bool_randomize_mice)
         self.gcm = update_intro_and_lab_events(self.gcm, bool_hidden_mansion, max_health, start_inv_list, door_to_close_list)
@@ -262,113 +261,6 @@ class LuigisMansionRandomizer:
         # Returned information is ignored.
         for _, _ in self.export_files_from_memory():
             continue
-
-    # Updates various DOL Offsets per the desired changes of the AP user
-    def update_dol_offsets(self, boo_rand_on: bool):
-        # Find the main DOL file, which is the main file used for GC and Wii games.
-        dol_data = self.gcm.read_file_data("sys/main.dol")
-        self.dol.read(dol_data)
-
-        # Walk Speed
-        if self.output_data["Options"]["walk_speed"] == 0:
-            walk_speed = 16784
-        elif self.output_data["Options"]["walk_speed"] == 1:
-            walk_speed = 16850
-        else:
-            walk_speed = 16950
-        self.dol.data.seek(0x396538)
-        self.dol.data.write(struct.pack(">H", walk_speed))
-
-        # Vacuum Speed
-        if any("Poltergust 4000" in key for key in self.output_data["Options"]["start_inventory"]):
-            vac_speed = "3800000F"
-        else:
-            vac_speed = "800D0160"
-        self.dol.data.seek(0x7EA28)
-        self.dol.data.write(bytes.fromhex(vac_speed))
-
-        # Fix Boos to properly spawn
-        self.dol.data.seek(0x12DCC9)
-        boo_data = "000005"
-        self.dol.data.write(bytes.fromhex(boo_data))
-
-        # Turn on custom code handler for boo display counter only if Boo Rando is on.
-        if boo_rand_on:
-            self.dol.data.seek(0x04DB50)
-            boo_custom_code_one = "93C1FFF0"
-            self.dol.data.write(bytes.fromhex(boo_custom_code_one))
-
-            self.dol.data.seek(0x04DBB0)
-            boo_custom_code_two = "4848CDE5"
-            self.dol.data.write(bytes.fromhex(boo_custom_code_two))
-
-            self.dol.data.seek(0x04DC10)
-            boo_custom_code_three = "4848CD85"
-            self.dol.data.write(bytes.fromhex(boo_custom_code_three))
-
-        # Turn off pickup animations
-        if self.output_data["Options"]["pickup_animation"] == 1:
-            pickup_val = [0x01]
-            gem_val = [0x05]
-
-            # Write additional code to enable Custom Pickup animations when animations are turned off.
-            self.dol.data.seek(0xAD625)
-            self.dol.data.write(bytes.fromhex("42D0F5"))
-        else:
-            pickup_val = [0x02]
-            gem_val = [0x06]
-
-        # Keys and important animations
-        self.dol.data.seek(0xCD39B)
-        self.dol.data.write(struct.pack(">B", *pickup_val))
-
-        # Diamonds and other treasure animations
-        # TODO this breaks king boo boss fight currently
-        self.dol.data.seek(0xCE8D3)
-        self.dol.data.write(struct.pack(">B", *gem_val))
-
-        # Turn off luigi scare animations
-        if self.output_data["Options"]["fear_animation"] == 1:
-            scare_val = [0x00]
-        else:
-            scare_val = [0x44]
-        self.dol.data.seek(0x396578)
-        self.dol.data.write(struct.pack(">B", *scare_val))
-
-        # Store Player name
-        lm_player_name = str(self.output_data["Name"]).strip()
-        self.dol.data.seek(0x311660)
-        self.dol.data.write(struct.pack(str(len(lm_player_name)) + "s", lm_player_name.encode()))
-
-        # Change King Boo's Health
-        king_boo_health = int(self.output_data["Options"]["king_boo_health"])
-        self.dol.data.seek(0x399228)
-        self.dol.data.write(struct.pack(">H", king_boo_health))
-
-        # Replace section two with our own custom section, which is about 1000 hex bytes long.
-        new_dol_size = 0x1000
-        new_dol_sect = DOLSection(0x39FA20, 0x804DD940, new_dol_size)
-        self.dol.sections[2] = new_dol_sect
-
-        # Append the extra bytes we expect, to ensure we can write to them in memory.
-        self.dol.data.seek(len(self.dol.data.getvalue()))
-        blank_data = b"\x00" * new_dol_size
-        self.dol.data.write(blank_data)
-
-        # Read in all the other custom DOL changes and update their values to the new value as expected.
-        from importlib.resources import files
-        with files(data).joinpath("dol_diff.csv").open() as file:
-            hex_reader = csv.DictReader(file)
-            for line in hex_reader:
-                new_dol_offset, hex_val = int(line["addr"], 16), bytes.fromhex(line["val"])
-                if self.debug:
-                    print(f"Updating DOL Offset {new_dol_offset} with hex value: {str(hex_val)}")
-                self.dol.data.seek(new_dol_offset)
-                self.dol.data.write(hex_val)
-
-        # Save all changes to the DOL itself.
-        self.dol.save_changes()
-        self.gcm.changed_files["sys/main.dol"] = self.dol.data
 
     # If Export to disc is true, Exports the entire file/directory contents of the ISO to specified folder
     # Otherwise, creates a direct ISO file.
