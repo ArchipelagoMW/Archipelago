@@ -23,7 +23,7 @@ from .options import (
     KerriganPresence, KerriganPrimalStatus, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence,
     get_enabled_campaigns, SpearOfAdunPassiveAbilityPresence, Starcraft2Options,
     GrantStoryTech, GenericUpgradeResearch, RequiredTactics,
-    upgrade_included_names, EnableVoidTrade, FillerRatio, MissionOrderScouting, option_groups,
+    upgrade_included_names, EnableVoidTrade, FillerItemsDistribution, MissionOrderScouting, option_groups,
     NovaGhostOfAChanceVariant, MissionOrder, VanillaItemsOnly, ExcludeOverpoweredItems,
 )
 from .rules import get_basic_units, SC2Logic
@@ -101,7 +101,7 @@ class SC2World(World):
         super(SC2World, self).__init__(multiworld, player)
         self.location_cache = []
         self.locked_locations = []
-        self.filler_ratio = FillerRatio.default
+        self.filler_ratio = FillerItemsDistribution.default
         self.logic = None
 
     def create_item(self, name: str) -> StarcraftItem:
@@ -130,7 +130,7 @@ class SC2World(World):
         # * If the item pool is less than the location count, add some filler items
 
         setup_events(self.player, self.locked_locations, self.location_cache)
-        set_up_filler_ratio(self)
+        set_up_filler_items_distribution(self)
 
         item_list: List[FilterItem] = create_and_flag_explicit_item_locks_and_excludes(self)
         flag_excludes_by_faction_presence(self, item_list)
@@ -879,12 +879,12 @@ def pad_item_pool_with_filler(world: SC2World, num_items: int, pool: List[Starcr
         pool.append(item)
 
 
-def set_up_filler_ratio(world: SC2World) -> None:
-    world.filler_ratio = world.options.filler_ratio.value.copy()
+def set_up_filler_items_distribution(world: SC2World) -> None:
+    world.filler_items_distribution = world.options.filler_items_distribution.value.copy()
 
     prune_fillers(world)
-    if sum(world.filler_ratio.values()) == 0:
-        world.filler_ratio = FillerRatio.default.copy()
+    if sum(world.filler_items_distribution.values()) == 0:
+        world.filler_items_distribution = FillerItemsDistribution.default.copy()
     prune_fillers(world)
 
 
@@ -900,17 +900,17 @@ def prune_fillers(world):
     )
     generic_upgrade_research = world.options.generic_upgrade_research
     if not include_protoss:
-        world.filler_ratio.pop(item_names.SHIELD_REGENERATION, 0)
+        world.filler_items_distribution.pop(item_names.SHIELD_REGENERATION, 0)
     if not include_kerrigan:
-        world.filler_ratio.pop(item_names.KERRIGAN_LEVELS_1, 0)
+        world.filler_items_distribution.pop(item_names.KERRIGAN_LEVELS_1, 0)
     if (generic_upgrade_research in
             [
                 GenericUpgradeResearch.option_always_auto,
                 GenericUpgradeResearch.option_auto_in_build
             ]
     ):
-        world.filler_ratio.pop(item_names.UPGRADE_RESEARCH_SPEED, 0)
-        world.filler_ratio.pop(item_names.UPGRADE_RESEARCH_COST, 0)
+        world.filler_items_distribution.pop(item_names.UPGRADE_RESEARCH_SPEED, 0)
+        world.filler_items_distribution.pop(item_names.UPGRADE_RESEARCH_COST, 0)
 
 
 def get_random_first_mission(world: SC2World, mission_order: SC2MissionOrder) -> SC2Mission:
