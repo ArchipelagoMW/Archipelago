@@ -287,7 +287,8 @@ def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict
                 event_no = 93
             case "Right Telephone":
                 event_no = 94
-        hint_data = all_hints[hint_name]
+        if hint_distribution_choice != 1 or hint_distribution_choice != 5
+            hint_data = all_hints[hint_name]
 
         if event_no == 4:
             lines = get_data(MAIN_PKG_NAME, "data/custom_events/event04.txt").decode('utf-8')
