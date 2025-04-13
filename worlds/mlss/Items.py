@@ -78,21 +78,21 @@ itemList: typing.List[ItemData] = [
     ItemData(77771060, "Beanstar Piece 3", ItemClassification.progression, 0x67),
     ItemData(77771061, "Beanstar Piece 4", ItemClassification.progression, 0x70),
     ItemData(77771062, "Spangle", ItemClassification.progression, 0x72),
-    ItemData(77771063, "Beanlet 1", ItemClassification.filler, 0x73),
-    ItemData(77771064, "Beanlet 2", ItemClassification.filler, 0x74),
-    ItemData(77771065, "Beanlet 3", ItemClassification.filler, 0x75),
-    ItemData(77771066, "Beanlet 4", ItemClassification.filler, 0x76),
-    ItemData(77771067, "Beanlet 5", ItemClassification.filler, 0x77),
-    ItemData(77771068, "Beanstone 1", ItemClassification.filler, 0x80),
-    ItemData(77771069, "Beanstone 2", ItemClassification.filler, 0x81),
-    ItemData(77771070, "Beanstone 3", ItemClassification.filler, 0x82),
-    ItemData(77771071, "Beanstone 4", ItemClassification.filler, 0x83),
-    ItemData(77771072, "Beanstone 5", ItemClassification.filler, 0x84),
-    ItemData(77771073, "Beanstone 6", ItemClassification.filler, 0x85),
-    ItemData(77771074, "Beanstone 7", ItemClassification.filler, 0x86),
-    ItemData(77771075, "Beanstone 8", ItemClassification.filler, 0x87),
-    ItemData(77771076, "Beanstone 9", ItemClassification.filler, 0x90),
-    ItemData(77771077, "Beanstone 10", ItemClassification.filler, 0x91),
+    ItemData(77771063, "Beanlet 1", ItemClassification.useful, 0x73),
+    ItemData(77771064, "Beanlet 2", ItemClassification.useful, 0x74),
+    ItemData(77771065, "Beanlet 3", ItemClassification.useful, 0x75),
+    ItemData(77771066, "Beanlet 4", ItemClassification.useful, 0x76),
+    ItemData(77771067, "Beanlet 5", ItemClassification.useful, 0x77),
+    ItemData(77771068, "Beanstone 1", ItemClassification.useful, 0x80),
+    ItemData(77771069, "Beanstone 2", ItemClassification.useful, 0x81),
+    ItemData(77771070, "Beanstone 3", ItemClassification.useful, 0x82),
+    ItemData(77771071, "Beanstone 4", ItemClassification.useful, 0x83),
+    ItemData(77771072, "Beanstone 5", ItemClassification.useful, 0x84),
+    ItemData(77771073, "Beanstone 6", ItemClassification.useful, 0x85),
+    ItemData(77771074, "Beanstone 7", ItemClassification.useful, 0x86),
+    ItemData(77771075, "Beanstone 8", ItemClassification.useful, 0x87),
+    ItemData(77771076, "Beanstone 9", ItemClassification.useful, 0x90),
+    ItemData(77771077, "Beanstone 10", ItemClassification.useful, 0x91),
     ItemData(77771078, "Secret Scroll 1", ItemClassification.useful, 0x92),
     ItemData(77771079, "Secret Scroll 2", ItemClassification.useful, 0x93),
     ItemData(77771080, "Castle Badge", ItemClassification.useful, 0x9F),
@@ -160,6 +160,7 @@ itemList: typing.List[ItemData] = [
     ItemData(77771142, "Game Boy Horror SP", ItemClassification.useful, 0xFE),
     ItemData(77771143, "Woo Bean", ItemClassification.skip_balancing, 0x1C),
     ItemData(77771144, "Hee Bean", ItemClassification.skip_balancing, 0x1F),
+    ItemData(77771145, "Beanstar Emblem", ItemClassification.progression, 0x3E),
 ]
 
 item_frequencies: typing.Dict[str, int] = {
@@ -184,6 +185,13 @@ item_frequencies: typing.Dict[str, int] = {
     "Hoo Bean": 100,
     "Chuckle Bean": 200,
     "Hammers": 3,
+}
+
+mlss_item_name_groups = {
+    "Beanstar Piece": { "Beanstar Piece 1", "Beanstar Piece 2", "Beanstar Piece 3", "Beanstar Piece 4"},
+    "Beanfruit": { "Bean Fruit 1", "Bean Fruit 2", "Bean Fruit 3", "Bean Fruit 4", "Bean Fruit 5", "Bean Fruit 6", "Bean Fruit 7"},
+    "Neon Egg": { "Blue Neon Egg", "Red Neon Egg", "Green Neon Egg", "Yellow Neon Egg", "Purple Neon Egg", "Orange Neon Egg", "Azure Neon Egg"},
+    "Chuckola Fruit": { "Red Chuckola Fruit", "Purple Chuckola Fruit", "White Chuckola Fruit"}
 }
 
 item_table: typing.Dict[str, ItemData] = {item.itemName: item for item in itemList}

@@ -8,7 +8,6 @@ from ..options import bosses
 def validate_wily_5(base: MM2TestBase) -> None:
     world = base.multiworld.worlds[base.player]
     weapon_damage = world.weapon_damage
-    boss_health = {boss: 0x1C for boss in [*list(range(8)), 12]}
     weapon_costs = {
         0: 0,
         1: 10,
@@ -20,25 +19,37 @@ def validate_wily_5(base: MM2TestBase) -> None:
         7: 0.25,
         8: 7,
     }
-    weapon_energy = {key: float(0x1C * 2) if key == 12 else float(0x1C) for key in weapon_costs}
-    weapon_boss = {boss: {weapon: weapon_damage[weapon][boss] for weapon in weapon_damage}
-                   for boss in [*list(range(8)), 12]}
-    flexibility = [(sum(1 if weapon_boss[boss][weapon] > 0 else 0 for weapon in range(9)) *
-                    sum(weapon_boss[boss].values()), boss) for boss in weapon_boss if boss != 12]
-    for _, boss in [*sorted(flexibility), (0, 12)]:
+    boss_health = {boss: 0x1C if boss != 12 else 0x1C * 2 for boss in [*range(8), 12]}
+    weapon_energy = {key: float(0x1C) for key in weapon_costs}
+    weapon_boss = {boss: {weapon: world.weapon_damage[weapon][boss] for weapon in world.weapon_damage}
+                   for boss in [*range(8), 12]}
+    flexibility = {
+        boss: (
+                sum(damage_value > 0 for damage_value in
+                    weapon_damages.values())  # Amount of weapons that hit this boss
+                * sum(weapon_damages.values())  # Overall damage that those weapons do
+        )
+        for boss, weapon_damages in weapon_boss.items() if boss != 12
+    }
+    flexibility = sorted(flexibility, key=flexibility.get)  # Fast way to sort dict by value
+    used_weapons = {i: set() for i in [*range(8), 12]}
+    for boss in [*flexibility, 12]:
         boss_damage = weapon_boss[boss]
         weapon_weight = {weapon: (weapon_energy[weapon] / damage) if damage else 0 for weapon, damage in
-                         boss_damage.items() if weapon_energy[weapon]}
+                         boss_damage.items() if weapon_energy[weapon] > 0}
+        if boss_damage[8]:
+            boss_damage[8] = 1.75 * boss_damage[8]
         if any(boss_damage[i] > 0 for i in range(8)) and 8 in weapon_weight:
             # We get exactly one use of Time Stopper during the rush
             # So we want to make sure that use is absolutely needed
             weapon_weight[8] = min(weapon_weight[8], 0.001)
         while boss_health[boss] > 0:
-            if boss_damage[0]:
+            if boss_damage[0] > 0:
                 boss_health[boss] = 0  # if we can buster, we should buster
                 continue
             highest, wp = max(zip(weapon_weight.values(), weapon_weight.keys()))
             uses = weapon_energy[wp] // weapon_costs[wp]
+            used_weapons[boss].add(wp)
             if int(uses * boss_damage[wp]) > boss_health[boss]:
                 used = ceil(boss_health[boss] / boss_damage[wp])
                 weapon_energy[wp] -= weapon_costs[wp] * used
