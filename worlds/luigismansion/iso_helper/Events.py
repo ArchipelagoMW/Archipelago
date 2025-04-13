@@ -287,7 +287,7 @@ def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict
                 event_no = 93
             case "Right Telephone":
                 event_no = 94
-        if hint_distribution_choice != 1 or hint_distribution_choice != 5:
+        if hint_distribution_choice != 1 and hint_distribution_choice != 5:
             hint_data = all_hints[hint_name]
 
         if event_no == 4:
@@ -338,7 +338,8 @@ def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict
 
         if event_no == 4:
             gcm = __update_custom_event(gcm, "04", True, lines, csv_lines)
-        gcm = __update_custom_event(gcm, str(event_no), True, lines, csv_lines)
+        else:
+            gcm = __update_custom_event(gcm, str(event_no), True, lines, csv_lines)
     return gcm
 
 # Using the provided txt or csv lines for a given event file, updates the actual szp file in memory with this data.
