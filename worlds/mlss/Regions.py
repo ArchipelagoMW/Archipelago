@@ -33,6 +33,7 @@ from .Locations import (
     postJokes,
     baseUltraRocks,
     coins,
+    cacklettas_soul,
 )
 from . import StateLogic
 
@@ -40,44 +41,45 @@ if typing.TYPE_CHECKING:
     from . import MLSSWorld
 
 
-def create_regions(world: "MLSSWorld", excluded: typing.List[str]):
+def create_regions(world: "MLSSWorld"):
     menu_region = Region("Menu", world.player, world.multiworld)
     world.multiworld.regions.append(menu_region)
 
-    create_region(world, "Main Area", mainArea, excluded)
-    create_region(world, "Chucklehuck Woods", chucklehuck, excluded)
-    create_region(world, "Beanbean Castle Town", castleTown, excluded)
-    create_region(world, "Shop Starting Flag", startingFlag, excluded)
-    create_region(world, "Shop Chuckolator Flag", chuckolatorFlag, excluded)
-    create_region(world, "Shop Mom Piranha Flag", piranhaFlag, excluded)
-    create_region(world, "Shop Enter Fungitown Flag", kidnappedFlag, excluded)
-    create_region(world, "Shop Beanstar Complete Flag", beanstarFlag, excluded)
-    create_region(world, "Shop Birdo Flag", birdoFlag, excluded)
-    create_region(world, "Surfable", surfable, excluded)
-    create_region(world, "Hooniversity", hooniversity, excluded)
-    create_region(world, "GwarharEntrance", gwarharEntrance, excluded)
-    create_region(world, "GwarharMain", gwarharMain, excluded)
-    create_region(world, "TeeheeValley", teeheeValley, excluded)
-    create_region(world, "Winkle", winkle, excluded)
-    create_region(world, "Sewers", sewers, excluded)
-    create_region(world, "Airport", airport, excluded)
-    create_region(world, "JokesEntrance", jokesEntrance, excluded)
-    create_region(world, "JokesMain", jokesMain, excluded)
-    create_region(world, "PostJokes", postJokes, excluded)
-    create_region(world, "Theater", theater, excluded)
-    create_region(world, "Fungitown", fungitown, excluded)
-    create_region(world, "Fungitown Shop Beanstar Complete Flag", fungitownBeanstar, excluded)
-    create_region(world, "Fungitown Shop Birdo Flag", fungitownBirdo, excluded)
-    create_region(world, "BooStatue", booStatue, excluded)
-    create_region(world, "Oasis", oasis, excluded)
-    create_region(world, "BaseUltraRocks", baseUltraRocks, excluded)
+    create_region(world, "Main Area", mainArea)
+    create_region(world, "Chucklehuck Woods", chucklehuck)
+    create_region(world, "Beanbean Castle Town", castleTown)
+    create_region(world, "Shop Starting Flag", startingFlag)
+    create_region(world, "Shop Chuckolator Flag", chuckolatorFlag)
+    create_region(world, "Shop Mom Piranha Flag", piranhaFlag)
+    create_region(world, "Shop Enter Fungitown Flag", kidnappedFlag)
+    create_region(world, "Shop Beanstar Complete Flag", beanstarFlag)
+    create_region(world, "Shop Birdo Flag", birdoFlag)
+    create_region(world, "Surfable", surfable)
+    create_region(world, "Hooniversity", hooniversity)
+    create_region(world, "GwarharEntrance", gwarharEntrance)
+    create_region(world, "GwarharMain", gwarharMain)
+    create_region(world, "TeeheeValley", teeheeValley)
+    create_region(world, "Winkle", winkle)
+    create_region(world, "Sewers", sewers)
+    create_region(world, "Airport", airport)
+    create_region(world, "JokesEntrance", jokesEntrance)
+    create_region(world, "JokesMain", jokesMain)
+    create_region(world, "PostJokes", postJokes)
+    create_region(world, "Theater", theater)
+    create_region(world, "Fungitown", fungitown)
+    create_region(world, "Fungitown Shop Beanstar Complete Flag", fungitownBeanstar)
+    create_region(world, "Fungitown Shop Birdo Flag", fungitownBirdo)
+    create_region(world, "BooStatue", booStatue)
+    create_region(world, "Oasis", oasis)
+    create_region(world, "BaseUltraRocks", baseUltraRocks)
+    create_region(world, "Cackletta's Soul", cacklettas_soul)
 
     if world.options.coins:
-        create_region(world, "Coins", coins, excluded)
+        create_region(world, "Coins", coins)
 
     if not world.options.castle_skip:
-        create_region(world, "Bowser's Castle", bowsers, excluded)
-        create_region(world, "Bowser's Castle Mini", bowsersMini, excluded)
+        create_region(world, "Bowser's Castle", bowsers)
+        create_region(world, "Bowser's Castle Mini", bowsersMini)
 
 
 def connect_regions(world: "MLSSWorld"):
@@ -89,6 +91,16 @@ def connect_regions(world: "MLSSWorld"):
     connect(world, names, "Main Area", "BaseUltraRocks", lambda state: StateLogic.ultra(state, world.player))
     connect(world, names, "Main Area", "Chucklehuck Woods", lambda state: StateLogic.brooch(state, world.player))
     connect(world, names, "Main Area", "BooStatue", lambda state: StateLogic.canCrash(state, world.player))
+    if world.options.goal == "emblem_hunt":
+        if world.options.castle_skip:
+            connect(world, names, "Main Area", "Cackletta's Soul",
+                    lambda state: state.has("Beanstar Emblem", world.player, world.options.emblems_required.value))
+        else:
+            connect(world, names, "Main Area", "Bowser's Castle", lambda state: state.has("Beanstar Emblem", world.player, world.options.emblems_required.value))
+            connect(world, names, "Bowser's Castle", "Bowser's Castle Mini", lambda state:
+                                  StateLogic.canMini(state, world.player)
+                                  and StateLogic.thunder(state,world.player))
+            connect(world, names, "Bowser's Castle Mini", "Cackletta's Soul", lambda state: StateLogic.soul(state, world.player))
     connect(
         world,
         names,
@@ -211,8 +223,8 @@ def connect_regions(world: "MLSSWorld"):
     connect(world, names, "Surfable", "GwarharEntrance")
     connect(world, names, "Surfable", "Oasis")
     connect(world, names, "Surfable", "JokesEntrance", lambda state: StateLogic.fire(state, world.player))
-    connect(world, names, "JokesMain", "PostJokes", lambda state: StateLogic.postJokes(state, world.player))
-    if not world.options.castle_skip:
+    connect(world, names, "JokesMain", "PostJokes", lambda state: StateLogic.postJokes(state, world.player, world.options.goal.value))
+    if not world.options.castle_skip and world.options.goal != "emblem_hunt":
         connect(world, names, "PostJokes", "Bowser's Castle")
         connect(
             world,
@@ -221,6 +233,9 @@ def connect_regions(world: "MLSSWorld"):
             "Bowser's Castle Mini",
             lambda state: StateLogic.canMini(state, world.player) and StateLogic.thunder(state, world.player),
         )
+        connect(world, names, "Bowser's Castle Mini", "Cackletta's Soul")
+    elif world.options.goal != "emblem_hunt":
+        connect(world, names, "PostJokes", "Cackletta's Soul")
     connect(world, names, "Chucklehuck Woods", "Winkle", lambda state: StateLogic.canDash(state, world.player))
     connect(
         world,
@@ -242,14 +257,14 @@ def connect_regions(world: "MLSSWorld"):
             names,
             "Shop Starting Flag",
             "Shop Birdo Flag",
-            lambda state: StateLogic.postJokes(state, world.player),
+            lambda state: StateLogic.postJokes(state, world.player, world.options.goal.value),
         )
         connect(
             world,
             names,
             "Fungitown",
             "Fungitown Shop Birdo Flag",
-            lambda state: StateLogic.postJokes(state, world.player),
+            lambda state: StateLogic.postJokes(state, world.player, world.options.goal.value),
         )
     else:
         connect(
@@ -271,22 +286,22 @@ def connect_regions(world: "MLSSWorld"):
             names,
             "Shop Starting Flag",
             "Shop Birdo Flag",
-            lambda state: StateLogic.canCrash(state, world.player) and StateLogic.postJokes(state, world.player),
+            lambda state: StateLogic.canCrash(state, world.player) and StateLogic.postJokes(state, world.player, world.options.goal.value),
         )
         connect(
             world,
             names,
             "Fungitown",
             "Fungitown Shop Birdo Flag",
-            lambda state: StateLogic.canCrash(state, world.player) and StateLogic.postJokes(state, world.player),
+            lambda state: StateLogic.canCrash(state, world.player) and StateLogic.postJokes(state, world.player, world.options.goal.value),
         )
 
 
-def create_region(world: "MLSSWorld", name, locations, excluded):
+def create_region(world: "MLSSWorld", name, locations):
     ret = Region(name, world.player, world.multiworld)
     for location in locations:
         loc = MLSSLocation(world.player, location.name, location.id, ret)
-        if location.name in excluded:
+        if location.name in world.disabled_locations:
             continue
         ret.locations.append(loc)
     world.multiworld.regions.append(ret)

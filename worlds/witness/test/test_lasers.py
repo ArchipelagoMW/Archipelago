@@ -96,6 +96,39 @@ class TestSymbolsRequiredToWinElevatorVanilla(WitnessTestBase):
         self.assert_can_beat_with_minimally(exact_requirement)
 
 
+class TestSymbolsRequiredToWinElevatorVariety(WitnessTestBase):
+    options = {
+        "shuffle_lasers": True,
+        "mountain_lasers": 1,
+        "victory_condition": "elevator",
+        "early_symbol_item": False,
+        "puzzle_randomization": "umbra_variety",
+    }
+
+    def test_symbols_to_win(self) -> None:
+        """
+        In symbol shuffle, the only way to reach the Elevator is through Mountain Entry by descending the Mountain.
+        This requires a very specific set of symbol items per puzzle randomization mode.
+        In this case, we check Variety Puzzles.
+        """
+
+        exact_requirement = {
+            "Monastery Laser": 1,
+            "Progressive Dots": 2,
+            "Progressive Stars": 2,
+            "Progressive Symmetry": 1,
+            "Black/White Squares": 1,
+            "Colored Squares": 1,
+            "Shapers": 1,
+            "Rotated Shapers": 1,
+            "Eraser": 1,
+            "Triangles": 1,
+            "Arrows": 1,
+        }
+
+        self.assert_can_beat_with_minimally(exact_requirement)
+
+
 class TestPanelsRequiredToWinElevator(WitnessTestBase):
     options = {
         "shuffle_lasers": True,

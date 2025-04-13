@@ -5,46 +5,48 @@ from . import poke_data
 loc_id_start = 172000000
 
 
-def trainersanity(multiworld, player):
-    return multiworld.trainersanity[player]
-
-
-def dexsanity(multiworld, player):
-    include = multiworld.worlds[player].dexsanity_table.pop(0)
-    multiworld.worlds[player].dexsanity_table.append(include)
+def trainersanity(world, player):
+    include = world.trainersanity_table.pop(0)
+    world.trainersanity_table.append(include)
     return include
 
 
-def hidden_items(multiworld, player):
-    return multiworld.randomize_hidden_items[player]
+def dexsanity(world, player):
+    include = world.dexsanity_table.pop(0)
+    world.dexsanity_table.append(include)
+    return include
 
 
-def hidden_moon_stones(multiworld, player):
-    return multiworld.randomize_hidden_items[player] or multiworld.stonesanity[player]
+def hidden_items(world, player):
+    return world.options.randomize_hidden_items
 
 
-def tea(multiworld, player):
-    return multiworld.tea[player]
+def hidden_moon_stones(world, player):
+    return world.options.randomize_hidden_items or world.options.stonesanity
 
 
-def extra_key_items(multiworld, player):
-    return multiworld.extra_key_items[player]
+def tea(world, player):
+    return world.options.tea
 
 
-def always_on(multiworld, player):
+def extra_key_items(world, player):
+    return world.options.extra_key_items
+
+
+def always_on(world, player):
     return True
 
 
-def prizesanity(multiworld, player):
-    return multiworld.prizesanity[player]
+def prizesanity(world, player):
+    return world.options.prizesanity
 
 
-def split_card_key(multiworld, player):
-    return multiworld.split_card_key[player].value > 0
+def split_card_key(world, player):
+    return world.options.split_card_key.value > 0
 
 
-def not_stonesanity(multiworld, player):
-    return not multiworld.stonesanity[player]
+def not_stonesanity(world, player):
+    return not world.options.stonesanity
 
 
 class LocationData:
@@ -221,7 +223,7 @@ location_data = [
                  Missable(92)),
     LocationData("Victory Road 2F-C", "East Item", "Full Heal", rom_addresses["Missable_Victory_Road_2F_Item_2"],
                  Missable(93)),
-    LocationData("Victory Road 2F-W", "West Item", "TM05 Mega Kick", rom_addresses["Missable_Victory_Road_2F_Item_3"],
+    LocationData("Victory Road 2F-C", "West Item", "TM05 Mega Kick", rom_addresses["Missable_Victory_Road_2F_Item_3"],
                  Missable(94)),
     LocationData("Victory Road 2F-NW", "North Item Near Moltres", "Guard Spec", rom_addresses["Missable_Victory_Road_2F_Item_4"],
                  Missable(95)),
@@ -395,11 +397,11 @@ location_data = [
     LocationData("Silph Co 5F", "Hidden Item Pot Plant", "Elixir", rom_addresses['Hidden_Item_Silph_Co_5F'], Hidden(18), inclusion=hidden_items),
     LocationData("Silph Co 9F-SW", "Hidden Item Nurse Bed", "Max Potion", rom_addresses['Hidden_Item_Silph_Co_9F'], Hidden(19), inclusion=hidden_items),
     LocationData("Saffron Copycat's House 2F", "Hidden Item Desk", "Nugget", rom_addresses['Hidden_Item_Copycats_House'], Hidden(20), inclusion=hidden_items),
-    LocationData("Cerulean Cave 1F-NW", "Hidden Item Center Rocks", "Rare Candy", rom_addresses['Hidden_Item_Cerulean_Cave_1F'], Hidden(21), inclusion=hidden_items),
+    LocationData("Cerulean Cave 1F-SW", "Hidden Item Center Rocks", "Rare Candy", rom_addresses['Hidden_Item_Cerulean_Cave_1F'], Hidden(21), inclusion=hidden_items),
     LocationData("Cerulean Cave B1F-E", "Hidden Item Northeast Rocks", "Ultra Ball", rom_addresses['Hidden_Item_Cerulean_Cave_B1F'], Hidden(22), inclusion=hidden_items),
     LocationData("Power Plant", "Hidden Item Central Dead End", "Max Elixir", rom_addresses['Hidden_Item_Power_Plant_1'], Hidden(23), inclusion=hidden_items),
     LocationData("Power Plant", "Hidden Item Before Zapdos", "PP Up", rom_addresses['Hidden_Item_Power_Plant_2'], Hidden(24), inclusion=hidden_items),
-    LocationData("Seafoam Islands B2F-NW", "Hidden Item Rock", "Nugget", rom_addresses['Hidden_Item_Seafoam_Islands_B2F'], Hidden(25), inclusion=hidden_items),
+    LocationData("Seafoam Islands B2F-SW", "Hidden Item Rock", "Nugget", rom_addresses['Hidden_Item_Seafoam_Islands_B2F'], Hidden(25), inclusion=hidden_items),
     LocationData("Seafoam Islands B4F-W", "Hidden Item Corner Island", "Ultra Ball", rom_addresses['Hidden_Item_Seafoam_Islands_B4F'], Hidden(26), inclusion=hidden_items),
     LocationData("Pokemon Mansion 1F", "Hidden Item Block Near Entrance Carpet", "Moon Stone", rom_addresses['Hidden_Item_Pokemon_Mansion_1F'], Hidden(27), inclusion=hidden_moon_stones),
     LocationData("Pokemon Mansion 3F-SW", "Hidden Item Behind Burglar", "Max Revive", rom_addresses['Hidden_Item_Pokemon_Mansion_3F'], Hidden(28), inclusion=hidden_items),
@@ -747,8 +749,8 @@ location_data = [
     LocationData("Cinnabar Gym", "Super Nerd 2", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_2_ITEM"], EventFlag(372), inclusion=trainersanity),
     LocationData("Cinnabar Gym", "Burglar 2", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_3_ITEM"], EventFlag(371), inclusion=trainersanity),
     LocationData("Cinnabar Gym", "Super Nerd 3", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_4_ITEM"], EventFlag(370), inclusion=trainersanity),
-    LocationData("Cinnabar Gym", "Super Nerd 4", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_5_ITEM"], EventFlag(369), inclusion=trainersanity),
-    LocationData("Cinnabar Gym", "Super Nerd 5", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_6_ITEM"], EventFlag(368), inclusion=trainersanity),
+    LocationData("Cinnabar Gym", "Burglar 3", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_5_ITEM"], EventFlag(369), inclusion=trainersanity),
+    LocationData("Cinnabar Gym", "Super Nerd 4", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_6_ITEM"], EventFlag(368), inclusion=trainersanity),
 
     LocationData("Celadon Prize Corner", "Item Prize 1", "TM23 Dragon Rage", rom_addresses["Prize_Item_A"], EventFlag(0x69a), inclusion=prizesanity),
     LocationData("Celadon Prize Corner", "Item Prize 2", "TM15 Hyper Beam", rom_addresses["Prize_Item_B"], EventFlag(0x69B), inclusion=prizesanity),
@@ -786,6 +788,8 @@ location_data = [
 
     LocationData("Celadon Game Corner", "", "Game Corner", event=True),
     LocationData("Cinnabar Island", "", "Cinnabar Island", event=True),
+    LocationData("Cinnabar Lab", "", "Cinnabar Lab", event=True),
+    LocationData("Mt Moon B2F", "Mt Moon Fossils", "Mt Moon Fossils", event=True),
     LocationData("Celadon Department Store 4F", "Buy Poke Doll", "Buy Poke Doll", event=True),
     LocationData("Celadon Department Store 4F", "Buy Fire Stone", "Fire Stone", event=True, inclusion=not_stonesanity),
     LocationData("Celadon Department Store 4F", "Buy Water Stone", "Water Stone", event=True, inclusion=not_stonesanity),
