@@ -334,6 +334,7 @@ def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict
                 csv_lines = csv_lines.replace("{WorldOrLoc}", hint_data["Location"])
                 case_type = "SpecificHint"
 
+        csv_lines = csv_lines.replace("{BreakHere}", "\n")
         lines = lines.replace("{HintType}", case_type)
 
         if event_no == 4:
