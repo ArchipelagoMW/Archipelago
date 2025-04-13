@@ -1,6 +1,5 @@
 from typing import Dict, List
 
-from .meme_bundles import community_center_meme_bundles
 from .remixed_anywhere_bundles import community_center_remixed_anywhere
 from .remixed_bundles import pantry_remixed, crafts_room_remixed, fish_tank_remixed, boiler_room_remixed, bulletin_board_remixed, vault_remixed, \
     abandoned_joja_mart_remixed, giant_stump_remixed
@@ -27,4 +26,3 @@ remixed_bundles = BundleSet([pantry_remixed, crafts_room_remixed, fish_tank_remi
 remixed_anywhere_bundles = BundleSet([community_center_remixed_anywhere, abandoned_joja_mart_remixed, giant_stump_remixed])
 
 # shuffled_bundles = BundleSet()
-meme_bundles = BundleSet([community_center_meme_bundles, abandoned_joja_mart_remixed, giant_stump_remixed])
