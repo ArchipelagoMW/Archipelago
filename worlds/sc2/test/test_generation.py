@@ -811,7 +811,7 @@ class TestItemFiltering(Sc2SetupTestBase):
     
     def test_setting_filter_weight_to_zero_excludes_that_item(self) -> None:
         world_options = {
-            'filler_ratio': {
+            'filler_items_distribution': {
                 'minerals': 0,
                 'gas': 1,
                 'supply': 0,
@@ -846,7 +846,7 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_shields_filler_doesnt_appear_if_no_protoss_missions_appear(self) -> None:
         world_options = {
-            'filler_ratio': {
+            'filler_items_distribution': {
                 'minerals': 1,
                 'gas': 0,
                 'supply': 0,
