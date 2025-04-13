@@ -95,13 +95,13 @@ class SC2World(World):
     required_client_version = 0, 4, 5
     custom_mission_order: SC2MissionOrder
     logic: Optional['SC2Logic']
-    filler_ratio: Dict[str, int]
+    filler_items_distribution: Dict[str, int]
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super(SC2World, self).__init__(multiworld, player)
         self.location_cache = []
         self.locked_locations = []
-        self.filler_ratio = FillerItemsDistribution.default
+        self.filler_items_distribution = FillerItemsDistribution.default
         self.logic = None
 
     def create_item(self, name: str) -> StarcraftItem:
@@ -186,8 +186,8 @@ class SC2World(World):
             self.multiworld.completion_condition[self.player] = self.custom_mission_order.get_completion_condition(self.player)
 
     def get_filler_item_name(self) -> str:
-        # Assume `self.filler_ratio` is validated and has at least one non-zero entry
-        return self.random.choices(tuple(self.filler_ratio), weights=self.filler_ratio.values())[0]  # type: ignore
+        # Assume `self.filler_items_distribution` is validated and has at least one non-zero entry
+        return self.random.choices(tuple(self.filler_items_distribution), weights=self.filler_items_distribution.values())[0]  # type: ignore
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         slot_data: Dict[str, Any] = {}
