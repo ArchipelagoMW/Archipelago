@@ -1,14 +1,17 @@
 import struct
+from pkgutil import get_data
+from io import BytesIO
 
 from gclib.dol import DOL, DOLSection
 from gclib.gcm import GCM
 
 MAIN_PKG_NAME = "worlds.luigismansion.LMGenerator"
+CUSTOM_CODE_OFFSET_START = 0x39FA20
 
 # Updates the main DOL file, which is the main file used for GC and Wii games. This section includes some custom code
 # inside the DOL file itself.
 def update_dol_offsets(gcm: GCM, dol: DOL, start_inv: list[str], walk_speed: int, slot_name: str,
-    king_boo_health: int, fear_anim_disabled: bool, pickup_anim_enabled: bool, boo_rand_on: bool):
+    king_boo_health: int, fear_anim_disabled: bool, pickup_anim_enabled: bool, boo_rand_on: bool) -> (GCM, DOL):
     # Find the main 
     dol_data = gcm.read_file_data("sys/main.dol")
     dol.read(dol_data)
@@ -89,7 +92,7 @@ def update_dol_offsets(gcm: GCM, dol: DOL, start_inv: list[str], walk_speed: int
 
     # Replace section two with our own custom section, which is about 1000 hex bytes long.
     new_dol_size = 0x1000
-    new_dol_sect = DOLSection(0x39FA20, 0x804DD940, new_dol_size)
+    new_dol_sect = DOLSection(CUSTOM_CODE_OFFSET_START, 0x804DD940, new_dol_size)
     dol.sections[2] = new_dol_sect
 
     # Append the extra bytes we expect, to ensure we can write to them in memory.
@@ -98,18 +101,18 @@ def update_dol_offsets(gcm: GCM, dol: DOL, start_inv: list[str], walk_speed: int
     dol.data.write(blank_data)
 
     # Read in all the other custom DOL changes and update their values to the new value as expected.
-    # TODO update reading the DOL offsets here and then add 39AF20 to them to write them back
-    #   Alternatively read the entire bin file and write teh contents to 39AF20.
-    #   From there, dol_diff can still be used for minor hooks we need to update.
-    custom_DOL_offsets = gcm.read_file_data()
-    from importlib.resources import files
-    with files(data).joinpath("dol_diff.csv").open() as file:
-        hex_reader = csv.DictReader(file)
-        for line in hex_reader:
-            new_dol_offset, hex_val = int(line["addr"], 16), bytes.fromhex(line["val"])
-            dol.data.seek(new_dol_offset)
-            dol.data.write(hex_val)
+    custom_dol_code = BytesIO(get_data(MAIN_PKG_NAME, "data/lm_custom_code.bin"))
+    dol.data.seek(CUSTOM_CODE_OFFSET_START)
+    dol.data.write(custom_dol_code)
+
+    dol_csv_offsets = get_data(MAIN_PKG_NAME, "data/dol_diff.csv").decode("utf-8")
+    for csv_line in dol_csv_offsets:
+        dol_addr, dol_val = csv_line.split(",")
+        dol.data.seek(int(dol_addr, 16))
+        dol.data.write(bytes.fromhex(dol_val))
 
     # Save all changes to the DOL itself.
     dol.save_changes()
     gcm.changed_files["sys/main.dol"] = dol.data
+
+    return gcm, dol
