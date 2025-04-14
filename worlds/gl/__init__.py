@@ -2,14 +2,14 @@ import os
 import typing
 
 import settings
-from BaseClasses import ItemClassification, Tutorial, Item, Location, CollectionState
+from BaseClasses import ItemClassification, Tutorial, Item, CollectionState
 from Fill import fast_fill
 from typing import List
 
 from worlds.AutoWorld import WebWorld, World
 
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
-from .Arrays import item_dict
+from .Arrays import item_dict, local_levels, skipped_local_locations
 from .Items import GLItem, item_frequencies, item_list, item_table, obelisks, mirror_shards
 from .Locations import LocationData, all_locations, location_table
 from .Options import GLOptions
@@ -71,12 +71,14 @@ class GauntletLegendsWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
     death: List[Item]
+    items: List[Item]
 
     disabled_locations: typing.Set[str]
 
     def generate_early(self) -> None:
         self.disabled_locations = set()
         self.death = []
+        self.items = []
         self.options.max_difficulty_value.value = max(self.options.max_difficulty_value.value, self.options.local_players.value)
 
     def create_regions(self) -> None:
@@ -172,8 +174,8 @@ class GauntletLegendsWorld(World):
         for item in [item_ for item_ in item_list
                      if (ItemClassification.progression in item_.progression
                      or ItemClassification.useful in item_.progression)
-                     and item_ not in precollected
-                     and item_ not in skipped_items]:
+                     and item_.item_name not in precollected
+                     and item_.item_name not in skipped_items]:
             freq = item_frequencies.get(item.item_name, 1)
             required_items += [item.item_name for _ in range(freq)]
 
@@ -181,7 +183,6 @@ class GauntletLegendsWorld(World):
 
         # Then, get a random amount of fillers until we have as many items as we have locations
         filler_items = []
-        trap_count = 0
         for item in [item_ for item_ in item_list
                      if ItemClassification.progression not in item_.progression
                      and ItemClassification.useful not in item_.progression
@@ -198,21 +199,25 @@ class GauntletLegendsWorld(World):
 
             if item.item_name == "Anti-Death Halo" and "Death" not in skipped_items and self.options.traps_frequency != "normal":
                 freq *= 2
+            if ItemClassification.trap in item.progression:
+                if self.options.max_difficulty_toggle:
+                    freq *= (self.options.max_difficulty_value.value / 4)
+                    freq = freq.__floor__()
             if item.item_name == "Death":
-                trap_count += freq
                 for i in range(freq):
-                    self.death += [self.create_item(item.item_name)]
+                    self.death.append(self.create_item(item.item_name))
             else:
                 filler_items += [item.item_name for _ in range(freq)]
 
-        remaining = len(all_locations) - len(required_items) - len(self.disabled_locations) - trap_count - (2 if not self.options.infinite_keys else 0)
+        remaining = len(list(self.get_locations())) - len(required_items) - len(self.death) - (2 if not self.options.infinite_keys else 0)
         if self.options.obelisks == 0:
             remaining -= 7
         if self.options.mirror_shards == 0:
             remaining -= 4
         self.random.shuffle(filler_items)
         for item in filler_items[:remaining]:
-            self.multiworld.itempool.append(self.create_item(item))
+            self.items.append(self.create_item(item))
+        print(f"{self.player} has {len(self.items)} items and {len(self.death)} deaths and {len(self.disabled_locations)} disabled locations and {len(required_items)} required items. The total number of items is {len(self.items) + len(self.death) + len(required_items)} and the total number of locations is {len(list(self.get_locations()))}. The difference is {len(list(self.get_locations())) - (len(self.items) + len(self.death) + len(self.disabled_locations) + len(required_items))}.")
 
     def set_rules(self) -> None:
         set_rules(self)
@@ -221,9 +226,20 @@ class GauntletLegendsWorld(World):
         )
 
     def pre_fill(self) -> None:
-        locations = [location for location in self.multiworld.get_unfilled_locations(self.player)]
-        self.random.shuffle(locations)
-        fast_fill(self.multiworld, self.death, locations)
+        # A percentage of all items will be placed locally, all deaths will be placed locally
+        local_item_count = (len(self.items) * 0.5).__floor__() + len(self.death)
+        local_locations = []
+        for level in local_levels:
+            level = [location for location in level if location.name not in self.disabled_locations and location.name not in skipped_local_locations]
+            self.random.shuffle(level)
+            for i in range(min(len(level), local_item_count // len(local_levels))):
+                local_locations.append(self.get_location(level[i].name))
+        self.random.shuffle(self.items)
+        self.random.shuffle(local_locations)
+        self.death, local_locations = fast_fill(self.multiworld, self.death, local_locations)
+        self.items, local_locations = fast_fill(self.multiworld, self.items, local_locations)
+        for item in self.items:
+            self.multiworld.itempool.append(item)
 
     def create_item(self, name: str) -> GLItem:
         item = item_table[name]

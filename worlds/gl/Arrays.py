@@ -287,6 +287,47 @@ level_locations: Dict[int, List[LocationData]] = {
     0x113: infernal_fortress,
 }
 
+local_levels = [
+    castle_courtyard,
+    dungeon_of_torment,
+    tower_armory,
+    castle_treasury,
+    valley_of_fire,
+    dagger_peak,
+    cliffs_of_desolation,
+    lost_cave,
+    volcanic_cavern,
+    poisoned_fields,
+    haunted_cemetery,
+    venomous_spire,
+    toxic_air_ship,
+    gates_of_the_underworld,
+    arctic_docks,
+    frozen_camp,
+    crystal_mine,
+    erupting_fissure,
+    desecrated_temple,
+    battle_trenches,
+    battle_towers,
+    infernal_fortress,
+]
+
+skipped_local_locations = [
+    "Valley of Fire - Key 1",
+    "Valley of Fire - Key 5",
+    "Valley of Fire - Obelisk",
+    "Dagger Peak - Obelisk",
+    "Cliffs of Desolation - Obelisk",
+    "Castle Courtyard - Obelisk",
+    "Dungeon of Torment - Obelisk",
+    "Poisoned Fields - Obelisk",
+    "Haunted Cemetery - Obelisk",
+    "Dragon's Lair - Dragon Mirror Shard",
+    "Chimera's Keep - Chimera Mirror Shard",
+    "Vat of the Plague Fiend - Plague Fiend Mirror Shard",
+    "Yeti's Cavern - Yeti Mirror Shard"
+]
+
 level_names: Dict[int, str] = {
     0x11: "Castle Courtyard",
     0x12: "Dungeon of Torment",
