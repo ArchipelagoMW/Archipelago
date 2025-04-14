@@ -496,7 +496,7 @@ class AutocompleteHintInput(ResizableTextField):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.dropdown = MarkupDropdown(caller=self, position="bottom", border_margin=dp(24), width=self.width)
+        self.dropdown = MarkupDropdown(caller=self, position="bottom", border_margin=dp(2), width=self.width)
         self.dropdown.bind(on_select=lambda instance, x: setattr(self, 'text', x))
         self.bind(on_text_validate=self.on_message)
         self.bind(width=lambda instance, x: setattr(self.dropdown, "width", x))
