@@ -484,13 +484,13 @@ class KH2World(World):
                 self.random_super_boss_list.remove(LocationName.Lvl50)
             if LocationName.Lvl99 in self.random_super_boss_list:
                 self.random_super_boss_list.remove(LocationName.Lvl99)
-            
+
         # We only want the bounty corresponding to our max level, remove the other level bounty
         if self.options.LevelDepth in ["level_50", "level_50_sanity"] and LocationName.Lvl99 in self.random_super_boss_list:
             self.random_super_boss_list.remove(LocationName.Lvl99)
 
         # We only want the bounty corresponding to our max level, remove the other level bounty
-        if self.options.LevelDepthin in ["level_99", "level_99_sanity"] and LocationName.Lvl50 in self.random_super_boss_list:
+        if self.options.LevelDepth in ["level_99", "level_99_sanity"] and LocationName.Lvl50 in self.random_super_boss_list:
             self.random_super_boss_list.remove(LocationName.Lvl50)
 
         if not self.options.SummonLevelLocationToggle and LocationName.Summonlvl7 in self.random_super_boss_list:
