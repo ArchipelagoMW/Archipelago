@@ -34,6 +34,7 @@ class TunicSettings(Group):
     class UTPoptrackerPath(FilePath):
         """Path to the user's TUNIC Poptracker Pack."""
         description = "TUNIC Poptracker Pack zip file"
+        required = False
 
     disable_local_spoiler: Union[DisableLocalSpoiler, bool] = False
     limit_grass_rando: Union[LimitGrassRando, bool] = True
@@ -754,13 +755,12 @@ class TunicWorld(World):
         return slot_data
 
     # for setting up the poptracker integration
-    # uncomment when it's optional to use the map
-    # tracker_world = {
-    #     "map_page_maps": ["maps/maps_pop.json"],
-    #     "map_page_locations": ["locations/locations_pop_er.json"],
-    #     "map_page_setting_key": f"Slot:{ut_player}:Current Map",
-    #     "map_page_index": ut_stuff.map_page_index,
-    #     "external_pack_key": "ut_poptracker_path",
-    #     "poptracker_name_mapping": ut_stuff.poptracker_data
-    # }
+    tracker_world = {
+        "map_page_maps": ["maps/maps_pop.json"],
+        "map_page_locations": ["locations/locations_pop_er.json"],
+        "map_page_setting_key": f"Slot:{ut_player}:Current Map",
+        "map_page_index": ut_stuff.map_page_index,
+        "external_pack_key": "ut_poptracker_path",
+        "poptracker_name_mapping": ut_stuff.poptracker_data
+    }
 
