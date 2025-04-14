@@ -217,7 +217,10 @@ class GauntletLegendsWorld(World):
         self.random.shuffle(filler_items)
         for item in filler_items[:remaining]:
             self.items.append(self.create_item(item))
-        print(f"{self.player} has {len(self.items)} items and {len(self.death)} deaths and {len(self.disabled_locations)} disabled locations and {len(required_items)} required items. The total number of items is {len(self.items) + len(self.death) + len(required_items)} and the total number of locations is {len(list(self.get_locations()))}. The difference is {len(list(self.get_locations())) - (len(self.items) + len(self.death) + len(self.disabled_locations) + len(required_items))}.")
+        self.random.shuffle(self.items)
+        for i in range((len(self.items) * 0.5).__floor__()):
+            self.multiworld.itempool.append(self.items[i])
+            del self.items[i]
 
     def set_rules(self) -> None:
         set_rules(self)
@@ -227,19 +230,16 @@ class GauntletLegendsWorld(World):
 
     def pre_fill(self) -> None:
         # A percentage of all items will be placed locally, all deaths will be placed locally
-        local_item_count = (len(self.items) * 0.5).__floor__() + len(self.death)
+        local_item_count = len(self.items) + len(self.death)
         local_locations = []
         for level in local_levels:
             level = [location for location in level if location.name not in self.disabled_locations and location.name not in skipped_local_locations]
             self.random.shuffle(level)
-            for i in range(min(len(level), local_item_count // len(local_levels))):
-                local_locations.append(self.get_location(level[i].name))
+            for i in range(min(len(level), (local_item_count // len(local_levels)) + 3)):
+        local_locations = local_locations[:local_item_count]
         self.random.shuffle(self.items)
         self.random.shuffle(local_locations)
-        self.death, local_locations = fast_fill(self.multiworld, self.death, local_locations)
-        self.items, local_locations = fast_fill(self.multiworld, self.items, local_locations)
-        for item in self.items:
-            self.multiworld.itempool.append(item)
+        fast_fill(self.multiworld, self.items + self.death, local_locations)
 
     def create_item(self, name: str) -> GLItem:
         item = item_table[name]
