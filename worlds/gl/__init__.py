@@ -236,6 +236,7 @@ class GauntletLegendsWorld(World):
             level = [location for location in level if location.name not in self.disabled_locations and location.name not in skipped_local_locations]
             self.random.shuffle(level)
             for i in range(min(len(level), (local_item_count // len(local_levels)) + 3)):
+                local_locations.append(self.get_location(level[i].name))
         local_locations = local_locations[:local_item_count]
         self.random.shuffle(self.items)
         self.random.shuffle(local_locations)
