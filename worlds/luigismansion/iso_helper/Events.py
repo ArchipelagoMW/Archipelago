@@ -172,7 +172,7 @@ def randomize_music(gcm: GCM, seed: str) -> GCM:
 def write_portrait_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict[str, dict[str,str]],
                         seed: str) -> GCM:
     csv_lines = get_data(MAIN_PKG_NAME, "data/custom_csvs/message78.csv").decode('utf-8')
-    for portrait_name, portrait_hint in all_hints:
+    for portrait_name, portrait_hint in all_hints.items():
         if portrait_name not in PORTRAIT_HINTS:
             continue
         match hint_distribution_choice:
