@@ -497,7 +497,6 @@ class AutocompleteHintInput(ResizableTextField):
         super().__init__(**kwargs)
 
         self.dropdown = MarkupDropdown(caller=self, position="bottom", border_margin=dp(2), width=self.width)
-        self.dropdown.bind(on_select=lambda instance, x: setattr(self, 'text', x))
         self.bind(on_text_validate=self.on_message)
         self.bind(width=lambda instance, x: setattr(self.dropdown, "width", x))
 
@@ -514,8 +513,11 @@ class AutocompleteHintInput(ResizableTextField):
 
             def on_press(text):
                 split_text = MarkupLabel(text=text).markup
-                return self.dropdown.select("".join(text_frag for text_frag in split_text
-                                                    if not text_frag.startswith("[")))
+                self.set_text(self, "".join(text_frag for text_frag in split_text
+                                            if not text_frag.startswith("[")))
+                self.dropdown.dismiss()
+                self.focus = True
+
             lowered = value.lower()
             for item_name in item_names:
                 try:
@@ -527,7 +529,7 @@ class AutocompleteHintInput(ResizableTextField):
                     text = text[:index] + "[b]" + text[index:index+len(value)]+"[/b]"+text[index+len(value):]
                     self.dropdown.items.append({
                         "text": text,
-                        "on_release": lambda: on_press(text),
+                        "on_release": lambda txt=text: on_press(txt),
                         "markup": True
                     })
             if not self.dropdown.parent:
@@ -666,7 +668,7 @@ class CommandPromptTextInput(ResizableTextField):
         super().__init__(**kwargs)
         self._command_history_index = -1
         self._command_history: typing.Deque[str] = deque(maxlen=CommandPromptTextInput.MAXIMUM_HISTORY_MESSAGES)
-    
+
     def update_history(self, new_entry: str) -> None:
         self._command_history_index = -1
         if is_command_input(new_entry):
@@ -693,7 +695,7 @@ class CommandPromptTextInput(ResizableTextField):
             self._change_to_history_text_if_available(self._command_history_index - 1)
             return True
         return super().keyboard_on_key_down(window, keycode, text, modifiers)
-    
+
     def _change_to_history_text_if_available(self, new_index: int) -> None:
         if new_index < -1:
             return
@@ -1105,7 +1107,7 @@ class HintLayout(MDBoxLayout):
             if fix_func:
                 fix_func()
 
-        
+
 status_names: typing.Dict[HintStatus, str] = {
     HintStatus.HINT_FOUND: "Found",
     HintStatus.HINT_UNSPECIFIED: "Unspecified",
