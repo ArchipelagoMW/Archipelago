@@ -711,16 +711,11 @@ class MessageBox(Popup):
         def __init__(self, **kwargs):
             super().__init__(**kwargs)
             self._label.refresh()
-            self.size = self._label.texture.size
-            if self.width + 50 > Window.width:
-                self.text_size[0] = Window.width - 50
-                self._label.refresh()
-                self.size = self._label.texture.size
 
     def __init__(self, title, text, error=False, **kwargs):
         label = MessageBox.MessageBoxLabel(text=text)
         separator_color = [217 / 255, 129 / 255, 122 / 255, 1.] if error else [47 / 255., 167 / 255., 212 / 255, 1.]
-        super().__init__(title=title, content=label, size_hint=(None, None), width=max(100, int(label.width) + 40),
+        super().__init__(title=title, content=label, size_hint=(0.5, None), width=max(100, int(label.width) + 40),
                          separator_color=separator_color, **kwargs)
         self.height += max(0, label.height - 18)
 
