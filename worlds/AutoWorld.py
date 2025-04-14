@@ -520,17 +520,19 @@ class World(metaclass=AutoWorldRegister):
 
     # these two methods can be extended for pseudo-items on state
     def collect(self, state: "CollectionState", item: "Item") -> bool:
+        """Called when an item is collected in to state. Useful for things such as progressive items or currency."""
+
         assert item.advancement, "Collect should no longer be called with non-advancements."
 
-        """Called when an item is collected in to state. Useful for things such as progressive items or currency."""
         name = self.collect_item(state, item)
         state.prog_items[self.player][name] += 1
         return True  # Backwards compatibility, this used to denote whether a progression item was picked up
 
     def remove(self, state: "CollectionState", item: "Item") -> bool:
+        """Called when an item is removed from to state. Useful for things such as progressive items or currency."""
+
         assert item.advancement, "Remove should no longer be called with non-advancements."
 
-        """Called when an item is removed from to state. Useful for things such as progressive items or currency."""
         name = self.collect_item(state, item, True)
         state.prog_items[self.player][name] -= 1
         if state.prog_items[self.player][name] < 1:
