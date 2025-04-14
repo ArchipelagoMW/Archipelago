@@ -923,9 +923,11 @@ class GameManager(ThemedApp):
         self.server_connect_bar.focus = True
         self.server_connect_bar.select_text(port_start if port_start > 0 else host_start, len(s))
 
-        from kivy.core.window import Window
-        from kivy.modules import console
-        console.create_console(Window, self.container)
+        # Uncomment to enable the kivy live editor console
+        # Press Ctrl-E (with numlock/capslock) disabled to open
+        # from kivy.core.window import Window
+        # from kivy.modules import console
+        # console.create_console(Window, self.container)
 
         return self.container
 
