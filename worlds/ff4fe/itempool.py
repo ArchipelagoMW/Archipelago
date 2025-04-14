@@ -87,6 +87,8 @@ def create_general_pool(world: World, location_count: int, key_item_count: int):
     else:
         refined_filler = [*items.filler_items]
         refined_useful = [*items.useful_items]
+    if world.options.NoAdamantArmors:
+        refined_useful.remove(items.get_item_data("Adamant Armor"))
     refined_filler = [item for item in refined_filler if item.tier >= world.options.MinTier.value]
     refined_useful = [item for item in refined_useful if item.tier <= world.options.MaxTier.value]
     refined_set = [*refined_useful, *refined_filler]
