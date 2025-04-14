@@ -165,12 +165,6 @@ class SuperBosses(Toggle):
     default = True
 
 
-class CasualBounties(Toggle):
-    """More casual and generic locations to expand bounty pool without superbosses"""
-    display_name = "Casual Bounty Toggle"
-    default = False
-
-
 class Cups(Choice):
     """Olympus Cups Toggles
         No Cups: All Cups are placed into Excluded Locations.
@@ -296,6 +290,12 @@ class BountyAmount(Range):
 class BountyStartHint(Toggle):
     """Start with Bounties Hinted"""
     display_name = "Start with Bounties Hinted"
+    default = False
+
+
+class CasualBounties(Toggle):
+    """More casual and generic locations to expand bounty pool without superbosses"""
+    display_name = "Casual Bounty Toggle"
     default = False
 
 
