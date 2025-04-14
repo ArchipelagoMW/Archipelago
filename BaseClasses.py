@@ -1031,6 +1031,20 @@ class CollectionState():
         if self.prog_items[player][item] < 1:
             del (self.prog_items[player][item])
 
+    def set_item(self, item: str, player: int, count: int) -> None:
+        """
+        Sets the item in state equal to the provided count.
+
+        :param item: The item to modify.
+        :param player: The player the item is for.
+        :param count: How many of the item to now have.
+        """
+        assert count >= 0
+        if count == 0:
+            del (self.prog_items[player][item])
+        else:
+            self.prog_items[player][item] = count
+
 
 class EntranceType(IntEnum):
     ONE_WAY = 1
