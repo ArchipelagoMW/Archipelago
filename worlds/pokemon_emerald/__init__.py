@@ -29,6 +29,8 @@ from .pokemon import (get_random_move, get_species_id_by_label, randomize_abilit
 from .rom import PokemonEmeraldProcedurePatch, write_tokens 
 from .util import get_encounter_type_label
 
+from worlds.LauncherComponents import Component, components, Type
+components.append(Component('Emerald Adjuster', 'EmeraldAdjuster', component_type=Type.ADJUSTER))
 
 class PokemonEmeraldWebWorld(WebWorld):
     """
