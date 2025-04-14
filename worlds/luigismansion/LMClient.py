@@ -66,13 +66,14 @@ LAST_RECV_ITEM_ADDR = 0x803CDEBA
 
 # These addresses are related to displaying text in game.
 RECV_DEFAULT_TIMER_IN_HEX = "5A" # 3 Seconds
-RECV_ITEM_DISPLAY_TIMER_ADDR = 0x804DD95B
-RECV_ITEM_DISPLAY_VIZ_ADDR = 0x804DD95F
-RECV_ITEM_NAME_ADDR = 0x804DE088
-RECV_ITEM_LOC_ADDR = 0x804DE0D0
-RECV_ITEM_SENDER_ADDR = 0x804DE0B0
+RECV_ITEM_DISPLAY_TIMER_ADDR = 0x804DD958
+RECV_ITEM_DISPLAY_VIZ_ADDR = 0x804DD95C
+RECV_ITEM_NAME_ADDR = 0x804DE05C
+RECV_ITEM_LOC_ADDR = 0x804DE080
+RECV_ITEM_SENDER_ADDR = 0x804DE0A0
 RECV_MAX_STRING_LENGTH = 24
 RECV_LINE_STRING_LENGTH = 27
+FRAME_AVG_COUNT = 30
 
 # This is the flag address we use to determine if Luigi is currently in an Event.
 # If this flag is on, do NOT send any items / receive them.
@@ -127,12 +128,18 @@ def write_short(console_address: int, value: int):
 
 
 def read_string(console_address: int, strlen: int):
-    return dme.read_bytes(console_address, strlen).decode().strip("\0")
+    return sbf.byte_string_strip_null_terminator(dme.read_bytes(console_address, strlen))
 
 
 def check_if_addr_is_pointer(addr: int):
     return 2147483648 <= dme.read_word(addr) <= 2172649471
 
+
+async def write_bytes_and_validate(addr: int, ram_offset: list[str] | None, curr_value: bytes) -> None:
+    if not ram_offset:
+        dme.write_bytes(addr, curr_value)
+    else:
+        dme.write_bytes(dme.follow_pointers(addr, ram_offset), curr_value)
 
 def get_base_rom_path(file_name: str = "") -> str:
     options: Settings = get_settings()
@@ -357,7 +364,6 @@ class LMContext(CommonContext):
             self.ui.connect_layout.add_widget(self.boo_count)
 
         curr_boo_count = len(set(([item.item for item in self.items_received if item.item in BOO_AP_ID_LIST])))
-
         self.boo_count.text = f"Boo Count: {curr_boo_count}/50"
 
 
@@ -576,11 +582,11 @@ class LMContext(CommonContext):
         if not (self.check_ingame() and self.check_alive()):
             return
 
-        if not self.spawn == "Foyer":
-            spawn_info: dict = spawn_locations[self.spawn]
-            dme.write_bytes(0x804de060, struct.pack("f", spawn_info["pos_x"]))
-            dme.write_bytes(0x804de064, struct.pack("f", spawn_info["pos_y"]))
-            dme.write_bytes(0x804de068, struct.pack("f", spawn_info["pos_z"]))
+        #if not self.spawn == "Foyer":
+        #    spawn_info: dict = spawn_locations[self.spawn]
+        #    dme.write_bytes(0x804de060, struct.pack("f", spawn_info["pos_x"]))
+        #    dme.write_bytes(0x804de064, struct.pack("f", spawn_info["pos_y"]))
+        #    dme.write_bytes(0x804de068, struct.pack("f", spawn_info["pos_z"]))
 
         # Always adjust the Vacuum speed as saving and quitting or going to E. Gadds lab could reset it back to normal.
         if any([netItem.item for netItem in self.items_received if netItem.item == 8064]):
@@ -697,9 +703,9 @@ async def give_player_items(ctx: LMContext):
         await asyncio.sleep(time_to_wait)
 
     while not ctx.exit_event.is_set():
-        # Only try to give items if we are in game and alive.
-        if not (ctx.check_ingame() and ctx.check_alive()):
-            await wait_for_next_loop(3)
+        if not (dme.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS and
+            ctx.check_ingame() and ctx.check_alive()):
+            await wait_for_next_loop(5)
             continue
 
         last_recv_idx = dme.read_word(LAST_RECV_ITEM_ADDR)
@@ -707,100 +713,82 @@ async def give_player_items(ctx: LMContext):
             await wait_for_next_loop(0.5)
             continue
 
-        # Filter for only items where we have not received yet. If same slot, only receive locations from pre-approved
-        # own locations, otherwise accept other slots. Additionally accept only items from a pre-approved list.
         recv_items = ctx.items_received[last_recv_idx:]
-
-        if len(recv_items) == 0:
-            dme.write_word(LAST_RECV_ITEM_ADDR, len(ctx.items_received))
-            return
-
         for item in recv_items:
             lm_item_name = ctx.item_names.lookup_in_game(item.item)
             lm_item = ALL_ITEMS_TABLE[lm_item_name]
 
             if "TrapLink" in ctx.tags and item.item in trap_id_list:
                 await ctx.send_trap_link(lm_item_name)
+
+            # Filter for only items where we have not received yet. If same slot, only receive locations from pre-set
+            # list of locations, otherwise accept other slots. Additionally accept only items from a pre-approved list.
             if item.item in RECV_ITEMS_IGNORE or (item.player == ctx.slot and not
             (item.location in SELF_LOCATIONS_TO_RECV or item.item in RECV_OWN_GAME_ITEMS)):
                 last_recv_idx += 1
                 dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
                 continue
 
-            # item_name_display = lm_item_name
-            # if len(lm_item_name) > RECV_MAX_STRING_LENGTH:
-            #     item_name_display = lm_item_name[0:RECV_MAX_STRING_LENGTH] + "..."
-            # dme.write_bytes(RECV_ITEM_NAME_ADDR, sbf.string_to_bytes(item_name_display, RECV_LINE_STRING_LENGTH))
-            #
-            # loc_name_display = ctx.location_names.lookup_in_game(item.location)
-            # if len(loc_name_display) > RECV_MAX_STRING_LENGTH:
-            #     loc_name_display = loc_name_display[0:RECV_MAX_STRING_LENGTH] + "..."
-            # dme.write_bytes(RECV_ITEM_LOC_ADDR, sbf.string_to_bytes(loc_name_display, RECV_LINE_STRING_LENGTH))
-            #
-            # recv_name_display = ctx.player_names[item.player]
-            # if len(recv_name_display) > RECV_MAX_STRING_LENGTH:
-            #     recv_name_display = recv_name_display[0:RECV_MAX_STRING_LENGTH] + "..."
-            # dme.write_bytes(RECV_ITEM_SENDER_ADDR, sbf.string_to_bytes(recv_name_display, RECV_LINE_STRING_LENGTH))
-            #
-            # dme.write_bytes(RECV_ITEM_DISPLAY_TIMER_ADDR, bytes.fromhex(RECV_DEFAULT_TIMER_IN_HEX))
-            # await wait_for_next_loop(int(RECV_DEFAULT_TIMER_IN_HEX, 16))
-            # while dme.read_byte(RECV_ITEM_DISPLAY_VIZ_ADDR) > 0:
-            #     await wait_for_next_loop(0.1)
+            item_name_display = lm_item_name[0:min(len(lm_item_name), RECV_MAX_STRING_LENGTH)]
+            #dme.write_bytes(RECV_ITEM_NAME_ADDR, sbf.string_to_bytes(item_name_display, RECV_LINE_STRING_LENGTH))
+
+            loc_name_display = ctx.location_names.lookup_in_game(item.location, item.player)
+            loc_name_display = loc_name_display[0:min(len(loc_name_display), SLOT_NAME_STR_LENGTH)]
+            #dme.write_bytes(RECV_ITEM_LOC_ADDR, sbf.string_to_bytes(loc_name_display, RECV_LINE_STRING_LENGTH))
+
+            recv_name_display = ctx.player_names[item.player]
+            recv_name_display = recv_name_display[0:min(len(recv_name_display), SLOT_NAME_STR_LENGTH)] + "'s Game"
+            #dme.write_bytes(RECV_ITEM_SENDER_ADDR, sbf.string_to_bytes(recv_name_display, RECV_LINE_STRING_LENGTH))
+
+            #print("STOP BEFORE WRITING TIMER")
+            #dme.write_word(RECV_ITEM_DISPLAY_TIMER_ADDR, int(RECV_DEFAULT_TIMER_IN_HEX, 16))
+            #print("STOP AFTER WRITING TIMER")
+            await wait_for_next_loop(int(RECV_DEFAULT_TIMER_IN_HEX, 16)/FRAME_AVG_COUNT)
+            #while dme.read_byte(RECV_ITEM_DISPLAY_VIZ_ADDR) > 0:
+                #await wait_for_next_loop(0.1)
 
             for addr_to_update in lm_item.update_ram_addr:
                 byte_size = 1 if addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
+                ram_offset = None
+                if addr_to_update.pointer_offset:
+                    ram_offset = [addr_to_update.pointer_offset]
 
                 if item.item in trap_id_list:
                     curr_val = addr_to_update.item_count
-                    if not addr_to_update.pointer_offset is None:
-                        dme.write_bytes(dme.follow_pointers(addr_to_update.ram_addr,
-                                                            [addr_to_update.pointer_offset]),
-                                        curr_val.to_bytes(byte_size, 'big'))
-                    else:
-                        dme.write_bytes(addr_to_update.ram_addr, curr_val.to_bytes(byte_size, 'big'))
                 elif item.item == 8140:  # Progressive Flower, 00EB, 00EC, 00ED
                     flower_count: int = len([netItem for netItem in ctx.items_received if netItem.item == 8140])
                     curr_val = min(flower_count + 234, 237)
-                    dme.write_bytes(addr_to_update.ram_addr, curr_val.to_bytes(byte_size, 'big'))
+                    ram_offset = None
                 elif not addr_to_update.item_count is None:
-                    if not addr_to_update.pointer_offset is None:
+                    if not ram_offset is None:
                         curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
-                                                                                     [addr_to_update.pointer_offset]),
-                                                                 byte_size))
+                            [addr_to_update.pointer_offset]), byte_size))
                         if item.item in HEALTH_RELATED_ITEMS:
                             curr_val = min(curr_val + addr_to_update.item_count, ctx.luigimaxhp)
                         else:
                             curr_val += addr_to_update.item_count
-                        dme.write_bytes(dme.follow_pointers(addr_to_update.ram_addr,
-                                                            [addr_to_update.pointer_offset]),
-                                        curr_val.to_bytes(byte_size, 'big'))
                     else:
                         curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
                         curr_val += addr_to_update.item_count
-                        dme.write_bytes(addr_to_update.ram_addr, curr_val.to_bytes(byte_size, 'big'))
                 else:
                     if not addr_to_update.pointer_offset is None:
                         curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
-                                                                                     [addr_to_update.pointer_offset]),
-                                                                 byte_size))
+                            [addr_to_update.pointer_offset]), byte_size))
                         curr_val = (curr_val | (1 << addr_to_update.bit_position))
-                        dme.write_bytes(dme.follow_pointers(addr_to_update.ram_addr,
-                                                            [addr_to_update.pointer_offset]),
-                                        curr_val.to_bytes(byte_size, 'big'))
                     else:
                         curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
                         if not addr_to_update.bit_position is None:
                             curr_val = (curr_val | (1 << addr_to_update.bit_position))
                         else:
                             curr_val += 1
-                        dme.write_bytes(addr_to_update.ram_addr, curr_val.to_bytes(byte_size, 'big'))
+                #await wait_for_next_loop(10)
+                await write_bytes_and_validate(addr_to_update.ram_addr, ram_offset,
+                    curr_val.to_bytes(byte_size, 'big'))
 
             # Update the last received index to ensure we don't receive the same item over and over.
             last_recv_idx += 1
             dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
         await wait_for_next_loop(0.5)
-
-
 
 
 def main(output_data: Optional[str] = None, connect=None, password=None):
