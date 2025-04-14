@@ -246,6 +246,8 @@ class KH2World(World):
         # hitlist
         if self.options.Goal not in ["lucky_emblem_hunt", "three_proofs"]:
             self.random_super_boss_list.extend(exclusion_table["Hitlist"])
+            if self.options.CasualBounties:
+                self.random_super_boss_list.extend(exclusion_table["HitlistCasual"])
             self.bounties_amount = self.options.BountyAmount.value
             self.bounties_required = self.options.BountyRequired.value
 
@@ -476,6 +478,13 @@ class KH2World(World):
         for location in self.options.exclude_locations.value:
             if location in self.random_super_boss_list:
                 self.random_super_boss_list.remove(location)
+
+        if self.options.LevelDepth == "level_1":
+            self.random_super_boss_list.remove(LocationName.Lvl50)
+            self.random_super_boss_list.remove(LocationName.Lvl99)
+
+        if self.options.LevelDepth not in ["level_99", "level_99_sanity"] and LocationName.Lvl99 in self.random_super_boss_list:
+            self.random_super_boss_list.remove(LocationName.Lvl99)
 
         if not self.options.SummonLevelLocationToggle and LocationName.Summonlvl7 in self.random_super_boss_list:
             self.random_super_boss_list.remove(LocationName.Summonlvl7)
