@@ -304,7 +304,7 @@ class Canvas(Grid):
         missions[-1].option_exit = False
 
         # Canvas spaces become empty slots
-        for idx in self.groups[" "]:
+        for idx in self.groups.get(" ", []):
             missions[idx].option_empty = True
 
         # Raycast into jump directions to find nearest empty space
