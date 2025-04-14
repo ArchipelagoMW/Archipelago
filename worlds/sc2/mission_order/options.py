@@ -15,9 +15,9 @@ from ..mission_tables import lookup_name_to_mission
 from ..mission_groups import mission_groups
 from ..item.item_tables import item_table
 from ..item.item_groups import item_name_groups
-from .layout_types import LayoutType
+from . import layout_types
+from .layout_types import LayoutType, Column, Grid, Hopscotch, Gauntlet, Blitz, Canvas
 from .mission_pools import Difficulty
-from .layout_types import Column, Grid, Hopscotch, Gauntlet, Blitz, Canvas
 from .presets_static import (
     static_preset, preset_mini_wol_with_prophecy, preset_mini_wol, preset_mini_hots, preset_mini_prophecy,
     preset_mini_lotv_prologue, preset_mini_lotv, preset_mini_lotv_epilogue, preset_mini_nco,
@@ -25,7 +25,6 @@ from .presets_static import (
     preset_lotv_epilogue, preset_lotv, preset_nco
 )
 from .presets_scripted import make_golden_path
-from ...alttp import difficulties
 
 GENERIC_KEY_NAME = "Key".casefold()
 GENERIC_PROGRESSIVE_KEY_NAME = "Progressive Key".casefold()
@@ -143,7 +142,7 @@ class CustomMissionOrder(OptionDict):
                 "display_name": [str],
                 "unique_name": bool,
                 # Type options
-                "type": lambda val: issubclass(globals()[val], LayoutType),
+                "type": lambda val: issubclass(getattr(layout_types, val), LayoutType),
                 "size": IntOne,
                 # Link options
                 "exit": bool,
@@ -272,7 +271,7 @@ def _resolve_special_options(data: Dict[str, Any]):
         data[option] = new_value
 
     # Special case for canvas layouts determining their own size
-    if "type" in data and data["type"] == Canvas:
+    if "type" in data and data["type"] == Canvas.__name__:
         canvas: List[str] = data["canvas"]
         longest_line = max(len(line) for line in canvas)
         data["size"] = len(canvas) * longest_line
