@@ -166,6 +166,25 @@ class ToggleButton(MDButton, ToggleButtonBehavior):
                 child.icon_color = self.theme_cls.primaryColor
 
 
+# thanks kivymd
+class ResizableTextField(MDTextField):
+    """
+    Resizable MDTextField that manually overrides the builtin sizing.
+    Note that in order to use this, the sizing must be specified from within a .kv rule.
+    """
+    def __init__(self, *args, **kwargs):
+        # cursed rules override
+        rules = Builder.match(self)
+        textfield = next((rule for rule in rules if rule.name == f"<MDTextField>"), None)
+        if textfield:
+            subclasses = rules[rules.index(textfield) + 1:]
+            for subclass in subclasses:
+                height_rule = subclass.properties.get("height", None)
+                if height_rule:
+                    height_rule.ignore_prev = True
+        super().__init__(args, kwargs)
+
+        
 # I was surprised to find this didn't already exist in kivy :(
 class HoverBehavior(object):
     """originally from https://stackoverflow.com/a/605348110"""
