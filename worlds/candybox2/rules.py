@@ -137,7 +137,8 @@ def set_rules(world: "CandyBox2World", player: int):
              lambda state: can_beat_sharks(world, state, player) and state.has("Heart Pendant", player)
                            and state.has("Heart Plug", player)
                            and state.has("Advanced Grimoire", player) and state.has("Red Enchanted Gloves", player)
-                           and state.has("Octopus King Crown with Jaspers", player))
+                           and state.has("Octopus King Crown with Jaspers", player)
+                           and state.has("Unicorn Horn", player))
 
     # X Potion
     add_rule(world.get_location("Yourself Defeated"), lambda state: state.has("Octopus King Crown", player))
