@@ -162,11 +162,12 @@ async def proxy(websocket, path: str = "/", ctx: TMContext = None):
 
         if ctx.is_proxy_connected():
             async for data in websocket:
-                if DEBUG:
-                    logger.info(f"Incoming message: {data}")
+                #if DEBUG:
+                logger.info(f"Incoming message: {data}")
 
                 for msg in decode(data):
                     if msg["cmd"] == "Connect":
+                        logger.info("Attempting Connection!")
                         # Proxy is connecting, make sure it is valid
                         if msg["game"] != "Trackmania":
                             logger.info("Aborting proxy connection: game is not Trackmania")
@@ -207,6 +208,7 @@ async def proxy(websocket, path: str = "/", ctx: TMContext = None):
 
     except Exception as e:
         if not isinstance(e, websockets.WebSocketException):
+            logger.info(";-;")
             logger.exception(e)
     finally:
         await ctx.disconnect_proxy()
@@ -241,7 +243,7 @@ def launch():
         ctx = TMContext(args.connect, args.password)
         logger.info("Starting Trackmania proxy server")
         ctx.proxy = websockets.serve(functools.partial(proxy, ctx=ctx),
-                                     host="localhost", port=11311, ping_timeout=999999, ping_interval=999999)
+                                     host="localhost", port=22422, ping_timeout=999999, ping_interval=999999)
         ctx.proxy_task = asyncio.create_task(proxy_loop(ctx), name="ProxyLoop")
 
         if gui_enabled:
