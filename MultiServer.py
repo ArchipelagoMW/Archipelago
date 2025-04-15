@@ -281,25 +281,6 @@ class Context:
             lambda: Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})'))
         self.non_hintable_names = collections.defaultdict(frozenset)
 
-        self._load_game_data()
-
-    # Data package retrieval
-    def _load_game_data(self):
-        import worlds
-        self.gamespackage = worlds.network_data_package["games"]
-
-        self.item_name_groups = {world_name: world.item_name_groups for world_name, world in
-                                 worlds.AutoWorldRegister.world_types.items()}
-        self.location_name_groups = {world_name: world.location_name_groups for world_name, world in
-                                     worlds.AutoWorldRegister.world_types.items()}
-        for world_name, world in worlds.AutoWorldRegister.world_types.items():
-            self.non_hintable_names[world_name] = world.hint_blacklist
-
-        for game_package in self.gamespackage.values():
-            # remove groups from data sent to clients
-            del game_package["item_name_groups"]
-            del game_package["location_name_groups"]
-
     def _init_game_data(self):
         for game_name, game_package in self.gamespackage.items():
             if "checksum" in game_package:
