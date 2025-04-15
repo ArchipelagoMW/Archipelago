@@ -95,6 +95,31 @@ item_table: Dict[str, ItemData] = {
     "Item - Diamond Ingot": ItemData("Item", 71 + item_index_offset, ItemClassification.useful, 18),
     "Item - Diamond Dust": ItemData("Item", 72 + item_index_offset, ItemClassification.useful, 18),
 
+    #Keys
+    "Item - Gardeners Key": ItemData("Item", 31 + item_index_offset, ItemClassification.progression),
+    "Item - Courtyard Key": ItemData("Item", 33 + item_index_offset, ItemClassification.progression),
+    "Item - Luxury Key": ItemData("Item", 36 + item_index_offset, ItemClassification.progression),
+    "Item - Cell Key": ItemData("Item", 40 + item_index_offset, ItemClassification.progression, 7),
+    "Item - South Wing Key": ItemData("Item", 41 + item_index_offset, ItemClassification.progression),
+    "Item - East Wing Key": ItemData("Item", 42 + item_index_offset, ItemClassification.progression),
+    "Item - West Wing Key": ItemData("Item", 43 + item_index_offset, ItemClassification.progression),
+    "Item - Dark Wing Key": ItemData("Item", 44 + item_index_offset, ItemClassification.progression),
+    "Item - Room 1 Key": ItemData("Item", 32 + item_index_offset, ItemClassification.progression),
+    "Item - Pyramid Key": ItemData("Item", 60 + item_index_offset, ItemClassification.progression),
+    "Item - Tram Key": ItemData("Item", 95 + item_index_offset, ItemClassification.progression),
+    "Item - Small Key": ItemData("Item", 29 + item_index_offset, ItemClassification.progression),
+    "Item - Boss Key": ItemData("Item", 30 + item_index_offset, ItemClassification.progression),
+    "Item - Ice Cell Key": ItemData("Item", 156 + item_index_offset, ItemClassification.progression),
+    "Item - Red Door Key": ItemData("Item", 169 + item_index_offset, ItemClassification.progression, 3),
+    "Item - Ice Puzzle Key": ItemData("Item", 160 + item_index_offset, ItemClassification.progression, 6),
+    "Item - Foliage Key": ItemData("Item", 141 + item_index_offset, ItemClassification.progression),
+    "Item - Cave Key": ItemData("Item", 118 + item_index_offset, ItemClassification.progression),
+    "Item - Canopy Key": ItemData("Item", 116 + item_index_offset, ItemClassification.progression),
+    "Item - Rampart Key": ItemData("Item", 175 + item_index_offset, ItemClassification.progression),
+    "Item - Forgotten Key": ItemData("Item", 192 + item_index_offset, ItemClassification.progression),
+    "Item - Skeleton Key": ItemData("Item", 147 + item_index_offset, ItemClassification.progression),
+
+
     #Passes
     "Item - Quintar Pass": ItemData("Item", 7 + item_index_offset, ItemClassification.progression),
     "Item - Luxury Pass": ItemData("Item", 93 + item_index_offset, ItemClassification.progression),
@@ -104,8 +129,8 @@ item_table: Dict[str, ItemData] = {
     #Key Items
     "Item - Black Squirrel": ItemData("Item", 21 + item_index_offset, ItemClassification.progression, 3),
     "Item - Dog Bone": ItemData("Item", 6 + item_index_offset, ItemClassification.progression, 3),
-    #TODO: Check clamshell count
-    "Item - Clamshell": ItemData("Item", 16 + item_index_offset, ItemClassification.progression, 17),
+    #TODO: Maybe exclude these; 16 clamshells can be found in vanilla and ClamHater (The Rocker) gives you 3; 13 are needed to give to ClamLover (Manana Man)
+    "Item - Clamshell": ItemData("Item", 16 + item_index_offset, ItemClassification.progression, 19),
     "Item - Digested Head": ItemData("Item", 17 + item_index_offset, ItemClassification.progression, 3),
     "Item - Lost Penguin": ItemData("Item", 24 + item_index_offset, ItemClassification.progression, 12),
     "Item - Elevator Part": ItemData("Item", 224 + item_index_offset, ItemClassification.progression, 17),
@@ -122,14 +147,14 @@ item_table: Dict[str, ItemData] = {
     "Item - Ancient Tablet B": ItemData("Item", 162 + item_index_offset, ItemClassification.filler),
     "Item - Ancient Tablet C": ItemData("Item", 163 + item_index_offset, ItemClassification.filler),
 
-    #Animal summons
+    #Animal mount summons
     "Item - Quintar Flute": ItemData("Item", 39 + item_index_offset, ItemClassification.progression),
     "Item - Ibek Bell": ItemData("Item", 50 + item_index_offset, ItemClassification.progression),
     "Item - Owl Drum": ItemData("Item", 49 + item_index_offset, ItemClassification.progression),
     "Item - Salmon Violin": ItemData("Item", 48 + item_index_offset, ItemClassification.progression),
     "Item - Salmon Cello": ItemData("Item", 114 + item_index_offset, ItemClassification.progression),
 
-    #Teleport items
+    #Teleport items (shards not included since they're stones but worse)
     "Item - Home Point Stone": ItemData("Item", 19 + item_index_offset, ItemClassification.progression),
     "Item - Gaea Stone": ItemData("Item", 23 + item_index_offset, ItemClassification.progression),
     "Item - Mercury Stone": ItemData("Item", 13 + item_index_offset, ItemClassification.progression),
