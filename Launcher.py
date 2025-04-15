@@ -230,7 +230,7 @@ def run_gui(path: str, args: Any) -> None:
     from kivy.properties import ObjectProperty
     from kivy.core.window import Window
     from kivy.metrics import dp
-    from kivymd.uix.button import MDIconButton
+    from kivymd.uix.button import MDIconButton, MDButton
     from kivymd.uix.card import MDCard
     from kivymd.uix.menu import MDDropdownMenu
     from kivymd.uix.snackbar import MDSnackbar, MDSnackbarText
@@ -340,7 +340,7 @@ def run_gui(path: str, args: Any) -> None:
             scroll_percent = self.button_layout.convert_distance_to_scroll(0, top)
             self.button_layout.scroll_y = max(0, min(1, scroll_percent[1]))
 
-        def filter_clients_by_type(self, caller):
+        def filter_clients_by_type(self, caller: MDButton):
             self._refresh_components(caller.type)
 
         def filter_clients_by_name(self, caller: MDTextField, name: str) -> None:
