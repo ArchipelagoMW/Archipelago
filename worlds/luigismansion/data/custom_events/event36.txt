@@ -100,6 +100,7 @@
 ------------
 <CASE>"GoodEnd"
 <GENON>"dm_uranai"
+<FLAGON>(121)
 <FLAGON>(13)
 <BGM>(32)
 <RAMDOMJMP>"BadEnd"
