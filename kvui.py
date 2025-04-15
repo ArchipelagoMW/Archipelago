@@ -744,17 +744,14 @@ class ClientTabs(MDTabsSecondary):
             item_text_object = self._get_tab_item_text_icon_object()
 
             if item_text_object:
-                tab_text_width = item_text_object.texture_size[0]
                 indicator_pos = (
-                    instance.x
-                    + (instance.width / 2 - tab_text_width / 2)
-                    + dp(4),
+                    instance.x + dp(12),
                     self.indicator.pos[1]
                     if not self._tabs_carousel
                     else self._tabs_carousel.height,
                 )
                 indicator_size = (
-                    tab_text_width - dp(8),
+                    instance.width - dp(24),
                     self.indicator_height,
                 )
 
