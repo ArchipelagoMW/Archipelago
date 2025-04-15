@@ -211,7 +211,7 @@ def mark_quest_entrance(world: "CandyBox2World", entrance: Entrance):
 
 def connect_entrances(world: "CandyBox2World"):
     if world.options.quest_randomisation == "off":
-        return
+        return world.original_entrances
 
     if hasattr(world.multiworld, "re_gen_passthrough"):
         placements = getattr(world.multiworld, "re_gen_passthrough")["Candy Box 2"]["entranceInformation"]
@@ -226,7 +226,7 @@ def connect_entrances(world: "CandyBox2World"):
         for x in placements:
             placement_state.connect(exits[x[0]], er_targets[x[1]])
         world.entrance_randomisation = placement_state
-        return
+        return world.entrance_randomisation.pairings
 
     if world.options.quest_randomisation == "except_x_potion_quest":
         world.entrance_randomisation = randomize_entrances(world, True, {
@@ -239,3 +239,5 @@ def connect_entrances(world: "CandyBox2World"):
             Groups.QUESTS.value: [Groups.QUESTS.value, Groups.X_QUEST.value],
             Groups.X_QUEST.value: [Groups.QUESTS.value, Groups.X_QUEST.value],
         })
+
+    return world.entrance_randomisation.pairings

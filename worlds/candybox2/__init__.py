@@ -41,12 +41,14 @@ class CandyBox2World(World):
     should_randomize_hp_bar: bool
     starting_weapon: int
     original_entrances: list[tuple[str, str]]
+    calculated_entrances: list[tuple[str, str]]
 
     def __init__(self, multiworld, player):
         super(CandyBox2World, self).__init__(multiworld, player)
         self.should_randomize_hp_bar = False
         self.starting_weapon = 0
         self.original_entrances: list[tuple[str, str]] = []
+        self.calculated_entrances: list[tuple[str, str]] = []
 
     def is_ut_regen(self):
         return hasattr(self.multiworld, "re_gen_passthrough")
@@ -74,7 +76,7 @@ class CandyBox2World(World):
                     self.multiworld.itempool += [self.create_item(name)]
 
     def connect_entrances(self) -> None:
-        connect_entrances(self)
+        self.calculated_entrances = connect_entrances(self)
 
     def interpret_slot_data(self, slot):
         return slot
@@ -82,7 +84,7 @@ class CandyBox2World(World):
     def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
         return {
             "uuid": str(uuid.uuid4()),
-            "entranceInformation": self.original_entrances if self.options.quest_randomisation == "off" else self.entrance_randomisation.pairings,
+            "entranceInformation": self.calculated_entrances,
             "deathLink": self.options.death_link.value,
             "energyLink": self.options.energy_link.value,
             "gifting": self.options.gifting.value,
@@ -128,4 +130,10 @@ class CandyBox2World(World):
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
         er_hint_data = {}
+
+        for entrance, destination in self.calculated_entrances:
+            region = self.multiworld.get_region(quest_friendly_names[quest_names_reverse[destination]], self.player)
+            for location in region.locations:
+                er_hint_data[location.address] = quest_friendly_names[quest_names_reverse[entrance]]
+
         hint_data[self.player] = er_hint_data
