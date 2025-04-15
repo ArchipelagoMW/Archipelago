@@ -60,7 +60,7 @@ These are "nice to have" features for a client, but they are not strictly requir
 if possible.
 
 * If your client appears in the Archipelago Launcher, you may define an icon for it that differentiates it from
-  other clients. The icon size is 38x38 pixels, but it will accept larger images with downscaling.
+  other clients. The icon size is 48x48 pixels, but smaller or larger images will scale to that size.
 
 ## World
 
@@ -109,6 +109,10 @@ subclass for webhost documentation and behaviors
 * A non-zero number of locations, added to your regions
 * A non-zero number of items **equal** to the number of locations, added to the multiworld itempool
   * In rare cases, there may be 0-location-0-item games, but this is extremely atypical.
+* A set 
+  [completion condition](https://github.com/ArchipelagoMW/Archipelago/blob/main/BaseClasses.py#L77) (aka "goal") for
+  the player.
+  * Use your player as the index (`multiworld.completion_condition[player]`) for your world's completion goal.
 
 ### Encouraged Features
 
@@ -142,11 +146,11 @@ workarounds or preferred methods which should be used instead:
   * If you need to place specific items, there are multiple ways to do so, but they should not be added to the 
     multiworld itempool.
 * It is not allowed to use `eval` for most reasons, chiefly due to security concerns. 
-* It is discouraged to use `yaml.load` directly due to security concerns.
-  * When possible, use `Utils.yaml_load` instead, as this defaults to the safe loader.
+* It is discouraged to use PyYAML (i.e. `yaml.load`) directly due to security concerns.
+  * When possible, use `Utils.parse_yaml` instead, as this defaults to the safe loader and the faster C parser.
 * When submitting regions or items to the multiworld (`multiworld.regions` and `multiworld.itempool` respectively), 
-  Do **not** use `=` as this will overwrite all elements for all games in the seed.
-  * Instead, use `append`, `extend`, or `+=`. 
+  do **not** use `=` as this will overwrite all elements for all games in the seed.
+  * Instead, use `append`, `extend`, or `+=`.
 
 ### Notable Caveats
 

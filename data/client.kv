@@ -18,6 +18,7 @@
     theme_style: "Dark" # Light/Dark
     primary_palette: "Green" # Many options
     dynamic_scheme_name: "TONAL_SPOT"
+    dynamic_scheme_contrast: 0.0
 <MDLabel>:
     color: self.theme_cls.primaryColor
 <TooltipLabel>:
@@ -184,6 +185,7 @@
     bar_width: "12dp"
     scroll_wheel_distance: 40
     do_scroll_x: False
+    scroll_type: ['bars', 'content']
 
     MDBoxLayout:
         id: layout

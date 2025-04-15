@@ -930,7 +930,7 @@ location_tables: Dict[str, List[DS3LocationData]] = {
                         "Great Swamp Ring", miniboss=True),  # Giant Crab drop
         DS3LocationData("RS: Blue Sentinels - Horace", "Blue Sentinels",
                         missable=True, npc=True),  # Horace quest
-        DS3LocationData("RS: Crystal Gem - stronghold, lizard", "Crystal Gem"),
+        DS3LocationData("RS: Crystal Gem - stronghold, lizard", "Crystal Gem", lizard=True),
         DS3LocationData("RS: Fading Soul - woods by Crucifixion Woods bonfire", "Fading Soul",
                         static='03,0:53300210::'),
 
