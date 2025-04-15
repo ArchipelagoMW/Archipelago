@@ -1,38 +1,184 @@
-from typing import Dict, Set, Tuple, NamedTuple
+from typing import Dict, Set, NamedTuple, Optional
+from BaseClasses import ItemClassification
 
 class ItemData(NamedTuple):
     category: str
-    code: int
-    count: int = 1
-    progression: bool = False
-    useful: bool = False
-    trap: bool = False
+    code: Optional[int]
+    classification: ItemClassification
+    amount: Optional[int] = 1
 
-# A lot of items arent normally dropped by the randomizer as they are mostly enemy drops, but they can be enabled if desired
+#Archipelago does not like it if an item has a code of 0, Crystal project starts its database
+#Ids at 0, so we add an offset to the id of each item and remove that offset in the client
+index_offset = 1
+
 item_table: Dict[str, ItemData] = {
-    'Owl Drum': ItemData('Equipment', 0, progression=True)
+    "Warrior Job": ItemData("Job", 0 + index_offset, ItemClassification.progression),
+    "Monk Job": ItemData("Job", 5 + index_offset, ItemClassification.progression),
+    "Rogue Job": ItemData("Job", 2 + index_offset, ItemClassification.progression),
+    "Cleric Job": ItemData("Job", 4 + index_offset, ItemClassification.progression),
+    "Wizard Job": ItemData("Job", 3 + index_offset, ItemClassification.progression),
+    "Warlock Job": ItemData("Job", 14 + index_offset, ItemClassification.progression),
+    "Fencer Job": ItemData("Job", 1 + index_offset, ItemClassification.progression),
+    "Shaman Job": ItemData("Job", 8 + index_offset, ItemClassification.progression),
+    "Scholar Job": ItemData("Job", 13 + index_offset, ItemClassification.progression),
+    "Aegis Job": ItemData("Job", 10 + index_offset, ItemClassification.progression),
+    "Hunter Job": ItemData("Job", 7 + index_offset, ItemClassification.progression),
+    "Chemist Job": ItemData("Job", 17 + index_offset, ItemClassification.progression),
+    "Reaper Job": ItemData("Job", 6 + index_offset, ItemClassification.progression),
+    "Ninja Job": ItemData("Job", 18 + index_offset, ItemClassification.progression),
+    "Nomad Job": ItemData("Job", 12 + index_offset, ItemClassification.progression),
+    "Dervish Job": ItemData("Job", 11 + index_offset, ItemClassification.progression),
+    "Beatsmith Job": ItemData("Job", 9 + index_offset, ItemClassification.progression),
+    "Samurai Job": ItemData("Job", 20 + index_offset, ItemClassification.progression),
+    "Assassin Job": ItemData("Job", 19 + index_offset, ItemClassification.progression),
+    "Valkyrie Job": ItemData("Job", 15 + index_offset, ItemClassification.progression),
+    "Summoner Job": ItemData("Job", 21 + index_offset, ItemClassification.progression),
+    "Beastmaster Job": ItemData("Job", 23 + index_offset, ItemClassification.progression),
+    "Weaver Job": ItemData("Job", 16 + index_offset, ItemClassification.progression),
+    "Mimic Job": ItemData("Job", 22 + index_offset, ItemClassification.progression),
+
+    "Tonic": ItemData("Item", 18 + index_offset, ItemClassification.filler, 0),
+    "Potion": ItemData("Item", 0 + index_offset, ItemClassification.filler, 0),
+    "Z-Potion": ItemData("Item", 102 + index_offset, ItemClassification.filler, 0),
+    "Tincture": ItemData("Item", 47 + index_offset, ItemClassification.filler, 0),
+    "Ether": ItemData("Item", 1 + index_offset, ItemClassification.filler, 0),
+    "Zether": ItemData("Item", 142 + index_offset, ItemClassification.filler, 0),
+    "Fenix Juice": ItemData("Item", 2 + index_offset, ItemClassification.filler, 0),
+    "Fenix Syrup": ItemData("Item", 145 + index_offset, ItemClassification.filler, 0),
+    "Nan's Stew'": ItemData("Item", 9 + index_offset, ItemClassification.filler, 0),
+    "Nan's Cocoa'": ItemData("Item", 8 + index_offset, ItemClassification.filler, 0),
+    "Nan's Secret Recipe": ItemData("Item", 54 + index_offset, ItemClassification.filler, 0),
+    "Nuts": ItemData("Item", 14 + index_offset, ItemClassification.filler, 0),
+    "Milk": ItemData("Item", 20 + index_offset, ItemClassification.progression, 0),
+    "Shoudu Stew": ItemData("Item", 132 + index_offset, ItemClassification.progression, 0),
+    "Sweet Pop Candy": ItemData("Item", 34 + index_offset, ItemClassification.filler, 0),
+    "Sour Pop Candy": ItemData("Item", 35 + index_offset, ItemClassification.filler, 0),
+    "Bitter Pop Candy": ItemData("Item", 171 + index_offset, ItemClassification.filler, 0),
+    "Rotten Salmon": ItemData("Item", 11 + index_offset, ItemClassification.progression, 0),
+    "Decent Cod": ItemData("Item", 38 + index_offset, ItemClassification.filler, 0),
+    "Fresh Salmon": ItemData("Item", 10 + index_offset, ItemClassification.filler, 0),
+    "Scroll": ItemData("Item", 263 + index_offset, ItemClassification.filler, 0),
+
+    "Tonic Pouch": ItemData("Item", 133 + index_offset, ItemClassification.useful, 21),
+    "Potion Pouch": ItemData("Item", 134 + index_offset, ItemClassification.useful, 19),
+    "Z-Potion Pouch": ItemData("Item", 143 + index_offset, ItemClassification.useful, 7),
+    "Tincture Pouch": ItemData("Item", 135 + index_offset, ItemClassification.useful, 16),
+    "Ether Pouch": ItemData("Item", 136 + index_offset, ItemClassification.useful, 15),
+    "Zether Pouch": ItemData("Item", 144 + index_offset, ItemClassification.useful, 7),
+    "Fenix Juice Pouch": ItemData("Item", 137 + index_offset, ItemClassification.useful, 8),
+    "Fenix Syrup Pouch": ItemData("Item", 146 + index_offset, ItemClassification.useful, 2),
+    "Nuts Sack": ItemData("Item", 184 + index_offset, ItemClassification.useful),
+    "Milk Bag": ItemData("Item", 138 + index_offset, ItemClassification.useful),
+    "Decent Cod Bag": ItemData("Item", 185 + index_offset, ItemClassification.useful),
+
+    "Flimsy Rod": ItemData("Item", 55 + index_offset, ItemClassification.useful),
+    "Tough Rod": ItemData("Item", 150 + index_offset, ItemClassification.useful),
+    "Super Rod": ItemData("Item", 151 + index_offset, ItemClassification.useful),
+    "Plug Lure": ItemData("Item", 91 + index_offset, ItemClassification.useful),
+    "Fly Lure": ItemData("Item", 149 + index_offset, ItemClassification.useful),
+    "Jigging Lure": ItemData("Item", 97 + index_offset, ItemClassification.useful),
+
+    "Silver Ore": ItemData("Item", 3 + index_offset, ItemClassification.useful, 18),
+    "Silver Ingot": ItemData("Item", 67 + index_offset, ItemClassification.useful, 18),
+    "Silver Dust": ItemData("Item", 68 + index_offset, ItemClassification.useful, 18),
+    "Gold Ore": ItemData("Item", 4 + index_offset, ItemClassification.useful, 18),
+    "Gold Ingot": ItemData("Item", 69 + index_offset, ItemClassification.useful, 18),
+    "Gold Dust": ItemData("Item", 70 + index_offset, ItemClassification.useful, 18),
+    "Diamond Ore": ItemData("Item", 5 + index_offset, ItemClassification.useful, 18),
+    "Diamond Ingot": ItemData("Item", 71 + index_offset, ItemClassification.useful, 18),
+    "Diamond Dust": ItemData("Item", 72 + index_offset, ItemClassification.useful, 18),
+
+    "Quintar Pass": ItemData("Item", 7 + index_offset, ItemClassification.progression),
+    "Luxary Pass": ItemData("Item", 93 + index_offset, ItemClassification.progression),
+    "Luxary Pass V2": ItemData("Item", 148 + index_offset, ItemClassification.progression),
+    "Ferry Pass": ItemData("Item", 37 + index_offset, ItemClassification.progression),
+
+    "Black Squirrel": ItemData("Item", 21 + index_offset, ItemClassification.progression, 3),
+    "Dog Bone": ItemData("Item", 6 + index_offset, ItemClassification.progression, 3),
+    #TODO: Check clamshell count
+    "Clamshell": ItemData("Item", 16 + index_offset, ItemClassification.progression, 17),
+    "Digested Head": ItemData("Item", 17 + index_offset, ItemClassification.progression, 3),
+    "Lost Penguin": ItemData("Item", 24 + index_offset, ItemClassification.progression, 12),
+    "Elevator Part": ItemData("Item", 224 + index_offset, ItemClassification.progression, 17),
+    "Undersea Crab": ItemData("Item", 212 + index_offset, ItemClassification.progression, 15),
+    "West Lookout Token": ItemData("Item", 81 + index_offset, ItemClassification.progression),
+    "Central Lookout Token": ItemData("Item", 88 + index_offset, ItemClassification.progression),
+    "North Lookout Token": ItemData("Item", 131 + index_offset, ItemClassification.progression),
+    "Babel Quintar": ItemData("Item", 167 + index_offset, ItemClassification.progression),
+    "Quintar Shedding": ItemData("Item", 168 + index_offset, ItemClassification.progression, 12),
+    "Vermillion Book": ItemData("Item", 172 + index_offset, ItemClassification.progression),
+    "Viridian Book": ItemData("Item", 173 + index_offset, ItemClassification.progression),
+    "Cerulean Book": ItemData("Item", 174 + index_offset, ItemClassification.progression),
+    "Ancient Tablet A": ItemData("Item", 161 + index_offset, ItemClassification.filler),
+    "Ancient Tablet B": ItemData("Item", 162 + index_offset, ItemClassification.filler),
+    "Ancient Tablet C": ItemData("Item", 163 + index_offset, ItemClassification.filler),
+
+    "Quintar Flute": ItemData("Item", 39 + index_offset, ItemClassification.progression),
+    "Ibek Bell": ItemData("Item", 50 + index_offset, ItemClassification.progression),
+    "Owl Drum": ItemData("Item", 49 + index_offset, ItemClassification.progression),
+    "Salmon Violin": ItemData("Item", 48 + index_offset, ItemClassification.progression),
+    "Salmon Cello": ItemData("Item", 114 + index_offset, ItemClassification.progression),
+
+    "Home Point Stone": ItemData("Item", 19 + index_offset, ItemClassification.progression),
+    "Gaea Stone": ItemData("Item", 23 + index_offset, ItemClassification.progression),
+    "Mercury Stone": ItemData("Item", 13 + index_offset, ItemClassification.progression),
+    "Poseidon Stone": ItemData("Item", 57 + index_offset, ItemClassification.progression),
+    "Mars Stone": ItemData("Item", 59 + index_offset, ItemClassification.progression),
+    "Ganymede Stone": ItemData("Item", 65 + index_offset, ItemClassification.progression),
+    "Triton Stone": ItemData("Item", 66 + index_offset, ItemClassification.progression),
+    "Callisto Stone": ItemData("Item", 155 + index_offset, ItemClassification.progression),
+    "Europa Stone": ItemData("Item", 64 + index_offset, ItemClassification.progression),
+    "Dione Stone": ItemData("Item", 166 + index_offset, ItemClassification.progression),
+    "Neptune Stone": ItemData("Item", 208 + index_offset, ItemClassification.progression),
+    "New World Stone": ItemData("Item", 140 + index_offset, ItemClassification.progression),
+    "Old World Stone": ItemData("Item", 253 + index_offset, ItemClassification.progression),
+
+    "Short Sword": ItemData("Equipment", 0 + index_offset, ItemClassification.useful),
+    "Iron Sword": ItemData("Equipment", 11 + index_offset, ItemClassification.useful),
+    "Contract": ItemData("Equipment", 71 + index_offset, ItemClassification.useful),
+    "Help the Prince": ItemData("Equipment", 89 + index_offset, ItemClassification.useful),
+    "Craftwork Sword": ItemData("Equipment", 93 + index_offset, ItemClassification.useful),
+    "Broadsword": ItemData("Equipment", 12 + index_offset, ItemClassification.useful),
+    "Sharp Sword": ItemData("Equipment", 200 + index_offset, ItemClassification.useful),
+    "Razor Edge": ItemData("Equipment", 199 + index_offset, ItemClassification.useful),
+    "Silver Sword": ItemData("Equipment", 112 + index_offset, ItemClassification.useful),
+    "Artisan Sword": ItemData("Equipment", 157 + index_offset, ItemClassification.useful),
+    "Longsword": ItemData("Equipment", 378 + index_offset, ItemClassification.useful),
+    "Boomer Sword": ItemData("Equipment", 177 + index_offset, ItemClassification.useful),
+    "Digested Sword": ItemData("Equipment", 227 + index_offset, ItemClassification.useful),
+    "Scimitar": ItemData("Equipment", 379 + index_offset, ItemClassification.useful),
+    "Cutlass": ItemData("Equipment", 377 + index_offset, ItemClassification.useful),
+    "Cold Touch": ItemData("Equipment", 375 + index_offset, ItemClassification.useful),
+    "Burning Blade": ItemData("Equipment", 497 + index_offset, ItemClassification.useful),
+    "Gold Sword": ItemData("Equipment", 138 + index_offset, ItemClassification.useful),
+    "War Sword": ItemData("Equipment", 376 + index_offset, ItemClassification.useful),
+    "Bloodbind": ItemData("Equipment", 197 + index_offset, ItemClassification.useful),
+    "Temporal Blade": ItemData("Equipment", 525 + index_offset, ItemClassification.useful),
+    "Highland Blade": ItemData("Equipment", 370 + index_offset, ItemClassification.useful),
+    "Hydra Edge": ItemData("Equipment", 371 + index_offset, ItemClassification.useful),
+    "Defender": ItemData("Equipment", 380 + index_offset, ItemClassification.useful),
+    "Crystal Sword": ItemData("Equipment", 374 + index_offset, ItemClassification.useful),
+    "Conquest": ItemData("Equipment", 372 + index_offset, ItemClassification.useful),
+    "Flame Sword": ItemData("Equipment", 381 + index_offset, ItemClassification.useful),
+    "Master Sword": ItemData("Equipment", 248 + index_offset, ItemClassification.useful),
+    "Rune Sword": ItemData("Equipment", 382 + index_offset, ItemClassification.useful),
+    "Auduril": ItemData("Equipment", 270 + index_offset, ItemClassification.useful),
+    "Master Bigsword": ItemData("Equipment", 249 + index_offset, ItemClassification.useful),
+    "Training Sword": ItemData("Equipment", 532 + index_offset, ItemClassification.useful),
+    "Life Line": ItemData("Equipment", 302 + index_offset, ItemClassification.useful),
+    "Soul Keeper": ItemData("Equipment", 303 + index_offset, ItemClassification.useful),
+    "Crabs Claw": ItemData("Equipment", 411 + index_offset, ItemClassification.useful),
+    "Kings Guard": ItemData("Equipment", 316 + index_offset, ItemClassification.useful),
+    "Diamond Sword": ItemData("Equipment", 135 + index_offset, ItemClassification.useful),
+    "Balrog": ItemData("Equipment", 369 + index_offset, ItemClassification.useful),
+    "Oily Sword": ItemData("Equipment", 279 + index_offset, ItemClassification.useful),
 }
-
-starter_melee_weapons: Tuple[str, ...] = (
-)
-
-starter_spells: Tuple[str, ...] = (
-)
-
-# weighted
-starter_progression_items: Tuple[str, ...] = (
-)
-
-pyramid_start_starter_progression_items: Tuple[str, ...] = (
-)
-
-filler_items: Tuple[str, ...] = (
-)
 
 def get_item_names_per_category() -> Dict[str, Set[str]]:
     categories: Dict[str, Set[str]] = {}
 
     for name, data in item_table.items():
-        categories.setdefault(data.category, set()).add(name)
+        if data.category != "Events":
+            categories.setdefault(data.category, set()).add(name)
 
     return categories
