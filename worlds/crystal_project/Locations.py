@@ -7,7 +7,7 @@ class LocationData(NamedTuple):
     code: Optional[int]
 
 def get_locations(world: "CrystalProjectWorld") -> List[LocationData]:
-
+    #Todo include crystals/job locations, NPC gifts, key items like squirrels, ore
     location_table: List[LocationData] = [
         LocationData("Spawning Meadow", "SM - Chest 1", 1)
     ]
