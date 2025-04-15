@@ -18,7 +18,7 @@ weapons = [
     "Tribal Spear",
     "Summoning Tribal Spear",
     "Giant Spoon",
-    "Scythe"
+    "Scythe",
     "Giant Spoon of Doom",
 ]
 
