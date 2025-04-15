@@ -66,10 +66,9 @@ class CandyBox2World(World):
 
     def create_items(self):
         for name, data in items.items():
-            if data.required_amount > 0:
-                for i in range(data.required_amount):
-                    if self.options.starting_weapon.value == data.code - candy_box_2_base_id:
-                        continue
+            required_amount = data.required_amount(self)
+            if required_amount > 0:
+                for i in range(required_amount):
                     if not self.options.randomise_hp_bar and name == "HP Bar":
                         continue
                     self.multiworld.itempool += [self.create_item(name)]
