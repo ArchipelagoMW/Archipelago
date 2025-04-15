@@ -32,10 +32,16 @@ class CrystalProjectWorld(World):
     location_name_to_id = location_ids
     location_name_groups = location_groups
     item_name_groups = get_item_names_per_category()
-    self.multiworld.push_precollected(self.create_item("Home Point Stone"))
+
+    def generate_early(self):
+        self.multiworld.push_precollected(self.create_item("Item - Home Point Stone"))
 
     def create_regions(self) -> None:
         init_areas(self, get_locations("CrystalProjectWorld"))
+
+    def create_item(self, name: str) -> Item:
+        data = item_table[name]
+        return Item(name, data.classification, data.code, self.player)
 
     def create_items(self) -> None:
         pool = self.get_item_pool(self.get_excluded_items())
@@ -44,33 +50,32 @@ class CrystalProjectWorld(World):
 
     def get_excluded_items(self) -> Set[str]:
         excluded_items: Set[str] = set()
-        excluded_items.add("Warrior Job")
-        excluded_items.add("Monk Job")
-        excluded_items.add("Rogue Job")
-        excluded_items.add("Cleric Job")
-        excluded_items.add("Wizard Job")
+        excluded_items.add("Job - Warrior")
+        excluded_items.add("Job - Monk")
+        excluded_items.add("Job - Rogue")
+        excluded_items.add("Job - Cleric")
+        excluded_items.add("Job - Wizard")
+        excluded_items.add("Job - Warlock")
 
-        if(!self.options.randomizeJobs) {
-            excluded_items.add("Warlock Job")
-            excluded_items.add("Fencer Job")
-            excluded_items.add("Shaman Job")
-            excluded_items.add("Scholar Job")
-            excluded_items.add("Aegis Job")
-            excluded_items.add("Hunter Job")
-            excluded_items.add("Chemist Job")
-            excluded_items.add("Reaper Job")
-            excluded_items.add("Ninja Job")
-            excluded_items.add("Nomad Job")
-            excluded_items.add("Dervish Job")
-            excluded_items.add("Beatsmith Job")
-            excluded_items.add("Samurai Job")
-            excluded_items.add("Assassin Job")
-            excluded_items.add("Valkyrie Job")
-            excluded_items.add("Summoner Job")
-            excluded_items.add("Beastmaster Job")
-            excluded_items.add("Weaver Job")
-            excluded_items.add("Mimic Job")
-        }
+        if self.options.randomizeJobs != 1:
+            excluded_items.add("Job - Fencer")
+            excluded_items.add("Job - Shaman")
+            excluded_items.add("Job - Scholar")
+            excluded_items.add("Job - Aegis")
+            excluded_items.add("Job - Hunter")
+            excluded_items.add("Job - Chemist")
+            excluded_items.add("Job - Reaper")
+            excluded_items.add("Job - Ninja")
+            excluded_items.add("Job - Nomad")
+            excluded_items.add("Job - Dervish")
+            excluded_items.add("Job - Beatsmith")
+            excluded_items.add("Job - Samurai")
+            excluded_items.add("Job - Assassin")
+            excluded_items.add("Job - Valkyrie")
+            excluded_items.add("Job - Summoner")
+            excluded_items.add("Job - Beastmaster")
+            excluded_items.add("Job - Weaver")
+            excluded_items.add("Job - Mimic")
 
         return excluded_items
 

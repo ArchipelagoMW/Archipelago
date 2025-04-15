@@ -6,8 +6,8 @@ class LocationData(NamedTuple):
     name: str
     code: Optional[int]
 
-    treasure_index_offset = 1
-    npc_index_offset = 10000
+treasure_index_offset = 1
+npc_index_offset = 10000
 
 def get_locations(world: "CrystalProjectWorld") -> List[LocationData]:
     #Todo include crystals/job locations, NPC gifts, key items like squirrels, ore
