@@ -146,8 +146,8 @@ workarounds or preferred methods which should be used instead:
   * If you need to place specific items, there are multiple ways to do so, but they should not be added to the 
     multiworld itempool.
 * It is not allowed to use `eval` for most reasons, chiefly due to security concerns. 
-* It is discouraged to use `yaml.load` directly due to security concerns.
-  * When possible, use `Utils.yaml_load` instead, as this defaults to the safe loader.
+* It is discouraged to use PyYAML (i.e. `yaml.load`) directly due to security concerns.
+  * When possible, use `Utils.parse_yaml` instead, as this defaults to the safe loader and the faster C parser.
 * When submitting regions or items to the multiworld (`multiworld.regions` and `multiworld.itempool` respectively), 
   do **not** use `=` as this will overwrite all elements for all games in the seed.
   * Instead, use `append`, `extend`, or `+=`.
