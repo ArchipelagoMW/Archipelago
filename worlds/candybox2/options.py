@@ -59,23 +59,26 @@ class TeapotHP(Range):
 
 class StartingWeapon(Choice):
     """
-    Select the weapon that you will start the game with
+    Select the weapon that you will start the game with.
+
+    Progressive Weapons will give you the next weapon in the sequence each time you get it.
     """
     display_name = "Starting Weapon"
     default = 61
 
     option_nothing = 61
+    option_progressive_weapons = -1
     option_wooden_sword = 23
     option_iron_axe = 24
-    option_tribal_spear = 36
-    option_monkey_wizard_staff = 16
     option_polished_silver_sword = 25
     option_trolls_bludgeon = 9
-    option_summoning_tribal_spear = 30
+    option_monkey_wizard_staff = 16
     option_enchanted_monkey_wizard_staff = 31
+    option_tribal_spear = 36
+    option_summoning_tribal_spear = 30
     option_giant_spoon = 37
-    option_giant_spoon_of_doom = 35
     option_scythe = 27
+    option_giant_spoon_of_doom = 35
 
 class RandomiseHpBar(Toggle):
     """Whether the HP Bar must be an item found elsewhere"""

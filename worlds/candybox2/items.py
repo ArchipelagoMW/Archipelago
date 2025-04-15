@@ -86,14 +86,26 @@ items: dict[str, CandyBox2ItemData] = {
     "Boots of Introspection": CandyBox2ItemData(candy_box_2_base_id + 59, lambda _: 1, ItemClassification.progression),
     "Pain au Chocolat": CandyBox2ItemData(candy_box_2_base_id + 60, lambda _: 5, ItemClassification.useful),
     "Nothing (Weapon)": CandyBox2ItemData(candy_box_2_base_id + 61, lambda world: weapon_item_count(world, 61), ItemClassification.progression),
+    "Progressive Weapon": CandyBox2ItemData(candy_box_2_base_id + 62, lambda world: progressive_weapon_count(world), ItemClassification.progression),
 }
 
 def weapon_item_count(world: "CandyBox2World", weapon: int):
-    if world.options.starting_weapon.value == weapon:
+    if world.starting_weapon == weapon:
         # We start with this weapon, so none of these are required
         return 0
 
+    if world.starting_weapon == -1:
+        # We are using Progressive Weapons, so no weapons will be added to the pool
+        return 0
+
     return 1
+
+def progressive_weapon_count(world: "CandyBox2World"):
+    if world.starting_weapon == -1:
+        return 11
+
+    # Progressive Weapons are disabled
+    return 0
 
 def hp_bar_count(world: "CandyBox2World"):
     if world.options.randomise_hp_bar:

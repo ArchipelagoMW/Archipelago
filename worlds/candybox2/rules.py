@@ -11,15 +11,15 @@ weapons = [
     "Nothing (Weapon)",
     "Wooden Sword",
     "Iron Axe",
-    "Tribal Spear",
-    "Monkey Wizard Staff",
     "Polished Silver Sword",
     "Troll's Bludgeon",
+    "Monkey Wizard Staff",
+    "Enchanted Monkey Wizard Staff",
+    "Tribal Spear",
     "Summoning Tribal Spear",
     "Giant Spoon",
-    "Enchanted Monkey Wizard Staff",
-    "Giant Spoon of Doom",
     "Scythe"
+    "Giant Spoon of Doom",
 ]
 
 armors = [
@@ -156,9 +156,13 @@ def has_weapon(world: "CandyBox2World", state: CollectionState, player: int, wea
     if state.has(weapon, player):
         return True
 
-    for item in items:
-        if items[item].code - candy_box_2_base_id == world.starting_weapon and item == weapon:
+    if world.starting_weapon == -1:
+        if state.has("Progressive Weapon", player, weapons.index(weapon)):
             return True
+    else:
+        for item in items:
+            if items[item].code - candy_box_2_base_id == world.starting_weapon and item == weapon:
+                return True
 
     return False
 
