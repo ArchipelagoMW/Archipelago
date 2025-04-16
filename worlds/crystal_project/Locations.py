@@ -9,6 +9,7 @@ class LocationData(NamedTuple):
 treasure_index_offset = 1
 npc_index_offset = 10000
 crystal_index_offset = 100000
+#ability_index_offset = 1000000 Abilities Todo
 
 def get_locations() -> List[LocationData]:
     #Todo include crystals/job locations, NPC gifts, key items like squirrels, ore
@@ -25,7 +26,7 @@ def get_locations() -> List[LocationData]:
         LocationData("Spawning Meadows", "Spawning Meadows Chest - Jump on secret tunnel chest Fenix Juice chest", 5 + treasure_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows Chest - Fenix Juice chest on path to Delende", 49 + treasure_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows Chest - Secret tunnel Stabbers chest", 47 + treasure_index_offset),
-        LocationData("Spawning Meadows", "Spawning Meadows Chest - Stout Shield Chest on ledge jump from tree", 50 + treasure_index_offset),
+        LocationData("Spawning Meadows", "Spawning Meadows Chest - Stout Shield chest on ledge jump from tree", 50 + treasure_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows Chest - Cross trees and jump down Tincture chest", 38 + treasure_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows Chest - Tonic chest west of spawn", 1 + treasure_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows Chest - Tonic chest in cave NW of spawn", 2 + treasure_index_offset),
@@ -33,14 +34,26 @@ def get_locations() -> List[LocationData]:
 
         #NPCs
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Pouch Nan", 53 + npc_index_offset),
-        LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret herb near Shaku", 627 + npc_index_offset),
+        LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb near Shaku", 627 + npc_index_offset), #Secret Herb 0
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Map Nan", 84 + npc_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Nan Stew", 14 + npc_index_offset),
-        LocationData("Spawning Meadows", "Spawning Meadows NPC - Butterfly Goo", 194 + npc_index_offset),
+        LocationData("Spawning Meadows", "Spawning Meadows NPC - Butterfly Goo", 194 + npc_index_offset), #Tree Fairy NPC seems to have the dialogue for this (ID 194)
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Buttersquirrel on tree SW of spawn", 264 + npc_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Buttersquirrel on tree NW of spawn", 296 + npc_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Buttersquirrel on tree near lampposts", 110 + npc_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Buttersquirrel on Mario jump tree", 3085 + npc_index_offset),
+        #Secret Herb locations that don't seem to be used?
+        #48, 112, -36
+        #LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb 1", 297 + npc_index_offset),
+        #79, 112, -30
+        #LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb 2", 545 + npc_index_offset),
+        #43, 104, -8
+        #LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb 3", 546 + npc_index_offset),
+
+
+        #Abilities Todo: descriptivize and implement
+        #118, 109, 10
+        #LocationData("Spawning Meadows", "Spawning Meadows Ability - Shaku from SFire_Summon", 477 + ability_index_offset),
 
         #Delende
         #Treasure chests
@@ -75,13 +88,13 @@ def get_locations() -> List[LocationData]:
 
         #Grans House (Delende)
         #Treasure chests
-        #126, 128, -58
+        #126, 128, -58 style: blank
         LocationData("Delende", "Delende Chest - Grans House empty chest 1", 87 + treasure_index_offset),
-        #127, 128, -58
+        #127, 128, -58 style: weapon
         LocationData("Delende", "Delende Chest - Grans House empty chest 2", 100 + treasure_index_offset),
-        #137, 128, -57
+        #137, 128, -57 style: consumable
         LocationData("Delende", "Delende Chest - Grans House empty chest 3", 177 + treasure_index_offset),
-        #137, 128, -56
+        #137, 128, -56 style: consumable
         LocationData("Delende", "Delende Chest - Grans House empty chest 4", 178 + treasure_index_offset),
 
         #Basement (Somehow Not Delende)
@@ -133,14 +146,61 @@ def get_locations() -> List[LocationData]:
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Clamshell chest south of ClamHater", 281 + treasure_index_offset),
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Tonic chest south of Clamshell chest south of ClamHater", 286 + treasure_index_offset),
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Climbing the seaside cliffs Potion chest", 42 + treasure_index_offset),
-        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Encampment freebie Tonic chest of the three amigos", 1161 + treasure_index_offset),
-        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Encampment freebie Scope Bit chest of the three amigos", 447 + treasure_index_offset),
-        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Encampment freebie Clamshell chest of the three amigos", 270 + treasure_index_offset),
-
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Three Amigos Tonic chest", 1161 + treasure_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Three Amigos Scope Bit chest", 447 + treasure_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Three Amigos Clamshell chest", 270 + treasure_index_offset),
+        #310, 116, -68
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Money chest beneath encampment ledge", 217 + treasure_index_offset),
+        #213, 107, 27
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Money chest on jigsaw mountain", 449 + treasure_index_offset),
+        #307, 113, -22
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Clamshell chest in cliffs nook south of encampment", 80 + treasure_index_offset),
+        #275,108,-28
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Clamshell chest below west Delende entrance", 273 + treasure_index_offset),
+        #312, 95, 12
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Clamshell chest above the eastern beach standing stones", 274 + treasure_index_offset),
+        #223, 94, 26
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Clamshell chest below jigsaw mountain", 275 + treasure_index_offset),
+        #259, 107, -18
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Island Clamshell chest by the waterfalls", 277 + treasure_index_offset),
+        #281, 98, -3
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Clamshell chest east of the river above the beach", 278 + treasure_index_offset),
+        #302, 101, 4
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Clamshell chest along the eastern beach up the cliffs", 279 + treasure_index_offset),
+        #250, 104, -13
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Parkour Fenix Juice chest by the island waterfalls", 289 + treasure_index_offset),
+        #218, 107, 23
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Headgear chest on jigsaw mountain", 157 + treasure_index_offset),
+        #289, 110, -18
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Jewel of Defense chest south of encampment on the canyon mountainside", 272 + treasure_index_offset),
+        #250, 98, -4
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Tincture chest downstream of the island waterfalls", 288 + treasure_index_offset),
+        #Seaside Cliffs Beach
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - The little mermaid Clamshell chest", 276 + treasure_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Clamshell chest atop the polka dot peninsula", 280 + treasure_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Peninsula Storm Cap chest past the standing stones jump puzzle", 205 + treasure_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - MR SNIPS Fenix Juice chest", 287 + treasure_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Swimmers Top chest atop sea stack east of the bay", 450 + treasure_index_offset),
+        #Seaside Cliffs Valley
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Rocky cove Clamshell chest down the lazy river", 269 + treasure_index_offset),
+        
         #NPCs
         LocationData("Seaside Cliffs", "Seaside Cliffs NPC - ClamHater above the mist", 283 + npc_index_offset),
-        LocationData("Seaside Cliffs", "Seaside Cliffs NPC - Encampment ClamLover Manananananana Man", 284 + npc_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs NPC - If you give a Manana Man a clam... (he will ask you for more)", 284 + npc_index_offset),
+        #343, 81, 0 Todo: requires Salmon
+        LocationData("Seaside Cliffs", "Seaside Cliffs NPC - Diamond Ore below the bay", 2896 + npc_index_offset),
 
+        #Draft Shaft Conduit
+        #Treasure chests
+        LocationData("Draft Shaft Conduit", "Draft Shaft Conduit Chest - Straight shot Torch chest", 82 + treasure_index_offset),
+        LocationData("Draft Shaft Conduit", "Draft Shaft Conduit Chest - Ring around the rosy Tonic Pouch chest", 81 + treasure_index_offset),
+
+        #Crystals
+        LocationData("Draft Shaft Conduit", "Draft Shaft Conduit Crystal - Shaman Crystal", 35 + crystal_index_offset),
+
+        #Mercury Shrine
+        #Treasure chests Todo: requires Mercury Stone
+        LocationData("Mercury Shrine", "Mercury Shrine Chest - Pinnacle Contract chest", 155 + treasure_index_offset),
 
         #Proving Meadows
         #Treasure chests
