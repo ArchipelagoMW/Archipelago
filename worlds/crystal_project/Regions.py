@@ -31,6 +31,17 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
     multiworld.regions += regions
     connect_menu_region(world)
 
+    multiworld.get_region("Spawning Meadows", player).add_exits(["Delende"])
+    multiworld.get_region("Delende", player).add_exits(["Soiled Den", "Pale Grotto", "Yamagawa M.A."])
+    multiworld.get_region("Pale Grotto", player).add_exits(["Proving Meadows"])
+
+    ## examples
+    # multiworld.get_region("Onett", player).add_exits(["Giant Step", "Twoson", "Northern Onett", "Global ATM Access"],
+    #                                              {"Giant Step": lambda state: state.has("Key to the Shack", player),
+    #                                               "Twoson": lambda state: state.has("Police Badge", player),
+    #                                               "Northern Onett": lambda state: state.has("Police Badge", player)})
+    # multiworld.get_region("Happy-Happy Village", player).add_exits(["Peaceful Rest Valley", "Lilliput Steps", "Global ATM Access"])
+
 def get_locations_per_region(locations: List[LocationData]) -> Dict[str, List[LocationData]]:
     per_region: Dict[str, List[LocationData]] = {}
 
