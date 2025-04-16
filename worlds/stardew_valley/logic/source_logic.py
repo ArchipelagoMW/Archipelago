@@ -12,7 +12,7 @@ from .region_logic import RegionLogicMixin
 from .requirement_logic import RequirementLogicMixin
 from .tool_logic import ToolLogicMixin
 from ..data.artisan import MachineSource
-from ..data.game_item import GenericSource, ItemSource, GameItem, CustomRuleSource
+from ..data.game_item import GenericSource, Source, GameItem, CustomRuleSource
 from ..data.harvest import ForagingSource, FruitBatsSource, MushroomCaveSource, SeasonalForagingSource, \
     HarvestCropSource, HarvestFruitTreeSource, ArtifactSpotSource
 from ..data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
@@ -36,7 +36,7 @@ ArtisanLogicMixin, ToolLogicMixin, RequirementLogicMixin, GrindLogicMixin]]):
         rules.append(self.logic.source.has_access_to_any(item.sources))
         return self.logic.and_(*rules)
 
-    def has_access_to_any(self, sources: Iterable[ItemSource]):
+    def has_access_to_any(self, sources: Iterable[Source]):
         return self.logic.or_(*(self.logic.source.has_access_to(source) & self.logic.requirement.meet_all_requirements(source.other_requirements)
                                 for source in sources))
 

@@ -194,6 +194,8 @@ item_table = {
     "Fuji Saved": ItemData(None, ItemClassification.progression, []),
     "Silph Co Liberated": ItemData(None, ItemClassification.progression, []),
     "Become Champion": ItemData(None, ItemClassification.progression, []),
+    "Mt Moon Fossils": ItemData(None, ItemClassification.progression, []),
+    "Cinnabar Lab": ItemData(None, ItemClassification.progression, []),
 
     "Trainer Parties": ItemData(None, ItemClassification.filler, [])
 }

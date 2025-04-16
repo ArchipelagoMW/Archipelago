@@ -31,6 +31,9 @@ def check_stdin() -> None:
         print("WARNING: Console input is not routed reliably on Windows, use the GUI instead.")
 
 class KH1ClientCommandProcessor(ClientCommandProcessor):
+    def __init__(self, ctx):
+        super().__init__(ctx)
+    
     def _cmd_deathlink(self):
         """Toggles Deathlink"""
         global death_link
@@ -40,6 +43,40 @@ class KH1ClientCommandProcessor(ClientCommandProcessor):
         else:
             death_link = True
             self.output(f"Death Link turned on")
+    
+    def _cmd_goal(self):
+        """Prints goal setting"""
+        if "goal" in self.ctx.slot_data.keys():
+            self.output(str(self.ctx.slot_data["goal"]))
+        else:
+            self.output("Unknown")
+    
+    def _cmd_eotw_unlock(self):
+        """Prints End of the World Unlock setting"""
+        if "required_reports_door" in self.ctx.slot_data.keys():
+            if self.ctx.slot_data["required_reports_door"] > 13:
+                self.output("Item")
+            else:
+                self.output(str(self.ctx.slot_data["required_reports_eotw"]) + " reports")
+        else:
+            self.output("Unknown")
+    
+    def _cmd_door_unlock(self):
+        """Prints Final Rest Door Unlock setting"""
+        if "door" in self.ctx.slot_data.keys():
+            if self.ctx.slot_data["door"] == "reports":
+                self.output(str(self.ctx.slot_data["required_reports_door"]) + " reports")
+            else:
+                self.output(str(self.ctx.slot_data["door"]))
+        else:
+            self.output("Unknown")
+    
+    def _cmd_advanced_logic(self):
+        """Prints advanced logic setting"""
+        if "advanced_logic" in self.ctx.slot_data.keys():
+            self.output(str(self.ctx.slot_data["advanced_logic"]))
+        else:
+            self.output("Unknown")
 
 class KH1Context(CommonContext):
     command_processor: int = KH1ClientCommandProcessor
@@ -51,6 +88,8 @@ class KH1Context(CommonContext):
         self.send_index: int = 0
         self.syncing = False
         self.awaiting_bridge = False
+        self.hinted_synth_location_ids = False
+        self.slot_data = {}
         # self.game_communication_path: files go in this path to pass data between us and the actual game
         if "localappdata" in os.environ:
             self.game_communication_path = os.path.expandvars(r"%localappdata%/KH1FM")
@@ -104,6 +143,7 @@ class KH1Context(CommonContext):
                     f.close()
             
             #Handle Slot Data
+            self.slot_data = args['slot_data']
             for key in list(args['slot_data'].keys()):
                 with open(os.path.join(self.game_communication_path, key + ".cfg"), 'w') as f:
                     f.write(str(args['slot_data'][key]))
@@ -217,11 +257,13 @@ async def game_watcher(ctx: KH1Context):
                         if timegm(time.strptime(st, '%Y%m%d%H%M%S')) > ctx.last_death_link and int(time.time()) % int(timegm(time.strptime(st, '%Y%m%d%H%M%S'))) < 10:
                             await ctx.send_death(death_text = "Sora was defeated!")
                 if file.find("insynthshop") > -1:
-                    await ctx.send_msgs([{
-                        "cmd": "LocationScouts",
-                        "locations": [2656401,2656402,2656403,2656404,2656405,2656406],
-                        "create_as_hint": 2
-                    }])
+                    if not ctx.hinted_synth_location_ids:
+                        await ctx.send_msgs([{
+                            "cmd": "LocationScouts",
+                            "locations": [2656401,2656402,2656403,2656404,2656405,2656406],
+                            "create_as_hint": 2
+                        }])
+                        ctx.hinted_synth_location_ids = True
         ctx.locations_checked = sending
         message = [{"cmd": 'LocationChecks', "locations": sending}]
         await ctx.send_msgs(message)
@@ -253,6 +295,6 @@ def launch():
     parser = get_base_parser(description="KH1 Client, for text interfacing.")
 
     args, rest = parser.parse_known_args()
-    colorama.init()
+    colorama.just_fix_windows_console()
     asyncio.run(main(args))
     colorama.deinit()
