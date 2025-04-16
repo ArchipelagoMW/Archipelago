@@ -343,6 +343,8 @@ class ChestTypes(Choice):
     """
     Determines how chest colors and size are chosen,
 
+    vanilla: Chests are their original size and color
+
     default: Size and color are determined by attempting to match the item type to a representative color similar to the vanilla game
 
     full_random: Size and color are chosen completely at random.
@@ -355,11 +357,12 @@ class ChestTypes(Choice):
     """
     display_name = "Chest Cosmetics"
     internal_name = "chest_types"
-    option_default = 0
-    option_full_random = 1
-    option_color = 2
-    option_size_and_color = 3
-    option_no_fuzzy_matching = 4
+    option_vanilla = 0
+    option_default = 1
+    option_full_random = 2
+    option_color = 3
+    option_size_and_color = 4
+    option_no_fuzzy_matching = 5
     default = 0
 
 

@@ -1076,7 +1076,7 @@ def update_obj_info(obj_info):
 
 # Indicates the chest size that will be loaded in game based on item provided. 0 = small, 1 = medium, 2 = large
 def __get_chest_size_from_item(item_name, chest_option, classification, trap_option, slot, iplayer):
-    if chest_option == 0 or chest_option == 2:
+    if chest_option == 1 or chest_option == 3:
         if "Boo" in item_name and slot == iplayer:
             return 0
         if any(iname in item_name for iname in money_item_names):
@@ -1101,7 +1101,7 @@ def __get_chest_size_from_item(item_name, chest_option, classification, trap_opt
 
         return 0
 
-    elif chest_option == 3:
+    elif chest_option == 4:
         if "progression" in classification:
             return 2
         elif "useful" in classification:
@@ -1116,10 +1116,10 @@ def __get_chest_size_from_item(item_name, chest_option, classification, trap_opt
             else:
                 return choice([0,1,2])
 
-    elif chest_option == 1:
+    elif chest_option == 2:
         return choice([0,1,2])
 
-    elif chest_option == 4:
+    elif chest_option == 5:
         if "Boo" in item_name and slot == iplayer:
             return 0
         if any(iname in item_name for iname in money_item_names) and slot == iplayer:
@@ -1269,7 +1269,7 @@ def update_treasure_table(treasure_info, character_info, output_data, teiden: bo
                 chest_size = 0
                 if item_data["room_no"] != 11:
                     # Replace the Chest visuals with something that matches the item name in "characterinfo".
-                    if output_data["Options"]["chest_types"] == 0:
+                    if output_data["Options"]["chest_types"] == 1:
                         x["name"] = __get_item_chest_visual(item_data["name"], 0, item_data["classification"], output_data["Options"]["trap_chests"], output_data["Slot"], item_data["player"])
                         if item_data["door_id"] == 0:
                             chest_size = __get_chest_size_from_item(item_data["name"], 0, item_data["classification"], output_data["Options"]["trap_chests"], output_data["Slot"], item_data["player"])
@@ -1354,7 +1354,7 @@ def __get_chest_size_from_key(key_id):
 
 # Changes the type of chest loaded in game based on the type of item that is hidden inside
 def __get_item_chest_visual(item_name, chest_option, classification, trap_option, slot, iplayer):
-    if chest_option == 0:
+    if chest_option == 1:
         if "Boo" in item_name and slot == iplayer:
             return "wtakara1"
         if any(iname in item_name for iname in money_item_names):
@@ -1388,7 +1388,7 @@ def __get_item_chest_visual(item_name, chest_option, classification, trap_option
                 return "gtakara1"
 
         return "btakara1"
-    elif chest_option == 2 or chest_option == 3:
+    elif chest_option == 3 or chest_option == 4:
         if "progression" in classification:
             return "ytakara1"
         elif "useful" in classification:
@@ -1403,10 +1403,10 @@ def __get_item_chest_visual(item_name, chest_option, classification, trap_option
             else:
                 return choice(["ytakara1", "rtakara1", "btakara1", "wtakara1", "gtakara1"])
 
-    elif chest_option == 1:
+    elif chest_option == 2:
         return choice(["ytakara1", "rtakara1", "btakara1", "wtakara1", "gtakara1"])
 
-    elif chest_option == 4:
+    elif chest_option == 5:
         if "Boo" in item_name and slot == iplayer:
             return "wtakara1"
         if any(iname in item_name for iname in money_item_names) and slot == iplayer:
