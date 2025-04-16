@@ -10,7 +10,7 @@ from collections import Counter, deque, defaultdict
 from collections.abc import Collection, MutableSequence
 from enum import IntEnum, IntFlag
 from typing import (AbstractSet, Any, Callable, ClassVar, Dict, Iterable, Iterator, List, Mapping, NamedTuple,
-                    Optional, Protocol, Set, Tuple, Union, TYPE_CHECKING)
+                    Optional, Protocol, Set, Tuple, Union, TYPE_CHECKING, Literal, overload)
 
 from typing_extensions import NotRequired, TypedDict
 
@@ -906,14 +906,14 @@ class CollectionState():
             if yield_each_sweep:
                 yield
 
-    @typing.overload
+    @overload
     def sweep_for_advancements(self, locations: Optional[Iterable[Location]] = None, *,
-                               yield_each_sweep: typing.Literal[True],
+                               yield_each_sweep: Literal[True],
                                checked_locations: Optional[Set[Location]] = None) -> Iterator[None]: ...
 
-    @typing.overload
+    @overload
     def sweep_for_advancements(self, locations: Optional[Iterable[Location]] = None,
-                               yield_each_sweep: typing.Literal[False] = False,
+                               yield_each_sweep: Literal[False] = False,
                                checked_locations: Optional[Set[Location]] = None) -> None: ...
 
     def sweep_for_advancements(self, locations: Optional[Iterable[Location]] = None, yield_each_sweep: bool = False,
