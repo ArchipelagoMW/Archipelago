@@ -96,11 +96,11 @@ class CelesteWorld(World):
                 self.active_levels.add("9c")
 
         self.active_levels.add(self.goal_area)
-        if self.goal_area == "9c":
-            self.active_levels.add("9b")
-            self.active_levels.add("9a")
-        elif self.goal_area == "9b":
-            self.active_levels.add("9a")
+        if self.goal_area == "10c":
+            self.active_levels.add("10b")
+            self.active_levels.add("10a")
+        elif self.goal_area == "10b":
+            self.active_levels.add("10a")
 
         self.active_items = set()
         for level in self.active_levels:

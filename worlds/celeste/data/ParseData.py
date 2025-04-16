@@ -58,7 +58,7 @@ for level in level_data["levels"]:
                     location_full_name = f"{room_full_name}_{location['name']}"
 
                     location_display_name = location['display_name']
-                    if location['type'] == "strawberry" or location['type'] == "binoculars":
+                    if (location['type'] == "strawberry" and location_display_name != "Moon Berry") or location['type'] == "binoculars" :
                         location_display_name = f"Room {room['name']} {location_display_name}" 
                     location_full_display_name = f"{level['display_name']} - {location_display_name}"
 
