@@ -174,6 +174,10 @@ def update_event_info(event_info, boo_checks: bool, output_data):
             x["EventFlag"] = 0
             x["disappear_flag"] = 74
 
+        # Turn off Event 74 (Warp to King Boo Fight) in blackout by disabling event if King Boo isn't present
+        if x["EventNo"] == 74:
+            x["CharacterName"] = "dltelesa"
+
         # Make event38 load more than once
         if x["EventNo"] == 38:
             x["EventLoad"] = 0
@@ -197,7 +201,6 @@ def update_event_info(event_info, boo_checks: bool, output_data):
 
         # Update the King Boo event trigger to be area entry based
         if boo_checks and x["EventNo"] == 16:
-            x["CharacterName"] = "(null)"
             x["pos_x"] = 2260.000000
             x["pos_y"] = -450.000000
             x["pos_z"] = -5300.000000
