@@ -122,7 +122,7 @@ def get_locations(world: "CrystalProjectWorld") -> List[LocationData]:
         LocationData("Pale Grotto", "Pale Grotto Chest - Temple sanctuary Pale Grotto Map chest", 1154 + treasure_index_offset),
         
         #Crystals
-        LocationData("Pale Grotto", "Pale Grotto Chest - Temple sanctuary Fencer Crystal", 130 + crystal_index_offset),
+        LocationData("Pale Grotto", "Pale Grotto Crystal - Temple sanctuary Fencer Crystal", 130 + crystal_index_offset),
 
         #Seaside Cliffs
         #Treasure chests
@@ -165,7 +165,7 @@ def get_locations(world: "CrystalProjectWorld") -> List[LocationData]:
         LocationData("Yamagawa M.A.", "Yamagawa M.A. NPC - Autumns Oath at waterfall source", 628 + npc_index_offset),
 
         #Crystals
-        LocationData("Yamagawa M.A.", "Yamagawa M.A. NPC - Jump into fireplace cave for Scholar Crystal", 166 + crystal_index_offset),
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. Crystal - Jump into fireplace cave for Scholar Crystal", 166 + crystal_index_offset),
 
         #Zones (Expert)
         #Lake Delende
