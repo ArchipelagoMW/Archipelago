@@ -113,6 +113,11 @@ class SatisfactoryWorld(World):
                     multiplied_amount = max(amount * (self.options.milestone_cost_multiplier / 100), 1)
                     slot_hub_layout[tier - 1][milestone - 1][self.item_name_to_id[bundled_name]] = multiplied_amount
 
+        starting_recipes: tuple[int] = tuple(
+            self.item_name_to_id[recipe_name] 
+            for recipe_name in self.critical_path.tier_0_recipes
+        )
+
         return {
             "Data": {
                 "HubLayout": slot_hub_layout,
@@ -123,20 +128,23 @@ class SatisfactoryWorld(World):
                     "FinalElevatorTier": self.options.final_elevator_package.value,
                     "FinalResourceSinkPointsTotal": self.options.goal_awesome_sink_points_total.value,
                     "FinalResourceSinkPointsPerMinute": self.options.goal_awesome_sink_points_per_minute.value,
+                    "FinalExplorationCollectionAmount": self.options.goal_exploration_collectables_amount.value,
                     "FreeSampleEquipment": self.options.free_sample_equipment.value,
                     "FreeSampleBuildings": self.options.free_sample_buildings.value,
                     "FreeSampleParts": self.options.free_sample_parts.value,
                     "FreeSampleRadioactive": bool(self.options.free_sample_radioactive),
-                    "EnergyLink": bool(self.options.energy_link)
-                }
+                    "EnergyLink": bool(self.options.energy_link),
+                    "StartingRecipies": starting_recipes
+                },
+                "SlotDataVersion": 1
             },
-            "SlotDataVersion": 1,
             "DeathLink": bool(self.options.death_link)
         }
 
 
-    def write_spoiler(self, spoiler_handle: TextIO) -> None:
-        pass
+    def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
+        if self.options.randomize_starter_recipes:
+            spoiler_handle.write(f'Starter Recipes:                 {sorted(self.critical_path.tier_0_recipes)}\n')
 
 
     def get_filler_item_name(self) -> str:
