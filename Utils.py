@@ -1120,12 +1120,14 @@ def visualize_regions(
     multiworld: MultiWorld = root_region.multiworld
 
     colors_used: set[int] = set()
-    if not entrance_highlighting:
-        entrance_highlighting = {}
-    else:
+    if entrance_highlighting:
         for color in entrance_highlighting.values():
             # filter the colors to their most-significant bits to avoid too similar colors
             colors_used.add(color & 0xF0F0F0)
+    else:
+        # assign an empty dict to not crash later
+        # the parameter is optional for ease of use when you don't care about colors
+        entrance_highlighting = {}
 
     def select_color(group: int) -> int:
         # specifically spacing color indexes by three different prime numbers (3, 5, 7) for the RGB components to avoid
