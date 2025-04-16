@@ -1,3 +1,0 @@
-# Pokepark Setup Guide
-
-## WIP

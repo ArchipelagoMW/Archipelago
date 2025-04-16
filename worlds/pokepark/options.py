@@ -20,6 +20,7 @@ class Powers(Choice):
     option_none = 4
     default = 3
 
+
 class RandomStartingZones(Choice):
     """
     Determines Starting Zone
@@ -32,12 +33,30 @@ class RandomStartingZones(Choice):
     option_one = 1
     option_ice_zone = 2
     default = 0
+
+
+class Goal(Choice):
+    """
+    Determines World completion condition
+    Mew: Beat Mew (Default)
+    aftergame: Complete the aftergame Prisma check (needs all friends). Adds aftergame pokemon and their minigames
+    """
+    display = "Goal Condition"
+    option_mew = 0
+    option_aftergame = 1
+
+
 @dataclass
 class PokeparkOptions(PerGameCommonOptions):
     power_randomizer: Powers
     starting_zone: RandomStartingZones
+    goal: Goal
+
 
 pokepark_option_groups = [
+    OptionGroup("Goal", [
+        Goal
+    ]),
     OptionGroup("Misc", [
         Powers,
         RandomStartingZones

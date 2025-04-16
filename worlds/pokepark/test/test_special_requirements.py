@@ -1,4 +1,6 @@
+from BaseClasses import ItemClassification
 from . import PokeparkTest
+from .. import PokeparkItem, REGION_UNLOCK
 
 
 class TestFriendCountDependencies(PokeparkTest):
@@ -196,7 +198,6 @@ class TestFriendCountDependencies(PokeparkTest):
         self.collect_by_name("Ice Zone Unlock")  # Region unlock removes dependency for tests
         self.assertFalse(self.can_reach_location("Ice Zone - Overworld - Glaceon"))
 
-
     def test_bastiodon_minigame_access(self) -> None:
         """Verify bastiodon minigame is accessable with (50 Pokemon friendships)."""
         pokemon_50_set = [
@@ -214,3 +215,33 @@ class TestFriendCountDependencies(PokeparkTest):
         self.collect_by_name(pokemon_50_set)
         self.collect_by_name("Cavern Zone & Magma Zone Unlock")  # Region unlock removes dependency for tests
         self.assertTrue(self.can_reach_region("Cavern Zone - Bastiodon's Panel Crush"))
+
+
+class TestReachingVictoryLocationMewChallenge(PokeparkTest):
+    options = {
+        "goal": 0
+    }
+
+    def test_can_beat_game(self) -> None:
+        self.collect(self.world.create_item("Skygarden Unlock"))
+        self.collect_by_name("Progressive Dash")
+
+        self.assertBeatable(True)
+
+
+class TestReachingVictoryLocationPostGame(PokeparkTest):
+    options = {
+        "goal": 1
+    }
+
+    def test_can_beat_game(self) -> None:
+        self.collect_all_but(["Victory"])
+        self.assertBeatable(True)
+
+    def test_can_not_beat_game_with_friend_missing(self) -> None:
+        self.collect_all_but(["Caterpie", "Victory"])
+        self.assertBeatable(False)
+
+    def test_can_not_beat_game_with_skygarden_unlock_missing(self) -> None:
+        self.collect_all_but(["Skygarden Unlock", "Victory"])
+        self.assertBeatable(False)

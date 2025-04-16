@@ -5,34 +5,36 @@ from BaseClasses import ItemClassification, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import components, Component, launch_subprocess
 from .items import FRIENDSHIP_ITEMS, PokeparkItem, UNLOCK_ITEMS, BERRIES, ALL_ITEMS_TABLE, PRISM_ITEM, POWERS, \
-    REGION_UNLOCK
-from .locations import ALL_LOCATIONS_TABLE
-from .logic import REGIONS
+    REGION_UNLOCK, VICTORY
+from .locations import ALL_LOCATIONS_TABLE, REGIONS
 from .options import PokeparkOptions, pokepark_option_groups
 
 
 class PokeparkWebWorld(WebWorld):
     theme = "jungle"
     tutorials = [Tutorial(
-            "Multiworld Setup Guide",
-            "A guide to setting up the Pokepark Randomizer software on your computer."
-            "This guide covers single-player, multiworld, and related software.",
-            "English",
-            "pokepark_en.md",
-            "pokepark/en",
-            [""]
+        "Multiworld Setup Guide",
+        "A guide to setting up the Pokepark Randomizer software on your computer."
+        "This guide covers single-player, multiworld, and related software.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        [""]
     )]
     options_presets = {
         "Default": {
             "power_randomizer": 3,
-            "starting_zone": 0
+            "starting_zone": 0,
+            "goal": 0
         }
     }
     option_groups = pokepark_option_groups
 
+
 class PokeparkWorld(World):
     """
-    The first Pokepark game featuring 3D Gameplay controlling Pokemon. Lot of Minigames in the mission to save the Pokepark through the collection of Prism Shards.
+    The first Pokepark game featuring 3D Gameplay controlling Pokemon.
+    Lot of Minigames in the mission to save the Pokepark through the collection of Prism Shards.
     """
     game = "PokePark"
 
@@ -44,13 +46,17 @@ class PokeparkWorld(World):
     item_name_to_id = ALL_ITEMS_TABLE
     location_name_to_id = ALL_LOCATIONS_TABLE
     location_name_groups = {
-        "Friendship Locations": [f"{region.display} - {friendship.name}" for region in REGIONS for friendship in
+        "Friendship Locations": [f"{region.display} - {friendship.name}" for region in REGIONS
+                                 for friendship in
                                  region.friendship_locations],
-        "Unlock Locations": [f"{region.display} - {unlock.name}" for region in REGIONS for unlock in
+        "Unlock Locations": [f"{region.display} - {unlock.name}" for region in REGIONS for unlock
+                             in
                              region.unlock_location],
-        "Minigame Locations": [f"{region.display} - {minigame.name}" for region in REGIONS for minigame in
+        "Minigame Locations": [f"{region.display} - {minigame.name}" for region in REGIONS for
+                               minigame in
                                region.minigame_location],
-        "Quest Locations": [f"{region.display} - {ability.name}" for region in REGIONS for ability in
+        "Quest Locations": [f"{region.display} - {ability.name}" for region in REGIONS for
+                            ability in
                             region.quest_locations]
     }
     item_name_groups = {
@@ -63,6 +69,7 @@ class PokeparkWorld(World):
     }
 
     data_version = 1
+
     def create_regions(self):
         from .regions import create_regions
         create_regions(self)
@@ -120,7 +127,15 @@ class PokeparkWorld(World):
 
     def _handle_starting_zones(self, pool):
         """Manages starting zones based on selected options."""
-        all_zones = ["Meadow Zone Unlock", "Beach Zone Unlock", "Ice Zone Unlock", "Cavern Zone & Magma Zone Unlock", "Haunted Zone Unlock"]
+        all_zones = ["Meadow Zone Unlock",
+                     "Beach Zone Unlock",
+                     "Ice Zone Unlock",
+                     "Cavern Zone & Magma Zone Unlock",
+                     "Haunted Zone Unlock",
+                     "Granite Zone & Flower Zone Unlock"]
+
+        if self.options.goal == self.options.goal.option_aftergame:
+            all_zones.append("Skygarden Unlock")
 
         if self.options.starting_zone == self.options.starting_zone.option_one:
             # Randomly select one starting zone
@@ -159,15 +174,31 @@ class PokeparkWorld(World):
         """Adds standard item categories to the pool."""
         # Items excluded from normal unlocks
         unlock_item_exception = ["Drifblim Unlock"]
+        friends_item_exception = []
 
-        pool.extend([self.create_item(name) for name in FRIENDSHIP_ITEMS.keys()])
+        if self.options.goal == self.options.goal.option_mew:
+            friends_item_exception.append("Jirachi")
+            friends_item_exception.append("Manaphy")
+            friends_item_exception.append("Latias")
+            friends_item_exception.append("Suicune")
+            friends_item_exception.append("Metagross")
+            friends_item_exception.append("Heatran")
+            friends_item_exception.append("Groudon")
+            friends_item_exception.append("Celebi")
+            friends_item_exception.append("Darkrai")
+            friends_item_exception.append("Rotom")
+            friends_item_exception.append("Shaymin")
+            friends_item_exception.append("Latios")
+            friends_item_exception.append("Deoxys")
+
+        pool.extend([self.create_item(name) for name in FRIENDSHIP_ITEMS.keys() if name not in friends_item_exception])
         pool.extend([self.create_item(name) for name in UNLOCK_ITEMS.keys()
                      if name not in unlock_item_exception])
         pool.extend([self.create_item(name) for name in PRISM_ITEM.keys()])
 
     def _fill_remaining_slots_with_berries(self, pool):
         """Fills remaining slots with berry items."""
-        remaining_slots = len(ALL_LOCATIONS_TABLE) - len(pool)
+        remaining_slots = len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)
         berry_items = list(BERRIES.keys())
 
         for i in range(remaining_slots):
@@ -178,7 +209,7 @@ class PokeparkWorld(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def create_item(self, name: str):
-        if name in FRIENDSHIP_ITEMS or name in UNLOCK_ITEMS or name in PRISM_ITEM or name in REGION_UNLOCK or name in POWERS:
+        if name in FRIENDSHIP_ITEMS or name in UNLOCK_ITEMS or name in PRISM_ITEM or name in REGION_UNLOCK or name in POWERS or name in VICTORY:
             classification = ItemClassification.progression
         elif name in BERRIES:
             classification = ItemClassification.progression_skip_balancing
@@ -187,9 +218,11 @@ class PokeparkWorld(World):
 
         return PokeparkItem(name, classification, ALL_ITEMS_TABLE[name], self.player)
 
+
 def launch_client():
-     from .PokeparkClient import main
-     launch_subprocess(main, name="Pokepark client")
+    from .PokeparkClient import main
+    launch_subprocess(main, name="Pokepark client")
+
 
 def add_client_to_launcher() -> None:
     version = "0.2.0"

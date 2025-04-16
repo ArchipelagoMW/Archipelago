@@ -1,1 +1,1 @@
-dolphin_memory_engine >= 1.1.3
+dolphin_memory_engine >= 1.3.0

@@ -7,10 +7,9 @@ from worlds.pokepark import POWERS, BERRIES
 from worlds.pokepark.adresses import \
     berry_item_checks, \
     POWER_INCREMENTS, POWER_SHARED_ADDR, prisma_blocked_itemIds, \
- UNLOCKS, MemoryRange, PRISMAS, POKEMON_STATES, \
+    UNLOCKS, MemoryRange, PRISMAS, POKEMON_STATES, \
     blocked_friendship_itemIds, \
-    blocked_friendship_unlock_itemIds, stage_id_address, main_menu_stage_id, main_menu2_stage_id, main_menu3_stage_id, \
-    BLOCKED_UNLOCKS
+    blocked_friendship_unlock_itemIds, stage_id_address, BLOCKED_UNLOCKS, valid_stage_ids
 from worlds.pokepark.dme_helper import write_memory
 from worlds.pokepark.watcher.location_state_watcher import location_state_watcher
 from worlds.pokepark.watcher.location_watcher import location_watcher
@@ -24,7 +23,6 @@ import Utils
 from NetUtils import ClientStatus, NetworkItem
 from CommonClient import gui_enabled, logger, get_base_parser, ClientCommandProcessor, \
     CommonContext, server_loop
-
 
 old_berry_count = 0
 first_berry_check = True
@@ -73,9 +71,6 @@ class PokeparkContext(CommonContext):
         await self.get_username()
         await self.send_connect()
 
-
-
-
     @property
     def endpoints(self):
         if self.server:
@@ -97,15 +92,13 @@ class PokeparkContext(CommonContext):
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
 
-
 def game_start():
     dme.hook()
     return dme.is_hooked()
 
+
 async def game_watcher(ctx: PokeparkContext):
-
     while not ctx.exit_event.is_set():
-
         sync_msg = [{'cmd': 'Sync'}]
         if ctx.locations_checked:
             sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
@@ -114,7 +107,6 @@ async def game_watcher(ctx: PokeparkContext):
             refresh_items(ctx)
 
         ctx.lives_switch = True
-
         if ctx.victory and not ctx.finished_game:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
@@ -124,7 +116,13 @@ async def game_watcher(ctx: PokeparkContext):
             dme.hook()
             if dme.is_hooked():
                 logger.info("Hooked to Dolphin!")
+                gameid = dme.read_bytes(0x80000000, 6).decode("utf-8")
                 ctx.hook_check = True
+                if gameid == "R8AJ01":
+                    logger.info("Correct Game Version")
+                else:
+                    logger.error(f"Wrong Game make sure you have a game with id R8AJ01. Your GameId: {gameid}")
+
             elif not ctx.hook_nagged:
                 logger.info(
                     "Please connect to Dolphin (may have issues, default is to start game before opening client).")
@@ -134,11 +132,10 @@ async def game_watcher(ctx: PokeparkContext):
         ctx.lives_switch = False
 
 
-def refresh_items(ctx:PokeparkContext):
+def refresh_items(ctx: PokeparkContext):
     stage_id = dme.read_word(stage_id_address)
-    if stage_id == main_menu_stage_id or stage_id == main_menu2_stage_id or stage_id == main_menu3_stage_id:
+    if not stage_id in valid_stage_ids:
         return
-
 
     blocked_items = set().union(
         prisma_blocked_itemIds,
@@ -159,7 +156,16 @@ def refresh_items(ctx:PokeparkContext):
 
     activate_power_items(items)
 
-def activate_unlock_items(items:list[NetworkItem]):
+    check_victory(items, ctx)
+
+
+def check_victory(items: list[NetworkItem], ctx: PokeparkContext):
+    for item in items:
+        if item.item == 999999:
+            send_victory(ctx)
+
+
+def activate_unlock_items(items: list[NetworkItem]):
     sums = {}
     for item in set(networkItem.item for networkItem in items):
         if item in UNLOCKS:
@@ -177,19 +183,22 @@ def activate_unlock_items(items:list[NetworkItem]):
         elif memory_range == MemoryRange.BYTE:
             dme.write_byte(address, value)
 
-def activate_friendship_items(items:list[NetworkItem]):
+
+def activate_friendship_items(items: list[NetworkItem]):
     for received_item in items:
         if received_item.item in POKEMON_STATES:
             friendship = POKEMON_STATES[received_item.item]
-            write_memory(dme,friendship.item,friendship.item.value)
+            write_memory(dme, friendship.item, friendship.item.value)
 
-def activate_prisma_items(items:list[NetworkItem]):
+
+def activate_prisma_items(items: list[NetworkItem]):
     for received_item in items:
         if received_item.item in PRISMAS:
             prisma = PRISMAS[received_item.item]
-            write_memory(dme,prisma.item,prisma.item.value)
+            write_memory(dme, prisma.item, prisma.item.value)
 
-def give_berry_items(items:list[NetworkItem]):
+
+def give_berry_items(items: list[NetworkItem]):
     global old_berry_count, first_berry_check
     berry_count_new = sum(1 for item in items if item.item in BERRIES.values())
     if first_berry_check and old_berry_count != berry_count_new and old_berry_count == 0 and berry_count_new > 1:
@@ -198,7 +207,7 @@ def give_berry_items(items:list[NetworkItem]):
         return
 
     new_berry_items = [item for item in items
-                      if item.item in BERRIES.values()][old_berry_count:berry_count_new]
+                       if item.item in BERRIES.values()][old_berry_count:berry_count_new]
     for received_item in new_berry_items:
         if received_item.item in berry_item_checks:
             for address, value in berry_item_checks[received_item.item]:
@@ -209,15 +218,16 @@ def give_berry_items(items:list[NetworkItem]):
 
     old_berry_count = berry_count_new
 
-def activate_power_items(items:list[NetworkItem]):
+
+def activate_power_items(items: list[NetworkItem]):
     thunderbolt_count = sum(1 for item in items
-                           if item.item == POWERS["Progressive Thunderbolt"])
+                            if item.item == POWERS["Progressive Thunderbolt"])
     dash_count = sum(1 for item in items
-                    if item.item == POWERS["Progressive Dash"])
+                     if item.item == POWERS["Progressive Dash"])
     health_count = sum(1 for item in items
-                    if item.item == POWERS["Progressive Health"])
+                       if item.item == POWERS["Progressive Health"])
     tail_count = sum(1 for item in items
-                    if item.item == POWERS["Progressive Iron Tail"])
+                     if item.item == POWERS["Progressive Iron Tail"])
 
     max_thunderbolt = len(POWER_INCREMENTS["thunderbolt"]["increments"])
     max_dash = len(POWER_INCREMENTS["dash"]["increments"])
@@ -250,7 +260,8 @@ def send_victory(ctx: PokeparkContext):
     logger.info("Congratulations")
     return
 
-def main(connect= None, password= None):
+
+def main(connect=None, password=None):
     Utils.init_logging("PokeparkClient", exception_logger="Client")
 
     async def _main(connect, password):
@@ -316,4 +327,3 @@ if __name__ == "__main__":
     parser = get_base_parser(description="Pokepark Client, for text interfacing.")
     args, rest = parser.parse_known_args()
     main(args.connect, args.password)
-

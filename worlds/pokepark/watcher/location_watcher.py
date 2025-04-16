@@ -4,9 +4,11 @@ import traceback
 import dolphin_memory_engine as dme
 
 from CommonClient import logger
+from worlds.pokepark import FRIENDSHIP_ITEMS
+from worlds.pokepark.LocationIds import MinigameLocationIds
 from worlds.pokepark.adresses import UNLOCKS, \
     stage_id_address, main_menu_stage_id, main_menu2_stage_id, main_menu3_stage_id, PRISMAS, \
-    POKEMON_STATES, MINIGAME_LOCATIONS, QUEST_LOCATIONS, pokemon_id_address
+    POKEMON_STATES, MINIGAME_LOCATIONS, QUEST_LOCATIONS, pokemon_id_address, intro_stage_id, valid_stage_ids
 from worlds.pokepark.dme_helper import read_memory, write_memory
 
 delay_seconds = 0.3
@@ -14,7 +16,6 @@ LAST_KNOWN_POKEMON_ID = 0
 
 
 async def location_watcher(ctx):
-
     minigame_remaining = [
         (loc.location, loc.locationId)
         for loc in MINIGAME_LOCATIONS
@@ -30,6 +31,21 @@ async def location_watcher(ctx):
         for unlock_state in UNLOCKS.values()
         for location in unlock_state.locations
     ]
+    legendary_minigame_ranges = {
+        "Jirachi": (MinigameLocationIds.PIKACHU_VINE_SWING.value, MinigameLocationIds.PACHIRISU_VINE_SWING.value),
+        "Latias": (MinigameLocationIds.PIKACHU_CIRCLE.value, MinigameLocationIds.WINGULL_CIRCLE.value),
+        "Manaphy": (MinigameLocationIds.PIKACHU_AQUA.value, MinigameLocationIds.LOTAD_AQUA.value),
+        "Suicune": (MinigameLocationIds.PIKACHU_SLIDE.value, MinigameLocationIds.SPHEAL_SLIDE.value),
+        "Metagross": (MinigameLocationIds.PIKACHU_PANEL.value, MinigameLocationIds.MAGBY_PANEL.value),
+        "Heatran": (MinigameLocationIds.PIKACHU_BUMPER.value, MinigameLocationIds.BONSLY_BUMPER.value),
+        "Groudon": (MinigameLocationIds.PIKACHU_BOULDER.value, MinigameLocationIds.MAWILE_BOULDER.value),
+        "Celebi": (MinigameLocationIds.PIKACHU_SWING.value, MinigameLocationIds.CROAGUNK_SWING.value),
+        "Darkrai": (MinigameLocationIds.PIKACHU_SLAM.value, MinigameLocationIds.KRABBY_SLAM.value),
+        "Rotom": (MinigameLocationIds.PIKACHU_SHOOT.value, MinigameLocationIds.BALTOY_SHOOT.value),
+        "Shaymin": (MinigameLocationIds.PIKACHU_HURDLE.value, MinigameLocationIds.VULPIX_HURDLE.value),
+        "Latios": (MinigameLocationIds.PIKACHU_SKY.value, MinigameLocationIds.ZUBAT_SKY.value),
+        "Deoxys": (MinigameLocationIds.PIKACHU_BALLOON.value, MinigameLocationIds.MIMEJR_BALLOON.value),
+    }
 
     def check_unlock_locations(stage_id):
         for location in unlock_remaining.copy():
@@ -86,12 +102,23 @@ async def location_watcher(ctx):
                 ctx.locations_checked.add(location_id)
                 quest_remaining.remove(check)
 
+    def get_minigames_in_range(min_id, max_id):
+        return [minigame.locationId for minigame in MINIGAME_LOCATIONS
+                if minigame.locationId and min_id <= minigame.locationId <= max_id]
+
+    def check_minigame_pokemon_unlock_locations():
+        for pokemon, (min_id, max_id) in legendary_minigame_ranges.items():
+            pokemon_minigames = get_minigames_in_range(min_id, max_id)
+
+            if all(location_id in ctx.locations_checked for location_id in pokemon_minigames):
+                ctx.locations_checked.add(FRIENDSHIP_ITEMS[pokemon])
+
     def _sub():
         if not dme.is_hooked():
             return
         stage_id = dme.read_word(stage_id_address)
 
-        if stage_id == main_menu_stage_id or stage_id == main_menu2_stage_id or stage_id == main_menu3_stage_id:
+        if not stage_id in valid_stage_ids:
             return
 
         check_friendship_locations(stage_id)
@@ -104,6 +131,8 @@ async def location_watcher(ctx):
 
         check_unlock_locations(stage_id)
 
+        check_minigame_pokemon_unlock_locations()
+
     while not ctx.exit_event.is_set():
         try:
             if not dme.is_hooked():
@@ -111,7 +140,7 @@ async def location_watcher(ctx):
             else:
                 _sub()
         except Exception as e:
-            logger.error(f"Error in location_state_watcher: {e}")
+            logger.error(f"Error in location_watcher: {e}")
             logger.error(f"Traceback: {traceback.format_exc()}")
 
         await asyncio.sleep(delay_seconds)

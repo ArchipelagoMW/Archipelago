@@ -160,7 +160,8 @@ class TestUnlockDependencies(PokeparkTest):
 
     def test_pikachu_balloon_unlock(self) -> None:
         """Verify unlock conditions for accessing Pikachu in Pelipper's Circle Circuit"""
-        locations = ["Beach Zone - Pelipper's Circle Circuit - Pikachu"]
+        locations = ["Beach Zone - Pelipper's Circle Circuit - Pikachu",
+                     "Granite Zone - Salamence's Sky Race - Pikachu"]
         items = [["Pikachu Balloon"]]
         self.assertAccessDependency(locations, items)
 
@@ -340,14 +341,17 @@ class TestUnlockDependencies(PokeparkTest):
         """Verify unlock conditions for accessing Baltoy in Magma Zone Overworld"""
 
         locations = ["Magma Zone - Overworld - Baltoy",
-                     "Magma Zone - Overworld - Baltoy Friendship - Pokemon Unlock"]
+                     "Magma Zone - Overworld - Baltoy Friendship - Pokemon Unlock",
+                     "Granite Zone - Overworld - Baltoy Friendship - Pokemon Unlock",
+                     "Granite Zone - Overworld - Baltoy"]
         items = [["Baltoy Unlock"]]
         self.assertAccessDependency(locations, items)
 
     def test_claydol_unlock(self) -> None:
         """Verify unlock conditions for accessing Claydol in Magma Zone Overworld"""
 
-        locations = ["Magma Zone - Overworld - Claydol"]
+        locations = ["Magma Zone - Overworld - Claydol",
+                     "Granite Zone - Overworld - Claydol"]
         items = [["Claydol Unlock"]]
         self.assertAccessDependency(locations, items)
 
@@ -473,6 +477,55 @@ class TestUnlockDependencies(PokeparkTest):
         items = [["Gengar Unlock"]]
         self.assertAccessDependency(locations, items)
 
+    def test_blastoise_unlock(self) -> None:
+        """Verify unlock conditions for accessing Blastoise in Beach Zone Overworld"""
+
+        locations = ["Beach Zone - Overworld - Blastoise"]
+        items = [["Blastoise Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_electivire_unlock(self) -> None:
+        """Verify unlock conditions for accessing Electivire in Cavern Zone Overworld"""
+
+        locations = ["Cavern Zone - Overworld - Electivire"]
+        items = [["Electivire Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_magmortar_unlock(self) -> None:
+        """Verify unlock conditions for accessing Magmortar in Magma Zone Overworld"""
+
+        locations = ["Magma Zone - Overworld - Magmortar"]
+        items = [["Magmortar Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_jolteon_unlock(self) -> None:
+        """Verify unlock conditions for accessing Jolteon in Granite Zone Overworld"""
+
+        locations = ["Granite Zone - Overworld - Jolteon"]
+        items = [["Jolteon Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_aerodactyl_unlock(self) -> None:
+        """Verify unlock conditions for accessing Aerodactyl in Granite Zone Overworld"""
+
+        locations = ["Granite Zone - Overworld - Aerodactyl"]
+        items = [["Aerodactyl Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_tyranitar_unlock(self) -> None:
+        """Verify unlock conditions for accessing Tyranitar in Granite Zone Overworld"""
+
+        locations = ["Granite Zone - Overworld - Tyranitar"]
+        items = [["Tyranitar Unlock"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_garchomp_unlock(self) -> None:
+        """Verify unlock conditions for accessing Garchomp in Granite Zone Overworld"""
+
+        locations = ["Granite Zone - Overworld - Garchomp"]
+        items = [["Garchomp Unlock"]]
+        self.assertAccessDependency(locations, items)
+
 
 class TestRegionAccess(PokeparkTest):
     def test_can_reach_beach_zone(self) -> None:
@@ -539,7 +592,10 @@ class TestRegionAccess(PokeparkTest):
     def test_single_locations_reachable_with_cavern_zone_unlock(self) -> None:
         """Verify abillity to access Mime Jr. with cavern zone and higher"""
         locations = ["Treehouse - Mime Jr."]
-        items = [["Cavern Zone & Magma Zone Unlock"], ["Haunted Zone Unlock"]]
+        items = [["Cavern Zone & Magma Zone Unlock"],
+                 ["Haunted Zone Unlock"],
+                 ["Granite Zone & Flower Zone Unlock"],
+                 ["Skygarden Unlock"]]
         self.assertAccessDependency(locations, items, True)
 
     def test_can_reach_magma_zone(self) -> None:
@@ -561,7 +617,10 @@ class TestRegionAccess(PokeparkTest):
     def test_single_locations_reachable_with_magma_zone_unlock(self) -> None:
         """Verify abillity to access Mime Jr. with magma zone and higher"""
         locations = ["Treehouse - Mime Jr."]
-        items = [["Cavern Zone & Magma Zone Unlock"], ["Haunted Zone Unlock"]]
+        items = [["Cavern Zone & Magma Zone Unlock"],
+                 ["Haunted Zone Unlock"],
+                 ["Granite Zone & Flower Zone Unlock"],
+                 ["Skygarden Unlock"]]
         self.assertAccessDependency(locations, items, True)
 
     def test_can_reach_haunted_zone(self) -> None:
@@ -595,6 +654,49 @@ class TestRegionAccess(PokeparkTest):
         self.collect_by_name(["Haunted Zone Unlock"])
         self.collect_all_but(["Dusknoir Unlock"])
         self.assertFalse(self.can_reach_region("Haunted Zone - Mansion - Dusknoir's Speed Slam"))
+
+    def test_can_reach_granite_zone(self) -> None:
+        """Verify ability to access Granite Zone Overworld"""
+        self.collect(self.world.create_item("Granite Zone & Flower Zone Unlock"))
+        self.assertTrue(self.can_reach_region("Granite Zone - Overworld"))
+
+    def test_can_reach_not_granite_zone(self) -> None:
+        """Verify inability to access Granite Zone Overworld without specific unlock"""
+
+        self.assertFalse(self.can_reach_region("Granite Zone - Overworld"))
+
+    def test_can_reach_flower_zone(self) -> None:
+        """Verify ability to access Flower Zone Overworld"""
+        self.collect(self.world.create_item("Granite Zone & Flower Zone Unlock"))
+        self.assertTrue(self.can_reach_region("Flower Zone - Overworld"))
+
+    def test_can_reach_not_flower_zone(self) -> None:
+        """Verify inability to access Flower Zone Overworld without specific unlock"""
+
+        self.assertFalse(self.can_reach_region("Flower Zone - Overworld"))
+
+    def test_can_reach_rayquaza_minigame_with_dusknoir_unlock(self) -> None:
+        """Verify abillity to access rayquaza minigame with rayquaza unlock"""
+        self.collect_by_name(["Granite Zone & Flower Zone Unlock"])
+        self.collect_by_name(["Rayquaza Unlock"])
+        self.assertTrue(self.can_reach_region("Flower Zone - Rayquaza's Balloon Panic"))
+
+    def test_can_not_reach_rayquaza_minigame_with_everything_but_rayquaza_unlock(self) -> None:
+        """Verify inability to access Magma Zone Overworld without specific unlock"""
+        self.collect_by_name(["Granite Zone & Flower Zone Unlock"])
+        self.collect_all_but(["Rayquaza Unlock"])
+        self.assertFalse(self.can_reach_region("Flower Zone - Rayquaza's Balloon Panic"))
+
+    def test_can_reach_skygarden(self) -> None:
+        """Verify ability to access Skygarden Overworld"""
+
+        self.collect(self.world.create_item("Skygarden Unlock"))
+        self.assertTrue(self.can_reach_region("Skygarden - Overworld"))
+
+    def test_can_reach_not_skygarden(self) -> None:
+        """Verify inability to access Skygarden Overworld without specific unlock"""
+
+        self.assertFalse(self.can_reach_region("Skygarden - Overworld"))
 
 
 class TestRegionAccessStartIceZone(PokeparkTest):

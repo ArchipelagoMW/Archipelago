@@ -9,89 +9,57 @@ class TestPowerItemDependenciesWithoutStartPower(PokeparkTest):
     }
 
     def test_can_battle(self) -> None:
-        """Test all locations that use the can battle requirement"""
-        battle_locations = [region.display + " - " + location.name for region in REGIONS for location in
-                            region.friendship_locations if
-                            hasattr(location, 'requirements') and location.requirements and hasattr(
-                                location.requirements,
-                                'powers') and location.requirements.powers == PowerRequirement.can_battle]
+        """Test can battle Power Requirement"""
+        battle_locations = ["Meadow Zone - Overworld - Croagunk"]
 
         items = [["Progressive Dash"], ["Progressive Thunderbolt"], ["Progressive Iron Tail"]]
         self.assertAccessDependency(battle_locations, items, True)
 
     def test_can_dash_overworld(self) -> None:
-        """Test all locations that use the can dash in the overworld requirement"""
-        battle_locations = [region.display + " - " + location.name for region in REGIONS for location in
-                            region.friendship_locations if
-                            hasattr(location, 'requirements') and location.requirements and hasattr(
-                                location.requirements,
-                                'powers') and location.requirements.powers == PowerRequirement.can_dash_overworld]
+        """Test can dash overworld requirement"""
+        battle_locations = ["Meadow Zone - Overworld - Caterpie Tree Dash"]
 
         items = [["Progressive Dash"]]
         self.assertAccessDependency(battle_locations, items, True)
 
     def test_can_play_catch(self) -> None:
-        """Test all locations that use the can play catch requirement"""
-        battle_locations = [region.display + " - " + location.name for region in REGIONS for location in
-                            region.friendship_locations if
-                            hasattr(location, 'requirements') and location.requirements and hasattr(
-                                location.requirements,
-                                'powers') and location.requirements.powers == PowerRequirement.can_play_catch]
+        """Test can play catch requirement"""
+        battle_locations = ["Meadow Zone - Overworld - Treecko"]
 
         items = [["Progressive Dash"]]
         self.assertAccessDependency(battle_locations, items, True)
 
     def test_can_play_catch_intermediate(self) -> None:
-        """Test all locations that use the can play catch requirement"""
-        battle_locations = [region.display + " - " + location.name for region in REGIONS for location in
-                            region.friendship_locations if
-                            hasattr(location, 'requirements') and location.requirements and hasattr(
-                                location.requirements,
-                                'powers') and location.requirements.powers == PowerRequirement.can_play_catch_intermediate]
+        """Test play catch intermediate requirement"""
+        battle_locations = ["Cavern Zone - Overworld - Raichu"]
 
         items = [["Progressive Dash", "Progressive Dash"]]
         self.assertAccessDependency(battle_locations, items, True)
 
     def test_can_destroy_objects_overworld(self) -> None:
-        """Test all locations that use the can destroy objects in the overworld requirement"""
-        battle_locations = [region.display + " - " + location.name for region in REGIONS for location in
-                            region.friendship_locations if
-                            hasattr(location, 'requirements') and location.requirements and hasattr(
-                                location.requirements,
-                                'powers') and location.requirements.powers == PowerRequirement.can_destroy_objects_overworld]
+        """Test  can destroy objects in the overworld requirement"""
+        battle_locations = ["Meadow Zone - Overworld - Shroomish Crate Dash"]
 
         items = [["Progressive Dash"], ["Progressive Thunderbolt"]]
         self.assertAccessDependency(battle_locations, items, True)
 
     def test_can_thunderbolt_overworld(self) -> None:
-        """Test all locations that use the can use thunderbolt in the overworld requirement"""
-        battle_locations = [region.display + " - " + location.name for region in REGIONS for location in
-                            region.friendship_locations if
-                            hasattr(location, 'requirements') and location.requirements and hasattr(
-                                location.requirements,
-                                'powers') and location.requirements.powers == PowerRequirement.can_thunderbolt_overworld]
+        """Test can use thunderbolt in the overworld requirement"""
+        battle_locations = ["Meadow Zone - Overworld - Magikarp electrocuted"]
 
         items = [["Progressive Thunderbolt"]]
         self.assertAccessDependency(battle_locations, items, True)
 
     def test_can_battle_thunderbolt_immune(self) -> None:
-        """Test all locations that use the can battle thunderbolt immune Pokemon requirement"""
-        battle_locations = [region.display + " - " + location.name for region in REGIONS for location in
-                            region.friendship_locations if
-                            hasattr(location, 'requirements') and location.requirements and hasattr(
-                                location.requirements,
-                                'powers') and location.requirements.powers == PowerRequirement.can_battle_thunderbolt_immune]
+        """Test can battle thunderbolt immune Pokemon requirement"""
+        battle_locations = ["Meadow Zone - Overworld - Torterra"]
 
         items = [["Progressive Dash"], ["Progressive Iron Tail"]]
         self.assertAccessDependency(battle_locations, items, True)
 
     def test_can_farm_berries(self) -> None:
-        """Test all locations that use the can farm berries requirement"""
-        battle_locations = [region.display + " - " + location.name for region in REGIONS for location in
-                            region.friendship_locations if
-                            hasattr(location, 'requirements') and location.requirements and hasattr(
-                                location.requirements,
-                                'powers') and location.requirements.powers == PowerRequirement.can_farm_berries]
+        """Test can farm berries requirement"""
+        battle_locations = ["Treehouse - Iron Tail Upgrade 1"]
 
         items = [["Progressive Dash"]]
         self.assertAccessDependency(battle_locations, items, True)

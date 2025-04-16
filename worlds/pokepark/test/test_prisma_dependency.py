@@ -7,69 +7,28 @@ class TestPrismaDependencies(PokeparkTest):
         """Verify locations and victory conditions for Bulbasaur's Prisma unlock"""
         locations = ["Meadow Zone - Overworld - Munchlax",
                      "Meadow Zone - Overworld - Munchlax Friendship - Pokemon Unlock",
-                     "Meadow Zone - Overworld - Tropius", "Meadow Zone - Overworld - Bulbasaur", "Victory"]
+                     "Meadow Zone - Overworld - Tropius", "Meadow Zone - Overworld - Bulbasaur",
+                     "Magma Zone - Overworld - Blaziken"]
         items = [["Bulbasaur Prisma"]]
-        self.assertAccessDependency(locations, items)
-
-    def test_venusaur_prisma(self) -> None:
-        """Verify victory conditions for Venusaur's Prisma unlock"""
-        locations = ["Victory"]
-        items = [["Venusaur Prisma"]]
         self.assertAccessDependency(locations, items)
 
     def test_pelipper_prisma(self) -> None:
         """Verify Treehouse Dash Upgrade locations and victory conditions for Pelipper's Prisma unlock"""
         locations = [f"Treehouse - Dash Upgrade {i}" for i in range(1, 4)]
-        locations.append("Victory")
+        locations.append("Magma Zone - Overworld - Blaziken")
         items = [["Pelipper Prisma"]]
-        self.assertAccessDependency(locations, items)
-
-    def test_gyarados_prisma(self) -> None:
-        """Verify victory conditions for Gyarados' Prisma unlock"""
-        locations = ["Victory"]
-        items = [["Gyarados Prisma"]]
-        self.assertAccessDependency(locations, items)
-
-    def test_empoleon_prisma(self) -> None:
-        """Verify victory conditions for Empoleon Prisma unlock"""
-        locations = ["Victory"]
-        items = [["Empoleon Prisma"]]
-        self.assertAccessDependency(locations, items)
-
-    def test_bastiodon_prisma(self) -> None:
-        """Verify victory conditions for Bastiodon Prisma unlock"""
-        locations = ["Victory"]
-        items = [["Bastiodon Prisma"]]
-        self.assertAccessDependency(locations, items)
-
-    def test_rhyperior_prisma(self) -> None:
-        """Verify victory conditions for Rhyperior Prisma unlock"""
-        locations = ["Victory"]
-        items = [["Rhyperior Prisma"]]
-        self.assertAccessDependency(locations, items)
-
-    def test_blaziken_prisma(self) -> None:
-        """Verify victory conditions for Blaziken Prisma unlock"""
-        locations = ["Victory"]
-        items = [["Blaziken Prisma"]]
-        self.assertAccessDependency(locations, items)
-
-    def test_tangrowth_prisma(self) -> None:
-        """Verify victory conditions for Blaziken Prisma unlock"""
-        locations = ["Victory"]
-        items = [["Tangrowth Prisma"]]
         self.assertAccessDependency(locations, items)
 
     def test_dusknoir_prisma(self) -> None:
         """Verify victory conditions for Blaziken Prisma unlock"""
-        locations = ["Victory",
+        locations = ["Magma Zone - Overworld - Blaziken",
                      "Haunted Zone - Overworld - Mansion - Duskull"]
         items = [["Dusknoir Prisma"]]
         self.assertAccessDependency(locations, items)
 
     def test_rotom_prisma(self) -> None:
         """Verify victory conditions for Blaziken Prisma unlock"""
-        locations = ["Victory",
+        locations = ["Magma Zone - Overworld - Blaziken",
                      "Haunted Zone - Overworld - Drifloon",
                      "Haunted Zone - Overworld - Metapod",
                      "Haunted Zone - Overworld - Kakuna",
@@ -77,3 +36,21 @@ class TestPrismaDependencies(PokeparkTest):
                      "Haunted Zone - Overworld - Mansion - Electrode"]
         items = [["Rotom Prisma"]]
         self.assertAccessDependency(locations, items)
+
+    def test_blaziken_location(self) -> None:
+        locations = ["Magma Zone - Overworld - Blaziken"]
+        items = [["Bulbasaur Prisma",
+                  "Venusaur Prisma",
+                  "Pelipper Prisma",
+                  "Gyarados Prisma",
+                  "Empoleon Prisma",
+                  "Bastiodon Prisma",
+                  "Rhyperior Prisma",
+                  "Blaziken Prisma",
+                  "Tangrowth Prisma",
+                  "Dusknoir Prisma",
+                  "Rotom Prisma",
+                  "Absol Prisma",
+                  "Salamence Prisma",
+                  "Rayquaza Prisma"]]
+        self.assertAccessDependency(locations, items, True)
