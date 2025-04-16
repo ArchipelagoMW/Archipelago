@@ -122,17 +122,33 @@ def get_locations(world: "CrystalProjectWorld") -> List[LocationData]:
         LocationData("Pale Grotto", "Pale Grotto Chest - Temple sanctuary Pale Grotto Map chest", 1154 + treasure_index_offset),
         
         #Crystals
-        LocationData("Pale Grotto", "Pale Grotto Chest - Temple sanctuary Fencer Crystal", 130 + treasure_index_offset),
+        LocationData("Pale Grotto", "Pale Grotto Chest - Temple sanctuary Fencer Crystal", 130 + crystal_index_offset),
+
+        #Seaside Cliffs
+        #Treasure chests
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - north Clamshell chest across river from double giant box", 282 + treasure_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Stonehenge Bracer chest", 150 + treasure_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - ClamHaters Mulan jumping puzzle Clamshell chest", 268 + treasure_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - ClamHaters Tincture Pouch chest after being made a man", 2981 + treasure_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Clamshell chest south of ClamHater", 281 + treasure_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Tonic chest south of Clamshell chest south of ClamHater", 286 + treasure_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Climbing the seaside cliffs Potion chest", 42 + treasure_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Encampment freebie Tonic chest of the three amigos", 1161 + treasure_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Encampment freebie Scope Bit chest of the three amigos", 447 + treasure_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Encampment freebie Clamshell chest of the three amigos", 270 + treasure_index_offset),
+
+        #NPCs
+        LocationData("Seaside Cliffs", "Seaside Cliffs NPC - ClamHater above the mist", 283 + npc_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs NPC - Encampment ClamLover Manananananana Man", 284 + npc_index_offset),
+
 
         #Proving Meadows
         #Treasure chests
         LocationData("Proving Meadows", "Proving Meadows Chest - Money chest next to trial guard", 207 + treasure_index_offset),
         LocationData("Proving Meadows", "Proving Meadows Chest - Battle Scythe chest along mountain behind waterfall", 258 + treasure_index_offset),
-        #Todo: check where Burglars Glove chest is
-        LocationData("Proving Meadows", "Proving Meadows Chest - Burglars Glove chest", 118 + treasure_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Chest - Burglars Glove chest hidden behind the inn", 118 + treasure_index_offset),
         LocationData("Proving Meadows", "Proving Meadows Chest - Tincture Pouch chest along mountain", 2980 + treasure_index_offset),
-        #Todo: check where Tonic chest is
-        LocationData("Proving Meadows", "Proving Meadows Chest - Tonic chest ", 256 + treasure_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Chest - Tarzan Tonic chest", 256 + treasure_index_offset),
         LocationData("Proving Meadows", "Proving Meadows Chest - Tonic Pouch chest on the climb up outside Skumparadise", 193 + treasure_index_offset),
 
         #Yamagawa M.A.
