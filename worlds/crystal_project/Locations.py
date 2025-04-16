@@ -12,6 +12,7 @@ npc_index_offset = 10000
 def get_locations(world: "CrystalProjectWorld") -> List[LocationData]:
     #Todo include crystals/job locations, NPC gifts, key items like squirrels, ore
     location_table: List[LocationData] = [
+        #Zones (Beginner)
         #Spawning Meadows
         #Treasure chests
         LocationData("Spawning Meadows", "Spawning Meadows Chest - Money chest on cliff north of spawn", 101 + treasure_index_offset),
@@ -72,19 +73,42 @@ def get_locations(world: "CrystalProjectWorld") -> List[LocationData]:
         LocationData("Delende", "Delende NPC - Dog Bone south of Soiled Den", 184 + npc_index_offset),
 
         #Grans House (Delende)
-        #Treasure chests - Todo: get descriptions for empty chest locations
+        #Treasure chests
         #126, 128, -58
-        LocationData("Delende", "Delende Chest - Empty chest", 87 + treasure_index_offset),
+        LocationData("Delende", "Delende Chest - Grans House empty chest 1", 87 + treasure_index_offset),
         #127, 128, -58
-        LocationData("Delende", "Delende Chest - Empty chest", 100 + treasure_index_offset),
+        LocationData("Delende", "Delende Chest - Grans House empty chest 2", 100 + treasure_index_offset),
         #137, 128, -57
-        LocationData("Delende", "Delende Chest - Empty chest", 177 + treasure_index_offset),
+        LocationData("Delende", "Delende Chest - Grans House empty chest 3", 177 + treasure_index_offset),
         #137, 128, -56
-        LocationData("Delende", "Delende Chest - Empty chest", 178 + treasure_index_offset),
+        LocationData("Delende", "Delende Chest - Grans House empty chest 4", 178 + treasure_index_offset),
 
-        #Soiled Den (Delende)
+        #Basement (Somehow Not Delende)
+        #Treasure chests
+        LocationData("Delende", "Delende Chest - Empty chest in basement", 179 + treasure_index_offset),
+        LocationData("Delende", "Delende Chest - Digested Head chest in basement", 180 + treasure_index_offset),
+
+        #Soiled Den
+        #Treasure chests - Todo: descriptivize these chest locations
+        #311, 111, -96
+        LocationData("Soiled Den", "Soiled Den Chest - Clamshell chest", 218 + treasure_index_offset),
+        #322, 111, -101
+        LocationData("Soiled Den", "Soiled Den Chest - Clamshell chest", 271 + treasure_index_offset),
+        #326, 111, -116
+        LocationData("Soiled Den", "Soiled Den Chest - Dodge Charm chest", 448 + treasure_index_offset),
+        #249, 116, -156
+        LocationData("Soiled Den", "Soiled Den Chest - Riverside Tonic Pouch chest", 1155 + treasure_index_offset),
+
         #NPCs
-        #Todo: 3rd dog bone here
+        #296, 112, -155
+        LocationData("Soiled Den", "Soiled Den NPC - Dog Bone among the bones and flowers", 176 + npc_index_offset),
+
+        #Pale Grotto
+        #Treasure chests - Todo: descriptivize these chest locations
+        #316, 120, -262
+        LocationData("Pale Grotto", "Pale Grotto Chest - Fenix Juice chest", 228 + treasure_index_offset),
+        #307, 124, -345
+        LocationData("Pale Grotto", "Pale Grotto Chest - Poisonkiss chest", 144 + treasure_index_offset),
 
         #Proving Meadows
         #Treasure chests
@@ -97,8 +121,25 @@ def get_locations(world: "CrystalProjectWorld") -> List[LocationData]:
         LocationData("Proving Meadows", "Proving Meadows Chest - Tonic chest ", 256 + treasure_index_offset),
         LocationData("Proving Meadows", "Proving Meadows Chest - Tonic Pouch chest on the climb up outside Skumparadise", 193 + treasure_index_offset),
 
+        #Yamagawa M.A.
+        #Treasure chests
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Money chest up first cliff", 2995 + treasure_index_offset),
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Sneaky Broadsword chest behind tree", 91 + treasure_index_offset),
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Iron Guard chest tucked next to waterfall", 95 + treasure_index_offset),
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Dead-end Tonic chest", 3056 + treasure_index_offset),
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Hidden stairway Tonic Pouch chest", 757 + treasure_index_offset),
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Drop down to mountain balcony Torpid Cuffs chest", 290 + treasure_index_offset),
 
+        #NPCs
+        #Todo: this requires Salmon
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. NPC - Autumns Oath at waterfall source", 628 + npc_index_offset),
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. NPC - Jump into fireplace cave for Scholar Crystal", 166 + npc_index_offset),
 
+        #Zones (Expert)
+        #Lake Delende
+        #Treasure chests
+        LocationData("Lake Delende", "Lake Delende Chest - Float Shoes chest on north edge", 1263 + treasure_index_offset),
+        LocationData("Lake Delende", "Lake Delende Chest - Lake Delende map chest on north edge", 2917 + treasure_index_offset),
 
     ]
 
