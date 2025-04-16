@@ -207,7 +207,7 @@
     // Events
     {
         "address": null, "name": "Victory - Eggnog",
-        "region": "FSP - Root Node", "requires": [
+        "region": "CH - Center", "requires": [
             { "item_group": "Sol Seals", "count": 8 },
             // the Eigong fight itself requires AD OR CL just for the judgement cut w/ crimson 3rd slash
             { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] } // combat logic
