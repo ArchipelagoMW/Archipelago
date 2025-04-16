@@ -11,9 +11,9 @@ from BaseClasses import Region, Location, Entrance, Item, ItemClassification, Tu
 
 def launch_client():
     from .client import launch
-    launch_component(launch, name="TMClient")
+    launch_component(launch, name="TrackmaniaClient")
 
-components.append(Component("Trackmania Client", "TMClient", func=launch_client,
+components.append(Component("Trackmania Client", "TrackmaniaClient", func=launch_client,
                             component_type=Type.CLIENT, icon='ngowo'))
 
 icon_paths['ngowo'] = local_path('data', 'ngowo.png')

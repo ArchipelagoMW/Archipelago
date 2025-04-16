@@ -11,15 +11,15 @@ from CommonClient import CommonContext, gui_enabled, ClientCommandProcessor, log
 DEBUG = True
 
 
-class TMCommandProcessor(ClientCommandProcessor):
+class TrackmaniaCommandProcessor(ClientCommandProcessor):
     def _cmd_trackmania(self):
         """Check Trackmania Plugin Connection State"""
-        if isinstance(self.ctx, TMContext):
-            logger.info(f"Trackmania Plugin Status: {self.ctx.get_tm_status()}")
+        if isinstance(self.ctx, TrackmaniaContext):
+            logger.info(f"Trackmania Plugin Status: {self.ctx.get_trackmania_status()}")
 
 
-class TMContext(CommonContext):
-    command_processor = TMCommandProcessor
+class TrackmaniaContext(CommonContext):
+    command_processor = TrackmaniaCommandProcessor
     game = "Trackmania"
 
     def __init__(self, server_address, password):
@@ -39,12 +39,12 @@ class TMContext(CommonContext):
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
-            await super(TMContext, self).server_auth(password_requested)
+            await super(TrackmaniaContext, self).server_auth(password_requested)
 
         await self.get_username()
         await self.send_connect()
 
-    def get_tm_status(self) -> str:
+    def get_trackmania_status(self) -> str:
         if not self.is_proxy_connected():
             return "Not connected to Trackmania Plugin"
 
@@ -145,22 +145,24 @@ class TMContext(CommonContext):
     def run_gui(self):
         from kvui import GameManager
 
-        class TMManager(GameManager):
+        class TrackmaniaManager(GameManager):
             logging_pairs = [
                 ("Client", "Archipelago")
             ]
             base_title = "Archipelago Trackmania Client"
 
-        self.ui = TMManager(self)
+        self.ui = TrackmaniaManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
 
-async def proxy(websocket, path: str = "/", ctx: TMContext = None):
+async def proxy(websocket, path: str = "/", ctx: TrackmaniaContext = None):
+    logger.info("proxying!")
     ctx.endpoint = Endpoint(websocket)
     try:
         await on_client_connected(ctx)
 
         if ctx.is_proxy_connected():
+            logger.info("connected!!")
             async for data in websocket:
                 #if DEBUG:
                 logger.info(f"Incoming message: {data}")
@@ -214,14 +216,14 @@ async def proxy(websocket, path: str = "/", ctx: TMContext = None):
         await ctx.disconnect_proxy()
 
 
-async def on_client_connected(ctx: TMContext):
+async def on_client_connected(ctx: TrackmaniaContext):
     if ctx.room_info and ctx.is_connected():
         await ctx.send_msgs_proxy(ctx.room_info)
     else:
         ctx.awaiting_info = True
 
 
-async def proxy_loop(ctx: TMContext):
+async def proxy_loop(ctx: TrackmaniaContext):
     try:
         while not ctx.exit_event.is_set():
             if len(ctx.server_msgs) > 0:
@@ -240,10 +242,10 @@ def launch():
         parser = get_base_parser()
         args = parser.parse_args()
 
-        ctx = TMContext(args.connect, args.password)
+        ctx = TrackmaniaContext(args.connect, args.password)
         logger.info("Starting Trackmania proxy server")
         ctx.proxy = websockets.serve(functools.partial(proxy, ctx=ctx),
-                                     host="localhost", port=22422, ping_timeout=999999, ping_interval=999999)
+                                     host="localhost", logger = logger, port=22422, ping_timeout=999999, ping_interval=999999)
         ctx.proxy_task = asyncio.create_task(proxy_loop(ctx), name="ProxyLoop")
 
         if gui_enabled:
@@ -254,7 +256,7 @@ def launch():
         await ctx.proxy_task
         await ctx.exit_event.wait()
 
-    Utils.init_logging("TMClient")
+    Utils.init_logging("TrackmaniaClient")
     # options = Utils.get_options()
 
     import colorama
