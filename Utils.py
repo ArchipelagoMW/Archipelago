@@ -1220,12 +1220,12 @@ def visualize_regions(
         all_groups: list[int] = sorted(set([entrance.randomization_group for entrance in all_entrances]))
         for group in all_groups:
             if group not in entrance_highlighting:
-                new_color: int = select_color(group)
-                entrance_highlighting[group] = new_color
-                colors_used.add(new_color)
                 if len(colors_used) >= 0x1000:
                     # on the off chance someone makes 4096 different entrance groups, don't cycle forever
                     break
+                new_color: int = select_color(group)
+                entrance_highlighting[group] = new_color
+                colors_used.add(new_color)
 
     uml.append("@startuml")
     uml.append("hide circle")
