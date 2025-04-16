@@ -237,7 +237,7 @@ filler_items: Dict[str, LMItemData] = {
     "Diamond": LMItemData("Money", 124, IC.filler,
         update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x33C, ram_byte_size=4, item_count=1)]),
     "Poison Mushroom": LMItemData("Trap", 125, IC.trap,
-        update_ram_addr=[LMRamData(0x804ddd1c, ram_byte_size=4, item_count=6)]), # value of 6
+        update_ram_addr=[LMRamData(0x804DDD1C, ram_byte_size=4, item_count=6)]), # value of 6
     "Ghost": LMItemData("Trap", 126, IC.trap,
         update_ram_addr=[LMRamData(0x804dd940, ram_byte_size=4, item_count=1)]),
     "Nothing": LMItemData("Nothing Item", 127, IC.filler),
@@ -246,11 +246,11 @@ filler_items: Dict[str, LMItemData] = {
     "Large Heart": LMItemData("Heart", 129, IC.filler,
         update_ram_addr=[LMRamData(0x803D8B40, pointer_offset=0xB8, ram_byte_size=2, item_count=50)]),
     "Bomb": LMItemData("Trap", 130, IC.trap,
-        update_ram_addr=[LMRamData(0x804ddd1c, ram_byte_size=4, item_count=1)]), # value of 1
+        update_ram_addr=[LMRamData(0x804DDD1C, ram_byte_size=4, item_count=1)]), # value of 1
     "Ice Trap": LMItemData("Trap", 131, IC.trap,
-        update_ram_addr=[LMRamData(0x804ddd1c, ram_byte_size=4, item_count=3)]), # value of 3
+        update_ram_addr=[LMRamData(0x804DDD1C, ram_byte_size=4, item_count=3)]), # value of 3
     "Banana Trap": LMItemData("Trap", 132, IC.trap,
-        update_ram_addr=[LMRamData(0x804ddd1c, ram_byte_size=4, item_count=2)]), # value of 2
+        update_ram_addr=[LMRamData(0x804DDD1C, ram_byte_size=4, item_count=2)]), # value of 2
     "10 Coins": LMItemData("Money", 133, IC.filler,
         update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x324, ram_byte_size=4, item_count=10)]),
     "20 Coins": LMItemData("Money", 134, IC.filler,
@@ -266,9 +266,9 @@ filler_items: Dict[str, LMItemData] = {
     "2 Gold Bars": LMItemData("Money", 139, IC.filler,
         update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x32C, ram_byte_size=4, item_count=2)]),
     "Possession Trap": LMItemData("Trap", 141, IC.trap,
-        update_ram_addr=[LMRamData(0x804ddd1c, ram_byte_size=4, item_count=5)]),
+        update_ram_addr=[LMRamData(0x804DDD1C, ram_byte_size=4, item_count=5)]),
     "Bonk Trap": LMItemData("Trap", 142, IC.trap,
-        update_ram_addr=[LMRamData(0x804ddd1c, ram_byte_size=4, item_count=4)]),
+        update_ram_addr=[LMRamData(0x804DDD1C, ram_byte_size=4, item_count=4)]),
 }
 
 ALL_ITEMS_TABLE = {**ITEM_TABLE,

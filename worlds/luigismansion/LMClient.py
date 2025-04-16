@@ -582,11 +582,11 @@ class LMContext(CommonContext):
         if not (self.check_ingame() and self.check_alive()):
             return
 
-        #if not self.spawn == "Foyer":
-        #    spawn_info: dict = spawn_locations[self.spawn]
-        #    dme.write_bytes(0x804de060, struct.pack("f", spawn_info["pos_x"]))
-        #    dme.write_bytes(0x804de064, struct.pack("f", spawn_info["pos_y"]))
-        #    dme.write_bytes(0x804de068, struct.pack("f", spawn_info["pos_z"]))
+        if not self.spawn == "Foyer":
+            spawn_info: dict = spawn_locations[self.spawn]
+            #dme.write_bytes(0x804DE034, struct.pack("f", spawn_info["pos_x"]))
+            #dme.write_bytes(0x804DE038, struct.pack("f", spawn_info["pos_y"]))
+            #dme.write_bytes(0x804DE03C, struct.pack("f", spawn_info["pos_z"]))
 
         # Always adjust the Vacuum speed as saving and quitting or going to E. Gadds lab could reset it back to normal.
         if any([netItem.item for netItem in self.items_received if netItem.item == 8064]):
@@ -600,7 +600,9 @@ class LMContext(CommonContext):
         # Always adjust Pickup animation issues if the user turned pick up animations off.
         if self.pickup_anim_off:
             crown_helper_val = "01"
-            dme.write_bytes(0x804de024, bytes.fromhex(crown_helper_val))
+            dme.write_bytes(0x804DDFF8, bytes.fromhex(crown_helper_val))
+
+        #dme.write_bytes(0x804ddf90, bytes.fromhex("00000001"))
 
         # Make it so the displayed Boo counter always appears even if you dont have boo radar or if you haven't caught
         # a boo in-game yet.
@@ -730,22 +732,23 @@ async def give_player_items(ctx: LMContext):
                 continue
 
             item_name_display = lm_item_name[0:min(len(lm_item_name), RECV_MAX_STRING_LENGTH)]
-            #dme.write_bytes(RECV_ITEM_NAME_ADDR, sbf.string_to_bytes(item_name_display, RECV_LINE_STRING_LENGTH))
+            dme.write_bytes(RECV_ITEM_NAME_ADDR, sbf.string_to_bytes(item_name_display, RECV_LINE_STRING_LENGTH))
 
-            loc_name_display = ctx.location_names.lookup_in_game(item.location, item.player)
+            if item.player == ctx.slot:
+                loc_name_display = ctx.location_names.lookup_in_game(item.location)
+            else:
+                loc_name_display = ctx.location_names.lookup_in_slot(item.location, item.player)
             loc_name_display = loc_name_display[0:min(len(loc_name_display), SLOT_NAME_STR_LENGTH)]
-            #dme.write_bytes(RECV_ITEM_LOC_ADDR, sbf.string_to_bytes(loc_name_display, RECV_LINE_STRING_LENGTH))
+            dme.write_bytes(RECV_ITEM_LOC_ADDR, sbf.string_to_bytes(loc_name_display, RECV_LINE_STRING_LENGTH))
 
             recv_name_display = ctx.player_names[item.player]
             recv_name_display = recv_name_display[0:min(len(recv_name_display), SLOT_NAME_STR_LENGTH)] + "'s Game"
-            #dme.write_bytes(RECV_ITEM_SENDER_ADDR, sbf.string_to_bytes(recv_name_display, RECV_LINE_STRING_LENGTH))
+            dme.write_bytes(RECV_ITEM_SENDER_ADDR, sbf.string_to_bytes(recv_name_display, RECV_LINE_STRING_LENGTH))
 
-            #print("STOP BEFORE WRITING TIMER")
-            #dme.write_word(RECV_ITEM_DISPLAY_TIMER_ADDR, int(RECV_DEFAULT_TIMER_IN_HEX, 16))
-            #print("STOP AFTER WRITING TIMER")
+            dme.write_word(RECV_ITEM_DISPLAY_TIMER_ADDR, int(RECV_DEFAULT_TIMER_IN_HEX, 16))
             await wait_for_next_loop(int(RECV_DEFAULT_TIMER_IN_HEX, 16)/FRAME_AVG_COUNT)
-            #while dme.read_byte(RECV_ITEM_DISPLAY_VIZ_ADDR) > 0:
-                #await wait_for_next_loop(0.1)
+            while dme.read_byte(RECV_ITEM_DISPLAY_VIZ_ADDR) > 0:
+                await wait_for_next_loop(0.1)
 
             for addr_to_update in lm_item.update_ram_addr:
                 byte_size = 1 if addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size

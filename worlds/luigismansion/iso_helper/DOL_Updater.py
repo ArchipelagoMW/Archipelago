@@ -114,12 +114,12 @@ def update_dol_offsets(gcm: GCM, dol: DOL, start_inv: list[str], walk_speed: int
 
     if not random_spawn == "Foyer":
         spawn_info: dict = spawn_locations[random_spawn]
-        dol.data.seek(0x3A0140)
-        dol.data.write(struct.pack("f", spawn_info["pos_x"]))
-        dol.data.seek(0x3A0144)
-        dol.data.write(struct.pack("f", spawn_info["pos_y"]))
-        dol.data.seek(0x3A0148)
-        dol.data.write(struct.pack("f", spawn_info["pos_z"]))
+        dol.data.seek(0x3A0114)
+        dol.data.write(struct.pack(">f", spawn_info["pos_x"]))
+        dol.data.seek(0x3A0118)
+        dol.data.write(struct.pack(">f", spawn_info["pos_y"]))
+        dol.data.seek(0x3A011C)
+        dol.data.write(struct.pack(">f", spawn_info["pos_z"]))
 
     # Save all changes to the DOL itself.
     dol.save_changes()
