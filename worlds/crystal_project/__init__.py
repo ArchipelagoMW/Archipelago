@@ -4,7 +4,7 @@ import typing
 import threading
 import pkgutil
 
-from .Items import item_table, get_item_names_per_category
+from .Items import item_table, filler_items, get_item_names_per_category
 from .Locations import get_locations
 from .Regions import init_areas
 from .game_data.static_location_data import location_ids, location_groups
@@ -48,6 +48,17 @@ class CrystalProjectWorld(World):
 
         self.multiworld.itempool += pool
 
+    def get_filler_item_name(self) -> str:
+        #traps go here if we have any
+        # trap_chance: int = self.options.trap_chance.value
+        # enabled_traps: List[str] = self.options.traps.value
+
+        # if self.random.random() < (trap_chance / 100) and enabled_traps:
+        #     return self.random.choice(enabled_traps)
+        # else:
+        #     return self.random.choice(filler_items) 
+        return self.random.choice(filler_items)
+
     def get_excluded_items(self) -> Set[str]:
         excluded_items: Set[str] = set()
         excluded_items.add("Job - Warrior")
@@ -87,6 +98,10 @@ class CrystalProjectWorld(World):
                 for _ in range(data.amount):
                     item = self.set_classifications(name)
                     pool.append(item)
+
+        for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)):
+            item = self.create_item(self.get_filler_item_name())
+            pool.append(item)
 
         return pool
 

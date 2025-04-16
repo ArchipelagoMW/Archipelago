@@ -18,14 +18,13 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
 
     regions = [
         create_region(world, player, locations_per_region, "Menu"),
-        create_region(world, player, locations_per_region, "Spawning Meadows")
-        create_region(world, player, locations_per_region, "Delende")
-        create_region(world, player, locations_per_region, "Soiled Den")
-        create_region(world, player, locations_per_region, "Pale Grotto")
-        create_region(world, player, locations_per_region, "Proving Meadows")
-        create_region(world, player, locations_per_region, "Yamagawa M.A.")
+        create_region(world, player, locations_per_region, "Spawning Meadows"),
+        create_region(world, player, locations_per_region, "Delende"),
+        create_region(world, player, locations_per_region, "Soiled Den"),
+        create_region(world, player, locations_per_region, "Pale Grotto"),
+        create_region(world, player, locations_per_region, "Proving Meadows"),
+        create_region(world, player, locations_per_region, "Yamagawa M.A."),
         create_region(world, player, locations_per_region, "Lake Delende")
-
     ]
 
     multiworld.regions += regions
@@ -68,10 +67,10 @@ def create_location(player: int, location_data: LocationData, region: Region) ->
 
 def connect_menu_region(world: "CrystalProjectWorld") -> None:
     starting_region_list = {
-        0: "Spawning Meadow"
+        0: "Spawning Meadows"
     }
 
     world.starting_region = starting_region_list[0]
     menu = world.multiworld.get_region("Menu", world.player)
-    spawningMeadow = world.multiworld.get_region("Spawning Meadow", world.player)
+    spawningMeadow = world.multiworld.get_region("Spawning Meadows", world.player)
     menu.connect(spawningMeadow)
