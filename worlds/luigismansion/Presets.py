@@ -15,6 +15,7 @@ all_random_settings = {
     LMOptions.PickupAnim.internal_name:                "random",
     LMOptions.LuigiMaxHealth:                          "random",
     LMOptions.RandomMusic.internal_name:               "random",
+    LMOptions.DoorModelRando.internal_name:            "random",
     LMOptions.EarlyFirstKey.internal_name:             "random",
     LMOptions.DoorRando.internal_name:                 "random",
     LMOptions.PortraitHints.internal_name:             "random",

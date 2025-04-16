@@ -88,7 +88,6 @@ class LMWeb(WebWorld):
             LuigiOptions.KingBooHealth,
             LuigiOptions.StartWithBooRadar,
             LuigiOptions.StartHiddenMansion,
-            LuigiOptions.RandomMusic,
             LuigiOptions.HintDistribution,
             LuigiOptions.PortraitHints,
             LuigiOptions.BooHealthOption,
@@ -97,8 +96,6 @@ class LMWeb(WebWorld):
             LuigiOptions.BooEscapeTime,
             LuigiOptions.BooAnger,
             LuigiOptions.ExtraBooSpots,
-            LuigiOptions.ChestTypes,
-            LuigiOptions.TrapChestType,
         ]),
         OptionGroup("Filler Weights", [
             LuigiOptions.BundleWeight,
@@ -116,6 +113,12 @@ class LMWeb(WebWorld):
             LuigiOptions.NothingWeight,
             LuigiOptions.HeartWeight,
         ]),
+        OptionGroup("Cosmetics", [
+            LuigiOptions.RandomMusic,
+            LuigiOptions.DoorModelRando,
+            LuigiOptions.ChestTypes,
+            LuigiOptions.TrapChestType,
+        ])
     ]
 
     tutorials = [

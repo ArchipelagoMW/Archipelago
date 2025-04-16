@@ -538,6 +538,13 @@ class GhostTrapWeight(Range):
     range_end = 100
     default = 15
 
+class DoorModelRando(Toggle):
+    """
+    Randomly choose models for every door in the mansion except the double doors.
+    """
+    display_name = "Randomized Door Model"
+    internal_name = "door_model_rando"
+
 @dataclass
 class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     rank_requirement: RankRequirement
@@ -549,6 +556,7 @@ class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     pickup_animation: PickupAnim
     luigi_max_health: LuigiMaxHealth
     random_music: RandomMusic
+    door_model_rando: DoorModelRando
     early_first_key: EarlyFirstKey
     door_rando: DoorRando
     enemizer: Enemizer
