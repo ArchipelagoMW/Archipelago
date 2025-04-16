@@ -10,7 +10,7 @@ treasure_index_offset = 1
 npc_index_offset = 10000
 crystal_index_offset = 100000
 
-def get_locations(world: "CrystalProjectWorld") -> List[LocationData]:
+def get_locations() -> List[LocationData]:
     #Todo include crystals/job locations, NPC gifts, key items like squirrels, ore
     location_table: List[LocationData] = [
         #Zones (Beginner)

@@ -3,7 +3,6 @@ from typing import Type, Any
 from typing import Dict
 from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, OptionDict, OptionList, Visibility, Option
 from Options import PerGameCommonOptions, DeathLinkMixin, AssembleOptions
-from schema import Schema, And, Optional, Or
 
 class RandomizeJobs(Toggle):
     """
