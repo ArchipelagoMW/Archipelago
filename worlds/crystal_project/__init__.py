@@ -7,7 +7,6 @@ import pkgutil
 from .Items import item_table, filler_items, get_item_names_per_category
 from .Locations import get_locations
 from .Regions import init_areas
-from .game_data.static_location_data import location_ids, location_groups
 from .Options import CrystalProjectOptions, Toggle
 
 from typing import List, Set, Dict, TextIO
@@ -29,15 +28,14 @@ class CrystalProjectWorld(World):
     topology_present = False  # show path to required location checks in spoiler
 
     item_name_to_id = {item: item_table[item].code for item in item_table}
-    location_name_to_id = location_ids
-    location_name_groups = location_groups
+    location_name_to_id = {location.name: location.code for location in get_locations()}
     item_name_groups = get_item_names_per_category()
 
     def generate_early(self):
         self.multiworld.push_precollected(self.create_item("Item - Home Point Stone"))
 
     def create_regions(self) -> None:
-        init_areas(self, get_locations("CrystalProjectWorld"))
+        init_areas(self, get_locations())
 
     def create_item(self, name: str) -> Item:
         data = item_table[name]
