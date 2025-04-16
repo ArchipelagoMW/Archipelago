@@ -8,6 +8,7 @@ class LocationData(NamedTuple):
 
 treasure_index_offset = 1
 npc_index_offset = 10000
+crystal_index_offset = 100000
 
 def get_locations(world: "CrystalProjectWorld") -> List[LocationData]:
     #Todo include crystals/job locations, NPC gifts, key items like squirrels, ore
@@ -89,13 +90,13 @@ def get_locations(world: "CrystalProjectWorld") -> List[LocationData]:
         LocationData("Delende", "Delende Chest - Digested Head chest in basement", 180 + treasure_index_offset),
 
         #Soiled Den
-        #Treasure chests - Todo: descriptivize these chest locations
+        #Treasure chests
         #311, 111, -96
-        LocationData("Soiled Den", "Soiled Den Chest - Clamshell chest", 218 + treasure_index_offset),
+        LocationData("Soiled Den", "Soiled Den Chest - Clamshell chest lurking in the shadows by the Bangler", 218 + treasure_index_offset),
         #322, 111, -101
-        LocationData("Soiled Den", "Soiled Den Chest - Clamshell chest", 271 + treasure_index_offset),
+        LocationData("Soiled Den", "Soiled Den Chest - Clamshell chest by the Bangler", 271 + treasure_index_offset),
         #326, 111, -116
-        LocationData("Soiled Den", "Soiled Den Chest - Dodge Charm chest", 448 + treasure_index_offset),
+        LocationData("Soiled Den", "Soiled Den Chest - Long river jump Dodge Charm chest", 448 + treasure_index_offset),
         #249, 116, -156
         LocationData("Soiled Den", "Soiled Den Chest - Riverside Tonic Pouch chest", 1155 + treasure_index_offset),
 
@@ -104,11 +105,24 @@ def get_locations(world: "CrystalProjectWorld") -> List[LocationData]:
         LocationData("Soiled Den", "Soiled Den NPC - Dog Bone among the bones and flowers", 176 + npc_index_offset),
 
         #Pale Grotto
-        #Treasure chests - Todo: descriptivize these chest locations
+        #Treasure chests
         #316, 120, -262
-        LocationData("Pale Grotto", "Pale Grotto Chest - Fenix Juice chest", 228 + treasure_index_offset),
+        LocationData("Pale Grotto", "Pale Grotto Chest - Ring around the rosy Fenix Juice chest", 228 + treasure_index_offset),
         #307, 124, -345
-        LocationData("Pale Grotto", "Pale Grotto Chest - Poisonkiss chest", 144 + treasure_index_offset),
+        LocationData("Pale Grotto", "Pale Grotto Chest - Poisonkiss chest north from save point", 144 + treasure_index_offset),
+        LocationData("Pale Grotto", "Pale Grotto Chest - Entrance river hop Tonic chest", 229 + treasure_index_offset),
+        LocationData("Pale Grotto", "Pale Grotto Chest - Tincture Pouch chest on promontory", 2979 + treasure_index_offset),
+        #Todo: the next two checks require Salmon
+        LocationData("Pale Grotto", "Pale Grotto Chest - Island Underpass Scrap chest", 3622 + treasure_index_offset),
+        LocationData("Pale Grotto", "Pale Grotto Chest - Island Z-Potion Pouch chest", 3077 + treasure_index_offset),
+        LocationData("Pale Grotto", "Pale Grotto Chest - Tincture chest tucked behind path to temple", 267 + treasure_index_offset),
+        LocationData("Pale Grotto", "Pale Grotto Chest - Jumping puzzle Storm Helm chest", 226 + treasure_index_offset),
+        LocationData("Pale Grotto", "Pale Grotto Chest - Money chest south of temple", 136 + treasure_index_offset),
+        LocationData("Pale Grotto", "Pale Grotto Chest - Temple antechamber Toothpick chest", 222 + treasure_index_offset),
+        LocationData("Pale Grotto", "Pale Grotto Chest - Temple sanctuary Pale Grotto Map chest", 1154 + treasure_index_offset),
+        
+        #Crystals
+        LocationData("Pale Grotto", "Pale Grotto Chest - Temple sanctuary Fencer Crystal", 130 + treasure_index_offset),
 
         #Proving Meadows
         #Treasure chests
@@ -133,7 +147,9 @@ def get_locations(world: "CrystalProjectWorld") -> List[LocationData]:
         #NPCs
         #Todo: this requires Salmon
         LocationData("Yamagawa M.A.", "Yamagawa M.A. NPC - Autumns Oath at waterfall source", 628 + npc_index_offset),
-        LocationData("Yamagawa M.A.", "Yamagawa M.A. NPC - Jump into fireplace cave for Scholar Crystal", 166 + npc_index_offset),
+
+        #Crystals
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. NPC - Jump into fireplace cave for Scholar Crystal", 166 + crystal_index_offset),
 
         #Zones (Expert)
         #Lake Delende
