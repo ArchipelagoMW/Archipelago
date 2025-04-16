@@ -57,7 +57,7 @@ class CrystalProjectWorld(World):
         #     return self.random.choice(enabled_traps)
         # else:
         #     return self.random.choice(filler_items) 
-        return self.random.choic(filler_items)
+        return self.random.choice(filler_items)
 
     def get_excluded_items(self) -> Set[str]:
         excluded_items: Set[str] = set()
@@ -98,6 +98,10 @@ class CrystalProjectWorld(World):
                 for _ in range(data.amount):
                     item = self.set_classifications(name)
                     pool.append(item)
+
+        for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)):
+            item = self.create_item(self.get_filler_item_name())
+            pool.append(item)
 
         return pool
 
