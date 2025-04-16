@@ -779,9 +779,15 @@ class CollectionState():
                 if unreachable_locations:
                     next_advancements_per_player.append((player, unreachable_locations))
 
-                # If the player does not receive any items for the rest of the sweep iteration, they will likely not
-                # have any reachable locations at the start of the next sweep iteration, so their locations can be
-                # skipped.
+                # A previous player's locations processed in the current `while players_to_check` iteration could have
+                # collected items belonging to `player`, but now that all of `player`'s reachable locations have been
+                # found, it can be assumed that `player` will not gain any more reachable locations until another one of
+                # their items is collected.
+                # It would be clearer to not add players to `next_players_to_check` in the first place if they have yet
+                # to be processed in the current `while players_to_check` iteration, but checking if a player should be
+                # added to `next_players_to_check` would need to be run once for every item that is collected, so it is
+                # more performant to instead discard `player` from `next_players_to_check` once their locations have
+                # been processed.
                 next_players_to_check.discard(player)
 
                 # Collect the items from the reachable locations.
