@@ -1059,11 +1059,18 @@ def freeze_support() -> None:
 _extend_freeze_support()
 
 
-def visualize_regions(root_region: Region, file_name: str, *,
-                      show_entrance_names: bool = False, show_locations: bool = True, show_other_regions: bool = True,
-                      linetype_ortho: bool = True, regions_to_highlight: set[Region] | None = None,
-                      entrance_highlighting: dict[int, int] | None = None,
-                      detail_other_regions: bool = False, auto_assign_colors: bool = False) -> None:
+def visualize_regions(
+        root_region: Region,
+        file_name: str,
+        *,
+        show_entrance_names: bool = False,
+        show_locations: bool = True,
+        show_other_regions: bool = True,
+        linetype_ortho: bool = True,
+        regions_to_highlight: set[Region] | None = None,
+        entrance_highlighting: dict[int, int] | None = None,
+        detail_other_regions: bool = False,
+        auto_assign_colors: bool = False) -> None:
     """Visualize the layout of a world as a PlantUML diagram.
 
     :param root_region: The region from which to start the diagram from. (Usually the "Menu" region of your world.)
@@ -1081,12 +1088,12 @@ def visualize_regions(root_region: Region, file_name: str, *,
     :param linetype_ortho: (default True) If enabled, orthogonal straight line parts will be used; otherwise polylines.
     :param regions_to_highlight: Regions that will be highlighted in green if they are reachable.
     :param entrance_highlighting: a mapping from your world's entrance randomization groups to RGB values, used to color
-        your entrances
+            your entrances
     :param detail_other_regions: (default False) If enabled, will fully visualize regions that aren't reachable
-        from root_region.
+            from root_region.
     :param auto_assign_colors: (default False) If enabled, will automatically assign random colors to entrances of the
-        same randomization group. Uses entrance_highlighting first, and only picks random colors for entrance groups
-        not found in the passed-in map
+            same randomization group. Uses entrance_highlighting first, and only picks random colors for entrance groups
+            not found in the passed-in map
 
     Example usage in World code:
     from Utils import visualize_regions
@@ -1126,8 +1133,8 @@ def visualize_regions(root_region: Region, file_name: str, *,
         COLOR_INDEX_SPACING: int = 0x357
         new_color_index: int = (group * COLOR_INDEX_SPACING) % 0x1000
         new_color = ((new_color_index & 0xF00) << 12) + \
-                        ((new_color_index & 0xF0) << 8) + \
-                        ((new_color_index & 0xF) << 4)
+                    ((new_color_index & 0xF0) << 8) + \
+                    ((new_color_index & 0xF) << 4)
         while new_color in colors_used:
             # while this is technically unbounded, expected collisions are low. There are 4095 possible colors
             # and worlds are unlikely to get to anywhere close to that many entrance groups
