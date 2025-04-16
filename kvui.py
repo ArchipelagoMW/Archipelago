@@ -98,7 +98,7 @@ class ThemedApp(MDApp):
 
 class ImageIcon(MDButtonIcon, AsyncImage):
     def __init__(self, *args, **kwargs):
-        super().__init__(args, kwargs)
+        super().__init__(*args, **kwargs)
         self.image = ApAsyncImage(**kwargs)
         self.add_widget(self.image)
 
@@ -183,14 +183,16 @@ class ResizableTextField(MDTextField):
                 height_rule = subclass.properties.get("height", None)
                 if height_rule:
                     height_rule.ignore_prev = True
-        super().__init__(args, kwargs)
+        super().__init__(*args, **kwargs)
 
 
 def on_release(self: MDButton, *args):
     super(MDButton, self).on_release(args)
     self.on_leave()
 
+
 MDButton.on_release = on_release
+
 
 # I was surprised to find this didn't already exist in kivy :(
 class HoverBehavior(object):
