@@ -674,7 +674,7 @@ class LMWorld(World):
                 copies_to_place = 1
             copies_to_place = 0 if copies_to_place - exclude.count(item) <= 0 else copies_to_place - exclude.count(item)
             for _ in range(copies_to_place):
-                item_list += item
+                item_list.append(item)
                 self.itempool.append(self.create_item(item))
         if self.options.early_first_key.value == 1:
             early_key = ""
