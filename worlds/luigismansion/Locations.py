@@ -105,6 +105,8 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     # "Hidden Room Small Chest R Floor": LMLocationData("Hidden Room", 15, "Furniture", 247, [], 1), # TODO Prevents Ghosts Spawn
     # "Sealed Room Lower Big Chest": LMLocationData("Sealed Room", 34, "Furniture", 529, [], 37), # TODO Prevents Ghosts Spawn
     # "Sealed Room Upper C Big Chest": LMLocationData("Sealed Room", 36, "Furniture", 527, [], 37), # TODO Prevents Ghosts Spawn
+    "Sealed Room SW Shelf Chest": LMLocationData("Sealed Room", 869, "Furniture", 531, [],
+        update_ram_addr=[LMRamData(in_game_room_id=37)]), #TODO test that this is the right entry
     # "Armory 4th Gray Chest": LMLocationData("Armory", 38, "Furniture", 651, [], 51), # TODO Prevents Ghosts Spawn
     # "Armory 5th Gray Chest": LMLocationData("Armory", 40, "Furniture", 653, [], 51), # TODO Prevents Ghosts Spawn
     # "Telephone Room C Chest": LMLocationData("Telephone Room", 43, "Furniture", 680, [], 53), # TODO Prevents Ghosts Spawn
