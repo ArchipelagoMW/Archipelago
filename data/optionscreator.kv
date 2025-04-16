@@ -25,7 +25,7 @@
 <VisualNamedRange>:
     id: this
     orientation: "horizontal"
-    spacing: "5dp"
+    spacing: "10dp"
     padding: (0, 0, "10dp", 0)
     choice: choice
 
@@ -113,16 +113,17 @@ ContainerLayout:
         MainLayout:
             id: player_layout
             rows: 2
+            spacing: "20dp"
 
             MDBoxLayout:
                 id: player_options
                 orientation: "horizontal"
-                height: "60dp"
+                height: "75dp"
                 size_hint_y: None
-                padding: [0, "20dp", 0, 0]
-                spacing: "20dp"
+                padding: ["10dp", "30dp", "10dp", 0]
+                spacing: "10dp"
 
-                MDTextField:
+                ResizableTextField:
                     id: player_name
                     multiline: False
 
@@ -134,10 +135,11 @@ ContainerLayout:
 
                 MDBoxLayout:
                     orientation: "vertical"
-                    spacing: "5dp"
+                    spacing: "15dp"
 
                     MDLabel:
                         id: game
+                        adaptive_size: True
                         text: "Game: None"
                         pos_hint: {"center_x": 0.5, "center_y": 0.5}
 
@@ -145,11 +147,15 @@ ContainerLayout:
                         pos_hint: {"center_x": 0.5, "center_y": 0.5}
                         on_press: app.export_options(self)
                         theme_width: "Custom"
+                        size_hint_y: 1
                         size_hint_x: 1
 
                         MDButtonText:
                             pos_hint: {"center_x": 0.5, "center_y": 0.5}
                             text: "Export Options"
+
+
+
             MainLayout:
                 cols: 1
                 id: options

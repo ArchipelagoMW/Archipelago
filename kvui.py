@@ -98,7 +98,7 @@ class ThemedApp(MDApp):
 
 class ImageIcon(MDButtonIcon, AsyncImage):
     def __init__(self, *args, **kwargs):
-        super().__init__(args, kwargs)
+        super().__init__(*args, **kwargs)
         self.image = ApAsyncImage(**kwargs)
         self.add_widget(self.image)
 
@@ -113,7 +113,7 @@ class ImageButton(MDIconButton):
             val = kwargs.pop(kwarg, "None")
             if val != "None":
                 image_args[kwarg.replace("image_", "")] = val
-        super().__init__()
+        super().__init__(**kwargs)
         self.image = ApAsyncImage(**image_args)
 
         def set_center(button, center):
@@ -156,7 +156,7 @@ class ToggleButton(MDButton, ToggleButtonBehavior):
                 child.text_color = self.theme_cls.onPrimaryColor
                 child.icon_color = self.theme_cls.onPrimaryColor
         else:
-            self.md_bg_color = self.theme_cls.surfaceContainerLowestColor
+            self.md_bg_color = self.theme_cls.surfaceContainerLowColor
             for child in self.children:
                 if child.theme_text_color == "Primary":
                     child.theme_text_color = "Custom"
@@ -182,7 +182,7 @@ class ResizableTextField(MDTextField):
                 height_rule = subclass.properties.get("height", None)
                 if height_rule:
                     height_rule.ignore_prev = True
-        super().__init__(args, kwargs)
+        super().__init__(*args, **kwargs)
 
 
 def on_release(self: MDButton, *args):

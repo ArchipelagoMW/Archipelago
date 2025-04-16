@@ -7,6 +7,7 @@ from kivymd.uix.anchorlayout import MDAnchorLayout
 from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelContent, MDExpansionPanelHeader
 from kivymd.uix.list import MDListItem, MDListItemTrailingIcon, MDListItemSupportingText
 from kivymd.uix.slider import MDSlider
+from kivymd.uix.snackbar import MDSnackbar, MDSnackbarText
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.button import MDButton, MDButtonText, MDIconButton
 from kivymd.uix.textfield import MDTextField
@@ -75,6 +76,11 @@ class VisualRange(MDBoxLayout):
         self.option = option
         self.name = name
         super().__init__(args, kwargs)
+
+        def update_points(*args):
+            pass
+
+        self.slider._update_points = update_points
 
 
 class VisualChoice(MDButton):
@@ -232,9 +238,15 @@ class YamlCreator(ThemedApp):
                 "game": self.current_game,
                 self.current_game: {k: check_random(v) for k, v in self.options.items()}
             }
-            with open(file_name, 'w') as f:
-                f.write(Utils.dump(options, sort_keys=False))
-                f.close()
+            try:
+                with open(file_name, 'w') as f:
+                    f.write(Utils.dump(options, sort_keys=False))
+                    f.close()
+                    MDSnackbar(MDSnackbarText(text="File saved successfully."), y=dp(24), pos_hint={"center_x": 0.5},
+                               size_hint_x=0.5).open()
+            except FileNotFoundError:
+                MDSnackbar(MDSnackbarText(text="Saving cancelled."), y=dp(24), pos_hint={"center_x": 0.5},
+                           size_hint_x=0.5).open()
 
     def create_range(self, option: typing.Type[Range], name: str):
         def update_text(slider, touch):
@@ -528,8 +540,11 @@ class YamlCreator(ThemedApp):
         self.game_label.text = f"Game: {self.current_game}"
 
     def tap_expansion_chevron(
-            self, panel: MDExpansionPanel, chevron: TrailingPressedIconButton
+            self, panel: MDExpansionPanel, chevron: TrailingPressedIconButton | MDListItem
     ):
+        if isinstance(chevron, MDListItem):
+            chevron = next((child for child in chevron.ids.trailing_container.children
+                            if isinstance(child, TrailingPressedIconButton)), None)
         Animation(
             padding=[0, dp(12), 0, dp(12)]
             if not panel.is_open
@@ -537,9 +552,10 @@ class YamlCreator(ThemedApp):
             d=0.2,
         ).start(panel)
         panel.open() if not panel.is_open else panel.close()
-        panel.set_chevron_down(
-            chevron
-        ) if not panel.is_open else panel.set_chevron_up(chevron)
+        if chevron:
+            panel.set_chevron_down(
+                chevron
+            ) if not panel.is_open else panel.set_chevron_up(chevron)
 
     def build(self):
         self.set_colors()
@@ -566,6 +582,11 @@ class YamlCreator(ThemedApp):
         self.game_label = self.container.ids.game
         self.name_input = self.container.ids.player_name
         self.option_layout = self.container.ids.options
+
+        def set_height(instance, value):
+            instance.height = value[1]
+
+        self.game_label.bind(texture_size=set_height)
 
         from kivy.modules.console import create_console
         from kivy.core.window import Window
