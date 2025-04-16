@@ -3,6 +3,7 @@ import os
 import re
 import tempfile
 import typing
+import shlex
 from shutil import which
 from typing import Optional
 
@@ -14,10 +15,12 @@ from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.metrics import dp
 from kivy.uix.label import Label
+from kivy.uix.textinput import TextInput
 from kivymd.uix.button import MDIconButton
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.snackbar import MDSnackbar, MDSnackbarButtonContainer, MDSnackbarCloseButton, MDSnackbarText
-from Utils import is_linux, is_macos, is_windows
+from kivymd.uix.textfield import MDTextField
+from Utils import is_linux, is_macos, is_windows, parse_yamls
 
 kv = """
 <OutlinedGrid@MDGridLayout>:
@@ -28,14 +31,14 @@ kv = """
             width: 2
             rectangle: self.x, self.y, self.width, self.height
 
-<MarkupLabel@MDLabel>
+<MarkupLabel@SelectableLabel>
     markup: True
     size_hint: 1, None
     padding: [2, 2, 2, 2]
     on_ref_press: app.on_ref_press(*args)
     adaptive_height: True
 
-BoxLayout:
+MDBoxLayout:
     orientation: "vertical"
     padding: [10, 10, 10, 10]
     spacing: 10
@@ -67,6 +70,25 @@ BoxLayout:
             row_default_height: 30
             cols: 4
             pos_hint: {"center_x": 0.5}
+
+    MDBoxLayout:
+        orientation: "horizontal"
+        adaptive_height: True
+        spacing: "5dp"
+
+        MDLabel:
+            text: "Additional options :"
+            height: "30dp"
+            adaptive_width: True
+
+        TextInput:
+            id: options_field
+            multiline: False
+            height: "30dp"
+            size_hint_y: None
+            background_color: app.theme_cls.backgroundColor
+            cursor_color: app.theme_cls.primaryColor
+            foreground_color: app.theme_cls.primaryColor
 
     MDButton:
         style: "filled"
@@ -122,8 +144,8 @@ async def show_in_file_explorer(path: str) -> str:
                 "/org/freedesktop/FileManager1",
                 "--method",
                 "org.freedesktop.FileManager1.ShowItems",
-                f"[\"file://{path}\"]",
-                "\"\"",
+                f'["file://{path}"]',
+                '""',
             )
     elif is_macos:
         # I have not tested this part yet
@@ -198,26 +220,36 @@ async def open_filename(
 class GeneratorApp(ThemedApp):
     player_table: MDGridLayout
     ui_log: UILog
+    options_field: TextInput
 
     players: list = []
     dropped_text: list[str] = []
     dropped_files: list[str] = []
+
+    # Added this here for compatibility with SelectableLabel
+    last_autofillable_command: str = ""
+    textinput: MDTextField
 
     def __init__(self):
         super(GeneratorApp, self).__init__()
         self.yamls = []
 
     def build(self):
+        self.set_colors()
         self.title = "Archipelago Generator"
+
         Window.bind(on_drop_file=self._on_file_drop)
         Window.bind(on_drop_text=self._on_text_drop)
-
         Window.bind(on_drop_begin=self._on_drop_begin)
         Window.bind(on_drop_end=self._on_drop_end)
 
         ui = Builder.load_string(kv)
         self.player_table = ui.ids.player_table
         self.ui_log = ui.ids.ui_log
+        self.options_field = ui.ids.options_field
+
+        # Added this here for compatibility with SelectableLabel
+        self.textinput = MDTextField()
 
         # for header in ["No.", "Name", "Game", "Remove"]:
         self.player_table.add_widget(Label(text="No.", text_size=(None, 30), size_hint_x=2))
@@ -241,10 +273,7 @@ class GeneratorApp(ThemedApp):
         for file_path in self.dropped_files:
             self._add_yaml_file(file_path)
 
-        for document in yaml.load_all(
-            "\n".join(self.dropped_text),
-            Loader=yaml.Loader,
-        ):
+        for document in parse_yamls("\n".join(self.dropped_text)):
             self._add_yaml(document)
 
     def on_ref_press(self, _, ref: str) -> None:
@@ -255,11 +284,16 @@ class GeneratorApp(ThemedApp):
 
     def _add_yaml_file(self, file_path: str) -> None:
         with open(file_path, "r", encoding="utf-8") as f:
-            document = yaml.load(f.read(), Loader=yaml.Loader)
-            self._add_yaml(document, os.path.basename(file_path))
+            for document in parse_yamls(f.read()):
+                self._add_yaml(document, os.path.basename(file_path))
 
     def _add_yaml(self, document, file_name: Optional[str] = None) -> None:
-        if "name" not in document or "game" not in document:
+        if (
+            "name" not in document
+            or "game" not in document
+            or not isinstance(document["name"], str)
+            or not isinstance(document["game"], str)
+        ):
             message = "Invalid Player YAML file"
             if file_name:
                 message = f"{message}: {file_name}"
@@ -289,7 +323,7 @@ class GeneratorApp(ThemedApp):
         self.players.append({"name": name, "game": game, "document": document, "widgets": widgets})
 
     async def _generate_async(self) -> None:
-        with tempfile.TemporaryDirectory(delete=False) as temp_dir:
+        with tempfile.TemporaryDirectory() as temp_dir:
             for idx, player in enumerate(self.players):
                 filename = f"P{idx}_{player["name"]}.yaml"
                 file_path = os.path.join(temp_dir, filename)
@@ -301,6 +335,7 @@ class GeneratorApp(ThemedApp):
                 "Generate.py",
                 "--player_files_path",
                 temp_dir,
+                *shlex.split(self.options_field.text),
                 stdin=asyncio.subprocess.PIPE,
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
@@ -322,8 +357,7 @@ class GeneratorApp(ThemedApp):
                 self.ui_log.on_message_markup("[color=008000]Generation completed successfully[/color]")
             else:
                 self.ui_log.on_message_markup(
-                    f"[color=7F7FFF]Generation failed with status code {
-                        process.returncode}[/color]"
+                    f"[color=7F7FFF]Generation failed with status code {process.returncode}[/color]"
                 )
 
     async def _log_stream_to_ui(self, stream: asyncio.StreamReader, color: str) -> None:
