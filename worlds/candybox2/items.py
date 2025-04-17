@@ -89,6 +89,10 @@ items: dict[str, CandyBox2ItemData] = {
     "Progressive Weapon": CandyBox2ItemData(candy_box_2_base_id + 62, lambda world: progressive_weapon_count(world), ItemClassification.progression),
 }
 
+filler_items: list[str] = [
+    "Candy"
+]
+
 def weapon_item_count(world: "CandyBox2World", weapon: int):
     if world.starting_weapon == weapon:
         # We start with this weapon, so none of these are required
