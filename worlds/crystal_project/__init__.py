@@ -9,7 +9,7 @@ from .Locations import get_locations
 from .Regions import init_areas
 from .Options import CrystalProjectOptions, Toggle
 
-from typing import List, Set, Dict, TextIO
+from typing import List, Set, Dict, TextIO, Any
 from worlds.AutoWorld import World
 from BaseClasses import Region, Location, Entrance, Item, ItemClassification
 
@@ -108,3 +108,17 @@ class CrystalProjectWorld(World):
         item = Item(name, data.classification, data.code, self.player)
 
         return item
+
+    # reference from blasphemous
+    def fill_slot_data(self) -> Dict[str, Any]:
+        slot_data: Dict[str, Any] = {}
+        # doors: Dict[str, str] = {}
+        # thorns: bool = True
+    
+        slot_data = {
+            "goal": self.options.goal.value,
+            "clamshellsQuantity": self.options.clamshellsQuantity.value,
+            "randomizeJobs": self.options.randomizeJobs.value
+        }
+    
+        return slot_data
