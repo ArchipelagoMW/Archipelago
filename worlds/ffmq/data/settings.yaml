@@ -169,6 +169,9 @@ Final Fantasy Mystic Quest:
   disable_spoilers:
     true: 0
     false: 0
+  enable_spoilers:
+    true: 0
+    false: 0
   progressive_formations:
     Disabled: 0
     RegionsStrict: 0

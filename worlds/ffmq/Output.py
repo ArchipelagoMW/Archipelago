@@ -73,6 +73,7 @@ def generate_output(self, output_directory):
         "sky_coin_mode": cc(self.options.sky_coin_mode),
         "sky_coin_fragments_qty": cc(self.options.shattered_sky_coin_quantity),
         "disable_spoilers": True,
+        "enable_spoilers": False,
         "progressive_formations": cc(self.options.progressive_formations),
         "map_shuffling": cc(self.options.map_shuffle),
         "overworld_shuffle": tf(self.options.overworld_shuffle),
@@ -106,8 +107,9 @@ def generate_output(self, output_directory):
     def progressive(item_name):
         if item_name not in progressives:
             return 0
+        ret = progressives[item_name]
         progressives[item_name] += 1
-        return progressives[item_name]
+        return ret
     starting_items = [output_item_name(item, progressive(item.name))
                       for item in self.multiworld.precollected_items[self.player]]
 
