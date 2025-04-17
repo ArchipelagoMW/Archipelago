@@ -130,7 +130,7 @@ item_table: Dict[str, ItemData] = {
     "Item - Black Squirrel": ItemData("Item", 21 + item_index_offset, ItemClassification.progression, 4),
     # "Item - Dog Bone": ItemData("Item", 6 + item_index_offset, ItemClassification.progression, 3),
     # #TODO: Maybe exclude these; 16 clamshells can be found in vanilla and ClamHater (The Rocker) gives you 3; 13 are needed to give to ClamLover (Manana Man)
-    # "Item - Clamshell": ItemData("Item", 16 + item_index_offset, ItemClassification.progression, 19),
+    "Item - Clamshell": ItemData("Item", 16 + item_index_offset, ItemClassification.progression, 19),
     # "Item - Digested Head": ItemData("Item", 17 + item_index_offset, ItemClassification.progression, 3),
     # "Item - Lost Penguin": ItemData("Item", 24 + item_index_offset, ItemClassification.progression, 12),
     # "Item - Elevator Part": ItemData("Item", 224 + item_index_offset, ItemClassification.progression, 17),
@@ -151,8 +151,7 @@ item_table: Dict[str, ItemData] = {
     "Item - Quintar Flute": ItemData("Item", 39 + item_index_offset, ItemClassification.progression),
     "Item - Ibek Bell": ItemData("Item", 50 + item_index_offset, ItemClassification.progression),
     "Item - Owl Drum": ItemData("Item", 49 + item_index_offset, ItemClassification.progression),
-    "Item - Salmon Violin": ItemData("Item", 48 + item_index_offset, ItemClassification.progression),
-    "Item - Salmon Cello": ItemData("Item", 114 + item_index_offset, ItemClassification.progression),
+    "Item - Progressive Salmon Violin": ItemData("Item", 48 + item_index_offset, ItemClassification.progression, 2),
 
     #Teleport items (shards not included since they're stones but worse)
     "Item - Home Point Stone": ItemData("Item", 19 + item_index_offset, ItemClassification.progression),

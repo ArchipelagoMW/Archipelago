@@ -48,7 +48,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
     multiworld.get_region("Proving Meadows", player).add_exits(["Skumparadise"], {"Skumparadise": lambda state: get_job_count(player, state) >= 3})
     multiworld.get_region("Skumparadise", player).add_exits(["Capital Sequoia"])
     multiworld.get_region("Capital Sequoia", player).add_exits(["Jojo Sewers", "Boomer Society", "Rolling Quintar Fields"])
-    multiworld.get_region("Jojo Sewers", player).add_exits(["Capital Jail"])
+    multiworld.get_region("Jojo Sewers", player).add_exits(["Capital Jail"], {"Capital Jail": lambda state: state.has_any({"Item - Quintar Flute"}, world.player)})
 
     ## examples
     # multiworld.get_region("Onett", player).add_exits(["Giant Step", "Twoson", "Northern Onett", "Global ATM Access"],
@@ -91,4 +91,4 @@ def connect_menu_region(world: "CrystalProjectWorld") -> None:
 
     world.starting_region = starting_region_list[0]
     menu = world.multiworld.get_region("Menu", world.player)
-    menu.add_exits(["Spawning Meadows", "Capital Sequoia"], {"Capital Sequoia": lambda state: state.has_any({"Gaea Stone"}, world.player)})
+    menu.add_exits(["Spawning Meadows", "Capital Sequoia"], {"Capital Sequoia": lambda state: state.has_any({"Item - Gaea Stone"}, world.player)})
