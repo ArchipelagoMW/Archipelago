@@ -43,7 +43,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Buttersquirrel on tree NW of spawn", 296 + npc_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Buttersquirrel on tree near lampposts", 110 + npc_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Buttersquirrel on Mario jump tree", 3085 + npc_index_offset),
-        #Secret Herb locations that don't seem to be used?
+        #Todo Secret Herb locations that don't seem to be used?
         #48, 112, -36
         #LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb 1", 297 + npc_index_offset),
         #79, 112, -30
@@ -60,7 +60,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Delende", "Delende Chest - Money chest in front of camp", 263 + treasure_index_offset),
         LocationData("Delende", "Delende Chest - Money chest in front of fish hatchery lower level", 210 + treasure_index_offset),
         LocationData("Delende", "Delende Chest - Return from fish hatchery Bracer chest", 34 + treasure_index_offset),
-        #Todo: add something to Rules.py; can't get Chartreuse without Owl + Salmon
+        #Todo Rules: requires Owl + Salmon
         LocationData("Delende", "Delende Chest - Heart tarn Chartreuse chest", 1554 + treasure_index_offset),
         LocationData("Delende", "Delende Chest - Mushroom underpass Cotton Hood chest", 262 + treasure_index_offset),
         LocationData("Delende", "Delende Chest - Fallen log parkour Earring chest", 208 + treasure_index_offset),
@@ -81,19 +81,19 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Delende", "Delende Chest - Tonic Pouch chest before Proving Meadows", 216 + treasure_index_offset),
         LocationData("Delende", "Delende Chest - Tonic Pouch chest in front of fish hatchery below tree", 2997 + treasure_index_offset),
 
-        #NPCs Todo: Astley1 NPC (ID 28) (184, 125, -93) gives you a Home Point Stone, but it's missable as a location; the item appears elsewhere later
+        #Todo NPCs Missable: Astley1 NPC (ID 28) (184, 125, -93) gives you a Home Point Stone, but it's missable as a location; the item appears elsewhere later
         LocationData("Delende", "Delende NPC - Dog Bone in spooky cave", 1915 + npc_index_offset),
         LocationData("Delende", "Delende NPC - Dog Bone Guy", 31 + npc_index_offset),
         LocationData("Delende", "Delende NPC - Dog Bone south of Soiled Den", 184 + npc_index_offset),
         #276, 116, -204; gives you Fervor Charm
         LocationData("Delende", "Delende NPC - Dizzy noob chucks a Fervor Charm at your face", 831 + npc_index_offset),
-        #NPCs Todo: shortcut girl (Z2_Collector Sister ID 3769 (169, 132, -89))
-        #NPCs Todo: do we want a filter option to add the guy who fishes things up for you (Z2_FisherOnDock ID 121 (166, 133, -208))
+        #Todo NPCs Shortcuts: shortcut girl (Z2_Collector Sister ID 3769 (169, 132, -89))
+        #Todo NPCs Player Options: do we want a filter option to add the guy who fishes things up for you (Z2_FisherOnDock ID 121 (166, 133, -208))
         LocationData("Delende", "Delende NPC - Dizzy noob chucks a Fervor Charm at your face", 831 + npc_index_offset),
         #Todo: descriptivize (Z2_MapMan (198, 131, -74))
         LocationData("Delende", "Delende NPC - Cartographer", 1153 + npc_index_offset),
-        #NPCs Todo: Rabbit Claws shortcut guy (Z2_RoosterFeetGuy ID 74(281, 128, -159))
-        #NPCs Todo: (Z2_RottenFishGuy ID 124 (181, 132, -200)) sells Rotten Salmon (progression item)
+        #Todo NPCs Shortcuts: Rabbit Claws shortcut guy (Z2_RoosterFeetGuy ID 74(281, 128, -159))
+        #Todo NPCs CheckOrNot: (Z2_RottenFishGuy ID 124 (181, 132, -200)) sells Rotten Salmon (progression item)
 
         #Grans House (Delende)
         #Treasure chests
@@ -134,7 +134,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Pale Grotto", "Pale Grotto Chest - Poisonkiss chest north from save point", 144 + treasure_index_offset),
         LocationData("Pale Grotto", "Pale Grotto Chest - Entrance river hop Tonic chest", 229 + treasure_index_offset),
         LocationData("Pale Grotto", "Pale Grotto Chest - Tincture Pouch chest on promontory", 2979 + treasure_index_offset),
-        #Todo: the next two checks require Salmon
+        #Todo Rules: the next two checks require Salmon
         LocationData("Pale Grotto", "Pale Grotto Chest - Island Underpass Scrap chest", 3622 + treasure_index_offset),
         LocationData("Pale Grotto", "Pale Grotto Chest - Island Z-Potion Pouch chest", 3077 + treasure_index_offset),
         LocationData("Pale Grotto", "Pale Grotto Chest - Tincture chest tucked behind path to temple", 267 + treasure_index_offset),
@@ -144,7 +144,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Pale Grotto", "Pale Grotto Chest - Temple sanctuary Pale Grotto Map chest", 1154 + treasure_index_offset),
         
         #NPCs
-        #NPC Todos: Pale Grotto Temple map (Z2_ReidCamp ID 1166 (273, 122, -327)) gives you Ring Mail if you don't have it but it's missable (it's in shops)
+        #Todo NPCs Missable: Pale Grotto Temple map (Z2_ReidCamp ID 1166 (273, 122, -327)) gives you Ring Mail if you don't have it but it's missable (it's in shops)
 
         #Crystals
         LocationData("Pale Grotto", "Pale Grotto Crystal - Temple sanctuary Fencer Crystal", 130 + crystal_index_offset),
@@ -199,9 +199,10 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #NPCs
         LocationData("Seaside Cliffs", "Seaside Cliffs NPC - ClamHater above the mist", 283 + npc_index_offset),
         LocationData("Seaside Cliffs", "Seaside Cliffs NPC - If you give a Manana Man a clam... (he will ask you for more)", 284 + npc_index_offset),
-        #343, 81, 0 Todo: requires Salmon
+        #343, 81, 0
+        #Todo Rules: requires Salmon
         LocationData("Seaside Cliffs", "Seaside Cliffs NPC - Diamond Ore below the bay", 2896 + npc_index_offset),
-        #NPCs Todo: Seaside Cliffs Outpost map has Master Shaman ID 3572 (387, 155, -104); gives you Shaman Seal in exchange for job mastery
+        #Todo NPCs Job Masters: Seaside Cliffs Outpost map has Master Shaman ID 3572 (387, 155, -104); gives you Shaman Seal in exchange for job mastery
 
         #Draft Shaft Conduit
         #Treasure chests
@@ -212,7 +213,8 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Draft Shaft Conduit", "Draft Shaft Conduit Crystal - Shaman Crystal", 35 + crystal_index_offset),
 
         #Mercury Shrine
-        #Treasure chests Todo: requires Mercury Stone
+        #Treasure chests
+        #Todo Rules: requires Mercury Stone
         LocationData("Mercury Shrine", "Mercury Shrine Chest - Pinnacle Contract chest", 155 + treasure_index_offset),
 
         #Yamagawa M.A.
@@ -225,9 +227,9 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Drop down to mountain balcony Torpid Cuffs chest", 290 + treasure_index_offset),
 
         #NPCs
-        #Todo: this requires Salmon
+        #Todo Rules: this requires Salmon
         LocationData("Yamagawa M.A.", "Yamagawa M.A. NPC - Autumns Oath at waterfall source", 628 + npc_index_offset),
-        #NPCs Todo: Yamagawa M.A. Temple map has Master Scholar ID 3574 (59, 151, -98); gives you Scholar Seal in exchange for job mastery
+        #Todo NPCs Job Masters: Yamagawa M.A. Temple map has Master Scholar ID 3574 (59, 151, -98); gives you Scholar Seal in exchange for job mastery
 
         #Crystals
         LocationData("Yamagawa M.A.", "Yamagawa M.A. Crystal - Jump into fireplace cave for Scholar Crystal", 166 + crystal_index_offset),
@@ -241,7 +243,8 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Proving Meadows", "Proving Meadows Chest - Tarzan Tonic chest", 256 + treasure_index_offset),
         LocationData("Proving Meadows", "Proving Meadows Chest - Tonic Pouch chest on the climb up outside Skumparadise", 193 + treasure_index_offset),
 
-        #NPCs Todo: this guy checks whether you have enough crystals to pass; this is a blocker guy not a location check guy
+        #NPCs
+        #Todo NPCs Blocker: this guy checks whether you have enough crystals to pass; this is a blocker guy not a location check guy
         #LocationData("Proving Meadows", "Proving Meadows NPC - Crystal Checker", 128 + npc_index_offset),
 
         #Skumparadise (we're smushing Trial Caves into there)
@@ -269,7 +272,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Magic shop attic Craftwork Scythe chest", 1389 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Training ground parkour Craftwork Katana chest", 1390 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Cap chest behind Luxury Shop", 2651 + treasure_index_offset),
-        #Todo: next three chests require the Luxury Key and Luxury Pass: Fenix Syrup Pouch (1533), Lucky Briefs (1532), Lucky Socks (1531)
+        #Todo Rules: next three chests require the Luxury Key and Luxury Pass: Fenix Syrup Pouch (1533), Lucky Briefs (1532), Lucky Socks (1531)
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Fenix Syrup Pouch chest locked in Luxury Shop storage", 1533 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Lucky Briefs chest locked in Luxury Shop storage", 1532 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Lucky Socks chest locked in Luxury Shop storage", 1531 + treasure_index_offset),
@@ -281,10 +284,10 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Gaea Shard chest 2 in Gaea Shrine", 227 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Gaea Shard chest 3 in Gaea Shrine", 381 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Gaea Shard chest 4 in Gaea Shrine", 548 + treasure_index_offset),
-        #Todo: requires either Owl, Ibek, Quintar, or Gaea Stone
+        #Todo Rules: requires either Owl, Ibek, Quintar, or Gaea Stone
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Bow chest in Clerics Lounge", 1391 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Axe chest in instrducktor classroom", 1387 + treasure_index_offset),
-        #Todo: requires Ibek
+        #Todo Rules: requires Ibek
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Watering Can chest in Master Warlocks chambers atop Weapons R Us", 2732 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Pages chest in Master Wizards Library atop Weapons R Us", 168 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Fenced-off Craftwork Helm chest in Armor Merchant alley", 2653 + treasure_index_offset),
@@ -295,27 +298,27 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Maze Craftwork Crown chest accompanied by blue flower pair", 390 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Gardeners Key chest below Lost Penguin", 388 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Cheat at maze for Givers Ring chest above fountain", 387 + treasure_index_offset),
-        #Todo: next three locations require Gardeners Key
+        #Todo Rules: next three locations require Gardeners Key
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Mail chest in Gardeners Shed", 2652 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Tuber Seed 1 in Gardeners Shed", 2663 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Tuber Seed 2 in Gardeners Shed", 2664 + treasure_index_offset),
 
         #NPCs 
-        #NPCs Todo: Courtyard Chloe (Z37_ChloeFishing ID 1661 (399, 155, -219)) gives you Fly Lure (and later she disappears and it's on the ground here)
-        #NPCs Todo: Courtyard Reid (Z28_Reid ID 2410 (113, 172, -372)) gives you a Courtyard Key or if you miss it it's on the ground (Z37_Courtyard Key ID 2486 (424, 150, -222))
-        #NPCs Todo: Master Beatsmith ID 3560 (361, 170, -268); gives you Beatsmith Seal in exchange for job mastery
-        #NPCs Todo: Master Cleric ID 3568 (363, 166, -266); gives you Cleric Seal in exchange for job mastery
-        #NPCs Todo: Master Monk ID 3567 (394, 179, -295); gives you Monk Seal in exchange for job mastery
-        #NPCs Todo: Master Rogue ID 3571 (444, 167, -264); gives you Rogue Seal in exchange for job mastery
-        #NPCs Todo: Master Warlock ID 3570 (400, 171, -267); gives you Warlock Seal in exchange for job mastery
-        #NPCs Todo: Master Warrior ID 3566 (424, 182, -293); gives you Warrior Seal in exchange for job mastery
-        #NPCs Todo: Master Wizard ID 3569 (391, 168, -266); gives you Wizard Seal in exchange for job mastery
-        #NPCs Todo: Z14_Duck_HomePointStone ID 560 (403, 161, -265) gives you a Home Point Stone if you don't have one
-        #NPCs Todo: Z14_ProgressionGat ID 3823 (403, 180, -367) requires 18 crystals; we think it's an original-randomizer-only NPC blocking the way to the castle
-        #Todo: requires 6 crystals and descriptivize; blocker guy who wants 6 crystals to give you Luxury Pass and entry to Luxury Store
+        #Todo NPCs Missable: Courtyard Chloe (Z37_ChloeFishing ID 1661 (399, 155, -219)) gives you Fly Lure (and later she disappears and it's on the ground here)
+        #Todo NPCs Missable: Courtyard Reid (Z28_Reid ID 2410 (113, 172, -372)) gives you a Courtyard Key or if you miss it it's on the ground (Z37_Courtyard Key ID 2486 (424, 150, -222))
+        #Todo NPCs Job Masters: Master Beatsmith ID 3560 (361, 170, -268); gives you Beatsmith Seal in exchange for job mastery
+        #Todo NPCs Job Masters: Master Cleric ID 3568 (363, 166, -266); gives you Cleric Seal in exchange for job mastery
+        #Todo NPCs Job Masters: Master Monk ID 3567 (394, 179, -295); gives you Monk Seal in exchange for job mastery
+        #Todo NPCs Job Masters: Master Rogue ID 3571 (444, 167, -264); gives you Rogue Seal in exchange for job mastery
+        #Todo NPCs Job Masters: Master Warlock ID 3570 (400, 171, -267); gives you Warlock Seal in exchange for job mastery
+        #Todo NPCs Job Masters: Master Warrior ID 3566 (424, 182, -293); gives you Warrior Seal in exchange for job mastery
+        #Todo NPCs Job Masters: Master Wizard ID 3569 (391, 168, -266); gives you Wizard Seal in exchange for job mastery
+        #Todo NPCs CheckOrNot: Z14_Duck_HomePointStone ID 560 (403, 161, -265) gives you a Home Point Stone if you don't have one
+        #Todo NPCs Blocker: Z14_ProgressionGate ID 3823 (403, 180, -367) requires 18 crystals; we think it's an original-randomizer-only NPC blocking the way to the castle
+        #Todo Rules: requires 6 crystals and descriptivize; blocker guy who wants 6 crystals to give you Luxury Pass and entry to Luxury Store
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Artisan Guard", 1162 + npc_index_offset),
         #Todo: (417, 171, -299) descriptivize
-        #Todo: requires Z14_LuxuryStolen variable key, which is set when Z14_StoreRoomProxFlag ID 1530 (425, 175, -295) is triggered by PlayerProximity
+        #Todo Rules: requires Z14_LuxuryStolen variable key, which is set when Z14_StoreRoomProxFlag ID 1530 (425, 175, -295) is triggered by PlayerProximity
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Luxury Key Guy", 1529 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Plug Lure sparkling in the fountain", 2584 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin on a tent", 605 + npc_index_offset),
@@ -324,9 +327,9 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin skulking in shop alley", 565 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin on gender change bench porch", 1095 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin enjoying inn hospitality", 946 + npc_index_offset),
-        #Todo: 5 checks on the Penguin Keeper
+        #Todo Multichecks: 5 checks on the Penguin Keeper
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper", 531 + npc_index_offset),
-        #Todo: requires either Owl, Ibek, Quintar, or Gaea Stone
+        #Todo Rules: requires either Owl, Ibek, Quintar, or Gaea Stone
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin trampling the Clerics flowers", 564 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Sadist Sam eats(?) Cerberus", 536 + npc_index_offset), #name is ca69011a in Crystal Edit whyy lmao
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin wandering the Magic Shop rooftop garden", 573 + npc_index_offset),
@@ -339,10 +342,11 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
 
 
         #Crystals
-        #Todo: requires Ibek
+        #Todo Rules: requires Ibek
         LocationData("Capital Sequoia", "Capital Sequoia Crystal - Beatsmith", 1087 + crystal_index_offset),
 
-        #Abilities Todo: descriptivize and implement
+        #Abilities
+        #Todo: descriptivize and implement
         #376, 178, -345 (Capital Sequoia (Maze) map)
         #LocationData("Capital Sequoia", "Capital Sequoia Ability - Niltsi from SWind_Summon", 1109 + ability_index_offset),
 
@@ -376,17 +380,17 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Hunting Bow chest deep in the eastern Quintar cave", 745 + treasure_index_offset),
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Money chest at the end of the road", 825 + treasure_index_offset),
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Tonic Pouch chest hidden beneath the end of the road", 2674 + treasure_index_offset),
-        #Todo: the rest all require Quintar
+        #Todo Rules: the rest all require Quintar
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Money chest west of and above sneaky Potion chest", 338 + treasure_index_offset),
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Pinnacle Tincture Pouch chest with a short and tall box friend", 471 + treasure_index_offset),
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Treetop Spore Blocker chest west of Quintar Sanctum", 365 + treasure_index_offset),
 
         #NPCs
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver Dust beneath overhang in eastern Quintar cave crevasse", 2678 + npc_index_offset),
-        #Todo: 2 checks on Quintar Enthusiast
+        #Todo NPCs Multichecks: 2 checks on Quintar Enthusiast
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Quintar Enthusiast (always pet Buttermint)", 464 + npc_index_offset),
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver Ingot in Quintar cave beneath the end of the road", 454 + npc_index_offset),
-        #Todo: the rest all require Quintar
+        #Todo Rules: the rest all require Quintar
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver Ore behind Quintar Nest befriending a stack of boxes", 323 + npc_index_offset),
 
 
