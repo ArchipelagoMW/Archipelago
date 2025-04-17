@@ -9,13 +9,15 @@ class Goal(Choice):
     - **All Peaks**: Finish all peaks in selected books to win/complete your run
     - **All Artefacts**: Collect all artefacts on selected peaks
     - **All Artefacts All Peaks**: complete both of the above
+    - **Time Attack**: Complete All time, rope and hold challenges
     - **All**: all items including bird seeds and ropes
     """
     display_name = "Goal"
     option_all_peaks = 0
     option_all_artefacts = 1
     option_all_artefacts_all_peaks = 2
-    option_all = 3
+    option_time_attack = 3
+    option_all = 4
     default = 0
 
 

@@ -41,7 +41,7 @@ class PeaksOfWorld(World):
     item_name_to_id = {item.name: item.id for item in full_item_table.values()}
     location_name_to_id = {location.name: location.id for location in full_location_table.values()}
     topology_present = True
-    artefacts_peaks_in_pool: RegionLocationInfo
+    checks_in_pool: RegionLocationInfo
 
     def create_item(self, name: str) -> Item:
         item_entry = full_item_table[name]
@@ -52,6 +52,11 @@ class PeaksOfWorld(World):
         return self.random.choice(choices)
 
     def generate_early(self) -> None:
+
+        if self.options.goal == Goal.option_time_attack and not self.options.include_time_attack:
+            raise OptionError("Goal is set as time attack but time attack is not enabled. "
+                              "Please choose another goal or enable time attack in the options.")
+
         if self.options.start_with_barometer:
             self.multiworld.push_precollected(self.create_item("Barometer"))
 
@@ -98,7 +103,7 @@ class PeaksOfWorld(World):
         self.multiworld.push_precollected(self.create_item(start_book))
 
     def create_regions(self) -> None:
-        self.artefacts_peaks_in_pool = create_poy_regions(self, self.options)
+        self.checks_in_pool = create_poy_regions(self, self.options)
 
     def create_items(self) -> None:
         # order: books, tools, ropes, bird seeds, artefacts, fill rest with extra Items
@@ -169,16 +174,20 @@ class PeaksOfWorld(World):
         if self.options.goal.value == Goal.option_all_artefacts:
             self.multiworld.completion_condition[self.player] = lambda state: all(
                 state.can_reach_location(artefact, self.player) for artefact in
-                self.artefacts_peaks_in_pool.artefacts_in_pool)
+                self.checks_in_pool.artefacts_in_pool)
 
         elif self.options.goal.value == Goal.option_all_peaks:
             self.multiworld.completion_condition[self.player] = lambda state: all(
-                state.can_reach_location(peak, self.player) for peak in self.artefacts_peaks_in_pool.peaks_in_pool)
+                state.can_reach_location(peak, self.player) for peak in self.checks_in_pool.peaks_in_pool)
 
         elif self.options.goal.value == Goal.option_all_artefacts_all_peaks:
             self.multiworld.completion_condition[self.player] = lambda state: all(
-                state.can_reach_location(loc, self.player) for loc in [*self.artefacts_peaks_in_pool.peaks_in_pool,
-                                                                       *self.artefacts_peaks_in_pool.artefacts_in_pool])
+                state.can_reach_location(loc, self.player) for loc in [*self.checks_in_pool.peaks_in_pool,
+                                                                       *self.checks_in_pool.artefacts_in_pool])
+
+        elif self.options.goal.value == Goal.option_time_attack:
+            self.multiworld.completion_condition[self.player] = lambda state: all(
+                state.can_reach_location(loc, self.player) for loc in self.checks_in_pool.peaks_in_pool)
 
         elif self.options.goal.value == Goal.option_all:
             self.multiworld.completion_condition[self.player] = lambda state: all(

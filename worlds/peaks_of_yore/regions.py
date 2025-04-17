@@ -13,6 +13,7 @@ class PeaksOfYoreLocation(Location):
 class RegionLocationInfo(NamedTuple):
     artefacts_in_pool: list[str]
     peaks_in_pool: list[str]
+    time_attack_in_pool: list[str]
 
 
 def create_poy_regions(world: World, options: PeaksOfYoreOptions) -> RegionLocationInfo:
@@ -23,7 +24,7 @@ def create_poy_regions(world: World, options: PeaksOfYoreOptions) -> RegionLocat
     world.multiworld.regions.append(cabin_region)
     menu_region.connect(cabin_region)
 
-    result = RegionLocationInfo([], [])
+    result = RegionLocationInfo([], [], [])
 
     if options.enable_fundamental:
         r = create_region("Fundamental Peaks", PeaksOfYoreRegion.FUNDAMENTALS, {"Fundamentals Book": 1},
@@ -84,10 +85,14 @@ def create_region(name: str, region_enum: PeaksOfYoreRegion, item_requirements: 
     cabin_region.connect(peaks_region, name + " Connection", lambda state: state.has_all_counts(item_requirements,
                                                                                                 world.player))
 
+    time_attack_checks: list[str] = []
+
     if options.include_time_attack:
         time_attack_time: dict[str: int] = locations_to_dict(time_attack_time_list[region_enum])
         time_attack_ropes: dict[str: int] = locations_to_dict(time_attack_ropes_list[region_enum])
         time_attack_holds: dict[str: int] = locations_to_dict(time_attack_holds_list[region_enum])
+
+        time_attack_checks = [*time_attack_time.keys(), *time_attack_ropes.keys(), *time_attack_holds.keys()]
 
         time_attack_region = Region(name + " (Time Attack)", world.player, world.multiworld)
         time_attack_region.add_locations({**time_attack_time, **time_attack_ropes, **time_attack_holds},
@@ -95,7 +100,7 @@ def create_region(name: str, region_enum: PeaksOfYoreRegion, item_requirements: 
         peaks_region.connect(time_attack_region, name + " Time Attack Connection",
                              lambda state: state.has("Pocketwatch", world.player))
 
-    return RegionLocationInfo([*artefacts.keys()], [*peaks.keys()])
+    return RegionLocationInfo([*artefacts.keys()], [*peaks.keys()], time_attack_checks)
 
 
 def locations_to_dict(locations: list[ItemOrLocation]) -> dict[str: int]:
