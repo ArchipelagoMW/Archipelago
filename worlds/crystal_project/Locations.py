@@ -51,7 +51,6 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #43, 104, -8
         #LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb 3", 546 + npc_index_offset),
 
-
         #Abilities Todo: descriptivize and implement
         #118, 109, 10
         #LocationData("Spawning Meadows", "Spawning Meadows Ability - Shaku from SFire_Summon", 477 + ability_index_offset),
@@ -87,6 +86,13 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Delende", "Delende NPC - Dog Bone south of Soiled Den", 184 + npc_index_offset),
         #276, 116, -204; gives you Fervor Charm
         LocationData("Delende", "Delende NPC - Dizzy noob chucks a Fervor Charm at your face", 831 + npc_index_offset),
+        #NPCs Todo: shortcut girl (Z2_Collector Sister ID 3769 (169, 132, -89))
+        #NPCs Todo: do we want a filter option to add the guy who fishes things up for you (Z2_FisherOnDock ID 121 (166, 133, -208))
+        LocationData("Delende", "Delende NPC - Dizzy noob chucks a Fervor Charm at your face", 831 + npc_index_offset),
+        #Todo: descriptivize (Z2_MapMan (198, 131, -74))
+        LocationData("Delende", "Delende NPC - Cartographer", 1153 + npc_index_offset),
+        #NPCs Todo: Rabbit Claws shortcut guy (Z2_RoosterFeetGuy ID 74(281, 128, -159))
+        #NPCs Todo: (Z2_RottenFishGuy ID 124 (181, 132, -200)) sells Rotten Salmon (progression item)
 
         #Grans House (Delende)
         #Treasure chests
@@ -136,6 +142,9 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Pale Grotto", "Pale Grotto Chest - Temple antechamber Toothpick chest", 222 + treasure_index_offset),
         LocationData("Pale Grotto", "Pale Grotto Chest - Temple sanctuary Pale Grotto Map chest", 1154 + treasure_index_offset),
         
+        #NPCs
+        #NPC Todos: Pale Grotto Temple map (Z2_ReidCamp ID 1166 (273, 122, -327)) gives you Ring Mail if you don't have it but it's missable (it's in shops)
+
         #Crystals
         LocationData("Pale Grotto", "Pale Grotto Crystal - Temple sanctuary Fencer Crystal", 130 + crystal_index_offset),
 
@@ -179,7 +188,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Tincture chest downstream of the island waterfalls", 288 + treasure_index_offset),
         #Seaside Cliffs Beach
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - The little mermaid Clamshell chest", 276 + treasure_index_offset),
-        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Clamshell chest atop the polka dot peninsula", 280 + treasure_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Hop along the sea stacks to the Clamshell chest south of the peninsula", 280 + treasure_index_offset),
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Peninsula Storm Cap chest past the standing stones jump puzzle", 205 + treasure_index_offset),
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - MR SNIPS Fenix Juice chest", 287 + treasure_index_offset),
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Swimmers Top chest atop sea stack east of the bay", 450 + treasure_index_offset),
@@ -191,6 +200,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Seaside Cliffs", "Seaside Cliffs NPC - If you give a Manana Man a clam... (he will ask you for more)", 284 + npc_index_offset),
         #343, 81, 0 Todo: requires Salmon
         LocationData("Seaside Cliffs", "Seaside Cliffs NPC - Diamond Ore below the bay", 2896 + npc_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player)),
+        #NPCs Todo: Seaside Cliffs Outpost map has Master Shaman ID 3572 (387, 155, -104); gives you Shaman Seal in exchange for job mastery
 
         #Draft Shaft Conduit
         #Treasure chests
@@ -203,6 +213,21 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #Mercury Shrine
         #Treasure chests Todo: requires Mercury Stone
         LocationData("Mercury Shrine", "Mercury Shrine Chest - Pinnacle Contract chest", 155 + treasure_index_offset, lambda state: state.has('Item - Mercury Stone', player)),
+
+        #Yamagawa M.A.
+        #Treasure chests
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Money chest up first cliff", 2995 + treasure_index_offset),
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Sneaky Broadsword chest behind tree", 91 + treasure_index_offset),
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Iron Guard chest tucked next to waterfall", 95 + treasure_index_offset),
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Dead-end Tonic chest", 3056 + treasure_index_offset),
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Hidden stairway Tonic Pouch chest", 757 + treasure_index_offset),
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Drop down to mountain balcony Torpid Cuffs chest", 290 + treasure_index_offset),
+
+        #NPCs
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. NPC - Autumns Oath at waterfall source", 628 + npc_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player)),
+
+        #Crystals
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. Crystal - Jump into fireplace cave for Scholar Crystal", 166 + crystal_index_offset),
 
         #Proving Meadows
         #Treasure chests
@@ -231,22 +256,6 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
 
         #Crystals
         LocationData("Skumparadise", "Skumparadise Crystal - Aegis Crystal", 68 + crystal_index_offset),
-
-
-        #Yamagawa M.A.
-        #Treasure chests
-        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Money chest up first cliff", 2995 + treasure_index_offset),
-        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Sneaky Broadsword chest behind tree", 91 + treasure_index_offset),
-        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Iron Guard chest tucked next to waterfall", 95 + treasure_index_offset),
-        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Dead-end Tonic chest", 3056 + treasure_index_offset),
-        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Hidden stairway Tonic Pouch chest", 757 + treasure_index_offset),
-        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Drop down to mountain balcony Torpid Cuffs chest", 290 + treasure_index_offset),
-
-        #NPCs
-        LocationData("Yamagawa M.A.", "Yamagawa M.A. NPC - Autumns Oath at waterfall source", 628 + npc_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player)),
-
-        #Crystals
-        LocationData("Yamagawa M.A.", "Yamagawa M.A. Crystal - Jump into fireplace cave for Scholar Crystal", 166 + crystal_index_offset),
 
         #Zones (Advanced)
         #Capital Sequoia (smushed Capital Courtyard in)
@@ -289,7 +298,22 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Tuber Seed 2 in Gardeners Shed", 2664 + treasure_index_offset, lambda state: state.has('Item - Gardeners Key', player)),
 
         #NPCs 
-        #Todo: Courtyard Chloe (ID 1661) (399, 155, -219) gives you a lure (and later she disappears and it's on the ground here)
+        #NPCs Todo: Courtyard Chloe (Z37_ChloeFishing ID 1661 (399, 155, -219)) gives you Fly Lure (and later she disappears and it's on the ground here)
+        #NPCs Todo: Courtyard Reid (Z28_Reid ID 2410 (113, 172, -372)) gives you a Courtyard Key or if you miss it it's on the ground (Z37_Courtyard Key ID 2486 (424, 150, -222))
+        #NPCs Todo: Master Beatsmith ID 3560 (361, 170, -268); gives you Beatsmith Seal in exchange for job mastery
+        #NPCs Todo: Master Cleric ID 3568 (363, 166, -266); gives you Cleric Seal in exchange for job mastery
+        #NPCs Todo: Master Monk ID 3567 (394, 179, -295); gives you Monk Seal in exchange for job mastery
+        #NPCs Todo: Master Rogue ID 3571 (444, 167, -264); gives you Rogue Seal in exchange for job mastery
+        #NPCs Todo: Master Warlock ID 3570 (400, 171, -267); gives you Warlock Seal in exchange for job mastery
+        #NPCs Todo: Master Warrior ID 3566 (424, 182, -293); gives you Warrior Seal in exchange for job mastery
+        #NPCs Todo: Master Wizard ID 3569 (391, 168, -266); gives you Wizard Seal in exchange for job mastery
+        #NPCs Todo: Z14_Duck_HomePointStone ID 560 (403, 161, -265) gives you a Home Point Stone if you don't have one
+        #NPCs Todo: Z14_ProgressionGat ID 3823 (403, 180, -367) requires 18 crystals; we think it's an original-randomizer-only NPC blocking the way to the castle
+        #Todo: requires 6 crystals and descriptivize; blocker guy who wants 6 crystals to give you Luxury Pass and entry to Luxury Store
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Artisan Guard", 1162 + npc_index_offset),
+        #Todo: (417, 171, -299) descriptivize
+        #Todo: requires Z14_LuxuryStolen variable key, which is set when Z14_StoreRoomProxFlag ID 1530 (425, 175, -295) is triggered by PlayerProximity
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Luxury Key Guy", 1529 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Plug Lure sparkling in the fountain", 2584 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin on a tent", 605 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Speedy Lost Penguin on patrol", 584 + npc_index_offset),
@@ -307,10 +331,16 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin cheating at Garden Maze", 421 + npc_index_offset, lambda state: state.has('Item - Gaea Stone', player)),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - How did you climb that tree, Lost Penguin", 422 + npc_index_offset, lambda state: state.has('Item - Gaea Stone', player)),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin among the eaves of Library roof", 594 + npc_index_offset, lambda state: state.has('Item - Gaea Stone', player)),
+        #Todo: descriptivize (440, 171, -296)
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Library Scholar", 1948 + npc_index_offset),
 
         #Crystals
         #Todo: requires Ibek
         LocationData("Capital Sequoia", "Capital Sequoia Crystal - Beatsmith", 1087 + crystal_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+
+        #Abilities Todo: descriptivize and implement
+        #376, 178, -345 (Capital Sequoia (Maze) map)
+        #LocationData("Capital Sequoia", "Capital Sequoia Ability - Niltsi from SWind_Summon", 1109 + ability_index_offset),
 
         #Jojo Sewers
         #Treasure chests
