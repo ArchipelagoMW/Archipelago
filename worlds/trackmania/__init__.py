@@ -53,3 +53,14 @@ class TrackmaniaWorld(World):
     #rules are also generated with the regions
     def create_regions(self):
         create_regions(self)
+
+    def fill_slot_data(self) -> dict:
+        slot_data: dict = {"TargetTimeSetting": str(self.options.target_time.value),
+                           "SeriesNumber": str(self.options.series_number.value),
+                           "SeriesMapNumber": str(self.options.series_map_number.value),
+                           "MedalRequirement": str(self.options.medal_requirement.value),
+                           "MapTags": str(self.options.map_tags.value),
+                           "MapTagsInclusive": str(self.options.map_tags_inclusive.value),
+                           "MapETags": str(self.options.map_etags.value)}
+
+        return slot_data

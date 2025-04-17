@@ -176,28 +176,6 @@ async def proxy(websocket, path: str = "/", ctx: TrackmaniaContext = None):
                             await ctx.disconnect_proxy()
                             break
 
-                        # if ctx.seed_name:
-                        #     seed_name = msg.get("seed_name", "")
-                        #     if seed_name != "" and seed_name != ctx.seed_name:
-                        #         logger.info("Aborting proxy connection: seed mismatch from save file")
-                        #         logger.info(f"Expected: {ctx.seed_name}, got: {seed_name}")
-                        #         text = encode([{"cmd": "PrintJSON",
-                        #                         "data": [{"text": "Connection aborted - save file to seed mismatch"}]}])
-                        #         await ctx.send_msgs_proxy(text)
-                        #         await ctx.disconnect_proxy()
-                        #         break
-
-                        # if ctx.auth:
-                        #     name = msg.get("name", "")
-                        #     if name != "" and name != ctx.auth:
-                        #         logger.info("Aborting proxy connection: player name mismatch from save file")
-                        #         logger.info(f"Expected: {ctx.auth}, got: {name}")
-                        #         text = encode([{"cmd": "PrintJSON",
-                        #                         "data": [{"text": "Connection aborted - player name mismatch"}]}])
-                        #         await ctx.send_msgs_proxy(text)
-                        #         await ctx.disconnect_proxy()
-                        #         break
-
                         if ctx.connected_msg and ctx.is_connected():
                             await ctx.send_msgs_proxy(ctx.connected_msg)
                             ctx.update_items()
