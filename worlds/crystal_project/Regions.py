@@ -73,6 +73,9 @@ def create_location(player: int, location_data: LocationData, region: Region) ->
     location = CrystalProjectLocation(player, location_data.name, location_data.code, region)
     location.region = location_data.region
 
+    if location_data.rule:
+        location.access_rule = location_data.rule
+
     return location
 
 def connect_menu_region(world: "CrystalProjectWorld") -> None:

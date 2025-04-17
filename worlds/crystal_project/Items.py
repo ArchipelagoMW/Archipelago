@@ -127,7 +127,7 @@ item_table: Dict[str, ItemData] = {
     # "Item - Ferry Pass": ItemData("Item", 37 + item_index_offset, ItemClassification.progression),
 
     # #Key Items
-    # "Item - Black Squirrel": ItemData("Item", 21 + item_index_offset, ItemClassification.progression, 4),
+    "Item - Black Squirrel": ItemData("Item", 21 + item_index_offset, ItemClassification.progression, 4),
     # "Item - Dog Bone": ItemData("Item", 6 + item_index_offset, ItemClassification.progression, 3),
     # #TODO: Maybe exclude these; 16 clamshells can be found in vanilla and ClamHater (The Rocker) gives you 3; 13 are needed to give to ClamLover (Manana Man)
     # "Item - Clamshell": ItemData("Item", 16 + item_index_offset, ItemClassification.progression, 19),

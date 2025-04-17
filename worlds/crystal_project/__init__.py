@@ -25,17 +25,17 @@ class CrystalProjectWorld(World):
     options_dataclass = CrystalProjectOptions
     options: CrystalProjectOptions
     #settings: typing.ClassVar[CrystalProjectSettings]  # will be automatically assigned from type hint
-    topology_present = False  # show path to required location checks in spoiler
+    topology_present = True  # show path to required location checks in spoiler
 
     item_name_to_id = {item: item_table[item].code for item in item_table}
-    location_name_to_id = {location.name: location.code for location in get_locations()}
+    location_name_to_id = {location.name: location.code for location in get_locations(-1)}
     item_name_groups = get_item_names_per_category()
 
     def generate_early(self):
         self.multiworld.push_precollected(self.create_item("Item - Home Point Stone"))
 
     def create_regions(self) -> None:
-        init_areas(self, get_locations())
+        init_areas(self, get_locations(self.player))
 
     def create_item(self, name: str) -> Item:
         data = item_table[name]
@@ -109,6 +109,20 @@ class CrystalProjectWorld(World):
         item = Item(name, data.classification, data.code, self.player)
 
         return item
+
+    def set_rules(self) -> None:
+        win_condition_item: str
+        if self.options.goal == 0:
+            win_condition_item = "Item - New World Stone"
+        elif self.options.goal == 1:
+            win_condition_item = "Item - Old World Stone"
+        elif self.options.goal == 2:
+            win_condition_item = "Item - Clamshell"
+        
+        if self.options.goal == 0 or self.options.goal == 1:
+            self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player)
+        if self.options.goal == 2:
+            self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player, self.options.clamshellsQuantity.value)
 
     # reference from blasphemous
     def fill_slot_data(self) -> Dict[str, Any]:
