@@ -7,15 +7,24 @@ from flask import request, redirect, url_for, render_template, Response, session
 from pony.orm import count, commit, db_session
 from werkzeug.utils import secure_filename
 
-from worlds.AutoWorld import AutoWorldRegister
+from worlds.AutoWorld import AutoWorldRegister, World
 from . import app, cache
 from .models import Seed, Room, Command, UUID, uuid4
+from Utils import title_sorted
 
 
 def get_world_theme(game_name: str) -> str:
     if game_name in AutoWorldRegister.world_types:
         return AutoWorldRegister.world_types[game_name].web.theme
     return 'grass'
+
+
+def get_visible_worlds() -> dict[str, type(World)]:
+    worlds = {}
+    for game, world in AutoWorldRegister.world_types.items():
+        if not world.hidden:
+            worlds[game] = world
+    return worlds
 
 
 def render_markdown(path: str) -> str:
@@ -72,23 +81,18 @@ def game_info(game, lang):
 @cache.cached()
 def games():
     """List of supported games"""
-    worlds = {}
-    for game, world in AutoWorldRegister.world_types.items():
-        if not world.hidden:
-            worlds[game] = world
-    return render_template("supportedGames.html", worlds=worlds)
+    return render_template("supportedGames.html", worlds=get_visible_worlds())
 
 
-@app.route('/tutorial/<string:game>/<string:file>/<string:lang>')
+@app.route('/tutorial/<string:game>/<string:file>')
 @cache.cached()
-def tutorial(game: str, file: str, lang: str):
+def tutorial(game: str, file: str):
     theme = get_world_theme(game)
     secure_game_name = secure_filename(game)
     file = secure_filename(file)
-    lang = secure_filename(lang)
     document = render_markdown(os.path.join(
         app.static_folder, "generated", "docs",
-        secure_game_name, f"{file}_{lang}.md"
+        secure_game_name, file+".md"
     ))
     return render_template(
         "markdown_document.html",
@@ -101,7 +105,20 @@ def tutorial(game: str, file: str, lang: str):
 @app.route('/tutorial/')
 @cache.cached()
 def tutorial_landing():
-    return render_template("tutorialLanding.html")
+    tutorials = {}
+    worlds = AutoWorldRegister.world_types
+    for world_name, world_type in worlds.items():
+        current_world = tutorials[world_name] = {}
+        for tutorial in world_type.web.tutorials:
+            current_tutorial = current_world.setdefault(tutorial.tutorial_name, {
+                "description": tutorial.description, "files": {}})
+            current_tutorial["files"][secure_filename(tutorial.file_name).rsplit(".", 1)[0]] = {
+                "authors": tutorial.authors,
+                "language": tutorial.language
+            }
+    tutorials = {world_name: tutorials for world_name, tutorials in title_sorted(
+        tutorials.items(), key=lambda element: "\x00" if element[0] == "Archipelago" else element[0])}
+    return render_template("tutorialLanding.html", worlds=worlds, tutorials=tutorials)
 
 
 @app.route('/faq/<string:lang>/')
