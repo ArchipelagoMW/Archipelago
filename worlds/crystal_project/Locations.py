@@ -87,6 +87,13 @@ def get_locations() -> List[LocationData]:
         LocationData("Delende", "Delende NPC - Dog Bone south of Soiled Den", 184 + npc_index_offset),
         #276, 116, -204; gives you Fervor Charm
         LocationData("Delende", "Delende NPC - Dizzy noob chucks a Fervor Charm at your face", 831 + npc_index_offset),
+        #NPCs Todo: shortcut girl (Z2_Collector Sister ID 3769 (169, 132, -89))
+        #NPCs Todo: do we want a filter option to add the guy who fishes things up for you (Z2_FisherOnDock ID 121 (166, 133, -208))
+        LocationData("Delende", "Delende NPC - Dizzy noob chucks a Fervor Charm at your face", 831 + npc_index_offset),
+        #Todo: descriptivize (Z2_MapMan (198, 131, -74))
+        LocationData("Delende", "Delende NPC - Cartographer", 1153 + npc_index_offset),
+        #NPCs Todo: Rabbit Claws shortcut guy (Z2_RoosterFeetGuy ID 74(281, 128, -159))
+        #NPCs Todo: (Z2_RottenFishGuy ID 124 (181, 132, -200)) sells Rotten Salmon (progression item)
 
         #Grans House (Delende)
         #Treasure chests
@@ -136,6 +143,9 @@ def get_locations() -> List[LocationData]:
         LocationData("Pale Grotto", "Pale Grotto Chest - Temple antechamber Toothpick chest", 222 + treasure_index_offset),
         LocationData("Pale Grotto", "Pale Grotto Chest - Temple sanctuary Pale Grotto Map chest", 1154 + treasure_index_offset),
         
+        #NPCs
+        #NPC Todos: Pale Grotto Temple map (Z2_ReidCamp ID 1166 (273, 122, -327)) gives you Ring Mail if you don't have it but it's missable (it's in shops)
+
         #Crystals
         LocationData("Pale Grotto", "Pale Grotto Crystal - Temple sanctuary Fencer Crystal", 130 + crystal_index_offset),
 
@@ -191,6 +201,7 @@ def get_locations() -> List[LocationData]:
         LocationData("Seaside Cliffs", "Seaside Cliffs NPC - If you give a Manana Man a clam... (he will ask you for more)", 284 + npc_index_offset),
         #343, 81, 0 Todo: requires Salmon
         LocationData("Seaside Cliffs", "Seaside Cliffs NPC - Diamond Ore below the bay", 2896 + npc_index_offset),
+        #NPCs Todo: Seaside Cliffs Outpost map has Master Shaman ID 3572 (387, 155, -104); gives you Shaman Seal in exchange for job mastery
 
         #Draft Shaft Conduit
         #Treasure chests
@@ -203,6 +214,23 @@ def get_locations() -> List[LocationData]:
         #Mercury Shrine
         #Treasure chests Todo: requires Mercury Stone
         LocationData("Mercury Shrine", "Mercury Shrine Chest - Pinnacle Contract chest", 155 + treasure_index_offset),
+
+        #Yamagawa M.A.
+        #Treasure chests
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Money chest up first cliff", 2995 + treasure_index_offset),
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Sneaky Broadsword chest behind tree", 91 + treasure_index_offset),
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Iron Guard chest tucked next to waterfall", 95 + treasure_index_offset),
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Dead-end Tonic chest", 3056 + treasure_index_offset),
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Hidden stairway Tonic Pouch chest", 757 + treasure_index_offset),
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Drop down to mountain balcony Torpid Cuffs chest", 290 + treasure_index_offset),
+
+        #NPCs
+        #Todo: this requires Salmon
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. NPC - Autumns Oath at waterfall source", 628 + npc_index_offset),
+        #NPCs Todo: Yamagawa M.A. Temple map has Master Scholar ID 3574 (59, 151, -98); gives you Scholar Seal in exchange for job mastery
+
+        #Crystals
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. Crystal - Jump into fireplace cave for Scholar Crystal", 166 + crystal_index_offset),
 
         #Proving Meadows
         #Treasure chests
@@ -231,23 +259,6 @@ def get_locations() -> List[LocationData]:
 
         #Crystals
         LocationData("Skumparadise", "Skumparadise Crystal - Aegis Crystal", 68 + crystal_index_offset),
-
-
-        #Yamagawa M.A.
-        #Treasure chests
-        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Money chest up first cliff", 2995 + treasure_index_offset),
-        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Sneaky Broadsword chest behind tree", 91 + treasure_index_offset),
-        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Iron Guard chest tucked next to waterfall", 95 + treasure_index_offset),
-        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Dead-end Tonic chest", 3056 + treasure_index_offset),
-        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Hidden stairway Tonic Pouch chest", 757 + treasure_index_offset),
-        LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Drop down to mountain balcony Torpid Cuffs chest", 290 + treasure_index_offset),
-
-        #NPCs
-        #Todo: this requires Salmon
-        LocationData("Yamagawa M.A.", "Yamagawa M.A. NPC - Autumns Oath at waterfall source", 628 + npc_index_offset),
-
-        #Crystals
-        LocationData("Yamagawa M.A.", "Yamagawa M.A. Crystal - Jump into fireplace cave for Scholar Crystal", 166 + crystal_index_offset),
 
         #Zones (Advanced)
         #Capital Sequoia (smushed Capital Courtyard in)
