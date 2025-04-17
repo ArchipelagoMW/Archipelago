@@ -173,7 +173,7 @@ class TestDeterministicGeneration(TestCase):
     """
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDownClass(cls) -> None:
         # Allow the data to be garbage collected by clearing the dict.
         cls.initial_multiworld_data_cache.clear()
         super().tearDownClass()
@@ -214,7 +214,7 @@ class TestDeterministicGeneration(TestCase):
         return multiworld.seed, None
 
     @staticmethod
-    def _new_multiworld_to_serializable_data(game: str, seed: int):
+    def _new_multiworld_to_serializable_data(game: str, seed: int) -> SerializableMultiWorldData:
         """
         Generate a multiworld for the given game and seed and return the multiworld as serializable data.
 
@@ -230,14 +230,14 @@ class TestDeterministicGeneration(TestCase):
         return multiworld_to_serializable(itempool_copy, multiworld)
 
     @staticmethod
-    def _hash_check():
+    def _hash_check() -> int:
         """Called by both the main Python process and a separate Python process to check that the hash seeds differ."""
         # Note: hashing an integer returns that integer if it's not too large, so a string literal is hashed instead
         # because str objects are "salted" with an unpredictable random value that remains constant within an individual
         # Python process.
         return hash("This string is hashed to check that one process' hash seed differs from another")
 
-    def assertDictEqualDiffMismatchedOnly(self, d1, d2, msg=None):
+    def assertDictEqualDiffMismatchedOnly(self, d1: dict, d2: dict, msg=None) -> None:
         """
         assertDictEqual's output on failure is not very readable for large dictionaries because it makes a diff of the
         entire dictionaries, rather than only the differences.
@@ -264,11 +264,11 @@ class TestDeterministicGeneration(TestCase):
         self.fail("Dictionaries were not equal, but they somehow had all the same keys and values."
                   + "" if msg is None else f" : {msg}")
 
-    def assertDictKeysEqual(self, d1: dict, d2: dict, msg=None):
+    def assertDictKeysEqual(self, d1: dict, d2: dict, msg=None) -> None:
         # Provides better failure output than comparing dict keys directly.
         self.assertEqual(set(d1.keys()), set(d2.keys()), msg)
 
-    def assertRegionsEqual(self, r1: dict[str, SerializableRegionData], r2: dict[str, SerializableRegionData]):
+    def assertRegionsEqual(self, r1: dict[str, SerializableRegionData], r2: dict[str, SerializableRegionData]) -> None:
         self.assertDictKeysEqual(r1, r2, "The were different regions in each multiworld")
         regions_with_locations_out_of_order = []
         for name, r1_data in r1.items():
@@ -293,7 +293,8 @@ class TestDeterministicGeneration(TestCase):
             order_fail_message = "Regions were the same, but in different orders"
         self.assertEqual(tuple(r1.keys()), tuple(r2.keys()), order_fail_message)
 
-    def assertLocationsEqual(self, l1: dict[str, SerializableLocationData], l2: dict[str, SerializableLocationData]):
+    def assertLocationsEqual(self, l1: dict[str, SerializableLocationData], l2: dict[str, SerializableLocationData]
+                             ) -> None:
         self.assertDictKeysEqual(l1, l2, "The were different locations in each multiworld")
 
         # Compare only "address" and "progress_type" to start with because they are much less likely to differ.
@@ -314,21 +315,22 @@ class TestDeterministicGeneration(TestCase):
         self.assertEqual(tuple(l1.keys()), tuple(l2.keys()),
                          "Locations and the items placed at them were the same, but in different orders")
 
-    def assertEntrancesEqual(self, e1: dict[str, SerializableEntranceData], e2: dict[str, SerializableEntranceData]):
+    def assertEntrancesEqual(self, e1: dict[str, SerializableEntranceData], e2: dict[str, SerializableEntranceData]
+                             ) -> None:
         self.assertDictKeysEqual(e1, e2, "There were different entrances in each multiworld")
         # Entrances are unlikely to have a different parent_region or connected_region, so check each entrance one
         # at a time.
         self.assertDictEqualDiffMismatchedOnly(e1, e2, "Entrances were not the same")
         self.assertEqual(tuple(e1.keys()), tuple(e2.keys()), "Entrances were the same, but in different orders")
 
-    def assertItemsEqual(self, i1: list[SerializableItemData], i2: list[SerializableItemData]):
+    def assertItemsEqual(self, i1: list[SerializableItemData], i2: list[SerializableItemData]) -> None:
         self.assertCountEqual(i1, i2, "Item counts did not match")
         self.assertEqual(i1, i2, "Items were the same, but in different orders")
 
-    def assertOptionsEqual(self, o1: dict[str, str], o2: dict[str, str]):
+    def assertOptionsEqual(self, o1: dict[str, str], o2: dict[str, str]) -> None:
         self.assertDictEqualDiffMismatchedOnly(o1, o2, "Options did not match")
 
-    def assertMultiWorldsEqual(self, m1: SerializableMultiWorldData, m2: SerializableMultiWorldData):
+    def assertMultiWorldsEqual(self, m1: SerializableMultiWorldData, m2: SerializableMultiWorldData) -> None:
         # Options are checked first because differences in rolled options are likely to affect the rest of generation.
         # Locations are checked last because the items placed at them are likely to be affected by all previously
         # checked parts.
