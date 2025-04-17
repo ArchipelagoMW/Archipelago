@@ -203,7 +203,7 @@ class Walksanity(Toggle):
 
 class Furnisanity(OptionSet):
     """
-    Adds interactable objects, such a dressers, paintings, candles, and light fixtures, to the location pool.
+    Adds interactable objects, such as dressers, paintings, candles, and light fixtures, to the location pool.
 
     Different sets of locations can be added within the list. Valid strings are:
     "Hangables" includes items on walls such as paintings and other decor
@@ -235,7 +235,7 @@ class Furnisanity(OptionSet):
 
 class EarlyFirstKey(Toggle):
     """
-    If enabled, this will attempt to find a key that lets you out of your starting room nad place it early in your own world.
+    If enabled, this will attempt to find a key that lets you out of your starting room and place it early in your own world.
     """
     display_name = "Early First Key"
     internal_name = "early_first_key"
