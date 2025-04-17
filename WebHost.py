@@ -54,7 +54,7 @@ def get_app() -> "Flask":
     return app
 
 
-def copy_tutorials_files_to_static():
+def copy_tutorials_files_to_static() -> None:
     import shutil
     import zipfile
     from werkzeug.utils import secure_filename
