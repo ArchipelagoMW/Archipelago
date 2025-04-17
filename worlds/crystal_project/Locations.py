@@ -50,7 +50,6 @@ def get_locations() -> List[LocationData]:
         #43, 104, -8
         #LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb 3", 546 + npc_index_offset),
 
-
         #Abilities Todo: descriptivize and implement
         #118, 109, 10
         #LocationData("Spawning Meadows", "Spawning Meadows Ability - Shaku from SFire_Summon", 477 + ability_index_offset),
@@ -269,7 +268,7 @@ def get_locations() -> List[LocationData]:
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Magic shop attic Craftwork Scythe chest", 1389 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Training ground parkour Craftwork Katana chest", 1390 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Cap chest behind Luxury Shop", 2651 + treasure_index_offset),
-        #Todo: next three chests require the Luxury Key: Fenix Syrup Pouch (1533), Lucky Briefs (1532), Lucky Socks (1531)
+        #Todo: next three chests require the Luxury Key and Luxury Pass: Fenix Syrup Pouch (1533), Lucky Briefs (1532), Lucky Socks (1531)
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Fenix Syrup Pouch chest locked in Luxury Shop storage", 1533 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Lucky Briefs chest locked in Luxury Shop storage", 1532 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Lucky Socks chest locked in Luxury Shop storage", 1531 + treasure_index_offset),
@@ -302,7 +301,21 @@ def get_locations() -> List[LocationData]:
 
         #NPCs 
         #NPCs Todo: Courtyard Chloe (Z37_ChloeFishing ID 1661 (399, 155, -219)) gives you Fly Lure (and later she disappears and it's on the ground here)
-        #NPCs Todo: Reid (Z28_Reid ID 2410 (113, 172, -372)) gives you a Courtyard Key or if you miss it it's on the ground (Z37_Courtyard Key ID 2486 (424, 150, -222))
+        #NPCs Todo: Courtyard Reid (Z28_Reid ID 2410 (113, 172, -372)) gives you a Courtyard Key or if you miss it it's on the ground (Z37_Courtyard Key ID 2486 (424, 150, -222))
+        #NPCs Todo: Master Beatsmith ID 3560 (361, 170, -268); gives you Beatsmith Seal in exchange for job mastery
+        #NPCs Todo: Master Cleric ID 3568 (363, 166, -266); gives you Cleric Seal in exchange for job mastery
+        #NPCs Todo: Master Monk ID 3567 (394, 179, -295); gives you Monk Seal in exchange for job mastery
+        #NPCs Todo: Master Rogue ID 3571 (444, 167, -264); gives you Rogue Seal in exchange for job mastery
+        #NPCs Todo: Master Warlock ID 3570 (400, 171, -267); gives you Warlock Seal in exchange for job mastery
+        #NPCs Todo: Master Warrior ID 3566 (424, 182, -293); gives you Warrior Seal in exchange for job mastery
+        #NPCs Todo: Master Wizard ID 3569 (391, 168, -266); gives you Wizard Seal in exchange for job mastery
+        #NPCs Todo: Z14_Duck_HomePointStone ID 560 (403, 161, -265) gives you a Home Point Stone if you don't have one
+        #NPCs Todo: Z14_ProgressionGat ID 3823 (403, 180, -367) requires 18 crystals; we think it's an original-randomizer-only NPC blocking the way to the castle
+        #Todo: requires 6 crystals and descriptivize; blocker guy who wants 6 crystals to give you Luxury Pass and entry to Luxury Store
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Artisan Guard", 1162 + npc_index_offset),
+        #Todo: (417, 171, -299) descriptivize
+        #Todo: requires Z14_LuxuryStolen variable key, which is set when Z14_StoreRoomProxFlag ID 1530 (425, 175, -295) is triggered by PlayerProximity
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Luxury Key Guy", 1529 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Plug Lure sparkling in the fountain", 2584 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin on a tent", 605 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Speedy Lost Penguin on patrol", 584 + npc_index_offset),
@@ -320,10 +333,17 @@ def get_locations() -> List[LocationData]:
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin cheating at Garden Maze", 421 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - How did you climb that tree, Lost Penguin", 422 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin among the eaves of Library roof", 594 + npc_index_offset),
+        #Todo: descriptivize (440, 171, -296)
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Library Scholar", 1948 + npc_index_offset),
+
 
         #Crystals
         #Todo: requires Ibek
         LocationData("Capital Sequoia", "Capital Sequoia Crystal - Beatsmith", 1087 + crystal_index_offset),
+
+        #Abilities Todo: descriptivize and implement
+        #376, 178, -345 (Capital Sequoia (Maze) map)
+        #LocationData("Capital Sequoia", "Capital Sequoia Ability - Niltsi from SWind_Summon", 1109 + ability_index_offset),
 
         #Jojo Sewers
         #Treasure chests
