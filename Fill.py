@@ -122,11 +122,13 @@ class _RestrictiveFillBatcher:
             for item in items_to_place:
                 for p, batch_pool_item in enumerate(batch_item_pool):
                     if batch_pool_item is item:
-                        batch_item_pool.pop(p)
+                        del batch_item_pool[p]
                         break
-                for p, pool_item in enumerate(item_pool):
+                # The items added into `reachable_items` are placed starting from the end of each deque in
+                # `reachable_items`, so the items being placed are more likely to found towards the end of `item_pool`.
+                for p, pool_item in enumerate(reversed(item_pool), start=1):
                     if pool_item is item:
-                        item_pool.pop(p)
+                        del item_pool[-p]
                         break
 
         def pop_items_to_place(self) -> list[Item]:
