@@ -45,7 +45,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
     multiworld.get_region("Delende", player).add_exits(["Soiled Den", "Pale Grotto", "Yamagawa M.A.", "Seaside Cliffs", "Mercury Shrine"])
     multiworld.get_region("Pale Grotto", player).add_exits(["Proving Meadows"])
     multiworld.get_region("Seaside Cliffs", player).add_exits(["Draft Shaft Conduit"])
-    multiworld.get_region("Proving Meadows", player).add_exits(["Skumparadise"], {"Skumparadise": lambda state: get_job_count(player, state) >= 9})
+    multiworld.get_region("Proving Meadows", player).add_exits(["Skumparadise"], {"Skumparadise": lambda state: get_job_count(player, state) >= 3})
     multiworld.get_region("Skumparadise", player).add_exits(["Capital Sequoia"])
     multiworld.get_region("Capital Sequoia", player).add_exits(["Jojo Sewers", "Boomer Society", "Rolling Quintar Fields"])
     multiworld.get_region("Jojo Sewers", player).add_exits(["Capital Jail"])
