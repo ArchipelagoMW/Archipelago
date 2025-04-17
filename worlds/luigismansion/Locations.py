@@ -121,6 +121,7 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Breaker Box": LMLocationData("Breaker Room", None, "Event", -1, [], locked_item="Blackout"),
     "King Boo": LMLocationData("Secret Altar", None, "Event", -1, [], locked_item="Mario's Painting"),
     "Clockwork Clear": LMLocationData("Clockwork Room", None, "Event", -1, [], locked_item="Defeat Clockwork"),
+    "Shivers Spawn": LMLocationData("1F Hallway", None, "Event", -1, [], locked_item="Shivers Spawn")
 }
 
 # Adds all the chests that are spawned after clearing a room of ghosts.
@@ -153,7 +154,7 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
         update_ram_addr=[LMRamData(0x803CDF7A, bit_position=2, in_game_room_id=22, ram_byte_size=2)]),
     "Dining Room Clear Chest": LMLocationData("Dining Room", 17, "Chest", 6, ["Fire Element Medal"],
         update_ram_addr=[LMRamData(0x803CDF62, bit_position=2, in_game_room_id=8, ram_byte_size=2)]),
-    "Butler Clear Chest": LMLocationData("Butler's Room", 8, "Chest", 0, ["Fire Element Medal"],
+    "Butler Clear Chest": LMLocationData("Butler's Room", 8, "Chest", 0, ["Fire Element Medal", "Shivers Spawn"],
         update_ram_addr=[LMRamData(0x803CDF50, bit_position=2, in_game_room_id=0, ram_byte_size=2)]),
     "Fortune Teller Clear Chest": LMLocationData("Fortune-Teller's Room", 5, "Chest", 2, [],
         update_ram_addr=[LMRamData(0x803CDF56, bit_position=2, in_game_room_id=3, ram_byte_size=2)]),
@@ -1642,7 +1643,7 @@ PORTRAIT_LOCATION_TABLE: dict[str, LMLocationData] = {
         update_ram_addr=[LMRamData(0x803D5DAA, bit_position=1, in_game_room_id=27)]),
     "The Floating Whirlindas": LMLocationData("Ballroom", 625, "Portrait", 34, [], remote_only=True,
         update_ram_addr=[LMRamData(0x803D5DBE, bit_position=2, in_game_room_id=9)]),
-    "Shivers, the Wandering Butler": LMLocationData("Butler's Room", 626, "Portrait", 29, ["Fire Element Medal"],
+    "Shivers, the Wandering Butler": LMLocationData("Butler's Room", 626, "Portrait", 29, ["Fire Element Medal", "Shivers Spawn"],
         remote_only=True, update_ram_addr=[LMRamData(0x803D5DA5, bit_position=6, in_game_room_id=0)]),
     "Madame Clairvoya, the Freaky Fortune-Teller": LMLocationData("Fortune-Teller's Room", 627, "Portrait", 31, [],
         remote_only=True, update_ram_addr=[LMRamData(0x803D5DBB, bit_position=2, in_game_room_id=3)]),
@@ -1737,7 +1738,7 @@ GOLD_MICE_LOCATION_TABLE: dict[str, LMLocationData] = {
 
 # Individual Boo room Locations
 ROOM_BOO_LOCATION_TABLE: dict[str, LMLocationData] = {
-    "Butler's Room Boo": LMLocationData("Butler's Room", 677, "Boo", 0, ["Fire Element Medal"], remote_only=True,
+    "Butler's Room Boo": LMLocationData("Butler's Room", 677, "Boo", 0, ["Fire Element Medal", "Shivers Spawn"], remote_only=True,
         update_ram_addr=[LMRamData(0x803D5E04, bit_position=0, in_game_room_id=0)]),
     "Hidden Room Boo": LMLocationData("Hidden Room", 678, "Boo", 1, [], remote_only=True,
         update_ram_addr=[LMRamData(0x803D5E04, bit_position=1, in_game_room_id=1)]),
@@ -1847,7 +1848,7 @@ BOO_LOCATION_TABLE = {**ROOM_BOO_LOCATION_TABLE,
                       **BOOLOSSUS_LOCATION_TABLE}
 
 LIGHT_LOCATION_TABLE: dict[str, LMLocationData] = {
-    "Butler's Room Light On": LMLocationData("Butler's Room", 743, "KingdomHearts", 0, ["Fire Element Medal"],
+    "Butler's Room Light On": LMLocationData("Butler's Room", 743, "KingdomHearts", 0, ["Fire Element Medal", "Shiver Spawn"],
         remote_only=True, update_ram_addr=[LMRamData(0x803CDF50, bit_position=1, in_game_room_id=0, ram_byte_size=2)]),
     "Hidden Room Light On": LMLocationData("Hidden Room", 744, "KingdomHearts", 0, [], remote_only=True,
         update_ram_addr=[LMRamData(0x803CDF52, bit_position=1, in_game_room_id=1, ram_byte_size=2)]),
