@@ -26,7 +26,13 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
         create_region(world, player, locations_per_region, "Draft Shaft Conduit"),
         create_region(world, player, locations_per_region, "Mercury Shrine"),
         create_region(world, player, locations_per_region, "Proving Meadows"),
+        create_region(world, player, locations_per_region, "Skumparadise"),
         create_region(world, player, locations_per_region, "Yamagawa M.A."),
+        create_region(world, player, locations_per_region, "Capital Sequoia"),
+        create_region(world, player, locations_per_region, "Jojo Sewers"),
+        create_region(world, player, locations_per_region, "Boomer Society"),
+        create_region(world, player, locations_per_region, "Rolling Quintar Fields"),
+        create_region(world, player, locations_per_region, "Capital Jail"),
         create_region(world, player, locations_per_region, "Lake Delende")
         
     ]

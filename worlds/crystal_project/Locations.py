@@ -325,6 +325,38 @@ def get_locations() -> List[LocationData]:
         #NPCs
         LocationData("Jojo Sewers", "Jojo Sewers NPC - Who even wants Stone of Jordan these days", 2759 + npc_index_offset),
 
+        #Boomer Society
+        #Treasure chests
+        LocationData("Boomer Society", "Boomer Society Chest - Gospel chest in log cabin", 2667 + treasure_index_offset),
+        LocationData("Boomer Society", "Boomer Society Chest - Boomer Society map chest on second floor of log cabin", 2909 + treasure_index_offset),
+
+        #NPCs
+        LocationData("Boomer Society", "Boomer Society NPC - Nice Allowance Lady", 476 + npc_index_offset),
+        LocationData("Boomer Society", "Boomer Society NPC - Treasury Grandpa", 547 + npc_index_offset),
+
+        #Rolling Quintar Fields
+        #Treasure chests
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Potion chest south of east gate", 826 + treasure_index_offset),
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Fenix Juice chest in Chevy divot south of east gate", 828 + treasure_index_offset),
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Hunting Axe chest deep in the Quintar cave", 817 + treasure_index_offset),
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Sneaky Potion chest behind tree", 829 + treasure_index_offset),
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Hunting Bow chest deep in the eastern Quintar cave", 745 + treasure_index_offset),
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Money chest at the end of the road", 825 + treasure_index_offset),
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Tonic Pouch chest hidden beneath the end of the road", 2674 + treasure_index_offset),
+        #Todo: the rest all require Quintar
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Money chest west of and above sneaky Potion chest", 338 + treasure_index_offset),
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Pinnacle Tincture Pouch chest with a short and tall box friend", 471 + treasure_index_offset),
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Treetop Spore Blocker chest west of Quintar Sanctum", 365 + treasure_index_offset),
+
+        #NPCs
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver Dust beneath overhang in eastern Quintar cave crevasse", 2678 + npc_index_offset),
+        #Todo: 2 checks on Quintar Enthusiast
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Quintar Enthusiast (always pet Buttermint)", 464 + npc_index_offset),
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver Ingot in Quintar cave beneath the end of the road", 454 + npc_index_offset),
+        #Todo: the rest all require Quintar
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver Ore behind Quintar Nest befriending a stack of boxes", 323 + npc_index_offset),
+
+
         #Capital Jail
         #Treasure chests
         LocationData("Capital Jail", "Capital Jail Chest - Touchdown South Wing Key chest", 640 + treasure_index_offset),
@@ -333,22 +365,57 @@ def get_locations() -> List[LocationData]:
         #Todo: require South Wing Key
         LocationData("Capital Jail", "Capital Jail Chest - Haunted jail cell East Wing Key chest in South Wing dead end", 931 + treasure_index_offset),
         #Todo: require South Wing Key and all Cell Keys
-        LocationData("Capital Jail", "Capital Jail Chest - South Wing Battleplate chest locked behind the rubble", 991 + treasure_index_offset),
+        LocationData("Capital Jail", "Capital Jail Chest - Fiercely guarded Cell Key chest locked behind the South Wing rubble", 990 + treasure_index_offset),
+        #Todo: require South Wing Key and all Cell Keys
+        LocationData("Capital Jail", "Capital Jail Chest - Fiercely guarded Iron Rod chest locked behind the South Wing rubble", 2668 + treasure_index_offset),
+        #Todo: require South Wing Key and all Cell Keys
+        LocationData("Capital Jail", "Capital Jail Chest - Battleplate chest locked behind the South Wing rubble", 991 + treasure_index_offset),
         #Technically in the Underpass but you come from here
         #Todo: require South Wing Key and all Cell Keys
         LocationData("Capital Jail", "Capital Jail Chest - Drop down behind the South Wing rubble Underpass Scrap chest", 3675 + treasure_index_offset),
         #Todo: require West Wing Key
         LocationData("Capital Jail", "Capital Jail Chest - Cell Key chest in West Wing jail cell among the glowy plants", 925 + treasure_index_offset),
         #Todo: require West Wing Key
-        LocationData("Capital Jail", "Capital Jail Chest - Arrow plants Battle Helm chest", 923 + treasure_index_offset),
+        LocationData("Capital Jail", "Capital Jail Chest - West Wing arrow plants Battle Helm chest", 923 + treasure_index_offset),
+        #Todo: require West Wing Key and all Cell Keys
+        LocationData("Capital Jail", "Capital Jail Chest - West Wing Cell Key chest locked among the foliage", 916 + treasure_index_offset),
+        #Todo: require East Wing Key
+        LocationData("Capital Jail", "Capital Jail Chest - Twinsies empty chest in East Wing bedroom closet", 2999 + treasure_index_offset),
+        #Todo: require East Wing Key
+        LocationData("Capital Jail", "Capital Jail Chest - Twinsies Potion chest in East Wing bedroom closet", 906 + treasure_index_offset),
+        #Todo: require East Wing Key
+        LocationData("Capital Jail", "Capital Jail Chest - Twinsies Cell Key top chest in waterlogged East Wing hallway", 676 + treasure_index_offset),
+        #Todo: require East Wing Key
+        LocationData("Capital Jail", "Capital Jail Chest - Twinsies Cell Key bottom chest in waterlogged East Wing hallway", 707 + treasure_index_offset),
+        #Todo: require East Wing Key and all Cell Keys
+        LocationData("Capital Jail", "Capital Jail Chest - Cell Key chest locked in broken East Wing jail cell", 708 + treasure_index_offset),
+        #Todo: require East Wing Key and all Cell Keys
+        LocationData("Capital Jail", "Capital Jail Chest - Cell Key chest locked in East Wing bedroom", 763 + treasure_index_offset),
+        #Todo: require East Wing Key and all Cell Keys
+        LocationData("Capital Jail", "Capital Jail Chest - Dark Wing Key chest locked beyond overgrown West Wing hallway", 909 + treasure_index_offset),
+        #Todo: require Dark Wing Key
+        LocationData("Capital Jail", "Capital Jail Chest - Capital Jail map chest in Dark Wing entry left cell", 2911 + treasure_index_offset),
+        #Todo: require Dark Wing Key
+        LocationData("Capital Jail", "Capital Jail Chest - Sneaky Woven Hood chest in Dark Wing", 929 + treasure_index_offset),
+        #Todo: require Dark Wing Key
+        LocationData("Capital Jail", "Capital Jail Chest - Corner lava jump Woven Shirt chest in Dark Wing", 920 + treasure_index_offset),
 
         #NPCs
         #Todo: require South Wing Key
         LocationData("Capital Jail", "Capital Jail NPC - Silver Ingot in haunted South Wing jail cell", 972 + npc_index_offset),
         #Todo: require South Wing Key
         LocationData("Capital Jail", "Capital Jail NPC - Silver Ingot in zombified South Wing jail cell", 989 + npc_index_offset),
+        #Todo: require East Wing Key and all Cell Keys
+        LocationData("Capital Jail", "Capital Jail NPC - Silver Ore locked in broken East Wing jail cell accompanied by blue flower", 760 + npc_index_offset),
+        #Todo: require East Wing Key and all Cell Keys
+        LocationData("Capital Jail", "Capital Jail NPC - Silver Dust locked in East Wing bedroom", 782 + npc_index_offset),
+        #Todo: require West Wing Key and all Cell Keys
+        LocationData("Capital Jail", "Capital Jail NPC - Silver Ore locked in overgrown West Wing hallway", 759 + npc_index_offset),
+        #Todo: require Dark Wing Key
+        LocationData("Capital Jail", "Capital Jail NPC - Silver Dust in Dark Wing entry right cell", 472 + npc_index_offset),
 
-
+        #Crystals
+        LocationData("Capital Jail", "Capital Jail Crystal - Reaper Crystal above hell pool", 908 + crystal_index_offset),
 
         #Zones (Expert)
         #Lake Delende
