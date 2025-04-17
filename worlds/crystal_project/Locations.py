@@ -81,10 +81,12 @@ def get_locations() -> List[LocationData]:
         LocationData("Delende", "Delende Chest - Tonic Pouch chest before Proving Meadows", 216 + treasure_index_offset),
         LocationData("Delende", "Delende Chest - Tonic Pouch chest in front of fish hatchery below tree", 2997 + treasure_index_offset),
 
-        #NPCs
+        #NPCs Todo: Astley1 NPC (ID 28) (184, 125, -93) gives you a Home Point Stone, but it's missable as a location; the item appears elsewhere later
         LocationData("Delende", "Delende NPC - Dog Bone in spooky cave", 1915 + npc_index_offset),
         LocationData("Delende", "Delende NPC - Dog Bone Guy", 31 + npc_index_offset),
         LocationData("Delende", "Delende NPC - Dog Bone south of Soiled Den", 184 + npc_index_offset),
+        #276, 116, -204; gives you Fervor Charm
+        LocationData("Delende", "Delende NPC - Dizzy noob chucks a Fervor Charm at your face", 831 + npc_index_offset),
 
         #Grans House (Delende)
         #Treasure chests
@@ -211,6 +213,26 @@ def get_locations() -> List[LocationData]:
         LocationData("Proving Meadows", "Proving Meadows Chest - Tarzan Tonic chest", 256 + treasure_index_offset),
         LocationData("Proving Meadows", "Proving Meadows Chest - Tonic Pouch chest on the climb up outside Skumparadise", 193 + treasure_index_offset),
 
+        #NPCs Todo: this guy checks whether you have enough crystals to pass; this is a blocker guy not a location check guy
+        #LocationData("Proving Meadows", "Proving Meadows NPC - Crystal Checker", 128 + npc_index_offset),
+
+        #Skumparadise (we're smushing Trial Caves into there)
+        #Treasure chests
+        LocationData("Skumparadise", "Skumparadise Chest - Stairs are lava Stalwart Shield chest", 126 + treasure_index_offset),
+        LocationData("Skumparadise", "Skumparadise Chest - Shroom-dodging Help the Prince chest", 120 + treasure_index_offset),
+        LocationData("Skumparadise", "Skumparadise Chest - Ride the shroom Awake Ring chest", 670 + treasure_index_offset),
+        LocationData("Skumparadise", "Skumparadise Chest - Wall niche Awake Ring chest", 671 + treasure_index_offset),
+        LocationData("Skumparadise", "Skumparadise Chest - Smaller wall niche Tincture Pouch chest", 669 + treasure_index_offset),
+        LocationData("Skumparadise", "Skumparadise Chest - Lava-loving shrooms Tonic Pouch chest", 684 + treasure_index_offset),
+        LocationData("Skumparadise", "Skumparadise Chest - Mana Ring chest behind the lava shroom colonnade", 685 + treasure_index_offset),
+        LocationData("Skumparadise", "Skumparadise Chest - There and back again Sharp Sword chest", 683 + treasure_index_offset),
+        LocationData("Skumparadise", "Skumparadise Chest - Tunnel Fenix Juice chest accompanied by a yellow flower", 1110 + treasure_index_offset),
+        LocationData("Skumparadise", "Skumparadise Chest - Money chest behind boss", 332 + treasure_index_offset),
+
+        #Crystals
+        LocationData("Skumparadise", "Skumparadise Crystal - Aegis Crystal", 68 + crystal_index_offset),
+
+
         #Yamagawa M.A.
         #Treasure chests
         LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Money chest up first cliff", 2995 + treasure_index_offset),
@@ -226,6 +248,107 @@ def get_locations() -> List[LocationData]:
 
         #Crystals
         LocationData("Yamagawa M.A.", "Yamagawa M.A. Crystal - Jump into fireplace cave for Scholar Crystal", 166 + crystal_index_offset),
+
+        #Zones (Advanced)
+        #Capital Sequoia (smushed Capital Courtyard in)
+        #Treasure chests
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Tonic Pouch chest beyond the courtyard wall", 2671 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Inn room Craftwork Staff chest", 1388 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Second-story Craftwork Dagger chest by Master Rogue", 158 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Magic shop attic Craftwork Scythe chest", 1389 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Training ground parkour Craftwork Katana chest", 1390 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Cap chest behind Luxury Shop", 2651 + treasure_index_offset),
+        #Todo: next three chests require the Luxury Key: Fenix Syrup Pouch (1533), Lucky Briefs (1532), Lucky Socks (1531)
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Fenix Syrup Pouch chest locked in Luxury Shop storage", 1533 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Lucky Briefs chest locked in Luxury Shop storage", 1532 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Lucky Socks chest locked in Luxury Shop storage", 1531 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Inn attic Craftwork Vest chest by Master Monk", 2656 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Shield chest by Master Warrior atop the Luxury Shop", 2655 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Sword chest atop library bookcases", 1392 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Penguin sanctuary Craftwork Robe chest", 2654 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Gaea Shard chest 1 in Gaea Shrine", 137 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Gaea Shard chest 2 in Gaea Shrine", 227 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Gaea Shard chest 3 in Gaea Shrine", 381 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Gaea Shard chest 4 in Gaea Shrine", 548 + treasure_index_offset),
+        #Todo: requires either Owl, Ibek, Quintar, or Gaea Stone
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Bow chest in Clerics Lounge", 1391 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Axe chest in instrducktor classroom", 1387 + treasure_index_offset),
+        #Todo: requires Ibek
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Watering Can chest in Master Warlocks chambers atop Weapons R Us", 2732 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Pages chest in Master Wizards Library atop Weapons R Us", 168 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Fenced-off Craftwork Helm chest in Armor Merchant alley", 2653 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Rapier chest beneath grand staircase", 1393 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Fang Pendant chest tucked into maze entrance hedge", 389 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Wand chest down left maze path", 452 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Hop the moat to maze Craftwork Spear chest", 863 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Maze Craftwork Crown chest accompanied by blue flower pair", 390 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Gardeners Key chest below Lost Penguin", 388 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Cheat at maze for Givers Ring chest above fountain", 387 + treasure_index_offset),
+        #Todo: next three locations require Gardeners Key
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Mail chest in Gardeners Shed", 2652 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Tuber Seed 1 in Gardeners Shed", 2663 + treasure_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Tuber Seed 2 in Gardeners Shed", 2664 + treasure_index_offset),
+
+        #NPCs 
+        #Todo: Courtyard Chloe (ID 1661) (399, 155, -219) gives you a lure (and later she disappears and it's on the ground here)
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Plug Lure sparkling in the fountain", 2584 + npc_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin on a tent", 605 + npc_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Speedy Lost Penguin on patrol", 584 + npc_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin kiosk keeper", 508 + npc_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin skulking in shop alley", 565 + npc_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin on gender change bench porch", 1095 + npc_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin enjoying inn hospitality", 946 + npc_index_offset),
+        #Todo: 5 checks on the Penguin Keeper
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper", 531 + npc_index_offset),
+        #Todo: requires either Owl, Ibek, Quintar, or Gaea Stone
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin trampling the Clerics flowers", 564 + npc_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Sadist Sam eats(?) Cerberus", 536 + npc_index_offset), #name is ca69011a in Crystal Edit whyy lmao
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin wandering the Magic Shop rooftop garden", 573 + npc_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin atop sewer exit rooftop", 567 + npc_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin cheating at Garden Maze", 421 + npc_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - How did you climb that tree, Lost Penguin", 422 + npc_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin among the eaves of Library roof", 594 + npc_index_offset),
+
+        #Crystals
+        #Todo: requires Ibek
+        LocationData("Capital Sequoia", "Capital Sequoia Crystal - Beatsmith", 1087 + crystal_index_offset),
+
+        #Jojo Sewers
+        #Treasure chests
+        LocationData("Jojo Sewers", "Jojo Sewers Chest - Guarded Tonic Pouch chest hiding in the grass", 743 + treasure_index_offset),
+        LocationData("Jojo Sewers", "Jojo Sewers Chest - Money chest in drowned passage to Boomer Society", 634 + treasure_index_offset),
+        LocationData("Jojo Sewers", "Jojo Sewers Chest - Tincture Pouch in the shadow of the waterfall", 1126 + treasure_index_offset),
+        LocationData("Jojo Sewers", "Jojo Sewers Chest - Leap of faith Smelly Gi chest", 887 + treasure_index_offset),
+        LocationData("Jojo Sewers", "Jojo Sewers Chest - Iron Helm chest in eastside sewer green room", 2658 + treasure_index_offset),
+        LocationData("Jojo Sewers", "Jojo Sewers Chest - Invisible maze Iron Armor chest", 744 + treasure_index_offset),
+
+        #NPCs
+        LocationData("Jojo Sewers", "Jojo Sewers NPC - Who even wants Stone of Jordan these days", 2759 + npc_index_offset),
+
+        #Capital Jail
+        #Treasure chests
+        LocationData("Capital Jail", "Capital Jail Chest - Touchdown South Wing Key chest", 640 + treasure_index_offset),
+        #Todo: require South Wing Key
+        LocationData("Capital Jail", "Capital Jail Chest - West Wing Key chest in South Wing jail cell across from busted wall", 930 + treasure_index_offset),
+        #Todo: require South Wing Key
+        LocationData("Capital Jail", "Capital Jail Chest - Haunted jail cell East Wing Key chest in South Wing dead end", 931 + treasure_index_offset),
+        #Todo: require South Wing Key and all Cell Keys
+        LocationData("Capital Jail", "Capital Jail Chest - South Wing Battleplate chest locked behind the rubble", 991 + treasure_index_offset),
+        #Technically in the Underpass but you come from here
+        #Todo: require South Wing Key and all Cell Keys
+        LocationData("Capital Jail", "Capital Jail Chest - Drop down behind the South Wing rubble Underpass Scrap chest", 3675 + treasure_index_offset),
+        #Todo: require West Wing Key
+        LocationData("Capital Jail", "Capital Jail Chest - Cell Key chest in West Wing jail cell among the glowy plants", 925 + treasure_index_offset),
+        #Todo: require West Wing Key
+        LocationData("Capital Jail", "Capital Jail Chest - Arrow plants Battle Helm chest", 923 + treasure_index_offset),
+
+        #NPCs
+        #Todo: require South Wing Key
+        LocationData("Capital Jail", "Capital Jail NPC - Silver Ingot in haunted South Wing jail cell", 972 + npc_index_offset),
+        #Todo: require South Wing Key
+        LocationData("Capital Jail", "Capital Jail NPC - Silver Ingot in zombified South Wing jail cell", 989 + npc_index_offset),
+
+
 
         #Zones (Expert)
         #Lake Delende
