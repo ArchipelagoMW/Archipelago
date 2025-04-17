@@ -231,10 +231,16 @@ class TestDeterministicGeneration(TestCase):
 
     @staticmethod
     def _hash_check() -> int:
-        """Called by both the main Python process and a separate Python process to check that the hash seeds differ."""
-        # Note: hashing an integer returns that integer if it's not too large, so a string literal is hashed instead
-        # because str objects are "salted" with an unpredictable random value that remains constant within an individual
-        # Python process.
+        """
+        Return the hash of a fixed object that produces a different hash depending on the hash seed of the current
+        Python process.
+
+        This is called by both the main Python process and by a separate Python process to check that the hash seeds of
+        both processes differ.
+
+        A string is hashed because the __hash__ values of str objects are "salted" with an unpredictable random value
+        that remains constant within an individual Python process. See the Python documentation for object.__hash__().
+        """
         return hash("This string is hashed to check that one process' hash seed differs from another")
 
     def assertDictEqualDiffMismatchedOnly(self, d1: Mapping[Any, object], d2: Mapping[Any, object], msg=None) -> None:
