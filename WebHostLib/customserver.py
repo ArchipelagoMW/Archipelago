@@ -227,6 +227,9 @@ def set_up_logging(room_id) -> logging.Logger:
 def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                        cert_file: typing.Optional[str], cert_key_file: typing.Optional[str],
                        host: str, rooms_to_run: multiprocessing.Queue, rooms_shutting_down: multiprocessing.Queue):
+    from setproctitle import setproctitle
+
+    setproctitle(name)
     Utils.init_logging(name)
     try:
         import resource
