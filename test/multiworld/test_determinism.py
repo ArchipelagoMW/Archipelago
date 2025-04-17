@@ -178,7 +178,7 @@ class TestDeterministicGeneration(TestCase):
         cls.initial_multiworld_data_cache.clear()
         super().tearDownClass()
 
-    def get_initial_multiworld(self, game: str) -> tuple[int, SerializableMultiWorldData] | tuple[int, None]:
+    def get_initial_multiworld(self, game: str) -> tuple[int, SerializableMultiWorldData | None]:
         """
         Get the initial multiworld seed and multiworld as serializable data for this game, or generate it and cache it
         if it does not exist.
@@ -211,7 +211,7 @@ class TestDeterministicGeneration(TestCase):
         # If the code in the self.subTest() context fails, execution continues after the end of the context, so this
         # return statement is reachable, despite PyCharm thinking it is unreachable.
         # noinspection PyUnreachableCode
-        return multiworld.seed, None
+        return seed, None
 
     @staticmethod
     def _new_multiworld_to_serializable_data(game: str, seed: int) -> SerializableMultiWorldData:
