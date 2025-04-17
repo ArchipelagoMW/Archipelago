@@ -97,6 +97,7 @@ def create_regions_and_locations(world):
     world.multiworld.regions.append(menu_region)
 
     world.active_checkpoint_names: list[str] = []
+    world.goal_checkpoint_names: dict[str] = dict()
     world.active_key_names: list[str] = []
     world.active_gem_names: list[str] = []
     world.active_clutter_names: list[str] = []
@@ -153,13 +154,14 @@ def create_regions_and_locations(world):
             if room.checkpoint != None:
                 checkpoint_rule = lambda state: True
                 if room.checkpoint == "Start":
-                    if level.name == world.goal_area and world.options.lock_goal_area:
+                    if world.options.lock_goal_area and (level.name == world.goal_area or (level.name[:2] == world.goal_area[:2] == "10")):
                         world.goal_start_region: str = room.checkpoint_region
                     elif level.name == "8a":
                         world.epilogue_start_region: str = room.checkpoint_region
                     else:
                         menu_region.add_exits([room.checkpoint_region], {room.checkpoint_region: checkpoint_rule})
                 else:
+                    # TODO: Account for Lock Goal Area here
                     checkpoint_location_name = level.display_name + " - " + room.checkpoint
                     world.active_checkpoint_names.append(checkpoint_location_name)
                     checkpoint_rule = lambda state, checkpoint_location_name=checkpoint_location_name: state.has(checkpoint_location_name, world.player)
@@ -167,7 +169,10 @@ def create_regions_and_locations(world):
                         checkpoint_location_name: world.location_name_to_id[checkpoint_location_name]
                     }, CelesteLocation)
 
-                    menu_region.add_exits([room.checkpoint_region], {room.checkpoint_region: checkpoint_rule})
+                    if world.options.lock_goal_area and (level.name == world.goal_area or (level.name[:2] == world.goal_area[:2] == "10")):
+                        world.goal_checkpoint_names[room.checkpoint_region] = checkpoint_location_name
+                    else:
+                        menu_region.add_exits([room.checkpoint_region], {room.checkpoint_region: checkpoint_rule})
 
             if world.options.roomsanity:
                 if room.name != "10b_GOAL":

@@ -120,11 +120,15 @@ class IncludeCore(Toggle):
     """
     display_name = "Include Core"
 
-class IncludeFarewell(Toggle):
+class IncludeFarewell(Choice):
     """
-    Determines whether Chapter 9 - Farewell Level will be included
+    Determines how much of Chapter 9 - Farewell Level will be included
     """
     display_name = "Include Farewell"
+    option_none = 0
+    option_empty_space = 1
+    option_farewell = 2
+    default = 0
 
 class IncludeBSides(Toggle):
     """

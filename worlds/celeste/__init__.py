@@ -83,8 +83,9 @@ class CelesteWorld(World):
         self.active_levels = {"0a", "1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a"}
         if self.options.include_core:
             self.active_levels.add("9a")
-        if self.options.include_farewell:
+        if self.options.include_farewell >= 1:
             self.active_levels.add("10a")
+        if self.options.include_farewell == 2:
             self.active_levels.add("10b")
         if self.options.include_b_sides:
             self.active_levels.update({"1b", "2b", "3b", "4b", "5b", "6b", "7b"})
@@ -186,6 +187,10 @@ class CelesteWorld(World):
         menu_region = self.multiworld.get_region("Menu", self.player)
         if getattr(self, "goal_start_region", None):
             menu_region.add_exits([self.goal_start_region], {self.goal_start_region: lambda state: state.has(ItemName.strawberry, self.player, self.strawberries_required)})
+        if getattr(self, "goal_checkpoint_names", None):
+            for region_name, location_name in self.goal_checkpoint_names.items():
+                checkpoint_rule = lambda state, location_name=location_name: state.has(location_name, self.player) and state.has(ItemName.strawberry, self.player, self.strawberries_required)
+                menu_region.add_exits([region_name], {region_name: checkpoint_rule})
 
         menu_region.add_exits([self.epilogue_start_region], {self.epilogue_start_region: lambda state: (state.has(ItemName.strawberry, self.player, self.strawberries_required) and state.has(ItemName.house_keys, self.player))})
 

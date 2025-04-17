@@ -37,7 +37,7 @@ goal_area_to_location_name: dict[str, str] = {
     "9a": "Core A - Level Clear",
     "9b": "Core B - Level Clear",
     "9c": "Core C - Level Clear",
-    "10a": "Farewell - Crystal Heart",
+    "10a": "Farewell - Crystal Heart?",
     "10b": "Farewell - Level Clear",
     "10c": "Farewell - Golden Strawberry",
 }
