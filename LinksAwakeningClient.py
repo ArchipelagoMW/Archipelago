@@ -370,11 +370,6 @@ class LinksAwakeningClient():
     retroarch_port = None
     gameboy = None
 
-    def msg(self, m):
-        logger.info(m)
-        s = f"SHOW_MSG {m}\n"
-        self.gameboy.send(s)
-
     def __init__(self, retroarch_address="127.0.0.1", retroarch_port=55355):
         self.retroarch_address = retroarch_address
         self.retroarch_port = retroarch_port
@@ -578,7 +573,6 @@ class LinksAwakeningContext(CommonContext):
     want_slot_data = True
     la_task = None
     client = None
-    # TODO: does this need to re-read on reset?
     found_checks = set()
     scouted_locations = set()
     recvd_checks = {}
@@ -593,7 +587,7 @@ class LinksAwakeningContext(CommonContext):
     def slot_storage_key(self):
         return f"{self.slot_info[self.slot].name}_{storage_key}"
 
-    def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str], magpie: typing.Optional[bool]) -> None:
+    def __init__(self, server_address: str | None, password: str | None, magpie: bool) -> None:
         self.client = LinksAwakeningClient()
         self.slot_data = {}
 
@@ -715,7 +709,7 @@ class LinksAwakeningContext(CommonContext):
                 "password": self.password,
             })
             if self.slot_data.get("death_link"):
-                await self.update_death_link(True)
+                Utils.async_start(self.update_death_link(True))
 
         # TODO - use watcher_event
         if cmd == "ReceivedItems":
