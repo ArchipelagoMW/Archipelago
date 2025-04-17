@@ -1,5 +1,5 @@
 """
-Archipelago launcher for bundled app.
+Archipelago Launcher
 
 * if run with APBP as argument, launch corresponding client.
 * if run with executable as argument, run it passing argv[2:] as arguments
@@ -8,9 +8,7 @@ Archipelago launcher for bundled app.
 Scroll down to components= to add components to the launcher as well as setup.py
 """
 
-
 import argparse
-import itertools
 import logging
 import multiprocessing
 import shlex
@@ -20,10 +18,11 @@ import urllib.parse
 import webbrowser
 from os.path import isfile
 from shutil import which
-from typing import Callable, Optional, Sequence, Tuple, Union
+from typing import Callable, Optional, Sequence, Tuple, Union, Any
 
 if __name__ == "__main__":
     import ModuleUpdate
+
     ModuleUpdate.update()
 
 import settings
@@ -105,7 +104,8 @@ components.extend([
     Component("Generate Template Options", func=generate_yamls),
     Component("Archipelago Website", func=lambda: webbrowser.open("https://archipelago.gg/")),
     Component("Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/8Z65BR2")),
-    Component("Unrated/18+ Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4")),
+    Component("Unrated/18+ Discord Server", icon="discord",
+              func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4")),
     Component("Browse Files", func=browse_files),
 ])
 
@@ -114,7 +114,7 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
     url = urllib.parse.urlparse(path)
     queries = urllib.parse.parse_qs(url.query)
     launch_args = (path, *launch_args)
-    client_component = None
+    client_component = []
     text_client_component = None
     if "game" in queries:
         game = queries["game"][0]
@@ -122,49 +122,40 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
         game = "Archipelago"
     for component in components:
         if component.supports_uri and component.game_name == game:
-            client_component = component
+            client_component.append(component)
         elif component.display_name == "Text Client":
             text_client_component = component
 
-    if client_component is None:
+    from kvui import MDButton, MDButtonText
+    from kivymd.uix.dialog import MDDialog, MDDialogHeadlineText, MDDialogContentContainer, MDDialogSupportingText
+    from kivymd.uix.divider import MDDivider
+
+    if not client_component:
         run_component(text_client_component, *launch_args)
         return
+    else:
+        popup_text = MDDialogSupportingText(text="Select client to open and connect with.")
+        component_buttons = [MDDivider()]
+        for component in [text_client_component, *client_component]:
+            component_buttons.append(MDButton(
+                MDButtonText(text=component.display_name),
+                on_release=lambda *args, comp=component: run_component(comp, *launch_args),
+                style="text"
+            ))
+        component_buttons.append(MDDivider())
 
-    from kvui import App, Button, BoxLayout, Label, Window
+    MDDialog(
+        # Headline
+        MDDialogHeadlineText(text="Connect to Multiworld"),
+        # Text
+        popup_text,
+        # Content
+        MDDialogContentContainer(
+            *component_buttons,
+            orientation="vertical"
+        ),
 
-    class Popup(App):
-        def __init__(self):
-            self.title = "Connect to Multiworld"
-            self.icon = r"data/icon.png"
-            super().__init__()
-
-        def build(self):
-            layout = BoxLayout(orientation="vertical")
-            layout.add_widget(Label(text="Select client to open and connect with."))
-            button_row = BoxLayout(orientation="horizontal", size_hint=(1, 0.4))
-
-            text_client_button = Button(
-                text=text_client_component.display_name,
-                on_release=lambda *args: run_component(text_client_component, *launch_args)
-            )
-            button_row.add_widget(text_client_button)
-
-            game_client_button = Button(
-                text=client_component.display_name,
-                on_release=lambda *args: run_component(client_component, *launch_args)
-            )
-            button_row.add_widget(game_client_button)
-
-            layout.add_widget(button_row)
-
-            return layout
-
-        def _stop(self, *largs):
-            # see run_gui Launcher _stop comment for details
-            self.root_window.close()
-            super()._stop(*largs)
-
-    Popup().run()
+    ).open()
 
 
 def identify(path: Union[None, str]) -> Tuple[Union[None, str], Union[None, Component]]:
@@ -220,100 +211,171 @@ def launch(exe, in_terminal=False):
     subprocess.Popen(exe)
 
 
+def create_shortcut(button: Any, component: Component) -> None:
+    from pyshortcuts import make_shortcut
+    script = sys.argv[0]
+    wkdir = Utils.local_path()
+
+    script = f"{script} \"{component.display_name}\""
+    make_shortcut(script, name=f"Archipelago {component.display_name}", icon=local_path("data", "icon.ico"),
+                  startmenu=False, terminal=False, working_dir=wkdir)
+    button.menu.dismiss()
+
+
 refresh_components: Optional[Callable[[], None]] = None
 
 
-def run_gui():
-    from kvui import App, ContainerLayout, GridLayout, Button, Label, ScrollBox, Widget, ApAsyncImage
+def run_gui(path: str, args: Any) -> None:
+    from kvui import (ThemedApp, MDFloatLayout, MDGridLayout, ScrollBox)
+    from kivy.properties import ObjectProperty
     from kivy.core.window import Window
-    from kivy.uix.relativelayout import RelativeLayout
+    from kivy.metrics import dp
+    from kivymd.uix.button import MDIconButton
+    from kivymd.uix.card import MDCard
+    from kivymd.uix.menu import MDDropdownMenu
+    from kivymd.uix.snackbar import MDSnackbar, MDSnackbarText
 
-    class Launcher(App):
+    from kivy.lang.builder import Builder
+
+    class LauncherCard(MDCard):
+        component: Component | None
+        image: str
+        context_button: MDIconButton = ObjectProperty(None)
+
+        def __init__(self, *args, component: Component | None = None, image_path: str = "", **kwargs):
+            self.component = component
+            self.image = image_path
+            super().__init__(args, kwargs)
+
+    class Launcher(ThemedApp):
         base_title: str = "Archipelago Launcher"
-        container: ContainerLayout
-        grid: GridLayout
-        _tool_layout: Optional[ScrollBox] = None
-        _client_layout: Optional[ScrollBox] = None
+        top_screen: MDFloatLayout = ObjectProperty(None)
+        navigation: MDGridLayout = ObjectProperty(None)
+        grid: MDGridLayout = ObjectProperty(None)
+        button_layout: ScrollBox = ObjectProperty(None)
+        cards: list[LauncherCard]
+        current_filter: Sequence[str | Type] | None
 
-        def __init__(self, ctx=None):
+        def __init__(self, ctx=None, path=None, args=None):
             self.title = self.base_title + " " + Utils.__version__
             self.ctx = ctx
             self.icon = r"data/icon.png"
+            self.favorites = []
+            self.launch_uri = path
+            self.launch_args = args
+            self.cards = []
+            self.current_filter = (Type.CLIENT, Type.TOOL, Type.ADJUSTER, Type.MISC)
+            persistent = Utils.persistent_load()
+            if "launcher" in persistent:
+                if "favorites" in persistent["launcher"]:
+                    self.favorites.extend(persistent["launcher"]["favorites"])
+                if "filter" in persistent["launcher"]:
+                    if persistent["launcher"]["filter"]:
+                        filters = []
+                        for filter in persistent["launcher"]["filter"].split(", "):
+                            if filter == "favorites":
+                                filters.append(filter)
+                            else:
+                                filters.append(Type[filter])
+                        self.current_filter = filters
             super().__init__()
 
-        def _refresh_components(self) -> None:
+        def set_favorite(self, caller):
+            if caller.component.display_name in self.favorites:
+                self.favorites.remove(caller.component.display_name)
+                caller.icon = "star-outline"
+            else:
+                self.favorites.append(caller.component.display_name)
+                caller.icon = "star"
 
-            def build_button(component: Component) -> Widget:
+        def build_card(self, component: Component) -> LauncherCard:
+            """
+                Builds a card widget for a given component.
+
+                :param component: The component associated with the button.
+
+                :return: The created Card Widget.
                 """
-                Builds a button widget for a given component.
+            button_card = LauncherCard(component=component,
+                                       image_path=icon_paths[component.icon])
 
-                Args:
-                    component (Component): The component associated with the button.
+            def open_menu(caller):
+                caller.menu.open()
 
-                Returns:
-                    None. The button is added to the parent grid layout.
+            menu_items = [
+                {
+                    "text": "Add shortcut on desktop",
+                    "leading_icon": "laptop",
+                    "on_release": lambda: create_shortcut(button_card.context_button, component)
+                }
+            ]
+            button_card.context_button.menu = MDDropdownMenu(caller=button_card.context_button, items=menu_items)
+            button_card.context_button.bind(on_release=open_menu)
 
-                """
-                button = Button(text=component.display_name, size_hint_y=None, height=40)
-                button.component = component
-                button.bind(on_release=self.component_action)
-                if component.icon != "icon":
-                    image = ApAsyncImage(source=icon_paths[component.icon],
-                                         size=(38, 38), size_hint=(None, 1), pos=(5, 0))
-                    box_layout = RelativeLayout(size_hint_y=None, height=40)
-                    box_layout.add_widget(button)
-                    box_layout.add_widget(image)
-                    return box_layout
-                return button
+            return button_card
+
+        def _refresh_components(self, type_filter: Sequence[str | Type] | None = None) -> None:
+            if not type_filter:
+                type_filter = [Type.CLIENT, Type.ADJUSTER, Type.TOOL, Type.MISC]
+            favorites = "favorites" in type_filter
 
             # clear before repopulating
-            assert self._tool_layout and self._client_layout, "must call `build` first"
-            tool_children = reversed(self._tool_layout.layout.children)
+            assert self.button_layout, "must call `build` first"
+            tool_children = reversed(self.button_layout.layout.children)
             for child in tool_children:
-                self._tool_layout.layout.remove_widget(child)
-            client_children = reversed(self._client_layout.layout.children)
-            for child in client_children:
-                self._client_layout.layout.remove_widget(child)
+                self.button_layout.layout.remove_widget(child)
 
-            _tools = {c.display_name: c for c in components if c.type == Type.TOOL}
-            _clients = {c.display_name: c for c in components if c.type == Type.CLIENT}
-            _adjusters = {c.display_name: c for c in components if c.type == Type.ADJUSTER}
-            _miscs = {c.display_name: c for c in components if c.type == Type.MISC}
+            cards = [card for card in self.cards if card.component.type in type_filter
+                     or favorites and card.component.display_name in self.favorites]
 
-            for (tool, client) in itertools.zip_longest(itertools.chain(
-                _tools.items(), _miscs.items(), _adjusters.items()
-            ), _clients.items()):
-                # column 1
-                if tool:
-                    self._tool_layout.layout.add_widget(build_button(tool[1]))
-                # column 2
-                if client:
-                    self._client_layout.layout.add_widget(build_button(client[1]))
+            self.current_filter = type_filter
+
+            for card in cards:
+                self.button_layout.layout.add_widget(card)
+
+            top = self.button_layout.children[0].y + self.button_layout.children[0].height \
+                           - self.button_layout.height
+            scroll_percent = self.button_layout.convert_distance_to_scroll(0, top)
+            self.button_layout.scroll_y = max(0, min(1, scroll_percent[1]))
+
+        def filter_clients(self, caller):
+            self._refresh_components(caller.type)
 
         def build(self):
-            self.container = ContainerLayout()
-            self.grid = GridLayout(cols=2)
-            self.container.add_widget(self.grid)
-            self.grid.add_widget(Label(text="General", size_hint_y=None, height=40))
-            self.grid.add_widget(Label(text="Clients", size_hint_y=None, height=40))
-            self._tool_layout = ScrollBox()
-            self._tool_layout.layout.orientation = "vertical"
-            self.grid.add_widget(self._tool_layout)
-            self._client_layout = ScrollBox()
-            self._client_layout.layout.orientation = "vertical"
-            self.grid.add_widget(self._client_layout)
-
-            self._refresh_components()
+            self.top_screen = Builder.load_file(Utils.local_path("data/launcher.kv"))
+            self.grid = self.top_screen.ids.grid
+            self.navigation = self.top_screen.ids.navigation
+            self.button_layout = self.top_screen.ids.button_layout
+            self.set_colors()
+            self.top_screen.md_bg_color = self.theme_cls.backgroundColor
 
             global refresh_components
             refresh_components = self._refresh_components
 
             Window.bind(on_drop_file=self._on_drop_file)
 
-            return self.container
+            for component in components:
+                self.cards.append(self.build_card(component))
+
+            self._refresh_components(self.current_filter)
+
+            # Uncomment to re-enable the Kivy console/live editor
+            # Ctrl-E to enable it, make sure numlock/capslock is disabled
+            # from kivy.modules.console import create_console
+            # create_console(Window, self.top_screen)
+
+            return self.top_screen
+
+        def on_start(self):
+            if self.launch_uri:
+                handle_uri(self.launch_uri, self.launch_args)
+                self.launch_uri = None
+                self.launch_args = None
 
         @staticmethod
         def component_action(button):
+            MDSnackbar(MDSnackbarText(text="Opening in a new window..."), y=dp(24), pos_hint={"center_x": 0.5},
+                       size_hint_x=0.5).open()
             if button.component.func:
                 button.component.func()
             else:
@@ -333,7 +395,13 @@ def run_gui():
             self.root_window.close()
             super()._stop(*largs)
 
-    Launcher().run()
+        def on_stop(self):
+            Utils.persistent_store("launcher", "favorites", self.favorites)
+            Utils.persistent_store("launcher", "filter", ", ".join(filter.name if isinstance(filter, Type) else filter
+                                                                   for filter in self.current_filter))
+            super().on_stop()
+
+    Launcher(path=path, args=args).run()
 
     # avoiding Launcher reference leak
     # and don't try to do something with widgets after window closed
@@ -360,16 +428,14 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
 
     path = args.get("Patch|Game|Component|url", None)
     if path is not None:
-        if path.startswith("archipelago://"):
-            handle_uri(path, args.get("args", ()))
-            return
-        file, component = identify(path)
-        if file:
-            args['file'] = file
-        if component:
-            args['component'] = component
-        if not component:
-            logging.warning(f"Could not identify Component responsible for {path}")
+        if not path.startswith("archipelago://"):
+            file, component = identify(path)
+            if file:
+                args['file'] = file
+            if component:
+                args['component'] = component
+            if not component:
+                logging.warning(f"Could not identify Component responsible for {path}")
 
     if args["update_settings"]:
         update_settings()
@@ -378,7 +444,7 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
     elif "component" in args:
         run_component(args["component"], *args["args"])
     elif not args["update_settings"]:
-        run_gui()
+        run_gui(path, args.get("args", ()))
 
 
 if __name__ == '__main__':
@@ -400,6 +466,7 @@ if __name__ == '__main__':
     main(parser.parse_args())
 
     from worlds.LauncherComponents import processes
+
     for process in processes:
         # we await all child processes to close before we tear down the process host
         # this makes it feel like each one is its own program, as the Launcher is closed now

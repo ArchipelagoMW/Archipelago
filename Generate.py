@@ -54,12 +54,22 @@ def mystery_argparse():
     parser.add_argument("--skip_output", action="store_true",
                         help="Skips generation assertion and output stages and skips multidata and spoiler output. "
                              "Intended for debugging and testing purposes.")
+    parser.add_argument("--spoiler_only", action="store_true",
+                        help="Skips generation assertion and multidata, outputting only a spoiler log. "
+                             "Intended for debugging and testing purposes.")
     args = parser.parse_args()
+
+    if args.skip_output and args.spoiler_only:
+        parser.error("Cannot mix --skip_output and --spoiler_only")
+    elif args.spoiler == 0 and args.spoiler_only:
+        parser.error("Cannot use --spoiler_only when --spoiler=0. Use --skip_output or set --spoiler to a different value")
+
     if not os.path.isabs(args.weights_file_path):
         args.weights_file_path = os.path.join(args.player_files_path, args.weights_file_path)
     if not os.path.isabs(args.meta_file_path):
         args.meta_file_path = os.path.join(args.player_files_path, args.meta_file_path)
     args.plando: PlandoOptions = PlandoOptions.from_option_string(args.plando)
+
     return args
 
 
@@ -108,6 +118,8 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
             raise Exception("Cannot mix --sameoptions with --meta")
     else:
         meta_weights = None
+
+
     player_id = 1
     player_files = {}
     for file in os.scandir(args.player_files_path):
@@ -164,6 +176,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
     erargs.outputpath = args.outputpath
     erargs.skip_prog_balancing = args.skip_prog_balancing
     erargs.skip_output = args.skip_output
+    erargs.spoiler_only = args.spoiler_only
     erargs.name = {}
     erargs.csv_output = args.csv_output
 
@@ -279,22 +292,30 @@ def get_choice(option, root, value=None) -> Any:
     raise RuntimeError(f"All options specified in \"{option}\" are weighted as zero.")
 
 
-class SafeDict(dict):
-    def __missing__(self, key):
-        return '{' + key + '}'
+class SafeFormatter(string.Formatter):
+    def get_value(self, key, args, kwargs):
+        if isinstance(key, int):
+            if key < len(args):
+                return args[key]
+            else:
+                return "{" + str(key) + "}"
+        else:
+            return kwargs.get(key, "{" + key + "}")
 
 
 def handle_name(name: str, player: int, name_counter: Counter):
     name_counter[name.lower()] += 1
     number = name_counter[name.lower()]
     new_name = "%".join([x.replace("%number%", "{number}").replace("%player%", "{player}") for x in name.split("%%")])
-    new_name = string.Formatter().vformat(new_name, (), SafeDict(number=number,
-                                                                 NUMBER=(number if number > 1 else ''),
-                                                                 player=player,
-                                                                 PLAYER=(player if player > 1 else '')))
+
+    new_name = SafeFormatter().vformat(new_name, (), {"number": number,
+                                                      "NUMBER": (number if number > 1 else ''),
+                                                      "player": player,
+                                                      "PLAYER": (player if player > 1 else '')})
     # Run .strip twice for edge case where after the initial .slice new_name has a leading whitespace.
     # Could cause issues for some clients that cannot handle the additional whitespace.
     new_name = new_name.strip()[:16].strip()
+
     if new_name == "Archipelago":
         raise Exception(f"You cannot name yourself \"{new_name}\"")
     return new_name

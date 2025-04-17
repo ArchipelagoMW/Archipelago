@@ -616,7 +616,7 @@ class MultiWorld():
         locations: Set[Location] = set()
         events: Set[Location] = set()
         for location in self.get_filled_locations():
-            if type(location.item.code) is int:
+            if type(location.item.code) is int and type(location.address) is int:
                 locations.add(location)
             else:
                 events.add(location)
@@ -1106,6 +1106,9 @@ class Region:
         def __len__(self) -> int:
             return self._list.__len__()
 
+        def __iter__(self):
+            return iter(self._list)
+
         # This seems to not be needed, but that's a bit suspicious.
         # def __del__(self):
         #     self.clear()
@@ -1310,9 +1313,6 @@ class Location:
         multiworld = self.parent_region.multiworld if self.parent_region and self.parent_region.multiworld else None
         return multiworld.get_name_string_for_object(self) if multiworld else f'{self.name} (Player {self.player})'
 
-    def __hash__(self):
-        return hash((self.name, self.player))
-
     def __lt__(self, other: Location):
         return (self.player, self.name) < (other.player, other.name)
 
@@ -1415,6 +1415,10 @@ class Item:
     @property
     def flags(self) -> int:
         return self.classification.as_flag()
+
+    @property
+    def is_event(self) -> bool:
+        return self.code is None
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Item):

@@ -1,0 +1,145 @@
+<LauncherCard>:
+    id: main
+    style: "filled"
+    padding: "4dp"
+    size_hint: 1, None
+    height: "75dp"
+    context_button: context
+    focus_behavior: False
+
+    MDRelativeLayout:
+        ApAsyncImage:
+            source: main.image
+            size: (48, 48)
+            size_hint: None, None
+            pos_hint: {"center_x": 0.1, "center_y": 0.5}
+
+        MDLabel:
+            text: main.component.display_name
+            pos_hint:{"center_x": 0.5, "center_y": 0.75 if main.component.description else 0.65}
+            halign: "center"
+            font_style: "Title"
+            role: "medium"
+            theme_text_color: "Custom"
+            text_color: app.theme_cls.primaryColor
+
+        MDLabel:
+            text: main.component.description
+            pos_hint: {"center_x": 0.5, "center_y": 0.35}
+            halign: "center"
+            role: "small"
+            theme_text_color: "Custom"
+            text_color: app.theme_cls.primaryColor
+
+        MDIconButton:
+            component: main.component
+            icon: "star" if self.component.display_name in app.favorites else "star-outline"
+            style: "standard"
+            pos_hint:{"center_x": 0.85, "center_y": 0.8}
+            theme_text_color: "Custom"
+            text_color: app.theme_cls.primaryColor
+            detect_visible: False
+            on_release: app.set_favorite(self)
+
+        MDIconButton:
+            id: context
+            icon: "menu"
+            style: "standard"
+            pos_hint:{"center_x": 0.95, "center_y": 0.8}
+            theme_text_color: "Custom"
+            text_color: app.theme_cls.primaryColor
+            detect_visible: False
+
+        MDButton:
+            pos_hint:{"center_x": 0.9, "center_y": 0.25}
+            size_hint_y: None
+            height: "25dp"
+            component: main.component
+            on_release: app.component_action(self)
+            detect_visible: False
+            MDButtonText:
+                text: "Open"
+
+
+#:import Type worlds.LauncherComponents.Type
+MDFloatLayout:
+    id: top_screen
+
+    MDGridLayout:
+        id: grid
+        cols: 2
+        spacing: "5dp"
+        padding: "10dp"
+
+        MDGridLayout:
+            id: navigation
+            cols: 1
+            size_hint_x: 0.25
+
+            MDButton:
+                id: all
+                style: "text"
+                type: (Type.CLIENT, Type.TOOL, Type.ADJUSTER, Type.MISC)
+                on_release: app.filter_clients(self)
+
+                MDButtonIcon:
+                    icon: "asterisk"
+                MDButtonText:
+                    text: "All"
+            MDButton:
+                id: client
+                style: "text"
+                type: (Type.CLIENT, )
+                on_release: app.filter_clients(self)
+
+                MDButtonIcon:
+                    icon: "controller"
+                MDButtonText:
+                    text: "Client"
+            MDButton:
+                id: Tool
+                style: "text"
+                type: (Type.TOOL, )
+                on_release: app.filter_clients(self)
+
+                MDButtonIcon:
+                    icon: "desktop-classic"
+                MDButtonText:
+                    text: "Tool"
+            MDButton:
+                id: adjuster
+                style: "text"
+                type: (Type.ADJUSTER, )
+                on_release: app.filter_clients(self)
+
+                MDButtonIcon:
+                    icon: "wrench"
+                MDButtonText:
+                    text: "Adjuster"
+            MDButton:
+                id: misc
+                style: "text"
+                type: (Type.MISC, )
+                on_release: app.filter_clients(self)
+
+                MDButtonIcon:
+                    icon: "dots-horizontal-circle-outline"
+                MDButtonText:
+                    text: "Misc"
+
+            MDButton:
+                id: favorites
+                style: "text"
+                type: ("favorites", )
+                on_release: app.filter_clients(self)
+
+                MDButtonIcon:
+                    icon: "star"
+                MDButtonText:
+                    text: "Favorites"
+
+            MDNavigationDrawerDivider:
+
+
+        ScrollBox:
+            id: button_layout
