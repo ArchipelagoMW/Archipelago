@@ -8,7 +8,8 @@ from worlds.AutoWorld import World, WebWorld
 from .locations import location_descriptions, locations
 from .items import items, CandyBox2Item, candy_box_2_base_id, filler_items
 from .options import CandyBox2Options
-from .regions import create_regions, connect_entrances, entrance_friendly_names
+from .regions import create_regions, connect_entrances
+from .rooms import entrance_friendly_names
 from .rules import set_rules
 
 EXPECTED_CLIENT_VERSION = "20250409-1+"

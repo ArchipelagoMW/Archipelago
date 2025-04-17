@@ -43,9 +43,7 @@ village_cellar_locations = {
 map_stage_1_locations = {}
 
 # Cleared desert quest
-map_stage_2_locations = {
-    "Pogo Stick": 500,
-}
+map_stage_2_locations = {}
 
 # Cleared bridge quest
 map_stage_3_locations = {}
@@ -242,6 +240,18 @@ castle_bakehouse_locations = {
     "Bake Pain au Chocolat 5": 4904,
 }
 
+pogo_stick_spot_locations = {
+    "Pogo Stick": 500,
+}
+
+pier_locations = {
+
+}
+
+lollipop_farm_locations = {
+
+}
+
 locations = {
     **candy_box_locations,
     **village_locations,
@@ -295,4 +305,7 @@ locations = {
     **lonely_house_locations,
     **yourself_fight_locations,
     **castle_bakehouse_locations,
+    **pogo_stick_spot_locations,
+    **pier_locations,
+    **lollipop_farm_locations
 }

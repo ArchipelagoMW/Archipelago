@@ -9,15 +9,21 @@ class QuestRandomisation(Choice):
 
     Off - Do not randomise quests
 
-    Except X Potion Quest - Randomise every quest, except for the X Potion Quest
+    Quests Only, Except X Potion Quest - Randomise every quest, except for the X Potion Quest
 
-    Everything - Randomise every quest, including the X Potion Quest
+    Quests Only - Rendomise every quest
+
+    Quests and Rooms Separate - Randomise every quest and every room
+
+    Everything - Randomise every quest and room together
     """
     display_name = "Quest Randomisation"
 
     option_off = 0
-    option_except_x_potion_quest = 1
-    option_everything = 2
+    option_quests_only_except_x_potion_quest = 1
+    option_quests_only = 2
+    option_quests_and_rooms_separate = 3
+    option_everything = 4
 
 
 class CandyProductionMultiplier(Range):
