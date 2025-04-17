@@ -1,6 +1,7 @@
 from typing import List, Dict, TYPE_CHECKING
 from BaseClasses import Region, Location
 from .Locations import LocationData
+from .rules import get_job_count
 if TYPE_CHECKING:
     from . import CrystalProjectWorld
 
@@ -22,12 +23,12 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
         create_region(world, player, locations_per_region, "Delende"),
         create_region(world, player, locations_per_region, "Soiled Den"),
         create_region(world, player, locations_per_region, "Pale Grotto"),
+        create_region(world, player, locations_per_region, "Yamagawa M.A."),
         create_region(world, player, locations_per_region, "Seaside Cliffs"),
         create_region(world, player, locations_per_region, "Draft Shaft Conduit"),
         create_region(world, player, locations_per_region, "Mercury Shrine"),
         create_region(world, player, locations_per_region, "Proving Meadows"),
         create_region(world, player, locations_per_region, "Skumparadise"),
-        create_region(world, player, locations_per_region, "Yamagawa M.A."),
         create_region(world, player, locations_per_region, "Capital Sequoia"),
         create_region(world, player, locations_per_region, "Jojo Sewers"),
         create_region(world, player, locations_per_region, "Boomer Society"),
@@ -41,8 +42,13 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
     connect_menu_region(world)
 
     multiworld.get_region("Spawning Meadows", player).add_exits(["Delende"])
-    multiworld.get_region("Delende", player).add_exits(["Soiled Den", "Pale Grotto", "Yamagawa M.A."])
+    multiworld.get_region("Delende", player).add_exits(["Soiled Den", "Pale Grotto", "Yamagawa M.A.", "Seaside Cliffs", "Mercury Shrine"])
     multiworld.get_region("Pale Grotto", player).add_exits(["Proving Meadows"])
+    multiworld.get_region("Seaside Cliffs", player).add_exits(["Draft Shaft Conduit"])
+    multiworld.get_region("Proving Meadows", player).add_exits(["Skumparadise"], {"Skumparadise": lambda state: get_job_count(player, state) >= 3})
+    multiworld.get_region("Skumparadise", player).add_exits(["Capital Sequoia"])
+    multiworld.get_region("Capital Sequoia", player).add_exits(["Jojo Sewers", "Boomer Society", "Rolling Quintar Fields"])
+    multiworld.get_region("Jojo Sewers", player).add_exits(["Capital Jail"])
 
     ## examples
     # multiworld.get_region("Onett", player).add_exits(["Giant Step", "Twoson", "Northern Onett", "Global ATM Access"],
@@ -73,6 +79,9 @@ def create_location(player: int, location_data: LocationData, region: Region) ->
     location = CrystalProjectLocation(player, location_data.name, location_data.code, region)
     location.region = location_data.region
 
+    if location_data.rule:
+        location.access_rule = location_data.rule
+
     return location
 
 def connect_menu_region(world: "CrystalProjectWorld") -> None:
@@ -82,5 +91,4 @@ def connect_menu_region(world: "CrystalProjectWorld") -> None:
 
     world.starting_region = starting_region_list[0]
     menu = world.multiworld.get_region("Menu", world.player)
-    spawningMeadow = world.multiworld.get_region("Spawning Meadows", world.player)
-    menu.connect(spawningMeadow)
+    menu.add_exits(["Spawning Meadows", "Capital Sequoia"], {"Capital Sequoia": lambda state: state.has_any({"Gaea Stone"}, world.player)})

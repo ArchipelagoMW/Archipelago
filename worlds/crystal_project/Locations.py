@@ -5,13 +5,14 @@ class LocationData(NamedTuple):
     region: str
     name: str
     code: Optional[int]
+    rule: Optional[Callable[[CollectionState], bool]] = None
 
 treasure_index_offset = 1
 npc_index_offset = 10000
 crystal_index_offset = 100000
 #ability_index_offset = 1000000 Abilities Todo
 
-def get_locations() -> List[LocationData]:
+def get_locations(player: Optional[int]) -> List[LocationData]:
     #Todo include crystals/job locations, NPC gifts, key items like squirrels, ore
     location_table: List[LocationData] = [
         #Zones (Beginner)
@@ -37,7 +38,7 @@ def get_locations() -> List[LocationData]:
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb near Shaku", 627 + npc_index_offset), #Secret Herb 0
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Map Nan", 84 + npc_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Nan Stew", 14 + npc_index_offset),
-        LocationData("Spawning Meadows", "Spawning Meadows NPC - Butterfly Goo", 194 + npc_index_offset), #Tree Fairy NPC seems to have the dialogue for this (ID 194)
+        LocationData("Spawning Meadows", "Spawning Meadows NPC - Butterfly Goo", 194 + npc_index_offset, lambda state: state.has('Item - Black Squirrel', player, 3)), #Tree Fairy NPC seems to have the dialogue for this (ID 194)
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Buttersquirrel on tree SW of spawn", 264 + npc_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Buttersquirrel on tree NW of spawn", 296 + npc_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Buttersquirrel on tree near lampposts", 110 + npc_index_offset),
