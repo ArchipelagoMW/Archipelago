@@ -85,7 +85,7 @@ peaks_list: dict[PeaksOfYoreRegion, list[ItemOrLocation]] = {
         ItemOrLocation('Old Mill', 2 + peak_offset),
         ItemOrLocation('Gray Gully', 3 + peak_offset),
         ItemOrLocation('Lighthouse', 4 + peak_offset),
-        ItemOrLocation('Old Man Of Sjor', 5 + peak_offset),
+        ItemOrLocation('Old Man Of Sjór', 5 + peak_offset),
         ItemOrLocation('Giants Shelf', 6 + peak_offset),
         ItemOrLocation("Evergreen's End", 7 + peak_offset),
         ItemOrLocation('The Twins', 8 + peak_offset),
@@ -131,14 +131,15 @@ ropes_list: dict[PeaksOfYoreRegion, list[ItemOrLocation]] = {
     PeaksOfYoreRegion.FUNDAMENTALS: [
         ItemOrLocation('Walters Crag: Rope (Co-Climb)', 0 + rope_offset),
         # the in game ropes are shuffled around a bit,
-        ItemOrLocation('Old Man Of Sjor: Rope', 4 + rope_offset),  # this is also why they are like this here
+        # this is also why they are in this weird order here
+        ItemOrLocation('Old Man Of Sjór: Rope', 4 + rope_offset),
         ItemOrLocation('Hangman\'s Leap: Rope', 5 + rope_offset),
         ItemOrLocation('Ugsome Storr: Rope', 6 + rope_offset),
         ItemOrLocation('Wuthering Crest: Rope', 9 + rope_offset),
         ItemOrLocation('Walter\'s Crag: Rope', 11 + rope_offset),
         ItemOrLocation('Land\'s End: Rope', 12 + rope_offset),
         ItemOrLocation('Evergreen\'s End: Rope', 13 + rope_offset),
-        ItemOrLocation('Great Crevice: Rope', 14 + rope_offset),
+        ItemOrLocation('The Great Crevice: Rope', 14 + rope_offset),
         ItemOrLocation('Old Hagger Rope', 15 + rope_offset),
     ],
     PeaksOfYoreRegion.INTERMEDIATE: [],
@@ -156,32 +157,32 @@ ropes_list: dict[PeaksOfYoreRegion, list[ItemOrLocation]] = {
 
 artefacts_list: dict[PeaksOfYoreRegion, list[ItemOrLocation]] = {
     PeaksOfYoreRegion.FUNDAMENTALS: [
-        ItemOrLocation('Hat', 0 + artefact_offset),
-        ItemOrLocation('Fisherman\'s Cap', 1 + artefact_offset),
-        ItemOrLocation('Safety Helmet', 2 + artefact_offset),
-        ItemOrLocation('Climbing Shoe', 3 + artefact_offset),
-        ItemOrLocation('Shovel', 4 + artefact_offset),
-        ItemOrLocation('Sleeping Bag', 5 + artefact_offset),
-        ItemOrLocation('Backpack', 6 + artefact_offset),
-        ItemOrLocation('Coffee Box (Old Langr)', 7 + artefact_offset, ItemClassification.useful),
-        ItemOrLocation('Coffee Box (Wuthering Crest)', 8 + artefact_offset, ItemClassification.useful),
-        ItemOrLocation('Picture Piece #1 (Gray Gully)', 14 + artefact_offset),
-        ItemOrLocation('Picture Piece #2 (Land\'s End)', 15 + artefact_offset),
-        ItemOrLocation('Picture Piece #3 (The Great Crevice)', 16 + artefact_offset),
-        ItemOrLocation('Fundamentals Trophy', 19 + artefact_offset),
+        ItemOrLocation('Old Mill: Hat', 0 + artefact_offset),
+        ItemOrLocation('Evergreen\'s End: Fisherman\'s Cap', 1 + artefact_offset),
+        ItemOrLocation('Old Grove\'s Skelf: Safety Helmet', 2 + artefact_offset),
+        ItemOrLocation('Old Man Of Sjór: Climbing Shoe', 3 + artefact_offset),
+        ItemOrLocation('Three Brothers: Shovel', 4 + artefact_offset),
+        ItemOrLocation('Giant\'s Shelf: Sleeping Bag', 5 + artefact_offset),
+        ItemOrLocation('Aldr Grotto: Backpack', 6 + artefact_offset),
+        ItemOrLocation('Old Langr: Coffee Box', 7 + artefact_offset, ItemClassification.useful),
+        ItemOrLocation('Wuthering Crest: Coffee Box', 8 + artefact_offset, ItemClassification.useful),
+        ItemOrLocation('Gray Gully: Picture Piece #1', 14 + artefact_offset),
+        ItemOrLocation('Land\'s End: Picture Piece #2', 15 + artefact_offset),
+        ItemOrLocation('The Great Crevice: Picture Piece #3', 16 + artefact_offset),
+        ItemOrLocation('Walter\'s Crag: Fundamentals Trophy', 19 + artefact_offset),
     ],
     PeaksOfYoreRegion.INTERMEDIATE: [
-        ItemOrLocation('Intermediate Trophy', 11 + artefact_offset),
+        ItemOrLocation('Leaning Spire: Intermediate Trophy', 11 + artefact_offset),
     ],
     PeaksOfYoreRegion.ADVANCED: [
-        ItemOrLocation('Chalk Box (Walker\'s Pillar)', 9 + artefact_offset, ItemClassification.useful),
-        ItemOrLocation('Chalk Box (Eldenhorn)', 10 + artefact_offset, ItemClassification.useful),
-        ItemOrLocation('Advanced Trophy', 12 + artefact_offset),
-        ItemOrLocation('Picture Piece #4 (St. Haelga)', 17 + artefact_offset),
-        ItemOrLocation('Picture Frame', 18 + artefact_offset),
+        ItemOrLocation('Walker\'s Pillar: Chalk Box', 9 + artefact_offset, ItemClassification.useful),
+        ItemOrLocation('Eldenhorn: Chalk Box', 10 + artefact_offset, ItemClassification.useful),
+        ItemOrLocation('Ymir\'s Shadow: Advanced Trophy', 12 + artefact_offset),
+        ItemOrLocation('St. Haelga: Picture Piece #4', 17 + artefact_offset),
+        ItemOrLocation('Great Gaol: Picture Frame', 18 + artefact_offset),
     ],
     PeaksOfYoreRegion.EXPERT: [
-        ItemOrLocation('Expert Trophy', 13 + artefact_offset),
+        ItemOrLocation('The Great Bulwark: Expert Trophy', 13 + artefact_offset),
     ],
     PeaksOfYoreRegion.NONE: []
 }
@@ -201,14 +202,14 @@ books_list: dict[PeaksOfYoreRegion, list[ItemOrLocation]] = {
 
 bird_seeds_list: dict[PeaksOfYoreRegion, list[ItemOrLocation]] = {
     PeaksOfYoreRegion.FUNDAMENTALS: [
-        ItemOrLocation('Bird Seed (Three Brothers)', 0 + bird_seed_offset),
+        ItemOrLocation('Three Brothers: Bird Seed', 0 + bird_seed_offset),
     ],
     PeaksOfYoreRegion.INTERMEDIATE: [
-        ItemOrLocation('Bird Seed (Old Skerry)', 1 + bird_seed_offset),
+        ItemOrLocation('Old Skerry: Bird Seed', 1 + bird_seed_offset),
     ],
     PeaksOfYoreRegion.ADVANCED: [
-        ItemOrLocation('Bird Seed (Great Gaol)', 2 + bird_seed_offset),
-        ItemOrLocation('Bird Seed (Eldenhorn)', 3 + bird_seed_offset),
+        ItemOrLocation('Great Gaol: Bird Seed', 2 + bird_seed_offset),
+        ItemOrLocation('Eldenhorn: Bird Seed', 3 + bird_seed_offset),
     ],
     PeaksOfYoreRegion.EXPERT: [],
     PeaksOfYoreRegion.NONE: []
@@ -249,6 +250,7 @@ extra_items_list: dict[PeaksOfYoreRegion, list[ItemOrLocation]] = {
     ]
 }
 
+# item lists below are generated based on previous lists
 free_solo_peak_list: dict[PeaksOfYoreRegion, list[ItemOrLocation]] = {
     PeaksOfYoreRegion.FUNDAMENTALS: [],
     PeaksOfYoreRegion.INTERMEDIATE: [],
@@ -260,33 +262,33 @@ free_solo_peak_list: dict[PeaksOfYoreRegion, list[ItemOrLocation]] = {
 }
 
 time_attack_time_list: dict[PeaksOfYoreRegion, list[ItemOrLocation]] = {
-    PeaksOfYoreRegion.FUNDAMENTALS: [p.offset(time_attack_time_offset - peak_offset, "Time record: " + p.name) for p
+    PeaksOfYoreRegion.FUNDAMENTALS: [p.offset(time_attack_time_offset - peak_offset, p.name + ": Time record") for p
                                      in peaks_list[PeaksOfYoreRegion.FUNDAMENTALS]],
-    PeaksOfYoreRegion.INTERMEDIATE: [p.offset(time_attack_time_offset - peak_offset, "Time record: " + p.name) for p
+    PeaksOfYoreRegion.INTERMEDIATE: [p.offset(time_attack_time_offset - peak_offset, p.name + ": Time record") for p
                                      in peaks_list[PeaksOfYoreRegion.INTERMEDIATE]],
-    PeaksOfYoreRegion.ADVANCED: [p.offset(time_attack_time_offset - peak_offset, "Time record: " + p.name) for p in
+    PeaksOfYoreRegion.ADVANCED: [p.offset(time_attack_time_offset - peak_offset, p.name + ": Time record") for p in
                                  peaks_list[PeaksOfYoreRegion.ADVANCED]],
     PeaksOfYoreRegion.EXPERT: [],
     PeaksOfYoreRegion.NONE: []
 }
 
 time_attack_holds_list: dict[PeaksOfYoreRegion, list[ItemOrLocation]] = {
-    PeaksOfYoreRegion.FUNDAMENTALS: [p.offset(time_attack_holds_offset - peak_offset, "Holds record: " + p.name) for p
+    PeaksOfYoreRegion.FUNDAMENTALS: [p.offset(time_attack_holds_offset - peak_offset, p.name + ": Holds record") for p
                                      in peaks_list[PeaksOfYoreRegion.FUNDAMENTALS]],
-    PeaksOfYoreRegion.INTERMEDIATE: [p.offset(time_attack_holds_offset - peak_offset, "Holds record: " + p.name) for p
+    PeaksOfYoreRegion.INTERMEDIATE: [p.offset(time_attack_holds_offset - peak_offset, p.name + ": Holds record") for p
                                      in peaks_list[PeaksOfYoreRegion.INTERMEDIATE]],
-    PeaksOfYoreRegion.ADVANCED: [p.offset(time_attack_holds_offset - peak_offset, "Holds record: " + p.name) for p in
+    PeaksOfYoreRegion.ADVANCED: [p.offset(time_attack_holds_offset - peak_offset, p.name + ": Holds record") for p in
                                  peaks_list[PeaksOfYoreRegion.ADVANCED]],
     PeaksOfYoreRegion.EXPERT: [],
     PeaksOfYoreRegion.NONE: []
 }
 
 time_attack_ropes_list: dict[PeaksOfYoreRegion, list[ItemOrLocation]] = {
-    PeaksOfYoreRegion.FUNDAMENTALS: [p.offset(time_attack_ropes_offset - peak_offset, "Ropes record: " + p.name) for p
+    PeaksOfYoreRegion.FUNDAMENTALS: [p.offset(time_attack_ropes_offset - peak_offset, p.name + ": Ropes record") for p
                                      in peaks_list[PeaksOfYoreRegion.FUNDAMENTALS]],
-    PeaksOfYoreRegion.INTERMEDIATE: [p.offset(time_attack_ropes_offset - peak_offset, "Ropes record: " + p.name) for p
+    PeaksOfYoreRegion.INTERMEDIATE: [p.offset(time_attack_ropes_offset - peak_offset, p.name + ": Ropes record") for p
                                      in peaks_list[PeaksOfYoreRegion.INTERMEDIATE]],
-    PeaksOfYoreRegion.ADVANCED: [p.offset(time_attack_ropes_offset - peak_offset, "Ropes record: " + p.name) for p in
+    PeaksOfYoreRegion.ADVANCED: [p.offset(time_attack_ropes_offset - peak_offset, p.name + ": Ropes record") for p in
                                  peaks_list[PeaksOfYoreRegion.ADVANCED]],
     PeaksOfYoreRegion.EXPERT: [],
     PeaksOfYoreRegion.NONE: []
@@ -316,7 +318,7 @@ def create_full_location_table() -> dict[str: ItemOrLocation]:
 
 def create_full_item_table() -> dict[str:ItemOrLocation]:
     ropes = {i.name: i for i in get_all_items_or_locations(ropes_list)}
-    artefacts = {i.name: i for i in get_all_items_or_locations(artefacts_list)}
+    artefacts = {i.name: i for i in get_all_items_or_locations(artefacts_list)} # remove peak name from Artefact name
     books = {i.name: i for i in get_all_items_or_locations(books_list)}
     bird_seeds = {i.name: i for i in get_all_items_or_locations(bird_seeds_list)}
     tools = {i.name: i for i in get_all_items_or_locations(tools_list)}
