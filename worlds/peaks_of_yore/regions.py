@@ -95,7 +95,7 @@ def create_region(name: str, region_enum: PeaksOfYoreRegion, item_requirements: 
         peaks_region.connect(time_attack_region, name + " Time Attack Connection",
                              lambda state: state.has("Pocketwatch", world.player))
 
-    return RegionLocationInfo(artefacts.keys(), peaks.keys())
+    return RegionLocationInfo([*artefacts.keys()], [*peaks.keys()])
 
 
 def locations_to_dict(locations: list[ItemOrLocation]) -> dict[str: int]:
