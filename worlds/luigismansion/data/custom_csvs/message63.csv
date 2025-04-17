@@ -6,4 +6,6 @@ CLOSE
 <COLOR>(1){SendPlayer}'s{BreakHere}<COLOR>(1){WorldOrLoc}
 <COLOR>(0)Due to unforeseen circumstances,{BreakHere}<COLOR>(0)I saw nothing in the mansion.{BreakHere}<COLOR>(0)Perhaps, next time, enable hints.
 {JokeText}
+<COLOR>(0)Here's a mushroom for you Luigi
+HEAL
 IGNORE

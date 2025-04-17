@@ -3,7 +3,7 @@
 <LUIGISTOP2>
 <FLAGON>(109)
 <BGM>(11)
-<CHOICE>"Hint"(1)"Save"(2)"Close"(3)<LISTEND>
+<CHOICE>"Hint"(1)"Save"(2)"Heal"(9)"Close"(3)<LISTEND>
 <ANYKEY>
 -------------------------
 <CASE>"Hint"
@@ -44,6 +44,12 @@
 ------------------------
 <CASE>"Save"
 <SAVE>
+<RAMDOMJMP>"Close"
+-------------------------
+<CASE>"Heal"
+<SPEAK>(8)
+<ANYKEY>
+<ACTOR>"demo_luigi"<HP>({LUIGIMAXHP})
 <RAMDOMJMP>"Close"
 -------------------------
 <CASE>"Close"

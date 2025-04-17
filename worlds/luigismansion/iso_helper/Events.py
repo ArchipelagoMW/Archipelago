@@ -267,7 +267,7 @@ def randomize_clairvoya(gcm: GCM, req_mario_count: str, hint_distribution_choice
     return __update_custom_event(gcm, "36", True, lines, csv_lines)
 
 # Writes all the in game hints for everything except clairvoya
-def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict[str, dict[str, str]],
+def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict[str, dict[str, str]], maxhp: str,
     seed: str) -> GCM:
     random.seed(seed)
     for hint_name in ALWAYS_HINT:
@@ -337,6 +337,8 @@ def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict
 
         csv_lines = csv_lines.replace("{BreakHere}", "\n")
         lines = lines.replace("{HintType}", case_type)
+        if event_no in [4, 17, 32, 63]:
+            lines = lines.replace("{LUIGIMAXHP}", maxhp)
 
         if event_no == 4:
             gcm = __update_custom_event(gcm, "04", True, lines, csv_lines)
