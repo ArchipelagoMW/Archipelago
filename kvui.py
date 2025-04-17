@@ -738,16 +738,27 @@ class MDNavigationItemUnderline(Widget):
 
 class MDScreenManagerBase(MDScreenManager):
     underline_bar: MDNavigationItemUnderline
+    current_tab: MDNavigationItemBase
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.bind(size=self.update_underline, pos=self.update_underline)
+
     def switch_screens(self, new_tab: MDNavigationItemBase) -> None:
+
         name = new_tab.text
         if self.screen_names.index(name) > self.screen_names.index(self.current_screen.name):
             self.transition.direction = "left"
         else:
             self.transition.direction = "right"
         self.current = name
-        self.update_underline(new_tab)
+        self.current_tab = new_tab
+        self.update_underline()
 
-    def update_underline(self, tab: MDNavigationItemBase) -> None:
+    def update_underline(self, *args) -> None:
+        tab = self.current_tab
+        if self.underline_bar is None or tab is None:
+            return
         self.underline_bar.line.points = [tab.x, tab.y, tab.right, tab.y]
         self.underline_bar.canvas.before.children[0].rgba = MDApp.get_running_app().theme_cls.primaryColor
 
@@ -850,11 +861,11 @@ class GameManager(ThemedApp):
         # middle part
         self.screens = MDScreenManagerBase(pos_hint={"center_x": 0.5})
         self.tabs = MDNavigationBar(orientation="horizontal", size_hint_y=None, height=dp(40), set_bars_color=True)
-        log_panel = self.log_panels["All"] = self.add_client_tab(
+        self.screens.current_tab = self.log_panels["All"] = self.add_client_tab(
             "All" if len(self.logging_pairs) > 1 else "Archipelago",
             UILog(*(logging.getLogger(logger_name) for logger_name, name in self.logging_pairs)),
         )
-        log_panel.active = True
+        self.log_panels["All"].active = True
         self.screens.underline_bar = MDNavigationItemUnderline()
 
         for logger_name, display_name in self.logging_pairs:
