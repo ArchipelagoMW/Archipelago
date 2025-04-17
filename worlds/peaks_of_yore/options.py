@@ -20,7 +20,6 @@ class Goal(Choice):
     option_all = 4
     default = 0
 
-
 class StartingBook(Choice):
     """
     Choose what book to start with. If the book is not enabled, the easiest enabled book will be chosen.
@@ -43,11 +42,9 @@ class StartingBook(Choice):
             return "Advanced Book"
         return "Expert Book"
 
-
 class StartWithBarometer(DefaultOnToggle):
     """Choose to start with the barometer, to locate items quicker"""
     display_name = "Start with Barometer"
-
 
 class StartWithOilLamp(Toggle):
     """
@@ -55,7 +52,6 @@ class StartWithOilLamp(Toggle):
     Also works with the Idol of Sundown.
     """
     display_name = "Start with Oil Lamp"
-
 
 class StartingHands(Choice):
     """
@@ -67,13 +63,11 @@ class StartingHands(Choice):
     option_left = 1
     option_right = 2
 
-
 class EarlyHands(DefaultOnToggle):
     """
     Choose whether the missing hand will be placed earlier in the run.
     """
     display_name = "Early Hands"
-
 
 class RopeUnlockMode(Choice):
     """
@@ -89,37 +83,31 @@ class RopeUnlockMode(Choice):
     option_normal = 2
     default = 1
 
-
 class EnableFundamental(DefaultOnToggle):
     """Enables Fundamentals book, items and collectibles"""
     display_name = "Fundamental Peaks"
-
 
 class EnableIntermediate(DefaultOnToggle):
     """Enables Intermediate book, items and collectibles"""
     display_name = "Intermediate Peaks"
 
-
 class EnableAdvanced(DefaultOnToggle):
     """Enables Advanced book, items and collectibles"""
     display_name = "Advanced Peaks"
-
 
 class EnableExpert(DefaultOnToggle):
     """Enables Expert book, items and collectibles"""
     display_name = "Expert Peaks"
 
-
 class DisableSolemnTempest(DefaultOnToggle):
     """Removes Solemn Tempest from the locations pool, has no effect if **Enable Expert Peaks** is disabled"""
     display_name = "Disable Solemn Tempest"
 
-
-class IncludeFreeSolo(Toggle):
+class IncludeFreeSolo(DefaultOnToggle):
     """Add Free Solo Peaks to the pool"""
     display_name = "Include Free Solo Peaks"
 
-class IncludeTimeAttack(Toggle):
+class IncludeTimeAttack(DefaultOnToggle):
     """Adds beating peak time, hold and rope counts as checks"""
     display_name = "Include Time Attack Challenges"
 
@@ -144,6 +132,31 @@ poy_option_groups = [
     ]),
 ]
 
+poy_option_presets: dict[str, dict[str, any]] = {
+    "Challenging": {
+        "death_link": True,
+        "starting_book": "intermediate",
+        "enable_expert": False,
+        "start_with_hands": "left",
+        "start_with_barometer": False,
+        "rope_unlock_mode": "normal",
+        "early_hands": True
+    },
+    "Hard": {
+        "goal": "all",
+        "death_link": True,
+        "starting_book": "random",
+        "enable_fundamental": True,
+        "enable_intermediate": True,
+        "enable_advanced": True,
+        "enable_expert": True,
+        "disable_solemn_tempest": False,
+        "start_with_hands": "left",
+        "start_with_barometer": False,
+        "rope_unlock_mode": "normal",
+        "early_hands": False
+    }
+}
 
 @dataclass
 class PeaksOfYoreOptions(PerGameCommonOptions):
@@ -163,3 +176,4 @@ class PeaksOfYoreOptions(PerGameCommonOptions):
     include_free_solo: IncludeFreeSolo
     include_time_attack: IncludeTimeAttack
     start_inventory_from_pool: StartInventoryPool
+

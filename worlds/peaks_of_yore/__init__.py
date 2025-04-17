@@ -4,7 +4,7 @@ from typing import Any
 from Options import Toggle, OptionError
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial, Item
-from .options import PeaksOfYoreOptions, Goal, StartingBook, RopeUnlockMode, StartingHands, poy_option_groups
+from .options import PeaksOfYoreOptions, Goal, StartingBook, RopeUnlockMode, StartingHands, poy_option_groups, poy_option_presets
 from .data import *
 
 from .regions import create_poy_regions, RegionLocationInfo
@@ -26,6 +26,7 @@ class PeaksOfWeb(WebWorld):
         ["c0der23"]
     )]
     option_groups = poy_option_groups
+    options_presets = poy_option_presets
 
 
 class PeaksOfWorld(World):
