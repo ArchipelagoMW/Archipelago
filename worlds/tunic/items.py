@@ -48,6 +48,7 @@ item_table: Dict[str, TunicItemData] = {
     "Gun": TunicItemData(IC.progression | IC.useful, 1, 30, "Weapons"),
     "Shield": TunicItemData(IC.useful, 1, 31, combat_ic=IC.progression | IC.useful),
     "Dath Stone": TunicItemData(IC.useful, 1, 32),
+    "Torch": TunicItemData(IC.useful, 0, 156),
     "Hourglass": TunicItemData(IC.useful, 1, 33),
     "Old House Key": TunicItemData(IC.progression, 1, 34, "Keys"),
     "Key": TunicItemData(IC.progression, 2, 35, "Keys"),
@@ -102,6 +103,10 @@ item_table: Dict[str, TunicItemData] = {
     "Forever Friend": TunicItemData(IC.useful, 1, 84, "Golden Treasures", combat_ic=IC.progression),
     "Fool Trap": TunicItemData(IC.trap, 0, 85),
     "Money x1": TunicItemData(IC.filler, 3, 86, "Money"),
+    "Money x2": TunicItemData(IC.filler, 0, 152, "Money"),
+    "Money x3": TunicItemData(IC.filler, 0, 153, "Money"),
+    "Money x4": TunicItemData(IC.filler, 0, 154, "Money"),
+    "Money x5": TunicItemData(IC.filler, 0, 155, "Money"),
     "Money x10": TunicItemData(IC.filler, 1, 87, "Money"),
     "Money x15": TunicItemData(IC.filler, 10, 88, "Money"),
     "Money x16": TunicItemData(IC.filler, 1, 89, "Money"),
@@ -211,7 +216,7 @@ slot_data_item_names = [
 
 combat_items: List[str] = [name for name, data in item_table.items()
                            if data.combat_ic and IC.progression in data.combat_ic]
-combat_items.extend(["Stick", "Sword", "Sword Upgrade", "Magic Wand", "Hero's Laurels"])
+combat_items.extend(["Stick", "Sword", "Sword Upgrade", "Magic Wand", "Hero's Laurels", "Gun"])
 
 item_name_to_id: Dict[str, int] = {name: item_base_id + data.item_id_offset for name, data in item_table.items()}
 
@@ -248,6 +253,7 @@ extra_groups: Dict[str, Set[str]] = {
     "Ladders in Atoll": {"Ladders in South Atoll"},
     "Ladders in Ruined Atoll": {"Ladders in South Atoll"},
     "Ladders in Town": {"Ladders in Overworld Town"},  # fuzzy matching decided this was Ladders in South Atoll
+    "Ladder in Quarry": {"Ladders in Lower Quarry"},  # fuzzy matching decided this was Ladder to Quarry
 }
 
 item_name_groups.update(extra_groups)
