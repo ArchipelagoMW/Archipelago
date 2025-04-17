@@ -116,7 +116,12 @@ class _RestrictiveFillBatcher:
         The items in this list must also be present in `reachable_items`.
         """
 
-        batch_sweep_state: CollectionState | None
+        batch_partial_exploration_state: CollectionState | None
+        """
+        An exploration state containing the items reachable starting from `batch_base_state`.
+        
+        Maximum exploration states and some swap states will be swept from `batch_partial_exploration_state`.
+        """
 
         def __init__(self,
                      batch_base_state: CollectionState,
@@ -132,7 +137,7 @@ class _RestrictiveFillBatcher:
             self.batched_placements_remaining = batched_placements_remaining
             self.reachable_items = reachable_items
 
-            self.batch_sweep_state = None
+            self.batch_partial_exploration_state = None
 
         @abc.abstractmethod
         def _pop_items_to_place(self) -> list[Item]:
@@ -203,23 +208,23 @@ class _RestrictiveFillBatcher:
             :param unplaced_items: All items that could not be placed at any location.
             :return: A CollectionState that has collected all reachable advancement items.
             """
-            batch_sweep_state = self.batch_sweep_state
+            partial_exploration_state = self.batch_partial_exploration_state
 
-            # Create the initial batch sweep state or recreate it if it was destroyed by a swap.
-            if batch_sweep_state is None:
+            # Create the initial partial exploration state or recreate it if it was destroyed by a swap.
+            if partial_exploration_state is None:
                 # `locations=None` defaults to `multiworld.get_filled_locations()`, so only get it once for both the
-                # batch sweep state and the maximum exploration state.
+                # batch's partial exploration state and the maximum exploration state.
                 if explore_locations is None:
                     explore_locations = self.batch_base_state.multiworld.get_filled_locations()
                 # batch_base_state has already collected all items that still need to be placed, but are not being
                 # placed in this batch.
-                batch_sweep_state = sweep_from_pool(self.batch_base_state, locations=explore_locations)
-                self.batch_sweep_state = batch_sweep_state
+                partial_exploration_state = sweep_from_pool(self.batch_base_state, locations=explore_locations)
+                self.batch_partial_exploration_state = partial_exploration_state
 
             maximum_exploration_state = sweep_from_pool(
                 # Collect items in this batch that have yet to be removed in order to be placed, and collect all items
                 # that could not be placed at any location.
-                batch_sweep_state, self.batch_item_pool + unplaced_items, explore_locations)
+                partial_exploration_state, self.batch_item_pool + unplaced_items, explore_locations)
 
             return maximum_exploration_state
 
@@ -235,12 +240,13 @@ class _RestrictiveFillBatcher:
             assert self.batch_empty_spaces[displaced_item.player] > 0
             self.batch_item_pool.append(displaced_item)
             self.batch_empty_spaces[displaced_item.player] -= 1
-            if self.batch_sweep_state is not None and swap_location in self.batch_sweep_state.advancements:
-                # If that batch's sweep state has collected the item from the swapped location, the state is now
-                # invalid. It must be re-created because it has collected the displaced item and the displaced item is
-                # now also in `batch_item_pool`, so the next `maximum_exploration_state` would end up having collected
-                # the displaced item twice.
-                self.batch_sweep_state = None
+            if (self.batch_partial_exploration_state is not None
+                    and swap_location in self.batch_partial_exploration_state.advancements):
+                # If that batch's partial exploration state has collected the item from the swapped location, the state
+                # is now invalid. It must be re-created because it has collected the displaced item and the displaced
+                # item is now also in `batch_item_pool`, so the next `maximum_exploration_state` would end up having
+                # collected the displaced item twice.
+                self.batch_partial_exploration_state = None
 
         def _add_swapped_item_into_future_batch(self, displaced_item: Item, item_to_place: Item,
                                                 swap_location: Location) -> None:
@@ -255,30 +261,31 @@ class _RestrictiveFillBatcher:
             # A batch's base state collects all items which are yet to be placed and which are not going to be placed as
             # part of the batch. The displaced item matches these criteria, so collect the item.
             self.batch_base_state.collect(displaced_item, True)
-            # A batch's sweep state is swept from its batch's base state, so it needs to collect the item too, but only
-            # if it had not already collected the item.
-            batch_sweep_state = self.batch_sweep_state
-            # The batch sweep state may have been destroyed by a previous `_add_swapped_item_into_batch` swap, in which
-            # case, it will not exist.
-            if batch_sweep_state is not None:
-                if swap_location not in batch_sweep_state.advancements:
-                    # The sweep state had not already collected the un-placed item by sweeping, so collect the item.
-                    batch_sweep_state.collect(displaced_item, True)
+            # A batch's partial exploration state is swept from its batch's base state, so it needs to collect the item
+            # too, but only if it had not already collected the item.
+            partial_exploration_state = self.batch_partial_exploration_state
+            # The batch's partial exploration state may have been destroyed by a previous `_add_swapped_item_into_batch`
+            # swap, in which case, it will not exist.
+            if partial_exploration_state is not None:
+                if swap_location not in partial_exploration_state.advancements:
+                    # The partial exploration state had not already collected the un-placed item by sweeping, so collect
+                    # the item.
+                    partial_exploration_state.collect(displaced_item, True)
                 else:
-                    # The batch's sweep state had already collected the displaced item from `spot_to_fill`.
-                    # Rather than destroying the batch's sweep state, it can be adjusted.
+                    # The partial exploration state had already collected the displaced item from `spot_to_fill`.
+                    # Rather than destroying the partial exploration state, it can be adjusted.
                     # Collect the item being placed if `spot_to_fill` is still reachable.
-                    if swap_location.can_reach(batch_sweep_state):
+                    if swap_location.can_reach(partial_exploration_state):
                         # This is slightly faster than removing `spot_to_fill` from the state's collected advancement
                         # locations and requiring future maximum exploration states sweep to pick up `item_to_place`
                         # from `swap_location`.
-                        batch_sweep_state.collect(item_to_place, True)
+                        partial_exploration_state.collect(item_to_place, True)
                     else:
                         # In minimal accessibility or in rare cases where `spot_to_fill` was only reachable because of
                         # the item that was placed at it, e.g. self-locking keys, `spot_to_fill` can be unreachable.
                         # Future sweeps will have to retry `spot_to_fill`, so remove it from the state's set of
                         # collected advancement locations.
-                        batch_sweep_state.advancements.remove(swap_location)
+                        partial_exploration_state.advancements.remove(swap_location)
 
         def update_for_swap(self, displaced_item: Item, item_to_place: Item, swap_location: Location) -> None:
             """
@@ -311,12 +318,11 @@ class _RestrictiveFillBatcher:
                 by continuing to swap.
             :return: A fully swept CollectionState for the swap attempt.
             """
-            # Use the batch's sweep state as the base state if it has not explored the location of the swap attempt.
-            # This reduces sweeping costs.
-            batch_sweep_state = self.batch_sweep_state
-            if (batch_sweep_state is not None
-                    and location not in batch_sweep_state.advancements):
-                swap_base_state = batch_sweep_state
+            # Use the batch's partial exploration state as the base state if it has not explored the location of the
+            # swap attempt. This reduces sweeping costs.
+            partial_exploration_state = self.batch_partial_exploration_state
+            if partial_exploration_state is not None and location not in partial_exploration_state.advancements:
+                swap_base_state = partial_exploration_state
             else:
                 swap_base_state = self.batch_base_state
 
