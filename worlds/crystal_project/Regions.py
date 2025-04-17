@@ -23,9 +23,12 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
         create_region(world, player, locations_per_region, "Soiled Den"),
         create_region(world, player, locations_per_region, "Pale Grotto"),
         create_region(world, player, locations_per_region, "Seaside Cliffs"),
+        create_region(world, player, locations_per_region, "Draft Shaft Conduit"),
+        create_region(world, player, locations_per_region, "Mercury Shrine"),
         create_region(world, player, locations_per_region, "Proving Meadows"),
         create_region(world, player, locations_per_region, "Yamagawa M.A."),
         create_region(world, player, locations_per_region, "Lake Delende")
+        
     ]
 
     multiworld.regions += regions
