@@ -1,6 +1,6 @@
 from operator import itemgetter
 import random
-from typing import TypedDict, ClassVar, Callable, Any
+from typing import TypedDict, ClassVar, Callable, Any, Mapping
 from unittest import TestCase
 
 # Imported before importing from Fill to prevent circular imports in spawned processes, when run as part of the full
@@ -237,7 +237,7 @@ class TestDeterministicGeneration(TestCase):
         # Python process.
         return hash("This string is hashed to check that one process' hash seed differs from another")
 
-    def assertDictEqualDiffMismatchedOnly(self, d1: dict, d2: dict, msg=None) -> None:
+    def assertDictEqualDiffMismatchedOnly(self, d1: Mapping[Any, object], d2: Mapping[Any, object], msg=None) -> None:
         """
         assertDictEqual's output on failure is not very readable for large dictionaries because it makes a diff of the
         entire dictionaries, rather than only the differences.
@@ -250,8 +250,8 @@ class TestDeterministicGeneration(TestCase):
         if d1 == d2:
             return
         # Produce copies of the dictionaries with equal items removed.
-        d1_mismatched = d1.copy()
-        d2_mismatched = d2.copy()
+        d1_mismatched = d1.copy()  # type: ignore
+        d2_mismatched = d2.copy()  # type: ignore
         for k, v1 in d1.items():
             if k in d2:
                 v2 = d2[k]
@@ -264,7 +264,9 @@ class TestDeterministicGeneration(TestCase):
         self.fail("Dictionaries were not equal, but they somehow had all the same keys and values."
                   + "" if msg is None else f" : {msg}")
 
-    def assertDictKeysEqual(self, d1: dict, d2: dict, msg=None) -> None:
+    def assertDictKeysEqual(self, d1: Mapping[Any, object], d2: Mapping[Any, object], msg=None) -> None:
+        self.assertIsInstance(d1, dict, msg)
+        self.assertIsInstance(d2, dict, msg)
         # Provides better failure output than comparing dict keys directly.
         self.assertEqual(set(d1.keys()), set(d2.keys()), msg)
 
