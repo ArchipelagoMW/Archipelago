@@ -1,4 +1,4 @@
-from enum import IntEnum
+from enum import IntEnum, StrEnum
 from typing import Callable, Optional, TYPE_CHECKING, Dict
 
 from BaseClasses import Region, MultiWorld, Entrance, CollectionState
@@ -22,84 +22,96 @@ from .rules import weapon_is_at_least, armor_is_at_least, chocolate_count, can_f
 if TYPE_CHECKING:
     from . import CandyBox2World
 
-class Groups(IntEnum):
-    QUESTS = 1
+class CandyBox2RandomizationGroup(IntEnum):
+    QUEST = 1
     X_QUEST = 2
+    ROOM = 3
 
-class CandyBox2Quest(IntEnum):
-    THE_CELLAR = 0
-    THE_DESERT = 1
-    THE_BRIDGE = 2
-    THE_OCTOPUS_KING = 3
-    THE_NAKED_MONKEY_WIZARD = 4
-    THE_SEA = 5
-    THE_FOREST = 6
-    THE_CASTLE_ENTRANCE = 7
-    THE_HOLE = 8
-    THE_GIANT_NOUGAT_MONSTER = 9
-    THE_CASTLE_TRAP_ROOM = 10
-    THE_CASTLE_EGG_ROOM = 11
-    HELL = 12
-    THE_DEVELOPER = 13
-    THE_XINOPHERYDON = 14
-    THE_TEAPOT = 15
-    THE_LEDGE_ROOM = 16
-    THE_X_POTION = 17
+class CandyBox2Room(StrEnum):
+    QUEST_THE_CELLAR = "THE_CELLAR"
+    QUEST_THE_DESERT = "THE_DESERT"
+    QUEST_THE_BRIDGE = "THE_BRIDGE"
+    QUEST_THE_OCTOPUS_KING = "THE_OCTOPUS_KING"
+    QUEST_THE_NAKED_MONKEY_WIZARD = "THE_NAKED_MONKEY_WIZARD"
+    QUEST_THE_SEA = "THE_SEA"
+    QUEST_THE_FOREST = "THE_FOREST"
+    QUEST_THE_CASTLE_ENTRANCE = "THE_CASTLE_ENTRANCE"
+    QUEST_THE_HOLE = "THE_HOLE"
+    QUEST_THE_GIANT_NOUGAT_MONSTER = "THE_GIANT_NOUGAT_MONSTER"
+    QUEST_THE_CASTLE_TRAP_ROOM = "THE_CASTLE_TRAP_ROOM"
+    QUEST_THE_CASTLE_EGG_ROOM = "THE_CASTLE_EGG_ROOM"
+    QUEST_HELL = "HELL"
+    QUEST_THE_DEVELOPER = "THE_DEVELOPER"
+    QUEST_THE_XINOPHERYDON = "THE_XINOPHERYDON"
+    QUEST_THE_TEAPOT = "THE_TEAPOT"
+    QUEST_THE_LEDGE_ROOM = "THE_LEDGE_ROOM"
+    QUEST_THE_X_POTION = "THE_X_POTION"
 
 
 class CandyBox2Region(Region):
     def __init__(self, name: str, player: int, multiworld: MultiWorld, hint: Optional[str] = None):
         super().__init__(name, player, multiworld, hint)
 
-quest_names: Dict[CandyBox2Quest, str] = {
-    CandyBox2Quest.THE_CELLAR: "THE_CELLAR",
-    CandyBox2Quest.THE_DESERT: "THE_DESERT",
-    CandyBox2Quest.THE_BRIDGE: "THE_BRIDGE",
-    CandyBox2Quest.THE_OCTOPUS_KING: "THE_OCTOPUS_KING",
-    CandyBox2Quest.THE_NAKED_MONKEY_WIZARD: "THE_NAKED_MONKEY_WIZARD",
-    CandyBox2Quest.THE_SEA: "THE_SEA",
-    CandyBox2Quest.THE_FOREST: "THE_FOREST",
-    CandyBox2Quest.THE_CASTLE_ENTRANCE: "THE_CASTLE_ENTRANCE",
-    CandyBox2Quest.THE_HOLE: "THE_HOLE",
-    CandyBox2Quest.THE_GIANT_NOUGAT_MONSTER: "THE_GIANT_NOUGAT_MONSTER",
-    CandyBox2Quest.THE_CASTLE_TRAP_ROOM: "THE_CASTLE_TRAP_ROOM",
-    CandyBox2Quest.THE_CASTLE_EGG_ROOM: "THE_CASTLE_EGG_ROOM",
-    CandyBox2Quest.HELL: "HELL",
-    CandyBox2Quest.THE_DEVELOPER: "THE_DEVELOPER",
-    CandyBox2Quest.THE_XINOPHERYDON: "THE_XINOPHERYDON",
-    CandyBox2Quest.THE_TEAPOT: "THE_TEAPOT",
-    CandyBox2Quest.THE_LEDGE_ROOM: "THE_LEDGE_ROOM",
-    CandyBox2Quest.THE_X_POTION: "THE_X_POTION",
-}
-quest_names_reverse = {v: k for k, v in quest_names.items()}
-
-quest_friendly_names: Dict[CandyBox2Quest, str] = {
-    CandyBox2Quest.THE_CELLAR: "Quest: The Cellar",
-    CandyBox2Quest.THE_DESERT: "Quest: The Desert",
-    CandyBox2Quest.THE_BRIDGE: "Quest: The Bridge",
-    CandyBox2Quest.THE_OCTOPUS_KING: "Quest: The Octopus King",
-    CandyBox2Quest.THE_NAKED_MONKEY_WIZARD: "Quest: The Naked Monkey Wizard",
-    CandyBox2Quest.THE_SEA: "Quest: The Sea",
-    CandyBox2Quest.THE_FOREST: "Quest: The Forest",
-    CandyBox2Quest.THE_CASTLE_ENTRANCE: "Quest: The Castle Entrance",
-    CandyBox2Quest.THE_HOLE: "Quest: The Hole",
-    CandyBox2Quest.THE_GIANT_NOUGAT_MONSTER: "Quest: The Giant Nougat Monster",
-    CandyBox2Quest.THE_CASTLE_TRAP_ROOM: "Quest: The Castle Trap Room",
-    CandyBox2Quest.THE_CASTLE_EGG_ROOM: "Quest: The Castle Egg Room",
-    CandyBox2Quest.HELL: "Quest: Hell",
-    CandyBox2Quest.THE_DEVELOPER: "Quest: The Developer",
-    CandyBox2Quest.THE_XINOPHERYDON: "Quest: The Xinopherydon",
-    CandyBox2Quest.THE_TEAPOT: "Quest: The Teapot",
-    CandyBox2Quest.THE_LEDGE_ROOM: "Quest: The Ledge Room",
-    CandyBox2Quest.THE_X_POTION: "Quest: Drink the X Potion",
+entrance_friendly_names: Dict[CandyBox2Room, str] = {
+    CandyBox2Room.QUEST_THE_CELLAR: "Quest: The Cellar",
+    CandyBox2Room.QUEST_THE_DESERT: "Quest: The Desert",
+    CandyBox2Room.QUEST_THE_BRIDGE: "Quest: The Bridge",
+    CandyBox2Room.QUEST_THE_OCTOPUS_KING: "Quest: The Octopus King",
+    CandyBox2Room.QUEST_THE_NAKED_MONKEY_WIZARD: "Quest: The Naked Monkey Wizard",
+    CandyBox2Room.QUEST_THE_SEA: "Quest: The Sea",
+    CandyBox2Room.QUEST_THE_FOREST: "Quest: The Forest",
+    CandyBox2Room.QUEST_THE_CASTLE_ENTRANCE: "Quest: The Castle Entrance",
+    CandyBox2Room.QUEST_THE_HOLE: "Quest: The Hole",
+    CandyBox2Room.QUEST_THE_GIANT_NOUGAT_MONSTER: "Quest: The Giant Nougat Monster",
+    CandyBox2Room.QUEST_THE_CASTLE_TRAP_ROOM: "Quest: The Castle Trap Room",
+    CandyBox2Room.QUEST_THE_CASTLE_EGG_ROOM: "Quest: The Castle Egg Room",
+    CandyBox2Room.QUEST_HELL: "Quest: Hell",
+    CandyBox2Room.QUEST_THE_DEVELOPER: "Quest: The Developer",
+    CandyBox2Room.QUEST_THE_XINOPHERYDON: "Quest: The Xinopherydon",
+    CandyBox2Room.QUEST_THE_TEAPOT: "Quest: The Teapot",
+    CandyBox2Room.QUEST_THE_LEDGE_ROOM: "Quest: The Ledge Room",
+    CandyBox2Room.QUEST_THE_X_POTION: "Quest: Drink the X Potion",
 }
 
-class CandyBox2QuestRegion(CandyBox2Region):
-    quest: CandyBox2Quest
+quests: list[CandyBox2Room] = [
+    CandyBox2Room.QUEST_THE_CELLAR,
+    CandyBox2Room.QUEST_THE_DESERT,
+    CandyBox2Room.QUEST_THE_BRIDGE,
+    CandyBox2Room.QUEST_THE_OCTOPUS_KING,
+    CandyBox2Room.QUEST_THE_NAKED_MONKEY_WIZARD,
+    CandyBox2Room.QUEST_THE_SEA,
+    CandyBox2Room.QUEST_THE_FOREST,
+    CandyBox2Room.QUEST_THE_CASTLE_ENTRANCE,
+    CandyBox2Room.QUEST_THE_HOLE,
+    CandyBox2Room.QUEST_THE_GIANT_NOUGAT_MONSTER,
+    CandyBox2Room.QUEST_THE_CASTLE_TRAP_ROOM,
+    CandyBox2Room.QUEST_THE_CASTLE_EGG_ROOM,
+    CandyBox2Room.QUEST_HELL,
+    CandyBox2Room.QUEST_THE_DEVELOPER,
+    CandyBox2Room.QUEST_THE_XINOPHERYDON,
+    CandyBox2Room.QUEST_THE_TEAPOT,
+    CandyBox2Room.QUEST_THE_LEDGE_ROOM,
+]
 
-    def __init__(self, quest: CandyBox2Quest, player: int, multiworld: MultiWorld):
-        super().__init__(quest_friendly_names[quest], player, multiworld, quest_friendly_names[quest])
-        self.quest = quest
+x_quest: list[CandyBox2Room] = [
+    CandyBox2Room.QUEST_THE_X_POTION
+]
+
+rooms: list[CandyBox2Room] = [
+
+]
+
+class CandyBox2RoomRegion(CandyBox2Region):
+    room: CandyBox2Room
+    randomization_group: CandyBox2RandomizationGroup
+
+    def __init__(self, room: CandyBox2Room, player: int, multiworld: MultiWorld):
+        super().__init__(entrance_friendly_names[room], player, multiworld, entrance_friendly_names[room])
+        self.room = room
+        if room in quests:
+            self.randomization_group = CandyBox2RandomizationGroup.QUEST
+        if room in x_quest:
+            self.randomization_group = CandyBox2RandomizationGroup.X_QUEST
 
 def create_regions(world: "CandyBox2World"):
     multiworld = world.multiworld
@@ -121,7 +133,7 @@ def create_regions(world: "CandyBox2World"):
     populate_region(world, player, CandyBox2Region("Village House 1", player, multiworld, "The house next to the forge in the village"), village_house_1_locations, village)
     village_house_2 = populate_region(world, player, CandyBox2Region("Village House 2", player, multiworld, "The house with the Cellar quest"), village_house_2_locations, village)
 
-    populate_region(world, player, CandyBox2QuestRegion(CandyBox2Quest.THE_CELLAR, player, multiworld), village_cellar_locations, village_house_2, lambda state: weapon_is_at_least(
+    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_CELLAR, player, multiworld), village_cellar_locations, village_house_2, lambda state: weapon_is_at_least(
         world, state, player, "Wooden Sword"))
 
     forge_1 = populate_region(world, player, CandyBox2Region("The Forge 1", player, multiworld, "The Forge in the village"), forge_1_locations, village)
@@ -136,7 +148,7 @@ def create_regions(world: "CandyBox2World"):
     populate_region(world, player, CandyBox2Region("The Lonely House", player, multiworld, "The Lonely House"), lonely_house_locations, world_map_1)
 
     # The Desert
-    populate_region(world, player, CandyBox2QuestRegion(CandyBox2Quest.THE_DESERT, player, multiworld), desert_locations, world_map_1)
+    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_DESERT, player, multiworld), desert_locations, world_map_1)
 
     # This is connected to world_map_2 because it is only accessible once you see the stones in the cave
     populate_region(world, player, CandyBox2Region("The Dig Spot", player, multiworld, "The Dig Spot"), dig_spot_locations, world_map_2)
@@ -152,40 +164,40 @@ def create_regions(world: "CandyBox2World"):
 
     # The Cave
     the_cave = populate_region(world, player, CandyBox2Region("The Cave", player, multiworld, "The Cave"), cave_locations, world_map_2)
-    populate_region(world, player, CandyBox2QuestRegion(CandyBox2Quest.THE_OCTOPUS_KING, player, multiworld), octopus_king_locations, the_cave)
-    populate_region(world, player, CandyBox2QuestRegion(CandyBox2Quest.THE_NAKED_MONKEY_WIZARD, player, multiworld), naked_monkey_wizard_locations, the_cave)
+    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_OCTOPUS_KING, player, multiworld), octopus_king_locations, the_cave)
+    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_NAKED_MONKEY_WIZARD, player, multiworld), naked_monkey_wizard_locations, the_cave)
 
     # The Bridge
-    populate_region(world, player, CandyBox2QuestRegion(CandyBox2Quest.THE_BRIDGE, player, multiworld), bridge_locations, world_map_2)
+    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_BRIDGE, player, multiworld), bridge_locations, world_map_2)
     populate_region(world, player, CandyBox2Region("The Sorceress' Hut", player, multiworld, "The Sorceress' Hut"), sorceress_hut_locations, world_map_3)
-    populate_region(world, player, CandyBox2QuestRegion(CandyBox2Quest.THE_SEA, player, multiworld), the_sea_locations, world_map_4)
+    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_SEA, player, multiworld), the_sea_locations, world_map_4)
 
     # The Forest
-    populate_region(world, player, CandyBox2QuestRegion(CandyBox2Quest.THE_FOREST, player, multiworld), forest_locations, world_map_4)
+    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_FOREST, player, multiworld), forest_locations, world_map_4)
 
     # The Castle
-    populate_region(world, player, CandyBox2QuestRegion(CandyBox2Quest.THE_CASTLE_ENTRANCE, player, multiworld), castle_entrance_locations, world_map_5)
-    populate_region(world, player, CandyBox2QuestRegion(CandyBox2Quest.THE_HOLE, player, multiworld), hole_locations, world_map_5)
-    populate_region(world, player, CandyBox2QuestRegion(CandyBox2Quest.THE_GIANT_NOUGAT_MONSTER, player, multiworld), giant_nougat_monster_locations, castle)
-    populate_region(world, player, CandyBox2QuestRegion(CandyBox2Quest.THE_CASTLE_TRAP_ROOM, player, multiworld), castle_trap_room_locations, castle)
+    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_CASTLE_ENTRANCE, player, multiworld), castle_entrance_locations, world_map_5)
+    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_HOLE, player, multiworld), hole_locations, world_map_5)
+    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_GIANT_NOUGAT_MONSTER, player, multiworld), giant_nougat_monster_locations, castle)
+    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_CASTLE_TRAP_ROOM, player, multiworld), castle_trap_room_locations, castle)
     populate_region(world, player, CandyBox2Region("The Dark Room", player, multiworld, "The Dark Room"), castle_dark_room_locations, castle)
     populate_region(world, player, CandyBox2Region("The Castle Bakehouse", player, multiworld, "The Castle Bakehouse"), castle_bakehouse_locations, castle, lambda state: chocolate_count(state, player) >= 13)
-    populate_region(world, player, CandyBox2QuestRegion(CandyBox2Quest.THE_CASTLE_EGG_ROOM, player, multiworld), castle_egg_room_locations, castle)
+    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_CASTLE_EGG_ROOM, player, multiworld), castle_egg_room_locations, castle)
     dragon_room = populate_region(world, player, CandyBox2Region("Dragon Room", player, multiworld, "The Dragon Room"), dragon_locations, castle)
 
     # The lighthouse is parented to the dragon room because its puzzles are dependent on reaching the dragon first
     populate_region(world, player, CandyBox2Region("The Lighthouse", player, multiworld, "The Lighthouse"), lighthouse_locations, dragon_room)
-    populate_region(world, player, CandyBox2QuestRegion(CandyBox2Quest.HELL, player, multiworld), hell_locations, dragon_room)
-    populate_region(world, player, CandyBox2QuestRegion(CandyBox2Quest.THE_DEVELOPER, player, multiworld), the_developer_fight_locations, dragon_room)
+    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_HELL, player, multiworld), hell_locations, dragon_room)
+    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_DEVELOPER, player, multiworld), the_developer_fight_locations, dragon_room)
 
     # The Desert Fortress
     desert_fortress = populate_region(world, player, CandyBox2Region("The Desert Fortress", player, multiworld, "The Desert Fortress"), desert_fortress_locations, world_map_1, lambda state: state.has("Desert Fortress Key", player))
-    populate_region(world, player, CandyBox2QuestRegion(CandyBox2Quest.THE_XINOPHERYDON, player, multiworld), xinopherydon_quest_locations, desert_fortress)
-    populate_region(world, player, CandyBox2QuestRegion(CandyBox2Quest.THE_TEAPOT, player, multiworld), teapot_quest_locations, desert_fortress)
-    populate_region(world, player, CandyBox2QuestRegion(CandyBox2Quest.THE_LEDGE_ROOM, player, multiworld), ledge_room_quest_locations, desert_fortress)
+    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_XINOPHERYDON, player, multiworld), xinopherydon_quest_locations, desert_fortress)
+    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_TEAPOT, player, multiworld), teapot_quest_locations, desert_fortress)
+    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_LEDGE_ROOM, player, multiworld), ledge_room_quest_locations, desert_fortress)
 
     # X Potion region
-    populate_region(world, player, CandyBox2QuestRegion(CandyBox2Quest.THE_X_POTION, player, multiworld), yourself_fight_locations, candy_box, lambda state: state.has("Sorceress' Cauldron", player) and can_grow_lollipops(state, player))
+    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_X_POTION, player, multiworld), yourself_fight_locations, candy_box, lambda state: state.has("Sorceress' Cauldron", player) and can_grow_lollipops(state, player))
 
 def populate_region(world: "CandyBox2World", player: int, region: CandyBox2Region, locations: dict[str, int], parent: Region | None, rule: Optional[Callable[[CollectionState], bool]] = None):
     region.locations += [CandyBox2Location(player, location_name, locations[location_name], region) for location_name in locations]
@@ -194,20 +206,20 @@ def populate_region(world: "CandyBox2World", player: int, region: CandyBox2Regio
     if parent is not None:
         entrance = parent.connect(region, None, rule)
 
-    if type(region) is CandyBox2QuestRegion:
-        mark_quest_entrance(world, entrance)
+    if type(region) is CandyBox2RoomRegion:
+        mark_room_entrance(world, entrance)
 
     return region
 
-def mark_quest_entrance(world: "CandyBox2World", entrance: Entrance):
-    name = quest_names[entrance.connected_region.quest]
+def mark_room_entrance(world: "CandyBox2World", entrance: Entrance):
+    name = entrance.connected_region.room
     world.original_entrances.append((name, name))
     if world.options.quest_randomisation == "off":
         return
 
     entrance.name = name
-    entrance.randomization_group = Groups.X_QUEST if entrance.connected_region.quest == CandyBox2Quest.THE_X_POTION else Groups.QUESTS
-    disconnect_entrance_for_randomization(entrance, Groups.QUESTS, name)
+    entrance.randomization_group = entrance.connected_region.randomization_group
+    disconnect_entrance_for_randomization(entrance, CandyBox2RandomizationGroup.QUEST, name)
 
 def connect_entrances(world: "CandyBox2World"):
     if world.options.quest_randomisation == "off":
@@ -230,14 +242,14 @@ def connect_entrances(world: "CandyBox2World"):
 
     if world.options.quest_randomisation == "except_x_potion_quest":
         world.entrance_randomisation = randomize_entrances(world, True, {
-            Groups.QUESTS.value: [Groups.QUESTS.value],
-            Groups.X_QUEST.value: [Groups.X_QUEST.value],
+            CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value],
+            CandyBox2RandomizationGroup.X_QUEST.value: [CandyBox2RandomizationGroup.X_QUEST.value],
         })
 
     if world.options.quest_randomisation == "everything":
         world.entrance_randomisation = randomize_entrances(world, True, {
-            Groups.QUESTS.value: [Groups.QUESTS.value, Groups.X_QUEST.value],
-            Groups.X_QUEST.value: [Groups.QUESTS.value, Groups.X_QUEST.value],
+            CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value],
+            CandyBox2RandomizationGroup.X_QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value],
         })
 
     return world.entrance_randomisation.pairings

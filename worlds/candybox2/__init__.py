@@ -8,7 +8,7 @@ from worlds.AutoWorld import World, WebWorld
 from .locations import location_descriptions, locations
 from .items import items, CandyBox2Item, candy_box_2_base_id, filler_items
 from .options import CandyBox2Options
-from .regions import create_regions, connect_entrances, quest_names_reverse, quest_friendly_names
+from .regions import create_regions, connect_entrances, entrance_friendly_names
 from .rules import set_rules
 
 EXPECTED_CLIENT_VERSION = "20250409-1+"
@@ -125,7 +125,7 @@ class CandyBox2World(World):
         spoiler_handle.write(f"\nCandy Box 2 Entrance randomisation for {self.player_name}:\n")
         slot_data = self.fill_slot_data()
         for entrance in slot_data.get("entranceInformation", []):
-            spoiler_handle.write(f"{quest_friendly_names[quest_names_reverse[entrance[0]]]} -> {quest_friendly_names[quest_names_reverse[entrance[1]]]}\n")
+            spoiler_handle.write(f"{entrance_friendly_names[entrance[0]]} -> {entrance_friendly_names[entrance[1]]}\n")
 
     def generate_basic(self) -> None:
         if not self.should_randomize_hp_bar:
@@ -135,8 +135,8 @@ class CandyBox2World(World):
         er_hint_data = {}
 
         for entrance, destination in self.calculated_entrances:
-            region = self.multiworld.get_region(quest_friendly_names[quest_names_reverse[destination]], self.player)
+            region = self.multiworld.get_region(entrance_friendly_names[destination], self.player)
             for location in region.locations:
-                er_hint_data[location.address] = quest_friendly_names[quest_names_reverse[entrance]]
+                er_hint_data[location.address] = entrance_friendly_names[entrance]
 
         hint_data[self.player] = er_hint_data
