@@ -117,7 +117,7 @@ def tutorial_landing():
                 "language": tutorial.language
             }
     tutorials = {world_name: tutorials for world_name, tutorials in title_sorted(
-        tutorials.items(), key=lambda element: "\x00" if element[0] == "Archipelago" else element[0])}
+        tutorials.items(), key=lambda element: "\x00" if element[0] == "Archipelago" else world_type[element[0]].game)}
     return render_template("tutorialLanding.html", worlds=worlds, tutorials=tutorials)
 
 
