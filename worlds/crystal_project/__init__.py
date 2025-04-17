@@ -59,6 +59,7 @@ class CrystalProjectWorld(World):
 
     def get_excluded_items(self) -> Set[str]:
         excluded_items: Set[str] = set()
+        excluded_items.add("Item - Home Point Stone")
         excluded_items.add("Job - Warrior")
         excluded_items.add("Job - Monk")
         excluded_items.add("Job - Rogue")
