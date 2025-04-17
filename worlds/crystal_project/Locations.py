@@ -301,7 +301,8 @@ def get_locations() -> List[LocationData]:
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Tuber Seed 2 in Gardeners Shed", 2664 + treasure_index_offset),
 
         #NPCs 
-        #Todo: Courtyard Chloe (ID 1661) (399, 155, -219) gives you a lure (and later she disappears and it's on the ground here)
+        #NPCs Todo: Courtyard Chloe (Z37_ChloeFishing ID 1661 (399, 155, -219)) gives you Fly Lure (and later she disappears and it's on the ground here)
+        #NPCs Todo: Reid (Z28_Reid ID 2410 (113, 172, -372)) gives you a Courtyard Key or if you miss it it's on the ground (Z37_Courtyard Key ID 2486 (424, 150, -222))
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Plug Lure sparkling in the fountain", 2584 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin on a tent", 605 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Speedy Lost Penguin on patrol", 584 + npc_index_offset),
