@@ -56,6 +56,7 @@ In general:
 - Bushes are not considered in logic. It is assumed that the player will find a way past them, whether it is with a sword, a bomb, fire, luring an enemy, etc. There is also an option in the in-game randomizer settings menu to clear some of the early bushes.
 - The Cathedral is accessible during the day by using the Hero's Laurels to reach the Overworld fuse near the Swamp entrance.
 - The Secret Legend chest at the Cathedral can be obtained during the day by opening the Holy Cross door from the outside.
+- For the Ice Grappling, Ladder Storage, and Laurels Zips options, there is [this document](https://docs.google.com/document/d/1SFZBfsqZWH1_EAV9zyZobvrBcvCd3_54JP3iVnJ8rUg/edit?usp=sharing) that shows the individual applications of these tricks in logic.
 
 For the Entrance Randomizer:
 - Activating a fuse to turn on a yellow teleporter pad also activates its counterpart in the Far Shore.
@@ -87,6 +88,8 @@ Notes:
 See the [Archipelago Plando Guide](../../../tutorial/Archipelago/plando/en) for more information on Plando and Connection Plando.
 
 ## Is there anything else I should know?
-You can go to [The TUNIC Randomizer Website](https://rando.tunic.run/) for a list of randomizer features as well as some helpful tips.
-You can use the Fairy Seeking Spell (ULU RDR) to locate the nearest unchecked location.
-You can use the Entrance Seeking Spell (RDR ULU) to locate the nearest unused entrance.
+- You can go to [The TUNIC Randomizer Website](https://rando.tunic.run/) for a list of randomizer features as well as some helpful tips.
+- You can use the Fairy Seeking Spell (ULU RDR) to locate the nearest unchecked location.
+- You can use the Entrance Seeking Spell (RDR ULU) to locate the nearest unused entrance.
+- Death Link can be toggled in game, and it can be set to receive traps instead of deaths.
+- Trap Link can be toggled in-game as well, which makes it so other players with Trap Link enabled will share the effects of traps with you, and vice versa. Trap Link functions cross-game, but only with other games that have Trap Link implemented, and only some traps can be shared, depending on the game.
