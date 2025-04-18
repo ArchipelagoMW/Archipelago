@@ -15,10 +15,10 @@ Fetches the current datapackage from the WebHost.
 Fetches datapackage by checksum.
 
 `/datapackage_checksum`  
-Fetches checksum of current datapackage.
+Fetches the checksum of the current static datapackage on the WebHost.
 
 ## Generation Endpoint
-These endpoints are used internaly for the WebHost to generate games, and validate their generation.
+These endpoints are used internally for the WebHost to generate games and validate their generation, and also used by external applications to generate games automatically.
 
 `(POST)` `/generate`  
 Submits a game to the WebHost for generation.
