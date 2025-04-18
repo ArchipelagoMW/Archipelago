@@ -29,40 +29,6 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
 
     all_players: dict[int, list[int]] = tracker_data.get_all_players()
 
-    class PlayerGroups(TypedDict):
-        slot: int
-        name: str
-        members: list[int]
-
-    groups: list[dict[str, int | list[PlayerGroups]]] = []
-    """The Slot ID of groups and the IDs of the group's members."""
-    for team, players in tracker_data.get_all_slots().items():
-        groups_in_team: list[PlayerGroups] = []
-        team_groups = {"team": team, "groups": groups_in_team}
-        groups.append(team_groups)
-        for player in players:
-            slot_info = tracker_data.get_slot_info(team, player)
-            if slot_info.type != SlotType.group or not slot_info.group_members:
-                continue
-            groups_in_team.append(
-                {
-                    "slot": player,
-                    "name": slot_info.name,
-                    "members": list(slot_info.group_members),
-                })
-    class PlayerName(TypedDict):
-        player: int
-        name: str
-
-    player_names: list[dict[str, str | list[PlayerName]]] = []
-    """Slot names of all players."""
-    for team, players in all_players.items():
-        per_team_player_names: list[PlayerName] = []
-        team_names = {"team": team, "players": per_team_player_names}
-        player_names.append(team_names)
-        for player in players:
-            per_team_player_names.append({"player": player, "name": tracker_data.get_player_name(team, player)})
-
     class PlayerAlias(TypedDict):
         player: int
         name: str | None
@@ -75,19 +41,6 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
         player_aliases.append(team_aliases)
         for player in players:
             team_player_aliases.append({"player": player, "alias": tracker_data.get_player_alias(team, player)})
-
-    class PlayerGame(TypedDict):
-        player: int
-        game: str
-
-    games: list[dict[str, int | list[PlayerGame]]] = []
-    """The game each player is playing."""
-    for team, players in all_players.items():
-        player_games: list[PlayerGame] = []
-        team_games = {"team": team, "players": player_games}
-        games.append(team_games)
-        for player in players:
-            player_games.append({"player": player, "game": tracker_data.get_player_game(team, player)})
 
     class PlayerItemsReceived(TypedDict):
         player: int
@@ -188,6 +141,76 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
         for player in players:
             player_statuses.append({"player": player, "status": tracker_data.get_player_client_status(team, player)})
 
+    return {
+        **get_static_tracker_data(room),
+        "player_aliases": player_aliases,
+        "player_items_received": player_items_received,
+        "player_checks_done": player_checks_done,
+        "total_checks_done": total_checks_done,
+        "hints": hints,
+        "activity_timers": activity_timers,
+        "connection_timers": connection_timers,
+        "player_status": player_status,
+        "datapackage": tracker_data._multidata["datapackage"],
+    }
+
+@cache.memoize()
+def get_static_tracker_data(room: Room) -> dict[str, Any]:
+    """
+    Builds and caches the static data for this active session tracker, so that it doesn't need to be recalculated.
+    """
+
+    tracker_data = TrackerData(room)
+
+    all_players: dict[int, list[int]] = tracker_data.get_all_players()
+
+    class PlayerGroups(TypedDict):
+        slot: int
+        name: str
+        members: list[int]
+
+    groups: list[dict[str, int | list[PlayerGroups]]] = []
+    """The Slot ID of groups and the IDs of the group's members."""
+    for team, players in tracker_data.get_all_slots().items():
+        groups_in_team: list[PlayerGroups] = []
+        team_groups = {"team": team, "groups": groups_in_team}
+        groups.append(team_groups)
+        for player in players:
+            slot_info = tracker_data.get_slot_info(team, player)
+            if slot_info.type != SlotType.group or not slot_info.group_members:
+                continue
+            groups_in_team.append(
+                {
+                    "slot": player,
+                    "name": slot_info.name,
+                    "members": list(slot_info.group_members),
+                })
+    class PlayerName(TypedDict):
+        player: int
+        name: str
+
+    player_names: list[dict[str, str | list[PlayerName]]] = []
+    """Slot names of all players."""
+    for team, players in all_players.items():
+        per_team_player_names: list[PlayerName] = []
+        team_names = {"team": team, "players": per_team_player_names}
+        player_names.append(team_names)
+        for player in players:
+            per_team_player_names.append({"player": player, "name": tracker_data.get_player_name(team, player)})
+
+    class PlayerGame(TypedDict):
+        player: int
+        game: str
+
+    games: list[dict[str, int | list[PlayerGame]]] = []
+    """The game each player is playing."""
+    for team, players in all_players.items():
+        player_games: list[PlayerGame] = []
+        team_games = {"team": team, "players": player_games}
+        games.append(team_games)
+        for player in players:
+            player_games.append({"player": player, "game": tracker_data.get_player_game(team, player)})
+
     class PlayerSlotData(TypedDict):
         player: int
         slot_data: dict[str, Any]
@@ -203,16 +226,7 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
 
     return {
         "groups": groups,
-        "player_names": player_names,
-        "player_aliases": player_aliases,
         "games": games,
-        "player_items_received": player_items_received,
-        "player_checks_done": player_checks_done,
-        "total_checks_done": total_checks_done,
-        "hints": hints,
-        "activity_timers": activity_timers,
-        "connection_timers": connection_timers,
-        "player_status": player_status,
+        "names": player_names,
         "slot_data": slot_data,
-        "datapackage": tracker_data._multidata["datapackage"],
     }
