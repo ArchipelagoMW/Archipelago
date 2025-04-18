@@ -50,9 +50,9 @@ def room_received_items(room_id: UUID) -> Dict[str, Any]:
     if room is None:
         return abort(404)
 
-    instancetrackerdata = tracker.TrackerData(room)
-    multisavedata: Dict[str, Any] = instancetrackerdata._multisave
-    if(multisavedata == None):
+    instancetrackerData = tracker.trackertata(room)
+    multisavedata: Dict[str, Any] = instancetrackerData._multisave
+    if(multiSavedata == None):
         return None
 
     receiveditemdata: Dict[str, Any] = multisavedata["received_items"]
