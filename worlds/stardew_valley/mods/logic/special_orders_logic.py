@@ -37,7 +37,7 @@ class ModSpecialOrderLogic(BaseLogic[Union[ActionLogicMixin, ArtisanLogicMixin, 
 ReceivedLogicMixin, RelationshipLogicMixin, SeasonLogicMixin, WalletLogicMixin]]):
     def get_modded_special_orders_rules(self):
         special_orders = {}
-        if ModNames.juna in self.options.mods:
+        if self.content.is_enabled(ModNames.juna):
             special_orders.update({
                 ModSpecialOrder.junas_monster_mash: self.logic.relationship.has_hearts(ModNPC.juna, 4) &
                                                     self.registry.special_order_rules[SpecialOrder.a_curious_substance] &
@@ -46,7 +46,7 @@ ReceivedLogicMixin, RelationshipLogicMixin, SeasonLogicMixin, WalletLogicMixin]]
                                                     self.logic.has("Energy Tonic") & self.logic.has(Material.sap) & self.logic.has(Loot.bug_meat) &
                                                     self.logic.has(Edible.oil_of_garlic) & self.logic.has(Meal.strange_bun)
             })
-        if ModNames.sve in self.options.mods:
+        if self.content.is_enabled(ModNames.sve):
             special_orders.update({
                 ModSpecialOrder.andys_cellar: self.logic.has(Material.stone) & self.logic.has(Material.wood) & self.logic.has(Material.hardwood) &
                                               self.logic.has(MetalBar.iron) & self.logic.received(CommunityUpgrade.movie_theater, 1) &
@@ -64,7 +64,7 @@ ReceivedLogicMixin, RelationshipLogicMixin, SeasonLogicMixin, WalletLogicMixin]]
                                                      self.logic.region.can_reach(SVERegion.susans_house)  # quest requires you make the fertilizer
             })
 
-        if ModNames.jasper in self.options.mods:
+        if self.content.is_enabled(ModNames.jasper):
             special_orders.update({
                 ModSpecialOrder.dwarf_scroll: self.logic.has_all(*(Artifact.dwarf_scroll_i, Artifact.dwarf_scroll_ii, Artifact.dwarf_scroll_iii,
                                                                    Artifact.dwarf_scroll_iv,)),

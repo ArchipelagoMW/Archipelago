@@ -48,7 +48,7 @@ TimeLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MonsterLogicMixin]]):
         return quests
 
     def _get_juna_quest_rules(self):
-        if ModNames.juna not in self.options.mods:
+        if not self.content.is_enabled(ModNames.juna):
             return {}
 
         return {
@@ -57,7 +57,7 @@ TimeLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MonsterLogicMixin]]):
         }
 
     def _get_mr_ginger_quest_rules(self):
-        if ModNames.ginger not in self.options.mods:
+        if not self.content.is_enabled(ModNames.ginger):
             return {}
 
         return {
@@ -65,7 +65,7 @@ TimeLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MonsterLogicMixin]]):
         }
 
     def _get_ayeisha_quest_rules(self):
-        if ModNames.ayeisha not in self.options.mods:
+        if not self.content.is_enabled(ModNames.ayeisha):
             return {}
 
         return {
@@ -74,7 +74,7 @@ TimeLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MonsterLogicMixin]]):
         }
 
     def _get_sve_quest_rules(self):
-        if ModNames.sve not in self.options.mods:
+        if not self.content.is_enabled(ModNames.sve):
             return {}
 
         return {
@@ -98,9 +98,8 @@ TimeLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MonsterLogicMixin]]):
             return self.logic.received(SVEQuestItem.aurora_vineyard_reclamation)
         return self.logic.quest.can_complete_quest(ModQuest.AuroraVineyard)
 
-
     def _get_distant_lands_quest_rules(self):
-        if ModNames.distant_lands not in self.options.mods:
+        if not self.content.is_enabled(ModNames.distant_lands):
             return {}
 
         return {
@@ -119,7 +118,7 @@ TimeLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MonsterLogicMixin]]):
         }
 
     def _get_boarding_house_quest_rules(self):
-        if ModNames.boarding_house not in self.options.mods:
+        if not self.content.is_enabled(ModNames.boarding_house):
             return {}
 
         return {
@@ -127,7 +126,7 @@ TimeLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MonsterLogicMixin]]):
         }
 
     def _get_hat_mouse_quest_rules(self):
-        if ModNames.lacey not in self.options.mods:
+        if not self.content.is_enabled(ModNames.lacey):
             return {}
 
         return {
