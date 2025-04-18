@@ -850,8 +850,8 @@ class GameManager(ThemedApp):
         # top part
         server_label = ServerLabel(width=dp(75))
         self.connect_layout.add_widget(server_label)
-        self.server_connect_bar = ConnectBarTextInput(text=self.ctx.suggested_address or "archipelago.gg:",
-                                                      pos_hint={"center_x": 0.5, "center_y": 0.5})
+        self.server_connect_bar = ConnectBarTextInput(pos_hint={"center_x": 0.5, "center_y": 0.5})
+        self.server_connect_bar.text = self.ctx.suggested_address or "archipelago.gg:"
 
         def connect_bar_validate(sender):
             if not self.ctx.server:
