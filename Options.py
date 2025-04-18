@@ -1529,7 +1529,6 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
                         if item in world.item_name_groups:
                             value = plando.items.pop(item)
                             group = world.item_name_groups[item]
-
                             if isinstance(value, bool):
                                 plando.items.update({key: value for key in sorted(group)})
                             else:
