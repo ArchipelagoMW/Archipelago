@@ -371,16 +371,16 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Hunting Bow chest deep in the eastern Quintar cave", 745 + treasure_index_offset),
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Money chest at the end of the road", 825 + treasure_index_offset),
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Tonic Pouch chest hidden beneath the end of the road", 2674 + treasure_index_offset),
-        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Money chest west of and above sneaky Potion chest", 338 + treasure_index_offset, lambda state: state.has('Item - Quintar Flute', player)),
-        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Pinnacle Tincture Pouch chest with a short and tall box friend", 471 + treasure_index_offset, lambda state: state.has('Item - Quintar Flute', player)),
-        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Treetop Spore Blocker chest west of Quintar Sanctum", 365 + treasure_index_offset, lambda state: state.has('Item - Quintar Flute', player)),
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Money chest west of and above sneaky Potion chest", 338 + treasure_index_offset, lambda state: state.has_any({'Item - Progressive Quintar Flute'}, player)),
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Pinnacle Tincture Pouch chest with a short and tall box friend", 471 + treasure_index_offset, lambda state: state.has_any({'Item - Progressive Quintar Flute'}, player)),
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Treetop Spore Blocker chest west of Quintar Sanctum", 365 + treasure_index_offset, lambda state: state.has_any({'Item - Progressive Quintar Flute'}, player)),
 
         #NPCs
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver Dust beneath overhang in eastern Quintar cave crevasse", 2678 + npc_index_offset),
         #Todo NPCs Multichecks: 2 checks on Quintar Enthusiast
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Quintar Enthusiast (always pet Buttermint)", 464 + npc_index_offset),
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver Ingot in Quintar cave beneath the end of the road", 454 + npc_index_offset),
-        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver Ore behind Quintar Nest befriending a stack of boxes", 323 + npc_index_offset, lambda state: state.has('Item - Quintar Flute', player)),
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver Ore behind Quintar Nest befriending a stack of boxes", 323 + npc_index_offset, lambda state: state.has_any({'Item - Progressive Quintar Flute'}, player)),
 
         #Quintar Nest
         #Treasure chests
@@ -390,7 +390,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Quintar Nest", "Quintar Nest Chest - Northwest Donut Lake sprinkle Potion chest", 432 + treasure_index_offset),
         LocationData("Quintar Nest", "Quintar Nest Chest - Welcome Potion chest", 3078 + treasure_index_offset),
         LocationData("Quintar Nest", "Quintar Nest Chest - Mighty jump to the Scope Bit chest along the east side wall", 746 + treasure_index_offset),
-        LocationData("Quintar Nest", "Quintar Nest Chest - Static Rod chest north of the sewers", 638 + treasure_index_offset, lambda state: state.has('Item - Quintar Flute', player)),
+        LocationData("Quintar Nest", "Quintar Nest Chest - Static Rod chest north of the sewers", 638 + treasure_index_offset, lambda state: state.has_any({'Item - Progressive Quintar Flute'}, player)),
         LocationData("Quintar Nest", "Quintar Nest Chest - North Donut Lake sprinkle Tincture chest", 852 + treasure_index_offset),
         LocationData("Quintar Nest", "Quintar Nest Chest - Hop along the west side wall to Tincture Pouch chest", 2982 + treasure_index_offset),
         LocationData("Quintar Nest", "Quintar Nest Chest - Donut Lake crown sprinkle Tonic chest", 851 + treasure_index_offset),
@@ -477,13 +477,13 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #Cobblestone Crag
         #Treasure chests
         LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Ether Pouch chest behind the sluice gate", 479 + treasure_index_offset),
-        LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Long jump Potion chest", 382 + treasure_index_offset, lambda state: state.has('Item - Quintar Flute', player)),
+        LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Long jump Potion chest", 382 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
         LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Potion Pouch chest tucked in a cranny between two tall spikes", 1119 + treasure_index_offset),
         LocationData("Cobblestone Crag", "Cobblestone Crag Chest - I totally meant to miss that jump Skewer chest", 2670 + treasure_index_offset),
         LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Tonic Pouch chest upon exiting from Quintar Nest", 478 + treasure_index_offset),
         LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Could really use a Walking Stick (chest) right about now...", 2669 + treasure_index_offset),
         #Technically on Underpass (Okimoto) map
-        LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Underpass Scrap chest on the way to the village hidden among the leaves", 3669 + treasure_index_offset, lambda state: state.has('Item - Quintar Flute', player)),
+        LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Underpass Scrap chest on the way to the village hidden among the leaves", 3669 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
 
         #NPCs
         LocationData("Cobblestone Crag", "Cobblestone Crag NPC - Westernmost Silver Dust", 1120 + npc_index_offset),
@@ -532,16 +532,16 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #Salmon Pass
         #Treasure chests
         LocationData("Salmon Pass", "Salmon Pass Chest - Riverbank Paypirbak chest among the yellow flowers", 2700 + treasure_index_offset),
-        LocationData("Salmon Pass", "Salmon Pass Chest - Fenix Juice chest across a bridge and around through a tunnel", 2420 + treasure_index_offset),
+        LocationData("Salmon Pass", "Salmon Pass Chest - Fenix Juice chest across a bridge and around through a tunnel", 2420 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
         LocationData("Salmon Pass", "Salmon Pass Chest - Fenix Juice chest admiring the hidden waterfall", 419 + treasure_index_offset),
 
         #Salmon River
         #Treasure chests
-        LocationData("Salmon River", "Salmon River Chest - Hop on Money chest once you have become frogger", 1264 + treasure_index_offset, lambda state: state.has('Item - Quintar Flute', player)),
-        LocationData("Salmon River", "Salmon River Chest - Bloodbind chest atop river island crown", 1297 + treasure_index_offset, lambda state: state.has('Item - Quintar Flute', player)),
-        LocationData("Salmon River", "Salmon River Chest - Money chest also wishes to be frogger", 325 + treasure_index_offset, lambda state: state.has('Item - Quintar Flute', player)),
-        LocationData("Salmon River", "Salmon River Chest - Ether Pouch chest in the stands of the Salmon race finish line ", 2976 + treasure_index_offset, lambda state: state.has('Item - Quintar Flute', player)),
-        LocationData("Salmon River", "Salmon River Chest - Salmon River Map chest inside the Salmon Shack", 2913 + treasure_index_offset, lambda state: state.has('Item - Quintar Flute', player)),
+        LocationData("Salmon River", "Salmon River Chest - Hop on Money chest once you have become frogger", 1264 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Salmon River", "Salmon River Chest - Bloodbind chest atop river island crown", 1297 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Salmon River", "Salmon River Chest - Money chest also wishes to be frogger", 325 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Salmon River", "Salmon River Chest - Ether Pouch chest in the stands of the Salmon race finish line ", 2976 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Salmon River", "Salmon River Chest - Salmon River Map chest inside the Salmon Shack", 2913 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
 
         #NPCs
         #Todo Missable NPCs: figure out Courtyard Key Reid (see Capital Sequoia)

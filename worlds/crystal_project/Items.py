@@ -120,7 +120,7 @@ item_table: Dict[str, ItemData] = {
     "Item - Skeleton Key": ItemData("Item", 147 + item_index_offset, ItemClassification.progression),
 
     # #Passes
-    "Item - Quintar Pass": ItemData("Item", 7 + item_index_offset, ItemClassification.progression),
+    #"Item - Quintar Pass": ItemData("Item", 7 + item_index_offset, ItemClassification.progression), (now part of Progressive Quintar Flute)
     "Item - Progressive Luxury Pass": ItemData("Item", 93 + item_index_offset, ItemClassification.progression, 2),
     "Item - Ferry Pass": ItemData("Item", 37 + item_index_offset, ItemClassification.progression),
 
@@ -146,7 +146,7 @@ item_table: Dict[str, ItemData] = {
     "Item - Ancient Tablet C": ItemData("Item", 163 + item_index_offset, ItemClassification.filler),
 
     #Animal mount summons
-    "Item - Quintar Flute": ItemData("Item", 39 + item_index_offset, ItemClassification.progression),
+    "Item - Progressive Quintar Flute": ItemData("Item", 39 + item_index_offset, ItemClassification.progression, 2), #Quintar Flute ID 39
     "Item - Ibek Bell": ItemData("Item", 50 + item_index_offset, ItemClassification.progression),
     "Item - Owl Drum": ItemData("Item", 49 + item_index_offset, ItemClassification.progression),
     "Item - Progressive Salmon Violin": ItemData("Item", 48 + item_index_offset, ItemClassification.progression, 2),

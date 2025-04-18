@@ -38,7 +38,6 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
         create_region(world, player, locations_per_region, "Capital Jail"),
         create_region(world, player, locations_per_region, "Capital Pipeline"),
         create_region(world, player, locations_per_region, "Cobblestone Crag"),
-        #Todo: add Quintar Flute access requirement to Okimoto and Shoudu Waterfront
         create_region(world, player, locations_per_region, "Okimoto N.S."),
         create_region(world, player, locations_per_region, "Greenshire Reprise"),
         create_region(world, player, locations_per_region, "Salmon Pass"),
@@ -59,22 +58,22 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
     multiworld.get_region("Skumparadise", player).add_exits(["Capital Sequoia"])
     multiworld.get_region("Capital Sequoia", player).add_exits(["Jojo Sewers", "Boomer Society", "Rolling Quintar Fields"])
     multiworld.get_region("Jojo Sewers", player).add_exits(["Capital Jail"], 
-        {"Capital Jail": lambda state: state.has_any({"Item - Quintar Flute"}, world.player)})
+        {"Capital Jail": lambda state: state.has_any({"Item - Progressive Quintar Flute"}, world.player)})
     multiworld.get_region("Capital Jail", player).add_exits(["Capital Pipeline"], 
         {"Capital Pipeline": lambda state: state.has("Item - South Wing Key", world.player) and state.has("Item - Cell Key", world.player, 6)})
     multiworld.get_region("Rolling Quintar Fields", player).add_exits(["Quintar Nest", "Quintar Sanctum"], 
-        {"Quintar Sanctum": lambda state: state.has("Item - Quintar Flute", world.player)})
+        {"Quintar Sanctum": lambda state: state.has_any({"Item - Progressive Quintar Flute"}, world.player, 2)})
     multiworld.get_region("Quintar Nest", player).add_exits(["Cobblestone Crag"])
     multiworld.get_region("Capital Sequoia", player).add_exits(["Cobblestone Crag", "Greenshire Reprise"], 
         {"Cobblestone Crag": lambda state: state.has_any({"Item - Courtyard Key"}, world.player), 
         "Greenshire Reprise": lambda state: get_job_count(player, state) >= 6 })
     multiworld.get_region("Cobblestone Crag", player).add_exits(["Shoudu Waterfront", "Okimoto N.S."], 
-        {"Shoudu Waterfront": lambda state: state.has_any({"Item - Quintar Flute"}, world.player), 
-        "Okimoto N.S.": lambda state: state.has_any({"Item - Quintar Flute"}, world.player)})
+        {"Shoudu Waterfront": lambda state: state.has("Item - Progressive Quintar Flute", world.player, 2), 
+        "Okimoto N.S.": lambda state: state.has("Item - Progressive Quintar Flute", world.player, 2)})
     multiworld.get_region("Greenshire Reprise", player).add_exits(["Salmon Pass"], 
-        {"Salmon Pass": lambda state: state.has_any({"Item - Quintar Flute"}, world.player)})
+        {"Salmon Pass": lambda state: state.has_any({"Item - Progressive Quintar Flute"}, world.player)})
     multiworld.get_region("Salmon Pass", player).add_exits(["Salmon River"], 
-        {"Salmon River": lambda state: state.has_any({"Item - Quintar Flute"}, world.player)})
+        {"Salmon River": lambda state: state.has("Item - Progressive Quintar Flute", world.player, 2)})
 
     ## examples
     # multiworld.get_region("Onett", player).add_exits(["Giant Step", "Twoson", "Northern Onett", "Global ATM Access"],
