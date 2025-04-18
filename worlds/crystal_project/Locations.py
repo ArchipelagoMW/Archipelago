@@ -376,6 +376,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Treetop Spore Blocker chest west of Quintar Sanctum", 365 + treasure_index_offset, lambda state: state.has_any({'Item - Progressive Quintar Flute'}, player)),
 
         #NPCs
+        #Todo NPCs Crystal Checker: guy gives you Quintar Pass for having enough crystals
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver Dust beneath overhang in eastern Quintar cave crevasse", 2678 + npc_index_offset),
         #Todo NPCs Multichecks: 2 checks on Quintar Enthusiast
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Quintar Enthusiast (always pet Buttermint)", 464 + npc_index_offset),
@@ -549,6 +550,81 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #Crystals
         #Technically in River Cat's Ego map
         LocationData("Salmon River", "Salmon River Crystal - Appease the QuizFish Nomad Crystal", 630 + treasure_index_offset),
+
+        #Poko Poko Desert
+        #Treasure chests
+        LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Quintar leapfrog Butter Cutter chest", 1080 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Hatchet chest south of tricky Quintar Gold Dust", 1082 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Poko Poko Desert", "Poko Poko Desert Chest - North Lookout Token chest in its tower", 1190 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Poko Poko Desert", "Poko Poko Desert Chest - This Dueller chests (on) a butte", 1169 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Stormy Fenix Juice chest on first floor of ruins", 2676 + treasure_index_offset),
+        LocationData("Poko Poko Desert", "Poko Poko Desert Chest - West Lookout Token chest in its tower", 1170 + treasure_index_offset),
+        LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Potion chest to fortify you for the jumping puzzle from hell", 2708 + treasure_index_offset),
+        LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Central Lookout Token chest (ok maybe that jumping puzzle wasnt that bad)", 1189 + treasure_index_offset),
+        LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Balance beam Scope Specs chest", 97 + treasure_index_offset),
+        LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Ether Pouch chest past Lost Son", 1667 + treasure_index_offset),
+
+        #NPCs
+        #Todo NPCs CheckOrNot: three Quintar Eggs in Poko Poko Desert (Nest) map
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Silver Dust beneath overhang in ruins south of shrine", 2675 + npc_index_offset),
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Silver Ingot slumbering in broken house NE of shrine", 1081 + npc_index_offset),
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Rocky outcropping Gold Dust will put your Quintar to the test", 2817 + npc_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Silver Ingot in the shade of the desert arch", 2682 + npc_index_offset),
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Thirsty Lad", 1201 + npc_index_offset),
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Stormy Silver Ore atop ruins", 2677 + npc_index_offset),
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Stormy Silver Ore on the ruined building floor", 2681 + npc_index_offset),
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold Ingot atop ridge south of North Lookout Tower", 2818 + npc_index_offset),
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Silver Dust in the dust a floor above Fenix Juice chest", 2680 + npc_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        #Todo NPCs Blocker: this son unlocks a check in Sara Sara Bazaar
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Circle the western desert wall for Lost Son", 1198 + npc_index_offset), #29b1d681
+        
+        #Sara Sara Bazaar
+        #Treasure chests
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Someone took the St James and left a Knockout Stick chest", 408 + treasure_index_offset, lambda state: state.has('Item - Room 1 Key', player)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Someone took the St James and left a Knockout Stick chest", 408 + treasure_index_offset, lambda state: state.has('Item - Room 1 Key', player)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Potion chest in darkened upper storeroom", 414 + treasure_index_offset, lambda state: state.has_any({'Item - Progressive Quintar Flute'}, player)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Storm Rod chest in darkened upper storeroom", 513 + treasure_index_offset, lambda state: state.has_any({'Item - Progressive Quintar Flute'}, player)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Potion Mixers Beaurior Volcano map chest", 1194 + treasure_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Spilled booty Captains Hat chest", 2936 + treasure_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player, 2)),
+
+        #NPCs
+        #Todo NPCs Crystal Checker: guy gives you Ferry Pass for having 15 crystals Z27_FerryCrystalChecker ID 940 (-166,93,56)
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Three tokens makes a Pyramid Key something something triangles", 949 + npc_index_offset, lambda state: state.has('Item - West Lookout Token', player) and state.has('Central Lookout Token', player) and state.has('North Lookout Token', player)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - The One and Only Room 1 Key", 385 + npc_index_offset),
+        #Todo NPCs Blocker: gotta find the Lost Son first (the mom before you find the son is a different NPC)
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Worried Mom Ferry Pass", 1196 + npc_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Pelt this Fish Merchant with Rotten Salmon", 942 + npc_index_offset, lambda state: state.has('Item - Rotten Salmon', player)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - No Shoudu Stew for you!", 1200 + npc_index_offset, lambda state: state.has('Item - Shoudu Stew', player)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silver Dust", 2905 + npc_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player, 2)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silverer Dust", 2906 + npc_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player, 2)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silver Ingot", 2903 + npc_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player, 2)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silverer Ingot", 2904 + npc_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player, 2)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silver Ore", 2901 + npc_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player, 2)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silverer Ore", 2902 + npc_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player, 2)),
+
+        #Ancient Reservoir
+        #Treasure chests
+        LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Really elaborate crystal rafters Red Coat chest", 1123 + treasure_index_offset),
+        LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Crystal gutters Red Cap chest", 1122 + treasure_index_offset),
+        LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Resist Shifter chest tucked on ledge by aqueduct", 1982 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Ether Pouch chest in East Switch Room", 2977 + treasure_index_offset),
+        LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Money chest in eastern nyoom room", 2056 + treasure_index_offset),
+        LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Potion Pouch chest hiding behind aqueduct grate", 2703 + treasure_index_offset),
+        LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Money chest hiding behind western aqueduct grate", 2702 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Twinsies Defense Shifter chest at west waterfall base", 2704 + treasure_index_offset),
+        LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Twinsies Money chest at west waterfall base", 1145 + treasure_index_offset),
+        LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Salmon swim up to death (Grim Scythe chest)", 2701 + treasure_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player, 2)),
+        LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Goat snack for later Ancient Reservoir map chest", 2915 + treasure_index_offset),
+        LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Celebrate your new hops Fenix Juice Pouch chest", 2517 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+
+        #NPCs
+        LocationData("Ancient Reservoir", "Ancient Reservoir NPC - Silver Ingot in the odd flooded room", 2695 + npc_index_offset),
+        LocationData("Ancient Reservoir", "Ancient Reservoir NPC - Silver Ore in the odd flooded room", 1675 + npc_index_offset),
+        LocationData("Ancient Reservoir", "Ancient Reservoir NPC - Goat victory Ibek Bell", 1676 + npc_index_offset), #Z30_PostBossEvent
+        LocationData("Ancient Reservoir", "Ancient Reservoir NPC - Silver Dust in the goat digs", 2696 + npc_index_offset), lambda state: state.has('Item - Ibek Bell', player)),
+
+        #Crystals
+        LocationData("Ancient Reservoir", "Ancient Reservoir Crystal - Dervish", 1121 + crystal_index_offset),
 
 
         #Overpass
