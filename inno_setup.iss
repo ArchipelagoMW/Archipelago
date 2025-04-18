@@ -45,7 +45,7 @@ MinVersion={#min_windows}
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
-Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}";
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}";
 Name: "deletelib"; Description: "Clean existing /lib folder and subfolders including /worlds"; Check: ShouldShowDeleteLibTask
 
 [Types]
