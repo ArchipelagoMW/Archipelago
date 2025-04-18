@@ -34,7 +34,7 @@ class RegionData:
         merged_exits.extend(self.exits)
         if exits is not None:
             merged_exits.extend(exits)
-        merged_exits = list(set(merged_exits))
+        merged_exits = sorted(set(merged_exits))
         return RegionData(self.name, merged_exits, is_ginger_island=self.is_ginger_island)
 
     def get_without_exits(self, exits_to_remove: Set[str]):

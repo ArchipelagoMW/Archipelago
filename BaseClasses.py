@@ -616,7 +616,7 @@ class MultiWorld():
         locations: Set[Location] = set()
         events: Set[Location] = set()
         for location in self.get_filled_locations():
-            if type(location.item.code) is int:
+            if type(location.item.code) is int and type(location.address) is int:
                 locations.add(location)
             else:
                 events.add(location)
