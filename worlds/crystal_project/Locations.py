@@ -334,7 +334,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Library Scholar", 1948 + npc_index_offset),
 
         #Crystals
-        LocationData("Capital Sequoia", "Capital Sequoia Crystal - Beatsmith", 1087 + crystal_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Crystal - Beatsmith Crystal", 1087 + crystal_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
 
         #Abilities
         #Todo: descriptivize and implement
@@ -382,6 +382,51 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver Ingot in Quintar cave beneath the end of the road", 454 + npc_index_offset),
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver Ore behind Quintar Nest befriending a stack of boxes", 323 + npc_index_offset, lambda state: state.has('Item - Quintar Flute', player)),
 
+        #Quintar Nest
+        #Treasure chests
+        LocationData("Quintar Nest", "Quintar Nest Chest - West Donut Lake sprinkle Money chest", 883 + treasure_index_offset),
+        LocationData("Quintar Nest", "Quintar Nest Chest - East Donut Lake sprinkle Ether chest", 884 + treasure_index_offset),
+        LocationData("Quintar Nest", "Quintar Nest Chest - Jumping puzzle Fenix Juice chest above the donut", 756 + treasure_index_offset),
+        LocationData("Quintar Nest", "Quintar Nest Chest - Northwest Donut Lake sprinkle Potion chest", 432 + treasure_index_offset),
+        LocationData("Quintar Nest", "Quintar Nest Chest - Welcome Potion chest", 3078 + treasure_index_offset),
+        LocationData("Quintar Nest", "Quintar Nest Chest - Mighty jump to the Scope Bit chest along the east side wall", 746 + treasure_index_offset),
+        LocationData("Quintar Nest", "Quintar Nest Chest - Static Rod chest north of the sewers", 638 + treasure_index_offset, lambda state: state.has('Item - Quintar Flute', player)),
+        LocationData("Quintar Nest", "Quintar Nest Chest - North Donut Lake sprinkle Tincture chest", 852 + treasure_index_offset),
+        LocationData("Quintar Nest", "Quintar Nest Chest - Hop along the west side wall to Tincture Pouch chest", 2982 + treasure_index_offset),
+        LocationData("Quintar Nest", "Quintar Nest Chest - Donut Lake crown sprinkle Tonic chest", 851 + treasure_index_offset),
+
+        #NPCs
+        #Todo NPCs CheckOrNot: two Quintar Eggs here
+        LocationData("Quintar Nest", "Quintar Nest NPC - Eastside Silver Dust come on down to the water", 711 + npc_index_offset),
+        LocationData("Quintar Nest", "Quintar Nest NPC - South of sewers Silver Ingot", 850 + npc_index_offset),
+        LocationData("Quintar Nest", "Quintar Nest NPC - Silver Ore on the way out", 755 + npc_index_offset),
+
+        #Crystals
+        LocationData("Quintar Nest", "Quintar Nest Crystal - Hunter Crystal", 621 + crystal_index_offset),
+
+        #Quintar Sanctum
+        #Treasure chests
+        LocationData("Quintar Sanctum", "Quintar Sanctum Chest - West wall big bounce Money chest", 810 + treasure_index_offset),
+        LocationData("Quintar Sanctum", "Quintar Sanctum Chest - Bounce field Fenix Juice chest", 969 + treasure_index_offset),
+        LocationData("Quintar Sanctum", "Quintar Sanctum Chest - Quintar Sanctum map chest in front of the shrine", 2910 + treasure_index_offset),
+        LocationData("Quintar Sanctum", "Quintar Sanctum Chest - Western Tincture Pouch chest at ground level", 2983 + treasure_index_offset),
+        LocationData("Quintar Sanctum", "Quintar Sanctum Chest - Northern Tonic Pouch chest at ground level", 593 + treasure_index_offset),
+        #Technically this one is in Overpass (2nd Overpass Scrap chest in main map's list)
+        LocationData("Quintar Sanctum", "Quintar Sanctum Chest - Lonely Overpass Scrap chest above Quintar Sanctum", 3533 + treasure_index_offset),
+
+        #NPCs
+        #Todo NPCs CheckOrNot: Quintar Egg here (on Quintar Sanctum Mushroom map)
+        LocationData("Quintar Sanctum", "Quintar Sanctum NPC - Silver Dust going back down", 802 + npc_index_offset),
+        LocationData("Quintar Sanctum", "Quintar Sanctum NPC - Silver Dust almost to the top", 965 + npc_index_offset),
+        LocationData("Quintar Sanctum", "Quintar Sanctum NPC - Mushroom bounce Silver Ingot", 411 + npc_index_offset),
+        LocationData("Quintar Sanctum", "Quintar Sanctum NPC - Silver Ingot beneath the shroom", 801 + npc_index_offset),
+        LocationData("Quintar Sanctum", "Quintar Sanctum NPC - East side Silver Ore (Do not look down)", 737 + npc_index_offset),
+        LocationData("Quintar Sanctum", "Quintar Sanctum NPC - Big bounce Silver Ore", 754 + npc_index_offset),
+        LocationData("Quintar Sanctum", "Quintar Sanctum NPC - Two Toads bestow Princess Toadstool", 963 + npc_index_offset),
+        LocationData("Quintar Sanctum", "Quintar Sanctum NPC - Two Toads crown Bowsette", 964 + npc_index_offset),
+
+        #Crystals
+        LocationData("Quintar Sanctum", "Quintar Sanctum Crystal - Chemist Crystal (of course this is in the shroom zone)", 810 + crystal_index_offset),
 
         #Capital Jail
         #Treasure chests
@@ -419,11 +464,118 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #Crystals
         LocationData("Capital Jail", "Capital Jail Crystal - Reaper Crystal above hell pool", 908 + crystal_index_offset),
 
+        #Capital Pipeline
+        #Treasure chests
+        LocationData("Capital Pipeline", "Capital Pipeline Chest - I wanna go home Capital Pipeline map chest", 2912 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Capital Pipeline", "Capital Pipeline Chest - Lucky Platter chest (Do not anger the fungus)", 1294 + treasure_index_offset),
+
+        #NPCs
+        LocationData("Capital Pipeline", "Capital Pipeline NPC - Silver Ingot in corrupted tunnel", 2660 + npc_index_offset),
+        LocationData("Capital Pipeline", "Capital Pipeline NPC - Silver Ore in corrupted tunnel", 1295 + npc_index_offset),
+        LocationData("Capital Pipeline", "Capital Pipeline NPC - Diamond Dust down the elevator into Jidamba", 2897 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+
+        #Cobblestone Crag
+        #Treasure chests
+        LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Ether Pouch chest behind the sluice gate", 479 + treasure_index_offset),
+        LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Long jump Potion chest", 382 + treasure_index_offset, lambda state: state.has('Item - Quintar Flute', player)),
+        LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Potion Pouch chest tucked in a cranny between two tall spikes", 1119 + treasure_index_offset),
+        LocationData("Cobblestone Crag", "Cobblestone Crag Chest - I totally meant to miss that jump Skewer chest", 2670 + treasure_index_offset),
+        LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Tonic Pouch chest upon exiting from Quintar Nest", 478 + treasure_index_offset),
+        LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Could really use a Walking Stick (chest) right about now...", 2669 + treasure_index_offset),
+        #Technically on Underpass (Okimoto) map
+        LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Underpass Scrap chest on the way to the village hidden among the leaves", 3669 + treasure_index_offset, lambda state: state.has('Item - Quintar Flute', player)),
+
+        #NPCs
+        LocationData("Cobblestone Crag", "Cobblestone Crag NPC - Westernmost Silver Dust", 1120 + npc_index_offset),
+
+        #Okimoto N.S.
+        #Treasure chests
+        LocationData("Okimoto N.S.", "Okimoto N.S. Chest - Moth love lamp (Butterfly chest)", 364 + treasure_index_offset),
+        LocationData("Okimoto N.S.", "Okimoto N.S. Chest - Dont bump your head Ether Pouch chest", 2661 + treasure_index_offset),
+        LocationData("Okimoto N.S.", "Okimoto N.S. Chest - Parkour to the west for Float Shoes chest", 337 + treasure_index_offset),
+        LocationData("Okimoto N.S.", "Okimoto N.S. Chest - Potion chest is just kinda in there, its not special", 356 + treasure_index_offset),
+        LocationData("Okimoto N.S.", "Okimoto N.S. Chest - Tanto chest east of save point", 344 + treasure_index_offset),
+        LocationData("Okimoto N.S.", "Okimoto N.S. Chest - Money chest on yashiki balcony", 690 + treasure_index_offset),
+        LocationData("Okimoto N.S.", "Okimoto N.S. Chest - Art of War chest down hidden stairs in library", 686 + treasure_index_offset),
+        LocationData("Okimoto N.S.", "Okimoto N.S. Chest - Magic Finder chest in the east ground floor room", 2673 + treasure_index_offset),
+        LocationData("Okimoto N.S.", "Okimoto N.S. Chest - Potion Pouch chest lurking behind the bookcase", 434 + treasure_index_offset),
+        LocationData("Okimoto N.S.", "Okimoto N.S. Chest - Tachi chest past the hidden staircase", 694 + treasure_index_offset),
+        LocationData("Okimoto N.S.", "Okimoto N.S. Chest - Dance above the koi pond Training Gi chest", 1103 + treasure_index_offset),
+
+        #NPCs
+        LocationData("Okimoto N.S.", "Okimoto N.S. NPC - Silver Dust on the way up", 359 + npc_index_offset),
+        LocationData("Okimoto N.S.", "Okimoto N.S. NPC - Why does a room like this exist (Silver Dust)", 692 + npc_index_offset),
+        LocationData("Okimoto N.S.", "Okimoto N.S. NPC - Eastern Silver Ingot atop pond box", 689 + npc_index_offset),
+        LocationData("Okimoto N.S.", "Okimoto N.S. NPC - Silver Ingot behind the room that shall not be named", 691 + npc_index_offset),
+        LocationData("Okimoto N.S.", "Okimoto N.S. NPC - Silver Ore atop the yashiki", 2659 + npc_index_offset),
+        LocationData("Okimoto N.S.", "Okimoto N.S. NPC - Lets get down to business western Silver Ore", 429 + npc_index_offset),
+        #Technically 3rd Overpass Scrap in Overpass main map
+        LocationData("Okimoto N.S.", "Okimoto N.S. NPC - Overpass Scrap", 3534 + npc_index_offset),
+
+        #Crystals
+        LocationData("Okimoto N.S.", "Okimoto N.S. Crystal - Ninja Crystal", 699 + crystal_index_offset),
+
+        #Greenshire Reprise
+        #Treasure chests
+        LocationData("Greenshire Reprise", "Greenshire Reprise Chest - Jump off bridge 4 Ambush Knife chest", 483 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Greenshire Reprise", "Greenshire Reprise Chest - Ether chest atop the waterfalls", 490 + treasure_index_offset),
+        LocationData("Greenshire Reprise", "Greenshire Reprise Chest - Jump off bridge 3 Looters Ring chest", 482 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Greenshire Reprise", "Greenshire Reprise Chest - Tall taunter Shell Amulet chest", 373 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Greenshire Reprise", "Greenshire Reprise Chest - Tincture Pouch chest in the valley of trees", 487 + treasure_index_offset),
+        LocationData("Greenshire Reprise", "Greenshire Reprise Chest - Tonic Pouch chest at the tip of the peninsula south of the second bridge", 491 + treasure_index_offset),
+
+        #NPCs
+        LocationData("Greenshire Reprise", "Greenshire Reprise NPC - Jump down from the second bridge to the Silver Ore fallen in north crack", 485 + npc_index_offset),
+        LocationData("Greenshire Reprise", "Greenshire Reprise NPC - Silver Dust across the first bridge hiding in a crack", 486 + npc_index_offset),
+        LocationData("Greenshire Reprise", "Greenshire Reprise NPC - The furthest southern edge Silver Ingot", 474 + npc_index_offset),
+
+        #Salmon Pass
+        #Treasure chests
+        LocationData("Salmon Pass", "Salmon Pass Chest - Riverbank Paypirbak chest among the yellow flowers", 2700 + treasure_index_offset),
+        LocationData("Salmon Pass", "Salmon Pass Chest - Fenix Juice chest across a bridge and around through a tunnel", 2420 + treasure_index_offset),
+        LocationData("Salmon Pass", "Salmon Pass Chest - Fenix Juice chest admiring the hidden waterfall", 419 + treasure_index_offset),
+
+        #Salmon River
+        #Treasure chests
+        LocationData("Salmon River", "Salmon River Chest - Hop on Money chest once you have become frogger", 1264 + treasure_index_offset),
+        LocationData("Salmon River", "Salmon River Chest - Bloodbind chest atop river island crown", 1297 + treasure_index_offset),
+        LocationData("Salmon River", "Salmon River Chest - Money chest also wishes to be frogger", 325 + treasure_index_offset),
+        LocationData("Salmon River", "Salmon River Chest - Ether Pouch chest in the stands of the Salmon race finish line ", 2976 + treasure_index_offset),
+        LocationData("Salmon River", "Salmon River Chest - Salmon River Map chest inside the Salmon Shack", 2913 + treasure_index_offset),
+
+        #NPCs
+        #Todo Missable NPCs: figure out Courtyard Key Reid (see Capital Sequoia)
+
+        #Crystals
+        #Technically in River Cat's Ego map
+        LocationData("Salmon River", "Salmon River Crystal - Appease the QuizFish Nomad Crystal", 630 + treasure_index_offset),
+
+
+        #Overpass
+        #Treasure chests
+        #The last Underpass Scrap chest on main map has been categorized under the Capital Jail
+        #The Underpass (Okimoto) map's Underpass Scrap has been categorized under Cobblestone Crag
+
+        #Underpass
+        #Treasure chests
+        #2nd Overpass Scrap chest on main map has been categorized under the Quintar Sanctum
+        #3rd Overpass Scrap chest on main map has been categorized under the Okimoto N.S.
+
         #Zones (Expert)
+        #Shoudu Waterfront
+        #Treasure chests
+        LocationData("Shoudu Waterfront", "Shoudu Waterfront Chest - Money chest along the water", 2419 + treasure_index_offset),
+        LocationData("Shoudu Waterfront", "Shoudu Waterfront Chest - Hop around Empty chest", 3690 + treasure_index_offset),
+        LocationData("Shoudu Waterfront", "Shoudu Waterfront Chest - Hop around Mars Stone chest", 1114 + treasure_index_offset),
+
         #Lake Delende
         #Treasure chests
         LocationData("Lake Delende", "Lake Delende Chest - Float Shoes chest on north edge", 1263 + treasure_index_offset),
         LocationData("Lake Delende", "Lake Delende Chest - Lake Delende map chest on north edge", 2917 + treasure_index_offset),
+
+        #Jidamba Eaclaneya
+        #NPCs
+        #1 Diamond Dust NPC on Jidamba Eaclaneya Fish Floor map has been categorized under the Capital Pipeline
 
     ]
 
