@@ -24,15 +24,10 @@
 <BaseButton>:
     ripple_color: app.theme_cls.primaryColor
     ripple_duration_in_fast: 0.2
-<MDNavigationBar>
-    set_bars_color: True
 <MDNavigationItemBase>:
     on_press: app.screens.switch_screens(self)
-    active: False
-    label: label
 
     MDNavigationItemLabel:
-        id: label
         text: root.text
         theme_text_color: "Custom"
         text_color_active: app.theme_cls.primaryColor
