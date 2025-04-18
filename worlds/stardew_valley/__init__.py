@@ -206,7 +206,8 @@ class StardewValleyWorld(World):
         if not building_progression.is_progressive:
             return
 
-        for building in building_progression.starting_buildings:
+        # starting_buildings is a set, so sort for deterministic order.
+        for building in sorted(building_progression.starting_buildings):
             item, quantity = building_progression.to_progressive_item(building)
             for _ in range(quantity):
                 self.multiworld.push_precollected(self.create_item(item))
