@@ -3,7 +3,7 @@
 Archipelago has a rudimentary API that can be queried by endpoints.
 The API is a work-in-progress and should be improved over time.
 
-All API requests will be formatted as: `https://<Archipelago URL>/api/<endpoint>`
+The following API requests are formatted as: `https://<Archipelago URL>/api/<endpoint>`
 
 ## Datapackage Endpoints
 These endpoints are used by applications to acquire and validate that they have a current datapackage for item and location IDs.
