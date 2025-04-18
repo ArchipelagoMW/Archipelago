@@ -3251,7 +3251,7 @@ class DKC2ExpertRules(DKC2Rules):
             LocationName.red_hot_ride_kong:
                 lambda state: self.can_carry(state) or self.has_both_kongs(state),
             LocationName.red_hot_ride_dk_coin:
-                lambda state: self.can_carry(state) or self.has_both_kongs(state),
+                lambda state: self.has_both_kongs(state) or (self.can_carry(state) and self.has_diddy(state)),
             LocationName.red_hot_ride_bonus_1:
                 lambda state: self.can_carry(state) or self.has_rambi(state),
 
@@ -3286,9 +3286,7 @@ class DKC2ExpertRules(DKC2Rules):
                     self.can_team_attack(state) or self.can_cartwheel(state)
                 ),
             LocationName.barrel_bayou_dk_coin:
-                lambda state: self.has_rambi(state) and (
-                    self.has_controllable_barrels(state) or (self.can_hover(state) and self.can_cartwheel(state))
-                ),
+                lambda state: self.has_rambi(state) and self.has_controllable_barrels(state),
             LocationName.barrel_bayou_bonus_1:
                 lambda state: self.can_carry(state) and (
                     self.has_controllable_barrels(state) or (self.can_hover(state) and self.can_cartwheel(state) and self.has_rambi(state))
@@ -3457,7 +3455,7 @@ class DKC2ExpertRules(DKC2Rules):
                 lambda state: (self.can_cling(state) or (self.has_diddy(state) and self.can_cartwheel(state))) and self.has_kannons(state) and self.has_rambi(state) and ( 
                     self.can_cartwheel(state) or self.can_team_attack(state)),
             LocationName.rambi_rumble_dk_coin:
-                lambda state: self.can_cling(state) and self.has_kannons(state),
+                lambda state: self.has_kannons(state) and (self.can_cling(state) or self.can_team_attack(state)),
             LocationName.rambi_rumble_bonus_1:
                 lambda state: self.can_cling(state) and self.has_kannons(state),
             LocationName.rambi_rumble_bonus_2:
@@ -3485,17 +3483,35 @@ class DKC2ExpertRules(DKC2Rules):
                 self.can_climb,
 
             LocationName.haunted_hall_clear:
-                self.has_skull_kart,
+                lambda state: self.has_skull_kart(state) and (
+                    self.has_diddy(state) or (self.has_dixie(state) 
+                        and (self.can_hover(state) or self.can_cartwheel(state))
+                        )),
             LocationName.haunted_hall_kong:
-                self.has_skull_kart,
+                lambda state: self.has_skull_kart(state) and (
+                    self.has_diddy(state) or (self.has_dixie(state) 
+                        and (self.can_hover(state) or self.can_cartwheel(state))
+                        )),
             LocationName.haunted_hall_dk_coin:
-                self.has_skull_kart,
+                lambda state: self.has_skull_kart(state) and (
+                    self.has_diddy(state) or (self.has_dixie(state) 
+                        and (self.can_hover(state) or self.can_cartwheel(state))
+                        )),
             LocationName.haunted_hall_bonus_1:
-                self.has_skull_kart,
+                lambda state: self.has_skull_kart(state) and (
+                    self.has_diddy(state) or (self.has_dixie(state) 
+                        and (self.can_hover(state) or self.can_cartwheel(state))
+                        )),
             LocationName.haunted_hall_bonus_2:
-                self.has_skull_kart,
+                lambda state: self.has_skull_kart(state) and (
+                    self.has_diddy(state) or (self.has_dixie(state) 
+                        and (self.can_hover(state) or self.can_cartwheel(state))
+                        )),
             LocationName.haunted_hall_bonus_3:
-                self.has_skull_kart,
+                lambda state: self.has_skull_kart(state) and (
+                    self.has_diddy(state) or (self.has_dixie(state) 
+                        and (self.can_hover(state) or self.can_cartwheel(state))
+                        )),
 
             LocationName.gusty_glade_clear:
                 lambda state: self.can_cling(state) and self.has_kannons(state),
@@ -4295,7 +4311,9 @@ class DKC2ExpertRules(DKC2Rules):
             LocationName.rambi_rumble_banana_bunch_2:
                 lambda state: (self.has_diddy(state) and self.can_cartwheel(state)) or (self.can_cling(state) and self.has_kannons(state)),
             LocationName.rambi_rumble_banana_coin_2:
-                lambda state: self.can_cling(state) and self.has_kannons(state),
+                lambda state: self.has_kannons(state) and (
+                        self.can_cling(state) or (self.has_diddy(state) and self.can_cartwheel(state) and self.can_hover(state))
+                    ),
             LocationName.rambi_rumble_banana_bunch_3:
                 lambda state: (self.can_cling(state) or (self.has_diddy(state) and self.can_cartwheel(state))) and self.has_kannons(state) and self.has_rambi(state),
 
@@ -4330,9 +4348,15 @@ class DKC2ExpertRules(DKC2Rules):
             LocationName.haunted_hall_banana_coin_1:
                 self.true,
             LocationName.haunted_hall_banana_coin_2:
-                self.has_skull_kart,
+                lambda state: self.has_skull_kart(state) and (
+                    self.has_diddy(state) or (self.has_dixie(state) 
+                        and (self.can_hover(state) or self.can_cartwheel(state))
+                        )),
             LocationName.haunted_hall_banana_coin_3:
-                self.has_skull_kart,
+                lambda state: self.has_skull_kart(state) and (
+                    self.has_diddy(state) or (self.has_dixie(state) 
+                        and (self.can_hover(state) or self.can_cartwheel(state))
+                        )),
 
             LocationName.gusty_glade_banana_coin_1:
                 self.can_team_attack,
