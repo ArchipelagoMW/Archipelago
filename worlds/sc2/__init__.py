@@ -820,6 +820,9 @@ def flag_and_add_resource_locations(world: SC2World, item_list: List[FilterItem]
             ):
                 item_name = world.get_filler_item_name()
                 item = create_item_with_correct_settings(world.player, item_name)
+                if item.classification & ItemClassification.progression:
+                    # Scouting shall show Filler (or a trap)
+                    item.classification = ItemClassification.filler
                 location.place_locked_item(item)
                 world.locked_locations.append(location.name)
 

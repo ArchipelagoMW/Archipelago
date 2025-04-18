@@ -486,6 +486,7 @@ def filter_items(world: 'SC2World', location_cache: List[Location], item_pool: L
     valid_items = valid_inventory.generate_reduced_inventory(target_nonfiller_item_count, filler_amount, mission_requirements)
     for _ in range(reserved_filler_count):
         filler_item = world.create_item(world.get_filler_item_name())
-        filler_item.classification = ItemClassification.filler # Must be flagged as Filler, even if it's a Kerrigan level
+        if filler_item.classification & ItemClassification.progression:
+            filler_item.classification = ItemClassification.filler # Must be flagged as Filler, even if it's a Kerrigan level
         valid_items.append(filler_item)
     return valid_items
