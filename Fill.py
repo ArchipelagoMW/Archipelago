@@ -380,6 +380,9 @@ class _RestrictiveFillBatcher:
             if partial_exploration_state is not None and location not in partial_exploration_state.advancements:
                 swap_base_state = partial_exploration_state
             else:
+                # Unfortunately, the partial exploration state has explored the location, so the swap state will have to
+                # be swept from the batch's base state instead, which has collected fewer items, so will take longer to
+                # sweep from.
                 swap_base_state = self.batch_base_state
 
             if unsafe:
