@@ -12,7 +12,7 @@ These endpoints are used by applications to aquire and validate they have a curr
 Fetches the current datapackage from the WebHost.
 
 `/datapackage/<string:checksum>`    
-Fetches databackage by checksum.
+Fetches datapackage by checksum.
 
 `/datapackage_checksum`  
 Fetches checksum of current datapackage.
