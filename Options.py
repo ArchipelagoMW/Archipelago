@@ -1528,12 +1528,13 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
                     for item in items_copy:
                         if item in world.item_name_groups:
                             value = plando.items.pop(item)
-                            group = sorted(world.item_name_groups[item])
-                            for group_item in group:
-                                if group_item in plando.items:
-                                    raise OptionError(f"Plando `items` contains both \"{group_item}\" and the group "
-                                                    f"\"{item}\" which contains it. It cannot have both.")
-                            plando.items.update({key: value for key in group})
+                            group = world.item_name_groups[item]
+
+                            if isinstance(value, bool):
+                                plando.items.update({key: value for key in sorted(group)})
+                            else:
+                                filtered_items = sorted(group.difference(list(plando.items.keys())))
+                                plando.items.update({key: 1 for key in random.choices(filtered_items, k=value)})
                 else:
                     assert isinstance(plando.items, list)  # pycharm can't figure out the hinting without the hint
                     for item in items_copy:
