@@ -46,8 +46,16 @@ class MessengerWeb(WebWorld):
         "setup/en",
         ["alwaysintreble"],
     )
+    plando_en = Tutorial(
+        "The Messenger Plando Guide",
+        "A guide detailing The Messenger's various supported plando options.",
+        "English",
+        "plando_en.md",
+        "plando/en",
+        ["alwaysintreble"],
+    )
 
-    tutorials = [tut_en]
+    tutorials = [tut_en, plando_en]
 
 
 class MessengerWorld(World):
