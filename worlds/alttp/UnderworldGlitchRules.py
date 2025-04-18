@@ -59,7 +59,7 @@ def dungeon_reentry_rules(world, player, clip: LTTPEntrance, dungeon_region: str
     # since the clip links directly to the exterior region. 
 
 
-def underworld_glitches_rules(world, player): 
+def underworld_glitches_rules(world, player):
     # Ice Palace Entrance Clip
     # This is the easiest one since it's a simple internal clip.
     # Need to also add melting to freezor chest since it's otherwise assumed.
@@ -88,12 +88,12 @@ def underworld_glitches_rules(world, player):
     # We need to be able to s+q to old man, then go to either Mire or Hera at either Hera or GT. 
     # First we require a certain type of entrance shuffle, then build the rule from its pieces. 
     if not world.worlds[player].swamp_patch_required:
-        if world.entrance_shuffle[player] in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
+        if world.worlds[player].options.entrance_shuffle in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
             rule_map = {
                 'Misery Mire (Entrance)': (lambda state: True),
                 'Tower of Hera (Bottom)': (lambda state: state.can_reach('Tower of Hera Big Key Door', 'Entrance', player))
             }
-            inverted = world.mode[player] == 'inverted'
+            inverted = world.worlds[player].options.mode == 'inverted'
             hera_rule = lambda state: (state.has('Moon Pearl', player) or not inverted) and \
                                       rule_map.get(world.get_entrance('Tower of Hera', player).connected_region.name, lambda state: False)(state)
             gt_rule = lambda state: (state.has('Moon Pearl', player) or inverted) and \
