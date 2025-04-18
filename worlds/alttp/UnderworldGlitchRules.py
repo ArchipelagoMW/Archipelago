@@ -1,6 +1,6 @@
-from BaseClasses import Entrance
 from worlds.generic.Rules import set_rule, add_rule
 from .StateHelpers import can_bomb_clip, has_sword, has_beam_sword, has_fire_source, can_melt_things, has_misery_mire_medallion
+from .SubClasses import LTTPEntrance
 
 
 # We actually need the logic to properly "mark" these regions as Light or Dark world. 
@@ -9,17 +9,15 @@ def underworld_glitch_connections(world, player):
     specrock = world.get_region('Spectacle Rock Cave (Bottom)', player)
     mire = world.get_region('Misery Mire (West)', player)
 
-    kikiskip = Entrance(player, 'Kiki Skip', specrock)
-    mire_to_hera = Entrance(player, 'Mire to Hera Clip', mire)
-    mire_to_swamp = Entrance(player, 'Hera to Swamp Clip', mire)
-    specrock.exits.append(kikiskip)
-    mire.exits.extend([mire_to_hera, mire_to_swamp])
+    kikiskip = specrock.create_exit('Kiki Skip')
+    mire_to_hera = mire.create_exit('Mire to Hera Clip')
+    mire_to_swamp = mire.create_exit('Hera to Swamp Clip')
 
     if world.worlds[player].fix_fake_world:
         kikiskip.connect(world.get_entrance('Palace of Darkness Exit', player).connected_region)
         mire_to_hera.connect(world.get_entrance('Tower of Hera Exit', player).connected_region)
         mire_to_swamp.connect(world.get_entrance('Swamp Palace Exit', player).connected_region)
-    else: 
+    else:
         kikiskip.connect(world.get_region('Palace of Darkness (Entrance)', player))
         mire_to_hera.connect(world.get_region('Tower of Hera (Bottom)', player))
         mire_to_swamp.connect(world.get_region('Swamp Palace (Entrance)', player))
@@ -37,7 +35,7 @@ def fake_pearl_state(state, player):
 
 # Sets the rules on where we can actually go using this clip.
 # Behavior differs based on what type of ER shuffle we're playing. 
-def dungeon_reentry_rules(world, player, clip: Entrance, dungeon_region: str, dungeon_exit: str): 
+def dungeon_reentry_rules(world, player, clip: LTTPEntrance, dungeon_region: str, dungeon_exit: str): 
     fix_dungeon_exits = world.worlds[player].fix_palaceofdarkness_exit
     fix_fake_worlds = world.worlds[player].fix_fake_world
 
