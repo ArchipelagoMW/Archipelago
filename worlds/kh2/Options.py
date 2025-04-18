@@ -294,8 +294,8 @@ class BountyStartHint(Toggle):
 
 
 class CasualBounties(Toggle):
-    """More casual and generic locations to expand bounty pool without superbosses"""
-    display_name = "Casual Bounty Toggle"
+    """Adds more casual and generic locations that aren't superbosses to expand the bounty pool. (World Bosses, etc.)"""
+    display_name = "Add Casual Bounties"
     default = False
 
 
