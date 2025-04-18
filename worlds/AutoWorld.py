@@ -7,14 +7,16 @@ import sys
 import time
 from random import Random
 from dataclasses import make_dataclass
-from typing import (Any, Callable, ClassVar, Dict, FrozenSet, Iterable, List, Mapping, Optional, Set, TextIO, Tuple,
-                    TYPE_CHECKING, Type, Union)
+from typing import (Any, Callable, ClassVar, Dict, FrozenSet, Generic, Iterable, List, Mapping, Optional, Set, TextIO,
+                    Tuple, TYPE_CHECKING, Type, Union)
 
 from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
-from BaseClasses import CollectionState
+from BaseClasses import (
+    CollectionState, Entrance, Item, Location, MultiWorld, Region, RegionManager, _T_Reg, _T_Ent, _T_Loc, _T_Item,
+    Tutorial,
+)
 
 if TYPE_CHECKING:
-    from BaseClasses import MultiWorld, Item, Location, Tutorial, Region, Entrance
     from . import GamesPackage
     from settings import Group
 
@@ -22,7 +24,7 @@ perf_logger = logging.getLogger("performance")
 
 
 class AutoWorldRegister(type):
-    world_types: Dict[str, Type[World]] = {}
+    world_types: Dict[str, Type[World[Region, Entrance, Location, Item]]] = {}
     __file__: str
     zip_path: Optional[str]
     settings_key: str
@@ -258,7 +260,7 @@ class WebWorld(metaclass=WebWorldRegister):
     """An optional map from item names (or item group names) to brief descriptions for users."""
 
 
-class World(metaclass=AutoWorldRegister):
+class World(Generic[_T_Reg, _T_Ent, _T_Loc, _T_Item], metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
 
@@ -307,6 +309,8 @@ class World(metaclass=AutoWorldRegister):
 
     origin_region_name: str = "Menu"
     """Name of the Region from which accessibility is tested."""
+    regions: RegionManager[_T_Reg, _T_Ent, _T_Loc]
+    """Regions for this world instance. Regions should be added to this, and not override it."""
 
     explicit_indirect_conditions: bool = True
     """If True, the world implementation is supposed to use MultiWorld.register_indirect_condition() correctly.
@@ -347,6 +351,8 @@ class World(metaclass=AutoWorldRegister):
         self.player = player
         self.random = Random(multiworld.random.getrandbits(64))
         multiworld.per_slot_randoms[player] = self.random
+        from BaseClasses import RegionManager
+        self.regions = RegionManager()
 
     def __getattr__(self, item: str) -> Any:
         if item == "settings":
@@ -473,7 +479,7 @@ class World(metaclass=AutoWorldRegister):
 
     # end of ordered Main.py calls
 
-    def create_item(self, name: str) -> "Item":
+    def create_item(self, name: str) -> _T_Item:
         """
         Create an item for this world type and player.
         Warning: this may be called with self.world = None, for example by MultiServer
@@ -502,7 +508,7 @@ class World(metaclass=AutoWorldRegister):
         return group
 
     # decent place to implement progressive items, in most cases can stay as-is
-    def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:
+    def collect_item(self, state: "CollectionState", item: _T_Item, remove: bool = False) -> Optional[str]:
         """
         Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
         Collect None to skip item.
@@ -514,7 +520,7 @@ class World(metaclass=AutoWorldRegister):
             return item.name
         return None
 
-    def get_pre_fill_items(self) -> List["Item"]:
+    def get_pre_fill_items(self) -> List[_T_Item]:
         """
         Used to return items that need to be collected when creating a fresh all_state, but don't exist in the
         multiworld itempool.
@@ -522,7 +528,7 @@ class World(metaclass=AutoWorldRegister):
         return []
 
     # these two methods can be extended for pseudo-items on state
-    def collect(self, state: "CollectionState", item: "Item") -> bool:
+    def collect(self, state: "CollectionState", item: _T_Item) -> bool:
         """Called when an item is collected in to state. Useful for things such as progressive items or currency."""
         name = self.collect_item(state, item)
         if name:
@@ -530,7 +536,7 @@ class World(metaclass=AutoWorldRegister):
             return True
         return False
 
-    def remove(self, state: "CollectionState", item: "Item") -> bool:
+    def remove(self, state: "CollectionState", item: _T_Item) -> bool:
         """Called when an item is removed from to state. Useful for things such as progressive items or currency."""
         name = self.collect_item(state, item, True)
         if name:
@@ -541,27 +547,27 @@ class World(metaclass=AutoWorldRegister):
         return False
 
     # following methods should not need to be overridden.
-    def create_filler(self) -> "Item":
+    def create_filler(self) -> _T_Item:
         return self.create_item(self.get_filler_item_name())
 
     # convenience methods
-    def get_location(self, location_name: str) -> "Location":
-        return self.multiworld.get_location(location_name, self.player)
+    def get_location(self, location_name: str) -> _T_Loc:
+        return self.regions.location_cache[location_name]
 
-    def get_locations(self) -> "Iterable[Location]":
-        return self.multiworld.get_locations(self.player)
+    def get_locations(self) -> Iterable[_T_Loc]:
+        return self.regions.location_cache.values()
 
-    def get_entrance(self, entrance_name: str) -> "Entrance":
-        return self.multiworld.get_entrance(entrance_name, self.player)
+    def get_entrance(self, entrance_name: str) -> _T_Ent:
+        return self.regions.entrance_cache[entrance_name]
 
-    def get_entrances(self) -> "Iterable[Entrance]":
-        return self.multiworld.get_entrances(self.player)
+    def get_entrances(self) -> Iterable[_T_Ent]:
+        return self.regions.entrance_cache.values()
 
-    def get_region(self, region_name: str) -> "Region":
-        return self.multiworld.get_region(region_name, self.player)
+    def get_region(self, region_name: str) -> _T_Reg:
+        return self.regions.region_cache[region_name]
 
-    def get_regions(self) -> "Iterable[Region]":
-        return self.multiworld.get_regions(self.player)
+    def get_regions(self) -> Iterable[_T_Reg]:
+        return self.regions.region_cache.values()
 
     def push_precollected(self, item: Item) -> None:
         self.multiworld.push_precollected(item)
