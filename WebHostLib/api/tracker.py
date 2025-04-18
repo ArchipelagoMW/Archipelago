@@ -13,8 +13,14 @@ from WebHostLib.tracker import TrackerData
 
 @api_endpoints.route("/tracker/<suuid:tracker>")
 @cache.cached(timeout=60)
-def tracker_data(tracker: UUID):
-    """outputs json data to <root_path>/api/tracker/<id of current session tracker>"""
+def tracker_data(tracker: UUID) -> dict[str, Any]:
+    """
+    Outputs json data to <root_path>/api/tracker/<id of current session tracker>.
+
+    :param tracker: UUID of current session tracker.
+
+    :return: Tracking data for all players in the room. Typing and docstrings describe the format of each value.
+    """
     room: Room | None = Room.get(tracker=tracker)
     if not room:
         abort(404)
