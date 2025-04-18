@@ -128,7 +128,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #Pale Grotto
         #Treasure chests
         #316, 120, -262
-        LocationData("Pale Grotto", "Pale Grotto Chest - Ring around the rosy Fenix Juice chest", 228 + treasure_index_offset),
+        LocationData("Pale Grotto", "Pale Grotto Chest - Fenix Juice chest across from fish island", 228 + treasure_index_offset),
         #307, 124, -345
         LocationData("Pale Grotto", "Pale Grotto Chest - Poisonkiss chest north from save point", 144 + treasure_index_offset),
         LocationData("Pale Grotto", "Pale Grotto Chest - Entrance river hop Tonic chest", 229 + treasure_index_offset),
