@@ -1116,8 +1116,11 @@ def build_sphinx_docs() -> None:
                     split_link = link.split("/")[-1].split(".")
                     link = split_link.pop(0)
                     for str_element in split_link:
-                        link += str_element.removeprefix("md")
-                    link = link.lower().replace(" ", "%20")
+                        if "#" in str_element:
+                            link += str_element.removeprefix("md")
+                        else:
+                            link += str_element.lower()
+                    link = link.replace(" ", "%20")
                 lines[line_index] = line[:start] + link + line[end:]
             with open(os.path.join(sphinx_input, file.name), "w") as f:
                 f.writelines(lines)
