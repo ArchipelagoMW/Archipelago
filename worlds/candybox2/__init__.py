@@ -2,7 +2,7 @@ import typing
 import uuid
 from typing import TextIO, Dict
 
-from BaseClasses import CollectionState, Tutorial
+from BaseClasses import CollectionState, Tutorial, MultiWorld
 from entrance_rando import ERPlacementState
 from worlds.AutoWorld import World, WebWorld
 from .locations import location_descriptions, locations
@@ -50,6 +50,16 @@ class CandyBox2World(World):
         self.starting_weapon = 0
         self.original_entrances: list[tuple[str, str]] = []
         self.calculated_entrances: list[tuple[str, str]] = []
+
+    @staticmethod
+    def stage_generate_early(multiworld: MultiWorld):
+        print(f"Candy Box 2: Client Version: {EXPECTED_CLIENT_VERSION}")
+        if EXPECTED_CLIENT_VERSION.endswith("+"):
+            print("Candy Box 2: <!> Warning! You are generating this game using a non-stable version of the apworld.")
+            print("                 If you plan to play this game with an async, it is recommended that you go back")
+            print("                 and use the stable version. If you decide to continue anyway, when you start")
+            print("                 the game, bookmark the \"Permalink to this version\" in the bottom left corner of")
+            print("                 the game, and ensure you use this version to play.")
 
     def is_ut_regen(self):
         return hasattr(self.multiworld, "re_gen_passthrough")
