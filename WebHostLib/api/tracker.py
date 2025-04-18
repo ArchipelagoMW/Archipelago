@@ -143,7 +143,7 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
 
     return {
         **get_static_tracker_data(room),
-        "player_aliases": player_aliases,
+        "aliases": player_aliases,
         "player_items_received": player_items_received,
         "player_checks_done": player_checks_done,
         "total_checks_done": total_checks_done,
