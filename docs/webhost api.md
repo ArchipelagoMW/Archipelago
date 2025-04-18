@@ -38,16 +38,6 @@ Retrieves:
 - Timeout counter (`timeout`)
 - Downloads for files required for gameplay (`downloads`)
 
-`/room_received_items/<suuid:room_id>`  
-Retreives all items received by players in the current room.  
-Fetches an array of objects formatted as:
-- Receiving Slot ID (`slot`)
-- Items (`items`)
-  - `0`: Item ID
-  - `1`: Location ID
-  - `2`: Sending Slot ID
-  - `3`: Item Flags
-
 ## User Endpoints
 User endpoints can get room and seed details from the current session tokens (cookies)
 
