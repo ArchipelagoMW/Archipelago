@@ -1297,7 +1297,7 @@ exclusion_table = {
         LocationName.MansionBasementCorridorHiPotion,
         LocationName.Xemnas1SecretAnsemReport13,
         LocationName.XigbarSecretAnsemReport3,
-        LocationName.Scar,
+        LocationName.MCP,
         LocationName.Lvl50,
         LocationName.Lvl99
     },
