@@ -6,13 +6,13 @@ from math import floor, ceil
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification, CollectionState
 from Options import Accessibility
 from worlds.AutoWorld import WebWorld, World
-from .item.item_tables import (
-    get_full_item_list, ProtossItemType,
-    ItemData, kerrigan_actives, kerrigan_passives,
-    not_balanced_starting_units, WEAPON_ARMOR_UPGRADE_MAX_LEVEL, ZergItemType,
-)
 from . import location_groups
-from .item import FilterItem, ItemFilterFlags, StarcraftItem, item_groups, item_names, item_tables, item_parents
+from .item.item_tables import (
+    get_full_item_list,
+    not_balanced_starting_units, WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
+)
+from .item import FilterItem, ItemFilterFlags, StarcraftItem, item_groups, item_names, item_tables, item_parents, \
+    ZergItemType, ProtossItemType, ItemData
 from .locations import (
 	get_locations, DEFAULT_LOCATION_LIST, get_location_types, get_location_flags,
     get_plando_locations, LocationType, lookup_location_id_to_type
@@ -704,30 +704,30 @@ def flag_start_abilities(world: SC2World, item_list: List[FilterItem]) -> None:
         return
     assert starter_abilities <= 4
     ability_count = int(starter_abilities)
-    ability_tiers = [0, 1, 3]
-    world.random.shuffle(ability_tiers)
-    if ability_count >= 4:
-        # Avoid picking an ultimate unless 4 starter abilities were asked for.
-        # Without this check, it would be possible to pick an ultimate if a previous tier failed
-        # to pick due to exclusions
-        ability_tiers.append(6)
-    for tier in ability_tiers:
-        abilities_in_tier = kerrigan_actives[tier].union(kerrigan_passives[tier])
+    available_abilities = item_groups.kerrigan_non_ulimates
+    for i in range(ability_count):
         potential_starter_abilities = [
             item for item in item_list
-            if item.name in abilities_in_tier
+            if item.name in available_abilities
             and (ItemFilterFlags.UserExcluded|ItemFilterFlags.StartInventory|ItemFilterFlags.Plando) & item.flags == 0
         ]
+        if len(potential_starter_abilities) == 0 or i >= 3:
+            # Avoid picking an ultimate unless 4 starter abilities were asked for.
+            # Without this check, it would be possible to pick an ultimate if a previous tier failed
+            # to pick due to exclusions
+            available_abilities = item_groups.kerrigan_abilities
+            potential_starter_abilities = [
+                item for item in item_list
+                if item.name in available_abilities
+                   and (ItemFilterFlags.UserExcluded|ItemFilterFlags.StartInventory|ItemFilterFlags.Plando) & item.flags == 0
+            ]
         # Try to avoid giving non-local items unless there is no alternative
         abilities = [item for item in potential_starter_abilities if ItemFilterFlags.NonLocal not in item.flags]
         if not abilities:
             abilities = potential_starter_abilities
         if abilities:
-            ability_count -= 1
             ability = world.random.choice(abilities)
             ability.flags |= ItemFilterFlags.StartInventory
-            if ability_count <= 0:
-                break
 
 
 def flag_unused_upgrade_types(world: SC2World, item_list: List[FilterItem]) -> None:

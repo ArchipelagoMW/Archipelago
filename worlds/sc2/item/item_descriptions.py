@@ -843,7 +843,7 @@ item_descriptions = {
     item_names.TORRASQUE_MERC: "Elite Ultralisk strain. Summoned at the Predator Nest.",
     item_names.HUNTERLING: "Elite strain. Can jump up and down cliffs and stun enemies by jumping on them. Summoned at the Predator Nest.",
     item_names.YGGDRASIL: "Elite Overlord strain that has the ability to transport buildings and ground units. Summoned at the Predator Nest.",
-    item_names.THORNSHELL: "Elite Roach Strain that has the ability to attack air units. Summoned at the Predator Nest.",
+    item_names.THORNSHELLS: "Elite Roach Strain that has the ability to attack air units. Summoned at the Predator Nest.",
     item_names.OVERLORD_VENTRAL_SACS: "Overlords gain the ability to transport ground units.",
     item_names.OVERLORD_GENERATE_CREEP: "Overlords gain the ability to generate creep while standing still.",
     item_names.OVERLORD_ANTENNAE: "Increases Overlord sight range.",
