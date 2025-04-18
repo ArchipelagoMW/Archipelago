@@ -6,6 +6,7 @@ from flask import abort, url_for
 import worlds.Files
 from . import api_endpoints, get_players
 from ..models import Room
+from .. import tracker
 
 
 @api_endpoints.route('/room_status/<suuid:room_id>')
@@ -39,4 +40,33 @@ def room_info(room_id: UUID) -> Dict[str, Any]:
         "last_activity": room.last_activity,
         "timeout": room.timeout,
         "downloads": downloads,
+    }
+
+# TODO: Modify endpoint when teams are implimented.
+#       Right now it'll just have a flat listing of all received items for a slot.
+@api_endpoints.route('/room_received_items/<suuid:room_id>')
+def room_received_items(room_id: UUID) -> Dict[str, Any]:
+    room = Room.get(id=room_id)
+    if room is None:
+        return abort(404)
+
+    instancetrackerData = tracker.trackertata(room)
+    multisavedata: Dict[str, Any] = instancetrackerData._multisave
+    if(multiSavedata == None):
+        return None
+
+    receiveditemdata: Dict[str, Any] = multisavedata["received_items"]
+
+    finalitemdata = []
+    for key in receiveditemdata:
+        for slot in sorted(room.seed.slots.player_id):
+            if str(key[1]) == str(slot) and str(key[2]) == "True":
+                Data = {
+                    "slot": slot,
+                    "items": receiveditemdata[key],
+                }
+                finalitemdata.append(Data)
+
+    return {
+        "room_received_items": finalitemdata,
     }
