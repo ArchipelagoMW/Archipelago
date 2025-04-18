@@ -155,6 +155,7 @@ class SubnauticaWorld(World):
             "creatures_to_scan": self.creatures_to_scan,
             "death_link": self.options.death_link.value,
             "free_samples": self.options.free_samples.value,
+            "radiation_rule": self.options.radiation_rule.current_key,
         }
 
         return slot_data
