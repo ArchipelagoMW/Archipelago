@@ -553,13 +553,13 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
 
         #Overpass
         #Treasure chests
-        #The last Underpass Scrap chest on main map has been categorized under the Capital Jail
-        #The Underpass (Okimoto) map's Underpass Scrap has been categorized under Cobblestone Crag
+        #2nd Overpass Scrap chest on main map has been categorized under the Quintar Sanctum
+        #3rd Overpass Scrap chest on main map has been categorized under the Okimoto N.S.
 
         #Underpass
         #Treasure chests
-        #2nd Overpass Scrap chest on main map has been categorized under the Quintar Sanctum
-        #3rd Overpass Scrap chest on main map has been categorized under the Okimoto N.S.
+        #The last Underpass Scrap chest on main map has been categorized under the Capital Jail
+        #The Underpass (Okimoto) map's Underpass Scrap has been categorized under Cobblestone Crag
 
         #Zones (Expert)
         #Shoudu Waterfront
