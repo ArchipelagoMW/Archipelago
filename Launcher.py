@@ -359,6 +359,11 @@ def run_gui(path: str, args: Any) -> None:
 
             self._refresh_components(self.current_filter)
 
+            # Uncomment to re-enable the Kivy console/live editor
+            # Ctrl-E to enable it, make sure numlock/capslock is disabled
+            # from kivy.modules.console import create_console
+            # create_console(Window, self.top_screen)
+
             return self.top_screen
 
         def on_start(self):

@@ -5,12 +5,13 @@
     size_hint: 1, None
     height: "75dp"
     context_button: context
+    focus_behavior: False
 
     MDRelativeLayout:
         ApAsyncImage:
             source: main.image
             size: (48, 48)
-            size_hint_y: None
+            size_hint: None, None
             pos_hint: {"center_x": 0.1, "center_y": 0.5}
 
         MDLabel:
@@ -37,6 +38,7 @@
             pos_hint:{"center_x": 0.85, "center_y": 0.8}
             theme_text_color: "Custom"
             text_color: app.theme_cls.primaryColor
+            detect_visible: False
             on_release: app.set_favorite(self)
 
         MDIconButton:
@@ -46,6 +48,7 @@
             pos_hint:{"center_x": 0.95, "center_y": 0.8}
             theme_text_color: "Custom"
             text_color: app.theme_cls.primaryColor
+            detect_visible: False
 
         MDButton:
             pos_hint:{"center_x": 0.9, "center_y": 0.25}
@@ -53,7 +56,7 @@
             height: "25dp"
             component: main.component
             on_release: app.component_action(self)
-
+            detect_visible: False
             MDButtonText:
                 text: "Open"
 
