@@ -73,8 +73,6 @@
     MDDialogSupportingText:
         text: "Add or Remove Entries"
 
-
-
     MDDialogContentContainer:
         orientation: "vertical"
         MDDivider:
@@ -87,12 +85,15 @@
             MDIconButton:
                 id: add
                 icon: "plus"
-                pos_hint: {"center_x": 1, "center_y": 0.5}
+                theme_height: "Custom"
+                height: "20dp"
+                on_press: root.validate_add(input)
+
         ScrollBox:
             id: scrollbox
             size_hint_y: None
             theme_bg_color: "Custom"
-            md_bg_color: app.theme_cls.surfaceContainerLowColor
+
         MDButton:
             id: save
             MDButtonText:

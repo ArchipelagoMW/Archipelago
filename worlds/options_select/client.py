@@ -1,5 +1,5 @@
 from kvui import (ThemedApp, ScrollBox, MainLayout, ContainerLayout, dp, Widget, MDBoxLayout, TooltipLabel, ToolTip,
-                  MDLabel, ToggleButton, MarkupDropdown)
+                  MDLabel, ToggleButton, MarkupDropdown, ResizableTextField)
 from kivy.animation import Animation
 from kivy.uix.behaviors.button import ButtonBehavior
 from kivymd.uix.behaviors import RotateBehavior
@@ -10,7 +10,6 @@ from kivymd.uix.slider import MDSlider
 from kivymd.uix.snackbar import MDSnackbar, MDSnackbarText
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.button import MDButton, MDButtonText, MDIconButton
-from kivymd.uix.textfield import MDTextField
 from kivymd.uix.dialog import MDDialog
 from kivy.core.text.markup import MarkupLabel
 from kivy.utils import escape_markup
@@ -108,7 +107,7 @@ class VisualNamedRange(MDBoxLayout):
         self.add_widget(self.range)
 
 
-class VisualFreeText(MDTextField):
+class VisualFreeText(ResizableTextField):
     option: typing.Type[FreeText] | typing.Type[TextChoice]
     name: str
 
@@ -152,7 +151,7 @@ class VisualListSet(MDDialog):
     scrollbox: ScrollBox = ObjectProperty(None)
     add: MDIconButton = ObjectProperty(None)
     save: MDButton = ObjectProperty(None)
-    input: MDTextField = ObjectProperty(None)
+    input: ResizableTextField = ObjectProperty(None)
     dropdown: MDDropdownMenu
     valid_keys: typing.Iterable[str]
 
@@ -165,20 +164,27 @@ class VisualListSet(MDDialog):
         self.dropdown = MarkupDropdown(caller=self.input, border_margin=dp(2),
                                        width=self.input.width, position="bottom")
         self.input.bind(text=self.on_text)
+        self.input.bind(on_text_validate=self.validate_add)
+
+    def validate_add(self, instance):
+        if self.valid_keys:
+            if self.input.text not in self.valid_keys:
+                MDSnackbar(MDSnackbarText(text="Item must be a valid key for this option."), y=dp(24),
+                           pos_hint={"center_x": 0.5}, size_hint_x=0.5)
+                return
+
+        if issubclass(self.option, OptionSet):
+            if any(self.input.text == child.text.text for child in self.scrollbox.layout.children):
+                MDSnackbar(MDSnackbarText(text="This value is already in the set."), y=dp(24),
+                           pos_hint={"center_x": 0.5}, size_hint_x=0.5)
+                return
+
+        self.add_set_item(self.input.text)
+        self.input.set_text(self.input, "")
 
     def remove_item(self, button: MDIconButton):
         list_item = button.parent
         self.scrollbox.layout.remove_widget(list_item)
-
-    def add_generic_item(self, key: str = "New Item"):
-        item = MDListItem(theme_bg_color="Custom", md_bg_color=self.theme_cls.surfaceContainerLowColor)
-        text = MDTextField(text=key, id="value", pos_hint={"center_x": 0.5, "center_y": 0.5}, size_hint_x=None,
-                           width=dp(400))
-        item.text = text
-        item.ids.text_container.add_widget(text)
-        item.add_widget(MDIconButton(icon="minus", on_release=self.remove_item, pos_hint={"center_x": 0.95,
-                                                                                     "center_y": 0.5}))
-        self.scrollbox.layout.add_widget(item)
 
     def add_set_item(self, key: str):
         text = MDListItemSupportingText(text=key, id="value")
@@ -196,6 +202,8 @@ class VisualListSet(MDDialog):
                 split_text = MarkupLabel(text=text, markup=True).markup
                 self.input.set_text(self.input, "".join(text_frag for text_frag in split_text
                                                     if not text_frag.startswith("[")))
+                self.dropdown.dismiss()
+
             lowered = value.lower()
             for item_name in self.valid_keys:
                 try:
@@ -223,7 +231,7 @@ class YamlCreator(ThemedApp):
     main_panel: MainLayout
     player_options: MainLayout
     option_layout: MainLayout
-    name_input: MDTextField
+    name_input: ResizableTextField
     game_label: MDLabel
     current_game: str
     options: typing.Dict[str, typing.Any]
@@ -394,27 +402,6 @@ class YamlCreator(ThemedApp):
         dialog.scrollbox.layout.theme_bg_color = "Custom"
         dialog.scrollbox.layout.spacing = dp(5)
         dialog.scrollbox.layout.padding = [0, dp(5), 0, 0]
-
-        if valid_keys:
-            def add_item(text):
-                dialog.add_set_item(text)
-                dropdown.dismiss()
-
-            menu_items = [
-                {
-                    "text": choice.title(),
-                    "on_release": lambda text=choice.title(): add_item(text)
-                }
-                for choice in valid_keys
-            ]
-            dropdown = MDDropdownMenu(caller=dialog.add, items=menu_items)
-            dialog.add.bind(on_release=lambda x: dropdown.open())
-            for item in sorted(option.default):
-                dialog.add_set_item(item)
-        else:
-            dialog.add.bind(on_release=lambda x: dialog.add_generic_item())
-            for item in sorted(option.default):
-                dialog.add_generic_item(item)
 
         dialog.save.bind(on_release=apply_changes)
         dialog.open()
