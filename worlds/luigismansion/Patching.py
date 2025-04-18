@@ -90,20 +90,6 @@ def update_event_info(event_info, boo_checks: bool, output_data):
             info_entry["pos_x"] == 0)), event_info.info_file_field_entries))
 
     for x in event_info.info_file_field_entries:
-        # Enables a text box to appear when the user receives a key
-        #if x["EventNo"] == 1:
-        #    x["CharacterName"] = "(null)"
-        #    x["pos_x"] = -1293.728000
-        #    x["pos_y"] = 812.320000
-        #    x["pos_z"] = -513.154700
-        #    x["EventFlag"] = 10
-        #    x["EventArea"] = 0
-        #    x["EventLoad"] = 0
-        #    x["EventLock"] = 1
-        #    x["disappear_flag"] = 0
-        #    x["EventIf"] = 0
-        #    x["PlayerStop"] = 0
-
         # Move Telephone rings to third phone, make an A press and make always on
         if x["EventNo"] == 92:
             x["EventFlag"] = 0
@@ -998,7 +984,7 @@ def update_observer_info(observer_info):
         "invisible": 1,
         "(Undocumented)": 0,
     })
-    # Turn on flag 34 to stop event38 from reloading
+    # Turn on flag 3 to stop event38 from reloading
     observer_info.info_file_field_entries.append({
         "name": "observer",
         "code_name": "(null)",
@@ -1015,7 +1001,7 @@ def update_observer_info(observer_info):
         "scale_z": 1.000000,
         "room_no": 57,
         "cond_arg0": 0,
-        "arg0": 34,
+        "arg0": 3,
         "arg1": 0,
         "arg2": 0,
         "arg3": 0,
