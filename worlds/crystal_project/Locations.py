@@ -324,7 +324,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper", 531 + npc_index_offset),
         #Next seven checks can be acquired by either Owl, Ibek, Quintar, or Gaea Stone; vanilla game expects Gaea Stone so that's the logic we're using
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin trampling the Clerics flowers", 564 + npc_index_offset, lambda state: state.has('Item - Gaea Stone', player)),
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Sadist Sam eats(?) Cerberus", 536 + npc_index_offset, lambda state: state.has('Item - Gaea Stone', player)), #name is ca69011a in Crystal Edit whyy lmao
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Give Sadist Sam head(s)", 536 + npc_index_offset, lambda state: state.has('Item - Gaea Stone', player)), #name is ca69011a in Crystal Edit whyy lmao
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin wandering the Magic Shop rooftop garden", 573 + npc_index_offset, lambda state: state.has('Item - Gaea Stone', player)),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin atop sewer exit rooftop", 567 + npc_index_offset, lambda state: state.has('Item - Gaea Stone', player)),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin cheating at Garden Maze", 421 + npc_index_offset, lambda state: state.has('Item - Gaea Stone', player)),

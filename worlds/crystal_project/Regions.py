@@ -35,7 +35,6 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
         create_region(world, player, locations_per_region, "Rolling Quintar Fields"),
         create_region(world, player, locations_per_region, "Quintar Nest"),
         create_region(world, player, locations_per_region, "Quintar Sanctum"),
-        create_region(world, player, locations_per_region, "Quintar Sanctum"),
         create_region(world, player, locations_per_region, "Capital Jail"),
         create_region(world, player, locations_per_region, "Capital Pipeline"),
         create_region(world, player, locations_per_region, "Cobblestone Crag"),
@@ -45,8 +44,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
         create_region(world, player, locations_per_region, "Salmon Pass"),
         create_region(world, player, locations_per_region, "Salmon River"),
         create_region(world, player, locations_per_region, "Shoudu Waterfront"),
-        create_region(world, player, locations_per_region, "Lake Delende")
-        
+        create_region(world, player, locations_per_region, "Lake Delende")     
     ]
 
     multiworld.regions += regions
@@ -56,10 +54,27 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
     multiworld.get_region("Delende", player).add_exits(["Soiled Den", "Pale Grotto", "Yamagawa M.A.", "Seaside Cliffs", "Mercury Shrine"])
     multiworld.get_region("Pale Grotto", player).add_exits(["Proving Meadows"])
     multiworld.get_region("Seaside Cliffs", player).add_exits(["Draft Shaft Conduit"])
-    multiworld.get_region("Proving Meadows", player).add_exits(["Skumparadise"], {"Skumparadise": lambda state: get_job_count(player, state) >= 3})
+    multiworld.get_region("Proving Meadows", player).add_exits(["Skumparadise"], 
+        {"Skumparadise": lambda state: get_job_count(player, state) >= 3})
     multiworld.get_region("Skumparadise", player).add_exits(["Capital Sequoia"])
     multiworld.get_region("Capital Sequoia", player).add_exits(["Jojo Sewers", "Boomer Society", "Rolling Quintar Fields"])
-    multiworld.get_region("Jojo Sewers", player).add_exits(["Capital Jail"], {"Capital Jail": lambda state: state.has_any({"Item - Quintar Flute"}, world.player)})
+    multiworld.get_region("Jojo Sewers", player).add_exits(["Capital Jail"], 
+        {"Capital Jail": lambda state: state.has_any({"Item - Quintar Flute"}, world.player)})
+    multiworld.get_region("Capital Jail", player).add_exits(["Capital Pipeline"], 
+        {"Capital Pipeline": lambda state: state.has("Item - South Wing Key", world.player) and state.has("Item - Cell Key", world.player, 6)})
+    multiworld.get_region("Rolling Quintar Fields", player).add_exits(["Quintar Nest", "Quintar Sanctum"], 
+        {"Quintar Sanctum": lambda state: state.has("Item - Quintar Flute", world.player)})
+    #TODO sanctum, next -> crag
+    multiworld.get_region("Capital Sequoia", player).add_exits(["Cobblestone Crag", "Greenshire Reprise"], 
+        {"Cobblestone Crag": lambda state: state.has_any({"Item - Courtyard Key"}, world.player), 
+        "Greenshire Reprise": lambda state: get_job_count(player, state) >= 6 })
+    multiworld.get_region("Cobblestone Crag", player).add_exits(["Shoudu Waterfront", "Okimoto N.S."], 
+        {"Shoudu Waterfront": lambda state: state.has_any({"Item - Quintar Flute"}, world.player), 
+        "Okimoto N.S.": lambda state: state.has_any({"Item - Quintar Flute"}, world.player)})
+    multiworld.get_region("Greenshire Reprise", player).add_exits(["Salmon Pass"], 
+        {"Salmon Pass": lambda state: state.has_any({"Item - Quintar Flute"}, world.player)})
+    multiworld.get_region("Salmon Pass", player).add_exits(["Salmon River"], 
+        {"Salmon River": lambda state: state.has_any({"Item - Quintar Flute"}, world.player)})
 
     ## examples
     # multiworld.get_region("Onett", player).add_exits(["Giant Step", "Twoson", "Northern Onett", "Global ATM Access"],
@@ -102,4 +117,6 @@ def connect_menu_region(world: "CrystalProjectWorld") -> None:
 
     world.starting_region = starting_region_list[0]
     menu = world.multiworld.get_region("Menu", world.player)
-    menu.add_exits(["Spawning Meadows", "Capital Sequoia"], {"Capital Sequoia": lambda state: state.has_any({"Item - Gaea Stone"}, world.player)})
+    menu.add_exits(["Spawning Meadows", "Capital Sequoia", "Salmon River"], 
+        {"Capital Sequoia": lambda state: state.has_any({"Item - Gaea Stone"}, world.player),
+        "Salmon River": lambda state: state.has_any({"Item - Poseidon Stone"}, world.player)})
