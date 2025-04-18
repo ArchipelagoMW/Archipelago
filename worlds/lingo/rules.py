@@ -36,7 +36,7 @@ def lingo_can_use_mastery_location(state: CollectionState, world: "LingoWorld"):
 def lingo_can_use_level_2_location(state: CollectionState, world: "LingoWorld"):
     counted_panels = 0
     state.update_reachable_regions(world.player)
-    for region in state.reachable_regions[world.player]:
+    for region in state.states[world.player].reachable_regions:
         for access_req, panel_count in world.player_logic.counting_panel_reqs.get(region.name, []):
             if _lingo_can_satisfy_requirements(state, access_req, world):
                 counted_panels += panel_count
