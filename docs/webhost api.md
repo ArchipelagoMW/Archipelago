@@ -30,7 +30,7 @@ Retreives the status of the seed's generation.
 Endpoints to fetch information of the active WebHost room with the supplied room_ID.
 
 `/room_status/<suuid:room_id>`  
-Retreives:
+Retrieves:
 - Tracker UUID (`tracker`)
 - Player List (Slot name, and Game) (`players`)
 - Last known hosted port (`last_port`)
