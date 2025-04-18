@@ -7,9 +7,9 @@ config file.
 
 ## What is considered a location check in ChecksFinder?
 
-Location check gets submitted when you beat the current board of minesweeper, by opening all non-bomb cells. The bottom
-of the screen has a number next to the archipelago logo, that number is how many location checks is left to be sent with
-your item inventory. You can only get as many checks as you have gained items, plus five to start with being available.
+Location checks get submitted when you open all non-bomb cells in a board. The bottom
+of the screen has a number next to the Archipelago logo that displays how many location checks are left to be sent with
+your current inventory. You can only get as many checks as you have gained items plus five checks to start with.
 
 ## When the player receives an item, what happens?
 
