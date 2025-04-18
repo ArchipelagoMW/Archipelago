@@ -12,7 +12,7 @@ def load_tests(loader, standard_tests, pattern):
     all_tests = [
         test_case for folder in folders if os.path.exists(folder)
         for test_collection in loader.discover(folder, top_level_dir=file_path)
-        for test_suite in test_collection
+        for test_suite in test_collection if isinstance(test_suite, unittest.suite.TestSuite)
         for test_case in test_suite
     ]
 
