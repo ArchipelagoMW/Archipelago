@@ -27,7 +27,7 @@ Submits a game to the WebHost for generation.
 Retreives the status of the seed's generation.
 
 ## Room Endpoints
-Room endpoints will fetch foom information of the supplied room_ID.
+Endpoints to fetch information of the active WebHost room with the supplied room_ID.
 
 `/room_status/<suuid:room_id>`  
 Retreives:
