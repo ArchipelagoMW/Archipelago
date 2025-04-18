@@ -1,5 +1,5 @@
 """Module extending BaseClasses.py for aLttP"""
-from typing import Any, List, Optional, TYPE_CHECKING, Tuple, Union
+from typing import Optional, TYPE_CHECKING
 from enum import IntEnum
 
 from BaseClasses import Entrance, Location, Item, ItemClassification, Region, MultiWorld
@@ -76,14 +76,14 @@ class ALttPItem(Item):
             return self.type
 
 
-Addresses = Union[int, List[int], Tuple[int, int, int, int, int, int, int, int, int, int, int, int, int]]
+Addresses = int | list[int] | tuple[int, int, int, int, int, int, int, int, int, int, int, int, int]
 
 
 class LTTPEntrance(Entrance):
-    addresses: Optional[Addresses] = None
-    target: Optional[int] = None
+    addresses: Addresses | None = None
+    target: int | None = None
 
-    def connect(self, region: Region, addresses: Optional[Addresses] = None, target: Optional[int] = None) -> None:
+    def connect(self, region: Region, addresses: Addresses | None = None, target: int | None = None) -> None:
         super().connect(region)
         self.addresses = addresses
         self.target = target
