@@ -616,7 +616,7 @@ class MultiWorld():
         locations: Set[Location] = set()
         events: Set[Location] = set()
         for location in self.get_filled_locations():
-            if type(location.item.code) is int:
+            if type(location.item.code) is int and type(location.address) is int:
                 locations.add(location)
             else:
                 events.add(location)
@@ -869,21 +869,40 @@ class CollectionState():
     def has(self, item: str, player: int, count: int = 1) -> bool:
         return self.prog_items[player][item] >= count
 
+    # for loops are specifically used in all/any/count methods, instead of all()/any()/sum(), to avoid the overhead of
+    # creating and iterating generator instances. In `return all(player_prog_items[item] for item in items)`, the
+    # argument to all() would be a new generator instance, for example.
     def has_all(self, items: Iterable[str], player: int) -> bool:
         """Returns True if each item name of items is in state at least once."""
-        return all(self.prog_items[player][item] for item in items)
+        player_prog_items = self.prog_items[player]
+        for item in items:
+            if not player_prog_items[item]:
+                return False
+        return True
 
     def has_any(self, items: Iterable[str], player: int) -> bool:
         """Returns True if at least one item name of items is in state at least once."""
-        return any(self.prog_items[player][item] for item in items)
+        player_prog_items = self.prog_items[player]
+        for item in items:
+            if player_prog_items[item]:
+                return True
+        return False
 
     def has_all_counts(self, item_counts: Mapping[str, int], player: int) -> bool:
         """Returns True if each item name is in the state at least as many times as specified."""
-        return all(self.prog_items[player][item] >= count for item, count in item_counts.items())
+        player_prog_items = self.prog_items[player]
+        for item, count in item_counts.items():
+            if player_prog_items[item] < count:
+                return False
+        return True
 
     def has_any_count(self, item_counts: Mapping[str, int], player: int) -> bool:
         """Returns True if at least one item name is in the state at least as many times as specified."""
-        return any(self.prog_items[player][item] >= count for item, count in item_counts.items())
+        player_prog_items = self.prog_items[player]
+        for item, count in item_counts.items():
+            if player_prog_items[item] >= count:
+                return True
+        return False
 
     def count(self, item: str, player: int) -> int:
         return self.prog_items[player][item]
@@ -911,11 +930,20 @@ class CollectionState():
 
     def count_from_list(self, items: Iterable[str], player: int) -> int:
         """Returns the cumulative count of items from a list present in state."""
-        return sum(self.prog_items[player][item_name] for item_name in items)
+        player_prog_items = self.prog_items[player]
+        total = 0
+        for item_name in items:
+            total += player_prog_items[item_name]
+        return total
 
     def count_from_list_unique(self, items: Iterable[str], player: int) -> int:
         """Returns the cumulative count of items from a list present in state. Ignores duplicates of the same item."""
-        return sum(self.prog_items[player][item_name] > 0 for item_name in items)
+        player_prog_items = self.prog_items[player]
+        total = 0
+        for item_name in items:
+            if player_prog_items[item_name] > 0:
+                total += 1
+        return total
 
     # item name group related
     def has_group(self, item_name_group: str, player: int, count: int = 1) -> bool:
@@ -1077,6 +1105,9 @@ class Region:
 
         def __len__(self) -> int:
             return self._list.__len__()
+
+        def __iter__(self):
+            return iter(self._list)
 
         # This seems to not be needed, but that's a bit suspicious.
         # def __del__(self):
@@ -1282,9 +1313,6 @@ class Location:
         multiworld = self.parent_region.multiworld if self.parent_region and self.parent_region.multiworld else None
         return multiworld.get_name_string_for_object(self) if multiworld else f'{self.name} (Player {self.player})'
 
-    def __hash__(self):
-        return hash((self.name, self.player))
-
     def __lt__(self, other: Location):
         return (self.player, self.name) < (other.player, other.name)
 
@@ -1387,6 +1415,10 @@ class Item:
     @property
     def flags(self) -> int:
         return self.classification.as_flag()
+
+    @property
+    def is_event(self) -> bool:
+        return self.code is None
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Item):
