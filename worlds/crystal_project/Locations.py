@@ -537,11 +537,11 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
 
         #Salmon River
         #Treasure chests
-        LocationData("Salmon River", "Salmon River Chest - Hop on Money chest once you have become frogger", 1264 + treasure_index_offset),
-        LocationData("Salmon River", "Salmon River Chest - Bloodbind chest atop river island crown", 1297 + treasure_index_offset),
-        LocationData("Salmon River", "Salmon River Chest - Money chest also wishes to be frogger", 325 + treasure_index_offset),
-        LocationData("Salmon River", "Salmon River Chest - Ether Pouch chest in the stands of the Salmon race finish line ", 2976 + treasure_index_offset),
-        LocationData("Salmon River", "Salmon River Chest - Salmon River Map chest inside the Salmon Shack", 2913 + treasure_index_offset),
+        LocationData("Salmon River", "Salmon River Chest - Hop on Money chest once you have become frogger", 1264 + treasure_index_offset, lambda state: state.has('Item - Quintar Flute', player)),
+        LocationData("Salmon River", "Salmon River Chest - Bloodbind chest atop river island crown", 1297 + treasure_index_offset, lambda state: state.has('Item - Quintar Flute', player)),
+        LocationData("Salmon River", "Salmon River Chest - Money chest also wishes to be frogger", 325 + treasure_index_offset, lambda state: state.has('Item - Quintar Flute', player)),
+        LocationData("Salmon River", "Salmon River Chest - Ether Pouch chest in the stands of the Salmon race finish line ", 2976 + treasure_index_offset, lambda state: state.has('Item - Quintar Flute', player)),
+        LocationData("Salmon River", "Salmon River Chest - Salmon River Map chest inside the Salmon Shack", 2913 + treasure_index_offset, lambda state: state.has('Item - Quintar Flute', player)),
 
         #NPCs
         #Todo Missable NPCs: figure out Courtyard Key Reid (see Capital Sequoia)
@@ -572,6 +572,13 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #Treasure chests
         LocationData("Lake Delende", "Lake Delende Chest - Float Shoes chest on north edge", 1263 + treasure_index_offset),
         LocationData("Lake Delende", "Lake Delende Chest - Lake Delende map chest on north edge", 2917 + treasure_index_offset),
+
+        #NPCs
+        LocationData("Lake Delende", "Lake Delende NPC - Panning for Gold Dust down Salmon Creek without a paddle", 2854 + npc_index_offset),
+
+        #Abilities Todo: descriptivize and implement
+        #97, 126, -211
+        #LocationData("Lake Delende", "Lake Delende Ability - Ioske from SEarth_Summon", 1111 + ability_index_offset),
 
         #Jidamba Eaclaneya
         #NPCs
