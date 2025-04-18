@@ -55,7 +55,15 @@ Example:
 ```
 
 `/datapackage/<string:checksum>`    
-Fetches datapackage by checksum.
+Fetches a single datapackage by checksum.
+Returns a dict of the game's data with:
+- A checksum `checksum`
+- A dict of item groups `item_name_groups`
+- Item name to AP ID dict `item_name_to_id`
+- A dict of location groups `location_name_groups`
+- Location name to AP ID dict `location_name_to_id`
+
+Its format will be identical to the whole-datapackage endpoint (`/datapackage`), except you'll only be returned the single game's data in a dict.
 
 `/datapackage_checksum`  
 Fetches the checksums of the current static datapackages on the WebHost.
