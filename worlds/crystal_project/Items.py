@@ -121,7 +121,7 @@ item_table: Dict[str, ItemData] = {
 
     # #Passes
     #"Item - Quintar Pass": ItemData("Item", 7 + item_index_offset, ItemClassification.progression), (now part of Progressive Quintar Flute)
-    "Item - Progressive Luxury Pass": ItemData("Item", 93 + item_index_offset, ItemClassification.progression, 2),
+    "Item - Progressive Luxury Pass": ItemData("Item", 93 + item_index_offset, ItemClassification.progression, 2), #Luxury Pass ID 93; Luxury Pass V2 148
     "Item - Ferry Pass": ItemData("Item", 37 + item_index_offset, ItemClassification.progression),
 
     # #Key Items
@@ -146,10 +146,10 @@ item_table: Dict[str, ItemData] = {
     "Item - Ancient Tablet C": ItemData("Item", 163 + item_index_offset, ItemClassification.filler),
 
     #Animal mount summons
-    "Item - Progressive Quintar Flute": ItemData("Item", 39 + item_index_offset, ItemClassification.progression, 2), #Quintar Flute ID 39
+    "Item - Progressive Quintar Flute": ItemData("Item", 39 + item_index_offset, ItemClassification.progression, 2), #Quintar Pass ID 7 & Quintar Flute ID 39
     "Item - Ibek Bell": ItemData("Item", 50 + item_index_offset, ItemClassification.progression),
     "Item - Owl Drum": ItemData("Item", 49 + item_index_offset, ItemClassification.progression),
-    "Item - Progressive Salmon Violin": ItemData("Item", 48 + item_index_offset, ItemClassification.progression, 2),
+    "Item - Progressive Salmon Violin": ItemData("Item", 48 + item_index_offset, ItemClassification.progression, 2), #Salmon Violin ID 48 & Salmon Cello ID 114
 
     #Teleport items (shards not included since they're stones but worse)
     "Item - Home Point Stone": ItemData("Item", 19 + item_index_offset, ItemClassification.progression),
