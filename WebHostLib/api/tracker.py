@@ -38,7 +38,7 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
             slot_info = tracker_data.get_slot_info(team, player)
             if slot_info.type != SlotType.group or not slot_info.group_members:
                 continue
-            team_groups[0]["groups"].append(
+            team_groups[team]["groups"].append(
                 {
                     "slot": player,
                     "name": slot_info.name,
