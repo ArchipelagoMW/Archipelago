@@ -44,7 +44,7 @@ User endpoints can get room and seed details from the current session tokens (co
 `/get_rooms`  
 Retreives all rooms currently owned by the session token.  
 Each room will have:
-- Room ID (`room_ID`)
+- Room ID (`room_id`)
 - Seed ID (`seed_id`)
 - Creation timestamp (`creation_time`)
 - Last activity timestamp (`last_activity`)
