@@ -1,11 +1,11 @@
 """
 Archipelago Launcher
 
-* if run with APBP as argument, launch corresponding client.
-* if run with executable as argument, run it passing argv[2:] as arguments
-* if run without arguments, open launcher GUI
+* If run with a patch file as argument, launch corresponding client with the patch file as an argument.
+* If run with component name as argument, run it passing argv[2:] as arguments.
+* If run without arguments or unknown arguments, open launcher GUI.
 
-Scroll down to components= to add components to the launcher as well as setup.py
+Additional components can be added to worlds.LauncherComponents.components.
 """
 
 import argparse
