@@ -1,12 +1,12 @@
 # API Guide
 
-Archipelago has a rudementary API that is able to be queried by endpoints.
+Archipelago has a rudimentary API that can be queried by endpoints.
 The API is a work-in-progress and should be improved over time.
 
 All API requests will be formatted as: `https://<Archipelago URL>/api/<endpoint>`
 
 ## Datapackage Endpoints
-These endpoints are used by applications to aquire and validate they have a current datapackage for item and location IDs.
+These endpoints are used by applications to acquire and validate that they have a current datapackage for item and location IDs.
 
 `/datapackage`  
 Fetches the current datapackage from the WebHost.
@@ -32,7 +32,7 @@ Endpoints to fetch information of the active WebHost room with the supplied room
 `/room_status/<suuid:room_id>`  
 Retrieves:
 - Tracker UUID (`tracker`)
-- Player List (Slot name, and Game) (`players`)
+- Player list (Slot name, and Game) (`players`)
 - Last known hosted port (`last_port`)
 - Last activity timestamp (`last_activity`)
 - Timeout counter (`timeout`)
@@ -46,9 +46,9 @@ Retreives all rooms currently owned by the session token.
 Each room will have:
 - Room ID (`room_ID`)
 - Seed ID (`seed_id`)
-- Creation Timestamp (`creation_time`)
+- Creation timestamp (`creation_time`)
 - Last activity timestamp (`last_activity`)
-- Last known AP Port (`last_port`)
+- Last known AP port (`last_port`)
 - Room tiumeout counter (`timeout`)
 - Room tracker UUID (`tracker`)
 
@@ -57,6 +57,5 @@ Retreives all seeds currently owned by the session token.
 Each seed will have:
 - Seed ID (`seed_id`)
 - Creation timestamp (`creation_time`)
-- Player Slots (`players`)
-
+- Player slots (`players`)
 
