@@ -1,27 +1,60 @@
-from .. import SVTestBase, SVTestCase
+from typing import ClassVar
+
+from test.param import classvar_matrix
+from .. import SVTestBase, SVTestCase, solo_multiworld
 from ..TestGeneration import get_all_permanent_progression_items
 from ..assertion import ModAssertMixin, WorldAssertMixin
 from ..options.presets import allsanity_mods_6_x_x
 from ... import options, Group
+from ...mods.mod_data import ModNames
+from ...options.options import all_mods
 
 
-class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
-
-    def test_given_single_mods_when_generate_then_basic_checks(self):
-        for mod in options.Mods.valid_keys:
-            world_options = {options.Mods: mod, options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false}
-            with self.solo_world_sub_test(f"Mod: {mod}", world_options) as (multi_world, _):
-                self.assert_basic_checks(multi_world)
-                self.assert_stray_mod_items(mod, multi_world)
+class TestCanGenerateAllsanityWithMods(WorldAssertMixin, ModAssertMixin, SVTestCase):
 
     def test_allsanity_all_mods_when_generate_then_basic_checks(self):
-        with self.solo_world_sub_test(world_options=allsanity_mods_6_x_x()) as (multi_world, _):
+        with solo_multiworld(allsanity_mods_6_x_x()) as (multi_world, _):
             self.assert_basic_checks(multi_world)
 
     def test_allsanity_all_mods_exclude_island_when_generate_then_basic_checks(self):
         world_options = allsanity_mods_6_x_x()
         world_options.update({options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true})
-        with self.solo_world_sub_test(world_options=world_options) as (multi_world, _):
+        with solo_multiworld(world_options) as (multi_world, _):
+            self.assert_basic_checks(multi_world)
+
+
+@classvar_matrix(mod=all_mods)
+class TestCanGenerateWithEachMod(WorldAssertMixin, ModAssertMixin, SVTestCase):
+    mod: ClassVar[str]
+
+    def test_given_single_mods_when_generate_then_basic_checks(self):
+        world_options = {
+            options.Mods: self.mod,
+            options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false
+        }
+        with solo_multiworld(world_options) as (multi_world, _):
+            self.assert_basic_checks(multi_world)
+            self.assert_stray_mod_items(self.mod, multi_world)
+
+
+@classvar_matrix(mod=all_mods.difference([
+    ModNames.ginger, ModNames.distant_lands, ModNames.skull_cavern_elevator, ModNames.wellwick, ModNames.magic, ModNames.binning_skill, ModNames.big_backpack,
+    ModNames.luck_skill, ModNames.tractor, ModNames.shiko, ModNames.archaeology, ModNames.delores, ModNames.socializing_skill, ModNames.cooking_skill
+]))
+class TestCanGenerateEachModWithEntranceRandomizationBuildings(WorldAssertMixin, SVTestCase):
+    """The following tests validate that ER still generates winnable and logically-sane games with given mods.
+    Mods that do not interact with entrances are skipped
+    Not all ER settings are tested, because 'buildings' is, essentially, a superset of all others
+    """
+    mod: ClassVar[str]
+
+    def test_given_mod_when_generate_then_basic_checks(self) -> None:
+        world_options = {
+            options.EntranceRandomization: options.EntranceRandomization.option_buildings,
+            options.Mods: self.mod,
+            options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false
+        }
+        with solo_multiworld(world_options, world_caching=False) as (multi_world, _):
             self.assert_basic_checks(multi_world)
 
 

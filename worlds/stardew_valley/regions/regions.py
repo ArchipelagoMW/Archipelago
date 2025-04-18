@@ -37,7 +37,7 @@ def create_connections_and_regions(active_content_packs: set[str]) -> tuple[dict
 
 def create_all_regions(active_content_packs: set[str]) -> dict[str, RegionData]:
     current_regions_by_name = create_vanilla_regions(active_content_packs)
-    mods.modify_regions_for_mods(current_regions_by_name, active_content_packs)
+    mods.modify_regions_for_mods(current_regions_by_name, sorted(active_content_packs))
     return current_regions_by_name
 
 
@@ -50,7 +50,7 @@ def create_vanilla_regions(active_content_packs: set[str]) -> dict[str, RegionDa
 
 def create_all_connections(active_content_packs: set[str]) -> dict[str, ConnectionData]:
     connections = create_vanilla_connections(active_content_packs)
-    mods.modify_connections_for_mods(connections, active_content_packs)
+    mods.modify_connections_for_mods(connections, sorted(active_content_packs))
     return connections
 
 
