@@ -201,6 +201,10 @@ class ModMachine:
     composter = "Composter"
     recycling_bin = "Recycling Bin"
     advanced_recycling_machine = "Advanced Recycling Machine"
+    copper_slot_machine = "Copper Slot Machine"
+    gold_slot_machine = "Gold Slot Machine"
+    iridium_slot_machine = "Iridium Slot Machine"
+    radioactive_slot_machine = "Radioactive Slot Machine"
 
 
 class ModFloor:

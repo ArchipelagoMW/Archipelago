@@ -1,16 +1,10 @@
 import enum
-import sys
 from abc import ABC
 from dataclasses import dataclass, field
 from types import MappingProxyType
 from typing import List, Iterable, Set, ClassVar, Tuple, Mapping, Callable, Any
 
 from ..stardew_rule.protocol import StardewRule
-
-if sys.version_info >= (3, 10):
-    kw_only = {"kw_only": True}
-else:
-    kw_only = {}
 
 DEFAULT_REQUIREMENT_TAGS = MappingProxyType({})
 
@@ -33,38 +27,29 @@ class ItemTag(enum.Enum):
 
 
 @dataclass(frozen=True)
-class ItemSource(ABC):
+class Source(ABC):
     add_tags: ClassVar[Tuple[ItemTag]] = ()
+
+    other_requirements: Tuple[Requirement, ...] = field(kw_only=True, default_factory=tuple)
 
     @property
     def requirement_tags(self) -> Mapping[str, Tuple[ItemTag, ...]]:
         return DEFAULT_REQUIREMENT_TAGS
 
-    # FIXME this should just be an optional field, but kw_only requires python 3.10...
-    @property
-    def other_requirements(self) -> Iterable[Requirement]:
-        return ()
 
-
-@dataclass(frozen=True, **kw_only)
-class GenericSource(ItemSource):
+@dataclass(frozen=True, kw_only=True)
+class GenericSource(Source):
     regions: Tuple[str, ...] = ()
     """No region means it's available everywhere."""
-    other_requirements: Tuple[Requirement, ...] = ()
 
 
 @dataclass(frozen=True)
-class CustomRuleSource(ItemSource):
+class CustomRuleSource(Source):
     """Hopefully once everything is migrated to sources, we won't need these custom logic anymore."""
     create_rule: Callable[[Any], StardewRule]
 
 
-@dataclass(frozen=True, **kw_only)
-class CompoundSource(ItemSource):
-    sources: Tuple[ItemSource, ...] = ()
-
-
-class Tag(ItemSource):
+class Tag(Source):
     """Not a real source, just a way to add tags to an item. Will be removed from the item sources during unpacking."""
     tag: Tuple[ItemTag, ...]
 
@@ -79,10 +64,10 @@ class Tag(ItemSource):
 @dataclass(frozen=True)
 class GameItem:
     name: str
-    sources: List[ItemSource] = field(default_factory=list)
+    sources: List[Source] = field(default_factory=list)
     tags: Set[ItemTag] = field(default_factory=set)
 
-    def add_sources(self, sources: Iterable[ItemSource]):
+    def add_sources(self, sources: Iterable[Source]):
         self.sources.extend(source for source in sources if type(source) is not Tag)
         for source in sources:
             self.add_tags(source.add_tags)
