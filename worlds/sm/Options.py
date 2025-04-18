@@ -23,7 +23,7 @@ class Preset(Choice):
     option_solution = 9
     option_custom = 10
     option_varia_custom = 11
-    default = 2
+    default = 0
 
 class StartLocation(Choice):
     """Choose where you want to start the game."""
@@ -70,7 +70,7 @@ class MaxDifficulty(Choice):
     option_hardcore = 4
     option_mania = 5
     option_infinity = 6
-    default = 4
+    default = 0
 
 class MorphPlacement(Choice):
     """Influences where the Morphing Ball with be placed."""
