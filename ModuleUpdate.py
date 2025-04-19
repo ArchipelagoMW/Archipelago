@@ -64,7 +64,7 @@ def confirm(msg: str):
 def update_command():
     check_pip()
     for file in requirements_files:
-        subprocess.call([sys.executable, "-m", "pip", "install", "-r", file, "--upgrade"])
+        subprocess.call([sys.executable, "-m", "pip", "install", "--break-system-packages", "-r", file, "--upgrade"])
 
 
 def install_pkg_resources(yes=False):

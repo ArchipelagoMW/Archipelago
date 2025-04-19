@@ -1,1 +1,2 @@
-pygbagfx==0.0.10
+pygbagfx>=0.0.11
+python-bps-continued>=7

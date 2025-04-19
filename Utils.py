@@ -15,12 +15,14 @@ import collections
 import importlib
 import logging
 import warnings
+import zlib
 
 from argparse import Namespace
 from settings import Settings, get_settings
 from time import sleep
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
 from yaml import load, load_all, dump
+from bps.operations import Header, SourceRead, TargetRead, SourceCopy, TargetCopy, SourceCRC32, TargetCRC32
 
 try:
     from yaml import CLoader as UnsafeLoader, CSafeLoader as SafeLoader, CDumper as Dumper
@@ -1074,3 +1076,31 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
     if isinstance(obj, str):
         return False
     return isinstance(obj, typing.Iterable)
+
+def data_to_bps_patch(data, source):
+    """
+    Accepts data of type:
+    {
+        "length": number
+        "data": [
+            {
+                "address": number
+                "length": number
+                "data": bytearray
+        ]
+    }"""
+
+    patch = [
+        Header(data["length"], data["length"], "")
+    ]
+    current_ptr = 0
+    for block in data["data"]:
+        if current_ptr < block["address"]:
+            patch.append(SourceRead(block["address"] - current_ptr))
+            current_ptr = block["address"]
+        patch.append(TargetRead(block["data"]))
+        current_ptr += len(block["data"])
+    if current_ptr < data["length"]:
+        patch.append(SourceRead(data["length"] - current_ptr))
+    patch.append(SourceCRC32(zlib.crc32(source)))
+    return patch
