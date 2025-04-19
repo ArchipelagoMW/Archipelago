@@ -339,6 +339,7 @@ class Wargroove2Context(CommonContext):
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
         from kvui import GameManager
+        from kivymd.uix.tab import MDTabsItem, MDTabsItemText
         from kivy.uix.tabbedpanel import TabbedPanelItem
         from kivy.lang import Builder
         from kivy.uix.togglebutton import ToggleButton
@@ -398,12 +399,8 @@ class Wargroove2Context(CommonContext):
 
             def build(self):
                 container = super().build()
-                panel = TabbedPanelItem(text="WG2 Tracker")
-                panel.content = self.build_tracker()
-                self.tabs.add_widget(panel)
-                panel = TabbedPanelItem(text="WG2 Levels")
-                panel.content = self.build_levels()
-                self.tabs.add_widget(panel)
+                self.add_client_tab("WG2 Tracker", self.build_tracker())
+                self.add_client_tab("WG2 Levels", self.build_levels())
                 return container
 
             def build_levels(self) -> LevelsLayout:
