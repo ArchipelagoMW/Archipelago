@@ -10,9 +10,7 @@ from .locations import candy_box_locations, CandyBox2Location, village_shop_loca
     village_house_2_locations, sorceress_hut_locations, octopus_king_locations, naked_monkey_wizard_locations, \
     castle_egg_room_locations, dragon_locations, lighthouse_locations, hell_locations, the_developer_fight_locations, \
     forge_1_locations, forge_2_locations, forge_3_locations, forge_4_locations, forge_5_locations, \
-    wishing_well_locations, wishing_well_glove_locations, wishing_well_tribal_spear_locations, \
-    wishing_well_monkey_wizard_staff_locations, wishing_well_knight_body_armour_locations, \
-    wishing_well_octopus_king_crown_locations, wishing_well_giant_spoon_locations, hole_locations, \
+    wishing_well_locations, hole_locations, \
     desert_fortress_locations, teapot_quest_locations, xinopherydon_quest_locations, ledge_room_quest_locations, \
     castle_trap_room_locations, squirrel_tree_locations, the_sea_locations, lonely_house_locations, dig_spot_locations, \
     yourself_fight_locations, castle_dark_room_locations, castle_bakehouse_locations, pogo_stick_spot_locations, \
@@ -63,7 +61,7 @@ def create_regions(world: "CandyBox2World"):
     world_map_4 = populate_region(world, player, CandyBox2Region("World Map (4)", player, multiworld, "The World Map"), map_stage_4_locations, world_map_3, lambda state: state.has("Progressive World Map", player, 4))
     world_map_5 = populate_region(world, player, CandyBox2Region("World Map (5)", player, multiworld, "The World Map"), map_stage_5_locations, world_map_4, lambda state: state.has("Progressive World Map", player, 5))
     castle = populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.CASTLE, player, multiworld), map_stage_6_locations, world_map_5, lambda state: state.has("Progressive World Map", player, 6))
-    tower_entrance = populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.TOWER, player, multiworld), map_stage_7_locations, castle, lambda state: state.has("Progressive World Map", player, 7))
+    tower_entrance = populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.TOWER, player, multiworld), map_stage_7_locations, castle, lambda state: state.has("Progressive World Map", player, 7) and can_reach_room(state, CandyBox2Room.CASTLE, player))
 
     # The Village
     populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.VILLAGE_SHOP, player, multiworld), village_shop_locations, village)
@@ -93,12 +91,6 @@ def create_regions(world: "CandyBox2World"):
 
     # The Wishing Well
     wishing_well = populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.WISHING_WELL, player, multiworld), wishing_well_locations, world_map_2, lambda state: chocolate_count(state, player) >= 13)
-    populate_region(world, player, CandyBox2Region("The Wishing Well (Unlocked Gloves)", player, multiworld, "The Wishing Well"), wishing_well_glove_locations, wishing_well, lambda state: state.has("Leather Gloves", player))
-    populate_region(world, player, CandyBox2Region("The Wishing Well (Unlocked Tribal Spear)", player, multiworld, "The Wishing Well"), wishing_well_tribal_spear_locations, wishing_well, lambda state: has_weapon(world, state, player, "Tribal Spear"))
-    populate_region(world, player, CandyBox2Region("The Wishing Well (Unlocked Monkey Wizard Staff)", player, multiworld, "The Wishing Well"), wishing_well_monkey_wizard_staff_locations, wishing_well, lambda state: has_weapon(world, state, player, "Monkey Wizard Staff"))
-    populate_region(world, player, CandyBox2Region("The Wishing Well (Unlocked Knight Body Armour)", player, multiworld, "The Wishing Well"), wishing_well_knight_body_armour_locations, wishing_well, lambda state: state.has("Knight Body Armour", player))
-    populate_region(world, player, CandyBox2Region("The Wishing Well (Unlocked Octopus King Crown)", player, multiworld, "The Wishing Well"), wishing_well_octopus_king_crown_locations, wishing_well, lambda state: state.has("Octopus King Crown", player))
-    populate_region(world, player, CandyBox2Region("The Wishing Well (Unlocked Giant Spoon)", player, multiworld, "The Wishing Well"), wishing_well_giant_spoon_locations, wishing_well, lambda state: has_weapon(world, state, player, "Giant Spoon"))
 
     # The Cave
     the_cave = populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.CAVE, player, multiworld), cave_locations, world_map_2)

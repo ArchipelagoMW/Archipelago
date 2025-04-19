@@ -65,6 +65,16 @@ def set_rules(world: "CandyBox2World", player: int):
                                                                                                   "Iron Axe") and has_projectiles(
         world, state, player))
 
+    # Wishing Well rules
+    add_rule(world.get_location("Enchant Red Enchanted Gloves"), lambda state: state.has("Leather Gloves", player))
+    add_rule(world.get_location("Enchant Pink Enchanted Gloves"), lambda state: state.has("Leather Gloves", player))
+    add_rule(world.get_location("Enchant Summoning Tribal Spear"), lambda state: has_weapon(world, state, player, "Tribal Spear"))
+    add_rule(world.get_location("Enchant Enchanted Monkey Wizard Staff"), lambda state: has_weapon(world, state, player, "Monkey Wizard Staff"))
+    add_rule(world.get_location("Enchant Enchanted Knight Body Armour"), lambda state: state.has("Knight Body Armour", player))
+    add_rule(world.get_location("Enchant Octopus King Crown with Jaspers"), lambda state: state.has("Octopus King Crown", player))
+    add_rule(world.get_location("Enchant Octopus King Crown with Obsidian"), lambda state: state.has("Octopus King Crown", player))
+    add_rule(world.get_location("Enchant Giant Spoon of Doom"), lambda state: has_weapon(world, state, player, "Giant Spoon"))
+
     # Bridge rules
     add_rule(world.get_location("Troll Defeated"), lambda state: weapon_is_at_least(world, state, player,
                                                                                     "Polished Silver Sword"))
