@@ -123,7 +123,8 @@ class _RestrictiveFillBatcher:
         Maximum exploration states and some swap states will be swept from `_partial_exploration_state`.
         """
 
-        _swap_removed_partial_exploration_state_item_ids: set[int]
+        _deferred_swap_item_ids: set[int]
+        _deferred_swap_items: list[Item]
 
         def __init__(self,
                      batch_base_state: CollectionState,
@@ -141,7 +142,8 @@ class _RestrictiveFillBatcher:
 
             self._partial_exploration_state = None
 
-            self._swap_removed_partial_exploration_state_item_ids = set()
+            self._deferred_swap_item_ids = set()
+            self._deferred_swap_items = []
 
         @abc.abstractmethod
         def _pop_items_to_place(self) -> list[Item]:
@@ -186,25 +188,27 @@ class _RestrictiveFillBatcher:
                 return []
             self.batched_placements_remaining = batched_placements_remaining - 1
             items_to_place = self._pop_items_to_place()
-            self._update_pools_for_items_to_place(items_to_place)
 
-            # A swap that displaces an item into the current batch of placements, that the partial exploration state had
-            # already collected, damages the partial exploration state because any maximum exploration states or swap
-            # states swept from the partial exploration state will only have collected that displaced item while it is
-            # still in `self.batch_item_pool`. Once the displaced item is removed from `self.batch_item_pool`, so is in
-            # `items_to_place`, these maximum exploration states and swap states will incorrectly have already collected
-            # items from locations that were only reachable because the partial exploration state had originally
-            # collected the displaced item.
-            swapped_item_ids = self._swap_removed_partial_exploration_state_item_ids
-            if swapped_item_ids and not swapped_item_ids.isdisjoint(map(id, items_to_place)):
-                # One of the items being placed was originally displaced out of an existing placement, due to a swap,
-                # and back into the current batch. The current partial exploration state only remained valid until it
-                # was time to place the displaced item again.
-                # If there was a way to tell if the displaced item was needed to reach any of the other items that the
-                # partial exploration state has collected, then destroying the state could be avoided, but there is
-                # currently no way to do this, so the partial exploration state must be destroyed and re-created.
+            deferred_swap_item_ids = self._deferred_swap_item_ids
+            if deferred_swap_item_ids and not deferred_swap_item_ids.isdisjoint(map(id, items_to_place)):
+                assert self._partial_exploration_state is not None
+                # One of the items being placed was swapped into the current batch, but was already collected by the
+                # partial exploration state. It is time to place that item now, so the partial exploration state is
+                # invalid and will need to be re-created.
                 self._partial_exploration_state = None
-                swapped_item_ids.clear()
+
+                # Any deferred swap items that are not being placed will need to be added back into the batch item pool.
+                # The deferred swap items that *are* being placed do not need to be added back into the batch item pool,
+                # but it is simpler to add all the items and then remove the ones being placed because determining which
+                # items do not need to be added needs to be done by comparing by identity.
+                for item in self._deferred_swap_items:
+                    self.batch_item_pool.append(item)
+
+                # Clear the list of deferred swap items and the set of their item IDs.
+                self._deferred_swap_items.clear()
+                deferred_swap_item_ids.clear()
+
+            self._update_pools_for_items_to_place(items_to_place)
             return items_to_place
 
         def get_maximum_exploration_state(self, explore_locations: list[Location] | None, unplaced_items: list[Item]
@@ -260,49 +264,36 @@ class _RestrictiveFillBatcher:
                 placed was placed at.
             """
             assert self.batch_empty_spaces[displaced_item.player] > 0
-            self.batch_item_pool.append(displaced_item)
             self.batch_empty_spaces[displaced_item.player] -= 1
             partial_exploration_state = self._partial_exploration_state
             if partial_exploration_state is not None and swap_location in partial_exploration_state.advancements:
-                # Swapping items into the current batch is a complicated set of interactions, if there are any issues
-                # with this conditional branch, setting `self._partial_exploration_state = None` will force the
-                # partial exploration state to be recreated, at the cost of a reduction in swap performance.
-                #
-                # The batch's partial exploration state has already collected the `displaced_item` from the swapped
-                # location. This is a problem because the partial exploration state could have collected items from
-                # locations that were only reachable because it had collected the `displaced_item`.
-                #
-                # If `displaced_item` is not removed from the partial exploration state, then any new maximum
-                # exploration state or swap state swept from the partial exploration state will end up collecting
-                # `displaced_item` a second time because `displaced_item` is added back into `self.batch_item_pool` and
-                # both the maximum exploration state and swap state collect all items in `self.batch_item_pool`.
-                #
-                # Removing `displaced_item` from the partial exploration state (and removing `swap_location` from
-                # its `.advancements` and `.locations_checked`) works to start with because the partial exploration
-                # state is only used to create maximum exploration and swap states, which will collect `displaced_item`
-                # from `self.batch_item_pool`. But `displaced_item` will eventually be removed from
-                # `self.batch_item_pool` so that `displaced_item` can be placed, once this happens, the partial
-                # exploration state can no longer be used to create maximum exploration and swap states because they
-                # won't collect `displaced_item`, but the partial exploration state could have collected items from
-                # locations that required `displaced_item` to reach.
-                #
-                # If there is any code that intends to use the partial exploration state, but does not collect the items
-                # in `self.batch_item_pool`, then that code will have to create a new partial exploration state.
-                # Maximum exploration and swap states will now collect `displaced_item` from `self.batch_item_pool`
-                # instead of it already being collected by the partial exploration state.
-                partial_exploration_state.remove(displaced_item)
-                # If a location has already been checked by a state, sweeping that state will skip checking that
-                # location again, so `swap_location` need to be removed so that sweeping will check the location again.
-                partial_exploration_state.advancements.remove(swap_location)
-                partial_exploration_state.locations_checked.remove(swap_location)
-                # Multiple items can be swapped into the current batch, and the items need to be compared by identity,
-                # so a set of the Item object IDs is used.
-                assert id(displaced_item) not in self._swap_removed_partial_exploration_state_item_ids, \
+                # The partial exploration state exists and has already collected `displaced_item`.
+                # `displaced_item` should be added into `self.batch_item_pool`, but doing so would mean that a maximum
+                # exploration state or swap state swept from the partial exploration state would have collected
+                # `displaced_item` twice, which would be incorrect.
+                # Instead of adding `displaced_item` into `self.batch_item_pool` immediately and re-creating the partial
+                # exploration state, adding `displaced_item` into `self.batch_item_pool` is deferred until it is time to
+                # place `displaced_item`. Only then does the partial exploration state need to be re-created. This
+                # reduces how often the partial exploration state needs to be re-created, increasing performance.
+                assert id(displaced_item) not in self._deferred_swap_item_ids, \
                     (f"Displaced item {displaced_item} has already been swapped into the batch. This should never"
                      f" happen because the set of displaced item IDs should be cleared whenever it is time to place one"
                      f" of the displaced items. If this does happen, it is more likely that a world submitted the same"
                      f" Item instance to the item pool multiple times instead of creating multiple Item instances.")
-                self._swap_removed_partial_exploration_state_item_ids.add(id(displaced_item))
+                # Multiple items can be displaced into the current batch, and the items need to be compared by identity,
+                # so a set of their unique object IDs is used to track them.
+                self._deferred_swap_item_ids.add(id(displaced_item))
+                self._deferred_swap_items.append(displaced_item)
+
+                # If a location has already been checked by a state, the state will ignore that location in further
+                # sweeps, so `swap_location` needs to be removed so that sweeping will check the location again.
+                partial_exploration_state.advancements.remove(swap_location)
+                # Also remove it from locations_checked for completeness.
+                partial_exploration_state.locations_checked.remove(swap_location)
+            else:
+                # If the partial exploration state does not currently exist, or has not collected the displaced item,
+                # the displaced item can simply be added into the batch's item pool.
+                self.batch_item_pool.append(displaced_item)
 
         def _add_swapped_item_into_future_batch(self, displaced_item: Item, item_to_place: Item,
                                                 swap_location: Location) -> None:
@@ -379,19 +370,31 @@ class _RestrictiveFillBatcher:
             partial_exploration_state = self._partial_exploration_state
             if partial_exploration_state is not None and location not in partial_exploration_state.advancements:
                 swap_base_state = partial_exploration_state
+                deferred_swap_items_to_collect = None
             else:
                 # Unfortunately, the partial exploration state has explored the location, so the swap state will have to
                 # be swept from the batch's base state instead, which has collected fewer items, so will take longer to
                 # sweep from.
                 swap_base_state = self.batch_base_state
+                # The base state won't have collected any deferred swap items, so those will also need to be collected.
+                if self._deferred_swap_items:
+                    deferred_swap_items_to_collect = self._deferred_swap_items
+                else:
+                    deferred_swap_items_to_collect = None
 
             if unsafe:
                 # Assume we can somehow collect `displaced_item` before the item that is being placed, by continuing to
                 # swap.
-                items_to_collect = self.batch_item_pool.copy()
-                items_to_collect.append(displaced_item)
+                if deferred_swap_items_to_collect is not None:
+                    items_to_collect = self.batch_item_pool + deferred_swap_items_to_collect
+                    items_to_collect.append(displaced_item)
+                else:
+                    items_to_collect = self.batch_item_pool + [displaced_item]
             else:
-                items_to_collect = self.batch_item_pool
+                if deferred_swap_items_to_collect is not None:
+                    items_to_collect = self.batch_item_pool + deferred_swap_items_to_collect
+                else:
+                    items_to_collect = self.batch_item_pool
 
             return sweep_from_pool(swap_base_state, items_to_collect, explore_locations)
 
