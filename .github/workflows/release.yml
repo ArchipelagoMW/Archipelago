@@ -29,8 +29,8 @@ jobs:
   # build-release-windows: # this is done by hand because of signing
   # build-release-macos: # LF volunteer
 
-  build-release-ubuntu2004:
-    runs-on: ubuntu-20.04
+  build-release-ubuntu2204:
+    runs-on: ubuntu-22.04
     steps:
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV

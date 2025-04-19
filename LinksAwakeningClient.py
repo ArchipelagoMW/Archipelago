@@ -26,6 +26,7 @@ import typing
 from CommonClient import (CommonContext, get_base_parser, gui_enabled, logger,
                           server_loop)
 from NetUtils import ClientStatus
+from worlds.ladx import LinksAwakeningWorld
 from worlds.ladx.Common import BASE_ID as LABaseID
 from worlds.ladx.GpsTracker import GpsTracker
 from worlds.ladx.TrackerConsts import storage_key
@@ -741,8 +742,8 @@ class LinksAwakeningContext(CommonContext):
                 await asyncio.sleep(1.0)
 
 def run_game(romfile: str) -> None:
-    auto_start = typing.cast(typing.Union[bool, str],
-                            Utils.get_options()["ladx_options"].get("rom_start", True))
+    auto_start = LinksAwakeningWorld.settings.rom_start
+
     if auto_start is True:
         import webbrowser
         webbrowser.open(romfile)

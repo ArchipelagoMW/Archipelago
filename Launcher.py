@@ -8,9 +8,7 @@ Archipelago Launcher
 Scroll down to components= to add components to the launcher as well as setup.py
 """
 
-import os
 import argparse
-import itertools
 import logging
 import multiprocessing
 import shlex
@@ -210,7 +208,7 @@ refresh_components: Optional[Callable[[], None]] = None
 
 
 def run_gui(path: str, args: Any) -> None:
-    from kvui import (ThemedApp, MDFloatLayout, MDGridLayout, MDButton, MDLabel, MDButtonText, ScrollBox, ApAsyncImage)
+    from kvui import (ThemedApp, MDFloatLayout, MDGridLayout, ScrollBox)
     from kivy.properties import ObjectProperty
     from kivy.core.window import Window
     from kivy.metrics import dp
@@ -230,7 +228,6 @@ def run_gui(path: str, args: Any) -> None:
             self.component = component
             self.image = image_path
             super().__init__(args, kwargs)
-
 
     class Launcher(ThemedApp):
         base_title: str = "Archipelago Launcher"
@@ -318,6 +315,11 @@ def run_gui(path: str, args: Any) -> None:
             for card in cards:
                 self.button_layout.layout.add_widget(card)
 
+            top = self.button_layout.children[0].y + self.button_layout.children[0].height \
+                           - self.button_layout.height
+            scroll_percent = self.button_layout.convert_distance_to_scroll(0, top)
+            self.button_layout.scroll_y = max(0, min(1, scroll_percent[1]))
+
         def filter_clients(self, caller):
             self._refresh_components(caller.type)
 
@@ -338,6 +340,11 @@ def run_gui(path: str, args: Any) -> None:
                 self.cards.append(self.build_card(component))
 
             self._refresh_components(self.current_filter)
+
+            # Uncomment to re-enable the Kivy console/live editor
+            # Ctrl-E to enable it, make sure numlock/capslock is disabled
+            # from kivy.modules.console import create_console
+            # create_console(Window, self.top_screen)
 
             return self.top_screen
 
