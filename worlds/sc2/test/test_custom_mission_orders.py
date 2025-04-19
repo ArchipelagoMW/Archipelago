@@ -105,7 +105,7 @@ class TestCustomMissionOrders(Sc2SetupTestBase):
 
     def test_locked_and_necessary_item_appears_once(self):
         # This is a filler upgrade with a parent
-        test_item = item_names.ZERGLING_METABOLIC_BOOST
+        test_item = item_names.MARINE_OPTIMIZED_LOGISTICS
         world_options = {
             'mission_order': 'custom',
             'locked_items': { test_item: 1 },
