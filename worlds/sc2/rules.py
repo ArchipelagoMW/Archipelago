@@ -1,12 +1,11 @@
 from math import floor
-from typing import TYPE_CHECKING, Set, Optional, Callable, Dict, Tuple
+from typing import TYPE_CHECKING, Set, Optional, Callable, Dict, Tuple, Iterable
 
 from BaseClasses import CollectionState, Location
-from .item.item_groups import kerrigan_non_ulimates, kerrigan_active_abilities, kerrigan_logic_active_abilities, \
-    kerrigan_non_ulimate_active_abilities
+from .item.item_groups import kerrigan_non_ulimates, kerrigan_logic_active_abilities
 from .item.item_names import PROGRESSIVE_PROTOSS_AIR_WEAPON, PROGRESSIVE_PROTOSS_AIR_ARMOR, PROGRESSIVE_PROTOSS_SHIELDS
 from .options import (
-    get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap,
+    RequiredTactics, kerrigan_unit_available, AllInMap,
     GrantStoryTech, GrantStoryLevels, SpearOfAdunPassiveAbilityPresence,
     SpearOfAdunPresence, MissionOrder, EnableMorphling,
     get_enabled_campaigns, get_enabled_races,
@@ -18,7 +17,7 @@ from .item.item_tables import (
     WEAPON_ARMOR_UPGRADE_MAX_LEVEL, soa_ultimate_ratings, soa_energy_ratings, terran_passive_ratings,
     soa_passive_ratings, zerg_passive_ratings, protoss_passive_ratings
 )
-from .mission_tables import SC2Race, SC2Campaign, MissionFlag
+from .mission_tables import SC2Race, SC2Campaign
 from .item import item_groups, item_names
 
 if TYPE_CHECKING:
@@ -76,7 +75,7 @@ class SC2Logic:
 
     # Super Globals
 
-    def is_item_placement(self, state: CollectionState):
+    def is_item_placement(self, state: CollectionState) -> bool:
         """
         Tells if it's item placement or item pool filter
         :return: True for item placement, False for pool filter

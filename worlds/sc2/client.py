@@ -25,7 +25,7 @@ from pathlib import Path
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows, async_start
-from .item import item_names, item_parents
+from .item import item_names, item_parents, race_to_item_type
 from .item.item_groups import item_name_groups, unlisted_item_name_groups, ItemGroupNames
 from . import options, VICTORY_MODULO
 from .options import (
@@ -58,7 +58,7 @@ from worlds._sc2common.bot.main import run_game
 from worlds._sc2common.bot.player import Bot
 from .item.item_tables import (
     lookup_id_to_name, get_full_item_list, ItemData,
-    race_to_item_type, ZergItemType, ProtossItemType, upgrade_bundles,
+    ZergItemType, ProtossItemType, upgrade_bundles,
     WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
 )
 from .locations import SC2WOL_LOC_ID_OFFSET, LocationType, LocationFlag, SC2HOTS_LOC_ID_OFFSET, VICTORY_CACHE_OFFSET

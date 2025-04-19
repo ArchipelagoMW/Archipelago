@@ -590,13 +590,23 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
 def flag_allowed_orphan_items(world: SC2World, item_list: List[FilterItem]) -> None:
     """Adds the `Allowed_Orphan` flag to items that shouldn't be filtered with their parents, like combat shield"""
     missions = get_all_missions(world.custom_mission_order)
-    terran_nobuild_missions = any((MissionFlag.Terran|MissionFlag.NoBuild) in  mission.flags for mission in missions)
-    for item in item_list:
-        if item.name in (
-                item_names.MARINE_COMBAT_SHIELD, item_names.MARINE_PROGRESSIVE_STIMPACK, item_names.MARINE_MAGRAIL_MUNITIONS,
-                item_names.MEDIC_STABILIZER_MEDPACKS, item_names.MEDIC_NANO_PROJECTOR,
-        ) and terran_nobuild_missions:
-            item.flags |= ItemFilterFlags.AllowedOrphan
+    terran_nobuild_missions = any((MissionFlag.Terran|MissionFlag.NoBuild) in mission.flags for mission in missions)
+    if terran_nobuild_missions:
+        for item in item_list:
+            if item.name in (
+                    item_names.MARINE_COMBAT_SHIELD, item_names.MARINE_PROGRESSIVE_STIMPACK, item_names.MARINE_MAGRAIL_MUNITIONS,
+                    item_names.MEDIC_STABILIZER_MEDPACKS, item_names.MEDIC_NANO_PROJECTOR, item_names.MARINE_LASER_TARGETING_SYSTEM,
+            ):
+                item.flags |= ItemFilterFlags.AllowedOrphan
+    # These rules only trigger on Standard tactics
+    if SC2Mission.BELLY_OF_THE_BEAST in missions and world.options.required_tactics == RequiredTactics.option_standard:
+        for item in item_list:
+            if item.name in (item_names.FIREBAT_NANO_PROJECTORS, item_names.FIREBAT_NANO_PROJECTORS, item_names.FIREBAT_PROGRESSIVE_STIMPACK):
+                item.flags |= ItemFilterFlags.AllowedOrphan
+    if SC2Mission.EVIL_AWOKEN in missions and world.options.required_tactics == RequiredTactics.option_standard:
+        for item in item_list:
+            if item.name in (item_names.STALKER_PHASE_REACTOR, item_names.STALKER_INSTIGATOR_SLAYER_DISINTEGRATING_PARTICLES, item_names.STALKER_INSTIGATOR_SLAYER_PARTICLE_REFLECTION):
+                item.flags |= ItemFilterFlags.AllowedOrphan
 
 
 def flag_start_inventory(world: SC2World, item_list: List[FilterItem]) -> None:

@@ -287,6 +287,10 @@ class TestItemFiltering(Sc2SetupTestBase):
         world_options = {
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
+            # Avoid options that lock non-vanilla items for logic
+            'spear_of_adun_presence': options.SpearOfAdunPresence.option_protoss,
+            'required_tactics': options.RequiredTactics.option_advanced,
+            'mastery_locations': options.MasteryLocations.option_disabled,
             'accessibility': 'locations',
             'vanilla_items_only': True,
             # Move the unit nerf items from the start inventory to the pool,
