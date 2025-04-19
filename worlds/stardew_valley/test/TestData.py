@@ -1,10 +1,26 @@
 import unittest
+from typing import List
 
 from .. import Group
 from ..content.content_packs import all_content_pack_names
 from ..items import load_item_csv
 from ..locations import load_location_csv
 from ..strings.trap_names import all_traps
+
+
+def print_lists_difference(list1: List[str], list2: List[str], list1_name: str = "List 1", list2_name: str = "List 2"):
+    for item in list1:
+        if item not in list2:
+            print(f"{item} is in {list1_name} but not in {list2_name}")
+    for item in list2:
+        if item not in list1:
+            print(f"{item} is in {list2_name} but not in {list1_name}")
+
+
+def print_duplicates(items: List[str]):
+    for item in items:
+        if items.count(item) > 1:
+            print(f"{item} is in the list {items.count(item)} times")
 
 
 class TestCsvIntegrity(unittest.TestCase):

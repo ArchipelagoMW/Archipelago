@@ -3,3 +3,7 @@ class SpecialItem:
     trimmed_purple_shorts = "Trimmed Lucky Purple Shorts"
     far_away_stone = "Far Away Stone"
     solid_gold_lewis = "Solid Gold Lewis"
+
+
+class NotReallyAnItem:
+    death = "Death"

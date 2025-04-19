@@ -4,6 +4,7 @@ from typing import Tuple, Optional
 from ..mods.mod_data import ModNames
 from ..strings.food_names import Beverage
 from ..strings.generic_names import Generic
+from ..strings.metal_names import Mineral
 from ..strings.region_names import Region, SVERegion, AlectoRegion, BoardingHouseRegion, LaceyRegion, LogicRegion
 from ..strings.season_names import Season
 from ..strings.villager_names import NPC, ModNPC
@@ -90,7 +91,7 @@ pizza = ("Pizza",)
 tigerseye = ("Tigerseye",)
 sam_loves = cactus_fruit + maple_bar + pizza + tigerseye
 frozen_tear = ("Frozen Tear",)
-obsidian = ("Obsidian",)
+obsidian = (Mineral.obsidian,)
 # pumpkin_soup = ("Pumpkin Soup",)
 # sashimi = ("Sashimi",)
 void_egg = ("Void Egg",)

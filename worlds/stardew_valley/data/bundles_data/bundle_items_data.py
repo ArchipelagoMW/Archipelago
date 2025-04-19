@@ -1,7 +1,7 @@
 from ...bundles.bundle_item import BundleItem
 from ...strings.animal_product_names import AnimalProduct
 from ...strings.artisan_good_names import ArtisanGood
-from ...strings.craftable_names import Consumable, Lighting, Fishing, Craftable, Bomb
+from ...strings.craftable_names import Consumable, Lighting, Fishing, Craftable, Bomb, Furniture, Floor
 from ...strings.crop_names import Vegetable, Fruit
 from ...strings.currency_names import Currency
 from ...strings.fertilizer_names import Fertilizer, SpeedGro, RetainingSoil
@@ -18,6 +18,7 @@ from ...strings.material_names import Material
 from ...strings.metal_names import Fossil, Ore, MetalBar, Mineral, Artifact
 from ...strings.monster_drop_names import Loot
 from ...strings.seed_names import TreeSeed, Seed
+from ...strings.special_item_names import SpecialItem, NotReallyAnItem
 
 wild_horseradish = BundleItem(Forageable.wild_horseradish)
 daffodil = BundleItem(Forageable.daffodil)
@@ -46,6 +47,7 @@ crocus = BundleItem(Forageable.crocus)
 holly = BundleItem(Forageable.holly)
 
 coconut = BundleItem(Forageable.coconut)
+golden_coconut = BundleItem(Geode.golden_coconut, source=BundleItem.Sources.island)
 cactus_fruit = BundleItem(Forageable.cactus_fruit)
 cave_carrot = BundleItem(Forageable.cave_carrot)
 purple_mushroom = BundleItem(Mushroom.purple)
@@ -118,6 +120,7 @@ starfruit = BundleItem(Fruit.starfruit)
 artichoke = BundleItem(Vegetable.artichoke)
 pineapple = BundleItem(Fruit.pineapple, source=BundleItem.Sources.content)
 taro_root = BundleItem(Vegetable.taro_root, source=BundleItem.Sources.content)
+dragon_tooth = BundleItem(Forageable.dragon_tooth, source=BundleItem.Sources.island)
 
 carrot = BundleItem(Vegetable.carrot)
 summer_squash = BundleItem(Vegetable.summer_squash)
@@ -148,6 +151,7 @@ goat_cheese = BundleItem(ArtisanGood.goat_cheese)
 cheese = BundleItem(ArtisanGood.cheese)
 honey = BundleItem(ArtisanGood.honey)
 beer = BundleItem(Beverage.beer)
+mayonnaise = BundleItem(ArtisanGood.mayonnaise)
 juice = BundleItem(ArtisanGood.juice)
 mead = BundleItem(ArtisanGood.mead)
 pale_ale = BundleItem(ArtisanGood.pale_ale)
@@ -241,13 +245,14 @@ copper_bar = BundleItem(MetalBar.copper)
 iron_Bar = BundleItem(MetalBar.iron)
 gold_bar = BundleItem(MetalBar.gold)
 iridium_bar = BundleItem(MetalBar.iridium)
-radioactive_bar = BundleItem(MetalBar.radioactive)
+radioactive_bar = BundleItem(MetalBar.radioactive, source=BundleItem.Sources.island)
 refined_quartz = BundleItem(MetalBar.quartz)
 coal = BundleItem(Material.coal, 5)
 iridium_ore = BundleItem(Ore.iridium)
 gold_ore = BundleItem(Ore.gold)
 iron_ore = BundleItem(Ore.iron)
 copper_ore = BundleItem(Ore.copper)
+radioactive_ore = BundleItem(Ore.radioactive, source=BundleItem.Sources.island)
 battery_pack = BundleItem(ArtisanGood.battery_pack)
 
 quartz = BundleItem(Mineral.quartz)
@@ -260,6 +265,11 @@ ruby = BundleItem(Mineral.ruby)
 amethyst = BundleItem(Mineral.amethyst)
 topaz = BundleItem(Mineral.topaz)
 jade = BundleItem(Mineral.jade)
+obsidian = BundleItem(Mineral.obsidian)
+jamborite = BundleItem(Mineral.jamborite)
+tigerseye = BundleItem(Mineral.tigerseye)
+opal = BundleItem(Mineral.opal)
+thunder_egg = BundleItem(Mineral.thunder_egg)
 
 slime = BundleItem(Loot.slime, 99)
 bug_meat = BundleItem(Loot.bug_meat, 10)
@@ -324,6 +334,8 @@ eggplant_parmesan = BundleItem(Meal.eggplant_parmesan)
 pumpkin_soup = BundleItem(Meal.pumpkin_soup)
 lucky_lunch = BundleItem(Meal.lucky_lunch)
 joja_cola = BundleItem(Trash.joja_cola)
+strange_bun = BundleItem(Meal.strange_bun)
+moss_soup = BundleItem(Meal.moss_soup)
 
 green_algae = BundleItem(WaterItem.green_algae)
 white_algae = BundleItem(WaterItem.white_algae)
@@ -359,6 +371,7 @@ ornamental_fan = BundleItem(Artifact.ornamental_fan)
 chipped_amphora = BundleItem(Artifact.chipped_amphora)
 strange_doll = BundleItem(Artifact.strange_doll)
 strange_doll_green = BundleItem(Artifact.strange_doll_green)
+ancient_seed = BundleItem(Artifact.ancient_seed)
 
 prehistoric_scapula = BundleItem(Fossil.prehistoric_scapula)
 prehistoric_tibia = BundleItem(Fossil.prehistoric_tibia)
@@ -371,6 +384,9 @@ nautilus_fossil = BundleItem(Fossil.nautilus_fossil)
 amphibian_fossil = BundleItem(Fossil.amphibian_fossil)
 palm_fossil = BundleItem(Fossil.palm_fossil)
 trilobite = BundleItem(Fossil.trilobite)
+snake_vertebrae = BundleItem(Fossil.snake_vertebrae, source=BundleItem.Sources.island)
+mummified_bat = BundleItem(Fossil.mummified_bat, source=BundleItem.Sources.island)
+fossilized_tail = BundleItem(Fossil.fossilized_tail, source=BundleItem.Sources.island)
 
 dinosaur_mayo = BundleItem(ArtisanGood.dinosaur_mayonnaise)
 void_mayo = BundleItem(ArtisanGood.void_mayonnaise)
@@ -424,12 +440,16 @@ prize_ticket = BundleItem(Currency.prize_ticket)
 mystery_box = BundleItem(Consumable.mystery_box)
 gold_mystery_box = BundleItem(Consumable.gold_mystery_box, source=BundleItem.Sources.masteries)
 calico_egg = BundleItem(Currency.calico_egg)
+golden_tag = BundleItem(Currency.golden_tag)
 
 apple_slices = BundleItem(ArtisanGood.specific_dried_fruit(Fruit.apple))
 
 infinity_crown = BundleItem(Hat.infinity_crown)
 bowler_hat = BundleItem(Hat.bowler)
 sombrero = BundleItem(Hat.sombrero)
+good_ol_cap = BundleItem(Hat.good_ol_cap)
+
+lucky_purple_shorts = BundleItem(SpecialItem.lucky_purple_shorts)
 
 ancient_fruit_wine = BundleItem(ArtisanGood.specific_wine(Fruit.ancient_fruit))
 dried_ancient_fruit = BundleItem(ArtisanGood.specific_dried_fruit(Fruit.ancient_fruit))
@@ -446,6 +466,7 @@ dried_pineapple = BundleItem(ArtisanGood.specific_dried_fruit(Fruit.pineapple))
 strawberry_wine = BundleItem(ArtisanGood.specific_wine(Fruit.strawberry))
 dried_strawberry = BundleItem(ArtisanGood.specific_dried_fruit(Fruit.strawberry))
 pumpkin_juice = BundleItem(ArtisanGood.specific_juice(Vegetable.pumpkin))
+raisins = BundleItem(ArtisanGood.raisins)
 
 aged_lava_eel_roe = BundleItem(ArtisanGood.specific_aged_roe(Fish.lava_eel))
 aged_crimsonfish_roe = BundleItem(ArtisanGood.specific_aged_roe(Fish.crimsonfish))
@@ -464,3 +485,31 @@ mango_sapling = BundleItem(Sapling.mango)
 orange_sapling = BundleItem(Sapling.orange)
 peach_sapling = BundleItem(Sapling.peach)
 pomegranate_sapling = BundleItem(Sapling.pomegranate)
+
+cookout_kit = BundleItem(Craftable.cookout_kit)
+tent_kit = BundleItem(Craftable.tent_kit)
+
+tea_set = BundleItem(Gift.tea_set)
+
+crystal_ball = BundleItem(Furniture.crystal_ball)
+amethyst_crystal_ball = BundleItem(Furniture.amethyst_crystal_ball)
+aquamarine_crystal_ball = BundleItem(Furniture.aquamarine_crystal_ball)
+emerald_crystal_ball = BundleItem(Furniture.emerald_crystal_ball)
+ruby_crystal_ball = BundleItem(Furniture.ruby_crystal_ball)
+topaz_crystal_ball = BundleItem(Furniture.topaz_crystal_ball)
+
+wood_floor = BundleItem(Floor.wood)
+rustic_plank_floor = BundleItem(Floor.rustic)
+straw_floor = BundleItem(Floor.straw)
+weathered_floor = BundleItem(Floor.weathered)
+crystal_floor = BundleItem(Floor.crystal)
+stone_floor = BundleItem(Floor.stone)
+stone_walkway_floor = BundleItem(Floor.stone_walkway)
+brick_floor = BundleItem(Floor.brick)
+wood_path = BundleItem(Floor.wood_path)
+gravel_path = BundleItem(Floor.gravel_path)
+cobblestone_path = BundleItem(Floor.cobblestone_path)
+stepping_stone_path = BundleItem(Floor.stepping_stone_path)
+crystal_path = BundleItem(Floor.crystal_path)
+
+death = BundleItem(NotReallyAnItem.death)

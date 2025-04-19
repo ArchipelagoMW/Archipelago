@@ -275,7 +275,7 @@ class Mineral:
                               geodes=(Geode.frozen, Geode.omni))
     mudstone = create_mineral("Mudstone",
                               geodes=(Geode.geode, Geode.omni))
-    obsidian = create_mineral("Obsidian",
+    obsidian = create_mineral(Mineral.obsidian,
                               geodes=(Geode.magma, Geode.omni))
     slate = create_mineral("Slate", geodes=(Geode.geode, Geode.omni))
     fairy_stone = create_mineral("Fairy Stone", geodes=(Geode.frozen, Geode.omni))
