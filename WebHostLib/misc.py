@@ -237,6 +237,8 @@ def get_sitemap():
 
 
 @app.route("/docs/")
-@app.route("/docs/<path:filename>")
-def get_dev_docs(filename: str = "index.html"):
-    return redirect(f"https://alwaysintreble.github.io/Archipelago/{filename}")
+def get_dev_docs() -> Response:
+    """
+    Forwards the user to the static development documentation website.
+    """
+    return redirect(f"https://ArchipelagoMW.github.io/Archipelago/")
