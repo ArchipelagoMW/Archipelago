@@ -906,7 +906,7 @@ class GameManager(ThemedApp):
                                     pos_hint={"center_y": 0.575})
         info_button.bind(on_release=self.command_button_action)
         bottom_layout.add_widget(info_button)
-        self.textinput = CommandPromptTextInput(size_hint_y=None, height=dp(30), multiline=False, write_tab=False)
+        self.textinput = CommandPromptTextInput(size_hint_y=None, multiline=False, write_tab=False)
         self.textinput.bind(on_text_validate=self.on_message)
         info_button.height = self.textinput.height
         self.textinput.text_validate_unfocus = False
