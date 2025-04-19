@@ -1538,7 +1538,7 @@ def get_enabled_races(world: Optional['SC2World']) -> Set[SC2Race]:
 
 def get_enabled_campaigns(world: Optional['SC2World']) -> Set[SC2Campaign]:
     if world is None:
-        return EnabledCampaigns.default
+        return {campaign for campaign in SC2Campaign if campaign.campaign_name in EnabledCampaigns.default}
     campaign_names = world.options.enabled_campaigns
     campaigns = {campaign for campaign in SC2Campaign if campaign.campaign_name in campaign_names}
     if (world.options.mission_order.value == MissionOrder.option_vanilla
@@ -1546,6 +1546,9 @@ def get_enabled_campaigns(world: Optional['SC2World']) -> Set[SC2Campaign]:
         and SC2Campaign.EPILOGUE in campaigns
     ):
         campaigns.remove(SC2Campaign.EPILOGUE)
+    if len(campaigns) == 0:
+        # Everything is disabled, roll as everything enabled
+        return {campaign for campaign in SC2Campaign if campaign != SC2Campaign.GLOBAL}
     return campaigns
 
 
