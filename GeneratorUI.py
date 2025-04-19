@@ -1,8 +1,8 @@
 import asyncio
+from concurrent.futures import ThreadPoolExecutor
 import os
 import re
 import tempfile
-import typing
 import shlex
 from shutil import which
 from typing import Optional
@@ -20,106 +20,14 @@ from kivymd.uix.button import MDIconButton
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.snackbar import MDSnackbar, MDSnackbarButtonContainer, MDSnackbarCloseButton, MDSnackbarText
 from kivymd.uix.textfield import MDTextField
-from Utils import is_linux, is_macos, is_windows, parse_yamls
+from Utils import is_linux, is_macos, is_windows, local_path, parse_yamls, open_filename
 
-kv = """
-<OutlinedGrid@MDGridLayout>:
-    canvas:
-        Color:
-            rgb: 1, 1, 1
-        Line:
-            width: 2
-            rectangle: self.x, self.y, self.width, self.height
-
-<MarkupLabel@SelectableLabel>
-    markup: True
-    size_hint: 1, None
-    padding: [2, 2, 2, 2]
-    on_ref_press: app.on_ref_press(*args)
-    adaptive_height: True
-
-MDBoxLayout:
-    orientation: "vertical"
-    padding: [10, 10, 10, 10]
-    spacing: 10
-
-    MDButton:
-        text: "Archipelago Generator"
-        size_hint: None, 0.1
-        pos_hint: {"right": 1}
-        on_press: app.open_file()
-
-        MDButtonIcon:
-            icon: "file-plus"
-
-        MDButtonText:
-            text: "Add File"
-
-    StackLayout:
-        canvas:
-            Color:
-                rgb: 1, 1, 1
-            Line:
-                width: 2
-                rectangle: self.x, self.y, self.width, self.height
-
-        padding: [10, 10, 10, 10]
-        MDGridLayout:
-            id: player_table
-            adaptive_height: True
-            row_default_height: 30
-            cols: 4
-            pos_hint: {"center_x": 0.5}
-
-    MDBoxLayout:
-        orientation: "horizontal"
-        adaptive_height: True
-        spacing: "5dp"
-
-        MDLabel:
-            text: "Additional options :"
-            height: "30dp"
-            adaptive_width: True
-
-        TextInput:
-            id: options_field
-            multiline: False
-            height: "30dp"
-            size_hint_y: None
-            background_color: app.theme_cls.backgroundColor
-            cursor_color: app.theme_cls.primaryColor
-            foreground_color: app.theme_cls.primaryColor
-
-    MDButton:
-        style: "filled"
-        size_hint: None, 0.1
-        pos_hint: {"center_x": 0.5}
-        on_press: app.generate()
-
-        MDButtonText:
-            text: "Generate"
-
-    MDLabel:
-        style: "filled"
-        size_hint: None, 0.1
-        text: "Output"
-
-    UILog:
-        id: ui_log
-        viewclass: "MarkupLabel"
-        padding: [5, 5, 5, 5]
-
-        canvas.before:
-            Color:
-                rgba: (1, 1, 1, 0.2)
-            Rectangle:
-                size: self.size
-                pos: self.pos
-"""
-
-
-async def show_in_file_explorer(path: str) -> str:
-    async def run(*args: str):
+async def show_in_file_explorer(path: str) -> None:
+    """Open the specified path in the native file explorer for the user's operating system
+    
+    :param path: The path of the file or folder to show
+    """
+    async def run(*args: str) -> None:
         proc = await asyncio.create_subprocess_exec(
             args[0],
             *args[1:],
@@ -127,8 +35,7 @@ async def show_in_file_explorer(path: str) -> str:
             stderr=asyncio.subprocess.PIPE,
         )
 
-        stdout, _ = await proc.communicate()
-        return stdout.decode("utf-8").split("\n", 1)[0] or None
+        await proc.communicate()
 
     if is_linux:
         # Attempt to open using DBus
@@ -155,76 +62,14 @@ async def show_in_file_explorer(path: str) -> str:
 
     raise Exception("Could not show file in explorer")
 
-
-async def open_filename(
-    title: str, filetypes: typing.Iterable[typing.Tuple[str, typing.Iterable[str]]], suggest: str = ""
-) -> Optional[str]:
-    """Opens a file browser.
-    Opens the native file browser if possible, falls back to tkinter otherwise.
-
-    I copy-pasted this functions from utils to use the create_subprocess_exec function from asyncio and make the whole
-    function async, even if it copies over the entire logic. I'm not sure that the TKinter part works correctly.
-
-    I would have preferred to update  the existing function to support async, but it does not exactly work that way. The
-    blocking nature of the function freezes the entire UI and leads to a program crash.
-    """
-
-    async def run(*args: str):
-        proc = await asyncio.create_subprocess_exec(
-            args[0],
-            *args[1:],
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,
-        )
-
-        stdout, _ = await proc.communicate()
-        return stdout.decode("utf-8").split("\n", 1)[0] or None
-
-    if is_linux:
-        # prefer native dialog
-        kdialog = which("kdialog")
-        if kdialog:
-            k_filters = "|".join((f'{text} (*{" *".join(ext)})' for (text, ext) in filetypes))
-            return await run(
-                kdialog,
-                f"--title={title}",
-                "--getopenfilename",
-                suggest or ".",
-                k_filters,
-            )
-        zenity = which("zenity")
-        if zenity:
-            z_filters = (f'--file-filter={text} ({", ".join(ext)}) | *{" *".join(ext)}' for (text, ext) in filetypes)
-            selection = (f"--filename={suggest}",) if suggest else ()
-            return await run(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
-
-    # fall back to tk
-    try:
-        import tkinter
-        import tkinter.filedialog
-    except Exception as e:
-        raise e
-    else:
-        try:
-            root = tkinter.Tk()
-        except tkinter.TclError:
-            return None  # GUI not available. None is the same as a user clicking "cancel"
-        root.withdraw()
-        return tkinter.filedialog.askopenfilename(
-            title=title,
-            filetypes=((t[0], " ".join(t[1])) for t in filetypes),
-            initialfile=suggest or None,
-        )
-
-
 class GeneratorApp(ThemedApp):
     player_table: MDGridLayout
     ui_log: UILog
     options_field: TextInput
 
-    players: list = []
-    dropped_text: list[str] = []
-    dropped_files: list[str] = []
+    players: list
+    dropped_text: list[str]
+    dropped_files: list[str]
 
     # Added this here for compatibility with SelectableLabel
     last_autofillable_command: str = ""
@@ -232,7 +77,9 @@ class GeneratorApp(ThemedApp):
 
     def __init__(self):
         super(GeneratorApp, self).__init__()
-        self.yamls = []
+        self.players = []
+        self.dropped_text = []
+        self.dropped_files = []
 
     def build(self):
         self.set_colors()
@@ -243,7 +90,7 @@ class GeneratorApp(ThemedApp):
         Window.bind(on_drop_begin=self._on_drop_begin)
         Window.bind(on_drop_end=self._on_drop_end)
 
-        ui = Builder.load_string(kv)
+        ui = Builder.load_file(local_path("data", "generator.kv"))
         self.player_table = ui.ids.player_table
         self.ui_log = ui.ids.ui_log
         self.options_field = ui.ids.options_field
@@ -255,6 +102,7 @@ class GeneratorApp(ThemedApp):
         self.player_table.add_widget(Label(text="No.", text_size=(None, 30), size_hint_x=2))
         self.player_table.add_widget(Label(text="Name", text_size=(None, 30), size_hint_x=8))
         self.player_table.add_widget(Label(text="Game", text_size=(None, 30), size_hint_x=8))
+        self.player_table.add_widget(Label(text="File", text_size=(None, 30), size_hint_x=8))
         self.player_table.add_widget(Label(text="", text_size=(None, 30), size_hint_x=2))
 
         return ui
@@ -288,32 +136,51 @@ class GeneratorApp(ThemedApp):
                 self._add_yaml(document, os.path.basename(file_path))
 
     def _add_yaml(self, document, file_name: Optional[str] = None) -> None:
-        if (
-            "name" not in document
-            or "game" not in document
-            or not isinstance(document["name"], str)
-            or not isinstance(document["game"], str)
-        ):
+        def show_error() -> None:
             message = "Invalid Player YAML file"
             if file_name:
                 message = f"{message}: {file_name}"
 
             self._show_error_in_snackbar(message)
             return
-
+        
         no = len(self.players) + 1
 
-        name = document["name"]
-        game = document["game"]
+        if "name" not in document:
+            name = "N/A" 
+        elif isinstance(document["name"], str):
+            name = document["name"]
+        elif isinstance(document["name"], dict):
+            name = '/'.join(document["name"].keys())
+        else:
+            show_error()
+
+        if len(name) > 30:
+            name = f"{name[0:29]}..."
+
+        if "game" not in document:
+            game = "N/A"
+        elif isinstance(document["game"], str):
+            game = document["game"]
+        elif isinstance(document["game"], dict):
+            keys = document["game"].keys()
+            count = len(keys)
+            game = list(keys)[0]
+            if count > 1:
+                game = f"{game} (+{count - 1} more)"
+        else:
+            return show_error()
 
         widgets = [
-            Label(text=str(no), size_hint_y=30),
-            Label(text=name, size_hint_y=30),
-            Label(text=game, size_hint_y=30),
+            Label(text=str(no), size_hint_x=2, size_hint_y=30),
+            Label(text=name, size_hint_x=8, size_hint_y=30),
+            Label(text=game, size_hint_x=8, size_hint_y=30),
+            Label(text=file_name or "Text Drop"),
             MDIconButton(
                 icon="minus-circle-outline",
                 style="standard",
                 on_release=self._remove_yaml,
+                size_hint_x=2
             ),
         ]
 
@@ -325,7 +192,7 @@ class GeneratorApp(ThemedApp):
     async def _generate_async(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             for idx, player in enumerate(self.players):
-                filename = f"P{idx}_{player["name"]}.yaml"
+                filename = f"P{idx}.yaml"
                 file_path = os.path.join(temp_dir, filename)
                 with open(file_path, "w", encoding="utf-8") as f:
                     f.write(yaml.dump(player["document"]))
@@ -383,9 +250,10 @@ class GeneratorApp(ThemedApp):
         asyncio.create_task(self._generate_async())
 
     async def open_player_file(self) -> None:
-        file_path = await open_filename("Select player file", (("YAML", ["yaml", "yml"]),))
-        if file_path:
-            self._add_yaml_file(file_path)
+        with ThreadPoolExecutor(1) as executor:
+            file_path = await asyncio.get_running_loop().run_in_executor(executor, lambda: open_filename("Select player file", (("YAML", ["yaml", "yml"]),)))
+            if file_path:
+                self._add_yaml_file(file_path)
 
     def open_file(self) -> None:
         asyncio.create_task(self.open_player_file())
