@@ -5,7 +5,7 @@ from BaseClasses import ItemClassification, Location, MultiWorld, Region, Tutori
 from Utils import visualize_regions
 from worlds.AutoWorld import WebWorld, World
 
-from .Items import CelesteItem, generate_item_table, generate_item_data_table, generate_item_groups, level_item_lists, trap_item_data_table
+from .Items import CelesteItem, generate_item_table, generate_item_data_table, generate_item_groups, level_item_lists, level_cassette_items, cassette_item_data_table, trap_item_data_table
 from .Locations import CelesteLocation, location_data_table, generate_location_groups, checkpoint_location_data_table, location_id_offsets
 from .Names import ItemName, LocationName
 from .Options import CelesteOptions, celeste_option_groups, resolve_options
@@ -180,6 +180,10 @@ class CelesteWorld(World):
         # Interactables
         item_pool += [self.create_item(item_name) for item_name in sorted(self.active_items)]
 
+        # Cassettes
+        if self.options.require_cassettes:
+            item_pool += [self.create_item(level_cassette_items[level_name]) for level_name in sorted(self.active_levels)]
+
         # Strawberries
         real_total_strawberries: int = min(self.options.total_strawberries.value, location_count - len(item_pool))
         self.strawberries_required = int(real_total_strawberries * (self.options.strawberries_required_percentage / 100))
@@ -279,6 +283,7 @@ class CelesteWorld(World):
 
             "music_shuffle": self.options.music_shuffle.value,
             "music_map": self.generate_music_data(),
+            "require_cassettes": self.options.require_cassettes.value,
         }
 
     def output_active_traps(self) -> dict[int, int]:

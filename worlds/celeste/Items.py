@@ -49,6 +49,35 @@ level_item_lists: dict[str, set[str]] = {
     "10c": {ItemName.badeline_boosters, ItemName.double_dash_refills, ItemName.springs, ItemName.pufferfish, ItemName.jellyfish},
 }
 
+level_cassette_items: dict[str, str] = {
+    "0a": ItemName.prologue_cassette,
+    "1a": ItemName.fc_a_cassette,
+    "1b": ItemName.fc_b_cassette,
+    "1c": ItemName.fc_c_cassette,
+    "2a": ItemName.os_a_cassette,
+    "2b": ItemName.os_b_cassette,
+    "2c": ItemName.os_c_cassette,
+    "3a": ItemName.cr_a_cassette,
+    "3b": ItemName.cr_b_cassette,
+    "3c": ItemName.cr_c_cassette,
+    "4a": ItemName.gr_a_cassette,
+    "4b": ItemName.gr_b_cassette,
+    "4c": ItemName.gr_c_cassette,
+    "5a": ItemName.mt_a_cassette,
+    "5b": ItemName.mt_b_cassette,
+    "5c": ItemName.mt_c_cassette,
+    "6a": ItemName.ref_a_cassette,
+    "6b": ItemName.ref_b_cassette,
+    "6c": ItemName.ref_c_cassette,
+    "7a": ItemName.sum_a_cassette,
+    "7b": ItemName.sum_b_cassette,
+    "7c": ItemName.sum_c_cassette,
+    "8a": ItemName.epilogue_cassette,
+    "9a": ItemName.core_a_cassette,
+    "9b": ItemName.core_b_cassette,
+    "9c": ItemName.core_c_cassette,
+    "10a":ItemName.farewell_cassette,
+}
 
 
 celeste_base_id: int = 0xCA10000
@@ -91,86 +120,6 @@ checkpoint_item_data_table: dict[str, CelesteItemData] = {}
 
 key_item_data_table: dict[str, CelesteItemData] = {}
 gem_item_data_table: dict[str, CelesteItemData] = {}
-
-old_checkpoint_item_data_table: dict[str, CelesteItemData] = {
-    ItemName.fc_a_checkpoint_1: CelesteItemData(celeste_base_id + 0x1000 + 0x00, ItemClassification.progression),
-    ItemName.fc_a_checkpoint_2: CelesteItemData(celeste_base_id + 0x1000 + 0x01, ItemClassification.progression),
-
-    ItemName.fc_b_checkpoint_1: CelesteItemData(celeste_base_id + 0x1000 + 0x08, ItemClassification.progression),
-    ItemName.fc_b_checkpoint_2: CelesteItemData(celeste_base_id + 0x1000 + 0x09, ItemClassification.progression),
-
-    ItemName.os_a_checkpoint_1: CelesteItemData(celeste_base_id + 0x1000 + 0x10, ItemClassification.progression),
-    ItemName.os_a_checkpoint_2: CelesteItemData(celeste_base_id + 0x1000 + 0x11, ItemClassification.progression),
-
-    ItemName.os_b_checkpoint_1: CelesteItemData(celeste_base_id + 0x1000 + 0x18, ItemClassification.progression),
-    ItemName.os_b_checkpoint_2: CelesteItemData(celeste_base_id + 0x1000 + 0x19, ItemClassification.progression),
-
-    ItemName.cr_a_checkpoint_1: CelesteItemData(celeste_base_id + 0x1000 + 0x20, ItemClassification.progression),
-    ItemName.cr_a_checkpoint_2: CelesteItemData(celeste_base_id + 0x1000 + 0x21, ItemClassification.progression),
-    ItemName.cr_a_checkpoint_3: CelesteItemData(celeste_base_id + 0x1000 + 0x22, ItemClassification.progression),
-
-    ItemName.cr_b_checkpoint_1: CelesteItemData(celeste_base_id + 0x1000 + 0x28, ItemClassification.progression),
-    ItemName.cr_b_checkpoint_2: CelesteItemData(celeste_base_id + 0x1000 + 0x29, ItemClassification.progression),
-    ItemName.cr_b_checkpoint_3: CelesteItemData(celeste_base_id + 0x1000 + 0x2A, ItemClassification.progression),
-
-    ItemName.gr_a_checkpoint_1: CelesteItemData(celeste_base_id + 0x1000 + 0x30, ItemClassification.progression),
-    ItemName.gr_a_checkpoint_2: CelesteItemData(celeste_base_id + 0x1000 + 0x31, ItemClassification.progression),
-    ItemName.gr_a_checkpoint_3: CelesteItemData(celeste_base_id + 0x1000 + 0x32, ItemClassification.progression),
-
-    ItemName.gr_b_checkpoint_1: CelesteItemData(celeste_base_id + 0x1000 + 0x38, ItemClassification.progression),
-    ItemName.gr_b_checkpoint_2: CelesteItemData(celeste_base_id + 0x1000 + 0x39, ItemClassification.progression),
-    ItemName.gr_b_checkpoint_3: CelesteItemData(celeste_base_id + 0x1000 + 0x3A, ItemClassification.progression),
-
-    ItemName.mt_a_checkpoint_1: CelesteItemData(celeste_base_id + 0x1000 + 0x40, ItemClassification.progression),
-    ItemName.mt_a_checkpoint_2: CelesteItemData(celeste_base_id + 0x1000 + 0x41, ItemClassification.progression),
-    ItemName.mt_a_checkpoint_3: CelesteItemData(celeste_base_id + 0x1000 + 0x42, ItemClassification.progression),
-    ItemName.mt_a_checkpoint_4: CelesteItemData(celeste_base_id + 0x1000 + 0x43, ItemClassification.progression),
-
-    ItemName.mt_b_checkpoint_1: CelesteItemData(celeste_base_id + 0x1000 + 0x48, ItemClassification.progression),
-    ItemName.mt_b_checkpoint_2: CelesteItemData(celeste_base_id + 0x1000 + 0x49, ItemClassification.progression),
-    ItemName.mt_b_checkpoint_3: CelesteItemData(celeste_base_id + 0x1000 + 0x4A, ItemClassification.progression),
-
-    ItemName.ref_a_checkpoint_1: CelesteItemData(celeste_base_id + 0x1000 + 0x50, ItemClassification.progression),
-    ItemName.ref_a_checkpoint_2: CelesteItemData(celeste_base_id + 0x1000 + 0x51, ItemClassification.progression),
-    ItemName.ref_a_checkpoint_3: CelesteItemData(celeste_base_id + 0x1000 + 0x52, ItemClassification.progression),
-    ItemName.ref_a_checkpoint_4: CelesteItemData(celeste_base_id + 0x1000 + 0x53, ItemClassification.progression),
-    ItemName.ref_a_checkpoint_5: CelesteItemData(celeste_base_id + 0x1000 + 0x54, ItemClassification.progression),
-
-    ItemName.ref_b_checkpoint_1: CelesteItemData(celeste_base_id + 0x1000 + 0x58, ItemClassification.progression),
-    ItemName.ref_b_checkpoint_2: CelesteItemData(celeste_base_id + 0x1000 + 0x59, ItemClassification.progression),
-    ItemName.ref_b_checkpoint_3: CelesteItemData(celeste_base_id + 0x1000 + 0x5A, ItemClassification.progression),
-
-    ItemName.sum_a_checkpoint_1: CelesteItemData(celeste_base_id + 0x1000 + 0x60, ItemClassification.progression),
-    ItemName.sum_a_checkpoint_2: CelesteItemData(celeste_base_id + 0x1000 + 0x61, ItemClassification.progression),
-    ItemName.sum_a_checkpoint_3: CelesteItemData(celeste_base_id + 0x1000 + 0x62, ItemClassification.progression),
-    ItemName.sum_a_checkpoint_4: CelesteItemData(celeste_base_id + 0x1000 + 0x63, ItemClassification.progression),
-    ItemName.sum_a_checkpoint_5: CelesteItemData(celeste_base_id + 0x1000 + 0x64, ItemClassification.progression),
-    ItemName.sum_a_checkpoint_6: CelesteItemData(celeste_base_id + 0x1000 + 0x65, ItemClassification.progression),
-
-    ItemName.sum_b_checkpoint_1: CelesteItemData(celeste_base_id + 0x1000 + 0x68, ItemClassification.progression),
-    ItemName.sum_b_checkpoint_2: CelesteItemData(celeste_base_id + 0x1000 + 0x69, ItemClassification.progression),
-    ItemName.sum_b_checkpoint_3: CelesteItemData(celeste_base_id + 0x1000 + 0x6A, ItemClassification.progression),
-    ItemName.sum_b_checkpoint_4: CelesteItemData(celeste_base_id + 0x1000 + 0x6B, ItemClassification.progression),
-    ItemName.sum_b_checkpoint_5: CelesteItemData(celeste_base_id + 0x1000 + 0x6C, ItemClassification.progression),
-    ItemName.sum_b_checkpoint_6: CelesteItemData(celeste_base_id + 0x1000 + 0x6D, ItemClassification.progression),
-
-    ItemName.core_a_checkpoint_1: CelesteItemData(celeste_base_id + 0x1000 + 0x70, ItemClassification.progression),
-    ItemName.core_a_checkpoint_2: CelesteItemData(celeste_base_id + 0x1000 + 0x71, ItemClassification.progression),
-    ItemName.core_a_checkpoint_3: CelesteItemData(celeste_base_id + 0x1000 + 0x72, ItemClassification.progression),
-
-    ItemName.core_b_checkpoint_1: CelesteItemData(celeste_base_id + 0x1000 + 0x78, ItemClassification.progression),
-    ItemName.core_b_checkpoint_2: CelesteItemData(celeste_base_id + 0x1000 + 0x79, ItemClassification.progression),
-    ItemName.core_b_checkpoint_3: CelesteItemData(celeste_base_id + 0x1000 + 0x7A, ItemClassification.progression),
-
-    ItemName.farewell_checkpoint_1: CelesteItemData(celeste_base_id + 0x1000 + 0x80, ItemClassification.progression),
-    ItemName.farewell_checkpoint_2: CelesteItemData(celeste_base_id + 0x1000 + 0x81, ItemClassification.progression),
-    ItemName.farewell_checkpoint_3: CelesteItemData(celeste_base_id + 0x1000 + 0x82, ItemClassification.progression),
-    ItemName.farewell_checkpoint_4: CelesteItemData(celeste_base_id + 0x1000 + 0x83, ItemClassification.progression),
-    ItemName.farewell_checkpoint_5: CelesteItemData(celeste_base_id + 0x1000 + 0x84, ItemClassification.progression),
-    ItemName.farewell_checkpoint_6: CelesteItemData(celeste_base_id + 0x1000 + 0x85, ItemClassification.progression),
-    ItemName.farewell_checkpoint_7: CelesteItemData(celeste_base_id + 0x1000 + 0x86, ItemClassification.progression),
-    ItemName.farewell_checkpoint_8: CelesteItemData(celeste_base_id + 0x1000 + 0x87, ItemClassification.progression),
-}
 
 interactable_item_data_table: dict[str, CelesteItemData] = {
     ItemName.springs:              CelesteItemData(celeste_base_id + 0x2000 + 0x00, ItemClassification.progression),
@@ -219,6 +168,36 @@ interactable_item_data_table: dict[str, CelesteItemData] = {
     ItemName.seekers:       CelesteItemData(celeste_base_id + 0x2000 + 0x1D, ItemClassification.progression),
 }
 
+cassette_item_data_table: dict[str, CelesteItemData] = {
+    ItemName.prologue_cassette: CelesteItemData(celeste_base_id + 0x1000 + 0x00, ItemClassification.filler),
+    ItemName.fc_a_cassette:     CelesteItemData(celeste_base_id + 0x1000 + 0x01, ItemClassification.filler),
+    ItemName.fc_b_cassette:     CelesteItemData(celeste_base_id + 0x1000 + 0x02, ItemClassification.filler),
+    ItemName.fc_c_cassette:     CelesteItemData(celeste_base_id + 0x1000 + 0x03, ItemClassification.filler),
+    ItemName.os_a_cassette:     CelesteItemData(celeste_base_id + 0x1000 + 0x04, ItemClassification.filler),
+    ItemName.os_b_cassette:     CelesteItemData(celeste_base_id + 0x1000 + 0x05, ItemClassification.filler),
+    ItemName.os_c_cassette:     CelesteItemData(celeste_base_id + 0x1000 + 0x06, ItemClassification.filler),
+    ItemName.cr_a_cassette:     CelesteItemData(celeste_base_id + 0x1000 + 0x07, ItemClassification.filler),
+    ItemName.cr_b_cassette:     CelesteItemData(celeste_base_id + 0x1000 + 0x08, ItemClassification.filler),
+    ItemName.cr_c_cassette:     CelesteItemData(celeste_base_id + 0x1000 + 0x09, ItemClassification.filler),
+    ItemName.gr_a_cassette:     CelesteItemData(celeste_base_id + 0x1000 + 0x0A, ItemClassification.filler),
+    ItemName.gr_b_cassette:     CelesteItemData(celeste_base_id + 0x1000 + 0x0B, ItemClassification.filler),
+    ItemName.gr_c_cassette:     CelesteItemData(celeste_base_id + 0x1000 + 0x0C, ItemClassification.filler),
+    ItemName.mt_a_cassette:     CelesteItemData(celeste_base_id + 0x1000 + 0x0D, ItemClassification.filler),
+    ItemName.mt_b_cassette:     CelesteItemData(celeste_base_id + 0x1000 + 0x0E, ItemClassification.filler),
+    ItemName.mt_c_cassette:     CelesteItemData(celeste_base_id + 0x1000 + 0x0F, ItemClassification.filler),
+    ItemName.ref_a_cassette:    CelesteItemData(celeste_base_id + 0x1000 + 0x10, ItemClassification.filler),
+    ItemName.ref_b_cassette:    CelesteItemData(celeste_base_id + 0x1000 + 0x11, ItemClassification.filler),
+    ItemName.ref_c_cassette:    CelesteItemData(celeste_base_id + 0x1000 + 0x12, ItemClassification.filler),
+    ItemName.sum_a_cassette:    CelesteItemData(celeste_base_id + 0x1000 + 0x13, ItemClassification.filler),
+    ItemName.sum_b_cassette:    CelesteItemData(celeste_base_id + 0x1000 + 0x14, ItemClassification.filler),
+    ItemName.sum_c_cassette:    CelesteItemData(celeste_base_id + 0x1000 + 0x15, ItemClassification.filler),
+    ItemName.epilogue_cassette: CelesteItemData(celeste_base_id + 0x1000 + 0x16, ItemClassification.filler),
+    ItemName.core_a_cassette:   CelesteItemData(celeste_base_id + 0x1000 + 0x17, ItemClassification.filler),
+    ItemName.core_b_cassette:   CelesteItemData(celeste_base_id + 0x1000 + 0x18, ItemClassification.filler),
+    ItemName.core_c_cassette:   CelesteItemData(celeste_base_id + 0x1000 + 0x19, ItemClassification.filler),
+    ItemName.farewell_cassette: CelesteItemData(celeste_base_id + 0x1000 + 0x1A, ItemClassification.filler),
+}
+
 def add_checkpoint_to_table(id: int, name: str):
     checkpoint_item_data_table[name] = CelesteItemData(id, ItemClassification.progression)
 
@@ -235,6 +214,7 @@ def generate_item_data_table() -> dict[int, CelesteItemData]:
             **checkpoint_item_data_table,
             **key_item_data_table,
             **gem_item_data_table,
+            **cassette_item_data_table,
             **interactable_item_data_table}
 
 
@@ -249,6 +229,7 @@ def generate_item_groups() -> dict[str, list[str]]:
         "Checkpoints":   list(checkpoint_item_data_table.keys()),
         "Keys":          list(key_item_data_table.keys()),
         "Gems":          list(gem_item_data_table.keys()),
+        "Cassettes":     list(cassette_item_data_table.keys()),
         "Interactables": list(interactable_item_data_table.keys()),
     }
 

@@ -279,6 +279,12 @@ class MusicShuffle(Choice):
     option_singularity = 2
     default = 0
 
+class RequireCassettes(Toggle):
+    """
+    Determines whether you must receive a level's Cassette Item to hear that level's music
+    """
+    display_name = "Require Cassettes"
+
 
 class MadelineHairLength(Choice):
     """
@@ -406,6 +412,7 @@ celeste_option_groups = [
     ]),
     OptionGroup("Aesthetic Options", [
         MusicShuffle,
+        RequireCassettes,
         MadelineHairLength,
         MadelineOneDashHairColor,
         MadelineTwoDashHairColor,
@@ -511,6 +518,7 @@ class CelesteOptions(PerGameCommonOptions):
     include_c_sides: IncludeCSides
 
     music_shuffle: MusicShuffle
+    require_cassettes: RequireCassettes
 
     madeline_hair_length: MadelineHairLength
     madeline_one_dash_hair_color: MadelineOneDashHairColor
