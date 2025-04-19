@@ -48,6 +48,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
         create_region(world, player, locations_per_region, "Salmon Bay"),
         create_region(world, player, locations_per_region, "Ancient Reservoir"),
         create_region(world, player, locations_per_region, "Shoudu Waterfront"),
+        create_region(world, player, locations_per_region, "Shoudu Province"),
         create_region(world, player, locations_per_region, "Lake Delende")     
     ]
 
@@ -76,6 +77,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
     multiworld.get_region("Cobblestone Crag", player).add_exits(["Shoudu Waterfront", "Okimoto N.S."], 
         {"Shoudu Waterfront": lambda state: state.has("Item - Progressive Quintar Flute", world.player, 2), 
         "Okimoto N.S.": lambda state: state.has("Item - Progressive Quintar Flute", world.player, 2)})
+    multiworld.get_region("Shoudu Waterfront", player).add_exits(["Shoudu Province"],
+        {"Shoudu Province": lambda state: state.has("Item - Ibek Bell", world.player)})
     multiworld.get_region("Greenshire Reprise", player).add_exits(["Salmon Pass"], 
         {"Salmon Pass": lambda state: state.has_any({"Item - Progressive Quintar Flute"}, world.player)})
     multiworld.get_region("Salmon Pass", player).add_exits(["Salmon River"], 
@@ -83,7 +86,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
     multiworld.get_region("Poko Poko Desert", player).add_exits(["Sara Sara Bazaar", "Ancient Reservoir", "Salmon Bay"], 
         {"Ancient Reservoir": lambda state: state.has("Item - Pyramid Key", world.player),
         "Salmon Bay": lambda state: state.has("Item - Progressive Quintar Flute", world.player, 2) and state.has("Item - Ibek Bell", player)})
-    multiworld.get_region("Sara Sara Bazaar", player).add_exits(["Sara Sara Beach"])
+    multiworld.get_region("Sara Sara Bazaar", player).add_exits(["Sara Sara Beach", "Shoudu Province"],
+        {"Shoudu Province": lambda state: state.has("Item - Ferry Pass", world.player)})
     ## examples
     # multiworld.get_region("Onett", player).add_exits(["Giant Step", "Twoson", "Northern Onett", "Global ATM Access"],
     #                                              {"Giant Step": lambda state: state.has("Key to the Shack", player),
