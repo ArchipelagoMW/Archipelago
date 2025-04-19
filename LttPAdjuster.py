@@ -40,7 +40,6 @@ class AdjusterWorld(object):
     def __init__(self, sprite_pool):
         import random
         self.sprite_pool = {1: sprite_pool}
-        self.per_slot_randoms = {1: random}
         self.worlds = {1: self.AdjusterSubWorld(random)}
 
 
