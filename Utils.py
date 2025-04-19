@@ -1094,8 +1094,17 @@ def build_sphinx_docs() -> None:
             # parse through the file and fix links for sphinx's api
             with open(os.path.join(sphinx_input, file.name), "r") as f:
                 lines = f.readlines()
-            for line_index in range(len(lines)):
+            # starting at -1 so i can iterate it early instead of in every if block
+            line_index = -1
+            while line_index < len(lines):
+                line_index += 1
                 line = lines[line_index]
+                # add explicit markdown headers for myst-parser to catch
+                if line.startswith("#"):
+                    header_text = line.strip("# \n").lower().replace(" ", "-")
+                    lines.insert(line_index, f"({header_text})=")
+                    line_index += 1
+                    continue
                 # hyperlink
                 if "](" not in line:
                     continue
