@@ -183,7 +183,7 @@ Endpoints to fetch information of the active WebHost room with the supplied room
 
 ### `/room_status/<suuid:room_id>`  
 <a name="roomstatus"></a>
-Will procide a dict of room data with the following keys:
+Will provide a dict of room data with the following keys:
 - Tracker UUID (`tracker`)
 - A list of players (`players`)
   - Each item containing a list with the Slot name and Game
