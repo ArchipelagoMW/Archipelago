@@ -1,5 +1,6 @@
 from typing import List, Optional, Callable, NamedTuple
 from BaseClasses import CollectionState
+from .rules import get_job_count
 
 class LocationData(NamedTuple):
     region: str
@@ -376,7 +377,8 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Treetop Spore Blocker chest west of Quintar Sanctum", 365 + treasure_index_offset, lambda state: state.has_any({'Item - Progressive Quintar Flute'}, player)),
 
         #NPCs
-        #Todo NPCs Crystal Checker: guy gives you Quintar Pass for having enough crystals
+        #Crystal Checker guy gives you Quintar Pass for having enough crystals
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Quintar Stable Owner crystal checker for Quintar Pass if you refuse to touch an eyeball", 375 + npc_index_offset, lambda state: get_job_count(player, state) >= 7),
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver Dust beneath overhang in eastern Quintar cave crevasse", 2678 + npc_index_offset),
         #Todo NPCs Multichecks: 2 checks on Quintar Enthusiast
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Quintar Enthusiast (always pet Buttermint)", 464 + npc_index_offset),
@@ -588,7 +590,8 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Spilled booty Captains Hat chest", 2936 + treasure_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player, 2)),
 
         #NPCs
-        #Todo NPCs Crystal Checker: guy gives you Ferry Pass for having 15 crystals Z27_FerryCrystalChecker ID 940 (-166,93,56)
+        #Crystal Checker guy gives you Ferry Pass for having 15 crystals Z27_FerryCrystalChecker ID 940 (-166,93,56)
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Ferry crystal checker grants Ferry Pass in case you hate children", 940 + npc_index_offset, lambda state: get_job_count(player, state) >= 15),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Three tokens makes a Pyramid Key something something triangles", 949 + npc_index_offset, lambda state: state.has('Item - West Lookout Token', player) and state.has('Central Lookout Token', player) and state.has('North Lookout Token', player)),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - The One and Only Room 1 Key", 385 + npc_index_offset),
         #Todo NPCs Blocker: gotta find the Lost Son first (the mom before you find the son is a different NPC)
