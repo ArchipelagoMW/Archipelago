@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from uuid import UUID, uuid4
 from pony.orm import Database, PrimaryKey, Required, Set, Optional, buffer, LongStr
 
@@ -20,8 +20,8 @@ class Slot(db.Entity):
 
 class Room(db.Entity):
     id = PrimaryKey(UUID, default=uuid4)
-    last_activity = Required(datetime, default=lambda: datetime.utcnow(), index=True)
-    creation_time = Required(datetime, default=lambda: datetime.utcnow(), index=True)  # index used by landing page
+    last_activity: datetime = Required(datetime, default=lambda: datetime.now(timezone.utc), index=True)
+    creation_time: datetime = Required(datetime, default=lambda: datetime.now(timezone.utc), index=True)  # index used by landing page
     owner = Required(UUID, index=True)
     commands = Set('Command')
     seed = Required('Seed', index=True)
@@ -38,7 +38,7 @@ class Seed(db.Entity):
     rooms = Set(Room)
     multidata = Required(bytes, lazy=True)
     owner = Required(UUID, index=True)
-    creation_time = Required(datetime, default=lambda: datetime.utcnow(), index=True)  # index used by landing page
+    creation_time: datetime = Required(datetime, default=lambda: datetime.now(timezone.utc), index=True)  # index used by landing page
     slots = Set(Slot)
     spoiler = Optional(LongStr, lazy=True)
     meta = Required(LongStr, default=lambda: "{\"race\": false}")  # additional meta information/tags

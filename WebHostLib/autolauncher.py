@@ -4,7 +4,7 @@ import json
 import logging
 import multiprocessing
 import typing
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, timezone
 from threading import Event, Thread
 from typing import Any
 from uuid import UUID
@@ -115,10 +115,10 @@ def autohost(config: dict):
                     with db_session:
                         rooms = select(
                             room for room in Room if
-                            room.last_activity >= datetime.utcnow() - timedelta(days=3))
+                            room.last_activity >= datetime.now(timezone.utc) - timedelta(days=3))
                         for room in rooms:
                             # we have to filter twice, as the per-room timeout can't currently be PonyORM transpiled.
-                            if room.last_activity >= datetime.utcnow() - timedelta(seconds=room.timeout + 5):
+                            if room.last_activity >= datetime.now(timezone.utc) - timedelta(seconds=room.timeout + 5):
                                 hosters[room.id.int % len(hosters)].start_room(room.id)
 
         except AlreadyRunningException:

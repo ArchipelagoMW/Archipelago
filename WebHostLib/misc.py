@@ -184,10 +184,19 @@ def host_room(room: UUID):
     if room is None:
         return abort(404)
 
-    now = datetime.datetime.utcnow()
+    now = datetime.datetime.now(datetime.timezone.utc)
     # indicate that the page should reload to get the assigned port
-    should_refresh = ((not room.last_port and now - room.creation_time < datetime.timedelta(seconds=3))
-                      or room.last_activity < now - datetime.timedelta(seconds=room.timeout))
+    creation_time_utc = room.creation_time
+    if creation_time_utc.tzinfo is None:
+        creation_time_utc = room.creation_time.replace(tzinfo=datetime.timezone.utc)
+    last_activity_utc = room.last_activity
+    if last_activity_utc.tzinfo is None:
+        last_activity_utc = room.last_activity.replace(tzinfo=datetime.timezone.utc)
+
+    should_refresh = (
+            (not room.last_port and now - creation_time_utc < datetime.timedelta(seconds=3))
+            or last_activity_utc < now - datetime.timedelta(seconds=room.timeout)
+    )
     with db_session:
         room.last_activity = now  # will trigger a spinup, if it's not already running
 
