@@ -43,6 +43,27 @@ app.config["JOB_TIME"] = 600
 app.config["GENERATOR_MEMORY_LIMIT"] = 4294967296
 app.config['SESSION_PERMANENT'] = True
 
+# Room Pool configuration.
+
+# ROOM_PORT_MIN determines the minimum port range to allocate to a Room.
+# Default value is 49152 (i.e. minimum-allocatable port on a single machine)
+app.config["ROOM_PORT_MIN"] = 49152
+# ROOM_PORT_MIN determines the maximum port range to allocate to a Room.
+# Default value is 65535 (i.e. maximum-allocatable port on a single machine)
+app.config["ROOM_PORT_MAX"] = 65535
+
+# ROOM_PORT_ALLOC_TRIES controls how many retries the random port allocation will try before 
+# raising an exception. -1 disables the retry threshold. A
+# value greater greater than -1 will continue for number specified.
+# A sensible threshold for this would be to try the maximum number of ports, determined
+# from "ROOM_PORT_MIN" and "ROOM_PORT_MAX":
+# app.config["ROOM_PORT_ALLOC_TRIES"] = app.config["ROOM_PORT_MAX"] - app.config["ROOM_PORT_MIN"]
+app.config["ROOM_PORT_ALLOC_TRIES"] = -1
+
+# ROOM_PORT_OVERFLOW controls whether, once reaching the limit of retried ports available,
+# the room port numbers will go to a port number potentially outside of ROOM_PORT_MIN and ROOM_PORT_MAX.
+app.config["ROOM_PORT_OVERFLOW"] = True
+
 # waitress uses one thread for I/O, these are for processing of views that then get sent
 # archipelago.gg uses gunicorn + nginx; ignoring this option
 app.config["WAITRESS_THREADS"] = 10

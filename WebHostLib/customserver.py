@@ -24,6 +24,8 @@ from Utils import restricted_loads, cache_argsless
 from .locker import Locker
 from .models import Command, GameDataPackage, Room, db
 
+class RoomPoolException(Exception)
+    pass
 
 class CustomClientMessageProcessor(ClientMessageProcessor):
     ctx: WebHostContext
@@ -100,13 +102,13 @@ class WebHostContext(Context):
             time.sleep(5)
 
     @db_session
-    def load(self, room_id: int):
+    def load(self, room_id: int, room_port_min: int, room_port_max: int):
         self.room_id = room_id
         room = Room.get(id=room_id)
         if room.last_port:
             self.port = room.last_port
         else:
-            self.port = get_random_port()
+            self.port = get_random_port(room_port_min, room_port_max)
 
         multidata = self.decompress(room.seed.multidata)
         game_data_packages = {}
@@ -171,8 +173,8 @@ class WebHostContext(Context):
         return d
 
 
-def get_random_port():
-    return random.randint(49152, 65535)
+def get_random_port(port_min: int, port_max: int):
+    return random.randint(port_min, port_max)
 
 
 @cache_argsless
@@ -224,7 +226,12 @@ def set_up_logging(room_id) -> logging.Logger:
     return logger
 
 
-def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
+def run_server_process(name: str, ponyconfig: dict,
+                       room_port_min: int,
+                       room_port_max: int,
+                       room_port_overflow: bool,
+                       room_port_alloc_tries: int,
+                       static_server_data: dict,
                        cert_file: typing.Optional[str], cert_key_file: typing.Optional[str],
                        host: str, rooms_to_run: multiprocessing.Queue, rooms_shutting_down: multiprocessing.Queue):
     from setproctitle import setproctitle
@@ -276,19 +283,50 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
             try:
                 logger = set_up_logging(room_id)
                 ctx = WebHostContext(static_server_data, logger)
-                ctx.load(room_id)
+                ctx.load(room_id, room_port_min, room_port_max)
                 ctx.init_save()
                 assert ctx.server is None
+
+                # Try the given port number. If the port allocated cannot be opened, get a random one
+                # from `websockets`:
                 try:
                     ctx.server = websockets.serve(
                         functools.partial(server, ctx=ctx), ctx.host, ctx.port, ssl=get_ssl_context())
-
                     await ctx.server
-                except OSError:  # likely port in use
-                    ctx.server = websockets.serve(
-                        functools.partial(server, ctx=ctx), ctx.host, 0, ssl=get_ssl_context())
+                except OSError as start_oserr:
+                    # If neither port allocation has been enabled, or room port overflows have been enabled,
+                    # then raise the exception
+                    if room_port_alloc_tries < 0 and room_port_overflow is False:
+                        ctx.logger.debug("Failed to immediately aquire port number")
+                        raise RoomPoolException() from start_oserr
 
-                    await ctx.server
+                    # The port is in use.
+                    # If the webserver has been configured to retry for ports, brute-force retry:
+                    if room_port_alloc_tries > -1:
+                        last_oserr = None
+                        for room_port_try in range(room_port_alloc_tries):
+                            next_port = get_random_port(room_port_min, room_port_max)
+                            try:
+                                ctx.server = websockets.serve(
+                                    functools.partial(server, ctx=ctx), ctx.host, next_port, ssl=get_ssl_context())
+                                await ctx.server
+                            except OSError as ose:
+                                ctx.logger.debug(f"Unable to allocate port {next_port}, trying next port \
+                                    (attempt {room_port_try+1} of {room_port_alloc_tries})...")
+                                last_oserr = ose
+                                continue
+
+                        if last_oserr is not None and room_port_overflow is False:
+                            raise RoomPoolException("Exhausted retries to allocate a port.") from last_oserr
+
+                    # If we still haven't been able to create a server, let `websockets` find a free port.
+                    if room_port_overflow is True:
+                        ctx.logger.debug("Randomly-allocating system free port")
+                        ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, 0,
+                            ssl=get_ssl_context())
+                        await ctx.server
+
+                # Get the allocated port from the `websockets` connection:
                 port = 0
                 for wssocket in ctx.server.ws_server.sockets:
                     socketname = wssocket.getsockname()
@@ -298,6 +336,8 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                             port = socketname[1]
                     elif wssocket.family == socket.AF_INET:
                         port = socketname[1]
+
+                # If a port number was allocated, then update the Room with the new port number:
                 if port:
                     ctx.logger.info(f'Hosting game at {host}:{port}')
                     with db_session:
@@ -317,6 +357,12 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                 if ctx.saving:
                     ctx._save()
                     setattr(asyncio.current_task(), "save", None)
+            except RoomPoolException as e:
+                with db_session:
+                    room = Room.get(id=room_id)
+                    room.last_port = get_random_port(room_port_min, room_port_max)
+                logger.exception(e)
+                raise
             except Exception as e:
                 with db_session:
                     room = Room.get(id=room_id)
