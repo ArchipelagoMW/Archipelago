@@ -1744,7 +1744,7 @@ class SC2Logic:
                 state.has_any((
                     item_names.ABERRATION, item_names.INFESTED_DIAMONDBACK, item_names.INFESTED_BANSHEE,
                 ), self.player)
-                or state.has_all({item_names.MUTALISK_SEVERING_GLAIVE, item_names.MUTALISK}, self.player)
+                or state.has_all({item_names.MUTALISK, item_names.MUTALISK_SEVERING_GLAIVE}, self.player)
                 or state.has_all((item_names.HYDRALISK, item_names.HYDRALISK_MUSCULAR_AUGMENTS), self.player)
                 or (
                         state.has(item_names.ZERGLING, self.player)

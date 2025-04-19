@@ -9,7 +9,8 @@ from .options import (
     ShuffleNoBuild, RequiredTactics, ExtraLocations, ShuffleCampaigns,
     kerrigan_unit_available, TakeOverAIAllies, MissionOrder, get_excluded_missions, get_enabled_campaigns,
     static_mission_orders,
-    TwoStartPositions, KeyMode, EnableMissionRaceBalancing, EnableRaceSwapVariants, NovaGhostOfAChanceVariant
+    TwoStartPositions, KeyMode, EnableMissionRaceBalancing, EnableRaceSwapVariants, NovaGhostOfAChanceVariant,
+    NerfUnitBaselines
 )
 from .mission_order.options import CustomMissionOrder
 from .mission_order import SC2MissionOrder
@@ -76,6 +77,7 @@ def adjust_mission_pools(world: 'SC2World', pools: SC2MOGenMissionPools):
     extra_locations = world.options.extra_locations.value
     grant_story_tech = world.options.grant_story_tech.value
     grant_story_levels = world.options.grant_story_levels.value
+    nerf_unit_baselines = world.options.nerf_unit_baselines.value == NerfUnitBaselines.option_true
 
     # WoL
     if shuffle_no_build == ShuffleNoBuild.option_false or adv_tactics:
@@ -83,14 +85,16 @@ def adjust_mission_pools(world: 'SC2World', pools: SC2MOGenMissionPools):
         # WoL
         pools.move_mission(SC2Mission.ZERO_HOUR, Difficulty.EASY, Difficulty.STARTER)
         pools.move_mission(SC2Mission.EVACUATION, Difficulty.EASY, Difficulty.STARTER)
+        pools.move_mission(SC2Mission.EVACUATION_Z, Difficulty.EASY, Difficulty.STARTER)
+        pools.move_mission(SC2Mission.EVACUATION_P, Difficulty.EASY, Difficulty.STARTER)
         pools.move_mission(SC2Mission.DEVILS_PLAYGROUND, Difficulty.EASY, Difficulty.STARTER)
+        pools.move_mission(SC2Mission.DEVILS_PLAYGROUND_Z, Difficulty.EASY, Difficulty.STARTER)
+        pools.move_mission(SC2Mission.DEVILS_PLAYGROUND_P, Difficulty.EASY, Difficulty.STARTER)
+        pools.move_mission(SC2Mission.THE_GREAT_TRAIN_ROBBERY, Difficulty.EASY, Difficulty.STARTER)
+        pools.move_mission(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z, Difficulty.EASY, Difficulty.STARTER)
+        pools.move_mission(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P, Difficulty.EASY, Difficulty.STARTER)
         # LotV
         pools.move_mission(SC2Mission.THE_GROWING_SHADOW, Difficulty.EASY, Difficulty.STARTER)
-        pools.move_mission(SC2Mission.THE_SPEAR_OF_ADUN, Difficulty.EASY, Difficulty.STARTER)
-        if extra_locations == ExtraLocations.option_enabled:
-            pools.move_mission(SC2Mission.SKY_SHIELD, Difficulty.EASY, Difficulty.STARTER)
-        # Pushing this to Easy
-        pools.move_mission(SC2Mission.THE_GREAT_TRAIN_ROBBERY, Difficulty.MEDIUM, Difficulty.EASY)
         if shuffle_no_build == ShuffleNoBuild.option_false:
             # Pushing Outbreak to Normal, as it cannot be placed as the second mission on Build-Only
             pools.move_mission(SC2Mission.OUTBREAK, Difficulty.EASY, Difficulty.MEDIUM)
@@ -100,13 +104,12 @@ def adjust_mission_pools(world: 'SC2World', pools: SC2MOGenMissionPools):
         # Additional changes on Advanced Tactics
         if adv_tactics:
             # WoL
-            pools.move_mission(SC2Mission.THE_GREAT_TRAIN_ROBBERY, Difficulty.EASY, Difficulty.STARTER)
             pools.move_mission(SC2Mission.SMASH_AND_GRAB, Difficulty.EASY, Difficulty.STARTER)
             pools.move_mission(SC2Mission.THE_MOEBIUS_FACTOR, Difficulty.MEDIUM, Difficulty.EASY)
+            pools.move_mission(SC2Mission.THE_MOEBIUS_FACTOR_Z, Difficulty.MEDIUM, Difficulty.EASY)
+            pools.move_mission(SC2Mission.THE_MOEBIUS_FACTOR_P, Difficulty.MEDIUM, Difficulty.EASY)
             pools.move_mission(SC2Mission.WELCOME_TO_THE_JUNGLE, Difficulty.MEDIUM, Difficulty.EASY)
             pools.move_mission(SC2Mission.ENGINE_OF_DESTRUCTION, Difficulty.HARD, Difficulty.MEDIUM)
-            # LotV
-            pools.move_mission(SC2Mission.AMON_S_REACH, Difficulty.EASY, Difficulty.STARTER)
     # Prophecy needs to be adjusted if by itself
     if enabled_campaigns == {SC2Campaign.PROPHECY}:
         pools.move_mission(SC2Mission.A_SINISTER_TURN, Difficulty.MEDIUM, Difficulty.EASY)
@@ -118,25 +121,19 @@ def adjust_mission_pools(world: 'SC2World', pools: SC2MOGenMissionPools):
     # HotS
     kerriganless = world.options.kerrigan_presence.value not in kerrigan_unit_available \
         or SC2Campaign.HOTS not in enabled_campaigns
-    if adv_tactics:
-        # Medium -> Easy
-        for mission in (SC2Mission.FIRE_IN_THE_SKY, SC2Mission.WAKING_THE_ANCIENT, SC2Mission.CONVICTION):
-            pools.move_mission(mission, Difficulty.MEDIUM, Difficulty.EASY)
-        # Hard -> Medium
-        pools.move_mission(SC2Mission.PHANTOMS_OF_THE_VOID, Difficulty.HARD, Difficulty.MEDIUM)
-        if not kerriganless:
-            # Additional starter mission assuming player starts with minimal anti-air
-            pools.move_mission(SC2Mission.WAKING_THE_ANCIENT, Difficulty.EASY, Difficulty.STARTER)
     if grant_story_tech:
         # Additional starter mission if player is granted story tech
         pools.move_mission(SC2Mission.ENEMY_WITHIN, Difficulty.EASY, Difficulty.STARTER)
-        pools.move_mission(SC2Mission.TEMPLAR_S_RETURN, Difficulty.EASY, Difficulty.STARTER)
+        pools.move_mission(SC2Mission.TEMPLAR_S_RETURN, Difficulty.MEDIUM, Difficulty.STARTER)
         pools.move_mission(SC2Mission.THE_ESCAPE, Difficulty.MEDIUM, Difficulty.STARTER)
         pools.move_mission(SC2Mission.IN_THE_ENEMY_S_SHADOW, Difficulty.MEDIUM, Difficulty.STARTER)
+    if not nerf_unit_baselines:
+        pools.move_mission(SC2Mission.TEMPLAR_S_RETURN, Difficulty.MEDIUM, Difficulty.STARTER)
     if (grant_story_tech and grant_story_levels) or kerriganless:
         # The player has, all the stuff he needs, provided under these settings
         pools.move_mission(SC2Mission.SUPREME, Difficulty.MEDIUM, Difficulty.STARTER)
         pools.move_mission(SC2Mission.THE_INFINITE_CYCLE, Difficulty.HARD, Difficulty.STARTER)
+        pools.move_mission(SC2Mission.CONVICTION, Difficulty.MEDIUM, Difficulty.STARTER)
     if \
             not grant_story_tech \
                     and (
@@ -154,7 +151,9 @@ def adjust_mission_pools(world: 'SC2World', pools: SC2MOGenMissionPools):
         pools.move_mission(SC2Mission.HARVEST_OF_SCREAMS, Difficulty.EASY, Difficulty.STARTER)
         pools.move_mission(SC2Mission.DOMINATION, Difficulty.EASY, Difficulty.STARTER)
     if pools.get_pool_size(Difficulty.STARTER) < 2:
-        pools.move_mission(SC2Mission.TEMPLAR_S_RETURN, Difficulty.EASY, Difficulty.STARTER)
+        pools.move_mission(SC2Mission.DOMINATION, Difficulty.EASY, Difficulty.STARTER)
+        pools.move_mission(SC2Mission.DOMINATION_T, Difficulty.EASY, Difficulty.STARTER)
+        pools.move_mission(SC2Mission.DOMINATION_P, Difficulty.EASY, Difficulty.STARTER)
     if pools.get_pool_size(Difficulty.STARTER) + pools.get_pool_size(Difficulty.EASY) < 2:
         # Flashpoint needs just a few items at start but competent comp at the end
         pools.move_mission(SC2Mission.FLASHPOINT, Difficulty.HARD, Difficulty.EASY)
