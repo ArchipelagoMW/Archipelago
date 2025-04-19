@@ -417,6 +417,12 @@ class World(metaclass=AutoWorldRegister):
         This happens before progression balancing, so the items may not be in their final locations yet.
         """
 
+    def post_balancing(self) -> None:
+        """
+        Called after progression balancing. Can be assumed that nothing will move here or after, and as such, nothing
+        should be moved around here.
+        """
+
     def generate_output(self, output_directory: str) -> None:
         """
         This method gets called from a threadpool, do not use multiworld.random here.
