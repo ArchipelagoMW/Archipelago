@@ -395,7 +395,7 @@ class OptionsCreator(ThemedApp):
         # We're only supporting Set/List
         # Dict may be feasible in the future, but it needs additional typing work
 
-        valid_keys = deepcopy(option.valid_keys)
+        valid_keys = sorted(option.valid_keys)
         if option.verify_item_name:
             valid_keys += list(world.item_name_to_id.keys())
         if option.verify_location_name:
