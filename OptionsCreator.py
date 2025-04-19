@@ -26,8 +26,6 @@ from worlds.AutoWorld import AutoWorldRegister, World
 from Options import (Option, Toggle, TextChoice, Choice, FreeText, NamedRange, Range, OptionSet, OptionList, OptionDict,
                      Removed, Visibility, VerifyKeys, PlandoTexts, PlandoConnections, ItemLinks)
 
-from .core import save_filename, FixedTooltipLabel
-
 
 def validate_url(x):
     try:
@@ -252,7 +250,7 @@ class OptionsCreator(ThemedApp):
 
     def export_options(self, button: Widget):
         if 0 < len(self.name_input.text) < 17 and self.current_game:
-            file_name = save_filename("Export Options File As...", [("YAML", ["*.yaml"])],
+            file_name = Utils.save_filename("Export Options File As...", [("YAML", ["*.yaml"])],
                                       Utils.get_file_safe_name(f"{self.name_input.text}.yaml"))
             options = {
                 "name": self.name_input.text,

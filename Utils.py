@@ -738,6 +738,7 @@ def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
         return tkinter.filedialog.askopenfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
                                                   initialfile=suggest or None)
 
+
 def save_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typing.Iterable[str]]], suggest: str = "") \
         -> typing.Optional[str]:
     logging.info(f"Opening file save dialog for {title}.")
@@ -773,7 +774,7 @@ def save_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
             return None  # GUI not available. None is the same as a user clicking "cancel"
         root.withdraw()
         return tkinter.filedialog.asksaveasfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
-                                                  initialfile=suggest or None)
+                                                    initialfile=suggest or None)
 
 
 def _mp_open_directory(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
