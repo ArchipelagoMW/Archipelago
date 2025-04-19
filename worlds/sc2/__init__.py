@@ -7,6 +7,7 @@ from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from Options import Accessibility
 from worlds.AutoWorld import WebWorld, World
 from . import location_groups
+from .item.item_groups import unreleased_items
 from .item.item_tables import (
     get_full_item_list,
     not_balanced_starting_units, WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
@@ -24,7 +25,7 @@ from .options import (
     get_enabled_campaigns, SpearOfAdunPassiveAbilityPresence, Starcraft2Options,
     GrantStoryTech, GenericUpgradeResearch, RequiredTactics,
     upgrade_included_names, EnableVoidTrade, FillerItemsDistribution, MissionOrderScouting, option_groups,
-    NovaGhostOfAChanceVariant, MissionOrder, VanillaItemsOnly, ExcludeOverpoweredItems,
+    NovaGhostOfAChanceVariant, MissionOrder, VanillaItemsOnly, ExcludeOverpoweredItems, ExcludeLegacyItems,
 )
 from .rules import get_basic_units, SC2Logic
 from . import settings
@@ -138,6 +139,7 @@ class SC2World(World):
         flag_allowed_orphan_items(self, item_list)
         flag_start_inventory(self, item_list)
         flag_unused_upgrade_types(self, item_list)
+        flag_unreleased_items(item_list)
         flag_user_excluded_item_sets(self, item_list)
         flag_war_council_items(self, item_list)
         flag_and_add_resource_locations(self, item_list)
@@ -760,6 +762,13 @@ def flag_unused_upgrade_types(world: SC2World, item_list: List[FilterItem]) -> N
                 elif ItemFilterFlags.UserExcluded not in item.flags:
                     upgrade_included_counts[item.name] = included + 1
 
+def flag_unreleased_items(item_list: List[FilterItem]) -> None:
+    """Remove all unreleased items unless they're explicitly locked"""
+    for item in item_list:
+        if (item.name in unreleased_items
+                and not (ItemFilterFlags.Locked|ItemFilterFlags.StartInventory) & item.flags):
+            item.flags |= ItemFilterFlags.Removed
+
 
 def flag_user_excluded_item_sets(world: SC2World, item_list: List[FilterItem]) -> None:
     """Excludes items based on item set options (`only_vanilla_items`)"""
@@ -778,22 +787,30 @@ def flag_user_excluded_item_sets(world: SC2World, item_list: List[FilterItem]) -
                     item.flags |= ItemFilterFlags.UserExcluded
                 vanilla_nonprogressive_count[item.name] += 1
 
+    excluded_count: Dict[str, int] = dict()
     if world.options.exclude_overpowered_items.value == ExcludeOverpoweredItems.option_true:
-        excluded_count = {
-            item_name: 0 for item_name in item_groups.overpowered_items
-        }
-        for item in item_list:
-            if ItemFilterFlags.UserExcluded in item.flags:
-                continue
-            if item.name in item_groups.overpowered_items:
-                if (excluded_count[item.name] == 0
-                        and (item.name not in vanilla_nonprogressive_count.keys()
-                             or vanilla_nonprogressive_count[item.name] == 0)
-                ):
-                    # Only one copy is considered overpowered
-                    # Don't exclude if it got already excluded by the rule above
-                    item.flags |= ItemFilterFlags.UserExcluded
-                    excluded_count[item.name] += 1
+        exclude_group(item_list, excluded_count, vanilla_nonprogressive_count, item_groups.overpowered_items)
+    if world.options.exclude_legacy_items.value == ExcludeLegacyItems.option_true:
+        exclude_group(item_list, excluded_count, vanilla_nonprogressive_count, item_groups.legacy_items)
+
+
+def exclude_group(item_list:Iterable[FilterItem], excluded_count: Dict[str, int], vanilla_nonprogressive_count: Dict[str, int], group: List[str]) -> None:
+    excluded_count.update({
+        item_name: 0 for item_name in group if item_name not in excluded_count.keys()
+    })
+    # TODO: variable count (allow to exclude with higher cardinality)
+    for item in item_list:
+        if ItemFilterFlags.UserExcluded in item.flags:
+            continue
+        if item.name in group:
+            if (excluded_count[item.name] == 0
+                    and (item.name not in vanilla_nonprogressive_count.keys()
+                         or vanilla_nonprogressive_count[item.name] == 0)
+            ):
+                # Only one copy is considered for exclusion
+                # Don't exclude if it got already excluded by vanilla or any previous rule
+                item.flags |= ItemFilterFlags.UserExcluded
+                excluded_count[item.name] += 1
 
 def flag_war_council_items(world: SC2World, item_list: List[FilterItem]) -> None:
     """Excludes / start-inventories items based on `nerf_unit_baselines` option.

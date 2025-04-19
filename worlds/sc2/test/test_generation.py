@@ -1031,3 +1031,19 @@ class TestItemFiltering(Sc2SetupTestBase):
         regen_biosteel_items = [item for item in itempool if item == item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL]
 
         self.assertEqual(len(regen_biosteel_items), 1) # One stack shall remain
+
+    def test_exclude_locked_overpowered_items(self) -> None:
+        locked_item = item_names.BATTLECRUISER_ATX_LASER_BATTERY
+        world_options = {
+            'mission_order': MissionOrder.option_grid,
+            'exclude_overpowered_items': ExcludeOverpoweredItems.option_true,
+            'locked_items': [locked_item],
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+            'selected_races': [SC2Race.TERRAN.get_title()],
+        }
+
+        self.generate_world(world_options)
+        itempool = [item.name for item in self.multiworld.itempool]
+        atx_laser_battery_items = [item for item in itempool if item == locked_item]
+
+        self.assertEqual(len(atx_laser_battery_items), 1) # Locked, remains

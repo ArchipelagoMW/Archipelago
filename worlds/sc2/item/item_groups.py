@@ -176,6 +176,7 @@ class ItemGroupNames:
     VANILLA_ITEMS = "Vanilla Items"
     OVERPOWERED_ITEMS = "Overpowered Items"
     UNRELEASED_ITEMS = "Unreleased Items"
+    LEGACY_ITEMS = "Legacy Items"
 
     @classmethod
     def get_all_group_names(cls) -> typing.Set[str]:
@@ -839,9 +840,9 @@ item_name_groups[ItemGroupNames.OVERPOWERED_ITEMS] = overpowered_items = [
 ]
 
 # Items not aimed to be officially released
-# These need further balancing, shouldn't generate normally
-# Added here in order to not confuse the client
-item_name_groups[ItemGroupNames.UNRELEASED_ITEMS] = [
+# These need further balancing, and they shouldn't generate normally unless explicitly locked
+# Added here to not confuse the client
+item_name_groups[ItemGroupNames.UNRELEASED_ITEMS] = unreleased_items = [
     item_names.PRIDE_OF_AUGUSTRGRAD,
     item_names.SKY_FURY,
     item_names.SHOCK_DIVISION,
@@ -855,5 +856,13 @@ item_name_groups[ItemGroupNames.UNRELEASED_ITEMS] = [
     item_names.NIGHT_HAWK,
     item_names.NIGHT_WOLF,
     item_names.EMPERORS_SHADOW_SOVEREIGN_TACTICAL_MISSILES,
+]
+
+# A place for traits that were released before but are to be taken down by default.
+# If an item gets split to multiple ones, the original one should be set deprecated instead (see Orbital Command for an example).
+# This is a place if you want to nerf or disable by default a previously released trait.
+# Currently, it disables only the topmost level of the progressives.
+# Don't place here anything that's present in the vanilla campaigns (if it's overpowered, use overpowered items instead)
+item_name_groups[ItemGroupNames.LEGACY_ITEMS] = legacy_items = [
     item_names.ASCENDANT_ARCHON_MERGE,
 ]
