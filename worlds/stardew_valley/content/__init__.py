@@ -1,8 +1,9 @@
 from . import content_packs
-from .feature import cropsanity, friendsanity, fishsanity, booksanity, skill_progression
+from .feature import cropsanity, friendsanity, fishsanity, booksanity, building_progression, skill_progression, tool_progression
 from .game_content import ContentPack, StardewContent, StardewFeatures
 from .unpacking import unpack_content
 from .. import options
+from ..strings.building_names import Building
 
 
 def create_content(player_options: options.StardewValleyOptions) -> StardewContent:
@@ -20,7 +21,7 @@ def choose_content_packs(player_options: options.StardewValleyOptions):
         if player_options.special_order_locations & options.SpecialOrderLocations.value_qi:
             active_packs.append(content_packs.qi_board_content_pack)
 
-    for mod in player_options.mods.value:
+    for mod in sorted(player_options.mods.value):
         active_packs.append(content_packs.by_mod[mod])
 
     return active_packs
@@ -29,10 +30,12 @@ def choose_content_packs(player_options: options.StardewValleyOptions):
 def choose_features(player_options: options.StardewValleyOptions) -> StardewFeatures:
     return StardewFeatures(
         choose_booksanity(player_options.booksanity),
+        choose_building_progression(player_options.building_progression, player_options.farm_type),
         choose_cropsanity(player_options.cropsanity),
         choose_fishsanity(player_options.fishsanity),
         choose_friendsanity(player_options.friendsanity, player_options.friendsanity_heart_size),
         choose_skill_progression(player_options.skill_progression),
+        choose_tool_progression(player_options.tool_progression, player_options.skill_progression),
     )
 
 
@@ -108,6 +111,32 @@ def choose_friendsanity(friendsanity_option: options.Friendsanity, heart_size: o
     raise ValueError(f"No friendsanity feature mapped to {str(friendsanity_option.value)}")
 
 
+def choose_building_progression(building_option: options.BuildingProgression,
+                                farm_type_option: options.FarmType) -> building_progression.BuildingProgressionFeature:
+    starting_buildings = {Building.farm_house, Building.pet_bowl, Building.shipping_bin}
+
+    if farm_type_option == options.FarmType.option_meadowlands:
+        starting_buildings.add(Building.coop)
+
+    if (building_option == options.BuildingProgression.option_vanilla
+            or building_option == options.BuildingProgression.option_vanilla_cheap
+            or building_option == options.BuildingProgression.option_vanilla_very_cheap):
+        return building_progression.BuildingProgressionVanilla(
+            starting_buildings=starting_buildings,
+        )
+
+    starting_buildings.remove(Building.shipping_bin)
+
+    if (building_option == options.BuildingProgression.option_progressive
+            or building_option == options.BuildingProgression.option_progressive_cheap
+            or building_option == options.BuildingProgression.option_progressive_very_cheap):
+        return building_progression.BuildingProgressionProgressive(
+            starting_buildings=starting_buildings,
+        )
+
+    raise ValueError(f"No building progression feature mapped to {str(building_option.value)}")
+
+
 skill_progression_by_option = {
     options.SkillProgression.option_vanilla: skill_progression.SkillProgressionVanilla(),
     options.SkillProgression.option_progressive: skill_progression.SkillProgressionProgressive(),
@@ -122,3 +151,18 @@ def choose_skill_progression(skill_progression_option: options.SkillProgression)
         raise ValueError(f"No skill progression feature mapped to {str(skill_progression_option.value)}")
 
     return skill_progression_feature
+
+
+def choose_tool_progression(tool_option: options.ToolProgression, skill_option: options.SkillProgression) -> tool_progression.ToolProgressionFeature:
+    if tool_option.is_vanilla:
+        return tool_progression.ToolProgressionVanilla()
+
+    tools_distribution = tool_progression.get_tools_distribution(
+        progressive_tools_enabled=True,
+        skill_masteries_enabled=skill_option == options.SkillProgression.option_progressive_with_masteries,
+    )
+
+    if tool_option.is_progressive:
+        return tool_progression.ToolProgressionProgressive(tools_distribution)
+
+    raise ValueError(f"No tool progression feature mapped to {str(tool_option.value)}")
