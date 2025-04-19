@@ -342,6 +342,7 @@ def run_gui(path: str, args: Any) -> None:
 
         def filter_clients_by_type(self, caller: MDButton):
             self._refresh_components(caller.type)
+            self.search_box.text = ""
 
         def filter_clients_by_name(self, caller: MDTextField, name: str) -> None:
             if len(name) == 0:
