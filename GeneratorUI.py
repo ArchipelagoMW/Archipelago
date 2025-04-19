@@ -20,6 +20,7 @@ from kivymd.uix.button import MDIconButton
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.snackbar import MDSnackbar, MDSnackbarButtonContainer, MDSnackbarCloseButton, MDSnackbarText
 from kivymd.uix.textfield import MDTextField
+from Launcher import get_exe
 from Utils import is_linux, is_macos, is_windows, local_path, parse_yamls, open_filename
 
 async def show_in_file_explorer(path: str) -> None:
@@ -198,8 +199,7 @@ class GeneratorApp(ThemedApp):
                     f.write(yaml.dump(player["document"]))
 
             process = await asyncio.create_subprocess_exec(
-                "python",
-                "Generate.py",
+                *get_exe("Generate"),
                 "--player_files_path",
                 temp_dir,
                 *shlex.split(self.options_field.text),
