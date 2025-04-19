@@ -4,13 +4,14 @@ from typing import List, Tuple
 from .bundle import Bundle
 from .bundle_room import BundleRoom, BundleRoomTemplate
 from ..content import StardewContent
-from ..data.bundle_data import pantry_vanilla, crafts_room_vanilla, fish_tank_vanilla, boiler_room_vanilla, bulletin_board_vanilla, vault_vanilla, \
-    pantry_thematic, crafts_room_thematic, fish_tank_thematic, boiler_room_thematic, bulletin_board_thematic, vault_thematic, pantry_remixed, \
+from ..data.bundles_data.bundle_data import pantry_remixed, \
     crafts_room_remixed, fish_tank_remixed, boiler_room_remixed, bulletin_board_remixed, vault_remixed, all_bundle_items_except_money, \
-    abandoned_joja_mart_thematic, abandoned_joja_mart_vanilla, abandoned_joja_mart_remixed, raccoon_vanilla, raccoon_thematic, raccoon_remixed, \
-    community_center_remixed_anywhere
+    abandoned_joja_mart_remixed, giant_stump_remixed
+from ..data.bundles_data.bundle_set import vanilla_bundles, remixed_bundles, thematic_bundles
+from ..data.bundles_data.remixed_anywhere_bundles import community_center_remixed_anywhere
 from ..logic.logic import StardewLogic
 from ..options import BundleRandomization, StardewValleyOptions
+from ..strings.bundle_names import CCRoom
 
 
 def get_all_bundles(random: Random, logic: StardewLogic, content: StardewContent, options: StardewValleyOptions) -> List[BundleRoom]:
@@ -29,42 +30,21 @@ def get_all_bundles(random: Random, logic: StardewLogic, content: StardewContent
 
 
 def get_vanilla_bundles(random: Random, content: StardewContent, options: StardewValleyOptions) -> List[BundleRoom]:
-    pantry = pantry_vanilla.create_bundle_room(random, content, options)
-    crafts_room = crafts_room_vanilla.create_bundle_room(random, content, options)
-    fish_tank = fish_tank_vanilla.create_bundle_room(random, content, options)
-    boiler_room = boiler_room_vanilla.create_bundle_room(random, content, options)
-    bulletin_board = bulletin_board_vanilla.create_bundle_room(random, content, options)
-    vault = vault_vanilla.create_bundle_room(random, content, options)
-    abandoned_joja_mart = abandoned_joja_mart_vanilla.create_bundle_room(random, content, options)
-    raccoon = raccoon_vanilla.create_bundle_room(random, content, options)
-    fix_raccoon_bundle_names(raccoon)
-    return [pantry, crafts_room, fish_tank, boiler_room, bulletin_board, vault, abandoned_joja_mart, raccoon]
+    generated_bundle_rooms = {room_name: vanilla_bundles.bundles_by_room[room_name].create_bundle_room(random, content, options) for room_name in vanilla_bundles.bundles_by_room}
+    fix_raccoon_bundle_names(generated_bundle_rooms[CCRoom.raccoon_requests])
+    return list(generated_bundle_rooms.values())
 
 
 def get_thematic_bundles(random: Random, content: StardewContent, options: StardewValleyOptions) -> List[BundleRoom]:
-    pantry = pantry_thematic.create_bundle_room(random, content, options)
-    crafts_room = crafts_room_thematic.create_bundle_room(random, content, options)
-    fish_tank = fish_tank_thematic.create_bundle_room(random, content, options)
-    boiler_room = boiler_room_thematic.create_bundle_room(random, content, options)
-    bulletin_board = bulletin_board_thematic.create_bundle_room(random, content, options)
-    vault = vault_thematic.create_bundle_room(random, content, options)
-    abandoned_joja_mart = abandoned_joja_mart_thematic.create_bundle_room(random, content, options)
-    raccoon = raccoon_thematic.create_bundle_room(random, content, options)
-    fix_raccoon_bundle_names(raccoon)
-    return [pantry, crafts_room, fish_tank, boiler_room, bulletin_board, vault, abandoned_joja_mart, raccoon]
+    generated_bundle_rooms = {room_name: thematic_bundles.bundles_by_room[room_name].create_bundle_room(random, content, options) for room_name in thematic_bundles.bundles_by_room}
+    fix_raccoon_bundle_names(generated_bundle_rooms[CCRoom.raccoon_requests])
+    return list(generated_bundle_rooms.values())
 
 
 def get_remixed_bundles(random: Random, content: StardewContent, options: StardewValleyOptions) -> List[BundleRoom]:
-    pantry = pantry_remixed.create_bundle_room(random, content, options)
-    crafts_room = crafts_room_remixed.create_bundle_room(random, content, options)
-    fish_tank = fish_tank_remixed.create_bundle_room(random, content, options)
-    boiler_room = boiler_room_remixed.create_bundle_room(random, content, options)
-    bulletin_board = bulletin_board_remixed.create_bundle_room(random, content, options)
-    vault = vault_remixed.create_bundle_room(random, content, options)
-    abandoned_joja_mart = abandoned_joja_mart_remixed.create_bundle_room(random, content, options)
-    raccoon = raccoon_remixed.create_bundle_room(random, content, options)
-    fix_raccoon_bundle_names(raccoon)
-    return [pantry, crafts_room, fish_tank, boiler_room, bulletin_board, vault, abandoned_joja_mart, raccoon]
+    generated_bundle_rooms = {room_name: remixed_bundles.bundles_by_room[room_name].create_bundle_room(random, content, options) for room_name in remixed_bundles.bundles_by_room}
+    fix_raccoon_bundle_names(generated_bundle_rooms[CCRoom.raccoon_requests])
+    return list(generated_bundle_rooms.values())
 
 
 def get_remixed_bundles_anywhere(random: Random, content: StardewContent, options: StardewValleyOptions) -> List[BundleRoom]:
@@ -79,10 +59,10 @@ def get_remixed_bundles_anywhere(random: Random, content: StardewContent, option
     fish_tank, end_index = create_room_from_bundles(fish_tank_remixed, all_chosen_bundles, end_index)
     boiler_room, end_index = create_room_from_bundles(boiler_room_remixed, all_chosen_bundles, end_index)
     bulletin_board, end_index = create_room_from_bundles(bulletin_board_remixed, all_chosen_bundles, end_index)
+    vault, end_index = create_room_from_bundles(vault_remixed, all_chosen_bundles, end_index)
 
-    vault = vault_remixed.create_bundle_room(random, content, options)
     abandoned_joja_mart = abandoned_joja_mart_remixed.create_bundle_room(random, content, options)
-    raccoon = raccoon_remixed.create_bundle_room(random, content, options)
+    raccoon = giant_stump_remixed.create_bundle_room(random, content, options)
     fix_raccoon_bundle_names(raccoon)
     return [pantry, crafts_room, fish_tank, boiler_room, bulletin_board, vault, abandoned_joja_mart, raccoon]
 
