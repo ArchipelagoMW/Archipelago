@@ -7,7 +7,7 @@
         id: slider
         min: this.option.range_start
         max: this.option.range_end
-        value: min(max(this.option.default, this.option.range_start), this.option.range_end)
+        value: min(max(this.option.default, this.option.range_start), this.option.range_end) if this.option.default != "random" else this.option.range_start
         step: 1
         step_point_size: 0
         MDSliderHandle:
