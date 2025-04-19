@@ -349,9 +349,10 @@ def run_gui(path: str, args: Any) -> None:
                 self._refresh_components(self.current_filter)
                 return
 
-            sub_matches = [card for card in self.cards
-                           if name.lower() in card.component.display_name.lower()
-                           and card.component.type != Type.HIDDEN]
+            sub_matches = [
+                card for card in self.cards
+                if name.lower() in card.component.display_name.lower() and card.component.type != Type.HIDDEN
+            ]
             self.button_layout.layout.clear_widgets()
             for card in sub_matches:
                 self.button_layout.layout.add_widget(card)
