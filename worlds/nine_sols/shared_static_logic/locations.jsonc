@@ -1284,7 +1284,7 @@
         "address": 3502, "name": "ED (Passages): Hack 2 Statues",
         "region": "EDP - Root Node", "requires": [
             // 1st statue requires jumping from slider to slider left of Root Node
-            { "item": "Cloud Leap" }, { "item": "Air Dash" },
+            { "item": "Cloud Leap" },
             { "item": "Charged Strike" }, // and the statue itself has a shield
             // 2nd statue needed its own region because of multiple entrances
             { "region": "EDP - Between Root Node & Tianshou Arena" },
