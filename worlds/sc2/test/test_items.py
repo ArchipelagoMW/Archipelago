@@ -169,11 +169,3 @@ class TestItems(unittest.TestCase):
             item_number = item_tables.get_full_item_list()[item].number
             self.assertLess(item_number, 30)
 
-    def test_unreleased_item_quantity(self) -> None:
-        """
-        Checks if all unreleased items are marked properly not to generate
-        """
-        items_to_check: List[str] = item_name_groups[ItemGroupNames.UNRELEASED_ITEMS]
-        for item in items_to_check:
-            item_quantity = item_tables.get_full_item_list()[item].quantity
-            self.assertEqual(item_quantity, 0)

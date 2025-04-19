@@ -4,11 +4,11 @@ Unit tests for world generation
 from typing import *
 from .test_base import Sc2SetupTestBase
 
-from .. import mission_groups, mission_tables, options, locations, SC2Mission, SC2Campaign, SC2Race
+from .. import mission_groups, mission_tables, options, locations, SC2Mission, SC2Campaign, SC2Race, unreleased_items
 from ..item import item_groups, item_tables, item_names
 from .. import get_all_missions, get_random_first_mission
 from ..options import EnabledCampaigns, NovaGhostOfAChanceVariant, MissionOrder, ExcludeOverpoweredItems, \
-    VanillaItemsOnly
+    VanillaItemsOnly, ExcludeLegacyItems
 
 
 class TestItemFiltering(Sc2SetupTestBase):
@@ -1047,3 +1047,20 @@ class TestItemFiltering(Sc2SetupTestBase):
         atx_laser_battery_items = [item for item in itempool if item == locked_item]
 
         self.assertEqual(len(atx_laser_battery_items), 1) # Locked, remains
+
+    def test_unreleased_item_quantity(self) -> None:
+        """
+        Checks if all unreleased items are marked properly not to generate
+        """
+        world_options = {
+            'mission_order': MissionOrder.option_grid,
+            'exclude_overpowered_items': ExcludeOverpoweredItems.option_false,
+            'exclude_legacy_items': ExcludeLegacyItems.option_false,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+        }
+        self.generate_world(world_options)
+        itempool = [item.name for item in self.multiworld.itempool]
+
+        items_to_check: List[str] = unreleased_items
+        for item in items_to_check:
+            self.assertNotIn(item, itempool)
