@@ -263,6 +263,23 @@ class ZoomTrapWeight(BaseTrapWeight):
     display_name = "Zoom Trap Weight"
 
 
+class MusicShuffle(Choice):
+    """
+    Music shuffle type
+
+    None: No Music is shuffled
+
+    Consistent: Each music track is consistently shuffled throughout the game
+
+    Singularity: The entire game uses one song for levels
+    """
+    display_name = "Music Shuffle"
+    option_none = 0
+    option_consistent = 1
+    option_singularity = 2
+    default = 0
+
+
 class MadelineHairLength(Choice):
     """
     How long Madeline's hair is
@@ -388,6 +405,7 @@ celeste_option_groups = [
         ZoomTrapWeight,
     ]),
     OptionGroup("Aesthetic Options", [
+        MusicShuffle,
         MadelineHairLength,
         MadelineOneDashHairColor,
         MadelineTwoDashHairColor,
@@ -491,6 +509,8 @@ class CelesteOptions(PerGameCommonOptions):
     include_farewell: IncludeFarewell
     include_b_sides: IncludeBSides
     include_c_sides: IncludeCSides
+
+    music_shuffle: MusicShuffle
 
     madeline_hair_length: MadelineHairLength
     madeline_one_dash_hair_color: MadelineOneDashHairColor

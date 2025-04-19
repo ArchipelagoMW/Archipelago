@@ -192,7 +192,7 @@ interactable_item_data_table: dict[str, CelesteItemData] = {
 
     ItemName.swap_blocks:  CelesteItemData(celeste_base_id + 0x2000 + 0x0A, ItemClassification.progression),
     ItemName.red_boosters: CelesteItemData(celeste_base_id + 0x2000 + 0x0B, ItemClassification.progression),
-    ItemName.torches:      CelesteItemData(celeste_base_id + 0x2000 + 0x22, ItemClassification.filler),
+    ItemName.torches:      CelesteItemData(celeste_base_id + 0x2000 + 0x22, ItemClassification.useful),
     ItemName.theo_crystal: CelesteItemData(celeste_base_id + 0x2000 + 0x0C, ItemClassification.progression),
 
     ItemName.feathers:     CelesteItemData(celeste_base_id + 0x2000 + 0x0D, ItemClassification.progression),

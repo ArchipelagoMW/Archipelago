@@ -276,6 +276,9 @@ class CelesteWorld(World):
             "madeline_two_dash_hair_color": self.madeline_two_dash_hair_color,
             "madeline_no_dash_hair_color": self.madeline_no_dash_hair_color,
             "madeline_feather_hair_color": self.madeline_feather_hair_color,
+
+            "music_shuffle": self.options.music_shuffle.value,
+            "music_map": self.generate_music_data(),
         }
 
     def output_active_traps(self) -> dict[int, int]:
@@ -295,3 +298,21 @@ class CelesteWorld(World):
         trap_data[0x2C] = self.options.zoom_trap_weight.value
 
         return trap_data
+
+    def generate_music_data(self) -> dict[int, int]:
+        if self.options.music_shuffle == "consistent":
+            musiclist_o = list(range(0, 48))
+            musiclist_s = musiclist_o.copy()
+            self.random.shuffle(musiclist_s)
+
+            return dict(zip(musiclist_o, musiclist_s))
+        elif self.options.music_shuffle == "singularity":
+            musiclist_o = list(range(0, 48))
+            musiclist_s = [self.random.choice(musiclist_o)] * len(musiclist_o)
+
+            return dict(zip(musiclist_o, musiclist_s))
+        else:
+            musiclist_o = list(range(0, 48))
+            musiclist_s = musiclist_o.copy()
+
+            return dict(zip(musiclist_o, musiclist_s))
