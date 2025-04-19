@@ -522,7 +522,10 @@ class OptionsCreator(ThemedApp):
             for name, option in cls.options_dataclass.type_hints.items():
                 group = next((group.name for group in cls.web.option_groups if option in group.options), "Game Options")
                 groups[group].append((name, option))
+
             for group, options in groups.items():
+                if not options:
+                    continue # Game Options can be empty if every other option is in another group
                 group_item = MDExpansionPanel(size_hint_y=None)
                 group_header = MDExpansionPanelHeader(MDListItem(MDListItemSupportingText(text=group),
                                                                  TrailingPressedIconButton(icon="chevron-right",

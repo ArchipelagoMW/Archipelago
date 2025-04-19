@@ -139,6 +139,7 @@ class ToggleButton(MDButton, ToggleButtonBehavior):
     def __init__(self, *args, **kwargs):
         super(ToggleButton, self).__init__(*args, **kwargs)
         self.bind(state=self._update_bg)
+        self._update_bg(self, self.state)
 
     def _update_bg(self, _, state: str):
         if self.disabled:
