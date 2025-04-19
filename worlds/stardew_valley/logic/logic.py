@@ -254,7 +254,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Geode.omni: self.mine.can_mine_in_the_mines_floor_41_80() | self.region.can_reach(Region.desert) | self.tool.has_tool(Tool.pan, ToolMaterial.iron) | self.received(Wallet.rusty_key) | (self.has(Fish.octopus) & self.building.has_building(Building.fish_pond)) | self.region.can_reach(Region.volcano_floor_10),
             Gift.bouquet: self.relationship.has_hearts_with_any_bachelor(8) & self.money.can_spend_at(Region.pierre_store, 100),
             Gift.golden_pumpkin: self.season.has(Season.fall) | self.action.can_open_geode(Geode.artifact_trove),
-            Gift.mermaid_pendant: self.region.can_reach(Region.tide_pools) & self.relationship.has_hearts_with_any_bachelor(10) & self.building.has_house(1) & self.has(Consumable.rain_totem),
+            Gift.mermaid_pendant: self.region.can_reach(Region.tide_pools) & self.relationship.has_hearts_with_any_bachelor(10) & self.building.has_building(Building.kitchen) & self.has(Consumable.rain_totem),
             Gift.movie_ticket: self.money.can_spend_at(Region.movie_ticket_stand, 1000),
             Gift.pearl: (self.has(Fish.blobfish) & self.building.has_building(Building.fish_pond)) | self.action.can_open_geode(Geode.artifact_trove),
             Gift.tea_set: self.season.has(Season.winter) & self.time.has_lived_max_months,
@@ -354,9 +354,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             crafting_rule = self.registry.crafting_rules[recipe]
             obtention_rule = self.registry.item_rules[recipe] if recipe in self.registry.item_rules else False_()
             self.registry.item_rules[recipe] = obtention_rule | crafting_rule
-
-        self.building.initialize_rules()
-        self.building.update_rules(self.mod.building.get_modded_building_rules())
 
         self.quest.initialize_rules()
         self.quest.update_rules(self.mod.quest.get_modded_quest_rules())
