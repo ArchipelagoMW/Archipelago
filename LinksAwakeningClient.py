@@ -638,6 +638,11 @@ class LinksAwakeningContext(CommonContext):
                 "password": self.password,
             })
 
+            # We can process linked items on already-checked checks now that we have slot_data
+            if self.client.tracker:
+                checked_checks = set(self.client.tracker.all_checks) - set(self.client.tracker.remaining_checks)
+                self.add_linked_items(checked_checks)
+
         # TODO - use watcher_event
         if cmd == "ReceivedItems":
             for index, item in enumerate(args["items"], start=args["index"]):
@@ -653,6 +658,13 @@ class LinksAwakeningContext(CommonContext):
         sync_msg = [{'cmd': 'Sync'}]
         await self.send_msgs(sync_msg)
 
+    def add_linked_items(self, checks):
+        for check in checks:
+            if check.value and check.linkedItem:
+                linkedItem = check.linkedItem
+                if 'condition' not in linkedItem or (self.slot_data and linkedItem['condition'](self.slot_data)):
+                    self.client.item_tracker.setExtraItem(check.linkedItem['item'], check.linkedItem['qty'])
+
     item_id_lookup = get_locations_to_id()
 
     async def run_game_loop(self):
@@ -661,11 +673,7 @@ class LinksAwakeningContext(CommonContext):
                 checkMetadataTable[check.id])] for check in ladxr_checks]
             self.new_checks(checks, [check.id for check in ladxr_checks])
 
-            for check in ladxr_checks:
-                if check.value and check.linkedItem:
-                    linkedItem = check.linkedItem
-                    if 'condition' not in linkedItem or linkedItem['condition'](self.slot_data):
-                        self.client.item_tracker.setExtraItem(check.linkedItem['item'], check.linkedItem['qty'])
+            self.add_linked_items(ladxr_checks)
 
         async def victory():
             await self.send_victory()
