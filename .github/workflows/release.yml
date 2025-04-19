@@ -29,8 +29,8 @@ jobs:
   # build-release-windows: # this is done by hand because of signing
   # build-release-macos: # LF volunteer
 
-  build-release-ubuntu2004:
-    runs-on: ubuntu-20.04
+  build-release-ubuntu2204:
+    runs-on: ubuntu-22.04
     steps:
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
@@ -64,7 +64,7 @@ jobs:
           # charset-normalizer was somehow incomplete in the github runner
           "${{ env.PYTHON }}" -m venv venv
           source venv/bin/activate
-          "${{ env.PYTHON }}" -m pip install --upgrade pip PyGObject charset-normalizer
+          "${{ env.PYTHON }}" -m pip install --upgrade pip "PyGObject<3.51.0" charset-normalizer
           python setup.py build_exe --yes bdist_appimage --yes
           echo -e "setup.py build output:\n `ls build`"
           echo -e "setup.py dist output:\n `ls dist`"
