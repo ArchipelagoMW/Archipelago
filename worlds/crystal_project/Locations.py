@@ -688,10 +688,25 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #3rd Overpass Scrap chest on main map has been categorized under the Okimoto N.S.
         #2nd Overpass Scrap chest from the bottom on main map has been categorized under Salmon Bay
 
+        #NPCs
+        #Todo NPCs CheckOrNot: Overpass 4 Quintar Eggs (Dirt Nest), 1 Quintar Egg (Stone Nest), 1 Quintar Egg (Cave Nest), 1 Quintar Egg (Stone Nest) submap
+        #Todo NPCs Job Masters: Overpass (Outpost) has Master Aegis ID 3610 (501, 194, -210); gives you Aegis Seal in exchange for job mastery
+        #Todo NPCs Job Masters: Overpass (Outpost) has Master Beastmaster ID 3608 (312, 236, -344); gives you Beastmaster Seal in exchange for job mastery
+        #Todo NPCs Job Masters: Overpass (Outpost) has Master Ninja ID 3550 (561, 238, -209); gives you Ninja Seal in exchange for job mastery
+        #Todo NPCs Job Masters: Overpass (Outpost) has Master Nomad ID 3548 (53, 227, -465); gives you Nomad Seal in exchange for job mastery
+        #Todo NPCs Job Masters: Overpass (Outpost) has Master Reaper ID 3611 (232, 220, -383); gives you Reaper Seal in exchange for job mastery
+        #Todo NPCs Job Masters: Overpass (Outpost) has Master Summoner ID 3557 (379, 246, -575); gives you Summoner Seal in exchange for job mastery
+        #Todo NPCs Job Masters: Overpass (Outpost) has Master Valkyrie ID 3554 (24, 137, 71); gives you Valkyrie Seal in exchange for job mastery
+        #Todo NPCs Job Masters: Overpass (Outpost 3H) has Master Fencer ID 3573 (166, 154, -124); gives you Fencer Seal in exchange for job mastery
+
         #Underpass
         #Treasure chests
         #The last Underpass Scrap chest on main map has been categorized under the Capital Jail
-        #The Underpass (Okimoto) map"s Underpass Scrap has been categorized under Cobblestone Crag
+        #The Underpass (Okimoto) Underpass Scrap has been categorized under Cobblestone Crag
+
+        #Abilities Todo: descriptivize and implement
+        #614, 91, -213
+        #LocationData("Underpass", "Underpass Ability - Pah from SReflect_Summon", 1130 + ability_index_offset),
 
         #Zones (Expert)
         #Shoudu Waterfront
