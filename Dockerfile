@@ -27,11 +27,12 @@ WORKDIR /app
 COPY . .
 
 #install requirements
+# hadolint ignore=DL3008
 RUN apt-get update; \
     apt-get install -y --no-install-recommends \
-    git=1:2.39.5-0+deb12u1 \
+    git \
     gcc=4:12.2.0-3 \
-    libc6-dev=2.36-9+deb12u9 \
+    libc6-dev \
     libtk8.6=8.6.13-2 \
     g++=4:12.2.0-3; \
     apt-get clean; \
