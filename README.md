@@ -63,7 +63,6 @@ Currently, the following games are supported:
 * TUNIC
 * Kirby's Dream Land 3
 * Celeste 64
-* Zork Grand Inquisitor
 * Castlevania 64
 * A Short Hike
 * Yoshi's Island
