@@ -694,6 +694,12 @@ def _mp_open_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args:
     res.put(open_filename(*args))
 
 
+def _mp_save_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
+    if is_kivy_running():
+        raise RuntimeError("kivy should not be running in multiprocess")
+    res.put(save_filename(*args))
+
+
 def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typing.Iterable[str]]], suggest: str = "") \
         -> typing.Optional[str]:
     logging.info(f"Opening file input dialog for {title}.")
@@ -765,9 +771,16 @@ def save_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
         import tkinter.filedialog
     except Exception as e:
         logging.error('Could not load tkinter, which is likely not installed. '
-                      f'This attempt was made because open_filename was used for "{title}".')
+                      f'This attempt was made because save_filename was used for "{title}".')
         raise e
     else:
+        if is_macos and is_kivy_running():
+            # on macOS, mixing kivy and tk does not work, so spawn a new process
+            # FIXME: performance of this is pretty bad, and we should (also) look into alternatives
+            from multiprocessing import Process, Queue
+            res: "Queue[typing.Optional[str]]" = Queue()
+            Process(target=_mp_save_filename, args=(res, title, filetypes, suggest)).start()
+            return res.get()
         try:
             root = tkinter.Tk()
         except tkinter.TclError:
