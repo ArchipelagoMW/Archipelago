@@ -65,7 +65,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
     multiworld.get_region("Capital Jail", player).add_exits(["Capital Pipeline"], 
         {"Capital Pipeline": lambda state: state.has("Item - South Wing Key", world.player) and state.has("Item - Cell Key", world.player, 6)})
     multiworld.get_region("Rolling Quintar Fields", player).add_exits(["Quintar Nest", "Quintar Sanctum"], 
-        {"Quintar Sanctum": lambda state: state.has_any({"Item - Progressive Quintar Flute"}, world.player, 2)})
+        {"Quintar Sanctum": lambda state: state.has("Item - Progressive Quintar Flute", world.player, 2)})
     multiworld.get_region("Quintar Nest", player).add_exits(["Cobblestone Crag"])
     multiworld.get_region("Capital Sequoia", player).add_exits(["Cobblestone Crag", "Greenshire Reprise"], 
         {"Cobblestone Crag": lambda state: state.has_any({"Item - Courtyard Key"}, world.player), 
