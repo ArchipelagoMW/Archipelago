@@ -70,9 +70,9 @@
     {
         "address": 305, "name": "AF (Depths): Hack 3 Statues",
         "region": "AFD - Lower Left Exit", "requires": [ // hacking 1 AND
-            // 1st statue is also in Lower Left Exit, right next to where the chest appears
-            { "region": "AFD - Climb to Root Node" }, // hidden on left side of the shaft
-            { "region": "AFD - Upper Right" } // left of the chests
+            { "item": "Tai-Chi Kick" }, // 1st statue is also in Lower Left Exit next to the chest; requires TCK
+            { "region": "AFD - Climb to Root Node" }, // hidden on left side of the shaft; requires parry only
+            { "region": "AFD - Upper Right" } // left of the chests; requires parry only
         ]
     },
     {
