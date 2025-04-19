@@ -231,7 +231,7 @@ Factory.register("HoverBehavior", HoverBehavior)
 
 
 class ToolTip(MDTooltipPlain):
-    pass
+    markup = True
 
 
 class ServerToolTip(ToolTip):

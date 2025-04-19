@@ -20,6 +20,7 @@ from copy import deepcopy
 import Utils
 import typing
 import webbrowser
+import re
 from urllib.parse import urlparse
 from worlds.AutoWorld import AutoWorldRegister, World
 from Options import (Option, Toggle, TextChoice, Choice, FreeText, NamedRange, Range, OptionSet, OptionList, OptionDict,
@@ -39,7 +40,11 @@ def validate_url(x):
 def filter_tooltip(tooltip):
     if tooltip is None:
         tooltip = "No tooltip available."
-    return dedent(tooltip).replace("\n", "<br>").replace("&", "&amp;").replace("[", "&bl;").replace("]", "&br;")
+    tooltip = dedent(tooltip).strip().replace("\n", "<br>").replace("&", "&amp;")\
+        .replace("[", "&bl;").replace("]", "&br;")
+    tooltip = re.sub(r"\*\*(.+?)\*\*", r"[b]\g<1>[/b]", tooltip)
+    tooltip = re.sub(r"\*(.+?)\*", r"[i]\g<1>[/i]", tooltip)
+    return escape_markup(tooltip)
 
 
 def option_can_be_randomized(option: typing.Type[Option]):
@@ -401,18 +406,9 @@ class OptionsCreator(ThemedApp):
             valid_keys += list(world.location_name_to_id.keys())
 
         def apply_changes(button):
-            if isinstance(option, OptionList):
-                if name not in self.options:
-                    self.options[name] = []
-                self.options[name].clear()
-                for list_item in dialog.scrollbox.layout.children:
-                    self.options[name].append(getattr(list_item.text, "text"))
-            else:
-                if name not in self.options:
-                    self.options[name] = set()
-                self.options[name].clear()
-                for list_item in dialog.scrollbox.layout.children:
-                    self.options[name].add(getattr(list_item.text, "text"))
+            self.options[name].clear()
+            for list_item in dialog.scrollbox.layout.children:
+                self.options[name].append(getattr(list_item.text, "text"))
             dialog.dismiss()
 
         dialog = VisualListSet(option=option, name=name, valid_keys=valid_keys)
@@ -421,6 +417,14 @@ class OptionsCreator(ThemedApp):
         dialog.scrollbox.layout.md_bg_color = self.theme_cls.surfaceContainerLowColor
         dialog.scrollbox.layout.spacing = dp(5)
         dialog.scrollbox.layout.padding = [0, dp(5), 0, 0]
+
+        if name not in self.options:
+            # convert from non-mutable to mutable
+            # We use list syntax even for sets, set behavior is enforced through GUI
+            self.options[name] = sorted(option.default)
+
+        for value in sorted(self.options[name]):
+            dialog.add_set_item(value)
 
         dialog.save.bind(on_release=apply_changes)
         dialog.open()
@@ -431,10 +435,11 @@ class OptionsCreator(ThemedApp):
         return main_button
 
     def create_option(self, option: typing.Type[Option], name: str, world: typing.Type[World]) -> Widget:
-        option_base = MDBoxLayout(orientation="vertical", size_hint_y=None)
+        option_base = MDBoxLayout(orientation="vertical", size_hint_y=None, padding=[0, 0, dp(5), 0])
 
         tooltip = filter_tooltip(option.__doc__)
-        option_label = TooltipLabel(text=f"[ref=0|{tooltip}]{getattr(option, 'display_name', name)}")
+        option_label = TooltipLabel(text=f"[ref=0|{tooltip}]"
+                                         f"{getattr(option, 'display_name', name)}")
         label_box = MDBoxLayout(orientation="horizontal")
         label_anchor = MDAnchorLayout(anchor_x="right", anchor_y="center")
         label_anchor.add_widget(option_label)

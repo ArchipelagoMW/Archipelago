@@ -106,13 +106,18 @@ ContainerLayout:
 
     MainLayout:
         id: main
-        cols: 2
+        cols: 3
         padding: 3, 5, 0, 3
+        spacing: "2dp"
 
         ScrollBox:
             id: scrollbox
             size_hint_x: None
             width: "150dp"
+
+        MDDivider:
+            orientation: "vertical"
+            width: "4dp"
 
         MainLayout:
             id: player_layout
@@ -143,7 +148,6 @@ ContainerLayout:
 
                     MDLabel:
                         id: game
-                        adaptive_size: True
                         text: "Game: None"
                         pos_hint: {"center_x": 0.5, "center_y": 0.5}
 
@@ -157,8 +161,6 @@ ContainerLayout:
                         MDButtonText:
                             pos_hint: {"center_x": 0.5, "center_y": 0.5}
                             text: "Export Options"
-
-
 
             MainLayout:
                 cols: 1
