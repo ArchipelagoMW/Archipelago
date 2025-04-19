@@ -110,10 +110,9 @@ components.extend([
 ])
 
 
-def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
+def handle_uri(path: str) -> tuple[list[Component], Component]:
     url = urllib.parse.urlparse(path)
     queries = urllib.parse.parse_qs(url.query)
-    launch_args = (path, *launch_args)
     client_component = []
     text_client_component = None
     if "game" in queries:
@@ -125,24 +124,23 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
             client_component.append(component)
         elif component.display_name == "Text Client":
             text_client_component = component
+    return client_component, text_client_component
 
+
+def build_uri_popup(component_list: list[Component], launch_args: Tuple[str, ...]) -> None:
     from kvui import MDButton, MDButtonText
     from kivymd.uix.dialog import MDDialog, MDDialogHeadlineText, MDDialogContentContainer, MDDialogSupportingText
     from kivymd.uix.divider import MDDivider
 
-    if not client_component:
-        run_component(text_client_component, *launch_args)
-        return
-    else:
-        popup_text = MDDialogSupportingText(text="Select client to open and connect with.")
-        component_buttons = [MDDivider()]
-        for component in [text_client_component, *client_component]:
-            component_buttons.append(MDButton(
-                MDButtonText(text=component.display_name),
-                on_release=lambda *args, comp=component: run_component(comp, *launch_args),
-                style="text"
-            ))
-        component_buttons.append(MDDivider())
+    popup_text = MDDialogSupportingText(text="Select client to open and connect with.")
+    component_buttons = [MDDivider()]
+    for component in component_list:
+        component_buttons.append(MDButton(
+            MDButtonText(text=component.display_name),
+            on_release=lambda *args, comp=component: run_component(comp, *launch_args),
+            style="text"
+        ))
+    component_buttons.append(MDDivider())
 
     MDDialog(
         # Headline
@@ -225,7 +223,7 @@ def create_shortcut(button: Any, component: Component) -> None:
 refresh_components: Optional[Callable[[], None]] = None
 
 
-def run_gui(path: str, args: Any) -> None:
+def run_gui(launch_components: list[Component], args: Any) -> None:
     from kvui import (ThemedApp, MDFloatLayout, MDGridLayout, ScrollBox)
     from kivy.properties import ObjectProperty
     from kivy.core.window import Window
@@ -256,12 +254,12 @@ def run_gui(path: str, args: Any) -> None:
         cards: list[LauncherCard]
         current_filter: Sequence[str | Type] | None
 
-        def __init__(self, ctx=None, path=None, args=None):
+        def __init__(self, ctx=None, components=None, args=None):
             self.title = self.base_title + " " + Utils.__version__
             self.ctx = ctx
             self.icon = r"data/icon.png"
             self.favorites = []
-            self.launch_uri = path
+            self.launch_components = components
             self.launch_args = args
             self.cards = []
             self.current_filter = (Type.CLIENT, Type.TOOL, Type.ADJUSTER, Type.MISC)
@@ -367,9 +365,9 @@ def run_gui(path: str, args: Any) -> None:
             return self.top_screen
 
         def on_start(self):
-            if self.launch_uri:
-                handle_uri(self.launch_uri, self.launch_args)
-                self.launch_uri = None
+            if self.launch_components:
+                build_uri_popup(self.launch_components, self.launch_args)
+                self.launch_components = None
                 self.launch_args = None
 
         @staticmethod
@@ -401,7 +399,7 @@ def run_gui(path: str, args: Any) -> None:
                                                                    for filter in self.current_filter))
             super().on_stop()
 
-    Launcher(path=path, args=args).run()
+    Launcher(components=launch_components, args=args).run()
 
     # avoiding Launcher reference leak
     # and don't try to do something with widgets after window closed
@@ -436,6 +434,12 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
                 args['component'] = component
             if not component:
                 logging.warning(f"Could not identify Component responsible for {path}")
+        else:
+            components, text_client_component = handle_uri(path)
+            if not components:
+                args['component'] = text_client_component
+            else:
+                args['launch_components'] = [text_client_component, *components]
 
     if args["update_settings"]:
         update_settings()
@@ -444,7 +448,11 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
     elif "component" in args:
         run_component(args["component"], *args["args"])
     elif not args["update_settings"]:
-        run_gui(path, args.get("args", ()))
+        if "launch_components" in args:
+            passthrough_args = (path, *args.get("args", ()))
+            run_gui(args['launch_components'], passthrough_args)
+        else:
+            run_gui(None, args.get("args", ()))
 
 
 if __name__ == '__main__':
