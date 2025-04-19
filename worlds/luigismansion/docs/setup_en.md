@@ -15,7 +15,7 @@ Run the emulator at least once to make sure it is working.
 
 3. Unzip the APworld from the downloads. Place the luigismansion.apworld in the custom_worlds folder of your Archipelago install
 
-4. Place the contents of the /lib folder from what you unzipped into the /lib folder of your Archipelago install. 
+4. Download the lib.zip from the releases page and unpack it. Place the contents of the /lib from what you unzipped into the /lib folder of your Archipelago install. 
 
 ## Create a Config (.yaml) File
 
