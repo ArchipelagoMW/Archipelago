@@ -33,6 +33,10 @@ class CrystalProjectWorld(World):
 
     def generate_early(self):
         self.multiworld.push_precollected(self.create_item("Item - Home Point Stone"))
+        if self.options.startWithTreasureFinder:
+            self.multiworld.push_precollected(self.create_item("Item - Treasure Finder"))
+        if self.options.startWithMaps:
+            self.multiworld.push_precollected(self.create_item("Item - Spawning Meadows Map"))
 
     def create_regions(self) -> None:
         init_areas(self, get_locations(self.player))
@@ -66,6 +70,12 @@ class CrystalProjectWorld(World):
         excluded_items.add("Job - Cleric")
         excluded_items.add("Job - Wizard")
         excluded_items.add("Job - Warlock")
+
+        if self.options.startWithTreasureFinder:
+            excluded_items.add("Item - Treasure Finder")
+
+        if self.options.startWithMaps:
+            excluded_items.add("Item - Spawning Meadows Map")
 
         if self.options.randomizeJobs != 1:
             excluded_items.add("Job - Fencer")
@@ -131,7 +141,9 @@ class CrystalProjectWorld(World):
         slot_data = {
             "goal": self.options.goal.value,
             "clamshellsQuantity": self.options.clamshellsQuantity.value,
-            "randomizeJobs": bool(self.options.randomizeJobs.value)
+            "randomizeJobs": bool(self.options.randomizeJobs.value),
+            "startWithTreasureFinder": bool(self.options.startWithTreasureFinder),
+            "startWithMaps": bool(self.options.startWithMaps)
         }
     
         return slot_data

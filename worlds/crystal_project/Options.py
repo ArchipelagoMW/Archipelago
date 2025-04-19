@@ -35,8 +35,22 @@ class RandomizeJobs(DefaultOnToggle):
     """
     display_name = "Randomize Jobs"
 
+class StartWithTreasureFinder(DefaultOnToggle):
+    """
+    When enabled, the player will start with the treasure finder in their inventory.
+    """
+    display_name = "Begin with Treasure Finder"
+
+class StartWithMaps(DefaultOnToggle):
+    """
+    When enabled, the player will start with all of the maps in their inventory.
+    """
+    display_name = "Begin with Area Maps"
+
 @dataclass
 class CrystalProjectOptions(PerGameCommonOptions):
     goal: Goal
     clamshellsQuantity: ClamshellsQuantity
     randomizeJobs: RandomizeJobs
+    startWithTreasureFinder: StartWithTreasureFinder
+    startWithMaps: StartWithMaps

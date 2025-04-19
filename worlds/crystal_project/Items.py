@@ -144,6 +144,7 @@ item_table: Dict[str, ItemData] = {
     "Item - Ancient Tablet A": ItemData("Item", 161 + item_index_offset, ItemClassification.filler),
     "Item - Ancient Tablet B": ItemData("Item", 162 + item_index_offset, ItemClassification.filler),
     "Item - Ancient Tablet C": ItemData("Item", 163 + item_index_offset, ItemClassification.filler),
+    "Item - Treasure Finder": ItemData("Item", 196 + item_index_offset, ItemClassification.useful),
 
     #Animal mount summons
     "Item - Progressive Quintar Flute": ItemData("Item", 39 + item_index_offset, ItemClassification.progression, 2), #Quintar Pass ID 7 & Quintar Flute ID 39
@@ -749,6 +750,9 @@ item_table: Dict[str, ItemData] = {
     "Equipment - Hand of Midas": ItemData("Equipment", 494 + equipment_index_offset, ItemClassification.useful),
     "Equipment - Ghendolfs Ring": ItemData("Equipment", 242 + equipment_index_offset, ItemClassification.useful),
     "Equipment - Master Material": ItemData("Equipment", 284 + equipment_index_offset, ItemClassification.useful),
+
+    #Maps
+    "Item - Spawning Meadows Map": ItemData("Item", 73 + item_index_offset, ItemClassification.useful),
 
     #Currency
     #"Currency": ItemData("Currency", 0 + index_offset, ItemClassification.filler),
