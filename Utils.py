@@ -47,7 +47,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.6.0"
+__version__ = "0.6.2"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -113,6 +113,8 @@ def cache_self1(function: typing.Callable[[S, T], RetType]) -> typing.Callable[[
             res = function(self, arg)
             cache[arg] = res
             return res
+
+    wrap.__defaults__ = function.__defaults__
 
     return wrap
 

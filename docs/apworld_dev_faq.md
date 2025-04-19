@@ -66,3 +66,22 @@ The reason entrance access rules using `location.can_reach` and `entrance.can_re
 We recognize it can feel like a trap since it will not alert you when you are missing an indirect condition, and that some games have very complex access rules.
 As of [PR #3682 (Core: Region handling customization)](https://github.com/ArchipelagoMW/Archipelago/pull/3682) being merged, it is possible for a world to opt out of indirect conditions entirely, instead using the system of checking each entrance whenever a region has been reached, although this does come with a performance cost.
 Opting out of using indirect conditions should only be used by games that *really* need it. For most games, it should be reasonable to know all entrance &rarr; region dependencies, making indirect conditions preferred because they are much faster.
+
+---
+
+### I uploaded the generated output of my world to the webhost and webhost is erroring on corrupted multidata
+
+The error `Could not load multidata. File may be corrupted or incompatible.` occurs when uploading a locally generated
+file where there is an issue with the multidata contained within it. It may come with a description like
+`(No module named 'worlds.myworld')` or `(global 'worlds.myworld.names.ItemNames' is forbidden)`
+
+Pickling is a way to compress python objects such that they can be decompressed and be used to rebuild the
+python objects. This means that if one of your custom class instances ends up in the multidata, the server would not
+be able to load that custom class to decompress the data, which can fail either because the custom class is unknown
+(because it cannot load your world module) or the class it's attempting to import to decompress is deemed unsafe.
+
+Common situations where this can happen include:
+* Using Option instances directly in slot_data. Ex: using `options.option_name` instead of `options.option_name.value`.
+  Also, consider using the `options.as_dict("option_name", "option_two")` helper.
+* Using enums as Location/Item names in the datapackage. When building out `location_name_to_id` and `item_name_to_id`,
+  make sure that you are not using your enum class for either the names or ids in these mappings.
