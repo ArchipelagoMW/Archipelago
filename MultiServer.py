@@ -1983,11 +1983,13 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             new_hint = new_hint.re_prioritize(ctx, status)
             if hint == new_hint:
                 return
-            ctx.replace_hint(client.team, hint.finding_player, hint, new_hint)
-            ctx.replace_hint(client.team, hint.receiving_player, hint, new_hint)
+
+            concerning_slots = ctx.slot_set(hint.receiving_player) | {hint.finding_player}
+            for slot in concerning_slots:
+                ctx.replace_hint(client.team, slot, hint, new_hint)
             ctx.save()
-            ctx.on_changed_hints(client.team, hint.finding_player)
-            ctx.on_changed_hints(client.team, hint.receiving_player)
+            for slot in concerning_slots:
+                ctx.on_changed_hints(client.team, slot)
         
         elif cmd == 'StatusUpdate':
             update_client_status(ctx, client, args["status"])
