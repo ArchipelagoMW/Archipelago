@@ -47,6 +47,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
         create_region(world, player, locations_per_region, "Sara Sara Beach"),
         create_region(world, player, locations_per_region, "Ancient Reservoir"),
         create_region(world, player, locations_per_region, "Salmon Bay"),
+        #Todo add entrances to The Open Sea
+        create_region(world, player, locations_per_region, "The Open Sea"),
         create_region(world, player, locations_per_region, "Shoudu Waterfront"),
         create_region(world, player, locations_per_region, "Shoudu Province"),
         create_region(world, player, locations_per_region, "Lake Delende")     
@@ -72,7 +74,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
         {"Quintar Sanctum": lambda state: state.has_any({"Item - Progressive Quintar Flute"}, world.player)})
     multiworld.get_region("Quintar Nest", player).add_exits(["Cobblestone Crag"])
     multiworld.get_region("Capital Sequoia", player).add_exits(["Cobblestone Crag", "Greenshire Reprise"], 
-        {"Cobblestone Crag": lambda state: state.has_any({"Item - Courtyard Key"}, world.player), 
+        {#"Cobblestone Crag": lambda state: state.has_any({"Item - Courtyard Key"}, world.player), 
         "Greenshire Reprise": lambda state: get_job_count(player, state) >= 6 })
     multiworld.get_region("Cobblestone Crag", player).add_exits(["Shoudu Waterfront", "Okimoto N.S."], 
         {"Shoudu Waterfront": lambda state: state.has("Item - Progressive Quintar Flute", world.player, 2), 

@@ -325,12 +325,12 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper", 531 + npc_index_offset),
         #Next seven checks can be acquired by either Owl, Ibek, Quintar, or Gaea Stone; vanilla game expects Gaea Stone so that"s the logic we"re using
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin trampling the Clerics flowers", 564 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Give Sadist Sam head(s)", 536 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)), #name is ca69011a in Crystal Edit whyy lmao
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin wandering the Magic Shop rooftop garden", 573 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Give Sadist Sam head(s)", 536 + npc_index_offset), #name is ca69011a in Crystal Edit whyy lmao
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin wandering the Magic Shop rooftop garden", 573 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin atop sewer exit rooftop", 567 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin cheating at Garden Maze", 421 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - How did you climb that tree, Lost Penguin", 422 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin among the eaves of Library roof", 594 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin cheating at Garden Maze", 421 + npc_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - How did you climb that tree, Lost Penguin", 422 + npc_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin among the eaves of Library roof", 594 + npc_index_offset),
         #Todo: descriptivize (440, 171, -296)
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Library Scholar", 1948 + npc_index_offset),
 
@@ -709,11 +709,67 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #LocationData("Underpass", "Underpass Ability - Pah from SReflect_Summon", 1130 + ability_index_offset),
 
         #Zones (Expert)
+        #The Open Sea
+        #Treasure chests
+        #Todo descriptivize & check requirements on these
+        LocationData("The Open Sea", "The Open Sea Chest - Fenix Syrup chest", 3767 + treasure_index_offset), #(910, 91, 173)
+        LocationData("The Open Sea", "The Open Sea Chest - Z-Potion chest", 3765 + treasure_index_offset), #(902, 91, 190)
+
+        #NPCs
+        #Todo NPCs Player Options: (-139, 91, 123) do we want a filter option to add the guy who fishes things up for you
+        #LocationData("The Open Sea", "The Open Sea NPC - Z27_FisherOnRaft", 2804 + npc_index_offset),
+        #Todo NPCs CheckOrNot: (930, 91, 253) do we put a check on the guy who gives you a Gaea Shard if you get there with no Salmon lol
+        #LocationData("The Open Sea", "The Open Sea NPC - Z34_SinisterSailor", 2520 + npc_index_offset),
+
         #Shoudu Waterfront
         #Treasure chests
         LocationData("Shoudu Waterfront", "Shoudu Waterfront Chest - Money chest along the water", 2419 + treasure_index_offset),
         LocationData("Shoudu Waterfront", "Shoudu Waterfront Chest - Hop around Empty chest", 3690 + treasure_index_offset),
         LocationData("Shoudu Waterfront", "Shoudu Waterfront Chest - Hop around Mars Stone chest", 1114 + treasure_index_offset),
+
+        #Shoudu Province
+        #Treasure chests
+        #Todo descriptivize & check requirements on these
+        LocationData("Shoudu Province", "Shoudu Province Chest - Money chest", 2794 + treasure_index_offset), #(728, 129, -249)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Money chest", 2812 + treasure_index_offset), #(737, 133, -264)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Money chest", 2813 + treasure_index_offset), #(734, 133, -262)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Bone Mail chest", 2751 + treasure_index_offset), #(731, 129, -251)        
+        LocationData("Shoudu Province", "Shoudu Province Chest - Cutlass chest", 2747 + treasure_index_offset), #(734, 130, -250)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3504 + treasure_index_offset), #(775, 125, -196)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3505 + treasure_index_offset), #(733, 126, -272)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3506 + treasure_index_offset), #(778, 126, -186)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3507 + treasure_index_offset), #(787, 117, -277)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3508 + treasure_index_offset), #(713, 137, -217)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3509 + treasure_index_offset), #(738, 125, -223)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3510 + treasure_index_offset), #(756, 125, -218)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3511 + treasure_index_offset), #(803, 120, -222)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3512 + treasure_index_offset), #(806, 115, -222)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3513 + treasure_index_offset), #(776, 123, -200)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3514 + treasure_index_offset), #(752, 124, -199)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3515 + treasure_index_offset), #(751, 122, -188)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3520 + treasure_index_offset), #(776, 120, -192)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3521 + treasure_index_offset), #(778, 117, -182)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3522 + treasure_index_offset), #(715, 125, -214)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Ether chest", 2717 + treasure_index_offset), #(716, 119, -217)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Ether Pouch chest", 1507 + treasure_index_offset), #(726, 105, -175)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Ether Pouch chest", 2978 + treasure_index_offset), #(725, 134, -241)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Fleuret chest", 1541 + treasure_index_offset), #(800, 119, -222)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Gaia Axe chest", 2723 + treasure_index_offset), #(736, 133, -262)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Gaia Vest chest", 2723 + treasure_index_offset), #(734, 133, -260)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Gravedigger chest", 2665 + treasure_index_offset), #(749, 134, -263)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Knicked Knackers chest", 1536 + treasure_index_offset), #(762, 117, -202)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Looters Pin chest", 1519 + treasure_index_offset), #(790, 107, -198)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Malifice chest", 2805 + treasure_index_offset), #(748, 134, -262)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Muggers Glove chest", 2760 + treasure_index_offset), #(743, 123, -198)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Muramasa chest", 2928 + treasure_index_offset), #(754, 134, -264)
+
+        #NPCs
+        #Todo NPCs Job Masters: Master Assassin ID 3605 (769, 123, -201); gives you Assassin Seal in exchange for job mastery
+        #Todo NPCs Job Masters: Master Samurai ID 3576 (800, 115, -221); gives you Samurai Seal in exchange for job mastery
+        #Todo descriptivize and check requirements on these
+        LocationData("Shoudu Province", "Shoudu Province NPC - Diamond Dust", 2833 + treasure_index_offset), #(752, 133, -262)
+        LocationData("Shoudu Province", "Shoudu Province NPC - Diamond Ingot", 2811 + treasure_index_offset), #(756, 133, -261)
+        LocationData("Shoudu Province", "Shoudu Province NPC - Diamond Ore", 2832 + treasure_index_offset), #(753, 130, -264)
 
         #Lake Delende
         #Treasure chests
