@@ -1,8 +1,6 @@
 from typing import Dict, Union
 
 from ..mod_data import ModNames
-from ... import options
-from ...data.craftable_data import all_crafting_recipes_by_name
 from ...logic.base_logic import BaseLogicMixin, BaseLogic
 from ...logic.combat_logic import CombatLogicMixin
 from ...logic.cooking_logic import CookingLogicMixin
@@ -20,11 +18,9 @@ from ...logic.season_logic import SeasonLogicMixin
 from ...logic.skill_logic import SkillLogicMixin
 from ...logic.time_logic import TimeLogicMixin
 from ...logic.tool_logic import ToolLogicMixin
-from ...options import Cropsanity
-from ...stardew_rule import StardewRule, True_
+from ...stardew_rule import StardewRule
 from ...strings.artisan_good_names import ModArtisanGood
-from ...strings.craftable_names import ModCraftable, ModMachine
-from ...strings.fish_names import ModTrash
+from ...strings.craftable_names import ModCraftable
 from ...strings.ingredient_names import Ingredient
 from ...strings.material_names import Material
 from ...strings.metal_names import all_fossils, all_artifacts, Ore, ModFossil
@@ -83,7 +79,7 @@ FarmingLogicMixin]]):
             # Gingerbread House
         }
 
-        if self.options.tool_progression & options.ToolProgression.option_progressive:
+        if self.content.features.tool_progression.is_progressive:
             options_to_update.update({
                 Ore.iridium: items[Ore.iridium] | self.logic.tool.can_use_tool_at(Tool.axe, ToolMaterial.iridium, DeepWoodsRegion.floor_50),  # Iridium Tree
             })
