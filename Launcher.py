@@ -368,6 +368,7 @@ def run_gui(path: str, args: Any) -> None:
             refresh_components = self._refresh_components
 
             Window.bind(on_drop_file=self._on_drop_file)
+            Window.bind(on_keyboard=self._on_keyboard)
 
             for component in components:
                 self.cards.append(self.build_card(component))
@@ -403,6 +404,15 @@ def run_gui(path: str, args: Any) -> None:
                 run_component(component, file)
             else:
                 logging.warning(f"unable to identify component for {file}")
+
+        def _on_keyboard(self, window: Window, key: int, scancode: int, codepoint: str, modifier: list[str]):
+            # Activate search as soon as we start typing, no matter if we are focused on the search box or not.
+            # Focus first, then capture the first character we type, otherwise it gets swallowed and lost.
+            # Limit text input to ASCII non-control characters (space bar to tilde).
+            if not self.search_box.focus:
+                self.search_box.focus = True
+                if key in range(32, 126):
+                    self.search_box.text += codepoint
 
         def _stop(self, *largs):
             # ran into what appears to be https://groups.google.com/g/kivy-users/c/saWDLoYCSZ4 with PyCharm.
