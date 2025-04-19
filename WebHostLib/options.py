@@ -108,7 +108,7 @@ def option_presets(game: str) -> Response:
                     f"Expected {option.special_range_names.keys()} or {option.range_start}-{option.range_end}."
 
                 presets[preset_name][preset_option_name] = option.value
-            elif isinstance(option, (Options.Range, Options.OptionSet, Options.OptionList, Options.ItemDict)):
+            elif isinstance(option, (Options.Range, Options.OptionSet, Options.OptionList, Options.OptionCounter)):
                 presets[preset_name][preset_option_name] = option.value
             elif isinstance(preset_option, str):
                 # Ensure the option value is valid for Choice and Toggle options
@@ -222,7 +222,7 @@ def generate_yaml(game: str):
 
         for key, val in options.copy().items():
             key_parts = key.rsplit("||", 2)
-            # Detect and build ItemDict options from their name pattern
+            # Detect and build OptionCounter options from their name pattern
             if key_parts[-1] == "qty":
                 if key_parts[0] not in options:
                     options[key_parts[0]] = {}
