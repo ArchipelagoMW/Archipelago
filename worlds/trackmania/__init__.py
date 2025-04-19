@@ -55,12 +55,12 @@ class TrackmaniaWorld(World):
         create_regions(self)
 
     def fill_slot_data(self) -> dict:
-        slot_data: dict = {"TargetTimeSetting": str(self.options.target_time.value),
-                           "SeriesNumber": str(self.options.series_number.value),
-                           "SeriesMapNumber": str(self.options.series_map_number.value),
-                           "MedalRequirement": str(self.options.medal_requirement.value),
-                           "MapTags": str(self.options.map_tags.value),
-                           "MapTagsInclusive": str(self.options.map_tags_inclusive.value),
-                           "MapETags": str(self.options.map_etags.value)}
+        slot_data: dict = {"TargetTimeSetting": (float(self.options.target_time.value)/100.0),
+                           "SeriesNumber": self.options.series_number.value,
+                           "SeriesMapNumber": self.options.series_map_number.value,
+                           "MedalRequirement": self.options.medal_requirement.value,
+                           "MapTags": "bla",#self.options.map_tags.value,
+                           "MapTagsInclusive": self.options.map_tags_inclusive.value,
+                           "MapETags": "bla"}#self.options.map_etags.value}
 
         return slot_data

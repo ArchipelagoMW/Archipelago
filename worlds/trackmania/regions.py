@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
-from .items import get_progression_medal, determine_item_classification
+from .items import get_progression_medal, determine_item_classification, TrackmaniaItem
 from .locations import TrackmaniaLocation, get_map_name, get_check_type_name, get_series_name
 from .data import MapCheckTypes
-from BaseClasses import Region, Location, LocationProgressType
+from BaseClasses import Region, Location, LocationProgressType, ItemClassification
 from worlds.generic.Rules import add_rule, set_rule
 
 if TYPE_CHECKING:
@@ -16,7 +16,7 @@ def create_check(world: "TrackmaniaWorld", reg: Region, map_name: str, check_typ
     reg.locations.append(location)
 
 def create_track_checks(world: "TrackmaniaWorld", series: Region, map : int) -> Region:
-    map_name = get_map_name(map) + " in " + series.name
+    map_name = series.name + " " + get_map_name(map)
     reg = series#Region(map_name, world.player, world.multiworld)
 
     create_check(world, reg, map_name, MapCheckTypes.Bronze)
@@ -46,6 +46,16 @@ def create_series_region(world: "TrackmaniaWorld", series: int) -> Region:
 
     return reg
 
+def create_victory_region(world: "TrackmaniaWorld", finalRegion: Region, finalMedalRequirement: int):
+    victory_region = Region("Victory!", world.player, world.multiworld)
+    world.multiworld.regions.append(victory_region)
+    victory_event = TrackmaniaLocation(world.player,"Victory!",None,victory_region)
+    victory_region.locations.append(victory_event)
+    victory_event.place_locked_item(TrackmaniaItem("Victory!", ItemClassification.progression, None, world.player))
+    finalRegion.connect(victory_region,"Victory!")
+    set_rule(victory_region, lambda state: state.has(get_progression_medal(world), world.player, finalMedalRequirement))
+    world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory!", world.player)
+
 def create_regions(world: "TrackmaniaWorld") -> Region:
     menu = Region ("Menu", world.player, world.multiworld)
     world.multiworld.regions.append(menu)
@@ -62,6 +72,10 @@ def create_regions(world: "TrackmaniaWorld") -> Region:
 
         previous_region = series
 
+    create_victory_region(world, previous_region, medal_requirement)
 
-    # from Utils import visualize_regions
-    # visualize_regions(world.multiworld.get_region("Menu", world.player), "my_world.puml")
+
+
+
+    from Utils import visualize_regions
+    visualize_regions(world.multiworld.get_region("Menu", world.player), "my_world.puml")

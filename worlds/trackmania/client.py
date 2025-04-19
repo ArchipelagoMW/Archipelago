@@ -8,7 +8,7 @@ from NetUtils import decode, encode, JSONtoTextParser, JSONMessagePart, NetworkI
 from MultiServer import Endpoint
 from CommonClient import CommonContext, gui_enabled, ClientCommandProcessor, logger, get_base_parser
 
-DEBUG = True
+DEBUG = False
 
 
 class TrackmaniaCommandProcessor(ClientCommandProcessor):
@@ -156,16 +156,14 @@ class TrackmaniaContext(CommonContext):
 
 
 async def proxy(websocket, path: str = "/", ctx: TrackmaniaContext = None):
-    logger.info("proxying!")
     ctx.endpoint = Endpoint(websocket)
     try:
         await on_client_connected(ctx)
 
         if ctx.is_proxy_connected():
-            logger.info("connected!!")
             async for data in websocket:
-                #if DEBUG:
-                logger.info(f"Incoming message: {data}")
+                if DEBUG:
+                    logger.info(f"Incoming message: {data}")
 
                 for msg in decode(data):
                     if msg["cmd"] == "Connect":
@@ -223,7 +221,7 @@ def launch():
         ctx = TrackmaniaContext(args.connect, args.password)
         logger.info("Starting Trackmania proxy server")
         ctx.proxy = websockets.serve(functools.partial(proxy, ctx=ctx),
-                                     host="localhost", logger = logger, port=22422, ping_timeout=999999, ping_interval=999999)
+                                     host="localhost", port=22422, ping_timeout=999999, ping_interval=999999)
         ctx.proxy_task = asyncio.create_task(proxy_loop(ctx), name="ProxyLoop")
 
         if gui_enabled:

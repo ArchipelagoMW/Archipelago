@@ -27,7 +27,7 @@ def build_locations() -> Dict[str, int]:
     return trackmania_locations
 
 def get_location_name(series: int, number : int, check : MapCheckTypes) -> str:
-    return get_map_name(number) + " in " + get_series_name(series) + " - " + get_check_type_name(check)
+    return get_series_name(series) + " " +get_map_name(number) + " - " + get_check_type_name(check)
 
 def get_map_name(number: int):
     return "Map " + str(number+1)
