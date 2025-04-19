@@ -47,7 +47,7 @@ class CrystalProjectWorld(World):
         self.multiworld.itempool += pool
 
     def get_filler_item_name(self) -> str:
-        #traps go here if we have any
+        # traps go here if we have any
         # trap_chance: int = self.options.trap_chance.value
         # enabled_traps: List[str] = self.options.traps.value
 
