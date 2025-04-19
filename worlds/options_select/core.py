@@ -45,11 +45,3 @@ def save_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
         return tkinter.filedialog.asksaveasfilename(title=title,
                                                     filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
                                                     initialfile=suggest or None)
-
-class FixedTooltipLabel(TooltipLabel):
-    # just gotta add this, but since we're subclassing
-    # we can just check before passing to super
-    def on_mouse_pos(self, window, pos):
-        if self.disabled:
-            return
-        return super().on_mouse_pos(window, pos)
