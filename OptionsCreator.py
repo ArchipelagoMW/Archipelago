@@ -75,7 +75,7 @@ class VisualRange(MDBoxLayout):
     def __init__(self, *args, option: typing.Type[Range], name: str, **kwargs):
         self.option = option
         self.name = name
-        super().__init__(*args, *kwargs)
+        super().__init__(*args, **kwargs)
 
         def update_points(*args):
             pass
@@ -91,7 +91,7 @@ class VisualChoice(MDButton):
     def __init__(self, *args, option: typing.Type[Choice], name: str, **kwargs):
         self.option = option
         self.name = name
-        super().__init__(*args, *kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class VisualNamedRange(MDBoxLayout):
@@ -103,7 +103,7 @@ class VisualNamedRange(MDBoxLayout):
     def __init__(self, *args, option: typing.Type[NamedRange], name: str, range: VisualRange, **kwargs):
         self.option = option
         self.name = name
-        super().__init__(*args, *kwargs)
+        super().__init__(*args, **kwargs)
         self.range = range
         self.add_widget(self.range)
 
@@ -115,7 +115,7 @@ class VisualFreeText(ResizableTextField):
     def __init__(self, *args, option: typing.Type[FreeText] | typing.Type[TextChoice], name: str, **kwargs):
         self.option = option
         self.name = name
-        super().__init__(*args, *kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class VisualTextChoice(MDBoxLayout):
@@ -128,7 +128,7 @@ class VisualTextChoice(MDBoxLayout):
                  text: VisualFreeText, **kwargs):
         self.option = option
         self.name = name
-        super(MDBoxLayout, self).__init__(*args, *kwargs)
+        super(MDBoxLayout, self).__init__(*args, **kwargs)
         self.choice = choice
         self.text = text
         self.add_widget(self.choice)
@@ -143,7 +143,7 @@ class VisualToggle(MDBoxLayout):
     def __init__(self, *args, option: typing.Type[Toggle], name: str, **kwargs):
         self.option = option
         self.name = name
-        super().__init__(*args, *kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class VisualListSet(MDDialog):
@@ -161,7 +161,7 @@ class VisualListSet(MDDialog):
         self.option = option
         self.name = name
         self.valid_keys = valid_keys
-        super().__init__(*args, *kwargs)
+        super().__init__(*args, **kwargs)
         self.dropdown = MarkupDropdown(caller=self.input, border_margin=dp(2),
                                        width=self.input.width, position="bottom")
         self.input.bind(text=self.on_text)
