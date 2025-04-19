@@ -33,7 +33,7 @@ from worlds.ladx.TrackerConsts import storage_key
 from worlds.ladx.ItemTracker import ItemTracker
 from worlds.ladx.LADXR.checkMetadata import checkMetadataTable
 from worlds.ladx.Locations import get_locations_to_id, meta_to_name
-from worlds.ladx.Tracker import LocationTracker, MagpieBridge
+from worlds.ladx.Tracker import LocationTracker, MagpieBridge, Check
 
 
 class GameboyException(Exception):
@@ -658,7 +658,7 @@ class LinksAwakeningContext(CommonContext):
         sync_msg = [{'cmd': 'Sync'}]
         await self.send_msgs(sync_msg)
 
-    def add_linked_items(self, checks):
+    def add_linked_items(self, checks: typing.List[Check]):
         for check in checks:
             if check.value and check.linkedItem:
                 linkedItem = check.linkedItem
