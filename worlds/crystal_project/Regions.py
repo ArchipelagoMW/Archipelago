@@ -45,8 +45,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
         create_region(world, player, locations_per_region, "Poko Poko Desert"),
         create_region(world, player, locations_per_region, "Sara Sara Bazaar"),
         create_region(world, player, locations_per_region, "Sara Sara Beach"),
-        create_region(world, player, locations_per_region, "Salmon Bay"),
         create_region(world, player, locations_per_region, "Ancient Reservoir"),
+        create_region(world, player, locations_per_region, "Salmon Bay"),
         create_region(world, player, locations_per_region, "Shoudu Waterfront"),
         create_region(world, player, locations_per_region, "Shoudu Province"),
         create_region(world, player, locations_per_region, "Lake Delende")     
