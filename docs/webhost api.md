@@ -5,11 +5,29 @@ The API is a work-in-progress and should be improved over time.
 
 The following API requests are formatted as: `https://<Archipelago URL>/api/<endpoint>`
 
+The returned data will be formated in a combination of JSON lists or dicts, with their keys or values being notated in `blocks` (if applicable)
+
+Current endpoints:
+- Datapackage API
+  - [`/datapackage`](#datapackage)
+  - [`/datapackage/<string:checksum>`](#datapackagestringchecksum)
+  - [`/datapackage_checksum`](#datapackagechecksum)
+- Generation API
+  - [`/generate`](#generate)
+  - [`/status/<suuid:seed>`](#status)
+- Room API
+  - [`/room_status/<suuid:room_id>`](#roomstatus)
+- User API
+  - [`/get_rooms`](#getrooms)
+  - [`/get_seeds`](#getseeds)
+
+
 ## Datapackage Endpoints
 These endpoints are used by applications to acquire and validate that they have a current datapackage for game data.   
 Such as item and location IDs, or name groupings.
 
-`/datapackage`  
+### `/datapackage`
+<a name="datapackage"></a>
 Fetches the current datapackage from the WebHost.  
 You'll receive an dict named `games` that contain a named dict of every game and its data currently supported by Archipelago.  
 Each game will have:
@@ -54,7 +72,8 @@ Example:
 }
 ```
 
-`/datapackage/<string:checksum>`    
+### `/datapackage/<string:checksum>`
+<a name="datapackagestringchecksum"></a>
 Fetches a single datapackage by checksum.
 Returns a dict of the game's data with:
 - A checksum `checksum`
@@ -65,9 +84,10 @@ Returns a dict of the game's data with:
 
 Its format will be identical to the whole-datapackage endpoint (`/datapackage`), except you'll only be returned the single game's data in a dict.
 
-`/datapackage_checksum`  
+### `/datapackage_checksum`
+<a name="datapackagechecksum"></a>
 Fetches the checksums of the current static datapackages on the WebHost.
-You'll receive a dict with `game:checksum` key-pairs for all the current officially supported games.
+You'll receive a dict with `game:checksum` key-pairs for all the current officially supported games.  
 Example:
 ```
 {
@@ -82,30 +102,158 @@ Example:
 ## Generation Endpoint
 These endpoints are used internally for the WebHost to generate games and validate their generation, and also used by external applications to generate games automatically.
 
-`(POST)` `/generate`  
-Submits a game to the WebHost for generation.
+### `/generate`
+<a name="generate"></a>
+Submits a game to the WebHost for generation.  
+**This endpoint only accepts a POST HTTP request.**  
 
-`/status/<suuid:seed>`  
-Retreives the status of the seed's generation.
+There are two ways to submit data for generation; With a file, and with JSON.
+
+#### With a file:
+Have your ZIP of yaml(s) or a single yaml, and submit a POST request to the `/generate` endpoint.  
+If the options are valid, you'll be returned a successful generation response. (see [Generation Response](#generation-response))
+
+Example using the python requests library:
+```
+file = {'file': open('Games.zip', 'rb')}
+req = requests.post("https://archipelago.gg/api/generate", files=file)
+```
+
+#### With JSON:
+Compile your weights/yaml data into a dict. Then insert that into a dict with the key `"weights"`.  
+Finally, submit a POST request to the `/generate` endpoint.  
+If the weighted options are valid, you'll be returned a successful generation response (see [Generation Response](#generation-response))
+
+Example using the python requests library:
+```
+data = {"Test":{"game": "Factorio","name": "Test","Factorio": {}},}
+weights={"weights": data}
+req = requests.post("https://archipelago.gg/api/generate", json=weights)
+```
+
+### Generation Response:
+#### Successful Generation:
+Upon successful generation you'll be sent a JSON dict response detailing the generation:
+- The UUID of the generation `detail`
+- The seed of the generation `encoded`
+- The response text `text`
+- The page that will resolve to the seed/room generation page once generation has completed `url`
+- And the API status page of the generation `wait_api_url` (see [Status Endpoint](#status))
+
+Example:
+```
+{
+    "detail": "19878f16-5a58-4b76-aab7-d6bf38be9463",
+    "encoded": "GYePFlpYS3aqt9a_OL6UYw",
+    "text": "Generation of seed 19878f16-5a58-4b76-aab7-d6bf38be9463 started successfully.",
+    "url": "http://atchipelago.gg/wait/GYePFlpYS3aqt9a_OL6UYw",
+    "wait_api_url": "http://atchipelago.gg/api/status/GYePFlpYS3aqt9a_OL6UYw"
+}
+```
+
+#### Failed Generation:
+
+Upon failed generation, you'll be returned a single keypair. The key will always be: `text`  
+The value will give you a hint as to what may have gone wrong.
+- Options without tags, and a 400 status code
+- Options in a string, and a 400 status code
+- Invalid file/weight string, `No options found. Expected file attachment or json weights.` with a 400 status code
+- Too many slots for the server to process, `Max size of multiworld exceeded` with a 409 status code
+
+In a single edgecase you'll be sent a dict with two keypairs `text` and `detail` with a 400 status code  
+If the generation detects a issue in generation, you'll be notified with:
+- Summary of issue in `text`
+- Detailed issed in `detail`
+
+In the event of an unhandled server exception, you'll be provided a dict with a single key `text`:
+- Exception, `Uncought Exception: <error>` with a 500 status code
+
+### `/status/<suuid:seed>`
+<a name="status"></a>
+Retreives the status of the seed's generation.  
+This endpoint will return a dict with a single keypair. The key will always be: `text`  
+The value will tell you the status of the generation:
+- Generation was completed, `Generation done` with a 201 status code
+- Generation request was not found, `Generation not found` with a 404 status code
+- Generation of the seed failed, `Generation failed` with a 500 status code
+- Generation is in progress still, `Generation running` with a 202 status code
 
 ## Room Endpoints
 Endpoints to fetch information of the active WebHost room with the supplied room_ID.
 
-`/room_status/<suuid:room_id>`  
-Retrieves:
+### `/room_status/<suuid:room_id>`  
+<a name="roomstatus"></a>
+Will procide a dict of room data with the following keys:
 - Tracker UUID (`tracker`)
-- Player list (Slot name, and Game) (`players`)
+- A list of players (`players`)
+  - Each item containing a list with the Slot name and Game
 - Last known hosted port (`last_port`)
 - Last activity timestamp (`last_activity`)
-- Timeout counter (`timeout`)
-- Downloads for files required for gameplay (`downloads`)
+- The room timeout counter (`timeout`)
+- A list of downloads for files required for gameplay (`downloads`)
+  - Each item is a dict containings the download URL and slot (`slot`, `download`)
+
+Example:
+```
+{
+    "downloads": [
+        {
+            "download": "/slot_file/kK5fmxd8TfisU5Yp_Dv_eg/1",
+            "slot": 1
+        },
+        {
+            "download": "/slot_file/kK5fmxd8TfisU5Yp_Dv_eg/2",
+            "slot": 2
+        },
+        {
+            "download": "/slot_file/kK5fmxd8TfisU5Yp_Dv_eg/3",
+            "slot": 3
+        },
+        {
+            "download": "/slot_file/kK5fmxd8TfisU5Yp_Dv_eg/4",
+            "slot": 4
+        },
+        {
+            "download": "/slot_file/kK5fmxd8TfisU5Yp_Dv_eg/5",
+            "slot": 5
+        }
+    ],
+    "last_activity": "Fri, 18 Apr 2025 20:35:45 GMT",
+    "last_port": 52122,
+    "players": [
+        [
+            "Quasky_OOT5",
+            "Ocarina of Time"
+        ],
+        [
+            "Quasky_OOT4",
+            "Ocarina of Time"
+        ],
+        [
+            "Quasky_OOT3",
+            "Ocarina of Time"
+        ],
+        [
+            "Quasky_OOT2",
+            "Ocarina of Time"
+        ],
+        [
+            "Quasky_OOT1",
+            "Ocarina of Time"
+        ]
+    ],
+    "timeout": 7200,
+    "tracker": "cf6989c0-4703-45d7-a317-2e5158431171"
+}
+```
 
 ## User Endpoints
 User endpoints can get room and seed details from the current session tokens (cookies)
 
-`/get_rooms`  
-Retreives all rooms currently owned by the session token.  
-Each room will have:
+### `/get_rooms`  
+<a name="getrooms"></a>
+Retreives a list of all rooms currently owned by the session token.  
+Each list item will contain a dict with the room's details:
 - Room ID (`room_id`)
 - Seed ID (`seed_id`)
 - Creation timestamp (`creation_time`)
@@ -114,10 +262,89 @@ Each room will have:
 - Room tiumeout counter (`timeout`)
 - Room tracker UUID (`tracker`)
 
-`/get_seeds`  
-Retreives all seeds currently owned by the session token.  
-Each seed will have:
+Example:
+```
+[
+    {
+        "creation_time": "Fri, 18 Apr 2025 19:46:53 GMT",
+        "last_activity": "Fri, 18 Apr 2025 21:16:02 GMT",
+        "last_port": 52122,
+        "room_id": "90ae5f9b-177c-4df8-ac53-9629fc3bff7a",
+        "seed_id": "efbd62c2-aaeb-4dda-88c3-f461c029cef6",
+        "timeout": 7200,
+        "tracker": "cf6989c0-4703-45d7-a317-2e5158431171"
+    },
+    {
+        "creation_time": "Fri, 18 Apr 2025 20:36:42 GMT",
+        "last_activity": "Fri, 18 Apr 2025 20:36:46 GMT",
+        "last_port": 56884,
+        "room_id": "14465c05-d08e-4d28-96bd-916f994609d8",
+        "seed_id": "a528e34c-3b4f-42a9-9f8f-00a4fd40bacb",
+        "timeout": 7200,
+        "tracker": "4e624bd8-32b6-42e4-9178-aa407f72751c"
+    }
+]
+```
+
+### `/get_seeds`  
+<a name="getseeds"></a>
+Retreives a list of all seeds currently owned by the session token.  
+Each item in the list will contain a dict with the seed's details:
 - Seed ID (`seed_id`)
 - Creation timestamp (`creation_time`)
-- Player slots (`players`)
+- A list of player slots (`players`)
+  - Each item in the list will contain a list of the slot name and game
 
+Example:
+```
+[
+    {
+        "creation_time": "Fri, 18 Apr 2025 19:46:52 GMT",
+        "players": [
+            [
+                "Quasky_OOT5",
+                "Ocarina of Time"
+            ],
+            [
+                "Quasky_OOT4",
+                "Ocarina of Time"
+            ],
+            [
+                "Quasky_OOT3",
+                "Ocarina of Time"
+            ],
+            [
+                "Quasky_OOT2",
+                "Ocarina of Time"
+            ],
+            [
+                "Quasky_OOT1",
+                "Ocarina of Time"
+            ]
+        ],
+        "seed_id": "efbd62c2-aaeb-4dda-88c3-f461c029cef6"
+    },
+    {
+        "creation_time": "Fri, 18 Apr 2025 20:36:39 GMT",
+        "players": [
+            [
+                "Quasky_1",
+                "Clique"
+            ],
+            [
+                "Quasky_2",
+                "Clique"
+            ],
+            [
+                "Quasky_3",
+                "Clique"
+            ],
+            [
+                "Bridgeipelago",
+                "Archipelago"
+            ]
+        ],
+        "seed_id": "a528e34c-3b4f-42a9-9f8f-00a4fd40bacb"
+    }
+]
+```
