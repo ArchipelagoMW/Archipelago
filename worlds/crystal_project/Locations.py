@@ -621,7 +621,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Ancient Reservoir", "Ancient Reservoir NPC - Silver Ingot in the odd flooded room", 2695 + npc_index_offset),
         LocationData("Ancient Reservoir", "Ancient Reservoir NPC - Silver Ore in the odd flooded room", 1675 + npc_index_offset),
         LocationData("Ancient Reservoir", "Ancient Reservoir NPC - Goat victory Ibek Bell", 1676 + npc_index_offset), #Z30_PostBossEvent
-        LocationData("Ancient Reservoir", "Ancient Reservoir NPC - Silver Dust in the goat digs", 2696 + npc_index_offset), lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Ancient Reservoir", "Ancient Reservoir NPC - Silver Dust in the goat digs", 2696 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
 
         #Crystals
         LocationData("Ancient Reservoir", "Ancient Reservoir Crystal - Dervish", 1121 + crystal_index_offset),
