@@ -1862,7 +1862,7 @@ item_table = {
     item_names.INSTIGATOR_MODERNIZED_SERVOS: ItemData(505 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 5, SC2Race.PROTOSS, classification=ItemClassification.progression, parent=item_names.INSTIGATOR),
     item_names.ADEPT_DISRUPTIVE_TRANSFER: ItemData(506 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 6, SC2Race.PROTOSS, parent=item_names.ADEPT),
     item_names.SLAYER_PHASE_BLINK: ItemData(507 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 7, SC2Race.PROTOSS, classification=ItemClassification.progression, parent=item_names.SLAYER),
-    item_names.AVENGER_KRYHAS_CLOAK: ItemData(508 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 8, SC2Race.PROTOSS, parent=item_names.AVENGER),
+    item_names.AVENGER_KRYHAS_CLOAK: ItemData(508 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 8, SC2Race.PROTOSS, classification=ItemClassification.progression, parent=item_names.AVENGER),
     item_names.DARK_TEMPLAR_LESSER_SHADOW_FURY: ItemData(509 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 9, SC2Race.PROTOSS, classification=ItemClassification.progression, parent=item_names.DARK_TEMPLAR),
     item_names.DARK_TEMPLAR_GREATER_SHADOW_FURY: ItemData(510 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 10, SC2Race.PROTOSS, classification=ItemClassification.progression, parent=item_names.DARK_TEMPLAR),
     item_names.BLOOD_HUNTER_BRUTAL_EFFICIENCY: ItemData(511 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 11, SC2Race.PROTOSS, classification=ItemClassification.progression, parent=item_names.BLOOD_HUNTER),
