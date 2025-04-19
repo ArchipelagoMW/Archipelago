@@ -66,6 +66,7 @@
     add: add
     save: save
     input: input
+    focus_behavior: False
 
     MDDialogHeadlineText:
         text: getattr(this.option, "display_name", this.name)
@@ -75,7 +76,8 @@
 
     MDDialogContentContainer:
         orientation: "vertical"
-        MDDivider:
+        spacing: 10
+
         MDBoxLayout:
             orientation: "horizontal"
             VisualListSetEntry:
@@ -92,7 +94,7 @@
         ScrollBox:
             id: scrollbox
             size_hint_y: None
-            theme_bg_color: "Custom"
+            adapt_minimum: False
 
         MDButton:
             id: save
@@ -105,6 +107,7 @@ ContainerLayout:
     MainLayout:
         id: main
         cols: 2
+        padding: 3, 5, 0, 3
 
         ScrollBox:
             id: scrollbox

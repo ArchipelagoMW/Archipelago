@@ -170,13 +170,13 @@ class VisualListSet(MDDialog):
         if self.valid_keys:
             if self.input.text not in self.valid_keys:
                 MDSnackbar(MDSnackbarText(text="Item must be a valid key for this option."), y=dp(24),
-                           pos_hint={"center_x": 0.5}, size_hint_x=0.5)
+                           pos_hint={"center_x": 0.5}, size_hint_x=0.5).open()
                 return
 
         if issubclass(self.option, OptionSet):
             if any(self.input.text == child.text.text for child in self.scrollbox.layout.children):
                 MDSnackbar(MDSnackbarText(text="This value is already in the set."), y=dp(24),
-                           pos_hint={"center_x": 0.5}, size_hint_x=0.5)
+                           pos_hint={"center_x": 0.5}, size_hint_x=0.5).open()
                 return
 
         self.add_set_item(self.input.text)
@@ -188,7 +188,7 @@ class VisualListSet(MDDialog):
 
     def add_set_item(self, key: str):
         text = MDListItemSupportingText(text=key, id="value")
-        item = MDListItem(text, MDIconButton(icon="minus", on_release=self.remove_item))
+        item = MDListItem(text, MDIconButton(icon="minus", on_release=self.remove_item), focus_behavior=False)
         item.text = text
         self.scrollbox.layout.add_widget(item)
 
@@ -202,6 +202,7 @@ class VisualListSet(MDDialog):
                 split_text = MarkupLabel(text=text, markup=True).markup
                 self.input.set_text(self.input, "".join(text_frag for text_frag in split_text
                                                     if not text_frag.startswith("[")))
+                self.input.focus = True
                 self.dropdown.dismiss()
 
             lowered = value.lower()
@@ -224,7 +225,8 @@ class VisualListSet(MDDialog):
             self.dropdown.dismiss()
 
 
-class YamlCreator(ThemedApp):
+class OptionsCreator(ThemedApp):
+    base_title: str = "Archipelago Options Creator"
     container: ContainerLayout
     main_layout: MainLayout
     scrollbox: ScrollBox
@@ -236,8 +238,15 @@ class YamlCreator(ThemedApp):
     current_game: str
     options: typing.Dict[str, typing.Any]
 
+    def __init__(self):
+        self.title = self.base_title + " " + Utils.__version__
+        self.icon = r"data/icon.png"
+        self.current_game = ""
+        self.options = {}
+        super().__init__()
+
     def export_options(self, button: Widget):
-        if self.name_input.text and self.current_game:
+        if 0 < len(self.name_input.text) < 17 and self.current_game:
             file_name = save_filename("Export Options File As...", [("YAML", ["*.yaml"])],
                                       Utils.get_file_safe_name(f"{self.name_input.text}.yaml"))
             options = {
@@ -255,6 +264,15 @@ class YamlCreator(ThemedApp):
             except FileNotFoundError:
                 MDSnackbar(MDSnackbarText(text="Saving cancelled."), y=dp(24), pos_hint={"center_x": 0.5},
                            size_hint_x=0.5).open()
+        elif not self.name_input.text:
+            MDSnackbar(MDSnackbarText(text="Name must not be empty."), y=dp(24), pos_hint={"center_x": 0.5},
+                       size_hint_x=0.5).open()
+        elif not self.current_game:
+            MDSnackbar(MDSnackbarText(text="You must select a game to play."), y=dp(24), pos_hint={"center_x": 0.5},
+                       size_hint_x=0.5).open()
+        else:
+            MDSnackbar(MDSnackbarText(text="Name cannot be longer than 16 characters."), y=dp(24),
+                       pos_hint={"center_x": 0.5}, size_hint_x=0.5).open()
 
     def create_range(self, option: typing.Type[Range], name: str):
         def update_text(slider, touch):
@@ -398,8 +416,9 @@ class YamlCreator(ThemedApp):
             dialog.dismiss()
 
         dialog = VisualListSet(option=option, name=name, valid_keys=valid_keys)
-        dialog.scrollbox.layout.md_bg_color = self.theme_cls.surfaceContainerLowColor
+        dialog.ids.container.spacing = dp(30)
         dialog.scrollbox.layout.theme_bg_color = "Custom"
+        dialog.scrollbox.layout.md_bg_color = self.theme_cls.surfaceContainerLowColor
         dialog.scrollbox.layout.spacing = dp(5)
         dialog.scrollbox.layout.padding = [0, dp(5), 0, 0]
 
@@ -526,9 +545,7 @@ class YamlCreator(ThemedApp):
             self.option_layout.add_widget(expansion_box)
         self.game_label.text = f"Game: {self.current_game}"
 
-    def tap_expansion_chevron(
-            self, panel: MDExpansionPanel, chevron: TrailingPressedIconButton | MDListItem
-    ):
+    def tap_expansion_chevron(self, panel: MDExpansionPanel, chevron: TrailingPressedIconButton | MDListItem):
         if isinstance(chevron, MDListItem):
             chevron = next((child for child in chevron.ids.trailing_container.children
                             if isinstance(child, TrailingPressedIconButton)), None)
@@ -583,7 +600,7 @@ class YamlCreator(ThemedApp):
 
 
 def launch():
-    YamlCreator().run()
+    OptionsCreator().run()
 
 
 if __name__ == "__main__":
