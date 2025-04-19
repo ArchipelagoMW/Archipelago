@@ -61,11 +61,11 @@ def create_regions(world: "CandyBox2World"):
     world_map_4 = populate_region(world, player, CandyBox2Region("World Map (4)", player, multiworld, "The World Map"), map_stage_4_locations, world_map_3, lambda state: state.has("Progressive World Map", player, 4))
     world_map_5 = populate_region(world, player, CandyBox2Region("World Map (5)", player, multiworld, "The World Map"), map_stage_5_locations, world_map_4, lambda state: state.has("Progressive World Map", player, 5))
     castle = populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.CASTLE, player, multiworld), map_stage_6_locations, world_map_5, lambda state: state.has("Progressive World Map", player, 6))
-    tower_entrance = populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.TOWER, player, multiworld), map_stage_7_locations, castle, lambda state: state.has("Progressive World Map", player, 7) and can_reach_room(state, CandyBox2Room.CASTLE, player))
+    tower_entrance = populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.TOWER, player, multiworld), map_stage_7_locations, castle, lambda state: state.has("Progressive World Map", player, 7) and can_reach_room(state, CandyBox2Room.CASTLE, player), True)
 
     # The Village
     populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.VILLAGE_SHOP, player, multiworld), village_shop_locations, village)
-    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.VILLAGE_FURNISHED_HOUSE, player, multiworld), village_house_1_locations, village)
+    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.VILLAGE_FURNISHED_HOUSE, player, multiworld), village_house_1_locations, village, lambda state: state.has("Third House Key", player))
     village_house_2 = populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.VILLAGE_QUEST_HOUSE, player, multiworld), village_house_2_locations, village)
 
     populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_CELLAR, player, multiworld), village_cellar_locations, village_house_2, lambda state: weapon_is_at_least(
@@ -73,9 +73,9 @@ def create_regions(world: "CandyBox2World"):
 
     forge_1 = populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.VILLAGE_FORGE, player, multiworld), forge_1_locations, village)
     forge_2 = populate_region(world, player, CandyBox2Region("The Forge 2", player, multiworld, "The Forge in the village"), forge_2_locations, forge_1)
-    forge_3 = populate_region(world, player, CandyBox2Region("The Forge 3", player, multiworld, "The forge in the village"), forge_3_locations, forge_2, lambda state: can_farm_candies(state, player))
-    forge_4 = populate_region(world, player, CandyBox2Region("The Forge 4", player, multiworld, "The forge in the village"), forge_4_locations, forge_3, lambda state: can_farm_candies(state, player) and state.has("Progressive World Map", player, 3))
-    forge_5 = populate_region(world, player, CandyBox2Region("The Forge 5", player, multiworld, "The forge in the village"), forge_5_locations, forge_4, lambda state: can_farm_candies(state, player) and state.has("Progressive World Map", player, 6))
+    forge_3 = populate_region(world, player, CandyBox2Region("The Forge 3", player, multiworld, "The forge in the village"), forge_3_locations, forge_2, lambda state: can_farm_candies(state, player), True)
+    forge_4 = populate_region(world, player, CandyBox2Region("The Forge 4", player, multiworld, "The forge in the village"), forge_4_locations, forge_3, lambda state: can_farm_candies(state, player) and state.has("Progressive World Map", player, 3), True)
+    forge_5 = populate_region(world, player, CandyBox2Region("The Forge 5", player, multiworld, "The forge in the village"), forge_5_locations, forge_4, lambda state: can_farm_candies(state, player) and state.has("Progressive World Map", player, 6), True)
 
     # The Squirrel Tree
     populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.SQUIRREL_TREE, player, multiworld), squirrel_tree_locations, world_map_1)
@@ -102,7 +102,7 @@ def create_regions(world: "CandyBox2World"):
     populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.SORCERESS_HUT, player, multiworld), sorceress_hut_locations, world_map_3)
     pier = populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.PIER, player, multiworld), pier_locations, world_map_4)
     populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_SEA, player, multiworld), the_sea_locations, pier)
-    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.LIGHTHOUSE, player, multiworld), lighthouse_locations, pier, lambda state: can_reach_room(state, CandyBox2Room.DRAGON, player))
+    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.LIGHTHOUSE, player, multiworld), lighthouse_locations, pier, lambda state: can_reach_room(state, CandyBox2Room.DRAGON, player), True)
 
     # The Forest
     populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_FOREST, player, multiworld), forest_locations, world_map_4)
@@ -127,9 +127,9 @@ def create_regions(world: "CandyBox2World"):
     populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_LEDGE_ROOM, player, multiworld), ledge_room_quest_locations, desert_fortress)
 
     # X Potion region
-    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_X_POTION, player, multiworld), yourself_fight_locations, candy_box, lambda state: state.has("Sorceress' Cauldron", player) and can_grow_lollipops(state, player))
+    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_X_POTION, player, multiworld), yourself_fight_locations, candy_box, lambda state: state.has("Sorceress' Cauldron", player) and can_grow_lollipops(state, player), True)
 
-def populate_region(world: "CandyBox2World", player: int, region: CandyBox2Region, locations: dict[str, int], parent: Region | None, rule: Optional[Callable[[CollectionState], bool]] = None):
+def populate_region(world: "CandyBox2World", player: int, region: CandyBox2Region, locations: dict[str, int], parent: Region | None, rule: Optional[Callable[[CollectionState], bool]] = None, indirect: bool = False):
     region.locations += [CandyBox2Location(player, location_name, locations[location_name], region) for location_name in locations]
     world.multiworld.regions.append(region)
     entrance = None
@@ -138,6 +138,9 @@ def populate_region(world: "CandyBox2World", player: int, region: CandyBox2Regio
 
     if type(region) is CandyBox2RoomRegion:
         mark_room_entrance(world, entrance)
+
+    if indirect:
+        world.multiworld.register_indirect_condition(region, entrance)
 
     return region
 

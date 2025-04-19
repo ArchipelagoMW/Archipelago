@@ -198,14 +198,14 @@ def lollipop_count(state: CollectionState, player: int):
 
 # Allows the player to plant enough lollipops at the farm for 1/minute
 def can_grow_lollipops(state: CollectionState, player: int):
-    return lollipop_count(state, player) >= 11 and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
+    return lollipop_count(state, player) >= 11 and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player) and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
 
 def can_farm_lollipops(state: CollectionState, player: int):
-    return can_grow_lollipops(state, player) and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player) and state.has("Pitchfork", player) and state.has("Shell Powder", player) and state.has("Green Fin", player)
+    return can_grow_lollipops(state, player) and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player) and state.has("Pitchfork", player) and state.has("Shell Powder", player) and state.has("Green Fin", player) and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
 
 # Ideally allows the player to stumble upon a quest they can use to farm candies
 def can_farm_candies(state: CollectionState, player: int):
-    return can_farm_lollipops(state, player) and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
+    return can_farm_lollipops(state, player) and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player) and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
 
 def can_reach_room(state: CollectionState, room: CandyBox2Room, player: int):
     return state.can_reach_region(entrance_friendly_names[room], player)

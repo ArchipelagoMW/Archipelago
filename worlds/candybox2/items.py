@@ -76,7 +76,7 @@ items: dict[str, CandyBox2ItemData] = {
     "500 Candies": CandyBox2ItemData(candy_box_2_base_id + 49, lambda _: 1),
     "3 Lollipops": CandyBox2ItemData(candy_box_2_base_id + 50, lambda _: 1, ItemClassification.progression),
     "3 Chocolate Bars": CandyBox2ItemData(candy_box_2_base_id + 51, lambda _: 2, ItemClassification.progression),
-    "Third House Key": CandyBox2ItemData(candy_box_2_base_id + 52, lambda _: 1),
+    "Third House Key": CandyBox2ItemData(candy_box_2_base_id + 52, lambda _: 1, ItemClassification.progression),
     "Sponge": CandyBox2ItemData(candy_box_2_base_id + 53, lambda _: 1, ItemClassification.progression),
     "Shell Powder": CandyBox2ItemData(candy_box_2_base_id + 54, lambda _: 1, ItemClassification.progression),
     "Red Fin": CandyBox2ItemData(candy_box_2_base_id + 55, lambda _: 1, ItemClassification.useful),
