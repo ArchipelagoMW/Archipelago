@@ -377,6 +377,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Treetop Spore Blocker chest west of Quintar Sanctum", 365 + treasure_index_offset, lambda state: state.has_any({'Item - Progressive Quintar Flute'}, player)),
 
         #NPCs
+        #Todo NPCs CheckOrNot: two Quintar Eggs
         #Crystal Checker guy gives you Quintar Pass for having enough crystals
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Quintar Stable Owner crystal checker for Quintar Pass if you refuse to touch an eyeball", 375 + npc_index_offset, lambda state: get_job_count(player, state) >= 7),
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver Dust beneath overhang in eastern Quintar cave crevasse", 2678 + npc_index_offset),
@@ -565,6 +566,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Central Lookout Token chest (ok maybe that jumping puzzle wasnt that bad)", 1189 + treasure_index_offset),
         LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Balance beam Scope Specs chest", 97 + treasure_index_offset),
         LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Ether Pouch chest past Lost Son", 1667 + treasure_index_offset),
+        LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Salmon Bay map chest cooling off in the tent before the Tower of Zott", 2914 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Progressive Quintar Flute', player, 2)),
 
         #NPCs
         #Todo NPCs CheckOrNot: three Quintar Eggs in Poko Poko Desert (Nest) map
@@ -579,6 +581,11 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Silver Dust in the dust a floor above Fenix Juice chest", 2680 + npc_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
         #Todo NPCs Blocker: this son unlocks a check in Sara Sara Bazaar
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Circle the western desert wall for Lost Son", 1198 + npc_index_offset), #29b1d681
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold Ingot overlooking Sara Sara Bazaar", 2707 + npc_index_offset, lambda state: state.has_any('Item - Ibek Bell', player)),
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold Dust accessible from beach reacharound", 2711 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Diamond Dust on the outside of the Tower of Zott", 2879 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Owl Drum', player)),
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold Ore on the far end of the Tower of Zott", 2816 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Owl Drum', player)),
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold Ore on an outcropping by the long loop-around chest", 2706 + npc_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
         
         #Sara Sara Bazaar
         #Treasure chests
@@ -605,6 +612,36 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silver Ore", 2901 + npc_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player, 2)),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silverer Ore", 2902 + npc_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player, 2)),
 
+        #Sara Sara Beach
+        #Treasure chests
+        LocationData("Sara Sara Beach", "Sara Sara Beach Chest - Tincture Pouch chest glittering in the sun at Ibek Cave exit", 1083 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach Chest - Tonic Pouch chest glittering in the sun at Ibek Cave exit", 1085 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach Chest - Ether chest on the back cliff wall", 154 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach Chest - Potion chest across the palms above the dust", 1509 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach Chest - How dare you stand where he stood Money chest", 1084 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach Chest - Blank Pages chest in beach cave", 2718 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach Chest - West beach tightrope walk Potion chest", 1546 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Progressive Quintar Flute', player, 2)),
+
+        #NPCs
+        #Todo NPCs Job Masters: Master Dervish ID 3575 (-255, 103, -237); gives you Dervish Seal in exchange for job mastery
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Dust glittering in the sun at Ibek Cave exit 1", 2683 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Dust glittering in the sun at Ibek Cave exit 2", 2684 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Dust glittering in the sun at Ibek Cave exit 3", 2686 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Cross my palms with Silver (Dust)", 2693 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Dust past the angry birds", 2697 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Jaunt along the cliff past Dr Cool Aids perch to Silver Ingot", 2685 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ingot on the beach rocks at eastern edge", 2687 + npc_index_offset),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ingot glittering in the sun at Ibek Cave exit", 2688 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ingot on the back cliff wall", 2694 + npc_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ingot at the foot of the Tower of Zott", 2699 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Lonely Islet Silver Ingot", 2878 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ore glittering in the sun at Ibek Cave exit 1", 2689 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ore glittering in the sun at Ibek Cave exit 2", 2690 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Eastern beach Silver Ore beheld by Dr Cool Aids", 2691 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ore on western beach along the cliffside", 2692 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ore chilling in beach cave", 2698 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ore further along the beach", 2877 + npc_index_offset),
+
         #Ancient Reservoir
         #Treasure chests
         LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Really elaborate crystal rafters Red Coat chest", 1123 + treasure_index_offset),
@@ -629,11 +666,27 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #Crystals
         LocationData("Ancient Reservoir", "Ancient Reservoir Crystal - Dervish", 1121 + crystal_index_offset),
 
+        #Salmon Bay
+        #Treasure chests
+        LocationData("Salmon Bay", "Salmon Bay Chest - Cliffdiving Ether Pouch chest", 2975 + treasure_index_offset),
+        LocationData("Salmon Bay", "Salmon Bay Chest - Potion Pouch chest across the bridge", 2974 + treasure_index_offset),
+        
+        #NPCs
+        LocationData("Salmon Bay", "Salmon Bay NPC - Ancient Tablet B on the moodlit shore behind the waterfall", 2438 + npc_index_offset),
+        LocationData("Salmon Bay", "Salmon Bay NPC - West cliffdiving Ancient Tablet C", 1271 + npc_index_offset),
+        LocationData("Salmon Bay", "Salmon Bay NPC - Quintar splish splash Ancient Tablet A", 1272 + npc_index_offset),
+        #Technically 2nd from bottom in Overpass main map
+        LocationData("Salmon Bay", "Salmon Bay NPC - Lonely Overpass Scrap among the half-dead pines", 3677 + npc_index_offset),
+
+        #Abilities Todo: descriptivize and implement
+        #-50, 91, -330
+        #LocationData("Salmon Bay", "Salmon Bay Ability - Guaba from SThunder_Summon", 1138 + ability_index_offset),
 
         #Overpass
         #Treasure chests
         #2nd Overpass Scrap chest on main map has been categorized under the Quintar Sanctum
         #3rd Overpass Scrap chest on main map has been categorized under the Okimoto N.S.
+        #2nd Overpass Scrap chest from the bottom on main map has been categorized under Salmon Bay
 
         #Underpass
         #Treasure chests
