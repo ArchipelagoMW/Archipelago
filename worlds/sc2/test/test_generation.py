@@ -1064,3 +1064,22 @@ class TestItemFiltering(Sc2SetupTestBase):
         items_to_check: List[str] = unreleased_items
         for item in items_to_check:
             self.assertNotIn(item, itempool)
+
+    def test_unreleased_item_quantity_locked(self) -> None:
+        """
+        Checks if all unreleased items are marked properly not to generate
+        Locking overrides this behavior - if they're locked, they must appear
+        """
+        world_options = {
+            'mission_order': MissionOrder.option_grid,
+            'exclude_overpowered_items': ExcludeOverpoweredItems.option_false,
+            'exclude_legacy_items': ExcludeLegacyItems.option_false,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+            'locked_items': {item_name: 0 for item_name in unreleased_items},
+        }
+        self.generate_world(world_options)
+        itempool = [item.name for item in self.multiworld.itempool]
+
+        items_to_check: List[str] = unreleased_items
+        for item in items_to_check:
+            self.assertIn(item, itempool)
