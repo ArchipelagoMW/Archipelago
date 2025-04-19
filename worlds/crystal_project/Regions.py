@@ -56,6 +56,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
 
     multiworld.get_region("Spawning Meadows", player).add_exits(["Delende"])
     multiworld.get_region("Delende", player).add_exits(["Soiled Den", "Pale Grotto", "Yamagawa M.A.", "Seaside Cliffs", "Mercury Shrine"])
+    multiworld.get_region("Yamagawa M.A.", player).add_exits(["Lake Delende"])
     multiworld.get_region("Pale Grotto", player).add_exits(["Proving Meadows"])
     multiworld.get_region("Seaside Cliffs", player).add_exits(["Draft Shaft Conduit"])
     multiworld.get_region("Proving Meadows", player).add_exits(["Skumparadise"], 
@@ -81,7 +82,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
         {"Salmon River": lambda state: state.has("Item - Progressive Quintar Flute", world.player, 2)})
     multiworld.get_region("Poko Poko Desert", player).add_exits(["Sara Sara Bazaar", "Ancient Reservoir", "Salmon Bay"], 
         {"Ancient Reservoir": lambda state: state.has("Item - Pyramid Key", world.player),
-        "Salmon Bay": lambda state: state.has("Item - Progressive Quintar Flute", world.player, 2) and state.has('Item - Ibek Bell', player)})
+        "Salmon Bay": lambda state: state.has("Item - Progressive Quintar Flute", world.player, 2) and state.has("Item - Ibek Bell", player)})
     multiworld.get_region("Sara Sara Bazaar", player).add_exits(["Sara Sara Beach"])
     ## examples
     # multiworld.get_region("Onett", player).add_exits(["Giant Step", "Twoson", "Northern Onett", "Global ATM Access"],
@@ -127,4 +128,4 @@ def connect_menu_region(world: "CrystalProjectWorld") -> None:
     menu.add_exits(["Spawning Meadows", "Capital Sequoia", "Salmon River", "Poko Poko Desert"], 
         {"Capital Sequoia": lambda state: state.has_any({"Item - Gaea Stone"}, world.player),
         "Salmon River": lambda state: state.has_any({"Item - Poseidon Stone"}, world.player),
-        "Poko Poko Desert": lambda state: state.has_any({"Item - Mars Stone"}, world.player),})
+        "Poko Poko Desert": lambda state: state.has_any({"Item - Mars Stone"}, world.player)})

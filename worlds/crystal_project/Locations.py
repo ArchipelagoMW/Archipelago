@@ -39,12 +39,12 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb near Shaku", 627 + npc_index_offset), #Secret Herb 0
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Map Nan", 84 + npc_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Nan Stew", 14 + npc_index_offset),
-        LocationData("Spawning Meadows", "Spawning Meadows NPC - Butterfly Goo", 194 + npc_index_offset, lambda state: state.has('Item - Black Squirrel', player, 3)), #Tree Fairy NPC seems to have the dialogue for this (ID 194)
+        LocationData("Spawning Meadows", "Spawning Meadows NPC - Butterfly Goo", 194 + npc_index_offset, lambda state: state.has("Item - Black Squirrel", player, 3)), #Tree Fairy NPC seems to have the dialogue for this (ID 194)
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Buttersquirrel on tree SW of spawn", 264 + npc_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Buttersquirrel on tree NW of spawn", 296 + npc_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Buttersquirrel on tree near lampposts", 110 + npc_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Buttersquirrel on Mario jump tree", 3085 + npc_index_offset),
-        #Todo Secret Herb locations that don't seem to be used?
+        #Todo Secret Herb locations that don"t seem to be used?
         #48, 112, -36
         #LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb 1", 297 + npc_index_offset),
         #79, 112, -30
@@ -61,7 +61,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Delende", "Delende Chest - Money chest in front of camp", 263 + treasure_index_offset),
         LocationData("Delende", "Delende Chest - Money chest in front of fish hatchery lower level", 210 + treasure_index_offset),
         LocationData("Delende", "Delende Chest - Return from fish hatchery Bracer chest", 34 + treasure_index_offset),
-        LocationData("Delende", "Delende Chest - Heart tarn Chartreuse chest", 1554 + treasure_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player) and state.has('Item - Owl Drum', player)),
+        LocationData("Delende", "Delende Chest - Heart tarn Chartreuse chest", 1554 + treasure_index_offset, lambda state: state.has("Item - Progressive Salmon Violin", player) and state.has("Item - Owl Drum", player)),
         LocationData("Delende", "Delende Chest - Mushroom underpass Cotton Hood chest", 262 + treasure_index_offset),
         LocationData("Delende", "Delende Chest - Fallen log parkour Earring chest", 208 + treasure_index_offset),
         LocationData("Delende", "Delende Chest - Earring chest across river", 213 + treasure_index_offset),
@@ -81,7 +81,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Delende", "Delende Chest - Tonic Pouch chest before Proving Meadows", 216 + treasure_index_offset),
         LocationData("Delende", "Delende Chest - Tonic Pouch chest in front of fish hatchery below tree", 2997 + treasure_index_offset),
 
-        #Todo NPCs Missable: Astley1 NPC (ID 28) (184, 125, -93) gives you a Home Point Stone, but it's missable as a location; the item appears elsewhere later
+        #Todo NPCs Missable: Astley1 NPC (ID 28) (184, 125, -93) gives you a Home Point Stone, but it"s missable as a location; the item appears elsewhere later
         LocationData("Delende", "Delende NPC - Dog Bone in spooky cave", 1915 + npc_index_offset),
         LocationData("Delende", "Delende NPC - Dog Bone Guy", 31 + npc_index_offset),
         LocationData("Delende", "Delende NPC - Dog Bone south of Soiled Den", 184 + npc_index_offset),
@@ -134,8 +134,8 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Pale Grotto", "Pale Grotto Chest - Poisonkiss chest north from save point", 144 + treasure_index_offset),
         LocationData("Pale Grotto", "Pale Grotto Chest - Entrance river hop Tonic chest", 229 + treasure_index_offset),
         LocationData("Pale Grotto", "Pale Grotto Chest - Tincture Pouch chest on promontory", 2979 + treasure_index_offset),
-        LocationData("Pale Grotto", "Pale Grotto Chest - Island Underpass Scrap chest", 3622 + treasure_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player)),
-        LocationData("Pale Grotto", "Pale Grotto Chest - Island Z-Potion Pouch chest", 3077 + treasure_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player)),
+        LocationData("Pale Grotto", "Pale Grotto Chest - Island Underpass Scrap chest", 3622 + treasure_index_offset, lambda state: state.has("Item - Progressive Salmon Violin", player)),
+        LocationData("Pale Grotto", "Pale Grotto Chest - Island Z-Potion Pouch chest", 3077 + treasure_index_offset, lambda state: state.has("Item - Progressive Salmon Violin", player)),
         LocationData("Pale Grotto", "Pale Grotto Chest - Tincture chest tucked behind path to temple", 267 + treasure_index_offset),
         LocationData("Pale Grotto", "Pale Grotto Chest - Jumping puzzle Storm Helm chest", 226 + treasure_index_offset),
         LocationData("Pale Grotto", "Pale Grotto Chest - Money chest south of temple", 136 + treasure_index_offset),
@@ -143,7 +143,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Pale Grotto", "Pale Grotto Chest - Temple sanctuary Pale Grotto Map chest", 1154 + treasure_index_offset),
         
         #NPCs
-        #Todo NPCs Missable: Pale Grotto Temple map (Z2_ReidCamp ID 1166 (273, 122, -327)) gives you Ring Mail if you don't have it but it's missable (it's in shops)
+        #Todo NPCs Missable: Pale Grotto Temple map (Z2_ReidCamp ID 1166 (273, 122, -327)) gives you Ring Mail if you don"t have it but it"s missable (it"s in shops)
 
         #Crystals
         LocationData("Pale Grotto", "Pale Grotto Crystal - Temple sanctuary Fencer Crystal", 130 + crystal_index_offset),
@@ -199,7 +199,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Seaside Cliffs", "Seaside Cliffs NPC - ClamHater above the mist", 283 + npc_index_offset),
         LocationData("Seaside Cliffs", "Seaside Cliffs NPC - If you give a Manana Man a clam... (he will ask you for more)", 284 + npc_index_offset),
         #343, 81, 0
-        LocationData("Seaside Cliffs", "Seaside Cliffs NPC - Diamond Ore below the bay", 2896 + npc_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player)),
+        LocationData("Seaside Cliffs", "Seaside Cliffs NPC - Diamond Ore below the bay", 2896 + npc_index_offset, lambda state: state.has("Item - Progressive Salmon Violin", player)),
         #Todo NPCs Job Masters: Seaside Cliffs Outpost map has Master Shaman ID 3572 (387, 155, -104); gives you Shaman Seal in exchange for job mastery
 
         #Draft Shaft Conduit
@@ -212,7 +212,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
 
         #Mercury Shrine
         #Treasure chests
-        LocationData("Mercury Shrine", "Mercury Shrine Chest - Pinnacle Contract chest", 155 + treasure_index_offset, lambda state: state.has('Item - Mercury Stone', player)),
+        LocationData("Mercury Shrine", "Mercury Shrine Chest - Pinnacle Contract chest", 155 + treasure_index_offset, lambda state: state.has("Item - Mercury Stone", player)),
 
         #Yamagawa M.A.
         #Treasure chests
@@ -224,7 +224,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Yamagawa M.A.", "Yamagawa M.A. Chest - Drop down to mountain balcony Torpid Cuffs chest", 290 + treasure_index_offset),
 
         #NPCs
-        LocationData("Yamagawa M.A.", "Yamagawa M.A. NPC - Autumns Oath at waterfall source", 628 + npc_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player)),
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. NPC - Autumns Oath at waterfall source", 628 + npc_index_offset, lambda state: state.has("Item - Progressive Salmon Violin", player)),
         #Todo NPCs Job Masters: Yamagawa M.A. Temple map has Master Scholar ID 3574 (59, 151, -98); gives you Scholar Seal in exchange for job mastery
 
         #Crystals
@@ -243,7 +243,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #Todo NPCs Blocker: this guy checks whether you have enough crystals to pass; this is a blocker guy not a location check guy
         #LocationData("Proving Meadows", "Proving Meadows NPC - Crystal Checker", 128 + npc_index_offset),
 
-        #Skumparadise (we're smushing Trial Caves into there)
+        #Skumparadise (we"re smushing Trial Caves into there)
         #Treasure chests
         LocationData("Skumparadise", "Skumparadise Chest - Stairs are lava Stalwart Shield chest", 126 + treasure_index_offset),
         LocationData("Skumparadise", "Skumparadise Chest - Shroom-dodging Help the Prince chest", 120 + treasure_index_offset),
@@ -269,9 +269,9 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Training ground parkour Craftwork Katana chest", 1390 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Cap chest behind Luxury Shop", 2651 + treasure_index_offset),
         #Todo Rules: next three chests require the Luxury Key: Fenix Syrup Pouch (1533), Lucky Briefs (1532), Lucky Socks (1531) and Progressive Luxury Pass
-        LocationData("Capital Sequoia", "Capital Sequoia Chest - Fenix Syrup Pouch chest locked in Luxury Shop storage", 1533 + treasure_index_offset, lambda state: state.has('Item - Luxury Key', player)),
-        LocationData("Capital Sequoia", "Capital Sequoia Chest - Lucky Briefs chest locked in Luxury Shop storage", 1532 + treasure_index_offset, lambda state: state.has('Item - Luxury Key', player)),
-        LocationData("Capital Sequoia", "Capital Sequoia Chest - Lucky Socks chest locked in Luxury Shop storage", 1531 + treasure_index_offset, lambda state: state.has('Item - Luxury Key', player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Fenix Syrup Pouch chest locked in Luxury Shop storage", 1533 + treasure_index_offset, lambda state: state.has("Item - Luxury Key", player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Lucky Briefs chest locked in Luxury Shop storage", 1532 + treasure_index_offset, lambda state: state.has("Item - Luxury Key", player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Lucky Socks chest locked in Luxury Shop storage", 1531 + treasure_index_offset, lambda state: state.has("Item - Luxury Key", player)),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Inn attic Craftwork Vest chest by Master Monk", 2656 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Shield chest by Master Warrior atop the Luxury Shop", 2655 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Sword chest atop library bookcases", 1392 + treasure_index_offset),
@@ -280,10 +280,10 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Gaea Shard chest 2 in Gaea Shrine", 227 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Gaea Shard chest 3 in Gaea Shrine", 381 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Gaea Shard chest 4 in Gaea Shrine", 548 + treasure_index_offset),
-        #Next check can be acquired with either Owl, Ibek, Quintar, or Gaea Stone; vanilla expects Gaea Stone so that's the logic we're using
-        LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Bow chest in Clerics Lounge", 1391 + treasure_index_offset, lambda state: state.has('Item - Gaea Stone', player)),
+        #Next check can be acquired with either Owl, Ibek, Quintar, or Gaea Stone; vanilla expects Gaea Stone so that"s the logic we"re using
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Bow chest in Clerics Lounge", 1391 + treasure_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Axe chest in instrducktor classroom", 1387 + treasure_index_offset),
-        LocationData("Capital Sequoia", "Capital Sequoia Chest - Watering Can chest in Master Warlocks chambers atop Weapons R Us", 2732 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Watering Can chest in Master Warlocks chambers atop Weapons R Us", 2732 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Pages chest in Master Wizards Library atop Weapons R Us", 168 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Fenced-off Craftwork Helm chest in Armor Merchant alley", 2653 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Rapier chest beneath grand staircase", 1393 + treasure_index_offset),
@@ -293,13 +293,13 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Maze Craftwork Crown chest accompanied by blue flower pair", 390 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Gardeners Key chest below Lost Penguin", 388 + treasure_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Cheat at maze for Givers Ring chest above fountain", 387 + treasure_index_offset),
-        LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Mail chest in Gardeners Shed", 2652 + treasure_index_offset, lambda state: state.has('Item - Gardeners Key', player)),
-        LocationData("Capital Sequoia", "Capital Sequoia Chest - Tuber Seed 1 in Gardeners Shed", 2663 + treasure_index_offset, lambda state: state.has('Item - Gardeners Key', player)),
-        LocationData("Capital Sequoia", "Capital Sequoia Chest - Tuber Seed 2 in Gardeners Shed", 2664 + treasure_index_offset, lambda state: state.has('Item - Gardeners Key', player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Craftwork Mail chest in Gardeners Shed", 2652 + treasure_index_offset, lambda state: state.has("Item - Gardeners Key", player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Tuber Seed 1 in Gardeners Shed", 2663 + treasure_index_offset, lambda state: state.has("Item - Gardeners Key", player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Tuber Seed 2 in Gardeners Shed", 2664 + treasure_index_offset, lambda state: state.has("Item - Gardeners Key", player)),
 
         #NPCs 
-        #Todo NPCs Missable: Courtyard Chloe (Z37_ChloeFishing ID 1661 (399, 155, -219)) gives you Fly Lure (and later she disappears and it's on the ground here)
-        #Todo NPCs Missable: Courtyard Reid (Z28_Reid ID 2410 (113, 172, -372)) gives you a Courtyard Key or if you miss it it's on the ground (Z37_Courtyard Key ID 2486 (424, 150, -222))
+        #Todo NPCs Missable: Courtyard Chloe (Z37_ChloeFishing ID 1661 (399, 155, -219)) gives you Fly Lure (and later she disappears and it"s on the ground here)
+        #Todo NPCs Missable: Courtyard Reid (Z28_Reid ID 2410 (113, 172, -372)) gives you a Courtyard Key or if you miss it it"s on the ground (Z37_Courtyard Key ID 2486 (424, 150, -222))
         #Todo NPCs Job Masters: Master Beatsmith ID 3560 (361, 170, -268); gives you Beatsmith Seal in exchange for job mastery
         #Todo NPCs Job Masters: Master Cleric ID 3568 (363, 166, -266); gives you Cleric Seal in exchange for job mastery
         #Todo NPCs Job Masters: Master Monk ID 3567 (394, 179, -295); gives you Monk Seal in exchange for job mastery
@@ -307,8 +307,8 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #Todo NPCs Job Masters: Master Warlock ID 3570 (400, 171, -267); gives you Warlock Seal in exchange for job mastery
         #Todo NPCs Job Masters: Master Warrior ID 3566 (424, 182, -293); gives you Warrior Seal in exchange for job mastery
         #Todo NPCs Job Masters: Master Wizard ID 3569 (391, 168, -266); gives you Wizard Seal in exchange for job mastery
-        #Todo NPCs CheckOrNot: Z14_Duck_HomePointStone ID 560 (403, 161, -265) gives you a Home Point Stone if you don't have one
-        #Todo NPCs Blocker: Z14_ProgressionGate ID 3823 (403, 180, -367) requires 18 crystals; we think it's an original-randomizer-only NPC blocking the way to the castle
+        #Todo NPCs CheckOrNot: Z14_Duck_HomePointStone ID 560 (403, 161, -265) gives you a Home Point Stone if you don"t have one
+        #Todo NPCs Blocker: Z14_ProgressionGate ID 3823 (403, 180, -367) requires 18 crystals; we think it"s an original-randomizer-only NPC blocking the way to the castle
         #Todo Rules: requires 6 crystals and descriptivize; blocker guy who wants 6 crystals to give you Luxury Pass and entry to Luxury Store
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Artisan Guard", 1162 + npc_index_offset),
         #Todo: (417, 171, -299) descriptivize
@@ -323,19 +323,19 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin enjoying inn hospitality", 946 + npc_index_offset),
         #Todo Multichecks: 5 checks on the Penguin Keeper
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper", 531 + npc_index_offset),
-        #Next seven checks can be acquired by either Owl, Ibek, Quintar, or Gaea Stone; vanilla game expects Gaea Stone so that's the logic we're using
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin trampling the Clerics flowers", 564 + npc_index_offset, lambda state: state.has('Item - Gaea Stone', player)),
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Give Sadist Sam head(s)", 536 + npc_index_offset, lambda state: state.has('Item - Gaea Stone', player)), #name is ca69011a in Crystal Edit whyy lmao
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin wandering the Magic Shop rooftop garden", 573 + npc_index_offset, lambda state: state.has('Item - Gaea Stone', player)),
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin atop sewer exit rooftop", 567 + npc_index_offset, lambda state: state.has('Item - Gaea Stone', player)),
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin cheating at Garden Maze", 421 + npc_index_offset, lambda state: state.has('Item - Gaea Stone', player)),
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - How did you climb that tree, Lost Penguin", 422 + npc_index_offset, lambda state: state.has('Item - Gaea Stone', player)),
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin among the eaves of Library roof", 594 + npc_index_offset, lambda state: state.has('Item - Gaea Stone', player)),
+        #Next seven checks can be acquired by either Owl, Ibek, Quintar, or Gaea Stone; vanilla game expects Gaea Stone so that"s the logic we"re using
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin trampling the Clerics flowers", 564 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Give Sadist Sam head(s)", 536 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)), #name is ca69011a in Crystal Edit whyy lmao
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin wandering the Magic Shop rooftop garden", 573 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin atop sewer exit rooftop", 567 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin cheating at Garden Maze", 421 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - How did you climb that tree, Lost Penguin", 422 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin among the eaves of Library roof", 594 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
         #Todo: descriptivize (440, 171, -296)
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Library Scholar", 1948 + npc_index_offset),
 
         #Crystals
-        LocationData("Capital Sequoia", "Capital Sequoia Crystal - Beatsmith Crystal", 1087 + crystal_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Crystal - Beatsmith Crystal", 1087 + crystal_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
 
         #Abilities
         #Todo: descriptivize and implement
@@ -372,9 +372,9 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Hunting Bow chest deep in the eastern Quintar cave", 745 + treasure_index_offset),
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Money chest at the end of the road", 825 + treasure_index_offset),
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Tonic Pouch chest hidden beneath the end of the road", 2674 + treasure_index_offset),
-        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Money chest west of and above sneaky Potion chest", 338 + treasure_index_offset, lambda state: state.has_any({'Item - Progressive Quintar Flute'}, player)),
-        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Pinnacle Tincture Pouch chest with a short and tall box friend", 471 + treasure_index_offset, lambda state: state.has_any({'Item - Progressive Quintar Flute'}, player)),
-        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Treetop Spore Blocker chest west of Quintar Sanctum", 365 + treasure_index_offset, lambda state: state.has_any({'Item - Progressive Quintar Flute'}, player)),
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Money chest west of and above sneaky Potion chest", 338 + treasure_index_offset, lambda state: state.has_any({"Item - Progressive Quintar Flute"}, player)),
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Pinnacle Tincture Pouch chest with a short and tall box friend", 471 + treasure_index_offset, lambda state: state.has_any({"Item - Progressive Quintar Flute"}, player)),
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Treetop Spore Blocker chest west of Quintar Sanctum", 365 + treasure_index_offset, lambda state: state.has_any({"Item - Progressive Quintar Flute"}, player)),
 
         #NPCs
         #Todo NPCs CheckOrNot: two Quintar Eggs
@@ -384,7 +384,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #Todo NPCs Multichecks: 2 checks on Quintar Enthusiast
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Quintar Enthusiast (always pet Buttermint)", 464 + npc_index_offset),
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver Ingot in Quintar cave beneath the end of the road", 454 + npc_index_offset),
-        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver Ore behind Quintar Nest befriending a stack of boxes", 323 + npc_index_offset, lambda state: state.has_any({'Item - Progressive Quintar Flute'}, player)),
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver Ore behind Quintar Nest befriending a stack of boxes", 323 + npc_index_offset, lambda state: state.has_any({"Item - Progressive Quintar Flute"}, player)),
 
         #Quintar Nest
         #Treasure chests
@@ -394,7 +394,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Quintar Nest", "Quintar Nest Chest - Northwest Donut Lake sprinkle Potion chest", 432 + treasure_index_offset),
         LocationData("Quintar Nest", "Quintar Nest Chest - Welcome Potion chest", 3078 + treasure_index_offset),
         LocationData("Quintar Nest", "Quintar Nest Chest - Mighty jump to the Scope Bit chest along the east side wall", 746 + treasure_index_offset),
-        LocationData("Quintar Nest", "Quintar Nest Chest - Static Rod chest north of the sewers", 638 + treasure_index_offset, lambda state: state.has_any({'Item - Progressive Quintar Flute'}, player)),
+        LocationData("Quintar Nest", "Quintar Nest Chest - Static Rod chest north of the sewers", 638 + treasure_index_offset, lambda state: state.has_any({"Item - Progressive Quintar Flute"}, player)),
         LocationData("Quintar Nest", "Quintar Nest Chest - North Donut Lake sprinkle Tincture chest", 852 + treasure_index_offset),
         LocationData("Quintar Nest", "Quintar Nest Chest - Hop along the west side wall to Tincture Pouch chest", 2982 + treasure_index_offset),
         LocationData("Quintar Nest", "Quintar Nest Chest - Donut Lake crown sprinkle Tonic chest", 851 + treasure_index_offset),
@@ -415,7 +415,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Quintar Sanctum", "Quintar Sanctum Chest - Quintar Sanctum map chest in front of the shrine", 2910 + treasure_index_offset),
         LocationData("Quintar Sanctum", "Quintar Sanctum Chest - Western Tincture Pouch chest at ground level", 2983 + treasure_index_offset),
         LocationData("Quintar Sanctum", "Quintar Sanctum Chest - Northern Tonic Pouch chest at ground level", 593 + treasure_index_offset),
-        #Technically this one is in Overpass (2nd Overpass Scrap chest in main map's list)
+        #Technically this one is in Overpass (2nd Overpass Scrap chest in main map"s list)
         LocationData("Quintar Sanctum", "Quintar Sanctum Chest - Lonely Overpass Scrap chest above Quintar Sanctum", 3533 + treasure_index_offset),
 
         #NPCs
@@ -435,59 +435,59 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #Capital Jail
         #Treasure chests
         LocationData("Capital Jail", "Capital Jail Chest - Touchdown South Wing Key chest", 640 + treasure_index_offset),
-        LocationData("Capital Jail", "Capital Jail Chest - West Wing Key chest in South Wing jail cell across from busted wall", 930 + treasure_index_offset, lambda state: state.has('Item - South Wing Key', player)),
-        LocationData("Capital Jail", "Capital Jail Chest - Haunted jail cell East Wing Key chest in South Wing dead end", 931 + treasure_index_offset, lambda state: state.has('Item - South Wing Key', player)),
-        LocationData("Capital Jail", "Capital Jail Chest - Fiercely guarded Cell Key chest locked behind the South Wing rubble", 990 + treasure_index_offset, lambda state: state.has('Item - South Wing Key', player) and state.has('Item - Cell Key', player, 6)),
-        LocationData("Capital Jail", "Capital Jail Chest - Fiercely guarded Iron Rod chest locked behind the South Wing rubble", 2668 + treasure_index_offset, lambda state: state.has('Item - South Wing Key', player) and state.has('Item - Cell Key', player, 6)),
-        LocationData("Capital Jail", "Capital Jail Chest - Battleplate chest locked behind the South Wing rubble", 991 + treasure_index_offset, lambda state: state.has('Item - South Wing Key', player) and state.has('Item - Cell Key', player, 6)),
+        LocationData("Capital Jail", "Capital Jail Chest - West Wing Key chest in South Wing jail cell across from busted wall", 930 + treasure_index_offset, lambda state: state.has("Item - South Wing Key", player)),
+        LocationData("Capital Jail", "Capital Jail Chest - Haunted jail cell East Wing Key chest in South Wing dead end", 931 + treasure_index_offset, lambda state: state.has("Item - South Wing Key", player)),
+        LocationData("Capital Jail", "Capital Jail Chest - Fiercely guarded Cell Key chest locked behind the South Wing rubble", 990 + treasure_index_offset, lambda state: state.has("Item - South Wing Key", player) and state.has("Item - Cell Key", player, 6)),
+        LocationData("Capital Jail", "Capital Jail Chest - Fiercely guarded Iron Rod chest locked behind the South Wing rubble", 2668 + treasure_index_offset, lambda state: state.has("Item - South Wing Key", player) and state.has("Item - Cell Key", player, 6)),
+        LocationData("Capital Jail", "Capital Jail Chest - Battleplate chest locked behind the South Wing rubble", 991 + treasure_index_offset, lambda state: state.has("Item - South Wing Key", player) and state.has("Item - Cell Key", player, 6)),
         #Technically in the Underpass but you come from here
-        LocationData("Capital Jail", "Capital Jail Chest - Drop down behind the South Wing rubble Underpass Scrap chest", 3675 + treasure_index_offset, lambda state: state.has('Item - South Wing Key', player) and state.has('Item - Cell Key', player, 6)),
-        LocationData("Capital Jail", "Capital Jail Chest - Cell Key chest in West Wing jail cell among the glowy plants", 925 + treasure_index_offset, lambda state: state.has('Item - West Wing Key', player)),
-        LocationData("Capital Jail", "Capital Jail Chest - West Wing arrow plants Battle Helm chest", 923 + treasure_index_offset, lambda state: state.has('Item - West Wing Key', player)),
-        LocationData("Capital Jail", "Capital Jail Chest - West Wing Cell Key chest locked among the foliage", 916 + treasure_index_offset, lambda state: state.has('Item - West Wing Key', player) and state.has('Item - Cell Key', player, 6)),
-        LocationData("Capital Jail", "Capital Jail Chest - Twinsies empty chest in East Wing bedroom closet", 2999 + treasure_index_offset, lambda state: state.has('Item - East Wing Key', player)),
-        LocationData("Capital Jail", "Capital Jail Chest - Twinsies Potion chest in East Wing bedroom closet", 906 + treasure_index_offset, lambda state: state.has('Item - East Wing Key', player)),
-        LocationData("Capital Jail", "Capital Jail Chest - Twinsies Cell Key top chest in waterlogged East Wing hallway", 676 + treasure_index_offset, lambda state: state.has('Item - East Wing Key', player)),
-        LocationData("Capital Jail", "Capital Jail Chest - Twinsies Cell Key bottom chest in waterlogged East Wing hallway", 707 + treasure_index_offset, lambda state: state.has('Item - East Wing Key', player)),
+        LocationData("Capital Jail", "Capital Jail Chest - Drop down behind the South Wing rubble Underpass Scrap chest", 3675 + treasure_index_offset, lambda state: state.has("Item - South Wing Key", player) and state.has("Item - Cell Key", player, 6)),
+        LocationData("Capital Jail", "Capital Jail Chest - Cell Key chest in West Wing jail cell among the glowy plants", 925 + treasure_index_offset, lambda state: state.has("Item - West Wing Key", player)),
+        LocationData("Capital Jail", "Capital Jail Chest - West Wing arrow plants Battle Helm chest", 923 + treasure_index_offset, lambda state: state.has("Item - West Wing Key", player)),
+        LocationData("Capital Jail", "Capital Jail Chest - West Wing Cell Key chest locked among the foliage", 916 + treasure_index_offset, lambda state: state.has("Item - West Wing Key", player) and state.has("Item - Cell Key", player, 6)),
+        LocationData("Capital Jail", "Capital Jail Chest - Twinsies empty chest in East Wing bedroom closet", 2999 + treasure_index_offset, lambda state: state.has("Item - East Wing Key", player)),
+        LocationData("Capital Jail", "Capital Jail Chest - Twinsies Potion chest in East Wing bedroom closet", 906 + treasure_index_offset, lambda state: state.has("Item - East Wing Key", player)),
+        LocationData("Capital Jail", "Capital Jail Chest - Twinsies Cell Key top chest in waterlogged East Wing hallway", 676 + treasure_index_offset, lambda state: state.has("Item - East Wing Key", player)),
+        LocationData("Capital Jail", "Capital Jail Chest - Twinsies Cell Key bottom chest in waterlogged East Wing hallway", 707 + treasure_index_offset, lambda state: state.has("Item - East Wing Key", player)),
 
-        LocationData("Capital Jail", "Capital Jail Chest - Cell Key chest locked in broken East Wing jail cell", 708 + treasure_index_offset, lambda state: state.has('Item - East Wing Key', player) and state.has('Item - Cell Key', player, 6)),
-        LocationData("Capital Jail", "Capital Jail Chest - Cell Key chest locked in East Wing bedroom", 763 + treasure_index_offset, lambda state: state.has('Item - East Wing Key', player) and state.has('Item - Cell Key', player, 6)),
-        LocationData("Capital Jail", "Capital Jail Chest - Dark Wing Key chest locked beyond overgrown West Wing hallway", 909 + treasure_index_offset, lambda state: state.has('Item - West Wing Key', player) and state.has('Item - Cell Key', player, 6)),
-        LocationData("Capital Jail", "Capital Jail Chest - Capital Jail map chest in Dark Wing entry left cell", 2911 + treasure_index_offset, lambda state: state.has('Item - Dark Wing Key', player)),
-        LocationData("Capital Jail", "Capital Jail Chest - Sneaky Woven Hood chest in Dark Wing", 929 + treasure_index_offset, lambda state: state.has('Item - Dark Wing Key', player)),
-        LocationData("Capital Jail", "Capital Jail Chest - Corner lava jump Woven Shirt chest in Dark Wing", 920 + treasure_index_offset, lambda state: state.has('Item - Dark Wing Key', player)),
+        LocationData("Capital Jail", "Capital Jail Chest - Cell Key chest locked in broken East Wing jail cell", 708 + treasure_index_offset, lambda state: state.has("Item - East Wing Key", player) and state.has("Item - Cell Key", player, 6)),
+        LocationData("Capital Jail", "Capital Jail Chest - Cell Key chest locked in East Wing bedroom", 763 + treasure_index_offset, lambda state: state.has("Item - East Wing Key", player) and state.has("Item - Cell Key", player, 6)),
+        LocationData("Capital Jail", "Capital Jail Chest - Dark Wing Key chest locked beyond overgrown West Wing hallway", 909 + treasure_index_offset, lambda state: state.has("Item - West Wing Key", player) and state.has("Item - Cell Key", player, 6)),
+        LocationData("Capital Jail", "Capital Jail Chest - Capital Jail map chest in Dark Wing entry left cell", 2911 + treasure_index_offset, lambda state: state.has("Item - Dark Wing Key", player)),
+        LocationData("Capital Jail", "Capital Jail Chest - Sneaky Woven Hood chest in Dark Wing", 929 + treasure_index_offset, lambda state: state.has("Item - Dark Wing Key", player)),
+        LocationData("Capital Jail", "Capital Jail Chest - Corner lava jump Woven Shirt chest in Dark Wing", 920 + treasure_index_offset, lambda state: state.has("Item - Dark Wing Key", player)),
 
         #NPCs
-        LocationData("Capital Jail", "Capital Jail NPC - Silver Ingot in haunted South Wing jail cell", 972 + npc_index_offset, lambda state: state.has('Item - South Wing Key', player)),
-        LocationData("Capital Jail", "Capital Jail NPC - Silver Ingot in zombified South Wing jail cell", 989 + npc_index_offset, lambda state: state.has('Item - South Wing Key', player)),
-        LocationData("Capital Jail", "Capital Jail NPC - Silver Ore locked in broken East Wing jail cell accompanied by blue flower", 760 + npc_index_offset, lambda state: state.has('Item - East Wing Key', player) and state.has('Item - Cell Key', player, 6)),
-        LocationData("Capital Jail", "Capital Jail NPC - Silver Dust locked in East Wing bedroom", 782 + npc_index_offset, lambda state: state.has('Item - East Wing Key', player) and state.has('Item - Cell Key', player, 6)),
-        LocationData("Capital Jail", "Capital Jail NPC - Silver Ore locked in overgrown West Wing hallway", 759 + npc_index_offset, lambda state: state.has('Item - West Wing Key', player) and state.has('Item - Cell Key', player, 6)),
-        LocationData("Capital Jail", "Capital Jail NPC - Silver Dust in Dark Wing entry right cell", 472 + npc_index_offset, lambda state: state.has('Item - Dark Wing Key', player)),
+        LocationData("Capital Jail", "Capital Jail NPC - Silver Ingot in haunted South Wing jail cell", 972 + npc_index_offset, lambda state: state.has("Item - South Wing Key", player)),
+        LocationData("Capital Jail", "Capital Jail NPC - Silver Ingot in zombified South Wing jail cell", 989 + npc_index_offset, lambda state: state.has("Item - South Wing Key", player)),
+        LocationData("Capital Jail", "Capital Jail NPC - Silver Ore locked in broken East Wing jail cell accompanied by blue flower", 760 + npc_index_offset, lambda state: state.has("Item - East Wing Key", player) and state.has("Item - Cell Key", player, 6)),
+        LocationData("Capital Jail", "Capital Jail NPC - Silver Dust locked in East Wing bedroom", 782 + npc_index_offset, lambda state: state.has("Item - East Wing Key", player) and state.has("Item - Cell Key", player, 6)),
+        LocationData("Capital Jail", "Capital Jail NPC - Silver Ore locked in overgrown West Wing hallway", 759 + npc_index_offset, lambda state: state.has("Item - West Wing Key", player) and state.has("Item - Cell Key", player, 6)),
+        LocationData("Capital Jail", "Capital Jail NPC - Silver Dust in Dark Wing entry right cell", 472 + npc_index_offset, lambda state: state.has("Item - Dark Wing Key", player)),
 
         #Crystals
         LocationData("Capital Jail", "Capital Jail Crystal - Reaper Crystal above hell pool", 908 + crystal_index_offset),
 
         #Capital Pipeline
         #Treasure chests
-        LocationData("Capital Pipeline", "Capital Pipeline Chest - I wanna go home Capital Pipeline map chest", 2912 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Capital Pipeline", "Capital Pipeline Chest - I wanna go home Capital Pipeline map chest", 2912 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Capital Pipeline", "Capital Pipeline Chest - Lucky Platter chest (Do not anger the fungus)", 1294 + treasure_index_offset),
 
         #NPCs
         LocationData("Capital Pipeline", "Capital Pipeline NPC - Silver Ingot in corrupted tunnel", 2660 + npc_index_offset),
         LocationData("Capital Pipeline", "Capital Pipeline NPC - Silver Ore in corrupted tunnel", 1295 + npc_index_offset),
-        LocationData("Capital Pipeline", "Capital Pipeline NPC - Diamond Dust down the elevator into Jidamba", 2897 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Capital Pipeline", "Capital Pipeline NPC - Diamond Dust down the elevator into Jidamba", 2897 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
 
         #Cobblestone Crag
         #Treasure chests
         LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Ether Pouch chest behind the sluice gate", 479 + treasure_index_offset),
-        LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Long jump Potion chest", 382 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Long jump Potion chest", 382 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
         LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Potion Pouch chest tucked in a cranny between two tall spikes", 1119 + treasure_index_offset),
         LocationData("Cobblestone Crag", "Cobblestone Crag Chest - I totally meant to miss that jump Skewer chest", 2670 + treasure_index_offset),
         LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Tonic Pouch chest upon exiting from Quintar Nest", 478 + treasure_index_offset),
         LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Could really use a Walking Stick (chest) right about now...", 2669 + treasure_index_offset),
         #Technically on Underpass (Okimoto) map
-        LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Underpass Scrap chest on the way to the village hidden among the leaves", 3669 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Underpass Scrap chest on the way to the village hidden among the leaves", 3669 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
 
         #NPCs
         LocationData("Cobblestone Crag", "Cobblestone Crag NPC - Westernmost Silver Dust", 1120 + npc_index_offset),
@@ -521,10 +521,10 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
 
         #Greenshire Reprise
         #Treasure chests
-        LocationData("Greenshire Reprise", "Greenshire Reprise Chest - Jump off bridge 4 Ambush Knife chest", 483 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Greenshire Reprise", "Greenshire Reprise Chest - Jump off bridge 4 Ambush Knife chest", 483 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Greenshire Reprise", "Greenshire Reprise Chest - Ether chest atop the waterfalls", 490 + treasure_index_offset),
-        LocationData("Greenshire Reprise", "Greenshire Reprise Chest - Jump off bridge 3 Looters Ring chest", 482 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
-        LocationData("Greenshire Reprise", "Greenshire Reprise Chest - Tall taunter Shell Amulet chest", 373 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Greenshire Reprise", "Greenshire Reprise Chest - Jump off bridge 3 Looters Ring chest", 482 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Greenshire Reprise", "Greenshire Reprise Chest - Tall taunter Shell Amulet chest", 373 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Greenshire Reprise", "Greenshire Reprise Chest - Tincture Pouch chest in the valley of trees", 487 + treasure_index_offset),
         LocationData("Greenshire Reprise", "Greenshire Reprise Chest - Tonic Pouch chest at the tip of the peninsula south of the second bridge", 491 + treasure_index_offset),
 
@@ -536,132 +536,132 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #Salmon Pass
         #Treasure chests
         LocationData("Salmon Pass", "Salmon Pass Chest - Riverbank Paypirbak chest among the yellow flowers", 2700 + treasure_index_offset),
-        LocationData("Salmon Pass", "Salmon Pass Chest - Fenix Juice chest across a bridge and around through a tunnel", 2420 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Salmon Pass", "Salmon Pass Chest - Fenix Juice chest across a bridge and around through a tunnel", 2420 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
         LocationData("Salmon Pass", "Salmon Pass Chest - Fenix Juice chest admiring the hidden waterfall", 419 + treasure_index_offset),
 
         #Salmon River
         #Treasure chests
-        LocationData("Salmon River", "Salmon River Chest - Hop on Money chest once you have become frogger", 1264 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
-        LocationData("Salmon River", "Salmon River Chest - Bloodbind chest atop river island crown", 1297 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
-        LocationData("Salmon River", "Salmon River Chest - Money chest also wishes to be frogger", 325 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
-        LocationData("Salmon River", "Salmon River Chest - Ether Pouch chest in the stands of the Salmon race finish line ", 2976 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
-        LocationData("Salmon River", "Salmon River Chest - Salmon River Map chest inside the Salmon Shack", 2913 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Salmon River", "Salmon River Chest - Hop on Money chest once you have become frogger", 1264 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Salmon River", "Salmon River Chest - Bloodbind chest atop river island crown", 1297 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Salmon River", "Salmon River Chest - Money chest also wishes to be frogger", 325 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Salmon River", "Salmon River Chest - Ether Pouch chest in the stands of the Salmon race finish line ", 2976 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Salmon River", "Salmon River Chest - Salmon River Map chest inside the Salmon Shack", 2913 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
 
         #NPCs
         #Todo Missable NPCs: figure out Courtyard Key Reid (see Capital Sequoia)
 
         #Crystals
-        #Technically in River Cat's Ego map
+        #Technically in River Cat"s Ego map
         LocationData("Salmon River", "Salmon River Crystal - Appease the QuizFish Nomad Crystal", 630 + treasure_index_offset),
 
         #Poko Poko Desert
         #Treasure chests
-        LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Quintar leapfrog Butter Cutter chest", 1080 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
-        LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Hatchet chest south of tricky Quintar Gold Dust", 1082 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
-        LocationData("Poko Poko Desert", "Poko Poko Desert Chest - North Lookout Token chest in its tower", 1190 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
-        LocationData("Poko Poko Desert", "Poko Poko Desert Chest - This Dueller chests (on) a butte", 1169 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Quintar leapfrog Butter Cutter chest", 1080 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Hatchet chest south of tricky Quintar Gold Dust", 1082 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Poko Poko Desert", "Poko Poko Desert Chest - North Lookout Token chest in its tower", 1190 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Poko Poko Desert", "Poko Poko Desert Chest - This Dueller chests (on) a butte", 1169 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
         LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Stormy Fenix Juice chest on first floor of ruins", 2676 + treasure_index_offset),
         LocationData("Poko Poko Desert", "Poko Poko Desert Chest - West Lookout Token chest in its tower", 1170 + treasure_index_offset),
         LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Potion chest to fortify you for the jumping puzzle from hell", 2708 + treasure_index_offset),
         LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Central Lookout Token chest (ok maybe that jumping puzzle wasnt that bad)", 1189 + treasure_index_offset),
         LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Balance beam Scope Specs chest", 97 + treasure_index_offset),
         LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Ether Pouch chest past Lost Son", 1667 + treasure_index_offset),
-        LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Salmon Bay map chest cooling off in the tent before the Tower of Zott", 2914 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Salmon Bay map chest cooling off in the tent before the Tower of Zott", 2914 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
 
         #NPCs
         #Todo NPCs CheckOrNot: three Quintar Eggs in Poko Poko Desert (Nest) map
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Silver Dust beneath overhang in ruins south of shrine", 2675 + npc_index_offset),
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Silver Ingot slumbering in broken house NE of shrine", 1081 + npc_index_offset),
-        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Rocky outcropping Gold Dust will put your Quintar to the test", 2817 + npc_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Rocky outcropping Gold Dust will put your Quintar to the test", 2817 + npc_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Silver Ingot in the shade of the desert arch", 2682 + npc_index_offset),
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Thirsty Lad", 1201 + npc_index_offset),
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Stormy Silver Ore atop ruins", 2677 + npc_index_offset),
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Stormy Silver Ore on the ruined building floor", 2681 + npc_index_offset),
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold Ingot atop ridge south of North Lookout Tower", 2818 + npc_index_offset),
-        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Silver Dust in the dust a floor above Fenix Juice chest", 2680 + npc_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Silver Dust in the dust a floor above Fenix Juice chest", 2680 + npc_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
         #Todo NPCs Blocker: this son unlocks a check in Sara Sara Bazaar
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Circle the western desert wall for Lost Son", 1198 + npc_index_offset), #29b1d681
-        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold Ingot overlooking Sara Sara Bazaar", 2707 + npc_index_offset, lambda state: state.has_any('Item - Ibek Bell', player)),
-        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold Dust accessible from beach reacharound", 2711 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Progressive Quintar Flute', player, 2)),
-        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Diamond Dust on the outside of the Tower of Zott", 2879 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Owl Drum', player)),
-        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold Ore on the far end of the Tower of Zott", 2816 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Owl Drum', player)),
-        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold Ore on an outcropping by the long loop-around chest", 2706 + npc_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold Ingot overlooking Sara Sara Bazaar", 2707 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold Dust accessible from beach reacharound", 2711 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Diamond Dust on the outside of the Tower of Zott", 2879 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Owl Drum", player)),
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold Ore on the far end of the Tower of Zott", 2816 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Owl Drum", player)),
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold Ore on an outcropping by the long loop-around chest", 2706 + npc_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
         
         #Sara Sara Bazaar
         #Treasure chests
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Someone took the St James and left a Knockout Stick chest", 408 + treasure_index_offset, lambda state: state.has('Item - Room 1 Key', player)),
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Someone took the St James and left a Knockout Stick chest", 408 + treasure_index_offset, lambda state: state.has('Item - Room 1 Key', player)),
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Potion chest in darkened upper storeroom", 414 + treasure_index_offset, lambda state: state.has_any({'Item - Progressive Quintar Flute'}, player)),
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Storm Rod chest in darkened upper storeroom", 513 + treasure_index_offset, lambda state: state.has_any({'Item - Progressive Quintar Flute'}, player)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Someone took the St James and left a Knockout Stick chest", 408 + treasure_index_offset, lambda state: state.has("Item - Room 1 Key", player)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Someone took the St James and left a Knockout Stick chest", 408 + treasure_index_offset, lambda state: state.has("Item - Room 1 Key", player)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Potion chest in darkened upper storeroom", 414 + treasure_index_offset, lambda state: state.has_any({"Item - Progressive Quintar Flute"}, player)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Storm Rod chest in darkened upper storeroom", 513 + treasure_index_offset, lambda state: state.has_any({"Item - Progressive Quintar Flute"}, player)),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Potion Mixers Beaurior Volcano map chest", 1194 + treasure_index_offset),
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Spilled booty Captains Hat chest", 2936 + treasure_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player, 2)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Spilled booty Captains Hat chest", 2936 + treasure_index_offset, lambda state: state.has("Item - Progressive Salmon Violin", player)),
 
         #NPCs
         #Crystal Checker guy gives you Ferry Pass for having 15 crystals Z27_FerryCrystalChecker ID 940 (-166,93,56)
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Ferry crystal checker grants Ferry Pass in case you hate children", 940 + npc_index_offset, lambda state: get_job_count(player, state) >= 15),
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Three tokens makes a Pyramid Key something something triangles", 949 + npc_index_offset, lambda state: state.has('Item - West Lookout Token', player) and state.has('Central Lookout Token', player) and state.has('North Lookout Token', player)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Three tokens makes a Pyramid Key something something triangles", 949 + npc_index_offset, lambda state: state.has("Item - West Lookout Token", player) and state.has("Central Lookout Token", player) and state.has("North Lookout Token", player)),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - The One and Only Room 1 Key", 385 + npc_index_offset),
         #Todo NPCs Blocker: gotta find the Lost Son first (the mom before you find the son is a different NPC)
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Worried Mom Ferry Pass", 1196 + npc_index_offset),
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Pelt this Fish Merchant with Rotten Salmon", 942 + npc_index_offset, lambda state: state.has('Item - Rotten Salmon', player)),
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - No Shoudu Stew for you!", 1200 + npc_index_offset, lambda state: state.has('Item - Shoudu Stew', player)),
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silver Dust", 2905 + npc_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player, 2)),
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silverer Dust", 2906 + npc_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player, 2)),
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silver Ingot", 2903 + npc_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player, 2)),
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silverer Ingot", 2904 + npc_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player, 2)),
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silver Ore", 2901 + npc_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player, 2)),
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silverer Ore", 2902 + npc_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player, 2)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Pelt this Fish Merchant with Rotten Salmon", 942 + npc_index_offset, lambda state: state.has("Item - Rotten Salmon", player)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - No Shoudu Stew for you!", 1200 + npc_index_offset, lambda state: state.has("Item - Shoudu Stew", player)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silver Dust", 2905 + npc_index_offset, lambda state: state.has("Item - Progressive Salmon Violin", player)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silverer Dust", 2906 + npc_index_offset, lambda state: state.has("Item - Progressive Salmon Violin", player)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silver Ingot", 2903 + npc_index_offset, lambda state: state.has("Item - Progressive Salmon Violin", player)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silverer Ingot", 2904 + npc_index_offset, lambda state: state.has("Item - Progressive Salmon Violin", player)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silver Ore", 2901 + npc_index_offset, lambda state: state.has("Item - Progressive Salmon Violin", player)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silverer Ore", 2902 + npc_index_offset, lambda state: state.has("Item - Progressive Salmon Violin", player)),
 
         #Sara Sara Beach
         #Treasure chests
-        LocationData("Sara Sara Beach", "Sara Sara Beach Chest - Tincture Pouch chest glittering in the sun at Ibek Cave exit", 1083 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
-        LocationData("Sara Sara Beach", "Sara Sara Beach Chest - Tonic Pouch chest glittering in the sun at Ibek Cave exit", 1085 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
-        LocationData("Sara Sara Beach", "Sara Sara Beach Chest - Ether chest on the back cliff wall", 154 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
-        LocationData("Sara Sara Beach", "Sara Sara Beach Chest - Potion chest across the palms above the dust", 1509 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Progressive Quintar Flute', player, 2)),
-        LocationData("Sara Sara Beach", "Sara Sara Beach Chest - How dare you stand where he stood Money chest", 1084 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
-        LocationData("Sara Sara Beach", "Sara Sara Beach Chest - Blank Pages chest in beach cave", 2718 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Progressive Quintar Flute', player, 2)),
-        LocationData("Sara Sara Beach", "Sara Sara Beach Chest - West beach tightrope walk Potion chest", 1546 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach Chest - Tincture Pouch chest glittering in the sun at Ibek Cave exit", 1083 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach Chest - Tonic Pouch chest glittering in the sun at Ibek Cave exit", 1085 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach Chest - Ether chest on the back cliff wall", 154 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach Chest - Potion chest across the palms above the dust", 1509 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach Chest - How dare you stand where he stood Money chest", 1084 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach Chest - Blank Pages chest in beach cave", 2718 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach Chest - West beach tightrope walk Potion chest", 1546 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
 
         #NPCs
         #Todo NPCs Job Masters: Master Dervish ID 3575 (-255, 103, -237); gives you Dervish Seal in exchange for job mastery
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Dust glittering in the sun at Ibek Cave exit 1", 2683 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Dust glittering in the sun at Ibek Cave exit 2", 2684 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Dust glittering in the sun at Ibek Cave exit 3", 2686 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Cross my palms with Silver (Dust)", 2693 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Progressive Quintar Flute', player, 2)),
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Dust past the angry birds", 2697 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Progressive Quintar Flute', player, 2)),
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Jaunt along the cliff past Dr Cool Aids perch to Silver Ingot", 2685 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Dust glittering in the sun at Ibek Cave exit 1", 2683 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Dust glittering in the sun at Ibek Cave exit 2", 2684 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Dust glittering in the sun at Ibek Cave exit 3", 2686 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Cross my palms with Silver (Dust)", 2693 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Dust past the angry birds", 2697 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Jaunt along the cliff past Dr Cool Aids perch to Silver Ingot", 2685 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ingot on the beach rocks at eastern edge", 2687 + npc_index_offset),
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ingot glittering in the sun at Ibek Cave exit", 2688 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ingot on the back cliff wall", 2694 + npc_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ingot at the foot of the Tower of Zott", 2699 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Progressive Quintar Flute', player, 2)),
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Lonely Islet Silver Ingot", 2878 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Progressive Quintar Flute', player, 2)),
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ore glittering in the sun at Ibek Cave exit 1", 2689 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ore glittering in the sun at Ibek Cave exit 2", 2690 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Eastern beach Silver Ore beheld by Dr Cool Aids", 2691 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ore on western beach along the cliffside", 2692 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Progressive Quintar Flute', player, 2)),
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ore chilling in beach cave", 2698 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player) and state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ingot glittering in the sun at Ibek Cave exit", 2688 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ingot on the back cliff wall", 2694 + npc_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ingot at the foot of the Tower of Zott", 2699 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Lonely Islet Silver Ingot", 2878 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ore glittering in the sun at Ibek Cave exit 1", 2689 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ore glittering in the sun at Ibek Cave exit 2", 2690 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Eastern beach Silver Ore beheld by Dr Cool Aids", 2691 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ore on western beach along the cliffside", 2692 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ore chilling in beach cave", 2698 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver Ore further along the beach", 2877 + npc_index_offset),
 
         #Ancient Reservoir
         #Treasure chests
         LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Really elaborate crystal rafters Red Coat chest", 1123 + treasure_index_offset),
         LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Crystal gutters Red Cap chest", 1122 + treasure_index_offset),
-        LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Resist Shifter chest tucked on ledge by aqueduct", 1982 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Resist Shifter chest tucked on ledge by aqueduct", 1982 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
         LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Ether Pouch chest in East Switch Room", 2977 + treasure_index_offset),
         LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Money chest in eastern nyoom room", 2056 + treasure_index_offset),
         LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Potion Pouch chest hiding behind aqueduct grate", 2703 + treasure_index_offset),
-        LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Money chest hiding behind western aqueduct grate", 2702 + treasure_index_offset, lambda state: state.has('Item - Progressive Quintar Flute', player, 2)),
+        LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Money chest hiding behind western aqueduct grate", 2702 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
         LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Twinsies Defense Shifter chest at west waterfall base", 2704 + treasure_index_offset),
         LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Twinsies Money chest at west waterfall base", 1145 + treasure_index_offset),
-        LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Salmon swim up to death (Grim Scythe chest)", 2701 + treasure_index_offset, lambda state: state.has('Item - Progressive Salmon Violin', player, 2)),
+        LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Salmon swim up to death (Grim Scythe chest)", 2701 + treasure_index_offset, lambda state: state.has("Item - Progressive Salmon Violin", player)),
         LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Goat snack for later Ancient Reservoir map chest", 2915 + treasure_index_offset),
-        LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Celebrate your new hops Fenix Juice Pouch chest", 2517 + treasure_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Celebrate your new hops Fenix Juice Pouch chest", 2517 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
 
         #NPCs
         LocationData("Ancient Reservoir", "Ancient Reservoir NPC - Silver Ingot in the odd flooded room", 2695 + npc_index_offset),
         LocationData("Ancient Reservoir", "Ancient Reservoir NPC - Silver Ore in the odd flooded room", 1675 + npc_index_offset),
         LocationData("Ancient Reservoir", "Ancient Reservoir NPC - Goat victory Ibek Bell", 1676 + npc_index_offset), #Z30_PostBossEvent
-        LocationData("Ancient Reservoir", "Ancient Reservoir NPC - Silver Dust in the goat digs", 2696 + npc_index_offset, lambda state: state.has('Item - Ibek Bell', player)),
+        LocationData("Ancient Reservoir", "Ancient Reservoir NPC - Silver Dust in the goat digs", 2696 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
 
         #Crystals
         LocationData("Ancient Reservoir", "Ancient Reservoir Crystal - Dervish", 1121 + crystal_index_offset),
@@ -691,7 +691,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #Underpass
         #Treasure chests
         #The last Underpass Scrap chest on main map has been categorized under the Capital Jail
-        #The Underpass (Okimoto) map's Underpass Scrap has been categorized under Cobblestone Crag
+        #The Underpass (Okimoto) map"s Underpass Scrap has been categorized under Cobblestone Crag
 
         #Zones (Expert)
         #Shoudu Waterfront
@@ -703,7 +703,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #Lake Delende
         #Treasure chests
         LocationData("Lake Delende", "Lake Delende Chest - Float Shoes chest on north edge", 1263 + treasure_index_offset),
-        LocationData("Lake Delende", "Lake Delende Chest - Lake Delende map chest on north edge", 2917 + treasure_index_offset),
+        LocationData("Lake Delende", "Lake Delende Chest - Lake Delende map chest on north edge", 2917 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
 
         #NPCs
         LocationData("Lake Delende", "Lake Delende NPC - Panning for Gold Dust down Salmon Creek without a paddle", 2854 + npc_index_offset),
