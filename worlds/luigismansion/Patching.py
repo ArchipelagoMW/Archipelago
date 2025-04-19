@@ -167,7 +167,7 @@ def update_event_info(event_info, boo_checks: bool, output_data):
         # Make event38 load more than once
         if x["EventNo"] == 38:
             x["EventLoad"] = 0
-            x["disappear_flag"] = 34
+            x["disappear_flag"] = 3
             x["EventIf"] = 2
 
         # Update the Washroom event trigger to be area entry based
