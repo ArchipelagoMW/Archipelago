@@ -151,6 +151,7 @@ class ItemTracker:
     def __init__(self, gameboy) -> None:
         self.gameboy = gameboy
         self.loadItems()
+        self.extraItems = {}
         pass
     extraItems = {}
 
