@@ -379,22 +379,17 @@ class LingoPlayerLogic:
                 good_item_options.append(pdoor.item_name)
 
             # Copied from The Witness -- remove any plandoed items from the possible good items set.
-            for v in world.multiworld.plando_items[world.player]:
-                if v.get("from_pool", True):
-                    for item_key in {"item", "items"}:
-                        if item_key in v:
-                            if type(v[item_key]) is str:
-                                if v[item_key] in good_item_options:
-                                    good_item_options.remove(v[item_key])
-                            elif type(v[item_key]) is dict:
-                                for item, weight in v[item_key].items():
-                                    if weight and item in good_item_options:
-                                        good_item_options.remove(item)
-                            else:
-                                # Other type of iterable
-                                for item in v[item_key]:
-                                    if item in good_item_options:
-                                        good_item_options.remove(item)
+            for v in world.options.plando_items:
+                if v.from_pool:
+                    if type(v.items) is dict:
+                        for item, weight in v.items.items():
+                            if weight and item in good_item_options:
+                                good_item_options.remove(item)
+                    else:
+                        # Other type of iterable
+                        for item in v.items:
+                            if item in good_item_options:
+                                good_item_options.remove(item)
 
             if len(good_item_options) > 0:
                 self.forced_good_item = world.random.choice(good_item_options)
