@@ -102,7 +102,7 @@ def KholdstareDefeatRule(state, player: int) -> bool:
                     state.has('Fire Rod', player) or
                     (
                             state.has('Bombos', player) and
-                            (has_sword(state, player) or state.multiworld.swordless[player])
+                            (has_sword(state, player) or state.multiworld.worlds[player].options.swordless)
                     )
             ) and
             (
@@ -111,7 +111,7 @@ def KholdstareDefeatRule(state, player: int) -> bool:
                     (
                             state.has('Fire Rod', player) and
                             state.has('Bombos', player) and
-                            state.multiworld.swordless[player] and
+                            state.multiworld.worlds[player].options.swordless and
                             can_extend_magic(state, player, 16)
                     )
             )
@@ -137,7 +137,7 @@ def AgahnimDefeatRule(state, player: int) -> bool:
 
 
 def GanonDefeatRule(state, player: int) -> bool:
-    if state.multiworld.swordless[player]:
+    if state.multiworld.worlds[player].options.swordless:
         return state.has('Hammer', player) and \
                has_fire_source(state, player) and \
                state.has('Silver Bow', player) and \
@@ -146,7 +146,7 @@ def GanonDefeatRule(state, player: int) -> bool:
     can_hurt = has_beam_sword(state, player)
     common = can_hurt and has_fire_source(state, player)
     # silverless ganon may be needed in anything higher than no glitches
-    if state.multiworld.glitches_required[player] != 'no_glitches':
+    if state.multiworld.worlds[player].options.glitches_required != 'no_glitches':
         # need to light torch a sufficient amount of times
         return common and (state.has('Tempered Sword', player) or state.has('Golden Sword', player) or (
                 state.has('Silver Bow', player) and can_shoot_arrows(state, player)) or
@@ -248,7 +248,7 @@ for location in boss_location_table:
 
 def place_boss(world: "ALTTPWorld", boss: str, location: str, level: Optional[str]) -> None:
     player = world.player
-    if location == 'Ganons Tower' and world.multiworld.mode[player] == 'inverted':
+    if location == 'Ganons Tower' and world.options.mode == 'inverted':
         location = 'Inverted Ganons Tower'
     logging.debug('Placing boss %s at %s', boss, location + (' (' + level + ')' if level else ''))
     world.dungeons[location].bosses[level] = BossFactory(boss, player)
@@ -260,9 +260,8 @@ def format_boss_location(location_name: str, level: str) -> str:
 
 def place_bosses(world: "ALTTPWorld") -> None:
     multiworld = world.multiworld
-    player = world.player
     # will either be an int or a lower case string with ';' between options
-    boss_shuffle: Union[str, int] = multiworld.boss_shuffle[player].value
+    boss_shuffle: Union[str, int] = world.options.boss_shuffle.value
     already_placed_bosses: List[str] = []
     remaining_locations: List[Tuple[str, str]] = []
     # handle plando
