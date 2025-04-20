@@ -442,13 +442,13 @@ loony_item_table: dict[str, LLItem] = {
     "Play As Werewolf": LLItem(
         ll_base_id + CH_WEREWOLF + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=LLFlags.MULTISAVE
     ),
-    "Enemy Overload": LLItem(ll_base_id + CH_RESPAWN + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
-    "Kick The Cat!": LLItem(ll_base_id + CH_KICKCAT + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Enemy Overload": LLItem(ll_base_id + CH_RESPAWN + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful),
+    "Kick The Cat!": LLItem(ll_base_id + CH_KICKCAT + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler),
     "Infinite Survival": LLItem(
         ll_base_id + CH_RNDSURVIVAL + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression
     ),
     "Play As Summony": LLItem(
-        ll_base_id + CH_SUMMON + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=LLFlags.MULTISAVE
+        ll_base_id + CH_SUMMON + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=LLFlags.MULTISAVE
     ),
     "Play As Ninja Girl": LLItem(
         ll_base_id + CH_THIEF + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=LLFlags.MULTISAVE
@@ -462,16 +462,14 @@ loony_item_table: dict[str, LLItem] = {
         ItemClassification.progression,
         flags=LLFlags.PWR_MAX | LLFlags.OP,
     ),
-    "Bend It Like Bouapha": LLItem(ll_base_id + CH_BEND + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
-    "Stinky Farley": LLItem(ll_base_id + CH_STINKY + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Bend It Like Bouapha": LLItem(ll_base_id + CH_BEND + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful),
+    "Stinky Farley": LLItem(ll_base_id + CH_STINKY + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful),
     "Ultra Weapons Are Go!": LLItem(
         ll_base_id + CH_ULTRAWEAPON + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression
     ),
-    "Thorns Aura": LLItem(ll_base_id + CH_THORNS + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
-    "Monster Regeneration": LLItem(
-        ll_base_id + CH_REGEN + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression
-    ),
-    "Farley Free Zone": LLItem(ll_base_id + CH_NOFARLEY + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Thorns Aura": LLItem(ll_base_id + CH_THORNS + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful),
+    "Monster Regeneration": LLItem(ll_base_id + CH_REGEN + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler),
+    "Farley Free Zone": LLItem(ll_base_id + CH_NOFARLEY + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler),
     "Bowling Access": LLItem(ll_base_id + MODE_BOWLING + AP_MODEMOD, LLItemCat.ACCESS, ItemClassification.progression),
     "Survival Access": LLItem(
         ll_base_id + MODE_SURVIVAL + AP_MODEMOD, LLItemCat.ACCESS, ItemClassification.progression
@@ -843,7 +841,7 @@ def set_rules(multiworld, world):
         "Tunnel: Scratch Wall": lambda state: have_special_weapon_bullet(state, player),
         "Swamp Gas: Scratch Wall": lambda state: have_special_weapon_bullet(state, player),
         "Swamp Gas: Bat Door": lambda state: state.has("Bat Key", player),
-        "Swamp Gas: Rock Prison": lambda state: have_bombs(state, player),
+        "Swamp Gas: Rock Prison": lambda state: state.has("Bombs", player) or state.has("Play As Werewolf", player),
         "Dusty Crypt: Pumpkin Door": lambda state: state.has("Pumpkin Key", player),
         "Musty Crypt: Maze Room": lambda state: have_special_weapon_bullet(state, player),
         "Rusty Crypt: Vine": lambda state: state.has("Fertilizer", player),
@@ -858,7 +856,8 @@ def set_rules(multiworld, world):
         "Wolf Den: Pumpkin Door": lambda state: state.has("Pumpkin Key", player),
         "Wolf Den: Vine": lambda state: state.has("Fertilizer", player),
         "Under The Ravine: Left Vine": lambda state: state.has("Fertilizer", player),
-        "Under The Ravine: Right Vine": lambda state: state.has("Fertilizer", player),
+        "Under The Ravine: Right Vine": lambda state: state.has("Fertilizer", player)
+        and state.has("Skull Key", player),
         "Creepy Caverns M: Pharaoh Bat Door": lambda state: state.has("Bat Key", player),
         "Castle Vampy IV: Ballroom Right": lambda state: state.has("Ghost Potion", player)
         and can_kill_werewolves(state, player),
@@ -880,6 +879,7 @@ def set_rules(multiworld, world):
         "Q: Smashing Pumpkins": lambda state: can_cleanse_crypts(state, player),
         "Q: Mystery Lake": lambda state: state.has("Orb", player, 4),
         "Q: Beneath The Lake": lambda state: power_level(state, player, 10),
+        "Q: Happy Stick?!?": lambda state: power_level(state, player, 40),
         "Q: A True Hero": lambda state: state.has("Fertilizer", player) and have_bombs(state, player),
         "Q: Silver Bullet": lambda state: can_cleanse_crypts(state, player) and state.has("Silver", player),
         "Q: Hairy Larry": lambda state: state.can_reach_region("Larry's Lair", player)
@@ -968,7 +968,7 @@ def set_entrance_rules(multiworld, world):
         LLEntrance("Zombiton", "A Messy Cabin", True),
         LLEntrance("Halloween Hill", "Rusty Crypt Entrance", True),
         LLEntrance("Halloween Hill", "Under The Lake Entrance", True, lambda state: state.has("Orb", player, 4)),
-        LLEntrance("Halloween Hill", "Haunted Tower Entrance", True, lambda state: state.has("Ghost Potion", player)),
+        LLEntrance("Halloween Hill", "Haunted Tower Entrance", True),
         LLEntrance("Rocky Cliffs", "Abandoned Mines Entrance", True),
         LLEntrance("Rocky Cliffs", "The Shrine Of Bombulus", True),
         LLEntrance("Rocky Cliffs", "A Gloomy Cavern Entrance", True, lambda state: have_light_source(state, player)),

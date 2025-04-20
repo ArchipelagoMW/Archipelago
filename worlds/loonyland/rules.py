@@ -14,7 +14,9 @@ def have_bombs(state: CollectionState, player: int) -> bool:
 
 
 def have_many_bombs(state: CollectionState, player: int) -> bool:
-    return state.has("Bombs", player) or (state.has("Play As Werewolf", player) and state.has("Infinite Gems", player))
+    return (state.has("Bombs", player) and state.count("Big Gem", 4)) or (
+        state.has("Play As Werewolf", player) and state.has("Infinite Gems", player)
+    )
 
 
 def have_special_weapon_damage(state: CollectionState, player: int) -> bool:
