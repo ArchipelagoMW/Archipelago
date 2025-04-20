@@ -19,7 +19,7 @@ from .logic.logic import StardewLogic
 from .logic.time_logic import MAX_MONTHS
 from .logic.tool_logic import tool_upgrade_prices
 from .mods.mod_data import ModNames
-from .options import BuildingProgression, ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
+from .options import ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
     Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, StardewValleyOptions, Walnutsanity
 from .stardew_rule import And, StardewRule, true_
 from .stardew_rule.indirect_connection import look_for_indirect_connection
@@ -71,7 +71,7 @@ def set_rules(world):
     set_tool_rules(logic, multiworld, player, world_content)
     set_skills_rules(logic, multiworld, player, world_content)
     set_bundle_rules(bundle_rooms, logic, multiworld, player, world_options)
-    set_building_rules(logic, multiworld, player, world_options)
+    set_building_rules(logic, multiworld, player, world_content)
     set_cropsanity_rules(logic, multiworld, player, world_content)
     set_story_quests_rules(all_location_names, logic, multiworld, player, world_options)
     set_special_order_rules(all_location_names, logic, multiworld, player, world_options)
@@ -130,15 +130,19 @@ def set_tool_rules(logic: StardewLogic, multiworld, player, content: StardewCont
         MultiWorldRules.set_rule(tool_upgrade_location, logic.tool.has_tool(tool, previous))
 
 
-def set_building_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
-    if not world_options.building_progression & BuildingProgression.option_progressive:
+def set_building_rules(logic: StardewLogic, multiworld, player, content: StardewContent):
+    building_progression = content.features.building_progression
+    if not building_progression.is_progressive:
         return
 
-    for building in locations.locations_by_tag[LocationTags.BUILDING_BLUEPRINT]:
-        if building.mod_name is not None and building.mod_name not in world_options.mods:
+    for building in content.farm_buildings.values():
+        if building.name in building_progression.starting_buildings:
             continue
-        MultiWorldRules.set_rule(multiworld.get_location(building.name, player),
-                                 logic.registry.building_rules[building.name.replace(" Blueprint", "")])
+
+        location_name = building_progression.to_location_name(building.name)
+
+        MultiWorldRules.set_rule(multiworld.get_location(location_name, player),
+                                 logic.building.can_build(building.name))
 
 
 def set_bundle_rules(bundle_rooms: List[BundleRoom], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
@@ -149,7 +153,7 @@ def set_bundle_rules(bundle_rooms: List[BundleRoom], logic: StardewLogic, multiw
             bundle_rules = logic.bundle.can_complete_bundle(bundle)
             if bundle_room.name == CCRoom.raccoon_requests:
                 num = int(bundle.name[-1])
-                extra_raccoons = 1 if world_options.quest_locations >= 0 else 0
+                extra_raccoons = 1 if world_options.quest_locations.has_story_quests() else 0
                 extra_raccoons = extra_raccoons + num
                 bundle_rules = logic.received(CommunityUpgrade.raccoon, extra_raccoons) & bundle_rules
                 if num > 1:
@@ -197,7 +201,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     movie_theater_rule = logic.has_movie_theater()
     set_entrance_rule(multiworld, player, Entrance.enter_movie_theater, movie_theater_rule)
     set_entrance_rule(multiworld, player, Entrance.purchase_movie_ticket, movie_theater_rule)
-    set_entrance_rule(multiworld, player, Entrance.take_bus_to_desert, logic.received("Bus Repair"))
+    set_entrance_rule(multiworld, player, Entrance.take_bus_to_desert, logic.received("Bus Repair") & logic.money.can_spend(500))
     set_entrance_rule(multiworld, player, Entrance.enter_skull_cavern, logic.received(Wallet.skull_key))
     set_entrance_rule(multiworld, player, LogicEntrance.talk_to_mines_dwarf,
                       logic.wallet.can_speak_dwarf() & logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron))
@@ -241,7 +245,7 @@ def set_dangerous_mine_rules(logic, multiworld, player, world_options: StardewVa
 
 
 def set_farm_buildings_entrance_rules(logic, multiworld, player):
-    set_entrance_rule(multiworld, player, Entrance.downstairs_to_cellar, logic.building.has_house(3))
+    set_entrance_rule(multiworld, player, Entrance.downstairs_to_cellar, logic.building.has_building(Building.cellar))
     set_entrance_rule(multiworld, player, Entrance.use_desert_obelisk, logic.can_use_obelisk(Transportation.desert_obelisk))
     set_entrance_rule(multiworld, player, Entrance.enter_greenhouse, logic.received("Greenhouse"))
     set_entrance_rule(multiworld, player, Entrance.enter_coop, logic.building.has_building(Building.coop))
@@ -358,7 +362,7 @@ def set_island_entrances_rules(logic: StardewLogic, multiworld, player, world_op
         Entrance.use_island_obelisk: logic.can_use_obelisk(Transportation.island_obelisk),
         Entrance.use_farm_obelisk: logic.can_use_obelisk(Transportation.farm_obelisk),
         Entrance.fish_shop_to_boat_tunnel: boat_repaired,
-        Entrance.boat_to_ginger_island: boat_repaired,
+        Entrance.boat_to_ginger_island: boat_repaired & logic.money.can_spend(1000),
         Entrance.island_south_to_west: logic.received("Island West Turtle"),
         Entrance.island_south_to_north: logic.received("Island North Turtle"),
         Entrance.island_west_to_islandfarmhouse: logic.received("Island Farmhouse"),
@@ -505,7 +509,7 @@ def set_cropsanity_rules(logic: StardewLogic, multiworld, player, world_content:
 
 
 def set_story_quests_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
-    if world_options.quest_locations < 0:
+    if world_options.quest_locations.has_no_story_quests():
         return
     for quest in locations.locations_by_tag[LocationTags.STORY_QUEST]:
         if quest.name in all_location_names and (quest.mod_name is None or quest.mod_name in world_options.mods):
@@ -540,9 +544,9 @@ slay_monsters = "Slay Monsters"
 
 
 def set_help_wanted_quests_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
-    help_wanted_number = world_options.quest_locations.value
-    if help_wanted_number < 0:
+    if world_options.quest_locations.has_no_story_quests():
         return
+    help_wanted_number = world_options.quest_locations.value
     for i in range(0, help_wanted_number):
         set_number = i // 7
         month_rule = logic.time.has_lived_months(set_number)
@@ -973,6 +977,7 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
     set_entrance_rule(multiworld, player, SVEEntrance.use_bear_shop, (logic.mod.sve.can_buy_bear_recipe()))
     set_entrance_rule(multiworld, player, SVEEntrance.railroad_to_grampleton_station, logic.received(SVEQuestItem.scarlett_job_offer))
     set_entrance_rule(multiworld, player, SVEEntrance.museum_to_gunther_bedroom, logic.relationship.has_hearts(ModNPC.gunther, 2))
+    set_entrance_rule(multiworld, player, SVEEntrance.to_aurora_basement, logic.mod.quest.has_completed_aurora_vineyard_bundle())
     logic.mod.sve.initialize_rules()
     for location in logic.registry.sve_location_rules:
         MultiWorldRules.set_rule(multiworld.get_location(location, player),
