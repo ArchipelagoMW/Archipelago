@@ -1,5 +1,6 @@
 from BaseClasses import ItemClassification, Region, Tutorial
 
+from Options import OptionError
 from worlds.AutoWorld import WebWorld, World
 
 from .Data.game_data import (
@@ -52,6 +53,7 @@ class LoonylandWorld(World):
     location_name_to_id = {name: data.id + loonyland_base_id for name, data in loonyland_location_table.items()}
     item_name_to_id = {name: data.id for name, data in loony_item_table.items()}
     item_name_to_id["Max Life and Gems"] = loonyland_base_id + 3000
+    badges_in_logic = 0
 
     item_name_groups = {
         "physical_items": {name for name, data in loony_item_table.items() if data.category == LLItemCat.ITEM},
@@ -71,6 +73,13 @@ class LoonylandWorld(World):
         "quests": {name for name, data in loonyland_location_table.items() if data.category == LLLocCat.QUEST},
         "badges": {name for name, data in loonyland_location_table.items() if data.category == LLLocCat.BADGE},
     }
+
+    def generate_early(self) -> None:
+        if (
+            self.options.win_condition.value == self.options.win_condition.option_badges
+            and self.options.badges.value == self.options.badges.option_none
+        ):
+            raise OptionError("Cannot have badges set to none with wincon as Badges")
 
     def create_junk(self) -> LoonylandItem:
         return LoonylandItem("Max Life and Gems", ItemClassification.filler, loonyland_base_id + 3000, self.player)
@@ -123,6 +132,15 @@ class LoonylandWorld(World):
                 new_loc_as_event = LoonylandLocation(self.player, loc_name + " Earned", None, region)
                 new_loc_as_event.place_locked_item(self.create_event("BadgeEarned"))
                 region.locations.append(new_loc_as_event)
+                self.badges_in_logic += 1
+        if (
+            self.options.win_condition == WinCondition.option_badges
+            and self.badges_in_logic < self.options.badges_required
+        ):
+            raise OptionError(
+                f'Not enough badge locations in logic ("{self.badges_in_logic}") '
+                f'for amount required ("{self.options.badges_required}")'
+            )
 
     def set_rules(self):
         # Completion condition.

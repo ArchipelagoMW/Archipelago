@@ -8,7 +8,7 @@ class WinCondition(Choice):
 
     **Badges**: Get X merit badges earned"""
 
-    #NOT IMPLEMENTED: normal_remix: Beat the final boss in normal and remix"""
+    # NOT IMPLEMENTED: normal_remix: Beat the final boss in normal and remix"""
 
     display_name = "Win Condition"
     option_evilizer = 0
