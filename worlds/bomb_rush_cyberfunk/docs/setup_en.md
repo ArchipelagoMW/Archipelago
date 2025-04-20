@@ -19,7 +19,7 @@ Cyberfunk root folder. *Do not use any pre-release versions of BepInEx 6.*
 3. Download `ModLocalizer.dll` from its [releases](https://github.com/TRPG0/BRC-ModLocalizer/releases) page, and put it 
 in `BepInEx\plugins`.
 
-4. Download the zip archive for Archipelago from its [releases](https://github.com/TRPG0/BRC-Archipelago/releases) 
+4. Download the zip archive for the Archipelago plugin from its [releases](https://github.com/TRPG0/BRC-Archipelago/releases) 
 page, and extract the contents into `BepInEx\plugins`.
 
 After installing Archipelago, there are some additional mods that can also be installed for a better experience:
