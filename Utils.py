@@ -677,7 +677,7 @@ def get_input_text_from_response(text: str, command: str) -> typing.Optional[str
             if text.startswith(question):
                 name = get_text_between(text, "did you mean '",
                                         "'? (")
-                return f"!{command} {name}"
+                return f"{command} {name}"
     elif text.startswith("Missing: "):
         return text.replace("Missing: ", "!hint_location ")
     return None
