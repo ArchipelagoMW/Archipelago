@@ -795,8 +795,35 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #crystals
         LocationData("Shoudu Province", "Shoudu Province Crystal - Samurai Crystal 3 Sky Arena wins", 1206 + crystal_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
 
+        #The undercity
+        #Items
+        LocationData("The Undercity", "The Undercity Chest - Potion Pouch Chest hiding in the rafters", 2989 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Ether Chest up the rafters against a pillar", 2990 + treasure_index_offset)
+        LocationData("The Undercity", "The Undercity Chest - Ether Pouch Chest even further up the rafters", 2991 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Fenix Juice Chest in the gated off room", 2988 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Ether Chest in the gated off room", 2987 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Potion Chest in the gated off room", 1147 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Elevator Part Chest", 3517 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Cursegiver Chest climb up the lampposts and run across the fence", 1925 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Elevator Part Chest climb the north wall", 3516 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Elevator Part Chest east of the waterfall on the awning", 3518 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Potion Chest hiding in a building in the north area", 2826 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Elevator Part in the Undercity Inn", 3519 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Brigandine Chest south of the Undercity Inn", 1695 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Knights Plate Chest hidden in a nook in the wall", 2793 + treasure_index_offset),
+        
+        #NPCs
+        LocationData("The Undercity", "The Undercity NPC - Gold Dust hiding from the bats under the awning", 2835 + npc_index_offset),
+        LocationData("The Undercity", "The Undercity NPC - Gold Ore in the gated off room", 2825 + npc_index_offset),
+        LocationData("The Undercity", "The Undercity NPC - Gold Dust in the sewer offshoot", 1696 + npc_index_offset, lambda state: state.has("Item - Progressive Salmon Violin", player)),
+        LocationData("The Undercity", "The Undercity NPC - Gold Ingot in the undercity inn's storage room", 1696 + npc_index_offset),
+
+        #Crystals
+        LocationData("The Undercity", "The Undercity Crystal - Assassin Crystal", 1204 + crystal_index_offset),
+
         #Ganymede Shrine
-        LocationData("Ganymede Shrine", "Ganymede Shrine Chest - drop down from the top", 1594 + treasure_index_offset, lambda state: state.has("Item - Ganymede Stone", player)),
+        #Items
+        LocationData("Ganymede Shrine", "Ganymede Shrine Chest - drop down from the top", 1594 + treasure_index_offset, lambda state: lambda state: state.has("Item - Ganymede Stone", player)),
 
         #Beaurior Volcano
         #Treasure Chests
