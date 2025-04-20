@@ -162,6 +162,9 @@ kent_c_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.kent_c, ken
 fruit_items = [tomato, pumpkin, summer_squash, eggplant, hot_pepper]
 fruit_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.fruit, fruit_items, 5, 5)
 
+reverse_items = [*all_simple_items]
+reverse_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.reverse, reverse_items, 4, 4)
+
 vampire_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.vampire, BundleItem(MemeCurrency.health, 100))
 exhaustion_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.exhaustion, BundleItem(MemeCurrency.energy, 400))
 tick_tock_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.tick_tock, BundleItem(MemeCurrency.time, 24))
@@ -190,6 +193,7 @@ cookie_clicker_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.cook
 # Sisyphus Bundle (Donate but it keeps emptying itself)
 # Bundle that sticks
 # Cookie Clicker Bundle
+# Reverse Bundle
 
 pantry_bundles_meme = []
 pantry_meme = BundleRoomTemplate(CCRoom.pantry, pantry_bundles_meme, 6)

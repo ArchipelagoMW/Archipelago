@@ -1,6 +1,7 @@
 from ...bundles.bundle_item import BundleItem
 from ...strings.animal_product_names import AnimalProduct
 from ...strings.artisan_good_names import ArtisanGood
+from ...strings.boot_names import Boots
 from ...strings.craftable_names import Consumable, Lighting, Fishing, Craftable, Bomb, Furniture, Floor
 from ...strings.crop_names import Vegetable, Fruit
 from ...strings.currency_names import Currency
@@ -15,6 +16,7 @@ from ...strings.gift_names import Gift
 from ...strings.hat_names import Hat
 from ...strings.ingredient_names import Ingredient
 from ...strings.material_names import Material
+from ...strings.meme_item_names import MemeItem
 from ...strings.metal_names import Fossil, Ore, MetalBar, Mineral, Artifact
 from ...strings.monster_drop_names import Loot
 from ...strings.seed_names import TreeSeed, Seed
@@ -270,6 +272,9 @@ jamborite = BundleItem(Mineral.jamborite)
 tigerseye = BundleItem(Mineral.tigerseye)
 opal = BundleItem(Mineral.opal)
 thunder_egg = BundleItem(Mineral.thunder_egg)
+ghost_crystal = BundleItem(Mineral.ghost_crystal)
+kyanite = BundleItem(Mineral.kyanite)
+lemon_stone = BundleItem(Mineral.lemon_stone)
 
 slime = BundleItem(Loot.slime, 99)
 bug_meat = BundleItem(Loot.bug_meat, 10)
@@ -441,6 +446,7 @@ mystery_box = BundleItem(Consumable.mystery_box)
 gold_mystery_box = BundleItem(Consumable.gold_mystery_box, source=BundleItem.Sources.masteries)
 calico_egg = BundleItem(Currency.calico_egg)
 golden_tag = BundleItem(Currency.golden_tag)
+stardrop_tea = BundleItem(ArtisanGood.stardrop_tea)
 
 apple_slices = BundleItem(ArtisanGood.specific_dried_fruit(Fruit.apple))
 
@@ -448,6 +454,18 @@ infinity_crown = BundleItem(Hat.infinity_crown)
 bowler_hat = BundleItem(Hat.bowler)
 sombrero = BundleItem(Hat.sombrero)
 good_ol_cap = BundleItem(Hat.good_ol_cap)
+living_hat = BundleItem(Hat.living_hat)
+garbage_hat = BundleItem(Hat.garbage_hat)
+golden_helmet = BundleItem(Hat.golden_helmet)
+laurel_wreath_crown = BundleItem(Hat.laurel_wreath_crown)
+joja_cap = BundleItem(Hat.joja_cap)
+deluxe_pirate_hat = BundleItem(Hat.deluxe_pirate_hat)
+dark_cowboy_hat = BundleItem(Hat.dark_cowboy_hat)
+tiger_hat = BundleItem(Hat.tiger_hat)
+mystery_hat = BundleItem(Hat.mystery_hat)
+dark_ballcap = BundleItem(Hat.dark_ballcap)
+
+mermaid_boots = BundleItem(Boots.mermaid_boots)
 
 lucky_purple_shorts = BundleItem(SpecialItem.lucky_purple_shorts)
 
@@ -476,6 +494,10 @@ aged_legend_roe = BundleItem(ArtisanGood.specific_aged_roe(Fish.legend))
 aged_glacierfish_roe = BundleItem(ArtisanGood.specific_aged_roe(Fish.glacierfish))
 aged_mutant_carp_roe = BundleItem(ArtisanGood.specific_aged_roe(Fish.mutant_carp))
 
+legend_bait = BundleItem(ArtisanGood.specific_bait(Fish.legend))
+
+smoked_legend = BundleItem(ArtisanGood.specific_smoked_fish(Fish.legend))
+
 mystic_syrup = BundleItem(ArtisanGood.mystic_syrup)
 apple_sapling = BundleItem(Sapling.apple)
 apricot_sapling = BundleItem(Sapling.apricot)
@@ -490,6 +512,8 @@ cookout_kit = BundleItem(Craftable.cookout_kit)
 tent_kit = BundleItem(Craftable.tent_kit)
 
 tea_set = BundleItem(Gift.tea_set)
+golden_pumpkin = BundleItem(Gift.golden_pumpkin)
+mermaid_pendant = BundleItem(Gift.mermaid_pendant)
 
 crystal_ball = BundleItem(Furniture.crystal_ball)
 amethyst_crystal_ball = BundleItem(Furniture.amethyst_crystal_ball)
@@ -497,6 +521,7 @@ aquamarine_crystal_ball = BundleItem(Furniture.aquamarine_crystal_ball)
 emerald_crystal_ball = BundleItem(Furniture.emerald_crystal_ball)
 ruby_crystal_ball = BundleItem(Furniture.ruby_crystal_ball)
 topaz_crystal_ball = BundleItem(Furniture.topaz_crystal_ball)
+flute_block = BundleItem(Furniture.flute_block)
 
 wood_floor = BundleItem(Floor.wood)
 rustic_plank_floor = BundleItem(Floor.rustic)
@@ -513,3 +538,16 @@ stepping_stone_path = BundleItem(Floor.stepping_stone_path)
 crystal_path = BundleItem(Floor.crystal_path)
 
 death = BundleItem(NotReallyAnItem.death)
+
+camping_stove = BundleItem(MemeItem.camping_stove)
+decorative_pot = BundleItem(MemeItem.decorative_pot)
+slime_crate = BundleItem(MemeItem.slime_crate)
+supply_crate = BundleItem(MemeItem.supply_crate)
+warp_totem_qis_arena = BundleItem(MemeItem.warp_totem_qis_arena)
+artifact_spot = BundleItem(MemeItem.artifact_spot)
+twig = BundleItem(MemeItem.twig)
+weeds = BundleItem(MemeItem.weeds)
+lumber = BundleItem(MemeItem.lumber)
+green_rain_weeds_0 = BundleItem(MemeItem.green_rain_weeds_0)
+seed_spot = BundleItem(MemeItem.seed_spot)
+pot_of_gold = BundleItem(MemeItem.pot_of_gold)

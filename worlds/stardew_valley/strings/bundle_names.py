@@ -148,6 +148,7 @@ class MemeBundleName:
     obelisks = cc_bundle("Obelisks")
     off_your_back = cc_bundle("Off Your Back")
     potato = cc_bundle("Potato")
+    reverse = cc_bundle("Reverse")
     rick = cc_bundle("Rick")
     romance = cc_bundle("Romance")
     sappy = cc_bundle("Sappy")

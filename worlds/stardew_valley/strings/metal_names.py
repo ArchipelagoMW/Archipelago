@@ -30,6 +30,9 @@ class MetalBar:
 
 
 class Mineral:
+    lemon_stone = "Lemon Stone"
+    kyanite = "Kyanite"
+    ghost_crystal = "Ghost Crystal"
     amethyst = "Amethyst"
     any_gem = "Any Gem"
     aquamarine = "Aquamarine"
