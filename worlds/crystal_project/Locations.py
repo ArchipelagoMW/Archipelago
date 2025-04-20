@@ -599,8 +599,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #NPCs
         #Crystal Checker guy gives you Ferry Pass for having 15 crystals Z27_FerryCrystalChecker ID 940 (-166,93,56)
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Ferry crystal checker grants Ferry Pass in case you hate children", 940 + npc_index_offset, lambda state: get_job_count(player, state) >= 15),
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Three tokens makes a Pyramid Key something something triangles", 949 + npc_index_offset, lambda state: state.has("Item - West Lookout Token", player) and state.has("Central Lookout Token", player) and state.has("North Lookout Token", player)),
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - The One and Only Room 1 Key", 385 + npc_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Three tokens makes a Pyramid Key something something triangles", 949 + npc_index_offset, lambda state: state.has("Item - West Lookout Token", player) and state.has("Item - Central Lookout Token", player) and state.has("Item - North Lookout Token", player)),        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - The One and Only Room 1 Key", 385 + npc_index_offset),
         #Todo NPCs Blocker: gotta find the Lost Son first (the mom before you find the son is a different NPC)
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Worried Mom Ferry Pass", 1196 + npc_index_offset),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Pelt this Fish Merchant with Rotten Salmon", 942 + npc_index_offset, lambda state: state.has("Item - Rotten Salmon", player)),
@@ -712,8 +711,8 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #The Open Sea
         #Treasure chests
         #Todo descriptivize & check requirements on these
-        LocationData("The Open Sea", "The Open Sea Chest - Fenix Syrup chest", 3767 + treasure_index_offset), #(910, 91, 173)
-        LocationData("The Open Sea", "The Open Sea Chest - Z-Potion chest", 3765 + treasure_index_offset), #(902, 91, 190)
+        # LocationData("The Open Sea", "The Open Sea Chest - Fenix Syrup chest", 3767 + treasure_index_offset), #(910, 91, 173)
+        # LocationData("The Open Sea", "The Open Sea Chest - Z-Potion chest", 3765 + treasure_index_offset), #(902, 91, 190)
 
         #NPCs
         #Todo NPCs Player Options: (-139, 91, 123) do we want a filter option to add the guy who fishes things up for you
