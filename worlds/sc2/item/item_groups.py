@@ -281,9 +281,11 @@ item_name_groups[ItemGroupNames.WOL_MERCS] = wol_mercs = [
     item_names.HELS_ANGELS, item_names.DUSK_WINGS, item_names.JACKSONS_REVENGE,
 ]
 item_name_groups[ItemGroupNames.WOL_BUILDINGS] = wol_buildings = [
-    item_names.BUNKER, item_names.SENSOR_TOWER, item_names.COMMAND_CENTER_MULE, item_names.COMMAND_CENTER_SCANNER_SWEEP,
+    item_names.BUNKER, item_names.MISSILE_TURRET, item_names.SENSOR_TOWER,
     item_names.PERDITION_TURRET, item_names.PLANETARY_FORTRESS,
     item_names.HIVE_MIND_EMULATOR, item_names.PSI_DISRUPTER,
+    # CC spells
+    item_names.COMMAND_CENTER_MULE, item_names.COMMAND_CENTER_SCANNER_SWEEP,
 ]
 item_name_groups[ItemGroupNames.MENGSK_UNITS] = [
     item_names.AEGIS_GUARD, item_names.EMPERORS_SHADOW,
