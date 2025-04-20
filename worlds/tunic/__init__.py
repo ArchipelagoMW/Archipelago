@@ -180,7 +180,6 @@ class TunicWorld(World):
                 self.options.laurels_location.value = LaurelsLocation.option_anywhere
                 self.options.grass_randomizer.value = self.passthrough.get("grass_randomizer", 0)
                 self.options.breakable_shuffle.value = self.passthrough.get("breakable_shuffle", 0)
-                self.options.fixed_shop.value = self.options.fixed_shop.option_false
                 self.options.laurels_location.value = self.options.laurels_location.option_anywhere
                 self.options.combat_logic.value = self.passthrough.get("combat_logic", 0)
             else:
