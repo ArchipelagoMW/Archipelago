@@ -2,7 +2,6 @@ import asyncio
 import os
 import time
 import traceback
-import struct
 
 import NetUtils
 import Utils
@@ -17,7 +16,6 @@ from . import CLIENT_VERSION
 from .LMGenerator import LuigisMansionRandomizer
 from .Items import *
 from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV, BOOLOSSUS_AP_ID_LIST
-from .Regions import spawn_locations
 from .Helper_Functions import StringByteFunction as sbf
 
 CONNECTION_REFUSED_GAME_STATUS = (
@@ -581,12 +579,6 @@ class LMContext(CommonContext):
     async def lm_update_non_savable_ram(self):
         if not (self.check_ingame() and self.check_alive()):
             return
-
-        if not self.spawn == "Foyer":
-            spawn_info: dict = spawn_locations[self.spawn]
-            #dme.write_bytes(0x804DE034, struct.pack("f", spawn_info["pos_x"]))
-            #dme.write_bytes(0x804DE038, struct.pack("f", spawn_info["pos_y"]))
-            #dme.write_bytes(0x804DE03C, struct.pack("f", spawn_info["pos_z"]))
 
         # Always adjust the Vacuum speed as saving and quitting or going to E. Gadds lab could reset it back to normal.
         if any([netItem.item for netItem in self.items_received if netItem.item == 8064]):
