@@ -8,7 +8,7 @@ from .. import mission_groups, mission_tables, options, locations, SC2Mission, S
 from ..item import item_groups, item_tables, item_names
 from .. import get_all_missions, get_random_first_mission
 from ..options import EnabledCampaigns, NovaGhostOfAChanceVariant, MissionOrder, ExcludeOverpoweredItems, \
-    VanillaItemsOnly, ExcludeLegacyItems
+    VanillaItemsOnly, ExcludeLegacyItems, MaximumCampaignSize
 
 
 class TestItemFiltering(Sc2SetupTestBase):
@@ -1175,3 +1175,15 @@ class TestItemFiltering(Sc2SetupTestBase):
         items_to_check: List[str] = unreleased_items
         for item in items_to_check:
             self.assertIn(item, itempool)
+
+    def test_merc_excluded_excludes_merc_upgrades(self) -> None:
+        world_options = {
+            'mission_order': MissionOrder.option_grid,
+            'maximum_campaign_size': MaximumCampaignSize.range_end,
+            'excluded_items': [item_name for item_name in item_groups.terran_mercenaries],
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+        }
+        self.generate_world(world_options)
+        itempool = [item.name for item in self.multiworld.itempool]
+
+        self.assertNotIn(item_names.ROGUE_FORCES, itempool)

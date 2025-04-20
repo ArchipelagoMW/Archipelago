@@ -131,6 +131,7 @@ parent_present[parent_names.STARSHIP_UNITS] = AnyOf(item_groups.starport_units, 
 parent_present[parent_names.STARSHIP_WEAPON_UNITS] = AnyOf(item_groups.starport_wa_group, display_string='Terran Starships')
 parent_present[parent_names.VEHICLE_UNITS] = AnyOf(item_groups.factory_units, display_string='Terran Vehicles')
 parent_present[parent_names.VEHICLE_WEAPON_UNITS] = AnyOf(item_groups.factory_wa_group, display_string='Terran Vehicles')
+parent_present[parent_names.TERRAN_MERCENARIES] = AnyOf(item_groups.terran_mercenaries, display_string='Terran Mercenaries')
 
 # Zerg
 parent_present[parent_names.ANY_NYDUS_WORM] = AnyOf((item_names.NYDUS_WORM, item_names.ECHIDNA_WORM), item_names.NYDUS_WORM)
@@ -151,6 +152,7 @@ parent_present[parent_names.ZERG_MELEE_ATTACKER] = AnyOf(item_groups.zerg_melee_
 parent_present[parent_names.ZERG_MISSILE_ATTACKER] = AnyOf(item_groups.zerg_ranged_wa, display_string='Zerg Ground')
 parent_present[parent_names.ZERG_CARAPACE_UNIT] = AnyOf(item_groups.zerg_ground_units, display_string='Zerg Flyers')
 parent_present[parent_names.ZERG_FLYING_UNIT] = AnyOf(item_groups.zerg_air_units, display_string='Zerg Flyers')
+parent_present[parent_names.ZERG_MERCENARIES] = AnyOf(item_groups.zerg_mercenaries, display_string='Zerg Mercenaries')
 
 # Protoss
 parent_present[parent_names.ARCHON_SOURCE] = AnyOf(

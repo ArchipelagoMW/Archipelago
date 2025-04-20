@@ -16,6 +16,7 @@ STARSHIP_UNITS = "Starship Units"
 STARSHIP_WEAPON_UNITS = "Starship Weapon Units"
 VEHICLE_UNITS = "Vehicle Units"
 VEHICLE_WEAPON_UNITS = "Vehicle Weapon Units"
+TERRAN_MERCENARIES = "Terran Mercenaries"
 
 # Zerg
 ANY_NYDUS_WORM = "Any Nydus Worm"
@@ -31,6 +32,7 @@ ZERG_MELEE_ATTACKER = "Zerg Melee Attacker"
 ZERG_MISSILE_ATTACKER = "Zerg Missile Attacker"
 ZERG_CARAPACE_UNIT = "Zerg Carapace Unit"
 ZERG_FLYING_UNIT = "Zerg Flying Unit"
+ZERG_MERCENARIES = "Zerg Mercenaries"
 
 # Protoss
 ARCHON_SOURCE = "Any Archon Source"

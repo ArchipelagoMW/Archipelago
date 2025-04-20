@@ -146,7 +146,7 @@ class ItemGroupNames:
     """All items from vanilla HotS"""
     OVERLORD_UPGRADES = "Overlord Upgrades"
     ZERG_MORPHS = "Zerg Morphs"
-    ZERG_MERCS = "Zerg Mercenaries"
+    ZERG_MERCENARIES = "Zerg Mercenaries"
     ZERG_BUILDINGS = "Zerg Buildings"
     INF_TERRAN_ITEMS = "Infested Terran Items"
     """All items from Stukov co-op subfaction"""
@@ -528,7 +528,7 @@ item_name_groups[ItemGroupNames.HOTS_MORPHS] = hots_morphs = [
 item_name_groups[ItemGroupNames.ZERG_MORPHS] = zerg_morphs = [
     item_name for item_name, item_data in item_tables.item_table.items() if item_data.type == item_tables.ZergItemType.Morph
 ]
-item_name_groups[ItemGroupNames.ZERG_MERCS] = zerg_mercs = [
+item_name_groups[ItemGroupNames.ZERG_MERCENARIES] = zerg_mercenaries = [
     item_name for item_name, item_data in item_tables.item_table.items() if item_data.type == item_tables.ZergItemType.Mercenary
 ]
 item_name_groups[ItemGroupNames.KERRIGAN_ABILITIES] = kerrigan_abilities = [
