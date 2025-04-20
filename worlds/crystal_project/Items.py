@@ -133,7 +133,7 @@ item_table: Dict[str, ItemData] = {
     "Item - Clamshell": ItemData("Item", 16 + item_index_offset, ItemClassification.progression, 19),
     "Item - Digested Head": ItemData("Item", 17 + item_index_offset, ItemClassification.progression, 3),
     "Item - Lost Penguin": ItemData("Item", 24 + item_index_offset, ItemClassification.progression, 12),
-    "Item - Elevator Part": ItemData("Item", 224 + item_index_offset, ItemClassification.progression, 17),
+    "Item - Elevator Part": ItemData("Item", 224 + item_index_offset, ItemClassification.progression, 10),
     "Item - Undersea Crab": ItemData("Item", 212 + item_index_offset, ItemClassification.progression, 15),
     "Item - West Lookout Token": ItemData("Item", 81 + item_index_offset, ItemClassification.progression),
     "Item - Central Lookout Token": ItemData("Item", 88 + item_index_offset, ItemClassification.progression),

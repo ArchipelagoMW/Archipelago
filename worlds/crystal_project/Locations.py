@@ -686,6 +686,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #2nd Overpass Scrap chest on main map has been categorized under the Quintar Sanctum
         #3rd Overpass Scrap chest on main map has been categorized under the Okimoto N.S.
         #2nd Overpass Scrap chest from the bottom on main map has been categorized under Salmon Bay
+        #5th Overpass Scrap chest from the top on main map has been categorized under quintar reserve
 
         #NPCs
         #Todo NPCs CheckOrNot: Overpass 4 Quintar Eggs (Dirt Nest), 1 Quintar Egg (Stone Nest), 1 Quintar Egg (Cave Nest), 1 Quintar Egg (Stone Nest) submap
@@ -798,7 +799,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #The undercity
         #Items
         LocationData("The Undercity", "The Undercity Chest - Potion Pouch Chest hiding in the rafters", 2989 + treasure_index_offset),
-        LocationData("The Undercity", "The Undercity Chest - Ether Chest up the rafters against a pillar", 2990 + treasure_index_offset)
+        LocationData("The Undercity", "The Undercity Chest - Ether Chest up the rafters against a pillar", 2990 + treasure_index_offset),
         LocationData("The Undercity", "The Undercity Chest - Ether Pouch Chest even further up the rafters", 2991 + treasure_index_offset),
         LocationData("The Undercity", "The Undercity Chest - Fenix Juice Chest in the gated off room", 2988 + treasure_index_offset),
         LocationData("The Undercity", "The Undercity Chest - Ether Chest in the gated off room", 2987 + treasure_index_offset),
@@ -867,6 +868,38 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
 
         #NPCs
         LocationData("Lake Delende", "Lake Delende NPC - Panning for Gold Dust down Salmon Creek without a paddle", 2854 + npc_index_offset),
+
+        #Quintar Reserve
+        #Items
+        LocationData("Quintar Reserve", "Quintar Reserve Chest - Overpass Scrap Chest on the climb up from the elevator", 3536 + treasure_index_offset),
+        LocationData("Quintar Reserve", "Quintar Reserve Chest - Quintar Grass Chest in race start hut", 1591 + treasure_index_offset),
+        LocationData("Quintar Reserve", "Quintar Reserve Chest - Undead Ring Chest in Mausoleum", 1320 + treasure_index_offset, lambda state: state.has("Item - Owl Drum", player)),
+
+        #NPCs
+        LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 1 down in the quintar nest", 2255 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 2 down in the quintar nest", 2256 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 4 north side of the map", 2259 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 5 long jog along the east mountian", 2260 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 6 overlooking the east ocean", 2261 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 7 on top of the Mausoleum", 2262 + npc_index_offset, lambda state: state.has("Item - Dione Stone", player) and state.has("Item - Owl Drum", player)),
+        LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 8 on a tree north of the Mausoleum", 2263 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
+        #shedding 9 is in the Dione Shrine because why not I guess
+        LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 10 overlooking the race start point", 2265 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 11 north of Mausoleum", 2266 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 12 just north of the quintar cosplayer", 2267 + npc_index_offset),
+        LocationData("Quintar Reserve", "Quintar Reserve NPC - Gold Ore east side of map", 2837 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Quintar Reserve", "Quintar Reserve NPC - Gold Ore climb the center mountain", 2839 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Quintar Reserve", "Quintar Reserve NPC - Gold Dust jump across the treetops", 2840 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2) and state.has("Item - Dione Stone", player)),
+
+        #Dione shrine
+        #items
+        LocationData("Dione Shrine", "Dione Shrine Chest - Dione Shard Chest on top of shrine", 2154 + treasure_index_offset, lambda state: state.has("Item - Dione Stone", player)),
+        LocationData("Dione Shrine", "Dione Shrine Chest - Dione Shard Chest in lobby", 2791 + treasure_index_offset),
+        LocationData("Dione Shrine", "Dione Shrine Chest - Dione Shard Chest on second floor", 2792 + treasure_index_offset),
+        LocationData("Dione Shrine", "Dione Shrine Chest - Dione Shard Chest on second floor balcony", 1146 + treasure_index_offset),
+
+        #NPCs
+        LocationData("Dione Shrine", "Dione Shrine NPC - Shedding 9 on top of the shrine", 2265 + npc_index_offset, lambda state: state.has("Item - Dione Stone", player)),
 
         #Abilities Todo: descriptivize and implement
         #97, 126, -211
