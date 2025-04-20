@@ -66,9 +66,9 @@ LAST_RECV_ITEM_ADDR = 0x803CDEBA
 RECV_DEFAULT_TIMER_IN_HEX = "5A" # 3 Seconds
 RECV_ITEM_DISPLAY_TIMER_ADDR = 0x804DD958
 RECV_ITEM_DISPLAY_VIZ_ADDR = 0x804DD95C
-RECV_ITEM_NAME_ADDR = 0x804DE05C
-RECV_ITEM_LOC_ADDR = 0x804DE080
-RECV_ITEM_SENDER_ADDR = 0x804DE0A0
+RECV_ITEM_NAME_ADDR = 0x804DE08C
+RECV_ITEM_LOC_ADDR = 0x804DE0B0
+RECV_ITEM_SENDER_ADDR = 0x804DE0D0
 RECV_MAX_STRING_LENGTH = 24
 RECV_LINE_STRING_LENGTH = 27
 FRAME_AVG_COUNT = 30
@@ -589,12 +589,11 @@ class LMContext(CommonContext):
             for addr_to_update in lm_item.update_ram_addr:
                 dme.write_bytes(addr_to_update.ram_addr, bytes.fromhex(vac_speed))
 
+        # TODO review this for king boo stuff in DOL_Updater instead.
         # Always adjust Pickup animation issues if the user turned pick up animations off.
-        if self.pickup_anim_off:
-            crown_helper_val = "01"
-            dme.write_bytes(0x804DDFF8, bytes.fromhex(crown_helper_val))
-
-        #dme.write_bytes(0x804ddf90, bytes.fromhex("00000001"))
+        #if self.pickup_anim_off:
+        #    crown_helper_val = "01"
+        #    dme.write_bytes(0x804DDFF8, bytes.fromhex(crown_helper_val))
 
         # Make it so the displayed Boo counter always appears even if you dont have boo radar or if you haven't caught
         # a boo in-game yet.

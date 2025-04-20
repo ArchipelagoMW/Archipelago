@@ -62,6 +62,10 @@ def update_dol_offsets(gcm: GCM, dol: DOL, start_inv: list[str], walk_speed: int
         # Write additional code to enable Custom Pickup animations when animations are turned off.
         dol.data.seek(0xAD625)
         dol.data.write(bytes.fromhex("42D0F5"))
+
+        #TODO review this for king boo stuff
+        #dol.data.seek(0x3A0108)
+        #dol.data.write(bytes.fromhex("01"))
     else:
         pickup_val = [0x02]
         gem_val = [0x06]
@@ -114,11 +118,11 @@ def update_dol_offsets(gcm: GCM, dol: DOL, start_inv: list[str], walk_speed: int
 
     if not random_spawn == "Foyer":
         spawn_info: dict = spawn_locations[random_spawn]
-        dol.data.seek(0x3A0114)
+        dol.data.seek(0x3A0144)
         dol.data.write(struct.pack(">f", spawn_info["pos_x"]))
-        dol.data.seek(0x3A0118)
+        dol.data.seek(0x3A0148)
         dol.data.write(struct.pack(">f", spawn_info["pos_y"]))
-        dol.data.seek(0x3A011C)
+        dol.data.seek(0x3A014C)
         dol.data.write(struct.pack(">f", spawn_info["pos_z"]))
 
     # Save all changes to the DOL itself.
