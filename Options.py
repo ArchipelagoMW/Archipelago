@@ -1484,7 +1484,7 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
                         items = [items]
                     locations = item.get("locations", [])
                     if not locations:
-                        locations = item.get("location", [])
+                        locations = item.get("location", ["Everywhere"])
                         if locations:
                             count = 1
                         if isinstance(locations, str):

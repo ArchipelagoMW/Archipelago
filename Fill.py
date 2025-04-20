@@ -937,7 +937,7 @@ def parse_planned_blocks(multiworld: MultiWorld) -> typing.Dict[int, typing.List
             locations_from_groups: typing.List[str] = []
             resolved_locations: typing.List[Location] = []
             for target_player in worlds:
-                world_locations = multiworld.get_locations(target_player)
+                world_locations = multiworld.get_unfilled_locations(target_player)
                 for group in multiworld.worlds[target_player].location_name_groups:
                     if group in locations:
                         locations_from_groups.extend(multiworld.worlds[target_player].location_name_groups[group])
