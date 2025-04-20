@@ -1,7 +1,7 @@
 import logging
 import typing
 from random import Random
-from typing import Dict, Any, Iterable, Optional, List, TextIO, cast
+from typing import Dict, Any, Iterable, Optional, List, TextIO
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from Options import PerGameCommonOptions
@@ -148,8 +148,8 @@ class StardewValleyWorld(World):
         self.precollect_building_items()
         items_to_exclude = [excluded_items
                             for excluded_items in self.multiworld.precollected_items[self.player]
-                            if not item_table[excluded_items.name].has_any_group(Group.RESOURCE_PACK,
-                                                                                 Group.FRIENDSHIP_PACK)]
+                            if item_table[excluded_items.name].has_any_group(Group.MAXIMUM_ONE)
+                            or not item_table[excluded_items.name].has_any_group(Group.RESOURCE_PACK, Group.FRIENDSHIP_PACK)]
 
         if self.options.season_randomization == SeasonRandomization.option_disabled:
             items_to_exclude = [item for item in items_to_exclude

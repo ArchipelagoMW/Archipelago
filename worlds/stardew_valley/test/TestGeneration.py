@@ -66,7 +66,7 @@ class TestBaseItemGeneration(SVTestBase):
 
     def test_does_not_create_or_create_two_of_exactly_two_items(self):
         all_created_items = self.get_all_created_items()
-        for exactly_two_item in items.items_by_group[items.Group.EXACTLY_TWO]:
+        for exactly_two_item in items.items_by_group[items.Group.AT_LEAST_TWO]:
             with self.subTest(f"{exactly_two_item.name}"):
                 count = all_created_items.count(exactly_two_item.name)
                 self.assertTrue(count == 0 or count == 2)
@@ -114,7 +114,7 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
 
     def test_does_not_create_exactly_two_items(self):
         all_created_items = self.get_all_created_items()
-        for exactly_two_item in items.items_by_group[items.Group.EXACTLY_TWO]:
+        for exactly_two_item in items.items_by_group[items.Group.AT_LEAST_TWO]:
             with self.subTest(f"{exactly_two_item.name}"):
                 count = all_created_items.count(exactly_two_item.name)
                 self.assertTrue(count == 0 or count == 2)
