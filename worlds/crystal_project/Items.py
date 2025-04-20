@@ -65,7 +65,7 @@ item_table: Dict[str, ItemData] = {
     "Item - Fresh Salmon": ItemData("Item", 10 + item_index_offset, ItemClassification.filler, 0),
     "Item - Scroll": ItemData("Item", 263 + item_index_offset, ItemClassification.filler, 0),
 
-    # #Bag upgrades
+    #Bag upgrades
     "Item - Tonic Pouch": ItemData("Item", 133 + item_index_offset, ItemClassification.useful, 21),
     "Item - Potion Pouch": ItemData("Item", 134 + item_index_offset, ItemClassification.useful, 19),
     "Item - Z-Potion Pouch": ItemData("Item", 143 + item_index_offset, ItemClassification.useful, 7),
@@ -78,7 +78,7 @@ item_table: Dict[str, ItemData] = {
     "Item - Milk Bag": ItemData("Item", 138 + item_index_offset, ItemClassification.useful),
     "Item - Decent Cod Bag": ItemData("Item", 185 + item_index_offset, ItemClassification.useful),
 
-    # #Fishing
+    #Fishing
     "Item - Flimsy Rod": ItemData("Item", 55 + item_index_offset, ItemClassification.useful),
     "Item - Tough Rod": ItemData("Item", 150 + item_index_offset, ItemClassification.useful),
     "Item - Super Rod": ItemData("Item", 151 + item_index_offset, ItemClassification.useful),
@@ -86,7 +86,7 @@ item_table: Dict[str, ItemData] = {
     "Item - Fly Lure": ItemData("Item", 149 + item_index_offset, ItemClassification.useful),
     "Item - Jigging Lure": ItemData("Item", 97 + item_index_offset, ItemClassification.useful),
 
-    # #Ore
+    #Ore
     "Item - Silver Ore": ItemData("Item", 3 + item_index_offset, ItemClassification.useful, 18),
     "Item - Silver Ingot": ItemData("Item", 67 + item_index_offset, ItemClassification.useful, 18),
     "Item - Silver Dust": ItemData("Item", 68 + item_index_offset, ItemClassification.useful, 18),
@@ -121,15 +121,15 @@ item_table: Dict[str, ItemData] = {
     "Item - Forgotten Key": ItemData("Item", 192 + item_index_offset, ItemClassification.progression),
     "Item - Skeleton Key": ItemData("Item", 147 + item_index_offset, ItemClassification.progression),
 
-    # #Passes
+    #Passes
     #"Item - Quintar Pass": ItemData("Item", 7 + item_index_offset, ItemClassification.progression), (now part of Progressive Quintar Flute)
     "Item - Progressive Luxury Pass": ItemData("Item", 93 + item_index_offset, ItemClassification.progression, 2), #Luxury Pass ID 93; Luxury Pass V2 148
     "Item - Ferry Pass": ItemData("Item", 37 + item_index_offset, ItemClassification.progression),
 
-    # #Key Items
+    #Key Items
     "Item - Black Squirrel": ItemData("Item", 21 + item_index_offset, ItemClassification.progression, 4),
     "Item - Dog Bone": ItemData("Item", 6 + item_index_offset, ItemClassification.progression, 3),
-    # #TODO: make count configurable for clam win con
+    #TODO: make count configurable for clam win con
     "Item - Clamshell": ItemData("Item", 16 + item_index_offset, ItemClassification.progression, 19),
     "Item - Digested Head": ItemData("Item", 17 + item_index_offset, ItemClassification.progression, 3),
     "Item - Lost Penguin": ItemData("Item", 24 + item_index_offset, ItemClassification.progression, 12),
