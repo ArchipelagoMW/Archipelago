@@ -29,18 +29,22 @@ requires:
 
 ## Item Plando
 
-Item plando allows a player to place an item in a specific location or specific locations, or place multiple items into 
+For a basic understanding of YAML files, refer to 
+[YAML Formatting](https://archipelago.gg/tutorial/Archipelago/advanced_settings/en#yaml-formatting) 
+in Advanced Settings.
+
+Item Plando allows a player to place an item in a specific location or specific locations, or place multiple items into 
 a list of specific locations both in their own game or in another player's game.
 
-To add item plando to your player yaml, you add a new Block with a list element, starting with a dash `-`, under the 
+To add item plando to your player yaml, you add a new block with a list element, starting with a dash `-`, under the 
 `plando_items` block. Your block should start with `item` if you want to do Single Placement, or `items` if you want 
 to do Multi Placement.
 
 After you define `item/items`, you would add another element (without a dash `-`) for `location` or `locations`, 
-depending on if you want to fill in one location or many. 
+depending on if you want to fill in one location or many. Note that both `location` and `locations` are optional.
 
 You may do any combination of `item/items` and `location/locations` in a plando block, but the important takeaways are:
-* The block only places items in locations **until the shorter of the two lists is completed.**
+* The block only places items in locations **until the shorter of the two lists is used up.**
 * An `item` block will only place a **single item** no matter how many you define it.
 * A `location` block will only fill a **single location** no matter how many you define.
 
@@ -147,32 +151,6 @@ in other players' worlds.
 
 ```yaml
   plando_items:
-    # Example block - Ocarina of Time
-    - items:
-        Kokiri Sword: 1
-        Biggoron Sword: 1
-        Bow: 1
-        Magic Meter: 1
-        Progressive Strength Upgrade: 3
-        Progressive Hookshot: 2
-      locations:
-        - Deku Tree Slingshot Chest
-        - Dodongos Cavern Bomb Bag Chest
-        - Jabu Jabus Belly Boomerang Chest
-        - Bottom of the Well Lens of Truth Chest
-        - Forest Temple Bow Chest
-        - Fire Temple Megaton Hammer Chest
-        - Water Temple Longshot Chest
-        - Shadow Temple Hover Boots Chest
-        - Spirit Temple Silver Gauntlets Chest
-      from_pool: false
-```
-This block will place the player's swords, bow, magic meter, strength upgrades, and hookshots in the dungeon major item 
-chests. Because the from_pool value is `false`, a copy of these items is added to these locations, while the originals
-remain in the item pool to be shuffled.
-
-```yaml
-  plando_items:
     # Example block - Timespinner
     - item:
         Empire Orb: 1
@@ -208,7 +186,36 @@ This block lists 5 items but only 4 locations, so it will place all but 1 of the
 chosen here. This block has an 80% chance of occurring. Because force is `true`, the Generator will fail if it cannot
 place one of the selected items (not including the fifth item). From_pool and World have been set to their default
 values here, but they can be omitted and have the same result: items will be removed from the pool, and the locations
-are in this player's own world. 
+are in this player's own world.
+
+```yaml
+  plando_items:
+    # Example block - Ocarina of Time
+    - items:
+        Biggoron Sword: 1
+        Bow: 1
+        Magic Meter: 1
+        Progressive Strength Upgrade: 3
+        Progressive Hookshot: 2
+      locations:
+        - Dodongos Cavern Bomb Bag Chest
+        - Jabu Jabus Belly Boomerang Chest
+        - Bottom of the Well Lens of Truth Chest
+        - Forest Temple Bow Chest
+        - Fire Temple Megaton Hammer Chest
+        - Water Temple Longshot Chest
+        - Shadow Temple Hover Boots Chest
+        - Spirit Temple Silver Gauntlets Chest
+      from_pool: false
+      
+    - item: Kokiri Sword
+      location: Deku Tree Slingshot Chest
+      from_pool: false
+```
+First, this block will place the player's Biggoron Sword, Bow, Magic Meter, strength upgrades, and hookshots in the 
+dungeon major item chests. Because the from_pool value is `false`, a copy of these items is added to these locations, 
+while the originals remain in the item pool to be shuffled. Secondly, it will place the Kokiri Sword in the Deku Tree 
+Slingshot Chest.
 
 ## Boss Plando
 
