@@ -27,6 +27,7 @@ including the exclamation point.
 - `!countdown <number of seconds>` Starts a countdown using the given seconds value. Useful for synchronizing starts.
   Defaults to 10 seconds if no argument is provided.
 - `!alias <alias>` Sets your alias, which allows you to use commands with the alias rather than your provided name.
+  `!alias` on its own will reset the alias to the player's original name.
 - `!admin <command>` Executes a command as if you typed it into the server console. Remote administration must be
   enabled.
 
@@ -65,6 +66,7 @@ including the exclamation point.
   argument is provided.
 - `/option <option name> <option value>` Set a server option. For a list of options, use the `/options` command.
 - `/alias <player name> <alias name>` Assign a player an alias, allowing you to reference the player by the alias in commands.
+  `!alias <player name>` on its own will reset the alias to the player's original name.
 
 
 ### Collect/Release

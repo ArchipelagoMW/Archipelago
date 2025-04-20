@@ -1,7 +1,10 @@
-from typing import Dict, List, NamedTuple, Optional
+from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING
 
 from BaseClasses import MultiWorld, Region, Entrance
 from .Locations import RLLocation, location_table, get_locations_by_category
+
+if TYPE_CHECKING:
+    from . import RLWorld
 
 
 class RLRegionData(NamedTuple):
@@ -9,7 +12,7 @@ class RLRegionData(NamedTuple):
     region_exits: Optional[List[str]]
 
 
-def create_regions(multiworld: MultiWorld, player: int):
+def create_regions(world: "RLWorld"):
     regions: Dict[str, RLRegionData] = {
         "Menu":              RLRegionData(None, ["Castle Hamson"]),
         "The Manor":         RLRegionData([],   []),
@@ -56,9 +59,9 @@ def create_regions(multiworld: MultiWorld, player: int):
     regions["The Fountain Room"].locations.append("Fountain Room")
 
     # Chests
-    chests = int(multiworld.chests_per_zone[player])
+    chests = int(world.options.chests_per_zone)
     for i in range(0, chests):
-        if multiworld.universal_chests[player]:
+        if world.options.universal_chests:
             regions["Castle Hamson"].locations.append(f"Chest {i + 1}")
             regions["Forest Abkhazia"].locations.append(f"Chest {i + 1 + chests}")
             regions["The Maya"].locations.append(f"Chest {i + 1 + (chests * 2)}")
@@ -70,9 +73,9 @@ def create_regions(multiworld: MultiWorld, player: int):
             regions["Land of Darkness"].locations.append(f"Land of Darkness - Chest {i + 1}")
 
     # Fairy Chests
-    chests = int(multiworld.fairy_chests_per_zone[player])
+    chests = int(world.options.fairy_chests_per_zone)
     for i in range(0, chests):
-        if multiworld.universal_fairy_chests[player]:
+        if world.options.universal_fairy_chests:
             regions["Castle Hamson"].locations.append(f"Fairy Chest {i + 1}")
             regions["Forest Abkhazia"].locations.append(f"Fairy Chest {i + 1 + chests}")
             regions["The Maya"].locations.append(f"Fairy Chest {i + 1 + (chests * 2)}")
@@ -85,14 +88,14 @@ def create_regions(multiworld: MultiWorld, player: int):
 
     # Set up the regions correctly.
     for name, data in regions.items():
-        multiworld.regions.append(create_region(multiworld, player, name, data))
+        world.multiworld.regions.append(create_region(world.multiworld, world.player, name, data))
 
-    multiworld.get_entrance("Castle Hamson", player).connect(multiworld.get_region("Castle Hamson", player))
-    multiworld.get_entrance("The Manor", player).connect(multiworld.get_region("The Manor", player))
-    multiworld.get_entrance("Forest Abkhazia", player).connect(multiworld.get_region("Forest Abkhazia", player))
-    multiworld.get_entrance("The Maya", player).connect(multiworld.get_region("The Maya", player))
-    multiworld.get_entrance("Land of Darkness", player).connect(multiworld.get_region("Land of Darkness", player))
-    multiworld.get_entrance("The Fountain Room", player).connect(multiworld.get_region("The Fountain Room", player))
+    world.get_entrance("Castle Hamson").connect(world.get_region("Castle Hamson"))
+    world.get_entrance("The Manor").connect(world.get_region("The Manor"))
+    world.get_entrance("Forest Abkhazia").connect(world.get_region("Forest Abkhazia"))
+    world.get_entrance("The Maya").connect(world.get_region("The Maya"))
+    world.get_entrance("Land of Darkness").connect(world.get_region("Land of Darkness"))
+    world.get_entrance("The Fountain Room").connect(world.get_region("The Fountain Room"))
 
 
 def create_region(multiworld: MultiWorld, player: int, name: str, data: RLRegionData):

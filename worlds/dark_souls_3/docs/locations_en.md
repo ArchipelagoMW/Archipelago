@@ -1020,7 +1020,7 @@ static _Dark Souls III_ randomizer].
 <tr><td>CKG: Drakeblood Helm - tomb, after killing AP mausoleum NPC</td><td>On the Drakeblood Knight after Oceiros fight, after defeating the Drakeblood Knight from the Serpent-Man Summoner</td></tr>
 <tr><td>CKG: Drakeblood Leggings - tomb, after killing AP mausoleum NPC</td><td>On the Drakeblood Knight after Oceiros fight, after defeating the Drakeblood Knight from the Serpent-Man Summoner</td></tr>
 <tr><td>CKG: Estus Shard - balcony</td><td>From the middle level of the first Consumed King&#x27;s Gardens elevator, out the balcony and to the right</td></tr>
-<tr><td>CKG: Human Pine Resin - by lone stairway bottom</td><td>On the right side of the garden, following the wall past the entrance to the shortcut elevator building, in a toxic pool</td></tr>
+<tr><td>CKG: Human Pine Resin - pool by lift</td><td>On the right side of the garden, following the wall past the entrance to the shortcut elevator building, in a toxic pool</td></tr>
 <tr><td>CKG: Human Pine Resin - toxic pool, past rotunda</td><td>In between two platforms near the middle of the garden, by a tree in a toxic pool</td></tr>
 <tr><td>CKG: Magic Stoneplate Ring - mob drop before boss</td><td>Dropped by the Cathedral Knight closest to the Oceiros fog gate</td></tr>
 <tr><td>CKG: Ring of Sacrifice - under balcony</td><td>Along the right wall of the garden, next to the first elevator building</td></tr>
@@ -1181,16 +1181,18 @@ static _Dark Souls III_ randomizer].
 <tr><td>FS: Alluring Skull - Mortician&#x27;s Ashes</td><td>Sold by Handmaid after giving Mortician&#x27;s Ashes</td></tr>
 <tr><td>FS: Arstor&#x27;s Spear - Ludleth for Greatwood</td><td>Boss weapon for Curse-Rotted Greatwood</td></tr>
 <tr><td>FS: Aural Decoy - Orbeck</td><td>Sold by Orbeck</td></tr>
-<tr><td>FS: Billed Mask - Yuria after killing KFF boss</td><td>Dropped by Yuria upon death or quest completion.</td></tr>
-<tr><td>FS: Black Dress - Yuria after killing KFF boss</td><td>Dropped by Yuria upon death or quest completion.</td></tr>
+<tr><td>FS: Billed Mask - shop after killing Yuria</td><td>Dropped by Yuria upon death or quest completion.</td></tr>
+<tr><td>FS: Black Dress - shop after killing Yuria</td><td>Dropped by Yuria upon death or quest completion.</td></tr>
 <tr><td>FS: Black Fire Orb - Karla for Grave Warden Tome</td><td>Sold by Karla after giving her the Grave Warden Pyromancy Tome</td></tr>
 <tr><td>FS: Black Flame - Karla for Grave Warden Tome</td><td>Sold by Karla after giving her the Grave Warden Pyromancy Tome</td></tr>
-<tr><td>FS: Black Gauntlets - Yuria after killing KFF boss</td><td>Dropped by Yuria upon death or quest completion.</td></tr>
+<tr><td>FS: Black Gauntlets - shop after killing Yuria</td><td>Dropped by Yuria upon death or quest completion.</td></tr>
+<tr><td>FS: Black Hand Armor - shop after killing GA NPC</td><td>Sold by Handmaid after killing Black Hand Kumai</td></tr>
+<tr><td>FS: Black Hand Hat - shop after killing GA NPC</td><td>Sold by Handmaid after killing Black Hand Kumai</td></tr>
 <tr><td>FS: Black Iron Armor - shop after killing Tsorig</td><td>Sold by Handmaid after killing Knight Slayer Tsorig in Smouldering Lake</td></tr>
 <tr><td>FS: Black Iron Gauntlets - shop after killing Tsorig</td><td>Sold by Handmaid after killing Knight Slayer Tsorig in Smouldering Lake</td></tr>
 <tr><td>FS: Black Iron Helm - shop after killing Tsorig</td><td>Sold by Handmaid after killing Knight Slayer Tsorig in Smouldering Lake</td></tr>
 <tr><td>FS: Black Iron Leggings - shop after killing Tsorig</td><td>Sold by Handmaid after killing Knight Slayer Tsorig in Smouldering Lake</td></tr>
-<tr><td>FS: Black Leggings - Yuria after killing KFF boss</td><td>Dropped by Yuria upon death or quest completion.</td></tr>
+<tr><td>FS: Black Leggings - shop after killing Yuria</td><td>Dropped by Yuria upon death or quest completion.</td></tr>
 <tr><td>FS: Black Serpent - Ludleth for Wolnir</td><td>Boss weapon for High Lord Wolnir</td></tr>
 <tr><td>FS: Blessed Weapon - Irina for Tome of Lothric</td><td>Sold by Irina after giving her the Braille Divine Tome of Lothric</td></tr>
 <tr><td>FS: Blue Tearstone Ring - Greirat</td><td>Given by Greirat upon rescuing him from the High Wall cell</td></tr>
@@ -1220,8 +1222,8 @@ static _Dark Souls III_ randomizer].
 <tr><td>FS: Dancer&#x27;s Leggings - shop after killing LC entry boss</td><td>Sold by Handmaid after defeating Dancer of the Boreal Valley</td></tr>
 <tr><td>FS: Dark Blade - Karla for Londor Tome</td><td>Sold by Irina or Karla after giving one the Londor Braille Divine Tome</td></tr>
 <tr><td>FS: Dark Edge - Karla</td><td>Sold by Karla after recruiting her, or in her ashes</td></tr>
-<tr><td>FS: Dark Hand - Yoel/Yuria</td><td>Sold by Yuria</td></tr>
-<tr><td>FS: Darkdrift - Yoel/Yuria</td><td>Dropped by Yuria upon death or quest completion.</td></tr>
+<tr><td>FS: Dark Hand - Yuria shop</td><td>Sold by Yuria</td></tr>
+<tr><td>FS: Darkdrift - kill Yuria</td><td>Dropped by Yuria upon death or quest completion.</td></tr>
 <tr><td>FS: Darkmoon Longbow - Ludleth for Aldrich</td><td>Boss weapon for Aldrich</td></tr>
 <tr><td>FS: Dead Again - Karla for Londor Tome</td><td>Sold by Irina or Karla after giving one the Londor Braille Divine Tome</td></tr>
 <tr><td>FS: Deep Protection - Karla for Deep Braille Tome</td><td>Sold by Irina or Karla after giving one the Deep Braille Divine Tome</td></tr>
@@ -1264,6 +1266,9 @@ static _Dark Souls III_ randomizer].
 <tr><td>FS: Exile Gauntlets - shop after killing NPCs in RS</td><td>Sold by Handmaid after killing the exiles just before Farron Keep</td></tr>
 <tr><td>FS: Exile Leggings - shop after killing NPCs in RS</td><td>Sold by Handmaid after killing the exiles just before Farron Keep</td></tr>
 <tr><td>FS: Exile Mask - shop after killing NPCs in RS</td><td>Sold by Handmaid after killing the exiles just before Farron Keep</td></tr>
+<tr><td>FS: Faraam Armor - shop after killing GA NPC</td><td>Sold by Handmaid after killing Lion Knight Albert</td></tr>
+<tr><td>FS: Faraam Boots - shop after killing GA NPC</td><td>Sold by Handmaid after killing Lion Knight Albert</td></tr>
+<tr><td>FS: Faraam Gauntlets - shop after killing GA NPC</td><td>Sold by Handmaid after killing Lion Knight Albert</td></tr>
 <tr><td>FS: Faraam Helm - shop after killing GA NPC</td><td>Sold by Handmaid after killing Lion Knight Albert</td></tr>
 <tr><td>FS: Farron Dart - Orbeck</td><td>Sold by Orbeck</td></tr>
 <tr><td>FS: Farron Dart - shop</td><td>Sold by Handmaid</td></tr>
@@ -1308,7 +1313,7 @@ static _Dark Souls III_ randomizer].
 <tr><td>FS: Heal - Irina</td><td>Sold by Irina after recruiting her, or in her ashes</td></tr>
 <tr><td>FS: Heal Aid - shop</td><td>Sold by Handmaid</td></tr>
 <tr><td>FS: Heavy Soul Arrow - Orbeck</td><td>Sold by Orbeck</td></tr>
-<tr><td>FS: Heavy Soul Arrow - Yoel/Yuria</td><td>Sold by Yoel/Yuria</td></tr>
+<tr><td>FS: Heavy Soul Arrow - Yoel/Yuria shop</td><td>Sold by Yoel/Yuria</td></tr>
 <tr><td>FS: Helm of Favor - shop after killing water reserve minibosses</td><td>Sold by Handmaid after killing Sulyvahn&#x27;s Beasts in Water Reserve</td></tr>
 <tr><td>FS: Hidden Blessing - Dreamchaser&#x27;s Ashes</td><td>Sold by Greirat after pillaging Irithyll</td></tr>
 <tr><td>FS: Hidden Blessing - Greirat from IBV</td><td>Sold by Greirat after pillaging Irithyll</td></tr>
@@ -1338,7 +1343,7 @@ static _Dark Souls III_ randomizer].
 <tr><td>FS: Lift Chamber Key - Leonhard</td><td>Given by Ringfinger Leonhard after acquiring a Pale Tongue.</td></tr>
 <tr><td>FS: Lightning Storm - Ludleth for Nameless</td><td>Boss weapon for Nameless King</td></tr>
 <tr><td>FS: Lloyd&#x27;s Shield Ring - Paladin&#x27;s Ashes</td><td>Sold by Handmaid after giving Paladin&#x27;s Ashes</td></tr>
-<tr><td>FS: Londor Braille Divine Tome - Yoel/Yuria</td><td>Sold by Yuria</td></tr>
+<tr><td>FS: Londor Braille Divine Tome - Yuria shop</td><td>Sold by Yuria</td></tr>
 <tr><td>FS: Lorian&#x27;s Armor - shop after killing GA boss</td><td>Sold by Handmaid after defeating Lothric, Younger Prince</td></tr>
 <tr><td>FS: Lorian&#x27;s Gauntlets - shop after killing GA boss</td><td>Sold by Handmaid after defeating Lothric, Younger Prince</td></tr>
 <tr><td>FS: Lorian&#x27;s Greatsword - Ludleth for Princes</td><td>Boss weapon for Twin Princes</td></tr>
@@ -1347,9 +1352,9 @@ static _Dark Souls III_ randomizer].
 <tr><td>FS: Lothric&#x27;s Holy Sword - Ludleth for Princes</td><td>Boss weapon for Twin Princes</td></tr>
 <tr><td>FS: Magic Barrier - Irina for Tome of Lothric</td><td>Sold by Irina after giving her the Braille Divine Tome of Lothric</td></tr>
 <tr><td>FS: Magic Shield - Orbeck</td><td>Sold by Orbeck</td></tr>
-<tr><td>FS: Magic Shield - Yoel/Yuria</td><td>Sold by Yoel/Yuria</td></tr>
+<tr><td>FS: Magic Shield - Yoel/Yuria shop</td><td>Sold by Yoel/Yuria</td></tr>
 <tr><td>FS: Magic Weapon - Orbeck</td><td>Sold by Orbeck</td></tr>
-<tr><td>FS: Magic Weapon - Yoel/Yuria</td><td>Sold by Yoel/Yuria</td></tr>
+<tr><td>FS: Magic Weapon - Yoel/Yuria shop</td><td>Sold by Yoel/Yuria</td></tr>
 <tr><td>FS: Mail Breaker - Sirris for killing Creighton</td><td>Given by Sirris talking to her in Firelink Shrine after invading and vanquishing Creighton.</td></tr>
 <tr><td>FS: Master&#x27;s Attire - NPC drop</td><td>Dropped by Sword Master</td></tr>
 <tr><td>FS: Master&#x27;s Gloves - NPC drop</td><td>Dropped by Sword Master</td></tr>
@@ -1401,10 +1406,10 @@ static _Dark Souls III_ randomizer].
 <tr><td>FS: Sneering Mask - Yoel&#x27;s room, kill Londor Pale Shade twice</td><td>In Yoel/Yuria&#x27;s area after defeating both Londor Pale Shade invasions</td></tr>
 <tr><td>FS: Soothing Sunlight - Ludleth for Dancer</td><td>Boss weapon for Dancer of the Boreal Valley</td></tr>
 <tr><td>FS: Soul Arrow - Orbeck</td><td>Sold by Orbeck</td></tr>
-<tr><td>FS: Soul Arrow - Yoel/Yuria</td><td>Sold by Yoel/Yuria</td></tr>
+<tr><td>FS: Soul Arrow - Yoel/Yuria shop</td><td>Sold by Yoel/Yuria</td></tr>
 <tr><td>FS: Soul Arrow - shop</td><td>Sold by Handmaid</td></tr>
 <tr><td>FS: Soul Greatsword - Orbeck</td><td>Sold by Orbeck</td></tr>
-<tr><td>FS: Soul Greatsword - Yoel/Yuria</td><td>Sold by Yoel/Yuria after using Draw Out True Strength</td></tr>
+<tr><td>FS: Soul Greatsword - Yoel/Yuria shop</td><td>Sold by Yoel/Yuria after using Draw Out True Strength</td></tr>
 <tr><td>FS: Soul Spear - Orbeck for Logan&#x27;s Scroll</td><td>Sold by Orbeck after giving him Logan&#x27;s Scroll</td></tr>
 <tr><td>FS: Soul of a Deserted Corpse - bell tower door</td><td>Next to the door requiring the Tower Key</td></tr>
 <tr><td>FS: Spook - Orbeck</td><td>Sold by Orbeck</td></tr>
@@ -1427,8 +1432,8 @@ static _Dark Souls III_ randomizer].
 <tr><td>FS: Undead Legion Gauntlet - shop after killing FK boss</td><td>Sold by Handmaid after defeating Abyss Watchers</td></tr>
 <tr><td>FS: Undead Legion Helm - shop after killing FK boss</td><td>Sold by Handmaid after defeating Abyss Watchers</td></tr>
 <tr><td>FS: Undead Legion Leggings - shop after killing FK boss</td><td>Sold by Handmaid after defeating Abyss Watchers</td></tr>
-<tr><td>FS: Untrue Dark Ring - Yoel/Yuria</td><td>Sold by Yuria</td></tr>
-<tr><td>FS: Untrue White Ring - Yoel/Yuria</td><td>Sold by Yuria</td></tr>
+<tr><td>FS: Untrue Dark Ring - Yuria shop</td><td>Sold by Yuria</td></tr>
+<tr><td>FS: Untrue White Ring - Yuria shop</td><td>Sold by Yuria</td></tr>
 <tr><td>FS: Vordt&#x27;s Great Hammer - Ludleth for Vordt</td><td>Boss weapon for Vordt of the Boreal Valley</td></tr>
 <tr><td>FS: Vow of Silence - Karla for Londor Tome</td><td>Sold by Irina or Karla after giving one the Londor Braille Divine Tome</td></tr>
 <tr><td>FS: Washing Pole - Easterner&#x27;s Ashes</td><td>Sold by Handmaid after giving Easterner&#x27;s Ashes</td></tr>
@@ -1477,8 +1482,6 @@ static _Dark Souls III_ randomizer].
 <tr><td>FSBT: Twinkling Titanite - lizard behind Firelink</td><td>Dropped by the Crystal Lizard behind Firelink Shrine. Can be accessed with tree jump by going all the way around the roof, left of the entrance to the rafters, or alternatively dropping down from the Bell Tower.</td></tr>
 <tr><td>FSBT: Very good! Carving - crow for Divine Blessing</td><td>Trade Divine Blessing with crow</td></tr>
 <tr><td>GA: Avelyn - 1F, drop from 3F onto bookshelves</td><td>On top of a bookshelf on the Archive first floor, accessible by going halfway up the stairs to the third floor, dropping down past the Grand Archives Scholar, and then dropping down again</td></tr>
-<tr><td>GA: Black Hand Armor - shop after killing GA NPC</td><td>Sold by Handmaid after killing Black Hand Kumai</td></tr>
-<tr><td>GA: Black Hand Hat - shop after killing GA NPC</td><td>Sold by Handmaid after killing Black Hand Kumai</td></tr>
 <tr><td>GA: Blessed Gem - rafters</td><td>On the rafters high above the Archives, can be accessed by dropping down from the Winged Knight roof area</td></tr>
 <tr><td>GA: Chaos Gem - dark room, lizard</td><td>Dropped by a Crystal Lizard on the Archives first floor in the dark room past the large wax pool</td></tr>
 <tr><td>GA: Cinders of a Lord - Lothric Prince</td><td>Dropped by Twin Princes</td></tr>
@@ -1489,9 +1492,6 @@ static _Dark Souls III_ randomizer].
 <tr><td>GA: Divine Pillars of Light - cage above rafters</td><td>In a cage above the rafters high above the Archives, can be accessed by dropping down from the Winged Knight roof area</td></tr>
 <tr><td>GA: Ember - 5F, by entrance</td><td>On a balcony high in the Archives overlooking the area with the Grand Archives Scholars with a shortcut ladder, on the opposite side from the wax pool</td></tr>
 <tr><td>GA: Estus Shard - dome, far balcony</td><td>On the Archives roof near the three Winged Knights, in a side area overlooking the ocean.</td></tr>
-<tr><td>GA: Faraam Armor - shop after killing GA NPC</td><td>Sold by Handmaid after killing Lion Knight Albert</td></tr>
-<tr><td>GA: Faraam Boots - shop after killing GA NPC</td><td>Sold by Handmaid after killing Lion Knight Albert</td></tr>
-<tr><td>GA: Faraam Gauntlets - shop after killing GA NPC</td><td>Sold by Handmaid after killing Lion Knight Albert</td></tr>
 <tr><td>GA: Fleshbite Ring - up stairs from 4F</td><td>From the first shortcut elevator with the movable bookshelf, past the Scholars right before going outside onto the roof, in an alcove to the right with many Clawed Curse bookshelves</td></tr>
 <tr><td>GA: Golden Wing Crest Shield - outside 5F, NPC drop</td><td>Dropped by Lion Knight Albert before the stairs leading up to Twin Princes</td></tr>
 <tr><td>GA: Heavy Gem - rooftops, lizard</td><td>Dropped by one of the pair of Crystal Lizards, on the right side, found going up a slope past the gargoyle on the Archives roof</td></tr>
@@ -1525,15 +1525,15 @@ static _Dark Souls III_ randomizer].
 <tr><td>GA: Titanite Chunk - 2F, by wax pool</td><td>Up the stairs from the Archives second floor on the right side from the entrance, in a corner near the small wax pool</td></tr>
 <tr><td>GA: Titanite Chunk - 2F, right after dark room</td><td>Exiting from the dark room with the Crystal Lizards on the first floor onto the second floor main room, then taking an immediate right</td></tr>
 <tr><td>GA: Titanite Chunk - 5F, far balcony</td><td>On a balcony outside where Lothric Knight stands on the top floor of the Archives, accessing by going right from the final wax pool or by dropping down from the gargoyle area</td></tr>
-<tr><td>GA: Titanite Chunk - rooftops, balcony</td><td>Going onto the roof and down the first ladder, all the way down the ledge facing the ocean to the right</td></tr>
 <tr><td>GA: Titanite Chunk - rooftops lower, ledge by buttress</td><td>Going onto the roof and down the first ladder, dropping down on either side from the ledge facing the ocean, on a roof ledge to the right</td></tr>
+<tr><td>GA: Titanite Chunk - rooftops, balcony</td><td>Going onto the roof and down the first ladder, all the way down the ledge facing the ocean to the right</td></tr>
 <tr><td>GA: Titanite Chunk - rooftops, just before 5F</td><td>On the Archives roof, after a short dropdown, in the small area where the two Gargoyles attack you</td></tr>
 <tr><td>GA: Titanite Scale - 1F, drop from 2F late onto bookshelves, lizard</td><td>Dropped by a Crystal Lizard on first floor bookshelves. Can be accessed by dropping down to the left at the end of the bridge which is the Crystal Sage&#x27;s final location</td></tr>
 <tr><td>GA: Titanite Scale - 1F, up stairs on bookshelf</td><td>On the Archives first floor, up a movable set of stairs near the large wax pool, on top of a bookshelf</td></tr>
 <tr><td>GA: Titanite Scale - 2F, titanite scale atop bookshelf</td><td>On top of a bookshelf on the Archive second floor, accessible by going halfway up the stairs to the third floor and dropping down near a Grand Archives Scholar</td></tr>
 <tr><td>GA: Titanite Scale - 3F, by ladder to 2F late</td><td>Going from the Crystal Sage&#x27;s location on the third floor to its location on the bridge, on the left side of the ladder you descend, behind a table</td></tr>
 <tr><td>GA: Titanite Scale - 3F, corner up stairs</td><td>From the Grand Archives third floor up past the thralls, in a corner with bookshelves to the left</td></tr>
-<tr><td>GA: Titanite Scale - 5F, chest by exit</td><td>In a chest after the first elevator shortcut with the movable bookshelf, in the area with the Grand Archives Scholars, to the left of the stairwell leading up to the roof</td></tr>
+<tr><td>GA: Titanite Scale - 4F, chest by exit</td><td>In a chest after the first elevator shortcut with the movable bookshelf, in the area with the Grand Archives Scholars, to the left of the stairwell leading up to the roof</td></tr>
 <tr><td>GA: Titanite Scale - dark room, upstairs</td><td>Right after going up the stairs to the Archives second floor, on the left guarded by a Grand Archives Scholar and a sequence of Clawed Curse bookshelves</td></tr>
 <tr><td>GA: Titanite Scale - rooftops lower, path to 2F</td><td>Going onto the roof and down the first ladder, dropping down on either side from the ledge facing the ocean, then going past the corvians all the way to the left and making a jump</td></tr>
 <tr><td>GA: Titanite Slab - 1F, after pulling 2F switch</td><td>In a chest on the Archives first floor, behind a bookshelf moved by pulling a lever in the middle of the second floor between two cursed bookshelves</td></tr>
@@ -1633,7 +1633,7 @@ static _Dark Souls III_ randomizer].
 <tr><td>IBV: Large Soul of a Nameless Soldier - central, by bonfire</td><td>By the Central Irithyll bonfire</td></tr>
 <tr><td>IBV: Large Soul of a Nameless Soldier - central, by second fountain</td><td>Next to the fountain up the stairs from the Central Irithyll bonfire</td></tr>
 <tr><td>IBV: Large Soul of a Nameless Soldier - lake island</td><td>On an island in the lake leading to the Distant Manor bonfire</td></tr>
-<tr><td>IBV: Large Soul of a Nameless Soldier - stairs to plaza</td><td>On the path from Central Irithyll bonfire, before making the left toward Church of Yorshka</td></tr>
+<tr><td>IBV: Large Soul of a Nameless Soldier - path to plaza</td><td>On the path from Central Irithyll bonfire, before making the left toward Church of Yorshka</td></tr>
 <tr><td>IBV: Large Titanite Shard - Distant Manor, under overhang</td><td>Under overhang next to second set of stairs leading from Distant Manor bonfire</td></tr>
 <tr><td>IBV: Large Titanite Shard - ascent, by elevator door</td><td>On the path from the sewer leading up to Pontiff&#x27;s cathedral, to the right of the statue surrounded by dogs</td></tr>
 <tr><td>IBV: Large Titanite Shard - ascent, down ladder in last building</td><td>Outside the final building before Pontiff&#x27;s cathedral, coming from the sewer, dropping down to the left before the entrance</td></tr>
@@ -1701,7 +1701,7 @@ static _Dark Souls III_ randomizer].
 <tr><td>ID: Large Titanite Shard - B1 far, rightmost cell</td><td>In a cell on the far end of the top corridor opposite to the bonfire in Irithyll Dungeon, nearby the Jailer</td></tr>
 <tr><td>ID: Large Titanite Shard - B1 near, by door</td><td>At the end of the top corridor on the bonfire side in Irithyll Dungeon, before the Jailbreaker&#x27;s Key door</td></tr>
 <tr><td>ID: Large Titanite Shard - B3 near, right corner</td><td>In the main Jailer cell block, to the left of the hallway leading to the Path of the Dragon area</td></tr>
-<tr><td>ID: Large Titanite Shard - after bonfire, second cell on right</td><td>In the second cell on the right after Irithyll Dungeon bonfire</td></tr>
+<tr><td>ID: Large Titanite Shard - after bonfire, second cell on left</td><td>In the second cell on the right after Irithyll Dungeon bonfire</td></tr>
 <tr><td>ID: Large Titanite Shard - pit #1</td><td>On the floor where the Giant Slave is standing</td></tr>
 <tr><td>ID: Large Titanite Shard - pit #2</td><td>On the floor where the Giant Slave is standing</td></tr>
 <tr><td>ID: Lightning Blade - B3 lift, middle platform</td><td>On the middle platform riding the elevator up from the Path of the Dragon area</td></tr>

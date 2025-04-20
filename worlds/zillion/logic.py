@@ -1,4 +1,5 @@
-from typing import Dict, FrozenSet, Tuple, List, Counter as _Counter
+from collections import Counter
+from collections.abc import Mapping
 
 from BaseClasses import CollectionState
 
@@ -24,18 +25,18 @@ def set_randomizer_locs(cs: CollectionState, p: int, zz_r: Randomizer) -> int:
     z_world = cs.multiworld.worlds[p]
     assert isinstance(z_world, ZillionWorld)
 
-    _hash = p
+    hash_ = p
     for z_loc in z_world.my_locations:
         zz_name = z_loc.zz_loc.name
         zz_item = z_loc.item.zz_item \
             if isinstance(z_loc.item, ZillionItem) and z_loc.item.player == p \
             else zz_empty
         zz_r.locations[zz_name].item = zz_item
-        _hash += (hash(zz_name) * (z_loc.zz_loc.req.gun + 2)) ^ hash(zz_item)
-    return _hash
+        hash_ += (hash(zz_name) * (z_loc.zz_loc.req.gun + 2)) ^ hash(zz_item)
+    return hash_
 
 
-def item_counts(cs: CollectionState, p: int) -> Tuple[Tuple[str, int], ...]:
+def item_counts(cs: CollectionState, p: int) -> tuple[tuple[str, int], ...]:
     """
     the zilliandomizer items that player p has collected
 
@@ -44,38 +45,51 @@ def item_counts(cs: CollectionState, p: int) -> Tuple[Tuple[str, int], ...]:
     return tuple((item_name, cs.count(item_name, p)) for item_name in item_name_to_id)
 
 
-LogicCacheType = Dict[int, Tuple[Dict[int, _Counter[str]], FrozenSet[Location]]]
-""" { hash: (cs.prog_items, accessible_locations) } """
+_cache_miss: tuple[None, frozenset[Location]] = (None, frozenset())
 
 
-def cs_to_zz_locs(cs: CollectionState, p: int, zz_r: Randomizer, id_to_zz_item: Dict[int, Item]) -> FrozenSet[Location]:
-    """
-    given an Archipelago `CollectionState`,
-    returns frozenset of accessible zilliandomizer locations
-    """
-    # caching this function because it would be slow
-    logic_cache: LogicCacheType = getattr(cs.multiworld, "zillion_logic_cache", {})
-    _hash = set_randomizer_locs(cs, p, zz_r)
-    counts = item_counts(cs, p)
-    _hash += hash(counts)
+class ZillionLogicCache:
+    _cache: dict[int, tuple[Counter[str], frozenset[Location]]]
+    """ `{ hash: (counter_from_prog_items, accessible_zz_locations) }` """
+    _player: int
+    _zz_r: Randomizer
+    _id_to_zz_item: Mapping[int, Item]
 
-    if _hash in logic_cache and logic_cache[_hash][0] == cs.prog_items:
-        # print("cache hit")
-        return logic_cache[_hash][1]
+    def __init__(self, player: int, zz_r: Randomizer, id_to_zz_item: Mapping[int, Item]) -> None:
+        self._cache = {}
+        self._player = player
+        self._zz_r = zz_r
+        self._id_to_zz_item = id_to_zz_item
 
-    # print("cache miss")
-    have_items: List[Item] = []
-    for name, count in counts:
-        have_items.extend([id_to_zz_item[item_name_to_id[name]]] * count)
-    # have_req is the result of converting AP CollectionState to zilliandomizer collection state
-    have_req = zz_r.make_ability(have_items)
+    def cs_to_zz_locs(self, cs: CollectionState) -> frozenset[Location]:
+        """
+        given an Archipelago `CollectionState`,
+        returns frozenset of accessible zilliandomizer locations
+        """
+        # caching this function because it would be slow
+        hash_ = set_randomizer_locs(cs, self._player, self._zz_r)
+        counts = item_counts(cs, self._player)
+        hash_ += hash(counts)
 
-    # This `get_locations` is where the core of the logic comes in.
-    # It takes a zilliandomizer collection state (a set of the abilities that I have)
-    # and returns list of all the zilliandomizer locations I can access with those abilities.
-    tr = frozenset(zz_r.get_locations(have_req))
+        cntr, locs = self._cache.get(hash_, _cache_miss)
+        if cntr == cs.prog_items[self._player]:
+            # print("cache hit")
+            return locs
 
-    # save result in cache
-    logic_cache[_hash] = (cs.prog_items.copy(), tr)
+        # print("cache miss")
+        have_items: list[Item] = []
+        for name, count in counts:
+            have_items.extend([self._id_to_zz_item[item_name_to_id[name]]] * count)
+        # have_req is the result of converting AP CollectionState to zilliandomizer collection state
+        have_req = self._zz_r.make_ability(have_items)
+        # print(f"{have_req=}")
 
-    return tr
+        # This `get_locations` is where the core of the logic comes in.
+        # It takes a zilliandomizer collection state (a set of the abilities that I have)
+        # and returns list of all the zilliandomizer locations I can access with those abilities.
+        tr = frozenset(self._zz_r.get_locations(have_req))
+
+        # save result in cache
+        self._cache[hash_] = (cs.prog_items[self._player].copy(), tr)
+
+        return tr

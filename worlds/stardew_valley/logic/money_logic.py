@@ -1,3 +1,4 @@
+import typing
 from typing import Union
 
 from Utils import cache_self1
@@ -11,9 +12,13 @@ from .time_logic import TimeLogicMixin
 from ..data.shop import ShopSource
 from ..options import SpecialOrderLocations
 from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_, true_
-from ..strings.ap_names.event_names import Event
 from ..strings.currency_names import Currency
 from ..strings.region_names import Region, LogicRegion
+
+if typing.TYPE_CHECKING:
+    from .shipping_logic import ShippingLogicMixin
+else:
+    ShippingLogicMixin = object
 
 qi_gem_rewards = ("100 Qi Gems", "50 Qi Gems", "40 Qi Gems", "35 Qi Gems", "25 Qi Gems",
                   "20 Qi Gems", "15 Qi Gems", "10 Qi Gems")
@@ -26,32 +31,32 @@ class MoneyLogicMixin(BaseLogicMixin):
 
 
 class MoneyLogic(BaseLogic[Union[RegionLogicMixin, MoneyLogicMixin, TimeLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin, SeasonLogicMixin,
-GrindLogicMixin]]):
+GrindLogicMixin, ShippingLogicMixin]]):
 
     @cache_self1
     def can_have_earned_total(self, amount: int) -> StardewRule:
-        if amount < 1000:
-            return True_()
+        if amount <= 1000:
+            return self.logic.true_
 
         pierre_rule = self.logic.region.can_reach_all((Region.pierre_store, Region.forest))
         willy_rule = self.logic.region.can_reach_all((Region.fish_shop, LogicRegion.fishing))
         clint_rule = self.logic.region.can_reach_all((Region.blacksmith, Region.mines_floor_5))
         robin_rule = self.logic.region.can_reach_all((Region.carpenter, Region.secret_woods))
-        shipping_rule = self.logic.received(Event.can_ship_items)
+        shipping_rule = self.logic.shipping.can_use_shipping_bin
 
-        if amount < 2000:
+        if amount <= 2500:
             selling_any_rule = pierre_rule | willy_rule | clint_rule | robin_rule | shipping_rule
             return selling_any_rule
 
-        if amount < 5000:
+        if amount <= 5000:
             selling_all_rule = (pierre_rule & willy_rule & clint_rule & robin_rule) | shipping_rule
             return selling_all_rule
 
-        if amount < 10000:
+        if amount <= 10000:
             return shipping_rule
 
-        seed_rules = self.logic.received(Event.can_shop_at_pierre)
-        if amount < 40000:
+        seed_rules = self.logic.region.can_reach(Region.pierre_store)
+        if amount <= 40000:
             return shipping_rule & seed_rules
 
         percent_progression_items_needed = min(90, amount // 20000)
@@ -75,7 +80,7 @@ GrindLogicMixin]]):
         item_rules = []
         if source.items_price is not None:
             for price, item in source.items_price:
-                item_rules.append(self.logic.has(item) & self.logic.grind.can_grind_item(price))
+                item_rules.append(self.logic.has(item) & self.logic.grind.can_grind_item(price, item))
 
         region_rule = self.logic.region.can_reach(source.shop_region)
 

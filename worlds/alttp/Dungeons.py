@@ -66,7 +66,7 @@ def create_dungeons(world: "ALTTPWorld"):
 
     def make_dungeon(name, default_boss, dungeon_regions, big_key, small_keys, dungeon_items):
         dungeon = Dungeon(name, dungeon_regions, big_key,
-                          [] if multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal else small_keys,
+                          [] if multiworld.worlds[player].options.small_key_shuffle == small_key_shuffle.option_universal else small_keys,
                           dungeon_items, player)
         for item in dungeon.all_items:
             item.dungeon = dungeon
@@ -143,7 +143,7 @@ def create_dungeons(world: "ALTTPWorld"):
                       item_factory(['Small Key (Turtle Rock)'] * 6, world),
                       item_factory(['Map (Turtle Rock)', 'Compass (Turtle Rock)'], world))
 
-    if multiworld.mode[player] != 'inverted':
+    if multiworld.worlds[player].options.mode != 'inverted':
         AT = make_dungeon('Agahnims Tower', 'Agahnim', ['Agahnims Tower', 'Agahnim 1'], None,
                           item_factory(['Small Key (Agahnims Tower)'] * 4, world), [])
         GT = make_dungeon('Ganons Tower', 'Agahnim2',
@@ -248,7 +248,7 @@ def fill_dungeons_restrictive(multiworld: MultiWorld):
                     pass
             for item in pre_fill_items:
                 multiworld.worlds[item.player].collect(all_state_base, item)
-            all_state_base.sweep_for_events()
+            all_state_base.sweep_for_advancements()
 
             # Remove completion condition so that minimal-accessibility worlds place keys properly
             for player in {item.player for item in in_dungeon_items}:
@@ -262,8 +262,8 @@ def fill_dungeons_restrictive(multiworld: MultiWorld):
                         all_state_base.remove(item_factory(key_data[3], multiworld.worlds[player]))
                         loc = multiworld.get_location(key_loc, player)
 
-                        if loc in all_state_base.events:
-                            all_state_base.events.remove(loc)
+                        if loc in all_state_base.advancements:
+                            all_state_base.advancements.remove(loc)
             fill_restrictive(multiworld, all_state_base, locations, in_dungeon_items, lock=True, allow_excluded=True,
                              name="LttP Dungeon Items")
 
