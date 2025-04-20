@@ -122,18 +122,20 @@ class ProfitMargin(NamedRange):
 
 class BundleRandomization(Choice):
     """What items are needed for the community center bundles?
-    Vanilla: Standard bundles from the vanilla game
-    Thematic: Every bundle will require random items compatible with their original theme
-    Remixed: Picks bundles at random from thematic, vanilla remixed and new custom ones
+    Vanilla: Standard bundles from the vanilla game.
+    Thematic: Every bundle will require random items compatible with their original theme.
+    Remixed: Picks bundles at random from thematic, vanilla remixed and new custom ones.
     Remixed Anywhere: Remixed, but bundles are not locked to specific rooms.
-    Shuffled: Every bundle will require random items and follow no particular structure"""
+    Shuffled: Every bundle will require random items and follow no particular structure.
+    Meme: A set of entirely custom bundles are generated purely based on jokes, references, and trolling. Funny but not balanced at all. Not for the faint of heart."""
     internal_name = "bundle_randomization"
     display_name = "Bundle Randomization"
     option_vanilla = 0
     option_thematic = 1
     option_remixed = 3
-    option_remixed_anywhere = 4
+    option_remixed_anywhere = 5
     option_shuffled = 6
+    option_meme = 10
     default = option_remixed
 
 

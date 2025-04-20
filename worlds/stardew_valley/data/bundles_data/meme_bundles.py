@@ -32,7 +32,7 @@ potato_items = [potato.as_amount(8)]
 potato_bundle = BundleTemplate(CCRoom.crafts_room, MemeBundleName.potato, potato_items, 12, 8)
 
 look_at_chickens_items = [duck_egg.as_amount(2)]
-look_at_chickens_bundle = BundleTemplate(CCRoom.crafts_room, MemeBundleName.look_at_chickens, look_at_chickens_items, 10, 4)
+look_at_chickens_bundle = BundleTemplate(CCRoom.pantry, MemeBundleName.look_at_chickens, look_at_chickens_items, 10, 4)
 
 lemonade_stand_items = [grape]
 lemonade_stand_bundle = BundleTemplate(CCRoom.pantry, MemeBundleName.lemonade_stand, lemonade_stand_items, 3, 1)
@@ -163,7 +163,7 @@ fruit_items = [tomato, pumpkin, summer_squash, eggplant, hot_pepper]
 fruit_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.fruit, fruit_items, 5, 5)
 
 reverse_items = [*all_simple_items]
-reverse_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.reverse, reverse_items, 4, 4)
+reverse_bundle = BundleTemplate(CCRoom.crafts_room, MemeBundleName.reverse, reverse_items, 4, 4)
 
 vampire_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.vampire, BundleItem(MemeCurrency.health, 100))
 exhaustion_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.exhaustion, BundleItem(MemeCurrency.energy, 400))
@@ -195,24 +195,24 @@ cookie_clicker_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.cook
 # Cookie Clicker Bundle
 # Reverse Bundle
 
-pantry_bundles_meme = []
+pantry_bundles_meme = [hurricane_tortilla_bundle, look_at_chickens_bundle, lemonade_stand_bundle, what_the_rock_is_cooking_bundle, sunmaid_bundle, big_grapes_bundle, eg_bundle, not_the_bees_bundle, speedrunners_bundle]
 pantry_meme = BundleRoomTemplate(CCRoom.pantry, pantry_bundles_meme, 6)
 
-crafts_room_bundles_meme = []
+crafts_room_bundles_meme = [AAAA_bundle, anything_for_beyonce_bundle, potato_bundle, cap_bundle, chaos_emerald_bundle, caffeinated_bundle, reverse_bundle]
 crafts_room_meme = BundleRoomTemplate(CCRoom.crafts_room, crafts_room_bundles_meme, 6)
 
-fish_tank_bundles_meme = []
+fish_tank_bundles_meme = [crab_rave_bundle, trout_bundle, doctor_angler_bundle, mermaid_bundle, legendairy_bundle, kent_c_bundle]
 fish_tank_meme = BundleRoomTemplate(CCRoom.fish_tank, fish_tank_bundles_meme, 6)
 
-boiler_room_bundles_meme = []
-boiler_room_room_meme = BundleRoomTemplate(CCRoom.boiler_room, boiler_room_bundles_meme, 6)
+boiler_room_bundles_meme = [amons_fall_bundle, screw_you_bundle, rick_bundle, minecraft_bundle, balls_bundle, tilesanity_bundle, obelisks_bundle, honorable_bundle, sisyphus_bundle]
+boiler_room_meme = BundleRoomTemplate(CCRoom.boiler_room, boiler_room_bundles_meme, 3)
 
-bulletin_board_bundles_meme = []
-bulletin_board_meme = BundleRoomTemplate(CCRoom.bulletin_board, bulletin_board_bundles_meme, 6)
+bulletin_board_bundles_meme = [burger_king_bundle, romance_bundle, burger_king_revenge_bundle, smapi_bundle, sappy_bundle, hats_off_to_you_bundle, snitch_bundle, commitment_bundle_bundle, journalist_bundle, trap_bundle, off_your_back_bundle, vocaloid_bundle, fruit_bundle]
+bulletin_board_meme = BundleRoomTemplate(CCRoom.bulletin_board, bulletin_board_bundles_meme, 5)
 
-vault_bundles_meme = []
-vault_meme = BundleRoomTemplate(CCRoom.vault, vault_bundles_meme, 6)
+vault_bundles_meme = [capitalist_bundle, death_bundle, bureaucracy_bundle, vampire_bundle, exhaustion_bundle, tick_tock_bundle, archipela_go_bundle, clique_bundle, cipher_bundle, cookie_clicker_bundle]
+vault_meme = BundleRoomTemplate(CCRoom.vault, vault_bundles_meme, 4)
 
-all_cc_meme_bundles = [*crafts_room_bundles_remixed, *pantry_bundles_remixed, *fish_tank_bundles_remixed,
-                       *boiler_room_bundles_remixed, *bulletin_board_bundles_remixed]
-community_center_meme_bundles = BundleRoomTemplate("Community Center", all_cc_meme_bundles, 26)
+all_cc_meme_bundles = [*pantry_bundles_meme, *crafts_room_bundles_meme, *fish_tank_bundles_meme,
+                       *boiler_room_bundles_meme, *bulletin_board_bundles_meme, *vault_bundles_meme]
+community_center_meme_bundles = BundleRoomTemplate("Community Center", all_cc_meme_bundles, 30)

@@ -38,6 +38,7 @@ class LocationTags(enum.Enum):
     VAULT_BUNDLE = enum.auto()
     COMMUNITY_CENTER_ROOM = enum.auto()
     RACCOON_BUNDLES = enum.auto()
+    MEME_BUNDLE = enum.auto()
     BACKPACK = enum.auto()
     BACKPACK_TIER = enum.auto()
     SPLIT_BACKPACK = enum.auto()
