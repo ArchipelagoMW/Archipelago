@@ -35,6 +35,19 @@ class TestCacheSelf1(unittest.TestCase):
         self.assertFalse(o1.func(1) is o1.func(2))
         self.assertFalse(o1.func(1) is o2.func(1))
 
+    def test_cache_default(self) -> None:
+        class Cls:
+            @cache_self1
+            def func(self, _: Any = 1) -> object:
+                return object()
+
+        o1 = Cls()
+        o2 = Cls()
+        self.assertIs(o1.func(), o1.func())
+        self.assertIs(o1.func(1), o1.func())
+        self.assertIsNot(o1.func(2), o1.func())
+        self.assertIsNot(o1.func(), o2.func())
+
     def test_gc(self) -> None:
         # verify that we don't keep a global reference
         import gc
