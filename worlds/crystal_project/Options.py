@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Type, Any
 from typing import Dict
 from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, OptionDict, OptionList, Visibility, Option
-from Options import PerGameCommonOptions, DeathLinkMixin, AssembleOptions
+from Options import PerGameCommonOptions, DeathLinkMixin, AssembleOptions, StartInventoryPool
 
 class Goal(Choice):
     """
@@ -49,6 +49,7 @@ class StartWithMaps(DefaultOnToggle):
 
 @dataclass
 class CrystalProjectOptions(PerGameCommonOptions):
+    start_inventory_from_pool: StartInventoryPool
     goal: Goal
     clamshellsQuantity: ClamshellsQuantity
     randomizeJobs: RandomizeJobs
