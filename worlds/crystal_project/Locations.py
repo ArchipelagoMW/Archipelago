@@ -751,7 +751,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest in the white hut", 3522 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Shoudu Province", "Shoudu Province Chest - Ether chest balance above the undercity", 2717 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Shoudu Province", "Shoudu Province Chest - Ether Pouch chest jump through a window", 1507 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
-        LocationData("Shoudu Province", "Shoudu Province Chest - Ether Pouch chest across the resovoir", 2978 + treasure_index_offse, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Salmon Violin", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Ether Pouch chest across the resovoir", 2978 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Salmon Violin", player)),
         LocationData("Shoudu Province", "Shoudu Province Chest - Fleuret chest above samurai lounge", 1541 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Shoudu Province", "Shoudu Province Chest - Gaia Axe chest", 2723 + treasure_index_offset), #(736, 133, -262)
         LocationData("Shoudu Province", "Shoudu Province Chest - Gaia Vest chest", 2723 + treasure_index_offset), #(734, 133, -260)

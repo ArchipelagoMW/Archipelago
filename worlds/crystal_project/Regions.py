@@ -50,7 +50,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
         create_region(world, player, locations_per_region, "The Open Sea"),
         create_region(world, player, locations_per_region, "Shoudu Waterfront"),
         create_region(world, player, locations_per_region, "Shoudu Province"),
-        create_region(world, player, locations_per_region, "Ganymede Shrine")",
+        create_region(world, player, locations_per_region, "Ganymede Shrine"),
         create_region(world, player, locations_per_region, "Beaurior Volcano"),
         create_region(world, player, locations_per_region, "Beaurior Rock"),
         create_region(world, player, locations_per_region, "Lake Delende"),
@@ -91,9 +91,9 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
     multiworld.get_region("Poko Poko Desert", player).add_exits(["Sara Sara Bazaar", "Ancient Reservoir", "Salmon Bay"], 
         {"Ancient Reservoir": lambda state: state.has("Item - Pyramid Key", world.player),
         "Salmon Bay": lambda state: state.has("Item - Progressive Quintar Flute", world.player, 2) and state.has("Item - Ibek Bell", player)})
-    multiworld.get_region("Sara Sara Bazaar", player).add_exits(["Sara Sara Beach", "Shoudu Province", "Open Sea"],
+    multiworld.get_region("Sara Sara Bazaar", player).add_exits(["Sara Sara Beach", "Shoudu Province", "The Open Sea"],
         {"Shoudu Province": lambda state: state.has("Item - Ferry Pass", world.player),
-        "Open Sea": lambda state: state.has("Item - Progressive Salmon Violin", world.player)})
+        "The Open Sea": lambda state: state.has("Item - Progressive Salmon Violin", world.player)})
     multiworld.get_region("Shoudu Province", player).add_exits(["Sara Sara Bazaar", "Ganymede Shrine"],
         {"Sara Sara Bazaar": lambda state: state.has("Item - Ferry Pass", world.player),
         "Ganymede Shrine": lambda state: state.has("Item - Ibek Bell", world.player)})
