@@ -33,29 +33,31 @@ For a basic understanding of YAML files, refer to
 [YAML Formatting](https://archipelago.gg/tutorial/Archipelago/advanced_settings/en#yaml-formatting) 
 in Advanced Settings.
 
-Item Plando allows a player to place an item in a specific location or specific locations, or place multiple items into 
-a list of specific locations both in their own game or in another player's game.
+Item Plando allows a player to place an item in a specific location or locations, or place multiple items into a list 
+of specific locations in their own game and/or in another player's game.
 
-To add item plando to your player yaml, you add a new block with a list element, starting with a dash `-`, under the 
-`plando_items` block. Your block should start with `item` if you want to do Single Placement, or `items` if you want 
-to do Multi Placement.
+To add item plando to your player yaml, you add a new list item, starting with a dash `-`, under the`plando_items` 
+block. You should start with `item` if you want to do Single Placement, or `items` if you want to do Multi Placement.
 
-After you define `item/items`, you would add another element (without a dash `-`) for `location` or `locations`, 
-depending on if you want to fill in one location or many. Note that both `location` and `locations` are optional.
+After you define `item/items`, you would add another list item (without a dash `-`) for `location` or `locations`, 
+depending on if you want to fill one location or many. Note that both `location` and `locations` are optional.
 
 You may do any combination of `item/items` and `location/locations` in a plando block, but the important takeaways are:
 * The block only places items in locations **until the shorter of the two lists is used up.**
-* An `item` block will only place a **single item** no matter how many you define it.
-* A `location` block will only fill a **single location** no matter how many you define.
+* An `item` block will only place a **single item** no matter how many you define in it.
+* A `location` block will only fill a **single location** no matter how many you define in it.
 
-Once you are satisfied with your block, you may continue to define new blocks, each starting with a `-`. 
-
-Each block can have several different options to tailor it the way you like.
+Once you are satisfied with your block, you may continue to define new list items, each starting with a dash `-`. Each 
+list item can have several different options to tailor it the way you like.
 
 ### `items`
 The `items` list defines the items to use. Each item name should be followed by a colon and a value.
 * A numerical value indicates the amount of that item.
 * A `true` value uses all copies of that item that are in your item pool.
+
+### `item`
+The `item` key defines a list of items to use, of which we will pick only one. Each item name should be followed by a 
+colon and a value. The value indicates the weight of that item being chosen.
 
 ### `locations` 
 The `locations` list defines possible locations those items can be placed in. Some special location group names can be 
@@ -86,14 +88,14 @@ This option determines whether the generator will fail if the item can't be plac
 * `silent`: If the placement fails, it will be ignored entirely. **(Default)**
 
 ### `percentage` 
-This option is the percentage chance for the relevant block to trigger. This can be any integer from 0 to 100. 
+This option is the percentage chance for the relevant list item to trigger. This can be any integer from 0 to 100. 
 **(Default: 100)**
 
 ### `count` 
-This option sets the number of items placed from the block. 
+This option sets the number of items placed from the list. 
 * **Default: 1 if using `item` or `location`, and `false` otherwise.**
 * **A number:** It will try to place this number of items.
-* `false`: It will try to place as many items from the block as it can.
+* `false`: It will try to place as many items from the list as it can.
 * **If `min` is defined,** it will try to place a random number of items higher than `min` (can be combined with `max`).
 * **If `max` is defined,** it will try to place a random number of items lower than `max` (can be combined with `min`).
 
@@ -154,16 +156,17 @@ in other players' worlds.
     # Example block - Timespinner
     - item:
         Empire Orb: 1
-        Radiant Orb: 1
+        Radiant Orb: 3
       location: Starter Chest 1
       from_pool: false
       world: true
       percentage: 50
 ```
-This block will place a single item, either the Empire Orb or Radiant Orb, on the location "Starter Chest 1". The world 
-value is `true`, so this location must be in another player's world. Because the from_pool value is `false`, a copy of 
-these items is added to these locations, while the originals remain in the item pool to be shuffled. Unlike the 
-previous examples, which will always trigger, this block only has a 50% chance to trigger.
+This block will place a single item, either the Empire Orb or Radiant Orb, on the location "Starter Chest 1". There is
+a 25% chance it is Empire Orb, and 75% chance it is Radiant Orb (1 to 3 odds). The world value is `true`, so this 
+location must be in another player's world. Because the from_pool value is `false`, a copy of these items is added to 
+these locations, while the originals remain in the item pool to be shuffled. Unlike the previous examples, which will 
+always trigger, this block only has a 50% chance to trigger.
 
 ```yaml
   plando_items:
@@ -215,7 +218,7 @@ are in this player's own world.
 First, this block will place the player's Biggoron Sword, Bow, Magic Meter, strength upgrades, and hookshots in the 
 dungeon major item chests. Because the from_pool value is `false`, a copy of these items is added to these locations, 
 while the originals remain in the item pool to be shuffled. Secondly, it will place the Kokiri Sword in the Deku Tree 
-Slingshot Chest.
+Slingshot Chest, again not from the pool.
 
 ## Boss Plando
 
