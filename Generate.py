@@ -514,10 +514,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     for option_key, option in world_type.options_dataclass.type_hints.items():
         handle_option(ret, game_weights, option_key, option, plando_options)
         valid_keys.add(option_key)
-    for option_key in game_weights:
-        if option_key in {"triggers", *valid_keys}:
-            continue
-        logging.warning(f"{option_key} is not a valid option name for {ret.game} and is not present in triggers.")
+
     if ret.game == "A Link to the Past":
         # TODO there are still more LTTP options not on the options system
         valid_keys |= {"sprite_pool", "sprite", "random_sprite_on_event"}
