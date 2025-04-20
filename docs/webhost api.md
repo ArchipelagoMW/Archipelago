@@ -146,8 +146,8 @@ Example:
     "detail": "19878f16-5a58-4b76-aab7-d6bf38be9463",
     "encoded": "GYePFlpYS3aqt9a_OL6UYw",
     "text": "Generation of seed 19878f16-5a58-4b76-aab7-d6bf38be9463 started successfully.",
-    "url": "http://atchipelago.gg/wait/GYePFlpYS3aqt9a_OL6UYw",
-    "wait_api_url": "http://atchipelago.gg/api/status/GYePFlpYS3aqt9a_OL6UYw"
+    "url": "http://archipelago.gg/wait/GYePFlpYS3aqt9a_OL6UYw",
+    "wait_api_url": "http://archipelago.gg/api/status/GYePFlpYS3aqt9a_OL6UYw"
 }
 ```
 
@@ -198,23 +198,23 @@ Example:
 {
     "downloads": [
         {
-            "download": "/slot_file/kK5fmxd8TfisU5Yp_Dv_eg/1",
+            "download": "/slot_file/kK5fmxd8TfisU5Yp_eg/1",
             "slot": 1
         },
         {
-            "download": "/slot_file/kK5fmxd8TfisU5Yp_Dv_eg/2",
+            "download": "/slot_file/kK5fmxd8TfisU5Yp_eg/2",
             "slot": 2
         },
         {
-            "download": "/slot_file/kK5fmxd8TfisU5Yp_Dv_eg/3",
+            "download": "/slot_file/kK5fmxd8TfisU5Yp_eg/3",
             "slot": 3
         },
         {
-            "download": "/slot_file/kK5fmxd8TfisU5Yp_Dv_eg/4",
+            "download": "/slot_file/kK5fmxd8TfisU5Yp_eg/4",
             "slot": 4
         },
         {
-            "download": "/slot_file/kK5fmxd8TfisU5Yp_Dv_eg/5",
+            "download": "/slot_file/kK5fmxd8TfisU5Yp_eg/5",
             "slot": 5
         }
     ],
@@ -222,23 +222,23 @@ Example:
     "last_port": 52122,
     "players": [
         [
-            "Quasky_OOT5",
+            "Slot_Name_1",
             "Ocarina of Time"
         ],
         [
-            "Quasky_OOT4",
+            "Slot_Name_2",
             "Ocarina of Time"
         ],
         [
-            "Quasky_OOT3",
+            "Slot_Name_3",
             "Ocarina of Time"
         ],
         [
-            "Quasky_OOT2",
+            "Slot_Name_4",
             "Ocarina of Time"
         ],
         [
-            "Quasky_OOT1",
+            "Slot_Name_5",
             "Ocarina of Time"
         ]
     ],
@@ -302,23 +302,23 @@ Example:
         "creation_time": "Fri, 18 Apr 2025 19:46:52 GMT",
         "players": [
             [
-                "Quasky_OOT5",
+                "Slot_Name_1",
                 "Ocarina of Time"
             ],
             [
-                "Quasky_OOT4",
+                "Slot_Name_2",
                 "Ocarina of Time"
             ],
             [
-                "Quasky_OOT3",
+                "Slot_Name_3",
                 "Ocarina of Time"
             ],
             [
-                "Quasky_OOT2",
+                "Slot_Name_4",
                 "Ocarina of Time"
             ],
             [
-                "Quasky_OOT1",
+                "Slot_Name_5",
                 "Ocarina of Time"
             ]
         ],
@@ -328,19 +328,19 @@ Example:
         "creation_time": "Fri, 18 Apr 2025 20:36:39 GMT",
         "players": [
             [
-                "Quasky_1",
+                "Slot_Name_1",
                 "Clique"
             ],
             [
-                "Quasky_2",
+                "Slot_Name_2",
                 "Clique"
             ],
             [
-                "Quasky_3",
+                "Slot_Name_3",
                 "Clique"
             ],
             [
-                "Bridgeipelago",
+                "Slot_Name_4",
                 "Archipelago"
             ]
         ],
