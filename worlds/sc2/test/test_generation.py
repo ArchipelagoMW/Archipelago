@@ -753,6 +753,95 @@ class TestItemFiltering(Sc2SetupTestBase):
         # No additional starting inventory item placement is needed
         self.assertEqual(len(upgrade_items), 0)
 
+    def test_kerrigan_levels_per_mission_triggering_pre_fill(self):
+        world_options = {
+            # Vanilla WoL with all missions
+            'mission_order': options.MissionOrder.option_custom,
+            'custom_mission_order': {
+                'campaign': {
+                    'goal': True,
+                    'layout': {
+                        'type': 'column',
+                        'size': 3,
+                        'missions': [
+                            {
+                                'index': 0,
+                                'mission_pool': [SC2Mission.LIBERATION_DAY.mission_name]
+                            },
+                            {
+                                'index': 1,
+                                'mission_pool': [SC2Mission.THE_INFINITE_CYCLE.mission_name]
+                            },
+                            {
+                                'index': 2,
+                                'mission_pool': [SC2Mission.THE_RECKONING.mission_name]
+                            },
+                        ]
+                    }
+                }
+            },
+            'required_tactics': options.RequiredTactics.option_standard,
+            'starter_unit': options.StarterUnit.option_off,
+            'generic_upgrade_items': options.GenericUpgradeItems.option_individual_items,
+            'grant_story_levels': options.GrantStoryLevels.option_disabled,
+            'kerrigan_levels_per_mission_completed': 1,
+            'kerrigan_level_item_distribution': options.KerriganLevelItemDistribution.option_size_2,
+        }
+
+        self.generate_world(world_options)
+        starting_inventory = [item.name for item in self.multiworld.precollected_items[self.player]]
+        kerrigan_1_stacks = [x for x in starting_inventory if x == item_names.KERRIGAN_LEVELS_1]
+
+        self.assertGreater(len(kerrigan_1_stacks), 0)
+
+    def test_kerrigan_levels_per_mission_and_generic_upgrades_both_triggering_pre_fill(self):
+        world_options = {
+            # Vanilla WoL with all missions
+            'mission_order': options.MissionOrder.option_custom,
+            'custom_mission_order': {
+                'campaign': {
+                    'goal': True,
+                    'layout': {
+                        'type': 'column',
+                        'size': 3,
+                        'missions': [
+                            {
+                                'index': 0,
+                                'mission_pool': [SC2Mission.LIBERATION_DAY.mission_name]
+                            },
+                            {
+                                'index': 1,
+                                'mission_pool': [SC2Mission.THE_INFINITE_CYCLE.mission_name]
+                            },
+                            {
+                                'index': 2,
+                                'mission_pool': [SC2Mission.THE_RECKONING.mission_name]
+                            },
+                        ]
+                    }
+                }
+            },
+            'required_tactics': options.RequiredTactics.option_standard,
+            'starter_unit': options.StarterUnit.option_off,
+            'generic_upgrade_items': options.GenericUpgradeItems.option_individual_items,
+            'grant_story_levels': options.GrantStoryLevels.option_disabled,
+            'kerrigan_levels_per_mission_completed': 1,
+            'kerrigan_level_item_distribution': options.KerriganLevelItemDistribution.option_size_2,
+            'generic_upgrade_missions': 100, # Weapon / Armor upgrades
+        }
+
+        self.generate_world(world_options)
+        starting_inventory = [item.name for item in self.multiworld.precollected_items[self.player]]
+        itempool = [item.name for item in self.multiworld.itempool]
+        kerrigan_1_stacks = [x for x in starting_inventory if x == item_names.KERRIGAN_LEVELS_1]
+        upgrade_items = [x for x in starting_inventory if x == item_names.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE]
+
+        self.assertGreater(len(kerrigan_1_stacks), 0) # Kerrigan levels were added
+        self.assertEqual(len(upgrade_items), 3) # W/A upgrades were added
+        self.assertNotIn(item_names.KERRIGAN_LEVELS_70, itempool)
+        self.assertNotIn(item_names.KERRIGAN_LEVELS_70, starting_inventory)
+
+
 
     def test_locking_required_items(self):
         world_options = {

@@ -249,31 +249,57 @@ class SC2World(World):
         return slot_data
 
     def pre_fill(self) -> None:
+        assert self.logic is not None
+        self.logic.total_mission_count = self.custom_mission_order.get_mission_count()
         if (
-            self.options.generic_upgrade_missions > 0
-            and self.options.required_tactics != RequiredTactics.option_no_logic
+                self.options.generic_upgrade_missions > 0
+                and self.options.required_tactics != RequiredTactics.option_no_logic
         ):
-            assert self.logic is not None
-            self.logic.total_mission_count = self.custom_mission_order.get_mission_count()
-            # Attempt to resolve situation when the option is too high for the mission order rolled
-            # TODO: Attempt to resolve Kerrigan levels too
+            # Attempt to resolve a situation when the option is too high for the mission order rolled
             weapon_armor_item_names = [
                 item_names.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE,
                 item_names.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE,
                 item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE
             ]
-            for attempt in range(0, WEAPON_ARMOR_UPGRADE_MAX_LEVEL):
-                all_state: CollectionState = self.multiworld.get_all_state(False)
-                location_failed = False
-                for location in self.location_cache:
-                    if not (all_state.can_reach_location(location.name, self.player)
-                            and all_state.can_reach_region(location.parent_region.name, self.player)):
-                        location_failed = True
-                        break
-                if location_failed:
-                    for item_name in weapon_armor_item_names:
-                        item = self.multiworld.create_item(item_name, self.player)
-                        self.multiworld.push_precollected(item)
+            def state_with_kerrigan_levels() -> CollectionState:
+                state: CollectionState = self.multiworld.get_all_state(False)
+                # Ignore dead ends caused by Kerrigan -> solve those in the next stage
+                state.collect(self.create_item(item_names.KERRIGAN_LEVELS_70))
+                state.update_reachable_regions(self.player)
+                return state
+
+            self._fill_needed_items(state_with_kerrigan_levels, weapon_armor_item_names, WEAPON_ARMOR_UPGRADE_MAX_LEVEL)
+        if (
+                self.options.kerrigan_levels_per_mission_completed > 0
+                and self.options.required_tactics != RequiredTactics.option_no_logic
+        ):
+            # Attempt to solve being locked by Kerrigan level requirements
+            self._fill_needed_items(lambda: self.multiworld.get_all_state(False), [item_names.KERRIGAN_LEVELS_1], 70)
+
+
+    def _fill_needed_items(self, all_state_getter: Callable[[],CollectionState], items_to_use: List[str], max_attempts: int) -> None:
+        """
+        Helper for pre-fill, seeks if the world is actually solvable and inserts items to start inventory if necessary.
+        :param all_state_getter:
+        :param items_to_use:
+        :param max_attempts:
+        :return:
+        """
+        for attempt in range(0, max_attempts):
+            all_state: CollectionState = all_state_getter()
+            location_failed = False
+            for location in self.location_cache:
+                if not (all_state.can_reach_location(location.name, self.player)
+                        and all_state.can_reach_region(location.parent_region.name, self.player)):
+                    location_failed = True
+                    break
+            if location_failed:
+                for item_name in items_to_use:
+                    item = self.multiworld.create_item(item_name, self.player)
+                    self.multiworld.push_precollected(item)
+            else:
+                return
+
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]) -> None:
         """

@@ -1004,7 +1004,7 @@ class SC2Logic:
         if (story_levels_available and self.story_levels_granted) or not self.kerrigan_unit_available:
             return True  # Levels are granted
         if (self.kerrigan_levels_per_mission_completed > 0
-                and self.kerrigan_levels_per_mission_completed_cap > 0
+                and self.kerrigan_levels_per_mission_completed_cap != 0
                 and not self.is_item_placement(state)
         ):
             # Levels can be granted from mission completion.
