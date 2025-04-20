@@ -6,7 +6,7 @@ from .test_base import Sc2SetupTestBase
 from .. import get_all_missions, mission_tables, options
 from ..item import item_groups, item_tables, item_names
 from ..mission_tables import SC2Race, SC2Mission, SC2Campaign, MissionFlag
-from ..options import EnabledCampaigns
+from ..options import EnabledCampaigns, MasteryLocations
 
 
 class TestSupportedUseCases(Sc2SetupTestBase):
@@ -80,6 +80,13 @@ class TestSupportedUseCases(Sc2SetupTestBase):
                 item_groups.ItemGroupNames.NCO_MAX_PROGRESSIVE_ITEMS: 0,
                 item_groups.ItemGroupNames.NCO_MIN_PROGRESSIVE_ITEMS: 1,
             },
+            'excluded_missions': [
+                # These missions have trouble fulfilling Terran Power Rating under these terms
+                SC2Mission.SUPERNOVA.mission_name,
+                SC2Mission.WELCOME_TO_THE_JUNGLE.mission_name,
+                SC2Mission.TROUBLE_IN_PARADISE.mission_name,
+            ],
+            'mastery_locations': MasteryLocations.option_disabled,
         }
 
         self.generate_world(world_options)
