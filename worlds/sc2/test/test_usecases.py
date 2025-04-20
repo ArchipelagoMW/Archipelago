@@ -117,7 +117,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             ],
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
-            'accessibility': 'locations',
+            'mastery_locations': options.MasteryLocations.option_disabled,
             'vanilla_items_only': True,
         }
 
