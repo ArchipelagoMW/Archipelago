@@ -730,46 +730,109 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #Shoudu Province
         #Treasure chests
         #Todo descriptivize & check requirements on these
-        LocationData("Shoudu Province", "Shoudu Province Chest - Money chest", 2794 + treasure_index_offset), #(728, 129, -249)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Money chest in the 2 Sky Arena Win Room", 2794 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Shoudu Province", "Shoudu Province Chest - Money chest", 2812 + treasure_index_offset), #(737, 133, -264)
         LocationData("Shoudu Province", "Shoudu Province Chest - Money chest", 2813 + treasure_index_offset), #(734, 133, -262)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Bone Mail chest", 2751 + treasure_index_offset), #(731, 129, -251)        
-        LocationData("Shoudu Province", "Shoudu Province Chest - Cutlass chest", 2747 + treasure_index_offset), #(734, 130, -250)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3504 + treasure_index_offset), #(775, 125, -196)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3505 + treasure_index_offset), #(733, 126, -272)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3506 + treasure_index_offset), #(778, 126, -186)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3507 + treasure_index_offset), #(787, 117, -277)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3508 + treasure_index_offset), #(713, 137, -217)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3509 + treasure_index_offset), #(738, 125, -223)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3510 + treasure_index_offset), #(756, 125, -218)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3511 + treasure_index_offset), #(803, 120, -222)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3512 + treasure_index_offset), #(806, 115, -222)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3513 + treasure_index_offset), #(776, 123, -200)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3514 + treasure_index_offset), #(752, 124, -199)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3515 + treasure_index_offset), #(751, 122, -188)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3520 + treasure_index_offset), #(776, 120, -192)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3521 + treasure_index_offset), #(778, 117, -182)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest", 3522 + treasure_index_offset), #(715, 125, -214)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Ether chest", 2717 + treasure_index_offset), #(716, 119, -217)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Ether Pouch chest", 1507 + treasure_index_offset), #(726, 105, -175)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Ether Pouch chest", 2978 + treasure_index_offset), #(725, 134, -241)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Fleuret chest", 1541 + treasure_index_offset), #(800, 119, -222)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Bone Mail chest in the 2 Sky Arena Win Room", 2751 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),     
+        LocationData("Shoudu Province", "Shoudu Province Chest - Cutlass chest in the 2 Sky Arena Win room", 2747 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest below the fast boi spark", 3504 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest hidden in a hosue by the elevator", 3505 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest through the rooftop window south of the fast boi spark", 3506 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest near sky fishing", 3507 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest in the resovoir above the water", 3508 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Salmon Violin", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest above the accessory shop", 3509 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest building near all the grates", 3510 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest above samurai lounge", 3511 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest in samurai lounge", 3512 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest in the assassin lounge", 3513 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest across from assassin lounge", 3514 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest its in a room and there is a bed", 3515 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest in the grainery", 3520 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest below the flower house", 3521 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest in the white hut", 3522 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Ether chest balance above the undercity", 2717 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Ether Pouch chest jump through a window", 1507 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Ether Pouch chest across the resovoir", 2978 + treasure_index_offse, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Salmon Violin", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Fleuret chest above samurai lounge", 1541 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Shoudu Province", "Shoudu Province Chest - Gaia Axe chest", 2723 + treasure_index_offset), #(736, 133, -262)
         LocationData("Shoudu Province", "Shoudu Province Chest - Gaia Vest chest", 2723 + treasure_index_offset), #(734, 133, -260)
         LocationData("Shoudu Province", "Shoudu Province Chest - Gravedigger chest", 2665 + treasure_index_offset), #(749, 134, -263)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Knicked Knackers chest", 1536 + treasure_index_offset), #(762, 117, -202)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Looters Pin chest", 1519 + treasure_index_offset), #(790, 107, -198)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Knicked Knackers chest crawl along the attic", 1536 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Looters Pin chest go in the back door cramped storage room", 1519 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Shoudu Province", "Shoudu Province Chest - Malifice chest", 2805 + treasure_index_offset), #(748, 134, -262)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Muggers Glove chest", 2760 + treasure_index_offset), #(743, 123, -198)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Muggers Glove chest sneak behind the boxes near assassin lounge", 2760 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Shoudu Province", "Shoudu Province Chest - Muramasa chest", 2928 + treasure_index_offset), #(754, 134, -264)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Plague Mask Chest in the Weaponsmith", 1505 + treasure_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Potion Chest outside the inn", 2985 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Potion Pouch go in the back door", 1506 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Potion Pouch near the assassin lounge", 2762 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Suitors Hat chest jump along the lampost", 2752 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Potion Pouch chest above the armor shop", 1517 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Potion chest through the rooftop window south of the fast boi spark", 2763 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Tincture Pouch chest balance above the undercity", 2716 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Potion Pouch chest across the balance beam east of save point", 3040 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Acrobat Shoes chest across on way to sky arena", 2754 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Potion Chest atop the roofs near the grates", 1369 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Potion Chest in the flower room", 2789 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Potion Chest hidden in a house by the elevator", 2790 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Potion Chest near sky fishing", 2986 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - The Immovable Chest under the dry kid pit", 1365 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Tonic Pouch in the 2 Sky Arena Win room", 2796 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Soul Kris Chest in 2 Sky Arena Win room", 2748 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
 
         #NPCs
         #Todo NPCs Job Masters: Master Assassin ID 3605 (769, 123, -201); gives you Assassin Seal in exchange for job mastery
         #Todo NPCs Job Masters: Master Samurai ID 3576 (800, 115, -221); gives you Samurai Seal in exchange for job mastery
+        #Todo sky arena npc
         #Todo descriptivize and check requirements on these
-        LocationData("Shoudu Province", "Shoudu Province NPC - Diamond Dust", 2833 + treasure_index_offset), #(752, 133, -262)
-        LocationData("Shoudu Province", "Shoudu Province NPC - Diamond Ingot", 2811 + treasure_index_offset), #(756, 133, -261)
-        LocationData("Shoudu Province", "Shoudu Province NPC - Diamond Ore", 2832 + treasure_index_offset), #(753, 130, -264)
+        LocationData("Shoudu Province", "Shoudu Province NPC - Diamond Dust", 2833 + npc_index_offset), #(752, 133, -262)
+        LocationData("Shoudu Province", "Shoudu Province NPC - Diamond Ingot", 2811 + npc_index_offset), #(756, 133, -261)
+        LocationData("Shoudu Province", "Shoudu Province NPC - Diamond Ore", 2832 + npc_index_offset), #(753, 130, -264)
+        LocationData("Shoudu Province", "Shoudu Province NPC - Gold Ingot back resovoir wall", 2827 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Salmon Violin", player)),
+        LocationData("Shoudu Province", "Shoudu Province NPC - Gold Ingot farmland on way to shrine", 2821 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province NPC - Gold Ore near sky fishing", 2834 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province NPC - Gold Dust in the 2 Sky Arena Win room", 2829 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+
+        #crystals
+        LocationData("Shoudu Province", "Shoudu Province Crystal - Samurai Crystal 3 Sky Arena wins", 1206 + crystal_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+
+        #Ganymede Shrine
+        LocationData("Ganymede Shrine", "Ganymede Shrine Chest - drop down from the top", 1594 + treasure_index_offset, lambda state: state.has("Item - Ganymede Stone", player)),
+
+        #Beaurior Volcano
+        #Treasure Chests
+        LocationData("Beaurior Volcano", "Beaurior Volcano Chest - Fenix Syrup chest", 3770 + treasure_index_offset),
+	    LocationData("Beaurior Volcano", "Beaurior Volcano Chest - Temporal Blade chest", 1168 + treasure_index_offset),
+	    LocationData("Beaurior Volcano", "Beaurior Volcano Chest - Tome of Light Chest", 2750 + treasure_index_offset),
+
+        #Beaurior Rock
+        #Treasure chests
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - Ground Floor Ether chest", 1796 + treasure_index_offset),
+	    LocationData("Beaurior Rock", "Beaurior Rock Chest - Ground Floor Guard Crown chest", 481 + treasure_index_offset),
+	    LocationData("Beaurior Rock", "Beaurior Rock Chest - Bottom Floor Halberd chest", 724 + treasure_index_offset, lambda state: state.has("Item - Small Key", player, 2)),
+	    LocationData("Beaurior Rock", "Beaurior Rock Chest - Bottom Floor Small Key chest", 1682 + treasure_index_offset, lambda state: state.has("Item - Small Key", player, 2)),
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - B1 Floor Small Key chest", 894 + treasure_index_offset),
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - Floor 2 Small Key chest", 1337 + treasure_index_offset, lambda state: state.has("Item - Small Key", player)),
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - Floor 3 Potion Pouch chest", 2973 + treasure_index_offset, lambda state: state.has("Item - Small Key", player, 2)),
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - Bottom Floor Ether chest", 1796 + treasure_index_offset, lambda state: state.has("Item - Small Key", player, 2)),
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - Floor 4 Small Key chest", 818 + treasure_index_offset, lambda state: state.has("Item - Small Key", player, 2)),
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - Floor 4 Map chest", 2916 + treasure_index_offset, lambda state: state.has("Item - Small Key", player, 2)),
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - Floor 2 Shelter Dress chest", 899 + treasure_index_offset, lambda state: state.has("Item - Small Key", player, 2)),
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - Floor 2 Fenix Juice chest", 1797 + treasure_index_offset, lambda state: state.has("Item - Small Key", player, 2)),
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - Floor 3 Ether Pouch chest", 2044 + treasure_index_offset, lambda state: state.has("Item - Small Key", player, 4)),
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - Floor 4 Potion chest", 2041 + treasure_index_offset, lambda state: state.has("Item - Small Key", player, 4)),
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - Floor 4 Ether chest", 1799 + treasure_index_offset, lambda state: state.has("Item - Small Key", player, 4)),
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - Floor 4 Cold Touch chest", 2040 + treasure_index_offset, lambda state: state.has("Item - Small Key", player, 4)),
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - Floor 5 Boss Key chest", 1683 + treasure_index_offset, lambda state: state.has("Item - Small Key", player, 4)),
+
+        #NPCs
+        LocationData("Beaurior Rock", "Beaurior Rock NPC - Bottom Floor Gold Ingot", 2822 + npc_index_offset, lambda state: state.has("Item - Small Key", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - Floor 4 Gold Dust chest", 2823 + npc_index_offset, lambda state: state.has("Item - Small Key", player, 4)),
+        LocationData("Beaurior Rock", "Beaurior Rock NPC - Floor 4 Gold Ore", 2824 + npc_index_offset, lambda state: state.has("Item - Small Key", player, 4) and state.has("Item - Progressive Quintar Flute", player, 2)),
+	    LocationData("Beaurior Rock", "Beaurior Rock NPC - Summit Gold Ore", 2836 + npc_index_offset, lambda state: state.has("Item - Small Key", player, 4) and state.has("Item - Boss Key", player)),
+
+        #Crystals
+	    LocationData("Beaurior Rock", "Beaurior Rock Crystal - Valkyrie", 1086 + crystal_index_offset, lambda state: state.has("Item - Small Key", player, 4) and state.has("Item - Boss Key", player)),
 
         #Lake Delende
         #Treasure chests
