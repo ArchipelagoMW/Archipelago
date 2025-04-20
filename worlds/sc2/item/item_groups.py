@@ -112,6 +112,7 @@ class ItemGroupNames:
     MENGSK_UNITS = "Mengsk Units"
     TERRAN_VETERANCY_UNITS = "Terran Veterancy Units"
     ORBITAL_COMMAND_ABILITIES = "Orbital Command Abilities"
+    WOL_ORBITAL_COMMAND_ABILITIES = "WoL Command Center Abilities"
 
     ZERG_ITEMS = "Zerg Items"
     ZERG_UNITS = "Zerg Units"
@@ -231,10 +232,6 @@ item_name_groups[ItemGroupNames.STARPORT_UNITS] = starport_units = [
     item_names.LIBERATOR, item_names.VALKYRIE, item_names.PRIDE_OF_AUGUSTRGRAD, item_names.SKY_FURY,
     item_names.EMPERORS_GUARDIAN, item_names.NIGHT_HAWK, item_names.NIGHT_WOLF,
 ]
-item_name_groups[ItemGroupNames.TERRAN_BUILDINGS] = terran_buildings = [
-    item_name for item_name, item_data in item_tables.item_table.items()
-    if item_data.type == item_tables.TerranItemType.Building
-]
 item_name_groups[ItemGroupNames.TERRAN_MERCENARIES] = terran_mercenaries = [
     item_name for item_name, item_data in item_tables.item_table.items()
     if item_data.type == item_tables.TerranItemType.Mercenary
@@ -284,8 +281,10 @@ item_name_groups[ItemGroupNames.WOL_BUILDINGS] = wol_buildings = [
     item_names.BUNKER, item_names.MISSILE_TURRET, item_names.SENSOR_TOWER,
     item_names.PERDITION_TURRET, item_names.PLANETARY_FORTRESS,
     item_names.HIVE_MIND_EMULATOR, item_names.PSI_DISRUPTER,
-    # CC spells
-    item_names.COMMAND_CENTER_MULE, item_names.COMMAND_CENTER_SCANNER_SWEEP,
+]
+item_name_groups[ItemGroupNames.TERRAN_BUILDINGS] = terran_buildings = [
+    item_name for item_name, item_data in item_tables.item_table.items()
+    if item_data.type == item_tables.TerranItemType.Building or item_name in wol_buildings
 ]
 item_name_groups[ItemGroupNames.MENGSK_UNITS] = [
     item_names.AEGIS_GUARD, item_names.EMPERORS_SHADOW,
@@ -302,6 +301,10 @@ item_name_groups[ItemGroupNames.ORBITAL_COMMAND_ABILITIES] = orbital_command_abi
     item_names.COMMAND_CENTER_SCANNER_SWEEP,
     item_names.COMMAND_CENTER_MULE,
     item_names.COMMAND_CENTER_EXTRA_SUPPLIES,
+]
+item_name_groups[ItemGroupNames.WOL_ORBITAL_COMMAND_ABILITIES] = wol_orbital_command_abilities = [
+    item_names.COMMAND_CENTER_SCANNER_SWEEP,
+    item_names.COMMAND_CENTER_MULE,
 ]
 spider_mine_sources = [
     item_names.VULTURE,
@@ -448,6 +451,7 @@ item_name_groups[ItemGroupNames.WOL_ITEMS] = vanilla_wol_items = (
     + wol_buildings
     + wol_mercs
     + wol_upgrades
+    + orbital_command_abilities
     + terran_generic_upgrades
 )
 
