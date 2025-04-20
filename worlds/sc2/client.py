@@ -1305,14 +1305,46 @@ API2_TO_API3_COMPAT_ITEMS: typing.Set[CompatItemHolder] = {
     CompatItemHolder(item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE, 3)
 }
 API3_TO_API4_COMPAT_ITEMS: typing.Set[CompatItemHolder] = {
-    CompatItemHolder(item_name)
-    for item_name, item_data in get_full_item_list().items()
-    if item_data.type in (ProtossItemType.War_Council, ProtossItemType.War_Council_2)
-       and item_name != item_names.DESTROYER_REFORGED_BLOODSHARD_CORE
-       and item_name != item_names.OBSERVER_INDUCE_SCOPOPHOBIA
+    # War Council
+    CompatItemHolder(item_names.ZEALOT_WHIRLWIND),
+    CompatItemHolder(item_names.CENTURION_RESOURCE_EFFICIENCY),
+    CompatItemHolder(item_names.SENTINEL_RESOURCE_EFFICIENCY),
+    CompatItemHolder(item_names.STALKER_PHASE_REACTOR),
+    CompatItemHolder(item_names.DRAGOON_PHALANX_SUIT),
+    CompatItemHolder(item_names.INSTIGATOR_MODERNIZED_SERVOS),
+    CompatItemHolder(item_names.ADEPT_DISRUPTIVE_TRANSFER),
+    CompatItemHolder(item_names.SLAYER_PHASE_BLINK),
+    CompatItemHolder(item_names.AVENGER_KRYHAS_CLOAK),
+    CompatItemHolder(item_names.DARK_TEMPLAR_LESSER_SHADOW_FURY),
+    CompatItemHolder(item_names.DARK_TEMPLAR_GREATER_SHADOW_FURY),
+    CompatItemHolder(item_names.BLOOD_HUNTER_BRUTAL_EFFICIENCY),
+    CompatItemHolder(item_names.SENTRY_DOUBLE_SHIELD_RECHARGE),
+    CompatItemHolder(item_names.ENERGIZER_MOBILE_CHRONO_BEAM),
+    CompatItemHolder(item_names.HAVOC_ENDURING_SIGHT),
+    CompatItemHolder(item_names.HIGH_TEMPLAR_PLASMA_SURGE),
+    CompatItemHolder(item_names.SIGNIFIER_FEEDBACK),
+    CompatItemHolder(item_names.ASCENDANT_ABILITY_EFFICIENCY),
+    CompatItemHolder(item_names.DARK_ARCHON_INDOMITABLE_WILL),
+    CompatItemHolder(item_names.IMMORTAL_IMPROVED_BARRIER),
+    CompatItemHolder(item_names.VANGUARD_RAPIDFIRE_CANNON),
+    CompatItemHolder(item_names.VANGUARD_FUSION_MORTARS),
+    CompatItemHolder(item_names.ANNIHILATOR_TWILIGHT_CHASSIS),
+    CompatItemHolder(item_names.COLOSSUS_FIRE_LANCE),
+    CompatItemHolder(item_names.WRATHWALKER_AERIAL_TRACKING),
+    CompatItemHolder(item_names.REAVER_KHALAI_REPLICATORS),
+    CompatItemHolder(item_names.PHOENIX_DOUBLE_GRAVITON_BEAM),
+    CompatItemHolder(item_names.CORSAIR_NETWORK_DISRUPTION),
+    CompatItemHolder(item_names.MIRAGE_GRAVITON_BEAM),
+    CompatItemHolder(item_names.VOID_RAY_PRISMATIC_RANGE),
+    CompatItemHolder(item_names.CARRIER_REPAIR_DRONES),
+    CompatItemHolder(item_names.TEMPEST_DISINTEGRATION),
+    CompatItemHolder(item_names.ARBITER_ABILITY_EFFICIENCY),
+    CompatItemHolder(item_names.MOTHERSHIP_INTEGRATED_POWER),
+    # Other items
+    CompatItemHolder(item_names.ASCENDANT_ARCHON_MERGE),
+    CompatItemHolder(item_names.DARK_TEMPLAR_ARCHON_MERGE),
+    CompatItemHolder(item_names.SPORE_CRAWLER_BIO_BONUS),
 }
-API3_TO_API4_COMPAT_ITEMS.add(CompatItemHolder(item_names.ASCENDANT_ARCHON_MERGE))
-API3_TO_API4_COMPAT_ITEMS.add(CompatItemHolder(item_names.DARK_TEMPLAR_ARCHON_MERGE))
 
 def compat_item_to_network_items(compat_item: CompatItemHolder) -> typing.List[NetworkItem]:
     item_id = get_full_item_list()[compat_item.name].code
@@ -1323,6 +1355,9 @@ def compat_item_to_network_items(compat_item: CompatItemHolder) -> typing.List[N
 def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
     items = ctx.items_received.copy()
     item_list = get_full_item_list()
+    def create_network_item(item_name: str) -> NetworkItem:
+        return NetworkItem(item_list[item_name].code, 0, 0, 0)
+
     # Items unlocked in earlier generator versions by default (Prophecy defaults, war council, rebalances)
     if ctx.slot_data_version < 3:
         for compat_item in API2_TO_API3_COMPAT_ITEMS:
@@ -1330,8 +1365,21 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
     if ctx.slot_data_version < 4:
         for compat_item in API3_TO_API4_COMPAT_ITEMS:
             items.extend(compat_item_to_network_items(compat_item))
-        if item_list[item_names.ROGUE_FORCES].code in set(item.item for item in ctx.items_received if item.player == ctx.slot):
-            items.append(NetworkItem(item_list[item_names.UNRESTRICTED_MUTATION].code, 0, 0, 0))
+        received_item_ids = set(item.item for item in ctx.items_received if item.player == ctx.slot)
+        if item_list[item_names.GHOST_PROGRESSIVE_RESOURCE_EFFICIENCY].code in received_item_ids:
+            items.append(create_network_item(item_names.GHOST_PROGRESSIVE_RESOURCE_EFFICIENCY))
+        if item_list[item_names.SPECTRE_PROGRESSIVE_RESOURCE_EFFICIENCY].code in received_item_ids:
+            items.append(create_network_item(item_names.SPECTRE_PROGRESSIVE_RESOURCE_EFFICIENCY))
+        if item_list[item_names.ROGUE_FORCES].code in received_item_ids:
+            items.append(create_network_item(item_names.UNRESTRICTED_MUTATION))
+        if item_list[item_names.SCOUT_PROGRESSIVE_RESOURCE_EFFICIENCY].code in received_item_ids:
+            items.append(create_network_item(item_names.SCOUT_PROGRESSIVE_RESOURCE_EFFICIENCY))
+        if item_list[item_names.SCOUT_ADVANCED_PHOTON_BLASTERS].code in received_item_ids:
+            items.append(create_network_item(item_names.SCOUT_GAMMA_PHOTON_BLASTERS))
+        if item_list[item_names.REAVER_PROGRESSIVE_RESOURCE_EFFICIENCY].code in received_item_ids:
+            items.append(create_network_item(item_names.REAVER_PROGRESSIVE_RESOURCE_EFFICIENCY))
+        if item_list[item_names.ORACLE_PROGRESSIVE_STASIS_CALIBRATION].code in received_item_ids:
+            items.append(create_network_item(item_names.ORACLE_PROGRESSIVE_STASIS_CALIBRATION))
 
     # API < 4 Orbital Command Count (Deprecated item)
     orbital_command_count: int = 0

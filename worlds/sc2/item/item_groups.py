@@ -774,11 +774,19 @@ item_name_groups[ItemGroupNames.LOTV_GLOBAL_UPGRADES] = lotv_global_upgrades = [
     item_names.GUARDIAN_SHELL,
     item_names.RECONSTRUCTION_BEAM,
 ]
+item_name_groups[ItemGroupNames.WAR_COUNCIL] = war_council_upgrades = [
+    item_name for item_name, item_data in item_tables.item_table.items()
+    if item_data.type in (item_tables.ProtossItemType.War_Council, item_tables.ProtossItemType.War_Council_2)
+       or item_name == item_names.ORACLE_PROGRESSIVE_STASIS_CALIBRATION
+]
+
 lotv_war_council_upgrades = [
     item_name for item_name, item_data in item_tables.item_table.items()
     if (
-        item_data.type in (item_tables.ProtossItemType.War_Council, item_tables.ProtossItemType.War_Council_2)
+        item_name in war_council_upgrades
         and item_data.parent in item_name_groups[ItemGroupNames.LOTV_UNITS]
+        # Destroyers get a custom (non-vanilla) buff, not a nerf over their vanilla council state
+        and item_name != item_names.DESTROYER_BLOODSHARD_REALIGNMENT
     )
 ]
 item_name_groups[ItemGroupNames.LOTV_ITEMS] = vanilla_lotv_items = (
@@ -794,11 +802,6 @@ item_name_groups[ItemGroupNames.VANILLA_ITEMS] = vanilla_items = (
     vanilla_wol_items + vanilla_hots_items + vanilla_lotv_items
 )
 
-item_name_groups[ItemGroupNames.WAR_COUNCIL] = [
-    item_name for item_name, item_data in item_tables.item_table.items()
-    if item_data.type in (item_tables.ProtossItemType.War_Council, item_tables.ProtossItemType.War_Council_2)
-]
-
 item_name_groups[ItemGroupNames.OVERPOWERED_ITEMS] = overpowered_items = [
     # Terran general
     item_names.SIEGE_TANK_GRADUATING_RANGE,
@@ -808,6 +811,8 @@ item_name_groups[ItemGroupNames.OVERPOWERED_ITEMS] = overpowered_items = [
     item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL,
     item_names.MECHANICAL_KNOW_HOW,
     item_names.MERCENARY_MUNITIONS,
+    item_names.GHOST_PROGRESSIVE_RESOURCE_EFFICIENCY,
+    item_names.SPECTRE_PROGRESSIVE_RESOURCE_EFFICIENCY,
 
     # Terran Mind Control
     item_names.HIVE_MIND_EMULATOR,
@@ -864,5 +869,12 @@ item_name_groups[ItemGroupNames.UNRELEASED_ITEMS] = unreleased_items = [
 # Currently, it disables only the topmost level of the progressives.
 # Don't place here anything that's present in the vanilla campaigns (if it's overpowered, use overpowered items instead)
 item_name_groups[ItemGroupNames.LEGACY_ITEMS] = legacy_items = [
+    item_names.GHOST_PROGRESSIVE_RESOURCE_EFFICIENCY,
+    item_names.SPECTRE_PROGRESSIVE_RESOURCE_EFFICIENCY,
     item_names.ASCENDANT_ARCHON_MERGE,
+    item_names.SCOUT_PROGRESSIVE_RESOURCE_EFFICIENCY,
+    item_names.SCOUT_GAMMA_PHOTON_BLASTERS,
+    item_names.REAVER_PROGRESSIVE_RESOURCE_EFFICIENCY,
+    item_names.ORACLE_PROGRESSIVE_STASIS_CALIBRATION,
+    item_names.DESTROYER_REFORGED_BLOODSHARD_CORE,
 ]

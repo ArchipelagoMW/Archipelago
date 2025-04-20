@@ -297,9 +297,12 @@ class TestItemFiltering(Sc2SetupTestBase):
             # else this option could push non-vanilla items past this test
             'nerf_unit_baselines': True,
         }
+
         self.generate_world(world_options)
+
         world_items = [(item.name, item_tables.item_table[item.name]) for item in self.multiworld.itempool]
         self.assertTrue(world_items)
+        self.assertNotIn(item_names.DESTROYER_BLOODSHARD_REALIGNMENT, world_items)
         for item_name, item_data in world_items:
             if item_data.quantity == 0:
                 continue

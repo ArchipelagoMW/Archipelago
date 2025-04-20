@@ -1354,6 +1354,7 @@ class SC2Logic:
                             state.has_any(
                                 (
                                     item_names.DESTROYER_REFORGED_BLOODSHARD_CORE,
+                                    item_names.DESTROYER_BLOODSHARD_REALIGNMENT,
                                     item_names.DESTROYER_RESOURCE_EFFICIENCY
                                 ), self.player)
                         )

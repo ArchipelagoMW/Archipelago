@@ -7,7 +7,7 @@ from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from Options import Accessibility
 from worlds.AutoWorld import WebWorld, World
 from . import location_groups
-from .item.item_groups import unreleased_items
+from .item.item_groups import unreleased_items, war_council_upgrades
 from .item.item_tables import (
     get_full_item_list,
     not_balanced_starting_units, WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
@@ -818,11 +818,14 @@ def flag_war_council_items(world: SC2World, item_list: List[FilterItem]) -> None
     if world.options.nerf_unit_baselines:
         return
 
+    flagged_item_names = []
     for item in item_list:
         if (
-            item.data.type in (ProtossItemType.War_Council, ProtossItemType.War_Council_2)
+            item.name in war_council_upgrades
             and not ItemFilterFlags.Excluded & item.flags
+            and item.name not in flagged_item_names
         ):
+            flagged_item_names.append(item.name)
             item.flags |= ItemFilterFlags.StartInventory
 
 
