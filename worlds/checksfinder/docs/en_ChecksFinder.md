@@ -7,7 +7,7 @@ config file.
 
 ## What is considered a location check in ChecksFinder?
 
-Location checks get submitted when you open all non-bomb cells in a board. The bottom
+Location checks get cleared when you open all non-bomb cells in a board. The bottom
 of the screen has a number next to the Archipelago logo that displays how many location checks are left to be sent with
 your current inventory. You can only get as many checks as you have gained items plus five checks to start with.
 
