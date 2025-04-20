@@ -276,7 +276,7 @@ id,name,classification,groups,content_packs
 291,Progressive Club,progression,"WEAPON,WEAPON_CLUB",
 292,Progressive Dagger,progression,"WEAPON,WEAPON_DAGGER",
 293,Progressive Slingshot,progression,"WEAPON,WEAPON_SLINGSHOT",
-294,Progressive Footwear,useful,FOOTWEAR,
+294,Progressive Footwear,progression,FOOTWEAR,
 295,Small Glow Ring,filler,"RING,RESOURCE_PACK,MAXIMUM_ONE",
 296,Glow Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
 297,Small Magnet Ring,filler,"RING,RESOURCE_PACK,MAXIMUM_ONE",

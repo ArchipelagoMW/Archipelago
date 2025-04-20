@@ -146,19 +146,24 @@ def create_backpack_items(item_factory: StardewItemFactory, options: StardewVall
     items.extend(item_factory(item) for item in ["Progressive Backpack"] * num_backpacks)
 
 
+def create_footwear(item_factory: StardewItemFactory, options: StardewValleyOptions, number: int) -> List[Item]:
+    classification = ItemClassification.progression if options.bundle_randomization == BundleRandomization.option_meme else ItemClassification.useful
+    return [item_factory(APWeapon.footwear, classification_pre_fill=classification) for _ in range(number)]
+
+
 def create_weapons(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):
     weapons = weapons_count(content)
     items.extend(item_factory(item) for item in [APWeapon.slingshot] * 2)
     monstersanity = options.monstersanity
     if monstersanity == Monstersanity.option_none:  # Without monstersanity, might not be enough checks to split the weapons
         items.extend(item_factory(item) for item in [APWeapon.weapon] * weapons)
-        items.extend(item_factory(item) for item in [APWeapon.footwear] * 3)  # 1-2 | 3-4 | 6-7-8
+        items.extend(create_footwear(item_factory, options, 3))  # 1-2 | 3-4 | 6-7-8
         return
 
     items.extend(item_factory(item) for item in [APWeapon.sword] * weapons)
     items.extend(item_factory(item) for item in [APWeapon.club] * weapons)
     items.extend(item_factory(item) for item in [APWeapon.dagger] * weapons)
-    items.extend(item_factory(item) for item in [APWeapon.footwear] * 4)  # 1-2 | 3-4 | 6-7-8 | 11-13
+    items.extend(create_footwear(item_factory, options, 4))  # 1-2 | 3-4 | 6-7-8 | 11-13
     if monstersanity == Monstersanity.option_goals or monstersanity == Monstersanity.option_one_per_category or \
             monstersanity == Monstersanity.option_short_goals or monstersanity == Monstersanity.option_very_short_goals:
         return

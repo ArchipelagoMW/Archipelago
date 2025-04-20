@@ -24,6 +24,7 @@ from .grind_logic import GrindLogicMixin
 from .harvesting_logic import HarvestingLogicMixin
 from .has_logic import HasLogicMixin
 from .logic_event import all_logic_events
+from .meme_items_logic import MemeItemsLogicMixin
 from .mine_logic import MineLogicMixin
 from .money_logic import MoneyLogicMixin
 from .monster_logic import MonsterLogicMixin
@@ -54,7 +55,7 @@ from ..data.museum_data import all_museum_items
 from ..data.recipe_data import all_cooking_recipes
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_logic import ModLogicMixin
-from ..options import StardewValleyOptions
+from ..options import StardewValleyOptions, BundleRandomization
 from ..stardew_rule import False_, StardewRule
 from ..strings.animal_names import Animal
 from ..strings.animal_product_names import AnimalProduct
@@ -98,7 +99,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
                    SkillLogicMixin, FarmingLogicMixin, BundleLogicMixin, FishingLogicMixin, MineLogicMixin, CookingLogicMixin, AbilityLogicMixin,
                    SpecialOrderLogicMixin, QuestLogicMixin, CraftingLogicMixin, ModLogicMixin, HarvestingLogicMixin, SourceLogicMixin,
                    RequirementLogicMixin, BookLogicMixin, GrindLogicMixin, FestivalLogicMixin, WalnutLogicMixin, GoalLogicMixin, SpecialItemsLogicMixin,
-                   MovieLogicMixin):
+                   MovieLogicMixin, MemeItemsLogicMixin):
     player: int
     options: StardewValleyOptions
     content: StardewContent
@@ -362,6 +363,10 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             crafting_rule = self.registry.crafting_rules[recipe]
             obtention_rule = self.registry.item_rules[recipe] if recipe in self.registry.item_rules else False_()
             self.registry.item_rules[recipe] = obtention_rule | crafting_rule
+
+        if self.options.bundle_randomization == BundleRandomization.option_meme:
+            self.meme.initialize_rules()
+            self.registry.item_rules.update(self.registry.meme_item_rules)
 
         self.quest.initialize_rules()
         self.quest.update_rules(self.mod.quest.get_modded_quest_rules())

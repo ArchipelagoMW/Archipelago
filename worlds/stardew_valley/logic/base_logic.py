@@ -25,6 +25,7 @@ class LogicRegistry:
         self.festival_rules: Dict[str, StardewRule] = {}
         self.quest_rules: Dict[str, StardewRule] = {}
         self.special_order_rules: Dict[str, StardewRule] = {}
+        self.meme_item_rules: Dict[str, StardewRule] = {}
 
         self.sve_location_rules: Dict[str, StardewRule] = {}
 

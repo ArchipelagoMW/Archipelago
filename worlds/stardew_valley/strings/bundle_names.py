@@ -10,13 +10,29 @@ class CCRoom:
 
 
 all_cc_bundle_names = []
+all_meme_bundle_names = []
 
 
-def cc_bundle(name: str) -> str:
-    full_name = f"{name} Bundle"
-    all_cc_bundle_names.append(full_name)
+def name_bundle(name: str) -> str:
+    return f"{name} Bundle"
+
+
+def register_bundle(bundle_name: str, is_meme: bool = False) -> str:
+    all_cc_bundle_names.append(bundle_name)
+    if is_meme:
+        all_meme_bundle_names.append(bundle_name)
+    return bundle_name
+
+
+def cc_bundle(name: str, is_meme: bool = False) -> str:
+    full_name = name_bundle(name)
+    register_bundle(full_name, is_meme)
     # print(full_name)
     return full_name
+
+
+def meme_bundle(name: str) -> str:
+    return cc_bundle(name, True)
 
 
 class BundleName:
@@ -111,57 +127,60 @@ class BundleName:
 
 
 class MemeBundleName:
-    AAAA = cc_bundle("AAAA")
-    amons_fall = cc_bundle("Amon's Fall")
-    anything_for_beyonce = cc_bundle("Anything For Beyonce")
-    archipela_go = cc_bundle("Archipela-Go!")
-    balls = cc_bundle("Balls")
-    big_grapes = cc_bundle("Big Grapes")
-    bureaucracy = cc_bundle("Bureaucracy")
-    burger_king = cc_bundle("Burger King")
-    burger_king_revenge = cc_bundle("Burger King's Revenge")
-    caffeinated = cc_bundle("Caffeinated")
-    cap = cc_bundle("Cap")
-    capitalist = cc_bundle("Capitalist's")
-    chaos_emerald = cc_bundle("Chaos Emerald")
-    cipher = cc_bundle("Cipher")
-    clique = cc_bundle("Clique")
-    commitment = cc_bundle("Commitment")
-    cookie_clicker = cc_bundle("Cookie Clicker")
-    crab_rave = cc_bundle("Crab Rave")
-    death = cc_bundle("Death")
-    doctor_angler = cc_bundle("Doctor Angler")
-    eg = cc_bundle("Eg")
-    exhaustion = cc_bundle("Exhaustion")
-    fruit = cc_bundle("'Fruit'")
-    hats_off_to_you = cc_bundle("Hats Off To You")
-    honorable = cc_bundle("Honorable")
-    hurricane_tortilla = cc_bundle("Hurricane Tortilla")
-    journalist = cc_bundle("Journalist's")
-    kent_c = cc_bundle("Kent C.")
-    legendairy = cc_bundle("Legendairy")
-    lemonade_stand = cc_bundle("Lemonade Stand")
-    look_at_chickens = cc_bundle("Look At These Chickens")
-    mermaid = cc_bundle("Mermaid")
-    minecraft = cc_bundle("Minecraft")
-    not_the_bees = cc_bundle("Not The Bees")
-    obelisks = cc_bundle("Obelisks")
-    off_your_back = cc_bundle("Off Your Back")
-    potato = cc_bundle("Potato")
-    reverse = cc_bundle("Reverse")
-    rick = cc_bundle("Rick")
-    romance = cc_bundle("Romance")
-    sappy = cc_bundle("Sappy")
-    screw_you = cc_bundle("Screw You")
-    sisyphus = cc_bundle("Sisyphus")
-    smapi = cc_bundle("SMAPI")
-    snitch = cc_bundle("Snitch")
-    speedrunners = cc_bundle("Speedrunner's")
-    sunmaid = cc_bundle("Sunmaid")
-    tick_tock = cc_bundle("Tick Tock")
-    tilesanity = cc_bundle("Tilesanity")
-    trap = cc_bundle("Trap")
-    trout = cc_bundle("Trout")
-    vampire = cc_bundle("Vampire")
-    vocaloid = cc_bundle("Vocaloid")
-    what_the_rock_is_cooking = cc_bundle("What The Rock Is Cooking")
+    communist = meme_bundle("Communist's")
+    bun_dle = register_bundle("Bun-dle", True)
+    bundle = meme_bundle("Bundle")
+    AAAA = meme_bundle("AAAA")
+    amons_fall = meme_bundle("Amon's Fall")
+    anything_for_beyonce = meme_bundle("Anything For Beyonce")
+    archipela_go = meme_bundle("Archipela-Go!")
+    balls = meme_bundle("Balls")
+    big_grapes = meme_bundle("Big Grapes")
+    bureaucracy = meme_bundle("Bureaucracy")
+    burger_king = meme_bundle("Burger King")
+    burger_king_revenge = meme_bundle("Burger King's Revenge")
+    caffeinated = meme_bundle("Caffeinated")
+    cap = meme_bundle("Cap")
+    capitalist = meme_bundle("Capitalist's")
+    chaos_emerald = meme_bundle("Chaos Emerald")
+    cipher = meme_bundle("Cipher")
+    clique = meme_bundle("Clique")
+    commitment = meme_bundle("Commitment")
+    cookie_clicker = meme_bundle("Cookie Clicker")
+    crab_rave = meme_bundle("Crab Rave")
+    death = meme_bundle("Death")
+    doctor_angler = meme_bundle("Doctor Angler")
+    eg = meme_bundle("Eg")
+    exhaustion = meme_bundle("Exhaustion")
+    fruit = meme_bundle("'Fruit'")
+    hats_off_to_you = meme_bundle("Hats Off To You")
+    honorable = meme_bundle("Honorable")
+    hurricane_tortilla = meme_bundle("Hurricane Tortilla")
+    journalist = meme_bundle("Journalist's")
+    kent_c = meme_bundle("Kent C.")
+    legendairy = meme_bundle("Legendairy")
+    lemonade_stand = meme_bundle("Lemonade Stand")
+    look_at_chickens = meme_bundle("Look At These Chickens")
+    mermaid = meme_bundle("Mermaid")
+    minecraft = meme_bundle("Minecraft")
+    not_the_bees = meme_bundle("Not The Bees")
+    obelisks = meme_bundle("Obelisks")
+    off_your_back = meme_bundle("Off Your Back")
+    potato = meme_bundle("Potato")
+    reverse = meme_bundle("Reverse")
+    rick = meme_bundle("Rick")
+    romance = meme_bundle("Romance")
+    sappy = meme_bundle("Sappy")
+    screw_you = meme_bundle("Screw You")
+    sisyphus = meme_bundle("Sisyphus")
+    smapi = meme_bundle("SMAPI")
+    snitch = meme_bundle("Snitch")
+    speedrunners = meme_bundle("Speedrunner's")
+    sunmaid = meme_bundle("Sunmaid")
+    tick_tock = meme_bundle("Tick Tock")
+    tilesanity = meme_bundle("Tilesanity")
+    trap = meme_bundle("Trap")
+    trout = meme_bundle("Trout")
+    vampire = meme_bundle("Vampire")
+    vocaloid = meme_bundle("Vocaloid")
+    what_the_rock_is_cooking = meme_bundle("What The Rock Is Cooking")
