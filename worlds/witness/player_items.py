@@ -65,13 +65,16 @@ class WitnessPlayerItems:
             or name in player_logic.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME
         }
 
-        # Downgrade door items
+        # Downgrade door items and make lasers local if local lasers is on
         for item_name, item_data in self.item_data.items():
             if not isinstance(item_data.definition, DoorItemDefinition):
                 continue
 
             if all(not self._logic.solvability_guaranteed(e_hex) for e_hex in item_data.definition.panel_id_hexes):
                 item_data.classification = ItemClassification.useful
+
+            if item_data.definition.category == ItemCategory.LASER and self._world.options.shuffle_lasers == "local":
+                item_data.local_only = True
 
         # Build the mandatory item list.
         self._mandatory_items: Dict[str, int] = {}
