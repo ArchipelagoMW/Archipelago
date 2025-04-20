@@ -47,11 +47,13 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
         create_region(world, player, locations_per_region, "Sara Sara Beach"),
         create_region(world, player, locations_per_region, "Ancient Reservoir"),
         create_region(world, player, locations_per_region, "Salmon Bay"),
-        #Todo add entrances to The Open Sea
         create_region(world, player, locations_per_region, "The Open Sea"),
         create_region(world, player, locations_per_region, "Shoudu Waterfront"),
         create_region(world, player, locations_per_region, "Shoudu Province"),
-        create_region(world, player, locations_per_region, "Lake Delende")     
+        create_region(world, player, locations_per_region, "Ganymede Shrine")",
+        create_region(world, player, locations_per_region, "Beaurior Volcano"),
+        create_region(world, player, locations_per_region, "Beaurior Rock"),
+        create_region(world, player, locations_per_region, "Lake Delende"),
     ]
 
     multiworld.regions += regions
@@ -61,7 +63,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
     multiworld.get_region("Delende", player).add_exits(["Soiled Den", "Pale Grotto", "Yamagawa M.A.", "Seaside Cliffs", "Mercury Shrine"])
     multiworld.get_region("Yamagawa M.A.", player).add_exits(["Lake Delende"])
     multiworld.get_region("Pale Grotto", player).add_exits(["Proving Meadows"])
-    multiworld.get_region("Seaside Cliffs", player).add_exits(["Draft Shaft Conduit"])
+    multiworld.get_region("Seaside Cliffs", player).add_exits(["Draft Shaft Conduit", "Beaurior Volcano"],
+        {"Beaurior Volcano": lambda state: state.has_any({"Item - Ibek Bell"}, world.player)})
     multiworld.get_region("Proving Meadows", player).add_exits(["Skumparadise"], 
         {"Skumparadise": lambda state: get_job_count(player, state) >= 3})
     multiworld.get_region("Skumparadise", player).add_exits(["Capital Sequoia"])
@@ -88,8 +91,16 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
     multiworld.get_region("Poko Poko Desert", player).add_exits(["Sara Sara Bazaar", "Ancient Reservoir", "Salmon Bay"], 
         {"Ancient Reservoir": lambda state: state.has("Item - Pyramid Key", world.player),
         "Salmon Bay": lambda state: state.has("Item - Progressive Quintar Flute", world.player, 2) and state.has("Item - Ibek Bell", player)})
-    multiworld.get_region("Sara Sara Bazaar", player).add_exits(["Sara Sara Beach", "Shoudu Province"],
-        {"Shoudu Province": lambda state: state.has("Item - Ferry Pass", world.player)})
+    multiworld.get_region("Sara Sara Bazaar", player).add_exits(["Sara Sara Beach", "Shoudu Province", "Open Sea"],
+        {"Shoudu Province": lambda state: state.has("Item - Ferry Pass", world.player),
+        "Open Sea": lambda state: state.has("Item - Progressive Salmon Violin", world.player)})
+    multiworld.get_region("Shoudu Province", player).add_exits(["Sara Sara Bazaar", "Ganymede Shrine"],
+        {"Sara Sara Bazaar": lambda state: state.has("Item - Ferry Pass", world.player),
+        "Ganymede Shrine": lambda state: state.has("Item - Ibek Bell", world.player)})
+    multiworld.get_region("Ganymede Shrine", player).add_exits(["Shoudu Province"])
+    multiworld.get_region("Sara Sara Beach", player).add_exits(["Beaurior Volcano"],
+        {"Beaurior Volcano": lambda state: state.has("Item - Ibek Bell", world.player)})
+    multiworld.get_region("Beaurior Volcano", player).add_exits(["Beaurior Rock"])
     ## examples
     # multiworld.get_region("Onett", player).add_exits(["Giant Step", "Twoson", "Northern Onett", "Global ATM Access"],
     #                                              {"Giant Step": lambda state: state.has("Key to the Shack", player),
@@ -131,7 +142,8 @@ def connect_menu_region(world: "CrystalProjectWorld") -> None:
 
     world.starting_region = starting_region_list[0]
     menu = world.multiworld.get_region("Menu", world.player)
-    menu.add_exits(["Spawning Meadows", "Capital Sequoia", "Salmon River", "Poko Poko Desert"], 
+    menu.add_exits(["Spawning Meadows", "Capital Sequoia", "Salmon River", "Poko Poko Desert", "Ganymede Shrine"], 
         {"Capital Sequoia": lambda state: state.has_any({"Item - Gaea Stone"}, world.player),
         "Salmon River": lambda state: state.has_any({"Item - Poseidon Stone"}, world.player),
-        "Poko Poko Desert": lambda state: state.has_any({"Item - Mars Stone"}, world.player)})
+        "Poko Poko Desert": lambda state: state.has_any({"Item - Mars Stone"}, world.player),
+        "Ganymede Shrine": lambda state: state.has_any({"Item - Ganymede Stone"}, world.player)})
