@@ -27,11 +27,11 @@ requires:
   plando: bosses, items, texts, connections
 ``` 
 
-## Item Plando
-
 For a basic understanding of YAML files, refer to 
 [YAML Formatting](https://archipelago.gg/tutorial/Archipelago/advanced_settings/en#yaml-formatting) 
 in Advanced Settings.
+
+## Item Plando
 
 Item Plando allows a player to place an item in a specific location or locations, or place multiple items into a list 
 of specific locations in their own game and/or in another player's game.
