@@ -25,7 +25,6 @@ window.addEventListener('load', () => {
         showdown.setOption('literalMidWordUnderscores', true);
         showdown.setOption('disableForced4SpacesIndentedSublists', true);
         tutorialWrapper.innerHTML += (new showdown.Converter()).makeHtml(results);
-        adjustHeaderWidth();
 
         const title = document.querySelector('h1')
         if (title) {
