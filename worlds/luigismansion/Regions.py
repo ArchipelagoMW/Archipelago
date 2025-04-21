@@ -108,8 +108,8 @@ spawn_locations = {
                               "key": ["Conservatory Key", "Heart Key"]}, # Conservatory
     "Billiards Room":        {"room_no": 12, "pos_x": -963.755737, "pos_y": 0, "pos_z": -3055.808110,
                               "key": ["Heart Key", "Billiards Room Key"]}, # Billiards
-    "Twins' Room":           {"room_no": 25, "pos_x": -1729.586790, "pos_y": 550, "pos_z": 116.055779,
-                              "key": ["Twins' Room Key", "Family Hallway Key"]}, # Twins
+    # "Twins' Room":           {"room_no": 25, "pos_x": -1729.586790, "pos_y": 550, "pos_z": 116.055779,
+    #                           "key": ["Twins' Room Key", "Family Hallway Key"]}, # Twins
     "Nursery":               {"room_no": 24, "pos_x": -3331.658690, "pos_y": 550, "pos_z": -198.970337,
                               "key": ["Nursery Key", "Family Hallway Key"]}, # Nursery
     "Master Bedroom":        {"room_no": 33, "pos_x": -3365.857670, "pos_y": 550, "pos_z": -1513.529660,
