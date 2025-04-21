@@ -2,7 +2,9 @@ import unittest
 
 from . import SVTestBase
 from .. import BundleRandomization
-from ..data.bundles_data.bundle_data import all_bundle_items_except_money, quality_crops_items_thematic, quality_foraging_items, quality_fish_items
+from ..data.bundles_data.bundle_data import all_bundle_items_except_money
+from ..data.bundles_data.remixed_bundles import quality_foraging_items, quality_fish_items
+from ..data.bundles_data.thematic_bundles import quality_crops_items_thematic
 from ..options import BundlePlando
 from ..strings.bundle_names import BundleName
 from ..strings.crop_names import Fruit
