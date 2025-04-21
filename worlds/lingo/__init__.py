@@ -160,21 +160,29 @@ class LingoWorld(World):
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
+    def place_good_item(self, progitempool: list[Item], fill_locations: list[Location]):
+        if len(self.player_logic.good_item_options) == 0:
+            return
+
+        good_location = self.get_location("Second Room - Good Luck")
+        if good_location.progress_type == LocationProgressType.EXCLUDED or good_location not in fill_locations:
+            return
+
+        good_items = list(filter(lambda progitem: progitem.player == self.player and
+                                                  progitem.name in self.player_logic.good_item_options, progitempool))
+
+        if len(good_items) == 0:
+            return
+
+        good_item = self.random.choice(good_items)
+        good_location.place_locked_item(good_item)
+
+        progitempool.remove(good_item)
+        fill_locations.remove(good_location)
+
     def fill_hook(self, progitempool: list[Item], usefulitempool: list[Item], filleritempool: list[Item],
                   fill_locations: list[Location]):
-        if len(self.player_logic.good_item_options) > 0:
-            good_location = self.get_location("Second Room - Good Luck")
-            good_items = list(filter(lambda progitem: progitem.player == self.player and
-                                                      progitem.name in self.player_logic.good_item_options,
-                                     progitempool))
-
-            if good_location.progress_type != LocationProgressType.EXCLUDED and good_location in fill_locations and\
-                    len(good_items) > 0:
-                good_item = self.random.choice(good_items)
-                good_location.place_locked_item(good_item)
-
-                progitempool.remove(good_item)
-                fill_locations.remove(good_location)
+        self.place_good_item(progitempool, fill_locations)
 
     def fill_slot_data(self):
         slot_options = [
