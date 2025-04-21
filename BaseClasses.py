@@ -223,7 +223,7 @@ class MultiWorld():
                               AutoWorld.AutoWorldRegister.world_types[self.game[player]].options_dataclass.type_hints}
         for option_key in all_keys:
             option = Utils.DeprecateDict(f"Getting options from multiworld is now deprecated. "
-                                         f"Please use `self.options.{option_key}` instead.")
+                                         f"Please use `self.options.{option_key}` instead.", True)
             option.update(getattr(args, option_key, {}))
             setattr(self, option_key, option)
 
