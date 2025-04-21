@@ -129,8 +129,8 @@ item_table: Dict[str, ItemData] = {
     #Key Items
     "Item - Black Squirrel": ItemData("Item", 21 + item_index_offset, ItemClassification.progression, 4),
     "Item - Dog Bone": ItemData("Item", 6 + item_index_offset, ItemClassification.progression, 3),
-    #TODO: make count configurable for clam win con
-    "Item - Clamshell": ItemData("Item", 16 + item_index_offset, ItemClassification.progression, 19),
+    # Number of clamshells is set dynamically based on your Clamshells in pool variable
+    "Item - Clamshell": ItemData("Item", 16 + item_index_offset, ItemClassification.progression, 0),
     "Item - Digested Head": ItemData("Item", 17 + item_index_offset, ItemClassification.progression, 3),
     "Item - Lost Penguin": ItemData("Item", 24 + item_index_offset, ItemClassification.progression, 12),
     "Item - Elevator Part": ItemData("Item", 224 + item_index_offset, ItemClassification.progression, 10),

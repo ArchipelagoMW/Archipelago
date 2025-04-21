@@ -7,7 +7,7 @@ import pkgutil
 from .Items import item_table, filler_items, get_item_names_per_category
 from .Locations import get_locations
 from .Regions import init_areas
-from .Options import CrystalProjectOptions, Toggle
+from .Options import CrystalProjectOptions
 
 from typing import List, Set, Dict, TextIO, Any
 from worlds.AutoWorld import World
@@ -28,7 +28,7 @@ class CrystalProjectWorld(World):
     topology_present = True  # show path to required location checks in spoiler
 
     item_name_to_id = {item: item_table[item].code for item in item_table}
-    location_name_to_id = {location.name: location.code for location in get_locations(-1)}
+    location_name_to_id = {location.name: location.code for location in get_locations(-1, None)}
     item_name_groups = get_item_names_per_category()
 
     def generate_early(self):
@@ -108,7 +108,7 @@ class CrystalProjectWorld(World):
             self.multiworld.push_precollected(self.create_item("Item - The Old World Map"))
 
     def create_regions(self) -> None:
-        init_areas(self, get_locations(self.player))
+        init_areas(self, get_locations(self.player, self.options), self.options)
 
     def create_item(self, name: str) -> Item:
         data = item_table[name]
@@ -244,6 +244,10 @@ class CrystalProjectWorld(World):
                     item = self.set_classifications(name)
                     pool.append(item)
 
+        for _ in range (self.options.clamshellsInPool):
+            item = self.set_classifications("Item - Clamshell")
+            pool.append(item)
+
         for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)):
             item = self.create_item(self.get_filler_item_name())
             pool.append(item)
@@ -258,11 +262,11 @@ class CrystalProjectWorld(World):
 
     def set_rules(self) -> None:
         win_condition_item: str
-        if self.options.goal == 0:
+        if self.options.goal == self.options.goal.option_astley:
             win_condition_item = "Item - New World Stone"
-        elif self.options.goal == 1:
+        elif self.options.goal == self.options.goal.option_true_astley:
             win_condition_item = "Item - Old World Stone"
-        elif self.options.goal == 2:
+        elif self.options.goal == self.options.goal.option_clamshells:
             win_condition_item = "Item - Clamshell"
         
         if self.options.goal == 0 or self.options.goal == 1:
@@ -270,7 +274,8 @@ class CrystalProjectWorld(World):
         if self.options.goal == 2:
             self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player, self.options.clamshellsQuantity.value)
 
-    # reference from blasphemous
+    # This is data that needs to be readable from within the modded version of the game.
+        # Example job rando makes the crystals behave differently, so the game needs to know about it.
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {}
     
@@ -278,8 +283,6 @@ class CrystalProjectWorld(World):
             "goal": self.options.goal.value,
             "clamshellsQuantity": self.options.clamshellsQuantity.value,
             "randomizeJobs": bool(self.options.randomizeJobs.value),
-            "startWithTreasureFinder": bool(self.options.startWithTreasureFinder),
-            "startWithMaps": bool(self.options.startWithMaps)
         }
     
         return slot_data
