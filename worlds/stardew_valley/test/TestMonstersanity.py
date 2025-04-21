@@ -68,6 +68,21 @@ class TestMonstersanityNone(SVMonstersanityTestBase):
         return False
 
 
+class TestMonstersanityNoneWithSVE(SVMonstersanityTestBase):
+    options = {
+        options.Monstersanity: options.Monstersanity.option_none,
+        options.Mods: ModNames.sve,
+    }
+    expected_progressive_generic_weapon = 6
+    expected_progressive_slingshot = 2
+    expected_progressive_footwear = 3
+
+    @property
+    def run_default_tests(self) -> bool:
+        # None is default
+        return False
+
+
 class TestMonstersanityGoals(SVMonstersanityTestBase):
     options = {
         options.Monstersanity: options.Monstersanity.option_goals,
