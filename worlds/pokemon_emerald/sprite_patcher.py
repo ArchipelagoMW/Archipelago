@@ -1,4 +1,6 @@
 import os
+import zlib
+
 from pygbagfx import _gbagfx # from package
 from .data import data
 
@@ -36,41 +38,40 @@ OBJECT_NEEDS_COMPRESSION = {
     "trainer_palette_battle": True,
 }
 
-# TODO: Replace DATA_ADDRESSES_MOCK with data.rom_addresses
 INTERNAL_ID_TO_SPRITE_ADDRESS = {
-    "pokemon_front_anim":    lambda a : DATA_ADDRESSES_MOCK["gMonFrontPicTable"]      + 8 * a,
-    "pokemon_back":          lambda a : DATA_ADDRESSES_MOCK["gMonBackPicTable"]       + 8 * a,
-    "pokemon_icon":          lambda a : DATA_ADDRESSES_MOCK["gMonIconTable"]          + 4 * a,
-    "pokemon_icon_index":    lambda a : DATA_ADDRESSES_MOCK["gMonIconPaletteIndices"] + a,
-    "pokemon_footprint":     lambda a : DATA_ADDRESSES_MOCK["gMonFootprintTable"]     + 4 * a,
-    "pokemon_palette":       lambda a : DATA_ADDRESSES_MOCK["gMonPaletteTable"]       + 8 * a,
-    "pokemon_palette_shiny": lambda a : DATA_ADDRESSES_MOCK["gMonShinyPaletteTable"]  + 8 * a,
-    "brendan_walking_running": lambda : DATA_ADDRESSES_MOCK["sPicTable_BrendanNormal"],
-    "brendan_mach_bike":       lambda : DATA_ADDRESSES_MOCK["sPicTable_BrendanMachBike"],
-    "brendan_acro_bike":       lambda : DATA_ADDRESSES_MOCK["sPicTable_BrendanAcroBike"],
-    "brendan_surfing":         lambda : DATA_ADDRESSES_MOCK["sPicTable_BrendanSurfing"],
-    "brendan_field_move":      lambda : DATA_ADDRESSES_MOCK["sPicTable_BrendanFieldMove"],
-    "brendan_underwater":      lambda : DATA_ADDRESSES_MOCK["sPicTable_BrendanUnderwater"],
-    "brendan_fishing":         lambda : DATA_ADDRESSES_MOCK["sPicTable_BrendanFishing"],
-    "brendan_watering":        lambda : DATA_ADDRESSES_MOCK["sPicTable_BrendanWatering"],
-    "brendan_decorating":      lambda : DATA_ADDRESSES_MOCK["sPicTable_BrendanDecorating"],
-    "brendan_battle_front":    lambda : DATA_ADDRESSES_MOCK["gTrainerFrontPicTable"] + 568,
-    "brendan_battle_back":     lambda : DATA_ADDRESSES_MOCK["gTrainerBackPicTable"],
-    "brendan_battle_back_2":   lambda : DATA_ADDRESSES_MOCK["sTrainerBackSpriteTemplates"],
-    "brendan_palette_battle":  lambda : DATA_ADDRESSES_MOCK["gTrainerBackPicPaletteTable"],
-    "may_walking_running": lambda : DATA_ADDRESSES_MOCK["sPicTable_MayNormal"],
-    "may_mach_bike":       lambda : DATA_ADDRESSES_MOCK["sPicTable_MayMachBike"],
-    "may_acro_bike":       lambda : DATA_ADDRESSES_MOCK["sPicTable_MayAcroBike"],
-    "may_surfing":         lambda : DATA_ADDRESSES_MOCK["sPicTable_MaySurfing"],
-    "may_field_move":      lambda : DATA_ADDRESSES_MOCK["sPicTable_MayFieldMove"],
-    "may_underwater":      lambda : DATA_ADDRESSES_MOCK["sPicTable_MayUnderwater"],
-    "may_fishing":         lambda : DATA_ADDRESSES_MOCK["sPicTable_MayFishing"],
-    "may_watering":        lambda : DATA_ADDRESSES_MOCK["sPicTable_MayWatering"],
-    "may_decorating":      lambda : DATA_ADDRESSES_MOCK["sPicTable_MayDecorating"],
-    "may_battle_front":    lambda : DATA_ADDRESSES_MOCK["gTrainerFrontPicTable"] + 576,
-    "may_battle_back":     lambda : DATA_ADDRESSES_MOCK["gTrainerBackPicTable"] + 8,
-    "may_battle_back_2":   lambda : DATA_ADDRESSES_MOCK["sTrainerBackSpriteTemplates"] + 24,
-    "may_palette_battle":  lambda : DATA_ADDRESSES_MOCK["gTrainerBackPicPaletteTable"] + 8,
+    "pokemon_front_anim":    lambda a : data_addresses["gMonFrontPicTable"]      + 8 * a,
+    "pokemon_back":          lambda a : data_addresses["gMonBackPicTable"]       + 8 * a,
+    "pokemon_icon":          lambda a : data_addresses["gMonIconTable"]          + 4 * a,
+    "pokemon_icon_index":    lambda a : data_addresses["gMonIconPaletteIndices"] + a,
+    "pokemon_footprint":     lambda a : data_addresses["gMonFootprintTable"]     + 4 * a,
+    "pokemon_palette":       lambda a : data_addresses["gMonPaletteTable"]       + 8 * a,
+    "pokemon_palette_shiny": lambda a : data_addresses["gMonShinyPaletteTable"]  + 8 * a,
+    "brendan_walking_running": lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 400,
+    "brendan_mach_bike":       lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 404,
+    "brendan_acro_bike":       lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 408,
+    "brendan_surfing":         lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 412,
+    "brendan_field_move":      lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 416,
+    "brendan_underwater":      lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 444,
+    "brendan_fishing":         lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 548,
+    "brendan_watering":        lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 764,
+    "brendan_decorating":      lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 772,
+    "brendan_battle_front":    lambda : data_addresses["gTrainerFrontPicTable"] + 568,
+    "brendan_battle_back":     lambda : data_addresses["gTrainerBackPicTable"],
+    "brendan_battle_back_2":   lambda : data_addresses["sTrainerBackSpriteTemplates"],
+    "brendan_palette_battle":  lambda : data_addresses["gTrainerBackPicPaletteTable"],
+    "may_walking_running": lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 420,
+    "may_mach_bike":       lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 424,
+    "may_acro_bike":       lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 428,
+    "may_surfing":         lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 432,
+    "may_field_move":      lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 436,
+    "may_underwater":      lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 448,
+    "may_fishing":         lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 552,
+    "may_watering":        lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 768,
+    "may_decorating":      lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 776,
+    "may_battle_front":    lambda : data_addresses["gTrainerFrontPicTable"] + 576,
+    "may_battle_back":     lambda : data_addresses["gTrainerBackPicTable"] + 8,
+    "may_battle_back_2":   lambda : data_addresses["sTrainerBackSpriteTemplates"] + 24,
+    "may_palette_battle":  lambda : data_addresses["gTrainerBackPicPaletteTable"] + 8,
 }
 
 PALETTE_TO_ADDRESS_LABEL_DICT = {
@@ -104,25 +105,7 @@ DATA_ADDRESSES_MOCK_AP = {
     "gTrainerFrontPicTable": 0x309f9c,
     "gTrainerBackPicTable": 0x30a694,
     "gTrainerBackPicPaletteTable": 0x30a6d4,
-    "sTrainerBackSpriteTemplates": 0x00,
-    "sPicTable_BrendanNormal": 0x00,
-    "sPicTable_BrendanMachBike": 0x00,
-    "sPicTable_BrendanAcroBike": 0x00,
-    "sPicTable_BrendanSurfing": 0x00,
-    "sPicTable_BrendanUnderwater": 0x00,
-    "sPicTable_BrendanFieldMove": 0x00,
-    "sPicTable_BrendanFishing": 0x00,
-    "sPicTable_BrendanWatering": 0x00,
-    "sPicTable_BrendanDecorating": 0x00,
-    "sPicTable_MayNormal": 0x00,
-    "sPicTable_MayMachBike": 0x00,
-    "sPicTable_MayAcroBike": 0x00,
-    "sPicTable_MaySurfing": 0x00,
-    "sPicTable_MayUnderwater": 0x00,
-    "sPicTable_MayFieldMove": 0x00,
-    "sPicTable_MayFishing": 0x00,
-    "sPicTable_MayWatering": 0x00,
-    "sPicTable_MayDecorating": 0x00,
+    "sTrainerBackSpriteTemplates": 0x32ed60,
     "gObjectEventPal_Brendan": 0x49fd28,
     "gObjectEventPal_May": 0x4ab7a8,
     "gObjectEventPal_BrendanReflection": 0x4a1148,
@@ -130,7 +113,7 @@ DATA_ADDRESSES_MOCK_AP = {
     "gObjectEventPal_PlayerUnderwater": 0x4aa588,
     "sEmpty6": 0xe3cf51
 }
-DATA_ADDRESSES_MOCK_BASE = {
+DATA_ADDRESSES_ORIGINAL = {
     "gMonFrontPicTable": 0x30a18c,
     "gMonBackPicTable": 0x3028b8,
     "gMonIconTable": 0x57bca8,
@@ -143,24 +126,6 @@ DATA_ADDRESSES_MOCK_BASE = {
     "gTrainerBackPicTable": 0x305d4c,
     "gTrainerBackPicPaletteTable": 0x305d8c,
     "sTrainerBackSpriteTemplates": 0x329df8,
-    "sPicTable_BrendanNormal": 0x505a8c,
-    "sPicTable_BrendanMachBike": 0x505b1c,
-    "sPicTable_BrendanAcroBike": 0x505b64,
-    "sPicTable_BrendanSurfing": 0x505c3c,
-    "sPicTable_BrendanUnderwater": 0x505c9c,
-    "sPicTable_BrendanFieldMove": 0x505ce4,
-    "sPicTable_BrendanFishing": 0x507a4c,
-    "sPicTable_BrendanWatering": 0x507e24,
-    "sPicTable_BrendanDecorating": 0x507eb4,
-    "sPicTable_MayNormal": 0x507144,
-    "sPicTable_MayMachBike": 0x5071d4,
-    "sPicTable_MayAcroBike": 0x50721c,
-    "sPicTable_MaySurfing": 0x5072f4,
-    "sPicTable_MayUnderwater": 0x507354,
-    "sPicTable_MayFieldMove": 0x50739c,
-    "sPicTable_MayFishing": 0x507aac,
-    "sPicTable_MayWatering": 0x507e6c,
-    "sPicTable_MayDecorating": 0x507ebc,
     "gObjectEventPal_Brendan": 0x4987f8,
     "gObjectEventPal_May": 0x4a4278,
     "gObjectEventPal_BrendanReflection": 0x499c18,
@@ -168,7 +133,11 @@ DATA_ADDRESSES_MOCK_BASE = {
     "gObjectEventPal_PlayerUnderwater": 0x4a3058,
     "sEmpty6": 0xe3cf31
 }
-DATA_ADDRESSES_MOCK = DATA_ADDRESSES_MOCK_BASE # Use DATA_ADDRESSES_MOCK_BASE for original ROMS, DATA_ADDRESSES_MOCK_AP for AP-patched ROMS
+
+# TODO: Replace DATA_ADDRESSES_MOCK_AP with data.rom_addresses
+data_addresses = DATA_ADDRESSES_MOCK_AP
+
+ORIGINAL_ROM_CRC32 = 0x1F1C08FB
 
 address_label_to_resource_path_list = { }
 files_to_clean_up = []
@@ -177,10 +146,15 @@ sprite_address_to_insert_to = 0x00
 
 
 def handle_sprite_pack(_sprite_pack_path, _rom):
+    global data_addresses
+    if zlib.crc32(_rom) == ORIGINAL_ROM_CRC32:
+        print("Original Emerald ROM detected! Loading its address dictionary...")
+        data_addresses = DATA_ADDRESSES_ORIGINAL
+
     global sprite_pack_data, sprite_address_to_insert_to
     # Build patch data, fetch end of file
     sprite_pack_data = { "length": 16777216, "data": [] }
-    sprite_address_to_insert_to = ((DATA_ADDRESSES_MOCK["sEmpty6"] >> 12) + 1) << 12 # Should be E3D000
+    sprite_address_to_insert_to = ((data_addresses["sEmpty6"] >> 12) + 1) << 12 # Should be E3D000
 
     # Handle existing Pokemon & Trainer folders
     for pokemon_name in POKEMON_FOLDERS:
@@ -192,7 +166,6 @@ def handle_sprite_pack(_sprite_pack_path, _rom):
         if os.path.exists(trainer_folder_path):
             handle_trainer_folder(trainer_folder_path, trainer_name, _rom)
 
-    print(sprite_pack_data)
     # Remove temporary files
     clean_up()
     return sprite_pack_data
@@ -273,6 +246,10 @@ def add_sprite(_is_pokemon, _object_name, _sprite_name, _path, _rom):
         if sprite_key == "trainer_battle_back_2":
             # Special case: Trainer Back sprites need further pointer seeking
             data_address = int.from_bytes(bytes(_rom[data_address + 12:data_address + 15]), 'little')
+        elif not "battle" in sprite_key:
+            # Special case: Trainer Overworld sprites need two objects to delve into
+            data_address = int.from_bytes(bytes(_rom[data_address:data_address + 3]), 'little')
+            data_address = int.from_bytes(bytes(_rom[data_address + 28:data_address + 31]), 'little')
         build_complex_sprite(data_address, sprite_key)
     else:
         # Replace pointer to old sprite with pointer to new sprite
@@ -353,7 +330,7 @@ def add_palette(_is_pokemon, _object_name, _palette_name, _path, _rom):
     _path = handle_sprite_to_palette(_path, _palette_name, needs_compression)
     palette_file = open(_path, "rb")
     palette_file_data = palette_file.read()
-    add_data_to_sprite_pack({ "address": data_address or DATA_ADDRESSES_MOCK[address_label], "length": len(palette_file_data), "data": palette_file_data })
+    add_data_to_sprite_pack({ "address": data_address or data_addresses[address_label], "length": len(palette_file_data), "data": palette_file_data })
 
 
 def add_data_to_sprite_pack(_data):

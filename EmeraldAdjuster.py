@@ -15,13 +15,13 @@ GAME_EMERALD = "Pokemon Emerald"
 def main():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--rom', default='', 
-        help='Path to a Pokemon Emerald randomized ROM to adjust.')
+    parser.add_argument('--patch', default='',
+        help='Path to a Pokemon Emerald AP-randomized ROM to adjust or path to a .apemerald patch file.')
     parser.add_argument('--sprite-pack', default='',
         help='Path to the Emerald sprite pack folder to use.')
 
     args = parser.parse_args()
-    if not os.path.isfile(args.rom):
+    if not os.path.isfile(args.patch):
         adjustGUI()
     else:
         adjust(args)
@@ -39,11 +39,7 @@ def adjustGUI():
 
     opts = Namespace()
 
-    # Select ROM
-    romDialogFrame = Frame(window, padx=8, pady=2)
-    romLabel = Label(romDialogFrame, text='Original Rom')
-    opts.rom = StringVar()
-    romEntry = Entry(romDialogFrame, textvariable=opts.rom)
+    # Select ROM or patch
     patchDialogFrame = Frame(window, padx=8, pady=2)
     patchLabel = Label(patchDialogFrame, text='Patch / Modified Rom')
     opts.patch = StringVar()
@@ -53,21 +49,13 @@ def adjustGUI():
     opts.sprite_pack = StringVar()
     spritePackEntry = Entry(spritePackFrame, textvariable=opts.sprite_pack)
 
-    def RomSelect():
-        rom = filedialog.askopenfilename(filetypes=[("Rom", [".gba"]), ("All Files", "*")])
-        opts.rom.set(rom)
     def PatchSelect():
         patch = filedialog.askopenfilename(filetypes=[("Rom & Patch Files", [".gba", ".apemerald"]), ("All Files", "*")])
         opts.patch.set(patch)
     def SpritePackSelect():
-        rom = filedialog.askdirectory()
-        opts.sprite_pack.set(rom)
+        sprite_pack = filedialog.askdirectory()
+        opts.sprite_pack.set(sprite_pack)
 
-    romSelectButton = Button(romDialogFrame, text='Select Rom', command=RomSelect)
-    romDialogFrame.pack(side=TOP, expand=True, fill=X)
-    romLabel.pack(side=LEFT)
-    romEntry.pack(side=LEFT, expand=True, fill=X)
-    romSelectButton.pack(side=LEFT)
     patchSelectButton = Button(patchDialogFrame, text='Select Patch/Rom', command=PatchSelect)
     patchDialogFrame.pack(side=TOP, expand=True, fill=X)
     patchLabel.pack(side=LEFT)
@@ -85,7 +73,6 @@ def adjustGUI():
     def adjustRom():
         try:
             guiargs = Namespace()
-            guiargs.rom = opts.rom.get()
             guiargs.patch = opts.patch.get()
             guiargs.sprite_pack = opts.sprite_pack.get()
             path = adjust(guiargs)
@@ -122,18 +109,15 @@ def adjust(args):
     if not args.patch:
         raise Exception("A patch file or a patched ROM is required!")
     if os.path.splitext(args.patch)[-1] == '.gba':
-        # Load up the patched ROM directly
+        # Load up the ROM directly
         with open(args.patch, 'rb') as stream:
             ap_rom = bytearray(stream.read())
     elif os.path.splitext(args.patch)[-1] == '.apemerald':
-        # Load the original rom and patch it as an AP rom
-        if not args.rom:
-            raise Exception("The original ROM is needed if a patch is given!")
-        with open(args.rom, 'rb') as stream:
-            rom = bytearray(stream.read())
-        # TODO: Handle .apemerald file
-        ap_rom = rom
-        pass
+        # Patch the registered ROM as an AP ROM
+        import Patch
+        meta, ap_rom_path = Patch.create_rom_file(args.patch)
+        with open(ap_rom_path, 'rb') as stream:
+            ap_rom = bytearray(stream.read())
     else:
         raise Exception("Invalid file extension; requires .gba or .apemerald")
 
@@ -144,7 +128,7 @@ def adjust(args):
     adjusted_ap_rom = bytearray(len(ap_rom))
     apply_bps_patch(sprite_pack_bps_patch, ap_rom, adjusted_ap_rom)
 
-    path_pieces = os.path.splitext(args.rom or args.patch)
+    path_pieces = os.path.splitext(args.patch)
     adjusted_path = path_pieces[0] + '-adjusted.gba'
     with open(adjusted_path, 'wb') as outfile:
         outfile.write(adjusted_ap_rom)
