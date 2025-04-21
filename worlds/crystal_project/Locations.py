@@ -599,7 +599,8 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #NPCs
         #Crystal Checker guy gives you Ferry Pass for having 15 crystals Z27_FerryCrystalChecker ID 940 (-166,93,56)
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Ferry crystal checker grants Ferry Pass in case you hate children", 940 + npc_index_offset, lambda state: get_job_count(player, state) >= 15),
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Three tokens makes a Pyramid Key something something triangles", 949 + npc_index_offset, lambda state: state.has("Item - West Lookout Token", player) and state.has("Item - Central Lookout Token", player) and state.has("Item - North Lookout Token", player)),        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - The One and Only Room 1 Key", 385 + npc_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Three tokens makes a Pyramid Key something something triangles", 949 + npc_index_offset, lambda state: state.has("Item - West Lookout Token", player) and state.has("Item - Central Lookout Token", player) and state.has("Item - North Lookout Token", player)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - The One and Only Room 1 Key", 385 + npc_index_offset),
         #Todo NPCs Blocker: gotta find the Lost Son first (the mom before you find the son is a different NPC)
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Worried Mom Ferry Pass", 1196 + npc_index_offset),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Pelt this Fish Merchant with Rotten Salmon", 942 + npc_index_offset, lambda state: state.has("Item - Rotten Salmon", player)),
@@ -919,26 +920,26 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Lonely Ether chest", 2428 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Tear Seed chest past the 2nd icy Chips Challenge", 2788 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Potion chest past the 3rd icy Chips Challenge", 1254 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Z-Potion Pouch chest above the Boomer Society", 2844 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player) and lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Ether chest above the Triton Shrine", 2795 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player) or lambda state: state.has("Item - Triton Stone", player)),
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Frost Reaper chest past the Chips Challenge fishing hut", 1578 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player) or lambda state: state.has("Item - Triton Stone", player)),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Z-Potion Pouch chest above the Boomer Society", 2844 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Ether chest above the Triton Shrine", 2795 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player) or state.has("Item - Triton Stone", player)),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Frost Reaper chest past the Chips Challenge fishing hut", 1578 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player) or state.has("Item - Triton Stone", player)),
         #requires (Ibek or Triton Stone) and Quintar
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Tall stones and blue flowers Potion Pouch chest", 2992 + treasure_index_offset, (lambda state: state.has("Item - Ibek Bell", player) or lambda state: state.has("Item - Triton Stone", player)) and lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Tall stones and blue flowers Potion Pouch chest", 2992 + treasure_index_offset, lambda state: (state.has("Item - Ibek Bell", player) or state.has("Item - Triton Stone", player)) and state.has("Item - Progressive Quintar Flute", player, 2)),
         #Technically Northern Cave
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Break the ice Radiance chest", 2744 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player) and lambda state: state.has("Item - Owl Drum", player)),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Break the ice Radiance chest", 2744 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Owl Drum", player)),
 
         #NPCs
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Gold Ingot above the Boomer Society", 1600 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Hop along spike mountain to Gold Dust", 2853 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) or lambda state: state.has("Item - Triton Stone", player)),
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Melted snow Gold Ingot past the Potion Pouch chest", 2847 + npc_index_offset, (lambda state: state.has("Item - Ibek Bell", player) or lambda state: state.has("Item - Triton Stone", player)) and lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Chip Challenge himself", 2388 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) or lambda state: state.has("Item - Triton Stone", player)),
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Gold Ingot by the breakable ice wall", 2814 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and lambda state: state.has("Item - Owl Drum", player)),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Gold Ingot above the Boomer Society", 1600 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Hop along spike mountain to Gold Dust", 2853 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) or state.has("Item - Triton Stone", player)),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Melted snow Gold Ingot past the Potion Pouch chest", 2847 + npc_index_offset, lambda state: (state.has("Item - Ibek Bell", player) or state.has("Item - Triton Stone", player)) and state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Chip Challenge himself", 2388 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) or state.has("Item - Triton Stone", player)),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Gold Ingot by the breakable ice wall", 2814 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Owl Drum", player)),
 
         #Northern Cave
         #Treasure chests
         LocationData("Northern Cave", "Northern Cave Chest - Island in the ice Tear Seed chest", 2787 + treasure_index_offset),
         LocationData("Northern Cave", "Northern Cave Chest - Ice Cell Key chest in the ominous Chips Challenge cave", 1579 + treasure_index_offset),
-        LocationData("Northern Cave", "Northern Cave Chest - Chip mimic Apprentice chest", 1552 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2) and lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Northern Cave", "Northern Cave Chest - Chip mimic Apprentice chest", 1552 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2) and state.has("Item - Ibek Bell", player)),
         LocationData("Northern Cave", "Northern Cave Chest - Money chest past the wiggly block spike pit", 3001 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
 
         #NPCs

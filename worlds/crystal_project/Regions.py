@@ -114,7 +114,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
         {"Beaurior Volcano": lambda state: state.has("Item - Ibek Bell", world.player)})
     multiworld.get_region("Beaurior Volcano", player).add_exits(["Beaurior Rock"])
     multiworld.get_region("Quintar Reserve", player).add_exits(["Dione Shrine"])
-    multiworld.get_region("Dione Shrine", player).add_exits(["Quintar Reserve", "Eastern Chasm"]],
+    multiworld.get_region("Dione Shrine", player).add_exits(["Quintar Reserve", "Eastern Chasm"],
         {"Lands End": lambda state: state.has("Item - Owl Drum", world.player)})
     multiworld.get_region("Tall, Tall Heights", player).add_exits(["Northern Cave", "Lands End"],
         {"Eastern Chasm": lambda state: state.has("Item - Ibek Bell", world.player)})
