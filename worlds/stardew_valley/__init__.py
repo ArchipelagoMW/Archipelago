@@ -16,8 +16,7 @@ from .items.item_creation import create_items, get_all_filler_items, remove_limi
 from .locations import location_table, create_locations, LocationData, locations_by_tag
 from .logic.logic import StardewLogic
 from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, EnabledFillerBuffs, \
-    NumberOfMovementBuffs, \
-    BuildingProgression, EntranceRandomization, FarmType
+    NumberOfMovementBuffs, BuildingProgression, EntranceRandomization, FarmType
 from .options.forced_options import force_change_options_if_incompatible
 from .options.option_groups import sv_option_groups
 from .options.presets import sv_options_presets
