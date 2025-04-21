@@ -16,7 +16,7 @@ def get_download(build: str) -> Response:
                            if download.platform == build).sort_by(ArchipelagoDownload.version).first()
     try:
         # ping GitHub API to make sure it's alive and cache the latest data
-        if get_latest_release(download_data.version):
+        if get_latest_release():
             download_data = select(download for download in ArchipelagoDownload
                                    if download.platform == build).sort_by(ArchipelagoDownload.version).first()
     except HTTPError:
@@ -26,8 +26,8 @@ def get_download(build: str) -> Response:
     return redirect(download_data.url)
 
 
-@cache.memoize(timeout=300)
-def get_latest_release(latest_version_known: str) -> bool:
+@cache.cached(timeout=300)
+def get_latest_release() -> bool:
     """
     Pulls the latest release from the Archipelago GitHub and saves new releases to the db.
 
@@ -40,9 +40,10 @@ def get_latest_release(latest_version_known: str) -> bool:
     data = response.json()
 
     entry_to_send: ArchipelagoDownload
-    if tuplize_version(data["tag_name"]) <= tuplize_version(latest_version_known):
-        return False
 
+    latest_downloads = select(download for download in ArchipelagoDownload if download.version == data["tag_name"])
+
+    new_download = False
     with db_session:
         for asset in data["assets"]:
             filename = name = asset["name"]
