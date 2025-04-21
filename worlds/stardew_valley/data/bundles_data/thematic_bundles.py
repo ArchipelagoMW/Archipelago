@@ -1,5 +1,16 @@
-from .vanilla_bundles import *
-from ...bundles.bundle import BundleTemplate
+from .bundle_items_data import *
+from .vanilla_bundles import raccoon_crab_pot_fish_items, raccoon_smoked_fish_items, raccoon_artisan_items, all_specific_dried_mushrooms, raccoon_food_items, \
+    raccoon_foraging_items, spring_foraging_items_vanilla, spring_foraging_bundle_vanilla, summer_foraging_items_vanilla, summer_foraging_bundle_vanilla, \
+    fall_foraging_items_vanilla, fall_foraging_bundle_vanilla, winter_foraging_items_vanilla, winter_foraging_bundle_vanilla, vault_bundles_vanilla, \
+    missing_bundle_vanilla, missing_bundle_items_vanilla, enchanter_bundle_vanilla, enchanter_items_vanilla, fodder_bundle_vanilla, fodder_items_vanilla, \
+    field_research_bundle_vanilla, field_research_items_vanilla, chef_bundle_vanilla, adventurer_bundle_vanilla, adventurer_items_vanilla, \
+    geologist_bundle_vanilla, geologist_items_vanilla, blacksmith_bundle_vanilla, blacksmith_items_vanilla, specialty_fish_bundle_vanilla, \
+    specialty_fish_items_vanilla, crab_pot_bundle_vanilla, crab_pot_trash_items, crab_pot_items_vanilla, night_fish_bundle_vanilla, night_fish_items_vanilla, \
+    ocean_fish_bundle_vanilla, ocean_fish_items_vanilla, lake_fish_bundle_vanilla, lake_fish_items_vanilla, river_fish_bundle_vanilla, river_fish_items_vanilla, \
+    artisan_bundle_vanilla, artisan_items_vanilla, animal_bundle_vanilla, animal_items_vanilla, quality_crops_bundle_vanilla, fall_crops_bundle_vanilla, \
+    fall_crops_items_vanilla, summer_crops_bundle_vanilla, summer_crops_items_vanilla, spring_crops_bundle_vanilla, spring_crops_items_vanilla, \
+    exotic_foraging_bundle_vanilla, exotic_foraging_items_vanilla, construction_bundle_vanilla, construction_items_vanilla
+from ...bundles.bundle import BundleTemplate, DeepBundleTemplate
 from ...bundles.bundle_room import BundleRoomTemplate
 from ...strings.bundle_names import CCRoom, BundleName
 

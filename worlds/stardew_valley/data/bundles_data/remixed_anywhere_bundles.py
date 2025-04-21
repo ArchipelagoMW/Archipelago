@@ -1,4 +1,6 @@
-from .remixed_bundles import *
+from .remixed_bundles import crafts_room_bundles_remixed, pantry_bundles_remixed, fish_tank_bundles_remixed, boiler_room_bundles_remixed, \
+    bulletin_board_bundles_remixed, vault_bundles_remixed
+from ...bundles.bundle_room import BundleRoomTemplate
 
 all_cc_remixed_bundles = [*crafts_room_bundles_remixed, *pantry_bundles_remixed, *fish_tank_bundles_remixed,
                           *boiler_room_bundles_remixed, *bulletin_board_bundles_remixed, *vault_bundles_remixed]
