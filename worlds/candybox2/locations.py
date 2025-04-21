@@ -125,24 +125,12 @@ lighthouse_locations = {
     "Solve Cyclops Puzzle": 2500
 }
 
-forge_1_locations = {
+forge_locations = {
     "Village Forge Lollipop on Exhaust Chute": 2600,
-    "Village Forge Buy Wooden Sword": 2601
-}
-
-forge_2_locations = {
-    "Village Forge Buy Iron Axe": 2700
-}
-
-forge_3_locations = {
+    "Village Forge Buy Wooden Sword": 2601,
+    "Village Forge Buy Iron Axe": 2700,
     "Village Forge Buy Polished Silver Sword": 2800,
-}
-
-forge_4_locations = {
-    "Village Forge Buy Lightweight Body Armour": 2900
-}
-
-forge_5_locations = {
+    "Village Forge Buy Lightweight Body Armour": 2900,
     "Village Forge Buy Scythe": 3000
 }
 
@@ -235,6 +223,10 @@ lollipop_farm_locations = {
 
 }
 
+village_minigame_locations = {
+
+}
+
 locations = {
     **candy_box_locations,
     **village_locations,
@@ -263,11 +255,7 @@ locations = {
     **hell_locations,
     **the_developer_fight_locations,
     **lighthouse_locations,
-    **forge_1_locations,
-    **forge_2_locations,
-    **forge_3_locations,
-    **forge_4_locations,
-    **forge_5_locations,
+    **forge_locations,
     **wishing_well_locations,
     **hole_locations,
     **desert_fortress_locations,
@@ -284,5 +272,6 @@ locations = {
     **castle_bakehouse_locations,
     **pogo_stick_spot_locations,
     **pier_locations,
-    **lollipop_farm_locations
+    **lollipop_farm_locations,
+    **village_minigame_locations
 }
