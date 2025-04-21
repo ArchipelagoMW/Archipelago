@@ -2,7 +2,6 @@
 Archipelago init file for Lingo
 """
 from logging import warning
-from typing import List
 
 from BaseClasses import CollectionState, Item, ItemClassification, Tutorial, Location, LocationProgressType
 from Options import OptionError
@@ -161,7 +160,7 @@ class LingoWorld(World):
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
-    def fill_hook(self, progitempool: List[Item], _: List[Item], _2: List[Item], fill_locations: List[Location]):
+    def fill_hook(self, progitempool: list[Item], _: list[Item], _2: list[Item], fill_locations: list[Location]):
         if len(self.player_logic.good_item_options) > 0:
             good_location = self.get_location("Second Room - Good Luck")
             good_items = list(filter(lambda progitem: progitem.player == self.player and
