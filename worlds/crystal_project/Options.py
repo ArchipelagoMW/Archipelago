@@ -26,14 +26,14 @@ class ClamshellsQuantity(Range):
     """If your goal is Clamshells, this is where you select how many you need to win."""
     display_name = "Clamshells needed to win"
     range_start = 1
-    range_end = 19
+    range_end = 100
     default = 13
     
 class ClamshellsInPool(Range):
     """This determines how many clamshells end up in the pool.  You probably only care if your goal is set to clamshells."""
     display_name = "Clamshells in the pool"
     range_start = 1
-    range_end = 50
+    range_end = 100
     default = 19
 
 class RandomizeJobs(DefaultOnToggle):
