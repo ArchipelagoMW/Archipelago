@@ -46,19 +46,34 @@ def get_latest_release() -> bool:
     new_download = False
     with db_session:
         for asset in data["assets"]:
-            filename = name = asset["name"]
-            if "AppImage" in filename:
-                name = "appimage"
-            elif "tar" in filename:
-                name = "tar"
-            elif "exe" in filename:
-                name = "windows"
-            # not currently supported but maybe one day
-            elif "arm64" in filename:
-                name = "arm64"
-            elif "amd64" in filename or "x86_64" in filename:
-                name = "x86_64"
+            name = asset["name"].lower()
+            platform = None
+            arch = "any"
+            fmt = None
+            if "appimage" in name:
+                fmt = "appimage"
+            elif "tar" in name:
+                fmt = "tar"
+            elif "setup" in name:
+                fmt = "setup"
+            elif "exe" in name:
+                platform = "windows"
+            elif "linux" in name:
+                platform = "linux"
+            elif "arm64" in name:
+                arch = "arm64"  # not currently supported but maybe one day
+            elif "amd64" in name or "x86_64" in name or "x64" in name:
+                arch = "x86_64"  # normalized
+            if not platform:
+                continue  # unknown platform
+            build = f"{platform}-{arch}"
+            if fmt:
+                build += f"-{fmt}"
             download_url = asset["browser_download_url"]
-            ArchipelagoDownload(platform=name, version=data["tag_name"], url=download_url, downloads=0)
+
+            # check if we have this build saved already
+            if not latest_downloads or not select(download for download in latest_downloads if download.build == build):
+                ArchipelagoDownload(build=build, version=data["tag_name"], url=download_url, downloads=0)
+                new_download = True
         commit()
-    return True
+    return new_download
