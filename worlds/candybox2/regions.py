@@ -41,7 +41,10 @@ class CandyBox2Entrance(Entrance):
         self.is_exit = True
 
     def can_connect_to(self, other: Entrance, dead_end: bool, er_state: "ERPlacementState") -> bool:
-        return self.randomization_type == other.randomization_type and (not er_state.coupled or (self.name != other.name and self.is_exit != other.is_exit))
+        return self.randomization_type == other.randomization_type and not (er_state.coupled and self.is_same_exit(other))
+
+    def is_same_exit(self, other: Entrance):
+        return self.name == other.name and self.is_exit == other.is_exit
 
 
 class CandyBox2Region(Region):
