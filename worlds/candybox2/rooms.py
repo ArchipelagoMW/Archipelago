@@ -106,7 +106,6 @@ quests: list[CandyBox2Room] = [
     CandyBox2Room.QUEST_THE_XINOPHERYDON,
     CandyBox2Room.QUEST_THE_TEAPOT,
     CandyBox2Room.QUEST_THE_LEDGE_ROOM,
-    CandyBox2Room.LOLLIPOP_FARM
 ]
 x_quest: list[CandyBox2Room] = [
     CandyBox2Room.QUEST_THE_X_POTION
@@ -133,4 +132,7 @@ rooms: list[CandyBox2Room] = [
     CandyBox2Room.CASTLE_DARK_ROOM,
     CandyBox2Room.DRAGON,
     CandyBox2Room.TOWER,
+]
+lollipop_farm: list[CandyBox2Room] = [
+    CandyBox2Room.LOLLIPOP_FARM
 ]

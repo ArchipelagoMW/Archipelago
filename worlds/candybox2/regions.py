@@ -1,7 +1,7 @@
 from enum import IntEnum
 from typing import Callable, Optional, TYPE_CHECKING
 
-from BaseClasses import Region, MultiWorld, Entrance, CollectionState
+from BaseClasses import Region, MultiWorld, Entrance, CollectionState, EntranceType
 from entrance_rando import disconnect_entrance_for_randomization, randomize_entrances, ERPlacementState
 from .locations import candy_box_locations, CandyBox2Location, village_shop_locations, village_house_1_locations, \
     village_locations, village_cellar_locations, map_stage_1_locations, map_stage_2_locations, map_stage_7_locations, \
@@ -15,7 +15,7 @@ from .locations import candy_box_locations, CandyBox2Location, village_shop_loca
     castle_trap_room_locations, squirrel_tree_locations, the_sea_locations, lonely_house_locations, dig_spot_locations, \
     yourself_fight_locations, castle_dark_room_locations, castle_bakehouse_locations, pogo_stick_spot_locations, \
     pier_locations, lollipop_farm_locations
-from .rooms import CandyBox2Room, quests, x_quest, rooms, entrance_friendly_names
+from .rooms import CandyBox2Room, quests, x_quest, rooms, entrance_friendly_names, lollipop_farm
 from .rules import weapon_is_at_least, chocolate_count, can_farm_candies, can_grow_lollipops, \
     has_weapon, can_reach_room
 
@@ -27,11 +27,33 @@ class CandyBox2RandomizationGroup(IntEnum):
     QUEST = 1
     X_QUEST = 2
     ROOM = 3
+    LOLLIPOP_FARM = 4
+
+
+class CandyBox2Entrance(Entrance):
+    is_exit: bool = False
+
+    def __init__(self, player: int, name: str = "", parent: Optional[Region] = None, randomization_group: int = 0,
+                 randomization_type: EntranceType = EntranceType.ONE_WAY) -> None:
+        super().__init__(player, name, parent, randomization_group, randomization_type)
+        self.is_exit = False
+
+    def configure_for_exit(self):
+        self.is_exit = True
+
+    def can_connect_to(self, other: Entrance, dead_end: bool, er_state: "ERPlacementState") -> bool:
+        return self.randomization_type == other.randomization_type and (not er_state.coupled or (self.name != other.name and self.is_exit != other.is_exit))
 
 
 class CandyBox2Region(Region):
+    entrance_type = CandyBox2Entrance
     def __init__(self, name: str, player: int, multiworld: MultiWorld, hint: Optional[str] = None):
         super().__init__(name, player, multiworld, hint)
+
+    def create_er_target(self, name: str):
+        entrance = super().create_er_target(name)
+        entrance.configure_for_exit()
+        return entrance
 
 
 class CandyBox2RoomRegion(CandyBox2Region):
@@ -47,6 +69,8 @@ class CandyBox2RoomRegion(CandyBox2Region):
             self.randomization_group = CandyBox2RandomizationGroup.X_QUEST
         if room in rooms:
             self.randomization_group = CandyBox2RandomizationGroup.ROOM
+        if room in lollipop_farm:
+            self.randomization_group = CandyBox2RandomizationGroup.LOLLIPOP_FARM
 
 def create_regions(world: "CandyBox2World"):
     multiworld = world.multiworld
@@ -71,11 +95,12 @@ def create_regions(world: "CandyBox2World"):
     populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_CELLAR, player, multiworld), village_cellar_locations, village_house_2, lambda state: weapon_is_at_least(
         world, state, player, "Wooden Sword"))
 
+    # TODO: We need to check that the previous item is obtainable as well
     forge_1 = populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.VILLAGE_FORGE, player, multiworld), forge_1_locations, village)
     forge_2 = populate_region(world, player, CandyBox2Region("The Forge 2", player, multiworld, "The Forge in the village"), forge_2_locations, forge_1)
     forge_3 = populate_region(world, player, CandyBox2Region("The Forge 3", player, multiworld, "The forge in the village"), forge_3_locations, forge_2, lambda state: can_farm_candies(state, player), True)
     forge_4 = populate_region(world, player, CandyBox2Region("The Forge 4", player, multiworld, "The forge in the village"), forge_4_locations, forge_3, lambda state: can_farm_candies(state, player) and state.has("Progressive World Map", player, 3), True)
-    forge_5 = populate_region(world, player, CandyBox2Region("The Forge 5", player, multiworld, "The forge in the village"), forge_5_locations, forge_4, lambda state: can_farm_candies(state, player) and state.has("Progressive World Map", player, 6), True)
+    forge_5 = populate_region(world, player, CandyBox2Region("The Forge 5", player, multiworld, "The forge in the village"), forge_5_locations, forge_4, lambda state: can_farm_candies(state, player) and can_reach_room(state, CandyBox2Room.DRAGON, player), True)
 
     # The Squirrel Tree
     populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.SQUIRREL_TREE, player, multiworld), squirrel_tree_locations, world_map_1)
@@ -188,14 +213,18 @@ def connect_entrances(world: "CandyBox2World"):
         world.entrance_randomisation = randomize_entrances(world, True, {
             CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value],
             CandyBox2RandomizationGroup.X_QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value],
-            CandyBox2RandomizationGroup.ROOM.value: [CandyBox2RandomizationGroup.ROOM.value],
+            CandyBox2RandomizationGroup.ROOM.value: [CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
+            CandyBox2RandomizationGroup.LOLLIPOP_FARM: [CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
         })
 
     if world.options.quest_randomisation == "everything":
         world.entrance_randomisation = randomize_entrances(world, True, {
-            CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value, CandyBox2RandomizationGroup.ROOM.value],
-            CandyBox2RandomizationGroup.X_QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value, CandyBox2RandomizationGroup.ROOM.value],
-            CandyBox2RandomizationGroup.ROOM.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value, CandyBox2RandomizationGroup.ROOM.value],
+            CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
+            CandyBox2RandomizationGroup.X_QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
+            CandyBox2RandomizationGroup.ROOM.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
+
+            # The lollipop farm can never go behind the X quest because the X quest requires lollipops
+            CandyBox2RandomizationGroup.LOLLIPOP_FARM.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
         })
 
     return world.entrance_randomisation.pairings
@@ -211,7 +240,7 @@ def entrances_to_add_to_pool(world: "CandyBox2World"):
         return [CandyBox2RandomizationGroup.QUEST, CandyBox2RandomizationGroup.X_QUEST]
 
     if world.options.quest_randomisation == "quests_and_rooms_separate":
-        return [CandyBox2RandomizationGroup.QUEST, CandyBox2RandomizationGroup.X_QUEST, CandyBox2RandomizationGroup.ROOM]
+        return [CandyBox2RandomizationGroup.QUEST, CandyBox2RandomizationGroup.X_QUEST, CandyBox2RandomizationGroup.ROOM, CandyBox2RandomizationGroup.LOLLIPOP_FARM]
 
     if world.options.quest_randomisation == "everything":
-        return [CandyBox2RandomizationGroup.QUEST, CandyBox2RandomizationGroup.X_QUEST, CandyBox2RandomizationGroup.ROOM]
+        return [CandyBox2RandomizationGroup.QUEST, CandyBox2RandomizationGroup.X_QUEST, CandyBox2RandomizationGroup.ROOM, CandyBox2RandomizationGroup.LOLLIPOP_FARM]
