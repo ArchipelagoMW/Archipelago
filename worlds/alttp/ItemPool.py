@@ -707,13 +707,20 @@ def get_pool_core(world, player: int):
         else:
             break
 
-    if goal == 'pedestal':
-        place_item('Master Sword Pedestal', 'Triforce')
-        pool.remove("Rupees (20)")
-
     if retro_bow:
         replace = {'Single Arrow', 'Arrows (10)', 'Arrow Upgrade (+5)', 'Arrow Upgrade (+10)', 'Arrow Upgrade (70)'}
         pool = ['Rupees (5)' if item in replace else item for item in pool]
+
+    if goal == 'pedestal':
+        place_item('Master Sword Pedestal', 'Triforce')
+        for rupee_name in ("Rupees (5)", "Rupees (20)", "Rupees (50)", "Rupees (100)", "Rupees (300)"):
+            try:
+                pool.remove(rupee_name)
+            except ValueError:
+                pass
+            else:
+                break
+
     if world.worlds[player].options.small_key_shuffle == small_key_shuffle.option_universal:
         pool.extend(diff.universal_keys)
         if mode == 'standard':
