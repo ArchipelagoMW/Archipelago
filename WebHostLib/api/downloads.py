@@ -56,11 +56,11 @@ def get_latest_release() -> bool:
                 fmt = "tar"
             elif "setup" in name:
                 fmt = "setup"
-            elif "exe" in name:
+            if "windows" in name or ".msi" in name or name.endswith(".exe"):
                 platform = "windows"
             elif "linux" in name:
                 platform = "linux"
-            elif "arm64" in name:
+            if "arm64" in name:
                 arch = "arm64"  # not currently supported but maybe one day
             elif "amd64" in name or "x86_64" in name or "x64" in name:
                 arch = "x86_64"  # normalized
