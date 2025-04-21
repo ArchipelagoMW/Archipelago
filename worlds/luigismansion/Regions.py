@@ -108,16 +108,16 @@ spawn_locations = {
                               "key": ["Conservatory Key", "Heart Key"]}, # Conservatory
     "Billiards Room":        {"room_no": 12, "pos_x": -963.755737, "pos_y": 0, "pos_z": -3055.808110,
                               "key": ["Heart Key", "Billiards Room Key"]}, # Billiards
-    # "Twins' Room":           {"room_no": 25, "pos_x": -1729.586790, "pos_y": 550, "pos_z": 116.055779,
-    #                           "key": ["Twins' Room Key", "Family Hallway Key"]}, # Twins
+    "Twins' Room":           {"room_no": 25, "pos_x": -1729.586790, "pos_y": 550, "pos_z": 116.055779,
+                              "key": ["Twins' Room Key", "Family Hallway Key"]}, # Twins
     "Nursery":               {"room_no": 24, "pos_x": -3331.658690, "pos_y": 550, "pos_z": -198.970337,
                               "key": ["Nursery Key", "Family Hallway Key"]}, # Nursery
     "Master Bedroom":        {"room_no": 33, "pos_x": -3365.857670, "pos_y": 550, "pos_z": -1513.529660,
                               "key": ["Heart Key", "Master Bedroom Key"]}, # Master bed
     #"Study":                 {"room_no": 34, "pos_x": -1696.352290, "pos_y": 550, "pos_z": -1605.182980,
     #                          "key": ["Study Key", "Family Hallway Key"]}, # Study Errors and neville's Chair doesn't spawn?
-    #"Parlor":                {"room_no": 35, "pos_x": -43.294357, "pos_y": 550, "pos_z": -1775.288450,
-    #                          "key": ["Parlor Key", "Heart Key", "Anteroom Key"]}, # Parlor
+    "Parlor":                {"room_no": 35, "pos_x": -43.294357, "pos_y": 550, "pos_z": -1775.288450,
+                             "key": ["Parlor Key", "Heart Key", "Anteroom Key"]}, # Parlor
     "Nana's Room":           {"room_no": 46, "pos_x": 173.368210, "pos_y": 550, "pos_z": -4615.553220,
                               "key": ["Nana's Room Key", "Upper 2F Stairwell Key"]}, # Nana
 }

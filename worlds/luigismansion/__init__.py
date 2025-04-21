@@ -296,6 +296,8 @@ class LMWorld(World):
             for location, data in PORTRAIT_LOCATION_TABLE.items():
                 region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
+                if entry.code == 624 and self.open_doors.get(28) == 0:
+                    add_rule(entry, lambda state: state.has("Twins Bedroom Key", self.player), "and")
                 if entry.code == 627:
                     add_rule(entry,
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value),
@@ -327,6 +329,8 @@ class LMWorld(World):
             for location, data in LIGHT_LOCATION_TABLE.items():
                 region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
+                if entry.code == 741 and self.open_doors.get(28) == 0:
+                    add_rule(entry, lambda state: state.has("Twins Bedroom Key", self.player), "and")
                 if entry.code == 745:
                     add_rule(entry,
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value),
@@ -383,6 +387,10 @@ class LMWorld(World):
                 entry = LMLocation(self.player, location, region, data)
                 if self.options.boo_gates == 1 and self.options.boo_radar != 2:
                     add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
+                if entry.code == 675 and self.open_doors.get(28) == 0:
+                    add_rule(entry, lambda state: state.has("Twins Bedroom Key", self.player), "and")
+                if data.code == 674 and self.open_doors.get(27) == 0:
+                    add_rule(entry, lambda state: state.has("Nursery Key", self.player), "and")
                 if entry.code == 679:
                     add_rule(entry,
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value),
@@ -423,7 +431,11 @@ class LMWorld(World):
                 entry.place_locked_item(Item("Boo", ItemClassification.progression, None, self.player))
                 if self.options.boo_gates == 1 and self.options.boo_radar != 2:
                     add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
-                if entry.code == 679:
+                if data.code == 675 and self.open_doors.get(28) == 0:
+                    add_rule(entry, lambda state: state.has("Twins Bedroom Key", self.player), "and")
+                if data.code == 674 and self.open_doors.get(27) == 0:
+                    add_rule(entry, lambda state: state.has("Nursery Key", self.player), "and")
+                if data.code == 679:
                     add_rule(entry,
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value),
                              "and")
@@ -626,6 +638,8 @@ class LMWorld(World):
             if entry.code == 5:
                 add_rule(entry,
                          lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value))
+            if entry.code == 25 and self.open_doors.get(28) == 0:
+                add_rule(entry, lambda state: state.has("Twins Bedroom Key", self.player), "and")
             if len(entry.access) != 0:
                 for item in entry.access:
                     if item == "Fire Element Medal":
