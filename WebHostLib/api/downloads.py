@@ -35,7 +35,7 @@ def get_latest_release(latest_version_known: str) -> bool:
     """
     import requests
 
-    response = requests.get("https://api.github.com/repos/ArchipelagoMW/Archipelago/releases/latest", timeout=5)
+    response = requests.get("https://api.github.com/repos/ArchipelagoMW/Archipelago/releases/latest", timeout=1)
     response.raise_for_status()
     data = response.json()
 
