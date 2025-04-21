@@ -35,6 +35,7 @@ class MessengerSettings(Group):
 
 class MessengerWeb(WebWorld):
     theme = "ocean"
+    rich_text_options_doc = True
 
     bug_report_page = "https://github.com/alwaysintreble/TheMessengerRandomizerModAP/issues"
 
