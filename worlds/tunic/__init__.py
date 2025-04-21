@@ -162,9 +162,14 @@ class TunicWorld(World):
                 self.options.shuffle_ladders.value = self.passthrough["shuffle_ladders"]
                 self.options.grass_randomizer.value = self.passthrough.get("grass_randomizer", 0)
                 self.options.breakable_shuffle.value = self.passthrough.get("breakable_shuffle", 0)
-                self.options.fixed_shop.value = self.options.fixed_shop.option_false
                 self.options.laurels_location.value = self.options.laurels_location.option_anywhere
                 self.options.combat_logic.value = self.passthrough["combat_logic"]
+
+                self.options.fixed_shop.value = self.options.fixed_shop.option_false
+                if ("ziggurat2020_3, ziggurat2020_1_zig2_skip" in self.passthrough["Entrance Rando"].keys()
+                        or "ziggurat2020_3, ziggurat2020_1_zig2_skip" in self.passthrough["Entrance Rando"].values()):
+                    self.options.fixed_shop.value = self.options.fixed_shop.option_true
+
             else:
                 self.using_ut = False
         else:
@@ -672,18 +677,6 @@ class TunicWorld(World):
                     slot_data[start_item] = []
                 for _ in range(self.options.start_inventory_from_pool[start_item]):
                     slot_data[start_item].extend(["Your Pocket", self.player])
-
-        for plando_item in self.multiworld.plando_items[self.player]:
-            if plando_item["from_pool"]:
-                items_to_find = set()
-                for item_type in [key for key in ["item", "items"] if key in plando_item]:
-                    for item in plando_item[item_type]:
-                        items_to_find.add(item)
-                for item in items_to_find:
-                    if item in slot_data_item_names:
-                        slot_data[item] = []
-                        for item_location in self.multiworld.find_item_locations(item, self.player):
-                            slot_data[item].extend(self.get_real_location(item_location))
 
         return slot_data
 
