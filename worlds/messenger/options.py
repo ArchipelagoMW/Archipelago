@@ -2,8 +2,11 @@ from dataclasses import dataclass
 
 from schema import And, Optional, Or, Schema
 
-from Options import Choice, DeathLinkMixin, DefaultOnToggle, ItemsAccessibility, OptionDict, PerGameCommonOptions, \
-    PlandoConnections, Range, StartInventoryPool, Toggle
+from Options import (
+    Choice, DeathLinkMixin, DefaultOnToggle, ItemsAccessibility, OptionDict, OptionGroup,
+    PerGameCommonOptions,
+    PlandoConnections, Range, StartInventoryPool, Toggle,
+)
 from . import RANDOMIZED_CONNECTIONS
 from .portals import CHECKPOINTS, PORTALS, SHOP_POINTS
 
@@ -255,3 +258,35 @@ class MessengerOptions(DeathLinkMixin, PerGameCommonOptions):
     shop_price_plan: PlannedShopPrices
     portal_plando: PortalPlando
     plando_connections: TransitionPlando
+
+
+option_groups = [
+    OptionGroup(
+        "Difficulty",
+        [
+            EarlyMed,
+            Logic,
+            LimitedMovement,
+        ],
+    ),
+    OptionGroup(
+        "Goal",
+        [
+            Goal,
+            MusicBox,
+            NotesNeeded,
+            AmountSeals,
+            RequiredSeals,
+        ],
+    ),
+    OptionGroup(
+        "Entrances",
+        [
+            AvailablePortals,
+            ShufflePortals,
+            ShuffleTransitions,
+            PortalPlando,
+            TransitionPlando,
+        ],
+    ),
+]
