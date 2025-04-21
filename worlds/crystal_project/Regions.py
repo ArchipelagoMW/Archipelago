@@ -57,6 +57,12 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
         create_region(world, player, locations_per_region, "Lake Delende"),
         create_region(world, player, locations_per_region, "Quintar Reserve"),
         create_region(world, player, locations_per_region, "Dione Shrine"),
+        #create_region(world, player, locations_per_region, "Quintar Mausoleum"),
+        create_region(world, player, locations_per_region, "Eastern Chasm"),
+        create_region(world, player, locations_per_region, "Tall, Tall Heights"),
+        create_region(world, player, locations_per_region, "Northern Cave"),
+        create_region(world, player, locations_per_region, "Lands End"),
+        
     ]
 
     multiworld.regions += regions
@@ -87,8 +93,9 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
         "Okimoto N.S.": lambda state: state.has("Item - Progressive Quintar Flute", world.player, 2)})
     multiworld.get_region("Shoudu Waterfront", player).add_exits(["Shoudu Province"],
         {"Shoudu Province": lambda state: state.has("Item - Ibek Bell", world.player)})
-    multiworld.get_region("Greenshire Reprise", player).add_exits(["Salmon Pass"], 
-        {"Salmon Pass": lambda state: state.has_any({"Item - Progressive Quintar Flute"}, world.player)})
+    multiworld.get_region("Greenshire Reprise", player).add_exits(["Salmon Pass", "Tall, Tall Heights"], 
+        {"Salmon Pass": lambda state: state.has_any({"Item - Progressive Quintar Flute"}, world.player),
+        "Tall, Tall Heights": lambda state: state.has("Item - Ibek Bell", world.player),})
     multiworld.get_region("Salmon Pass", player).add_exits(["Salmon River"], 
         {"Salmon River": lambda state: state.has("Item - Progressive Quintar Flute", world.player, 2)})
     multiworld.get_region("Poko Poko Desert", player).add_exits(["Sara Sara Bazaar", "Ancient Reservoir", "Salmon Bay"], 
@@ -107,7 +114,10 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
         {"Beaurior Volcano": lambda state: state.has("Item - Ibek Bell", world.player)})
     multiworld.get_region("Beaurior Volcano", player).add_exits(["Beaurior Rock"])
     multiworld.get_region("Quintar Reserve", player).add_exits(["Dione Shrine"])
-    multiworld.get_region("Dione Shrine", player).add_exits(["Quintar Reserve"])
+    multiworld.get_region("Dione Shrine", player).add_exits(["Quintar Reserve", "Eastern Chasm"]],
+        {"Lands End": lambda state: state.has("Item - Owl Drum", world.player)})
+    multiworld.get_region("Tall, Tall Heights", player).add_exits(["Northern Cave", "Lands End"],
+        {"Eastern Chasm": lambda state: state.has("Item - Ibek Bell", world.player)})
 
 def get_locations_per_region(locations: List[LocationData]) -> Dict[str, List[LocationData]]:
     per_region: Dict[str, List[LocationData]] = {}
@@ -143,9 +153,11 @@ def connect_menu_region(world: "CrystalProjectWorld") -> None:
 
     world.starting_region = starting_region_list[0]
     menu = world.multiworld.get_region("Menu", world.player)
-    menu.add_exits(["Spawning Meadows", "Capital Sequoia", "Salmon River", "Poko Poko Desert", "Ganymede Shrine", "Dione Shrine"], 
+    menu.add_exits(["Spawning Meadows", "Capital Sequoia", "Salmon River", "Poko Poko Desert", "Ganymede Shrine", "Dione Shrine", "Tall, Tall Heights"], 
         {"Capital Sequoia": lambda state: state.has_any({"Item - Gaea Stone"}, world.player),
         "Salmon River": lambda state: state.has_any({"Item - Poseidon Stone"}, world.player),
         "Poko Poko Desert": lambda state: state.has_any({"Item - Mars Stone"}, world.player),
         "Ganymede Shrine": lambda state: state.has_any({"Item - Ganymede Stone"}, world.player),
-        "Dione Shrine": lambda state: state.has_any({"Item - Dione Stone"}, world.player)})
+        "Dione Shrine": lambda state: state.has_any({"Item - Dione Stone"}, world.player),
+        "Tall, Tall Heights": lambda state: state.has_any({"Item - Triton Stone"}, world.player),
+        })

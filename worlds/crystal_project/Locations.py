@@ -747,7 +747,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest in the assassin lounge", 3513 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest across from assassin lounge", 3514 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest its in a room and there is a bed", 3515 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
-        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest in the grainery", 3520 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest in the granary", 3520 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest below the flower house", 3521 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest in the white hut", 3522 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Shoudu Province", "Shoudu Province Chest - Ether chest balance above the undercity", 2717 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
@@ -762,8 +762,8 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Shoudu Province", "Shoudu Province Chest - Malifice chest", 2805 + treasure_index_offset), #(748, 134, -262)
         LocationData("Shoudu Province", "Shoudu Province Chest - Muggers Glove chest sneak behind the boxes near assassin lounge", 2760 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Shoudu Province", "Shoudu Province Chest - Muramasa chest", 2928 + treasure_index_offset), #(754, 134, -264)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Plague Mask Chest in the Weaponsmith", 1505 + treasure_index_offset),
-        LocationData("Shoudu Province", "Shoudu Province Chest - Potion Chest outside the inn", 2985 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Plague Mask chest in the Weaponsmith", 1505 + treasure_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Potion chest outside the inn", 2985 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Shoudu Province", "Shoudu Province Chest - Potion Pouch go in the back door", 1506 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Shoudu Province", "Shoudu Province Chest - Potion Pouch near the assassin lounge", 2762 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Shoudu Province", "Shoudu Province Chest - Suitors Hat chest jump along the lampost", 2752 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
@@ -772,13 +772,13 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Shoudu Province", "Shoudu Province Chest - Tincture Pouch chest balance above the undercity", 2716 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Shoudu Province", "Shoudu Province Chest - Potion Pouch chest across the balance beam east of save point", 3040 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Shoudu Province", "Shoudu Province Chest - Acrobat Shoes chest across on way to sky arena", 2754 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
-        LocationData("Shoudu Province", "Shoudu Province Chest - Potion Chest atop the roofs near the grates", 1369 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
-        LocationData("Shoudu Province", "Shoudu Province Chest - Potion Chest in the flower room", 2789 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
-        LocationData("Shoudu Province", "Shoudu Province Chest - Potion Chest hidden in a house by the elevator", 2790 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
-        LocationData("Shoudu Province", "Shoudu Province Chest - Potion Chest near sky fishing", 2986 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
-        LocationData("Shoudu Province", "Shoudu Province Chest - The Immovable Chest under the dry kid pit", 1365 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Potion chest atop the roofs near the grates", 1369 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Potion chest in the flower room", 2789 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Potion chest hidden in a house by the elevator", 2790 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Potion chest near sky fishing", 2986 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - The Immovable chest under the dry kid pit", 1365 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
         LocationData("Shoudu Province", "Shoudu Province Chest - Tonic Pouch in the 2 Sky Arena Win room", 2796 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
-        LocationData("Shoudu Province", "Shoudu Province Chest - Soul Kris Chest in 2 Sky Arena Win room", 2748 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Soul Kris chest in 2 Sky Arena Win room", 2748 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
 
         #NPCs
         #Todo NPCs Job Masters: Master Assassin ID 3605 (769, 123, -201); gives you Assassin Seal in exchange for job mastery
@@ -798,20 +798,20 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
 
         #The undercity
         #Items
-        LocationData("The Undercity", "The Undercity Chest - Potion Pouch Chest hiding in the rafters", 2989 + treasure_index_offset),
-        LocationData("The Undercity", "The Undercity Chest - Ether Chest up the rafters against a pillar", 2990 + treasure_index_offset),
-        LocationData("The Undercity", "The Undercity Chest - Ether Pouch Chest even further up the rafters", 2991 + treasure_index_offset),
-        LocationData("The Undercity", "The Undercity Chest - Fenix Juice Chest in the gated off room", 2988 + treasure_index_offset),
-        LocationData("The Undercity", "The Undercity Chest - Ether Chest in the gated off room", 2987 + treasure_index_offset),
-        LocationData("The Undercity", "The Undercity Chest - Potion Chest in the gated off room", 1147 + treasure_index_offset),
-        LocationData("The Undercity", "The Undercity Chest - Elevator Part Chest", 3517 + treasure_index_offset),
-        LocationData("The Undercity", "The Undercity Chest - Cursegiver Chest climb up the lampposts and run across the fence", 1925 + treasure_index_offset),
-        LocationData("The Undercity", "The Undercity Chest - Elevator Part Chest climb the north wall", 3516 + treasure_index_offset),
-        LocationData("The Undercity", "The Undercity Chest - Elevator Part Chest east of the waterfall on the awning", 3518 + treasure_index_offset),
-        LocationData("The Undercity", "The Undercity Chest - Potion Chest hiding in a building in the north area", 2826 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Potion Pouch chest hiding in the rafters", 2989 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Ether chest up the rafters against a pillar", 2990 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Ether Pouch chest even further up the rafters", 2991 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Fenix Juice chest in the gated off room", 2988 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Ether chest in the gated off room", 2987 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Potion chest in the gated off room", 1147 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Elevator Part chest", 3517 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Cursegiver chest climb up the lampposts and run across the fence", 1925 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Elevator Part chest climb the north wall", 3516 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Elevator Part chest east of the waterfall on the awning", 3518 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Potion chest hiding in a building in the north area", 2826 + treasure_index_offset),
         LocationData("The Undercity", "The Undercity Chest - Elevator Part in the Undercity Inn", 3519 + treasure_index_offset),
-        LocationData("The Undercity", "The Undercity Chest - Brigandine Chest south of the Undercity Inn", 1695 + treasure_index_offset),
-        LocationData("The Undercity", "The Undercity Chest - Knights Plate Chest hidden in a nook in the wall", 2793 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Brigandine chest south of the Undercity Inn", 1695 + treasure_index_offset),
+        LocationData("The Undercity", "The Undercity Chest - Knights Plate chest hidden in a nook in the wall", 2793 + treasure_index_offset),
         
         #NPCs
         LocationData("The Undercity", "The Undercity NPC - Gold Dust hiding from the bats under the awning", 2835 + npc_index_offset),
@@ -830,7 +830,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #Treasure Chests
         LocationData("Beaurior Volcano", "Beaurior Volcano Chest - Fenix Syrup chest", 3770 + treasure_index_offset),
 	    LocationData("Beaurior Volcano", "Beaurior Volcano Chest - Temporal Blade chest", 1168 + treasure_index_offset),
-	    LocationData("Beaurior Volcano", "Beaurior Volcano Chest - Tome of Light Chest", 2750 + treasure_index_offset),
+	    LocationData("Beaurior Volcano", "Beaurior Volcano Chest - Tome of Light chest", 2750 + treasure_index_offset),
 
         #Beaurior Rock
         #Treasure chests
@@ -854,7 +854,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
 
         #NPCs
         LocationData("Beaurior Rock", "Beaurior Rock NPC - Bottom Floor Gold Ingot", 2822 + npc_index_offset, lambda state: state.has("Item - Small Key", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
-        LocationData("Beaurior Rock", "Beaurior Rock Chest - Floor 4 Gold Dust chest", 2823 + npc_index_offset, lambda state: state.has("Item - Small Key", player, 4)),
+        LocationData("Beaurior Rock", "Beaurior Rock NPC - Floor 4 Gold Dust", 2823 + npc_index_offset, lambda state: state.has("Item - Small Key", player, 4)),
         LocationData("Beaurior Rock", "Beaurior Rock NPC - Floor 4 Gold Ore", 2824 + npc_index_offset, lambda state: state.has("Item - Small Key", player, 4) and state.has("Item - Progressive Quintar Flute", player, 2)),
 	    LocationData("Beaurior Rock", "Beaurior Rock NPC - Summit Gold Ore", 2836 + npc_index_offset, lambda state: state.has("Item - Small Key", player, 4) and state.has("Item - Boss Key", player)),
 
@@ -869,11 +869,15 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #NPCs
         LocationData("Lake Delende", "Lake Delende NPC - Panning for Gold Dust down Salmon Creek without a paddle", 2854 + npc_index_offset),
 
+        #Abilities Todo: descriptivize and implement
+        #97, 126, -211
+        #LocationData("Lake Delende", "Lake Delende Ability - Ioske from SEarth_Summon", 1111 + ability_index_offset),
+
         #Quintar Reserve
         #Items
-        LocationData("Quintar Reserve", "Quintar Reserve Chest - Overpass Scrap Chest on the climb up from the elevator", 3536 + treasure_index_offset),
-        LocationData("Quintar Reserve", "Quintar Reserve Chest - Quintar Grass Chest in race start hut", 1591 + treasure_index_offset),
-        LocationData("Quintar Reserve", "Quintar Reserve Chest - Undead Ring Chest in Mausoleum", 1320 + treasure_index_offset, lambda state: state.has("Item - Owl Drum", player)),
+        LocationData("Quintar Reserve", "Quintar Reserve Chest - Overpass Scrap chest on the climb up from the elevator", 3536 + treasure_index_offset),
+        LocationData("Quintar Reserve", "Quintar Reserve Chest - Quintar Grass chest in race start hut", 1591 + treasure_index_offset),
+        LocationData("Quintar Reserve", "Quintar Reserve Chest - Undead Ring chest in Mausoleum", 1320 + treasure_index_offset, lambda state: state.has("Item - Owl Drum", player)),
 
         #NPCs
         LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 1 down in the quintar nest", 2255 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and state.has("Item - Progressive Quintar Flute", player, 2)),
@@ -893,17 +897,71 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
 
         #Dione shrine
         #items
-        LocationData("Dione Shrine", "Dione Shrine Chest - Dione Shard Chest on top of shrine", 2154 + treasure_index_offset, lambda state: state.has("Item - Dione Stone", player)),
-        LocationData("Dione Shrine", "Dione Shrine Chest - Dione Shard Chest in lobby", 2791 + treasure_index_offset),
-        LocationData("Dione Shrine", "Dione Shrine Chest - Dione Shard Chest on second floor", 2792 + treasure_index_offset),
-        LocationData("Dione Shrine", "Dione Shrine Chest - Dione Shard Chest on second floor balcony", 1146 + treasure_index_offset),
+        LocationData("Dione Shrine", "Dione Shrine Chest - Dione Shard chest on top of shrine", 2154 + treasure_index_offset, lambda state: state.has("Item - Dione Stone", player)),
+        LocationData("Dione Shrine", "Dione Shrine Chest - Dione Shard chest in lobby", 2791 + treasure_index_offset),
+        LocationData("Dione Shrine", "Dione Shrine Chest - Dione Shard chest on second floor", 2792 + treasure_index_offset),
+        LocationData("Dione Shrine", "Dione Shrine Chest - Dione Shard chest on second floor balcony", 1146 + treasure_index_offset),
 
         #NPCs
         LocationData("Dione Shrine", "Dione Shrine NPC - Shedding 9 on top of the shrine", 2265 + npc_index_offset, lambda state: state.has("Item - Dione Stone", player)),
 
-        #Abilities Todo: descriptivize and implement
-        #97, 126, -211
-        #LocationData("Lake Delende", "Lake Delende Ability - Ioske from SEarth_Summon", 1111 + ability_index_offset),
+        #Quintar Mausoleum
+        #Treasure chests Todo descriptivize
+        #LocationData("Quintar Mausoleum", "Quintar Mausoleum Chest - Babel Quintar chest", 2153 + treasure_index_offset),
+
+        #Eastern Chasm
+        #Treasure chests
+        LocationData("Eastern Chasm", "Eastern Chasm Chest - Eastern Chasm map chest at the overgrown opposite of chasm", 3543 + treasure_index_offset),
+
+        #Tall, Tall Heights
+        #Treasure chests
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Tear Seed chest past the icy Chips Challenge", 2786 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Lonely Ether chest", 2428 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Tear Seed chest past the 2nd icy Chips Challenge", 2788 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Potion chest past the 3rd icy Chips Challenge", 1254 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Z-Potion Pouch chest above the Boomer Society", 2844 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player) and lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Ether chest above the Triton Shrine", 2795 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player) or lambda state: state.has("Item - Triton Stone", player)),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Frost Reaper chest past the Chips Challenge fishing hut", 1578 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player) or lambda state: state.has("Item - Triton Stone", player)),
+        #requires (Ibek or Triton Stone) and Quintar
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Tall stones and blue flowers Potion Pouch chest", 2992 + treasure_index_offset, (lambda state: state.has("Item - Ibek Bell", player) or lambda state: state.has("Item - Triton Stone", player)) and lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
+        #Technically Northern Cave
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Break the ice Radiance chest", 2744 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player) and lambda state: state.has("Item - Owl Drum", player)),
+
+        #NPCs
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Gold Ingot above the Boomer Society", 1600 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Hop along spike mountain to Gold Dust", 2853 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) or lambda state: state.has("Item - Triton Stone", player)),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Melted snow Gold Ingot past the Potion Pouch chest", 2847 + npc_index_offset, (lambda state: state.has("Item - Ibek Bell", player) or lambda state: state.has("Item - Triton Stone", player)) and lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Chip Challenge himself", 2388 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) or lambda state: state.has("Item - Triton Stone", player)),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Gold Ingot by the breakable ice wall", 2814 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player) and lambda state: state.has("Item - Owl Drum", player)),
+
+        #Northern Cave
+        #Treasure chests
+        LocationData("Northern Cave", "Northern Cave Chest - Island in the ice Tear Seed chest", 2787 + treasure_index_offset),
+        LocationData("Northern Cave", "Northern Cave Chest - Ice Cell Key chest in the ominous Chips Challenge cave", 1579 + treasure_index_offset),
+        LocationData("Northern Cave", "Northern Cave Chest - Chip mimic Apprentice chest", 1552 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2) and lambda state: state.has("Item - Ibek Bell", player)),
+        LocationData("Northern Cave", "Northern Cave Chest - Money chest past the wiggly block spike pit", 3001 + treasure_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+
+        #NPCs
+        LocationData("Northern Cave", "Northern Cave NPC - Gold Ore past the wiggly block spike pit", 2815 + npc_index_offset, lambda state: state.has("Item - Ibek Bell", player)),
+
+        #Lands End
+        #Treasure chests
+        LocationData("Lands End", "Lands End Chest - Definitely requires Quintar *wink* Ether chest among the spikes", 2849 + treasure_index_offset),
+        LocationData("Lands End", "Lands End Chest - Definitely requires Quintar *wink* Potion chest among the spikes", 3003 + treasure_index_offset),
+        LocationData("Lands End", "Lands End Chest - Brave the spikes to climb the northern peak Money chest", 3002 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Lands End", "Lands End Chest - Blue Cape chest to defeat the Huns", 2740 + treasure_index_offset),
+        LocationData("Lands End", "Lands End Chest - Blue Cape chest tucked against River Cats Ego", 1692 + treasure_index_offset),
+        LocationData("Lands End", "Lands End Chest - Defender chest in spikes and storm", 1358 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Lands End", "Lands End Chest - Fancy some spikes cliffdiving? Rune Ward chest", 1693 + treasure_index_offset),
+        LocationData("Lands End", "Lands End Chest - Callisto Stone chest by the lovely owl tree", 1561 + treasure_index_offset),
+        LocationData("Lands End", "Lands End Chest - Ether chest inside the shrine", 3017 + treasure_index_offset),
+
+        #NPCs
+        LocationData("Lands End", "Lands End NPC - Get down to business in the mountains Gold Ingot", 2848 + npc_index_offset),
+        LocationData("Lands End", "Lands End NPC - Pillar Gold Ore by River Cats Ego", 2850 + npc_index_offset),
+        LocationData("Lands End", "Lands End NPC - Gold Dust in spikes and storm", 2851 + npc_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Lands End", "Lands End NPC - Gold Ingot behind the shrine", 2852 + npc_index_offset),
+        LocationData("Lands End", "Lands End NPC - Owl Drum", 1176 + npc_index_offset),
 
         #Jidamba Eaclaneya
         #NPCs
