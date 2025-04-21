@@ -23,6 +23,7 @@ class SatisfactoryWorld(World):
     topology_present = False
     web = SatisfactoryWebWorld()
     origin_region_name = "Overworld"
+    required_client_version = (0, 6, 0)
 
     game_logic: ClassVar[GameLogic] = GameLogic()
     state_logic: StateLogic

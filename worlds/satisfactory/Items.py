@@ -630,7 +630,7 @@ class Items:
         "Customizer: Carbon Steel Finish": ItemData(G.Customizer, 1338772, C.filler, 0), 
         "Customizer: Caterium Paint Finish": ItemData(G.Customizer, 1338773, C.filler, 0), 
 
-        #1338774 - 1338799 Reserved for Cosmetics
+        #1338776 - 1338799 Reserved for Cosmetics
 
         # Transports 1338800 - 1338899
         # Drones (including Drone)

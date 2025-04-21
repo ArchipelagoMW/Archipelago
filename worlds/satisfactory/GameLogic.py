@@ -623,7 +623,7 @@ class GameLogic:
         "Power Storage": Building("Power Storage", ("Wire", "Modular Frame", "Stator"), can_produce=False),
         "Foundation": Building("Foundation", ("Iron Plate", "Concrete"), can_produce=False),
         "Walls Orange": Building("Walls Orange", ("Iron Plate", "Concrete"), can_produce=False),
-        "Space Elevator": Building("Space Elevator", ("Concrete", "Iron Plate", "Iron Rod", "Wire"), can_produce=False, implicitly_unlocked=True),
+        "Space Elevator": Building("Space Elevator", ("Concrete", "Iron Plate", "Iron Rod", "Wire"), can_produce=False),
 
 #1.0
         "Converter": Building("Converter", ("Fused Modular Frame", "Cooling System", "Radio Control Unit", "SAM Fluctuator"), PowerInfrastructureLevel.Complex),

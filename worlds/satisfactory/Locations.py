@@ -270,7 +270,7 @@ class Locations():
             MamSlot("Alien Technology", "Production Amplifier", 1338591),
             MamSlot("Alien Technology", "Power Augmenter", 1338592),
             # 1338593 Alien Power Matrix
-            MamSlot("Quartz", "Material Resonance Screening", 1338594),
+            MamSlot("Quartz", "Material Resonance Screening", 1338594), # 1.1
             # 1338600 - 1338699 - Harddrives - Harddrives
             ShopSlot(self.state_logic, 1, 3, 1338700),
             ShopSlot(self.state_logic, 2, 3, 1338701),
