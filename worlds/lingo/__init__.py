@@ -167,7 +167,8 @@ class LingoWorld(World):
                                                       progitem.name in self.player_logic.good_item_options,
                                      progitempool))
 
-            if good_location.progress_type != LocationProgressType.EXCLUDED and len(good_items) > 0:
+            if good_location.progress_type != LocationProgressType.EXCLUDED and good_location in fill_locations and\
+                    len(good_items) > 0:
                 good_item = self.random.choice(good_items)
                 good_location.place_locked_item(good_item)
 
