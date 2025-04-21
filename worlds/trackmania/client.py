@@ -17,6 +17,15 @@ class TrackmaniaCommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, TrackmaniaContext):
             logger.info(f"Trackmania Plugin Status: {self.ctx.get_trackmania_status()}")
 
+    def _cmd_reroll(self):
+        if isinstance(self.ctx, TrackmaniaContext):
+            if self.ctx.is_proxy_connected():
+                logger.info("Rerolling Loaded Map...")
+                msg : dict [str,str] = {"cmd" : "Reroll"}
+                self.ctx.server_msgs.append(encode([msg]))
+
+
+
 
 class TrackmaniaContext(CommonContext):
     command_processor = TrackmaniaCommandProcessor

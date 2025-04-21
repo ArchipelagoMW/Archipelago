@@ -1,22 +1,29 @@
 import settings
 import typing
+import os
 from .options import TrackmaniaOptions
 from .items import trackmania_items, trackmania_item_groups, create_itempool, create_item
 from .locations import build_locations
 from .regions import create_regions
 from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import Component, components, icon_paths, launch as launch_component, Type
+from worlds.LauncherComponents import Component, components, icon_paths, launch_subprocess, Type
 from Utils import local_path
 from BaseClasses import Region, Location, Entrance, Item, ItemClassification, Tutorial
+from NetUtils import decode, encode
 
 def launch_client():
     from .client import launch
-    launch_component(launch, name="TrackmaniaClient")
+    launch_subprocess(launch, name="TrackmaniaClient")
+
+icon_path : str = local_path('data', 'ngowo.png')
+icon: str = 'icon'
+
+if os.path.exists(icon_path):
+    icon_paths['ngowo'] = icon_path
+    icon = 'ngowo'
 
 components.append(Component("Trackmania Client", "TrackmaniaClient", func=launch_client,
-                            component_type=Type.CLIENT, icon='ngowo'))
-
-icon_paths['ngowo'] = local_path('data', 'ngowo.png')
+                            component_type=Type.CLIENT, icon=icon))
 
 class Webmania(WebWorld):
     theme = "ice"
@@ -59,8 +66,8 @@ class TrackmaniaWorld(World):
                            "SeriesNumber": self.options.series_number.value,
                            "SeriesMapNumber": self.options.series_map_number.value,
                            "MedalRequirement": self.options.medal_requirement.value,
-                           "MapTags": "bla",#self.options.map_tags.value,
+                           "MapTags": encode(self.options.map_tags.value),
                            "MapTagsInclusive": self.options.map_tags_inclusive.value,
-                           "MapETags": "bla"}#self.options.map_etags.value}
+                           "MapETags": encode(self.options.map_etags.value),}
 
         return slot_data
