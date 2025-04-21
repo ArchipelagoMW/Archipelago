@@ -2,8 +2,6 @@ from typing import Dict, NamedTuple, Optional
 
 from BaseClasses import Item, ItemClassification
 
-class SDItem(Item):
-    game: str = "Silver Daze"
 
 class ItemData(NamedTuple):
     code: int

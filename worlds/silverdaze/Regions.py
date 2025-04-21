@@ -1,19 +1,36 @@
-from typing import NamedTuple, List
+from typing import TYPE_CHECKING, Callable, Dict, List, Optional, Tuple
 
-from BaseClasses import MultiWorld, Region, Entrance
-from .Locations import SDLocation, location_table, get_locations_by_category
-from . import SDWorld
+from BaseClasses import CollectionState, ItemClassification, Region
+
+from BaseClasses import MultiWorld
+
+from .Items import item_table
+from .Locations import location_table
+
+if TYPE_CHECKING:
+    from . import SDWorld
+
+def link_sd_areas(world: MultiWorld, player: int):
+    for (exit, region) in mandatory_connections:
+        world.get_entrance(exit, player).connect(world.get_region(region, player))
 
 
-class SDRegionData(NamedTuple):
-    locations: [List[str]]
-    region_exits: [List[str]]
+sd_regions = [
+    #Name of region, any exits
+    ("Menu", ["New_Game"]),
+    ("Geo_Room", ["Leave_Geo_Room"]),
+    ("Cotton",  ["Door_To_Hub2"]),
+    ("GreyHub2", ["Red_Demo_Entrance"]),
+    ("Red", ["Red2_Demo_Entrance","Red_Demo_Entrance"]),
+    ("Red2", []),
+    ]
+#Sawyer: Add new regions when the time comes
+mandatory_connections = [
+    #Name of entrance, region where it leads
+    ("New_Game", "Geo_Room"),
+    ("Leave_Geo_Room", "Cotton"),
+    ("Door_To_Hub2", "GreyHub2"),
+    ("Red_Demo_Entrance", "Red"),
+    ("Red2_Demo_Entrance", "Red2"),
 
-def create_regions(world: "SDWorld"):
-    regions = {
-        "GeoRoom":      SDRegionData([],    []),
-        "GreyZone1":    SDRegionData([],    []),
-        "GreyZone2":    SDRegionData([],    []),
-        "RedZone1":     SDRegionData([],    []),
-        "RedZone2":     SDRegionData([],    []),
-    }
+]
