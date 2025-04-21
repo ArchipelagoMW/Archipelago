@@ -42,7 +42,7 @@ def create_items(item_factory: StardewItemFactory, locations_count: int, items_t
     items += unique_filler_items
     logger.debug(f"Created {len(unique_filler_items)} unique filler items")
 
-    resource_pack_items = fill_with_resource_packs_and_traps(item_factory, options, random, items, locations_count)
+    resource_pack_items = fill_with_resource_packs_and_traps(item_factory, options, random, items + items_to_exclude, locations_count - len(items))
     items += resource_pack_items
     logger.debug(f"Created {len(resource_pack_items)} resource packs")
 
@@ -572,7 +572,7 @@ def weapons_count(options: StardewValleyOptions):
 
 def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options: StardewValleyOptions, random: Random,
                                        items_already_added: List[Item],
-                                       number_locations: int) -> List[Item]:
+                                       available_item_slots: int) -> List[Item]:
     include_traps = options.trap_difficulty != TrapDifficulty.option_no_traps
     items_already_added_names = [item.name for item in items_already_added]
     useful_resource_packs = [pack for pack in items_by_group[Group.RESOURCE_PACK_USEFUL]
@@ -597,10 +597,9 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
     priority_filler_items = remove_excluded_items(priority_filler_items, options)
 
     number_priority_items = len(priority_filler_items)
-    required_resource_pack = number_locations - len(items_already_added)
-    if required_resource_pack < number_priority_items:
+    if available_item_slots < number_priority_items:
         chosen_priority_items = [item_factory(resource_pack) for resource_pack in
-                                 random.sample(priority_filler_items, required_resource_pack)]
+                                 random.sample(priority_filler_items, available_item_slots)]
         return chosen_priority_items
 
     items = []
@@ -608,7 +607,7 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
                                           ItemClassification.trap if resource_pack.classification == ItemClassification.trap else ItemClassification.useful)
                              for resource_pack in priority_filler_items]
     items.extend(chosen_priority_items)
-    required_resource_pack -= number_priority_items
+    available_item_slots -= number_priority_items
     all_filler_packs = [filler_pack for filler_pack in all_filler_packs
                         if Group.MAXIMUM_ONE not in filler_pack.groups or
                         (filler_pack.name not in [priority_item.name for priority_item in
@@ -616,18 +615,18 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
 
     filler_weights = get_filler_weights(options, all_filler_packs)
 
-    while required_resource_pack > 0:
+    while available_item_slots > 0:
         resource_pack = random.choices(all_filler_packs, weights=filler_weights, k=1)[0]
-        exactly_2 = Group.EXACTLY_TWO in resource_pack.groups
-        while exactly_2 and required_resource_pack == 1:
+        exactly_2 = Group.AT_LEAST_TWO in resource_pack.groups
+        while exactly_2 and available_item_slots == 1:
             resource_pack = random.choices(all_filler_packs, weights=filler_weights, k=1)[0]
-            exactly_2 = Group.EXACTLY_TWO in resource_pack.groups
+            exactly_2 = Group.AT_LEAST_TWO in resource_pack.groups
         classification = ItemClassification.useful if resource_pack.classification == ItemClassification.progression else resource_pack.classification
         items.append(item_factory(resource_pack, classification))
-        required_resource_pack -= 1
+        available_item_slots -= 1
         if exactly_2:
             items.append(item_factory(resource_pack, classification))
-            required_resource_pack -= 1
+            available_item_slots -= 1
         if exactly_2 or Group.MAXIMUM_ONE in resource_pack.groups:
             index = all_filler_packs.index(resource_pack)
             all_filler_packs.pop(index)
@@ -681,7 +680,7 @@ def generate_filler_choice_pool(options: StardewValleyOptions) -> list[str]:
 
 
 def remove_limited_amount_packs(packs):
-    return [pack for pack in packs if Group.MAXIMUM_ONE not in pack.groups and Group.EXACTLY_TWO not in pack.groups]
+    return [pack for pack in packs if Group.MAXIMUM_ONE not in pack.groups and Group.AT_LEAST_TWO not in pack.groups]
 
 
 def get_all_filler_items(include_traps: bool, exclude_ginger_island: bool) -> List[ItemData]:

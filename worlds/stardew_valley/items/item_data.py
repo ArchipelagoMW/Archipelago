@@ -51,7 +51,7 @@ class Group(enum.Enum):
     TRAP = enum.auto()
     BONUS = enum.auto()
     MAXIMUM_ONE = enum.auto()
-    EXACTLY_TWO = enum.auto()
+    AT_LEAST_TWO = enum.auto()
     DEPRECATED = enum.auto()
     RESOURCE_PACK_USEFUL = enum.auto()
     SPECIAL_ORDER_BOARD = enum.auto()
@@ -99,11 +99,6 @@ class ItemData:
 
 class StardewItemFactory(Protocol):
     def __call__(self, name: Union[str, ItemData], override_classification: ItemClassification = None) -> Item:
-        raise NotImplementedError
-
-
-class StardewItemDeleter(Protocol):
-    def __call__(self, item: Item):
         raise NotImplementedError
 
 
