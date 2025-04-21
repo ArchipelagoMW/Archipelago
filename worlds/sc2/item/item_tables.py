@@ -383,7 +383,7 @@ item_table = {
                  parent=item_names.SIEGE_TANK),
     item_names.PREDATOR_RESOURCE_EFFICIENCY:
         ItemData(275 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_3, 10, SC2Race.TERRAN,
-                 parent=item_names.PREDATOR),
+                 classification=ItemClassification.progression, parent=item_names.PREDATOR),
     item_names.MEDIVAC_EXPANDED_HULL:
         ItemData(276 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_3, 11, SC2Race.TERRAN,
                  parent=item_names.MEDIVAC),
@@ -566,7 +566,7 @@ item_table = {
                  parent=item_names.VIKING),
     item_names.BANSHEE_SHAPED_HULL:
         ItemData(336 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_4, 17, SC2Race.TERRAN,
-                 parent=item_names.BANSHEE),
+                 classification=ItemClassification.progression, parent=item_names.BANSHEE),
     item_names.BANSHEE_ADVANCED_TARGETING_OPTICS:
         ItemData(337 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_4, 18, SC2Race.TERRAN,
                  classification=ItemClassification.progression, parent=item_names.BANSHEE),
@@ -635,7 +635,7 @@ item_table = {
                  classification=ItemClassification.progression, parent=item_names.GHOST),
     item_names.GHOST_LOCKDOWN:
         ItemData(359 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_5, 10, SC2Race.TERRAN,
-                 parent=item_names.GHOST),
+                 classification=ItemClassification.progression, parent=item_names.GHOST),
     item_names.SPECTRE_IMPALER_ROUNDS:
         ItemData(360 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_5, 11, SC2Race.TERRAN,
                  parent=item_names.SPECTRE),
@@ -671,7 +671,7 @@ item_table = {
                  parent=item_names.SCIENCE_VESSEL),
     item_names.CYCLONE_TARGETING_OPTICS:
         ItemData(372 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_5, 21, SC2Race.TERRAN,
-                 parent=item_names.CYCLONE),
+                 classification=ItemClassification.progression, parent=item_names.CYCLONE),
     item_names.CYCLONE_RAPID_FIRE_LAUNCHERS:
         ItemData(373 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_5, 22, SC2Race.TERRAN,
                  parent=item_names.CYCLONE),
@@ -691,17 +691,17 @@ item_table = {
         ItemData(378 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_5, 27, SC2Race.TERRAN,
                  parent=item_names.WIDOW_MINE),
     item_names.VALKYRIE_ENHANCED_CLUSTER_LAUNCHERS:
-        ItemData(379 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_5, 28,
-                 SC2Race.TERRAN, parent=item_names.VALKYRIE),
+        ItemData(379 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_5, 28,  SC2Race.TERRAN,
+                 classification=ItemClassification.progression, parent=item_names.VALKYRIE),
     item_names.VALKYRIE_SHAPED_HULL:
         ItemData(380 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_5, 29, SC2Race.TERRAN,
-                 parent=item_names.VALKYRIE),
+                 classification=ItemClassification.progression, parent=item_names.VALKYRIE),
     item_names.VALKYRIE_FLECHETTE_MISSILES:
         ItemData(381 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 0, SC2Race.TERRAN,
                  classification=ItemClassification.progression, parent=item_names.VALKYRIE),
     item_names.VALKYRIE_AFTERBURNERS:
         ItemData(382 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 1, SC2Race.TERRAN,
-                 parent=item_names.VALKYRIE),
+                 classification=ItemClassification.progression, parent=item_names.VALKYRIE),
     item_names.CYCLONE_INTERNAL_TECH_MODULE:
         ItemData(383 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 2, SC2Race.TERRAN,
                  parent=item_names.CYCLONE),
@@ -909,7 +909,7 @@ item_table = {
                  parent=item_names.BATTLECRUISER),
     item_names.PREDATOR_ADAPTIVE_DEFENSES:
         ItemData(753 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 7, SC2Race.TERRAN,
-                 parent=item_names.PREDATOR),
+                 classification=ItemClassification.progression, parent=item_names.PREDATOR),
     item_names.VIKING_AESIR_TURBINES:
         ItemData(754 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 8, SC2Race.TERRAN,
                  parent=item_names.VIKING),

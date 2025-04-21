@@ -3320,16 +3320,45 @@ class SC2Logic:
         return (
             self.terran_competent_comp(state)
             and self.terran_mobile_detector(state)
+            and self.nova_any_weapon(state)
+            and self.nova_splash(state)
             and (
-                state.has_any({item_names.BATTLECRUISER, item_names.LIBERATOR, item_names.BANSHEE}, self.player)
-                or state.has_all({item_names.WRAITH, item_names.WRAITH_ADVANCED_LASER_TECHNOLOGY}, self.player)
-            )
-            and (state.has_any({item_names.BATTLECRUISER, item_names.VIKING, item_names.LIBERATOR}, self.player)
-                or (self.advanced_tactics
-                    and state.has_all({item_names.RAVEN, item_names.RAVEN_HUNTER_SEEKER_WEAPON}, self.player)
+                # Xanthos
+                state.has_any((item_names.BATTLECRUISER, item_names.VIKING, item_names.WARHOUND), self.player)
+                or state.has_all((item_names.LIBERATOR, item_names.LIBERATOR_SMART_SERVOS), self.player)
+                or state.has_all((item_names.THOR, item_names.THOR_PROGRESSIVE_HIGH_IMPACT_PAYLOAD), self.player)
+                or (
+                        state.has(item_names.VALKYRIE, self.player)
+                        and state.has_any((item_names.VALKYRIE_AFTERBURNERS, item_names.VALKYRIE_SHAPED_HULL),self.player)
+                        and state.has_any((item_names.VALKYRIE_FLECHETTE_MISSILES, item_names.VALKYRIE_ENHANCED_CLUSTER_LAUNCHERS),self.player)
                 )
+                or (
+                    state.has(item_names.BANSHEE, self.player)
+                    and (self.advanced_tactics or state.has(item_names.BANSHEE_SHAPED_HULL, self.player))
+                )
+                or (
+                            self.advanced_tactics
+                            and (
+                                (
+                                        state.has_all((item_names.MARINE, item_names.MARINE_PROGRESSIVE_STIMPACK), self.player)
+                                        and (
+                                                self.terran_bio_heal(state)
+                                                or state.count(item_names.MARINE_PROGRESSIVE_STIMPACK, self.player) >= 2
+                                        )
+                                )
+                                or (state.has(item_names.DOMINION_TROOPER, self.player) and self.terran_bio_heal(state))
+                                or state.has_all((item_names.PREDATOR, item_names.PREDATOR_RESOURCE_EFFICIENCY, item_names.PREDATOR_ADAPTIVE_DEFENSES), self.player)
+                                or state.has_all((item_names.CYCLONE, item_names.CYCLONE_TARGETING_OPTICS), self.player)
+                            )
+                    )
             )
-            and self.terran_very_hard_mission_weapon_armor_level(state)
+            and ( # The enemy has 3/3 BCs
+                    state.has_any((item_names.GOLIATH, item_names.VIKING, item_names.NOVA_C20A_CANISTER_RIFLE, item_names.NOVA_BLAZEFIRE_GUNBLADE), self.player)
+                    or state.has_all((item_names.THOR, item_names.THOR_PROGRESSIVE_HIGH_IMPACT_PAYLOAD), self.player)
+                    or state.has_all((item_names.GHOST, item_names.GHOST_LOCKDOWN), self.player)
+                    or state.has_all((item_names.BATTLECRUISER, item_names.BATTLECRUISER_ATX_LASER_BATTERY), self.player)
+            )
+            and self.terran_army_weapon_armor_upgrade_min_level(state) >= 3
         )
 
     def has_terran_units(self, target: int) -> Callable[['CollectionState'], bool]:
