@@ -164,18 +164,16 @@ class LingoWorld(World):
     def fill_hook(self, progitempool: List[Item], _: List[Item], _2: List[Item], fill_locations: List[Location]):
         if len(self.player_logic.good_item_options) > 0:
             good_location = self.get_location("Second Room - Good Luck")
+            good_items = list(filter(lambda progitem: progitem.player == self.player and
+                                                      progitem.name in self.player_logic.good_item_options,
+                                     progitempool))
 
-            if good_location.progress_type != LocationProgressType.EXCLUDED:
-                good_items = list(filter(lambda progitem: progitem.player == self.player and
-                                                          progitem.name in self.player_logic.good_item_options,
-                                         progitempool))
+            if good_location.progress_type != LocationProgressType.EXCLUDED and len(good_items) > 0:
+                good_item = self.random.choice(good_items)
+                good_location.place_locked_item(good_item)
 
-                if len(good_items) > 0:
-                    good_item = self.random.choice(good_items)
-                    progitempool.remove(good_item)
-
-                    good_location.place_locked_item(good_item)
-                    fill_locations.remove(good_location)
+                progitempool.remove(good_item)
+                fill_locations.remove(good_location)
 
     def fill_slot_data(self):
         slot_options = [
