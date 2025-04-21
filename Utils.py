@@ -116,6 +116,8 @@ def cache_self1(function: typing.Callable[[S, T], RetType]) -> typing.Callable[[
             cache[arg] = res
             return res
 
+    wrap.__defaults__ = function.__defaults__
+
     return wrap
 
 

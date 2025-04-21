@@ -43,8 +43,8 @@ from kivy.core.image import ImageLoader, ImageLoaderBase, ImageData
 from kivy.base import ExceptionHandler, ExceptionManager
 from kivy.clock import Clock
 from kivy.factory import Factory
-from kivy.properties import BooleanProperty, ObjectProperty, NumericProperty
-from kivy.metrics import dp
+from kivy.properties import BooleanProperty, ObjectProperty, NumericProperty, StringProperty
+from kivy.metrics import dp, sp
 from kivy.uix.widget import Widget
 from kivy.uix.layout import Layout
 from kivy.utils import escape_markup
@@ -60,7 +60,7 @@ from kivymd.app import MDApp
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.tab.tab import MDTabsPrimary, MDTabsItem, MDTabsItemText, MDTabsCarousel
+from kivymd.uix.tab.tab import MDTabsSecondary, MDTabsItem, MDTabsItemText, MDTabsCarousel
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.menu.menu import MDDropdownTextItem
 from kivymd.uix.dropdownitem import MDDropDownItem, MDDropDownItemText
@@ -90,15 +90,15 @@ remove_between_brackets = re.compile(r"\[.*?]")
 class ThemedApp(MDApp):
     def set_colors(self):
         text_colors = KivyJSONtoTextParser.TextColors()
-        self.theme_cls.theme_style = getattr(text_colors, "theme_style", "Dark")
-        self.theme_cls.primary_palette = getattr(text_colors, "primary_palette", "Green")
-        self.theme_cls.dynamic_scheme_name = getattr(text_colors, "dynamic_scheme_name", "TONAL_SPOT")
-        self.theme_cls.dynamic_scheme_contrast = getattr(text_colors, "dynamic_scheme_contrast", 0.0)
+        self.theme_cls.theme_style = text_colors.theme_style
+        self.theme_cls.primary_palette = text_colors.primary_palette
+        self.theme_cls.dynamic_scheme_name = text_colors.dynamic_scheme_name
+        self.theme_cls.dynamic_scheme_contrast = text_colors.dynamic_scheme_contrast
 
 
 class ImageIcon(MDButtonIcon, AsyncImage):
     def __init__(self, *args, **kwargs):
-        super().__init__(args, kwargs)
+        super().__init__(*args, **kwargs)
         self.image = ApAsyncImage(**kwargs)
         self.add_widget(self.image)
 
@@ -164,6 +164,34 @@ class ToggleButton(MDButton, ToggleButtonBehavior):
                     child.theme_icon_color = "Custom"
                 child.text_color = self.theme_cls.primaryColor
                 child.icon_color = self.theme_cls.primaryColor
+
+
+# thanks kivymd
+class ResizableTextField(MDTextField):
+    """
+    Resizable MDTextField that manually overrides the builtin sizing.
+
+    Note that in order to use this, the sizing must be specified from within a .kv rule.
+    """
+    def __init__(self, *args, **kwargs):
+        # cursed rules override
+        rules = Builder.match(self)
+        textfield = next((rule for rule in rules if rule.name == f"<MDTextField>"), None)
+        if textfield:
+            subclasses = rules[rules.index(textfield) + 1:]
+            for subclass in subclasses:
+                height_rule = subclass.properties.get("height", None)
+                if height_rule:
+                    height_rule.ignore_prev = True
+        super().__init__(*args, **kwargs)
+
+
+def on_release(self: MDButton, *args):
+    super(MDButton, self).on_release(args)
+    self.on_leave()
+
+
+MDButton.on_release = on_release
 
 
 # I was surprised to find this didn't already exist in kivy :(
@@ -266,11 +294,15 @@ class TooltipLabel(HovererableLabel, MDTooltip):
         self._tooltip = None
 
 
-class ServerLabel(HovererableLabel, MDTooltip):
+class ServerLabel(HoverBehavior, MDTooltip, MDBoxLayout):
     tooltip_display_delay = 0.1
+    text: str = StringProperty("Server:")
 
     def __init__(self, *args, **kwargs):
-        super(HovererableLabel, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+        self.add_widget(MDIcon(icon="information", font_size=sp(15)))
+        self.add_widget(TooltipLabel(text=self.text, pos_hint={"center_x": 0.5, "center_y": 0.5},
+                                     font_size=sp(15)))
         self._tooltip = ServerToolTip(text="Test")
 
     def on_enter(self):
@@ -383,7 +415,6 @@ class MarkupDropdownTextItem(MDDropdownTextItem):
         for child in self.children:
             if child.__class__ == MDLabel:
                 child.markup = True
-        print(self.text)
     # Currently, this only lets us do markup on text that does not have any icons
     # Create new TextItems as needed
 
@@ -461,14 +492,13 @@ class MarkupDropdown(MDDropdownMenu):
             self.menu.data = self._items
 
 
-class AutocompleteHintInput(MDTextField):
+class AutocompleteHintInput(ResizableTextField):
     min_chars = NumericProperty(3)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.dropdown = MarkupDropdown(caller=self, position="bottom", border_margin=dp(24), width=self.width)
-        self.dropdown.bind(on_select=lambda instance, x: setattr(self, 'text', x))
+        self.dropdown = MarkupDropdown(caller=self, position="bottom", border_margin=dp(2), width=self.width)
         self.bind(on_text_validate=self.on_message)
         self.bind(width=lambda instance, x: setattr(self.dropdown, "width", x))
 
@@ -485,8 +515,11 @@ class AutocompleteHintInput(MDTextField):
 
             def on_press(text):
                 split_text = MarkupLabel(text=text).markup
-                return self.dropdown.select("".join(text_frag for text_frag in split_text
-                                                    if not text_frag.startswith("[")))
+                self.set_text(self, "".join(text_frag for text_frag in split_text
+                                            if not text_frag.startswith("[")))
+                self.dropdown.dismiss()
+                self.focus = True
+
             lowered = value.lower()
             for item_name in item_names:
                 try:
@@ -498,7 +531,7 @@ class AutocompleteHintInput(MDTextField):
                     text = text[:index] + "[b]" + text[index:index+len(value)]+"[/b]"+text[index+len(value):]
                     self.dropdown.items.append({
                         "text": text,
-                        "on_release": lambda: on_press(text),
+                        "on_release": lambda txt=text: on_press(txt),
                         "markup": True
                     })
             if not self.dropdown.parent:
@@ -589,8 +622,7 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
                                     if self.entrance_text != "Vanilla"
                                     else "", ". (", self.status_text.lower(), ")"))
                     temp = MarkupLabel(text).markup
-                    text = "".join(
-                        part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
+                    text = "".join(part for part in temp if not part.startswith("["))
                     Clipboard.copy(escape_markup(text).replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]"))
                     return self.parent.select_with_touch(self.index, touch)
         else:
@@ -621,7 +653,7 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
             self.selected = is_selected
 
 
-class ConnectBarTextInput(MDTextField):
+class ConnectBarTextInput(ResizableTextField):
     def insert_text(self, substring, from_undo=False):
         s = substring.replace("\n", "").replace("\r", "")
         return super(ConnectBarTextInput, self).insert_text(s, from_undo=from_undo)
@@ -631,14 +663,14 @@ def is_command_input(string: str) -> bool:
     return len(string) > 0 and string[0] in "/!"
 
 
-class CommandPromptTextInput(MDTextField):
+class CommandPromptTextInput(ResizableTextField):
     MAXIMUM_HISTORY_MESSAGES = 50
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
         self._command_history_index = -1
         self._command_history: typing.Deque[str] = deque(maxlen=CommandPromptTextInput.MAXIMUM_HISTORY_MESSAGES)
-    
+
     def update_history(self, new_entry: str) -> None:
         self._command_history_index = -1
         if is_command_input(new_entry):
@@ -665,7 +697,7 @@ class CommandPromptTextInput(MDTextField):
             self._change_to_history_text_if_available(self._command_history_index - 1)
             return True
         return super().keyboard_on_key_down(window, keycode, text, modifiers)
-    
+
     def _change_to_history_text_if_available(self, new_index: int) -> None:
         if new_index < -1:
             return
@@ -683,28 +715,60 @@ class MessageBox(Popup):
         def __init__(self, **kwargs):
             super().__init__(**kwargs)
             self._label.refresh()
-            self.size = self._label.texture.size
-            if self.width + 50 > Window.width:
-                self.text_size[0] = Window.width - 50
-                self._label.refresh()
-                self.size = self._label.texture.size
 
     def __init__(self, title, text, error=False, **kwargs):
         label = MessageBox.MessageBoxLabel(text=text)
         separator_color = [217 / 255, 129 / 255, 122 / 255, 1.] if error else [47 / 255., 167 / 255., 212 / 255, 1.]
-        super().__init__(title=title, content=label, size_hint=(None, None), width=max(100, int(label.width) + 40),
+        super().__init__(title=title, content=label, size_hint=(0.5, None), width=max(100, int(label.width) + 40),
                          separator_color=separator_color, **kwargs)
         self.height += max(0, label.height - 18)
 
 
-class ClientTabs(MDTabsPrimary):
+class ClientTabs(MDTabsSecondary):
     carousel: MDTabsCarousel
     lock_swiping = True
 
     def __init__(self, *args, **kwargs):
-        self.carousel = MDTabsCarousel(lock_swiping=True)
-        super().__init__(*args, MDDivider(size_hint_y=None, height=dp(4)), self.carousel, **kwargs)
+        self.carousel = MDTabsCarousel(lock_swiping=True, anim_move_duration=0.2)
+        super().__init__(*args, MDDivider(size_hint_y=None, height=dp(1)), self.carousel, **kwargs)
         self.size_hint_y = 1
+
+    def _check_panel_height(self, *args):
+        self.ids.tab_scroll.height = dp(38)
+
+    def update_indicator(
+        self, x: float = 0.0, w: float = 0.0, instance: MDTabsItem = None
+    ) -> None:
+        def update_indicator(*args):
+            indicator_pos = (0, 0)
+            indicator_size = (0, 0)
+
+            item_text_object = self._get_tab_item_text_icon_object()
+
+            if item_text_object:
+                indicator_pos = (
+                    instance.x + dp(12),
+                    self.indicator.pos[1]
+                    if not self._tabs_carousel
+                    else self._tabs_carousel.height,
+                )
+                indicator_size = (
+                    instance.width - dp(24),
+                    self.indicator_height,
+                )
+
+            Animation(
+                pos=indicator_pos,
+                size=indicator_size,
+                d=0 if not self.indicator_anim else self.indicator_duration,
+                t=self.indicator_transition,
+            ).start(self.indicator)
+
+        if not instance:
+            self.indicator.pos = (x, self.indicator.pos[1])
+            self.indicator.size = (w, self.indicator_height)
+        else:
+            Clock.schedule_once(update_indicator)
 
     def remove_tab(self, tab, content=None):
         if content is None:
@@ -712,6 +776,21 @@ class ClientTabs(MDTabsPrimary):
         self.ids.container.remove_widget(tab)
         self.carousel.remove_widget(content)
         self.on_size(self, self.size)
+
+
+class CommandButton(MDButton, MDTooltip):
+    def __init__(self, *args, manager: "GameManager", **kwargs):
+        super().__init__(*args, **kwargs)
+        self.manager = manager
+        self._tooltip = ToolTip(text="Test")
+
+    def on_enter(self):
+        self._tooltip.text = self.manager.commandprocessor.get_help_text()
+        self._tooltip.font_size = dp(20 - (len(self._tooltip.text) // 400))  # mostly guessing on the numbers here
+        self.display_tooltip()
+
+    def on_leave(self):
+        self.animation_tooltip_dismiss()
 
 
 class GameManager(ThemedApp):
@@ -768,19 +847,19 @@ class GameManager(ThemedApp):
 
         self.grid = MainLayout()
         self.grid.cols = 1
-        self.connect_layout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(70),
+        self.connect_layout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(40),
                                           spacing=5, padding=(5, 10))
         # top part
-        server_label = ServerLabel(halign="center")
+        server_label = ServerLabel(width=dp(75))
         self.connect_layout.add_widget(server_label)
         self.server_connect_bar = ConnectBarTextInput(text=self.ctx.suggested_address or "archipelago.gg:",
-                                                      size_hint_y=None, role="medium",
-                                                      height=dp(70), multiline=False, write_tab=False)
+                                                      pos_hint={"center_x": 0.5, "center_y": 0.5})
 
         def connect_bar_validate(sender):
             if not self.ctx.server:
                 self.connect_button_action(sender)
 
+        self.server_connect_bar.height = dp(30)
         self.server_connect_bar.bind(on_text_validate=connect_bar_validate)
         self.connect_layout.add_widget(self.server_connect_bar)
         self.server_connect_button = MDButton(MDButtonText(text="Connect"), style="filled", size=(dp(100), dp(70)),
@@ -793,7 +872,7 @@ class GameManager(ThemedApp):
         self.grid.add_widget(self.progressbar)
 
         # middle part
-        self.tabs = ClientTabs()
+        self.tabs = ClientTabs(pos_hint={"center_x": 0.5, "center_y": 0.5})
         self.tabs.add_widget(MDTabsItem(MDTabsItemText(text="All" if len(self.logging_pairs) > 1 else "Archipelago")))
         self.log_panels["All"] = self.tabs.default_tab_content = UILog(*(logging.getLogger(logger_name)
                                                                              for logger_name, name in
@@ -821,12 +900,13 @@ class GameManager(ThemedApp):
         self.grid.add_widget(self.main_area_container)
 
         # bottom part
-        bottom_layout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(70), spacing=5, padding=(5, 10))
-        info_button = MDButton(MDButtonText(text="Command:"), radius=5, style="filled", size=(dp(100), dp(70)),
-                               size_hint_x=None, size_hint_y=None, pos_hint={"center_y": 0.575})
+        bottom_layout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(40), spacing=5, padding=(5, 10))
+        info_button = CommandButton(MDButtonText(text="Command:", halign="left"), manager=self, radius=5,
+                                    style="filled", size=(dp(100), dp(70)), size_hint_x=None, size_hint_y=None,
+                                    pos_hint={"center_y": 0.575})
         info_button.bind(on_release=self.command_button_action)
         bottom_layout.add_widget(info_button)
-        self.textinput = CommandPromptTextInput(size_hint_y=None, height=dp(30), multiline=False, write_tab=False)
+        self.textinput = CommandPromptTextInput(size_hint_y=None, multiline=False, write_tab=False)
         self.textinput.bind(on_text_validate=self.on_message)
         info_button.height = self.textinput.height
         self.textinput.text_validate_unfocus = False
@@ -844,15 +924,27 @@ class GameManager(ThemedApp):
         self.server_connect_bar.focus = True
         self.server_connect_bar.select_text(port_start if port_start > 0 else host_start, len(s))
 
+        # Uncomment to enable the kivy live editor console
+        # Press Ctrl-E (with numlock/capslock) disabled to open
+        # from kivy.core.window import Window
+        # from kivy.modules import console
+        # console.create_console(Window, self.container)
+
         return self.container
 
-    def add_client_tab(self, title: str, content: Widget) -> Widget:
+    def add_client_tab(self, title: str, content: Widget, index: int = -1) -> Widget:
         """Adds a new tab to the client window with a given title, and provides a given Widget as its content.
          Returns the new tab widget, with the provided content being placed on the tab as content."""
         new_tab = MDTabsItem(MDTabsItemText(text=title))
         new_tab.content = content
-        self.tabs.add_widget(new_tab)
-        self.tabs.carousel.add_widget(new_tab.content)
+        if -1 < index <= len(self.tabs.carousel.slides):
+            new_tab.bind(on_release=self.tabs.set_active_item)
+            new_tab._tabs = self.tabs
+            self.tabs.ids.container.add_widget(new_tab, index=index)
+            self.tabs.carousel.add_widget(new_tab.content, index=len(self.tabs.carousel.slides) - index)
+        else:
+            self.tabs.add_widget(new_tab)
+            self.tabs.carousel.add_widget(new_tab.content)
         return new_tab
 
     def update_texts(self, dt):
@@ -1002,8 +1094,9 @@ class HintLayout(MDBoxLayout):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        boxlayout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(55))
-        boxlayout.add_widget(MDLabel(text="New Hint:", size_hint_x=None, size_hint_y=None, height=dp(55)))
+        boxlayout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(40))
+        boxlayout.add_widget(MDLabel(text="New Hint:", size_hint_x=None, size_hint_y=None,
+                                     height=dp(40), width=dp(75), halign="center", valign="center"))
         boxlayout.add_widget(AutocompleteHintInput())
         self.add_widget(boxlayout)
 
@@ -1013,7 +1106,7 @@ class HintLayout(MDBoxLayout):
             if fix_func:
                 fix_func()
 
-        
+
 status_names: typing.Dict[HintStatus, str] = {
     HintStatus.HINT_FOUND: "Found",
     HintStatus.HINT_UNSPECIFIED: "Unspecified",
@@ -1110,6 +1203,7 @@ class HintLog(MDRecycleView):
 
 
 class ApAsyncImage(AsyncImage):
+
     def is_uri(self, filename: str) -> bool:
         if filename.startswith("ap:"):
             return True
@@ -1155,7 +1249,23 @@ class E(ExceptionHandler):
 class KivyJSONtoTextParser(JSONtoTextParser):
     # dummy class to absorb kvlang definitions
     class TextColors(Widget):
-        pass
+        white: str = StringProperty("FFFFFF")
+        black: str = StringProperty("000000")
+        red: str = StringProperty("EE0000")
+        green: str = StringProperty("00FF7F")
+        yellow: str = StringProperty("FAFAD2")
+        blue: str = StringProperty("6495ED")
+        magenta: str = StringProperty("EE00EE")
+        cyan: str = StringProperty("00EEEE")
+        slateblue: str = StringProperty("6D8BE8")
+        plum: str = StringProperty("AF99EF")
+        salmon: str = StringProperty("FA8072")
+        orange: str = StringProperty("FF7700")
+        # KivyMD parameters
+        theme_style: str = StringProperty("Dark")
+        primary_palette: str = StringProperty("Lightsteelblue")
+        dynamic_scheme_name: str = StringProperty("VIBRANT")
+        dynamic_scheme_contrast: int = NumericProperty(0)
 
     def __init__(self, *args, **kwargs):
         # we grab the color definitions from the .kv file, then overwrite the JSONtoTextParser default entries
