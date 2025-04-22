@@ -894,7 +894,7 @@ item_table = {
         ItemData(632 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 23, SC2Race.TERRAN,
                  classification=ItemClassification.progression),
     item_names.SIGNAL_BEACON:
-        ItemData(633 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 24, SC2Race.TERRAN),
+        ItemData(633 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 24, SC2Race.TERRAN, parent=parent_names.TERRAN_MERCENARIES),
 
     # WoL Protoss takes SC2WOL + 700~708
 

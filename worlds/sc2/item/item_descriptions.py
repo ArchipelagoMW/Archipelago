@@ -556,7 +556,7 @@ item_descriptions = {
     item_names.ADVANCED_OPTICS: "Increases attack range of all Terran mechanical units by 1.",
     item_names.ROGUE_FORCES: "Terran Mercenary calldowns are no longer limited by charges.",
     item_names.MECHANICAL_KNOW_HOW: "Increases mechanical unit life by 20%.",
-    item_names.MERCENARY_MUNITIONS: "Increases attack speed of all Terran Mercenary units by 10%.",
+    item_names.MERCENARY_MUNITIONS: "Increases attack speed of all Terran combat units by 15%.",
     item_names.PROGRESSIVE_FAST_DELIVERY: "At level 1, you can request one Mercenary unit immediately at the start of a mission. Level 2 allows you to calldown 3 Mercenary units immediately.",
     item_names.RAPID_REINFORCEMENT: "Reduces cooldowns of all Terran Mercenary calldowns by 60s.",
     item_names.SIGNAL_BEACON: "Terran Mercenary Calldowns are instantly deployed on rally point.",
