@@ -1,9 +1,6 @@
 ; Handle the multiworld link
 
 MainLoop:
-#IF HARDWARE_LINK
-    call handleSerialLink
-#ENDIF
     ; Check if the gameplay is world
     ld   a, [$DB95]
     cp   $0B
@@ -46,15 +43,56 @@ MainLoop:
     ld   a, [wDropBombSpawnCount]
     and  a
     call nz, LinkSpawnBomb
+    ; deathlink
+    ld   a, wMWCommand
+    bit  3, a
+    jr   z, .noSpawn
+    ld   a, [wHasMedicine]
+    ; set health and health loss to a
+    ; instant kill if no medicine
+    ; kill with damage if medicine (to trigger)
+    ld   [$DB5A], a ; wHealth
+    ld   [$DB94], a ; wSubtractHealthBuffer
+    ; set health gain to zero
+    xor  a
+    ld   [$DB93], a ; wAddHealthBuffer
+    ; flag deathlink as received
+    ld   a, $01
+    ld   [wMWDeathLinkRecv], a
+
 .noSpawn:
+    ; Have a location to collect?
+    ld   a, wMWCommand
+    bit  2, a
+    jr   z, .noCollect
+    ld   a, wMWMultipurposeE ; location mask
+    ld   b, a ; store it on b
+    ld   hl, wMWMultipurposeC  ; collect location hi
+    ld   a, [wMWMultipurposeD] ; collect location lo
+    or   [hl] ; a is location data
+    ld   c, a ; store it on c
+    or   a, b ; a is location data with mask applied
+    cp   a, c ; if a was unchanged...
+    jr   nz, .finishCommands ; do nothing else
+    ld   [hl], a
 
+.noCollect
     ; Have an item to give?
-    ld   hl, wLinkStatusBits
-    bit  0, [hl]
-    ret  z
+    ld   a, wMWCommand
+    bit  0, a
+    jr   z, .finishCommands
+    bit  1, a ; should skip recvindex check
+    jr   nz, .skipRecvIndexCheck
+    ld   a, wMWRecvIndexHi
+    cp   a, wMWMultipurposeC
+    jr   nz, .finishCommands ; failed check on hi
+    ld   a, wMWRecvIndexLo
+    cp   a, wMWMultipurposeD
+    jr   nz, .finishCommands ; failed check on lo
 
+.skipRecvIndexCheck
     ; Give an item to the player
-    ld   a, [wLinkGiveItem]
+    ld   a, [wMWItemCode]
     ; if zol:
     cp   $22 ; zol item
     jr   z, LinkGiveSlime
@@ -74,10 +112,11 @@ MainLoop:
     ld  a, [wLinkGiveItemFrom]
     call MessageAddPlayerName
     ld   a, $C9
-    ; hl = $wLinkStatusBits
-    ld   hl, wLinkStatusBits
-    ; clear the 0 bit of *hl
-    res  0, [hl]
+
+.finishCommands
+    ; clear MW command
+    xor  a
+    ld   wMWCommand, a
     ; OpenDialog()
     jp   $2385 ; Opendialog in $000-$0FF range
 
@@ -275,49 +314,6 @@ SpecialRandomTeleport:
 Data_004_7AE5: ; @TODO Palette data
     db   $33, $62, $1A, $01, $FF, $0F, $FF, $7F
 
-
-Deathlink:
-    ; Spawn the entity
-    ld   a, $CA               ; $7AF3: $3E $CA
-    call $3B86                ; $7AF5: $CD $86 $3B  ;SpawnEntityTrampoline
-    ld   a, $26               ; $7AF8: $3E $26      ;
-    ldh  [$F4], a             ; $7AFA: $E0 $F4      ; set noise
-    ; Set posX = linkX
-    ldh  a, [$98] ; LinkX
-    ld   hl, $C200 ; wEntitiesPosXTable
-    add  hl, de
-    ld   [hl], a
-    ; set posY = linkY - 54
-    ldh  a, [$99] ; LinkY
-    sub  a, 54
-    ld   hl, $C210 ; wEntitiesPosYTable
-    add  hl, de
-    ld   [hl], a
-    ; wEntitiesPrivateState3Table
-    ld   hl, $C2D0          ; $7B0A: $21 $D0 $C2
-    add  hl, de                                   ; $7B0D: $19
-    ld   [hl], $01                                ; $7B0E: $36 $01
-    ; wEntitiesTransitionCountdownTable    
-    ld   hl, $C2E0    ; $7B10: $21 $E0 $C2
-    add  hl, de                                   ; $7B13: $19
-    ld   [hl], $C0                                ; $7B14: $36 $C0
-    ; GetEntityTransitionCountdown             
-    call $0C05             ; $7B16: $CD $05 $0C
-    ld   [hl], $C0                                ; $7B19: $36 $C0
-    ; IncrementEntityState
-    call $3B12                ; $7B1B: $CD $12 $3B
-
-    ; Remove medicine
-    xor  a                                        ; $7B1E: $AF
-    ld   [$DB0D], a           ; $7B1F: $EA $0D $DB ; ld   [wHasMedicine], a
-    ; Reduce health by a lot
-    ld   a, $FF                                   ; $7B22: $3E $FF
-    ld   [$DB94], a           ; $7B24: $EA $94 $DB ; ld   [wSubtractHealthBuffer], a
-
-    ld   hl, $DC88                             ; $7B2C: $21 $88 $DC
-    ; Set palette
-    ld   de, Data_004_7AE5                        ; $7B2F: $11 $E5 $7A
-    
 loop_7B32:
     ld   a, [de]                                  ; $7B32: $1A
     ; ld   [hl+], a                                 ; $7B33: $22
@@ -334,7 +330,7 @@ loop_7B32:
 
 ; probalby wants
 ;     ld   a, $02                                   ; $7B40: $3E $02
-    ;ldh  [hLinkInteractiveMotionBlocked], a 
+    ;ldh  [hLinkInteractiveMotionBlocked], a
 
 RandomTeleportPositions:
     db $55, $54, $54, $54, $55, $55, $55, $54, $65, $55, $54, $65, $56, $56, $55, $55

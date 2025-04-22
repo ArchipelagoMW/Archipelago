@@ -105,6 +105,9 @@ def generateRom(args, world: "LinksAwakeningWorld"):
     assembler.const("wCustomMessage", 0xC0A0)
     assembler.const("wOverworldRoomStatus", 0xD800)
 
+    # There's a third unused death count address, use it to flag receipt of death link
+    assembler.const("wMWDeathLinkRecv", 0xDB59)
+
     # We store the link info in unused color dungeon flags, so it gets preserved in the savegame.
     assembler.const("wMWRecvIndexHi", 0xDDF6)
     assembler.const("wMWRecvIndexLo", 0xDDF7)

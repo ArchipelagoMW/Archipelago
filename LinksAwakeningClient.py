@@ -77,10 +77,12 @@ class Constants:
     ROMGameID = 0x0051  # 4 bytes
     SlotName = 0x0134
     wGameplayType = 0xDB95
+    wHealth = 0xDB5A
 
+    wMWDeathLinkRecv = 0xDB59   # RW
     wMWRecvIndexHi = 0xDDF6   # RO: The index of the next item to receive.
     wMWRecvIndexLo = 0xDDF7   #     If given something different it will be ignored.
-    wMWCommand = 0xDDF8       # RW: See MW_Commands
+    wMWCommand = 0xDDF8           # RW: See MWCommands
     wMWItemCode = 0xDDF9      # RW: Item code to give the player
     wMWItemSenderHi = 0xDDFA  # RW: Unused, but maybe will set up more rom banks in the future
     wMWItemSenderLo = 0xDDFB  # RW: ID for sending player
@@ -102,19 +104,22 @@ class Constants:
     VictoryGameplayAndSub = 0x0102
 
 
-class MW_Commands(Enum):
+class MWCommands(Enum):
     # bit 0: send item
     # bit 1: consider receive index for item send and tick up
     # bit 2: collect location
     # bit 3: send death link
-    # bit 4: send effect
-    NONE =              0b00000000
     SEND_ITEM =         0b00000011
-    SEND_ITEM_EXTRA =   0b00000001
     COLLECT =           0b00000100
     COLLECT_WITH_ITEM = 0b00000101
     DEATH_LINK =        0b00001000
-    SEND_EFFECT =       0b00010000
+
+
+class DeathLinkStatus(Enum):
+    NONE = 0
+    PENDING = 1
+    SENDING = 2
+    DYING = 3
 
 
 class RAGameboy():
@@ -365,7 +370,7 @@ class LinksAwakeningClient():
     auth = None
     game_crc = None
     collect_enabled = True
-    pending_deathlink = False
+    death_link_status = DeathLinkStatus.NONE
     retroarch_address = None
     retroarch_port = None
     gameboy = None
@@ -457,7 +462,7 @@ class LinksAwakeningClient():
             item = ctx.locations_info[id]
             if item.player == ctx.slot:
                 self.gameboy.send_mw_command(
-                    command=MW_Commands.COLLECT_WITH_ITEM,
+                    command=MWCommands.COLLECT_WITH_ITEM,
                     item_code=item.item - BASE_ID,
                     item_sender=clamp(0, ctx.slot, 100),
                     mp_cd=check.address,
@@ -465,7 +470,7 @@ class LinksAwakeningClient():
                 )
             else:
                 self.gameboy.send_mw_command(
-                    command=MW_Commands.COLLECT,
+                    command=MWCommands.COLLECT,
                     mp_cd=check.address,
                     mp_e=check.mask,
                 )
@@ -490,7 +495,7 @@ class LinksAwakeningClient():
     def read_byte(self, addr):
         return self.gameboy.read_memory_cache([addr])[addr]
 
-    async def main_tick(self, ctx, item_get_cb, win_cb, deathlink_cb):
+    async def main_tick(self, ctx, item_get_cb, win_cb, death_link_cb):
         await self.gameboy.update_cache()
 
         if not self.gameboy.cache:
@@ -507,22 +512,33 @@ class LinksAwakeningClient():
         if self.read_byte(Constants.wGameplayType) == 1: # Credits
             await win_cb()
 
-        # TODO detect death -> deathlink_cb()
+        if self.death_link_status == DeathLinkStatus.NONE: # natural death
+            if not self.read_byte(Constants.wHealth):
+                death_link_cb()
+                self.death_link_status = DeathLinkStatus.DYING
+        elif self.death_link_status == DeathLinkStatus.PENDING: # make sure receive flag is cleared
+            if self.read_byte(Constants.WMWDeathLinkRecv):
+                self.gameboy.write_memory(Constants.wMWDeathLinkRecv, 0)
+            else:
+                self.death_link_status = DeathLinkStatus.SENDING
+        elif self.death_link_status == DeathLinkStatus.SENDING: # send death link until receive flag set
+            if self.read_byte(Constants.WMWDeathLinkRecv):
+                self.death_link_status = DeathLinkStatus.DYING
+            else:
+                self.gameboy.send_mw_command(command=MWCommands.DEATH_LINK)
+        elif self.death_link_status == DeathLinkStatus.DYING: # wait until alive again before returning to normal
+            if self.read_byte(Constants.wHealth):
+                self.death_link_status = DeathLinkStatus.NONE
 
-        # TODO check flag to see if deathlink received (that third unused death counter) and clear pending death link and clear flag
-
-        if self.read_byte(Constants.wMWCommand) != MW_Commands.NONE:
-            return # there's already an unprocessed command
-
-        if self.pending_deathlink:
-            self.gameboy.send_mw_command(command=MW_Commands.DEATH_LINK)
+        if self.read_byte(Constants.wMWCommand) or self.death_link_status:
+            return
 
         recv_hi = self.read_byte(Constants.wMWRecvIndexHi)
         recv_lo = self.read_byte(Constants.wMWRecvIndexLo)
         recv_index = recv_hi * 0xff + recv_lo
         if recv_index in ctx.recvd_checks:
             item = ctx.recvd_checks[recv_index]
-            self.gameboy.send_mw_command(command=MW_Commands.SEND_ITEM,
+            self.gameboy.send_mw_command(command=MWCommands.SEND_ITEM,
                                          item_code=item.item - BASE_ID,
                                          item_sender=clamp(0, item.player, 100),
                                          mp_cd=recv_index)
@@ -559,8 +575,8 @@ class LinksAwakeningCommandProcessor(ClientCommandProcessor):
             else:
                 logger.info("Collect disabled")
 
-    def _cmd_deathlink(self):
-        """Toggles deathlink."""
+    def _cmd_death_link(self):
+        """Toggles death link."""
         if isinstance(self.ctx, LinksAwakeningContext):
             Utils.async_start(self.ctx.update_death_link("DeathLink" not in self.ctx.tags))
 
@@ -641,7 +657,7 @@ class LinksAwakeningContext(CommonContext):
         self.disconnected_intentionally = True
         CommonContext.event_invalid_slot(self)
 
-    async def send_deathlink(self):
+    async def send_death_link(self):
         if "DeathLink" in self.tags:
             logger.info("DeathLink: Sending death to your friends...")
             self.last_death_link = time.time()
@@ -668,9 +684,9 @@ class LinksAwakeningContext(CommonContext):
         # Ask for updates so that players can co-op entrances in a seed
         await self.send_msgs([{"cmd": "SetNotify", "keys": [self.slot_storage_key]}])
 
-    def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
-        self.client.pending_deathlink = True
-        super(LinksAwakeningContext, self).on_deathlink(data)
+    def on_death_link(self, data: typing.Dict[str, typing.Any]) -> None:
+        self.client.death_link_status = DeathLinkStatus.PENDING
+        super(LinksAwakeningContext, self).on_death_link(data)
 
     def new_checks(self, item_ids, ladxr_ids):
         self.found_checks.update(item_ids)
@@ -740,8 +756,8 @@ class LinksAwakeningContext(CommonContext):
         async def victory():
             await self.send_victory()
 
-        async def deathlink():
-            await self.send_deathlink()
+        async def death_link():
+            await self.send_death_link()
 
         if self.magpie_enabled:
             self.magpie_task = asyncio.create_task(self.magpie.serve())
@@ -775,7 +791,7 @@ class LinksAwakeningContext(CommonContext):
                 min_tick_duration = 0.1
                 last_tick = time.time()
                 while True:
-                    await self.client.main_tick(self, on_item_get, victory, deathlink)
+                    await self.client.main_tick(self, on_item_get, victory, death_link)
 
                     now = time.time()
                     tick_duration = now - last_tick
