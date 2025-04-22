@@ -2422,7 +2422,7 @@ def parse_args() -> argparse.Namespace:
     from settings import get_settings
 
     parser = argparse.ArgumentParser()
-    defaults = get_settings()["server_options"].as_dict()
+    defaults = get_settings().server_options.as_dict()
     parser.add_argument('multidata', nargs="?", default=defaults["multidata"])
     parser.add_argument('--host', default=defaults["host"])
     parser.add_argument('--port', default=defaults["port"], type=int)
