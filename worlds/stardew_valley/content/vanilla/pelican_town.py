@@ -3,7 +3,7 @@ from ...data import villagers_data, fish_data
 from ...data.building import Building
 from ...data.game_item import GenericSource, ItemTag, Tag, CustomRuleSource
 from ...data.harvest import ForagingSource, SeasonalForagingSource, ArtifactSpotSource
-from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, YearRequirement
+from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, TotalEarningsRequirement, YearRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.book_names import Book
@@ -14,6 +14,7 @@ from ...strings.food_names import Beverage, Meal
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.fruit_tree_names import Sapling
 from ...strings.generic_names import Generic
+from ...strings.hat_names import Hat
 from ...strings.material_names import Material
 from ...strings.metal_names import MetalBar
 from ...strings.region_names import Region, LogicRegion
@@ -293,6 +294,52 @@ pelican_town = ContentPack(
         Book.woodcutters_weekly: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
             ShopSource(money_price=5000, shop_region=LogicRegion.bookseller_1),),
+
+        # Hats
+        Hat.good_ol_cap: (ShopSource(money_price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(TotalEarningsRequirement(15000),)),),
+        Hat.lucky_bow: (ShopSource(money_price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(TotalEarningsRequirement(50000),)),),
+        Hat.cool_cap: (ShopSource(money_price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(TotalEarningsRequirement(250000),)),),
+        Hat.bowler: (ShopSource(money_price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(TotalEarningsRequirement(1000000),)),),
+        Hat.sombrero: (ShopSource(money_price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(TotalEarningsRequirement(10000000),)),),
+        # Hat.blue_bonnet,
+        # Hat.cowboy_hat,
+        # Hat.butterfly_bow,
+        # Hat.mouse_ears,
+        # Hat.cat_ears,
+        # Hat.tiara,
+        # Hat.santa_hat,
+        # Hat.earmuffs,
+        # Hat.delicate_bow,
+        # Hat.plum_chapeau,
+        # Hat.archers_cap,
+        # Hat.tropiclip,
+        # Hat.hunters_cap,
+        # Hat.daisy,
+        # Hat.trucker_hat,
+        # Hat.gnomes_cap,
+        # Hat.souwester,
+        # Hat.official_cap,
+        # Hat.eye_patch,
+        # Hat.watermelon_band,
+        # Hat.polka_bow,
+        # Hat.chicken_mask,
+        # Hat.cowpoke_hat,
+        # Hat.cowgal_hat,
+        # Hat.goblin_mask,
+        # Hat.chef_hat,
+        # Hat.straw,
+        # Hat.sailors_cap,
+        # Hat.elegant_turban,
+        # Hat.junimo_hat,
+        # Hat.paper_hat,
+        # Hat.pageboy_cap,
+        # Hat.jester_hat,
+        # Hat.blue_ribbon,
+        # Hat.governors_hat,
+        # Hat.white_bow,
+        # Hat.space_helmet,
+        # Hat.infinity_crown,
+        # Hat.sports_cap,
     },
     fishes=(
         fish_data.albacore,

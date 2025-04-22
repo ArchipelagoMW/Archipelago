@@ -127,15 +127,14 @@ class BundleName:
 
 
 class MemeBundleName:
-    communist = meme_bundle("Communist's")
-    bun_dle = register_bundle("Bun-dle", True)
-    bundle = meme_bundle("Bundle")
     AAAA = meme_bundle("AAAA")
     amons_fall = meme_bundle("Amon's Fall")
     anything_for_beyonce = meme_bundle("Anything For Beyonce")
     archipela_go = meme_bundle("Archipela-Go!")
     balls = meme_bundle("Balls")
     big_grapes = meme_bundle("Big Grapes")
+    bun_dle = register_bundle("Bun-dle", True)
+    bundle = meme_bundle("Bundle")
     bureaucracy = meme_bundle("Bureaucracy")
     burger_king = meme_bundle("Burger King")
     burger_king_revenge = meme_bundle("Burger King's Revenge")
@@ -146,6 +145,7 @@ class MemeBundleName:
     cipher = meme_bundle("Cipher")
     clique = meme_bundle("Clique")
     commitment = meme_bundle("Commitment")
+    communist = meme_bundle("Communist's")
     cookie_clicker = meme_bundle("Cookie Clicker")
     crab_rave = meme_bundle("Crab Rave")
     death = meme_bundle("Death")

@@ -3,6 +3,7 @@ from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.hat_names import all_hat_names
 from ..strings.meme_item_names import MemeItem
 from ..strings.ring_names import all_ring_names
+from ..strings.special_item_names import NotReallyAnItem
 
 
 class MemeItemsLogicMixin(BaseLogicMixin):
@@ -33,6 +34,7 @@ class MemeItemsLogic(BaseLogic):
             MemeItem.worn_shirt: self.has_any_shirt(),
             MemeItem.worn_boots: self.has_any_boots(),
             MemeItem.worn_hat: self.has_any_hat(),
+            NotReallyAnItem.death: self.logic.true_,
         })
 
     def can_cheat(self):

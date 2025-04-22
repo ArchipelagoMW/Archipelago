@@ -4,7 +4,7 @@ from typing import Iterable
 from .base_logic import BaseLogicMixin, BaseLogic
 from ..data.game_item import Requirement
 from ..data.requirement import ToolRequirement, BookRequirement, SkillRequirement, SeasonRequirement, YearRequirement, CombatRequirement, QuestRequirement, \
-    RelationshipRequirement, FishingRequirement, WalnutRequirement, RegionRequirement
+    RelationshipRequirement, FishingRequirement, WalnutRequirement, RegionRequirement, TotalEarningsRequirement
 
 
 class RequirementLogicMixin(BaseLogicMixin):
@@ -67,3 +67,7 @@ class RequirementLogic(BaseLogic):
     @meet_requirement.register
     def _(self, requirement: FishingRequirement):
         return self.logic.fishing.can_fish_at(requirement.region)
+
+    @meet_requirement.register
+    def _(self, requirement: TotalEarningsRequirement):
+        return self.logic.money.can_have_earned_total(requirement.amount)

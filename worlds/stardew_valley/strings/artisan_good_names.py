@@ -1,3 +1,6 @@
+from worlds.stardew_valley.strings.fish_names import Fish
+
+
 class ArtisanGood:
     honey = "Honey"
     oak_resin = "Oak Resin"
@@ -63,6 +66,8 @@ class ArtisanGood:
 
     @classmethod
     def specific_aged_roe(cls, fish: str) -> str:
+        if fish == Fish.sturgeon:
+            return ArtisanGood.caviar
         return f"{cls.aged_roe} [{fish}]"
 
     @classmethod

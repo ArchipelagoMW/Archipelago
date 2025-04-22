@@ -23,7 +23,7 @@ vanilla_regions: tuple[RegionData, ...] = (
                (Entrance.forest_to_town, Entrance.enter_secret_woods, Entrance.forest_to_wizard_tower, Entrance.forest_to_marnie_ranch,
                 Entrance.forest_to_leah_cottage, Entrance.forest_to_sewer, Entrance.forest_to_mastery_cave, LogicEntrance.buy_from_traveling_merchant,
                 LogicEntrance.complete_raccoon_requests, LogicEntrance.fish_in_waterfall, LogicEntrance.attend_flower_dance, LogicEntrance.attend_trout_derby,
-                LogicEntrance.attend_festival_of_ice)),
+                LogicEntrance.attend_festival_of_ice, LogicEntrance.buy_from_hat_mouse)),
     RegionData(LogicRegion.forest_waterfall),
     RegionData(RegionName.farm_cave),
     RegionData(RegionName.greenhouse,
@@ -199,6 +199,7 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(LogicRegion.bookseller_1, (LogicEntrance.buy_year1_books,)),
     RegionData(LogicRegion.bookseller_2, (LogicEntrance.buy_year3_books,)),
     RegionData(LogicRegion.bookseller_3),
+    RegionData(LogicRegion.hat_mouse),
 )
 ginger_island_regions = (
     # This overrides the regions from vanilla... When regions are moved to content packs, overriding existing entrances should no longer be necessary.
@@ -447,6 +448,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(LogicEntrance.attend_fair, LogicRegion.fair),
     ConnectionData(LogicEntrance.attend_spirit_eve, LogicRegion.spirit_eve),
     ConnectionData(LogicEntrance.attend_festival_of_ice, LogicRegion.festival_of_ice),
+    ConnectionData(LogicEntrance.buy_from_hat_mouse, LogicRegion.hat_mouse),
     ConnectionData(LogicEntrance.attend_night_market, LogicRegion.night_market),
     ConnectionData(LogicEntrance.attend_winter_star, LogicRegion.winter_star),
     ConnectionData(LogicEntrance.attend_squidfest, LogicRegion.squidfest),

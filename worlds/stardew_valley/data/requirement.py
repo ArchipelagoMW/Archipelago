@@ -60,3 +60,8 @@ class FishingRequirement(Requirement):
 @dataclass(frozen=True)
 class WalnutRequirement(Requirement):
     amount: int
+
+
+@dataclass(frozen=True)
+class TotalEarningsRequirement(Requirement):
+    amount: int

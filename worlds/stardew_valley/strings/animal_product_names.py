@@ -39,7 +39,6 @@ class AnimalProduct:
     slime_egg_red = "Red Slime Egg"
     slime_egg_tiger = "Tiger Slime Egg"
     squid_ink = "Squid Ink"
-    sturgeon_roe = "Sturgeon Roe"
     truffle = "Truffle"
     void_egg_starter = "Void Egg (Starter)"
     """This item does not really exist and should never end up being displayed.

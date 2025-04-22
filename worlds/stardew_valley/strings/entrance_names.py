@@ -232,6 +232,7 @@ class LogicEntrance:
     attend_fair = "Attend Stardew Valley Fair"
     attend_spirit_eve = "Attend Spirit's Eve"
     attend_festival_of_ice = "Attend Festival of Ice"
+    buy_from_hat_mouse = "Buy From Hat Mouse"
     attend_night_market = "Attend Night Market"
     attend_winter_star = "Attend Feast of the Winter Star"
     attend_squidfest = "Attend SquidFest"

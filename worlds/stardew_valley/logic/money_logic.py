@@ -3,7 +3,7 @@ from .base_logic import BaseLogicMixin, BaseLogic
 from ..content.vanilla.qi_board import qi_board_content_pack
 from ..data.shop import ShopSource
 from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_, true_
-from ..strings.currency_names import Currency
+from ..strings.currency_names import Currency, MemeCurrency
 from ..strings.region_names import Region, LogicRegion
 
 qi_gem_rewards = ("100 Qi Gems", "50 Qi Gems", "40 Qi Gems", "35 Qi Gems", "25 Qi Gems",
@@ -90,6 +90,12 @@ class MoneyLogic(BaseLogic):
                 self.logic.region.can_reach(Region.saloon) & self.can_have_earned_total(5000)
         if currency == Currency.golden_walnut:
             return self.can_spend_walnut(amount)
+        if currency == MemeCurrency.code or currency == MemeCurrency.energy or currency == MemeCurrency.health:
+            return self.logic.true_
+        if (currency == MemeCurrency.clic or currency == MemeCurrency.steps) and amount < 100:
+            return self.logic.true_
+        if currency == MemeCurrency.clic or currency == MemeCurrency.steps or currency == MemeCurrency.time:
+            return self.logic.time.has_lived_months(1)
 
         return self.logic.has(currency) & self.logic.grind.can_grind_item(amount)
 
