@@ -5,8 +5,8 @@ from typing import TextIO, Dict
 from BaseClasses import CollectionState, Tutorial, MultiWorld
 from entrance_rando import ERPlacementState
 from worlds.AutoWorld import World, WebWorld
-from .locations import location_descriptions, locations
-from .items import items, CandyBox2Item, candy_box_2_base_id, filler_items
+from .locations import location_descriptions, locations, CandyBox2LocationName
+from .items import items, CandyBox2Item, candy_box_2_base_id, filler_items, CandyBox2ItemName
 from .options import CandyBox2Options
 from .regions import create_regions, connect_entrances
 from .rooms import entrance_friendly_names, CandyBox2Room
@@ -82,8 +82,6 @@ class CandyBox2World(World):
             required_amount = data.required_amount(self)
             if required_amount > 0:
                 for i in range(required_amount):
-                    if not self.options.randomise_hp_bar and name == "HP Bar":
-                        continue
                     self.multiworld.itempool += [self.create_item(name)]
 
     def get_filler_item_name(self) -> str:
@@ -126,11 +124,11 @@ class CandyBox2World(World):
 
     def completion_rule(self, state: CollectionState):
         return can_reach_room(state, CandyBox2Room.TOWER, self.player) and \
-            state.has("P Stone", self.player) and \
-            state.has("L Stone", self.player) and \
-            state.has("A Stone", self.player) and \
-            state.has("Y Stone", self.player) and \
-            state.has("Locked Candy Box", self.player)
+            state.has(CandyBox2ItemName.P_STONE, self.player) and \
+            state.has(CandyBox2ItemName.L_STONE, self.player) and \
+            state.has(CandyBox2ItemName.A_STONE, self.player) and \
+            state.has(CandyBox2ItemName.Y_STONE, self.player) and \
+            state.has(CandyBox2ItemName.LOCKED_CANDY_BOX, self.player)
 
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
         spoiler_handle.write(f"\nCandy Box 2 Entrance randomisation for {self.player_name}:\n")
@@ -140,7 +138,7 @@ class CandyBox2World(World):
 
     def generate_basic(self) -> None:
         if not self.should_randomize_hp_bar:
-            self.multiworld.get_location("HP Bar Unlock", self.player).place_locked_item(self.create_item("HP Bar"))
+            self.multiworld.get_location(CandyBox2LocationName.HP_BAR_UNLOCK, self.player).place_locked_item(self.create_item(CandyBox2ItemName.HP_BAR))
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
         er_hint_data = {}
