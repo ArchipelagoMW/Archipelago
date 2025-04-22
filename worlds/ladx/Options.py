@@ -54,7 +54,7 @@ class Logic(Choice, LADXROption):
 class TradeQuest(DefaultOffToggle, LADXROption):
     """
     Trade quest items are randomized. Each NPC takes its normal trade quest
-    item, but gives a random item.
+    item and gives a randomized item in return.
     """
     display_name = "Trade Quest"
     ladxr_name = "tradequest"
@@ -62,7 +62,7 @@ class TradeQuest(DefaultOffToggle, LADXROption):
 
 class TextShuffle(DefaultOffToggle):
     """
-    Shuffles all the text in the game.
+    Shuffles all text in the game.
     """
     display_name = "Text Shuffle"
 
@@ -79,13 +79,16 @@ class Rooster(DefaultOnToggle, LADXROption):
 
 class EntranceShuffle(Choice, LADXROption):
     """
-    Randomizes where overworld entrances lead to.
+    Randomizes where overworld entrances lead.
+
 
     **Simple:** Single-entrance caves/houses that have items are shuffled
     amongst each other.
 
-    If *Dungeon Shuffle* is enabled, then these will be shuffled with all the
-    non-connector entrance pool. Note, some entrances can lead into water, use
+    If *Dungeon Shuffle* is enabled, then dungeons will be shuffled with all the
+
+    non-connector entrances in the pool. Note, some entrances can lead into water, use
+
     the warp-to-home from the save&quit menu to escape this.
     """
 
@@ -106,7 +109,7 @@ class EntranceShuffle(Choice, LADXROption):
 
 class DungeonShuffle(DefaultOffToggle, LADXROption):
     """
-    Randomizes dungeon entrances within eachother.
+    Randomizes dungeon entrances with each other.
     """
     display_name = "Dungeon Shuffle"
     ladxr_name = "dungeonshuffle"
@@ -309,7 +312,7 @@ class MusicChangeCondition(Choice):
 class HardMode(Choice, LADXROption):
     """
     **Oracle:** Less iframes and health from drops. Bombs damage yourself. Water
-    damages you without flippers. No piece of power or acorn.
+    damages you without flippers. No pieces of power or acorns.
 
     **Hero:** Switch version hero mode, double damage, no heart/fairy drops.
 
@@ -389,7 +392,7 @@ class NoFlash(DefaultOnToggle, LADXROption):
 
 class BootsControls(Choice):
     """
-    Adds additional button to activate Pegasus Boots (does nothing if you
+    Adds an additional button to activate Pegasus Boots (does nothing if you
     haven't picked up your boots!)
 
     **Vanilla:** Nothing changes, you have to equip the boots to use them.
@@ -413,7 +416,7 @@ class BootsControls(Choice):
 
 class LinkPalette(Choice, LADXROption):
     """
-    Sets link's palette.
+    Sets Link's palette.
 
     A-D are color palettes usually used during the damage animation and can
     change based on where you are.
