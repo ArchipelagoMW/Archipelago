@@ -90,8 +90,8 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #Todo NPCs Shortcuts: shortcut girl (Z2_Collector Sister ID 3769 (169, 132, -89))
         #Todo NPCs Player Options: do we want a filter option to add the guy who fishes things up for you (Z2_FisherOnDock ID 121 (166, 133, -208))
         LocationData("Delende", "Delende NPC - Dizzy noob chucks a Fervor Charm at your face", 831 + npc_index_offset),
-        #Todo: descriptivize (Z2_MapMan (198, 131, -74))
-        LocationData("Delende", "Delende NPC - Cartographer", 1153 + npc_index_offset),
+        #Todo NPCs CheckOrNot: guy who gives you a map of Delende if you don't have one (Z2_MapMan (198, 131, -74))
+        #LocationData("Delende", "Delende NPC - Cartographer", 1153 + npc_index_offset),
         #Todo NPCs Shortcuts: Rabbit Claws shortcut guy (Z2_RoosterFeetGuy ID 74(281, 128, -159))
         #Todo NPCs CheckOrNot: (Z2_RottenFishGuy ID 124 (181, 132, -200)) sells Rotten Salmon (progression item)
 
@@ -331,7 +331,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin cheating at Garden Maze", 421 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - How did you climb that tree, Lost Penguin", 422 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin among the eaves of Library roof", 594 + npc_index_offset),
-        #Todo: descriptivize (440, 171, -296)
+        #Todo: descriptivize (440, 171, -296) Z14_Library Scholar
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Library Scholar", 1948 + npc_index_offset),
 
         #Crystals
@@ -378,8 +378,8 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
 
         #NPCs
         #Todo NPCs CheckOrNot: two Quintar Eggs
-        #Crystal Checker guy gives you Quintar Pass for having enough crystals
-        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Quintar Stable Owner crystal checker for Quintar Pass if you refuse to touch an eyeball", 375 + npc_index_offset, lambda state: get_job_count(player, state) >= 7),
+        #Todo NPCs CheckOrNot: Crystal Checker guy gives you Quintar Pass for having enough crystals; doesn't if you already have the Quintar Pass
+        #LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Quintar Stable Owner crystal checker for Quintar Pass if you refuse to touch an eyeball", 375 + npc_index_offset, lambda state: get_job_count(player, state) >= 7),
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver Dust beneath overhang in eastern Quintar cave crevasse", 2678 + npc_index_offset),
         #Todo NPCs Multichecks: 2 checks on Quintar Enthusiast
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Quintar Enthusiast (always pet Buttermint)", 464 + npc_index_offset),
@@ -487,7 +487,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Tonic Pouch chest upon exiting from Quintar Nest", 478 + treasure_index_offset),
         LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Could really use a Walking Stick (chest) right about now...", 2669 + treasure_index_offset),
         #Technically on Underpass (Okimoto) map
-        LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Underpass Scrap chest on the way to the village hidden among the leaves", 3669 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Underpass Scrap chest on the way to the village hidden among the leaves", 3669 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2) or lambda state: state.has("Item - Ibek Bell", player)),
 
         #NPCs
         LocationData("Cobblestone Crag", "Cobblestone Crag NPC - Westernmost Silver Dust", 1120 + npc_index_offset),
@@ -597,8 +597,8 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Spilled booty Captains Hat chest", 2936 + treasure_index_offset, lambda state: state.has("Item - Progressive Salmon Violin", player)),
 
         #NPCs
-        #Crystal Checker guy gives you Ferry Pass for having 15 crystals Z27_FerryCrystalChecker ID 940 (-166,93,56)
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Ferry crystal checker grants Ferry Pass in case you hate children", 940 + npc_index_offset, lambda state: get_job_count(player, state) >= 15),
+        #Todo NPCs CheckOrNot: Crystal Checker guy gives you Ferry Pass for having 15 crystals Z27_FerryCrystalChecker ID 940 (-166,93,56)
+        #LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Ferry crystal checker grants Ferry Pass in case you hate children", 940 + npc_index_offset, lambda state: get_job_count(player, state) >= 15),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Three tokens makes a Pyramid Key something something triangles", 949 + npc_index_offset, lambda state: state.has("Item - West Lookout Token", player) and state.has("Item - Central Lookout Token", player) and state.has("Item - North Lookout Token", player)),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - The One and Only Room 1 Key", 385 + npc_index_offset),
         #Todo NPCs Blocker: gotta find the Lost Son first (the mom before you find the son is a different NPC)
@@ -949,7 +949,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #Treasure chests
         LocationData("Lands End", "Lands End Chest - Definitely requires Quintar *wink* Ether chest among the spikes", 2849 + treasure_index_offset),
         LocationData("Lands End", "Lands End Chest - Definitely requires Quintar *wink* Potion chest among the spikes", 3003 + treasure_index_offset),
-        LocationData("Lands End", "Lands End Chest - Brave the spikes to climb the northern peak Money chest", 3002 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
+        LocationData("Lands End", "Lands End Chest - Brave the spikes to climb the northern peak Money chest", 3002 + treasure_index_offset),
         LocationData("Lands End", "Lands End Chest - Blue Cape chest to defeat the Huns", 2740 + treasure_index_offset),
         LocationData("Lands End", "Lands End Chest - Blue Cape chest tucked against River Cats Ego", 1692 + treasure_index_offset),
         LocationData("Lands End", "Lands End Chest - Defender chest in spikes and storm", 1358 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
